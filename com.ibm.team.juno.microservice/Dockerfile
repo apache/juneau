@@ -1,4 +1,4 @@
-# Dockerfile for creating a Juno microservice container
+# Dockerfile for creating a Juneau microservice container
 
 FROM ubuntu
 

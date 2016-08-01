@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
-Main-Class: com.ibm.juno.microservice.RestMicroservice
+Main-Class: org.apache.juneau.microservice.RestMicroservice
 Rest-Resources: 
- com.ibm.juno.microservice.sample.RootResources
+ org.apache.juneau.microservice.sample.RootResources
 Main-ConfigFile: microservice.cfg
 Class-Path: 
  lib/commons-codec-1.9.jar 
@@ -12,7 +12,7 @@ Class-Path:
  lib/httpmime-4.5.jar 
  lib/javax.servlet-api-3.0.jar 
  lib/jetty-all-8.1.0.jar 
- lib/juno-all-5.2.jar 
+ lib/juneau-all-5.2.jar 
  lib/org.apache.commons.fileupload_1.3.1.jar
 
  

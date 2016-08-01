@@ -1,7 +1,0 @@
-OSGi-based microservice
-Improved Serializer and Parser contexts
-Specialized @RestMethod.minVersion() and @RestResource.minVersion() annotations.  Use specialized RestMatcher.
-New @RestResource.versionHeader() annotation.
-New HtmlSerializerProperties.detectUrlsInStrings property.
-MessagePack format
-YAML format

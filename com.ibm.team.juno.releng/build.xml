@@ -1,14 +1,20 @@
 <?xml version='1.0'?>
 <!--
-    Licensed Materials - Property of IBM
-    (c) Copyright IBM Corporation 2014, 2015. All Rights Reserved.
-   
-    Note to U.S. Government Users Restricted Rights:  
-    Use, duplication or disclosure restricted by GSA ADP Schedule 
-    Contract with IBM Corp. 
- -->
-
-<project name='Juno' xmlns:jacoco='antlib:org.jacoco.ant' default='Juno.Build'>
+ ***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            * 
+ * with the License.  You may obtain a copy of the License at                                                              *
+ *                                                                                                                         *
+ *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
+ *                                                                                                                         *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
+ * specific language governing permissions and limitations under the License.                                              *
+ *                                                                                                                         *
+ ***************************************************************************************************************************
+-->
+<project name='Juneau' xmlns:jacoco='antlib:org.jacoco.ant' default='Juneau.Build'>
 	
 	<taskdef 
 		uri='antlib:org.jacoco.ant' 
@@ -18,50 +24,46 @@
 	<!-- ================================================================================ -->
 	<!-- Common initialization -->
 	<!-- ================================================================================ -->
-	<target name='Juno.Init'>
+	<target name='Juneau.Init'>
 		<tstamp/>
 		<loadproperties srcFile='build.properties'/>
 	
 		<!-- Additional classpath -->
 		<path id='classpath'>
-			<pathelement path='../com.ibm.team.juno/lib/jena/jena-core-2.7.1.jar'/>
-			<pathelement path='../com.ibm.team.juno.releng/lib/mail.jar'/>
-			<pathelement path='../com.ibm.team.juno.releng/lib/httpclient/httpclient-4.5.jar'/>
-			<pathelement path='../com.ibm.team.juno.releng/lib/httpclient/httpcore-4.4.1.jar'/>
-			<pathelement path='../com.ibm.team.juno.releng/lib/httpclient/httpmime-4.5.jar'/>
-			<pathelement path='../com.ibm.team.juno.releng/lib/javax.servlet_2.5.0.jar'/>
-			<pathelement path='../com.ibm.team.juno.releng/lib/jaxrs/jsr311-api-1.1.1.jar'/>
-			<pathelement path='../com.ibm.team.juno.releng/lib/equinox/org.eclipse.osgi_3.6.50.R36x_v20120315-1500.jar'/>
-			<pathelement path='../com.ibm.team.juno.releng/lib/equinox/org.eclipse.osgi.services_3.2.100.v20100503.jar'/>
-			<pathelement path='../com.ibm.team.juno.releng/lib/junit/junit-4.12.jar'/>
-			<pathelement path='../com.ibm.team.juno.releng/lib/commons-fileupload/org.apache.commons.fileupload_1.3.1.jar'/>
+			<pathelement path='../org.apache.juneau.releng/lib/jena/jena-core-2.7.1.jar'/>
+			<pathelement path='../org.apache.juneau.releng/lib/mail.jar'/>
+			<pathelement path='../org.apache.juneau.releng/lib/httpclient/httpclient-4.5.jar'/>
+			<pathelement path='../org.apache.juneau.releng/lib/httpclient/httpcore-4.4.1.jar'/>
+			<pathelement path='../org.apache.juneau.releng/lib/httpclient/httpmime-4.5.jar'/>
+			<pathelement path='../org.apache.juneau.releng/lib/javax.servlet_2.5.0.jar'/>
+			<pathelement path='../org.apache.juneau.releng/lib/jaxrs/jsr311-api-1.1.1.jar'/>
+			<pathelement path='../org.apache.juneau.releng/lib/equinox/org.eclipse.osgi_3.6.50.R36x_v20120315-1500.jar'/>
+			<pathelement path='../org.apache.juneau.releng/lib/equinox/org.eclipse.osgi.services_3.2.100.v20100503.jar'/>
+			<pathelement path='../org.apache.juneau.releng/lib/junit/junit-4.12.jar'/>
+			<pathelement path='../org.apache.juneau.releng/lib/commons-fileupload/org.apache.commons.fileupload_1.3.1.jar'/>
 
 			<!-- Microservice jar -->
-			<pathelement path='../com.ibm.team.juno.microservice/lib/jetty-all-8.1.0.jar'/>
+			<pathelement path='../org.apache.juneau.microservice/lib/jetty-all-8.1.0.jar'/>
 		</path>
 	</target>
 
 	<!-- ================================================================================ -->
 	<!-- Build -->
 	<!-- ================================================================================ -->
-	<target name='Juno.Build' depends='Juno.Init' description='Creates a new release of the product.'>
+	<target name='Juneau.Build' depends='Juneau.Init' description='Creates a new release of the product.'>
 		<delete dir='build' quiet='true'/>
 		<mkdir dir='build'/>
-		<antcall target='Juno.BuildJars'/>
-		<antcall target='Juno.ComponentTest'/>
-		<antcall target='Juno.BuildDoc'/>
-		<antcall target='Juno.BuildDocZip'/>
-		
-		<echo message="Buiding Juno Zip"/>
-		<copy file='Readme.txt' todir='${dir.build}'/>
-		<zip basedir='${dir.build}' destfile='${dir.build}/Juno Cloud API (v${version}).zip' includes='juno-all-*.jar,bundles/**,source/**,microservice-*.zip,juno-javadocs.war,Readme.txt'/>
+		<antcall target='Juneau.BuildJars'/>
+		<antcall target='Juneau.ComponentTest'/>
+		<antcall target='Juneau.BuildDoc'/>
+		<antcall target='Juneau.BuildDocZip'/>
 	</target>
 
 	<!-- ================================================================================ -->
 	<!-- Build the jar files -->
 	<!-- ================================================================================ -->
 	<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-	<target name='Juno.BuildJars' depends='Juno.Init' description='Build jar files.'>
+	<target name='Juneau.BuildJars' depends='Juneau.Init' description='Build jar files.'>
 		
 		<delete dir='bin' quiet='true'/>
 		<delete dir='build' quiet='true'/>
@@ -78,17 +80,17 @@
 		<mkdir dir='bin/server.test'/>
 
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-		<!-- juno-core.jar -->
+		<!-- juneau-core.jar -->
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-		<echo message='*** Compiling com.ibm.team.juno_${version}.jar ***'/>
+		<echo message='*** Compiling org.apache.juneau_${version}.jar ***'/>
 		
 		<copy todir='bin/core'>
-			<fileset dir='../com.ibm.team.juno/src' includes='**/*.properties'/>
-			<fileset dir='../com.ibm.team.juno' includes='META-INF/*'/>
+			<fileset dir='../org.apache.juneau/src/main/java' includes='**/*.properties'/>
+			<fileset dir='../org.apache.juneau' includes='META-INF/*'/>
 		</copy>
 		<javac destdir='bin/core' fork='true' source='1.6' target='1.6' debug='true' includeantruntime='false'>
 			<classpath refid='classpath'/>
-			<src path='../com.ibm.team.juno/src'/>
+			<src path='../org.apache.juneau/src/main/java'/>
 		</javac>
 		<manifest file='bin/core/META-INF/MANIFEST.MF' mode='update'>
 				<attribute name='Built-By' value='${user.name}'/>
@@ -96,26 +98,21 @@
 			<attribute name='Bundle-Version' value='${version}'/>
 		</manifest>
 		
-		<jar jarfile='${dir.build}/bundles/com.ibm.team.juno_${version}.jar' basedir='bin/core' duplicate='fail' level='9' excludes='**/proto/**' manifest='bin/core/META-INF/MANIFEST.MF'/>
-		
-		<copy todir='bin/core' includeemptydirs='false'>
-			<fileset dir='../com.ibm.team.juno/src'/>
-		</copy>
-		<jar jarfile='${dir.build}/source/com.ibm.team.juno_${version}.jar' basedir='bin/core' duplicate='fail' excludes='**/proto/**' manifest='bin/core/META-INF/MANIFEST.MF'/>
+		<jar jarfile='${dir.build}/org.apache.juneau_${version}.jar' basedir='bin/core' duplicate='fail' level='9' excludes='**/proto/**' manifest='bin/core/META-INF/MANIFEST.MF'/>
 
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-		<!-- juno-server.jar -->
+		<!-- juneau-server.jar -->
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-		<echo message='*** Compiling com.ibm.team.juno.server_${version}.jar ***'/>
+		<echo message='*** Compiling org.apache.juneau.server_${version}.jar ***'/>
 		
 		<copy todir='bin/server'>
-			<fileset dir='../com.ibm.team.juno.server/src' includes='**/*.properties,**/*.css,**/*.ico,com/ibm/team/juno/server/htdocs/*'/>
-			<fileset dir='../com.ibm.team.juno.server' includes='META-INF/*'/>
+			<fileset dir='../org.apache.juneau.server/src/main/java' includes='**/*.properties,**/*.css,**/*.ico,com/ibm/team/juneau/server/htdocs/*'/>
+			<fileset dir='../org.apache.juneau.server' includes='META-INF/*'/>
 		</copy>
 		<javac destdir='bin/server' fork='true' source='1.6' target='1.6' debug='true' includeantruntime='false'>
 			<classpath refid='classpath'/>
 			<classpath path='bin/core'/>
-			<src path='../com.ibm.team.juno.server/src'/>
+			<src path='../org.apache.juneau.server/src/main/java'/>
 		</javac>
 		<manifest file='bin/server/META-INF/MANIFEST.MF' mode='update'>
 			<attribute name='Built-By' value='${user.name}'/>
@@ -123,26 +120,21 @@
 			<attribute name='Bundle-Version' value='${version}'/>
 		</manifest>
 		
-		<jar jarfile='${dir.build}/bundles/com.ibm.team.juno.server_${version}.jar' basedir='bin/server' duplicate='fail' level='9' excludes='**/proto/**' manifest='bin/server/META-INF/MANIFEST.MF'/>
-
-		<copy todir='bin/server' includeemptydirs='false'>
-			<fileset dir='../com.ibm.team.juno.server/src'/>
-		</copy>
-		<jar jarfile='${dir.build}/source/com.ibm.team.juno.server_${version}.jar' basedir='bin/server' duplicate='fail' excludes='**/proto/**' manifest='bin/server/META-INF/MANIFEST.MF'/>
+		<jar jarfile='${dir.build}/org.apache.juneau.server_${version}.jar' basedir='bin/server' duplicate='fail' level='9' excludes='**/proto/**' manifest='bin/server/META-INF/MANIFEST.MF'/>
 
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-		<!-- juno-client.jar -->
+		<!-- juneau-client.jar -->
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-		<echo message='*** com.ibm.team.juno.client_${version}.jar ***'/>
+		<echo message='*** org.apache.juneau.client_${version}.jar ***'/>
 		
 		<copy todir='bin/client'>
-			<fileset dir='../com.ibm.team.juno.client/src' includes='**/*.properties'/>
-			<fileset dir='../com.ibm.team.juno.client' includes='META-INF/*'/>
+			<fileset dir='../org.apache.juneau.client/src/main/java' includes='**/*.properties'/>
+			<fileset dir='../org.apache.juneau.client' includes='META-INF/*'/>
 		</copy>
 		<javac destdir='bin/client' fork='true' source='1.6' target='1.6' debug='true' includeantruntime='false'>
 			<classpath refid='classpath'/>
 			<classpath path='bin/core'/>
-			<src path='../com.ibm.team.juno.client/src'/>
+			<src path='../org.apache.juneau.client/src/main/java'/>
 		</javac>
 		<manifest file='bin/client/META-INF/MANIFEST.MF' mode='update'>
 				<attribute name='Built-By' value='${user.name}'/>
@@ -150,28 +142,23 @@
 			<attribute name='Bundle-Version' value='${version}'/>
 		</manifest>
 		
-		<jar jarfile='${dir.build}/bundles/com.ibm.team.juno.client_${version}.jar' basedir='bin/client' duplicate='fail' level='9' excludes='**/proto/**' manifest='bin/client/META-INF/MANIFEST.MF'/>
-		
-		<copy todir='bin/client' includeemptydirs='false'>
-			<fileset dir='../com.ibm.team.juno.client/src'/>
-		</copy>
-		<jar jarfile='${dir.build}/source/com.ibm.team.juno.client_${version}.jar' basedir='bin/client' duplicate='fail' excludes='**/proto/**' manifest='bin/client/META-INF/MANIFEST.MF'/>
+		<jar jarfile='${dir.build}/org.apache.juneau.client_${version}.jar' basedir='bin/client' duplicate='fail' level='9' excludes='**/proto/**' manifest='bin/client/META-INF/MANIFEST.MF'/>
 		
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-		<!-- juno-microservice.jar -->
+		<!-- juneau-microservice.jar -->
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-		<echo message='*** Compiling com.ibm.team.juno.microservice_${version}.jar ***'/>
+		<echo message='*** Compiling org.apache.juneau.microservice_${version}.jar ***'/>
 		
 		<copy todir='bin/microservice'>
-			<fileset dir='../com.ibm.team.juno.microservice/src' includes='**/*.properties,com/ibm/juno/microservice/resources/*.html'/>
-			<fileset dir='../com.ibm.team.juno.microservice' includes='META-INF/*'/>
+			<fileset dir='../org.apache.juneau.microservice/src/main/java' includes='**/*.properties,org/apache/juneau/microservice/resources/*.html'/>
+			<fileset dir='../org.apache.juneau.microservice' includes='META-INF/*'/>
 		</copy>
 		<javac destdir='bin/microservice' fork='true' source='1.6' target='1.6' debug='true' includeantruntime='false'>
 			<classpath refid='classpath'/>
 			<classpath path='bin/core'/>
 			<classpath path='bin/server'/>
 			<classpath path='bin/client'/>
-			<src path='../com.ibm.team.juno.microservice/src'/>
+			<src path='../org.apache.juneau.microservice/src/main/java'/>
 		</javac>
 		<manifest file='bin/microservice/META-INF/MANIFEST.MF' mode='update'>
 				<attribute name='Built-By' value='${user.name}'/>
@@ -179,43 +166,46 @@
 			<attribute name='Bundle-Version' value='${version}'/>
 		</manifest>
 		
-		<jar jarfile='${dir.build}/bundles/com.ibm.team.juno.microservice_${version}.jar' basedir='bin/microservice' duplicate='fail' level='9' excludes='**/proto/**' manifest='bin/microservice/META-INF/MANIFEST.MF'/>
-		
-		<copy todir='bin/microservice' includeemptydirs='false'>
-			<fileset dir='../com.ibm.team.juno.microservice/src'/>
-		</copy>
-		<jar jarfile='${dir.build}/source/com.ibm.team.juno.microservice_${version}.jar' basedir='bin/microservice' duplicate='fail' excludes='**/proto/**' manifest='bin/microservice/META-INF/MANIFEST.MF'/>
+		<jar jarfile='${dir.build}/org.apache.juneau.microservice_${version}.jar' basedir='bin/microservice' duplicate='fail' level='9' excludes='**/proto/**' manifest='bin/microservice/META-INF/MANIFEST.MF'/>
 
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-		<!-- juno-all.jar -->
+		<!-- juneau-all.jar -->
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-		<echo message='*** Building juno-all-${shortVersion}.jar ***'/>
+		<echo message='*** Building juneau-all-${version}.jar ***'/>
 		
 		<manifest file='bin/all/META-INF/MANIFEST.MF'>
 			<attribute name='Built-By' value='${user.name}'/>
 			<attribute name='Build-Date' value='${TODAY}'/>
-			<attribute name='Bundle-Name' value='Juno Cloud API'/>
+			<attribute name='Bundle-Name' value='Juneau Cloud Tools'/>
 			<attribute name='Bundle-Vendor' value='IBM'/>
-			<attribute name='Bundle-SymbolicName' value='com.ibm.team.juno.all'/>
+			<attribute name='Bundle-SymbolicName' value='org.apache.juneau.all'/>
 			<attribute name='Bundle-Version' value='${version}'/>
 		</manifest>
 
-		<jar destfile='${dir.build}/juno-all-${shortVersion}.jar' excludes='META-INF/*' manifest='bin/all/META-INF/MANIFEST.MF'>
-			<zipgroupfileset dir='${dir.build}/bundles'/>
-		</jar>
-		
-		<jar destfile='${dir.build}/source/juno-all-${shortVersion}.jar' excludes='META-INF/*' manifest='bin/all/META-INF/MANIFEST.MF'>
-			<zipgroupfileset dir='${dir.build}/source'/>
+		<jar destfile='${dir.build}/juneau-all-${version}.jar' excludes='META-INF/*' manifest='bin/all/META-INF/MANIFEST.MF'>
+			<zipgroupfileset dir='${dir.build}' includes="org.apache.juneau_${version}.jar,org.apache.juneau.server_${version}.jar,org.apache.juneau.client_${version}.jar,org.apache.juneau.microservice_${version}.jar"/>
 		</jar>
 		
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-		<!-- juno-samples.jar -->
+		<!-- juneau-all_src.zip -->
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-		<echo message='*** Building juno-samples-${shortVersion}.jar ***'/>
+		<echo message='*** Building juneau-all-${version}_src.zip ***'/>
+		
+		<zip destfile='${dir.build}/juneau-all-${version}_src.zip'>
+			<fileset dir="../org.apache.juneau/src/main/java"/>
+			<fileset dir="../org.apache.juneau.server/src/main/java"/>
+			<fileset dir="../org.apache.juneau.client/src/main/java"/>
+			<fileset dir="../org.apache.juneau.microservice/src/main/java"/>
+		</zip>
+
+		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+		<!-- juneau-samples.jar -->
+		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+		<echo message='*** Building juneau-samples-${version}.jar ***'/>
 
 		<copy todir='bin/samples'>
-			<fileset dir='../com.ibm.team.juno.samples/src' includes='**/*.properties,**/*.jpg,**/*.css,**/*.html'/>
-			<fileset dir='../com.ibm.team.juno.samples' includes='META-INF/*'/>
+			<fileset dir='../org.apache.juneau.samples/src/main/java' includes='**/*'/>
+			<fileset dir='../org.apache.juneau.samples' includes='META-INF/*'/>
 		</copy>
 		<javac destdir='bin/samples' fork='true' source='1.6' target='1.6' debug='true' includeantruntime='false'>
 			<classpath refid='classpath'/>
@@ -223,7 +213,7 @@
 			<classpath path='bin/server'/>
 			<classpath path='bin/client'/>
 			<classpath path='bin/microservice'/>
-			<src path='../com.ibm.team.juno.samples/src'/>
+			<src path='../org.apache.juneau.samples/src/main/java'/>
 		</javac>
 		<manifest file='bin/samples/META-INF/MANIFEST.MF' mode='update'>
 			<attribute name='Built-By' value='${user.name}'/>
@@ -231,36 +221,29 @@
 			<attribute name='Bundle-Version' value='${version}'/>
 		</manifest>
 		
-		<jar jarfile='${dir.build}/juno-samples-${shortVersion}.jar' basedir='bin/samples' duplicate='fail' level='9' excludes='**/proto/**' manifest='bin/samples/META-INF/MANIFEST.MF'/>
+		<jar jarfile='${dir.build}/juneau-samples-${version}.jar' basedir='bin/samples' duplicate='fail' level='9' excludes='**/proto/**' manifest='bin/samples/META-INF/MANIFEST.MF'/>
 		
-		<copy todir='bin/samples' includeemptydirs='false'>
-			<fileset dir='../com.ibm.team.juno.samples/src'/>
-		</copy>
-		<jar jarfile='${dir.build}/source/juno-samples-${shortVersion}_src.jar' basedir='bin/samples' duplicate='fail' excludes='**/proto/**' manifest='bin/samples/META-INF/MANIFEST.MF'/>
-	
-		<jar jarfile='${dir.build}/juno-samples-fat-${shortVersion}.jar' manifest="bin/samples/META-INF/MANIFEST.MF">
-			<zipgroupfileset dir='${dir.build}' includes='juno-all-${shortVersion}.jar,juno-samples-${shortVersion}.jar'/>
-			<zipgroupfileset dir='../com.ibm.team.juno.microservice/lib' includes='*.jar'/>
+		<jar jarfile='${dir.build}/juneau-samples-fat-${version}.jar' manifest="bin/samples/META-INF/MANIFEST.MF">
+			<zipgroupfileset dir='${dir.build}' includes='juneau-all-${version}.jar,juneau-samples-${version}.jar'/>
+			<zipgroupfileset dir='../org.apache.juneau.microservice/lib' includes='*.jar'/>
 			<zipgroupfileset dir='lib/jena' includes='*.jar'/>
 			<zipgroupfileset dir='lib/derby' includes='*.jar'/>
 		</jar>
 		
-		<copy todir='${dir.build}' file='../com.ibm.team.juno.samples/samples.cfg'/>
-		
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-		<!-- juno-core-test.jar -->
+		<!-- juneau-core-test.jar -->
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-		<echo message='*** Building juno-core-test-${shortVersion}.jar ***'/>
+		<echo message='*** Building juneau-core-test-${version}.jar ***'/>
 		<copy todir='bin/core.test'>
-			<fileset dir='../com.ibm.team.juno.test/src' excludes='**/*.java'/>
-			<fileset dir='../com.ibm.team.juno.test' includes='META-INF/*'/>
+			<fileset dir='../org.apache.juneau/src/test/java' excludes='**/*.java'/>
+			<fileset dir='../org.apache.juneau' includes='META-INF/*'/>
 		</copy>
 		<javac destdir='bin/core.test' fork='true' source='1.6' target='1.6' debug='true' includeantruntime='false' encoding='UTF-8'>
 			<classpath refid='classpath'/>
 			<classpath>
 				<fileset dir='${dir.build}' includes='**/*.jar'/>
 			</classpath>
-			<src path='../com.ibm.team.juno.test/src'/>
+			<src path='../org.apache.juneau/src/test/java'/>
 		</javac>
 		<manifest file='bin/core.test/META-INF/MANIFEST.MF' mode='update'>
 			<attribute name='Built-By' value='${user.name}'/>
@@ -268,26 +251,26 @@
 			<attribute name='Bundle-Version' value='${version}'/>
 		</manifest>
 		
-		<jar jarfile='${dir.build}/test/juno-core-test-${shortVersion}.jar' basedir='bin/core.test' duplicate='fail' level='9' excludes='**/proto/**' manifest='bin/core.test/META-INF/MANIFEST.MF'/>
+		<jar jarfile='${dir.build}/juneau-core-test-${version}.jar' basedir='bin/core.test' duplicate='fail' level='9' excludes='**/proto/**' manifest='bin/core.test/META-INF/MANIFEST.MF'/>
 
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-		<!-- juno-server-test.jar -->
+		<!-- juneau-server-test.jar -->
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-		<echo message='*** Building juno-server-test-${shortVersion}.jar ***'/>
+		<echo message='*** Building juneau-server-test-${version}.jar ***'/>
 		
 		<copy todir='bin/server.test'>
-			<fileset dir='../com.ibm.team.juno.server.test/tests' excludes='**/*.java'/>
-			<fileset dir='../com.ibm.team.juno.server.test/server' excludes='**/*.java'/>
-			<fileset dir='../com.ibm.team.juno.server.test' includes='META-INF/*'/>
+			<fileset dir='../org.apache.juneau.server.test/src/main/java' excludes='**/*.java'/>
+			<fileset dir='../org.apache.juneau.server.test/src/test/java' excludes='**/*.java'/>
+			<fileset dir='../org.apache.juneau.server.test' includes='META-INF/*'/>
 		</copy>
 		<javac destdir='bin/server.test' fork='true' source='1.6' target='1.6' debug='true' includeantruntime='false' encoding='UTF-8'>
 			<classpath refid='classpath'/>
 			<classpath>
-				<fileset dir='../com.ibm.team.juno.microservice/lib' includes='**/*.jar'/>
+				<fileset dir='../org.apache.juneau.microservice/lib' includes='**/*.jar'/>
 				<fileset dir='${dir.build}' includes='**/*.jar'/>
 			</classpath>
-			<src path='../com.ibm.team.juno.server.test/tests'/>
-			<src path='../com.ibm.team.juno.server.test/server'/>
+			<src path='../org.apache.juneau.server.test/src/main/java'/>
+			<src path='../org.apache.juneau.server.test/src/test/java'/>
 		</javac>
 		<manifest file='bin/server.test/META-INF/MANIFEST.MF' mode='update'>
 			<attribute name='Built-By' value='${user.name}'/>
@@ -295,61 +278,60 @@
 			<attribute name='Bundle-Version' value='${version}'/>
 		</manifest>
 		
-		<jar destfile='${dir.build}/test/juno-server-test-${shortVersion}.jar' basedir='bin/server.test' excludes='META-INF/*' manifest='bin/server.test/META-INF/MANIFEST.MF'>
-			<zipgroupfileset dir='${dir.build}' includes='juno-samples-fat-${shortVersion}.jar'/>
+		<jar destfile='${dir.build}/juneau-server-test-${version}.jar' basedir='bin/server.test' excludes='META-INF/*' manifest='bin/server.test/META-INF/MANIFEST.MF'>
+			<zipgroupfileset dir='${dir.build}' includes='juneau-samples-fat-${version}.jar'/>
 		</jar>
 
-		<copy file='../com.ibm.team.juno.server.test/juno-server-test.cfg' todir='${dir.build}/test'/>
+		<copy file='../org.apache.juneau.server.test/juneau-server-test.cfg' todir='${dir.build}/test'/>
 		
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-		<!-- juno.war -->
+		<!-- juneau.war -->
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-		<echo message='*** Building juno-samples-${shortVersion}.war ***'/>
-		<war destfile='${dir.build}/juno-samples-${shortVersion}.war' webxml='../com.ibm.team.juno.samples/war/web.xml'>
+		<echo message='*** Building juneau-samples-${version}.war ***'/>
+		<war destfile='${dir.build}/juneau-samples-${version}.war' webxml='../org.apache.juneau.samples/war/web.xml'>
 			<lib dir='lib/commons-codec-1.9'/>
 			<lib dir='lib/derby'/>
 			<lib dir='lib/httpclient' includes='*.jar'/>
 			<lib dir='lib/jaxrs'/>
 			<lib dir='lib/jena'/>
-			<lib dir='${dir.build}' includes='juno-samples-${shortVersion}.jar,juno-all-${shortVersion}.jar'/>
+			<lib dir='${dir.build}' includes='juneau-samples-${version}.jar,juneau-all-${version}.jar'/>
 		</war>
 
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-		<!-- microservice-project.zip -->
+		<!-- org.apache.juneau.microservice.template.zip -->
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-		<echo message='*** Building microservice-project-${shortVersion}.zip ***'/>
-		<mkdir dir="${dir.build}/microservice-project"/>
-		<copy todir='${dir.build}/microservice-project'>
-			<fileset dir='../com.ibm.team.juno.microservice.template' includes='src/**,META-INF/**,*.cfg'/>
-			<fileset dir='../com.ibm.team.juno.microservice.template/project-root' includes='**'/>
+		<echo message='*** Building org.apache.juneau.microservice.template-${version}.zip ***'/>
+		<mkdir dir="${dir.build}/org.apache.juneau.microservice.template"/>
+		<copy todir='${dir.build}/org.apache.juneau.microservice.template'>
+			<fileset dir='../org.apache.juneau.microservice.template' excludes='target/**'/>
 		</copy>
-		<copy todir='${dir.build}/microservice-project/lib'>
-			<fileset dir='${dir.build}' includes='juno-all-${shortVersion}.jar'/>
-			<fileset dir='../com.ibm.team.juno.microservice/lib' includes='*.jar'/>
+		<copy todir='${dir.build}/org.apache.juneau.microservice.template/lib'>
+			<fileset dir='${dir.build}' includes='juneau-all-${version}.jar'/>
+			<fileset dir='../org.apache.juneau.microservice/lib' includes='*.jar'/>
 		</copy>
-		<zip basedir='${dir.build}' includes='microservice-project/**' destfile='${dir.build}/microservice-project-${shortVersion}.zip'/>
-
+		<zip basedir='${dir.build}' includes='org.apache.juneau.microservice.template/**' destfile='${dir.build}/org.apache.juneau.microservice.template-${version}.zip'/>
+		<delete dir="${dir.build}/org.apache.juneau.microservice.template"/>
+		
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-		<!-- microservice-samples-project.zip -->
+		<!-- org.apache.juneau.samples.zip -->
 		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-		<echo message='*** Building microservice-samples-project-${shortVersion}.zip ***'/>
-		<mkdir dir="${dir.build}/microservice-samples-project"/>
-		<copy todir='${dir.build}/microservice-samples-project'>
-			<fileset dir='../com.ibm.team.juno.samples' includes='src/**,META-INF/**,*.cfg'/>
-			<fileset dir='../com.ibm.team.juno.samples/project-root' includes='**'/>
+		<echo message='*** Building org.apache.juneau.samples-${version}.zip ***'/>
+		<mkdir dir="${dir.build}/org.apache.juneau.samples"/>
+		<copy todir='${dir.build}/org.apache.juneau.samples'>
+			<fileset dir='../org.apache.juneau.samples' excludes='target/**'/>
 		</copy>
-		<copy todir='${dir.build}/microservice-samples-project/lib'>
-			<fileset dir='${dir.build}' includes='juno-all-${shortVersion}.jar'/>
-			<fileset dir='../com.ibm.team.juno.samples/lib' includes='*.jar'/>
-			<fileset dir='../com.ibm.team.juno.microservice/lib' includes='*.jar'/>
+		<copy todir='${dir.build}/org.apache.juneau.samples/lib'>
+			<fileset dir='${dir.build}' includes='juneau-all-${version}.jar'/>
+			<fileset dir='../org.apache.juneau.microservice/lib' includes='*.jar'/>
 		</copy>
-		<zip basedir='${dir.build}' includes='microservice-samples-project/**' destfile='${dir.build}/microservice-samples-project-${shortVersion}.zip'/>
+		<zip basedir='${dir.build}' includes='org.apache.juneau.samples/**' destfile='${dir.build}/org.apache.juneau.samples-${version}.zip'/>
+		<delete dir="${dir.build}/org.apache.juneau.samples"/>
 	</target>
 	
 	<!-- ================================================================================ -->
 	<!-- Component tests -->
 	<!-- ================================================================================ -->
-	<target name='Juno.ComponentTest' depends='Juno.Init' description='Run JUnit component tests.'>
+	<target name='Juneau.ComponentTest' depends='Juneau.Init' description='Run JUnit component tests.'>
 
 		<delete dir='${dir.build}/test/junit' failonerror='false'/>
 		<delete dir='${dir.build}/test/jacoco' failonerror='false'/>
@@ -357,23 +339,23 @@
 		<mkdir dir='${dir.build}/test/junit/results'/>
 		<mkdir dir='${dir.build}/test/junit/html'/>
 		
-		<echo message='*** Starting juno-samples microservice ***'/>
-		<jacoco:coverage destfile='${dir.build}/test/jacoco/jacoco2.exec' includes='com.ibm.juno.*'>
-			<java jar='${dir.build}/juno-samples-fat-${shortVersion}.jar' dir='${dir.build}' fork='true' spawn='true'/>
+		<echo message='*** Starting juneau-samples microservice ***'/>
+		<jacoco:coverage destfile='${dir.build}/test/jacoco/jacoco2.exec' includes='org.apache.juneau.*'>
+			<java jar='${dir.build}/juneau-samples-fat-${version}.jar' dir='${dir.build}' fork='true' spawn='true'/>
 		</jacoco:coverage>
 			
-		<echo message='*** Starting juno-server-test microservice ***'/>
-		<jacoco:coverage destfile='${dir.build}/test/jacoco/jacoco3.exec' includes='com.ibm.juno.*'>
-			<java jar='${dir.build}/test/juno-server-test-${shortVersion}.jar' dir='${dir.build}/test' fork='true' spawn='true'/>
+		<echo message='*** Starting juneau-server-test microservice ***'/>
+		<jacoco:coverage destfile='${dir.build}/test/jacoco/jacoco3.exec' includes='org.apache.juneau.*'>
+			<java jar='${dir.build}/juneau-server-test-${version}.jar' dir='${dir.build}/test' fork='true' spawn='true'/>
 		</jacoco:coverage>
 
 		<echo message='*** Running component tests ***'/>
-		<jacoco:coverage destfile='${dir.build}/test/jacoco/jacoco.exec' includes='com.ibm.juno.*'>
+		<jacoco:coverage destfile='${dir.build}/test/jacoco/jacoco.exec' includes='org.apache.juneau.*'>
 	
 		<!-- Run from project dir.  Fork=true required for dir attr. -->
-			<junit printsummary='true' showoutput='true' fork='true' includeAntRuntime='true' failureproperty='TestFailed'>
-				<sysproperty key='JUNO_SAMPLE_URL' value='http://localhost:10000'/>
-				<sysproperty key='JUNO_SERVER_TEST_URL' value='http://localhost:10001'/>
+		<junit printsummary='true' showoutput='true' fork='true' includeAntRuntime='true' failureproperty='TestFailed' forkmode='once'>
+			<sysproperty key='JUNO_SAMPLE_URL' value='http://localhost:10000'/>
+			<sysproperty key='JUNO_SERVER_TEST_URL' value='http://localhost:10001'/>
 			<classpath>
 				<fileset dir='lib'>
 					<include name='**/*.jar' />
@@ -382,54 +364,65 @@
 					<include name='**/*.jar' />
 				</fileset>
 			</classpath>
-			<formatter type='xml' usefile='true' />
-				<batchtest todir='${dir.build}/test/junit/results' filtertrace='false'>
-				<fileset dir='../com.ibm.team.juno.test/src'>
-					<include name='**/AllTests.java' />
+			<batchtest todir='${dir.build}/test/junit/results' filtertrace='false'>
+				<fileset dir='../org.apache.juneau/src/test/java'>
+					<include name='**/CT_*.java' />
 				</fileset>
-					<fileset dir='../com.ibm.team.juno.server.test/tests'>
-						<include name='**/AllTests.java' />
-					</fileset>
+				<fileset dir='../org.apache.juneau.server.test/src/test/java'>
+					<include name='**/CT_*.java' />
+				</fileset>
+				<formatter type='xml'/>
 			</batchtest>
 		</junit>
 
 		</jacoco:coverage>
 
-		<echo message='*** Stopping juno-samples microservice ***'/>
-		<get src='http://127.0.0.1:10000/shutdown' dest='out.html'/>
+		<!-- Create the JUnit report file -->
+		<delete dir='${dir.build}/test/junit/html' failonerror='false' />
+		<mkdir dir='${dir.build}/test/junit/html' />
+		<!-- Commented out for now due to bug https://issues.apache.org/bugzilla/show_bug.cgi?id=51668 -->
+		<junitreport>
+			<fileset dir='${dir.build}/test/junit/results'>
+				<include name='**/TEST-*.xml' />
+			</fileset>
+			<report format='noframes' todir='${dir.build}/test/junit/html'/>
+		</junitreport>
+
+		<echo message='*** Stopping juneau-samples microservice ***'/>
+		<get src='http://127.0.0.1:10000/shutdown' dest='out.html' ignoreerrors='true'/>
 		
-		<echo message='*** Stopping juno-server-test microservice ***'/>
-		<get src='http://127.0.0.1:10001/shutdown' dest='out.html'/>
+		<echo message='*** Stopping juneau-server-test microservice ***'/>
+		<get src='http://127.0.0.1:10001/shutdown' dest='out.html' ignoreerrors='true'/>
 
 		<jacoco:report>
 			<executiondata>
-				<file file='${dir.build}/test/jacoco/jacoco.exec' />
+				<!--file file='${dir.build}/test/jacoco/jacoco.exec' /-->
 				<file file='${dir.build}/test/jacoco/jacoco2.exec' />
 				<file file='${dir.build}/test/jacoco/jacoco3.exec' />
 			</executiondata>
-			<structure name='Juno'>
+			<structure name='Juneau'>
 			    <group name='Core'>
 					<classfiles>
-						<fileset dir='${dir.build}' includes='juno-core.jar'/>
+						<fileset dir='${dir.build}' includes='juneau-core.jar'/>
 					</classfiles>
 					<sourcefiles encoding='UTF-8'>
-						<fileset dir='../com.ibm.team.juno/src' />
+						<fileset dir='../org.apache.juneau/src/main/java' />
 					</sourcefiles>
 			    </group>
 			    <group name='Server'>
 					<classfiles>
-						<fileset dir='${dir.build}' includes='juno-server.jar'/>
+						<fileset dir='${dir.build}' includes='juneau-server.jar'/>
 					</classfiles>
 					<sourcefiles encoding='UTF-8'>
-						<fileset dir='../com.ibm.team.juno.server/src' />
+						<fileset dir='../org.apache.juneau.server/src/main/java' />
 					</sourcefiles>
 			    </group>
 			    <group name='Client'>
 					<classfiles>
-						<fileset dir='${dir.build}' includes='juno-client.jar'/>
+						<fileset dir='${dir.build}' includes='juneau-client.jar'/>
 					</classfiles>
 					<sourcefiles encoding='UTF-8'>
-						<fileset dir='../com.ibm.team.juno.client/src' />
+						<fileset dir='../org.apache.juneau.client/src/main/java' />
 					</sourcefiles>
 			    </group>
 			</structure>
@@ -439,97 +432,88 @@
 			<xml destfile='${dir.build}/test/jacoco/results/report.xml' />
 		</jacoco:report>
 
-		<!-- Create the JUnit report file -->
-		<delete dir='${dir.build}/test/junit/html' failonerror='false' />
-		<mkdir dir='${dir.build}/test/junit/html' />
-		<!-- Commented out for now due to bug https://issues.apache.org/bugzilla/show_bug.cgi?id=51668 -->
-		<!--junitreport todir='CT_Results'>
-			<fileset dir='CT_Results'>
-				<include name='**/TEST-*.xml' />
-			</fileset>
-			<report format='noframes' todir='CT_Results_html'/>
-		</junitreport-->
-
-		<ant target='Juno.CtFailed'/>
-		<ant target='Juno.CtSucceeded'/>
+		<ant target='Juneau.CtFailed'/>
+		<ant target='Juneau.CtSucceeded'/>
 	</target>
 
-	<target name='Juno.CtFailed' if='TestFailed'>
-		<echo message='Juno component testsuite run had at least one failure.'/>
+	<target name='Juneau.CtFailed' if='TestFailed'>
+		<echo message='Juneau component testsuite run had at least one failure.'/>
 	</target>
 
-	<target name='Juno.CtSucceeded' unless='TestFailed'>
-		<echo message='Juno component testsuite run succeeded.'/>
+	<target name='Juneau.CtSucceeded' unless='TestFailed'>
+		<echo message='Juneau component testsuite run succeeded.'/>
 	</target>
 	
 	
 	<!-- ================================================================================ -->
 	<!-- Build Javadocs -->
 	<!-- ================================================================================ -->
-	<target name='Juno.BuildDoc' depends='Juno.Init' unless='Juno.BuildDoc.Executed'>
+	<target name='Juneau.BuildDoc' depends='Juneau.Init' unless='Juneau.BuildDoc.Executed'>
 		<!--delete dir='doc'/-->
-		<echo message="Building Javadocs at ${dir.build}/doc"/>
+		<echo message="Building Javadocs at ${dir.build}/javadoc"/>
 		<javadoc 
 				access='protected' 
-				windowtitle='Juno' 
+				windowtitle='Juneau' 
 				author='true' 
-				destdir='${dir.build}/doc' 
+				destdir='${dir.build}/javadoc' 
 				linksource='on' 
 				source='1.6' 
-				overview='../com.ibm.team.juno/src/overview.html' 
+				overview='../org.apache.juneau/src/main/java/overview.html' 
 				stylesheetfile='javadoc.css'
 				use='true'
-				additionalparam='-sourcetab 3 -notimestamp'
+				additionalparam='-sourcetab 3 -notimestamp -Xdoclint:none'
 				verbose='false'
 				excludepackagenames='*proto*'>
 			<link href='http://docs.oracle.com/javase/7/docs/api/' />
 			<link href='http://docs.oracle.com/javaee/5/api/' />
-			<packageset dir='../com.ibm.team.juno/src'>
-				<include name='com/ibm/juno/**'/>
+			<packageset dir='../org.apache.juneau/src/main/java'>
+				<include name='org/apache/juneau/**'/>
+				<exclude name='**/proto/**'/>
+				<exclude name='**/internal/**'/>
+			</packageset>
+			<packageset dir='../org.apache.juneau.client/src/main/java'>
+				<include name='org/apache/juneau/**'/>
 				<exclude name='**/proto/**'/>
 			</packageset>
-			<packageset dir='../com.ibm.team.juno.client/src'>
-				<include name='com/ibm/juno/**'/>
+			<packageset dir='../org.apache.juneau.server/src/main/java'>
+				<include name='org/apache/juneau/**'/>
 				<exclude name='**/proto/**'/>
 			</packageset>
-			<packageset dir='../com.ibm.team.juno.server/src'>
-				<include name='com/ibm/juno/**'/>
-				<exclude name='**/proto/**'/>
-			</packageset>
-			<packageset dir='../com.ibm.team.juno.microservice/src'>
-				<include name='com/ibm/juno/**'/>
+			<packageset dir='../org.apache.juneau.microservice/src/main/java'>
+				<include name='org/apache/juneau/**'/>
 				<exclude name='**/proto/**'/>
 			</packageset>
 			<classpath refid='classpath'/>
-			<group title='com.ibm.juno.core - &lt;i&gt;Core API (serializers, parsers, bean context)&lt;/i&gt;'>
-				<package name='com.ibm.juno.core*'/>
+			<group title='org.apache.juneau - Core API (serializers, parsers, bean context)'>
+				<package name='org.apache.juneau*'/>
 			</group>
-			<group title='com.ibm.juno.server - &lt;i>REST Server API&lt;/i>'>
-				<package name='com.ibm.juno.server*'/>
+			<group title='org.apache.juneau.server - REST Server API'>
+				<package name='org.apache.juneau.server*'/>
 			</group>
-			<group title='com.ibm.juno.client - &lt;i>REST Client API&lt;/i>'>
-				<package name='com.ibm.juno.client*'/>
+			<group title='org.apache.juneau.client - REST Client API'>
+				<package name='org.apache.juneau.client*'/>
 			</group>
-			<group title='com.ibm.juno.microservice - &lt;i>Microservice API&lt;/i>'>
-				<package name='com.ibm.juno.microservice*'/>
+			<group title='org.apache.juneau.microservice - Microservice API'>
+				<package name='org.apache.juneau.microservice*'/>
 			</group>
 		</javadoc>
-		<!--java classname='com.ibm.juno.utils.LinkValidator' classpath='../com.ibm.juno.utils/bin;bin' dir='.' fork='true'>
+		<!--java classname='org.apache.juneau.utils.LinkValidator' classpath='../org.apache.juneau.utils/bin;bin' dir='.' fork='true'>
 			<arg value='doc'/>
 		</java-->
-		<property name='Juno.BuildDoc.Executed' value='true'/>
+		
+		<property name='Juneau.BuildDoc.Executed' value='true'/>
 	</target>
 	
 
 	<!-- ================================================================================ -->
 	<!-- Build Javadoc zip file -->
 	<!-- ================================================================================ -->
-	<target name='Juno.BuildDocZip' description='Create Javadoc archive file' depends='Juno.BuildDoc'>
+	<target name='Juneau.BuildDocZip' description='Create Javadoc archive file' depends='Juneau.BuildDoc'>
 
-		<!-- juno_javadocs.war -->
-		<echo message='*** Building juno-javadocs.war ***'/>
-		<war destfile='${dir.build}/juno-javadocs.war' webxml='misc/web.xml'>
-			<fileset dir='${dir.build}/doc'/>
+		<!-- juneau_javadocs.war -->
+		<echo message='*** Building juneau-javadocs-${version}.war ***'/>
+		<war destfile='${dir.build}/juneau-javadocs-${version}.war' webxml='misc/web.xml'>
+			<fileset dir='${dir.build}/javadoc'/>
 		</war>		
 		
 	</target>

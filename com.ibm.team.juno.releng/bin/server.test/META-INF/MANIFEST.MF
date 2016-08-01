@@ -1,15 +1,15 @@
 Manifest-Version: 1.0
-Ant-Version: Apache Ant 1.8.3
-Created-By: pwa6470_27sr1-20140411_01 (SR1) (IBM Corporation)
+Ant-Version: Apache Ant 1.9.6
+Created-By: 1.8.0_77-b03 (Oracle Corporation)
 Bundle-ManifestVersion: 2
-Bundle-Name: Juno Cloud API - Server Test
-Bundle-SymbolicName: com.ibm.team.juno.server.test
-Bundle-Version: 5.2.0.0
+Bundle-Name: Juneau Cloud Tools - Server Test
+Bundle-SymbolicName: org.apache.juneau.server
+Bundle-Version: 6.0.0
 Bundle-Vendor: IBM
-Main-Class: com.ibm.juno.microservice.RestMicroservice
-Rest-Resources: com.ibm.juno.server.test.Root
-Main-ConfigFile: juno-server-test.cfg
+Main-Class: org.apache.juneau.microservice.RestMicroservice
+Rest-Resources: org.apache.juneau.server.Root
+Main-ConfigFile: juneau-server-test.cfg
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Built-By: jbognar
-Build-Date: December 30 2015
+Built-By: james.bognar
+Build-Date: July 24 2016
 

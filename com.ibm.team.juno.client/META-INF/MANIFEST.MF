@@ -1,11 +1,11 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Juno Cloud API - Client
-Bundle-SymbolicName: com.ibm.team.juno.client
+Bundle-Name: Juneau Cloud Tools - Client
+Bundle-SymbolicName: org.apache.juneau.client
 Bundle-Version: 5.2.1000.qualifier
 Bundle-Vendor: IBM
 Require-Bundle: 
- com.ibm.team.juno
+ org.apache.juneau
 Import-Package: 
  org.apache.http,
  org.apache.http.auth,
@@ -32,6 +32,5 @@ Import-Package:
  org.apache.http.protocol,
  org.apache.http.util
 Export-Package: 
- com.ibm.juno.client,
- com.ibm.juno.client.jazz
+ org.apache.juneau.client
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
