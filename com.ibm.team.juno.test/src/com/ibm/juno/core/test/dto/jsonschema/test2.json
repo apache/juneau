@@ -1,0 +1,20 @@
+{
+	id: 'http://id', 
+	'$schema': 'http://schemaVersionUri', 
+	type: [
+		'string', 
+		'number'
+	], 
+	definitions: {
+		definition: {
+			id: 'http://definition'
+		}
+	}, 
+	items: [
+		{
+			'$ref': 'http://items'
+		}
+	], 
+	additionalItems: true, 
+	additionalProperties: true
+}

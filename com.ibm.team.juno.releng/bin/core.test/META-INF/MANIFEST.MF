@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Ant-Version: Apache Ant 1.8.3
+Created-By: pwa6470_27sr1-20140411_01 (SR1) (IBM Corporation)
+Bundle-ManifestVersion: 2
+Bundle-Name: Juno Cloud API - Test
+Bundle-SymbolicName: com.ibm.team.juno.test
+Bundle-Version: 5.2.0.0
+Bundle-Vendor: IBM
+Require-Bundle: com.ibm.team.juno,com.ibm.team.juno.client,com.ibm.tea
+ m.juno.server,org.junit
+Import-Package: javax.servlet,javax.servlet.http,org.apache.commons.fi
+ leupload,org.apache.commons.fileupload.servlet,org.apache.derby.jdbc,
+ org.apache.http,org.apache.http.impl.client,org.osgi.framework,org.os
+ gi.service.http,org.osgi.util.tracker
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Built-By: jbognar
+Build-Date: December 30 2015
+

@@ -1,0 +1,120 @@
+/*******************************************************************************
+ * Licensed Materials - Property of IBM
+ * (c) Copyright IBM Corporation 2014, 2015. All Rights Reserved.
+ *
+ * Note to U.S. Government Users Restricted Rights:
+ * Use, duplication or disclosure restricted by GSA ADP Schedule
+ * Contract with IBM Corp.
+ *******************************************************************************/
+package com.ibm.juno.server.tests;
+
+import static com.ibm.juno.server.tests.TestUtils.*;
+import static javax.servlet.http.HttpServletResponse.*;
+import static org.junit.Assert.*;
+
+import java.io.*;
+
+import org.junit.*;
+
+import com.ibm.juno.client.*;
+import com.ibm.juno.core.utils.*;
+
+public class CT_TestAcceptCharset {
+
+	boolean debug = false;
+
+	//====================================================================================================
+	// Test that Q-values are being resolved correctly.
+	//====================================================================================================
+	@Test
+	public void testQValues() throws Exception {
+		RestClient client = new TestRestClient().setHeader("Accept", "text/plain");
+
+		check1(client, "utf-8", "utf-8");
+		check1(client, "iso-8859-1", "iso-8859-1");
+		check1(client, "bad,utf-8", "utf-8");
+		check1(client, "utf-8,bad", "utf-8");
+		check1(client, "bad;q=0.9,utf-8;q=0.1", "utf-8");
+		check1(client, "bad;q=0.1,utf-8;q=0.9", "utf-8");
+		check1(client, "utf-8,iso-8859-1", "utf-8");
+		check1(client, "iso-8859-1,utf-8", "utf-8");
+		check1(client, "utf-8;q=0.9,iso-8859-1;q=0.1", "utf-8");
+		check1(client, "utf-8;q=0.1,iso-8859-1;q=0.9", "iso-8859-1");
+		check1(client, "*", "utf-8");
+		check1(client, "bad,iso-8859-1;q=0.5,*;q=0.1", "iso-8859-1");
+		check1(client, "bad,iso-8859-1;q=0.1,*;q=0.5", "utf-8");
+
+		client.closeQuietly();
+	}
+
+	private void check1(RestClient client, String requestCharset, String responseCharset) throws Exception {
+		RestCall r;
+		InputStream is;
+		String url = "/testAcceptCharset/testQValues";
+		r = client.doGet(url).setHeader("Accept-Charset", requestCharset).connect();
+		assertTrue(r.getResponse().getFirstHeader("Content-Type").getValue().toLowerCase().contains(responseCharset));
+		is = r.getInputStream();
+		assertEquals("foo", IOUtils.read(new InputStreamReader(is, responseCharset)));
+	}
+
+	//====================================================================================================
+	// Validate various Accept-Charset variations.
+	//====================================================================================================
+	@Test
+	public void testCharsetOnResponse() throws Exception {
+		RestClient client = new TestRestClient().setAccept("text/plain").setContentType("text/plain");
+		String url = "/testAcceptCharset/testCharsetOnResponse";
+		String r;
+
+		r = client.doPut(url, new StringReader("")).getResponseAsString();
+		assertEquals("utf-8/utf-8", r.toLowerCase());
+
+		r = client.doPut(url, new StringReader("")).setHeader("Accept-Charset", "Shift_JIS").getResponseAsString();
+		assertEquals("utf-8/shift_jis", r.toLowerCase());
+
+		try {
+			r = client.doPut(url+"?noTrace=true", new StringReader("")).setHeader("Accept-Charset", "BAD").getResponseAsString();
+			fail("Exception expected");
+		} catch (RestCallException e) {
+			checkErrorResponse(debug, e, SC_NOT_ACCEPTABLE, "No supported charsets in header 'Accept-Charset': 'BAD'");
+		}
+
+		r = client.doPut(url, new StringReader("")).setHeader("Accept-Charset", "UTF-8").getResponseAsString();
+		assertEquals("utf-8/utf-8", r.toLowerCase());
+
+		r = client.doPut(url, new StringReader("")).setHeader("Accept-Charset", "bad,iso-8859-1").getResponseAsString();
+		assertEquals("utf-8/iso-8859-1", r.toLowerCase());
+
+		r = client.doPut(url, new StringReader("")).setHeader("Accept-Charset", "bad;q=0.9,iso-8859-1;q=0.1").getResponseAsString();
+		assertEquals("utf-8/iso-8859-1", r.toLowerCase());
+
+		r = client.doPut(url, new StringReader("")).setHeader("Accept-Charset", "bad;q=0.1,iso-8859-1;q=0.9").getResponseAsString();
+		assertEquals("utf-8/iso-8859-1", r.toLowerCase());
+
+		client.setHeader("Accept-Charset", "utf-8");
+
+		r = client.doPut(url, new StringReader("")).setHeader("Content-Type", "text/plain").getResponseAsString();
+		assertEquals("utf-8/utf-8", r.toLowerCase());
+
+		r = client.doPut(url, new StringReader("")).setHeader("Content-Type", "text/plain;charset=utf-8").getResponseAsString();
+		assertEquals("utf-8/utf-8", r.toLowerCase());
+
+		r = client.doPut(url, new StringReader("")).setHeader("Content-Type", "text/plain;charset=UTF-8").getResponseAsString();
+		assertEquals("utf-8/utf-8", r.toLowerCase());
+
+		r = client.doPut(url, new StringReader("")).setHeader("Content-Type", "text/plain;charset=iso-8859-1").getResponseAsString();
+		assertEquals("iso-8859-1/utf-8", r.toLowerCase());
+
+		r = client.doPut(url, new StringReader("")).setHeader("Content-Type", "text/plain;charset=Shift_JIS").getResponseAsString();
+		assertEquals("shift_jis/utf-8", r.toLowerCase());
+
+		try {
+			r = client.doPut(url + "?noTrace=true&Content-Type=text/plain;charset=BAD", new StringReader("")).getResponseAsString();
+			fail("Exception expected");
+		} catch (RestCallException e) {
+			checkErrorResponse(debug, e, SC_UNSUPPORTED_MEDIA_TYPE, "Unsupported charset in header 'Content-Type': 'text/plain;charset=BAD'");
+		}
+		
+		client.closeQuietly();
+	}
+}

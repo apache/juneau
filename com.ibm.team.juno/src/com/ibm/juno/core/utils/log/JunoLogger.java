@@ -1,0 +1,293 @@
+/*******************************************************************************
+ * Licensed Materials - Property of IBM
+ * (c) Copyright IBM Corporation 2016. All Rights Reserved.
+ *
+ *  The source code for this program is not published or otherwise
+ *  divested of its trade secrets, irrespective of what has been
+ *  deposited with the U.S. Copyright Office.
+ *******************************************************************************/
+package com.ibm.juno.core.utils.log;
+
+import static java.util.logging.Level.*;
+
+import java.text.*;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.logging.*;
+
+import com.ibm.juno.core.filters.*;
+import com.ibm.juno.core.json.*;
+import com.ibm.juno.core.serializer.*;
+import com.ibm.juno.core.utils.*;
+
+/**
+ * Wraps and extends the {@link java.util.logging.Logger} class to provide some additional convenience methods.
+ *
+ * @author James Bognar (jbognar@us.ibm.com)
+ */
+public class JunoLogger extends java.util.logging.Logger {
+
+	private static final WriterSerializer serializer = JsonSerializer.DEFAULT_LAX.clone()
+		.addFilters(
+			ClassFilter.class,
+			CalendarFilter.ISO8601DTZ.class,
+			DateFilter.ISO8601DTZ.class,
+			EnumerationFilter.class,
+			IteratorFilter.class
+		);
+
+	private static final ConcurrentHashMap<Class<?>,String> rbMap = new ConcurrentHashMap<Class<?>,String>();
+
+	private final ResourceBundle rb;
+	private final java.util.logging.Logger innerLogger;
+
+	/**
+	 * Get logger for specified class.
+	 *
+	 * @param forClass The class to create a logger for.
+	 * @return A new <l>Logger</l>.
+	 */
+	public static JunoLogger getLogger(Class<?> forClass) {
+		return new JunoLogger(java.util.logging.Logger.getLogger(forClass.getName()));
+	}
+
+	/**
+	 * Get logger for specified class using the specified resource bundle name.
+	 *
+	 * @param forClass The class to create a logger for.
+	 * @param resourceBundleName The name of the resource bundle.
+	 * 	Can be any of the following formats:
+	 * 	<ol>
+	 * 		<li>An absolute path.  E.g. <js>"com/ibm/nls/Messages"</js>.
+	 * 		<li>A path relative to the package of the class.  E.g. <js>"nls/Messages"</js>.
+	 * 	</ol>
+	 * 	Both <js>'.'</js> and <js>'/'</js> can be used as path delimiters.
+	 * @return A new <l>Logger</l>.
+	 */
+	public static JunoLogger getLogger(Class<?> forClass, String resourceBundleName) {
+		return new JunoLogger(java.util.logging.Logger.getLogger(forClass.getName(), resolveResourceBundleName(forClass, resourceBundleName)));
+	}
+
+	/**
+	 * Get logger with specified name using the specified resource bundle name.
+	 *
+	 * @param name The name of the logger to use.
+	 * @param resourceBundleName The name of the resource bundle.
+	 * 	Can be any of the following formats:
+	 * 	<ol>
+	 * 		<li>An absolute path.  E.g. <js>"com/ibm/nls/Messages"</js>.
+	 * 		<li>A path relative to the package of the class.  E.g. <js>"nls/Messages"</js>.
+	 * 	</ol>
+	 * 	Both <js>'.'</js> and <js>'/'</js> can be used as path delimiters.
+	 * @return A new <l>Logger</l>.
+	 */
+	public static JunoLogger getLogger(String name, String resourceBundleName) {
+		return new JunoLogger(java.util.logging.Logger.getLogger(name, resourceBundleName));
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param innerLogger The wrapped logger.
+	 */
+	protected JunoLogger(java.util.logging.Logger innerLogger) {
+		super(innerLogger.getName(), innerLogger.getResourceBundleName());
+		this.innerLogger = innerLogger;
+		this.rb = getResourceBundle();
+	}
+
+	/**
+     * Logs a message with the specified {@link MessageFormat}-style arguments at {@link Level#SEVERE} level.
+     *
+     * @param msg The message to log.
+     * @param args The {@link MessageFormat}-style arguments.
+	 */
+	public void severe(String msg, Object...args) {
+		if (isLoggable(SEVERE))
+			log(SEVERE, msg, args);
+	}
+
+	/**
+    * Logs a message with the specified {@link MessageFormat}-style arguments at {@link Level#WARNING} level.
+    *
+    * @param msg The message to log.
+    * @param args The {@link MessageFormat}-style arguments.
+	 */
+	public void warning(String msg, Object...args) {
+		if (isLoggable(WARNING))
+			log(WARNING, msg, args);
+	}
+
+	/**
+    * Logs a message with the specified {@link MessageFormat}-style arguments at {@link Level#INFO} level.
+    *
+    * @param msg The message to log.
+    * @param args The {@link MessageFormat}-style arguments.
+	 */
+	public void info(String msg, Object...args) {
+		if (isLoggable(INFO))
+			log(INFO, msg, args);
+	}
+
+	/**
+    * Logs a message with the specified {@link MessageFormat}-style arguments at {@link Level#CONFIG} level.
+    *
+    * @param msg The message to log.
+    * @param args The {@link MessageFormat}-style arguments.
+	 */
+	public void config(String msg, Object...args) {
+		if (isLoggable(CONFIG))
+			log(CONFIG, msg, args);
+	}
+
+	/**
+    * Logs a message with the specified {@link MessageFormat}-style arguments at {@link Level#FINE} level.
+    *
+    * @param msg The message to log.
+    * @param args The {@link MessageFormat}-style arguments.
+	 */
+	public void fine(String msg, Object...args) {
+		if (isLoggable(FINE))
+			log(FINE, msg, args);
+	}
+
+	/**
+    * Logs a message with the specified {@link MessageFormat}-style arguments at {@link Level#FINER} level.
+    *
+    * @param msg The message to log.
+    * @param args The {@link MessageFormat}-style arguments.
+	 */
+	public void finer(String msg, Object...args) {
+		if (isLoggable(FINER))
+			log(FINER, msg, args);
+	}
+
+	/**
+    * Logs a message with the specified {@link MessageFormat}-style arguments at {@link Level#FINEST} level.
+    *
+    * @param msg The message to log.
+    * @param args The {@link MessageFormat}-style arguments.
+	 */
+	public void finest(String msg, Object...args) {
+		if (isLoggable(FINEST))
+			log(FINEST, msg, args);
+	}
+
+	/**
+    * Logs an exception as {@link Level#SEVERE} level.
+	 *
+	 * @param t The Throwable object to log.
+	 */
+	public void severe(Throwable t) {
+		if (isLoggable(SEVERE))
+			log(SEVERE, t.getLocalizedMessage(), t);
+	}
+
+	/**
+    * Logs an exception as {@link Level#WARNING} level.
+	 *
+	 * @param t The Throwable object to log.
+	 */
+	public void warning(Throwable t) {
+		if (isLoggable(WARNING))
+			log(WARNING, t.getLocalizedMessage(), t);
+	}
+
+	/**
+    * Logs a message with the specified {@link MessageFormat}-style arguments at {@link Level#SEVERE} level.
+	 *
+	 * @param t The Throwable object associated with the event that needs to be logged.
+    * @param msg The message to log.
+    * @param args The {@link MessageFormat}-style arguments.
+	 */
+	public void severe(Throwable t, String msg, Object...args) {
+		if (isLoggable(SEVERE))
+			log(SEVERE, getMessage(msg, args), t);
+	}
+
+	/**
+    * Logs a message with the specified {@link MessageFormat}-style arguments at {@link Level#WARNING} level.
+	 *
+	 * @param t The Throwable object associated with the event that needs to be logged.
+    * @param msg The message to log.
+    * @param args The {@link MessageFormat}-style arguments.
+	 */
+	public void warning(Throwable t, String msg, Object...args) {
+		if (isLoggable(WARNING))
+			log(WARNING, getMessage(msg, args), t);
+	}
+
+	/**
+    * Logs a message with the specified {@link MessageFormat}-style arguments at {@link Level#INFO} level.
+	 *
+	 * @param t The Throwable object associated with the event that needs to be logged.
+    * @param msg The message to log.
+    * @param args The {@link MessageFormat}-style arguments.
+	 */
+	public void info(Throwable t, String msg, Object...args) {
+		if (isLoggable(INFO))
+			log(INFO, getMessage(msg, args), t);
+	}
+
+   @Override /* Logger */
+	public void log(LogRecord record) {
+   	innerLogger.log(record);
+   }
+
+   @Override /* Logger */
+	public boolean isLoggable(Level level) {
+   	return innerLogger.isLoggable(level);
+   }
+
+	/**
+    * Similar to {@link #log(Level, String, Object[])}, except arguments are converted to objects
+    * 	that are serialized using the {@link JsonSerializer#toStringObject(Object)} method.
+    * This allows arbitrary POJOs to be serialized as message parameters.
+	 *
+	 * @param level The level of the given message.
+    * @param msg The message to log.
+    * @param args The POJO arguments.
+	 */
+	public void logObjects(Level level, String msg, Object...args) {
+		if (isLoggable(level)) {
+			for (int i = 0; i < args.length; i++)
+				args[i] = serializer.toStringObject(args[i]);
+			log(level, msg, args);
+		}
+	}
+
+	private String getMessage(String msg, Object...args) {
+		if (args.length == 0)
+			return msg;
+		if (rb != null && rb.containsKey(msg))
+			msg = rb.getString(msg);
+		return MessageFormat.format(msg, args);
+	}
+
+	private static String resolveResourceBundleName(Class<?> forClass, String path) {
+		if (StringUtils.isEmpty(path))
+			return null;
+		String rb = rbMap.get(forClass);
+		if (rb == null) {
+			path = path.replace('/', '.');
+			if (path.startsWith("."))
+				path = path.substring(1);
+			ClassLoader cl = forClass.getClassLoader();
+			try {
+				ResourceBundle.getBundle(path, Locale.getDefault(), cl);
+				rbMap.putIfAbsent(forClass, path);
+			} catch (MissingResourceException e) {
+				try {
+					path = forClass.getPackage().getName() + '.' + path;
+					ResourceBundle.getBundle(path, Locale.getDefault(), cl);
+					rbMap.putIfAbsent(forClass, path);
+				} catch (MissingResourceException e2) {
+					rbMap.putIfAbsent(forClass, "");
+				}
+			}
+			rb = rbMap.get(forClass);
+		}
+		return ("".equals(rb) ? null : rb);
+	}
+
+}

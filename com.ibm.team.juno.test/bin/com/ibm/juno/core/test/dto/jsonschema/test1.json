@@ -1,0 +1,77 @@
+{
+	id: 'http://id', 
+	'$schema': 'http://schemaVersionUri', 
+	title: 'title', 
+	description: 'description', 
+	type: 'number', 
+	definitions: {
+		definition: {
+			'$ref': 'http://definition'
+		}
+	}, 
+	properties: {
+		property: {
+			type: 'number'
+		}
+	}, 
+	patternProperties: {
+		'/pattern/': {
+			type: 'number'
+		}
+	}, 
+	dependencies: {
+		dependency: {
+			'$ref': 'http://dependency'
+		}
+	}, 
+	items: [
+		{
+			type: 'number'
+		}
+	], 
+	multipleOf: 1, 
+	maximum: 2, 
+	exclusiveMaximum: true, 
+	minimum: 3, 
+	exclusiveMinimum: true, 
+	maxLength: 4, 
+	minLength: 5, 
+	pattern: '/pattern/', 
+	additionalItems: [
+		{
+			type: 'number'
+		}
+	], 
+	maxItems: 6, 
+	minItems: 7, 
+	uniqueItems: true, 
+	maxProperties: 8, 
+	minProperties: 9, 
+	required: [
+		'required'
+	], 
+	additionalProperties: {
+		'$ref': 'http://additionalProperty'
+	}, 
+	'enum': [
+		'enum'
+	], 
+	allOf: [
+		{
+			'$ref': 'http://allOf'
+		}
+	], 
+	anyOf: [
+		{
+			'$ref': 'http://anyOf'
+		}
+	], 
+	oneOf: [
+		{
+			'$ref': 'http://oneOf'
+		}
+	], 
+	not: {
+		'$ref': 'http://not'
+	}
+}

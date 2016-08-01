@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Licensed Materials - Property of IBM
+	(c) Copyright IBM Corporation 2015. All Rights Reserved.
+	
+	Note to U.S. Government Users Restricted Rights:  
+	Use, duplication or disclosure restricted by GSA ADP Schedule 
+	Contract with IBM Corp. 
+ -->
+
+<web-app 
+	version="2.4" 
+	xmlns="http://java.sun.com/xml/ns/j2ee" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+		 
+	<servlet>
+		<servlet-name>sample</servlet-name>
+		<servlet-class>com.ibm.juno.server.samples.RootResources</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>test</servlet-name>
+		<servlet-class>com.ibm.juno.server.samples.test.Root</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>testuris</servlet-name>
+		<servlet-class>com.ibm.juno.server.samples.test.TestUris</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>sample</servlet-name>
+		<url-pattern>/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>test</servlet-name>
+		<url-pattern>/test/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>testuris</servlet-name>
+		<url-pattern>/testuris/*</url-pattern>
+	</servlet-mapping>
+</web-app>

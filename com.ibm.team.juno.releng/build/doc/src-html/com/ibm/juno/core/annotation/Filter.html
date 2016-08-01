@@ -1,0 +1,154 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../javadoc.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>/*******************************************************************************<a name="line.1"></a>
+<span class="sourceLineNo">002</span> * Licensed Materials - Property of IBM<a name="line.2"></a>
+<span class="sourceLineNo">003</span> * (c) Copyright IBM Corporation 2011, 2014. All Rights Reserved.<a name="line.3"></a>
+<span class="sourceLineNo">004</span> *<a name="line.4"></a>
+<span class="sourceLineNo">005</span> *  The source code for this program is not published or otherwise<a name="line.5"></a>
+<span class="sourceLineNo">006</span> *  divested of its trade secrets, irrespective of what has been<a name="line.6"></a>
+<span class="sourceLineNo">007</span> *  deposited with the U.S. Copyright Office.<a name="line.7"></a>
+<span class="sourceLineNo">008</span> *******************************************************************************/<a name="line.8"></a>
+<span class="sourceLineNo">009</span>package com.ibm.juno.core.annotation;<a name="line.9"></a>
+<span class="sourceLineNo">010</span><a name="line.10"></a>
+<span class="sourceLineNo">011</span>import static java.lang.annotation.ElementType.*;<a name="line.11"></a>
+<span class="sourceLineNo">012</span>import static java.lang.annotation.RetentionPolicy.*;<a name="line.12"></a>
+<span class="sourceLineNo">013</span><a name="line.13"></a>
+<span class="sourceLineNo">014</span>import java.lang.annotation.*;<a name="line.14"></a>
+<span class="sourceLineNo">015</span><a name="line.15"></a>
+<span class="sourceLineNo">016</span>import com.ibm.juno.core.filter.*;<a name="line.16"></a>
+<span class="sourceLineNo">017</span>import com.ibm.juno.core.serializer.*;<a name="line.17"></a>
+<span class="sourceLineNo">018</span><a name="line.18"></a>
+<span class="sourceLineNo">019</span>/**<a name="line.19"></a>
+<span class="sourceLineNo">020</span> * Annotation that can be applied to a class to associate a filter with it.<a name="line.20"></a>
+<span class="sourceLineNo">021</span> * &lt;p&gt;<a name="line.21"></a>
+<span class="sourceLineNo">022</span> *    Typically used to associate {@link PojoFilter PojoFilters} with classes using annotations<a name="line.22"></a>
+<span class="sourceLineNo">023</span> *       instead of programatically through a method such as {@link Serializer#addFilters(Class...)}.<a name="line.23"></a>
+<span class="sourceLineNo">024</span> *<a name="line.24"></a>
+<span class="sourceLineNo">025</span> * &lt;h6 class='topic'&gt;Example&lt;/h6&gt;<a name="line.25"></a>
+<span class="sourceLineNo">026</span> * &lt;p&gt;<a name="line.26"></a>
+<span class="sourceLineNo">027</span> *    In this case, a filter is being applied to a bean that will force it to be serialized as a &lt;code&gt;String&lt;/code&gt;<a name="line.27"></a>
+<span class="sourceLineNo">028</span> * &lt;p class='bcode'&gt;<a name="line.28"></a>
+<span class="sourceLineNo">029</span> *    &lt;jc&gt;// Our bean class&lt;/jc&gt;<a name="line.29"></a>
+<span class="sourceLineNo">030</span> *    &lt;ja&gt;@Filter&lt;/ja&gt;(BFilter.&lt;jk&gt;class&lt;/jk&gt;)<a name="line.30"></a>
+<span class="sourceLineNo">031</span> *    &lt;jk&gt;public class&lt;/jk&gt; B {<a name="line.31"></a>
+<span class="sourceLineNo">032</span> *       &lt;jk&gt;public&lt;/jk&gt; String &lt;jf&gt;f1&lt;/jf&gt;;<a name="line.32"></a>
+<span class="sourceLineNo">033</span> *    }<a name="line.33"></a>
+<span class="sourceLineNo">034</span> *<a name="line.34"></a>
+<span class="sourceLineNo">035</span> *    &lt;jc&gt;// Our filter to force the bean to be serialized as a String&lt;/jc&gt;<a name="line.35"></a>
+<span class="sourceLineNo">036</span> *    &lt;jk&gt;public class&lt;/jk&gt; BFilter &lt;jk&gt;extends&lt;/jk&gt; PojoFilter&amp;lt;B,String&amp;gt; {<a name="line.36"></a>
+<span class="sourceLineNo">037</span> *       &lt;jk&gt;public&lt;/jk&gt; String filter(B o) &lt;jk&gt;throws&lt;/jk&gt; SerializeException {<a name="line.37"></a>
+<span class="sourceLineNo">038</span> *          &lt;jk&gt;return&lt;/jk&gt; o.f1;<a name="line.38"></a>
+<span class="sourceLineNo">039</span> *       }<a name="line.39"></a>
+<span class="sourceLineNo">040</span> *       &lt;jk&gt;public&lt;/jk&gt; B unfilter(String f, ClassMeta&amp;lt;?&amp;gt; hint) &lt;jk&gt;throws&lt;/jk&gt; ParseException {<a name="line.40"></a>
+<span class="sourceLineNo">041</span> *          B b1 = &lt;jk&gt;new&lt;/jk&gt; B();<a name="line.41"></a>
+<span class="sourceLineNo">042</span> *          b1.&lt;jf&gt;f1&lt;/jf&gt; = f;<a name="line.42"></a>
+<span class="sourceLineNo">043</span> *          &lt;jk&gt;return&lt;/jk&gt; b1;<a name="line.43"></a>
+<span class="sourceLineNo">044</span> *       }<a name="line.44"></a>
+<span class="sourceLineNo">045</span> *    }<a name="line.45"></a>
+<span class="sourceLineNo">046</span> *<a name="line.46"></a>
+<span class="sourceLineNo">047</span> *    &lt;jk&gt;public void&lt;/jk&gt; testFilter() &lt;jk&gt;throws&lt;/jk&gt; Exception {<a name="line.47"></a>
+<span class="sourceLineNo">048</span> *       WriterSerializer s = JsonSerializer.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;;<a name="line.48"></a>
+<span class="sourceLineNo">049</span> *       B b = &lt;jk&gt;new&lt;/jk&gt; B();<a name="line.49"></a>
+<span class="sourceLineNo">050</span> *       b.&lt;jf&gt;f1&lt;/jf&gt; = &lt;js&gt;"bar"&lt;/js&gt;;<a name="line.50"></a>
+<span class="sourceLineNo">051</span> *       String json = s.serialize(b);<a name="line.51"></a>
+<span class="sourceLineNo">052</span> *       &lt;jsm&gt;assertEquals&lt;/jsm&gt;(&lt;js&gt;"'bar'"&lt;/js&gt;, json);<a name="line.52"></a>
+<span class="sourceLineNo">053</span> *<a name="line.53"></a>
+<span class="sourceLineNo">054</span> *       ReaderParser p = JsonParser.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;;<a name="line.54"></a>
+<span class="sourceLineNo">055</span> *       b = p.parse(json, B.&lt;jk&gt;class&lt;/jk&gt;);<a name="line.55"></a>
+<span class="sourceLineNo">056</span> *       &lt;jsm&gt;assertEquals&lt;/jsm&gt;(&lt;js&gt;"bar"&lt;/js&gt;, t.&lt;jf&gt;f1&lt;/jf&gt;);<a name="line.56"></a>
+<span class="sourceLineNo">057</span> *    }<a name="line.57"></a>
+<span class="sourceLineNo">058</span> * &lt;/p&gt;<a name="line.58"></a>
+<span class="sourceLineNo">059</span> * &lt;p&gt;<a name="line.59"></a>
+<span class="sourceLineNo">060</span> *    Note that using this annotation is functionally equivalent to adding filters to the serializers and parsers:<a name="line.60"></a>
+<span class="sourceLineNo">061</span> * &lt;p class='bcode'&gt;<a name="line.61"></a>
+<span class="sourceLineNo">062</span> *    WriterSerializer s = &lt;jk&gt;new&lt;/jk&gt; JsonSerializer.addFilters(BFilter.&lt;jk&gt;class&lt;/jk&gt;);<a name="line.62"></a>
+<span class="sourceLineNo">063</span> *    ReaderParser p = &lt;jk&gt;new&lt;/jk&gt; JsonParser.addFilters(BFilter.&lt;jk&gt;class&lt;/jk&gt;);<a name="line.63"></a>
+<span class="sourceLineNo">064</span> * &lt;/p&gt;<a name="line.64"></a>
+<span class="sourceLineNo">065</span> * &lt;p&gt;<a name="line.65"></a>
+<span class="sourceLineNo">066</span> *    It is technically possible to associate a {@link BeanFilter} with a bean class using this annotation.<a name="line.66"></a>
+<span class="sourceLineNo">067</span> *    However in practice, it's almost always less code to simply use the {@link Bean @Bean} annotation.<a name="line.67"></a>
+<span class="sourceLineNo">068</span> * &lt;/p&gt;<a name="line.68"></a>
+<span class="sourceLineNo">069</span> *<a name="line.69"></a>
+<span class="sourceLineNo">070</span> * @author James Bognar (jbognar@us.ibm.com)<a name="line.70"></a>
+<span class="sourceLineNo">071</span> */<a name="line.71"></a>
+<span class="sourceLineNo">072</span>@Documented<a name="line.72"></a>
+<span class="sourceLineNo">073</span>@Target(TYPE)<a name="line.73"></a>
+<span class="sourceLineNo">074</span>@Retention(RUNTIME)<a name="line.74"></a>
+<span class="sourceLineNo">075</span>@Inherited<a name="line.75"></a>
+<span class="sourceLineNo">076</span>public @interface Filter {<a name="line.76"></a>
+<span class="sourceLineNo">077</span><a name="line.77"></a>
+<span class="sourceLineNo">078</span>   /**<a name="line.78"></a>
+<span class="sourceLineNo">079</span>    * The filter class.<a name="line.79"></a>
+<span class="sourceLineNo">080</span>    */<a name="line.80"></a>
+<span class="sourceLineNo">081</span>   Class&lt;? extends com.ibm.juno.core.filter.Filter&gt; value() default com.ibm.juno.core.filter.Filter.NULL.class;<a name="line.81"></a>
+<span class="sourceLineNo">082</span>}<a name="line.82"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

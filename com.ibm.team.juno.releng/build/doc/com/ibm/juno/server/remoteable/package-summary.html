@@ -1,0 +1,467 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="en">
+<head>
+<title>com.ibm.juno.server.remoteable (Juno)</title>
+<link rel="stylesheet" type="text/css" href="../../../../../javadoc.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="com.ibm.juno.server.remoteable (Juno)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a>
+<div class="skip"><a href="#skip-navbar_top" title="Skip navigation links">Skip navigation links</a></div>
+<a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li class="navBarCell1Rev">Package</li>
+<li>Class</li>
+<li><a href="package-use.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../com/ibm/juno/server/matchers/package-summary.html">Prev Package</a></li>
+<li><a href="../../../../../com/ibm/juno/server/response/package-summary.html">Next Package</a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?com/ibm/juno/server/remoteable/package-summary.html" target="_top">Frames</a></li>
+<li><a href="package-summary.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<div class="header">
+<h1 title="Package" class="title">Package&nbsp;com.ibm.juno.server.remoteable</h1>
+<div class="docSummary">
+<div class="block">Remoteable service API</div>
+</div>
+<p>See:&nbsp;<a href="#package_description">Description</a></p>
+</div>
+<div class="contentContainer">
+<ul class="blockList">
+<li class="blockList">
+<table class="packageSummary" border="0" cellpadding="3" cellspacing="0" summary="Class Summary table, listing classes, and an explanation">
+<caption><span>Class Summary</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Class</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../com/ibm/juno/server/remoteable/RemoteableServiceProperties.html" title="class in com.ibm.juno.server.remoteable">RemoteableServiceProperties</a></td>
+<td class="colLast">
+<div class="block">Configurable properties for the <a href="../../../../../com/ibm/juno/server/remoteable/RemoteableServlet.html" title="class in com.ibm.juno.server.remoteable"><code>RemoteableServlet</code></a> class.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../com/ibm/juno/server/remoteable/RemoteableServlet.html" title="class in com.ibm.juno.server.remoteable">RemoteableServlet</a></td>
+<td class="colLast">
+<div class="block">Abstract class for defining Remoteable services.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<a name="package_description">
+<!--   -->
+</a>
+<h2 title="Package com.ibm.juno.server.remoteable Description">Package com.ibm.juno.server.remoteable Description</h2>
+<div class="block"><p>Remoteable service API</p>
+
+<script>
+   function toggle(x) {
+      var div = x.nextSibling;
+      while (div != null && div.nodeType != 1)
+         div = div.nextSibling;
+      if (div != null) {
+         var d = div.style.display;
+         if (d == 'block' || d == '') {
+            div.style.display = 'none';
+            x.className += " closed";
+         } else {
+            div.style.display = 'block';
+            x.className = x.className.replace(/(?:^|\s)closed(?!\S)/g , '' );
+         }
+      }
+   }
+</script>
+
+<p>
+   Defines an API for remote proxy interfaces (e.g. Remoteable Services).
+</p>
+
+<a name='TOC'></a><h5 class='toc'>Table of Contents</h5>
+<ol class='toc'>
+   <li><p><a class='doclink' href='#Intro'>Remoteable Services</a></p>
+   <li><p><a class='doclink' href='#Client'>Client Side</a></p> 
+   <li><p><a class='doclink' href='#Server'>Server Side</a></p>
+   <li><p><a class='doclink' href='#RemoteableAnnotation'>@Remoteable Annotation</a></p>
+</ol>
+
+<!-- ======================================================================================================== -->
+<a name="Intro"></a>
+<h2 class='topic' onclick='toggle(this)'>1 - Remoteable Services</h2>
+<div class='topic'>
+   <p>
+      The Remoteable Service API allows for client side code to use interface proxies for 
+         calling methods on POJOs on the server side.
+   </p>
+   <p>
+      Proxy interfaces are retrieved using the <a href="../../../../../com/ibm/juno/client/RestClient.html#getRemoteableProxy(java.lang.Class)"><code>RestClient.getRemoteableProxy(Class)</code></a> method.
+      The <a href="../../../../../com/ibm/juno/client/RestClient.html#setRemoteableServletUri(java.lang.String)"><code>RestClient.setRemoteableServletUri(String)</code></a> method is used to specify the location
+         of the remoteable services servlet running on the server.
+      The remoteable servlet is a specialized subclass of <a href="../../../../../com/ibm/juno/server/RestServlet.html" title="class in com.ibm.juno.server"><code>RestServlet</code></a> that provides a full-blown
+         REST interface for calling remoteable services (e.g. POJOs) remotely. 
+   </p>
+   <p>
+      The following simplified example shows how a method on a POJO on a server can be called through an interface
+         on a client...
+   <p class='bcode'>
+   <jk>public interface</jk> IAddressBook {
+      Person createPerson(CreatePerson cp) <jk>throws</jk> Exception;
+      Person findPerson(<jk>int</jk> id);
+      Address findAddress(<jk>int</jk> id);
+      Person findPersonWithAddress(<jk>int</jk> id);
+   }
+   </p>        
+   <p>
+      The client side code for invoking this method is shown below...
+   </p>
+   <p class='bcode'>
+   <jc>// Create a RestClient using JSON for serialization, and point to the server-side remoteable servlet.</jc>
+   RestClient client = <jk>new</jk> RestClient(JsonSerializer.<jk>class</jk>,JsonParser.<jk>class</jk>)
+      .setRemoteableServletUri(<js>"https://localhost:9080/juno/sample/remoteable"</js>);
+   
+   <jc>// Create a proxy interface.</jc>
+   IAddressBook ab = client.getRemoteableProxy(IAddressBook.<jk>class</jk>);
+   
+   <jc>// Invoke a method on the server side and get the returned result.</jc>
+   Person p = ab.createPerson(
+      <jk>new</jk> CreatePerson(<js>"Test Person"</js>,
+         AddressBook.<jsm>toCalendar</jsm>(<js>"Aug 1, 1999"</js>),
+         <jk>new</jk> CreateAddress(<js>"Test street"</js>, <js>"Test city"</js>, <js>"Test state"</js>, 12345, <jk>true</jk>))
+   );
+   </p>
+   <p>
+      The requirements for a method to be callable through the remoteable service are:
+      <ul>
+         <li>The method must be public.
+         <li>The parameter and return types must be <a href='../../core/package-summary.html#PojoCategories'><u>serializable and parsable</u></a>.
+      </ul>
+   </p>
+</div>
+
+<!-- ======================================================================================================== -->
+<a name="Client"></a>
+<h2 class='topic' onclick='toggle(this)'>2 - Client Side</h2>
+<div class='topic'>
+   <p>
+      Remoteable interface proxies are retrieved through the existing <a href="../../../../../com/ibm/juno/client/RestClient.html" title="class in com.ibm.juno.client"><code>RestClient</code></a> class.
+   </p>
+   <p>
+      It may seem that the client-side code would need to be complex.
+      In reality, it builds upon existing serializing, parsing, and REST capabilities in Juno resulting
+         in very little additional code.
+      The entire code for the <code>RestClient.getRemoteableProxy(Class)</code> method is shown below:
+   </p>
+   <p class='bcode'>
+   <jk>public</jk> &lt;T&gt; T getRemoteableProxy(<jk>final</jk> Class&lt;T&gt; interfaceClass) {
+      <jk>return</jk> (T)Proxy.newProxyInstance(
+         interfaceClass.getClassLoader(),
+         <jk>new</jk> Class[] { interfaceClass },
+         <jk>new</jk> InvocationHandler() {
+            <ja>@Override</ja>
+            <jk>public</jk> Object invoke(Object proxy, Method method, Object[] args) {
+               <jk>try</jk> {
+                  String uri = <jf>remoteableServletUri</jf> + '/' + interfaceClass.getName() + '/' + ClassUtils.<jsm>getMethodSignature</jsm>(method);
+                  <jk>return</jk> doPost(uri, args).getResponse(method.getReturnType());
+               } <jk>catch</jk> (Exception e) {
+                  <jk>throw new</jk> RuntimeException(e);
+               }
+            }
+      });
+   }
+   </p>
+   <p>
+      Since we build upon the existing <code>RestClient</code> API, we inherit all of it's features.
+      For example, convenience methods for setting POJO filters and properties to customize 
+         the behavior of the serializers and parsers, and the ability to provide your own
+         customized Apache <code>HttpClient</code> for handling various scenarios involving
+         authentication and internet proxies.
+   </p>
+</div>
+
+<!-- ======================================================================================================== -->
+<a name="Server"></a>
+<h2 class='topic' onclick='toggle(this)'>3 - Server Side</h2>
+<div class='topic'>
+   <p>
+      The server side is only slightly more complex, but boasts useful debugging and discovery capabilities.  
+   </p>
+   <p>
+      The <a href="../../../../../com/ibm/juno/server/remoteable/RemoteableServlet.html" title="class in com.ibm.juno.server.remoteable"><code>RemoteableServlet</code></a> class is an implementation of <a href="../../../../../com/ibm/juno/server/RestServlet.html" title="class in com.ibm.juno.server"><code>RestServlet</code></a> 
+         that provides a REST interface for invoking calls on POJOs.
+      The <code>RemoteableServlet</code> class is abstract and must implement a single method for providing
+         the set of POJOs to expose as remote interfaces.  
+   </p>
+   <p>
+      The samples bundle includes a sample implementation of a remotable service that can be used to interact with the
+         address book POJO also included in the bundle.  
+      The method that must be implemented is <a href="../../../../../com/ibm/juno/server/remoteable/RemoteableServlet.html#getServiceMap()"><code>RemoteableServlet.getServiceMap()</code></a>
+         that simply returns a mapping of Java interfaces (or classes) to POJO instances.
+   </p>
+   <p class='bcode'>
+   <ja>@RestResource</ja>(
+      path=<js>"/remoteable"</js>
+   )
+   <jk>public class</jk> SampleRemoteableServlet <jk>extends</jk> RemoteableServlet {
+   
+      <jc>// The POJO being manipulated (i.e. the remoteable service)</jc>
+      AddressBook <jf>addressBook</jf> = <jk>new</jk> AddressBook();
+   
+      <ja>@Override</ja> <jc>/* RemoteableServlet */</jc>
+      <jk>protected</jk> Map&lt;Class&lt;?&gt;,Object&gt; getServiceMap() <jk>throws</jk> Exception {
+         Map&lt;Class&lt;?&gt;,Object&gt; m = <jk>new</jk> LinkedHashMap&lt;Class&lt;?&gt;,Object&gt;();
+   
+         <jc>// In this simplified example, we expose the same POJO service under two different interfaces.
+         // One is IAddressBook which only exposes methods defined on that interface, and
+         // the other is AddressBook itself which exposes all public methods defined on the class itself.</jc>
+         m.put(IAddressBook.<jk>class</jk>, addressBook);
+         m.put(AddressBook.<jk>class</jk>, addressBook);
+         <jk>return</jk> m;
+      }
+   }
+   </p>
+   <p>
+      Since this class is a servlet, and can be deployed as such.  
+      In the sample code, it's listed as a child resource to <code>com.ibm.juno.server.samples.RootResources</code>
+         which makes it available under the URL <code>/juno/sample/remoteable</code>.
+   </p>
+   <p>
+      If you point your browser to that URL, you get a list of available interfaces:
+   </p>
+   <img class='bordered' src="doc-files/1.png">
+   <p>
+      Clicking the hyperlinks on each shows you the list of methods that can be invoked on that service.
+      Note that the <code>IAddressBook</code> link shows that you can only invoke methods defined on that
+         interface, whereas the <code>AddressBook</code> link shows ALL public methods defined on that class.
+      Since <code>AddressBook</code> extends from <code>LinkedList</code>, you may notice familiar collections
+         framework methods listed.
+   </p>
+   <img class='bordered' src="doc-files/2.png">
+   <img class='bordered' src="doc-files/3.png">
+   <p>
+      Let's see how we can interact with this interface through nothing more than REST calls
+         to get a better idea on how this works.
+         We'll use the same method call as in the introduction.
+      First, we need to create the serialized form of the arguments:
+   </p>
+   <p class='bcode'>
+   Object[] args = <jk>new</jk> Object[] {
+      <jk>new</jk> CreatePerson(<js>"Test Person"</js>,
+         AddressBook.<jsm>toCalendar</jsm>(<js>"Aug 1, 1999"</js>),
+         <jk>new</jk> CreateAddress(<js>"Test street"</js>, <js>"Test city"</js>, <js>"Test state"</js>, 12345, <jk>true</jk>))
+   };
+   String asJson = JsonSerializer.<jsf>DEFAULT_LAX_READABLE</jsf>.toString(args);
+   System.<jsf>err</jsf>.println(asJson);
+   </p>
+   <p>
+      That produces the following JSON output:
+   </p>
+   <p class='bcode'>
+   [
+      {
+         name: <js>'Test Person'</js>, 
+         birthDate: <js>'Aug 1, 1999'</js>, 
+         addresses: [
+            {
+               street: <js>'Test street'</js>, 
+               city: <js>'Test city'</js>, 
+               state: <js>'Test state'</js>, 
+               zip: 12345, 
+               isCurrent: <jk>true</jk>
+            }
+         ]
+      }
+   ]  
+   </p>
+   <p>
+      Note that in this example we're using JSON.  
+      However, various other content types can also be used such as XML, URL-Encoding, UON, or HTML.  
+      In practice however, JSON will preferred since it is often the most efficient.
+   </p>
+   <p>
+      Next, we can use a tool such as Poster to make the REST call.
+      Methods are invoked by POSTing the serialized object array to the URI of the interface method.
+      In this case, we want to POST our JSON to <code>/juno/sample/remoteable/com.ibm.juno.samples.addressbook.IAddressBook/createPerson(com.ibm.juno.samples.addressbook.CreatePerson)</code>.
+      Make sure that we specify the <code>Content-Type</code> of the body as <code>text/json</code>.
+      We also want the results to be returned as JSON, so we set the <code>Accept</code> header to <code>text/json</code> as well.
+   </p>
+   <img class='bordered' src="doc-files/4.png">
+   <p>
+      When we execute the POST, we should see the following successful response whose body contains the returned <code>Person</code> bean
+         serialized to JSON:
+   </p>
+   <img class='bordered' src="doc-files/5.png">
+   <p>
+      From there, we could use the following code snippet to reconstruct the response object from JSON:
+   </p>
+   <p class='bcode'>
+      String response = <js>"<i>output from above</i>"</js>;
+      Person p = JsonParser.<jsf>DEFAULT</jsf>.parse(response, Person.<jk>class</jk>);
+   </p>
+   <p>
+      If we alter our servlet to allow overloaded GET requests, we can invoke methods using nothing more than a browser...
+   </p>
+   <p class='bcode'>
+   <ja>@RestResource</ja>(
+      path=<js>"/remoteable"</js>,
+      properties={
+         <jc>// Allow us to use method=POST from a browser.</jc>
+         <ja>@Property</ja>(name=<jsf>REST_allowMethodParam</jsf>, value=<js>"*"</js>)
+      }
+   )
+   <jk>public class</jk> SampleRemoteableServlet <jk>extends</jk> RemoteableServlet {
+   </p>
+   <p>
+      For example, here we call the <code>findPerson(<jk>int</jk>)</code> method to retrieve a person and get the returned POJO 
+         (in this case as HTML since that's what's in the <code>Accept</code> header when calling from a browser):
+   </p>
+   <img class='bordered' src="doc-files/6.png">
+   <p>
+      When specifying the POST body as a <code>&content</code> parameter, the method arguments should be in UON notation.
+      See <a href="../../../../../com/ibm/juno/core/urlencoding/UonSerializer.html" title="class in com.ibm.juno.core.urlencoding"><code>UonSerializer</code></a> for more information about this encoding.
+      Usually you can also pass in JSON if you specify <code>&Content-Type=text/json</code> in the URL parameters
+         but passing in unencoded JSON in a URL may not work in all browsers.  Therefore, UON is preferred.
+   </p>
+</div>
+
+<!-- ======================================================================================================== -->
+<a name="RemoteableAnnotation"></a>
+<h2 class='topic' onclick='toggle(this)'>4 - @Remoteable Annotation</h2>
+<div class='topic'>
+   <p>
+      What if you want fine-tuned control over which methods are exposed in an interface instead of just all public methods?
+      For this, the <a href="../../../../../com/ibm/juno/core/annotation/Remoteable.html" title="annotation in com.ibm.juno.core.annotation"><code>@Remoteable</code></a> annotation is provided.
+      It can be applied to individual interface methods to only expose those methods through the remoteable servlet.
+   </p>
+   <p>
+      For example, to expose only the first 2 methods in our <code>IAddressBook</code> interface...
+   </p>
+   <p class='bcode'>
+   <jk>public interface</jk> IAddressBook {
+      <ja>@Remoteable</ja> Person createPerson(CreatePerson cp) <jk>throws</jk> Exception;
+      <ja>@Remoteable</ja> Person findPerson(<jk>int</jk> id);
+      Address findAddress(<jk>int</jk> id);
+      Person findPersonWithAddress(<jk>int</jk> id);
+   }
+   </p>  
+   <p>
+      On the server side, the option to restrict access to only annotated methods is defined through a property:
+   </p>
+   <p class='bcode'>
+   <ja>@RestResource</ja>(
+      path=<js>"/remoteable"</js>,
+      properties={
+         <jc>// Only expose methods annotated with @Remoteable.</jc>
+         <ja>@Property</ja>(name=<jsf>REMOTEABLE_includeOnlyRemotableMethods</jsf>, value=<js>"true"</js>)
+      }
+   )
+   <jk>public class</jk> SampleRemoteableServlet <jk>extends</jk> RemoteableServlet {
+   </p>
+   <p>
+      The <ja>@Remoteable</ja> annotation can also be applied to the interface class to expose all public methods defined on that interface.
+   </p>
+   <p class='bcode'>
+   <ja>@Remoteable</ja>
+   <jk>public interface</jk> IAddressBook {
+      Person createPerson(CreatePerson cp) <jk>throws</jk> Exception;
+      Person findPerson(<jk>int</jk> id);
+      Address findAddress(<jk>int</jk> id);
+      Person findPersonWithAddress(<jk>int</jk> id);
+   }
+   </p>  
+</div></div>
+</div>
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a>
+<div class="skip"><a href="#skip-navbar_bottom" title="Skip navigation links">Skip navigation links</a></div>
+<a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li class="navBarCell1Rev">Package</li>
+<li>Class</li>
+<li><a href="package-use.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../com/ibm/juno/server/matchers/package-summary.html">Prev Package</a></li>
+<li><a href="../../../../../com/ibm/juno/server/response/package-summary.html">Next Package</a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?com/ibm/juno/server/remoteable/package-summary.html" target="_top">Frames</a></li>
+<li><a href="package-summary.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+</body>
+</html>

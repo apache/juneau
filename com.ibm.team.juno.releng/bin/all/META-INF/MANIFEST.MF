@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Ant-Version: Apache Ant 1.8.3
+Created-By: pwa6470_27sr1-20140411_01 (SR1) (IBM Corporation)
+Built-By: jbognar
+Build-Date: December 30 2015
+Bundle-Name: Juno Cloud API
+Bundle-Vendor: IBM
+Bundle-SymbolicName: com.ibm.team.juno.all
+Bundle-Version: 5.2.0.0
+

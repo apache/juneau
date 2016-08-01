@@ -1,0 +1,845 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="en">
+<head>
+<title>Uses of Class com.ibm.juno.core.CoreApi (Juno)</title>
+<link rel="stylesheet" type="text/css" href="../../../../../javadoc.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="Uses of Class com.ibm.juno.core.CoreApi (Juno)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a>
+<div class="skip"><a href="#skip-navbar_top" title="Skip navigation links">Skip navigation links</a></div>
+<a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="../package-summary.html">Package</a></li>
+<li><a href="../../../../../com/ibm/juno/core/CoreApi.html" title="class in com.ibm.juno.core">Class</a></li>
+<li class="navBarCell1Rev">Use</li>
+<li><a href="../package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li>Prev</li>
+<li>Next</li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?com/ibm/juno/core/class-use/CoreApi.html" target="_top">Frames</a></li>
+<li><a href="CoreApi.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<div class="header">
+<h2 title="Uses of Class com.ibm.juno.core.CoreApi" class="title">Uses of Class<br>com.ibm.juno.core.CoreApi</h2>
+</div>
+<div class="classUseContainer">
+<ul class="blockList">
+<li class="blockList">
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing packages, and an explanation">
+<caption><span>Packages that use <a href="../../../../../com/ibm/juno/core/CoreApi.html" title="class in com.ibm.juno.core">CoreApi</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Package</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><a href="#com.ibm.juno.client">com.ibm.juno.client</a></td>
+<td class="colLast">
+<div class="block">REST client API</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="#com.ibm.juno.client.jazz">com.ibm.juno.client.jazz</a></td>
+<td class="colLast">
+<div class="block">Jazz REST client API</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="#com.ibm.juno.core">com.ibm.juno.core</a></td>
+<td class="colLast">
+<div class="block">Base toolkit for serializers, parsers, and bean contexts</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="#com.ibm.juno.core.csv">com.ibm.juno.core.csv</a></td>
+<td class="colLast">
+<div class="block">CSV serialization and parsing support</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="#com.ibm.juno.core.html">com.ibm.juno.core.html</a></td>
+<td class="colLast">
+<div class="block">HTML serialization and parsing support</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="#com.ibm.juno.core.jena">com.ibm.juno.core.jena</a></td>
+<td class="colLast">
+<div class="block">Jena-based RDF serialization and parsing support</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="#com.ibm.juno.core.jso">com.ibm.juno.core.jso</a></td>
+<td class="colLast">
+<div class="block">Java-serialized-object support</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="#com.ibm.juno.core.json">com.ibm.juno.core.json</a></td>
+<td class="colLast">
+<div class="block">JSON serialization and parsing support</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="#com.ibm.juno.core.parser">com.ibm.juno.core.parser</a></td>
+<td class="colLast">
+<div class="block">Parser API</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="#com.ibm.juno.core.plaintext">com.ibm.juno.core.plaintext</a></td>
+<td class="colLast">
+<div class="block">Plain-text serialization and parsing support</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="#com.ibm.juno.core.serializer">com.ibm.juno.core.serializer</a></td>
+<td class="colLast">
+<div class="block">Serializer API</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="#com.ibm.juno.core.soap">com.ibm.juno.core.soap</a></td>
+<td class="colLast">
+<div class="block">SOAP/XML serialization and parsing support</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="#com.ibm.juno.core.urlencoding">com.ibm.juno.core.urlencoding</a></td>
+<td class="colLast">
+<div class="block">URL encoding serialization and parsing support</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="#com.ibm.juno.core.xml">com.ibm.juno.core.xml</a></td>
+<td class="colLast">
+<div class="block">XML serialization and parsing support</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList">
+<ul class="blockList">
+<li class="blockList"><a name="com.ibm.juno.client">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../com/ibm/juno/core/CoreApi.html" title="class in com.ibm.juno.core">CoreApi</a> in <a href="../../../../../com/ibm/juno/client/package-summary.html">com.ibm.juno.client</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing subclasses, and an explanation">
+<caption><span>Subclasses of <a href="../../../../../com/ibm/juno/core/CoreApi.html" title="class in com.ibm.juno.core">CoreApi</a> in <a href="../../../../../com/ibm/juno/client/package-summary.html">com.ibm.juno.client</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/client/RestClient.html" title="class in com.ibm.juno.client">RestClient</a></strong></code>
+<div class="block">Utility class for interfacing with remote REST interfaces.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="com.ibm.juno.client.jazz">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../com/ibm/juno/core/CoreApi.html" title="class in com.ibm.juno.core">CoreApi</a> in <a href="../../../../../com/ibm/juno/client/jazz/package-summary.html">com.ibm.juno.client.jazz</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing subclasses, and an explanation">
+<caption><span>Subclasses of <a href="../../../../../com/ibm/juno/core/CoreApi.html" title="class in com.ibm.juno.core">CoreApi</a> in <a href="../../../../../com/ibm/juno/client/jazz/package-summary.html">com.ibm.juno.client.jazz</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/client/jazz/JazzRestClient.html" title="class in com.ibm.juno.client.jazz">JazzRestClient</a></strong></code>
+<div class="block">Specialized <a href="../../../../../com/ibm/juno/client/RestClient.html" title="class in com.ibm.juno.client"><code>RestClient</code></a> for working with Jazz servers.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="com.ibm.juno.core">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../com/ibm/juno/core/CoreApi.html" title="class in com.ibm.juno.core">CoreApi</a> in <a href="../../../../../com/ibm/juno/core/package-summary.html">com.ibm.juno.core</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../com/ibm/juno/core/package-summary.html">com.ibm.juno.core</a> that return <a href="../../../../../com/ibm/juno/core/CoreApi.html" title="class in com.ibm.juno.core">CoreApi</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../com/ibm/juno/core/CoreApi.html" title="class in com.ibm.juno.core">CoreApi</a></code></td>
+<td class="colLast"><span class="strong">CoreApi.</span><code><strong><a href="../../../../../com/ibm/juno/core/CoreApi.html#addFilters(java.lang.Class...)">addFilters</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;...&nbsp;classes)</code>
+<div class="block">Shortcut for calling <code>getBeanContext().addFilters(Class...)</code>.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../com/ibm/juno/core/CoreApi.html" title="class in com.ibm.juno.core">CoreApi</a></code></td>
+<td class="colLast"><span class="strong">CoreApi.</span><code><strong><a href="../../../../../com/ibm/juno/core/CoreApi.html#addImplClass(java.lang.Class, java.lang.Class)">addImplClass</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;interfaceClass,
+                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends T&gt;&nbsp;implClass)</code>
+<div class="block">Shortcut for calling <code>getBeanContext().addImplClass(Class, Class)</code>.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../com/ibm/juno/core/CoreApi.html" title="class in com.ibm.juno.core">CoreApi</a></code></td>
+<td class="colLast"><span class="strong">CoreApi.</span><code><strong><a href="../../../../../com/ibm/juno/core/CoreApi.html#addNotBeanClasses(java.lang.Class...)">addNotBeanClasses</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;...&nbsp;classes)</code>
+<div class="block">Shortcut for calling <code>getBeanContext().addNotBeanClasses(Class...)</code>.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../com/ibm/juno/core/CoreApi.html" title="class in com.ibm.juno.core">CoreApi</a></code></td>
+<td class="colLast"><span class="strong">CoreApi.</span><code><strong><a href="../../../../../com/ibm/juno/core/CoreApi.html#clone()">clone</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../com/ibm/juno/core/CoreApi.html" title="class in com.ibm.juno.core">CoreApi</a></code></td>
+<td class="colLast"><span class="strong">CoreApi.</span><code><strong><a href="../../../../../com/ibm/juno/core/CoreApi.html#lock()">lock</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../com/ibm/juno/core/CoreApi.html" title="class in com.ibm.juno.core">CoreApi</a></code></td>
+<td class="colLast"><span class="strong">CoreApi.</span><code><strong><a href="../../../../../com/ibm/juno/core/CoreApi.html#setClassLoader(java.lang.ClassLoader)">setClassLoader</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/ClassLoader.html?is-external=true" title="class or interface in java.lang">ClassLoader</a>&nbsp;classLoader)</code>
+<div class="block">Shortcut for calling <code>getBeanContext().setClassLoader(ClassLoader)</code>.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../com/ibm/juno/core/CoreApi.html" title="class in com.ibm.juno.core">CoreApi</a></code></td>
+<td class="colLast"><span class="strong">CoreApi.</span><code><strong><a href="../../../../../com/ibm/juno/core/CoreApi.html#setProperties(com.ibm.juno.core.ObjectMap)">setProperties</a></strong>(<a href="../../../../../com/ibm/juno/core/ObjectMap.html" title="class in com.ibm.juno.core">ObjectMap</a>&nbsp;properties)</code>
+<div class="block">Sets multiple properties on this class.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../com/ibm/juno/core/CoreApi.html" title="class in com.ibm.juno.core">CoreApi</a></code></td>
+<td class="colLast"><span class="strong">CoreApi.</span><code><strong><a href="../../../../../com/ibm/juno/core/CoreApi.html#setProperty(java.lang.String, java.lang.Object)">setProperty</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;property,
+                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;value)</code>
+<div class="block">Sets a property on this class.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="com.ibm.juno.core.csv">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../com/ibm/juno/core/CoreApi.html" title="class in com.ibm.juno.core">CoreApi</a> in <a href="../../../../../com/ibm/juno/core/csv/package-summary.html">com.ibm.juno.core.csv</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing subclasses, and an explanation">
+<caption><span>Subclasses of <a href="../../../../../com/ibm/juno/core/CoreApi.html" title="class in com.ibm.juno.core">CoreApi</a> in <a href="../../../../../com/ibm/juno/core/csv/package-summary.html">com.ibm.juno.core.csv</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/csv/CsvSerializer.html" title="class in com.ibm.juno.core.csv">CsvSerializer</a></strong></code>
+<div class="block">TODO - Work in progress.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="com.ibm.juno.core.html">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../com/ibm/juno/core/CoreApi.html" title="class in com.ibm.juno.core">CoreApi</a> in <a href="../../../../../com/ibm/juno/core/html/package-summary.html">com.ibm.juno.core.html</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing subclasses, and an explanation">
+<caption><span>Subclasses of <a href="../../../../../com/ibm/juno/core/CoreApi.html" title="class in com.ibm.juno.core">CoreApi</a> in <a href="../../../../../com/ibm/juno/core/html/package-summary.html">com.ibm.juno.core.html</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/html/HtmlDocSerializer.html" title="class in com.ibm.juno.core.html">HtmlDocSerializer</a></strong></code>
+<div class="block">Serializes POJOs to HTTP responses as HTML documents.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/html/HtmlParser.html" title="class in com.ibm.juno.core.html">HtmlParser</a></strong></code>
+<div class="block">Parses text generated by the <a href="../../../../../com/ibm/juno/core/html/HtmlSerializer.html" title="class in com.ibm.juno.core.html"><code>HtmlSerializer</code></a> class back into a POJO model.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/html/HtmlSchemaDocSerializer.html" title="class in com.ibm.juno.core.html">HtmlSchemaDocSerializer</a></strong></code>
+<div class="block">Serializes POJO metamodels to HTML.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/html/HtmlSerializer.html" title="class in com.ibm.juno.core.html">HtmlSerializer</a></strong></code>
+<div class="block">Serializes POJO models to HTML.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/html/HtmlSerializer.Sq.html" title="class in com.ibm.juno.core.html">HtmlSerializer.Sq</a></strong></code>
+<div class="block">Default serializer, single quotes.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/html/HtmlSerializer.SqReadable.html" title="class in com.ibm.juno.core.html">HtmlSerializer.SqReadable</a></strong></code>
+<div class="block">Default serializer, single quotes, whitespace added.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/html/HtmlStrippedDocSerializer.html" title="class in com.ibm.juno.core.html">HtmlStrippedDocSerializer</a></strong></code>
+<div class="block">Serializes POJOs to HTTP responses as stripped HTML.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="com.ibm.juno.core.jena">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../com/ibm/juno/core/CoreApi.html" title="class in com.ibm.juno.core">CoreApi</a> in <a href="../../../../../com/ibm/juno/core/jena/package-summary.html">com.ibm.juno.core.jena</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing subclasses, and an explanation">
+<caption><span>Subclasses of <a href="../../../../../com/ibm/juno/core/CoreApi.html" title="class in com.ibm.juno.core">CoreApi</a> in <a href="../../../../../com/ibm/juno/core/jena/package-summary.html">com.ibm.juno.core.jena</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/jena/RdfParser.html" title="class in com.ibm.juno.core.jena">RdfParser</a></strong></code>
+<div class="block">Parses RDF into POJOs.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/jena/RdfParser.N3.html" title="class in com.ibm.juno.core.jena">RdfParser.N3</a></strong></code>
+<div class="block">Consumes N3 input</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/jena/RdfParser.NTriple.html" title="class in com.ibm.juno.core.jena">RdfParser.NTriple</a></strong></code>
+<div class="block">Consumes N-Triple input</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/jena/RdfParser.Turtle.html" title="class in com.ibm.juno.core.jena">RdfParser.Turtle</a></strong></code>
+<div class="block">Consumes Turtle input</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/jena/RdfParser.Xml.html" title="class in com.ibm.juno.core.jena">RdfParser.Xml</a></strong></code>
+<div class="block">Consumes RDF/XML input</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/jena/RdfSerializer.html" title="class in com.ibm.juno.core.jena">RdfSerializer</a></strong></code>
+<div class="block">Serializes POJOs to RDF.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/jena/RdfSerializer.N3.html" title="class in com.ibm.juno.core.jena">RdfSerializer.N3</a></strong></code>
+<div class="block">Produces N3 output</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/jena/RdfSerializer.NTriple.html" title="class in com.ibm.juno.core.jena">RdfSerializer.NTriple</a></strong></code>
+<div class="block">Produces N-Triple output</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/jena/RdfSerializer.Turtle.html" title="class in com.ibm.juno.core.jena">RdfSerializer.Turtle</a></strong></code>
+<div class="block">Produces Turtle output</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/jena/RdfSerializer.Xml.html" title="class in com.ibm.juno.core.jena">RdfSerializer.Xml</a></strong></code>
+<div class="block">Produces RDF/XML output</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/jena/RdfSerializer.XmlAbbrev.html" title="class in com.ibm.juno.core.jena">RdfSerializer.XmlAbbrev</a></strong></code>
+<div class="block">Produces Abbreviated RDF/XML output</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="com.ibm.juno.core.jso">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../com/ibm/juno/core/CoreApi.html" title="class in com.ibm.juno.core">CoreApi</a> in <a href="../../../../../com/ibm/juno/core/jso/package-summary.html">com.ibm.juno.core.jso</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing subclasses, and an explanation">
+<caption><span>Subclasses of <a href="../../../../../com/ibm/juno/core/CoreApi.html" title="class in com.ibm.juno.core">CoreApi</a> in <a href="../../../../../com/ibm/juno/core/jso/package-summary.html">com.ibm.juno.core.jso</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/jso/JavaSerializedObjectParser.html" title="class in com.ibm.juno.core.jso">JavaSerializedObjectParser</a></strong></code>
+<div class="block">Parses POJOs from HTTP responses as Java <a href="http://docs.oracle.com/javase/7/docs/api/java/io/ObjectInputStream.html?is-external=true" title="class or interface in java.io"><code>ObjectInputStreams</code></a>.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/jso/JavaSerializedObjectSerializer.html" title="class in com.ibm.juno.core.jso">JavaSerializedObjectSerializer</a></strong></code>
+<div class="block">Serializes POJOs to HTTP responses as Java <a href="http://docs.oracle.com/javase/7/docs/api/java/io/ObjectOutputStream.html?is-external=true" title="class or interface in java.io"><code>ObjectOutputStreams</code></a>.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="com.ibm.juno.core.json">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../com/ibm/juno/core/CoreApi.html" title="class in com.ibm.juno.core">CoreApi</a> in <a href="../../../../../com/ibm/juno/core/json/package-summary.html">com.ibm.juno.core.json</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing subclasses, and an explanation">
+<caption><span>Subclasses of <a href="../../../../../com/ibm/juno/core/CoreApi.html" title="class in com.ibm.juno.core">CoreApi</a> in <a href="../../../../../com/ibm/juno/core/json/package-summary.html">com.ibm.juno.core.json</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/json/JsonParser.html" title="class in com.ibm.juno.core.json">JsonParser</a></strong></code>
+<div class="block">Parses any valid JSON text into a POJO model.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/json/JsonSchemaSerializer.html" title="class in com.ibm.juno.core.json">JsonSchemaSerializer</a></strong></code>
+<div class="block">Serializes POJO metadata to HTTP responses as JSON.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/json/JsonSerializer.html" title="class in com.ibm.juno.core.json">JsonSerializer</a></strong></code>
+<div class="block">Serializes POJO models to JSON.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/json/JsonSerializer.Readable.html" title="class in com.ibm.juno.core.json">JsonSerializer.Readable</a></strong></code>
+<div class="block">Default serializer, with whitespace.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/json/JsonSerializer.Simple.html" title="class in com.ibm.juno.core.json">JsonSerializer.Simple</a></strong></code>
+<div class="block">Default serializer, single quotes, simple mode.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/json/JsonSerializer.SimpleReadable.html" title="class in com.ibm.juno.core.json">JsonSerializer.SimpleReadable</a></strong></code>
+<div class="block">Default serializer, single quotes, simple mode, with whitespace.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/json/JsonSerializer.SimpleReadableSafe.html" title="class in com.ibm.juno.core.json">JsonSerializer.SimpleReadableSafe</a></strong></code>
+<div class="block">Default serializer, single quotes, simple mode, with whitespace and recursion detection.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="com.ibm.juno.core.parser">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../com/ibm/juno/core/CoreApi.html" title="class in com.ibm.juno.core">CoreApi</a> in <a href="../../../../../com/ibm/juno/core/parser/package-summary.html">com.ibm.juno.core.parser</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing subclasses, and an explanation">
+<caption><span>Subclasses of <a href="../../../../../com/ibm/juno/core/CoreApi.html" title="class in com.ibm.juno.core">CoreApi</a> in <a href="../../../../../com/ibm/juno/core/parser/package-summary.html">com.ibm.juno.core.parser</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/parser/InputStreamParser.html" title="class in com.ibm.juno.core.parser">InputStreamParser</a></strong></code>
+<div class="block">Subclass of <a href="../../../../../com/ibm/juno/core/parser/Parser.html" title="class in com.ibm.juno.core.parser"><code>Parser</code></a> for byte-based parsers.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/parser/Parser.html" title="class in com.ibm.juno.core.parser">Parser</a>&lt;R&gt;</strong></code>
+<div class="block">Parent class for all Juno parsers.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html" title="class in com.ibm.juno.core.parser">ReaderParser</a></strong></code>
+<div class="block">Subclass of <a href="../../../../../com/ibm/juno/core/parser/Parser.html" title="class in com.ibm.juno.core.parser"><code>Parser</code></a> for characters-based parsers.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="com.ibm.juno.core.plaintext">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../com/ibm/juno/core/CoreApi.html" title="class in com.ibm.juno.core">CoreApi</a> in <a href="../../../../../com/ibm/juno/core/plaintext/package-summary.html">com.ibm.juno.core.plaintext</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing subclasses, and an explanation">
+<caption><span>Subclasses of <a href="../../../../../com/ibm/juno/core/CoreApi.html" title="class in com.ibm.juno.core">CoreApi</a> in <a href="../../../../../com/ibm/juno/core/plaintext/package-summary.html">com.ibm.juno.core.plaintext</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/plaintext/PlainTextParser.html" title="class in com.ibm.juno.core.plaintext">PlainTextParser</a></strong></code>
+<div class="block">Parsers HTTP plain text request bodies into <a href=../../../../../com/ibm/juno/core/plaintext/'../package-summary.html#PojoCategories'>Group 5</a> POJOs.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/plaintext/PlainTextSerializer.html" title="class in com.ibm.juno.core.plaintext">PlainTextSerializer</a></strong></code>
+<div class="block">Serializes POJOs to plain text using just the <code>toString()</code> method on the serialized object.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="com.ibm.juno.core.serializer">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../com/ibm/juno/core/CoreApi.html" title="class in com.ibm.juno.core">CoreApi</a> in <a href="../../../../../com/ibm/juno/core/serializer/package-summary.html">com.ibm.juno.core.serializer</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing subclasses, and an explanation">
+<caption><span>Subclasses of <a href="../../../../../com/ibm/juno/core/CoreApi.html" title="class in com.ibm.juno.core">CoreApi</a> in <a href="../../../../../com/ibm/juno/core/serializer/package-summary.html">com.ibm.juno.core.serializer</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/serializer/OutputStreamSerializer.html" title="class in com.ibm.juno.core.serializer">OutputStreamSerializer</a></strong></code>
+<div class="block">Subclass of <a href="../../../../../com/ibm/juno/core/serializer/Serializer.html" title="class in com.ibm.juno.core.serializer"><code>Serializer</code></a> for byte-based serializers.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/serializer/Serializer.html" title="class in com.ibm.juno.core.serializer">Serializer</a>&lt;W&gt;</strong></code>
+<div class="block">Parent class for all Juno serializers.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/serializer/WriterSerializer.html" title="class in com.ibm.juno.core.serializer">WriterSerializer</a></strong></code>
+<div class="block">Subclass of <a href="../../../../../com/ibm/juno/core/serializer/Serializer.html" title="class in com.ibm.juno.core.serializer"><code>Serializer</code></a> for character-based serializers.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="com.ibm.juno.core.soap">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../com/ibm/juno/core/CoreApi.html" title="class in com.ibm.juno.core">CoreApi</a> in <a href="../../../../../com/ibm/juno/core/soap/package-summary.html">com.ibm.juno.core.soap</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing subclasses, and an explanation">
+<caption><span>Subclasses of <a href="../../../../../com/ibm/juno/core/CoreApi.html" title="class in com.ibm.juno.core">CoreApi</a> in <a href="../../../../../com/ibm/juno/core/soap/package-summary.html">com.ibm.juno.core.soap</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/soap/SoapXmlSerializer.html" title="class in com.ibm.juno.core.soap">SoapXmlSerializer</a></strong></code>
+<div class="block">Serializes POJOs to HTTP responses as XML+SOAP.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="com.ibm.juno.core.urlencoding">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../com/ibm/juno/core/CoreApi.html" title="class in com.ibm.juno.core">CoreApi</a> in <a href="../../../../../com/ibm/juno/core/urlencoding/package-summary.html">com.ibm.juno.core.urlencoding</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing subclasses, and an explanation">
+<caption><span>Subclasses of <a href="../../../../../com/ibm/juno/core/CoreApi.html" title="class in com.ibm.juno.core">CoreApi</a> in <a href="../../../../../com/ibm/juno/core/urlencoding/package-summary.html">com.ibm.juno.core.urlencoding</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/urlencoding/UonParser.html" title="class in com.ibm.juno.core.urlencoding">UonParser</a></strong></code>
+<div class="block">Parses UON (a notation for URL-encoded query parameter values) text into POJO models.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/urlencoding/UonParser.Decoding.html" title="class in com.ibm.juno.core.urlencoding">UonParser.Decoding</a></strong></code>
+<div class="block">Equivalent to <code><jk>new</jk> UrlEncodingParser().setProperty(UonParserProperties.<jsf>UON_decodeChars</jsf>,<jk>true</jk>);</code>.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/urlencoding/UonSerializer.html" title="class in com.ibm.juno.core.urlencoding">UonSerializer</a></strong></code>
+<div class="block">Serializes POJO models to UON (a notation for URL-encoded query parameter values).</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/urlencoding/UonSerializer.Encoding.html" title="class in com.ibm.juno.core.urlencoding">UonSerializer.Encoding</a></strong></code>
+<div class="block">Equivalent to <code><jk>new</jk> UonSerializer().setProperty(UonSerializerProperties.<jsf>UON_encodeChars</jsf>,<jk>true</jk>);</code>.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/urlencoding/UonSerializer.Readable.html" title="class in com.ibm.juno.core.urlencoding">UonSerializer.Readable</a></strong></code>
+<div class="block">Equivalent to <code><jk>new</jk> UonSerializer().setProperty(UonSerializerProperties.<jsf>UON_useWhitespace</jsf>,<jk>true</jk>);</code>.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/urlencoding/UonSerializer.Simple.html" title="class in com.ibm.juno.core.urlencoding">UonSerializer.Simple</a></strong></code>
+<div class="block">Equivalent to <code><jk>new</jk> UonSerializer().setProperty(UonSerializerProperties.<jsf>UON_simpleMode</jsf>,<jk>true</jk>);</code>.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/urlencoding/UonSerializer.SimpleEncoding.html" title="class in com.ibm.juno.core.urlencoding">UonSerializer.SimpleEncoding</a></strong></code>
+<div class="block">Equivalent to <code><jk>new</jk> UonSerializer().setProperty(UonSerializerProperties.<jsf>UON_simpleMode</jsf>,<jk>true</jk>).setProperty(UonSerializerProperties.<jsf>UON_encodeChars</jsf>,<jk>true</jk>);</code>.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/urlencoding/UrlEncodingParser.html" title="class in com.ibm.juno.core.urlencoding">UrlEncodingParser</a></strong></code>
+<div class="block">Parses URL-encoded text into POJO models.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/urlencoding/UrlEncodingSerializer.html" title="class in com.ibm.juno.core.urlencoding">UrlEncodingSerializer</a></strong></code>
+<div class="block">Serializes POJO models to URL-encoded notation with UON-encoded values (a notation for URL-encoded query paramter values).</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/urlencoding/UrlEncodingSerializer.Readable.html" title="class in com.ibm.juno.core.urlencoding">UrlEncodingSerializer.Readable</a></strong></code>
+<div class="block">Equivalent to <code><jk>new</jk> UrlEncodingSerializer().setProperty(UonSerializerProperties.<jsf>UON_useWhitespace</jsf>,<jk>true</jk>);</code>.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/urlencoding/UrlEncodingSerializer.Simple.html" title="class in com.ibm.juno.core.urlencoding">UrlEncodingSerializer.Simple</a></strong></code>
+<div class="block">Equivalent to <code><jk>new</jk> UrlEncodingSerializer().setProperty(UonSerializerProperties.<jsf>UON_simpleMode</jsf>,<jk>true</jk>);</code>.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/urlencoding/UrlEncodingSerializer.SimpleExpanded.html" title="class in com.ibm.juno.core.urlencoding">UrlEncodingSerializer.SimpleExpanded</a></strong></code>
+<div class="block">Equivalent to <code><jk>new</jk> UrlEncodingSerializer().setProperty(UonSerializerProperties.<jsf>UON_simpleMode</jsf>,<jk>true</jk>).setProperty(UonSerializerProperties.<jsf>URLENC_expandedParams</jsf>,<jk>true</jk>);</code>.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="com.ibm.juno.core.xml">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../com/ibm/juno/core/CoreApi.html" title="class in com.ibm.juno.core">CoreApi</a> in <a href="../../../../../com/ibm/juno/core/xml/package-summary.html">com.ibm.juno.core.xml</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing subclasses, and an explanation">
+<caption><span>Subclasses of <a href="../../../../../com/ibm/juno/core/CoreApi.html" title="class in com.ibm.juno.core">CoreApi</a> in <a href="../../../../../com/ibm/juno/core/xml/package-summary.html">com.ibm.juno.core.xml</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/xml/XmlDocSerializer.html" title="class in com.ibm.juno.core.xml">XmlDocSerializer</a></strong></code>
+<div class="block">Serializes POJOs to HTTP responses as XML.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/xml/XmlDocSerializer.Simple.html" title="class in com.ibm.juno.core.xml">XmlDocSerializer.Simple</a></strong></code>
+<div class="block">Default serializer without namespaces.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/xml/XmlParser.html" title="class in com.ibm.juno.core.xml">XmlParser</a></strong></code>
+<div class="block">Parses text generated by the <a href="../../../../../com/ibm/juno/core/xml/XmlSerializer.html" title="class in com.ibm.juno.core.xml"><code>XmlSerializer</code></a> class back into a POJO model.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/xml/XmlSchemaDocSerializer.html" title="class in com.ibm.juno.core.xml">XmlSchemaDocSerializer</a></strong></code>
+<div class="block">Serializes POJO metadata to HTTP responses as XML.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/xml/XmlSchemaSerializer.html" title="class in com.ibm.juno.core.xml">XmlSchemaSerializer</a></strong></code>
+<div class="block">Serializes POJO metadata to HTTP responses as XML.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/xml/XmlSerializer.html" title="class in com.ibm.juno.core.xml">XmlSerializer</a></strong></code>
+<div class="block">Serializes POJO models to XML.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/xml/XmlSerializer.Simple.html" title="class in com.ibm.juno.core.xml">XmlSerializer.Simple</a></strong></code>
+<div class="block">Default serializer without namespaces.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/xml/XmlSerializer.SimpleSq.html" title="class in com.ibm.juno.core.xml">XmlSerializer.SimpleSq</a></strong></code>
+<div class="block">Default serializer without namespaces, single quotes.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/xml/XmlSerializer.SimpleXmlJsonSq.html" title="class in com.ibm.juno.core.xml">XmlSerializer.SimpleXmlJsonSq</a></strong></code>
+<div class="block">Default serializer with JSON attribute tags, single quotes.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/xml/XmlSerializer.Sq.html" title="class in com.ibm.juno.core.xml">XmlSerializer.Sq</a></strong></code>
+<div class="block">Default serializer, single quotes.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/xml/XmlSerializer.SqReadable.html" title="class in com.ibm.juno.core.xml">XmlSerializer.SqReadable</a></strong></code>
+<div class="block">Default serializer, single quotes, whitespace added.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/xml/XmlSerializer.XmlJson.html" title="class in com.ibm.juno.core.xml">XmlSerializer.XmlJson</a></strong></code>
+<div class="block">Default serializer with JSON attribute tags.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/xml/XmlSerializer.XmlJsonSq.html" title="class in com.ibm.juno.core.xml">XmlSerializer.XmlJsonSq</a></strong></code>
+<div class="block">Default serializer with JSON attribute tags, single quotes.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a>
+<div class="skip"><a href="#skip-navbar_bottom" title="Skip navigation links">Skip navigation links</a></div>
+<a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="../package-summary.html">Package</a></li>
+<li><a href="../../../../../com/ibm/juno/core/CoreApi.html" title="class in com.ibm.juno.core">Class</a></li>
+<li class="navBarCell1Rev">Use</li>
+<li><a href="../package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li>Prev</li>
+<li>Next</li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?com/ibm/juno/core/class-use/CoreApi.html" target="_top">Frames</a></li>
+<li><a href="CoreApi.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../javadoc.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>/*******************************************************************************<a name="line.1"></a>
+<span class="sourceLineNo">002</span> * Licensed Materials - Property of IBM<a name="line.2"></a>
+<span class="sourceLineNo">003</span> * (c) Copyright IBM Corporation 2014, 2015. All Rights Reserved.<a name="line.3"></a>
+<span class="sourceLineNo">004</span> *<a name="line.4"></a>
+<span class="sourceLineNo">005</span> *  The source code for this program is not published or otherwise<a name="line.5"></a>
+<span class="sourceLineNo">006</span> *  divested of its trade secrets, irrespective of what has been<a name="line.6"></a>
+<span class="sourceLineNo">007</span> *  deposited with the U.S. Copyright Office.<a name="line.7"></a>
+<span class="sourceLineNo">008</span> *******************************************************************************/<a name="line.8"></a>
+<span class="sourceLineNo">009</span>package com.ibm.juno.core.ini;<a name="line.9"></a>
+<span class="sourceLineNo">010</span><a name="line.10"></a>
+<span class="sourceLineNo">011</span>import com.ibm.juno.core.utils.*;<a name="line.11"></a>
+<span class="sourceLineNo">012</span><a name="line.12"></a>
+<span class="sourceLineNo">013</span>/**<a name="line.13"></a>
+<span class="sourceLineNo">014</span> * Simply XOR+Base64 encoder for obscuring passwords and other sensitive data in INI config files.<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * &lt;p&gt;<a name="line.15"></a>
+<span class="sourceLineNo">016</span> * This is not intended to be used as strong encryption.<a name="line.16"></a>
+<span class="sourceLineNo">017</span> *<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * @author James Bognar (jbognar@us.ibm.com)<a name="line.18"></a>
+<span class="sourceLineNo">019</span> */<a name="line.19"></a>
+<span class="sourceLineNo">020</span>public final class XorEncoder implements Encoder {<a name="line.20"></a>
+<span class="sourceLineNo">021</span><a name="line.21"></a>
+<span class="sourceLineNo">022</span>   /** Reusable XOR-Encoder instance. */<a name="line.22"></a>
+<span class="sourceLineNo">023</span>   public static final XorEncoder INSTANCE = new XorEncoder();<a name="line.23"></a>
+<span class="sourceLineNo">024</span><a name="line.24"></a>
+<span class="sourceLineNo">025</span>   private static final String key = System.getProperty("com.ibm.juno.core.ini.XorEncoder.key", "nuy7og796Vh6G9O6bG230SHK0cc8QYkH");   // The super-duper-secret key<a name="line.25"></a>
+<span class="sourceLineNo">026</span><a name="line.26"></a>
+<span class="sourceLineNo">027</span>   @Override /* Encoder */<a name="line.27"></a>
+<span class="sourceLineNo">028</span>   public String encode(String fieldName, String in) {<a name="line.28"></a>
+<span class="sourceLineNo">029</span>      byte[] b = in.getBytes(IOUtils.UTF8);<a name="line.29"></a>
+<span class="sourceLineNo">030</span>      for (int i = 0; i &lt; b.length; i++) {<a name="line.30"></a>
+<span class="sourceLineNo">031</span>            int j = i % key.length();<a name="line.31"></a>
+<span class="sourceLineNo">032</span>         b[i] = (byte)(b[i] ^ key.charAt(j));<a name="line.32"></a>
+<span class="sourceLineNo">033</span>      }<a name="line.33"></a>
+<span class="sourceLineNo">034</span>      return StringUtils.base64Encode(b);<a name="line.34"></a>
+<span class="sourceLineNo">035</span>   }<a name="line.35"></a>
+<span class="sourceLineNo">036</span><a name="line.36"></a>
+<span class="sourceLineNo">037</span>   @Override /* Encoder */<a name="line.37"></a>
+<span class="sourceLineNo">038</span>   public String decode(String fieldName, String in) {<a name="line.38"></a>
+<span class="sourceLineNo">039</span>      byte[] b = StringUtils.base64Decode(in);<a name="line.39"></a>
+<span class="sourceLineNo">040</span>      for (int i = 0; i &lt; b.length; i++) {<a name="line.40"></a>
+<span class="sourceLineNo">041</span>         int j = i % key.length();<a name="line.41"></a>
+<span class="sourceLineNo">042</span>         b[i] = (byte)(b[i] ^ key.charAt(j));<a name="line.42"></a>
+<span class="sourceLineNo">043</span>   }<a name="line.43"></a>
+<span class="sourceLineNo">044</span>      return new String(b, IOUtils.UTF8);<a name="line.44"></a>
+<span class="sourceLineNo">045</span>   }<a name="line.45"></a>
+<span class="sourceLineNo">046</span>}<a name="line.46"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

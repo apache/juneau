@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: com.ibm.team.juno.microservice
+Bundle-SymbolicName: com.ibm.team.juno.microservice
+Bundle-Version: 5.2.0
+Bundle-Vendor: IBM
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6

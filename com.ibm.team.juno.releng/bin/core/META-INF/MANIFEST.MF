@@ -1,0 +1,26 @@
+Manifest-Version: 1.0
+Ant-Version: Apache Ant 1.8.3
+Created-By: pwa6470_27sr1-20140411_01 (SR1) (IBM Corporation)
+Bundle-ManifestVersion: 2
+Bundle-Name: Juno Cloud API - Core
+Bundle-SymbolicName: com.ibm.team.juno
+Bundle-Version: 5.2.0.0
+Bundle-Vendor: IBM
+DynamicImport-Package: com.hp.hpl.jena.rdf.model,com.hp.hpl.jena.share
+ d
+Export-Package: com.ibm.juno.core,com.ibm.juno.core.annotation,com.ibm
+ .juno.core.csv,com.ibm.juno.core.dto,com.ibm.juno.core.dto.atom,com.i
+ bm.juno.core.dto.cognos,com.ibm.juno.core.dto.jsonschema,com.ibm.juno
+ .core.encoders,com.ibm.juno.core.filter,com.ibm.juno.core.filters,com
+ .ibm.juno.core.html,com.ibm.juno.core.html.annotation,com.ibm.juno.co
+ re.html.dto,com.ibm.juno.core.ini,com.ibm.juno.core.jena,com.ibm.juno
+ .core.jena.annotation,com.ibm.juno.core.jso,com.ibm.juno.core.json,co
+ m.ibm.juno.core.json.annotation,com.ibm.juno.core.parser,com.ibm.juno
+ .core.plaintext,com.ibm.juno.core.serializer,com.ibm.juno.core.soap,c
+ om.ibm.juno.core.urlencoding,com.ibm.juno.core.urlencoding.annotation
+ ,com.ibm.juno.core.utils,com.ibm.juno.core.xml,com.ibm.juno.core.xml.
+ annotation
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Built-By: jbognar
+Build-Date: December 30 2015
+

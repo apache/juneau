@@ -1,0 +1,262 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="en">
+<head>
+<title>Filter (Juno)</title>
+<link rel="stylesheet" type="text/css" href="../../../../../javadoc.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="Filter (Juno)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a>
+<div class="skip"><a href="#skip-navbar_top" title="Skip navigation links">Skip navigation links</a></div>
+<a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/Filter.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../com/ibm/juno/core/annotation/Consumes.html" title="annotation in com.ibm.juno.core.annotation"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../com/ibm/juno/core/annotation/NameProperty.html" title="annotation in com.ibm.juno.core.annotation"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?com/ibm/juno/core/annotation/Filter.html" target="_top">Frames</a></li>
+<li><a href="Filter.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Required&nbsp;|&nbsp;</li>
+<li><a href="#annotation_type_optional_element_summary">Optional</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#annotation_type_element_detail">Element</a></li>
+</ul>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">com.ibm.juno.core.annotation</div>
+<h2 title="Annotation Type Filter" class="title">Annotation Type Filter</h2>
+</div>
+<div class="contentContainer">
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<hr>
+<br>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/annotation/Documented.html?is-external=true" title="class or interface in java.lang.annotation">@Documented</a>
+<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/annotation/Target.html?is-external=true" title="class or interface in java.lang.annotation">@Target</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/annotation/Target.html?is-external=true#value()" title="class or interface in java.lang.annotation">value</a>=<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/annotation/ElementType.html?is-external=true#TYPE" title="class or interface in java.lang.annotation">TYPE</a>)
+<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/annotation/Retention.html?is-external=true" title="class or interface in java.lang.annotation">@Retention</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/annotation/Retention.html?is-external=true#value()" title="class or interface in java.lang.annotation">value</a>=<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/annotation/RetentionPolicy.html?is-external=true#RUNTIME" title="class or interface in java.lang.annotation">RUNTIME</a>)
+<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/annotation/Inherited.html?is-external=true" title="class or interface in java.lang.annotation">@Inherited</a>
+public @interface <a href="../../../../../src-html/com/ibm/juno/core/annotation/Filter.html#line.76">Filter</a></pre>
+<div class="block">Annotation that can be applied to a class to associate a filter with it.
+ <p>
+   Typically used to associate <a href="../../../../../com/ibm/juno/core/filter/PojoFilter.html" title="class in com.ibm.juno.core.filter"><code>PojoFilters</code></a> with classes using annotations
+      instead of programatically through a method such as <a href="../../../../../com/ibm/juno/core/serializer/Serializer.html#addFilters(java.lang.Class...)"><code>Serializer.addFilters(Class...)</code></a>.
+
+ <h6 class='topic'>Example</h6>
+ <p>
+   In this case, a filter is being applied to a bean that will force it to be serialized as a <code>String</code>
+ <p class='bcode'>
+   <jc>// Our bean class</jc>
+   <ja>@Filter</ja>(BFilter.<jk>class</jk>)
+   <jk>public class</jk> B {
+      <jk>public</jk> String <jf>f1</jf>;
+   }
+
+   <jc>// Our filter to force the bean to be serialized as a String</jc>
+   <jk>public class</jk> BFilter <jk>extends</jk> PojoFilter&lt;B,String&gt; {
+      <jk>public</jk> String filter(B o) <jk>throws</jk> SerializeException {
+         <jk>return</jk> o.f1;
+      }
+      <jk>public</jk> B unfilter(String f, ClassMeta&lt;?&gt; hint) <jk>throws</jk> ParseException {
+         B b1 = <jk>new</jk> B();
+         b1.<jf>f1</jf> = f;
+         <jk>return</jk> b1;
+      }
+   }
+
+   <jk>public void</jk> testFilter() <jk>throws</jk> Exception {
+      WriterSerializer s = JsonSerializer.<jsf>DEFAULT</jsf>;
+      B b = <jk>new</jk> B();
+      b.<jf>f1</jf> = <js>"bar"</js>;
+      String json = s.serialize(b);
+      <jsm>assertEquals</jsm>(<js>"'bar'"</js>, json);
+
+      ReaderParser p = JsonParser.<jsf>DEFAULT</jsf>;
+      b = p.parse(json, B.<jk>class</jk>);
+      <jsm>assertEquals</jsm>(<js>"bar"</js>, t.<jf>f1</jf>);
+   }
+ </p>
+ <p>
+   Note that using this annotation is functionally equivalent to adding filters to the serializers and parsers:
+ <p class='bcode'>
+   WriterSerializer s = <jk>new</jk> JsonSerializer.addFilters(BFilter.<jk>class</jk>);
+   ReaderParser p = <jk>new</jk> JsonParser.addFilters(BFilter.<jk>class</jk>);
+ </p>
+ <p>
+   It is technically possible to associate a <a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html" title="class in com.ibm.juno.core.filter"><code>BeanFilter</code></a> with a bean class using this annotation.
+   However in practice, it's almost always less code to simply use the <a href="../../../../../com/ibm/juno/core/annotation/Bean.html" title="annotation in com.ibm.juno.core.annotation"><code>@Bean</code></a> annotation.
+ </p></div>
+<dl><dt><span class="strong">Author:</span></dt>
+  <dd>James Bognar (jbognar@us.ibm.com)</dd></dl>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- =========== ANNOTATION TYPE OPTIONAL MEMBER SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="annotation_type_optional_element_summary">
+<!--   -->
+</a>
+<h3>Optional Element Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Optional Element Summary table, listing optional elements, and an explanation">
+<caption><span>Optional Elements</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Optional Element and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../com/ibm/juno/core/filter/Filter.html" title="class in com.ibm.juno.core.filter">Filter</a>&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/annotation/Filter.html#value()">value</a></strong></code>
+<div class="block">The filter class.</div>
+</td>
+</tr>
+</table>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ============ ANNOTATION TYPE MEMBER DETAIL =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="annotation_type_element_detail">
+<!--   -->
+</a>
+<h3>Element Detail</h3>
+<a name="value()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>value</h4>
+<pre>public abstract&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../com/ibm/juno/core/filter/Filter.html" title="class in com.ibm.juno.core.filter">Filter</a>&gt;&nbsp;<a href="../../../../../src-html/com/ibm/juno/core/annotation/Filter.html#line.81">value</a></pre>
+<div class="block">The filter class.</div>
+<dl>
+<dt>Default:</dt>
+<dd>com.ibm.juno.core.filter.Filter.NULL.class</dd>
+</dl>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a>
+<div class="skip"><a href="#skip-navbar_bottom" title="Skip navigation links">Skip navigation links</a></div>
+<a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/Filter.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../com/ibm/juno/core/annotation/Consumes.html" title="annotation in com.ibm.juno.core.annotation"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../com/ibm/juno/core/annotation/NameProperty.html" title="annotation in com.ibm.juno.core.annotation"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?com/ibm/juno/core/annotation/Filter.html" target="_top">Frames</a></li>
+<li><a href="Filter.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Required&nbsp;|&nbsp;</li>
+<li><a href="#annotation_type_optional_element_summary">Optional</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#annotation_type_element_detail">Element</a></li>
+</ul>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+</body>
+</html>

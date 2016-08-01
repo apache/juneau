@@ -1,0 +1,838 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="en">
+<head>
+<title>BeanFilter (Juno)</title>
+<link rel="stylesheet" type="text/css" href="../../../../../javadoc.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="BeanFilter (Juno)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a>
+<div class="skip"><a href="#skip-navbar_top" title="Skip navigation links">Skip navigation links</a></div>
+<a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/BeanFilter.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../com/ibm/juno/core/filter/AnnotationBeanFilter.html" title="class in com.ibm.juno.core.filter"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../com/ibm/juno/core/filter/Filter.html" title="class in com.ibm.juno.core.filter"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?com/ibm/juno/core/filter/BeanFilter.html" target="_top">Frames</a></li>
+<li><a href="BeanFilter.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li><a href="#nested_classes_inherited_from_class_com.ibm.juno.core.filter.Filter">Nested</a>&nbsp;|&nbsp;</li>
+<li><a href="#fields_inherited_from_class_com.ibm.juno.core.filter.Filter">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">com.ibm.juno.core.filter</div>
+<h2 title="Class BeanFilter" class="title">Class BeanFilter&lt;T&gt;</h2>
+</div>
+<div class="contentContainer">
+<ul class="inheritance">
+<li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
+<li>
+<ul class="inheritance">
+<li><a href="../../../../../com/ibm/juno/core/filter/Filter.html" title="class in com.ibm.juno.core.filter">com.ibm.juno.core.filter.Filter</a></li>
+<li>
+<ul class="inheritance">
+<li>com.ibm.juno.core.filter.BeanFilter&lt;T&gt;</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<dl><dt><span class="strong">Type Parameters:</span></dt><dd><code>T</code> - The class type that this filter applies to.</dd></dl>
+<dl>
+<dt>Direct Known Subclasses:</dt>
+<dd><a href="../../../../../com/ibm/juno/core/filter/AnnotationBeanFilter.html" title="class in com.ibm.juno.core.filter">AnnotationBeanFilter</a>, <a href="../../../../../com/ibm/juno/core/filter/InterfaceBeanFilter.html" title="class in com.ibm.juno.core.filter">InterfaceBeanFilter</a></dd>
+</dl>
+<hr>
+<br>
+<pre>public abstract class <a href="../../../../../src-html/com/ibm/juno/core/filter/BeanFilter.html#line.65">BeanFilter</a>&lt;T&gt;
+extends <a href="../../../../../com/ibm/juno/core/filter/Filter.html" title="class in com.ibm.juno.core.filter">Filter</a></pre>
+<div class="block">Parent class for all bean filters.
+ <p>
+   Bean filters are used to control aspects of how beans are handled during serialization and parsing.
+ <p>
+   This class can be considered a programmatic equivalent to using the <a href="../../../../../com/ibm/juno/core/annotation/Bean.html" title="annotation in com.ibm.juno.core.annotation"><code>@Bean</code></a> annotation on bean classes.
+   Thus, it can be used to perform the same function as the <code>@Bean</code> annotation when you don't have
+      the ability to annotate those classes (e.g. you don't have access to the source code).
+ <p>
+   Note that value returned by the <a href="../../../../../com/ibm/juno/core/filter/Filter.html#forClass()"><code>Filter.forClass()</code></a> method is automatically determined through reflection
+      when the no-arg constructor is used.
+
+ <p>
+   When defining bean filters, you can either call the setters in the contructor, or override getters.
+
+ <h6 class='topic'>Example</h6>
+ <p class='bcode'>
+   <jc>// Create our serializer with a filter.</jc>
+   WriterSerializer s = <jk>new</jk> JsonSerializer().addFilters(AddressFilter.<jk>class</jk>);
+
+   Address a = <jk>new</jk> Address();
+   String json = s.serialize(a); <jc>// Serializes only street, city, state.</jc>
+
+   <jc>// Filter class defined via setters</jc>
+   <jk>public class</jk> AddressFilter <jk>extends</jk> BeanFilter&lt;Address&gt; {
+      <jk>public</jk> AddressFilter() {
+         setProperties(<js>"street"</js>,<js>"city"</js>,<js>"state"</js>);
+      }
+   }
+
+   <jc>// Filter class defined by overriding getters</jc>
+   <jk>public class</jk> AddressFilter <jk>extends</jk> BeanFilter&lt;Address&gt; {
+      <jk>public</jk> String[] getProperties() {
+         <jk>return new</jk> String[]{<js>"street"</js>,<js>"city"</js>,<js>"state"</js>};
+      }
+   }
+ </p>
+ <p>
+   The examples in this class use the setters approach.
+
+ <h6 class='topic'>Additional information</h6>
+   See <a href="../../../../../com/ibm/juno/core/filter/package-summary.html"><code>com.ibm.juno.core.filter</code></a> for more information.</div>
+<dl><dt><span class="strong">Author:</span></dt>
+  <dd>James Bognar (jbognar@us.ibm.com)</dd></dl>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- ======== NESTED CLASS SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="nested_class_summary">
+<!--   -->
+</a>
+<h3>Nested Class Summary</h3>
+<ul class="blockList">
+<li class="blockList"><a name="nested_classes_inherited_from_class_com.ibm.juno.core.filter.Filter">
+<!--   -->
+</a>
+<h3>Nested classes/interfaces inherited from class&nbsp;com.ibm.juno.core.filter.<a href="../../../../../com/ibm/juno/core/filter/Filter.html" title="class in com.ibm.juno.core.filter">Filter</a></h3>
+<code><a href="../../../../../com/ibm/juno/core/filter/Filter.FilterType.html" title="enum in com.ibm.juno.core.filter">Filter.FilterType</a>, <a href="../../../../../com/ibm/juno/core/filter/Filter.NULL.html" title="class in com.ibm.juno.core.filter">Filter.NULL</a></code></li>
+</ul>
+</li>
+</ul>
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<ul class="blockList">
+<li class="blockList"><a name="fields_inherited_from_class_com.ibm.juno.core.filter.Filter">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;com.ibm.juno.core.filter.<a href="../../../../../com/ibm/juno/core/filter/Filter.html" title="class in com.ibm.juno.core.filter">Filter</a></h3>
+<code><a href="../../../../../com/ibm/juno/core/filter/Filter.html#beanContext">beanContext</a>, <a href="../../../../../com/ibm/juno/core/filter/Filter.html#forClass">forClass</a>, <a href="../../../../../com/ibm/juno/core/filter/Filter.html#type">type</a></code></li>
+</ul>
+</li>
+</ul>
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_summary">
+<!--   -->
+</a>
+<h3>Constructor Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Constructor Summary table, listing constructors, and an explanation">
+<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html#BeanFilter()">BeanFilter</a></strong>()</code>
+<div class="block">Constructor that determines the for-class value using reflection.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><strong><a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html#BeanFilter(java.lang.Class)">BeanFilter</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;<a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html" title="type parameter in BeanFilter">T</a>&gt;&nbsp;forClass)</code>
+<div class="block">Constructor that specifies the for-class explicitly.</div>
+</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html" title="class in com.ibm.juno.core.filter">BeanFilter</a>&lt;<a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html" title="type parameter in BeanFilter">T</a>&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html#addSubType(java.lang.Class, java.lang.String)">addSubType</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;c,
+                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;id)</code>
+<div class="block">Convenience method for adding a single subtype in leu of using <a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html#setSubTypes(java.util.LinkedHashMap)"><code>setSubTypes(LinkedHashMap)</code></a> in one call.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html#getExcludeProperties()">getExcludeProperties</a></strong>()</code>
+<div class="block">Returns the list of properties to ignore on a bean.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html#getInterfaceClass()">getInterfaceClass</a></strong>()</code>
+<div class="block">Returns the interface class associated with this class.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html#getProperties()">getProperties</a></strong>()</code>
+<div class="block">Returns the set and order of names of properties associated with a bean class.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../com/ibm/juno/core/PropertyNamer.html" title="interface in com.ibm.juno.core">PropertyNamer</a>&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html#getPropertyNamer()">getPropertyNamer</a></strong>()</code>
+<div class="block">Returns the <a href="../../../../../com/ibm/juno/core/PropertyNamer.html" title="interface in com.ibm.juno.core"><code>PropertyNamer</code></a> associated with the bean to tailor the names of bean properties.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html#getStopClass()">getStopClass</a></strong>()</code>
+<div class="block">Returns the stop class associated with this class.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html#getSubTypeProperty()">getSubTypeProperty</a></strong>()</code>
+<div class="block">Returns the name of the sub type property associated with the bean class.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/LinkedHashMap.html?is-external=true" title="class or interface in java.util">LinkedHashMap</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html#getSubTypes()">getSubTypes</a></strong>()</code>
+<div class="block">Returns the subtypes associated with the bean class.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html#readProperty(java.lang.Object, java.lang.String, java.lang.Object)">readProperty</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;bean,
+                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name,
+                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;value)</code>
+<div class="block">Subclasses can override this property to convert property values to some other
+   object just before serialization.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html" title="class in com.ibm.juno.core.filter">BeanFilter</a>&lt;<a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html" title="type parameter in BeanFilter">T</a>&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html#setExcludeProperties(java.lang.String...)">setExcludeProperties</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;excludeProperties)</code>
+<div class="block">Specifies a list of properties to ignore on a bean.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html" title="class in com.ibm.juno.core.filter">BeanFilter</a>&lt;<a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html" title="type parameter in BeanFilter">T</a>&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html#setInterfaceClass(java.lang.Class)">setInterfaceClass</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;interfaceClass)</code>
+<div class="block">Identifies a class to be used as the interface class for this and all subclasses.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html" title="class in com.ibm.juno.core.filter">BeanFilter</a>&lt;<a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html" title="type parameter in BeanFilter">T</a>&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html#setProperties(java.lang.String...)">setProperties</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;properties)</code>
+<div class="block">Specifies the set and order of names of properties associated with a bean class.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html" title="class in com.ibm.juno.core.filter">BeanFilter</a>&lt;<a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html" title="type parameter in BeanFilter">T</a>&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html#setPropertyNamer(java.lang.Class)">setPropertyNamer</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../com/ibm/juno/core/PropertyNamer.html" title="interface in com.ibm.juno.core">PropertyNamer</a>&gt;&nbsp;propertyNamer)</code>
+<div class="block">Associates a <a href="../../../../../com/ibm/juno/core/PropertyNamer.html" title="interface in com.ibm.juno.core"><code>PropertyNamer</code></a> with this bean to tailor the names of the bean properties.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html" title="class in com.ibm.juno.core.filter">BeanFilter</a>&lt;<a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html" title="type parameter in BeanFilter">T</a>&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html#setStopClass(java.lang.Class)">setStopClass</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;stopClass)</code>
+<div class="block">Identifies a stop class for this class and all subclasses.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html" title="class in com.ibm.juno.core.filter">BeanFilter</a>&lt;<a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html" title="type parameter in BeanFilter">T</a>&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html#setSubTypeProperty(java.lang.String)">setSubTypeProperty</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;subTypeAttr)</code>
+<div class="block">Defines a virtual property on a superclass that identifies bean subtype classes.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html" title="class in com.ibm.juno.core.filter">BeanFilter</a>&lt;<a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html" title="type parameter in BeanFilter">T</a>&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html#setSubTypes(java.util.LinkedHashMap)">setSubTypes</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/LinkedHashMap.html?is-external=true" title="class or interface in java.util">LinkedHashMap</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;subTypes)</code>
+<div class="block">Specifies the set of subclasses of this bean class in addition to a string identifier for that subclass.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html#writeProperty(java.lang.Object, java.lang.String, java.lang.Object)">writeProperty</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;bean,
+                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name,
+                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;value)</code>
+<div class="block">Subclasses can override this property to convert property values to some other
+   object just before calling the bean setter.</div>
+</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_com.ibm.juno.core.filter.Filter">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;com.ibm.juno.core.filter.<a href="../../../../../com/ibm/juno/core/filter/Filter.html" title="class in com.ibm.juno.core.filter">Filter</a></h3>
+<code><a href="../../../../../com/ibm/juno/core/filter/Filter.html#forClass()">forClass</a>, <a href="../../../../../com/ibm/juno/core/filter/Filter.html#getBeanContext()">getBeanContext</a>, <a href="../../../../../com/ibm/juno/core/filter/Filter.html#getImplClass()">getImplClass</a>, <a href="../../../../../com/ibm/juno/core/filter/Filter.html#getType()">getType</a>, <a href="../../../../../com/ibm/juno/core/filter/Filter.html#hashCode()">hashCode</a>, <a href="../../../../../com/ibm/juno/core/filter/Filter.html#isSameAs(com.ibm.juno.core.filter.Filter)">isSameAs</a>, <a href="../../../../../com/ibm/juno/core/filter/Filter.html#setBeanContext(com.ibm.juno.core.BeanContext)">setBeanContext</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
+<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang">clone</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang">equals</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang">toString</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long, int)" title="class or interface in java.lang">wait</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_detail">
+<!--   -->
+</a>
+<h3>Constructor Detail</h3>
+<a name="BeanFilter()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>BeanFilter</h4>
+<pre>public&nbsp;<a href="../../../../../src-html/com/ibm/juno/core/filter/BeanFilter.html#line.77">BeanFilter</a>()</pre>
+<div class="block">Constructor that determines the for-class value using reflection.</div>
+</li>
+</ul>
+<a name="BeanFilter(java.lang.Class)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>BeanFilter</h4>
+<pre>public&nbsp;<a href="../../../../../src-html/com/ibm/juno/core/filter/BeanFilter.html#line.124">BeanFilter</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;<a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html" title="type parameter in BeanFilter">T</a>&gt;&nbsp;forClass)</pre>
+<div class="block">Constructor that specifies the for-class explicitly.
+ <p>
+ This constructor only needs to be called when the class type cannot be inferred through reflection.
+
+ <dl>
+   <dt>Example:</dt>
+   <dd>
+      <p class='bcode'>
+   <jk>public class</jk> SomeArbitraryFilter <jk>extends</jk> BeanFilter&lt?&gt; {
+      <jk>public</jk> SomeArbitraryFilter(Class&lt?&gt; forClass) {
+         <jk>super</jk>(forClass);
+         ...
+      }
+   }
+      </p>
+   </dd>
+ </dl></div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>forClass</code> - The class that this bean filter applies to.</dd></dl>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="getProperties()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getProperties</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;<a href="../../../../../src-html/com/ibm/juno/core/filter/BeanFilter.html#line.135">getProperties</a>()</pre>
+<div class="block">Returns the set and order of names of properties associated with a bean class.</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>The name of the properties associated with a bean class, or <jk>null</jk> if all bean properties should be used.</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html#setProperties(java.lang.String...)"><code>setProperties(String...)</code></a></dd></dl>
+</li>
+</ul>
+<a name="setProperties(java.lang.String...)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setProperties</h4>
+<pre>public&nbsp;<a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html" title="class in com.ibm.juno.core.filter">BeanFilter</a>&lt;<a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html" title="type parameter in BeanFilter">T</a>&gt;&nbsp;<a href="../../../../../src-html/com/ibm/juno/core/filter/BeanFilter.html#line.169">setProperties</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;properties)</pre>
+<div class="block">Specifies the set and order of names of properties associated with a bean class.
+ <p>
+   The order specified is the same order that the entries will be returned by the <a href="../../../../../com/ibm/juno/core/BeanMap.html#entrySet()"><code>BeanMap.entrySet()</code></a> and related methods.
+ <p>
+   This method is an alternative to using the <a href="../../../../../com/ibm/juno/core/annotation/Bean.html#properties()"><code>Bean.properties()</code></a> annotation on a class.
+
+ <dl>
+   <dt>Example:</dt>
+   <dd>
+      <p class='bcode'>
+   <jc>// Create our serializer with a filter.</jc>
+   WriterSerializer s = <jk>new</jk> JsonSerializer().addFilters(AddressFilter.<jk>class</jk>);
+
+   Address a = <jk>new</jk> Address();
+   String json = s.serialize(a); <jc>// Serializes only street, city, state.</jc>
+
+   <jc>// Filter class</jc>
+   <jk>public class</jk> AddressFilter <jk>extends</jk> BeanFilter&lt;Address&gt; {
+      <jk>public</jk> AddressFilter() {
+         setProperties(<js>"street"</js>,<js>"city"</js>,<js>"state"</js>);
+      }
+   }
+      </p>
+   </dd>
+ </dl></div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>properties</code> - The name of the properties associated with a bean class.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>This object (for method chaining).</dd></dl>
+</li>
+</ul>
+<a name="getExcludeProperties()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getExcludeProperties</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;<a href="../../../../../src-html/com/ibm/juno/core/filter/BeanFilter.html#line.180">getExcludeProperties</a>()</pre>
+<div class="block">Returns the list of properties to ignore on a bean.</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>The name of the properties to ignore on a bean, or <jk>null</jk> to not ignore any properties.</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html#setExcludeProperties(java.lang.String...)"><code>setExcludeProperties(String...)</code></a></dd></dl>
+</li>
+</ul>
+<a name="setExcludeProperties(java.lang.String...)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setExcludeProperties</h4>
+<pre>public&nbsp;<a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html" title="class in com.ibm.juno.core.filter">BeanFilter</a>&lt;<a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html" title="type parameter in BeanFilter">T</a>&gt;&nbsp;<a href="../../../../../src-html/com/ibm/juno/core/filter/BeanFilter.html#line.212">setExcludeProperties</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;excludeProperties)</pre>
+<div class="block">Specifies a list of properties to ignore on a bean.
+ <p>
+   This method is an alternative to using the <a href="../../../../../com/ibm/juno/core/annotation/Bean.html#excludeProperties()"><code>Bean.excludeProperties()</code></a> annotation on a class.
+
+ <dl>
+   <dt>Example:</dt>
+   <dd>
+      <p class='bcode'>
+   <jc>// Create our serializer with a filter.</jc>
+   WriterSerializer s = <jk>new</jk> JsonSerializer().addFilters(NoCityOrStateFilter.<jk>class</jk>);
+
+   Address a = <jk>new</jk> Address();
+   String json = s.serialize(a); <jc>// Excludes city and state.</jc>
+
+   <jc>// Filter class</jc>
+   <jk>public class</jk> NoCityOrStateFilter <jk>extends</jk> BeanFilter&lt;Address&gt; {
+      <jk>public</jk> AddressFilter() {
+         setExcludeProperties(<js>"city"</js>,<js>"state"</js>);
+      }
+   }
+      </p>
+   </dd>
+ </dl></div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>excludeProperties</code> - The name of the properties to ignore on a bean class.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>This object (for method chaining).</dd></dl>
+</li>
+</ul>
+<a name="getPropertyNamer()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getPropertyNamer</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../com/ibm/juno/core/PropertyNamer.html" title="interface in com.ibm.juno.core">PropertyNamer</a>&gt;&nbsp;<a href="../../../../../src-html/com/ibm/juno/core/filter/BeanFilter.html#line.223">getPropertyNamer</a>()</pre>
+<div class="block">Returns the <a href="../../../../../com/ibm/juno/core/PropertyNamer.html" title="interface in com.ibm.juno.core"><code>PropertyNamer</code></a> associated with the bean to tailor the names of bean properties.</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>The property namer class, or <jk>null</jk> if no property namer is associated with this bean property.</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html#setPropertyNamer(java.lang.Class)"><code>setPropertyNamer(Class)</code></a></dd></dl>
+</li>
+</ul>
+<a name="setPropertyNamer(java.lang.Class)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setPropertyNamer</h4>
+<pre>public&nbsp;<a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html" title="class in com.ibm.juno.core.filter">BeanFilter</a>&lt;<a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html" title="type parameter in BeanFilter">T</a>&gt;&nbsp;<a href="../../../../../src-html/com/ibm/juno/core/filter/BeanFilter.html#line.239">setPropertyNamer</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../com/ibm/juno/core/PropertyNamer.html" title="interface in com.ibm.juno.core">PropertyNamer</a>&gt;&nbsp;propertyNamer)</pre>
+<div class="block">Associates a <a href="../../../../../com/ibm/juno/core/PropertyNamer.html" title="interface in com.ibm.juno.core"><code>PropertyNamer</code></a> with this bean to tailor the names of the bean properties.
+ <p>
+   Property namers are used to transform bean property names from standard form to some other form.
+   For example, the <a href="../../../../../com/ibm/juno/core/PropertyNamerDashedLC.html" title="class in com.ibm.juno.core"><code>PropertyNamerDashedLC</code></a> will convert property names to dashed-lowercase, and
+      these will be used as attribute names in JSON, and element names in XML.
+ <p>
+   This method is an alternative to using the <a href="../../../../../com/ibm/juno/core/annotation/Bean.html#propertyNamer()"><code>Bean.propertyNamer()</code></a> annotation on a class.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>propertyNamer</code> - The property namer class.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>This object (for method chaining).</dd></dl>
+</li>
+</ul>
+<a name="getSubTypeProperty()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getSubTypeProperty</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../../../../src-html/com/ibm/juno/core/filter/BeanFilter.html#line.250">getSubTypeProperty</a>()</pre>
+<div class="block">Returns the name of the sub type property associated with the bean class.</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>The sub type property name, or <jk>null</jk> if bean has no subtypes defined.</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html#setSubTypeProperty(java.lang.String)"><code>setSubTypeProperty(String)</code></a></dd></dl>
+</li>
+</ul>
+<a name="setSubTypeProperty(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setSubTypeProperty</h4>
+<pre>public&nbsp;<a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html" title="class in com.ibm.juno.core.filter">BeanFilter</a>&lt;<a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html" title="type parameter in BeanFilter">T</a>&gt;&nbsp;<a href="../../../../../src-html/com/ibm/juno/core/filter/BeanFilter.html#line.307">setSubTypeProperty</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;subTypeAttr)</pre>
+<div class="block">Defines a virtual property on a superclass that identifies bean subtype classes.
+ <p>
+   In the following example, the abstract class has two subclasses that are differentiated
+      by a property called <code>subType</code>
+
+ <p class='bcode'>
+   <jc>// Abstract superclass</jc>
+   <jk>public abstract class</jk> A {
+      <jk>public</jk> String <jf>f0</jf> = <js>"f0"</js>;
+   }
+
+   <jc>// Subclass 1</jc>
+   <jk>public class</jk> A1 <jk>extends</jk> A {
+      <jk>public</jk> String <jf>f1</jf>;
+   }
+
+   <jc>// Subclass 2</jc>
+   <jk>public class</jk> A2 <jk>extends</jk> A {
+      <jk>public</jk> String <jf>f2</jf>;
+   }
+
+   <jc>// Filter for defining subtypes</jc>
+   <jk>public class</jk> AFilter <jk>extends</jk> BeanFilter&lt;A&gt; {
+      <jk>public</jk> AFilter() {
+         setSubTypeProperty(<js>"subType"</js>);
+         addSubType(Al.<jk>class</jk>, <js>"A1"</js>);
+         addSubType(A2.<jk>class</jk>, <js>"A2"</js>);
+      }
+   }
+ </p>
+ <p>
+   The following shows what happens when serializing a subclassed object to JSON:
+ <p class='bcode'>
+   JsonSerializer s = <jk>new</jk> JsonSerializer().addFilters(AFilter.<jk>class</jk>);
+   A1 a1 = <jk>new</jk> A1();
+   a1.<jf>f1</jf> = <js>"f1"</js>;
+   String r = s.serialize(a1);
+   <jsm>assertEquals</jsm>(<js>"{subType:'A1',f1:'f1',f0:'f0'}"</js>, r);
+ </p>
+ <p>
+   The following shows what happens when parsing back into the original object.
+ <p class='bcode'>
+   JsonParser p = <jk>new</jk> JsonParser().addFilters(AFilter.<jk>class</jk>);
+   A a = p.parse(r, A.<jk>class</jk>);
+   <jsm>assertTrue</jsm>(a <jk>instanceof</jk> A1);
+ </p>
+ <p>
+   This method is an alternative to using the <a href="../../../../../com/ibm/juno/core/annotation/Bean.html#subTypeProperty()"><code>Bean.subTypeProperty()</code></a> annotation on a class.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>subTypeAttr</code> - The name of the attribute representing the subtype.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>This object (for method chaining).</dd></dl>
+</li>
+</ul>
+<a name="getSubTypes()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getSubTypes</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/LinkedHashMap.html?is-external=true" title="class or interface in java.util">LinkedHashMap</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;<a href="../../../../../src-html/com/ibm/juno/core/filter/BeanFilter.html#line.318">getSubTypes</a>()</pre>
+<div class="block">Returns the subtypes associated with the bean class.</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>The set of sub types associated with this bean class, or <jk>null</jk> if bean has no subtypes defined.</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html#setSubTypeProperty(java.lang.String)"><code>setSubTypeProperty(String)</code></a></dd></dl>
+</li>
+</ul>
+<a name="setSubTypes(java.util.LinkedHashMap)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setSubTypes</h4>
+<pre>public&nbsp;<a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html" title="class in com.ibm.juno.core.filter">BeanFilter</a>&lt;<a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html" title="type parameter in BeanFilter">T</a>&gt;&nbsp;<a href="../../../../../src-html/com/ibm/juno/core/filter/BeanFilter.html#line.329">setSubTypes</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/LinkedHashMap.html?is-external=true" title="class or interface in java.util">LinkedHashMap</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;subTypes)</pre>
+<div class="block">Specifies the set of subclasses of this bean class in addition to a string identifier for that subclass.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>subTypes</code> - the map of subtype classes to subtype identifier strings.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>This object (for method chaining).</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html#setSubTypeProperty(java.lang.String)"><code>setSubTypeProperty(String)</code></a></dd></dl>
+</li>
+</ul>
+<a name="addSubType(java.lang.Class, java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>addSubType</h4>
+<pre>public&nbsp;<a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html" title="class in com.ibm.juno.core.filter">BeanFilter</a>&lt;<a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html" title="type parameter in BeanFilter">T</a>&gt;&nbsp;<a href="../../../../../src-html/com/ibm/juno/core/filter/BeanFilter.html#line.342">addSubType</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;c,
+                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;id)</pre>
+<div class="block">Convenience method for adding a single subtype in leu of using <a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html#setSubTypes(java.util.LinkedHashMap)"><code>setSubTypes(LinkedHashMap)</code></a> in one call.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>c</code> - The subtype class.</dd><dd><code>id</code> - The subtype identifier string for the specified subtype class.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>This object (for method chaining).</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html#setSubTypeProperty(java.lang.String)"><code>setSubTypeProperty(String)</code></a></dd></dl>
+</li>
+</ul>
+<a name="getInterfaceClass()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getInterfaceClass</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;<a href="../../../../../src-html/com/ibm/juno/core/filter/BeanFilter.html#line.355">getInterfaceClass</a>()</pre>
+<div class="block">Returns the interface class associated with this class.</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>The interface class associated with this class, or <jk>null</jk> if no interface class is associated.</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html#setInterfaceClass(java.lang.Class)"><code>setInterfaceClass(Class)</code></a></dd></dl>
+</li>
+</ul>
+<a name="setInterfaceClass(java.lang.Class)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setInterfaceClass</h4>
+<pre>public&nbsp;<a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html" title="class in com.ibm.juno.core.filter">BeanFilter</a>&lt;<a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html" title="type parameter in BeanFilter">T</a>&gt;&nbsp;<a href="../../../../../src-html/com/ibm/juno/core/filter/BeanFilter.html#line.398">setInterfaceClass</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;interfaceClass)</pre>
+<div class="block">Identifies a class to be used as the interface class for this and all subclasses.
+ <p>
+   Functionally equivalent to using the <a href="../../../../../com/ibm/juno/core/annotation/Bean.html#interfaceClass()"><code>Bean.interfaceClass()</code></a> annotation.
+ <p>
+   When specified, only the list of properties defined on the interface class will be used during serialization.
+   Additional properties on subclasses will be ignored.
+ <p class='bcode'>
+   <jc>// Parent class</jc>
+   <jk>public abstract class</jk> A {
+      <jk>public</jk> String <jf>f0</jf> = <js>"f0"</js>;
+   }
+
+   <jc>// Sub class</jc>
+   <jk>public class</jk> A1 <jk>extends</jk> A {
+      <jk>public</jk> String <jf>f1</jf> = <js>"f1"</js>;
+   }
+
+   <jc>// Filter class</jc>
+   <jk>public class</jk> AFilter <jk>extends</jk> BeanFilter&lt;A&gt; {
+      <jk>public</jk> AFilter() {
+         setInterfaceClass(A.<jk>class</jk>);
+      }
+   }
+
+   JsonSerializer s = new JsonSerializer().addFilters(AFilter.<jk>class</jk>);
+   A1 a1 = <jk>new</jk> A1();
+   String r = s.serialize(a1);
+   <jsm>assertEquals</jsm>(<js>"{f0:'f0'}"</js>, r);  <jc>// Note f1 is not serialized</jc>
+ </p>
+ <p>
+   Note that this filter can be used on the parent class so that it filters to all child classes,
+      or can be set individually on the child classes.
+ <p>
+   This method is an alternative to using the <a href="../../../../../com/ibm/juno/core/annotation/Bean.html#interfaceClass()"><code>Bean.interfaceClass()</code></a>} annotation.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>interfaceClass</code> - The interface class.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>This object (for method chaining).</dd></dl>
+</li>
+</ul>
+<a name="getStopClass()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getStopClass</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;<a href="../../../../../src-html/com/ibm/juno/core/filter/BeanFilter.html#line.409">getStopClass</a>()</pre>
+<div class="block">Returns the stop class associated with this class.</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>The stop class associated with this class, or <jk>null</jk> if no stop class is associated.</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html#setStopClass(java.lang.Class)"><code>setStopClass(Class)</code></a></dd></dl>
+</li>
+</ul>
+<a name="setStopClass(java.lang.Class)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setStopClass</h4>
+<pre>public&nbsp;<a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html" title="class in com.ibm.juno.core.filter">BeanFilter</a>&lt;<a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html" title="type parameter in BeanFilter">T</a>&gt;&nbsp;<a href="../../../../../src-html/com/ibm/juno/core/filter/BeanFilter.html#line.441">setStopClass</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;stopClass)</pre>
+<div class="block">Identifies a stop class for this class and all subclasses.
+ <p>
+   Functionally equivalent to using the <a href="../../../../../com/ibm/juno/core/annotation/Bean.html#stopClass()"><code>Bean.stopClass()</code></a> annotation.
+ <p>
+   Identical in purpose to the stop class specified by <a href="http://docs.oracle.com/javase/7/docs/api/java/beans/Introspector.html?is-external=true#getBeanInfo(java.lang.Class, java.lang.Class)" title="class or interface in java.beans"><code>Introspector.getBeanInfo(Class, Class)</code></a>.
+   Any properties in the stop class or in its baseclasses will be ignored during analysis.
+ <p>
+   For example, in the following class hierarchy, instances of <code>C3</code> will include property <code>p3</code>, but
+      not <code>p1</code> or <code>p2</code>.
+ <p class='bcode'>
+   <jk>public class</jk> C1 {
+      <jk>public int</jk> getP1();
+   }
+
+   <jk>public class</jk> C2 <jk>extends</jk> C1 {
+      <jk>public int</jk> getP2();
+   }
+
+   <ja>@Bean</ja>(stopClass=C2.<jk>class</jk>)
+   <jk>public class</jk> C3 <jk>extends</jk> C2 {
+      <jk>public int</jk> getP3();
+   }
+ </p></div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>stopClass</code> - The stop class.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>This object (for method chaining).</dd></dl>
+</li>
+</ul>
+<a name="readProperty(java.lang.Object, java.lang.String, java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>readProperty</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;<a href="../../../../../src-html/com/ibm/juno/core/filter/BeanFilter.html#line.455">readProperty</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;bean,
+                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name,
+                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;value)</pre>
+<div class="block">Subclasses can override this property to convert property values to some other
+   object just before serialization.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>bean</code> - The bean from which the property was read.</dd><dd><code>name</code> - The property name.</dd><dd><code>value</code> - The value just extracted from calling the bean getter.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The value to serialize.  Default is just to return the existing value.</dd></dl>
+</li>
+</ul>
+<a name="writeProperty(java.lang.Object, java.lang.String, java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>writeProperty</h4>
+<pre>public&nbsp;boolean&nbsp;<a href="../../../../../src-html/com/ibm/juno/core/filter/BeanFilter.html#line.469">writeProperty</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;bean,
+                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name,
+                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;value)</pre>
+<div class="block">Subclasses can override this property to convert property values to some other
+   object just before calling the bean setter.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>bean</code> - The bean from which the property was read.</dd><dd><code>name</code> - The property name.</dd><dd><code>value</code> - The value just parsed.</dd>
+<dt><span class="strong">Returns:</span></dt><dd><jk>true</jk> if we set the property, <jk>false</jk> if we should allow the
+   framework to call the setter.</dd></dl>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a>
+<div class="skip"><a href="#skip-navbar_bottom" title="Skip navigation links">Skip navigation links</a></div>
+<a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/BeanFilter.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../com/ibm/juno/core/filter/AnnotationBeanFilter.html" title="class in com.ibm.juno.core.filter"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../com/ibm/juno/core/filter/Filter.html" title="class in com.ibm.juno.core.filter"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?com/ibm/juno/core/filter/BeanFilter.html" target="_top">Frames</a></li>
+<li><a href="BeanFilter.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li><a href="#nested_classes_inherited_from_class_com.ibm.juno.core.filter.Filter">Nested</a>&nbsp;|&nbsp;</li>
+<li><a href="#fields_inherited_from_class_com.ibm.juno.core.filter.Filter">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+</body>
+</html>

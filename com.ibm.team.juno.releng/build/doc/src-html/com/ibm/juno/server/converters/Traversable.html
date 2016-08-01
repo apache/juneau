@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../javadoc.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>/*******************************************************************************<a name="line.1"></a>
+<span class="sourceLineNo">002</span> * Licensed Materials - Property of IBM<a name="line.2"></a>
+<span class="sourceLineNo">003</span> * (c) Copyright IBM Corporation 2014, 2015. All Rights Reserved.<a name="line.3"></a>
+<span class="sourceLineNo">004</span> *<a name="line.4"></a>
+<span class="sourceLineNo">005</span> *  The source code for this program is not published or otherwise<a name="line.5"></a>
+<span class="sourceLineNo">006</span> *  divested of its trade secrets, irrespective of what has been<a name="line.6"></a>
+<span class="sourceLineNo">007</span> *  deposited with the U.S. Copyright Office.<a name="line.7"></a>
+<span class="sourceLineNo">008</span> *******************************************************************************/<a name="line.8"></a>
+<span class="sourceLineNo">009</span>package com.ibm.juno.server.converters;<a name="line.9"></a>
+<span class="sourceLineNo">010</span><a name="line.10"></a>
+<span class="sourceLineNo">011</span>import javax.servlet.http.*;<a name="line.11"></a>
+<span class="sourceLineNo">012</span><a name="line.12"></a>
+<span class="sourceLineNo">013</span>import com.ibm.juno.core.*;<a name="line.13"></a>
+<span class="sourceLineNo">014</span>import com.ibm.juno.core.serializer.*;<a name="line.14"></a>
+<span class="sourceLineNo">015</span>import com.ibm.juno.core.utils.*;<a name="line.15"></a>
+<span class="sourceLineNo">016</span>import com.ibm.juno.server.*;<a name="line.16"></a>
+<span class="sourceLineNo">017</span><a name="line.17"></a>
+<span class="sourceLineNo">018</span>/**<a name="line.18"></a>
+<span class="sourceLineNo">019</span> * Converter for enablement of {@link PojoRest} support on response objects returned by a &lt;code&gt;@RestMethod&lt;/code&gt; method.<a name="line.19"></a>
+<span class="sourceLineNo">020</span> * &lt;p&gt;<a name="line.20"></a>
+<span class="sourceLineNo">021</span> *    When enabled, objects in a POJO tree returned by the REST method can be addressed through additional URL path information.<a name="line.21"></a>
+<span class="sourceLineNo">022</span> *<a name="line.22"></a>
+<span class="sourceLineNo">023</span> * &lt;p class='bcode'&gt;<a name="line.23"></a>
+<span class="sourceLineNo">024</span> *    &lt;jc&gt;// Resource method on resource "http://localhost:8080/sample/addressBook"&lt;/jc&gt;<a name="line.24"></a>
+<span class="sourceLineNo">025</span> *    &lt;ja&gt;@RestMethod&lt;/ja&gt;(name=&lt;js&gt;"GET"&lt;/js&gt;, converters=Traversable.&lt;jk&gt;class&lt;/jk&gt;)<a name="line.25"></a>
+<span class="sourceLineNo">026</span> *    &lt;jk&gt;public void&lt;/jk&gt; doGet(RestRequest req, RestResponse res) {<a name="line.26"></a>
+<span class="sourceLineNo">027</span> *       &lt;jk&gt;return new&lt;/jk&gt; AddressBook();<a name="line.27"></a>
+<span class="sourceLineNo">028</span> *    }<a name="line.28"></a>
+<span class="sourceLineNo">029</span> *<a name="line.29"></a>
+<span class="sourceLineNo">030</span> *    &lt;jc&gt;// Sample usage&lt;/jc&gt;<a name="line.30"></a>
+<span class="sourceLineNo">031</span> *    &lt;jk&gt;public static void&lt;/jk&gt; main(String[] args) {<a name="line.31"></a>
+<span class="sourceLineNo">032</span> *       &lt;jc&gt;// Get the zip code of the 2nd address of the first person in the address book.&lt;/jc&gt;<a name="line.32"></a>
+<span class="sourceLineNo">033</span> *       RestCall r = &lt;jk&gt;new&lt;/jk&gt; RestClient().doGet(&lt;js&gt;"http://localhost:8080/sample/addressBook/0/addresses/1/zip"&lt;/js&gt;);<a name="line.33"></a>
+<span class="sourceLineNo">034</span> *       &lt;jk&gt;int&lt;/jk&gt; zip = r.getResponse(Integer.&lt;jk&gt;class&lt;/jk&gt;);<a name="line.34"></a>
+<span class="sourceLineNo">035</span> *    }<a name="line.35"></a>
+<span class="sourceLineNo">036</span> * &lt;/p&gt;<a name="line.36"></a>
+<span class="sourceLineNo">037</span> * &lt;p&gt;<a name="line.37"></a>
+<span class="sourceLineNo">038</span> *    See {@link PojoRest} for additional information on addressing elements in a POJO tree using URL notation.<a name="line.38"></a>
+<span class="sourceLineNo">039</span> */<a name="line.39"></a>
+<span class="sourceLineNo">040</span>public final class Traversable implements RestConverter {<a name="line.40"></a>
+<span class="sourceLineNo">041</span><a name="line.41"></a>
+<span class="sourceLineNo">042</span>   @Override /* RestConverter */<a name="line.42"></a>
+<span class="sourceLineNo">043</span>   @SuppressWarnings({"rawtypes", "unchecked"})<a name="line.43"></a>
+<span class="sourceLineNo">044</span>   public Object convert(RestRequest req, Object o, ClassMeta cm) throws RestException {<a name="line.44"></a>
+<span class="sourceLineNo">045</span>      if (o == null)<a name="line.45"></a>
+<span class="sourceLineNo">046</span>         return null;<a name="line.46"></a>
+<span class="sourceLineNo">047</span><a name="line.47"></a>
+<span class="sourceLineNo">048</span>      if (req.getPathRemainder() != null) {<a name="line.48"></a>
+<span class="sourceLineNo">049</span>         try {<a name="line.49"></a>
+<span class="sourceLineNo">050</span>            if (cm.getPojoFilter() != null)<a name="line.50"></a>
+<span class="sourceLineNo">051</span>               o = cm.getPojoFilter().filter(o);<a name="line.51"></a>
+<span class="sourceLineNo">052</span>            PojoRest p = new PojoRest(o, req.getReaderParser());<a name="line.52"></a>
+<span class="sourceLineNo">053</span>            o = p.get(req.getPathRemainder());<a name="line.53"></a>
+<span class="sourceLineNo">054</span>         } catch (SerializeException e) {<a name="line.54"></a>
+<span class="sourceLineNo">055</span>            throw new RestException(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e);<a name="line.55"></a>
+<span class="sourceLineNo">056</span>         } catch (PojoRestException e) {<a name="line.56"></a>
+<span class="sourceLineNo">057</span>            throw new RestException(e.getStatus(), e);<a name="line.57"></a>
+<span class="sourceLineNo">058</span>         }<a name="line.58"></a>
+<span class="sourceLineNo">059</span>      }<a name="line.59"></a>
+<span class="sourceLineNo">060</span><a name="line.60"></a>
+<span class="sourceLineNo">061</span>      return o;<a name="line.61"></a>
+<span class="sourceLineNo">062</span>   }<a name="line.62"></a>
+<span class="sourceLineNo">063</span>}<a name="line.63"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

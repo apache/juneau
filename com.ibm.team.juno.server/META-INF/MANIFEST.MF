@@ -1,0 +1,27 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Juno Cloud API - Server
+Bundle-SymbolicName: com.ibm.team.juno.server
+Bundle-Version: 5.2.1000.qualifier
+Bundle-Vendor: IBM
+Require-Bundle: 
+ com.ibm.team.juno
+Import-Package: 
+ com.hp.hpl.jena.rdf.model;resolution:=optional,
+ com.hp.hpl.jena.shared;resolution:=optional,
+ javax.servlet,
+ javax.servlet.http,
+ javax.ws.rs;resolution:=optional,
+ javax.ws.rs.core;resolution:=optional,
+ javax.ws.rs.ext;resolution:=optional
+Export-Package: 
+ com.ibm.juno.server,
+ com.ibm.juno.server.annotation,
+ com.ibm.juno.server.converters,
+ com.ibm.juno.server.jaxrs,
+ com.ibm.juno.server.jena,
+ com.ibm.juno.server.labels,
+ com.ibm.juno.server.matchers,
+ com.ibm.juno.server.remoteable,
+ com.ibm.juno.server.response
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6

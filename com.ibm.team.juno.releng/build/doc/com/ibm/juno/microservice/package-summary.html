@@ -1,0 +1,1078 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="en">
+<head>
+<title>com.ibm.juno.microservice (Juno)</title>
+<link rel="stylesheet" type="text/css" href="../../../../javadoc.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="com.ibm.juno.microservice (Juno)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a>
+<div class="skip"><a href="#skip-navbar_top" title="Skip navigation links">Skip navigation links</a></div>
+<a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li class="navBarCell1Rev">Package</li>
+<li>Class</li>
+<li><a href="package-use.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+<li><a href="../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../com/ibm/juno/core/xml/annotation/package-summary.html">Prev Package</a></li>
+<li><a href="../../../../com/ibm/juno/microservice/resources/package-summary.html">Next Package</a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../index.html?com/ibm/juno/microservice/package-summary.html" target="_top">Frames</a></li>
+<li><a href="package-summary.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<div class="header">
+<h1 title="Package" class="title">Package&nbsp;com.ibm.juno.microservice</h1>
+<div class="docSummary">
+<div class="block">Juno Cloud Microservice API</div>
+</div>
+<p>See:&nbsp;<a href="#package_description">Description</a></p>
+</div>
+<div class="contentContainer">
+<ul class="blockList">
+<li class="blockList">
+<table class="packageSummary" border="0" cellpadding="3" cellspacing="0" summary="Class Summary table, listing classes, and an explanation">
+<caption><span>Class Summary</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Class</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../com/ibm/juno/microservice/Microservice.html" title="class in com.ibm.juno.microservice">Microservice</a></td>
+<td class="colLast">
+<div class="block">Parent class for all microservices.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../com/ibm/juno/microservice/Resource.html" title="class in com.ibm.juno.microservice">Resource</a></td>
+<td class="colLast">
+<div class="block">Superclass for all REST resources.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../com/ibm/juno/microservice/ResourceGroup.html" title="class in com.ibm.juno.microservice">ResourceGroup</a></td>
+<td class="colLast">
+<div class="block">Superclass for all REST resource groups.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../com/ibm/juno/microservice/ResourceJena.html" title="class in com.ibm.juno.microservice">ResourceJena</a></td>
+<td class="colLast">
+<div class="block">Superclass for all REST resources with RDF support.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../com/ibm/juno/microservice/RestMicroservice.html" title="class in com.ibm.juno.microservice">RestMicroservice</a></td>
+<td class="colLast">
+<div class="block">Entry point for Juno microservice that implements a REST interface using Jetty on a single port.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<a name="package_description">
+<!--   -->
+</a>
+<h2 title="Package com.ibm.juno.microservice Description">Package com.ibm.juno.microservice Description</h2>
+<div class="block"><p>Juno Cloud Microservice API</p>
+
+<script>
+   function toggle(x) {
+      var div = x.nextSibling;
+      while (div != null && div.nodeType != 1)
+         div = div.nextSibling;
+      if (div != null) {
+         var d = div.style.display;
+         if (d == 'block' || d == '') {
+            div.style.display = 'none';
+            x.className += " closed";
+         } else {
+            div.style.display = 'block';
+            x.className = x.className.replace(/(?:^|\s)closed(?!\S)/g , '' );
+         }
+      }
+   }
+</script>
+
+<a id='TOC'></a><h5 class='toc'>Table of Contents</h5>
+<ol class='toc'>
+   <li><p><a class='doclink' href='#Introduction'>Microservice Introduction</a></p> 
+   <li><p><a class='doclink' href='#GettingStarted'>Getting Started</a></p> 
+   <ol>
+      <li><p><a class='doclink' href='#GettingStarted_Installing'>Installing in Eclipse</a></p> 
+      <li><p><a class='doclink' href='#GettingStarted_Running'>Running in Eclipse</a></p> 
+      <li><p><a class='doclink' href='#GettingStarted_Building'>Building and Running from Command-Line</a></p> 
+   </ol> 
+   <li><p><a class='doclink' href='#Manifest'>Manifest File</a></p> 
+   <ol>
+      <li><p><a class='doclink' href='#Manifest_API'>Manifest API</a></p> 
+   </ol>
+   <li><p><a class='doclink' href='#ConfigFile'>Config File</a></p>
+   <ol>
+      <li><p><a class='doclink' href='#ConfigFile_API'>Config File API</a></p>
+   </ol> 
+   <li><p><a class='doclink' href='#ResourceClasses'>Resource Classes</a></p> 
+   <li><p><a class='doclink' href='#RestMicroservice'>RestMicroservice</a></p>
+   <ol> 
+      <li><p><a class='doclink' href='#RestMicroservice_Extending'>Extending RestMicroservice</a></p>
+   </ol>
+</ol>
+
+<!-- ======================================================================================================== -->
+<a id="Introduction"></a>
+<h2 class='topic' onclick='toggle(this)'>1 - Microservice Introduction</h2>
+<div class='topic'>
+   <p>
+      The Juno Cloud Microservice is an API for creating standalone executable jars that can be used to 
+      start lightweight configurable REST interfaces with all the power of the Juno REST server and client APIs.
+   </p>
+   <p>
+      The Microservice API consists of a combination of the Juno Core, Server, and Client APIs and an embedded
+      Eclipse Jetty Servlet Container.  It includes all libraries needed to execute in a Java 1.6+ environment.
+   </p>
+   <p>
+      Features include:
+   </p>
+   <ul class='spaced-list'>
+      <li>An out-of-the-box zipped Eclipse project to get started quickly.
+      <li>Packaged as a simple executable jar and configuration file.
+      <li>All the power of the Juno Cloud API for defining REST servlets and clients with the ability to serialize and parse POJOs as HTML, JSON, XML, RDF, URL-Encoding, and others.
+      <li>An extensible API that allows you to hook into various lifecycle events.
+      <li>Simple-to-use APIs for accessing manifest file entries, command-line arguments, and external configuration file properties.
+      <li>Predefined REST resources for configuring microservice and accessing log files.
+   </ul>
+</div>
+
+<!-- ======================================================================================================== -->
+<a id="GettingStarted"></a>
+<h2 class='topic' onclick='toggle(this)'>2 - Getting Started</h2>
+<div class='topic'>
+   <p>
+      The <l>microservice-project.zip</l> file is a zipped eclipse project that includes everything you 
+      need to create a REST microservice in an Eclipse workspace.
+   </p>  
+      
+   <!-- ======================================================================================================== -->
+   <a id="GettingStarted_Installing"></a>
+   <h3 class='topic' onclick='toggle(this)'>2.1 - Installing in Eclipse</h3>
+   <div class='topic'>
+      <p>
+         Follow these instructions to create a new template project in Eclipse.
+      </p>     
+      <ol class='spaced-list'>
+         <li>Download the latest microservice-project zip file (e.g. <l>microservice-project-5.2.zip</l>).
+         <li>In your Eclipse workspace, go to <b>File-&gt;Import-&gt;General-&gt;Existing Projects into Workspace</b> and click <b>Next</b>.<br><br>
+            <img class='bordered' src="doc-files/instructions1.png">
+         <li>Select the zip file and click <b>Finish</b>.<br><br>
+            <img class='bordered' src="doc-files/instructions2.png">
+         <li>In your workspace, you should now see the following project:<br><br>
+            <img class='bordered' src="doc-files/instructions3.png">
+      </ol>
+      <p>
+         The important elements in this project are:
+      </p>
+      <ul class='spaced-list'>
+         <li><l>META-INF/MANIFEST.MF</l> - The manifest file.  <br>
+            This defines the entry point, classpath, top-level REST resources, and location of external configuration file. <br><br>
+            <p class='bcode'>
+   <mk>Main-Class</mk>: com.ibm.juno.microservice.RestMicroservice
+   <mk>Rest-Resources</mk>: 
+    com.ibm.juno.microservice.sample.RootResources
+   <mk>Main-ConfigFile</mk>: microservice.cfg
+   <mk>Class-Path</mk>: 
+    lib/commons-codec-1.9.jar 
+    lib/commons-io-1.2.jar 
+    lib/commons-logging-1.1.1.jar 
+    lib/httpclient-4.5.jar 
+    lib/httpcore-4.4.1.jar 
+    lib/httpmime-4.5.jar 
+    lib/javax.servlet-api-3.0.jar 
+    lib/jetty-all-8.1.0.jar 
+    lib/juno-all-5.2.jar 
+    lib/org.apache.commons.fileupload_1.3.1.jar
+            </p>
+         <li><l>RestMicroservice.java</l> - The application class. <br>
+            This is a specialized microservice in Juno for exposing REST servlets.
+         <li><l>RootResources.java</l> - The top-level REST resource. <br>
+            This class routes HTTP requests to child resources:<br><br>
+            <p class='bcode'>
+   <jd>/**
+    * Root microservice page.
+    */</jd>
+   <ja>@RestResource</ja>(
+      path=<js>"/"</js>,
+      label=<js>"Juno Microservice Template"</js>,
+      description=<js>"Template for creating REST microservices"</js>,
+      properties={
+         <ja>@Property</ja>(name=<jsf>HTMLDOC_links</jsf>, value=<js>"{options:'$R{servletURI}?method=OPTIONS'}"</js>)
+      },
+      children={
+         HelloWorldResource.<jk>class</jk>,
+         ConfigResource.<jk>class</jk>,
+         LogsResource.<jk>class</jk>
+      }
+   )
+   <jk>public class</jk> RootResources <jk>extends</jk> ResourceGroup {
+      <jc>// No actual code!</jc>
+   }     
+            </p>
+         <li><l>microservice.cfg</l> - The external configuration file. <br>
+            A deceivingly simple yet powerful INI-style configuration file:<br><br>
+      <p class='bcode'>
+   <cc>#================================================================================
+   # Basic configuration file for SaaS microservices
+   # Subprojects can use this as a starting point.
+   #================================================================================</cc>
+   
+   <cc>#================================================================================
+   # REST settings
+   #================================================================================</cc>
+   <cs>[REST]</cs>
+   
+   <cc># The HTTP port number to use.
+   # Default is Rest-Port setting in manifest file, or 8000.</cc>
+   <ck>port</ck> = <cv>10000</cv>
+   ...
+            </p>
+            
+      </ul>
+      <p>
+         At this point, you're ready to start the microservice from your workspace.
+      </p>
+   </div>
+
+   <!-- ======================================================================================================== -->
+   <a id="GettingStarted_Running"></a>
+   <h3 class='topic' onclick='toggle(this)'>2.2 - Running in Eclipse</h3>
+   <div class='topic'>
+      <p>
+         The <l>microservice-project.launch</l> file is already provided to allow you to quickly start
+         your new microservice.
+      </p>
+      <p>
+         Go to <b>Run-&gt;Run Configurations-&gt;Java Application-&gt;microservice-project</b> and click <b>Run</b>.
+      </p>
+      <img class='bordered' src="doc-files/instructions4.png">
+      <p>
+         In your console view, you should see the following output:
+      </p>
+      <img class='bordered' src="doc-files/instructions5.png">
+      <p>
+         Now open your browser and point to <l>http://localhost:10000</l>.  
+         You should see the following:
+      </p>
+      <img class='bordered' src="doc-files/instructions6.png">
+      <p>
+         You have started a REST interface on port 10000.
+      </p>
+   </div>
+
+   <!-- ======================================================================================================== -->
+   <a id="GettingStarted_Building"></a>
+   <h3 class='topic' onclick='toggle(this)'>2.3 - Building and Running from Command Line</h3>
+   <div class='topic'>
+      <p>
+         The <l>build.xml</l> file is a very basic ANT script for creating your microservice
+         as an executable jar.
+      </p>
+      <p>
+         To build your microservice, right-click on <l>build.xml</l> and select <b>Run As-&gt;Ant Build</b>.
+         Once complete (which should only take about 1 second), if you refresh your project, you should see the following new directory:
+      </p>
+      <img class='bordered' src='doc-files/build1.png'>
+      <p>
+         If you open up a command prompt in the <l>build/microservice</l> folder, you can start your microservice as follows:
+      </p>
+      <img class='bordered' src='doc-files/build2.png'>
+      <p>
+         If you get this error message: <code class='snippet'>java.net.BindException: Address already in use</code>, then this microservice is already running elsewhere and so it cannot bind to port 10000.
+      </p>
+   </div>
+</div>
+
+
+<!-- ======================================================================================================== -->
+<a id="Manifest"></a>
+<h2 class='topic' onclick='toggle(this)'>3 - Manifest File</h2>
+<div class='topic'>
+   <p>
+      The <l>META-INF/MANIFEST.MF</l> file is used to describe the microservice. 
+      If you open it, you'll see the following:
+   </p>
+   <p class='bcode'>
+   <mk>Main-Class</mk>: <mv>com.ibm.juno.microservice.RestMicroservice</mv>
+   <mk>Rest-Resources</mk>: 
+    <mv>com.ibm.juno.microservice.sample.RootResources</mv>
+   <mk>Main-ConfigFile</mk>: <mv>microservice.cfg</mv>
+   <mk>Class-Path</mk>: 
+    <mv>lib/commons-codec-1.9.jar 
+    lib/commons-io-1.2.jar 
+    lib/commons-logging-1.1.1.jar 
+    lib/httpclient-4.5.jar 
+    lib/httpcore-4.4.1.jar 
+    lib/httpmime-4.5.jar 
+    lib/javax.servlet-api-3.0.jar 
+    lib/jetty-all-8.1.0.jar 
+    lib/juno-all-5.2.jar 
+    lib/org.apache.commons.fileupload_1.3.1.jar</mv>
+   </p>
+   <p>
+      The <mk>Main-Class</mk> entry is the standard manifest entry describing the entry point for the executable jar.
+      In most cases, this value will always be <l>com.ibm.juno.microservice.RestMicroservice</l>.
+      However, it is possible to extend this class or implement your own microservice, in which case you'll need
+      to modify this value to point to the new class.
+   </p>
+   <p>
+      The <mk>Rest-Resources</mk> entry is a comma-delimited list of REST resources.
+      These are classes that subclass from either <a href="../../../../com/ibm/juno/microservice/Resource.html" title="class in com.ibm.juno.microservice"><code>Resource</code></a> or <a href="../../../../com/ibm/juno/microservice/ResourceGroup.html" title="class in com.ibm.juno.microservice"><code>ResourceGroup</code></a>.
+      This is a specialized entry when using <l>com.ibm.juno.microservice.RestMicroservice</l>.
+      In most cases, you'll want to specify a single top-level "grouping" REST resource mapped to <l>"/"</l> that extends from <a href="../../../../com/ibm/juno/microservice/ResourceGroup.html" title="class in com.ibm.juno.microservice"><code>ResourceGroup</code></a>
+      so that you can define multiple child resources.
+      In this case, we're pointing to a resource defined in our project: <l>com.ibm.juno.microservice.sample.RootResources</l>.
+   </p>
+   <p>
+      The <mk>Main-ConfigFile</mk> entry points to the location of an external configuration file for our microservice.
+   </p>     
+   <p>
+      The <mk>Class-Path</mk> entry is the standard manifest file entry.
+      However, if you need to add extra libraries to your microservice, you'll need to copy them into your <l>lib</l> 
+      directory and add them to the classpath here.
+   </p>
+   <p>
+      Other manifest file entries are also provided:
+   </p>
+   <ul class='spaced-list'>
+      <li><mk>Rest-Port</mk> - The HTTP port to use.  Default is <l>10000</l>.
+      <li><mk>Rest-ContextPath</mk> - The servlet context path.  Default is <l>"/"</l>.
+      <li><mk>Rest-AuthType</mk> - Authentication support.<br>  
+         Possible values are <l>"NONE"</l> and <l>"BASIC"</l>.<br>  
+         Default is <l>"NONE"</l>.<br>
+         Used with the following additional settings:
+         <ul>
+            <li><mk>Rest-LoginUser</mk>
+            <li><mk>Rest-LoginPassword</mk>
+            <li><mk>Rest-AuthRealm</mk>
+         </ul>
+   </ul>
+   <p>
+      In addition to these predefined manifest entries, you can add your own particular entries to the manifest file
+      and access them through the Manifest API described next. 
+   </p>
+   
+   <!-- ======================================================================================================== -->
+   <a id="Manifest_API"></a>
+   <h3 class='topic' onclick='toggle(this)'>3.1 - Manifest API</h3>
+   <div class='topic'>
+      <p>
+         The <a href="../../../../com/ibm/juno/microservice/Microservice.html#getManifest()"><code>Microservice.getManifest()</code></a> method is a static method that
+         can be used to retrieve the manifest file as an <a href="../../../../com/ibm/juno/core/ObjectMap.html" title="class in com.ibm.juno.core"><code>ObjectMap</code></a>.  
+      </p>
+      <p class='bcode'>
+   <jc>// Get Main-Class from manifest file.</jc>
+   String mainClass = Microservice.<jsm>getManifest</jsm>().getString(<js>"Main-Class"</js>, <js>"unknown"</js>);
+    
+   <jc>// Get Rest-Resources from manifest file.</jc>
+   String[] restResources = Microservice.<jsm>getManifest</jsm>().getStringArray(<js>"Rest-Resources"</js>);
+      </p>
+      <p>
+         Since this method returns an <a href="../../../../com/ibm/juno/core/ObjectMap.html" title="class in com.ibm.juno.core"><code>ObjectMap</code></a>, it's possible to retrieve entries as a wide variety
+         of object types such as java primitives, arrays, collections, maps, or even POJOs serialized as JSON.
+      </p>
+   </div>
+</div>
+
+<!-- ======================================================================================================== -->
+<a id="ConfigFile"></a>
+<h2 class='topic' onclick='toggle(this)'>4 - Config File</h2>
+<div class='topic'>
+   <p>
+      The microservice config file is an external INI-style configuration file that is used to configure
+      your microservice.
+   </p>
+   <p>
+      If you open the <l>microservice.cfg</l> file, you'll see several predefined sections and settings.
+   </p>
+   <p class='bcode'>
+   <cc>#================================================================================
+   # Basic configuration file for SaaS microservices
+   # Subprojects can use this as a starting point.
+   #================================================================================</cc>
+   
+   <cc>#================================================================================
+   # REST settings
+   #================================================================================</cc>
+   <cs>[REST]</cs>
+   
+   <cc># The HTTP port number to use.
+   # Default is Rest-Port setting in manifest file, or 8000.</cc>
+   <ck>port</ck> = <cv>10000</cv>
+   
+   <cc># A JSON map of servlet paths to servlet classes.
+   # Example:  
+   #  resourceMap = {'/*':'com.ibm.MyServlet'}
+   # Either resourceMap or resources must be specified.</cc>
+   <ck>resourceMap</ck> = 
+
+   <cc># A comma-delimited list of names of classes that extend from Servlet.
+   # Resource paths are pulled from @RestResource.path() annotation, or
+   #  "/*" if annotation not specified.
+   # Example:  
+   #  resources = com.ibm.MyServlet
+   # Default is Rest-Resources in manifest file.
+   # Either resourceMap or resources must be specified.</cc>
+   <ck>resources</ck> = 
+
+   <cc># The context root of the Jetty server.
+   # Default is Rest-ContextPath in manifest file, or "/".</cc>
+   <ck>contextPath</ck> = 
+
+   <cc># Authentication:  NONE, BASIC.</cc>
+   <ck>authType</ck> = <cv>NONE</cv>
+   
+   <cc># The BASIC auth username.
+   # Default is Rest-LoginUser in manifest file.</cc>
+   <ck>loginUser</ck> = 
+   
+   <cc># The BASIC auth password.
+   # Default is Rest-LoginPassword in manifest file.</cc>
+   <ck>loginPassword</ck> = 
+   
+   <cc># The BASIC auth realm.
+   # Default is Rest-AuthRealm in manifest file.</cc>
+   <ck>authRealm</ck> = 
+   
+   <cc># Stylesheet to use for HTML views.
+   # The default options are:
+   #  - styles/juno.css
+   #  - styles/devops.css
+   # Other stylesheets can be referenced relative to the servlet package or working
+   #  directory.</cc>
+   <ck>stylesheet</ck> = <cv>styles/devops.css</cv>
+   
+   <cc># What to do when the config file is saved.
+   # Possible values:
+   #  NOTHING - Don't do anything. 
+   #  RESTART_SERVER - Restart the Jetty server.
+   #  RESTART_SERVICE - Shutdown and exit with code '3'.</cc>
+   <ck>saveConfigAction</ck> = <cv>RESTART_SERVER</cv>
+   
+   <cc># Enable SSL support.</cc>
+   <ck>useSsl</ck> = <cv>false</cv>
+   
+   <cc>#================================================================================
+   # Bean properties on the org.eclipse.jetty.util.ssl.SslSocketFactory class
+   #--------------------------------------------------------------------------------
+   # Ignored if REST/useSsl is false.
+   #================================================================================</cc>
+   <cs>[REST-SslContextFactory]</cs>
+   <ck>keyStorePath</ck> = <cv>client_keystore.jks</cv>
+   <ck>keyStorePassword*</ck> = <cv>{HRAaRQoT}</cv>
+   <ck>excludeCipherSuites</ck> = <cv>TLS_DHE.*, TLS_EDH.*</cv>
+   <ck>excludeProtocols</ck> = <cv>SSLv3</cv>
+   <ck>allowRenegotiate</ck> = <cv>false</cv>
+   
+   <cc>#================================================================================
+   # Logger settings
+   # See FileHandler Java class for details.
+   #================================================================================</cc>
+   <cs>[Logging]</cs>
+
+   <cc># The directory where to create the log file.
+   # Default is "."</cc>
+   <ck>logDir</ck> = <cv>logs</cv>
+   
+   <cc># The name of the log file to create for the main logger.
+   # The logDir and logFile make up the pattern that's passed to the FileHandler
+   # constructor.
+   # If value is not specified, then logging to a file will not be set up.</cc>
+   <ck>logFile</ck> = <cv>microservice.%g.log</cv>
+   
+   <cc># Whether to append to the existing log file or create a new one.
+   # Default is false.</cc>
+   <ck>append</ck> = 
+   
+   <cc># The SimpleDateFormat format to use for dates.
+   # Default is "yyyy.MM.dd hh:mm:ss".</cc>
+   <ck>dateFormat</ck> = 
+   
+   <cc># The log message format.
+   # The value can contain any of the following variables:
+   #  {date} - The date, formatted per dateFormat.
+   #  {class} - The class name.
+   #  {method} - The method name.
+   #  {logger} - The logger name.
+   #  {level} - The log level name.
+   #  {msg} - The log message.
+   #  {threadid} - The thread ID.
+   #  {exception} - The localized exception message.
+   # Default is "[{date} {level}] {msg}%n".</cc>
+   <ck>format</ck> =
+   
+   <cc># The maximum log file size.
+   # Suffixes available for numbers.
+   # See ConfigFile.getInt(String,int) for details.
+   # Default is 1M.</cc>
+   <ck>limit</ck> = <cv>10M</cv>
+   
+   <cc># Max number of log files.
+   # Default is 1.</cc>
+   <ck>count</ck> = <cv>5</cv>
+   
+   <cc># Default log levels.
+   # Keys are logger names.
+   # Values are serialized Level POJOs.</cc>
+   <ck>levels</ck> = <cv>{ com.ibm.juno:'INFO' }</cv>
+   
+   <cc># Only print unique stack traces once and then refer to them by a simple 8 character hash identifier.
+   # Useful for preventing log files from filling up with duplicate stack traces.
+   # Default is false.</cc>
+   <ck>useStackTraceHashes</ck> = <cv>true</cv>
+   
+   <cc># The default level for the console logger.
+   # Default is WARNING.</cc>
+   <ck>consoleLevel</ck> = 
+   
+   <cc>#================================================================================
+   # System properties
+   #--------------------------------------------------------------------------------
+   # These are arbitrary system properties that are set during startup.
+   #================================================================================</cc>
+   <cs>[SystemProperties]</cs>
+   
+   <cc># Configure Jetty for StdErrLog Logging</cc>
+   <ck>org.eclipse.jetty.util.log.class</ck> = <cv>org.eclipse.jetty.util.log.StrErrLog</cv>
+   
+   <cc># Jetty logging level</cc>
+   <ck>org.eclipse.jetty.LEVEL</ck> = <cv>WARN</cv>      
+   </p>
+   <p class='info'>
+      The predefined config file includes all settings for instructional purposes. 
+      In your microservice, you can remove all lines from your config file that have default values.
+   </p>
+   <p>
+      Although the config file looks deceptively simple, the config file API is a very powerful feature with many capabilities, including:
+   </p>
+   <ul>
+      <li>The ability to use variables to reference environment variables, system properties, other config file entries, and a host of other types.
+      <li>The ability to store and retrieve POJOs as JSON.
+      <li>APIs for updating, modifying, and saving configuration files without losing comments or formatting.
+      <li>Extensive listener APIs.
+   </ul>
+   <h6 class='topic'>Examples:</h6>
+   <p class='bcode'>
+   <cc>#--------------------------</cc>
+   <cc># My section</cc>
+   <cc>#--------------------------</cc>
+   <cs>[MySection]</cs>
+   
+   <cc># An integer</cc>
+   <ck>anInt</ck> = <cv>1 </cv>
+   
+   <cc># A boolean</cc>
+   <ck>aBoolean</ck> = <cv>true </cv>
+   
+   <cc># An int array</cc>
+   <ck>anIntArray</ck> = <cv>1,2,3 </cv>
+   
+   <cc># A POJO that can be converted from a String</cc>
+   <ck>aURL</ck> = <cv>http://foo </cv>
+   
+   <cc># An encoded password</cc>
+   <ck>aPassword*</ck> = <cv>{HRAaRQoT}</cv>
+
+   <cc># A POJO that can be converted from JSON</cc>
+   <ck>aBean</ck> = <cv>{foo:'bar',baz:123}</cv>
+   
+   <cc># A system property</cc>
+   <ck>locale</ck> = <cv>$S{java.locale, en_US}</cv>
+   
+   <cc># An environment variable</cc>
+   <ck>path</ck> = <cv>$E{PATH, unknown}</cv>
+   
+   <cc># A manifest file entry</cc>
+   <ck>mainClass</ck> = <cv>$MF{Main-Class}</cv>
+   
+   <cc># Another value in this config file</cc>
+   <ck>sameAsAnInt</ck> = <cv>$C{MySection/anInt}</cv>
+   
+   <cc># A command-line argument in the form "myarg=foo"</cc>
+   <ck>myArg</ck> = <cv>$ARG{myarg}</cv>
+   
+   <cc># The first command-line argument</cc>
+   <ck>firstArg</ck> = <cv>$ARG{0}</cv>
+
+   <cc># Look for system property, or env var if that doesn't exist, or command-line arg if that doesn't exist.</cc>
+   <ck>nested</ck> = <cv>$S{mySystemProperty,$E{MY_ENV_VAR,$ARG{0}}}</cv>
+
+   <cc># A POJO with embedded variables</cc>
+   <ck>aBean2</ck> = <cv>{foo:'$ARG{0}',baz:$C{MySection/anInt}}</cv>
+   
+   </p>
+   <p class='bcode'>
+   <jc>// Java code for accessing config entries above.</jc>
+   ConfigFile cf = Microservice.<jsm>getConfig</jsm>();
+   
+   <jk>int</jk> anInt = cf.getInt(<js>"MySection/anInt"</js>); 
+   <jk>boolean</jk> aBoolean = cf.getBoolean(<js>"MySection/aBoolean"</js>); 
+   <jk>int</jk>[] anIntArray = cf.getObject(<jk>int</jk>[].<jk>class</jk>, <js>"MySection/anIntArray"</js>); 
+   URL aURL = cf.getObject(URL.<jk>class</jk>, <js>"MySection/aURL"</js>); 
+   String aPassword = cf.getString(<js>"MySection/aPassword"</js>);
+   MyBean aBean = cf.getObject(MyBean.<jk>class</jk>, <js>"MySection/aBean"</js>); 
+   Locale locale = cf.getObject(Locale.<jk>class</jk>, <js>"MySection/locale"</js>); 
+   String path = cf.getString(<js>"MySection/path"</js>); 
+   String mainClass = cf.getString(<js>"MySection/mainClass"</js>); 
+   <jk>int</jk> sameAsAnInt = cf.getInt(<js>"MySection/sameAsAnInt"</js>); 
+   String myArg = cf.getString(<js>"MySection/myArg"</js>); 
+   String firstArg = cf.getString(<js>"MySection/firstArg"</js>); 
+   </p>
+   <h6 class='topic'>Additional Information</h6>
+   <ul class='javahierarchy'>
+      <li class='p'><a href='../core/ini/package-summary.html#TOC'><l>com.ibm.juno.core.ini</l></a> - Juno Configuration API Javadocs.
+   </ul>
+   
+   <!-- ======================================================================================================== -->
+   <a id="ConfigFile_API"></a>
+   <h3 class='topic' onclick='toggle(this)'>4.1 - Config File API</h3>
+   <div class='topic'>
+      <p>
+         There are 3 primary ways of getting access to the config file.
+      </p>
+      <ul class='javahierarchy'>
+         <li class='m'><a href="../../../../com/ibm/juno/microservice/Microservice.html#getConfig()"><code>Microservice.getConfig()</code></a> - A static method that can be used to access
+            the config file from anywhere in your application.<br>
+            When using this method, any of the following variables can be resolved:
+            <ul>
+               <li><l>$S{key}, $S{key,default}</l> - System properties.
+               <li><l>$E{key}, $E{key,default}</l> - Environment variables.
+               <li><l>$C{key}, $C{key,default}</l> - Config file entries.
+               <li><l>$MF{key}, $MF{key,default}</l> - Manifest file entries.
+               <li><l>$ARG{key}, $ARG{key,default}</l> - Command-line arguments.
+            </ul>
+            Additional user-defined variables can be defined by overriding the <a href="../../../../com/ibm/juno/microservice/Microservice.html#createVarResolver()"><code>Microservice.createVarResolver()</code></a> method.
+         <li class='m'><a href="../../../../com/ibm/juno/server/RestServlet.html#getConfig()"><code>RestServlet.getConfig()</code></a> - An instance method to access it from inside a REST servlet.<br>
+            The following variables are available in addition to the variables defined above:
+            <ul>
+               <li><l>$I{key}, $I{key,default}</l> - Servlet initialization parameters.
+            </ul>
+            <h6 class='figure'>Example usage:</h6>
+            <p class='bcode'>
+   <cc>#-------------------------------</cc>
+   <cc># Properties for MyHelloResource </cc>
+   <cc>#-------------------------------</cc>
+   <cs>[MyHelloResource]</cs>
+   <ck>greeting</ck> = <cv>Hello world!</cv> 
+            </p>
+            <p class='bcode'>
+   <ja>@RestResource</ja>(...)
+   <jk>public class</jk> MyHelloResource <jk>extends</jk> Resource {
+      <jc>// Access config file when initializing fields.</jc>
+      <jk>private</jk> String greeting = getConfig().getString(<js>"MyHelloResource/greeting"</js>); 
+      
+      <jc>// Or access config file in servlet init method.</jc>
+      <ja>@Override</ja> <jc>/* Servlet */</jc>
+      <jk>public void</jk> init() {
+         String greeting = getConfig().getString(<js>"MyHelloResource/greeting"</js>); 
+      }
+   }     
+            </p>
+            <p>
+               Additional user-defined variables can be defined at this level by overriding the <a href="../../../../com/ibm/juno/microservice/Resource.html#createVarResolver()"><code>Resource.createVarResolver()</code></a> method.
+            </p>
+         <li class='m'><a href="../../../../com/ibm/juno/server/RestRequest.html#getConfig()"><code>RestRequest.getConfig()</code></a> - An instance method to access it from inside a REST method.<br>
+            The following variables are available in addition to the variables defined above:
+            <ul>
+               <li><l>$L{key}, $L{key,args}</l> - Localized variables pulled from <a href="../../../../com/ibm/juno/server/RestRequest.html#getMessage(java.lang.String, java.lang.Object...)"><code>RestRequest.getMessage(String, Object...)</code></a>.
+               <li><l>$A{key}, $A{key,default}</l> - Request attributes pulled from <a href="http://docs.oracle.com/javaee/5/api/javax/servlet/ServletRequestWrapper.html?is-external=true#getAttribute(java.lang.String)" title="class or interface in javax.servlet"><code>ServletRequestWrapper.getAttribute(String)</code></a>.
+               <li><l>$P{key}, $P{key,default}</l> - Request parameters pulled from <a href="../../../../com/ibm/juno/server/RestRequest.html#getParameter(java.lang.String)"><code>RestRequest.getParameter(String)</code></a>.
+               <li><l>$R{key}</l> - Request variables.
+               <ul>
+                  <li><l>$R{contextPath}</l> - Value returned by <a href="http://docs.oracle.com/javaee/5/api/javax/servlet/http/HttpServletRequestWrapper.html?is-external=true#getContextPath()" title="class or interface in javax.servlet.http"><code>HttpServletRequestWrapper.getContextPath()</code></a>.
+                  <li><l>$R{method}</l> - Value returned by <a href="../../../../com/ibm/juno/server/RestRequest.html#getMethod()"><code>RestRequest.getMethod()</code></a>.
+                  <li><l>$R{methodDescription}</l> - Value returned by <a href="../../../../com/ibm/juno/server/RestRequest.html#getMethodDescription()"><code>RestRequest.getMethodDescription()</code></a>.
+                  <li><l>$R{pathInfo}</l> - Value returned by <a href="http://docs.oracle.com/javaee/5/api/javax/servlet/http/HttpServletRequestWrapper.html?is-external=true#getPathInfo()" title="class or interface in javax.servlet.http"><code>HttpServletRequestWrapper.getPathInfo()</code></a>.
+                  <li><l>$R{requestParentURI}</l> - Value returned by <a href="../../../../com/ibm/juno/server/RestRequest.html#getRequestParentURI()"><code>RestRequest.getRequestParentURI()</code></a>.
+                  <li><l>$R{requestURI}</l> - Value returned by <a href="http://docs.oracle.com/javaee/5/api/javax/servlet/http/HttpServletRequestWrapper.html?is-external=true#getRequestURI()" title="class or interface in javax.servlet.http"><code>HttpServletRequestWrapper.getRequestURI()</code></a>.
+                  <li><l>$R{servletDescription}</l> - Value returned by <a href="../../../../com/ibm/juno/server/RestRequest.html#getServletDescription()"><code>RestRequest.getServletDescription()</code></a>.
+                  <li><l>$R{servletLabel}</l> - Value returned by <a href="../../../../com/ibm/juno/server/RestRequest.html#getServletLabel()"><code>RestRequest.getServletLabel()</code></a>.
+                  <li><l>$R{servletParentURI}</l> - Value returned by <a href="../../../../com/ibm/juno/server/RestRequest.html#getServletParentURI()"><code>RestRequest.getServletParentURI()</code></a>.
+                  <li><l>$R{servletPath}</l> - Value returned by <a href="http://docs.oracle.com/javaee/5/api/javax/servlet/http/HttpServletRequestWrapper.html?is-external=true#getServletPath()" title="class or interface in javax.servlet.http"><code>HttpServletRequestWrapper.getServletPath()</code></a>.
+                  <li><l>$R{servletURI}</l> - Value returned by <a href="../../../../com/ibm/juno/server/RestRequest.html#getServletURI()"><code>RestRequest.getServletURI()</code></a>.
+                  <li><l>$R{trimmedRequestURI}</l> - Value returned by <a href="../../../../com/ibm/juno/server/RestRequest.html#getTrimmedRequestURI()"><code>RestRequest.getTrimmedRequestURI()</code></a>.
+               </ul>
+               <li><l>$UE{...}</l> - URL-Encode the specified value by calling <a href="../../../../com/ibm/juno/server/RestUtils.html#encode(java.lang.String)"><code>RestUtils.encode(String)</code></a>.
+            </ul>
+            <h6 class='figure'>Example usage:</h6>
+            <p class='bcode'>
+   <cc>#-----------------------------</cc>
+   <cc># Contents of microservice.cfg </cc>
+   <cc>#-----------------------------</cc>
+   <cs>[MyHelloResource]</cs>
+   <ck>greeting</ck> = <cv>Hello $A{person}!</cv> 
+   <ck>localizedGreeting</ck> = <cv>$L{HelloMessage,$A{person}}</cv> 
+            </p>
+            <p class='bcode'>
+   <cc>#---------------------------------</cc>
+   <cc># Contents of MyHelloResource.java </cc>
+   <cc>#---------------------------------</cc>
+   <ja>@RestResource</ja>(
+      path=<js>"/hello"</js>,
+      messages=<js>"nls/Messages"</js>,
+      ...
+   )
+   <jk>public class</jk> MyHelloResource <jk>extends</jk> Resource {
+
+      <jd>/** Standard hello message. */</jd>
+      <ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/{person}"</js>)
+      <jk>public</jk> String sayHello(RestRequest req) {
+         <jk>return</jk> req.getConfig().getString(<js>"MyHelloResource/greeting"</js>);
+      }
+
+      <jd>/** Hello message in users language. */</jd>
+      <ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/localized/{person}"</js>)
+      <jk>public</jk> String sayLocalizedHello(RestRequest req) {
+         <jk>return</jk> req.getConfig().getString(<js>"MyHelloResource/localizedGreeting"</js>);
+      }
+   }     
+            <p class='bcode'>
+   <cc>#---------------------------------------</cc>
+   <cc># Contents of nls/Messages_en.properties </cc>
+   <cc>#---------------------------------------</cc>
+   <ck>MyHelloResource.HelloMessage</ck> = <cv>Hello {0}!</cv> 
+            </p>
+            <p>
+               Additional user-defined variables can be defined at this level by overriding the <a href="../../../../com/ibm/juno/server/RestServlet.html#createRequestVarResolver(com.ibm.juno.server.RestRequest)"><code>RestServlet.createRequestVarResolver(RestRequest)</code></a> method.
+            </p>
+      </ul>
+      <p>
+         That <l>sayLocalizedHello()</l> example might need some explanation since there's a lot going on there.
+         Here's what happens when an HTTP call is made to <l>GET /hello/localized/Bob</l>:
+      </p>
+      <ol class='spaced-list'>
+         <li>The HTTP call matches the <l>/hello</l> path on the <l>MyHelloResource</l> class.
+         <li>The HTTP call matches the <l>/localized/{person}</l> path on the <l>sayLocalizedHello()</l> method.
+         <li>The request attribute <l>person</l> gets assigned the value <l>"Bob"</l>.
+         <li>The call to <l>req.getConfig().getString("MyHelloResource/localizedGreeting")</l> 
+            finds the value <l>"$L{HelloMessage,$A{person}}"</l>.
+         <li>The arguments in the <l>$L{}</l> variable get resolved, resulting in <l>"$L{HelloMessage,Bob}"</l>.
+         <li>The <l>$L{}</l> variable gets resolved to the message <l>"Hello {0}!"</l> in the localized properties file of the servlet based on the <l>Accept-Language</l> header on the request.
+         <li>The arguments get replaced in the message resulting in <l>"Hello Bob!"</l>. 
+         <li>The resulting message <l>"Hello Bob!"</l> is returned as a POJO to be serialized to whatever content type was specified on the <l>Accept</l> header on the request.
+</ol>
+      <p>
+         This particular example is needlessly complex, but it gives an idea of how variables can be used recursively to produce sophisticated results
+      </p>
+   </div>
+</div>
+
+<!-- ======================================================================================================== -->
+<a id="ResourceClasses"></a>
+<h2 class='topic' onclick='toggle(this)'>5 - Resource Classes</h2>
+<div class='topic'>
+   <p>
+      Now let's take a look at the resource classes themselves.  
+      The top-level page:
+   </p>
+   <img class='bordered' src='doc-files/instructions6.png'>
+   <p>
+      ...is generated by this class...
+   <p class='bcode'>
+   <jd>/**
+    * Root microservice page.
+    */</jd>
+   <ja>@RestResource</ja>(
+      path=<js>"/"</js>,
+      label=<js>"Juno Microservice Template"</js>,
+      description=<js>"Template for creating REST microservices"</js>,
+      properties={
+         <ja>@Property</ja>(name=<jsf>HTMLDOC_links</jsf>, value=<js>"{options:'$R{servletURI}?method=OPTIONS'}"</js>)
+      },
+      children={
+         HelloWorldResource.<jk>class</jk>,
+         ConfigResource.<jk>class</jk>,
+         LogsResource.<jk>class</jk>
+      }
+   )
+   <jk>public class</jk> RootResources <jk>extends</jk> ResourceGroup {
+      <jk>private static final long</jk> <jsf>serialVersionUID</jsf> = 1L;
+   }     
+   </p>
+   <ul class='spaced-list'>
+      <li>The </l>label</l> and <l>description</l> annotations define the titles on the page.<br>
+         These can be globalized using <l>$L{...}</l> variables, or by defining specially-named properties in the properties
+         file for the resource.
+      <li>In this case, the <l>path</l> annotation defines the context root of your application since it was 
+         not specified in the manifest or config file.<br>
+         Therefore, this resource is mapped to <l>http://localhost:10000</l>.
+      <li>The <l>children</l> annotation make up the list of child resources.<br>
+         These child resources can be anything that extends from <l>Servlet</l>, although usually
+         they will be subclasses of <a href="../../../../com/ibm/juno/microservice/Resource.html" title="class in com.ibm.juno.microservice"><code>Resource</code></a> or other resource groups.
+   </ul>
+   <p>
+      If you click the <l>helloWorld</l> link in your application, you'll get a simple hello world message:
+   </p>
+   <img class='bordered' src='doc-files/helloworld1.png'>
+   <p>
+      ...which is generated by this class...
+   </p>
+   <p class='bcode'>
+   <jd>/**
+    * Sample REST resource that prints out a simple "Hello world!" message.
+    */</jd>
+   <ja>@RestResource</ja>(
+      path=<js>"/helloWorld"</js>,
+      label=<js>"Hello World example"</js>,
+      description=<js>"Simplest possible REST resource"</js>
+   )
+   <jk>public class</jk> HelloWorldResource <jk>extends</jk> Resource {
+   
+      <jd>/** GET request handler */</jd>
+      <ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/*"</js>)
+      <jk>public</jk> String sayHello() {
+         <jk>return</jk> <js>"Hello world!"</js>;
+      }
+   }     
+   </p>
+   <p>
+      The <a href="../../../../com/ibm/juno/microservice/Resource.html" title="class in com.ibm.juno.microservice"><code>Resource</code></a> and <a href="../../../../com/ibm/juno/microservice/ResourceGroup.html" title="class in com.ibm.juno.microservice"><code>ResourceGroup</code></a> classes
+      are powerful servlets designed specifically for creating REST APIs using nothing more than serialized and parsed POJOs.
+   </p>
+   <h6 class='topic'>Additional Information</h6>
+   <ul class='javahierarchy'>
+      <li class='p'><a href='../server/package-summary.html#TOC'><l>com.ibm.juno.core.server</l></a> - Juno Server API Javadocs.
+   </ul>
+</div>
+
+
+<!-- ======================================================================================================== -->
+<a id="RestMicroservice"></a>
+<h2 class='topic' onclick='toggle(this)'>6 - RestMicroservice</h2>
+<div class='topic'>
+   <p>
+      The <a href="../../../../com/ibm/juno/microservice/RestMicroservice.html" title="class in com.ibm.juno.microservice"><code>RestMicroservice</code></a> class is the main application entrypoint for REST microservices. 
+   </p>
+   <p>
+      The class hierarchy is:
+   </p>
+   <ul class='javahierarchy'>
+      <li class='a'><a href="../../../../com/ibm/juno/microservice/Microservice.html" title="class in com.ibm.juno.microservice"><code>Microservice</code></a> - Abstract class that defines simple start/stop methods and access to the manifest file, config file, and arguments.
+         <ul>
+            <li class='c'><a href="../../../../com/ibm/juno/microservice/RestMicroservice.html" title="class in com.ibm.juno.microservice"><code>RestMicroservice</code></a> - Specialized microservice for starting up REST interfaces using Jetty and specifying REST servlets
+               through the manifest file or config file.
+         </ul>
+   </ul>
+   <p>
+      Refer to the Javadocs for these class for more information.
+   </p>
+   
+<!-- ======================================================================================================== -->
+   <a id="RestMicroservice_Extending"></a>
+   <h3 class='topic' onclick='toggle(this)'>6.1 - Extending RestMicroservice</h3>
+<div class='topic'>
+      <p>
+         This example shows how the <a href="../../../../com/ibm/juno/microservice/RestMicroservice.html" title="class in com.ibm.juno.microservice"><code>RestMicroservice</code></a> class
+         can be extended to implement lifecycle listener methods or override existing methods.
+         We'll create a new class <l>com.ibm.SampleCustomRestMicroservice</l>.
+      </p>
+      <p>
+         First, the manifest file needs to be modified to point to our new microservice:
+      </p>
+      <p class='bcode'>
+   <mk>Main-Class:</mk> com.ibm.SampleCustomRestMicroservice
+      </p>
+      <p>
+         Then we define the following class:
+      </p>
+      <p class='bcode'>
+   <jd>/**
+    * Sample subclass of a RestMicroservice that provides customized behavior.
+    * This class must be specified in the Main-Class entry in the manifest file and optionally
+    *    a Main-ConfigFile entry.
+    */</jd>
+   <jk>public class</jk> SampleCustomRestMicroservice <jk>extends</jk> RestMicroservice {
+   
+      <jd>/**
+       * Must implement a main method and call start()!
+       */</jd>
+      <jk>public static void</jk> main(String[] args) <jk>throws</jk> Exception {
+         <jk>new</jk> SampleCustomRestMicroservice(args).start();
+      }
+   
+      <jd>/**
+       * Must implement a constructor!
+       * 
+       * <ja>@param</ja> args Command line arguments. 
+       * <ja>@throws</ja> Exception 
+       */</jd>
+      <jk>public</jk> SampleCustomRestMicroservice(String[] args) <jk>throws</jk> Exception {
+         <jk>super</jk>(args);
+      }
+   
+      <jc>//--------------------------------------------------------------------------------
+      // Methods on Microservice that can be overridden and customized.
+      //--------------------------------------------------------------------------------</jc>
+   
+      <ja>@Override</ja> <jc>/* Microservice */</jc>
+      <jk>protected void</jk> start() <jk>throws</jk> Exception {
+         <jk>super</jk>.start();
+      }
+   
+      <ja>@Override</ja> <jc>/* Microservice */</jc>
+      <jk>public void</jk> stop() {
+         <jk>super</jk>.stop();
+      }
+   
+      <ja>@Override</ja> <jc>/* Microservice */</jc>
+      <jk>public void</jk> kill() {
+         <jk>super</jk>.kill();
+      }
+   
+      <ja>@Override</ja> <jc>/* Microservice */</jc>
+      <jk>public void</jk> onStart() {
+         System.<jsf>err</jsf>.println(<js>"onStart() called!"</js>);
+      }
+   
+      <ja>@Override</ja> <jc>/* Microservice */</jc>
+      <jk>public void</jk> onStop() {
+         System.<jsf>err</jsf>.println(<js>"onStop() called!"</js>);
+      }
+   
+      <jc>//--------------------------------------------------------------------------------
+      // Methods on RestMicroservice that can be overridden and customized.
+      //--------------------------------------------------------------------------------</jc>
+   
+      <ja>@Override</ja> <jc>/* RestMicroservice */</jc>
+      <jk>protected void</jk> initLogging() <jk>throws</jk> Exception {
+         <jk>super</jk>.initLogging();
+      }
+   
+      <ja>@Override</ja> <jc>/* RestMicroservice */</jc>
+      <jk>protected</jk> Server createServer() <jk>throws</jk> Exception {
+         <jk>return super</jk>.createServer();
+      }
+   
+      <ja>@Override</ja> <jc>/* RestMicroservice */</jc>
+      <jk>protected void</jk> startServer() <jk>throws</jk> Exception {
+         <jk>super</jk>.startServer();
+      }
+   
+      <ja>@Override</ja> <jc>/* RestMicroservice */</jc>
+      <jk>protected void</jk> onCreateServer() {
+         System.<jsf>err</jsf>.println(<js>"onCreateServer() called!"</js>);
+      }
+   
+      <ja>@Override</ja> <jc>/* RestMicroservice */</jc>
+      <jk>protected void</jk> onStartServer() {
+         System.<jsf>err</jsf>.println(<js>"onStartServer() called!"</js>);
+      }
+   
+      <ja>@Override</ja> <jc>/* RestMicroservice */</jc>
+      <jk>protected void</jk> onPostStartServer() {
+         System.<jsf>err</jsf>.println(<js>"onPostStartServer() called!"</js>);
+      }
+   
+      <ja>@Override</ja> <jc>/* RestMicroservice */</jc>
+      <jk>protected void</jk> onStopServer() {
+         System.<jsf>err</jsf>.println(<js>"onStopServer() called!"</js>);
+      }
+   
+      <ja>@Override</ja> <jc>/* RestMicroservice */</jc>
+      <jk>protected void</jk> onPostStopServer() {
+         System.<jsf>err</jsf>.println(<js>"onPostStopServer() called!"</js>);
+      }
+   }
+      </p>
+   </div>   
+</div></div>
+</div>
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a>
+<div class="skip"><a href="#skip-navbar_bottom" title="Skip navigation links">Skip navigation links</a></div>
+<a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li class="navBarCell1Rev">Package</li>
+<li>Class</li>
+<li><a href="package-use.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+<li><a href="../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../com/ibm/juno/core/xml/annotation/package-summary.html">Prev Package</a></li>
+<li><a href="../../../../com/ibm/juno/microservice/resources/package-summary.html">Next Package</a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../index.html?com/ibm/juno/microservice/package-summary.html" target="_top">Frames</a></li>
+<li><a href="package-summary.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+</body>
+</html>

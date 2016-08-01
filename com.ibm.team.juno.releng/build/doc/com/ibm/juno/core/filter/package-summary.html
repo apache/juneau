@@ -1,0 +1,936 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="en">
+<head>
+<title>com.ibm.juno.core.filter (Juno)</title>
+<link rel="stylesheet" type="text/css" href="../../../../../javadoc.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="com.ibm.juno.core.filter (Juno)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a>
+<div class="skip"><a href="#skip-navbar_top" title="Skip navigation links">Skip navigation links</a></div>
+<a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li class="navBarCell1Rev">Package</li>
+<li>Class</li>
+<li><a href="package-use.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../com/ibm/juno/core/encoders/package-summary.html">Prev Package</a></li>
+<li><a href="../../../../../com/ibm/juno/core/filters/package-summary.html">Next Package</a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?com/ibm/juno/core/filter/package-summary.html" target="_top">Frames</a></li>
+<li><a href="package-summary.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<div class="header">
+<h1 title="Package" class="title">Package&nbsp;com.ibm.juno.core.filter</h1>
+<div class="docSummary">
+<div class="block">Filter API</div>
+</div>
+<p>See:&nbsp;<a href="#package_description">Description</a></p>
+</div>
+<div class="contentContainer">
+<ul class="blockList">
+<li class="blockList">
+<table class="packageSummary" border="0" cellpadding="3" cellspacing="0" summary="Class Summary table, listing classes, and an explanation">
+<caption><span>Class Summary</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Class</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../com/ibm/juno/core/filter/AnnotationBeanFilter.html" title="class in com.ibm.juno.core.filter">AnnotationBeanFilter</a>&lt;T&gt;</td>
+<td class="colLast">
+<div class="block">Bean filter constructed from a <a href="../../../../../com/ibm/juno/core/annotation/Bean.html" title="annotation in com.ibm.juno.core.annotation"><code>@Bean</code></a> annotation found on a class.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html" title="class in com.ibm.juno.core.filter">BeanFilter</a>&lt;T&gt;</td>
+<td class="colLast">
+<div class="block">Parent class for all bean filters.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../com/ibm/juno/core/filter/Filter.html" title="class in com.ibm.juno.core.filter">Filter</a></td>
+<td class="colLast">
+<div class="block">Parent class for all bean and POJO filters.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../com/ibm/juno/core/filter/Filter.NULL.html" title="class in com.ibm.juno.core.filter">Filter.NULL</a></td>
+<td class="colLast">
+<div class="block">Represents no filter.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../com/ibm/juno/core/filter/InterfaceBeanFilter.html" title="class in com.ibm.juno.core.filter">InterfaceBeanFilter</a>&lt;T&gt;</td>
+<td class="colLast">
+<div class="block">Simple bean filter that simply identifies a class to be used as an interface
+   class for all child classes.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../com/ibm/juno/core/filter/PojoFilter.html" title="class in com.ibm.juno.core.filter">PojoFilter</a>&lt;T,F&gt;</td>
+<td class="colLast">
+<div class="block">Used to convert non-serializable objects to a serializable form.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../com/ibm/juno/core/filter/PojoFilter.NULL.html" title="class in com.ibm.juno.core.filter">PojoFilter.NULL</a></td>
+<td class="colLast">
+<div class="block">Represents no filter.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../com/ibm/juno/core/filter/SurrogateFilter.html" title="class in com.ibm.juno.core.filter">SurrogateFilter</a>&lt;T,F&gt;</td>
+<td class="colLast">
+<div class="block">Specialized <a href="../../../../../com/ibm/juno/core/filter/PojoFilter.html" title="class in com.ibm.juno.core.filter"><code>PojoFilter</code></a> for surrogate classes.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList">
+<table class="packageSummary" border="0" cellpadding="3" cellspacing="0" summary="Enum Summary table, listing enums, and an explanation">
+<caption><span>Enum Summary</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Enum</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../com/ibm/juno/core/filter/Filter.FilterType.html" title="enum in com.ibm.juno.core.filter">Filter.FilterType</a></td>
+<td class="colLast">
+<div class="block">The filter subtype</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<a name="package_description">
+<!--   -->
+</a>
+<h2 title="Package com.ibm.juno.core.filter Description">Package com.ibm.juno.core.filter Description</h2>
+<div class="block"><p>Filter API</p>
+
+<script>
+   function toggle(x) {
+      var div = x.nextSibling;
+      while (div != null && div.nodeType != 1)
+         div = div.nextSibling;
+      if (div != null) {
+         var d = div.style.display;
+         if (d == 'block' || d == '') {
+            div.style.display = 'none';
+            x.className += " closed";
+         } else {
+            div.style.display = 'block';
+            x.className = x.className.replace(/(?:^|\s)closed(?!\S)/g , '' );
+         }
+      }
+   }
+</script>
+
+<a id='TOC'></a><h5 class='toc'>Table of Contents</h5>
+<ol class='toc'>
+   <li><p><a class='doclink' href='#Filters'>Filters</a></p>
+   <ol>
+      <li><p><a class='doclink' href='#BeanFilters'>BeanFilter Class</a></p>
+      <li><p><a class='doclink' href='#PojoFilters'>PojoFilter Class</a></p>
+      <li><p><a class='doclink' href='#PojoFilters_OneWay'>One-Way PojoFilters</a></p>
+      <li><p><a class='doclink' href='#StopClasses'>Stop Classes</a></p>
+      <li><p><a class='doclink' href='#SurrogateClasses'>Surrogate Classes</a></p>
+      <li><p><a class='doclink' href='#ToObjectMaps'>Serializing to ObjectMaps</a></p>
+   </ol>
+</ol>
+
+<!-- ======================================================================================================== -->
+<a id="Filters"></a>
+<h2 class='topic' onclick='toggle(this)'>1 - Filters</h2>
+<div class='topic'>
+   <p>
+      By default, the Juno framework can serialize and parse a wide variety of POJOs out-of-the-box.  
+      However, a <code>Filter</code> API is provided to tailor how certain Java objects are handled by the framework.
+      The class hierarchy is shown here:
+   </p>
+   <ul class='spaced-list'>
+      <li><a href="../../../../../com/ibm/juno/core/filter/Filter.html" title="class in com.ibm.juno.core.filter"><code>Filter</code></a> - Top-level interface for all filters.
+   <ul>
+      <li><a href="../../../../../com/ibm/juno/core/filter/BeanFilter.html" title="class in com.ibm.juno.core.filter"><code>BeanFilter</code></a> - Filters that alter the way beans are handled.
+      <li><a href="../../../../../com/ibm/juno/core/filter/PojoFilter.html" title="class in com.ibm.juno.core.filter"><code>PojoFilter</code></a> - Filters that transform non-serializable POJOs into serializable POJOs during serialization 
+         (and optionally vis-versa during parsing).
+      </ul>
+   </ul>
+   <p>
+      Filters are added to serializers and parsers in a variety of ways:
+   </p> 
+   <ul>
+      <li><a href="../../../../../com/ibm/juno/core/serializer/Serializer.html#addFilters(java.lang.Class...)"><code>Serializer.addFilters(Class[])</code></a> - On serializers.
+      <li><a href="../../../../../com/ibm/juno/core/serializer/SerializerGroup.html#addFilters(java.lang.Class...)"><code>SerializerGroup.addFilters(Class[])</code></a> - On groups of serializers.
+      <li><a href="../../../../../com/ibm/juno/core/parser/Parser.html#addFilters(java.lang.Class...)"><code>Parser.addFilters(Class[])</code></a> - On parsers.
+      <li><a href="../../../../../com/ibm/juno/core/parser/ParserGroup.html#addFilters(java.lang.Class...)"><code>ParserGroup.addFilters(Class[])</code></a> - On groups of parsers.
+      <li><a href="../../../../../com/ibm/juno/client/RestClient.html#addFilters(java.lang.Class...)"><code>RestClient.addFilters(Class[])</code></a> - On the serializer and parser registered on a REST client.
+      <li><a href="../../../../../com/ibm/juno/server/annotation/RestResource.html#filters()"><code>@RestResource.filters()</code></a> - On all serializers and parsers defined on a REST servlet.
+      <li><a href="../../../../../com/ibm/juno/server/annotation/RestMethod.html#filters()"><code>@RestMethod.filters()</code></a> - On all serializers and parsers defined on a method in a REST servlet.
+      <li><a href="../../../../../com/ibm/juno/server/jaxrs/JunoProvider.html#filters()"><code>JunoProvider.filters()</code></a> - On all serializers and parsers defined on a JAX-RS provider.
+   </ul>
+   <p>
+      Filters (typically <code>PojoFilters</code>) can also be associated with classes through the <a href="../../../../../com/ibm/juno/core/annotation/Filter.html" title="annotation in com.ibm.juno.core.annotation"><code>@Filter</code></a> annotation. 
+   </p>
+      
+   <!-- ======================================================================================================== -->
+   <a id="BeanFilters"></a>
+   <h3 class='topic' onclick='toggle(this)'>1.1 - BeanFilter Class</h3>
+   <div class='topic'>
+      <p>
+         Bean filters are used to tailor how Juno handles bean classes.
+         They can be used for the following purposes:
+      </p>
+      <ul>
+         <li>Include or exclude which properties are exposed in beans, or the order those properties are serialized.
+         <li>Define property-namers for customizing bean property names.
+         <li>Define bean subtypes.
+         <li>Define bean interface classes.
+      </ul>
+      <p>
+         It should be noted that the <a href="../../../../../com/ibm/juno/core/annotation/Bean.html" title="annotation in com.ibm.juno.core.annotation"><code>@Bean</code></a> annotation provides equivalent functionality
+            through annotations.  
+         However, the <code>BeanFilter</code> class allows you to provide the same features when you do
+            not have access to the source code.
+      <p>
+      <h5 class='topic'>Examples</h5>
+
+      <h6 class='topic'>Explicitly specify which properties are visible on a bean class</h6>
+      <p class='bcode'>
+   <jc>// Define filter that orders properties by "age" then "name"</jc>
+   <jk>public class</jk> MyFilter <jk>extends</jk> BeanFilter&ltPerson&gt; {
+      <jk>public</jk> MyFilter() {
+         setProperties(<js>"age"</js>,<js>"name"</js>);
+      }
+   }
+   
+   WriterSerializer s = <jk>new</jk> JsonSerializer().addFilters(MyFilter.<jk>class</jk>);
+   Person p = getPerson();
+   String json = s.serialize(p);  <jc>// Prints "{age:45,name:'John Smith'}"</jc>
+      </p>
+      <p>
+         Note that this is equivalent to specifying the following annotation on the bean class:
+      </p>
+      <p class='bcode'>
+   <ja>@Bean</ja>(properties={<js>"age"</js>,<js>"name"</js>})
+   <jk>public class</jk> Person {
+      ...
+   }
+      </p>
+
+      <h6 class='topic'>Exclude which properties are visible on a bean class</h6>
+      <p class='bcode'>
+   <jc>// Define filter that excludes "name"</jc>
+   <jk>public class</jk> MyFilter <jk>extends</jk> BeanFilter&ltPerson&gt; {
+      <jk>public</jk> MyFilter() {
+         setExcludeProperties(<js>"name"</js>);
+      }
+   }
+   
+   WriterSerializer s = <jk>new</jk> JsonSerializer().addFilters(MyFilter.<jk>class</jk>);
+   Person p = getPerson();
+   String json = s.serialize(p);  <jc>// Prints "{age:45}"</jc>
+      </p>
+      <p>
+         Note that this is equivalent to specifying the following annotation on the bean class:
+      </p>
+      <p class='bcode'>
+   <ja>@Bean</ja>(excludeProperties={<js>"name"</js>})
+   <jk>public class</jk> Person {
+      ...
+   }
+      </p>
+
+      <h6 class='topic'>Define specialized property namers</h6>
+      <p class='bcode'>
+   <jc>// Define filter with our own property namer.</jc>
+   <jk>public class</jk> MyFilter <jk>extends</jk> BeanFilter&ltPerson&gt; {
+      <jk>public</jk> MyFilter() {
+         setPropertyNamer(UpperCasePropertyNamer.<jk>class</jk>);
+      }
+   }
+
+   <jc>// Define property namer that upper-cases the property names</jc>   
+   <jk>public class</jk> UpperCasePropertyNamer <jk>implements</jk> PropertyNamer {
+   
+      <ja>@Override</ja>
+      <jk>public</jk> String getPropertyName(String name) {
+         <jk>return</jk> name.toUpperCase();
+      }
+   }
+   
+   <jc>// Serialize to JSON</jc>
+   WriterSerializer s = <jk>new</jk> JsonSerializer().addFilters(MyFilter.<jk>class</jk>);
+   Person person = getPerson();
+   String json = s.serialize(p);  <jc>// Prints "{AGE:45,NAME:'John Smith'}"</jc>
+   
+   <jc>// Parse back into bean</jc>
+   ReaderParser p = <jk>new</jk> JsonParser().addFilters(MyFilter.<jk>class</jk>);
+   person = p.parse(json, Person.class); <jc>// Read back into original object</jc>
+      </p>
+      <p>
+         Note that this is equivalent to specifying the following annotation on the bean class:
+      </p>
+      <p class='bcode'>
+   <ja>@Bean</ja>(propertyNamer=UpperCasePropertyNamer.<jk>class</jk>)
+   <jk>public class</jk> Person {
+      ...
+   }
+      </p>
+      
+      <h6 class='topic'>Define bean subtypes</h6>
+      <p>
+         Juno allows you to losslessly serialize and parse abstract class fields back into the original 
+            concrete objects by defining a subtype attribute and a list of subtypes/ids.
+      </p>
+      <p>
+         For example, let's define the following parent class with two subclasses:
+      </p>
+      <p class='bcode'>
+   <jc>// Abstract parent class</jc>
+   <jk>public abstract class</jk> MyClass {
+      <jk>public</jk> String <jf>foo</jf>=<js>"foo"</js>;
+   }
+
+   <jc>// Subclass 1</jc>
+   <jk>public class</jk> MyClassBar <jk>extends</jk> MyClass {
+      <jk>public</jk> String <jf>bar</jf>=<js>"bar"</js>;
+   }
+   
+   <jc>// Subclass 2</jc>
+   <jk>public class</jk> MyClassBaz <jk>extends</jk> MyClass {
+      <jk>public</jk> String <jf>baz</jf>=<js>"baz"</js>;
+   }
+      </p>
+      <p>
+         Normally, when parsing a serialized <code>MyClass</code> object, the parser does not know what subtype to create.
+         This can be fixed by defining the following filter:
+      </p>     
+      <p class='bcode'>
+   <jc>// Define filter with our own property namer.</jc>
+   <jk>public class</jk> MyClassFilter <jk>extends</jk> BeanFilter&ltMyClass&gt; {
+      <jk>public</jk> MyClassFilter() {
+         setSubTypeProperty(<js>"subType"</js>);
+         addSubType(MyClassBar.<jk>class</jk>, <js>"BAR"</js>);
+         addSubType(MyClassBaz.<jk>class</jk>, <js>"BAZ"</js>);
+      }
+   }
+      </p>
+      <p>
+         When serialized, the serialized bean will include a <code>"subType"</code> attribute that identifies the subclass, and
+            allows it to be parsed back into the original subclass.
+      </p>
+      <p class='bcode'>
+   <jc>// Serialize to JSON</jc>
+   WriterSerializer s = <jk>new</jk> JsonSerializer().addFilters(MyClassFilter.<jk>class</jk>);
+   MyClass c = <jk>new</jk> MyClassBar();
+   String json = s.serialize(p);  <jc>// Prints "{subType:'BAR',foo:'foo',bar:'bar'}"</jc>
+   
+   <jc>// Parse back into bean</jc>
+   ReaderParser p = <jk>new</jk> JsonParser().addFilters(MyClassFilter.<jk>class</jk>);
+   c = p.parse(json, MyClass.<jk>class</jk>); <jc>// c is an instance of MyClassBar</jc>
+      </p>  
+      <p>
+         It should be noted that the sub type attribute is always rendered first in the JSON object so 
+            that the bean object can be instantiated before the real properties are set on it during parsing.  
+         Beans with subtypes are thus 'lazy-instantiated' when the sub type attribute is set.
+         If the sub type attribute is not listed first, the parser will still be able to parse the input,
+         but with reduced efficiency since it must cache the incoming data until the bean can be instantiated.
+      </p>
+      <p>
+         Note that this filter is equivalent to specifying the following annotation on the bean class:
+      </p>
+      <p class='bcode'>
+   <ja>@Bean</ja>(
+      subTypeProperty=<js>"subType"</js>,
+      subTypes={
+         <ja>@BeanSubType</ja>(type=MyClassBar.<jk>class</jk>, id=<js>"BAR"</js>),
+         <ja>@BeanSubType</ja>(type=MyClassBaz.<jk>class</jk>, id=<js>"BAZ"</js>)
+      }
+   )
+   <jk>public abstract class</jk> MyClass {
+      ...
+   }
+      </p>
+         
+      <h6 class='topic'>Limiting bean properties to parent bean classes</h6>
+      <p>
+         Occassionally, you may want to limit bean properties to some parent interface.
+         For example, in the <code>RequestEchoResource</code> class in the sample war file, we serialize instances of
+            <code>HttpServletRequest</code> and <code>HttpServletResponse</code>.
+         However, we really only want to serialize the properties defined on those specific APIs, not 
+            vendor-specific methods on the instances of those classes.
+         This can be done through the <code>interfaceClass</code> property of a bean filter.
+      </p>
+      <p>
+         For example, let's define the following parent class and subclass:
+      </p>
+      <p class='bcode'>
+   <jc>// Abstract parent class</jc>
+   <jk>public abstract class</jk> MyClass {
+      <jk>public</jk> String <jf>foo</jf>=<js>"foo"</js>;
+   }
+
+   <jc>// Subclass 1</jc>
+   <jk>public class</jk> MyClassBar <jk>extends</jk> MyClass {
+      <jk>public</jk> String <jf>bar</jf>=<js>"bar"</js>;
+   }
+      </p>
+      <p>
+         Suppose we only want to render the properties defined on <code>MyClass</code>, not those defined on child classes.
+         To do so, we can define the following filter:
+      </p>
+      <p class='bcode'>
+   <jc>// Define filter that limits properties to only those defined on MyClass</jc>
+   <jk>public class</jk> MyClassFilter <jk>extends</jk> BeanFilter&ltMyClass&gt; {
+      <jk>public</jk> MyClassFilter() {
+         setInterfaceClass(MyClass.<jk>class</jk>);
+      }
+   }
+      </p>
+      <p>
+         When serialized, the serialized bean will only include properties defined on the parent class.
+      </p>
+      <p class='bcode'>
+   <jc>// Serialize to JSON</jc>
+   WriterSerializer s = <jk>new</jk> JsonSerializer().addFilters(MyClassFilter.<jk>class</jk>);
+   MyClass c = <jk>new</jk> MyClassBar();
+   String json = s.serialize(p);  <jc>// Prints "{foo:'foo'}"</jc>
+      </p>  
+      <p>
+         The equivalent can be done through an annotation on the parent class, which applies to all child classes:
+      </p>
+      <p class='bcode'>
+   <ja>@Bean</ja>(interfaceClass=MyClass.<jk>class</jk>)
+   <jk>public abstract class</jk> MyClass {
+      <jk>public</jk> String <jf>foo</jf>=<js>"foo"</js>;
+   }
+      </p>
+      <p>
+         The annotation can also be applied on the individual child classes, like so...
+      </p>
+      <p class='bcode'>
+   <ja>@Bean</ja>(interfaceClass=MyClass.<jk>class</jk>)
+   <jk>public class</jk> MyClassBar <jk>extends</jk> MyClass {
+      <jk>public</jk> String <jf>bar</jf>=<js>"bar"</js>;
+   }
+      </p>
+      <p>
+         Also, the <code>addFilters(...)</code> methods will automatically interpret any non-<code>Filter</code> classes
+            passed in as meaning interface classes.  
+         So in the previous example, the <code>BeanFilter</code> class could have been avoided altogether by just 
+            passing in <code>MyClass.<jk>class</jk></code> to the serializer, like so:
+      </p>
+      <p class='bcode'>
+   <jc>// Serialize to JSON</jc>
+   WriterSerializer s = <jk>new</jk> JsonSerializer().addFilters(MyClass.<jk>class</jk>);
+      </p>
+      <p>
+         In fact, this is the shortcut used in the <code>RequestEchoResource</code> sample class:
+      </p>
+      <p class='bcode'>
+   <ja>@RestResource</ja>(
+      filters={
+         <jc>// Interpret these as their parent classes, not subclasses</jc>
+         HttpServletRequest.<jk>class</jk>, HttpSession.<jk>class</jk>, ServletContext.<jk>class</jk>
+      }
+   )
+   <jk>public class</jk> RequestEchoResource <jk>extends</jk> RestServletDefault {
+      </p>
+      
+      <h6 class='topic'>Allowing non-public bean classes/methods/fields to be used by the framework</h6>
+      <p>
+         By default, only public classes are interpreted as beans.  Non-public classes are treated as 'other' POJOs that
+         are typically just serialized to strings using the <code>toString()</code> method.
+         Likewise, by default, only public fields/methods are interpreted as bean properties.
+      </p>
+      <p>
+         The following bean context properties can be used to allow non-public classes/methods/fields to be
+         used by the framework:
+      </p>
+      <ul>
+         <li><a href="../../../../../com/ibm/juno/core/BeanContextProperties.html#BEAN_beanClassVisibility"><code>BeanContextProperties.BEAN_beanClassVisibility</code></a>
+         <li><a href="../../../../../com/ibm/juno/core/BeanContextProperties.html#BEAN_beanConstructorVisibility"><code>BeanContextProperties.BEAN_beanConstructorVisibility</code></a>
+         <li><a href="../../../../../com/ibm/juno/core/BeanContextProperties.html#BEAN_methodVisibility"><code>BeanContextProperties.BEAN_methodVisibility</code></a>
+         <li><a href="../../../../../com/ibm/juno/core/BeanContextProperties.html#BEAN_beanFieldVisibility"><code>BeanContextProperties.BEAN_beanFieldVisibility</code></a>
+      </ul>
+      <p>
+         Also, specifying a <a href="../../../../../com/ibm/juno/core/annotation/BeanProperty.html" title="annotation in com.ibm.juno.core.annotation"><code>@BeanProperty</code></a> annotation on non-public getters/setters/fields
+            will also allow them to be detected by the framework.
+      </p>
+      <p class='bcode'>
+   <jk>public class</jk> MyBean {
+      <jc>// A bean property</jc>
+      <jk>public int</jk> f1;    
+      
+      <jc>// Not a bean property</jc>
+      <ja>@BeanIgnore</ja>
+      <jk>public int</jk> f2;     
+      
+      <jc>// A bean property</jc>
+      <ja>@BeanProperty</ja>    
+      <jk>protected int</jk> f3;  
+      
+      <jc>// A bean property</jc>
+      <ja>@BeanProperty</ja>    
+      <jk>private int</jk> getF3() {...}
+   }
+      </p>
+   </div>
+
+   <!-- ======================================================================================================== -->
+   <a id="PojoFilters"></a>
+   <h3 class='topic' onclick='toggle(this)'>1.2 - PojoFilter Class</h3>
+   <div class='topic'>
+      <p>
+         <a href="../../../../../com/ibm/juno/core/filter/PojoFilter.html" title="class in com.ibm.juno.core.filter"><code>PojoFilters</code></a> are a critical component of the Juno architecture.  
+         They allow the Juno serializers and parsers to be extended to handle virtually any kind of Java object. 
+      </p>
+      <p>
+         As explained in the overview, Juno has built-in support for serializing and parsing specific kinds of objects, like primitive objects, bean, maps, collections, and arrays.  
+         Other kinds of POJOs, such as <code>Date</code> objects, cannot be serialized properly, since they are not true beans.  
+         This is where <code>PojoFilters</code> come into play.
+      </p>
+      <p>
+         The purpose of an <code>PojoFilter</code> is to convert a non-serializable object to a serializable surrogate form during serialization, and to optionally convert that surrogate form back into the original object during parsing.
+      </p>
+      <p>
+         For example, the following filter can be used to convert <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Date.html?is-external=true" title="class or interface in java.util"><code>Date</code></a> objects to ISO8601 strings during serialization, and <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Date.html?is-external=true" title="class or interface in java.util"><code>Date</code></a> objects from ISO8601 string during parsing:
+      </p>
+      <p class='bcode'>
+   <jc>// Sample filter for converting Dates to ISO8601 strings.</jc>
+   <jk>public class</jk> MyDateFilter <jk>extends</jk> PojoFilter&lt;Date,String&gt; {
+      
+      <jc>// ISO8601 formatter.</jc>
+      <jk>private</jk> DateFormat <jf>format</jf> = <jk>new</jk> SimpleDateFormat(<js>"yyyy-MM-dd'T'HH:mm:ssZ"</js>);
+      
+      <jd>/** Converts a Date object to an ISO8601 string. */</jd>
+      <ja>@Override</ja>
+      <jk>public</jk> String filter(Date o) {
+         <jk>return</jk> <jf>format</jf>.format(o);
+      }
+      
+      <jd>/** Converts an ISO8601 string to a Date object. */</jd>
+      <ja>@Override</ja>
+      <jk>public</jk> Date unfilter(String o, ClassMeta&lt;?&gt; hint) <jk>throws</jk> ParseException {
+         <jk>try</jk> {
+            <jk>return</jk> <jf>format</jf>.parse(o);
+         } <jk>catch</jk> (java.text.ParseException e) {
+            <jk>throw new</jk> ParseException(e);
+         }
+      }
+   }
+      </p>
+      <p>
+         The filter above can then be associated with serializers and parsers as the following example shows:
+      </p>
+      <p class='bcode'>
+   <jc>// Sample bean with a Date field.</jc>
+   <jk>public class</jk> MyBean {
+      <jk>public</jk> Date <jf>date</jf> = <jk>new</jk> Date(112, 2, 3, 4, 5, 6);
+   }
+
+   <jc>// Create a new JSON serializer, associate our date filter with it, and serialize a sample bean.</jc>
+   Serializer serializer = <jk>new</jk> JsonSerializer().addFilters(MyDateFilter.<jk>class</jk>);
+   String json = serializer.serialize(<jk>new</jk> MyBean());  <jc>// == "{date:'2012-03-03T04:05:06-0500'}"</jc>
+   
+   <jc>// Create a JSON parser, associate our date filter with it, and reconstruct our bean (including the date).</jc>
+   ReaderParser parser = <jk>new</jk> JsonParser().addFilters(MyDateFilter.<jk>class</jk>);
+   MyBean bean = parser.parse(json, MyBean.<jk>class</jk>);
+   <jk>int</jk> day = bean.<jf>date</jf>.getDay();                   <jc>// == 3</jc>
+      </p>
+      <p>
+         In addition, the <a href="../../../../../com/ibm/juno/core/BeanMap.html#get(java.lang.Object)"><code>BeanMap.get(Object)</code></a> and <a href="../../../../../com/ibm/juno/core/BeanMap.html#put(java.lang.String, java.lang.Object)"><code>BeanMap.put(String,Object)</code></a> methods will automatically convert to filtered values as the following example shows:
+      </p>
+      <p class='bcode'>
+   <jc>// Create a new bean context and add our filter.</jc>
+   BeanContext beanContext = <jk>new</jk> BeanContext().addFilters(MyDateFilter.<jk>class</jk>);
+
+   <jc>// Create a new bean.</jc>
+   MyBean myBean = <jk>new</jk> MyBean();
+
+   <jc>// Wrap it in a bean map.</jc>
+   BeanMap&lt;Bean&gt; beanMap = beanContext.forBean(myBean);
+
+   <jc>// Use the get() method to get the date field as an ISO8601 string.</jc>
+   String date = (String)beanMap.get(<js>"date"</js>);            <jc>// == "2012-03-03T04:05:06-0500"</jc> 
+   
+   <jc>// Use the put() method to set the date field to an ISO8601 string.</jc>
+   beanMap.put(<js>"date"</js>, <js>"2013-01-01T12:30:00-0500"</js>);   <jc>// Set it to a new value.</jc> 
+   
+   <jc>// Verify that the date changed on the original bean.</jc>
+   <jk>int</jk> year = myBean.<jf>date</jf>.getYear();                        <jc>// == 113</jc>
+      </p>
+      <p>
+         Another example of a <code>PojoFilter</code> is one that converts <code><jk>byte</jk>[]</code> arrays to BASE64-encoded strings:
+      </p>
+      <p class='bcode'>
+   <jk>public class</jk> ByteArrayBase64Filter <jk>extends</jk> PojoFilter&lt;<jk>byte</jk>[],String&gt; {
+   
+      <ja>@Override</ja>
+      <jk>public</jk> String filter(<jk>byte</jk>[] b) <jk>throws</jk> SerializeException {
+         <jk>try</jk> {
+            ByteArrayOutputStream baos = <jk>new</jk> ByteArrayOutputStream();
+            OutputStream b64os = MimeUtility.encode(baos, <js>"base64"</js>);
+            b64os.write(b);
+            b64os.close();
+            <jk>return new</jk> String(baos.toByteArray());
+         } <jk>catch</jk> (Exception e) {
+            <jk>throw new</jk> SerializeException(e);
+         }
+      }
+      
+      <ja>@Override</ja>
+      <jk>public byte</jk>[] unfilter(String s, ClassMeta&lt;?&gt; hint) <jk>throws</jk> ParseException {
+         <jk>try</jk> {
+            <jk>byte</jk>[] b = s.getBytes();
+            ByteArrayInputStream bais = <jk>new</jk> ByteArrayInputStream(b);
+            InputStream b64is = MimeUtility.decode(bais, <js>"base64"</js>);
+            <jk>byte</jk>[] tmp = <jk>new byte</jk>[b.length];
+            <jk>int</jk> n = b64is.read(tmp);
+            <jk>byte</jk>[] res = <jk>new byte</jk>[n];
+            System.<jsm>arraycopy</jsm>(tmp, 0, res, 0, n);
+            <jk>return</jk> res;
+         } <jk>catch</jk> (Exception e) {
+            <jk>throw new</jk> ParseException(e);
+         }
+      }
+   }
+      </p>
+      <p>
+         The following example shows the BASE64 filter in use:
+      </p>
+      <p class='bcode'>
+   <jc>// Create a JSON serializer and register the BASE64 encoding filter with it.</jc>
+   Serializer serializer = <jk>new</jk> JsonSerializer().addFilters(ByteArrayBase64Filter.<jk>class</jk>);
+   ReaderParser parser = <jk>new</jk> JsonParser().addFilters(ByteArrayBase64Filter.<jk>class</jk>);
+   
+   <jk>byte</jk>[] a1 = {1,2,3};
+   String s1 = serializer.serialize(a1);     <jc>// Produces "'AQID'"</jc>
+   a1 = parser.parse(s1, <jk>byte</jk>[].<jk>class</jk>);      <jc>// Reproduces {1,2,3}</jc>
+   
+   <jk>byte</jk>[][] a2 = {{1,2,3},{4,5,6},<jk>null</jk>};
+   String s2 = serializer.serialize(a2);     <jc>// Produces "['AQID','BAUG',null]"</jc>
+   a2 = parser.parse(s2, <jk>byte</jk>[][].<jk>class</jk>);    <jc>// Reproduces {{1,2,3},{4,5,6},null}</jc>
+      </p>
+      <p>
+         It should be noted that the sample filters shown above have already been implemented in the <a href="../../../../../com/ibm/juno/core/filters/package-summary.html"><code>com.ibm.juno.core.filters</code></a> package.
+         The following are a list of out-of-the-box filters:
+      </p>
+      <ul>
+         <li><a href="../../../../../com/ibm/juno/core/filters/ByteArrayBase64Filter.html" title="class in com.ibm.juno.core.filters"><code>ByteArrayBase64Filter</code></a> - Converts byte arrays to BASE64 encoded strings.
+         <li><a href="../../../../../com/ibm/juno/core/filters/CalendarFilter.html" title="class in com.ibm.juno.core.filters"><code>CalendarFilter</code></a> - Filters for converting <code>Calendar</code> objects to various date format strings.
+         <li><a href="../../../../../com/ibm/juno/core/filters/DateFilter.html" title="class in com.ibm.juno.core.filters"><code>DateFilter</code></a> - Filters for converting <code>Date</code> objects to various date format strings.
+         <li><a href="../../../../../com/ibm/juno/core/filters/EnumerationFilter.html" title="class in com.ibm.juno.core.filters"><code>EnumerationFilter</code></a> - Filters for converting <code>Enumeration</code> objects to arrays.
+         <li><a href="../../../../../com/ibm/juno/core/filters/IteratorFilter.html" title="class in com.ibm.juno.core.filters"><code>IteratorFilter</code></a> - Filters for converting <code>Iterator</code> objects to arrays.
+         <li><a href="../../../../../com/ibm/juno/core/filters/ReaderFilter.html" title="class in com.ibm.juno.core.filters"><code>ReaderFilter</code></a> - Filters for converting <code>Readers</code> to objects before serialization.
+         <li><a href="../../../../../com/ibm/juno/core/filters/XMLGregorianCalendarFilter.html" title="class in com.ibm.juno.core.filters"><code>XMLGregorianCalendarFilter</code></a> - Filters for converting <code>XMLGregorianCalendar</code> objects to ISO8601 strings.
+      </ul>
+      
+      <h6 class='topic'>Valid filtered class types</h6>
+      <p>
+         The filtered class type can be any serializable class type as defined in the <a href='../package-summary.html#PojoCategories'>POJO categories</a> table.
+      </p>
+   </div>
+   
+
+   <!-- ======================================================================================================== -->
+   <a id="PojoFilters_OneWay"></a>
+   <h3 class='topic' onclick='toggle(this)'>1.3 - One-Way PojoFilters</h3>
+   <div class='topic'>
+      <p>
+         In the previous section, we defined two-way filters, meaning filters where the original objects could be reconstructing during parsing.  However, there are certain kinds of POJOs that we may want to support for serializing, but that are not possible to reconstruct during parsing.  For these, we can use one-way object filters.
+      </p>
+      <p>
+         A one-way object filter is simply an object filter that only implements the <code>filter()</code> method.  The <code>unfilter()</code> method is simply left unimplemented.
+      </p>
+      <p>
+         An example of a one-way filter would be one that allows <code>Iterators</code> to be serialized as JSON arrays.  It can make sense to be able to render <code>Iterators</code> as arrays, but in general it's not possible to reconstruct an <code>Iterator</code> during parsing. 
+      </p>
+      <p class='bcode'>
+   <jk>public class</jk> IteratorFilter <jk>extends</jk> PojoFilter&lt;Iterator,List&gt; {
+      
+      <ja>@Override</ja>
+      <jk>public</jk> List filter(Iterator o) {
+         List l = <jk>new</jk> LinkedList();
+         <jk>while</jk> (o.hasNext())
+            l.add(o.next());
+         <jk>return</jk> l;
+      }
+   }
+      </p>
+      <p>
+         Here is an example of our one-way filter being used.  Note that trying to parse the original object will cause a <a href="../../../../../com/ibm/juno/core/parser/ParseException.html" title="class in com.ibm.juno.core.parser"><code>ParseException</code></a> to be thrown.
+      </p>
+      <p class='bcode'>
+   <jc>// Create a JSON serializer that can serialize Iterators.</jc>
+   Serializer serializer = <jk>new</jk> JsonSerializer().addFilters(IteratorFilter.<jk>class</jk>);
+   
+   <jc>// Construct an iterator we want to serialize.</jc>
+   Iterator iterator = <jk>new</jk> ObjectList(1,2,3).iterator();
+   
+   <jc>// Serialize our Iterator</jc>
+   String s = serializer.serialize(iterator);      <jc>// Produces "[1,2,3]"</jc>
+   
+   <jc>// Try to parse it.</jc>
+   ReaderParser parser = <jk>new</jk> JsonParser().addFilters(IteratorFilter.<jk>class</jk>);
+   iterator = parser.parse(s, Iterator.<jk>class</jk>);     <jc>// Throws ParseException!!!</jc>
+      </p>
+   </div>
+
+   <!-- ======================================================================================================== -->
+   <a id="StopClasses"></a>
+   <h3 class='topic' onclick='toggle(this)'>1.4 - Stop Classes</h3>
+   <div class='topic'>
+      <p>
+         Occassionally, you may want to limit bean properties to only those defined on a parent class or interface.  
+         There are a couple of ways of doing this.
+      </p>
+      <p>
+         For example, let's define the following parent class and subclass:
+      </p>
+      <p class='bcode'>
+   <jc>// Abstract parent class</jc>
+   <jk>public abstract class</jk> MyClass {
+      <jk>public</jk> String <jf>foo</jf>=<js>"foo"</js>;
+   }
+
+   <jc>// Subclass 1</jc>
+   <jk>public class</jk> MyClassBar <jk>extends</jk> MyClass {
+      <jk>public</jk> String <jf>bar</jf>=<js>"bar"</js>;
+   }
+      </p>
+      <p>
+         Suppose we only want to render the properties defined on <code>MyClass</code>, not those defined on child classes. 
+         To do so, we can define the following filter:
+      </p>
+      <p class='bcode'>
+   <jc>// Define filter that limits properties to only those defined on MyClass</jc>
+   <jk>public class</jk> MyClassFilter <jk>extends</jk> BeanFilter&ltMyClass&gt; {
+      <jk>public</jk> MyClassFilter() {
+         setInterfaceClass(MyClass.<jk>class</jk>);
+      }
+   }
+      </p>
+      <p>
+         When serialized, the serialized bean will only include properties defined on the parent class.
+      </p>
+      <p class='bcode'>
+   <jc>// Serialize to JSON</jc>
+   WriterSerializer s = <jk>new</jk> JsonSerializer().addFilters(MyClassFilter.<jk>class</jk>);
+   MyClass c = <jk>new</jk> MyClassBar();
+   String json = s.serialize(p);  <jc>// Prints "{foo:'foo'}"</jc>
+      </p>  
+      <p>
+         The equivalent can be done through an annotation on the parent class, which applies to all child classes:
+      </p>
+      <p class='bcode'>
+   <ja>@Bean</ja>(interfaceClass=MyClass.<jk>class</jk>)
+   <jk>public abstract class</jk> MyClass {
+      <jk>public</jk> String <jf>foo</jf>=<js>"foo"</js>;
+   }
+      </p>
+      <p>
+         The annotation can also be applied on the individual child classes, like so...
+      </p>
+      <p class='bcode'>
+   <ja>@Bean</ja>(interfaceClass=MyClass.<jk>class</jk>)
+   <jk>public class</jk> MyClassBar <jk>extends</jk> MyClass {
+      <jk>public</jk> String <jf>bar</jf>=<js>"bar"</js>;
+   }
+      </p>
+      <p>
+         Also, the <code>addFilters()</code> methods will automatically interpret any non-Filter classes passed in as meaning interface classes. 
+         So in the previous example, the <code>BeanFilter</code> class could have been avoided altogether by just passing in <code>MyClass.<jk>class</jk></code> to the serializer, like so:
+      </p>
+      <p class='bcode'>
+   <jc>// Serialize to JSON</jc>
+   WriterSerializer s = <jk>new</jk> JsonSerializer().addFilters(MyClass.<jk>class</jk>);
+      </p>
+   </div>
+
+   <!-- ======================================================================================================== -->
+   <a id="SurrogateClasses"></a>
+   <h3 class='topic' onclick='toggle(this)'>1.5 - Surrogate Classes</h3>
+   <div class='topic'>
+      <p>
+         Surrogate classes are very similar in concept to one-way <code>PojoFilters</code> except they represent a simpler syntax.
+      </p>
+      <p>
+         For example, let's say we want to be able to serialize the following class, but it's not serializable for some reason (for example, there are no
+         properties exposed):  
+      <p class='bcode'>
+   <jk>public class</jk> MyNonSerializableClass {
+      <jk>protected</jk> String <jf>foo</jf>;
+   }
+      </p>
+      <p>
+         This could be solved with the following <code>PojoFilter</code>.
+      </p>
+      <p class='bcode'>
+   <jk>public class</jk> MySerializableSurrogate {
+      <jk>public</jk> String <jf>foo</jf>;
+   }
+      
+   <jk>public class</jk> MyFilter <jk>extends</jk> PojoFilter&lt;MyNonSerializableClass,MySerializableSurrogate&gt; {
+      
+      <ja>@Override</ja>
+      <jk>public</jk> MySerializableSurrogate filter(MyNonSerializableClass o) {
+         MySerializableSurrogate s = <jk>new</jk> MySerializableSurrogate();
+         s.<jf>foo</jf> = o.<jf>foo</jf>;
+         <jk>return</jk> s;
+      }
+   }
+      </p>
+      <p>
+         However, the same can be accomplished by using a surrogate class that simply contains a constructor with the non-serializable class as an argument:
+      </p>
+      <p class='bcode'>
+   <jk>public class</jk> MySerializableSurrogate {
+      <jk>public</jk> String <jf>foo</jf>;
+      
+      <jk>public</jk> MySerializableSurrogate(MyNonSerializableClass c) {
+         <jk>this</jk>.<jf>foo</jf> = c.<jf>foo</jf>;
+      }
+   }
+      </p>
+      <p>
+         The surrogate class is registered just like any other filter:
+      </p>
+      <p class='bcode'>
+   <jc>// Create a JSON serializer that can serialize Iterators.</jc>
+   Serializer serializer = <jk>new</jk> JsonSerializer().addFilters(MySerializableSurrogate.<jk>class</jk>);
+      </p>
+      <p>
+         When the serializer encounters the non-serializable class, it will serialize an instance of the surrogate instead.
+      </p>
+   </div>
+   
+   <!-- ======================================================================================================== -->
+   <a id="ToObjectMaps"></a>
+   <h3 class='topic' onclick='toggle(this)'>1.6 - Serializing to ObjectMaps</h3>
+   <div class='topic'>
+   <div class='topic'>
+      <p>
+         A shortcut method for filtering is provided that can often be simpler than defining filters.
+         In this case, we add methods to our class to serialize to <a href="../../../../../com/ibm/juno/core/ObjectMap.html" title="class in com.ibm.juno.core"><code>ObjectMaps</code></a>
+      </p>
+      <p>
+      <p class='bcode'>
+   <jk>public class</jk> MyClass {
+      <jk>private</jk> String <jf>f1</jf>;
+      
+      <jc>// Constructor that takes in an ObjectMap</jc>
+      <jk>public</jk> MyClass(ObjectMap m) {
+         <jf>f1</jf> = m.getString(<js>"f1"</js>);
+      }
+      
+      <jc>// Method that converts object to an ObjectMap</jc>
+      <jk>public</jk> ObjectMap toObjectMap() {
+         <jk>return new</jk> ObjectMap().append(<js>"f1"</js>, <jf>f1</jf>);
+      }
+      </p>
+      <p>
+         The <code>toObjectMap()</code> method will automatically be used during serialization, and 
+         the constructor will automatically be used during parsing.
+         This will work for all serializers and parsers.
+      </p>
+   </div>
+</div></div>
+</div>
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a>
+<div class="skip"><a href="#skip-navbar_bottom" title="Skip navigation links">Skip navigation links</a></div>
+<a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li class="navBarCell1Rev">Package</li>
+<li>Class</li>
+<li><a href="package-use.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../com/ibm/juno/core/encoders/package-summary.html">Prev Package</a></li>
+<li><a href="../../../../../com/ibm/juno/core/filters/package-summary.html">Next Package</a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?com/ibm/juno/core/filter/package-summary.html" target="_top">Frames</a></li>
+<li><a href="package-summary.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+</body>
+</html>

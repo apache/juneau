@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../javadoc.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>/*******************************************************************************<a name="line.1"></a>
+<span class="sourceLineNo">002</span> * Licensed Materials - Property of IBM<a name="line.2"></a>
+<span class="sourceLineNo">003</span> * © Copyright IBM Corporation 2015. All Rights Reserved.<a name="line.3"></a>
+<span class="sourceLineNo">004</span> *<a name="line.4"></a>
+<span class="sourceLineNo">005</span> * Note to U.S. Government Users Restricted Rights:<a name="line.5"></a>
+<span class="sourceLineNo">006</span> * Use, duplication or disclosure restricted by GSA ADP Schedule<a name="line.6"></a>
+<span class="sourceLineNo">007</span> * Contract with IBM Corp.<a name="line.7"></a>
+<span class="sourceLineNo">008</span> *******************************************************************************/<a name="line.8"></a>
+<span class="sourceLineNo">009</span>package com.ibm.juno.server.remoteable;<a name="line.9"></a>
+<span class="sourceLineNo">010</span><a name="line.10"></a>
+<span class="sourceLineNo">011</span>import com.ibm.juno.core.annotation.*;<a name="line.11"></a>
+<span class="sourceLineNo">012</span>import com.ibm.juno.server.*;<a name="line.12"></a>
+<span class="sourceLineNo">013</span>import com.ibm.juno.server.annotation.*;<a name="line.13"></a>
+<span class="sourceLineNo">014</span><a name="line.14"></a>
+<span class="sourceLineNo">015</span>/**<a name="line.15"></a>
+<span class="sourceLineNo">016</span> * Configurable properties for the {@link RemoteableServlet} class.<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * &lt;p&gt;<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * Properties can be set on the {@link RestServlet} class using the {@link RestResource#properties} or {@link RestMethod#properties} annotations.<a name="line.18"></a>
+<span class="sourceLineNo">019</span> * &lt;p&gt;<a name="line.19"></a>
+<span class="sourceLineNo">020</span> * These properties can also be passed in as servlet init parameters.<a name="line.20"></a>
+<span class="sourceLineNo">021</span> * &lt;p&gt;<a name="line.21"></a>
+<span class="sourceLineNo">022</span> * These properties are only valid at the class level, not the method level.  Setting them on {@link RestMethod#properties()} has no effect.<a name="line.22"></a>
+<span class="sourceLineNo">023</span> *<a name="line.23"></a>
+<span class="sourceLineNo">024</span> * @author James Bognar (jbognar@us.ibm.com)<a name="line.24"></a>
+<span class="sourceLineNo">025</span> */<a name="line.25"></a>
+<span class="sourceLineNo">026</span>public final class RemoteableServiceProperties {<a name="line.26"></a>
+<span class="sourceLineNo">027</span><a name="line.27"></a>
+<span class="sourceLineNo">028</span>   /**<a name="line.28"></a>
+<span class="sourceLineNo">029</span>    * Only expose interfaces and methods annotated with {@link Remoteable @Remoteable} ({@link Boolean}, default=&lt;jk&gt;false&lt;/jk&gt;).<a name="line.29"></a>
+<span class="sourceLineNo">030</span>    * &lt;p&gt;<a name="line.30"></a>
+<span class="sourceLineNo">031</span>    * When enabled, the {@link RemoteableServlet} class will only work with annotated remoteable interfaces and methods.<a name="line.31"></a>
+<span class="sourceLineNo">032</span>    * Otherwise, all public methods can be executed through the service.<a name="line.32"></a>
+<span class="sourceLineNo">033</span>    */<a name="line.33"></a>
+<span class="sourceLineNo">034</span>   public static final String REMOTEABLE_includeOnlyRemotableMethods = "RemoteableService.includeOnlyRemoteableMethods";<a name="line.34"></a>
+<span class="sourceLineNo">035</span>}<a name="line.35"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

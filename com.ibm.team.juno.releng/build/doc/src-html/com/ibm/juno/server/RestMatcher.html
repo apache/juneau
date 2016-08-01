@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../javadoc.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>/*******************************************************************************<a name="line.1"></a>
+<span class="sourceLineNo">002</span> * Licensed Materials - Property of IBM<a name="line.2"></a>
+<span class="sourceLineNo">003</span> * (c) Copyright IBM Corporation 2014, 2015. All Rights Reserved.<a name="line.3"></a>
+<span class="sourceLineNo">004</span> *<a name="line.4"></a>
+<span class="sourceLineNo">005</span> *  The source code for this program is not published or otherwise<a name="line.5"></a>
+<span class="sourceLineNo">006</span> *  divested of its trade secrets, irrespective of what has been<a name="line.6"></a>
+<span class="sourceLineNo">007</span> *  deposited with the U.S. Copyright Office.<a name="line.7"></a>
+<span class="sourceLineNo">008</span> *******************************************************************************/<a name="line.8"></a>
+<span class="sourceLineNo">009</span>package com.ibm.juno.server;<a name="line.9"></a>
+<span class="sourceLineNo">010</span><a name="line.10"></a>
+<span class="sourceLineNo">011</span>import com.ibm.juno.server.annotation.*;<a name="line.11"></a>
+<span class="sourceLineNo">012</span><a name="line.12"></a>
+<span class="sourceLineNo">013</span>/**<a name="line.13"></a>
+<span class="sourceLineNo">014</span> * Class used for defining method-level matchers using the {@link RestMethod#matchers()} annotation.<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * &lt;p&gt;<a name="line.15"></a>
+<span class="sourceLineNo">016</span> * Matchers are used to allow multiple Java methods to handle requests assigned to the same<a name="line.16"></a>
+<span class="sourceLineNo">017</span> *    URL path pattern, but differing based on some request attribute, such as a specific header value.<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * For example, matchers can be used to provide two different methods for handling requests<a name="line.18"></a>
+<span class="sourceLineNo">019</span> *    from two different client versions.<a name="line.19"></a>
+<span class="sourceLineNo">020</span> * &lt;p&gt;<a name="line.20"></a>
+<span class="sourceLineNo">021</span> * Java methods with matchers associated with them are always attempted before Java methods<a name="line.21"></a>
+<span class="sourceLineNo">022</span> *    without matchers.<a name="line.22"></a>
+<span class="sourceLineNo">023</span> * This allows a 'default' method to be defined to handle requests where no matchers match.<a name="line.23"></a>
+<span class="sourceLineNo">024</span> * &lt;p&gt;<a name="line.24"></a>
+<span class="sourceLineNo">025</span> * When multiple matchers are specified on a method, only one matcher is required to match.<a name="line.25"></a>
+<span class="sourceLineNo">026</span> * This is opposite from the {@link RestMethod#guards()} annotation, where all guards<a name="line.26"></a>
+<span class="sourceLineNo">027</span> *    are required to match in order to execute the method.<a name="line.27"></a>
+<span class="sourceLineNo">028</span> *<a name="line.28"></a>
+<span class="sourceLineNo">029</span> * &lt;h6 class='topic'&gt;Example&lt;/h6&gt;<a name="line.29"></a>
+<span class="sourceLineNo">030</span> * &lt;p class='bcode'&gt;<a name="line.30"></a>
+<span class="sourceLineNo">031</span> *    &lt;jk&gt;public class&lt;/jk&gt; MyResource &lt;jk&gt;extends&lt;/jk&gt; RestServlet {<a name="line.31"></a>
+<span class="sourceLineNo">032</span> *<a name="line.32"></a>
+<span class="sourceLineNo">033</span> *       &lt;ja&gt;@RestMethod&lt;/ja&gt;(name=&lt;js&gt;"GET"&lt;/js&gt;, path=&lt;js&gt;"/foo"&lt;/js&gt;, matchers=IsDNT.&lt;jk&gt;class&lt;/jk&gt;)<a name="line.33"></a>
+<span class="sourceLineNo">034</span> *       &lt;jk&gt;public&lt;/jk&gt; Object doGetWithDNT() {<a name="line.34"></a>
+<span class="sourceLineNo">035</span> *          &lt;jc&gt;// Handle request with Do-Not-Track specified&lt;/jc&gt;<a name="line.35"></a>
+<span class="sourceLineNo">036</span> *       }<a name="line.36"></a>
+<span class="sourceLineNo">037</span> *<a name="line.37"></a>
+<span class="sourceLineNo">038</span> *       &lt;ja&gt;@RestMethod&lt;/ja&gt;(name=&lt;js&gt;"GET"&lt;/js&gt;, path=&lt;js&gt;"/foo"&lt;/js&gt;)<a name="line.38"></a>
+<span class="sourceLineNo">039</span> *       &lt;jk&gt;public&lt;/jk&gt; Object doGetWithoutDNT() {<a name="line.39"></a>
+<span class="sourceLineNo">040</span> *          &lt;jc&gt;// Handle request without Do-Not-Track specified&lt;/jc&gt;<a name="line.40"></a>
+<span class="sourceLineNo">041</span> *       }<a name="line.41"></a>
+<span class="sourceLineNo">042</span> *    }<a name="line.42"></a>
+<span class="sourceLineNo">043</span> *<a name="line.43"></a>
+<span class="sourceLineNo">044</span> *    &lt;jk&gt;public class&lt;/jk&gt; IsDNT &lt;jk&gt;extends&lt;/jk&gt; RestMatcher {<a name="line.44"></a>
+<span class="sourceLineNo">045</span> *       &lt;ja&gt;@Override&lt;/ja&gt;<a name="line.45"></a>
+<span class="sourceLineNo">046</span> *       &lt;jk&gt;public boolean&lt;/jk&gt; matches(RestRequest req) {<a name="line.46"></a>
+<span class="sourceLineNo">047</span> *          &lt;jk&gt;return&lt;/jk&gt; req.getHeader(&lt;jk&gt;int&lt;/jk&gt;.&lt;jk&gt;class&lt;/jk&gt;, &lt;js&gt;"DNT"&lt;/js&gt;, 0) == 1;<a name="line.47"></a>
+<span class="sourceLineNo">048</span> *       }<a name="line.48"></a>
+<span class="sourceLineNo">049</span> *    }<a name="line.49"></a>
+<span class="sourceLineNo">050</span> * &lt;/p&gt;<a name="line.50"></a>
+<span class="sourceLineNo">051</span> */<a name="line.51"></a>
+<span class="sourceLineNo">052</span>public abstract class RestMatcher {<a name="line.52"></a>
+<span class="sourceLineNo">053</span><a name="line.53"></a>
+<span class="sourceLineNo">054</span>   /**<a name="line.54"></a>
+<span class="sourceLineNo">055</span>    * Returns &lt;jk&gt;true&lt;/jk&gt; if the specified request matches this matcher.<a name="line.55"></a>
+<span class="sourceLineNo">056</span>    *<a name="line.56"></a>
+<span class="sourceLineNo">057</span>    * @param req The servlet request.<a name="line.57"></a>
+<span class="sourceLineNo">058</span>    * @return &lt;jk&gt;true&lt;/jk&gt; if the specified request matches this matcher.<a name="line.58"></a>
+<span class="sourceLineNo">059</span>    */<a name="line.59"></a>
+<span class="sourceLineNo">060</span>   public abstract boolean matches(RestRequest req);<a name="line.60"></a>
+<span class="sourceLineNo">061</span>}<a name="line.61"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

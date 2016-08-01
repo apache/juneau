@@ -1,0 +1,347 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="en">
+<head>
+<title>RdfParser.Turtle (Juno)</title>
+<link rel="stylesheet" type="text/css" href="../../../../../javadoc.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="RdfParser.Turtle (Juno)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a>
+<div class="skip"><a href="#skip-navbar_top" title="Skip navigation links">Skip navigation links</a></div>
+<a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/RdfParser.Turtle.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../com/ibm/juno/core/jena/RdfParser.NTriple.html" title="class in com.ibm.juno.core.jena"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../com/ibm/juno/core/jena/RdfParser.Xml.html" title="class in com.ibm.juno.core.jena"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?com/ibm/juno/core/jena/RdfParser.Turtle.html" target="_top">Frames</a></li>
+<li><a href="RdfParser.Turtle.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li><a href="#nested_classes_inherited_from_class_com.ibm.juno.core.jena.RdfParser">Nested</a>&nbsp;|&nbsp;</li>
+<li><a href="#fields_inherited_from_class_com.ibm.juno.core.jena.RdfParser">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#methods_inherited_from_class_com.ibm.juno.core.jena.RdfParser">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li>Method</li>
+</ul>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">com.ibm.juno.core.jena</div>
+<h2 title="Class RdfParser.Turtle" class="title">Class RdfParser.Turtle</h2>
+</div>
+<div class="contentContainer">
+<ul class="inheritance">
+<li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
+<li>
+<ul class="inheritance">
+<li><a href="../../../../../com/ibm/juno/core/Lockable.html" title="class in com.ibm.juno.core">com.ibm.juno.core.Lockable</a></li>
+<li>
+<ul class="inheritance">
+<li><a href="../../../../../com/ibm/juno/core/CoreApi.html" title="class in com.ibm.juno.core">com.ibm.juno.core.CoreApi</a></li>
+<li>
+<ul class="inheritance">
+<li><a href="../../../../../com/ibm/juno/core/parser/Parser.html" title="class in com.ibm.juno.core.parser">com.ibm.juno.core.parser.Parser</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/io/Reader.html?is-external=true" title="class or interface in java.io">Reader</a>&gt;</li>
+<li>
+<ul class="inheritance">
+<li><a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html" title="class in com.ibm.juno.core.parser">com.ibm.juno.core.parser.ReaderParser</a></li>
+<li>
+<ul class="inheritance">
+<li><a href="../../../../../com/ibm/juno/core/jena/RdfParser.html" title="class in com.ibm.juno.core.jena">com.ibm.juno.core.jena.RdfParser</a></li>
+<li>
+<ul class="inheritance">
+<li>com.ibm.juno.core.jena.RdfParser.Turtle</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<dl>
+<dt>All Implemented Interfaces:</dt>
+<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Cloneable.html?is-external=true" title="class or interface in java.lang">Cloneable</a></dd>
+</dl>
+<dl>
+<dt>Enclosing class:</dt>
+<dd><a href="../../../../../com/ibm/juno/core/jena/RdfParser.html" title="class in com.ibm.juno.core.jena">RdfParser</a></dd>
+</dl>
+<hr>
+<br>
+<pre><a href="../../../../../com/ibm/juno/core/annotation/Consumes.html" title="annotation in com.ibm.juno.core.annotation">@Consumes</a>(<a href="../../../../../com/ibm/juno/core/annotation/Consumes.html#value()">value</a>="text/turtle")
+public static class <a href="../../../../../src-html/com/ibm/juno/core/jena/RdfParser.html#line.91">RdfParser.Turtle</a>
+extends <a href="../../../../../com/ibm/juno/core/jena/RdfParser.html" title="class in com.ibm.juno.core.jena">RdfParser</a></pre>
+<div class="block">Consumes Turtle input</div>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- ======== NESTED CLASS SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="nested_class_summary">
+<!--   -->
+</a>
+<h3>Nested Class Summary</h3>
+<ul class="blockList">
+<li class="blockList"><a name="nested_classes_inherited_from_class_com.ibm.juno.core.jena.RdfParser">
+<!--   -->
+</a>
+<h3>Nested classes/interfaces inherited from class&nbsp;com.ibm.juno.core.jena.<a href="../../../../../com/ibm/juno/core/jena/RdfParser.html" title="class in com.ibm.juno.core.jena">RdfParser</a></h3>
+<code><a href="../../../../../com/ibm/juno/core/jena/RdfParser.N3.html" title="class in com.ibm.juno.core.jena">RdfParser.N3</a>, <a href="../../../../../com/ibm/juno/core/jena/RdfParser.NTriple.html" title="class in com.ibm.juno.core.jena">RdfParser.NTriple</a>, <a href="../../../../../com/ibm/juno/core/jena/RdfParser.Turtle.html" title="class in com.ibm.juno.core.jena">RdfParser.Turtle</a>, <a href="../../../../../com/ibm/juno/core/jena/RdfParser.Xml.html" title="class in com.ibm.juno.core.jena">RdfParser.Xml</a></code></li>
+</ul>
+</li>
+</ul>
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<ul class="blockList">
+<li class="blockList"><a name="fields_inherited_from_class_com.ibm.juno.core.jena.RdfParser">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;com.ibm.juno.core.jena.<a href="../../../../../com/ibm/juno/core/jena/RdfParser.html" title="class in com.ibm.juno.core.jena">RdfParser</a></h3>
+<code><a href="../../../../../com/ibm/juno/core/jena/RdfParser.html#DEFAULT_N3">DEFAULT_N3</a>, <a href="../../../../../com/ibm/juno/core/jena/RdfParser.html#DEFAULT_NTRIPLE">DEFAULT_NTRIPLE</a>, <a href="../../../../../com/ibm/juno/core/jena/RdfParser.html#DEFAULT_TURTLE">DEFAULT_TURTLE</a>, <a href="../../../../../com/ibm/juno/core/jena/RdfParser.html#DEFAULT_XML">DEFAULT_XML</a>, <a href="../../../../../com/ibm/juno/core/jena/RdfParser.html#rpp">rpp</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="fields_inherited_from_class_com.ibm.juno.core.parser.Parser">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;com.ibm.juno.core.parser.<a href="../../../../../com/ibm/juno/core/parser/Parser.html" title="class in com.ibm.juno.core.parser">Parser</a></h3>
+<code><a href="../../../../../com/ibm/juno/core/parser/Parser.html#pp">pp</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="fields_inherited_from_class_com.ibm.juno.core.CoreApi">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;com.ibm.juno.core.<a href="../../../../../com/ibm/juno/core/CoreApi.html" title="class in com.ibm.juno.core">CoreApi</a></h3>
+<code><a href="../../../../../com/ibm/juno/core/CoreApi.html#beanContextFactory">beanContextFactory</a></code></li>
+</ul>
+</li>
+</ul>
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_summary">
+<!--   -->
+</a>
+<h3>Constructor Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Constructor Summary table, listing constructors, and an explanation">
+<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../../com/ibm/juno/core/jena/RdfParser.Turtle.html#RdfParser.Turtle()">RdfParser.Turtle</a></strong>()</code>
+<div class="block">Constructor</div>
+</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_com.ibm.juno.core.jena.RdfParser">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;com.ibm.juno.core.jena.<a href="../../../../../com/ibm/juno/core/jena/RdfParser.html" title="class in com.ibm.juno.core.jena">RdfParser</a></h3>
+<code><a href="../../../../../com/ibm/juno/core/jena/RdfParser.html#addFilters(java.lang.Class...)">addFilters</a>, <a href="../../../../../com/ibm/juno/core/jena/RdfParser.html#addImplClass(java.lang.Class, java.lang.Class)">addImplClass</a>, <a href="../../../../../com/ibm/juno/core/jena/RdfParser.html#addNotBeanClasses(java.lang.Class...)">addNotBeanClasses</a>, <a href="../../../../../com/ibm/juno/core/jena/RdfParser.html#clone()">clone</a>, <a href="../../../../../com/ibm/juno/core/jena/RdfParser.html#createContext(com.ibm.juno.core.ObjectMap, java.lang.reflect.Method, java.lang.Object)">createContext</a>, <a href="../../../../../com/ibm/juno/core/jena/RdfParser.html#doParse(java.io.Reader, int, com.ibm.juno.core.ClassMeta, com.ibm.juno.core.parser.ParserContext)">doParse</a>, <a href="../../../../../com/ibm/juno/core/jena/RdfParser.html#lock()">lock</a>, <a href="../../../../../com/ibm/juno/core/jena/RdfParser.html#setClassLoader(java.lang.ClassLoader)">setClassLoader</a>, <a href="../../../../../com/ibm/juno/core/jena/RdfParser.html#setProperties(com.ibm.juno.core.ObjectMap)">setProperties</a>, <a href="../../../../../com/ibm/juno/core/jena/RdfParser.html#setProperty(java.lang.String, java.lang.Object)">setProperty</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_com.ibm.juno.core.parser.ReaderParser">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;com.ibm.juno.core.parser.<a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html" title="class in com.ibm.juno.core.parser">ReaderParser</a></h3>
+<code><a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html#doParseArgs(java.io.Reader, int, com.ibm.juno.core.ClassMeta[], com.ibm.juno.core.parser.ParserContext)">doParseArgs</a>, <a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html#doParseIntoCollection(java.io.Reader, int, java.util.Collection, java.lang.reflect.Type, com.ibm.juno.core.parser.ParserContext)">doParseIntoCollection</a>, <a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html#doParseIntoMap(java.io.Reader, int, java.util.Map, java.lang.reflect.Type, java.lang.reflect.Type, com.ibm.juno.core.parser.ParserContext)">doParseIntoMap</a>, <a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html#isReaderParser()">isReaderParser</a>, <a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html#parse(java.lang.CharSequence, java.lang.Class)">parse</a>, <a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html#parse(java.lang.CharSequence, com.ibm.juno.core.ClassMeta)">parse</a>, <a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html#parseArgs(java.lang.CharSequence, com.ibm.juno.core.ClassMeta[])">parseArgs</a>, <a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html#parseArgs(java.io.Reader, int, com.ibm.juno.core.ClassMeta[])">parseArgs</a>, <a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html#parseCollection(java.lang.CharSequence, java.lang.Class, java.lang.Class)">parseCollection</a>, <a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html#parseIntoCollection(java.lang.CharSequence, java.util.Collection, java.lang.reflect.Type)">parseIntoCollection</a>, <a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html#parseIntoCollection(java.io.Reader, int, java.util.Collection, java.lang.reflect.Type)">parseIntoCollection</a>, <a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html#parseIntoMap(java.lang.CharSequence, java.util.Map, java.lang.reflect.Type, java.lang.reflect.Type)">parseIntoMap</a>, <a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html#parseIntoMap(java.io.Reader, int, java.util.Map, java.lang.reflect.Type, java.lang.reflect.Type)">parseIntoMap</a>, <a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html#parseMap(java.lang.CharSequence, java.lang.Class, java.lang.Class, java.lang.Class)">parseMap</a>, <a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html#wrapReader(java.lang.CharSequence)">wrapReader</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_com.ibm.juno.core.parser.Parser">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;com.ibm.juno.core.parser.<a href="../../../../../com/ibm/juno/core/parser/Parser.html" title="class in com.ibm.juno.core.parser">Parser</a></h3>
+<code><a href="../../../../../com/ibm/juno/core/parser/Parser.html#addListener(com.ibm.juno.core.parser.ParserListener)">addListener</a>, <a href="../../../../../com/ibm/juno/core/parser/Parser.html#convertAttrToType(java.lang.Object, java.lang.String, com.ibm.juno.core.ClassMeta)">convertAttrToType</a>, <a href="../../../../../com/ibm/juno/core/parser/Parser.html#createContext()">createContext</a>, <a href="../../../../../com/ibm/juno/core/parser/Parser.html#getListeners()">getListeners</a>, <a href="../../../../../com/ibm/juno/core/parser/Parser.html#getMediaTypes()">getMediaTypes</a>, <a href="../../../../../com/ibm/juno/core/parser/Parser.html#onUnknownProperty(com.ibm.juno.core.parser.ParserContext, java.lang.String, com.ibm.juno.core.BeanMap, int, int)">onUnknownProperty</a>, <a href="../../../../../com/ibm/juno/core/parser/Parser.html#parse(R, int, java.lang.Class)">parse</a>, <a href="../../../../../com/ibm/juno/core/parser/Parser.html#parse(R, int, com.ibm.juno.core.ClassMeta)">parse</a>, <a href="../../../../../com/ibm/juno/core/parser/Parser.html#parse(R, int, com.ibm.juno.core.ClassMeta, com.ibm.juno.core.parser.ParserContext)">parse</a>, <a href="../../../../../com/ibm/juno/core/parser/Parser.html#parseCollection(R, int, java.lang.Class, java.lang.Class)">parseCollection</a>, <a href="../../../../../com/ibm/juno/core/parser/Parser.html#parseMap(R, int, java.lang.Class, java.lang.Class, java.lang.Class)">parseMap</a>, <a href="../../../../../com/ibm/juno/core/parser/Parser.html#setName(com.ibm.juno.core.ClassMeta, java.lang.Object, java.lang.Object)">setName</a>, <a href="../../../../../com/ibm/juno/core/parser/Parser.html#setParent(com.ibm.juno.core.ClassMeta, java.lang.Object, java.lang.Object)">setParent</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_com.ibm.juno.core.CoreApi">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;com.ibm.juno.core.<a href="../../../../../com/ibm/juno/core/CoreApi.html" title="class in com.ibm.juno.core">CoreApi</a></h3>
+<code><a href="../../../../../com/ibm/juno/core/CoreApi.html#checkLock()">checkLock</a>, <a href="../../../../../com/ibm/juno/core/CoreApi.html#getBeanContext()">getBeanContext</a>, <a href="../../../../../com/ibm/juno/core/CoreApi.html#object()">object</a>, <a href="../../../../../com/ibm/juno/core/CoreApi.html#string()">string</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_com.ibm.juno.core.Lockable">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;com.ibm.juno.core.<a href="../../../../../com/ibm/juno/core/Lockable.html" title="class in com.ibm.juno.core">Lockable</a></h3>
+<code><a href="../../../../../com/ibm/juno/core/Lockable.html#isLocked()">isLocked</a>, <a href="../../../../../com/ibm/juno/core/Lockable.html#onUnclone()">onUnclone</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
+<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang">equals</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang">hashCode</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang">toString</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long, int)" title="class or interface in java.lang">wait</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_detail">
+<!--   -->
+</a>
+<h3>Constructor Detail</h3>
+<a name="RdfParser.Turtle()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>RdfParser.Turtle</h4>
+<pre>public&nbsp;<a href="../../../../../src-html/com/ibm/juno/core/jena/RdfParser.Turtle.html#line.93">RdfParser.Turtle</a>()</pre>
+<div class="block">Constructor</div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a>
+<div class="skip"><a href="#skip-navbar_bottom" title="Skip navigation links">Skip navigation links</a></div>
+<a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/RdfParser.Turtle.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../com/ibm/juno/core/jena/RdfParser.NTriple.html" title="class in com.ibm.juno.core.jena"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../com/ibm/juno/core/jena/RdfParser.Xml.html" title="class in com.ibm.juno.core.jena"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?com/ibm/juno/core/jena/RdfParser.Turtle.html" target="_top">Frames</a></li>
+<li><a href="RdfParser.Turtle.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li><a href="#nested_classes_inherited_from_class_com.ibm.juno.core.jena.RdfParser">Nested</a>&nbsp;|&nbsp;</li>
+<li><a href="#fields_inherited_from_class_com.ibm.juno.core.jena.RdfParser">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#methods_inherited_from_class_com.ibm.juno.core.jena.RdfParser">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li>Method</li>
+</ul>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+</body>
+</html>

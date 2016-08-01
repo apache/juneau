@@ -1,0 +1,326 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="en">
+<head>
+<title>NamespaceFactory (Juno)</title>
+<link rel="stylesheet" type="text/css" href="../../../../../javadoc.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="NamespaceFactory (Juno)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a>
+<div class="skip"><a href="#skip-navbar_top" title="Skip navigation links">Skip navigation links</a></div>
+<a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/NamespaceFactory.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../com/ibm/juno/core/xml/Namespace.html" title="class in com.ibm.juno.core.xml"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../com/ibm/juno/core/xml/XmlBeanMeta.html" title="class in com.ibm.juno.core.xml"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?com/ibm/juno/core/xml/NamespaceFactory.html" target="_top">Frames</a></li>
+<li><a href="NamespaceFactory.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">com.ibm.juno.core.xml</div>
+<h2 title="Class NamespaceFactory" class="title">Class NamespaceFactory</h2>
+</div>
+<div class="contentContainer">
+<ul class="inheritance">
+<li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
+<li>
+<ul class="inheritance">
+<li>com.ibm.juno.core.xml.NamespaceFactory</li>
+</ul>
+</li>
+</ul>
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<hr>
+<br>
+<pre>public final class <a href="../../../../../src-html/com/ibm/juno/core/xml/NamespaceFactory.html#line.28">NamespaceFactory</a>
+extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
+<div class="block">Factory class for getting unique instances of <a href="../../../../../com/ibm/juno/core/xml/Namespace.html" title="class in com.ibm.juno.core.xml"><code>Namespace</code></a> objects.
+ <p>
+   For performance reasons, <a href="../../../../../com/ibm/juno/core/xml/Namespace.html" title="class in com.ibm.juno.core.xml"><code>Namespace</code></a> objects are stored in <a href="../../../../../com/ibm/juno/core/utils/IdentityList.html" title="class in com.ibm.juno.core.utils"><code>IdentityLists</code></a>.
+   For this to work property, namespaces with the same name and URI must only be represented by a single
+   <a href="../../../../../com/ibm/juno/core/xml/Namespace.html" title="class in com.ibm.juno.core.xml"><code>Namespace</code></a> instance.
+   This factory class ensures this identity uniqueness.</div>
+<dl><dt><span class="strong">Author:</span></dt>
+  <dd>James Bognar (jbognar@us.ibm.com)</dd></dl>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_summary">
+<!--   -->
+</a>
+<h3>Constructor Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Constructor Summary table, listing constructors, and an explanation">
+<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../../com/ibm/juno/core/xml/NamespaceFactory.html#NamespaceFactory()">NamespaceFactory</a></strong>()</code>&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../com/ibm/juno/core/xml/Namespace.html" title="class in com.ibm.juno.core.xml">Namespace</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/xml/NamespaceFactory.html#get(java.lang.String, java.lang.String)">get</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name,
+      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;uri)</code>
+<div class="block">Get the <a href="../../../../../com/ibm/juno/core/xml/Namespace.html" title="class in com.ibm.juno.core.xml"><code>Namespace</code></a> with the specified name and URI, and create a new one
+   if this is the first time it's been encountered.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../com/ibm/juno/core/xml/Namespace.html" title="class in com.ibm.juno.core.xml">Namespace</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/xml/NamespaceFactory.html#parseNamespace(java.lang.Object)">parseNamespace</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</code>
+<div class="block">Converts the specified object into a <a href="../../../../../com/ibm/juno/core/xml/Namespace.html" title="class in com.ibm.juno.core.xml"><code>Namespace</code></a> object.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../com/ibm/juno/core/xml/Namespace.html" title="class in com.ibm.juno.core.xml">Namespace</a>[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/xml/NamespaceFactory.html#parseNamespaces(java.lang.Object)">parseNamespaces</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</code>
+<div class="block">Converts the specified object into an array of <a href="../../../../../com/ibm/juno/core/xml/Namespace.html" title="class in com.ibm.juno.core.xml"><code>Namespace</code></a> object.</div>
+</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
+<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang">clone</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang">equals</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang">hashCode</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang">toString</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long, int)" title="class or interface in java.lang">wait</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_detail">
+<!--   -->
+</a>
+<h3>Constructor Detail</h3>
+<a name="NamespaceFactory()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>NamespaceFactory</h4>
+<pre>public&nbsp;<a href="../../../../../src-html/com/ibm/juno/core/xml/NamespaceFactory.html#line.28">NamespaceFactory</a>()</pre>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="get(java.lang.String, java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>get</h4>
+<pre>public static&nbsp;<a href="../../../../../com/ibm/juno/core/xml/Namespace.html" title="class in com.ibm.juno.core.xml">Namespace</a>&nbsp;<a href="../../../../../src-html/com/ibm/juno/core/xml/NamespaceFactory.html#line.40">get</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name,
+            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;uri)</pre>
+<div class="block">Get the <a href="../../../../../com/ibm/juno/core/xml/Namespace.html" title="class in com.ibm.juno.core.xml"><code>Namespace</code></a> with the specified name and URI, and create a new one
+   if this is the first time it's been encountered.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>name</code> - The namespace name.  See <a href="../../../../../com/ibm/juno/core/xml/Namespace.html#getName()"><code>Namespace.getName()</code></a>.</dd><dd><code>uri</code> - The namespace URI.  See <a href="../../../../../com/ibm/juno/core/xml/Namespace.html#getUri()"><code>Namespace.getUri()</code></a>.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The namespace object.</dd></dl>
+</li>
+</ul>
+<a name="parseNamespace(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>parseNamespace</h4>
+<pre>public static&nbsp;<a href="../../../../../com/ibm/juno/core/xml/Namespace.html" title="class in com.ibm.juno.core.xml">Namespace</a>&nbsp;<a href="../../../../../src-html/com/ibm/juno/core/xml/NamespaceFactory.html#line.65">parseNamespace</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
+<div class="block">Converts the specified object into a <a href="../../../../../com/ibm/juno/core/xml/Namespace.html" title="class in com.ibm.juno.core.xml"><code>Namespace</code></a> object.
+ <p>
+   Can be any of following types:
+ <ul>
+   <li>A <a href="../../../../../com/ibm/juno/core/xml/Namespace.html" title="class in com.ibm.juno.core.xml"><code>Namespace</code></a> object
+   <li>A JSON string containing a single key/value pair indicating the name/URI mapping.
+   <li>A <code>Map</code> containing a single key/value pair indicating the name/URI mapping.
+ </ul></div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>o</code> - The input.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The namespace object, or <jk>null</jk> if the input was <jk>null</jk> or an empty JSON object.</dd></dl>
+</li>
+</ul>
+<a name="parseNamespaces(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>parseNamespaces</h4>
+<pre>public static&nbsp;<a href="../../../../../com/ibm/juno/core/xml/Namespace.html" title="class in com.ibm.juno.core.xml">Namespace</a>[]&nbsp;<a href="../../../../../src-html/com/ibm/juno/core/xml/NamespaceFactory.html#line.98">parseNamespaces</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
+<div class="block">Converts the specified object into an array of <a href="../../../../../com/ibm/juno/core/xml/Namespace.html" title="class in com.ibm.juno.core.xml"><code>Namespace</code></a> object.
+ <p>
+   Can be any of following types:
+ <ul>
+   <li>A <a href="../../../../../com/ibm/juno/core/xml/Namespace.html" title="class in com.ibm.juno.core.xml"><code>Namespace</code></a> array
+   <li>A JSON string with key/value pairs indicating name/URI pairs.
+   <li>A <code>Map</code> with key/value pairs indicating name/URI pairs.
+   <li>A <code>Collection</code> containing any of object that can be passed to <a href="../../../../../com/ibm/juno/core/xml/NamespaceFactory.html#parseNamespace(java.lang.Object)"><code>parseNamespace(Object)</code></a>.
+ </ul></div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>o</code> - The input.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The namespace objects, or <jk>null</jk> if the input was <jk>null</jk> or an empty JSON object.</dd></dl>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a>
+<div class="skip"><a href="#skip-navbar_bottom" title="Skip navigation links">Skip navigation links</a></div>
+<a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/NamespaceFactory.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../com/ibm/juno/core/xml/Namespace.html" title="class in com.ibm.juno.core.xml"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../com/ibm/juno/core/xml/XmlBeanMeta.html" title="class in com.ibm.juno.core.xml"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?com/ibm/juno/core/xml/NamespaceFactory.html" target="_top">Frames</a></li>
+<li><a href="NamespaceFactory.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+</body>
+</html>

@@ -1,0 +1,535 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="en">
+<head>
+<title>JazzRestClient (Juno)</title>
+<link rel="stylesheet" type="text/css" href="../../../../../javadoc.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="JazzRestClient (Juno)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a>
+<div class="skip"><a href="#skip-navbar_top" title="Skip navigation links">Skip navigation links</a></div>
+<a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/JazzRestClient.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li>Prev Class</li>
+<li>Next Class</li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?com/ibm/juno/client/jazz/JazzRestClient.html" target="_top">Frames</a></li>
+<li><a href="JazzRestClient.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#fields_inherited_from_class_com.ibm.juno.client.RestClient">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">com.ibm.juno.client.jazz</div>
+<h2 title="Class JazzRestClient" class="title">Class JazzRestClient</h2>
+</div>
+<div class="contentContainer">
+<ul class="inheritance">
+<li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
+<li>
+<ul class="inheritance">
+<li><a href="../../../../../com/ibm/juno/core/Lockable.html" title="class in com.ibm.juno.core">com.ibm.juno.core.Lockable</a></li>
+<li>
+<ul class="inheritance">
+<li><a href="../../../../../com/ibm/juno/core/CoreApi.html" title="class in com.ibm.juno.core">com.ibm.juno.core.CoreApi</a></li>
+<li>
+<ul class="inheritance">
+<li><a href="../../../../../com/ibm/juno/client/RestClient.html" title="class in com.ibm.juno.client">com.ibm.juno.client.RestClient</a></li>
+<li>
+<ul class="inheritance">
+<li>com.ibm.juno.client.jazz.JazzRestClient</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<dl>
+<dt>All Implemented Interfaces:</dt>
+<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Cloneable.html?is-external=true" title="class or interface in java.lang">Cloneable</a></dd>
+</dl>
+<hr>
+<br>
+<pre>public class <a href="../../../../../src-html/com/ibm/juno/client/jazz/JazzRestClient.html#line.43">JazzRestClient</a>
+extends <a href="../../../../../com/ibm/juno/client/RestClient.html" title="class in com.ibm.juno.client">RestClient</a></pre>
+<div class="block">Specialized <a href="../../../../../com/ibm/juno/client/RestClient.html" title="class in com.ibm.juno.client"><code>RestClient</code></a> for working with Jazz servers.
+ <p>
+ Provides support for BASIC, FORM, and OIDC authentication against Jazz servers and simple SSL certificate validation.
+
+ <h6 class='topic'>Additional Information</h6>
+ <ul>
+   <li><a class='doclink' href='package-summary.html#RestClient'>com.ibm.juno.client.jazz &gt; Jazz REST client API</a> for more information and code examples.
+ </ul></div>
+<dl><dt><span class="strong">Author:</span></dt>
+  <dd>James Bognar (jbognar@us.ibm.com)</dd></dl>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<ul class="blockList">
+<li class="blockList"><a name="fields_inherited_from_class_com.ibm.juno.client.RestClient">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;com.ibm.juno.client.<a href="../../../../../com/ibm/juno/client/RestClient.html" title="class in com.ibm.juno.client">RestClient</a></h3>
+<code><a href="../../../../../com/ibm/juno/client/RestClient.html#httpClientBuilder">httpClientBuilder</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="fields_inherited_from_class_com.ibm.juno.core.CoreApi">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;com.ibm.juno.core.<a href="../../../../../com/ibm/juno/core/CoreApi.html" title="class in com.ibm.juno.core">CoreApi</a></h3>
+<code><a href="../../../../../com/ibm/juno/core/CoreApi.html#beanContextFactory">beanContextFactory</a></code></li>
+</ul>
+</li>
+</ul>
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_summary">
+<!--   -->
+</a>
+<h3>Constructor Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Constructor Summary table, listing constructors, and an explanation">
+<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../../com/ibm/juno/client/jazz/JazzRestClient.html#JazzRestClient(java.lang.String, com.ibm.juno.client.SSLOpts, java.lang.String, java.lang.String)">JazzRestClient</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;jazzUrl,
+                            <a href="../../../../../com/ibm/juno/client/SSLOpts.html" title="class in com.ibm.juno.client">SSLOpts</a>&nbsp;sslOpts,
+                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;user,
+                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;pw)</code>
+<div class="block">Create a new client with no serializer or parser.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><strong><a href="../../../../../com/ibm/juno/client/jazz/JazzRestClient.html#JazzRestClient(java.lang.String, com.ibm.juno.client.SSLOpts, java.lang.String, java.lang.String, java.lang.Class, java.lang.Class)">JazzRestClient</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;jazzUri,
+                            <a href="../../../../../com/ibm/juno/client/SSLOpts.html" title="class in com.ibm.juno.client">SSLOpts</a>&nbsp;sslOpts,
+                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;user,
+                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;pw,
+                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../com/ibm/juno/core/serializer/Serializer.html" title="class in com.ibm.juno.core.serializer">Serializer</a>&lt;?&gt;&gt;&nbsp;s,
+                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../com/ibm/juno/core/parser/Parser.html" title="class in com.ibm.juno.core.parser">Parser</a>&lt;?&gt;&gt;&nbsp;p)</code>
+<div class="block">Create a new client with the specified serializer and parser classes.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../../com/ibm/juno/client/jazz/JazzRestClient.html#JazzRestClient(java.lang.String, com.ibm.juno.client.SSLOpts, java.lang.String, java.lang.String, com.ibm.juno.core.serializer.Serializer, com.ibm.juno.core.parser.Parser)">JazzRestClient</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;jazzUri,
+                            <a href="../../../../../com/ibm/juno/client/SSLOpts.html" title="class in com.ibm.juno.client">SSLOpts</a>&nbsp;sslOpts,
+                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;user,
+                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;pw,
+                            <a href="../../../../../com/ibm/juno/core/serializer/Serializer.html" title="class in com.ibm.juno.core.serializer">Serializer</a>&lt;?&gt;&nbsp;s,
+                            <a href="../../../../../com/ibm/juno/core/parser/Parser.html" title="class in com.ibm.juno.core.parser">Parser</a>&lt;?&gt;&nbsp;p)</code>
+<div class="block">Create a new client with the specified serializer and parser instances.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><strong><a href="../../../../../com/ibm/juno/client/jazz/JazzRestClient.html#JazzRestClient(java.lang.String, java.lang.String, java.lang.String)">JazzRestClient</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;jazzUrl,
+                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;user,
+                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;pw)</code>
+<div class="block">Create a new client with no serializer or parser, and LAX SSL support.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../../com/ibm/juno/client/jazz/JazzRestClient.html#JazzRestClient(java.lang.String, java.lang.String, java.lang.String, java.lang.Class, java.lang.Class)">JazzRestClient</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;jazzUri,
+                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;user,
+                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;pw,
+                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../com/ibm/juno/core/serializer/Serializer.html" title="class in com.ibm.juno.core.serializer">Serializer</a>&lt;?&gt;&gt;&nbsp;s,
+                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../com/ibm/juno/core/parser/Parser.html" title="class in com.ibm.juno.core.parser">Parser</a>&lt;?&gt;&gt;&nbsp;p)</code>
+<div class="block">Create a new client with the specified serializer and parser classes and LAX SSL support.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><strong><a href="../../../../../com/ibm/juno/client/jazz/JazzRestClient.html#JazzRestClient(java.lang.String, java.lang.String, java.lang.String, com.ibm.juno.core.serializer.Serializer, com.ibm.juno.core.parser.Parser)">JazzRestClient</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;jazzUri,
+                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;user,
+                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;pw,
+                            <a href="../../../../../com/ibm/juno/core/serializer/Serializer.html" title="class in com.ibm.juno.core.serializer">Serializer</a>&lt;?&gt;&nbsp;s,
+                            <a href="../../../../../com/ibm/juno/core/parser/Parser.html" title="class in com.ibm.juno.core.parser">Parser</a>&lt;?&gt;&nbsp;p)</code>
+<div class="block">Create a new client with the specified serializer and parser instances and LAX SSL support.</div>
+</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected org.apache.http.impl.client.CloseableHttpClient</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/client/jazz/JazzRestClient.html#createHttpClient()">createHttpClient</a></strong>()</code>
+<div class="block">Creates an instance of an <code>HttpClient</code> to be used to handle all HTTP communications with the target server.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected org.apache.http.impl.client.HttpClientBuilder</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/client/jazz/JazzRestClient.html#createHttpClientBuilder()">createHttpClientBuilder</a></strong>()</code>
+<div class="block">Creates an instance of an <code>HttpClientBuilder</code> to be used to create
+   the <code>HttpClient</code>.</div>
+</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_com.ibm.juno.client.RestClient">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;com.ibm.juno.client.<a href="../../../../../com/ibm/juno/client/RestClient.html" title="class in com.ibm.juno.client">RestClient</a></h3>
+<code><a href="../../../../../com/ibm/juno/client/RestClient.html#addFilters(java.lang.Class...)">addFilters</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#addImplClass(java.lang.Class, java.lang.Class)">addImplClass</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#addInterceptor(com.ibm.juno.client.RestCallInterceptor)">addInterceptor</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#addInterceptorFirst(org.apache.http.HttpRequestInterceptor)">addInterceptorFirst</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#addInterceptorFirst(org.apache.http.HttpResponseInterceptor)">addInterceptorFirst</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#addInterceptorLast(org.apache.http.HttpRequestInterceptor)">addInterceptorLast</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#addInterceptorLast(org.apache.http.HttpResponseInterceptor)">addInterceptorLast</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#addNotBeanClasses(java.lang.Class...)">addNotBeanClasses</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#close()">close</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#closeQuietly()">closeQuietly</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#createConnectionManager()">createConnectionManager</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#disableAuthCaching()">disableAuthCaching</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#disableAutomaticRetries()">disableAutomaticRetries</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#disableConnectionState()">disableConnectionState</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#disableContentCompression()">disableContentCompression</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#disableCookieManagement()">disableCookieManagement</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#disableRedirectHandling()">disableRedirectHandling</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#doCall(com.ibm.juno.client.HttpMethod, java.lang.Object, java.lang.Object)">doCall</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#doCall(java.lang.String, java.lang.Object, boolean)">doCall</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#doCallback(java.lang.String)">doCallback</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#doDelete(java.lang.Object)">doDelete</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#doFormPost(java.lang.Object, java.lang.Object)">doFormPost</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#doGet(java.lang.Object)">doGet</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#doOptions(java.lang.Object)">doOptions</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#doPost(java.lang.Object, java.lang.Object)">doPost</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#doPut(java.lang.Object, java.lang.Object)">doPut</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#enableLaxSSL()">enableLaxSSL</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#enableSSL(com.ibm.juno.client.SSLOpts)">enableSSL</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#evictExpiredConnections()">evictExpiredConnections</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#evictIdleConnections(long, java.util.concurrent.TimeUnit)">evictIdleConnections</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#execute(org.apache.http.client.methods.HttpUriRequest)">execute</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#finalize()">finalize</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#getHttpClient()">getHttpClient</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#getParser()">getParser</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#getRemoteableProxy(java.lang.Class)">getRemoteableProxy</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#getSerializer()">getSerializer</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#logTo(java.util.logging.Level, java.util.logging.Logger)">logTo</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#setAccept(java.lang.String)">setAccept</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#setBackoffManager(org.apache.http.client.BackoffManager)">setBackoffManager</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#setBasicAuth(java.lang.String, int, java.lang.String, java.lang.String)">setBasicAuth</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#setClassLoader(java.lang.ClassLoader)">setClassLoader</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#setConnectionBackoffStrategy(org.apache.http.client.ConnectionBackoffStrategy)">setConnectionBackoffStrategy</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#setConnectionManager(org.apache.http.conn.HttpClientConnectionManager)">setConnectionManager</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#setConnectionManagerShared(boolean)">setConnectionManagerShared</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#setConnectionReuseStrategy(org.apache.http.ConnectionReuseStrategy)">setConnectionReuseStrategy</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#setConnectionTimeToLive(long, java.util.concurrent.TimeUnit)">setConnectionTimeToLive</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#setContentDecoderRegistry(java.util.Map)">setContentDecoderRegistry</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#setContentType(java.lang.String)">setContentType</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#setDefaultAuthSchemeRegistry(org.apache.http.config.Lookup)">setDefaultAuthSchemeRegistry</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#setDefaultConnectionConfig(org.apache.http.config.ConnectionConfig)">setDefaultConnectionConfig</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#setDefaultCookieSpecRegistry(org.apache.http.config.Lookup)">setDefaultCookieSpecRegistry</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#setDefaultCookieStore(org.apache.http.client.CookieStore)">setDefaultCookieStore</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#setDefaultCredentialsProvider(org.apache.http.client.CredentialsProvider)">setDefaultCredentialsProvider</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#setDefaultHeaders(java.util.Collection)">setDefaultHeaders</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#setDefaultRequestConfig(org.apache.http.client.config.RequestConfig)">setDefaultRequestConfig</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#setDefaultSocketConfig(org.apache.http.config.SocketConfig)">setDefaultSocketConfig</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#setHeader(java.lang.String, java.lang.Object)">setHeader</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#setHttpClient(org.apache.http.impl.client.CloseableHttpClient)">setHttpClient</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#setHttpProcessor(org.apache.http.protocol.HttpProcessor)">setHttpProcessor</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#setKeepAliveStrategy(org.apache.http.conn.ConnectionKeepAliveStrategy)">setKeepAliveStrategy</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#setMaxConnPerRoute(int)">setMaxConnPerRoute</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#setMaxConnTotal(int)">setMaxConnTotal</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#setParser(java.lang.Class)">setParser</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#setParser(com.ibm.juno.core.parser.Parser)">setParser</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#setPooled()">setPooled</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#setProperties(com.ibm.juno.core.ObjectMap)">setProperties</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#setProperty(java.lang.String, java.lang.Object)">setProperty</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#setProxy(org.apache.http.HttpHost)">setProxy</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#setProxyAuthenticationStrategy(org.apache.http.client.AuthenticationStrategy)">setProxyAuthenticationStrategy</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#setPublicSuffixMatcher(org.apache.http.conn.util.PublicSuffixMatcher)">setPublicSuffixMatcher</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#setRedirectStrategy(org.apache.http.client.RedirectStrategy)">setRedirectStrategy</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#setRemoteableServletUri(java.lang.String)">setRemoteableServletUri</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#setRequestExecutor(org.apache.http.protocol.HttpRequestExecutor)">setRequestExecutor</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#setRetryHandler(org.apache.http.client.HttpRequestRetryHandler)">setRetryHandler</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#setRootUrl(java.lang.String)">setRootUrl</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#setRoutePlanner(org.apache.http.conn.routing.HttpRoutePlanner)">setRoutePlanner</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#setSchemePortResolver(org.apache.http.conn.SchemePortResolver)">setSchemePortResolver</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#setSerializer(java.lang.Class)">setSerializer</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#setSerializer(com.ibm.juno.core.serializer.Serializer)">setSerializer</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#setServiceUnavailableRetryStrategy(org.apache.http.client.ServiceUnavailableRetryStrategy)">setServiceUnavailableRetryStrategy</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#setSSLContext(javax.net.ssl.SSLContext)">setSSLContext</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#setSSLHostnameVerifier(javax.net.ssl.HostnameVerifier)">setSSLHostnameVerifier</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#setSSLSocketFactory(org.apache.http.conn.socket.LayeredConnectionSocketFactory)">setSSLSocketFactory</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#setTargetAuthenticationStrategy(org.apache.http.client.AuthenticationStrategy)">setTargetAuthenticationStrategy</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#setUserAgent(java.lang.String)">setUserAgent</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#setUserTokenHandler(org.apache.http.client.UserTokenHandler)">setUserTokenHandler</a>, <a href="../../../../../com/ibm/juno/client/RestClient.html#useSystemProperties()">useSystemProperties</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_com.ibm.juno.core.CoreApi">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;com.ibm.juno.core.<a href="../../../../../com/ibm/juno/core/CoreApi.html" title="class in com.ibm.juno.core">CoreApi</a></h3>
+<code><a href="../../../../../com/ibm/juno/core/CoreApi.html#checkLock()">checkLock</a>, <a href="../../../../../com/ibm/juno/core/CoreApi.html#clone()">clone</a>, <a href="../../../../../com/ibm/juno/core/CoreApi.html#getBeanContext()">getBeanContext</a>, <a href="../../../../../com/ibm/juno/core/CoreApi.html#lock()">lock</a>, <a href="../../../../../com/ibm/juno/core/CoreApi.html#object()">object</a>, <a href="../../../../../com/ibm/juno/core/CoreApi.html#string()">string</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_com.ibm.juno.core.Lockable">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;com.ibm.juno.core.<a href="../../../../../com/ibm/juno/core/Lockable.html" title="class in com.ibm.juno.core">Lockable</a></h3>
+<code><a href="../../../../../com/ibm/juno/core/Lockable.html#isLocked()">isLocked</a>, <a href="../../../../../com/ibm/juno/core/Lockable.html#onUnclone()">onUnclone</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
+<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang">equals</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang">hashCode</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang">toString</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long, int)" title="class or interface in java.lang">wait</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_detail">
+<!--   -->
+</a>
+<h3>Constructor Detail</h3>
+<a name="JazzRestClient(java.lang.String, com.ibm.juno.client.SSLOpts, java.lang.String, java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>JazzRestClient</h4>
+<pre>public&nbsp;<a href="../../../../../src-html/com/ibm/juno/client/jazz/JazzRestClient.html#line.59">JazzRestClient</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;jazzUrl,
+              <a href="../../../../../com/ibm/juno/client/SSLOpts.html" title="class in com.ibm.juno.client">SSLOpts</a>&nbsp;sslOpts,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;user,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;pw)
+               throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<div class="block">Create a new client with no serializer or parser.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>jazzUrl</code> - The URL of the Jazz server being connected to (e.g. <js>"https://localhost:9443/jazz"</js>)</dd><dd><code>sslOpts</code> - SSL options.</dd><dd><code>user</code> - The Jazz username.</dd><dd><code>pw</code> - The Jazz password.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - If a problem occurred trying to authenticate against the Jazz server.</dd></dl>
+</li>
+</ul>
+<a name="JazzRestClient(java.lang.String, java.lang.String, java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>JazzRestClient</h4>
+<pre>public&nbsp;<a href="../../../../../src-html/com/ibm/juno/client/jazz/JazzRestClient.html#line.77">JazzRestClient</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;jazzUrl,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;user,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;pw)
+               throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<div class="block">Create a new client with no serializer or parser, and LAX SSL support.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>jazzUrl</code> - The URL of the Jazz server being connected to (e.g. <js>"https://localhost:9443/jazz"</js>)</dd><dd><code>user</code> - The Jazz username.</dd><dd><code>pw</code> - The Jazz password.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd></dl>
+</li>
+</ul>
+<a name="JazzRestClient(java.lang.String, com.ibm.juno.client.SSLOpts, java.lang.String, java.lang.String, com.ibm.juno.core.serializer.Serializer, com.ibm.juno.core.parser.Parser)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>JazzRestClient</h4>
+<pre>public&nbsp;<a href="../../../../../src-html/com/ibm/juno/client/jazz/JazzRestClient.html#line.92">JazzRestClient</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;jazzUri,
+              <a href="../../../../../com/ibm/juno/client/SSLOpts.html" title="class in com.ibm.juno.client">SSLOpts</a>&nbsp;sslOpts,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;user,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;pw,
+              <a href="../../../../../com/ibm/juno/core/serializer/Serializer.html" title="class in com.ibm.juno.core.serializer">Serializer</a>&lt;?&gt;&nbsp;s,
+              <a href="../../../../../com/ibm/juno/core/parser/Parser.html" title="class in com.ibm.juno.core.parser">Parser</a>&lt;?&gt;&nbsp;p)
+               throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<div class="block">Create a new client with the specified serializer and parser instances.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>jazzUri</code> - The URI of the Jazz server being connected to (e.g. <js>"https://localhost:9443/jazz"</js>)</dd><dd><code>sslOpts</code> - SSL options.</dd><dd><code>user</code> - The Jazz username.</dd><dd><code>pw</code> - The Jazz password.</dd><dd><code>s</code> - The serializer for converting POJOs to HTTP request message body text.</dd><dd><code>p</code> - The parser for converting HTTP response message body text to POJOs.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - If a problem occurred trying to authenticate against the Jazz server.</dd></dl>
+</li>
+</ul>
+<a name="JazzRestClient(java.lang.String, java.lang.String, java.lang.String, com.ibm.juno.core.serializer.Serializer, com.ibm.juno.core.parser.Parser)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>JazzRestClient</h4>
+<pre>public&nbsp;<a href="../../../../../src-html/com/ibm/juno/client/jazz/JazzRestClient.html#line.108">JazzRestClient</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;jazzUri,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;user,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;pw,
+              <a href="../../../../../com/ibm/juno/core/serializer/Serializer.html" title="class in com.ibm.juno.core.serializer">Serializer</a>&lt;?&gt;&nbsp;s,
+              <a href="../../../../../com/ibm/juno/core/parser/Parser.html" title="class in com.ibm.juno.core.parser">Parser</a>&lt;?&gt;&nbsp;p)
+               throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<div class="block">Create a new client with the specified serializer and parser instances and LAX SSL support.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>jazzUri</code> - The URI of the Jazz server being connected to (e.g. <js>"https://localhost:9443/jazz"</js>)</dd><dd><code>user</code> - The Jazz username.</dd><dd><code>pw</code> - The Jazz password.</dd><dd><code>s</code> - The serializer for converting POJOs to HTTP request message body text.</dd><dd><code>p</code> - The parser for converting HTTP response message body text to POJOs.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - If a problem occurred trying to authenticate against the Jazz server.</dd></dl>
+</li>
+</ul>
+<a name="JazzRestClient(java.lang.String, com.ibm.juno.client.SSLOpts, java.lang.String, java.lang.String, java.lang.Class, java.lang.Class)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>JazzRestClient</h4>
+<pre>public&nbsp;<a href="../../../../../src-html/com/ibm/juno/client/jazz/JazzRestClient.html#line.126">JazzRestClient</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;jazzUri,
+              <a href="../../../../../com/ibm/juno/client/SSLOpts.html" title="class in com.ibm.juno.client">SSLOpts</a>&nbsp;sslOpts,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;user,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;pw,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../com/ibm/juno/core/serializer/Serializer.html" title="class in com.ibm.juno.core.serializer">Serializer</a>&lt;?&gt;&gt;&nbsp;s,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../com/ibm/juno/core/parser/Parser.html" title="class in com.ibm.juno.core.parser">Parser</a>&lt;?&gt;&gt;&nbsp;p)
+               throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/InstantiationException.html?is-external=true" title="class or interface in java.lang">InstantiationException</a>,
+                      <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<div class="block">Create a new client with the specified serializer and parser classes.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>jazzUri</code> - The URI of the Jazz server being connected to (e.g. <js>"https://localhost:9443/jazz"</js>)</dd><dd><code>sslOpts</code> - SSL options.</dd><dd><code>user</code> - The Jazz username.</dd><dd><code>pw</code> - The Jazz password.</dd><dd><code>s</code> - The serializer for converting POJOs to HTTP request message body text.</dd><dd><code>p</code> - The parser for converting HTTP response message body text to POJOs.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - If a problem occurred trying to authenticate against the Jazz server.</dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/InstantiationException.html?is-external=true" title="class or interface in java.lang">InstantiationException</a></code> - If serializer or parser could not be instantiated.</dd></dl>
+</li>
+</ul>
+<a name="JazzRestClient(java.lang.String, java.lang.String, java.lang.String, java.lang.Class, java.lang.Class)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>JazzRestClient</h4>
+<pre>public&nbsp;<a href="../../../../../src-html/com/ibm/juno/client/jazz/JazzRestClient.html#line.143">JazzRestClient</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;jazzUri,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;user,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;pw,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../com/ibm/juno/core/serializer/Serializer.html" title="class in com.ibm.juno.core.serializer">Serializer</a>&lt;?&gt;&gt;&nbsp;s,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../com/ibm/juno/core/parser/Parser.html" title="class in com.ibm.juno.core.parser">Parser</a>&lt;?&gt;&gt;&nbsp;p)
+               throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/InstantiationException.html?is-external=true" title="class or interface in java.lang">InstantiationException</a>,
+                      <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<div class="block">Create a new client with the specified serializer and parser classes and LAX SSL support.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>jazzUri</code> - The URI of the Jazz server being connected to (e.g. <js>"https://localhost:9443/jazz"</js>)</dd><dd><code>user</code> - The Jazz username.</dd><dd><code>pw</code> - The Jazz password.</dd><dd><code>s</code> - The serializer for converting POJOs to HTTP request message body text.</dd><dd><code>p</code> - The parser for converting HTTP response message body text to POJOs.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - If a problem occurred trying to authenticate against the Jazz server.</dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/InstantiationException.html?is-external=true" title="class or interface in java.lang">InstantiationException</a></code> - If serializer or parser could not be instantiated.</dd></dl>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="createHttpClient()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>createHttpClient</h4>
+<pre>protected&nbsp;org.apache.http.impl.client.CloseableHttpClient&nbsp;<a href="../../../../../src-html/com/ibm/juno/client/jazz/JazzRestClient.html#line.150">createHttpClient</a>()
+                                                                    throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
+<div class="block"><span class="strong">Description copied from class:&nbsp;<code><a href="../../../../../com/ibm/juno/client/RestClient.html#createHttpClient()">RestClient</a></code></span></div>
+<div class="block">Creates an instance of an <code>HttpClient</code> to be used to handle all HTTP communications with the target server.
+ <p>
+ This HTTP client is used when the HTTP client is not specified through one of the constructors or the
+   <a href="../../../../../com/ibm/juno/client/RestClient.html#setHttpClient(org.apache.http.impl.client.CloseableHttpClient)"><code>RestClient.setHttpClient(CloseableHttpClient)</code></a> method.
+ <p>
+ Subclasses can override this method to provide specially-configured HTTP clients to handle
+   stuff such as SSL/TLS certificate handling, authentication, etc.
+ <p>
+ The default implementation returns an instance of <code>HttpClient</code> using the client builder
+   returned by <a href="../../../../../com/ibm/juno/client/RestClient.html#createHttpClientBuilder()"><code>RestClient.createHttpClientBuilder()</code></a>.</div>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="../../../../../com/ibm/juno/client/RestClient.html#createHttpClient()">createHttpClient</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../com/ibm/juno/client/RestClient.html" title="class in com.ibm.juno.client">RestClient</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>The HTTP client to use.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd></dl>
+</li>
+</ul>
+<a name="createHttpClientBuilder()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>createHttpClientBuilder</h4>
+<pre>protected&nbsp;org.apache.http.impl.client.HttpClientBuilder&nbsp;<a href="../../../../../src-html/com/ibm/juno/client/jazz/JazzRestClient.html#line.205">createHttpClientBuilder</a>()</pre>
+<div class="block"><span class="strong">Description copied from class:&nbsp;<code><a href="../../../../../com/ibm/juno/client/RestClient.html#createHttpClientBuilder()">RestClient</a></code></span></div>
+<div class="block">Creates an instance of an <code>HttpClientBuilder</code> to be used to create
+   the <code>HttpClient</code>.
+ <p>
+   Subclasses can override this method to provide their own client builder.
+ </p>
+ <p>
+   The predefined method returns an <code>HttpClientBuilder</code> with the following settings:
+ </p>
+ <ul>
+   <li>Lax redirect strategy.
+   <li>The connection manager returned by <a href="../../../../../com/ibm/juno/client/RestClient.html#createConnectionManager()"><code>RestClient.createConnectionManager()</code></a>.
+ </ul></div>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="../../../../../com/ibm/juno/client/RestClient.html#createHttpClientBuilder()">createHttpClientBuilder</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../com/ibm/juno/client/RestClient.html" title="class in com.ibm.juno.client">RestClient</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>The HTTP client builder to use to create the HTTP client.</dd></dl>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a>
+<div class="skip"><a href="#skip-navbar_bottom" title="Skip navigation links">Skip navigation links</a></div>
+<a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/JazzRestClient.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li>Prev Class</li>
+<li>Next Class</li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?com/ibm/juno/client/jazz/JazzRestClient.html" target="_top">Frames</a></li>
+<li><a href="JazzRestClient.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#fields_inherited_from_class_com.ibm.juno.client.RestClient">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+</body>
+</html>

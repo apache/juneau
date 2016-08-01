@@ -1,0 +1,434 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="en">
+<head>
+<title>HtmlStrippedDocSerializer (Juno)</title>
+<link rel="stylesheet" type="text/css" href="../../../../../javadoc.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="HtmlStrippedDocSerializer (Juno)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a>
+<div class="skip"><a href="#skip-navbar_top" title="Skip navigation links">Skip navigation links</a></div>
+<a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/HtmlStrippedDocSerializer.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../com/ibm/juno/core/html/HtmlSerializerWriter.html" title="class in com.ibm.juno.core.html"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../com/ibm/juno/core/html/SimpleHtmlWriter.html" title="class in com.ibm.juno.core.html"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?com/ibm/juno/core/html/HtmlStrippedDocSerializer.html" target="_top">Frames</a></li>
+<li><a href="HtmlStrippedDocSerializer.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li><a href="#nested_classes_inherited_from_class_com.ibm.juno.core.html.HtmlSerializer">Nested</a>&nbsp;|&nbsp;</li>
+<li><a href="#fields_inherited_from_class_com.ibm.juno.core.html.HtmlSerializer">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">com.ibm.juno.core.html</div>
+<h2 title="Class HtmlStrippedDocSerializer" class="title">Class HtmlStrippedDocSerializer</h2>
+</div>
+<div class="contentContainer">
+<ul class="inheritance">
+<li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
+<li>
+<ul class="inheritance">
+<li><a href="../../../../../com/ibm/juno/core/Lockable.html" title="class in com.ibm.juno.core">com.ibm.juno.core.Lockable</a></li>
+<li>
+<ul class="inheritance">
+<li><a href="../../../../../com/ibm/juno/core/CoreApi.html" title="class in com.ibm.juno.core">com.ibm.juno.core.CoreApi</a></li>
+<li>
+<ul class="inheritance">
+<li><a href="../../../../../com/ibm/juno/core/serializer/Serializer.html" title="class in com.ibm.juno.core.serializer">com.ibm.juno.core.serializer.Serializer</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/io/Writer.html?is-external=true" title="class or interface in java.io">Writer</a>&gt;</li>
+<li>
+<ul class="inheritance">
+<li><a href="../../../../../com/ibm/juno/core/serializer/WriterSerializer.html" title="class in com.ibm.juno.core.serializer">com.ibm.juno.core.serializer.WriterSerializer</a></li>
+<li>
+<ul class="inheritance">
+<li><a href="../../../../../com/ibm/juno/core/xml/XmlSerializer.html" title="class in com.ibm.juno.core.xml">com.ibm.juno.core.xml.XmlSerializer</a></li>
+<li>
+<ul class="inheritance">
+<li><a href="../../../../../com/ibm/juno/core/html/HtmlSerializer.html" title="class in com.ibm.juno.core.html">com.ibm.juno.core.html.HtmlSerializer</a></li>
+<li>
+<ul class="inheritance">
+<li>com.ibm.juno.core.html.HtmlStrippedDocSerializer</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<dl>
+<dt>All Implemented Interfaces:</dt>
+<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Cloneable.html?is-external=true" title="class or interface in java.lang">Cloneable</a></dd>
+</dl>
+<dl>
+<dt>Direct Known Subclasses:</dt>
+<dd><a href="../../../../../com/ibm/juno/core/html/HtmlDocSerializer.html" title="class in com.ibm.juno.core.html">HtmlDocSerializer</a></dd>
+</dl>
+<hr>
+<br>
+<pre><a href="../../../../../com/ibm/juno/core/annotation/Produces.html" title="annotation in com.ibm.juno.core.annotation">@Produces</a>(<a href="../../../../../com/ibm/juno/core/annotation/Produces.html#value()">value</a>="text/html+stripped",
+          <a href="../../../../../com/ibm/juno/core/annotation/Produces.html#contentType()">contentType</a>="text/html")
+public class <a href="../../../../../src-html/com/ibm/juno/core/html/HtmlStrippedDocSerializer.html#line.38">HtmlStrippedDocSerializer</a>
+extends <a href="../../../../../com/ibm/juno/core/html/HtmlSerializer.html" title="class in com.ibm.juno.core.html">HtmlSerializer</a></pre>
+<div class="block">Serializes POJOs to HTTP responses as stripped HTML.
+
+
+ <h6 class='topic'>Media types</h6>
+ <p>
+   Handles <code>Accept</code> types: <code>text/html+stripped</code>
+ <p>
+   Produces <code>Content-Type</code> types: <code>text/html</code>
+
+
+ <h6 class='topic'>Description</h6>
+ <p>
+   Produces the same output as <a href="../../../../../com/ibm/juno/core/html/HtmlDocSerializer.html" title="class in com.ibm.juno.core.html"><code>HtmlDocSerializer</code></a>, but without the header and body tags and page title and description.
+   Used primarily for JUnit testing the <a href="../../../../../com/ibm/juno/core/html/HtmlDocSerializer.html" title="class in com.ibm.juno.core.html"><code>HtmlDocSerializer</code></a> class.</div>
+<dl><dt><span class="strong">Author:</span></dt>
+  <dd>James Bognar (jbognar@us.ibm.com)</dd></dl>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- ======== NESTED CLASS SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="nested_class_summary">
+<!--   -->
+</a>
+<h3>Nested Class Summary</h3>
+<ul class="blockList">
+<li class="blockList"><a name="nested_classes_inherited_from_class_com.ibm.juno.core.html.HtmlSerializer">
+<!--   -->
+</a>
+<h3>Nested classes/interfaces inherited from class&nbsp;com.ibm.juno.core.html.<a href="../../../../../com/ibm/juno/core/html/HtmlSerializer.html" title="class in com.ibm.juno.core.html">HtmlSerializer</a></h3>
+<code><a href="../../../../../com/ibm/juno/core/html/HtmlSerializer.Sq.html" title="class in com.ibm.juno.core.html">HtmlSerializer.Sq</a>, <a href="../../../../../com/ibm/juno/core/html/HtmlSerializer.SqReadable.html" title="class in com.ibm.juno.core.html">HtmlSerializer.SqReadable</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="nested_classes_inherited_from_class_com.ibm.juno.core.xml.XmlSerializer">
+<!--   -->
+</a>
+<h3>Nested classes/interfaces inherited from class&nbsp;com.ibm.juno.core.xml.<a href="../../../../../com/ibm/juno/core/xml/XmlSerializer.html" title="class in com.ibm.juno.core.xml">XmlSerializer</a></h3>
+<code><a href="../../../../../com/ibm/juno/core/xml/XmlSerializer.Simple.html" title="class in com.ibm.juno.core.xml">XmlSerializer.Simple</a>, <a href="../../../../../com/ibm/juno/core/xml/XmlSerializer.SimpleSq.html" title="class in com.ibm.juno.core.xml">XmlSerializer.SimpleSq</a>, <a href="../../../../../com/ibm/juno/core/xml/XmlSerializer.SimpleXmlJsonSq.html" title="class in com.ibm.juno.core.xml">XmlSerializer.SimpleXmlJsonSq</a>, <a href="../../../../../com/ibm/juno/core/xml/XmlSerializer.XmlJson.html" title="class in com.ibm.juno.core.xml">XmlSerializer.XmlJson</a>, <a href="../../../../../com/ibm/juno/core/xml/XmlSerializer.XmlJsonSq.html" title="class in com.ibm.juno.core.xml">XmlSerializer.XmlJsonSq</a></code></li>
+</ul>
+</li>
+</ul>
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<ul class="blockList">
+<li class="blockList"><a name="fields_inherited_from_class_com.ibm.juno.core.html.HtmlSerializer">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;com.ibm.juno.core.html.<a href="../../../../../com/ibm/juno/core/html/HtmlSerializer.html" title="class in com.ibm.juno.core.html">HtmlSerializer</a></h3>
+<code><a href="../../../../../com/ibm/juno/core/html/HtmlSerializer.html#DEFAULT">DEFAULT</a>, <a href="../../../../../com/ibm/juno/core/html/HtmlSerializer.html#DEFAULT_SQ">DEFAULT_SQ</a>, <a href="../../../../../com/ibm/juno/core/html/HtmlSerializer.html#DEFAULT_SQ_READABLE">DEFAULT_SQ_READABLE</a>, <a href="../../../../../com/ibm/juno/core/html/HtmlSerializer.html#hsp">hsp</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="fields_inherited_from_class_com.ibm.juno.core.xml.XmlSerializer">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;com.ibm.juno.core.xml.<a href="../../../../../com/ibm/juno/core/xml/XmlSerializer.html" title="class in com.ibm.juno.core.xml">XmlSerializer</a></h3>
+<code><a href="../../../../../com/ibm/juno/core/xml/XmlSerializer.html#DEFAULT_SIMPLE">DEFAULT_SIMPLE</a>, <a href="../../../../../com/ibm/juno/core/xml/XmlSerializer.html#DEFAULT_SIMPLE_SQ">DEFAULT_SIMPLE_SQ</a>, <a href="../../../../../com/ibm/juno/core/xml/XmlSerializer.html#DEFAULT_SIMPLE_XMLJSON_SQ">DEFAULT_SIMPLE_XMLJSON_SQ</a>, <a href="../../../../../com/ibm/juno/core/xml/XmlSerializer.html#DEFAULT_XMLJSON">DEFAULT_XMLJSON</a>, <a href="../../../../../com/ibm/juno/core/xml/XmlSerializer.html#DEFAULT_XMLJSON_SQ">DEFAULT_XMLJSON_SQ</a>, <a href="../../../../../com/ibm/juno/core/xml/XmlSerializer.html#xsp">xsp</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="fields_inherited_from_class_com.ibm.juno.core.serializer.Serializer">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;com.ibm.juno.core.serializer.<a href="../../../../../com/ibm/juno/core/serializer/Serializer.html" title="class in com.ibm.juno.core.serializer">Serializer</a></h3>
+<code><a href="../../../../../com/ibm/juno/core/serializer/Serializer.html#sp">sp</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="fields_inherited_from_class_com.ibm.juno.core.CoreApi">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;com.ibm.juno.core.<a href="../../../../../com/ibm/juno/core/CoreApi.html" title="class in com.ibm.juno.core">CoreApi</a></h3>
+<code><a href="../../../../../com/ibm/juno/core/CoreApi.html#beanContextFactory">beanContextFactory</a></code></li>
+</ul>
+</li>
+</ul>
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_summary">
+<!--   -->
+</a>
+<h3>Constructor Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Constructor Summary table, listing constructors, and an explanation">
+<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../../com/ibm/juno/core/html/HtmlStrippedDocSerializer.html#HtmlStrippedDocSerializer()">HtmlStrippedDocSerializer</a></strong>()</code>&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/html/HtmlStrippedDocSerializer.html#doSerialize(java.lang.Object, java.io.Writer, com.ibm.juno.core.serializer.SerializerContext)">doSerialize</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o,
+                      <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Writer.html?is-external=true" title="class or interface in java.io">Writer</a>&nbsp;out,
+                      <a href="../../../../../com/ibm/juno/core/serializer/SerializerContext.html" title="class in com.ibm.juno.core.serializer">SerializerContext</a>&nbsp;ctx)</code>
+<div class="block">Serializes a POJO to the specified output stream or writer.</div>
+</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_com.ibm.juno.core.html.HtmlSerializer">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;com.ibm.juno.core.html.<a href="../../../../../com/ibm/juno/core/html/HtmlSerializer.html" title="class in com.ibm.juno.core.html">HtmlSerializer</a></h3>
+<code><a href="../../../../../com/ibm/juno/core/html/HtmlSerializer.html#addFilters(java.lang.Class...)">addFilters</a>, <a href="../../../../../com/ibm/juno/core/html/HtmlSerializer.html#addImplClass(java.lang.Class, java.lang.Class)">addImplClass</a>, <a href="../../../../../com/ibm/juno/core/html/HtmlSerializer.html#addNotBeanClasses(java.lang.Class...)">addNotBeanClasses</a>, <a href="../../../../../com/ibm/juno/core/html/HtmlSerializer.html#clone()">clone</a>, <a href="../../../../../com/ibm/juno/core/html/HtmlSerializer.html#createContext(com.ibm.juno.core.ObjectMap, java.lang.reflect.Method)">createContext</a>, <a href="../../../../../com/ibm/juno/core/html/HtmlSerializer.html#getSchemaSerializer()">getSchemaSerializer</a>, <a href="../../../../../com/ibm/juno/core/html/HtmlSerializer.html#lock()">lock</a>, <a href="../../../../../com/ibm/juno/core/html/HtmlSerializer.html#serializeAnything(com.ibm.juno.core.html.HtmlSerializerWriter, java.lang.Object, com.ibm.juno.core.ClassMeta, com.ibm.juno.core.html.HtmlSerializerContext, java.lang.String, int, com.ibm.juno.core.BeanPropertyMeta)">serializeAnything</a>, <a href="../../../../../com/ibm/juno/core/html/HtmlSerializer.html#setClassLoader(java.lang.ClassLoader)">setClassLoader</a>, <a href="../../../../../com/ibm/juno/core/html/HtmlSerializer.html#setProperties(com.ibm.juno.core.ObjectMap)">setProperties</a>, <a href="../../../../../com/ibm/juno/core/html/HtmlSerializer.html#setProperty(java.lang.String, java.lang.Object)">setProperty</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_com.ibm.juno.core.xml.XmlSerializer">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;com.ibm.juno.core.xml.<a href="../../../../../com/ibm/juno/core/xml/XmlSerializer.html" title="class in com.ibm.juno.core.xml">XmlSerializer</a></h3>
+<code><a href="../../../../../com/ibm/juno/core/xml/XmlSerializer.html#findNsfMappings(java.lang.Object, com.ibm.juno.core.xml.XmlSerializerContext)">findNsfMappings</a>, <a href="../../../../../com/ibm/juno/core/xml/XmlSerializer.html#serializeAnything(com.ibm.juno.core.xml.XmlSerializerWriter, java.lang.Object, com.ibm.juno.core.ClassMeta, com.ibm.juno.core.xml.XmlSerializerContext, java.lang.String, com.ibm.juno.core.xml.Namespace, boolean, com.ibm.juno.core.xml.annotation.XmlFormat, com.ibm.juno.core.BeanPropertyMeta)">serializeAnything</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_com.ibm.juno.core.serializer.WriterSerializer">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;com.ibm.juno.core.serializer.<a href="../../../../../com/ibm/juno/core/serializer/WriterSerializer.html" title="class in com.ibm.juno.core.serializer">WriterSerializer</a></h3>
+<code><a href="../../../../../com/ibm/juno/core/serializer/WriterSerializer.html#isWriterSerializer()">isWriterSerializer</a>, <a href="../../../../../com/ibm/juno/core/serializer/WriterSerializer.html#serialize(java.lang.Object)">serialize</a>, <a href="../../../../../com/ibm/juno/core/serializer/WriterSerializer.html#serialize(java.lang.Object, com.ibm.juno.core.serializer.SerializerContext)">serialize</a>, <a href="../../../../../com/ibm/juno/core/serializer/WriterSerializer.html#toString(java.lang.Object)">toString</a>, <a href="../../../../../com/ibm/juno/core/serializer/WriterSerializer.html#toStringObject(java.lang.Object)">toStringObject</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_com.ibm.juno.core.serializer.Serializer">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;com.ibm.juno.core.serializer.<a href="../../../../../com/ibm/juno/core/serializer/Serializer.html" title="class in com.ibm.juno.core.serializer">Serializer</a></h3>
+<code><a href="../../../../../com/ibm/juno/core/serializer/Serializer.html#createContext()">createContext</a>, <a href="../../../../../com/ibm/juno/core/serializer/Serializer.html#getMediaTypes()">getMediaTypes</a>, <a href="../../../../../com/ibm/juno/core/serializer/Serializer.html#getResponseContentType()">getResponseContentType</a>, <a href="../../../../../com/ibm/juno/core/serializer/Serializer.html#getResponseHeaders(com.ibm.juno.core.ObjectMap)">getResponseHeaders</a>, <a href="../../../../../com/ibm/juno/core/serializer/Serializer.html#serialize(java.lang.Object, W)">serialize</a>, <a href="../../../../../com/ibm/juno/core/serializer/Serializer.html#serialize(java.lang.Object, W, com.ibm.juno.core.serializer.SerializerContext)">serialize</a>, <a href="../../../../../com/ibm/juno/core/serializer/Serializer.html#toList(java.lang.Class, java.lang.Object)">toList</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_com.ibm.juno.core.CoreApi">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;com.ibm.juno.core.<a href="../../../../../com/ibm/juno/core/CoreApi.html" title="class in com.ibm.juno.core">CoreApi</a></h3>
+<code><a href="../../../../../com/ibm/juno/core/CoreApi.html#checkLock()">checkLock</a>, <a href="../../../../../com/ibm/juno/core/CoreApi.html#getBeanContext()">getBeanContext</a>, <a href="../../../../../com/ibm/juno/core/CoreApi.html#object()">object</a>, <a href="../../../../../com/ibm/juno/core/CoreApi.html#string()">string</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_com.ibm.juno.core.Lockable">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;com.ibm.juno.core.<a href="../../../../../com/ibm/juno/core/Lockable.html" title="class in com.ibm.juno.core">Lockable</a></h3>
+<code><a href="../../../../../com/ibm/juno/core/Lockable.html#isLocked()">isLocked</a>, <a href="../../../../../com/ibm/juno/core/Lockable.html#onUnclone()">onUnclone</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
+<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang">equals</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang">hashCode</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang">toString</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long, int)" title="class or interface in java.lang">wait</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_detail">
+<!--   -->
+</a>
+<h3>Constructor Detail</h3>
+<a name="HtmlStrippedDocSerializer()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>HtmlStrippedDocSerializer</h4>
+<pre>public&nbsp;<a href="../../../../../src-html/com/ibm/juno/core/html/HtmlStrippedDocSerializer.html#line.38">HtmlStrippedDocSerializer</a>()</pre>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="doSerialize(java.lang.Object, java.io.Writer, com.ibm.juno.core.serializer.SerializerContext)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>doSerialize</h4>
+<pre>protected&nbsp;void&nbsp;<a href="../../../../../src-html/com/ibm/juno/core/html/HtmlStrippedDocSerializer.html#line.45">doSerialize</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o,
+               <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Writer.html?is-external=true" title="class or interface in java.io">Writer</a>&nbsp;out,
+               <a href="../../../../../com/ibm/juno/core/serializer/SerializerContext.html" title="class in com.ibm.juno.core.serializer">SerializerContext</a>&nbsp;ctx)
+                    throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a>,
+                           <a href="../../../../../com/ibm/juno/core/serializer/SerializeException.html" title="class in com.ibm.juno.core.serializer">SerializeException</a></pre>
+<div class="block"><span class="strong">Description copied from class:&nbsp;<code><a href="../../../../../com/ibm/juno/core/serializer/Serializer.html#doSerialize(java.lang.Object, W, com.ibm.juno.core.serializer.SerializerContext)">Serializer</a></code></span></div>
+<div class="block">Serializes a POJO to the specified output stream or writer.
+ <p>
+ This method should NOT close the context object.</div>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="../../../../../com/ibm/juno/core/html/HtmlSerializer.html#doSerialize(java.lang.Object, java.io.Writer, com.ibm.juno.core.serializer.SerializerContext)">doSerialize</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../com/ibm/juno/core/html/HtmlSerializer.html" title="class in com.ibm.juno.core.html">HtmlSerializer</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>o</code> - The object to serialize.</dd><dd><code>out</code> - The writer or output stream to write to.</dd><dd><code>ctx</code> - The serializer context object return by <a href="../../../../../com/ibm/juno/core/serializer/Serializer.html#createContext(com.ibm.juno.core.ObjectMap, java.lang.reflect.Method)"><code>Serializer.createContext(ObjectMap, Method)</code></a>.<br>
+   If <jk>null</jk>, context is created using <a href="../../../../../com/ibm/juno/core/serializer/Serializer.html#createContext()"><code>Serializer.createContext()</code></a>.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - If a problem occurred trying to write to the writer.</dd>
+<dd><code><a href="../../../../../com/ibm/juno/core/serializer/SerializeException.html" title="class in com.ibm.juno.core.serializer">SerializeException</a></code> - If a problem occurred trying to convert the output.</dd></dl>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a>
+<div class="skip"><a href="#skip-navbar_bottom" title="Skip navigation links">Skip navigation links</a></div>
+<a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/HtmlStrippedDocSerializer.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../com/ibm/juno/core/html/HtmlSerializerWriter.html" title="class in com.ibm.juno.core.html"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../com/ibm/juno/core/html/SimpleHtmlWriter.html" title="class in com.ibm.juno.core.html"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?com/ibm/juno/core/html/HtmlStrippedDocSerializer.html" target="_top">Frames</a></li>
+<li><a href="HtmlStrippedDocSerializer.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li><a href="#nested_classes_inherited_from_class_com.ibm.juno.core.html.HtmlSerializer">Nested</a>&nbsp;|&nbsp;</li>
+<li><a href="#fields_inherited_from_class_com.ibm.juno.core.html.HtmlSerializer">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+</body>
+</html>

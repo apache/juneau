@@ -1,0 +1,533 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../javadoc.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>/*******************************************************************************<a name="line.1"></a>
+<span class="sourceLineNo">002</span> * Licensed Materials - Property of IBM<a name="line.2"></a>
+<span class="sourceLineNo">003</span> * (c) Copyright IBM Corporation 2011, 2015. All Rights Reserved.<a name="line.3"></a>
+<span class="sourceLineNo">004</span> *<a name="line.4"></a>
+<span class="sourceLineNo">005</span> *  The source code for this program is not published or otherwise<a name="line.5"></a>
+<span class="sourceLineNo">006</span> *  divested of its trade secrets, irrespective of what has been<a name="line.6"></a>
+<span class="sourceLineNo">007</span> *  deposited with the U.S. Copyright Office.<a name="line.7"></a>
+<span class="sourceLineNo">008</span> *******************************************************************************/<a name="line.8"></a>
+<span class="sourceLineNo">009</span>package com.ibm.juno.core;<a name="line.9"></a>
+<span class="sourceLineNo">010</span><a name="line.10"></a>
+<span class="sourceLineNo">011</span>import java.io.*;<a name="line.11"></a>
+<span class="sourceLineNo">012</span>import java.lang.reflect.*;<a name="line.12"></a>
+<span class="sourceLineNo">013</span>import java.util.*;<a name="line.13"></a>
+<span class="sourceLineNo">014</span><a name="line.14"></a>
+<span class="sourceLineNo">015</span>import com.ibm.juno.core.annotation.*;<a name="line.15"></a>
+<span class="sourceLineNo">016</span>import com.ibm.juno.core.filter.*;<a name="line.16"></a>
+<span class="sourceLineNo">017</span>import com.ibm.juno.core.parser.*;<a name="line.17"></a>
+<span class="sourceLineNo">018</span>import com.ibm.juno.core.xml.annotation.*;<a name="line.18"></a>
+<span class="sourceLineNo">019</span><a name="line.19"></a>
+<span class="sourceLineNo">020</span>/**<a name="line.20"></a>
+<span class="sourceLineNo">021</span> * Java bean wrapper class.<a name="line.21"></a>
+<span class="sourceLineNo">022</span> *<a name="line.22"></a>
+<span class="sourceLineNo">023</span> *<a name="line.23"></a>
+<span class="sourceLineNo">024</span> * &lt;h6 class='topic'&gt;Description&lt;/h6&gt;<a name="line.24"></a>
+<span class="sourceLineNo">025</span> * &lt;p&gt;<a name="line.25"></a>
+<span class="sourceLineNo">026</span> *    A wrapper that wraps Java bean instances inside of a {@link Map} interface that allows<a name="line.26"></a>
+<span class="sourceLineNo">027</span> *    properties on the wrapped object can be accessed using the {@link Map#get(Object) get()} and {@link Map#put(Object,Object) put()} methods.<a name="line.27"></a>
+<span class="sourceLineNo">028</span> * &lt;p&gt;<a name="line.28"></a>
+<span class="sourceLineNo">029</span> *    Use the {@link BeanContext} class to create instances of this class.<a name="line.29"></a>
+<span class="sourceLineNo">030</span> *<a name="line.30"></a>
+<span class="sourceLineNo">031</span> *<a name="line.31"></a>
+<span class="sourceLineNo">032</span> * &lt;h6 class='topic'&gt;Bean property order&lt;/h6&gt;<a name="line.32"></a>
+<span class="sourceLineNo">033</span> * &lt;p&gt;<a name="line.33"></a>
+<span class="sourceLineNo">034</span> *    The order of the properties returned by the {@link Map#keySet() keySet()} and {@link Map#entrySet() entrySet()} methods are as follows:<a name="line.34"></a>
+<span class="sourceLineNo">035</span> *    &lt;ul&gt;<a name="line.35"></a>
+<span class="sourceLineNo">036</span> *       &lt;li&gt;If {@link Bean @Bean} annotation is specified on class, then the order is the same as the list of properties in the annotation.<a name="line.36"></a>
+<span class="sourceLineNo">037</span> *       &lt;li&gt;If {@link Bean @Bean} annotation is not specified on the class, then the order is the same as that returned<a name="line.37"></a>
+<span class="sourceLineNo">038</span> *          by the {@link java.beans.BeanInfo} class (i.e. ordered by definition in the class).<a name="line.38"></a>
+<span class="sourceLineNo">039</span> *    &lt;/ul&gt;<a name="line.39"></a>
+<span class="sourceLineNo">040</span> *    &lt;br&gt;<a name="line.40"></a>
+<span class="sourceLineNo">041</span> *    The order can also be overridden through the use of a {@link BeanFilter}.<a name="line.41"></a>
+<span class="sourceLineNo">042</span> *<a name="line.42"></a>
+<span class="sourceLineNo">043</span> *<a name="line.43"></a>
+<span class="sourceLineNo">044</span> * &lt;h6 class='topic'&gt;POJO filters&lt;/h6&gt;<a name="line.44"></a>
+<span class="sourceLineNo">045</span> * &lt;p&gt;<a name="line.45"></a>
+<span class="sourceLineNo">046</span> *    If {@link PojoFilter PojoFilters} are defined on the class types of the properties of this bean or the bean properties themselves, the<a name="line.46"></a>
+<span class="sourceLineNo">047</span> *    {@link #get(Object)} and {@link #put(Object, Object)} methods will automatically<a name="line.47"></a>
+<span class="sourceLineNo">048</span> *    transform the property value to and from the serialized form.<a name="line.48"></a>
+<span class="sourceLineNo">049</span> *<a name="line.49"></a>
+<span class="sourceLineNo">050</span> * @author Barry M. Caceres<a name="line.50"></a>
+<span class="sourceLineNo">051</span> * @author James Bognar (jbognar@us.ibm.com)<a name="line.51"></a>
+<span class="sourceLineNo">052</span> * @param &lt;T&gt; Specifies the type of object that this map encapsulates.<a name="line.52"></a>
+<span class="sourceLineNo">053</span> */<a name="line.53"></a>
+<span class="sourceLineNo">054</span>public class BeanMap&lt;T&gt; extends AbstractMap&lt;String,Object&gt; implements Delegate&lt;T&gt; {<a name="line.54"></a>
+<span class="sourceLineNo">055</span><a name="line.55"></a>
+<span class="sourceLineNo">056</span>   /** The wrapped object. */<a name="line.56"></a>
+<span class="sourceLineNo">057</span>   protected T bean;<a name="line.57"></a>
+<span class="sourceLineNo">058</span><a name="line.58"></a>
+<span class="sourceLineNo">059</span>   /** Temporary holding cache for beans with read-only properties.  Normally null. */<a name="line.59"></a>
+<span class="sourceLineNo">060</span>   protected Map&lt;String,Object&gt; propertyCache;<a name="line.60"></a>
+<span class="sourceLineNo">061</span><a name="line.61"></a>
+<span class="sourceLineNo">062</span>   /** Temporary holding cache for bean properties of array types when the add() method is being used. */<a name="line.62"></a>
+<span class="sourceLineNo">063</span>   protected Map&lt;String,List&lt;?&gt;&gt; arrayPropertyCache;<a name="line.63"></a>
+<span class="sourceLineNo">064</span><a name="line.64"></a>
+<span class="sourceLineNo">065</span>   /** The BeanMeta associated with the class of the object. */<a name="line.65"></a>
+<span class="sourceLineNo">066</span>   protected BeanMeta&lt;T&gt; meta;<a name="line.66"></a>
+<span class="sourceLineNo">067</span><a name="line.67"></a>
+<span class="sourceLineNo">068</span>   /**<a name="line.68"></a>
+<span class="sourceLineNo">069</span>    * Instance of this class are instantiated through the BeanContext class.<a name="line.69"></a>
+<span class="sourceLineNo">070</span>    *<a name="line.70"></a>
+<span class="sourceLineNo">071</span>    * @param bean The bean to wrap inside this map.<a name="line.71"></a>
+<span class="sourceLineNo">072</span>    * @param meta The metadata associated with the bean class.<a name="line.72"></a>
+<span class="sourceLineNo">073</span>    */<a name="line.73"></a>
+<span class="sourceLineNo">074</span>   protected BeanMap(T bean, BeanMeta&lt;T&gt; meta) {<a name="line.74"></a>
+<span class="sourceLineNo">075</span>      this.bean = bean;<a name="line.75"></a>
+<span class="sourceLineNo">076</span>      this.meta = meta;<a name="line.76"></a>
+<span class="sourceLineNo">077</span>      if (meta.constructorArgs.length &gt; 0)<a name="line.77"></a>
+<span class="sourceLineNo">078</span>         propertyCache = new TreeMap&lt;String,Object&gt;();<a name="line.78"></a>
+<span class="sourceLineNo">079</span>   }<a name="line.79"></a>
+<span class="sourceLineNo">080</span><a name="line.80"></a>
+<span class="sourceLineNo">081</span>   /**<a name="line.81"></a>
+<span class="sourceLineNo">082</span>    * Returns the metadata associated with this bean map.<a name="line.82"></a>
+<span class="sourceLineNo">083</span>    *<a name="line.83"></a>
+<span class="sourceLineNo">084</span>    * @return The metadata associated with this bean map.<a name="line.84"></a>
+<span class="sourceLineNo">085</span>    */<a name="line.85"></a>
+<span class="sourceLineNo">086</span>   public BeanMeta&lt;T&gt; getMeta() {<a name="line.86"></a>
+<span class="sourceLineNo">087</span>      return meta;<a name="line.87"></a>
+<span class="sourceLineNo">088</span>   }<a name="line.88"></a>
+<span class="sourceLineNo">089</span><a name="line.89"></a>
+<span class="sourceLineNo">090</span>   /**<a name="line.90"></a>
+<span class="sourceLineNo">091</span>    * Returns the wrapped bean object.<a name="line.91"></a>
+<span class="sourceLineNo">092</span>    * Triggers bean creation if bean has read-only properties set through a constructor<a name="line.92"></a>
+<span class="sourceLineNo">093</span>    *    defined by the {@link BeanConstructor} annotation.<a name="line.93"></a>
+<span class="sourceLineNo">094</span>    *<a name="line.94"></a>
+<span class="sourceLineNo">095</span>    * @return The inner bean object.<a name="line.95"></a>
+<span class="sourceLineNo">096</span>    */<a name="line.96"></a>
+<span class="sourceLineNo">097</span>   public T getBean() {<a name="line.97"></a>
+<span class="sourceLineNo">098</span>      T b = getBean(true);<a name="line.98"></a>
+<span class="sourceLineNo">099</span><a name="line.99"></a>
+<span class="sourceLineNo">100</span>      // If we have any arrays that need to be constructed, do it now.<a name="line.100"></a>
+<span class="sourceLineNo">101</span>      if (arrayPropertyCache != null) {<a name="line.101"></a>
+<span class="sourceLineNo">102</span>         for (Map.Entry&lt;String,List&lt;?&gt;&gt; e : arrayPropertyCache.entrySet()) {<a name="line.102"></a>
+<span class="sourceLineNo">103</span>            String key = e.getKey();<a name="line.103"></a>
+<span class="sourceLineNo">104</span>            List&lt;?&gt; value = e.getValue();<a name="line.104"></a>
+<span class="sourceLineNo">105</span>            BeanPropertyMeta&lt;T&gt; bpm = getPropertyMeta(key);<a name="line.105"></a>
+<span class="sourceLineNo">106</span>            try {<a name="line.106"></a>
+<span class="sourceLineNo">107</span>               bpm.setArray(b, value);<a name="line.107"></a>
+<span class="sourceLineNo">108</span>            } catch (Exception e1) {<a name="line.108"></a>
+<span class="sourceLineNo">109</span>               throw new RuntimeException(e1);<a name="line.109"></a>
+<span class="sourceLineNo">110</span>            }<a name="line.110"></a>
+<span class="sourceLineNo">111</span>         }<a name="line.111"></a>
+<span class="sourceLineNo">112</span>         arrayPropertyCache = null;<a name="line.112"></a>
+<span class="sourceLineNo">113</span>      }<a name="line.113"></a>
+<span class="sourceLineNo">114</span>      return b;<a name="line.114"></a>
+<span class="sourceLineNo">115</span>   }<a name="line.115"></a>
+<span class="sourceLineNo">116</span><a name="line.116"></a>
+<span class="sourceLineNo">117</span>   /**<a name="line.117"></a>
+<span class="sourceLineNo">118</span>    * Returns the wrapped bean object.<a name="line.118"></a>
+<span class="sourceLineNo">119</span>    * &lt;p&gt;<a name="line.119"></a>
+<span class="sourceLineNo">120</span>    * If &lt;code&gt;create&lt;/code&gt; is &lt;jk&gt;false&lt;/jk&gt;, then this method may return &lt;jk&gt;null&lt;/jk&gt;<a name="line.120"></a>
+<span class="sourceLineNo">121</span>    *    if the bean has read-only properties set through a constructor<a name="line.121"></a>
+<span class="sourceLineNo">122</span>    *    defined by the {@link BeanConstructor} annotation.<a name="line.122"></a>
+<span class="sourceLineNo">123</span>    * &lt;p&gt;<a name="line.123"></a>
+<span class="sourceLineNo">124</span>    * This method does NOT always return the bean in it's final state.<a name="line.124"></a>
+<span class="sourceLineNo">125</span>    *    Array properties temporary stored as ArrayLists are not finalized<a name="line.125"></a>
+<span class="sourceLineNo">126</span>    *    until the {@link #getBean()} method is called.<a name="line.126"></a>
+<span class="sourceLineNo">127</span>    *<a name="line.127"></a>
+<span class="sourceLineNo">128</span>    * @param create If bean hasn't been instantiated yet, then instantiate it.<a name="line.128"></a>
+<span class="sourceLineNo">129</span>    * @return The inner bean object.<a name="line.129"></a>
+<span class="sourceLineNo">130</span>    */<a name="line.130"></a>
+<span class="sourceLineNo">131</span>   public T getBean(boolean create) {<a name="line.131"></a>
+<span class="sourceLineNo">132</span>      /** If this is a read-only bean, then we need to create it. */<a name="line.132"></a>
+<span class="sourceLineNo">133</span>      if (bean == null &amp;&amp; create &amp;&amp; meta.constructorArgs.length &gt; 0) {<a name="line.133"></a>
+<span class="sourceLineNo">134</span>         String[] props = meta.constructorArgs;<a name="line.134"></a>
+<span class="sourceLineNo">135</span>         Constructor&lt;T&gt; c = meta.constructor;<a name="line.135"></a>
+<span class="sourceLineNo">136</span>         Object[] args = new Object[props.length];<a name="line.136"></a>
+<span class="sourceLineNo">137</span>         for (int i = 0; i &lt; props.length; i++)<a name="line.137"></a>
+<span class="sourceLineNo">138</span>            args[i] = propertyCache.remove(props[i]);<a name="line.138"></a>
+<span class="sourceLineNo">139</span>         try {<a name="line.139"></a>
+<span class="sourceLineNo">140</span>            bean = c.newInstance(args);<a name="line.140"></a>
+<span class="sourceLineNo">141</span>            for (Map.Entry&lt;String,Object&gt; e : propertyCache.entrySet())<a name="line.141"></a>
+<span class="sourceLineNo">142</span>               put(e.getKey(), e.getValue());<a name="line.142"></a>
+<span class="sourceLineNo">143</span>            propertyCache = null;<a name="line.143"></a>
+<span class="sourceLineNo">144</span>         } catch (Exception e) {<a name="line.144"></a>
+<span class="sourceLineNo">145</span>            throw new BeanRuntimeException(e);<a name="line.145"></a>
+<span class="sourceLineNo">146</span>         }<a name="line.146"></a>
+<span class="sourceLineNo">147</span>      }<a name="line.147"></a>
+<span class="sourceLineNo">148</span>      return bean;<a name="line.148"></a>
+<span class="sourceLineNo">149</span>   }<a name="line.149"></a>
+<span class="sourceLineNo">150</span><a name="line.150"></a>
+<span class="sourceLineNo">151</span>   /**<a name="line.151"></a>
+<span class="sourceLineNo">152</span>    * Returns the value of the property identified as the URI property (annotated with {@link BeanProperty#beanUri()} as &lt;jk&gt;true&lt;/jk&gt;).<a name="line.152"></a>
+<span class="sourceLineNo">153</span>    *<a name="line.153"></a>
+<span class="sourceLineNo">154</span>    * @return The URI value, or &lt;jk&gt;null&lt;/jk&gt; if no URI property exists on this bean.<a name="line.154"></a>
+<span class="sourceLineNo">155</span>    */<a name="line.155"></a>
+<span class="sourceLineNo">156</span>   public Object getBeanUri() {<a name="line.156"></a>
+<span class="sourceLineNo">157</span>      BeanMeta&lt;T&gt; bm = getMeta();<a name="line.157"></a>
+<span class="sourceLineNo">158</span>      return bm.hasBeanUriProperty() ? bm.getBeanUriProperty().get(this) : null;<a name="line.158"></a>
+<span class="sourceLineNo">159</span>   }<a name="line.159"></a>
+<span class="sourceLineNo">160</span><a name="line.160"></a>
+<span class="sourceLineNo">161</span>   /**<a name="line.161"></a>
+<span class="sourceLineNo">162</span>    * Sets the bean URI property if the bean has a URI property.<a name="line.162"></a>
+<span class="sourceLineNo">163</span>    * Ignored otherwise.<a name="line.163"></a>
+<span class="sourceLineNo">164</span>    *<a name="line.164"></a>
+<span class="sourceLineNo">165</span>    * @param o The bean URI object.<a name="line.165"></a>
+<span class="sourceLineNo">166</span>    * @return If the bean context setting {@code beanMapPutReturnsOldValue} is &lt;jk&gt;true&lt;/jk&gt;, then the old value of the property is returned.<a name="line.166"></a>
+<span class="sourceLineNo">167</span>    *       Otherwise, this method always returns &lt;jk&gt;null&lt;/jk&gt;.<a name="line.167"></a>
+<span class="sourceLineNo">168</span>    */<a name="line.168"></a>
+<span class="sourceLineNo">169</span>   public Object putBeanUri(Object o) {<a name="line.169"></a>
+<span class="sourceLineNo">170</span>      BeanMeta&lt;T&gt; bm = getMeta();<a name="line.170"></a>
+<span class="sourceLineNo">171</span>      return bm.hasBeanUriProperty() ? bm.getBeanUriProperty().set(this, o) : null;<a name="line.171"></a>
+<span class="sourceLineNo">172</span>   }<a name="line.172"></a>
+<span class="sourceLineNo">173</span><a name="line.173"></a>
+<span class="sourceLineNo">174</span>   /**<a name="line.174"></a>
+<span class="sourceLineNo">175</span>    * Sets a property on the bean.<a name="line.175"></a>
+<span class="sourceLineNo">176</span>    * &lt;p&gt;<a name="line.176"></a>
+<span class="sourceLineNo">177</span>    * If there is a {@link PojoFilter} associated with this bean property or bean property type class, then <a name="line.177"></a>
+<span class="sourceLineNo">178</span>    *    you must pass in a filtered value.<a name="line.178"></a>
+<span class="sourceLineNo">179</span>    * For example, if the bean property type class is a {@link Date} and the bean property has the <a name="line.179"></a>
+<span class="sourceLineNo">180</span>    *    {@link com.ibm.juno.core.filters.DateFilter.ISO8601DT} filter associated with it through the <a name="line.180"></a>
+<span class="sourceLineNo">181</span>    *    {@link BeanProperty#filter() @BeanProperty.filter()} annotation, the value being passed in must be <a name="line.181"></a>
+<span class="sourceLineNo">182</span>    *    a String containing an ISO8601 date-time string value. <a name="line.182"></a>
+<span class="sourceLineNo">183</span>    *<a name="line.183"></a>
+<span class="sourceLineNo">184</span>    * &lt;dl&gt;<a name="line.184"></a>
+<span class="sourceLineNo">185</span>    *    &lt;dt&gt;Example:&lt;/dt&gt;<a name="line.185"></a>
+<span class="sourceLineNo">186</span>    *    &lt;dd&gt;<a name="line.186"></a>
+<span class="sourceLineNo">187</span>    * &lt;p class='bcode'&gt;<a name="line.187"></a>
+<span class="sourceLineNo">188</span>    *    &lt;jc&gt;// Construct a bean with a 'birthDate' Date field&lt;/jc&gt;<a name="line.188"></a>
+<span class="sourceLineNo">189</span>    *    Person p = &lt;jk&gt;new&lt;/jk&gt; Person();<a name="line.189"></a>
+<span class="sourceLineNo">190</span>    *<a name="line.190"></a>
+<span class="sourceLineNo">191</span>    *    &lt;jc&gt;// Create a bean context and add the ISO8601 date-time filter&lt;/jc&gt;<a name="line.191"></a>
+<span class="sourceLineNo">192</span>    *    BeanContext beanContext = &lt;jk&gt;new&lt;/jk&gt; BeanContext().addFilter(DateFilter.ISO8601DT.&lt;jk&gt;class&lt;/jk&gt;);<a name="line.192"></a>
+<span class="sourceLineNo">193</span>    *<a name="line.193"></a>
+<span class="sourceLineNo">194</span>    *    &lt;jc&gt;// Wrap our bean in a bean map&lt;/jc&gt;<a name="line.194"></a>
+<span class="sourceLineNo">195</span>    *    BeanMap&amp;lt;Person&amp;gt; b = beanContext.forBean(p);<a name="line.195"></a>
+<span class="sourceLineNo">196</span>    *<a name="line.196"></a>
+<span class="sourceLineNo">197</span>    *    &lt;jc&gt;// Set the field&lt;/jc&gt;<a name="line.197"></a>
+<span class="sourceLineNo">198</span>    *    myBeanMap.put(&lt;js&gt;"birthDate"&lt;/js&gt;, &lt;js&gt;"'1901-03-03T04:05:06-5000'"&lt;/js&gt;);<a name="line.198"></a>
+<span class="sourceLineNo">199</span>    * &lt;/p&gt;<a name="line.199"></a>
+<span class="sourceLineNo">200</span>    *    &lt;/dd&gt;<a name="line.200"></a>
+<span class="sourceLineNo">201</span>    * &lt;/dl&gt;<a name="line.201"></a>
+<span class="sourceLineNo">202</span>    *<a name="line.202"></a>
+<span class="sourceLineNo">203</span>    * @param property The name of the property to set.<a name="line.203"></a>
+<span class="sourceLineNo">204</span>    * @param value The value to set the property to.<a name="line.204"></a>
+<span class="sourceLineNo">205</span>    * @return If the bean context setting {@code beanMapPutReturnsOldValue} is &lt;jk&gt;true&lt;/jk&gt;, then the old value of the property is returned.<a name="line.205"></a>
+<span class="sourceLineNo">206</span>    *       Otherwise, this method always returns &lt;jk&gt;null&lt;/jk&gt;.<a name="line.206"></a>
+<span class="sourceLineNo">207</span>    * @throws RuntimeException if any of the following occur.<a name="line.207"></a>
+<span class="sourceLineNo">208</span>    *    &lt;ul&gt;<a name="line.208"></a>
+<span class="sourceLineNo">209</span>    *       &lt;li&gt;BeanMapEntry does not exist on the underlying object.<a name="line.209"></a>
+<span class="sourceLineNo">210</span>    *       &lt;li&gt;Security settings prevent access to the underlying object setter method.<a name="line.210"></a>
+<span class="sourceLineNo">211</span>    *       &lt;li&gt;An exception occurred inside the setter method.<a name="line.211"></a>
+<span class="sourceLineNo">212</span>    *    &lt;/ul&gt;<a name="line.212"></a>
+<span class="sourceLineNo">213</span>    */<a name="line.213"></a>
+<span class="sourceLineNo">214</span>   @Override /* Map */<a name="line.214"></a>
+<span class="sourceLineNo">215</span>   public Object put(String property, Object value) {<a name="line.215"></a>
+<span class="sourceLineNo">216</span>      BeanPropertyMeta&lt;T&gt; p = meta.properties.get(property);<a name="line.216"></a>
+<span class="sourceLineNo">217</span>      if (p == null) {<a name="line.217"></a>
+<span class="sourceLineNo">218</span>         if (meta.ctx.ignoreUnknownBeanProperties)<a name="line.218"></a>
+<span class="sourceLineNo">219</span>            return null;<a name="line.219"></a>
+<span class="sourceLineNo">220</span>         if (property.equals("&lt;uri&gt;") &amp;&amp; meta.uriProperty != null)<a name="line.220"></a>
+<span class="sourceLineNo">221</span>            return meta.uriProperty.set(this, value);<a name="line.221"></a>
+<span class="sourceLineNo">222</span><a name="line.222"></a>
+<span class="sourceLineNo">223</span>         // If this bean has subtypes, and we haven't set the subtype yet,<a name="line.223"></a>
+<span class="sourceLineNo">224</span>         // store the property in a temporary cache until the bean can be instantiated.<a name="line.224"></a>
+<span class="sourceLineNo">225</span>         // This eliminates the need for requiring that the sub type attribute be provided first.<a name="line.225"></a>
+<span class="sourceLineNo">226</span>         if (meta.subTypeIdProperty != null) {<a name="line.226"></a>
+<span class="sourceLineNo">227</span>            if (propertyCache == null)<a name="line.227"></a>
+<span class="sourceLineNo">228</span>               propertyCache = new TreeMap&lt;String,Object&gt;();<a name="line.228"></a>
+<span class="sourceLineNo">229</span>            return propertyCache.put(property, value);<a name="line.229"></a>
+<span class="sourceLineNo">230</span>         }<a name="line.230"></a>
+<span class="sourceLineNo">231</span><a name="line.231"></a>
+<span class="sourceLineNo">232</span>         throw new BeanRuntimeException(meta.c, "Bean property ''{0}'' not found.", property);<a name="line.232"></a>
+<span class="sourceLineNo">233</span>      }<a name="line.233"></a>
+<span class="sourceLineNo">234</span>      if (meta.filter != null)<a name="line.234"></a>
+<span class="sourceLineNo">235</span>         if (meta.filter.writeProperty(this.bean, property, value))<a name="line.235"></a>
+<span class="sourceLineNo">236</span>            return null;<a name="line.236"></a>
+<span class="sourceLineNo">237</span>      return p.set(this, value);<a name="line.237"></a>
+<span class="sourceLineNo">238</span>   }<a name="line.238"></a>
+<span class="sourceLineNo">239</span><a name="line.239"></a>
+<span class="sourceLineNo">240</span>   /**<a name="line.240"></a>
+<span class="sourceLineNo">241</span>    * Add a value to a collection or array property.<a name="line.241"></a>
+<span class="sourceLineNo">242</span>    * &lt;p&gt;<a name="line.242"></a>
+<span class="sourceLineNo">243</span>    *    As a general rule, adding to arrays is not recommended since the array must be recreate each time<a name="line.243"></a>
+<span class="sourceLineNo">244</span>    *    this method is called.<a name="line.244"></a>
+<span class="sourceLineNo">245</span>    *<a name="line.245"></a>
+<span class="sourceLineNo">246</span>    * @param property Property name or child-element name (if {@link Xml#childName()} is specified).<a name="line.246"></a>
+<span class="sourceLineNo">247</span>    * @param value The value to add to the collection or array.<a name="line.247"></a>
+<span class="sourceLineNo">248</span>    */<a name="line.248"></a>
+<span class="sourceLineNo">249</span>   public void add(String property, Object value) {<a name="line.249"></a>
+<span class="sourceLineNo">250</span>      BeanPropertyMeta&lt;T&gt; p = meta.properties.get(property);<a name="line.250"></a>
+<span class="sourceLineNo">251</span>      if (p == null) {<a name="line.251"></a>
+<span class="sourceLineNo">252</span>         if (meta.ctx.ignoreUnknownBeanProperties)<a name="line.252"></a>
+<span class="sourceLineNo">253</span>            return;<a name="line.253"></a>
+<span class="sourceLineNo">254</span>         throw new BeanRuntimeException(meta.c, "Bean property ''{0}'' not found.", property);<a name="line.254"></a>
+<span class="sourceLineNo">255</span>      }<a name="line.255"></a>
+<span class="sourceLineNo">256</span>      p.add(this, value);<a name="line.256"></a>
+<span class="sourceLineNo">257</span>   }<a name="line.257"></a>
+<span class="sourceLineNo">258</span><a name="line.258"></a>
+<span class="sourceLineNo">259</span><a name="line.259"></a>
+<span class="sourceLineNo">260</span>   /**<a name="line.260"></a>
+<span class="sourceLineNo">261</span>    * Gets a property on the bean.<a name="line.261"></a>
+<span class="sourceLineNo">262</span>    * &lt;p&gt;<a name="line.262"></a>
+<span class="sourceLineNo">263</span>    * If there is a {@link PojoFilter} associated with this bean property or bean property type class, then <a name="line.263"></a>
+<span class="sourceLineNo">264</span>    *    this method will return the filtered value.<a name="line.264"></a>
+<span class="sourceLineNo">265</span>    * For example, if the bean property type class is a {@link Date} and the bean property has the <a name="line.265"></a>
+<span class="sourceLineNo">266</span>    *    {@link com.ibm.juno.core.filters.DateFilter.ISO8601DT} filter associated with it through the <a name="line.266"></a>
+<span class="sourceLineNo">267</span>    *    {@link BeanProperty#filter() @BeanProperty.filter()} annotation, this method will return a String <a name="line.267"></a>
+<span class="sourceLineNo">268</span>    *    containing an ISO8601 date-time string value. <a name="line.268"></a>
+<span class="sourceLineNo">269</span>    *<a name="line.269"></a>
+<span class="sourceLineNo">270</span>    * &lt;dl&gt;<a name="line.270"></a>
+<span class="sourceLineNo">271</span>    *    &lt;dt&gt;Example:&lt;/dt&gt;<a name="line.271"></a>
+<span class="sourceLineNo">272</span>    *    &lt;dd&gt;<a name="line.272"></a>
+<span class="sourceLineNo">273</span>    * &lt;p class='bcode'&gt;<a name="line.273"></a>
+<span class="sourceLineNo">274</span>    *    &lt;jc&gt;// Construct a bean with a 'birthDate' Date field&lt;/jc&gt;<a name="line.274"></a>
+<span class="sourceLineNo">275</span>    *    Person p = &lt;jk&gt;new&lt;/jk&gt; Person();<a name="line.275"></a>
+<span class="sourceLineNo">276</span>    *    p.setBirthDate(&lt;jk&gt;new&lt;/jk&gt; Date(1, 2, 3, 4, 5, 6));<a name="line.276"></a>
+<span class="sourceLineNo">277</span>    *<a name="line.277"></a>
+<span class="sourceLineNo">278</span>    *    &lt;jc&gt;// Create a bean context and add the ISO8601 date-time filter&lt;/jc&gt;<a name="line.278"></a>
+<span class="sourceLineNo">279</span>    *    BeanContext beanContext = &lt;jk&gt;new&lt;/jk&gt; BeanContext().addFilter(DateFilter.ISO8601DT.&lt;jk&gt;class&lt;/jk&gt;);<a name="line.279"></a>
+<span class="sourceLineNo">280</span>    *<a name="line.280"></a>
+<span class="sourceLineNo">281</span>    *    &lt;jc&gt;// Wrap our bean in a bean map&lt;/jc&gt;<a name="line.281"></a>
+<span class="sourceLineNo">282</span>    *    BeanMap&amp;lt;Person&amp;gt; b = beanContext.forBean(p);<a name="line.282"></a>
+<span class="sourceLineNo">283</span>    *<a name="line.283"></a>
+<span class="sourceLineNo">284</span>    *    &lt;jc&gt;// Get the field as a string (i.e. "'1901-03-03T04:05:06-5000'")&lt;/jc&gt;<a name="line.284"></a>
+<span class="sourceLineNo">285</span>    *    String s = myBeanMap.get(&lt;js&gt;"birthDate"&lt;/js&gt;);<a name="line.285"></a>
+<span class="sourceLineNo">286</span>    * &lt;/p&gt;<a name="line.286"></a>
+<span class="sourceLineNo">287</span>    *    &lt;/dd&gt;<a name="line.287"></a>
+<span class="sourceLineNo">288</span>    * &lt;/dl&gt;<a name="line.288"></a>
+<span class="sourceLineNo">289</span>    *<a name="line.289"></a>
+<span class="sourceLineNo">290</span>    * @param property The name of the property to get.<a name="line.290"></a>
+<span class="sourceLineNo">291</span>    * @throws RuntimeException if any of the following occur.<a name="line.291"></a>
+<span class="sourceLineNo">292</span>    *    &lt;ol&gt;<a name="line.292"></a>
+<span class="sourceLineNo">293</span>    *       &lt;li&gt;BeanMapEntry does not exist on the underlying object.<a name="line.293"></a>
+<span class="sourceLineNo">294</span>    *       &lt;li&gt;Security settings prevent access to the underlying object getter method.<a name="line.294"></a>
+<span class="sourceLineNo">295</span>    *       &lt;li&gt;An exception occurred inside the getter method.<a name="line.295"></a>
+<span class="sourceLineNo">296</span>    *    &lt;/ol&gt;<a name="line.296"></a>
+<span class="sourceLineNo">297</span>    */<a name="line.297"></a>
+<span class="sourceLineNo">298</span>   @Override /* Map */<a name="line.298"></a>
+<span class="sourceLineNo">299</span>   public Object get(Object property) {<a name="line.299"></a>
+<span class="sourceLineNo">300</span>      BeanPropertyMeta&lt;T&gt; p = meta.properties.get(property);<a name="line.300"></a>
+<span class="sourceLineNo">301</span>      if (p == null)<a name="line.301"></a>
+<span class="sourceLineNo">302</span>         return null;<a name="line.302"></a>
+<span class="sourceLineNo">303</span>      if (meta.filter != null &amp;&amp; property != null)<a name="line.303"></a>
+<span class="sourceLineNo">304</span>         return meta.filter.readProperty(this.bean, property.toString(), p.get(this));<a name="line.304"></a>
+<span class="sourceLineNo">305</span>      return p.get(this);<a name="line.305"></a>
+<span class="sourceLineNo">306</span>   }<a name="line.306"></a>
+<span class="sourceLineNo">307</span><a name="line.307"></a>
+<span class="sourceLineNo">308</span>   /**<a name="line.308"></a>
+<span class="sourceLineNo">309</span>    * Convenience method for setting multiple property values by passing in JSON (or other) text.<a name="line.309"></a>
+<span class="sourceLineNo">310</span>    * &lt;p&gt;<a name="line.310"></a>
+<span class="sourceLineNo">311</span>    * Typically the input is going to be JSON, although the actual data type<a name="line.311"></a>
+<span class="sourceLineNo">312</span>    *    depends on the default parser specified by the {@link BeanContextFactory#setDefaultParser(ReaderParser)} method<a name="line.312"></a>
+<span class="sourceLineNo">313</span>    *    on the bean context that created this map.<a name="line.313"></a>
+<span class="sourceLineNo">314</span>    *<a name="line.314"></a>
+<span class="sourceLineNo">315</span>    * &lt;dl&gt;<a name="line.315"></a>
+<span class="sourceLineNo">316</span>    *    &lt;dt&gt;Example:&lt;/dt&gt;<a name="line.316"></a>
+<span class="sourceLineNo">317</span>    *    &lt;dd&gt;<a name="line.317"></a>
+<span class="sourceLineNo">318</span>    * &lt;p class='bcode'&gt;<a name="line.318"></a>
+<span class="sourceLineNo">319</span>    *    aPersonBean.load(&lt;js&gt;"{name:'John Smith',age:21}"&lt;/js&gt;)<a name="line.319"></a>
+<span class="sourceLineNo">320</span>    * &lt;/p&gt;<a name="line.320"></a>
+<span class="sourceLineNo">321</span>    *    &lt;/dd&gt;<a name="line.321"></a>
+<span class="sourceLineNo">322</span>    * &lt;/dl&gt;<a name="line.322"></a>
+<span class="sourceLineNo">323</span>    *<a name="line.323"></a>
+<span class="sourceLineNo">324</span>    * @param input The text that will get parsed into a map and then added to this map.<a name="line.324"></a>
+<span class="sourceLineNo">325</span>    * @return This object (for method chaining).<a name="line.325"></a>
+<span class="sourceLineNo">326</span>    * @throws ParseException If the input contains a syntax error or is malformed.<a name="line.326"></a>
+<span class="sourceLineNo">327</span>    */<a name="line.327"></a>
+<span class="sourceLineNo">328</span>   public BeanMap&lt;T&gt; load(String input) throws ParseException {<a name="line.328"></a>
+<span class="sourceLineNo">329</span>      putAll(new ObjectMap(input, this.meta.ctx.defaultParser));<a name="line.329"></a>
+<span class="sourceLineNo">330</span>      return this;<a name="line.330"></a>
+<span class="sourceLineNo">331</span>   }<a name="line.331"></a>
+<span class="sourceLineNo">332</span><a name="line.332"></a>
+<span class="sourceLineNo">333</span>   /**<a name="line.333"></a>
+<span class="sourceLineNo">334</span>    * Convenience method for setting multiple property values by passing in a reader.<a name="line.334"></a>
+<span class="sourceLineNo">335</span>    *<a name="line.335"></a>
+<span class="sourceLineNo">336</span>    * @param r The text that will get parsed into a map and then added to this map.<a name="line.336"></a>
+<span class="sourceLineNo">337</span>    * @param p The parser to use to parse the text.<a name="line.337"></a>
+<span class="sourceLineNo">338</span>    * @return This object (for method chaining).<a name="line.338"></a>
+<span class="sourceLineNo">339</span>    * @throws ParseException If the input contains a syntax error or is malformed.<a name="line.339"></a>
+<span class="sourceLineNo">340</span>    * @throws IOException Thrown by &lt;code&gt;Reader&lt;/code&gt;.<a name="line.340"></a>
+<span class="sourceLineNo">341</span>    */<a name="line.341"></a>
+<span class="sourceLineNo">342</span>   public BeanMap&lt;T&gt; load(Reader r, ReaderParser p) throws ParseException, IOException {<a name="line.342"></a>
+<span class="sourceLineNo">343</span>      putAll(new ObjectMap(r, p));<a name="line.343"></a>
+<span class="sourceLineNo">344</span>      return this;<a name="line.344"></a>
+<span class="sourceLineNo">345</span>   }<a name="line.345"></a>
+<span class="sourceLineNo">346</span><a name="line.346"></a>
+<span class="sourceLineNo">347</span>   /**<a name="line.347"></a>
+<span class="sourceLineNo">348</span>    * Convenience method for loading this map with the contents of the specified map.<a name="line.348"></a>
+<span class="sourceLineNo">349</span>    * &lt;p&gt;<a name="line.349"></a>
+<span class="sourceLineNo">350</span>    * Identical to {@link #putAll(Map)} except as a fluent-style method.<a name="line.350"></a>
+<span class="sourceLineNo">351</span>    *<a name="line.351"></a>
+<span class="sourceLineNo">352</span>    * @param entries The map containing the entries to add to this map.<a name="line.352"></a>
+<span class="sourceLineNo">353</span>    * @return This object (for method chaining).<a name="line.353"></a>
+<span class="sourceLineNo">354</span>    */<a name="line.354"></a>
+<span class="sourceLineNo">355</span>   @SuppressWarnings({"unchecked","rawtypes"})<a name="line.355"></a>
+<span class="sourceLineNo">356</span>   public BeanMap&lt;T&gt; load(Map entries) {<a name="line.356"></a>
+<span class="sourceLineNo">357</span>      putAll(entries);<a name="line.357"></a>
+<span class="sourceLineNo">358</span>      return this;<a name="line.358"></a>
+<span class="sourceLineNo">359</span>   }<a name="line.359"></a>
+<span class="sourceLineNo">360</span><a name="line.360"></a>
+<span class="sourceLineNo">361</span>   /**<a name="line.361"></a>
+<span class="sourceLineNo">362</span>    * Returns the names of all properties associated with the bean.<a name="line.362"></a>
+<span class="sourceLineNo">363</span>    * &lt;p&gt;<a name="line.363"></a>
+<span class="sourceLineNo">364</span>    *    The returned set is unmodifiable.<a name="line.364"></a>
+<span class="sourceLineNo">365</span>    */<a name="line.365"></a>
+<span class="sourceLineNo">366</span>   @Override /* Map */<a name="line.366"></a>
+<span class="sourceLineNo">367</span>   public Set&lt;String&gt; keySet() {<a name="line.367"></a>
+<span class="sourceLineNo">368</span>      return meta.properties.keySet();<a name="line.368"></a>
+<span class="sourceLineNo">369</span>   }<a name="line.369"></a>
+<span class="sourceLineNo">370</span><a name="line.370"></a>
+<span class="sourceLineNo">371</span>   /**<a name="line.371"></a>
+<span class="sourceLineNo">372</span>    * Returns the specified property on this bean map.<a name="line.372"></a>
+<span class="sourceLineNo">373</span>    * &lt;p&gt;<a name="line.373"></a>
+<span class="sourceLineNo">374</span>    *    Allows you to get and set an individual property on a bean without having a<a name="line.374"></a>
+<span class="sourceLineNo">375</span>    *    handle to the bean itself by using the {@link BeanMapEntry#getValue()}<a name="line.375"></a>
+<span class="sourceLineNo">376</span>    *    and {@link BeanMapEntry#setValue(Object)} methods.<a name="line.376"></a>
+<span class="sourceLineNo">377</span>    * &lt;p&gt;<a name="line.377"></a>
+<span class="sourceLineNo">378</span>    *    This method can also be used to get metadata on a property by<a name="line.378"></a>
+<span class="sourceLineNo">379</span>    *    calling the {@link BeanMapEntry#getMeta()} method.<a name="line.379"></a>
+<span class="sourceLineNo">380</span>    *<a name="line.380"></a>
+<span class="sourceLineNo">381</span>    * @param propertyName The name of the property to look up.<a name="line.381"></a>
+<span class="sourceLineNo">382</span>    * @return The bean property, or null if the bean has no such property.<a name="line.382"></a>
+<span class="sourceLineNo">383</span>    */<a name="line.383"></a>
+<span class="sourceLineNo">384</span>   public BeanMapEntry&lt;T&gt; getProperty(String propertyName) {<a name="line.384"></a>
+<span class="sourceLineNo">385</span>      BeanPropertyMeta&lt;T&gt; p = meta.properties.get(propertyName);<a name="line.385"></a>
+<span class="sourceLineNo">386</span>      if (p == null)<a name="line.386"></a>
+<span class="sourceLineNo">387</span>         return null;<a name="line.387"></a>
+<span class="sourceLineNo">388</span>      return new BeanMapEntry&lt;T&gt;(this, p);<a name="line.388"></a>
+<span class="sourceLineNo">389</span>   }<a name="line.389"></a>
+<span class="sourceLineNo">390</span><a name="line.390"></a>
+<span class="sourceLineNo">391</span>   /**<a name="line.391"></a>
+<span class="sourceLineNo">392</span>    * Returns the metadata on the specified property.<a name="line.392"></a>
+<span class="sourceLineNo">393</span>    *<a name="line.393"></a>
+<span class="sourceLineNo">394</span>    * @param propertyName The name of the bean property.<a name="line.394"></a>
+<span class="sourceLineNo">395</span>    * @return Metadata on the specified property, or &lt;jk&gt;null&lt;/jk&gt; if that property does not exist.<a name="line.395"></a>
+<span class="sourceLineNo">396</span>    */<a name="line.396"></a>
+<span class="sourceLineNo">397</span>   public BeanPropertyMeta&lt;T&gt; getPropertyMeta(String propertyName) {<a name="line.397"></a>
+<span class="sourceLineNo">398</span>      return meta.properties.get(propertyName);<a name="line.398"></a>
+<span class="sourceLineNo">399</span>   }<a name="line.399"></a>
+<span class="sourceLineNo">400</span><a name="line.400"></a>
+<span class="sourceLineNo">401</span>   /**<a name="line.401"></a>
+<span class="sourceLineNo">402</span>    * Returns the {@link ClassMeta} of the wrapped bean.<a name="line.402"></a>
+<span class="sourceLineNo">403</span>    *<a name="line.403"></a>
+<span class="sourceLineNo">404</span>    * @return The class type of the wrapped bean.<a name="line.404"></a>
+<span class="sourceLineNo">405</span>    */<a name="line.405"></a>
+<span class="sourceLineNo">406</span>   @Override /* Delagate */<a name="line.406"></a>
+<span class="sourceLineNo">407</span>   public ClassMeta&lt;T&gt; getClassMeta() {<a name="line.407"></a>
+<span class="sourceLineNo">408</span>      return this.meta.getClassMeta();<a name="line.408"></a>
+<span class="sourceLineNo">409</span>   }<a name="line.409"></a>
+<span class="sourceLineNo">410</span><a name="line.410"></a>
+<span class="sourceLineNo">411</span>   /**<a name="line.411"></a>
+<span class="sourceLineNo">412</span>    * Returns all the properties associated with the bean.<a name="line.412"></a>
+<span class="sourceLineNo">413</span>    */<a name="line.413"></a>
+<span class="sourceLineNo">414</span>   @Override /* Map */<a name="line.414"></a>
+<span class="sourceLineNo">415</span>   public Set&lt;Entry&lt;String,Object&gt;&gt; entrySet() {<a name="line.415"></a>
+<span class="sourceLineNo">416</span><a name="line.416"></a>
+<span class="sourceLineNo">417</span>      // Construct our own anonymous set to implement this function.<a name="line.417"></a>
+<span class="sourceLineNo">418</span>      Set&lt;Entry&lt;String,Object&gt;&gt; s = new AbstractSet&lt;Entry&lt;String,Object&gt;&gt;() {<a name="line.418"></a>
+<span class="sourceLineNo">419</span><a name="line.419"></a>
+<span class="sourceLineNo">420</span>         // Get the list of properties from the meta object.<a name="line.420"></a>
+<span class="sourceLineNo">421</span>         // Note that the HashMap.values() method caches results, so this collection<a name="line.421"></a>
+<span class="sourceLineNo">422</span>         // will really only be constructed once per bean type since the underlying<a name="line.422"></a>
+<span class="sourceLineNo">423</span>         // map never changes.<a name="line.423"></a>
+<span class="sourceLineNo">424</span>         final Collection&lt;BeanPropertyMeta&lt;T&gt;&gt; pSet = meta.properties.values();<a name="line.424"></a>
+<span class="sourceLineNo">425</span><a name="line.425"></a>
+<span class="sourceLineNo">426</span>         @Override /* Set */<a name="line.426"></a>
+<span class="sourceLineNo">427</span>         public Iterator&lt;java.util.Map.Entry&lt;String, Object&gt;&gt; iterator() {<a name="line.427"></a>
+<span class="sourceLineNo">428</span><a name="line.428"></a>
+<span class="sourceLineNo">429</span>            // Construct our own anonymous iterator that uses iterators against the meta.properties<a name="line.429"></a>
+<span class="sourceLineNo">430</span>            // map to maintain position.  This prevents us from having to construct any of our own<a name="line.430"></a>
+<span class="sourceLineNo">431</span>            // collection objects.<a name="line.431"></a>
+<span class="sourceLineNo">432</span>            return new Iterator&lt;Entry&lt;String,Object&gt;&gt;() {<a name="line.432"></a>
+<span class="sourceLineNo">433</span><a name="line.433"></a>
+<span class="sourceLineNo">434</span>               final Iterator&lt;BeanPropertyMeta&lt;T&gt;&gt; pIterator = pSet.iterator();<a name="line.434"></a>
+<span class="sourceLineNo">435</span><a name="line.435"></a>
+<span class="sourceLineNo">436</span>               @Override /* Iterator */<a name="line.436"></a>
+<span class="sourceLineNo">437</span>               public boolean hasNext() {<a name="line.437"></a>
+<span class="sourceLineNo">438</span>                  return pIterator.hasNext();<a name="line.438"></a>
+<span class="sourceLineNo">439</span>               }<a name="line.439"></a>
+<span class="sourceLineNo">440</span><a name="line.440"></a>
+<span class="sourceLineNo">441</span>               @Override /* Iterator */<a name="line.441"></a>
+<span class="sourceLineNo">442</span>               public Map.Entry&lt;String, Object&gt; next() {<a name="line.442"></a>
+<span class="sourceLineNo">443</span>                  return new BeanMapEntry&lt;T&gt;(BeanMap.this, pIterator.next());<a name="line.443"></a>
+<span class="sourceLineNo">444</span>               }<a name="line.444"></a>
+<span class="sourceLineNo">445</span><a name="line.445"></a>
+<span class="sourceLineNo">446</span>               @Override /* Iterator */<a name="line.446"></a>
+<span class="sourceLineNo">447</span>               public void remove() {<a name="line.447"></a>
+<span class="sourceLineNo">448</span>                  throw new UnsupportedOperationException("Cannot remove item from iterator.");<a name="line.448"></a>
+<span class="sourceLineNo">449</span>               }<a name="line.449"></a>
+<span class="sourceLineNo">450</span>            };<a name="line.450"></a>
+<span class="sourceLineNo">451</span>         }<a name="line.451"></a>
+<span class="sourceLineNo">452</span><a name="line.452"></a>
+<span class="sourceLineNo">453</span>         @Override /* Set */<a name="line.453"></a>
+<span class="sourceLineNo">454</span>         public int size() {<a name="line.454"></a>
+<span class="sourceLineNo">455</span>            return pSet.size();<a name="line.455"></a>
+<span class="sourceLineNo">456</span>         }<a name="line.456"></a>
+<span class="sourceLineNo">457</span>      };<a name="line.457"></a>
+<span class="sourceLineNo">458</span><a name="line.458"></a>
+<span class="sourceLineNo">459</span>      return s;<a name="line.459"></a>
+<span class="sourceLineNo">460</span>   }<a name="line.460"></a>
+<span class="sourceLineNo">461</span>}<a name="line.461"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

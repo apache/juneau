@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../javadoc.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>/*******************************************************************************<a name="line.1"></a>
+<span class="sourceLineNo">002</span> * Licensed Materials - Property of IBM<a name="line.2"></a>
+<span class="sourceLineNo">003</span> * (c) Copyright IBM Corporation 2014, 2015. All Rights Reserved.<a name="line.3"></a>
+<span class="sourceLineNo">004</span> *<a name="line.4"></a>
+<span class="sourceLineNo">005</span> *  The source code for this program is not published or otherwise<a name="line.5"></a>
+<span class="sourceLineNo">006</span> *  divested of its trade secrets, irrespective of what has been<a name="line.6"></a>
+<span class="sourceLineNo">007</span> *  deposited with the U.S. Copyright Office.<a name="line.7"></a>
+<span class="sourceLineNo">008</span> *******************************************************************************/<a name="line.8"></a>
+<span class="sourceLineNo">009</span>package com.ibm.juno.core.utils;<a name="line.9"></a>
+<span class="sourceLineNo">010</span><a name="line.10"></a>
+<span class="sourceLineNo">011</span>import static com.ibm.juno.core.utils.ThrowableUtils.*;<a name="line.11"></a>
+<span class="sourceLineNo">012</span><a name="line.12"></a>
+<span class="sourceLineNo">013</span>/**<a name="line.13"></a>
+<span class="sourceLineNo">014</span> * Stores a set of language keywords for quick lookup.<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * &lt;p&gt;<a name="line.15"></a>
+<span class="sourceLineNo">016</span> * Keywords must be:<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * &lt;ul&gt;<a name="line.17"></a>
+<span class="sourceLineNo">018</span> *    &lt;li&gt;2 or more characters in length.<a name="line.18"></a>
+<span class="sourceLineNo">019</span> *    &lt;li&gt;Lowercase ASCII.<a name="line.19"></a>
+<span class="sourceLineNo">020</span> * &lt;/ul&gt;<a name="line.20"></a>
+<span class="sourceLineNo">021</span> *<a name="line.21"></a>
+<span class="sourceLineNo">022</span> * @author James Bognar (jbognar@us.ibm.com)<a name="line.22"></a>
+<span class="sourceLineNo">023</span> */<a name="line.23"></a>
+<span class="sourceLineNo">024</span>public final class KeywordSet {<a name="line.24"></a>
+<span class="sourceLineNo">025</span>   final char[][][][] store;<a name="line.25"></a>
+<span class="sourceLineNo">026</span><a name="line.26"></a>
+<span class="sourceLineNo">027</span>   /**<a name="line.27"></a>
+<span class="sourceLineNo">028</span>    * Constructor.<a name="line.28"></a>
+<span class="sourceLineNo">029</span>    *<a name="line.29"></a>
+<span class="sourceLineNo">030</span>    * @param keywords The list of keywords.<a name="line.30"></a>
+<span class="sourceLineNo">031</span>    */<a name="line.31"></a>
+<span class="sourceLineNo">032</span>   public KeywordSet(String... keywords) {<a name="line.32"></a>
+<span class="sourceLineNo">033</span>      this.store = new char[26][][][];<a name="line.33"></a>
+<span class="sourceLineNo">034</span><a name="line.34"></a>
+<span class="sourceLineNo">035</span>      for (String keyword : keywords) {<a name="line.35"></a>
+<span class="sourceLineNo">036</span>         if (keyword.length() &lt; 2)<a name="line.36"></a>
+<span class="sourceLineNo">037</span>            illegalArg("Invalid keyword '{0}' passed to KeywordStore.", keyword);<a name="line.37"></a>
+<span class="sourceLineNo">038</span>         int c0 = keyword.charAt(0) - 'a';<a name="line.38"></a>
+<span class="sourceLineNo">039</span>         int c1 = keyword.charAt(1) - 'a';<a name="line.39"></a>
+<span class="sourceLineNo">040</span>         if (c0 &lt; 0 || c0 &gt; 25 || c1 &lt; 0 || c1 &gt; 25)<a name="line.40"></a>
+<span class="sourceLineNo">041</span>            illegalArg("Invalid keyword '{0}' passed to KeywordStore.", keyword);<a name="line.41"></a>
+<span class="sourceLineNo">042</span>         if (this.store[c0] == null)<a name="line.42"></a>
+<span class="sourceLineNo">043</span>            this.store[c0] = new char[26][][];<a name="line.43"></a>
+<span class="sourceLineNo">044</span>         char[][][] x1 = this.store[c0];<a name="line.44"></a>
+<span class="sourceLineNo">045</span>         char[][] x2;<a name="line.45"></a>
+<span class="sourceLineNo">046</span>         if (x1[c1] == null)<a name="line.46"></a>
+<span class="sourceLineNo">047</span>            x2 = new char[1][];<a name="line.47"></a>
+<span class="sourceLineNo">048</span>         else {<a name="line.48"></a>
+<span class="sourceLineNo">049</span>            x2 = new char[x1[c1].length+1][];<a name="line.49"></a>
+<span class="sourceLineNo">050</span>            System.arraycopy(x1[c1], 0, x2, 0, x1[c1].length);<a name="line.50"></a>
+<span class="sourceLineNo">051</span>         }<a name="line.51"></a>
+<span class="sourceLineNo">052</span>         x2[x2.length-1] = keyword.toCharArray();<a name="line.52"></a>
+<span class="sourceLineNo">053</span>         x1[c1] = x2;<a name="line.53"></a>
+<span class="sourceLineNo">054</span>      }<a name="line.54"></a>
+<span class="sourceLineNo">055</span>   }<a name="line.55"></a>
+<span class="sourceLineNo">056</span><a name="line.56"></a>
+<span class="sourceLineNo">057</span>   /**<a name="line.57"></a>
+<span class="sourceLineNo">058</span>    * Returns &lt;jk&gt;true&lt;jk&gt; if the specified string exists in this store.<a name="line.58"></a>
+<span class="sourceLineNo">059</span>    *<a name="line.59"></a>
+<span class="sourceLineNo">060</span>    * @param s The string to check.<a name="line.60"></a>
+<span class="sourceLineNo">061</span>    * @return &lt;jk&gt;true&lt;jk&gt; if the specified string exists in this store.<a name="line.61"></a>
+<span class="sourceLineNo">062</span>    */<a name="line.62"></a>
+<span class="sourceLineNo">063</span>   public boolean contains(String s) {<a name="line.63"></a>
+<span class="sourceLineNo">064</span>      if (s == null || s.length() &lt; 2)<a name="line.64"></a>
+<span class="sourceLineNo">065</span>         return false;<a name="line.65"></a>
+<span class="sourceLineNo">066</span>      int c0 = s.charAt(0) - 'a', c1 = s.charAt(1) - 'a';<a name="line.66"></a>
+<span class="sourceLineNo">067</span>      if (c0 &lt; 0 || c0 &gt; 25 || c1 &lt; 0 || c1 &gt; 25)<a name="line.67"></a>
+<span class="sourceLineNo">068</span>         return false;<a name="line.68"></a>
+<span class="sourceLineNo">069</span>      char[][][] x1 = store[c0];<a name="line.69"></a>
+<span class="sourceLineNo">070</span>      if (x1 == null)<a name="line.70"></a>
+<span class="sourceLineNo">071</span>         return false;<a name="line.71"></a>
+<span class="sourceLineNo">072</span>      char[][] x2 = x1[c1];<a name="line.72"></a>
+<span class="sourceLineNo">073</span>      if (x2 == null)<a name="line.73"></a>
+<span class="sourceLineNo">074</span>         return false;<a name="line.74"></a>
+<span class="sourceLineNo">075</span>      for (int i = 0; i &lt; x2.length; i++) {<a name="line.75"></a>
+<span class="sourceLineNo">076</span>         char[] keyword = x2[i];<a name="line.76"></a>
+<span class="sourceLineNo">077</span>         if (keyword.length == s.length()) {<a name="line.77"></a>
+<span class="sourceLineNo">078</span>            for (int j = 0; j &lt; keyword.length; j++)<a name="line.78"></a>
+<span class="sourceLineNo">079</span>               if (keyword[j] != s.charAt(j))<a name="line.79"></a>
+<span class="sourceLineNo">080</span>                  return false;<a name="line.80"></a>
+<span class="sourceLineNo">081</span>            return true;<a name="line.81"></a>
+<span class="sourceLineNo">082</span>         }<a name="line.82"></a>
+<span class="sourceLineNo">083</span>      }<a name="line.83"></a>
+<span class="sourceLineNo">084</span>      return false;<a name="line.84"></a>
+<span class="sourceLineNo">085</span>   }<a name="line.85"></a>
+<span class="sourceLineNo">086</span>}<a name="line.86"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

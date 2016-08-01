@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../javadoc.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>/*******************************************************************************<a name="line.1"></a>
+<span class="sourceLineNo">002</span> * Licensed Materials - Property of IBM<a name="line.2"></a>
+<span class="sourceLineNo">003</span> * (c) Copyright IBM Corporation 2014, 2015. All Rights Reserved.<a name="line.3"></a>
+<span class="sourceLineNo">004</span> *<a name="line.4"></a>
+<span class="sourceLineNo">005</span> *  The source code for this program is not published or otherwise<a name="line.5"></a>
+<span class="sourceLineNo">006</span> *  divested of its trade secrets, irrespective of what has been<a name="line.6"></a>
+<span class="sourceLineNo">007</span> *  deposited with the U.S. Copyright Office.<a name="line.7"></a>
+<span class="sourceLineNo">008</span> *******************************************************************************/<a name="line.8"></a>
+<span class="sourceLineNo">009</span>package com.ibm.juno.server.converters;<a name="line.9"></a>
+<span class="sourceLineNo">010</span><a name="line.10"></a>
+<span class="sourceLineNo">011</span>import static javax.servlet.http.HttpServletResponse.*;<a name="line.11"></a>
+<span class="sourceLineNo">012</span><a name="line.12"></a>
+<span class="sourceLineNo">013</span>import com.ibm.juno.core.*;<a name="line.13"></a>
+<span class="sourceLineNo">014</span>import com.ibm.juno.core.json.*;<a name="line.14"></a>
+<span class="sourceLineNo">015</span>import com.ibm.juno.core.utils.*;<a name="line.15"></a>
+<span class="sourceLineNo">016</span>import com.ibm.juno.server.*;<a name="line.16"></a>
+<span class="sourceLineNo">017</span><a name="line.17"></a>
+<span class="sourceLineNo">018</span>/**<a name="line.18"></a>
+<span class="sourceLineNo">019</span> * Converter for enablement of {@link PojoIntrospector} support on response objects returned by a &lt;code&gt;@RestMethod&lt;/code&gt; method.<a name="line.19"></a>
+<span class="sourceLineNo">020</span> * &lt;p&gt;<a name="line.20"></a>
+<span class="sourceLineNo">021</span> *    When enabled, public methods can be called on objects returned through the {@link RestResponse#setOutput(Object)} method.<a name="line.21"></a>
+<span class="sourceLineNo">022</span> * &lt;p&gt;<a name="line.22"></a>
+<span class="sourceLineNo">023</span> *    Note that opening up public methods for calling through a REST interface can be dangerous, and should<a name="line.23"></a>
+<span class="sourceLineNo">024</span> *    be done with caution.<a name="line.24"></a>
+<span class="sourceLineNo">025</span> * &lt;p&gt;<a name="line.25"></a>
+<span class="sourceLineNo">026</span> *    Java methods are invoked by passing in the following URL parameters:<a name="line.26"></a>
+<span class="sourceLineNo">027</span> * &lt;ul&gt;<a name="line.27"></a>
+<span class="sourceLineNo">028</span> *    &lt;li&gt;&lt;code&gt;&amp;amp;invokeMethod&lt;/code&gt; - The Java method name, optionally with arguments if necessary to differentiate between methods.<a name="line.28"></a>
+<span class="sourceLineNo">029</span> *    &lt;li&gt;&lt;code&gt;&amp;amp;invokeArgs&lt;/code&gt; - The arguments as a JSON array.<a name="line.29"></a>
+<span class="sourceLineNo">030</span> * &lt;/ul&gt;<a name="line.30"></a>
+<span class="sourceLineNo">031</span> * &lt;p&gt;<a name="line.31"></a>
+<span class="sourceLineNo">032</span> *    See {@link PojoIntrospector} for additional information on introspecting POJO methods.<a name="line.32"></a>
+<span class="sourceLineNo">033</span> */<a name="line.33"></a>
+<span class="sourceLineNo">034</span>public final class Introspectable implements RestConverter {<a name="line.34"></a>
+<span class="sourceLineNo">035</span><a name="line.35"></a>
+<span class="sourceLineNo">036</span>   @Override /* RestConverter */<a name="line.36"></a>
+<span class="sourceLineNo">037</span>   @SuppressWarnings({"unchecked", "rawtypes"})<a name="line.37"></a>
+<span class="sourceLineNo">038</span>   public Object convert(RestRequest req, Object o, ClassMeta cm) throws RestException {<a name="line.38"></a>
+<span class="sourceLineNo">039</span>      String method = req.getParameter("invokeMethod");<a name="line.39"></a>
+<span class="sourceLineNo">040</span>      String args = req.getParameter("invokeArgs");<a name="line.40"></a>
+<span class="sourceLineNo">041</span>      if (method == null)<a name="line.41"></a>
+<span class="sourceLineNo">042</span>         return o;<a name="line.42"></a>
+<span class="sourceLineNo">043</span>      try {<a name="line.43"></a>
+<span class="sourceLineNo">044</span>         if (cm.getPojoFilter() != null)<a name="line.44"></a>
+<span class="sourceLineNo">045</span>            o = cm.getPojoFilter().filter(o);<a name="line.45"></a>
+<span class="sourceLineNo">046</span>         return new PojoIntrospector(o, JsonParser.DEFAULT).invokeMethod(method, args);<a name="line.46"></a>
+<span class="sourceLineNo">047</span>      } catch (Exception e) {<a name="line.47"></a>
+<span class="sourceLineNo">048</span>         e.printStackTrace();<a name="line.48"></a>
+<span class="sourceLineNo">049</span>         return new RestException(SC_INTERNAL_SERVER_ERROR,<a name="line.49"></a>
+<span class="sourceLineNo">050</span>            "Error occurred trying to invoke method: {0}",<a name="line.50"></a>
+<span class="sourceLineNo">051</span>            e.getLocalizedMessage()<a name="line.51"></a>
+<span class="sourceLineNo">052</span>         ).initCause(e);<a name="line.52"></a>
+<span class="sourceLineNo">053</span>      }<a name="line.53"></a>
+<span class="sourceLineNo">054</span>   }<a name="line.54"></a>
+<span class="sourceLineNo">055</span>}<a name="line.55"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

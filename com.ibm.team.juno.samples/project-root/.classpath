@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry exported="true" kind="lib" path="lib/commons-codec-1.9.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/commons-io-1.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/commons-logging-1.1.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/httpclient-4.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/httpcore-4.4.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/httpmime-4.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/javax.servlet-api-3.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jetty-all-8.1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/juno-all-5.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/org.apache.commons.fileupload_1.3.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/derby.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jena-core-2.7.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jena-iri-0.9.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/log4j-1.2.16.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/slf4j-api-1.6.4.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/slf4j-log4j12-1.6.4.jar"/>
+        <classpathentry kind="output" path="bin"/>
+</classpath>

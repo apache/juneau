@@ -1,0 +1,356 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="en">
+<head>
+<title>RdfParserProperties (Juno)</title>
+<link rel="stylesheet" type="text/css" href="../../../../../javadoc.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="RdfParserProperties (Juno)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a>
+<div class="skip"><a href="#skip-navbar_top" title="Skip navigation links">Skip navigation links</a></div>
+<a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/RdfParserProperties.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../com/ibm/juno/core/jena/RdfParserContext.html" title="class in com.ibm.juno.core.jena"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html" title="class in com.ibm.juno.core.jena"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?com/ibm/juno/core/jena/RdfParserProperties.html" target="_top">Frames</a></li>
+<li><a href="RdfParserProperties.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">com.ibm.juno.core.jena</div>
+<h2 title="Class RdfParserProperties" class="title">Class RdfParserProperties</h2>
+</div>
+<div class="contentContainer">
+<ul class="inheritance">
+<li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
+<li>
+<ul class="inheritance">
+<li><a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html" title="class in com.ibm.juno.core.jena">com.ibm.juno.core.jena.RdfProperties</a></li>
+<li>
+<ul class="inheritance">
+<li>com.ibm.juno.core.jena.RdfParserProperties</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<dl>
+<dt>All Implemented Interfaces:</dt>
+<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Cloneable.html?is-external=true" title="class or interface in java.lang">Cloneable</a></dd>
+</dl>
+<hr>
+<br>
+<pre>public final class <a href="../../../../../src-html/com/ibm/juno/core/jena/RdfParserProperties.html#line.28">RdfParserProperties</a>
+extends <a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html" title="class in com.ibm.juno.core.jena">RdfProperties</a>
+implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Cloneable.html?is-external=true" title="class or interface in java.lang">Cloneable</a></pre>
+<div class="block">Configurable properties on the <a href="../../../../../com/ibm/juno/core/jena/RdfParser.html" title="class in com.ibm.juno.core.jena"><code>RdfParser</code></a> class.
+ <p>
+   Use the <a href="../../../../../com/ibm/juno/core/jena/RdfParser.html#setProperty(java.lang.String, java.lang.Object)"><code>RdfParser.setProperty(String, Object)</code></a> method to set property values.
+ <p>
+   In addition to these properties, the following properties are also applicable for <a href="../../../../../com/ibm/juno/core/jena/RdfParser.html" title="class in com.ibm.juno.core.jena"><code>RdfParser</code></a>.
+ <ul>
+   <li><a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html" title="class in com.ibm.juno.core.jena"><code>RdfProperties</code></a>
+   <li><a href="../../../../../com/ibm/juno/core/parser/ParserProperties.html" title="class in com.ibm.juno.core.parser"><code>ParserProperties</code></a>
+   <li><a href="../../../../../com/ibm/juno/core/BeanContextProperties.html" title="class in com.ibm.juno.core"><code>BeanContextProperties</code></a>
+ </ul></div>
+<dl><dt><span class="strong">Author:</span></dt>
+  <dd>James Bognar (jbognar@us.ibm.com)</dd></dl>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Field Summary table, listing fields, and an explanation">
+<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/jena/RdfParserProperties.html#RDF_trimWhitespace">RDF_trimWhitespace</a></strong></code>
+<div class="block">Trim whitespace from text elements (<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang"><code>Boolean</code></a>, default=<jk>false</jk>).</div>
+</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="fields_inherited_from_class_com.ibm.juno.core.jena.RdfProperties">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;com.ibm.juno.core.jena.<a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html" title="class in com.ibm.juno.core.jena">RdfProperties</a></h3>
+<code><a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_arp_embedding">RDF_arp_embedding</a>, <a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_arp_err_">RDF_arp_err_</a>, <a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_arp_errorMode">RDF_arp_errorMode</a>, <a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_arp_ign_">RDF_arp_ign_</a>, <a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_arp_iriRules">RDF_arp_iriRules</a>, <a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_arp_warn_">RDF_arp_warn_</a>, <a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_collectionFormat">RDF_collectionFormat</a>, <a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_junoBpNs">RDF_junoBpNs</a>, <a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_junoNs">RDF_junoNs</a>, <a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_language">RDF_language</a>, <a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_looseCollection">RDF_looseCollection</a>, <a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_n3_abbrevBaseUri">RDF_n3_abbrevBaseUri</a>, <a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_n3_indentProperty">RDF_n3_indentProperty</a>, <a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_n3_minGap">RDF_n3_minGap</a>, <a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_n3_objectLists">RDF_n3_objectLists</a>, <a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_n3_propertyColumn">RDF_n3_propertyColumn</a>, <a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_n3_subjectColumn">RDF_n3_subjectColumn</a>, <a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_n3_useDoubles">RDF_n3_useDoubles</a>, <a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_n3_usePropertySymbols">RDF_n3_usePropertySymbols</a>, <a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_n3_useTripleQuotedStrings">RDF_n3_useTripleQuotedStrings</a>, <a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_n3_widePropertyLen">RDF_n3_widePropertyLen</a>, <a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_rdfxml_allowBadUris">RDF_rdfxml_allowBadUris</a>, <a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_rdfxml_attributeQuoteChar">RDF_rdfxml_attributeQuoteChar</a>, <a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_rdfxml_blockRules">RDF_rdfxml_blockRules</a>, <a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_rdfxml_longId">RDF_rdfxml_longId</a>, <a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_rdfxml_relativeUris">RDF_rdfxml_relativeUris</a>, <a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_rdfxml_showDoctypeDeclaration">RDF_rdfxml_showDoctypeDeclaration</a>, <a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_rdfxml_showXmlDeclaration">RDF_rdfxml_showXmlDeclaration</a>, <a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_rdfxml_tab">RDF_rdfxml_tab</a>, <a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_rdfxml_xmlBase">RDF_rdfxml_xmlBase</a>, <a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_useXmlNamespaces">RDF_useXmlNamespaces</a></code></li>
+</ul>
+</li>
+</ul>
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_summary">
+<!--   -->
+</a>
+<h3>Constructor Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Constructor Summary table, listing constructors, and an explanation">
+<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../../com/ibm/juno/core/jena/RdfParserProperties.html#RdfParserProperties()">RdfParserProperties</a></strong>()</code>&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../com/ibm/juno/core/jena/RdfParserProperties.html" title="class in com.ibm.juno.core.jena">RdfParserProperties</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/jena/RdfParserProperties.html#clone()">clone</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/jena/RdfParserProperties.html#setProperty(java.lang.String, java.lang.Object)">setProperty</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;property,
+                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;value)</code>
+<div class="block">Sets the specified property value.</div>
+</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
+<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang">equals</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang">hashCode</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang">toString</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long, int)" title="class or interface in java.lang">wait</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ============ FIELD DETAIL =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_detail">
+<!--   -->
+</a>
+<h3>Field Detail</h3>
+<a name="RDF_trimWhitespace">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>RDF_trimWhitespace</h4>
+<pre>public static final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> <a href="../../../../../src-html/com/ibm/juno/core/jena/RdfParserProperties.html#line.36">RDF_trimWhitespace</a></pre>
+<div class="block">Trim whitespace from text elements (<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang"><code>Boolean</code></a>, default=<jk>false</jk>).
+ <p>
+ If <jk>true</jk>, whitespace in text elements will be automatically trimmed.</div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#com.ibm.juno.core.jena.RdfParserProperties.RDF_trimWhitespace">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_detail">
+<!--   -->
+</a>
+<h3>Constructor Detail</h3>
+<a name="RdfParserProperties()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>RdfParserProperties</h4>
+<pre>public&nbsp;<a href="../../../../../src-html/com/ibm/juno/core/jena/RdfParserProperties.html#line.28">RdfParserProperties</a>()</pre>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="setProperty(java.lang.String, java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setProperty</h4>
+<pre>public&nbsp;boolean&nbsp;<a href="../../../../../src-html/com/ibm/juno/core/jena/RdfParserProperties.html#line.47">setProperty</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;property,
+                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;value)</pre>
+<div class="block">Sets the specified property value.</div>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#setProperty(java.lang.String, java.lang.Object)">setProperty</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html" title="class in com.ibm.juno.core.jena">RdfProperties</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>property</code> - The property name.</dd><dd><code>value</code> - The property value.</dd>
+<dt><span class="strong">Returns:</span></dt><dd><jk>true</jk> if property name was valid and property was set.</dd></dl>
+</li>
+</ul>
+<a name="clone()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>clone</h4>
+<pre>public&nbsp;<a href="../../../../../com/ibm/juno/core/jena/RdfParserProperties.html" title="class in com.ibm.juno.core.jena">RdfParserProperties</a>&nbsp;<a href="../../../../../src-html/com/ibm/juno/core/jena/RdfParserProperties.html#line.61">clone</a>()</pre>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang">clone</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
+</dl>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a>
+<div class="skip"><a href="#skip-navbar_bottom" title="Skip navigation links">Skip navigation links</a></div>
+<a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/RdfParserProperties.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../com/ibm/juno/core/jena/RdfParserContext.html" title="class in com.ibm.juno.core.jena"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html" title="class in com.ibm.juno.core.jena"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?com/ibm/juno/core/jena/RdfParserProperties.html" target="_top">Frames</a></li>
+<li><a href="RdfParserProperties.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+</body>
+</html>

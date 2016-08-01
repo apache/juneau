@@ -1,0 +1,234 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../javadoc.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>/*******************************************************************************<a name="line.1"></a>
+<span class="sourceLineNo">002</span> * Licensed Materials - Property of IBM<a name="line.2"></a>
+<span class="sourceLineNo">003</span> * (c) Copyright IBM Corporation 2011, 2015. All Rights Reserved.<a name="line.3"></a>
+<span class="sourceLineNo">004</span> *<a name="line.4"></a>
+<span class="sourceLineNo">005</span> *  The source code for this program is not published or otherwise<a name="line.5"></a>
+<span class="sourceLineNo">006</span> *  divested of its trade secrets, irrespective of what has been<a name="line.6"></a>
+<span class="sourceLineNo">007</span> *  deposited with the U.S. Copyright Office.<a name="line.7"></a>
+<span class="sourceLineNo">008</span> *******************************************************************************/<a name="line.8"></a>
+<span class="sourceLineNo">009</span>package com.ibm.juno.core.html;<a name="line.9"></a>
+<span class="sourceLineNo">010</span><a name="line.10"></a>
+<span class="sourceLineNo">011</span>import java.io.*;<a name="line.11"></a>
+<span class="sourceLineNo">012</span>import java.lang.reflect.*;<a name="line.12"></a>
+<span class="sourceLineNo">013</span>import java.util.*;<a name="line.13"></a>
+<span class="sourceLineNo">014</span><a name="line.14"></a>
+<span class="sourceLineNo">015</span>import com.ibm.juno.core.*;<a name="line.15"></a>
+<span class="sourceLineNo">016</span>import com.ibm.juno.core.annotation.*;<a name="line.16"></a>
+<span class="sourceLineNo">017</span>import com.ibm.juno.core.dto.*;<a name="line.17"></a>
+<span class="sourceLineNo">018</span>import com.ibm.juno.core.serializer.*;<a name="line.18"></a>
+<span class="sourceLineNo">019</span>import com.ibm.juno.core.utils.*;<a name="line.19"></a>
+<span class="sourceLineNo">020</span><a name="line.20"></a>
+<span class="sourceLineNo">021</span>/**<a name="line.21"></a>
+<span class="sourceLineNo">022</span> * Serializes POJOs to HTTP responses as HTML documents.<a name="line.22"></a>
+<span class="sourceLineNo">023</span> *<a name="line.23"></a>
+<span class="sourceLineNo">024</span> *<a name="line.24"></a>
+<span class="sourceLineNo">025</span> * &lt;h6 class='topic'&gt;Media types&lt;/h6&gt;<a name="line.25"></a>
+<span class="sourceLineNo">026</span> * &lt;p&gt;<a name="line.26"></a>
+<span class="sourceLineNo">027</span> *    Handles &lt;code&gt;Accept&lt;/code&gt; types: &lt;code&gt;text/html&lt;/code&gt;<a name="line.27"></a>
+<span class="sourceLineNo">028</span> * &lt;p&gt;<a name="line.28"></a>
+<span class="sourceLineNo">029</span> *    Produces &lt;code&gt;Content-Type&lt;/code&gt; types: &lt;code&gt;text/html&lt;/code&gt;<a name="line.29"></a>
+<span class="sourceLineNo">030</span> *<a name="line.30"></a>
+<span class="sourceLineNo">031</span> *<a name="line.31"></a>
+<span class="sourceLineNo">032</span> * &lt;h6 class='topic'&gt;Description&lt;/h6&gt;<a name="line.32"></a>
+<span class="sourceLineNo">033</span> * &lt;p&gt;<a name="line.33"></a>
+<span class="sourceLineNo">034</span> *    Same as {@link HtmlSerializer}, except wraps the response in &lt;code&gt;&lt;xt&gt;&amp;lt;html&amp;gt;&lt;/code&gt;, &lt;code&gt;&lt;xt&gt;&amp;lt;head&amp;gt;&lt;/code&gt;,<a name="line.34"></a>
+<span class="sourceLineNo">035</span> *    and &lt;code&gt;&lt;xt&gt;&amp;lt;body&amp;gt;&lt;/code&gt; tags so that it can be rendered in a browser.<a name="line.35"></a>
+<span class="sourceLineNo">036</span> *<a name="line.36"></a>
+<span class="sourceLineNo">037</span> *<a name="line.37"></a>
+<span class="sourceLineNo">038</span> * &lt;h6 class='topic'&gt;Configurable properties&lt;/h6&gt;<a name="line.38"></a>
+<span class="sourceLineNo">039</span> * &lt;p&gt;<a name="line.39"></a>
+<span class="sourceLineNo">040</span> *    This class has the following properties associated with it:<a name="line.40"></a>
+<span class="sourceLineNo">041</span> * &lt;ul&gt;<a name="line.41"></a>
+<span class="sourceLineNo">042</span> *    &lt;li&gt;{@link HtmlDocSerializerProperties}<a name="line.42"></a>
+<span class="sourceLineNo">043</span> *    &lt;li&gt;{@link HtmlSerializerProperties}<a name="line.43"></a>
+<span class="sourceLineNo">044</span> *    &lt;li&gt;{@link SerializerProperties}<a name="line.44"></a>
+<span class="sourceLineNo">045</span> *    &lt;li&gt;{@link BeanContextProperties}<a name="line.45"></a>
+<span class="sourceLineNo">046</span> * &lt;/ul&gt;<a name="line.46"></a>
+<span class="sourceLineNo">047</span> *<a name="line.47"></a>
+<span class="sourceLineNo">048</span> *<a name="line.48"></a>
+<span class="sourceLineNo">049</span> * @author James Bognar (jbognar@us.ibm.com)<a name="line.49"></a>
+<span class="sourceLineNo">050</span> */<a name="line.50"></a>
+<span class="sourceLineNo">051</span>@Produces("text/html")<a name="line.51"></a>
+<span class="sourceLineNo">052</span>public class HtmlDocSerializer extends HtmlStrippedDocSerializer {<a name="line.52"></a>
+<span class="sourceLineNo">053</span><a name="line.53"></a>
+<span class="sourceLineNo">054</span>   // Properties defined in RestServletProperties<a name="line.54"></a>
+<span class="sourceLineNo">055</span>   private static final String<a name="line.55"></a>
+<span class="sourceLineNo">056</span>      REST_method = "RestServlet.method",<a name="line.56"></a>
+<span class="sourceLineNo">057</span>      REST_relativeServletURI = "RestServlet.relativeServletURI";<a name="line.57"></a>
+<span class="sourceLineNo">058</span><a name="line.58"></a>
+<span class="sourceLineNo">059</span><a name="line.59"></a>
+<span class="sourceLineNo">060</span>   //--------------------------------------------------------------------------------<a name="line.60"></a>
+<span class="sourceLineNo">061</span>   // Overridden methods<a name="line.61"></a>
+<span class="sourceLineNo">062</span>   //--------------------------------------------------------------------------------<a name="line.62"></a>
+<span class="sourceLineNo">063</span><a name="line.63"></a>
+<span class="sourceLineNo">064</span>   @Override /* Serializer */<a name="line.64"></a>
+<span class="sourceLineNo">065</span>   protected void doSerialize(Object o, Writer out, SerializerContext ctx) throws IOException, SerializeException {<a name="line.65"></a>
+<span class="sourceLineNo">066</span><a name="line.66"></a>
+<span class="sourceLineNo">067</span>      HtmlSerializerContext hctx = (HtmlSerializerContext)ctx;<a name="line.67"></a>
+<span class="sourceLineNo">068</span>      HtmlSerializerWriter w = hctx.getWriter(out);<a name="line.68"></a>
+<span class="sourceLineNo">069</span><a name="line.69"></a>
+<span class="sourceLineNo">070</span>      ObjectMap properties = hctx.getProperties();<a name="line.70"></a>
+<span class="sourceLineNo">071</span><a name="line.71"></a>
+<span class="sourceLineNo">072</span>      boolean isOptionsPage = properties.containsKey(REST_method) &amp;&amp; properties.getString(REST_method).equalsIgnoreCase("OPTIONS");<a name="line.72"></a>
+<span class="sourceLineNo">073</span><a name="line.73"></a>
+<span class="sourceLineNo">074</span>      // Render the header.<a name="line.74"></a>
+<span class="sourceLineNo">075</span>      w.sTag("html").nl();<a name="line.75"></a>
+<span class="sourceLineNo">076</span>      w.sTag("head").nl();<a name="line.76"></a>
+<span class="sourceLineNo">077</span><a name="line.77"></a>
+<span class="sourceLineNo">078</span>      String cssUrl = hctx.getCssUrl();<a name="line.78"></a>
+<span class="sourceLineNo">079</span>      if (cssUrl == null)<a name="line.79"></a>
+<span class="sourceLineNo">080</span>         cssUrl = properties.getString(REST_relativeServletURI) + "/style.css";<a name="line.80"></a>
+<span class="sourceLineNo">081</span><a name="line.81"></a>
+<span class="sourceLineNo">082</span>      w.oTag(1, "style")<a name="line.82"></a>
+<span class="sourceLineNo">083</span>         .attr("type", "text/css")<a name="line.83"></a>
+<span class="sourceLineNo">084</span>         .appendln("&gt;")<a name="line.84"></a>
+<span class="sourceLineNo">085</span>         .append(2, "@import ").q().append(cssUrl).q().appendln(";");<a name="line.85"></a>
+<span class="sourceLineNo">086</span>      if (hctx.isNoWrap())<a name="line.86"></a>
+<span class="sourceLineNo">087</span>         w.appendln("\n* {white-space:nowrap;}");<a name="line.87"></a>
+<span class="sourceLineNo">088</span>      if (hctx.getCssImports() != null)<a name="line.88"></a>
+<span class="sourceLineNo">089</span>         for (String cssImport : hctx.getCssImports())<a name="line.89"></a>
+<span class="sourceLineNo">090</span>            w.append(2, "@import ").q().append(cssImport).q().appendln(";");<a name="line.90"></a>
+<span class="sourceLineNo">091</span>      w.eTag(1, "style").nl();<a name="line.91"></a>
+<span class="sourceLineNo">092</span>      w.eTag("head").nl();<a name="line.92"></a>
+<span class="sourceLineNo">093</span>      w.sTag("body").nl();<a name="line.93"></a>
+<span class="sourceLineNo">094</span>      // Write the title of the page.<a name="line.94"></a>
+<span class="sourceLineNo">095</span>      String title = hctx.getTitle();<a name="line.95"></a>
+<span class="sourceLineNo">096</span>      if (title == null &amp;&amp; isOptionsPage)<a name="line.96"></a>
+<span class="sourceLineNo">097</span>         title = "Options";<a name="line.97"></a>
+<span class="sourceLineNo">098</span>      String description = hctx.getDescription();<a name="line.98"></a>
+<span class="sourceLineNo">099</span>      if (title != null)<a name="line.99"></a>
+<span class="sourceLineNo">100</span>         w.oTag(1, "h3").attr("class", "title").append('&gt;').encodeText(title).eTag("h3").nl();<a name="line.100"></a>
+<span class="sourceLineNo">101</span>      if (description != null)<a name="line.101"></a>
+<span class="sourceLineNo">102</span>         w.oTag(1, "h5").attr("class", "description").append('&gt;').encodeText(description).eTag("h5").nl();<a name="line.102"></a>
+<span class="sourceLineNo">103</span><a name="line.103"></a>
+<span class="sourceLineNo">104</span>      // Write the action links that render above the results.<a name="line.104"></a>
+<span class="sourceLineNo">105</span>      List&lt;Link&gt; actions = new LinkedList&lt;Link&gt;();<a name="line.105"></a>
+<span class="sourceLineNo">106</span><a name="line.106"></a>
+<span class="sourceLineNo">107</span>      // If this is an OPTIONS request, provide a 'back' link to return to the GET request page.<a name="line.107"></a>
+<span class="sourceLineNo">108</span>      if (! isOptionsPage) {<a name="line.108"></a>
+<span class="sourceLineNo">109</span>         ObjectMap htmlLinks = hctx.getLinks();<a name="line.109"></a>
+<span class="sourceLineNo">110</span>         if (htmlLinks != null) {<a name="line.110"></a>
+<span class="sourceLineNo">111</span>            for (Map.Entry&lt;String,Object&gt; e : htmlLinks.entrySet()) {<a name="line.111"></a>
+<span class="sourceLineNo">112</span>               String uri = e.getValue().toString();<a name="line.112"></a>
+<span class="sourceLineNo">113</span>               if (uri.indexOf("://") == -1 &amp;&amp; ! StringUtils.startsWith(uri, '/')) {<a name="line.113"></a>
+<span class="sourceLineNo">114</span>                  StringBuilder sb = new StringBuilder(properties.getString(REST_relativeServletURI));<a name="line.114"></a>
+<span class="sourceLineNo">115</span>                  if (! (uri.isEmpty() || uri.charAt(0) == '?' || uri.charAt(0) == '/'))<a name="line.115"></a>
+<span class="sourceLineNo">116</span>                     sb.append('/');<a name="line.116"></a>
+<span class="sourceLineNo">117</span>                  sb.append(uri);<a name="line.117"></a>
+<span class="sourceLineNo">118</span>                  uri = sb.toString();<a name="line.118"></a>
+<span class="sourceLineNo">119</span>               }<a name="line.119"></a>
+<span class="sourceLineNo">120</span><a name="line.120"></a>
+<span class="sourceLineNo">121</span>               actions.add(new Link(e.getKey(), uri));<a name="line.121"></a>
+<span class="sourceLineNo">122</span>            }<a name="line.122"></a>
+<span class="sourceLineNo">123</span>         }<a name="line.123"></a>
+<span class="sourceLineNo">124</span>      }<a name="line.124"></a>
+<span class="sourceLineNo">125</span><a name="line.125"></a>
+<span class="sourceLineNo">126</span>      if (actions.size() &gt; 0) {<a name="line.126"></a>
+<span class="sourceLineNo">127</span>         w.oTag(1, "p").attr("class", "links").append('&gt;').nl();<a name="line.127"></a>
+<span class="sourceLineNo">128</span>         for (Iterator&lt;Link&gt; i = actions.iterator(); i.hasNext();) {<a name="line.128"></a>
+<span class="sourceLineNo">129</span>            Link h = i.next();<a name="line.129"></a>
+<span class="sourceLineNo">130</span>            w.oTag(2, "a").attr("class", "link").attr("href", h.getHref(), true).append('&gt;').append(h.getName()).eTag("a").nl();<a name="line.130"></a>
+<span class="sourceLineNo">131</span>            if (i.hasNext())<a name="line.131"></a>
+<span class="sourceLineNo">132</span>               w.append(3, " - ").nl();<a name="line.132"></a>
+<span class="sourceLineNo">133</span>         }<a name="line.133"></a>
+<span class="sourceLineNo">134</span>         w.eTag(1, "p").nl();<a name="line.134"></a>
+<span class="sourceLineNo">135</span>      }<a name="line.135"></a>
+<span class="sourceLineNo">136</span><a name="line.136"></a>
+<span class="sourceLineNo">137</span>      hctx.indent = 3;<a name="line.137"></a>
+<span class="sourceLineNo">138</span><a name="line.138"></a>
+<span class="sourceLineNo">139</span>      // To allow for page formatting using CSS, we encapsulate the data inside two div tags:<a name="line.139"></a>
+<span class="sourceLineNo">140</span>      // &lt;div class='outerdata'&gt;&lt;div class='data' id='data'&gt;...&lt;/div&gt;&lt;/div&gt;<a name="line.140"></a>
+<span class="sourceLineNo">141</span>      w.oTag(1, "div").attr("class","outerdata").append('&gt;').nl();<a name="line.141"></a>
+<span class="sourceLineNo">142</span>      w.oTag(2, "div").attr("class","data").attr("id", "data").append('&gt;').nl();<a name="line.142"></a>
+<span class="sourceLineNo">143</span>      if (isEmptyList(o))<a name="line.143"></a>
+<span class="sourceLineNo">144</span>         w.oTag(3, "p").append('&gt;').append("no results").eTag("p");<a name="line.144"></a>
+<span class="sourceLineNo">145</span>      else<a name="line.145"></a>
+<span class="sourceLineNo">146</span>         super.doSerialize(o, w, hctx);<a name="line.146"></a>
+<span class="sourceLineNo">147</span>      w.eTag(2, "div").nl();<a name="line.147"></a>
+<span class="sourceLineNo">148</span>      w.eTag(1, "div").nl();<a name="line.148"></a>
+<span class="sourceLineNo">149</span><a name="line.149"></a>
+<span class="sourceLineNo">150</span>      w.eTag("body").nl().eTag("html").nl();<a name="line.150"></a>
+<span class="sourceLineNo">151</span>   }<a name="line.151"></a>
+<span class="sourceLineNo">152</span><a name="line.152"></a>
+<span class="sourceLineNo">153</span>   private boolean isEmptyList(Object o) {<a name="line.153"></a>
+<span class="sourceLineNo">154</span>      if (o == null)<a name="line.154"></a>
+<span class="sourceLineNo">155</span>         return false;<a name="line.155"></a>
+<span class="sourceLineNo">156</span>      if (o instanceof Collection &amp;&amp; ((Collection&lt;?&gt;)o).size() == 0)<a name="line.156"></a>
+<span class="sourceLineNo">157</span>         return true;<a name="line.157"></a>
+<span class="sourceLineNo">158</span>      if (o.getClass().isArray() &amp;&amp; Array.getLength(o) == 0)<a name="line.158"></a>
+<span class="sourceLineNo">159</span>         return true;<a name="line.159"></a>
+<span class="sourceLineNo">160</span>      return false;<a name="line.160"></a>
+<span class="sourceLineNo">161</span>   }<a name="line.161"></a>
+<span class="sourceLineNo">162</span>}<a name="line.162"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

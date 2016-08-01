@@ -1,0 +1,128 @@
+<!DOCTYPE HTML>
+<!--
+    Licensed Materials - Property of IBM
+    (c) Copyright IBM Corporation 2014. All Rights Reserved.
+   
+    Note to U.S. Government Users Restricted Rights:  
+    Use, duplication or disclosure restricted by GSA ADP Schedule 
+    Contract with IBM Corp. 
+ -->
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<style type="text/css">
+		/* For viewing in Page Designer */
+		@IMPORT url("../../../../../../javadoc.css");
+
+		/* For viewing in REST interface */
+		@IMPORT url("../htdocs/javadoc.css");
+		body { 
+			margin: 20px; 
+		}	
+	</style>
+	<script>
+		/* Replace all @code and @link tags. */	
+		window.onload = function() {
+			document.body.innerHTML = document.body.innerHTML.replace(/\{\@code ([^\}]+)\}/g, '<code>$1</code>');
+			document.body.innerHTML = document.body.innerHTML.replace(/\{\@link (([^\}]+)\.)?([^\.\}]+)\}/g, '<code>$3</code>');
+		}
+	</script>
+</head>
+<body>
+<p>Serializer API</p>
+
+<script>
+	function toggle(x) {
+		var div = x.nextSibling;
+		while (div != null && div.nodeType != 1)
+			div = div.nextSibling;
+		if (div != null) {
+			var d = div.style.display;
+			if (d == 'block' || d == '') {
+				div.style.display = 'none';
+				x.className += " closed";
+			} else {
+				div.style.display = 'block';
+				x.className = x.className.replace(/(?:^|\s)closed(?!\S)/g , '' );
+			}
+		}
+	}
+</script>
+
+<a id='TOC'></a><h5 class='toc'>Table of Contents</h5>
+<ol class='toc'>
+	<li><p><a class='doclink' href='#Serializer'>Serializer API</a></p>
+	<ol>
+		<li><p><a class='doclink' href='#SerializerGroup'>The SerializerGroup class</a></p>
+	</ol>
+	<li><p><a class='doclink' href='#DefiningSerializer'>Defining a new Serializer</a></p>
+</ol>
+
+<!-- ======================================================================================================== -->
+<a id="Serializer"></a>
+<h2 class='topic' onclick='toggle(this)'>1 - Serializer API</h2>
+<div class='topic'>
+	<p>
+		The serialization API is designed to be easily extensible by developers.<br>
+		If you are writing your own serializer, you will typically subclass directly from either {@link com.ibm.juno.core.serializer.WriterSerializer}
+			or {@link com.ibm.juno.core.serializer.OutputStreamSerializer}.<br>
+	</p>
+
+	<!-- ======================================================================================================== -->
+	<a id="SerializerGroup"></a>
+	<h3 class='topic' onclick='toggle(this)'>1.1 - The SerializerGroup class</h3>
+	<div class='topic'>
+		<p>
+			The {@link com.ibm.juno.core.serializer.SerializerGroup} class represents a group of serializers registered with the media types they handle.
+		</p>
+		
+		<h6 class='topic'>Features</h6>		
+		<p>
+			The <code>SerializerGroup</code> class provides the following features:
+		<ul>
+			<li>Finds serializers based on HTTP <code>Accept</code> header values.
+			<li>Sets common properties on all serializers in a single method call.
+		 	<li>Locks all serializers in a single method call.
+			<li>Clones existing groups and all serializers within the group in a single method call.
+		</ul>
+		
+		<p>
+			Refer to {@link com.ibm.juno.core.serializer.SerializerGroup} for additional information.
+		</p>
+	</div> 
+</div>
+
+
+<!-- ======================================================================================================== -->
+<a id="DefiningSerializer"></a>
+<h2 class='topic' onclick='toggle(this)'>2 - Defining a new Serializer</h2>
+<div class='topic'>
+	<p>
+		Defining a new serializer is quite simple if you subclass directly from {@link com.ibm.juno.core.serializer.WriterSerializer} 
+			or {@link com.ibm.juno.core.serializer.OutputStreamSerializer}.<br>
+		In each case, you simply need to implement a single
+			method and specify a {@link com.ibm.juno.core.annotation.Produces} annotation.
+	</p>
+	<p>
+		The following example shows a simple serializer that converts images to output streams using standard JRE classes.
+	</p>
+	<p class='bcode'>
+	<ja>@Produces</ja>({<js>"image/png"</js>,<js>"image/jpeg"</js>})
+	<jk>public static class</jk> ImageSerializer <jk>extends</jk> OutputStreamSerializer {
+		<ja>@Override</ja>
+		<jk>public void</jk> serialize(Object o, OutputStream out, SerializerContext ctx) <jk>throws</jk> IOException, SerializeException {
+			RenderedImage image = (RenderedImage)o;
+			String mediaType = ctx.getMediaType();
+			ImageIO.<jsm>write</jsm>(image, mediaType.substring(mediaType.indexOf(<js>'/'</js>)+1), out);
+		}	
+	}
+	</p>
+	<p>
+		Serializer that take advantage of the entire {@link com.ibm.juno.core.CoreApi} interface to be able to serialize arbitrary beans and POJOs is
+			considerably more complex and outside the scope of this document.<br>  
+		If developing such a serializer, the best course of action would be to replicate what occurs in the {@link com.ibm.juno.core.json.JsonSerializer} class.
+	</p>
+</div>
+
+</body>
+</html>

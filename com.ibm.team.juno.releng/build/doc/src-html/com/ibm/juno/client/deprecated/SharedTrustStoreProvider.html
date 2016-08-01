@@ -1,0 +1,176 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../javadoc.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>/*******************************************************************************<a name="line.1"></a>
+<span class="sourceLineNo">002</span> * Licensed Materials - Property of IBM<a name="line.2"></a>
+<span class="sourceLineNo">003</span> * (c) Copyright IBM Corporation 2010, 2015. All Rights Reserved.<a name="line.3"></a>
+<span class="sourceLineNo">004</span> *<a name="line.4"></a>
+<span class="sourceLineNo">005</span> * The source code for this program is not published or otherwise<a name="line.5"></a>
+<span class="sourceLineNo">006</span> * divested of its trade secrets, irrespective of what has been<a name="line.6"></a>
+<span class="sourceLineNo">007</span> * deposited with the U.S. Copyright Office.<a name="line.7"></a>
+<span class="sourceLineNo">008</span> *******************************************************************************/<a name="line.8"></a>
+<span class="sourceLineNo">009</span>package com.ibm.juno.client.deprecated;<a name="line.9"></a>
+<span class="sourceLineNo">010</span><a name="line.10"></a>
+<span class="sourceLineNo">011</span>import java.io.*;<a name="line.11"></a>
+<span class="sourceLineNo">012</span>import java.security.*;<a name="line.12"></a>
+<span class="sourceLineNo">013</span>import java.security.cert.*;<a name="line.13"></a>
+<span class="sourceLineNo">014</span>import java.security.cert.Certificate;<a name="line.14"></a>
+<span class="sourceLineNo">015</span><a name="line.15"></a>
+<span class="sourceLineNo">016</span>/**<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * Trust store provider with shared static certificate stores.<a name="line.17"></a>
+<span class="sourceLineNo">018</span> */<a name="line.18"></a>
+<span class="sourceLineNo">019</span>@Deprecated // Use SimpleX509TrustManager<a name="line.19"></a>
+<span class="sourceLineNo">020</span>public final class SharedTrustStoreProvider implements ITrustStoreProvider {<a name="line.20"></a>
+<span class="sourceLineNo">021</span><a name="line.21"></a>
+<span class="sourceLineNo">022</span>   // In-memory trust store of all certificates explicitly accepted by the<a name="line.22"></a>
+<span class="sourceLineNo">023</span>   // certificate validator during this session. The validator will not be<a name="line.23"></a>
+<span class="sourceLineNo">024</span>   // called again during this session for any of these certificates. These may<a name="line.24"></a>
+<span class="sourceLineNo">025</span>   // include expired, not yet valid, or otherwise untrusted certificates.<a name="line.25"></a>
+<span class="sourceLineNo">026</span>   // These are kept distinctly, rather than merged into the runtime trust<a name="line.26"></a>
+<span class="sourceLineNo">027</span>   // store, because the base trust manager will never accept expired, etc.<a name="line.27"></a>
+<span class="sourceLineNo">028</span>   // certificates, even if from a trusted source.<a name="line.28"></a>
+<span class="sourceLineNo">029</span>   private static CertificateStore sessionCerts;<a name="line.29"></a>
+<span class="sourceLineNo">030</span><a name="line.30"></a>
+<span class="sourceLineNo">031</span>   // In-memory trust store of all permanently trusted certificates, assembled<a name="line.31"></a>
+<span class="sourceLineNo">032</span>   // from a number of key store files. These are provided to the base trust<a name="line.32"></a>
+<span class="sourceLineNo">033</span>   // manager as the basis for its decision making.<a name="line.33"></a>
+<span class="sourceLineNo">034</span>   private static CertificateStore runtimeCerts;<a name="line.34"></a>
+<span class="sourceLineNo">035</span><a name="line.35"></a>
+<span class="sourceLineNo">036</span>   // Location and password of the user's private trust store for this application.<a name="line.36"></a>
+<span class="sourceLineNo">037</span>   private static String userTrustStoreLocation;<a name="line.37"></a>
+<span class="sourceLineNo">038</span>   private static String userTrustStorePassword;<a name="line.38"></a>
+<span class="sourceLineNo">039</span><a name="line.39"></a>
+<span class="sourceLineNo">040</span>   static {<a name="line.40"></a>
+<span class="sourceLineNo">041</span>      init();<a name="line.41"></a>
+<span class="sourceLineNo">042</span>   }<a name="line.42"></a>
+<span class="sourceLineNo">043</span><a name="line.43"></a>
+<span class="sourceLineNo">044</span>   private static final void init() {<a name="line.44"></a>
+<span class="sourceLineNo">045</span>      try {<a name="line.45"></a>
+<span class="sourceLineNo">046</span>         String userHome = System.getProperty("user.home");<a name="line.46"></a>
+<span class="sourceLineNo">047</span>         String javaHome = System.getProperty("java.home");<a name="line.47"></a>
+<span class="sourceLineNo">048</span><a name="line.48"></a>
+<span class="sourceLineNo">049</span>         userTrustStoreLocation = userHome + "/.jazzcerts";<a name="line.49"></a>
+<span class="sourceLineNo">050</span>         userTrustStorePassword = "ibmrationaljazz";<a name="line.50"></a>
+<span class="sourceLineNo">051</span><a name="line.51"></a>
+<span class="sourceLineNo">052</span>         sessionCerts = new CertificateStore();<a name="line.52"></a>
+<span class="sourceLineNo">053</span><a name="line.53"></a>
+<span class="sourceLineNo">054</span>         runtimeCerts = new CertificateStore();<a name="line.54"></a>
+<span class="sourceLineNo">055</span><a name="line.55"></a>
+<span class="sourceLineNo">056</span>         // JRE keystore override<a name="line.56"></a>
+<span class="sourceLineNo">057</span>         String file = System.getProperty("javax.net.ssl.trustStore");<a name="line.57"></a>
+<span class="sourceLineNo">058</span>         String password = System.getProperty("javax.net.ssl.trustStorePassword");<a name="line.58"></a>
+<span class="sourceLineNo">059</span>         addCertificatesFromStore(runtimeCerts, file, password);<a name="line.59"></a>
+<span class="sourceLineNo">060</span><a name="line.60"></a>
+<span class="sourceLineNo">061</span>         // JRE Signer CA keystore<a name="line.61"></a>
+<span class="sourceLineNo">062</span>         file = javaHome + "/lib/security/cacerts";<a name="line.62"></a>
+<span class="sourceLineNo">063</span>         addCertificatesFromStore(runtimeCerts, file, null);<a name="line.63"></a>
+<span class="sourceLineNo">064</span><a name="line.64"></a>
+<span class="sourceLineNo">065</span>         // JRE Secure Site CA keystore<a name="line.65"></a>
+<span class="sourceLineNo">066</span>         file =  (javaHome + "/lib/security/jssecacerts");<a name="line.66"></a>
+<span class="sourceLineNo">067</span>         addCertificatesFromStore(runtimeCerts, file, null);<a name="line.67"></a>
+<span class="sourceLineNo">068</span><a name="line.68"></a>
+<span class="sourceLineNo">069</span>         // Application-specific keystore for the current user<a name="line.69"></a>
+<span class="sourceLineNo">070</span>         addCertificatesFromStore(runtimeCerts, userTrustStoreLocation, userTrustStorePassword);<a name="line.70"></a>
+<span class="sourceLineNo">071</span><a name="line.71"></a>
+<span class="sourceLineNo">072</span>      } catch (Exception e) {<a name="line.72"></a>
+<span class="sourceLineNo">073</span>         e.printStackTrace();<a name="line.73"></a>
+<span class="sourceLineNo">074</span>      }<a name="line.74"></a>
+<span class="sourceLineNo">075</span>   }<a name="line.75"></a>
+<span class="sourceLineNo">076</span><a name="line.76"></a>
+<span class="sourceLineNo">077</span>   private static void addCertificatesFromStore(CertificateStore store, String file, String password) {<a name="line.77"></a>
+<span class="sourceLineNo">078</span>      try {<a name="line.78"></a>
+<span class="sourceLineNo">079</span>         File f = new File(file);<a name="line.79"></a>
+<span class="sourceLineNo">080</span>         if (f.canRead())<a name="line.80"></a>
+<span class="sourceLineNo">081</span>            store.loadCertificates(f, password);<a name="line.81"></a>
+<span class="sourceLineNo">082</span>      } catch (Exception e) {<a name="line.82"></a>
+<span class="sourceLineNo">083</span>         // Discard errors<a name="line.83"></a>
+<span class="sourceLineNo">084</span>      }<a name="line.84"></a>
+<span class="sourceLineNo">085</span>   }<a name="line.85"></a>
+<span class="sourceLineNo">086</span><a name="line.86"></a>
+<span class="sourceLineNo">087</span>   @Override /* ITrustStoreProvider */<a name="line.87"></a>
+<span class="sourceLineNo">088</span>   public CertificateStore getRuntimeTrustStore() {<a name="line.88"></a>
+<span class="sourceLineNo">089</span>      return runtimeCerts;<a name="line.89"></a>
+<span class="sourceLineNo">090</span>   }<a name="line.90"></a>
+<span class="sourceLineNo">091</span><a name="line.91"></a>
+<span class="sourceLineNo">092</span>   @Override /* ITrustStoreProvider */<a name="line.92"></a>
+<span class="sourceLineNo">093</span>   public CertificateStore getSessionTrustStore() {<a name="line.93"></a>
+<span class="sourceLineNo">094</span>      return sessionCerts;<a name="line.94"></a>
+<span class="sourceLineNo">095</span>   }<a name="line.95"></a>
+<span class="sourceLineNo">096</span><a name="line.96"></a>
+<span class="sourceLineNo">097</span>   @Override /* ITrustStoreProvider */<a name="line.97"></a>
+<span class="sourceLineNo">098</span>   public void installCertificate(Certificate cert) throws NoSuchAlgorithmException, CertificateException, KeyStoreException, IOException {<a name="line.98"></a>
+<span class="sourceLineNo">099</span>      File  f = new File(userTrustStoreLocation);<a name="line.99"></a>
+<span class="sourceLineNo">100</span>      KeyStore ks = CertificateStore.load(f, userTrustStorePassword);<a name="line.100"></a>
+<span class="sourceLineNo">101</span>      ks.setCertificateEntry(CertificateStore.computeAlias(cert), cert);<a name="line.101"></a>
+<span class="sourceLineNo">102</span>      CertificateStore.store(ks, f, userTrustStorePassword);<a name="line.102"></a>
+<span class="sourceLineNo">103</span>   }<a name="line.103"></a>
+<span class="sourceLineNo">104</span>}<a name="line.104"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

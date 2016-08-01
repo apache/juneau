@@ -1,0 +1,17 @@
+<object xmlns='http://www.ibm.com' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>
+	<name>John Smith</name>
+	<address type='object'>
+		<streetAddress>21 2nd Street</streetAddress>
+		<city>New York</city>
+		<state>NY</state>
+		<postalCode type='number'>10021</postalCode>
+	</address>
+	<phoneNumbers type='array'>
+		<string>212 555-1111</string>
+		<string>212 555-2222</string>
+	</phoneNumbers>
+	<additionalInfo xsi:nil='true'/>
+	<remote type='boolean'>false</remote>
+	<height type='number'>62.4</height>
+	<fico_x0020_score>_x0020_&gt; 640</fico_x0020_score>
+</object>

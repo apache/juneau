@@ -1,0 +1,536 @@
+<?xml version='1.0'?>
+<!--
+    Licensed Materials - Property of IBM
+    (c) Copyright IBM Corporation 2014, 2015. All Rights Reserved.
+   
+    Note to U.S. Government Users Restricted Rights:  
+    Use, duplication or disclosure restricted by GSA ADP Schedule 
+    Contract with IBM Corp. 
+ -->
+
+<project name='Juno' xmlns:jacoco='antlib:org.jacoco.ant' default='Juno.Build'>
+	
+	<taskdef 
+		uri='antlib:org.jacoco.ant' 
+		resource='org/jacoco/ant/antlib.xml'
+		classpath='lib/jacoco/jacocoant.jar'/>
+	
+	<!-- ================================================================================ -->
+	<!-- Common initialization -->
+	<!-- ================================================================================ -->
+	<target name='Juno.Init'>
+		<tstamp/>
+		<loadproperties srcFile='build.properties'/>
+	
+		<!-- Additional classpath -->
+		<path id='classpath'>
+			<pathelement path='../com.ibm.team.juno/lib/jena/jena-core-2.7.1.jar'/>
+			<pathelement path='../com.ibm.team.juno.releng/lib/mail.jar'/>
+			<pathelement path='../com.ibm.team.juno.releng/lib/httpclient/httpclient-4.5.jar'/>
+			<pathelement path='../com.ibm.team.juno.releng/lib/httpclient/httpcore-4.4.1.jar'/>
+			<pathelement path='../com.ibm.team.juno.releng/lib/httpclient/httpmime-4.5.jar'/>
+			<pathelement path='../com.ibm.team.juno.releng/lib/javax.servlet_2.5.0.jar'/>
+			<pathelement path='../com.ibm.team.juno.releng/lib/jaxrs/jsr311-api-1.1.1.jar'/>
+			<pathelement path='../com.ibm.team.juno.releng/lib/equinox/org.eclipse.osgi_3.6.50.R36x_v20120315-1500.jar'/>
+			<pathelement path='../com.ibm.team.juno.releng/lib/equinox/org.eclipse.osgi.services_3.2.100.v20100503.jar'/>
+			<pathelement path='../com.ibm.team.juno.releng/lib/junit/junit-4.12.jar'/>
+			<pathelement path='../com.ibm.team.juno.releng/lib/commons-fileupload/org.apache.commons.fileupload_1.3.1.jar'/>
+
+			<!-- Microservice jar -->
+			<pathelement path='../com.ibm.team.juno.microservice/lib/jetty-all-8.1.0.jar'/>
+		</path>
+	</target>
+
+	<!-- ================================================================================ -->
+	<!-- Build -->
+	<!-- ================================================================================ -->
+	<target name='Juno.Build' depends='Juno.Init' description='Creates a new release of the product.'>
+		<delete dir='build' quiet='true'/>
+		<mkdir dir='build'/>
+		<antcall target='Juno.BuildJars'/>
+		<antcall target='Juno.ComponentTest'/>
+		<antcall target='Juno.BuildDoc'/>
+		<antcall target='Juno.BuildDocZip'/>
+		
+		<echo message="Buiding Juno Zip"/>
+		<copy file='Readme.txt' todir='${dir.build}'/>
+		<zip basedir='${dir.build}' destfile='${dir.build}/Juno Cloud API (v${version}).zip' includes='juno-all-*.jar,bundles/**,source/**,microservice-*.zip,juno-javadocs.war,Readme.txt'/>
+	</target>
+
+	<!-- ================================================================================ -->
+	<!-- Build the jar files -->
+	<!-- ================================================================================ -->
+	<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+	<target name='Juno.BuildJars' depends='Juno.Init' description='Build jar files.'>
+		
+		<delete dir='bin' quiet='true'/>
+		<delete dir='build' quiet='true'/>
+		
+		<mkdir dir='bin/core'/>
+		<mkdir dir='bin/server'/>
+		<mkdir dir='bin/client'/>
+		<mkdir dir='bin/microservice'/>
+		<mkdir dir='bin/source'/>
+		<mkdir dir='bin/all/META-INF'/>
+
+		<mkdir dir='bin/samples'/>
+		<mkdir dir='bin/core.test'/>
+		<mkdir dir='bin/server.test'/>
+
+		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+		<!-- juno-core.jar -->
+		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+		<echo message='*** Compiling com.ibm.team.juno_${version}.jar ***'/>
+		
+		<copy todir='bin/core'>
+			<fileset dir='../com.ibm.team.juno/src' includes='**/*.properties'/>
+			<fileset dir='../com.ibm.team.juno' includes='META-INF/*'/>
+		</copy>
+		<javac destdir='bin/core' fork='true' source='1.6' target='1.6' debug='true' includeantruntime='false'>
+			<classpath refid='classpath'/>
+			<src path='../com.ibm.team.juno/src'/>
+		</javac>
+		<manifest file='bin/core/META-INF/MANIFEST.MF' mode='update'>
+				<attribute name='Built-By' value='${user.name}'/>
+				<attribute name='Build-Date' value='${TODAY}'/>
+			<attribute name='Bundle-Version' value='${version}'/>
+		</manifest>
+		
+		<jar jarfile='${dir.build}/bundles/com.ibm.team.juno_${version}.jar' basedir='bin/core' duplicate='fail' level='9' excludes='**/proto/**' manifest='bin/core/META-INF/MANIFEST.MF'/>
+		
+		<copy todir='bin/core' includeemptydirs='false'>
+			<fileset dir='../com.ibm.team.juno/src'/>
+		</copy>
+		<jar jarfile='${dir.build}/source/com.ibm.team.juno_${version}.jar' basedir='bin/core' duplicate='fail' excludes='**/proto/**' manifest='bin/core/META-INF/MANIFEST.MF'/>
+
+		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+		<!-- juno-server.jar -->
+		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+		<echo message='*** Compiling com.ibm.team.juno.server_${version}.jar ***'/>
+		
+		<copy todir='bin/server'>
+			<fileset dir='../com.ibm.team.juno.server/src' includes='**/*.properties,**/*.css,**/*.ico,com/ibm/team/juno/server/htdocs/*'/>
+			<fileset dir='../com.ibm.team.juno.server' includes='META-INF/*'/>
+		</copy>
+		<javac destdir='bin/server' fork='true' source='1.6' target='1.6' debug='true' includeantruntime='false'>
+			<classpath refid='classpath'/>
+			<classpath path='bin/core'/>
+			<src path='../com.ibm.team.juno.server/src'/>
+		</javac>
+		<manifest file='bin/server/META-INF/MANIFEST.MF' mode='update'>
+			<attribute name='Built-By' value='${user.name}'/>
+			<attribute name='Build-Date' value='${TODAY}'/>
+			<attribute name='Bundle-Version' value='${version}'/>
+		</manifest>
+		
+		<jar jarfile='${dir.build}/bundles/com.ibm.team.juno.server_${version}.jar' basedir='bin/server' duplicate='fail' level='9' excludes='**/proto/**' manifest='bin/server/META-INF/MANIFEST.MF'/>
+
+		<copy todir='bin/server' includeemptydirs='false'>
+			<fileset dir='../com.ibm.team.juno.server/src'/>
+		</copy>
+		<jar jarfile='${dir.build}/source/com.ibm.team.juno.server_${version}.jar' basedir='bin/server' duplicate='fail' excludes='**/proto/**' manifest='bin/server/META-INF/MANIFEST.MF'/>
+
+		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+		<!-- juno-client.jar -->
+		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+		<echo message='*** com.ibm.team.juno.client_${version}.jar ***'/>
+		
+		<copy todir='bin/client'>
+			<fileset dir='../com.ibm.team.juno.client/src' includes='**/*.properties'/>
+			<fileset dir='../com.ibm.team.juno.client' includes='META-INF/*'/>
+		</copy>
+		<javac destdir='bin/client' fork='true' source='1.6' target='1.6' debug='true' includeantruntime='false'>
+			<classpath refid='classpath'/>
+			<classpath path='bin/core'/>
+			<src path='../com.ibm.team.juno.client/src'/>
+		</javac>
+		<manifest file='bin/client/META-INF/MANIFEST.MF' mode='update'>
+				<attribute name='Built-By' value='${user.name}'/>
+				<attribute name='Build-Date' value='${TODAY}'/>
+			<attribute name='Bundle-Version' value='${version}'/>
+		</manifest>
+		
+		<jar jarfile='${dir.build}/bundles/com.ibm.team.juno.client_${version}.jar' basedir='bin/client' duplicate='fail' level='9' excludes='**/proto/**' manifest='bin/client/META-INF/MANIFEST.MF'/>
+		
+		<copy todir='bin/client' includeemptydirs='false'>
+			<fileset dir='../com.ibm.team.juno.client/src'/>
+		</copy>
+		<jar jarfile='${dir.build}/source/com.ibm.team.juno.client_${version}.jar' basedir='bin/client' duplicate='fail' excludes='**/proto/**' manifest='bin/client/META-INF/MANIFEST.MF'/>
+		
+		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+		<!-- juno-microservice.jar -->
+		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+		<echo message='*** Compiling com.ibm.team.juno.microservice_${version}.jar ***'/>
+		
+		<copy todir='bin/microservice'>
+			<fileset dir='../com.ibm.team.juno.microservice/src' includes='**/*.properties,com/ibm/juno/microservice/resources/*.html'/>
+			<fileset dir='../com.ibm.team.juno.microservice' includes='META-INF/*'/>
+		</copy>
+		<javac destdir='bin/microservice' fork='true' source='1.6' target='1.6' debug='true' includeantruntime='false'>
+			<classpath refid='classpath'/>
+			<classpath path='bin/core'/>
+			<classpath path='bin/server'/>
+			<classpath path='bin/client'/>
+			<src path='../com.ibm.team.juno.microservice/src'/>
+		</javac>
+		<manifest file='bin/microservice/META-INF/MANIFEST.MF' mode='update'>
+				<attribute name='Built-By' value='${user.name}'/>
+				<attribute name='Build-Date' value='${TODAY}'/>
+			<attribute name='Bundle-Version' value='${version}'/>
+		</manifest>
+		
+		<jar jarfile='${dir.build}/bundles/com.ibm.team.juno.microservice_${version}.jar' basedir='bin/microservice' duplicate='fail' level='9' excludes='**/proto/**' manifest='bin/microservice/META-INF/MANIFEST.MF'/>
+		
+		<copy todir='bin/microservice' includeemptydirs='false'>
+			<fileset dir='../com.ibm.team.juno.microservice/src'/>
+		</copy>
+		<jar jarfile='${dir.build}/source/com.ibm.team.juno.microservice_${version}.jar' basedir='bin/microservice' duplicate='fail' excludes='**/proto/**' manifest='bin/microservice/META-INF/MANIFEST.MF'/>
+
+		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+		<!-- juno-all.jar -->
+		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+		<echo message='*** Building juno-all-${shortVersion}.jar ***'/>
+		
+		<manifest file='bin/all/META-INF/MANIFEST.MF'>
+			<attribute name='Built-By' value='${user.name}'/>
+			<attribute name='Build-Date' value='${TODAY}'/>
+			<attribute name='Bundle-Name' value='Juno Cloud API'/>
+			<attribute name='Bundle-Vendor' value='IBM'/>
+			<attribute name='Bundle-SymbolicName' value='com.ibm.team.juno.all'/>
+			<attribute name='Bundle-Version' value='${version}'/>
+		</manifest>
+
+		<jar destfile='${dir.build}/juno-all-${shortVersion}.jar' excludes='META-INF/*' manifest='bin/all/META-INF/MANIFEST.MF'>
+			<zipgroupfileset dir='${dir.build}/bundles'/>
+		</jar>
+		
+		<jar destfile='${dir.build}/source/juno-all-${shortVersion}.jar' excludes='META-INF/*' manifest='bin/all/META-INF/MANIFEST.MF'>
+			<zipgroupfileset dir='${dir.build}/source'/>
+		</jar>
+		
+		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+		<!-- juno-samples.jar -->
+		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+		<echo message='*** Building juno-samples-${shortVersion}.jar ***'/>
+
+		<copy todir='bin/samples'>
+			<fileset dir='../com.ibm.team.juno.samples/src' includes='**/*.properties,**/*.jpg,**/*.css,**/*.html'/>
+			<fileset dir='../com.ibm.team.juno.samples' includes='META-INF/*'/>
+		</copy>
+		<javac destdir='bin/samples' fork='true' source='1.6' target='1.6' debug='true' includeantruntime='false'>
+			<classpath refid='classpath'/>
+			<classpath path='bin/core'/>
+			<classpath path='bin/server'/>
+			<classpath path='bin/client'/>
+			<classpath path='bin/microservice'/>
+			<src path='../com.ibm.team.juno.samples/src'/>
+		</javac>
+		<manifest file='bin/samples/META-INF/MANIFEST.MF' mode='update'>
+			<attribute name='Built-By' value='${user.name}'/>
+			<attribute name='Build-Date' value='${TODAY}'/>
+			<attribute name='Bundle-Version' value='${version}'/>
+		</manifest>
+		
+		<jar jarfile='${dir.build}/juno-samples-${shortVersion}.jar' basedir='bin/samples' duplicate='fail' level='9' excludes='**/proto/**' manifest='bin/samples/META-INF/MANIFEST.MF'/>
+		
+		<copy todir='bin/samples' includeemptydirs='false'>
+			<fileset dir='../com.ibm.team.juno.samples/src'/>
+		</copy>
+		<jar jarfile='${dir.build}/source/juno-samples-${shortVersion}_src.jar' basedir='bin/samples' duplicate='fail' excludes='**/proto/**' manifest='bin/samples/META-INF/MANIFEST.MF'/>
+	
+		<jar jarfile='${dir.build}/juno-samples-fat-${shortVersion}.jar' manifest="bin/samples/META-INF/MANIFEST.MF">
+			<zipgroupfileset dir='${dir.build}' includes='juno-all-${shortVersion}.jar,juno-samples-${shortVersion}.jar'/>
+			<zipgroupfileset dir='../com.ibm.team.juno.microservice/lib' includes='*.jar'/>
+			<zipgroupfileset dir='lib/jena' includes='*.jar'/>
+			<zipgroupfileset dir='lib/derby' includes='*.jar'/>
+		</jar>
+		
+		<copy todir='${dir.build}' file='../com.ibm.team.juno.samples/samples.cfg'/>
+		
+		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+		<!-- juno-core-test.jar -->
+		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+		<echo message='*** Building juno-core-test-${shortVersion}.jar ***'/>
+		<copy todir='bin/core.test'>
+			<fileset dir='../com.ibm.team.juno.test/src' excludes='**/*.java'/>
+			<fileset dir='../com.ibm.team.juno.test' includes='META-INF/*'/>
+		</copy>
+		<javac destdir='bin/core.test' fork='true' source='1.6' target='1.6' debug='true' includeantruntime='false' encoding='UTF-8'>
+			<classpath refid='classpath'/>
+			<classpath>
+				<fileset dir='${dir.build}' includes='**/*.jar'/>
+			</classpath>
+			<src path='../com.ibm.team.juno.test/src'/>
+		</javac>
+		<manifest file='bin/core.test/META-INF/MANIFEST.MF' mode='update'>
+			<attribute name='Built-By' value='${user.name}'/>
+			<attribute name='Build-Date' value='${TODAY}'/>
+			<attribute name='Bundle-Version' value='${version}'/>
+		</manifest>
+		
+		<jar jarfile='${dir.build}/test/juno-core-test-${shortVersion}.jar' basedir='bin/core.test' duplicate='fail' level='9' excludes='**/proto/**' manifest='bin/core.test/META-INF/MANIFEST.MF'/>
+
+		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+		<!-- juno-server-test.jar -->
+		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+		<echo message='*** Building juno-server-test-${shortVersion}.jar ***'/>
+		
+		<copy todir='bin/server.test'>
+			<fileset dir='../com.ibm.team.juno.server.test/tests' excludes='**/*.java'/>
+			<fileset dir='../com.ibm.team.juno.server.test/server' excludes='**/*.java'/>
+			<fileset dir='../com.ibm.team.juno.server.test' includes='META-INF/*'/>
+		</copy>
+		<javac destdir='bin/server.test' fork='true' source='1.6' target='1.6' debug='true' includeantruntime='false' encoding='UTF-8'>
+			<classpath refid='classpath'/>
+			<classpath>
+				<fileset dir='../com.ibm.team.juno.microservice/lib' includes='**/*.jar'/>
+				<fileset dir='${dir.build}' includes='**/*.jar'/>
+			</classpath>
+			<src path='../com.ibm.team.juno.server.test/tests'/>
+			<src path='../com.ibm.team.juno.server.test/server'/>
+		</javac>
+		<manifest file='bin/server.test/META-INF/MANIFEST.MF' mode='update'>
+			<attribute name='Built-By' value='${user.name}'/>
+			<attribute name='Build-Date' value='${TODAY}'/>
+			<attribute name='Bundle-Version' value='${version}'/>
+		</manifest>
+		
+		<jar destfile='${dir.build}/test/juno-server-test-${shortVersion}.jar' basedir='bin/server.test' excludes='META-INF/*' manifest='bin/server.test/META-INF/MANIFEST.MF'>
+			<zipgroupfileset dir='${dir.build}' includes='juno-samples-fat-${shortVersion}.jar'/>
+		</jar>
+
+		<copy file='../com.ibm.team.juno.server.test/juno-server-test.cfg' todir='${dir.build}/test'/>
+		
+		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+		<!-- juno.war -->
+		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+		<echo message='*** Building juno-samples-${shortVersion}.war ***'/>
+		<war destfile='${dir.build}/juno-samples-${shortVersion}.war' webxml='../com.ibm.team.juno.samples/war/web.xml'>
+			<lib dir='lib/commons-codec-1.9'/>
+			<lib dir='lib/derby'/>
+			<lib dir='lib/httpclient' includes='*.jar'/>
+			<lib dir='lib/jaxrs'/>
+			<lib dir='lib/jena'/>
+			<lib dir='${dir.build}' includes='juno-samples-${shortVersion}.jar,juno-all-${shortVersion}.jar'/>
+		</war>
+
+		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+		<!-- microservice-project.zip -->
+		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+		<echo message='*** Building microservice-project-${shortVersion}.zip ***'/>
+		<mkdir dir="${dir.build}/microservice-project"/>
+		<copy todir='${dir.build}/microservice-project'>
+			<fileset dir='../com.ibm.team.juno.microservice.template' includes='src/**,META-INF/**,*.cfg'/>
+			<fileset dir='../com.ibm.team.juno.microservice.template/project-root' includes='**'/>
+		</copy>
+		<copy todir='${dir.build}/microservice-project/lib'>
+			<fileset dir='${dir.build}' includes='juno-all-${shortVersion}.jar'/>
+			<fileset dir='../com.ibm.team.juno.microservice/lib' includes='*.jar'/>
+		</copy>
+		<zip basedir='${dir.build}' includes='microservice-project/**' destfile='${dir.build}/microservice-project-${shortVersion}.zip'/>
+
+		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+		<!-- microservice-samples-project.zip -->
+		<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+		<echo message='*** Building microservice-samples-project-${shortVersion}.zip ***'/>
+		<mkdir dir="${dir.build}/microservice-samples-project"/>
+		<copy todir='${dir.build}/microservice-samples-project'>
+			<fileset dir='../com.ibm.team.juno.samples' includes='src/**,META-INF/**,*.cfg'/>
+			<fileset dir='../com.ibm.team.juno.samples/project-root' includes='**'/>
+		</copy>
+		<copy todir='${dir.build}/microservice-samples-project/lib'>
+			<fileset dir='${dir.build}' includes='juno-all-${shortVersion}.jar'/>
+			<fileset dir='../com.ibm.team.juno.samples/lib' includes='*.jar'/>
+			<fileset dir='../com.ibm.team.juno.microservice/lib' includes='*.jar'/>
+		</copy>
+		<zip basedir='${dir.build}' includes='microservice-samples-project/**' destfile='${dir.build}/microservice-samples-project-${shortVersion}.zip'/>
+	</target>
+	
+	<!-- ================================================================================ -->
+	<!-- Component tests -->
+	<!-- ================================================================================ -->
+	<target name='Juno.ComponentTest' depends='Juno.Init' description='Run JUnit component tests.'>
+
+		<delete dir='${dir.build}/test/junit' failonerror='false'/>
+		<delete dir='${dir.build}/test/jacoco' failonerror='false'/>
+		
+		<mkdir dir='${dir.build}/test/junit/results'/>
+		<mkdir dir='${dir.build}/test/junit/html'/>
+		
+		<echo message='*** Starting juno-samples microservice ***'/>
+		<jacoco:coverage destfile='${dir.build}/test/jacoco/jacoco2.exec' includes='com.ibm.juno.*'>
+			<java jar='${dir.build}/juno-samples-fat-${shortVersion}.jar' dir='${dir.build}' fork='true' spawn='true'/>
+		</jacoco:coverage>
+			
+		<echo message='*** Starting juno-server-test microservice ***'/>
+		<jacoco:coverage destfile='${dir.build}/test/jacoco/jacoco3.exec' includes='com.ibm.juno.*'>
+			<java jar='${dir.build}/test/juno-server-test-${shortVersion}.jar' dir='${dir.build}/test' fork='true' spawn='true'/>
+		</jacoco:coverage>
+
+		<echo message='*** Running component tests ***'/>
+		<jacoco:coverage destfile='${dir.build}/test/jacoco/jacoco.exec' includes='com.ibm.juno.*'>
+	
+		<!-- Run from project dir.  Fork=true required for dir attr. -->
+			<junit printsummary='true' showoutput='true' fork='true' includeAntRuntime='true' failureproperty='TestFailed'>
+				<sysproperty key='JUNO_SAMPLE_URL' value='http://localhost:10000'/>
+				<sysproperty key='JUNO_SERVER_TEST_URL' value='http://localhost:10001'/>
+			<classpath>
+				<fileset dir='lib'>
+					<include name='**/*.jar' />
+				</fileset>
+				<fileset dir='build'>
+					<include name='**/*.jar' />
+				</fileset>
+			</classpath>
+			<formatter type='xml' usefile='true' />
+				<batchtest todir='${dir.build}/test/junit/results' filtertrace='false'>
+				<fileset dir='../com.ibm.team.juno.test/src'>
+					<include name='**/AllTests.java' />
+				</fileset>
+					<fileset dir='../com.ibm.team.juno.server.test/tests'>
+						<include name='**/AllTests.java' />
+					</fileset>
+			</batchtest>
+		</junit>
+
+		</jacoco:coverage>
+
+		<echo message='*** Stopping juno-samples microservice ***'/>
+		<get src='http://127.0.0.1:10000/shutdown' dest='out.html'/>
+		
+		<echo message='*** Stopping juno-server-test microservice ***'/>
+		<get src='http://127.0.0.1:10001/shutdown' dest='out.html'/>
+
+		<jacoco:report>
+			<executiondata>
+				<file file='${dir.build}/test/jacoco/jacoco.exec' />
+				<file file='${dir.build}/test/jacoco/jacoco2.exec' />
+				<file file='${dir.build}/test/jacoco/jacoco3.exec' />
+			</executiondata>
+			<structure name='Juno'>
+			    <group name='Core'>
+					<classfiles>
+						<fileset dir='${dir.build}' includes='juno-core.jar'/>
+					</classfiles>
+					<sourcefiles encoding='UTF-8'>
+						<fileset dir='../com.ibm.team.juno/src' />
+					</sourcefiles>
+			    </group>
+			    <group name='Server'>
+					<classfiles>
+						<fileset dir='${dir.build}' includes='juno-server.jar'/>
+					</classfiles>
+					<sourcefiles encoding='UTF-8'>
+						<fileset dir='../com.ibm.team.juno.server/src' />
+					</sourcefiles>
+			    </group>
+			    <group name='Client'>
+					<classfiles>
+						<fileset dir='${dir.build}' includes='juno-client.jar'/>
+					</classfiles>
+					<sourcefiles encoding='UTF-8'>
+						<fileset dir='../com.ibm.team.juno.client/src' />
+					</sourcefiles>
+			    </group>
+			</structure>
+			<!--  to produce reports in different formats.  -->
+			<html destdir='${dir.build}/test/jacoco/results' />
+			<csv destfile='${dir.build}/test/jacoco/results/report.csv' />
+			<xml destfile='${dir.build}/test/jacoco/results/report.xml' />
+		</jacoco:report>
+
+		<!-- Create the JUnit report file -->
+		<delete dir='${dir.build}/test/junit/html' failonerror='false' />
+		<mkdir dir='${dir.build}/test/junit/html' />
+		<!-- Commented out for now due to bug https://issues.apache.org/bugzilla/show_bug.cgi?id=51668 -->
+		<!--junitreport todir='CT_Results'>
+			<fileset dir='CT_Results'>
+				<include name='**/TEST-*.xml' />
+			</fileset>
+			<report format='noframes' todir='CT_Results_html'/>
+		</junitreport-->
+
+		<ant target='Juno.CtFailed'/>
+		<ant target='Juno.CtSucceeded'/>
+	</target>
+
+	<target name='Juno.CtFailed' if='TestFailed'>
+		<echo message='Juno component testsuite run had at least one failure.'/>
+	</target>
+
+	<target name='Juno.CtSucceeded' unless='TestFailed'>
+		<echo message='Juno component testsuite run succeeded.'/>
+	</target>
+	
+	
+	<!-- ================================================================================ -->
+	<!-- Build Javadocs -->
+	<!-- ================================================================================ -->
+	<target name='Juno.BuildDoc' depends='Juno.Init' unless='Juno.BuildDoc.Executed'>
+		<!--delete dir='doc'/-->
+		<echo message="Building Javadocs at ${dir.build}/doc"/>
+		<javadoc 
+				access='protected' 
+				windowtitle='Juno' 
+				author='true' 
+				destdir='${dir.build}/doc' 
+				linksource='on' 
+				source='1.6' 
+				overview='../com.ibm.team.juno/src/overview.html' 
+				stylesheetfile='javadoc.css'
+				use='true'
+				additionalparam='-sourcetab 3 -notimestamp'
+				verbose='false'
+				excludepackagenames='*proto*'>
+			<link href='http://docs.oracle.com/javase/7/docs/api/' />
+			<link href='http://docs.oracle.com/javaee/5/api/' />
+			<packageset dir='../com.ibm.team.juno/src'>
+				<include name='com/ibm/juno/**'/>
+				<exclude name='**/proto/**'/>
+			</packageset>
+			<packageset dir='../com.ibm.team.juno.client/src'>
+				<include name='com/ibm/juno/**'/>
+				<exclude name='**/proto/**'/>
+			</packageset>
+			<packageset dir='../com.ibm.team.juno.server/src'>
+				<include name='com/ibm/juno/**'/>
+				<exclude name='**/proto/**'/>
+			</packageset>
+			<packageset dir='../com.ibm.team.juno.microservice/src'>
+				<include name='com/ibm/juno/**'/>
+				<exclude name='**/proto/**'/>
+			</packageset>
+			<classpath refid='classpath'/>
+			<group title='com.ibm.juno.core - &lt;i&gt;Core API (serializers, parsers, bean context)&lt;/i&gt;'>
+				<package name='com.ibm.juno.core*'/>
+			</group>
+			<group title='com.ibm.juno.server - &lt;i>REST Server API&lt;/i>'>
+				<package name='com.ibm.juno.server*'/>
+			</group>
+			<group title='com.ibm.juno.client - &lt;i>REST Client API&lt;/i>'>
+				<package name='com.ibm.juno.client*'/>
+			</group>
+			<group title='com.ibm.juno.microservice - &lt;i>Microservice API&lt;/i>'>
+				<package name='com.ibm.juno.microservice*'/>
+			</group>
+		</javadoc>
+		<!--java classname='com.ibm.juno.utils.LinkValidator' classpath='../com.ibm.juno.utils/bin;bin' dir='.' fork='true'>
+			<arg value='doc'/>
+		</java-->
+		<property name='Juno.BuildDoc.Executed' value='true'/>
+	</target>
+	
+
+	<!-- ================================================================================ -->
+	<!-- Build Javadoc zip file -->
+	<!-- ================================================================================ -->
+	<target name='Juno.BuildDocZip' description='Create Javadoc archive file' depends='Juno.BuildDoc'>
+
+		<!-- juno_javadocs.war -->
+		<echo message='*** Building juno-javadocs.war ***'/>
+		<war destfile='${dir.build}/juno-javadocs.war' webxml='misc/web.xml'>
+			<fileset dir='${dir.build}/doc'/>
+		</war>		
+		
+	</target>
+</project>

@@ -1,0 +1,210 @@
+<!DOCTYPE HTML>
+<!--
+    Licensed Materials - Property of IBM
+    (c) Copyright IBM Corporation 2014. All Rights Reserved.
+   
+    Note to U.S. Government Users Restricted Rights:  
+    Use, duplication or disclosure restricted by GSA ADP Schedule 
+    Contract with IBM Corp. 
+ -->
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<style type="text/css">
+		/* For viewing in Page Designer */
+		@IMPORT url("../../../../../javadoc.css");
+
+		/* For viewing in REST interface */
+		@IMPORT url("../htdocs/javadoc.css");
+		body { 
+			margin: 20px; 
+		}	
+	</style>
+	<script>
+		/* Replace all @code and @link tags. */	
+		window.onload = function() {
+			document.body.innerHTML = document.body.innerHTML.replace(/\{\@code ([^\}]+)\}/g, '<code>$1</code>');
+			document.body.innerHTML = document.body.innerHTML.replace(/\{\@link (([^\}]+)\.)?([^\.\}]+)\}/g, '<code>$3</code>');
+		}
+	</script>
+</head>
+<body>
+<p>Base toolkit for serializers, parsers, and bean contexts</p>
+
+<script>
+	function toggle(x) {
+		var div = x.nextSibling;
+		while (div != null && div.nodeType != 1)
+			div = div.nextSibling;
+		if (div != null) {
+			var d = div.style.display;
+			if (d == 'block' || d == '') {
+				div.style.display = 'none';
+				x.className += " closed";
+			} else {
+				div.style.display = 'block';
+				x.className = x.className.replace(/(?:^|\s)closed(?!\S)/g , '' );
+			}
+		}
+	}
+</script>
+
+<a id='TOC'></a><h5 class='toc'>Table of Contents</h5>
+<ol class='toc'>
+	<li><p><a class='doclink' href='#BeanContext_Api'>Bean Context API</a></p> 
+	<ol>
+		<li><p><a class='doclink' href='#BeanMap'>The BeanMap class</a></p> 
+		<li><p><a class='doclink' href='#BeanContext'>The BeanContext class</a></p>
+		<li><p><a class='doclink' href='#Bean'>Bean annotations</a></p>
+	</ol>
+	<li><p><a class='doclink' href='#ObjectMap_ObjectList'>ObjectMap and ObjectList APIs</a></p>
+	<li><p><a class='doclink' href='#PojoCategories'>POJO Categories</a></p>
+</ol>
+
+<!-- ======================================================================================================== -->
+<a id="BeanContext_Api"></a>
+<h2 class='topic' onclick='toggle(this)'>1 - Bean Context API</h2>
+<div class='topic'>
+	<p>
+		The {@link com.ibm.juno.core.BeanContext} class is the core class in the Juno architecture.  It serves multiple functions...
+	</p>
+	<ul class='normal'>
+		<li>It provides the ability to create instances of {@link com.ibm.juno.core.BeanMap BeanMaps}.
+		<li>It serves as a repository for {@link com.ibm.juno.core.filter.Filter Filters}, which are used to tailor how beans and non-beans are handled. 
+		<li>It's used by all built-in {@link com.ibm.juno.core.serializer.Serializer Serializers} and {@link com.ibm.juno.core.parser.Parser Parsers} for working with POJOs in a consistent way.
+	</ul>
+	
+	<!-- ======================================================================================================== -->
+	<a id="BeanMap"></a>
+	<h3 class='topic' onclick='toggle(this)'>1.1 - The BeanMap class</h3>
+	<div class='topic'>
+		<p>
+			The {@link com.ibm.juno.core.BeanMap} class allows you to access the properties of a bean through the familiar {@code Map} interface. 
+			So, for example, you can use the {@code Map.get(key)} method to retrieve a property value in leu of it's getter method, and the {@code Map.put(key, value)} method to set a property value in leu of it's setter method.
+		</p>
+		<p>
+			The serialization and parsing of beans in Juno is accomplished by wrapping Java beans inside instances of the class {@code BeanMap}. 
+		</p>
+		<p>
+			<b>Note:</b> Instances of {@link com.ibm.juno.core.BeanMap} objects are always retrieved through the {@link com.ibm.juno.core.BeanContext} class. You cannot instantiate {@code BeanMaps} directly since the rules for defining what constitutes a bean depend on various settings in the bean context.
+		</p>
+		<p>
+			In general, the performance on using the {@link com.ibm.juno.core.BeanMap} class to access properties is equivalent to using reflection directly.
+		</p>
+		<p>
+			See the {@link com.ibm.juno.core.BeanMap} javadoc for more information.
+		</p>
+	</div>
+	
+	<!-- ======================================================================================================== -->
+	<a id="BeanContext"></a>
+	<h3 class='topic' onclick='toggle(this)'>1.2 - The BeanContext class</h3>
+	<div class='topic'>
+		<p>
+			The {@link com.ibm.juno.core.BeanContext} class is the workhorse class used to wrap Java beans inside {@link com.ibm.juno.core.BeanMap BeanMaps}. 
+			There are several options provided on the {@link com.ibm.juno.core.BeanContext} class to tailor the definition of a bean.
+		</p>
+		<p>
+			The following is a very simple example of how to wrap a bean inside a {@link com.ibm.juno.core.BeanMap} wrapper and use the wrapper interface to get and set property values on the bean. 
+			In this case, we're using the DEFAULT bean context.
+		</p>
+		<p class='bcode'>
+	<jc>// A sample pseudo bean class.</jc>
+	<jk>public class</jk> Person {
+		<jk>public</jk> String getName();
+		<jk>public void</jk> setName(String name);
+		<jk>public int</jk> getAge();
+		<jk>public void</jk> setAge(<jk>int</jk> age);
+	}
+	
+	<jc>// Get an instance of a bean context.
+	// In this case, just use the default bean context.</jc>
+	BeanContext beanContext = BeanContext.<jsf>DEFAULT</jsf>;
+	
+	<jc>// Create an instance of our bean and wrap it in a bean map.</jc>
+	Person p = <jk>new</jk> Person();
+	BeanMap&lt;Person&gt; m = beanContext.forBean(p);
+	
+	<jc>// Set some properties on the bean.</jc>
+	m.put(<js>"name"</js>, <js>"John Smith"</js>);
+	m.put(<js>"age"</js>, 21);
+	
+	<jc>// Print out bean properties.</jc>
+	System.out.println(m.get(<js>"name"</js>));	<jc>// Prints "John Smith"</jc>
+	System.out.println(p.getName());	  <jc>// Prints "John Smith"</jc>
+	System.out.println(m.get(<js>"age"</js>));	 <jc>// Prints 21</jc>
+	System.out.println(p.getAge());		<jc>// Prints 21</jc>
+	
+	<jc>// The bean context class can also create instances of bean maps.</jc>
+	m = beanContext.newBeanMap(Person.<jk>class</jk>);
+	p = m.getBean();	<jc>// Get the new wrapped bean.</jc>
+	
+	<jc>// The bean context class can also create instances of beans.</jc>
+	p = beanContext.newBean(Person.<jk>class</jk>);
+		</p>
+		<p>
+			There are 3 ways to get an instance of a {@link com.ibm.juno.core.BeanContext}:
+		</p>
+		<p class='bcode'>
+	<jc>// Use one of the default bean contexts.</jc>
+	BeanContext beanContext = BeanContext.<jsf>DEFAULT</jsf>;
+	
+	<jc>// Create a context from scratch with your own settings.</jc>
+	beanContext = <jk>new</jk> BeanContext().addFilters(DateFilter.ISO8601DT.<jk>class</jk>);
+	
+	<jc>// Clone and modify an existing context.</jc>
+	beanContext = BeanContext.<jsf>DEFAULT</jsf>.clone().addFilters(DateFilter.ISO8601DT.<jk>class</jk>);
+		</p>
+		<p>
+			The {@link com.ibm.juno.core.BeanContext} class is a highly-customizable class.  
+			See the {@link com.ibm.juno.core.BeanContext} javadoc for more information.
+		</p>
+	</div>
+	
+	<!-- ======================================================================================================== -->
+	<a id="Bean"></a>
+	<h3 class='topic' onclick='toggle(this)'>1.3 - Bean annotations</h3>
+	<div class='topic'>
+		<p>
+			Juno provides the following annotations that can be used to fine-tune what properties are associated with beans:
+		</p>
+		<ul class='normal'>
+			<li>{@link com.ibm.juno.core.annotation.Bean} - Fine-tune properties associated with beans.
+			<li>{@link com.ibm.juno.core.annotation.BeanProperty} - Fine-tune bean properties (fields / getters / setters).
+			<li>{@link com.ibm.juno.core.annotation.BeanConstructor} - Define read-only bean properties that can only be set through constructor arguments.
+			<li>{@link com.ibm.juno.core.annotation.BeanIgnore} - Prevent bean classes/methods/fields from being interpreted as bean constructs.
+		</ul>
+		<p>
+			These annotations always override the settings defined in the {@link com.ibm.juno.core.BeanContext} class.
+		</p>
+		<p>
+			For example, the following bean class will only have one property associated with it, <js>"name"</js>, since it's the only one listed in the list of properties.
+		</p>
+		<p class='bcode'>
+	<jc>// Bean with only one 'name' property</jc>
+	<ja>@Bean</ja>(properties={<js>"name"</js>})
+	<jk>public class</jk> Person {
+		<jk>public</jk> String getName();
+		<jk>public void</jk> setName(String name);
+		<jk>public int</jk> getAge();
+		<jk>public void</jk> setAge(<jk>int</jk> age);
+	}
+		</p>
+		<p>
+			When this bean is serialized using one of the {@link com.ibm.juno.core.serializer.Serializer Serializers}, the age property will be ignored.
+		</p>
+		<p>
+			Using the <ja>@Bean</ja> and <ja>@BeanProperty</ja> annotations, it's also possible to include non-standard properties (for example, getters or setters with non-standard names), or override the names of properties (for example, {@code "Name"} or {@code "fullName"} instead of {@code "name"}).
+		</p>
+		<p>
+			It should be noted that the {@link com.ibm.juno.core.filter.BeanFilter} class can also be used to exclude properties from beans.  
+			However, only the annotations can be used to include non-standard properties or override property names.
+		</p>
+		<p>
+			See the {@link com.ibm.juno.core.annotation.Bean}, {@link com.ibm.juno.core.annotation.BeanProperty}, {@link com.ibm.juno.core.annotation.BeanConstructor}, and {@link com.ibm.juno.core.annotation.BeanIgnore} javadocs for more information.
+		</p>
+	</div>
+</div>
+
+</body>
+</html>

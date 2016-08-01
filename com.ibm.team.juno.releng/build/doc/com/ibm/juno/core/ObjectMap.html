@@ -1,0 +1,2094 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="en">
+<head>
+<title>ObjectMap (Juno)</title>
+<link rel="stylesheet" type="text/css" href="../../../../javadoc.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="ObjectMap (Juno)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a>
+<div class="skip"><a href="#skip-navbar_top" title="Skip navigation links">Skip navigation links</a></div>
+<a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/ObjectMap.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+<li><a href="../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../com/ibm/juno/core/ObjectList.html" title="class in com.ibm.juno.core"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../com/ibm/juno/core/PropertyNamer.html" title="interface in com.ibm.juno.core"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../index.html?com/ibm/juno/core/ObjectMap.html" target="_top">Frames</a></li>
+<li><a href="ObjectMap.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li><a href="#nested_classes_inherited_from_class_java.util.AbstractMap">Nested</a>&nbsp;|&nbsp;</li>
+<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">com.ibm.juno.core</div>
+<h2 title="Class ObjectMap" class="title">Class ObjectMap</h2>
+</div>
+<div class="contentContainer">
+<ul class="inheritance">
+<li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
+<li>
+<ul class="inheritance">
+<li><a href="http://docs.oracle.com/javase/7/docs/api/java/util/AbstractMap.html?is-external=true" title="class or interface in java.util">java.util.AbstractMap</a>&lt;K,V&gt;</li>
+<li>
+<ul class="inheritance">
+<li><a href="http://docs.oracle.com/javase/7/docs/api/java/util/HashMap.html?is-external=true" title="class or interface in java.util">java.util.HashMap</a>&lt;K,V&gt;</li>
+<li>
+<ul class="inheritance">
+<li><a href="http://docs.oracle.com/javase/7/docs/api/java/util/LinkedHashMap.html?is-external=true" title="class or interface in java.util">java.util.LinkedHashMap</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</li>
+<li>
+<ul class="inheritance">
+<li>com.ibm.juno.core.ObjectMap</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<dl>
+<dt>All Implemented Interfaces:</dt>
+<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Cloneable.html?is-external=true" title="class or interface in java.lang">Cloneable</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</dd>
+</dl>
+<dl>
+<dt>Direct Known Subclasses:</dt>
+<dd><a href="../../../../com/ibm/juno/core/utils/Args.html" title="class in com.ibm.juno.core.utils">Args</a>, <a href="../../../../com/ibm/juno/core/utils/DelegateMap.html" title="class in com.ibm.juno.core.utils">DelegateMap</a>, <a href="../../../../com/ibm/juno/core/utils/ManifestFile.html" title="class in com.ibm.juno.core.utils">ManifestFile</a></dd>
+</dl>
+<hr>
+<br>
+<pre>public class <a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.98">ObjectMap</a>
+extends <a href="http://docs.oracle.com/javase/7/docs/api/java/util/LinkedHashMap.html?is-external=true" title="class or interface in java.util">LinkedHashMap</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</pre>
+<div class="block">Java implementation of a JSON object.
+ <p>
+   An extension of <a href="http://docs.oracle.com/javase/7/docs/api/java/util/LinkedHashMap.html?is-external=true" title="class or interface in java.util"><code>LinkedHashMap</code></a>, so all methods available in that class are also available
+   to this class.
+ <p>
+   Note that the use of this class is optional.  The serializers will accept any objects that implement
+   the <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util"><code>Map</code></a> interface.  But this class provides some useful additional functionality
+   when working with JSON models constructed from Java Collections Framework objects.  For example, a
+   constructor is provided for converting a JSON object string directly into a <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util"><code>Map</code></a>.  It also contains
+   accessor methods for to avoid common typecasting when accessing elements in a list.
+
+ <h6 class='topic'>Examples</h6>
+ <p class='bcode'>
+   <jc>// Construct an empty Map</jc>
+   Map m = <jk>new</jk> ObjectMap();
+
+   <jc>// Construct a Map from JSON</jc>
+   String json = <js>"{a:'A',b:{c:'C',d:123}}"</js>;
+   m = <jk>new</jk> ObjectMap(json);
+
+   <jc>// Construct a Map using the append method</jc>
+   m = <jk>new</jk> ObjectMap().append(<js>"foo"</js>,<js>"x"</js>).append(<js>"bar"</js>,123).append(<js>"baz"</js>,<jk>true</jk>);
+
+   <jc>// Construct a Map from XML generated by XmlSerializer</jc>
+   String xml = <js>"&lt;object&gt;&lt;a type='string'&gt;A&lt;/a&gt;&lt;b type='object'&gt;&lt;c type='string'&gt;C&lt;/c&gt;&lt;d type='number'&gt;123&lt;/d&gt;&lt;/b&gt;&lt;/object&gt;"</js>;
+   m = <jk>new</jk> ObjectMap(xml, DataFormat.<jsf>XML</jsf>);
+   m = (Map)XmlParser.<jsf>DEFAULT</jsf>.parse(xml); <jc>// Equivalent</jc>
+   m = (Map)XmlParser.<jsf>DEFAULT</jsf>.parse(Object.<jk>class</jk>, xml); <jc>// Equivalent</jc>
+   m = XmlParser.<jsf>DEFAULT</jsf>.parse(Map.<jk>class</jk>, xml); <jc>// Equivalent</jc>
+   m = XmlParser.<jsf>DEFAULT</jsf>.parse(ObjectMap.<jk>class</jk>, xml); <jc>// Equivalent</jc>
+
+   <jc>// Construct a Map from a URL GET parameter string generated by UrlEncodingParser</jc>
+   String urlParams = <js>"?a='A'&amp;b={c:'C',d:123}"</js>;
+   m = <jk>new</jk> ObjectMap(urlParams, DataFormat.<jsf>URLPARAM</jsf>);
+   m = (Map)UrlEncodingParser.<jsf>DEFAULT</jsf>.parse(Object.<jk>class</jk>, xml); <jc>// Equivalent</jc>
+   m = UrlEncodingParser.<jsf>DEFAULT</jsf>.parse(Map.<jk>class</jk>, xml); <jc>// Equivalent</jc>
+   m = UrlEncodingParser.<jsf>DEFAULT</jsf>.parse(ObjectMap.<jk>class</jk>, xml); <jc>// Equivalent</jc>
+
+   <jc>// Construct JSON from ObjectMap</jc>
+   m = <jk>new</jk> ObjectMap(<js>"{foo:'bar'},{baz:[123,true]}"</js>);
+   json = m.toString();  <jc>// Produces "{foo:'bar'},{baz:[123,true]}"</jc>
+   json = m.toString(JsonSerializer.<jsf>DEFAULT_CONDENSED</jsf>);  <jc>// Equivalent</jc>
+   json = JsonSerializer.<jsf>DEFAULT_CONDENSED</jsf>.serialize(m);  <jc>// Equivalent</jc>
+
+   <jc>// Get a map entry as an Integer</jc>
+   m = <jk>new</jk> ObjectMap(<js>"{foo:123}"</js>);
+   Integer i = m.getInt(<js>"foo"</js>);
+   i = m.get(Integer.<jk>class</jk>, <js>"foo"</js>);  <jc>// Equivalent</jc>
+
+   <jc>// Get a map entry as a Float</jc>
+   m = <jk>new</jk> ObjectMap(<js>"{foo:123}"</js>);
+   Float f = m.getFloat(<js>"foo"</js>);
+   f = m.get(Float.<jk>class</jk>, <js>"foo"</js>);  <jc>// Equivalent</jc>
+
+   <jc>// Same as above, except converted to a String</jc>
+   m = <jk>new</jk> ObjectMap(<js>"{foo:123}"</js>);
+   String s = m.getString(<js>"foo"</js>); <jc>// Returns "123"</jc>
+   s = m.get(String.<jk>class</jk>, <js>"foo"</js>);  <jc>// Equivalent</jc>
+
+   <jc>// Get one of the entries in the list as a bean (converted to a bean if it isn't already one)</jc>
+   m = <jk>new</jk> ObjectMap(<js>"{person:{name:'John Smith',age:45}}"</js>);
+   Person p = m.get(Person.<jk>class</jk>, <js>"person"</js>);
+
+   <jc>// Add an inner map</jc>
+   ObjectMap m1 = <jk>new</jk> ObjectMap(<js>"{a:1}"</js>);
+   ObjectMap m2 = <jk>new</jk> ObjectMap(<js>"{b:2}"</js>).setInner(m1);
+   <jk>int</jk> a = m2.getInt(<js>"a"</js>);  <jc>// a == 1 </jc>
+ </p>
+ <p>
+   This class is not thread safe.
+ </p></div>
+<dl><dt><span class="strong">Author:</span></dt>
+  <dd>James Bognar (jbognar@us.ibm.com)</dd>
+<dt><span class="strong">See Also:</span></dt><dd><a href="../../../../serialized-form.html#com.ibm.juno.core.ObjectMap">Serialized Form</a></dd></dl>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- ======== NESTED CLASS SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="nested_class_summary">
+<!--   -->
+</a>
+<h3>Nested Class Summary</h3>
+<ul class="blockList">
+<li class="blockList"><a name="nested_classes_inherited_from_class_java.util.AbstractMap">
+<!--   -->
+</a>
+<h3>Nested classes/interfaces inherited from class&nbsp;java.util.<a href="http://docs.oracle.com/javase/7/docs/api/java/util/AbstractMap.html?is-external=true" title="class or interface in java.util">AbstractMap</a></h3>
+<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/AbstractMap.SimpleEntry.html?is-external=true" title="class or interface in java.util">AbstractMap.SimpleEntry</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/AbstractMap.SimpleEntry.html?is-external=true" title="class or interface in java.util">K</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/AbstractMap.SimpleEntry.html?is-external=true" title="class or interface in java.util">V</a>&gt;, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/AbstractMap.SimpleImmutableEntry.html?is-external=true" title="class or interface in java.util">AbstractMap.SimpleImmutableEntry</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/AbstractMap.SimpleImmutableEntry.html?is-external=true" title="class or interface in java.util">K</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/AbstractMap.SimpleImmutableEntry.html?is-external=true" title="class or interface in java.util">V</a>&gt;</code></li>
+</ul>
+</li>
+</ul>
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Field Summary table, listing fields, and an explanation">
+<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../com/ibm/juno/core/ObjectMap.html" title="class in com.ibm.juno.core">ObjectMap</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#EMPTY_MAP">EMPTY_MAP</a></strong></code>
+<div class="block">An empty read-only ObjectMap.</div>
+</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_summary">
+<!--   -->
+</a>
+<h3>Constructor Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Constructor Summary table, listing constructors, and an explanation">
+<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#ObjectMap()">ObjectMap</a></strong>()</code>
+<div class="block">Construct an empty JSON object (i.e.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#ObjectMap(com.ibm.juno.core.BeanContext)">ObjectMap</a></strong>(<a href="../../../../com/ibm/juno/core/BeanContext.html" title="class in com.ibm.juno.core">BeanContext</a>&nbsp;beanContext)</code>
+<div class="block">Construct an empty JSON object (i.e.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#ObjectMap(java.lang.CharSequence)">ObjectMap</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;s)</code>
+<div class="block">Shortcut for <code><jk>new</jk> ObjectMap(string,JsonParser.<jsf>DEFAULT</jsf>);</code></div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#ObjectMap(java.lang.CharSequence, com.ibm.juno.core.parser.ReaderParser)">ObjectMap</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;s,
+                  <a href="../../../../com/ibm/juno/core/parser/ReaderParser.html" title="class in com.ibm.juno.core.parser">ReaderParser</a>&nbsp;p)</code>
+<div class="block">Construct an ObjectMap directly from a string using the specified parser.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#ObjectMap(java.util.Map)">ObjectMap</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;?,?&gt;&nbsp;m)</code>
+<div class="block">Construct a JSON object and fill it with the contents from the specified <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util"><code>Map</code></a>.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#ObjectMap(java.io.Reader)">ObjectMap</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/Reader.html?is-external=true" title="class or interface in java.io">Reader</a>&nbsp;r)</code>
+<div class="block">Shortcut for <code><jk>new</jk> ObjectMap(reader, JsonParser.<jsf>DEFAULT</jsf>)</code>.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#ObjectMap(java.io.Reader, com.ibm.juno.core.parser.ReaderParser)">ObjectMap</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/Reader.html?is-external=true" title="class or interface in java.io">Reader</a>&nbsp;r,
+                  <a href="../../../../com/ibm/juno/core/parser/ReaderParser.html" title="class in com.ibm.juno.core.parser">ReaderParser</a>&nbsp;p)</code>
+<div class="block">Construct an ObjectMap directly from a reader using the specified parser.</div>
+</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../com/ibm/juno/core/ObjectMap.html" title="class in com.ibm.juno.core">ObjectMap</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#append(java.lang.String, java.lang.Object)">append</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key,
+            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;value)</code>
+<div class="block">Convenience method for adding multiple objects to this map.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#cast()">cast</a></strong>()</code>
+<div class="block">Converts this map into the class type specified by the <js>"_class"</js> entry value.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>&lt;T&gt;&nbsp;T</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#cast(java.lang.Class)">cast</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;type)</code>
+<div class="block">Converts this map into an object of the specified type.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>&lt;T&gt;&nbsp;T</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#cast(com.ibm.juno.core.ClassMeta)">cast</a></strong>(<a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;T&gt;&nbsp;cm)</code>
+<div class="block">Same as <a href="../../../../com/ibm/juno/core/ObjectMap.html#cast(java.lang.Class)"><code>cast(Class)</code></a>, except allows you to specify a <a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core"><code>ClassMeta</code></a> parameter.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#containsKey(java.lang.Object)">containsKey</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#containsOuterKey(java.lang.Object)">containsOuterKey</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key)</code>
+<div class="block">Returns <jk>true</jk> if this map contains the specified key, ignoring
+   the inner map if it exists.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#deleteAt(java.lang.String)">deleteAt</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;path)</code>
+<div class="block">Similar to <a href="http://docs.oracle.com/javase/7/docs/api/java/util/HashMap.html?is-external=true#remove(java.lang.Object)" title="class or interface in java.util"><code>remove(Object)</code></a>,but the key is a slash-delimited
+   path used to traverse entries in this POJO.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#entrySet()">entrySet</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../com/ibm/juno/core/ObjectMap.html" title="class in com.ibm.juno.core">ObjectMap</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#exclude(java.lang.String...)">exclude</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;keys)</code>
+<div class="block">Returns a copy of this <code>ObjectMap</code> without the specified keys.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>&lt;T&gt;&nbsp;T</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#find(java.lang.Class, java.lang.String...)">find</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;type,
+        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;keys)</code>
+<div class="block">Returns the value for the first key in the list that has an entry in this map.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#find(java.lang.String...)">find</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;keys)</code>
+<div class="block">Returns the value for the first key in the list that has an entry in this map.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#findBoolean(java.lang.String...)">findBoolean</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;keys)</code>
+<div class="block">Returns the first entry that exists converted to a <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang"><code>Boolean</code></a>.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#findInt(java.lang.String...)">findInt</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;keys)</code>
+<div class="block">Returns the first entry that exists converted to an <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang"><code>Integer</code></a>.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#findKeyIgnoreCase(java.lang.String)">findKeyIgnoreCase</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key)</code>
+<div class="block">Searches for the specified key in this map ignoring case.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;?&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#findList(java.lang.String...)">findList</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;keys)</code>
+<div class="block">Returns the first entry that exists converted to a <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util"><code>List</code></a>.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#findLong(java.lang.String...)">findLong</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;keys)</code>
+<div class="block">Returns the first entry that exists converted to a <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang"><code>Long</code></a>.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;?,?&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#findMap(java.lang.String...)">findMap</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;keys)</code>
+<div class="block">Returns the first entry that exists converted to a <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util"><code>Map</code></a>.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../com/ibm/juno/core/ObjectList.html" title="class in com.ibm.juno.core">ObjectList</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#findObjectList(java.lang.String...)">findObjectList</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;keys)</code>
+<div class="block">Returns the first entry that exists converted to a <a href="../../../../com/ibm/juno/core/ObjectList.html" title="class in com.ibm.juno.core"><code>ObjectList</code></a>.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../com/ibm/juno/core/ObjectMap.html" title="class in com.ibm.juno.core">ObjectMap</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#findObjectMap(java.lang.String...)">findObjectMap</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;keys)</code>
+<div class="block">Returns the first entry that exists converted to a <a href="../../../../com/ibm/juno/core/ObjectMap.html" title="class in com.ibm.juno.core"><code>ObjectMap</code></a>.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#findString(java.lang.String...)">findString</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;keys)</code>
+<div class="block">Returns the first entry that exists converted to a <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang"><code>String</code></a>.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>&lt;T&gt;&nbsp;T</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#get(java.lang.Class, java.lang.String)">get</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;type,
+      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key)</code>
+<div class="block">Same as <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#get(java.lang.Object)" title="class or interface in java.util"><code>get()</code></a>, but casts or converts the value to the specified class type.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>&lt;T&gt;&nbsp;T</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#get(java.lang.Class, java.lang.String, T)">get</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;type,
+      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key,
+      T&nbsp;def)</code>
+<div class="block">Same as <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#get(java.lang.Object)" title="class or interface in java.util"><code>get()</code></a>, but casts or converts the value to the specified class type.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>&lt;T&gt;&nbsp;T</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#get(com.ibm.juno.core.ClassMeta, java.lang.String)">get</a></strong>(<a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;T&gt;&nbsp;type,
+      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key)</code>
+<div class="block">Same as <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#get(java.lang.Object)" title="class or interface in java.util"><code>get()</code></a>, but casts or converts the value to the specified class type.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>&lt;T&gt;&nbsp;T</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#get(com.ibm.juno.core.ClassMeta, java.lang.String, T)">get</a></strong>(<a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;T&gt;&nbsp;type,
+      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key,
+      T&nbsp;def)</code>
+<div class="block">Same as <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#get(java.lang.Object)" title="class or interface in java.util"><code>get()</code></a>, but casts or converts the value to the specified class type.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#get(java.lang.Object)">get</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>&lt;T&gt;&nbsp;T</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#get(com.ibm.juno.core.filter.PojoFilter, java.lang.String)">get</a></strong>(<a href="../../../../com/ibm/juno/core/filter/PojoFilter.html" title="class in com.ibm.juno.core.filter">PojoFilter</a>&lt;T,?&gt;&nbsp;filter,
+      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key)</code>
+<div class="block">Same as <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#get(java.lang.Object)" title="class or interface in java.util"><code>get()</code></a>, but converts the raw value to the specified class type using the specified filter.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#get(java.lang.String, java.lang.Object)">get</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key,
+      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;def)</code>
+<div class="block">Same as <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#get(java.lang.Object)" title="class or interface in java.util"><code>get()</code></a>, but returns the default value if the key
+ could not be found.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>&lt;T&gt;&nbsp;T</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#getAt(java.lang.Class, java.lang.String)">getAt</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;type,
+          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;path)</code>
+<div class="block">Same as <a href="../../../../com/ibm/juno/core/ObjectMap.html#get(java.lang.Class, java.lang.String)"><code>get(Class,String)</code></a>, but the key is a slash-delimited
+   path used to traverse entries in this POJO.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../com/ibm/juno/core/BeanContext.html" title="class in com.ibm.juno.core">BeanContext</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#getBeanContext()">getBeanContext</a></strong>()</code>
+<div class="block">Returns the <a href="../../../../com/ibm/juno/core/BeanContext.html" title="class in com.ibm.juno.core"><code>BeanContext</code></a> currently associated with this map.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#getBoolean(java.lang.String)">getBoolean</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key)</code>
+<div class="block">Returns the specified entry value converted to a <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang"><code>Boolean</code></a>.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#getBoolean(java.lang.String, java.lang.Boolean)">getBoolean</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key,
+                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;defVal)</code>
+<div class="block">Returns the specified entry value converted to a <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang"><code>Boolean</code></a>.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;?&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#getClassMeta(java.lang.String)">getClassMeta</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key)</code>
+<div class="block">Returns the class type of the object at the specified index.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#getFirstKey()">getFirstKey</a></strong>()</code>
+<div class="block">Returns the first key in the map.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../com/ibm/juno/core/ObjectMap.html" title="class in com.ibm.juno.core">ObjectMap</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#getInner()">getInner</a></strong>()</code>
+<div class="block">Returns the inner map if one was set through <a href="../../../../com/ibm/juno/core/ObjectMap.html#setInner(com.ibm.juno.core.ObjectMap)"><code>setInner(ObjectMap)</code></a>.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#getInt(java.lang.String)">getInt</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key)</code>
+<div class="block">Returns the specified entry value converted to an <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang"><code>Integer</code></a>.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#getInt(java.lang.String, java.lang.Integer)">getInt</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key,
+            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;defVal)</code>
+<div class="block">Returns the specified entry value converted to an <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang"><code>Integer</code></a>.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;?&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#getList(java.lang.String)">getList</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key)</code>
+<div class="block">Returns the specified entry value converted to a <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util"><code>List</code></a>.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;?&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#getList(java.lang.String, java.util.List)">getList</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;?&gt;&nbsp;defVal)</code>
+<div class="block">Returns the specified entry value converted to a <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util"><code>List</code></a>.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#getLong(java.lang.String)">getLong</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key)</code>
+<div class="block">Returns the specified entry value converted to a <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang"><code>Long</code></a>.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#getLong(java.lang.String, java.lang.Long)">getLong</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>&nbsp;defVal)</code>
+<div class="block">Returns the specified entry value converted to a <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang"><code>Long</code></a>.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;?,?&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#getMap(java.lang.String)">getMap</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key)</code>
+<div class="block">Returns the specified entry value converted to a <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util"><code>Map</code></a>.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;?,?&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#getMap(java.lang.String, java.util.Map)">getMap</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key,
+            <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;?,?&gt;&nbsp;defVal)</code>
+<div class="block">Returns the specified entry value converted to a <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util"><code>Map</code></a>.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../com/ibm/juno/core/ObjectList.html" title="class in com.ibm.juno.core">ObjectList</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#getObjectList(java.lang.String)">getObjectList</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key)</code>
+<div class="block">Returns the specified entry value converted to a <a href="../../../../com/ibm/juno/core/ObjectList.html" title="class in com.ibm.juno.core"><code>ObjectList</code></a>.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../com/ibm/juno/core/ObjectList.html" title="class in com.ibm.juno.core">ObjectList</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#getObjectList(java.lang.String, com.ibm.juno.core.ObjectList)">getObjectList</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key,
+                          <a href="../../../../com/ibm/juno/core/ObjectList.html" title="class in com.ibm.juno.core">ObjectList</a>&nbsp;defVal)</code>
+<div class="block">Returns the specified entry value converted to a <a href="../../../../com/ibm/juno/core/ObjectList.html" title="class in com.ibm.juno.core"><code>ObjectList</code></a>.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../com/ibm/juno/core/ObjectMap.html" title="class in com.ibm.juno.core">ObjectMap</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#getObjectMap(java.lang.String)">getObjectMap</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key)</code>
+<div class="block">Returns the specified entry value converted to a <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util"><code>Map</code></a>.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../com/ibm/juno/core/ObjectMap.html" title="class in com.ibm.juno.core">ObjectMap</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#getObjectMap(java.lang.String, com.ibm.juno.core.ObjectMap)">getObjectMap</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key,
+                        <a href="../../../../com/ibm/juno/core/ObjectMap.html" title="class in com.ibm.juno.core">ObjectMap</a>&nbsp;defVal)</code>
+<div class="block">Returns the specified entry value converted to a <a href="../../../../com/ibm/juno/core/ObjectMap.html" title="class in com.ibm.juno.core"><code>ObjectMap</code></a>.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#getString(java.lang.String)">getString</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key)</code>
+<div class="block">Returns the specified entry value converted to a <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang"><code>String</code></a>.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#getString(java.lang.String, java.lang.String)">getString</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key,
+                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;defVal)</code>
+<div class="block">Returns the specified entry value converted to a <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang"><code>String</code></a>.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#getStringArray(java.lang.String)">getStringArray</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key)</code>
+<div class="block">Specialized method that calls <a href="../../../../com/ibm/juno/core/ObjectMap.html#getString(java.lang.String)"><code>getString(String)</code></a> and splits the
+   results as a simple comma-delimited list.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#getStringArray(java.lang.String, java.lang.String[])">getStringArray</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key,
+                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;def)</code>
+<div class="block">Same as <a href="../../../../com/ibm/juno/core/ObjectMap.html#getStringArray(java.lang.String)"><code>getStringArray(String)</code></a> but returns a default value if the value cannot be found.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../com/ibm/juno/core/ObjectMap.html" title="class in com.ibm.juno.core">ObjectMap</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#include(java.lang.String...)">include</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;keys)</code>
+<div class="block">Returns a copy of this <code>ObjectMap</code> with only the specified keys.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#keySet()">keySet</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#postAt(java.lang.String, java.lang.Object)">postAt</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;path,
+            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</code>
+<div class="block">Similar to <a href="../../../../com/ibm/juno/core/ObjectMap.html#putAt(java.lang.String, java.lang.Object)"><code>putAt(String,Object)</code></a>, but used to append
+   to collections and arrays.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#putAt(java.lang.String, java.lang.Object)">putAt</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;path,
+          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</code>
+<div class="block">Same as <code>put(String,Object)</code>, but the key is a slash-delimited
+   path used to traverse entries in this POJO.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../com/ibm/juno/core/ObjectMap.html" title="class in com.ibm.juno.core">ObjectMap</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#putIfEmpty(java.lang.String, java.lang.Object)">putIfEmpty</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key,
+                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;val)</code>
+<div class="block">Sets a value in this map if the entry does not exist or the value is <jk>null</jk> or an empty string.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../com/ibm/juno/core/ObjectMap.html" title="class in com.ibm.juno.core">ObjectMap</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#putIfNull(java.lang.String, java.lang.Object)">putIfNull</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key,
+                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;val)</code>
+<div class="block">Sets a value in this map if the entry does not exist or the value is <jk>null</jk>.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#putJson(java.lang.String, java.lang.String)">putJson</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;json)</code>
+<div class="block">Convenience method for inserting JSON directly into an attribute on this object.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>&lt;T&gt;&nbsp;T</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#remove(java.lang.Class, java.lang.String, T)">remove</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;type,
+            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key,
+            T&nbsp;defVal)</code>
+<div class="block">Equivalent to calling <code>get(class,key,def)</code> followed by <code>remove(key);</code></div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#removeAll(java.util.Collection)">removeAll</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;keys)</code>
+<div class="block">Convenience method for removing several keys at once.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#removeAll(java.lang.String...)">removeAll</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;keys)</code>
+<div class="block">Convenience method for removing several keys at once.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../com/ibm/juno/core/ObjectMap.html" title="class in com.ibm.juno.core">ObjectMap</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#serializeTo(java.io.Writer)">serializeTo</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/Writer.html?is-external=true" title="class or interface in java.io">Writer</a>&nbsp;w)</code>
+<div class="block">Convenience method for serializing this map to the specified <code>Writer</code> using
+ the <a href="../../../../com/ibm/juno/core/json/JsonSerializer.html#DEFAULT"><code>JsonSerializer.DEFAULT</code></a> serializer.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../com/ibm/juno/core/ObjectMap.html" title="class in com.ibm.juno.core">ObjectMap</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#setBeanContext(com.ibm.juno.core.BeanContext)">setBeanContext</a></strong>(<a href="../../../../com/ibm/juno/core/BeanContext.html" title="class in com.ibm.juno.core">BeanContext</a>&nbsp;beanContext)</code>
+<div class="block">Override the default bean context used for converting POJOs.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../com/ibm/juno/core/ObjectMap.html" title="class in com.ibm.juno.core">ObjectMap</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#setInner(com.ibm.juno.core.ObjectMap)">setInner</a></strong>(<a href="../../../../com/ibm/juno/core/ObjectMap.html" title="class in com.ibm.juno.core">ObjectMap</a>&nbsp;inner)</code>
+<div class="block">Set an inner map in this map to allow for chained get calls.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#toString()">toString</a></strong>()</code>
+<div class="block">Serialize this object into a JSON string using the <a href="../../../../com/ibm/juno/core/json/JsonSerializer.html#DEFAULT"><code>JsonSerializer.DEFAULT</code></a> serializer.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/ObjectMap.html#toString(com.ibm.juno.core.serializer.WriterSerializer)">toString</a></strong>(<a href="../../../../com/ibm/juno/core/serializer/WriterSerializer.html" title="class in com.ibm.juno.core.serializer">WriterSerializer</a>&nbsp;serializer)</code>
+<div class="block">Serialize this object into a string using the specified serializer.</div>
+</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_java.util.LinkedHashMap">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.util.<a href="http://docs.oracle.com/javase/7/docs/api/java/util/LinkedHashMap.html?is-external=true" title="class or interface in java.util">LinkedHashMap</a></h3>
+<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/LinkedHashMap.html?is-external=true#clear()" title="class or interface in java.util">clear</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/LinkedHashMap.html?is-external=true#containsValue(java.lang.Object)" title="class or interface in java.util">containsValue</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/LinkedHashMap.html?is-external=true#removeEldestEntry(java.util.Map.Entry)" title="class or interface in java.util">removeEldestEntry</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_java.util.HashMap">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.util.<a href="http://docs.oracle.com/javase/7/docs/api/java/util/HashMap.html?is-external=true" title="class or interface in java.util">HashMap</a></h3>
+<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/HashMap.html?is-external=true#clone()" title="class or interface in java.util">clone</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/HashMap.html?is-external=true#isEmpty()" title="class or interface in java.util">isEmpty</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/HashMap.html?is-external=true#put(K, V)" title="class or interface in java.util">put</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/HashMap.html?is-external=true#putAll(java.util.Map)" title="class or interface in java.util">putAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/HashMap.html?is-external=true#remove(java.lang.Object)" title="class or interface in java.util">remove</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/HashMap.html?is-external=true#size()" title="class or interface in java.util">size</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/HashMap.html?is-external=true#values()" title="class or interface in java.util">values</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_java.util.AbstractMap">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.util.<a href="http://docs.oracle.com/javase/7/docs/api/java/util/AbstractMap.html?is-external=true" title="class or interface in java.util">AbstractMap</a></h3>
+<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/AbstractMap.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.util">equals</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/AbstractMap.html?is-external=true#hashCode()" title="class or interface in java.util">hashCode</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
+<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long, int)" title="class or interface in java.lang">wait</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_java.util.Map">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;java.util.<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a></h3>
+<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.util">equals</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#hashCode()" title="class or interface in java.util">hashCode</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#isEmpty()" title="class or interface in java.util">isEmpty</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#put(K, V)" title="class or interface in java.util">put</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#putAll(java.util.Map)" title="class or interface in java.util">putAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#remove(java.lang.Object)" title="class or interface in java.util">remove</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#size()" title="class or interface in java.util">size</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#values()" title="class or interface in java.util">values</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ============ FIELD DETAIL =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_detail">
+<!--   -->
+</a>
+<h3>Field Detail</h3>
+<a name="EMPTY_MAP">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>EMPTY_MAP</h4>
+<pre>public static final&nbsp;<a href="../../../../com/ibm/juno/core/ObjectMap.html" title="class in com.ibm.juno.core">ObjectMap</a> <a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.108">EMPTY_MAP</a></pre>
+<div class="block">An empty read-only ObjectMap.</div>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_detail">
+<!--   -->
+</a>
+<h3>Constructor Detail</h3>
+<a name="ObjectMap(java.lang.CharSequence, com.ibm.juno.core.parser.ReaderParser)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>ObjectMap</h4>
+<pre>public&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.147">ObjectMap</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;s,
+         <a href="../../../../com/ibm/juno/core/parser/ReaderParser.html" title="class in com.ibm.juno.core.parser">ReaderParser</a>&nbsp;p)
+          throws <a href="../../../../com/ibm/juno/core/parser/ParseException.html" title="class in com.ibm.juno.core.parser">ParseException</a></pre>
+<div class="block">Construct an ObjectMap directly from a string using the specified parser.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>s</code> - The string being parsed.</dd><dd><code>p</code> - The parser to use to parse the input.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../com/ibm/juno/core/parser/ParseException.html" title="class in com.ibm.juno.core.parser">ParseException</a></code> - If the input contains a syntax error or is malformed.</dd></dl>
+</li>
+</ul>
+<a name="ObjectMap(java.lang.CharSequence)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>ObjectMap</h4>
+<pre>public&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.165">ObjectMap</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;s)
+          throws <a href="../../../../com/ibm/juno/core/parser/ParseException.html" title="class in com.ibm.juno.core.parser">ParseException</a></pre>
+<div class="block">Shortcut for <code><jk>new</jk> ObjectMap(string,JsonParser.<jsf>DEFAULT</jsf>);</code></div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>s</code> - The JSON text to parse.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../com/ibm/juno/core/parser/ParseException.html" title="class in com.ibm.juno.core.parser">ParseException</a></code> - If the input contains a syntax error or is malformed.</dd></dl>
+</li>
+</ul>
+<a name="ObjectMap(java.io.Reader, com.ibm.juno.core.parser.ReaderParser)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>ObjectMap</h4>
+<pre>public&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.177">ObjectMap</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/Reader.html?is-external=true" title="class or interface in java.io">Reader</a>&nbsp;r,
+         <a href="../../../../com/ibm/juno/core/parser/ReaderParser.html" title="class in com.ibm.juno.core.parser">ReaderParser</a>&nbsp;p)
+          throws <a href="../../../../com/ibm/juno/core/parser/ParseException.html" title="class in com.ibm.juno.core.parser">ParseException</a>,
+                 <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<div class="block">Construct an ObjectMap directly from a reader using the specified parser.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>r</code> - The reader to read from.  The reader will be wrapped in a <a href="http://docs.oracle.com/javase/7/docs/api/java/io/BufferedReader.html?is-external=true" title="class or interface in java.io"><code>BufferedReader</code></a> if it isn't already.</dd><dd><code>p</code> - The parser to use to parse the input.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../com/ibm/juno/core/parser/ParseException.html" title="class in com.ibm.juno.core.parser">ParseException</a></code> - If the input contains a syntax error or is malformed.</dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - If a problem occurred trying to read from the reader.</dd></dl>
+</li>
+</ul>
+<a name="ObjectMap(java.io.Reader)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>ObjectMap</h4>
+<pre>public&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.188">ObjectMap</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/Reader.html?is-external=true" title="class or interface in java.io">Reader</a>&nbsp;r)
+          throws <a href="../../../../com/ibm/juno/core/parser/ParseException.html" title="class in com.ibm.juno.core.parser">ParseException</a>,
+                 <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<div class="block">Shortcut for <code><jk>new</jk> ObjectMap(reader, JsonParser.<jsf>DEFAULT</jsf>)</code>.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>r</code> - The reader to read from.  The reader will be wrapped in a <a href="http://docs.oracle.com/javase/7/docs/api/java/io/BufferedReader.html?is-external=true" title="class or interface in java.io"><code>BufferedReader</code></a> if it isn't already.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../com/ibm/juno/core/parser/ParseException.html" title="class in com.ibm.juno.core.parser">ParseException</a></code> - If the input contains a syntax error or is malformed.</dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - If a problem occurred trying to read from the reader.</dd></dl>
+</li>
+</ul>
+<a name="ObjectMap()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>ObjectMap</h4>
+<pre>public&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.201">ObjectMap</a>()</pre>
+<div class="block">Construct an empty JSON object (i.e. an empty <a href="http://docs.oracle.com/javase/7/docs/api/java/util/LinkedHashMap.html?is-external=true" title="class or interface in java.util"><code>LinkedHashMap</code></a>).</div>
+</li>
+</ul>
+<a name="ObjectMap(com.ibm.juno.core.BeanContext)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>ObjectMap</h4>
+<pre>public&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.210">ObjectMap</a>(<a href="../../../../com/ibm/juno/core/BeanContext.html" title="class in com.ibm.juno.core">BeanContext</a>&nbsp;beanContext)</pre>
+<div class="block">Construct an empty JSON object (i.e. an empty <a href="http://docs.oracle.com/javase/7/docs/api/java/util/LinkedHashMap.html?is-external=true" title="class or interface in java.util"><code>LinkedHashMap</code></a>) with the specified bean context.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>beanContext</code> - The bean context to use for creating beans.</dd></dl>
+</li>
+</ul>
+<a name="ObjectMap(java.util.Map)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>ObjectMap</h4>
+<pre>public&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.220">ObjectMap</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;?,?&gt;&nbsp;m)</pre>
+<div class="block">Construct a JSON object and fill it with the contents from the specified <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util"><code>Map</code></a>.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>m</code> - The map whose entries will be copied into this map.</dd></dl>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="setInner(com.ibm.juno.core.ObjectMap)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setInner</h4>
+<pre>public&nbsp;<a href="../../../../com/ibm/juno/core/ObjectMap.html" title="class in com.ibm.juno.core">ObjectMap</a>&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.246">setInner</a>(<a href="../../../../com/ibm/juno/core/ObjectMap.html" title="class in com.ibm.juno.core">ObjectMap</a>&nbsp;inner)</pre>
+<div class="block">Set an inner map in this map to allow for chained get calls.
+ <p>
+ If <a href="../../../../com/ibm/juno/core/ObjectMap.html#get(java.lang.Object)"><code>get(Object)</code></a> returns <jk>null</jk>, then <a href="../../../../com/ibm/juno/core/ObjectMap.html#get(java.lang.Object)"><code>get(Object)</code></a> will be called on the inner map.
+ <p>
+ In addition to providing the ability to chain maps, this method also provides the ability
+ to wrap an existing map inside another map so that you can add entries to the outer
+ map without affecting the values on the inner map.
+ <p class='bcode'>
+   ObjectMap m1 = <jk>new</jk> ObjectMap(<js>"{foo:1}"</js>);
+   ObjectMap m2 = <jk>new</jk> ObjectMap().setInner(m1);
+   m2.put(<js>"foo"</js>, 2);                      <jc>// Overwrite the entry</jc>
+   <jk>int</jk> foo1 = m1.getInt(<js>"foo"</js>);           <jc>// foo1 == 1 </jc>
+   <jk>int</jk> foo2 = m2.getInt(<js>"foo"</js>);           <jc>// foo2 == 2 </jc>
+ </p></div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>inner</code> - The inner map.
+   Can be <jk>null</jk> to remove the inner map from an existing map.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>This object (for method chaining).</dd></dl>
+</li>
+</ul>
+<a name="findKeyIgnoreCase(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>findKeyIgnoreCase</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.257">findKeyIgnoreCase</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key)</pre>
+<div class="block">Searches for the specified key in this map ignoring case.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>key</code> - The key to search for.  For performance reasons, it's preferrable that the key be all lowercase.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The key, or <jk>null</jk> if map does not contain this key.</dd></dl>
+</li>
+</ul>
+<a name="getInner()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getInner</h4>
+<pre>public&nbsp;<a href="../../../../com/ibm/juno/core/ObjectMap.html" title="class in com.ibm.juno.core">ObjectMap</a>&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.270">getInner</a>()</pre>
+<div class="block">Returns the inner map if one was set through <a href="../../../../com/ibm/juno/core/ObjectMap.html#setInner(com.ibm.juno.core.ObjectMap)"><code>setInner(ObjectMap)</code></a>.</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>The inner map if one was set through <a href="../../../../com/ibm/juno/core/ObjectMap.html#setInner(com.ibm.juno.core.ObjectMap)"><code>setInner(ObjectMap)</code></a>, or <jk>null</jk> if no inner map is present.</dd></dl>
+</li>
+</ul>
+<a name="setBeanContext(com.ibm.juno.core.BeanContext)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setBeanContext</h4>
+<pre>public&nbsp;<a href="../../../../com/ibm/juno/core/ObjectMap.html" title="class in com.ibm.juno.core">ObjectMap</a>&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.284">setBeanContext</a>(<a href="../../../../com/ibm/juno/core/BeanContext.html" title="class in com.ibm.juno.core">BeanContext</a>&nbsp;beanContext)</pre>
+<div class="block">Override the default bean context used for converting POJOs.
+ <p>
+ Default is <a href="../../../../com/ibm/juno/core/BeanContext.html#DEFAULT"><code>BeanContext.DEFAULT</code></a>, which is sufficient in most cases.
+ <p>
+ Useful if you're serializing/parsing beans with filters defined.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>beanContext</code> - The new bean context.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>This object (for method chaining).</dd></dl>
+</li>
+</ul>
+<a name="getBeanContext()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getBeanContext</h4>
+<pre>public&nbsp;<a href="../../../../com/ibm/juno/core/BeanContext.html" title="class in com.ibm.juno.core">BeanContext</a>&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.294">getBeanContext</a>()</pre>
+<div class="block">Returns the <a href="../../../../com/ibm/juno/core/BeanContext.html" title="class in com.ibm.juno.core"><code>BeanContext</code></a> currently associated with this map.</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>The <a href="../../../../com/ibm/juno/core/BeanContext.html" title="class in com.ibm.juno.core"><code>BeanContext</code></a> currently associated with this map.</dd></dl>
+</li>
+</ul>
+<a name="append(java.lang.String, java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>append</h4>
+<pre>public&nbsp;<a href="../../../../com/ibm/juno/core/ObjectMap.html" title="class in com.ibm.juno.core">ObjectMap</a>&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.308">append</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key,
+               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;value)</pre>
+<div class="block">Convenience method for adding multiple objects to this map.
+ <p>
+   Equivalent to calling <code>put(key, value)</code>, but returns
+   this map so that the method can be chained.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>key</code> - The key.</dd><dd><code>value</code> - The value.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>This object (for method chaining).</dd></dl>
+</li>
+</ul>
+<a name="get(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>get</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.314">get</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key)</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#get(java.lang.Object)" title="class or interface in java.util">get</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></dd>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/LinkedHashMap.html?is-external=true#get(java.lang.Object)" title="class or interface in java.util">get</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/LinkedHashMap.html?is-external=true" title="class or interface in java.util">LinkedHashMap</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></dd>
+</dl>
+</li>
+</ul>
+<a name="get(java.lang.String, java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>get</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.329">get</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key,
+         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;def)</pre>
+<div class="block">Same as <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#get(java.lang.Object)" title="class or interface in java.util"><code>get()</code></a>, but returns the default value if the key
+ could not be found.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>key</code> - The key.</dd><dd><code>def</code> - The default value if the entry doesn't exist.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The value, or the default value if the entry doesn't exist.</dd></dl>
+</li>
+</ul>
+<a name="get(java.lang.Class, java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>get</h4>
+<pre>public&nbsp;&lt;T&gt;&nbsp;T&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.344">get</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;type,
+        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key)</pre>
+<div class="block">Same as <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#get(java.lang.Object)" title="class or interface in java.util"><code>get()</code></a>, but casts or converts the value to the specified class type.
+ <p>
+   See <a href="../../../../com/ibm/juno/core/BeanContext.html#convertToType(java.lang.Object, com.ibm.juno.core.ClassMeta)"><code>BeanContext.convertToType(Object, ClassMeta)</code></a> for the list of valid data conversions.</div>
+<dl><dt><span class="strong">Type Parameters:</span></dt><dd><code>T</code> - The class type.</dd><dt><span class="strong">Parameters:</span></dt><dd><code>type</code> - The class type.</dd><dd><code>key</code> - The key.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The value, or <jk>null</jk> if the entry doesn't exist.</dd></dl>
+</li>
+</ul>
+<a name="get(com.ibm.juno.core.filter.PojoFilter, java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>get</h4>
+<pre>public&nbsp;&lt;T&gt;&nbsp;T&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.358">get</a>(<a href="../../../../com/ibm/juno/core/filter/PojoFilter.html" title="class in com.ibm.juno.core.filter">PojoFilter</a>&lt;T,?&gt;&nbsp;filter,
+        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key)
+      throws <a href="../../../../com/ibm/juno/core/parser/ParseException.html" title="class in com.ibm.juno.core.parser">ParseException</a></pre>
+<div class="block">Same as <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#get(java.lang.Object)" title="class or interface in java.util"><code>get()</code></a>, but converts the raw value to the specified class type using the specified filter.</div>
+<dl><dt><span class="strong">Type Parameters:</span></dt><dd><code>T</code> - The filtered class type.</dd><dt><span class="strong">Parameters:</span></dt><dd><code>filter</code> - The filter class used to convert the raw type to a filtered type.</dd><dd><code>key</code> - The key.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The value, or <jk>null</jk> if the entry doesn't exist.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../com/ibm/juno/core/parser/ParseException.html" title="class in com.ibm.juno.core.parser">ParseException</a></code> - Thrown by the filter if a problem occurred trying to parse the value.</dd></dl>
+</li>
+</ul>
+<a name="get(java.lang.Class,java.lang.String,java.lang.Object)">
+<!--   -->
+</a><a name="get(java.lang.Class, java.lang.String, T)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>get</h4>
+<pre>public&nbsp;&lt;T&gt;&nbsp;T&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.377">get</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;type,
+        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key,
+        T&nbsp;def)</pre>
+<div class="block">Same as <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#get(java.lang.Object)" title="class or interface in java.util"><code>get()</code></a>, but casts or converts the value to the specified class type.
+ <p>
+   See <a href="../../../../com/ibm/juno/core/BeanContext.html#convertToType(java.lang.Object, com.ibm.juno.core.ClassMeta)"><code>BeanContext.convertToType(Object, ClassMeta)</code></a> for the list of valid data conversions.</div>
+<dl><dt><span class="strong">Type Parameters:</span></dt><dd><code>T</code> - The class type.</dd><dt><span class="strong">Parameters:</span></dt><dd><code>type</code> - The class type.</dd><dd><code>key</code> - The key.</dd><dd><code>def</code> - The default value if the entry doesn't exist.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The value, or the default value if the entry doesn't exist.</dd></dl>
+</li>
+</ul>
+<a name="get(com.ibm.juno.core.ClassMeta, java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>get</h4>
+<pre>public&nbsp;&lt;T&gt;&nbsp;T&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.397">get</a>(<a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;T&gt;&nbsp;type,
+        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key)</pre>
+<div class="block">Same as <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#get(java.lang.Object)" title="class or interface in java.util"><code>get()</code></a>, but casts or converts the value to the specified class type.
+ <p>
+   See <a href="../../../../com/ibm/juno/core/BeanContext.html#convertToType(java.lang.Object, com.ibm.juno.core.ClassMeta)"><code>BeanContext.convertToType(Object, ClassMeta)</code></a> for the list of valid data conversions.</div>
+<dl><dt><span class="strong">Type Parameters:</span></dt><dd><code>T</code> - The class type.</dd><dt><span class="strong">Parameters:</span></dt><dd><code>type</code> - The class type.</dd><dd><code>key</code> - The key.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The value, or the default value if the entry doesn't exist.</dd></dl>
+</li>
+</ul>
+<a name="get(com.ibm.juno.core.ClassMeta,java.lang.String,java.lang.Object)">
+<!--   -->
+</a><a name="get(com.ibm.juno.core.ClassMeta, java.lang.String, T)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>get</h4>
+<pre>public&nbsp;&lt;T&gt;&nbsp;T&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.412">get</a>(<a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;T&gt;&nbsp;type,
+        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key,
+        T&nbsp;def)</pre>
+<div class="block">Same as <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#get(java.lang.Object)" title="class or interface in java.util"><code>get()</code></a>, but casts or converts the value to the specified class type.
+ <p>
+   See <a href="../../../../com/ibm/juno/core/BeanContext.html#convertToType(java.lang.Object, com.ibm.juno.core.ClassMeta)"><code>BeanContext.convertToType(Object, ClassMeta)</code></a> for the list of valid data conversions.</div>
+<dl><dt><span class="strong">Type Parameters:</span></dt><dd><code>T</code> - The class type.</dd><dt><span class="strong">Parameters:</span></dt><dd><code>type</code> - The class type.</dd><dd><code>key</code> - The key.</dd><dd><code>def</code> - The default value if the entry doesn't exist.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The value, or the default value if the entry doesn't exist.</dd></dl>
+</li>
+</ul>
+<a name="find(java.lang.String...)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>find</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.425">find</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;keys)</pre>
+<div class="block">Returns the value for the first key in the list that has an entry in this map.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>keys</code> - The keys to look up in order.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The value of the first entry whose key exists, or <jk>null</jk> if none of the keys exist in this map.</dd></dl>
+</li>
+</ul>
+<a name="find(java.lang.Class, java.lang.String...)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>find</h4>
+<pre>public&nbsp;&lt;T&gt;&nbsp;T&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.444">find</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;type,
+         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;keys)</pre>
+<div class="block">Returns the value for the first key in the list that has an entry in this map.
+ <p>
+   Casts or converts the value to the specified class type.
+ <p>
+   See <a href="../../../../com/ibm/juno/core/BeanContext.html#convertToType(java.lang.Object, com.ibm.juno.core.ClassMeta)"><code>BeanContext.convertToType(Object, ClassMeta)</code></a> for the list of valid data conversions.</div>
+<dl><dt><span class="strong">Type Parameters:</span></dt><dd><code>T</code> - The class type to convert the value to.</dd><dt><span class="strong">Parameters:</span></dt><dd><code>type</code> - The class type to convert the value to.</dd><dd><code>keys</code> - The keys to look up in order.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The value of the first entry whose key exists, or <jk>null</jk> if none of the keys exist in this map.</dd></dl>
+</li>
+</ul>
+<a name="getAt(java.lang.Class, java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getAt</h4>
+<pre>public&nbsp;&lt;T&gt;&nbsp;T&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.476">getAt</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;type,
+          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;path)</pre>
+<div class="block">Same as <a href="../../../../com/ibm/juno/core/ObjectMap.html#get(java.lang.Class, java.lang.String)"><code>get(Class,String)</code></a>, but the key is a slash-delimited
+   path used to traverse entries in this POJO.
+ <p>
+   For example, the following code is equivalent:
+ </p>
+ <p class='bcode'>
+   ObjectMap m = getObjectMap();
+
+   <jc>// Long way</jc>
+   <jk>long</jk> l = m.getObjectMap(<js>"foo"</js>).getObjectList(<js>"bar"</js>).getObjectMap(<js>"0"</js>).getLong(<js>"baz"</js>);
+
+   <jc>// Using this method</jc>
+   <jk>long</jk> l = m.getAt(<jk>long</jk>.<jk>class</jk>, <js>"foo/bar/0/baz"</js>);
+ </p>
+ <p>
+   This method uses the <a href="../../../../com/ibm/juno/core/utils/PojoRest.html" title="class in com.ibm.juno.core.utils"><code>PojoRest</code></a> class to perform the lookup, so the map can contain
+      any of the various class types that the <a href="../../../../com/ibm/juno/core/utils/PojoRest.html" title="class in com.ibm.juno.core.utils"><code>PojoRest</code></a> class supports (e.g. beans, collections, arrays).
+ </p></div>
+<dl><dt><span class="strong">Type Parameters:</span></dt><dd><code>T</code> - The class type.</dd><dt><span class="strong">Parameters:</span></dt><dd><code>type</code> - The class type.</dd><dd><code>path</code> - The path to the entry.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The value, or <jk>null</jk> if the entry doesn't exist.</dd></dl>
+</li>
+</ul>
+<a name="putAt(java.lang.String, java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>putAt</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.504">putAt</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;path,
+           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
+<div class="block">Same as <code>put(String,Object)</code>, but the key is a slash-delimited
+   path used to traverse entries in this POJO.
+ <p>
+   For example, the following code is equivalent:
+ </p>
+ <p class='bcode'>
+   ObjectMap m = getObjectMap();
+
+   <jc>// Long way</jc>
+   m.getObjectMap(<js>"foo"</js>).getObjectList(<js>"bar"</js>).getObjectMap(<js>"0"</js>).put(<js>"baz"</js>, 123);
+
+   <jc>// Using this method</jc>
+   m.putAt(<js>"foo/bar/0/baz"</js>, 123);
+ </p>
+ <p>
+   This method uses the <a href="../../../../com/ibm/juno/core/utils/PojoRest.html" title="class in com.ibm.juno.core.utils"><code>PojoRest</code></a> class to perform the lookup, so the map can contain
+      any of the various class types that the <a href="../../../../com/ibm/juno/core/utils/PojoRest.html" title="class in com.ibm.juno.core.utils"><code>PojoRest</code></a> class supports (e.g. beans, collections, arrays).
+ </p></div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>path</code> - The path to the entry.</dd><dd><code>o</code> - The new value.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The previous value, or <jk>null</jk> if the entry doesn't exist.</dd></dl>
+</li>
+</ul>
+<a name="postAt(java.lang.String, java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>postAt</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.532">postAt</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;path,
+            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
+<div class="block">Similar to <a href="../../../../com/ibm/juno/core/ObjectMap.html#putAt(java.lang.String, java.lang.Object)"><code>putAt(String,Object)</code></a>, but used to append
+   to collections and arrays.
+ <p>
+   For example, the following code is equivalent:
+ </p>
+ <p class='bcode'>
+   ObjectMap m = getObjectMap();
+
+   <jc>// Long way</jc>
+   m.getObjectMap(<js>"foo"</js>).getObjectList(<js>"bar"</js>).append(123);
+
+   <jc>// Using this method</jc>
+   m.postAt(<js>"foo/bar"</js>, 123);
+ </p>
+ <p>
+   This method uses the <a href="../../../../com/ibm/juno/core/utils/PojoRest.html" title="class in com.ibm.juno.core.utils"><code>PojoRest</code></a> class to perform the lookup, so the map can contain
+      any of the various class types that the <a href="../../../../com/ibm/juno/core/utils/PojoRest.html" title="class in com.ibm.juno.core.utils"><code>PojoRest</code></a> class supports (e.g. beans, collections, arrays).
+ </p></div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>path</code> - The path to the entry.</dd><dd><code>o</code> - The new value.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The previous value, or <jk>null</jk> if the entry doesn't exist.</dd></dl>
+</li>
+</ul>
+<a name="deleteAt(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>deleteAt</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.559">deleteAt</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;path)</pre>
+<div class="block">Similar to <a href="http://docs.oracle.com/javase/7/docs/api/java/util/HashMap.html?is-external=true#remove(java.lang.Object)" title="class or interface in java.util"><code>remove(Object)</code></a>,but the key is a slash-delimited
+   path used to traverse entries in this POJO.
+ <p>
+   For example, the following code is equivalent:
+ </p>
+ <p class='bcode'>
+   ObjectMap m = getObjectMap();
+
+   <jc>// Long way</jc>
+   m.getObjectMap(<js>"foo"</js>).getObjectList(<js>"bar"</js>).getObjectMap(1).remove(<js>"baz"</js>);
+
+   <jc>// Using this method</jc>
+   m.deleteAt(<js>"foo/bar/0/baz"</js>);
+ </p>
+ <p>
+   This method uses the <a href="../../../../com/ibm/juno/core/utils/PojoRest.html" title="class in com.ibm.juno.core.utils"><code>PojoRest</code></a> class to perform the lookup, so the map can contain
+      any of the various class types that the <a href="../../../../com/ibm/juno/core/utils/PojoRest.html" title="class in com.ibm.juno.core.utils"><code>PojoRest</code></a> class supports (e.g. beans, collections, arrays).
+ </p></div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>path</code> - The path to the entry.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The previous value, or <jk>null</jk> if the entry doesn't exist.</dd></dl>
+</li>
+</ul>
+<a name="putJson(java.lang.String, java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>putJson</h4>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.572">putJson</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key,
+           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;json)
+             throws <a href="../../../../com/ibm/juno/core/parser/ParseException.html" title="class in com.ibm.juno.core.parser">ParseException</a></pre>
+<div class="block">Convenience method for inserting JSON directly into an attribute on this object.
+ <p>
+   The JSON text can be an object (i.e. <js>"{...}"</js>) or an array (i.e. <js>"[...]"</js>).</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>key</code> - The key.</dd><dd><code>json</code> - The JSON text that will be parsed into an Object and then inserted into this map.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../com/ibm/juno/core/parser/ParseException.html" title="class in com.ibm.juno.core.parser">ParseException</a></code> - If the input contains a syntax error or is malformed.</dd></dl>
+</li>
+</ul>
+<a name="getString(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getString</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.584">getString</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key)</pre>
+<div class="block">Returns the specified entry value converted to a <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang"><code>String</code></a>.
+ <p>
+   Shortcut for <code>get(String.<jk>class</jk>, key)</code>.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>key</code> - The key.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The converted value, or <jk>null</jk> if the map contains no mapping for this key.</dd></dl>
+</li>
+</ul>
+<a name="getStringArray(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getStringArray</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.595">getStringArray</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key)</pre>
+<div class="block">Specialized method that calls <a href="../../../../com/ibm/juno/core/ObjectMap.html#getString(java.lang.String)"><code>getString(String)</code></a> and splits the
+   results as a simple comma-delimited list.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>key</code> - the key.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>A list of tokens, trimmed of whitespace.  An empty list if entry not found.  Never <jk>null</jk>.</dd></dl>
+</li>
+</ul>
+<a name="getStringArray(java.lang.String, java.lang.String[])">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getStringArray</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.607">getStringArray</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key,
+                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;def)</pre>
+<div class="block">Same as <a href="../../../../com/ibm/juno/core/ObjectMap.html#getStringArray(java.lang.String)"><code>getStringArray(String)</code></a> but returns a default value if the value cannot be found.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>key</code> - The map key.</dd><dd><code>def</code> - The default value if value is not found.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The value converted to a string array.</dd></dl>
+</li>
+</ul>
+<a name="getString(java.lang.String, java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getString</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.622">getString</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key,
+               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;defVal)</pre>
+<div class="block">Returns the specified entry value converted to a <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang"><code>String</code></a>.
+ <p>
+   Shortcut for <code>get(String.<jk>class</jk>, key, defVal)</code>.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>key</code> - The key.</dd><dd><code>defVal</code> - The default value if the map doesn't contain the specified mapping.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The converted value, or the default value if the map contains no mapping for this key.</dd></dl>
+</li>
+</ul>
+<a name="getInt(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getInt</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.635">getInt</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key)</pre>
+<div class="block">Returns the specified entry value converted to an <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang"><code>Integer</code></a>.
+ <p>
+   Shortcut for <code>get(Integer.<jk>class</jk>, key)</code>.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>key</code> - The key.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The converted value, or <jk>null</jk> if the map contains no mapping for this key.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../com/ibm/juno/core/InvalidDataConversionException.html" title="class in com.ibm.juno.core">InvalidDataConversionException</a></code> - If value cannot be converted.</dd></dl>
+</li>
+</ul>
+<a name="getInt(java.lang.String, java.lang.Integer)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getInt</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.649">getInt</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key,
+             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;defVal)</pre>
+<div class="block">Returns the specified entry value converted to an <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang"><code>Integer</code></a>.
+ <p>
+   Shortcut for <code>get(Integer.<jk>class</jk>, key, defVal)</code>.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>key</code> - The key.</dd><dd><code>defVal</code> - The default value if the map doesn't contain the specified mapping.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The converted value, or the default value if the map contains no mapping for this key.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../com/ibm/juno/core/InvalidDataConversionException.html" title="class in com.ibm.juno.core">InvalidDataConversionException</a></code> - If value cannot be converted.</dd></dl>
+</li>
+</ul>
+<a name="getLong(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getLong</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.662">getLong</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key)</pre>
+<div class="block">Returns the specified entry value converted to a <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang"><code>Long</code></a>.
+ <p>
+   Shortcut for <code>get(Long.<jk>class</jk>, key)</code>.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>key</code> - The key.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The converted value, or <jk>null</jk> if the map contains no mapping for this key.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../com/ibm/juno/core/InvalidDataConversionException.html" title="class in com.ibm.juno.core">InvalidDataConversionException</a></code> - If value cannot be converted.</dd></dl>
+</li>
+</ul>
+<a name="getLong(java.lang.String, java.lang.Long)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getLong</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.676">getLong</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key,
+           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>&nbsp;defVal)</pre>
+<div class="block">Returns the specified entry value converted to a <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang"><code>Long</code></a>.
+ <p>
+   Shortcut for <code>get(Long.<jk>class</jk>, key, defVal)</code>.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>key</code> - The key.</dd><dd><code>defVal</code> - The default value if the map doesn't contain the specified mapping.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The converted value, or the default value if the map contains no mapping for this key.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../com/ibm/juno/core/InvalidDataConversionException.html" title="class in com.ibm.juno.core">InvalidDataConversionException</a></code> - If value cannot be converted.</dd></dl>
+</li>
+</ul>
+<a name="getBoolean(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getBoolean</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.689">getBoolean</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key)</pre>
+<div class="block">Returns the specified entry value converted to a <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang"><code>Boolean</code></a>.
+ <p>
+   Shortcut for <code>get(Boolean.<jk>class</jk>, key)</code>.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>key</code> - The key.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The converted value, or <jk>null</jk> if the map contains no mapping for this key.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../com/ibm/juno/core/InvalidDataConversionException.html" title="class in com.ibm.juno.core">InvalidDataConversionException</a></code> - If value cannot be converted.</dd></dl>
+</li>
+</ul>
+<a name="getBoolean(java.lang.String, java.lang.Boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getBoolean</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.703">getBoolean</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key,
+                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;defVal)</pre>
+<div class="block">Returns the specified entry value converted to a <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang"><code>Boolean</code></a>.
+ <p>
+   Shortcut for <code>get(Boolean.<jk>class</jk>, key, defVal)</code>.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>key</code> - The key.</dd><dd><code>defVal</code> - The default value if the map doesn't contain the specified mapping.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The converted value, or the default value if the map contains no mapping for this key.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../com/ibm/juno/core/InvalidDataConversionException.html" title="class in com.ibm.juno.core">InvalidDataConversionException</a></code> - If value cannot be converted.</dd></dl>
+</li>
+</ul>
+<a name="getMap(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getMap</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;?,?&gt;&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.716">getMap</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key)</pre>
+<div class="block">Returns the specified entry value converted to a <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util"><code>Map</code></a>.
+ <p>
+   Shortcut for <code>get(Map.<jk>class</jk>, key)</code>.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>key</code> - The key.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The converted value, or <jk>null</jk> if the map contains no mapping for this key.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../com/ibm/juno/core/InvalidDataConversionException.html" title="class in com.ibm.juno.core">InvalidDataConversionException</a></code> - If value cannot be converted.</dd></dl>
+</li>
+</ul>
+<a name="getMap(java.lang.String, java.util.Map)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getMap</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;?,?&gt;&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.730">getMap</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;?,?&gt;&nbsp;defVal)</pre>
+<div class="block">Returns the specified entry value converted to a <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util"><code>Map</code></a>.
+ <p>
+   Shortcut for <code>get(Map.<jk>class</jk>, key, defVal)</code>.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>key</code> - The key.</dd><dd><code>defVal</code> - The default value if the map doesn't contain the specified mapping.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The converted value, or the default value if the map contains no mapping for this key.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../com/ibm/juno/core/InvalidDataConversionException.html" title="class in com.ibm.juno.core">InvalidDataConversionException</a></code> - If value cannot be converted.</dd></dl>
+</li>
+</ul>
+<a name="getList(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getList</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;?&gt;&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.743">getList</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key)</pre>
+<div class="block">Returns the specified entry value converted to a <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util"><code>List</code></a>.
+ <p>
+   Shortcut for <code>get(List.<jk>class</jk>, key)</code>.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>key</code> - The key.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The converted value, or <jk>null</jk> if the map contains no mapping for this key.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../com/ibm/juno/core/InvalidDataConversionException.html" title="class in com.ibm.juno.core">InvalidDataConversionException</a></code> - If value cannot be converted.</dd></dl>
+</li>
+</ul>
+<a name="getList(java.lang.String, java.util.List)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getList</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;?&gt;&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.757">getList</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;?&gt;&nbsp;defVal)</pre>
+<div class="block">Returns the specified entry value converted to a <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util"><code>List</code></a>.
+ <p>
+   Shortcut for <code>get(List.<jk>class</jk>, key, defVal)</code>.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>key</code> - The key.</dd><dd><code>defVal</code> - The default value if the map doesn't contain the specified mapping.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The converted value, or the default value if the map contains no mapping for this key.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../com/ibm/juno/core/InvalidDataConversionException.html" title="class in com.ibm.juno.core">InvalidDataConversionException</a></code> - If value cannot be converted.</dd></dl>
+</li>
+</ul>
+<a name="getObjectMap(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getObjectMap</h4>
+<pre>public&nbsp;<a href="../../../../com/ibm/juno/core/ObjectMap.html" title="class in com.ibm.juno.core">ObjectMap</a>&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.770">getObjectMap</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key)</pre>
+<div class="block">Returns the specified entry value converted to a <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util"><code>Map</code></a>.
+ <p>
+   Shortcut for <code>get(ObjectMap.<jk>class</jk>, key)</code>.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>key</code> - The key.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The converted value, or <jk>null</jk> if the map contains no mapping for this key.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../com/ibm/juno/core/InvalidDataConversionException.html" title="class in com.ibm.juno.core">InvalidDataConversionException</a></code> - If value cannot be converted.</dd></dl>
+</li>
+</ul>
+<a name="getObjectMap(java.lang.String, com.ibm.juno.core.ObjectMap)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getObjectMap</h4>
+<pre>public&nbsp;<a href="../../../../com/ibm/juno/core/ObjectMap.html" title="class in com.ibm.juno.core">ObjectMap</a>&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.784">getObjectMap</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key,
+                     <a href="../../../../com/ibm/juno/core/ObjectMap.html" title="class in com.ibm.juno.core">ObjectMap</a>&nbsp;defVal)</pre>
+<div class="block">Returns the specified entry value converted to a <a href="../../../../com/ibm/juno/core/ObjectMap.html" title="class in com.ibm.juno.core"><code>ObjectMap</code></a>.
+ <p>
+   Shortcut for <code>get(ObjectMap.<jk>class</jk>, key, defVal)</code>.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>key</code> - The key.</dd><dd><code>defVal</code> - The default value if the map doesn't contain the specified mapping.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The converted value, or the default value if the map contains no mapping for this key.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../com/ibm/juno/core/InvalidDataConversionException.html" title="class in com.ibm.juno.core">InvalidDataConversionException</a></code> - If value cannot be converted.</dd></dl>
+</li>
+</ul>
+<a name="getObjectList(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getObjectList</h4>
+<pre>public&nbsp;<a href="../../../../com/ibm/juno/core/ObjectList.html" title="class in com.ibm.juno.core">ObjectList</a>&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.797">getObjectList</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key)</pre>
+<div class="block">Returns the specified entry value converted to a <a href="../../../../com/ibm/juno/core/ObjectList.html" title="class in com.ibm.juno.core"><code>ObjectList</code></a>.
+ <p>
+   Shortcut for <code>get(ObjectList.<jk>class</jk>, key)</code>.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>key</code> - The key.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The converted value, or <jk>null</jk> if the map contains no mapping for this key.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../com/ibm/juno/core/InvalidDataConversionException.html" title="class in com.ibm.juno.core">InvalidDataConversionException</a></code> - If value cannot be converted.</dd></dl>
+</li>
+</ul>
+<a name="getObjectList(java.lang.String, com.ibm.juno.core.ObjectList)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getObjectList</h4>
+<pre>public&nbsp;<a href="../../../../com/ibm/juno/core/ObjectList.html" title="class in com.ibm.juno.core">ObjectList</a>&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.811">getObjectList</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key,
+                       <a href="../../../../com/ibm/juno/core/ObjectList.html" title="class in com.ibm.juno.core">ObjectList</a>&nbsp;defVal)</pre>
+<div class="block">Returns the specified entry value converted to a <a href="../../../../com/ibm/juno/core/ObjectList.html" title="class in com.ibm.juno.core"><code>ObjectList</code></a>.
+ <p>
+   Shortcut for <code>get(ObjectList.<jk>class</jk>, key, defVal)</code>.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>key</code> - The key.</dd><dd><code>defVal</code> - The default value if the map doesn't contain the specified mapping.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The converted value, or the default value if the map contains no mapping for this key.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../com/ibm/juno/core/InvalidDataConversionException.html" title="class in com.ibm.juno.core">InvalidDataConversionException</a></code> - If value cannot be converted.</dd></dl>
+</li>
+</ul>
+<a name="findString(java.lang.String...)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>findString</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.824">findString</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;keys)</pre>
+<div class="block">Returns the first entry that exists converted to a <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang"><code>String</code></a>.
+ <p>
+   Shortcut for <code>find(String.<jk>class</jk>, keys)</code>.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>keys</code> - The list of keys to look for.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The converted value of the first key in the list that has an entry in this map,
+   or <jk>null</jk> if the map contains no mapping for any of the keys.</dd></dl>
+</li>
+</ul>
+<a name="findInt(java.lang.String...)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>findInt</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.838">findInt</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;keys)</pre>
+<div class="block">Returns the first entry that exists converted to an <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang"><code>Integer</code></a>.
+ <p>
+   Shortcut for <code>find(Integer.<jk>class</jk>, keys)</code>.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>keys</code> - The list of keys to look for.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The converted value of the first key in the list that has an entry in this map,
+   or <jk>null</jk> if the map contains no mapping for any of the keys.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../com/ibm/juno/core/InvalidDataConversionException.html" title="class in com.ibm.juno.core">InvalidDataConversionException</a></code> - If value cannot be converted.</dd></dl>
+</li>
+</ul>
+<a name="findLong(java.lang.String...)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>findLong</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.852">findLong</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;keys)</pre>
+<div class="block">Returns the first entry that exists converted to a <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang"><code>Long</code></a>.
+ <p>
+   Shortcut for <code>find(Long.<jk>class</jk>, keys)</code>.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>keys</code> - The list of keys to look for.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The converted value of the first key in the list that has an entry in this map,
+   or <jk>null</jk> if the map contains no mapping for any of the keys.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../com/ibm/juno/core/InvalidDataConversionException.html" title="class in com.ibm.juno.core">InvalidDataConversionException</a></code> - If value cannot be converted.</dd></dl>
+</li>
+</ul>
+<a name="findBoolean(java.lang.String...)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>findBoolean</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.866">findBoolean</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;keys)</pre>
+<div class="block">Returns the first entry that exists converted to a <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang"><code>Boolean</code></a>.
+ <p>
+   Shortcut for <code>find(Boolean.<jk>class</jk>, keys)</code>.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>keys</code> - The list of keys to look for.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The converted value of the first key in the list that has an entry in this map,
+   or <jk>null</jk> if the map contains no mapping for any of the keys.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../com/ibm/juno/core/InvalidDataConversionException.html" title="class in com.ibm.juno.core">InvalidDataConversionException</a></code> - If value cannot be converted.</dd></dl>
+</li>
+</ul>
+<a name="findMap(java.lang.String...)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>findMap</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;?,?&gt;&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.880">findMap</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;keys)</pre>
+<div class="block">Returns the first entry that exists converted to a <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util"><code>Map</code></a>.
+ <p>
+   Shortcut for <code>find(Map.<jk>class</jk>, keys)</code>.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>keys</code> - The list of keys to look for.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The converted value of the first key in the list that has an entry in this map,
+   or <jk>null</jk> if the map contains no mapping for any of the keys.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../com/ibm/juno/core/InvalidDataConversionException.html" title="class in com.ibm.juno.core">InvalidDataConversionException</a></code> - If value cannot be converted.</dd></dl>
+</li>
+</ul>
+<a name="findList(java.lang.String...)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>findList</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;?&gt;&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.894">findList</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;keys)</pre>
+<div class="block">Returns the first entry that exists converted to a <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util"><code>List</code></a>.
+ <p>
+   Shortcut for <code>find(List.<jk>class</jk>, keys)</code>.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>keys</code> - The list of keys to look for.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The converted value of the first key in the list that has an entry in this map,
+   or <jk>null</jk> if the map contains no mapping for any of the keys.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../com/ibm/juno/core/InvalidDataConversionException.html" title="class in com.ibm.juno.core">InvalidDataConversionException</a></code> - If value cannot be converted.</dd></dl>
+</li>
+</ul>
+<a name="findObjectMap(java.lang.String...)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>findObjectMap</h4>
+<pre>public&nbsp;<a href="../../../../com/ibm/juno/core/ObjectMap.html" title="class in com.ibm.juno.core">ObjectMap</a>&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.908">findObjectMap</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;keys)</pre>
+<div class="block">Returns the first entry that exists converted to a <a href="../../../../com/ibm/juno/core/ObjectMap.html" title="class in com.ibm.juno.core"><code>ObjectMap</code></a>.
+ <p>
+   Shortcut for <code>find(ObjectMap.<jk>class</jk>, keys)</code>.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>keys</code> - The list of keys to look for.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The converted value of the first key in the list that has an entry in this map,
+   or <jk>null</jk> if the map contains no mapping for any of the keys.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../com/ibm/juno/core/InvalidDataConversionException.html" title="class in com.ibm.juno.core">InvalidDataConversionException</a></code> - If value cannot be converted.</dd></dl>
+</li>
+</ul>
+<a name="findObjectList(java.lang.String...)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>findObjectList</h4>
+<pre>public&nbsp;<a href="../../../../com/ibm/juno/core/ObjectList.html" title="class in com.ibm.juno.core">ObjectList</a>&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.922">findObjectList</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;keys)</pre>
+<div class="block">Returns the first entry that exists converted to a <a href="../../../../com/ibm/juno/core/ObjectList.html" title="class in com.ibm.juno.core"><code>ObjectList</code></a>.
+ <p>
+   Shortcut for <code>find(ObjectList.<jk>class</jk>, keys)</code>.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>keys</code> - The list of keys to look for.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The converted value of the first key in the list that has an entry in this map,
+   or <jk>null</jk> if the map contains no mapping for any of the keys.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../com/ibm/juno/core/InvalidDataConversionException.html" title="class in com.ibm.juno.core">InvalidDataConversionException</a></code> - If value cannot be converted.</dd></dl>
+</li>
+</ul>
+<a name="getFirstKey()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getFirstKey</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.931">getFirstKey</a>()</pre>
+<div class="block">Returns the first key in the map.</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>The first key in the map, or <jk>null</jk> if the map is empty.</dd></dl>
+</li>
+</ul>
+<a name="getClassMeta(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getClassMeta</h4>
+<pre>public&nbsp;<a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;?&gt;&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.941">getClassMeta</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key)</pre>
+<div class="block">Returns the class type of the object at the specified index.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>key</code> - The key into this map.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The data type of the object at the specified key, or <jk>null</jk> if the value is null or does not exist.</dd></dl>
+</li>
+</ul>
+<a name="remove(java.lang.Class,java.lang.String,java.lang.Object)">
+<!--   -->
+</a><a name="remove(java.lang.Class, java.lang.String, T)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>remove</h4>
+<pre>public&nbsp;&lt;T&gt;&nbsp;T&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.955">remove</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;type,
+           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key,
+           T&nbsp;defVal)</pre>
+<div class="block">Equivalent to calling <code>get(class,key,def)</code> followed by <code>remove(key);</code></div>
+<dl><dt><span class="strong">Type Parameters:</span></dt><dd><code>T</code> - The class type.</dd><dt><span class="strong">Parameters:</span></dt><dd><code>type</code> - The class type.</dd><dd><code>key</code> - The key.</dd><dd><code>defVal</code> - The default value if the map doesn't contain the specified mapping.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The converted value, or the default value if the map contains no mapping for this key.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../com/ibm/juno/core/InvalidDataConversionException.html" title="class in com.ibm.juno.core">InvalidDataConversionException</a></code> - If value cannot be converted.</dd></dl>
+</li>
+</ul>
+<a name="removeAll(java.util.Collection)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>removeAll</h4>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.967">removeAll</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;keys)</pre>
+<div class="block">Convenience method for removing several keys at once.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>keys</code> - The list of keys to remove.</dd></dl>
+</li>
+</ul>
+<a name="removeAll(java.lang.String...)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>removeAll</h4>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.977">removeAll</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;keys)</pre>
+<div class="block">Convenience method for removing several keys at once.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>keys</code> - The list of keys to remove.</dd></dl>
+</li>
+</ul>
+<a name="containsKey(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>containsKey</h4>
+<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.983">containsKey</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key)</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#containsKey(java.lang.Object)" title="class or interface in java.util">containsKey</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></dd>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/HashMap.html?is-external=true#containsKey(java.lang.Object)" title="class or interface in java.util">containsKey</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/HashMap.html?is-external=true" title="class or interface in java.util">HashMap</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></dd>
+</dl>
+</li>
+</ul>
+<a name="containsOuterKey(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>containsOuterKey</h4>
+<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.998">containsOuterKey</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key)</pre>
+<div class="block">Returns <jk>true</jk> if this map contains the specified key, ignoring
+   the inner map if it exists.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>key</code> - The key to look up.</dd>
+<dt><span class="strong">Returns:</span></dt><dd><jk>true</jk> if this map contains the specified key.</dd></dl>
+</li>
+</ul>
+<a name="include(java.lang.String...)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>include</h4>
+<pre>public&nbsp;<a href="../../../../com/ibm/juno/core/ObjectMap.html" title="class in com.ibm.juno.core">ObjectMap</a>&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.1008">include</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;keys)</pre>
+<div class="block">Returns a copy of this <code>ObjectMap</code> with only the specified keys.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>keys</code> - The keys of the entries to copy.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>A new map with just the keys and values from this map.</dd></dl>
+</li>
+</ul>
+<a name="exclude(java.lang.String...)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>exclude</h4>
+<pre>public&nbsp;<a href="../../../../com/ibm/juno/core/ObjectMap.html" title="class in com.ibm.juno.core">ObjectMap</a>&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.1023">exclude</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;keys)</pre>
+<div class="block">Returns a copy of this <code>ObjectMap</code> without the specified keys.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>keys</code> - The keys of the entries not to copy.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>A new map without the keys and values from this map.</dd></dl>
+</li>
+</ul>
+<a name="putIfNull(java.lang.String, java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>putIfNull</h4>
+<pre>public&nbsp;<a href="../../../../com/ibm/juno/core/ObjectMap.html" title="class in com.ibm.juno.core">ObjectMap</a>&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.1043">putIfNull</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key,
+                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;val)</pre>
+<div class="block">Sets a value in this map if the entry does not exist or the value is <jk>null</jk>.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>key</code> - The map key.</dd><dd><code>val</code> - The value to set if the current value does not exist or is <jk>null</jk>.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>This object (for method chaining).</dd></dl>
+</li>
+</ul>
+<a name="putIfEmpty(java.lang.String, java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>putIfEmpty</h4>
+<pre>public&nbsp;<a href="../../../../com/ibm/juno/core/ObjectMap.html" title="class in com.ibm.juno.core">ObjectMap</a>&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.1057">putIfEmpty</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;key,
+                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;val)</pre>
+<div class="block">Sets a value in this map if the entry does not exist or the value is <jk>null</jk> or an empty string.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>key</code> - The map key.</dd><dd><code>val</code> - The value to set if the current value does not exist or is <jk>null</jk> or an empty string.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>This object (for method chaining).</dd></dl>
+</li>
+</ul>
+<a name="cast()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>cast</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.1151">cast</a>()</pre>
+<div class="block">Converts this map into the class type specified by the <js>"_class"</js> entry value.
+ <p>
+   This method can be used to convert <code>ObjectMap</code> objects to a variety of POJO types.
+
+ <dl>
+   <dt>Example of valid class types:</dt>
+   <dd>
+      <p>
+         An object map can be converted to a bean.
+      </p>
+      <p class='bcode'>
+   {
+      _class: <js>'com.ibm.sample.addressBook.Person'</js>,
+      name: <js>'John Smith'</js>,
+      ...
+   }
+      </p>
+      <p>
+         It can also be converted into another map type.
+      </p>
+      <p class='bcode'>
+   <jc>// Generic TreeMap (String keys, Object values)</jc>
+   {
+      _class: <js>'java.util.TreeMap'</js>,
+      name: <js>'John Smith'</js>,
+      ...
+   }
+   <jc>// TreeMap where values are forced to be strings.</jc>
+   {
+      _class: <js>'java.util.TreeMap&lt;java.lang.String,java.lang.String&gt;'</js>,
+      name: <js>'John Smith'</js>,
+      ...
+   }
+      </p>
+      <p>
+         It can also be converted to Collections objects if map defines an <code>items</code> entry of type array.
+      </p>
+      <p class='bcode'>
+   <jc>// LinkedList of strings</jc>
+   {
+      _class: <js>'java.util.LinkedList'</js>,
+      items: [ <js>'John Smith'</js>, ... ]
+   }
+   <jc>// LinkedList of beans</jc>
+   {
+      _class: <js>'java.util.LinkedList&lt;com.ibm.sample.addressBook.Person&gt;'</js>,
+      items: [ { name: <js>'John Smith'</js>, ... }, ... ]
+   }
+      </p>
+      <p>
+         It can also be converted to arrays.
+      </p>
+      <p class='bcode'>
+   <jc>// Array of strings</jc>
+   {
+      _class: <js>'java.lang.String[]'</js>,
+      items: [ <js>'John Smith'</js>, ... ]
+   }
+   <jc>// Array of beans</jc>
+   {
+      _class: <js>'com.ibm.sample.addressBook.Person[]'</js>,
+      items: [ { name: <js>'John Smith'</js>, ... }, ... ]
+   }
+      </p>
+      <p>
+         It can also be converted to any type that can be handled by the <a href="../../../../com/ibm/juno/core/BeanContext.html#convertToType(java.lang.Object, java.lang.Class)"><code>BeanContext.convertToType(Object, Class)</code></a> method.
+         In this case, the value is specified by an <code>value</code> entry of any type.
+         For example, if the bean context has a <a href="../../../../com/ibm/juno/core/filters/CalendarFilter.html" title="class in com.ibm.juno.core.filters"><code>CalendarFilter</code></a> associated with it, it can convert a string value to a calendar.
+      <p class='bcode'>
+   {
+      _class: <js>'java.util.GregorianCalendar'</js>,
+      value: <js>'2001-07-04T15:30:45-05:00'</js>
+   }
+      </p>
+   </dd>
+   <dt>Notes:</dt>
+   <dd>
+      <ul>
+         <li>This method is recursive.  It will also recursively convert any descendant entries to POJOs.
+      </ul>
+   </dd>
+ </dl></div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>The new Java object of type specified by the <js>"_class"</js> entry value, or this
+   same object if entry does not exist.</dd></dl>
+</li>
+</ul>
+<a name="cast(java.lang.Class)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>cast</h4>
+<pre>public&nbsp;&lt;T&gt;&nbsp;T&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.1176">cast</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;type)</pre>
+<div class="block">Converts this map into an object of the specified type.
+ <p>
+ The rules are the same as those specified in <a href="../../../../com/ibm/juno/core/ObjectMap.html#cast()"><code>cast()</code></a>.
+ <p>
+ If this map contains a <js>"_class"</js> entry, it must be the same as or a subclass
+   of the <code>type</code>.</div>
+<dl><dt><span class="strong">Type Parameters:</span></dt><dd><code>T</code> - The class type to convert this map object to.</dd><dt><span class="strong">Parameters:</span></dt><dd><code>type</code> - The class type to convert this map object to.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The new object.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/ClassCastException.html?is-external=true" title="class or interface in java.lang">ClassCastException</a></code> - If the <js>"_class"</js> entry is present and not assignable
+   from <code>type</code></dd></dl>
+</li>
+</ul>
+<a name="cast(com.ibm.juno.core.ClassMeta)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>cast</h4>
+<pre>public&nbsp;&lt;T&gt;&nbsp;T&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.1193">cast</a>(<a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;T&gt;&nbsp;cm)</pre>
+<div class="block">Same as <a href="../../../../com/ibm/juno/core/ObjectMap.html#cast(java.lang.Class)"><code>cast(Class)</code></a>, except allows you to specify a <a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core"><code>ClassMeta</code></a> parameter.</div>
+<dl><dt><span class="strong">Type Parameters:</span></dt><dd><code>T</code> - The class type to convert this map object to.</dd><dt><span class="strong">Parameters:</span></dt><dd><code>cm</code> - The class type to convert this map object to.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The new object.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/ClassCastException.html?is-external=true" title="class or interface in java.lang">ClassCastException</a></code> - If the <js>"_class"</js> entry is present and not assignable
+   from <code>type</code></dd></dl>
+</li>
+</ul>
+<a name="toString(com.ibm.juno.core.serializer.WriterSerializer)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>toString</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.1308">toString</a>(<a href="../../../../com/ibm/juno/core/serializer/WriterSerializer.html" title="class in com.ibm.juno.core.serializer">WriterSerializer</a>&nbsp;serializer)
+                throws <a href="../../../../com/ibm/juno/core/serializer/SerializeException.html" title="class in com.ibm.juno.core.serializer">SerializeException</a></pre>
+<div class="block">Serialize this object into a string using the specified serializer.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>serializer</code> - The serializer to use to convert this object to a string.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>This object serialized as a string.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../com/ibm/juno/core/serializer/SerializeException.html" title="class in com.ibm.juno.core.serializer">SerializeException</a></code> - If a problem occurred trying to convert the output.</dd></dl>
+</li>
+</ul>
+<a name="toString()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>toString</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.1316">toString</a>()</pre>
+<div class="block">Serialize this object into a JSON string using the <a href="../../../../com/ibm/juno/core/json/JsonSerializer.html#DEFAULT"><code>JsonSerializer.DEFAULT</code></a> serializer.</div>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/AbstractMap.html?is-external=true#toString()" title="class or interface in java.util">toString</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/AbstractMap.html?is-external=true" title="class or interface in java.util">AbstractMap</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></dd>
+</dl>
+</li>
+</ul>
+<a name="serializeTo(java.io.Writer)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>serializeTo</h4>
+<pre>public&nbsp;<a href="../../../../com/ibm/juno/core/ObjectMap.html" title="class in com.ibm.juno.core">ObjectMap</a>&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.1333">serializeTo</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/Writer.html?is-external=true" title="class or interface in java.io">Writer</a>&nbsp;w)
+                      throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a>,
+                             <a href="../../../../com/ibm/juno/core/serializer/SerializeException.html" title="class in com.ibm.juno.core.serializer">SerializeException</a></pre>
+<div class="block">Convenience method for serializing this map to the specified <code>Writer</code> using
+ the <a href="../../../../com/ibm/juno/core/json/JsonSerializer.html#DEFAULT"><code>JsonSerializer.DEFAULT</code></a> serializer.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>w</code> - The writer to serialize this object to.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>This object (for method chaining).</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - If a problem occurred trying to write to the writer.</dd>
+<dd><code><a href="../../../../com/ibm/juno/core/serializer/SerializeException.html" title="class in com.ibm.juno.core.serializer">SerializeException</a></code> - If a problem occurred trying to convert the output.</dd></dl>
+</li>
+</ul>
+<a name="keySet()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>keySet</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.1339">keySet</a>()</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#keySet()" title="class or interface in java.util">keySet</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></dd>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/HashMap.html?is-external=true#keySet()" title="class or interface in java.util">keySet</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/HashMap.html?is-external=true" title="class or interface in java.util">HashMap</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></dd>
+</dl>
+</li>
+</ul>
+<a name="entrySet()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>entrySet</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&gt;&nbsp;<a href="../../../../src-html/com/ibm/juno/core/ObjectMap.html#line.1349">entrySet</a>()</pre>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#entrySet()" title="class or interface in java.util">entrySet</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></dd>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/HashMap.html?is-external=true#entrySet()" title="class or interface in java.util">entrySet</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/HashMap.html?is-external=true" title="class or interface in java.util">HashMap</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></dd>
+</dl>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a>
+<div class="skip"><a href="#skip-navbar_bottom" title="Skip navigation links">Skip navigation links</a></div>
+<a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/ObjectMap.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+<li><a href="../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../com/ibm/juno/core/ObjectList.html" title="class in com.ibm.juno.core"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../com/ibm/juno/core/PropertyNamer.html" title="interface in com.ibm.juno.core"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../index.html?com/ibm/juno/core/ObjectMap.html" target="_top">Frames</a></li>
+<li><a href="ObjectMap.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li><a href="#nested_classes_inherited_from_class_java.util.AbstractMap">Nested</a>&nbsp;|&nbsp;</li>
+<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+</body>
+</html>

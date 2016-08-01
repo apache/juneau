@@ -1,0 +1,643 @@
+<!DOCTYPE HTML>
+<!--
+    Licensed Materials - Property of IBM
+    (c) Copyright IBM Corporation 2014. All Rights Reserved.
+   
+    Note to U.S. Government Users Restricted Rights:  
+    Use, duplication or disclosure restricted by GSA ADP Schedule 
+    Contract with IBM Corp. 
+ -->
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<style type="text/css">
+		/* For viewing in Page Designer */
+		@IMPORT url("../../../../../../javadoc.css");
+
+		/* For viewing in REST interface */
+		@IMPORT url("../htdocs/javadoc.css");
+		body { 
+			margin: 20px; 
+		}	
+	</style>
+	<script>
+		/* Replace all @code and @link tags. */	
+		window.onload = function() {
+			document.body.innerHTML = document.body.innerHTML.replace(/\{\@code ([^\}]+)\}/g, '<code>$1</code>');
+			document.body.innerHTML = document.body.innerHTML.replace(/\{\@link (([^\}]+)\.)?([^\.\}]+)\}/g, '<code>$3</code>');
+		}
+	</script>
+</head>
+<body>
+<p>INI file support</p>
+
+<script>
+	function toggle(x) {
+		var div = x.nextSibling;
+		while (div != null && div.nodeType != 1)
+			div = div.nextSibling;
+		if (div != null) {
+			var d = div.style.display;
+			if (d == 'block' || d == '') {
+				div.style.display = 'none';
+				x.className += " closed";
+			} else {
+				div.style.display = 'block';
+				x.className = x.className.replace(/(?:^|\s)closed(?!\S)/g , '' );
+			}
+		}
+	}
+</script>
+
+<a id='TOC'></a><h5 class='toc'>Table of Contents</h5>
+<ol class='toc'>
+	<li><p><a class='doclink' href='#Overview'>Overview</a></p> 
+	<li><p><a class='doclink' href='#Variables'>Variables</a></p> 
+	<li><p><a class='doclink' href='#Encoded'>Encoded Entries</a></p> 
+	<li><p><a class='doclink' href='#Listeners'>Listeners</a></p> 
+	<li><p><a class='doclink' href='#CommandLine'>Command Line API</a></p> 
+	<li><p><a class='doclink' href='#Serializing'>Serializing Config Files</a></p> 
+	<li><p><a class='doclink' href='#Merging'>Merging Config Files</a></p> 
+</ol>
+
+<!-- ======================================================================================================== -->
+<a id="Overview"></a>
+<h2 class='topic' onclick='toggle(this)'>1 - Overview</h2>
+<div class='topic'>
+	<p>
+		The {@link com.ibm.juno.core.ini.ConfigMgr} and {@link com.ibm.juno.core.ini.ConfigFile} classes 
+		implement an API for working with INI-style configuration files such as the following:
+	</p>
+	<p class='bcode'>
+	<cc>#--------------------------</cc>
+	<cc># Default section</cc>
+	<cc>#--------------------------</cc>
+	<ck>key1</ck> = <cv>1</cv>
+	<ck>key2</ck> = <cv>true</cv>
+	<ck>key3</ck> = <cv>1,2,3</cv>
+	<ck>key4</ck> = <cv>http://foo</cv>
+	
+	<cc>#--------------------------</cc>
+	<cc># A comment about Section 1</cc>
+	<cc>#--------------------------</cc>
+	<cs>[Section1]</cs>
+	<ck>key1</ck> = <cv>2</cv>
+	<ck>key2</ck> = <cv>false</cv>
+	<ck>key3</ck> = <cv>4,5,6</cv>
+	<ck>key4</ck> = <cv>http://bar</cv>
+	</p>
+	
+	<p>
+		The {@link com.ibm.juno.core.ini.ConfigMgr} class is used to instantiate instances of 
+		{@link com.ibm.juno.core.ini.ConfigFile} which can then be used to retrieve config file values through either <js>"key"</js> or <js>"Section/key"</js> identifiers.
+	</p>
+
+	<p class='bcode'>
+	<jk>int</jk> key1;
+	<jk>boolean</jk> key2;
+	<jk>int</jk>[] key3;
+	URL key4;
+	
+	<jc>// Get our config file using the default config manager</jc>
+	ConfigFile f = ConfigMgr.<jsf>DEFAULT</jsf>.getConfig(<js>"C:/temp/MyConfig.cfg"</js>);
+
+	<jc>// Read values from default section</jc>
+	key1 = f.getInt(<js>"key1"</js>);
+	key2 = f.getBoolean(<js>"key2"</js>);
+	key3 = f.getObject(<jk>int</jk>[].<jk>class</jk>, <js>"key3"</js>);
+	key4 = f.getObject(URL.<jk>class</jk>, <js>"key4"</js>);
+
+	<jc>// Read values from Section #1</jc>
+	key1 = f.getInt(<js>"Section1/key1"</js>);
+	key2 = f.getBoolean(<js>"Section1/key2"</js>);
+	key3 = f.getObject(<jk>int</jk>[].<jk>class</jk>, <js>"Section1/key3"</js>);
+	key4 = f.getObject(URL.<jk>class</jk>, <js>"Section1/key4"</js>);
+	</p>
+
+	<p>
+		The interface also allows config files to be constructed programmatically...
+	</p>
+	
+	<p class='bcode'>
+	<jc>// Construct the sample INI file programmatically</jc>
+	ConfigFile f = ConfigMgr.<jsf>DEFAULT</jsf>.getConfig(<js>"C:/temp/MyConfig.cfg"</js>, <jk>true</jk>)
+		.addLines(<jk>null</jk>,                     <jc>// The default 'null' section</jc>
+			<js>"# Default section"</js>,             <jc>// A regular comment</jc>
+			<js>"key1 = 1"</js>,                      <jc>// A numeric entry</jc>
+			<js>"key2 = true"</js>,                   <jc>// A boolean entry</jc>
+			<js>"key3 = 1,2,3"</js>,                  <jc>// An array entry</jc>
+			<js>"key4 = http://foo"</js>,             <jc>// A POJO entry</jc>
+			<js>""</js>)                              <jc>// A blank line</jc>
+		.addHeaderComments(<js>"Section1"</js>,       <jc>// The 'Section1' section</jc>
+			<js>"A comment about Section 1"</js>)     <jc>// A header comment</jc>
+		.addLines(<js>"Section1"</js>,                <jc>// The 'Section1' section</jc>
+			<js>"key1 = 2"</js>,                      <jc>// A numeric entry</jc>
+			<js>"key2 = false"</js>,                  <jc>// A boolean entry</jc>
+			<js>"key3 = 4,5,6"</js>,                  <jc>// An array entry</jc>
+			<js>"key4 = http://bar"</js>)             <jc>// A POJO entry</jc>
+		.save();                            <jc>// Save to MyConfig.cfg</jc>
+	</p>
+	
+	<p>
+		The following is equivalent, except uses {@link com.ibm.juno.core.ini.ConfigFile#put(String,Object)} to set values.
+		Note how we're setting values as POJOs which will be automatically converted to strings when persisted to disk.
+	<p class='bcode'>
+	<jc>// Construct the sample INI file programmatically</jc>
+	ConfigFile f = ConfigMgr.<jsf>DEFAULT</jsf>.getConfig(<js>"C:/temp/MyConfig.cfg"</js>, <jk>true</jk>)
+		.addLines(<jk>null</jk>,
+			<js>"# Default section"</js>)
+		.addHeaderComments(<js>"Section1"</js>,
+			<js>"A comment about Section 1"</js>);
+	cf.put(<js>"key1"</js>, 1);
+	cf.put(<js>"key2"</js>, <jk>true</jk>);
+	cf.put(<js>"key3"</js>, <jk>new int</jk>[]{1,2,3});
+	cf.put(<js>"key4"</js>, <jk>new</jk> URL(<js>"http://foo"</js>));
+	cf.put(<js>"Section1/key1"</js>, 2);
+	cf.put(<js>"Section1/key2"</js>, <jk>false</jk>);
+	cf.put(<js>"Section1/key3"</js>, <jk>new int</jk>[]{4,5,6});
+	cf.put(<js>"Section1/key4"</js>, <jk>new</jk> URL(<js>"http://bar"</js>));
+	cf.save();
+	</p>
+	<p>
+		Refer to {@link com.ibm.juno.core.ini.ConfigFile#put(String,Object,boolean)} for a description of 
+		formats for various data types.
+	</p>
+	<p>
+		Various convenience getter methods are provided for retrieving different data types:
+	</p>
+	<p class='bcode'>
+	<jc>// Strings with default values</jc>
+	<jc>// key1 = foobar</jc>
+	String key1 = cf.getString(<js>"key1"</js>);
+
+	<jc>// Numbers</jc>
+	<jc>// key2 = 123</jc>
+	<jk>float</jk> key2 = cf.getObject(<jk>float</jk>.<jk>class</jk>, <js>"key2"</js>);
+
+	<jc>// Booleans</jc>
+	<jc>// key3 = true</jc>
+	<jk>boolean</jk> key3 = cf.getBoolean(<js>"key3"</js>);
+
+	<jc>// Objects convertable to and from strings using the JSON serializer and parser</jc>
+	<jc>// key4 = http://foo</jc>
+	URL key4 = cf.getObject(URL.<jk>class</jk>, <js>"key4"</js>);
+
+	<jc>// Arrays of strings</jc>
+	<jc>// key5 = foo, bar</jc>
+	String[] key5 = cf.getStringArray(<js>"key5"</js>);
+
+	<jc>// Arrays of objects</jc>
+	<jc>// key6 = http://foo,http://bar</jc>
+	URL[] key6 = cf.getObject(URL[].<jk>class</jk>, <js>"key6"</js>);
+
+	<jc>// Arrays of primitives</jc>
+	<jc>// key7 = 1,2,3</jc>
+	<jk>int</jk>[] key7 = cf.getObject(<jk>int</jk>[].<jk>class</jk>, <js>"key7"</js>);
+
+	<jc>// Enums</jc>
+	<jc>// key8 = MINUTES</jc>
+	TimeUnit key8 = cf.getObject(TimeUnit.<jk>class</jk>, <js>"key8"</js>);
+
+	<jc>// Beans</jc>
+	<jc>// key9 = {name:'John Smith', addresses:[{street:'101 Main St', city:'Anywhere', state:'TX'}]}</jc>
+	Person key9 = cf.getObject(Person.<jk>class</jk>, <js>"key9"</js>);
+
+	<jc>// Generic Maps</jc>
+	<jc>// key10 = {foo:'bar', baz:123}</jc>
+	Map key10 = cf.getObject(ObjectMap.<jk>class</jk>, <js>"key10"</js>);
+	</p>
+</div>
+
+<!-- ======================================================================================================== -->
+<a id="Variables"></a>
+<h2 class='topic' onclick='toggle(this)'>2 - Variables</h2>
+<div class='topic'>
+	<p>
+		Config files can contain variables that get resolved dynamically using the {@link com.ibm.juno.core.utils.StringVarResolver} API.<br>
+	</p>
+	<p>
+		Resolving config files can be retrieved through the following methods:
+		<ul>
+			<li>{@link com.ibm.juno.core.ini.ConfigFile#getResolving()} - Returns a config file that resolves a default set of variables.
+			<li>{@link com.ibm.juno.core.ini.ConfigFile#getResolving(StringVarResolver)} - Returns a config file that resolves a custom set of variables.
+		</ul>
+	</p>	
+	<p>
+		The default {@link com.ibm.juno.core.ini.ConfigFile#getResolving()} method returns a config file that resolves the following
+		variables:
+	</p>
+	<ul>
+		<li><code>$S{key}</code>, <code>$S{key,default}</code> - System properties.
+		<li><code>$E{key}</code>, <code>$E{key,default}</code> - Environment variables.
+		<li><code>$C{key}</code>, <code>$C{key,default}</code> - Values in this configuration file.
+	</ul>
+	<p>
+	<h6 class='topic'>Examples:</h6>
+	<p class='bcode'>
+	<cc>#--------------------------</cc>
+	<cc># Examples </cc>
+	<cc>#--------------------------</cc>
+	<cs>[MyProperties]</cs>
+	<ck>javaHome</ck> = <cv>$S{java.home}</cv>
+	<ck>path</ck> = <cv>$E{PATH}</cv>
+	<ck>customMessage</ck> = <cv>Java home is $C{MyProperties/javaHome} and the environment path is $C{MyProperties/path}.</cv>
+	</p>
+	<p>
+		Resolving config files (and any config files retrieved through the same <code>ConfigMgr</code> that point to the same physical file)
+		share the same underlying config files in memory.  
+		This allows changes in one instance of the config file to be reflected in all.
+	</p>
+	<p>
+		Support for variables is extensible.  You can add support for your own variables by implementing custom 
+		{@link com.ibm.juno.core.utils.StringVarResolver StringVarResolvers}.<br>
+		For example, the microservice <code>Resource</code> class provides access to config files that
+			can contain any of the following variables:
+	</p>
+	<ul>
+		<li><code>$C</code> - Config variables.
+		<li><code>$S</code> - System properties.
+		<li><code>$E</code> - Environment variables.
+		<li><code>$I</code> - Servlet init parameters.
+		<li><code>$ARG</code> - JVM command-line arguments.
+		<li><code>$MF</code> - Main jar manifest file entries.
+		<li><code>$L</code> - Localized strings.
+		<li><code>$A</code> - HTTP request attributes.
+		<li><code>$P</code> - HTTP request URL parameters.
+		<li><code>$R</code> - HTTP request variables.
+		<li><code>$UE</code> - URL-encoding function.
+	</ul>
+</div>
+
+<!-- ======================================================================================================== -->
+<a id="Encoded"></a>
+<h2 class='topic' onclick='toggle(this)'>3 - Encoded Entries</h2>
+<div class='topic'>
+	<p>
+		If a config file contains sensitive information such as passwords, those values can be 
+		marked for encoding by appending <js>'*'</js> to the end of the key name.<br>
+		If a marked and unencoded value is detected in the file during load, it will be encoded and saved immediately.
+	</p>
+	<p>
+		For example, the following password is marked for encoding....
+	</p>
+	<p class='bcode'>
+		<cs>[MyHost]</cs>
+		<ck>url</ck> = <cv>http://localhost:9080/foo</cv>
+		<ck>user</ck> = <cv>me</cv>
+		<ck>password*</ck> = <cv>mypassword</cv>
+	</p>
+	<p>
+		After initial loading, the file contents will contain an encoded value...
+	</p>
+	<p class='bcode'>
+		<cs>[MyHost]</cs>
+		<ck>url</ck> = <cv>http://localhost:9080/foo</cv>
+		<ck>user</ck> = <cv>me</cv>
+		<ck>password*</ck> = <cv>{AwwJVhwUQFZEMg==}</cv>
+	</p>
+	<p>
+		The default encoder is {@link com.ibm.juno.core.ini.XorEncoder} which is a simple XOR+Base64 encoder.<br>
+		If desired, custom encoder can be used by implementing the {@link com.ibm.juno.core.ini.Encoder}
+		interface and creating your own <code>ConfigMgr</code> using the {@link com.ibm.juno.core.ini.ConfigMgr#ConfigMgr(boolean,Encoder,WriterSerializer,ReaderParser,Charset,String[])}
+		constructor.
+	</p>
+</div>
+
+<!-- ======================================================================================================== -->
+<a id="Listeners"></a>
+<h2 class='topic' onclick='toggle(this)'>4 - Listeners</h2>
+<div class='topic'>
+	<p>
+		The following method is provided for listening to changes made on config files:
+	</p>
+	<p>
+		{@link com.ibm.juno.core.ini.ConfigFile#addListener(ConfigFileListener)}.
+	</p>
+	<p>
+		Subclasses are provided for listening for different kinds of events:
+	</p>
+	<ul>
+		<li>{@link com.ibm.juno.core.ini.ConfigFileListener} - Config file is saved, loaded, or modified.
+		<li>{@link com.ibm.juno.core.ini.SectionListener} - One or more entries in a section are modified.
+		<li>{@link com.ibm.juno.core.ini.EntryListener} - An individual entry is modified.
+	</ul>
+	<h6 class="topic">Example:</h6>
+	<p class='bcode'>
+	<jc>// Get our config file using the default config manager</jc>
+	ConfigFile f = ConfigMgr.<jsf>DEFAULT</jsf>.getConfig(<js>"C:/temp/MyConfig.cfg"</js>);
+
+	<jc>// Add a listener for an entry</jc>
+	f.addListener(
+		<jk>new</jk> EntryListener(<js>"Section1/key1"</js>) {
+			<ja>@Override</ja>
+			<jk>public void</jk> onChange(ConfigFile cf) {
+				System.<jsf>err</jsf>.println(<js>"Entry changed!  New value is "</js> + cf.getString(<js>"Section1/key1"</js>));
+			}
+		}
+	);
+	</p>
+	<p>
+		Note that since {@link com.ibm.juno.core.ini.ConfigFile} instances for the same physical files are shared in {@link com.ibm.juno.core.ini.ConfigMgr}, a change made
+		in once instance of a config file will trigger all listeners defined on that physical file.
+	</p>
+</div>
+
+<!-- ======================================================================================================== -->
+<a id="CommandLine"></a>
+<h2 class='topic' onclick='toggle(this)'>5 - Command Line API</h2>
+<div class='topic'>
+	<p>
+		The {@link com.ibm.juno.core.ini.ConfigMgr} class contains a {@link com.ibm.juno.core.ini.ConfigMgr#main(String[])}
+			method that can be used to work with config files through a command-line prompt.<br>
+		This is invoked as a normal Java command:
+	</p>
+	<p class='bcode'>
+	java -jar juno.jar com.ibm.juno.core.ini.ConfigMgr [args]
+	</p>
+	<p>
+		Arguments can be any of the following...
+		<ul class='spaced-list'>
+			<li>No arguments<br>
+				Prints usage message.
+			<li><code>createBatchEnvFile -configfile &lt;configFile&gt; -envfile &lt;batchFile&gt; [-verbose]</code><br>
+				Creates a batch file that will set each config file entry as an environment variable.<br>
+				Characters in the keys that are not valid as environment variable names (e.g. <js>'/'</js> and <js>'.'</js>)
+				will be converted to underscores.
+			<li><code>createShellEnvFile -configFile &lt;configFile&gt; -envFile &lt;configFile&gt; [-verbose]</code>
+				Creates a shell script that will set each config file entry as an environment variable.<br>
+				Characters in the keys that are not valid as environment variable names (e.g. <js>'/'</js> and <js>'.'</js>)
+					will be converted to underscores.
+			<li><code>setVals -configFile &lt;configFile&gt; -vals [var1=val1 [var2=val2...]] [-verbose]</code>
+				Sets values in config files.
+		</ul>
+	</p>
+	<p>
+		For example, the following command will create the file <code>'MyConfig.bat'</code> from the contents of the file <code>'MyConfig.cfg'</code>.
+	</p>
+	<p class='bcode'>
+		java com.ibm.juno.core.ini.ConfigMgr createBatchEnvFile -configfile C:\foo\MyConfig.cfg -batchfile C:\foo\MyConfig.bat
+	</p>
+</div>
+
+<!-- ======================================================================================================== -->
+<a id="Serializing"></a>
+<h2 class='topic' onclick='toggle(this)'>6 - Serializing Config Files</h2>
+<div class='topic'>
+	<p>
+		Instances of {@link com.ibm.juno.core.ini.ConfigFile} are POJOs that can be serialized to and parsed from
+			all supported Juno languages.
+	</p>
+	<p>
+		The <code>com.ibm.juno.microservice.resources.ConfigResource</code> is a predefined REST interface that
+			allows access to the config file used by a microservice.<br>
+		The <code>com.ibm.team.juno.samples</code> project is a microservice that includes this resource
+			at <code>http://localhost:10000/sample/config</code>.<br>
+		The sample microservice uses the following config file <code>juno-samples.cfg</code>:
+	</p>
+	<p class='bcode'>
+	<cc>#================================================================================
+	# Basic configuration file for SaaS microservices
+	# Subprojects can use this as a starting point.
+	#================================================================================</cc>
+	
+	<cc>#================================================================================
+	# REST settings
+	#================================================================================</cc>
+	<cs>[REST]</cs>
+	
+	<cc># The HTTP port number to use.
+	# Default is Rest-Port setting in manifest file, or 8000.</cc>
+	<ck>port</ck> = <cv>10000</cv>
+	
+	<cc># A JSON map of servlet paths to servlet classes.
+	# Example:  
+	# 	resourceMap = {'/*':'com.ibm.MyServlet'}
+	# Either resourceMap or resources must be specified.</cc>
+	<ck>resourceMap</ck> = 
+
+	<cc># A comma-delimited list of names of classes that extend from Servlet.
+	# Resource paths are pulled from @RestResource.path() annotation, or
+	# 	"/*" if annotation not specified.
+	# Example:  
+	# 	resources = com.ibm.MyServlet
+	# Default is Rest-Resources in manifest file.
+	# Either resourceMap or resources must be specified.</cc>
+	<ck>resources</ck> = 
+
+	<cc># The context root of the Jetty server.
+	# Default is Rest-ContextPath in manifest file, or "/".</cc>
+	<ck>contextPath</ck> = 
+
+	<cc># Authentication:  NONE, BASIC.</cc>
+	<ck>authType</ck> = <cv>NONE</cv>
+	
+	<cc># The BASIC auth username.
+	# Default is Rest-LoginUser in manifest file.</cc>
+	<ck>loginUser</ck> = 
+	
+	<cc># The BASIC auth password.
+	# Default is Rest-LoginPassword in manifest file.</cc>
+	<ck>loginPassword</ck> = 
+	
+	<cc># The BASIC auth realm.
+	# Default is Rest-AuthRealm in manifest file.</cc>
+	<ck>authRealm</ck> = 
+	
+	<cc># Stylesheet to use for HTML views.
+	# The default options are:
+	#  - styles/juno.css
+	#  - styles/devops.css
+	# Other stylesheets can be referenced relative to the servlet package or working
+	# 	directory.</cc>
+	<ck>stylesheet</ck> = <cv>styles/devops.css</cv>
+	
+	<cc># What to do when the config file is saved.
+	# Possible values:
+	# 	NOTHING - Don't do anything. 
+	#	RESTART_SERVER - Restart the Jetty server.
+	#	RESTART_SERVICE - Shutdown and exit with code '3'.</cc>
+	<ck>saveConfigAction</ck> = <cv>RESTART_SERVER</cv>
+	
+	<cc># Enable SSL support.</cc>
+	<ck>useSsl</ck> = false
+	
+	<cc>#================================================================================
+	# Bean properties on the org.eclipse.jetty.util.ssl.SslSocketFactory class
+	#--------------------------------------------------------------------------------
+	# Ignored if REST/useSsl is false.
+	#================================================================================</cc>
+	<cs>[REST-SslContextFactory]</cs>
+	<ck>keyStorePath</ck> = <cv>client_keystore.jks</cv>
+	<ck>keyStorePassword*</ck> = <cv>{HRAaRQoT}</cv>
+	<ck>excludeCipherSuites</ck> = <cv>TLS_DHE.*, TLS_EDH.*</cv>
+	<ck>excludeProtocols</ck> = <cv>SSLv3</cv>
+	<ck>allowRenegotiate</ck> = <cv>false</cv>
+	
+	<cc>#================================================================================
+	# Logger settings
+	# See FileHandler Java class for details.
+	#================================================================================</cc>
+	<cs>[Logging]</cs>
+
+	<cc># The directory where to create the log file.
+	# Default is "."</cc>
+	<ck>logDir</ck> = <cv>logs</cv>
+	
+	<cc># The name of the log file to create for the main logger.
+	# The logDir and logFile make up the pattern that's passed to the FileHandler
+	# constructor.
+	# If value is not specified, then logging to a file will not be set up.</cc>
+	<ck>logFile</ck> = <cv>microservice.%g.log</cv>
+	
+	<cc># Whether to append to the existing log file or create a new one.
+	# Default is false.</cc>
+	<ck>append</ck> = 
+	
+	<cc># The SimpleDateFormat format to use for dates.
+	# Default is "yyyy.MM.dd hh:mm:ss".</cc>
+	<ck>dateFormat</ck> = 
+	
+	<cc># The log message format.
+	# The value can contain any of the following variables:
+	# 	{date} - The date, formatted per dateFormat.
+	#	{class} - The class name.
+	#	{method} - The method name.
+	#	{logger} - The logger name.
+	#	{level} - The log level name.
+	#	{msg} - The log message.
+	#	{threadid} - The thread ID.
+	#	{exception} - The localized exception message.
+	# Default is "[{date} {level}] {msg}%n".</cc>
+	<ck>format</ck> =
+	
+	<cc># The maximum log file size.
+	# Suffixes available for numbers.
+	# See ConfigFile.getInt(String,int) for details.
+	# Default is 1M.</cc>
+	<ck>limit</ck> = <cv>10M</cv>
+	
+	<cc># Max number of log files.
+	# Default is 1.</cc>
+	<ck>count</ck> = <cv>5</cv>
+	
+	<cc># Default log levels.
+	# Keys are logger names.
+	# Values are serialized Level POJOs.</cc>
+	<ck>levels</ck> = <cv>{ com.ibm.juno:'INFO' }</cv>
+	
+	<cc># Only print unique stack traces once and then refer to them by a simple 8 character hash identifier.
+	# Useful for preventing log files from filling up with duplicate stack traces.
+	# Default is false.</cc>
+	<ck>useStackTraceHashes</ck> = <cv>true</cv>
+	
+	<cc># The default level for the console logger.
+	# Default is WARNING.</cc>
+	<ck>consoleLevel</ck> = 
+	
+	<cc>#================================================================================
+	# System properties
+	#--------------------------------------------------------------------------------
+	# These are arbitrary system properties that are set during startup.
+	#================================================================================</cc>
+	<cs>[SystemProperties]</cs>
+	
+	<cc># Configure Jetty for StdErrLog Logging</cc>
+	<ck>org.eclipse.jetty.util.log.class</ck> = <cv>org.eclipse.jetty.util.log.StrErrLog</cv>
+	
+	<cc># Jetty logging level</cc>
+	<ck>org.eclipse.jetty.LEVEL</ck> = <cv>WARN</cv>		
+	</p>
+	<p>
+		The config file looks deceivingly simple.
+		However, it should be noticed that the config file is a VERY powerful feature with many capabilities including:
+	</p>
+	<p>
+		When you point your browser to this resource, you'll notice that the contents of the config file
+			are being serialized to HTML as a POJO: 
+	</p>
+	<img class='bordered' src="doc-files/config1.png">
+	<p>
+		Likewise, the config file can also be serialized as any of the supported languages such as JSON: 
+	</p>
+	<img class='bordered' src="doc-files/config2.png">
+	<p>
+		The code for implementing this page could not be any simpler, since it simply returns the config
+			file returned by the <code>RestServlet.getConfig()</code> method.
+	</p>
+	<p class='bcode'>
+		<jd>/** 
+		 * [GET /] - Show contents of config file.
+		 *  
+		 * <ja>@return</ja> The config file.  
+		 * <ja>@throws</ja> Exception 
+		 */</jd>
+		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/"</js>, description=<js>"Show contents of config file."</js>)
+		<jk>public</jk> ConfigFile getConfigContents() <jk>throws</jk> Exception {
+			<jk>return</jk> getConfig();
+		}
+	</p>
+	<p>
+		The edit page takes you to an editor that allows you to modify the contents of the config file: 
+	</p>
+	<img class='bordered' src="doc-files/config3.png">
+	<p>
+		This latter page uses the {@link com.ibm.juno.core.ini.ConfigFile#toString()} method to retrieve the
+		contents of the config file in INI format.
+	</p>
+	<p>
+		Since config files are serializable, that mean they can also be retrieved through the <code>RestClient</code> API.
+	</p>
+	<p class='bcode'>
+	<jc>// Create a new REST client with JSON support</jc>
+	RestClient c = <jk>new</jk> RestClient(JsonSerializer.<jk>class</jk>, JsonParser.<jk>class</jk>);
+
+	<jc>// Retrieve config file through REST interface</jc>
+	ConfigFile cf = c.doGet(<js>"http://localhost:10000/sample/config"</js>).getResponse(ConfigFileImpl.<jk>class</jk>);
+	</p>
+</div>
+
+<!-- ======================================================================================================== -->
+<a id="Merging"></a>
+<h2 class='topic' onclick='toggle(this)'>7 - Merging Config Files</h2>
+<div class='topic'>
+	<p>
+		In the previous example, an edit page was shown that allows you to edit config files through
+		a REST interface.<br>
+		Note that if only a single entry is modified in the config file, we only want to trigger
+		listeners for that change, not trigger all listeners.<br>
+		This is where the {@link com.ibm.juno.core.ini.ConfigFile#merge(ConfigFile)} method comes into play.<br>
+		This method will copy the contents of one config file over to another config file, but only
+		trigger listeners when the values are different.
+	</p>
+	<p>
+		The edit page is implemented with this method which is a simple PUT with the contents of
+			the new INI file as the body of the HTTP request:
+	</p>
+	<p class='bcode'>
+	<jd>/** 
+	 * [PUT /] - Sets contents of config file. 
+	 * 
+	 * <ja>@param</ja> contents The new contents of the config file. 
+	 * <ja>@return</ja> The new config file contents.
+	 * <ja>@throws</ja> Exception 
+	 */</jd>
+	<ja>@RestMethod</ja>(name=<js>"PUT"</js>, path=<js>"/"</js>,
+		description=<js>"Sets contents of config file."</js>,
+		input={
+			<ja>@Var</ja>(category=<jsf>CONTENT</jsf>, description=<js>"New contents in INI file format."</js>)
+		}
+	)
+	<jk>public</jk> ConfigFile setConfigContents(<ja>@Content</ja> Reader contents) <jk>throws</jk> Exception {
+		
+		<jc>// Create a new in-memory config file based on the contents of the HTTP request.</jc>
+		ConfigFile cf2 = ConfigMgr.<jsf>DEFAULT</jsf>.create().load(contents);
+		
+		<jc>// Merge the in-memory config file into the existing config file and save it.
+		// Then return the modified config file to be parsed as a POJO.</jc>
+		<jk>return</jk> getConfig().merge(cf2).save();
+	}
+	</p>
+</div>
+
+</body>
+</html>

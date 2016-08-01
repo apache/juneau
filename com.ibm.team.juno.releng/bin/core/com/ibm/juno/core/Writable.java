@@ -1,0 +1,38 @@
+/*******************************************************************************
+ * Licensed Materials - Property of IBM
+ * (c) Copyright IBM Corporation 2015. All Rights Reserved.
+ *
+ * Note to U.S. Government Users Restricted Rights:  Use,
+ * duplication or disclosure restricted by GSA ADP Schedule
+ * Contract with IBM Corp.
+ *******************************************************************************/
+package com.ibm.juno.core;
+
+import java.io.*;
+
+/**
+ * Interface that identifies that an object can be serialized directly to a writer.
+ * <p>
+ * 	Instances must identify the media type of the content by implementing the
+ * 	{@link #getMediaType()} method.
+ * </p>
+ *
+ * @author James Bognar (jbognar@us.ibm.com)
+ */
+public interface Writable {
+
+	/**
+	 * Serialize this object to the specified writer.
+	 *
+	 * @param w The writer to write to.
+	 * @throws IOException
+	 */
+	void writeTo(Writer w) throws IOException;
+
+	/**
+	 * Returns the serialized media type for this resource (e.g. <js>"text/html"</js>)
+	 *
+	 * @return The media type, or <jk>null</jk> if the media type is not known.
+	 */
+	String getMediaType();
+}

@@ -1,0 +1,1930 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="en">
+<head>
+<title>com.ibm.juno.core.jena (Juno)</title>
+<link rel="stylesheet" type="text/css" href="../../../../../javadoc.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="com.ibm.juno.core.jena (Juno)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a>
+<div class="skip"><a href="#skip-navbar_top" title="Skip navigation links">Skip navigation links</a></div>
+<a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li class="navBarCell1Rev">Package</li>
+<li>Class</li>
+<li><a href="package-use.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../com/ibm/juno/core/ini/package-summary.html">Prev Package</a></li>
+<li><a href="../../../../../com/ibm/juno/core/jena/annotation/package-summary.html">Next Package</a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?com/ibm/juno/core/jena/package-summary.html" target="_top">Frames</a></li>
+<li><a href="package-summary.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<div class="header">
+<h1 title="Package" class="title">Package&nbsp;com.ibm.juno.core.jena</h1>
+<div class="docSummary">
+<div class="block">Jena-based RDF serialization and parsing support</div>
+</div>
+<p>See:&nbsp;<a href="#package_description">Description</a></p>
+</div>
+<div class="contentContainer">
+<ul class="blockList">
+<li class="blockList">
+<table class="packageSummary" border="0" cellpadding="3" cellspacing="0" summary="Class Summary table, listing classes, and an explanation">
+<caption><span>Class Summary</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Class</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../com/ibm/juno/core/jena/Constants.html" title="class in com.ibm.juno.core.jena">Constants</a></td>
+<td class="colLast">
+<div class="block">Constants used by the <a href="../../../../../com/ibm/juno/core/jena/RdfSerializer.html" title="class in com.ibm.juno.core.jena"><code>RdfSerializer</code></a> and <a href="../../../../../com/ibm/juno/core/jena/RdfParser.html" title="class in com.ibm.juno.core.jena"><code>RdfParser</code></a> classes.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../com/ibm/juno/core/jena/RdfBeanPropertyMeta.html" title="class in com.ibm.juno.core.jena">RdfBeanPropertyMeta</a>&lt;T&gt;</td>
+<td class="colLast">
+<div class="block">Metadata on bean properties specific to the RDF serializers and parsers pulled from the <a href="../../../../../com/ibm/juno/core/jena/annotation/Rdf.html" title="annotation in com.ibm.juno.core.jena.annotation"><code>@Rdf</code></a> annotation on the bean property.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../com/ibm/juno/core/jena/RdfClassMeta.html" title="class in com.ibm.juno.core.jena">RdfClassMeta</a></td>
+<td class="colLast">
+<div class="block">Metadata on classes specific to the RDF serializers and parsers pulled from the <a href="../../../../../com/ibm/juno/core/jena/annotation/Rdf.html" title="annotation in com.ibm.juno.core.jena.annotation"><code>@Rdf</code></a> annotation on the class.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../com/ibm/juno/core/jena/RdfParser.html" title="class in com.ibm.juno.core.jena">RdfParser</a></td>
+<td class="colLast">
+<div class="block">Parses RDF into POJOs.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../com/ibm/juno/core/jena/RdfParser.N3.html" title="class in com.ibm.juno.core.jena">RdfParser.N3</a></td>
+<td class="colLast">
+<div class="block">Consumes N3 input</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../com/ibm/juno/core/jena/RdfParser.NTriple.html" title="class in com.ibm.juno.core.jena">RdfParser.NTriple</a></td>
+<td class="colLast">
+<div class="block">Consumes N-Triple input</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../com/ibm/juno/core/jena/RdfParser.Turtle.html" title="class in com.ibm.juno.core.jena">RdfParser.Turtle</a></td>
+<td class="colLast">
+<div class="block">Consumes Turtle input</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../com/ibm/juno/core/jena/RdfParser.Xml.html" title="class in com.ibm.juno.core.jena">RdfParser.Xml</a></td>
+<td class="colLast">
+<div class="block">Consumes RDF/XML input</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../com/ibm/juno/core/jena/RdfParserContext.html" title="class in com.ibm.juno.core.jena">RdfParserContext</a></td>
+<td class="colLast">
+<div class="block">Context object that lives for the duration of a single parse of <a href="../../../../../com/ibm/juno/core/jena/RdfParser.html" title="class in com.ibm.juno.core.jena"><code>RdfParser</code></a>.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../com/ibm/juno/core/jena/RdfParserProperties.html" title="class in com.ibm.juno.core.jena">RdfParserProperties</a></td>
+<td class="colLast">
+<div class="block">Configurable properties on the <a href="../../../../../com/ibm/juno/core/jena/RdfParser.html" title="class in com.ibm.juno.core.jena"><code>RdfParser</code></a> class.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html" title="class in com.ibm.juno.core.jena">RdfProperties</a></td>
+<td class="colLast">
+<div class="block">Configurable properties common to both the <a href="../../../../../com/ibm/juno/core/jena/RdfSerializer.html" title="class in com.ibm.juno.core.jena"><code>RdfSerializer</code></a> and <a href="../../../../../com/ibm/juno/core/jena/RdfParser.html" title="class in com.ibm.juno.core.jena"><code>RdfParser</code></a> classes.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../com/ibm/juno/core/jena/RdfSerializer.html" title="class in com.ibm.juno.core.jena">RdfSerializer</a></td>
+<td class="colLast">
+<div class="block">Serializes POJOs to RDF.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../com/ibm/juno/core/jena/RdfSerializer.N3.html" title="class in com.ibm.juno.core.jena">RdfSerializer.N3</a></td>
+<td class="colLast">
+<div class="block">Produces N3 output</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../com/ibm/juno/core/jena/RdfSerializer.NTriple.html" title="class in com.ibm.juno.core.jena">RdfSerializer.NTriple</a></td>
+<td class="colLast">
+<div class="block">Produces N-Triple output</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../com/ibm/juno/core/jena/RdfSerializer.Turtle.html" title="class in com.ibm.juno.core.jena">RdfSerializer.Turtle</a></td>
+<td class="colLast">
+<div class="block">Produces Turtle output</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../com/ibm/juno/core/jena/RdfSerializer.Xml.html" title="class in com.ibm.juno.core.jena">RdfSerializer.Xml</a></td>
+<td class="colLast">
+<div class="block">Produces RDF/XML output</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../com/ibm/juno/core/jena/RdfSerializer.XmlAbbrev.html" title="class in com.ibm.juno.core.jena">RdfSerializer.XmlAbbrev</a></td>
+<td class="colLast">
+<div class="block">Produces Abbreviated RDF/XML output</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../com/ibm/juno/core/jena/RdfSerializerContext.html" title="class in com.ibm.juno.core.jena">RdfSerializerContext</a></td>
+<td class="colLast">
+<div class="block">Context object that lives for the duration of a single serialization of <a href="../../../../../com/ibm/juno/core/jena/RdfSerializer.html" title="class in com.ibm.juno.core.jena"><code>RdfSerializer</code></a>.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../com/ibm/juno/core/jena/RdfSerializerProperties.html" title="class in com.ibm.juno.core.jena">RdfSerializerProperties</a></td>
+<td class="colLast">
+<div class="block">Configurable properties on the <a href="../../../../../com/ibm/juno/core/jena/RdfSerializer.html" title="class in com.ibm.juno.core.jena"><code>RdfSerializer</code></a> class.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../com/ibm/juno/core/jena/RdfUtils.html" title="class in com.ibm.juno.core.jena">RdfUtils</a></td>
+<td class="colLast">
+<div class="block">Utility classes.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList">
+<table class="packageSummary" border="0" cellpadding="3" cellspacing="0" summary="Enum Summary table, listing enums, and an explanation">
+<caption><span>Enum Summary</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Enum</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../com/ibm/juno/core/jena/RdfCollectionFormat.html" title="enum in com.ibm.juno.core.jena">RdfCollectionFormat</a></td>
+<td class="colLast">
+<div class="block">Used in conjunction with the <a href="../../../../../com/ibm/juno/core/jena/annotation/Rdf.html#collectionFormat()"><code>@Rdf.collectionFormat()</code></a> annotation to fine-tune how
+   classes, beans, and bean properties are serialized, particularly collections.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<a name="package_description">
+<!--   -->
+</a>
+<h2 title="Package com.ibm.juno.core.jena Description">Package com.ibm.juno.core.jena Description</h2>
+<div class="block"><p>Jena-based RDF serialization and parsing support</p>
+<script>
+   function toggle(x) {
+      var div = x.nextSibling;
+      while (div != null && div.nodeType != 1)
+         div = div.nextSibling;
+      if (div != null) {
+         var d = div.style.display;
+         if (d == 'block' || d == '') {
+            div.style.display = 'none';
+            x.className += " closed";
+         } else {
+            div.style.display = 'block';
+            x.className = x.className.replace(/(?:^|\s)closed(?!\S)/g , '' );
+         }
+      }
+   }
+</script>
+
+<a id='TOC'></a><h5 class='toc'>Table of Contents</h5>
+<ol class='toc'>
+   <li><p><a class='doclink' href='#RdfOverview'>RDF support overview</a></p> 
+   <ol>
+      <li><p><a class='doclink' href='#RdfOverviewExample'>Example</a></p>
+   </ol>
+   <li><p><a class='doclink' href='#RdfSerializer'>RdfSerializer class</a></p> 
+   <ol>
+      <li><p><a class='doclink' href='#Namespaces'>Namespaces</a></p>
+      <li><p><a class='doclink' href='#UriProperties'>URI properties</a></p>
+      <li><p><a class='doclink' href='#BeanAnnotations'>@Bean and @BeanProperty annotations</a></p>
+      <li><p><a class='doclink' href='#Collections'>Collections</a></p>
+      <li><p><a class='doclink' href='#RootProperty'>Root property</a></p>
+      <li><p><a class='doclink' href='#TypedLiterals'>Typed literals</a></p>
+      <li><p><a class='doclink' href='#Recursion'>Non-tree models and recursion detection</a></p>
+      <li><p><a class='doclink' href='#SerializerConfigurableProperties'>Configurable properties</a></p>
+      <li><p><a class='doclink' href='#SerializerOtherNotes'>Other notes</a></p>
+   </ol> 
+   <li><p><a class='doclink' href='#RdfParser'>RdfParser class</a></p> 
+   <ol>
+      <li><p><a class='doclink' href='#GenericParsing'>Parsing into generic POJO models</a></p>
+      <li><p><a class='doclink' href='#ParserConfigurableProperties'>Configurable properties</a></p>
+      <li><p><a class='doclink' href='#ParserOtherNotes'>Other notes</a></p>
+   </ol> 
+   <li><p><a class='doclink' href='#RestApiSupport'>REST API support</a></p> 
+   <ol>
+      <li><p><a class='doclink' href='#RestServerSupport'>REST server support</a></p>
+      <ol>
+      <li><p><a class='doclink' href='#RestServletJenaDefault'>Using RestServletJenaDefault</a></p>
+      <li><p><a class='doclink' href='#RestServlet'>Using RestServlet with annotations</a></p>
+      <li><p><a class='doclink' href='#DefaultJenaProvider'>Using JAX-RS DefaultJenaProvider</a></p>
+      <li><p><a class='doclink' href='#BaseProvider'>Using JAX-RS BaseProvider with annotations</a></p>
+      </ol>
+      <li><p><a class='doclink' href='#RestClientSupport'>REST client support</a></p>
+   </ol> 
+</ol>
+
+
+<!-- ======================================================================================================== -->
+<a id="RdfOverview"></a>
+<h2 class='topic' onclick='toggle(this)'>1 - RDF support overview</h2>
+<div class='topic'>
+   <p>
+      Juno supports serializing and parsing arbitrary POJOs to and from the following RDF formats:
+   </p>
+   <ul>
+      <li>RDF/XML
+      <li>Abbreviated RDF/XML
+      <li>N-Triple
+      <li>Turtle
+      <li>N3
+   </ul>
+   <p>
+      Juno can serialize and parse instances of any of the following POJO types:
+   </p>
+   <ul>
+      <li>Java primitive objects (e.g. <code>String</code>, <code>Integer</code>, <code>Boolean</code>, <code>Float</code>).
+      <li>Java collections framework objects (e.g. <code>HashSet</code>, <code>TreeMap</code>) containing anything on this list.
+      <li>Multi-dimensional arrays of any type on this list.
+      <li>Java Beans with properties of any type on this list.
+      <li>Classes with standard transformations to and from <code>Strings</code> (e.g. classes containing <code>toString()</code>, 
+         <code>fromString()</code>, <code>valueOf()</code>, <code>constructor(String)</code>).
+   </ul>
+   <p>
+      In addition to the types shown above, Juno includes the ability to define filters to transform non-standard object and 
+         property types to serializable forms (e.g. to transform <code>Calendars</code> to and from <code>ISO8601</code> strings, 
+         or <code>byte[]</code> arrays to and from base-64 encoded strings).<br>
+      These filters can be associated with serializers/parsers, or can be associated with classes or bean properties through type and method annotations.
+   </p>
+   <p>
+      Refer to <a href='../package-summary.html#PojoCategories' class='doclink'>POJO Categories</a> for a complete definition of supported POJOs.
+   </p>
+   <h6 class='topic'>Prerequisites</h6>
+   <p>
+      Juno uses the Jena library for these formats.  <br>
+      The predefined serializers and parsers convert POJOs to and from RDF models and then uses Jena to convert them to and from the various RDF languages. 
+   </p>
+   <p>
+      Since Juno is 100% pure IBM code, the Jena libraries must be provided on the classpath separately if you plan on making use of the RDF support.
+   </p>
+      The minimum list of required jars are:
+   </p>
+   <ul>
+      <li><code>jena-core-2.7.1.jar</code>   
+      <li><code>jena-iri-0.9.2.jar</code>    
+      <li><code>log4j-1.2.16.jar</code>   
+      <li><code>slf4j-api-1.6.4.jar</code>   
+      <li><code>slf4j-log4j12-1.6.4.jar</code>  
+   </ul>
+
+   <!-- ======================================================================================================== -->
+   <a id="RdfOverviewExample"></a>
+   <h3 class='topic' onclick='toggle(this)'>1.1 - RDF support overview - example</h3>
+   <div class='topic'>
+      <p>
+         The example shown here is from the Address Book resource located in the <code>com.ibm.juno.sample.war</code> application.
+      </p>
+      <p>
+         The POJO model consists of a <code>List</code> of <code>Person</code> beans, with each <code>Person</code> containing
+            zero or more <code>Address</code> beans.
+      </p>
+      <p>
+         When you point a browser at <code>/sample/addressBook</code>, the POJO is rendered as HTML:
+      </p>
+      <img class='bordered' src="doc-files/Example_HTML.png">
+      <p>
+         By appending <code>?Accept=<i>mediaType</i>&plainText=true</code> to the URL, you can view the data in the various RDF supported formats.
+      </p>
+      
+      <h6 class='figure'>RDF/XML</h6>
+      <img class='bordered' src="doc-files/Example_RDFXML.png">
+      
+      <h6 class='figure'>Abbreviated RDF/XML</h6>
+      <img class='bordered' src="doc-files/Example_RDFXMLABBREV.png">
+
+      <h6 class='figure'>N-Triple</h6>
+      <img class='bordered' src="doc-files/Example_NTriple.png">
+
+      <h6 class='figure'>Turtle</h6>
+      <img class='bordered' src="doc-files/Example_Turtle.png">
+      
+      <h6 class='figure'>N3</h6>
+      <img class='bordered' src="doc-files/Example_N3.png">
+   </div>
+</div>
+
+<!-- ======================================================================================================== -->
+<a id="RdfSerializer"></a>
+<h2 class='topic' onclick='toggle(this)'>2 - RdfSerializer class</h2>
+<div class='topic'>
+   <p>
+      The <a href="../../../../../com/ibm/juno/core/jena/RdfSerializer.html" title="class in com.ibm.juno.core.jena"><code>RdfSerializer</code></a> class is the top-level class for all Jena-based serializers.<br>
+      Language-specific serializers are defined as inner subclasses of the <code>RdfSerializer</code> class:
+   </p>  
+   <ul>
+      <li><a href="../../../../../com/ibm/juno/core/jena/RdfSerializer.Xml.html" title="class in com.ibm.juno.core.jena"><code>RdfSerializer.Xml</code></a>
+      <li><a href="../../../../../com/ibm/juno/core/jena/RdfSerializer.XmlAbbrev.html" title="class in com.ibm.juno.core.jena"><code>RdfSerializer.XmlAbbrev</code></a>
+      <li><a href="../../../../../com/ibm/juno/core/jena/RdfSerializer.NTriple.html" title="class in com.ibm.juno.core.jena"><code>RdfSerializer.NTriple</code></a>
+      <li><a href="../../../../../com/ibm/juno/core/jena/RdfSerializer.Turtle.html" title="class in com.ibm.juno.core.jena"><code>RdfSerializer.Turtle</code></a>
+      <li><a href="../../../../../com/ibm/juno/core/jena/RdfSerializer.N3.html" title="class in com.ibm.juno.core.jena"><code>RdfSerializer.N3</code></a>
+   </ul>
+   <p>
+      Static reusable instances of serializers are also provided with default settings:
+   </p>
+   <ul>
+      <li><a href="../../../../../com/ibm/juno/core/jena/RdfSerializer.html#DEFAULT_XML"><code>RdfSerializer.DEFAULT_XML</code></a>
+      <li><a href="../../../../../com/ibm/juno/core/jena/RdfSerializer.html#DEFAULT_XMLABBREV"><code>RdfSerializer.DEFAULT_XMLABBREV</code></a>
+      <li><a href="../../../../../com/ibm/juno/core/jena/RdfSerializer.html#DEFAULT_TURTLE"><code>RdfSerializer.DEFAULT_TURTLE</code></a>
+      <li><a href="../../../../../com/ibm/juno/core/jena/RdfSerializer.html#DEFAULT_NTRIPLE"><code>RdfSerializer.DEFAULT_NTRIPLE</code></a>
+      <li><a href="../../../../../com/ibm/juno/core/jena/RdfSerializer.html#DEFAULT_N3"><code>RdfSerializer.DEFAULT_N3</code></a>
+   </ul>
+   <p>
+      Abbreviated RDF/XML is currently the most widely accepted and readable RDF syntax, so the examples shown here will use that format.
+   </p>
+   <p>
+      For brevity, the examples will use public fields instead of getters/setters to reduce the size of the examples.<br>
+      In the real world, you'll typically want to use standard bean getters and setters.
+   </p>
+   <p>
+      To start off simple, we'll begin with the following simplified bean and build it up.
+   </p>
+   <p class='bcode'>
+   <jk>public class</jk> Person {
+      <jc>// Bean properties</jc>
+      <jk>public int</jk> <jf>id</jf>;
+      <jk>public</jk> String <jf>name</jf>;
+
+      <jc>// Bean constructor (needed by parser)</jc>
+      <jk>public</jk> Person() {}
+
+      <jc>// Normal constructor</jc>
+      <jk>public</jk> Person(<jk>int</jk> id, String name) {
+         <jk>this</jk>.<jf>id</jf> = id;
+         <jk>this</jk>.<jf>name</jf> = name;
+      }
+   }
+   </p>
+   <p>
+      The following code shows how to convert this to abbreviated RDF/XML:
+   </p>
+   <p class='bcode'>
+   <jc>// Create a new serializer with readable output.</jc>
+   RdfSerializer s = <jk>new</jk> RdfSerializer.XmlAbbrev().setProperty(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3);
+
+   <jc>// Create our bean.</jc>
+   Person p = <jk>new</jk> Person(1, <js>"John Smith"</js>);
+
+   <jc>// Serialize the bean to RDF/XML.</jc>
+   String rdfXml = s.serialize(p);
+   </p>
+   <p>
+      It should be noted that serializers can also be created by cloning existing serializers:
+   </p>
+   <p class='bcode'>
+   <jc>// Create a new serializer with readable output by cloning an existing serializer.</jc>
+   RdfSerializer s = RdfSerializer.<jsf>DEFAULT_XMLABBREV</jsf>.clone().setProperty(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3);
+   </p>
+   <p>
+      This code produces the following output:
+   </p>
+   <p class='bcode'>
+   <xt>&lt;rdf:RDF</xt>
+       <xa>xmlns:rdf</xa>=<xs>"http://www.w3.org/1999/02/22-rdf-syntax-ns#"</xs>
+       <xa>xmlns:j</xa>=<xs>"http://www.ibm.com/juno/"</xs>
+       <xa>xmlns:jp</xa>=<xs>"http://www.ibm.com/junobp/"</xs><xt>&gt;</xt>
+      <xt>&lt;rdf:Description&gt;</xt>
+         <xt>&lt;jp:id&gt;</xt>1<xt>&lt;/jp:id&gt;</xt>
+         <xt>&lt;jp:name&gt;</xt>John Smith<xt>&lt;/jp:name&gt;</xt>
+      <xt>&lt;/rdf:Description&gt;</xt>
+   <xt>&lt;/rdf:RDF&gt;</xt>
+   </p>
+   <p>
+      Notice that we've taken an arbitrary POJO and converted it to RDF.<br>
+      The Juno serializers and parsers are designed to work with arbitrary POJOs without requiring 
+         any annotations.<br>
+      That being said, several annotations are provided to customize how POJOs are handled to produce usable RDF.
+   </p>
+   
+   <!-- ======================================================================================================== -->
+   <a id="Namespaces"></a>
+   <h3 class='topic' onclick='toggle(this)'>2.1 - Namespaces</h3>
+   <div class='topic'>
+      <p>
+         You'll notice in the previous example that Juno namespaces are used to represent bean property names.<br>
+         These are used by default when namespaces are not explicitly specified.
+      </p>
+      <p>
+         The <code>juno</code> namespace is used for generic names for objects that don't have namespaces associated with them.
+      </p>
+      <p>
+         The <code>junobp</code> namespace is used on bean properties that don't have namespaces associated with them.
+      </p>
+      <p>
+         The easiest way to specify namespaces is through annotations.<br>
+         In this example, we're going to associate the prefix <code>'per'</code> to our bean class and all
+            properties of this class.<br>
+         We do this by adding the following annotation to our class:
+      </p>
+      <p class='bcode'>
+   <ja>@Rdf</ja>(prefix=<js>"per"</js>)
+   <jk>public class</jk> Person {
+   </p>
+   <p>
+      In general, the best approach is to define the namespace URIs at the package level using a <code>package-info.java</code>
+         class, like so:
+   </p>
+   <p class='bcode'>
+   <jc>// RDF namespaces used in this package</jc>
+   <ja>@RdfSchema</ja>(
+      prefix=<js>"ab"</js>,
+      rdfNs={
+         <ja>@RdfNs</ja>(prefix=<js>"ab"</js>, namespaceURI=<js>"http://www.ibm.com/addressBook/"</js>),
+         <ja>@RdfNs</ja>(prefix=<js>"per"</js>, namespaceURI=<js>"http://www.ibm.com/person/"</js>),
+         <ja>@RdfNs</ja>(prefix=<js>"addr"</js>, namespaceURI=<js>"http://www.ibm.com/address/"</js>),
+         <ja>@RdfNs</ja>(prefix=<js>"mail"</js>, namespaceURI=<js>"http://www.ibm.com/mail/"</js>)
+      }
+   )
+   <jk>package</jk> com.ibm.sample.addressbook;
+   <jk>import</jk> com.ibm.juno.core.xml.annotation.*;
+      </p>
+      <p>
+         This assigns a default prefix of <js>"ab"</js> for all classes and properties within the project, 
+            and specifies various other prefixes used within this project.
+      </p>
+      <p>
+         Now when we rerun the sample code, we'll get the following:
+      </p>
+      <p class='bcode'>
+   <xt>&lt;rdf:RDF</xt>
+       <xa>xmlns:rdf</xa>=<xs>"http://www.w3.org/1999/02/22-rdf-syntax-ns#"</xs>
+       <xa>xmlns:j</xa>=<xs>"http://www.ibm.com/juno/"</xs>
+       <xa>xmlns:jp</xa>=<xs>"http://www.ibm.com/junobp/"</xs>
+       <xa>xmlns:per</xa>=<xs>"http://www.ibm.com/person/"</xs><xt>&gt;</xt>
+      <xt>&lt;rdf:Description&gt;</xt>
+         <xt>&lt;per:id&gt;</xt>1<xt>&lt;/per:id&gt;</xt>
+         <xt>&lt;per:name&gt;</xt>John Smith<xt>&lt;/per:name&gt;</xt>
+      <xt>&lt;/rdf:Description&gt;</xt>
+   <xt>&lt;/rdf:RDF&gt;</xt>
+      </p>
+      <p>
+         Namespace auto-detection (<a href="../../../../../com/ibm/juno/core/xml/XmlSerializerProperties.html#XML_autoDetectNamespaces"><code>XmlSerializerProperties.XML_autoDetectNamespaces</code></a>) is enabled
+            on serializers by default.<br>
+         This causes the serializer to make a first-pass over the data structure to look for namespaces.<br>
+         In high-performance environments, you may want to consider disabling auto-detection and providing an explicit list of namespaces to the serializer
+            to avoid this scanning step.
+      </p>
+      <p class='bcode'>
+   <jc>// Create a new serializer, but manually specify the namespaces.</jc>
+   RdfSerializer s = <jk>new</jk> RdfSerializer.XmlAbbrev()
+      .setProperty(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3)
+      .setProperty(XmlSerializerProperties.<jsf>XML_autoDetectNamespaces</jsf>, <jk>false</jk>)
+      .setProperty(XmlSerializerProperties.<jsf>XML_namespaces</jsf>, <js>"{per:'http://www.ibm.com/person/'}"</js>);
+   </p>
+      <p>
+         This code change will produce the same output as before, but will perform slightly better since it doesn't have to crawl the POJO tree before serializing the result.
+      </p>
+   </div>
+
+   <!-- ======================================================================================================== -->
+   <a id="UriProperties"></a>
+   <h3 class='topic' onclick='toggle(this)'>2.2 - URI properties</h3>
+   <div class='topic'>
+      <p>
+         Bean properties of type <code>java.net.URI</code> or <code>java.net.URL</code> have special meaning to the RDF serializer.<br>
+         They are interpreted as resource identifiers.
+      </p>
+      <p>
+         In the following code, we're adding 2 new properties.<br>
+         The first property is annotated with <ja>@BeanProperty</ja> to identify that this property is the
+            resource identifier for this bean.<br>
+         The second unannotated property is interpreted as a reference to another resource.
+      </p>
+      <p class='bcode'> 
+   <jk>public class</jk> Person {
+      
+      <jc>// Bean properties</jc>
+      <ja>@BeanProperty</ja>(beanUri=<jk>true</jk>) 
+      <jk>public</jk> URI <jf>uri</jf>;
+      
+      <jk>public</jk> URI <jf>addressBookUri</jf>;
+   
+      ...
+      
+      <jc>// Normal constructor</jc>
+      <jk>public</jk> Person(<jk>int</jk> id, String name, String uri, String addressBookUri) <jk>throws</jk> URISyntaxException {
+         <jk>this</jk>.<jf>id</jf> = id;
+         <jk>this</jk>.<jf>name</jf> = name;
+         <jk>this</jk>.<jf>uri</jf> = <jk>new</jk> URI(uri);
+         <jk>this</jk>.<jf>addressBookUri</jf> = <jk>new</jk> URI(addressBookUri);
+      }
+   }
+      </p>
+      <p>
+         We alter our code to pass in values for these new properties.
+      </p>
+      <p class='bcode'>
+   <jc>// Create our bean.</jc>
+   Person p = <jk>new</jk> Person(1, <js>"John Smith"</js>, <js>"http://sample/addressBook/person/1"</js>, <js>"http://sample/addressBook"</js>);
+      </p>
+      <p>
+         Now when we run the sample code, we get the following:
+      </p>
+      <p class='bcode'>
+   <xt>&lt;rdf:RDF</xt>
+       <xa>xmlns:rdf</xa>=<xs>"http://www.w3.org/1999/02/22-rdf-syntax-ns#"</xs>
+       <xa>xmlns:j</xa>=<xs>"http://www.ibm.com/juno/"</xs>
+       <xa>xmlns:jp</xa>=<xs>"http://www.ibm.com/junobp/"</xs>
+       <xa>xmlns:per</xa>=<xs>"http://www.ibm.com/person/"</xs><xt>&gt;</xt>
+      <xt>&lt;rdf:Description <b><xa>rdf:about</xa>=<xs>"http://sample/addressBook/person/1"</xs></b>&gt;</xt>
+         <xt><b>&lt;per:addressBookUri</xt> <xa>rdf:resource</xa>=<xs>"http://sample/addressBook"</xs><xt>/&gt;</b></xt>
+         <xt>&lt;per:id&gt;</xt>1<xt>&lt;/per:id&gt;</xt>
+         <xt>&lt;per:name&gt;</xt>John Smith<xt>&lt;/per:name&gt;</xt>
+      <xt>&lt;/rdf:Description&gt;</xt>
+   <xt>&lt;/rdf:RDF&gt;</xt>
+      </p>
+      <p>
+         The <a href="../../../../../com/ibm/juno/core/annotation/URI.html" title="annotation in com.ibm.juno.core.annotation"><code>URI</code></a> annotation can also be used on classes and properties 
+            to identify them as URLs when they're not instances of <code>java.net.URI</code> or <code>java.net.URL</code> 
+            (not needed if <code><ja>@BeanProperty</ja>(beanUri=<jk>true</jk>)</code> is already specified).
+      </p>
+      <p>
+         The following properties would have produced the same output as before.  Note that the <ja>@URI</ja> annotation is only needed
+            on the second property.
+      </p>
+      <p class='bcode'>
+   <jk>public class</jk> Person {
+      
+      <jc>// Bean properties</jc>
+      <ja>@BeanProperty</ja>(beanUri=<jk>true</jk>) <jk>public</jk> String <jf>uri</jf>;
+      
+      <ja>@URI</ja> <jk>public</jk> String <jf>addressBookUri</jf>;
+      </p>
+      <p>
+         Also take note of the <a href="../../../../../com/ibm/juno/core/serializer/SerializerProperties.html#SERIALIZER_relativeUriBase"><code>SerializerProperties.SERIALIZER_relativeUriBase</code></a> and <a href="../../../../../com/ibm/juno/core/serializer/SerializerProperties.html#SERIALIZER_absolutePathUriBase"><code>SerializerProperties.SERIALIZER_absolutePathUriBase</code></a>
+            settings that can be specified on the serializer to resolve relative and context-root-relative URIs to fully-qualfied URIs.
+      </p>
+      <p>
+         This can be useful if you want to keep the URI authority and context root information out of the bean logic layer.
+      </p>
+      <p>
+         The following code produces the same output as before, but the URIs on the beans are relative.
+      </p>
+      <p class='bcode'>
+   <jc>// Create a new serializer with readable output.</jc>
+   RdfSerializer s = <jk>new</jk> RdfSerializer.XmlAbbrev()
+      .setProperty(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3);
+      .setProperty(SerializerProperties.<jsf>SERIALIZER_relativeUriBase</jsf>, <js>"http://myhost/sample"</js>);
+      .setProperty(SerializerProperties.<jsf>SERIALIZER_absolutePathUriBase</jsf>, <js>"http://myhost"</js>);
+      
+   <jc>// Create our bean.</jc>
+   Person p = <jk>new</jk> Person(1, <js>"John Smith"</js>, <js>"person/1"</js>, <js>"/"</js>);
+
+   <jc>// Serialize the bean to RDF/XML.</jc>
+   String rdfXml = s.serialize(p);
+      </p>     
+   </div>
+   
+   <!-- ======================================================================================================== -->
+   <a id="BeanAnnotations"></a>
+   <h3 class='topic' onclick='toggle(this)'>2.3 - @Bean and @BeanProperty annotations</h3>
+   <div class='topic'>
+      <p>
+         The <a href="../../../../../com/ibm/juno/core/annotation/Bean.html" title="annotation in com.ibm.juno.core.annotation"><code>Bean</code></a> and <a href="../../../../../com/ibm/juno/core/annotation/BeanProperty.html" title="annotation in com.ibm.juno.core.annotation"><code>BeanProperty</code></a> annotations
+            are used to customize the behavior of beans across the entire framework.<br>
+         In addition to using them to identify the resource URI for the bean shown above, they have various other uses:
+      </p>
+      <ul>
+         <li>Hiding bean properties.
+         <li>Specifying the ordering of bean properties.
+         <li>Overriding the names of bean properties.
+         <li>Associating filters at both the class and property level (to convert non-serializable POJOs to serializable forms).
+      </ul>
+      <p>
+         For example, we now add a <code>birthDate</code> property, and associate a filter with it to transform
+            it to an ISO8601 date-time string in GMT time.<br>
+         By default, <code>Calendars</code> are treated as beans by the framework, which is usually not how you want them serialized.<br>
+         Using filters, we can convert them to standardized string forms.
+      </p>
+      <p class='bcode'> 
+   <jk>public class</jk> Person {
+      
+      <jc>// Bean properties</jc>
+      <ja>@BeanProperty</ja>(filter=CalendarFilter.ISO8601DTZ.<jk>class</jk>) <jk>public</jk> Calendar birthDate;
+      ...
+      
+      <jc>// Normal constructor</jc>
+      <jk>public</jk> Person(<jk>int</jk> id, String name, String uri, String addressBookUri, String birthDate) <jk>throws</jk> Exception {
+         ...
+         <jk>this</jk>.<jf>birthDate</jf> = <jk>new</jk> GregorianCalendar();
+         <jk>this</jk>.<jf>birthDate</jf>.setTime(DateFormat.<jsm>getDateInstance</jsm>(DateFormat.<jsf>MEDIUM</jsf>).parse(birthDate));
+      }
+   }
+      </p>
+      <p>
+         And we alter our code to pass in the birthdate.
+      </p>
+      <p class='bcode'>
+   <jc>// Create our bean.</jc>
+   Person p = <jk>new</jk> Person(1, <js>"John Smith"</js>, <js>"http://sample/addressBook/person/1"</js>, <js>"http://sample/addressBook"</js>, <js>"Aug 12, 1946"</js>);
+      </p>
+      <p>
+         Now when we rerun the sample code, we'll get the following:
+      </p>
+      <p class='bcode'>
+   <xt>&lt;rdf:RDF</xt>
+       <xa>xmlns:rdf</xa>=<xs>"http://www.w3.org/1999/02/22-rdf-syntax-ns#"</xs>
+       <xa>xmlns:j</xa>=<xs>"http://www.ibm.com/juno/"</xs>
+       <xa>xmlns:jp</xa>=<xs>"http://www.ibm.com/junobp/"</xs>
+       <xa>xmlns:per</xa>=<xs>"http://www.ibm.com/person/"</xs><xt>&gt;</xt>
+      <xt>&lt;rdf:Description <xa>rdf:about</xa>=<xs>"http://sample/addressBook/person/1"</xs>&gt;</xt>
+         <xt>&lt;per:addressBookUri</xt> <xa>rdf:resource</xa>=<xs>"http://sample/addressBook"</xs><xt>/&gt;</xt>
+         <xt>&lt;per:id&gt;</xt>1<xt>&lt;/per:id&gt;</xt>
+         <xt>&lt;per:name&gt;</xt>John Smith<xt>&lt;/per:name&gt;</xt>
+         <xt><b>&lt;per:birthDate&gt;</xt>1946-08-12T00:00:00Z<xt>&lt;/per:birthDate&gt;</b></xt>
+      <xt>&lt;/rdf:Description&gt;</xt>
+   <xt>&lt;/rdf:RDF&gt;</xt>
+      </p>
+   </div>
+   
+      
+   <!-- ======================================================================================================== -->
+   <a id="Collections"></a>
+   <h3 class='topic' onclick='toggle(this)'>2.4 - Collections</h3>
+   <div class='topic'>
+      <p>
+         Collections and arrays are converted to RDF sequences.<br>
+         In our example, let's add a list-of-beans property to our sample class:
+      </p>
+      <p class='bcode'>
+   <jk>public class</jk> Person {
+      
+      <jc>// Bean properties</jc>
+      <jk>public</jk> LinkedList&lt;Address&gt; <jf>addresses</jf> = <jk>new</jk> LinkedList&lt;Address&gt;();
+      ...
+   }
+      </p>
+      <p>
+         The <code>Address</code> class has the following properties defined:
+      </p>
+      <p class='bcode'>
+   <ja>@Rdf</ja>(prefix=<js>"addr"</js>)
+   <jk>public class</jk> Address {
+
+      <jc>// Bean properties</jc>
+      <ja>@BeanProperty</ja>(beanUri=<jk>true</jk>) <jk>public</jk> URI <jf>uri</jf>;
+      <jk>public</jk> URI <jf>personUri</jf>;
+      
+      <jk>public int</jk> <jf>id</jf>;
+      
+      <ja>@Rdf</ja>(prefix=<js>"mail"</js>) 
+      <jk>public</jk> String <jf>street</jf>, <jf>city</jf>, <jf>state</jf>;
+      
+      <ja>@Rdf</ja>(prefix=<js>"mail"</js>) 
+      <jk>public int</jk> <jf>zip</jf>;
+      
+      <jk>public boolean</jk> <jf>isCurrent</jf>;
+   }
+      </p>
+      <p>
+         Next, add some quick-and-dirty code to add an address to our person bean:
+      </p>
+      <p class='bcode'>
+   <jc>// Create a new serializer (revert back to namespace autodetection).</jc>
+   RdfSerializer s = <jk>new</jk> RdfSerializer.XmlAbbrev().setProperty(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3);
+
+   <jc>// Create our bean.</jc>
+   Person p = <jk>new</jk> Person(1, <js>"John Smith"</js>, <js>"http://sample/addressBook/person/1"</js>, <js>"http://sample/addressBook"</js>, <js>"Aug 12, 1946"</js>);
+   Address a = <jk>new</jk> Address();
+   a.<jf>uri</jf> = <jk>new</jk> URI(<js>"http://sample/addressBook/address/1"</js>);
+   a.<jf>personUri</jf> = <jk>new</jk> URI(<js>"http://sample/addressBook/person/1"</js>);
+   a.<jf>id</jf> = 1;
+   a.<jf>street</jf> = <js>"100 Main Street"</js>;
+   a.<jf>city</jf> = <js>"Anywhereville"</js>;
+   a.<jf>state</jf> = <js>"NY"</js>;
+   a.<jf>zip</jf> = 12345;
+   a.<jf>isCurrent</jf> = <jk>true</jk>;
+   p.<jf>addresses</jf>.add(a);  
+      </p>
+      <p>
+         Now when we run the sample code, we get the following:
+      </p>
+      <p class='bcode'>
+   <xt>&lt;rdf:RDF</xt>
+       <xa>xmlns:rdf</xa>=<xs>"http://www.w3.org/1999/02/22-rdf-syntax-ns#"</xs>
+       <xa>xmlns:j</xa>=<xs>"http://www.ibm.com/juno/"</xs>
+       <xa>xmlns:jp</xa>=<xs>"http://www.ibm.com/junobp/"</xs>
+       <xa>xmlns:per</xa>=<xs>"http://www.ibm.com/person/"</xs>
+       <b><xa>xmlns:mail</xa>=<xs>"http://www.ibm.com/mail/"</xs></b>
+       <b><xa>xmlns:addr</xa>=<xs>"http://www.ibm.com/address/"</xs></b><xt>&gt;</xt>
+      <xt>&lt;rdf:Description <xa>rdf:about</xa>=<xs>"http://sample/addressBook/person/1"</xs>&gt;</xt>
+         <xt>&lt;per:addressBookUri</xt> <xa>rdf:resource</xa>=<xs>"http://sample/addressBook"</xs><xt>/&gt;</xt>
+         <xt>&lt;per:id&gt;</xt>1<xt>&lt;/per:id&gt;</xt>
+         <xt>&lt;per:name&gt;</xt>John Smith<xt>&lt;/per:name&gt;</xt>
+         <b><xt>&lt;per:addresses&gt;</xt>
+            <xt>&lt;rdf:Seq&gt;</xt>
+               <xt>&lt;rdf:li&gt;</xt>
+                  <xt>&lt;rdf:Description <xa>rdf:about</xa>=<xs>"http://sample/addressBook/address/1"</xs>&gt;</xt>
+                     <xt>&lt;addr:personUri <xa>rdf:resource</xa>=<xs>"http://sample/addressBook/person/1"</xs>/&gt;</xt>
+                     <xt>&lt;addr:id&gt;</xt>1<xt>&lt;/addr:id&gt;</xt>
+                     <xt>&lt;mail:street&gt;</xt>100 Main Street<xt>&lt;/mail:street&gt;</xt>
+                     <xt>&lt;mail:city&gt;</xt>Anywhereville<xt>&lt;/mail:city&gt;</xt>
+                     <xt>&lt;mail:state&gt;</xt>NY<xt>&lt;/mail:state&gt;</xt>
+                     <xt>&lt;mail:zip&gt;</xt>12345<xt>&lt;/mail:zip&gt;</xt>
+                     <xt>&lt;addr:isCurrent&gt;</xt>true<xt>&lt;/addr:isCurrent&gt;</xt>
+                  <xt>&lt;/rdf:Description&gt;</xt>
+               <xt>&lt;/rdf:li&gt;</xt>
+            <xt>&lt;/rdf:Seq&gt;</xt>
+         <xt>&lt;/per:addresses&gt;</xt></b>
+      <xt>&lt;/rdf:Description&gt;</xt>
+   <xt>&lt;/rdf:RDF&gt;</xt>
+      </p>
+   </div>
+   
+
+   <!-- ======================================================================================================== -->
+   <a id="RootProperty"></a>
+   <h3 class='topic' onclick='toggle(this)'>2.5 - Root property</h3>
+   <div class='topic'>
+      <p>
+         For all RDF languages, the POJO objects get broken down into simple triplets.<br>
+         Unfortunately, for tree-structured data like the POJOs shown above, this causes the root node of the tree to become lost.<br>
+         There is no easy way to identify that <code>person/1</code> is the root node in our tree once in triplet form, and in
+            some cases it's impossible.
+      </p>
+      <p>
+         By default, the <a href="../../../../../com/ibm/juno/core/jena/RdfParser.html" title="class in com.ibm.juno.core.jena"><code>RdfParser</code></a> class handles this by scanning
+            all the nodes and identifying the nodes without incoming references.<br>
+         However, this is inefficient, especially for large models.<br>
+         And in cases where the root node is referenced by another node in the model by URL, it's not possible to locate the root at all.
+      </p>
+      <p>
+         To resolve this issue, the property <a href="../../../../../com/ibm/juno/core/jena/RdfSerializerProperties.html#RDF_addRootProperty"><code>RdfSerializerProperties.RDF_addRootProperty</code></a> was introduced.<br>
+         When enabled, this adds a special <code>root</code> attribute to the root node to make it easy to locate by the parser.
+      </p>
+      <p>
+         To enable, set the <jsf>RDF_addRootProperty</jsf> property to <jk>true</jk> on the serializer:
+      </p>
+      <p class='bcode'>
+   <jc>// Create a new serializer.</jc>
+   RdfSerializer s = <jk>new</jk> RdfSerializer.XmlAbbrev()
+      .setProperty(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3),
+      .setProperty(RdfSerializerProperties.<jsf>RDF_addRootProperty</jsf>, <jk>true</jk>);
+      </p>  
+      <p>
+         Now when we rerun the sample code, we'll see the added <code>root</code> attribute on the root resource.
+      </p>
+      <p class='bcode'>
+   <xt>&lt;rdf:RDF</xt>
+       <xa>xmlns:rdf</xa>=<xs>"http://www.w3.org/1999/02/22-rdf-syntax-ns#"</xs>
+       <xa>xmlns:j</xa>=<xs>"http://www.ibm.com/juno/"</xs>
+       <xa>xmlns:jp</xa>=<xs>"http://www.ibm.com/junobp/"</xs>
+       <xa>xmlns:per</xa>=<xs>"http://www.ibm.com/person/"</xs>
+       <xa>xmlns:mail</xa>=<xs>"http://www.ibm.com/mail/"</xs>
+       <xa>xmlns:addr</xa>=<xs>"http://www.ibm.com/address/"</xs><xt>&gt;</xt>
+      <xt>&lt;rdf:Description <xa>rdf:about</xa>=<xs>"http://sample/addressBook/person/1"</xs>&gt;</xt>
+         <b><xt>&lt;j:root&gt;</xt>true<xt>&lt;/j:root&gt;</xt></b>
+         <xt>&lt;per:addressBookUri</xt> <xa>rdf:resource</xa>=<xs>"http://sample/addressBook"</xs><xt>/&gt;</xt>
+         <xt>&lt;per:id&gt;</xt>1<xt>&lt;/per:id&gt;</xt>
+         <xt>&lt;per:name&gt;</xt>John Smith<xt>&lt;/per:name&gt;</xt>
+         <xt>&lt;per:addresses&gt;</xt>
+            <xt>&lt;rdf:Seq&gt;</xt>
+               <xt>&lt;rdf:li&gt;</xt>
+                  <xt>&lt;rdf:Description <xa>rdf:about</xa>=<xs>"http://sample/addressBook/address/1"</xs>&gt;</xt>
+                     <xt>&lt;addr:personUri <xa>rdf:resource</xa>=<xs>"http://sample/addressBook/person/1"</xs>/&gt;</xt>
+                     <xt>&lt;addr:id&gt;</xt>1<xt>&lt;/addr:id&gt;</xt>
+                     <xt>&lt;mail:street&gt;</xt>100 Main Street<xt>&lt;/mail:street&gt;</xt>
+                     <xt>&lt;mail:city&gt;</xt>Anywhereville<xt>&lt;/mail:city&gt;</xt>
+                     <xt>&lt;mail:state&gt;</xt>NY<xt>&lt;/mail:state&gt;</xt>
+                     <xt>&lt;mail:zip&gt;</xt>12345<xt>&lt;/mail:zip&gt;</xt>
+                     <xt>&lt;addr:isCurrent&gt;</xt>true<xt>&lt;/addr:isCurrent&gt;</xt>
+                  <xt>&lt;/rdf:Description&gt;</xt>
+               <xt>&lt;/rdf:li&gt;</xt>
+            <xt>&lt;/rdf:Seq&gt;</xt>
+         <xt>&lt;/per:addresses&gt;</xt>
+      <xt>&lt;/rdf:Description&gt;</xt>
+   <xt>&lt;/rdf:RDF&gt;</xt>
+      </p>
+   </div>
+   
+
+   <!-- ======================================================================================================== -->
+   <a id="TypedLiterals"></a>
+   <h3 class='topic' onclick='toggle(this)'>2.6 - Typed literals</h3>
+   <div class='topic'>
+      <p>
+         XML-Schema datatypes can be added to non-<code>String</code> literals through the <a href="../../../../../com/ibm/juno/core/jena/RdfSerializerProperties.html#RDF_addLiteralTypes"><code>RdfSerializerProperties.RDF_addLiteralTypes</code></a>
+            setting.
+      </p>
+      <p>
+         To enable, set the <jsf>RDF_addLiteralTypes</jsf> property to <jk>true</jk> on the serializer:
+      </p>
+      <p class='bcode'>
+   <jc>// Create a new serializer (revert back to namespace autodetection).</jc>
+   RdfSerializer s = <jk>new</jk> RdfSerializer.XmlAbbrev()
+      .setProperty(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3),
+      .setProperty(RdfSerializerProperties.<jsf>RDF_addLiteralTypes</jsf>, <jk>true</jk>);
+      </p>  
+      <p>
+         Now when we rerun the sample code, we'll see the added <code>root</code> attribute on the root resource.
+      </p>
+      <p class='bcode'>
+   <xt>&lt;rdf:RDF</xt>
+       <xa>xmlns:rdf</xa>=<xs>"http://www.w3.org/1999/02/22-rdf-syntax-ns#"</xs>
+       <xa>xmlns:j</xa>=<xs>"http://www.ibm.com/juno/"</xs>
+       <xa>xmlns:jp</xa>=<xs>"http://www.ibm.com/junobp/"</xs>
+       <xa>xmlns:per</xa>=<xs>"http://www.ibm.com/person/"</xs>
+       <xa>xmlns:mail</xa>=<xs>"http://www.ibm.com/mail/"</xs>
+       <xa>xmlns:addr</xa>=<xs>"http://www.ibm.com/address/"</xs><xt>&gt;</xt>
+      <xt>&lt;rdf:Description <xa>rdf:about</xa>=<xs>"http://sample/addressBook/person/1"</xs>&gt;</xt>
+         <xt>&lt;per:addressBookUri</xt> <xa>rdf:resource</xa>=<xs>"http://sample/addressBook"</xs><xt>/&gt;</xt>
+         <xt>&lt;per:id</xt> <b><xa>rdf:datatype</xa>=<xs>"http://www.w3.org/2001/XMLSchema#int"</xs></b><xt>&gt;</xt>1<xt>&lt;/per:id&gt;</xt>
+         <xt>&lt;per:name&gt;</xt>John Smith<xt>&lt;/per:name&gt;</xt>
+         <xt>&lt;per:addresses&gt;</xt>
+            <xt>&lt;rdf:Seq&gt;</xt>
+               <xt>&lt;rdf:li&gt;</xt>
+                  <xt>&lt;rdf:Description <xa>rdf:about</xa>=<xs>"http://sample/addressBook/address/1"</xs>&gt;</xt>
+                     <xt>&lt;addr:personUri <xa>rdf:resource</xa>=<xs>"http://sample/addressBook/person/1"</xs>/&gt;</xt>
+                     <xt>&lt;addr:id</xt> <b><xa>rdf:datatype</xa>=<xs>"http://www.w3.org/2001/XMLSchema#int"</xs></b>&gt;</xt>1<xt>&lt;/addr:id&gt;</xt>
+                     <xt>&lt;mail:street&gt;</xt>100 Main Street<xt>&lt;/mail:street&gt;</xt>
+                     <xt>&lt;mail:city&gt;</xt>Anywhereville<xt>&lt;/mail:city&gt;</xt>
+                     <xt>&lt;mail:state&gt;</xt>NY<xt>&lt;/mail:state&gt;</xt>
+                     <xt>&lt;mail:zip</xt> <b><xa>rdf:datatype</xa>=<xs>"http://www.w3.org/2001/XMLSchema#int"</xs></b>&gt;</xt>12345<xt>&lt;/mail:zip&gt;</xt>
+                     <xt>&lt;addr:isCurrent</xt> <b><xa>rdf:datatype</xa>=<xs>"http://www.w3.org/2001/XMLSchema#boolean"</xs></b>&gt;</xt>true<xt>&lt;/addr:isCurrent&gt;</xt>
+                  <xt>&lt;/rdf:Description&gt;</xt>
+               <xt>&lt;/rdf:li&gt;</xt>
+            <xt>&lt;/rdf:Seq&gt;</xt>
+         <xt>&lt;/per:addresses&gt;</xt>
+      <xt>&lt;/rdf:Description&gt;</xt>
+   <xt>&lt;/rdf:RDF&gt;</xt>
+      </p>
+   </div>
+
+
+   <!-- ======================================================================================================== -->
+   <a id="Recursion"></a>
+   <h3 class='topic' onclick='toggle(this)'>2.7 - Non-tree models and recursion detection</h3>
+   <div class='topic'>
+      <p>
+         The RDF serializer is designed to be used against tree structures.<br>  
+         It expects that there not be loops in the POJO model (e.g. children with references to parents, etc...).<br>
+         If you try to serialize models with loops, you will usually cause a <code>StackOverflowError</code> to 
+            be thrown (if <a href="../../../../../com/ibm/juno/core/serializer/SerializerProperties.html#SERIALIZER_maxDepth"><code>SerializerProperties.SERIALIZER_maxDepth</code></a> is not reached first).
+      </p>
+      <p>
+         If you still want to use the XML serializer on such models, Juno provides the 
+            <a href="../../../../../com/ibm/juno/core/serializer/SerializerProperties.html#SERIALIZER_detectRecursions"><code>SerializerProperties.SERIALIZER_detectRecursions</code></a> setting.<br>
+         It tells the serializer to look for instances of an object in the current branch of the tree and
+            skip serialization when a duplicate is encountered.
+      </p>
+      <p>
+         Recursion detection introduces a performance penalty of around 20%.<br>
+         For this reason the setting is disabled by default.
+      </p>
+   </div>
+
+
+   <!-- ======================================================================================================== -->
+   <a id="SerializerConfigurableProperties"></a>
+   <h3 class='topic' onclick='toggle(this)'>2.8 - Configurable properties</h3>
+   <div class='topic'>
+      <p>
+         The full list of configurable settings applicable to the <code>RdfSerializer</code> class is shown below:
+      </p>
+      <table class='styled' style='border-collapse: collapse;'>
+         <tr><th>Property</th><th>Short Description</th></tr>
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/jena/RdfSerializerProperties.html#RDF_addLiteralTypes"><code>RdfSerializerProperties.RDF_addLiteralTypes</code></a></td>
+            <td>Add XSI data types to non-<code>String</code> literals</td>
+         </tr>    
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/jena/RdfSerializerProperties.html#RDF_addRootProperty"><code>RdfSerializerProperties.RDF_addRootProperty</code></a></td>
+            <td>Add RDF root identifier property to root node</td>
+         </tr>    
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_junoNs"><code>RdfProperties.RDF_junoNs</code></a></td>
+            <td>The XML namespace for Juno properties</td>
+         </tr>    
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_junoBpNs"><code>RdfProperties.RDF_junoBpNs</code></a></td>
+            <td>The default XML namespace for bean properties</td>
+         </tr>    
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_arp_iriRules"><code>RdfProperties.RDF_arp_iriRules</code></a></td>
+            <td>Set the engine for checking and resolving</td>
+         </tr>    
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_arp_errorMode"><code>RdfProperties.RDF_arp_errorMode</code></a></td>
+            <td>Allows a coarse-grained approach to control of error handling</td>
+         </tr>    
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_arp_embedding"><code>RdfProperties.RDF_arp_embedding</code></a></td>
+            <td>Sets ARP to look for RDF embedded within an enclosing XML document</td>
+         </tr>    
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_arp_err_"><code>RdfProperties.RDF_arp_err_</code></a></td>
+            <td>Provides fine-grained control over detected error conditions</td>
+         </tr>    
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_arp_warn_"><code>RdfProperties.RDF_arp_warn_</code></a></td>
+            <td>Provides fine-grained control over detected warning conditions</td>
+         </tr>    
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_arp_ign_"><code>RdfProperties.RDF_arp_ign_</code></a></td>
+            <td>Provides fine-grained control over ignoring conditions</td>
+         </tr>    
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_rdfxml_xmlBase"><code>RdfProperties.RDF_rdfxml_xmlBase</code></a></td>
+            <td>The value to be included for an <xa>xml:base</xa> attribute on the root element in the file</td>
+         </tr>    
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_rdfxml_longId"><code>RdfProperties.RDF_rdfxml_longId</code></a></td>
+            <td>Whether to use long IDs for anon resources</td>
+         </tr>    
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_rdfxml_allowBadUris"><code>RdfProperties.RDF_rdfxml_allowBadUris</code></a></td>
+            <td>URIs in the graph are, by default, checked prior to serialization</td>
+         </tr>    
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_rdfxml_relativeUris"><code>RdfProperties.RDF_rdfxml_relativeUris</code></a></td>
+            <td>What sort of relative URIs should be used</td>
+         </tr>    
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_rdfxml_showXmlDeclaration"><code>RdfProperties.RDF_rdfxml_showXmlDeclaration</code></a></td>
+            <td>Options for XML declaration in output</td>
+         </tr>    
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_rdfxml_showDoctypeDeclaration"><code>RdfProperties.RDF_rdfxml_showDoctypeDeclaration</code></a></td>
+            <td>Show XML declaration in output</td>
+         </tr>    
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_rdfxml_tab"><code>RdfProperties.RDF_rdfxml_tab</code></a></td>
+            <td>The number of spaces with which to indent XML child elements</td>
+         </tr>    
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_rdfxml_attributeQuoteChar"><code>RdfProperties.RDF_rdfxml_attributeQuoteChar</code></a></td>
+            <td>The XML attribute quote character</td>
+         </tr>    
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_rdfxml_blockRules"><code>RdfProperties.RDF_rdfxml_blockRules</code></a></td>
+            <td>Indicates grammar rules that will not be used</td>
+         </tr>    
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_n3_minGap"><code>RdfProperties.RDF_n3_minGap</code></a></td>
+            <td>Minimum gap between items on a line</td>
+         </tr>    
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_n3_objectLists"><code>RdfProperties.RDF_n3_objectLists</code></a></td>
+            <td>Print object lists as comma separated lists</td>
+         </tr>    
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_n3_subjectColumn"><code>RdfProperties.RDF_n3_subjectColumn</code></a></td>
+            <td>If the subject is shorter than this value, the first property may go on the same line</td>
+         </tr>    
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_n3_propertyColumn"><code>RdfProperties.RDF_n3_propertyColumn</code></a></td>
+            <td>Width of the property column</td>
+         </tr>    
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_n3_indentProperty"><code>RdfProperties.RDF_n3_indentProperty</code></a></td>
+            <td>Width to indent properties</td>
+         </tr>    
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_n3_widePropertyLen"><code>RdfProperties.RDF_n3_widePropertyLen</code></a></td>
+            <td>Width of the property column</td>
+         </tr>    
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_n3_abbrevBaseUri"><code>RdfProperties.RDF_n3_abbrevBaseUri</code></a></td>
+            <td>Control whether to use abbreviations <code>&lt;&gt;</code> or <code>&lt;#&gt;</code></td>
+         </tr>    
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_n3_usePropertySymbols"><code>RdfProperties.RDF_n3_usePropertySymbols</code></a></td>
+            <td>Control whether to use <code>a</code>, <code>=</code> and <code>=&gt;</code> in output</td>
+         </tr>    
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_n3_useTripleQuotedStrings"><code>RdfProperties.RDF_n3_useTripleQuotedStrings</code></a></td>
+            <td>Allow the use of <code>"""</code> to delimit long strings</td>
+         </tr>    
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_n3_useDoubles"><code>RdfProperties.RDF_n3_useDoubles</code></a></td>
+            <td>Allow the use doubles as <code>123.456</code></td>
+         </tr> 
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/xml/XmlSerializerProperties.html#XML_autoDetectNamespaces"><code>XmlSerializerProperties.XML_autoDetectNamespaces</code></a></td>
+            <td>Auto-detect namespace usage</td>
+         </tr> 
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/xml/XmlSerializerProperties.html#XML_namespaces"><code>XmlSerializerProperties.XML_namespaces</code></a></td>
+            <td>Namespaces used</td>
+         </tr> 
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/serializer/SerializerProperties.html#SERIALIZER_maxDepth"><code>SerializerProperties.SERIALIZER_maxDepth</code></a></td>
+            <td>Maximum serialization depth</td>
+         </tr> 
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/serializer/SerializerProperties.html#SERIALIZER_detectRecursions"><code>SerializerProperties.SERIALIZER_detectRecursions</code></a></td>
+            <td>Automatically detect POJO recursions</td>
+         </tr> 
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/serializer/SerializerProperties.html#SERIALIZER_useIndentation"><code>SerializerProperties.SERIALIZER_useIndentation</code></a></td>
+            <td>Use indentation in output</td>
+         </tr> 
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/serializer/SerializerProperties.html#SERIALIZER_quoteChar"><code>SerializerProperties.SERIALIZER_quoteChar</code></a></td>
+            <td>Quote character</td>
+         </tr> 
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/serializer/SerializerProperties.html#SERIALIZER_trimNullProperties"><code>SerializerProperties.SERIALIZER_trimNullProperties</code></a></td>
+            <td>Trim null bean property values from output</td>
+         </tr> 
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/serializer/SerializerProperties.html#SERIALIZER_trimEmptyLists"><code>SerializerProperties.SERIALIZER_trimEmptyLists</code></a></td>
+            <td>Trim empty lists and arrays from output</td>
+         </tr> 
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/serializer/SerializerProperties.html#SERIALIZER_trimEmptyMaps"><code>SerializerProperties.SERIALIZER_trimEmptyMaps</code></a></td>
+            <td>Trim empty maps from output</td>
+         </tr> 
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/serializer/SerializerProperties.html#SERIALIZER_relativeUriBase"><code>SerializerProperties.SERIALIZER_relativeUriBase</code></a></td>
+            <td>URI context root for relative URIs</td>
+         </tr> 
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/serializer/SerializerProperties.html#SERIALIZER_absolutePathUriBase"><code>SerializerProperties.SERIALIZER_absolutePathUriBase</code></a></td>
+            <td>URI authority for absolute path relative URIs</td>
+         </tr> 
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/BeanContextProperties.html#BEAN_beansRequireDefaultConstructor"><code>BeanContextProperties.BEAN_beansRequireDefaultConstructor</code></a></td>
+            <td>Beans require no-arg constructors</td>
+         </tr> 
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/BeanContextProperties.html#BEAN_beansRequireSerializable"><code>BeanContextProperties.BEAN_beansRequireSerializable</code></a></td>
+            <td>Beans require <code>Serializable</code> interface</td>
+         </tr> 
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/BeanContextProperties.html#BEAN_beansRequireSettersForGetters"><code>BeanContextProperties.BEAN_beansRequireSettersForGetters</code></a></td>
+            <td>Beans require setters for getters</td>
+         </tr> 
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/BeanContextProperties.html#BEAN_beansRequireSomeProperties"><code>BeanContextProperties.BEAN_beansRequireSomeProperties</code></a></td>
+            <td>Beans require some properties</td>
+         </tr> 
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/BeanContextProperties.html#BEAN_beanConstructorVisibility"><code>BeanContextProperties.BEAN_beanConstructorVisibility</code></a></td>
+            <td>Look for bean constructors with the specified minimum visibility</td>
+         </tr> 
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/BeanContextProperties.html#BEAN_beanClassVisibility"><code>BeanContextProperties.BEAN_beanClassVisibility</code></a></td>
+            <td>Look for bean classes with the specified minimum visibility</td>
+         </tr> 
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/BeanContextProperties.html#BEAN_beanFieldVisibility"><code>BeanContextProperties.BEAN_beanFieldVisibility</code></a></td>
+            <td>Look for bean fields with the specified minimum visibility</td>
+         </tr> 
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/BeanContextProperties.html#BEAN_methodVisibility"><code>BeanContextProperties.BEAN_methodVisibility</code></a></td>
+            <td>Look for bean methods with the specified minimum visibility</td>
+         </tr> 
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/BeanContextProperties.html#BEAN_useJavaBeanIntrospector"><code>BeanContextProperties.BEAN_useJavaBeanIntrospector</code></a></td>
+            <td>Use Java <a href="http://docs.oracle.com/javase/7/docs/api/java/beans/Introspector.html?is-external=true" title="class or interface in java.beans"><code>Introspector</code></a> for determining bean properties</td>
+         </tr> 
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/BeanContextProperties.html#BEAN_useInterfaceProxies"><code>BeanContextProperties.BEAN_useInterfaceProxies</code></a></td>
+            <td>Use interface proxies</td>
+         </tr> 
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/BeanContextProperties.html#BEAN_ignoreUnknownBeanProperties"><code>BeanContextProperties.BEAN_ignoreUnknownBeanProperties</code></a></td>
+            <td>Ignore unknown properties</td>
+         </tr> 
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/BeanContextProperties.html#BEAN_ignoreUnknownNullBeanProperties"><code>BeanContextProperties.BEAN_ignoreUnknownNullBeanProperties</code></a></td>
+            <td>Ignore unknown properties with null values</td>
+         </tr> 
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/BeanContextProperties.html#BEAN_ignoreInvocationExceptionsOnGetters"><code>BeanContextProperties.BEAN_ignoreInvocationExceptionsOnGetters</code></a></td>
+            <td>Ignore invocation errors when calling getters</td>
+         </tr> 
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/BeanContextProperties.html#BEAN_ignoreInvocationExceptionsOnSetters"><code>BeanContextProperties.BEAN_ignoreInvocationExceptionsOnSetters</code></a></td>
+            <td>Ignore invocation errors when calling setters</td>
+         </tr> 
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/BeanContextProperties.html#BEAN_addNotBeanPackages"><code>BeanContextProperties.BEAN_addNotBeanPackages</code></a></td>
+            <td>Add to the list of packages whose classes should not be considered beans</td>
+         </tr> 
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/BeanContextProperties.html#BEAN_removeNotBeanPackages"><code>BeanContextProperties.BEAN_removeNotBeanPackages</code></a></td>
+            <td>Remove from the list of packages whose classes should not be considered beans</td>
+         </tr> 
+      </table> 
+   </div>      
+
+
+   <!-- ======================================================================================================== -->
+   <a id="SerializerOtherNotes"></a>
+   <h3 class='topic' onclick='toggle(this)'>2.9 - Other notes</h3>
+   <div class='topic'>
+      <ul>
+         <li>Like all other Juno serializers, the RDF serializer is thread safe and maintains an internal cache of bean classes encountered.
+            For performance reasons, it's recommended that serializers be reused whenever possible instead of always creating new instances.
+      </ul>
+   </div>
+</div>
+
+
+<!-- ======================================================================================================== -->
+<a id="RdfParser"></a>
+<h2 class='topic' onclick='toggle(this)'>3 - RdfParser class</h2>
+<div class='topic'>
+   <p>
+      The <a href="../../../../../com/ibm/juno/core/jena/RdfParser.html" title="class in com.ibm.juno.core.jena"><code>RdfParser</code></a> class is the top-level class for all Jena-based parsers.<br>
+      Language-specific parsers are defined as inner subclasses of the <code>RdfParser</code> class:
+   </p>  
+   <ul>
+      <li><a href="../../../../../com/ibm/juno/core/jena/RdfParser.Xml.html" title="class in com.ibm.juno.core.jena"><code>RdfParser.Xml</code></a>
+      <li><a href="../../../../../com/ibm/juno/core/jena/RdfParser.NTriple.html" title="class in com.ibm.juno.core.jena"><code>RdfParser.NTriple</code></a>
+      <li><a href="../../../../../com/ibm/juno/core/jena/RdfParser.Turtle.html" title="class in com.ibm.juno.core.jena"><code>RdfParser.Turtle</code></a>
+      <li><a href="../../../../../com/ibm/juno/core/jena/RdfParser.N3.html" title="class in com.ibm.juno.core.jena"><code>RdfParser.N3</code></a>
+   </ul>
+   <p>
+      The <code>RdfParser.Xml</code> parser handles both regular and abbreviated RDF/XML.
+   </p>
+   <p>
+      Static reusable instances of parsers are also provided with default settings:
+   </p>
+   <ul>
+      <li><a href="../../../../../com/ibm/juno/core/jena/RdfParser.html#DEFAULT_XML"><code>RdfParser.DEFAULT_XML</code></a>
+      <li><a href="../../../../../com/ibm/juno/core/jena/RdfParser.html#DEFAULT_TURTLE"><code>RdfParser.DEFAULT_TURTLE</code></a>
+      <li><a href="../../../../../com/ibm/juno/core/jena/RdfParser.html#DEFAULT_NTRIPLE"><code>RdfParser.DEFAULT_NTRIPLE</code></a>
+      <li><a href="../../../../../com/ibm/juno/core/jena/RdfParser.html#DEFAULT_N3"><code>RdfParser.DEFAULT_N3</code></a>
+   </ul>
+   <p>
+      For an example, we will build upon the previous example and parse the generated RDF/XML back into the original bean.
+   </p>
+      <p class='bcode'>
+   <jc>// Create a new serializer with readable output.</jc>
+   RdfSerializer s = <jk>new</jk> RdfSerializer.XmlAbbrev()
+      .setProperty(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3)
+      .setProperty(RdfSerializerProperties.<jsf>RDF_addRootProperty</jsf>, <jk>true</jk>);
+
+   <jc>// Create our bean.</jc>
+   Person p = <jk>new</jk> Person(1, <js>"John Smith"</js>, <js>"http://sample/addressBook/person/1"</js>, <js>"http://sample/addressBook"</js>, <js>"Aug 12, 1946"</js>);
+   Address a = <jk>new</jk> Address();
+   a.<jf>uri</jf> = <jk>new</jk> URI(<js>"http://sample/addressBook/address/1"</js>);
+   a.<jf>personUri</jf> = <jk>new</jk> URI(<js>"http://sample/addressBook/person/1"</js>);
+   a.<jf>id</jf> = 1;
+   a.<jf>street</jf> = <js>"100 Main Street"</js>;
+   a.<jf>city</jf> = <js>"Anywhereville"</js>;
+   a.<jf>state</jf> = <js>"NY"</js>;
+   a.<jf>zip</jf> = 12345;
+   a.<jf>isCurrent</jf> = <jk>true</jk>;
+   p.<jf>addresses</jf>.add(a);  
+
+   <jc>// Serialize the bean to RDF/XML.</jc>
+   String rdfXml = s.serialize(p);
+   
+   <jc>// Parse it back into a bean using the reusable XML parser.</jc>
+   p = RdfParser.<jsf>DEFAULT_XML</jsf>.parse(rdfXml, Person.<jk>class</jk>);
+
+   <jc>// Render it as JSON.</jc>
+   String json = JsonSerializer.<jsf>DEFAULT_LAX_READABLE</jsf>.serialize(p);
+   System.<jsm>err</jsm>.println(json);
+   </p>
+   <p>
+      We print it out to JSON to show that all the data has been preserved:
+   </p>
+   <p class='bcode'>
+   {
+      uri: <js>'http://sample/addressBook/person/1'</js>, 
+      addressBookUri: <js>'http://sample/addressBook'</js>, 
+      id: 1, 
+      name: <js>'John Smith'</js>, 
+      birthDate: <js>'1946-08-12T00:00:00Z'</js>, 
+      addresses: [
+         {
+            uri: <js>'http://sample/addressBook/address/1'</js>, 
+            personUri: <js>'http://sample/addressBook/person/1'</js>, 
+            id: 1, 
+            street: <js>'100 Main Street'</js>, 
+            city: <js>'Anywhereville'</js>, 
+            state: <js>'NY'</js>, 
+            zip: 12345, 
+            isCurrent: <jk>true</jk>
+         }
+      ]
+   }  
+   </p>
+   
+
+   <!-- ======================================================================================================== -->
+   <a id="GenericParsing"></a>
+   <h3 class='topic' onclick='toggle(this)'>3.1 - Parsing into generic POJO models</h3>
+   <div class='topic'>
+      <p>
+         The RDF parser is not limited to parsing back into the original bean classes.<br>  
+         If the bean classes are not available on the parsing side, the parser can also be used to 
+            parse into a generic model consisting of <code>Maps</code>, <code>Collections</code>, and primitive
+            objects.
+      </p>
+      <p>
+         You can parse into any <code>Map</code> type (e.g. <code>HashMap</code>, <code>TreeMap</code>), but
+            using <a href="../../../../../com/ibm/juno/core/ObjectMap.html" title="class in com.ibm.juno.core"><code>ObjectMap</code></a> is recommended since it has many convenience methods
+            for converting values to various types. <br> 
+         The same is true when parsing collections.  You can use any Collection (e.g. <code>HashSet</code>, <code>LinkedList</code>)
+            or array (e.g. <code>Object[]</code>, <code>String[]</code>, <code>String[][]</code>), but using 
+            <a href="../../../../../com/ibm/juno/core/ObjectList.html" title="class in com.ibm.juno.core"><code>ObjectList</code></a> is recommended.
+      </p>
+      <p>
+         When the map or list type is not specified, or is the abstract <code>Map</code>, <code>Collection</code>, or <code>List</code> types, 
+            the parser will use <code>ObjectMap</code> and <code>ObjectList</code> by default.
+      </p>
+      <p>
+         In the following example, we parse into an <code>ObjectMap</code> and use the convenience methods for performing data conversion on values in the map.
+      </p>
+      <p class='bcode'> 
+   <jc>// Parse RDF into a generic POJO model.</jc>
+   ObjectMap m = RdfParser.<jsf>DEFAULT_XML</jsf>.parse(rdfXml, ObjectMap.<jk>class</jk>);
+
+   <jc>// Get some simple values.</jc>
+   String name = m.getString(<js>"name"</js>);
+   <jk>int</jk> id = m.getInt(<js>"id"</js>);
+
+   <jc>// Get a value convertable from a String.</jc>
+   URI uri = m.get(URI.<jk>class</jk>, <js>"uri"</js>);
+
+   <jc>// Get a value using a filter.</jc>
+   CalendarFilter filter = <jk>new</jk> CalendarFilter.ISO8601DTZ();
+   Calendar birthDate = m.get(filter, <js>"birthDate"</js>);
+
+   <jc>// Get the addresses.</jc>
+   ObjectList addresses = m.getObjectList(<js>"addresses"</js>);
+
+   <jc>// Get the first address and convert it to a bean.</jc>
+   Address address = addresses.get(Address.<jk>class</jk>, 0);
+      </p>
+      
+      <p>
+         However, there are caveats when parsing into generic models due to the nature of RDF.<br>
+         Watch out for the following:
+      </p>
+      <ul>
+         <li>The ordering of entries are going to be inconsistent.<br><br>
+         <li>Bean URIs are always going to be denoted with the key <js>"uri"</js>.<br>
+            Therefore, you cannot have a bean with a URI property and a separate property named <js>"uri"</js>.<br>
+            The latter will overwrite the former.<br>
+            This isn't a problem when parsing into beans instead of generic POJO models.<br><br>
+         <li>All values are strings.<br>
+            This normally isn't a problem when using <code>ObjectMap</code> and <code>ObjectList</code> since 
+               various methods are provided for converting to the correct type anyway.<br><br>  
+         <li>The results may not be what is expected if there are lots of URL reference loops in the RDF model.<br>
+            As nodes are processed from the root node down through the child nodes, the parser keeps
+               track of previously processed parent URIs and handles them accordingly.<br>
+            If it finds that the URI has previously been processed, it handles it as a normal URI string and doesn't 
+               process further.<br>
+            However, depending on how complex the reference loops are, the parsed data may end up having the
+               same data in it, but structured differently from the original POJO.
+      </ul>
+      <p>
+         We can see some of these when we render the <code>ObjectMap</code> back to JSON.
+      </p>
+      <p class='bcode'>
+   System.<jsm>err</jsm>.println(JsonSerializer.<jsf>DEFAULT_LAX_READABLE</jsf>.serialize(m));
+      </p>
+      <p>
+         This is what's produced:
+      </p>
+      <p class='bcode'>
+   {
+      uri: <js>'http://sample/addressBook/person/1'</js>, 
+      addresses: [
+         {
+            uri: <js>'http://sample/addressBook/address/1'</js>, 
+            isCurrent: <js>'true'</js>, 
+            zip: <js>'12345'</js>, 
+            state: <js>'NY'</js>, 
+            city: <js>'Anywhereville'</js>, 
+            street: <js>'100 Main Street'</js>, 
+            id: <js>'1'</js>, 
+            personUri: <js>'http://sample/addressBook/person/1'</js>
+         }
+      ], 
+      birthDate: <js>'1946-08-12T00:00:00Z'</js>, 
+      addressBookUri: <js>'http://sample/addressBook'</js>, 
+      name: <js>'John Smith'</js>, 
+      id: <js>'1'</js>, 
+      root: <js>'true'</js>
+   }     
+      </p>
+      <p>
+         As a general rule, parsing into beans is often more efficient than parsing into generic models.<br>
+         And working with beans is often less error prone than working with generic models.
+      </p>
+   </div>
+
+   <!-- ======================================================================================================== -->
+   <a id="ParserConfigurableProperties"></a>
+   <h3 class='topic' onclick='toggle(this)'>3.2 - Configurable properties</h3>
+   <div class='topic'>
+      <p>
+         The full list of configurable settings applicable to the <code>RdfParser</code> class is shown below:
+      </p>
+      <table class='styled' style='border-collapse: collapse;'>
+         <tr><th>Property</th><th>Short Description</th></tr>
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/jena/RdfParserProperties.html#RDF_trimWhitespace"><code>RdfParserProperties.RDF_trimWhitespace</code></a></td>
+            <td>Trim whitespace from text elements</td>
+         </tr>    
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_arp_iriRules"><code>RdfProperties.RDF_arp_iriRules</code></a></td>
+            <td>Set the engine for checking and resolving</td>
+         </tr>    
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_arp_errorMode"><code>RdfProperties.RDF_arp_errorMode</code></a></td>
+            <td>Allows a coarse-grained approach to control of error handling</td>
+         </tr>    
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_arp_embedding"><code>RdfProperties.RDF_arp_embedding</code></a></td>
+            <td>Sets ARP to look for RDF embedded within an enclosing XML document</td>
+         </tr>    
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_arp_err_"><code>RdfProperties.RDF_arp_err_</code></a></td>
+            <td>Provides fine-grained control over detected error conditions</td>
+         </tr>    
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_arp_warn_"><code>RdfProperties.RDF_arp_warn_</code></a></td>
+            <td>Provides fine-grained control over detected warning conditions</td>
+         </tr>    
+         <tr>
+            <td><a href="../../../../../com/ibm/juno/core/jena/RdfProperties.html#RDF_arp_ign_"><code>RdfProperties.RDF_arp_ign_</code></a></td>
+            <td>Provides fine-grained control over ignoring conditions</td>
+         </tr>    
+      </table> 
+   </div>      
+
+
+   <!-- ======================================================================================================== -->
+   <a id="ParserOtherNotes"></a>
+   <h3 class='topic' onclick='toggle(this)'>3.3 - Other notes</h3>
+   <div class='topic'>
+      <ul>
+         <li>Like all other Juno parsers, the RDF parser is thread safe and maintains an internal cache of bean classes encountered.
+            For performance reasons, it's recommended that parser be reused whenever possible instead of always creating new instances.
+      </ul>
+   </div>
+   
+</div>
+
+
+<!-- ======================================================================================================== -->
+<a id="RestApiSupport"></a>
+<h2 class='topic' onclick='toggle(this)'>4 - REST API support</h2>
+<div class='topic'>
+   <p>
+      Juno provides fully-integrated support for RDF serialization/parsing in the REST server and client APIs.
+   </p>
+   <p>
+      The next two sections describe these in detail.
+   </p>
+
+   <!-- ======================================================================================================== -->
+   <a id="RestServerSupport"></a>
+   <h3 class='topic' onclick='toggle(this)'>4.1 - REST server support</h3>
+   <div class='topic'>
+      <p>
+         There are four general ways of defining REST interfaces with support for RDF media types.<br>
+         Two using the built-in Juno Server API, and two using the JAX-RS integration component.
+      </p>
+      <ul>
+         <li>Create a servlet that subclasses from <a href="../../../../../com/ibm/juno/server/jena/RestServletJenaDefault.html" title="class in com.ibm.juno.server.jena"><code>RestServletJenaDefault</code></a>.<br>
+            This includes serialization and parsing for all Jena supported types, including all supported flavors of RDF.<br><br>
+         <li>Create a servlet that subclasses from <a href="../../../../../com/ibm/juno/server/RestServlet.html" title="class in com.ibm.juno.server"><code>RestServlet</code></a> and specify the
+               RDF serializers and parsers using the <a href="../../../../../com/ibm/juno/server/annotation/RestResource.html#serializers()"><code>RestResource.serializers()</code></a> and
+               <a href="../../../../../com/ibm/juno/server/annotation/RestResource.html#parsers()"><code>RestResource.parsers()</code></a> on the entire servlet class, or 
+               the <a href="../../../../../com/ibm/juno/server/annotation/RestMethod.html#serializers()"><code>RestMethod.serializers()</code></a> and <a href="../../../../../com/ibm/juno/server/annotation/RestMethod.html#parsers()"><code>RestMethod.parsers()</code></a>
+               annotations on individual methods within the class.<br><br>
+         <li>Register <a href="../../../../../com/ibm/juno/server/jaxrs/rdf/DefaultJenaProvider.html" title="class in com.ibm.juno.server.jaxrs.rdf"><code>DefaultJenaProvider</code></a> with JAX-RS to provide support RDF support for all JAX-RS resource.<br>
+            This includes serialization and parsing for all Juno supported types (JSON, XML, HTML...), including all supported flavors of RDF.<br><br>
+         <li>Create and register a subclass of <a href="../../../../../com/ibm/juno/server/jaxrs/BaseProvider.html" title="class in com.ibm.juno.server.jaxrs"><code>BaseProvider</code></a> and specify the serializers and parsers to use on JAX-RS resources.
+      </ul>
+      <p>
+         In general, the Juno REST server API is much more configurable and easier to use than JAX-RS, but beware that the author may be slightly biased in this statement.
+      </p>
+
+      <!-- ======================================================================================================== -->
+      <a id="RestServletJenaDefault"></a>
+      <h4 class='topic' onclick='toggle(this)'>4.1.1 - Using RestServletJenaDefault</h4>
+      <div class='topic'>
+         <p>
+            The quickest way to implement a REST resource with RDF support is to create a subclass of <a href="../../../../../com/ibm/juno/server/jena/RestServletJenaDefault.html" title="class in com.ibm.juno.server.jena"><code>RestServletJenaDefault</code></a>.<br>
+            This class provides support for all the RDF flavors in addition to JSON, XML, HTML, and URL-Encoding.
+         </p>
+         <p>
+            The reason why RDF support was not added to <a href="../../../../../com/ibm/juno/server/RestServletDefault.html" title="class in com.ibm.juno.server"><code>RestServletDefault</code></a> directly was to keep the Jena prerequisites
+               out of the <code>com.ibm.juno.server</code> package.
+         </p>
+         <p>
+            The <code>AddressBookResource</code> example shown in the first chapter uses the <code>RestServletJenaDefault</code> class.<br>
+            The start of the class definition is shown below:
+         </p>
+         <p class='bcode'>
+   <jc>// Proof-of-concept resource that shows off the capabilities of working with POJO resources.
+   // Consists of an in-memory address book repository.</jc>
+   <ja>@RestResource</ja>(
+      messages=<js>"nls/AddressBookResource"</js>,
+      properties={
+         <ja>@Property</ja>(name=RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, value=<js>"3"</js>),
+         <ja>@Property</ja>(name=RdfSerializerProperties.<jsf>RDF_addRootProperty</jsf>, value=<js>"true"</js>),
+         <ja>@Property</ja>(name=SerializerProperties.<jsf>SERIALIZER_quoteChar</jsf>, value=<js>"'"</js>),
+         <ja>@Property</ja>(name=HtmlSerializerProperties.<jsf>HTML_uriAnchorText</jsf>, value=<jsf>TO_STRING</jsf>),
+         <ja>@Property</ja>(name=HtmlDocSerializerProperties.<jsf>HTMLDOC_title</jsf>, value=<js>"$L{title}"</js>),
+         <ja>@Property</ja>(name=HtmlDocSerializerProperties.<jsf>HTMLDOC_description</jsf>, value=<js>"$L{description}"</js>),
+         <ja>@Property</ja>(name=HtmlDocSerializerProperties.<jsf>HTMLDOC_links</jsf>, value=<js>"{options:'?method=OPTIONS',doc:'doc'}"</js>)
+      },
+      encoders=GzipEncoder.<jk>class</jk>
+   )
+   <jk>public class</jk> AddressBookResource <jk>extends</jk> RestServletJenaDefault {
+         </p>
+         <p>
+            Notice how serializer and parser properties can be specified using the <code>@RestResource.properties()</code> annotation.<br>
+            The <jsf>RDF_rdfxml_tab</jsf> and <jsf>RDF_addRootProperty</jsf> are properties on the RDF serializers.<br>
+            The <jsf>SERIALIZER_quoteChar</jsf> property is common to all serializers.<br>
+            The remaining properties are specific to the HTML serializer.
+         </p>
+         <p>
+            The <code>$L{...}</code> variable represent localized strings pulled from the resource bundle identified by the <code>messages</code> annotation.
+            These variables are replaced at runtime based on the HTTP request locale.
+            Several built-in runtime variable types are defined, and the API can be extended to include user-defined variables.
+            See <a href="../../../../../com/ibm/juno/server/RestServlet.html#getVarResolver()"><code>RestServlet.getVarResolver()</code></a> for more information.
+         </p>
+         <p>
+            This document won't go into all the details of the Juno <code>RestServlet</code> class.<br>
+            Refer to the <a href="../../../../../com/ibm/juno/server/package-summary.html"><code>com.ibm.juno.server</code></a> documentation for more information on the REST servlet class in general.
+         </p>
+         <p>
+            The rest of the code in the resource class consists of REST methods that simply accept and return POJOs.<br>
+            The framework takes care of all content negotiation, serialization/parsing, and error handling.<br>
+            Below are 3 of those methods to give you a general idea of the concept:
+         </p>
+         <p class='bcode'>
+   <jc>// GET person request handler</jc>
+   <ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/people/{id}/*"</js>, rc={200,404})
+   <jk>public</jk> Person getPerson(RestRequest req, <ja>@Attr</ja> <jk>int</jk> id) throws Exception {
+      properties.put(HtmlDocSerializerProperties.<jsf>HTMLDOC_title</jsf>, req.getPathInfo());
+      <jk>return</jk> findPerson(id);
+   }
+   
+   <jc>// POST person handler</jc>
+   <ja>@RestMethod</ja>(name=<js>"POST"</js>, path=<js>"/people"</js>, guards=AdminGuard.<jk>class</jk>, rc={307,404})
+   <jk>public void</jk> createPerson(RestResponse res, <ja>@Content</ja> CreatePerson cp) <jk>throws</jk> Exception {
+      Person p = addressBook.createPerson(cp);
+      res.sendRedirect(p.<jf>uri</jf>);
+   }
+
+   <jc>// DELETE person handler</jc>
+   <ja>@RestMethod</ja>(name=<js>"DELETE"</js>, path=<js>"/people/{id}"</js>, guards=AdminGuard.<jk>class</jk>, rc={200,404})
+   <jk>public</jk> String deletePerson(RestResponse res, <ja>@Attr</ja> <jk>int</jk> id) <jk>throws</jk> Exception {
+      Person p = findPerson(id);
+      addressBook.remove(p);
+      <jk>return</jk> <js>"DELETE successful"</js>;         
+   }  
+         </p>
+         <p>
+            The resource class can be registered with the web application like any other servlet, or can be 
+               defined as a child of another resource through the <a href="../../../../../com/ibm/juno/server/annotation/RestResource.html#children()"><code>RestResource.children()</code></a> annotation.
+      </div>
+
+      <!-- ======================================================================================================== -->
+      <a id="RestServlet"></a>
+      <h4 class='topic' onclick='toggle(this)'>4.1.2 - Using RestServlet with annotations</h4>
+      <div class='topic'>
+         <p>
+            For fine-tuned control of media types, the <a href="../../../../../com/ibm/juno/server/RestServlet.html" title="class in com.ibm.juno.server"><code>RestServlet</code></a> class 
+               can be subclassed directly.<br>
+            The serializers/parsers can be specified through annotations at the class and/or method levels.
+         </p>
+         <p>
+            An equivalent <code>AddressBookResource</code> class could be defined to only support RDF/XML using
+               the following definition:
+         </p>
+         <p class='bcode'>
+   <ja>@RestResource</ja>(
+      serializers={RdfSerializer.XmlAbbrev.<jk>class</jk>},
+      parsers={RdfParser.Xml.<jk>class</jk>},
+      properties={
+         <ja>@Property</ja>(name=RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, value=<js>"3"</js>),
+         <ja>@Property</ja>(name=RdfSerializerProperties.<jsf>RDF_addRootProperty</jsf>, value=<js>"true"</js>),
+         <ja>@Property</ja>(name=SerializerProperties.<jsf>SERIALIZER_quoteChar</jsf>, value=<js>"'"</js>)
+      }
+   )
+   <jk>public class</jk> AddressBookResource <jk>extends</jk> RestServlet {
+         </p>
+         <p>
+            Likewise, serializers and parsers can be specified/augmented/overridden at the method level like so:
+         </p>
+         <p class='bcode'>
+   <jc>// GET person request handler</jc>
+   <ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/people/{id}/*"</js>, rc={200,404},
+      serializers={RdfSerializer.XmlAbbrev.<jk>class</jk>},
+      parsers={RdfParser.Xml.<jk>class</jk>},
+      properties={
+         <ja>@Property</ja>(name=RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, value=<js>"3"</js>),
+         <ja>@Property</ja>(name=SerializerProperties.<jsf>SERIALIZER_quoteChar</jsf>, value=<js>"'"</js>)
+      }
+   )
+   <jk>public</jk> Person getPerson(RestRequest req, <ja>@Attr</ja> <jk>int</jk> id) throws Exception {
+      properties.put(HtmlDocSerializerProperties.<jsf>HTMLDOC_title</jsf>, req.getPathInfo());
+      <jk>return</jk> findPerson(id);
+   }
+         </p>
+         <p>
+            The <a href="../../../../../com/ibm/juno/server/annotation/RestMethod.html#serializersInherit()"><code>RestMethod.serializersInherit()</code></a> and 
+               <a href="../../../../../com/ibm/juno/server/annotation/RestMethod.html#parsersInherit()"><code>RestMethod.parsersInherit()</code></a> control how various artifacts
+               are inherited from the parent class.<br>
+            Refer to <a href="../../../../../com/ibm/juno/server/package-summary.html"><code>com.ibm.juno.server</code></a> for additional information on using these annotations.
+         </p>
+      </div>
+
+      <!-- ======================================================================================================== -->
+      <a id="DefaultJenaProvider"></a>
+      <h4 class='topic' onclick='toggle(this)'>4.1.3 - Using JAX-RS DefaultJenaProvider</h4>
+      <div class='topic'>
+         <p>
+            RDF media type support in JAX-RS can be achieved by using the <a href="../../../../../com/ibm/juno/server/jaxrs/rdf/DefaultJenaProvider.html" title="class in com.ibm.juno.server.jaxrs.rdf"><code>DefaultJenaProvider</code></a> class.<br>
+            It implements the JAX-RS <code>MessageBodyReader</code> and <code>MessageBodyWriter</code> interfaces for all Juno supported media types.
+         </p>
+         <p>
+            The <code>DefaultJenaProvider</code> class definition is shown below:
+         </p>
+         <p class='bcode'>
+   <ja>@Provider</ja>
+   <ja>@Produces</ja>({
+      <js>"application/json"</js>, <js>"text/json"</js>,                 <jc>// JsonSerializer</jc>
+      <js>"application/json+simple"</js>,<js>"text/json+simple"</js>,    <jc>// JsonSerializer.Simple</jc>
+      <js>"application/json+schema"</js>,<js>"text/json+schema"</js>,    <jc>// JsonSchemaSerializer</jc>
+      <js>"text/xml"</js>,                                      <jc>// XmlDocSerializer</jc>
+      <js>"text/xml+simple"</js>,                               <jc>// XmlDocSerializer.Simple</jc>
+      <js>"text/xml+schema"</js>,                               <jc>// XmlSchemaDocSerializer</jc>
+      <js>"text/html"</js>,                                     <jc>// HtmlDocSerializer</jc>
+      <js>"application/x-www-form-urlencoded"</js>,             <jc>// UrlEncodingSerializer</jc>
+      <js>"text/xml+soap"</js>,                                 <jc>// SoapXmlSerializer</jc>
+      <js>"text/xml+rdf"</js>,                                  <jc>// RdfSerializer.Xml</jc>
+      <js>"text/xml+rdf+abbrev"</js>,                           <jc>// RdfSerializer.XmlAbbrev</jc>
+      <js>"text/n-triple"</js>,                                 <jc>// RdfSerializer.NTriple</jc>
+      <js>"text/turtle"</js>,                                   <jc>// RdfSerializer.Turtle</jc>
+      <js>"text/n3"</js>,                                       <jc>// RdfSerializer.N3</jc>
+      <js>"application/x-java-serialized-object"</js>           <jc>// JavaSerializedObjectSerializer</jc>
+   })
+   <ja>@Consumes</ja>({
+      <js>"application/json"</js>, <js>"text/json"</js>,                 <jc>// JsonParser</jc>
+      <js>"text/xml"</js>,                                      <jc>// XmlParser</jc>
+      <js>"text/html"</js>,                                     <jc>// HtmlParser</jc>
+      <js>"application/x-www-form-urlencoded"</js>,             <jc>// UrlEncodingParser</jc>
+      <js>"text/xml+rdf"</js>,                                  <jc>// RdfParser.Xml</jc>
+      <js>"text/n-triple"</js>,                                 <jc>// RdfParser.NTriple</jc>
+      <js>"text/turtle"</js>,                                   <jc>// RdfParser.Turtle</jc>
+      <js>"text/n3"</js>,                                       <jc>// RdfParser.N3</jc>
+      <js>"application/x-java-serialized-object"</js>           <jc>// JavaSerializedObjectParser</jc>
+   })
+   <ja>@JunoProvider</ja>(
+      serializers={
+         JsonSerializer.<jk>class</jk>,
+         JsonSerializer.Simple.<jk>class</jk>,
+         JsonSchemaSerializer.<jk>class</jk>,
+         XmlDocSerializer.<jk>class</jk>,
+         XmlDocSerializer.Simple.<jk>class</jk>,
+         XmlSchemaDocSerializer.<jk>class</jk>,
+         HtmlDocSerializer.<jk>class</jk>,
+         UrlEncodingSerializer.<jk>class</jk>,
+         SoapXmlSerializer.<jk>class</jk>,
+         RdfSerializer.Xml.<jk>class</jk>,
+         RdfSerializer.XmlAbbrev.<jk>class</jk>,
+         RdfSerializer.NTriple.<jk>class</jk>,
+         RdfSerializer.Turtle.<jk>class</jk>,
+         RdfSerializer.N3.<jk>class</jk>,
+         JavaSerializedObjectSerializer.<jk>class</jk>
+      },
+      parsers={
+         JsonParser.<jk>class</jk>,
+         XmlParser.<jk>class</jk>,
+         HtmlParser.<jk>class</jk>,
+         UrlEncodingParser.<jk>class</jk>,
+         RdfParser.Xml.<jk>class</jk>,
+         RdfParser.NTriple.<jk>class</jk>,
+         RdfParser.Turtle.<jk>class</jk>,
+         RdfParser.N3.<jk>class</jk>,
+         JavaSerializedObjectParser.<jk>class</jk>,
+      }
+   )
+   <jk>public final class</jk> DefaultJenaProvider <jk>extends</jk> BaseProvider {}
+         </p>
+         <p>
+            That's the entire class.  It consists of only annotations to hook up media types to Juno serializers and parsers.<br>
+            The <ja>@Provider</ja>, <ja>@Produces</ja>, and <ja>@Consumes</ja> annotations are standard JAX-RS annotations, and the <ja>@JunoProvider</ja> annotation is from Juno.
+         </p>
+         <p>
+            To enable the provider, you need to make the JAX-RS environment aware of it.<br>
+            In Wink, this is accomplished by adding an entry to a config file.
+         </p>
+         <p class='bcode'>
+   <xt>&lt;web-app</xt> <xa>version</xa>=<xs>"2.3"</xs><xt>&gt;</xt>
+      <xt>&lt;servlet&gt;</xt>
+         <xt>&lt;servlet-name&gt;</xt>WinkService<xt>&lt;/servlet-name&gt;</xt>
+         <xt>&lt;servlet-class&gt;</xt>org.apache.wink.server.internal.servlet.RestServlet<xt>&lt;/servlet-class&gt;</xt>
+         <xt>&lt;init-param&gt;</xt>
+            <xt>&lt;param-name&gt;</xt>applicationConfigLocation<xt>&lt;/param-name&gt;</xt>
+            <xt>&lt;param-value&gt;</xt>/WEB-INF/wink.cfg<xt>&lt;/param-value&gt;</xt>
+         <xt>&lt;/init-param&gt;</xt>
+      <xt>&lt;/servlet&gt;</xt>
+         </p>
+         <p>
+            Simply include a reference to the provider in the configuration file.
+         <p class='bcode'>
+   com.ibm.juno.server.jaxrs.DefaultJenaProvider
+         </p>
+         <p>
+            Properties can be specified on providers through the <a href="../../../../../com/ibm/juno/server/jaxrs/JunoProvider.html#properties()"><code>JunoProvider.properties()</code></a> annotation.
+         </p>
+         <p>
+            Properties can also be specified at the method level by using the <a href="../../../../../com/ibm/juno/server/annotation/RestMethod.html#properties()"><code>RestMethod.properties()</code></a> annotation, like so:
+         </p>
+         <p class='bcode'>
+   <ja>@GET</ja>
+   <ja>@Produces</ja>(<js>"*/*"</js>)
+   <ja>@RestMethod</ja>( <jc>/* Override some properties */</jc>
+      properties={
+         <ja>@Property</ja>(name=RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, value=<js>"3"</js>),
+         <ja>@Property</ja>(name=SerializerProperties.<jsf>SERIALIZER_quoteChar</jsf>, value=<js>"'"</js>)
+      }
+   )
+   <jk>public</jk> Message getMessage() {
+      <jk>return</jk> message;
+   }
+         </p>
+         <h6 class='topic'>Limitations</h6>
+         <p>
+            In general, the Juno REST API is considerably more flexible than the JAX-RS API, since you can specify and override
+               serializers, parsers, properties, filters, converters, guards, etc... at both the class and method levels.<br>
+            Therefore, the JAX-RS API has the following limitations that the Juno Server API does not:
+         </p>
+         <ul>
+            <li>The ability to specify different media type providers at the class and method levels.<br> 
+               For example, you may want to use <code>RdfSerializer.Xml</code> with one set of properties on 
+                  one class, and another instance with different properties on another class.<br>
+               There is currently no way to define this at the class level.<br>
+               You can override properties at the method level, but this can be cumbersome since it would have to be
+                  done for all methods in the resource.<br><br>
+            <li>The Juno Server API allows you to manipulate properties programatically through the <a href="../../../../../com/ibm/juno/server/RestResponse.html#setProperty(java.lang.String, java.lang.Object)"><code>RestResponse.setProperty(String,Object)</code></a>
+               method, and through the <a href="../../../../../com/ibm/juno/server/annotation/Properties.html" title="annotation in com.ibm.juno.server.annotation"><code>Properties</code></a> annotation.<br>
+               There is no equivalent in JAX-RS.
+         </ul>
+      </div>
+
+      <!-- ======================================================================================================== -->
+      <a id="BaseProvider"></a>
+      <h4 class='topic' onclick='toggle(this)'>4.1.4 - Using JAX-RS BaseProvider with annotations</h4>
+      <div class='topic'>
+         <p>
+            To provide support for only RDF media types, you can define your own provider class, like so:
+         </p>
+         <p class='bcode'>
+   <ja>@Provider</ja>
+   <ja>@Produces</ja>({
+      <js>"text/xml+rdf"</js>,                                  <jc>// RdfSerializer.Xml</jc>
+      <js>"text/xml+rdf+abbrev"</js>,                           <jc>// RdfSerializer.XmlAbbrev</jc>
+      <js>"text/n-triple"</js>,                                 <jc>// RdfSerializer.NTriple</jc>
+      <js>"text/turtle"</js>,                                   <jc>// RdfSerializer.Turtle</jc>
+      <js>"text/n3"</js>,                                       <jc>// RdfSerializer.N3</jc>
+   })
+   <ja>@Consumes</ja>({
+      <js>"text/xml+rdf"</js>,                                  <jc>// RdfParser.Xml</jc>
+      <js>"text/n-triple"</js>,                                 <jc>// RdfParser.NTriple</jc>
+      <js>"text/turtle"</js>,                                   <jc>// RdfParser.Turtle</jc>
+      <js>"text/n3"</js>,                                       <jc>// RdfParser.N3</jc>
+   })
+   <ja>@JunoProvider</ja>(
+      serializers={
+         RdfSerializer.Xml.<jk>class</jk>,
+         RdfSerializer.XmlAbbrev.<jk>class</jk>,
+         RdfSerializer.NTriple.<jk>class</jk>,
+         RdfSerializer.Turtle.<jk>class</jk>,
+         RdfSerializer.N3.<jk>class</jk>,
+      },
+      parsers={
+         RdfParser.Xml.<jk>class</jk>,
+         RdfParser.NTriple.<jk>class</jk>,
+         RdfParser.Turtle.<jk>class</jk>,
+         RdfParser.N3.<jk>class</jk>,
+      },
+      properties={
+         <ja>@Property</ja>(name=RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, value=<js>"3"</js>),
+         <ja>@Property</ja>(name=SerializerProperties.<jsf>SERIALIZER_quoteChar</jsf>, value=<js>"'"</js>)
+      }
+   )
+   <jk>public final class</jk> MyRdfProvider <jk>extends</jk> BaseProvider {}
+         </p>
+         <p>
+            Then register it with Wink the same way as <code>DefaultJenaProvider</code>.
+         </p>
+      </div>
+
+   </div>
+
+   <!-- ======================================================================================================== -->
+   <a id="RestClientSupport"></a>
+   <h3 class='topic' onclick='toggle(this)'>4.2 - REST client support</h3>
+   <div class='topic'>
+      <p>
+         The <a href="../../../../../com/ibm/juno/client/RestClient.html" title="class in com.ibm.juno.client"><code>RestClient</code></a> class provides an easy-to-use REST client interface with 
+            pluggable media type handling using any of the Juno serializers and parsers.
+      </p>
+      <p>
+         Defining a client to support RDF media types on HTTP requests and responses can be done in one line of code:
+      </p>
+      <p class='bcode'>
+   <jc>// Create a client to handle RDF/XML requests and responses.</jc>
+   RestClient client = <jk>new</jk> RestClient(RdfSerializer.XmlAbbrev.<jk>class</jk>, RdfParser.Xml.<jk>class</jk>);
+      </p>
+      <p>
+         The client handles all content negotiation based on the registered serializers and parsers.
+      </p>
+      <p>
+         The following code is pulled from the main method of the <code>ClientTest</code> class in the sample web application, and
+            is run against the <code>AddressBookResource</code> class running within the sample app.
+         It shows how the client can be used to interact with the REST API while completely hiding the negotiated content type and working with nothing more than beans.
+      </p>
+      <p class='bcode'>
+   String root = <js>"http://localhost:9080/sample/addressBook"</js>;
+   
+   <jc>// Get the current contents of the address book</jc>
+   AddressBook ab = client.doGet(root).getResponse(AddressBook.<jk>class</jk>);
+   System.<jsm>out</jsm>.println(<js>"Number of entries = "</js> + ab.size());
+   
+   <jc>// Delete the existing entries</jc>
+   <jk>for</jk> (Person p : ab) {
+      String r = client.doDelete(p.<jf>uri</jf>).getResponse(String.<jk>class</jk>);
+      System.<jsm>out</jsm>.println(<js>"Deleted person "</js> + p.<jf>name</jf> + <js>", response = "</js> + r);
+   }
+   
+   <jc>// Make sure they're gone</jc>
+   ab = client.doGet(root).getResponse(AddressBook.<jk>class</jk>);
+   System.<jsm>out</jsm>.println(<js>"Number of entries = "</js> + ab.size());
+   
+   <jc>// Add 1st person again</jc>
+   CreatePerson cp = <jk>new</jk> CreatePerson(
+      <js>"Barack Obama"</js>, 
+      <jsm>toCalendar</jsm>(<js>"Aug 4, 1961"</js>),
+      <jk>new</jk> CreateAddress(<js>"1600 Pennsylvania Ave"</js>, <js>"Washington"</js>, <js>"DC"</js>, 20500, <jk>true</jk>),
+      <jk>new</jk> CreateAddress(<js>"5046 S Greenwood Ave"</js>, <js>"Chicago"</js>, <js>"IL"</js>, 60615, <jk>false</jk>)
+   ); 
+   Person p = client.doPost(root + <js>"/people"</js>, cp).getResponse(Person.<jk>class</jk>);
+   System.<jsm>out</jsm>.println(<js>"Created person "</js> + p.<jf>name</jf> + <js>", uri = "</js> + p.<jf>uri</jf>);
+   
+   <jc>// Add 2nd person again, but add addresses separately</jc>
+   cp = <jk>new</jk> CreatePerson(
+      <js>"George Walker Bush"</js>, 
+      toCalendar(<js>"Jul 6, 1946"</js>)
+   );
+   p = client.doPost(root + <js>"/people"</js>, cp).getResponse(Person.<jk>class</jk>);
+   System.<jsm>out</jsm>.println(<js>"Created person "</js> + p.<jf>name</jf> + <js>", uri = "</js> + p.<jf>uri</jf>);
+   
+   <jc>// Add addresses to 2nd person</jc>
+   CreateAddress ca = <jk>new</jk> CreateAddress(<js>"43 Prairie Chapel Rd"</js>, <js>"Crawford"</js>, <js>"TX"</js>, 76638, <jk>true</jk>);
+   Address a = client.doPost(p.<jf>uri</jf> + <js>"/addresses"</js>, ca).getResponse(Address.<jk>class</jk>);
+   System.<jsm>out</jsm>.println(<js>"Created address "</js> + a.<jf>uri</jf>);
+            
+   ca = <jk>new</jk> CreateAddress(<js>"1600 Pennsylvania Ave"</js>, <js>"Washington"</js>, <js>"DC"</js>, 20500, <jk>false</jk>);
+   a = client.doPost(p.<jf>uri</jf> + "/addresses"</js>, ca).getResponse(Address.<jk>class</jk>);
+   System.<jsm>out</jsm>.println(<js>"Created address "</js> + a.<jf>uri</jf>);
+   
+   <jc>// Find 1st person, and change name</jc>
+   Person[] pp = client.doGet(root + <js>"?q={name:\"'Barack+Obama'\"}"</js>).getResponse(Person[].<jk>class</jk>);
+   String r = client.doPut(pp[0].<jf>uri</jf> + <js>"/name"</js>, <js>"Barack Hussein Obama"</js>).getResponse(String.<jk>class</jk>);
+   System.<jsm>out</jsm>.println(<js>"Changed name, response = "</js> + r);
+   p = client.doGet(pp[0].<jf>uri</jf>).getResponse(Person.<jk>class</jk>);
+   System.<jsm>out</jsm>.println(<js>"New name = "</js> + p.<jf>name</jf>);
+      </p>
+      <p>
+         The code above produces the following output.
+      </p>
+      <p class='bcode'>
+   Number of entries = 2
+   Deleted person Barack Obama, response = DELETE successful
+   Deleted person George Walker Bush, response = DELETE successful
+   Number of entries = 0
+   Created person Barack Obama, uri = http://localhost:9080/sample/addressBook/people/3
+   Created person George Walker Bush, uri = http://localhost:9080/sample/addressBook/people/4
+   Created address http://localhost:9080/sample/addressBook/addresses/7
+   Created address http://localhost:9080/sample/addressBook/addresses/8
+   Changed name, response = PUT successful
+   New name = Barack Hussein Obama
+      </p>
+   </div>
+</div>
+<p align="center"><i><b>*** fín ***</b></i></p></div>
+</div>
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a>
+<div class="skip"><a href="#skip-navbar_bottom" title="Skip navigation links">Skip navigation links</a></div>
+<a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li class="navBarCell1Rev">Package</li>
+<li>Class</li>
+<li><a href="package-use.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../com/ibm/juno/core/ini/package-summary.html">Prev Package</a></li>
+<li><a href="../../../../../com/ibm/juno/core/jena/annotation/package-summary.html">Next Package</a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?com/ibm/juno/core/jena/package-summary.html" target="_top">Frames</a></li>
+<li><a href="package-summary.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+</body>
+</html>

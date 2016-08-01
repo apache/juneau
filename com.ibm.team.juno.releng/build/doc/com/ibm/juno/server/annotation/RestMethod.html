@@ -1,0 +1,825 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="en">
+<head>
+<title>RestMethod (Juno)</title>
+<link rel="stylesheet" type="text/css" href="../../../../../javadoc.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="RestMethod (Juno)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a>
+<div class="skip"><a href="#skip-navbar_top" title="Skip navigation links">Skip navigation links</a></div>
+<a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/RestMethod.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../com/ibm/juno/server/annotation/Response.html" title="annotation in com.ibm.juno.server.annotation"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../com/ibm/juno/server/annotation/RestResource.html" title="annotation in com.ibm.juno.server.annotation"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?com/ibm/juno/server/annotation/RestMethod.html" target="_top">Frames</a></li>
+<li><a href="RestMethod.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Required&nbsp;|&nbsp;</li>
+<li><a href="#annotation_type_optional_element_summary">Optional</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#annotation_type_element_detail">Element</a></li>
+</ul>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">com.ibm.juno.server.annotation</div>
+<h2 title="Annotation Type RestMethod" class="title">Annotation Type RestMethod</h2>
+</div>
+<div class="contentContainer">
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<hr>
+<br>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/annotation/Documented.html?is-external=true" title="class or interface in java.lang.annotation">@Documented</a>
+<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/annotation/Target.html?is-external=true" title="class or interface in java.lang.annotation">@Target</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/annotation/Target.html?is-external=true#value()" title="class or interface in java.lang.annotation">value</a>=<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/annotation/ElementType.html?is-external=true#METHOD" title="class or interface in java.lang.annotation">METHOD</a>)
+<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/annotation/Retention.html?is-external=true" title="class or interface in java.lang.annotation">@Retention</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/annotation/Retention.html?is-external=true#value()" title="class or interface in java.lang.annotation">value</a>=<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/annotation/RetentionPolicy.html?is-external=true#RUNTIME" title="class or interface in java.lang.annotation">RUNTIME</a>)
+<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/annotation/Inherited.html?is-external=true" title="class or interface in java.lang.annotation">@Inherited</a>
+public @interface <a href="../../../../../src-html/com/ibm/juno/server/annotation/RestMethod.html#line.32">RestMethod</a></pre>
+<div class="block">Identifies a REST Java method on a <a href="../../../../../com/ibm/juno/server/RestServlet.html" title="class in com.ibm.juno.server"><code>RestServlet</code></a> implementation class.
+ <p>
+      Refer to <a href="../../../../../com/ibm/juno/server/package-summary.html"><code>com.ibm.juno.server</code></a> doc for information on using this class.</div>
+<dl><dt><span class="strong">Author:</span></dt>
+  <dd>James Bognar (jbognar@us.ibm.com)</dd></dl>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- =========== ANNOTATION TYPE OPTIONAL MEMBER SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="annotation_type_optional_element_summary">
+<!--   -->
+</a>
+<h3>Optional Element Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Optional Element Summary table, listing optional elements, and an explanation">
+<caption><span>Optional Elements</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Optional Element and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../com/ibm/juno/server/RestConverter.html" title="interface in com.ibm.juno.server">RestConverter</a>&gt;[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/server/annotation/RestMethod.html#converters()">converters</a></strong></code>
+<div class="block">Method response converters.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/server/annotation/RestMethod.html#defaultRequestHeaders()">defaultRequestHeaders</a></strong></code>
+<div class="block">Specifies default values for request headers.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/server/annotation/RestMethod.html#description()">description</a></strong></code>
+<div class="block">Optional description.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../com/ibm/juno/core/encoders/Encoder.html" title="class in com.ibm.juno.core.encoders">Encoder</a>&gt;[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/server/annotation/RestMethod.html#encoders()">encoders</a></strong></code>
+<div class="block">Appends to the list of <a href="../../../../../com/ibm/juno/core/encoders/Encoder.html" title="class in com.ibm.juno.core.encoders"><code>encoders</code></a> specified on the servlet.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/server/annotation/RestMethod.html#filters()">filters</a></strong></code>
+<div class="block">Appends the specified filters to all serializers and parsers used by this method.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../com/ibm/juno/server/RestGuard.html" title="class in com.ibm.juno.server">RestGuard</a>&gt;[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/server/annotation/RestMethod.html#guards()">guards</a></strong></code>
+<div class="block">Method guards.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/server/annotation/RestMethod.html#inheritEncoders()">inheritEncoders</a></strong></code>
+<div class="block">Specifies whether the method should inherit encoders from the servlet.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../com/ibm/juno/server/annotation/Var.html" title="annotation in com.ibm.juno.server.annotation">Var</a>[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/server/annotation/RestMethod.html#input()">input</a></strong></code>
+<div class="block">Optional input description.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../com/ibm/juno/server/RestMatcher.html" title="class in com.ibm.juno.server">RestMatcher</a>&gt;[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/server/annotation/RestMethod.html#matchers()">matchers</a></strong></code>
+<div class="block">Method matchers.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/server/annotation/RestMethod.html#name()">name</a></strong></code>
+<div class="block">REST method name.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../com/ibm/juno/core/parser/Parser.html" title="class in com.ibm.juno.core.parser">Parser</a>&lt;?&gt;&gt;[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/server/annotation/RestMethod.html#parsers()">parsers</a></strong></code>
+<div class="block">Overrides the list of parsers assigned at the method level.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../com/ibm/juno/server/annotation/Inherit.html" title="enum in com.ibm.juno.server.annotation">Inherit</a>[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/server/annotation/RestMethod.html#parsersInherit()">parsersInherit</a></strong></code>
+<div class="block">Used in conjunction with <a href="../../../../../com/ibm/juno/server/annotation/RestMethod.html#parsers()"><code>parsers()</code></a> to identify what class-level settings are inherited by the method parser group.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/server/annotation/RestMethod.html#path()">path</a></strong></code>
+<div class="block">Optional path pattern for the specified method.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/server/annotation/RestMethod.html#priority()">priority</a></strong></code>
+<div class="block">URL path pattern priority.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../com/ibm/juno/server/annotation/Property.html" title="annotation in com.ibm.juno.server.annotation">Property</a>[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/server/annotation/RestMethod.html#properties()">properties</a></strong></code>
+<div class="block">Same as <a href="../../../../../com/ibm/juno/server/annotation/RestResource.html#properties()"><code>RestResource.properties()</code></a>, except defines property values by default when this method is called.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>int[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/server/annotation/RestMethod.html#rc()">rc</a></strong></code>
+<div class="block">Possible HTTP response codes from this method.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../com/ibm/juno/server/annotation/Response.html" title="annotation in com.ibm.juno.server.annotation">Response</a>[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/server/annotation/RestMethod.html#responses()">responses</a></strong></code>
+<div class="block">Optional output description.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../com/ibm/juno/core/serializer/Serializer.html" title="class in com.ibm.juno.core.serializer">Serializer</a>&lt;?&gt;&gt;[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/server/annotation/RestMethod.html#serializers()">serializers</a></strong></code>
+<div class="block">Overrides the list of serializers assigned at the method level.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../com/ibm/juno/server/annotation/Inherit.html" title="enum in com.ibm.juno.server.annotation">Inherit</a>[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/server/annotation/RestMethod.html#serializersInherit()">serializersInherit</a></strong></code>
+<div class="block">Used in conjunction with <a href="../../../../../com/ibm/juno/server/annotation/RestMethod.html#serializers()"><code>serializers()</code></a> to identify what class-level settings are inherited by the method serializer group.</div>
+</td>
+</tr>
+</table>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ============ ANNOTATION TYPE MEMBER DETAIL =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="annotation_type_element_detail">
+<!--   -->
+</a>
+<h3>Element Detail</h3>
+<a name="name()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>name</h4>
+<pre>public abstract&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../../../../src-html/com/ibm/juno/server/annotation/RestMethod.html#line.47">name</a></pre>
+<div class="block">REST method name.
+ <p>
+   Typically <js>"GET"</js>, <js>"PUT"</js>, <js>"POST"</js>, <js>"DELETE"</js>, or <js>"OPTIONS"</js>.
+ <p>
+   Can also be a non-HTTP-standard name that is passed in through a <code>&amp;method=methodName</code> URL parameter.
+ <p>
+   Method names are case-insensitive (always folded to upper-case).
+ <p>
+   If a method name is not specified, then the method name is determined based on the Java method name.<br>
+   For example, if the method is <code>doPost(...)</code>, then the method name is automatically detected as <js>"POST"</js>.</div>
+<dl>
+<dt>Default:</dt>
+<dd>""</dd>
+</dl>
+</li>
+</ul>
+<a name="path()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>path</h4>
+<pre>public abstract&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../../../../src-html/com/ibm/juno/server/annotation/RestMethod.html#line.56">path</a></pre>
+<div class="block">Optional path pattern for the specified method.
+ <p>
+   Appending <js>"/*"</js> to the end of the path pattern will make it match any remainder too.<br>
+   Not appending <js>"/*"</js> to the end of the pattern will cause a 404 (Not found) error to occur
+   if the exact pattern is not found.</div>
+<dl>
+<dt>Default:</dt>
+<dd>"/*"</dd>
+</dl>
+</li>
+</ul>
+<a name="priority()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>priority</h4>
+<pre>public abstract&nbsp;int&nbsp;<a href="../../../../../src-html/com/ibm/juno/server/annotation/RestMethod.html#line.66">priority</a></pre>
+<div class="block">URL path pattern priority.
+ <p>
+   To force path patterns to be checked before other path patterns, use a higher priority number.
+ <p>
+   By default, it's <code>0</code>, which means it will use an internal heuristic to
+   determine a best match.</div>
+<dl>
+<dt>Default:</dt>
+<dd>0</dd>
+</dl>
+</li>
+</ul>
+<a name="guards()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>guards</h4>
+<pre>public abstract&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../com/ibm/juno/server/RestGuard.html" title="class in com.ibm.juno.server">RestGuard</a>&gt;[]&nbsp;<a href="../../../../../src-html/com/ibm/juno/server/annotation/RestMethod.html#line.77">guards</a></pre>
+<div class="block">Method guards.
+ <p>
+   Associates one or more <a href="../../../../../com/ibm/juno/server/RestGuard.html" title="class in com.ibm.juno.server"><code>RestGuards</code></a> with a method call.
+   These guards get called immediately before execution of the REST method.
+ <p>
+   Typically, guards will be used for permissions checking on the user making the request,
+   but it can also be used for other purposes like pre-call validation of a request.</div>
+<dl>
+<dt>Default:</dt>
+<dd>{}</dd>
+</dl>
+</li>
+</ul>
+<a name="converters()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>converters</h4>
+<pre>public abstract&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../com/ibm/juno/server/RestConverter.html" title="interface in com.ibm.juno.server">RestConverter</a>&gt;[]&nbsp;<a href="../../../../../src-html/com/ibm/juno/server/annotation/RestMethod.html#line.90">converters</a></pre>
+<div class="block">Method response converters.
+ <p>
+   Associates one or more <a href="../../../../../com/ibm/juno/server/RestConverter.html" title="interface in com.ibm.juno.server"><code>RestConverters</code></a> with a method call.
+   These converters get called immediately after execution of the REST method in the same
+      order specified in the annotation.
+ <p>
+   Can be used for performing post-processing on the response object before serialization.
+ <p>
+   Default converters are available in the <a href="../../../../../com/ibm/juno/server/converters/package-summary.html"><code>com.ibm.juno.server.converters</code></a> package.</div>
+<dl>
+<dt>Default:</dt>
+<dd>{}</dd>
+</dl>
+</li>
+</ul>
+<a name="matchers()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>matchers</h4>
+<pre>public abstract&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../com/ibm/juno/server/RestMatcher.html" title="class in com.ibm.juno.server">RestMatcher</a>&gt;[]&nbsp;<a href="../../../../../src-html/com/ibm/juno/server/annotation/RestMethod.html#line.102">matchers</a></pre>
+<div class="block">Method matchers.
+ <p>
+   Associates one more more <a href="../../../../../com/ibm/juno/server/RestMatcher.html" title="class in com.ibm.juno.server"><code>RestMatchers</code></a> with this method.
+ <p>
+   Matchers are used to allow multiple Java methods to handle requests assigned to the same
+      URL path pattern, but differing based on some request attribute, such as a specific header value.
+ <p>
+   See <a href="../../../../../com/ibm/juno/server/RestMatcher.html" title="class in com.ibm.juno.server"><code>RestMatcher</code></a> for details.</div>
+<dl>
+<dt>Default:</dt>
+<dd>{}</dd>
+</dl>
+</li>
+</ul>
+<a name="serializers()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>serializers</h4>
+<pre>public abstract&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../com/ibm/juno/core/serializer/Serializer.html" title="class in com.ibm.juno.core.serializer">Serializer</a>&lt;?&gt;&gt;[]&nbsp;<a href="../../../../../src-html/com/ibm/juno/server/annotation/RestMethod.html#line.126">serializers</a></pre>
+<div class="block">Overrides the list of serializers assigned at the method level.
+ <p>
+ Use this annotation when the list of serializers assigned to a method differs from the list of serializers assigned at the servlet level.
+ <p>
+ To append to the list of serializers assigned at the servlet level, use <code>serializersInherit=<jsf>SERIALIZERS</jsf></code>.
+
+ <p class='bcode'>
+   <jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
+
+      <ja>@RestMethod</ja>(
+         name=<js>"GET"</js>,
+         path=<js>"/foo"</js>,
+         serializers=MySpecialSerializer.<jk>class</jk>,
+         serializersInherit=<jsf>SERIALIZERS</jsf>
+      )
+      <jk>public</jk> Object doGetWithSpecialAcceptType() {
+         <jc>// Handle request for special Accept type</jc>
+      }
+   }
+ </p></div>
+<dl>
+<dt>Default:</dt>
+<dd>{}</dd>
+</dl>
+</li>
+</ul>
+<a name="serializersInherit()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>serializersInherit</h4>
+<pre>public abstract&nbsp;<a href="../../../../../com/ibm/juno/server/annotation/Inherit.html" title="enum in com.ibm.juno.server.annotation">Inherit</a>[]&nbsp;<a href="../../../../../src-html/com/ibm/juno/server/annotation/RestMethod.html#line.149">serializersInherit</a></pre>
+<div class="block">Used in conjunction with <a href="../../../../../com/ibm/juno/server/annotation/RestMethod.html#serializers()"><code>serializers()</code></a> to identify what class-level settings are inherited by the method serializer group.
+ <p>
+ Possible values:
+ </p>
+ <ul>
+   <li><a href="../../../../../com/ibm/juno/server/annotation/Inherit.html#SERIALIZERS"><code>Inherit.SERIALIZERS</code></a> - Inherit class-level serializers.
+   <li><a href="../../../../../com/ibm/juno/server/annotation/Inherit.html#PROPERTIES"><code>Inherit.PROPERTIES</code></a> - Inherit class-level properties.
+   <li><a href="../../../../../com/ibm/juno/server/annotation/Inherit.html#FILTERS"><code>Inherit.FILTERS</code></a> - Inherit class-level filters.
+ </ul>
+ <p>
+   For example, to inherit all serializers, properties, and filters from the servlet class:
+ </p>
+ <p class='bcode'>
+   <ja>@RestMethod</ja>(
+      path=<js>"/foo"</js>,
+      serializers=MySpecialSerializer.<jk>class</jk>,
+      serializersInherit={<jsf>SERIALIZERS</jsf>,<jsf>PROPERTIES</jsf>,<jsf>FILTERS</jsf>}
+   )
+ </p></div>
+<dl>
+<dt>Default:</dt>
+<dd>{}</dd>
+</dl>
+</li>
+</ul>
+<a name="parsers()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>parsers</h4>
+<pre>public abstract&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../com/ibm/juno/core/parser/Parser.html" title="class in com.ibm.juno.core.parser">Parser</a>&lt;?&gt;&gt;[]&nbsp;<a href="../../../../../src-html/com/ibm/juno/server/annotation/RestMethod.html#line.173">parsers</a></pre>
+<div class="block">Overrides the list of parsers assigned at the method level.
+ <p>
+ Use this annotation when the list of parsers assigned to a method differs from the list of parsers assigned at the servlet level.
+ <p>
+ To append to the list of serializers assigned at the servlet level, use <code>serializersInherit=<jsf>SERIALIZERS</jsf></code>.
+
+ <p class='bcode'>
+   <jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
+
+      <ja>@RestMethod</ja>(
+         name=<js>"PUT"</js>,
+         path=<js>"/foo"</js>,
+         parsers=MySpecialParser.<jk>class</jk>,
+         parsersInherit=<jsf>PARSERS</jsf>
+      )
+      <jk>public</jk> Object doGetWithSpecialAcceptType() {
+         <jc>// Handle request for special Accept type</jc>
+      }
+   }
+ </p></div>
+<dl>
+<dt>Default:</dt>
+<dd>{}</dd>
+</dl>
+</li>
+</ul>
+<a name="parsersInherit()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>parsersInherit</h4>
+<pre>public abstract&nbsp;<a href="../../../../../com/ibm/juno/server/annotation/Inherit.html" title="enum in com.ibm.juno.server.annotation">Inherit</a>[]&nbsp;<a href="../../../../../src-html/com/ibm/juno/server/annotation/RestMethod.html#line.195">parsersInherit</a></pre>
+<div class="block">Used in conjunction with <a href="../../../../../com/ibm/juno/server/annotation/RestMethod.html#parsers()"><code>parsers()</code></a> to identify what class-level settings are inherited by the method parser group.
+ <p>
+ Possible values:
+ <ul>
+   <li><a href="../../../../../com/ibm/juno/server/annotation/Inherit.html#PARSERS"><code>Inherit.PARSERS</code></a> - Inherit class-level parsers.
+   <li><a href="../../../../../com/ibm/juno/server/annotation/Inherit.html#PROPERTIES"><code>Inherit.PROPERTIES</code></a> - Inherit class-level properties.
+   <li><a href="../../../../../com/ibm/juno/server/annotation/Inherit.html#FILTERS"><code>Inherit.FILTERS</code></a> - Inherit class-level filters.
+ </ul>
+ <p>
+   For example, to inherit all parsers, properties, and filters from the servlet class:
+ </p>
+ <p class='bcode'>
+   <ja>@RestMethod</ja>(
+      path=<js>"/foo"</js>,
+      parsers=MySpecialParser.<jk>class</jk>,
+      parsersInherit={<jsf>PARSERS</jsf>,<jsf>PROPERTIES</jsf>,<jsf>FILTERS</jsf>}
+   )
+ </p></div>
+<dl>
+<dt>Default:</dt>
+<dd>{}</dd>
+</dl>
+</li>
+</ul>
+<a name="encoders()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>encoders</h4>
+<pre>public abstract&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../com/ibm/juno/core/encoders/Encoder.html" title="class in com.ibm.juno.core.encoders">Encoder</a>&gt;[]&nbsp;<a href="../../../../../src-html/com/ibm/juno/server/annotation/RestMethod.html#line.220">encoders</a></pre>
+<div class="block">Appends to the list of <a href="../../../../../com/ibm/juno/core/encoders/Encoder.html" title="class in com.ibm.juno.core.encoders"><code>encoders</code></a> specified on the servlet.
+ <p>
+ Use this annotation when the list of encoders assigned to a method differs from the list of encoders assigned at the servlet level.
+ <p>
+ These can be used to enable various kinds of compression (e.g. <js>"gzip"</js>) on requests and responses.
+
+ <p class='bcode'>
+   <jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
+
+      <ja>@RestMethod</ja>(
+         name=<js>"PUT"</js>,
+         path=<js>"/foo"</js>,
+         encoders={GzipEncoder.<jk>class</jk>}
+      )
+      <jk>public</jk> Object doGetWithSpecialEncoding() {
+         <jc>// Handle request with special encoding</jc>
+      }
+   }
+ </p>
+
+ If you want to OVERRIDE the set of encoders specified by the servlet, combine this annotation with <code><ja>@RestMethod</ja>(inheritEncoders=<jk>false</jk>)</code>.</div>
+<dl>
+<dt>Default:</dt>
+<dd>{}</dd>
+</dl>
+</li>
+</ul>
+<a name="inheritEncoders()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>inheritEncoders</h4>
+<pre>public abstract&nbsp;boolean&nbsp;<a href="../../../../../src-html/com/ibm/juno/server/annotation/RestMethod.html#line.225">inheritEncoders</a></pre>
+<div class="block">Specifies whether the method should inherit encoders from the servlet.</div>
+<dl>
+<dt>Default:</dt>
+<dd>true</dd>
+</dl>
+</li>
+</ul>
+<a name="properties()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>properties</h4>
+<pre>public abstract&nbsp;<a href="../../../../../com/ibm/juno/server/annotation/Property.html" title="annotation in com.ibm.juno.server.annotation">Property</a>[]&nbsp;<a href="../../../../../src-html/com/ibm/juno/server/annotation/RestMethod.html#line.232">properties</a></pre>
+<div class="block">Same as <a href="../../../../../com/ibm/juno/server/annotation/RestResource.html#properties()"><code>RestResource.properties()</code></a>, except defines property values by default when this method is called.
+ <p>
+ This is equivalent to simply calling <code>res.addProperties()</code> in the Java method, but is provided for convenience.</div>
+<dl>
+<dt>Default:</dt>
+<dd>{}</dd>
+</dl>
+</li>
+</ul>
+<a name="filters()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>filters</h4>
+<pre>public abstract&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;[]&nbsp;<a href="../../../../../src-html/com/ibm/juno/server/annotation/RestMethod.html#line.237">filters</a></pre>
+<div class="block">Appends the specified filters to all serializers and parsers used by this method.</div>
+<dl>
+<dt>Default:</dt>
+<dd>{}</dd>
+</dl>
+</li>
+</ul>
+<a name="rc()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>rc</h4>
+<pre>public abstract&nbsp;int[]&nbsp;<a href="../../../../../src-html/com/ibm/juno/server/annotation/RestMethod.html#line.255">rc</a></pre>
+<div class="block">Possible HTTP response codes from this method.
+ <p>
+   This annotation is provided for documentation purposes.
+   It is used in conjunction with the following NLS resource bundle keys to populate options pages:
+ <ul>
+   <li><js>"(className.?)[javaMethodName].res.[rc]"</js> - Response description (defaults to HTTP status message).
+      e.g. <js>"MyClass.myMethod.res.404 = Sorry...I couldn't find that."</js> or <js>"myMethod.res.404 = Sorry...I couldn't find that."</js>
+   <li><js>"(className.?)[javaMethodName].res.[rc].[varCategory].[varName]"</js> - Response variable .
+      e.g. <js>"MyClass.myMethod.res.302.[header].[Location] = Set to the location where the thing can be found."</js> or  <js>"myMethod.res.302.[header].[Location] = Set to the location where the thing can be found."</js>
+ </ul>
+ <p>
+ Note that you can still define the keys in the resource bundle and not use this annotation.
+ However, the annotation is provided if you just want the OPTIONS page to show the possible status codes with
+ default HTTP status messages.</div>
+<dl>
+<dt>Default:</dt>
+<dd>{}</dd>
+</dl>
+</li>
+</ul>
+<a name="defaultRequestHeaders()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>defaultRequestHeaders</h4>
+<pre>public abstract&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;<a href="../../../../../src-html/com/ibm/juno/server/annotation/RestMethod.html#line.284">defaultRequestHeaders</a></pre>
+<div class="block">Specifies default values for request headers.
+ <p>
+ Strings are of the format <js>"Header-Name: header-value"</js>.
+ <p>
+ Affects values returned by <a href="../../../../../com/ibm/juno/server/RestRequest.html#getHeader(java.lang.String)"><code>RestRequest.getHeader(String)</code></a> when the header is not present on the request.
+ <p>
+ The most useful reason for this annotation is to provide a default <code>Accept</code> header when one is not specified
+   so that a particular default <a href="../../../../../com/ibm/juno/core/serializer/Serializer.html" title="class in com.ibm.juno.core.serializer"><code>Serializer</code></a> is picked.
+ <p>
+ Only one header value can be specified per entry (i.e. it's not a delimited list of header entries).
+ <p>
+ Header values specified at the method level override header values specified at the servlet level.
+
+ <dl>
+   <dt>Example:</dt>
+   <dd>
+ <p class='bcode'>
+   <jc>// Assume "text/json" Accept value when Accept not specified</jc>
+   <ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/*"</js>, defaultRequestHeaders={<js>"Accept: text/json"</js>})
+   <jk>public</jk> String doGet() {
+      ...
+   }
+ </p>
+   </dd>
+ </dl></div>
+<dl>
+<dt>Default:</dt>
+<dd>{}</dd>
+</dl>
+</li>
+</ul>
+<a name="description()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>description</h4>
+<pre>public abstract&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../../../../src-html/com/ibm/juno/server/annotation/RestMethod.html#line.302">description</a></pre>
+<div class="block">Optional description.
+ <p>
+   This description is used in the following locations:
+   <ul>
+      <li>The value returned by <a href="../../../../../com/ibm/juno/server/RestRequest.html#getMethodDescription()"><code>RestRequest.getMethodDescription()</code></a>.
+      <li>The <js>"$R{methodDescription}"</js> variable.
+      <li>The description of the method in the OPTIONS page.
+   </ul>
+ <p>
+   The default value pulls the description from the <code>(className.?)[javaMethodName]</code> entry in the servlet resource bundle.
+   (e.g. <js>"MyClass.myMethod = foo"</js> or <js>"myMethod = foo"</js>).
+ <p>
+   This field value can contain variables (e.g. "$L{my.localized.variable}").
+   See <a href="../../../../../com/ibm/juno/server/RestServlet.html#createRequestVarResolver(com.ibm.juno.server.RestRequest)"><code>RestServlet.createRequestVarResolver(RestRequest)</code></a>.</div>
+<dl>
+<dt>Default:</dt>
+<dd>""</dd>
+</dl>
+</li>
+</ul>
+<a name="input()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>input</h4>
+<pre>public abstract&nbsp;<a href="../../../../../com/ibm/juno/server/annotation/Var.html" title="annotation in com.ibm.juno.server.annotation">Var</a>[]&nbsp;<a href="../../../../../src-html/com/ibm/juno/server/annotation/RestMethod.html#line.340">input</a></pre>
+<div class="block">Optional input description.
+ <p>
+   This annotation is provided for documentation purposes and is used to populate the method <js>"input"</js> column
+      on the OPTIONS page.
+ <p>
+ Example:
+ <p class='bcode'>
+   <ja>@RestMethod</ja>(
+      name=<js>"POST"</js>, path=<js>"/{a}"</js>,
+      description=<js>"This is my method."</js>,
+      input={
+         <ja>@Var</ja>(category=<js>"attr"</js>, name=<js>"a"</js>, description=<js>"The 'a' attribute"</js>),
+         <ja>@Var</ja>(category=<js>"param"</js>, name=<js>"b"</js>, description=<js>"The 'b' parameter"</js>),
+         <ja>@Var</ja>(category=<js>"content"</js>, description=<js>"The HTTP content"</js>),
+         <ja>@Var</ja>(category=<js>"header"</js>, name=<js>"D"</js>, description=<js>"The 'D' header"</js>),
+         <ja>@Var</ja>(category=<js>"foo"</js>, name=<js>"bar"</js>, description=<js>"An arbitrary category"</js>)
+      }
+   )
+ </p>
+ This is functionally equivalent to specifying the following keys in the resource bundle for the class, except in this case
+ the strings are internationalized.
+ <p class='bcode'>
+   <jk>MyClass.myMethod</jk> = <js>This is my method.</js>
+   <jk>MyClass.myMethod.req.attr.a</jk> = <js>The 'a' attribute</js>
+   <jk>MyClass.myMethod.req.param.b</jk> = <js>The 'b' parameter</js>
+   <jk>MyClass.myMethod.req.content</jk> = <js>The HTTP content</js>
+   <jk>MyClass.myMethod.req.header.d</jk> = <js>The 'D' header</js>
+   <jk>MyClass.myMethod.req.foo.bar</jk> = <js>An arbitrary category</js>
+ <p>
+ As a general rule, use annotations when you don't care about internationalization (i.e. you only want to support English),
+ and use resource bundles if you need to support localization.
+ <p>
+   These annotations can contain variables (e.g. "$L{my.localized.variable}").
+   See <a href="../../../../../com/ibm/juno/server/RestServlet.html#createRequestVarResolver(com.ibm.juno.server.RestRequest)"><code>RestServlet.createRequestVarResolver(RestRequest)</code></a>.</div>
+<dl>
+<dt>Default:</dt>
+<dd>{}</dd>
+</dl>
+</li>
+</ul>
+<a name="responses()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>responses</h4>
+<pre>public abstract&nbsp;<a href="../../../../../com/ibm/juno/server/annotation/Response.html" title="annotation in com.ibm.juno.server.annotation">Response</a>[]&nbsp;<a href="../../../../../src-html/com/ibm/juno/server/annotation/RestMethod.html#line.378">responses</a></pre>
+<div class="block">Optional output description.
+ <p>
+   This annotation is provided for documentation purposes and is used to populate the method <js>"responses"</js> column
+      on the OPTIONS page.
+ <p>
+ Example:
+ <p class='bcode'>
+   <ja>@RestMethod</ja>(
+      name=<js>"GET"</js>, path=<js>"/"</js>,
+      responses={
+         <ja>@Response</ja>(200),
+         <ja>@Response</ja>(
+            value=302,
+            description=<js>"Thing wasn't found here"</js>,
+            output={
+               <ja>@Var</ja>(category=<js>"header"</js>, name=<js>"Location"</js>, description=<js>"The place to find the thing"</js>)
+            }
+         )
+      }
+   )
+ </p>
+ This is functionally equivalent to specifying the following keys in the resource bundle for the class, except in this case
+ the strings are internationalized.
+ <p class='bcode'>
+   <jk>MyClass.myMethod.res.200</jk> = <js>OK</js>
+   <jk>MyClass.myMethod.res.302</jk> = <js>Thing wasn't found here</js>
+   <jk>MyClass.myMethod.res.302.header.Location</jk> = <js>The place to find the thing</js>
+ <p>
+ As a general rule, use annotations when you don't care about internationalization (i.e. you only want to support English),
+ and use resource bundles if you need to support localization.
+ <p>
+   These annotations can contain variables (e.g. "$L{my.localized.variable}").
+   See <a href="../../../../../com/ibm/juno/server/RestServlet.html#createRequestVarResolver(com.ibm.juno.server.RestRequest)"><code>RestServlet.createRequestVarResolver(RestRequest)</code></a>.</div>
+<dl>
+<dt>Default:</dt>
+<dd>{}</dd>
+</dl>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a>
+<div class="skip"><a href="#skip-navbar_bottom" title="Skip navigation links">Skip navigation links</a></div>
+<a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/RestMethod.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../com/ibm/juno/server/annotation/Response.html" title="annotation in com.ibm.juno.server.annotation"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../com/ibm/juno/server/annotation/RestResource.html" title="annotation in com.ibm.juno.server.annotation"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?com/ibm/juno/server/annotation/RestMethod.html" target="_top">Frames</a></li>
+<li><a href="RestMethod.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Required&nbsp;|&nbsp;</li>
+<li><a href="#annotation_type_optional_element_summary">Optional</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#annotation_type_element_detail">Element</a></li>
+</ul>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+</body>
+</html>

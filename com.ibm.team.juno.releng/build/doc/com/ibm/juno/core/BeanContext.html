@@ -1,0 +1,1454 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="en">
+<head>
+<title>BeanContext (Juno)</title>
+<link rel="stylesheet" type="text/css" href="../../../../javadoc.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="BeanContext (Juno)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a>
+<div class="skip"><a href="#skip-navbar_top" title="Skip navigation links">Skip navigation links</a></div>
+<a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/BeanContext.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+<li><a href="../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li>Prev Class</li>
+<li><a href="../../../../com/ibm/juno/core/BeanContextFactory.html" title="class in com.ibm.juno.core"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../index.html?com/ibm/juno/core/BeanContext.html" target="_top">Frames</a></li>
+<li><a href="BeanContext.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">com.ibm.juno.core</div>
+<h2 title="Class BeanContext" class="title">Class BeanContext</h2>
+</div>
+<div class="contentContainer">
+<ul class="inheritance">
+<li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
+<li>
+<ul class="inheritance">
+<li>com.ibm.juno.core.BeanContext</li>
+</ul>
+</li>
+</ul>
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<hr>
+<br>
+<pre>public final class <a href="../../../../src-html/com/ibm/juno/core/BeanContext.html#line.194">BeanContext</a>
+extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
+<div class="block">Core class of the Juno architecture.
+ <p>
+   This class servers multiple purposes:
+   <ul>
+      <li>Provides the ability to wrap beans inside <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util"><code>Map</code></a> interfaces.
+      <li>Serves as a repository for metadata on POJOs, such as associated <a href="../../../../com/ibm/juno/core/filter/Filter.html" title="class in com.ibm.juno.core.filter"><code>filters</code></a>, <a href="../../../../com/ibm/juno/core/PropertyNamer.html" title="interface in com.ibm.juno.core"><code>property namers</code></a>, etc...
+         which are used to tailor how POJOs are serialized and parsed.
+      <li>Serves as a common utility class for all <a href="../../../../com/ibm/juno/core/serializer/Serializer.html" title="class in com.ibm.juno.core.serializer"><code>Serializers</code></a> and <a href="../../../../com/ibm/juno/core/parser/Parser.html" title="class in com.ibm.juno.core.parser"><code>Parsers</code></a>
+            for serializing and parsing Java beans.
+   </ul>
+
+
+ <h5 class='topic'>Bean Contexts</h5>
+ <p>
+   Typically, it will be sufficient to use the existing <a href="../../../../com/ibm/juno/core/BeanContext.html#DEFAULT"><code>DEFAULT</code></a> contexts for creating
+   bean maps.  However, if you want to tweak any of the settings on the context, you must
+   either clone the default context or create a new one from scratch (whichever is simpler for you).
+   You'll notice that this context class uses a fluent interface for defining settings.
+ <p>
+   Bean context factories can be locked using the <a href="../../../../com/ibm/juno/core/BeanContextFactory.html#lock()"><code>BeanContextFactory.lock()</code></a> method.  This makes the context settings
+   read-only.  Attempting to change a setting on a locked context will cause a <a href="../../../../com/ibm/juno/core/LockedException.html" title="class in com.ibm.juno.core"><code>LockedException</code></a>
+   to be thrown.  The default context is locked by default.  Cloning a locked context using the
+   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang"><code>Object.clone()</code></a> method produces a new unlocked context.  Locking a context is optional, although
+   it can prevent errors where bean contexts, parsers, or serializers start behaving differently
+   because a setting was changed.  As a general rule, if you want to change a setting on an existing
+   context, you should clone it, modify the setting(s), and then lock the new context.
+
+
+ <h5 class='topic'>BeanContext settings</h5>
+   <code>BeanContexts</code> have several settings that can be used to tweak behavior on how beans are handled.
+ <p>
+   Some settings (e.g. <a href="../../../../com/ibm/juno/core/BeanContextProperties.html#BEAN_beansRequireDefaultConstructor"><code>BeanContextProperties.BEAN_beansRequireDefaultConstructor</code></a>) are used to differentiate between bean and non-bean classes.
+   Attempting to create a bean map around one of these objects will throw a <a href="../../../../com/ibm/juno/core/BeanRuntimeException.html" title="class in com.ibm.juno.core"><code>BeanRuntimeException</code></a>.
+   The purpose for this behavior is so that the serializers can identify these non-bean classes and convert them to plain strings using the <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang"><code>Object.toString()</code></a> method.
+ <p>
+   Some settings (e.g. <a href="../../../../com/ibm/juno/core/BeanContextProperties.html#BEAN_beanFieldVisibility"><code>BeanContextProperties.BEAN_beanFieldVisibility</code></a>) are used to determine what kinds of properties are detected on beans.
+ <p>
+   Some settings (e.g. <a href="../../../../com/ibm/juno/core/BeanContextProperties.html#BEAN_beanMapPutReturnsOldValue"><code>BeanContextProperties.BEAN_beanMapPutReturnsOldValue</code></a>) change the runtime behavior of bean maps.
+
+
+ <h6 class='topic'>Configurable properties</h6>
+   This class has configurable properties that can be set through the <a href="../../../../com/ibm/juno/core/BeanContextFactory.html#setProperty(java.lang.String, java.lang.Object)"><code>BeanContextFactory.setProperty(String, Object)</code></a> method.
+ <p>
+   See <a href="../../../../com/ibm/juno/core/BeanContextProperties.html" title="class in com.ibm.juno.core"><code>BeanContextProperties</code></a> for settings applicable to this class.
+
+
+ <h6 class='topic'>Examples</h6>
+ <p class='bcode'>
+   <jc>// Construct a context from scratch.</jc>
+   BeanContext beanContext = <jk>new</jk> BeanContextFactory()
+      .setProperty(BeanContextProperties.<jsf>BEAN_beansRequireDefaultConstructor</jsf>, <jk>true</jk>)
+      .addNotBeanClasses(Foo.<jk>class</jk>)
+      .getBeanContext();
+
+   <jc>// Clone an existing context factory.</jc>
+   BeanContext beanContext = otherBeanContextFactory.clone()
+      .setProperty(BeanContextProperties.<jsf>BEAN_beansRequireDefaultConstructor</jsf>, <jk>true</jk>)
+      .addNotBeanClasses(Foo.<jk>class</jk>)
+      .getBeanContext();
+ </p>
+
+
+ <h5 class='topic'>Bean Maps</h5>
+ <p>
+   <a href="../../../../com/ibm/juno/core/BeanMap.html" title="class in com.ibm.juno.core"><code>BeanMaps</code></a> are wrappers around Java beans that allow properties to be retrieved and
+   set using the common <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#put(K, V)" title="class or interface in java.util"><code>Map.put(Object,Object)</code></a> and <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#get(java.lang.Object)" title="class or interface in java.util"><code>Map.get(Object)</code></a> methods.<br>
+   <br>
+   Bean maps are created in two ways...
+   <ol>
+      <li> <a href="../../../../com/ibm/juno/core/BeanContext.html#forBean(T)"><code>BeanContext.forBean()</code></a> - Wraps an existing bean inside a <code>Map</code> wrapper.
+      <li> <a href="../../../../com/ibm/juno/core/BeanContext.html#newBeanMap(java.lang.Class)"><code>BeanContext.newInstance()</code></a> - Create a new bean instance wrapped in a <code>Map</code> wrapper.
+   </ol>
+
+
+ <h6 class='topic'>Examples</h6>
+ <p class='bcode'>
+   <jc>// A sample bean class</jc>
+   <jk>public class</jk> Person {
+      <jk>public</jk> String getName();
+      <jk>public void</jk> setName(String name);
+      <jk>public int</jk> getAge();
+      <jk>public void</jk> setAge(<jk>int</jk> age);
+   }
+
+   <jc>// Wrap an existing bean in a new bean map</jc>
+   BeanMap&lt;Person&gt; m1 = BeanContext.<jsf>DEFAULT</jsf>.forBean(<jk>new</jk> Person());
+   m1.put(<js>"name"</js>, <js>"John Smith"</js>);
+   m1.put(<js>"age"</js>, 45);
+
+   <jc>// Create a new bean instance wrapped in a new bean map</jc>
+   BeanMap&lt;Person&gt; m2 = BeanContext.<jsf>DEFAULT</jsf>.newInstance(Person.<jk>class</jk>);
+   m2.put(<js>"name"</js>, <js>"John Smith"</js>);
+   m2.put(<js>"age"</js>, 45);
+   Person p = m2.getBean();  <jc>// Get the bean instance that was created.</jc>
+ </p>
+
+
+ <h5 class='topic'>Bean Annotations</h5>
+ <p>
+   This package contains annotations that can be applied to
+   class definitions to override what properties are detected on a bean.
+ <h6 class='topic'>Examples</h6>
+ <p class='bcode'>
+   <jc>// Bean class definition where only property 'name' is detected.</jc>
+   <ja>&#64;Bean</ja>(properties={<js>"name"</js>})
+   <jk>public class</jk> Person {
+      <jk>public</jk> String getName();
+      <jk>public void</jk> setName(String name);
+      <jk>public int</jk> getAge();
+      <jk>public void</jk> setAge(<jk>int</jk> age);
+   }
+ <p>
+   See <a href="../../../../com/ibm/juno/core/annotation/Bean.html" title="annotation in com.ibm.juno.core.annotation"><code>@Bean</code></a> and <a href="../../../../com/ibm/juno/core/annotation/BeanProperty.html" title="annotation in com.ibm.juno.core.annotation"><code>@BeanProperty</code></a> for more information.
+
+
+ <h5 class='topic'>Beans with read-only properties</h5>
+ <p>
+   Bean maps can also be defined on top of beans with read-only properties by adding a
+   <a href="../../../../com/ibm/juno/core/annotation/BeanConstructor.html" title="annotation in com.ibm.juno.core.annotation"><code>@BeanConstructor</code></a> annotation to one of the constructors on the
+   bean class.  This will allow read-only properties to be set through constructor arguments.
+ <p>
+   When the <code>@BeanConstructor</code> annotation is present, bean instantiation is delayed until the call to <a href="../../../../com/ibm/juno/core/BeanMap.html#getBean()"><code>BeanMap.getBean()</code></a>.
+   Until then, bean property values are stored in a local cache until <code>getBean()</code> is called.
+   Because of this additional caching step, parsing into read-only beans tends to be slower and use
+   more memory than parsing into beans with writable properties.
+ <p>
+   Attempting to call <a href="../../../../com/ibm/juno/core/BeanMap.html#put(java.lang.String, java.lang.Object)"><code>BeanMap.put(String,Object)</code></a> on a read-only property after calling <a href="../../../../com/ibm/juno/core/BeanMap.html#getBean()"><code>BeanMap.getBean()</code></a>
+   will result in a <a href="../../../../com/ibm/juno/core/BeanRuntimeException.html" title="class in com.ibm.juno.core"><code>BeanRuntimeException</code></a> being thrown.
+   Multiple calls to <a href="../../../../com/ibm/juno/core/BeanMap.html#getBean()"><code>BeanMap.getBean()</code></a> will return the same bean instance.
+ <p>
+   Beans can be defined with a combination of read-only and read-write properties.
+ <p>
+   See <a href="../../../../com/ibm/juno/core/annotation/BeanConstructor.html" title="annotation in com.ibm.juno.core.annotation"><code>@BeanConstructor</code></a> for more information.
+
+
+ <h5 class='topic'>Filters</h5>
+ <p>
+   <a href="../../../../com/ibm/juno/core/filter/Filter.html" title="class in com.ibm.juno.core.filter"><code>Filters</code></a> are used to tailor how beans and non-beans are handled.<br>
+   There are two subclasses of filters:
+   <ol>
+      <li><a href="../../../../com/ibm/juno/core/filter/BeanFilter.html" title="class in com.ibm.juno.core.filter"><code>BeanFilter</code></a> - Allows you to tailor handling of bean classes.
+         This class can be considered a programmatic equivalent to the <a href="../../../../com/ibm/juno/core/annotation/Bean.html" title="annotation in com.ibm.juno.core.annotation"><code>Bean</code></a> annotation when
+         annotating classes are not possible (e.g. you don't have access to the source).
+      <li><a href="../../../../com/ibm/juno/core/filter/PojoFilter.html" title="class in com.ibm.juno.core.filter"><code>PojoFilter</code></a> - Allows you to convert objects to serializable forms.
+   </ol>
+ <p>
+   See <a href="../../../../com/ibm/juno/core/filter/package-summary.html"><code>com.ibm.juno.core.filter</code></a> for more information.
+
+
+ <h5 class='topic'>ClassMetas</h5>
+ <p>
+   The <a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core"><code>ClassMeta</code></a> class is a wrapper around <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang"><code>Class</code></a> object that provides cached information
+   about that class (e.g. whether it's a <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util"><code>Map</code></a> or <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util"><code>Collection</code></a> or bean).
+ <p>
+   As a general rule, it's best to reuse bean contexts (and therefore serializers and parsers too)
+   whenever possible since it takes some time to populate the internal <code>ClassMeta</code> object cache.
+   By reusing bean contexts, the class type metadata only needs to be calculated once which significantly
+   improves performance.
+ <p>
+   See <a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core"><code>ClassMeta</code></a> for more information.</div>
+<dl><dt><span class="strong">Author:</span></dt>
+  <dd>Barry M. Caceres, James Bognar (jbognar@us.ibm.com)</dd></dl>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Field Summary table, listing fields, and an explanation">
+<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../com/ibm/juno/core/BeanContext.html" title="class in com.ibm.juno.core">BeanContext</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/BeanContext.html#DEFAULT">DEFAULT</a></strong></code>
+<div class="block">Default context.</div>
+</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>&lt;T&gt;&nbsp;T</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/BeanContext.html#convertToType(java.lang.Object, java.lang.Class)">convertToType</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;value,
+                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;type)</code>
+<div class="block">Converts the specified value to the specified class type.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>&lt;T&gt;&nbsp;T</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/BeanContext.html#convertToType(java.lang.Object, com.ibm.juno.core.ClassMeta)">convertToType</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;value,
+                          <a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;T&gt;&nbsp;type)</code>
+<div class="block">Casts the specified value into the specified type.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>&lt;T&gt;&nbsp;T</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/BeanContext.html#convertToType(java.lang.Object, java.lang.Object, java.lang.Class)">convertToType</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;outer,
+                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;value,
+                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;type)</code>
+<div class="block">Same as <a href="../../../../com/ibm/juno/core/BeanContext.html#convertToType(java.lang.Object, java.lang.Class)"><code>convertToType(Object, Class)</code></a>, except used for instantiating inner member classes that must
+   be instantiated within another class instance.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>&lt;T&gt;&nbsp;T</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/BeanContext.html#convertToType(java.lang.Object, java.lang.Object, com.ibm.juno.core.ClassMeta)">convertToType</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;outer,
+                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;value,
+                          <a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;T&gt;&nbsp;type)</code>
+<div class="block">Same as <a href="../../../../com/ibm/juno/core/BeanContext.html#convertToType(java.lang.Object, com.ibm.juno.core.ClassMeta)"><code>convertToType(Object, ClassMeta)</code></a>, except used for instantiating inner member classes that must
+   be instantiated within another class instance.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected static void</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/BeanContext.html#dumpCacheStats()">dumpCacheStats</a></strong>()</code>
+<div class="block">Prints meta cache statistics to <code>System.out</code>.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/BeanContext.html#equals(java.lang.Object)">equals</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected &lt;T&gt;&nbsp;<a href="../../../../com/ibm/juno/core/filter/BeanFilter.html" title="class in com.ibm.juno.core.filter">BeanFilter</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/BeanContext.html#findBeanFilter(java.lang.Class)">findBeanFilter</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;c)</code>
+<div class="block">Returns the <a href="../../../../com/ibm/juno/core/filter/BeanFilter.html" title="class in com.ibm.juno.core.filter"><code>BeanFilter</code></a> associated with the specified class, or <jk>null</jk> if there is no
+ bean filter associated with the class.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected &lt;T&gt;&nbsp;<a href="../../../../com/ibm/juno/core/filter/PojoFilter.html" title="class in com.ibm.juno.core.filter">PojoFilter</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/BeanContext.html#findPojoFilter(java.lang.Class)">findPojoFilter</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;c)</code>
+<div class="block">Returns the <a href="../../../../com/ibm/juno/core/filter/PojoFilter.html" title="class in com.ibm.juno.core.filter"><code>PojoFilter</code></a> associated with the specified class, or <jk>null</jk> if there is no
+ pojo filter associated with the class.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../com/ibm/juno/core/BeanMap.html" title="class in com.ibm.juno.core">BeanMap</a>&lt;T&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/BeanContext.html#forBean(T)">forBean</a></strong>(T&nbsp;o)</code>
+<div class="block">Wraps an object inside a <a href="../../../../com/ibm/juno/core/BeanMap.html" title="class in com.ibm.juno.core"><code>BeanMap</code></a> object (i.e.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../com/ibm/juno/core/BeanMap.html" title="class in com.ibm.juno.core">BeanMap</a>&lt;T&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/BeanContext.html#forBean(T, java.lang.Class)">forBean</a></strong>(T&nbsp;o,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? super T&gt;&nbsp;c)</code>
+<div class="block">Wraps an object inside a <a href="../../../../com/ibm/juno/core/BeanMap.html" title="class in com.ibm.juno.core"><code>BeanMap</code></a> object (i.e.: a modifiable <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util"><code>Map</code></a>)
+ defined as a bean for one of its class, a super class, or an implemented interface.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../com/ibm/juno/core/BeanMeta.html" title="class in com.ibm.juno.core">BeanMeta</a>&lt;T&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/BeanContext.html#getBeanMeta(java.lang.Class)">getBeanMeta</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;c)</code>
+<div class="block">Returns the <a href="../../../../com/ibm/juno/core/BeanMeta.html" title="class in com.ibm.juno.core"><code>BeanMeta</code></a> class for the specified class.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected &lt;T&gt;&nbsp;<a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;T&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/BeanContext.html#getClassMeta(com.ibm.juno.core.annotation.BeanProperty, java.lang.reflect.Type, java.util.Map)">getClassMeta</a></strong>(<a href="../../../../com/ibm/juno/core/annotation/BeanProperty.html" title="annotation in com.ibm.juno.core.annotation">BeanProperty</a>&nbsp;p,
+                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/reflect/Type.html?is-external=true" title="class or interface in java.lang.reflect">Type</a>&nbsp;t,
+                        <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;[]&gt;&nbsp;typeVarImpls)</code>
+<div class="block">Used for determining the class type on a method or field where a <code>@BeanProperty</code> annotation
+   may be present.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;T&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/BeanContext.html#getClassMeta(java.lang.Class)">getClassMeta</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;c)</code>
+<div class="block">Construct a <code>ClassMeta</code> wrapper around a <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang"><code>Class</code></a> object.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/BeanContext.html#getClassMeta(java.lang.reflect.Type)">getClassMeta</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/reflect/Type.html?is-external=true" title="class or interface in java.lang.reflect">Type</a>&nbsp;o)</code>
+<div class="block">Constructs a ClassMeta object given the specified object and parameters.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;T&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/BeanContext.html#getClassMetaForObject(T)">getClassMetaForObject</a></strong>(T&nbsp;o)</code>
+<div class="block">Shortcut for calling <code>getClassMeta(o.getClass())</code>.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;?&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/BeanContext.html#getClassMetaFromString(java.lang.String)">getClassMetaFromString</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;s)</code>
+<div class="block">Converts class name strings to ClassMeta objects.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;?&gt;[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/BeanContext.html#getClassMetas(java.lang.Class[])">getClassMetas</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;[]&nbsp;classes)</code>
+<div class="block">Given an array of <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang"><code>Class</code></a> objects, returns an array of corresponding <a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core"><code>ClassMeta</code></a> objects.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>&lt;E,T extends <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;E&gt;&gt;&nbsp;<br><a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;T&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/BeanContext.html#getCollectionClassMeta(java.lang.Class, java.lang.Class)">getCollectionClassMeta</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;c,
+                                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;E&gt;&nbsp;elementType)</code>
+<div class="block">Construct a <code>ClassMeta</code> wrapper around a <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util"><code>Collection</code></a> object.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>&lt;E,T extends <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;E&gt;&gt;&nbsp;<br><a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;T&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/BeanContext.html#getCollectionClassMeta(java.lang.Class, com.ibm.juno.core.ClassMeta)">getCollectionClassMeta</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;c,
+                                            <a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;E&gt;&nbsp;elementType)</code>
+<div class="block">Construct a <code>ClassMeta</code> wrapper around a <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util"><code>Collection</code></a> object.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>&lt;T extends <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&gt;&nbsp;<br><a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;T&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/BeanContext.html#getCollectionClassMeta(java.lang.Class, java.lang.reflect.Type)">getCollectionClassMeta</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;c,
+                                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/reflect/Type.html?is-external=true" title="class or interface in java.lang.reflect">Type</a>&nbsp;elementType)</code>
+<div class="block">Construct a <code>ClassMeta</code> wrapper around a <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util"><code>Collection</code></a> object.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected &lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/reflect/Constructor.html?is-external=true" title="class or interface in java.lang.reflect">Constructor</a>&lt;? extends T&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/BeanContext.html#getImplClassConstructor(java.lang.Class, com.ibm.juno.core.Visibility)">getImplClassConstructor</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;c,
+                                              <a href="../../../../com/ibm/juno/core/Visibility.html" title="enum in com.ibm.juno.core">Visibility</a>&nbsp;v)</code>
+<div class="block">Gets the no-arg constructor for the specified class.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>&lt;K,V,T extends <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;K,V&gt;&gt;&nbsp;<br><a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;T&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/BeanContext.html#getMapClassMeta(java.lang.Class, java.lang.Class, java.lang.Class)">getMapClassMeta</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;c,
+                              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;K&gt;&nbsp;keyType,
+                              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;V&gt;&nbsp;valueType)</code>
+<div class="block">Construct a <code>ClassMeta</code> wrapper around a <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util"><code>Map</code></a> object.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>&lt;K,V,T extends <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;K,V&gt;&gt;&nbsp;<br><a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;T&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/BeanContext.html#getMapClassMeta(java.lang.Class, com.ibm.juno.core.ClassMeta, com.ibm.juno.core.ClassMeta)">getMapClassMeta</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;c,
+                              <a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;K&gt;&nbsp;keyType,
+                              <a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;V&gt;&nbsp;valueType)</code>
+<div class="block">Construct a <code>ClassMeta</code> wrapper around a <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util"><code>Map</code></a> object.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>&lt;T extends <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&gt;&nbsp;<br><a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;T&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/BeanContext.html#getMapClassMeta(java.lang.Class, java.lang.reflect.Type, java.lang.reflect.Type)">getMapClassMeta</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;c,
+                              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/reflect/Type.html?is-external=true" title="class or interface in java.lang.reflect">Type</a>&nbsp;keyType,
+                              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/reflect/Type.html?is-external=true" title="class or interface in java.lang.reflect">Type</a>&nbsp;valueType)</code>
+<div class="block">Construct a <code>ClassMeta</code> wrapper around a <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util"><code>Map</code></a> object.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/BeanContext.html#hasChildPojoFilters(java.lang.Class)">hasChildPojoFilters</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;c)</code>
+<div class="block">Checks whether a class has a <a href="../../../../com/ibm/juno/core/filter/PojoFilter.html" title="class in com.ibm.juno.core.filter"><code>PojoFilter</code></a> associated with it in this bean context.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/BeanContext.html#hashCode()">hashCode</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/BeanContext.html#hasSameCache(com.ibm.juno.core.BeanContext)">hasSameCache</a></strong>(<a href="../../../../com/ibm/juno/core/BeanContext.html" title="class in com.ibm.juno.core">BeanContext</a>&nbsp;bc)</code>
+<div class="block">Returns <jk>true</jk> if the specified bean context shares the same cache as this bean context.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/BeanContext.html#isBean(java.lang.Class)">isBean</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;c)</code>
+<div class="block">Determines whether the specified class matches the requirements on this context of being a bean.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/BeanContext.html#isBean(java.lang.Object)">isBean</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</code>
+<div class="block">Determines whether the specified object matches the requirements on this context of being a bean.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/BeanContext.html#isIgnoreUnknownBeanProperties()">isIgnoreUnknownBeanProperties</a></strong>()</code>
+<div class="block">Bean property getter:  <property>ignoreUnknownBeanProperties</property>.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/BeanContext.html#isNotABean(java.lang.Class)">isNotABean</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;c)</code>
+<div class="block">Determines whether the specified class is ignored as a bean class based on the various
+   exclusion parameters specified on this context class.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>&lt;T&gt;&nbsp;T</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/BeanContext.html#newBean(java.lang.Class)">newBean</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;c)</code>
+<div class="block">Creates a new empty bean of the specified type, except used for instantiating inner member classes that must
+   be instantiated within another class instance.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>&lt;T&gt;&nbsp;T</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/BeanContext.html#newBean(java.lang.Object, java.lang.Class)">newBean</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;outer,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;c)</code>
+<div class="block">Same as <a href="../../../../com/ibm/juno/core/BeanContext.html#newBean(java.lang.Class)"><code>newBean(Class)</code></a>, except used for instantiating inner member classes that must
+   be instantiated within another class instance.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../com/ibm/juno/core/BeanMap.html" title="class in com.ibm.juno.core">BeanMap</a>&lt;T&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/BeanContext.html#newBeanMap(java.lang.Class)">newBeanMap</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;c)</code>
+<div class="block">Creates a new <a href="../../../../com/ibm/juno/core/BeanMap.html" title="class in com.ibm.juno.core"><code>BeanMap</code></a> object (i.e.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../com/ibm/juno/core/BeanMap.html" title="class in com.ibm.juno.core">BeanMap</a>&lt;T&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/BeanContext.html#newBeanMap(java.lang.Object, java.lang.Class)">newBeanMap</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;outer,
+                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;c)</code>
+<div class="block">Same as <a href="../../../../com/ibm/juno/core/BeanContext.html#newBeanMap(java.lang.Class)"><code>newBeanMap(Class)</code></a>, except used for instantiating inner member classes that must
+   be instantiated within another class instance.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;T&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/BeanContext.html#normalizeClassMeta(com.ibm.juno.core.ClassMeta)">normalizeClassMeta</a></strong>(<a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;T&gt;&nbsp;cm)</code>
+<div class="block">Returns the class type bound to this bean context if the specified class type
+   is from another bean context.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/BeanContext.html#object()">object</a></strong>()</code>
+<div class="block">Returns a reusable <a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core"><code>ClassMeta</code></a> representation for the class <code>Object</code>.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/BeanContext.html#string()">string</a></strong>()</code>
+<div class="block">Returns a reusable <a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core"><code>ClassMeta</code></a> representation for the class <code>String</code>.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/BeanContext.html#toArray(com.ibm.juno.core.ClassMeta, java.util.Collection)">toArray</a></strong>(<a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;?&gt;&nbsp;type,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;list)</code>
+<div class="block">Converts the contents of the specified list into an array.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../com/ibm/juno/core/BeanContext.html#toString()">toString</a></strong>()</code>&nbsp;</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
+<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang">clone</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long, int)" title="class or interface in java.lang">wait</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ============ FIELD DETAIL =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_detail">
+<!--   -->
+</a>
+<h3>Field Detail</h3>
+<a name="DEFAULT">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>DEFAULT</h4>
+<pre>public static final&nbsp;<a href="../../../../com/ibm/juno/core/BeanContext.html" title="class in com.ibm.juno.core">BeanContext</a> <a href="../../../../src-html/com/ibm/juno/core/BeanContext.html#line.202">DEFAULT</a></pre>
+<div class="block">Default context.  All default settings.</div>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="hasSameCache(com.ibm.juno.core.BeanContext)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>hasSameCache</h4>
+<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/com/ibm/juno/core/BeanContext.html#line.381">hasSameCache</a>(<a href="../../../../com/ibm/juno/core/BeanContext.html" title="class in com.ibm.juno.core">BeanContext</a>&nbsp;bc)</pre>
+<div class="block">Returns <jk>true</jk> if the specified bean context shares the same cache as this bean context.
+ Useful for testing purposes.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>bc</code> - The bean context to compare to.</dd>
+<dt><span class="strong">Returns:</span></dt><dd><jk>true</jk> if the bean contexts have equivalent settings and thus share caches.</dd></dl>
+</li>
+</ul>
+<a name="isIgnoreUnknownBeanProperties()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isIgnoreUnknownBeanProperties</h4>
+<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/com/ibm/juno/core/BeanContext.html#line.392">isIgnoreUnknownBeanProperties</a>()</pre>
+<div class="block">Bean property getter:  <property>ignoreUnknownBeanProperties</property>.
+ See <a href="../../../../com/ibm/juno/core/BeanContextProperties.html#BEAN_ignoreUnknownBeanProperties"><code>BeanContextProperties.BEAN_ignoreUnknownBeanProperties</code></a>.</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>The value of the <property>ignoreUnknownBeanProperties</property> property on this bean.</dd></dl>
+</li>
+</ul>
+<a name="isNotABean(java.lang.Class)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isNotABean</h4>
+<pre>protected&nbsp;boolean&nbsp;<a href="../../../../src-html/com/ibm/juno/core/BeanContext.html#line.404">isNotABean</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;c)</pre>
+<div class="block">Determines whether the specified class is ignored as a bean class based on the various
+   exclusion parameters specified on this context class.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>c</code> - The class type being tested.</dd>
+<dt><span class="strong">Returns:</span></dt><dd><jk>true</jk> if the specified class matches any of the exclusion parameters.</dd></dl>
+</li>
+</ul>
+<a name="dumpCacheStats()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>dumpCacheStats</h4>
+<pre>protected static&nbsp;void&nbsp;<a href="../../../../src-html/com/ibm/juno/core/BeanContext.html#line.425">dumpCacheStats</a>()</pre>
+<div class="block">Prints meta cache statistics to <code>System.out</code>.</div>
+</li>
+</ul>
+<a name="forBean(java.lang.Object)">
+<!--   -->
+</a><a name="forBean(T)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>forBean</h4>
+<pre>public&nbsp;&lt;T&gt;&nbsp;<a href="../../../../com/ibm/juno/core/BeanMap.html" title="class in com.ibm.juno.core">BeanMap</a>&lt;T&gt;&nbsp;<a href="../../../../src-html/com/ibm/juno/core/BeanContext.html#line.455">forBean</a>(T&nbsp;o)</pre>
+<div class="block">Wraps an object inside a <a href="../../../../com/ibm/juno/core/BeanMap.html" title="class in com.ibm.juno.core"><code>BeanMap</code></a> object (i.e. a modifiable <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util"><code>Map</code></a>).
+ <p>
+   If object is not a true bean, then throws a <a href="../../../../com/ibm/juno/core/BeanRuntimeException.html" title="class in com.ibm.juno.core"><code>BeanRuntimeException</code></a> with an explanation of why it's not a bean.
+
+ <dl>
+   <dt>Example:</dt>
+   <dd>
+ <p class='bcode'>
+   <jc>// Construct a bean map around a bean instance</jc>
+   BeanMap&lt;Person&gt; bm = BeanContext.<jsf>DEFAULT</jsf>.forBean(<jk>new</jk> Person());
+ </p>
+   </dd>
+ </dl></div>
+<dl><dt><span class="strong">Type Parameters:</span></dt><dd><code>T</code> - The class of the object being wrapped.</dd><dt><span class="strong">Parameters:</span></dt><dd><code>o</code> - The object to wrap in a map interface.  Must not be null.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The wrapped object.</dd></dl>
+</li>
+</ul>
+<a name="isBean(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isBean</h4>
+<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/com/ibm/juno/core/BeanContext.html#line.465">isBean</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
+<div class="block">Determines whether the specified object matches the requirements on this context of being a bean.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>o</code> - The object being tested.</dd>
+<dt><span class="strong">Returns:</span></dt><dd><jk>true</jk> if the specified object is considered a bean.</dd></dl>
+</li>
+</ul>
+<a name="isBean(java.lang.Class)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isBean</h4>
+<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/com/ibm/juno/core/BeanContext.html#line.477">isBean</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;c)</pre>
+<div class="block">Determines whether the specified class matches the requirements on this context of being a bean.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>c</code> - The class being tested.</dd>
+<dt><span class="strong">Returns:</span></dt><dd><jk>true</jk> if the specified class is considered a bean.</dd></dl>
+</li>
+</ul>
+<a name="forBean(java.lang.Object,java.lang.Class)">
+<!--   -->
+</a><a name="forBean(T, java.lang.Class)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>forBean</h4>
+<pre>public&nbsp;&lt;T&gt;&nbsp;<a href="../../../../com/ibm/juno/core/BeanMap.html" title="class in com.ibm.juno.core">BeanMap</a>&lt;T&gt;&nbsp;<a href="../../../../src-html/com/ibm/juno/core/BeanContext.html#line.509">forBean</a>(T&nbsp;o,
+                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? super T&gt;&nbsp;c)
+                   throws <a href="../../../../com/ibm/juno/core/BeanRuntimeException.html" title="class in com.ibm.juno.core">BeanRuntimeException</a></pre>
+<div class="block">Wraps an object inside a <a href="../../../../com/ibm/juno/core/BeanMap.html" title="class in com.ibm.juno.core"><code>BeanMap</code></a> object (i.e.: a modifiable <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util"><code>Map</code></a>)
+ defined as a bean for one of its class, a super class, or an implemented interface.
+ <p>
+   If object is not a true bean, throws a <a href="../../../../com/ibm/juno/core/BeanRuntimeException.html" title="class in com.ibm.juno.core"><code>BeanRuntimeException</code></a> with an explanation of why it's not a bean.
+
+ <dl>
+   <dt>Example:</dt>
+   <dd>
+ <p class='bcode'>
+   <jc>// Construct a bean map for new bean using only properties defined in a superclass</jc>
+   BeanMap&lt;MySubBean&gt; bm = BeanContext.<jsf>DEFAULT</jsf>.forBean(<jk>new</jk> MySubBean(), MySuperBean.<jk>class</jk>);
+
+   <jc>// Construct a bean map for new bean using only properties defined in an interface</jc>
+   BeanMap&lt;MySubBean&gt; bm = BeanContext.<jsf>DEFAULT</jsf>.forBean(<jk>new</jk> MySubBean(), MySuperInterface.<jk>class</jk>);
+ </p>
+   </dd>
+ </dl></div>
+<dl><dt><span class="strong">Type Parameters:</span></dt><dd><code>T</code> - The class of the object being wrapped.</dd><dt><span class="strong">Parameters:</span></dt><dd><code>o</code> - The object to wrap in a bean interface.  Must not be null.</dd><dd><code>c</code> - The superclass to narrow the bean properties to.  Must not be null.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The bean representation, or <jk>null</jk> if the object is not a true bean.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang">NullPointerException</a></code> - If either parameter is null.</dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang">IllegalArgumentException</a></code> - If the specified object is not an an instance of the specified class.</dd>
+<dd><code><a href="../../../../com/ibm/juno/core/BeanRuntimeException.html" title="class in com.ibm.juno.core">BeanRuntimeException</a></code> - If specified object is not a bean according to the bean rules
+      specified in this context class.</dd></dl>
+</li>
+</ul>
+<a name="newBeanMap(java.lang.Class)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>newBeanMap</h4>
+<pre>public&nbsp;&lt;T&gt;&nbsp;<a href="../../../../com/ibm/juno/core/BeanMap.html" title="class in com.ibm.juno.core">BeanMap</a>&lt;T&gt;&nbsp;<a href="../../../../src-html/com/ibm/juno/core/BeanContext.html#line.543">newBeanMap</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;c)</pre>
+<div class="block">Creates a new <a href="../../../../com/ibm/juno/core/BeanMap.html" title="class in com.ibm.juno.core"><code>BeanMap</code></a> object (i.e. a modifiable <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util"><code>Map</code></a>) of the given class with uninitialized property values.
+ <p>
+   If object is not a true bean, then throws a <a href="../../../../com/ibm/juno/core/BeanRuntimeException.html" title="class in com.ibm.juno.core"><code>BeanRuntimeException</code></a> with an explanation of why it's not a bean.
+
+ <dl>
+   <dt>Example:</dt>
+   <dd>
+ <p class='bcode'>
+   <jc>// Construct a new bean map wrapped around a new Person object</jc>
+   BeanMap&lt;Person&gt; bm = BeanContext.<jsf>DEFAULT</jsf>.newBeanMap(Person.<jk>class</jk>);
+ </p>
+   </dd>
+ </dl></div>
+<dl><dt><span class="strong">Type Parameters:</span></dt><dd><code>T</code> - The class of the object being wrapped.</dd><dt><span class="strong">Parameters:</span></dt><dd><code>c</code> - The name of the class to create a new instance of.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>A new instance of the class.</dd></dl>
+</li>
+</ul>
+<a name="newBeanMap(java.lang.Object, java.lang.Class)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>newBeanMap</h4>
+<pre>public&nbsp;&lt;T&gt;&nbsp;<a href="../../../../com/ibm/juno/core/BeanMap.html" title="class in com.ibm.juno.core">BeanMap</a>&lt;T&gt;&nbsp;<a href="../../../../src-html/com/ibm/juno/core/BeanContext.html#line.557">newBeanMap</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;outer,
+                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;c)</pre>
+<div class="block">Same as <a href="../../../../com/ibm/juno/core/BeanContext.html#newBeanMap(java.lang.Class)"><code>newBeanMap(Class)</code></a>, except used for instantiating inner member classes that must
+   be instantiated within another class instance.</div>
+<dl><dt><span class="strong">Type Parameters:</span></dt><dd><code>T</code> - The class of the object being wrapped.</dd><dt><span class="strong">Parameters:</span></dt><dd><code>c</code> - The name of the class to create a new instance of.</dd><dd><code>outer</code> - If class is a member class, this is the instance of the containing class.
+   Should be <jk>null</jk> if not a member class.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>A new instance of the class.</dd></dl>
+</li>
+</ul>
+<a name="newBean(java.lang.Class)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>newBean</h4>
+<pre>public&nbsp;&lt;T&gt;&nbsp;T&nbsp;<a href="../../../../src-html/com/ibm/juno/core/BeanContext.html#line.590">newBean</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;c)
+          throws <a href="../../../../com/ibm/juno/core/BeanRuntimeException.html" title="class in com.ibm.juno.core">BeanRuntimeException</a></pre>
+<div class="block">Creates a new empty bean of the specified type, except used for instantiating inner member classes that must
+   be instantiated within another class instance.
+
+ <dl>
+   <dt>Example:</dt>
+   <dd>
+ <p class='bcode'>
+   <jc>// Construct a new instance of the specified bean class</jc>
+   Person p = BeanContext.<jsf>DEFAULT</jsf>.newBean(Person.<jk>class</jk>);
+ </p>
+   </dd>
+ </dl></div>
+<dl><dt><span class="strong">Type Parameters:</span></dt><dd><code>T</code> - The class type of the bean being created.</dd><dt><span class="strong">Parameters:</span></dt><dd><code>c</code> - The class type of the bean being created.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>A new bean object.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../com/ibm/juno/core/BeanRuntimeException.html" title="class in com.ibm.juno.core">BeanRuntimeException</a></code> - If the specified class is not a valid bean.</dd></dl>
+</li>
+</ul>
+<a name="newBean(java.lang.Object, java.lang.Class)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>newBean</h4>
+<pre>public&nbsp;&lt;T&gt;&nbsp;T&nbsp;<a href="../../../../src-html/com/ibm/juno/core/BeanContext.html#line.605">newBean</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;outer,
+            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;c)
+          throws <a href="../../../../com/ibm/juno/core/BeanRuntimeException.html" title="class in com.ibm.juno.core">BeanRuntimeException</a></pre>
+<div class="block">Same as <a href="../../../../com/ibm/juno/core/BeanContext.html#newBean(java.lang.Class)"><code>newBean(Class)</code></a>, except used for instantiating inner member classes that must
+   be instantiated within another class instance.</div>
+<dl><dt><span class="strong">Type Parameters:</span></dt><dd><code>T</code> - The class type of the bean being created.</dd><dt><span class="strong">Parameters:</span></dt><dd><code>c</code> - The class type of the bean being created.</dd><dd><code>outer</code> - If class is a member class, this is the instance of the containing class.
+   Should be <jk>null</jk> if not a member class.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>A new bean object.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../com/ibm/juno/core/BeanRuntimeException.html" title="class in com.ibm.juno.core">BeanRuntimeException</a></code> - If the specified class is not a valid bean.</dd></dl>
+</li>
+</ul>
+<a name="getBeanMeta(java.lang.Class)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getBeanMeta</h4>
+<pre>public&nbsp;&lt;T&gt;&nbsp;<a href="../../../../com/ibm/juno/core/BeanMeta.html" title="class in com.ibm.juno.core">BeanMeta</a>&lt;T&gt;&nbsp;<a href="../../../../src-html/com/ibm/juno/core/BeanContext.html#line.634">getBeanMeta</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;c)</pre>
+<div class="block">Returns the <a href="../../../../com/ibm/juno/core/BeanMeta.html" title="class in com.ibm.juno.core"><code>BeanMeta</code></a> class for the specified class.</div>
+<dl><dt><span class="strong">Type Parameters:</span></dt><dd><code>T</code> - The class type to get the meta-data on.</dd><dt><span class="strong">Parameters:</span></dt><dd><code>c</code> - The class to get the meta-data on.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The <a href="../../../../com/ibm/juno/core/BeanMeta.html" title="class in com.ibm.juno.core"><code>BeanMeta</code></a> for the specified class, or <jk>null</jk> if the class
+   is not a bean per the settings on this context.</dd></dl>
+</li>
+</ul>
+<a name="normalizeClassMeta(com.ibm.juno.core.ClassMeta)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>normalizeClassMeta</h4>
+<pre>public&nbsp;&lt;T&gt;&nbsp;<a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;T&gt;&nbsp;<a href="../../../../src-html/com/ibm/juno/core/BeanContext.html#line.653">normalizeClassMeta</a>(<a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;T&gt;&nbsp;cm)</pre>
+<div class="block">Returns the class type bound to this bean context if the specified class type
+   is from another bean context.
+ <p>
+ For example, this method allows you to pass in an object from <code>BeanContext.<jsf>DEFAULT</jsf>.getMapClassMeta(...)</code>
+   to any of the <code>ReaderParser.parse(Reader, ClassMeta, ParserContext)</code> methods, and the parsers
+   will use this method to replace the class type with the one registered with the parser.
+ This ensures that registered filters are applied correctly.</div>
+<dl><dt><span class="strong">Type Parameters:</span></dt><dd><code>T</code> - The class type.</dd><dt><span class="strong">Parameters:</span></dt><dd><code>cm</code> - The class type.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The class type bound by this bean context.</dd></dl>
+</li>
+</ul>
+<a name="getClassMeta(java.lang.Class)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getClassMeta</h4>
+<pre>public&nbsp;&lt;T&gt;&nbsp;<a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;T&gt;&nbsp;<a href="../../../../src-html/com/ibm/juno/core/BeanContext.html#line.679">getClassMeta</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;c)</pre>
+<div class="block">Construct a <code>ClassMeta</code> wrapper around a <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang"><code>Class</code></a> object.</div>
+<dl><dt><span class="strong">Type Parameters:</span></dt><dd><code>T</code> - The class type being wrapped.</dd><dt><span class="strong">Parameters:</span></dt><dd><code>c</code> - The class being wrapped.
+   of type <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang"><code>Class</code></a> or <a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core"><code>ClassMeta</code></a>.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>If the class is not an array, returns a cached <a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core"><code>ClassMeta</code></a> object.
+   Otherwise, returns a new <a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core"><code>ClassMeta</code></a> object every time.<br></dd></dl>
+</li>
+</ul>
+<a name="getMapClassMeta(java.lang.Class, com.ibm.juno.core.ClassMeta, com.ibm.juno.core.ClassMeta)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getMapClassMeta</h4>
+<pre>public&nbsp;&lt;K,V,T extends <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;K,V&gt;&gt;&nbsp;<a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;T&gt;&nbsp;<a href="../../../../src-html/com/ibm/juno/core/BeanContext.html#line.733">getMapClassMeta</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;c,
+                                                    <a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;K&gt;&nbsp;keyType,
+                                                    <a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;V&gt;&nbsp;valueType)</pre>
+<div class="block">Construct a <code>ClassMeta</code> wrapper around a <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util"><code>Map</code></a> object.</div>
+<dl><dt><span class="strong">Type Parameters:</span></dt><dd><code>K</code> - The map key class type.</dd><dd><code>V</code> - The map value class type.</dd><dd><code>T</code> - The map class type.</dd><dt><span class="strong">Parameters:</span></dt><dd><code>c</code> - The map class type.</dd><dd><code>keyType</code> - The map key class type.</dd><dd><code>valueType</code> - The map value class type.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>If the key and value types are OBJECT, returns a cached <a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core"><code>ClassMeta</code></a> object.<br>
+   Otherwise, returns a new <a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core"><code>ClassMeta</code></a> object every time.</dd></dl>
+</li>
+</ul>
+<a name="getMapClassMeta(java.lang.Class, java.lang.Class, java.lang.Class)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getMapClassMeta</h4>
+<pre>public&nbsp;&lt;K,V,T extends <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;K,V&gt;&gt;&nbsp;<a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;T&gt;&nbsp;<a href="../../../../src-html/com/ibm/juno/core/BeanContext.html#line.751">getMapClassMeta</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;c,
+                                                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;K&gt;&nbsp;keyType,
+                                                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;V&gt;&nbsp;valueType)</pre>
+<div class="block">Construct a <code>ClassMeta</code> wrapper around a <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util"><code>Map</code></a> object.</div>
+<dl><dt><span class="strong">Type Parameters:</span></dt><dd><code>K</code> - The map key class type.</dd><dd><code>V</code> - The map value class type.</dd><dd><code>T</code> - The map class type.</dd><dt><span class="strong">Parameters:</span></dt><dd><code>c</code> - The map class type.</dd><dd><code>keyType</code> - The map key class type.</dd><dd><code>valueType</code> - The map value class type.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>If the key and value types are Object, returns a cached <a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core"><code>ClassMeta</code></a> object.<br>
+   Otherwise, returns a new <a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core"><code>ClassMeta</code></a> object every time.</dd></dl>
+</li>
+</ul>
+<a name="getMapClassMeta(java.lang.Class, java.lang.reflect.Type, java.lang.reflect.Type)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getMapClassMeta</h4>
+<pre>public&nbsp;&lt;T extends <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&gt;&nbsp;<a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;T&gt;&nbsp;<a href="../../../../src-html/com/ibm/juno/core/BeanContext.html#line.765">getMapClassMeta</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;c,
+                                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/reflect/Type.html?is-external=true" title="class or interface in java.lang.reflect">Type</a>&nbsp;keyType,
+                                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/reflect/Type.html?is-external=true" title="class or interface in java.lang.reflect">Type</a>&nbsp;valueType)</pre>
+<div class="block">Construct a <code>ClassMeta</code> wrapper around a <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util"><code>Map</code></a> object.</div>
+<dl><dt><span class="strong">Type Parameters:</span></dt><dd><code>T</code> - The map class type.</dd><dt><span class="strong">Parameters:</span></dt><dd><code>c</code> - The map class type.</dd><dd><code>keyType</code> - The map key class type.</dd><dd><code>valueType</code> - The map value class type.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>If the key and value types are Object, returns a cached <a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core"><code>ClassMeta</code></a> object.<br>
+   Otherwise, returns a new <a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core"><code>ClassMeta</code></a> object every time.</dd></dl>
+</li>
+</ul>
+<a name="getCollectionClassMeta(java.lang.Class, com.ibm.juno.core.ClassMeta)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getCollectionClassMeta</h4>
+<pre>public&nbsp;&lt;E,T extends <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;E&gt;&gt;&nbsp;<a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;T&gt;&nbsp;<a href="../../../../src-html/com/ibm/juno/core/BeanContext.html#line.779">getCollectionClassMeta</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;c,
+                                                              <a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;E&gt;&nbsp;elementType)</pre>
+<div class="block">Construct a <code>ClassMeta</code> wrapper around a <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util"><code>Collection</code></a> object.</div>
+<dl><dt><span class="strong">Type Parameters:</span></dt><dd><code>E</code> - The collection element class type.</dd><dd><code>T</code> - The collection class type.</dd><dt><span class="strong">Parameters:</span></dt><dd><code>c</code> - The collection class type.</dd><dd><code>elementType</code> - The collection element class type.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>If the element type is <code>OBJECT</code>, returns a cached <a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core"><code>ClassMeta</code></a> object.<br>
+   Otherwise, returns a new <a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core"><code>ClassMeta</code></a> object every time.</dd></dl>
+</li>
+</ul>
+<a name="getCollectionClassMeta(java.lang.Class, java.lang.Class)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getCollectionClassMeta</h4>
+<pre>public&nbsp;&lt;E,T extends <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;E&gt;&gt;&nbsp;<a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;T&gt;&nbsp;<a href="../../../../src-html/com/ibm/juno/core/BeanContext.html#line.795">getCollectionClassMeta</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;c,
+                                                              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;E&gt;&nbsp;elementType)</pre>
+<div class="block">Construct a <code>ClassMeta</code> wrapper around a <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util"><code>Collection</code></a> object.</div>
+<dl><dt><span class="strong">Type Parameters:</span></dt><dd><code>E</code> - The collection element class type.</dd><dd><code>T</code> - The collection class type.</dd><dt><span class="strong">Parameters:</span></dt><dd><code>c</code> - The collection class type.</dd><dd><code>elementType</code> - The collection element class type.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>If the element type is <code>OBJECT</code>, returns a cached <a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core"><code>ClassMeta</code></a> object.<br>
+   Otherwise, returns a new <a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core"><code>ClassMeta</code></a> object every time.</dd></dl>
+</li>
+</ul>
+<a name="getCollectionClassMeta(java.lang.Class, java.lang.reflect.Type)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getCollectionClassMeta</h4>
+<pre>public&nbsp;&lt;T extends <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&gt;&nbsp;<a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;T&gt;&nbsp;<a href="../../../../src-html/com/ibm/juno/core/BeanContext.html#line.808">getCollectionClassMeta</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;c,
+                                                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/reflect/Type.html?is-external=true" title="class or interface in java.lang.reflect">Type</a>&nbsp;elementType)</pre>
+<div class="block">Construct a <code>ClassMeta</code> wrapper around a <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util"><code>Collection</code></a> object.</div>
+<dl><dt><span class="strong">Type Parameters:</span></dt><dd><code>T</code> - The collection class type.</dd><dt><span class="strong">Parameters:</span></dt><dd><code>c</code> - The collection class type.</dd><dd><code>elementType</code> - The collection element class type.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>If the element type is <code>OBJECT</code>, returns a cached <a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core"><code>ClassMeta</code></a> object.<br>
+   Otherwise, returns a new <a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core"><code>ClassMeta</code></a> object every time.</dd></dl>
+</li>
+</ul>
+<a name="getClassMeta(java.lang.reflect.Type)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getClassMeta</h4>
+<pre>public&nbsp;<a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&nbsp;<a href="../../../../src-html/com/ibm/juno/core/BeanContext.html#line.825">getClassMeta</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/reflect/Type.html?is-external=true" title="class or interface in java.lang.reflect">Type</a>&nbsp;o)</pre>
+<div class="block">Constructs a ClassMeta object given the specified object and parameters.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>o</code> - The parent class type.
+   Can be any of the following types:
+   <ul>
+      <li><a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core"><code>ClassMeta</code></a> object, which just returns the same object.
+      <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang"><code>Class</code></a> object (e.g. <code>String.<jk>class</jk></code>).
+      <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/reflect/Type.html?is-external=true" title="class or interface in java.lang.reflect"><code>Type</code></a> object (e.g. <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/reflect/ParameterizedType.html?is-external=true" title="class or interface in java.lang.reflect"><code>ParameterizedType</code></a> or <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/reflect/GenericArrayType.html?is-external=true" title="class or interface in java.lang.reflect"><code>GenericArrayType</code></a>.
+      <li>Anything else is interpreted as <code>getClassMeta(o.getClass(), parameters);</code>
+   </ul></dd>
+<dt><span class="strong">Returns:</span></dt><dd>A ClassMeta object, or <jk>null</jk> if the object is null.</dd></dl>
+</li>
+</ul>
+<a name="getClassMetas(java.lang.Class[])">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getClassMetas</h4>
+<pre>public&nbsp;<a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;?&gt;[]&nbsp;<a href="../../../../src-html/com/ibm/juno/core/BeanContext.html#line.922">getClassMetas</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;[]&nbsp;classes)</pre>
+<div class="block">Given an array of <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang"><code>Class</code></a> objects, returns an array of corresponding <a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core"><code>ClassMeta</code></a> objects.
+ Constructs a new array on each call.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>classes</code> - The array of classes to get class metas for.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>An array of <a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core"><code>ClassMeta</code></a> objects corresponding to the classes.  Never <jk>null</jk>.</dd></dl>
+</li>
+</ul>
+<a name="getClassMetaForObject(java.lang.Object)">
+<!--   -->
+</a><a name="getClassMetaForObject(T)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getClassMetaForObject</h4>
+<pre>public&nbsp;&lt;T&gt;&nbsp;<a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;T&gt;&nbsp;<a href="../../../../src-html/com/ibm/juno/core/BeanContext.html#line.974">getClassMetaForObject</a>(T&nbsp;o)</pre>
+<div class="block">Shortcut for calling <code>getClassMeta(o.getClass())</code>.</div>
+<dl><dt><span class="strong">Type Parameters:</span></dt><dd><code>T</code> - The class of the object being passed in.</dd><dt><span class="strong">Parameters:</span></dt><dd><code>o</code> - The class to find the class type for.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The ClassMeta object, or <jk>null</jk> if <code>o</code> is <jk>null</jk>.</dd></dl>
+</li>
+</ul>
+<a name="getClassMeta(com.ibm.juno.core.annotation.BeanProperty, java.lang.reflect.Type, java.util.Map)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getClassMeta</h4>
+<pre>protected&nbsp;&lt;T&gt;&nbsp;<a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;T&gt;&nbsp;<a href="../../../../src-html/com/ibm/juno/core/BeanContext.html#line.993">getClassMeta</a>(<a href="../../../../com/ibm/juno/core/annotation/BeanProperty.html" title="annotation in com.ibm.juno.core.annotation">BeanProperty</a>&nbsp;p,
+                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/reflect/Type.html?is-external=true" title="class or interface in java.lang.reflect">Type</a>&nbsp;t,
+                            <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;[]&gt;&nbsp;typeVarImpls)</pre>
+<div class="block">Used for determining the class type on a method or field where a <code>@BeanProperty</code> annotation
+   may be present.</div>
+<dl><dt><span class="strong">Type Parameters:</span></dt><dd><code>T</code> - The class type we're wrapping.</dd><dt><span class="strong">Parameters:</span></dt><dd><code>p</code> - The property annotation on the type if there is one.</dd><dd><code>t</code> - The type.</dd><dd><code>typeVarImpls</code> - Contains known resolved type parameters on the specified class so
+   that we can result <code>ParameterizedTypes</code> and <code>TypeVariables</code>.<br>
+   Can be <jk>null</jk> if the information is not known.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The new <code>ClassMeta</code> object wrapped around the <code>Type</code> object.</dd></dl>
+</li>
+</ul>
+<a name="getClassMetaFromString(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getClassMetaFromString</h4>
+<pre>public&nbsp;<a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;?&gt;&nbsp;<a href="../../../../src-html/com/ibm/juno/core/BeanContext.html#line.1057">getClassMetaFromString</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;s)</pre>
+<div class="block">Converts class name strings to ClassMeta objects.
+
+ <dl>
+   <dt>Example:</dt>
+   <dd>
+ <ul>
+   <li><code>java.lang.String</code>
+   <li><code>com.ibm.sample.MyBean[]</code>
+   <li><code>java.util.HashMap&lt;java.lang.String,java.lang.Integer&gt;</code>
+   <li><code>[Ljava.lang.String;</code> (i.e. the value of <code>String[].<jk>class</jk>.getName()</code>
+ </ul>
+   </dd>
+ </dl></div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>s</code> - The class name.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The ClassMeta corresponding to the class name string.</dd></dl>
+</li>
+</ul>
+<a name="findPojoFilter(java.lang.Class)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>findPojoFilter</h4>
+<pre>protected&nbsp;&lt;T&gt;&nbsp;<a href="../../../../com/ibm/juno/core/filter/PojoFilter.html" title="class in com.ibm.juno.core.filter">PojoFilter</a>&nbsp;<a href="../../../../src-html/com/ibm/juno/core/BeanContext.html#line.1158">findPojoFilter</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;c)</pre>
+<div class="block">Returns the <a href="../../../../com/ibm/juno/core/filter/PojoFilter.html" title="class in com.ibm.juno.core.filter"><code>PojoFilter</code></a> associated with the specified class, or <jk>null</jk> if there is no
+ pojo filter associated with the class.</div>
+<dl><dt><span class="strong">Type Parameters:</span></dt><dd><code>T</code> - The class associated with the filter.</dd><dt><span class="strong">Parameters:</span></dt><dd><code>c</code> - The class associated with the filter.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The filter associated with the class, or null if there is no association.</dd></dl>
+</li>
+</ul>
+<a name="hasChildPojoFilters(java.lang.Class)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>hasChildPojoFilters</h4>
+<pre>protected&nbsp;boolean&nbsp;<a href="../../../../src-html/com/ibm/juno/core/BeanContext.html#line.1172">hasChildPojoFilters</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;c)</pre>
+<div class="block">Checks whether a class has a <a href="../../../../com/ibm/juno/core/filter/PojoFilter.html" title="class in com.ibm.juno.core.filter"><code>PojoFilter</code></a> associated with it in this bean context.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>c</code> - The class to check.</dd>
+<dt><span class="strong">Returns:</span></dt><dd><jk>true</jk> if the specified class or one of its subclasses has a <a href="../../../../com/ibm/juno/core/filter/PojoFilter.html" title="class in com.ibm.juno.core.filter"><code>PojoFilter</code></a> associated with it.</dd></dl>
+</li>
+</ul>
+<a name="findBeanFilter(java.lang.Class)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>findBeanFilter</h4>
+<pre>protected&nbsp;&lt;T&gt;&nbsp;<a href="../../../../com/ibm/juno/core/filter/BeanFilter.html" title="class in com.ibm.juno.core.filter">BeanFilter</a>&nbsp;<a href="../../../../src-html/com/ibm/juno/core/BeanContext.html#line.1188">findBeanFilter</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;c)</pre>
+<div class="block">Returns the <a href="../../../../com/ibm/juno/core/filter/BeanFilter.html" title="class in com.ibm.juno.core.filter"><code>BeanFilter</code></a> associated with the specified class, or <jk>null</jk> if there is no
+ bean filter associated with the class.</div>
+<dl><dt><span class="strong">Type Parameters:</span></dt><dd><code>T</code> - The class associated with the filter.</dd><dt><span class="strong">Parameters:</span></dt><dd><code>c</code> - The class associated with the filter.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The filter associated with the class, or null if there is no association.</dd></dl>
+</li>
+</ul>
+<a name="getImplClassConstructor(java.lang.Class, com.ibm.juno.core.Visibility)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getImplClassConstructor</h4>
+<pre>protected&nbsp;&lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/reflect/Constructor.html?is-external=true" title="class or interface in java.lang.reflect">Constructor</a>&lt;? extends T&gt;&nbsp;<a href="../../../../src-html/com/ibm/juno/core/BeanContext.html#line.1204">getImplClassConstructor</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;c,
+                                                   <a href="../../../../com/ibm/juno/core/Visibility.html" title="enum in com.ibm.juno.core">Visibility</a>&nbsp;v)</pre>
+<div class="block">Gets the no-arg constructor for the specified class.</div>
+<dl><dt><span class="strong">Type Parameters:</span></dt><dd><code>T</code> - The class to check.</dd><dt><span class="strong">Parameters:</span></dt><dd><code>c</code> - The class to check.</dd><dd><code>v</code> - The minimum visibility for the constructor.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The no arg constructor, or <jk>null</jk> if the class has no no-arg constructor.</dd></dl>
+</li>
+</ul>
+<a name="convertToType(java.lang.Object, java.lang.Class)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>convertToType</h4>
+<pre>public&nbsp;&lt;T&gt;&nbsp;T&nbsp;<a href="../../../../src-html/com/ibm/juno/core/BeanContext.html#line.1233">convertToType</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;value,
+                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;type)
+                throws <a href="../../../../com/ibm/juno/core/InvalidDataConversionException.html" title="class in com.ibm.juno.core">InvalidDataConversionException</a></pre>
+<div class="block">Converts the specified value to the specified class type.
+ <p>
+   See <a href="../../../../com/ibm/juno/core/BeanContext.html#convertToType(java.lang.Object, com.ibm.juno.core.ClassMeta)"><code>convertToType(Object, ClassMeta)</code></a> for the list of valid conversions.</div>
+<dl><dt><span class="strong">Type Parameters:</span></dt><dd><code>T</code> - The class type to convert the value to.</dd><dt><span class="strong">Parameters:</span></dt><dd><code>value</code> - The value to convert.</dd><dd><code>type</code> - The class type to convert the value to.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The converted value.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../com/ibm/juno/core/InvalidDataConversionException.html" title="class in com.ibm.juno.core">InvalidDataConversionException</a></code> - If the specified value cannot be converted to the specified type.</dd></dl>
+</li>
+</ul>
+<a name="convertToType(java.lang.Object, java.lang.Object, java.lang.Class)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>convertToType</h4>
+<pre>public&nbsp;&lt;T&gt;&nbsp;T&nbsp;<a href="../../../../src-html/com/ibm/juno/core/BeanContext.html#line.1252">convertToType</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;outer,
+                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;value,
+                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;type)
+                throws <a href="../../../../com/ibm/juno/core/InvalidDataConversionException.html" title="class in com.ibm.juno.core">InvalidDataConversionException</a></pre>
+<div class="block">Same as <a href="../../../../com/ibm/juno/core/BeanContext.html#convertToType(java.lang.Object, java.lang.Class)"><code>convertToType(Object, Class)</code></a>, except used for instantiating inner member classes that must
+   be instantiated within another class instance.</div>
+<dl><dt><span class="strong">Type Parameters:</span></dt><dd><code>T</code> - The class type to convert the value to.</dd><dt><span class="strong">Parameters:</span></dt><dd><code>outer</code> - If class is a member class, this is the instance of the containing class.
+   Should be <jk>null</jk> if not a member class.</dd><dd><code>value</code> - The value to convert.</dd><dd><code>type</code> - The class type to convert the value to.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The converted value.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../com/ibm/juno/core/InvalidDataConversionException.html" title="class in com.ibm.juno.core">InvalidDataConversionException</a></code> - If the specified value cannot be converted to the specified type.</dd></dl>
+</li>
+</ul>
+<a name="object()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>object</h4>
+<pre>public&nbsp;<a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;<a href="../../../../src-html/com/ibm/juno/core/BeanContext.html#line.1267">object</a>()</pre>
+<div class="block">Returns a reusable <a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core"><code>ClassMeta</code></a> representation for the class <code>Object</code>.
+ <p>
+ This <code>ClassMeta</code> is often used to represent "any object type" when an object type
+   is not known.
+ <p>
+ This method is identical to calling <code>getClassMeta(Object.<jk>class</jk>)</code> but uses
+   a cached copy to avoid a hashmap lookup.</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>The <a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core"><code>ClassMeta</code></a> object associated with the <code>Object</code> class.</dd></dl>
+</li>
+</ul>
+<a name="string()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>string</h4>
+<pre>public&nbsp;<a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;<a href="../../../../src-html/com/ibm/juno/core/BeanContext.html#line.1281">string</a>()</pre>
+<div class="block">Returns a reusable <a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core"><code>ClassMeta</code></a> representation for the class <code>String</code>.
+ <p>
+ This <code>ClassMeta</code> is often used to represent key types in maps.
+ <p>
+ This method is identical to calling <code>getClassMeta(String.<jk>class</jk>)</code> but uses
+   a cached copy to avoid a hashmap lookup.</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>The <a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core"><code>ClassMeta</code></a> object associated with the <code>String</code> class.</dd></dl>
+</li>
+</ul>
+<a name="convertToType(java.lang.Object, com.ibm.juno.core.ClassMeta)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>convertToType</h4>
+<pre>public&nbsp;&lt;T&gt;&nbsp;T&nbsp;<a href="../../../../src-html/com/ibm/juno/core/BeanContext.html#line.1418">convertToType</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;value,
+                  <a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;T&gt;&nbsp;type)
+                throws <a href="../../../../com/ibm/juno/core/InvalidDataConversionException.html" title="class in com.ibm.juno.core">InvalidDataConversionException</a></pre>
+<div class="block">Casts the specified value into the specified type.
+ <p>
+   If the value isn't an instance of the specified type, then converts
+   the value if possible.<br>
+ <p>
+   The following conversions are valid:
+   <table class='styled'>
+      <tr><th>Convert to type</th><th>Valid input value types</th><th>Notes</th></tr>
+      <tr>
+         <td>
+            A class that is the normal type of a registered <a href="../../../../com/ibm/juno/core/filter/PojoFilter.html" title="class in com.ibm.juno.core.filter"><code>PojoFilter</code></a>.
+         </td>
+         <td>
+            A value whose class matches the filtered type of that registered <a href="../../../../com/ibm/juno/core/filter/PojoFilter.html" title="class in com.ibm.juno.core.filter"><code>PojoFilter</code></a>.
+         </td>
+         <td>&nbsp;</td>
+      </tr>
+      <tr>
+         <td>
+            A class that is the filtered type of a registered <a href="../../../../com/ibm/juno/core/filter/PojoFilter.html" title="class in com.ibm.juno.core.filter"><code>PojoFilter</code></a>.
+         </td>
+         <td>
+            A value whose class matches the normal type of that registered <a href="../../../../com/ibm/juno/core/filter/PojoFilter.html" title="class in com.ibm.juno.core.filter"><code>PojoFilter</code></a>.
+         </td>
+         <td>&nbsp;</td>
+      </tr>
+      <tr>
+         <td>
+            <code>Number</code> (e.g. <code>Integer</code>, <code>Short</code>, <code>Float</code>,...)<br>
+            <code>Number.<jsf>TYPE</jsf></code> (e.g. <code>Integer.<jsf>TYPE</jsf></code>, <code>Short.<jsf>TYPE</jsf></code>, <code>Float.<jsf>TYPE</jsf></code>,...)
+         </td>
+         <td>
+            <code>Number</code>, <code>String</code>, <jk>null</jk>
+         </td>
+         <td>
+            For primitive <code>TYPES</code>, <jk>null</jk> returns the JVM default value for that type.
+         </td>
+      </tr>
+      <tr>
+         <td>
+            <code>Map</code> (e.g. <code>Map</code>, <code>HashMap</code>, <code>TreeMap</code>, <code>ObjectMap</code>)
+         </td>
+         <td>
+            <code>Map</code>
+         </td>
+         <td>
+            If <code>Map</code> is not constructible, a <code>ObjectMap</code> is created.
+         </td>
+      </tr>
+      <tr>
+         <td>
+         <code>Collection</code> (e.g. <code>List</code>, <code>LinkedList</code>, <code>HashSet</code>, <code>ObjectList</code>)
+         </td>
+         <td>
+            <code>Collection&lt;Object&gt;</code><br>
+            <code>Object[]</code>
+         </td>
+         <td>
+            If <code>Collection</code> is not constructible, a <code>ObjectList</code> is created.
+         </td>
+      </tr>
+      <tr>
+         <td>
+            <code>X[]</code> (array of any type X)<br>
+         </td>
+         <td>
+            <code>List&lt;X&gt;</code><br>
+         </td>
+         <td>&nbsp;</td>
+      </tr>
+      <tr>
+         <td>
+            <code>X[][]</code> (multi-dimensional arrays)<br>
+         </td>
+         <td>
+            <code>List&lt;List&lt;X&gt;&gt;</code><br>
+            <code>List&lt;X[]&gt;</code><br>
+            <code>List[]&lt;X&gt;</code><br>
+         </td>
+         <td>&nbsp;</td>
+      </tr>
+      <tr>
+         <td>
+            <code>Enum</code><br>
+         </td>
+         <td>
+            <code>String</code><br>
+         </td>
+         <td>&nbsp;</td>
+      </tr>
+      <tr>
+         <td>
+            Bean<br>
+         </td>
+         <td>
+            <code>Map</code><br>
+         </td>
+         <td>&nbsp;</td>
+      </tr>
+      <tr>
+         <td>
+            <code>String</code><br>
+         </td>
+         <td>
+            Anything<br>
+         </td>
+         <td>
+            Arrays are converted to JSON arrays<br>
+         </td>
+      </tr>
+      <tr>
+         <td>
+            Anything with one of the following methods:<br>
+            <code><jk>public static</jk> T fromString(String)</code><br>
+            <code><jk>public static</jk> T valueOf(String)</code><br>
+            <code><jk>public<jk> T(String)</code><br>
+         </td>
+         <td>
+            <code>String</code><br>
+         </td>
+         <td>
+            <br>
+         </td>
+      </tr>
+   </table></div>
+<dl><dt><span class="strong">Type Parameters:</span></dt><dd><code>T</code> - The class type to convert the value to.</dd><dt><span class="strong">Parameters:</span></dt><dd><code>value</code> - The value to be converted.</dd><dd><code>type</code> - The target object type.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The converted type.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../com/ibm/juno/core/InvalidDataConversionException.html" title="class in com.ibm.juno.core">InvalidDataConversionException</a></code> - If the specified value cannot be converted to the specified type.</dd></dl>
+</li>
+</ul>
+<a name="convertToType(java.lang.Object, java.lang.Object, com.ibm.juno.core.ClassMeta)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>convertToType</h4>
+<pre>public&nbsp;&lt;T&gt;&nbsp;T&nbsp;<a href="../../../../src-html/com/ibm/juno/core/BeanContext.html#line.1434">convertToType</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;outer,
+                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;value,
+                  <a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;T&gt;&nbsp;type)
+                throws <a href="../../../../com/ibm/juno/core/InvalidDataConversionException.html" title="class in com.ibm.juno.core">InvalidDataConversionException</a></pre>
+<div class="block">Same as <a href="../../../../com/ibm/juno/core/BeanContext.html#convertToType(java.lang.Object, com.ibm.juno.core.ClassMeta)"><code>convertToType(Object, ClassMeta)</code></a>, except used for instantiating inner member classes that must
+   be instantiated within another class instance.</div>
+<dl><dt><span class="strong">Type Parameters:</span></dt><dd><code>T</code> - The class type to convert the value to.</dd><dt><span class="strong">Parameters:</span></dt><dd><code>outer</code> - If class is a member class, this is the instance of the containing class.
+   Should be <jk>null</jk> if not a member class.</dd><dd><code>value</code> - The value to convert.</dd><dd><code>type</code> - The class type to convert the value to.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The converted value.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../com/ibm/juno/core/InvalidDataConversionException.html" title="class in com.ibm.juno.core">InvalidDataConversionException</a></code> - If the specified value cannot be converted to the specified type.</dd></dl>
+</li>
+</ul>
+<a name="toArray(com.ibm.juno.core.ClassMeta, java.util.Collection)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>toArray</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;<a href="../../../../src-html/com/ibm/juno/core/BeanContext.html#line.1699">toArray</a>(<a href="../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;?&gt;&nbsp;type,
+             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;?&gt;&nbsp;list)</pre>
+<div class="block">Converts the contents of the specified list into an array.
+ <p>
+   Works on both object and primitive arrays.
+ <p>
+   In the case of multi-dimensional arrays, the incoming list must
+   contain elements of type n-1 dimension.  i.e. if <code>type</code> is <code><jk>int</jk>[][]</code>
+   then <code>list</code> must have entries of type <code><jk>int</jk>[]</code>.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>type</code> - The type to convert to.  Must be an array type.</dd><dd><code>list</code> - The contents to populate the array with.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>A new object or primitive array.</dd></dl>
+</li>
+</ul>
+<a name="hashCode()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>hashCode</h4>
+<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/com/ibm/juno/core/BeanContext.html#line.1725">hashCode</a>()</pre>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="equals(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>equals</h4>
+<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/com/ibm/juno/core/BeanContext.html#line.1734">equals</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang">equals</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="toString()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>toString</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../../../src-html/com/ibm/juno/core/BeanContext.html#line.1781">toString</a>()</pre>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang">toString</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
+</dl>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a>
+<div class="skip"><a href="#skip-navbar_bottom" title="Skip navigation links">Skip navigation links</a></div>
+<a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/BeanContext.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+<li><a href="../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li>Prev Class</li>
+<li><a href="../../../../com/ibm/juno/core/BeanContextFactory.html" title="class in com.ibm.juno.core"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../index.html?com/ibm/juno/core/BeanContext.html" target="_top">Frames</a></li>
+<li><a href="BeanContext.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+</body>
+</html>

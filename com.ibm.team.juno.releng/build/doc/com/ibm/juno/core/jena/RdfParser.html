@@ -1,0 +1,746 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="en">
+<head>
+<title>RdfParser (Juno)</title>
+<link rel="stylesheet" type="text/css" href="../../../../../javadoc.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="RdfParser (Juno)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a>
+<div class="skip"><a href="#skip-navbar_top" title="Skip navigation links">Skip navigation links</a></div>
+<a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/RdfParser.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../com/ibm/juno/core/jena/RdfCollectionFormat.html" title="enum in com.ibm.juno.core.jena"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../com/ibm/juno/core/jena/RdfParser.N3.html" title="class in com.ibm.juno.core.jena"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?com/ibm/juno/core/jena/RdfParser.html" target="_top">Frames</a></li>
+<li><a href="RdfParser.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li><a href="#nested_class_summary">Nested</a>&nbsp;|&nbsp;</li>
+<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">com.ibm.juno.core.jena</div>
+<h2 title="Class RdfParser" class="title">Class RdfParser</h2>
+</div>
+<div class="contentContainer">
+<ul class="inheritance">
+<li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
+<li>
+<ul class="inheritance">
+<li><a href="../../../../../com/ibm/juno/core/Lockable.html" title="class in com.ibm.juno.core">com.ibm.juno.core.Lockable</a></li>
+<li>
+<ul class="inheritance">
+<li><a href="../../../../../com/ibm/juno/core/CoreApi.html" title="class in com.ibm.juno.core">com.ibm.juno.core.CoreApi</a></li>
+<li>
+<ul class="inheritance">
+<li><a href="../../../../../com/ibm/juno/core/parser/Parser.html" title="class in com.ibm.juno.core.parser">com.ibm.juno.core.parser.Parser</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/io/Reader.html?is-external=true" title="class or interface in java.io">Reader</a>&gt;</li>
+<li>
+<ul class="inheritance">
+<li><a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html" title="class in com.ibm.juno.core.parser">com.ibm.juno.core.parser.ReaderParser</a></li>
+<li>
+<ul class="inheritance">
+<li>com.ibm.juno.core.jena.RdfParser</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<dl>
+<dt>All Implemented Interfaces:</dt>
+<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Cloneable.html?is-external=true" title="class or interface in java.lang">Cloneable</a></dd>
+</dl>
+<dl>
+<dt>Direct Known Subclasses:</dt>
+<dd><a href="../../../../../com/ibm/juno/core/jena/RdfParser.N3.html" title="class in com.ibm.juno.core.jena">RdfParser.N3</a>, <a href="../../../../../com/ibm/juno/core/jena/RdfParser.NTriple.html" title="class in com.ibm.juno.core.jena">RdfParser.NTriple</a>, <a href="../../../../../com/ibm/juno/core/jena/RdfParser.Turtle.html" title="class in com.ibm.juno.core.jena">RdfParser.Turtle</a>, <a href="../../../../../com/ibm/juno/core/jena/RdfParser.Xml.html" title="class in com.ibm.juno.core.jena">RdfParser.Xml</a></dd>
+</dl>
+<hr>
+<br>
+<pre><a href="../../../../../com/ibm/juno/core/annotation/Consumes.html" title="annotation in com.ibm.juno.core.annotation">@Consumes</a>(<a href="../../../../../com/ibm/juno/core/annotation/Consumes.html#value()">value</a>="text/xml+rdf")
+public class <a href="../../../../../src-html/com/ibm/juno/core/jena/RdfParser.html#line.56">RdfParser</a>
+extends <a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html" title="class in com.ibm.juno.core.parser">ReaderParser</a></pre>
+<div class="block">Parses RDF into POJOs.
+
+
+ <h6 class='topic'>Configurable properties</h6>
+ <p>
+   Refer to <a class='doclink' href='package-summary.html#ParserConfigurableProperties'>Configurable Properties</a>
+      for the entire list of configurable properties.
+
+
+ <h6 class='topic'>Behavior-specific subclasses</h6>
+ <p>
+   The following direct subclasses are provided for language-specific parsers:
+ <ul>
+   <li><a href="../../../../../com/ibm/juno/core/jena/RdfParser.Xml.html" title="class in com.ibm.juno.core.jena"><code>RdfParser.Xml</code></a> - RDF/XML and RDF/XML-ABBREV.
+   <li><a href="../../../../../com/ibm/juno/core/jena/RdfParser.NTriple.html" title="class in com.ibm.juno.core.jena"><code>RdfParser.NTriple</code></a> - N-TRIPLE.
+   <li><a href="../../../../../com/ibm/juno/core/jena/RdfParser.Turtle.html" title="class in com.ibm.juno.core.jena"><code>RdfParser.Turtle</code></a> - TURTLE.
+   <li><a href="../../../../../com/ibm/juno/core/jena/RdfParser.N3.html" title="class in com.ibm.juno.core.jena"><code>RdfParser.N3</code></a> - N3.
+ </ul>
+
+
+ <h6 class='topic'>Additional Information</h6>
+ <p>
+   See <a class='doclink' href='package-summary.html#TOC'>RDF Overview</a> for an overview of RDF support in Juno.</div>
+<dl><dt><span class="strong">Author:</span></dt>
+  <dd>James Bognar (jbognar@us.ibm.com)</dd></dl>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- ======== NESTED CLASS SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="nested_class_summary">
+<!--   -->
+</a>
+<h3>Nested Class Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Nested Class Summary table, listing nested classes, and an explanation">
+<caption><span>Nested Classes</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/jena/RdfParser.N3.html" title="class in com.ibm.juno.core.jena">RdfParser.N3</a></strong></code>
+<div class="block">Consumes N3 input</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/jena/RdfParser.NTriple.html" title="class in com.ibm.juno.core.jena">RdfParser.NTriple</a></strong></code>
+<div class="block">Consumes N-Triple input</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/jena/RdfParser.Turtle.html" title="class in com.ibm.juno.core.jena">RdfParser.Turtle</a></strong></code>
+<div class="block">Consumes Turtle input</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/jena/RdfParser.Xml.html" title="class in com.ibm.juno.core.jena">RdfParser.Xml</a></strong></code>
+<div class="block">Consumes RDF/XML input</div>
+</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Field Summary table, listing fields, and an explanation">
+<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../com/ibm/juno/core/jena/RdfParser.html" title="class in com.ibm.juno.core.jena">RdfParser</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/jena/RdfParser.html#DEFAULT_N3">DEFAULT_N3</a></strong></code>
+<div class="block">Default N3 parser, all default settings.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../com/ibm/juno/core/jena/RdfParser.html" title="class in com.ibm.juno.core.jena">RdfParser</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/jena/RdfParser.html#DEFAULT_NTRIPLE">DEFAULT_NTRIPLE</a></strong></code>
+<div class="block">Default N-Triple parser, all default settings.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../com/ibm/juno/core/jena/RdfParser.html" title="class in com.ibm.juno.core.jena">RdfParser</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/jena/RdfParser.html#DEFAULT_TURTLE">DEFAULT_TURTLE</a></strong></code>
+<div class="block">Default Turtle parser, all default settings.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../com/ibm/juno/core/jena/RdfParser.html" title="class in com.ibm.juno.core.jena">RdfParser</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/jena/RdfParser.html#DEFAULT_XML">DEFAULT_XML</a></strong></code>
+<div class="block">Default XML parser, all default settings.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../com/ibm/juno/core/jena/RdfParserProperties.html" title="class in com.ibm.juno.core.jena">RdfParserProperties</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/jena/RdfParser.html#rpp">rpp</a></strong></code>
+<div class="block">Jena parser properties currently set on this parser.</div>
+</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="fields_inherited_from_class_com.ibm.juno.core.parser.Parser">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;com.ibm.juno.core.parser.<a href="../../../../../com/ibm/juno/core/parser/Parser.html" title="class in com.ibm.juno.core.parser">Parser</a></h3>
+<code><a href="../../../../../com/ibm/juno/core/parser/Parser.html#pp">pp</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="fields_inherited_from_class_com.ibm.juno.core.CoreApi">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;com.ibm.juno.core.<a href="../../../../../com/ibm/juno/core/CoreApi.html" title="class in com.ibm.juno.core">CoreApi</a></h3>
+<code><a href="../../../../../com/ibm/juno/core/CoreApi.html#beanContextFactory">beanContextFactory</a></code></li>
+</ul>
+</li>
+</ul>
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_summary">
+<!--   -->
+</a>
+<h3>Constructor Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Constructor Summary table, listing constructors, and an explanation">
+<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../../com/ibm/juno/core/jena/RdfParser.html#RdfParser()">RdfParser</a></strong>()</code>&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../com/ibm/juno/core/jena/RdfParser.html" title="class in com.ibm.juno.core.jena">RdfParser</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/jena/RdfParser.html#addFilters(java.lang.Class...)">addFilters</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;...&nbsp;classes)</code>
+<div class="block">Shortcut for calling <code>getBeanContext().addFilters(Class...)</code>.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../com/ibm/juno/core/jena/RdfParser.html" title="class in com.ibm.juno.core.jena">RdfParser</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/jena/RdfParser.html#addImplClass(java.lang.Class, java.lang.Class)">addImplClass</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;interfaceClass,
+                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends T&gt;&nbsp;implClass)</code>
+<div class="block">Shortcut for calling <code>getBeanContext().addImplClass(Class, Class)</code>.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../com/ibm/juno/core/jena/RdfParser.html" title="class in com.ibm.juno.core.jena">RdfParser</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/jena/RdfParser.html#addNotBeanClasses(java.lang.Class...)">addNotBeanClasses</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;...&nbsp;classes)</code>
+<div class="block">Shortcut for calling <code>getBeanContext().addNotBeanClasses(Class...)</code>.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../com/ibm/juno/core/jena/RdfParser.html" title="class in com.ibm.juno.core.jena">RdfParser</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/jena/RdfParser.html#clone()">clone</a></strong>()</code>
+<div class="block">Creates an unlocked clone of this object.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../com/ibm/juno/core/jena/RdfParserContext.html" title="class in com.ibm.juno.core.jena">RdfParserContext</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/jena/RdfParser.html#createContext(com.ibm.juno.core.ObjectMap, java.lang.reflect.Method, java.lang.Object)">createContext</a></strong>(<a href="../../../../../com/ibm/juno/core/ObjectMap.html" title="class in com.ibm.juno.core">ObjectMap</a>&nbsp;op,
+                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/reflect/Method.html?is-external=true" title="class or interface in java.lang.reflect">Method</a>&nbsp;javaMethod,
+                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;outer)</code>
+<div class="block">Create the context object that will be passed in to the parse method.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected &lt;T&gt;&nbsp;T</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/jena/RdfParser.html#doParse(java.io.Reader, int, com.ibm.juno.core.ClassMeta, com.ibm.juno.core.parser.ParserContext)">doParse</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/Reader.html?is-external=true" title="class or interface in java.io">Reader</a>&nbsp;in,
+              int&nbsp;estimatedSize,
+              <a href="../../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;T&gt;&nbsp;type,
+              <a href="../../../../../com/ibm/juno/core/parser/ParserContext.html" title="class in com.ibm.juno.core.parser">ParserContext</a>&nbsp;ctx)</code>
+<div class="block">Workhorse method.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../com/ibm/juno/core/jena/RdfParser.html" title="class in com.ibm.juno.core.jena">RdfParser</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/jena/RdfParser.html#lock()">lock</a></strong>()</code>
+<div class="block">Locks this object so that settings on it cannot be modified.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../com/ibm/juno/core/jena/RdfParser.html" title="class in com.ibm.juno.core.jena">RdfParser</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/jena/RdfParser.html#setClassLoader(java.lang.ClassLoader)">setClassLoader</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/ClassLoader.html?is-external=true" title="class or interface in java.lang">ClassLoader</a>&nbsp;classLoader)</code>
+<div class="block">Shortcut for calling <code>getBeanContext().setClassLoader(ClassLoader)</code>.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../com/ibm/juno/core/jena/RdfParser.html" title="class in com.ibm.juno.core.jena">RdfParser</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/jena/RdfParser.html#setProperties(com.ibm.juno.core.ObjectMap)">setProperties</a></strong>(<a href="../../../../../com/ibm/juno/core/ObjectMap.html" title="class in com.ibm.juno.core">ObjectMap</a>&nbsp;properties)</code>
+<div class="block">Sets multiple properties on this class.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../com/ibm/juno/core/jena/RdfParser.html" title="class in com.ibm.juno.core.jena">RdfParser</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/ibm/juno/core/jena/RdfParser.html#setProperty(java.lang.String, java.lang.Object)">setProperty</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;property,
+                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;value)</code>
+<div class="block">Sets a property on this class.</div>
+</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_com.ibm.juno.core.parser.ReaderParser">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;com.ibm.juno.core.parser.<a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html" title="class in com.ibm.juno.core.parser">ReaderParser</a></h3>
+<code><a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html#doParseArgs(java.io.Reader, int, com.ibm.juno.core.ClassMeta[], com.ibm.juno.core.parser.ParserContext)">doParseArgs</a>, <a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html#doParseIntoCollection(java.io.Reader, int, java.util.Collection, java.lang.reflect.Type, com.ibm.juno.core.parser.ParserContext)">doParseIntoCollection</a>, <a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html#doParseIntoMap(java.io.Reader, int, java.util.Map, java.lang.reflect.Type, java.lang.reflect.Type, com.ibm.juno.core.parser.ParserContext)">doParseIntoMap</a>, <a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html#isReaderParser()">isReaderParser</a>, <a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html#parse(java.lang.CharSequence, java.lang.Class)">parse</a>, <a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html#parse(java.lang.CharSequence, com.ibm.juno.core.ClassMeta)">parse</a>, <a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html#parseArgs(java.lang.CharSequence, com.ibm.juno.core.ClassMeta[])">parseArgs</a>, <a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html#parseArgs(java.io.Reader, int, com.ibm.juno.core.ClassMeta[])">parseArgs</a>, <a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html#parseCollection(java.lang.CharSequence, java.lang.Class, java.lang.Class)">parseCollection</a>, <a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html#parseIntoCollection(java.lang.CharSequence, java.util.Collection, java.lang.reflect.Type)">parseIntoCollection</a>, <a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html#parseIntoCollection(java.io.Reader, int, java.util.Collection, java.lang.reflect.Type)">parseIntoCollection</a>, <a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html#parseIntoMap(java.lang.CharSequence, java.util.Map, java.lang.reflect.Type, java.lang.reflect.Type)">parseIntoMap</a>, <a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html#parseIntoMap(java.io.Reader, int, java.util.Map, java.lang.reflect.Type, java.lang.reflect.Type)">parseIntoMap</a>, <a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html#parseMap(java.lang.CharSequence, java.lang.Class, java.lang.Class, java.lang.Class)">parseMap</a>, <a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html#wrapReader(java.lang.CharSequence)">wrapReader</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_com.ibm.juno.core.parser.Parser">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;com.ibm.juno.core.parser.<a href="../../../../../com/ibm/juno/core/parser/Parser.html" title="class in com.ibm.juno.core.parser">Parser</a></h3>
+<code><a href="../../../../../com/ibm/juno/core/parser/Parser.html#addListener(com.ibm.juno.core.parser.ParserListener)">addListener</a>, <a href="../../../../../com/ibm/juno/core/parser/Parser.html#convertAttrToType(java.lang.Object, java.lang.String, com.ibm.juno.core.ClassMeta)">convertAttrToType</a>, <a href="../../../../../com/ibm/juno/core/parser/Parser.html#createContext()">createContext</a>, <a href="../../../../../com/ibm/juno/core/parser/Parser.html#getListeners()">getListeners</a>, <a href="../../../../../com/ibm/juno/core/parser/Parser.html#getMediaTypes()">getMediaTypes</a>, <a href="../../../../../com/ibm/juno/core/parser/Parser.html#onUnknownProperty(com.ibm.juno.core.parser.ParserContext, java.lang.String, com.ibm.juno.core.BeanMap, int, int)">onUnknownProperty</a>, <a href="../../../../../com/ibm/juno/core/parser/Parser.html#parse(R, int, java.lang.Class)">parse</a>, <a href="../../../../../com/ibm/juno/core/parser/Parser.html#parse(R, int, com.ibm.juno.core.ClassMeta)">parse</a>, <a href="../../../../../com/ibm/juno/core/parser/Parser.html#parse(R, int, com.ibm.juno.core.ClassMeta, com.ibm.juno.core.parser.ParserContext)">parse</a>, <a href="../../../../../com/ibm/juno/core/parser/Parser.html#parseCollection(R, int, java.lang.Class, java.lang.Class)">parseCollection</a>, <a href="../../../../../com/ibm/juno/core/parser/Parser.html#parseMap(R, int, java.lang.Class, java.lang.Class, java.lang.Class)">parseMap</a>, <a href="../../../../../com/ibm/juno/core/parser/Parser.html#setName(com.ibm.juno.core.ClassMeta, java.lang.Object, java.lang.Object)">setName</a>, <a href="../../../../../com/ibm/juno/core/parser/Parser.html#setParent(com.ibm.juno.core.ClassMeta, java.lang.Object, java.lang.Object)">setParent</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_com.ibm.juno.core.CoreApi">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;com.ibm.juno.core.<a href="../../../../../com/ibm/juno/core/CoreApi.html" title="class in com.ibm.juno.core">CoreApi</a></h3>
+<code><a href="../../../../../com/ibm/juno/core/CoreApi.html#checkLock()">checkLock</a>, <a href="../../../../../com/ibm/juno/core/CoreApi.html#getBeanContext()">getBeanContext</a>, <a href="../../../../../com/ibm/juno/core/CoreApi.html#object()">object</a>, <a href="../../../../../com/ibm/juno/core/CoreApi.html#string()">string</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_com.ibm.juno.core.Lockable">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;com.ibm.juno.core.<a href="../../../../../com/ibm/juno/core/Lockable.html" title="class in com.ibm.juno.core">Lockable</a></h3>
+<code><a href="../../../../../com/ibm/juno/core/Lockable.html#isLocked()">isLocked</a>, <a href="../../../../../com/ibm/juno/core/Lockable.html#onUnclone()">onUnclone</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
+<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang">equals</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang">hashCode</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang">toString</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long, int)" title="class or interface in java.lang">wait</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ============ FIELD DETAIL =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_detail">
+<!--   -->
+</a>
+<h3>Field Detail</h3>
+<a name="DEFAULT_XML">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>DEFAULT_XML</h4>
+<pre>public static final&nbsp;<a href="../../../../../com/ibm/juno/core/jena/RdfParser.html" title="class in com.ibm.juno.core.jena">RdfParser</a> <a href="../../../../../src-html/com/ibm/juno/core/jena/RdfParser.html#line.59">DEFAULT_XML</a></pre>
+<div class="block">Default XML parser, all default settings.</div>
+</li>
+</ul>
+<a name="DEFAULT_TURTLE">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>DEFAULT_TURTLE</h4>
+<pre>public static final&nbsp;<a href="../../../../../com/ibm/juno/core/jena/RdfParser.html" title="class in com.ibm.juno.core.jena">RdfParser</a> <a href="../../../../../src-html/com/ibm/juno/core/jena/RdfParser.html#line.62">DEFAULT_TURTLE</a></pre>
+<div class="block">Default Turtle parser, all default settings.</div>
+</li>
+</ul>
+<a name="DEFAULT_NTRIPLE">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>DEFAULT_NTRIPLE</h4>
+<pre>public static final&nbsp;<a href="../../../../../com/ibm/juno/core/jena/RdfParser.html" title="class in com.ibm.juno.core.jena">RdfParser</a> <a href="../../../../../src-html/com/ibm/juno/core/jena/RdfParser.html#line.65">DEFAULT_NTRIPLE</a></pre>
+<div class="block">Default N-Triple parser, all default settings.</div>
+</li>
+</ul>
+<a name="DEFAULT_N3">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>DEFAULT_N3</h4>
+<pre>public static final&nbsp;<a href="../../../../../com/ibm/juno/core/jena/RdfParser.html" title="class in com.ibm.juno.core.jena">RdfParser</a> <a href="../../../../../src-html/com/ibm/juno/core/jena/RdfParser.html#line.68">DEFAULT_N3</a></pre>
+<div class="block">Default N3 parser, all default settings.</div>
+</li>
+</ul>
+<a name="rpp">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>rpp</h4>
+<pre>protected transient&nbsp;<a href="../../../../../com/ibm/juno/core/jena/RdfParserProperties.html" title="class in com.ibm.juno.core.jena">RdfParserProperties</a> <a href="../../../../../src-html/com/ibm/juno/core/jena/RdfParser.html#line.109">rpp</a></pre>
+<div class="block">Jena parser properties currently set on this parser.</div>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_detail">
+<!--   -->
+</a>
+<h3>Constructor Detail</h3>
+<a name="RdfParser()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>RdfParser</h4>
+<pre>public&nbsp;<a href="../../../../../src-html/com/ibm/juno/core/jena/RdfParser.html#line.56">RdfParser</a>()</pre>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="doParse(java.io.Reader, int, com.ibm.juno.core.ClassMeta, com.ibm.juno.core.parser.ParserContext)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>doParse</h4>
+<pre>protected&nbsp;&lt;T&gt;&nbsp;T&nbsp;<a href="../../../../../src-html/com/ibm/juno/core/jena/RdfParser.html#line.114">doParse</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/Reader.html?is-external=true" title="class or interface in java.io">Reader</a>&nbsp;in,
+            int&nbsp;estimatedSize,
+            <a href="../../../../../com/ibm/juno/core/ClassMeta.html" title="class in com.ibm.juno.core">ClassMeta</a>&lt;T&gt;&nbsp;type,
+            <a href="../../../../../com/ibm/juno/core/parser/ParserContext.html" title="class in com.ibm.juno.core.parser">ParserContext</a>&nbsp;ctx)
+             throws <a href="../../../../../com/ibm/juno/core/parser/ParseException.html" title="class in com.ibm.juno.core.parser">ParseException</a>,
+                    <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<div class="block"><span class="strong">Description copied from class:&nbsp;<code><a href="../../../../../com/ibm/juno/core/parser/Parser.html#doParse(R, int, com.ibm.juno.core.ClassMeta, com.ibm.juno.core.parser.ParserContext)">Parser</a></code></span></div>
+<div class="block">Workhorse method.  Subclasses are expected to implement this method.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html#doParse(java.io.Reader, int, com.ibm.juno.core.ClassMeta, com.ibm.juno.core.parser.ParserContext)">doParse</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html" title="class in com.ibm.juno.core.parser">ReaderParser</a></code></dd>
+<dt><span class="strong">Type Parameters:</span></dt><dd><code>T</code> - The class type of the object to create.</dd><dt><span class="strong">Parameters:</span></dt><dd><code>in</code> - The input stream or reader containing the input.</dd><dd><code>estimatedSize</code> - The estimated size of the input, or <code>-1</code> if unknown.</dd><dd><code>type</code> - The class type of the object to create.
+   If <jk>null</jk> or <code>Object.<jk>class</jk></code>, object type is based on what's being parsed.
+   For example, when parsing JSON text, it may return a <code>String</code>, <code>Number</code>, <code>ObjectMap</code>, etc...</dd><dd><code>ctx</code> - The runtime context object returned by <a href="../../../../../com/ibm/juno/core/parser/Parser.html#createContext(com.ibm.juno.core.ObjectMap, java.lang.reflect.Method, java.lang.Object)"><code>Parser.createContext(ObjectMap, Method, Object)</code></a>.
+   If <jk>null</jk>, one will be created using <a href="../../../../../com/ibm/juno/core/parser/Parser.html#createContext()"><code>Parser.createContext()</code></a>.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The parsed object.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../../com/ibm/juno/core/parser/ParseException.html" title="class in com.ibm.juno.core.parser">ParseException</a></code> - If the input contains a syntax error or is malformed, or is not valid for the specified type.</dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - If a problem occurred trying to read from the reader.</dd></dl>
+</li>
+</ul>
+<a name="createContext(com.ibm.juno.core.ObjectMap, java.lang.reflect.Method, java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>createContext</h4>
+<pre>public&nbsp;<a href="../../../../../com/ibm/juno/core/jena/RdfParserContext.html" title="class in com.ibm.juno.core.jena">RdfParserContext</a>&nbsp;<a href="../../../../../src-html/com/ibm/juno/core/jena/RdfParser.html#line.459">createContext</a>(<a href="../../../../../com/ibm/juno/core/ObjectMap.html" title="class in com.ibm.juno.core">ObjectMap</a>&nbsp;op,
+                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/reflect/Method.html?is-external=true" title="class or interface in java.lang.reflect">Method</a>&nbsp;javaMethod,
+                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;outer)</pre>
+<div class="block"><span class="strong">Description copied from class:&nbsp;<code><a href="../../../../../com/ibm/juno/core/parser/Parser.html#createContext(com.ibm.juno.core.ObjectMap, java.lang.reflect.Method, java.lang.Object)">Parser</a></code></span></div>
+<div class="block">Create the context object that will be passed in to the parse method.
+ <p>
+   It's up to implementers to decide what the context object looks like, although typically
+   it's going to be a subclass of <a href="../../../../../com/ibm/juno/core/parser/ParserContext.html" title="class in com.ibm.juno.core.parser"><code>ParserContext</code></a>.</div>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="../../../../../com/ibm/juno/core/parser/Parser.html#createContext(com.ibm.juno.core.ObjectMap, java.lang.reflect.Method, java.lang.Object)">createContext</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../com/ibm/juno/core/parser/Parser.html" title="class in com.ibm.juno.core.parser">Parser</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/io/Reader.html?is-external=true" title="class or interface in java.io">Reader</a>&gt;</code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>op</code> - Optional additional properties.</dd><dd><code>javaMethod</code> - Java method that invoked this serializer.
+   When using the REST API, this is the Java method invoked by the REST call.
+   Can be used to access annotations defined on the method or class.</dd><dd><code>outer</code> - The outer object for instantiating top-level non-static inner classes.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The new context.</dd></dl>
+</li>
+</ul>
+<a name="setProperty(java.lang.String, java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setProperty</h4>
+<pre>public&nbsp;<a href="../../../../../com/ibm/juno/core/jena/RdfParser.html" title="class in com.ibm.juno.core.jena">RdfParser</a>&nbsp;<a href="../../../../../src-html/com/ibm/juno/core/jena/RdfParser.html#line.464">setProperty</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;property,
+                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;value)
+                      throws <a href="../../../../../com/ibm/juno/core/LockedException.html" title="class in com.ibm.juno.core">LockedException</a></pre>
+<div class="block"><span class="strong">Description copied from class:&nbsp;<code><a href="../../../../../com/ibm/juno/core/CoreApi.html#setProperty(java.lang.String, java.lang.Object)">CoreApi</a></code></span></div>
+<div class="block">Sets a property on this class.</div>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html#setProperty(java.lang.String, java.lang.Object)">setProperty</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html" title="class in com.ibm.juno.core.parser">ReaderParser</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>property</code> - The property name.</dd><dd><code>value</code> - The property value.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>This class (for method chaining).</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../../com/ibm/juno/core/LockedException.html" title="class in com.ibm.juno.core">LockedException</a></code> - If <a href="../../../../../com/ibm/juno/core/CoreApi.html#lock()"><code>CoreApi.lock()</code></a> has been called on this object.</dd></dl>
+</li>
+</ul>
+<a name="setProperties(com.ibm.juno.core.ObjectMap)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setProperties</h4>
+<pre>public&nbsp;<a href="../../../../../com/ibm/juno/core/jena/RdfParser.html" title="class in com.ibm.juno.core.jena">RdfParser</a>&nbsp;<a href="../../../../../src-html/com/ibm/juno/core/jena/RdfParser.html#line.472">setProperties</a>(<a href="../../../../../com/ibm/juno/core/ObjectMap.html" title="class in com.ibm.juno.core">ObjectMap</a>&nbsp;properties)
+                        throws <a href="../../../../../com/ibm/juno/core/LockedException.html" title="class in com.ibm.juno.core">LockedException</a></pre>
+<div class="block"><span class="strong">Description copied from class:&nbsp;<code><a href="../../../../../com/ibm/juno/core/CoreApi.html#setProperties(com.ibm.juno.core.ObjectMap)">CoreApi</a></code></span></div>
+<div class="block">Sets multiple properties on this class.</div>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html#setProperties(com.ibm.juno.core.ObjectMap)">setProperties</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html" title="class in com.ibm.juno.core.parser">ReaderParser</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>properties</code> - The properties to set on this class.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>This class (for method chaining).</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../../com/ibm/juno/core/LockedException.html" title="class in com.ibm.juno.core">LockedException</a></code> - If <a href="../../../../../com/ibm/juno/core/CoreApi.html#lock()"><code>CoreApi.lock()</code></a> has been called on this object.</dd></dl>
+</li>
+</ul>
+<a name="addNotBeanClasses(java.lang.Class...)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>addNotBeanClasses</h4>
+<pre>public&nbsp;<a href="../../../../../com/ibm/juno/core/jena/RdfParser.html" title="class in com.ibm.juno.core.jena">RdfParser</a>&nbsp;<a href="../../../../../src-html/com/ibm/juno/core/jena/RdfParser.html#line.479">addNotBeanClasses</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;...&nbsp;classes)
+                            throws <a href="../../../../../com/ibm/juno/core/LockedException.html" title="class in com.ibm.juno.core">LockedException</a></pre>
+<div class="block"><span class="strong">Description copied from class:&nbsp;<code><a href="../../../../../com/ibm/juno/core/CoreApi.html#addNotBeanClasses(java.lang.Class...)">CoreApi</a></code></span></div>
+<div class="block">Shortcut for calling <code>getBeanContext().addNotBeanClasses(Class...)</code>.</div>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html#addNotBeanClasses(java.lang.Class...)">addNotBeanClasses</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html" title="class in com.ibm.juno.core.parser">ReaderParser</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>classes</code> - The new setting value for the bean context.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>This object (for method chaining).</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../../com/ibm/juno/core/LockedException.html" title="class in com.ibm.juno.core">LockedException</a></code> - If <a href="../../../../../com/ibm/juno/core/BeanContextFactory.html#lock()"><code>BeanContextFactory.lock()</code></a> was called on this class or the bean context.</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../com/ibm/juno/core/BeanContextFactory.html#addNotBeanClasses(java.lang.Class...)"><code>BeanContextFactory.addNotBeanClasses(Class...)</code></a></dd></dl>
+</li>
+</ul>
+<a name="addFilters(java.lang.Class...)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>addFilters</h4>
+<pre>public&nbsp;<a href="../../../../../com/ibm/juno/core/jena/RdfParser.html" title="class in com.ibm.juno.core.jena">RdfParser</a>&nbsp;<a href="../../../../../src-html/com/ibm/juno/core/jena/RdfParser.html#line.485">addFilters</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;...&nbsp;classes)
+                     throws <a href="../../../../../com/ibm/juno/core/LockedException.html" title="class in com.ibm.juno.core">LockedException</a></pre>
+<div class="block"><span class="strong">Description copied from class:&nbsp;<code><a href="../../../../../com/ibm/juno/core/CoreApi.html#addFilters(java.lang.Class...)">CoreApi</a></code></span></div>
+<div class="block">Shortcut for calling <code>getBeanContext().addFilters(Class...)</code>.</div>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html#addFilters(java.lang.Class...)">addFilters</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html" title="class in com.ibm.juno.core.parser">ReaderParser</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>classes</code> - The new setting value for the bean context.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>This object (for method chaining).</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../../com/ibm/juno/core/LockedException.html" title="class in com.ibm.juno.core">LockedException</a></code> - If <a href="../../../../../com/ibm/juno/core/BeanContextFactory.html#lock()"><code>BeanContextFactory.lock()</code></a> was called on this class or the bean context.</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../com/ibm/juno/core/BeanContextFactory.html#addFilters(java.lang.Class...)"><code>BeanContextFactory.addFilters(Class...)</code></a></dd></dl>
+</li>
+</ul>
+<a name="addImplClass(java.lang.Class, java.lang.Class)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>addImplClass</h4>
+<pre>public&nbsp;&lt;T&gt;&nbsp;<a href="../../../../../com/ibm/juno/core/jena/RdfParser.html" title="class in com.ibm.juno.core.jena">RdfParser</a>&nbsp;<a href="../../../../../src-html/com/ibm/juno/core/jena/RdfParser.html#line.491">addImplClass</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;interfaceClass,
+                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends T&gt;&nbsp;implClass)
+                       throws <a href="../../../../../com/ibm/juno/core/LockedException.html" title="class in com.ibm.juno.core">LockedException</a></pre>
+<div class="block"><span class="strong">Description copied from class:&nbsp;<code><a href="../../../../../com/ibm/juno/core/CoreApi.html#addImplClass(java.lang.Class, java.lang.Class)">CoreApi</a></code></span></div>
+<div class="block">Shortcut for calling <code>getBeanContext().addImplClass(Class, Class)</code>.</div>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html#addImplClass(java.lang.Class, java.lang.Class)">addImplClass</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html" title="class in com.ibm.juno.core.parser">ReaderParser</a></code></dd>
+<dt><span class="strong">Type Parameters:</span></dt><dd><code>T</code> - The class type of the interface.</dd><dt><span class="strong">Parameters:</span></dt><dd><code>interfaceClass</code> - The interface class.</dd><dd><code>implClass</code> - The implementation class.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>This object (for method chaining).</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../../com/ibm/juno/core/LockedException.html" title="class in com.ibm.juno.core">LockedException</a></code> - If <a href="../../../../../com/ibm/juno/core/BeanContextFactory.html#lock()"><code>BeanContextFactory.lock()</code></a> was called on this class or the bean context.</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../com/ibm/juno/core/BeanContextFactory.html#addImplClass(java.lang.Class, java.lang.Class)"><code>BeanContextFactory.addImplClass(Class, Class)</code></a></dd></dl>
+</li>
+</ul>
+<a name="setClassLoader(java.lang.ClassLoader)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setClassLoader</h4>
+<pre>public&nbsp;<a href="../../../../../com/ibm/juno/core/jena/RdfParser.html" title="class in com.ibm.juno.core.jena">RdfParser</a>&nbsp;<a href="../../../../../src-html/com/ibm/juno/core/jena/RdfParser.html#line.497">setClassLoader</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/ClassLoader.html?is-external=true" title="class or interface in java.lang">ClassLoader</a>&nbsp;classLoader)
+                         throws <a href="../../../../../com/ibm/juno/core/LockedException.html" title="class in com.ibm.juno.core">LockedException</a></pre>
+<div class="block"><span class="strong">Description copied from class:&nbsp;<code><a href="../../../../../com/ibm/juno/core/CoreApi.html#setClassLoader(java.lang.ClassLoader)">CoreApi</a></code></span></div>
+<div class="block">Shortcut for calling <code>getBeanContext().setClassLoader(ClassLoader)</code>.</div>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html#setClassLoader(java.lang.ClassLoader)">setClassLoader</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html" title="class in com.ibm.juno.core.parser">ReaderParser</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>classLoader</code> - The new classloader.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>This object (for method chaining).</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../../com/ibm/juno/core/LockedException.html" title="class in com.ibm.juno.core">LockedException</a></code> - If <a href="../../../../../com/ibm/juno/core/BeanContextFactory.html#lock()"><code>BeanContextFactory.lock()</code></a> was called on this class or the bean context.</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../com/ibm/juno/core/BeanContextFactory.html#setClassLoader(java.lang.ClassLoader)"><code>BeanContextFactory.setClassLoader(ClassLoader)</code></a></dd></dl>
+</li>
+</ul>
+<a name="lock()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>lock</h4>
+<pre>public&nbsp;<a href="../../../../../com/ibm/juno/core/jena/RdfParser.html" title="class in com.ibm.juno.core.jena">RdfParser</a>&nbsp;<a href="../../../../../src-html/com/ibm/juno/core/jena/RdfParser.html#line.503">lock</a>()</pre>
+<div class="block"><span class="strong">Description copied from class:&nbsp;<code><a href="../../../../../com/ibm/juno/core/Lockable.html#lock()">Lockable</a></code></span></div>
+<div class="block">Locks this object so that settings on it cannot be modified.</div>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html#lock()">lock</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html" title="class in com.ibm.juno.core.parser">ReaderParser</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>This object (for method chaining).</dd></dl>
+</li>
+</ul>
+<a name="clone()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>clone</h4>
+<pre>public&nbsp;<a href="../../../../../com/ibm/juno/core/jena/RdfParser.html" title="class in com.ibm.juno.core.jena">RdfParser</a>&nbsp;<a href="../../../../../src-html/com/ibm/juno/core/jena/RdfParser.html#line.509">clone</a>()</pre>
+<div class="block"><span class="strong">Description copied from class:&nbsp;<code><a href="../../../../../com/ibm/juno/core/Lockable.html#clone()">Lockable</a></code></span></div>
+<div class="block">Creates an unlocked clone of this object.</div>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html#clone()">clone</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../com/ibm/juno/core/parser/ReaderParser.html" title="class in com.ibm.juno.core.parser">ReaderParser</a></code></dd>
+</dl>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a>
+<div class="skip"><a href="#skip-navbar_bottom" title="Skip navigation links">Skip navigation links</a></div>
+<a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/RdfParser.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../com/ibm/juno/core/jena/RdfCollectionFormat.html" title="enum in com.ibm.juno.core.jena"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../com/ibm/juno/core/jena/RdfParser.N3.html" title="class in com.ibm.juno.core.jena"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?com/ibm/juno/core/jena/RdfParser.html" target="_top">Frames</a></li>
+<li><a href="RdfParser.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li><a href="#nested_class_summary">Nested</a>&nbsp;|&nbsp;</li>
+<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+</body>
+</html>
