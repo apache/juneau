@@ -1,0 +1,17 @@
+{
+	name: "John Smith", 
+	address: {
+		streetAddress: "21 2nd Street", 
+		city: "New York", 
+		state: "NY", 
+		postalCode: 10021
+	}, 
+	phoneNumbers: [
+		"212 555-1111", 
+		"212 555-2222"
+	], 
+	additionalInfo: null, 
+	remote: false, 
+	height: 62.4, 
+	"fico score": " > 640"
+}

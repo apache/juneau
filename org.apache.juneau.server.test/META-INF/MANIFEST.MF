@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Juneau Cloud Tools - Server Test
+Bundle-SymbolicName: org.apache.juneau.server
+Bundle-Version: 5.1.1000.qualifier
+Bundle-Vendor: IBM
+Main-Class: org.apache.juneau.microservice.RestMicroservice
+Rest-Resources: org.apache.juneau.server.Root
+Main-ConfigFile: juneau-server-test.cfg
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6

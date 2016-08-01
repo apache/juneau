@@ -1,0 +1,27 @@
+<html>
+<head>
+	<style type="text/css">
+		/* For viewing in Page Designer */
+		@IMPORT url("../../../../../../org.apache.juneau/javadoc.css");
+
+		/* For viewing in REST interface */
+		@IMPORT url("../htdocs/javadoc.css");
+		body { 
+			margin: 20px; 
+		}	
+	</style>
+	<script>
+		/* Replace all @code and @link tags. */	
+		window.onload = function() {
+			document.body.innerHTML = document.body.innerHTML.replace(/\{\@code ([^\}]+)\}/g, '<code>$1</code>');
+			document.body.innerHTML = document.body.innerHTML.replace(/\{\@link (([^\}]+)\.)?([^\.\}]+)\}/g, '<code>$3</code>');
+		}
+	</script>
+</head>
+<body>
+<p>Javadocs for Address Book Resource Example</p>
+<p>
+	Pretend there is documentation here.
+</p>
+</body>
+</html>
