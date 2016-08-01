@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Juno Releng
-Bundle-SymbolicName: com.ibm.team.juno.releng
+Bundle-Name: Juneau Releng
+Bundle-SymbolicName: org.apache.juneau.releng
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: IBM
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
@@ -12,10 +12,14 @@ Bundle-ClassPath:
  lib/httpclient/httpmime-4.5.jar,
  lib/httpclient/httpcore-4.4.1.jar
 Export-Package: 
+ com.hp.hpl.jena.rdf.model,
+ com.hp.hpl.jena.shared,
  org.apache.derby.jdbc,
  javax.ws.rs,
  javax.ws.rs.core,
  javax.ws.rs.ext,
+ org.apache.commons.fileupload,
+ org.apache.commons.fileupload.servlet,
  org.apache.http,
  org.apache.http.auth,
  org.apache.http.client,

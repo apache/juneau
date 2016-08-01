@@ -27,4 +27,4 @@
 core.ignore.recursive= 
 
 core.ignore= \
-	{juno-microservice.jar} 
+	{juneau-microservice.jar} 

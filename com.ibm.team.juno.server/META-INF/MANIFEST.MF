@@ -1,11 +1,11 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Juno Cloud API - Server
-Bundle-SymbolicName: com.ibm.team.juno.server
+Bundle-Name: Juneau Cloud Tools - Server
+Bundle-SymbolicName: org.apache.juneau.server
 Bundle-Version: 5.2.1000.qualifier
 Bundle-Vendor: IBM
 Require-Bundle: 
- com.ibm.team.juno
+ org.apache.juneau
 Import-Package: 
  com.hp.hpl.jena.rdf.model;resolution:=optional,
  com.hp.hpl.jena.shared;resolution:=optional,
@@ -15,13 +15,13 @@ Import-Package:
  javax.ws.rs.core;resolution:=optional,
  javax.ws.rs.ext;resolution:=optional
 Export-Package: 
- com.ibm.juno.server,
- com.ibm.juno.server.annotation,
- com.ibm.juno.server.converters,
- com.ibm.juno.server.jaxrs,
- com.ibm.juno.server.jena,
- com.ibm.juno.server.labels,
- com.ibm.juno.server.matchers,
- com.ibm.juno.server.remoteable,
- com.ibm.juno.server.response
+ org.apache.juneau.server,
+ org.apache.juneau.server.annotation,
+ org.apache.juneau.server.converters,
+ org.apache.juneau.server.jaxrs,
+ org.apache.juneau.server.jena,
+ org.apache.juneau.server.labels,
+ org.apache.juneau.server.matchers,
+ org.apache.juneau.server.remoteable,
+ org.apache.juneau.server.response
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
