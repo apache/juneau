@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Main-Class: org.apache.juneau.microservice.RestMicroservice
+Rest-Resources: 
+ org.apache.juneau.microservice.sample.RootResources
+Main-ConfigFile: microservice.cfg
+Class-Path: 
+ lib/commons-codec-1.9.jar 
+ lib/commons-io-1.2.jar 
+ lib/commons-logging-1.1.1.jar 
+ lib/httpclient-4.5.jar 
+ lib/httpcore-4.4.1.jar 
+ lib/httpmime-4.5.jar 
+ lib/javax.servlet-api-3.0.jar 
+ lib/jetty-all-8.1.0.jar 
+ lib/juneau-all-5.2.jar 
+ lib/org.apache.commons.fileupload_1.3.1.jar
+
+ 
