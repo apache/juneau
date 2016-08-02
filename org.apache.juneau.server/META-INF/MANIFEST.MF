@@ -10,10 +10,7 @@ Import-Package:
  com.hp.hpl.jena.rdf.model;resolution:=optional,
  com.hp.hpl.jena.shared;resolution:=optional,
  javax.servlet,
- javax.servlet.http,
- javax.ws.rs;resolution:=optional,
- javax.ws.rs.core;resolution:=optional,
- javax.ws.rs.ext;resolution:=optional
+ javax.servlet.http
 Export-Package: 
  org.apache.juneau.server,
  org.apache.juneau.server.annotation,

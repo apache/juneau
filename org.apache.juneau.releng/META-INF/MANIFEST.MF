@@ -5,40 +5,4 @@ Bundle-SymbolicName: org.apache.juneau.releng
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: IBM
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Bundle-ClassPath: 
- lib/derby/derby.jar,
- lib/jaxrs/jsr311-api-1.1.1.jar,
- lib/httpclient/httpclient-4.5.jar,
- lib/httpclient/httpmime-4.5.jar,
- lib/httpclient/httpcore-4.4.1.jar
-Export-Package: 
- com.hp.hpl.jena.rdf.model,
- com.hp.hpl.jena.shared,
- org.apache.derby.jdbc,
- javax.ws.rs,
- javax.ws.rs.core,
- javax.ws.rs.ext,
- org.apache.commons.fileupload,
- org.apache.commons.fileupload.servlet,
- org.apache.http,
- org.apache.http.auth,
- org.apache.http.client,
- org.apache.http.client.config,
- org.apache.http.client.entity,
- org.apache.http.client.methods,
- org.apache.http.client.params,
- org.apache.http.client.utils,
- org.apache.http.config,
- org.apache.http.conn,
- org.apache.http.conn.scheme,
- org.apache.http.conn.ssl,
- org.apache.http.conn.socket,
- org.apache.http.entity,
- org.apache.http.entity.mime,
- org.apache.http.impl.client,
- org.apache.http.impl.conn,
- org.apache.http.impl.cookie,
- org.apache.http.message,
- org.apache.http.params,
- org.apache.http.protocol,
- org.apache.http.util
+
