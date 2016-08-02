@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Apache Juneau - REST server test component
 Bundle-SymbolicName: org.apache.juneau.server.test
 Bundle-Version: 5.1.1000.qualifier
-Bundle-Vendor: Apache Software Foundation, Juneau (Incubating Project)
+Bundle-Vendor: Apache Software Foundation, Juneau
 Main-Class: org.apache.juneau.microservice.RestMicroservice
 Rest-Resources: org.apache.juneau.server.Root
 Main-ConfigFile: juneau-server-test.cfg

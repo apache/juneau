@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Apache Juneau - Core component, serializers, parsers
 Bundle-SymbolicName: org.apache.juneau
 Bundle-Version: 5.2.1000.qualifier
-Bundle-Vendor: Apache Software Foundation, Juneau (Incubating Project)
+Bundle-Vendor: Apache Software Foundation, Juneau
 DynamicImport-Package: 
  com.hp.hpl.jena.rdf.model,
  com.hp.hpl.jena.shared

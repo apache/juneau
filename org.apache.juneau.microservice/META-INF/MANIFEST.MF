@@ -3,5 +3,5 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Apache Juneau - Microservice component
 Bundle-SymbolicName: org.apache.juneau.microservice
 Bundle-Version: 5.2.0
-Bundle-Vendor: Apache Software Foundation, Juneau (Incubating Project)
+Bundle-Vendor: Apache Software Foundation, Juneau
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
