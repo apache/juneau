@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: com.ibm.team.juneau.microservice
+Bundle-Name: Apache Juneau - Microservice component
 Bundle-SymbolicName: org.apache.juneau.microservice
 Bundle-Version: 5.2.0
-Bundle-Vendor: IBM
+Bundle-Vendor: Apache Software Foundation, Juneau (Incubating Project)
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

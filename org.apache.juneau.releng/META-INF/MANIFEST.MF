@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Juneau Releng
+Bundle-Name: Apache Juneau - Release engineering components
 Bundle-SymbolicName: org.apache.juneau.releng
 Bundle-Version: 1.0.0.qualifier
-Bundle-Vendor: IBM
+Bundle-Vendor: Apache Software Foundation, Juneau (Incubating Project)
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 

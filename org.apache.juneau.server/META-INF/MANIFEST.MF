@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Juneau Cloud Tools - Server
+Bundle-Name: Apache Juneau - REST server component
 Bundle-SymbolicName: org.apache.juneau.server
 Bundle-Version: 5.2.1000.qualifier
-Bundle-Vendor: IBM
+Bundle-Vendor: Apache Software Foundation, Juneau (Incubating Project)
 Require-Bundle: 
  org.apache.juneau
 Import-Package: 

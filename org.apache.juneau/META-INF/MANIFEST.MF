@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Juneau Cloud Tools - Core
+Bundle-Name: Apache Juneau - Core component, serializers, parsers
 Bundle-SymbolicName: org.apache.juneau
 Bundle-Version: 5.2.1000.qualifier
-Bundle-Vendor: IBM
+Bundle-Vendor: Apache Software Foundation, Juneau (Incubating Project)
 DynamicImport-Package: 
  com.hp.hpl.jena.rdf.model,
  com.hp.hpl.jena.shared

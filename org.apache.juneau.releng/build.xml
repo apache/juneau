@@ -176,8 +176,8 @@
 		<manifest file='bin/all/META-INF/MANIFEST.MF'>
 			<attribute name='Built-By' value='${user.name}'/>
 			<attribute name='Build-Date' value='${TODAY}'/>
-			<attribute name='Bundle-Name' value='Juneau Cloud Tools'/>
-			<attribute name='Bundle-Vendor' value='IBM'/>
+			<attribute name='Bundle-Name' value='Apache Juneau'/>
+			<attribute name='Bundle-Vendor' value='Apache Software Foundation, Juneau (Incubating Project)'/>
 			<attribute name='Bundle-SymbolicName' value='org.apache.juneau.all'/>
 			<attribute name='Bundle-Version' value='${version}'/>
 		</manifest>
