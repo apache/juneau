@@ -14,5 +14,3 @@ Class-Path:
  lib/jetty-all-8.1.0.jar 
  lib/juneau-all-5.2.jar 
  lib/org.apache.commons.fileupload_1.3.1.jar
-
- 
