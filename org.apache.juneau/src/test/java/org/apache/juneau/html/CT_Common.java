@@ -110,15 +110,15 @@ public class CT_Common {
 
 		s.setProperty(SERIALIZER_trimEmptyLists, false);
 		r = s.serialize(t1);
-		// TODO: fail with Java 8: assertEquals("<table type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f1</string></td><td><ul></ul></td></tr><tr><td><string>f2</string></td><td><table type='array'><tr><th>s1</th><th>s2</th></tr><tr><null/></tr><tr><td><null/></td><td><string>s2</string></td></tr></table></td></tr></table>", r);
-		//t2 = p.parse(r, C.class);
-		//assertEqualObjects(t1, t2);
+		assertEquals("<table type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f1</string></td><td><ul></ul></td></tr><tr><td><string>f2</string></td><td><table type='array'><tr><th>s1</th><th>s2</th></tr><tr><null/></tr><tr><td><null/></td><td><string>s2</string></td></tr></table></td></tr></table>", r);
+		t2 = p.parse(r, C.class);
+		assertEqualObjects(t1, t2);
 
 		s.setProperty(SERIALIZER_trimEmptyLists, true);
 		r = s.serialize(t1);
-		// TODO: fail with Java 8: assertEquals("<table type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f2</string></td><td><table type='array'><tr><th>s1</th><th>s2</th></tr><tr><null/></tr><tr><td><null/></td><td><string>s2</string></td></tr></table></td></tr></table>", r);
-		// t2 = p.parse(r, C.class);
-		// assertNull(t2.f1);
+		assertEquals("<table type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f2</string></td><td><table type='array'><tr><th>s1</th><th>s2</th></tr><tr><null/></tr><tr><td><null/></td><td><string>s2</string></td></tr></table></td></tr></table>", r);
+		t2 = p.parse(r, C.class);
+		assertNull(t2.f1);
 	}
 
 	public static class C {
@@ -144,15 +144,15 @@ public class CT_Common {
 
 		s.setProperty(SERIALIZER_trimEmptyLists, false);
 		r = s.serialize(t1);
-		// TODO: fail with Java 8: assertEquals("<table type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f1</string></td><td><ul></ul></td></tr><tr><td><string>f2</string></td><td><table type='array'><tr><th>s1</th><th>s2</th></tr><tr><null/></tr><tr><td><null/></td><td><string>s2</string></td></tr></table></td></tr></table>", r);
-		//t2 = p.parse(r, D.class);
-		//assertEqualObjects(t1, t2);
+		assertEquals("<table type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f1</string></td><td><ul></ul></td></tr><tr><td><string>f2</string></td><td><table type='array'><tr><th>s1</th><th>s2</th></tr><tr><null/></tr><tr><td><null/></td><td><string>s2</string></td></tr></table></td></tr></table>", r);
+		t2 = p.parse(r, D.class);
+		assertEqualObjects(t1, t2);
 
 		s.setProperty(SERIALIZER_trimEmptyLists, true);
 		r = s.serialize(t1);
-		// TODO: fail with Java 8: assertEquals("<table type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f2</string></td><td><table type='array'><tr><th>s1</th><th>s2</th></tr><tr><null/></tr><tr><td><null/></td><td><string>s2</string></td></tr></table></td></tr></table>", r);
-		//t2 = p.parse(r, D.class);
-		//assertNull(t2.f1);
+		assertEquals("<table type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f2</string></td><td><table type='array'><tr><th>s1</th><th>s2</th></tr><tr><null/></tr><tr><td><null/></td><td><string>s2</string></td></tr></table></td></tr></table>", r);
+		t2 = p.parse(r, D.class);
+		assertNull(t2.f1);
 	}
 
 	public static class D {

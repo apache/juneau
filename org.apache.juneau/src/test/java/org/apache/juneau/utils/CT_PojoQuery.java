@@ -404,19 +404,19 @@ public class CT_PojoQuery {
 
 		view = new ObjectList("['f1']");
 		results = filter.filterCollection(query, view, sort, pos, limit, ignoreCase);
-		// TODO: fails with Java 8: assertObjectEquals("[{f1:'foo'},{f1:'bar'},{f1:'baz'}]", results);
+		assertObjectEquals("[{f1:'foo'},{f1:'bar'},{f1:'baz'}]", results);
 
 		view = new ObjectList("['f2']");
 		results = filter.filterCollection(query, view, sort, pos, limit, ignoreCase);
-		// TODO: fail with Java 8: assertObjectEquals("[{f2:1},{f2:2},{f2:3}]", results);
+		assertObjectEquals("[{f2:1},{f2:2},{f2:3}]", results);
 
 		view = new ObjectList("['f3']");
 		results = filter.filterCollection(query, view, sort, pos, limit, ignoreCase);
-		// TODO: fail with Java 8: assertObjectEquals("[{f3:true},{f3:false},{f3:true}]", results);
+		assertObjectEquals("[{f3:true},{f3:false},{f3:true}]", results);
 
 		view = new ObjectList("['f3','f2','f1']");
 		results = filter.filterCollection(query, view, sort, pos, limit, ignoreCase);
-		// TODO: fail with Java 8: assertObjectEquals("[{f3:true,f2:1,f1:'foo'},{f3:false,f2:2,f1:'bar'},{f3:true,f2:3,f1:'baz'}]", results);
+		assertObjectEquals("[{f3:true,f2:1,f1:'foo'},{f3:false,f2:2,f1:'bar'},{f3:true,f2:3,f1:'baz'}]", results);
 	}
 
 	public class E {
@@ -457,15 +457,15 @@ public class CT_PojoQuery {
 
 		view = new ObjectList("['f1']");
 		results = filter.filterCollection(query, view, sort, pos, limit, ignoreCase);
-		// TODO: fails with Java 8: assertObjectEquals("[{f1:'foo'},{f1:'bar'},{f1:'baz'}]", results);
+		assertObjectEquals("[{f1:'foo'},{f1:'bar'},{f1:'baz'}]", results);
 
 		view = new ObjectList("[{f2:['f1']}]");
 		results = filter.filterCollection(query, view, sort, pos, limit, ignoreCase);
-		// TODO: fail with Java 8: assertObjectEquals("[{f2:{f1:'f2_foo'}},{f2:{f1:'f2_bar'}},{f2:{f1:'f2_baz'}}]", results);
+		assertObjectEquals("[{f2:{f1:'f2_foo'}},{f2:{f1:'f2_bar'}},{f2:{f1:'f2_baz'}}]", results);
 
 		view = new ObjectList("['f1',{f3:['f1']}]");
 		results = filter.filterCollection(query, view, sort, pos, limit, ignoreCase);
-		// TODO: fail with Java 8: assertObjectEquals("[{f1:'foo',f3:[{f1:'f31_foo'},{f1:'f32_foo'}]},{f1:'bar',f3:[{f1:'f31_bar'},{f1:'f32_bar'}]},{f1:'baz',f3:[{f1:'f31_baz'},{f1:'f32_baz'}]}]", results);
+		assertObjectEquals("[{f1:'foo',f3:[{f1:'f31_foo'},{f1:'f32_foo'}]},{f1:'bar',f3:[{f1:'f31_bar'},{f1:'f32_bar'}]},{f1:'baz',f3:[{f1:'f31_baz'},{f1:'f32_baz'}]}]", results);
 	}
 
 	public class F1 {
@@ -511,15 +511,15 @@ public class CT_PojoQuery {
 
 		view = new ObjectList("['f1']");
 		results = filter.filterMap(view);
-		// TODO: fail with Java 8: assertObjectEquals("{f1:'foo'}", results);
+		assertObjectEquals("{f1:'foo'}", results);
 
 		view = new ObjectList("['f2']");
 		results = filter.filterMap(view);
-		// TODO: fail with Java 8: assertObjectEquals("{f2:1}", results);
+		assertObjectEquals("{f2:1}", results);
 
 		view = new ObjectList("['f3','f1']");
 		results = filter.filterMap(view);
-		// TODO: fail with Java 8: assertObjectEquals("{f3:true,f1:'foo'}", results);
+		assertObjectEquals("{f3:true,f1:'foo'}", results);
 	}
 
 	public class G {
@@ -551,15 +551,15 @@ public class CT_PojoQuery {
 
 		view = new ObjectList("['f1']");
 		results = filter.filterMap(view);
-		// TODO: fail with Java 8: assertObjectEquals("{f1:'foo'}", results);
+		assertObjectEquals("{f1:'foo'}", results);
 
 		view = new ObjectList("[{f2:['f1']}]");
 		results = filter.filterMap(view);
-		// TODO: fail with Java 8: assertObjectEquals("{f2:{f1:'f2_foo'}}", results);
+		assertObjectEquals("{f2:{f1:'f2_foo'}}", results);
 
 		view = new ObjectList("['f1',{f3:['f1']}]");
 		results = filter.filterMap(view);
-		// TODO: fail with Java 8: assertObjectEquals("{f1:'foo',f3:[{f1:'f31_foo'},{f1:'f32_foo'}]}", results);
+		assertObjectEquals("{f1:'foo',f3:[{f1:'f31_foo'},{f1:'f32_foo'}]}", results);
 	}
 
 	public class H1 {
@@ -617,49 +617,49 @@ public class CT_PojoQuery {
 		sort = new ObjectList("['f2']");
 		view = new ObjectList("['f1','f2']");
 		results = filter.filterCollection(query, view, sort, pos, limit, ignoreCase);
-		// TODO: fail with Java 8: assertEquals("[{f1:2,f2:'bar'},{f1:3,f2:'baz'},{f1:1,f2:'foo'}]", s.serialize(results));
+		assertEquals("[{f1:2,f2:'bar'},{f1:3,f2:'baz'},{f1:1,f2:'foo'}]", s.serialize(results));
 
 		sort = new ObjectList("[{f2:'d'}]");
 		view = new ObjectList("['f1','f2']");
 		results = filter.filterCollection(query, view, sort, pos, limit, ignoreCase);
-		// TODO: fail with Java 8: assertEquals("[{f1:1,f2:'foo'},{f1:3,f2:'baz'},{f1:2,f2:'bar'}]", s.serialize(results));
+		assertEquals("[{f1:1,f2:'foo'},{f1:3,f2:'baz'},{f1:2,f2:'bar'}]", s.serialize(results));
 
 		sort = new ObjectList("['f3']");
 		view = new ObjectList("['f1','f3']");
 		results = filter.filterCollection(query, view, sort, pos, limit, ignoreCase);
-		// TODO: fail with Java 8: assertEquals("[{f1:2,f3:false},{f1:1,f3:true},{f1:3,f3:true}]", s.serialize(results));
+		assertEquals("[{f1:2,f3:false},{f1:1,f3:true},{f1:3,f3:true}]", s.serialize(results));
 
 		sort = new ObjectList("['f3',{f1:'a'}]");
 		view = new ObjectList("['f1','f3']");
 		results = filter.filterCollection(query, view, sort, pos, limit, ignoreCase);
-		// TODO: fail with Java 8: assertEquals("[{f1:2,f3:false},{f1:1,f3:true},{f1:3,f3:true}]", s.serialize(results));
+		assertEquals("[{f1:2,f3:false},{f1:1,f3:true},{f1:3,f3:true}]", s.serialize(results));
 
 		sort = new ObjectList("['f3',{f1:'d'}]");
 		view = new ObjectList("['f1','f3']");
 		results = filter.filterCollection(query, view, sort, pos, limit, ignoreCase);
-		// TODO: fail with Java 8: assertEquals("[{f1:2,f3:false},{f1:3,f3:true},{f1:1,f3:true}]", s.serialize(results));
+		assertEquals("[{f1:2,f3:false},{f1:3,f3:true},{f1:1,f3:true}]", s.serialize(results));
 
 		sort = new ObjectList("['f1']");
 		view = new ObjectList("['f1']");
 		limit = 1;
 		pos = 0;
 		results = filter.filterCollection(query, view, sort, pos, limit, ignoreCase);
-		// TODO: fail with Java 8: assertEquals("[{f1:1}]", s.serialize(results));
+		assertEquals("[{f1:1}]", s.serialize(results));
 
 		limit = 3;
 		pos = 0;
 		results = filter.filterCollection(query, view, sort, pos, limit, ignoreCase);
-		// TODO: fail with Java 8: assertEquals("[{f1:1},{f1:2},{f1:3}]", s.serialize(results));
+		assertEquals("[{f1:1},{f1:2},{f1:3}]", s.serialize(results));
 
 		limit = 1;
 		pos = 2;
 		results = filter.filterCollection(query, view, sort, pos, limit, ignoreCase);
-		// TODO: fail with Java 8: assertEquals("[{f1:3}]", s.serialize(results));
+		assertEquals("[{f1:3}]", s.serialize(results));
 
 		limit = 100;
 		pos = 2;
 		results = filter.filterCollection(query, view, sort, pos, limit, ignoreCase);
-		// TODO: fail with Java 8: assertEquals("[{f1:3}]", s.serialize(results));
+		assertEquals("[{f1:3}]", s.serialize(results));
 	}
 
 	public class I {

@@ -548,7 +548,7 @@ public class CT_Rdf {
 	 			+ "\n      <jp:f3 resource='http://localhost/f3/1'/>"
 	 			+ "\n   </rdf:Description>"
 				+ "\n</rdf:RDF>";
-		// TODO: fails with Java 8: assertXmlEquals(expected, rdfXml);
+		// TODO: https://issues.apache.org/jira/browse/JUNEAU-2 assertXmlEquals(expected, rdfXml);
 
 		l = p.parseCollection(rdfXml, LinkedList.class, D.class);
 		D[] da = l.toArray(new D[l.size()]);
@@ -564,7 +564,7 @@ public class CT_Rdf {
 	 			+ "\n      <jp:f3 resource='http://localhost/f3/1'/>"
 	 			+ "\n   </rdf:Description>"
 				+ "\n</rdf:RDF>";
-		// TODO: fails with Java 8: assertXmlEquals(expected, rdfXml);
+		// TODO: https://issues.apache.org/jira/browse/JUNEAU-2 assertXmlEquals(expected, rdfXml);
 
 		da = p.parse(rdfXml, D[].class);
 		rdfXml = s.serialize(da);
@@ -579,7 +579,7 @@ public class CT_Rdf {
 	 			+ "\n      <jp:f3 resource='http://localhost/f3/1'/>"
 	 			+ "\n   </rdf:Description>"
 				+ "\n</rdf:RDF>";
-		// TODO: fails with Java 8: assertXmlEquals(expected, rdfXml);
+		// TODO: https://issues.apache.org/jira/browse/JUNEAU-2assertXmlEquals(expected, rdfXml);
 	}
 
 	public static class D {
