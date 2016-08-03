@@ -448,7 +448,7 @@ public class HtmlSerializer extends XmlSerializer {
 					else
 						m2 = bc.forBean(o);
 
-					Iterator mapEntries = m2.entrySet(session.isTrimNulls()).iterator();
+					Iterator mapEntries = m2.entrySet(false).iterator();
 					while (mapEntries.hasNext()) {
 						BeanMapEntry p = (BeanMapEntry)mapEntries.next();
 						BeanPropertyMeta pMeta = p.getMeta();

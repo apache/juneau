@@ -96,7 +96,7 @@ public class DelegateBeanMap<T> extends BeanMap<T> {
 	}
 
 	@Override /* Map */
-	public Set<Entry<String,Object>> entrySet() {
+	public Set<Entry<String,Object>> entrySet(final boolean ignoreNulls) {
 		Set<Entry<String,Object>> s = Collections.newSetFromMap(new LinkedHashMap<Map.Entry<String,Object>,Boolean>());
 		for (final String key : keys) {
 			BeanMapEntry<T> bme;
