@@ -413,20 +413,49 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	}
 
 	/**
-	 * Returns all the properties associated with the bean.
+	 * Invokes all the getters on this bean and return the values as a list of {@link BeanPropertyValue} objects.
+	 * <p>
+	 * This allows a snapshot of all values to be grabbed from a bean in one call.
+	 *
+	 * @param addClassAttr Add a <jk>"_class"</jk> bean property to the returned list.
+	 * @param ignoreNulls Don't return properties whose values are null.
+	 * @return The list of all bean property values.
 	 */
-	@Override /* Map */
-	public Set<Entry<String,Object>> entrySet() {
-		return entrySet(false);
+	public List<BeanPropertyValue> getValues(final boolean addClassAttr, final boolean ignoreNulls) {
+		Collection<BeanPropertyMeta<T>> properties = getProperties();
+		int capacity = (ignoreNulls && properties.size() > 10) ? 10 : properties.size() + (addClassAttr ? 1 : 0);
+		List<BeanPropertyValue> l = new ArrayList<BeanPropertyValue>(capacity);
+		if (addClassAttr)
+			l.add(new BeanPropertyValue(meta.getClassProperty(), meta.c.getName(), null));
+		for (BeanPropertyMeta<T> bpm : properties) {
+			try {
+				Object val = bpm.get(this);
+				if (val != null || ! ignoreNulls)
+					l.add(new BeanPropertyValue(bpm, val, null));
+			} catch (Error e) {
+				// Errors should always be uncaught.
+				throw e;
+			} catch (Throwable t) {
+				l.add(new BeanPropertyValue(bpm, null, t));
+			}
+		}
+		return l;
+	}
+
+	/**
+	 * Returns a simple collection of properties for this bean map.
+	 * @return A simple collection of properties for this bean map.
+	 */
+	protected Collection<BeanPropertyMeta<T>> getProperties() {
+		return meta.properties.values();
 	}
 
 	/**
 	 * Returns all the properties associated with the bean.
-	 * @param ignoreNulls - Iterator should not return properties with null values.
 	 * @return A new set.
 	 */
-	public Set<Entry<String,Object>> entrySet(final boolean ignoreNulls) {
-		int todo = 1;  // Create a more efficient method.
+	@Override
+	public Set<Entry<String,Object>> entrySet() {
 
 		// Construct our own anonymous set to implement this function.
 		Set<Entry<String,Object>> s = new AbstractSet<Entry<String,Object>>() {
@@ -435,7 +464,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 			// Note that the HashMap.values() method caches results, so this collection
 			// will really only be constructed once per bean type since the underlying
 			// map never changes.
-			final Collection<BeanPropertyMeta<T>> pSet = meta.properties.values();
+			final Collection<BeanPropertyMeta<T>> pSet = getProperties();
 
 			@Override /* Set */
 			public Iterator<java.util.Map.Entry<String, Object>> iterator() {
@@ -446,29 +475,15 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 				return new Iterator<Entry<String,Object>>() {
 
 					final Iterator<BeanPropertyMeta<T>> pIterator = pSet.iterator();
-					BeanMapEntry<T> nextEntry;
 
 					@Override /* Iterator */
 					public boolean hasNext() {
-						return nextEntry() != null;
+						return pIterator.hasNext();
 					}
 
 					@Override /* Iterator */
 					public Map.Entry<String, Object> next() {
-						BeanMapEntry<T> e = nextEntry();
-						nextEntry = null;
-						return e;
-					}
-
-					private BeanMapEntry<T> nextEntry() {
-						if (nextEntry == null) {
-							while (pIterator.hasNext() && nextEntry == null) {
-								BeanPropertyMeta<T> bpm = pIterator.next();
-								if ((! ignoreNulls) || bpm.get(BeanMap.this) != null)
-									nextEntry = new BeanMapEntry<T>(BeanMap.this, bpm);
-							}
-						}
-						return nextEntry;
+						return new BeanMapEntry<T>(BeanMap.this, pIterator.next());
 					}
 
 					@Override /* Iterator */

@@ -1895,11 +1895,20 @@ public class CT_BeanMap {
 		Z z = new Z();
 		BeanMap<Z> bm = BeanContext.DEFAULT.forBean(z);
 
-		Iterator i = bm.entrySet(true).iterator();
+		Iterator i = bm.getValues(false, true).iterator();
 		assertFalse(i.hasNext());
 
 		z.b = "";
-		i = bm.entrySet(true).iterator();
+		i = bm.getValues(false, true).iterator();
+		assertTrue(i.hasNext());
+		i.next();
+		assertFalse(i.hasNext());
+
+		i = bm.getValues(false, false).iterator();
+		assertTrue(i.hasNext());
+		i.next();
+		assertTrue(i.hasNext());
+		i.next();
 		assertTrue(i.hasNext());
 		i.next();
 		assertFalse(i.hasNext());

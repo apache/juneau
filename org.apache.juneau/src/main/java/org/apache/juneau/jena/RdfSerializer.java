@@ -315,30 +315,26 @@ public class RdfSerializer extends WriterSerializer {
 		}
 	}
 
-	private void serializeBeanMap(RdfSerializerSession session, BeanMap m, Resource r) throws SerializeException {
-		ArrayList<BeanMapEntry> l = new ArrayList<BeanMapEntry>(m.entrySet(session.isTrimNulls()));
+	private void serializeBeanMap(RdfSerializerSession session, BeanMap<?> m, Resource r) throws SerializeException {
+		List<BeanPropertyValue> l = m.getValues(false, session.isTrimNulls());
 		Collections.reverse(l);
-		for (BeanMapEntry bme : l) {
-			BeanPropertyMeta pMeta = bme.getMeta();
+		for (BeanPropertyValue bpv : l) {
+			BeanPropertyMeta pMeta = bpv.getMeta();
 			ClassMeta<?> cm = pMeta.getClassMeta();
 
 			if (pMeta.isBeanUri())
 				continue;
 
-			String key = bme.getKey();
-			Object value = null;
-			try {
-				value = bme.getValue();
-			} catch (StackOverflowError e) {
-				throw e;
-			} catch (Throwable t) {
+			String key = bpv.getName();
+			Object value = bpv.getValue();
+			Throwable t = bpv.getThrown();
+			if (t != null)
 				session.addBeanGetterWarning(pMeta, t);
-			}
 
 			if (session.canIgnoreValue(cm, key, value))
 				continue;
 
-			BeanPropertyMeta bpm = bme.getMeta();
+			BeanPropertyMeta bpm = bpv.getMeta();
 			Namespace ns = bpm.getRdfMeta().getNamespace();
 			if (ns == null && session.isUseXmlNamespaces())
 				ns = bpm.getXmlMeta().getNamespace();

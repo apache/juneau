@@ -291,35 +291,19 @@ public class JsonSerializer extends WriterSerializer {
 	}
 
 	@SuppressWarnings({ "rawtypes" })
-	private SerializerWriter serializeBeanMap(JsonSerializerSession session, JsonWriter out, BeanMap m, boolean addClassAttr) throws Exception {
+	private SerializerWriter serializeBeanMap(JsonSerializerSession session, JsonWriter out, BeanMap<?> m, boolean addClassAttr) throws Exception {
 		int depth = session.getIndent();
 		out.append('{');
 
-		Iterator mapEntries = m.entrySet(session.isTrimNulls()).iterator();
-
-		// Print out "_class" attribute on this bean if required.
-		if (addClassAttr) {
-			String attr = "_class";
-			out.cr(depth).attr(attr).append(':').s().q().append(m.getClassMeta().getInnerClass().getName()).q();
-			if (mapEntries.hasNext())
-				out.append(',').s();
-		}
-
 		boolean addComma = false;
 
-		while (mapEntries.hasNext()) {
-			BeanMapEntry p = (BeanMapEntry)mapEntries.next();
+		for (BeanPropertyValue p : m.getValues(addClassAttr, session.isTrimNulls())) {
 			BeanPropertyMeta pMeta = p.getMeta();
-
-			String key = p.getKey();
-			Object value = null;
-			try {
-				value = p.getValue();
-			} catch (StackOverflowError e) {
-				throw e;
-			} catch (Throwable t) {
+			String key = p.getName();
+			Object value = p.getValue();
+			Throwable t = p.getThrown();
+			if (t != null)
 				session.addBeanGetterWarning(pMeta, t);
-			}
 
 			if (session.canIgnoreValue(pMeta.getClassMeta(), key, value))
 				continue;

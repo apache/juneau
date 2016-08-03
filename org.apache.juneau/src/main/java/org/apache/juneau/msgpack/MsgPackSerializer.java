@@ -132,9 +132,12 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 		ClassMeta<?> keyType = type.getKeyType(), valueType = type.getValueType();
 
 		m = session.sort(m);
+		
+		// The map size may change as we're iterating over it, so
+		// grab a snapshot of the entries in a separate list.
 		List<SimpleMapEntry> entries = new ArrayList<SimpleMapEntry>(m.size());
 		for (Map.Entry e : (Set<Map.Entry>)m.entrySet())
-			entries.add(new SimpleMapEntry(e.getKey(), e.getValue(), null));
+			entries.add(new SimpleMapEntry(e.getKey(), e.getValue()));
 
 		out.startMap(entries.size());
 
@@ -157,46 +160,38 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 		serializeCollection(session, out, o, type);
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private void serializeBeanMap(MsgPackSerializerSession session, MsgPackOutputStream out, final BeanMap m, boolean addClassAttr) throws Exception {
+	@SuppressWarnings({ "rawtypes" })
+	private void serializeBeanMap(MsgPackSerializerSession session, MsgPackOutputStream out, final BeanMap<?> m, boolean addClassAttr) throws Exception {
 
-		List<SimpleMapEntry> entries = new ArrayList<SimpleMapEntry>(m.getMeta().getPropertyMetas().size() + (addClassAttr ? 1 : 0));
-		// Print out "_class" attribute on this bean if required.
-		if (addClassAttr)
-			entries.add(new SimpleMapEntry("_class", m.getClassMeta().getInnerClass().getName(), null));
+		List<BeanPropertyValue> values = m.getValues(addClassAttr, session.isTrimNulls());
 
-		for (BeanMapEntry p : (Set<BeanMapEntry>)m.entrySet(session.isTrimNulls())) {
-			try {
-				BeanPropertyMeta pMeta = p.getMeta();
-				String key = p.getKey();
-				Object value = p.getValue();
-				if (! session.canIgnoreValue(pMeta.getClassMeta(), p.getKey(), p.getValue()))
-					entries.add(new SimpleMapEntry(key, value, pMeta));
-			} catch (StackOverflowError e) {
-				throw e;
-			} catch (Throwable t) {
-				session.addBeanGetterWarning(p.getMeta(), t);
-			}
-
-		}
-		int size = entries.size();
+		int size = values.size();
+		for (BeanPropertyValue p : values)
+			if (p.getThrown() != null)
+				size--;
 		out.startMap(size);
 
-		for (SimpleMapEntry p : entries) {
-			serializeAnything(session, out, p.key, null, null, null);
-			serializeAnything(session, out, p.value, p.pMeta == null ? session.getBeanContext().string() : p.pMeta.getClassMeta(), session.toString(p.key), p.pMeta);
+		for (BeanPropertyValue p : values) {
+			BeanPropertyMeta pMeta = p.getMeta();
+			String key = p.getName();
+			Object value = p.getValue();
+			Throwable t = p.getThrown();
+			if (t != null)
+				session.addBeanGetterWarning(pMeta, t);
+			else {
+				serializeAnything(session, out, key, null, null, null);
+				serializeAnything(session, out, value, pMeta == null ? session.getBeanContext().string() : pMeta.getClassMeta(), key, pMeta);
+			}
 		}
 	}
 
 	private static class SimpleMapEntry {
 		final Object key;
 		final Object value;
-		final BeanPropertyMeta<?> pMeta;
 
-		private SimpleMapEntry(Object key, Object value, BeanPropertyMeta<?> pMeta) {
+		private SimpleMapEntry(Object key, Object value) {
 			this.key = key;
 			this.value = value;
-			this.pMeta = pMeta;
 		}
 	}
 

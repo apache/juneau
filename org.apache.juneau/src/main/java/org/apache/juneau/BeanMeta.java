@@ -100,6 +100,7 @@ public class BeanMeta<T> {
 	BeanPropertyMeta<T> uriProperty;                                 // The property identified as the URI for this bean (annotated with @BeanProperty.beanUri).
 	BeanPropertyMeta<T> subTypeIdProperty;                           // The property indentified as the sub type differentiator property (identified by @Bean.subTypeProperty annotation).
 	PropertyNamer propertyNamer;                                     // Class used for calculating bean property names.
+	BeanPropertyMeta<T> classProperty;                               // "_class" mock bean property.
 
 	BeanMeta() {}
 
@@ -110,10 +111,11 @@ public class BeanMeta<T> {
 	 * @param ctx The bean context that created this object.
 	 * @param transform Optional bean transform associated with the target class.  Can be <jk>null</jk>.
 	 */
-	protected BeanMeta(ClassMeta<T> classMeta, BeanContext ctx, org.apache.juneau.transform.BeanTransform<? extends T> transform) {
+	protected BeanMeta(final ClassMeta<T> classMeta, BeanContext ctx, org.apache.juneau.transform.BeanTransform<? extends T> transform) {
 		this.classMeta = classMeta;
 		this.ctx = ctx;
 		this.transform = transform;
+		this.classProperty = new BeanPropertyMeta<T>(this, "_class", ctx.string());
 		this.c = classMeta.getInnerClass();
 	}
 
@@ -396,6 +398,16 @@ public class BeanMeta<T> {
 	 */
 	public BeanPropertyMeta<T> getBeanUriProperty() {
 		return uriProperty;
+	}
+
+	/**
+	 * Returns a mock bean property that resolves to the name <js>"_class"</js> and whose value always resolves
+	 * 	to the class name of the bean.
+	 *
+	 * @return The class name property.
+	 */
+	public BeanPropertyMeta<T> getClassProperty() {
+		return classProperty;
 	}
 
 	/*

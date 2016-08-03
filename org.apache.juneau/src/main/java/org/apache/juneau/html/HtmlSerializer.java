@@ -320,7 +320,7 @@ public class HtmlSerializer extends XmlSerializer {
 	}
 
 	@SuppressWarnings({ "rawtypes" })
-	private void serializeBeanMap(HtmlSerializerSession session, HtmlWriter out, BeanMap m, String classAttr, BeanPropertyMeta<?> ppMeta) throws Exception {
+	private void serializeBeanMap(HtmlSerializerSession session, HtmlWriter out, BeanMap<?> m, String classAttr, BeanPropertyMeta<?> ppMeta) throws Exception {
 		int i = session.getIndent();
 
 		Object o = m.getBean();
@@ -345,21 +345,14 @@ public class HtmlSerializer extends XmlSerializer {
 			out.eTag(i+1, "tr").nl();
 		}
 
-		Iterator mapEntries = m.entrySet(session.isTrimNulls()).iterator();
-
-		while (mapEntries.hasNext()) {
-			BeanMapEntry p = (BeanMapEntry)mapEntries.next();
+		for (BeanPropertyValue p : m.getValues(false, session.isTrimNulls())) {
 			BeanPropertyMeta pMeta = p.getMeta();
 
-			String key = p.getKey();
-			Object value = null;
-			try {
-				value = p.getValue();
-			} catch (StackOverflowError e) {
-				throw e;
-			} catch (Throwable t) {
+			String key = p.getName();
+			Object value = p.getValue();
+			Throwable t = p.getThrown();
+			if (t != null)
 				session.addBeanGetterWarning(pMeta, t);
-			}
 
 			if (session.canIgnoreValue(pMeta.getClassMeta(), key, value))
 				continue;
@@ -371,12 +364,12 @@ public class HtmlSerializer extends XmlSerializer {
 			out.sTag(i+2, "td").nl();
 			try {
 				serializeAnything(session, out, value, p.getMeta().getClassMeta(), key, 2, pMeta);
-			} catch (SerializeException t) {
-				throw t;
-			} catch (StackOverflowError t) {
-				throw t;
-			} catch (Throwable t) {
-				session.addBeanGetterWarning(pMeta, t);
+			} catch (SerializeException e) {
+				throw e;
+			} catch (Error e) {
+				throw e;
+			} catch (Throwable e) {
+				session.addBeanGetterWarning(pMeta, e);
 			}
 			out.eTag(i+2, "td").nl();
 			out.eTag(i+1, "tr").nl();
@@ -448,7 +441,7 @@ public class HtmlSerializer extends XmlSerializer {
 					else
 						m2 = bc.forBean(o);
 
-					Iterator mapEntries = m2.entrySet(false).iterator();
+					Iterator mapEntries = m2.entrySet().iterator();
 					while (mapEntries.hasNext()) {
 						BeanMapEntry p = (BeanMapEntry)mapEntries.next();
 						BeanPropertyMeta pMeta = p.getMeta();

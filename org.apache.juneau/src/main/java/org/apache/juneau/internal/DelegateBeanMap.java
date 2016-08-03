@@ -96,7 +96,7 @@ public class DelegateBeanMap<T> extends BeanMap<T> {
 	}
 
 	@Override /* Map */
-	public Set<Entry<String,Object>> entrySet(final boolean ignoreNulls) {
+	public Set<Entry<String,Object>> entrySet() {
 		Set<Entry<String,Object>> s = Collections.newSetFromMap(new LinkedHashMap<Map.Entry<String,Object>,Boolean>());
 		for (final String key : keys) {
 			BeanMapEntry<T> bme;
@@ -109,6 +109,26 @@ public class DelegateBeanMap<T> extends BeanMap<T> {
 			s.add(bme);
 		}
 		return s;
+	}
+
+	@Override /* BeanMap */
+	public Collection<BeanPropertyMeta<T>> getProperties() {
+		List<BeanPropertyMeta<T>> l = new ArrayList<BeanPropertyMeta<T>>(keys.size());
+		for (final String key : keys) {
+			BeanPropertyMeta<T> p = this.getPropertyMeta(key);
+			if (overrideValues.containsKey(key)) {
+				p = new BeanPropertyMeta<T>(this.meta, key) {
+					@Override /* BeanPropertyMeta */
+					public Object get(BeanMap<T> m) {
+						return overrideValues.get(key);
+					}
+				};
+			}
+			if (p == null)
+				throw new BeanRuntimeException(super.getClassMeta().getInnerClass(), "Property ''{0}'' not found on class.", key);
+			l.add(p);
+		}
+		return l;
 	}
 
 	private class BeanMapEntryOverride<T2> extends BeanMapEntry<T2> {

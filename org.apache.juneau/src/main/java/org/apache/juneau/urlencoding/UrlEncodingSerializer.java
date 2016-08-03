@@ -321,34 +321,19 @@ public class UrlEncodingSerializer extends UonSerializer {
 	}
 
 	@SuppressWarnings({ "rawtypes" })
-	private SerializerWriter serializeBeanMap(UrlEncodingSerializerSession session, UonWriter out, BeanMap m, boolean addClassAttr) throws Exception {
+	private SerializerWriter serializeBeanMap(UrlEncodingSerializerSession session, UonWriter out, BeanMap<?> m, boolean addClassAttr) throws Exception {
 		int depth = session.getIndent();
-
-		Iterator mapEntries = m.entrySet(session.isTrimNulls()).iterator();
-
-		// Print out "_class" attribute on this bean if required.
-		if (addClassAttr) {
-			String attr = "_class";
-			out.appendObject(attr, false, false, true).append('=').append(m.getClassMeta().getInnerClass().getName());
-			if (mapEntries.hasNext())
-				out.cr(depth).append('&');
-		}
 
 		boolean addAmp = false;
 
-		while (mapEntries.hasNext()) {
-			BeanMapEntry p = (BeanMapEntry)mapEntries.next();
+		for (BeanPropertyValue p : m.getValues(addClassAttr, session.isTrimNulls())) {
 			BeanPropertyMeta pMeta = p.getMeta();
 
-			String key = p.getKey();
-			Object value = null;
-			try {
-				value = p.getValue();
-			} catch (StackOverflowError e) {
-				throw e;
-			} catch (Throwable t) {
+			String key = p.getName();
+			Object value = p.getValue();
+			Throwable t = p.getThrown();
+			if (t != null)
 				session.addBeanGetterWarning(pMeta, t);
-			}
 
 			if (session.canIgnoreValue(pMeta.getClassMeta(), key, value))
 				continue;

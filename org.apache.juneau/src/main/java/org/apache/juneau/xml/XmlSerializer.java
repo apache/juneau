@@ -221,7 +221,7 @@ public class XmlSerializer extends WriterSerializer {
 		// Handle recursion
 		if (aType != null && ! aType.isPrimitive()) {
 
-			BeanMap bm = null;
+			BeanMap<?> bm = null;
 			if (aType.isBeanMap()) {
 				bm = (BeanMap)o;
 			} else if (aType.isBean()) {
@@ -262,7 +262,7 @@ public class XmlSerializer extends WriterSerializer {
 					findNsfMappings(session, o2);
 			}
 			if (bm != null) {
-				for (BeanMapEntry p : (Set<BeanMapEntry>)bm.entrySet(session.isTrimNulls())) {
+				for (BeanPropertyValue p : bm.getValues(false, session.isTrimNulls())) {
 
 					Namespace ns = p.getMeta().getXmlMeta().getNamespace();
 					if (ns != null && ns.uri != null)
@@ -526,38 +526,38 @@ public class XmlSerializer extends WriterSerializer {
 		return hasChildren;
 	}
 
-	private boolean serializeBeanMap(XmlSerializerSession session, XmlWriter out, BeanMap m, Namespace elementNs, boolean isCollapsed) throws Exception {
+	private boolean serializeBeanMap(XmlSerializerSession session, XmlWriter out, BeanMap<?> m, Namespace elementNs, boolean isCollapsed) throws Exception {
 		boolean hasChildren = false;
 		BeanMeta bm = m.getMeta();
 
+		List<BeanPropertyValue> lp = m.getValues(false, session.isTrimNulls());
+
 		Map<String,BeanPropertyMeta> xmlAttrs = bm.getXmlMeta().getXmlAttrProperties();
 		Object content = null;
-		for (BeanPropertyMeta p : xmlAttrs.values()) {
+		for (BeanPropertyValue p : lp) {
+			if (xmlAttrs.containsKey(p.getName())) {
+				BeanPropertyMeta pMeta = p.getMeta();
+				String key = p.getName();
+				Object value = p.getValue();
+				Throwable t = p.getThrown();
+				if (t != null)
+					session.addBeanGetterWarning(pMeta, t);
 
-			String key = p.getName();
-			Object value = null;
-			try {
-				value = p.get(m);
-			} catch (StackOverflowError e) {
-				throw e;
-			} catch (Throwable x) {
-				session.addBeanGetterWarning(p, x);
+				if (session.canIgnoreValue(pMeta.getClassMeta(), key, value))
+					continue;
+
+				Namespace ns = (session.isEnableNamespaces() && pMeta.getXmlMeta().getNamespace() != elementNs ? pMeta.getXmlMeta().getNamespace() : null);
+
+				if (pMeta.isBeanUri() || pMeta.isUri())
+					out.attrUri(ns, key, value);
+				else
+					out.attr(ns, key, value);
 			}
-
-			if (session.canIgnoreValue(p.getClassMeta(), key, value))
-				continue;
-
-			Namespace ns = (session.isEnableNamespaces() && p.getXmlMeta().getNamespace() != elementNs ? p.getXmlMeta().getNamespace() : null);
-
-			if (p.isBeanUri() || p.isUri())
-				out.attrUri(ns, key, value);
-			else
-				out.attr(ns, key, value);
 		}
 
 		boolean hasContent = false;
 
-		for (BeanMapEntry p : (Set<BeanMapEntry>)m.entrySet(session.isTrimNulls())) {
+		for (BeanPropertyValue p : lp) {
 			BeanPropertyMeta pMeta = p.getMeta();
 			XmlFormat xf = pMeta.getXmlMeta().getXmlFormat();
 
@@ -567,15 +567,11 @@ public class XmlSerializer extends WriterSerializer {
 			} else if (xf == ATTR) {
 				// Do nothing
 			} else {
-				String key = p.getKey();
-				Object value = null;
-				try {
-					value = p.getValue();
-				} catch (StackOverflowError e) {
-					throw e;
-				} catch (Throwable x) {
-					session.addWarning("Could not call getValue() on property ''{0}'', {1}", key, x.getLocalizedMessage());
-				}
+				String key = p.getName();
+				Object value = p.getValue();
+				Throwable t = p.getThrown();
+				if (t != null)
+					session.addBeanGetterWarning(pMeta, t);
 
 				if (session.canIgnoreValue(pMeta.getClassMeta(), key, value))
 					continue;
