@@ -69,7 +69,13 @@ public class BeanPropertyMeta<T> {
 	/** RDF related metadata on this bean property. */
 	protected RdfBeanPropertyMeta<T> rdfMeta;  //
 
-	BeanPropertyMeta(BeanMeta<T> beanMeta, String name) {
+	/**
+	 * Constructor.
+	 *
+	 * @param beanMeta The metadata of the bean containing this property.
+	 * @param name This property name.
+	 */
+	protected BeanPropertyMeta(BeanMeta<T> beanMeta, String name) {
 		this.beanMeta = beanMeta;
 		this.name = name;
 	}
@@ -142,7 +148,7 @@ public class BeanPropertyMeta<T> {
 	 */
 	public ClassMeta<?> getClassMeta() {
 		if (typeMeta == null)
-			typeMeta = (transform != null ? transform.getTransformedClassMeta() : rawTypeMeta.getTransformedClassMeta());
+			typeMeta = (transform != null ? transform.getTransformedClassMeta() : rawTypeMeta == null ? beanMeta.ctx.object() : rawTypeMeta.getTransformedClassMeta());
 		return typeMeta;
 	}
 

@@ -111,6 +111,26 @@ public class DelegateBeanMap<T> extends BeanMap<T> {
 		return s;
 	}
 
+	@Override /* BeanMap */
+	public Collection<BeanPropertyMeta<T>> getProperties() {
+		List<BeanPropertyMeta<T>> l = new ArrayList<BeanPropertyMeta<T>>(keys.size());
+		for (final String key : keys) {
+			BeanPropertyMeta<T> p = this.getPropertyMeta(key);
+			if (overrideValues.containsKey(key)) {
+				p = new BeanPropertyMeta<T>(this.meta, key) {
+					@Override /* BeanPropertyMeta */
+					public Object get(BeanMap<T> m) {
+						return overrideValues.get(key);
+					}
+				};
+			}
+			if (p == null)
+				throw new BeanRuntimeException(super.getClassMeta().getInnerClass(), "Property ''{0}'' not found on class.", key);
+			l.add(p);
+		}
+		return l;
+	}
+
 	private class BeanMapEntryOverride<T2> extends BeanMapEntry<T2> {
 		Object value;
 

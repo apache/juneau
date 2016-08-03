@@ -51,7 +51,7 @@ public class MessageBundle extends ResourceBundle {
 
 	// A map that contains all keys [shortKeyName->keyName] and [keyName->keyName], where shortKeyName
 	// refers to keys prefixed and stripped of the class name (e.g. "foobar"->"MyClass.foobar")
-	private final ConcurrentHashMap<String,String> keyMap = new ConcurrentHashMap<String,String>();
+	private final Map<String,String> keyMap = new ConcurrentHashMap<String,String>();
 
 	// Contains all keys present in all bundles in searchBundles.
 	private final ConcurrentSkipListSet<String> allKeys = new ConcurrentSkipListSet<String>();
