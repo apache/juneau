@@ -277,21 +277,87 @@ public class TestUtils {
 	 * This method is primarily meant for debugging purposes.
 	 */
 	private static final String sortXml(String xml) throws Exception {
-
-		xml = xml.replaceAll("\\w+\\:", "");  // Strip out all namespaces.
+		xml = xml.replaceAll("\\w+\\:", "").replaceAll(">\\s+<", "><");  // Strip out all namespaces and whitespace.
 
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		dbf.setIgnoringElementContentWhitespace(true);
-		dbf.setNamespaceAware(false);
 		DocumentBuilder db = dbf.newDocumentBuilder();
 		Document doc = db.parse(new InputSource(new StringReader(xml)));
 
-		DOMSource s = new DOMSource(doc);
+		SortedNode n = new SortedNode(doc.getDocumentElement());
+		return n.toString();
+	}
 
-		StringWriter sw = new StringWriter();
-		StreamResult sr = new StreamResult(sw);
-		XML_SORT_TRANSFORMER.transform(s, sr);
-		return sw.toString().replace('"', '\'').replace("\r", "");
+	/**
+	 * A sorted node in a DOM tree.
+	 */
+	private static class SortedNode implements Comparable<SortedNode> {
+		public String name, text="", attrs="";
+		public List<SortedNode> children = new LinkedList<SortedNode>();
+
+		SortedNode(Element e) {
+			this.name = e.getNodeName();
+			NamedNodeMap attrs = e.getAttributes();
+			if (attrs != null) {
+				StringBuilder sb = new StringBuilder();
+				Set<String> attrNames = new TreeSet<String>();
+				for (int i = 0; i < attrs.getLength(); i++)
+					attrNames.add(attrs.item(i).getNodeName());
+				for (String n : attrNames) {
+					Node node = attrs.getNamedItem(n);
+					sb.append(" ").append(n).append("='").append(node.getNodeValue()).append("'");
+				}
+				this.attrs = sb.toString();
+			}
+			NodeList nl = e.getChildNodes();
+			for (int i = 0; i < nl.getLength(); i++) {
+				Node n = nl.item(i);
+				if (n instanceof Element)
+					children.add(new SortedNode((Element)nl.item(i)));
+				if (n instanceof Text)
+					this.text += ((Text)n).getNodeValue();
+			}
+			Collections.sort(children);
+		}
+
+		@Override
+		public int compareTo(SortedNode n) {
+			int i = name.compareTo(n.name);
+			if (i != 0)
+				return i;
+			i = attrs.compareTo(n.attrs);
+			if (i != 0)
+				return i;
+			i = text.compareTo(n.text);
+			if (i != 0)
+				return i;
+			return 0;
+		}
+
+		public String toString() {
+			return toString(0, new StringBuilder()).toString();
+		}
+
+		public StringBuilder toString(int depth ,StringBuilder sb) {
+			indent(depth, sb).append("<").append(name).append(attrs);
+			if (children.isEmpty() && text.isEmpty()) {
+				sb.append("/>\n");
+				return sb;
+			}
+			sb.append(">\n");
+			if (! text.isEmpty())
+				indent(depth+1, sb).append(text).append("\n");
+			for (SortedNode c : children) {
+				c.toString(depth+1, sb);
+			}
+			indent(depth, sb).append("</").append(name).append(">\n");
+			return sb;
+		}
+	}
+
+	private static StringBuilder indent(int depth, StringBuilder sb) {
+		for (int i = 0; i < depth; i++)
+			sb.append("\t");
+		return sb;
 	}
 
 	/**
@@ -301,34 +367,6 @@ public class TestUtils {
 	 */
 	public static final void assertXmlEquals(String expected, String actual) throws Exception {
 		assertEquals(sortXml(expected), sortXml(actual));
-	}
-
-	private static Transformer XML_SORT_TRANSFORMER;
-	static {
-		try {
-			String xsl = ""
-				+ "	<xsl:stylesheet version='1.0'"
-				+ "	 xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>"
-				+ "	 <xsl:output omit-xml-declaration='yes' indent='yes'/>"
-				+ "	 <xsl:strip-space elements='*'/>"
-				+ "	 <xsl:template match='node()|@*'>"
-				+ "	  <xsl:copy>"
-				+ "	   <xsl:apply-templates select='@*'>"
-				+ "	    <xsl:sort select='name()'/>"
-				+ "	   </xsl:apply-templates>"
-				+ "	   <xsl:apply-templates select='node()'>"
-				+ "	    <xsl:sort select='name()'/>"
-				+ "	    <xsl:sort select='text()'/>"
-				+ "	   </xsl:apply-templates>"
-				+ "	  </xsl:copy>"
-				+ "	 </xsl:template>"
-				+ "	</xsl:stylesheet>";
-			TransformerFactory tf = TransformerFactory.newInstance();
-			StreamSource ss = new StreamSource(new StringReader(xsl));
-			XML_SORT_TRANSFORMER = tf.newTransformer(ss);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
 	}
 
 	/**
