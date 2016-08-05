@@ -15,6 +15,9 @@ package org.apache.juneau.internal;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.html.*;
+import org.apache.juneau.jena.*;
+import org.apache.juneau.xml.*;
 
 /**
  * Represents a wrapped {@link BeanMap} where property values can be overridden, removed, or reordered
@@ -117,10 +120,23 @@ public class DelegateBeanMap<T> extends BeanMap<T> {
 		for (final String key : keys) {
 			BeanPropertyMeta<T> p = this.getPropertyMeta(key);
 			if (overrideValues.containsKey(key)) {
+				final BeanPropertyMeta<T> p2 = p;
 				p = new BeanPropertyMeta<T>(this.meta, key) {
 					@Override /* BeanPropertyMeta */
 					public Object get(BeanMap<T> m) {
 						return overrideValues.get(key);
+					}
+					@Override /* BeanPropertyMeta */
+					public RdfBeanPropertyMeta<T> getRdfMeta() {
+						return p2.getRdfMeta();
+					}
+					@Override /* BeanPropertyMeta */
+					public HtmlBeanPropertyMeta<T> getHtmlMeta() {
+						return p2.getHtmlMeta();
+					}
+					@Override /* BeanPropertyMeta */
+					public XmlBeanPropertyMeta<T> getXmlMeta() {
+						return p2.getXmlMeta();
 					}
 				};
 			}
