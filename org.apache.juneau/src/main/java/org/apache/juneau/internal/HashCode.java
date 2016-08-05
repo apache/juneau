@@ -22,7 +22,7 @@ package org.apache.juneau.internal;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-public final class HashCode {
+public class HashCode {
 
 	private int hashCode = 1;
 
@@ -35,7 +35,6 @@ public final class HashCode {
 		return new HashCode();
 	}
 
-
 	/**
 	 * Hashes the hashcode of the specified object into this object.
 	 *
@@ -43,6 +42,7 @@ public final class HashCode {
 	 * @return This object (for method chaining).
 	 */
 	public HashCode add(Object o) {
+		o = normalize(o);
 		add(o == null ? 1 : o.hashCode());
 		return this;
 	}
@@ -67,5 +67,19 @@ public final class HashCode {
 	 */
 	public int get() {
       return hashCode;
+	}
+
+	/**
+	 * Converts the object to a normalized form before grabbing it's hashcode.
+	 * Subclasses can override this method to provide specialized handling
+	 * 	(e.g. converting numbers to strings so that <code>123</code> and <js>"123"</js>
+	 * 	end up creating the same hashcode.)
+	 * Default implementation does nothing.
+	 *
+	 * @param o The object to normalize before getting it's hashcode.
+	 * @return The normalized object.
+	 */
+	protected Object normalize(Object o) {
+		return o;
 	}
 }

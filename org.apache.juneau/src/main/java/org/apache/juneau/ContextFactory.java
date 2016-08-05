@@ -239,7 +239,7 @@ public final class ContextFactory extends Lockable {
 	// All configuration properties in this object.
 	// Keys are property prefixes (e.g. 'BeanContext').
 	// Values are maps containing properties for that specific prefix.
-	private Map<String,PropertyMap> properties = new ConcurrentHashMap<String,PropertyMap>();
+	private Map<String,PropertyMap> properties = new ConcurrentSkipListMap<String,PropertyMap>();
 
 	// Context cache.
 	// This gets cleared every time any properties change on this object.
@@ -248,7 +248,7 @@ public final class ContextFactory extends Lockable {
 	// Global Context cache.
 	// Context factories that are the 'same' will use the same maps from this cache.
 	// 'same' means the context properties are all the same when converted to strings.
-	private static final ConcurrentHashMap<ContextFactory, ConcurrentHashMap<Class<? extends Context>,Context>> globalContextCache = new ConcurrentHashMap<ContextFactory, ConcurrentHashMap<Class<? extends Context>,Context>>();
+	private static final ConcurrentHashMap<Integer, ConcurrentHashMap<Class<? extends Context>,Context>> globalContextCache = new ConcurrentHashMap<Integer, ConcurrentHashMap<Class<? extends Context>,Context>>();
 
 	private ReadWriteLock lock = new ReentrantReadWriteLock();
 	private Lock rl = lock.readLock(), wl = lock.writeLock();
@@ -264,7 +264,7 @@ public final class ContextFactory extends Lockable {
 	private static Comparator<Object> PROPERTY_COMPARATOR = new Comparator<Object>() {
 		@Override
 		public int compare(Object o1, Object o2) {
-			return ContextFactory.toString(o1).compareTo(ContextFactory.toString(o2));
+			return normalize(o1).toString().compareTo(normalize(o2).toString());
 		}
 	};
 
@@ -546,9 +546,10 @@ public final class ContextFactory extends Lockable {
 				if (! contexts.containsKey(c)) {
 
 					// Try to get it from the global cache.
-					if (! globalContextCache.containsKey(this))
-						globalContextCache.putIfAbsent(clone(), new ConcurrentHashMap<Class<? extends Context>,Context>());
-					ConcurrentHashMap<Class<? extends Context>, Context> cacheForThisConfig = globalContextCache.get(this);
+					Integer key = hashCode();
+					if (! globalContextCache.containsKey(key))
+						globalContextCache.putIfAbsent(key, new ConcurrentHashMap<Class<? extends Context>,Context>());
+					ConcurrentHashMap<Class<? extends Context>, Context> cacheForThisConfig = globalContextCache.get(key);
 
 					if (! cacheForThisConfig.containsKey(c))
 						cacheForThisConfig.putIfAbsent(c, c.getConstructor(ContextFactory.class).newInstance(this));
@@ -733,21 +734,26 @@ public final class ContextFactory extends Lockable {
 
 	@Override /* Object */
 	public int hashCode() {
-		return this.properties.hashCode();
-	}
-
-	@Override /* Object */
-	public boolean equals(Object o) {
-		if (o instanceof ContextFactory) {
-			ContextFactory c = (ContextFactory)o;
-			return c.properties.equals(properties);
-		}
-		return false;
+		HashCode c = new HashCode();
+		for (PropertyMap m : properties.values())
+			c.add(m);
+		return c.get();
 	}
 
 	//--------------------------------------------------------------------------------
 	// Utility classes and methods.
 	//--------------------------------------------------------------------------------
+
+	/**
+	 * Hashcode generator that treats strings and primitive values the same.
+	 * (e.g. <code>123</code> and <js>"123"</js> result in the same hashcode.)
+	 */
+	protected static class NormalizingHashCode extends HashCode {
+		@Override /* HashCode */
+		protected Object normalize(Object o) {
+			return ContextFactory.normalize(o);
+		}
+	}
 
 	/**
 	 * Contains all the properties for a particular property prefix (e.g. <js>'BeanContext'</js>)
@@ -762,12 +768,14 @@ public final class ContextFactory extends Lockable {
 	@SuppressWarnings("hiding")
 	public class PropertyMap {
 
-		private Map<String,Property> map = new ConcurrentSkipListMap<String,Property>();
-		volatile int hashCode = 0;
-		ReadWriteLock lock = new ReentrantReadWriteLock();
-		Lock rl = lock.readLock(), wl = lock.writeLock();
+		private final Map<String,Property> map = new ConcurrentSkipListMap<String,Property>();
+		private volatile int hashCode = 0;
+		private final ReadWriteLock lock = new ReentrantReadWriteLock();
+		private final Lock rl = lock.readLock(), wl = lock.writeLock();
+		private final String prefix;
 
 		private PropertyMap(String prefix) {
+			this.prefix = prefix;
 			prefix = prefix + '.';
 			Properties p = System.getProperties();
 			for (Map.Entry<Object,Object> e : p.entrySet())
@@ -779,6 +787,7 @@ public final class ContextFactory extends Lockable {
 		 * Copy constructor.
 		 */
 		private PropertyMap(PropertyMap orig) {
+			this.prefix = orig.prefix;
 			for (Map.Entry<String,Property> e : orig.map.entrySet())
 				this.map.put(e.getKey(), Property.create(e.getValue().name, e.getValue().value()));
 		}
@@ -926,7 +935,7 @@ public final class ContextFactory extends Lockable {
 			rl.lock();
 			try {
 				if (hashCode == 0) {
-					HashCode c = HashCode.create();
+					HashCode c = new HashCode().add(prefix);
 					for (Property p : map.values())
 						c.add(p);
 					this.hashCode = c.get();
@@ -955,15 +964,11 @@ public final class ContextFactory extends Lockable {
 
 		@Override
 		public String toString() {
-			ObjectMap m = new ObjectMap();
-			m.put("id", System.identityHashCode(this));
-			m.put("hashcode", hashCode());
-			m.put("values", map);
-			return JsonSerializer.DEFAULT_LAX.toString(m);
+			return "PropertyMap(id="+System.identityHashCode(this)+")";
 		}
 	}
 
-	private abstract static class Property implements Comparable<Property> {
+	private abstract static class Property {
 		private final String name, type;
 		private final Object value;
 
@@ -1005,36 +1010,22 @@ public final class ContextFactory extends Lockable {
 
 		@Override /* Object */
 		public int hashCode() {
-			HashCode c = HashCode.create().add(name);
+			HashCode c = new NormalizingHashCode().add(name);
 			if (value instanceof Map) {
 				for (Map.Entry<?,?> e : ((Map<?,?>)value).entrySet())
-					c.add(ContextFactory.toString(e.getKey())).add(ContextFactory.toString(e.getValue()));
+					c.add(e.getKey()).add(e.getValue());
 			} else if (value instanceof Collection) {
 				for (Object o : (Collection<?>)value)
-					c.add(ContextFactory.toString(o));
+					c.add(o);
 			} else {
-				c.add(ContextFactory.toString(value));
+				c.add(value);
 			}
 			return c.get();
 		}
 
-		@Override /* Object */
-		public boolean equals(Object o) {
-			if (o instanceof Property) {
-				Property p = (Property)o;
-				return ContextFactory.same(value, p.value);
-			}
-			return false;
-		}
-
-		@Override
-		public int compareTo(Property p) {
-			return name.compareTo(p.name);
-		}
-
 		@Override
 		public String toString() {
-			return JsonSerializer.DEFAULT_LAX.toString(value);
+			return "Property(name="+name+",type="+type+")";
 		}
 	}
 
@@ -1064,12 +1055,14 @@ public final class ContextFactory extends Lockable {
 				for (Object o : (Collection<Object>)val)
 					add(o);
 			else {
-				String s = val.toString();
-				if (s.startsWith("[") && s.endsWith("]")) {
-					try {
-						add(new ObjectList(s));
-						return;
-					} catch (Exception e) {}
+				if (val instanceof String) {
+					String s = val.toString();
+					if (s.startsWith("[") && s.endsWith("]")) {
+						try {
+							add(new ObjectList(s));
+							return;
+						} catch (Exception e) {}
+					}
 				}
 				for (Object o : value)
 					if (same(val, o))
@@ -1087,12 +1080,14 @@ public final class ContextFactory extends Lockable {
 				for (Object o : (Collection<Object>)val)
 					remove(o);
 			else {
-				String s = val.toString();
-				if (s.startsWith("[") && s.endsWith("]")) {
-					try {
-						remove(new ObjectList(s));
-						return;
-					} catch (Exception e) {}
+				if (val instanceof String) {
+					String s = val.toString();
+					if (s.startsWith("[") && s.endsWith("]")) {
+						try {
+							remove(new ObjectList(s));
+							return;
+						} catch (Exception e) {}
+					}
 				}
 				for (Iterator<Object> i = value.iterator(); i.hasNext();)
 					if (same(i.next(), val))
@@ -1201,10 +1196,18 @@ public final class ContextFactory extends Lockable {
 		}
 	}
 
-	private static String toString(Object o) {
+	/**
+	 * Converts an object to a normalized form for comparison purposes.
+	 *
+	 * @param o The object to normalize.
+	 * @return The normalized object.
+	 */
+	private static final Object normalize(Object o) {
 		if (o instanceof Class)
 			return ((Class<?>)o).getName();
-		return o.toString();
+		if (o instanceof Number || o instanceof Boolean)
+			return o.toString();
+		return o;
 	}
 
 	/*
@@ -1244,7 +1247,7 @@ public final class ContextFactory extends Lockable {
 			}
 			return false;
 		} else {
-			return ContextFactory.toString(o1).equals(ContextFactory.toString(o2));
+			return normalize(o1).equals(normalize(o2));
 		}
 	}
 

@@ -202,7 +202,6 @@ public class CT_ContextFactory {
 		ContextFactory.PropertyMap p1 = f1.getPropertyMap("A");
 		ContextFactory.PropertyMap p2 = f2.getPropertyMap("A");
 		assertEquals(p1.hashCode(), p2.hashCode());
-		assertTrue(p1.equals(p2));
 	}
 
 	@SuppressWarnings("unchecked")

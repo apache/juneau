@@ -88,6 +88,7 @@ public class A1 {
 		return x;
 	}
 
+	@Bean(sort=true)
 	public static class A2 {
 		public int f1;
 		protected int f2;
@@ -112,6 +113,7 @@ public class A1 {
 		}
 	}
 
+	@Bean(sort=true)
 	protected static class A3 {
 		public int f1;
 		protected int f2;
@@ -136,6 +138,7 @@ public class A1 {
 		}
 	}
 
+	@Bean(sort=true)
 	static class A4 {
 		public int f1;
 		protected int f2;
@@ -160,6 +163,7 @@ public class A1 {
 		}
 	}
 
+	@Bean(sort=true)
 	private static class A5 {
 		public int f1;
 		protected int f2;
