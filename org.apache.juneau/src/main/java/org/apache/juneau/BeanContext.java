@@ -481,7 +481,7 @@ public class BeanContext extends Context {
 	// This map ensures that if the BeanContext properties in the ConfigFactory are the same,
 	// then we reuse the same Class->ClassMeta cache map.
 	// This significantly reduces the number of times we need to construct ClassMeta objects which can be expensive.
-	private static final ConcurrentHashMap<ContextFactory.PropertyMap,Map<Class,ClassMeta>> cmCacheCache = new ConcurrentHashMap<ContextFactory.PropertyMap,Map<Class,ClassMeta>>();
+	private static final ConcurrentHashMap<Integer,Map<Class,ClassMeta>> cmCacheCache = new ConcurrentHashMap<Integer,Map<Class,ClassMeta>>();
 
 	/** Default config.  All default settings. */
 	public static final BeanContext DEFAULT = ContextFactory.create().getContext(BeanContext.class);
@@ -542,9 +542,9 @@ public class BeanContext extends Context {
 		super(cf);
 
 		ContextFactory.PropertyMap pm = cf.getPropertyMap("BeanContext");
+		hashCode = pm.hashCode();
 		classLoader = cf.classLoader;
 		defaultParser = cf.defaultParser;
-		hashCode = pm.hashCode;
 
 		beansRequireDefaultConstructor = pm.get(BEAN_beansRequireDefaultConstructor, boolean.class, false);
 		beansRequireSerializable = pm.get(BEAN_beansRequireSerializable, boolean.class, false);
@@ -622,13 +622,13 @@ public class BeanContext extends Context {
 		implKeyClasses = implClasses.keySet().toArray(new Class[0]);
 		implValueClasses = implClasses.values().toArray(new Class[0]);
 
-		if (! cmCacheCache.containsKey(pm)) {
+		if (! cmCacheCache.containsKey(hashCode)) {
 			ConcurrentHashMap<Class,ClassMeta> cm = new ConcurrentHashMap<Class,ClassMeta>();
 			cm.put(String.class, new ClassMeta(String.class, this));
 			cm.put(Object.class, new ClassMeta(Object.class, this));
-			cmCacheCache.putIfAbsent(pm, cm);
+			cmCacheCache.putIfAbsent(hashCode, cm);
 		}
-		this.cmCache = cmCacheCache.get(pm);
+		this.cmCache = cmCacheCache.get(hashCode);
 		this.cmString = cmCache.get(String.class);
 		this.cmObject = cmCache.get(Object.class);
 		this.cmClass = cmCache.get(Class.class);
@@ -2031,7 +2031,7 @@ public class BeanContext extends Context {
 	@Override /* Object */
 	public boolean equals(Object o) {
 		if (o instanceof BeanContext)
-			return ((BeanContext)o).cmCache == cmCache;
+			return ((BeanContext)o).hashCode == hashCode;
 		return false;
 	}
 
