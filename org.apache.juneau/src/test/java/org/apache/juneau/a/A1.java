@@ -16,6 +16,7 @@ import org.apache.juneau.annotation.*;
 
 // Default class
 @SuppressWarnings({"unused","synthetic-access"})
+@Bean(sort=true)
 public class A1 {
 	public int f1;
 	protected int f2;
@@ -34,10 +35,10 @@ public class A1 {
 	private int getF8() { return f8; }
 	private void setF8(int f8) { this.f8 = f8; }
 
-	public A2 a2;
-	public A3 a3;
-	public A4 a4;
-	public A5 a5;
+	public A2 g2;
+	public A3 g3;
+	public A4 g4;
+	public A5 g5;
 
 	public static A1 create() {
 		A1 x = new A1();
@@ -49,42 +50,42 @@ public class A1 {
 		x.f6 = 6;
 		x.f7 = 7;
 		x.f8 = 8;
-		x.a2 = new A2();
-		x.a2.f1 = 1;
-		x.a2.f2 = 2;
-		x.a2.f3 = 3;
-		x.a2.f4 = 4;
-		x.a2.f5 = 5;
-		x.a2.f6 = 6;
-		x.a2.f7 = 7;
-		x.a2.f8 = 8;
-		x.a3 = new A3();
-		x.a3.f1 = 1;
-		x.a3.f2 = 2;
-		x.a3.f3 = 3;
-		x.a3.f4 = 4;
-		x.a3.f5 = 5;
-		x.a3.f6 = 6;
-		x.a3.f7 = 7;
-		x.a3.f8 = 8;
-		x.a4 = new A4();
-		x.a4.f1 = 1;
-		x.a4.f2 = 2;
-		x.a4.f3 = 3;
-		x.a4.f4 = 4;
-		x.a4.f5 = 5;
-		x.a4.f6 = 6;
-		x.a4.f7 = 7;
-		x.a4.f8 = 8;
-		x.a5 = new A5();
-		x.a5.f1 = 1;
-		x.a5.f2 = 2;
-		x.a5.f3 = 3;
-		x.a5.f4 = 4;
-		x.a5.f5 = 5;
-		x.a5.f6 = 6;
-		x.a5.f7 = 7;
-		x.a5.f8 = 8;
+		x.g2 = new A2();
+		x.g2.f1 = 1;
+		x.g2.f2 = 2;
+		x.g2.f3 = 3;
+		x.g2.f4 = 4;
+		x.g2.f5 = 5;
+		x.g2.f6 = 6;
+		x.g2.f7 = 7;
+		x.g2.f8 = 8;
+		x.g3 = new A3();
+		x.g3.f1 = 1;
+		x.g3.f2 = 2;
+		x.g3.f3 = 3;
+		x.g3.f4 = 4;
+		x.g3.f5 = 5;
+		x.g3.f6 = 6;
+		x.g3.f7 = 7;
+		x.g3.f8 = 8;
+		x.g4 = new A4();
+		x.g4.f1 = 1;
+		x.g4.f2 = 2;
+		x.g4.f3 = 3;
+		x.g4.f4 = 4;
+		x.g4.f5 = 5;
+		x.g4.f6 = 6;
+		x.g4.f7 = 7;
+		x.g4.f8 = 8;
+		x.g5 = new A5();
+		x.g5.f1 = 1;
+		x.g5.f2 = 2;
+		x.g5.f3 = 3;
+		x.g5.f4 = 4;
+		x.g5.f5 = 5;
+		x.g5.f6 = 6;
+		x.g5.f7 = 7;
+		x.g5.f8 = 8;
 		return x;
 	}
 

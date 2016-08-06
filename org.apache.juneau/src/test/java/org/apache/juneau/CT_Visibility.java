@@ -58,16 +58,16 @@ public class CT_Visibility {
 		s4.setProperty(BEAN_beanFieldVisibility, PUBLIC);
 
 		r = s1.serialize(a1);
-		assertEquals("{f1:1,a2:{f1:1,f5:5},a3:'A3',a4:'A4',a5:'A5',f5:5}", r);
+		assertEquals("{f1:1,f5:5,g2:{f1:1,f5:5},g3:'A3',g4:'A4',g5:'A5'}", r);
 
 		r = s2.serialize(a1);
-		assertEquals("{f1:1,a2:{f1:1,f5:5},a3:{f1:1,f5:5},a4:'A4',a5:'A5',f5:5}", r);
+		assertEquals("{f1:1,f5:5,g2:{f1:1,f5:5},g3:{f1:1,f5:5},g4:'A4',g5:'A5'}", r);
 
 		r = s3.serialize(a1);
-		assertEquals("{f1:1,a2:{f1:1,f5:5},a3:{f1:1,f5:5},a4:{f1:1,f5:5},a5:'A5',f5:5}", r);
+		assertEquals("{f1:1,f5:5,g2:{f1:1,f5:5},g3:{f1:1,f5:5},g4:{f1:1,f5:5},g5:'A5'}", r);
 
 		r = s4.serialize(a1);
-		assertEquals("{f1:1,a2:{f1:1,f5:5},a3:{f1:1,f5:5},a4:{f1:1,f5:5},a5:{f1:1,f5:5},f5:5}", r);
+		assertEquals("{f1:1,f5:5,g2:{f1:1,f5:5},g3:{f1:1,f5:5},g4:{f1:1,f5:5},g5:{f1:1,f5:5}}", r);
 
 		s1.setProperty(BEAN_beanFieldVisibility, PROTECTED);
 		s2.setProperty(BEAN_beanFieldVisibility, PROTECTED);
@@ -75,16 +75,16 @@ public class CT_Visibility {
 		s4.setProperty(BEAN_beanFieldVisibility, PROTECTED);
 
 		r = s1.serialize(a1);
-		assertEquals("{f1:1,f2:2,a2:{f1:1,f2:2,f5:5},a3:'A3',a4:'A4',a5:'A5',f5:5}", r);
+		assertEquals("{f1:1,f2:2,f5:5,g2:{f1:1,f2:2,f5:5},g3:'A3',g4:'A4',g5:'A5'}", r);
 
 		r = s2.serialize(a1);
-		assertEquals("{f1:1,f2:2,a2:{f1:1,f2:2,f5:5},a3:{f1:1,f2:2,f5:5},a4:'A4',a5:'A5',f5:5}", r);
+		assertEquals("{f1:1,f2:2,f5:5,g2:{f1:1,f2:2,f5:5},g3:{f1:1,f2:2,f5:5},g4:'A4',g5:'A5'}", r);
 
 		r = s3.serialize(a1);
-		assertEquals("{f1:1,f2:2,a2:{f1:1,f2:2,f5:5},a3:{f1:1,f2:2,f5:5},a4:{f1:1,f2:2,f5:5},a5:'A5',f5:5}", r);
+		assertEquals("{f1:1,f2:2,f5:5,g2:{f1:1,f2:2,f5:5},g3:{f1:1,f2:2,f5:5},g4:{f1:1,f2:2,f5:5},g5:'A5'}", r);
 
 		r = s4.serialize(a1);
-		assertEquals("{f1:1,f2:2,a2:{f1:1,f2:2,f5:5},a3:{f1:1,f2:2,f5:5},a4:{f1:1,f2:2,f5:5},a5:{f1:1,f2:2,f5:5},f5:5}", r);
+		assertEquals("{f1:1,f2:2,f5:5,g2:{f1:1,f2:2,f5:5},g3:{f1:1,f2:2,f5:5},g4:{f1:1,f2:2,f5:5},g5:{f1:1,f2:2,f5:5}}", r);
 
 		s1.setProperty(BEAN_beanFieldVisibility, Visibility.DEFAULT);
 		s2.setProperty(BEAN_beanFieldVisibility, Visibility.DEFAULT);
@@ -92,16 +92,16 @@ public class CT_Visibility {
 		s4.setProperty(BEAN_beanFieldVisibility, Visibility.DEFAULT);
 
 		r = s1.serialize(a1);
-		assertEquals("{f1:1,f2:2,f3:3,a2:{f1:1,f2:2,f3:3,f5:5},a3:'A3',a4:'A4',a5:'A5',f5:5}", r);
+		assertEquals("{f1:1,f2:2,f3:3,f5:5,g2:{f1:1,f2:2,f3:3,f5:5},g3:'A3',g4:'A4',g5:'A5'}", r);
 
 		r = s2.serialize(a1);
-		assertEquals("{f1:1,f2:2,f3:3,a2:{f1:1,f2:2,f3:3,f5:5},a3:{f1:1,f2:2,f3:3,f5:5},a4:'A4',a5:'A5',f5:5}", r);
+		assertEquals("{f1:1,f2:2,f3:3,f5:5,g2:{f1:1,f2:2,f3:3,f5:5},g3:{f1:1,f2:2,f3:3,f5:5},g4:'A4',g5:'A5'}", r);
 
 		r = s3.serialize(a1);
-		assertEquals("{f1:1,f2:2,f3:3,a2:{f1:1,f2:2,f3:3,f5:5},a3:{f1:1,f2:2,f3:3,f5:5},a4:{f1:1,f2:2,f3:3,f5:5},a5:'A5',f5:5}", r);
+		assertEquals("{f1:1,f2:2,f3:3,f5:5,g2:{f1:1,f2:2,f3:3,f5:5},g3:{f1:1,f2:2,f3:3,f5:5},g4:{f1:1,f2:2,f3:3,f5:5},g5:'A5'}", r);
 
 		r = s4.serialize(a1);
-		assertEquals("{f1:1,f2:2,f3:3,a2:{f1:1,f2:2,f3:3,f5:5},a3:{f1:1,f2:2,f3:3,f5:5},a4:{f1:1,f2:2,f3:3,f5:5},a5:{f1:1,f2:2,f3:3,f5:5},f5:5}", r);
+		assertEquals("{f1:1,f2:2,f3:3,f5:5,g2:{f1:1,f2:2,f3:3,f5:5},g3:{f1:1,f2:2,f3:3,f5:5},g4:{f1:1,f2:2,f3:3,f5:5},g5:{f1:1,f2:2,f3:3,f5:5}}", r);
 
 		s1.setProperty(BEAN_beanFieldVisibility, PRIVATE);
 		s2.setProperty(BEAN_beanFieldVisibility, PRIVATE);
@@ -109,16 +109,16 @@ public class CT_Visibility {
 		s4.setProperty(BEAN_beanFieldVisibility, PRIVATE);
 
 		r = s1.serialize(a1);
-		assertEquals("{f1:1,f2:2,f3:3,f4:4,a2:{f1:1,f2:2,f3:3,f4:4,f5:5},a3:'A3',a4:'A4',a5:'A5',f5:5}", r);
+		assertEquals("{f1:1,f2:2,f3:3,f4:4,f5:5,g2:{f1:1,f2:2,f3:3,f4:4,f5:5},g3:'A3',g4:'A4',g5:'A5'}", r);
 
 		r = s2.serialize(a1);
-		assertEquals("{f1:1,f2:2,f3:3,f4:4,a2:{f1:1,f2:2,f3:3,f4:4,f5:5},a3:{f1:1,f2:2,f3:3,f4:4,f5:5},a4:'A4',a5:'A5',f5:5}", r);
+		assertEquals("{f1:1,f2:2,f3:3,f4:4,f5:5,g2:{f1:1,f2:2,f3:3,f4:4,f5:5},g3:{f1:1,f2:2,f3:3,f4:4,f5:5},g4:'A4',g5:'A5'}", r);
 
 		r = s3.serialize(a1);
-		assertEquals("{f1:1,f2:2,f3:3,f4:4,a2:{f1:1,f2:2,f3:3,f4:4,f5:5},a3:{f1:1,f2:2,f3:3,f4:4,f5:5},a4:{f1:1,f2:2,f3:3,f4:4,f5:5},a5:'A5',f5:5}", r);
+		assertEquals("{f1:1,f2:2,f3:3,f4:4,f5:5,g2:{f1:1,f2:2,f3:3,f4:4,f5:5},g3:{f1:1,f2:2,f3:3,f4:4,f5:5},g4:{f1:1,f2:2,f3:3,f4:4,f5:5},g5:'A5'}", r);
 
 		r = s4.serialize(a1);
-		assertEquals("{f1:1,f2:2,f3:3,f4:4,a2:{f1:1,f2:2,f3:3,f4:4,f5:5},a3:{f1:1,f2:2,f3:3,f4:4,f5:5},a4:{f1:1,f2:2,f3:3,f4:4,f5:5},a5:{f1:1,f2:2,f3:3,f4:4,f5:5},f5:5}", r);
+		assertEquals("{f1:1,f2:2,f3:3,f4:4,f5:5,g2:{f1:1,f2:2,f3:3,f4:4,f5:5},g3:{f1:1,f2:2,f3:3,f4:4,f5:5},g4:{f1:1,f2:2,f3:3,f4:4,f5:5},g5:{f1:1,f2:2,f3:3,f4:4,f5:5}}", r);
 
 		s1.setProperty(BEAN_methodVisibility, NONE);
 		s2.setProperty(BEAN_methodVisibility, NONE);
@@ -126,16 +126,16 @@ public class CT_Visibility {
 		s4.setProperty(BEAN_methodVisibility, NONE);
 
 		r = s1.serialize(a1);
-		assertEquals("{f1:1,f2:2,f3:3,f4:4,a2:{f1:1,f2:2,f3:3,f4:4},a3:'A3',a4:'A4',a5:'A5'}", r);
+		assertEquals("{f1:1,f2:2,f3:3,f4:4,g2:{f1:1,f2:2,f3:3,f4:4},g3:'A3',g4:'A4',g5:'A5'}", r);
 
 		r = s2.serialize(a1);
-		assertEquals("{f1:1,f2:2,f3:3,f4:4,a2:{f1:1,f2:2,f3:3,f4:4},a3:{f1:1,f2:2,f3:3,f4:4},a4:'A4',a5:'A5'}", r);
+		assertEquals("{f1:1,f2:2,f3:3,f4:4,g2:{f1:1,f2:2,f3:3,f4:4},g3:{f1:1,f2:2,f3:3,f4:4},g4:'A4',g5:'A5'}", r);
 
 		r = s3.serialize(a1);
-		assertEquals("{f1:1,f2:2,f3:3,f4:4,a2:{f1:1,f2:2,f3:3,f4:4},a3:{f1:1,f2:2,f3:3,f4:4},a4:{f1:1,f2:2,f3:3,f4:4},a5:'A5'}", r);
+		assertEquals("{f1:1,f2:2,f3:3,f4:4,g2:{f1:1,f2:2,f3:3,f4:4},g3:{f1:1,f2:2,f3:3,f4:4},g4:{f1:1,f2:2,f3:3,f4:4},g5:'A5'}", r);
 
 		r = s4.serialize(a1);
-		assertEquals("{f1:1,f2:2,f3:3,f4:4,a2:{f1:1,f2:2,f3:3,f4:4},a3:{f1:1,f2:2,f3:3,f4:4},a4:{f1:1,f2:2,f3:3,f4:4},a5:{f1:1,f2:2,f3:3,f4:4}}", r);
+		assertEquals("{f1:1,f2:2,f3:3,f4:4,g2:{f1:1,f2:2,f3:3,f4:4},g3:{f1:1,f2:2,f3:3,f4:4},g4:{f1:1,f2:2,f3:3,f4:4},g5:{f1:1,f2:2,f3:3,f4:4}}", r);
 
 		s1.setProperty(BEAN_methodVisibility, PROTECTED);
 		s2.setProperty(BEAN_methodVisibility, PROTECTED);
@@ -143,16 +143,16 @@ public class CT_Visibility {
 		s4.setProperty(BEAN_methodVisibility, PROTECTED);
 
 		r = s1.serialize(a1);
-		assertEquals("{f1:1,f2:2,f3:3,f4:4,a2:{f1:1,f2:2,f3:3,f4:4,f5:5,f6:6},a3:'A3',a4:'A4',a5:'A5',f5:5,f6:6}", r);
+		assertEquals("{f1:1,f2:2,f3:3,f4:4,f5:5,f6:6,g2:{f1:1,f2:2,f3:3,f4:4,f5:5,f6:6},g3:'A3',g4:'A4',g5:'A5'}", r);
 
 		r = s2.serialize(a1);
-		assertEquals("{f1:1,f2:2,f3:3,f4:4,a2:{f1:1,f2:2,f3:3,f4:4,f5:5,f6:6},a3:{f1:1,f2:2,f3:3,f4:4,f5:5,f6:6},a4:'A4',a5:'A5',f5:5,f6:6}", r);
+		assertEquals("{f1:1,f2:2,f3:3,f4:4,f5:5,f6:6,g2:{f1:1,f2:2,f3:3,f4:4,f5:5,f6:6},g3:{f1:1,f2:2,f3:3,f4:4,f5:5,f6:6},g4:'A4',g5:'A5'}", r);
 
 		r = s3.serialize(a1);
-		assertEquals("{f1:1,f2:2,f3:3,f4:4,a2:{f1:1,f2:2,f3:3,f4:4,f5:5,f6:6},a3:{f1:1,f2:2,f3:3,f4:4,f5:5,f6:6},a4:{f1:1,f2:2,f3:3,f4:4,f5:5,f6:6},a5:'A5',f5:5,f6:6}", r);
+		assertEquals("{f1:1,f2:2,f3:3,f4:4,f5:5,f6:6,g2:{f1:1,f2:2,f3:3,f4:4,f5:5,f6:6},g3:{f1:1,f2:2,f3:3,f4:4,f5:5,f6:6},g4:{f1:1,f2:2,f3:3,f4:4,f5:5,f6:6},g5:'A5'}", r);
 
 		r = s4.serialize(a1);
-		assertEquals("{f1:1,f2:2,f3:3,f4:4,a2:{f1:1,f2:2,f3:3,f4:4,f5:5,f6:6},a3:{f1:1,f2:2,f3:3,f4:4,f5:5,f6:6},a4:{f1:1,f2:2,f3:3,f4:4,f5:5,f6:6},a5:{f1:1,f2:2,f3:3,f4:4,f5:5,f6:6},f5:5,f6:6}", r);
+		assertEquals("{f1:1,f2:2,f3:3,f4:4,f5:5,f6:6,g2:{f1:1,f2:2,f3:3,f4:4,f5:5,f6:6},g3:{f1:1,f2:2,f3:3,f4:4,f5:5,f6:6},g4:{f1:1,f2:2,f3:3,f4:4,f5:5,f6:6},g5:{f1:1,f2:2,f3:3,f4:4,f5:5,f6:6}}", r);
 
 	}
 
