@@ -5,4 +5,3 @@ Bundle-SymbolicName: org.apache.juneau.releng
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: Apache Software Foundation, Juneau
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-
