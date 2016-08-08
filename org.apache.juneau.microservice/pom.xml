@@ -21,21 +21,21 @@
 
 	<parent>
 		<groupId>org.apache.juneau</groupId>
-		<artifactId>juneau-all</artifactId>
-		<version>6.0.0-SNAPSHOT</version>
-		<relativePath>../org.apache.juneau.releng/pom.xml</relativePath>
+		<artifactId>juneau</artifactId>
+		<version>6.0.0-incubating-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-server</artifactId>
-			<version>6.0.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-client</artifactId>
-			<version>6.0.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.jetty.aggregate</groupId>
