@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>org.apache.juneau.distrib</name>
+	<name>juneau-distrib</name>
 	<comment></comment>
 	<projects>
 	</projects>
