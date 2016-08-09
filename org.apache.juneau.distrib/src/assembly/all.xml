@@ -22,21 +22,12 @@
 		<format>zip</format>
 	</formats>
 	<includeBaseDirectory>false</includeBaseDirectory>
-	<moduleSets>
-		<moduleSet>
-			<useAllReactorProjects>true</useAllReactorProjects>
-			<includes>
-				<include>org.apache.juneau:juneau-core</include>
-				<include>org.apache.juneau:juneau-client</include>
-				<include>org.apache.juneau:juneau-server</include>
-				<include>org.apache.juneau:juneau-microservice</include>
-			</includes>
-			<binaries>
-				<outputDirectory>/</outputDirectory>
-				<unpack>false</unpack>
-			</binaries>
-			<sources>
-			</sources>
-		</moduleSet>
-	</moduleSets>
+	<dependencySets>
+        <dependencySet>
+            <includes>
+                <include>*</include>
+            </includes>
+            <outputDirectory>/</outputDirectory>
+        </dependencySet>
+    </dependencySets>
 </assembly>

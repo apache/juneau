@@ -15,9 +15,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.apache.juneau</groupId>
+	<parent>
+		<groupId>org.apache.juneau</groupId>
+		<artifactId>juneau</artifactId>
+		<version>6.0.0-incubating-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
 	<artifactId>juneau-microservice-template</artifactId>
-	<version>6.0.0-SNAPSHOT</version>
 	<name>Apache Juneau Microservice Template</name>
 	<description>A template project developers use to start with to create a microservice.</description>
 	<properties>
@@ -27,7 +31,7 @@
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-microservice</artifactId>
-			<version>6.0.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 	<build>
