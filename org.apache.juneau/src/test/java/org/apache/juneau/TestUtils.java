@@ -24,7 +24,6 @@ import java.util.regex.*;
 
 import javax.xml.*;
 import javax.xml.parsers.*;
-import javax.xml.transform.*;
 import javax.xml.transform.dom.*;
 import javax.xml.transform.stream.*;
 import javax.xml.validation.*;
@@ -247,9 +246,6 @@ public class TestUtils {
 		if (is == null) {
 			is = new FileInputStream(p);
 		}
-		if (is == null) {
-			throw new FileNotFoundException(p);
-		}
 		String e = IOUtils.read(is);
 		e = e.replaceAll("\r", "");
 		return e;
@@ -333,6 +329,7 @@ public class TestUtils {
 			return 0;
 		}
 
+		@Override
 		public String toString() {
 			return toString(0, new StringBuilder()).toString();
 		}
