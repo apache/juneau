@@ -37,13 +37,13 @@
 	</properties>
 
 	<modules>
-		<module>org.apache.juneau</module>
-		<module>org.apache.juneau.client</module>
-		<module>org.apache.juneau.server</module>
-		<module>org.apache.juneau.microservice</module>
-		<module>org.apache.juneau.samples</module>
-		<module>org.apache.juneau.server.test</module>
-		<module>org.apache.juneau.distrib</module>
+		<module>juneau-core</module>
+		<module>juneau-client</module>
+		<module>juneau-server</module>
+		<module>juneau-microservice</module>
+		<module>juneau-samples</module>
+		<module>juneau-server-test</module>
+		<module>juneau-distrib</module>
 	</modules>
 
 	<build>
@@ -72,7 +72,7 @@
 					<version>2.19.1</version>
 					<configuration>
 						<includes>
-							<include>**/CT_*.class</include>
+							<include>**/*Test.class</include>
 						</includes>
 					</configuration>
 				</plugin>
