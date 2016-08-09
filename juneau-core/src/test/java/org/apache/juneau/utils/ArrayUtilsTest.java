@@ -20,6 +20,7 @@ import java.util.*;
 
 import org.junit.*;
 
+@SuppressWarnings("javadoc")
 public class ArrayUtilsTest {
 
 	//====================================================================================================

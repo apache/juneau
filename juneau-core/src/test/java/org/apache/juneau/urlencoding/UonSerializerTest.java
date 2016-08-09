@@ -17,6 +17,7 @@ import static org.junit.Assert.*;
 import org.apache.juneau.*;
 import org.junit.*;
 
+@SuppressWarnings("javadoc")
 public class UonSerializerTest {
 
 	static UonSerializer s = UonSerializer.DEFAULT_ENCODING;

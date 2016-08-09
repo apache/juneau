@@ -20,6 +20,7 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.utils.IOPipe.*;
 import org.junit.*;
 
+@SuppressWarnings("javadoc")
 public class IOPipeTest {
 
 	//====================================================================================================

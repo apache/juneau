@@ -23,7 +23,7 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.transforms.*;
 import org.junit.*;
 
-@SuppressWarnings({"serial","rawtypes"})
+@SuppressWarnings({"serial","rawtypes","javadoc"})
 public class PojoQueryTest {
 
 	//====================================================================================================

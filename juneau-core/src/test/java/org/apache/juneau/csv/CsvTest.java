@@ -19,6 +19,7 @@ import java.util.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;
 
+@SuppressWarnings("javadoc")
 public class CsvTest {
 
 	//====================================================================================================

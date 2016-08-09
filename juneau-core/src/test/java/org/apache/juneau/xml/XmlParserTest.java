@@ -19,6 +19,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
 import org.junit.*;
 
+@SuppressWarnings("javadoc")
 public class XmlParserTest {
 
 	@Test

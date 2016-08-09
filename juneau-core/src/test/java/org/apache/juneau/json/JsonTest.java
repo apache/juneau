@@ -14,7 +14,6 @@ package org.apache.juneau.json;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.json.JsonSerializerContext.*;
-import static org.apache.juneau.serializer.SerializerContext.*;
 import static org.junit.Assert.*;
 
 import java.util.*;
@@ -24,7 +23,7 @@ import org.apache.juneau.json.annotation.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;
 
-@SuppressWarnings("serial")
+@SuppressWarnings({"serial","javadoc"})
 public class JsonTest {
 
 	//====================================================================================================

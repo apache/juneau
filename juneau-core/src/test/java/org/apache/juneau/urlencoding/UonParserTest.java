@@ -19,7 +19,7 @@ import java.util.*;
 import org.apache.juneau.parser.*;
 import org.junit.*;
 
-@SuppressWarnings({"rawtypes","unchecked","hiding"})
+@SuppressWarnings({"rawtypes","unchecked","hiding","javadoc"})
 public class UonParserTest {
 
 	static UonParser p = UonParser.DEFAULT;

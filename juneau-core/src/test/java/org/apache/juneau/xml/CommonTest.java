@@ -29,7 +29,7 @@ import org.apache.juneau.testbeans.*;
 import org.apache.juneau.xml.annotation.*;
 import org.junit.*;
 
-@SuppressWarnings({"serial"})
+@SuppressWarnings({"serial","javadoc"})
 public class CommonTest {
 
 	//====================================================================================================

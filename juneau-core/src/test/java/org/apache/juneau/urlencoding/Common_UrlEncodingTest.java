@@ -27,7 +27,7 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.testbeans.*;
 import org.junit.*;
 
-@SuppressWarnings({"hiding","serial"})
+@SuppressWarnings({"hiding","serial","javadoc"})
 public class Common_UrlEncodingTest {
 	UrlEncodingParser p = UrlEncodingParser.DEFAULT;
 

@@ -18,6 +18,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.transform.*;
 import org.junit.*;
 
+@SuppressWarnings("javadoc")
 public class BeanMapTest {
 
 	//====================================================================================================

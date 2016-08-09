@@ -39,6 +39,7 @@ import org.w3c.dom.bootstrap.*;
 import org.w3c.dom.ls.*;
 import org.xml.sax.*;
 
+@SuppressWarnings({"javadoc","hiding"})
 public class TestUtils {
 
 	private static JsonSerializer js = new JsonSerializer.Simple()

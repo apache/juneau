@@ -21,6 +21,7 @@ import org.junit.runner.*;
 import org.junit.runners.*;
 
 @RunWith(Parameterized.class)
+@SuppressWarnings("javadoc")
 public class VersionRangeTest {
 
 	@Parameterized.Parameters

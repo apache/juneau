@@ -18,6 +18,7 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.svl.*;
 import org.junit.*;
 
+@SuppressWarnings("javadoc")
 public class StringVarResolverTest {
 
 	//====================================================================================================

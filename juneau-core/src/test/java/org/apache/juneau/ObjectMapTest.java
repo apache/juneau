@@ -18,6 +18,7 @@ import static org.junit.Assert.*;
 import org.apache.juneau.utils.*;
 import org.junit.*;
 
+@SuppressWarnings("javadoc")
 public class ObjectMapTest {
 
 	//====================================================================================================

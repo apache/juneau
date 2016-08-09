@@ -15,7 +15,6 @@ package org.apache.juneau.jena;
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.jena.RdfCommonContext.*;
 import static org.apache.juneau.jena.RdfSerializerContext.*;
-import static org.apache.juneau.serializer.SerializerContext.*;
 import static org.junit.Assert.*;
 
 import java.net.URI;
@@ -29,6 +28,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.transforms.*;
 import org.junit.*;
 
+@SuppressWarnings("javadoc")
 public class RdfParserTest {
 
 	@Test

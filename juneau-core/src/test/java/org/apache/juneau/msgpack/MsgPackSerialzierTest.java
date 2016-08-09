@@ -14,12 +14,10 @@ package org.apache.juneau.msgpack;
 
 import static org.junit.Assert.*;
 
-import java.io.*;
-
 import org.apache.juneau.*;
 import org.junit.*;
 
-@SuppressWarnings("serial")
+@SuppressWarnings({"javadoc"})
 public class MsgPackSerialzierTest {
 
 	//====================================================================================================

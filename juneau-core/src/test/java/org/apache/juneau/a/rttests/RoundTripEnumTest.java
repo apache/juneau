@@ -26,7 +26,7 @@ import org.junit.*;
  * Tests designed to serialize and parse objects to make sure we end up
  * with the same objects for all serializers and parsers.
  */
-@SuppressWarnings({"hiding","serial"})
+@SuppressWarnings({"hiding","serial","javadoc"})
 public class RoundTripEnumTest extends RoundTripTest {
 
 	public RoundTripEnumTest(String label, Serializer s, Parser p, int flags) throws Exception {

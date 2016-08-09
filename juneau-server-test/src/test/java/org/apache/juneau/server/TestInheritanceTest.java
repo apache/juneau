@@ -80,7 +80,6 @@ public class TestInheritanceTest {
 	// Test filter inheritance.
 	//====================================================================================================
 	@Test
-	@SuppressWarnings("hiding")
 	public void testTransforms() throws Exception {
 		RestClient client = new TestRestClient(JsonSerializer.class, JsonParser.class).setAccept("text/json+simple");
 		String r;
@@ -108,7 +107,6 @@ public class TestInheritanceTest {
 	// Test properties inheritance.
 	//====================================================================================================
 	@Test
-	@SuppressWarnings("hiding")
 	public void testProperties() throws Exception {
 		RestClient client = new TestRestClient(JsonSerializer.class, JsonParser.class).setAccept("text/json+simple");
 		String r;

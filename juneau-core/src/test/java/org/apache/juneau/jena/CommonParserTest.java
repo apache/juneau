@@ -15,7 +15,6 @@ package org.apache.juneau.jena;
 import static org.apache.juneau.BeanContext.*;
 import static org.apache.juneau.jena.RdfCommonContext.*;
 import static org.apache.juneau.jena.RdfSerializerContext.*;
-import static org.apache.juneau.serializer.SerializerContext.*;
 import static org.junit.Assert.*;
 
 import java.util.*;
@@ -25,7 +24,7 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;
 
-@SuppressWarnings({"rawtypes","serial"})
+@SuppressWarnings({"rawtypes","serial","javadoc"})
 public class CommonParserTest {
 
 	private String wrap(String in) {

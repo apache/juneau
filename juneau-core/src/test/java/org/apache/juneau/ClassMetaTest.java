@@ -19,7 +19,7 @@ import java.util.*;
 import org.apache.juneau.transform.*;
 import org.junit.*;
 
-@SuppressWarnings({"rawtypes","serial","hiding"})
+@SuppressWarnings({"rawtypes","serial","hiding","javadoc"})
 public class ClassMetaTest {
 
 	BeanContext bc = BeanContext.DEFAULT;

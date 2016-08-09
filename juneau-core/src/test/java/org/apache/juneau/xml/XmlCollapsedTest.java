@@ -18,13 +18,12 @@ import static org.junit.Assert.*;
 
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.annotation.*;
 import org.junit.*;
 
-@SuppressWarnings({"serial"})
+@SuppressWarnings({"serial","javadoc"})
 public class XmlCollapsedTest {
 
 	//====================================================================================================

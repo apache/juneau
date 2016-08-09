@@ -21,6 +21,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;
 
+@SuppressWarnings("javadoc")
 public class ReaderFilterTest {
 
 	//====================================================================================================

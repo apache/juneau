@@ -12,23 +12,18 @@
  ***************************************************************************************************************************/
 package org.apache.juneau.a.rttests;
 
-import static org.apache.juneau.TestUtils.*;
 import static org.junit.Assert.*;
 
-import java.text.*;
 import java.util.*;
-
-import org.apache.juneau.dto.jsonschema.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;
-
 
 /**
  * Tests designed to serialize and parse objects to make sure we end up
  * with the same objects for all serializers and parsers.
  */
-@SuppressWarnings("hiding")
+@SuppressWarnings({"hiding","javadoc","deprecation"})
 public class RoundTripNumericConstructorsTest extends RoundTripTest {
 
 	public RoundTripNumericConstructorsTest(String label, Serializer s, Parser p, int flags) throws Exception {

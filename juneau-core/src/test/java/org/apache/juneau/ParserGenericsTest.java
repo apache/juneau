@@ -20,7 +20,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.junit.*;
 
-@SuppressWarnings("serial")
+@SuppressWarnings({"serial","javadoc"})
 public class ParserGenericsTest {
 
 	//====================================================================================================

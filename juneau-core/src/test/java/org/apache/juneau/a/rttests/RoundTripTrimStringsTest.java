@@ -19,10 +19,10 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;
 
-
 /**
  * Tests for the {@link SerializerContext#SERIALIZER_trimStrings} and {@link ParserContext#PARSER_trimStrings}.
  */
+@SuppressWarnings("javadoc")
 public class RoundTripTrimStringsTest extends RoundTripTest {
 
 	public RoundTripTrimStringsTest(String label, Serializer s, Parser p, int flags) throws Exception {

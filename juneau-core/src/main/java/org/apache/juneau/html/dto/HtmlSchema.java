@@ -19,6 +19,7 @@ package org.apache.juneau.html.dto;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
+@SuppressWarnings("javadoc")
 public class HtmlSchema {
 
 	// List of all classes that make up this schema.

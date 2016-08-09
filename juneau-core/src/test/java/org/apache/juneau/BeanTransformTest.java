@@ -20,6 +20,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.json.*;
 import org.junit.*;
 
+@SuppressWarnings("javadoc")
 public class BeanTransformTest {
 
 	//====================================================================================================

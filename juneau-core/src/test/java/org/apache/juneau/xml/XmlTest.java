@@ -30,7 +30,7 @@ import org.apache.juneau.xml.xml1b.*;
 import org.apache.juneau.xml.xml1c.*;
 import org.junit.*;
 
-@SuppressWarnings({"serial"})
+@SuppressWarnings({"serial","javadoc"})
 public class XmlTest {
 
 	//====================================================================================================

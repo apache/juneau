@@ -19,7 +19,7 @@ import org.apache.juneau.annotation.*;
 import org.junit.*;
 
 
-@SuppressWarnings({"rawtypes"})
+@SuppressWarnings({"rawtypes","javadoc"})
 public class AnnotationsTest {
 
 	//====================================================================================================

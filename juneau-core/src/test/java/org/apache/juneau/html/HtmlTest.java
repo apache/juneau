@@ -13,7 +13,6 @@
 package org.apache.juneau.html;
 
 import static org.apache.juneau.html.HtmlSerializerContext.*;
-import static org.apache.juneau.serializer.SerializerContext.*;
 import static org.junit.Assert.*;
 
 import java.util.*;
@@ -27,6 +26,7 @@ import org.apache.juneau.testbeans.*;
 import org.apache.juneau.transform.*;
 import org.junit.*;
 
+@SuppressWarnings({"javadoc","unchecked","rawtypes","serial"})
 public class HtmlTest {
 
 	//====================================================================================================

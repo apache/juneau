@@ -16,17 +16,15 @@ import static org.apache.juneau.TestUtils.*;
 import static org.junit.Assert.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;
-
-
 
 /**
  * Tests designed to serialize and parse objects to make sure we end up
  * with the same objects for all serializers and parsers.
  */
+@SuppressWarnings("javadoc")
 public class RoundTripBeanInheritanceTest extends RoundTripTest {
 
 	public RoundTripBeanInheritanceTest(String label, Serializer s, Parser p, int flags) throws Exception {

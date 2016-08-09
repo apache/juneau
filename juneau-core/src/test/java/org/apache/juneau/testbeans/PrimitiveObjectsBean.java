@@ -15,7 +15,7 @@ package org.apache.juneau.testbeans;
 import java.math.*;
 import java.util.*;
 
-@SuppressWarnings({"serial"})
+@SuppressWarnings({"serial","javadoc"})
 public class PrimitiveObjectsBean {
 
 	// primitive objects

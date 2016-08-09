@@ -20,6 +20,7 @@ import java.util.*;
 import org.apache.juneau.internal.*;
 import org.junit.*;
 
+@SuppressWarnings("javadoc")
 public class MultiSetTest {
 
 	@Test

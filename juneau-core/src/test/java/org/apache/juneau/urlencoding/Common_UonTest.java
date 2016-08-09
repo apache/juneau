@@ -27,7 +27,7 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.testbeans.*;
 import org.junit.*;
 
-@SuppressWarnings({"hiding","serial"})
+@SuppressWarnings({"hiding","serial","javadoc"})
 public class Common_UonTest {
 	UonParser p = UonParser.DEFAULT;
 	UonParser pe = UonParser.DEFAULT_DECODING;

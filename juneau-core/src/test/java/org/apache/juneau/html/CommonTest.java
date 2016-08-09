@@ -15,7 +15,6 @@ package org.apache.juneau.html;
 import static org.apache.juneau.BeanContext.*;
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.html.HtmlSerializerContext.*;
-import static org.apache.juneau.serializer.SerializerContext.*;
 import static org.junit.Assert.*;
 
 import java.net.*;
@@ -29,7 +28,7 @@ import org.apache.juneau.testbeans.*;
 import org.apache.juneau.xml.*;
 import org.junit.*;
 
-@SuppressWarnings("serial")
+@SuppressWarnings({"serial","javadoc"})
 public class CommonTest {
 
 	//====================================================================================================

@@ -34,7 +34,6 @@ public class TestLargePojos extends RestServletJenaDefault {
 	}
 
 	@RestMethod(name="PUT", path="/")
-	@SuppressWarnings("unused")
 	public String testPut(@Content LargePojo in) {
 		return "ok";
 	}

@@ -26,9 +26,9 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.svl.*;
-import org.apache.juneau.utils.*;
 import org.junit.*;
 
+@SuppressWarnings("javadoc")
 public class ConfigFileTest {
 
 	private File getFreshFile() {

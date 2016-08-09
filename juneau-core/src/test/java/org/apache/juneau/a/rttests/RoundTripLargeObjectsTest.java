@@ -35,7 +35,7 @@ import org.junit.runners.*;
  * with the same objects for all serializers and parsers.
  */
 @Ignore
-@SuppressWarnings({"hiding","serial"})
+@SuppressWarnings({"hiding","serial","javadoc"})
 public class RoundTripLargeObjectsTest extends RoundTripTest {
 
 	private static final int NUM_RUNS = 10;

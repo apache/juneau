@@ -29,7 +29,7 @@ import org.apache.juneau.utils.*;
 		TestNls.Test6.class
 	}
 )
-@SuppressWarnings({"serial","unused"})
+@SuppressWarnings({"serial"})
 public class TestNls extends RestServletGroupDefault {
 	private static final long serialVersionUID = 1L;
 

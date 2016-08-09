@@ -23,7 +23,7 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;
 
-@SuppressWarnings({"unchecked","hiding","serial"})
+@SuppressWarnings({"unchecked","hiding","serial","javadoc"})
 public class ByteArrayBase64TransformTest extends RoundTripTest {
 
 	public ByteArrayBase64TransformTest(String label, Serializer s, Parser p, int flags) throws Exception {

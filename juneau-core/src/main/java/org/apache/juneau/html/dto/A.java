@@ -24,6 +24,7 @@ import org.apache.juneau.xml.annotation.*;
  * @author James Bognar (james.bognar@salesforce.com)
  */
 @Xml(name="a")
+@SuppressWarnings("javadoc")
 public class A extends HtmlElement {
 
 	/** <code>name</code> attribute */

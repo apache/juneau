@@ -17,6 +17,7 @@ import static org.junit.Assert.*;
 import org.apache.juneau.parser.*;
 import org.junit.*;
 
+@SuppressWarnings("javadoc")
 public class ParserReaderTest {
 
 	//====================================================================================================

@@ -24,7 +24,7 @@ import org.junit.*;
  * Tests to ensure the valueOf(String), fromString(String), parse(String), and parseString(String) methods
  * are used correctly by parsers.
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused","javadoc"})
 public class RoundTripObjectsAsStringsTest extends RoundTripTest {
 
 	public RoundTripObjectsAsStringsTest(String label, Serializer s, Parser p, int flags) throws Exception {

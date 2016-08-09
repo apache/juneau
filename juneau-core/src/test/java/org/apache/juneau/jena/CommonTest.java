@@ -29,7 +29,7 @@ import org.apache.juneau.testbeans.*;
 import org.apache.juneau.xml.*;
 import org.junit.*;
 
-@SuppressWarnings({"unchecked","serial"})
+@SuppressWarnings({"unchecked","serial","javadoc"})
 public class CommonTest {
 
 	private RdfSerializer getBasicSerializer() {

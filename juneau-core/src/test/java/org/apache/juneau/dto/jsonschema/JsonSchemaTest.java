@@ -20,7 +20,7 @@ import java.net.*;
 import org.apache.juneau.json.*;
 import org.junit.*;
 
-
+@SuppressWarnings("javadoc")
 public class JsonSchemaTest {
 
 	@Test

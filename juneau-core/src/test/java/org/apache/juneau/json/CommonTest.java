@@ -27,7 +27,7 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.testbeans.*;
 import org.junit.*;
 
-@SuppressWarnings({"serial"})
+@SuppressWarnings({"serial","javadoc"})
 public class CommonTest {
 
 	//====================================================================================================

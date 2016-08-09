@@ -17,6 +17,7 @@ import java.util.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.urlencoding.annotation.*;
 
+@SuppressWarnings("javadoc")
 public class DTOs {
 
 	@Bean(sort=true)

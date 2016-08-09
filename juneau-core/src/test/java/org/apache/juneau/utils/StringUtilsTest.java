@@ -16,7 +16,6 @@ import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.junit.Assert.*;
 
-import java.io.ObjectInputStream.*;
 import java.math.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
@@ -28,6 +27,7 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.transforms.*;
 import org.junit.*;
 
+@SuppressWarnings("javadoc")
 public class StringUtilsTest {
 
 	//====================================================================================================

@@ -12,7 +12,7 @@
  ***************************************************************************************************************************/
 package org.apache.juneau.xml.xml1c;
 
-
+@SuppressWarnings("javadoc")
 public class T9 {
 
 	public int f1 = 1;

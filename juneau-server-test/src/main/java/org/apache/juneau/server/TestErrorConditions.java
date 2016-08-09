@@ -21,7 +21,6 @@ import org.apache.juneau.server.annotation.*;
 @RestResource(
 	path="/testErrorConditions"
 )
-@SuppressWarnings("unused")
 public class TestErrorConditions extends RestServletDefault {
 	private static final long serialVersionUID = 1L;
 

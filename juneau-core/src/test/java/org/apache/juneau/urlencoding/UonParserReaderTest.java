@@ -19,6 +19,7 @@ import java.io.*;
 import org.apache.juneau.*;
 import org.junit.*;
 
+@SuppressWarnings({"javadoc","resource"})
 public class UonParserReaderTest {
 
 	//====================================================================================================

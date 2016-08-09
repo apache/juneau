@@ -14,7 +14,6 @@ package org.apache.juneau.a.rttests;
 
 import static org.apache.juneau.a.rttests.RoundTripTest.Flags.*;
 import static org.apache.juneau.jena.RdfSerializerContext.*;
-import static org.apache.juneau.serializer.SerializerContext.*;
 import static org.apache.juneau.urlencoding.UonSerializerContext.*;
 import static org.apache.juneau.urlencoding.UrlEncodingContext.*;
 import static org.apache.juneau.xml.XmlSerializerContext.*;
@@ -34,13 +33,12 @@ import org.apache.juneau.xml.*;
 import org.junit.runner.*;
 import org.junit.runners.*;
 
-
 /**
  * Tests designed to serialize and parse objects to make sure we end up
  * with the same objects for all serializers and parsers.
  */
 @RunWith(Parameterized.class)
-@SuppressWarnings({"unchecked","hiding"})
+@SuppressWarnings({"unchecked","hiding","javadoc"})
 public abstract class RoundTripTest {
 
 	public static class Flags {
@@ -221,14 +219,14 @@ public abstract class RoundTripTest {
 		Object out = serialize(object, this.s);
 		if (p == null)
 			return object;
-		T o = (T)this.p.parse(out, t);
+		T o = this.p.parse(out, t);
 		return (returnOriginalObject ? object : o);
 	}
 	public <T> T roundTrip(T object, Class<? extends T> c) throws Exception {
 		Object out = serialize(object, this.s);
 		if (p == null)
 			return object;
-		T o = (T)this.p.parse(out, p.getBeanContext().getClassMeta(c));
+		T o = this.p.parse(out, p.getBeanContext().getClassMeta(c));
 		return (returnOriginalObject ? object : o);
 	}
 	public <K,V,T extends Map<K,V>> T roundTripMap(T object, Class<? extends T> c, Class<K> k, Class<V> v) throws Exception {
@@ -236,7 +234,7 @@ public abstract class RoundTripTest {
 		if (p == null)
 			return object;
 		ClassMeta<? extends T> cm = p.getBeanContext().getMapClassMeta(c, k, v);
-		T o = (T)this.p.parse(out, cm);
+		T o = this.p.parse(out, cm);
 		return (returnOriginalObject ? object : o);
 	}
 	public <E,T extends Collection<E>> T roundTripCollection(T object, Class<? extends T> c, Class<E> e) throws Exception {
@@ -244,7 +242,7 @@ public abstract class RoundTripTest {
 		if (p == null)
 			return object;
 		ClassMeta<? extends T> cm = p.getBeanContext().getCollectionClassMeta(c, e);
-		T o = (T)this.p.parse(out, cm);
+		T o = this.p.parse(out, cm);
 		return (returnOriginalObject ? object : o);
 	}
 

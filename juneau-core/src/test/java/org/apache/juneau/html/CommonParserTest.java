@@ -22,7 +22,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
 import org.junit.*;
 
-@SuppressWarnings({"rawtypes","serial"})
+@SuppressWarnings({"rawtypes","serial","javadoc"})
 public class CommonParserTest {
 
 	//====================================================================================================

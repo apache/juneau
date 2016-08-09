@@ -17,6 +17,7 @@ import java.net.URI;
 
 import org.apache.juneau.annotation.*;
 
+@SuppressWarnings("javadoc")
 @Bean(sort=true)
 public class TestURI {
 	@BeanProperty(beanUri=true)

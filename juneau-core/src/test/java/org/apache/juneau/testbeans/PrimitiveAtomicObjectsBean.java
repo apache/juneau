@@ -21,7 +21,7 @@ import java.util.concurrent.atomic.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@SuppressWarnings({"serial"})
+@SuppressWarnings({"serial","javadoc"})
 public class PrimitiveAtomicObjectsBean {
 
 	// primitive objects

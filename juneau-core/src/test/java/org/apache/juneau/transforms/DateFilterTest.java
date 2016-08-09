@@ -23,7 +23,7 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;
 
-@SuppressWarnings("deprecation")
+@SuppressWarnings({"deprecation","javadoc"})
 public class DateFilterTest {
 
 	private static TimeZone tz;

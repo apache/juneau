@@ -22,7 +22,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
 import org.junit.*;
 
-@SuppressWarnings({"rawtypes","hiding","serial"})
+@SuppressWarnings({"rawtypes","hiding","serial","javadoc"})
 public class CommonParser_UonTest {
 
 	ReaderParser p = UonParser.DEFAULT.clone().setClassLoader(getClass().getClassLoader());

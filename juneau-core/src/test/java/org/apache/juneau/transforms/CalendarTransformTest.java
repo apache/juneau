@@ -33,6 +33,7 @@ import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
 import org.junit.*;
 
+@SuppressWarnings("javadoc")
 public class CalendarTransformTest {
 
 	private static Calendar testDate = new GregorianCalendar(TimeZone.getTimeZone("PST"));

@@ -21,7 +21,7 @@ import org.apache.juneau.xml.*;
 import org.junit.*;
 
 
-@SuppressWarnings({"rawtypes"})
+@SuppressWarnings({"rawtypes","javadoc"})
 public class ContextFactoryTest {
 
 	//====================================================================================================
