@@ -30,6 +30,11 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-microservice</artifactId>
 			<version>${project.version}</version>
 		</dependency>
