@@ -22,6 +22,7 @@ import org.apache.juneau.annotation.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
+@Bean(sort=true)
 public final class Namespace implements Comparable<Namespace> {
 	final String name, uri;
 	private final int hashCode;
