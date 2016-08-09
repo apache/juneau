@@ -406,6 +406,7 @@ public class CT_BeanConfig {
 	}
 
 
+	@Bean(properties={"name","age"})
 	public static class ReadOnlyPerson {
 		private final String name;
 		private final int age;
