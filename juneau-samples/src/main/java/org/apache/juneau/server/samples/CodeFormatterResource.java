@@ -21,7 +21,7 @@ import org.apache.juneau.server.*;
 import org.apache.juneau.server.annotation.*;
 
 /**
- * Service at <code>/jazz/rawSql</code>.
+ * Service at <code>/codeFormatter</code>.
  * Used for executing SQL queries against the repository database.
  */
 @RestResource(
