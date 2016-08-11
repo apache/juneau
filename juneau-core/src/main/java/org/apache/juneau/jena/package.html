@@ -135,6 +135,7 @@
 	<p>
 		Since Juneau is 100% pure IBM code, the Jena libraries must be provided on the classpath separately if you plan on making use of the RDF support.
 	</p>
+	<p>
 		The minimum list of required jars are:
 	</p>
 	<ul>
@@ -161,7 +162,7 @@
 		</p>
 		<img class='bordered' src="doc-files/Example_HTML.png">
 		<p>
-			By appending <code>?Accept=<i>mediaType</i>&plainText=true</code> to the URL, you can view the data in the various RDF supported formats.
+			By appending <code>?Accept=<i>mediaType</i>&amp;plainText=true</code> to the URL, you can view the data in the various RDF supported formats.
 		</p>
 		
 		<h6 class='figure'>RDF/XML</h6>
@@ -404,7 +405,7 @@
 	    <xa>xmlns:jp</xa>=<xs>"http://www.ibm.com/juneaubp/"</xs>
 	    <xa>xmlns:per</xa>=<xs>"http://www.ibm.com/person/"</xs><xt>&gt;</xt>
 	   <xt>&lt;rdf:Description <b><xa>rdf:about</xa>=<xs>"http://sample/addressBook/person/1"</xs></b>&gt;</xt>
-	      <xt><b>&lt;per:addressBookUri</xt> <xa>rdf:resource</xa>=<xs>"http://sample/addressBook"</xs><xt>/&gt;</b></xt>
+	      <xt>&lt;per:addressBookUri</xt> <xa>rdf:resource</xa>=<xs>"http://sample/addressBook"</xs><xt>/&gt;</xt>
 	      <xt>&lt;per:id&gt;</xt>1<xt>&lt;/per:id&gt;</xt>
 	      <xt>&lt;per:name&gt;</xt>John Smith<xt>&lt;/per:name&gt;</xt>
 	   <xt>&lt;/rdf:Description&gt;</xt>
@@ -508,7 +509,7 @@
 	      <xt>&lt;per:addressBookUri</xt> <xa>rdf:resource</xa>=<xs>"http://sample/addressBook"</xs><xt>/&gt;</xt>
 	      <xt>&lt;per:id&gt;</xt>1<xt>&lt;/per:id&gt;</xt>
 	      <xt>&lt;per:name&gt;</xt>John Smith<xt>&lt;/per:name&gt;</xt>
-	      <xt><b>&lt;per:birthDate&gt;</xt>1946-08-12T00:00:00Z<xt>&lt;/per:birthDate&gt;</b></xt>
+	      <xt>&lt;per:birthDate&gt;</xt>1946-08-12T00:00:00Z<xt>&lt;/per:birthDate&gt;</xt>
 	   <xt>&lt;/rdf:Description&gt;</xt>
 	<xt>&lt;/rdf:RDF&gt;</xt>
 		</p>

@@ -157,7 +157,7 @@
 		</p>
 		<img class='bordered' src="doc-files/Example_HTML.png">
 		<p>
-			By appending <code>?Accept=<i>mediaType</i>&plainText=true</code> to the URL, you can view the data in the various supported XML formats:
+			By appending <code>?Accept=<i>mediaType</i>&amp;plainText=true</code> to the URL, you can view the data in the various supported XML formats:
 		</p>
 		
 		<h6 class='figure'>Normal XML</h6>
@@ -507,12 +507,12 @@
 		}
 
 		<jc>// Converts the text to and from the appropriate media type.</jc>
-		<jk>public class</jk> TextContentHandler <jk>implements</jk> XmlContentHandler&ltText&gt; {
+		<jk>public class</jk> TextContentHandler <jk>implements</jk> XmlContentHandler&lt;Text&gt; {
 	
 			<ja>@Override</ja>
 			<jk>public void</jk> parse(XMLStreamReader r, Text text) <jk>throws</jk> Exception {
 				String type = text.<jf>type</jf>;
-				<jk>if</jk> (type != <jk>null</jk> && type.equals(<js>"xhtml"</js>))
+				<jk>if</jk> (type != <jk>null</jk> &amp;&amp; type.equals(<js>"xhtml"</js>))
 					text.<jf>text</jf> = <jsm>decode</jsm>(readXmlContents(r).trim());
 				<jk>else</jk>
 					text.<jf>text</jf> = <jsm>decode</jsm>(r.getElementText().trim());
@@ -522,7 +522,7 @@
 			<jk>public void</jk> serialize(XmlSerializerWriter w, Text text) <jk>throws</jk> Exception {
 				String type = text.<jf>type</jf>;
 				String content = text.<jf>text</jf>;
-				<jk>if</jk> (type != <jk>null</jk> && type.equals(<js>"xhtml"</js>))
+				<jk>if</jk> (type != <jk>null</jk> &amp;&amp; type.equals(<js>"xhtml"</js>))
 					w.encodeTextInvalidChars(content);
 				<jk>else</jk>
 					w.encodeText(content);

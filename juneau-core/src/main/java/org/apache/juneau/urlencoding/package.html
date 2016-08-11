@@ -135,7 +135,7 @@
 		</p>
 		<img class='bordered' src="doc-files/Example_HTML.png">
 		<p>
-			By appending <code>?Accept=application/x-www-form-urlencoded&plainText=true</code> to the URL, you can view the data as a URL-encoded string:
+			By appending <code>?Accept=application/x-www-form-urlencoded&amp;plainText=true</code> to the URL, you can view the data as a URL-encoded string:
 		</p>
 		<img class='bordered' src="doc-files/Example_UrlEncoding.png">
 		
@@ -143,17 +143,17 @@
 			Juneau supports two kinds of serialization:
 		</p>
 		<ul class='spaced-list'>
-			<li>Construction of full URL query parameter strings (e.g. <code>&key=value</code> pairs) from beans and maps.
-			<li>Construction of URL query parameter value strings (e.g. just the <code>value</code> portion of <code>&key=value</code> pairs) from any POJO.  
+			<li>Construction of full URL query parameter strings (e.g. <code>&amp;key=value</code> pairs) from beans and maps.
+			<li>Construction of URL query parameter value strings (e.g. just the <code>value</code> portion of <code>&amp;key=value</code> pairs) from any POJO.  
 		</ul>
 		<p>
 			Top-level beans and maps can serialized as key/value pairs as shown below:
 		</p>
 		<h6 class='figure'>Example:  A bean with 2 string properties, 'foo' and 'baz', serialized to a query string</h6>
-		<p class='bcode'>	http://localhost/sample?<xa>foo</xa>=<xs>bar</xs>&<xa>baz</xa>=<xs>bing</xs></p>
+		<p class='bcode'>	http://localhost/sample?<xa>foo</xa>=<xs>bar</xs>&amp;<xa>baz</xa>=<xs>bing</xs></p>
 		<p>
 			Lower-level beans and maps are also serialized as key/value pairs, but are surrounded with a <js>"$o(...)"</js> construct to denote an object mapping, 
-				and uses a comma as the parameter delimiter instead of <js>"&"</js>.<br>
+				and uses a comma as the parameter delimiter instead of <js>"&amp;"</js>.<br>
 		</p>
 		<h6 class='figure'>Example:  A bean serialized as a query parameter value.</h6>
 		<p class='bcode'>	http://localhost/sample?<xa>a1</xa>=$o(<xa>foo</xa>=<xs>bar</xs>,<xa>baz</xa>=<xs>bing</xs>)</p>
@@ -181,14 +181,14 @@
 			<tr>
 				<td>Booleans</td>
 				<td>BOOLEAN</td>
-				<td class='code'><xa>a1</xa>=$b(<xs>true</xs>)&<xa>a2</xa>=$b(<xs>false</xs>)</td>
-				<td class='code'><xa>a1</xa>=<xs>true</xs>&<xa>a2</xa>=<xs>false</xs></td>
+				<td class='code'><xa>a1</xa>=$b(<xs>true</xs>)&amp;<xa>a2</xa>=$b(<xs>false</xs>)</td>
+				<td class='code'><xa>a1</xa>=<xs>true</xs>&amp;<xa>a2</xa>=<xs>false</xs></td>
 			</tr>
 			<tr>
 				<td>int/float/double/...</td>
 				<td>NUMBER</td>
-				<td class='code'><xa>a1</xa>=$n(<xs>123</xs>)&<xa>a2</xa>=$n(<xs>1.23e1</xs>)</td>
-				<td class='code'><xa>a1</xa>=<xs>123</xs>&<xa>a2</xa>=<xs>1.23e1</xs></td>
+				<td class='code'><xa>a1</xa>=$n(<xs>123</xs>)&amp;<xa>a2</xa>=$n(<xs>1.23e1</xs>)</td>
+				<td class='code'><xa>a1</xa>=<xs>123</xs>&amp;<xa>a2</xa>=<xs>1.23e1</xs></td>
 			</tr>
 			<tr>
 				<td>null</td>
@@ -324,7 +324,7 @@
 		The code above produces the following output:
 	</p>
 	<p class='bcode'>
-	<xa>id</xa>=$n(<xs>1</xs>)&<xa>name</xa>=<xs>John+Smith</xs>
+	<xa>id</xa>=$n(<xs>1</xs>)&amp;<xa>name</xa>=<xs>John+Smith</xs>
 	</p>
 	<p>
 		The general method guidelines are as follows:
@@ -402,7 +402,7 @@
 			Using <code>UrlEncodingSerializer</code> instead would create the following:
 		</p>
 		<p class='bcode'>
-	<xa>id</xa>=$n(<xs>1</xs>)&<xa>name</xa>=<xs>John+Smith</xs>&<xa>uri</xa>=<xs>http://sample/addressBook/person/1</xs>&<xa>addressBookUri</xa>=<xs>http://sample/addressBook</xs>&<xa>birthDate</xa>=<xs>1946-08-12T00:00:00Z</xs>
+	<xa>id</xa>=$n(<xs>1</xs>)&amp;<xa>name</xa>=<xs>John+Smith</xs>&amp;<xa>uri</xa>=<xs>http://sample/addressBook/person/1</xs>&amp;<xa>addressBookUri</xa>=<xs>http://sample/addressBook</xs>&amp;<xa>birthDate</xa>=<xs>1946-08-12T00:00:00Z</xs>
 		</p>
 		<p>
 			Another useful feature is the {@link org.apache.juneau.annotation.Bean#propertyNamer()} annotation that allows you to plug in your own
@@ -529,11 +529,11 @@
 			If we were to use <code>UrlEncodingSerializer</code> instead, we would get the following:
 		</p>
 		<p class='bcode'>
-	<xa>id</xa>=$n(<xs>1</xs>)& 
-	<xa>name</xa>=<xs>John+Smith</xs>& 
-	<xa>uri</xa>=<xs>http://sample/addressBook/person/1</xs>& 
-	<xa>addressBookUri</xa>=<xs>http://sample/addressBook</xs>&
-	<xa>birthDate</xa>=<xs>1946-08-12T00:00:00Z</xs>&
+	<xa>id</xa>=$n(<xs>1</xs>)&amp; 
+	<xa>name</xa>=<xs>John+Smith</xs>&amp; 
+	<xa>uri</xa>=<xs>http://sample/addressBook/person/1</xs>&amp; 
+	<xa>addressBookUri</xa>=<xs>http://sample/addressBook</xs>&amp;
+	<xa>birthDate</xa>=<xs>1946-08-12T00:00:00Z</xs>&amp;
 	<xa>addresses</xa>=$a(
 		$o(
 			<xa>uri</xa>=<xs>http://sample/addressBook/address/1</xs>, 
@@ -549,7 +549,7 @@
 		</p>
 	</div>
 	<p>
-		Note how the top level <code>Person</code> bean is serialized using the standard <js>'&'</js> delimiter, whereas the lower-level <code>Address</code>
+		Note how the top level <code>Person</code> bean is serialized using the standard <js>'&amp;'</js> delimiter, whereas the lower-level <code>Address</code>
 			bean is serialized using the <js>','</js> character to prevent the <code>addresses</code> field from being incompletely parsed.
 	</p>
 	
