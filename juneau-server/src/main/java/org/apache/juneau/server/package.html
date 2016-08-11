@@ -60,7 +60,7 @@
 	Defines an API for defining REST resources as servlets.
 </p>
 
-<a name='TOC'></a><h5 class='toc'>Table of Contents</h5>
+<a id='TOC'></a><h5 class='toc'>Table of Contents</h5>
 <ol class='toc'>
 	<li><p><a class='doclink' href='#Intro'>Introduction</a></p>
 	<li><p><a class='doclink' href='#HelloWorldResource'>Hello World Example</a></p>
@@ -109,7 +109,7 @@
 </ol>
 
 <!-- ======================================================================================================== -->
-<a name="Intro"></a>
+<a id="Intro"></a>
 <h2 class='topic' onclick='toggle(this)'>1 - Introduction</h2>
 <div class='topic'>
 	<p>
@@ -171,7 +171,7 @@
 				<li>Ability to pass HTTP header values as URL GET parameters (e.g. <l>&amp;Accept=text/xml</l>).
 				<li>Ability to pass HTTP content on PUT/POST requests as a URL GET parameter (e.g. <l>&amp;content={foo:"bar"}</l>).
 				<li>Ability to simulate non-GET requests using a <l>&amp;method</l> GET parameter (e.g. <l>&amp;method=POST</l>).
-				<li>Ability to force <ss>"text/plain"</ss> on response using GET parameter <l>&amp;plainText=true</l>.
+				<li>Ability to force <js>"text/plain"</js> on response using GET parameter <l>&amp;plainText=true</l>.
 			</ul>
 			<br>
 		<li>Ability to implement overloaded HTTP methods through the use of the <l>&amp;method</l> attribute (e.g. <l>&amp;method=FOO</l>).
@@ -190,7 +190,7 @@
 </div>
 	
 <!-- ======================================================================================================== -->
-<a name="HelloWorldResource"></a>
+<a id="HelloWorldResource"></a>
 <h2 class='topic' onclick='toggle(this)'>2 - Hello World Example</h2>
 <div class='topic'>
 	<p>
@@ -315,7 +315,7 @@
 </div>
 	
 <!-- ======================================================================================================== -->
-<a name="ClassHierarchy"></a>
+<a id="ClassHierarchy"></a>
 <h2 class='topic' onclick='toggle(this)'>3 - Class Hierarchy</h2>
 <div class='topic'>
 	<p>
@@ -381,7 +381,7 @@
 </div>
 
 	<!-- ======================================================================================================== -->
-<a name="RestResources"></a>
+<a id="RestResources"></a>
 <h2 class='topic' onclick='toggle(this)'>4 - REST Servlets</h2>
 	<div class='topic'>
 		<p>
@@ -420,6 +420,7 @@
 			<td class='code'>application/json</td>
 			<td>{@link org.apache.juneau.json.JsonSerializer.Simple}</td>
 		</tr>
+		<tr>
 			<td class='code'>application/json+schema<br>text/json+schema</td>
 			<td class='code'>application/json</td>
 			<td>{@link org.apache.juneau.json.JsonSchemaSerializer}</td>
@@ -525,7 +526,7 @@
 	</ul>
 
 	<!-- ======================================================================================================== -->
-	<a name="RestResources.MethodSignature"></a>
+	<a id="RestResources.MethodSignature"></a>
 	<h3 class='topic' onclick='toggle(this)'>4.1 - REST Java Method Signature</h3>
 	<div class='topic'>
 		<p>
@@ -679,7 +680,7 @@
 		</ul>
 		
 		<!-- ======================================================================================================== -->
-		<a name="RestResources.MethodSignature.Path"></a>
+		<a id="RestResources.MethodSignature.Path"></a>
 		<h4 class='topic' onclick='toggle(this)'>4.1.1 - Path</h4>
 		<div class='topic'>
 			<p>
@@ -780,7 +781,7 @@
 		</div>
 		
 		<!-- ======================================================================================================== -->
-		<a name="RestResources.MethodSignature.Matchers"></a>
+		<a id="RestResources.MethodSignature.Matchers"></a>
 		<h4 class='topic' onclick='toggle(this)'>4.1.2 - Matchers</h4>
 		<div class='topic'>
 		<p>
@@ -824,7 +825,7 @@
 	</div>
 
 	<!-- ======================================================================================================== -->
-	<a name="RestResources.RequestContent"></a>
+	<a id="RestResources.RequestContent"></a>
 	<h3 class='topic' onclick='toggle(this)'>4.2 - Request Content</h3>
 	<div class='topic'>
 		<p>
@@ -864,7 +865,7 @@
 		</p>
 		
 	<!-- ======================================================================================================== -->
-		<a name="RestResources.RequestContent.FormPosts"></a>
+		<a id="RestResources.RequestContent.FormPosts"></a>
 		<h4 class='topic' onclick='toggle(this)'>4.2.1 - Form Posts</h4>
 	<div class='topic'>	
 		<p>
@@ -873,7 +874,7 @@
 			<p>
 				The best way to handle a form post is by using an input bean.
 				The samples include a <l>UrlEncodedFormResource</l> class that takes in URL-Encoded
-					form post of the form <l>"aString=foo&aNumber=123&aDate=2001-07-04T15:30:45Z"</l>.
+					form post of the form <l>"aString=foo&amp;aNumber=123&amp;aDate=2001-07-04T15:30:45Z"</l>.
 				The code is shown here:
 		</p>
 		<p class='bcode'>				
@@ -922,7 +923,7 @@
 		</div>
 
 		<!-- ======================================================================================================== -->
-		<a name="RestResources.RequestContent"></a>
+		<a id="RestResources.RequestContent"></a>
 		<h4 class='topic' onclick='toggle(this)'>4.2.2 - Multipart Form Posts</h4>
 		<div class='topic'>
 		<p>
@@ -962,7 +963,7 @@
 			<ja>@Override</ja> <jc>/* RestMatcher */</jc>
 			<jk>public boolean</jk> matches(RestRequest req) {
 				String contentType = req.getContentType();
-				<jk>return</jk> contentType != <jk>null</jk> && contentType.startsWith(<js>"multipart/form-data"</js>); 
+				<jk>return</jk> contentType != <jk>null</jk> &amp;&amp; contentType.startsWith(<js>"multipart/form-data"</js>); 
 			}
 		}
 		</p>
@@ -970,7 +971,7 @@
 	</div>
 
 	<!-- ======================================================================================================== -->
-	<a name="RestResources.ResponseContent"></a>
+	<a id="RestResources.ResponseContent"></a>
 	<h3 class='topic' onclick='toggle(this)'>4.3 - Response Content</h3>
 	<div class='topic'>
 		<p>
@@ -1012,7 +1013,7 @@
 	</div>
 
 	<!-- ======================================================================================================== -->
-	<a name="RestResources.OptionsPages"></a>
+	<a id="RestResources.OptionsPages"></a>
 	<h3 class='topic' onclick='toggle(this)'>4.4 - OPTIONS Pages</h3>
 	<div class='topic'>
 		<p>
@@ -1316,7 +1317,7 @@
 	</div>
 
 	<!-- ======================================================================================================== -->
-	<a name="RestResources.Serializers"></a>
+	<a id="RestResources.Serializers"></a>
 	<h3 class='topic' onclick='toggle(this)'>4.5 - Serializers</h3>
 	<div class='topic'>
 		<p>
@@ -1377,7 +1378,7 @@
 	</div>
 	
 	<!-- ======================================================================================================== -->
-	<a name="RestResources.Parsers"></a>
+	<a id="RestResources.Parsers"></a>
 	<h3 class='topic' onclick='toggle(this)'>4.6 - Parsers</h3>
 	<div class='topic'>
 		<p>
@@ -1434,7 +1435,7 @@
 	</div>
 
 	<!-- ======================================================================================================== -->
-	<a name="RestResources.Properties"></a>
+	<a id="RestResources.Properties"></a>
 	<h3 class='topic' onclick='toggle(this)'>4.7 - Properties</h3>
 	<div class='topic'>
 		<p>
@@ -1529,7 +1530,7 @@
 	</div>
 	
 	<!-- ======================================================================================================== -->
-	<a name="RestResources.Transforms"></a>
+	<a id="RestResources.Transforms"></a>
 	<h3 class='topic' onclick='toggle(this)'>4.8 - Transforms</h3>
 	<div class='topic'>
 		<p>
@@ -1584,7 +1585,7 @@
 	</div>	
 	
 	<!-- ======================================================================================================== -->
-	<a name="RestResources.Guards"></a>
+	<a id="RestResources.Guards"></a>
 	<h3 class='topic' onclick='toggle(this)'>4.9 - Guards</h3>
 	<div class='topic'>
 		<p>
@@ -1647,7 +1648,7 @@
 	</div>
 	
 	<!-- ======================================================================================================== -->
-	<a name="RestResources.Converters"></a>
+	<a id="RestResources.Converters"></a>
 	<h3 class='topic' onclick='toggle(this)'>4.10 - Converters</h3>
 	<div class='topic'>
 		<p>
@@ -1744,7 +1745,7 @@
 	</div>
 
 	<!-- ======================================================================================================== -->
-	<a name="RestResources.Children"></a>
+	<a id="RestResources.Children"></a>
 	<h3 class='topic' onclick='toggle(this)'>4.11 - Child Resources</h3>
 	<div class='topic'>		
 		<p>
@@ -1869,8 +1870,9 @@
 	</div>
 	
 	<!-- ======================================================================================================== -->
-	<a name="RestResources.Labels"></a>
+	<a id="RestResources.Labels"></a>
 	<h3 class='topic' onclick='toggle(this)'>4.12 - Localized Messages</h3>
+	<div class='topic'>
 		<p>
 			The {@link org.apache.juneau.server.annotation.RestResource#messages @RestResource.messages()} annotation can be used to associate a resource bundle with a servlet class.
 		</p>
@@ -1912,7 +1914,7 @@
 	</div>
 	
 	<!-- ======================================================================================================== -->
-	<a name="RestResources.Encoders"></a>
+	<a id="RestResources.Encoders"></a>
 	<h3 class='topic' onclick='toggle(this)'>4.13- Encoders</h3>
 	<div class='topic'>
 		<p>
@@ -1941,7 +1943,7 @@
 	</div>
 	
 	<!-- ======================================================================================================== -->
-	<a name="RestResources.SvlVars"></a>
+	<a id="RestResources.SvlVars"></a>
 	<h3 class='topic' onclick='toggle(this)'>4.14 - SVL Vars</h3>
 	<div class='topic'>
 		<p>	
@@ -2242,7 +2244,7 @@
 	</div>
 	
 	<!-- ======================================================================================================== -->
-	<a name="RestResources.StaticFiles"></a>
+	<a id="RestResources.StaticFiles"></a>
 	<h3 class='topic' onclick='toggle(this)'>4.15 - Static Files</h3>
 	<div class='topic'>
 		<p>
@@ -2284,7 +2286,7 @@
 	</div>
 
 	<!-- ======================================================================================================== -->
-	<a name="RestResources.Listeners"></a>
+	<a id="RestResources.Listeners"></a>
 	<h3 class='topic' onclick='toggle(this)'>4.16 - Listener Methods</h3>	
 	<div class='topic'>
 		<p>
@@ -2307,7 +2309,7 @@
 	</div>
 
 	<!-- ======================================================================================================== -->
-	<a name="RestResources.Stylesheet"></a>
+	<a id="RestResources.Stylesheet"></a>
 	<h3 class='topic' onclick='toggle(this)'>4.17 - Stylesheet</h3>	
 	<div class='topic'>
 		<p>
@@ -2362,7 +2364,7 @@
 	</div>
 
 	<!-- ======================================================================================================== -->
-	<a name="RestResources.Headers"></a>
+	<a id="RestResources.Headers"></a>
 	<h3 class='topic' onclick='toggle(this)'>4.18 - Default Headers</h3>
 	<div class='topic'>
 		<p>
@@ -2402,7 +2404,7 @@
 	</div>
 
 	<!-- ======================================================================================================== -->
-	<a name="RestResources.Errors"></a>
+	<a id="RestResources.Errors"></a>
 	<h3 class='topic' onclick='toggle(this)'>4.19 - Handling Errors / Logging</h3>
 	<div class='topic'>
 		<p>
@@ -2467,7 +2469,7 @@
 	</div>
 
 	<!-- ======================================================================================================== -->
-	<a name="RestResources.ConfigFile"></a>
+	<a id="RestResources.ConfigFile"></a>
 	<h3 class='topic' onclick='toggle(this)'>4.20 - Configuration Files</h3>
 	<div class='topic'>
 		<p>
@@ -2638,7 +2640,7 @@
 	</div>
 
 	<!-- ======================================================================================================== -->
-	<a name="RestResources.Inheritence"></a>
+	<a id="RestResources.Inheritence"></a>
 	<h3 class='topic' onclick='toggle(this)'>4.21 - Annotation Inheritence</h3>
 	<div class='topic'>
 		<p>
@@ -2777,7 +2779,7 @@
 	</div>
 	
 	<!-- ======================================================================================================== -->
-	<a name="RestResources.HttpStatusCodes"></a>
+	<a id="RestResources.HttpStatusCodes"></a>
 	<h3 class='topic' onclick='toggle(this)'>4.22 - HTTP Status Codes</h3>
 	<div class='topic'>
 		<p>
@@ -2835,7 +2837,7 @@
 	</div>
 
 	<!-- ======================================================================================================== -->
-	<a name="RestResources.OverloadedHttpMethods"></a>
+	<a id="RestResources.OverloadedHttpMethods"></a>
 	<h3 class='topic' onclick='toggle(this)'>4.23 - Overloaded HTTP Methods</h3>
 	<div class='topic'>
 		<p>
@@ -2857,7 +2859,7 @@
 		<p class='bcode'>
 	<ja>@RestResource</ja>(
 		properties={
-			<jc>// Allow &method parameter on BAR requests</jc>
+			<jc>// Allow &amp;method parameter on BAR requests</jc>
 			<ja>@Property</ja>(name=<jsf>REST_allowMethodParam</jsf>, value=<js>"BAR"</js>)
 		},
 	)
@@ -2865,7 +2867,7 @@
 	</div>
 	
 	<!-- ======================================================================================================== -->
-	<a name="RestResources.BuildInParams"></a>
+	<a id="RestResources.BuildInParams"></a>
 	<h3 class='topic' onclick='toggle(this)'>4.24 - Built-In Parameters</h3>
 	<div class='topic'>
 		<p>
@@ -2925,7 +2927,7 @@
 	</div>
 	
 	<!-- ======================================================================================================== -->
-	<a name="RestResources.CustomSerializersParsers"></a>
+	<a id="RestResources.CustomSerializersParsers"></a>
 	<h3 class='topic' onclick='toggle(this)'>4.25 - Defining your own serializers/parsers</h3>
 	<div class='topic'>
 		<p>
@@ -3046,7 +3048,7 @@
 	</div>
 
 	<!-- ======================================================================================================== -->
-	<a name="RestResources.ResponseHandlers"></a>
+	<a id="RestResources.ResponseHandlers"></a>
 	<h3 class='topic' onclick='toggle(this)'>4.26 - Response Handlers</h3>
 	<div class='topic'>
 		<p>
@@ -3089,7 +3091,7 @@
 	</div>
 
 	<!-- ======================================================================================================== -->
-	<a name="RestResources.OtherNotes"></a>
+	<a id="RestResources.OtherNotes"></a>
 	<h3 class='topic' onclick='toggle(this)'>4.27 - Other Notes</h3>
 	<div class='topic'>
 		<ul class='spaced-list'>
@@ -3114,7 +3116,7 @@
 </div>
 
 <!-- ======================================================================================================== -->
-<a name="Osgi"></a>
+<a id="Osgi"></a>
 <h2 class='topic' onclick='toggle(this)'>5 - Using with OSGi</h2>
 <div class='topic'>
 		<p>
@@ -3181,7 +3183,7 @@
 </div>
 
 <!-- ======================================================================================================== -->
-<a name="PojosConvertableFromString"></a>
+<a id="PojosConvertableFromString"></a>
 <h2 class='topic' onclick='toggle(this)'>6 - POJOs Convertable From Strings</h2>
 <div class='topic'>
 		<p>
@@ -3210,7 +3212,7 @@
 </div>
 
 <!-- ======================================================================================================== -->
-<a name="AddressBookResource"></a>
+<a id="AddressBookResource"></a>
 <h2 class='topic' onclick='toggle(this)'>7 - Address Book Resource</h2>
 <div class='topic'>
 		<p>
@@ -3591,7 +3593,7 @@
 	<ck>getCognosData</ck> = <cv>Get data in Cognos/XML format</cv>
 	<ck>getCognosData.res.200.content</ck> = <cv>DataSet</cv>
 	
-	<ck>otherNotes</ck> = <cv>GZip support enabled.  Public methods can be invoked by using the &Method URL parameter.  'text/cognos+xml' support available under root resource only</cv>
+	<ck>otherNotes</ck> = <cv>GZip support enabled.  Public methods can be invoked by using the &amp;Method URL parameter.  'text/cognos+xml' support available under root resource only</cv>
 	</p>
 
 </div>

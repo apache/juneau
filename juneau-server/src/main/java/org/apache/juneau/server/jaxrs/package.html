@@ -60,13 +60,13 @@
 	Defines an API and default provides for using Juneau serializers and parsers as JAX-RS providers.
 </p>
 
-<a name='TOC'></a><h5 class='toc'>Table of Contents</h5>
+<a id='TOC'></a><h5 class='toc'>Table of Contents</h5>
 <ol class='toc'>
 	<li><p><a class='doclink' href='#BaseProvider'>Juneau JAX-RS Provider</a></p>
 </ol>
 
 <!-- ======================================================================================================== -->
-<a name="BaseProvider"></a>
+<a id="BaseProvider"></a>
 <h2 class='topic' onclick='toggle(this)'>1 - Juneau JAX-RS Provider</h2>
 <div class='topic'>
 	<p>
@@ -254,7 +254,6 @@
 		In these examples, note that the <jsf>SERIALIZER_useIndentation</jsf> and <jsf>LAX_MODE</jsf> settings
 			cause the output to be readable instead of condensed.
 	</p>
-	</p>
 	<p class='bcode'>
 	C:\>curl.exe -H "Accept: text/json" -X GET http://localhost:9080/sample/wink/helloworld
 	<ja>{
@@ -307,7 +306,7 @@
 	</p>
 	<p class='bcode'>
 	C:\>curl.exe -H "Accept: application/x-www-form-urlencoded" -X GET http://localhost:9080/sample/wink/helloworld
-	<ja>text='Hello+world'&author='John+Smith'</ja>
+	<ja>text='Hello+world'&amp;author='John+Smith'</ja>
 	</p>
 	<p class='bcode'>
 	C:\&gt;curl.exe -H "Accept: text/xml+schema" -X GET http://localhost:9080/sample/wink/helloworld
@@ -330,8 +329,8 @@
 	stackTracet ▲[Ljava/lang/StackTraceElement;xpq t /com.ibm.sample.jaxrs.HelloWorldResource$Messageur ▲[Ljava.lang.Sta
 	lineNumberL ♫declaringClassq ~ ♠LfileNameq ~ ♠L
 	methodNameq ~ ♠xp  ♦át →java.io.ObjectOutputStreamt ↨ObjectOutputStream.javat ♀writeObject0sq ~ ♀  ☺[t →java.io.Obje
-	 3org.apache.juneau.serializer.OutputStreamSerializert ←OutputStreamSerializer.javat    serializesq ~ ♀   ^t &com.ib
-	 &t /org.apache.wink.server.handlers.AbstractHandlert ¶AbstractHandler.javat ♫handleResponsesq ~ ♀   →t 5org.apache.
+	 3org.apache.juneau.serializer.OutputStreamSerializert ←OutputStreamSerializer.javat    serializesq ~ ♀   ^t &amp;com.ib
+	 &amp;t /org.apache.wink.server.handlers.AbstractHandlert ¶AbstractHandler.javat ♫handleResponsesq ~ ♀   →t 5org.apache.
 	sq ~ ♀   Ct 5org.apache.wink.server.handlers.AbstractHandlersChaint →AbstractHandlersChain.javat doChainsq ~ ♀   't
 	 ♠handlesq ~ ♀   ▬t 5org.apache.wink.server.handlers.ResponseHandlersChaint →ResponseHandlersChain.javat ♠handlesq ~
 	 ♫handleResponsesq ~ ♀   →t 5org.apache.wink.server.handlers.ResponseHandlersChaint →ResponseHandlersChain.javat ♠ha

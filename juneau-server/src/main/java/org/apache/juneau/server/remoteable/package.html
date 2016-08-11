@@ -60,7 +60,7 @@
 	Defines an API for remote proxy interfaces (e.g. Remoteable Services).
 </p>
 
-<a name='TOC'></a><h5 class='toc'>Table of Contents</h5>
+<a id='TOC'></a><h5 class='toc'>Table of Contents</h5>
 <ol class='toc'>
 	<li><p><a class='doclink' href='#Intro'>Remoteable Services</a></p>
 	<li><p><a class='doclink' href='#Client'>Client Side</a></p> 
@@ -69,7 +69,7 @@
 </ol>
 
 <!-- ======================================================================================================== -->
-<a name="Intro"></a>
+<a id="Intro"></a>
 <h2 class='topic' onclick='toggle(this)'>1 - Remoteable Services</h2>
 <div class='topic'>
 	<p>
@@ -114,15 +114,15 @@
 	</p>
 	<p>
 		The requirements for a method to be callable through the remoteable service are:
-		<ul class='spaced-list'>
-			<li>The method must be public.
-			<li>The parameter and return types must be <a href='../../core/package-summary.html#PojoCategories'><u>serializable and parsable</u></a>.
-		</ul>
 	</p>
+	<ul class='spaced-list'>
+		<li>The method must be public.
+		<li>The parameter and return types must be <a href='../../core/package-summary.html#PojoCategories'>serializable and parsable</a>.
+	</ul>
 </div>
 
 <!-- ======================================================================================================== -->
-<a name="Client"></a>
+<a id="Client"></a>
 <h2 class='topic' onclick='toggle(this)'>2 - Client Side</h2>
 <div class='topic'>
 	<p>
@@ -162,7 +162,7 @@
 </div>
 
 <!-- ======================================================================================================== -->
-<a name="Server"></a>
+<a id="Server"></a>
 <h2 class='topic' onclick='toggle(this)'>3 - Server Side</h2>
 <div class='topic'>
 	<p>
@@ -299,15 +299,15 @@
 	</p>
 	<img class='bordered' src="doc-files/6.png">
 	<p>
-		When specifying the POST body as a <code>&content</code> parameter, the method arguments should be in UON notation.
+		When specifying the POST body as a <code>&amp;content</code> parameter, the method arguments should be in UON notation.
 		See {@link org.apache.juneau.urlencoding.UonSerializer} for more information about this encoding.
-		Usually you can also pass in JSON if you specify <code>&Content-Type=text/json</code> in the URL parameters
+		Usually you can also pass in JSON if you specify <code>&amp;Content-Type=text/json</code> in the URL parameters
 			but passing in unencoded JSON in a URL may not work in all browsers.  Therefore, UON is preferred.
 	</p>
 </div>
 
 <!-- ======================================================================================================== -->
-<a name="RemoteableAnnotation"></a>
+<a id="RemoteableAnnotation"></a>
 <h2 class='topic' onclick='toggle(this)'>4 - @Remoteable Annotation</h2>
 <div class='topic'>
 	<p>

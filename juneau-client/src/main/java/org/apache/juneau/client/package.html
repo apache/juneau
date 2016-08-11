@@ -215,11 +215,11 @@
 		<p>
 			The simplest way to enable SSL support in the client is to use the {@link org.apache.juneau.client.RestClient#enableSSL(SSLOpts)} method
 			and one of the predefined {@link org.apache.juneau.client.SSLOpts} instances:
-			<ul>
-				<li>{@link org.apache.juneau.client.SSLOpts#DEFAULT} - Normal certificate and hostname validation.
-				<li>{@link org.apache.juneau.client.SSLOpts#LAX} - Allows for self-signed certificates.
-			</ul>
 		</p>
+		<ul>
+			<li>{@link org.apache.juneau.client.SSLOpts#DEFAULT} - Normal certificate and hostname validation.
+			<li>{@link org.apache.juneau.client.SSLOpts#LAX} - Allows for self-signed certificates.
+		</ul>
 		<h6 class='topic'>Example:</h6>
 		<p class='bcode'>
 	<jc>// Create a client that ignores self-signed or otherwise invalid certificates.</jc>
@@ -451,7 +451,7 @@
 				<jk>throw new</jk> RestCallException(<js>"Expected a redirect URI during OIDC authentication: "</js> + response.getStatusLine());
 
 			<jc>// Handle Bearer Challenge</jc>
-			HttpGet method = <jk>new</jk> HttpGet(redirectUri + <js>"&prompt=none"</js>);
+			HttpGet method = <jk>new</jk> HttpGet(redirectUri + <js>"&amp;prompt=none"</js>);
 			addDefaultOidcHeaders(method);
 
 			response = client.execute(method);
@@ -466,7 +466,7 @@
 			<jk>if</jk> (! <js>"true"</js>.equals(loginRequired))
 				<jk>throw new</jk> RestCallException(<js>"X-JSA-LOGIN-REQUIRED header not found on response during OIDC authentication phase 2: "</js> + response.getStatusLine());
 
-			method = <jk>new</jk> HttpGet(redirectUri + <js>"&prompt=none"</js>);
+			method = <jk>new</jk> HttpGet(redirectUri + <js>"&amp;prompt=none"</js>);
 
 			addDefaultOidcHeaders(method);
 			response = client.execute(method);
@@ -796,11 +796,11 @@
 		</p>
 		<p>
 			The requirements for a method to be callable through a remoteable service are:
-			<ul class='spaced-list'>
-				<li>The method must be public.
-				<li>The parameter and return types must be <a href='../../../../org/apache/juneau/package-summary.html#PojoCategories'><u>serializable and parsable</u></a>.
-			</ul>
 		</p>
+		<ul class='spaced-list'>
+			<li>The method must be public.
+			<li>The parameter and return types must be <a href='../../../../org/apache/juneau/package-summary.html#PojoCategories'>serializable and parsable</a>.
+		</ul>
 		<p>
 			One significant feature is that the remoteable services servlet is a full-blown REST interface.  
 			Therefore, in cases where the interface classes are not available on the client side,
