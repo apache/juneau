@@ -128,7 +128,7 @@
 		<h6 class='topic'>Explicitly specify which properties are visible on a bean class</h6>
 		<p class='bcode'>
 	<jc>// Define transform that orders properties by "age" then "name"</jc>
-	<jk>public class</jk> MyTransform <jk>extends</jk> BeanTransform&ltPerson&gt; {
+	<jk>public class</jk> MyTransform <jk>extends</jk> BeanTransform&lt;Person&gt; {
 		<jk>public</jk> MyTransform() {
 			setProperties(<js>"age"</js>,<js>"name"</js>);
 		}
@@ -151,7 +151,7 @@
 		<h6 class='topic'>Exclude which properties are visible on a bean class</h6>
 		<p class='bcode'>
 	<jc>// Define transform that excludes "name"</jc>
-	<jk>public class</jk> MyTransform <jk>extends</jk> BeanTransform&ltPerson&gt; {
+	<jk>public class</jk> MyTransform <jk>extends</jk> BeanTransform&lt;Person&gt; {
 		<jk>public</jk> MyTransform() {
 			setExcludeProperties(<js>"name"</js>);
 		}
@@ -174,7 +174,7 @@
 		<h6 class='topic'>Define specialized property namers</h6>
 		<p class='bcode'>
 	<jc>// Define transform with our own property namer.</jc>
-	<jk>public class</jk> MyTransform <jk>extends</jk> BeanTransform&ltPerson&gt; {
+	<jk>public class</jk> MyTransform <jk>extends</jk> BeanTransform&lt;Person&gt; {
 		<jk>public</jk> MyTransform() {
 			setPropertyNamer(UpperCasePropertyNamer.<jk>class</jk>);
 		}
@@ -238,7 +238,7 @@
 		</p>		
 		<p class='bcode'>
 	<jc>// Define transform with our own property namer.</jc>
-	<jk>public class</jk> MyClassTransform <jk>extends</jk> BeanTransform&ltMyClass&gt; {
+	<jk>public class</jk> MyClassTransform <jk>extends</jk> BeanTransform&lt;MyClass&gt; {
 		<jk>public</jk> MyClassTransform() {
 			setSubTypeProperty(<js>"subType"</js>);
 			addSubType(MyClassBar.<jk>class</jk>, <js>"BAR"</js>);
@@ -312,7 +312,7 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Define transform that limits properties to only those defined on MyClass</jc>
-	<jk>public class</jk> MyClassTransform <jk>extends</jk> BeanTransform&ltMyClass&gt; {
+	<jk>public class</jk> MyClassTransform <jk>extends</jk> BeanTransform&lt;MyClass&gt; {
 		<jk>public</jk> MyClassTransform() {
 			setInterfaceClass(MyClass.<jk>class</jk>);
 		}
@@ -636,7 +636,7 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Define transform that limits properties to only those defined on MyClass</jc>
-	<jk>public class</jk> MyClassTransform <jk>extends</jk> BeanTransform&ltMyClass&gt; {
+	<jk>public class</jk> MyClassTransform <jk>extends</jk> BeanTransform&lt;MyClass&gt; {
 		<jk>public</jk> MyClassTransform() {
 			setInterfaceClass(MyClass.<jk>class</jk>);
 		}
@@ -739,7 +739,6 @@
 	<!-- ======================================================================================================== -->
 	<a id="ToObjectMaps"></a>
 	<h3 class='topic' onclick='toggle(this)'>1.6 - Serializing to ObjectMaps</h3>
-	<div class='topic'>
 	<div class='topic'>
 		<p>
 			A shortcut method for transforming is provided that can often be simpler than defining transforms.

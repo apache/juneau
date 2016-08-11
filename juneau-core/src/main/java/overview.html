@@ -362,8 +362,8 @@
 				</td>
 				<td>
 					<ul class='normal'>
-						<li>{@code HashSet<String,Integer>}
-						<li>{@code TreeMap<Integer,Bean>}
+						<li>{@code HashSet&lt;String,Integer&gt;}
+						<li>{@code TreeMap&lt;Integer,Bean&gt;}
 						<li><code>List&lt;<jk>int</jk>[][]&gt;</code>
 						<li>{@code Bean[]}
 					</ul>
@@ -380,8 +380,8 @@
 				</td>
 				<td>
 					<ul class='normal'>
-						<li>{@code HashSet<Bean,Integer>}
-						<li>{@code TreeMap<Integer,Reader>}
+						<li>{@code HashSet&lt;Bean,Integer&gt;}
+						<li>{@code TreeMap&lt;Integer,Reader&gt;}
 					</ul>
 				</td>
 				<td style='background-color:lightgreen;text-align:center'><b>yes</b></td>
@@ -1263,7 +1263,7 @@
 	</p>
 	<p>
 		The framework allows you to override header values through GET parameters, so that you can specify the <l>ACCEPT</l> header to see each type. 
-		Adding <l>&plainText=true</l> forces the response <l>Content-Type</l> to be <l>text/plain.</l>
+		Adding <l>&amp;plainText=true</l> forces the response <l>Content-Type</l> to be <l>text/plain.</l>
 	<h6 class='figure'>HTML</h6>
 	<img class='bordered' src="doc-files/Server.Html.png">
 	<h6 class='figure'>JSON</h6>
@@ -1385,11 +1385,11 @@
 	</p>
 	<p>
 		The requirements for a method to be callable through a remoteable service are:
-		<ul class='spaced-list'>
-			<li>The method must be public.
-			<li>The parameter and return types must be <a href='#Core.PojoCategories'><u>serializable and parsable</u></a>.
-		</ul>
 	</p>
+	<ul class='spaced-list'>
+		<li>The method must be public.
+		<li>The parameter and return types must be <a href='#Core.PojoCategories'>serializable and parsable</a>.
+	</ul>
 	<p>
 		One significant feature is that the remoteable services servlet is a full-blown REST interface.  
 		Therefore, in cases where the interface classes are not available on the client side,
@@ -1571,7 +1571,7 @@
 	</div>
 	
 	<!-- ======================================================================================================== -->
-	<a name="Samples.RestResource"></a>
+	<a id="Samples.RestResource"></a>
 	<h3 class='topic' onclick='toggle(this)'>7.4 - MANIFEST.MF</h3>
 	<div class='topic'>
 		<p>
@@ -1622,7 +1622,7 @@
 	</div>	
 
 	<!-- ======================================================================================================== -->
-	<a name="Samples.RootResources"></a>
+	<a id="Samples.RootResources"></a>
 	<h3 class='topic' onclick='toggle(this)'>7.5 - RootResources</h3>
 	<div class='topic'>
 		<p>
@@ -1761,7 +1761,7 @@
 	</div>	
 
 	<!-- ======================================================================================================== -->
-	<a name="Samples.HelloWorldResource"></a>
+	<a id="Samples.HelloWorldResource"></a>
 	<h3 class='topic' onclick='toggle(this)'>7.6 - HelloWorldResource</h3>
 	<div class='topic'>
 		<p>
@@ -1833,7 +1833,7 @@
 	</div>	
 
 	<!-- ======================================================================================================== -->
-	<a name="Samples.MethodExampleResource"></a>
+	<a id="Samples.MethodExampleResource"></a>
 	<h3 class='topic' onclick='toggle(this)'>7.7 - MethodExampleResource</h3>
 	<div class='topic'>
 		<p>
@@ -2046,7 +2046,7 @@
 	</div>	
 	
 	<!-- ======================================================================================================== -->
-	<a name="Samples.UrlEncodedFormResource"></a>
+	<a id="Samples.UrlEncodedFormResource"></a>
 	<h3 class='topic' onclick='toggle(this)'>7.8 - UrlEncodedFormResource</h3>
 	<div class='topic'>
 		<p>
@@ -2182,7 +2182,7 @@
 	</div>	
 	
 	<!-- ======================================================================================================== -->
-	<a name="Samples.RequestEchoResource"></a>
+	<a id="Samples.RequestEchoResource"></a>
 	<h3 class='topic' onclick='toggle(this)'>7.9 - RequestEchoResource</h3>
 	<div class='topic'>
 		<p>
@@ -2291,7 +2291,7 @@
 	</div>	
 	
 	<!-- ======================================================================================================== -->
-	<a name="Samples.AddressBookResource"></a>
+	<a id="Samples.AddressBookResource"></a>
 	<h3 class='topic' onclick='toggle(this)'>7.10 - AddressBookResource</h3>
 	<div class='topic'>
 		<p>
@@ -2329,7 +2329,7 @@
 		<img class='bordered' src='doc-files/Samples.AddressBookResource.2.png'>
 		
 		<!-- ======================================================================================================== -->
-		<a name="Samples.AddressBookResource.Classes"></a>
+		<a id="Samples.AddressBookResource.Classes"></a>
 		<h4 class='topic' onclick='toggle(this)'>7.10.1 - Classes</h4>
 		<div class='topic'>
 			<p>
@@ -2523,7 +2523,7 @@
 		<jk>public</jk> String <jf>id</jf>;
 		<jk>public</jk> String <jf>name</jf>;
 		<ja>@BeanProperty</ja>(transform=CalendarTransform.Medium.<jk>class</jk>) <jk>public</jk> Calendar <jf>birthDate</jf>;
-		<jk>public</jk> LinkedList&lt;Address&gt; <jf>addresses</jf> = new LinkedList&ltAddress&gt;();
+		<jk>public</jk> LinkedList&lt;Address&gt; <jf>addresses</jf> = new LinkedList&lt;Address&gt;();
 		
 		<jd>/** Bean constructor - Needed for instantiating on server side */</jd> 
 		<jk>public</jk> Person() {} 
@@ -3037,12 +3037,12 @@
 	<ck>getCognosData</ck> = <cv>Get data in Cognos/XML format</cv>
 	<ck>getCognosData.res.200.content</ck> = <cv>DataSet</cv>
 	
-	<ck>otherNotes</ck> = <cv>GZip support enabled.  Public methods can be invoked by using the &Method URL parameter.  'text/cognos+xml' support available under root resource only</cv>
+	<ck>otherNotes</ck> = <cv>GZip support enabled.  Public methods can be invoked by using the &amp;Method URL parameter.  'text/cognos+xml' support available under root resource only</cv>
 			</p>
 		</div>
 		
 		<!-- ======================================================================================================== -->
-		<a name="Samples.AddressBookResource.Demo"></a>
+		<a id="Samples.AddressBookResource.Demo"></a>
 		<h4 class='topic' onclick='toggle(this)'>7.10.2 - Demo</h4>
 		<div class='topic'>
 			<p>
@@ -3105,7 +3105,7 @@
 		</div>
 		
 		<!-- ======================================================================================================== -->
-		<a name="Samples.AddressBookResource.Traversable"></a>
+		<a id="Samples.AddressBookResource.Traversable"></a>
 		<h4 class='topic' onclick='toggle(this)'>7.10.3 - Traversable</h4>
 		<div class='topic'>
 			<p>
@@ -3118,7 +3118,7 @@
 		</div>
 
 		<!-- ======================================================================================================== -->
-		<a name="Samples.AddressBookResource.Queryable"></a>
+		<a id="Samples.AddressBookResource.Queryable"></a>
 		<h4 class='topic' onclick='toggle(this)'>7.10.4 - Queryable</h4>
 		<div class='topic'>
 			<p>
@@ -3134,7 +3134,7 @@
 		</div>
 		
 		<!-- ======================================================================================================== -->
-		<a name="Samples.AddressBookResource.Introspectable"></a>
+		<a id="Samples.AddressBookResource.Introspectable"></a>
 		<h4 class='topic' onclick='toggle(this)'>7.10.5 - Introspectable</h4>
 		<div class='topic'>
 			<p>
@@ -3144,7 +3144,7 @@
 		</div>
 		
 		<!-- ======================================================================================================== -->
-		<a name="Samples.AddressBookResource.RestClient"></a>
+		<a id="Samples.AddressBookResource.RestClient"></a>
 		<h4 class='topic' onclick='toggle(this)'>7.10.6 - ClientTest</h4>
 		<div class='topic'>
 			<p>
@@ -3257,7 +3257,7 @@
 		</div>
 	
 		<!-- ======================================================================================================== -->
-		<a name="Samples.AddressBookResource.Browser"></a>
+		<a id="Samples.AddressBookResource.Browser"></a>
 		<h4 class='topic' onclick='toggle(this)'>7.10.7 - Browser Tips</h4>
 		<div class='topic'>
 			<p>
@@ -3288,7 +3288,7 @@
 	</div>	
 	
 	<!-- ======================================================================================================== -->
-	<a name="Samples.SampleRemoteableServlet"></a>
+	<a id="Samples.SampleRemoteableServlet"></a>
 	<h3 class='topic' onclick='toggle(this)'>7.11 - SampleRemoteableServlet</h3>
 	<div class='topic'>
 		<p>	
@@ -3387,7 +3387,7 @@
 	</div>	
 
 	<!-- ======================================================================================================== -->
-	<a name="Samples.TempDirResource"></a>
+	<a id="Samples.TempDirResource"></a>
 	<h3 class='topic' onclick='toggle(this)'>7.12 - TempDirResource</h3>
 	<div class='topic'>
 		<p>	
@@ -3504,7 +3504,7 @@
 	</div>	
 	
 	<!-- ======================================================================================================== -->
-	<a name="Samples.AtomFeedResource"></a>
+	<a id="Samples.AtomFeedResource"></a>
 	<h3 class='topic' onclick='toggle(this)'>7.13 - AtomFeedResource</h3>
 	<div class='topic'>
 		<p>	
@@ -3614,7 +3614,7 @@
 	</div>	
 	
 	<!-- ======================================================================================================== -->
-	<a name="Samples.DockerRegistryResource"></a>
+	<a id="Samples.DockerRegistryResource"></a>
 	<h3 class='topic' onclick='toggle(this)'>7.14 - DockerRegistryResource</h3>
 	<div class='topic'>
 		<p>	
@@ -3701,7 +3701,7 @@
 	</div>	
 	
 	<!-- ======================================================================================================== -->
-	<a name="Samples.TumblrParserResource"></a>
+	<a id="Samples.TumblrParserResource"></a>
 	<h3 class='topic' onclick='toggle(this)'>7.15 - TumblrParserResource</h3>
 	<div class='topic'>
 		<p>	
@@ -3780,7 +3780,7 @@
 	</div>	
 	
 	<!-- ======================================================================================================== -->
-	<a name="Samples.PhotosResource"></a>
+	<a id="Samples.PhotosResource"></a>
 	<h3 class='topic' onclick='toggle(this)'>7.16 - PhotosResource</h3>
 	<div class='topic'>
 		<p>	
@@ -3922,7 +3922,7 @@
 	</div>	
 
 	<!-- ======================================================================================================== -->
-	<a name="Samples.JsonSchemaResource"></a>
+	<a id="Samples.JsonSchemaResource"></a>
 	<h3 class='topic' onclick='toggle(this)'>7.17 - JsonSchemaResource</h3>
 	<div class='topic'>
 		<p>	
@@ -4000,7 +4000,7 @@
 	</div>	
 
 	<!-- ======================================================================================================== -->
-	<a name="Samples.SqlQueryResource"></a>
+	<a id="Samples.SqlQueryResource"></a>
 	<h3 class='topic' onclick='toggle(this)'>7.18 - SqlQueryResource</h3>
 	<div class='topic'>
 		<p>	
@@ -4192,7 +4192,7 @@
 
 
 	<!-- ======================================================================================================== -->
-	<a name="Samples.ConfigResource"></a>
+	<a id="Samples.ConfigResource"></a>
 	<h3 class='topic' onclick='toggle(this)'>7.19 - ConfigResource</h3>
 	<div class='topic'>
 		<p>
@@ -4385,7 +4385,7 @@
 	<xt>&lt;head&gt;</xt> 
 		<xt>&lt;meta</xt> <xa>http-equiv</xa>=<xs>'Content-Type'</xs> <xa>content</xa>=<xs>'text/html; <xa>charset</xa>=UTF-8'</xs><xt>&gt;</xt> 
 		<xt>&lt;style</xt> <xa>type</xa>=<xs>'text/css'</xs><xt>&gt;</xt> 
-			<xt>@import</xt> <xs>'$R{servletURI}/style.css'</; 
+			<xt>@import</xt> <xs>'$R{servletURI}/style.css'</xs>; 
 		<xt>&lt;/style&gt;</xt> 
 	<xt>&lt;/head&gt;</xt> 
 	<xt>&lt;body&gt;</xt> 
@@ -4407,7 +4407,7 @@
 	</div>
 
 	<!-- ======================================================================================================== -->
-	<a name="Samples.LogsResource"></a>
+	<a id="Samples.LogsResource"></a>
 	<h3 class='topic' onclick='toggle(this)'>7.20 - LogsResource</h3>
 	<div class='topic'>
 		<p>
@@ -4765,7 +4765,7 @@
 			<li>New properties on {@link org.apache.juneau.html.HtmlSerializer}:
 				<ul>
 					<li>{@link org.apache.juneau.html.HtmlSerializerContext#HTML_detectLinksInStrings} - Automatically detect hyperlinks in strings.
-					<li>{@link org.apache.juneau.html.HtmlSerializerContext#HTML_lookForLabelParameters} - Specify anchor text by appending <code>&label=MyLabel</code> to URL.
+					<li>{@link org.apache.juneau.html.HtmlSerializerContext#HTML_lookForLabelParameters} - Specify anchor text by appending <code>&amp;label=MyLabel</code> to URL.
 					<li>{@link org.apache.juneau.html.HtmlSerializerContext#HTML_labelParameter} - Specify what URL parameter to use as the anchor text label.
 					<li>New {@link org.apache.juneau.html.HtmlSerializerContext#URI_ANCHOR} option for {@link org.apache.juneau.html.HtmlSerializerContext#HTML_uriAnchorText}.				
 				</ul>
@@ -5034,7 +5034,7 @@
 			<li>{@link org.apache.juneau.html.HtmlDocSerializer} wraps output in two div tags instead of one (e.g. <code>&lt;div class='outerdata'&gt;&lt;div class='data' id='data'&gt;...&lt;/div&gt;&lt;/div&gt;</code>).
 				Needed for supporting the new devops look-and-feel.
 			<li>Fixed indentation inconsistencies in {@link org.apache.juneau.html.HtmlDocSerializer}.
-			<li>Renamed <code><s>HtmlSchemaSerializer</s></code> to {@link org.apache.juneau.html.HtmlSchemaDocSerializer}.
+			<li>Renamed <del>HtmlSchemaSerializer</del> to {@link org.apache.juneau.html.HtmlSchemaDocSerializer}.
 			<li>RDF serializers and parsers now support <code>RdfProperties.RDF_looseCollection</code> loose collections.
 			<li>RDF parser handles case where resources point to themselves (an unfortunate behavior in JFS RDF documents).
 			<li>JSON parser with throw an exception in strict mode if it encounters numbers that are valid in Java but invalid in JSON (e.g. octal, hexadecimal numbers).
@@ -5059,7 +5059,7 @@
 			<li>{@link org.apache.juneau.utils.MessageBundle} and <code>SafeResourceMultiBundle</code> moved from server component.
 			<li>Several bug fixes and performance improvements in <del><code>StringVarResolver</code></del>.
 			<li>Various enhancements to {@link org.apache.juneau.internal.TeeWriter} and {@link org.apache.juneau.internal.TeeOutputStream}.
-			<li>Renamed <code><s>CharSet</s></code> to {@link org.apache.juneau.internal.AsciiSet}.
+			<li>Renamed <del>CharSet</del> to {@link org.apache.juneau.internal.AsciiSet}.
 			<li>{@link org.apache.juneau.serializer.SerializerGroup} and {@link org.apache.juneau.parser.ParserGroup} now ignores <code>NoClassDefFoundErrors</code>
 				so that resources that include Jena support can continue to operate even if the Jena libraries are not present.
 			<li>New {@link org.apache.juneau.internal.FileUtils#createTempFile(String)} method.
@@ -5326,7 +5326,7 @@
 			<li>Fixed bug in {@link org.apache.juneau.html.HtmlStrippedDocSerializer} where exception was thrown when trying to serialize primitive arrays.
 			<li>{@link org.apache.juneau.json.JsonParser} now handles parsing JSON boolean/numeric values as strings to bean properties of type boolean or number. 
 			<li>{@link org.apache.juneau.urlencoding.UrlEncodingSerializer} and {@link org.apache.juneau.urlencoding.UrlEncodingParser} now 
-				represent arrays and collections as key-value pairs where the keys are numbers (e.g. <js>"?0=foo&1=bar"</js>).
+				represent arrays and collections as key-value pairs where the keys are numbers (e.g. <js>"?0=foo&amp;1=bar"</js>).
 			<li>Various internal improvements to {@link org.apache.juneau.utils.IOPipe}.
 			<li>New {@link org.apache.juneau.internal.ReflectionUtils#getResource(Class,String)} method.
 			<li>{@link org.apache.juneau.internal.StringUtils#parseNumber(String,Class)} now returns zero for empty strings. 
@@ -5697,7 +5697,7 @@
 		<ul class='spaced-list'>
 			<li>Added a default OPTIONS page to {@link org.apache.juneau.server.RestServletDefault} and {@link org.apache.juneau.server.jena.RestServletJenaDefault}.
 			<li><code>RestServletProperties.REST_allowMethodParam</code> has been enhanced to allow you to
-				explicitely specify which HTTP methods can be used in the <code>&method</code> parameter.
+				explicitely specify which HTTP methods can be used in the <code>&amp;method</code> parameter.
 			<li>New methods added to {@link org.apache.juneau.server.RestRequest}:
 			<ul>
 				<li>{@link org.apache.juneau.server.RestRequest#getParser()}
@@ -5792,7 +5792,7 @@
 					<li>New {@link org.apache.juneau.urlencoding.UrlEncodingContext#URLENC_expandedParams} property for controlling whether arrays/Collections 
 						should be serialized/parsed as multi-part parameters.
 					<li>New {@link org.apache.juneau.urlencoding.annotation.UrlEncoding#expandedParams() @UrlEncoding.expandedParams()}
-						annotation that specifies that bean properties of type array/Collection be serialized as multi-part parameters (e.g. <code>&key=val1&key=val2</code>).
+						annotation that specifies that bean properties of type array/Collection be serialized as multi-part parameters (e.g. <code>&amp;key=val1&amp;key=val2</code>).
 				</ul>
 			</li>
 			<li>New {@link org.apache.juneau.json.JsonSerializerContext#JSON_escapeSolidus} property for controlling whether slash characters should be escaped.
@@ -5814,11 +5814,11 @@
 			<li>GET parameters are now CASE-SENSITIVE per W3C standards.
 				<ul>
 					<li>
-					<li><code>&Content</code> must now be specified as <code>&content</code>.
-					<li><code>&Method</code> must now be specified as <code>&method</code>.
-					<li><code>&debug</code> must now be specified as <code>&debug=true</code>.
-					<li><code>&plainText</code> must now be specified as <code>&plainText=true</code>.
-					<li><code>&notrace</code> must now be specified as <code>&noTrace=true</code>.
+					<li><code>&amp;Content</code> must now be specified as <code>&amp;content</code>.
+					<li><code>&amp;Method</code> must now be specified as <code>&amp;method</code>.
+					<li><code>&amp;debug</code> must now be specified as <code>&amp;debug=true</code>.
+					<li><code>&amp;plainText</code> must now be specified as <code>&amp;plainText=true</code>.
+					<li><code>&amp;notrace</code> must now be specified as <code>&amp;noTrace=true</code>.
 				</ul>
 			</li>
 			<li>Performance improvements around query parameters.
@@ -5830,7 +5830,7 @@
 			</li>
 			<li>Fixed Jetty issue in {@link org.apache.juneau.server.RestResponse#setHeader(String,String)} where setting 
 				the <code>Content-Type</code> through this method was inconsistent with the behavior in WAS/Tomcat.
-			<li><code>&noTrace=true</code> now prevents any errors from being logged in log file.
+			<li><code>&amp;noTrace=true</code> now prevents any errors from being logged in log file.
 			<li>Workaround for Jetty issue where <code>ServletContext.getContextPath()</code> always ends with <js>"null"</js>.
 			<li><code>RestServletProperties.REST_allowMethodParam</code> is now <jk>true</jk> by default on all subclasses 
 				of {@link org.apache.juneau.server.RestServletDefault} and {@link org.apache.juneau.server.jena.RestServletJenaDefault}.
@@ -5944,7 +5944,7 @@
 			<li>Changed configuration names for consistency with Jazz Framework.
 			<li>New {@link org.apache.juneau.client.RestClient#execute(HttpUriRequest)} method that allows subclasses to handle their own HTTP request execution.
 			<li>Changes in <code>JazzRestClient</code> to handle introduction of SSO support in v6.
-			<li><code>&plainText</code> debug feature was broken.
+			<li><code>&amp;plainText</code> debug feature was broken.
 			<li>Removed double-buffering in <code>RestRequest</code>.
 			<li>Metadata cleanup, Find Bug fixes.
 		</ul>
