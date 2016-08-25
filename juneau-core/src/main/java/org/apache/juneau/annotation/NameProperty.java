@@ -24,7 +24,7 @@ import org.apache.juneau.ini.*;
  * its parent object.
  * <p>
  * For example, the {@link Section} class must know the name it's known by it's parent
- * {@link ConfigFileImpl} class, so parsers will call this method with the sectio name
+ * {@link ConfigFileImpl} class, so parsers will call this method with the section name
  * using the {@link Section#setName(String)} method.
  *
  * @author James Bognar (james.bognar@salesforce.com)
