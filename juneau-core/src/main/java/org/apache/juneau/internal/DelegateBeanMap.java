@@ -102,9 +102,9 @@ public class DelegateBeanMap<T> extends BeanMap<T> {
 	public Set<Entry<String,Object>> entrySet() {
 		Set<Entry<String,Object>> s = Collections.newSetFromMap(new LinkedHashMap<Map.Entry<String,Object>,Boolean>());
 		for (final String key : keys) {
-			BeanMapEntry<T> bme;
+			BeanMapEntry bme;
 			if (overrideValues.containsKey(key))
-				bme = new BeanMapEntryOverride<T>(this, this.getPropertyMeta(key), overrideValues.get(key));
+				bme = new BeanMapEntryOverride(this, this.getPropertyMeta(key), overrideValues.get(key));
 			else
 				bme = this.getProperty(key);
 			if (bme == null)
@@ -115,27 +115,27 @@ public class DelegateBeanMap<T> extends BeanMap<T> {
 	}
 
 	@Override /* BeanMap */
-	public Collection<BeanPropertyMeta<T>> getProperties() {
-		List<BeanPropertyMeta<T>> l = new ArrayList<BeanPropertyMeta<T>>(keys.size());
+	public Collection<BeanPropertyMeta> getProperties() {
+		List<BeanPropertyMeta> l = new ArrayList<BeanPropertyMeta>(keys.size());
 		for (final String key : keys) {
-			BeanPropertyMeta<T> p = this.getPropertyMeta(key);
+			BeanPropertyMeta p = this.getPropertyMeta(key);
 			if (overrideValues.containsKey(key)) {
-				final BeanPropertyMeta<T> p2 = p;
-				p = new BeanPropertyMeta<T>(this.meta, key) {
+				final BeanPropertyMeta p2 = p;
+				p = new BeanPropertyMeta(this.meta, key) {
 					@Override /* BeanPropertyMeta */
-					public Object get(BeanMap<T> m) {
+					public Object get(BeanMap<?> m) {
 						return overrideValues.get(key);
 					}
 					@Override /* BeanPropertyMeta */
-					public RdfBeanPropertyMeta<T> getRdfMeta() {
+					public RdfBeanPropertyMeta getRdfMeta() {
 						return p2.getRdfMeta();
 					}
 					@Override /* BeanPropertyMeta */
-					public HtmlBeanPropertyMeta<T> getHtmlMeta() {
+					public HtmlBeanPropertyMeta getHtmlMeta() {
 						return p2.getHtmlMeta();
 					}
 					@Override /* BeanPropertyMeta */
-					public XmlBeanPropertyMeta<T> getXmlMeta() {
+					public XmlBeanPropertyMeta getXmlMeta() {
 						return p2.getXmlMeta();
 					}
 				};
@@ -147,10 +147,10 @@ public class DelegateBeanMap<T> extends BeanMap<T> {
 		return l;
 	}
 
-	private class BeanMapEntryOverride<T2> extends BeanMapEntry<T2> {
+	private class BeanMapEntryOverride extends BeanMapEntry {
 		Object value;
 
-		private BeanMapEntryOverride(BeanMap<T2> bm, BeanPropertyMeta<T2> bpm, Object value) {
+		private BeanMapEntryOverride(BeanMap<?> bm, BeanPropertyMeta bpm, Object value) {
 			super(bm, bpm);
 			this.value = value;
 		}

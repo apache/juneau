@@ -366,7 +366,6 @@ public class UonSerializer extends WriterSerializer {
 		return out;
 	}
 
-	@SuppressWarnings({ "rawtypes" })
 	private SerializerWriter serializeBeanMap(UonSerializerSession session, UonWriter out, BeanMap<?> m, boolean addClassAttr) throws Exception {
 		int depth = session.getIndent();
 

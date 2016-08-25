@@ -89,7 +89,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * @param o The object.
 	 * @return <jk>true</jk> if the specified object is a URL.
 	 */
-	public boolean isUri(ClassMeta<?> cm, BeanPropertyMeta<?> pMeta, Object o) {
+	public boolean isUri(ClassMeta<?> cm, BeanPropertyMeta pMeta, Object o) {
 		if (cm.isUri())
 			return true;
 		if (pMeta != null && (pMeta.isUri() || pMeta.isBeanUri()))
@@ -106,7 +106,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * @param o The URL object.
 	 * @return The anchor text to use for the specified URL object.
 	 */
-	public String getAnchorText(BeanPropertyMeta<?> pMeta, Object o) {
+	public String getAnchorText(BeanPropertyMeta pMeta, Object o) {
 		String s;
 		if (lookForLabelParameters) {
 			s = o.toString();

@@ -290,7 +290,6 @@ public class JsonSerializer extends WriterSerializer {
 		return out;
 	}
 
-	@SuppressWarnings({ "rawtypes" })
 	private SerializerWriter serializeBeanMap(JsonSerializerSession session, JsonWriter out, BeanMap<?> m, boolean addClassAttr) throws Exception {
 		int depth = session.getIndent();
 		out.append('{');

@@ -561,7 +561,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 		try {
 			BeanMap<T> bm = getParser().getBeanContext().newBeanMap(c);
 			for (String k : getSectionKeys(sectionName)) {
-				BeanPropertyMeta<?> bpm = bm.getPropertyMeta(k);
+				BeanPropertyMeta bpm = bm.getPropertyMeta(k);
 				if (bpm == null) {
 					if (! ignoreUnknownProperties)
 						throw new ParseException("Unknown property {0} encountered", k);

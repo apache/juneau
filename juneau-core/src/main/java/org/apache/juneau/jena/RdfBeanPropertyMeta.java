@@ -24,9 +24,8 @@ import org.apache.juneau.xml.*;
  * Metadata on bean properties specific to the RDF serializers and parsers pulled from the {@link Rdf @Rdf} annotation on the bean property.
  *
  * @author James Bognar (james.bognar@salesforce.com)
- * @param <T> The bean class.
  */
-public class RdfBeanPropertyMeta<T> {
+public class RdfBeanPropertyMeta {
 
 	private RdfCollectionFormat collectionFormat = DEFAULT;
 	private Namespace namespace = null;
@@ -36,7 +35,7 @@ public class RdfBeanPropertyMeta<T> {
 	 *
 	 * @param bpMeta The metadata of the bean property of this additional metadata.
 	 */
-	public RdfBeanPropertyMeta(BeanPropertyMeta<T> bpMeta) {
+	public RdfBeanPropertyMeta(BeanPropertyMeta bpMeta) {
 
 		List<Rdf> rdfs = bpMeta.findAnnotations(Rdf.class);
 		List<RdfSchema> schemas = bpMeta.findAnnotations(RdfSchema.class);

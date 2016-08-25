@@ -132,7 +132,7 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 		ClassMeta<?> keyType = type.getKeyType(), valueType = type.getValueType();
 
 		m = session.sort(m);
-		
+
 		// The map size may change as we're iterating over it, so
 		// grab a snapshot of the entries in a separate list.
 		List<SimpleMapEntry> entries = new ArrayList<SimpleMapEntry>(m.size());
@@ -160,7 +160,6 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 		serializeCollection(session, out, o, type);
 	}
 
-	@SuppressWarnings({ "rawtypes" })
 	private void serializeBeanMap(MsgPackSerializerSession session, MsgPackOutputStream out, final BeanMap<?> m, boolean addClassAttr) throws Exception {
 
 		List<BeanPropertyValue> values = m.getValues(addClassAttr, session.isTrimNulls());

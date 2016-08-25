@@ -280,7 +280,7 @@ public class HtmlSerializer extends XmlSerializer {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private void serializeMap(HtmlSerializerSession session, HtmlWriter out, Map m, ClassMeta<?> type, String classAttr, BeanPropertyMeta<?> ppMeta) throws Exception {
+	private void serializeMap(HtmlSerializerSession session, HtmlWriter out, Map m, ClassMeta<?> type, String classAttr, BeanPropertyMeta ppMeta) throws Exception {
 		ClassMeta<?> keyType = type.getKeyType(), valueType = type.getValueType();
 		ClassMeta<?> aType = session.getBeanContext().getClassMetaForObject(m);       // The actual type
 
@@ -319,8 +319,7 @@ public class HtmlSerializer extends XmlSerializer {
 		out.eTag(i, "table").nl();
 	}
 
-	@SuppressWarnings({ "rawtypes" })
-	private void serializeBeanMap(HtmlSerializerSession session, HtmlWriter out, BeanMap<?> m, String classAttr, BeanPropertyMeta<?> ppMeta) throws Exception {
+	private void serializeBeanMap(HtmlSerializerSession session, HtmlWriter out, BeanMap<?> m, String classAttr, BeanPropertyMeta ppMeta) throws Exception {
 		int i = session.getIndent();
 
 		Object o = m.getBean();
@@ -378,7 +377,7 @@ public class HtmlSerializer extends XmlSerializer {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private void serializeCollection(HtmlSerializerSession session, HtmlWriter out, Collection c, ClassMeta<?> type, String name, String classAttr, BeanPropertyMeta<?> ppMeta) throws Exception {
+	private void serializeCollection(HtmlSerializerSession session, HtmlWriter out, Collection c, ClassMeta<?> type, String name, String classAttr, BeanPropertyMeta ppMeta) throws Exception {
 
 		BeanContext bc = session.getBeanContext();
 		ClassMeta<?> elementType = type.getElementType();
@@ -471,7 +470,7 @@ public class HtmlSerializer extends XmlSerializer {
 	 * 2-dimensional tables are used for collections of objects that all have the same set of property names.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private String[] getTableHeaders(SerializerSession session, Collection c, BeanPropertyMeta<?> pMeta) throws Exception {
+	private String[] getTableHeaders(SerializerSession session, Collection c, BeanPropertyMeta pMeta) throws Exception {
 		BeanContext bc = session.getBeanContext();
 		if (c.size() == 0)
 			return null;

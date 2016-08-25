@@ -56,7 +56,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	 * @param pMeta The metadata on the bean property.
 	 * @return <jk>true</jk> if the specified bean property should be expanded as multiple key-value pairs.
 	 */
-	public final boolean shouldUseExpandedParams(BeanPropertyMeta<?> pMeta) {
+	public final boolean shouldUseExpandedParams(BeanPropertyMeta pMeta) {
 		ClassMeta<?> cm = pMeta.getClassMeta();
 		if (cm.isArray() || cm.isCollection()) {
 			if (expandedParams)

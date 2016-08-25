@@ -119,7 +119,7 @@ public final class MsgPackParser extends InputStreamParser {
 					BeanMap m = bc.newBeanMap(outer, ft.getInnerClass());
 					for (int i = 0; i < length; i++) {
 						String pName = parseAnything(session, string(), is, m.getBean(false));
-						BeanPropertyMeta<?> bpm = m.getPropertyMeta(pName);
+						BeanPropertyMeta bpm = m.getPropertyMeta(pName);
 						if (bpm == null) {
 							if (pName.equals("_class"))
 								parseAnything(session, bc.string(), is, null);

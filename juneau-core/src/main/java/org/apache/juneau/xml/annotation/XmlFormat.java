@@ -27,9 +27,17 @@ public enum XmlFormat {
 	/**
 	 * Render property as an attribute instead of an element.
 	 * <p>
-	 * 	Can only be applied to properties (methods/fields) of simple types (e.g. <code>String</code>, <code>Number</code>).
+	 * 	Can only be applied to properties (methods/fields) of class types that can be convertible to <code>Strings</code>.
 	 */
 	ATTR,
+
+	/**
+	 * Render property as attributes instead of an element.
+	 * <p>
+	 * 	Can only be applied to properties (methods/fields) of class type <code>Map&lt;Object,Object&gt;</code> where both
+	 * 	objects are convertible to <code>Strings</code>.
+	 */
+	ATTRS,
 
 	/**
 	 * Render property as an element instead of an attribute.
