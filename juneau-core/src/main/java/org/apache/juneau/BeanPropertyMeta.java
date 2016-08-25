@@ -24,13 +24,11 @@ import java.net.URI;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.html.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.jena.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
-import org.apache.juneau.xml.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Contains metadata about a bean property.
@@ -59,14 +57,7 @@ public class BeanPropertyMeta {
 	private String[] properties;
 	private PojoTransform transform;      // PojoTransform defined only via @BeanProperty annotation.
 
-	/** HTML related metadata on this bean property. */
-	protected HtmlBeanPropertyMeta htmlMeta;
-
-	/** XML related metadata on this bean property. */
-	protected XmlBeanPropertyMeta xmlMeta;
-
-	/** RDF related metadata on this bean property. */
-	protected RdfBeanPropertyMeta rdfMeta;  //
+	private MetadataMap extMeta = new MetadataMap();  // Extended metadata
 
 	/**
 	 * Constructor.
@@ -233,30 +224,13 @@ public class BeanPropertyMeta {
 	}
 
 	/**
-	 * Returns the HTML-related metadata on this bean property.
+	 * Returns the language-specified extended metadata on this bean property.
 	 *
-	 * @return The HTML-related metadata on this bean property.  Never <jk>null</jk>/.
+	 * @param c The name of the metadata class to create.
+	 * @return Extended metadata on this bean property.  Never <jk>null</jk>.
 	 */
-	public HtmlBeanPropertyMeta getHtmlMeta() {
-		return htmlMeta;
-	}
-
-	/**
-	 * Returns the XML-related metadata on this bean property.
-	 *
-	 * @return The XML-related metadata on this bean property.  Never <jk>null</jk>/.
-	 */
-	public XmlBeanPropertyMeta getXmlMeta() {
-		return xmlMeta;
-	}
-
-	/**
-	 * Returns the RDF-related metadata on this bean property.
-	 *
-	 * @return The RDF-related metadata on this bean property.  Never <jk>null</jk>/.
-	 */
-	public RdfBeanPropertyMeta getRdfMeta() {
-		return rdfMeta;
+	public <M extends BeanPropertyMetaExtended> M getExtendedMeta(Class<M> c) {
+		return extMeta.get(c, this);
 	}
 
 	boolean validate() throws Exception {
@@ -321,10 +295,6 @@ public class BeanPropertyMeta {
 			return false;
 		if (field != null && ! isParentClass(field.getType(), c))
 			return false;
-
-		htmlMeta = new HtmlBeanPropertyMeta(this);
-		xmlMeta = new XmlBeanPropertyMeta(this);
-		rdfMeta = new RdfBeanPropertyMeta(this);
 
 		return true;
 	}

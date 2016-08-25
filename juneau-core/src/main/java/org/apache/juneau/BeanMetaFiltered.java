@@ -15,7 +15,6 @@ package org.apache.juneau;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.xml.*;
 
 /**
  * Sames as {@link BeanMeta}, except the list of bean properties are limited
@@ -39,7 +38,6 @@ public final class BeanMetaFiltered<T> extends BeanMeta<T> {
 		this.properties = new LinkedHashMap<String,BeanPropertyMeta>();
 		for (String p : pNames)
 			properties.put(p, innerMeta.getPropertyMeta(p));
-		this.xmlMeta = new XmlBeanMeta<T>(innerMeta, pNames);
 	}
 
 	/**
@@ -55,6 +53,11 @@ public final class BeanMetaFiltered<T> extends BeanMeta<T> {
 	@Override /* Delagate */
 	public ClassMeta<T> getClassMeta() {
 		return innerMeta.classMeta;
+	}
+
+	@Override /* Delagate */
+	public <M extends BeanMetaExtended> M getExtendedMeta(Class<M> m) {
+		return innerMeta.getExtendedMeta(m);
 	}
 
 	@Override /* BeanMeta */

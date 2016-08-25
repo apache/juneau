@@ -22,11 +22,9 @@ import java.util.*;
 import java.util.Map.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.html.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.jena.*;
 import org.apache.juneau.transform.*;
-import org.apache.juneau.xml.*;
+import org.apache.juneau.utils.*;
 
 
 /**
@@ -93,8 +91,7 @@ public class BeanMeta<T> {
 	/** For beans with constructors with BeanConstructor annotation, this is the list of constructor arg properties. */
 	protected String[] constructorArgs = new String[0];
 
-	/** XML-related metadata */
-	protected XmlBeanMeta<T> xmlMeta;
+	private MetadataMap extMeta = new MetadataMap();  // Extended metadata
 
 	// Other fields
 	BeanPropertyMeta uriProperty;                                 // The property identified as the URI for this bean (annotated with @BeanProperty.beanUri).
@@ -347,8 +344,6 @@ public class BeanMeta<T> {
 				}
 			}
 
-			xmlMeta = new XmlBeanMeta<T>(this, null);
-
 			// We return this through the Bean.keySet() interface, so make sure it's not modifiable.
 			properties = Collections.unmodifiableMap(properties);
 
@@ -577,12 +572,13 @@ public class BeanMeta<T> {
 	}
 
 	/**
-	 * Returns XML related metadata for this bean type.
+	 * Returns the language-specified extended metadata on this bean class.
 	 *
-	 * @return The XML metadata for this bean type.
+	 * @param metaDataClass The name of the metadata class to create.
+	 * @return Extended metadata on this bean class.  Never <jk>null</jk>.
 	 */
-	public XmlBeanMeta<T> getXmlMeta() {
-		return xmlMeta;
+	public <M extends BeanMetaExtended> M getExtendedMeta(Class<M> metaDataClass) {
+		return extMeta.get(metaDataClass, this);
 	}
 
 	/**
@@ -712,9 +708,6 @@ public class BeanMeta<T> {
 			super(BeanMeta.this, subTypeAttr, ctx.string());
 			this.subTypes = subTypes;
 			this.realProperty = realProperty;
-			this.htmlMeta = new HtmlBeanPropertyMeta(this);
-			this.xmlMeta = new XmlBeanPropertyMeta(this);
-			this.rdfMeta = new RdfBeanPropertyMeta(this);
 		}
 
 		/*

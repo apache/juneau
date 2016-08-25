@@ -61,7 +61,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 		if (cm.isArray() || cm.isCollection()) {
 			if (expandedParams)
 				return true;
-			if (pMeta.getBeanMeta().getClassMeta().getUrlEncodingMeta().isExpandedParams())
+			if (pMeta.getBeanMeta().getClassMeta().getExtendedMeta(UrlEncodingClassMeta.class).isExpandedParams())
 				return true;
 		}
 		return false;

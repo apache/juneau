@@ -196,7 +196,7 @@ public class XmlSchemaSerializer extends XmlSerializer {
 			if (cm == null)
 				queueElement(ns, "null", object());
 			else {
-				XmlClassMeta xmlMeta = cm.getXmlMeta();
+				XmlClassMeta xmlMeta = cm.getExtendedMeta(XmlClassMeta.class);
 				if (xmlMeta.getElementName() != null && xmlMeta.getNamespace() != null)
 					ns = xmlMeta.getNamespace();
 				queueElement(ns, xmlMeta.getElementName(), cm);
@@ -296,7 +296,7 @@ public class XmlSchemaSerializer extends XmlSerializer {
 			int i = session.getIndent() + 1;
 			if (name == null)
 				name = getElementName(ft);
-			Namespace ns = first(ft.getXmlMeta().getNamespace(), defaultNs);
+			Namespace ns = first(ft.getExtendedMeta(XmlClassMeta.class).getNamespace(), defaultNs);
 			String type = getXmlType(ns, ft);
 
 			w.oTag(i, "element")
@@ -340,7 +340,7 @@ public class XmlSchemaSerializer extends XmlSerializer {
 			// This element can have mixed content if:
 			// 	1) It's a generic Object (so it can theoretically be anything)
 			//		2) The bean has a property defined with @XmlFormat.CONTENT.
-			if ((cm.isBean() && cm.getBeanMeta().getXmlMeta().getXmlContentProperty() != null) || cm.isObject())
+			if ((cm.isBean() && cm.getBeanMeta().getExtendedMeta(XmlBeanMeta.class).getXmlContentProperty() != null) || cm.isObject())
 				w.attr("mixed", "true");
 
 			w.cTag().nl();
@@ -371,10 +371,10 @@ public class XmlSchemaSerializer extends XmlSerializer {
 					boolean hasChildElements = false;
 
 					for (BeanPropertyMeta pMeta : bm.getPropertyMetas())
-						if (pMeta.getXmlMeta().getXmlFormat() != XmlFormat.ATTR && pMeta.getXmlMeta().getXmlFormat() != XmlFormat.CONTENT)
+						if (pMeta.getExtendedMeta(XmlBeanPropertyMeta.class).getXmlFormat() != XmlFormat.ATTR && pMeta.getExtendedMeta(XmlBeanPropertyMeta.class).getXmlFormat() != XmlFormat.CONTENT)
 							hasChildElements = true;
 
-					if (bm.getXmlMeta().getXmlContentProperty() != null) {
+					if (bm.getExtendedMeta(XmlBeanMeta.class).getXmlContentProperty() != null) {
 						w.sTag(i+1, "sequence").nl();
 						w.oTag(i+2, "any")
 							.attr("processContents", "skip")
@@ -388,7 +388,7 @@ public class XmlSchemaSerializer extends XmlSerializer {
 						boolean hasOtherNsElement = false;
 
 						for (BeanPropertyMeta pMeta : bm.getPropertyMetas()) {
-							XmlBeanPropertyMeta xmlMeta = pMeta.getXmlMeta();
+							XmlBeanPropertyMeta xmlMeta = pMeta.getExtendedMeta(XmlBeanPropertyMeta.class);
 							if (xmlMeta.getXmlFormat() != XmlFormat.ATTR) {
 								boolean isCollapsed = xmlMeta.getXmlFormat() == COLLAPSED;
 								ClassMeta<?> ct2 = pMeta.getClassMeta();
@@ -398,7 +398,7 @@ public class XmlSchemaSerializer extends XmlSerializer {
 										childName = xmlMeta.getChildName();
 									ct2 = pMeta.getClassMeta().getElementType();
 								}
-								Namespace cNs = first(xmlMeta.getNamespace(), ct2.getXmlMeta().getNamespace(), cm.getXmlMeta().getNamespace(), defaultNs);
+								Namespace cNs = first(xmlMeta.getNamespace(), ct2.getExtendedMeta(XmlClassMeta.class).getNamespace(), cm.getExtendedMeta(XmlClassMeta.class).getNamespace(), defaultNs);
 								if (xmlMeta.getNamespace() == null) {
 									w.oTag(i+2, "element")
 										.attr("name", XmlUtils.encodeElementName(childName), true)
@@ -433,8 +433,8 @@ public class XmlSchemaSerializer extends XmlSerializer {
 						w.eTag(i+1, "sequence").nl();
 					}
 
-					for (BeanPropertyMeta pMeta : bm.getXmlMeta().getXmlAttrProperties().values()) {
-						Namespace pNs = pMeta.getXmlMeta().getNamespace();
+					for (BeanPropertyMeta pMeta : bm.getExtendedMeta(XmlBeanMeta.class).getXmlAttrProperties().values()) {
+						Namespace pNs = pMeta.getExtendedMeta(XmlBeanPropertyMeta.class).getNamespace();
 						if (pNs == null)
 							pNs = defaultNs;
 
@@ -469,7 +469,7 @@ public class XmlSchemaSerializer extends XmlSerializer {
 							.ceTag().nl();
 						w.eTag(i+1, "sequence").nl();
 					} else {
-						Namespace cNs = first(elementType.getXmlMeta().getNamespace(), cm.getXmlMeta().getNamespace(), defaultNs);
+						Namespace cNs = first(elementType.getExtendedMeta(XmlClassMeta.class).getNamespace(), cm.getExtendedMeta(XmlClassMeta.class).getNamespace(), defaultNs);
 						schemas.queueType(cNs, null, elementType);
 						w.sTag(i+1, "sequence").nl();
 						w.oTag(i+2, "choice")
@@ -521,7 +521,7 @@ public class XmlSchemaSerializer extends XmlSerializer {
 
 		private String getElementName(ClassMeta<?> cm) {
 			cm = cm.getTransformedClassMeta();
-			String name = cm.getXmlMeta().getElementName();
+			String name = cm.getExtendedMeta(XmlClassMeta.class).getElementName();
 
 			if (name == null) {
 				if (cm.isBoolean())

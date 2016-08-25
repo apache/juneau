@@ -21,16 +21,18 @@ import org.apache.juneau.xml.annotation.*;
  * Metadata on beans specific to the XML serializers and parsers pulled from the {@link Xml @Xml} annotation on the class.
  *
  * @author James Bognar (james.bognar@salesforce.com)
- * @param <T> The bean class type.
  */
-public class XmlBeanMeta<T> {
+public class XmlBeanMeta extends BeanMetaExtended {
 
 	// XML related fields
 	private final Map<String,BeanPropertyMeta> xmlAttrs;                        // Map of bean properties that are represented as XML attributes.
 	private final BeanPropertyMeta xmlContent;                                  // Bean property that is represented as XML content within the bean element.
-	private final XmlContentHandler<T> xmlContentHandler;                       // Class used to convert bean to XML content.
+	private final XmlContentHandler<?> xmlContentHandler;                       // Class used to convert bean to XML content.
 	private final Map<String,BeanPropertyMeta> childElementProperties;          // Properties defined with @Xml.childName annotation.
-	private final BeanMeta<T> beanMeta;
+
+	public XmlBeanMeta(BeanMeta<?> beanMeta) {
+		this(beanMeta, null);
+	}
 
 	/**
 	 * Constructor.
@@ -38,28 +40,27 @@ public class XmlBeanMeta<T> {
 	 * @param beanMeta The metadata on the bean that this metadata applies to.
 	 * @param pNames Only look at these property names.  If <jk>null</jk>, apply to all bean properties.
 	 */
-	@SuppressWarnings("unchecked")
-	public XmlBeanMeta(BeanMeta<T> beanMeta, String[] pNames) {
-		this.beanMeta = beanMeta;
-		Class<T> c = beanMeta.getClassMeta().getInnerClass();
+	public XmlBeanMeta(BeanMeta<?> beanMeta, String[] pNames) {
+		super(beanMeta);
+		Class<?> c = beanMeta.getClassMeta().getInnerClass();
 
 		Map<String,BeanPropertyMeta> tXmlAttrs = new LinkedHashMap<String,BeanPropertyMeta>();
 		BeanPropertyMeta tXmlContent = null;
-		XmlContentHandler<T> tXmlContentHandler = null;
+		XmlContentHandler<?> tXmlContentHandler = null;
 		Map<String,BeanPropertyMeta> tChildElementProperties = new LinkedHashMap<String,BeanPropertyMeta>();
 
 		for (BeanPropertyMeta p : beanMeta.getPropertyMetas(pNames)) {
-			XmlFormat xf = p.getXmlMeta().getXmlFormat();
+			XmlFormat xf = p.getExtendedMeta(XmlBeanPropertyMeta.class).getXmlFormat();
 			if (xf == XmlFormat.ATTR)
 				tXmlAttrs.put(p.getName(), p);
 			else if (xf == XmlFormat.CONTENT) {
 				if (tXmlContent != null)
 					throw new BeanRuntimeException(c, "Multiple instances of CONTENT properties defined on class.  Only one property can be designated as such.");
 				tXmlContent = p;
-				tXmlContentHandler = (XmlContentHandler<T>) p.getXmlMeta().getXmlContentHandler();
+				tXmlContentHandler = p.getExtendedMeta(XmlBeanPropertyMeta.class).getXmlContentHandler();
 			}
 			// Look for any properties that are collections with @Xml.childName specified.
-			String n = p.getXmlMeta().getChildName();
+			String n = p.getExtendedMeta(XmlBeanPropertyMeta.class).getChildName();
 			if (n != null) {
 				if (tChildElementProperties.containsKey(n))
 					throw new BeanRuntimeException(c, "Multiple properties found with the name ''{0}''.", n);
@@ -97,7 +98,7 @@ public class XmlBeanMeta<T> {
 	 *
 	 * @return The XML content handler for this bean, or <jk>null</jk> if no content handler is defined.
 	 */
-	protected XmlContentHandler<T> getXmlContentHandler() {
+	protected XmlContentHandler<?> getXmlContentHandler() {
 		return xmlContentHandler;
 	}
 
@@ -125,6 +126,6 @@ public class XmlBeanMeta<T> {
 			if (bpm != null)
 				return bpm;
 		}
-		return beanMeta.getPropertyMeta(fieldName);
+		return getBeanMeta().getPropertyMeta(fieldName);
 	}
 }

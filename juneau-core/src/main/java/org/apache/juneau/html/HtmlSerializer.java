@@ -232,11 +232,11 @@ public class HtmlSerializer extends XmlSerializer {
 					gType = bc.getClassMetaForObject(o);
 			}
 
-			HtmlClassMeta html = gType.getHtmlMeta();
+			HtmlClassMeta html = gType.getExtendedMeta(HtmlClassMeta.class);
 
-			if (html.isAsXml() || (pMeta != null && pMeta.getHtmlMeta().isAsXml()))
+			if (html.isAsXml() || (pMeta != null && pMeta.getExtendedMeta(HtmlBeanPropertyMeta.class).isAsXml()))
 				super.serializeAnything(session, out, o, null, null, null, false, XmlFormat.NORMAL, null);
-			else if (html.isAsPlainText() || (pMeta != null && pMeta.getHtmlMeta().isAsPlainText()))
+			else if (html.isAsPlainText() || (pMeta != null && pMeta.getExtendedMeta(HtmlBeanPropertyMeta.class).isAsPlainText()))
 				out.write(o == null ? "null" : o.toString());
 			else if (o == null || (gType.isChar() && ((Character)o).charValue() == 0))
 				out.tag(i, "null").nl();
@@ -289,7 +289,7 @@ public class HtmlSerializer extends XmlSerializer {
 		if (classAttr != null)
 			out.attr("class", classAttr);
 		out.appendln(">");
-		if (! (aType.getHtmlMeta().isNoTableHeaders() || (ppMeta != null && ppMeta.getHtmlMeta().isNoTableHeaders()))) {
+		if (! (aType.getExtendedMeta(HtmlClassMeta.class).isNoTableHeaders() || (ppMeta != null && ppMeta.getExtendedMeta(HtmlBeanPropertyMeta.class).isNoTableHeaders()))) {
 			out.sTag(i+1, "tr").nl();
 			out.sTag(i+2, "th").nl().appendln(i+3, "<string>key</string>").eTag(i+2, "th").nl();
 			out.sTag(i+2, "th").nl().appendln(i+3, "<string>value</string>").eTag(i+2, "th").nl();
@@ -337,7 +337,7 @@ public class HtmlSerializer extends XmlSerializer {
 		if (classAttr != null)
 			out.attr("_class", classAttr);
 		out.append('>').nl();
-		if (! (m.getClassMeta().getHtmlMeta().isNoTableHeaders() || (ppMeta != null && ppMeta.getHtmlMeta().isNoTableHeaders()))) {
+		if (! (m.getClassMeta().getExtendedMeta(HtmlClassMeta.class).isNoTableHeaders() || (ppMeta != null && ppMeta.getExtendedMeta(HtmlBeanPropertyMeta.class).isNoTableHeaders()))) {
 			out.sTag(i+1, "tr").nl();
 			out.sTag(i+2, "th").nl().appendln(i+3, "<string>key</string>").eTag(i+2, "th").nl();
 			out.sTag(i+2, "th").nl().appendln(i+3, "<string>value</string>").eTag(i+2, "th").nl();
@@ -486,7 +486,7 @@ public class HtmlSerializer extends XmlSerializer {
 			}
 		if (o1 == null)
 			return null;
-		ClassMeta cm = bc.getClassMetaForObject(o1);
+		ClassMeta<?> cm = bc.getClassMetaForObject(o1);
 		if (cm.getPojoTransform() != null) {
 			PojoTransform f = cm.getPojoTransform();
 			o1 = f.transform(o1);
@@ -496,10 +496,10 @@ public class HtmlSerializer extends XmlSerializer {
 			return null;
 		if (cm.getInnerClass().isAnnotationPresent(HtmlLink.class))
 			return null;
-		HtmlClassMeta h = cm.getHtmlMeta();
-		if (h.isNoTables() || (pMeta != null && pMeta.getHtmlMeta().isNoTables()))
+		HtmlClassMeta h = cm.getExtendedMeta(HtmlClassMeta.class);
+		if (h.isNoTables() || (pMeta != null && pMeta.getExtendedMeta(HtmlBeanPropertyMeta.class).isNoTables()))
 			return null;
-		if (h.isNoTableHeaders() || (pMeta != null && pMeta.getHtmlMeta().isNoTableHeaders()))
+		if (h.isNoTableHeaders() || (pMeta != null && pMeta.getExtendedMeta(HtmlBeanPropertyMeta.class).isNoTableHeaders()))
 			return new String[0];
 		if (session.canIgnoreValue(cm, null, o1))
 			return null;
