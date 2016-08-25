@@ -12,15 +12,16 @@
  ***************************************************************************************************************************/
 package org.apache.juneau.html;
 
+import org.apache.juneau.*;
 import org.apache.juneau.html.annotation.*;
-import org.apache.juneau.internal.*;
+import org.apache.juneau.internal.*; 
 
 /**
  * Metadata on classes specific to the HTML serializers and parsers pulled from the {@link Html @Html} annotation on the class.
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-public class HtmlClassMeta {
+public class HtmlClassMeta extends ClassMetaExtended {
 
 	private final Html html;
 	private final boolean asXml, noTables, noTableHeaders, asPlainText;
@@ -28,10 +29,11 @@ public class HtmlClassMeta {
 	/**
 	 * Constructor.
 	 *
-	 * @param c The class that this annotation is defined on.
+	 * @param cm The class that this annotation is defined on.
 	 */
-	public HtmlClassMeta(Class<?> c) {
-		this.html = ReflectionUtils.getAnnotation(Html.class, c);
+	public HtmlClassMeta(ClassMeta<?> cm) {
+		super(cm);
+		this.html = ReflectionUtils.getAnnotation(Html.class, getInnerClass());
 		if (html != null) {
 			asXml = html.asXml();
 			noTables = html.noTables();

@@ -242,10 +242,11 @@ public class RdfSerializer extends WriterSerializer {
 		} else if (gType.isCollection() || gType.isArray() || (wType != null && wType.isCollection())) {
 			Collection c = session.sort(gType.isCollection() ? (Collection)o : toList(gType.getInnerClass(), o));
 			RdfCollectionFormat f = session.getCollectionFormat();
-			if (gType.getRdfMeta().getCollectionFormat() != RdfCollectionFormat.DEFAULT)
-				f = gType.getRdfMeta().getCollectionFormat();
-			if (bpm != null && bpm.getRdfMeta().getCollectionFormat() != RdfCollectionFormat.DEFAULT)
-				f = bpm.getRdfMeta().getCollectionFormat();
+			RdfClassMeta rcm = gType.getExtendedMeta(RdfClassMeta.class);
+			if (rcm.getCollectionFormat() != RdfCollectionFormat.DEFAULT)
+				f = rcm.getCollectionFormat(); 
+			if (bpm != null && bpm.getExtendedMeta(RdfBeanPropertyMeta.class).getCollectionFormat() != RdfCollectionFormat.DEFAULT)
+				f = bpm.getExtendedMeta(RdfBeanPropertyMeta.class).getCollectionFormat();
 			switch (f) {
 				case BAG: n = serializeToContainer(session, c, gType, m.createBag()); break;
 				case LIST: n = serializeToList(session, c, gType); break;
@@ -335,9 +336,9 @@ public class RdfSerializer extends WriterSerializer {
 				continue;
 
 			BeanPropertyMeta bpm = bpv.getMeta();
-			Namespace ns = bpm.getRdfMeta().getNamespace();
+			Namespace ns = bpm.getExtendedMeta(RdfBeanPropertyMeta.class).getNamespace();
 			if (ns == null && session.isUseXmlNamespaces())
-				ns = bpm.getXmlMeta().getNamespace();
+				ns = bpm.getExtendedMeta(XmlBeanPropertyMeta.class).getNamespace();
 			if (ns == null)
 				ns = session.getJuneauBpNs();
 			else if (session.isAutoDetectNamespaces())
@@ -375,9 +376,9 @@ public class RdfSerializer extends WriterSerializer {
 		for (Object e : c) {
 			Namespace ns = null;
 			if (bpm != null) {
-				ns = bpm.getRdfMeta().getNamespace();
+				ns = bpm.getExtendedMeta(RdfBeanPropertyMeta.class).getNamespace();
 				if (ns == null && session.isUseXmlNamespaces())
-					ns = bpm.getXmlMeta().getNamespace();
+					ns = bpm.getExtendedMeta(XmlBeanPropertyMeta.class).getNamespace();
 			}
 			if (ns == null)
 				ns = session.getJuneauBpNs();

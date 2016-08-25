@@ -14,16 +14,17 @@ package org.apache.juneau.jena;
 
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.jena.annotation.*;
-import org.apache.juneau.xml.*;
+import org.apache.juneau.xml.*; 
 
 /**
  * Metadata on classes specific to the RDF serializers and parsers pulled from the {@link Rdf @Rdf} annotation on the class.
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-public class RdfClassMeta {
+public class RdfClassMeta extends ClassMetaExtended {
 
 	private final Rdf rdf;
 	private final RdfCollectionFormat collectionFormat;
@@ -32,9 +33,11 @@ public class RdfClassMeta {
 	/**
 	 * Constructor.
 	 *
-	 * @param c The class that this annotation is defined on.
+	 * @param cm The class that this annotation is defined on.
 	 */
-	public RdfClassMeta(Class<?> c) {
+	public RdfClassMeta(ClassMeta<?> cm) {
+		super(cm);
+		Class<?> c = getInnerClass();
 		this.rdf = ReflectionUtils.getAnnotation(Rdf.class, c);
 		if (rdf != null) {
 			collectionFormat = rdf.collectionFormat();

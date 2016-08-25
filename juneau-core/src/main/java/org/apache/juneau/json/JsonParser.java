@@ -107,9 +107,9 @@ public final class JsonParser extends ReaderParser {
 		PojoTransform<T,Object> transform = (PojoTransform<T,Object>)nt.getPojoTransform();
 		ClassMeta<?> ft = nt.getTransformedClassMeta();
 		session.setCurrentClass(ft);
-		String wrapperAttr = ft.getJsonMeta().getWrapperAttr();
+		String wrapperAttr = ft.getExtendedMeta(JsonClassMeta.class).getWrapperAttr();
 
-		Object o = null;
+		Object o = null; 
 
 		skipCommentsAndSpace(session, r);
 		if (wrapperAttr != null)

@@ -4770,6 +4770,14 @@
 					<li>New {@link org.apache.juneau.html.HtmlSerializerContext#URI_ANCHOR} option for {@link org.apache.juneau.html.HtmlSerializerContext#HTML_uriAnchorText}.				
 				</ul>
 			</li>
+			<li>Removed generics from {@link org.apache.juneau.BeanPropertyMeta}.
+			<li>Introduced new classes to eliminate the references to language-specific metadata in the core metadata classes:
+				<ul>
+					<li>{@link org.apache.juneau.ClassMetaExtended} / {@link org.apache.juneau.ClassMeta#getExtendedMeta(Class)} 
+					<li>{@link org.apache.juneau.BeanMetaExtended} / {@link org.apache.juneau.BeanMeta#getExtendedMeta(Class)} 
+					<li>{@link org.apache.juneau.BeanPropertyMetaExtended} / {@link org.apache.juneau.BeanPropertyMetaMeta#getExtendedMeta(Class)} 
+				</ul>
+			</li>
 		</ul>		
 
 		<h6 class='topic'>org.apache.juneau.server</h6>

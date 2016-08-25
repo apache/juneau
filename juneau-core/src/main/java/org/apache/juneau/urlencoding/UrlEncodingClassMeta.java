@@ -12,15 +12,16 @@
  ***************************************************************************************************************************/
 package org.apache.juneau.urlencoding;
 
+import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.urlencoding.annotation.*;
+import org.apache.juneau.urlencoding.annotation.*; 
 
 /**
  * Metadata on classes specific to the URL-Encoding serializers and parsers pulled from the {@link UrlEncoding @UrlEncoding} annotation on the class.
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-public class UrlEncodingClassMeta {
+public class UrlEncodingClassMeta extends ClassMetaExtended {
 
 	private final UrlEncoding urlEncoding;
 	private final boolean expandedParams;
@@ -28,10 +29,11 @@ public class UrlEncodingClassMeta {
 	/**
 	 * Constructor.
 	 *
-	 * @param c The class that this annotation is defined on.
+	 * @param cm The class that this annotation is defined on.
 	 */
-	public UrlEncodingClassMeta(Class<?> c) {
-		this.urlEncoding = ReflectionUtils.getAnnotation(UrlEncoding.class, c);
+	public UrlEncodingClassMeta(ClassMeta<?> cm) {
+		super(cm);
+		this.urlEncoding = ReflectionUtils.getAnnotation(UrlEncoding.class, getInnerClass());
 		if (urlEncoding != null) {
 			expandedParams = urlEncoding.expandedParams();
 		} else {

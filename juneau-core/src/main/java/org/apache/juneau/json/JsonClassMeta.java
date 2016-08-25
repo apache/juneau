@@ -12,15 +12,16 @@
  ***************************************************************************************************************************/
 package org.apache.juneau.json;
 
+import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.json.annotation.*;
+import org.apache.juneau.json.annotation.*; 
 
 /**
  * Metadata on classes specific to the JSON serializers and parsers pulled from the {@link Json @Json} annotation on the class.
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-public class JsonClassMeta {
+public class JsonClassMeta extends ClassMetaExtended {
 
 	private final Json json;
 	private final String wrapperAttr;
@@ -28,10 +29,11 @@ public class JsonClassMeta {
 	/**
 	 * Constructor.
 	 *
-	 * @param c The class that this annotation is defined on.
+	 * @param cm The class that this annotation is defined on.
 	 */
-	public JsonClassMeta(Class<?> c) {
-		this.json = ReflectionUtils.getAnnotation(Json.class, c);
+	public JsonClassMeta(ClassMeta<?> cm) {
+		super(cm);
+		this.json = ReflectionUtils.getAnnotation(Json.class, getInnerClass());
 		if (json != null) {
 			wrapperAttr = StringUtils.nullIfEmpty(json.wrapperAttr());
 		} else {

@@ -23,14 +23,10 @@ import java.net.URI;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.html.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.jena.*;
-import org.apache.juneau.json.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.transform.Transform;
-import org.apache.juneau.urlencoding.*;
-import org.apache.juneau.xml.*;
+import org.apache.juneau.utils.*; 
 
 /**
  * A wrapper class around the {@link Class} object that provides cached information
@@ -87,11 +83,7 @@ public final class ClassMeta<T> implements Type {
 		isAbstract,                                    // True if this class is abstract.
 		isMemberClass;                                 // True if this is a non-static member class.
 
-	private XmlClassMeta xmlMeta;                      // Class-related metadata from the @Xml annotation found on this class or parent class.
-	private JsonClassMeta jsonMeta;                    // Class-related metadata from the @Json annotation found on this class or parent class.
-	private HtmlClassMeta htmlMeta;                    // Class-related metadata from the @Html annotation found on this class or parent class.
-	private UrlEncodingClassMeta urlEncodingMeta;      // Class-related metadata from the @UrlEncoding annotation found on this class or parent class.
-	private RdfClassMeta rdfMeta;                      // Class-related metadata from the @Rdf annotation found on this class or parent class.
+	private MetadataMap extMeta = new MetadataMap();  // Extended metadata
 
 	private Throwable initException;                   // Any exceptions thrown in the init() method.
 	private boolean hasChildPojoTransforms;               // True if this class or any subclass of this class has a PojoTransform associated with it.
@@ -153,12 +145,6 @@ public final class ClassMeta<T> implements Type {
 			}
 
 			this.hasChildPojoTransforms = beanContext.hasChildPojoTransforms(innerClass);
-
-			this.xmlMeta = new XmlClassMeta(innerClass);
-			this.jsonMeta = new JsonClassMeta(innerClass);
-			this.htmlMeta = new HtmlClassMeta(innerClass);
-			this.urlEncodingMeta = new UrlEncodingClassMeta(innerClass);
-			this.rdfMeta = new RdfClassMeta(innerClass);
 
 			Class c = innerClass;
 
@@ -846,48 +832,13 @@ public final class ClassMeta<T> implements Type {
 	}
 
 	/**
-	 * Returns the <ja>@Xml</ja> annotation defined on this class, superclass, or interface of this class.
+	 * Returns the language-specified extended metadata on this class.
 	 *
-	 * @return XML metadata on this class.  Never <jk>null</jk>.
+	 * @param c The name of the metadata class to create.
+	 * @return Extended metadata on this class.  Never <jk>null</jk>.
 	 */
-	public XmlClassMeta getXmlMeta() {
-		return xmlMeta;
-	}
-
-	/**
-	 * Returns metadata from the <ja>@Json</ja> annotation defined on this class, superclass, or interface of this class.
-	 *
-	 * @return JSON metadata on this class.  Never <jk>null</jk>.
-	 */
-	public JsonClassMeta getJsonMeta() {
-		return jsonMeta;
-	}
-
-	/**
-	 * Returns metadata from the <ja>@Html</ja> annotation defined on this class, superclass, or interface of this class.
-	 *
-	 * @return HTML metadata on this class.  Never <jk>null</jk>.
-	 */
-	public HtmlClassMeta getHtmlMeta() {
-		return htmlMeta;
-	}
-
-	/**
-	 * Returns metadata from the <ja>@UrlEncoding</ja> annotation defined on this class, superclass, or interface of this class.
-	 *
-	 * @return URL-Encoding metadata on this class.  Never <jk>null</jk>.
-	 */
-	public UrlEncodingClassMeta getUrlEncodingMeta() {
-		return urlEncodingMeta;
-	}
-
-	/**
-	 * Returns metadata from the <ja>@Rdf</ja> annotation defined on this class, superclass, or interface of this class.
-	 *
-	 * @return RDF metadata on this class.  Never <jk>null</jk>.
-	 */
-	public RdfClassMeta getRdfMeta() {
-		return rdfMeta;
+	public <M extends ClassMetaExtended> M getExtendedMeta(Class<M> c) {
+		return extMeta.get(c, this);
 	}
 
 	/**

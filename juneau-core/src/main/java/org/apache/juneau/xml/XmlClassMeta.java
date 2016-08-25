@@ -14,6 +14,7 @@ package org.apache.juneau.xml;
 
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.xml.annotation.*;
 
@@ -23,7 +24,7 @@ import org.apache.juneau.xml.annotation.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-public class XmlClassMeta {
+public class XmlClassMeta extends ClassMetaExtended {
 
 	private final Namespace namespace;
 	private final Xml xml;
@@ -34,9 +35,11 @@ public class XmlClassMeta {
 	/**
 	 * Constructor.
 	 *
-	 * @param c The class that this annotation is defined on.
+	 * @param cm The class that this annotation is defined on.
 	 */
-	public XmlClassMeta(Class<?> c) {
+	public XmlClassMeta(ClassMeta<?> cm) {
+		super(cm);
+		Class<?> c = getInnerClass();
 		this.namespace = findNamespace(c);
 		this.xml =  ReflectionUtils.getAnnotation(Xml.class, c);
 		if (xml != null) {

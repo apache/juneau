@@ -30,17 +30,12 @@ public class XmlBeanMeta extends BeanMetaExtended {
 	private final XmlContentHandler<?> xmlContentHandler;                       // Class used to convert bean to XML content.
 	private final Map<String,BeanPropertyMeta> childElementProperties;          // Properties defined with @Xml.childName annotation.
 
-	public XmlBeanMeta(BeanMeta<?> beanMeta) {
-		this(beanMeta, null);
-	}
-
 	/**
 	 * Constructor.
 	 *
 	 * @param beanMeta The metadata on the bean that this metadata applies to.
-	 * @param pNames Only look at these property names.  If <jk>null</jk>, apply to all bean properties.
 	 */
-	public XmlBeanMeta(BeanMeta<?> beanMeta, String[] pNames) {
+	public XmlBeanMeta(BeanMeta<?> beanMeta) {
 		super(beanMeta);
 		Class<?> c = beanMeta.getClassMeta().getInnerClass();
 
@@ -49,7 +44,7 @@ public class XmlBeanMeta extends BeanMetaExtended {
 		XmlContentHandler<?> tXmlContentHandler = null;
 		Map<String,BeanPropertyMeta> tChildElementProperties = new LinkedHashMap<String,BeanPropertyMeta>();
 
-		for (BeanPropertyMeta p : beanMeta.getPropertyMetas(pNames)) {
+		for (BeanPropertyMeta p : beanMeta.getPropertyMetas()) {
 			XmlFormat xf = p.getExtendedMeta(XmlBeanPropertyMeta.class).getXmlFormat();
 			if (xf == XmlFormat.ATTR)
 				tXmlAttrs.put(p.getName(), p);

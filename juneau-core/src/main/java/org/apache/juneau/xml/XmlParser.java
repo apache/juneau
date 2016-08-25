@@ -146,10 +146,10 @@ public class XmlParser extends ReaderParser {
 			parseIntoMap(session, r, m, string(), object());
 			o = ft.newInstanceFromObjectMap(outer, m);
 		} else if (ft.canCreateNewBean(outer)) {
-			if (ft.getXmlMeta().getFormat() == XmlFormat.COLLAPSED) {
+			if (ft.getExtendedMeta(XmlClassMeta.class).getFormat() == XmlFormat.COLLAPSED) {
 				String fieldName = r.getLocalName();
-				BeanMap m = bc.newBeanMap(outer, ft.getInnerClass());
-				BeanPropertyMeta bpm = m.getMeta().getXmlMeta().getPropertyMeta(fieldName);
+				BeanMap<?> m = bc.newBeanMap(outer, ft.getInnerClass());
+				BeanPropertyMeta bpm = m.getMeta().getExtendedMeta(XmlBeanMeta.class).getPropertyMeta(fieldName);
 				ClassMeta<?> cm = m.getMeta().getClassMeta();
 				Object value = parseAnything(session, cm, currAttr, r, m.getBean(false), false);
 				setName(cm, value, currAttr);
@@ -274,8 +274,8 @@ public class XmlParser extends ReaderParser {
 	}
 
 	private <T> BeanMap<T> parseIntoBean(XmlParserSession session, XMLStreamReader r, BeanMap<T> m) throws Exception {
-		BeanMeta bMeta = m.getMeta();
-		XmlBeanMeta xmlMeta = bMeta.getXmlMeta();
+		BeanMeta<?> bMeta = m.getMeta();
+		XmlBeanMeta xmlMeta = bMeta.getExtendedMeta(XmlBeanMeta.class);
 
 		for (int i = 0; i < r.getAttributeCount(); i++) {
 			String key = session.decodeString(r.getAttributeLocalName(i));
@@ -324,7 +324,7 @@ public class XmlParser extends ReaderParser {
 					}
 				} else {
 					session.setCurrentProperty(pMeta);
-					XmlFormat xf = pMeta.getXmlMeta().getXmlFormat();
+					XmlFormat xf = pMeta.getExtendedMeta(XmlBeanPropertyMeta.class).getXmlFormat();
 					if (xf == COLLAPSED) {
 						ClassMeta<?> et = pMeta.getClassMeta().getElementType();
 						Object value = parseAnything(session, et, currAttr, r, m.getBean(false), false);
