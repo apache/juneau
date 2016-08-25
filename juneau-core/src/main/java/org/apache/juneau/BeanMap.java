@@ -106,7 +106,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 			for (Map.Entry<String,List<?>> e : arrayPropertyCache.entrySet()) {
 				String key = e.getKey();
 				List<?> value = e.getValue();
-				BeanPropertyMeta<T> bpm = getPropertyMeta(key);
+				BeanPropertyMeta bpm = getPropertyMeta(key);
 				try {
 					bpm.setArray(b, value);
 				} catch (Exception e1) {
@@ -217,7 +217,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 */
 	@Override /* Map */
 	public Object put(String property, Object value) {
-		BeanPropertyMeta<T> p = meta.properties.get(property);
+		BeanPropertyMeta p = meta.properties.get(property);
 		if (p == null) {
 			if (meta.ctx.ignoreUnknownBeanProperties)
 				return null;
@@ -251,7 +251,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * @param value The value to add to the collection or array.
 	 */
 	public void add(String property, Object value) {
-		BeanPropertyMeta<T> p = meta.properties.get(property);
+		BeanPropertyMeta p = meta.properties.get(property);
 		if (p == null) {
 			if (meta.ctx.ignoreUnknownBeanProperties)
 				return;
@@ -301,7 +301,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 */
 	@Override /* Map */
 	public Object get(Object property) {
-		BeanPropertyMeta<T> p = meta.properties.get(property);
+		BeanPropertyMeta p = meta.properties.get(property);
 		if (p == null)
 			return null;
 		if (meta.transform != null && property != null)
@@ -385,11 +385,11 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * @param propertyName The name of the property to look up.
 	 * @return The bean property, or null if the bean has no such property.
 	 */
-	public BeanMapEntry<T> getProperty(String propertyName) {
-		BeanPropertyMeta<T> p = meta.properties.get(propertyName);
+	public BeanMapEntry getProperty(String propertyName) {
+		BeanPropertyMeta p = meta.properties.get(propertyName);
 		if (p == null)
 			return null;
-		return new BeanMapEntry<T>(this, p);
+		return new BeanMapEntry(this, p);
 	}
 
 	/**
@@ -398,7 +398,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * @param propertyName The name of the bean property.
 	 * @return Metadata on the specified property, or <jk>null</jk> if that property does not exist.
 	 */
-	public BeanPropertyMeta<T> getPropertyMeta(String propertyName) {
+	public BeanPropertyMeta getPropertyMeta(String propertyName) {
 		return meta.properties.get(propertyName);
 	}
 
@@ -422,12 +422,12 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * @return The list of all bean property values.
 	 */
 	public List<BeanPropertyValue> getValues(final boolean addClassAttr, final boolean ignoreNulls) {
-		Collection<BeanPropertyMeta<T>> properties = getProperties();
+		Collection<BeanPropertyMeta> properties = getProperties();
 		int capacity = (ignoreNulls && properties.size() > 10) ? 10 : properties.size() + (addClassAttr ? 1 : 0);
 		List<BeanPropertyValue> l = new ArrayList<BeanPropertyValue>(capacity);
 		if (addClassAttr)
 			l.add(new BeanPropertyValue(meta.getClassProperty(), meta.c.getName(), null));
-		for (BeanPropertyMeta<T> bpm : properties) {
+		for (BeanPropertyMeta bpm : properties) {
 			try {
 				Object val = bpm.get(this);
 				if (val != null || ! ignoreNulls)
@@ -446,7 +446,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * Returns a simple collection of properties for this bean map.
 	 * @return A simple collection of properties for this bean map.
 	 */
-	protected Collection<BeanPropertyMeta<T>> getProperties() {
+	protected Collection<BeanPropertyMeta> getProperties() {
 		return meta.properties.values();
 	}
 
@@ -464,7 +464,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 			// Note that the HashMap.values() method caches results, so this collection
 			// will really only be constructed once per bean type since the underlying
 			// map never changes.
-			final Collection<BeanPropertyMeta<T>> pSet = getProperties();
+			final Collection<BeanPropertyMeta> pSet = getProperties();
 
 			@Override /* Set */
 			public Iterator<java.util.Map.Entry<String, Object>> iterator() {
@@ -474,7 +474,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 				// collection objects.
 				return new Iterator<Entry<String,Object>>() {
 
-					final Iterator<BeanPropertyMeta<T>> pIterator = pSet.iterator();
+					final Iterator<BeanPropertyMeta> pIterator = pSet.iterator();
 
 					@Override /* Iterator */
 					public boolean hasNext() {
@@ -483,7 +483,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 
 					@Override /* Iterator */
 					public Map.Entry<String, Object> next() {
-						return new BeanMapEntry<T>(BeanMap.this, pIterator.next());
+						return new BeanMapEntry(BeanMap.this, pIterator.next());
 					}
 
 					@Override /* Iterator */
@@ -500,5 +500,10 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 		};
 
 		return s;
+	}
+
+	@SuppressWarnings("unchecked")
+	void setBean(Object bean) {
+		this.bean = (T)bean;
 	}
 }

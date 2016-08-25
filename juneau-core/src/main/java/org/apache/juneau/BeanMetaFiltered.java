@@ -36,7 +36,7 @@ public final class BeanMetaFiltered<T> extends BeanMeta<T> {
 	 */
 	public BeanMetaFiltered(BeanMeta<T> innerMeta, String[] pNames) {
 		this.innerMeta = innerMeta;
-		this.properties = new LinkedHashMap<String,BeanPropertyMeta<T>>();
+		this.properties = new LinkedHashMap<String,BeanPropertyMeta>();
 		for (String p : pNames)
 			properties.put(p, innerMeta.getPropertyMeta(p));
 		this.xmlMeta = new XmlBeanMeta<T>(innerMeta, pNames);
@@ -58,12 +58,12 @@ public final class BeanMetaFiltered<T> extends BeanMeta<T> {
 	}
 
 	@Override /* BeanMeta */
-	public Collection<BeanPropertyMeta<T>> getPropertyMetas() {
+	public Collection<BeanPropertyMeta> getPropertyMetas() {
 		return properties.values();
 	}
 
 	@Override /* BeanMeta */
-	public BeanPropertyMeta<T> getPropertyMeta(String name) {
+	public BeanPropertyMeta getPropertyMeta(String name) {
 		return properties.get(name);
 	}
 

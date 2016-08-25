@@ -32,6 +32,16 @@ public final class BeanRuntimeException extends FormattedRuntimeException {
 	}
 
 	/**
+	 * Constructor.
+	 *
+	 * @param message The error message.
+	 * @param args Arguments passed in to the {@code String.format()} method.
+	 */
+	public BeanRuntimeException(String message, Object...args) {
+		super(message, args);
+	}
+
+	/**
 	 * Shortcut for calling <code><jk>new</jk> BeanRuntimeException(String.format(c.getName() + <js>": "</js> + message, args));</code>
 	 *
 	 * @param c The class name of the bean that caused the exception.

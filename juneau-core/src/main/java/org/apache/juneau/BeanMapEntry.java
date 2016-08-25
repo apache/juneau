@@ -41,12 +41,10 @@ import org.apache.juneau.transform.*;
  * </p>
  *
  * @author James Bognar (james.bognar@salesforce.com)
- *
- * @param <T> The bean type.
  */
-public class BeanMapEntry<T> implements Map.Entry<String,Object> {
-	private final BeanMap<T> beanMap;
-	private final BeanPropertyMeta<T> meta;
+public class BeanMapEntry implements Map.Entry<String,Object> {
+	private final BeanMap<?> beanMap;
+	private final BeanPropertyMeta meta;
 
 	/**
 	 * Constructor.
@@ -54,7 +52,7 @@ public class BeanMapEntry<T> implements Map.Entry<String,Object> {
 	 * @param beanMap The bean map that this entry belongs to.
 	 * @param property The bean property.
 	 */
-	protected BeanMapEntry(BeanMap<T> beanMap, BeanPropertyMeta<T> property) {
+	protected BeanMapEntry(BeanMap<?> beanMap, BeanPropertyMeta property) {
 		this.beanMap = beanMap;
 		this.meta = property;
 	}
@@ -105,7 +103,7 @@ public class BeanMapEntry<T> implements Map.Entry<String,Object> {
 	 *
 	 * @return The bean map that contains this property.
 	 */
-	public BeanMap<T> getBeanMap() {
+	public BeanMap<?> getBeanMap() {
 		return this.beanMap;
 	}
 
@@ -114,7 +112,7 @@ public class BeanMapEntry<T> implements Map.Entry<String,Object> {
 	 *
 	 * @return Metadata about this bean property.
 	 */
-	public BeanPropertyMeta<T> getMeta() {
+	public BeanPropertyMeta getMeta() {
 		return this.meta;
 	}
 

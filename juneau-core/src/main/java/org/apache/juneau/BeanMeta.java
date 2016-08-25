@@ -70,7 +70,7 @@ public class BeanMeta<T> {
 	protected Class<T> c;
 
 	/** The properties on the target class. */
-	protected Map<String,BeanPropertyMeta<T>> properties;
+	protected Map<String,BeanPropertyMeta> properties;
 
 	/** The getter properties on the target class. */
 	protected Map<Method,String> getterProps = new HashMap<Method,String>();
@@ -97,10 +97,10 @@ public class BeanMeta<T> {
 	protected XmlBeanMeta<T> xmlMeta;
 
 	// Other fields
-	BeanPropertyMeta<T> uriProperty;                                 // The property identified as the URI for this bean (annotated with @BeanProperty.beanUri).
-	BeanPropertyMeta<T> subTypeIdProperty;                           // The property indentified as the sub type differentiator property (identified by @Bean.subTypeProperty annotation).
+	BeanPropertyMeta uriProperty;                                 // The property identified as the URI for this bean (annotated with @BeanProperty.beanUri).
+	BeanPropertyMeta subTypeIdProperty;                           // The property indentified as the sub type differentiator property (identified by @Bean.subTypeProperty annotation).
 	PropertyNamer propertyNamer;                                     // Class used for calculating bean property names.
-	BeanPropertyMeta<T> classProperty;                               // "_class" mock bean property.
+	BeanPropertyMeta classProperty;                               // "_class" mock bean property.
 
 	BeanMeta() {}
 
@@ -115,7 +115,7 @@ public class BeanMeta<T> {
 		this.classMeta = classMeta;
 		this.ctx = ctx;
 		this.transform = transform;
-		this.classProperty = new BeanPropertyMeta<T>(this, "_class", ctx.string());
+		this.classProperty = new BeanPropertyMeta(this, "_class", ctx.string());
 		this.c = classMeta.getInnerClass();
 	}
 
@@ -154,7 +154,7 @@ public class BeanMeta<T> {
 			if (stopClass == null)
 				stopClass = Object.class;
 
-			Map<String,BeanPropertyMeta<T>> normalProps = new LinkedHashMap<String,BeanPropertyMeta<T>>();
+			Map<String,BeanPropertyMeta> normalProps = new LinkedHashMap<String,BeanPropertyMeta>();
 
 			/// See if this class matches one the patterns in the exclude-class list.
 			if (ctx.isNotABean(c))
@@ -217,7 +217,7 @@ public class BeanMeta<T> {
 			// First populate the properties with those specified in the bean annotation to
 			// ensure that ordering first.
 			for (String name : fixedBeanProps)
-				normalProps.put(name, new BeanPropertyMeta<T>(this, name));
+				normalProps.put(name, new BeanPropertyMeta(this, name));
 
 			if (ctx.useJavaBeanIntrospector) {
 				BeanInfo bi = null;
@@ -229,7 +229,7 @@ public class BeanMeta<T> {
 					for (PropertyDescriptor pd : bi.getPropertyDescriptors()) {
 						String name = pd.getName();
 						if (! normalProps.containsKey(name))
-							normalProps.put(name, new BeanPropertyMeta<T>(this, name));
+							normalProps.put(name, new BeanPropertyMeta(this, name));
 						normalProps.get(name).setGetter(pd.getReadMethod()).setSetter(pd.getWriteMethod());
 					}
 				}
@@ -240,7 +240,7 @@ public class BeanMeta<T> {
 					String name = findPropertyName(f, fixedBeanProps);
 					if (name != null) {
 						if (! normalProps.containsKey(name))
-							normalProps.put(name, new BeanPropertyMeta<T>(this, name));
+							normalProps.put(name, new BeanPropertyMeta(this, name));
 						normalProps.get(name).setField(f);
 					}
 				}
@@ -252,8 +252,8 @@ public class BeanMeta<T> {
 					String pn = bm.propertyName;
 					Method m = bm.method;
 					if (! normalProps.containsKey(pn))
-						normalProps.put(pn, new BeanPropertyMeta<T>(this, pn));
-					BeanPropertyMeta<?> bpm = normalProps.get(pn);
+						normalProps.put(pn, new BeanPropertyMeta(this, pn));
+					BeanPropertyMeta bpm = normalProps.get(pn);
 					if (! bm.isSetter)
 						bpm.setGetter(m);
 				}
@@ -261,7 +261,7 @@ public class BeanMeta<T> {
 				// Now iterate through all the setters.
 				for (BeanMethod bm : bms) {
 					if (bm.isSetter) {
-						BeanPropertyMeta<?> bpm = normalProps.get(bm.propertyName);
+						BeanPropertyMeta bpm = normalProps.get(bm.propertyName);
 						if (bm.matchesPropertyType(bpm))
 							bpm.setSetter(bm.method);
 					}
@@ -274,8 +274,8 @@ public class BeanMeta<T> {
 				typeVarImpls = null;
 
 			// Eliminate invalid properties, and set the contents of getterProps and setterProps.
-			for (Iterator<BeanPropertyMeta<T>> i = normalProps.values().iterator(); i.hasNext();) {
-				BeanPropertyMeta<T> p = i.next();
+			for (Iterator<BeanPropertyMeta> i = normalProps.values().iterator(); i.hasNext();) {
+				BeanPropertyMeta p = i.next();
 				try {
 					if (p.validate()) {
 
@@ -303,7 +303,7 @@ public class BeanMeta<T> {
 
 			// Mark constructor arg properties.
 			for (String fp : constructorArgs) {
-				BeanPropertyMeta<T> m = normalProps.get(fp);
+				BeanPropertyMeta m = normalProps.get(fp);
 				if (m == null)
 					throw new BeanRuntimeException(c, "The property ''{0}'' was defined on the @BeanConstructor(properties=X) annotation but was not found on the class definition.", fp);
 				m.setAsConstructorArg();
@@ -315,7 +315,7 @@ public class BeanMeta<T> {
 
 			boolean sortProperties = (ctx.sortProperties || (transform != null && transform.isSortProperties())) && fixedBeanProps.isEmpty();
 
-			properties = sortProperties ? new TreeMap<String,BeanPropertyMeta<T>>() : new LinkedHashMap<String,BeanPropertyMeta<T>>();
+			properties = sortProperties ? new TreeMap<String,BeanPropertyMeta>() : new LinkedHashMap<String,BeanPropertyMeta>();
 
 			if (transform != null && transform.getSubTypeProperty() != null) {
 				String subTypeProperty = transform.getSubTypeProperty();
@@ -338,7 +338,7 @@ public class BeanMeta<T> {
 				// Only include specified properties if BeanTransform.includeKeys is specified.
 				// Note that the order must match includeKeys.
 				} else if (includeKeys != null) {
-					Map<String,BeanPropertyMeta<T>> properties2 = new LinkedHashMap<String,BeanPropertyMeta<T>>();
+					Map<String,BeanPropertyMeta> properties2 = new LinkedHashMap<String,BeanPropertyMeta>();
 					for (String k : includeKeys) {
 						if (properties.containsKey(k))
 							properties2.put(k, properties.get(k));
@@ -368,7 +368,7 @@ public class BeanMeta<T> {
 	 *
 	 * @return The meta property for the sub type property, or <jk>null</jk> if no subtype is defined for this bean.
 	 */
-	public BeanPropertyMeta<T> getSubTypeIdProperty() {
+	public BeanPropertyMeta getSubTypeIdProperty() {
 		return subTypeIdProperty;
 	}
 
@@ -396,7 +396,7 @@ public class BeanMeta<T> {
 	 *
 	 * @return The URI property, or <jk>null</jk> if no URI property exists on this bean.
 	 */
-	public BeanPropertyMeta<T> getBeanUriProperty() {
+	public BeanPropertyMeta getBeanUriProperty() {
 		return uriProperty;
 	}
 
@@ -406,7 +406,7 @@ public class BeanMeta<T> {
 	 *
 	 * @return The class name property.
 	 */
-	public BeanPropertyMeta<T> getClassProperty() {
+	public BeanPropertyMeta getClassProperty() {
 		return classProperty;
 	}
 
@@ -433,7 +433,7 @@ public class BeanMeta<T> {
 		 * Returns true if this method matches the class type of the specified property.
 		 * Only meant to be used for setters.
 		 */
-		boolean matchesPropertyType(BeanPropertyMeta<?> b) {
+		boolean matchesPropertyType(BeanPropertyMeta b) {
 			if (b == null)
 				return false;
 
@@ -557,7 +557,7 @@ public class BeanMeta<T> {
 	 *
 	 * @return Metadata on all properties associated with this bean.
 	 */
-	public Collection<BeanPropertyMeta<T>> getPropertyMetas() {
+	public Collection<BeanPropertyMeta> getPropertyMetas() {
 		return this.properties.values();
 	}
 
@@ -567,10 +567,10 @@ public class BeanMeta<T> {
 	 * @param pNames The list of properties to retrieve.  If <jk>null</jk>, returns all properties.
 	 * @return The metadata on the specified list of properties.
 	 */
-	public Collection<BeanPropertyMeta<T>> getPropertyMetas(final String...pNames) {
+	public Collection<BeanPropertyMeta> getPropertyMetas(final String...pNames) {
 		if (pNames == null)
 			return getPropertyMetas();
-		List<BeanPropertyMeta<T>> l = new ArrayList<BeanPropertyMeta<T>>(pNames.length);
+		List<BeanPropertyMeta> l = new ArrayList<BeanPropertyMeta>(pNames.length);
 		for (int i = 0; i < pNames.length; i++)
 			l.add(getPropertyMeta(pNames[i]));
 		return l;
@@ -592,7 +592,7 @@ public class BeanMeta<T> {
 	 * @return The metadata about the property, or <jk>null</jk> if no such property exists
 	 * 	on this bean.
 	 */
-	public BeanPropertyMeta<T> getPropertyMeta(String name) {
+	public BeanPropertyMeta getPropertyMeta(String name) {
 		return this.properties.get(name);
 	}
 
@@ -703,25 +703,25 @@ public class BeanMeta<T> {
 	 * Bean property for getting and setting bean subtype.
 	 */
 	@SuppressWarnings({"rawtypes","unchecked"})
-	private class SubTypePropertyMeta extends BeanPropertyMeta<T> {
+	private class SubTypePropertyMeta extends BeanPropertyMeta {
 
 		private Map<Class<?>,String> subTypes;
-		private BeanPropertyMeta<T> realProperty;  // Bean property if bean actually has a real subtype field.
+		private BeanPropertyMeta realProperty;  // Bean property if bean actually has a real subtype field.
 
-		SubTypePropertyMeta(String subTypeAttr, Map<Class<?>,String> subTypes, BeanPropertyMeta<T> realProperty) {
+		SubTypePropertyMeta(String subTypeAttr, Map<Class<?>,String> subTypes, BeanPropertyMeta realProperty) {
 			super(BeanMeta.this, subTypeAttr, ctx.string());
 			this.subTypes = subTypes;
 			this.realProperty = realProperty;
-			this.htmlMeta = new HtmlBeanPropertyMeta<T>(this);
-			this.xmlMeta = new XmlBeanPropertyMeta<T>(this);
-			this.rdfMeta = new RdfBeanPropertyMeta<T>(this);
+			this.htmlMeta = new HtmlBeanPropertyMeta(this);
+			this.xmlMeta = new XmlBeanPropertyMeta(this);
+			this.rdfMeta = new RdfBeanPropertyMeta(this);
 		}
 
 		/*
 		 * Setting this bean property causes the inner bean to be set to the subtype implementation.
 		 */
 		@Override /* BeanPropertyMeta */
-		public Object set(BeanMap<T> m, Object value) throws BeanRuntimeException {
+		public Object set(BeanMap<?> m, Object value) throws BeanRuntimeException {
 			if (value == null)
 				throw new BeanRuntimeException("Attempting to set bean subtype property to null.");
 			String subTypeId = value.toString();
@@ -730,7 +730,7 @@ public class BeanMeta<T> {
 					Class subTypeClass = e.getKey();
 					m.meta = ctx.getBeanMeta(subTypeClass);
 					try {
-						m.bean = (T)subTypeClass.newInstance();
+						m.setBean(subTypeClass.newInstance());
 						if (realProperty != null)
 							realProperty.set(m, value);
 						// If subtype attribute wasn't specified first, set them again from the temporary cache.
@@ -747,7 +747,7 @@ public class BeanMeta<T> {
 		}
 
 		@Override /* BeanPropertyMeta */
-		public Object get(BeanMap<T> m) throws BeanRuntimeException {
+		public Object get(BeanMap<?> m) throws BeanRuntimeException {
 			String subTypeId = transform.getSubTypes().get(c);
 			if (subTypeId == null)
 				throw new BeanRuntimeException(c, "Unmapped sub type class");
@@ -759,7 +759,7 @@ public class BeanMeta<T> {
 	public String toString() {
 		StringBuilder sb = new StringBuilder(c.getName());
 		sb.append(" {\n");
-		for (BeanPropertyMeta<?> pm : this.properties.values())
+		for (BeanPropertyMeta pm : this.properties.values())
 			sb.append('\t').append(pm.toString()).append(",\n");
 		sb.append('}');
 		return sb.toString();

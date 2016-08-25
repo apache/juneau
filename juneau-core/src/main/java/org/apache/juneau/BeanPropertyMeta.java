@@ -41,17 +41,16 @@ import org.apache.juneau.xml.*;
  * 	Developers will typically not need access to this class.  The information provided by it is already
  * 	exposed through several methods on the {@link BeanMap} API.
  *
- * @param <T> The class type of the bean that this metadata applies to.
  * @author James Bognar (james.bognar@salesforce.com)
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })
-public class BeanPropertyMeta<T> {
+public class BeanPropertyMeta {
 
 	private Field field;
 	private Method getter, setter;
 	private boolean isConstructorArg, isBeanUri, isUri;
 
-	private final BeanMeta<T> beanMeta;
+	private final BeanMeta<?> beanMeta;
 
 	private String name;
 	private ClassMeta<?>
@@ -61,13 +60,13 @@ public class BeanPropertyMeta<T> {
 	private PojoTransform transform;      // PojoTransform defined only via @BeanProperty annotation.
 
 	/** HTML related metadata on this bean property. */
-	protected HtmlBeanPropertyMeta<T> htmlMeta;
+	protected HtmlBeanPropertyMeta htmlMeta;
 
 	/** XML related metadata on this bean property. */
-	protected XmlBeanPropertyMeta<T> xmlMeta;
+	protected XmlBeanPropertyMeta xmlMeta;
 
 	/** RDF related metadata on this bean property. */
-	protected RdfBeanPropertyMeta<T> rdfMeta;  //
+	protected RdfBeanPropertyMeta rdfMeta;  //
 
 	/**
 	 * Constructor.
@@ -75,17 +74,17 @@ public class BeanPropertyMeta<T> {
 	 * @param beanMeta The metadata of the bean containing this property.
 	 * @param name This property name.
 	 */
-	protected BeanPropertyMeta(BeanMeta<T> beanMeta, String name) {
+	protected BeanPropertyMeta(BeanMeta<?> beanMeta, String name) {
 		this.beanMeta = beanMeta;
 		this.name = name;
 	}
 
-	BeanPropertyMeta(BeanMeta<T> beanMeta, String name, ClassMeta<?> rawTypeMeta) {
+	BeanPropertyMeta(BeanMeta<?> beanMeta, String name, ClassMeta<?> rawTypeMeta) {
 		this(beanMeta, name);
 		this.rawTypeMeta = rawTypeMeta;
 	}
 
-	BeanPropertyMeta(BeanMeta<T> beanMeta, String name, Method getter, Method setter) {
+	BeanPropertyMeta(BeanMeta<?> beanMeta, String name, Method getter, Method setter) {
 		this(beanMeta, name);
 		setGetter(getter);
 		setSetter(setter);
@@ -106,7 +105,7 @@ public class BeanPropertyMeta<T> {
 	 * @return The bean meta that this property belongs to.
 	 */
 	@BeanIgnore
-	public BeanMeta<T> getBeanMeta() {
+	public BeanMeta<?> getBeanMeta() {
 		return beanMeta;
 	}
 
@@ -158,7 +157,7 @@ public class BeanPropertyMeta<T> {
 	 * @param getter The getter method to associate with this property.
 	 * @return This object (for method chaining).
 	 */
-	BeanPropertyMeta<T> setGetter(Method getter) {
+	BeanPropertyMeta setGetter(Method getter) {
 		setAccessible(getter);
 		this.getter = getter;
 		return this;
@@ -170,7 +169,7 @@ public class BeanPropertyMeta<T> {
 	 * @param setter The setter method to associate with this property.
 	 * @return This object (for method chaining).
 	 */
-	BeanPropertyMeta<T> setSetter(Method setter) {
+	BeanPropertyMeta setSetter(Method setter) {
 		setAccessible(setter);
 		this.setter = setter;
 		return this;
@@ -182,7 +181,7 @@ public class BeanPropertyMeta<T> {
 	 * @param field The field to associate with this property.
 	 * @return This object (for method chaining).
 	 */
-	BeanPropertyMeta<T> setField(Field field) {
+	BeanPropertyMeta setField(Field field) {
 		setAccessible(field);
 		this.field = field;
 		return this;
@@ -193,7 +192,7 @@ public class BeanPropertyMeta<T> {
 	 *
 	 * @return This object (for method chaining).
 	 */
-	BeanPropertyMeta<T> setAsConstructorArg() {
+	BeanPropertyMeta setAsConstructorArg() {
 		this.isConstructorArg = true;
 		return this;
 	}
@@ -238,7 +237,7 @@ public class BeanPropertyMeta<T> {
 	 *
 	 * @return The HTML-related metadata on this bean property.  Never <jk>null</jk>/.
 	 */
-	public HtmlBeanPropertyMeta<T> getHtmlMeta() {
+	public HtmlBeanPropertyMeta getHtmlMeta() {
 		return htmlMeta;
 	}
 
@@ -247,7 +246,7 @@ public class BeanPropertyMeta<T> {
 	 *
 	 * @return The XML-related metadata on this bean property.  Never <jk>null</jk>/.
 	 */
-	public XmlBeanPropertyMeta<T> getXmlMeta() {
+	public XmlBeanPropertyMeta getXmlMeta() {
 		return xmlMeta;
 	}
 
@@ -256,7 +255,7 @@ public class BeanPropertyMeta<T> {
 	 *
 	 * @return The RDF-related metadata on this bean property.  Never <jk>null</jk>/.
 	 */
-	public RdfBeanPropertyMeta<T> getRdfMeta() {
+	public RdfBeanPropertyMeta getRdfMeta() {
 		return rdfMeta;
 	}
 
@@ -349,7 +348,7 @@ public class BeanPropertyMeta<T> {
 	 * @param m The bean map to get the transformed value from.
 	 * @return The property value.
 	 */
-	public Object get(BeanMap<T> m) {
+	public Object get(BeanMap<?> m) {
 		try {
 			// Read-only beans have their properties stored in a cache until getBean() is called.
 			Object bean = m.bean;
@@ -411,7 +410,7 @@ public class BeanPropertyMeta<T> {
 	 * @return The previous property value.
 	 * @throws BeanRuntimeException If property could not be set.
 	 */
-	public Object set(BeanMap<T> m, Object value) throws BeanRuntimeException {
+	public Object set(BeanMap<?> m, Object value) throws BeanRuntimeException {
 		try {
 			// Comvert to raw form.
 			value = normalize(value);
@@ -617,7 +616,7 @@ public class BeanPropertyMeta<T> {
 	 * @throws IllegalAccessException Thrown by method invocation.
 	 * @throws InvocationTargetException Thrown by method invocation.
 	 */
-	protected void setArray(T bean, List l) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+	protected void setArray(Object bean, List l) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
 		Object array = ArrayUtils.toArray(l, this.rawTypeMeta.getElementType().getInnerClass());
 		if (setter != null)
 			setter.invoke(bean, array);
@@ -636,7 +635,7 @@ public class BeanPropertyMeta<T> {
 	 * @param value The value to add to the field.
 	 * @throws BeanRuntimeException If field is not a collection or array.
 	 */
-	public void add(BeanMap<T> m, Object value) throws BeanRuntimeException {
+	public void add(BeanMap<?> m, Object value) throws BeanRuntimeException {
 
 		BeanContext bc = beanMeta.ctx;
 
