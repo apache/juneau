@@ -209,7 +209,7 @@ public class XmlSerializer extends WriterSerializer {
 		aType = session.push(null, o, null);
 
 		if (aType != null) {
-			Namespace ns = aType.getXmlMeta().getNamespace();
+			Namespace ns = aType.getExtendedMeta(XmlClassMeta.class).getNamespace();
 			if (ns != null) {
 				if (ns.uri != null)
 					session.addNamespace(ns);
@@ -227,8 +227,8 @@ public class XmlSerializer extends WriterSerializer {
 			} else if (aType.isBean()) {
 				bm = bc.forBean(o);
 			} else if (aType.isDelegate()) {
-				ClassMeta innerType = ((Delegate)o).getClassMeta();
-				Namespace ns = innerType.getXmlMeta().getNamespace();
+				ClassMeta<?> innerType = ((Delegate)o).getClassMeta();
+				Namespace ns = innerType.getExtendedMeta(XmlClassMeta.class).getNamespace();
 				if (ns != null) {
 					if (ns.uri != null)
 						session.addNamespace(ns);
@@ -237,8 +237,8 @@ public class XmlSerializer extends WriterSerializer {
 				}
 
 				if (innerType.isBean()) {
-					for (BeanPropertyMeta bpm : (Collection<BeanPropertyMeta>)innerType.getBeanMeta().getPropertyMetas()) {
-						ns = bpm.getXmlMeta().getNamespace();
+					for (BeanPropertyMeta bpm : innerType.getBeanMeta().getPropertyMetas()) {
+						ns = bpm.getExtendedMeta(XmlBeanPropertyMeta.class).getNamespace();
 						if (ns != null && ns.uri != null)
 							session.addNamespace(ns);
 					}
@@ -264,7 +264,7 @@ public class XmlSerializer extends WriterSerializer {
 			if (bm != null) {
 				for (BeanPropertyValue p : bm.getValues(false, session.isTrimNulls())) {
 
-					Namespace ns = p.getMeta().getXmlMeta().getNamespace();
+					Namespace ns = p.getMeta().getExtendedMeta(XmlBeanPropertyMeta.class).getNamespace();
 					if (ns != null && ns.uri != null)
 						session.addNamespace(ns);
 
@@ -362,7 +362,7 @@ public class XmlSerializer extends WriterSerializer {
 		else if (gType.isBoolean())
 			ts = "boolean";
 		else if (gType.isMap() || gType.isBean() || gType.hasToObjectMapMethod()) {
-			isCollapsed = gType.getXmlMeta().getFormat() == XmlFormat.COLLAPSED;
+			isCollapsed = gType.getExtendedMeta(XmlClassMeta.class).getFormat() == XmlFormat.COLLAPSED;
 			ts = "object";
 		}
 		else if (gType.isCollection() || gType.isArray()) {
@@ -375,9 +375,9 @@ public class XmlSerializer extends WriterSerializer {
 
 		// Is there a name associated with this bean?
 		if (elementName == null)
-			elementName = gType.getXmlMeta().getElementName();
+			elementName = gType.getExtendedMeta(XmlClassMeta.class).getElementName();
 		if (elementName == null)
-			elementName = aType.getXmlMeta().getElementName();
+			elementName = aType.getExtendedMeta(XmlClassMeta.class).getElementName();
 
 		// If the value is null then it's either going to be <null/> or <XmlSerializer nil='true'/>
 		// depending on whether the element has a name.
@@ -388,9 +388,9 @@ public class XmlSerializer extends WriterSerializer {
 
 		if (session.isEnableNamespaces()) {
 			if (elementNamespace == null)
-				elementNamespace = gType.getXmlMeta().getNamespace();
+				elementNamespace = gType.getExtendedMeta(XmlClassMeta.class).getNamespace();
 			if (elementNamespace == null)
-				elementNamespace = aType.getXmlMeta().getNamespace();
+				elementNamespace = aType.getExtendedMeta(XmlClassMeta.class).getNamespace();
 			if (elementNamespace != null && elementNamespace.uri == null)
 				elementNamespace = null;
 			if (elementNamespace == null)
@@ -528,11 +528,11 @@ public class XmlSerializer extends WriterSerializer {
 
 	private boolean serializeBeanMap(XmlSerializerSession session, XmlWriter out, BeanMap<?> m, Namespace elementNs, boolean isCollapsed) throws Exception {
 		boolean hasChildren = false;
-		BeanMeta bm = m.getMeta();
+		BeanMeta<?> bm = m.getMeta();
 
 		List<BeanPropertyValue> lp = m.getValues(false, session.isTrimNulls());
 
-		Map<String,BeanPropertyMeta> xmlAttrs = bm.getXmlMeta().getXmlAttrProperties();
+		Map<String,BeanPropertyMeta> xmlAttrs = bm.getExtendedMeta(XmlBeanMeta.class).getXmlAttrProperties();
 		Object content = null;
 		for (BeanPropertyValue p : lp) {
 			if (xmlAttrs.containsKey(p.getName())) {
@@ -546,7 +546,7 @@ public class XmlSerializer extends WriterSerializer {
 				if (session.canIgnoreValue(pMeta.getClassMeta(), key, value))
 					continue;
 
-				Namespace ns = (session.isEnableNamespaces() && pMeta.getXmlMeta().getNamespace() != elementNs ? pMeta.getXmlMeta().getNamespace() : null);
+				Namespace ns = (session.isEnableNamespaces() && pMeta.getExtendedMeta(XmlBeanPropertyMeta.class).getNamespace() != elementNs ? pMeta.getExtendedMeta(XmlBeanPropertyMeta.class).getNamespace() : null);
 
 				if (pMeta.isBeanUri() || pMeta.isUri())
 					out.attrUri(ns, key, value);
@@ -559,7 +559,7 @@ public class XmlSerializer extends WriterSerializer {
 
 		for (BeanPropertyValue p : lp) {
 			BeanPropertyMeta pMeta = p.getMeta();
-			XmlFormat xf = pMeta.getXmlMeta().getXmlFormat();
+			XmlFormat xf = pMeta.getExtendedMeta(XmlBeanPropertyMeta.class).getXmlFormat();
 
 			if (xf == CONTENT) {
 				content = p.getValue();
@@ -580,7 +580,7 @@ public class XmlSerializer extends WriterSerializer {
 					hasChildren = true;
 					out.appendIf(! isCollapsed, '>').nl();
 				}
-				serializeAnything(session, out, value, pMeta.getClassMeta(), key, pMeta.getXmlMeta().getNamespace(), false, pMeta.getXmlMeta().getXmlFormat(), pMeta);
+				serializeAnything(session, out, value, pMeta.getClassMeta(), key, pMeta.getExtendedMeta(XmlBeanPropertyMeta.class).getNamespace(), false, pMeta.getExtendedMeta(XmlBeanPropertyMeta.class).getXmlFormat(), pMeta);
 			}
 		}
 		if ((! hasContent) || session.canIgnoreValue(string(), null, content))
@@ -588,7 +588,7 @@ public class XmlSerializer extends WriterSerializer {
 		out.append('>').cr(session.indent);
 
 		// Serialize XML content.
-		XmlContentHandler h = bm.getXmlMeta().getXmlContentHandler();
+		XmlContentHandler h = bm.getExtendedMeta(XmlBeanMeta.class).getXmlContentHandler();
 		if (h != null)
 			h.serialize(out, m.getBean());
 		else
@@ -607,18 +607,18 @@ public class XmlSerializer extends WriterSerializer {
 		Namespace eNs = null;
 
 		if (ppMeta != null) {
-			eName = ppMeta.getXmlMeta().getChildName();
-			eNs = ppMeta.getXmlMeta().getNamespace();
+			eName = ppMeta.getExtendedMeta(XmlBeanPropertyMeta.class).getChildName();
+			eNs = ppMeta.getExtendedMeta(XmlBeanPropertyMeta.class).getNamespace();
 		}
 
 		if (eName == null) {
-			eName = type.getXmlMeta().getChildName();
-			eNs = type.getXmlMeta().getNamespace();
+			eName = type.getExtendedMeta(XmlClassMeta.class).getChildName();
+			eNs = type.getExtendedMeta(XmlClassMeta.class).getNamespace();
 		}
 
 		if (eName == null && ! elementType.isObject()) {
-			eName = elementType.getXmlMeta().getElementName();
-			eNs = elementType.getXmlMeta().getNamespace();
+			eName = elementType.getExtendedMeta(XmlClassMeta.class).getElementName();
+			eNs = elementType.getExtendedMeta(XmlClassMeta.class).getNamespace();
 		}
 
 		for (Iterator i = c.iterator(); i.hasNext();) {

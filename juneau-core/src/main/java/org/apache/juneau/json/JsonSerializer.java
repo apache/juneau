@@ -198,7 +198,7 @@ public class JsonSerializer extends WriterSerializer {
 				gType = bc.getClassMetaForObject(o);
 		}
 
-		String wrapperAttr = gType.getJsonMeta().getWrapperAttr();
+		String wrapperAttr = gType.getExtendedMeta(JsonClassMeta.class).getWrapperAttr();
 		if (wrapperAttr != null) {
 			out.append('{').cr(session.indent).attr(wrapperAttr).append(':').s();
 			session.indent++;

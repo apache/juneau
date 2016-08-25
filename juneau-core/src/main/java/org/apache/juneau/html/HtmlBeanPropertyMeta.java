@@ -20,22 +20,23 @@ import org.apache.juneau.html.annotation.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-public class HtmlBeanPropertyMeta {
+public class HtmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 
 	private boolean asXml, noTables, noTableHeaders, asPlainText;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param beanPropertyMeta The metadata of the bean property of this additional metadata.
+	 * @param bpm The metadata of the bean property of this additional metadata.
 	 */
-	public HtmlBeanPropertyMeta(BeanPropertyMeta beanPropertyMeta) {
-		if (beanPropertyMeta.getField() != null)
-			findHtmlInfo(beanPropertyMeta.getField().getAnnotation(Html.class));
-		if (beanPropertyMeta.getGetter() != null)
-			findHtmlInfo(beanPropertyMeta.getGetter().getAnnotation(Html.class));
-		if (beanPropertyMeta.getSetter() != null)
-			findHtmlInfo(beanPropertyMeta.getSetter().getAnnotation(Html.class));
+	public HtmlBeanPropertyMeta(BeanPropertyMeta bpm) {
+		super(bpm);
+		if (bpm.getField() != null)
+			findHtmlInfo(bpm.getField().getAnnotation(Html.class));
+		if (bpm.getGetter() != null)
+			findHtmlInfo(bpm.getGetter().getAnnotation(Html.class));
+		if (bpm.getSetter() != null)
+			findHtmlInfo(bpm.getSetter().getAnnotation(Html.class));
 	}
 
 	private void findHtmlInfo(Html html) {

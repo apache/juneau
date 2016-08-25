@@ -25,7 +25,7 @@ import org.apache.juneau.xml.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-public class RdfBeanPropertyMeta {
+public class RdfBeanPropertyMeta extends BeanPropertyMetaExtended {
 
 	private RdfCollectionFormat collectionFormat = DEFAULT;
 	private Namespace namespace = null;
@@ -33,12 +33,13 @@ public class RdfBeanPropertyMeta {
 	/**
 	 * Constructor.
 	 *
-	 * @param bpMeta The metadata of the bean property of this additional metadata.
+	 * @param bpm The metadata of the bean property of this additional metadata.
 	 */
-	public RdfBeanPropertyMeta(BeanPropertyMeta bpMeta) {
+	public RdfBeanPropertyMeta(BeanPropertyMeta bpm) {
+		super(bpm);
 
-		List<Rdf> rdfs = bpMeta.findAnnotations(Rdf.class);
-		List<RdfSchema> schemas = bpMeta.findAnnotations(RdfSchema.class);
+		List<Rdf> rdfs = bpm.findAnnotations(Rdf.class);
+		List<RdfSchema> schemas = bpm.findAnnotations(RdfSchema.class);
 
 		for (Rdf rdf : rdfs)
 			if (collectionFormat == DEFAULT)

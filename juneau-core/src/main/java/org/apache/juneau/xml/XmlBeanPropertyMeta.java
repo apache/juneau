@@ -22,33 +22,32 @@ import org.apache.juneau.xml.annotation.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-public class XmlBeanPropertyMeta {
+public class XmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 
 	private Namespace namespace = null;
 	private XmlFormat xmlFormat = XmlFormat.NORMAL;
 	private XmlContentHandler<?> xmlContentHandler = null;
 	private String childName;
-	private final BeanPropertyMeta beanPropertyMeta;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param beanPropertyMeta The metadata of the bean property of this additional metadata.
+	 * @param bpm The metadata of the bean property of this additional metadata.
 	 */
-	public XmlBeanPropertyMeta(BeanPropertyMeta beanPropertyMeta) {
-		this.beanPropertyMeta = beanPropertyMeta;
+	public XmlBeanPropertyMeta(BeanPropertyMeta bpm) {
+		super(bpm);
 
-		if (beanPropertyMeta.getField() != null)
-			findXmlInfo(beanPropertyMeta.getField().getAnnotation(Xml.class));
-		if (beanPropertyMeta.getGetter() != null)
-			findXmlInfo(beanPropertyMeta.getGetter().getAnnotation(Xml.class));
-		if (beanPropertyMeta.getSetter() != null)
-			findXmlInfo(beanPropertyMeta.getSetter().getAnnotation(Xml.class));
+		if (bpm.getField() != null)
+			findXmlInfo(bpm.getField().getAnnotation(Xml.class));
+		if (bpm.getGetter() != null)
+			findXmlInfo(bpm.getGetter().getAnnotation(Xml.class));
+		if (bpm.getSetter() != null)
+			findXmlInfo(bpm.getSetter().getAnnotation(Xml.class));
 
 		if (namespace == null)
-			namespace = beanPropertyMeta.getBeanMeta().getClassMeta().getXmlMeta().getNamespace();
+			namespace = bpm.getBeanMeta().getClassMeta().getExtendedMeta(XmlClassMeta.class).getNamespace();
 
-		if (beanPropertyMeta.isBeanUri() && xmlFormat != XmlFormat.ELEMENT)
+		if (bpm.isBeanUri() && xmlFormat != XmlFormat.ELEMENT)
 			xmlFormat = XmlFormat.ATTR;
 	}
 
@@ -102,26 +101,18 @@ public class XmlBeanPropertyMeta {
 		return childName;
 	}
 
-	/**
-	 * Returns the bean property metadata that this metadata belongs to.
-	 *
-	 * @return The bean property metadata.  Never <jk>null</jk>.
-	 */
-	protected BeanPropertyMeta getBeanPropertyMeta() {
-		return beanPropertyMeta;
-	}
-
 	private void findXmlInfo(Xml xml) {
 		if (xml == null)
 			return;
-		ClassMeta<?> cmProperty = beanPropertyMeta.getClassMeta();
-		ClassMeta<?> cmBean = beanPropertyMeta.getBeanMeta().getClassMeta();
-		String name = beanPropertyMeta.getName();
+		BeanPropertyMeta bpm = getBeanPropertyMeta();
+		ClassMeta<?> cmProperty = bpm.getClassMeta();
+		ClassMeta<?> cmBean = bpm.getBeanMeta().getClassMeta();
+		String name = bpm.getName();
 		if (! xml.name().isEmpty())
 			throw new BeanRuntimeException(cmBean.getInnerClass(), "Annotation error on property ''{0}''.  Found @Xml.name annotation can only be specified on types.", name);
 
-		List<Xml> xmls = beanPropertyMeta.findAnnotations(Xml.class);
-		List<XmlSchema> schemas = beanPropertyMeta.findAnnotations(XmlSchema.class);
+		List<Xml> xmls = bpm.findAnnotations(Xml.class);
+		List<XmlSchema> schemas = bpm.findAnnotations(XmlSchema.class);
 		namespace = XmlUtils.findNamespace(xmls, schemas);
 
 		if (xmlFormat == XmlFormat.NORMAL)
@@ -136,16 +127,16 @@ public class XmlBeanPropertyMeta {
 		if (xmlFormat == XmlFormat.COLLAPSED) {
 			if (isCollection) {
 				if (cen.isEmpty())
-					cen = cmProperty.getXmlMeta().getChildName();
+					cen = cmProperty.getExtendedMeta(XmlClassMeta.class).getChildName();
 				if (cen == null || cen.isEmpty())
-					cen = cmProperty.getElementType().getXmlMeta().getElementName();
+					cen = cmProperty.getElementType().getExtendedMeta(XmlClassMeta.class).getElementName();
 				if (cen == null || cen.isEmpty())
 					cen = name;
 			} else {
 				throw new BeanRuntimeException(cmBean.getInnerClass(), "Annotation error on property ''{0}''.  @Xml.format=COLLAPSED can only be specified on collections and arrays.", name);
 			}
 			if (cen.isEmpty() && isCollection)
-				cen = cmProperty.getXmlMeta().getElementName();
+				cen = cmProperty.getExtendedMeta(XmlClassMeta.class).getElementName();
 		}
 
 		try {

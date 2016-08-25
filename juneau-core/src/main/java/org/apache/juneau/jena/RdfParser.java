@@ -231,8 +231,8 @@ public class RdfParser extends ReaderParser {
 	}
 
 	private boolean isMultiValuedCollections(RdfParserSession session, BeanPropertyMeta pMeta) {
-		if (pMeta != null && pMeta.getRdfMeta().getCollectionFormat() != RdfCollectionFormat.DEFAULT)
-			return pMeta.getRdfMeta().getCollectionFormat() == RdfCollectionFormat.MULTI_VALUED;
+		if (pMeta != null && pMeta.getExtendedMeta(RdfBeanPropertyMeta.class).getCollectionFormat() != RdfCollectionFormat.DEFAULT)
+			return pMeta.getExtendedMeta(RdfBeanPropertyMeta.class).getCollectionFormat() == RdfCollectionFormat.MULTI_VALUED;
 		return session.getCollectionFormat() == RdfCollectionFormat.MULTI_VALUED;
 	}
 
