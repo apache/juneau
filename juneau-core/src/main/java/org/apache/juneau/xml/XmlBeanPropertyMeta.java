@@ -21,22 +21,21 @@ import org.apache.juneau.xml.annotation.*;
  * Metadata on bean properties specific to the XML serializers and parsers pulled from the {@link Xml @Xml} annotation on the bean property.
  *
  * @author James Bognar (james.bognar@salesforce.com)
- * @param <T> The bean class.
  */
-public class XmlBeanPropertyMeta<T> {
+public class XmlBeanPropertyMeta {
 
 	private Namespace namespace = null;
 	private XmlFormat xmlFormat = XmlFormat.NORMAL;
-	private XmlContentHandler<T> xmlContentHandler = null;
+	private XmlContentHandler<?> xmlContentHandler = null;
 	private String childName;
-	private final BeanPropertyMeta<T> beanPropertyMeta;
+	private final BeanPropertyMeta beanPropertyMeta;
 
 	/**
 	 * Constructor.
 	 *
 	 * @param beanPropertyMeta The metadata of the bean property of this additional metadata.
 	 */
-	public XmlBeanPropertyMeta(BeanPropertyMeta<T> beanPropertyMeta) {
+	public XmlBeanPropertyMeta(BeanPropertyMeta beanPropertyMeta) {
 		this.beanPropertyMeta = beanPropertyMeta;
 
 		if (beanPropertyMeta.getField() != null)
@@ -90,7 +89,7 @@ public class XmlBeanPropertyMeta<T> {
 	 *
 	 * @return The XML content handler, or <jk>null</jk> if annotation not specified.
 	 */
-	protected XmlContentHandler<T> getXmlContentHandler() {
+	protected XmlContentHandler<?> getXmlContentHandler() {
 		return xmlContentHandler;
 	}
 
@@ -108,11 +107,10 @@ public class XmlBeanPropertyMeta<T> {
 	 *
 	 * @return The bean property metadata.  Never <jk>null</jk>.
 	 */
-	protected BeanPropertyMeta<T> getBeanPropertyMeta() {
+	protected BeanPropertyMeta getBeanPropertyMeta() {
 		return beanPropertyMeta;
 	}
 
-	@SuppressWarnings("unchecked")
 	private void findXmlInfo(Xml xml) {
 		if (xml == null)
 			return;
@@ -152,7 +150,7 @@ public class XmlBeanPropertyMeta<T> {
 
 		try {
 			if (xmlFormat == XmlFormat.CONTENT && xml.contentHandler() != XmlContentHandler.NULL.class)
-				xmlContentHandler = (XmlContentHandler<T>) xml.contentHandler().newInstance();
+				xmlContentHandler = xml.contentHandler().newInstance();
 		} catch (Exception e) {
 			throw new BeanRuntimeException(cmBean.getInnerClass(), "Could not instantiate content handler ''{0}''", xml.contentHandler().getName()).initCause(e);
 		}

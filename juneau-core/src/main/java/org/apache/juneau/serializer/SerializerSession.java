@@ -74,7 +74,7 @@ public class SerializerSession extends Session {
 	private final Object output;
 	private OutputStream outputStream;
 	private Writer writer, flushOnlyWriter;
-	private BeanPropertyMeta<?> currentProperty;
+	private BeanPropertyMeta currentProperty;
 	private ClassMeta<?> currentClass;
 
 
@@ -223,7 +223,7 @@ public class SerializerSession extends Session {
 	 * Sets the current bean property being serialized for proper error messages.
 	 * @param currentProperty The current property being serialized.
 	 */
-	public void setCurrentProperty(BeanPropertyMeta<?> currentProperty) {
+	public void setCurrentProperty(BeanPropertyMeta currentProperty) {
 		this.currentProperty = currentProperty;
 	}
 
@@ -505,7 +505,7 @@ public class SerializerSession extends Session {
 	 * @param p The bean map entry representing the bean property.
 	 * @param t The throwable that the bean getter threw.
 	 */
-	public void addBeanGetterWarning(BeanPropertyMeta<?> p, Throwable t) {
+	public void addBeanGetterWarning(BeanPropertyMeta p, Throwable t) {
 		String prefix = (debug ? getStack(false) + ": " : "");
 		addWarning("{0}Could not call getValue() on property ''{1}'' of class ''{2}'', exception = {3}", prefix, p.getName(), p.getBeanMeta().getClassMeta(), t.getLocalizedMessage());
 	}

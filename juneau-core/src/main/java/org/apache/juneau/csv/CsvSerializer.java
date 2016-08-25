@@ -23,7 +23,7 @@ import org.apache.juneau.serializer.*;
  * TODO - Work in progress.  CSV serializer.
  */
 @Produces("text/csv")
-@SuppressWarnings({"unchecked","rawtypes"})
+@SuppressWarnings({"rawtypes"})
 public final class CsvSerializer extends WriterSerializer {
 
 	//--------------------------------------------------------------------------------

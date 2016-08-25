@@ -43,7 +43,7 @@ public class ParserSession extends Session {
 	private final Object input;
 	private InputStream inputStream;
 	private Reader reader, noCloseReader;
-	private BeanPropertyMeta<?> currentProperty;
+	private BeanPropertyMeta currentProperty;
 	private ClassMeta<?> currentClass;
 
 	/**
@@ -202,7 +202,7 @@ public class ParserSession extends Session {
 	 * Sets the current bean property being parsed for proper error messages.
 	 * @param currentProperty The current property being parsed.
 	 */
-	public void setCurrentProperty(BeanPropertyMeta<?> currentProperty) {
+	public void setCurrentProperty(BeanPropertyMeta currentProperty) {
 		this.currentProperty = currentProperty;
 	}
 

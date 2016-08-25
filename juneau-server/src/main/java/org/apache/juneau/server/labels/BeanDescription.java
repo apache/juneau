@@ -23,11 +23,10 @@ import org.apache.juneau.annotation.*;
  * <p>
  * 	Useful for rendering simple information about a bean during REST OPTIONS requests.
  *
- * @param <T> The class type of the bean.
  * @author James Bognar (james.bognar@salesforce.com)
  */
 @Bean(properties={"type","properties"})
-public final class BeanDescription<T> {
+public final class BeanDescription {
 
 	/** The bean class type. */
 	public String type;
@@ -39,12 +38,12 @@ public final class BeanDescription<T> {
 	 * Constructor
 	 * @param c The bean class type.
 	 */
-	public BeanDescription(Class<T> c) {
+	public BeanDescription(Class<?> c) {
 		type = c.getName();
-		BeanMeta<T> bm = BeanContext.DEFAULT.getBeanMeta(c);
+		BeanMeta<?> bm = BeanContext.DEFAULT.getBeanMeta(c);
 		properties = new BeanPropertyDescription[bm.getPropertyMetas().size()];
 		int i = 0;
-		for (BeanPropertyMeta<T> pm : bm.getPropertyMetas())
+		for (BeanPropertyMeta pm : bm.getPropertyMetas())
 			properties[i++] = new BeanPropertyDescription(pm.getName(), pm.getClassMeta());
 	}
 

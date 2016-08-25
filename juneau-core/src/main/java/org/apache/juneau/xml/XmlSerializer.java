@@ -297,7 +297,7 @@ public class XmlSerializer extends WriterSerializer {
 	 */
 	protected XmlWriter serializeAnything(XmlSerializerSession session, XmlWriter out, Object o,
 			ClassMeta eType, String elementName, Namespace elementNamespace, boolean addNamespaceUris,
-			XmlFormat format, BeanPropertyMeta<?> pMeta) throws Exception {
+			XmlFormat format, BeanPropertyMeta pMeta) throws Exception {
 
 		BeanContext bc = session.getBeanContext();
 		String ts = null;              // The type string (e.g. <type> or <x x='type'>
@@ -597,7 +597,7 @@ public class XmlSerializer extends WriterSerializer {
 		return true;
 	}
 
-	private XmlWriter serializeCollection(XmlSerializerSession session, XmlWriter out, Collection c, ClassMeta<?> type, BeanPropertyMeta<?> ppMeta) throws Exception {
+	private XmlWriter serializeCollection(XmlSerializerSession session, XmlWriter out, Collection c, ClassMeta<?> type, BeanPropertyMeta ppMeta) throws Exception {
 
 		c = session.sort(c);
 

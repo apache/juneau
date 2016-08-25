@@ -338,7 +338,7 @@ public final class HtmlParser extends ReaderParser {
 						//onUnknownProperty(key, m, -1, -1);
 						parseAnything(session, object(), r, l);
 					} else {
-						BeanPropertyMeta<?> bpm = e.getMeta();
+						BeanPropertyMeta bpm = e.getMeta();
 						ClassMeta<?> cm = bpm.getClassMeta();
 						Object value = parseAnything(session, cm, r, m.getBean(false));
 						setName(cm, value, key);

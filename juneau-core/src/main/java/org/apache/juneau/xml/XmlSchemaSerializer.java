@@ -370,7 +370,7 @@ public class XmlSchemaSerializer extends XmlSerializer {
 
 					boolean hasChildElements = false;
 
-					for (BeanPropertyMeta<?> pMeta : bm.getPropertyMetas())
+					for (BeanPropertyMeta pMeta : bm.getPropertyMetas())
 						if (pMeta.getXmlMeta().getXmlFormat() != XmlFormat.ATTR && pMeta.getXmlMeta().getXmlFormat() != XmlFormat.CONTENT)
 							hasChildElements = true;
 
@@ -387,8 +387,8 @@ public class XmlSchemaSerializer extends XmlSerializer {
 
 						boolean hasOtherNsElement = false;
 
-						for (BeanPropertyMeta<?> pMeta : bm.getPropertyMetas()) {
-							XmlBeanPropertyMeta<?> xmlMeta = pMeta.getXmlMeta();
+						for (BeanPropertyMeta pMeta : bm.getPropertyMetas()) {
+							XmlBeanPropertyMeta xmlMeta = pMeta.getXmlMeta();
 							if (xmlMeta.getXmlFormat() != XmlFormat.ATTR) {
 								boolean isCollapsed = xmlMeta.getXmlFormat() == COLLAPSED;
 								ClassMeta<?> ct2 = pMeta.getClassMeta();
@@ -433,7 +433,7 @@ public class XmlSchemaSerializer extends XmlSerializer {
 						w.eTag(i+1, "sequence").nl();
 					}
 
-					for (BeanPropertyMeta<?> pMeta : bm.getXmlMeta().getXmlAttrProperties().values()) {
+					for (BeanPropertyMeta pMeta : bm.getXmlMeta().getXmlAttrProperties().values()) {
 						Namespace pNs = pMeta.getXmlMeta().getNamespace();
 						if (pNs == null)
 							pNs = defaultNs;

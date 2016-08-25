@@ -186,7 +186,7 @@ public class RdfParser extends ReaderParser {
 		if (bm.hasBeanUriProperty() && r2.getURI() != null)
 			m.putBeanUri(r2.getURI());
 		Property subTypeIdProperty = null;
-		BeanPropertyMeta<T> stp = bm.getSubTypeIdProperty();
+		BeanPropertyMeta stp = bm.getSubTypeIdProperty();
 		if (stp != null) {
 			subTypeIdProperty = session.getProperty(stp.getName());
 			Statement st = r2.getProperty(subTypeIdProperty);
@@ -201,7 +201,7 @@ public class RdfParser extends ReaderParser {
 			if (p.equals(subTypeIdProperty))
 				continue;
 			String key = session.decodeString(p.getLocalName());
-			BeanPropertyMeta<T> pMeta = m.getPropertyMeta(key);
+			BeanPropertyMeta pMeta = m.getPropertyMeta(key);
 			session.setCurrentProperty(pMeta);
 			if (pMeta != null) {
 				RDFNode o = st.getObject();
@@ -230,7 +230,7 @@ public class RdfParser extends ReaderParser {
 		return m;
 	}
 
-	private boolean isMultiValuedCollections(RdfParserSession session, BeanPropertyMeta<?> pMeta) {
+	private boolean isMultiValuedCollections(RdfParserSession session, BeanPropertyMeta pMeta) {
 		if (pMeta != null && pMeta.getRdfMeta().getCollectionFormat() != RdfCollectionFormat.DEFAULT)
 			return pMeta.getRdfMeta().getCollectionFormat() == RdfCollectionFormat.MULTI_VALUED;
 		return session.getCollectionFormat() == RdfCollectionFormat.MULTI_VALUED;

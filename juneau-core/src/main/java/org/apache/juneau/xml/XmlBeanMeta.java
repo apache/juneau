@@ -26,10 +26,10 @@ import org.apache.juneau.xml.annotation.*;
 public class XmlBeanMeta<T> {
 
 	// XML related fields
-	private final Map<String,BeanPropertyMeta<T>> xmlAttrs;                        // Map of bean properties that are represented as XML attributes.
-	private final BeanPropertyMeta<T> xmlContent;                                  // Bean property that is represented as XML content within the bean element.
-	private final XmlContentHandler<T> xmlContentHandler;                          // Class used to convert bean to XML content.
-	private final Map<String,BeanPropertyMeta<T>> childElementProperties;          // Properties defined with @Xml.childName annotation.
+	private final Map<String,BeanPropertyMeta> xmlAttrs;                        // Map of bean properties that are represented as XML attributes.
+	private final BeanPropertyMeta xmlContent;                                  // Bean property that is represented as XML content within the bean element.
+	private final XmlContentHandler<T> xmlContentHandler;                       // Class used to convert bean to XML content.
+	private final Map<String,BeanPropertyMeta> childElementProperties;          // Properties defined with @Xml.childName annotation.
 	private final BeanMeta<T> beanMeta;
 
 	/**
@@ -38,16 +38,17 @@ public class XmlBeanMeta<T> {
 	 * @param beanMeta The metadata on the bean that this metadata applies to.
 	 * @param pNames Only look at these property names.  If <jk>null</jk>, apply to all bean properties.
 	 */
+	@SuppressWarnings("unchecked")
 	public XmlBeanMeta(BeanMeta<T> beanMeta, String[] pNames) {
 		this.beanMeta = beanMeta;
 		Class<T> c = beanMeta.getClassMeta().getInnerClass();
 
-		Map<String,BeanPropertyMeta<T>> tXmlAttrs = new LinkedHashMap<String,BeanPropertyMeta<T>>();
-		BeanPropertyMeta<T> tXmlContent = null;
+		Map<String,BeanPropertyMeta> tXmlAttrs = new LinkedHashMap<String,BeanPropertyMeta>();
+		BeanPropertyMeta tXmlContent = null;
 		XmlContentHandler<T> tXmlContentHandler = null;
-		Map<String,BeanPropertyMeta<T>> tChildElementProperties = new LinkedHashMap<String,BeanPropertyMeta<T>>();
+		Map<String,BeanPropertyMeta> tChildElementProperties = new LinkedHashMap<String,BeanPropertyMeta>();
 
-		for (BeanPropertyMeta<T> p : beanMeta.getPropertyMetas(pNames)) {
+		for (BeanPropertyMeta p : beanMeta.getPropertyMetas(pNames)) {
 			XmlFormat xf = p.getXmlMeta().getXmlFormat();
 			if (xf == XmlFormat.ATTR)
 				tXmlAttrs.put(p.getName(), p);
@@ -55,7 +56,7 @@ public class XmlBeanMeta<T> {
 				if (tXmlContent != null)
 					throw new BeanRuntimeException(c, "Multiple instances of CONTENT properties defined on class.  Only one property can be designated as such.");
 				tXmlContent = p;
-				tXmlContentHandler = p.getXmlMeta().getXmlContentHandler();
+				tXmlContentHandler = (XmlContentHandler<T>) p.getXmlMeta().getXmlContentHandler();
 			}
 			// Look for any properties that are collections with @Xml.childName specified.
 			String n = p.getXmlMeta().getChildName();
@@ -78,7 +79,7 @@ public class XmlBeanMeta<T> {
 	 *
 	 * @return Metadata on the XML attribute properties of the bean.
 	 */
-	protected Map<String,BeanPropertyMeta<T>> getXmlAttrProperties() {
+	protected Map<String,BeanPropertyMeta> getXmlAttrProperties() {
 		return xmlAttrs;
 	}
 
@@ -87,7 +88,7 @@ public class XmlBeanMeta<T> {
 	 *
 	 * @return The bean property, or <jk>null</jk> if annotation is not specified.
 	 */
-	protected BeanPropertyMeta<T> getXmlContentProperty() {
+	protected BeanPropertyMeta getXmlContentProperty() {
 		return xmlContent;
 	}
 
@@ -106,7 +107,7 @@ public class XmlBeanMeta<T> {
 	 *
 	 * @return The child element properties for this bean, or <jk>null</jk> if no child element properties are defined.
 	 */
-	protected Map<String,BeanPropertyMeta<T>> getChildElementProperties() {
+	protected Map<String,BeanPropertyMeta> getChildElementProperties() {
 		return childElementProperties;
 	}
 
@@ -118,9 +119,9 @@ public class XmlBeanMeta<T> {
 	 * @param fieldName The bean property name.
 	 * @return The property metadata.
 	 */
-	protected BeanPropertyMeta<T> getPropertyMeta(String fieldName) {
+	protected BeanPropertyMeta getPropertyMeta(String fieldName) {
 		if (childElementProperties != null) {
-			BeanPropertyMeta<T> bpm = childElementProperties.get(fieldName);
+			BeanPropertyMeta bpm = childElementProperties.get(fieldName);
 			if (bpm != null)
 				return bpm;
 		}

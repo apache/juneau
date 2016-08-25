@@ -19,9 +19,8 @@ import org.apache.juneau.html.annotation.*;
  * Metadata on bean properties specific to the HTML serializers and parsers pulled from the {@link Html @Html} annotation on the bean property.
  *
  * @author James Bognar (james.bognar@salesforce.com)
- * @param <T> The bean class.
  */
-public class HtmlBeanPropertyMeta<T> {
+public class HtmlBeanPropertyMeta {
 
 	private boolean asXml, noTables, noTableHeaders, asPlainText;
 
@@ -30,7 +29,7 @@ public class HtmlBeanPropertyMeta<T> {
 	 *
 	 * @param beanPropertyMeta The metadata of the bean property of this additional metadata.
 	 */
-	public HtmlBeanPropertyMeta(BeanPropertyMeta<T> beanPropertyMeta) {
+	public HtmlBeanPropertyMeta(BeanPropertyMeta beanPropertyMeta) {
 		if (beanPropertyMeta.getField() != null)
 			findHtmlInfo(beanPropertyMeta.getField().getAnnotation(Html.class));
 		if (beanPropertyMeta.getGetter() != null)
