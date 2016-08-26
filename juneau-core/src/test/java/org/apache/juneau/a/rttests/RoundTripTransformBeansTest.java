@@ -21,7 +21,7 @@ import javax.xml.datatype.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.annotation.Transform;
+import org.apache.juneau.annotation.Pojo;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
@@ -228,7 +228,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 		assertEquals("bar", t.f1);
 	}
 
-	@Transform(BTransform.class)
+	@Pojo(transform=BTransform.class)
 	public static class B {
 		public String f1;
 	}

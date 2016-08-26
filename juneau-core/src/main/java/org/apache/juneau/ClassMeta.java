@@ -26,7 +26,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.transform.Transform;
-import org.apache.juneau.utils.*; 
+import org.apache.juneau.utils.*;
 
 /**
  * A wrapper class around the {@link Class} object that provides cached information
@@ -431,9 +431,9 @@ public final class ClassMeta<T> implements Type {
 
 	private Transform findTransform(BeanContext context) {
 		try {
-			org.apache.juneau.annotation.Transform b = innerClass.getAnnotation(org.apache.juneau.annotation.Transform.class);
+			org.apache.juneau.annotation.Pojo b = innerClass.getAnnotation(org.apache.juneau.annotation.Pojo.class);
 			if (b != null) {
-				Class<? extends Transform> c = b.value();
+				Class<? extends Transform> c = b.transform();
 				if (c != Transform.NULL.class) {
 					Transform f = c.newInstance();
 					f.setBeanContext(context);

@@ -21,7 +21,9 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 
 /**
- * Annotation that can be applied to a class to associate a transform with it.
+ * Used to tailor how POJOs get interpreted by the framework.
+ * <p>
+ * 	Annotation that can be applied to POJOs to associate transforms with them.
  * <p>
  * 	Typically used to associate {@link PojoTransform PojoTransforms} with classes using annotations
  * 		instead of programatically through a method such as {@link Serializer#addTransforms(Class...)}.
@@ -31,7 +33,7 @@ import org.apache.juneau.transform.*;
  * 	In this case, a transform is being applied to a bean that will force it to be serialized as a <code>String</code>
  * <p class='bcode'>
  * 	<jc>// Our bean class</jc>
- * 	<ja>@Transform</ja>(BTransform.<jk>class</jk>)
+ * 	<ja>@Pojo</ja>(transform=BTransform.<jk>class</jk>)
  * 	<jk>public class</jk> B {
  * 		<jk>public</jk> String <jf>f1</jf>;
  * 	}
@@ -77,10 +79,10 @@ import org.apache.juneau.transform.*;
 @Target(TYPE)
 @Retention(RUNTIME)
 @Inherited
-public @interface Transform {
+public @interface Pojo {
 
 	/**
 	 * The transform class.
 	 */
-	Class<? extends org.apache.juneau.transform.Transform> value() default org.apache.juneau.transform.Transform.NULL.class;
+	Class<? extends Transform> transform() default Transform.NULL.class;
 }

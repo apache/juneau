@@ -19,7 +19,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.annotation.Transform;
+import org.apache.juneau.annotation.Pojo;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.testbeans.*;
@@ -100,7 +100,7 @@ public class HtmlTest {
 		public String f2 = "f2";
 	}
 
-	@Transform(A4Transform.class)
+	@Pojo(transform=A4Transform.class)
 	public static class A4 {
 		public String f2 = "f2";
 	}
@@ -112,7 +112,7 @@ public class HtmlTest {
 		}
 	}
 
-	@Transform(A5Transform.class)
+	@Pojo(transform=A5Transform.class)
 	public static class A5 {
 		public String f2 = "f2";
 	}
