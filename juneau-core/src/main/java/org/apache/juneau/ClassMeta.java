@@ -433,11 +433,14 @@ public final class ClassMeta<T> implements Type {
 		try {
 			org.apache.juneau.annotation.Pojo b = innerClass.getAnnotation(org.apache.juneau.annotation.Pojo.class);
 			if (b != null) {
-				Class<? extends Transform> c = b.transform();
-				if (c != Transform.NULL.class) {
-					Transform f = c.newInstance();
-					f.setBeanContext(context);
-					return f;
+				Class<?> c = b.swap();
+				if (c != Null.class) {
+					if (ClassUtils.isParentClass(PojoSwap.class, c)) {
+						Transform f = (Transform)c.newInstance();
+						f.setBeanContext(context);
+						return f;
+					}
+					throw new RuntimeException("TODO - Surrogate classes not yet supported.");
 				}
 			}
 			if (context == null)

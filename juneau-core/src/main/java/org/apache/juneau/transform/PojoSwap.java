@@ -91,9 +91,6 @@ import org.apache.juneau.serializer.*;
  */
 public abstract class PojoSwap<T,S> extends Transform {
 
-	/** Represents no transform. */
-	public static class NULL extends PojoSwap<Object,Object> {}
-
 	Class<T> normalClass;
 	Class<S> transformedClass;
 	ClassMeta<S> transformedClassMeta;

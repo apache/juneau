@@ -46,9 +46,6 @@ import org.apache.juneau.*;
  */
 public class Transform {
 
-	/** Represents no transform. */
-	public static class NULL extends Transform {}
-
 	/** The transform subtype */
 	public static enum TransformType {
 		/** PojoSwap */

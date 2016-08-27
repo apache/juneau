@@ -300,13 +300,16 @@ public class BeanPropertyMeta {
 	}
 
 	private PojoSwap getPropertyPojoSwap(BeanProperty p) throws Exception {
-		Class<? extends PojoSwap> c = p.transform();
-		if (c == PojoSwap.NULL.class)
+		Class<?> c = p.swap();
+		if (c == Null.class)
 			return null;
 		try {
-			PojoSwap f = c.newInstance();
-			f.setBeanContext(this.beanMeta.ctx);
-			return f;
+			if (ClassUtils.isParentClass(PojoSwap.class, c)) {
+				PojoSwap f = (PojoSwap)c.newInstance();
+				f.setBeanContext(this.beanMeta.ctx);
+				return f;
+			}
+			throw new RuntimeException("TODO - Surrogate swaps not yet supported.");
 		} catch (Exception e) {
 			throw new BeanRuntimeException(this.beanMeta.c, "Could not instantiate PojoSwap ''{0}'' for bean property ''{1}''", c.getName(), this.name).initCause(e);
 		}

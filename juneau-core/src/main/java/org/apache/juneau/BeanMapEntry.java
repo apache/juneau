@@ -69,7 +69,7 @@ public class BeanMapEntry implements Map.Entry<String,Object> {
 	 * 	this method will return the transformed value.
 	 * For example, if the bean property type class is a {@link Date} and the bean property has the
 	 * 	{@link org.apache.juneau.transforms.DateSwap.ISO8601DT} transform associated with it through the
-	 * 	{@link BeanProperty#transform() @BeanProperty.transform()} annotation, this method will return a String
+	 * 	{@link BeanProperty#swap() @BeanProperty.swap()} annotation, this method will return a String
 	 * 	containing an ISO8601 date-time string value.
 	 */
 	@Override /* Map.Entry */
@@ -88,7 +88,7 @@ public class BeanMapEntry implements Map.Entry<String,Object> {
 	 * 	you must pass in a transformed value.
 	 * For example, if the bean property type class is a {@link Date} and the bean property has the
 	 * 	{@link org.apache.juneau.transforms.DateSwap.ISO8601DT} transform associated with it through the
-	 * 	{@link BeanProperty#transform() @BeanProperty.transform()} annotation, the value being passed in must be
+	 * 	{@link BeanProperty#swap() @BeanProperty.swap()} annotation, the value being passed in must be
 	 * 	a String containing an ISO8601 date-time string value.
 	 *
 	 * @return  The set value after it's been converted.

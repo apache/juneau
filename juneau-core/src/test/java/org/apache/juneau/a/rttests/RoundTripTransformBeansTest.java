@@ -228,12 +228,12 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 		assertEquals("bar", t.f1);
 	}
 
-	@Pojo(transform=BTransform.class)
+	@Pojo(swap=BSwap.class)
 	public static class B {
 		public String f1;
 	}
 
-	public static class BTransform extends PojoSwap<B,String> {
+	public static class BSwap extends PojoSwap<B,String> {
 		@Override /* PojoSwap */
 		public String swap(B o) throws SerializeException {
 			return o.f1;

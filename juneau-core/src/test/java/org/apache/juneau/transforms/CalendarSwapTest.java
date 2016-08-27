@@ -648,7 +648,7 @@ public class CalendarSwapTest {
 
 	@Bean(sort=true)
 	public static class A {
-		@BeanProperty(transform=CalendarSwap.ISO8601DTZ.class)
+		@BeanProperty(swap=CalendarSwap.ISO8601DTZ.class)
 		public Calendar d1;
 		private Calendar d2, d3;
 		public A(Calendar date) {
@@ -657,7 +657,7 @@ public class CalendarSwapTest {
 
 		public A() {}
 
-		@BeanProperty(transform=CalendarSwap.RFC2822DTZ.class)
+		@BeanProperty(swap=CalendarSwap.RFC2822DTZ.class)
 		public Calendar getD2() {
 			return d2;
 		}
@@ -668,7 +668,7 @@ public class CalendarSwapTest {
 		public Calendar getD3() {
 			return d3;
 		}
-		@BeanProperty(transform=CalendarLongSwap.class)
+		@BeanProperty(swap=CalendarLongSwap.class)
 		public void setD3(Calendar d3) {
 			this.d3 = d3;
 		}

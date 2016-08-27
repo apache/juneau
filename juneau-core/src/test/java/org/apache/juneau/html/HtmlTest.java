@@ -100,7 +100,7 @@ public class HtmlTest {
 		public String f2 = "f2";
 	}
 
-	@Pojo(transform=A4Swap.class)
+	@Pojo(swap=A4Swap.class)
 	public static class A4 {
 		public String f2 = "f2";
 	}
@@ -112,7 +112,7 @@ public class HtmlTest {
 		}
 	}
 
-	@Pojo(transform=A5Swap.class)
+	@Pojo(swap=A5Swap.class)
 	public static class A5 {
 		public String f2 = "f2";
 	}

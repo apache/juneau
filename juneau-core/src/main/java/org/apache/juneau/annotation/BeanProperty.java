@@ -19,6 +19,7 @@ import java.lang.annotation.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.jena.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.xml.*;
@@ -110,10 +111,10 @@ public @interface BeanProperty {
 	Class<?>[] params() default {};
 
 	/**
-	 * Associates an object transform with this bean property that will convert it
-	 * to a different value during serialization and parsing.
+	 * Associates a {@link PojoSwap} or {@link SurrogateSwap} with this bean property that will swap the value object
+	 * 	with another object during serialization and parsing.
 	 * <p>
-	 * This annotation supersedes any transform associated with the bean property type
+	 * This annotation supersedes any swaps associated with the bean property type
 	 * 	class itself.
 	 * <p>
 	 * Typically used for rendering {@link Date Dates} and {@link Calendar Calendars}
@@ -133,7 +134,7 @@ public @interface BeanProperty {
 	 * 	</dd>
 	 * </dl>
 	 */
-	Class<? extends PojoSwap<?,?>> transform() default PojoSwap.NULL.class;
+	Class<?> swap() default Null.class;
 
 	/**
 	 * Used to limit which child properties are rendered by the serializers.
