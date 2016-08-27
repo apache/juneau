@@ -400,9 +400,9 @@ public abstract class RestServlet extends HttpServlet {
 	}
 
 	/**
-	 * Creates the class-level POJO transforms associated with this servlet.
+	 * Creates the class-level POJO swaps associated with this servlet.
 	 * <p>
-	 * Subclasses can override this method to provide their own class-level POJO transforms for this servlet.
+	 * Subclasses can override this method to provide their own class-level POJO swaps for this servlet.
 	 * <p>
 	 * By default, returns the transforms specified through the {@link RestResource#transforms() @RestResource.transforms()} annotation in child-to-parent order.
 	 * 	(i.e. transforms will be applied in child-to-parent order with child annotations overriding parent annotations when
@@ -2501,7 +2501,7 @@ public abstract class RestServlet extends HttpServlet {
 	}
 
 	/**
-	 * Returns the class-level POJO transforms associated with this servlet.
+	 * Returns the class-level POJO swaps associated with this servlet.
 	 * <p>
 	 * Created by the {@link #createTransforms()} method.
 	 *

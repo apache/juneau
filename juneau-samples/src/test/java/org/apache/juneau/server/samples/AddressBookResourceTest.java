@@ -43,8 +43,8 @@ public class AddressBookResourceTest {
 			new SamplesRestClient(XmlSerializer.class,  HtmlParser.class).setAccept("text/html+stripped")
 		};
 		for (RestClient c : clients) {
-			c.getSerializer().addTransforms(CalendarTransform.Medium.class);
-			c.getParser().addTransforms(CalendarTransform.Medium.class);
+			c.getSerializer().addTransforms(CalendarSwap.Medium.class);
+			c.getParser().addTransforms(CalendarSwap.Medium.class);
 			c.getSerializer().setProperty(XmlSerializerContext.XML_autoDetectNamespaces, true);
 		}
 	}
@@ -62,7 +62,7 @@ public class AddressBookResourceTest {
 	@Test
 	public void testBasic() throws Exception {
 		String in = IOUtils.read(getClass().getResourceAsStream("/org/apache/juneau/server/test/AddressBookResource_test0Test.json"));
-		JsonParser p = new JsonParser().addTransforms(CalendarTransform.Medium.class);
+		JsonParser p = new JsonParser().addTransforms(CalendarSwap.Medium.class);
 		Person person = p.parse(in, Person.class);
 		if (debug) System.err.println(person);
 	}

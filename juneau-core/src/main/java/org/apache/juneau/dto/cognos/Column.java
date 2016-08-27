@@ -33,7 +33,7 @@ public class Column {
 
 	private String name, type;
 	private Integer length;
-	PojoTransform transform;
+	PojoSwap transform;
 
 	/** Bean constructor. */
 	public Column() {}
@@ -62,7 +62,7 @@ public class Column {
 	}
 
 	/**
-	 * Associates a POJO transform with this column.
+	 * Associates a POJO swap with this column.
 	 * <p>
 	 * 	Typically used to define columns that don't exist on the underlying beans being serialized.
 	 * <p>
@@ -72,9 +72,9 @@ public class Column {
 	 * <p class='bcode'>
 	 * 	Column c = <jk>new</jk> Column(<js>"numAddresses"</js>, <js>"xs:int"</js>)
 	 * 		.addTransform(
-	 * 			<jk>new</jk> PojoTransform<Person,Integer>() {
+	 * 			<jk>new</jk> PojoSwap<Person,Integer>() {
 	 * 				<ja>@Override</ja>
-	 * 				<jk>public</jk> Integer transform(Person p) {
+	 * 				<jk>public</jk> Integer swap(Person p) {
 	 * 					<jk>return</jk> p.<jf>addresses</jf>.size();
 	 * 				}
 	 * 			}
@@ -84,7 +84,7 @@ public class Column {
 	 * @param transform The transform to associate with the column.
 	 * @return This object (for method chaining).
 	 */
-	public Column addTransform(PojoTransform transform) {
+	public Column addTransform(PojoSwap transform) {
 		this.transform = transform;
 		return this;
 	}

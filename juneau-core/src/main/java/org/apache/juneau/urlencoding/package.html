@@ -110,7 +110,7 @@
 		<li>Multi-dimensional arrays of any type on this list.
 		<li>Java Beans with properties of any type on this list.
 		<li>Classes with standard transformations to and from <code>Strings</code> (e.g. classes containing <code>toString()</code>, <code>fromString()</code>, <code>valueOf()</code>, <code>constructor(String)</code>).
-		<li>Non-serializable classes and properties with associated <code>PojoTransforms</code> that convert them to serializable forms.
+		<li>Non-serializable classes and properties with associated <code>PojoSwaps</code> that convert them to serializable forms.
 	</ul>
 	<p>
 		Refer to <a href='../package-summary.html#PojoCategories' class='doclink'>POJO Categories</a> for a complete definition of supported POJOs.
@@ -215,7 +215,7 @@
 			<li>On classes through the <code><ja>@Bean</ja></code> annotation.
 			<li>On bean properties through the <code><ja>@BeanProperty</ja></code> annotations.
 		</ul>
-		<h6 class='figure'>Example:  A serialized Calendar object using <code>CalendarTransform.RFC2822DTZ</code> transform.</h6>
+		<h6 class='figure'>Example:  A serialized Calendar object using <code>CalendarSwap.RFC2822DTZ</code> transform.</h6>
 		<p class='bcode'>	http://localhost/sample?<xa>a1=<js>Sun~,+03+Mar+1901+09:05:06+GMT</js></p>
 		<p>
 			For more information about transforms, refer to {@link org.apache.juneau.transform}.
@@ -368,7 +368,7 @@
 		<jk>public</jk> URI <jf>uri</jf>;
 		<jk>public</jk> URI <jf>addressBookUri</jf>;
 
-		<ja>@BeanProperty</ja>(transform=CalendarTransform.ISO8601DTZ.<jk>class</jk>) <jk>public</jk> Calendar <jf>birthDate</jf>;
+		<ja>@BeanProperty</ja>(transform=CalendarSwap.ISO8601DTZ.<jk>class</jk>) <jk>public</jk> Calendar <jf>birthDate</jf>;
 
 
 		<jc>// Bean constructor (needed by parser)</jc>
@@ -860,7 +860,7 @@
 	URI uri = m.get(URI.<jk>class</jk>, <js>"uri"</js>);
 
 	<jc>// Get a value using a transform.</jc>
-	CalendarTransform transform = <jk>new</jk> CalendarTransform.ISO8601DTZ();
+	CalendarSwap transform = <jk>new</jk> CalendarSwap.ISO8601DTZ();
 	Calendar birthDate = m.get(transform, <js>"birthDate"</js>);
 
 	<jc>// Get the addresses.</jc>

@@ -34,7 +34,7 @@ import org.apache.juneau.transform.*;
  * 	Essentially just converts plain text to POJOs via static <code>fromString()</code> or <code>valueOf()</code>, or
  * 	through constructors that take a single string argument.
  * <p>
- * 	Also parses objects using a transform if the object class has an {@link PojoTransform PojoTransform&lt;?,String&gt;} transform defined on it.
+ * 	Also parses objects using a transform if the object class has an {@link PojoSwap PojoSwap&lt;?,String&gt;} transform defined on it.
  *
  *
  * <h6 class='topic'>Configurable properties</h6>

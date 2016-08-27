@@ -218,7 +218,7 @@ public class Schema {
 	 * @return The value of the <property>type</property> property on this bean, or <jk>null</jk> if it is not set.
 	 * 	Can be either a {@link JsonType} or {@link JsonTypeArray} depending on what value was used to set it.
 	 */
-	@BeanProperty(transform=JsonTypeOrJsonTypeArrayTransform.class)
+	@BeanProperty(transform=JsonTypeOrJsonTypeArraySwap.class)
 	public Object getType() {
 		if (typeJsonType != null)
 			return typeJsonType;
@@ -292,15 +292,15 @@ public class Schema {
 	 * </ul>
 	 * Serialization method is a no-op.
 	 */
-	public static class JsonTypeOrJsonTypeArrayTransform extends PojoTransform<Object,Object> {
+	public static class JsonTypeOrJsonTypeArraySwap extends PojoSwap<Object,Object> {
 
-		@Override /* PojoTransform */
-		public Object transform(Object o) throws SerializeException {
+		@Override /* PojoSwap */
+		public Object swap(Object o) throws SerializeException {
 			return o;
 		}
 
-		@Override /* PojoTransform */
-		public Object normalize(Object o, ClassMeta<?> hint) throws ParseException {
+		@Override /* PojoSwap */
+		public Object unswap(Object o, ClassMeta<?> hint) throws ParseException {
 			BeanContext bc = getBeanContext();
 			ClassMeta<?> cm = (o instanceof Collection ? bc.getClassMeta(JsonTypeArray.class) : bc.getClassMeta(JsonType.class));
 			return bc.convertToType(o, cm);
@@ -514,7 +514,7 @@ public class Schema {
 	 * @return The value of the <property>items</property> property on this bean, or <jk>null</jk> if it is not set.
 	 * 	Can be either a {@link Schema} or {@link SchemaArray} depending on what value was used to set it.
 	 */
-	@BeanProperty(transform=SchemaOrSchemaArrayTransform.class)
+	@BeanProperty(transform=SchemaOrSchemaArraySwap.class)
 	public Object getItems() {
 		if (itemsSchema != null)
 			return itemsSchema;
@@ -553,15 +553,15 @@ public class Schema {
 	 * </ul>
 	 * Serialization method is a no-op.
 	 */
-	public static class SchemaOrSchemaArrayTransform extends PojoTransform<Object,Object> {
+	public static class SchemaOrSchemaArraySwap extends PojoSwap<Object,Object> {
 
-		@Override /* PojoTransform */
-		public Object transform(Object o) throws SerializeException {
+		@Override /* PojoSwap */
+		public Object swap(Object o) throws SerializeException {
 			return o;
 		}
 
-		@Override /* PojoTransform */
-		public Object normalize(Object o, ClassMeta<?> hint) throws ParseException {
+		@Override /* PojoSwap */
+		public Object unswap(Object o, ClassMeta<?> hint) throws ParseException {
 			BeanContext bc = getBeanContext();
 			ClassMeta<?> cm = (o instanceof Collection ? bc.getClassMeta(SchemaArray.class) : bc.getClassMeta(Schema.class));
 			return bc.convertToType(o, cm);
@@ -772,7 +772,7 @@ public class Schema {
 	 * @return The value of the <property>additionalItems</property> property on this bean, or <jk>null</jk> if it is not set.
 	 * 	Can be either a {@link Boolean} or {@link SchemaArray} depending on what value was used to set it.
 	 */
-	@BeanProperty(transform=BooleanOrSchemaArrayTransform.class)
+	@BeanProperty(transform=BooleanOrSchemaArraySwap.class)
 	public Object getAdditionalItems() {
 		if (additionalItemsBoolean != null)
 			return additionalItemsBoolean;
@@ -848,15 +848,15 @@ public class Schema {
 	 * </ul>
 	 * Serialization method is a no-op.
 	 */
-	public static class BooleanOrSchemaArrayTransform extends PojoTransform<Object,Object> {
+	public static class BooleanOrSchemaArraySwap extends PojoSwap<Object,Object> {
 
-		@Override /* PojoTransform */
-		public Object transform(Object o) throws SerializeException {
+		@Override /* PojoSwap */
+		public Object swap(Object o) throws SerializeException {
 			return o;
 		}
 
-		@Override /* PojoTransform */
-		public Object normalize(Object o, ClassMeta<?> hint) throws ParseException {
+		@Override /* PojoSwap */
+		public Object unswap(Object o, ClassMeta<?> hint) throws ParseException {
 			BeanContext bc = getBeanContext();
 			ClassMeta<?> cm = (o instanceof Collection ? bc.getClassMeta(SchemaArray.class) : bc.getClassMeta(Boolean.class));
 			return bc.convertToType(o, cm);
@@ -1031,7 +1031,7 @@ public class Schema {
 	 * @return The value of the <property>additionalProperties</property> property on this bean, or <jk>null</jk> if it is not set.
 	 * 	Can be either a {@link Boolean} or {@link SchemaArray} depending on what value was used to set it.
 	 */
-	@BeanProperty(transform=BooleanOrSchemaTransform.class)
+	@BeanProperty(transform=BooleanOrSchemaSwap.class)
 	public Object getAdditionalProperties() {
 		if (additionalPropertiesBoolean != null)
 			return additionalItemsBoolean;
@@ -1093,15 +1093,15 @@ public class Schema {
 	 * </ul>
 	 * Serialization method is a no-op.
 	 */
-	public static class BooleanOrSchemaTransform extends PojoTransform<Object,Object> {
+	public static class BooleanOrSchemaSwap extends PojoSwap<Object,Object> {
 
-		@Override /* PojoTransform */
-		public Object transform(Object o) throws SerializeException {
+		@Override /* PojoSwap */
+		public Object swap(Object o) throws SerializeException {
 			return o;
 		}
 
-		@Override /* PojoTransform */
-		public Object normalize(Object o, ClassMeta<?> hint) throws ParseException {
+		@Override /* PojoSwap */
+		public Object unswap(Object o, ClassMeta<?> hint) throws ParseException {
 			BeanContext bc = getBeanContext();
 			ClassMeta<?> cm = (o instanceof Boolean ? bc.getClassMeta(Boolean.class) : bc.getClassMeta(Schema.class));
 			return bc.convertToType(o, cm);

@@ -100,7 +100,7 @@ public class Entry extends CommonEntry {
 	 *
 	 * @return The publish timestamp of this entry.
 	 */
- 	@BeanProperty(transform=CalendarTransform.ISO8601DT.class)
+ 	@BeanProperty(transform=CalendarSwap.ISO8601DT.class)
 	public Calendar getPublished() {
  		return published;
  	}

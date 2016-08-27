@@ -327,9 +327,9 @@ public class XmlSerializer extends WriterSerializer {
 			gType = aType.getTransformedClassMeta();
 
 			// Transform if necessary
-			PojoTransform transform = aType.getPojoTransform();
+			PojoSwap transform = aType.getPojoSwap();
 			if (transform != null) {
-				o = transform.transform(o);
+				o = transform.swap(o);
 
 				// If the transform's getTransformedClass() method returns Object, we need to figure out
 				// the actual type now.

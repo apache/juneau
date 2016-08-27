@@ -42,7 +42,7 @@ public class HashCode {
 	 * @return This object (for method chaining).
 	 */
 	public HashCode add(Object o) {
-		o = normalize(o);
+		o = unswap(o);
 		add(o == null ? 1 : o.hashCode());
 		return this;
 	}
@@ -79,7 +79,7 @@ public class HashCode {
 	 * @param o The object to normalize before getting it's hashcode.
 	 * @return The normalized object.
 	 */
-	protected Object normalize(Object o) {
+	protected Object unswap(Object o) {
 		return o;
 	}
 }

@@ -14,41 +14,26 @@ package org.apache.juneau.transforms;
 
 import java.util.*;
 
-import org.apache.juneau.*;
-import org.apache.juneau.parser.*;
 import org.apache.juneau.transform.*;
 
 /**
- * Transforms {@link Calendar Calendars} to {@link Long Longs} using {@code Calender.getTime().getTime()}.
+ * Transforms {@link Iterator Iterators} to {@code List<Object>} objects.
+ * <p>
+ * 	This is a one-way transform, since {@code Iterators} cannot be reconstituted.
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-public class CalendarLongTransform extends PojoTransform<Calendar,Long> {
+@SuppressWarnings({"unchecked","rawtypes"})
+public class IteratorSwap extends PojoSwap<Iterator,List> {
 
 	/**
-	 * Converts the specified {@link Calendar} to a {@link Long}.
+	 * Converts the specified {@link Iterator} to a {@link List}.
 	 */
-	@Override /* PojoTransform */
-	public Long transform(Calendar o) {
-		return o.getTime().getTime();
-	}
-
-	/**
-	 * Converts the specified {@link Long} to a {@link Calendar}.
-	 */
-	@Override /* PojoTransform */
-	@SuppressWarnings("unchecked")
-	public Calendar normalize(Long o, ClassMeta<?> hint) throws ParseException {
-		ClassMeta<? extends Calendar> tt;
-		try {
-			if (hint == null || ! hint.canCreateNewInstance())
-				hint = getBeanContext().getClassMeta(GregorianCalendar.class);
-			tt = (ClassMeta<? extends Calendar>)hint;
-			Calendar c = tt.newInstance();
-			c.setTimeInMillis(o);
-			return c;
-		} catch (Exception e) {
-			throw new ParseException(e);
-		}
+	@Override /* PojoSwap */
+	public List swap(Iterator o) {
+		List l = new LinkedList();
+		while (o.hasNext())
+			l.add(o.next());
+		return l;
 	}
 }

@@ -51,8 +51,8 @@ public final class Traversable implements RestConverter {
 
 		if (req.getPathRemainder() != null) {
 			try {
-				if (cm.getPojoTransform() != null)
-					o = cm.getPojoTransform().transform(o);
+				if (cm.getPojoSwap() != null)
+					o = cm.getPojoSwap().swap(o);
 				PojoRest p = new PojoRest(o, req.getReaderParser());
 				o = p.get(req.getPathRemainder());
 			} catch (SerializeException e) {

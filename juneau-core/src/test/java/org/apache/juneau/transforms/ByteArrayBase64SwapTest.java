@@ -24,16 +24,16 @@ import org.apache.juneau.serializer.*;
 import org.junit.*;
 
 @SuppressWarnings({"unchecked","hiding","serial","javadoc"})
-public class ByteArrayBase64TransformTest extends RoundTripTest {
+public class ByteArrayBase64SwapTest extends RoundTripTest {
 
-	public ByteArrayBase64TransformTest(String label, Serializer s, Parser p, int flags) throws Exception {
+	public ByteArrayBase64SwapTest(String label, Serializer s, Parser p, int flags) throws Exception {
 		super(label, s, p, flags);
 	}
 
 	@Override /* RoundTripTest */
 	public Class<?>[] getTransforms() {
 		return new Class<?>[] {
-			ByteArrayBase64Transform.class
+			ByteArrayBase64Swap.class
 		};
 	}
 
@@ -42,7 +42,7 @@ public class ByteArrayBase64TransformTest extends RoundTripTest {
 	//====================================================================================================
 	@Test
 	public void testPrimitiveArrays() throws Exception {
-		WriterSerializer s = new JsonSerializer.Simple().addTransforms(ByteArrayBase64Transform.class).setProperty(SERIALIZER_trimNullProperties, false);
+		WriterSerializer s = new JsonSerializer.Simple().addTransforms(ByteArrayBase64Swap.class).setProperty(SERIALIZER_trimNullProperties, false);
 
 		byte[] a1 = {1,2,3};
 		assertEquals("'AQID'", s.serialize(a1));

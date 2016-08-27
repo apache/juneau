@@ -157,10 +157,10 @@
 	BeanContext beanContext = BeanContext.<jsf>DEFAULT</jsf>;
 	
 	<jc>// Create a context from scratch with your own settings.</jc>
-	beanContext = <jk>new</jk> BeanContext().addTransforms(DateTransform.ISO8601DT.<jk>class</jk>);
+	beanContext = <jk>new</jk> BeanContext().addTransforms(DateSwap.ISO8601DT.<jk>class</jk>);
 	
 	<jc>// Clone and modify an existing context.</jc>
-	beanContext = BeanContext.<jsf>DEFAULT</jsf>.clone().addTransforms(DateTransform.ISO8601DT.<jk>class</jk>);
+	beanContext = BeanContext.<jsf>DEFAULT</jsf>.clone().addTransforms(DateSwap.ISO8601DT.<jk>class</jk>);
 		</p>
 		<p>
 			The {@link org.apache.juneau.BeanContext} class is a highly-customizable class.  
@@ -204,7 +204,7 @@
 			Using the <ja>@Bean</ja> and <ja>@BeanProperty</ja> annotations, it's also possible to include non-standard properties (for example, getters or setters with non-standard names), or override the names of properties (for example, {@code "Name"} or {@code "fullName"} instead of {@code "name"}).
 		</p>
 		<p>
-			It should be noted that the {@link org.apache.juneau.transform.BeanTransform} class can also be used to exclude properties from beans.  
+			It should be noted that the {@link org.apache.juneau.transform.BeanFilter} class can also be used to exclude properties from beans.  
 			However, only the annotations can be used to include non-standard properties or override property names.
 		</p>
 		<p>

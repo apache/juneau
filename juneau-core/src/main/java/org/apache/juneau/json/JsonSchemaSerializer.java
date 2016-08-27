@@ -112,7 +112,7 @@ public final class JsonSchemaSerializer extends JsonSerializer {
 
 		out.put("type", type);
 		out.put("description", eType.toString());
-		PojoTransform f = eType.getPojoTransform();
+		PojoSwap f = eType.getPojoSwap();
 		if (f != null)
 			out.put("transform", f);
 

@@ -241,9 +241,9 @@ public class UrlEncodingSerializer extends UonSerializer {
 		addClassAttr = (session.isAddClassAttrs());
 
 		// Transform if necessary
-		PojoTransform transform = aType.getPojoTransform();				// The transform
+		PojoSwap transform = aType.getPojoSwap();				// The transform
 		if (transform != null) {
-			o = transform.transform(o);
+			o = transform.swap(o);
 
 			// If the transform's getTransformedClass() method returns Object, we need to figure out
 			// the actual type now.

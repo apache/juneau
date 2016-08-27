@@ -87,7 +87,7 @@ public class PojoQueryTest {
 		int limit = 0;
 		boolean ignoreCase = false;
 		BeanContext bc = BeanContext.DEFAULT;
-		WriterSerializer s = new JsonSerializer.Simple().addTransforms(CalendarTransform.Simple.class);
+		WriterSerializer s = new JsonSerializer.Simple().addTransforms(CalendarSwap.Simple.class);
 		B[] in;
 		PojoQuery filter;
 
@@ -603,7 +603,7 @@ public class PojoQueryTest {
 		int limit = 0;
 		boolean ignoreCase = false;
 		BeanContext bc = BeanContext.DEFAULT;
-		WriterSerializer s = new JsonSerializer.Simple().addTransforms(CalendarTransform.Simple.class);
+		WriterSerializer s = new JsonSerializer.Simple().addTransforms(CalendarSwap.Simple.class);
 		List results;
 
 		I[] in = new I[] {

@@ -127,7 +127,7 @@ import org.apache.juneau.parser.*;
  * <p>
  * 	Lists are appended to the beginning of the set so that behavior can be overridden.<br>
  * <p>
- * 	For sample, the following code shows the order in which POJO transforms are applied.<br>
+ * 	For sample, the following code shows the order in which POJO swaps are applied.<br>
  * 	In this case, we want F3 and F4 to appear at the beginning of the set so that they
  * 	take precedence over F1 and F2....
  * <p class='bcode'>
@@ -264,7 +264,7 @@ public final class ContextFactory extends Lockable {
 	private static Comparator<Object> PROPERTY_COMPARATOR = new Comparator<Object>() {
 		@Override
 		public int compare(Object o1, Object o2) {
-			return normalize(o1).toString().compareTo(normalize(o2).toString());
+			return unswap(o1).toString().compareTo(unswap(o2).toString());
 		}
 	};
 
@@ -750,8 +750,8 @@ public final class ContextFactory extends Lockable {
 	 */
 	protected static class NormalizingHashCode extends HashCode {
 		@Override /* HashCode */
-		protected Object normalize(Object o) {
-			return ContextFactory.normalize(o);
+		protected Object unswap(Object o) {
+			return ContextFactory.unswap(o);
 		}
 	}
 
@@ -1202,7 +1202,7 @@ public final class ContextFactory extends Lockable {
 	 * @param o The object to normalize.
 	 * @return The normalized object.
 	 */
-	private static final Object normalize(Object o) {
+	private static final Object unswap(Object o) {
 		if (o instanceof Class)
 			return ((Class<?>)o).getName();
 		if (o instanceof Number || o instanceof Boolean)
@@ -1247,7 +1247,7 @@ public final class ContextFactory extends Lockable {
 			}
 			return false;
 		} else {
-			return normalize(o1).equals(normalize(o2));
+			return unswap(o1).equals(unswap(o2));
 		}
 	}
 

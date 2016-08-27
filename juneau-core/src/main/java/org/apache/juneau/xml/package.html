@@ -852,7 +852,7 @@
 	<jk>public class</jk> Person {
 		
 		<jc>// Bean properties</jc>
-		<ja>@BeanProperty</ja>(transform=CalendarTransform.ISO8601DTZ.<jk>class</jk>) <jk>public</jk> Calendar birthDate;
+		<ja>@BeanProperty</ja>(transform=CalendarSwap.ISO8601DTZ.<jk>class</jk>) <jk>public</jk> Calendar birthDate;
 		...
 		
 		<jc>// Normal constructor</jc>
@@ -1031,7 +1031,7 @@
 		<jk>public</jk> String <jf>name</jf>;
 		<ja>@BeanProperty</ja>(beanUri=<jk>true</jk>) <jk>public</jk> URI <jf>uri</jf>;
 		<jk>public</jk> URI <jf>addressBookUri</jf>;
-		<ja>@BeanProperty</ja>(transform=CalendarTransform.ISO8601DTZ.<jk>class</jk>) <jk>public</jk> Calendar <jf>birthDate</jf>;
+		<ja>@BeanProperty</ja>(transform=CalendarSwap.ISO8601DTZ.<jk>class</jk>) <jk>public</jk> Calendar <jf>birthDate</jf>;
 		<jk>public</jk> LinkedList&lt;Address&gt; <jf>addresses</jf> = <jk>new</jk> LinkedList&lt;Address&gt;();
 
 		<jc>// Bean constructor (needed by parser)</jc>
@@ -1711,7 +1711,7 @@
 	URI uri = m.get(URI.<jk>class</jk>, <js>"uri"</js>);
 
 	<jc>// Get a value using a transform.</jc>
-	CalendarTransform transform = <jk>new</jk> CalendarTransform.ISO8601DTZ();
+	CalendarSwap transform = <jk>new</jk> CalendarSwap.ISO8601DTZ();
 	Calendar birthDate = m.get(transform, <js>"birthDate"</js>);
 
 	<jc>// Get the addresses.</jc>

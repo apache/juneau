@@ -28,7 +28,7 @@ public class CreatePerson {
 
 	// Bean properties
 	public String name;
-	@BeanProperty(transform=CalendarTransform.Medium.class) public Calendar birthDate;
+	@BeanProperty(transform=CalendarSwap.Medium.class) public Calendar birthDate;
 	public LinkedList<CreateAddress> addresses = new LinkedList<CreateAddress>();
 
 	/** Bean constructor - Needed for instantiating on server side */

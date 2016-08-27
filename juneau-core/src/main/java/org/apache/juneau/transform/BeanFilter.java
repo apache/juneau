@@ -21,9 +21,9 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 
 /**
- * Parent class for all bean transforms.
+ * Parent class for all bean filters.
  * <p>
- * 	Bean transforms are used to control aspects of how beans are handled during serialization and parsing.
+ * 	Bean filters are used to control aspects of how beans are handled during serialization and parsing.
  * <p>
  * 	This class can be considered a programmatic equivalent to using the {@link Bean @Bean} annotation on bean classes.
  * 	Thus, it can be used to perform the same function as the <code>@Bean</code> annotation when you don't have
@@ -33,25 +33,25 @@ import org.apache.juneau.internal.*;
  * 		when the no-arg constructor is used.
  *
  * <p>
- * 	When defining bean transforms, you can either call the setters in the contructor, or override getters.
+ * 	When defining bean filters, you can either call the setters in the contructor, or override getters.
  *
  * <h6 class='topic'>Example</h6>
  * <p class='bcode'>
- * 	<jc>// Create our serializer with a transform.</jc>
- * 	WriterSerializer s = <jk>new</jk> JsonSerializer().addTransforms(AddressTransform.<jk>class</jk>);
+ * 	<jc>// Create our serializer with a filter.</jc>
+ * 	WriterSerializer s = <jk>new</jk> JsonSerializer().addTransforms(AddressFilter.<jk>class</jk>);
  *
  * 	Address a = <jk>new</jk> Address();
  * 	String json = s.serialize(a); <jc>// Serializes only street, city, state.</jc>
  *
- * 	<jc>// Transform class defined via setters</jc>
- * 	<jk>public class</jk> AddressTransform <jk>extends</jk> BeanTransform&lt;Address&gt; {
- * 		<jk>public</jk> AddressTransform() {
+ * 	<jc>// Filter class defined via setters</jc>
+ * 	<jk>public class</jk> AddressFilter <jk>extends</jk> BeanFilter&lt;Address&gt; {
+ * 		<jk>public</jk> AddressFilter() {
  * 			setProperties(<js>"street"</js>,<js>"city"</js>,<js>"state"</js>);
  * 		}
  * 	}
  *
- * 	<jc>// Transform class defined by overriding getters</jc>
- * 	<jk>public class</jk> AddressTransform <jk>extends</jk> BeanTransform&lt;Address&gt; {
+ * 	<jc>// Filter class defined by overriding getters</jc>
+ * 	<jk>public class</jk> AddressFilter <jk>extends</jk> BeanFilter&lt;Address&gt; {
  * 		<jk>public</jk> String[] getProperties() {
  * 			<jk>return new</jk> String[]{<js>"street"</js>,<js>"city"</js>,<js>"state"</js>};
  * 		}
@@ -65,9 +65,9 @@ import org.apache.juneau.internal.*;
  *
  *
  * @author James Bognar (james.bognar@salesforce.com)
- * @param <T> The class type that this transform applies to.
+ * @param <T> The class type that this filter applies to.
  */
-public abstract class BeanTransform<T> extends Transform {
+public abstract class BeanFilter<T> extends Transform {
 
 	private String[] properties, excludeProperties;
 	private LinkedHashMap<Class<?>, String> subTypes;
@@ -80,13 +80,13 @@ public abstract class BeanTransform<T> extends Transform {
 	 * Constructor that determines the for-class value using reflection.
 	 */
 	@SuppressWarnings("unchecked")
-	public BeanTransform() {
+	public BeanFilter() {
 		super();
 		this.type = TransformType.BEAN;
 
 		Class<?> c = this.getClass().getSuperclass();
 		Type t = this.getClass().getGenericSuperclass();
-		while (c != BeanTransform.class) {
+		while (c != BeanFilter.class) {
 			t = c.getGenericSuperclass();
 			c = c.getSuperclass();
 		}
@@ -115,8 +115,8 @@ public abstract class BeanTransform<T> extends Transform {
 	 * 	<dt>Example:</dt>
 	 * 	<dd>
 	 * 		<p class='bcode'>
-	 * 	<jk>public class</jk> SomeArbitraryTransform <jk>extends</jk> BeanTransform&lt?&gt; {
-	 * 		<jk>public</jk> SomeArbitraryTransform(Class&lt?&gt; forClass) {
+	 * 	<jk>public class</jk> SomeArbitraryFilter <jk>extends</jk> BeanFilter&lt?&gt; {
+	 * 		<jk>public</jk> SomeArbitraryFiter(Class&lt?&gt; forClass) {
 	 * 			<jk>super</jk>(forClass);
 	 * 			...
 	 * 		}
@@ -125,9 +125,9 @@ public abstract class BeanTransform<T> extends Transform {
 	 * 	</dd>
 	 * </dl>
 	 *
-	 * @param forClass The class that this bean transform applies to.
+	 * @param forClass The class that this bean filter applies to.
 	 */
-	public BeanTransform(Class<T> forClass) {
+	public BeanFilter(Class<T> forClass) {
 		super(forClass);
 		this.type = TransformType.BEAN;
 	}
@@ -153,15 +153,15 @@ public abstract class BeanTransform<T> extends Transform {
 	 * 	<dt>Example:</dt>
 	 * 	<dd>
 	 * 		<p class='bcode'>
-	 * 	<jc>// Create our serializer with a transform.</jc>
-	 * 	WriterSerializer s = <jk>new</jk> JsonSerializer().addTransforms(AddressTransform.<jk>class</jk>);
+	 * 	<jc>// Create our serializer with a filter.</jc>
+	 * 	WriterSerializer s = <jk>new</jk> JsonSerializer().addTransforms(AddressFilter.<jk>class</jk>);
 	 *
 	 * 	Address a = <jk>new</jk> Address();
 	 * 	String json = s.serialize(a); <jc>// Serializes only street, city, state.</jc>
 	 *
 	 * 	<jc>// Transform class</jc>
-	 * 	<jk>public class</jk> AddressTransform <jk>extends</jk> BeanTransform&lt;Address&gt; {
-	 * 		<jk>public</jk> AddressTransform() {
+	 * 	<jk>public class</jk> AddressFilter <jk>extends</jk> BeanFilter&lt;Address&gt; {
+	 * 		<jk>public</jk> AddressFilter() {
 	 * 			setProperties(<js>"street"</js>,<js>"city"</js>,<js>"state"</js>);
 	 * 		}
 	 * 	}
@@ -172,7 +172,7 @@ public abstract class BeanTransform<T> extends Transform {
 	 * @param properties The name of the properties associated with a bean class.
 	 * @return This object (for method chaining).
 	 */
-	public BeanTransform<T> setProperties(String...properties) {
+	public BeanFilter<T> setProperties(String...properties) {
 		this.properties = properties;
 		return this;
 	}
@@ -183,7 +183,7 @@ public abstract class BeanTransform<T> extends Transform {
 	 * @param properties A comma-delimited list of properties.
 	 * @return This object (for method chaining).
 	 */
-	public BeanTransform<T> setProperties(String properties) {
+	public BeanFilter<T> setProperties(String properties) {
 		return setProperties(StringUtils.split(properties, ','));
 	}
 
@@ -210,7 +210,7 @@ public abstract class BeanTransform<T> extends Transform {
 	 * @param sortProperties The new value for the sort properties property.
 	 * @return This object (for method chaining).
 	 */
-	public BeanTransform<T> setSortProperties(boolean sortProperties) {
+	public BeanFilter<T> setSortProperties(boolean sortProperties) {
 		this.sortProperties = sortProperties;
 		return this;
 	}
@@ -234,15 +234,15 @@ public abstract class BeanTransform<T> extends Transform {
 	 * 	<dt>Example:</dt>
 	 * 	<dd>
 	 * 		<p class='bcode'>
-	 * 	<jc>// Create our serializer with a transform.</jc>
-	 * 	WriterSerializer s = <jk>new</jk> JsonSerializer().addTransforms(NoCityOrStateTransform.<jk>class</jk>);
+	 * 	<jc>// Create our serializer with a filter.</jc>
+	 * 	WriterSerializer s = <jk>new</jk> JsonSerializer().addTransforms(NoCityOrStateFilter.<jk>class</jk>);
 	 *
 	 * 	Address a = <jk>new</jk> Address();
 	 * 	String json = s.serialize(a); <jc>// Excludes city and state.</jc>
 	 *
 	 * 	<jc>// Transform class</jc>
-	 * 	<jk>public class</jk> NoCityOrStateTransform <jk>extends</jk> BeanTransform&lt;Address&gt; {
-	 * 		<jk>public</jk> AddressTransform() {
+	 * 	<jk>public class</jk> NoCityOrStateFilter <jk>extends</jk> BeanFilter&lt;Address&gt; {
+	 * 		<jk>public</jk> AddressFilter() {
 	 * 			setExcludeProperties(<js>"city"</js>,<js>"state"</js>);
 	 * 		}
 	 * 	}
@@ -253,7 +253,7 @@ public abstract class BeanTransform<T> extends Transform {
 	 * @param excludeProperties The name of the properties to ignore on a bean class.
 	 * @return This object (for method chaining).
 	 */
-	public BeanTransform<T> setExcludeProperties(String...excludeProperties) {
+	public BeanFilter<T> setExcludeProperties(String...excludeProperties) {
 		this.excludeProperties = excludeProperties;
 		return this;
 	}
@@ -264,7 +264,7 @@ public abstract class BeanTransform<T> extends Transform {
 	 * @param excludeProperties A comma-delimited list of properties to eclipse.
 	 * @return This object (for method chaining).
 	 */
-	public BeanTransform<T> setExcludeProperties(String excludeProperties) {
+	public BeanFilter<T> setExcludeProperties(String excludeProperties) {
 		return setExcludeProperties(StringUtils.split(excludeProperties, ','));
 	}
 
@@ -290,7 +290,7 @@ public abstract class BeanTransform<T> extends Transform {
 	 * @param propertyNamer The property namer class.
 	 * @return This object (for method chaining).
 	 */
-	public BeanTransform<T> setPropertyNamer(Class<? extends PropertyNamer> propertyNamer) {
+	public BeanFilter<T> setPropertyNamer(Class<? extends PropertyNamer> propertyNamer) {
 		this.propertyNamer = propertyNamer;
 		return this;
 	}
@@ -328,7 +328,7 @@ public abstract class BeanTransform<T> extends Transform {
 	 * 	}
 	 *
 	 * 	<jc>// Transform for defining subtypes</jc>
-	 * 	<jk>public class</jk> ATransform <jk>extends</jk> BeanTransform&lt;A&gt; {
+	 * 	<jk>public class</jk> ATransform <jk>extends</jk> BeanFilter&lt;A&gt; {
 	 * 		<jk>public</jk> ATransform() {
 	 * 			setSubTypeProperty(<js>"subType"</js>);
 	 * 			addSubType(Al.<jk>class</jk>, <js>"A1"</js>);
@@ -358,7 +358,7 @@ public abstract class BeanTransform<T> extends Transform {
 	 * @param subTypeAttr The name of the attribute representing the subtype.
 	 * @return This object (for method chaining).
 	 */
-	public BeanTransform<T> setSubTypeProperty(String subTypeAttr) {
+	public BeanFilter<T> setSubTypeProperty(String subTypeAttr) {
 		this.subTypeAttr = subTypeAttr;
 		return this;
 	}
@@ -380,7 +380,7 @@ public abstract class BeanTransform<T> extends Transform {
 	 * @param subTypes the map of subtype classes to subtype identifier strings.
 	 * @return This object (for method chaining).
 	 */
-	public BeanTransform<T> setSubTypes(LinkedHashMap<Class<?>, String> subTypes) {
+	public BeanFilter<T> setSubTypes(LinkedHashMap<Class<?>, String> subTypes) {
 		this.subTypes = subTypes;
 		return this;
 	}
@@ -393,7 +393,7 @@ public abstract class BeanTransform<T> extends Transform {
 	 * @param id The subtype identifier string for the specified subtype class.
 	 * @return This object (for method chaining).
 	 */
-	public BeanTransform<T> addSubType(Class<?> c, String id) {
+	public BeanFilter<T> addSubType(Class<?> c, String id) {
 		if (subTypes == null)
 			subTypes = new LinkedHashMap<Class<?>, String>();
 		subTypes.put(c, id);
@@ -429,7 +429,7 @@ public abstract class BeanTransform<T> extends Transform {
 	 * 	}
 	 *
 	 * 	<jc>// Transform class</jc>
-	 * 	<jk>public class</jk> ATransform <jk>extends</jk> BeanTransform&lt;A&gt; {
+	 * 	<jk>public class</jk> ATransform <jk>extends</jk> BeanFilter&lt;A&gt; {
 	 * 		<jk>public</jk> ATransform() {
 	 * 			setInterfaceClass(A.<jk>class</jk>);
 	 * 		}
@@ -441,7 +441,7 @@ public abstract class BeanTransform<T> extends Transform {
 	 * 	<jsm>assertEquals</jsm>(<js>"{f0:'f0'}"</js>, r);  <jc>// Note f1 is not serialized</jc>
 	 * </p>
 	 * <p>
-	 * 	Note that this transform can be used on the parent class so that it transforms to all child classes,
+	 * 	Note that this filter can be used on the parent class so that it filters to all child classes,
 	 * 		or can be set individually on the child classes.
 	 * <p>
 	 * 	This method is an alternative to using the {@link Bean#interfaceClass()}} annotation.
@@ -449,7 +449,7 @@ public abstract class BeanTransform<T> extends Transform {
 	 * @param interfaceClass The interface class.
 	 * @return This object (for method chaining).
 	 */
-	public BeanTransform<T> setInterfaceClass(Class<?> interfaceClass) {
+	public BeanFilter<T> setInterfaceClass(Class<?> interfaceClass) {
 		this.interfaceClass = interfaceClass;
 		return this;
 	}
@@ -492,7 +492,7 @@ public abstract class BeanTransform<T> extends Transform {
 	 * @param stopClass The stop class.
 	 * @return This object (for method chaining).
 	 */
-	public BeanTransform<T> setStopClass(Class<?> stopClass) {
+	public BeanFilter<T> setStopClass(Class<?> stopClass) {
 		this.stopClass = stopClass;
 		return this;
 	}

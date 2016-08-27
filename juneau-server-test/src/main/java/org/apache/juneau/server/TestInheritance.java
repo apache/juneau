@@ -293,23 +293,23 @@ public class TestInheritance extends RestServlet {
 	public static class Foo2 {@Override public String toString(){return "Foo2";}}
 	public static class Foo3 {@Override public String toString(){return "Foo3";}}
 
-	public static class F1 extends PojoTransform<Foo1,String> {
-		@Override /* PojoTransform */
-		public String transform(Foo1 o) throws SerializeException {
+	public static class F1 extends PojoSwap<Foo1,String> {
+		@Override /* PojoSwap */
+		public String swap(Foo1 o) throws SerializeException {
 			return "F1";
 		}
 	}
 
-	public static class F2 extends PojoTransform<Foo2,String> {
-		@Override /* PojoTransform */
-		public String transform(Foo2 o) throws SerializeException {
+	public static class F2 extends PojoSwap<Foo2,String> {
+		@Override /* PojoSwap */
+		public String swap(Foo2 o) throws SerializeException {
 			return "F2";
 		}
 	}
 
-	public static class F3 extends PojoTransform<Foo3,String> {
-		@Override /* PojoTransform */
-		public String transform(Foo3 o) throws SerializeException {
+	public static class F3 extends PojoSwap<Foo3,String> {
+		@Override /* PojoSwap */
+		public String swap(Foo3 o) throws SerializeException {
 			return "F3";
 		}
 	}

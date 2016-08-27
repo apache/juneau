@@ -10,30 +10,45 @@
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations under the License.
  ***************************************************************************************************************************/
-package org.apache.juneau.transform;
+package org.apache.juneau.transforms;
+
+import java.util.*;
 
 import org.apache.juneau.*;
-
+import org.apache.juneau.parser.*;
+import org.apache.juneau.transform.*;
 
 /**
- * Simple bean transform that simply identifies a class to be used as an interface
- * 	class for all child classes.
- * <p>
- * 	These objects are created when you pass in non-<code>Transform</code> classes to {@link ContextFactory#addToProperty(String,Object)},
- * 		and are equivalent to adding a <code><ja>@Bean</ja>(interfaceClass=Foo.<jk>class</jk>)</code> annotation on the <code>Foo</code> class.
+ * Transforms {@link Calendar Calendars} to {@link Long Longs} using {@code Calender.getTime().getTime()}.
  *
  * @author James Bognar (james.bognar@salesforce.com)
- * @param <T> The class type that this transform applies to.
  */
-public class InterfaceBeanTransform<T> extends BeanTransform<T> {
+public class CalendarLongSwap extends PojoSwap<Calendar,Long> {
 
 	/**
-	 * Constructor.
-	 *
-	 * @param interfaceClass The class to use as an interface on all child classes.
+	 * Converts the specified {@link Calendar} to a {@link Long}.
 	 */
-	public InterfaceBeanTransform(Class<T> interfaceClass) {
-		super(interfaceClass);
-		setInterfaceClass(interfaceClass);
+	@Override /* PojoSwap */
+	public Long swap(Calendar o) {
+		return o.getTime().getTime();
+	}
+
+	/**
+	 * Converts the specified {@link Long} to a {@link Calendar}.
+	 */
+	@Override /* PojoSwap */
+	@SuppressWarnings("unchecked")
+	public Calendar unswap(Long o, ClassMeta<?> hint) throws ParseException {
+		ClassMeta<? extends Calendar> tt;
+		try {
+			if (hint == null || ! hint.canCreateNewInstance())
+				hint = getBeanContext().getClassMeta(GregorianCalendar.class);
+			tt = (ClassMeta<? extends Calendar>)hint;
+			Calendar c = tt.newInstance();
+			c.setTimeInMillis(o);
+			return c;
+		} catch (Exception e) {
+			throw new ParseException(e);
+		}
 	}
 }

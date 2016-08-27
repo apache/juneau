@@ -22,7 +22,7 @@ import org.apache.juneau.serializer.*;
 
 
 /**
- * Specialized {@link PojoTransform} for surrogate classes.
+ * Specialized {@link PojoSwap} for surrogate classes.
  * <p>
  * Surrogate classes are used in place of other classes during serialization.
  * For example, you may want to use a surrogate class to change the names or order of bean
@@ -108,13 +108,13 @@ import org.apache.juneau.serializer.*;
  * 	}
  * </p>
  * <p>
- * It should be noted that a surrogate class is functionally equivalent to the following {@link PojoTransform} implementation:
+ * It should be noted that a surrogate class is functionally equivalent to the following {@link PojoSwap} implementation:
  * <p class='bcode'>
- * 	<jk>public static class</jk> SurrogateTransform <jk>extends</jk> PojoTransform&lt;Normal,Surrogate&gt; {
- * 		<jk>public</jk> Surrogate transform(Normal n) <jk>throws</jk> SerializeException {
+ * 	<jk>public static class</jk> SurrogateSwap <jk>extends</jk> PojoSwap&lt;Normal,Surrogate&gt; {
+ * 		<jk>public</jk> Surrogate swap(Normal n) <jk>throws</jk> SerializeException {
  * 			<jk>return new</jk> Surrogate(n);
  * 		}
- * 		<jk>public</jk> Normal normalize(Surrogate s, ClassMeta<?> hint) <jk>throws</jk> ParseException {
+ * 		<jk>public</jk> Normal unswap(Surrogate s, ClassMeta<?> hint) <jk>throws</jk> ParseException {
  * 			<jk>return</jk> Surrogate.<jsm>toNormal</jsm>(s);
  * 		}
  * 	}
@@ -124,7 +124,7 @@ import org.apache.juneau.serializer.*;
  * @param <T> The class type that this transform applies to.
  * @param <F> The transformed class type.
  */
-public class SurrogateTransform<T,F> extends PojoTransform<T,F> {
+public class SurrogateSwap<T,F> extends PojoSwap<T,F> {
 
 	private Constructor<F> constructor;   // public F(T t);
 	private Method untransformMethod;        // public static T valueOf(F f);
@@ -136,23 +136,23 @@ public class SurrogateTransform<T,F> extends PojoTransform<T,F> {
 	 * @param constructor The constructor on the surrogate class that takes the normal class as a parameter.
 	 * @param untransformMethod The static method that converts surrogate objects into normal objects.
 	 */
-	protected SurrogateTransform(Class<T> forClass, Constructor<F> constructor, Method untransformMethod) {
+	protected SurrogateSwap(Class<T> forClass, Constructor<F> constructor, Method untransformMethod) {
 		super(forClass, constructor.getDeclaringClass());
 		this.constructor = constructor;
 		this.untransformMethod = untransformMethod;
 	}
 
 	/**
-	 * Given the specified surrogate class, return the list of POJO transforms.
+	 * Given the specified surrogate class, return the list of POJO swaps.
 	 * A transform is returned for each public 1-arg constructor found.
 	 * Returns an empty list if no public 1-arg constructors are found.
 	 *
 	 * @param c The surrogate class.
-	 * @return The list of POJO transforms that apply to this class.
+	 * @return The list of POJO swaps that apply to this class.
 	 */
 	@SuppressWarnings({"unchecked", "rawtypes"})
-	public static List<SurrogateTransform<?,?>> findTransforms(Class<?> c) {
-		List<SurrogateTransform<?,?>> l = new LinkedList<SurrogateTransform<?,?>>();
+	public static List<SurrogateSwap<?,?>> findTransforms(Class<?> c) {
+		List<SurrogateSwap<?,?>> l = new LinkedList<SurrogateSwap<?,?>>();
 		for (Constructor<?> cc : c.getConstructors()) {
 			if (cc.getAnnotation(BeanIgnore.class) == null) {
 				Class<?>[] pt = cc.getParameterTypes();
@@ -176,7 +176,7 @@ public class SurrogateTransform<T,F> extends PojoTransform<T,F> {
 							}
 						}
 
-						l.add(new SurrogateTransform(pt[0], cc, untransformMethod));
+						l.add(new SurrogateSwap(pt[0], cc, untransformMethod));
 					}
 				}
 			}
@@ -184,8 +184,8 @@ public class SurrogateTransform<T,F> extends PojoTransform<T,F> {
 		return l;
 	}
 
-	@Override /* PojoTransform */
-	public F transform(T o) throws SerializeException {
+	@Override /* PojoSwap */
+	public F swap(T o) throws SerializeException {
 		try {
 			return constructor.newInstance(o);
 		} catch (Exception e) {
@@ -193,9 +193,9 @@ public class SurrogateTransform<T,F> extends PojoTransform<T,F> {
 		}
 	}
 
-	@Override /* PojoTransform */
+	@Override /* PojoSwap */
 	@SuppressWarnings("unchecked")
-	public T normalize(F f, ClassMeta<?> hint) throws ParseException {
+	public T unswap(F f, ClassMeta<?> hint) throws ParseException {
 		if (untransformMethod == null)
 			throw new ParseException("static valueOf({0}) method not implement on surrogate class ''{1}''", f.getClass().getName(), getNormalClass().getName());
 		try {

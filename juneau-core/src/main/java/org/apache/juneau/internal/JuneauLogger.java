@@ -32,10 +32,10 @@ public class JuneauLogger extends java.util.logging.Logger {
 
 	private static final WriterSerializer serializer = JsonSerializer.DEFAULT_LAX.clone()
 		.addTransforms(
-			CalendarTransform.ISO8601DTZ.class,
-			DateTransform.ISO8601DTZ.class,
-			EnumerationTransform.class,
-			IteratorTransform.class
+			CalendarSwap.ISO8601DTZ.class,
+			DateSwap.ISO8601DTZ.class,
+			EnumerationSwap.class,
+			IteratorSwap.class
 		);
 
 	private static final ConcurrentHashMap<Class<?>,String> rbMap = new ConcurrentHashMap<Class<?>,String>();

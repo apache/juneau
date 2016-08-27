@@ -56,7 +56,7 @@ import org.apache.juneau.*;
  *
  * 	<jc>// Change settings for all serializers in the group and lock it.</jc>
  * 	g.setProperty(SerializerContext.<jsf>SERIALIZER_useIndentation</jsf>, <jk>true</jk>)
- * 		.addTransforms(CalendarTransform.ISO8601DT.<jk>class</jk>)
+ * 		.addTransforms(CalendarSwap.ISO8601DT.<jk>class</jk>)
  * 		.lock();
  *
  * 	<jc>// Find the appropriate serializer by Accept type</jc>
@@ -277,7 +277,7 @@ public final class SerializerGroup extends Lockable {
 	/**
 	 * Shortcut for calling {@link Serializer#addTransforms(Class[])} on all serializers in this group.
 	 *
-	 * @param classes The classes to add bean transforms for to the underlying bean context of all serializers in this group.
+	 * @param classes The classes to add bean filters for to the underlying bean context of all serializers in this group.
 	 * @throws LockedException If {@link #lock()} was called on this object.
 	 * @return This object (for method chaining).
 	 */

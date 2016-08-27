@@ -356,12 +356,12 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * @throws ParseException Thrown by the transform if a problem occurred trying to parse the value.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public <T> T get(PojoTransform<T,?> transform, String key) throws ParseException {
+	public <T> T get(PojoSwap<T,?> transform, String key) throws ParseException {
 		Object o = super.get(key);
 		if (o == null)
 			return null;
-		PojoTransform f = transform;
-		return (T)f.normalize(o, null);
+		PojoSwap f = transform;
+		return (T)f.unswap(o, null);
 	}
 
 	/**
@@ -1130,7 +1130,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * 		<p>
 	 * 			It can also be converted to any type that can be handled by the {@link BeanContext#convertToType(Object, Class)} method.
 	 * 			In this case, the value is specified by an <code>value</code> entry of any type.
-	 * 			For example, if the bean context has a {@link CalendarTransform} associated with it, it can convert a string value to a calendar.
+	 * 			For example, if the bean context has a {@link CalendarSwap} associated with it, it can convert a string value to a calendar.
 	 * 		<p class='bcode'>
 	 * 	{
 	 * 		_class: <js>'java.util.GregorianCalendar'</js>,

@@ -21,7 +21,7 @@ import org.apache.juneau.json.*;
 import org.junit.*;
 
 @SuppressWarnings("javadoc")
-public class BeanTransformTest {
+public class BeanFilterTest {
 
 	//====================================================================================================
 	// Test sub types

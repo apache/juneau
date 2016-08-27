@@ -99,7 +99,7 @@ public @interface RestResource {
 	 * </ul>
 	 * <p>
 	 * If the specified class is an instance of {@link Transform}, then that filter is added.
-	 * Any other classes are wrapped in a {@link BeanTransform} to indicate that subclasses should
+	 * Any other classes are wrapped in a {@link BeanFilter} to indicate that subclasses should
 	 * 	be treated as the specified class type.
 	 */
 	Class<?>[] transforms() default {};

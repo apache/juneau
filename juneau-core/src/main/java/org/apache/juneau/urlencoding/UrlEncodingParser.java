@@ -74,7 +74,7 @@ public class UrlEncodingParser extends UonParser {
 		BeanContext bc = session.getBeanContext();
 		if (nt == null)
 			nt = (ClassMeta<T>)object();
-		PojoTransform<T,Object> transform = (PojoTransform<T,Object>)nt.getPojoTransform();
+		PojoSwap<T,Object> transform = (PojoSwap<T,Object>)nt.getPojoSwap();
 		ClassMeta<?> ft = nt.getTransformedClassMeta();
 
 		int c = r.peek();
@@ -126,7 +126,7 @@ public class UrlEncodingParser extends UonParser {
 		}
 
 		if (transform != null && o != null)
-			o = transform.normalize(o, nt);
+			o = transform.unswap(o, nt);
 
 		if (outer != null)
 			setParent(nt, o, outer);

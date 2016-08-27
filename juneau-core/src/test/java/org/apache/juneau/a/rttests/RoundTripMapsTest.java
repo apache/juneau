@@ -42,9 +42,9 @@ public class RoundTripMapsTest extends RoundTripTest {
 	@Override /* RoundTripTest */
 	public Class<?>[] getTransforms() {
 		return new Class<?>[]{
-			ByteArrayBase64Transform.class,
-			DateTransform.ISO8601DTZ.class,
-			CalendarLongTransform.class,
+			ByteArrayBase64Swap.class,
+			DateSwap.ISO8601DTZ.class,
+			CalendarLongSwap.class,
 		};
 	}
 

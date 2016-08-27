@@ -94,10 +94,10 @@ import org.apache.juneau.utils.*;
  * 		</tr>
  * 	</table>
  * <p>
- * 	In addition, any class types with {@link PojoTransform PojoTransforms} associated with them on the registered
+ * 	In addition, any class types with {@link PojoSwap PojoSwaps} associated with them on the registered
  * 		{@link #getBeanContext() beanContext} can also be passed in.
  * <p>
- * 	For example, if the {@link CalendarTransform} transform is used to generalize {@code Calendar} objects to {@code String} objects.  When registered
+ * 	For example, if the {@link CalendarSwap} transform is used to generalize {@code Calendar} objects to {@code String} objects.  When registered
  * 	with this parser, you can construct {@code Calendar} objects from {@code Strings} using the following syntax...
  * <p class='bcode'>
  * 	Calendar c = parser.parse(<js>"'Sun Mar 03 04:05:06 EST 2001'"</js>, GregorianCalendar.<jk>class</jk>);
@@ -579,7 +579,7 @@ public abstract class Parser extends CoreApi {
 
 		if (type == null)
 			type = (ClassMeta<T>)object();
-		PojoTransform transform = type.getPojoTransform();
+		PojoSwap transform = type.getPojoSwap();
 		ClassMeta<?> gType = type.getTransformedClassMeta();
 
 		Object o = s;
@@ -600,7 +600,7 @@ public abstract class Parser extends CoreApi {
 		}
 
 		if (transform != null)
-			o = transform.normalize(o, type);
+			o = transform.unswap(o, type);
 
 		return (T)o;
 	}

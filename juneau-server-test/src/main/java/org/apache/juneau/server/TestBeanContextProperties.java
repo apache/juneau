@@ -23,7 +23,7 @@ import org.apache.juneau.transforms.*;
  */
 @RestResource(
 	path="/testBeanContext",
-	transforms=DateTransform.ISO8601DTZ.class
+	transforms=DateSwap.ISO8601DTZ.class
 )
 public class TestBeanContextProperties extends RestServletDefault {
 	private static final long serialVersionUID = 1L;
@@ -33,9 +33,9 @@ public class TestBeanContextProperties extends RestServletDefault {
 	//====================================================================================================
 	@RestMethod(name="GET", path="/testClassTransforms/{d1}")
 	public Reader testClassTransforms(@Attr("d1") Date d1, @Param("d2") Date d2, @Header("X-D3") Date d3) throws Exception {
-		DateTransform df = DateTransform.ISO8601DTZ.class.newInstance();
+		DateSwap df = DateSwap.ISO8601DTZ.class.newInstance();
 		return new StringReader(
-			"d1="+df.transform(d1)+",d2="+df.transform(d2)+",d3="+df.transform(d3)+""
+			"d1="+df.swap(d1)+",d2="+df.swap(d2)+",d3="+df.swap(d3)+""
 		);
 	}
 }

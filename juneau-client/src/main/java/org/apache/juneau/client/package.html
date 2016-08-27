@@ -185,7 +185,7 @@
 		.getResponse(Boolean.<jk>class</jk>);
 			
 	<jc>// GET request, getting a filtered object</jc>
-	client.getParser().addTransforms(CalendarTransform.<jsf>ISO8601</jsf>.<jk>class</jk>);
+	client.getParser().addTransforms(CalendarSwap.<jsf>ISO8601</jsf>.<jk>class</jk>);
 	Calendar birthDate = client.doGet(<js>"http://localhost:9080/sample/addressBook/0/birthDate"</js>)
 		.getResponse(GregorianCalendar.<jk>class</jk>);
 

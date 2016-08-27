@@ -12,45 +12,28 @@
  ***************************************************************************************************************************/
 package org.apache.juneau.transforms;
 
-import java.util.*;
-
 import org.apache.juneau.*;
-import org.apache.juneau.parser.*;
 import org.apache.juneau.transform.*;
 
 /**
- * Transforms {@link Date Dates} to {@link Map Maps} of the format <tt>{value:long}</tt>.
+ * Transforms beans into {@link String Strings} by simply calling the {@link Object#toString()} method.
+ * <p>
+ * 	Allows you to specify classes that should just be converted to {@code Strings} instead of potentially
+ * 	being turned into Maps by the {@link BeanContext} (or worse, throwing {@link BeanRuntimeException BeanRuntimeExceptions}).
+ * <p>
+ * 	This is usually a one-way transform.
+ * 	Beans serialized as strings cannot be reconstituted using a parser unless it is a <a class='doclink' href='../package-summary.html#PojoCategories'>Type 5 POJO</a>.
  *
  * @author James Bognar (james.bognar@salesforce.com)
+ * @param <T> The class type of the bean.
  */
-@SuppressWarnings("rawtypes")
-public class DateMapTransform extends PojoTransform<Date,Map> {
+public class BeanStringSwap<T> extends PojoSwap<T,String> {
 
 	/**
-	 * Converts the specified {@link Date} to a {@link Map}.
+	 * Converts the specified bean to a {@link String}.
 	 */
-	@Override /* PojoTransform */
-	public Map transform(Date o) {
-		ObjectMap m = new ObjectMap();
-		m.put("time", o.getTime());
-		return m;
-	}
-
-	/**
-	 * Converts the specified {@link Map} to a {@link Date}.
-	 */
-	@Override /* PojoTransform */
-	public Date normalize(Map o, ClassMeta<?> hint) throws ParseException {
-		Class<?> c = (hint == null ? java.util.Date.class : hint.getInnerClass());
-		long l = Long.parseLong(((Map<?,?>)o).get("time").toString());
-		if (c == java.util.Date.class)
-			return new java.util.Date(l);
-		if (c == java.sql.Date.class)
-			return new java.sql.Date(l);
-		if (c == java.sql.Time.class)
-			return new java.sql.Time(l);
-		if (c == java.sql.Timestamp.class)
-			return new java.sql.Timestamp(l);
-		throw new ParseException("DateMapTransform is unable to narrow object of type ''{0}''", c);
+	@Override /* PojoSwap */
+	public String swap(T o) {
+		return o.toString();
 	}
 }

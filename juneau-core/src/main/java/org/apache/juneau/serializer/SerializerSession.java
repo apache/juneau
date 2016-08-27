@@ -537,10 +537,10 @@ public class SerializerSession extends Session {
 	public final Object generalize(Object o, ClassMeta<?> type) throws SerializeException {
 		if (o == null)
 			return null;
-		PojoTransform f = (type == null || type.isObject() ? getBeanContext().getClassMeta(o.getClass()).getPojoTransform() : type.getPojoTransform());
+		PojoSwap f = (type == null || type.isObject() ? getBeanContext().getClassMeta(o.getClass()).getPojoSwap() : type.getPojoSwap());
 		if (f == null)
 			return o;
-		return f.transform(o);
+		return f.swap(o);
 	}
 
 	/**

@@ -46,7 +46,7 @@ public @interface Bean {
 	 * <p>
 	 * 	The order specified is the same order that the entries will be returned by the {@link BeanMap#entrySet()} and related methods.
 	 * <p>
-	 * 	This annotation is an alternative to using the {@link BeanTransform} class with an implemented {@link BeanTransform#getProperties()} method.
+	 * 	This annotation is an alternative to using the {@link BeanFilter} class with an implemented {@link BeanFilter#getProperties()} method.
 	 *
 	 * <dl>
 	 * 	<dt>Example:</dt>
@@ -84,7 +84,7 @@ public @interface Bean {
 	/**
 	 * Specifies a list of properties that should be excluded from {@link BeanMap#entrySet()}.
 	 * <p>
-	 * 	This annotation is an alternative to using the {@link BeanTransform} class with an implemented {@link BeanTransform#getExcludeProperties()} method.
+	 * 	This annotation is an alternative to using the {@link BeanFilter} class with an implemented {@link BeanFilter#getExcludeProperties()} method.
 	 *
 	 * <dl>
 	 * 	<dt>Example:</dt>
@@ -108,7 +108,7 @@ public @interface Bean {
 	 * 	For example, the {@link PropertyNamerDashedLC} will convert property names to dashed-lowercase, and
 	 * 		these will be used as attribute names in JSON, and element names in XML.
 	 * <p>
-	 * 	This annotation is an alternative to using the {@link BeanTransform} class with an implemented {@link BeanTransform#getPropertyNamer()} method.
+	 * 	This annotation is an alternative to using the {@link BeanFilter} class with an implemented {@link BeanFilter#getPropertyNamer()} method.
 	 *
 	 * <dl>
 	 * 	<dt>Example:</dt>
@@ -170,7 +170,7 @@ public @interface Bean {
 	 * 	<jsm>assertTrue</jsm>(a <jk>instanceof</jk> A1);
 	 * </p>
 	 * <p>
-	 * 	This annotation is an alternative to using the {@link BeanTransform} class with an implemented {@link BeanTransform#getSubTypeProperty()} method.
+	 * 	This annotation is an alternative to using the {@link BeanFilter} class with an implemented {@link BeanFilter#getSubTypeProperty()} method.
 	 */
 	String subTypeProperty() default "";
 
@@ -205,7 +205,7 @@ public @interface Bean {
 	 * 	Note that this annotation can be used on the parent class so that it filters to all child classes,
 	 * 		or can be set individually on the child classes.
 	 * <p>
-	 * 	This annotation is an alternative to using the {@link BeanTransform} class with an implemented {@link BeanTransform#getInterfaceClass()} method.
+	 * 	This annotation is an alternative to using the {@link BeanFilter} class with an implemented {@link BeanFilter#getInterfaceClass()} method.
 	 */
 	Class<?> interfaceClass() default Object.class;
 

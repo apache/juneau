@@ -45,8 +45,8 @@ public final class Introspectable implements RestConverter {
 		if (method == null)
 			return o;
 		try {
-			if (cm.getPojoTransform() != null)
-				o = cm.getPojoTransform().transform(o);
+			if (cm.getPojoSwap() != null)
+				o = cm.getPojoSwap().swap(o);
 			return new PojoIntrospector(o, JsonParser.DEFAULT).invokeMethod(method, args);
 		} catch (Exception e) {
 			e.printStackTrace();

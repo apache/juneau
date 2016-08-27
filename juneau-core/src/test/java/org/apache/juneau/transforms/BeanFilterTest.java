@@ -20,7 +20,7 @@ import org.apache.juneau.annotation.*;
 import org.junit.*;
 
 @SuppressWarnings("javadoc")
-public class BeanTransformTest {
+public class BeanFilterTest {
 
 	//====================================================================================================
 	// Transformed interfaces

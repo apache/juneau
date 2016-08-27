@@ -100,26 +100,26 @@ public class HtmlTest {
 		public String f2 = "f2";
 	}
 
-	@Pojo(transform=A4Transform.class)
+	@Pojo(transform=A4Swap.class)
 	public static class A4 {
 		public String f2 = "f2";
 	}
 
-	public static class A4Transform extends PojoTransform<A4,A1> {
-		@Override /* PojoTransform */
-		public A1 transform(A4 o) throws SerializeException {
+	public static class A4Swap extends PojoSwap<A4,A1> {
+		@Override /* PojoSwap */
+		public A1 swap(A4 o) throws SerializeException {
 			return new A1();
 		}
 	}
 
-	@Pojo(transform=A5Transform.class)
+	@Pojo(transform=A5Swap.class)
 	public static class A5 {
 		public String f2 = "f2";
 	}
 
-	public static class A5Transform extends PojoTransform<A5,ObjectMap> {
-		@Override /* PojoTransform */
-		public ObjectMap transform(A5 o) {
+	public static class A5Swap extends PojoSwap<A5,ObjectMap> {
+		@Override /* PojoSwap */
+		public ObjectMap swap(A5 o) {
 			return new ObjectMap().append("f1", "f1");
 		}
 	}

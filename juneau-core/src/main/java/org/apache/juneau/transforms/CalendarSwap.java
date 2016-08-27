@@ -43,7 +43,7 @@ import org.apache.juneau.transform.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-public class CalendarTransform extends PojoTransform<Calendar,String> {
+public class CalendarSwap extends PojoSwap<Calendar,String> {
 
 	private static final TimeZone GMT = TimeZone.getTimeZone("GMT");
 
@@ -59,7 +59,7 @@ public class CalendarTransform extends PojoTransform<Calendar,String> {
 	 * 	</dd>
 	 * </dl>
 	 */
-	public static class ToString extends CalendarTransform {
+	public static class ToString extends CalendarSwap {
 		/** Constructor */
 		public ToString() {
 			super("EEE MMM dd HH:mm:ss zzz yyyy");
@@ -91,13 +91,13 @@ public class CalendarTransform extends PojoTransform<Calendar,String> {
 	 * 	</dd>
 	 * </dl>
 	 */
-	public static class ISO8601DT extends CalendarTransform {
+	public static class ISO8601DT extends CalendarSwap {
 
 		/** Constructor */
 		public ISO8601DT() {}
 
-		@Override /* PojoTransform */
-		public Calendar normalize(String o, ClassMeta<?> hint) throws ParseException {
+		@Override /* PojoSwap */
+		public Calendar unswap(String o, ClassMeta<?> hint) throws ParseException {
 			try {
 				if (StringUtils.isEmpty(o))
 					return null;
@@ -107,8 +107,8 @@ public class CalendarTransform extends PojoTransform<Calendar,String> {
 			}
 		}
 
-		@Override /* PojoTransform */
-		public String transform(Calendar o) {
+		@Override /* PojoSwap */
+		public String swap(Calendar o) {
 			return DatatypeConverter.printDateTime(o);
 		}
 	}
@@ -118,13 +118,13 @@ public class CalendarTransform extends PojoTransform<Calendar,String> {
 	 * <p>
 	 * Example output: <js>"2001-07-04T15:30:45Z"</js>
 	 */
-	public static class ISO8601DTZ extends CalendarTransform {
+	public static class ISO8601DTZ extends CalendarSwap {
 
 		/** Constructor */
 		public ISO8601DTZ() {}
 
-		@Override /* PojoTransform */
-		public Calendar normalize(String o, ClassMeta<?> hint) throws ParseException {
+		@Override /* PojoSwap */
+		public Calendar unswap(String o, ClassMeta<?> hint) throws ParseException {
 			try {
 				if (StringUtils.isEmpty(o))
 					return null;
@@ -134,8 +134,8 @@ public class CalendarTransform extends PojoTransform<Calendar,String> {
 			}
 		}
 
-		@Override /* PojoTransform */
-		public String transform(Calendar o) {
+		@Override /* PojoSwap */
+		public String swap(Calendar o) {
 			if (o.getTimeZone().getRawOffset() != 0) {
 				Calendar c = Calendar.getInstance(GMT);
 				c.setTime(o.getTime());
@@ -148,7 +148,7 @@ public class CalendarTransform extends PojoTransform<Calendar,String> {
 	/**
 	 * Transforms {@link Calendar Calendars} to RFC2822 date-time strings.
 	 */
-	public static class RFC2822DT extends CalendarTransform {
+	public static class RFC2822DT extends CalendarSwap {
 		/** Constructor */
 		public RFC2822DT() {
 			super("EEE, dd MMM yyyy HH:mm:ss Z");
@@ -160,7 +160,7 @@ public class CalendarTransform extends PojoTransform<Calendar,String> {
 	 * <p>
 	 * Example output: <js>"Wed, 31 Jan 2001 12:34:56 +0000"</js>
 	 */
-	public static class RFC2822DTZ extends CalendarTransform {
+	public static class RFC2822DTZ extends CalendarSwap {
 		/** Constructor */
 		public RFC2822DTZ() {
 			super("EEE, dd MMM yyyy HH:mm:ss 'GMT'", GMT);
@@ -170,7 +170,7 @@ public class CalendarTransform extends PojoTransform<Calendar,String> {
 	/**
 	 * Transforms {@link Calendar Calendars} to RFC2822 date strings.
 	 */
-	public static class RFC2822D extends CalendarTransform {
+	public static class RFC2822D extends CalendarSwap {
 		/** Constructor */
 		public RFC2822D() {
 			super("dd MMM yyyy");
@@ -180,7 +180,7 @@ public class CalendarTransform extends PojoTransform<Calendar,String> {
 	/**
 	 * Transforms {@link Calendar Calendars} to simple <js>"yyyy/MM/dd HH:mm:ss"</js> strings.
 	 */
-	public static class Simple extends CalendarTransform {
+	public static class Simple extends CalendarSwap {
 		/** Constructor */
 		public Simple() {
 			super("yyyy/MM/dd HH:mm:ss");
@@ -190,7 +190,7 @@ public class CalendarTransform extends PojoTransform<Calendar,String> {
 	/**
 	 * Transforms {@link Calendar Calendars} to {@link DateFormat#MEDIUM} strings.
 	 */
-	public static class Medium extends CalendarTransform {
+	public static class Medium extends CalendarSwap {
 		/** Constructor */
 		public Medium() {
 			super(DateFormat.getDateInstance(DateFormat.MEDIUM));
@@ -205,9 +205,9 @@ public class CalendarTransform extends PojoTransform<Calendar,String> {
 	/**
 	 * Default constructor.
 	 * <p>
-	 * 	This constructor is used when <code>transform()</code> and <code>normalize()</code> are overridden by subclasses.
+	 * 	This constructor is used when <code>swap()</code> and <code>unswap()</code> are overridden by subclasses.
 	 */
-	public CalendarTransform() {}
+	public CalendarSwap() {}
 
 	/**
 	 * Construct a transform using the specified date format string that will be
@@ -216,7 +216,7 @@ public class CalendarTransform extends PojoTransform<Calendar,String> {
 	 *
 	 * @param simpleDateFormat The {@link SimpleDateFormat} pattern.
 	 */
-	public CalendarTransform(String simpleDateFormat) {
+	public CalendarSwap(String simpleDateFormat) {
 		this(new SimpleDateFormat(simpleDateFormat));
 	}
 
@@ -228,7 +228,7 @@ public class CalendarTransform extends PojoTransform<Calendar,String> {
 	 * @param simpleDateFormat The {@link SimpleDateFormat} pattern.
 	 * @param timeZone The time zone to associate with the date pattern.
 	 */
-	public CalendarTransform(String simpleDateFormat, TimeZone timeZone) {
+	public CalendarSwap(String simpleDateFormat, TimeZone timeZone) {
 		this(new SimpleDateFormat(simpleDateFormat));
 		format.setTimeZone(timeZone);
 		this.timeZone = timeZone;
@@ -240,7 +240,7 @@ public class CalendarTransform extends PojoTransform<Calendar,String> {
 	 *
 	 * @param format The format to use to convert dates to strings.
 	 */
-	public CalendarTransform(DateFormat format) {
+	public CalendarSwap(DateFormat format) {
 		super();
 		this.format = format;
 	}
@@ -248,8 +248,8 @@ public class CalendarTransform extends PojoTransform<Calendar,String> {
 	/**
 	 * Converts the specified {@link Calendar} to a {@link String}.
 	 */
-	@Override /* PojoTransform */
-	public String transform(Calendar o) {
+	@Override /* PojoSwap */
+	public String swap(Calendar o) {
 		DateFormat df = format;
 		TimeZone tz1 = o.getTimeZone();
 		TimeZone tz2 = format.getTimeZone();
@@ -263,8 +263,8 @@ public class CalendarTransform extends PojoTransform<Calendar,String> {
 	/**
 	 * Converts the specified {@link String} to a {@link Calendar}.
 	 */
-	@Override /* PojoTransform */
-	public Calendar normalize(String o, ClassMeta<?> hint) throws ParseException {
+	@Override /* PojoSwap */
+	public Calendar unswap(String o, ClassMeta<?> hint) throws ParseException {
 		try {
 			if (StringUtils.isEmpty(o))
 				return null;

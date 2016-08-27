@@ -34,7 +34,7 @@ import org.apache.juneau.utils.*;
  * <h6 class='topic'>Description</h6>
  * <p>
  * 	Uses introspection to find all the properties associated with this class.  If the {@link Bean @Bean} annotation
- * 	is present on the class, or the class has a {@link BeanTransform} registered with it in the bean context,
+ * 	is present on the class, or the class has a {@link BeanFilter} registered with it in the bean context,
  * 	then that information is used to determine the properties on the class.
  * 	Otherwise, the {@code BeanInfo} functionality in Java is used to determine the properties on the class.
  *
@@ -52,7 +52,7 @@ import org.apache.juneau.utils.*;
  * 			</ul>
  * 	</ul>
  * 	<br>
- * 	The order can also be overridden through the use of an {@link BeanTransform}.
+ * 	The order can also be overridden through the use of an {@link BeanFilter}.
  *
  *
  * @param <T> The class type that this metadata applies to.
@@ -79,8 +79,8 @@ public class BeanMeta<T> {
 	/** The bean context that created this metadata object. */
 	protected BeanContext ctx;
 
-	/** Optional bean transform associated with the target class. */
-	protected BeanTransform<? extends T> transform;
+	/** Optional bean filter associated with the target class. */
+	protected BeanFilter<? extends T> transform;
 
 	/** Type variables implemented by this bean. */
 	protected Map<Class<?>,Class<?>[]> typeVarImpls;
@@ -106,9 +106,9 @@ public class BeanMeta<T> {
 	 *
 	 * @param classMeta The target class.
 	 * @param ctx The bean context that created this object.
-	 * @param transform Optional bean transform associated with the target class.  Can be <jk>null</jk>.
+	 * @param transform Optional bean filter associated with the target class.  Can be <jk>null</jk>.
 	 */
-	protected BeanMeta(final ClassMeta<T> classMeta, BeanContext ctx, org.apache.juneau.transform.BeanTransform<? extends T> transform) {
+	protected BeanMeta(final ClassMeta<T> classMeta, BeanContext ctx, org.apache.juneau.transform.BeanFilter<? extends T> transform) {
 		this.classMeta = classMeta;
 		this.ctx = ctx;
 		this.transform = transform;
@@ -325,14 +325,14 @@ public class BeanMeta<T> {
 			// If a transform is defined, look for inclusion and exclusion lists.
 			if (transform != null) {
 
-				// Eliminated excluded properties if BeanTransform.excludeKeys is specified.
+				// Eliminated excluded properties if BeanFilter.excludeKeys is specified.
 				String[] includeKeys = transform.getProperties();
 				String[] excludeKeys = transform.getExcludeProperties();
 				if (excludeKeys != null) {
 					for (String k : excludeKeys)
 						properties.remove(k);
 
-				// Only include specified properties if BeanTransform.includeKeys is specified.
+				// Only include specified properties if BeanFilter.includeKeys is specified.
 				// Note that the order must match includeKeys.
 				} else if (includeKeys != null) {
 					Map<String,BeanPropertyMeta> properties2 = new LinkedHashMap<String,BeanPropertyMeta>();
