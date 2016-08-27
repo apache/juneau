@@ -195,7 +195,7 @@ public class SurrogateSwap<T,F> extends PojoSwap<T,F> {
 
 	@Override /* PojoSwap */
 	@SuppressWarnings("unchecked")
-	public T unswap(F f, ClassMeta<?> hint) throws ParseException {
+	public T unswap(F f) throws ParseException {
 		if (untransformMethod == null)
 			throw new ParseException("static valueOf({0}) method not implement on surrogate class ''{1}''", f.getClass().getName(), getNormalClass().getName());
 		try {

@@ -42,11 +42,11 @@ public class CalendarMapSwap extends PojoSwap<Calendar,Map> {
 	 */
 	@Override /* PojoSwap */
 	@SuppressWarnings("unchecked")
-	public Calendar unswap(Map o, ClassMeta<?> hint) throws ParseException {
+	public Calendar unswap(Map o, ClassMeta<?> hint, BeanContext bc) throws ParseException {
 		ClassMeta<? extends Calendar> tt;
 		try {
 			if (hint == null || ! hint.canCreateNewInstance())
-				hint = getBeanContext().getClassMeta(GregorianCalendar.class);
+				hint = bc.getClassMeta(GregorianCalendar.class);
 			tt = (ClassMeta<? extends Calendar>)hint;
 			long time = Long.parseLong(o.get("time").toString());
 			String timeZone = o.get("timeZone").toString();

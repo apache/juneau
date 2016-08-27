@@ -190,7 +190,7 @@ public class JsonSerializer extends WriterSerializer {
 		// Transform if necessary
 		PojoSwap transform = aType.getPojoSwap();				// The transform
 		if (transform != null) {
-			o = transform.swap(o);
+			o = transform.swap(o, bc);
 
 			// If the transform's getTransformedClass() method returns Object, we need to figure out
 			// the actual type now.

@@ -182,7 +182,7 @@ public final class MsgPackParser extends InputStreamParser {
 		}
 
 		if (transform != null && o != null)
-			o = transform.unswap(o, nt);
+			o = transform.unswap(o, nt, bc);
 
 		if (outer != null)
 			setParent(nt, o, outer);

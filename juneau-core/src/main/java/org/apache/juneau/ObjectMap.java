@@ -361,7 +361,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 		if (o == null)
 			return null;
 		PojoSwap f = transform;
-		return (T)f.unswap(o, null);
+		return (T)f.unswap(o, null, beanContext);
 	}
 
 	/**

@@ -133,7 +133,7 @@ public final class ClassMeta<T> implements Type {
 					beanFilter = (BeanFilter)transform;
 				else
 					pojoSwap = (PojoSwap)transform;
-				transformedClassMeta = (pojoSwap == null ? this : beanContext.getClassMeta(pojoSwap.getTransformedClass()));
+				transformedClassMeta = (pojoSwap == null ? this : beanContext.getClassMeta(pojoSwap.getSwapClass()));
 			}
 			if (transformedClassMeta == null)
 				transformedClassMeta = this;
@@ -435,11 +435,8 @@ public final class ClassMeta<T> implements Type {
 			if (b != null) {
 				Class<?> c = b.swap();
 				if (c != Null.class) {
-					if (ClassUtils.isParentClass(PojoSwap.class, c)) {
-						Transform f = (Transform)c.newInstance();
-						f.setBeanContext(context);
-						return f;
-					}
+					if (ClassUtils.isParentClass(PojoSwap.class, c)) 
+						return (Transform)c.newInstance();
 					throw new RuntimeException("TODO - Surrogate classes not yet supported.");
 				}
 			}

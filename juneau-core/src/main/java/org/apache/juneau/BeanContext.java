@@ -583,15 +583,10 @@ public class BeanContext extends Context {
  		for (Class<?> c : pm.get(BEAN_transforms, Class[].class, new Class[0])) {
 			if (isParentClass(Transform.class, c)) {
 				try {
-					if (isParentClass(BeanFilter.class, c)) {
-						BeanFilter<?> f = (BeanFilter<?>)c.newInstance();
-						//f.setBeanContext(this);
-						lbf.add(f);
-					} else if (isParentClass(PojoSwap.class, c)) {
-						PojoSwap<?,?> f = (PojoSwap<?,?>)c.newInstance();
-						f.setBeanContext(this);
-						lpf.add(f);
-					}
+					if (isParentClass(BeanFilter.class, c)) 
+						lbf.add((BeanFilter<?>)c.newInstance());
+					else if (isParentClass(PojoSwap.class, c)) 
+						lpf.add((PojoSwap<?,?>)c.newInstance());
 				} catch (Exception e) {
 					throw new RuntimeException(e);
 				}
@@ -599,16 +594,12 @@ public class BeanContext extends Context {
  				if (! c.getClass().isInterface()) {
 					List<SurrogateSwap<?,?>> l = SurrogateSwap.findTransforms(c);
 					if (! l.isEmpty()) {
-						for (SurrogateSwap<?,?> f : l) {
-							f.setBeanContext(this);
+						for (SurrogateSwap<?,?> f : l)
 							lpf.add(f);
-						}
 						continue;
 					}
 				}
-				BeanFilter<?> f = new InterfaceBeanFilter(c);
-				f.setBeanContext(this);
-				lbf.add(f);
+ 				lbf.add(new InterfaceBeanFilter(c));
 			}
 		}
  		beanFilters = lbf.toArray(new BeanFilter[0]);
@@ -1736,17 +1727,17 @@ public class BeanContext extends Context {
 
 			if (type.getPojoSwap() != null) {
 				PojoSwap f = type.getPojoSwap();
-				Class<?> nc = f.getNormalClass(), fc = f.getTransformedClass();
+				Class<?> nc = f.getNormalClass(), fc = f.getSwapClass();
 				if (isParentClass(nc, tc) && isParentClass(fc, value.getClass()))
-					return (T)f.unswap(value, type);
+					return (T)f.unswap(value, type, this);
 			}
 
 			ClassMeta<?> vt = getClassMetaForObject(value);
 			if (vt.getPojoSwap() != null) {
 				PojoSwap f = vt.getPojoSwap();
-				Class<?> nc = f.getNormalClass(), fc = f.getTransformedClass();
+				Class<?> nc = f.getNormalClass(), fc = f.getSwapClass();
 				if (isParentClass(nc, vt.getInnerClass()) && isParentClass(fc, tc))
-					return (T)f.swap(value);
+					return (T)f.swap(value, this);
 			}
 
 			if (type.isPrimitive()) {

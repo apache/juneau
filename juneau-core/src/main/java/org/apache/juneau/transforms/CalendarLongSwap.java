@@ -38,11 +38,11 @@ public class CalendarLongSwap extends PojoSwap<Calendar,Long> {
 	 */
 	@Override /* PojoSwap */
 	@SuppressWarnings("unchecked")
-	public Calendar unswap(Long o, ClassMeta<?> hint) throws ParseException {
+	public Calendar unswap(Long o, ClassMeta<?> hint, BeanContext bc) throws ParseException {
 		ClassMeta<? extends Calendar> tt;
 		try {
 			if (hint == null || ! hint.canCreateNewInstance())
-				hint = getBeanContext().getClassMeta(GregorianCalendar.class);
+				hint = bc.getClassMeta(GregorianCalendar.class);
 			tt = (ClassMeta<? extends Calendar>)hint;
 			Calendar c = tt.newInstance();
 			c.setTimeInMillis(o);

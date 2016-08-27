@@ -300,8 +300,7 @@ public class Schema {
 		}
 
 		@Override /* PojoSwap */
-		public Object unswap(Object o, ClassMeta<?> hint) throws ParseException {
-			BeanContext bc = getBeanContext();
+		public Object unswap(Object o, ClassMeta<?> hint, BeanContext bc) throws ParseException {
 			ClassMeta<?> cm = (o instanceof Collection ? bc.getClassMeta(JsonTypeArray.class) : bc.getClassMeta(JsonType.class));
 			return bc.convertToType(o, cm);
 		}
@@ -561,8 +560,7 @@ public class Schema {
 		}
 
 		@Override /* PojoSwap */
-		public Object unswap(Object o, ClassMeta<?> hint) throws ParseException {
-			BeanContext bc = getBeanContext();
+		public Object unswap(Object o, ClassMeta<?> hint, BeanContext bc) throws ParseException {
 			ClassMeta<?> cm = (o instanceof Collection ? bc.getClassMeta(SchemaArray.class) : bc.getClassMeta(Schema.class));
 			return bc.convertToType(o, cm);
 		}
@@ -856,8 +854,7 @@ public class Schema {
 		}
 
 		@Override /* PojoSwap */
-		public Object unswap(Object o, ClassMeta<?> hint) throws ParseException {
-			BeanContext bc = getBeanContext();
+		public Object unswap(Object o, ClassMeta<?> hint, BeanContext bc) throws ParseException {
 			ClassMeta<?> cm = (o instanceof Collection ? bc.getClassMeta(SchemaArray.class) : bc.getClassMeta(Boolean.class));
 			return bc.convertToType(o, cm);
 		}
@@ -1101,8 +1098,7 @@ public class Schema {
 		}
 
 		@Override /* PojoSwap */
-		public Object unswap(Object o, ClassMeta<?> hint) throws ParseException {
-			BeanContext bc = getBeanContext();
+		public Object unswap(Object o, ClassMeta<?> hint, BeanContext bc) throws ParseException {
 			ClassMeta<?> cm = (o instanceof Boolean ? bc.getClassMeta(Boolean.class) : bc.getClassMeta(Schema.class));
 			return bc.convertToType(o, cm);
 		}

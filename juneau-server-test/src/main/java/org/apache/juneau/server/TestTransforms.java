@@ -13,7 +13,6 @@
 package org.apache.juneau.server;
 
 
-import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.server.annotation.*;
@@ -74,7 +73,7 @@ public class TestTransforms extends TestTransformsParent {
 			return "A1-" + a.f1;
 		}
 		@Override /* PojoSwap */
-		public A unswap(String in, ClassMeta<?> hint) throws ParseException {
+		public A unswap(String in) throws ParseException {
 			if (! in.startsWith("A1"))
 				throw new RuntimeException("Invalid input for SwapA1!");
 			A a = new A();
@@ -89,7 +88,7 @@ public class TestTransforms extends TestTransformsParent {
 			return "A2-" + a.f1;
 		}
 		@Override /* PojoSwap */
-		public A unswap(String in, ClassMeta<?> hint) throws ParseException {
+		public A unswap(String in) throws ParseException {
 			if (! in.startsWith("A2"))
 				throw new RuntimeException("Invalid input for SwapA2!");
 			A a = new A();
@@ -104,7 +103,7 @@ public class TestTransforms extends TestTransformsParent {
 			return "A3-" + a.f1;
 		}
 		@Override /* PojoSwap */
-		public A unswap(String in, ClassMeta<?> hint) throws ParseException {
+		public A unswap(String in) throws ParseException {
 			if (! in.startsWith("A3"))
 				throw new RuntimeException("Invalid input for SwapA3!");
 			A a = new A();

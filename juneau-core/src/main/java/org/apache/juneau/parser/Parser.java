@@ -600,7 +600,7 @@ public abstract class Parser extends CoreApi {
 		}
 
 		if (transform != null)
-			o = transform.unswap(o, type);
+			o = transform.unswap(o, type, session.getBeanContext());
 
 		return (T)o;
 	}

@@ -239,7 +239,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 			return o.f1;
 		}
 		@Override /* PojoSwap */
-		public B unswap(String f, ClassMeta<?> hint) throws ParseException {
+		public B unswap(String f) throws ParseException {
 			B b1 = new B();
 			b1.f1 = f;
 			return b1;

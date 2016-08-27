@@ -224,7 +224,7 @@ public class HtmlSerializer extends XmlSerializer {
 			// Transform if necessary
 			PojoSwap transform = aType.getPojoSwap();
 			if (transform != null) {
-				o = transform.swap(o);
+				o = transform.swap(o, bc);
 
 				// If the transforms getTransformedClass() method returns Object, we need to figure out
 				// the actual type now.
@@ -411,7 +411,7 @@ public class HtmlSerializer extends XmlSerializer {
 
 				if (cm != null && cm.getPojoSwap() != null) {
 					PojoSwap f = cm.getPojoSwap();
-					o = f.swap(o);
+					o = f.swap(o, bc);
 					cm = cm.getTransformedClassMeta();
 				}
 
@@ -489,7 +489,7 @@ public class HtmlSerializer extends XmlSerializer {
 		ClassMeta<?> cm = bc.getClassMetaForObject(o1);
 		if (cm.getPojoSwap() != null) {
 			PojoSwap f = cm.getPojoSwap();
-			o1 = f.swap(o1);
+			o1 = f.swap(o1, bc);
 			cm = cm.getTransformedClassMeta();
 		}
 		if (cm == null || ! (cm.isMap() || cm.isBean()))

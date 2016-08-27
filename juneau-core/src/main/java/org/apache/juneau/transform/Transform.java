@@ -57,9 +57,6 @@ public class Transform {
 	/** The class that this transform applies to. */
 	protected Class<?> forClass;
 
-	/** The bean context that this transform instance belongs to. */
-	protected BeanContext beanContext;
-
 	/** Whether this is a BeanFilter or PojoSwap. */
 	protected TransformType type = TransformType.POJO;
 
@@ -98,38 +95,8 @@ public class Transform {
 		return type;
 	}
 
-	/**
-	 * Returns the {@link BeanContext} that created this transform.
-	 *
-	 * @return The bean context that created this transform.
-	 */
-	protected BeanContext getBeanContext() {
-		return beanContext;
-	}
-
-	/**
-	 * Sets the bean context that this transform instance was created by.
-	 *
-	 * @param beanContext The bean context that created this transform.
-	 * @return This object (for method chaining).
-	 */
-	public Transform setBeanContext(BeanContext beanContext) {
-		this.beanContext = beanContext;
-		return this;
-	}
-
 	@Override /* Object */
 	public int hashCode() {
 		return getClass().getName().hashCode() + forClass().getName().hashCode();
-	}
-
-	/**
-	 * Checks if the specified transform class is the same as this one.
-	 *
-	 * @param f The transform to check.
-	 * @return <jk>true</jk> if the specified transform is equivalent to this one.
-	 */
-	public boolean isSameAs(Transform f) {
-		return f.getClass().equals(getClass()) && f.forClass().equals(forClass());
 	}
 }

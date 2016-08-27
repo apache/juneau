@@ -14,6 +14,7 @@ package org.apache.juneau.transforms;
 
 import java.io.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
@@ -98,11 +99,11 @@ public class ReaderSwap extends PojoSwap<Reader,Object> {
 	 * by the contents of the reader.
 	 */
 	@Override /* PojoSwap */
-	public Object swap(Reader o) throws SerializeException {
+	public Object swap(Reader o, BeanContext bc) throws SerializeException {
 		try {
 			if (parser == null)
 				return IOUtils.read(o);
-			return parser.parse(o, beanContext.object());
+			return parser.parse(o, bc.object());
 		} catch (IOException e) {
 			return e.getLocalizedMessage();
 		} catch (Exception e) {

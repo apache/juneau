@@ -50,7 +50,7 @@ public class PojoSwapTest {
 		}
 
 		@Override
-		public String unswap(String f, ClassMeta<?> hint) throws ParseException {
+		public String unswap(String f) throws ParseException {
 			return f.substring(1, f.length()-1);
 		}
 	}

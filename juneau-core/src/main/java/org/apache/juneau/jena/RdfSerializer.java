@@ -182,7 +182,7 @@ public class RdfSerializer extends WriterSerializer {
 			// Transform if necessary
 			PojoSwap transform = aType.getPojoSwap();
 			if (transform != null) {
-				o = transform.swap(o);
+				o = transform.swap(o, bc);
 
 				// If the transforms getTransformedClass() method returns Object, we need to figure out
 				// the actual type now.
@@ -244,7 +244,7 @@ public class RdfSerializer extends WriterSerializer {
 			RdfCollectionFormat f = session.getCollectionFormat();
 			RdfClassMeta rcm = gType.getExtendedMeta(RdfClassMeta.class);
 			if (rcm.getCollectionFormat() != RdfCollectionFormat.DEFAULT)
-				f = rcm.getCollectionFormat(); 
+				f = rcm.getCollectionFormat();
 			if (bpm != null && bpm.getExtendedMeta(RdfBeanPropertyMeta.class).getCollectionFormat() != RdfCollectionFormat.DEFAULT)
 				f = bpm.getExtendedMeta(RdfBeanPropertyMeta.class).getCollectionFormat();
 			switch (f) {

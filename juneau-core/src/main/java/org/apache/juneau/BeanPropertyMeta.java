@@ -138,7 +138,7 @@ public class BeanPropertyMeta {
 	 */
 	public ClassMeta<?> getClassMeta() {
 		if (typeMeta == null)
-			typeMeta = (transform != null ? transform.getTransformedClassMeta() : rawTypeMeta == null ? beanMeta.ctx.object() : rawTypeMeta.getTransformedClassMeta());
+			typeMeta = (transform != null ? transform.getSwapClassMeta(beanMeta.ctx) : rawTypeMeta == null ? beanMeta.ctx.object() : rawTypeMeta.getTransformedClassMeta());
 		return typeMeta;
 	}
 
@@ -305,9 +305,7 @@ public class BeanPropertyMeta {
 			return null;
 		try {
 			if (ClassUtils.isParentClass(PojoSwap.class, c)) {
-				PojoSwap f = (PojoSwap)c.newInstance();
-				f.setBeanContext(this.beanMeta.ctx);
-				return f;
+				return (PojoSwap)c.newInstance();
 			}
 			throw new RuntimeException("TODO - Surrogate swaps not yet supported.");
 		} catch (Exception e) {
@@ -551,8 +549,8 @@ public class BeanPropertyMeta {
 				}
 
 			} else {
-				if (transform != null && value != null && isParentClass(transform.getTransformedClass(), value.getClass())) {
-						value = transform.unswap(value, rawTypeMeta);
+				if (transform != null && value != null && isParentClass(transform.getSwapClass(), value.getClass())) {
+						value = transform.unswap(value, rawTypeMeta, beanMeta.ctx);
 				} else {
 						value = beanMeta.ctx.convertToType(value, rawTypeMeta);
 					}
@@ -724,7 +722,7 @@ public class BeanPropertyMeta {
 	private Object transform(Object o) throws SerializeException {
 		// First use transform defined via @BeanProperty.
 		if (transform != null)
-			return transform.swap(o);
+			return transform.swap(o, beanMeta.ctx);
 		if (o == null)
 			return null;
 		// Otherwise, look it up via bean context.
@@ -733,14 +731,14 @@ public class BeanPropertyMeta {
 			ClassMeta<?> cm = rawTypeMeta.innerClass == c ? rawTypeMeta : beanMeta.ctx.getClassMeta(c);
 			PojoSwap f = cm.getPojoSwap();
 			if (f != null)
-				return f.swap(o);
+				return f.swap(o, beanMeta.ctx);
 		}
 		return o;
 	}
 
 	private Object unswap(Object o) throws ParseException {
 		if (transform != null)
-			return transform.unswap(o, rawTypeMeta);
+			return transform.unswap(o, rawTypeMeta, beanMeta.ctx);
 		if (o == null)
 			return null;
 		if (rawTypeMeta.hasChildPojoSwaps()) {
@@ -748,7 +746,7 @@ public class BeanPropertyMeta {
 			ClassMeta<?> cm = rawTypeMeta.innerClass == c ? rawTypeMeta : beanMeta.ctx.getClassMeta(c);
 			PojoSwap f = cm.getPojoSwap();
 			if (f != null)
-				return f.unswap(o, rawTypeMeta);
+				return f.unswap(o, rawTypeMeta, beanMeta.ctx);
 		}
 		return o;
 	}

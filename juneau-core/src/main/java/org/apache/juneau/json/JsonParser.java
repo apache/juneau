@@ -109,7 +109,7 @@ public final class JsonParser extends ReaderParser {
 		session.setCurrentClass(ft);
 		String wrapperAttr = ft.getExtendedMeta(JsonClassMeta.class).getWrapperAttr();
 
-		Object o = null; 
+		Object o = null;
 
 		skipCommentsAndSpace(session, r);
 		if (wrapperAttr != null)
@@ -202,7 +202,7 @@ public final class JsonParser extends ReaderParser {
 			skipWrapperAttrEnd(session, r);
 
 		if (transform != null && o != null)
-			o = transform.unswap(o, nt);
+			o = transform.unswap(o, nt, bc);
 
 		if (outer != null)
 			setParent(nt, o, outer);

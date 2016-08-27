@@ -21,7 +21,7 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 
 /**
- * Used to convert non-serializable objects to a serializable form.
+ * Used to swap out non-serializable objects with serializable replacements during serialization, and vis-versa during parsing.
  *
  *
  * <h6 class='topic'>Description</h6>
@@ -72,10 +72,10 @@ import org.apache.juneau.serializer.*;
  * <h6 class='topic'>One-way vs. Two-way Serialization</h6>
  * <p>
  * 	Note that while there is a unified interface for handling swaps during both serialization and parsing,
- * 	in many cases only one of the {@link #swap(Object)} or {@link #unswap(Object, ClassMeta)} methods will be defined
+ * 	in many cases only one of the {@link #swap(Object)} or {@link #unswap(Object)} methods will be defined
  * 	because the swap is one-way.  For example, a swap may be defined to convert an {@code Iterator} to a {@code ObjectList}, but
- * 	it's not possible to unswap an {@code Iterator}.  In that case, the {@code generalize(Object}} method would
- * 	be implemented, but the {@code narrow(ObjectMap)} object would not, and the swap would be associated on
+ * 	it's not possible to unswap an {@code Iterator}.  In that case, the {@code swap(Object}} method would
+ * 	be implemented, but the {@code unswap(ObjectMap)} object would not, and the swap would be associated on
  * 	the serializer, but not the parser.  Also, you may choose to serialize objects like {@code Dates} to readable {@code Strings},
  * 	in which case it's not possible to reparse it back into a {@code Date}, since there is no way for the {@code Parser} to
  * 	know it's a {@code Date} from just the JSON or XML text.
@@ -92,8 +92,8 @@ import org.apache.juneau.serializer.*;
 public abstract class PojoSwap<T,S> extends Transform {
 
 	Class<T> normalClass;
-	Class<S> transformedClass;
-	ClassMeta<S> transformedClassMeta;
+	Class<S> swapClass;
+	ClassMeta<S> swapClassMeta;
 
 	/**
 	 * Constructor.
@@ -131,9 +131,9 @@ public abstract class PojoSwap<T,S> extends Transform {
 				} else
 					throw new RuntimeException("Unsupported parameter type: " + nType);
 				if (pta[1] instanceof Class)
-					this.transformedClass = (Class<S>)pta[1];
+					this.swapClass = (Class<S>)pta[1];
 				else if (pta[1] instanceof ParameterizedType)
-					this.transformedClass = (Class<S>)((ParameterizedType)pta[1]).getRawType();
+					this.swapClass = (Class<S>)((ParameterizedType)pta[1]).getRawType();
 				else
 					throw new RuntimeException("Unexpected transformed class type: " + pta[1].getClass().getName());
 			}
@@ -144,11 +144,11 @@ public abstract class PojoSwap<T,S> extends Transform {
 	 * Constructor for when the normal and transformed classes are already known.
 	 *
 	 * @param normalClass The normal class (cannot be serialized).
-	 * @param transformedClass The transformed class (serializable).
+	 * @param swapClass The transformed class (serializable).
 	 */
-	protected PojoSwap(Class<T> normalClass, Class<S> transformedClass) {
+	protected PojoSwap(Class<T> normalClass, Class<S> swapClass) {
 		this.normalClass = normalClass;
-		this.transformedClass = transformedClass;
+		this.swapClass = swapClass;
 	}
 
 	/**
@@ -174,7 +174,33 @@ public abstract class PojoSwap<T,S> extends Transform {
 	}
 
 	/**
+	 *	Same as {@link #swap(Object)}, but override this method instead if you want access to the bean context that created this swap.
+	 *
+	 * @param o The object to be transformed.
+	 * @param beanContext The bean context to use to get the class meta.
+	 * 	This is always going to be the same bean context that created this swap.
+	 * @return The transformed object.
+	 * @throws SerializeException If a problem occurred trying to convert the output.
+	 */
+	public S swap(T o, BeanContext beanContext) throws SerializeException {
+		return swap(o);
+	}
+
+	/**
 	 * If this transform is to be used to reconstitute POJOs that aren't true Java beans, it must implement this method.
+	 *
+	 * @param f The transformed object.
+	 * 	This may be <jk>null</jk> if the parser cannot make this determination.
+	 * @return The narrowed object.
+	 * @throws ParseException If this method is not implemented.
+	 */
+	public T unswap(S f) throws ParseException {
+		throw new ParseException("Narrow method not implemented on transform ''{0}''", this.getClass().getName());
+	}
+
+	/**
+	 *	Same as {@link #unswap(Object)}, but override this method if you need access to the expected class type
+	 *		to be created.
 	 *
 	 * @param f The transformed object.
 	 * @param hint If possible, the parser will try to tell you the object type being created.  For example,
@@ -184,7 +210,23 @@ public abstract class PojoSwap<T,S> extends Transform {
 	 * @throws ParseException If this method is not implemented.
 	 */
 	public T unswap(S f, ClassMeta<?> hint) throws ParseException {
-		throw new ParseException("Narrow method not implemented on transform ''{0}''", this.getClass().getName());
+		return unswap(f);
+	}
+
+	/**
+	 *	Same as {@link #unswap(Object, ClassMeta)}, but override this method if you need access to the bean context that created this swap.
+	 *
+	 * @param f The transformed object.
+	 * @param hint If possible, the parser will try to tell you the object type being created.  For example,
+	 * 	on a serialized date, this may tell you that the object being created must be of type {@code GregorianCalendar}.<br>
+	 * 	This may be <jk>null</jk> if the parser cannot make this determination.
+	 * @param beanContext The bean context to use to get the class meta.
+	 * 	This is always going to be the same bean context that created this swap.
+	 * @return The narrowed object.
+	 * @throws ParseException If this method is not implemented.
+	 */
+	public T unswap(S f, ClassMeta<?> hint, BeanContext beanContext) throws ParseException {
+		return unswap(f, hint);
 	}
 
 	/**
@@ -204,24 +246,26 @@ public abstract class PojoSwap<T,S> extends Transform {
 	 *
 	 * @return The transformed form of this class.
 	 */
-	public Class<S> getTransformedClass() {
-		return transformedClass;
+	public Class<S> getSwapClass() {
+		return swapClass;
 	}
 
 	/**
 	 * Returns the {@link ClassMeta} of the transformed class type.
 	 * This value is cached for quick lookup.
 	 *
+	 * @param beanContext The bean context to use to get the class meta.
+	 * 	This is always going to be the same bean context that created this swap.
 	 * @return The {@link ClassMeta} of the transformed class type.
 	 */
-	public ClassMeta<S> getTransformedClassMeta() {
-		if (transformedClassMeta == null)
-			transformedClassMeta = beanContext.getClassMeta(transformedClass);
-		return transformedClassMeta;
+	public ClassMeta<S> getSwapClassMeta(BeanContext beanContext) {
+		if (swapClassMeta == null)
+			swapClassMeta = beanContext.getClassMeta(swapClass);
+		return swapClassMeta;
 	}
 
 	/**
-	 * Checks if the specified object is an instance of the normal class defined on this transform.
+	 * Checks if the specified object is an instance of the normal class defined on this swap.
 	 *
 	 * @param o The object to check.
 	 * @return <jk>true</jk> if the specified object is a subclass of the normal class defined on this transform.
@@ -234,16 +278,16 @@ public abstract class PojoSwap<T,S> extends Transform {
 	}
 
 	/**
-	 * Checks if the specified object is an instance of the transformed class defined on this transform.
+	 * Checks if the specified object is an instance of the swap class defined on this swap.
 	 *
 	 * @param o The object to check.
 	 * @return <jk>true</jk> if the specified object is a subclass of the transformed class defined on this transform.
 	 * 	<jk>null</jk> always return <jk>false</jk>.
 	 */
-	public boolean isTransformedObject(Object o) {
+	public boolean isSwappedObject(Object o) {
 		if (o == null)
 			return false;
-		return ClassUtils.isParentClass(transformedClass, o.getClass());
+		return ClassUtils.isParentClass(swapClass, o.getClass());
 	}
 
 	//--------------------------------------------------------------------------------
@@ -257,6 +301,6 @@ public abstract class PojoSwap<T,S> extends Transform {
 
 	@Override /* Object */
 	public String toString() {
-		return getClass().getSimpleName() + '<' + getNormalClass().getSimpleName() + "," + getTransformedClass().getSimpleName() + '>';
+		return getClass().getSimpleName() + '<' + getNormalClass().getSimpleName() + "," + getSwapClass().getSimpleName() + '>';
 	}
 }
