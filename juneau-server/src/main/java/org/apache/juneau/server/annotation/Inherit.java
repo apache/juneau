@@ -26,7 +26,7 @@ public enum Inherit {
 	/** Inherit parsers from parent. */
 	PARSERS,
 
-	/** Inherit transforms from parent. */
+	/** Inherit bean filters and POJO swaps from parent. */
 	TRANSFORMS,
 
 	/** Inherit properties from parent. */

@@ -50,8 +50,10 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 			parsers.append(jp.parsers());
 			for (Property p : jp.properties())
 				properties.put(p.name(), p.value());
-			serializers.addTransforms(jp.transforms());
-			parsers.addTransforms(jp.transforms());
+			serializers.addBeanFilters(jp.beanFilters());
+			parsers.addBeanFilters(jp.beanFilters());
+			serializers.addPojoSwaps(jp.pojoSwaps());
+			parsers.addPojoSwaps(jp.pojoSwaps());
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

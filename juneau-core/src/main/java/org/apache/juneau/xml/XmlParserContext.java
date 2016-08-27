@@ -29,7 +29,8 @@ import org.apache.juneau.parser.*;
  * 	<li>{@link XmlParser#setProperty(String,Object)}
  * 	<li>{@link XmlParser#setProperties(ObjectMap)}
  * 	<li>{@link XmlParser#addNotBeanClasses(Class[])}
- * 	<li>{@link XmlParser#addTransforms(Class[])}
+ * 	<li>{@link XmlParser#addBeanFilters(Class[])}
+ * 	<li>{@link XmlParser#addPojoSwaps(Class[])}
  * 	<li>{@link XmlParser#addImplClass(Class,Class)}
  * </ul>
  * <p>

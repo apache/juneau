@@ -60,7 +60,7 @@ import org.apache.juneau.serializer.*;
  * 		can be instantiated by the parser before being converted into the normal class by the untransform method).
  * </ul>
  * <p>
- * Surrogate classes are associated with serializers and parsers using the {@link CoreApi#addTransforms(Class...)} method.
+ * Surrogate classes are associated with serializers and parsers using the {@link CoreApi#addPojoSwaps(Class...)} method.
  * <p class='bcode'>
  * 	<ja>@Test</ja>
  * 	<jk>public void</jk> test() <jk>throws</jk> Exception {

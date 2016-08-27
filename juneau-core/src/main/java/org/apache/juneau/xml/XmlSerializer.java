@@ -674,8 +674,14 @@ public class XmlSerializer extends WriterSerializer {
 	}
 
 	@Override /* CoreApi */
-	public XmlSerializer addTransforms(Class<?>...classes) throws LockedException {
-		super.addTransforms(classes);
+	public XmlSerializer addBeanFilters(Class<?>...classes) throws LockedException {
+		super.addBeanFilters(classes);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public XmlSerializer addPojoSwaps(Class<?>...classes) throws LockedException {
+		super.addPojoSwaps(classes);
 		return this;
 	}
 

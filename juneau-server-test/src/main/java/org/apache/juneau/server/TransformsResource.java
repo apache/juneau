@@ -23,7 +23,7 @@ import org.apache.juneau.transform.*;
  */
 @RestResource(
 	path="/testTransforms",
-	transforms={TransformsResource.SwapA2.class}
+	pojoSwaps={TransformsResource.SwapA2.class}
 )
 public class TransformsResource extends TransformsParentResource {
 	private static final long serialVersionUID = 1L;
@@ -49,15 +49,15 @@ public class TransformsResource extends TransformsParentResource {
 	// Test method transform overrides class transform
 	// Should return "A3-1".
 	//====================================================================================================
-	@RestMethod(name="GET", path="/testMethodTransformOverridesClassTransform", transforms={SwapA3.class})
+	@RestMethod(name="GET", path="/testMethodTransformOverridesClassTransform", pojoSwaps={SwapA3.class})
 	public A test2a() {
 		return new A();
 	}
-	@RestMethod(name="PUT", path="/testMethodTransformOverridesClassTransform", transforms={SwapA3.class})
+	@RestMethod(name="PUT", path="/testMethodTransformOverridesClassTransform", pojoSwaps={SwapA3.class})
 	public A test2b(@Content A a) {
 		return a;
 	}
-	@RestMethod(name="PUT", path="/testMethodTransformOverridesClassTransform/{a}", transforms={SwapA3.class})
+	@RestMethod(name="PUT", path="/testMethodTransformOverridesClassTransform/{a}", pojoSwaps={SwapA3.class})
 	public A test2c(@Attr A a) {
 		return a;
 	}

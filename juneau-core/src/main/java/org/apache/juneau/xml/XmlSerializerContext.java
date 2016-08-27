@@ -26,7 +26,8 @@ import org.apache.juneau.serializer.*;
  * 	<li>{@link XmlSerializer#setProperty(String,Object)}
  * 	<li>{@link XmlSerializer#setProperties(ObjectMap)}
  * 	<li>{@link XmlSerializer#addNotBeanClasses(Class[])}
- * 	<li>{@link XmlSerializer#addTransforms(Class[])}
+ * 	<li>{@link XmlSerializer#addBeanFilters(Class[])}
+ * 	<li>{@link XmlSerializer#addPojoSwaps(Class[])}
  * 	<li>{@link XmlSerializer#addImplClass(Class,Class)}
  * </ul>
  * <p>

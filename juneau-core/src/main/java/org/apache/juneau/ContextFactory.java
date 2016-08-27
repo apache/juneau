@@ -93,7 +93,7 @@ import org.apache.juneau.parser.*;
  * 			Objects can be of any type, even complex types.<br>
  * 			Use lists if the ordering of the values in the set is important (similar to how the order of entries in a classpath is important).<br>
  * 			<br>
- * 			For example, the {@link BeanContext#BEAN_transforms} property is used to store transform classes.<br>
+ * 			For example, the {@link BeanContext#BEAN_beanFilters} property is used to store bean filters.<br>
  * 			It's name is <js>"BeanContext.transforms.list"</js>.
  *
  * 		<li><l>MAP</l> - A sorted map of key-value pairs.<br>
@@ -696,17 +696,32 @@ public final class ContextFactory extends Lockable {
 	}
 
 	/**
+	 * Shortcut for calling <code>addTo(<jsf>BEAN_beanFilters</jsf>, <jf>classes</jf>)</code>.
+	 *
+	 * @param classes The new setting value for the bean context.
+	 * @throws LockedException If {@link ContextFactory#lock()} was called on this class or the bean context.
+	 * @return This object (for method chaining).
+	 * @see ContextFactory#addToProperty(String, Object)
+	 * @see BeanContext#BEAN_beanFilters
+	 */
+	public ContextFactory addBeanFilters(Class<?>...classes) throws LockedException {
+		checkLock();
+		addToProperty(BEAN_beanFilters, classes);
+		return this;
+	}
+
+	/**
 	 * Shortcut for calling <code>addTo(<jsf>BEAN_transforms</jsf>, <jf>classes</jf>)</code>.
 	 *
 	 * @param classes The new setting value for the bean context.
 	 * @throws LockedException If {@link ContextFactory#lock()} was called on this class or the bean context.
 	 * @return This object (for method chaining).
 	 * @see ContextFactory#addToProperty(String, Object)
-	 * @see BeanContext#BEAN_transforms
+	 * @see BeanContext#BEAN_pojoSwaps
 	 */
-	public ContextFactory addTransforms(Class<?>...classes) throws LockedException {
+	public ContextFactory addPojoSwaps(Class<?>...classes) throws LockedException {
 		checkLock();
-		addToProperty(BEAN_transforms, classes);
+		addToProperty(BEAN_pojoSwaps, classes);
 		return this;
 	}
 

@@ -47,13 +47,13 @@ public class GroupsResource extends RestServlet {
 
 
 	@Override /* RestServlet */
-	public SerializerGroup createSerializers(ObjectMap properties, Class<?>[] filters) throws Exception {
-		return new SerializerGroup().append(SSerializer.class).setProperties(properties).addTransforms(filters);
+	public SerializerGroup createSerializers(ObjectMap properties, Class<?>[] beanFilters, Class<?>[] pojoSwaps) throws Exception {
+		return new SerializerGroup().append(SSerializer.class).setProperties(properties).addBeanFilters(beanFilters).addPojoSwaps(pojoSwaps);
 	}
 
 	@Override /* RestServlet */
-	public ParserGroup createParsers(ObjectMap properties, Class<?>[] filters) throws Exception {
-		return new ParserGroup().append(PParser.class).setProperties(properties).addTransforms(filters);
+	public ParserGroup createParsers(ObjectMap properties, Class<?>[] beanFilters, Class<?>[] pojoSwaps) throws Exception {
+		return new ParserGroup().append(PParser.class).setProperties(properties).addBeanFilters(beanFilters).addPojoSwaps(pojoSwaps);
 	}
 
 	//====================================================================================================

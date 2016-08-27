@@ -48,8 +48,8 @@ public class DateFilterTest {
 	@Test
 	public void testString() throws Exception {
 		Class<?> f = DateSwap.ToString.class;
-		WriterSerializer s = new JsonSerializer.Simple().addTransforms(f);
-		ReaderParser p = new JsonParser().addTransforms(f);
+		WriterSerializer s = new JsonSerializer.Simple().addPojoSwaps(f);
+		ReaderParser p = new JsonParser().addPojoSwaps(f);
 		doTest(s, p, "'Sun Mar 03 04:05:06 "+tz1+" 1901'");
 	}
 
@@ -59,8 +59,8 @@ public class DateFilterTest {
 	@Test
 	public void testISO8601DTZ() throws Exception {
 		Class<?> f = DateSwap.ISO8601DTZ.class;
-		WriterSerializer s = new JsonSerializer.Simple().addTransforms(f);
-		ReaderParser p = new JsonParser().addTransforms(f);
+		WriterSerializer s = new JsonSerializer.Simple().addPojoSwaps(f);
+		ReaderParser p = new JsonParser().addPojoSwaps(f);
 		doTest(s, p, "'1901-03-03T09:05:06Z'");
 	}
 
@@ -70,8 +70,8 @@ public class DateFilterTest {
 	@Test
 	public void testRFC2822DT() throws Exception {
 		Class<?> f = DateSwap.RFC2822DT.class;
-		WriterSerializer s = new JsonSerializer.Simple().addTransforms(f);
-		ReaderParser p = new JsonParser().addTransforms(f);
+		WriterSerializer s = new JsonSerializer.Simple().addPojoSwaps(f);
+		ReaderParser p = new JsonParser().addPojoSwaps(f);
 		doTest(s, p, "'Sun, 03 Mar 1901 04:05:06 "+tz1+"'");
 	}
 
@@ -81,8 +81,8 @@ public class DateFilterTest {
 	@Test
 	public void testLong() throws Exception {
 		Class<?> f = DateLongSwap.class;
-		WriterSerializer s = new JsonSerializer.Simple().addTransforms(f);
-		ReaderParser p = new JsonParser().addTransforms(f);
+		WriterSerializer s = new JsonSerializer.Simple().addPojoSwaps(f);
+		ReaderParser p = new JsonParser().addPojoSwaps(f);
 		doTest(s, p, "-2172149694000");
 	}
 
@@ -92,8 +92,8 @@ public class DateFilterTest {
 	@Test
 	public void testMap() throws Exception {
 		Class<?> f = DateMapSwap.class;
-		WriterSerializer s = new JsonSerializer.Simple().addTransforms(f);
-		ReaderParser p = new JsonParser().addTransforms(f);
+		WriterSerializer s = new JsonSerializer.Simple().addPojoSwaps(f);
+		ReaderParser p = new JsonParser().addPojoSwaps(f);
 		doTest(s, p, "{time:-2172149694000}");
 	}
 
@@ -146,9 +146,9 @@ public class DateFilterTest {
 	public void testBeanWithDate() throws Exception {
 		A testBeanA = new A().init();
 
-		final String jsonData = new JsonSerializer().addTransforms(
+		final String jsonData = new JsonSerializer().addPojoSwaps(
 			DateSwap.ISO8601DT.class).serialize(testBeanA);
-		final ObjectMap data = new JsonParser().addTransforms(
+		final ObjectMap data = new JsonParser().addPojoSwaps(
 			DateSwap.ISO8601DT.class).parse(jsonData, ObjectMap.class);
 
 		final DateSwap.ISO8601DT dateSwap = new DateSwap.ISO8601DT();

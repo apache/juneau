@@ -794,8 +794,14 @@ public class UonParser extends ReaderParser {
 	}
 
 	@Override /* CoreApi */
-	public UonParser addTransforms(Class<?>...classes) throws LockedException {
-		super.addTransforms(classes);
+	public UonParser addBeanFilters(Class<?>...classes) throws LockedException {
+		super.addBeanFilters(classes);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser addPojoSwaps(Class<?>...classes) throws LockedException {
+		super.addPojoSwaps(classes);
 		return this;
 	}
 

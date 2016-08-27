@@ -488,8 +488,14 @@ public class XmlParser extends ReaderParser {
 	}
 
 	@Override /* CoreApi */
-	public XmlParser addTransforms(Class<?>...classes) throws LockedException {
-		super.addTransforms(classes);
+	public XmlParser addBeanFilters(Class<?>...classes) throws LockedException {
+		super.addBeanFilters(classes);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public XmlParser addPojoSwaps(Class<?>...classes) throws LockedException {
+		super.addPojoSwaps(classes);
 		return this;
 	}
 

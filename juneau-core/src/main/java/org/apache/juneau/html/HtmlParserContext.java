@@ -28,7 +28,8 @@ import org.apache.juneau.parser.*;
  * 	<li>{@link HtmlParser#setProperty(String,Object)}
  * 	<li>{@link HtmlParser#setProperties(ObjectMap)}
  * 	<li>{@link HtmlParser#addNotBeanClasses(Class[])}
- * 	<li>{@link HtmlParser#addTransforms(Class[])}
+ * 	<li>{@link HtmlParser#addBeanFilters(Class[])}
+ * 	<li>{@link HtmlParser#addPojoSwaps(Class[])}
  * 	<li>{@link HtmlParser#addImplClass(Class,Class)}
  * </ul>
  * <p>

@@ -46,7 +46,7 @@ public class RoundTripEnumTest extends RoundTripTest {
 
 	@Test
 	public void testEnumB() throws Exception {
-		WriterSerializer s = new JsonSerializer.Simple().addTransforms(getTransforms());
+		WriterSerializer s = new JsonSerializer.Simple().addBeanFilters(getBeanFilters()).addPojoSwaps(getPojoSwaps());
 		BEnum t = BEnum.FOO;
 		assertEquals("'xfoo'", s.serialize(t));
 		t = roundTrip(t, BEnum.class);

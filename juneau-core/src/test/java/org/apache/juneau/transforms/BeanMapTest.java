@@ -26,7 +26,7 @@ public class BeanMapTest {
 	//====================================================================================================
 	@Test
 	public void testFilteredEntry() throws Exception {
-		BeanContext bc = ContextFactory.create().addTransforms(ByteArrayBase64Swap.class).getBeanContext();
+		BeanContext bc = ContextFactory.create().addPojoSwaps(ByteArrayBase64Swap.class).getBeanContext();
 		BeanMap<A> m = bc.forBean(new A());
 
 		assertEquals("AQID", m.get("f1"));
@@ -48,12 +48,12 @@ public class BeanMapTest {
 	//====================================================================================================
 	@Test
 	public void testFilteredEntryWithMultipleMatchingFilters() throws Exception {
-		BeanContext bc = ContextFactory.create().addTransforms(B2Filter.class,B1Filter.class).getBeanContext();
+		BeanContext bc = ContextFactory.create().addPojoSwaps(B2Swap.class,B1Swap.class).getBeanContext();
 		BeanMap<B> bm = bc.forBean(B.create());
 		ObjectMap om = (ObjectMap)bm.get("b1");
 		assertEquals("b2", om.getString("type"));
 
-		bc = ContextFactory.create().addTransforms(B1Filter.class,B2Filter.class).getBeanContext();
+		bc = ContextFactory.create().addPojoSwaps(B1Swap.class,B2Swap.class).getBeanContext();
 		bm = bc.forBean(B.create());
 		om = (ObjectMap)bm.get("b1");
 		assertEquals("b1", om.getString("type"));
@@ -81,14 +81,14 @@ public class BeanMapTest {
 		public String f2;
 	}
 
-	public static class B1Filter extends PojoSwap<B1,ObjectMap> {
+	public static class B1Swap extends PojoSwap<B1,ObjectMap> {
 		@Override /* PojoSwap */
 		public ObjectMap swap(B1 b1) {
 			return new ObjectMap().append("type", "b1").append("f1", b1.f1);
 		}
 	}
 
-	public static class B2Filter extends PojoSwap<B2,ObjectMap> {
+	public static class B2Swap extends PojoSwap<B2,ObjectMap> {
 		@Override /* PojoSwap */
 		public ObjectMap swap(B2 b2) {
 			return new ObjectMap().append("type", "b2").append("f1", b2.f1);

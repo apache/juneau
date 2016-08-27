@@ -35,7 +35,7 @@ import org.apache.juneau.transform.*;
 	serializers={InheritanceResource.S1.class,InheritanceResource.S2.class},
 	parsers={InheritanceResource.P1.class,InheritanceResource.P2.class},
 	encoders={InheritanceResource.E1.class,InheritanceResource.E2.class},
-	transforms={InheritanceResource.F1.class},
+	pojoSwaps={InheritanceResource.F1Swap.class},
 	properties={@Property(name="p1",value="v1"), @Property(name="p2",value="v2")}
 )
 public class InheritanceResource extends RestServlet {
@@ -45,7 +45,7 @@ public class InheritanceResource extends RestServlet {
 		serializers={S3.class,S4.class},
 		parsers={P3.class,P4.class},
 		encoders={E3.class,E4.class},
-		transforms={F2.class},
+		pojoSwaps={F2Swap.class},
 		properties={@Property(name="p2",value="v2a"), @Property(name="p3",value="v3"), @Property(name="p4",value="v4")}
 	)
 	public static class Sub extends InheritanceResource {
@@ -149,35 +149,35 @@ public class InheritanceResource extends RestServlet {
 	public static class TestTransforms extends Sub {
 		private static final long serialVersionUID = 1L;
 
-		// Should show ['F1','F2','Foo3']
+		// Should show ['F1Swap','F2Swap','Foo3']
 		@RestMethod(name="GET", path="/test1")
 		public Object[] test1() {
 			return new Object[]{new Foo1(), new Foo2(), new Foo3()};
 		}
 
-		// Should show ['F1','F2','F3']
+		// Should show ['F1Swap','F2Swap','F3Swap']
 		// Inherited serializer already has parent filters applied.
-		@RestMethod(name="GET", path="/test2", transforms=F3.class)
+		@RestMethod(name="GET", path="/test2", pojoSwaps=F3Swap.class)
 		public Object[] test2() {
 			return new Object[]{new Foo1(), new Foo2(), new Foo3()};
 		}
 
-		// Should show ['F1','F2','F3']
-		@RestMethod(name="GET", path="/test3", transforms=F3.class, serializersInherit=TRANSFORMS)
+		// Should show ['F1Swap','F2Swap','F3Swap']
+		@RestMethod(name="GET", path="/test3", pojoSwaps=F3Swap.class, serializersInherit=TRANSFORMS)
 		public Object[] test3() {
 			return new Object[]{new Foo1(), new Foo2(), new Foo3()};
 		}
 
-		// Should show ['Foo1','Foo2','F3']
+		// Should show ['Foo1','Foo2','F3Swap']
 		// Overriding serializer does not have parent filters applied.
-		@RestMethod(name="GET", path="/test4", serializers=JsonSerializer.Simple.class, transforms=F3.class)
+		@RestMethod(name="GET", path="/test4", serializers=JsonSerializer.Simple.class, pojoSwaps=F3Swap.class)
 		public Object[] test4() {
 			return new Object[]{new Foo1(), new Foo2(), new Foo3()};
 		}
 
-		// Should show ['F1','F2','F3']
+		// Should show ['F1Swap','F2Swap','F3Swap']
 		// Overriding serializer does have parent filters applied.
-		@RestMethod(name="GET", path="/test5", serializers=JsonSerializer.Simple.class, transforms=F3.class, serializersInherit=TRANSFORMS)
+		@RestMethod(name="GET", path="/test5", serializers=JsonSerializer.Simple.class, pojoSwaps=F3Swap.class, serializersInherit=TRANSFORMS)
 		public Object[] test5() {
 			return new Object[]{new Foo1(), new Foo2(), new Foo3()};
 		}
@@ -293,21 +293,21 @@ public class InheritanceResource extends RestServlet {
 	public static class Foo2 {@Override public String toString(){return "Foo2";}}
 	public static class Foo3 {@Override public String toString(){return "Foo3";}}
 
-	public static class F1 extends PojoSwap<Foo1,String> {
+	public static class F1Swap extends PojoSwap<Foo1,String> {
 		@Override /* PojoSwap */
 		public String swap(Foo1 o) throws SerializeException {
 			return "F1";
 		}
 	}
 
-	public static class F2 extends PojoSwap<Foo2,String> {
+	public static class F2Swap extends PojoSwap<Foo2,String> {
 		@Override /* PojoSwap */
 		public String swap(Foo2 o) throws SerializeException {
 			return "F2";
 		}
 	}
 
-	public static class F3 extends PojoSwap<Foo3,String> {
+	public static class F3Swap extends PojoSwap<Foo3,String> {
 		@Override /* PojoSwap */
 		public String swap(Foo3 o) throws SerializeException {
 			return "F3";

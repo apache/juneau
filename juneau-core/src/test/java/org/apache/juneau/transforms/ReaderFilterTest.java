@@ -29,7 +29,7 @@ public class ReaderFilterTest {
 	//====================================================================================================
 	@Test
 	public void test() throws Exception {
-		WriterSerializer s = new JsonSerializer.Simple().addTransforms(ReaderSwap.Json.class);
+		WriterSerializer s = new JsonSerializer.Simple().addPojoSwaps(ReaderSwap.Json.class);
 
 		Reader r;
 		Map<String,Object> m;
@@ -39,7 +39,7 @@ public class ReaderFilterTest {
 		m.put("X", r);
 		assertEquals("{X:{foo:'bar',baz:'quz'}}", s.serialize(m));
 
-		s.addTransforms(ReaderSwap.Xml.class);
+		s.addPojoSwaps(ReaderSwap.Xml.class);
 		r = new StringReader("<object><foo type='string'>bar</foo><baz type='string'>quz</baz></object>");
 		m = new HashMap<String,Object>();
 		m.put("X", r);

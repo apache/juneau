@@ -26,7 +26,8 @@ import org.apache.juneau.serializer.*;
  * 	<li>{@link UonSerializer#setProperty(String,Object)}
  * 	<li>{@link UonSerializer#setProperties(ObjectMap)}
  * 	<li>{@link UonSerializer#addNotBeanClasses(Class[])}
- * 	<li>{@link UonSerializer#addTransforms(Class[])}
+ * 	<li>{@link UonSerializer#addBeanFilters(Class[])}
+ * 	<li>{@link UonSerializer#addPojoSwaps(Class[])}
  * 	<li>{@link UonSerializer#addImplClass(Class,Class)}
  * </ul>
  * <p>

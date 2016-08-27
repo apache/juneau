@@ -227,8 +227,14 @@ public final class MsgPackParser extends InputStreamParser {
 	}
 
 	@Override /* CoreApi */
-	public MsgPackParser addTransforms(Class<?>...classes) throws LockedException {
-		super.addTransforms(classes);
+	public MsgPackParser addBeanFilters(Class<?>...classes) throws LockedException {
+		super.addBeanFilters(classes);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public MsgPackParser addPojoSwaps(Class<?>...classes) throws LockedException {
+		super.addPojoSwaps(classes);
 		return this;
 	}
 

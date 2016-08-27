@@ -30,7 +30,6 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
-import org.apache.juneau.transform.Transform;
 
 /**
  * Core class of the Juneau architecture.
@@ -392,34 +391,46 @@ public class BeanContext extends Context {
 	public static final String BEAN_notBeanClasses_remove = "BeanContext.notBeanClasses.set.remove";
 
 	/**
-	 * List of transform classes on the bean context (<code>List&lt;Class&gt;</code>).
+	 * List of bean filters registered on the bean context (<code>List&lt;Class&gt;</code>).
 	 * <p>
 	 * There are two category of classes that can be passed in through this method:
 	 * <ul class='spaced-list'>
-	 * 	<li>Subclasses of {@link PojoSwap} and {@link BeanFilter}.
-	 * 	<li>Any other class.
+	 * 	<li>Subclasses of {@link BeanFilter}.
+	 * 	<li>Bean interface classes.  A shortcut for defining a {@link InterfaceBeanFilter}.
 	 * </ul>
-	 * <p>
-	 * When <code>Transform</code> classes are specified, they identify objects that need to be
-	 * 	transformed into some other type during serialization (and optionally the reverse during parsing).
-	 * <p>
-	 * When non-<code>Transform</code> classes are specified, they are wrapped inside {@link BeanFilter BeanFilters}.
-	 * For example, if you have an interface <code>IFoo</code> and a subclass <code>Foo</code>, and you
-	 * 	only want properties defined on <code>IFoo</code> to be visible as bean properties for <code>Foo</code> objects,
-	 * 	you can simply pass in <code>IFoo.<jk>class</jk></code> to this method.
-	 * </p>
 	 */
-	public static final String BEAN_transforms = "BeanContext.transforms.list";
+	public static final String BEAN_beanFilters = "BeanContext.beanFilters.list";
+
+	/**
+	 * Add to the list of bean filters.
+	 */
+	public static final String BEAN_beanFilters_add = "BeanContext.beanFilters.list.add";
+
+	/**
+	 * Remove from the list of bean filters.
+	 */
+	public static final String BEAN_beanFilters_remove = "BeanContext.beanFilters.list.remove";
+
+	/**
+	 * List of POJO swaps registered on the bean context (<code>List&lt;Class&gt;</code>).
+	 * <p>
+	 * There are two category of classes that can be passed in through this method:
+	 * <ul class='spaced-list'>
+	 * 	<li>Subclasses of {@link PojoSwap}.
+	 * 	<li>Surrogate classes.  A shortcut for defining a {@link SurrogateSwap}.
+	 * </ul>
+	 */
+	public static final String BEAN_pojoSwaps = "BeanContext.pojoSwaps.list";
 
 	/**
 	 * Add to the list of transform classes.
 	 */
-	public static final String BEAN_transforms_add = "BeanContext.transforms.list.add";
+	public static final String BEAN_pojoSwaps_add = "BeanContext.pojoSwaps.list.add";
 
 	/**
 	 * Remove from the list of transform classes.
 	 */
-	public static final String BEAN_transforms_remove = "BeanContext.transforms.list.remove";
+	public static final String BEAN_pojoSwaps_remove = "BeanContext.pojoSwaps.list.remove";
 
 	/**
 	 * Specifies implementation classes for an interface or abstract class (<code>Map&lt;Class,Class&gt;</code>).
@@ -579,30 +590,29 @@ public class BeanContext extends Context {
 		notBeanPackagePrefixes = l2.toArray(new String[l2.size()]);
 
 		LinkedList<BeanFilter<?>> lbf = new LinkedList<BeanFilter<?>>();
-		LinkedList<PojoSwap<?,?>> lpf = new LinkedList<PojoSwap<?,?>>();
- 		for (Class<?> c : pm.get(BEAN_transforms, Class[].class, new Class[0])) {
-			if (isParentClass(Transform.class, c)) {
-				try {
-					if (isParentClass(BeanFilter.class, c)) 
-						lbf.add((BeanFilter<?>)c.newInstance());
-					else if (isParentClass(PojoSwap.class, c)) 
-						lpf.add((PojoSwap<?,?>)c.newInstance());
-				} catch (Exception e) {
-					throw new RuntimeException(e);
-				}
-			} else {
- 				if (! c.getClass().isInterface()) {
-					List<SurrogateSwap<?,?>> l = SurrogateSwap.findTransforms(c);
-					if (! l.isEmpty()) {
-						for (SurrogateSwap<?,?> f : l)
-							lpf.add(f);
-						continue;
-					}
-				}
- 				lbf.add(new InterfaceBeanFilter(c));
+ 		try {
+			for (Class<?> c : pm.get(BEAN_beanFilters, Class[].class, new Class[0])) {
+				if (isParentClass(BeanFilter.class, c))
+					lbf.add((BeanFilter<?>)c.newInstance());
+				else
+					lbf.add(new InterfaceBeanFilter(c));
 			}
+		} catch (Exception e) {
+			throw new RuntimeException(e);
 		}
  		beanFilters = lbf.toArray(new BeanFilter[0]);
+
+		LinkedList<PojoSwap<?,?>> lpf = new LinkedList<PojoSwap<?,?>>();
+ 		try {
+			for (Class<?> c : pm.get(BEAN_pojoSwaps, Class[].class, new Class[0])) {
+				if (isParentClass(PojoSwap.class, c))
+					lpf.add((PojoSwap<?,?>)c.newInstance());
+				else
+					lpf.addAll(SurrogateSwap.findTransforms(c));
+			}
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
  		pojoSwaps = lpf.toArray(new PojoSwap[0]);
 
  		implClasses = new TreeMap<Class<?>,Class<?>>(new ClassComparator());

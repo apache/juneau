@@ -48,7 +48,7 @@ import org.apache.juneau.transform.*;
  * 	</ul>
  * <p>
  * 	The types above are considered "JSON-primitive" object types.  Any non-JSON-primitive object types are transformed
- * 		into JSON-primitive object types through {@link org.apache.juneau.transform.Transform Transforms} associated through the {@link CoreApi#addTransforms(Class...)}
+ * 		into JSON-primitive object types through {@link org.apache.juneau.transform.PojoSwap PojoSwaps} associated through the {@link CoreApi#addPojoSwaps(Class...)}
  * 		method.  Several default transforms are provided for transforming Dates, Enums, Iterators, etc...
  * <p>
  * 	This serializer provides several serialization options.  Typically, one of the predefined DEFAULT serializers will be sufficient.
@@ -388,8 +388,14 @@ public class JsonSerializer extends WriterSerializer {
 	}
 
 	@Override /* CoreApi */
-	public JsonSerializer addTransforms(Class<?>...classes) throws LockedException {
-		super.addTransforms(classes);
+	public JsonSerializer addBeanFilters(Class<?>...classes) throws LockedException {
+		super.addBeanFilters(classes);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer addPojoSwaps(Class<?>...classes) throws LockedException {
+		super.addPojoSwaps(classes);
 		return this;
 	}
 

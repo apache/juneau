@@ -1485,7 +1485,7 @@ public class BeanMapTest {
 	//====================================================================================================
 	@Test
 	public void testCastToLinkedListUsingTransform() throws Exception {
-		BeanContext bc = ContextFactory.create().addTransforms(CalendarSwap.ISO8601DTZ.class).getBeanContext();
+		BeanContext bc = ContextFactory.create().addPojoSwaps(CalendarSwap.ISO8601DTZ.class).getBeanContext();
 
 		// With _class
 		ObjectMap m = new ObjectMap(bc);

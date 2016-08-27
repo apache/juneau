@@ -789,8 +789,14 @@ public final class JsonParser extends ReaderParser {
 	}
 
 	@Override /* CoreApi */
-	public JsonParser addTransforms(Class<?>...classes) throws LockedException {
-		super.addTransforms(classes);
+	public JsonParser addBeanFilters(Class<?>...classes) throws LockedException {
+		super.addBeanFilters(classes);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser addPojoSwaps(Class<?>...classes) throws LockedException {
+		super.addPojoSwaps(classes);
 		return this;
 	}
 

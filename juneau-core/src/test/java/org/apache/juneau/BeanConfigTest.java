@@ -732,22 +732,22 @@ public class BeanConfigTest {
 		p2.setProperty(BEAN_notBeanPackages_remove, "bar");
 		assertSameCache(p1, p2);
 
-		p1.addTransforms(DummyPojoSwapA.class);
+		p1.addPojoSwaps(DummyPojoSwapA.class);
 		assertDifferentCache(p1, p2);
-		p2.addTransforms(DummyPojoSwapA.class);
+		p2.addPojoSwaps(DummyPojoSwapA.class);
 		assertSameCache(p1, p2);
-		p1.addTransforms(DummyPojoSwapB.class,DummyPojoSwapC.class);  // Order of filters is important!
-		p2.addTransforms(DummyPojoSwapC.class,DummyPojoSwapB.class);
+		p1.addPojoSwaps(DummyPojoSwapB.class,DummyPojoSwapC.class);  // Order of filters is important!
+		p2.addPojoSwaps(DummyPojoSwapC.class,DummyPojoSwapB.class);
 		assertDifferentCache(p1, p2);
 
 		p1 = new JsonParser();
 		p2 = new JsonParser();
-		p1.addTransforms(DummyBeanFilterA.class);
+		p1.addBeanFilters(DummyBeanFilterA.class);
 		assertDifferentCache(p1, p2);
-		p2.addTransforms(DummyBeanFilterA.class);
+		p2.addBeanFilters(DummyBeanFilterA.class);
 		assertSameCache(p1, p2);
-		p1.addTransforms(DummyBeanFilterB.class,DummyBeanFilterC.class);  // Order of filters is important!
-		p2.addTransforms(DummyBeanFilterC.class,DummyBeanFilterB.class);
+		p1.addBeanFilters(DummyBeanFilterB.class,DummyBeanFilterC.class);  // Order of filters is important!
+		p2.addBeanFilters(DummyBeanFilterC.class,DummyBeanFilterB.class);
 		assertDifferentCache(p1, p2);
 	}
 

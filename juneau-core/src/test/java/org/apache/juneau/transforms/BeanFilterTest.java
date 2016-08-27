@@ -30,13 +30,13 @@ public class BeanFilterTest {
 		BeanContext bc;
 		BeanMap<A3> bm;
 
-		bc = ContextFactory.create().addTransforms(A1.class).getBeanContext();
+		bc = ContextFactory.create().addBeanFilters(A1.class).getBeanContext();
 		bm = bc.newBeanMap(A3.class);
 		assertEquals("f1", bm.get("f1"));
 		assertNull(bm.get("f2"));
 		assertNull(bm.get("f3"));
 
-		bc = ContextFactory.create().addTransforms(A2.class).getBeanContext();
+		bc = ContextFactory.create().addBeanFilters(A2.class).getBeanContext();
 		bm = bc.newBeanMap(A3.class);
 		assertEquals("f1", bm.get("f1"));
 		assertEquals("f2", bm.get("f2"));
@@ -73,13 +73,13 @@ public class BeanFilterTest {
 		BeanContext bc;
 		BeanMap<Test2> bm;
 
-		bc = ContextFactory.create().addTransforms(B1.class).getBeanContext();
+		bc = ContextFactory.create().addBeanFilters(B1.class).getBeanContext();
 		bm = bc.newBeanMap(Test2.class);
 		assertEquals("f1", bm.get("f1"));
 		assertNull(bm.get("f2"));
 		assertNull(bm.get("f3"));
 
-		bc = ContextFactory.create().addTransforms(B2.class).getBeanContext();
+		bc = ContextFactory.create().addBeanFilters(B2.class).getBeanContext();
 		bm = bc.newBeanMap(Test2.class);
 		assertEquals("f1", bm.get("f1"));
 		assertEquals("f2", bm.get("f2"));

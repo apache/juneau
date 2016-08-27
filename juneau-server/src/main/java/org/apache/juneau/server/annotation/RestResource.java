@@ -89,20 +89,35 @@ public @interface RestResource {
 	Class<? extends RestConverter>[] converters() default {};
 
 	/**
-	 * Class-level POJO filters.
+	 * Class-level bean filters.
 	 * <p>
-	 * Shortcut to add POJO filters to the bean contexts of the objects returned by the following methods:
+	 * Shortcut to add bean filters to the bean contexts of the objects returned by the following methods:
 	 * <ul>
 	 * 	<li>{@link RestServlet#getBeanContext()}
 	 * 	<li>{@link RestServlet#getSerializers()}
 	 * 	<li>{@link RestServlet#getParsers()}
 	 * </ul>
 	 * <p>
-	 * If the specified class is an instance of {@link Transform}, then that filter is added.
-	 * Any other classes are wrapped in a {@link BeanFilter} to indicate that subclasses should
+	 * If the specified class is an instance of {@link BeanFilter}, then that filter is added.
+	 * Any other classes are wrapped in a {@link InterfaceBeanFilter} to indicate that subclasses should
 	 * 	be treated as the specified class type.
 	 */
-	Class<?>[] transforms() default {};
+	Class<?>[] beanFilters() default {};
+
+	/**
+	 * Class-level POJO swaps.
+	 * <p>
+	 * Shortcut to add POJO swaps to the bean contexts of the objects returned by the following methods:
+	 * <ul>
+	 * 	<li>{@link RestServlet#getBeanContext()}
+	 * 	<li>{@link RestServlet#getSerializers()}
+	 * 	<li>{@link RestServlet#getParsers()}
+	 * </ul>
+	 * <p>
+	 * If the specified class is an instance of {@link PojoSwap}, then that swap is added.
+	 * Any other classes are wrapped in a {@link SurrogateSwap}.
+	 */
+	Class<?>[] pojoSwaps() default {};
 
 	/**
 	 * Class-level properties.

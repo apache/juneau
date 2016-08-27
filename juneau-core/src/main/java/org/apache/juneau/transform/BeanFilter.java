@@ -328,8 +328,8 @@ public abstract class BeanFilter<T> extends Transform {
 	 * 	}
 	 *
 	 * 	<jc>// Transform for defining subtypes</jc>
-	 * 	<jk>public class</jk> ATransform <jk>extends</jk> BeanFilter&lt;A&gt; {
-	 * 		<jk>public</jk> ATransform() {
+	 * 	<jk>public class</jk> AFilter <jk>extends</jk> BeanFilter&lt;A&gt; {
+	 * 		<jk>public</jk> AFilter() {
 	 * 			setSubTypeProperty(<js>"subType"</js>);
 	 * 			addSubType(Al.<jk>class</jk>, <js>"A1"</js>);
 	 * 			addSubType(A2.<jk>class</jk>, <js>"A2"</js>);
@@ -339,7 +339,7 @@ public abstract class BeanFilter<T> extends Transform {
 	 * <p>
 	 * 	The following shows what happens when serializing a subclassed object to JSON:
 	 * <p class='bcode'>
-	 * 	JsonSerializer s = <jk>new</jk> JsonSerializer().addTransforms(ATransform.<jk>class</jk>);
+	 * 	JsonSerializer s = <jk>new</jk> JsonSerializer().addBeanFilters(AFilter.<jk>class</jk>);
 	 * 	A1 a1 = <jk>new</jk> A1();
 	 * 	a1.<jf>f1</jf> = <js>"f1"</js>;
 	 * 	String r = s.serialize(a1);
@@ -348,7 +348,7 @@ public abstract class BeanFilter<T> extends Transform {
 	 * <p>
 	 * 	The following shows what happens when parsing back into the original object.
 	 * <p class='bcode'>
-	 * 	JsonParser p = <jk>new</jk> JsonParser().addTransforms(ATransform.<jk>class</jk>);
+	 * 	JsonParser p = <jk>new</jk> JsonParser().addBeanFilters(AFilter.<jk>class</jk>);
 	 * 	A a = p.parse(r, A.<jk>class</jk>);
 	 * 	<jsm>assertTrue</jsm>(a <jk>instanceof</jk> A1);
 	 * </p>
@@ -429,13 +429,13 @@ public abstract class BeanFilter<T> extends Transform {
 	 * 	}
 	 *
 	 * 	<jc>// Transform class</jc>
-	 * 	<jk>public class</jk> ATransform <jk>extends</jk> BeanFilter&lt;A&gt; {
-	 * 		<jk>public</jk> ATransform() {
+	 * 	<jk>public class</jk> AFilter <jk>extends</jk> BeanFilter&lt;A&gt; {
+	 * 		<jk>public</jk> AFilter() {
 	 * 			setInterfaceClass(A.<jk>class</jk>);
 	 * 		}
 	 * 	}
 	 *
-	 * 	JsonSerializer s = new JsonSerializer().addTransforms(ATransform.<jk>class</jk>);
+	 * 	JsonSerializer s = new JsonSerializer().addBeanFilters(AFilter.<jk>class</jk>);
 	 * 	A1 a1 = <jk>new</jk> A1();
 	 * 	String r = s.serialize(a1);
 	 * 	<jsm>assertEquals</jsm>(<js>"{f0:'f0'}"</js>, r);  <jc>// Note f1 is not serialized</jc>

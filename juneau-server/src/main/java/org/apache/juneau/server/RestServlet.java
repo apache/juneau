@@ -99,7 +99,7 @@ public abstract class RestServlet extends HttpServlet {
 	private UrlEncodingParser urlEncodingParser;
 	private ObjectMap properties;
 	private RestGuard[] guards;
-	private Class<?>[] transforms;
+	private Class<?>[] beanFilters, pojoSwaps;
 	private RestConverter[] converters;
 	private TreeMap<String,String> defaultRequestHeaders;
 	private Map<String,Object> defaultResponseHeaders;
@@ -189,13 +189,14 @@ public abstract class RestServlet extends HttpServlet {
 			staticFilesPrefixes = staticFilesMap.keySet().toArray(new String[0]);
 
 			properties = createProperties();
-			transforms = createTransforms();
+			beanFilters = createBeanFilters();
+			pojoSwaps = createPojoSwaps();
 			context = ContextFactory.create().setProperties(properties).getContext(RestServletContext.class);
-			beanContext = createBeanContext(properties, transforms);
-			urlEncodingSerializer = createUrlEncodingSerializer(properties, transforms).lock();
-			urlEncodingParser = createUrlEncodingParser(properties, transforms).lock();
-			serializers = createSerializers(properties, transforms).lock();
-			parsers = createParsers(properties, transforms).lock();
+			beanContext = createBeanContext(properties, beanFilters, pojoSwaps);
+			urlEncodingSerializer = createUrlEncodingSerializer(properties, beanFilters, pojoSwaps).lock();
+			urlEncodingParser = createUrlEncodingParser(properties, beanFilters, pojoSwaps).lock();
+			serializers = createSerializers(properties, beanFilters, pojoSwaps).lock();
+			parsers = createParsers(properties, beanFilters, pojoSwaps).lock();
 			converters = createConverters(properties);
 			encoders = createEncoders(properties);
 			guards = createGuards(properties);
@@ -400,22 +401,44 @@ public abstract class RestServlet extends HttpServlet {
 	}
 
 	/**
+	 * Creates the class-level bean filters associated with this servlet.
+	 * <p>
+	 * Subclasses can override this method to provide their own class-level bean filters for this servlet.
+	 * <p>
+	 * By default, returns the bean filters specified through the {@link RestResource#beanFilters() @RestResource.beanFilters()} annotation in child-to-parent order.
+	 * 	(i.e. bean filters will be applied in child-to-parent order with child annotations overriding parent annotations when
+	 * 	the same filters are applied).
+	 *
+	 * @return The new set of transforms associated with this servet.
+	 */
+	protected Class<?>[] createBeanFilters() {
+		List<Class<?>> l = new LinkedList<Class<?>>();
+
+		// Bean filters are loaded in parent-to-child order to allow overrides.
+		for (RestResource r : restResourceAnnotationsChildFirst.values())
+			for (Class c : r.beanFilters())
+				l.add(c);
+
+		return l.toArray(new Class<?>[l.size()]);
+	}
+
+	/**
 	 * Creates the class-level POJO swaps associated with this servlet.
 	 * <p>
 	 * Subclasses can override this method to provide their own class-level POJO swaps for this servlet.
 	 * <p>
-	 * By default, returns the transforms specified through the {@link RestResource#transforms() @RestResource.transforms()} annotation in child-to-parent order.
-	 * 	(i.e. transforms will be applied in child-to-parent order with child annotations overriding parent annotations when
-	 * 	the same transforms are applied).
+	 * By default, returns the transforms specified through the {@link RestResource#pojoSwaps() @RestResource.pojoSwaps()} annotation in child-to-parent order.
+	 * 	(i.e. POJO swaps will be applied in child-to-parent order with child annotations overriding parent annotations when
+	 * 	the same swaps are applied).
 	 *
 	 * @return The new set of transforms associated with this servet.
 	 */
-	protected Class<?>[] createTransforms() {
+	protected Class<?>[] createPojoSwaps() {
 		List<Class<?>> l = new LinkedList<Class<?>>();
 
 		// Transforms are loaded in parent-to-child order to allow overrides.
 		for (RestResource r : restResourceAnnotationsChildFirst.values())
-			for (Class c : r.transforms())
+			for (Class c : r.pojoSwaps())
 				l.add(c);
 
 		return l.toArray(new Class<?>[l.size()]);
@@ -427,12 +450,13 @@ public abstract class RestServlet extends HttpServlet {
 	 * Subclasses can override this method to provide their own specialized bean context.
 	 *
 	 * @param properties Servlet-level properties returned by {@link #createProperties()}.
-	 * @param transforms Servlet-level transforms returned by {@link #createTransforms()}.
+	 * @param beanFilters Servlet-level bean filters returned by {@link #createBeanFilters()}.
+	 * @param pojoSwaps Servlet-level POJO swaps returned by {@link #createPojoSwaps()}.
 	 * @return The new bean context.
 	 * @throws Exception If bean context not be constructed for any reason.
 	 */
-	protected BeanContext createBeanContext(ObjectMap properties, Class<?>[] transforms) throws Exception {
-		return ContextFactory.create().addTransforms(transforms).setProperties(properties).getBeanContext();
+	protected BeanContext createBeanContext(ObjectMap properties, Class<?>[] beanFilters, Class<?>[] pojoSwaps) throws Exception {
+		return ContextFactory.create().addBeanFilters(beanFilters).addPojoSwaps(pojoSwaps).setProperties(properties).getBeanContext();
 	}
 
 	/**
@@ -441,12 +465,13 @@ public abstract class RestServlet extends HttpServlet {
 	 * Subclasses can override this method to provide their own specialized serializer.
 	 *
 	 * @param properties Servlet-level properties returned by {@link #createProperties()}.
-	 * @param transforms Servlet-level transforms returned by {@link #createTransforms()}.
+	 * @param beanFilters Servlet-level bean filters returned by {@link #createBeanFilters()}.
+	 * @param pojoSwaps Servlet-level POJO swaps returned by {@link #createPojoSwaps()}.
 	 * @return The new URL-Encoding serializer.
 	 * @throws Exception If the serializer could not be constructed for any reason.
 	 */
-	protected UrlEncodingSerializer createUrlEncodingSerializer(ObjectMap properties, Class<?>[] transforms) throws Exception {
-		return new UrlEncodingSerializer().setProperties(properties).addTransforms(transforms);
+	protected UrlEncodingSerializer createUrlEncodingSerializer(ObjectMap properties, Class<?>[] beanFilters, Class<?>[] pojoSwaps) throws Exception {
+		return new UrlEncodingSerializer().setProperties(properties).addBeanFilters(beanFilters).addPojoSwaps(pojoSwaps);
 	}
 
 	/**
@@ -455,12 +480,13 @@ public abstract class RestServlet extends HttpServlet {
 	 * Subclasses can override this method to provide their own specialized parser.
 	 *
 	 * @param properties Servlet-level properties returned by {@link #createProperties()}.
-	 * @param transforms Servlet-level transforms returned by {@link #createTransforms()}.
+	 * @param beanFilters Servlet-level bean filters returned by {@link #createBeanFilters()}.
+	 * @param pojoSwaps Servlet-level POJO swaps returned by {@link #createPojoSwaps()}.
 	 * @return The new URL-Encoding parser.
 	 * @throws Exception If the parser could not be constructed for any reason.
 	 */
-	protected UrlEncodingParser createUrlEncodingParser(ObjectMap properties, Class<?>[] transforms) throws Exception {
-		return new UrlEncodingParser().setProperties(properties).addTransforms(transforms);
+	protected UrlEncodingParser createUrlEncodingParser(ObjectMap properties, Class<?>[] beanFilters, Class<?>[] pojoSwaps) throws Exception {
+		return new UrlEncodingParser().setProperties(properties).addBeanFilters(beanFilters).addPojoSwaps(pojoSwaps);
 	}
 
 	/**
@@ -474,11 +500,12 @@ public abstract class RestServlet extends HttpServlet {
 	 * 	and all parent classes.
 	 *
 	 * @param properties Servlet-level properties returned by {@link #createProperties()}.
-	 * @param transforms Servlet-level transforms returned by {@link #createTransforms()}.
+	 * @param beanFilters Servlet-level bean filters returned by {@link #createBeanFilters()}.
+	 * @param pojoSwaps Servlet-level POJO swaps returned by {@link #createPojoSwaps()}.
 	 * @return The group of serializers.
 	 * @throws Exception If serializer group could not be constructed for any reason.
 	 */
-	protected SerializerGroup createSerializers(ObjectMap properties, Class<?>[] transforms) throws Exception {
+	protected SerializerGroup createSerializers(ObjectMap properties, Class<?>[] beanFilters, Class<?>[] pojoSwaps) throws Exception {
 		SerializerGroup g = new SerializerGroup();
 
 		// Serializers are loaded in parent-to-child order to allow overrides.
@@ -491,7 +518,7 @@ public abstract class RestServlet extends HttpServlet {
 				}
 
 		g.setProperties(properties);
-		g.addTransforms(transforms);
+		g.addBeanFilters(beanFilters).addPojoSwaps(pojoSwaps);
 		return g;
 	}
 
@@ -506,11 +533,12 @@ public abstract class RestServlet extends HttpServlet {
 	 * 	and all parent classes.
 	 *
 	 * @param properties Servlet-level properties returned by {@link #createProperties()}.
-	 * @param transforms Servlet-level transforms returned by {@link #createTransforms()}.
+	 * @param beanFilters Servlet-level bean filters returned by {@link #createBeanFilters()}.
+	 * @param pojoSwaps Servlet-level POJO swaps returned by {@link #createPojoSwaps()}.
 	 * @return The group of parsers.
 	 * @throws Exception If parser group could not be constructed for any reason.
 	 */
-	protected ParserGroup createParsers(ObjectMap properties, Class<?>[] transforms) throws Exception {
+	protected ParserGroup createParsers(ObjectMap properties, Class<?>[] beanFilters, Class<?>[] pojoSwaps) throws Exception {
 		ParserGroup g = new ParserGroup();
 
 		// Parsers are loaded in parent-to-child order to allow overrides.
@@ -523,7 +551,7 @@ public abstract class RestServlet extends HttpServlet {
 				}
 
 		g.setProperties(properties);
-		g.addTransforms(transforms);
+		g.addBeanFilters(beanFilters).addPojoSwaps(pojoSwaps);
 		return g;
 	}
 
@@ -1859,7 +1887,7 @@ public abstract class RestServlet extends HttpServlet {
 				ArrayList<Inherit> si = new ArrayList<Inherit>(Arrays.asList(m.serializersInherit()));
 				ArrayList<Inherit> pi = new ArrayList<Inherit>(Arrays.asList(m.parsersInherit()));
 
-				if (m.serializers().length > 0 || m.parsers().length > 0 || m.properties().length > 0 || m.transforms().length > 0) {
+				if (m.serializers().length > 0 || m.parsers().length > 0 || m.properties().length > 0 || m.beanFilters().length > 0 || m.pojoSwaps().length > 0) {
 					mSerializers = (si.contains(SERIALIZERS) || m.serializers().length == 0 ? mSerializers.clone() : new SerializerGroup());
 					mParsers = (pi.contains(PARSERS) || m.parsers().length == 0 ? mParsers.clone() : new ParserGroup());
 					mUrlEncodingParser = mUrlEncodingParser.clone();
@@ -1906,7 +1934,7 @@ public abstract class RestServlet extends HttpServlet {
 				if (m.serializers().length > 0) {
 					mSerializers.append(m.serializers());
 					if (si.contains(TRANSFORMS))
-						mSerializers.addTransforms(getTransforms());
+						mSerializers.addBeanFilters(getBeanFilters()).addPojoSwaps(getPojoSwaps());
 					if (si.contains(PROPERTIES))
 						mSerializers.setProperties(getProperties());
 				}
@@ -1914,7 +1942,7 @@ public abstract class RestServlet extends HttpServlet {
 				if (m.parsers().length > 0) {
 					mParsers.append(m.parsers());
 					if (pi.contains(TRANSFORMS))
-						mParsers.addTransforms(getTransforms());
+						mParsers.addBeanFilters(getBeanFilters()).addPojoSwaps(getPojoSwaps());
 					if (pi.contains(PROPERTIES))
 						mParsers.setProperties(getProperties());
 				}
@@ -1930,10 +1958,16 @@ public abstract class RestServlet extends HttpServlet {
 					}
 				}
 
-				if (m.transforms().length > 0) {
-					mSerializers.addTransforms(m.transforms());
-					mParsers.addTransforms(m.transforms());
-					mUrlEncodingParser.addTransforms(m.transforms());
+				if (m.beanFilters().length > 0) {
+					mSerializers.addBeanFilters(m.beanFilters());
+					mParsers.addBeanFilters(m.beanFilters());
+					mUrlEncodingParser.addBeanFilters(m.beanFilters());
+				}
+
+				if (m.pojoSwaps().length > 0) {
+					mSerializers.addPojoSwaps(m.pojoSwaps());
+					mParsers.addPojoSwaps(m.pojoSwaps());
+					mUrlEncodingParser.addPojoSwaps(m.pojoSwaps());
 				}
 
 				if (m.encoders().length > 0 || ! m.inheritEncoders()) {
@@ -2445,7 +2479,7 @@ public abstract class RestServlet extends HttpServlet {
 					if (o == null)
 						o = req.getHeader(k);
 				}
-				if (o instanceof String) 
+				if (o instanceof String)
 					o = req.getVarResolverSession().resolve(o.toString());
 				return o;
 			}
@@ -2501,14 +2535,25 @@ public abstract class RestServlet extends HttpServlet {
 	}
 
 	/**
+	 * Returns the class-level bean filters associated with this servlet.
+	 * <p>
+	 * Created by the {@link #createBeanFilters()} method.
+	 *
+	 * @return The class-level bean filters associated with this servlet.
+	 */
+	public Class<?>[] getBeanFilters() {
+		return beanFilters;
+	}
+
+	/**
 	 * Returns the class-level POJO swaps associated with this servlet.
 	 * <p>
-	 * Created by the {@link #createTransforms()} method.
+	 * Created by the {@link #createPojoSwaps()} method.
 	 *
-	 * @return The class-level guards associated with this servlet.
+	 * @return The class-level POJO swaps associated with this servlet.
 	 */
-	public Class<?>[] getTransforms() {
-		return transforms;
+	public Class<?>[] getPojoSwaps() {
+		return pojoSwaps;
 	}
 
 	/**
@@ -2570,7 +2615,7 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Returns the serializer group containing serializers used for serializing output POJOs in HTTP responses.
 	 * <p>
-	 * Created by the {@link #createSerializers(ObjectMap, Class[])} method.
+	 * Created by the {@link #createSerializers(ObjectMap, Class[], Class[])} method.
 	 *
 	 * @return The group of serializers.
 	 */
@@ -2581,7 +2626,7 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Returns the parser group containing parsers used for parsing input into POJOs from HTTP requests.
 	 * <p>
-	 * Created by the {@link #createParsers(ObjectMap, Class[])} method.
+	 * Created by the {@link #createParsers(ObjectMap, Class[], Class[])} method.
 	 *
 	 * @return The group of parsers.
 	 */
@@ -2592,7 +2637,7 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Returns the URL-encoding parser used for parsing URL query parameters.
 	 * <p>
-	 * Created by the {@link #createUrlEncodingParser(ObjectMap, Class[])} method.
+	 * Created by the {@link #createUrlEncodingParser(ObjectMap, Class[], Class[])} method.
 	 *
 	 * @return The URL-Encoding parser to use for parsing URL query parameters.
 	 */
@@ -2603,7 +2648,7 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Returns the URL-encoding serializer used for serializing arguments in {@link Redirect} objects.
 	 * <p>
-	 * Created by the {@link #createUrlEncodingSerializer(ObjectMap, Class[])} method.
+	 * Created by the {@link #createUrlEncodingSerializer(ObjectMap, Class[], Class[])} method.
 	 *
 	 * @return The URL-Encoding serializer.
 	 */
@@ -2625,7 +2670,7 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Returns the {@link BeanContext} object used for parsing path variables and header values.
 	 * <p>
-	 * Created by the {@link #createBeanContext(ObjectMap, Class[])} method.
+	 * Created by the {@link #createBeanContext(ObjectMap, Class[], Class[])} method.
 	 *
 	 * @return The bean context used for parsing path variables and header values.
 	 */

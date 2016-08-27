@@ -432,8 +432,14 @@ public class UrlEncodingSerializer extends UonSerializer {
 	}
 
 	@Override /* CoreApi */
-	public UrlEncodingSerializer addTransforms(Class<?>...classes) throws LockedException {
-		super.addTransforms(classes);
+	public UrlEncodingSerializer addBeanFilters(Class<?>...classes) throws LockedException {
+		super.addBeanFilters(classes);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UrlEncodingSerializer addPojoSwaps(Class<?>...classes) throws LockedException {
+		super.addPojoSwaps(classes);
 		return this;
 	}
 

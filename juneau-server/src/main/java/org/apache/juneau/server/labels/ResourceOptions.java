@@ -25,7 +25,7 @@ import org.apache.juneau.server.annotation.*;
  * <p>
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@Bean(properties={"label","description","className","methods","children","consumes","produces","guards","transforms","converters"})
+@Bean(properties={"label","description","className","methods","children","consumes","produces","guards","converters"})
 public class ResourceOptions {
 	private String label, description;
 	private String className;
@@ -33,7 +33,6 @@ public class ResourceOptions {
 	private ChildResourceDescriptions children;
 	private Collection<String> consumes, produces;
 	private Collection<String> guards;
-	private Collection<String> transforms;
 	private Collection<String> converters;
 
 	/**
@@ -51,7 +50,6 @@ public class ResourceOptions {
 			setProduces(servlet.getSupportedContentTypes());
 			setChildren(new ChildResourceDescriptions(servlet, req));
 			setGuards(servlet.getGuards());
-			setTransforms(servlet.getTransforms());
 			setConverters(servlet.getConverters());
 		} catch (RestServletException e) {
 			throw new RestException(SC_INTERNAL_SERVER_ERROR, e);
@@ -220,36 +218,6 @@ public class ResourceOptions {
 		for (RestGuard g : guards)
 			l.add(g.getClass().getSimpleName());
 		return setGuards(l);
-	}
-
-	/**
-	 * Returns the list of class-wide transforms associated with this resource (typically through {@link RestResource#transforms()} annotation).
-	 * @return The simple class names of the transforms.
-	 */
-	public Collection<String> getTransforms() {
-		return transforms;
-	}
-
-	/**
-	 * Sets the simple class names of the transforms associated with this resource.
-	 * @param transforms The simple class names of the transforms.
-	 * @return This object (for method chaining).
-	 */
-	public ResourceOptions setTransforms(Collection<String> transforms) {
-		this.transforms = transforms;
-		return this;
-	}
-
-	/**
-	 * Shortcut for calling {@link #setTransforms(Collection)} from {@link Class} instances.
-	 * @param transforms Transform classes associated with this resource.
-	 * @return This object (for method chaining).
-	 */
-	public ResourceOptions setTransforms(Class<?>[] transforms) {
-		Collection<String> l = new ArrayList<String>(transforms.length);
-		for (Class<?> c : transforms)
-			l.add(c.getSimpleName());
-		return setTransforms(l);
 	}
 
 	/**

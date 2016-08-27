@@ -25,7 +25,8 @@ import org.apache.juneau.*;
  * 	<li>{@link UrlEncodingSerializer#setProperty(String,Object)}
  * 	<li>{@link UrlEncodingSerializer#setProperties(ObjectMap)}
  * 	<li>{@link UrlEncodingSerializer#addNotBeanClasses(Class[])}
- * 	<li>{@link UrlEncodingSerializer#addTransforms(Class[])}
+ * 	<li>{@link UrlEncodingSerializer#addBeanFilters(Class[])}
+ * 	<li>{@link UrlEncodingSerializer#addPojoSwaps(Class[])}
  * 	<li>{@link UrlEncodingSerializer#addImplClass(Class,Class)}
  * </ul>
  * <p>

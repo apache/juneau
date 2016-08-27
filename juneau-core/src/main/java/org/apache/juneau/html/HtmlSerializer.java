@@ -606,8 +606,14 @@ public class HtmlSerializer extends XmlSerializer {
 	}
 
 	@Override /* CoreApi */
-	public HtmlSerializer addTransforms(Class<?>...classes) throws LockedException {
-		super.addTransforms(classes);
+	public HtmlSerializer addBeanFilters(Class<?>...classes) throws LockedException {
+		super.addBeanFilters(classes);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer addPojoSwaps(Class<?>...classes) throws LockedException {
+		super.addPojoSwaps(classes);
 		return this;
 	}
 

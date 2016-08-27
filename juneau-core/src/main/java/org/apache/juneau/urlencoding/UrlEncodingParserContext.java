@@ -25,7 +25,8 @@ import org.apache.juneau.*;
  * 	<li>{@link UrlEncodingParser#setProperty(String,Object)}
  * 	<li>{@link UrlEncodingParser#setProperties(ObjectMap)}
  * 	<li>{@link UrlEncodingParser#addNotBeanClasses(Class[])}
- * 	<li>{@link UrlEncodingParser#addTransforms(Class[])}
+ * 	<li>{@link UrlEncodingParser#addBeanFilters(Class[])}
+ * 	<li>{@link UrlEncodingParser#addPojoSwaps(Class[])}
  * 	<li>{@link UrlEncodingParser#addImplClass(Class,Class)}
  * </ul>
  * <p>

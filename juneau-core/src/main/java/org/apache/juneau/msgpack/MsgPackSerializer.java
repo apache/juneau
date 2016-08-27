@@ -244,8 +244,14 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 	}
 
 	@Override /* CoreApi */
-	public MsgPackSerializer addTransforms(Class<?>...classes) throws LockedException {
-		super.addTransforms(classes);
+	public MsgPackSerializer addBeanFilters(Class<?>...classes) throws LockedException {
+		super.addBeanFilters(classes);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public MsgPackSerializer addPojoSwaps(Class<?>...classes) throws LockedException {
+		super.addPojoSwaps(classes);
 		return this;
 	}
 

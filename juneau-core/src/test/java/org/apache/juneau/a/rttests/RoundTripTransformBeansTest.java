@@ -41,18 +41,18 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 	}
 
 	//====================================================================================================
-	// testTransformBeans1
+	// testSwapBeans1
 	//====================================================================================================
 	@Test
-	public void testTransformBeans1() throws Exception {
+	public void testSwapBeans1() throws Exception {
 		Class<?>[] f = {
 			ByteArrayBase64Swap.class,
 			CalendarSwap.ISO8601DTZ.class,
 			DateSwap.ISO8601DTZ.class
 		};
-		s.addTransforms(f);
+		s.addPojoSwaps(f);
 		if (p != null)
-			p.addTransforms(f);
+			p.addPojoSwaps(f);
 		A t = new A().init();
 		t = roundTrip(t, A.class);
 
@@ -161,18 +161,18 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 
 
 	//====================================================================================================
-	// testTransformBeans2
+	// testSwapBeans2
 	//====================================================================================================
 	@Test
-	public void testTransformBeans2() throws Exception {
+	public void testSwapBeans2() throws Exception {
 		Class<?>[] f = {
 			ByteArrayBase64Swap.class,
 			CalendarSwap.Medium.class,
 			DateSwap.RFC2822DT.class,
 		};
-		s.addTransforms(f);
+		s.addPojoSwaps(f);
 		if (p != null)
-			p.addTransforms(f);
+			p.addPojoSwaps(f);
 		A t = new A().init();
 		t = roundTrip(t, A.class);
 
@@ -258,8 +258,8 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 		GregorianCalendar gc = new GregorianCalendar();
 		XMLGregorianCalendar c = DatatypeFactory.newInstance().newXMLGregorianCalendar(gc);
 
-		Serializer s = getSerializer().clone().addTransforms(XMLGregorianCalendarSwap.class);
-		Parser p = getParser().clone().addTransforms(XMLGregorianCalendarSwap.class);
+		Serializer s = getSerializer().clone().addPojoSwaps(XMLGregorianCalendarSwap.class);
+		Parser p = getParser().clone().addPojoSwaps(XMLGregorianCalendarSwap.class);
 
 		Object r = s.serialize(c);
 		XMLGregorianCalendar c2 = p.parse(r, XMLGregorianCalendar.class);
@@ -337,10 +337,10 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 	//====================================================================================================
 	@Test
 	public void testSurrogateTransform() throws Exception {
-		addTransforms(D2.class);
+		addPojoSwaps(D2.class);
 
-		JsonSerializer s = new JsonSerializer.Simple().addTransforms(D2.class);
-		JsonParser p = new JsonParser().addTransforms(D2.class);
+		JsonSerializer s = new JsonSerializer.Simple().addPojoSwaps(D2.class);
+		JsonParser p = new JsonParser().addPojoSwaps(D2.class);
 		Object r;
 		D1 d1 = D1.create();
 

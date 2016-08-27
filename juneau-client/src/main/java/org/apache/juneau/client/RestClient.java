@@ -902,14 +902,26 @@ public class RestClient extends CoreApi {
 	}
 
 	@Override /* CoreAPI */
-	public RestClient addTransforms(Class<?>...classes) throws LockedException {
-		super.addTransforms(classes);
+	public RestClient addBeanFilters(Class<?>...classes) throws LockedException {
+		super.addBeanFilters(classes);
 		if (serializer != null)
-			serializer.addTransforms(classes);
+			serializer.addBeanFilters(classes);
 		if (parser != null)
-			parser.addTransforms(classes);
+			parser.addBeanFilters(classes);
 		if (urlEncodingSerializer != null)
-			urlEncodingSerializer.addTransforms(classes);
+			urlEncodingSerializer.addBeanFilters(classes);
+		return this;
+	}
+
+	@Override /* CoreAPI */
+	public RestClient addPojoSwaps(Class<?>...classes) throws LockedException {
+		super.addPojoSwaps(classes);
+		if (serializer != null)
+			serializer.addPojoSwaps(classes);
+		if (parser != null)
+			parser.addPojoSwaps(classes);
+		if (urlEncodingSerializer != null)
+			urlEncodingSerializer.addPojoSwaps(classes);
 		return this;
 	}
 

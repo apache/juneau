@@ -29,8 +29,8 @@ public class PojoSwapTest {
 	//====================================================================================================
 	@Test
 	public void testSameType() throws Exception {
-		JsonSerializer s = JsonSerializer.DEFAULT_LAX.clone().addTransforms(ATransform.class);
-		JsonParser p = JsonParser.DEFAULT.clone().addTransforms(ATransform.class);
+		JsonSerializer s = JsonSerializer.DEFAULT_LAX.clone().addPojoSwaps(ASwap.class);
+		JsonParser p = JsonParser.DEFAULT.clone().addPojoSwaps(ASwap.class);
 		String r;
 
 		r = s.serialize("foobar");
@@ -43,7 +43,7 @@ public class PojoSwapTest {
 		assertEquals("{xfoox:'xbarx'}", r);
 	}
 
-	public static class ATransform extends PojoSwap<String,String> {
+	public static class ASwap extends PojoSwap<String,String> {
 		@Override
 		public String swap(String o) throws SerializeException {
 			return "x" + o + "x";

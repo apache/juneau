@@ -35,9 +35,11 @@ import org.apache.juneau.transforms.*;
 		@Property(name=SERIALIZER_detectRecursions, value="true"),
 		@Property(name=HTMLDOC_links, value="{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$R{servletParentURI}/source?classes=(org.apache.juneau.server.samples.RequestEchoResource)'}")
 	},
-	transforms={
+	beanFilters={
 		// Interpret these as their parent classes, not subclasses
 		HttpServletRequest.class, HttpSession.class, ServletContext.class,
+	},
+	pojoSwaps={
 		// Add a special filter for Enumerations
 		EnumerationSwap.class
 	}

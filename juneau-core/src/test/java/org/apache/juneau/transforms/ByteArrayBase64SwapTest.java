@@ -31,7 +31,7 @@ public class ByteArrayBase64SwapTest extends RoundTripTest {
 	}
 
 	@Override /* RoundTripTest */
-	public Class<?>[] getTransforms() {
+	public Class<?>[] getPojoSwaps() {
 		return new Class<?>[] {
 			ByteArrayBase64Swap.class
 		};
@@ -42,7 +42,7 @@ public class ByteArrayBase64SwapTest extends RoundTripTest {
 	//====================================================================================================
 	@Test
 	public void testPrimitiveArrays() throws Exception {
-		WriterSerializer s = new JsonSerializer.Simple().addTransforms(ByteArrayBase64Swap.class).setProperty(SERIALIZER_trimNullProperties, false);
+		WriterSerializer s = new JsonSerializer.Simple().addPojoSwaps(ByteArrayBase64Swap.class).setProperty(SERIALIZER_trimNullProperties, false);
 
 		byte[] a1 = {1,2,3};
 		assertEquals("'AQID'", s.serialize(a1));

@@ -137,7 +137,7 @@ public class ClassMetaTest {
 		assertEquals(hi2.getTransformedClassMeta().getInnerClass(), HI2.class);
 		assertEquals(hc2.getTransformedClassMeta().getInnerClass(), HC2.class);
 
-		bc = ContextFactory.create().addTransforms(HI1Swap.class).getBeanContext();
+		bc = ContextFactory.create().addPojoSwaps(HI1Swap.class).getBeanContext();
 		ooo = bc.getClassMeta(Object.class);
 		hi1 = bc.getClassMeta(HI1.class);
 		hc1 = bc.getClassMeta(HC1.class);
@@ -159,7 +159,7 @@ public class ClassMetaTest {
 		assertEquals(hi2.getTransformedClassMeta().getInnerClass(), Map.class);
 		assertEquals(hc2.getTransformedClassMeta().getInnerClass(), Map.class);
 
-		bc = ContextFactory.create().addTransforms(HC1Swap.class).getBeanContext();
+		bc = ContextFactory.create().addPojoSwaps(HC1Swap.class).getBeanContext();
 		ooo = bc.getClassMeta(Object.class);
 		hi1 = bc.getClassMeta(HI1.class);
 		hc1 = bc.getClassMeta(HC1.class);
@@ -181,7 +181,7 @@ public class ClassMetaTest {
 		assertEquals(hi2.getTransformedClassMeta().getInnerClass(), HI2.class);
 		assertEquals(hc2.getTransformedClassMeta().getInnerClass(), Map.class);
 
-		bc = ContextFactory.create().addTransforms(HI2Swap.class).getBeanContext();
+		bc = ContextFactory.create().addPojoSwaps(HI2Swap.class).getBeanContext();
 		ooo = bc.getClassMeta(Object.class);
 		hi1 = bc.getClassMeta(HI1.class);
 		hc1 = bc.getClassMeta(HC1.class);
@@ -203,7 +203,7 @@ public class ClassMetaTest {
 		assertEquals(hi2.getTransformedClassMeta().getInnerClass(), Map.class);
 		assertEquals(hc2.getTransformedClassMeta().getInnerClass(), Map.class);
 
-		bc = ContextFactory.create().addTransforms(HC2Swap.class).getBeanContext();
+		bc = ContextFactory.create().addPojoSwaps(HC2Swap.class).getBeanContext();
 		ooo = bc.getClassMeta(Object.class);
 		hi1 = bc.getClassMeta(HI1.class);
 		hc1 = bc.getClassMeta(HC1.class);
@@ -225,7 +225,7 @@ public class ClassMetaTest {
 		assertEquals(hi2.getTransformedClassMeta().getInnerClass(), HI2.class);
 		assertEquals(hc2.getTransformedClassMeta().getInnerClass(), Map.class);
 
-		bc = ContextFactory.create().addTransforms(HI1Swap.class,HC1Swap.class,HI2Swap.class,HC2Swap.class).getBeanContext();
+		bc = ContextFactory.create().addPojoSwaps(HI1Swap.class,HC1Swap.class,HI2Swap.class,HC2Swap.class).getBeanContext();
 		ooo = bc.getClassMeta(Object.class);
 		hi1 = bc.getClassMeta(HI1.class);
 		hc1 = bc.getClassMeta(HC1.class);
@@ -247,7 +247,7 @@ public class ClassMetaTest {
 		assertEquals(hi2.getTransformedClassMeta().getInnerClass(), Map.class);
 		assertEquals(hc2.getTransformedClassMeta().getInnerClass(), Map.class);
 
-		bc = ContextFactory.create().addTransforms(HC2Swap.class,HI2Swap.class,HC1Swap.class,HI1Swap.class).getBeanContext();
+		bc = ContextFactory.create().addPojoSwaps(HC2Swap.class,HI2Swap.class,HC1Swap.class,HI1Swap.class).getBeanContext();
 		ooo = bc.getClassMeta(Object.class);
 		hi1 = bc.getClassMeta(HI1.class);
 		hc1 = bc.getClassMeta(HC1.class);

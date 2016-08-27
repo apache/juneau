@@ -116,17 +116,32 @@ public abstract class CoreApi extends Lockable {
 	}
 
 	/**
-	 * Shortcut for calling <code>getContextFactory().addTransforms(<jf>classes</jf>)</code>.
+	 * Shortcut for calling <code>getContextFactory().addBeanFilters(<jf>classes</jf>)</code>.
 	 *
 	 * @param classes The new setting value for the bean context.
 	 * @throws LockedException If {@link ContextFactory#lock()} was called on this class or the bean context.
 	 * @return This object (for method chaining).
 	 * @see ContextFactory#addToProperty(String, Object)
-	 * @see BeanContext#BEAN_transforms
+	 * @see BeanContext#BEAN_beanFilters
 	 */
-	public CoreApi addTransforms(Class<?>...classes) throws LockedException {
+	public CoreApi addBeanFilters(Class<?>...classes) throws LockedException {
 		checkLock();
-		contextFactory.addTransforms(classes);
+		contextFactory.addBeanFilters(classes);
+		return this;
+	}
+
+	/**
+	 * Shortcut for calling <code>getContextFactory().addPojoSwaps(<jf>classes</jf>)</code>.
+	 *
+	 * @param classes The new setting value for the bean context.
+	 * @throws LockedException If {@link ContextFactory#lock()} was called on this class or the bean context.
+	 * @return This object (for method chaining).
+	 * @see ContextFactory#addToProperty(String, Object)
+	 * @see BeanContext#BEAN_pojoSwaps
+	 */
+	public CoreApi addPojoSwaps(Class<?>...classes) throws LockedException {
+		checkLock();
+		contextFactory.addPojoSwaps(classes);
 		return this;
 	}
 

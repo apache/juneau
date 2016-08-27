@@ -275,16 +275,30 @@ public final class SerializerGroup extends Lockable {
 	}
 
 	/**
-	 * Shortcut for calling {@link Serializer#addTransforms(Class[])} on all serializers in this group.
+	 * Shortcut for calling {@link Serializer#addBeanFilters(Class[])} on all serializers in this group.
 	 *
 	 * @param classes The classes to add bean filters for to the underlying bean context of all serializers in this group.
 	 * @throws LockedException If {@link #lock()} was called on this object.
 	 * @return This object (for method chaining).
 	 */
-	public SerializerGroup addTransforms(Class<?>...classes) throws LockedException {
+	public SerializerGroup addBeanFilters(Class<?>...classes) throws LockedException {
 		checkLock();
 		for (Serializer s : serializers)
-			s.addTransforms(classes);
+			s.addBeanFilters(classes);
+		return this;
+	}
+
+	/**
+	 * Shortcut for calling {@link Serializer#addPojoSwaps(Class[])} on all serializers in this group.
+	 *
+	 * @param classes The classes to add POJO swaps for to the underlying bean context of all serializers in this group.
+	 * @throws LockedException If {@link #lock()} was called on this object.
+	 * @return This object (for method chaining).
+	 */
+	public SerializerGroup addPojoSwaps(Class<?>...classes) throws LockedException {
+		checkLock();
+		for (Serializer s : serializers)
+			s.addPojoSwaps(classes);
 		return this;
 	}
 

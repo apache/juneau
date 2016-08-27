@@ -419,8 +419,14 @@ public class RdfSerializer extends WriterSerializer {
 	}
 
 	@Override /* CoreApi */
-	public RdfSerializer addTransforms(Class<?>...classes) throws LockedException {
-		super.addTransforms(classes);
+	public RdfSerializer addBeanFilters(Class<?>...classes) throws LockedException {
+		super.addBeanFilters(classes);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public RdfSerializer addPojoSwaps(Class<?>...classes) throws LockedException {
+		super.addPojoSwaps(classes);
 		return this;
 	}
 

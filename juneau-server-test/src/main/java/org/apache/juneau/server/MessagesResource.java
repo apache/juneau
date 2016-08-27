@@ -26,7 +26,7 @@ import org.apache.juneau.transform.*;
 @RestResource(
 	path="/testMessages",
 	messages="MessagesResource",
-	transforms={
+	pojoSwaps={
 		MessagesResource.ResourceBundleSwap.class
 	}
 )

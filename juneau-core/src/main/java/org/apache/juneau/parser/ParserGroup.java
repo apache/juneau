@@ -252,16 +252,30 @@ public final class ParserGroup extends Lockable {
 	}
 
 	/**
-	 * Shortcut for calling {@link Parser#addTransforms(Class[])} on all parsers in this group.
+	 * Shortcut for calling {@link Parser#addBeanFilters(Class[])} on all parsers in this group.
 	 *
 	 * @param classes The classes to add bean filters for to the underlying bean context of all parsers in this group.
 	 * @throws LockedException If {@link #lock()} was called on this object.
 	 * @return This object (for method chaining).
 	 */
-	public ParserGroup addTransforms(Class<?>...classes) throws LockedException {
+	public ParserGroup addBeanFilters(Class<?>...classes) throws LockedException {
 		checkLock();
 		for (Parser p : parsers)
-			p.addTransforms(classes);
+			p.addBeanFilters(classes);
+		return this;
+	}
+
+	/**
+	 * Shortcut for calling {@link Parser#addPojoSwaps(Class[])} on all parsers in this group.
+	 *
+	 * @param classes The classes to add POJO swaps for to the underlying bean context of all parsers in this group.
+	 * @throws LockedException If {@link #lock()} was called on this object.
+	 * @return This object (for method chaining).
+	 */
+	public ParserGroup addPojoSwaps(Class<?>...classes) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.addPojoSwaps(classes);
 		return this;
 	}
 

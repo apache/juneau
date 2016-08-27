@@ -523,8 +523,14 @@ public class UrlEncodingParser extends UonParser {
 	}
 
 	@Override /* CoreApi */
-	public UrlEncodingParser addTransforms(Class<?>...classes) throws LockedException {
-		super.addTransforms(classes);
+	public UrlEncodingParser addBeanFilters(Class<?>...classes) throws LockedException {
+		super.addBeanFilters(classes);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UrlEncodingParser addPojoSwaps(Class<?>...classes) throws LockedException {
+		super.addPojoSwaps(classes);
 		return this;
 	}
 

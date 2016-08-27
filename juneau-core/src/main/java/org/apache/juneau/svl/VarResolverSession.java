@@ -13,11 +13,11 @@
 
 package org.apache.juneau.svl;
 
-import java.util.*;
 import static java.text.MessageFormat.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
+import java.util.*;
 
 import org.apache.juneau.*;
 

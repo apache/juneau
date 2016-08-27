@@ -698,8 +698,14 @@ public final class HtmlParser extends ReaderParser {
 	}
 
 	@Override /* CoreApi */
-	public HtmlParser addTransforms(Class<?>...classes) throws LockedException {
-		super.addTransforms(classes);
+	public HtmlParser addBeanFilters(Class<?>...classes) throws LockedException {
+		super.addBeanFilters(classes);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlParser addPojoSwaps(Class<?>...classes) throws LockedException {
+		super.addPojoSwaps(classes);
 		return this;
 	}
 

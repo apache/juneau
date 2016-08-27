@@ -462,8 +462,14 @@ public class UonSerializer extends WriterSerializer {
 	}
 
 	@Override /* CoreApi */
-	public UonSerializer addTransforms(Class<?>...classes) throws LockedException {
-		super.addTransforms(classes);
+	public UonSerializer addBeanFilters(Class<?>...classes) throws LockedException {
+		super.addBeanFilters(classes);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer addPojoSwaps(Class<?>...classes) throws LockedException {
+		super.addPojoSwaps(classes);
 		return this;
 	}
 

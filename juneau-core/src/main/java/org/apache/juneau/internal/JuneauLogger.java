@@ -31,7 +31,7 @@ import org.apache.juneau.transforms.*;
 public class JuneauLogger extends java.util.logging.Logger {
 
 	private static final WriterSerializer serializer = JsonSerializer.DEFAULT_LAX.clone()
-		.addTransforms(
+		.addPojoSwaps(
 			CalendarSwap.ISO8601DTZ.class,
 			DateSwap.ISO8601DTZ.class,
 			EnumerationSwap.class,

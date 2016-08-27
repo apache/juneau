@@ -463,8 +463,14 @@ public class RdfParser extends ReaderParser {
 	}
 
 	@Override /* CoreApi */
-	public RdfParser addTransforms(Class<?>...classes) throws LockedException {
-		super.addTransforms(classes);
+	public RdfParser addBeanFilters(Class<?>...classes) throws LockedException {
+		super.addBeanFilters(classes);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public RdfParser addPojoSwaps(Class<?>...classes) throws LockedException {
+		super.addPojoSwaps(classes);
 		return this;
 	}
 

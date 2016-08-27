@@ -25,7 +25,6 @@ import java.util.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.transform.*;
-import org.apache.juneau.transform.Transform;
 import org.apache.juneau.utils.*;
 
 /**

@@ -23,7 +23,7 @@ import org.apache.juneau.transforms.*;
  */
 @RestResource(
 	path="/testBeanContext",
-	transforms=DateSwap.ISO8601DTZ.class
+	pojoSwaps=DateSwap.ISO8601DTZ.class
 )
 public class BeanContextPropertiesResource extends RestServletDefault {
 	private static final long serialVersionUID = 1L;

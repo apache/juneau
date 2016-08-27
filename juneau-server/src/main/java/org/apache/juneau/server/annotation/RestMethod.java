@@ -236,9 +236,14 @@ public @interface RestMethod {
 	Property[] properties() default {};
 
 	/**
-	 * Appends the specified transforms to all serializers and parsers used by this method.
+	 * Appends the specified bean filters to all serializers and parsers used by this method.
 	 */
-	Class<?>[] transforms() default {};
+	Class<?>[] beanFilters() default {};
+
+	/**
+	 * Appends the specified POJO swaps to all serializers and parsers used by this method.
+	 */
+	Class<?>[] pojoSwaps() default {};
 
 	/**
 	 * Possible HTTP response codes from this method.

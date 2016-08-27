@@ -52,10 +52,10 @@ public class TestUtils {
 
 
 	private static JsonSerializer js2 = new JsonSerializer.Simple()
-		.addTransforms(IteratorSwap.class, EnumerationSwap.class);
+		.addPojoSwaps(IteratorSwap.class, EnumerationSwap.class);
 
 	private static JsonSerializer js3 = new JsonSerializer.Simple()
-		.addTransforms(IteratorSwap.class, EnumerationSwap.class)
+		.addPojoSwaps(IteratorSwap.class, EnumerationSwap.class)
 		.setProperty(BEAN_sortProperties, true);
 
 	/**

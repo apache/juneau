@@ -304,8 +304,14 @@ public abstract class Serializer extends CoreApi {
 	}
 
 	@Override /* CoreApi */
-	public Serializer addTransforms(Class<?>...classes) throws LockedException {
-		super.addTransforms(classes);
+	public Serializer addBeanFilters(Class<?>...classes) throws LockedException {
+		super.addBeanFilters(classes);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer addPojoSwaps(Class<?>...classes) throws LockedException {
+		super.addPojoSwaps(classes);
 		return this;
 	}
 

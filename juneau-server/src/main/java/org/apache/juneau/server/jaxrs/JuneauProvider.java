@@ -43,15 +43,25 @@ import org.apache.juneau.xml.*;
 public @interface JuneauProvider {
 
 	/**
-	 * Provider-level POJO filters.
+	 * Provider-level bean filters.
 	 * <p>
 	 * 	These filters are applied to all serializers and parsers being used by the provider.
 	 * <p>
-	 * 	If the specified class is an instance of {@link Transform}, then that filter is added.
-	 * 	Any other classes are wrapped in a {@link BeanFilter} to indicate that subclasses should
+	 * 	If the specified class is an instance of {@link BeanFilter}, then that filter is added.
+	 * 	Any other classes are wrapped in a {@link InterfaceBeanFilter} to indicate that subclasses should
 	 * 		be treated as the specified class type.
 	 */
-	Class<?>[] transforms() default {};
+	Class<?>[] beanFilters() default {};
+
+	/**
+	 * Provider-level POJO swaps.
+	 * <p>
+	 * 	These POJO swaps are applied to all serializers and parsers being used by the provider.
+	 * <p>
+	 * 	If the specified class is an instance of {@link PojoSwap}, then that swap is added.
+	 * 	Any other classes are wrapped in a {@link SurrogateSwap}.
+	 */
+	Class<?>[] pojoSwaps() default {};
 
 	/**
 	 * Provider-level properties.

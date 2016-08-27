@@ -697,8 +697,14 @@ public abstract class Parser extends CoreApi {
 	}
 
 	@Override /* CoreApi */
-	public Parser addTransforms(Class<?>...classes) throws LockedException {
-		super.addTransforms(classes);
+	public Parser addBeanFilters(Class<?>...classes) throws LockedException {
+		super.addBeanFilters(classes);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Parser addPojoSwaps(Class<?>...classes) throws LockedException {
+		super.addPojoSwaps(classes);
 		return this;
 	}
 

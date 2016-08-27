@@ -97,7 +97,7 @@ public class BeanFilterTest {
 	//====================================================================================================
 	@Test
 	public void testParentClassTransform() throws Exception {
-		JsonSerializer s = new JsonSerializer.Simple().addTransforms(C1.class);
+		JsonSerializer s = new JsonSerializer.Simple().addBeanFilters(C1.class);
 
 		C1 c1 = new C2();
 		String r = s.serialize(c1);
@@ -122,7 +122,7 @@ public class BeanFilterTest {
 	//====================================================================================================
 	@Test
 	public void testParentClassTransform2() throws Exception {
-		JsonSerializer s = new JsonSerializer.Simple().addTransforms(D1.class);
+		JsonSerializer s = new JsonSerializer.Simple().addBeanFilters(D1.class);
 
 		D1 d1 = new D2();
 		String r = s.serialize(d1);

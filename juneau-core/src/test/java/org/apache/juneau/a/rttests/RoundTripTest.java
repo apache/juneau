@@ -189,8 +189,8 @@ public abstract class RoundTripTest {
 	public boolean debug = false;
 
 	public RoundTripTest(String label, Serializer s, Parser p, int flags) throws Exception {
-		this.s = s.clone().addTransforms(getTransforms());
-		this.p = p == null ? null : p.clone().addTransforms(getTransforms());
+		this.s = s.clone().addBeanFilters(getBeanFilters()).addPojoSwaps(getPojoSwaps());
+		this.p = p == null ? null : p.clone().addBeanFilters(getBeanFilters()).addPojoSwaps(getPojoSwaps());
 		this.label = label;
 
 		Map<Class<Object>, Class<? extends Object>> m = getImplClasses();
@@ -207,7 +207,11 @@ public abstract class RoundTripTest {
 	}
 
 
-	public Class<?>[] getTransforms() {
+	public Class<?>[] getBeanFilters() {
+		return new Class<?>[0];
+	}
+
+	public Class<?>[] getPojoSwaps() {
 		return new Class<?>[0];
 	}
 
@@ -266,10 +270,16 @@ public abstract class RoundTripTest {
 		return p;
 	}
 
-	protected void addTransforms(Class<?>...c) {
-		s.addTransforms(c);
+	protected void addBeanFilters(Class<?>...c) {
+		s.addBeanFilters(c);
 		if (p != null)
-			p.addTransforms(c);
+			p.addBeanFilters(c);
+	}
+
+	protected void addPojoSwaps(Class<?>...c) {
+		s.addPojoSwaps(c);
+		if (p != null)
+			p.addPojoSwaps(c);
 	}
 
 	public boolean isValidationOnly() {

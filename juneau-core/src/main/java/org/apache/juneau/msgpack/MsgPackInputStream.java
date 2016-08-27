@@ -15,6 +15,7 @@ package org.apache.juneau.msgpack;
 import static org.apache.juneau.msgpack.DataType.*;
 
 import java.io.*;
+
 import org.apache.juneau.internal.*;
 
 /**

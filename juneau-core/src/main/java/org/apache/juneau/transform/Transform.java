@@ -12,8 +12,6 @@
  ***************************************************************************************************************************/
 package org.apache.juneau.transform;
 
-import org.apache.juneau.*;
-
 /**
  * Parent class for all bean and POJO swaps.
  *
@@ -33,9 +31,6 @@ import org.apache.juneau.*;
  * 	<li>{@link PojoSwap} - Non-bean filters for converting POJOs into serializable equivalents.
  * 	<li>{@link BeanFilter} - Bean filters for configuring how beans are handled.
  * </ul>
- * <p>
- * 	Transforms are associated with bean contexts (and serializers/parsers) through the {@link ContextFactory#addToProperty(String,Object)}
- * 		and {@link CoreApi#addTransforms(Class[])} methods.
  *
  *
  * <h6 class='topic'>Additional information</h6>

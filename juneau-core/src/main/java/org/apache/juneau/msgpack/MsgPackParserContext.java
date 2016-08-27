@@ -26,7 +26,8 @@ import org.apache.juneau.parser.*;
  * 	<li>{@link MsgPackParser#setProperty(String,Object)}
  * 	<li>{@link MsgPackParser#setProperties(ObjectMap)}
  * 	<li>{@link MsgPackParser#addNotBeanClasses(Class[])}
- * 	<li>{@link MsgPackParser#addTransforms(Class[])}
+ * 	<li>{@link MsgPackParser#addBeanFilters(Class[])}
+ * 	<li>{@link MsgPackParser#addPojoSwaps(Class[])}
  * 	<li>{@link MsgPackParser#addImplClass(Class,Class)}
  * </ul>
  * <p>
