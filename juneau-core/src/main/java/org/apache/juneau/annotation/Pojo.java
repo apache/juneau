@@ -33,6 +33,7 @@ public @interface Pojo {
 
 	/**
 	 * Associate a {@link PojoSwap} or {@link SurrogateSwap} with this class type.
+	 *
 	 * <p>
 	 * Supports the following class types:
 	 * <ul>
