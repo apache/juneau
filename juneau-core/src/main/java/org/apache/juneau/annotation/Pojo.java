@@ -82,7 +82,7 @@ import org.apache.juneau.transform.*;
 public @interface Pojo {
 
 	/**
-	 * Associate a {@link PojoSwap} or {@link SurrogateSwap} with this class type.
+	 * Associate a {@link PojoSwap} or {@link SurrogateSwap} with this class type. 
 	 */
 	Class<? extends Transform> transform() default Transform.NULL.class;
 }
