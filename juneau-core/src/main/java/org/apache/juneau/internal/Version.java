@@ -74,6 +74,9 @@ public class Version {
 			else if (c < 0)
 				return true;
 		}
+		for (int i = parts.length; i < v.parts.length; i++)
+			if (v.parts[i] != 0)
+				return false;
 		return ! exclusive;
 	}
 
@@ -92,7 +95,17 @@ public class Version {
 	 * @return <jk>true</jk> if the specified version is at most this version.
 	 */
 	public boolean isAtMost(Version v, boolean exclusive) {
-		return v.isAtLeast(this, exclusive);
+		for (int i = 0; i < Math.min(parts.length, v.parts.length); i++) {
+			int c = parts[i] - v.parts[i];
+			if (c > 0)
+				return false;
+			else if (c < 0)
+				return true;
+		}
+		for (int i = parts.length; i < v.parts.length; i++)
+			if (v.parts[i] > 0)
+				return false;
+		return ! exclusive;
 	}
 
 	/**
