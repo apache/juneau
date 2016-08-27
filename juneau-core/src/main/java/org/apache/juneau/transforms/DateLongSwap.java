@@ -19,44 +19,34 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.transform.*;
 
 /**
- * Transforms {@link Calendar Calendars} to {@link Map Maps} of the format <code>{_class:String,value:long}</code>.
+ * Transforms {@link Date Dates} to {@link Long Longs}.
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@SuppressWarnings("rawtypes")
-public class CalendarMapTransform extends PojoTransform<Calendar,Map> {
+public class DateLongSwap extends PojoSwap<Date,Long> {
 
 	/**
-	 * Converts the specified {@link Calendar} to a {@link Map}.
+	 * Converts the specified {@link Date} to a {@link Long}.
 	 */
-	@Override /* PojoTransform */
-	public Map transform(Calendar o) {
-		ObjectMap m = new ObjectMap();
-		m.put("time", o.getTime().getTime());
-		m.put("timeZone", o.getTimeZone().getID());
-		return m;
+	@Override /* PojoSwap */
+	public Long swap(Date o) {
+		return o.getTime();
 	}
 
 	/**
-	 * Converts the specified {@link Map} to a {@link Calendar}.
+	 * Converts the specified {@link Long} to a {@link Date}.
 	 */
-	@Override /* PojoTransform */
-	@SuppressWarnings("unchecked")
-	public Calendar normalize(Map o, ClassMeta<?> hint) throws ParseException {
-		ClassMeta<? extends Calendar> tt;
-		try {
-			if (hint == null || ! hint.canCreateNewInstance())
-				hint = getBeanContext().getClassMeta(GregorianCalendar.class);
-			tt = (ClassMeta<? extends Calendar>)hint;
-			long time = Long.parseLong(o.get("time").toString());
-			String timeZone = o.get("timeZone").toString();
-			Date d = new Date(time);
-			Calendar c = tt.newInstance();
-			c.setTime(d);
-			c.setTimeZone(TimeZone.getTimeZone(timeZone));
-			return c;
-		} catch (Exception e) {
-			throw new ParseException(e);
-		}
+	@Override /* PojoSwap */
+	public Date unswap(Long o, ClassMeta<?> hint) throws ParseException {
+		Class<?> c = (hint == null ? java.util.Date.class : hint.getInnerClass());
+		if (c == java.util.Date.class)
+			return new java.util.Date(o);
+		if (c == java.sql.Date.class)
+			return new java.sql.Date(o);
+		if (c == java.sql.Time.class)
+			return new java.sql.Time(o);
+		if (c == java.sql.Timestamp.class)
+			return new java.sql.Timestamp(o);
+		throw new ParseException("DateLongSwap is unable to narrow object of type ''{0}''", c);
 	}
 }

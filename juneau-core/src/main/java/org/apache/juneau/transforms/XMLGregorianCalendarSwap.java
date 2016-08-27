@@ -29,14 +29,14 @@ import org.apache.juneau.transform.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-public class XMLGregorianCalendarTransform extends PojoTransform<XMLGregorianCalendar,String> {
+public class XMLGregorianCalendarSwap extends PojoSwap<XMLGregorianCalendar,String> {
 
 	private DatatypeFactory dtf;
 
 	/**
 	 * Constructor.
 	 */
-	public XMLGregorianCalendarTransform() {
+	public XMLGregorianCalendarSwap() {
 		try {
 			this.dtf = DatatypeFactory.newInstance();
 		} catch (DatatypeConfigurationException e) {
@@ -47,16 +47,16 @@ public class XMLGregorianCalendarTransform extends PojoTransform<XMLGregorianCal
 	/**
 	 * Converts the specified <code>XMLGregorianCalendar</code> to a {@link String}.
 	 */
-	@Override /* PojoTransform */
-	public String transform(XMLGregorianCalendar b) throws SerializeException {
+	@Override /* PojoSwap */
+	public String swap(XMLGregorianCalendar b) throws SerializeException {
 		return b.toXMLFormat();
 	}
 
 	/**
 	 * Converts the specified {@link String} to an <code>XMLGregorianCalendar</code>.
 	 */
-	@Override /* PojoTransform */
-	public XMLGregorianCalendar normalize(String s, ClassMeta<?> hint) throws ParseException {
+	@Override /* PojoSwap */
+	public XMLGregorianCalendar unswap(String s, ClassMeta<?> hint) throws ParseException {
 		if (StringUtils.isEmpty(s))
 			return null;
 		return dtf.newXMLGregorianCalendar(s);

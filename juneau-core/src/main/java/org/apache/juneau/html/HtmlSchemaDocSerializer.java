@@ -116,7 +116,7 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 
 		out.put("type", type);
 		out.put("class", eType.toString());
-		PojoTransform t = eType.getPojoTransform();
+		PojoSwap t = eType.getPojoSwap();
 		if (t != null)
 			out.put("transform", t);
 

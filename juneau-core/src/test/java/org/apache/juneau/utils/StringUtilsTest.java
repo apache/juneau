@@ -617,7 +617,7 @@ public class StringUtilsTest {
 	//====================================================================================================
 	@Test
 	public void testParseISO8601Date() throws Exception {
-		WriterSerializer s = new JsonSerializer.Simple().addTransforms(DateTransform.ISO8601DTPNZ.class);
+		WriterSerializer s = new JsonSerializer.Simple().addTransforms(DateSwap.ISO8601DTPNZ.class);
 
 		assertNull(parseISO8601Date(null));
 		assertNull(parseISO8601Date(""));

@@ -134,7 +134,7 @@ public class DataConversionTest {
 	@Test
 	public void testObjectTransforms() throws Exception {
 		String s = "Jan 12, 2001";
-		BeanContext bc = ContextFactory.create().addTransforms(CalendarTransform.Medium.class).getBeanContext();
+		BeanContext bc = ContextFactory.create().addTransforms(CalendarSwap.Medium.class).getBeanContext();
 		Calendar c = bc.convertToType(s, GregorianCalendar.class);
 		assertEquals(2001, c.get(Calendar.YEAR));
 		c = bc.convertToType(s, Calendar.class);

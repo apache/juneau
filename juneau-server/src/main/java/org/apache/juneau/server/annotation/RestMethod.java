@@ -420,7 +420,7 @@ public @interface RestMethod {
 	 * 	}
 	 *
 	 * 	<jc>// Call this method if X-Client-Version is at least 1.1, but less than 2.0.</jc>
-	 * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/foobar"</js>, clientVersion=<js>"[1.1,2.0)"</js>, transforms={NewToOldPojoTransform.<jk>class</jk>})
+	 * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/foobar"</js>, clientVersion=<js>"[1.1,2.0)"</js>, transforms={NewToOldPojoSwap.<jk>class</jk>})
 	 * 	<jk>public</jk> NewPojo oldMethod() {
 	 * 		<jk>return</jk> newMethod()
 	 * 	}

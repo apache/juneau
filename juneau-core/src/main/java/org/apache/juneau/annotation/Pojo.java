@@ -25,7 +25,7 @@ import org.apache.juneau.transform.*;
  * <p>
  * 	Annotation that can be applied to POJOs to associate transforms with them.
  * <p>
- * 	Typically used to associate {@link PojoTransform PojoTransforms} with classes using annotations
+ * 	Typically used to associate {@link PojoSwap PojoSwaps} with classes using annotations
  * 		instead of programatically through a method such as {@link Serializer#addTransforms(Class...)}.
  *
  * <h6 class='topic'>Example</h6>
@@ -33,17 +33,17 @@ import org.apache.juneau.transform.*;
  * 	In this case, a transform is being applied to a bean that will force it to be serialized as a <code>String</code>
  * <p class='bcode'>
  * 	<jc>// Our bean class</jc>
- * 	<ja>@Pojo</ja>(transform=BTransform.<jk>class</jk>)
+ * 	<ja>@Pojo</ja>(transform=BSwap.<jk>class</jk>)
  * 	<jk>public class</jk> B {
  * 		<jk>public</jk> String <jf>f1</jf>;
  * 	}
  *
  * 	<jc>// Our transform to force the bean to be serialized as a String</jc>
- * 	<jk>public class</jk> BTransform <jk>extends</jk> PojoTransform&lt;B,String&gt; {
- * 		<jk>public</jk> String transform(B o) <jk>throws</jk> SerializeException {
+ * 	<jk>public class</jk> BSwap <jk>extends</jk> PojoSwap&lt;B,String&gt; {
+ * 		<jk>public</jk> String swap(B o) <jk>throws</jk> SerializeException {
  * 			<jk>return</jk> o.f1;
  * 		}
- * 		<jk>public</jk> B normalize(String f, ClassMeta&lt;?&gt; hint) <jk>throws</jk> ParseException {
+ * 		<jk>public</jk> B unswap(String f, ClassMeta&lt;?&gt; hint) <jk>throws</jk> ParseException {
  * 			B b1 = <jk>new</jk> B();
  * 			b1.<jf>f1</jf> = f;
  * 			<jk>return</jk> b1;
@@ -65,11 +65,11 @@ import org.apache.juneau.transform.*;
  * <p>
  * 	Note that using this annotation is functionally equivalent to adding transforms to the serializers and parsers:
  * <p class='bcode'>
- * 	WriterSerializer s = <jk>new</jk> JsonSerializer.addTransforms(BTransform.<jk>class</jk>);
- * 	ReaderParser p = <jk>new</jk> JsonParser.addTransforms(BTransform.<jk>class</jk>);
+ * 	WriterSerializer s = <jk>new</jk> JsonSerializer.addTransforms(BSwap.<jk>class</jk>);
+ * 	ReaderParser p = <jk>new</jk> JsonParser.addTransforms(BSwap.<jk>class</jk>);
  * </p>
  * <p>
- * 	It is technically possible to associate a {@link BeanTransform} with a bean class using this annotation.
+ * 	It is technically possible to associate a {@link BeanFilter} with a bean class using this annotation.
  * 	However in practice, it's almost always less code to simply use the {@link Bean @Bean} annotation.
  * </p>
  *

@@ -12,25 +12,40 @@
  ***************************************************************************************************************************/
 package org.apache.juneau.transforms;
 
-import static org.junit.Assert.*;
-
-import java.util.*;
-
-import org.apache.juneau.json.*;
+import org.apache.juneau.*;
+import org.apache.juneau.internal.*;
+import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
-import org.junit.*;
+import org.apache.juneau.transform.*;
 
-@SuppressWarnings("javadoc")
-public class EnumerationTransformTest {
+/**
+ * Transforms <code><jk>byte</jk>[]</code> arrays to BASE-64 encoded {@link String Strings}.
+ *
+ * @author James Bognar (james.bognar@salesforce.com)
+ */
+public class ByteArrayBase64Swap extends PojoSwap<byte[],String> {
 
-	//====================================================================================================
-	// test
-	//====================================================================================================
-	@Test
-	public void test() throws Exception {
-		WriterSerializer s = new JsonSerializer.Simple().addTransforms(EnumerationTransform.class);
-		Vector<String> v = new Vector<String>(Arrays.asList(new String[]{"foo","bar","baz"}));
-		Enumeration<String> e = v.elements();
-		assertEquals("['foo','bar','baz']", s.serialize(e));
+	/**
+	 * Converts the specified <code><jk>byte</jk>[]</code> to a {@link String}.
+	 */
+	@Override /* PojoSwap */
+	public String swap(byte[] b) throws SerializeException {
+		try {
+			return StringUtils.base64Encode(b);
+		} catch (Exception e) {
+			throw new SerializeException(e);
+		}
+	}
+
+	/**
+	 * Converts the specified {@link String} to a <code><jk>byte</jk>[]</code>.
+	 */
+	@Override /* PojoSwap */
+	public byte[] unswap(String s, ClassMeta<?> hint) throws ParseException {
+		try {
+			return StringUtils.base64Decode(s);
+		} catch (Exception e) {
+			throw new ParseException(e);
+		}
 	}
 }

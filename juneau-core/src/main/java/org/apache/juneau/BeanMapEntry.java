@@ -36,7 +36,7 @@ import org.apache.juneau.transform.*;
  * 	<jc>// Set the property value</jc>
  * 	birthDate.setValue(<jk>new</jk> Date(1, 2, 3, 4, 5, 6));
  *
- * 	<jc>// Or if the DateTransform.DEFAULT_ISO8601DT is registered with the bean context, set a transformed value</jc>
+ * 	<jc>// Or if the DateSwap.DEFAULT_ISO8601DT is registered with the bean context, set a transformed value</jc>
  * 	birthDate.setValue(<js>"'1901-03-03T04:05:06-5000'"</js>);
  * </p>
  *
@@ -65,10 +65,10 @@ public class BeanMapEntry implements Map.Entry<String,Object> {
 	/**
 	 * Returns the value of this property.
 	 * <p>
-	 * If there is a {@link PojoTransform} associated with this bean property or bean property type class, then
+	 * If there is a {@link PojoSwap} associated with this bean property or bean property type class, then
 	 * 	this method will return the transformed value.
 	 * For example, if the bean property type class is a {@link Date} and the bean property has the
-	 * 	{@link org.apache.juneau.transforms.DateTransform.ISO8601DT} transform associated with it through the
+	 * 	{@link org.apache.juneau.transforms.DateSwap.ISO8601DT} transform associated with it through the
 	 * 	{@link BeanProperty#transform() @BeanProperty.transform()} annotation, this method will return a String
 	 * 	containing an ISO8601 date-time string value.
 	 */
@@ -84,10 +84,10 @@ public class BeanMapEntry implements Map.Entry<String,Object> {
 	 * <p>
 	 * If the property is a bean type {@code X}, then the value can either be an {@code X} or a {@code Map}.
 	 * <p>
-	 * If there is a {@link PojoTransform} associated with this bean property or bean property type class, then
+	 * If there is a {@link PojoSwap} associated with this bean property or bean property type class, then
 	 * 	you must pass in a transformed value.
 	 * For example, if the bean property type class is a {@link Date} and the bean property has the
-	 * 	{@link org.apache.juneau.transforms.DateTransform.ISO8601DT} transform associated with it through the
+	 * 	{@link org.apache.juneau.transforms.DateSwap.ISO8601DT} transform associated with it through the
 	 * 	{@link BeanProperty#transform() @BeanProperty.transform()} annotation, the value being passed in must be
 	 * 	a String containing an ISO8601 date-time string value.
 	 *

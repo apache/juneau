@@ -17,14 +17,14 @@ import java.util.*;
 import org.apache.juneau.annotation.*;
 
 /**
- * Bean transform constructed from a {@link Bean @Bean} annotation found on a class.
+ * Bean filter constructed from a {@link Bean @Bean} annotation found on a class.
  * <p>
  * <b>*** Internal class - Not intended for external use ***</b>
  *
  * @author James Bognar (james.bognar@salesforce.com)
  * @param <T> The class type that this transform applies to.
  */
-public final class AnnotationBeanTransform<T> extends BeanTransform<T> {
+public final class AnnotationBeanFilter<T> extends BeanFilter<T> {
 
 	/**
 	 * Constructor.
@@ -32,7 +32,7 @@ public final class AnnotationBeanTransform<T> extends BeanTransform<T> {
 	 * @param annotatedClass The class found to have a {@link Bean @Bean} annotation.
 	 * @param annotations The {@link Bean @Bean} annotations found on the class and all parent classes in child-to-parent order.
 	 */
-	public AnnotationBeanTransform(Class<T> annotatedClass, List<Bean> annotations) {
+	public AnnotationBeanFilter(Class<T> annotatedClass, List<Bean> annotations) {
 		super(annotatedClass);
 
 		ListIterator<Bean> li = annotations.listIterator(annotations.size());

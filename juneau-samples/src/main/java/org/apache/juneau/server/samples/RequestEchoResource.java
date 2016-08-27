@@ -39,7 +39,7 @@ import org.apache.juneau.transforms.*;
 		// Interpret these as their parent classes, not subclasses
 		HttpServletRequest.class, HttpSession.class, ServletContext.class,
 		// Add a special filter for Enumerations
-		EnumerationTransform.class
+		EnumerationSwap.class
 	}
 )
 public class RequestEchoResource extends Resource {

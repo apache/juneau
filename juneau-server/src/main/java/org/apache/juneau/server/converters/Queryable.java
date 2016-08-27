@@ -64,8 +64,8 @@ public final class Queryable implements RestConverter {
 			if (req.hasAnyQueryParameters("q","v","s","g","i","p","l")) {
 				BeanContext bc = req.getBeanContext();
 
-				if (cm.getPojoTransform() != null)
-					o = cm.getPojoTransform().transform(o);
+				if (cm.getPojoSwap() != null)
+					o = cm.getPojoSwap().swap(o);
 
 				PojoQuery f = new PojoQuery(o, bc);
 

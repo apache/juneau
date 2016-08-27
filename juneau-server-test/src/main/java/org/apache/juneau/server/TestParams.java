@@ -108,7 +108,7 @@ public class TestParams extends RestServletDefault {
 
 	@Override /* RestServlet */
 	public Class<?>[] createTransforms() {
-		return new Class[]{CalendarTransform.Medium.class};
+		return new Class[]{CalendarSwap.Medium.class};
 	}
 
 	//====================================================================================================

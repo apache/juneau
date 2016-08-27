@@ -18,7 +18,7 @@ import org.apache.juneau.server.annotation.*;
  * JUnit automated testcase resource.
  */
 @RestResource(
-	transforms={TestTransforms.TransformA1.class}
+	transforms={TestTransforms.SwapA1.class}
 )
 public class TestTransformsParent extends RestServletDefault {
 	private static final long serialVersionUID = 1L;

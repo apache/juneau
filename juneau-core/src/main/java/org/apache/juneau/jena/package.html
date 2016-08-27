@@ -119,10 +119,10 @@
 			<code>fromString()</code>, <code>valueOf()</code>, <code>constructor(String)</code>).
 	</ul>
 	<p>
-		In addition to the types shown above, Juneau includes the ability to define transforms to transform non-standard object and 
+		In addition to the types shown above, Juneau includes the ability to define 'swaps' to transform non-standard object and 
 			property types to serializable forms (e.g. to transform <code>Calendars</code> to and from <code>ISO8601</code> strings, 
 			or <code>byte[]</code> arrays to and from base-64 encoded strings).<br>
-		These transforms can be associated with serializers/parsers, or can be associated with classes or bean properties through type and method annotations.
+		These  can be associated with serializers/parsers, or can be associated with classes or bean properties through type and method annotations.
 	</p>
 	<p>
 		Refer to <a href='../package-summary.html#PojoCategories' class='doclink'>POJO Categories</a> for a complete definition of supported POJOs.
@@ -469,16 +469,16 @@
 			<li>Associating transforms at both the class and property level (to convert non-serializable POJOs to serializable forms).
 		</ul>
 		<p>
-			For example, we now add a <code>birthDate</code> property, and associate a transform with it to transform
+			For example, we now add a <code>birthDate</code> property, and associate a swap with it to transform
 				it to an ISO8601 date-time string in GMT time.<br>
 			By default, <code>Calendars</code> are treated as beans by the framework, which is usually not how you want them serialized.<br>
-			Using transforms, we can convert them to standardized string forms.
+			Using swaps, we can convert them to standardized string forms.
 		</p>
 		<p class='bcode'>	
 	<jk>public class</jk> Person {
 		
 		<jc>// Bean properties</jc>
-		<ja>@BeanProperty</ja>(transform=CalendarTransform.ISO8601DTZ.<jk>class</jk>) <jk>public</jk> Calendar birthDate;
+		<ja>@BeanProperty</ja>(transform=CalendarSwap.ISO8601DTZ.<jk>class</jk>) <jk>public</jk> Calendar birthDate;
 		...
 		
 		<jc>// Normal constructor</jc>
@@ -898,9 +898,9 @@
 	<jc>// Get a value convertable from a String.</jc>
 	URI uri = m.get(URI.<jk>class</jk>, <js>"uri"</js>);
 
-	<jc>// Get a value using a transform.</jc>
-	CalendarTransform transform = <jk>new</jk> CalendarTransform.ISO8601DTZ();
-	Calendar birthDate = m.get(transform, <js>"birthDate"</js>);
+	<jc>// Get a value using a swap.</jc>
+	CalendarSwap swap = <jk>new</jk> CalendarSwap.ISO8601DTZ();
+	Calendar birthDate = m.get(swap, <js>"birthDate"</js>);
 
 	<jc>// Get the addresses.</jc>
 	ObjectList addresses = m.getObjectList(<js>"addresses"</js>);

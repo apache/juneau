@@ -76,8 +76,8 @@ public final class ClassMeta<T> implements Type {
 	Method namePropertyMethod;                        // The method to set the name on an object (if it has one).
 	Method parentPropertyMethod;                      // The method to set the parent on an object (if it has one).
 	String notABeanReason;                            // If this isn't a bean, the reason why.
-	PojoTransform<T,?> pojoTransform;                       // The object transform associated with this bean (if it has one).
-	BeanTransform<? extends T> beanTransform;               // The bean transform associated with this bean (if it has one).
+	PojoSwap<T,?> pojoSwap;                       // The object transform associated with this bean (if it has one).
+	BeanFilter<? extends T> beanFilter;               // The bean filter associated with this bean (if it has one).
 	boolean
 		isDelegate,                                    // True if this class extends Delegate.
 		isAbstract,                                    // True if this class is abstract.
@@ -86,7 +86,7 @@ public final class ClassMeta<T> implements Type {
 	private MetadataMap extMeta = new MetadataMap();  // Extended metadata
 
 	private Throwable initException;                   // Any exceptions thrown in the init() method.
-	private boolean hasChildPojoTransforms;               // True if this class or any subclass of this class has a PojoTransform associated with it.
+	private boolean hasChildPojoSwaps;               // True if this class or any subclass of this class has a PojoSwap associated with it.
 	private Object primitiveDefault;                   // Default value for primitive type classes.
 	private Map<String,Method> remoteableMethods,      // Methods annotated with @Remoteable.  Contains all public methods if class is annotated with @Remotable.
 		publicMethods;                                 // All public methods, including static methods.
@@ -130,10 +130,10 @@ public final class ClassMeta<T> implements Type {
 			Transform transform = findTransform(beanContext);
 			if (transform != null) {
 				if (transform.getType() == Transform.TransformType.BEAN)
-					beanTransform = (BeanTransform)transform;
+					beanFilter = (BeanFilter)transform;
 				else
-					pojoTransform = (PojoTransform)transform;
-				transformedClassMeta = (pojoTransform == null ? this : beanContext.getClassMeta(pojoTransform.getTransformedClass()));
+					pojoSwap = (PojoSwap)transform;
+				transformedClassMeta = (pojoSwap == null ? this : beanContext.getClassMeta(pojoSwap.getTransformedClass()));
 			}
 			if (transformedClassMeta == null)
 				transformedClassMeta = this;
@@ -144,7 +144,7 @@ public final class ClassMeta<T> implements Type {
 					noArgConstructor = findNoArgConstructor(innerClass, Visibility.PUBLIC);
 			}
 
-			this.hasChildPojoTransforms = beanContext.hasChildPojoTransforms(innerClass);
+			this.hasChildPojoSwaps = beanContext.hasChildPojoSwaps(innerClass);
 
 			Class c = innerClass;
 
@@ -305,7 +305,7 @@ public final class ClassMeta<T> implements Type {
 			// Note that this needs to be done after all other initialization has been done.
 			else if (classCategory == UNKNOWN) {
 
-				BeanMeta newMeta = new BeanMeta(this, beanContext, beanTransform);
+				BeanMeta newMeta = new BeanMeta(this, beanContext, beanFilter);
 				try {
 					notABeanReason = newMeta.init();
 				} catch (RuntimeException e) {
@@ -399,12 +399,12 @@ public final class ClassMeta<T> implements Type {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this class as subtypes defined through {@link Bean#subTypes} or {@link BeanTransform#getSubTypes()}.
+	 * Returns <jk>true</jk> if this class as subtypes defined through {@link Bean#subTypes} or {@link BeanFilter#getSubTypes()}.
 	 *
 	 * @return <jk>true</jk> if this class has subtypes.
 	 */
 	public boolean hasSubTypes() {
-		return beanTransform != null && beanTransform.getSubTypeProperty() != null;
+		return beanFilter != null && beanFilter.getSubTypeProperty() != null;
 	}
 
 	/**
@@ -418,15 +418,15 @@ public final class ClassMeta<T> implements Type {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this class or any child classes has a {@link PojoTransform} associated with it.
+	 * Returns <jk>true</jk> if this class or any child classes has a {@link PojoSwap} associated with it.
 	 * <p>
 	 * Used when transforming bean properties to prevent having to look up transforms if we know for certain
 	 * that no transforms are associated with a bean property.
 	 *
-	 * @return <jk>true</jk> if this class or any child classes has a {@link PojoTransform} associated with it.
+	 * @return <jk>true</jk> if this class or any child classes has a {@link PojoSwap} associated with it.
 	 */
-	public boolean hasChildPojoTransforms() {
-		return hasChildPojoTransforms;
+	public boolean hasChildPojoSwaps() {
+		return hasChildPojoSwaps;
 	}
 
 	private Transform findTransform(BeanContext context) {
@@ -442,15 +442,15 @@ public final class ClassMeta<T> implements Type {
 			}
 			if (context == null)
 				return null;
-			Transform f = context.findBeanTransform(innerClass);
+			Transform f = context.findBeanFilter(innerClass);
 			if (f != null)
 				return f;
-			f = context.findPojoTransform(innerClass);
+			f = context.findPojoSwap(innerClass);
 			if (f != null)
 				return f;
 			List<Bean> ba = ReflectionUtils.findAnnotations(Bean.class, innerClass);
 			if (! ba.isEmpty())
-				f = new AnnotationBeanTransform<T>(innerClass, ba);
+				f = new AnnotationBeanFilter<T>(innerClass, ba);
 			return f;
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -524,7 +524,7 @@ public final class ClassMeta<T> implements Type {
 	}
 
 	/**
-	 * Returns the generalized form of this class if there is an {@link PojoTransform} associated with it.
+	 * Returns the generalized form of this class if there is an {@link PojoSwap} associated with it.
 	 *
 	 * @return The transformed class type, or this object if no transform is associated with the class.
 	 */
@@ -803,13 +803,13 @@ public final class ClassMeta<T> implements Type {
 	}
 
 	/**
-	 * Returns the {@link PojoTransform} associated with this class.
+	 * Returns the {@link PojoSwap} associated with this class.
 	 *
-	 * @return The {@link PojoTransform} associated with this class, or <jk>null</jk> if there is no POJO transform
+	 * @return The {@link PojoSwap} associated with this class, or <jk>null</jk> if there is no POJO swap
 	 * 	associated with this class.
 	 */
-	public PojoTransform<T,?> getPojoTransform() {
-		return pojoTransform;
+	public PojoSwap<T,?> getPojoSwap() {
+		return pojoSwap;
 	}
 
 	/**
@@ -895,7 +895,7 @@ public final class ClassMeta<T> implements Type {
 		if (beanMeta == null)
 			return false;
 		// Beans with transforms with subtype properties are assumed to be constructable.
-		if (beanTransform != null && beanTransform.getSubTypeProperty() != null)
+		if (beanFilter != null && beanFilter.getSubTypeProperty() != null)
 			return true;
 		if (beanMeta.constructor == null)
 			return false;

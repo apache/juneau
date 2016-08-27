@@ -56,7 +56,7 @@ import org.apache.juneau.*;
  *
  * 	<jc>// Change settings on parsers simultaneously</jc>
  * 	g.setProperty(BeanContext.<jsf>BEAN_beansRequireSerializable</jsf>, <jk>true</jk>)
- * 		.addTransforms(CalendarTransform.ISO8601DT.<jk>class</jk>)
+ * 		.addTransforms(CalendarSwap.ISO8601DT.<jk>class</jk>)
  * 		.lock();
  *
  * 	<jc>// Find the appropriate parser by Content-Type</jc>
@@ -254,7 +254,7 @@ public final class ParserGroup extends Lockable {
 	/**
 	 * Shortcut for calling {@link Parser#addTransforms(Class[])} on all parsers in this group.
 	 *
-	 * @param classes The classes to add bean transforms for to the underlying bean context of all parsers in this group.
+	 * @param classes The classes to add bean filters for to the underlying bean context of all parsers in this group.
 	 * @throws LockedException If {@link #lock()} was called on this object.
 	 * @return This object (for method chaining).
 	 */

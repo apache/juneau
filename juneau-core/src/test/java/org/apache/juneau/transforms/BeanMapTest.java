@@ -26,7 +26,7 @@ public class BeanMapTest {
 	//====================================================================================================
 	@Test
 	public void testFilteredEntry() throws Exception {
-		BeanContext bc = ContextFactory.create().addTransforms(ByteArrayBase64Transform.class).getBeanContext();
+		BeanContext bc = ContextFactory.create().addTransforms(ByteArrayBase64Swap.class).getBeanContext();
 		BeanMap<A> m = bc.forBean(new A());
 
 		assertEquals("AQID", m.get("f1"));
@@ -81,16 +81,16 @@ public class BeanMapTest {
 		public String f2;
 	}
 
-	public static class B1Filter extends PojoTransform<B1,ObjectMap> {
-		@Override /* PojoTransform */
-		public ObjectMap transform(B1 b1) {
+	public static class B1Filter extends PojoSwap<B1,ObjectMap> {
+		@Override /* PojoSwap */
+		public ObjectMap swap(B1 b1) {
 			return new ObjectMap().append("type", "b1").append("f1", b1.f1);
 		}
 	}
 
-	public static class B2Filter extends PojoTransform<B2,ObjectMap> {
-		@Override /* PojoTransform */
-		public ObjectMap transform(B2 b2) {
+	public static class B2Filter extends PojoSwap<B2,ObjectMap> {
+		@Override /* PojoSwap */
+		public ObjectMap swap(B2 b2) {
 			return new ObjectMap().append("type", "b2").append("f1", b2.f1);
 		}
 	}

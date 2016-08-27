@@ -19,34 +19,44 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.transform.*;
 
 /**
- * Transforms {@link Date Dates} to {@link Long Longs}.
+ * Transforms {@link Calendar Calendars} to {@link Map Maps} of the format <code>{_class:String,value:long}</code>.
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-public class DateLongTransform extends PojoTransform<Date,Long> {
+@SuppressWarnings("rawtypes")
+public class CalendarMapSwap extends PojoSwap<Calendar,Map> {
 
 	/**
-	 * Converts the specified {@link Date} to a {@link Long}.
+	 * Converts the specified {@link Calendar} to a {@link Map}.
 	 */
-	@Override /* PojoTransform */
-	public Long transform(Date o) {
-		return o.getTime();
+	@Override /* PojoSwap */
+	public Map swap(Calendar o) {
+		ObjectMap m = new ObjectMap();
+		m.put("time", o.getTime().getTime());
+		m.put("timeZone", o.getTimeZone().getID());
+		return m;
 	}
 
 	/**
-	 * Converts the specified {@link Long} to a {@link Date}.
+	 * Converts the specified {@link Map} to a {@link Calendar}.
 	 */
-	@Override /* PojoTransform */
-	public Date normalize(Long o, ClassMeta<?> hint) throws ParseException {
-		Class<?> c = (hint == null ? java.util.Date.class : hint.getInnerClass());
-		if (c == java.util.Date.class)
-			return new java.util.Date(o);
-		if (c == java.sql.Date.class)
-			return new java.sql.Date(o);
-		if (c == java.sql.Time.class)
-			return new java.sql.Time(o);
-		if (c == java.sql.Timestamp.class)
-			return new java.sql.Timestamp(o);
-		throw new ParseException("DateLongTransform is unable to narrow object of type ''{0}''", c);
+	@Override /* PojoSwap */
+	@SuppressWarnings("unchecked")
+	public Calendar unswap(Map o, ClassMeta<?> hint) throws ParseException {
+		ClassMeta<? extends Calendar> tt;
+		try {
+			if (hint == null || ! hint.canCreateNewInstance())
+				hint = getBeanContext().getClassMeta(GregorianCalendar.class);
+			tt = (ClassMeta<? extends Calendar>)hint;
+			long time = Long.parseLong(o.get("time").toString());
+			String timeZone = o.get("timeZone").toString();
+			Date d = new Date(time);
+			Calendar c = tt.newInstance();
+			c.setTime(d);
+			c.setTimeZone(TimeZone.getTimeZone(timeZone));
+			return c;
+		} catch (Exception e) {
+			throw new ParseException(e);
+		}
 	}
 }

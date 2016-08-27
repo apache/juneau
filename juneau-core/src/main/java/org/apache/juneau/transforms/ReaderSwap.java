@@ -49,10 +49,10 @@ import org.apache.juneau.xml.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-public class ReaderTransform extends PojoTransform<Reader,Object> {
+public class ReaderSwap extends PojoSwap<Reader,Object> {
 
 	/** Reader transform for reading JSON text. */
-	public static class Json extends ReaderTransform {
+	public static class Json extends ReaderSwap {
 		/** Constructor */
 		public Json() {
 			super(JsonParser.DEFAULT);
@@ -60,7 +60,7 @@ public class ReaderTransform extends PojoTransform<Reader,Object> {
 	}
 
 	/** Reader transform for reading XML text. */
-	public static class Xml extends ReaderTransform {
+	public static class Xml extends ReaderSwap {
 		/** Constructor */
 		public Xml() {
 			super(XmlParser.DEFAULT);
@@ -68,7 +68,7 @@ public class ReaderTransform extends PojoTransform<Reader,Object> {
 	}
 
 	/** Reader transform for reading HTML text. */
-	public static class Html extends ReaderTransform {
+	public static class Html extends ReaderSwap {
 		/** Constructor */
 		public Html() {
 			super(HtmlParser.DEFAULT);
@@ -76,7 +76,7 @@ public class ReaderTransform extends PojoTransform<Reader,Object> {
 	}
 
 	/** Reader transform for reading plain text. */
-	public static class PlainText extends ReaderTransform {
+	public static class PlainText extends ReaderSwap {
 		/** Constructor */
 		public PlainText() {
 			super(null);
@@ -89,7 +89,7 @@ public class ReaderTransform extends PojoTransform<Reader,Object> {
 	/**
 	 * @param parser The parser to use to convert the contents of the reader to Java objects.
 	 */
-	public ReaderTransform(ReaderParser parser) {
+	public ReaderSwap(ReaderParser parser) {
 		this.parser = parser;
 	}
 
@@ -97,8 +97,8 @@ public class ReaderTransform extends PojoTransform<Reader,Object> {
 	 * Converts the specified {@link Reader} to an {@link Object} whose type is determined
 	 * by the contents of the reader.
 	 */
-	@Override /* PojoTransform */
-	public Object transform(Reader o) throws SerializeException {
+	@Override /* PojoSwap */
+	public Object swap(Reader o) throws SerializeException {
 		try {
 			if (parser == null)
 				return IOUtils.read(o);
@@ -106,7 +106,7 @@ public class ReaderTransform extends PojoTransform<Reader,Object> {
 		} catch (IOException e) {
 			return e.getLocalizedMessage();
 		} catch (Exception e) {
-			throw new SerializeException("ReaderTransform could not transform object of type ''{0}''", o == null ? null : o.getClass().getName()).initCause(e);
+			throw new SerializeException("ReaderSwap could not transform object of type ''{0}''", o == null ? null : o.getClass().getName()).initCause(e);
 		}
 	}
 }

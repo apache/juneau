@@ -46,7 +46,7 @@ import org.apache.juneau.transform.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-public class DateTransform extends PojoTransform<Date,String> {
+public class DateSwap extends PojoSwap<Date,String> {
 
 	/**
 	 * Transforms {@link Date Dates} to {@link String Strings} using the {@code Date.toString()} method.
@@ -60,7 +60,7 @@ public class DateTransform extends PojoTransform<Date,String> {
 	 * 	</dd>
 	 * </dl>
 	 */
-	public static class ToString extends DateTransform {
+	public static class ToString extends DateSwap {
 		/** Constructor */
 		public ToString() {
 			super("EEE MMM dd HH:mm:ss zzz yyyy");
@@ -92,7 +92,7 @@ public class DateTransform extends PojoTransform<Date,String> {
 	 * 	</dd>
 	 * </dl>
 	 */
-	public static class ISO8601DT extends DateTransform {
+	public static class ISO8601DT extends DateSwap {
 		private SimpleDateFormat tzFormat = new SimpleDateFormat("Z");
 
 		/** Constructor */
@@ -109,8 +109,8 @@ public class DateTransform extends PojoTransform<Date,String> {
 			super(pattern);
 		}
 
-		@Override /* PojoTransform */
-		public Date normalize(String o, ClassMeta<?> hint) throws ParseException {
+		@Override /* PojoSwap */
+		public Date unswap(String o, ClassMeta<?> hint) throws ParseException {
 			try {
 				if (StringUtils.isEmpty(o))
 					return null;
@@ -122,9 +122,9 @@ public class DateTransform extends PojoTransform<Date,String> {
 			}
 		}
 
-		@Override /* PojoTransform */
-		public String transform(Date o) {
-			String s = super.transform(o);
+		@Override /* PojoSwap */
+		public String swap(Date o) {
+			String s = super.swap(o);
 			String tz = tzFormat.format(o);
 			if (tz.equals("+0000"))
 				return s + "Z";
@@ -150,7 +150,7 @@ public class DateTransform extends PojoTransform<Date,String> {
 	 * <p>
 	 * Example output: <js>"2001-07-04T15:30:45.123"</js>
 	 */
-	public static class ISO8601DTPNZ extends DateTransform {
+	public static class ISO8601DTPNZ extends DateSwap {
 
 		/** Constructor */
 		public ISO8601DTPNZ() {
@@ -163,7 +163,7 @@ public class DateTransform extends PojoTransform<Date,String> {
 	 * <p>
 	 * Example output:  <js>"2001-07-04T15:30:45Z"</js>
 	 */
-	public static class ISO8601DTZ extends DateTransform {
+	public static class ISO8601DTZ extends DateSwap {
 
 		/** Constructor */
 		public ISO8601DTZ() {
@@ -179,8 +179,8 @@ public class DateTransform extends PojoTransform<Date,String> {
 			super(pattern, "GMT");
 		}
 
-		@Override /* PojoTransform */
-		public Date normalize(String o, ClassMeta<?> hint) throws ParseException {
+		@Override /* PojoSwap */
+		public Date unswap(String o, ClassMeta<?> hint) throws ParseException {
 			try {
 				if (StringUtils.isEmpty(o))
 					return null;
@@ -209,7 +209,7 @@ public class DateTransform extends PojoTransform<Date,String> {
 	/**
 	 * Transforms {@link Date Dates} to RFC2822 date-time strings.
 	 */
-	public static class RFC2822DT extends DateTransform {
+	public static class RFC2822DT extends DateSwap {
 		/** Constructor */
 		public RFC2822DT() {
 			super("EEE, dd MMM yyyy HH:mm:ss z");
@@ -221,7 +221,7 @@ public class DateTransform extends PojoTransform<Date,String> {
 	 * <p>
 	 * Example output:  <js>"2001-07-04T15:30:45Z"</js>
 	 */
-	public static class RFC2822DTZ extends DateTransform {
+	public static class RFC2822DTZ extends DateSwap {
 		/** Constructor */
 		public RFC2822DTZ() {
 			super("EEE, dd MMM yyyy HH:mm:ss z", "GMT");
@@ -231,7 +231,7 @@ public class DateTransform extends PojoTransform<Date,String> {
 	/**
 	 * Transforms {@link Date Dates} to RFC2822 date strings.
 	 */
-	public static class RFC2822D extends DateTransform {
+	public static class RFC2822D extends DateSwap {
 		/** Constructor */
 		public RFC2822D() {
 			super("dd MMM yyyy");
@@ -241,7 +241,7 @@ public class DateTransform extends PojoTransform<Date,String> {
 	/**
 	 * Transforms {@link Date Dates} to simple <js>"yyyy/MM/dd HH:mm:ss"</js> strings.
 	 */
-	public static class SimpleDT extends DateTransform {
+	public static class SimpleDT extends DateSwap {
 		/** Constructor */
 		public SimpleDT() {
 			super("yyyy/MM/dd HH:mm:ss");
@@ -251,7 +251,7 @@ public class DateTransform extends PojoTransform<Date,String> {
 	/**
 	 * Transforms {@link Date Dates} to simple <js>"yyyy/MM/dd HH:mm:ss.SSS"</js> strings.
 	 */
-	public static class SimpleDTP extends DateTransform {
+	public static class SimpleDTP extends DateSwap {
 		/** Constructor */
 		public SimpleDTP() {
 			super("yyyy/MM/dd HH:mm:ss.SSS");
@@ -261,7 +261,7 @@ public class DateTransform extends PojoTransform<Date,String> {
 	/**
 	 * Transforms {@link Date Dates} to simple <js>"HH:mm:ss"</js> strings.
 	 */
-	public static class SimpleT extends DateTransform {
+	public static class SimpleT extends DateSwap {
 		/** Constructor */
 		public SimpleT() {
 			super("HH:mm:ss");
@@ -271,7 +271,7 @@ public class DateTransform extends PojoTransform<Date,String> {
 	/**
 	 * Transforms {@link Date Dates} to simple <js>"HH:mm:ss.SSS"</js> strings.
 	 */
-	public static class SimpleTP extends DateTransform {
+	public static class SimpleTP extends DateSwap {
 		/** Constructor */
 		public SimpleTP() {
 			super("HH:mm:ss.SSS");
@@ -281,7 +281,7 @@ public class DateTransform extends PojoTransform<Date,String> {
 	/**
 	 * Transforms {@link Date Dates} to {@link DateFormat#MEDIUM} strings.
 	 */
-	public static class Medium extends DateTransform {
+	public static class Medium extends DateSwap {
 		/** Constructor */
 		public Medium() {
 			super(DateFormat.getDateInstance(DateFormat.MEDIUM));
@@ -298,7 +298,7 @@ public class DateTransform extends PojoTransform<Date,String> {
 	 *
 	 * @param simpleDateFormat The {@link SimpleDateFormat} pattern.
 	 */
-	public DateTransform(String simpleDateFormat) {
+	public DateSwap(String simpleDateFormat) {
 		this(new SimpleDateFormat(simpleDateFormat));
 	}
 
@@ -310,7 +310,7 @@ public class DateTransform extends PojoTransform<Date,String> {
 	 * @param simpleDateFormat The {@link SimpleDateFormat} pattern.
 	 * @param timeZone The time zone to associate with the date pattern.
 	 */
-	public DateTransform(String simpleDateFormat, String timeZone) {
+	public DateSwap(String simpleDateFormat, String timeZone) {
 		this(new SimpleDateFormat(simpleDateFormat));
 		format.setTimeZone(TimeZone.getTimeZone(timeZone));
 	}
@@ -321,7 +321,7 @@ public class DateTransform extends PojoTransform<Date,String> {
 	 *
 	 * @param format The format to use to convert dates to strings.
 	 */
-	public DateTransform(DateFormat format) {
+	public DateSwap(DateFormat format) {
 		super();
 		this.format = format;
 	}
@@ -329,16 +329,16 @@ public class DateTransform extends PojoTransform<Date,String> {
 	/**
 	 * Converts the specified {@link Date} to a {@link String}.
 	 */
-	@Override /* PojoTransform */
-	public String transform(Date o) {
+	@Override /* PojoSwap */
+	public String swap(Date o) {
 		return format.format(o);
 	}
 
 	/**
 	 * Converts the specified {@link String} to a {@link Date}.
 	 */
-	@Override /* PojoTransform */
-	public Date normalize(String o, ClassMeta<?> hint) throws ParseException {
+	@Override /* PojoSwap */
+	public Date unswap(String o, ClassMeta<?> hint) throws ParseException {
 		try {
 			if (StringUtils.isEmpty(o))
 				return null;
@@ -365,6 +365,6 @@ public class DateTransform extends PojoTransform<Date,String> {
 			return new java.sql.Time(in.getTime());
 		if (c == java.sql.Timestamp.class)
 			return new java.sql.Timestamp(in.getTime());
-		throw new ParseException("DateTransform is unable to narrow object of type ''{0}''", c);
+		throw new ParseException("DateSwap is unable to narrow object of type ''{0}''", c);
 	}
 }

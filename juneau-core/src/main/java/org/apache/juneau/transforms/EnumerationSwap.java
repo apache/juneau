@@ -17,23 +17,23 @@ import java.util.*;
 import org.apache.juneau.transform.*;
 
 /**
- * Transforms {@link Iterator Iterators} to {@code List<Object>} objects.
+ * Transforms {@link Enumeration Enumerations} to {@code List<Object>} objects.
  * <p>
- * 	This is a one-way transform, since {@code Iterators} cannot be reconstituted.
+ * 	This is a one-way transform, since {@code Enumerations} cannot be reconstituted.
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
 @SuppressWarnings({"unchecked","rawtypes"})
-public class IteratorTransform extends PojoTransform<Iterator,List> {
+public class EnumerationSwap extends PojoSwap<Enumeration,List> {
 
 	/**
-	 * Converts the specified {@link Iterator} to a {@link List}.
+	 * Converts the specified {@link Enumeration} to a {@link List}.
 	 */
-	@Override /* PojoTransform */
-	public List transform(Iterator o) {
+	@Override /* PojoSwap */
+	public List swap(Enumeration o) {
 		List l = new LinkedList();
-		while (o.hasNext())
-			l.add(o.next());
+		while (o.hasMoreElements())
+			l.add(o.nextElement());
 		return l;
 	}
 }

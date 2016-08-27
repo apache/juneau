@@ -24,7 +24,7 @@ import org.apache.juneau.transform.*;
  */
 @RestResource(
 	path="/testTransforms",
-	transforms={TestTransforms.TransformA2.class}
+	transforms={TestTransforms.SwapA2.class}
 )
 public class TestTransforms extends TestTransformsParent {
 	private static final long serialVersionUID = 1L;
@@ -50,15 +50,15 @@ public class TestTransforms extends TestTransformsParent {
 	// Test method transform overrides class transform
 	// Should return "A3-1".
 	//====================================================================================================
-	@RestMethod(name="GET", path="/testMethodTransformOverridesClassTransform", transforms={TransformA3.class})
+	@RestMethod(name="GET", path="/testMethodTransformOverridesClassTransform", transforms={SwapA3.class})
 	public A test2a() {
 		return new A();
 	}
-	@RestMethod(name="PUT", path="/testMethodTransformOverridesClassTransform", transforms={TransformA3.class})
+	@RestMethod(name="PUT", path="/testMethodTransformOverridesClassTransform", transforms={SwapA3.class})
 	public A test2b(@Content A a) {
 		return a;
 	}
-	@RestMethod(name="PUT", path="/testMethodTransformOverridesClassTransform/{a}", transforms={TransformA3.class})
+	@RestMethod(name="PUT", path="/testMethodTransformOverridesClassTransform/{a}", transforms={SwapA3.class})
 	public A test2c(@Attr A a) {
 		return a;
 	}
@@ -68,45 +68,45 @@ public class TestTransforms extends TestTransformsParent {
 		public int f1;
 	}
 
-	public static class TransformA1 extends PojoTransform<A,String> {
-		@Override /* PojoTransform */
-		public String transform(A a) throws SerializeException {
+	public static class SwapA1 extends PojoSwap<A,String> {
+		@Override /* PojoSwap */
+		public String swap(A a) throws SerializeException {
 			return "A1-" + a.f1;
 		}
-		@Override /* PojoTransform */
-		public A normalize(String in, ClassMeta<?> hint) throws ParseException {
+		@Override /* PojoSwap */
+		public A unswap(String in, ClassMeta<?> hint) throws ParseException {
 			if (! in.startsWith("A1"))
-				throw new RuntimeException("Invalid input for TransformA1!");
+				throw new RuntimeException("Invalid input for SwapA1!");
 			A a = new A();
 			a.f1 = Integer.parseInt(in.substring(3));
 			return a;
 		}
 	}
 
-	public static class TransformA2 extends PojoTransform<A,String> {
-		@Override /* PojoTransform */
-		public String transform(A a) throws SerializeException {
+	public static class SwapA2 extends PojoSwap<A,String> {
+		@Override /* PojoSwap */
+		public String swap(A a) throws SerializeException {
 			return "A2-" + a.f1;
 		}
-		@Override /* PojoTransform */
-		public A normalize(String in, ClassMeta<?> hint) throws ParseException {
+		@Override /* PojoSwap */
+		public A unswap(String in, ClassMeta<?> hint) throws ParseException {
 			if (! in.startsWith("A2"))
-				throw new RuntimeException("Invalid input for TransformA2!");
+				throw new RuntimeException("Invalid input for SwapA2!");
 			A a = new A();
 			a.f1 = Integer.parseInt(in.substring(3));
 			return a;
 		}
 	}
 
-	public static class TransformA3 extends PojoTransform<A,String> {
-		@Override /* PojoTransform */
-		public String transform(A a) throws SerializeException {
+	public static class SwapA3 extends PojoSwap<A,String> {
+		@Override /* PojoSwap */
+		public String swap(A a) throws SerializeException {
 			return "A3-" + a.f1;
 		}
-		@Override /* PojoTransform */
-		public A normalize(String in, ClassMeta<?> hint) throws ParseException {
+		@Override /* PojoSwap */
+		public A unswap(String in, ClassMeta<?> hint) throws ParseException {
 			if (! in.startsWith("A3"))
-				throw new RuntimeException("Invalid input for TransformA3!");
+				throw new RuntimeException("Invalid input for SwapA3!");
 			A a = new A();
 			a.f1 = Integer.parseInt(in.substring(3));
 			return a;

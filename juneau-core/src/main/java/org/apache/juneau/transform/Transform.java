@@ -15,7 +15,7 @@ package org.apache.juneau.transform;
 import org.apache.juneau.*;
 
 /**
- * Parent class for all bean and POJO transforms.
+ * Parent class for all bean and POJO swaps.
  *
  *
  * <h6 class='topic'>Description</h6>
@@ -30,8 +30,8 @@ import org.apache.juneau.*;
  * <p>
  * 	There are 2 subclasses of transforms:
  * <ul class='spaced-list'>
- * 	<li>{@link PojoTransform} - Non-bean transforms for converting POJOs into serializable equivalents.
- * 	<li>{@link BeanTransform} - Bean transforms for configuring how beans are handled.
+ * 	<li>{@link PojoSwap} - Non-bean filters for converting POJOs into serializable equivalents.
+ * 	<li>{@link BeanFilter} - Bean filters for configuring how beans are handled.
  * </ul>
  * <p>
  * 	Transforms are associated with bean contexts (and serializers/parsers) through the {@link ContextFactory#addToProperty(String,Object)}
@@ -51,9 +51,9 @@ public class Transform {
 
 	/** The transform subtype */
 	public static enum TransformType {
-		/** PojoTransform */
+		/** PojoSwap */
 		POJO,
-		/** BeanTransform */
+		/** BeanFilter */
 		BEAN
 	}
 
@@ -63,7 +63,7 @@ public class Transform {
 	/** The bean context that this transform instance belongs to. */
 	protected BeanContext beanContext;
 
-	/** Whether this is a BeanTransform or PojoTransform. */
+	/** Whether this is a BeanFilter or PojoSwap. */
 	protected TransformType type = TransformType.POJO;
 
 	Transform() {}
@@ -93,7 +93,7 @@ public class Transform {
 	}
 
 	/**
-	 * Returns whether this is an instance of {@link PojoTransform} or {@link BeanTransform}.
+	 * Returns whether this is an instance of {@link PojoSwap} or {@link BeanFilter}.
 	 *
 	 * @return The transform type.
 	 */

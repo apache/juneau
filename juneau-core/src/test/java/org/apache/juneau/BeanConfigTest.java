@@ -732,31 +732,31 @@ public class BeanConfigTest {
 		p2.setProperty(BEAN_notBeanPackages_remove, "bar");
 		assertSameCache(p1, p2);
 
-		p1.addTransforms(DummyPojoTransformA.class);
+		p1.addTransforms(DummyPojoSwapA.class);
 		assertDifferentCache(p1, p2);
-		p2.addTransforms(DummyPojoTransformA.class);
+		p2.addTransforms(DummyPojoSwapA.class);
 		assertSameCache(p1, p2);
-		p1.addTransforms(DummyPojoTransformB.class,DummyPojoTransformC.class);  // Order of filters is important!
-		p2.addTransforms(DummyPojoTransformC.class,DummyPojoTransformB.class);
+		p1.addTransforms(DummyPojoSwapB.class,DummyPojoSwapC.class);  // Order of filters is important!
+		p2.addTransforms(DummyPojoSwapC.class,DummyPojoSwapB.class);
 		assertDifferentCache(p1, p2);
 
 		p1 = new JsonParser();
 		p2 = new JsonParser();
-		p1.addTransforms(DummyBeanTransformA.class);
+		p1.addTransforms(DummyBeanFilterA.class);
 		assertDifferentCache(p1, p2);
-		p2.addTransforms(DummyBeanTransformA.class);
+		p2.addTransforms(DummyBeanFilterA.class);
 		assertSameCache(p1, p2);
-		p1.addTransforms(DummyBeanTransformB.class,DummyBeanTransformC.class);  // Order of filters is important!
-		p2.addTransforms(DummyBeanTransformC.class,DummyBeanTransformB.class);
+		p1.addTransforms(DummyBeanFilterB.class,DummyBeanFilterC.class);  // Order of filters is important!
+		p2.addTransforms(DummyBeanFilterC.class,DummyBeanFilterB.class);
 		assertDifferentCache(p1, p2);
 	}
 
-	public static class DummyPojoTransformA extends PojoTransform<A,ObjectMap> {}
-	public static class DummyPojoTransformB extends PojoTransform<B,ObjectMap> {}
-	public static class DummyPojoTransformC extends PojoTransform<C,ObjectMap> {}
-	public static class DummyBeanTransformA extends BeanTransform<A> {}
-	public static class DummyBeanTransformB extends BeanTransform<B> {}
-	public static class DummyBeanTransformC extends BeanTransform<C> {}
+	public static class DummyPojoSwapA extends PojoSwap<A,ObjectMap> {}
+	public static class DummyPojoSwapB extends PojoSwap<B,ObjectMap> {}
+	public static class DummyPojoSwapC extends PojoSwap<C,ObjectMap> {}
+	public static class DummyBeanFilterA extends BeanFilter<A> {}
+	public static class DummyBeanFilterB extends BeanFilter<B> {}
+	public static class DummyBeanFilterC extends BeanFilter<C> {}
 	public static class C {}
 
 	private void assertSameCache(Parser p1, Parser p2) {

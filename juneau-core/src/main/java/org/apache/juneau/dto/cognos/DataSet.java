@@ -58,9 +58,9 @@ import org.apache.juneau.xml.annotation.*;
  * 		<jk>new</jk> Column(<js>"age"</js>, <js>"xs:int"</js>),
  * 		<jk>new</jk> Column(<js>"numAddresses"</js>, <js>"xs:int"</js>)
  * 			.addTransform(
- * 				<jk>new</jk> PojoTransform&ltPerson,Integer&gt;() {
+ * 				<jk>new</jk> PojoSwap&ltPerson,Integer&gt;() {
  * 					<ja>@Override</ja>
- * 					<jk>public</jk> Integer transform(Person p) {
+ * 					<jk>public</jk> Integer swap(Person p) {
  * 						<jk>return</jk> p.<jf>addresses</jf>.size();
  * 					}
  * 				}
@@ -112,7 +112,7 @@ public class DataSet {
 					for (Column col : columns) {
 						Object v;
 						if (col.transform != null)
-							v = col.transform.transform(o2);
+							v = col.transform.swap(o2);
 						else
 							v = m.get(col.getName());
 						r.add(v == null ? null : v.toString());

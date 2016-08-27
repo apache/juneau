@@ -42,12 +42,12 @@ import org.apache.juneau.xml.annotation.*;
  * 			by the {@link java.beans.BeanInfo} class (i.e. ordered by definition in the class).
  * 	</ul>
  * 	<br>
- * 	The order can also be overridden through the use of a {@link BeanTransform}.
+ * 	The order can also be overridden through the use of a {@link BeanFilter}.
  *
  *
- * <h6 class='topic'>POJO transforms</h6>
+ * <h6 class='topic'>POJO swaps</h6>
  * <p>
- * 	If {@link PojoTransform PojoTransforms} are defined on the class types of the properties of this bean or the bean properties themselves, the
+ * 	If {@link PojoSwap PojoSwaps} are defined on the class types of the properties of this bean or the bean properties themselves, the
  * 	{@link #get(Object)} and {@link #put(String, Object)} methods will automatically
  * 	transform the property value to and from the serialized form.
  *
@@ -178,10 +178,10 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	/**
 	 * Sets a property on the bean.
 	 * <p>
-	 * If there is a {@link PojoTransform} associated with this bean property or bean property type class, then
+	 * If there is a {@link PojoSwap} associated with this bean property or bean property type class, then
 	 * 	you must pass in a transformed value.
 	 * For example, if the bean property type class is a {@link Date} and the bean property has the
-	 * 	{@link org.apache.juneau.transforms.DateTransform.ISO8601DT} transform associated with it through the
+	 * 	{@link org.apache.juneau.transforms.DateSwap.ISO8601DT} transform associated with it through the
 	 * 	{@link BeanProperty#transform() @BeanProperty.transform()} annotation, the value being passed in must be
 	 * 	a String containing an ISO8601 date-time string value.
 	 *
@@ -193,7 +193,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * 	Person p = <jk>new</jk> Person();
 	 *
 	 * 	<jc>// Create a bean context and add the ISO8601 date-time transform</jc>
-	 * 	BeanContext beanContext = <jk>new</jk> BeanContext().addTransform(DateTransform.ISO8601DT.<jk>class</jk>);
+	 * 	BeanContext beanContext = <jk>new</jk> BeanContext().addTransform(DateSwap.ISO8601DT.<jk>class</jk>);
 	 *
 	 * 	<jc>// Wrap our bean in a bean map</jc>
 	 * 	BeanMap&lt;Person&gt; b = beanContext.forBean(p);
@@ -264,10 +264,10 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	/**
 	 * Gets a property on the bean.
 	 * <p>
-	 * If there is a {@link PojoTransform} associated with this bean property or bean property type class, then
+	 * If there is a {@link PojoSwap} associated with this bean property or bean property type class, then
 	 * 	this method will return the transformed value.
 	 * For example, if the bean property type class is a {@link Date} and the bean property has the
-	 * 	{@link org.apache.juneau.transforms.DateTransform.ISO8601DT} transform associated with it through the
+	 * 	{@link org.apache.juneau.transforms.DateSwap.ISO8601DT} transform associated with it through the
 	 * 	{@link BeanProperty#transform() @BeanProperty.transform()} annotation, this method will return a String
 	 * 	containing an ISO8601 date-time string value.
 	 *
@@ -280,7 +280,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * 	p.setBirthDate(<jk>new</jk> Date(1, 2, 3, 4, 5, 6));
 	 *
 	 * 	<jc>// Create a bean context and add the ISO8601 date-time transform</jc>
-	 * 	BeanContext beanContext = <jk>new</jk> BeanContext().addTransform(DateTransform.ISO8601DT.<jk>class</jk>);
+	 * 	BeanContext beanContext = <jk>new</jk> BeanContext().addTransform(DateSwap.ISO8601DT.<jk>class</jk>);
 	 *
 	 * 	<jc>// Wrap our bean in a bean map</jc>
 	 * 	BeanMap&lt;Person&gt; b = beanContext.forBean(p);

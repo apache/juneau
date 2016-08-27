@@ -126,14 +126,14 @@ public @interface BeanProperty {
 	 * 	<jk>public class</jk> MyClass {
 	 *
 	 * 		<jc>// During serialization, convert to ISO8601 date-time string.</jc>
-	 * 		<ja>@BeanProperty</ja>(transform=CalendarTransform.ISO8601DT.<jk>class</jk>)
+	 * 		<ja>@BeanProperty</ja>(transform=CalendarSwap.ISO8601DT.<jk>class</jk>)
 	 * 		<jk>public</jk> Calendar getTime();
 	 * 	}
 	 * 		</p>
 	 * 	</dd>
 	 * </dl>
 	 */
-	Class<? extends PojoTransform<?,?>> transform() default PojoTransform.NULL.class;
+	Class<? extends PojoSwap<?,?>> transform() default PojoSwap.NULL.class;
 
 	/**
 	 * Used to limit which child properties are rendered by the serializers.

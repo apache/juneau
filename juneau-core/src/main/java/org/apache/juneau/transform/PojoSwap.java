@@ -26,32 +26,32 @@ import org.apache.juneau.serializer.*;
  *
  * <h6 class='topic'>Description</h6>
  * <p>
- * 	<code>PojoTransforms</code> are used to extend the functionality of the serializers and parsers to be able to handle POJOs
+ * 	<code>PojoSwaps</code> are used to extend the functionality of the serializers and parsers to be able to handle POJOs
  * 	that aren't automatically handled by the serializers or parsers.  For example, JSON does not have a standard
- * 	representation for rendering dates.  By defining a special {@code Date} transform and associating it with a serializer and
+ * 	representation for rendering dates.  By defining a special {@code Date} swap and associating it with a serializer and
  * 	parser, you can convert a {@code Date} object to a {@code String} during serialization, and convert that {@code String} object back into
  * 	a {@code Date} object during parsing.
  * <p>
- * 	Object transforms MUST declare a public no-arg constructor so that the bean context can instantiate them.
+ * 	Swaps MUST declare a public no-arg constructor so that the bean context can instantiate them.
  * <p>
- * 	<code>PojoTransforms</code> are associated with instances of {@link BeanContext BeanContexts} by passing the transform class to
+ * 	<code>PojoSwaps</code> are associated with instances of {@link BeanContext BeanContexts} by passing the swap class to
  * 	the {@link CoreApi#addTransforms(Class...)} method.<br>
  * 	When associated with a bean context, fields of the specified type will automatically be converted when the
  * 	{@link BeanMap#get(Object)} or {@link BeanMap#put(String, Object)} methods are called.<br>
  * <p>
- * 	<code>PojoTransforms</code> have two parameters:
+ * 	<code>PojoSwaps</code> have two parameters:
  * 	<ol>
- * 		<li>{@code <F>} - The transformed representation of an object.
  * 		<li>{@code <T>} - The normal representation of an object.
+ * 		<li>{@code <S>} - The swapped representation of an object.
  * 	</ol>
  * 	<br>
- * 	{@link Serializer Serializers} use object transforms to convert objects of type T into objects of type F, and on calls to {@link BeanMap#get(Object)}.<br>
- * 	{@link Parser Parsers} use object transforms to convert objects of type F into objects of type T, and on calls to {@link BeanMap#put(String,Object)}.
+ * 	{@link Serializer Serializers} use swaps to convert objects of type T into objects of type S, and on calls to {@link BeanMap#get(Object)}.<br>
+ * 	{@link Parser Parsers} use swaps to convert objects of type S into objects of type T, and on calls to {@link BeanMap#put(String,Object)}.
  *
  *
- * <h6 class='topic'>Transformed Class Type {@code <T>}</h6>
+ * <h6 class='topic'>Swap Class Type {@code <S>}</h6>
  * <p>
- * 	The transformed object representation of an object must be an object type that the serializers can
+ * 	The swapped object representation of an object must be an object type that the serializers can
  * 	natively convert to JSON (or language-specific equivalent).  The list of valid transformed types are as follows...
  * 	<ul class='spaced-list'>
  * 		<li>{@link String}
@@ -64,18 +64,18 @@ import org.apache.juneau.serializer.*;
  * 	</ul>
  *
  *
- * <h6 class='topic'>Normal Class Type {@code <N>}</h6>
+ * <h6 class='topic'>Normal Class Type {@code <T>}</h6>
  * <p>
  * 	The normal object representation of an object.<br>
  *
  *
  * <h6 class='topic'>One-way vs. Two-way Serialization</h6>
  * <p>
- * 	Note that while there is a unified interface for handling transforming during both serialization and parsing,
- * 	in many cases only one of the {@link #transform(Object)} or {@link #normalize(Object, ClassMeta)} methods will be defined
- * 	because the transform is one-way.  For example, a transform may be defined to convert an {@code Iterator} to a {@code ObjectList}, but
- * 	it's not possible to untransform an {@code Iterator}.  In that case, the {@code generalize(Object}} method would
- * 	be implemented, but the {@code narrow(ObjectMap)} object would not, and the transform would be associated on
+ * 	Note that while there is a unified interface for handling swaps during both serialization and parsing,
+ * 	in many cases only one of the {@link #swap(Object)} or {@link #unswap(Object, ClassMeta)} methods will be defined
+ * 	because the swap is one-way.  For example, a swap may be defined to convert an {@code Iterator} to a {@code ObjectList}, but
+ * 	it's not possible to unswap an {@code Iterator}.  In that case, the {@code generalize(Object}} method would
+ * 	be implemented, but the {@code narrow(ObjectMap)} object would not, and the swap would be associated on
  * 	the serializer, but not the parser.  Also, you may choose to serialize objects like {@code Dates} to readable {@code Strings},
  * 	in which case it's not possible to reparse it back into a {@code Date}, since there is no way for the {@code Parser} to
  * 	know it's a {@code Date} from just the JSON or XML text.
@@ -86,28 +86,28 @@ import org.apache.juneau.serializer.*;
  *
  *
  * @author James Bognar (james.bognar@salesforce.com)
- * @param <N> The normal form of the class.
- * @param <T> The transformed form of the class.
+ * @param <T> The normal form of the class.
+ * @param <S> The swapped form of the class.
  */
-public abstract class PojoTransform<N,T> extends Transform {
+public abstract class PojoSwap<T,S> extends Transform {
 
 	/** Represents no transform. */
-	public static class NULL extends PojoTransform<Object,Object> {}
+	public static class NULL extends PojoSwap<Object,Object> {}
 
-	Class<N> normalClass;
-	Class<T> transformedClass;
-	ClassMeta<T> transformedClassMeta;
+	Class<T> normalClass;
+	Class<S> transformedClass;
+	ClassMeta<S> transformedClassMeta;
 
 	/**
 	 * Constructor.
 	 */
 	@SuppressWarnings("unchecked")
-	protected PojoTransform() {
+	protected PojoSwap() {
 		super();
 
 		Class<?> c = this.getClass().getSuperclass();
 		Type t = this.getClass().getGenericSuperclass();
-		while (c != PojoTransform.class) {
+		while (c != PojoSwap.class) {
 			t = c.getGenericSuperclass();
 			c = c.getSuperclass();
 		}
@@ -119,24 +119,24 @@ public abstract class PojoTransform<N,T> extends Transform {
 			if (pta.length == 2) {
 				Type nType = pta[0];
 				if (nType instanceof Class) {
-					this.normalClass = (Class<N>)nType;
+					this.normalClass = (Class<T>)nType;
 
 				// <byte[],x> ends up containing a GenericArrayType, so it has to
 				// be handled as a special case.
 				} else if (nType instanceof GenericArrayType) {
 					Class<?> cmpntType = (Class<?>)((GenericArrayType)nType).getGenericComponentType();
-					this.normalClass = (Class<N>)Array.newInstance(cmpntType, 0).getClass();
+					this.normalClass = (Class<T>)Array.newInstance(cmpntType, 0).getClass();
 
 				// <Class<?>,x> ends up containing a ParameterizedType, so just use the raw type.
 				} else if (nType instanceof ParameterizedType) {
-					this.normalClass = (Class<N>)((ParameterizedType)nType).getRawType();
+					this.normalClass = (Class<T>)((ParameterizedType)nType).getRawType();
 
 				} else
 					throw new RuntimeException("Unsupported parameter type: " + nType);
 				if (pta[1] instanceof Class)
-					this.transformedClass = (Class<T>)pta[1];
+					this.transformedClass = (Class<S>)pta[1];
 				else if (pta[1] instanceof ParameterizedType)
-					this.transformedClass = (Class<T>)((ParameterizedType)pta[1]).getRawType();
+					this.transformedClass = (Class<S>)((ParameterizedType)pta[1]).getRawType();
 				else
 					throw new RuntimeException("Unexpected transformed class type: " + pta[1].getClass().getName());
 			}
@@ -149,7 +149,7 @@ public abstract class PojoTransform<N,T> extends Transform {
 	 * @param normalClass The normal class (cannot be serialized).
 	 * @param transformedClass The transformed class (serializable).
 	 */
-	protected PojoTransform(Class<N> normalClass, Class<T> transformedClass) {
+	protected PojoSwap(Class<T> normalClass, Class<S> transformedClass) {
 		this.normalClass = normalClass;
 		this.transformedClass = transformedClass;
 	}
@@ -172,7 +172,7 @@ public abstract class PojoTransform<N,T> extends Transform {
 	 * @return The transformed object.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
-	public T transform(N o) throws SerializeException {
+	public S swap(T o) throws SerializeException {
 		throw new SerializeException("Generalize method not implemented on transform ''{0}''", this.getClass().getName());
 	}
 
@@ -186,7 +186,7 @@ public abstract class PojoTransform<N,T> extends Transform {
 	 * @return The narrowed object.
 	 * @throws ParseException If this method is not implemented.
 	 */
-	public N normalize(T f, ClassMeta<?> hint) throws ParseException {
+	public T unswap(S f, ClassMeta<?> hint) throws ParseException {
 		throw new ParseException("Narrow method not implemented on transform ''{0}''", this.getClass().getName());
 	}
 
@@ -195,7 +195,7 @@ public abstract class PojoTransform<N,T> extends Transform {
 	 *
 	 * @return The normal form of this class.
 	 */
-	public Class<N> getNormalClass() {
+	public Class<T> getNormalClass() {
 		return normalClass;
 	}
 
@@ -207,7 +207,7 @@ public abstract class PojoTransform<N,T> extends Transform {
 	 *
 	 * @return The transformed form of this class.
 	 */
-	public Class<T> getTransformedClass() {
+	public Class<S> getTransformedClass() {
 		return transformedClass;
 	}
 
@@ -217,7 +217,7 @@ public abstract class PojoTransform<N,T> extends Transform {
 	 *
 	 * @return The {@link ClassMeta} of the transformed class type.
 	 */
-	public ClassMeta<T> getTransformedClassMeta() {
+	public ClassMeta<S> getTransformedClassMeta() {
 		if (transformedClassMeta == null)
 			transformedClassMeta = beanContext.getClassMeta(transformedClass);
 		return transformedClassMeta;

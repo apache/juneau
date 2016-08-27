@@ -27,7 +27,7 @@ import org.apache.juneau.transform.*;
 	path="/testMessages",
 	messages="TestMessages",
 	transforms={
-		TestMessages.ResourceBundleTransform.class
+		TestMessages.ResourceBundleSwap.class
 	}
 )
 public class TestMessages extends RestServletDefault {
@@ -49,9 +49,9 @@ public class TestMessages extends RestServletDefault {
 	)
 	public static class TestMessages2 extends TestMessages {}
 
-	public static class ResourceBundleTransform extends PojoTransform<ResourceBundle,ObjectMap> {
+	public static class ResourceBundleSwap extends PojoSwap<ResourceBundle,ObjectMap> {
 		@Override /* Transform */
-		public ObjectMap transform(ResourceBundle o) throws SerializeException {
+		public ObjectMap swap(ResourceBundle o) throws SerializeException {
 			ObjectMap m = new ObjectMap();
 			for (String k : o.keySet())
 				m.put(k, o.getString(k));

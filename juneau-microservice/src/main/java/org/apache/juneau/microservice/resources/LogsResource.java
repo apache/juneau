@@ -45,8 +45,8 @@ import org.apache.juneau.transforms.*;
 		@Property(name=REST_allowMethodParam, value="true")
 	},
 	transforms={
-		IteratorTransform.class,       // Allows Iterators and Iterables to be serialized.
-		DateTransform.ISO8601DT.class  // Serialize Date objects as ISO8601 strings.
+		IteratorSwap.class,       // Allows Iterators and Iterables to be serialized.
+		DateSwap.ISO8601DT.class  // Serialize Date objects as ISO8601 strings.
 	}
 )
 @SuppressWarnings("nls")
@@ -262,7 +262,7 @@ public class LogsResource extends Resource {
 		public String type;
 		public Object name;
 		public Long size;
-		@BeanProperty(transform=DateTransform.Medium.class) public Date lastModified;
+		@BeanProperty(transform=DateSwap.Medium.class) public Date lastModified;
 		public URL view, highlighted, parsed, download, delete;
 
 		public FileResource(File f, URL url) throws IOException {

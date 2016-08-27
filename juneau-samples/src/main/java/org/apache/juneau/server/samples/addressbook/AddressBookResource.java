@@ -274,9 +274,9 @@ public class AddressBookResource extends ResourceJena {
 			new Column("age", "xs:int"),
 			new Column("numAddresses", "xs:int")
 				.addTransform(
-					new PojoTransform<Person,Integer>() {
-						@Override /* PojoTransform */
-						public Integer transform(Person p) {
+					new PojoSwap<Person,Integer>() {
+						@Override /* PojoSwap */
+						public Integer swap(Person p) {
 							return p.addresses.size();
 						}
 					}

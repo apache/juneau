@@ -422,9 +422,9 @@
 				<td style='text-align:center'>4</td>
 				<td>
 					<b>Transformed objects</b><br>
-					These are objects that are not directly serializable, but have {@link org.apache.juneau.transform.PojoTransform PojoTransforms} associated with them.  
+					These are objects that are not directly serializable, but have {@link org.apache.juneau.transform.PojoSwap PojoSwaps} associated with them.  
 					The purpose of an object transform is to convert an object to another object that is easier to serialize and parse.  
-					For example, the {@link org.apache.juneau.transforms.DateTransform.ISO8601DT} transform can be used to serialize {@link java.util.Date} objects 
+					For example, the {@link org.apache.juneau.transforms.DateSwap.ISO8601DT} transform can be used to serialize {@link java.util.Date} objects 
 						to ISO8601 strings, and parse them back into {@link java.util.Date} objects.
 				</td>
 				<td>&nbsp;</td>
@@ -824,50 +824,50 @@
 	<h4 class='topic' onclick='toggle(this)'>2.7 - Transforms</h4>
 	<div class='topic'>
 		<p>
-			The programmatic equivalent to the annotations are the {@link org.apache.juneau.transform.BeanTransform} and 
-			{@link org.apache.juneau.transform.PojoTransform} classes.  
+			The programmatic equivalent to the annotations are the {@link org.apache.juneau.transform.BeanFilter} and 
+			{@link org.apache.juneau.transform.PojoSwap} classes.  
 		</p>
 		<p>
-			The following example is equivalent to specifying the <l>@Bean</l> annotation in the previous example using a bean transform:
+			The following example is equivalent to specifying the <l>@Bean</l> annotation in the previous example using a bean filter:
 		</p>
 		<p class='bcode'>
 	<jc>// Define transform that returns properties in the following order: "street", "city", "state"</jc>
-	<jk>public class</jk> AddressTransform <jk>extends</jk> BeanTransform&lt;Address&gt; {
-		<jk>public</jk> AddressTransform() {
+	<jk>public class</jk> AddressFilter <jk>extends</jk> BeanFilter&lt;Address&gt; {
+		<jk>public</jk> AddressFilter() {
 			setProperties(<js>"street"</js>,<js>"city"</js>,<js>"state"</js>);
 		}
 	}
 	
-	WriterSerializer s = <jk>new</jk> JsonSerializer().addTransforms(AddressTransform.<jk>class</jk>);
+	WriterSerializer s = <jk>new</jk> JsonSerializer().addTransforms(AddressFilter.<jk>class</jk>);
 	Address a = getAddress();
 	String json = s.serialize(a);  <jc>// Prints "{street:'...',city:'...',state;'...'}"</jc>
 		</p>
 		<p>
-			The {@link org.apache.juneau.transform.PojoTransform} class is a critical component of Juneau that allows serializers and parsers to
+			The {@link org.apache.juneau.transform.PojoSwap} class is a critical component of Juneau that allows serializers and parsers to
 			be able to handle virtually any Java object.
 			Simply put, they can be thought of as 'transformers' that convert non-serializable objects to serializable objects and vice versa.
 		</p>
 		<p>
 			For example, <l>Date</l> objects are not normally serializable.
 			(Technically, they look like beans with getters/setters and so get serialized as such, which typically is not the desired result.)
-			The following POJO transform can be used to represent dates in ISO8601 format:
+			The following POJO swap can be used to represent dates in ISO8601 format:
 		</p>
 		<p class='bcode'>
 	<jc>// Sample transform for converting Dates to ISO8601 strings.</jc>
-	<jk>public class</jk> MyDateTransform <jk>extends</jk> PojoTransform&lt;Date,String&gt; {
+	<jk>public class</jk> MyDateSwap <jk>extends</jk> PojoSwap&lt;Date,String&gt; {
 		
 		<jc>// ISO8601 formatter.</jc>
 		<jk>private</jk> DateFormat <jf>format</jf> = <jk>new</jk> SimpleDateFormat(<js>"yyyy-MM-dd'T'HH:mm:ssZ"</js>);
 		
 		<jd>/** Converts a Date object to an ISO8601 string. */</jd>
 		<ja>@Override</ja>
-		<jk>public</jk> String transform(Date o) {
+		<jk>public</jk> String swap(Date o) {
 			<jk>return</jk> <jf>format</jf>.format(o);
 		}
 		
 		<jd>/** Converts an ISO8601 string to a Date object. */</jd>
 		<ja>@Override</ja>
-		<jk>public</jk> Date normalize(String o, ClassMeta&lt;?&gt; hint) <jk>throws</jk> ParseException {
+		<jk>public</jk> Date unswap(String o, ClassMeta&lt;?&gt; hint) <jk>throws</jk> ParseException {
 			<jk>try</jk> {
 				<jk>return</jk> <jf>format</jf>.parse(o);
 			} <jk>catch</jk> (java.text.ParseException e) {
@@ -886,11 +886,11 @@
 	}
 
 	<jc>// Create a new JSON serializer, associate our date transform with it, and serialize a sample bean.</jc>
-	Serializer serializer = <jk>new</jk> JsonSerializer().addTransforms(MyDateTransform.<jk>class</jk>);
+	Serializer serializer = <jk>new</jk> JsonSerializer().addTransforms(MyDateSwap.<jk>class</jk>);
 	String json = serializer.serialize(<jk>new</jk> MyBean());	<jc>// == "{date:'2012-03-03T04:05:06-0500'}"</jc>
 	
 	<jc>// Create a JSON parser, associate our date transform with it, and reconstruct our bean (including the date).</jc>
-	ReaderParser parser = <jk>new</jk> JsonParser().addTransforms(MyDateTransform.<jk>class</jk>);
+	ReaderParser parser = <jk>new</jk> JsonParser().addTransforms(MyDateSwap.<jk>class</jk>);
 	MyBean bean = parser.parse(json, MyBean.<jk>class</jk>);
 	<jk>int</jk> day = bean.<jf>date</jf>.getDay(); 						<jc>// == 3</jc>
 		</p>
@@ -1245,7 +1245,7 @@
 		<jk>public</jk> URI <jf>addressBookUri</jf>; 
 		<jk>public int</jk> <jf>id</jf>; 
 		<jk>public</jk> String <jf>name</jf>; 
-		<ja>@BeanProperty</ja>(transform=CalendarTransform.Medium.<jk>class</jk>) <jk>public</jk> Calendar <jf>birthDate</jf>; 
+		<ja>@BeanProperty</ja>(transform=CalendarSwap.Medium.<jk>class</jk>) <jk>public</jk> Calendar <jf>birthDate</jf>; 
 		<jk>public</jk> LinkedList&lt;Address&gt; <jf>addresses</jf>; 
 	} 
 	&nbsp;
@@ -2088,7 +2088,7 @@
 		<jk>public static class</jk> FormInputBean { 
 			<jk>public</jk> String aString; 
 			<jk>public int</jk> aNumber; 
-			<ja>@BeanProperty</ja>(transform=CalendarTransform.<jsf>ISO8601DT</jsf>.<jk>class</jk>) 
+			<ja>@BeanProperty</ja>(transform=CalendarSwap.<jsf>ISO8601DT</jsf>.<jk>class</jk>) 
 			<jk>public</jk> Calendar aDate; 
 		} 
 	}		
@@ -2220,7 +2220,7 @@
 			<jc>// Interpret these as their parent classes, not subclasses</jc>
 			HttpServletRequest.<jk>class</jk>, HttpSession.<jk>class</jk>, ServletContext.<jk>class</jk>,
 			<jc>// Add a special transform for Enumerations</jc>
-			EnumerationTransform.<jk>class</jk>
+			EnumerationSwap.<jk>class</jk>
 		}
 	)
 	<jk>public class</jk> RequestEchoResource <jk>extends</jk> Resource {
@@ -2261,14 +2261,14 @@
 		<jc>// You'll just reuse the parent serializer group</jc>
 		SerializerGroup serializerGroup = <jk>super</jk>.createSerializers(properties, transforms);
 		
-		<jc>// Add bean transforms for the HttpServletRequest, HttpSession, and ServletContext objects
+		<jc>// Add bean filters for the HttpServletRequest, HttpSession, and ServletContext objects
 		//		so that you don't show vendor-specific properties on subclasses.
 		// Add Enumeration transform to be able to render the contents of Enumeration properties.
 		// The max depth and detect recursion options prevent any possible runaway serializations.  
 		// This shouldn't happen, but future JEE APIs may introduce deep hierarchies or loops.</jc>
 		serializerGroup
 			.addTransforms(HttpServletRequest.<jk>class</jk>, HttpSession.<jk>class</jk>, ServletContext.<jk>class</jk>)
-			.addTransforms(EnumerationTransform.<jk>class</jk>)
+			.addTransforms(EnumerationSwap.<jk>class</jk>)
 			.setProperty(<jsf>SERIALIZER_maxDepth</jsf>, 10)
 			.setProperty(<jsf>SERIALIZER_detectRecursions</jsf>, <jk>true</jk>);
 			.setProperty(<jsf>HTMLDOC_links</jsf>, <js>"{...}"</js>);
@@ -2522,7 +2522,7 @@
 		<jk>public</jk> URI <jf>addressBookUri</jf>;
 		<jk>public</jk> String <jf>id</jf>;
 		<jk>public</jk> String <jf>name</jf>;
-		<ja>@BeanProperty</ja>(transform=CalendarTransform.Medium.<jk>class</jk>) <jk>public</jk> Calendar <jf>birthDate</jf>;
+		<ja>@BeanProperty</ja>(transform=CalendarSwap.Medium.<jk>class</jk>) <jk>public</jk> Calendar <jf>birthDate</jf>;
 		<jk>public</jk> LinkedList&lt;Address&gt; <jf>addresses</jf> = new LinkedList&lt;Address&gt;();
 		
 		<jd>/** Bean constructor - Needed for instantiating on server side */</jd> 
@@ -2566,7 +2566,7 @@
 						resource.  
 					This property has special meaning for the XML and RDF serializizers.  The XML serializer serializes this as a <l>uri</l> attribute instead of an <l>&lt;uri&gt;</l> element, and 
 						the RDF serializer uses this property for the value of the <l>rdf:resource</l> attribute.
-				<li>The <code><ja>@BeanProperty</ja>(transform=CalendarTransform.Medium.<jk>class</jk>)</code> annotation causes the date field to 
+				<li>The <code><ja>@BeanProperty</ja>(transform=CalendarSwap.Medium.<jk>class</jk>)</code> annotation causes the date field to 
 						be serialized in the format <l>"MM dd, yyyy"</l>.
 					This could have also been specified globally on the resource level through the {@link org.apache.juneau.server.annotation.RestResource#properties} annotation.
 			</ul>
@@ -2625,7 +2625,7 @@
 		
 		<jc>// Bean properties</jc>
 		<jk>public</jk> String <jf>name</jf>;
-		<ja>@BeanProperty(</ja>transform=CalendarTransform.Medium.<jk>class</jk>) <jk>public</jk> Calendar <jf>birthDate</jf>;
+		<ja>@BeanProperty(</ja>transform=CalendarSwap.Medium.<jk>class</jk>) <jk>public</jk> Calendar <jf>birthDate</jf>;
 		<jk>public</jk> LinkedList&lt;CreateAddress&gt; <jf>addresses</jf>;
 		
 		<jd>/** Bean constructor - Needed for instantiating on server side */</jd>
@@ -2900,9 +2900,9 @@
 				<jk>new</jk> Column(<js>"age"</js>, <js>"xs:int"</js>), 
 				<jk>new</jk> Column(<js>"numAddresses"</js>, <js>"xs:int"</js>) 
 				.addTransform( 
-					<jk>new</jk> PojoTransform&lt;Person,Integer&gt;() { 
-						<ja>@Override</ja> /* PojoTransform */ 
-						<jk>public</jk> Integer transform(Person p) { 
+					<jk>new</jk> PojoSwap&lt;Person,Integer&gt;() { 
+						<ja>@Override</ja> /* PojoSwap */ 
+						<jk>public</jk> Integer swap(Person p) { 
 							<jk>return</jk> p.addresses.size(); 
 						} 
 					} 
@@ -4456,25 +4456,25 @@
 		<div class='topic'>
 			<p>
 				The {@link org.apache.juneau.server.annotation.RestResource#transforms()} annotation can be used to add 
-				POJO transforms to all the serializers and parsers registered with a servlet.
+				POJO swaps to all the serializers and parsers registered with a servlet.
 			</p>
 			<p>
-				In this example, you define a POJO transform that converts doubles to localized-format strings using
+				In this example, you define a POJO swap that converts doubles to localized-format strings using
 				the <l>NumberFormat</l> Java class.
 			</p>
 			<p class='bcode'>
 	<ja>@RestResource</ja>(
 		transforms={
-			MyRestService.LongTransform.<jk>class</jk>
+			MyRestService.DoubleSwap.<jk>class</jk>
 		}
 	)
 	<jk>public class</jk> MyRestService <jk>extends</jk> JazzDefaultRestResource {
 	
 		<jk>private static final</jk> NumberFormat <jsf>FORMAT</jsf> = NumberFormat.<jsm>getInstance()</jsm>;
 
-		<jk>public static class</jk> DoubleTransform <jk>extends</jk> PojoTransform&lt;Double,String&gt; {
-			<ja>@Override</ja> <jc>/* PojoTransform */</jc>
-			<jk>public</jk> String transform(Double o) <jk>throws</jk> SerializeException {
+		<jk>public static class</jk> DoubleSwap <jk>extends</jk> PojoSwap&lt;Double,String&gt; {
+			<ja>@Override</ja> <jc>/* PojoSwap */</jc>
+			<jk>public</jk> String swap(Double o) <jk>throws</jk> SerializeException {
 				<jk>return</jk> <jsf>FORMAT</jsf>.format(o);
 			}		
 		}
@@ -4499,7 +4499,7 @@
 	<ja>@Override</ja>
 	<jk>protected</jk> SerializerGroup createSerializers(ObjectMap properties, Class[] transforms) <jk>throws</jk> Exception {
 		SerializerGroup g = <jk>super</jk>.createSerializers(properties, transforms);
-		g.getSerializer(<js>"text/html"</js>).addTransforms(DoubleTransform.<jk>class</jk>); 
+		g.getSerializer(<js>"text/html"</js>).addTransforms(DoubleSwap.<jk>class</jk>); 
 		<jk>return</jk> g;
 	}
 			</p>
@@ -4733,7 +4733,7 @@
 			<li>Parsers can now parse directly from {@link java.io.File Files} and other types.
 				See {@link org.apache.juneau.parser.Parser#parse(Object,ClassMeta)}
 			<li>Parsers will automatically covert numeric input to POJOs that have numeric constructors (e.g. <code>java.util.Date</code>).
-			<li>Renamed 'Filters' to 'Transforms'.  Filters is just too overloaded a term.
+			<li>Renamed 'Filters' to 'BeanFilters' and 'PojoSwaps'.  Filters is just too overloaded a term.
 			<li>Internal utility classes moved to a new <code>org.apache.juneau.internal</code> package.
 				These internal utility classes are not meant for consumption outside the Juneau codebase.
 			<li>New methods on {@link org.apache.juneau.parser.Parser}:
@@ -4749,10 +4749,10 @@
 				</ul>
 			</li>
 			<li>New {@link org.apache.juneau.annotation.Bean#sort() @Bean.sort()} annotation.
-			<li>New methods on {@link org.apache.juneau.transform.BeanTransform}:
+			<li>New methods on {@link org.apache.juneau.transform.BeanFilter}:
 				<ul>
-					<li>{@link org.apache.juneau.transform.BeanTransform#isSortProperties()}
-					<li>{@link org.apache.juneau.transform.BeanTransform#setSortProperties(boolean)}
+					<li>{@link org.apache.juneau.transform.BeanFilter#isSortProperties()}
+					<li>{@link org.apache.juneau.transform.BeanFilter#setSortProperties(boolean)}
 				</ul>
 			</li>
 			<li>Added <ja>@Bean.properties</ja> annotations on various DTO beans to make the ordering consistent
@@ -5037,7 +5037,7 @@
 			<li>New <del><code>StringVar.doResolve(String)</code></del> method.
 			<li>New <del><code>StringVarResolver.DEFAULT</code></del> field.
 			<li>Eliminated dependency on <code>javax.mail.internet.MimeUtility</code> by implementing our own {@link org.apache.juneau.internal.StringUtils#base64Encode(byte[])} method.
-			<li>{@link org.apache.juneau.transforms.CalendarTransform} and {@link org.apache.juneau.transforms.DateTransform} classes now handle blank input better.  Returns <jk>null</jk> instead of throwing an exception.
+			<li>{@link org.apache.juneau.transforms.CalendarSwap} and {@link org.apache.juneau.transforms.DateSwap} classes now handle blank input better.  Returns <jk>null</jk> instead of throwing an exception.
 			<li>{@link org.apache.juneau.html.HtmlDocSerializer} specifies the default CSS location as <code>/servletPath/style.css</code> instead of <code>/servletPath/htdocs/juneau.css</code>.  
 				This coincides with enhancements made in the server code for specifying styles.
 			<li>{@link org.apache.juneau.html.HtmlDocSerializer} wraps output in two div tags instead of one (e.g. <code>&lt;div class='outerdata'&gt;&lt;div class='data' id='data'&gt;...&lt;/div&gt;&lt;/div&gt;</code>).
@@ -6031,11 +6031,11 @@
 			Juno 5.1.0.6 is a moderate update.
 		</p>
 		<ul class='spaced-list'>
-			<li>Simplified API for {@link org.apache.juneau.transform.PojoTransform}.  
-				Since it's rarely used, the <code>beanContext</code> parameter was replaced with a {@link org.apache.juneau.transform.PojoTransform#getBeanContext()} method on
+			<li>Simplified API for {@link org.apache.juneau.transform.PojoSwap}.  
+				Since it's rarely used, the <code>beanContext</code> parameter was replaced with a {@link org.apache.juneau.transform.PojoSwap#getBeanContext()} method on
 				the class.
-			<li>New simplified way of defining POJO filters without needing to extend {@link org.apache.juneau.transform.PojoTransform}.
-				See {@link org.apache.juneau.transform.SurrogateTransform} for details.
+			<li>New simplified way of defining POJO filters without needing to extend {@link org.apache.juneau.transform.PojoSwap}.
+				See {@link org.apache.juneau.transform.SurrogateSwap} for details.
 			<li>New {@link org.apache.juneau.html.annotation.Html @Html} annotation.
 				Will allow the definition of standard XHTML DTOs in future releases.  
 				For now, {@link org.apache.juneau.html.dto.Img} is an example of defining an XHTML element using Juno DTOs.
@@ -6126,8 +6126,8 @@
 			<li>New {@link org.apache.juneau.json.annotation.Json#wrapperAttr() @Json.wrapperAttr()}	annotation that automatically wraps beans and objects in a wrapper
 				attribute when serializing to or parsing from JSON.
 			<li>Changed the default ordering of bean properties to be in parent-to-child class order.
-			<li>New {@link org.apache.juneau.transform.BeanTransform#readProperty(Object,String,Object) readProperty()} and {@link org.apache.juneau.transform.BeanTransform#writeProperty(Object,String,Object) writeProperty()}
-				methods added to {@link org.apache.juneau.transform.BeanTransform} class to allow individualized serialization and parsing behavior on a class-by-class basis.
+			<li>New {@link org.apache.juneau.transform.BeanFilter#readProperty(Object,String,Object) readProperty()} and {@link org.apache.juneau.transform.BeanFilter#writeProperty(Object,String,Object) writeProperty()}
+				methods added to {@link org.apache.juneau.transform.BeanFilter} class to allow individualized serialization and parsing behavior on a class-by-class basis.
 			<li>Eliminated previous restriction where bean subtype attributes had to be listed first in JSON objects when using the {@link org.apache.juneau.annotation.Bean#subTypeProperty()} annotation.
 				The previous behavior was not strictly JSON-compliant since JSON objects are supposed to consist of unordered lists of key/value pairs.
 				While targeted for JSON, the restriction is also lifted for all other parsers.  	
@@ -6346,7 +6346,7 @@
 				New {@link org.apache.juneau.annotation.Bean#stopClass @Bean.stopClass} annotation for specifying stop classes for bean properties.
 			</li>
 			<li>
-				New {@link org.apache.juneau.transform.BeanTransform#setStopClass(Class)} which is the program equivalent to the annotation above.
+				New {@link org.apache.juneau.transform.BeanFilter#setStopClass(Class)} which is the program equivalent to the annotation above.
 			</li>
 			<li>
 				New methods on {@link org.apache.juneau.dto.ResultSetList}:
@@ -6489,7 +6489,7 @@
 				The new class hierarchy is much simpler to understand.
 			</li>
 			<li>
-				Added {@link org.apache.juneau.transforms.XMLGregorianCalendarTransform} to convert these to ISO8601 strings during serialization, and vice versa during parsing.
+				Added {@link org.apache.juneau.transforms.XMLGregorianCalendarSwap} to convert these to ISO8601 strings during serialization, and vice versa during parsing.
 			</li>
 			<li>
 				Added a {@link org.apache.juneau.json.JsonParserContext#JSON_strictMode strict} mode to {@link org.apache.juneau.json.JsonParser}.
@@ -6528,7 +6528,7 @@
 			<li>
 				Revamped the API for filter support:
 				<ul>
-					<li>Updated {@link org.apache.juneau.transform.BeanTransform} class to mirror the {@link org.apache.juneau.annotation.Bean @Bean} annotation.</li>
+					<li>Updated {@link org.apache.juneau.transform.BeanFilter} class to mirror the {@link org.apache.juneau.annotation.Bean @Bean} annotation.</li>
 					<li>Introduced support for bean {@link org.apache.juneau.annotation.Bean#subTypeProperty() subtypes}. </li>
 					<li>Replaced <code><ja>@Bean</ja>(filter=xxx)</code> with new {@link org.apache.juneau.annotation.Transform @Transform} annotation.</li>
 				</ul>
@@ -6548,8 +6548,8 @@
 			<li>
 				New predefined DateFilters with millisecond precision:
 				<ul>
-					<li><code>org.apache.juneau.transforms.DateTransform.ISO8601DTP</code></li>
-					<li><code>org.apache.juneau.transforms.DateTransform.ISO8601DTZP</code></li>
+					<li><code>org.apache.juneau.transforms.DateSwap.ISO8601DTP</code></li>
+					<li><code>org.apache.juneau.transforms.DateSwap.ISO8601DTZP</code></li>
 				</ul>
 			</li>
 		</ul>		
@@ -6686,7 +6686,7 @@
 				Removed <code><ja>@Xml</ja>.valAttr</code> annotation since it's now redundant with <code><ja>@Xml</ja>(format=<jsf>CONTENT</jsf>)</code>.
  			</li>
  			<li>
-				Fixed timezone bug in {@link org.apache.juneau.transforms.CalendarTransform}.
+				Fixed timezone bug in {@link org.apache.juneau.transforms.CalendarSwap}.
 			</li>
  			<li>
 				Simplified <code>Serializer.serialize(Object,Object,SerializerContext)</code> method.
@@ -6992,7 +6992,7 @@
 				New {@link org.apache.juneau.transform} package.
 				<ul>
 					<li>Cleaner class structure.</li>
-					<li>Improved {@link org.apache.juneau.transform.BeanTransform} class for defining property filters on beans.</li>
+					<li>Improved {@link org.apache.juneau.transform.BeanFilter} class for defining property filters on beans.</li>
 					<li>Improved {@link org.apache.juneau.utils.PojoQuery} class for defining filters on objects (previously called <code>ObjectFilter</code>).</li>
          		</ul>
          	</li>
@@ -7033,7 +7033,7 @@
 				<code>JsonMap</code> and <code>JsonList</code> changed to {@link org.apache.juneau.ObjectMap} and {@link org.apache.juneau.ObjectList} to better reflect that they're not limited to just JSON support.
      		</li>
      		<li>
-				Renamed <code>PojoTransform</code> to {@link org.apache.juneau.utils.PojoQuery} to not confuse it with the new Filter API.
+				Renamed <code>PojoSwap</code> to {@link org.apache.juneau.utils.PojoQuery} to not confuse it with the new Filter API.
 			</li>
 		</ul>
 		<h6 class='topic'>REST server API changes</h6>
@@ -7561,8 +7561,8 @@
 				The API for handling non-standard POJOs has been simplified by introducing the concept of a {@link org.apache.juneau.transform.Transform} class, which is associated with the <code>BeanContext</code> class (and thus the Serializer and Parser classes too) through the <code>BeanContext.addTransforms(Class[])</code> method.<br>
 				Two new subclasses of {@link org.apache.juneau.transform.Transform}:
 				<ul>
-					<li>{@link org.apache.juneau.transform.BeanTransform} - Filter POJO beans.</li>
-					<li>{@link org.apache.juneau.transform.PojoTransform} - Filter POJOs that aren't beans.</li>
+					<li>{@link org.apache.juneau.transform.BeanFilter} - Filter POJO beans.</li>
+					<li>{@link org.apache.juneau.transform.PojoSwap} - Filter POJOs that aren't beans.</li>
 				</ul>
 				This new API replaces the previous separate <code>Cast</code> and <code>BeanFilter</code> APIs which were considerably more complicated and puts them under a common API. 
 			</li>

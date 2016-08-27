@@ -893,7 +893,7 @@
 		<jk>public static class</jk> FormInputBean {
 			<jk>public</jk> String <jf>aString</jf>;
 			<jk>public int</jk> <jf>aNumber</jf>;
-			<ja>@BeanProperty</ja>(transform=CalendarTransform.<jsf>ISO8601DT</jsf>.<jk>class</jk>)
+			<ja>@BeanProperty</ja>(transform=CalendarSwap.<jsf>ISO8601DT</jsf>.<jk>class</jk>)
 			<jk>public</jk> Calendar <jf>aDate</jf>;
 		}
 	}		
@@ -1539,7 +1539,7 @@
 		</p>
 		<p>
 			The {@link org.apache.juneau.server.annotation.RestResource#transforms() @RestResource.transforms()} annotation 
-			can be used as a convenient way to add POJO transforms to the serializers and parsers
+			can be used as a convenient way to add POJO swaps to the serializers and parsers
 			registered with the servlet.
 		</p>
 		<p class='bcode'>
@@ -1547,10 +1547,10 @@
 	<ja>@RestResource</ja>(
 		transforms={
 			<jc>// Calendars should be serialized/parsed as ISO8601 date-time strings</jc>
-			CalendarTransform.<jsf>DEFAULT_ISO8601DT</jsf>.<jk>class</jk>,
+			CalendarSwap.<jsf>DEFAULT_ISO8601DT</jsf>.<jk>class</jk>,
 
 			<jc>// Byte arrays should be serialized/parsed as BASE64-encoded strings</jc>
-			ByteArrayBase64Transform.<jk>class</jk>,
+			ByteArrayBase64Swap.<jk>class</jk>,
 
 			<jc>// Subclasses of MyInterface will be treated as MyInterface objects.</jc>
 			<jc>// Bean properties not defined on that interface will be ignored.</jc>
@@ -2217,7 +2217,7 @@
 		<jk>public static class</jk> FormInputBean { 
 			<jk>public</jk> String <jf>aString</jf>; 
 			<jk>public int</jk> <jf>aNumber</jf>; 
-			<ja>@BeanProperty</ja>(transform=CalendarTransform.<jsf>ISO8601DT</jsf>.<jk>class</jk>) 
+			<ja>@BeanProperty</ja>(transform=CalendarSwap.<jsf>ISO8601DT</jsf>.<jk>class</jk>) 
 			<jk>public</jk> Calendar <jf>aDate</jf>; 
 		} 
 	}
@@ -3206,7 +3206,7 @@
 		<ul>
 			<li><code><jk>public</jk> T(String in);</code>
 		</ul>
-		<li>Has a {@link org.apache.juneau.transform.PojoTransform} associated with the servlet
+		<li>Has a {@link org.apache.juneau.transform.PojoSwap} associated with the servlet
 			with a transformed type of <l>String</l>.
 	</ul>
 </div>
@@ -3469,9 +3469,9 @@
 				<jk>new</jk> Column(<js>"age"</js>, <js>"xs:int"</js>), 
 				<jk>new</jk> Column(<js>"numAddresses"</js>, <js>"xs:int"</js>) 
 				.addTransform( 
-					<jk>new</jk> PojoTransform&lt;Person,Integer&gt;() { 
-						<ja>@Override</ja> /* PojoTransform */ 
-						<jk>public</jk> Integer transform(Person p) { 
+					<jk>new</jk> PojoSwap&lt;Person,Integer&gt;() { 
+						<ja>@Override</ja> /* PojoSwap */ 
+						<jk>public</jk> Integer swap(Person p) { 
 							<jk>return</jk> p.addresses.size(); 
 						} 
 					} 

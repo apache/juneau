@@ -164,10 +164,10 @@ import org.apache.juneau.transform.Transform;
  * 	{@link Transform Transforms} are used to tailor how beans and non-beans are handled.<br>
  * 	There are two subclasses of transforms:
  * 	<ol class='spaced-list'>
- * 		<li>{@link BeanTransform} - Allows you to tailor handling of bean classes.
+ * 		<li>{@link BeanFilter} - Allows you to tailor handling of bean classes.
  * 			This class can be considered a programmatic equivalent to the {@link Bean} annotation when
  * 			annotating classes are not possible (e.g. you don't have access to the source).
- * 		<li>{@link PojoTransform} - Allows you to convert objects to serializable forms.
+ * 		<li>{@link PojoSwap} - Allows you to convert objects to serializable forms.
  * 	</ol>
  * <p>
  * 	See {@link org.apache.juneau.transform} for more information.
@@ -396,14 +396,14 @@ public class BeanContext extends Context {
 	 * <p>
 	 * There are two category of classes that can be passed in through this method:
 	 * <ul class='spaced-list'>
-	 * 	<li>Subclasses of {@link PojoTransform} and {@link BeanTransform}.
+	 * 	<li>Subclasses of {@link PojoSwap} and {@link BeanFilter}.
 	 * 	<li>Any other class.
 	 * </ul>
 	 * <p>
 	 * When <code>Transform</code> classes are specified, they identify objects that need to be
 	 * 	transformed into some other type during serialization (and optionally the reverse during parsing).
 	 * <p>
-	 * When non-<code>Transform</code> classes are specified, they are wrapped inside {@link BeanTransform BeanTransforms}.
+	 * When non-<code>Transform</code> classes are specified, they are wrapped inside {@link BeanFilter BeanFilters}.
 	 * For example, if you have an interface <code>IFoo</code> and a subclass <code>Foo</code>, and you
 	 * 	only want properties defined on <code>IFoo</code> to be visible as bean properties for <code>Foo</code> objects,
 	 * 	you can simply pass in <code>IFoo.<jk>class</jk></code> to this method.
@@ -512,8 +512,8 @@ public class BeanContext extends Context {
 
 	final Class<?>[] notBeanClasses;
 	final String[] notBeanPackageNames, notBeanPackagePrefixes;
-	final BeanTransform<?>[] beanTransforms;
-	final PojoTransform<?,?>[] pojoTransforms;
+	final BeanFilter<?>[] beanFilters;
+	final PojoSwap<?,?>[] pojoSwaps;
 	final Map<Class<?>,Class<?>> implClasses;
 	final Class<?>[] implKeyClasses, implValueClasses;
 	final ClassLoader classLoader;
@@ -578,17 +578,17 @@ public class BeanContext extends Context {
 		notBeanPackageNames = l1.toArray(new String[l1.size()]);
 		notBeanPackagePrefixes = l2.toArray(new String[l2.size()]);
 
-		LinkedList<BeanTransform<?>> lbf = new LinkedList<BeanTransform<?>>();
-		LinkedList<PojoTransform<?,?>> lpf = new LinkedList<PojoTransform<?,?>>();
+		LinkedList<BeanFilter<?>> lbf = new LinkedList<BeanFilter<?>>();
+		LinkedList<PojoSwap<?,?>> lpf = new LinkedList<PojoSwap<?,?>>();
  		for (Class<?> c : pm.get(BEAN_transforms, Class[].class, new Class[0])) {
 			if (isParentClass(Transform.class, c)) {
 				try {
-					if (isParentClass(BeanTransform.class, c)) {
-						BeanTransform<?> f = (BeanTransform<?>)c.newInstance();
+					if (isParentClass(BeanFilter.class, c)) {
+						BeanFilter<?> f = (BeanFilter<?>)c.newInstance();
 						//f.setBeanContext(this);
 						lbf.add(f);
-					} else if (isParentClass(PojoTransform.class, c)) {
-						PojoTransform<?,?> f = (PojoTransform<?,?>)c.newInstance();
+					} else if (isParentClass(PojoSwap.class, c)) {
+						PojoSwap<?,?> f = (PojoSwap<?,?>)c.newInstance();
 						f.setBeanContext(this);
 						lpf.add(f);
 					}
@@ -597,22 +597,22 @@ public class BeanContext extends Context {
 				}
 			} else {
  				if (! c.getClass().isInterface()) {
-					List<SurrogateTransform<?,?>> l = SurrogateTransform.findTransforms(c);
+					List<SurrogateSwap<?,?>> l = SurrogateSwap.findTransforms(c);
 					if (! l.isEmpty()) {
-						for (SurrogateTransform<?,?> f : l) {
+						for (SurrogateSwap<?,?> f : l) {
 							f.setBeanContext(this);
 							lpf.add(f);
 						}
 						continue;
 					}
 				}
-				BeanTransform<?> f = new InterfaceBeanTransform(c);
+				BeanFilter<?> f = new InterfaceBeanFilter(c);
 				f.setBeanContext(this);
 				lbf.add(f);
 			}
 		}
- 		beanTransforms = lbf.toArray(new BeanTransform[0]);
- 		pojoTransforms = lpf.toArray(new PojoTransform[0]);
+ 		beanFilters = lbf.toArray(new BeanFilter[0]);
+ 		pojoSwaps = lpf.toArray(new PojoSwap[0]);
 
  		implClasses = new TreeMap<Class<?>,Class<?>>(new ClassComparator());
  		Map<Class,Class> m = pm.getMap(BEAN_implClasses, Class.class, Class.class, null);
@@ -872,7 +872,7 @@ public class BeanContext extends Context {
 			T o = (T)m.newBean(outer);
 			if (o == null) {
 				// Beans with subtypes won't be instantiated until the sub type property is specified.
-				if (cm.beanTransform != null && cm.beanTransform.getSubTypeProperty() != null)
+				if (cm.beanFilter != null && cm.beanFilter.getSubTypeProperty() != null)
 					return null;
 				throw new BeanRuntimeException(c, "Class does not have a no-arg constructor.");
 			}
@@ -942,8 +942,8 @@ public class BeanContext extends Context {
 
 		// If this is an array, then we want it wrapped in an uncached ClassMeta object.
 		// Note that if it has a pojo transform, we still want to cache it so that
-		// we can cache something like byte[] with ByteArrayBase64Transform.
-		if (c.isArray() && findPojoTransform(c) == null)
+		// we can cache something like byte[] with ByteArrayBase64Swap.
+		if (c.isArray() && findPojoSwap(c) == null)
 			return new ClassMeta(c, this);
 
 		// This can happen if we have transforms defined against String or Object.
@@ -1410,46 +1410,46 @@ public class BeanContext extends Context {
 	}
 
 	/**
-	 * Returns the {@link PojoTransform} associated with the specified class, or <jk>null</jk> if there is no
+	 * Returns the {@link PojoSwap} associated with the specified class, or <jk>null</jk> if there is no
 	 * pojo transform associated with the class.
 	 *
 	 * @param <T> The class associated with the transform.
 	 * @param c The class associated with the transform.
 	 * @return The transform associated with the class, or null if there is no association.
 	 */
-	protected <T> PojoTransform findPojoTransform(Class<T> c) {
+	protected <T> PojoSwap findPojoSwap(Class<T> c) {
 		// Note:  On first
 		if (c != null)
-			for (PojoTransform f : pojoTransforms)
+			for (PojoSwap f : pojoSwaps)
 				if (isParentClass(f.forClass(), c))
 					return f;
 		return null;
 	}
 
 	/**
-	 * Checks whether a class has a {@link PojoTransform} associated with it in this bean context.
+	 * Checks whether a class has a {@link PojoSwap} associated with it in this bean context.
 	 * @param c The class to check.
-	 * @return <jk>true</jk> if the specified class or one of its subclasses has a {@link PojoTransform} associated with it.
+	 * @return <jk>true</jk> if the specified class or one of its subclasses has a {@link PojoSwap} associated with it.
 	 */
-	protected boolean hasChildPojoTransforms(Class<?> c) {
+	protected boolean hasChildPojoSwaps(Class<?> c) {
 		if (c != null)
-			for (PojoTransform f : pojoTransforms)
+			for (PojoSwap f : pojoSwaps)
 				if (isParentClass(c, f.forClass()))
 					return true;
 		return false;
 	}
 
 	/**
-	 * Returns the {@link BeanTransform} associated with the specified class, or <jk>null</jk> if there is no
-	 * bean transform associated with the class.
+	 * Returns the {@link BeanFilter} associated with the specified class, or <jk>null</jk> if there is no
+	 * bean filter associated with the class.
 	 *
 	 * @param <T> The class associated with the transform.
 	 * @param c The class associated with the transform.
 	 * @return The transform associated with the class, or null if there is no association.
 	 */
-	protected <T> BeanTransform findBeanTransform(Class<T> c) {
+	protected <T> BeanFilter findBeanFilter(Class<T> c) {
 		if (c != null)
-			for (BeanTransform f : beanTransforms)
+			for (BeanFilter f : beanFilters)
 				if (isParentClass(f.forClass(), c))
 					return f;
 		return null;
@@ -1569,19 +1569,19 @@ public class BeanContext extends Context {
 	 * 		<tr><th>Convert to type</th><th>Valid input value types</th><th>Notes</th></tr>
 	 * 		<tr>
 	 * 			<td>
-	 * 				A class that is the normal type of a registered {@link PojoTransform}.
+	 * 				A class that is the normal type of a registered {@link PojoSwap}.
 	 * 			</td>
 	 * 			<td>
-	 * 				A value whose class matches the transformed type of that registered {@link PojoTransform}.
+	 * 				A value whose class matches the transformed type of that registered {@link PojoSwap}.
 	 * 			</td>
 	 * 			<td>&nbsp;</td>
 	 * 		</tr>
 	 * 		<tr>
 	 * 			<td>
-	 * 				A class that is the transformed type of a registered {@link PojoTransform}.
+	 * 				A class that is the transformed type of a registered {@link PojoSwap}.
 	 * 			</td>
 	 * 			<td>
-	 * 				A value whose class matches the normal type of that registered {@link PojoTransform}.
+	 * 				A value whose class matches the normal type of that registered {@link PojoSwap}.
 	 * 			</td>
 	 * 			<td>&nbsp;</td>
 	 * 		</tr>
@@ -1734,19 +1734,19 @@ public class BeanContext extends Context {
 			if (tc == Class.class)
 				return (T)(classLoader.loadClass(value.toString()));
 
-			if (type.getPojoTransform() != null) {
-				PojoTransform f = type.getPojoTransform();
+			if (type.getPojoSwap() != null) {
+				PojoSwap f = type.getPojoSwap();
 				Class<?> nc = f.getNormalClass(), fc = f.getTransformedClass();
 				if (isParentClass(nc, tc) && isParentClass(fc, value.getClass()))
-					return (T)f.normalize(value, type);
+					return (T)f.unswap(value, type);
 			}
 
 			ClassMeta<?> vt = getClassMetaForObject(value);
-			if (vt.getPojoTransform() != null) {
-				PojoTransform f = vt.getPojoTransform();
+			if (vt.getPojoSwap() != null) {
+				PojoSwap f = vt.getPojoSwap();
 				Class<?> nc = f.getNormalClass(), fc = f.getTransformedClass();
 				if (isParentClass(nc, vt.getInnerClass()) && isParentClass(fc, tc))
-					return (T)f.transform(value);
+					return (T)f.swap(value);
 			}
 
 			if (type.isPrimitive()) {
@@ -2055,8 +2055,8 @@ public class BeanContext extends Context {
 			.append("ignoreInvocationExceptionsOnGetters", ignoreInvocationExceptionsOnGetters)
 			.append("ignoreInvocationExceptionsOnSetters", ignoreInvocationExceptionsOnSetters)
 			.append("useJavaBeanIntrospector", useJavaBeanIntrospector)
-			.append("beanTransforms", beanTransforms)
-			.append("pojoTransforms", pojoTransforms)
+			.append("beanFilters", beanFilters)
+			.append("pojoSwaps", pojoSwaps)
 			.append("notBeanClasses", notBeanClasses)
 			.append("implClasses", implClasses)
 			.append("sortProperties", sortProperties);

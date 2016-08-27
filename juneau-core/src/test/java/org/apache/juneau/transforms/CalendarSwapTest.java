@@ -34,7 +34,7 @@ import org.apache.juneau.xml.*;
 import org.junit.*;
 
 @SuppressWarnings("javadoc")
-public class CalendarTransformTest {
+public class CalendarSwapTest {
 
 	private static Calendar testDate = new GregorianCalendar(TimeZone.getTimeZone("PST"));
 	static {
@@ -60,78 +60,78 @@ public class CalendarTransformTest {
 	//====================================================================================================
 	@Test
 	public void testTimezone() throws Exception {
-		PojoTransform<Calendar,String> f;
+		PojoSwap<Calendar,String> f;
 		String s;
 		Calendar c;
 
 		//--------------------
 		// ISO8601DT
 		//--------------------
-		f = new CalendarTransform.ISO8601DT();
+		f = new CalendarSwap.ISO8601DT();
 
 		s = "2001-01-31T12:34:56Z";
 		c = DatatypeConverter.parseDateTime(s);
-		assertEquals(s, f.transform(c));
+		assertEquals(s, f.swap(c));
 
 		s = "2001-01-31T09:34:56-03:00";
 		c = DatatypeConverter.parseDateTime(s);
-		assertEquals(s, f.transform(c));
+		assertEquals(s, f.swap(c));
 
 		s = "2001-01-31T06:34:56-06:00";
 		c = DatatypeConverter.parseDateTime(s);
-		assertEquals(s, f.transform(c));
+		assertEquals(s, f.swap(c));
 
 
 		//--------------------
 		// ISO8601DTZ
 		//--------------------
-		f = new CalendarTransform.ISO8601DTZ();
+		f = new CalendarSwap.ISO8601DTZ();
 
 		s = "2001-01-31T12:34:56Z";
 		c = DatatypeConverter.parseDateTime(s);
-		assertEquals(s, f.transform(c));
+		assertEquals(s, f.swap(c));
 
 		s = "2001-01-31T09:34:56-03:00";
 		c = DatatypeConverter.parseDateTime(s);
-		assertEquals("2001-01-31T12:34:56Z", f.transform(c));
+		assertEquals("2001-01-31T12:34:56Z", f.swap(c));
 
 		s = "2001-01-31T06:34:56-06:00";
 		c = DatatypeConverter.parseDateTime(s);
-		assertEquals("2001-01-31T12:34:56Z", f.transform(c));
+		assertEquals("2001-01-31T12:34:56Z", f.swap(c));
 
 		//--------------------
 		// RFC2822DTZ
 		//--------------------
-		f = new CalendarTransform.RFC2822DT();
+		f = new CalendarSwap.RFC2822DT();
 
 		s = "2001-01-31T12:34:56Z";
 		c = DatatypeConverter.parseDateTime(s);
-		assertEquals("Wed, 31 Jan 2001 12:34:56 +0000", f.transform(c));
+		assertEquals("Wed, 31 Jan 2001 12:34:56 +0000", f.swap(c));
 
 		s = "2001-01-31T09:34:56-03:00";
 		c = DatatypeConverter.parseDateTime(s);
-		assertEquals("Wed, 31 Jan 2001 09:34:56 -0300", f.transform(c));
+		assertEquals("Wed, 31 Jan 2001 09:34:56 -0300", f.swap(c));
 
 		s = "2001-01-31T06:34:56-06:00";
 		c = DatatypeConverter.parseDateTime(s);
-		assertEquals("Wed, 31 Jan 2001 06:34:56 -0600", f.transform(c));
+		assertEquals("Wed, 31 Jan 2001 06:34:56 -0600", f.swap(c));
 
 		//--------------------
 		// RFC2822DTZ
 		//--------------------
-		f = new CalendarTransform.RFC2822DTZ();
+		f = new CalendarSwap.RFC2822DTZ();
 
 		s = "2001-01-31T12:34:56Z";
 		c = DatatypeConverter.parseDateTime(s);
-		assertEquals("Wed, 31 Jan 2001 12:34:56 GMT", f.transform(c));
+		assertEquals("Wed, 31 Jan 2001 12:34:56 GMT", f.swap(c));
 
 		s = "2001-01-31T09:34:56-03:00";
 		c = DatatypeConverter.parseDateTime(s);
-		assertEquals("Wed, 31 Jan 2001 12:34:56 GMT", f.transform(c));
+		assertEquals("Wed, 31 Jan 2001 12:34:56 GMT", f.swap(c));
 
 		s = "2001-01-31T06:34:56-06:00";
 		c = DatatypeConverter.parseDateTime(s);
-		assertEquals("Wed, 31 Jan 2001 12:34:56 GMT", f.transform(c));
+		assertEquals("Wed, 31 Jan 2001 12:34:56 GMT", f.swap(c));
 	}
 
 
@@ -140,7 +140,7 @@ public class CalendarTransformTest {
 	//====================================================================================================
 	@Test
 	public void testDefaultStringJson() throws Exception {
-		Class<?> f = CalendarTransform.ToString.class;
+		Class<?> f = CalendarSwap.ToString.class;
 		WriterSerializer s = new JsonSerializer.Simple().addTransforms(f);
 		ReaderParser p = new JsonParser().addTransforms(f);
 		doTest(s, p, true, "'Sun Mar 03 10:11:12 PST 1901'");
@@ -151,7 +151,7 @@ public class CalendarTransformTest {
 	//====================================================================================================
 	@Test
 	public void testDefaultStringXml() throws Exception {
-		Class<?> f = CalendarTransform.ToString.class;
+		Class<?> f = CalendarSwap.ToString.class;
 		WriterSerializer s = new XmlSerializer.SimpleSq().addTransforms(f);
 		ReaderParser p = new XmlParser().addTransforms(f);
 		doTest(s, p, true, "<string>Sun Mar 03 10:11:12 PST 1901</string>");
@@ -162,7 +162,7 @@ public class CalendarTransformTest {
 	//====================================================================================================
 	@Test
 	public void testDefaultStringHtml() throws Exception {
-		Class<?> f = CalendarTransform.ToString.class;
+		Class<?> f = CalendarSwap.ToString.class;
 		WriterSerializer s = new HtmlSerializer().addTransforms(f);
 		ReaderParser p = new HtmlParser().addTransforms(f);
 		doTest(s, p, true, "<string>Sun Mar 03 10:11:12 PST 1901</string>");
@@ -173,7 +173,7 @@ public class CalendarTransformTest {
 	//====================================================================================================
 	@Test
 	public void testDefaultStringUon() throws Exception {
-		Class<?> f = CalendarTransform.ToString.class;
+		Class<?> f = CalendarSwap.ToString.class;
 		WriterSerializer s = new UonSerializer.Encoding().addTransforms(f);
 		ReaderParser p = UonParser.DEFAULT_DECODING.clone().addTransforms(f);
 		doTest(s, p, true, "Sun+Mar+03+10:11:12+PST+1901");
@@ -184,7 +184,7 @@ public class CalendarTransformTest {
 	//====================================================================================================
 	@Test
 	public void testDefaultStringUrlEncoding() throws Exception {
-		Class<?> f = CalendarTransform.ToString.class;
+		Class<?> f = CalendarSwap.ToString.class;
 		WriterSerializer s = new UrlEncodingSerializer().addTransforms(f);
 		ReaderParser p = UrlEncodingParser.DEFAULT.clone().addTransforms(f);
 		doTest(s, p, true, "_value=Sun+Mar+03+10:11:12+PST+1901");
@@ -195,7 +195,7 @@ public class CalendarTransformTest {
 	//====================================================================================================
 	@Test
 	public void testDefaultStringRdfXml() throws Exception {
-		Class<?> f = CalendarTransform.ToString.class;
+		Class<?> f = CalendarSwap.ToString.class;
 		WriterSerializer s = getRdfSerializer().addTransforms(f);
 		ReaderParser p = new RdfParser.Xml().addTransforms(f);
 		doTest(s, p, true, "<rdf:Description><j:value>Sun Mar 03 10:11:12 PST 1901</j:value></rdf:Description>");
@@ -206,7 +206,7 @@ public class CalendarTransformTest {
 	//====================================================================================================
 	@Test
 	public void testISO8601DTJson() throws Exception {
-		Class<?> f = CalendarTransform.ISO8601DT.class;
+		Class<?> f = CalendarSwap.ISO8601DT.class;
 		WriterSerializer s = new JsonSerializer.Simple().addTransforms(f);
 		ReaderParser p = new JsonParser().addTransforms(f);
 		String x = "'1901-03-03T10:11:12-08:00'";
@@ -218,7 +218,7 @@ public class CalendarTransformTest {
 	//====================================================================================================
 	@Test
 	public void testISO8601DTXml() throws Exception {
-		Class<?> f = CalendarTransform.ISO8601DT.class;
+		Class<?> f = CalendarSwap.ISO8601DT.class;
 		WriterSerializer s = new XmlSerializer.SimpleSq().addTransforms(f);
 		ReaderParser p = new XmlParser().addTransforms(f);
 		doTest(s, p, true, "<string>1901-03-03T10:11:12-08:00</string>");
@@ -229,7 +229,7 @@ public class CalendarTransformTest {
 	//====================================================================================================
 	@Test
 	public void testISO8601DTHtml() throws Exception {
-		Class<?> f = CalendarTransform.ISO8601DT.class;
+		Class<?> f = CalendarSwap.ISO8601DT.class;
 		WriterSerializer s = new HtmlSerializer().addTransforms(f);
 		ReaderParser p = new HtmlParser().addTransforms(f);
 		doTest(s, p, true, "<string>1901-03-03T10:11:12-08:00</string>");
@@ -240,7 +240,7 @@ public class CalendarTransformTest {
 	//====================================================================================================
 	@Test
 	public void testISO8601DTUon() throws Exception {
-		Class<?> f = CalendarTransform.ISO8601DT.class;
+		Class<?> f = CalendarSwap.ISO8601DT.class;
 		WriterSerializer s = new UonSerializer().addTransforms(f);
 		ReaderParser p = new UonParser().addTransforms(f);
 		doTest(s, p, true, "1901-03-03T10:11:12-08:00");
@@ -251,7 +251,7 @@ public class CalendarTransformTest {
 	//====================================================================================================
 	@Test
 	public void testISO8601DTUrlEncoding() throws Exception {
-		Class<?> f = CalendarTransform.ISO8601DT.class;
+		Class<?> f = CalendarSwap.ISO8601DT.class;
 		WriterSerializer s = new UrlEncodingSerializer().addTransforms(f);
 		ReaderParser p = new UrlEncodingParser().addTransforms(f);
 		doTest(s, p, true, "_value=1901-03-03T10:11:12-08:00");
@@ -262,7 +262,7 @@ public class CalendarTransformTest {
 	//====================================================================================================
 	@Test
 	public void testISO8601DTRdfXml() throws Exception {
-		Class<?> f = CalendarTransform.ISO8601DT.class;
+		Class<?> f = CalendarSwap.ISO8601DT.class;
 		WriterSerializer s = getRdfSerializer().addTransforms(f);
 		ReaderParser p = new RdfParser.Xml().addTransforms(f);
 		doTest(s, p, true, "<rdf:Description><j:value>1901-03-03T10:11:12-08:00</j:value></rdf:Description>");
@@ -273,7 +273,7 @@ public class CalendarTransformTest {
 	//====================================================================================================
 	@Test
 	public void testRFC2822DTJson() throws Exception {
-		Class<?> f = CalendarTransform.RFC2822DTZ.class;
+		Class<?> f = CalendarSwap.RFC2822DTZ.class;
 		WriterSerializer s = new JsonSerializer.Simple().addTransforms(f);
 		ReaderParser p = new JsonParser().addTransforms(f);
 		doTest(s, p, true, "'Sun, 03 Mar 1901 18:11:12 GMT'");
@@ -284,7 +284,7 @@ public class CalendarTransformTest {
 	//====================================================================================================
 	@Test
 	public void testRFC2822DTXml() throws Exception {
-		Class<?> f = CalendarTransform.RFC2822DTZ.class;
+		Class<?> f = CalendarSwap.RFC2822DTZ.class;
 		WriterSerializer s = new XmlSerializer.SimpleSq().addTransforms(f);
 		ReaderParser p = new XmlParser().addTransforms(f);
 		doTest(s, p, true, "<string>Sun, 03 Mar 1901 18:11:12 GMT</string>");
@@ -295,7 +295,7 @@ public class CalendarTransformTest {
 	//====================================================================================================
 	@Test
 	public void testRFC2822DTHtml() throws Exception {
-		Class<?> f = CalendarTransform.RFC2822DTZ.class;
+		Class<?> f = CalendarSwap.RFC2822DTZ.class;
 		WriterSerializer s = new HtmlSerializer().addTransforms(f);
 		ReaderParser p = new HtmlParser().addTransforms(f);
 		doTest(s, p, true, "<string>Sun, 03 Mar 1901 18:11:12 GMT</string>");
@@ -306,7 +306,7 @@ public class CalendarTransformTest {
 	//====================================================================================================
 	@Test
 	public void testRFC2822DTUon() throws Exception {
-		Class<?> f = CalendarTransform.RFC2822DTZ.class;
+		Class<?> f = CalendarSwap.RFC2822DTZ.class;
 		WriterSerializer s = new UonSerializer.Encoding().addTransforms(f);
 		ReaderParser p = UonParser.DEFAULT_DECODING.clone().addTransforms(f);
 		doTest(s, p, true, "Sun,+03+Mar+1901+18:11:12+GMT");
@@ -317,7 +317,7 @@ public class CalendarTransformTest {
 	//====================================================================================================
 	@Test
 	public void testRFC2822DTUrlEncoding() throws Exception {
-		Class<?> f = CalendarTransform.RFC2822DTZ.class;
+		Class<?> f = CalendarSwap.RFC2822DTZ.class;
 		WriterSerializer s = new UrlEncodingSerializer().addTransforms(f);
 		ReaderParser p = UrlEncodingParser.DEFAULT.clone().addTransforms(f);
 		doTest(s, p, true, "_value=Sun,+03+Mar+1901+18:11:12+GMT");
@@ -328,7 +328,7 @@ public class CalendarTransformTest {
 	//====================================================================================================
 	@Test
 	public void testRFC2822DTRdfXml() throws Exception {
-		Class<?> f = CalendarTransform.RFC2822DTZ.class;
+		Class<?> f = CalendarSwap.RFC2822DTZ.class;
 		WriterSerializer s = getRdfSerializer().addTransforms(f);
 		ReaderParser p = new RdfParser.Xml().addTransforms(f);
 		doTest(s, p, true, "<rdf:Description><j:value>Sun, 03 Mar 1901 18:11:12 GMT</j:value></rdf:Description>");
@@ -339,7 +339,7 @@ public class CalendarTransformTest {
 	//====================================================================================================
 	@Test
 	public void testDefaultLongJson() throws Exception {
-		Class<?> f = CalendarLongTransform.class;
+		Class<?> f = CalendarLongSwap.class;
 		WriterSerializer s = new JsonSerializer.Simple().addTransforms(f);
 		ReaderParser p = new JsonParser().addTransforms(f);
 		doTest(s, p, true, "-2172116928000");
@@ -350,7 +350,7 @@ public class CalendarTransformTest {
 	//====================================================================================================
 	@Test
 	public void testDefaultLongXml() throws Exception {
-		Class<?> f = CalendarLongTransform.class;
+		Class<?> f = CalendarLongSwap.class;
 		WriterSerializer s = new XmlSerializer.SimpleSq().addTransforms(f);
 		ReaderParser p = new XmlParser().addTransforms(f);
 		doTest(s, p, true, "<number>-2172116928000</number>");
@@ -361,7 +361,7 @@ public class CalendarTransformTest {
 	//====================================================================================================
 	@Test
 	public void testDefaultLongHtml() throws Exception {
-		Class<?> f = CalendarLongTransform.class;
+		Class<?> f = CalendarLongSwap.class;
 		WriterSerializer s = new HtmlSerializer().addTransforms(f);
 		ReaderParser p = new HtmlParser().addTransforms(f);
 		doTest(s, p, true, "<number>-2172116928000</number>");
@@ -372,7 +372,7 @@ public class CalendarTransformTest {
 	//====================================================================================================
 	@Test
 	public void testDefaultLongUon() throws Exception {
-		Class<?> f = CalendarLongTransform.class;
+		Class<?> f = CalendarLongSwap.class;
 		WriterSerializer s = UonSerializer.DEFAULT_SIMPLE.clone().addTransforms(f);
 		ReaderParser p = new UonParser().addTransforms(f);
 		doTest(s, p, true, "-2172116928000");
@@ -383,7 +383,7 @@ public class CalendarTransformTest {
 	//====================================================================================================
 	@Test
 	public void testDefaultLongUrlEncoding() throws Exception {
-		Class<?> f = CalendarLongTransform.class;
+		Class<?> f = CalendarLongSwap.class;
 		WriterSerializer s = UrlEncodingSerializer.DEFAULT_SIMPLE.clone().addTransforms(f);
 		ReaderParser p = new UrlEncodingParser().addTransforms(f);
 		doTest(s, p, true, "_value=-2172116928000");
@@ -394,7 +394,7 @@ public class CalendarTransformTest {
 	//====================================================================================================
 	@Test
 	public void testDefaultLongRdfXml() throws Exception {
-		Class<?> f = CalendarLongTransform.class;
+		Class<?> f = CalendarLongSwap.class;
 		WriterSerializer s = getRdfSerializer().addTransforms(f);
 		ReaderParser p = new RdfParser.Xml().addTransforms(f);
 		doTest(s, p, true, "<rdf:Description><j:value>-2172116928000</j:value></rdf:Description>");
@@ -405,7 +405,7 @@ public class CalendarTransformTest {
 	//====================================================================================================
 	@Test
 	public void testDefaultMapJson() throws Exception {
-		Class<?> f = CalendarMapTransform.class;
+		Class<?> f = CalendarMapSwap.class;
 		WriterSerializer s = new JsonSerializer.Simple().addTransforms(f);
 		ReaderParser p = new JsonParser().addTransforms(f);
 		doTest(s, p, true, "{time:-2172116928000,timeZone:'PST'}");
@@ -416,7 +416,7 @@ public class CalendarTransformTest {
 	//====================================================================================================
 	@Test
 	public void testDefaultMapXml() throws Exception {
-		Class<?> f = CalendarMapTransform.class;
+		Class<?> f = CalendarMapSwap.class;
 		WriterSerializer s = new XmlSerializer.SimpleXmlJsonSq().addTransforms(f);
 		ReaderParser p = new XmlParser().addTransforms(f);
 		doTest(s, p, true, "<object><time type='number'>-2172116928000</time><timeZone>PST</timeZone></object>");
@@ -427,7 +427,7 @@ public class CalendarTransformTest {
 	//====================================================================================================
 	@Test
 	public void testDefaultMapHtml() throws Exception {
-		Class<?> f = CalendarMapTransform.class;
+		Class<?> f = CalendarMapSwap.class;
 		WriterSerializer s = new HtmlSerializer.Sq().addTransforms(f);
 		ReaderParser p = new HtmlParser().addTransforms(f);
 		doTest(s, p, true, "<table type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>time</string></td><td><number>-2172116928000</number></td></tr><tr><td><string>timeZone</string></td><td><string>PST</string></td></tr></table>");
@@ -438,7 +438,7 @@ public class CalendarTransformTest {
 	//====================================================================================================
 	@Test
 	public void testDefaultMapUon() throws Exception {
-		Class<?> f = CalendarMapTransform.class;
+		Class<?> f = CalendarMapSwap.class;
 		WriterSerializer s = UonSerializer.DEFAULT_SIMPLE.clone().addTransforms(f);
 		ReaderParser p = new UonParser().addTransforms(f);
 		doTest(s, p, true, "(time=-2172116928000,timeZone=PST)");
@@ -449,7 +449,7 @@ public class CalendarTransformTest {
 	//====================================================================================================
 	@Test
 	public void testDefaultMapUrlEncoding() throws Exception {
-		Class<?> f = CalendarMapTransform.class;
+		Class<?> f = CalendarMapSwap.class;
 		WriterSerializer s = UrlEncodingSerializer.DEFAULT_SIMPLE.clone().addTransforms(f);
 		ReaderParser p = new UrlEncodingParser().addTransforms(f);
 		doTest(s, p, true, "time=-2172116928000&timeZone=PST");
@@ -460,7 +460,7 @@ public class CalendarTransformTest {
 	//====================================================================================================
 	@Test
 	public void testDefaultMapRdfXml() throws Exception {
-		Class<?> f = CalendarMapTransform.class;
+		Class<?> f = CalendarMapSwap.class;
 		WriterSerializer s = getRdfSerializer().addTransforms(f);
 		ReaderParser p = new RdfParser.Xml().addTransforms(f);
 		doTest(s, p, true, "<rdf:Description><jp:time>-2172116928000</jp:time><jp:timeZone>PST</jp:timeZone></rdf:Description>");
@@ -471,7 +471,7 @@ public class CalendarTransformTest {
 	//====================================================================================================
 	@Test
 	public void testDefaultMediumJson() throws Exception {
-		Class<?> f = CalendarTransform.Medium.class;
+		Class<?> f = CalendarSwap.Medium.class;
 		WriterSerializer s = new JsonSerializer.Simple().addTransforms(f);
 		ReaderParser p = new JsonParser().addTransforms(f);
 		doTest(s, p, false, "'Mar 3, 1901'");
@@ -482,7 +482,7 @@ public class CalendarTransformTest {
 	//====================================================================================================
 	@Test
 	public void testDefaultMediumXml() throws Exception {
-		Class<?> f = CalendarTransform.Medium.class;
+		Class<?> f = CalendarSwap.Medium.class;
 		WriterSerializer s = new XmlSerializer.SimpleSq().addTransforms(f);
 		ReaderParser p = new XmlParser().addTransforms(f);
 		doTest(s, p, false, "<string>Mar 3, 1901</string>");
@@ -493,7 +493,7 @@ public class CalendarTransformTest {
 	//====================================================================================================
 	@Test
 	public void testDefaultMediumHtml() throws Exception {
-		Class<?> f = CalendarTransform.Medium.class;
+		Class<?> f = CalendarSwap.Medium.class;
 		WriterSerializer s = new HtmlSerializer().addTransforms(f);
 		ReaderParser p = new HtmlParser().addTransforms(f);
 		doTest(s, p, false, "<string>Mar 3, 1901</string>");
@@ -504,7 +504,7 @@ public class CalendarTransformTest {
 	//====================================================================================================
 	@Test
 	public void testDefaultMediumUon() throws Exception {
-		Class<?> f = CalendarTransform.Medium.class;
+		Class<?> f = CalendarSwap.Medium.class;
 		WriterSerializer s = new UonSerializer.Encoding().addTransforms(f);
 		ReaderParser p = UonParser.DEFAULT_DECODING.clone().addTransforms(f);
 		doTest(s, p, false, "Mar+3,+1901");
@@ -515,7 +515,7 @@ public class CalendarTransformTest {
 	//====================================================================================================
 	@Test
 	public void testDefaultMediumUrlEncoding() throws Exception {
-		Class<?> f = CalendarTransform.Medium.class;
+		Class<?> f = CalendarSwap.Medium.class;
 		WriterSerializer s = new UrlEncodingSerializer().addTransforms(f);
 		ReaderParser p = UrlEncodingParser.DEFAULT.clone().addTransforms(f);
 		doTest(s, p, false, "_value=Mar+3,+1901");
@@ -526,7 +526,7 @@ public class CalendarTransformTest {
 	//====================================================================================================
 	@Test
 	public void testDefaultMediumRdfXml() throws Exception {
-		Class<?> f = CalendarTransform.Medium.class;
+		Class<?> f = CalendarSwap.Medium.class;
 		WriterSerializer s = getRdfSerializer().addTransforms(f);
 		ReaderParser p = new RdfParser.Xml().addTransforms(f);
 		doTest(s, p, false, "<rdf:Description><j:value>Mar 3, 1901</j:value></rdf:Description>");
@@ -648,7 +648,7 @@ public class CalendarTransformTest {
 
 	@Bean(sort=true)
 	public static class A {
-		@BeanProperty(transform=CalendarTransform.ISO8601DTZ.class)
+		@BeanProperty(transform=CalendarSwap.ISO8601DTZ.class)
 		public Calendar d1;
 		private Calendar d2, d3;
 		public A(Calendar date) {
@@ -657,7 +657,7 @@ public class CalendarTransformTest {
 
 		public A() {}
 
-		@BeanProperty(transform=CalendarTransform.RFC2822DTZ.class)
+		@BeanProperty(transform=CalendarSwap.RFC2822DTZ.class)
 		public Calendar getD2() {
 			return d2;
 		}
@@ -668,7 +668,7 @@ public class CalendarTransformTest {
 		public Calendar getD3() {
 			return d3;
 		}
-		@BeanProperty(transform=CalendarLongTransform.class)
+		@BeanProperty(transform=CalendarLongSwap.class)
 		public void setD3(Calendar d3) {
 			this.d3 = d3;
 		}

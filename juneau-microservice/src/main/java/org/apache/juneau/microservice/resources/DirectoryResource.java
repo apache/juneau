@@ -307,7 +307,7 @@ public class DirectoryResource extends Resource {
 		/**
 		 * @return The file last modified timestamp.
 		 */
-		@BeanProperty(transform=DateTransform.ISO8601DTP.class)
+		@BeanProperty(transform=DateSwap.ISO8601DTP.class)
 		public Date getLastModified() {
 			return new Date(f.lastModified());
 		}

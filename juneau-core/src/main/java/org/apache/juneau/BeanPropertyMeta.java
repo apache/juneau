@@ -55,7 +55,7 @@ public class BeanPropertyMeta {
 		rawTypeMeta,                           // The real class type of the bean property.
 		typeMeta;                              // The transformed class type of the bean property.
 	private String[] properties;
-	private PojoTransform transform;      // PojoTransform defined only via @BeanProperty annotation.
+	private PojoSwap transform;      // PojoSwap defined only via @BeanProperty annotation.
 
 	private MetadataMap extMeta = new MetadataMap();  // Extended metadata
 
@@ -130,7 +130,7 @@ public class BeanPropertyMeta {
 	/**
 	 * Returns the {@link ClassMeta} of the class of this property.
 	 * <p>
-	 * If this property or the property type class has a {@link PojoTransform} associated with it, this
+	 * If this property or the property type class has a {@link PojoSwap} associated with it, this
 	 * 	method returns the transformed class meta.
 	 * This matches the class type that is used by the {@link #get(BeanMap)} and {@link #set(BeanMap, Object)} methods.
 	 *
@@ -249,7 +249,7 @@ public class BeanPropertyMeta {
 			rawTypeMeta = f.getClassMeta(p, field.getGenericType(), typeVarImpls);
 			isUri |= (rawTypeMeta.isUri() || field.isAnnotationPresent(org.apache.juneau.annotation.URI.class));
 			if (p != null) {
-				transform = getPropertyPojoTransform(p);
+				transform = getPropertyPojoSwap(p);
 				if (p.properties().length != 0)
 					properties = p.properties();
 				isBeanUri |= p.beanUri();
@@ -263,7 +263,7 @@ public class BeanPropertyMeta {
 			isUri |= (rawTypeMeta.isUri() || getter.isAnnotationPresent(org.apache.juneau.annotation.URI.class));
 			if (p != null) {
 				if (transform == null)
-					transform = getPropertyPojoTransform(p);
+					transform = getPropertyPojoSwap(p);
 				if (properties != null && p.properties().length != 0)
 					properties = p.properties();
 				isBeanUri |= p.beanUri();
@@ -277,7 +277,7 @@ public class BeanPropertyMeta {
 			isUri |= (rawTypeMeta.isUri() || setter.isAnnotationPresent(org.apache.juneau.annotation.URI.class));
 			if (p != null) {
 			if (transform == null)
-				transform = getPropertyPojoTransform(p);
+				transform = getPropertyPojoSwap(p);
 				if (properties != null && p.properties().length != 0)
 					properties = p.properties();
 				isBeanUri |= p.beanUri();
@@ -299,16 +299,16 @@ public class BeanPropertyMeta {
 		return true;
 	}
 
-	private PojoTransform getPropertyPojoTransform(BeanProperty p) throws Exception {
-		Class<? extends PojoTransform> c = p.transform();
-		if (c == PojoTransform.NULL.class)
+	private PojoSwap getPropertyPojoSwap(BeanProperty p) throws Exception {
+		Class<? extends PojoSwap> c = p.transform();
+		if (c == PojoSwap.NULL.class)
 			return null;
 		try {
-			PojoTransform f = c.newInstance();
+			PojoSwap f = c.newInstance();
 			f.setBeanContext(this.beanMeta.ctx);
 			return f;
 		} catch (Exception e) {
-			throw new BeanRuntimeException(this.beanMeta.c, "Could not instantiate PojoTransform ''{0}'' for bean property ''{1}''", c.getName(), this.name).initCause(e);
+			throw new BeanRuntimeException(this.beanMeta.c, "Could not instantiate PojoSwap ''{0}'' for bean property ''{1}''", c.getName(), this.name).initCause(e);
 		}
 	}
 
@@ -383,7 +383,7 @@ public class BeanPropertyMeta {
 	public Object set(BeanMap<?> m, Object value) throws BeanRuntimeException {
 		try {
 			// Comvert to raw form.
-			value = normalize(value);
+			value = unswap(value);
 			BeanContext bc = this.beanMeta.ctx;
 
 		if (m.bean == null) {
@@ -549,7 +549,7 @@ public class BeanPropertyMeta {
 
 			} else {
 				if (transform != null && value != null && isParentClass(transform.getTransformedClass(), value.getClass())) {
-						value = transform.normalize(value, rawTypeMeta);
+						value = transform.unswap(value, rawTypeMeta);
 				} else {
 						value = beanMeta.ctx.convertToType(value, rawTypeMeta);
 					}
@@ -721,31 +721,31 @@ public class BeanPropertyMeta {
 	private Object transform(Object o) throws SerializeException {
 		// First use transform defined via @BeanProperty.
 		if (transform != null)
-			return transform.transform(o);
+			return transform.swap(o);
 		if (o == null)
 			return null;
 		// Otherwise, look it up via bean context.
-		if (rawTypeMeta.hasChildPojoTransforms()) {
+		if (rawTypeMeta.hasChildPojoSwaps()) {
 			Class c = o.getClass();
 			ClassMeta<?> cm = rawTypeMeta.innerClass == c ? rawTypeMeta : beanMeta.ctx.getClassMeta(c);
-			PojoTransform f = cm.getPojoTransform();
+			PojoSwap f = cm.getPojoSwap();
 			if (f != null)
-				return f.transform(o);
+				return f.swap(o);
 		}
 		return o;
 	}
 
-	private Object normalize(Object o) throws ParseException {
+	private Object unswap(Object o) throws ParseException {
 		if (transform != null)
-			return transform.normalize(o, rawTypeMeta);
+			return transform.unswap(o, rawTypeMeta);
 		if (o == null)
 			return null;
-		if (rawTypeMeta.hasChildPojoTransforms()) {
+		if (rawTypeMeta.hasChildPojoSwaps()) {
 			Class c = o.getClass();
 			ClassMeta<?> cm = rawTypeMeta.innerClass == c ? rawTypeMeta : beanMeta.ctx.getClassMeta(c);
-			PojoTransform f = cm.getPojoTransform();
+			PojoSwap f = cm.getPojoSwap();
 			if (f != null)
-				return f.normalize(o, rawTypeMeta);
+				return f.unswap(o, rawTypeMeta);
 		}
 		return o;
 	}

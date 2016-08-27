@@ -46,9 +46,9 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 	@Test
 	public void testTransformBeans1() throws Exception {
 		Class<?>[] f = {
-			ByteArrayBase64Transform.class,
-			CalendarTransform.ISO8601DTZ.class,
-			DateTransform.ISO8601DTZ.class
+			ByteArrayBase64Swap.class,
+			CalendarSwap.ISO8601DTZ.class,
+			DateSwap.ISO8601DTZ.class
 		};
 		s.addTransforms(f);
 		if (p != null)
@@ -56,7 +56,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 		A t = new A().init();
 		t = roundTrip(t, A.class);
 
-		// ByteArrayBase64Transform
+		// ByteArrayBase64Swap
 		assertEquals(3, t.fByte[3]);
 		assertNull(t.fnByte);
 		assertEquals(5, t.faByte[2][1]);
@@ -65,7 +65,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 		assertEquals(6, t.fmByte.get("bar")[2]);
 		assertNull(t.fmByte.get("baz"));
 
-		// CalendarTransform
+		// CalendarSwap
 		t.fCalendar.setTimeZone(TimeZone.getTimeZone("GMT"));
 		assertEquals(2001, t.fCalendar.get(Calendar.YEAR));
 		assertEquals(01, t.fCalendar.get(Calendar.MONTH));
@@ -84,7 +84,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 		assertNull(t.fnCalendar);
 		assertNull(t.fn2Calendar);
 
-		// DateTransform
+		// DateSwap
 		assertEquals(1000, t.fDate.getTime());
 		assertNull(t.fnDate);
 		assertEquals(3000, t.faDate[2].getTime());
@@ -96,7 +96,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 
 	public static class A {
 
-		// Test ByteArrayBase64Transform
+		// Test ByteArrayBase64Swap
 		public byte[] fByte;
 		public byte[] fnByte;
 		public byte[][] faByte;
@@ -166,9 +166,9 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 	@Test
 	public void testTransformBeans2() throws Exception {
 		Class<?>[] f = {
-			ByteArrayBase64Transform.class,
-			CalendarTransform.Medium.class,
-			DateTransform.RFC2822DT.class,
+			ByteArrayBase64Swap.class,
+			CalendarSwap.Medium.class,
+			DateSwap.RFC2822DT.class,
 		};
 		s.addTransforms(f);
 		if (p != null)
@@ -176,7 +176,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 		A t = new A().init();
 		t = roundTrip(t, A.class);
 
-		// ByteArrayBase64Transform
+		// ByteArrayBase64Swap
 		assertEquals(3, t.fByte[3]);
 		assertNull(t.fnByte);
 		assertEquals(5, t.faByte[2][1]);
@@ -185,7 +185,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 		assertEquals(6, t.fmByte.get("bar")[2]);
 		assertNull(t.fmByte.get("baz"));
 
-		// CalendarTransform
+		// CalendarSwap
 		t.fCalendar.setTimeZone(TimeZone.getTimeZone("GMT"));
 		assertEquals(2001, t.fCalendar.get(Calendar.YEAR));
 		assertEquals(01, t.fCalendar.get(Calendar.MONTH));
@@ -206,7 +206,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 		assertNull(t.fnCalendar);
 		assertNull(t.fn2Calendar);
 
-		// DateTransform
+		// DateSwap
 		assertEquals(1000, t.fDate.getTime());
 		assertNull(t.fnDate);
 		assertEquals(3000, t.faDate[2].getTime());
@@ -233,13 +233,13 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 		public String f1;
 	}
 
-	public static class BTransform extends PojoTransform<B,String> {
-		@Override /* PojoTransform */
-		public String transform(B o) throws SerializeException {
+	public static class BTransform extends PojoSwap<B,String> {
+		@Override /* PojoSwap */
+		public String swap(B o) throws SerializeException {
 			return o.f1;
 		}
-		@Override /* PojoTransform */
-		public B normalize(String f, ClassMeta<?> hint) throws ParseException {
+		@Override /* PojoSwap */
+		public B unswap(String f, ClassMeta<?> hint) throws ParseException {
 			B b1 = new B();
 			b1.f1 = f;
 			return b1;
@@ -247,7 +247,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 	}
 
 	//====================================================================================================
-	// testXMLGregorianCalendar - Test XMLGregorianCalendarTransform class.
+	// testXMLGregorianCalendar - Test XMLGregorianCalendarSwap class.
 	//====================================================================================================
 	@Test
 	public void testXMLGregorianCalendar() throws Exception {
@@ -258,8 +258,8 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 		GregorianCalendar gc = new GregorianCalendar();
 		XMLGregorianCalendar c = DatatypeFactory.newInstance().newXMLGregorianCalendar(gc);
 
-		Serializer s = getSerializer().clone().addTransforms(XMLGregorianCalendarTransform.class);
-		Parser p = getParser().clone().addTransforms(XMLGregorianCalendarTransform.class);
+		Serializer s = getSerializer().clone().addTransforms(XMLGregorianCalendarSwap.class);
+		Parser p = getParser().clone().addTransforms(XMLGregorianCalendarSwap.class);
 
 		Object r = s.serialize(c);
 		XMLGregorianCalendar c2 = p.parse(r, XMLGregorianCalendar.class);

@@ -60,9 +60,9 @@
 <ol class='toc'>
 	<li><p><a class='doclink' href='#Transforms'>Transforms</a></p>
 	<ol>
-		<li><p><a class='doclink' href='#BeanTransforms'>BeanTransform Class</a></p>
-		<li><p><a class='doclink' href='#PojoTransforms'>PojoTransform Class</a></p>
-		<li><p><a class='doclink' href='#PojoTransforms_OneWay'>One-Way PojoTransforms</a></p>
+		<li><p><a class='doclink' href='#BeanFilters'>BeanFilter Class</a></p>
+		<li><p><a class='doclink' href='#PojoSwaps'>PojoSwap Class</a></p>
+		<li><p><a class='doclink' href='#PojoSwaps_OneWay'>One-Way PojoSwaps</a></p>
 		<li><p><a class='doclink' href='#StopClasses'>Stop Classes</a></p>
 		<li><p><a class='doclink' href='#SurrogateClasses'>Surrogate Classes</a></p>
 		<li><p><a class='doclink' href='#ToObjectMaps'>Serializing to ObjectMaps</a></p>
@@ -81,8 +81,8 @@
 	<ul class='spaced-list'>
 		<li>{@link org.apache.juneau.transform.Transform} - Top-level interface for all transforms.
 	<ul class='spaced-list'>
-		<li>{@link org.apache.juneau.transform.BeanTransform} - Transforms that alter the way beans are handled.
-		<li>{@link org.apache.juneau.transform.PojoTransform} - Transforms that transform non-serializable POJOs into serializable POJOs during serialization 
+		<li>{@link org.apache.juneau.transform.BeanFilter} - Transforms that alter the way beans are handled.
+		<li>{@link org.apache.juneau.transform.PojoSwap} - Transforms that swap non-serializable POJOs with serializable POJOs during serialization 
 			(and optionally vis-versa during parsing).
 		</ul>
 	</ul>
@@ -100,15 +100,15 @@
 		<li>{@link org.apache.juneau.server.jaxrs.JuneauProvider#transforms()} - On all serializers and parsers defined on a JAX-RS provider.
 	</ul>
 	<p>
-		Transforms (typically <code>PojoTransforms</code>) can also be associated with classes through the {@link org.apache.juneau.annotation.Transform @Transform} annotation. 
+		Swaps can also be associated with classes through the {@link org.apache.juneau.annotation.Pojo @Pojo} annotation. 
 	</p>
 		
 	<!-- ======================================================================================================== -->
-	<a id="BeanTransforms"></a>
-	<h3 class='topic' onclick='toggle(this)'>1.1 - BeanTransform Class</h3>
+	<a id="BeanFilters"></a>
+	<h3 class='topic' onclick='toggle(this)'>1.1 - BeanFilter Class</h3>
 	<div class='topic'>
 		<p>
-			Bean transforms are used to tailor how Juneau handles bean classes.
+			Bean filters are used to tailor how Juneau handles bean classes.
 			They can be used for the following purposes:
 		</p>
 		<ul class='spaced-list'>
@@ -120,7 +120,7 @@
 		<p>
 			It should be noted that the {@link org.apache.juneau.annotation.Bean @Bean} annotation provides equivalent functionality
 				through annotations.  
-			However, the <code>BeanTransform</code> class allows you to provide the same features when you do
+			However, the <code>BeanFilter</code> class allows you to provide the same features when you do
 				not have access to the source code.
 		<p>
 		<h5 class='topic'>Examples</h5>
@@ -128,13 +128,13 @@
 		<h6 class='topic'>Explicitly specify which properties are visible on a bean class</h6>
 		<p class='bcode'>
 	<jc>// Define transform that orders properties by "age" then "name"</jc>
-	<jk>public class</jk> MyTransform <jk>extends</jk> BeanTransform&lt;Person&gt; {
-		<jk>public</jk> MyTransform() {
+	<jk>public class</jk> MyBeanFilter <jk>extends</jk> BeanFilter&lt;Person&gt; {
+		<jk>public</jk> MyBeanFilter() {
 			setProperties(<js>"age"</js>,<js>"name"</js>);
 		}
 	}
 	
-	WriterSerializer s = <jk>new</jk> JsonSerializer().addTransforms(MyTransform.<jk>class</jk>);
+	WriterSerializer s = <jk>new</jk> JsonSerializer().addTransforms(MyBeanFilter.<jk>class</jk>);
 	Person p = getPerson();
 	String json = s.serialize(p);  <jc>// Prints "{age:45,name:'John Smith'}"</jc>
 		</p>
@@ -151,13 +151,13 @@
 		<h6 class='topic'>Exclude which properties are visible on a bean class</h6>
 		<p class='bcode'>
 	<jc>// Define transform that excludes "name"</jc>
-	<jk>public class</jk> MyTransform <jk>extends</jk> BeanTransform&lt;Person&gt; {
-		<jk>public</jk> MyTransform() {
+	<jk>public class</jk> MyBeanFilter <jk>extends</jk> BeanFilter&lt;Person&gt; {
+		<jk>public</jk> MyBeanFilter() {
 			setExcludeProperties(<js>"name"</js>);
 		}
 	}
 	
-	WriterSerializer s = <jk>new</jk> JsonSerializer().addTransforms(MyTransform.<jk>class</jk>);
+	WriterSerializer s = <jk>new</jk> JsonSerializer().addTransforms(MyBeanFilter.<jk>class</jk>);
 	Person p = getPerson();
 	String json = s.serialize(p);  <jc>// Prints "{age:45}"</jc>
 		</p>
@@ -174,8 +174,8 @@
 		<h6 class='topic'>Define specialized property namers</h6>
 		<p class='bcode'>
 	<jc>// Define transform with our own property namer.</jc>
-	<jk>public class</jk> MyTransform <jk>extends</jk> BeanTransform&lt;Person&gt; {
-		<jk>public</jk> MyTransform() {
+	<jk>public class</jk> MyBeanFilter <jk>extends</jk> BeanFilter&lt;Person&gt; {
+		<jk>public</jk> MyBeanFilter() {
 			setPropertyNamer(UpperCasePropertyNamer.<jk>class</jk>);
 		}
 	}
@@ -190,12 +190,12 @@
 	}
 	
 	<jc>// Serialize to JSON</jc>
-	WriterSerializer s = <jk>new</jk> JsonSerializer().addTransforms(MyTransform.<jk>class</jk>);
+	WriterSerializer s = <jk>new</jk> JsonSerializer().addTransforms(MyBeanFilter.<jk>class</jk>);
 	Person person = getPerson();
 	String json = s.serialize(p);  <jc>// Prints "{AGE:45,NAME:'John Smith'}"</jc>
 	
 	<jc>// Parse back into bean</jc>
-	ReaderParser p = <jk>new</jk> JsonParser().addTransforms(MyTransform.<jk>class</jk>);
+	ReaderParser p = <jk>new</jk> JsonParser().addTransforms(MyBeanFilter.<jk>class</jk>);
 	person = p.parse(json, Person.class); <jc>// Read back into original object</jc>
 		</p>
 		<p>
@@ -238,8 +238,8 @@
 		</p>		
 		<p class='bcode'>
 	<jc>// Define transform with our own property namer.</jc>
-	<jk>public class</jk> MyClassTransform <jk>extends</jk> BeanTransform&lt;MyClass&gt; {
-		<jk>public</jk> MyClassTransform() {
+	<jk>public class</jk> MyBeanFilter <jk>extends</jk> BeanFilter&lt;MyClass&gt; {
+		<jk>public</jk> MyBeanFilter() {
 			setSubTypeProperty(<js>"subType"</js>);
 			addSubType(MyClassBar.<jk>class</jk>, <js>"BAR"</js>);
 			addSubType(MyClassBaz.<jk>class</jk>, <js>"BAZ"</js>);
@@ -252,12 +252,12 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Serialize to JSON</jc>
-	WriterSerializer s = <jk>new</jk> JsonSerializer().addTransforms(MyClassTransform.<jk>class</jk>);
+	WriterSerializer s = <jk>new</jk> JsonSerializer().addTransforms(MyBeanFilter.<jk>class</jk>);
 	MyClass c = <jk>new</jk> MyClassBar();
 	String json = s.serialize(p);  <jc>// Prints "{subType:'BAR',foo:'foo',bar:'bar'}"</jc>
 	
 	<jc>// Parse back into bean</jc>
-	ReaderParser p = <jk>new</jk> JsonParser().addTransforms(MyClassTransform.<jk>class</jk>);
+	ReaderParser p = <jk>new</jk> JsonParser().addTransforms(MyBeanFilter.<jk>class</jk>);
 	c = p.parse(json, MyClass.<jk>class</jk>); <jc>// c is an instance of MyClassBar</jc>
 		</p>	
 		<p>
@@ -290,7 +290,7 @@
 				<code>HttpServletRequest</code> and <code>HttpServletResponse</code>.
 			However, we really only want to serialize the properties defined on those specific APIs, not 
 				vendor-specific methods on the instances of those classes.
-			This can be done through the <code>interfaceClass</code> property of a bean transform.
+			This can be done through the <code>interfaceClass</code> property of a bean filter.
 		</p>
 		<p>
 			For example, let's define the following parent class and subclass:
@@ -312,8 +312,8 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Define transform that limits properties to only those defined on MyClass</jc>
-	<jk>public class</jk> MyClassTransform <jk>extends</jk> BeanTransform&lt;MyClass&gt; {
-		<jk>public</jk> MyClassTransform() {
+	<jk>public class</jk> MyBeanFilter <jk>extends</jk> BeanFilter&lt;MyClass&gt; {
+		<jk>public</jk> MyBeanFilter() {
 			setInterfaceClass(MyClass.<jk>class</jk>);
 		}
 	}
@@ -323,7 +323,7 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Serialize to JSON</jc>
-	WriterSerializer s = <jk>new</jk> JsonSerializer().addTransforms(MyClassTransform.<jk>class</jk>);
+	WriterSerializer s = <jk>new</jk> JsonSerializer().addTransforms(MyBeanFilter.<jk>class</jk>);
 	MyClass c = <jk>new</jk> MyClassBar();
 	String json = s.serialize(p);  <jc>// Prints "{foo:'foo'}"</jc>
 		</p>	
@@ -348,7 +348,7 @@
 		<p>
 			Also, the <code>addTransforms(...)</code> methods will automatically interpret any non-<code>Transform</code> classes
 				passed in as meaning interface classes.  
-			So in the previous example, the <code>BeanTransform</code> class could have been avoided altogether by just 
+			So in the previous example, the <code>BeanFilter</code> class could have been avoided altogether by just 
 				passing in <code>MyClass.<jk>class</jk></code> to the serializer, like so:
 		</p>
 		<p class='bcode'>
@@ -409,40 +409,40 @@
 	</div>
 
 	<!-- ======================================================================================================== -->
-	<a id="PojoTransforms"></a>
-	<h3 class='topic' onclick='toggle(this)'>1.2 - PojoTransform Class</h3>
+	<a id="PojoSwaps"></a>
+	<h3 class='topic' onclick='toggle(this)'>1.2 - PojoSwap Class</h3>
 	<div class='topic'>
 		<p>
-			{@link org.apache.juneau.transform.PojoTransform PojoTransforms} are a critical component of the Juneau architecture.  
+			{@link org.apache.juneau.transform.PojoSwap PojoSwaps} are a critical component of the Juneau architecture.  
 			They allow the Juneau serializers and parsers to be extended to handle virtually any kind of Java object. 
 		</p>
 		<p>
 			As explained in the overview, Juneau has built-in support for serializing and parsing specific kinds of objects, like primitive objects, bean, maps, collections, and arrays.  
 			Other kinds of POJOs, such as {@code Date} objects, cannot be serialized properly, since they are not true beans.  
-			This is where <code>PojoTransforms</code> come into play.
+			This is where <code>PojoSwaps</code> come into play.
 		</p>
 		<p>
-			The purpose of an <code>PojoTransform</code> is to convert a non-serializable object to a serializable surrogate form during serialization, and to optionally convert that surrogate form back into the original object during parsing.
+			The purpose of an <code>PojoSwap</code> is to convert a non-serializable object to a serializable surrogate form during serialization, and to optionally convert that surrogate form back into the original object during parsing.
 		</p>
 		<p>
 			For example, the following transform can be used to convert {@link java.util.Date} objects to ISO8601 strings during serialization, and {@link java.util.Date} objects from ISO8601 string during parsing:
 		</p>
 		<p class='bcode'>
 	<jc>// Sample transform for converting Dates to ISO8601 strings.</jc>
-	<jk>public class</jk> MyDateTransform <jk>extends</jk> PojoTransform&lt;Date,String&gt; {
+	<jk>public class</jk> MyDateSwap <jk>extends</jk> PojoSwap&lt;Date,String&gt; {
 		
 		<jc>// ISO8601 formatter.</jc>
 		<jk>private</jk> DateFormat <jf>format</jf> = <jk>new</jk> SimpleDateFormat(<js>"yyyy-MM-dd'T'HH:mm:ssZ"</js>);
 		
 		<jd>/** Converts a Date object to an ISO8601 string. */</jd>
 		<ja>@Override</ja>
-		<jk>public</jk> String transform(Date o) {
+		<jk>public</jk> String swap(Date o) {
 			<jk>return</jk> <jf>format</jf>.format(o);
 		}
 		
 		<jd>/** Converts an ISO8601 string to a Date object. */</jd>
 		<ja>@Override</ja>
-		<jk>public</jk> Date normalize(String o, ClassMeta&lt;?&gt; hint) <jk>throws</jk> ParseException {
+		<jk>public</jk> Date unswap(String o, ClassMeta&lt;?&gt; hint) <jk>throws</jk> ParseException {
 			<jk>try</jk> {
 				<jk>return</jk> <jf>format</jf>.parse(o);
 			} <jk>catch</jk> (java.text.ParseException e) {
@@ -461,11 +461,11 @@
 	}
 
 	<jc>// Create a new JSON serializer, associate our date transform with it, and serialize a sample bean.</jc>
-	Serializer serializer = <jk>new</jk> JsonSerializer().addTransforms(MyDateTransform.<jk>class</jk>);
+	Serializer serializer = <jk>new</jk> JsonSerializer().addTransforms(MyDateSwap.<jk>class</jk>);
 	String json = serializer.serialize(<jk>new</jk> MyBean());	<jc>// == "{date:'2012-03-03T04:05:06-0500'}"</jc>
 	
 	<jc>// Create a JSON parser, associate our date transform with it, and reconstruct our bean (including the date).</jc>
-	ReaderParser parser = <jk>new</jk> JsonParser().addTransforms(MyDateTransform.<jk>class</jk>);
+	ReaderParser parser = <jk>new</jk> JsonParser().addTransforms(MyDateSwap.<jk>class</jk>);
 	MyBean bean = parser.parse(json, MyBean.<jk>class</jk>);
 	<jk>int</jk> day = bean.<jf>date</jf>.getDay(); 						<jc>// == 3</jc>
 		</p>
@@ -474,7 +474,7 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Create a new bean context and add our transform.</jc>
-	BeanContext beanContext = <jk>new</jk> BeanContext().addTransforms(MyDateTransform.<jk>class</jk>);
+	BeanContext beanContext = <jk>new</jk> BeanContext().addTransforms(MyDateSwap.<jk>class</jk>);
 
 	<jc>// Create a new bean.</jc>
 	MyBean myBean = <jk>new</jk> MyBean();
@@ -492,13 +492,13 @@
 	<jk>int</jk> year = myBean.<jf>date</jf>.getYear(); 								<jc>// == 113</jc>
 		</p>
 		<p>
-			Another example of a <code>PojoTransform</code> is one that converts <code><jk>byte</jk>[]</code> arrays to BASE64-encoded strings:
+			Another example of a <code>PojoSwap</code> is one that converts <code><jk>byte</jk>[]</code> arrays to BASE64-encoded strings:
 		</p>
 		<p class='bcode'>
-	<jk>public class</jk> ByteArrayBase64Transform <jk>extends</jk> PojoTransform&lt;<jk>byte</jk>[],String&gt; {
+	<jk>public class</jk> ByteArrayBase64Swap <jk>extends</jk> PojoSwap&lt;<jk>byte</jk>[],String&gt; {
 	
 		<ja>@Override</ja>
-		<jk>public</jk> String transform(<jk>byte</jk>[] b) <jk>throws</jk> SerializeException {
+		<jk>public</jk> String swap(<jk>byte</jk>[] b) <jk>throws</jk> SerializeException {
 			<jk>try</jk> {
 				ByteArrayOutputStream baos = <jk>new</jk> ByteArrayOutputStream();
 				OutputStream b64os = MimeUtility.encode(baos, <js>"base64"</js>);
@@ -511,7 +511,7 @@
 		}
 		
 		<ja>@Override</ja>
-		<jk>public byte</jk>[] normalize(String s, ClassMeta&lt;?&gt; hint) <jk>throws</jk> ParseException {
+		<jk>public byte</jk>[] unswap(String s, ClassMeta&lt;?&gt; hint) <jk>throws</jk> ParseException {
 			<jk>try</jk> {
 				<jk>byte</jk>[] b = s.getBytes();
 				ByteArrayInputStream bais = <jk>new</jk> ByteArrayInputStream(b);
@@ -532,8 +532,8 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Create a JSON serializer and register the BASE64 encoding transform with it.</jc>
-	Serializer serializer = <jk>new</jk> JsonSerializer().addTransforms(ByteArrayBase64Transform.<jk>class</jk>);
-	ReaderParser parser = <jk>new</jk> JsonParser().addTransforms(ByteArrayBase64Transform.<jk>class</jk>);
+	Serializer serializer = <jk>new</jk> JsonSerializer().addTransforms(ByteArrayBase64Swap.<jk>class</jk>);
+	ReaderParser parser = <jk>new</jk> JsonParser().addTransforms(ByteArrayBase64Swap.<jk>class</jk>);
 	
 	<jk>byte</jk>[] a1 = {1,2,3};
 	String s1 = serializer.serialize(a1);		<jc>// Produces "'AQID'"</jc>
@@ -548,13 +548,13 @@
 			The following are a list of out-of-the-box transforms:
 		</p>
 		<ul class='spaced-list'>
-			<li>{@link org.apache.juneau.transforms.ByteArrayBase64Transform} - Converts byte arrays to BASE64 encoded strings.
-			<li>{@link org.apache.juneau.transforms.CalendarTransform} - Transforms for converting <code>Calendar</code> objects to various date format strings.
-			<li>{@link org.apache.juneau.transforms.DateTransform} - Transforms for converting <code>Date</code> objects to various date format strings.
-			<li>{@link org.apache.juneau.transforms.EnumerationTransform} - Transforms for converting <code>Enumeration</code> objects to arrays.
-			<li>{@link org.apache.juneau.transforms.IteratorTransform} - Transforms for converting <code>Iterator</code> objects to arrays.
-			<li>{@link org.apache.juneau.transforms.ReaderTransform} - Transforms for converting <code>Readers</code> to objects before serialization.
-			<li>{@link org.apache.juneau.transforms.XMLGregorianCalendarTransform} - Transforms for converting <code>XMLGregorianCalendar</code> objects to ISO8601 strings.
+			<li>{@link org.apache.juneau.transforms.ByteArrayBase64Swap} - Converts byte arrays to BASE64 encoded strings.
+			<li>{@link org.apache.juneau.transforms.CalendarSwap} - Transforms for converting <code>Calendar</code> objects to various date format strings.
+			<li>{@link org.apache.juneau.transforms.DateSwap} - Transforms for converting <code>Date</code> objects to various date format strings.
+			<li>{@link org.apache.juneau.transforms.EnumerationSwap} - Transforms for converting <code>Enumeration</code> objects to arrays.
+			<li>{@link org.apache.juneau.transforms.IteratorSwap} - Transforms for converting <code>Iterator</code> objects to arrays.
+			<li>{@link org.apache.juneau.transforms.ReaderSwap} - Transforms for converting <code>Readers</code> to objects before serialization.
+			<li>{@link org.apache.juneau.transforms.XMLGregorianCalendarSwap} - Transforms for converting <code>XMLGregorianCalendar</code> objects to ISO8601 strings.
 		</ul>
 		
 		<h6 class='topic'>Valid transformed class types</h6>
@@ -565,23 +565,23 @@
 	
 
 	<!-- ======================================================================================================== -->
-	<a id="PojoTransforms_OneWay"></a>
-	<h3 class='topic' onclick='toggle(this)'>1.3 - One-Way PojoTransforms</h3>
+	<a id="PojoSwaps_OneWay"></a>
+	<h3 class='topic' onclick='toggle(this)'>1.3 - One-Way PojoSwaps</h3>
 	<div class='topic'>
 		<p>
 			In the previous section, we defined two-way transforms, meaning transforms where the original objects could be reconstructing during parsing.  However, there are certain kinds of POJOs that we may want to support for serializing, but that are not possible to reconstruct during parsing.  For these, we can use one-way object transforms.
 		</p>
 		<p>
-			A one-way object transform is simply an object transform that only implements the {@code transform()} method.  The {@code normalize()} method is simply left unimplemented.
+			A one-way object transform is simply an object transform that only implements the {@code swap()} method.  The {@code unswap()} method is simply left unimplemented.
 		</p>
 		<p>
 			An example of a one-way transform would be one that allows {@code Iterators} to be serialized as JSON arrays.  It can make sense to be able to render {@code Iterators} as arrays, but in general it's not possible to reconstruct an {@code Iterator} during parsing. 
 		</p>
 		<p class='bcode'>
-	<jk>public class</jk> IteratorTransform <jk>extends</jk> PojoTransform&lt;Iterator,List&gt; {
+	<jk>public class</jk> IteratorSwap <jk>extends</jk> PojoSwap&lt;Iterator,List&gt; {
 		
 		<ja>@Override</ja>
-		<jk>public</jk> List transform(Iterator o) {
+		<jk>public</jk> List swap(Iterator o) {
 			List l = <jk>new</jk> LinkedList();
 			<jk>while</jk> (o.hasNext())
 				l.add(o.next());
@@ -594,7 +594,7 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Create a JSON serializer that can serialize Iterators.</jc>
-	Serializer serializer = <jk>new</jk> JsonSerializer().addTransforms(IteratorTransform.<jk>class</jk>);
+	Serializer serializer = <jk>new</jk> JsonSerializer().addTransforms(IteratorSwap.<jk>class</jk>);
 	
 	<jc>// Construct an iterator we want to serialize.</jc>
 	Iterator iterator = <jk>new</jk> ObjectList(1,2,3).iterator();
@@ -603,7 +603,7 @@
 	String s = serializer.serialize(iterator);		<jc>// Produces "[1,2,3]"</jc>
 	
 	<jc>// Try to parse it.</jc>
-	ReaderParser parser = <jk>new</jk> JsonParser().addTransforms(IteratorTransform.<jk>class</jk>);
+	ReaderParser parser = <jk>new</jk> JsonParser().addTransforms(IteratorSwap.<jk>class</jk>);
 	iterator = parser.parse(s, Iterator.<jk>class</jk>);		<jc>// Throws ParseException!!!</jc>
 		</p>
 	</div>
@@ -636,8 +636,8 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Define transform that limits properties to only those defined on MyClass</jc>
-	<jk>public class</jk> MyClassTransform <jk>extends</jk> BeanTransform&lt;MyClass&gt; {
-		<jk>public</jk> MyClassTransform() {
+	<jk>public class</jk> MyBeanFilter <jk>extends</jk> BeanFilter&lt;MyClass&gt; {
+		<jk>public</jk>  MyBeanFilter() {
 			setInterfaceClass(MyClass.<jk>class</jk>);
 		}
 	}
@@ -647,7 +647,7 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Serialize to JSON</jc>
-	WriterSerializer s = <jk>new</jk> JsonSerializer().addTransforms(MyClassTransform.<jk>class</jk>);
+	WriterSerializer s = <jk>new</jk> JsonSerializer().addTransforms(MyBeanFilter.<jk>class</jk>);
 	MyClass c = <jk>new</jk> MyClassBar();
 	String json = s.serialize(p);  <jc>// Prints "{foo:'foo'}"</jc>
 		</p>	
@@ -671,7 +671,7 @@
 		</p>
 		<p>
 			Also, the <code>addTransforms()</code> methods will automatically interpret any non-Transform classes passed in as meaning interface classes. 
-			So in the previous example, the <code>BeanTransform</code> class could have been avoided altogether by just passing in <code>MyClass.<jk>class</jk></code> to the serializer, like so:
+			So in the previous example, the <code>BeanFilter</code> class could have been avoided altogether by just passing in <code>MyClass.<jk>class</jk></code> to the serializer, like so:
 		</p>
 		<p class='bcode'>
 	<jc>// Serialize to JSON</jc>
@@ -684,7 +684,7 @@
 	<h3 class='topic' onclick='toggle(this)'>1.5 - Surrogate Classes</h3>
 	<div class='topic'>
 		<p>
-			Surrogate classes are very similar in concept to one-way <code>PojoTransforms</code> except they represent a simpler syntax.
+			Surrogate classes are very similar in concept to one-way <code>PojoSwaps</code> except they represent a simpler syntax.
 		</p>
 		<p>
 			For example, let's say we want to be able to serialize the following class, but it's not serializable for some reason (for example, there are no
@@ -695,17 +695,17 @@
 	}
 		</p>
 		<p>
-			This could be solved with the following <code>PojoTransform</code>.
+			This could be solved with the following <code>PojoSwap</code>.
 		</p>
 		<p class='bcode'>
 	<jk>public class</jk> MySerializableSurrogate {
 		<jk>public</jk> String <jf>foo</jf>;
 	}
 		
-	<jk>public class</jk> MyTransform <jk>extends</jk> PojoTransform&lt;MyNonSerializableClass,MySerializableSurrogate&gt; {
+	<jk>public class</jk> MySwap <jk>extends</jk> PojoSwap&lt;MyNonSerializableClass,MySerializableSurrogate&gt; {
 		
 		<ja>@Override</ja>
-		<jk>public</jk> MySerializableSurrogate transform(MyNonSerializableClass o) {
+		<jk>public</jk> MySerializableSurrogate swap(MyNonSerializableClass o) {
 			MySerializableSurrogate s = <jk>new</jk> MySerializableSurrogate();
 			s.<jf>foo</jf> = o.<jf>foo</jf>;
 			<jk>return</jk> s;

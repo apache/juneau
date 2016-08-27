@@ -10,30 +10,30 @@
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations under the License.
  ***************************************************************************************************************************/
-package org.apache.juneau.transforms;
+package org.apache.juneau.transform;
 
 import org.apache.juneau.*;
-import org.apache.juneau.transform.*;
+
 
 /**
- * Transforms beans into {@link String Strings} by simply calling the {@link Object#toString()} method.
+ * Simple bean filter that simply identifies a class to be used as an interface
+ * 	class for all child classes.
  * <p>
- * 	Allows you to specify classes that should just be converted to {@code Strings} instead of potentially
- * 	being turned into Maps by the {@link BeanContext} (or worse, throwing {@link BeanRuntimeException BeanRuntimeExceptions}).
- * <p>
- * 	This is usually a one-way transform.
- * 	Beans serialized as strings cannot be reconstituted using a parser unless it is a <a class='doclink' href='../package-summary.html#PojoCategories'>Type 5 POJO</a>.
+ * 	These objects are created when you pass in non-<code>Transform</code> classes to {@link ContextFactory#addToProperty(String,Object)},
+ * 		and are equivalent to adding a <code><ja>@Bean</ja>(interfaceClass=Foo.<jk>class</jk>)</code> annotation on the <code>Foo</code> class.
  *
  * @author James Bognar (james.bognar@salesforce.com)
- * @param <T> The class type of the bean.
+ * @param <T> The class type that this transform applies to.
  */
-public class BeanStringTransform<T> extends PojoTransform<T,String> {
+public class InterfaceBeanFilter<T> extends BeanFilter<T> {
 
 	/**
-	 * Converts the specified bean to a {@link String}.
+	 * Constructor.
+	 *
+	 * @param interfaceClass The class to use as an interface on all child classes.
 	 */
-	@Override /* PojoTransform */
-	public String transform(T o) {
-		return o.toString();
+	public InterfaceBeanFilter(Class<T> interfaceClass) {
+		super(interfaceClass);
+		setInterfaceClass(interfaceClass);
 	}
 }
