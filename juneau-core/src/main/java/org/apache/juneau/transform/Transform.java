@@ -77,26 +77,11 @@ public class Transform {
 	}
 
 	/**
-	 * Returns the implementation class.
-	 * Useful for debugging when calling {@link BeanContext#toString()}.
-	 *
-	 * @return The implementation class of this transform.
-	 */
-	public Class<?> getImplClass() {
-		return this.getClass();
-	}
-
-	/**
 	 * Returns whether this is an instance of {@link PojoSwap} or {@link BeanFilter}.
 	 *
 	 * @return The transform type.
 	 */
 	public TransformType getType() {
 		return type;
-	}
-
-	@Override /* Object */
-	public int hashCode() {
-		return getClass().getName().hashCode() + forClass().getName().hashCode();
 	}
 }
