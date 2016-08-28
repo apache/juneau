@@ -4727,7 +4727,7 @@
 				</ul>
 			<li>Refactored var resolver API and added them to a new package - {@link org.apache.juneau.svl}.
 				<ul>
-					<li>Support for stream-based variables - {@link org.apache.juneau.svl.StreamVar}.
+					<li>Support for stream-based variables - {@link org.apache.juneau.svl.StreamedVar}.
 					<li>Added support for context and session objects.
 				</ul>
 			<li>{@link org.apache.juneau.msgpack MessagePack} support.
@@ -4778,7 +4778,7 @@
 				<ul>
 					<li>{@link org.apache.juneau.ClassMetaExtended} / {@link org.apache.juneau.ClassMeta#getExtendedMeta(Class)} 
 					<li>{@link org.apache.juneau.BeanMetaExtended} / {@link org.apache.juneau.BeanMeta#getExtendedMeta(Class)} 
-					<li>{@link org.apache.juneau.BeanPropertyMetaExtended} / {@link org.apache.juneau.BeanPropertyMetaMeta#getExtendedMeta(Class)} 
+					<li>{@link org.apache.juneau.BeanPropertyMetaExtended} / {@link org.apache.juneau.BeanPropertyMeta#getExtendedMeta(Class)} 
 				</ul>
 			</li>
 			<li>Renamed <code>@Transform</code> annotation to {@link org.apache.juneau.annotation.Pojo @Pojo} so that it can be used for various POJO-related behavior, not just associating transforms.  
@@ -4791,7 +4791,6 @@
 			<li>New/updated methods on {@link org.apache.juneau.server.RestServlet}:
 				<ul>
 					<li>{@link org.apache.juneau.server.RestServlet#createProperties()}
-					<li>{@link org.apache.juneau.server.RestServlet#createTransforms()}
 					<li>{@link org.apache.juneau.server.RestServlet#createBeanContext(ObjectMap,Class[],Class[])}
 					<li>{@link org.apache.juneau.server.RestServlet#createBeanFilters()}
 					<li>{@link org.apache.juneau.server.RestServlet#createPojoSwaps()}
@@ -6534,7 +6533,7 @@
 				<ul>
 					<li>Updated {@link org.apache.juneau.transform.BeanFilter} class to mirror the {@link org.apache.juneau.annotation.Bean @Bean} annotation.</li>
 					<li>Introduced support for bean {@link org.apache.juneau.annotation.Bean#subTypeProperty() subtypes}. </li>
-					<li>Replaced <code><ja>@Bean</ja>(filter=xxx)</code> with new {@link org.apache.juneau.annotation.Transform @Transform} annotation.</li>
+					<li>Replaced <code><ja>@Bean</ja>(filter=xxx)</code> with new <del><code>@Transform</code></del> annotation.</li>
 				</ul>
 			</li>
 			<li>
@@ -7562,8 +7561,8 @@
 			</li>
 			<li>
 				Simplified Filter API for handling non-standard POJOs.<br>
-				The API for handling non-standard POJOs has been simplified by introducing the concept of a {@link org.apache.juneau.transform.Transform} class, which is associated with the <code>BeanContext</code> class (and thus the Serializer and Parser classes too) through the <code>BeanContext.addTransforms(Class[])</code> method.<br>
-				Two new subclasses of {@link org.apache.juneau.transform.Transform}:
+				The API for handling non-standard POJOs has been simplified by introducing the concept of a <del><code>Transform</code></del> class, which is associated with the <code>BeanContext</code> class (and thus the Serializer and Parser classes too) through the <code>BeanContext.addTransforms(Class[])</code> method.<br>
+				Two new subclasses of <del><code>Transform</code></del>:
 				<ul>
 					<li>{@link org.apache.juneau.transform.BeanFilter} - Filter POJO beans.</li>
 					<li>{@link org.apache.juneau.transform.PojoSwap} - Filter POJOs that aren't beans.</li>

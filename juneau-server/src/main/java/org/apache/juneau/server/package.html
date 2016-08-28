@@ -1334,7 +1334,7 @@
 		<ul class='javahierarchy'>
 			<li class='n'>{@link org.apache.juneau.server.annotation.RestResource#serializers() @RestResource.serializers()} - Annotation on servlet class.
 			<li class='n'>{@link org.apache.juneau.server.annotation.RestMethod#serializers() @RestMethod.serializers()} - Annotation on individual servlet methods.
-			<li class='m'>{@link org.apache.juneau.server.RestServlet#createSerializers(ObjectMap,Class[])} - Override method to set the serializers programmatically.
+			<li class='m'>{@link org.apache.juneau.server.RestServlet#createSerializers(ObjectMap,Class[],Class[])} - Override method to set the serializers programmatically.
 		</ul>
 		<p>
 			The following are equivalent ways of defining serializers used by a servlet...
@@ -1356,9 +1356,9 @@
  		...
 	}
 
-	<jc>// Example #3 - Serializers defined on servlet by overriding the createSerializers(ObjectMap,Class[]) method</jc>
+	<jc>// Example #3 - Serializers defined on servlet by overriding the createSerializers(ObjectMap,Class[],Class[]) method</jc>
 	<ja>@Override</ja>
-	<jk>public</jk> SerializerGroup createSerializers(ObjectMap,Class[]) {
+	<jk>public</jk> SerializerGroup createSerializers(ObjectMap,Class[],Class[]) {
 
  		SerializerGroup g = <jk>new</jk> SerializerGroup()
  			.append(JsonSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>);
@@ -1395,7 +1395,7 @@
 		<ul class='javahierarchy'>
 			<li class='n'>{@link org.apache.juneau.server.annotation.RestResource#parsers() @RestResource.parsers()} - Annotation on servlet class.
 			<li class='n'>{@link org.apache.juneau.server.annotation.RestMethod#parsers() @RestMethod.parsers()} - Annotation on individual servlet methods.
-			<li class='m'>{@link org.apache.juneau.server.RestServlet#createParsers(ObjectMap,Class[])} - Override method to set the parsers programmatically.
+			<li class='m'>{@link org.apache.juneau.server.RestServlet#createParsers(ObjectMap,Class[],Class[])} - Override method to set the parsers programmatically.
 		</ul>
 		<p>
 			The following are equivalent ways of defining parsers used by a servlet...
@@ -1513,8 +1513,8 @@
 		</p>
 		<ul class='spaced-list'>
 			<li>By overriding the {@link org.apache.juneau.server.RestServlet#createProperties()} method.
-			<li>By overriding the {@link org.apache.juneau.server.RestServlet#createSerializers(ObjectMap,Class[])} and 
-				{@link org.apache.juneau.server.RestServlet#createParsers(ObjectMap,Class[])} methods and setting properties on the 
+			<li>By overriding the {@link org.apache.juneau.server.RestServlet#createSerializers(ObjectMap,Class[],Class[])} and 
+				{@link org.apache.juneau.server.RestServlet#createParsers(ObjectMap,Class[],Class[])} methods and setting properties on the 
 				serializers and parsers directly.
 			
 		</ul>
@@ -1564,8 +1564,9 @@
 	}
 		</p>
 		<p>
-			{@link org.apache.juneau.server.annotation.RestMethod#transforms() @RestMethod.transforms()}
-				is the equivalent annotation for individual Java methods.
+			{@link org.apache.juneau.server.annotation.RestMethod#beanFilters() @RestMethod.beanFilters()} and 
+				{@link org.apache.juneau.server.annotation.RestMethod#pojoSwaps() @RestMethod.pojoSwaps()}
+				are the equivalent annotations for individual Java methods.
 		</p>
 		<p>
 			Transforms can also be defined programmatically through the following:
@@ -1580,7 +1581,7 @@
 		<h6 class='topic'>Additional Information</h6>
 		<ul class='javahierarchy'>
 			<li class='n'>{@link org.apache.juneau.server.annotation.RestMethod#serializersInherit @RestMethod.serializersInherit()} 
-				<br>Controls how serializers inherit transforms from the servlet class.
+				<br>Controls how serializers inherit transforms (bean filters and POJO swaps) from the servlet class.
 			<li class='n'>{@link org.apache.juneau.server.annotation.RestMethod#parsersInherit @RestMethod.parsersInherit()} 
 				<br>Controls how parsers inherit transforms from the servlet class.
 		</ul>

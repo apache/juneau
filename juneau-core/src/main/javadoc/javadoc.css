@@ -657,6 +657,6 @@ h1.hidden {
 	font-weight: bold;
 }
 
-@import url('juneau-code.css');
-@import url('juneau-doc.css');
+@import url('resources/juneau-code.css');
+@import url('resources/juneau-doc.css');
 
