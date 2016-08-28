@@ -35,7 +35,7 @@ import org.apache.juneau.xml.annotation.*;
  * 	<li>Identify a specific subclass for a property with a general class type.
  * 	<li>Identify class types of elements in properties of type <code>Collection</code> or <code>Map</code>.
  * 	<li>Hide properties during serialization.
- * 	<li>Associate transforms with bean property values, such as a transform to convert a <code>Calendar</code> field to a string.
+ * 	<li>Associate transforms with bean property values, such as a POJO swap to convert a <code>Calendar</code> field to a string.
  * 	<li>Override the list of properties during serialization on child elements of a property of type <code>Collection</code> or <code>Map</code>.
  * 	<li>Identify a property as the URL for a bean.
  * 	<li>Identify a property as the ID for a bean.
@@ -127,7 +127,7 @@ public @interface BeanProperty {
 	 * 	<jk>public class</jk> MyClass {
 	 *
 	 * 		<jc>// During serialization, convert to ISO8601 date-time string.</jc>
-	 * 		<ja>@BeanProperty</ja>(transform=CalendarSwap.ISO8601DT.<jk>class</jk>)
+	 * 		<ja>@BeanProperty</ja>(pojoSwap=CalendarSwap.ISO8601DT.<jk>class</jk>)
 	 * 		<jk>public</jk> Calendar getTime();
 	 * 	}
 	 * 		</p>

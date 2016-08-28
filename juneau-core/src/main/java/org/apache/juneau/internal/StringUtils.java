@@ -495,6 +495,26 @@ public final class StringUtils {
 	}
 
 	/**
+	 * Same as {@link #split(String, char)} except splits all strings in the input and returns a single result.
+	 *
+	 * @param s The string to split.  Can be <jk>null</jk>.
+	 * @param c The character to split on.
+	 * @return The tokens.
+	 */
+	public static String[] split(String[] s, char c) {
+		if (s == null)
+			return null;
+		List<String> l = new LinkedList<String>();
+		for (String ss : s) {
+			if (ss == null || ss.indexOf(c) == -1)
+				l.add(ss);
+			else
+				l.addAll(Arrays.asList(split(ss, c)));
+		}
+		return l.toArray(new String[l.size()]);
+	}
+
+	/**
 	 * Returns <jk>true</jk> if specified string is <jk>null</jk> or empty.
 	 *
 	 * @param s The string to check.

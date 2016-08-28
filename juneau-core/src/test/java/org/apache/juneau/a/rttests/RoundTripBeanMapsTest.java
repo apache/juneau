@@ -523,7 +523,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	}
 	public static class D2Filter extends BeanFilter<D2> {
 		public D2Filter() {
-			setProperties("f3","f2");
+			super("f3","f2");
 		}
 	}
 
@@ -585,7 +585,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	}
 	public static class E2Filter extends BeanFilter<E2> {
 		public E2Filter() {
-			setExcludeProperties("f2");
+			super(null, null, new String[]{"f2"}, null, null, false, null);
 		}
 	}
 
@@ -677,12 +677,12 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	}
 	public static class FB1Filter extends BeanFilter<FB1> {
 		public FB1Filter() {
-			setInterfaceClass(FB1.class);
+			super(FB1.class);
 		}
 	}
 	public static class FB2Filter extends BeanFilter<FB2> {
 		public FB2Filter() {
-			setInterfaceClass(FB1.class);
+			super(FB1.class);
 		}
 	}
 

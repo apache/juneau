@@ -55,14 +55,14 @@ public final class ClassMeta<T> implements Type {
 		MAP, COLLECTION, CLASS, NUMBER, DECIMAL, BOOLEAN, CHAR, DATE, ARRAY, ENUM, BEAN, UNKNOWN, OTHER, CHARSEQ, STR, OBJ, URI, BEANMAP, READER, INPUTSTREAM
 	}
 
-	final BeanContext beanContext;                      // The bean context that created this object.
+	final BeanContext beanContext;                    // The bean context that created this object.
 	ClassCategory classCategory = UNKNOWN;            // The class category.
 	final Class<T> innerClass;                        // The class being wrapped.
 	ClassMeta<?>
-		serializedClassMeta,                             // The transformed class type (in class has transform associated with it.
-		elementType = null,                            // If ARRAY or COLLECTION, the element class type.
-		keyType = null,                                // If MAP, the key class type.
-		valueType = null;                              // If MAP, the value class type.
+		serializedClassMeta,                          // The transformed class type (if class has swap associated with it).
+		elementType = null,                           // If ARRAY or COLLECTION, the element class type.
+		keyType = null,                               // If MAP, the key class type.
+		valueType = null;                             // If MAP, the value class type.
 	InvocationHandler invocationHandler;              // The invocation handler for this class (if it has one).
 	volatile BeanMeta<T> beanMeta;                    // The bean meta for this bean class (if it's a bean).
 	Method fromStringMethod;                          // The static valueOf(String) or fromString(String) method (if it has one).
@@ -75,17 +75,17 @@ public final class ClassMeta<T> implements Type {
 	Method namePropertyMethod;                        // The method to set the name on an object (if it has one).
 	Method parentPropertyMethod;                      // The method to set the parent on an object (if it has one).
 	String notABeanReason;                            // If this isn't a bean, the reason why.
-	PojoSwap<T,?> pojoSwap;                       // The object transform associated with this bean (if it has one).
+	PojoSwap<T,?> pojoSwap;                           // The object POJO swap associated with this bean (if it has one).
 	BeanFilter<? extends T> beanFilter;               // The bean filter associated with this bean (if it has one).
 	boolean
-		isDelegate,                                    // True if this class extends Delegate.
-		isAbstract,                                    // True if this class is abstract.
-		isMemberClass;                                 // True if this is a non-static member class.
+		isDelegate,                                   // True if this class extends Delegate.
+		isAbstract,                                   // True if this class is abstract.
+		isMemberClass;                                // True if this is a non-static member class.
 
 	private MetadataMap extMeta = new MetadataMap();  // Extended metadata
 
 	private Throwable initException;                   // Any exceptions thrown in the init() method.
-	private boolean hasChildPojoSwaps;               // True if this class or any subclass of this class has a PojoSwap associated with it.
+	private boolean hasChildPojoSwaps;                 // True if this class or any subclass of this class has a PojoSwap associated with it.
 	private Object primitiveDefault;                   // Default value for primitive type classes.
 	private Map<String,Method> remoteableMethods,      // Methods annotated with @Remoteable.  Contains all public methods if class is annotated with @Remotable.
 		publicMethods;                                 // All public methods, including static methods.

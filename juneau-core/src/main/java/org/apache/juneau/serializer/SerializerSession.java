@@ -526,7 +526,7 @@ public class SerializerSession extends Session {
 	}
 
 	/**
-	 * Generalize the specified object if a transform is associated with it.
+	 * Generalize the specified object if a POJO swap is associated with it.
 	 *
 	 * @param o The object to generalize.
 	 * @param type The type of object.

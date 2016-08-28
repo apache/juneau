@@ -181,7 +181,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * If there is a {@link PojoSwap} associated with this bean property or bean property type class, then
 	 * 	you must pass in a transformed value.
 	 * For example, if the bean property type class is a {@link Date} and the bean property has the
-	 * 	{@link org.apache.juneau.transforms.DateSwap.ISO8601DT} transform associated with it through the
+	 * 	{@link org.apache.juneau.transforms.DateSwap.ISO8601DT} swap associated with it through the
 	 * 	{@link BeanProperty#swap() @BeanProperty.swap()} annotation, the value being passed in must be
 	 * 	a String containing an ISO8601 date-time string value.
 	 *
@@ -192,7 +192,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * 	<jc>// Construct a bean with a 'birthDate' Date field</jc>
 	 * 	Person p = <jk>new</jk> Person();
 	 *
-	 * 	<jc>// Create a bean context and add the ISO8601 date-time transform</jc>
+	 * 	<jc>// Create a bean context and add the ISO8601 date-time swap</jc>
 	 * 	BeanContext beanContext = <jk>new</jk> BeanContext().addPojoSwaps(DateSwap.ISO8601DT.<jk>class</jk>);
 	 *
 	 * 	<jc>// Wrap our bean in a bean map</jc>
@@ -235,8 +235,8 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 
 			throw new BeanRuntimeException(meta.c, "Bean property ''{0}'' not found.", property);
 		}
-		if (meta.transform != null)
-			if (meta.transform.writeProperty(this.bean, property, value))
+		if (meta.beanFilter != null)
+			if (meta.beanFilter.writeProperty(this.bean, property, value))
 				return null;
 		return p.set(this, value);
 	}
@@ -267,7 +267,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * If there is a {@link PojoSwap} associated with this bean property or bean property type class, then
 	 * 	this method will return the transformed value.
 	 * For example, if the bean property type class is a {@link Date} and the bean property has the
-	 * 	{@link org.apache.juneau.transforms.DateSwap.ISO8601DT} transform associated with it through the
+	 * 	{@link org.apache.juneau.transforms.DateSwap.ISO8601DT} swap associated with it through the
 	 * 	{@link BeanProperty#swap() @BeanProperty.swap()} annotation, this method will return a String
 	 * 	containing an ISO8601 date-time string value.
 	 *
@@ -304,8 +304,8 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 		BeanPropertyMeta p = meta.properties.get(property);
 		if (p == null)
 			return null;
-		if (meta.transform != null && property != null)
-			return meta.transform.readProperty(this.bean, property.toString(), p.get(this));
+		if (meta.beanFilter != null && property != null)
+			return meta.beanFilter.readProperty(this.bean, property.toString(), p.get(this));
 		return p.get(this);
 	}
 

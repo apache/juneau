@@ -23,7 +23,7 @@ import org.apache.juneau.*;
  * 		and are equivalent to adding a <code><ja>@Bean</ja>(interfaceClass=Foo.<jk>class</jk>)</code> annotation on the <code>Foo</code> class.
  *
  * @author James Bognar (james.bognar@salesforce.com)
- * @param <T> The class type that this transform applies to.
+ * @param <T> The class type that this bean filter applies to.
  */
 public class InterfaceBeanFilter<T> extends BeanFilter<T> {
 
@@ -34,6 +34,5 @@ public class InterfaceBeanFilter<T> extends BeanFilter<T> {
 	 */
 	public InterfaceBeanFilter(Class<T> interfaceClass) {
 		super(interfaceClass);
-		setInterfaceClass(interfaceClass);
 	}
 }

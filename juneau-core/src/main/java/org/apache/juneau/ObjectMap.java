@@ -347,21 +347,21 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	}
 
 	/**
-	 * Same as {@link Map#get(Object) get()}, but converts the raw value to the specified class type using the specified transform.
+	 * Same as {@link Map#get(Object) get()}, but converts the raw value to the specified class type using the specified beanFilter.
 	 *
 	 * @param <T> The transformed class type.
-	 * @param transform The transform class used to convert the raw type to a transformed type.
+	 * @param pojoSwap The swap class used to convert the raw type to a transformed type.
 	 * @param key The key.
 	 * @return The value, or <jk>null</jk> if the entry doesn't exist.
-	 * @throws ParseException Thrown by the transform if a problem occurred trying to parse the value.
+	 * @throws ParseException Thrown by the POJO swap if a problem occurred trying to parse the value.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public <T> T get(PojoSwap<T,?> transform, String key) throws ParseException {
+	public <T> T get(PojoSwap<T,?> pojoSwap, String key) throws ParseException {
 		Object o = super.get(key);
 		if (o == null)
 			return null;
-		PojoSwap f = transform;
-		return (T)f.unswap(o, null, beanContext);
+		PojoSwap swap = pojoSwap;
+		return (T)swap.unswap(o, null, beanContext);
 	}
 
 	/**

@@ -111,8 +111,8 @@ public class DataSet {
 						m = beanContext.forBean(o2);
 					for (Column col : columns) {
 						Object v;
-						if (col.transform != null)
-							v = col.transform.swap(o2, beanContext);
+						if (col.pojoSwap != null)
+							v = col.pojoSwap.swap(o2, beanContext);
 						else
 							v = m.get(col.getName());
 						r.add(v == null ? null : v.toString());

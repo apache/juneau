@@ -91,16 +91,17 @@ import org.apache.juneau.serializer.*;
  */
 public abstract class PojoSwap<T,S> {
 
-	Class<T> normalClass;
-	Class<S> swapClass;
-	ClassMeta<S> swapClassMeta;
+	private final Class<T> normalClass;
+	private final Class<S> swapClass;
+	private ClassMeta<S> swapClassMeta;
 
 	/**
 	 * Constructor.
 	 */
 	@SuppressWarnings("unchecked")
 	protected PojoSwap() {
-		super();
+
+		Class<?> t_normalClass = null, t_swapClass = null;
 
 		Class<?> c = this.getClass().getSuperclass();
 		Type t = this.getClass().getGenericSuperclass();
@@ -116,28 +117,31 @@ public abstract class PojoSwap<T,S> {
 			if (pta.length == 2) {
 				Type nType = pta[0];
 				if (nType instanceof Class) {
-					this.normalClass = (Class<T>)nType;
+					t_normalClass = (Class<T>)nType;
 
 				// <byte[],x> ends up containing a GenericArrayType, so it has to
 				// be handled as a special case.
 				} else if (nType instanceof GenericArrayType) {
 					Class<?> cmpntType = (Class<?>)((GenericArrayType)nType).getGenericComponentType();
-					this.normalClass = (Class<T>)Array.newInstance(cmpntType, 0).getClass();
+					t_normalClass = Array.newInstance(cmpntType, 0).getClass();
 
 				// <Class<?>,x> ends up containing a ParameterizedType, so just use the raw type.
 				} else if (nType instanceof ParameterizedType) {
-					this.normalClass = (Class<T>)((ParameterizedType)nType).getRawType();
+					t_normalClass = (Class<T>)((ParameterizedType)nType).getRawType();
 
 				} else
 					throw new RuntimeException("Unsupported parameter type: " + nType);
 				if (pta[1] instanceof Class)
-					this.swapClass = (Class<S>)pta[1];
+					t_swapClass = (Class<S>)pta[1];
 				else if (pta[1] instanceof ParameterizedType)
-					this.swapClass = (Class<S>)((ParameterizedType)pta[1]).getRawType();
+					t_swapClass = (Class<S>)((ParameterizedType)pta[1]).getRawType();
 				else
 					throw new RuntimeException("Unexpected transformed class type: " + pta[1].getClass().getName());
 			}
 		}
+
+		this.normalClass = (Class<T>)t_normalClass;
+		this.swapClass = (Class<S>)t_swapClass;
 	}
 
 	/**
@@ -170,7 +174,7 @@ public abstract class PojoSwap<T,S> {
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	public S swap(T o) throws SerializeException {
-		throw new SerializeException("Generalize method not implemented on transform ''{0}''", this.getClass().getName());
+		throw new SerializeException("Swap method not implemented on PojoSwap ''{0}''", this.getClass().getName());
 	}
 
 	/**
@@ -195,11 +199,11 @@ public abstract class PojoSwap<T,S> {
 	 * @throws ParseException If this method is not implemented.
 	 */
 	public T unswap(S f) throws ParseException {
-		throw new ParseException("Narrow method not implemented on transform ''{0}''", this.getClass().getName());
+		throw new ParseException("Unswap method not implemented on PojoSwap ''{0}''", this.getClass().getName());
 	}
 
 	/**
-	 *	Same as {@link #unswap(Object)}, but override this method if you need access to the real class type or the bean context that created this swap. 
+	 *	Same as {@link #unswap(Object)}, but override this method if you need access to the real class type or the bean context that created this swap.
 	 *
 	 * @param f The transformed object.
 	 * @param hint If possible, the parser will try to tell you the object type being created.  For example,

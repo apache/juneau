@@ -462,7 +462,7 @@ public class StringUtilsTest {
 	public void testSplit() throws Exception {
 		String[] r;
 
-		assertNull(split(null, ','));
+		assertNull(split((String)null, ','));
 		assertObjectEquals("[]", split("", ','));
 		assertObjectEquals("['1']", split("1", ','));
 		assertObjectEquals("['1','2']", split("1,2", ','));

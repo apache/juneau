@@ -80,7 +80,7 @@ public class BeanMeta<T> {
 	protected BeanContext ctx;
 
 	/** Optional bean filter associated with the target class. */
-	protected BeanFilter<? extends T> transform;
+	protected BeanFilter<? extends T> beanFilter;
 
 	/** Type variables implemented by this bean. */
 	protected Map<Class<?>,Class<?>[]> typeVarImpls;
@@ -106,12 +106,12 @@ public class BeanMeta<T> {
 	 *
 	 * @param classMeta The target class.
 	 * @param ctx The bean context that created this object.
-	 * @param transform Optional bean filter associated with the target class.  Can be <jk>null</jk>.
+	 * @param beanFilter Optional bean filter associated with the target class.  Can be <jk>null</jk>.
 	 */
-	protected BeanMeta(final ClassMeta<T> classMeta, BeanContext ctx, org.apache.juneau.transform.BeanFilter<? extends T> transform) {
+	protected BeanMeta(final ClassMeta<T> classMeta, BeanContext ctx, BeanFilter<? extends T> beanFilter) {
 		this.classMeta = classMeta;
 		this.ctx = ctx;
-		this.transform = transform;
+		this.beanFilter = beanFilter;
 		this.classProperty = new BeanPropertyMeta(this, "_class", ctx.string());
 		this.c = classMeta.getInnerClass();
 	}
@@ -145,9 +145,9 @@ public class BeanMeta<T> {
 
 			// If @Bean.interfaceClass is specified on the parent class, then we want
 			// to use the properties defined on that class, not the subclass.
-			Class<?> c2 = (transform != null && transform.getInterfaceClass() != null ? transform.getInterfaceClass() : c);
+			Class<?> c2 = (beanFilter != null && beanFilter.getInterfaceClass() != null ? beanFilter.getInterfaceClass() : c);
 
-			Class<?> stopClass = (transform != null ? transform.getStopClass() : Object.class);
+			Class<?> stopClass = (beanFilter != null ? beanFilter.getStopClass() : Object.class);
 			if (stopClass == null)
 				stopClass = Object.class;
 
@@ -164,7 +164,7 @@ public class BeanMeta<T> {
 				return "Class is annotated with @BeanIgnore";
 
 			// Make sure it's serializable.
-			if (transform == null && ctx.beansRequireSerializable && ! isParentClass(Serializable.class, c))
+			if (beanFilter == null && ctx.beansRequireSerializable && ! isParentClass(Serializable.class, c))
 				return "Class is not serializable";
 
 			// Look for @BeanConstructor constructor.
@@ -188,7 +188,7 @@ public class BeanMeta<T> {
 			if (constructor == null)
 				constructor = (Constructor<T>)ClassMeta.findNoArgConstructor(c, conVis);
 
-			if (constructor == null && transform == null && ctx.beansRequireDefaultConstructor)
+			if (constructor == null && beanFilter == null && ctx.beansRequireDefaultConstructor)
 				return "Class does not have the required no-arg constructor";
 
 			if (! setAccessible(constructor))
@@ -197,15 +197,15 @@ public class BeanMeta<T> {
 			// Explicitly defined property names in @Bean annotation.
 			Set<String> fixedBeanProps = new LinkedHashSet<String>();
 
-			if (transform != null) {
+			if (beanFilter != null) {
 
 				// Get the 'properties' attribute if specified.
-				if (transform.getProperties() != null)
-					for (String p : transform.getProperties())
+				if (beanFilter.getProperties() != null)
+					for (String p : beanFilter.getProperties())
 						fixedBeanProps.add(p);
 
-				if (transform.getPropertyNamer() != null)
-					propertyNamer = transform.getPropertyNamer().newInstance();
+				if (beanFilter.getPropertyNamer() != null)
+					propertyNamer = beanFilter.getPropertyNamer();
 			}
 
 			if (propertyNamer == null)
@@ -307,27 +307,27 @@ public class BeanMeta<T> {
 			}
 
 			// Make sure at least one property was found.
-			if (transform == null && ctx.beansRequireSomeProperties && normalProps.size() == 0)
+			if (beanFilter == null && ctx.beansRequireSomeProperties && normalProps.size() == 0)
 				return "No properties detected on bean class";
 
-			boolean sortProperties = (ctx.sortProperties || (transform != null && transform.isSortProperties())) && fixedBeanProps.isEmpty();
+			boolean sortProperties = (ctx.sortProperties || (beanFilter != null && beanFilter.isSortProperties())) && fixedBeanProps.isEmpty();
 
 			properties = sortProperties ? new TreeMap<String,BeanPropertyMeta>() : new LinkedHashMap<String,BeanPropertyMeta>();
 
-			if (transform != null && transform.getSubTypeProperty() != null) {
-				String subTypeProperty = transform.getSubTypeProperty();
-				this.subTypeIdProperty = new SubTypePropertyMeta(subTypeProperty, transform.getSubTypes(), normalProps.remove(subTypeProperty));
+			if (beanFilter != null && beanFilter.getSubTypeProperty() != null) {
+				String subTypeProperty = beanFilter.getSubTypeProperty();
+				this.subTypeIdProperty = new SubTypePropertyMeta(subTypeProperty, beanFilter.getSubTypes(), normalProps.remove(subTypeProperty));
 				properties.put(subTypeProperty, this.subTypeIdProperty);
 			}
 
 			properties.putAll(normalProps);
 
-			// If a transform is defined, look for inclusion and exclusion lists.
-			if (transform != null) {
+			// If a beanFilter is defined, look for inclusion and exclusion lists.
+			if (beanFilter != null) {
 
 				// Eliminated excluded properties if BeanFilter.excludeKeys is specified.
-				String[] includeKeys = transform.getProperties();
-				String[] excludeKeys = transform.getExcludeProperties();
+				String[] includeKeys = beanFilter.getProperties();
+				String[] excludeKeys = beanFilter.getExcludeProperties();
 				if (excludeKeys != null) {
 					for (String k : excludeKeys)
 						properties.remove(k);
@@ -741,7 +741,7 @@ public class BeanMeta<T> {
 
 		@Override /* BeanPropertyMeta */
 		public Object get(BeanMap<?> m) throws BeanRuntimeException {
-			String subTypeId = transform.getSubTypes().get(c);
+			String subTypeId = beanFilter.getSubTypes().get(c);
 			if (subTypeId == null)
 				throw new BeanRuntimeException(c, "Unmapped sub type class");
 			return subTypeId;

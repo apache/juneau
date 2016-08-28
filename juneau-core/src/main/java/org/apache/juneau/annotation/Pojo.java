@@ -51,7 +51,7 @@ public @interface Pojo {
 	 * 		<jk>public</jk> String <jf>f1</jf>;
 	 * 	}
 	 *
-	 * 	<jc>// Our transform to force the bean to be serialized as a String</jc>
+	 * 	<jc>// Our POJO swap to force the bean to be serialized as a String</jc>
 	 * 	<jk>public class</jk> BSwap <jk>extends</jk> PojoSwap&lt;B,String&gt; {
 	 * 		<jk>public</jk> String swap(B o) <jk>throws</jk> SerializeException {
 	 * 			<jk>return</jk> o.f1;

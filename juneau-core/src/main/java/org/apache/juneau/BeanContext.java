@@ -423,12 +423,12 @@ public class BeanContext extends Context {
 	public static final String BEAN_pojoSwaps = "BeanContext.pojoSwaps.list";
 
 	/**
-	 * Add to the list of transform classes.
+	 * Add to the list of POJO swap classes.
 	 */
 	public static final String BEAN_pojoSwaps_add = "BeanContext.pojoSwaps.list.add";
 
 	/**
-	 * Remove from the list of transform classes.
+	 * Remove from the list of POJO swap classes.
 	 */
 	public static final String BEAN_pojoSwaps_remove = "BeanContext.pojoSwaps.list.remove";
 
@@ -942,7 +942,7 @@ public class BeanContext extends Context {
 	public <T> ClassMeta<T> getClassMeta(Class<T> c) {
 
 		// If this is an array, then we want it wrapped in an uncached ClassMeta object.
-		// Note that if it has a pojo transform, we still want to cache it so that
+		// Note that if it has a pojo swap, we still want to cache it so that
 		// we can cache something like byte[] with ByteArrayBase64Swap.
 		if (c.isArray() && findPojoSwap(c) == null)
 			return new ClassMeta(c, this);
@@ -1414,9 +1414,9 @@ public class BeanContext extends Context {
 	 * Returns the {@link PojoSwap} associated with the specified class, or <jk>null</jk> if there is no
 	 * pojo swap associated with the class.
 	 *
-	 * @param <T> The class associated with the transform.
-	 * @param c The class associated with the transform.
-	 * @return The transform associated with the class, or null if there is no association.
+	 * @param <T> The class associated with the swap.
+	 * @param c The class associated with the swap.
+	 * @return The swap associated with the class, or null if there is no association.
 	 */
 	protected <T> PojoSwap findPojoSwap(Class<T> c) {
 		// Note:  On first
@@ -1444,9 +1444,9 @@ public class BeanContext extends Context {
 	 * Returns the {@link BeanFilter} associated with the specified class, or <jk>null</jk> if there is no
 	 * bean filter associated with the class.
 	 *
-	 * @param <T> The class associated with the transform.
-	 * @param c The class associated with the transform.
-	 * @return The transform associated with the class, or null if there is no association.
+	 * @param <T> The class associated with the bean filter.
+	 * @param c The class associated with the bean filter.
+	 * @return The bean filter associated with the class, or null if there is no association.
 	 */
 	protected <T> BeanFilter findBeanFilter(Class<T> c) {
 		if (c != null)

@@ -14,6 +14,7 @@ package org.apache.juneau.transform;
 
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 
 /**
@@ -22,7 +23,7 @@ import org.apache.juneau.annotation.*;
  * <b>*** Internal class - Not intended for external use ***</b>
  *
  * @author James Bognar (james.bognar@salesforce.com)
- * @param <T> The class type that this transform applies to.
+ * @param <T> The class type that this bean filter applies to.
  */
 public final class AnnotationBeanFilter<T> extends BeanFilter<T> {
 
@@ -33,37 +34,63 @@ public final class AnnotationBeanFilter<T> extends BeanFilter<T> {
 	 * @param annotations The {@link Bean @Bean} annotations found on the class and all parent classes in child-to-parent order.
 	 */
 	public AnnotationBeanFilter(Class<T> annotatedClass, List<Bean> annotations) {
-		super(annotatedClass);
+		this(new Builder<T>(annotatedClass, annotations));
+	}
 
-		ListIterator<Bean> li = annotations.listIterator(annotations.size());
-		while (li.hasPrevious()) {
-			Bean b = li.previous();
+	private AnnotationBeanFilter(Builder<T> b) {
+		super(b.beanClass, b.properties, b.excludeProperties, b.interfaceClass, b.stopClass, b.sortProperties, b.propertyNamer);
 
-			if (b.properties().length > 0 && getProperties() == null)
-				setProperties(b.properties());
+		// Temp
+		setSubTypeProperty(b.subTypeProperty);
+		setSubTypes(b.subTypes);
+	}
 
-			if (b.sort())
-				setSortProperties(true);
+	private static class Builder<T> {
+		Class<T> beanClass;
+		String[] properties;
+		String[] excludeProperties;
+		Class<?> interfaceClass;
+		Class<?> stopClass;
+		boolean sortProperties;
+		PropertyNamer propertyNamer;
+		String subTypeProperty;
+		LinkedHashMap<Class<?>,String> subTypes = new LinkedHashMap<Class<?>,String>();
 
-			if (b.excludeProperties().length > 0)
-				setExcludeProperties(b.excludeProperties());
+		private Builder(Class<T> annotatedClass, List<Bean> annotations) {
+			this.beanClass = annotatedClass;
+			ListIterator<Bean> li = annotations.listIterator(annotations.size());
+			while (li.hasPrevious()) {
+				Bean b = li.previous();
 
-			setPropertyNamer(b.propertyNamer());
+				if (b.properties().length > 0 && properties == null)
+					properties = b.properties();
 
-			if (b.interfaceClass() != Object.class)
-				setInterfaceClass(b.interfaceClass());
+				if (b.sort())
+					sortProperties = true;
 
-			if (b.stopClass() != Object.class)
-				setStopClass(b.stopClass());
+				if (b.excludeProperties().length > 0 && excludeProperties == null)
+					excludeProperties = b.excludeProperties();
 
-			if (! b.subTypeProperty().isEmpty()) {
-				setSubTypeProperty(b.subTypeProperty());
+				if (b.propertyNamer() != PropertyNamerDefault.class)
+					try {
+						propertyNamer = b.propertyNamer().newInstance();
+					} catch (Exception e) {
+						throw new RuntimeException(e);
+					}
 
-				LinkedHashMap<Class<?>,String> subTypes = new LinkedHashMap<Class<?>,String>();
-				for (BeanSubType bst : b.subTypes())
-					subTypes.put(bst.type(), bst.id());
+				if (b.interfaceClass() != Object.class && interfaceClass == null)
+					interfaceClass = b.interfaceClass();
 
-				setSubTypes(subTypes);
+				if (b.stopClass() != Object.class)
+					stopClass = b.stopClass();
+
+
+				if (! b.subTypeProperty().isEmpty()) {
+					subTypeProperty = b.subTypeProperty();
+
+					for (BeanSubType bst : b.subTypes())
+						subTypes.put(bst.type(), bst.id());
+				}
 			}
 		}
 	}

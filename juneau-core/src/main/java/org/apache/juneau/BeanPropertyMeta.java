@@ -55,7 +55,7 @@ public class BeanPropertyMeta {
 		rawTypeMeta,                           // The real class type of the bean property.
 		typeMeta;                              // The transformed class type of the bean property.
 	private String[] properties;
-	private PojoSwap transform;      // PojoSwap defined only via @BeanProperty annotation.
+	private PojoSwap swap;                     // PojoSwap defined only via @BeanProperty annotation.
 
 	private MetadataMap extMeta = new MetadataMap();  // Extended metadata
 
@@ -138,7 +138,7 @@ public class BeanPropertyMeta {
 	 */
 	public ClassMeta<?> getClassMeta() {
 		if (typeMeta == null)
-			typeMeta = (transform != null ? transform.getSwapClassMeta(beanMeta.ctx) : rawTypeMeta == null ? beanMeta.ctx.object() : rawTypeMeta.getSerializedClassMeta());
+			typeMeta = (swap != null ? swap.getSwapClassMeta(beanMeta.ctx) : rawTypeMeta == null ? beanMeta.ctx.object() : rawTypeMeta.getSerializedClassMeta());
 		return typeMeta;
 	}
 
@@ -249,7 +249,7 @@ public class BeanPropertyMeta {
 			rawTypeMeta = f.getClassMeta(p, field.getGenericType(), typeVarImpls);
 			isUri |= (rawTypeMeta.isUri() || field.isAnnotationPresent(org.apache.juneau.annotation.URI.class));
 			if (p != null) {
-				transform = getPropertyPojoSwap(p);
+				swap = getPropertyPojoSwap(p);
 				if (p.properties().length != 0)
 					properties = p.properties();
 				isBeanUri |= p.beanUri();
@@ -262,8 +262,8 @@ public class BeanPropertyMeta {
 				rawTypeMeta = f.getClassMeta(p, getter.getGenericReturnType(), typeVarImpls);
 			isUri |= (rawTypeMeta.isUri() || getter.isAnnotationPresent(org.apache.juneau.annotation.URI.class));
 			if (p != null) {
-				if (transform == null)
-					transform = getPropertyPojoSwap(p);
+				if (swap == null)
+					swap = getPropertyPojoSwap(p);
 				if (properties != null && p.properties().length != 0)
 					properties = p.properties();
 				isBeanUri |= p.beanUri();
@@ -276,8 +276,8 @@ public class BeanPropertyMeta {
 				rawTypeMeta = f.getClassMeta(p, setter.getGenericParameterTypes()[0], typeVarImpls);
 			isUri |= (rawTypeMeta.isUri() || setter.isAnnotationPresent(org.apache.juneau.annotation.URI.class));
 			if (p != null) {
-			if (transform == null)
-				transform = getPropertyPojoSwap(p);
+			if (swap == null)
+				swap = getPropertyPojoSwap(p);
 				if (properties != null && p.properties().length != 0)
 					properties = p.properties();
 				isBeanUri |= p.beanUri();
@@ -549,8 +549,8 @@ public class BeanPropertyMeta {
 				}
 
 			} else {
-				if (transform != null && value != null && isParentClass(transform.getSwapClass(), value.getClass())) {
-						value = transform.unswap(value, rawTypeMeta, beanMeta.ctx);
+				if (swap != null && value != null && isParentClass(swap.getSwapClass(), value.getClass())) {
+						value = swap.unswap(value, rawTypeMeta, beanMeta.ctx);
 				} else {
 						value = beanMeta.ctx.convertToType(value, rawTypeMeta);
 					}
@@ -720,9 +720,9 @@ public class BeanPropertyMeta {
 	}
 
 	private Object transform(Object o) throws SerializeException {
-		// First use transform defined via @BeanProperty.
-		if (transform != null)
-			return transform.swap(o, beanMeta.ctx);
+		// First use swap defined via @BeanProperty.
+		if (swap != null)
+			return swap.swap(o, beanMeta.ctx);
 		if (o == null)
 			return null;
 		// Otherwise, look it up via bean context.
@@ -737,8 +737,8 @@ public class BeanPropertyMeta {
 	}
 
 	private Object unswap(Object o) throws ParseException {
-		if (transform != null)
-			return transform.unswap(o, rawTypeMeta, beanMeta.ctx);
+		if (swap != null)
+			return swap.unswap(o, rawTypeMeta, beanMeta.ctx);
 		if (o == null)
 			return null;
 		if (rawTypeMeta.hasChildPojoSwaps()) {
