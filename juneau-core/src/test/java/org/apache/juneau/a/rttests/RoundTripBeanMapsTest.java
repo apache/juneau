@@ -495,7 +495,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	// Test @Bean(properties=xxx) using BeanFilter
 	//====================================================================================================
 	@Test
-	public void testPropertiesUsingTransform() throws Exception {
+	public void testPropertiesUsingBeanFilter() throws Exception {
 		JsonSerializer js = JsonSerializer.DEFAULT_LAX.clone().addBeanFilters(D2Filter.class);
 
 		// Skip validation-only tests
@@ -560,7 +560,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	// Test @Bean(excludeProperties=xxx) using BeanFilter
 	//====================================================================================================
 	@Test
-	public void testExcludePropertiesUsingTransform() throws Exception {
+	public void testExcludePropertiesUsingBeanFilter() throws Exception {
 		// Skip validation-only tests
 		if (isValidationOnly())
 			return;
@@ -625,7 +625,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	// Test @Bean(interfaceClass=xxx) using BeanFilter
 	//====================================================================================================
 	@Test
-	public void testInterfaceClassUsingTransform() throws Exception {
+	public void testInterfaceClassUsingBeanFilter() throws Exception {
 		Serializer s;
 		Parser p;
 		FB2 t;
@@ -635,7 +635,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		if (isValidationOnly())
 			return;
 
-		// --- Transform defined on parent class ---
+		// --- BeanFilter defined on parent class ---
 		s = getSerializer().clone().addBeanFilters(FB1Filter.class);
 		p = getParser().clone().addBeanFilters(FB1Filter.class);
 
@@ -644,7 +644,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		t = p.parse(r, FB2.class);
 		assertObjectEquals("{f1:'f1'}", t);
 
-		// --- Transform defined on child class class ---
+		// --- BeanFilter defined on child class class ---
 		s = getSerializer().clone().addBeanFilters(FB2Filter.class);
 		p = getParser().clone().addBeanFilters(FB2Filter.class);
 
@@ -653,7 +653,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		t = p.parse(r, FB2.class);
 		assertObjectEquals("{f1:'f1'}", t);
 
-		// --- Transform defined as plain class ---
+		// --- BeanFilter defined as plain class ---
 		s = getSerializer().clone().addBeanFilters(FB1.class);
 		p = getParser().clone().addBeanFilters(FB1.class);
 

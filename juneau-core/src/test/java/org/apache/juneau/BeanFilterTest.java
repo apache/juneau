@@ -93,10 +93,10 @@ public class BeanFilterTest {
 	}
 
 	//====================================================================================================
-	// Test parent class used as transform
+	// Test parent class used as filter
 	//====================================================================================================
 	@Test
-	public void testParentClassTransform() throws Exception {
+	public void testParentClassFilter() throws Exception {
 		JsonSerializer s = new JsonSerializer.Simple().addBeanFilters(C1.class);
 
 		C1 c1 = new C2();
@@ -118,10 +118,10 @@ public class BeanFilterTest {
 	}
 
 	//====================================================================================================
-	// Test non-static parent class used as transform
+	// Test non-static parent class used as filter
 	//====================================================================================================
 	@Test
-	public void testParentClassTransform2() throws Exception {
+	public void testParentClassFilter2() throws Exception {
 		JsonSerializer s = new JsonSerializer.Simple().addBeanFilters(D1.class);
 
 		D1 d1 = new D2();

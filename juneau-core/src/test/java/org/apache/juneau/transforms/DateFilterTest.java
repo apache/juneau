@@ -154,7 +154,7 @@ public class DateFilterTest {
 		final DateSwap.ISO8601DT dateSwap = new DateSwap.ISO8601DT();
 		// this works
 		final String sValue = data.getString("birthday"); //$NON-NLS-1$
-		dateSwap.unswap(sValue, data.getBeanContext().getClassMeta(Date.class));
+		dateSwap.unswap(sValue, data.getBeanContext().getClassMeta(Date.class), null);
 		// this does not work
 		data.get(dateSwap, "birthday"); //$NON-NLS-1$
 	}

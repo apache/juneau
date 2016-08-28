@@ -436,7 +436,7 @@ public abstract class RestServlet extends HttpServlet {
 	protected Class<?>[] createPojoSwaps() {
 		List<Class<?>> l = new LinkedList<Class<?>>();
 
-		// Transforms are loaded in parent-to-child order to allow overrides.
+		// Swaps are loaded in parent-to-child order to allow overrides.
 		for (RestResource r : restResourceAnnotationsChildFirst.values())
 			for (Class c : r.pojoSwaps())
 				l.add(c);

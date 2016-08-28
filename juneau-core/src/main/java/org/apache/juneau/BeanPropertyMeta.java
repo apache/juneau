@@ -138,7 +138,7 @@ public class BeanPropertyMeta {
 	 */
 	public ClassMeta<?> getClassMeta() {
 		if (typeMeta == null)
-			typeMeta = (transform != null ? transform.getSwapClassMeta(beanMeta.ctx) : rawTypeMeta == null ? beanMeta.ctx.object() : rawTypeMeta.getTransformedClassMeta());
+			typeMeta = (transform != null ? transform.getSwapClassMeta(beanMeta.ctx) : rawTypeMeta == null ? beanMeta.ctx.object() : rawTypeMeta.getSerializedClassMeta());
 		return typeMeta;
 	}
 

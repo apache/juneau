@@ -56,7 +56,7 @@ import org.apache.juneau.*;
  *
  * 	<jc>// Change settings on parsers simultaneously</jc>
  * 	g.setProperty(BeanContext.<jsf>BEAN_beansRequireSerializable</jsf>, <jk>true</jk>)
- * 		.addTransforms(CalendarSwap.ISO8601DT.<jk>class</jk>)
+ * 		.addPojoSwaps(CalendarSwap.ISO8601DT.<jk>class</jk>)
  * 		.lock();
  *
  * 	<jc>// Find the appropriate parser by Content-Type</jc>

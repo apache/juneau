@@ -217,10 +217,10 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 	}
 
 	//====================================================================================================
-	// testTransform - Bean.transform annotation
+	// testSwaps - Bean.pojoSwaps annotation
 	//====================================================================================================
 	@Test
-	public void testTransform() throws Exception {
+	public void testSwaps() throws Exception {
 		B t = new B();
 		t.f1 = "bar";
 		t = roundTrip(t, B.class);
@@ -336,7 +336,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 	// Surrogate transforms
 	//====================================================================================================
 	@Test
-	public void testSurrogateTransform() throws Exception {
+	public void testSurrogates() throws Exception {
 		addPojoSwaps(D2.class);
 
 		JsonSerializer s = new JsonSerializer.Simple().addPojoSwaps(D2.class);

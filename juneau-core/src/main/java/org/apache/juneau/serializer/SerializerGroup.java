@@ -56,7 +56,7 @@ import org.apache.juneau.*;
  *
  * 	<jc>// Change settings for all serializers in the group and lock it.</jc>
  * 	g.setProperty(SerializerContext.<jsf>SERIALIZER_useIndentation</jsf>, <jk>true</jk>)
- * 		.addTransforms(CalendarSwap.ISO8601DT.<jk>class</jk>)
+ * 		.addPojoSwaps(CalendarSwap.ISO8601DT.<jk>class</jk>)
  * 		.lock();
  *
  * 	<jc>// Find the appropriate serializer by Accept type</jc>

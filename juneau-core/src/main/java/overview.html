@@ -421,10 +421,10 @@
 			<tr class='dark bb' style='background-color:lightyellow'>
 				<td style='text-align:center'>4</td>
 				<td>
-					<b>Transformed objects</b><br>
+					<b>Swapped objects</b><br>
 					These are objects that are not directly serializable, but have {@link org.apache.juneau.transform.PojoSwap PojoSwaps} associated with them.  
-					The purpose of an object transform is to convert an object to another object that is easier to serialize and parse.  
-					For example, the {@link org.apache.juneau.transforms.DateSwap.ISO8601DT} transform can be used to serialize {@link java.util.Date} objects 
+					The purpose of a POJO swap is to convert an object to another object that is easier to serialize and parse.  
+					For example, the {@link org.apache.juneau.transforms.DateSwap.ISO8601DT} class can be used to serialize {@link java.util.Date} objects 
 						to ISO8601 strings, and parse them back into {@link java.util.Date} objects.
 				</td>
 				<td>&nbsp;</td>
@@ -434,8 +434,8 @@
 			<tr class='light bb'>
 				<td style='text-align:center'>4a</td>
 				<td>
-					<b>2-way transformed to group [1, 2a, 3a] objects</b><br>
-					For example, a transform that converts a {@code Date} to a {@code String}.
+					<b>2-way swapped to group [1, 2a, 3a] objects</b><br>
+					For example, a swap that converts a {@code Date} to a {@code String}.
 				</td>
 				<td>&nbsp;</td>
 				<td style='background-color:lightgreen;text-align:center'><b>yes</b></td>
@@ -444,8 +444,8 @@
 			<tr class='light bb'>
 				<td style='text-align:center'>4b</td>
 				<td>
-					<b>1-way transformed to group [1, 2, 3] objects</b><br>
-					For example, a transform that converts an {@code Iterator} to a {@code List}.  
+					<b>1-way swapped to group [1, 2, 3] objects</b><br>
+					For example, a swap that converts an {@code Iterator} to a {@code List}.  
 					This would be one way, since you cannot reconstruct an {@code Iterator}.
 				</td>
 				<td>&nbsp;</td>
@@ -496,7 +496,7 @@
 		</p>
 		<p>
 			Default serialization support is provided for Java primitives, <l>Maps</l>, <l>Collections</l>, beans, and arrays. <br> 
-			Extensible support for other data types such as <l>Calendars</l>, <l>Dates</l>, <l>Iterators</l> is available through the use of transforms.
+			Extensible support for other data types such as <l>Calendars</l>, <l>Dates</l>, <l>Iterators</l> is available through the use of POJO swaps.
 		</p>
 		<p>
 			In most cases, you can serialize objects in one line of code by using one of the default serializers:
@@ -808,11 +808,11 @@
 	
 		<h6 class='topic'>Additional Information</h6>
 		<ul class='javahierarchy'>
+			<li class='n'>{@link org.apache.juneau.annotation.Pojo @Pojo} - Used to tailor how non-bean POJOs get interpreted by the framework.
 			<li class='n'>{@link org.apache.juneau.annotation.Bean @Bean} - Used to tailor how beans get interpreted by the framework.
 			<li class='n'>{@link org.apache.juneau.annotation.BeanConstructor @BeanConstructor} - Maps constructor arguments to property names on beans with read-only properties.
 			<li class='n'>{@link org.apache.juneau.annotation.BeanIgnore @BeanIgnore} - Ignore classes, fields, and methods from being interpreted as bean or bean components.
 			<li class='n'>{@link org.apache.juneau.annotation.BeanProperty @BeanProperty} - Used to tailor how bean properties get interpreted by the framework.
-			<li class='n'>{@link org.apache.juneau.annotation.Transform @Transform} - Annotation that can be applied to a class to associate a transform with it.
 			<li class='n'>{@link org.apache.juneau.annotation.NameProperty @NameProperty} - Identifies a setter as a method for setting the name of a POJO as it's known by its parent object.
 			<li class='n'>{@link org.apache.juneau.annotation.ParentProperty @ParentProperty} - Identifies a setter as a method for adding a parent reference to a child object.
 			<li class='n'>{@link org.apache.juneau.annotation.URI @URI} - Used to identify a class or bean property as a URI.
@@ -831,14 +831,14 @@
 			The following example is equivalent to specifying the <l>@Bean</l> annotation in the previous example using a bean filter:
 		</p>
 		<p class='bcode'>
-	<jc>// Define transform that returns properties in the following order: "street", "city", "state"</jc>
+	<jc>// Define bean filter that returns properties in the following order: "street", "city", "state"</jc>
 	<jk>public class</jk> AddressFilter <jk>extends</jk> BeanFilter&lt;Address&gt; {
 		<jk>public</jk> AddressFilter() {
 			setProperties(<js>"street"</js>,<js>"city"</js>,<js>"state"</js>);
 		}
 	}
 	
-	WriterSerializer s = <jk>new</jk> JsonSerializer().addTransforms(AddressFilter.<jk>class</jk>);
+	WriterSerializer s = <jk>new</jk> JsonSerializer().addBeanFilters(AddressFilter.<jk>class</jk>);
 	Address a = getAddress();
 	String json = s.serialize(a);  <jc>// Prints "{street:'...',city:'...',state;'...'}"</jc>
 		</p>
@@ -853,7 +853,7 @@
 			The following POJO swap can be used to represent dates in ISO8601 format:
 		</p>
 		<p class='bcode'>
-	<jc>// Sample transform for converting Dates to ISO8601 strings.</jc>
+	<jc>// Sample swap for converting Dates to ISO8601 strings.</jc>
 	<jk>public class</jk> MyDateSwap <jk>extends</jk> PojoSwap&lt;Date,String&gt; {
 		
 		<jc>// ISO8601 formatter.</jc>
@@ -867,7 +867,7 @@
 		
 		<jd>/** Converts an ISO8601 string to a Date object. */</jd>
 		<ja>@Override</ja>
-		<jk>public</jk> Date unswap(String o, ClassMeta&lt;?&gt; hint) <jk>throws</jk> ParseException {
+		<jk>public</jk> Date unswap(String o) <jk>throws</jk> ParseException {
 			<jk>try</jk> {
 				<jk>return</jk> <jf>format</jf>.parse(o);
 			} <jk>catch</jk> (java.text.ParseException e) {
@@ -877,7 +877,7 @@
 	}
 		</p>
 		<p>
-			The transform above can then be associated with serializers and parsers as the following example shows:
+			The swap above can then be associated with serializers and parsers as the following example shows:
 		</p>
 		<p class='bcode'>
 	<jc>// Sample bean with a Date field.</jc>
@@ -885,12 +885,12 @@
 		<jk>public</jk> Date <jf>date</jf> = <jk>new</jk> Date(112, 2, 3, 4, 5, 6);
 	}
 
-	<jc>// Create a new JSON serializer, associate our date transform with it, and serialize a sample bean.</jc>
-	Serializer serializer = <jk>new</jk> JsonSerializer().addTransforms(MyDateSwap.<jk>class</jk>);
+	<jc>// Create a new JSON serializer, associate our date swap with it, and serialize a sample bean.</jc>
+	Serializer serializer = <jk>new</jk> JsonSerializer().addPojoSwaps(MyDateSwap.<jk>class</jk>);
 	String json = serializer.serialize(<jk>new</jk> MyBean());	<jc>// == "{date:'2012-03-03T04:05:06-0500'}"</jc>
 	
-	<jc>// Create a JSON parser, associate our date transform with it, and reconstruct our bean (including the date).</jc>
-	ReaderParser parser = <jk>new</jk> JsonParser().addTransforms(MyDateSwap.<jk>class</jk>);
+	<jc>// Create a JSON parser, associate our date swap with it, and reconstruct our bean (including the date).</jc>
+	ReaderParser parser = <jk>new</jk> JsonParser().addPojoSwaps(MyDateSwap.<jk>class</jk>);
 	MyBean bean = parser.parse(json, MyBean.<jk>class</jk>);
 	<jk>int</jk> day = bean.<jf>date</jf>.getDay(); 						<jc>// == 3</jc>
 		</p>
@@ -903,7 +903,7 @@
 	</div>
 			
 	<!-- ======================================================================================================== -->
-	<a id="Core.Transforms"></a>
+	<a id="Core.SVL"></a>
 	<h4 class='topic' onclick='toggle(this)'>2.8 - Simple Variable Language</h4>
 	<div class='topic'>
 		<p>
@@ -1245,7 +1245,7 @@
 		<jk>public</jk> URI <jf>addressBookUri</jf>; 
 		<jk>public int</jk> <jf>id</jf>; 
 		<jk>public</jk> String <jf>name</jf>; 
-		<ja>@BeanProperty</ja>(transform=CalendarSwap.Medium.<jk>class</jk>) <jk>public</jk> Calendar <jf>birthDate</jf>; 
+		<ja>@BeanProperty</ja>(pojoSwaps=CalendarSwap.Medium.<jk>class</jk>) <jk>public</jk> Calendar <jf>birthDate</jf>; 
 		<jk>public</jk> LinkedList&lt;Address&gt; <jf>addresses</jf>; 
 	} 
 	&nbsp;
@@ -2088,7 +2088,7 @@
 		<jk>public static class</jk> FormInputBean { 
 			<jk>public</jk> String aString; 
 			<jk>public int</jk> aNumber; 
-			<ja>@BeanProperty</ja>(transform=CalendarSwap.<jsf>ISO8601DT</jsf>.<jk>class</jk>) 
+			<ja>@BeanProperty</ja>(pojoSwaps=CalendarSwap.<jsf>ISO8601DT</jsf>.<jk>class</jk>) 
 			<jk>public</jk> Calendar aDate; 
 		} 
 	}		
@@ -2195,8 +2195,8 @@
 		<ul class='spaced-list'>
 			<li>Using the {@link org.apache.juneau.server.annotation.RestResource#properties() @RestResource.properties()}
 				annotation to set serializer properties.
-			<li>Using the {@link org.apache.juneau.server.annotation.RestResource#transforms() @RestResource.transforms()}
-				annotation to set serializer transforms.
+			<li>Using the {@link org.apache.juneau.server.annotation.RestResource#beanFilters() @RestResource.beanFilters()} and {@link org.apache.juneau.server.annotation.RestResource#pojoSwaps() @RestResource.pojoSwaps()}
+				annotations to set serializer transforms.
 			<li>Using the {@link org.apache.juneau.server.annotation.Properties @Properties} annotation to set serializers properties
 				programmatically on a request.
 		</ul>
@@ -2216,10 +2216,12 @@
 			<ja>@Property</ja>(name=<jsf>SERIALIZER_detectRecursions</jsf>, value=<js>"true"</js>),
 			<ja>@Property</ja>(name=<jsf>HTMLDOC_links</jsf>, value=<js>"{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$R{servletParentURI}/source?classes=(org.apache.juneau.server.samples.RequestEchoResource)'}"</js>)
 		},
-		transforms={
+		beanFilters={
 			<jc>// Interpret these as their parent classes, not subclasses</jc>
 			HttpServletRequest.<jk>class</jk>, HttpSession.<jk>class</jk>, ServletContext.<jk>class</jk>,
-			<jc>// Add a special transform for Enumerations</jc>
+		},
+		pojoSwaps={
+			<jc>// Add a special POJO swap for Enumerations</jc>
 			EnumerationSwap.<jk>class</jk>
 		}
 	)
@@ -2246,8 +2248,9 @@
 				not implementation-specific (i.e. WAS or Jetty) fields which can get messy.
 		</p>
 		<p>
-			The {@link org.apache.juneau.server.annotation.RestResource#properties() @RestResource.properties()} and 
-				{@link org.apache.juneau.server.annotation.RestResource#transforms() @RestResopurce.transforms()} annotations are used 
+			The {@link org.apache.juneau.server.annotation.RestResource#properties() @RestResource.properties()}, 
+				{@link org.apache.juneau.server.annotation.RestResource#beanFilters() @RestResopurce.beanFilters()}, and
+				{@link org.apache.juneau.server.annotation.RestResource#pojoSwaps() @RestResopurce.pojoSwaps()} annotations are used 
 				to set behavior properties on the resource's underlying bean context, serializers, and parsers.  
 			You're using them here to modify the behavior of serialization for all content types.  
 			The annotations are functionally equivalent to overriding the {@link org.apache.juneau.server.RestServlet#createSerializers(ObjectMap,Class[])} method, as follows:
@@ -2263,12 +2266,12 @@
 		
 		<jc>// Add bean filters for the HttpServletRequest, HttpSession, and ServletContext objects
 		//		so that you don't show vendor-specific properties on subclasses.
-		// Add Enumeration transform to be able to render the contents of Enumeration properties.
+		// Add Enumeration POJO swap to be able to render the contents of Enumeration properties.
 		// The max depth and detect recursion options prevent any possible runaway serializations.  
 		// This shouldn't happen, but future JEE APIs may introduce deep hierarchies or loops.</jc>
 		serializerGroup
-			.addTransforms(HttpServletRequest.<jk>class</jk>, HttpSession.<jk>class</jk>, ServletContext.<jk>class</jk>)
-			.addTransforms(EnumerationSwap.<jk>class</jk>)
+			.addBeanFilters(HttpServletRequest.<jk>class</jk>, HttpSession.<jk>class</jk>, ServletContext.<jk>class</jk>)
+			.addPojoSwaps(EnumerationSwap.<jk>class</jk>)
 			.setProperty(<jsf>SERIALIZER_maxDepth</jsf>, 10)
 			.setProperty(<jsf>SERIALIZER_detectRecursions</jsf>, <jk>true</jk>);
 			.setProperty(<jsf>HTMLDOC_links</jsf>, <js>"{...}"</js>);
@@ -2522,7 +2525,7 @@
 		<jk>public</jk> URI <jf>addressBookUri</jf>;
 		<jk>public</jk> String <jf>id</jf>;
 		<jk>public</jk> String <jf>name</jf>;
-		<ja>@BeanProperty</ja>(transform=CalendarSwap.Medium.<jk>class</jk>) <jk>public</jk> Calendar <jf>birthDate</jf>;
+		<ja>@BeanProperty</ja>(pojoSwap=CalendarSwap.Medium.<jk>class</jk>) <jk>public</jk> Calendar <jf>birthDate</jf>;
 		<jk>public</jk> LinkedList&lt;Address&gt; <jf>addresses</jf> = new LinkedList&lt;Address&gt;();
 		
 		<jd>/** Bean constructor - Needed for instantiating on server side */</jd> 
@@ -2566,7 +2569,7 @@
 						resource.  
 					This property has special meaning for the XML and RDF serializizers.  The XML serializer serializes this as a <l>uri</l> attribute instead of an <l>&lt;uri&gt;</l> element, and 
 						the RDF serializer uses this property for the value of the <l>rdf:resource</l> attribute.
-				<li>The <code><ja>@BeanProperty</ja>(transform=CalendarSwap.Medium.<jk>class</jk>)</code> annotation causes the date field to 
+				<li>The <code><ja>@BeanProperty</ja>(pojoSwap=CalendarSwap.Medium.<jk>class</jk>)</code> annotation causes the date field to 
 						be serialized in the format <l>"MM dd, yyyy"</l>.
 					This could have also been specified globally on the resource level through the {@link org.apache.juneau.server.annotation.RestResource#properties} annotation.
 			</ul>
@@ -2625,7 +2628,7 @@
 		
 		<jc>// Bean properties</jc>
 		<jk>public</jk> String <jf>name</jf>;
-		<ja>@BeanProperty(</ja>transform=CalendarSwap.Medium.<jk>class</jk>) <jk>public</jk> Calendar <jf>birthDate</jf>;
+		<ja>@BeanProperty(</ja>pojoSwap=CalendarSwap.Medium.<jk>class</jk>) <jk>public</jk> Calendar <jf>birthDate</jf>;
 		<jk>public</jk> LinkedList&lt;CreateAddress&gt; <jf>addresses</jf>;
 		
 		<jd>/** Bean constructor - Needed for instantiating on server side */</jd>
@@ -2899,7 +2902,7 @@
 				<jk>new</jk> Column(<js>"name"</js>, <js>"xs:String"</js>, 255), 
 				<jk>new</jk> Column(<js>"age"</js>, <js>"xs:int"</js>), 
 				<jk>new</jk> Column(<js>"numAddresses"</js>, <js>"xs:int"</js>) 
-				.addTransform( 
+				.addPojoSwap( 
 					<jk>new</jk> PojoSwap&lt;Person,Integer&gt;() { 
 						<ja>@Override</ja> /* PojoSwap */ 
 						<jk>public</jk> Integer swap(Person p) { 
@@ -4451,11 +4454,11 @@
 	<h3 class='topic' onclick='toggle(this)'>8.2 - Server API</h3>
 	<div class='topic'>
 		<!-- ======================================================================================================== -->
-		<a id="Cookbook.Server.applyDoubletransform"></a>
+		<a id="Cookbook.Server.applyDoubleTransform"></a>
 		<h3 class='topic' onclick='toggle(this)'>8.2.1 - Apply a transform that changes the format of doubles</h3>
 		<div class='topic'>
 			<p>
-				The {@link org.apache.juneau.server.annotation.RestResource#transforms()} annotation can be used to add 
+				The {@link org.apache.juneau.server.annotation.RestResource#pojoSwaps()} annotation can be used to add 
 				POJO swaps to all the serializers and parsers registered with a servlet.
 			</p>
 			<p>
@@ -4464,7 +4467,7 @@
 			</p>
 			<p class='bcode'>
 	<ja>@RestResource</ja>(
-		transforms={
+		pojoSwaps={
 			MyRestService.DoubleSwap.<jk>class</jk>
 		}
 	)
@@ -4486,20 +4489,20 @@
 		<h3 class='topic' onclick='toggle(this)'>8.2.2 - Apply transforms to a subset of serializers or parsers</h3>
 		<div class='topic'>
 			<p>
-				The {@link org.apache.juneau.server.RestServlet#createSerializers(ObjectMap,Class[])} and {@link org.apache.juneau.server.RestServlet#createParsers(ObjectMap,Class[])}
+				The {@link org.apache.juneau.server.RestServlet#createSerializers(ObjectMap,Class[],Class[])} and {@link org.apache.juneau.server.RestServlet#createParsers(ObjectMap,Class[],Class[])}
 				methods are the servlet methods that get called during servlet initialization to create the serializer and
 				parser groups.
 				These methods can be overridden to customize individual serializers and parsers in a way that can't be done using annotations.
 			</p>
 			<p>
-				In this example, you want to apply the transform from the previous example to change the rendered format for doubles.
-				However, in this case, you apply the transform to only the HTML serializer.
+				In this example, you want to apply the swap from the previous example to change the rendered format for doubles.
+				However, in this case, you apply the swao to only the HTML serializer.
 			</p>
 			<p class='bcode'>
 	<ja>@Override</ja>
-	<jk>protected</jk> SerializerGroup createSerializers(ObjectMap properties, Class[] transforms) <jk>throws</jk> Exception {
-		SerializerGroup g = <jk>super</jk>.createSerializers(properties, transforms);
-		g.getSerializer(<js>"text/html"</js>).addTransforms(DoubleSwap.<jk>class</jk>); 
+	<jk>protected</jk> SerializerGroup createSerializers(ObjectMap properties, Class[] beanFilters, Class[] pojoSwaps) <jk>throws</jk> Exception {
+		SerializerGroup g = <jk>super</jk>.createSerializers(properties, beanFilters, pojoSwaps);
+		g.getSerializer(<js>"text/html"</js>).addPojoSwaps(DoubleSwap.<jk>class</jk>); 
 		<jk>return</jk> g;
 	}
 			</p>

@@ -1481,10 +1481,10 @@ public class BeanMapTest {
 	}
 
 	//====================================================================================================
-	// testCastToLinkedListUsingTransform - cast() to LinkedList<Calendar> using CalendarSwap
+	// testCastToLinkedListUsingSwap - cast() to LinkedList<Calendar> using CalendarSwap
 	//====================================================================================================
 	@Test
-	public void testCastToLinkedListUsingTransform() throws Exception {
+	public void testCastToLinkedListUsingSwap() throws Exception {
 		BeanContext bc = ContextFactory.create().addPojoSwaps(CalendarSwap.ISO8601DTZ.class).getBeanContext();
 
 		// With _class

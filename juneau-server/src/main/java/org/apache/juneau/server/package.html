@@ -893,7 +893,7 @@
 		<jk>public static class</jk> FormInputBean {
 			<jk>public</jk> String <jf>aString</jf>;
 			<jk>public int</jk> <jf>aNumber</jf>;
-			<ja>@BeanProperty</ja>(transform=CalendarSwap.<jsf>ISO8601DT</jsf>.<jk>class</jk>)
+			<ja>@BeanProperty</ja>(pojoSwaps=CalendarSwap.<jsf>ISO8601DT</jsf>.<jk>class</jk>)
 			<jk>public</jk> Calendar <jf>aDate</jf>;
 		}
 	}		
@@ -1538,20 +1538,22 @@
 			(See <a class='doclink' href='../../../../overview-summary.html#Core.Transforms'>Transforms</a>)
 		</p>
 		<p>
-			The {@link org.apache.juneau.server.annotation.RestResource#transforms() @RestResource.transforms()} annotation 
-			can be used as a convenient way to add POJO swaps to the serializers and parsers
+			The {@link org.apache.juneau.server.annotation.RestResource#beanFilters() @RestResource.beanFilters()} 
+			and {@link org.apache.juneau.server.annotation.RestResource#pojoSwaps() @RestResource.pojoSwaps()} annotations 
+			can be used as a convenient way to add bean filters and POJO swaps to the serializers and parsers
 			registered with the servlet.
 		</p>
 		<p class='bcode'>
 	<jc>// Servlet with transforms applied</jc>
 	<ja>@RestResource</ja>(
-		transforms={
+		pojoSwaps={
 			<jc>// Calendars should be serialized/parsed as ISO8601 date-time strings</jc>
 			CalendarSwap.<jsf>DEFAULT_ISO8601DT</jsf>.<jk>class</jk>,
 
 			<jc>// Byte arrays should be serialized/parsed as BASE64-encoded strings</jc>
 			ByteArrayBase64Swap.<jk>class</jk>,
-
+		},
+		beanFilters={
 			<jc>// Subclasses of MyInterface will be treated as MyInterface objects.</jc>
 			<jc>// Bean properties not defined on that interface will be ignored.</jc>
 			MyInterface.<jk>class</jk>
@@ -1569,9 +1571,9 @@
 			Transforms can also be defined programmatically through the following:
 		</p>
 		<ul class='spaced-list'>
-			<li>By overriding the {@link org.apache.juneau.server.RestServlet#createTransforms()} method.
-			<li>By overriding the {@link org.apache.juneau.server.RestServlet#createSerializers(ObjectMap,Class[])} and 
-				{@link org.apache.juneau.server.RestServlet#createParsers(ObjectMap,Class[])} methods and setting transforms on the 
+			<li>By overriding the {@link org.apache.juneau.server.RestServlet#createBeanFilters()} and {@link org.apache.juneau.server.RestServlet#createPojoSwaps()} methods.
+			<li>By overriding the {@link org.apache.juneau.server.RestServlet#createSerializers(ObjectMap,Class[],Class[])} and 
+				{@link org.apache.juneau.server.RestServlet#createParsers(ObjectMap,Class[],Class[])} methods and setting transforms on the 
 				serializers and parsers directly.
 			
 		</ul>
@@ -2217,7 +2219,7 @@
 		<jk>public static class</jk> FormInputBean { 
 			<jk>public</jk> String <jf>aString</jf>; 
 			<jk>public int</jk> <jf>aNumber</jf>; 
-			<ja>@BeanProperty</ja>(transform=CalendarSwap.<jsf>ISO8601DT</jsf>.<jk>class</jk>) 
+			<ja>@BeanProperty</ja>(pojoSwaps=CalendarSwap.<jsf>ISO8601DT</jsf>.<jk>class</jk>) 
 			<jk>public</jk> Calendar <jf>aDate</jf>; 
 		} 
 	}
@@ -2671,9 +2673,15 @@
 				</td>
 			</tr>
 			<tr>
-				<td>{@link org.apache.juneau.server.annotation.RestResource#transforms() transforms()}</td>
+				<td>{@link org.apache.juneau.server.annotation.RestResource#beanFilters() beanFilters()}</td>
 				<td>
-					Transforms on child are combined with those on parent class.
+					Bean filters on child are combined with those on parent class.
+				</td>
+			</tr>
+			<tr>
+				<td>{@link org.apache.juneau.server.annotation.RestResource#pojoSwaps() pojoSwaps()}</td>
+				<td>
+					POJO swaps on child are combined with those on parent class.
 				</td>
 			</tr>
 			<tr>
@@ -3207,7 +3215,7 @@
 			<li><code><jk>public</jk> T(String in);</code>
 		</ul>
 		<li>Has a {@link org.apache.juneau.transform.PojoSwap} associated with the servlet
-			with a transformed type of <l>String</l>.
+			with a swapped type of <l>String</l>.
 	</ul>
 </div>
 

@@ -76,7 +76,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	public final boolean shouldUseExpandedParams(Object value) {
 		if (value == null || ! expandedParams)
 			return false;
-		ClassMeta<?> cm = getBeanContext().getClassMetaForObject(value).getTransformedClassMeta();
+		ClassMeta<?> cm = getBeanContext().getClassMetaForObject(value).getSerializedClassMeta();
 		if (cm.isArray() || cm.isCollection()) {
 			if (expandedParams)
 				return true;

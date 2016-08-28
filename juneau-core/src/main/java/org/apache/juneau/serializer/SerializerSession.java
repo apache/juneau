@@ -702,8 +702,8 @@ public class SerializerSession extends Session {
 			StringBuilder sb = new StringBuilder().append('[').append(depth).append(']');
 			sb.append(StringUtils.isEmpty(name) ? "<noname>" : name).append(':');
 			sb.append(aType.toString(simple));
-			if (aType != aType.getTransformedClassMeta())
-				sb.append('/').append(aType.getTransformedClassMeta().toString(simple));
+			if (aType != aType.getSerializedClassMeta())
+				sb.append('/').append(aType.getSerializedClassMeta().toString(simple));
 			return sb.toString();
 		}
 	}

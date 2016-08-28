@@ -98,7 +98,7 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 
 		aType = session.push(attrName, eType, null);
 
-		gType = eType.getTransformedClassMeta();
+		gType = eType.getSerializedClassMeta();
 		String type = null;
 
 		if (gType.isEnum() || gType.isCharSequence() || gType.isChar())

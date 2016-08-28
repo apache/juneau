@@ -74,15 +74,15 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 			aType = object();
 		}
 
-		gType = aType.getTransformedClassMeta();
+		gType = aType.getSerializedClassMeta();
 		addClassAttr = (session.isAddClassAttrs() && ! eType.equals(aType));
 
-		// Transform if necessary
-		PojoSwap transform = aType.getPojoSwap();				// The transform
-		if (transform != null) {
-			o = transform.swap(o, bc);
+		// Swap if necessary
+		PojoSwap swap = aType.getPojoSwap();
+		if (swap != null) {
+			o = swap.swap(o, bc);
 
-			// If the transform's getTransformedClass() method returns Object, we need to figure out
+			// If the getSwapClass() method returns Object, we need to figure out
 			// the actual type now.
 			if (gType.isObject())
 				gType = bc.getClassMetaForObject(o);

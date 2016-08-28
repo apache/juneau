@@ -77,7 +77,7 @@
 	</p>
 	<ul class='normal'>
 		<li>It provides the ability to create instances of {@link org.apache.juneau.BeanMap BeanMaps}.
-		<li>It serves as a repository for {@link org.apache.juneau.transform.Transform Transforms}, which are used to tailor how beans and non-beans are handled. 
+		<li>It serves as a repository for {@link org.apache.juneau.transform.BeanFilter BeanFilters} and {@link org.apache.juneau.transform.PojoSwap PojoSwaps}, which are used to tailor how Java objects are handled. 
 		<li>It's used by all built-in {@link org.apache.juneau.serializer.Serializer Serializers} and {@link org.apache.juneau.parser.Parser Parsers} for working with POJOs in a consistent way.
 	</ul>
 	
@@ -157,10 +157,10 @@
 	BeanContext beanContext = BeanContext.<jsf>DEFAULT</jsf>;
 	
 	<jc>// Create a context from scratch with your own settings.</jc>
-	beanContext = <jk>new</jk> BeanContext().addTransforms(DateSwap.ISO8601DT.<jk>class</jk>);
+	beanContext = <jk>new</jk> BeanContext().addPojoSwaps(DateSwap.ISO8601DT.<jk>class</jk>);
 	
 	<jc>// Clone and modify an existing context.</jc>
-	beanContext = BeanContext.<jsf>DEFAULT</jsf>.clone().addTransforms(DateSwap.ISO8601DT.<jk>class</jk>);
+	beanContext = BeanContext.<jsf>DEFAULT</jsf>.clone().addPojoSwaps(DateSwap.ISO8601DT.<jk>class</jk>);
 		</p>
 		<p>
 			The {@link org.apache.juneau.BeanContext} class is a highly-customizable class.  

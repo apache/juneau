@@ -23,10 +23,10 @@ import org.junit.*;
 public class BeanFilterTest {
 
 	//====================================================================================================
-	// Transformed interfaces
+	// Interface bean filters
 	//====================================================================================================
 	@Test
-	public void testTransformedInterfaces() throws Exception {
+	public void testInterfaceBeanFilters() throws Exception {
 		BeanContext bc;
 		BeanMap<A3> bm;
 
@@ -66,10 +66,10 @@ public class BeanFilterTest {
 	}
 
 	//====================================================================================================
-	// Transformed abstract classes
+	// Abstract class bean filters
 	//====================================================================================================
 	@Test
-	public void testTransformedAbstractClasses() throws Exception {
+	public void testAbstractClassBeanFilters() throws Exception {
 		BeanContext bc;
 		BeanMap<Test2> bm;
 
@@ -111,10 +111,10 @@ public class BeanFilterTest {
 	}
 
 	//====================================================================================================
-	// Transformed with stop classes
+	// Filtered with stop classes
 	//====================================================================================================
 	@Test
-	public void testTransformedWithStopClass() throws Exception {
+	public void testFilteredWithStopClass() throws Exception {
 		C3 c3 = new C3();
 		assertObjectEquals("{f3:3,p3:3}", c3);
 	}
@@ -136,7 +136,7 @@ public class BeanFilterTest {
 	}
 
 	@Test
-	public void testTransformedWithStopClassOnParentClass() throws Exception {
+	public void testFilterWithStopClassOnParentClass() throws Exception {
 		D3 d3 = new D3();
 		assertObjectEquals("{f3:3,p3:3}", d3);
 	}
@@ -158,7 +158,7 @@ public class BeanFilterTest {
 	}
 
 	@Test
-	public void testTransformedWithStopClassOnParentClassWithOverriddenAnnotation() throws Exception {
+	public void testFilteredWithStopClassOnParentClassWithOverriddenAnnotation() throws Exception {
 		E3 e3 = new E3();
 		assertObjectEquals("{f3:3,p3:3}", e3);
 	}
@@ -181,7 +181,7 @@ public class BeanFilterTest {
 	}
 
 	@Test
-	public void testTransformedWithStopClassesAtMulitpleLevels() throws Exception {
+	public void testFilteredWithStopClassesAtMulitpleLevels() throws Exception {
 		F3 e3 = new F3();
 		assertObjectEquals("{f3:3,p3:3}", e3);
 	}

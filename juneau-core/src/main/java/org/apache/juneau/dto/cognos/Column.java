@@ -71,7 +71,7 @@ public class Column {
 	 * 		on the serialized beans.
 	 * <p class='bcode'>
 	 * 	Column c = <jk>new</jk> Column(<js>"numAddresses"</js>, <js>"xs:int"</js>)
-	 * 		.addTransform(
+	 * 		.addPojoSwaps(
 	 * 			<jk>new</jk> PojoSwap<Person,Integer>() {
 	 * 				<ja>@Override</ja>
 	 * 				<jk>public</jk> Integer swap(Person p) {
@@ -84,7 +84,7 @@ public class Column {
 	 * @param transform The transform to associate with the column.
 	 * @return This object (for method chaining).
 	 */
-	public Column addTransform(PojoSwap transform) {
+	public Column addPojoSwap(PojoSwap transform) {
 		this.transform = transform;
 		return this;
 	}

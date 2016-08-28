@@ -94,7 +94,7 @@ public class UonParser extends ReaderParser {
 		if (nt == null)
 			nt = (ClassMeta<T>)object();
 		PojoSwap<T,Object> transform = (PojoSwap<T,Object>)nt.getPojoSwap();
-		ClassMeta<?> ft = nt.getTransformedClassMeta();
+		ClassMeta<?> ft = nt.getSerializedClassMeta();
 
 		Object o = null;
 

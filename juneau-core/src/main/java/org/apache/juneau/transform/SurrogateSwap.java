@@ -64,8 +64,8 @@ import org.apache.juneau.serializer.*;
  * <p class='bcode'>
  * 	<ja>@Test</ja>
  * 	<jk>public void</jk> test() <jk>throws</jk> Exception {
- * 		JsonSerializer s = <jk>new</jk> JsonSerializer.Simple().addTransforms(Surrogate.<jk>class</jk>);
- * 		JsonParser p = <jk>new</jk> JsonParser().addTransforms(Surrogate.<jk>class</jk>);
+ * 		JsonSerializer s = <jk>new</jk> JsonSerializer.Simple().addPojoSwaps(Surrogate.<jk>class</jk>);
+ * 		JsonParser p = <jk>new</jk> JsonParser().addPojoSwaps(Surrogate.<jk>class</jk>);
  * 		String r;
  * 		Normal n = Normal.<jsm>create</jsm>();
  *
@@ -151,7 +151,7 @@ public class SurrogateSwap<T,F> extends PojoSwap<T,F> {
 	 * @return The list of POJO swaps that apply to this class.
 	 */
 	@SuppressWarnings({"unchecked", "rawtypes"})
-	public static List<SurrogateSwap<?,?>> findTransforms(Class<?> c) {
+	public static List<SurrogateSwap<?,?>> findPojoSwaps(Class<?> c) {
 		List<SurrogateSwap<?,?>> l = new LinkedList<SurrogateSwap<?,?>>();
 		for (Constructor<?> cc : c.getConstructors()) {
 			if (cc.getAnnotation(BeanIgnore.class) == null) {
@@ -163,20 +163,20 @@ public class SurrogateSwap<T,F> extends PojoSwap<T,F> {
 					int mod = cc.getModifiers();
 					if (Modifier.isPublic(mod)) {  // Only public constructors.
 
-						// Find the untransform method if there is one.
-						Method untransformMethod = null;
+						// Find the unswap method if there is one.
+						Method unswapMethod = null;
 						for (Method m : c.getMethods()) {
 							if (pt[0].equals(m.getReturnType())) {
 								Class<?>[] mpt = m.getParameterTypes();
 								if (mpt.length == 1 && mpt[0].equals(c)) { // Only methods with one parameter and where the return type matches this class.
 									int mod2 = m.getModifiers();
 									if (Modifier.isPublic(mod2) && Modifier.isStatic(mod2))  // Only public static methods.
-										untransformMethod = m;
+										unswapMethod = m;
 								}
 							}
 						}
 
-						l.add(new SurrogateSwap(pt[0], cc, untransformMethod));
+						l.add(new SurrogateSwap(pt[0], cc, unswapMethod));
 					}
 				}
 			}

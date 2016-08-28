@@ -273,7 +273,7 @@ public class AddressBookResource extends ResourceJena {
 			new Column("name", "xs:String", 255),
 			new Column("age", "xs:int"),
 			new Column("numAddresses", "xs:int")
-				.addTransform(
+				.addPojoSwap(
 					new PojoSwap<Person,Integer>() {
 						@Override /* PojoSwap */
 						public Integer swap(Person p) {

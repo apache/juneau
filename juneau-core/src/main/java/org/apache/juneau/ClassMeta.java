@@ -59,7 +59,7 @@ public final class ClassMeta<T> implements Type {
 	ClassCategory classCategory = UNKNOWN;            // The class category.
 	final Class<T> innerClass;                        // The class being wrapped.
 	ClassMeta<?>
-		transformedClassMeta,                             // The transformed class type (in class has transform associated with it.
+		serializedClassMeta,                             // The transformed class type (in class has transform associated with it.
 		elementType = null,                            // If ARRAY or COLLECTION, the element class type.
 		keyType = null,                                // If MAP, the key class type.
 		valueType = null;                              // If MAP, the value class type.
@@ -126,16 +126,11 @@ public final class ClassMeta<T> implements Type {
 	ClassMeta init() {
 
 		try {
-			Transform transform = findTransform(beanContext);
-			if (transform != null) {
-				if (transform.getType() == Transform.TransformType.BEAN)
-					beanFilter = (BeanFilter)transform;
-				else
-					pojoSwap = (PojoSwap)transform;
-				transformedClassMeta = (pojoSwap == null ? this : beanContext.getClassMeta(pojoSwap.getSwapClass()));
-			}
-			if (transformedClassMeta == null)
-				transformedClassMeta = this;
+			beanFilter = findBeanFilter(beanContext);
+			pojoSwap = findPojoSwap(beanContext);
+			serializedClassMeta = (pojoSwap == null ? this : beanContext.getClassMeta(pojoSwap.getSwapClass()));
+			if (serializedClassMeta == null)
+				serializedClassMeta = this;
 
 			if (innerClass != Object.class) {
 				this.noArgConstructor = beanContext.getImplClassConstructor(innerClass, Visibility.PUBLIC);
@@ -428,28 +423,38 @@ public final class ClassMeta<T> implements Type {
 		return hasChildPojoSwaps;
 	}
 
-	private Transform findTransform(BeanContext context) {
+	@SuppressWarnings("unchecked")
+	private BeanFilter<? extends T> findBeanFilter(BeanContext context) {
 		try {
-			org.apache.juneau.annotation.Pojo b = innerClass.getAnnotation(org.apache.juneau.annotation.Pojo.class);
-			if (b != null) {
-				Class<?> c = b.swap();
-				if (c != Null.class) {
-					if (ClassUtils.isParentClass(PojoSwap.class, c)) 
-						return (Transform)c.newInstance();
-					throw new RuntimeException("TODO - Surrogate classes not yet supported.");
-				}
-			}
 			if (context == null)
 				return null;
-			Transform f = context.findBeanFilter(innerClass);
-			if (f != null)
-				return f;
-			f = context.findPojoSwap(innerClass);
+			BeanFilter<? extends T> f = context.findBeanFilter(innerClass);
 			if (f != null)
 				return f;
 			List<Bean> ba = ReflectionUtils.findAnnotations(Bean.class, innerClass);
 			if (! ba.isEmpty())
 				f = new AnnotationBeanFilter<T>(innerClass, ba);
+			return f;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private PojoSwap<T,?> findPojoSwap(BeanContext context) {
+		try {
+			Pojo p = innerClass.getAnnotation(Pojo.class);
+			if (p != null) {
+				Class<?> c = p.swap();
+				if (c != Null.class) {
+					if (ClassUtils.isParentClass(PojoSwap.class, c))
+						return (PojoSwap<T,?>)c.newInstance();
+					throw new RuntimeException("TODO - Surrogate classes not yet supported.");
+				}
+			}
+			if (context == null)
+				return null;
+			PojoSwap<T,?> f = context.findPojoSwap(innerClass);
 			return f;
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -523,13 +528,13 @@ public final class ClassMeta<T> implements Type {
 	}
 
 	/**
-	 * Returns the generalized form of this class if there is an {@link PojoSwap} associated with it.
+	 * Returns the serialized (swapped) form of this class if there is an {@link PojoSwap} associated with it.
 	 *
-	 * @return The transformed class type, or this object if no transform is associated with the class.
+	 * @return The serialized class type, or this object if no swap is associated with the class.
 	 */
 	@BeanIgnore
-	public ClassMeta<?> getTransformedClassMeta() {
-		return transformedClassMeta;
+	public ClassMeta<?> getSerializedClassMeta() {
+		return serializedClassMeta;
 	}
 
 	/**

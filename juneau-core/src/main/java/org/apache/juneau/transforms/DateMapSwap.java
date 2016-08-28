@@ -40,7 +40,7 @@ public class DateMapSwap extends PojoSwap<Date,Map> {
 	 * Converts the specified {@link Map} to a {@link Date}.
 	 */
 	@Override /* PojoSwap */
-	public Date unswap(Map o, ClassMeta<?> hint) throws ParseException {
+	public Date unswap(Map o, ClassMeta<?> hint, BeanContext bc) throws ParseException {
 		Class<?> c = (hint == null ? java.util.Date.class : hint.getInnerClass());
 		long l = Long.parseLong(((Map<?,?>)o).get("time").toString());
 		if (c == java.util.Date.class)

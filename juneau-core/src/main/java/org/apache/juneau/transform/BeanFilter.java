@@ -28,17 +28,14 @@ import org.apache.juneau.internal.*;
  * 	This class can be considered a programmatic equivalent to using the {@link Bean @Bean} annotation on bean classes.
  * 	Thus, it can be used to perform the same function as the <code>@Bean</code> annotation when you don't have
  * 		the ability to annotate those classes (e.g. you don't have access to the source code).
- * <p>
- * 	Note that value returned by the {@link Transform#forClass()} method is automatically determined through reflection
- * 		when the no-arg constructor is used.
  *
  * <p>
  * 	When defining bean filters, you can either call the setters in the contructor, or override getters.
  *
  * <h6 class='topic'>Example</h6>
  * <p class='bcode'>
- * 	<jc>// Create our serializer with a filter.</jc>
- * 	WriterSerializer s = <jk>new</jk> JsonSerializer().addTransforms(AddressFilter.<jk>class</jk>);
+ * 	<jc>// Create our serializer with a bean filter.</jc>
+ * 	WriterSerializer s = <jk>new</jk> JsonSerializer().addBeanFilters(AddressFilter.<jk>class</jk>);
  *
  * 	Address a = <jk>new</jk> Address();
  * 	String json = s.serialize(a); <jc>// Serializes only street, city, state.</jc>
@@ -67,8 +64,9 @@ import org.apache.juneau.internal.*;
  * @author James Bognar (james.bognar@salesforce.com)
  * @param <T> The class type that this filter applies to.
  */
-public abstract class BeanFilter<T> extends Transform {
+public abstract class BeanFilter<T> {
 
+	private Class<T> beanClass;
 	private String[] properties, excludeProperties;
 	private LinkedHashMap<Class<?>, String> subTypes;
 	private String subTypeAttr;
@@ -82,7 +80,6 @@ public abstract class BeanFilter<T> extends Transform {
 	@SuppressWarnings("unchecked")
 	public BeanFilter() {
 		super();
-		this.type = TransformType.BEAN;
 
 		Class<?> c = this.getClass().getSuperclass();
 		Type t = this.getClass().getGenericSuperclass();
@@ -98,7 +95,7 @@ public abstract class BeanFilter<T> extends Transform {
 			if (pta.length > 0) {
 				Type nType = pta[0];
 				if (nType instanceof Class)
-					this.forClass = (Class<T>)nType;
+					this.beanClass = (Class<T>)nType;
 
 				else
 					throw new RuntimeException("Unsupported parameter type: " + nType);
@@ -125,11 +122,18 @@ public abstract class BeanFilter<T> extends Transform {
 	 * 	</dd>
 	 * </dl>
 	 *
-	 * @param forClass The class that this bean filter applies to.
+	 * @param beanClass The class that this bean filter applies to.
 	 */
-	public BeanFilter(Class<T> forClass) {
-		super(forClass);
-		this.type = TransformType.BEAN;
+	public BeanFilter(Class<T> beanClass) {
+		this.beanClass = beanClass;
+	}
+
+	/**
+	 * Returns the bean class that this filter applies to.
+	 * @return The bean class that this filter applies to.
+	 */
+	public Class<T> getBeanClass() {
+		return beanClass;
 	}
 
 	/**
@@ -153,13 +157,13 @@ public abstract class BeanFilter<T> extends Transform {
 	 * 	<dt>Example:</dt>
 	 * 	<dd>
 	 * 		<p class='bcode'>
-	 * 	<jc>// Create our serializer with a filter.</jc>
-	 * 	WriterSerializer s = <jk>new</jk> JsonSerializer().addTransforms(AddressFilter.<jk>class</jk>);
+	 * 	<jc>// Create our serializer with a bean filter.</jc>
+	 * 	WriterSerializer s = <jk>new</jk> JsonSerializer().addBeanFilters(AddressFilter.<jk>class</jk>);
 	 *
 	 * 	Address a = <jk>new</jk> Address();
 	 * 	String json = s.serialize(a); <jc>// Serializes only street, city, state.</jc>
 	 *
-	 * 	<jc>// Transform class</jc>
+	 * 	<jc>// Filter class</jc>
 	 * 	<jk>public class</jk> AddressFilter <jk>extends</jk> BeanFilter&lt;Address&gt; {
 	 * 		<jk>public</jk> AddressFilter() {
 	 * 			setProperties(<js>"street"</js>,<js>"city"</js>,<js>"state"</js>);
@@ -234,13 +238,13 @@ public abstract class BeanFilter<T> extends Transform {
 	 * 	<dt>Example:</dt>
 	 * 	<dd>
 	 * 		<p class='bcode'>
-	 * 	<jc>// Create our serializer with a filter.</jc>
-	 * 	WriterSerializer s = <jk>new</jk> JsonSerializer().addTransforms(NoCityOrStateFilter.<jk>class</jk>);
+	 * 	<jc>// Create our serializer with a bean filter.</jc>
+	 * 	WriterSerializer s = <jk>new</jk> JsonSerializer().addBeanFilters(NoCityOrStateFilter.<jk>class</jk>);
 	 *
 	 * 	Address a = <jk>new</jk> Address();
 	 * 	String json = s.serialize(a); <jc>// Excludes city and state.</jc>
 	 *
-	 * 	<jc>// Transform class</jc>
+	 * 	<jc>// Filter class</jc>
 	 * 	<jk>public class</jk> NoCityOrStateFilter <jk>extends</jk> BeanFilter&lt;Address&gt; {
 	 * 		<jk>public</jk> AddressFilter() {
 	 * 			setExcludeProperties(<js>"city"</js>,<js>"state"</js>);
@@ -327,7 +331,7 @@ public abstract class BeanFilter<T> extends Transform {
 	 * 		<jk>public</jk> String <jf>f2</jf>;
 	 * 	}
 	 *
-	 * 	<jc>// Transform for defining subtypes</jc>
+	 * 	<jc>// Filter for defining subtypes</jc>
 	 * 	<jk>public class</jk> AFilter <jk>extends</jk> BeanFilter&lt;A&gt; {
 	 * 		<jk>public</jk> AFilter() {
 	 * 			setSubTypeProperty(<js>"subType"</js>);
@@ -428,7 +432,7 @@ public abstract class BeanFilter<T> extends Transform {
 	 * 		<jk>public</jk> String <jf>f1</jf> = <js>"f1"</js>;
 	 * 	}
 	 *
-	 * 	<jc>// Transform class</jc>
+	 * 	<jc>// Filter class</jc>
 	 * 	<jk>public class</jk> AFilter <jk>extends</jk> BeanFilter&lt;A&gt; {
 	 * 		<jk>public</jk> AFilter() {
 	 * 			setInterfaceClass(A.<jk>class</jk>);

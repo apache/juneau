@@ -292,7 +292,7 @@ public class XmlSchemaSerializer extends XmlSerializer {
 				return false;
 			processedElements.add(name);
 
-			ClassMeta<?> ft = cm.getTransformedClassMeta();
+			ClassMeta<?> ft = cm.getSerializedClassMeta();
 			int i = session.getIndent() + 1;
 			if (name == null)
 				name = getElementName(ft);
@@ -332,7 +332,7 @@ public class XmlSchemaSerializer extends XmlSerializer {
 
 			int i = session.getIndent() + 1;
 
-			cm = cm.getTransformedClassMeta();
+			cm = cm.getSerializedClassMeta();
 
 			w.oTag(i, "complexType")
 				.attr("name", name);
@@ -520,7 +520,7 @@ public class XmlSchemaSerializer extends XmlSerializer {
 		}
 
 		private String getElementName(ClassMeta<?> cm) {
-			cm = cm.getTransformedClassMeta();
+			cm = cm.getSerializedClassMeta();
 			String name = cm.getExtendedMeta(XmlClassMeta.class).getElementName();
 
 			if (name == null) {
@@ -550,7 +550,7 @@ public class XmlSchemaSerializer extends XmlSerializer {
 
 		private String getXmlType(Namespace currentNs, ClassMeta<?> cm) {
 			String name = null;
-			cm = cm.getTransformedClassMeta();
+			cm = cm.getSerializedClassMeta();
 			if (currentNs == targetNs && ! session.isAddJsonTypeAttrs()) {
 				if (cm.isBoolean())
 					name = "boolean";

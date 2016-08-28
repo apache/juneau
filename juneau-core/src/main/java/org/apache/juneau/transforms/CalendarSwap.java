@@ -97,7 +97,7 @@ public class CalendarSwap extends PojoSwap<Calendar,String> {
 		public ISO8601DT() {}
 
 		@Override /* PojoSwap */
-		public Calendar unswap(String o, ClassMeta<?> hint) throws ParseException {
+		public Calendar unswap(String o, ClassMeta<?> hint, BeanContext bc) throws ParseException {
 			try {
 				if (StringUtils.isEmpty(o))
 					return null;
@@ -124,7 +124,7 @@ public class CalendarSwap extends PojoSwap<Calendar,String> {
 		public ISO8601DTZ() {}
 
 		@Override /* PojoSwap */
-		public Calendar unswap(String o, ClassMeta<?> hint) throws ParseException {
+		public Calendar unswap(String o, ClassMeta<?> hint, BeanContext bc) throws ParseException {
 			try {
 				if (StringUtils.isEmpty(o))
 					return null;
@@ -264,7 +264,7 @@ public class CalendarSwap extends PojoSwap<Calendar,String> {
 	 * Converts the specified {@link String} to a {@link Calendar}.
 	 */
 	@Override /* PojoSwap */
-	public Calendar unswap(String o, ClassMeta<?> hint) throws ParseException {
+	public Calendar unswap(String o, ClassMeta<?> hint, BeanContext bc) throws ParseException {
 		try {
 			if (StringUtils.isEmpty(o))
 				return null;

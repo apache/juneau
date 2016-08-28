@@ -216,17 +216,17 @@ public class HtmlSerializer extends XmlSerializer {
 			out.tag(i, "null").nl();
 		else {
 
-			gType = aType.getTransformedClassMeta();
+			gType = aType.getSerializedClassMeta();
 			String classAttr = null;
 			if (session.isAddClassAttrs() && ! eType.equals(aType))
 				classAttr = aType.toString();
 
-			// Transform if necessary
-			PojoSwap transform = aType.getPojoSwap();
-			if (transform != null) {
-				o = transform.swap(o, bc);
+			// Swap if necessary
+			PojoSwap swap = aType.getPojoSwap();
+			if (swap != null) {
+				o = swap.swap(o, bc);
 
-				// If the transforms getTransformedClass() method returns Object, we need to figure out
+				// If the getSwapClass() method returns Object, we need to figure out
 				// the actual type now.
 				if (gType.isObject())
 					gType = bc.getClassMetaForObject(o);
@@ -412,7 +412,7 @@ public class HtmlSerializer extends XmlSerializer {
 				if (cm != null && cm.getPojoSwap() != null) {
 					PojoSwap f = cm.getPojoSwap();
 					o = f.swap(o, bc);
-					cm = cm.getTransformedClassMeta();
+					cm = cm.getSerializedClassMeta();
 				}
 
 				if (cm != null && session.isAddClassAttrs() && elementType.getInnerClass() != o.getClass())
@@ -490,7 +490,7 @@ public class HtmlSerializer extends XmlSerializer {
 		if (cm.getPojoSwap() != null) {
 			PojoSwap f = cm.getPojoSwap();
 			o1 = f.swap(o1, bc);
-			cm = cm.getTransformedClassMeta();
+			cm = cm.getSerializedClassMeta();
 		}
 		if (cm == null || ! (cm.isMap() || cm.isBean()))
 			return null;
@@ -526,7 +526,7 @@ public class HtmlSerializer extends XmlSerializer {
 			if (cm != null && cm.getPojoSwap() != null) {
 				PojoSwap f = cm.getPojoSwap();
 				o = f.swap(o);
-				cm = cm.getTransformedClassMeta();
+				cm = cm.getSerializedClassMeta();
 			}
 			if (prevC.contains(cm))
 				continue;

@@ -129,10 +129,10 @@ public class DataConversionTest {
 	}
 
 	//====================================================================================================
-	// Data conversions with object transforms.
+	// Data conversions with swaps.
 	//====================================================================================================
 	@Test
-	public void testObjectTransforms() throws Exception {
+	public void testObjectSwaps() throws Exception {
 		String s = "Jan 12, 2001";
 		BeanContext bc = ContextFactory.create().addPojoSwaps(CalendarSwap.Medium.class).getBeanContext();
 		Calendar c = bc.convertToType(s, GregorianCalendar.class);

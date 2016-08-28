@@ -244,7 +244,7 @@ public class RdfParser extends ReaderParser {
 		if (nt == null)
 			nt = (ClassMeta<T>)object();
 		PojoSwap<T,Object> transform = (PojoSwap<T,Object>)nt.getPojoSwap();
-		ClassMeta<?> ft = nt.getTransformedClassMeta();
+		ClassMeta<?> ft = nt.getSerializedClassMeta();
 		session.setCurrentClass(ft);
 
 		if (! ft.canCreateNewInstance(outer)) {

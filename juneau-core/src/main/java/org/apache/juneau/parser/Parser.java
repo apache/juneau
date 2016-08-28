@@ -580,7 +580,7 @@ public abstract class Parser extends CoreApi {
 		if (type == null)
 			type = (ClassMeta<T>)object();
 		PojoSwap transform = type.getPojoSwap();
-		ClassMeta<?> gType = type.getTransformedClassMeta();
+		ClassMeta<?> gType = type.getSerializedClassMeta();
 
 		Object o = s;
 		if (gType.isChar())

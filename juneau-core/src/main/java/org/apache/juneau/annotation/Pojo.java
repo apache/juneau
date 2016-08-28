@@ -78,8 +78,8 @@ public @interface Pojo {
 	 * <p>
 	 * 	Note that using this annotation is functionally equivalent to adding swaps to the serializers and parsers:
 	 * <p class='bcode'>
-	 * 	WriterSerializer s = <jk>new</jk> JsonSerializer.addTransforms(BSwap.<jk>class</jk>);
-	 * 	ReaderParser p = <jk>new</jk> JsonParser.addTransforms(BSwap.<jk>class</jk>);
+	 * 	WriterSerializer s = <jk>new</jk> JsonSerializer.addPojoSwaps(BSwap.<jk>class</jk>);
+	 * 	ReaderParser p = <jk>new</jk> JsonParser.addPojoSwaps(BSwap.<jk>class</jk>);
 	 * </p>
 	 */
 	Class<?> swap() default Null.class;

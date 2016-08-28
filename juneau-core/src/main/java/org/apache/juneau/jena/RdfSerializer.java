@@ -177,20 +177,20 @@ public class RdfSerializer extends WriterSerializer {
 				aType = ((Delegate)o).getClassMeta();
 			}
 
-			gType = aType.getTransformedClassMeta();
+			gType = aType.getSerializedClassMeta();
 
-			// Transform if necessary
-			PojoSwap transform = aType.getPojoSwap();
-			if (transform != null) {
-				o = transform.swap(o, bc);
+			// Swap if necessary
+			PojoSwap swap = aType.getPojoSwap();
+			if (swap != null) {
+				o = swap.swap(o, bc);
 
-				// If the transforms getTransformedClass() method returns Object, we need to figure out
+				// If the getSwapClass() method returns Object, we need to figure out
 				// the actual type now.
 				if (gType.isObject())
 					gType = bc.getClassMetaForObject(o);
 			}
 		} else {
-			gType = eType.getTransformedClassMeta();
+			gType = eType.getSerializedClassMeta();
 		}
 
 		RDFNode n = null;

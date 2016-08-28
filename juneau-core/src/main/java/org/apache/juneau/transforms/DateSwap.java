@@ -110,7 +110,7 @@ public class DateSwap extends PojoSwap<Date,String> {
 		}
 
 		@Override /* PojoSwap */
-		public Date unswap(String o, ClassMeta<?> hint) throws ParseException {
+		public Date unswap(String o, ClassMeta<?> hint, BeanContext bc) throws ParseException {
 			try {
 				if (StringUtils.isEmpty(o))
 					return null;
@@ -180,7 +180,7 @@ public class DateSwap extends PojoSwap<Date,String> {
 		}
 
 		@Override /* PojoSwap */
-		public Date unswap(String o, ClassMeta<?> hint) throws ParseException {
+		public Date unswap(String o, ClassMeta<?> hint, BeanContext bc) throws ParseException {
 			try {
 				if (StringUtils.isEmpty(o))
 					return null;
@@ -338,7 +338,7 @@ public class DateSwap extends PojoSwap<Date,String> {
 	 * Converts the specified {@link String} to a {@link Date}.
 	 */
 	@Override /* PojoSwap */
-	public Date unswap(String o, ClassMeta<?> hint) throws ParseException {
+	public Date unswap(String o, ClassMeta<?> hint, BeanContext bc) throws ParseException {
 		try {
 			if (StringUtils.isEmpty(o))
 				return null;

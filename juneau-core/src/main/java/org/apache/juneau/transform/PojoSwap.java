@@ -89,7 +89,7 @@ import org.apache.juneau.serializer.*;
  * @param <T> The normal form of the class.
  * @param <S> The swapped form of the class.
  */
-public abstract class PojoSwap<T,S> extends Transform {
+public abstract class PojoSwap<T,S> {
 
 	Class<T> normalClass;
 	Class<S> swapClass;
@@ -199,22 +199,7 @@ public abstract class PojoSwap<T,S> extends Transform {
 	}
 
 	/**
-	 *	Same as {@link #unswap(Object)}, but override this method if you need access to the expected class type
-	 *		to be created.
-	 *
-	 * @param f The transformed object.
-	 * @param hint If possible, the parser will try to tell you the object type being created.  For example,
-	 * 	on a serialized date, this may tell you that the object being created must be of type {@code GregorianCalendar}.<br>
-	 * 	This may be <jk>null</jk> if the parser cannot make this determination.
-	 * @return The narrowed object.
-	 * @throws ParseException If this method is not implemented.
-	 */
-	public T unswap(S f, ClassMeta<?> hint) throws ParseException {
-		return unswap(f);
-	}
-
-	/**
-	 *	Same as {@link #unswap(Object, ClassMeta)}, but override this method if you need access to the bean context that created this swap.
+	 *	Same as {@link #unswap(Object)}, but override this method if you need access to the real class type or the bean context that created this swap.
 	 *
 	 * @param f The transformed object.
 	 * @param hint If possible, the parser will try to tell you the object type being created.  For example,
@@ -226,7 +211,7 @@ public abstract class PojoSwap<T,S> extends Transform {
 	 * @throws ParseException If this method is not implemented.
 	 */
 	public T unswap(S f, ClassMeta<?> hint, BeanContext beanContext) throws ParseException {
-		return unswap(f, hint);
+		return unswap(f);
 	}
 
 	/**
@@ -293,11 +278,6 @@ public abstract class PojoSwap<T,S> extends Transform {
 	//--------------------------------------------------------------------------------
 	// Overridden methods
 	//--------------------------------------------------------------------------------
-
-	@Override /* Transform */
-	public Class<?> forClass() {
-		return normalClass;
-	}
 
 	@Override /* Object */
 	public String toString() {
