@@ -1,5 +1,8 @@
 /* Javadoc style sheet */
 
+@import url('resources/juneau-code.css');
+@import url('resources/juneau-doc.css');
+
 /*
 Overall document style
 */
@@ -656,7 +659,4 @@ h1.hidden {
 .strong {
 	font-weight: bold;
 }
-
-@import url('resources/juneau-code.css');
-@import url('resources/juneau-doc.css');
 
