@@ -199,7 +199,7 @@ public abstract class PojoSwap<T,S> {
 	}
 
 	/**
-	 *	Same as {@link #unswap(Object)}, but override this method if you need access to the real class type or the bean context that created this swap.
+	 *	Same as {@link #unswap(Object)}, but override this method if you need access to the real class type or the bean context that created this swap. 
 	 *
 	 * @param f The transformed object.
 	 * @param hint If possible, the parser will try to tell you the object type being created.  For example,

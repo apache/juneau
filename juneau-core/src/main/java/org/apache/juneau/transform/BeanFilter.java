@@ -34,8 +34,8 @@ import org.apache.juneau.internal.*;
  *
  * <h6 class='topic'>Example</h6>
  * <p class='bcode'>
- * 	<jc>// Create our serializer with a bean filter.</jc>
- * 	WriterSerializer s = <jk>new</jk> JsonSerializer().addBeanFilters(AddressFilter.<jk>class</jk>);
+ * 	<jc>// Create our serializer with a bean filter.</jc> 
+ * 	WriterSerializer s = <jk>new</jk> JsonSerializer().addBeanFilters(AddressFilter.<jk>class</jk>); 
  *
  * 	Address a = <jk>new</jk> Address();
  * 	String json = s.serialize(a); <jc>// Serializes only street, city, state.</jc>
