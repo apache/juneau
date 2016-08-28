@@ -18,9 +18,9 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<style type="text/css">
 		/* For viewing in file system and page designer */
-		@IMPORT url("../../../../org.apache.juneau.releng/javadoc.css");
-		@IMPORT url("../../../../org.apache.juneau.releng/juneau-doc.css");
-		@IMPORT url("../../../../org.apache.juneau.releng/juneau-code.css");
+		@IMPORT url("../../../../juneau-releng/javadoc.css");
+		@IMPORT url("../../../../juneau-releng/juneau-doc.css");
+		@IMPORT url("../../../../juneau-releng/juneau-code.css");
 
 		body { 
 			margin: 20px; 
@@ -748,8 +748,8 @@
 		<ul class='javahierarchy'>
 			<li class='n'>{@link org.apache.juneau.server.annotation.RestResource#properties() @RestResource.properties()} - Annotation on instances of {@link org.apache.juneau.server.RestServlet}.
 			<li class='n'>{@link org.apache.juneau.server.annotation.RestMethod#properties() @RestMethod.properties()} - Annotation on java methods in instances of {@link org.apache.juneau.server.RestServlet}.
-			<li class='m'>{@link org.apache.juneau.server.RestServlet#createSerializers(ObjectMap,Class[])} - Properties can be set programmatically on serializers by overriding this method.
-			<li class='m'>{@link org.apache.juneau.server.RestServlet#createParsers(ObjectMap,Class[])} - Properties can be set programmatically on parsers by overriding this method.
+			<li class='m'>{@link org.apache.juneau.server.RestServlet#createSerializers(ObjectMap,Class[],Class[])} - Properties can be set programmatically on serializers by overriding this method.
+			<li class='m'>{@link org.apache.juneau.server.RestServlet#createParsers(ObjectMap,Class[],Class[])} - Properties can be set programmatically on parsers by overriding this method.
 		</ul>
 		<p>
 			Similarly, the REST client API provides ways of setting properties:
@@ -2253,16 +2253,16 @@
 				{@link org.apache.juneau.server.annotation.RestResource#pojoSwaps() @RestResopurce.pojoSwaps()} annotations are used 
 				to set behavior properties on the resource's underlying bean context, serializers, and parsers.  
 			You're using them here to modify the behavior of serialization for all content types.  
-			The annotations are functionally equivalent to overriding the {@link org.apache.juneau.server.RestServlet#createSerializers(ObjectMap,Class[])} method, as follows:
+			The annotations are functionally equivalent to overriding the {@link org.apache.juneau.server.RestServlet#createSerializers(ObjectMap,Class[],Class[])} method, as follows:
 		</p>
 		<h6 class='figure'>Hypothetical RequestEchoResource.createSerializers() method</h6>
 		<p class='bcode'>
 	<jd>/** Override the default rest serializers to add some transforms */</jd>
 	<ja>@Override</ja>
-	<jk>protected</jk> SerializerGroup createSerializers(ObjectMap properties,Class[] transforms) {
+	<jk>protected</jk> SerializerGroup createSerializers(ObjectMap properties, Class[] beanFilters, Class[] pojoSwaps) {
 
 		<jc>// You'll just reuse the parent serializer group</jc>
-		SerializerGroup serializerGroup = <jk>super</jk>.createSerializers(properties, transforms);
+		SerializerGroup serializerGroup = <jk>super</jk>.createSerializers(properties, beanFilters, pojoSwaps);
 		
 		<jc>// Add bean filters for the HttpServletRequest, HttpSession, and ServletContext objects
 		//		so that you don't show vendor-specific properties on subclasses.
@@ -4781,7 +4781,7 @@
 					<li>{@link org.apache.juneau.BeanPropertyMetaExtended} / {@link org.apache.juneau.BeanPropertyMetaMeta#getExtendedMeta(Class)} 
 				</ul>
 			</li>
-			<li>Renamed <code>@Transform</code> annotation to {@link Pojo @Pojo} so that it can be used for various POJO-related behavior, not just associating transforms.  
+			<li>Renamed <code>@Transform</code> annotation to {@link org.apache.juneau.annotation.Pojo @Pojo} so that it can be used for various POJO-related behavior, not just associating transforms.  
 		</ul>		
 
 		<h6 class='topic'>org.apache.juneau.server</h6>
@@ -4792,11 +4792,12 @@
 				<ul>
 					<li>{@link org.apache.juneau.server.RestServlet#createProperties()}
 					<li>{@link org.apache.juneau.server.RestServlet#createTransforms()}
-					<li>{@link org.apache.juneau.server.RestServlet#createBeanContext(ObjectMap,Class[])}
-					<li>{@link org.apache.juneau.server.RestServlet#createSerializers(ObjectMap,Class[])}
-					<li>{@link org.apache.juneau.server.RestServlet#createParsers(ObjectMap,Class[])}
-					<li>{@link org.apache.juneau.server.RestServlet#createUrlEncodingSerializer(ObjectMap,Class[])}
-					<li>{@link org.apache.juneau.server.RestServlet#createUrlEncodingParser(ObjectMap,Class[])}
+					<li>{@link org.apache.juneau.server.RestServlet#createBeanContext(ObjectMap,Class[],Class[])}
+					<li>{@link org.apache.juneau.server.RestServlet#createBeanFilters()}
+					<li>{@link org.apache.juneau.server.RestServlet#createPojoSwaps()}
+					<li>{@link org.apache.juneau.server.RestServlet#createParsers(ObjectMap,Class[],Class[])}
+					<li>{@link org.apache.juneau.server.RestServlet#createUrlEncodingSerializer(ObjectMap,Class[],Class[])}
+					<li>{@link org.apache.juneau.server.RestServlet#createUrlEncodingParser(ObjectMap,Class[],Class[])}
 					<li>{@link org.apache.juneau.server.RestServlet#createConverters(ObjectMap)}
 					<li>{@link org.apache.juneau.server.RestServlet#createDefaultRequestHeaders(ObjectMap)}
 					<li>{@link org.apache.juneau.server.RestServlet#createDefaultResponseHeaders(ObjectMap)}
@@ -5600,11 +5601,11 @@
 			<li>New methods on {@link org.apache.juneau.ClassMeta} that eliminates language-specific code in 
 				the general class metadata.
 				<ul>
-					<li>{@link org.apache.juneau.ClassMeta#getXmlMeta()}
-					<li>{@link org.apache.juneau.ClassMeta#getJsonMeta()}
-					<li>{@link org.apache.juneau.ClassMeta#getHtmlMeta()}
-					<li>{@link org.apache.juneau.ClassMeta#getUrlEncodingMeta()}
-					<li>{@link org.apache.juneau.ClassMeta#getRdfMeta()}
+					<li><del><code>ClassMeta.getXmlMeta()</code></del>
+					<li><del><code>ClassMeta.getJsonMeta()</code></del>
+					<li><del><code>ClassMeta.getHtmlMeta()</code></del>
+					<li><del><code>ClassMeta.getUrlEncodingMeta()</code></del>
+					<li><del><code>ClassMeta.getRdfMeta()</code></del>
 				</ul>
 			<li>New {@link org.apache.juneau.dto.jsonschema.JsonType#ANY} enum.
 			<li>New {@link org.apache.juneau.html.annotation.Html#asPlainText @Html.asPlainText()} annotation.
@@ -5885,7 +5886,7 @@
 			</li>
 			<li>Fix bug where <code>BeanRuntimeExceptions</code> weren't being thrown on subsequent calls to {@link org.apache.juneau.BeanContext#getClassMeta(Class)}.
 			<li>Moved logic for <code>BeanContext.getPrimitiveDefault(Class)</code> to new {@link org.apache.juneau.ClassMeta#getPrimitiveDefault()} method for performance reasons.
-			<li>Fixed bug in <code>BeanContext.addTransforms(Class[])</code> that would cause filter order to get messed up.
+			<li>Fixed bug in <del><code>BeanContext.addTransforms(Class[])</code></del> that would cause filter order to get messed up.
 			<li>{@link org.apache.juneau.ClassMeta#newInstance()} can now create array instances.
 			<li>Fixed indentation bugs in {@link org.apache.juneau.html.HtmlSerializer}.
 			<li>Fixed issue in {@link org.apache.juneau.html.HtmlSerializer} where newlines were not being converted into line breaks.
@@ -5917,7 +5918,7 @@
 					<li>{@link org.apache.juneau.client.RestClient#setProperty(String,Object)}			
 					<li>{@link org.apache.juneau.client.RestClient#setProperties(ObjectMap)}			
 					<li>{@link org.apache.juneau.client.RestClient#addNotBeanClasses(Class[])}			
-					<li>{@link org.apache.juneau.client.RestClient#addTransforms(Class[])}			
+					<li><del><code>RestClient.addTransforms(Class[])</code></del>		
 					<li>{@link org.apache.juneau.client.RestClient#addImplClass(Class,Class)}	
 				</ul>
 			<li>Renamed <code>RestClient.shutdown()</code> to {@link org.apache.juneau.client.RestClient#close()} to mirror change in Apache API.		
@@ -6035,7 +6036,7 @@
 		</p>
 		<ul class='spaced-list'>
 			<li>Simplified API for {@link org.apache.juneau.transform.PojoSwap}.  
-				Since it's rarely used, the <code>beanContext</code> parameter was replaced with a {@link org.apache.juneau.transform.PojoSwap#getBeanContext()} method on
+				Since it's rarely used, the <code>beanContext</code> parameter was replaced with a <del><code>PojoSwap#getBeanContext()</code></del> method on
 				the class.
 			<li>New simplified way of defining POJO filters without needing to extend {@link org.apache.juneau.transform.PojoSwap}.
 				See {@link org.apache.juneau.transform.SurrogateSwap} for details.
@@ -7322,7 +7323,7 @@
 						Combined 4 classes into a single class.
 					</li>
 					<li>
-						New <code>@Bean.filter</code> and {@link org.apache.juneau.annotation.BeanProperty#transform() @BeanProperty.filter} annotations.<br>
+						New <del><code>@Bean.filter</code></del> and <del><code>@BeanProperty.filter</code></del> annotations.<br>
 						Used for defining filters on bean classes and bean properties instead of just globally through <code>BeanContext.addTransforms(Class[])</code>.
 					</li>
 					<li>
