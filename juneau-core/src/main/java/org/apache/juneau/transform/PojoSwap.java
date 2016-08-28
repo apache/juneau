@@ -89,7 +89,7 @@ import org.apache.juneau.serializer.*;
  * @param <T> The normal form of the class.
  * @param <S> The swapped form of the class.
  */
-public abstract class PojoSwap<T,S> extends Transform {
+public abstract class PojoSwap<T,S> {
 
 	Class<T> normalClass;
 	Class<S> swapClass;
@@ -293,11 +293,6 @@ public abstract class PojoSwap<T,S> extends Transform {
 	//--------------------------------------------------------------------------------
 	// Overridden methods
 	//--------------------------------------------------------------------------------
-
-	@Override /* Transform */
-	public Class<?> forClass() {
-		return normalClass;
-	}
 
 	@Override /* Object */
 	public String toString() {

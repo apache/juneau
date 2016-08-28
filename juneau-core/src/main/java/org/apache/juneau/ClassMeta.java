@@ -126,14 +126,9 @@ public final class ClassMeta<T> implements Type {
 	ClassMeta init() {
 
 		try {
-			Transform transform = findTransform(beanContext);
-			if (transform != null) {
-				if (transform.getType() == Transform.TransformType.BEAN)
-					beanFilter = (BeanFilter)transform;
-				else
-					pojoSwap = (PojoSwap)transform;
-				transformedClassMeta = (pojoSwap == null ? this : beanContext.getClassMeta(pojoSwap.getSwapClass()));
-			}
+			beanFilter = findBeanFilter(beanContext);
+			pojoSwap = findPojoSwap(beanContext);
+			transformedClassMeta = (pojoSwap == null ? this : beanContext.getClassMeta(pojoSwap.getSwapClass()));
 			if (transformedClassMeta == null)
 				transformedClassMeta = this;
 
@@ -428,28 +423,38 @@ public final class ClassMeta<T> implements Type {
 		return hasChildPojoSwaps;
 	}
 
-	private Transform findTransform(BeanContext context) {
+	@SuppressWarnings("unchecked")
+	private BeanFilter<? extends T> findBeanFilter(BeanContext context) {
 		try {
-			org.apache.juneau.annotation.Pojo b = innerClass.getAnnotation(org.apache.juneau.annotation.Pojo.class);
-			if (b != null) {
-				Class<?> c = b.swap();
-				if (c != Null.class) {
-					if (ClassUtils.isParentClass(PojoSwap.class, c)) 
-						return (Transform)c.newInstance();
-					throw new RuntimeException("TODO - Surrogate classes not yet supported.");
-				}
-			}
 			if (context == null)
 				return null;
-			Transform f = context.findBeanFilter(innerClass);
-			if (f != null)
-				return f;
-			f = context.findPojoSwap(innerClass);
+			BeanFilter<? extends T> f = context.findBeanFilter(innerClass);
 			if (f != null)
 				return f;
 			List<Bean> ba = ReflectionUtils.findAnnotations(Bean.class, innerClass);
 			if (! ba.isEmpty())
 				f = new AnnotationBeanFilter<T>(innerClass, ba);
+			return f;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private PojoSwap<T,?> findPojoSwap(BeanContext context) {
+		try {
+			Pojo p = innerClass.getAnnotation(Pojo.class);
+			if (p != null) {
+				Class<?> c = p.swap();
+				if (c != Null.class) {
+					if (ClassUtils.isParentClass(PojoSwap.class, c))
+						return (PojoSwap<T,?>)c.newInstance();
+					throw new RuntimeException("TODO - Surrogate classes not yet supported.");
+				}
+			}
+			if (context == null)
+				return null;
+			PojoSwap<T,?> f = context.findPojoSwap(innerClass);
 			return f;
 		} catch (Exception e) {
 			throw new RuntimeException(e);

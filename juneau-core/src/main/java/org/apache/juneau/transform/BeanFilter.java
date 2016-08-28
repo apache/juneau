@@ -28,9 +28,6 @@ import org.apache.juneau.internal.*;
  * 	This class can be considered a programmatic equivalent to using the {@link Bean @Bean} annotation on bean classes.
  * 	Thus, it can be used to perform the same function as the <code>@Bean</code> annotation when you don't have
  * 		the ability to annotate those classes (e.g. you don't have access to the source code).
- * <p>
- * 	Note that value returned by the {@link Transform#forClass()} method is automatically determined through reflection
- * 		when the no-arg constructor is used.
  *
  * <p>
  * 	When defining bean filters, you can either call the setters in the contructor, or override getters.
@@ -67,8 +64,9 @@ import org.apache.juneau.internal.*;
  * @author James Bognar (james.bognar@salesforce.com)
  * @param <T> The class type that this filter applies to.
  */
-public abstract class BeanFilter<T> extends Transform {
+public abstract class BeanFilter<T> {
 
+	private Class<T> beanClass;
 	private String[] properties, excludeProperties;
 	private LinkedHashMap<Class<?>, String> subTypes;
 	private String subTypeAttr;
@@ -82,7 +80,6 @@ public abstract class BeanFilter<T> extends Transform {
 	@SuppressWarnings("unchecked")
 	public BeanFilter() {
 		super();
-		this.type = TransformType.BEAN;
 
 		Class<?> c = this.getClass().getSuperclass();
 		Type t = this.getClass().getGenericSuperclass();
@@ -98,7 +95,7 @@ public abstract class BeanFilter<T> extends Transform {
 			if (pta.length > 0) {
 				Type nType = pta[0];
 				if (nType instanceof Class)
-					this.forClass = (Class<T>)nType;
+					this.beanClass = (Class<T>)nType;
 
 				else
 					throw new RuntimeException("Unsupported parameter type: " + nType);
@@ -125,11 +122,18 @@ public abstract class BeanFilter<T> extends Transform {
 	 * 	</dd>
 	 * </dl>
 	 *
-	 * @param forClass The class that this bean filter applies to.
+	 * @param beanClass The class that this bean filter applies to.
 	 */
-	public BeanFilter(Class<T> forClass) {
-		super(forClass);
-		this.type = TransformType.BEAN;
+	public BeanFilter(Class<T> beanClass) {
+		this.beanClass = beanClass;
+	}
+
+	/**
+	 * Returns the bean class that this filter applies to.
+	 * @return The bean class that this filter applies to.
+	 */
+	public Class<T> getBeanClass() {
+		return beanClass;
 	}
 
 	/**

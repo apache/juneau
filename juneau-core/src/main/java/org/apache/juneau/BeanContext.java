@@ -37,7 +37,7 @@ import org.apache.juneau.transform.*;
  * 	This class servers multiple purposes:
  * 	<ul class='spaced-list'>
  * 		<li>Provides the ability to wrap beans inside {@link Map} interfaces.
- * 		<li>Serves as a repository for metadata on POJOs, such as associated {@link Transform transforms}, {@link PropertyNamer property namers}, etc...
+ * 		<li>Serves as a repository for metadata on POJOs, such as associated {@link BeanFilter beanFilters}, {@link PropertyNamer property namers}, etc...
  * 			which are used to tailor how POJOs are serialized and parsed.
  * 		<li>Serves as a common utility class for all {@link Serializer Serializers} and {@link Parser Parsers}
  * 				for serializing and parsing Java beans.
@@ -158,15 +158,15 @@ import org.apache.juneau.transform.*;
  * 	See {@link BeanConstructor @BeanConstructor} for more information.
  *
  *
- * <h5 class='topic'>Transforms</h5>
+ * <h5 class='topic'>BeanFilters and PojoSwaps</h5>
  * <p>
- * 	{@link Transform Transforms} are used to tailor how beans and non-beans are handled.<br>
- * 	There are two subclasses of transforms:
+ * 	{@link BeanFilter BeanFilters} and {@link PojoSwap PojoSwaps} are used to tailor how beans and POJOs are handled.<br>
  * 	<ol class='spaced-list'>
  * 		<li>{@link BeanFilter} - Allows you to tailor handling of bean classes.
  * 			This class can be considered a programmatic equivalent to the {@link Bean} annotation when
  * 			annotating classes are not possible (e.g. you don't have access to the source).
- * 		<li>{@link PojoSwap} - Allows you to convert objects to serializable forms.
+ * 			This includes specifying which properties are visible and the ability to programmatically override the execution of properties.
+ * 		<li>{@link PojoSwap} - Allows you to swap out non-serializable objects with serializable replacements.
  * 	</ol>
  * <p>
  * 	See {@link org.apache.juneau.transform} for more information.
@@ -1412,7 +1412,7 @@ public class BeanContext extends Context {
 
 	/**
 	 * Returns the {@link PojoSwap} associated with the specified class, or <jk>null</jk> if there is no
-	 * pojo transform associated with the class.
+	 * pojo swap associated with the class.
 	 *
 	 * @param <T> The class associated with the transform.
 	 * @param c The class associated with the transform.
@@ -1422,7 +1422,7 @@ public class BeanContext extends Context {
 		// Note:  On first
 		if (c != null)
 			for (PojoSwap f : pojoSwaps)
-				if (isParentClass(f.forClass(), c))
+				if (isParentClass(f.getNormalClass(), c))
 					return f;
 		return null;
 	}
@@ -1435,7 +1435,7 @@ public class BeanContext extends Context {
 	protected boolean hasChildPojoSwaps(Class<?> c) {
 		if (c != null)
 			for (PojoSwap f : pojoSwaps)
-				if (isParentClass(c, f.forClass()))
+				if (isParentClass(c, f.getNormalClass()))
 					return true;
 		return false;
 	}
@@ -1451,7 +1451,7 @@ public class BeanContext extends Context {
 	protected <T> BeanFilter findBeanFilter(Class<T> c) {
 		if (c != null)
 			for (BeanFilter f : beanFilters)
-				if (isParentClass(f.forClass(), c))
+				if (isParentClass(f.getBeanClass(), c))
 					return f;
 		return null;
 	}

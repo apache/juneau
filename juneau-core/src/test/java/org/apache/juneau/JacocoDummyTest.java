@@ -17,7 +17,6 @@ import java.lang.reflect.*;
 import org.apache.juneau.ini.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.jena.*;
-import org.apache.juneau.transform.*;
 import org.apache.juneau.xml.annotation.*;
 import org.junit.*;
 
@@ -41,7 +40,6 @@ public class JacocoDummyTest {
 		}
 
 		ConfigFileFormat.valueOf(ConfigFileFormat.INI.toString());
-		Transform.TransformType.valueOf(Transform.TransformType.POJO.toString());
 		RdfCollectionFormat.valueOf(RdfCollectionFormat.DEFAULT.toString());
 		XmlFormat.valueOf(XmlFormat.NORMAL.toString());
 		Visibility.valueOf(Visibility.DEFAULT.toString());
