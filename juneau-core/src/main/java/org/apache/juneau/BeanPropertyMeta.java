@@ -46,7 +46,7 @@ public class BeanPropertyMeta {
 
 	private Field field;
 	private Method getter, setter;
-	private boolean isConstructorArg, isBeanUri, isUri;
+	private boolean isConstructorArg, isUri;
 
 	private final BeanMeta<?> beanMeta;
 
@@ -189,15 +189,6 @@ public class BeanPropertyMeta {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this bean property is marked with {@link BeanProperty#beanUri()} as <jk>true</jk>.
-	 *
-	 * @return <jk>true</jk> if this bean property is marked with {@link BeanProperty#beanUri()} as <jk>true</jk>.
-	 */
-	public boolean isBeanUri() {
-		return isBeanUri;
-	}
-
-	/**
 	 * Returns <jk>true</jk> if this bean property is a URI.
 	 * <p>
 	 * A bean property can be considered a URI if any of the following are true:
@@ -249,7 +240,6 @@ public class BeanPropertyMeta {
 				swap = getPropertyPojoSwap(p);
 				if (p.properties().length != 0)
 					properties = p.properties();
-				isBeanUri |= p.beanUri();
 			}
 		}
 
@@ -263,7 +253,6 @@ public class BeanPropertyMeta {
 					swap = getPropertyPojoSwap(p);
 				if (properties != null && p.properties().length != 0)
 					properties = p.properties();
-				isBeanUri |= p.beanUri();
 			}
 		}
 
@@ -277,7 +266,6 @@ public class BeanPropertyMeta {
 				swap = getPropertyPojoSwap(p);
 				if (properties != null && p.properties().length != 0)
 					properties = p.properties();
-				isBeanUri |= p.beanUri();
 			}
 		}
 

@@ -46,9 +46,6 @@ public class XmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 
 		if (namespace == null)
 			namespace = bpm.getBeanMeta().getClassMeta().getExtendedMeta(XmlClassMeta.class).getNamespace();
-
-		if (bpm.isBeanUri() && xmlFormat != XmlFormat.ELEMENT)
-			xmlFormat = XmlFormat.ATTR;
 	}
 
 	/**

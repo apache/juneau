@@ -19,7 +19,6 @@ import static org.junit.Assert.*;
 
 import java.net.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.annotation.*;
 import org.junit.*;
 
@@ -47,7 +46,7 @@ public class CommonXmlTest {
 	}
 
 	public static class A {
-		@BeanProperty(beanUri=true) public URL url;
+		@Xml(format=XmlFormat.ATTR) public URL url;
 		@Xml(format=ATTR) public int id;
 		public String name;
 		public A() {}
@@ -71,7 +70,7 @@ public class CommonXmlTest {
 	}
 
 	public static class B {
-		@BeanProperty(beanUri=true) public URL url;
+		@Xml(format=XmlFormat.ATTR) public URL url;
 		public URL url2;
 		public B() {}
 		public B(String url) throws Exception {

@@ -19,7 +19,8 @@ import static org.junit.Assert.*;
 
 import java.net.*;
 
-import org.apache.juneau.annotation.*;
+import org.apache.juneau.jena.annotation.*;
+import org.apache.juneau.xml.annotation.*;
 import org.junit.*;
 
 @SuppressWarnings("javadoc")
@@ -55,7 +56,7 @@ public class CommonXmlTest {
 	}
 
 	public static class A {
-		@BeanProperty(beanUri=true) public URL url;
+		@Rdf(beanUri=true) @Xml(format=XmlFormat.ATTR) public URL url;
 		public String name;
 
 		public static A create() throws Exception {
@@ -83,7 +84,7 @@ public class CommonXmlTest {
 	}
 
 	public static class B {
-		@BeanProperty(beanUri=true) public URL url;
+		@Rdf(beanUri=true) @Xml(format=XmlFormat.ATTR) public URL url;
 		public URL url2;
 
 		public static B create() throws Exception {

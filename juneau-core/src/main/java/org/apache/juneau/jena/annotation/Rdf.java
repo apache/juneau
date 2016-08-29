@@ -59,4 +59,15 @@ public @interface Rdf {
 	 * @see RdfCollectionFormat
 	 */
 	RdfCollectionFormat collectionFormat() default RdfCollectionFormat.DEFAULT;
+
+	/**
+	 * Marks a bean property as a resource URI identifier for the bean.
+	 * <p>
+	 * Has the following effects on the following serializers:
+	 * <ul class='spaced-list'>
+	 * 	<li>{@link RdfSerializer} - Will be rendered as the value of the <js>"rdf:about"</js> attribute
+	 * 		for the bean.
+	 * </ul>
+	 */
+	boolean beanUri() default false;
 }

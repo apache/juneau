@@ -14,7 +14,6 @@ package org.apache.juneau.samples.addressbook;
 
 import java.net.URI;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.xml.annotation.*;
 
@@ -28,7 +27,7 @@ public class Address {
 	private static int nextAddressId = 1;
 
 	// Bean properties
-	@BeanProperty(beanUri=true) public URI uri;
+	@Rdf(beanUri=true) public URI uri;
 	public URI personUri;
 	public int id;
 	@Xml(prefix="mail") @Rdf(prefix="mail") public String street, city, state;

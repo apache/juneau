@@ -20,10 +20,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.jena.*;
 import org.apache.juneau.transform.*;
-import org.apache.juneau.xml.*;
-import org.apache.juneau.xml.annotation.*;
 
 /**
  * Used tailor how bean properties get interpreted by the framework.
@@ -170,18 +167,5 @@ public @interface BeanProperty {
 	 * </dl>
 	 */
 	String[] properties() default {};
-
-	/**
-	 * Marks a bean property as a resource URI identifier for the bean.
-	 * <p>
-	 * Has the following effects on the following serializers:
-	 * <ul class='spaced-list'>
-	 * 	<li>{@link XmlSerializer} - Will be rendered as an XML attribute on the bean element, unless
-	 * 		marked with a {@link Xml#format} value of {@link XmlFormat#ELEMENT}.
-	 * 	<li>{@link RdfSerializer} - Will be rendered as the value of the <js>"rdf:about"</js> attribute
-	 * 		for the bean.
-	 * </ul>
-	 */
-	boolean beanUri() default false;
 }
 

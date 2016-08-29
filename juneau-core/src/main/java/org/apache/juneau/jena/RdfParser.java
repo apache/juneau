@@ -183,8 +183,9 @@ public class RdfParser extends ReaderParser {
 
 	private <T> BeanMap<T> parseIntoBeanMap(RdfParserSession session, Resource r2, BeanMap<T> m) throws Exception {
 		BeanMeta<T> bm = m.getMeta();
-		if (bm.hasBeanUriProperty() && r2.getURI() != null)
-			m.putBeanUri(r2.getURI());
+		RdfBeanMeta rbm = bm.getExtendedMeta(RdfBeanMeta.class);
+		if (rbm.hasBeanUri() && r2.getURI() != null)
+			rbm.getBeanUriProperty().set(m, r2.getURI());
 		Property subTypeIdProperty = null;
 		BeanPropertyMeta stp = bm.getSubTypeIdProperty();
 		if (stp != null) {

@@ -548,7 +548,7 @@ public class XmlSerializer extends WriterSerializer {
 
 				Namespace ns = (session.isEnableNamespaces() && pMeta.getExtendedMeta(XmlBeanPropertyMeta.class).getNamespace() != elementNs ? pMeta.getExtendedMeta(XmlBeanPropertyMeta.class).getNamespace() : null);
 
-				if (pMeta.isBeanUri() || pMeta.isUri())
+				if (pMeta.isUri())
 					out.attrUri(ns, key, value);
 				else
 					out.attr(ns, key, value);

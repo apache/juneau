@@ -104,7 +104,7 @@ public class RdfParserTest {
 	public static class A {
 		public int f1;
 		public String f2;
-		@BeanProperty(beanUri=true) public URI f3;
+		@Rdf(beanUri=true) public URI f3;
 		public URI f4a, f4b;
 		@BeanProperty(swap=CalendarSwap.ISO8601DTZ.class) public Calendar f5;
 		public LinkedList<A1> f6 = new LinkedList<A1>();
@@ -129,7 +129,7 @@ public class RdfParserTest {
 	public static class A1 {
 		public int f1;
 		public String f2;
-		@BeanProperty(beanUri=true) public URI f3;
+		@Rdf(beanUri=true) public URI f3;
 		public URI f4a, f4b;
 		@BeanProperty(swap=CalendarSwap.ISO8601DTZ.class) public Calendar f5;
 

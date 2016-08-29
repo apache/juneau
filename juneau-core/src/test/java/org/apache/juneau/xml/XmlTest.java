@@ -23,6 +23,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.xml.annotation.*;
 import org.apache.juneau.xml.xml1a.*;
@@ -441,7 +442,7 @@ public class XmlTest {
 	}
 
 	public static class N {
-		@BeanProperty(beanUri=true) @Xml(format=ELEMENT) public URL url;
+		@Rdf(beanUri=true) @Xml(format=ELEMENT) public URL url;
 		public int id;
 		public String name;
 		public N() {}
@@ -473,7 +474,7 @@ public class XmlTest {
 	}
 
 	public static class O {
-		@BeanProperty(beanUri=true, name="url2") @Xml(format=ELEMENT) public URL url;
+		@BeanProperty(name="url2") @Xml(format=ELEMENT) public URL url;
 		@BeanProperty(name="id2") public int id;
 		public String name;
 		public O() {}
@@ -505,7 +506,7 @@ public class XmlTest {
 	}
 
 	public static class P {
-		@BeanProperty(beanUri=true, name="url2") public URL url;
+		@BeanProperty(name="url2") @Xml(format=ATTR) public URL url;
 		@BeanProperty(name="id2") @Xml(format=ATTR) public int id;
 		public String name;
 		public P() {}

@@ -153,29 +153,6 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	}
 
 	/**
-	 * Returns the value of the property identified as the URI property (annotated with {@link BeanProperty#beanUri()} as <jk>true</jk>).
-	 *
-	 * @return The URI value, or <jk>null</jk> if no URI property exists on this bean.
-	 */
-	public Object getBeanUri() {
-		BeanMeta<T> bm = getMeta();
-		return bm.hasBeanUriProperty() ? bm.getBeanUriProperty().get(this) : null;
-	}
-
-	/**
-	 * Sets the bean URI property if the bean has a URI property.
-	 * Ignored otherwise.
-	 *
-	 * @param o The bean URI object.
-	 * @return If the bean context setting {@code beanMapPutReturnsOldValue} is <jk>true</jk>, then the old value of the property is returned.
-	 * 		Otherwise, this method always returns <jk>null</jk>.
-	 */
-	public Object putBeanUri(Object o) {
-		BeanMeta<T> bm = getMeta();
-		return bm.hasBeanUriProperty() ? bm.getBeanUriProperty().set(this, o) : null;
-	}
-
-	/**
 	 * Sets a property on the bean.
 	 * <p>
 	 * If there is a {@link PojoSwap} associated with this bean property or bean property type class, then
@@ -221,8 +198,6 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 		if (p == null) {
 			if (meta.ctx.ignoreUnknownBeanProperties)
 				return null;
-			if (property.equals("<uri>") && meta.uriProperty != null)
-				return meta.uriProperty.set(this, value);
 
 			// If this bean has subtypes, and we haven't set the subtype yet,
 			// store the property in a temporary cache until the bean can be instantiated.

@@ -29,6 +29,7 @@ public class RdfBeanPropertyMeta extends BeanPropertyMetaExtended {
 
 	private RdfCollectionFormat collectionFormat = DEFAULT;
 	private Namespace namespace = null;
+	private boolean isBeanUri;
 
 	/**
 	 * Constructor.
@@ -41,9 +42,12 @@ public class RdfBeanPropertyMeta extends BeanPropertyMetaExtended {
 		List<Rdf> rdfs = bpm.findAnnotations(Rdf.class);
 		List<RdfSchema> schemas = bpm.findAnnotations(RdfSchema.class);
 
-		for (Rdf rdf : rdfs)
+		for (Rdf rdf : rdfs) {
 			if (collectionFormat == DEFAULT)
 				collectionFormat = rdf.collectionFormat();
+			if (rdf.beanUri())
+				isBeanUri = true;
+		}
 
 		namespace = RdfUtils.findNamespace(rdfs, schemas);
 	}
@@ -78,5 +82,14 @@ public class RdfBeanPropertyMeta extends BeanPropertyMetaExtended {
 	 */
 	public Namespace getNamespace() {
 		return namespace;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this bean property is marked with {@link Rdf#beanUri()} as <jk>true</jk>.
+	 *
+	 * @return <jk>true</jk> if this bean property is marked with {@link Rdf#beanUri()} as <jk>true</jk>.
+	 */
+	public boolean isBeanUri() {
+		return isBeanUri;
 	}
 }

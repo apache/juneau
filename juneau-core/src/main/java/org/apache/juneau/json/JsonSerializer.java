@@ -213,7 +213,7 @@ public class JsonSerializer extends WriterSerializer {
 			serializeMap(session, out, gType.toObjectMap(o), gType);
 		else if (gType.isBean())
 			serializeBeanMap(session, out, bc.forBean(o), addClassAttr);
-		else if (gType.isUri() || (pMeta != null && (pMeta.isUri() || pMeta.isBeanUri())))
+		else if (gType.isUri() || (pMeta != null && pMeta.isUri()))
 			out.q().appendUri(o).q();
 		else if (gType.isMap()) {
 			if (o instanceof BeanMap)

@@ -94,9 +94,8 @@ public class BeanMeta<T> {
 	private final MetadataMap extMeta;  // Extended metadata
 
 	// Other fields
-	final BeanPropertyMeta uriProperty;                                 // The property identified as the URI for this bean (annotated with @BeanProperty.beanUri).
 	final BeanPropertyMeta subTypeIdProperty;                           // The property indentified as the sub type differentiator property (identified by @Bean.subTypeProperty annotation).
-	private final BeanPropertyMeta classProperty;                               // "_class" mock bean property.
+	private final BeanPropertyMeta classProperty;                       // "_class" mock bean property.
 
 	final String notABeanReason;
 
@@ -124,7 +123,6 @@ public class BeanMeta<T> {
 		this.constructor = b.constructor;
 		this.constructorArgs = b.constructorArgs;
 		this.extMeta = b.extMeta;
-		this.uriProperty = b.uriProperty;
 		this.subTypeIdProperty = b.subTypeIdProperty;
 		this.classProperty = new BeanPropertyMeta(this, "_class", ctx.string());
 	}
@@ -142,7 +140,6 @@ public class BeanMeta<T> {
 		Constructor<T> constructor;
 		String[] constructorArgs = new String[0];
 		MetadataMap extMeta = new MetadataMap();
-		BeanPropertyMeta uriProperty;
 		BeanPropertyMeta subTypeIdProperty;
 		PropertyNamer propertyNamer;
 
@@ -303,9 +300,6 @@ public class BeanMeta<T> {
 							if (p.getSetter() != null)
 								setterProps.put(p.getSetter(), p.getName());
 
-							if (p.isBeanUri())
-								uriProperty = p;
-
 						} else {
 							i.remove();
 						}
@@ -436,24 +430,6 @@ public class BeanMeta<T> {
 	 */
 	public boolean isSubTyped() {
 		return subTypeIdProperty != null;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if one of the properties on this bean is annotated with {@link BeanProperty#beanUri()} as <jk>true</jk>
-	 *
-	 * @return <jk>true</jk> if this bean has subtypes associated with it. <jk>true</jk> if there is a URI property associated with this bean.
-	 */
-	public boolean hasBeanUriProperty() {
-		return uriProperty != null;
-	}
-
-	/**
-	 * Returns the bean property marked as the URI for the bean (annotated with {@link BeanProperty#beanUri()} as <jk>true</jk>).
-	 *
-	 * @return The URI property, or <jk>null</jk> if no URI property exists on this bean.
-	 */
-	public BeanPropertyMeta getBeanUriProperty() {
-		return uriProperty;
 	}
 
 	/**

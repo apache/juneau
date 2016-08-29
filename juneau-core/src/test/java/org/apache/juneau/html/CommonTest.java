@@ -23,6 +23,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.testbeans.*;
 import org.apache.juneau.xml.*;
@@ -240,7 +241,7 @@ public class CommonTest {
 	}
 
 	public static class G {
-		@BeanProperty(beanUri=true) public URI uri;
+		public URI uri;
 		public URI f1;
 		public URL f2;
 	}

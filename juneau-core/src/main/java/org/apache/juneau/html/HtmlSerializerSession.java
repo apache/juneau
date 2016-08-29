@@ -92,7 +92,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	public boolean isUri(ClassMeta<?> cm, BeanPropertyMeta pMeta, Object o) {
 		if (cm.isUri())
 			return true;
-		if (pMeta != null && (pMeta.isUri() || pMeta.isBeanUri()))
+		if (pMeta != null && pMeta.isUri())
 			return true;
 		if (detectLinksInStrings && o instanceof CharSequence && urlPattern.matcher(o.toString()).matches())
 			return true;

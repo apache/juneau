@@ -291,7 +291,7 @@ public class UonSerializer extends WriterSerializer {
 			serializeMap(session, out, gType.toObjectMap(o), eType);
 		else if (gType.isBean())
 			serializeBeanMap(session, out, bc.forBean(o), addClassAttr);
-		else if (gType.isUri() || (pMeta != null && (pMeta.isUri() || pMeta.isBeanUri())))
+		else if (gType.isUri() || (pMeta != null && pMeta.isUri()))
 			out.appendUri(o, isTop);
 		else if (gType.isMap()) {
 			if (o instanceof BeanMap)

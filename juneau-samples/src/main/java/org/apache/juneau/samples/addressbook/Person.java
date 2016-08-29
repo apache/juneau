@@ -30,7 +30,7 @@ public class Person {
 	private static int nextPersonId = 1;
 
 	// Bean properties
-	@BeanProperty(beanUri=true) public URI uri;
+	@Rdf(beanUri=true) public URI uri;
 	public URI addressBookUri;
 	public int id;
 	public String name;

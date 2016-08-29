@@ -19,7 +19,6 @@ import static org.apache.juneau.jena.RdfSerializerContext.*;
 import java.net.URI;
 import java.util.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
@@ -178,7 +177,7 @@ public class RdfTest {
 
 	@Rdf(prefix="a", namespace="http://ns/")
 	public static class A {
-		@BeanProperty(beanUri=true) public URI f1;
+		@Rdf(beanUri=true) public URI f1;
       public String[] f2;
       public List<Integer> f3;
 
@@ -344,7 +343,7 @@ public class RdfTest {
 
 	@Rdf(prefix="b", namespace="http://ns/")
 	public static class B {
-		@BeanProperty(beanUri=true) public URI f1;
+		@Rdf(beanUri=true) public URI f1;
 
 		@Rdf(collectionFormat=RdfCollectionFormat.SEQ)
 		public String[] f2;
@@ -582,7 +581,7 @@ public class RdfTest {
 	}
 
 	public static class D {
-		@BeanProperty(beanUri=true) public URI f1;
+		@Rdf(beanUri=true) public URI f1;
 		public String f2;
 		public URI f3;
 

@@ -219,8 +219,12 @@ public class RdfSerializer extends WriterSerializer {
 		} else if (gType.isMap() || (wType != null && wType.isMap())) {
 			if (o instanceof BeanMap) {
 				BeanMap bm = (BeanMap)o;
-				String uri = getUri(session, bm.getBeanUri(), null);
-				n = m.createResource(uri);
+				Object uri = null;
+				RdfBeanMeta rbm = (RdfBeanMeta)bm.getMeta().getExtendedMeta(RdfBeanMeta.class);
+				if (rbm.hasBeanUri())
+					uri = rbm.getBeanUriProperty().get(bm);
+				String uri2 = getUri(session, uri, null);
+				n = m.createResource(uri2);
 				serializeBeanMap(session, bm, (Resource)n);
 			} else {
 				Map m2 = (Map)o;
@@ -235,8 +239,12 @@ public class RdfSerializer extends WriterSerializer {
 
 		} else if (gType.isBean()) {
 			BeanMap bm = bc.forBean(o);
-			String uri = getUri(session, bm.getBeanUri(), null);
-			n = m.createResource(uri);
+			Object uri = null;
+			RdfBeanMeta rbm = (RdfBeanMeta)bm.getMeta().getExtendedMeta(RdfBeanMeta.class);
+			if (rbm.hasBeanUri())
+				uri = rbm.getBeanUriProperty().get(bm);
+			String uri2 = getUri(session, uri, null);
+			n = m.createResource(uri2);
 			serializeBeanMap(session, bm, (Resource)n);
 
 		} else if (gType.isCollection() || gType.isArray() || (wType != null && wType.isCollection())) {
@@ -323,7 +331,7 @@ public class RdfSerializer extends WriterSerializer {
 			BeanPropertyMeta pMeta = bpv.getMeta();
 			ClassMeta<?> cm = pMeta.getClassMeta();
 
-			if (pMeta.isBeanUri())
+			if (pMeta.getExtendedMeta(RdfBeanPropertyMeta.class).isBeanUri())
 				continue;
 
 			String key = bpv.getName();

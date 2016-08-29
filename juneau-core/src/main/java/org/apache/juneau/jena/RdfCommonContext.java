@@ -14,7 +14,6 @@ package org.apache.juneau.jena;
 
 import java.util.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.xml.*;
 import org.apache.juneau.xml.annotation.*;
@@ -354,7 +353,7 @@ public interface RdfCommonContext {
 	 * when serialized as loose collections.
 	 *	<p>
 	 *	This setting is typically only useful if the beans being parsed into do not have a bean property
-	 *	annotated with {@link BeanProperty#beanUri @BeanProperty(beanUri=true)}.
+	 *	annotated with {@link Rdf#beanUri @Rdf(beanUri=true)}.
 	 *
 	 * <dl>
 	 * 	<dt>Example:</dt>

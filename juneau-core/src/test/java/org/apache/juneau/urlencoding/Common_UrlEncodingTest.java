@@ -237,7 +237,7 @@ public class Common_UrlEncodingTest {
 	}
 
 	public static class G {
-		@BeanProperty(beanUri=true) public URI uri;
+		public URI uri;
 		public URI f1;
 		public URL f2;
 	}
