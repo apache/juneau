@@ -25,8 +25,6 @@ import org.apache.juneau.annotation.*;
  */
 public final class BeanMetaFiltered<T> extends BeanMeta<T> {
 
-	private final BeanMeta<T> innerMeta;
-
 	/**
 	 * Wrapper constructor.
 	 *
@@ -34,10 +32,7 @@ public final class BeanMetaFiltered<T> extends BeanMeta<T> {
 	 * @param pNames The list of transformed property names.
 	 */
 	public BeanMetaFiltered(BeanMeta<T> innerMeta, String[] pNames) {
-		this.innerMeta = innerMeta;
-		this.properties = new LinkedHashMap<String,BeanPropertyMeta>();
-		for (String p : pNames)
-			properties.put(p, innerMeta.getPropertyMeta(p));
+		super(innerMeta.classMeta, innerMeta.ctx, innerMeta.beanFilter, pNames);
 	}
 
 	/**
@@ -48,30 +43,5 @@ public final class BeanMetaFiltered<T> extends BeanMeta<T> {
 	 */
 	public BeanMetaFiltered(BeanMeta<T> innerMeta, Collection<String> pNames) {
 		this(innerMeta, pNames.toArray(new String[pNames.size()]));
-	}
-
-	@Override /* Delagate */
-	public ClassMeta<T> getClassMeta() {
-		return innerMeta.classMeta;
-	}
-
-	@Override /* Delagate */
-	public <M extends BeanMetaExtended> M getExtendedMeta(Class<M> m) {
-		return innerMeta.getExtendedMeta(m);
-	}
-
-	@Override /* BeanMeta */
-	public Collection<BeanPropertyMeta> getPropertyMetas() {
-		return properties.values();
-	}
-
-	@Override /* BeanMeta */
-	public BeanPropertyMeta getPropertyMeta(String name) {
-		return properties.get(name);
-	}
-
-	@Override /* Object */
-	public String toString() {
-		return innerMeta.c.getName();
 	}
 }

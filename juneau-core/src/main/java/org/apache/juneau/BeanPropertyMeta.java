@@ -233,10 +233,7 @@ public class BeanPropertyMeta {
 		return extMeta.get(c, this);
 	}
 
-	boolean validate() throws Exception {
-
-		BeanContext f = beanMeta.ctx;
-		Map<Class<?>,Class<?>[]> typeVarImpls = beanMeta.typeVarImpls;
+	boolean validate(BeanContext f, Map<Class<?>,Class<?>[]> typeVarImpls) throws Exception {
 
 		if (field == null && getter == null)
 			return false;
@@ -565,6 +562,7 @@ public class BeanPropertyMeta {
 		} catch (BeanRuntimeException e) {
 			throw e;
 		} catch (Exception e) {
+			e.printStackTrace();
 			if (beanMeta.ctx.ignoreInvocationExceptionsOnSetters) {
 					if (rawTypeMeta.isPrimitive())
 						return rawTypeMeta.getPrimitiveDefault();

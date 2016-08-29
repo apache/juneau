@@ -299,9 +299,10 @@ public final class ClassMeta<T> implements Type {
 			// Note that this needs to be done after all other initialization has been done.
 			else if (classCategory == UNKNOWN) {
 
-				BeanMeta newMeta = new BeanMeta(this, beanContext, beanFilter);
+				BeanMeta newMeta = null;
 				try {
-					notABeanReason = newMeta.init();
+					newMeta = new BeanMeta(this, beanContext, beanFilter, null);
+					notABeanReason = newMeta.notABeanReason;
 				} catch (RuntimeException e) {
 					notABeanReason = e.getMessage();
 					throw e;

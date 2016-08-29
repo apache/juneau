@@ -62,44 +62,43 @@ import org.apache.juneau.utils.*;
 public class BeanMeta<T> {
 
 	/** The target class type that this meta object describes. */
-	protected ClassMeta<T> classMeta;
+	protected final ClassMeta<T> classMeta;
 
 	/** The target class that this meta object describes. */
-	protected Class<T> c;
+	protected final Class<T> c;
 
 	/** The properties on the target class. */
-	protected Map<String,BeanPropertyMeta> properties;
+	protected final Map<String,BeanPropertyMeta> properties;
 
 	/** The getter properties on the target class. */
-	protected Map<Method,String> getterProps = new HashMap<Method,String>();
+	protected final Map<Method,String> getterProps;
 
 	/** The setter properties on the target class. */
-	protected Map<Method,String> setterProps = new HashMap<Method,String>();
+	protected final Map<Method,String> setterProps;
 
 	/** The bean context that created this metadata object. */
-	protected BeanContext ctx;
+	protected final BeanContext ctx;
 
 	/** Optional bean filter associated with the target class. */
-	protected BeanFilter<? extends T> beanFilter;
+	protected final BeanFilter<? extends T> beanFilter;
 
 	/** Type variables implemented by this bean. */
-	protected Map<Class<?>,Class<?>[]> typeVarImpls;
+	protected final Map<Class<?>,Class<?>[]> typeVarImpls;
 
 	/** The constructor for this bean. */
-	protected Constructor<T> constructor;
+	protected final Constructor<T> constructor;
 
 	/** For beans with constructors with BeanConstructor annotation, this is the list of constructor arg properties. */
-	protected String[] constructorArgs = new String[0];
+	protected final String[] constructorArgs;
 
-	private MetadataMap extMeta = new MetadataMap();  // Extended metadata
+	private final MetadataMap extMeta;  // Extended metadata
 
 	// Other fields
-	BeanPropertyMeta uriProperty;                                 // The property identified as the URI for this bean (annotated with @BeanProperty.beanUri).
-	BeanPropertyMeta subTypeIdProperty;                           // The property indentified as the sub type differentiator property (identified by @Bean.subTypeProperty annotation).
-	PropertyNamer propertyNamer;                                     // Class used for calculating bean property names.
-	BeanPropertyMeta classProperty;                               // "_class" mock bean property.
+	final BeanPropertyMeta uriProperty;                                 // The property identified as the URI for this bean (annotated with @BeanProperty.beanUri).
+	final BeanPropertyMeta subTypeIdProperty;                           // The property indentified as the sub type differentiator property (identified by @Bean.subTypeProperty annotation).
+	private final BeanPropertyMeta classProperty;                               // "_class" mock bean property.
 
-	BeanMeta() {}
+	final String notABeanReason;
 
 	/**
 	 * Constructor.
@@ -107,14 +106,306 @@ public class BeanMeta<T> {
 	 * @param classMeta The target class.
 	 * @param ctx The bean context that created this object.
 	 * @param beanFilter Optional bean filter associated with the target class.  Can be <jk>null</jk>.
+	 * @param pNames Explicit list of property names and order of properties.  If <jk>null</jk>, determine automatically.
 	 */
-	protected BeanMeta(final ClassMeta<T> classMeta, BeanContext ctx, BeanFilter<? extends T> beanFilter) {
+	protected BeanMeta(final ClassMeta<T> classMeta, BeanContext ctx, BeanFilter<? extends T> beanFilter, String[] pNames) {
 		this.classMeta = classMeta;
 		this.ctx = ctx;
-		this.beanFilter = beanFilter;
-		this.classProperty = new BeanPropertyMeta(this, "_class", ctx.string());
 		this.c = classMeta.getInnerClass();
+
+		Builder<T> b = new Builder<T>(classMeta, ctx, beanFilter, pNames);
+		this.notABeanReason = b.init(this);
+
+		this.beanFilter = beanFilter;
+		this.properties = b.properties;
+		this.getterProps = Collections.unmodifiableMap(b.getterProps);
+		this.setterProps = Collections.unmodifiableMap(b.setterProps);
+		this.typeVarImpls = b.typeVarImpls;
+		this.constructor = b.constructor;
+		this.constructorArgs = b.constructorArgs;
+		this.extMeta = b.extMeta;
+		this.uriProperty = b.uriProperty;
+		this.subTypeIdProperty = b.subTypeIdProperty;
+		this.classProperty = new BeanPropertyMeta(this, "_class", ctx.string());
 	}
+
+
+	private static final class Builder<T> {
+		ClassMeta<T> classMeta;
+		BeanContext ctx;
+		BeanFilter<? extends T> beanFilter;
+		String[] pNames;
+		Map<String,BeanPropertyMeta> properties;
+		Map<Method,String> getterProps = new HashMap<Method,String>();
+		Map<Method,String> setterProps = new HashMap<Method,String>();
+		Map<Class<?>,Class<?>[]> typeVarImpls;
+		Constructor<T> constructor;
+		String[] constructorArgs = new String[0];
+		MetadataMap extMeta = new MetadataMap();
+		BeanPropertyMeta uriProperty;
+		BeanPropertyMeta subTypeIdProperty;
+		PropertyNamer propertyNamer;
+
+		private Builder(ClassMeta<T> classMeta, BeanContext ctx, BeanFilter<? extends T> beanFilter, String[] pNames) {
+			this.classMeta = classMeta;
+			this.ctx = ctx;
+			this.beanFilter = beanFilter;
+			this.pNames = pNames;
+		}
+
+		@SuppressWarnings("unchecked")
+		private String init(BeanMeta<T> beanMeta) {
+			Class<?> c = classMeta.getInnerClass();
+
+			try {
+				Visibility
+					conVis = ctx.beanConstructorVisibility,
+					cVis = ctx.beanClassVisibility,
+					mVis = ctx.beanMethodVisibility,
+					fVis = ctx.beanFieldVisibility;
+
+				// If @Bean.interfaceClass is specified on the parent class, then we want
+				// to use the properties defined on that class, not the subclass.
+				Class<?> c2 = (beanFilter != null && beanFilter.getInterfaceClass() != null ? beanFilter.getInterfaceClass() : c);
+
+				Class<?> stopClass = (beanFilter != null ? beanFilter.getStopClass() : Object.class);
+				if (stopClass == null)
+					stopClass = Object.class;
+
+				Map<String,BeanPropertyMeta> normalProps = new LinkedHashMap<String,BeanPropertyMeta>();
+
+				/// See if this class matches one the patterns in the exclude-class list.
+				if (ctx.isNotABean(c))
+					return "Class matches exclude-class list";
+
+				if (! cVis.isVisible(c.getModifiers()))
+					return "Class is not public";
+
+				if (c.isAnnotationPresent(BeanIgnore.class))
+					return "Class is annotated with @BeanIgnore";
+
+				// Make sure it's serializable.
+				if (beanFilter == null && ctx.beansRequireSerializable && ! isParentClass(Serializable.class, c))
+					return "Class is not serializable";
+
+				// Look for @BeanConstructor constructor.
+				for (Constructor<?> x : c.getConstructors()) {
+					if (x.isAnnotationPresent(BeanConstructor.class)) {
+						if (constructor != null)
+							throw new BeanRuntimeException(c, "Multiple instances of '@BeanConstructor' found.");
+						constructor = (Constructor<T>)x;
+						constructorArgs = x.getAnnotation(BeanConstructor.class).properties();
+						if (constructorArgs.length != x.getParameterTypes().length)
+							throw new BeanRuntimeException(c, "Number of properties defined in '@BeanConstructor' annotation does not match number of parameters in constructor.");
+						if (! setAccessible(constructor))
+							throw new BeanRuntimeException(c, "Could not set accessibility to true on method with @BeanConstructor annotation.  Method=''{0}''", constructor.getName());
+					}
+				}
+
+				// If this is an interface, look for impl classes defined in the context.
+				if (constructor == null)
+					constructor = (Constructor<T>)ctx.getImplClassConstructor(c, conVis);
+
+				if (constructor == null)
+					constructor = (Constructor<T>)ClassMeta.findNoArgConstructor(c, conVis);
+
+				if (constructor == null && beanFilter == null && ctx.beansRequireDefaultConstructor)
+					return "Class does not have the required no-arg constructor";
+
+				if (! setAccessible(constructor))
+					throw new BeanRuntimeException(c, "Could not set accessibility to true on no-arg constructor");
+
+				// Explicitly defined property names in @Bean annotation.
+				Set<String> fixedBeanProps = new LinkedHashSet<String>();
+
+				if (beanFilter != null) {
+
+					// Get the 'properties' attribute if specified.
+					if (beanFilter.getProperties() != null)
+						for (String p : beanFilter.getProperties())
+							fixedBeanProps.add(p);
+
+					if (beanFilter.getPropertyNamer() != null)
+						propertyNamer = beanFilter.getPropertyNamer();
+				}
+
+				if (propertyNamer == null)
+					propertyNamer = new PropertyNamerDefault();
+
+				// First populate the properties with those specified in the bean annotation to
+				// ensure that ordering first.
+				for (String name : fixedBeanProps)
+					normalProps.put(name, new BeanPropertyMeta(beanMeta, name));
+
+				if (ctx.useJavaBeanIntrospector) {
+					BeanInfo bi = null;
+					if (! c2.isInterface())
+						bi = Introspector.getBeanInfo(c2, stopClass);
+					else
+						bi = Introspector.getBeanInfo(c2, null);
+					if (bi != null) {
+						for (PropertyDescriptor pd : bi.getPropertyDescriptors()) {
+							String name = pd.getName();
+							if (! normalProps.containsKey(name))
+								normalProps.put(name, new BeanPropertyMeta(beanMeta, name));
+							normalProps.get(name).setGetter(pd.getReadMethod()).setSetter(pd.getWriteMethod());
+						}
+					}
+
+				} else /* Use 'better' introspection */ {
+
+					for (Field f : findBeanFields(c2, stopClass, fVis)) {
+						String name = findPropertyName(f, fixedBeanProps);
+						if (name != null) {
+							if (! normalProps.containsKey(name))
+								normalProps.put(name, new BeanPropertyMeta(beanMeta, name));
+							normalProps.get(name).setField(f);
+						}
+					}
+
+					List<BeanMethod> bms = findBeanMethods(c2, stopClass, mVis, fixedBeanProps, propertyNamer);
+
+					// Iterate through all the getters.
+					for (BeanMethod bm : bms) {
+						String pn = bm.propertyName;
+						Method m = bm.method;
+						if (! normalProps.containsKey(pn))
+							normalProps.put(pn, new BeanPropertyMeta(beanMeta, pn));
+						BeanPropertyMeta bpm = normalProps.get(pn);
+						if (! bm.isSetter)
+							bpm.setGetter(m);
+					}
+
+					// Now iterate through all the setters.
+					for (BeanMethod bm : bms) {
+						if (bm.isSetter) {
+							BeanPropertyMeta bpm = normalProps.get(bm.propertyName);
+							if (bm.matchesPropertyType(bpm))
+								bpm.setSetter(bm.method);
+						}
+					}
+				}
+
+				typeVarImpls = new HashMap<Class<?>,Class<?>[]>();
+				findTypeVarImpls(c, typeVarImpls);
+				if (typeVarImpls.isEmpty())
+					typeVarImpls = null;
+
+				// Eliminate invalid properties, and set the contents of getterProps and setterProps.
+				for (Iterator<BeanPropertyMeta> i = normalProps.values().iterator(); i.hasNext();) {
+					BeanPropertyMeta p = i.next();
+					try {
+						if (p.validate(ctx, typeVarImpls)) {
+
+							if (p.getGetter() != null)
+								getterProps.put(p.getGetter(), p.getName());
+
+							if (p.getSetter() != null)
+								setterProps.put(p.getSetter(), p.getName());
+
+							if (p.isBeanUri())
+								uriProperty = p;
+
+						} else {
+							i.remove();
+						}
+					} catch (ClassNotFoundException e) {
+						throw new BeanRuntimeException(c, e.getLocalizedMessage());
+					}
+				}
+
+				// Check for missing properties.
+				for (String fp : fixedBeanProps)
+					if (! normalProps.containsKey(fp))
+						throw new BeanRuntimeException(c, "The property ''{0}'' was defined on the @Bean(properties=X) annotation but was not found on the class definition.", fp);
+
+				// Mark constructor arg properties.
+				for (String fp : constructorArgs) {
+					BeanPropertyMeta m = normalProps.get(fp);
+					if (m == null)
+						throw new BeanRuntimeException(c, "The property ''{0}'' was defined on the @BeanConstructor(properties=X) annotation but was not found on the class definition.", fp);
+					m.setAsConstructorArg();
+				}
+
+				// Make sure at least one property was found.
+				if (beanFilter == null && ctx.beansRequireSomeProperties && normalProps.size() == 0)
+					return "No properties detected on bean class";
+
+				boolean sortProperties = (ctx.sortProperties || (beanFilter != null && beanFilter.isSortProperties())) && fixedBeanProps.isEmpty();
+
+				properties = sortProperties ? new TreeMap<String,BeanPropertyMeta>() : new LinkedHashMap<String,BeanPropertyMeta>();
+
+				if (beanFilter != null && beanFilter.getSubTypeProperty() != null) {
+					String subTypeProperty = beanFilter.getSubTypeProperty();
+					this.subTypeIdProperty = new SubTypePropertyMeta(beanMeta, subTypeProperty, beanFilter.getSubTypes(), normalProps.remove(subTypeProperty));
+					properties.put(subTypeProperty, this.subTypeIdProperty);
+				}
+
+				properties.putAll(normalProps);
+
+				// If a beanFilter is defined, look for inclusion and exclusion lists.
+				if (beanFilter != null) {
+
+					// Eliminated excluded properties if BeanFilter.excludeKeys is specified.
+					String[] includeKeys = beanFilter.getProperties();
+					String[] excludeKeys = beanFilter.getExcludeProperties();
+					if (excludeKeys != null) {
+						for (String k : excludeKeys)
+							properties.remove(k);
+
+					// Only include specified properties if BeanFilter.includeKeys is specified.
+					// Note that the order must match includeKeys.
+					} else if (includeKeys != null) {
+						Map<String,BeanPropertyMeta> properties2 = new LinkedHashMap<String,BeanPropertyMeta>();
+						for (String k : includeKeys) {
+							if (properties.containsKey(k))
+								properties2.put(k, properties.get(k));
+						}
+						properties = properties2;
+					}
+				}
+
+				if (pNames != null) {
+					Map<String,BeanPropertyMeta> properties2 = new LinkedHashMap<String,BeanPropertyMeta>();
+					for (String k : pNames) {
+						if (properties.containsKey(k))
+							properties2.put(k, properties.get(k));
+					}
+					properties = properties2;
+				}
+
+				// We return this through the Bean.keySet() interface, so make sure it's not modifiable.
+				properties = Collections.unmodifiableMap(properties);
+
+			} catch (BeanRuntimeException e) {
+				throw e;
+			} catch (Exception e) {
+				return "Exception:  " + StringUtils.getStackTrace(e);
+			}
+
+			return null;
+		}
+
+		/*
+		 * Returns the property name of the specified field if it's a valid property.
+		 * Returns null if the field isn't a valid property.
+		 */
+		private String findPropertyName(Field f, Set<String> fixedBeanProps) {
+			BeanProperty bp = f.getAnnotation(BeanProperty.class);
+			if (bp != null && ! bp.name().equals("")) {
+				String name = bp.name();
+				if (fixedBeanProps.isEmpty() || fixedBeanProps.contains(name))
+					return name;
+				throw new BeanRuntimeException(classMeta.getInnerClass(), "Method property ''{0}'' identified in @BeanProperty, but missing from @Bean", name);
+			}
+			String name = propertyNamer.getPropertyName(f.getName());
+			if (fixedBeanProps.isEmpty() || fixedBeanProps.contains(name))
+				return name;
+			return null;
+		}
+
+	}
+
 
 	/**
 	 * Returns the {@link ClassMeta} of this bean.
@@ -124,236 +415,6 @@ public class BeanMeta<T> {
 	@BeanIgnore
 	public ClassMeta<T> getClassMeta() {
 		return classMeta;
-	}
-
-	/**
-	 * Initializes this bean meta, and returns an error message if the specified class is not
-	 * a bean for any reason.
-	 *
-	 * @return Reason why this class isn't a bean, or <jk>null</jk> if no problems detected.
-	 * @throws BeanRuntimeException If unexpected error occurs such as invalid annotations on the bean class.
-	 */
-	@SuppressWarnings("unchecked")
-	protected String init() throws BeanRuntimeException {
-
-		try {
-			Visibility
-				conVis = ctx.beanConstructorVisibility,
-				cVis = ctx.beanClassVisibility,
-				mVis = ctx.beanMethodVisibility,
-				fVis = ctx.beanFieldVisibility;
-
-			// If @Bean.interfaceClass is specified on the parent class, then we want
-			// to use the properties defined on that class, not the subclass.
-			Class<?> c2 = (beanFilter != null && beanFilter.getInterfaceClass() != null ? beanFilter.getInterfaceClass() : c);
-
-			Class<?> stopClass = (beanFilter != null ? beanFilter.getStopClass() : Object.class);
-			if (stopClass == null)
-				stopClass = Object.class;
-
-			Map<String,BeanPropertyMeta> normalProps = new LinkedHashMap<String,BeanPropertyMeta>();
-
-			/// See if this class matches one the patterns in the exclude-class list.
-			if (ctx.isNotABean(c))
-				return "Class matches exclude-class list";
-
-			if (! cVis.isVisible(c.getModifiers()))
-				return "Class is not public";
-
-			if (c.isAnnotationPresent(BeanIgnore.class))
-				return "Class is annotated with @BeanIgnore";
-
-			// Make sure it's serializable.
-			if (beanFilter == null && ctx.beansRequireSerializable && ! isParentClass(Serializable.class, c))
-				return "Class is not serializable";
-
-			// Look for @BeanConstructor constructor.
-			for (Constructor<?> x : c.getConstructors()) {
-				if (x.isAnnotationPresent(BeanConstructor.class)) {
-					if (constructor != null)
-						throw new BeanRuntimeException(c, "Multiple instances of '@BeanConstructor' found.");
-					constructor = (Constructor<T>)x;
-					constructorArgs = x.getAnnotation(BeanConstructor.class).properties();
-					if (constructorArgs.length != x.getParameterTypes().length)
-						throw new BeanRuntimeException(c, "Number of properties defined in '@BeanConstructor' annotation does not match number of parameters in constructor.");
-					if (! setAccessible(constructor))
-						throw new BeanRuntimeException(c, "Could not set accessibility to true on method with @BeanConstructor annotation.  Method=''{0}''", constructor.getName());
-				}
-			}
-
-			// If this is an interface, look for impl classes defined in the context.
-			if (constructor == null)
-				constructor = (Constructor<T>)ctx.getImplClassConstructor(c, conVis);
-
-			if (constructor == null)
-				constructor = (Constructor<T>)ClassMeta.findNoArgConstructor(c, conVis);
-
-			if (constructor == null && beanFilter == null && ctx.beansRequireDefaultConstructor)
-				return "Class does not have the required no-arg constructor";
-
-			if (! setAccessible(constructor))
-				throw new BeanRuntimeException(c, "Could not set accessibility to true on no-arg constructor");
-
-			// Explicitly defined property names in @Bean annotation.
-			Set<String> fixedBeanProps = new LinkedHashSet<String>();
-
-			if (beanFilter != null) {
-
-				// Get the 'properties' attribute if specified.
-				if (beanFilter.getProperties() != null)
-					for (String p : beanFilter.getProperties())
-						fixedBeanProps.add(p);
-
-				if (beanFilter.getPropertyNamer() != null)
-					propertyNamer = beanFilter.getPropertyNamer();
-			}
-
-			if (propertyNamer == null)
-				propertyNamer = new PropertyNamerDefault();
-
-			// First populate the properties with those specified in the bean annotation to
-			// ensure that ordering first.
-			for (String name : fixedBeanProps)
-				normalProps.put(name, new BeanPropertyMeta(this, name));
-
-			if (ctx.useJavaBeanIntrospector) {
-				BeanInfo bi = null;
-				if (! c2.isInterface())
-					bi = Introspector.getBeanInfo(c2, stopClass);
-				else
-					bi = Introspector.getBeanInfo(c2, null);
-				if (bi != null) {
-					for (PropertyDescriptor pd : bi.getPropertyDescriptors()) {
-						String name = pd.getName();
-						if (! normalProps.containsKey(name))
-							normalProps.put(name, new BeanPropertyMeta(this, name));
-						normalProps.get(name).setGetter(pd.getReadMethod()).setSetter(pd.getWriteMethod());
-					}
-				}
-
-			} else /* Use 'better' introspection */ {
-
-				for (Field f : findBeanFields(c2, stopClass, fVis)) {
-					String name = findPropertyName(f, fixedBeanProps);
-					if (name != null) {
-						if (! normalProps.containsKey(name))
-							normalProps.put(name, new BeanPropertyMeta(this, name));
-						normalProps.get(name).setField(f);
-					}
-				}
-
-				List<BeanMethod> bms = findBeanMethods(c2, stopClass, mVis, fixedBeanProps, propertyNamer);
-
-				// Iterate through all the getters.
-				for (BeanMethod bm : bms) {
-					String pn = bm.propertyName;
-					Method m = bm.method;
-					if (! normalProps.containsKey(pn))
-						normalProps.put(pn, new BeanPropertyMeta(this, pn));
-					BeanPropertyMeta bpm = normalProps.get(pn);
-					if (! bm.isSetter)
-						bpm.setGetter(m);
-				}
-
-				// Now iterate through all the setters.
-				for (BeanMethod bm : bms) {
-					if (bm.isSetter) {
-						BeanPropertyMeta bpm = normalProps.get(bm.propertyName);
-						if (bm.matchesPropertyType(bpm))
-							bpm.setSetter(bm.method);
-					}
-				}
-			}
-
-			typeVarImpls = new HashMap<Class<?>,Class<?>[]>();
-			findTypeVarImpls(c, typeVarImpls);
-			if (typeVarImpls.isEmpty())
-				typeVarImpls = null;
-
-			// Eliminate invalid properties, and set the contents of getterProps and setterProps.
-			for (Iterator<BeanPropertyMeta> i = normalProps.values().iterator(); i.hasNext();) {
-				BeanPropertyMeta p = i.next();
-				try {
-					if (p.validate()) {
-
-						if (p.getGetter() != null)
-							getterProps.put(p.getGetter(), p.getName());
-
-						if (p.getSetter() != null)
-							setterProps.put(p.getSetter(), p.getName());
-
-						if (p.isBeanUri())
-							uriProperty = p;
-
-					} else {
-						i.remove();
-					}
-				} catch (ClassNotFoundException e) {
-					throw new BeanRuntimeException(c, e.getLocalizedMessage());
-				}
-			}
-
-			// Check for missing properties.
-			for (String fp : fixedBeanProps)
-				if (! normalProps.containsKey(fp))
-					throw new BeanRuntimeException(c, "The property ''{0}'' was defined on the @Bean(properties=X) annotation but was not found on the class definition.", fp);
-
-			// Mark constructor arg properties.
-			for (String fp : constructorArgs) {
-				BeanPropertyMeta m = normalProps.get(fp);
-				if (m == null)
-					throw new BeanRuntimeException(c, "The property ''{0}'' was defined on the @BeanConstructor(properties=X) annotation but was not found on the class definition.", fp);
-				m.setAsConstructorArg();
-			}
-
-			// Make sure at least one property was found.
-			if (beanFilter == null && ctx.beansRequireSomeProperties && normalProps.size() == 0)
-				return "No properties detected on bean class";
-
-			boolean sortProperties = (ctx.sortProperties || (beanFilter != null && beanFilter.isSortProperties())) && fixedBeanProps.isEmpty();
-
-			properties = sortProperties ? new TreeMap<String,BeanPropertyMeta>() : new LinkedHashMap<String,BeanPropertyMeta>();
-
-			if (beanFilter != null && beanFilter.getSubTypeProperty() != null) {
-				String subTypeProperty = beanFilter.getSubTypeProperty();
-				this.subTypeIdProperty = new SubTypePropertyMeta(subTypeProperty, beanFilter.getSubTypes(), normalProps.remove(subTypeProperty));
-				properties.put(subTypeProperty, this.subTypeIdProperty);
-			}
-
-			properties.putAll(normalProps);
-
-			// If a beanFilter is defined, look for inclusion and exclusion lists.
-			if (beanFilter != null) {
-
-				// Eliminated excluded properties if BeanFilter.excludeKeys is specified.
-				String[] includeKeys = beanFilter.getProperties();
-				String[] excludeKeys = beanFilter.getExcludeProperties();
-				if (excludeKeys != null) {
-					for (String k : excludeKeys)
-						properties.remove(k);
-
-				// Only include specified properties if BeanFilter.includeKeys is specified.
-				// Note that the order must match includeKeys.
-				} else if (includeKeys != null) {
-					Map<String,BeanPropertyMeta> properties2 = new LinkedHashMap<String,BeanPropertyMeta>();
-					for (String k : includeKeys) {
-						if (properties.containsKey(k))
-							properties2.put(k, properties.get(k));
-					}
-					properties = properties2;
-				}
-			}
-
-			// We return this through the Bean.keySet() interface, so make sure it's not modifiable.
-			properties = Collections.unmodifiableMap(properties);
-
-		} catch (BeanRuntimeException e) {
-			throw e;
-		} catch (Exception e) {
-			return "Exception:  " + StringUtils.getStackTrace(e);
-		}
-
-		return null;
 	}
 
 	/**
@@ -621,24 +682,6 @@ public class BeanMeta<T> {
 		return null;
 	}
 
-	/*
-	 * Returns the property name of the specified field if it's a valid property.
-	 * Returns null if the field isn't a valid property.
-	 */
-	private String findPropertyName(Field f, Set<String> fixedBeanProps) {
-		BeanProperty bp = f.getAnnotation(BeanProperty.class);
-		if (bp != null && ! bp.name().equals("")) {
-			String name = bp.name();
-			if (fixedBeanProps.isEmpty() || fixedBeanProps.contains(name))
-				return name;
-			throw new BeanRuntimeException(c, "Method property ''{0}'' identified in @BeanProperty, but missing from @Bean", name);
-		}
-		String name = propertyNamer.getPropertyName(f.getName());
-		if (fixedBeanProps.isEmpty() || fixedBeanProps.contains(name))
-			return name;
-		return null;
-	}
-
 	/**
 	 * Recursively determines the classes represented by parameterized types in the class hierarchy of
 	 * the specified type, and puts the results in the specified map.<br>
@@ -699,15 +742,17 @@ public class BeanMeta<T> {
 	 * Bean property for getting and setting bean subtype.
 	 */
 	@SuppressWarnings({"rawtypes","unchecked"})
-	private class SubTypePropertyMeta extends BeanPropertyMeta {
+	private static class SubTypePropertyMeta extends BeanPropertyMeta {
 
 		private Map<Class<?>,String> subTypes;
 		private BeanPropertyMeta realProperty;  // Bean property if bean actually has a real subtype field.
+		private BeanMeta<?> beanMeta;
 
-		SubTypePropertyMeta(String subTypeAttr, Map<Class<?>,String> subTypes, BeanPropertyMeta realProperty) {
-			super(BeanMeta.this, subTypeAttr, ctx.string());
+		SubTypePropertyMeta(BeanMeta beanMeta, String subTypeAttr, Map<Class<?>,String> subTypes, BeanPropertyMeta realProperty) {
+			super(beanMeta, subTypeAttr, beanMeta.ctx.string());
 			this.subTypes = subTypes;
 			this.realProperty = realProperty;
+			this.beanMeta = beanMeta;
 		}
 
 		/*
@@ -721,7 +766,7 @@ public class BeanMeta<T> {
 			for (Entry<Class<?>,String> e : subTypes.entrySet()) {
 				if (e.getValue().equals(subTypeId)) {
 					Class subTypeClass = e.getKey();
-					m.meta = ctx.getBeanMeta(subTypeClass);
+					m.meta = beanMeta.ctx.getBeanMeta(subTypeClass);
 					try {
 						m.setBean(subTypeClass.newInstance());
 						if (realProperty != null)
@@ -736,14 +781,14 @@ public class BeanMeta<T> {
 					return null;
 				}
 			}
-			throw new BeanRuntimeException(c, "Unknown subtype ID ''{0}''", subTypeId);
+			throw new BeanRuntimeException(beanMeta.c, "Unknown subtype ID ''{0}''", subTypeId);
 		}
 
 		@Override /* BeanPropertyMeta */
 		public Object get(BeanMap<?> m) throws BeanRuntimeException {
-			String subTypeId = beanFilter.getSubTypes().get(c);
+			String subTypeId = beanMeta.beanFilter.getSubTypes().get(beanMeta.c);
 			if (subTypeId == null)
-				throw new BeanRuntimeException(c, "Unmapped sub type class");
+				throw new BeanRuntimeException(beanMeta.c, "Unmapped sub type class");
 			return subTypeId;
 		}
 	}
