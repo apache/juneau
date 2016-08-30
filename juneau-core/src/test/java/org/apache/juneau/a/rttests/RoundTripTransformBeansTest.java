@@ -281,9 +281,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 
 	@Bean(
 		subTypeProperty="type",
-		subTypes={
-			@BeanSubType(id="C3", type=C3.class)
-		}
+		subTypes={C3.class}
 	)
 	public static interface C1<T> extends Serializable {
 		void setF1(T f1);
@@ -304,6 +302,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 		}
 	}
 
+	@Bean(name="C3")
 	public static class C3<T> extends C2<T> {
 
 		public static C3 create() {

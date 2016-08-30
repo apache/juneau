@@ -249,16 +249,13 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 
 	@Bean(
 		subTypeProperty="subType",
-		subTypes={
-			@BeanSubType(type=B1.class, id="B1"),
-			@BeanSubType(type=B2.class, id="B2"),
-			@BeanSubType(type=B3.class, id="B3")
-		}
+		subTypes={B1.class,B2.class,B3.class}
 	)
 	public abstract static class B {
 		public String f0 = "f0";
 	}
 
+	@Bean(name="B1")
 	public static class B1 extends B {
 		public String f1;
 		public static B1 create() {
@@ -269,6 +266,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		}
 	}
 
+	@Bean(name="B2")
 	public static class B2 extends B {
 		public int f2;
 		public static B2 create() {
@@ -279,6 +277,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		}
 	}
 
+	@Bean(name="B3")
 	public static class B3 extends B {
 		public XMLGregorianCalendar f3;
 		public static B3 create() throws Exception {
@@ -387,15 +386,13 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 
 	@Bean(
 		subTypeProperty="subType",
-		subTypes={
-			@BeanSubType(type=BA1.class, id="BA1"),
-			@BeanSubType(type=BA2.class, id="BA2")
-		}
+		subTypes={BA1.class,BA2.class}
 	)
 	public abstract static class BA {
 		public String f0a, subType, f0b;
 	}
 
+	@Bean(name="BA1")
 	public static class BA1 extends BA {
 		public String f1;
 		public static BA1 create() {
@@ -408,6 +405,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		}
 	}
 
+	@Bean(name="BA2")
 	public static class BA2 extends BA {
 		public String f2;
 	}

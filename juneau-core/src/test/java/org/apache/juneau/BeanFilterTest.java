@@ -55,39 +55,37 @@ public class BeanFilterTest {
 
 	@Bean(
 		subTypeProperty="subType",
-		subTypes={
-			@BeanSubType(type=A1.class, id="A1"),
-			@BeanSubType(type=A2.class, id="A2")
-		}
+		subTypes={A1.class,A2.class}
 	)
 	public static abstract class A {
 		public String f0 = "f0";
 		public B fb;
 	}
 
+	@Bean(name="A1")
 	public static class A1 extends A {
 		public String f1;
 	}
 
+	@Bean(name="A2")
 	public static class A2 extends A {
 		public String f2;
 	}
 
 	@Bean(
 		subTypeProperty="subType",
-		subTypes={
-			@BeanSubType(type=B1.class, id="B1"),
-			@BeanSubType(type=B2.class, id="B2")
-		}
+		subTypes={B1.class,B2.class}
 	)
 	public static abstract class B {
 		public String f0b = "f0b";
 	}
 
+	@Bean(name="B1")
 	public static class B1 extends B {
 		public String f1;
 	}
 
+	@Bean(name="B2")
 	public static class B2 extends B {
 		public String f2;
 	}

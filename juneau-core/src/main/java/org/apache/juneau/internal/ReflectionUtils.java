@@ -91,6 +91,19 @@ public final class ReflectionUtils {
 	}
 
 	/**
+	 * Same as {@link #findAnnotations(Class, Class)} but returns the list in parent-to-child order.
+	 *
+	 * @param a The annotation class type.
+	 * @param c The class being searched.
+	 * @return The found matches, or an empty array if annotation was not found.
+	 */
+	public static <T extends Annotation> List<T> findAnnotationsParentFirst(Class<T> a, Class<?> c) {
+		List<T> l = findAnnotations(a, c);
+		Collections.reverse(l);
+		return l;
+	}
+
+	/**
 	 * Sames as {@link #findAnnotations(Class, Class)} except returns the annotations as a map
 	 * with the keys being the class on which the annotation was found.
 	 * <p>

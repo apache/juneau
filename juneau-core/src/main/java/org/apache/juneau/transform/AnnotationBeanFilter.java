@@ -88,8 +88,18 @@ public final class AnnotationBeanFilter<T> extends BeanFilter<T> {
 				if (! b.subTypeProperty().isEmpty()) {
 					subTypeProperty = b.subTypeProperty();
 
-					for (BeanSubType bst : b.subTypes())
-						subTypes.put(bst.type(), bst.id());
+					for (Class<?> bst : b.subTypes()) {
+						Bean b2 = bst.getAnnotation(Bean.class);
+						Pojo p2 = bst.getAnnotation(Pojo.class);
+						String name = null;
+						if (! b2.name().isEmpty())
+							name = b2.name();
+						else if (! p2.name().isEmpty())
+							name = p2.name();
+						else
+							name = bst.getName();
+						subTypes.put(bst, name);
+					}
 				}
 			}
 		}

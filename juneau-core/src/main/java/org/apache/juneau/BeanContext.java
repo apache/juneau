@@ -446,6 +446,10 @@ public class BeanContext extends Context {
 	 */
 	public static final String BEAN_implClasses_put = "BeanContext.implClasses.map.put";
 
+	public static final String BEAN_classLexicon = "BeanContext.pojoSwaps.list";
+	public static final String BEAN_classLexicon_add = "BeanContext.pojoSwaps.list.add";
+	public static final String BEAN_classLexicon_remove = "BeanContext.pojoSwaps.list.remove";
+
 	/**
 	 * Specifies the default parser to use when converting <code>Strings</code> to POJOs in the {@link BeanContext#convertToType(Object, Class)} method (<code>Class</code>).
 	 */
@@ -525,6 +529,7 @@ public class BeanContext extends Context {
 	final String[] notBeanPackageNames, notBeanPackagePrefixes;
 	final BeanFilter<?>[] beanFilters;
 	final PojoSwap<?,?>[] pojoSwaps;
+	final ClassLexicon classLexicon;
 	final Map<Class<?>,Class<?>> implClasses;
 	final Class<?>[] implKeyClasses, implValueClasses;
 	final ClassLoader classLoader;
@@ -614,6 +619,8 @@ public class BeanContext extends Context {
 			throw new RuntimeException(e);
 		}
  		pojoSwaps = lpf.toArray(new PojoSwap[0]);
+
+ 		classLexicon = new ClassLexicon(pm.get(BEAN_pojoSwaps, Class[].class, new Class[0]));
 
  		implClasses = new TreeMap<Class<?>,Class<?>>(new ClassComparator());
  		Map<Class,Class> m = pm.getMap(BEAN_implClasses, Class.class, Class.class, null);
@@ -1454,6 +1461,10 @@ public class BeanContext extends Context {
 				if (isParentClass(f.getBeanClass(), c))
 					return f;
 		return null;
+	}
+
+	protected ClassLexicon getClassLexicon() {
+		return classLexicon;
 	}
 
 	/**

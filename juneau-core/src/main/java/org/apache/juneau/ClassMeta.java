@@ -83,6 +83,7 @@ public final class ClassMeta<T> implements Type {
 		isMemberClass;                                // True if this is a non-static member class.
 
 	private MetadataMap extMeta = new MetadataMap();  // Extended metadata
+	private ClassLexicon classLexicon;
 
 	private Throwable initException;                   // Any exceptions thrown in the init() method.
 	private boolean hasChildPojoSwaps;                 // True if this class or any subclass of this class has a PojoSwap associated with it.
@@ -128,6 +129,15 @@ public final class ClassMeta<T> implements Type {
 		try {
 			beanFilter = findBeanFilter(beanContext);
 			pojoSwap = findPojoSwap(beanContext);
+
+			classLexicon = beanContext.getClassLexicon();
+			for (Pojo p : ReflectionUtils.findAnnotationsParentFirst(Pojo.class, innerClass))
+				if (p.lexicon().length > 0)
+					classLexicon = new ClassLexicon(classLexicon, p.lexicon());
+			for (Bean b : ReflectionUtils.findAnnotationsParentFirst(Bean.class, innerClass))
+				if (b.lexicon().length > 0)
+					classLexicon = new ClassLexicon(classLexicon, b.lexicon());
+
 			serializedClassMeta = (pojoSwap == null ? this : beanContext.getClassMeta(pojoSwap.getSwapClass()));
 			if (serializedClassMeta == null)
 				serializedClassMeta = this;
@@ -394,7 +404,7 @@ public final class ClassMeta<T> implements Type {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this class as subtypes defined through {@link Bean#subTypes} or {@link BeanFilter#getSubTypes()}.
+	 * Returns <jk>true</jk> if this class as subtypes defined through {@link Bean#subTypes}.
 	 *
 	 * @return <jk>true</jk> if this class has subtypes.
 	 */

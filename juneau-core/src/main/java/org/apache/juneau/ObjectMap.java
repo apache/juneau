@@ -1150,11 +1150,20 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * 	same object if entry does not exist.
 	 */
 	public Object cast() {
+		return cast((ClassLexicon)null);
+	}
+
+	public Object cast(ClassLexicon classLexicon) {
 		String c = (String)get("_class");
 		if (c == null) {
 			if (containsKey("_value"))
 				return get("_value");
 			return this;
+		}
+		if (classLexicon != null) {
+			Class<?> c2 = classLexicon.getClassForName(c);
+			if (c2 != null)
+				return cast2(beanContext.getClassMeta(c2));
 		}
 		return cast2(beanContext.getClassMetaFromString(c));
 	}
@@ -1249,7 +1258,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 
 						// Attempt to recursively cast child maps.
 						if (v instanceof ObjectMap)
-							v = ((ObjectMap)v).cast();
+							v = ((ObjectMap)v).cast(beanContext.classLexicon);
 
 						k = (kType.isString() ? k : beanContext.convertToType(k, kType));
 						v = (vType.isObject() ? v : beanContext.convertToType(v, vType));
@@ -1270,7 +1279,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 
 						// Attempt to recursively cast child maps.
 						if (v instanceof ObjectMap)
-							v = ((ObjectMap)v).cast();
+							v = ((ObjectMap)v).cast(beanContext.classLexicon);
 
 						bm.put(k, v);
 					}
