@@ -373,8 +373,9 @@ public class UonSerializer extends WriterSerializer {
 
 		boolean addComma = false;
 
-		for (BeanPropertyValue p : m.getValues(addClassAttr, session.isTrimNulls())) {
+		for (BeanPropertyValue p : m.getValues(session.isTrimNulls(), addClassAttr ? session.createBeanClassProperty(m, null) : null)) {
 			BeanPropertyMeta pMeta = p.getMeta();
+			ClassMeta<?> cMeta = p.getClassMeta();
 
 			String key = p.getName();
 			Object value = p.getValue();
@@ -382,7 +383,7 @@ public class UonSerializer extends WriterSerializer {
 			if (t != null)
 				session.addBeanGetterWarning(pMeta, t);
 
-			if (session.canIgnoreValue(pMeta.getClassMeta(), key, value))
+			if (session.canIgnoreValue(cMeta, key, value))
 				continue;
 
 			if (addComma)
@@ -390,7 +391,7 @@ public class UonSerializer extends WriterSerializer {
 
 			out.cr(depth).appendObject(key, false, false, false).append('=');
 
-			serializeAnything(session, out, value, pMeta.getClassMeta(), key, pMeta, false, false);
+			serializeAnything(session, out, value, cMeta, key, pMeta, false, false);
 
 			addComma = true;
 		}

@@ -1895,16 +1895,16 @@ public class BeanMapTest {
 		Z z = new Z();
 		BeanMap<Z> bm = BeanContext.DEFAULT.forBean(z);
 
-		Iterator i = bm.getValues(false, true).iterator();
+		Iterator i = bm.getValues(true).iterator();
 		assertFalse(i.hasNext());
 
 		z.b = "";
-		i = bm.getValues(false, true).iterator();
+		i = bm.getValues(true).iterator();
 		assertTrue(i.hasNext());
 		i.next();
 		assertFalse(i.hasNext());
 
-		i = bm.getValues(false, false).iterator();
+		i = bm.getValues(false).iterator();
 		assertTrue(i.hasNext());
 		i.next();
 		assertTrue(i.hasNext());

@@ -32,7 +32,7 @@ public class BeanPropertyValue {
 	 * @param value The bean property value.
 	 * @param thrown The exception thrown by calling the property getter.
 	 */
-	protected BeanPropertyValue(BeanPropertyMeta pMeta, Object value, Throwable thrown) {
+	public BeanPropertyValue(BeanPropertyMeta pMeta, Object value, Throwable thrown) {
 		this.pMeta = pMeta;
 		this.value = value;
 		this.thrown = thrown;
@@ -44,6 +44,14 @@ public class BeanPropertyValue {
 	 */
 	public final BeanPropertyMeta getMeta() {
 		return pMeta;
+	}
+
+	/**
+	 * Returns the bean property metadata.
+	 * @return The bean property metadata.
+	 */
+	public final ClassMeta<?> getClassMeta() {
+		return pMeta.getClassMeta();
 	}
 
 	/**

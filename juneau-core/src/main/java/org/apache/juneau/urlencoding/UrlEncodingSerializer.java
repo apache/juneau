@@ -326,8 +326,9 @@ public class UrlEncodingSerializer extends UonSerializer {
 
 		boolean addAmp = false;
 
-		for (BeanPropertyValue p : m.getValues(addClassAttr, session.isTrimNulls())) {
+		for (BeanPropertyValue p : m.getValues(session.isTrimNulls(), addClassAttr ? session.createBeanClassProperty(m, null) : null)) {
 			BeanPropertyMeta pMeta = p.getMeta();
+			ClassMeta<?> cMeta = p.getClassMeta();
 
 			String key = p.getName();
 			Object value = p.getValue();
@@ -335,21 +336,20 @@ public class UrlEncodingSerializer extends UonSerializer {
 			if (t != null)
 				session.addBeanGetterWarning(pMeta, t);
 
-			if (session.canIgnoreValue(pMeta.getClassMeta(), key, value))
+			if (session.canIgnoreValue(cMeta, key, value))
 				continue;
 
 			if (value != null && session.shouldUseExpandedParams(pMeta)) {
-				ClassMeta cm = pMeta.getClassMeta();
 				// Transformed object array bean properties may be transformed resulting in ArrayLists,
 				// so we need to check type if we think it's an array.
-				Iterator i = (cm.isCollection() || value instanceof Collection) ? ((Collection)value).iterator() : ArrayUtils.iterator(value);
+				Iterator i = (cMeta.isCollection() || value instanceof Collection) ? ((Collection)value).iterator() : ArrayUtils.iterator(value);
 				while (i.hasNext()) {
 					if (addAmp)
 						out.cr(depth).append('&');
 
 					out.appendObject(key, false, true, true).append('=');
 
-					super.serializeAnything(session, out, i.next(), pMeta.getClassMeta().getElementType(), key, pMeta, false, true);
+					super.serializeAnything(session, out, i.next(), cMeta.getElementType(), key, pMeta, false, true);
 
 					addAmp = true;
 				}
@@ -359,7 +359,7 @@ public class UrlEncodingSerializer extends UonSerializer {
 
 				out.appendObject(key, false, true, true).append('=');
 
-				super.serializeAnything(session, out, value, pMeta.getClassMeta(), key, pMeta, false, true);
+				super.serializeAnything(session, out, value, cMeta, key, pMeta, false, true);
 
 				addAmp = true;
 			}

@@ -740,4 +740,23 @@ public class SerializerSession extends Session {
 			m.put("stack", stack);
 		return m;
 	}
+
+	/**
+	 * Create a "_class" property that represents the name of the bean.
+	 * 
+	 * @param m 
+	 * 	The bean map to create a class property on.
+	 * @param lexicon
+	 * 	The bean/pojo lexicon map to use to resolve the name of the bean class.
+	 * @return 
+	 * 	A new bean property value.
+	 */
+	public BeanPropertyValue createBeanClassProperty(BeanMap<?> m, ClassLexicon lexicon) {
+		BeanMeta<?> bm = m.getMeta();
+		Class<?> c = bm.getClassMeta().getInnerClass();
+		String name = (lexicon == null ? null : lexicon.getNameForClass(c));
+		if (name == null)
+			name = c.getName();
+		return new BeanPropertyValue(bm.getClassProperty(), name, null);
+	}
 }

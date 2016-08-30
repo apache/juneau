@@ -325,11 +325,11 @@ public class RdfSerializer extends WriterSerializer {
 	}
 
 	private void serializeBeanMap(RdfSerializerSession session, BeanMap<?> m, Resource r) throws SerializeException {
-		List<BeanPropertyValue> l = m.getValues(false, session.isTrimNulls());
+		List<BeanPropertyValue> l = m.getValues(session.isTrimNulls());
 		Collections.reverse(l);
 		for (BeanPropertyValue bpv : l) {
 			BeanPropertyMeta pMeta = bpv.getMeta();
-			ClassMeta<?> cm = pMeta.getClassMeta();
+			ClassMeta<?> cMeta = pMeta.getClassMeta();
 
 			if (pMeta.getExtendedMeta(RdfBeanPropertyMeta.class).isBeanUri())
 				continue;
@@ -340,7 +340,7 @@ public class RdfSerializer extends WriterSerializer {
 			if (t != null)
 				session.addBeanGetterWarning(pMeta, t);
 
-			if (session.canIgnoreValue(cm, key, value))
+			if (session.canIgnoreValue(cMeta, key, value))
 				continue;
 
 			BeanPropertyMeta bpm = bpv.getMeta();
@@ -353,7 +353,7 @@ public class RdfSerializer extends WriterSerializer {
 				session.addModelPrefix(ns);
 
 			Property p = session.getModel().createProperty(ns.getUri(), session.encodeElementName(key));
-			RDFNode n = serializeAnything(session, value, pMeta.isUri(), cm, key, pMeta, r);
+			RDFNode n = serializeAnything(session, value, pMeta.isUri(), cMeta, key, pMeta, r);
 			if (n != null)
 				r.addProperty(p, n);
 		}

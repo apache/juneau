@@ -162,7 +162,7 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 
 	private void serializeBeanMap(MsgPackSerializerSession session, MsgPackOutputStream out, final BeanMap<?> m, boolean addClassAttr) throws Exception {
 
-		List<BeanPropertyValue> values = m.getValues(addClassAttr, session.isTrimNulls());
+		List<BeanPropertyValue> values = m.getValues(session.isTrimNulls(), addClassAttr ? session.createBeanClassProperty(m, null) : null);
 
 		int size = values.size();
 		for (BeanPropertyValue p : values)
@@ -172,6 +172,7 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 
 		for (BeanPropertyValue p : values) {
 			BeanPropertyMeta pMeta = p.getMeta();
+			ClassMeta<?> cMeta = p.getClassMeta();
 			String key = p.getName();
 			Object value = p.getValue();
 			Throwable t = p.getThrown();
@@ -179,7 +180,7 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 				session.addBeanGetterWarning(pMeta, t);
 			else {
 				serializeAnything(session, out, key, null, null, null);
-				serializeAnything(session, out, value, pMeta == null ? session.getBeanContext().string() : pMeta.getClassMeta(), key, pMeta);
+				serializeAnything(session, out, value, cMeta, key, pMeta);
 			}
 		}
 	}

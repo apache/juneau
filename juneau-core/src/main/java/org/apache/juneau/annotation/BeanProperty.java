@@ -167,5 +167,7 @@ public @interface BeanProperty {
 	 * </dl>
 	 */
 	String[] properties() default {};
+
+	Class<?>[] lexicon() default {};
 }
 

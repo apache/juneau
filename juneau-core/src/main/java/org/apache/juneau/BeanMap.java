@@ -392,16 +392,20 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * <p>
 	 * This allows a snapshot of all values to be grabbed from a bean in one call.
 	 *
-	 * @param addClassAttr Add a <jk>"_class"</jk> bean property to the returned list.
-	 * @param ignoreNulls Don't return properties whose values are null.
+	 * @param ignoreNulls
+	 * 	Don't return properties whose values are null.
+	 * @param prependVals
+	 * 	Additional bean property values to prepended to this list.
+	 * 	Any <jk>null</jk> values in this list will be ignored.
 	 * @return The list of all bean property values.
 	 */
-	public List<BeanPropertyValue> getValues(final boolean addClassAttr, final boolean ignoreNulls) {
+	public List<BeanPropertyValue> getValues(final boolean ignoreNulls, BeanPropertyValue...prependVals) {
 		Collection<BeanPropertyMeta> properties = getProperties();
-		int capacity = (ignoreNulls && properties.size() > 10) ? 10 : properties.size() + (addClassAttr ? 1 : 0);
+		int capacity = (ignoreNulls && properties.size() > 10) ? 10 : properties.size() + prependVals.length;
 		List<BeanPropertyValue> l = new ArrayList<BeanPropertyValue>(capacity);
-		if (addClassAttr)
-			l.add(new BeanPropertyValue(meta.getClassProperty(), meta.c.getName(), null));
+		for (BeanPropertyValue v : prependVals)
+			if (v != null)
+				l.add(v);
 		for (BeanPropertyMeta bpm : properties) {
 			try {
 				Object val = bpm.get(this);

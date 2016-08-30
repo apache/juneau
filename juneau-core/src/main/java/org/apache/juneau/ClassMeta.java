@@ -384,6 +384,10 @@ public final class ClassMeta<T> implements Type {
 		return this;
 	}
 
+	public ClassLexicon getClassLexicon() {
+		return classLexicon;
+	}
+
 	/**
 	 * Returns the category of this class.
 	 *

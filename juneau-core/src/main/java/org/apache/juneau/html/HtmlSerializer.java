@@ -344,8 +344,9 @@ public class HtmlSerializer extends XmlSerializer {
 			out.eTag(i+1, "tr").nl();
 		}
 
-		for (BeanPropertyValue p : m.getValues(false, session.isTrimNulls())) {
+		for (BeanPropertyValue p : m.getValues(session.isTrimNulls())) {
 			BeanPropertyMeta pMeta = p.getMeta();
+			ClassMeta<?> cMeta = p.getClassMeta();
 
 			String key = p.getName();
 			Object value = p.getValue();
@@ -353,7 +354,7 @@ public class HtmlSerializer extends XmlSerializer {
 			if (t != null)
 				session.addBeanGetterWarning(pMeta, t);
 
-			if (session.canIgnoreValue(pMeta.getClassMeta(), key, value))
+			if (session.canIgnoreValue(cMeta, key, value))
 				continue;
 
 			out.sTag(i+1, "tr").nl();
@@ -362,7 +363,7 @@ public class HtmlSerializer extends XmlSerializer {
 			out.eTag(i+2, "td").nl();
 			out.sTag(i+2, "td").nl();
 			try {
-				serializeAnything(session, out, value, p.getMeta().getClassMeta(), key, 2, pMeta);
+				serializeAnything(session, out, value, cMeta, key, 2, pMeta);
 			} catch (SerializeException e) {
 				throw e;
 			} catch (Error e) {

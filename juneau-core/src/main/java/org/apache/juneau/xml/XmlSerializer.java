@@ -262,7 +262,7 @@ public class XmlSerializer extends WriterSerializer {
 					findNsfMappings(session, o2);
 			}
 			if (bm != null) {
-				for (BeanPropertyValue p : bm.getValues(false, session.isTrimNulls())) {
+				for (BeanPropertyValue p : bm.getValues(session.isTrimNulls())) {
 
 					Namespace ns = p.getMeta().getExtendedMeta(XmlBeanPropertyMeta.class).getNamespace();
 					if (ns != null && ns.uri != null)
@@ -530,20 +530,22 @@ public class XmlSerializer extends WriterSerializer {
 		boolean hasChildren = false;
 		BeanMeta<?> bm = m.getMeta();
 
-		List<BeanPropertyValue> lp = m.getValues(false, session.isTrimNulls());
+		List<BeanPropertyValue> lp = m.getValues(session.isTrimNulls());
 
 		Map<String,BeanPropertyMeta> xmlAttrs = bm.getExtendedMeta(XmlBeanMeta.class).getXmlAttrProperties();
 		Object content = null;
 		for (BeanPropertyValue p : lp) {
 			if (xmlAttrs.containsKey(p.getName())) {
 				BeanPropertyMeta pMeta = p.getMeta();
+				ClassMeta<?> cMeta = p.getClassMeta();
+
 				String key = p.getName();
 				Object value = p.getValue();
 				Throwable t = p.getThrown();
 				if (t != null)
 					session.addBeanGetterWarning(pMeta, t);
 
-				if (session.canIgnoreValue(pMeta.getClassMeta(), key, value))
+				if (session.canIgnoreValue(cMeta, key, value))
 					continue;
 
 				Namespace ns = (session.isEnableNamespaces() && pMeta.getExtendedMeta(XmlBeanPropertyMeta.class).getNamespace() != elementNs ? pMeta.getExtendedMeta(XmlBeanPropertyMeta.class).getNamespace() : null);
@@ -559,6 +561,8 @@ public class XmlSerializer extends WriterSerializer {
 
 		for (BeanPropertyValue p : lp) {
 			BeanPropertyMeta pMeta = p.getMeta();
+			ClassMeta<?> cMeta = p.getClassMeta();
+
 			XmlFormat xf = pMeta.getExtendedMeta(XmlBeanPropertyMeta.class).getXmlFormat();
 
 			if (xf == CONTENT) {
@@ -573,14 +577,14 @@ public class XmlSerializer extends WriterSerializer {
 				if (t != null)
 					session.addBeanGetterWarning(pMeta, t);
 
-				if (session.canIgnoreValue(pMeta.getClassMeta(), key, value))
+				if (session.canIgnoreValue(cMeta, key, value))
 					continue;
 
 				if (! hasChildren) {
 					hasChildren = true;
 					out.appendIf(! isCollapsed, '>').nl();
 				}
-				serializeAnything(session, out, value, pMeta.getClassMeta(), key, pMeta.getExtendedMeta(XmlBeanPropertyMeta.class).getNamespace(), false, pMeta.getExtendedMeta(XmlBeanPropertyMeta.class).getXmlFormat(), pMeta);
+				serializeAnything(session, out, value, cMeta, key, pMeta.getExtendedMeta(XmlBeanPropertyMeta.class).getNamespace(), false, pMeta.getExtendedMeta(XmlBeanPropertyMeta.class).getXmlFormat(), pMeta);
 			}
 		}
 		if ((! hasContent) || session.canIgnoreValue(string(), null, content))
