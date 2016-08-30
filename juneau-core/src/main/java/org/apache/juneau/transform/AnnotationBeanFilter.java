@@ -85,7 +85,7 @@ public final class AnnotationBeanFilter<T> extends BeanFilter<T> {
 					stopClass = b.stopClass();
 
 
-				if (! b.subTypeProperty().isEmpty()) {
+				if (b.subTypes().length > 0) {
 					subTypeProperty = b.subTypeProperty();
 
 					for (Class<?> bst : b.subTypes()) {

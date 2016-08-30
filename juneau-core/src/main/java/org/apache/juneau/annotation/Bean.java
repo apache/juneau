@@ -243,7 +243,7 @@ public @interface Bean {
 	 * <p>
 	 * 	This annotation is an alternative to using the {@link BeanFilter} class with an implemented {@link BeanFilter#getSubTypeProperty()} method.
 	 */
-	String subTypeProperty() default "";
+	String subTypeProperty() default "_class";
 
 	/**
 	 * Used in conjunction with {@link #subTypeProperty()} to set up bean subtypes.
