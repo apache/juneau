@@ -58,6 +58,7 @@ public class BeanPropertyMeta {
 	private PojoSwap swap;                     // PojoSwap defined only via @BeanProperty annotation.
 
 	private MetadataMap extMeta = new MetadataMap();  // Extended metadata
+	private ClassLexicon classLexicon;
 
 	/**
 	 * Constructor.
@@ -140,6 +141,21 @@ public class BeanPropertyMeta {
 		if (typeMeta == null)
 			typeMeta = (swap != null ? swap.getSwapClassMeta(beanMeta.ctx) : rawTypeMeta == null ? beanMeta.ctx.object() : rawTypeMeta.getSerializedClassMeta());
 		return typeMeta;
+	}
+
+	/**
+	 * Returns the class lexicon in use for this bean property.
+	 * The order of lookup for the lexicon is as follows:
+	 * <ol>
+	 * 	<li>Lexicon defined via {@link BeanProperty#classLexicon()}.
+	 * 	<li>Lexicon defined via {@link Bean#classLexicon()} or {@link Pojo#classLexicon()} (or {@link BeanFilter} equivalent).
+	 * 	<li>Lexicon defined via {@link BeanContext#BEAN_classLexicon} context property.
+	 * </ol>
+	 *
+	 * @return The class lexicon in use for this bean property.  Never <jk>null</jk>.
+	 */
+	public ClassLexicon getClassLexicon() {
+		return classLexicon;
 	}
 
 	/**
@@ -240,6 +256,8 @@ public class BeanPropertyMeta {
 				swap = getPropertyPojoSwap(p);
 				if (p.properties().length != 0)
 					properties = p.properties();
+				if (p.classLexicon().length > 0)
+					this.classLexicon = new ClassLexicon(p.classLexicon());
 			}
 		}
 
@@ -253,6 +271,8 @@ public class BeanPropertyMeta {
 					swap = getPropertyPojoSwap(p);
 				if (properties != null && p.properties().length != 0)
 					properties = p.properties();
+				if (p.classLexicon().length > 0)
+					this.classLexicon = new ClassLexicon(p.classLexicon());
 			}
 		}
 
@@ -266,6 +286,8 @@ public class BeanPropertyMeta {
 				swap = getPropertyPojoSwap(p);
 				if (properties != null && p.properties().length != 0)
 					properties = p.properties();
+				if (p.classLexicon().length > 0)
+					this.classLexicon = new ClassLexicon(p.classLexicon());
 			}
 		}
 

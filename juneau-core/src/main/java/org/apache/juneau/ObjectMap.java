@@ -1153,6 +1153,14 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 		return cast((ClassLexicon)null);
 	}
 
+	/**
+	 * Same as {@link #cast()}, but first do a lookup for the name in the specified lexicon.
+	 *
+	 * @param classLexicon
+	 * 	The class lexicon to resolve the name.  Can be <jk>null</jk>.
+	 * @return The new Java object of type specified by the <js>"_class"</js> entry value, or this
+	 * 	same object if entry does not exist.
+	 */
 	public Object cast(ClassLexicon classLexicon) {
 		String c = (String)get("_class");
 		if (c == null) {

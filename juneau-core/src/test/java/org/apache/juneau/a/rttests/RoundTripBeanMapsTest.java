@@ -357,10 +357,15 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 
 	public static class CFilter extends BeanFilter<C> {
 		public CFilter() {
-			setSubTypeProperty("subType");
-			addSubType(C1.class, "C1");
-			addSubType(C2.class, "C2");
-			addSubType(C3.class, "C3");
+			super(C.class, null, null, null, null, false, null, null, "subType", createSubTypes());
+		}
+
+		private static Map<Class<?>,String> createSubTypes() {
+			HashMap<Class<?>,String> m = new HashMap<Class<?>,String>();
+			m.put(C1.class,"C1");
+			m.put(C2.class,"C2");
+			m.put(C3.class,"C3");
+			return m;
 		}
 	}
 
@@ -453,9 +458,9 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 
 	public static class CAFilter extends BeanFilter<CA> {
 		public CAFilter() {
-			setSubTypeProperty("subType");
-			addSubType(CA1.class, "CA1");
-			addSubType(CA2.class, "CA2");
+			super(CA.class, null, null, null, null, false, null, null, "subType",
+				new HashMap<Class<?>,String>(){{put(CA1.class,"CA1");put(CA2.class,"CA2");}}
+			);
 		}
 	}
 
@@ -583,7 +588,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	}
 	public static class E2Filter extends BeanFilter<E2> {
 		public E2Filter() {
-			super(null, null, new String[]{"f2"}, null, null, false, null);
+			super(null, null, new String[]{"f2"}, null, null, false, null, null, null, null);
 		}
 	}
 

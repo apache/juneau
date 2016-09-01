@@ -132,11 +132,11 @@ public final class ClassMeta<T> implements Type {
 
 			classLexicon = beanContext.getClassLexicon();
 			for (Pojo p : ReflectionUtils.findAnnotationsParentFirst(Pojo.class, innerClass))
-				if (p.lexicon().length > 0)
-					classLexicon = new ClassLexicon(classLexicon, p.lexicon());
+				if (p.classLexicon().length > 0)
+					classLexicon = new ClassLexicon(p.classLexicon());
 			for (Bean b : ReflectionUtils.findAnnotationsParentFirst(Bean.class, innerClass))
-				if (b.lexicon().length > 0)
-					classLexicon = new ClassLexicon(classLexicon, b.lexicon());
+				if (b.classLexicon().length > 0)
+					classLexicon = new ClassLexicon(b.classLexicon());
 
 			serializedClassMeta = (pojoSwap == null ? this : beanContext.getClassMeta(pojoSwap.getSwapClass()));
 			if (serializedClassMeta == null)
@@ -384,6 +384,16 @@ public final class ClassMeta<T> implements Type {
 		return this;
 	}
 
+	/**
+	 * Returns the class lexicon in use for this class.
+	 * The order of lookup for the lexicon is as follows:
+	 * <ol>
+	 * 	<li>Lexicon defined via {@link Bean#classLexicon()} or {@link Pojo#classLexicon()} (or {@link BeanFilter} equivalent).
+	 * 	<li>Lexicon defined via {@link BeanContext#BEAN_classLexicon} context property.
+	 * </ol>
+	 *
+	 * @return The class lexicon in use for this class.  Never <jk>null</jk>.
+	 */
 	public ClassLexicon getClassLexicon() {
 		return classLexicon;
 	}

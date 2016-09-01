@@ -40,7 +40,7 @@ public @interface Pojo {
 	 * 	output so that the class can be determined during parsing.
 	 * It is also used to specify element names in XML.
 	 * <p>
-	 * The name is used in combination with the lexicon defined through {@link #lexicon()}.  Together, they make up
+	 * The name is used in combination with the lexicon defined through {@link #classLexicon()}.  Together, they make up
 	 * 	a simple name/value mapping of names to classes.
 	 * Names do not need to be universally unique.  However, they must be unique within a lexicon.
 	 *
@@ -101,7 +101,7 @@ public @interface Pojo {
 	 * 		Note that the subclass MUST implement a no-arg constructor so that it can be instantiated.
 	 * </ul>
 	 */
-	Class<?>[] lexicon() default {};
+	Class<?>[] classLexicon() default {};
 
 	/**
 	 * Associate a {@link PojoSwap} or {@link SurrogateSwap} with this class type.

@@ -446,8 +446,19 @@ public class BeanContext extends Context {
 	 */
 	public static final String BEAN_implClasses_put = "BeanContext.implClasses.map.put";
 
+	/**
+	 * Specifies the list of classes that make up the class lexicon for this bean context (<code>List&lt;Class&gt;</code>).
+	 */
 	public static final String BEAN_classLexicon = "BeanContext.classLexicon.list";
+
+	/**
+	 * Add to the class lexicon list.
+	 */
 	public static final String BEAN_classLexicon_add = "BeanContext.classLexicon.list.add";
+
+	/**
+	 * Remove from the class lexicon list.
+	 */
 	public static final String BEAN_classLexicon_remove = "BeanContext.classLexicon.list.remove";
 
 	/**
@@ -1463,6 +1474,11 @@ public class BeanContext extends Context {
 		return null;
 	}
 
+	/**
+	 * Returns the class lexicon defined in this bean context defined by {@link BeanContext#BEAN_classLexicon}.
+	 *
+	 * @return The class lexicon defined in this bean context.  Never <jk>null</jk>.
+	 */
 	protected ClassLexicon getClassLexicon() {
 		return classLexicon;
 	}

@@ -168,6 +168,20 @@ public @interface BeanProperty {
 	 */
 	String[] properties() default {};
 
-	Class<?>[] lexicon() default {};
+	/**
+	 * The list of classes that make up the class lexicon for this bean proeprty.
+	 * <p>
+	 * The lexicon is a name/class mapping used to find class types during parsing when they cannot be inferred through reflection.
+	 * The names are defined through the {@link #name()} annotation defined on the bean or POJO classes.
+	 * <p>
+	 * This list can consist of the following class types:
+	 * <ul>
+	 * 	<li>Any bean class that specifies a value for {@link Bean#name() @Bean.name()};
+	 * 	<li>Any POJO class that specifies a value for {@link Pojo#name() @Pojo.name()};
+	 * 	<li>Any subclass of {@link ClassLexicon} that defines an entire set of mappings.
+	 * 		Note that the subclass MUST implement a no-arg constructor so that it can be instantiated.
+	 * </ul>
+	 */
+	Class<?>[] classLexicon() default {};
 }
 

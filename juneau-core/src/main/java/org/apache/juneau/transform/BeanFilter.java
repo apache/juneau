@@ -68,11 +68,12 @@ public abstract class BeanFilter<T> {
 
 	private final Class<T> beanClass;
 	private final String[] properties, excludeProperties;
-	private LinkedHashMap<Class<?>, String> subTypes;
-	private String subTypeAttr;
+	private final Map<Class<?>, String> subTypes;
+	private final String subTypeAttr;
 	private final PropertyNamer propertyNamer;
 	private final Class<?> interfaceClass, stopClass;
 	private final boolean sortProperties;
+	private final ClassLexicon classLexicon;
 
 	/**
 	 * Constructor.
@@ -143,9 +144,63 @@ public abstract class BeanFilter<T> {
 	 * 	Sort properties in alphabetical order.
 	 * @param propertyNamer
 	 * 	The property namer to use to name bean properties.
+	 * @param classLexicon
+	 * 	The class lexicon to use for resolving class identifier names from classes.
+	 * @param subTypeProperty
+	 * 	Defines a virtual property on a superclass that identifies bean subtype classes.
+	 * 	<p>
+	 * 	In the following example, the abstract class has two subclasses that are differentiated
+	 * 		by a property called <code>subType</code>
+	 *
+	 * 	<p class='bcode'>
+	 * 	<jc>// Abstract superclass</jc>
+	 * 	<jk>public abstract class</jk> A {
+	 * 		<jk>public</jk> String <jf>f0</jf> = <js>"f0"</js>;
+	 * 	}
+	 *
+	 * 	<jc>// Subclass 1</jc>
+	 * 	<jk>public class</jk> A1 <jk>extends</jk> A {
+	 * 		<jk>public</jk> String <jf>f1</jf>;
+	 * 	}
+	 *
+	 * 	<jc>// Subclass 2</jc>
+	 * 	<jk>public class</jk> A2 <jk>extends</jk> A {
+	 * 		<jk>public</jk> String <jf>f2</jf>;
+	 * 	}
+	 *
+	 * 	<jc>// Filter for defining subtypes</jc>
+	 * 	<jk>public class</jk> AFilter <jk>extends</jk> BeanFilter&lt;A&gt; {
+	 * 		<jk>public</jk> AFilter() {
+	 * 			<jk>super</jk>(A.<jk>class</jk>, <jk>null</jk>, <jk>null</jk>, <jk>null</jk>, <jk>null</jk>, <jk>false</jk>, <jk>null</jk>, <jk>null</jk>, <js>"subType"</js>, <jsm>createSubTypes</jsm>())
+	 * 		}
+	 * 		<jk>private static</jk> Map&lt;Class&lt;?&gt;,String&gt; <jsm>createSubTypes</jsm>() {
+	 * 			HashMap&lt;Class&lt;?&gt;,String&gt; m = new HashMap&lt;Class&lt;?&gt;,String&gt;();
+	 * 			m.put(A1.<jk>class</jk>,<js>"A1"</js>);
+	 * 			m.put(A2.<jk>class</jk>,<js>"A2"</js>);
+	 * 			<jk>return</jk> m;
+	 * 		}
+	 * 	}
+	 * 	</p>
+	 * 	<p>
+	 * 	The following shows what happens when serializing a subclassed object to JSON:
+	 * 	<p class='bcode'>
+	 * 	JsonSerializer s = <jk>new</jk> JsonSerializer().addBeanFilters(AFilter.<jk>class</jk>);
+	 * 	A1 a1 = <jk>new</jk> A1();
+	 * 	a1.<jf>f1</jf> = <js>"f1"</js>;
+	 * 	String r = s.serialize(a1);
+	 * 	<jsm>assertEquals</jsm>(<js>"{subType:'A1',f1:'f1',f0:'f0'}"</js>, r);
+	 *		</p>
+	 * 	<p>
+	 * 	The following shows what happens when parsing back into the original object.
+	 * 	<p class='bcode'>
+	 * 	JsonParser p = <jk>new</jk> JsonParser().addBeanFilters(AFilter.<jk>class</jk>);
+	 * 	A a = p.parse(r, A.<jk>class</jk>);
+	 * 	<jsm>assertTrue</jsm>(a <jk>instanceof</jk> A1);
+	 * 	</p>
+	 * @param subTypes
 	 */
 	@SuppressWarnings("unchecked")
-	public BeanFilter(Class<T> beanClass, String[] properties, String[] excludeProperties, Class<?> interfaceClass, Class<?> stopClass, boolean sortProperties, PropertyNamer propertyNamer) {
+	public BeanFilter(Class<T> beanClass, String[] properties, String[] excludeProperties, Class<?> interfaceClass, Class<?> stopClass, boolean sortProperties, PropertyNamer propertyNamer, ClassLexicon classLexicon, String subTypeProperty, Map<Class<?>,String> subTypes) {
 
 		if (beanClass == null) {
 			Class<?> c = this.getClass().getSuperclass();
@@ -177,6 +232,9 @@ public abstract class BeanFilter<T> {
 		this.stopClass = stopClass;
 		this.sortProperties = sortProperties;
 		this.propertyNamer = propertyNamer;
+		this.classLexicon = classLexicon;
+		this.subTypeAttr = subTypeProperty;
+		this.subTypes = subTypes == null ? null : Collections.unmodifiableMap(subTypes);
 	}
 
 	/**
@@ -186,7 +244,7 @@ public abstract class BeanFilter<T> {
 	 */
 	@SuppressWarnings("unchecked")
 	public BeanFilter(Class<?> interfaceClass) {
-		this((Class<T>)interfaceClass, null, null, interfaceClass, null, false, null);
+		this((Class<T>)interfaceClass, null, null, interfaceClass, null, false, null, null, null, null);
 	}
 
 	/**
@@ -195,7 +253,7 @@ public abstract class BeanFilter<T> {
 	 * @param properties
 	 */
 	public BeanFilter(String...properties) {
-		this(null, properties, null, null, null, false, null);
+		this(null, properties, null, null, null, false, null, null, null, null);
 	}
 
 	/**
@@ -254,7 +312,6 @@ public abstract class BeanFilter<T> {
 	/**
 	 * Returns the name of the sub type property associated with the bean class.
 	 *
-	 * @see #setSubTypeProperty(String)
 	 * @return The sub type property name, or <jk>null</jk> if bean has no subtypes defined.
 	 */
 	public String getSubTypeProperty() {
@@ -262,102 +319,21 @@ public abstract class BeanFilter<T> {
 	}
 
 	/**
-	 * Defines a virtual property on a superclass that identifies bean subtype classes.
-	 * <p>
-	 * 	In the following example, the abstract class has two subclasses that are differentiated
-	 * 		by a property called <code>subType</code>
+	 * Returns the class lexicon to use for this bean.
 	 *
-	 * <p class='bcode'>
-	 * 	<jc>// Abstract superclass</jc>
-	 * 	<jk>public abstract class</jk> A {
-	 * 		<jk>public</jk> String <jf>f0</jf> = <js>"f0"</js>;
-	 * 	}
-	 *
-	 * 	<jc>// Subclass 1</jc>
-	 * 	<jk>public class</jk> A1 <jk>extends</jk> A {
-	 * 		<jk>public</jk> String <jf>f1</jf>;
-	 * 	}
-	 *
-	 * 	<jc>// Subclass 2</jc>
-	 * 	<jk>public class</jk> A2 <jk>extends</jk> A {
-	 * 		<jk>public</jk> String <jf>f2</jf>;
-	 * 	}
-	 *
-	 * 	<jc>// Filter for defining subtypes</jc>
-	 * 	<jk>public class</jk> AFilter <jk>extends</jk> BeanFilter&lt;A&gt; {
-	 * 		<jk>public</jk> AFilter() {
-	 * 			setSubTypeProperty(<js>"subType"</js>);
-	 * 			addSubType(Al.<jk>class</jk>, <js>"A1"</js>);
-	 * 			addSubType(A2.<jk>class</jk>, <js>"A2"</js>);
-	 * 		}
-	 * 	}
-	 * </p>
-	 * <p>
-	 * 	The following shows what happens when serializing a subclassed object to JSON:
-	 * <p class='bcode'>
-	 * 	JsonSerializer s = <jk>new</jk> JsonSerializer().addBeanFilters(AFilter.<jk>class</jk>);
-	 * 	A1 a1 = <jk>new</jk> A1();
-	 * 	a1.<jf>f1</jf> = <js>"f1"</js>;
-	 * 	String r = s.serialize(a1);
-	 * 	<jsm>assertEquals</jsm>(<js>"{subType:'A1',f1:'f1',f0:'f0'}"</js>, r);
-	 * </p>
-	 * <p>
-	 * 	The following shows what happens when parsing back into the original object.
-	 * <p class='bcode'>
-	 * 	JsonParser p = <jk>new</jk> JsonParser().addBeanFilters(AFilter.<jk>class</jk>);
-	 * 	A a = p.parse(r, A.<jk>class</jk>);
-	 * 	<jsm>assertTrue</jsm>(a <jk>instanceof</jk> A1);
-	 * </p>
-	 * <p>
-	 * 	This method is an alternative to using the {@link Bean#subTypeProperty()} annotation on a class.
-	 *
-	 * @param subTypeAttr The name of the attribute representing the subtype.
-	 * @return This object (for method chaining).
+	 * @return The class lexicon to use for this bean.
 	 */
-	@Deprecated
-	public BeanFilter<T> setSubTypeProperty(String subTypeAttr) {
-		this.subTypeAttr = subTypeAttr;
-		return this;
+	public ClassLexicon getClassLexicon() {
+		return classLexicon;
 	}
 
 	/**
 	 * Returns the subtypes associated with the bean class.
 	 *
-	 * @see #setSubTypeProperty(String)
 	 * @return The set of sub types associated with this bean class, or <jk>null</jk> if bean has no subtypes defined.
 	 */
-	@Deprecated
-	public LinkedHashMap<Class<?>, String> getSubTypes() {
+	public Map<Class<?>, String> getSubTypes() {
 		return subTypes;
-	}
-
-	/**
-	 * Specifies the set of subclasses of this bean class in addition to a string identifier for that subclass.
-	 *
-	 * @see #setSubTypeProperty(String)
-	 * @param subTypes the map of subtype classes to subtype identifier strings.
-	 * @return This object (for method chaining).
-	 */
-	@Deprecated
-	public BeanFilter<T> setSubTypes(LinkedHashMap<Class<?>, String> subTypes) {
-		this.subTypes = subTypes;
-		return this;
-	}
-
-	/**
-	 * Convenience method for adding a single subtype in leu of using {@link #setSubTypes(LinkedHashMap)} in one call.
-	 *
-	 * @see #setSubTypeProperty(String)
-	 * @param c The subtype class.
-	 * @param id The subtype identifier string for the specified subtype class.
-	 * @return This object (for method chaining).
-	 */
-	@Deprecated
-	public BeanFilter<T> addSubType(Class<?> c, String id) {
-		if (subTypes == null)
-			subTypes = new LinkedHashMap<Class<?>, String>();
-		subTypes.put(c, id);
-		return this;
 	}
 
 	/**

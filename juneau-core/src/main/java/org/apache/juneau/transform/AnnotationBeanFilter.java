@@ -38,11 +38,7 @@ public final class AnnotationBeanFilter<T> extends BeanFilter<T> {
 	}
 
 	private AnnotationBeanFilter(Builder<T> b) {
-		super(b.beanClass, b.properties, b.excludeProperties, b.interfaceClass, b.stopClass, b.sortProperties, b.propertyNamer);
-
-		// Temp
-		setSubTypeProperty(b.subTypeProperty);
-		setSubTypes(b.subTypes);
+		super(b.beanClass, b.properties, b.excludeProperties, b.interfaceClass, b.stopClass, b.sortProperties, b.propertyNamer, b.classLexicon, b.subTypeProperty, b.subTypes);
 	}
 
 	private static class Builder<T> {
@@ -53,6 +49,7 @@ public final class AnnotationBeanFilter<T> extends BeanFilter<T> {
 		Class<?> stopClass;
 		boolean sortProperties;
 		PropertyNamer propertyNamer;
+		ClassLexicon classLexicon;
 		String subTypeProperty;
 		LinkedHashMap<Class<?>,String> subTypes = new LinkedHashMap<Class<?>,String>();
 
@@ -84,6 +81,8 @@ public final class AnnotationBeanFilter<T> extends BeanFilter<T> {
 				if (b.stopClass() != Object.class)
 					stopClass = b.stopClass();
 
+				if (b.classLexicon().length > 0)
+					classLexicon = new ClassLexicon(b.classLexicon());
 
 				if (b.subTypes().length > 0) {
 					subTypeProperty = b.subTypeProperty();

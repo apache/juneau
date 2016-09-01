@@ -21,7 +21,21 @@ import org.apache.juneau.internal.*;
 /**
  * A lookup table for resolving classes by name.
  * <p>
- * Class names are typically defined through the {@link Bean#name()} or {@link Pojo#name()} annotations.
+ * In a nutshell, provides a simple mapping of class objects to identifying names by implementing the following two methods:
+ * <ul>
+ * 	<li>{@link #getClassForName(String)}
+ * 	<li>{@link #getNameForClass(Class)}
+ * </ul>
+ * <p>
+ * Class names are defined through the {@link Bean#name()} or {@link Pojo#name()} annotations when using the {@link ClassLexicon#ClassLexicon(Class...)}
+ * 	constructor, but can be defined programmatically by using the {@link ClassLexicon#ClassLexicon(Map)} constructor.
+ * <p>
+ * The lexicon is used by the framework in the following ways:
+ * <ul>
+ * 	<li>If a class type cannot be inferred through reflection during parsing, then a helper <js>"_class"</js> is added to the serialized output
+ * 		using the name defined for that class in this lexicon.  This helps determine the real class at parse time.
+ * 	<li>The lexicon name is used as element names when serialized to XML.
+ * </ul>
  *
  * @author james.bognar
  */
