@@ -92,4 +92,15 @@
 			</plugin>
 		</plugins>
 	</build>
+	<url>http://juneau.incubator.apache.org</url>
+	<organization>
+		<url>http://www.apache.org/</url>
+		<name>Apache</name>
+	</organization>
+	<scm>
+		<url>https://git-wip-us.apache.org/repos/asf?p=incubator-juneau.git</url>
+	</scm>
+	<issueManagement>
+		<url>https://issues.apache.org/jira/browse/JUNEAU</url>
+	</issueManagement>
 </project>
