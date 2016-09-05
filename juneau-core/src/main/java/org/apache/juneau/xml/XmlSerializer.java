@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -375,9 +375,9 @@ public class XmlSerializer extends WriterSerializer {
 
 		// Is there a name associated with this bean?
 		if (elementName == null)
-			elementName = gType.getExtendedMeta(XmlClassMeta.class).getElementName();
+			elementName = gType.getLexiconName();
 		if (elementName == null)
-			elementName = aType.getExtendedMeta(XmlClassMeta.class).getElementName();
+			elementName = aType.getLexiconName();
 
 		// If the value is null then it's either going to be <null/> or <XmlSerializer nil='true'/>
 		// depending on whether the element has a name.
@@ -621,7 +621,7 @@ public class XmlSerializer extends WriterSerializer {
 		}
 
 		if (eName == null && ! elementType.isObject()) {
-			eName = elementType.getExtendedMeta(XmlClassMeta.class).getElementName();
+			eName = elementType.getLexiconName();
 			eNs = elementType.getExtendedMeta(XmlClassMeta.class).getNamespace();
 		}
 

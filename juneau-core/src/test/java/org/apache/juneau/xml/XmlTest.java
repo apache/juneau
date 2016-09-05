@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -82,8 +82,7 @@ public class XmlTest {
 	}
 
 	/** Class with explicitly specified properties */
-	@Bean(properties = { "name", "age" })
-	@Xml(name="Person1")
+	@Bean(name="Person1", properties = { "name", "age" })
 	public static class Person1 {
 		public int age;
 		private String name;
@@ -124,7 +123,7 @@ public class XmlTest {
 		validateXml(t);
 	}
 
-	@Xml(name="foo")
+	@Bean(name="foo")
 	public static class A {
 		public int f1 = 1;
 	}
@@ -156,7 +155,7 @@ public class XmlTest {
 		validateXml(t);
 	}
 
-	@Xml(name="foo")
+	@Bean(name="foo")
 	public static interface C1 {}
 	public static class C2 implements C1 {}
 	public static class C3 extends C2 {
@@ -177,28 +176,8 @@ public class XmlTest {
 		validateXml(t);
 	}
 
-	@Xml(name="~!@#$%^&*()_+`-={}|[]\\:\";'<>?,.\n\r\t\b")
+	@Bean(name="~!@#$%^&*()_+`-={}|[]\\:\";'<>?,.\n\r\t\b")
 	public static class D {
-		public int f1 = 1;
-	}
-
-	//====================================================================================================
-	// Element name can only be specified on classes.
-	//====================================================================================================
-	@Test
-	public void testElementNameInInvalidLocations() throws Exception {
-		XmlSerializer s = XmlSerializer.DEFAULT_SIMPLE_SQ;
-		E t = new E();
-		try {
-			s.serialize(t);
-			fail("Exception not thrown");
-		} catch (Exception e) {
-			assertEquals("org.apache.juneau.xml.XmlTest$E: Annotation error on property 'f1'.  Found @Xml.name annotation can only be specified on types.", e.getLocalizedMessage());
-		}
-	}
-
-	public static class E {
-		@Xml(name="foo")
 		public int f1 = 1;
 	}
 
@@ -218,7 +197,7 @@ public class XmlTest {
 		validateXml(t);
 	}
 
-	@Xml(name="foo")
+	@Bean(name="foo")
 	public static class F extends LinkedList<String>{}
 
 	//====================================================================================================
@@ -237,7 +216,7 @@ public class XmlTest {
 		validateXml(t);
 	}
 
-	@Xml(name="bar")
+	@Bean(name="bar")
 	public static class G {
 		public F f1 = new F();
 	}
@@ -253,7 +232,7 @@ public class XmlTest {
 		assertEquals("<foo>bar</foo>", r);
 	}
 
-	@Xml(name="foo")
+	@Pojo(name="foo")
 	public static class H {
 		@Override /* Object */
 		public String toString() {
@@ -292,13 +271,13 @@ public class XmlTest {
 		assertEquals("<foo><f1><bar><f2>2</f2></bar></f1></foo>", r);
 	}
 
-	@Xml(name="foo")
+	@Bean(name="foo")
 	public static class J1 {
 		@BeanProperty(properties={"f2"}) public List<J2> f1 = new LinkedList<J2>() {{
 			add(new J2());
 		}};}
 
-	@Xml(name="bar")
+	@Bean(name="bar")
 	public static class J2 {
 		public int f2 = 2;
 		public int f3 = 3;

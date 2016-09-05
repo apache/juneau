@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -28,7 +28,6 @@ public class XmlClassMeta extends ClassMetaExtended {
 	private final Namespace namespace;
 	private final Xml xml;
 	private final XmlFormat format;
-	private final String elementName;
 	private final String childName;
 
 	/**
@@ -43,12 +42,10 @@ public class XmlClassMeta extends ClassMetaExtended {
 		this.xml =  ReflectionUtils.getAnnotation(Xml.class, c);
 		if (xml != null) {
 			this.format = xml.format();
-			this.elementName = StringUtils.nullIfEmpty(xml.name());
 			this.childName = StringUtils.nullIfEmpty(xml.childName());
 
 		} else {
 			this.format = XmlFormat.NORMAL;
-			this.elementName = null;
 			this.childName = null;
 		}
 	}
@@ -69,15 +66,6 @@ public class XmlClassMeta extends ClassMetaExtended {
 	 */
 	protected XmlFormat getFormat() {
 		return format;
-	}
-
-	/**
-	 * Returns the {@link Xml#name()} annotation defined on the class.
-	 *
-	 * @return The value of the {@link Xml#name()} annotation, or <jk>null</jk> if not specified.
-	 */
-	protected String getElementName() {
-		return elementName;
 	}
 
 	/**

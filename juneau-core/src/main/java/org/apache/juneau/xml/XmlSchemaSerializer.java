@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -197,9 +197,9 @@ public class XmlSchemaSerializer extends XmlSerializer {
 				queueElement(ns, "null", object());
 			else {
 				XmlClassMeta xmlMeta = cm.getExtendedMeta(XmlClassMeta.class);
-				if (xmlMeta.getElementName() != null && xmlMeta.getNamespace() != null)
+				if (cm.getLexiconName() != null && xmlMeta.getNamespace() != null)
 					ns = xmlMeta.getNamespace();
-				queueElement(ns, xmlMeta.getElementName(), cm);
+				queueElement(ns, cm.getLexiconName(), cm);
 			}
 			processQueue();
 		}
@@ -521,7 +521,7 @@ public class XmlSchemaSerializer extends XmlSerializer {
 
 		private String getElementName(ClassMeta<?> cm) {
 			cm = cm.getSerializedClassMeta();
-			String name = cm.getExtendedMeta(XmlClassMeta.class).getElementName();
+			String name = cm.getLexiconName();
 
 			if (name == null) {
 				if (cm.isBoolean())

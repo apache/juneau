@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -74,9 +74,8 @@ import org.apache.juneau.xml.annotation.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@Xml(name="dataset")
 @SuppressWarnings("unchecked")
-@Bean(properties={"metadata","data"})
+@Bean(name="dataset", properties={"metadata","data"})
 public class DataSet {
 
 	private Column[] metaData;
@@ -137,7 +136,8 @@ public class DataSet {
 	 *
 	 * @author James Bognar (james.bognar@salesforce.com)
 	 */
-	@Xml(name="row", childName="value")
+	@Bean(name="row")
+	@Xml(childName="value")
 	public static class Row extends LinkedList<String> {
 		private static final long serialVersionUID = 1L;
 	}

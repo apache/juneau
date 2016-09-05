@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -59,10 +59,10 @@ public final class ClassMeta<T> implements Type {
 	ClassCategory classCategory = UNKNOWN;            // The class category.
 	final Class<T> innerClass;                        // The class being wrapped.
 	ClassMeta<?>
-		serializedClassMeta,                          // The transformed class type (if class has swap associated with it).
-		elementType = null,                           // If ARRAY or COLLECTION, the element class type.
-		keyType = null,                               // If MAP, the key class type.
-		valueType = null;                             // If MAP, the value class type.
+		serializedClassMeta,                           // The transformed class type (if class has swap associated with it).
+		elementType = null,                            // If ARRAY or COLLECTION, the element class type.
+		keyType = null,                                // If MAP, the key class type.
+		valueType = null;                              // If MAP, the value class type.
 	InvocationHandler invocationHandler;              // The invocation handler for this class (if it has one).
 	volatile BeanMeta<T> beanMeta;                    // The bean meta for this bean class (if it's a bean).
 	Method fromStringMethod;                          // The static valueOf(String) or fromString(String) method (if it has one).
@@ -78,17 +78,18 @@ public final class ClassMeta<T> implements Type {
 	PojoSwap<T,?> pojoSwap;                           // The object POJO swap associated with this bean (if it has one).
 	BeanFilter<? extends T> beanFilter;               // The bean filter associated with this bean (if it has one).
 	boolean
-		isDelegate,                                   // True if this class extends Delegate.
-		isAbstract,                                   // True if this class is abstract.
-		isMemberClass;                                // True if this is a non-static member class.
+		isDelegate,                                    // True if this class extends Delegate.
+		isAbstract,                                    // True if this class is abstract.
+		isMemberClass;                                 // True if this is a non-static member class.
 
 	private MetadataMap extMeta = new MetadataMap();  // Extended metadata
-	private ClassLexicon classLexicon;
+	private ClassLexicon classLexicon;                // The class lexicon defined on this bean or pojo.
+	private String name;                              // The lexical name associated with this bean or pojo.
 
-	private Throwable initException;                   // Any exceptions thrown in the init() method.
-	private boolean hasChildPojoSwaps;                 // True if this class or any subclass of this class has a PojoSwap associated with it.
-	private Object primitiveDefault;                   // Default value for primitive type classes.
-	private Map<String,Method> remoteableMethods,      // Methods annotated with @Remoteable.  Contains all public methods if class is annotated with @Remotable.
+	private Throwable initException;                  // Any exceptions thrown in the init() method.
+	private boolean hasChildPojoSwaps;                // True if this class or any subclass of this class has a PojoSwap associated with it.
+	private Object primitiveDefault;                  // Default value for primitive type classes.
+	private Map<String,Method> remoteableMethods,     // Methods annotated with @Remoteable.  Contains all public methods if class is annotated with @Remotable.
 		publicMethods;                                 // All public methods, including static methods.
 
 	private static final Boolean BOOLEAN_DEFAULT = false;
@@ -131,12 +132,18 @@ public final class ClassMeta<T> implements Type {
 			pojoSwap = findPojoSwap(beanContext);
 
 			classLexicon = beanContext.getClassLexicon();
-			for (Pojo p : ReflectionUtils.findAnnotationsParentFirst(Pojo.class, innerClass))
+			for (Pojo p : ReflectionUtils.findAnnotationsParentFirst(Pojo.class, innerClass)) {
 				if (p.classLexicon().length > 0)
 					classLexicon = new ClassLexicon(p.classLexicon());
-			for (Bean b : ReflectionUtils.findAnnotationsParentFirst(Bean.class, innerClass))
+				if (! p.name().isEmpty())
+					name = p.name();
+			}
+			for (Bean b : ReflectionUtils.findAnnotationsParentFirst(Bean.class, innerClass)) {
 				if (b.classLexicon().length > 0)
 					classLexicon = new ClassLexicon(b.classLexicon());
+				if (! b.name().isEmpty())
+					name = b.name();
+			}
 
 			serializedClassMeta = (pojoSwap == null ? this : beanContext.getClassMeta(pojoSwap.getSwapClass()));
 			if (serializedClassMeta == null)
@@ -396,6 +403,17 @@ public final class ClassMeta<T> implements Type {
 	 */
 	public ClassLexicon getClassLexicon() {
 		return classLexicon;
+	}
+
+	/**
+	 * Returns the lexical name associated with this class.
+	 * <p>
+	 * The lexical name is defined by either {@link Bean#name()} or {@link Pojo#name()}.
+	 *
+	 * @return The lexical name associated with this class, or <jk>null</jk> if there is no lexical name defined.
+	 */
+	public String getLexiconName() {
+		return name;
 	}
 
 	/**
@@ -1255,29 +1273,29 @@ public final class ClassMeta<T> implements Type {
 	 * @return The same string builder passed in (for method chaining).
 	 */
 	protected StringBuilder toString(StringBuilder sb, boolean simple) {
-		String name = innerClass.getName();
+		String n = innerClass.getName();
 		if (simple) {
-			int i = name.lastIndexOf('.');
-			name = name.substring(i == -1 ? 0 : i+1).replace('$', '.');
+			int i = n.lastIndexOf('.');
+			n = n.substring(i == -1 ? 0 : i+1).replace('$', '.');
 		}
 		switch(classCategory) {
 			case ARRAY:
 				return elementType.toString(sb, simple).append('[').append(']');
 			case MAP:
-				return sb.append(name).append(keyType.isObject() && valueType.isObject() ? "" : "<"+keyType.toString(simple)+","+valueType.toString(simple)+">");
+				return sb.append(n).append(keyType.isObject() && valueType.isObject() ? "" : "<"+keyType.toString(simple)+","+valueType.toString(simple)+">");
 			case BEANMAP:
-				return sb.append(BeanMap.class.getName()).append('<').append(name).append('>');
+				return sb.append(BeanMap.class.getName()).append('<').append(n).append('>');
 			case COLLECTION:
-				return sb.append(name).append(elementType.isObject() ? "" : "<"+elementType.toString(simple)+">");
+				return sb.append(n).append(elementType.isObject() ? "" : "<"+elementType.toString(simple)+">");
 			case OTHER:
 				if (simple)
-					return sb.append(name);
-				sb.append("OTHER-").append(name).append(",notABeanReason=").append(notABeanReason);
+					return sb.append(n);
+				sb.append("OTHER-").append(n).append(",notABeanReason=").append(notABeanReason);
 				if (initException != null)
 					sb.append(",initException=").append(initException);
 				return sb;
 			default:
-				return sb.append(name);
+				return sb.append(n);
 		}
 	}
 

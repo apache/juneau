@@ -14,14 +14,16 @@ package org.apache.juneau.samples.addressbook;
 
 import java.net.URI;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
  * Address bean
  */
-@Xml(prefix="addr",name="address")
+@Xml(prefix="addr")
 @Rdf(prefix="addr")
+@Bean(name="address")
 public class Address {
 
 	private static int nextAddressId = 1;

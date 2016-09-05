@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -105,8 +105,6 @@ public class XmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 		ClassMeta<?> cmProperty = bpm.getClassMeta();
 		ClassMeta<?> cmBean = bpm.getBeanMeta().getClassMeta();
 		String name = bpm.getName();
-		if (! xml.name().isEmpty())
-			throw new BeanRuntimeException(cmBean.getInnerClass(), "Annotation error on property ''{0}''.  Found @Xml.name annotation can only be specified on types.", name);
 
 		List<Xml> xmls = bpm.findAnnotations(Xml.class);
 		List<XmlSchema> schemas = bpm.findAnnotations(XmlSchema.class);
@@ -126,14 +124,14 @@ public class XmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 				if (cen.isEmpty())
 					cen = cmProperty.getExtendedMeta(XmlClassMeta.class).getChildName();
 				if (cen == null || cen.isEmpty())
-					cen = cmProperty.getElementType().getExtendedMeta(XmlClassMeta.class).getElementName();
+					cen = cmProperty.getElementType().getLexiconName();
 				if (cen == null || cen.isEmpty())
 					cen = name;
 			} else {
 				throw new BeanRuntimeException(cmBean.getInnerClass(), "Annotation error on property ''{0}''.  @Xml.format=COLLAPSED can only be specified on collections and arrays.", name);
 			}
 			if (cen.isEmpty() && isCollection)
-				cen = cmProperty.getExtendedMeta(XmlClassMeta.class).getElementName();
+				cen = cmProperty.getLexiconName();
 		}
 
 		try {

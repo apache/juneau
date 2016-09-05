@@ -23,8 +23,9 @@ import org.apache.juneau.xml.annotation.*;
 /**
  * Person POJO
  */
-@Xml(prefix="per",name="person")
+@Xml(prefix="per")
 @Rdf(prefix="per")
+@Bean(name="person")
 public class Person {
 
 	private static int nextPersonId = 1;

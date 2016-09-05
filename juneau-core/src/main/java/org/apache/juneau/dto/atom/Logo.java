@@ -14,8 +14,9 @@ package org.apache.juneau.dto.atom;
 
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
-import java.net.*;
+import java.net.URI;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
@@ -34,7 +35,7 @@ import org.apache.juneau.xml.annotation.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@Xml(name="logo")
+@Bean(name="logo")
 public class Logo extends Common {
 
 	private URI uri;

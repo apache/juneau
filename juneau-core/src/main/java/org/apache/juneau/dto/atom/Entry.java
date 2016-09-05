@@ -17,7 +17,6 @@ import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.transforms.*;
-import org.apache.juneau.xml.annotation.*;
 
 /**
  * Represents an <code>atomEntry</code> construct in the RFC4287 specification.
@@ -48,7 +47,7 @@ import org.apache.juneau.xml.annotation.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@Xml(name="entry")
+@Bean(name="entry")
 public class Entry extends CommonEntry {
 
 	private Content content;

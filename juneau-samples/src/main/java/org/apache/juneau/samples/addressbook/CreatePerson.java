@@ -22,8 +22,9 @@ import org.apache.juneau.xml.annotation.*;
 /**
  * POJO for creating a new person
  */
-@Xml(prefix="per",name="person")
+@Xml(prefix="per")
 @Rdf(prefix="per")
+@Bean(name="person")
 public class CreatePerson {
 
 	// Bean properties

@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -20,7 +20,6 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
-import org.apache.juneau.xml.annotation.*;
 
 /**
  * Represents a top-level schema object bean in the JSON-Schema core specification.
@@ -29,9 +28,9 @@ import org.apache.juneau.xml.annotation.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@Xml(name="schema")
 @SuppressWarnings("hiding")
-@Bean(properties={"id","$schema","$ref", "title","description","type","definitions","properties",
+@Bean(name="schema",
+	properties={"id","$schema","$ref", "title","description","type","definitions","properties",
 	"patternProperties","dependencies","items","multipleOf","maximum","exclusiveMaximum",
 	"minimum","exclusiveMinimum","maxLength","minLength","pattern","additionalItems",
 	"maxItems","minItems","uniqueItems","maxProperties","minProperties","required",

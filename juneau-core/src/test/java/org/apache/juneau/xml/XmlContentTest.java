@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -24,6 +24,7 @@ import java.io.*;
 import javax.xml.stream.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.annotation.*;
 import org.junit.*;
 
@@ -125,7 +126,7 @@ public class XmlContentTest {
 		assertEqualObjects(t, t2);
 	}
 
-	@Xml(name="A")
+	@Bean(name="A")
 	public static class A {
 		@Xml(format=ATTR) public String f1;
 		@Xml(format=CONTENT) public String f2;
@@ -248,7 +249,7 @@ public class XmlContentTest {
 		assertEqualObjects(t, t2);
 	}
 
-	@Xml(name="A")
+	@Bean(name="A")
 	public static class B {
 		@Xml(format=ATTR) public String f1;
 		@Xml(format=CONTENT, contentHandler=BContentHandler.class) public String f2;

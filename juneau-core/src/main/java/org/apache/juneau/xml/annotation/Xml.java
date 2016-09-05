@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -39,41 +39,6 @@ import org.apache.juneau.xml.*;
 @Retention(RUNTIME)
 @Inherited
 public @interface Xml {
-
-	/**
-	 * Sets the name of the XML element in cases where the XML element has no name (e.g. the root element).
-	 * <p>
-	 * 	Applies only to {@link ElementType#TYPE}.
-	 *
-	 * <dl>
-	 * 	<dt>Example:</dt>
-	 * 	<dd>
-	 * 		<p class='bcode'>
-	 * 	<ja>@Xml</ja>(name=<js>"MyBean"</js>)
-	 * 	<jk>public class</jk> MyBean {
-	 * 		<jk>public int</jk> f1 = 123;
-	 * 	}
-	 * 		</p>
-	 * 		<p>
-	 * 			Without the <ja>@Xml</ja> annotations, serializing this bean as XML would have produced the following...
-	 * 		</p>
-	 * 		<p class='bcode'>
-	 * 	<xt>&lt;object&gt;</xt>
-	 * 		<xt>&lt;f1&gt;</xt>123<xt>&lt;/f1&gt;</xt>
-	 * 	<xt>&lt;/object&gt;</xt>
-	 * 		</p>
-	 * 		<p>
-	 * 			With the annotations, serializing this bean as XML produces the following...
-	 * 		</p>
-	 * 		<p class='bcode'>
-	 * 	<xt>&lt;MyBean&gt;</xt>
-	 * 		<xt>&lt;f1&gt;</xt>123<xt>&lt;/f1&gt;</xt>
-	 * 	<xt>&lt;/MyBean&gt;</xt>
-	 * 		</p>
-	 * 	</dd>
-	 * </dl>
-	 */
-	String name() default "";
 
 	/**
 	 * Sets the name of the XML child elements for bean properties of type collection and array.

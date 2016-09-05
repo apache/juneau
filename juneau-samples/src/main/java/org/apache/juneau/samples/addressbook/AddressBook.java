@@ -12,16 +12,16 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.samples.addressbook;
 
-import java.net.*;
+import java.net.URI;
 import java.text.*;
 import java.util.*;
 
-import org.apache.juneau.xml.annotation.*;
+import org.apache.juneau.annotation.*;
 
 /**
  *  Address book bean
  */
-@Xml(name="addressBook")
+@Bean(name="addressBook")
 public class AddressBook extends LinkedList<Person> implements IAddressBook {
 	private static final long serialVersionUID = 1L;
 

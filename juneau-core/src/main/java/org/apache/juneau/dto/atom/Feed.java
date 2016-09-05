@@ -52,7 +52,7 @@ import org.apache.juneau.xml.annotation.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@Xml(name="feed")
+@Bean(name="feed")
 @SuppressWarnings("hiding")
 public class Feed extends CommonEntry {
 

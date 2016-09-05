@@ -12,14 +12,16 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.samples.addressbook;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
  * POJO for creating a new address
  */
-@Xml(prefix="addr",name="address")
+@Xml(prefix="addr")
 @Rdf(prefix="addr")
+@Bean(name="address")
 public class CreateAddress {
 
 	// Bean properties

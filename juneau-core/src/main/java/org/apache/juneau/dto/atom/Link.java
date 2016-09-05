@@ -14,8 +14,9 @@ package org.apache.juneau.dto.atom;
 
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
-import java.net.*;
+import java.net.URI;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
@@ -41,7 +42,7 @@ import org.apache.juneau.xml.annotation.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@Xml(name="link")
+@Bean(name="link")
 public class Link extends Common {
 
 	private String href;
