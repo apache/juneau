@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -14,14 +14,15 @@ package org.apache.juneau.html.dto;
 
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
- * Represents an HTML IMG element.
+ * DTO for an HTML <a href='https://www.w3.org/TR/html5/embedded-content-0.html#the-img-element'>&lt;img&gt;</a> element.
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@Xml(name="img")
+@Bean(name="img")
 public class Img extends HtmlElement {
 
 	/** <code>src</code> attribute */

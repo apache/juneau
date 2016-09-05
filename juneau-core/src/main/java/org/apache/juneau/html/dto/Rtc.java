@@ -15,11 +15,11 @@ package org.apache.juneau.html.dto;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a href='https://www.w3.org/TR/html5/embedded-content-0.html#the-audio-element'>&lt;audio&gt;</a> element.
+ * DTO for an HTML <a href='https://www.w3.org/TR/html5/text-level-semantics.html#the-rtc-element'>&lt;rtc&gt;</a> element.
  * <p>
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@Bean(name="audio")
-public class Audio extends HtmlElement {
+@Bean(name="rtc")
+public class Rtc extends HtmlElement {
 }
