@@ -20,6 +20,6 @@ import org.apache.juneau.annotation.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@Bean(name="dfn")
+@Bean(typeName="dfn")
 public class Dfn extends HtmlElement {
 }

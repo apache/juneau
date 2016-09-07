@@ -20,6 +20,6 @@ import org.apache.juneau.annotation.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@Bean(name="header")
+@Bean(typeName="header")
 public class Header extends HtmlElement {
 }

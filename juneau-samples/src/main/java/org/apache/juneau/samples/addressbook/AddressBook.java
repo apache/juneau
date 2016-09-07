@@ -21,7 +21,7 @@ import org.apache.juneau.annotation.*;
 /**
  *  Address book bean
  */
-@Bean(name="addressBook")
+@Bean(typeName="addressBook")
 public class AddressBook extends LinkedList<Person> implements IAddressBook {
 	private static final long serialVersionUID = 1L;
 

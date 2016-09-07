@@ -35,7 +35,7 @@ import org.apache.juneau.xml.annotation.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@Bean(name="id")
+@Bean(typeName="id")
 public class Id extends Common {
 
 	private String text;

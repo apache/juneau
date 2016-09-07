@@ -20,6 +20,6 @@ import org.apache.juneau.annotation.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@Bean(name="del")
+@Bean(typeName="del")
 public class Del extends HtmlElement {
 }

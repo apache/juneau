@@ -29,7 +29,7 @@ import org.apache.juneau.transform.*;
  * @author James Bognar (james.bognar@salesforce.com)
  */
 @SuppressWarnings("hiding")
-@Bean(name="schema",
+@Bean(typeName="schema",
 	properties={"id","$schema","$ref", "title","description","type","definitions","properties",
 	"patternProperties","dependencies","items","multipleOf","maximum","exclusiveMaximum",
 	"minimum","exclusiveMinimum","maxLength","minLength","pattern","additionalItems",

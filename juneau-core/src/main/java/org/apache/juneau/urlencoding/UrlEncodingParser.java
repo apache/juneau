@@ -69,13 +69,13 @@ public class UrlEncodingParser extends UonParser {
 		setProperty(UON_decodeChars, true);
 	}
 
-	private <T> T parseAnything(UrlEncodingParserSession session, ClassMeta<T> nt, ParserReader r, Object outer) throws Exception {
+	private <T> T parseAnything(UrlEncodingParserSession session, ClassMeta<T> eType, ParserReader r, Object outer) throws Exception {
 
 		BeanContext bc = session.getBeanContext();
-		if (nt == null)
-			nt = (ClassMeta<T>)object();
-		PojoSwap<T,Object> transform = (PojoSwap<T,Object>)nt.getPojoSwap();
-		ClassMeta<?> ft = nt.getSerializedClassMeta();
+		if (eType == null)
+			eType = (ClassMeta<T>)object();
+		PojoSwap<T,Object> transform = (PojoSwap<T,Object>)eType.getPojoSwap();
+		ClassMeta<?> sType = eType.getSerializedClassMeta();
 
 		int c = r.peek();
 		if (c == '?')
@@ -83,19 +83,19 @@ public class UrlEncodingParser extends UonParser {
 
 		Object o;
 
-		if (ft.isObject()) {
+		if (sType.isObject()) {
 			ObjectMap m = new ObjectMap(bc);
 			parseIntoMap(session, r, m, bc.string(), bc.object());
 			o = m.cast();
-		} else if (ft.isMap()) {
-			Map m = (ft.canCreateNewInstance() ? (Map)ft.newInstance() : new ObjectMap(bc));
-			o = parseIntoMap(session, r, m, ft.getKeyType(), ft.getValueType());
-		} else if (ft.canCreateNewInstanceFromObjectMap(outer)) {
+		} else if (sType.isMap()) {
+			Map m = (sType.canCreateNewInstance() ? (Map)sType.newInstance() : new ObjectMap(bc));
+			o = parseIntoMap(session, r, m, sType.getKeyType(), sType.getValueType());
+		} else if (sType.canCreateNewInstanceFromObjectMap(outer)) {
 			ObjectMap m = new ObjectMap(bc);
 			parseIntoMap(session, r, m, string(), object());
-			o = ft.newInstanceFromObjectMap(outer, m);
-		} else if (ft.canCreateNewBean(outer)) {
-			BeanMap m = bc.newBeanMap(outer, ft.getInnerClass());
+			o = sType.newInstanceFromObjectMap(outer, m);
+		} else if (sType.canCreateNewBean(outer)) {
+			BeanMap m = bc.newBeanMap(outer, sType.getInnerClass());
 			m = parseIntoBeanMap(session, r, m);
 			o = m == null ? null : m.getBean();
 		} else {
@@ -106,30 +106,30 @@ public class UrlEncodingParser extends UonParser {
 			if (m.containsKey("_class"))
 				o = m.cast();
 			else if (m.containsKey("_value"))
-				o = session.getBeanContext().convertToType(m.get("_value"), ft);
-			else if (ft.isCollection()) {
+				o = session.getBeanContext().convertToType(m.get("_value"), sType);
+			else if (sType.isCollection()) {
 				// ?1=foo&2=bar...
-				Collection c2 = ft.canCreateNewInstance() ? (Collection)ft.newInstance() : new ObjectList(bc);
+				Collection c2 = sType.canCreateNewInstance() ? (Collection)sType.newInstance() : new ObjectList(bc);
 				Map<Integer,Object> t = new TreeMap<Integer,Object>();
 				for (Map.Entry<String,Object> e : m.entrySet()) {
 					String k = e.getKey();
 					if (StringUtils.isNumeric(k))
-						t.put(Integer.valueOf(k), bc.convertToType(e.getValue(), ft.getElementType()));
+						t.put(Integer.valueOf(k), bc.convertToType(e.getValue(), sType.getElementType()));
 				}
 				c2.addAll(t.values());
 				o = c2;
 			} else {
-				if (ft.getNotABeanReason() != null)
-					throw new ParseException(session, "Class ''{0}'' could not be instantiated as application/x-www-form-urlencoded.  Reason: ''{1}''", ft, ft.getNotABeanReason());
-				throw new ParseException(session, "Malformed application/x-www-form-urlencoded input for class ''{0}''.", ft);
+				if (sType.getNotABeanReason() != null)
+					throw new ParseException(session, "Class ''{0}'' could not be instantiated as application/x-www-form-urlencoded.  Reason: ''{1}''", sType, sType.getNotABeanReason());
+				throw new ParseException(session, "Malformed application/x-www-form-urlencoded input for class ''{0}''.", sType);
 			}
 		}
 
 		if (transform != null && o != null)
-			o = transform.unswap(o, nt, bc);
+			o = transform.unswap(o, eType, bc);
 
 		if (outer != null)
-			setParent(nt, o, outer);
+			setParent(eType, o, outer);
 
 		return (T)o;
 	}

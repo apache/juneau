@@ -126,7 +126,7 @@ public class XmlContentTest {
 		assertEqualObjects(t, t2);
 	}
 
-	@Bean(name="A")
+	@Bean(typeName="A")
 	public static class A {
 		@Xml(format=ATTR) public String f1;
 		@Xml(format=CONTENT) public String f2;
@@ -249,7 +249,7 @@ public class XmlContentTest {
 		assertEqualObjects(t, t2);
 	}
 
-	@Bean(name="A")
+	@Bean(typeName="A")
 	public static class B {
 		@Xml(format=ATTR) public String f1;
 		@Xml(format=CONTENT, contentHandler=BContentHandler.class) public String f2;

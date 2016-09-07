@@ -20,6 +20,6 @@ import org.apache.juneau.annotation.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@Bean(name="blockquote")
+@Bean(typeName="blockquote")
 public class Blockquote extends HtmlElement {
 }

@@ -20,6 +20,6 @@ import org.apache.juneau.annotation.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@Bean(name="progress")
+@Bean(typeName="progress")
 public class Progress extends HtmlElement {
 }

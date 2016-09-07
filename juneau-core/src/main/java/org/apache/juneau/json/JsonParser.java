@@ -99,15 +99,15 @@ public final class JsonParser extends ReaderParser {
 	/** Default parser, all default settings.*/
 	public static final JsonParser DEFAULT_STRICT = new JsonParser().setProperty(JSON_strictMode, true).lock();
 
-	private <T> T parseAnything(JsonParserSession session, ClassMeta<T> nt, ParserReader r, Object outer) throws Exception {
+	private <T> T parseAnything(JsonParserSession session, ClassMeta<T> eType, ParserReader r, Object outer) throws Exception {
 
 		BeanContext bc = session.getBeanContext();
-		if (nt == null)
-			nt = (ClassMeta<T>)object();
-		PojoSwap<T,Object> transform = (PojoSwap<T,Object>)nt.getPojoSwap();
-		ClassMeta<?> ft = nt.getSerializedClassMeta();
-		session.setCurrentClass(ft);
-		String wrapperAttr = ft.getExtendedMeta(JsonClassMeta.class).getWrapperAttr();
+		if (eType == null)
+			eType = (ClassMeta<T>)object();
+		PojoSwap<T,Object> transform = (PojoSwap<T,Object>)eType.getPojoSwap();
+		ClassMeta<?> sType = eType.getSerializedClassMeta();
+		session.setCurrentClass(sType);
+		String wrapperAttr = sType.getExtendedMeta(JsonClassMeta.class).getWrapperAttr();
 
 		Object o = null;
 
@@ -124,7 +124,7 @@ public final class JsonParser extends ReaderParser {
 			// Let o be null;
 		} else if (c == 'n') {
 			parseKeyword(session, "null", r);
-		} else if (ft.isObject()) {
+		} else if (sType.isObject()) {
 			if (c == '{') {
 				ObjectMap m2 = new ObjectMap(bc);
 				parseIntoMap2(session, r, m2, string(), object());
@@ -133,7 +133,7 @@ public final class JsonParser extends ReaderParser {
 				o = parseIntoCollection2(session, r, new ObjectList(bc), object());
 			else if (c == '\'' || c == '"') {
 				o = parseString(session, r);
-				if (ft.isChar())
+				if (sType.isChar())
 					o = o.toString().charAt(0);
 			}
 			else if (c >= '0' && c <= '9' || c == '-')
@@ -145,67 +145,67 @@ public final class JsonParser extends ReaderParser {
 				parseKeyword(session, "false", r);
 				o = Boolean.FALSE;
 			}
-		} else if (ft.isBoolean()) {
+		} else if (sType.isBoolean()) {
 			o = parseBoolean(session, r);
-		} else if (ft.isCharSequence()) {
+		} else if (sType.isCharSequence()) {
 			o = parseString(session, r);
-		} else if (ft.isChar()) {
+		} else if (sType.isChar()) {
 			o = parseString(session, r).charAt(0);
-		} else if (ft.isNumber()) {
-			o = parseNumber(session, r, (Class<? extends Number>)ft.getInnerClass());
-		} else if (ft.isMap()) {
-			Map m = (ft.canCreateNewInstance(outer) ? (Map)ft.newInstance(outer) : new ObjectMap(bc));
-			o = parseIntoMap2(session, r, m, ft.getKeyType(), ft.getValueType());
-		} else if (ft.isCollection()) {
+		} else if (sType.isNumber()) {
+			o = parseNumber(session, r, (Class<? extends Number>)sType.getInnerClass());
+		} else if (sType.isMap()) {
+			Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : new ObjectMap(bc));
+			o = parseIntoMap2(session, r, m, sType.getKeyType(), sType.getValueType());
+		} else if (sType.isCollection()) {
 			if (c == '{') {
 				ObjectMap m = new ObjectMap(bc);
 				parseIntoMap2(session, r, m, string(), object());
 				o = m.cast();
 			} else {
-				Collection l = (ft.canCreateNewInstance(outer) ? (Collection)ft.newInstance() : new ObjectList(bc));
-				o = parseIntoCollection2(session, r, l, ft.getElementType());
+				Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance() : new ObjectList(bc));
+				o = parseIntoCollection2(session, r, l, sType.getElementType());
 			}
-		} else if (ft.canCreateNewInstanceFromObjectMap(outer)) {
+		} else if (sType.canCreateNewInstanceFromObjectMap(outer)) {
 			ObjectMap m = new ObjectMap(bc);
 			parseIntoMap2(session, r, m, string(), object());
-			o = ft.newInstanceFromObjectMap(outer, m);
-		} else if (ft.canCreateNewBean(outer)) {
-			BeanMap m = bc.newBeanMap(outer, ft.getInnerClass());
+			o = sType.newInstanceFromObjectMap(outer, m);
+		} else if (sType.canCreateNewBean(outer)) {
+			BeanMap m = bc.newBeanMap(outer, sType.getInnerClass());
 			o = parseIntoBeanMap2(session, r, m).getBean();
-		} else if (ft.canCreateNewInstanceFromString(outer) && (c == '\'' || c == '"')) {
-			o = ft.newInstanceFromString(outer, parseString(session, r));
-		} else if (ft.canCreateNewInstanceFromNumber(outer) && StringUtils.isFirstNumberChar((char)c)) {
-			o = ft.newInstanceFromNumber(outer, parseNumber(session, r, ft.getNewInstanceFromNumberClass()));
-		} else if (ft.isArray()) {
+		} else if (sType.canCreateNewInstanceFromString(outer) && (c == '\'' || c == '"')) {
+			o = sType.newInstanceFromString(outer, parseString(session, r));
+		} else if (sType.canCreateNewInstanceFromNumber(outer) && StringUtils.isFirstNumberChar((char)c)) {
+			o = sType.newInstanceFromNumber(outer, parseNumber(session, r, sType.getNewInstanceFromNumberClass()));
+		} else if (sType.isArray()) {
 			if (c == '{') {
 				ObjectMap m = new ObjectMap(bc);
 				parseIntoMap2(session, r, m, string(), object());
 				o = m.cast();
 			} else {
-				ArrayList l = (ArrayList)parseIntoCollection2(session, r, new ArrayList(), ft.getElementType());
-				o = bc.toArray(ft, l);
+				ArrayList l = (ArrayList)parseIntoCollection2(session, r, new ArrayList(), sType.getElementType());
+				o = bc.toArray(sType, l);
 			}
 		} else if (c == '{') {
 			Map m = new ObjectMap(bc);
-			parseIntoMap2(session, r, m, ft.getKeyType(), ft.getValueType());
+			parseIntoMap2(session, r, m, sType.getKeyType(), sType.getValueType());
 			if (m.containsKey("_class"))
 				o = ((ObjectMap)m).cast();
 			else
-				throw new ParseException(session, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", ft.getInnerClass().getName(), ft.getNotABeanReason());
-		} else if (ft.canCreateNewInstanceFromString(outer) && ! session.isStrictMode()) {
-			o = ft.newInstanceFromString(outer, parseString(session, r));
+				throw new ParseException(session, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.getInnerClass().getName(), sType.getNotABeanReason());
+		} else if (sType.canCreateNewInstanceFromString(outer) && ! session.isStrictMode()) {
+			o = sType.newInstanceFromString(outer, parseString(session, r));
 		} else {
-			throw new ParseException(session, "Unrecognized syntax for class type ''{0}'', starting character ''{1}''", ft, (char)c);
+			throw new ParseException(session, "Unrecognized syntax for class type ''{0}'', starting character ''{1}''", sType, (char)c);
 		}
 
 		if (wrapperAttr != null)
 			skipWrapperAttrEnd(session, r);
 
 		if (transform != null && o != null)
-			o = transform.unswap(o, nt, bc);
+			o = transform.unswap(o, eType, bc);
 
 		if (outer != null)
-			setParent(nt, o, outer);
+			setParent(eType, o, outer);
 
 		return (T)o;
 	}

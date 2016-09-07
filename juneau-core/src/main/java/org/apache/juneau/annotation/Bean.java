@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -49,25 +49,25 @@ public @interface Bean {
 	 * 	output so that the class can be determined during parsing.
 	 * It is also used to specify element names in XML.
 	 * <p>
-	 * The name is used in combination with the lexicon defined through {@link #classLexicon()}.  Together, they make up
+	 * The name is used in combination with the class dictionary defined through {@link #typeDictionary()}.  Together, they make up
 	 * 	a simple name/value mapping of names to classes.
-	 * Names do not need to be universally unique.  However, they must be unique within a lexicon.
+	 * Names do not need to be universally unique.  However, they must be unique within a dictionary.
 	 *
 	 * <dl>
 	 * 	<dt>Example:</dt>
 	 * 	<dd>
 	 * 		<p class='bcode'>
-	 * 	<ja>@Bean</ja>(name=<js>"foo"</js>)
+	 * 	<ja>@Bean</ja>(typeName=<js>"foo"</js>)
 	 * 	<jk>public class</jk> Foo {
 	 * 		<jc>// A bean property where the object types cannot be inferred since it's an Object[].</jc>
-	 * 	   <ja>@BeanProperty</ja>(lexicon={Bar.<jk>class</jk>,Baz.<jk>class</jk>})
+	 * 	   <ja>@BeanProperty</ja>(typeDictionary={Bar.<jk>class</jk>,Baz.<jk>class</jk>})
 	 * 	   <jk>public</jk> Object[] x = <jk>new</jk> Object[]{<jk>new</jk> Bar(), <jk>new</jk> Baz()};
 	 * 	}
 	 *
-	 * 	<ja>@Bean</ja>(name=<js>"bar"</js>)
+	 * 	<ja>@Bean</ja>(typeName=<js>"bar"</js>)
 	 * 	<jk>public class</jk> Bar {}
 	 *
-	 * 	<ja>@Bean</ja>(name=<js>"baz"</js>)
+	 * 	<ja>@Bean</ja>(typeName=<js>"baz"</js>)
 	 * 	<jk>public class</jk> Baz {}
 	 * 		</p>
 	 * 		<p>
@@ -87,30 +87,29 @@ public @interface Bean {
 	 * 		<p class='bcode'>
 	 * 	{
 	 * 	   <jsa>x</jsa>: [
-	 * 	      {<jsa>n</jsa>:<jss>'bar'</jss>},
-	 * 	      {<jsa>n</jsa>:<jss>'baz'</jss>}
+	 * 	      {<jsa>_type</jsa>:<jss>'bar'</jss>},
+	 * 	      {<jsa>_type</jsa>:<jss>'baz'</jss>}
 	 * 	   ]
 	 * 	}	 *
 	 * 	</dd>
 	 * </dl>
 	 */
-	String name() default "";
+	String typeName() default "";
 
 	/**
-	 * The list of classes that make up the class lexicon for this class.
+	 * The list of classes that make up the class dictionary for this class.
 	 * <p>
-	 * The lexicon is a name/class mapping used to find class types during parsing when they cannot be inferred through reflection.
-	 * The names are defined through the {@link #name()} annotation defined on the bean or POJO classes.
+	 * The dictionary is a name/class mapping used to find class types during parsing when they cannot be inferred through reflection.
+	 * The names are defined through the {@link #typeName()} annotation defined on the bean or POJO classes.
 	 * <p>
 	 * This list can consist of the following class types:
 	 * <ul>
-	 * 	<li>Any bean class that specifies a value for {@link Bean#name() @Bean.name()};
-	 * 	<li>Any POJO class that specifies a value for {@link Pojo#name() @Pojo.name()};
-	 * 	<li>Any subclass of {@link ClassLexicon} that defines an entire set of mappings.
+	 * 	<li>Any bean class that specifies a value for {@link Bean#typeName() @Bean.name()};
+	 * 	<li>Any subclass of {@link TypeDictionary} that defines an entire set of mappings.
 	 * 		Note that the subclass MUST implement a no-arg constructor so that it can be instantiated.
 	 * </ul>
 	 */
-	Class<?>[] classLexicon() default {};
+	Class<?>[] typeDictionary() default {};
 
 	/**
 	 * The set and order of names of properties associated with a bean class.

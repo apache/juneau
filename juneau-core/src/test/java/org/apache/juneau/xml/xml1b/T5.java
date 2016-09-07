@@ -16,7 +16,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.annotation.*;
 
 @Xml(prefix="foo",namespace="http://foo")
-@Bean(name="T5", sort=true)
+@Bean(typeName="T5", sort=true)
 @SuppressWarnings("javadoc")
 public class T5 {
 

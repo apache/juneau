@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -195,7 +195,7 @@ public class HtmlSerializer extends XmlSerializer {
 
 		BeanContext bc = session.getBeanContext();
 		ClassMeta<?> aType = null;       // The actual type
-		ClassMeta<?> gType = object();   // The generic type
+		ClassMeta<?> sType = object();   // The serialized type
 
 		if (eType == null)
 			eType = object();
@@ -216,7 +216,7 @@ public class HtmlSerializer extends XmlSerializer {
 			out.tag(i, "null").nl();
 		else {
 
-			gType = aType.getSerializedClassMeta();
+			sType = aType.getSerializedClassMeta();
 			String classAttr = null;
 			if (session.isAddClassAttrs() && ! eType.equals(aType))
 				classAttr = aType.toString();
@@ -228,45 +228,45 @@ public class HtmlSerializer extends XmlSerializer {
 
 				// If the getSwapClass() method returns Object, we need to figure out
 				// the actual type now.
-				if (gType.isObject())
-					gType = bc.getClassMetaForObject(o);
+				if (sType.isObject())
+					sType = bc.getClassMetaForObject(o);
 			}
 
-			HtmlClassMeta html = gType.getExtendedMeta(HtmlClassMeta.class);
+			HtmlClassMeta html = sType.getExtendedMeta(HtmlClassMeta.class);
 
 			if (html.isAsXml() || (pMeta != null && pMeta.getExtendedMeta(HtmlBeanPropertyMeta.class).isAsXml()))
 				super.serializeAnything(session, out, o, null, null, null, false, XmlFormat.NORMAL, null);
 			else if (html.isAsPlainText() || (pMeta != null && pMeta.getExtendedMeta(HtmlBeanPropertyMeta.class).isAsPlainText()))
 				out.write(o == null ? "null" : o.toString());
-			else if (o == null || (gType.isChar() && ((Character)o).charValue() == 0))
+			else if (o == null || (sType.isChar() && ((Character)o).charValue() == 0))
 				out.tag(i, "null").nl();
-			else if (gType.hasToObjectMapMethod())
-				serializeMap(session, out, gType.toObjectMap(o), eType, classAttr, pMeta);
-			else if (gType.isBean())
+			else if (sType.hasToObjectMapMethod())
+				serializeMap(session, out, sType.toObjectMap(o), eType, classAttr, pMeta);
+			else if (sType.isBean())
 				serializeBeanMap(session, out, bc.forBean(o), classAttr, pMeta);
-			else if (gType.isNumber())
+			else if (sType.isNumber())
 				out.sTag(i, "number").append(o).eTag("number").nl();
-			else if (gType.isBoolean())
+			else if (sType.isBoolean())
 				out.sTag(i, "boolean").append(o).eTag("boolean").nl();
-			else if (gType.isMap()) {
+			else if (sType.isMap()) {
 				if (o instanceof BeanMap)
 					serializeBeanMap(session, out, (BeanMap)o, classAttr, pMeta);
 				else
 					serializeMap(session, out, (Map)o, eType, classAttr, pMeta);
 			}
-			else if (gType.isCollection()) {
+			else if (sType.isCollection()) {
 				if (classAttr != null)
-					serializeCollection(session, out, (Collection)o, gType, name, classAttr, pMeta);
+					serializeCollection(session, out, (Collection)o, sType, name, classAttr, pMeta);
 				else
 					serializeCollection(session, out, (Collection)o, eType, name, null, pMeta);
 			}
-			else if (gType.isArray()) {
+			else if (sType.isArray()) {
 				if (classAttr != null)
-					serializeCollection(session, out, toList(gType.getInnerClass(), o), gType, name, classAttr, pMeta);
+					serializeCollection(session, out, toList(sType.getInnerClass(), o), sType, name, classAttr, pMeta);
 				else
-					serializeCollection(session, out, toList(gType.getInnerClass(), o), eType, name, null, pMeta);
+					serializeCollection(session, out, toList(sType.getInnerClass(), o), eType, name, null, pMeta);
 			}
-			else if (session.isUri(gType, pMeta, o)) {
+			else if (session.isUri(sType, pMeta, o)) {
 				String label = session.getAnchorText(pMeta, o);
 				out.oTag(i, "a").attrUri("href", o).append('>');
 				out.append(label);

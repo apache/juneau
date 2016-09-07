@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -157,7 +157,7 @@ public class RdfSerializer extends WriterSerializer {
 
 		ClassMeta<?> aType = null;       // The actual type
 		ClassMeta<?> wType = null;       // The wrapped type
-		ClassMeta<?> gType = object();   // The generic type
+		ClassMeta<?> sType = object();   // The serialized type
 
 		aType = session.push(attrName, o, eType);
 
@@ -177,7 +177,7 @@ public class RdfSerializer extends WriterSerializer {
 				aType = ((Delegate)o).getClassMeta();
 			}
 
-			gType = aType.getSerializedClassMeta();
+			sType = aType.getSerializedClassMeta();
 
 			// Swap if necessary
 			PojoSwap swap = aType.getPojoSwap();
@@ -186,16 +186,16 @@ public class RdfSerializer extends WriterSerializer {
 
 				// If the getSwapClass() method returns Object, we need to figure out
 				// the actual type now.
-				if (gType.isObject())
-					gType = bc.getClassMetaForObject(o);
+				if (sType.isObject())
+					sType = bc.getClassMetaForObject(o);
 			}
 		} else {
-			gType = eType.getSerializedClassMeta();
+			sType = eType.getSerializedClassMeta();
 		}
 
 		RDFNode n = null;
 
-		if (o == null || gType.isChar() && ((Character)o).charValue() == 0) {
+		if (o == null || sType.isChar() && ((Character)o).charValue() == 0) {
 			if (bpm != null) {
 				if (! session.isTrimNulls()) {
 					n = m.createResource(RDF_NIL);
@@ -204,19 +204,19 @@ public class RdfSerializer extends WriterSerializer {
 				n = m.createResource(RDF_NIL);
 			}
 
-		} else if (gType.isUri() || isURI) {
+		} else if (sType.isUri() || isURI) {
 			n = m.createResource(getUri(session, o, null));
 
-		} else if (gType.isCharSequence() || gType.isChar()) {
+		} else if (sType.isCharSequence() || sType.isChar()) {
 			n = m.createLiteral(session.encodeTextInvalidChars(o));
 
-		} else if (gType.isNumber() || gType.isBoolean()) {
+		} else if (sType.isNumber() || sType.isBoolean()) {
 			if (! session.isAddLiteralTypes())
 				n = m.createLiteral(o.toString());
 			else
 				n = m.createTypedLiteral(o);
 
-		} else if (gType.isMap() || (wType != null && wType.isMap())) {
+		} else if (sType.isMap() || (wType != null && wType.isMap())) {
 			if (o instanceof BeanMap) {
 				BeanMap bm = (BeanMap)o;
 				Object uri = null;
@@ -229,15 +229,15 @@ public class RdfSerializer extends WriterSerializer {
 			} else {
 				Map m2 = (Map)o;
 				n = m.createResource();
-				serializeMap(session, m2, (Resource)n, gType);
+				serializeMap(session, m2, (Resource)n, sType);
 			}
 
-		} else if (gType.hasToObjectMapMethod()) {
-			Map m2 = gType.toObjectMap(o);
+		} else if (sType.hasToObjectMapMethod()) {
+			Map m2 = sType.toObjectMap(o);
 			n = m.createResource();
-			serializeMap(session, m2, (Resource)n, gType);
+			serializeMap(session, m2, (Resource)n, sType);
 
-		} else if (gType.isBean()) {
+		} else if (sType.isBean()) {
 			BeanMap bm = bc.forBean(o);
 			Object uri = null;
 			RdfBeanMeta rbm = (RdfBeanMeta)bm.getMeta().getExtendedMeta(RdfBeanMeta.class);
@@ -247,19 +247,19 @@ public class RdfSerializer extends WriterSerializer {
 			n = m.createResource(uri2);
 			serializeBeanMap(session, bm, (Resource)n);
 
-		} else if (gType.isCollection() || gType.isArray() || (wType != null && wType.isCollection())) {
-			Collection c = session.sort(gType.isCollection() ? (Collection)o : toList(gType.getInnerClass(), o));
+		} else if (sType.isCollection() || sType.isArray() || (wType != null && wType.isCollection())) {
+			Collection c = session.sort(sType.isCollection() ? (Collection)o : toList(sType.getInnerClass(), o));
 			RdfCollectionFormat f = session.getCollectionFormat();
-			RdfClassMeta rcm = gType.getExtendedMeta(RdfClassMeta.class);
+			RdfClassMeta rcm = sType.getExtendedMeta(RdfClassMeta.class);
 			if (rcm.getCollectionFormat() != RdfCollectionFormat.DEFAULT)
 				f = rcm.getCollectionFormat();
 			if (bpm != null && bpm.getExtendedMeta(RdfBeanPropertyMeta.class).getCollectionFormat() != RdfCollectionFormat.DEFAULT)
 				f = bpm.getExtendedMeta(RdfBeanPropertyMeta.class).getCollectionFormat();
 			switch (f) {
-				case BAG: n = serializeToContainer(session, c, gType, m.createBag()); break;
-				case LIST: n = serializeToList(session, c, gType); break;
-				case MULTI_VALUED: serializeToMultiProperties(session, c, gType, bpm, attrName, parentResource); break;
-				default: n = serializeToContainer(session, c, gType, m.createSeq());
+				case BAG: n = serializeToContainer(session, c, sType, m.createBag()); break;
+				case LIST: n = serializeToList(session, c, sType); break;
+				case MULTI_VALUED: serializeToMultiProperties(session, c, sType, bpm, attrName, parentResource); break;
+				default: n = serializeToContainer(session, c, sType, m.createSeq());
 			}
 		} else {
 			n = m.createLiteral(session.encodeTextInvalidChars(session.toString(o)));
@@ -379,8 +379,8 @@ public class RdfSerializer extends WriterSerializer {
 		return session.getModel().createList(l.iterator());
 	}
 
-	private void serializeToMultiProperties(RdfSerializerSession session, Collection c, ClassMeta<?> gType, BeanPropertyMeta bpm, String attrName, Resource parentResource) throws SerializeException {
-		ClassMeta<?> elementType = gType.getElementType();
+	private void serializeToMultiProperties(RdfSerializerSession session, Collection c, ClassMeta<?> sType, BeanPropertyMeta bpm, String attrName, Resource parentResource) throws SerializeException {
+		ClassMeta<?> elementType = sType.getElementType();
 		for (Object e : c) {
 			Namespace ns = null;
 			if (bpm != null) {

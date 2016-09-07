@@ -20,6 +20,6 @@ import org.apache.juneau.annotation.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@Bean(name="sub")
+@Bean(typeName="sub")
 public class Sub extends HtmlElement {
 }

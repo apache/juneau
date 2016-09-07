@@ -22,7 +22,7 @@ import org.apache.juneau.xml.annotation.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@Bean(name="img")
+@Bean(typeName="img")
 public class Img extends HtmlElement {
 
 	/** <code>src</code> attribute */

@@ -197,9 +197,9 @@ public class XmlSchemaSerializer extends XmlSerializer {
 				queueElement(ns, "null", object());
 			else {
 				XmlClassMeta xmlMeta = cm.getExtendedMeta(XmlClassMeta.class);
-				if (cm.getLexiconName() != null && xmlMeta.getNamespace() != null)
+				if (cm.getDictionaryName() != null && xmlMeta.getNamespace() != null)
 					ns = xmlMeta.getNamespace();
-				queueElement(ns, cm.getLexiconName(), cm);
+				queueElement(ns, cm.getDictionaryName(), cm);
 			}
 			processQueue();
 		}
@@ -521,7 +521,7 @@ public class XmlSchemaSerializer extends XmlSerializer {
 
 		private String getElementName(ClassMeta<?> cm) {
 			cm = cm.getSerializedClassMeta();
-			String name = cm.getLexiconName();
+			String name = cm.getDictionaryName();
 
 			if (name == null) {
 				if (cm.isBoolean())

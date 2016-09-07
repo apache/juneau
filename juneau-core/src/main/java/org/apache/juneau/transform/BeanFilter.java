@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -73,7 +73,7 @@ public abstract class BeanFilter<T> {
 	private final PropertyNamer propertyNamer;
 	private final Class<?> interfaceClass, stopClass;
 	private final boolean sortProperties;
-	private final ClassLexicon classLexicon;
+	private final TypeDictionary typeDictionary;
 
 	/**
 	 * Constructor.
@@ -144,8 +144,8 @@ public abstract class BeanFilter<T> {
 	 * 	Sort properties in alphabetical order.
 	 * @param propertyNamer
 	 * 	The property namer to use to name bean properties.
-	 * @param classLexicon
-	 * 	The class lexicon to use for resolving class identifier names from classes.
+	 * @param typeDictionary
+	 * 	The class dictionary to use for resolving class identifier names from classes.
 	 * @param subTypeProperty
 	 * 	Defines a virtual property on a superclass that identifies bean subtype classes.
 	 * 	<p>
@@ -200,7 +200,7 @@ public abstract class BeanFilter<T> {
 	 * @param subTypes
 	 */
 	@SuppressWarnings("unchecked")
-	public BeanFilter(Class<T> beanClass, String[] properties, String[] excludeProperties, Class<?> interfaceClass, Class<?> stopClass, boolean sortProperties, PropertyNamer propertyNamer, ClassLexicon classLexicon, String subTypeProperty, Map<Class<?>,String> subTypes) {
+	public BeanFilter(Class<T> beanClass, String[] properties, String[] excludeProperties, Class<?> interfaceClass, Class<?> stopClass, boolean sortProperties, PropertyNamer propertyNamer, TypeDictionary typeDictionary, String subTypeProperty, Map<Class<?>,String> subTypes) {
 
 		if (beanClass == null) {
 			Class<?> c = this.getClass().getSuperclass();
@@ -232,7 +232,7 @@ public abstract class BeanFilter<T> {
 		this.stopClass = stopClass;
 		this.sortProperties = sortProperties;
 		this.propertyNamer = propertyNamer;
-		this.classLexicon = classLexicon;
+		this.typeDictionary = typeDictionary;
 		this.subTypeAttr = subTypeProperty;
 		this.subTypes = subTypes == null ? null : Collections.unmodifiableMap(subTypes);
 	}
@@ -319,12 +319,12 @@ public abstract class BeanFilter<T> {
 	}
 
 	/**
-	 * Returns the class lexicon to use for this bean.
+	 * Returns the class dictionary to use for this bean.
 	 *
-	 * @return The class lexicon to use for this bean.
+	 * @return The class dictionary to use for this bean.
 	 */
-	public ClassLexicon getClassLexicon() {
-		return classLexicon;
+	public TypeDictionary getTypeDictionary() {
+		return typeDictionary;
 	}
 
 	/**

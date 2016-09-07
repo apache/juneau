@@ -51,14 +51,14 @@ public final class MsgPackParser extends InputStreamParser {
 	/**
 	 * Workhorse method.
 	 */
-	private <T> T parseAnything(MsgPackParserSession session, ClassMeta<T> nt, MsgPackInputStream is, Object outer) throws Exception {
+	private <T> T parseAnything(MsgPackParserSession session, ClassMeta<T> eType, MsgPackInputStream is, Object outer) throws Exception {
 
 		BeanContext bc = session.getBeanContext();
-		if (nt == null)
-			nt = (ClassMeta<T>)object();
-		PojoSwap<T,Object> transform = (PojoSwap<T,Object>)nt.getPojoSwap();
-		ClassMeta<?> ft = nt.getSerializedClassMeta();
-		session.setCurrentClass(ft);
+		if (eType == null)
+			eType = (ClassMeta<T>)object();
+		PojoSwap<T,Object> transform = (PojoSwap<T,Object>)eType.getPojoSwap();
+		ClassMeta<?> sType = eType.getSerializedClassMeta();
+		session.setCurrentClass(sType);
 
 		Object o = null;
 		DataType dt = is.readDataType();
@@ -79,44 +79,44 @@ public final class MsgPackParser extends InputStreamParser {
 				o = session.trim(is.readString());
 			else if (dt == BIN)
 				o = is.readBinary();
-			else if (dt == ARRAY && ft.isObject()) {
+			else if (dt == ARRAY && sType.isObject()) {
 				ObjectList ol = new ObjectList(bc);
 				for (int i = 0; i < length; i++)
 					ol.add(parseAnything(session, object(), is, outer));
 				o = ol;
-			} else if (dt == MAP && ft.isObject()) {
+			} else if (dt == MAP && sType.isObject()) {
 				ObjectMap om = new ObjectMap(bc);
 				for (int i = 0; i < length; i++)
 					om.put(parseAnything(session, string(), is, outer), parseAnything(session, object(), is, om));
 				o = om.cast();
 			}
 
-			if (ft.isObject()) {
+			if (sType.isObject()) {
 				// Do nothing.
-			} else if (ft.isBoolean() || ft.isCharSequence() || ft.isChar() || ft.isNumber()) {
-				o = bc.convertToType(o, ft);
-			} else if (ft.isMap()) {
+			} else if (sType.isBoolean() || sType.isCharSequence() || sType.isChar() || sType.isNumber()) {
+				o = bc.convertToType(o, sType);
+			} else if (sType.isMap()) {
 				if (dt == MAP) {
-					Map m = (ft.canCreateNewInstance(outer) ? (Map)ft.newInstance(outer) : new ObjectMap(bc));
+					Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : new ObjectMap(bc));
 					for (int i = 0; i < length; i++) {
-						Object key = parseAnything(session, ft.getKeyType(), is, outer);
-						ClassMeta<?> vt = ft.getValueType();
+						Object key = parseAnything(session, sType.getKeyType(), is, outer);
+						ClassMeta<?> vt = sType.getValueType();
 						Object value = parseAnything(session, vt, is, m);
 						setName(vt, value, key);
 						m.put(key, value);
 					}
 					o = m;
 				} else {
-					throw new ParseException(session, "Invalid data type {0} encountered for parse type {1}", dt, ft);
+					throw new ParseException(session, "Invalid data type {0} encountered for parse type {1}", dt, sType);
 				}
-			} else if (ft.canCreateNewInstanceFromObjectMap(outer)) {
+			} else if (sType.canCreateNewInstanceFromObjectMap(outer)) {
 				ObjectMap m = new ObjectMap(bc);
 				for (int i = 0; i < length; i++)
 					m.put(parseAnything(session, string(), is, outer), parseAnything(session, object(), is, m));
-				o = ft.newInstanceFromObjectMap(outer, m);
-			} else if (ft.canCreateNewBean(outer)) {
+				o = sType.newInstanceFromObjectMap(outer, m);
+			} else if (sType.canCreateNewBean(outer)) {
 				if (dt == MAP) {
-					BeanMap m = bc.newBeanMap(outer, ft.getInnerClass());
+					BeanMap m = bc.newBeanMap(outer, sType.getInnerClass());
 					for (int i = 0; i < length; i++) {
 						String pName = parseAnything(session, string(), is, m.getBean(false));
 						BeanPropertyMeta bpm = m.getPropertyMeta(pName);
@@ -134,39 +134,39 @@ public final class MsgPackParser extends InputStreamParser {
 					}
 					o = m.getBean();
 				} else {
-					throw new ParseException(session, "Invalid data type {0} encountered for parse type {1}", dt, ft);
+					throw new ParseException(session, "Invalid data type {0} encountered for parse type {1}", dt, sType);
 				}
-			} else if (ft.canCreateNewInstanceFromString(outer) && dt == STRING) {
-				o = ft.newInstanceFromString(outer, o == null ? "" : o.toString());
-			} else if (ft.canCreateNewInstanceFromNumber(outer) && dt.isOneOf(INT, LONG, FLOAT, DOUBLE)) {
-				o = ft.newInstanceFromNumber(outer, (Number)o);
-			} else if (ft.isCollection()) {
+			} else if (sType.canCreateNewInstanceFromString(outer) && dt == STRING) {
+				o = sType.newInstanceFromString(outer, o == null ? "" : o.toString());
+			} else if (sType.canCreateNewInstanceFromNumber(outer) && dt.isOneOf(INT, LONG, FLOAT, DOUBLE)) {
+				o = sType.newInstanceFromNumber(outer, (Number)o);
+			} else if (sType.isCollection()) {
 				if (dt == MAP) {
 					ObjectMap m = new ObjectMap(bc);
 					for (int i = 0; i < length; i++)
 						m.put(parseAnything(session, string(), is, outer), parseAnything(session, object(), is, m));
 					o = m.cast();
 				} else if (dt == ARRAY) {
-					Collection l = (ft.canCreateNewInstance(outer) ? (Collection)ft.newInstance() : new ObjectList(bc));
+					Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance() : new ObjectList(bc));
 					for (int i = 0; i < length; i++)
-						l.add(parseAnything(session, ft.getElementType(), is, l));
+						l.add(parseAnything(session, sType.getElementType(), is, l));
 					o = l;
 				} else {
-					throw new ParseException(session, "Invalid data type {0} encountered for parse type {1}", dt, ft);
+					throw new ParseException(session, "Invalid data type {0} encountered for parse type {1}", dt, sType);
 				}
-			} else if (ft.isArray()) {
+			} else if (sType.isArray()) {
 				if (dt == MAP) {
 					ObjectMap m = new ObjectMap(bc);
 					for (int i = 0; i < length; i++)
 						m.put(parseAnything(session, string(), is, outer), parseAnything(session, object(), is, m));
 					o = m.cast();
 				} else if (dt == ARRAY) {
-					Collection l = (ft.isCollection() && ft.canCreateNewInstance(outer) ? (Collection)ft.newInstance() : new ObjectList(bc));
+					Collection l = (sType.isCollection() && sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance() : new ObjectList(bc));
 					for (int i = 0; i < length; i++)
-						l.add(parseAnything(session, ft.getElementType(), is, l));
-					o = bc.toArray(ft, l);
+						l.add(parseAnything(session, sType.getElementType(), is, l));
+					o = bc.toArray(sType, l);
 				} else {
-					throw new ParseException(session, "Invalid data type {0} encountered for parse type {1}", dt, ft);
+					throw new ParseException(session, "Invalid data type {0} encountered for parse type {1}", dt, sType);
 				}
 			} else if (dt == MAP) {
 				ObjectMap m = new ObjectMap(bc);
@@ -175,17 +175,17 @@ public final class MsgPackParser extends InputStreamParser {
 				if (m.containsKey("_class"))
 					o = m.cast();
 				else
-					throw new ParseException(session, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", ft.getInnerClass().getName(), ft.getNotABeanReason());
+					throw new ParseException(session, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.getInnerClass().getName(), sType.getNotABeanReason());
 			} else {
-				throw new ParseException(session, "Invalid data type {0} encountered for parse type {1}", dt, ft);
+				throw new ParseException(session, "Invalid data type {0} encountered for parse type {1}", dt, sType);
 			}
 		}
 
 		if (transform != null && o != null)
-			o = transform.unswap(o, nt, bc);
+			o = transform.unswap(o, eType, bc);
 
 		if (outer != null)
-			setParent(nt, o, outer);
+			setParent(eType, o, outer);
 
 		return (T)o;
 	}

@@ -20,6 +20,6 @@ import org.apache.juneau.annotation.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@Bean(name="meter")
+@Bean(typeName="meter")
 public class Meter extends HtmlElement {
 }

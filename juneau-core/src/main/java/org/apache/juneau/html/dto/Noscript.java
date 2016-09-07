@@ -20,6 +20,6 @@ import org.apache.juneau.annotation.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@Bean(name="noscript")
+@Bean(typeName="noscript")
 public class Noscript extends HtmlElement {
 }

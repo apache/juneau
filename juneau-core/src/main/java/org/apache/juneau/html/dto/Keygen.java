@@ -20,6 +20,6 @@ import org.apache.juneau.annotation.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@Bean(name="keygen")
+@Bean(typeName="keygen")
 public class Keygen extends HtmlElement {
 }

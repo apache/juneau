@@ -75,7 +75,7 @@ import org.apache.juneau.xml.annotation.*;
  * @author James Bognar (james.bognar@salesforce.com)
  */
 @SuppressWarnings("unchecked")
-@Bean(name="dataset", properties={"metadata","data"})
+@Bean(typeName="dataset", properties={"metadata","data"})
 public class DataSet {
 
 	private Column[] metaData;
@@ -136,7 +136,7 @@ public class DataSet {
 	 *
 	 * @author James Bognar (james.bognar@salesforce.com)
 	 */
-	@Bean(name="row")
+	@Bean(typeName="row")
 	@Xml(childName="value")
 	public static class Row extends LinkedList<String> {
 		private static final long serialVersionUID = 1L;

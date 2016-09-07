@@ -20,6 +20,6 @@ import org.apache.juneau.annotation.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@Bean(name="video")
+@Bean(typeName="video")
 public class Video extends HtmlElement {
 }

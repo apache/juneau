@@ -20,6 +20,6 @@ import org.apache.juneau.annotation.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@Bean(name="area")
+@Bean(typeName="area")
 public class Area extends HtmlElement {
 }

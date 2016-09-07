@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -38,7 +38,7 @@ public final class AnnotationBeanFilter<T> extends BeanFilter<T> {
 	}
 
 	private AnnotationBeanFilter(Builder<T> b) {
-		super(b.beanClass, b.properties, b.excludeProperties, b.interfaceClass, b.stopClass, b.sortProperties, b.propertyNamer, b.classLexicon, b.subTypeProperty, b.subTypes);
+		super(b.beanClass, b.properties, b.excludeProperties, b.interfaceClass, b.stopClass, b.sortProperties, b.propertyNamer, b.typeDictionary, b.subTypeProperty, b.subTypes);
 	}
 
 	private static class Builder<T> {
@@ -49,7 +49,7 @@ public final class AnnotationBeanFilter<T> extends BeanFilter<T> {
 		Class<?> stopClass;
 		boolean sortProperties;
 		PropertyNamer propertyNamer;
-		ClassLexicon classLexicon;
+		TypeDictionary typeDictionary;
 		String subTypeProperty;
 		LinkedHashMap<Class<?>,String> subTypes = new LinkedHashMap<Class<?>,String>();
 
@@ -81,20 +81,17 @@ public final class AnnotationBeanFilter<T> extends BeanFilter<T> {
 				if (b.stopClass() != Object.class)
 					stopClass = b.stopClass();
 
-				if (b.classLexicon().length > 0)
-					classLexicon = new ClassLexicon(b.classLexicon());
+				if (b.typeDictionary().length > 0)
+					typeDictionary = new TypeDictionary(b.typeDictionary());
 
 				if (b.subTypes().length > 0) {
 					subTypeProperty = b.subTypeProperty();
 
 					for (Class<?> bst : b.subTypes()) {
 						Bean b2 = bst.getAnnotation(Bean.class);
-						Pojo p2 = bst.getAnnotation(Pojo.class);
 						String name = null;
-						if (! b2.name().isEmpty())
-							name = b2.name();
-						else if (! p2.name().isEmpty())
-							name = p2.name();
+						if (! b2.typeName().isEmpty())
+							name = b2.typeName();
 						else
 							name = bst.getName();
 						subTypes.put(bst, name);

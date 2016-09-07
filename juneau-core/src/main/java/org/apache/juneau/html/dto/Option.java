@@ -20,6 +20,6 @@ import org.apache.juneau.annotation.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@Bean(name="option")
+@Bean(typeName="option")
 public class Option extends HtmlElement {
 }

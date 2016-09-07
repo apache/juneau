@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -230,14 +230,14 @@ public class UrlEncodingSerializer extends UonSerializer {
 
 		boolean addClassAttr;		// Add "_class" attribute to element?
 		ClassMeta<?> aType;			// The actual type
-		ClassMeta<?> gType;			// The generic type
+		ClassMeta<?> sType;			// The serialized type
 
 		aType = session.push("root", o, object());
 		session.indent--;
 		if (aType == null)
 			aType = object();
 
-		gType = aType.getSerializedClassMeta();
+		sType = aType.getSerializedClassMeta();
 		addClassAttr = (session.isAddClassAttrs());
 
 		// Swap if necessary
@@ -247,21 +247,21 @@ public class UrlEncodingSerializer extends UonSerializer {
 
 			// If the getSwapClass() method returns Object, we need to figure out
 			// the actual type now.
-			if (gType.isObject())
-				gType = bc.getClassMetaForObject(o);
+			if (sType.isObject())
+				sType = bc.getClassMetaForObject(o);
 		}
 
-		if (gType.isMap()) {
+		if (sType.isMap()) {
 			if (o instanceof BeanMap)
 				serializeBeanMap(session, out, (BeanMap)o, addClassAttr);
 			else
-				serializeMap(session, out, (Map)o, gType);
-		} else if (gType.hasToObjectMapMethod()) {
-			serializeMap(session, out, gType.toObjectMap(o), gType);
-		} else if (gType.isBean()) {
+				serializeMap(session, out, (Map)o, sType);
+		} else if (sType.hasToObjectMapMethod()) {
+			serializeMap(session, out, sType.toObjectMap(o), sType);
+		} else if (sType.isBean()) {
 			serializeBeanMap(session, out, bc.forBean(o), addClassAttr);
-		} else if (gType.isCollection()) {
-			serializeMap(session, out, getCollectionMap((Collection)o), bc.getMapClassMeta(Map.class, Integer.class, gType.getElementType()));
+		} else if (sType.isCollection()) {
+			serializeMap(session, out, getCollectionMap((Collection)o), bc.getMapClassMeta(Map.class, Integer.class, sType.getElementType()));
 		} else {
 			// All other types can't be serialized as key/value pairs, so we create a
 			// mock key/value pair with a "_value" key.

@@ -20,6 +20,6 @@ import org.apache.juneau.annotation.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@Bean(name="ul")
+@Bean(typeName="ul")
 public class Ul extends HtmlElement {
 }

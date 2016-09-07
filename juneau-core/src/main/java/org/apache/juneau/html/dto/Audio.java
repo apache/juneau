@@ -20,6 +20,6 @@ import org.apache.juneau.annotation.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@Bean(name="audio")
+@Bean(typeName="audio")
 public class Audio extends HtmlElement {
 }

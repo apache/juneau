@@ -20,6 +20,6 @@ import org.apache.juneau.annotation.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@Bean(name="nav")
+@Bean(typeName="nav")
 public class Nav extends HtmlElement {
 }

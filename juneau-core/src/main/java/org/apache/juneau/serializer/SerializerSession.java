@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -743,18 +743,18 @@ public class SerializerSession extends Session {
 
 	/**
 	 * Create a "_class" property that represents the name of the bean.
-	 * 
-	 * @param m 
+	 *
+	 * @param m
 	 * 	The bean map to create a class property on.
-	 * @param lexicon
-	 * 	The bean/pojo lexicon map to use to resolve the name of the bean class.
-	 * @return 
+	 * @param typeDictionary
+	 * 	The bean dictionary map to use to resolve the name of the bean class.
+	 * @return
 	 * 	A new bean property value.
 	 */
-	public BeanPropertyValue createBeanClassProperty(BeanMap<?> m, ClassLexicon lexicon) {
+	public BeanPropertyValue createBeanClassProperty(BeanMap<?> m, TypeDictionary typeDictionary) {
 		BeanMeta<?> bm = m.getMeta();
 		Class<?> c = bm.getClassMeta().getInnerClass();
-		String name = (lexicon == null ? null : lexicon.getNameForClass(c));
+		String name = (typeDictionary == null ? null : typeDictionary.getNameForClass(c));
 		if (name == null)
 			name = c.getName();
 		return new BeanPropertyValue(bm.getClassProperty(), name, null);

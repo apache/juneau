@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -58,7 +58,7 @@ public class BeanPropertyMeta {
 	private PojoSwap swap;                     // PojoSwap defined only via @BeanProperty annotation.
 
 	private MetadataMap extMeta = new MetadataMap();  // Extended metadata
-	private ClassLexicon classLexicon;
+	private TypeDictionary typeDictionary;
 
 	/**
 	 * Constructor.
@@ -144,18 +144,18 @@ public class BeanPropertyMeta {
 	}
 
 	/**
-	 * Returns the class lexicon in use for this bean property.
-	 * The order of lookup for the lexicon is as follows:
+	 * Returns the class dictionary in use for this bean property.
+	 * The order of lookup for the dictionary is as follows:
 	 * <ol>
-	 * 	<li>Lexicon defined via {@link BeanProperty#classLexicon()}.
-	 * 	<li>Lexicon defined via {@link Bean#classLexicon()} or {@link Pojo#classLexicon()} (or {@link BeanFilter} equivalent).
-	 * 	<li>Lexicon defined via {@link BeanContext#BEAN_classLexicon} context property.
+	 * 	<li>Dictionary defined via {@link BeanProperty#typeDictionary()}.
+	 * 	<li>Dictionary defined via {@link Bean#typeDictionary()} (or {@link BeanFilter} equivalent).
+	 * 	<li>Dictionary defined via {@link BeanContext#BEAN_typeDictionary} context property.
 	 * </ol>
 	 *
-	 * @return The class lexicon in use for this bean property.  Never <jk>null</jk>.
+	 * @return The class dictionary in use for this bean property.  Never <jk>null</jk>.
 	 */
-	public ClassLexicon getClassLexicon() {
-		return classLexicon;
+	public TypeDictionary getTypeDictionary() {
+		return typeDictionary;
 	}
 
 	/**
@@ -256,8 +256,8 @@ public class BeanPropertyMeta {
 				swap = getPropertyPojoSwap(p);
 				if (p.properties().length != 0)
 					properties = p.properties();
-				if (p.classLexicon().length > 0)
-					this.classLexicon = new ClassLexicon(p.classLexicon());
+				if (p.typeDictionary().length > 0)
+					this.typeDictionary = new TypeDictionary(p.typeDictionary());
 			}
 		}
 
@@ -271,8 +271,8 @@ public class BeanPropertyMeta {
 					swap = getPropertyPojoSwap(p);
 				if (properties != null && p.properties().length != 0)
 					properties = p.properties();
-				if (p.classLexicon().length > 0)
-					this.classLexicon = new ClassLexicon(p.classLexicon());
+				if (p.typeDictionary().length > 0)
+					this.typeDictionary = new TypeDictionary(p.typeDictionary());
 			}
 		}
 
@@ -286,8 +286,8 @@ public class BeanPropertyMeta {
 				swap = getPropertyPojoSwap(p);
 				if (properties != null && p.properties().length != 0)
 					properties = p.properties();
-				if (p.classLexicon().length > 0)
-					this.classLexicon = new ClassLexicon(p.classLexicon());
+				if (p.typeDictionary().length > 0)
+					this.typeDictionary = new TypeDictionary(p.typeDictionary());
 			}
 		}
 

@@ -20,6 +20,6 @@ import org.apache.juneau.annotation.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@Bean(name="pre")
+@Bean(typeName="pre")
 public class Pre extends HtmlElement {
 }

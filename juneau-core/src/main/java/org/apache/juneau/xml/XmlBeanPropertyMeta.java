@@ -124,14 +124,14 @@ public class XmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 				if (cen.isEmpty())
 					cen = cmProperty.getExtendedMeta(XmlClassMeta.class).getChildName();
 				if (cen == null || cen.isEmpty())
-					cen = cmProperty.getElementType().getLexiconName();
+					cen = cmProperty.getElementType().getDictionaryName();
 				if (cen == null || cen.isEmpty())
 					cen = name;
 			} else {
 				throw new BeanRuntimeException(cmBean.getInnerClass(), "Annotation error on property ''{0}''.  @Xml.format=COLLAPSED can only be specified on collections and arrays.", name);
 			}
 			if (cen.isEmpty() && isCollection)
-				cen = cmProperty.getLexiconName();
+				cen = cmProperty.getDictionaryName();
 		}
 
 		try {

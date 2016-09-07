@@ -302,7 +302,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 		}
 	}
 
-	@Bean(name="C3")
+	@Bean(typeName="C3")
 	public static class C3<T> extends C2<T> {
 
 		public static C3 create() {

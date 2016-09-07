@@ -20,6 +20,6 @@ import org.apache.juneau.annotation.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@Bean(name="div")
+@Bean(typeName="div")
 public class Div extends HtmlElement {
 }

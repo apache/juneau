@@ -35,7 +35,7 @@ import org.apache.juneau.xml.annotation.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@Bean(name="icon")
+@Bean(typeName="icon")
 public class Icon extends Common {
 
 	private URI uri;

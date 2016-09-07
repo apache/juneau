@@ -20,6 +20,6 @@ import org.apache.juneau.annotation.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@Bean(name="embed")
+@Bean(typeName="embed")
 public class Embed extends HtmlElement {
 }

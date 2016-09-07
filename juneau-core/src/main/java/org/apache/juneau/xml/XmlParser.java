@@ -62,14 +62,14 @@ public class XmlParser extends ReaderParser {
 	private static final int UNKNOWN=0, OBJECT=1, ARRAY=2, STRING=3, NUMBER=4, BOOLEAN=5, NULL=6;
 
 
-	private <T> T parseAnything(XmlParserSession session, ClassMeta<T> nt, String currAttr, XMLStreamReader r, Object outer, boolean isRoot) throws Exception {
+	private <T> T parseAnything(XmlParserSession session, ClassMeta<T> eType, String currAttr, XMLStreamReader r, Object outer, boolean isRoot) throws Exception {
 
 		BeanContext bc = session.getBeanContext();
-		if (nt == null)
-			nt = (ClassMeta<T>)object();
-		PojoSwap<T,Object> transform = (PojoSwap<T,Object>)nt.getPojoSwap();
-		ClassMeta<?> ft = nt.getSerializedClassMeta();
-		session.setCurrentClass(ft);
+		if (eType == null)
+			eType = (ClassMeta<T>)object();
+		PojoSwap<T,Object> transform = (PojoSwap<T,Object>)eType.getPojoSwap();
+		ClassMeta<?> sType = eType.getSerializedClassMeta();
+		session.setCurrentClass(sType);
 
 		String wrapperAttr = (isRoot && session.isPreserveRootElement()) ? r.getName().getLocalPart() : null;
 		String typeAttr = r.getAttributeValue(null, "type");
@@ -85,10 +85,10 @@ public class XmlParser extends ReaderParser {
 			else
 				jsonType = getJsonType(elementName);
 		}
-		if (! ft.canCreateNewInstance(outer)) {
+		if (! sType.canCreateNewInstance(outer)) {
 			String c = r.getAttributeValue(null, "_class");
 			if (c != null) {
-				ft = nt = (ClassMeta<T>)bc.getClassMetaFromString(c);
+				sType = eType = (ClassMeta<T>)bc.getClassMetaFromString(c);
 			}
 		}
 		Object o = null;
@@ -105,7 +105,7 @@ public class XmlParser extends ReaderParser {
 			}
 		}
 
-		if (ft.isObject()) {
+		if (sType.isObject()) {
 			if (jsonType == OBJECT) {
 				ObjectMap m = new ObjectMap(bc);
 				parseIntoMap(session, r, m, string(), object());
@@ -116,7 +116,7 @@ public class XmlParser extends ReaderParser {
 				o = parseIntoCollection(session, r, new ObjectList(bc), object());
 			else if (jsonType == STRING) {
 				o = session.decodeString(r.getElementText());
-				if (ft.isChar())
+				if (sType.isChar())
 					o = o.toString().charAt(0);
 			}
 			else if (jsonType == NUMBER)
@@ -125,30 +125,30 @@ public class XmlParser extends ReaderParser {
 				o = Boolean.parseBoolean(session.decodeLiteral(r.getElementText()));
 			else if (jsonType == UNKNOWN)
 				o = getUnknown(session, r);
-		} else if (ft.isBoolean()) {
+		} else if (sType.isBoolean()) {
 			o = Boolean.parseBoolean(session.decodeLiteral(r.getElementText()));
-		} else if (ft.isCharSequence()) {
+		} else if (sType.isCharSequence()) {
 			o = session.decodeString(r.getElementText());
-		} else if (ft.isChar()) {
+		} else if (sType.isChar()) {
 			o = session.decodeString(r.getElementText()).charAt(0);
-		} else if (ft.isMap()) {
-			Map m = (ft.canCreateNewInstance(outer) ? (Map)ft.newInstance(outer) : new ObjectMap(bc));
-			o = parseIntoMap(session, r, m, ft.getKeyType(), ft.getValueType());
+		} else if (sType.isMap()) {
+			Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : new ObjectMap(bc));
+			o = parseIntoMap(session, r, m, sType.getKeyType(), sType.getValueType());
 			if (wrapperAttr != null)
 				o = new ObjectMap(bc).append(wrapperAttr, m);
-		} else if (ft.isCollection()) {
-			Collection l = (ft.canCreateNewInstance(outer) ? (Collection)ft.newInstance(outer) : new ObjectList(bc));
-			o = parseIntoCollection(session, r, l, ft.getElementType());
-		} else if (ft.isNumber()) {
-			o = parseNumber(session.decodeLiteral(r.getElementText()), (Class<? extends Number>)ft.getInnerClass());
-		} else if (ft.canCreateNewInstanceFromObjectMap(outer)) {
+		} else if (sType.isCollection()) {
+			Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance(outer) : new ObjectList(bc));
+			o = parseIntoCollection(session, r, l, sType.getElementType());
+		} else if (sType.isNumber()) {
+			o = parseNumber(session.decodeLiteral(r.getElementText()), (Class<? extends Number>)sType.getInnerClass());
+		} else if (sType.canCreateNewInstanceFromObjectMap(outer)) {
 			ObjectMap m = new ObjectMap(bc);
 			parseIntoMap(session, r, m, string(), object());
-			o = ft.newInstanceFromObjectMap(outer, m);
-		} else if (ft.canCreateNewBean(outer)) {
-			if (ft.getExtendedMeta(XmlClassMeta.class).getFormat() == XmlFormat.COLLAPSED) {
+			o = sType.newInstanceFromObjectMap(outer, m);
+		} else if (sType.canCreateNewBean(outer)) {
+			if (sType.getExtendedMeta(XmlClassMeta.class).getFormat() == XmlFormat.COLLAPSED) {
 				String fieldName = r.getLocalName();
-				BeanMap<?> m = bc.newBeanMap(outer, ft.getInnerClass());
+				BeanMap<?> m = bc.newBeanMap(outer, sType.getInnerClass());
 				BeanPropertyMeta bpm = m.getMeta().getExtendedMeta(XmlBeanMeta.class).getPropertyMeta(fieldName);
 				ClassMeta<?> cm = m.getMeta().getClassMeta();
 				Object value = parseAnything(session, cm, currAttr, r, m.getBean(false), false);
@@ -156,25 +156,25 @@ public class XmlParser extends ReaderParser {
 				bpm.set(m, value);
 				o = m.getBean();
 			} else {
-				BeanMap m = bc.newBeanMap(outer, ft.getInnerClass());
+				BeanMap m = bc.newBeanMap(outer, sType.getInnerClass());
 				o = parseIntoBean(session, r, m).getBean();
 			}
-		} else if (ft.isArray()) {
-			ArrayList l = (ArrayList)parseIntoCollection(session, r, new ArrayList(), ft.getElementType());
-			o = bc.toArray(ft, l);
-		} else if (ft.canCreateNewInstanceFromString(outer)) {
-			o = ft.newInstanceFromString(outer, session.decodeString(r.getElementText()));
-		} else if (ft.canCreateNewInstanceFromNumber(outer)) {
-			o = ft.newInstanceFromNumber(outer, parseNumber(session.decodeLiteral(r.getElementText()), ft.getNewInstanceFromNumberClass()));
+		} else if (sType.isArray()) {
+			ArrayList l = (ArrayList)parseIntoCollection(session, r, new ArrayList(), sType.getElementType());
+			o = bc.toArray(sType, l);
+		} else if (sType.canCreateNewInstanceFromString(outer)) {
+			o = sType.newInstanceFromString(outer, session.decodeString(r.getElementText()));
+		} else if (sType.canCreateNewInstanceFromNumber(outer)) {
+			o = sType.newInstanceFromNumber(outer, parseNumber(session.decodeLiteral(r.getElementText()), sType.getNewInstanceFromNumberClass()));
 		} else {
-			throw new ParseException(session, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", ft.getInnerClass().getName(), ft.getNotABeanReason());
+			throw new ParseException(session, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.getInnerClass().getName(), sType.getNotABeanReason());
 		}
 
 		if (transform != null && o != null)
-			o = transform.unswap(o, nt, bc);
+			o = transform.unswap(o, eType, bc);
 
 		if (outer != null)
-			setParent(nt, o, outer);
+			setParent(eType, o, outer);
 
 		return (T)o;
 	}

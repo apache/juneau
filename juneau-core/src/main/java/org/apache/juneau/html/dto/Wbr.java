@@ -20,6 +20,6 @@ import org.apache.juneau.annotation.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@Bean(name="wbr")
+@Bean(typeName="wbr")
 public class Wbr extends HtmlElement {
 }

@@ -20,6 +20,6 @@ import org.apache.juneau.annotation.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@Bean(name="code")
+@Bean(typeName="code")
 public class Code extends HtmlElement {
 }

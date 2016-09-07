@@ -238,22 +238,22 @@ public class RdfParser extends ReaderParser {
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private <T> T parseAnything(RdfParserSession session, ClassMeta<T> nt, RDFNode n, Object outer) throws Exception {
+	private <T> T parseAnything(RdfParserSession session, ClassMeta<T> eType, RDFNode n, Object outer) throws Exception {
 
 		BeanContext bc = session.getBeanContext();
 
-		if (nt == null)
-			nt = (ClassMeta<T>)object();
-		PojoSwap<T,Object> transform = (PojoSwap<T,Object>)nt.getPojoSwap();
-		ClassMeta<?> ft = nt.getSerializedClassMeta();
-		session.setCurrentClass(ft);
+		if (eType == null)
+			eType = (ClassMeta<T>)object();
+		PojoSwap<T,Object> transform = (PojoSwap<T,Object>)eType.getPojoSwap();
+		ClassMeta<?> sType = eType.getSerializedClassMeta();
+		session.setCurrentClass(sType);
 
-		if (! ft.canCreateNewInstance(outer)) {
+		if (! sType.canCreateNewInstance(outer)) {
 			if (n.isResource()) {
 				Statement st = n.asResource().getProperty(session.getClassProperty());
 				if (st != null) {
  					String c = st.getLiteral().getString();
-					ft = nt = (ClassMeta<T>)bc.getClassMetaFromString(c);
+					sType = eType = (ClassMeta<T>)bc.getClassMetaFromString(c);
 				}
 			}
 		}
@@ -261,7 +261,7 @@ public class RdfParser extends ReaderParser {
 		Object o = null;
 		if (n.isResource() && n.asResource().getURI() != null && n.asResource().getURI().equals(RDF_NIL)) {
 			// Do nothing.  Leave o == null.
-		} else if (ft.isObject()) {
+		} else if (sType.isObject()) {
 			if (n.isLiteral()) {
 				o = n.asLiteral().getValue();
 				if (o instanceof String) {
@@ -276,13 +276,13 @@ public class RdfParser extends ReaderParser {
 					o = parseAnything(session, object(), n.asResource().getProperty(session.getValueProperty()).getObject(), outer);
 				} else if (isSeq(session, r)) {
 					o = new ObjectList(bc);
-					parseIntoCollection(session, r.as(Seq.class), (Collection)o, ft.getElementType());
+					parseIntoCollection(session, r.as(Seq.class), (Collection)o, sType.getElementType());
 				} else if (isBag(session, r)) {
 					o = new ObjectList(bc);
-					parseIntoCollection(session, r.as(Bag.class), (Collection)o, ft.getElementType());
+					parseIntoCollection(session, r.as(Bag.class), (Collection)o, sType.getElementType());
 				} else if (r.canAs(RDFList.class)) {
 					o = new ObjectList(bc);
-					parseIntoCollection(session, r.as(RDFList.class), (Collection)o, ft.getElementType());
+					parseIntoCollection(session, r.as(RDFList.class), (Collection)o, sType.getElementType());
 				} else {
 					// If it has a URI and no child properties, we interpret this as an
 					// external resource, and convert it to just a URL.
@@ -297,67 +297,67 @@ public class RdfParser extends ReaderParser {
 			} else {
 				throw new ParseException(session, "Unrecognized node type ''{0}'' for object", n);
 			}
-		} else if (ft.isBoolean()) {
+		} else if (sType.isBoolean()) {
 			o = bc.convertToType(getValue(session, n, outer), boolean.class);
-		} else if (ft.isCharSequence()) {
+		} else if (sType.isCharSequence()) {
 			o = session.decodeString(getValue(session, n, outer));
-		} else if (ft.isChar()) {
+		} else if (sType.isChar()) {
 			o = session.decodeString(getValue(session, n, outer)).charAt(0);
-		} else if (ft.isNumber()) {
-			o = parseNumber(getValue(session, n, outer).toString(), (Class<? extends Number>)ft.getInnerClass());
-		} else if (ft.isMap()) {
+		} else if (sType.isNumber()) {
+			o = parseNumber(getValue(session, n, outer).toString(), (Class<? extends Number>)sType.getInnerClass());
+		} else if (sType.isMap()) {
 			Resource r = n.asResource();
 			if (session.wasAlreadyProcessed(r))
 				return null;
-			Map m = (ft.canCreateNewInstance(outer) ? (Map)ft.newInstance(outer) : new ObjectMap(bc));
-			o = parseIntoMap(session, r, m, nt.getKeyType(), nt.getValueType());
-		} else if (ft.isCollection() || ft.isArray()) {
-			if (ft.isArray())
+			Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : new ObjectMap(bc));
+			o = parseIntoMap(session, r, m, eType.getKeyType(), eType.getValueType());
+		} else if (sType.isCollection() || sType.isArray()) {
+			if (sType.isArray())
 				o = new ArrayList();
 			else
-				o = (ft.canCreateNewInstance(outer) ? (Collection<?>)ft.newInstance(outer) : new ObjectList(bc));
+				o = (sType.canCreateNewInstance(outer) ? (Collection<?>)sType.newInstance(outer) : new ObjectList(bc));
 			Resource r = n.asResource();
 			if (session.wasAlreadyProcessed(r))
 				return null;
 			if (isSeq(session, r)) {
-				parseIntoCollection(session, r.as(Seq.class), (Collection)o, ft.getElementType());
+				parseIntoCollection(session, r.as(Seq.class), (Collection)o, sType.getElementType());
 			} else if (isBag(session, r)) {
-				parseIntoCollection(session, r.as(Bag.class), (Collection)o, ft.getElementType());
+				parseIntoCollection(session, r.as(Bag.class), (Collection)o, sType.getElementType());
 			} else if (r.canAs(RDFList.class)) {
-				parseIntoCollection(session, r.as(RDFList.class), (Collection)o, ft.getElementType());
+				parseIntoCollection(session, r.as(RDFList.class), (Collection)o, sType.getElementType());
 			} else {
 				throw new ParseException("Unrecognized node type ''{0}'' for collection", n);
 			}
-			if (ft.isArray())
-				o = bc.toArray(ft, (Collection)o);
-		} else if (ft.canCreateNewInstanceFromObjectMap(outer)) {
+			if (sType.isArray())
+				o = bc.toArray(sType, (Collection)o);
+		} else if (sType.canCreateNewInstanceFromObjectMap(outer)) {
 			Resource r = n.asResource();
 			if (session.wasAlreadyProcessed(r))
 				return null;
 			Map m = new ObjectMap(bc);
-			parseIntoMap(session, r, m, nt.getKeyType(), nt.getValueType());
-			o = ft.newInstanceFromObjectMap(outer, (ObjectMap)m);
-		} else if (ft.canCreateNewBean(outer)) {
+			parseIntoMap(session, r, m, eType.getKeyType(), eType.getValueType());
+			o = sType.newInstanceFromObjectMap(outer, (ObjectMap)m);
+		} else if (sType.canCreateNewBean(outer)) {
 			Resource r = n.asResource();
 			if (session.wasAlreadyProcessed(r))
 				return null;
-			BeanMap<?> bm = bc.newBeanMap(outer, ft.getInnerClass());
+			BeanMap<?> bm = bc.newBeanMap(outer, sType.getInnerClass());
 			o = parseIntoBeanMap(session, r, bm).getBean();
-		} else if (ft.isUri() && n.isResource()) {
-			o = ft.newInstanceFromString(outer, session.decodeString(n.asResource().getURI()));
-		} else if (ft.canCreateNewInstanceFromString(outer)) {
-			o = ft.newInstanceFromString(outer, session.decodeString(getValue(session, n, outer)));
-		} else if (ft.canCreateNewInstanceFromNumber(outer)) {
-			o = ft.newInstanceFromNumber(outer, parseNumber(getValue(session, n, outer).toString(), ft.getNewInstanceFromNumberClass()));
+		} else if (sType.isUri() && n.isResource()) {
+			o = sType.newInstanceFromString(outer, session.decodeString(n.asResource().getURI()));
+		} else if (sType.canCreateNewInstanceFromString(outer)) {
+			o = sType.newInstanceFromString(outer, session.decodeString(getValue(session, n, outer)));
+		} else if (sType.canCreateNewInstanceFromNumber(outer)) {
+			o = sType.newInstanceFromNumber(outer, parseNumber(getValue(session, n, outer).toString(), sType.getNewInstanceFromNumberClass()));
 		} else {
-			throw new ParseException("Class ''{0}'' could not be instantiated.  Reason: ''{1}''", ft.getInnerClass().getName(), ft.getNotABeanReason());
+			throw new ParseException("Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.getInnerClass().getName(), sType.getNotABeanReason());
 		}
 
 		if (transform != null && o != null)
-			o = transform.unswap(o, nt, bc);
+			o = transform.unswap(o, eType, bc);
 
 		if (outer != null)
-			setParent(nt, o, outer);
+			setParent(eType, o, outer);
 
 		return (T)o;
 	}

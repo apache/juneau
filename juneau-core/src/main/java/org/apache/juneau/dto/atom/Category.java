@@ -39,7 +39,7 @@ import org.apache.juneau.xml.annotation.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@Bean(name="category")
+@Bean(typeName="category")
 public class Category extends Common {
 
 	private String term;

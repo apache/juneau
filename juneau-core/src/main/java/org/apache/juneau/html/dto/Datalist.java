@@ -20,6 +20,6 @@ import org.apache.juneau.annotation.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@Bean(name="datalist")
+@Bean(typeName="datalist")
 public class Datalist extends HtmlElement {
 }

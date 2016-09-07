@@ -67,14 +67,14 @@ public final class HtmlParser extends ReaderParser {
 	 * 	Precondition:  Must be pointing at START_ELEMENT or CHARACTERS event.
 	 * 	Postcondition:  Pointing at next event to be processed.
 	 */
-	private <T> T parseAnything(HtmlParserSession session, ClassMeta<T> nt, XMLEventReader r, Object outer) throws Exception {
+	private <T> T parseAnything(HtmlParserSession session, ClassMeta<T> eType, XMLEventReader r, Object outer) throws Exception {
 
 		BeanContext bc = session.getBeanContext();
-		if (nt == null)
-			nt = (ClassMeta<T>)object();
-		PojoSwap<T,Object> transform = (PojoSwap<T,Object>)nt.getPojoSwap();
-		ClassMeta<?> ft = nt.getSerializedClassMeta();
-		session.setCurrentClass(ft);
+		if (eType == null)
+			eType = (ClassMeta<T>)object();
+		PojoSwap<T,Object> transform = (PojoSwap<T,Object>)eType.getPojoSwap();
+		ClassMeta<?> sType = eType.getSerializedClassMeta();
+		session.setCurrentClass(sType);
 
 		Object o = null;
 
@@ -83,26 +83,26 @@ public final class HtmlParser extends ReaderParser {
 			event = r.nextEvent();
 
 		if (event.isEndDocument())
-			throw new XMLStreamException("Unexpected end of stream in parseAnything for type '"+nt+"'", event.getLocation());
+			throw new XMLStreamException("Unexpected end of stream in parseAnything for type '"+eType+"'", event.getLocation());
 
 		if (event.isCharacters()) {
 			String text = parseCharacters(event, r);
-			if (ft.isObject())
+			if (sType.isObject())
 				o = text;
-			else if (ft.isCharSequence())
+			else if (sType.isCharSequence())
 				o = text;
-			else if (ft.isNumber())
-				o = parseNumber(text, (Class<? extends Number>)nt.getInnerClass());
-			else if (ft.isChar())
+			else if (sType.isNumber())
+				o = parseNumber(text, (Class<? extends Number>)eType.getInnerClass());
+			else if (sType.isChar())
 				o = text.charAt(0);
-			else if (ft.isBoolean())
+			else if (sType.isBoolean())
 				o = Boolean.parseBoolean(text);
-			else if (ft.canCreateNewInstanceFromString(outer))
-				o = ft.newInstanceFromString(outer, text);
-			else if (ft.canCreateNewInstanceFromNumber(outer))
-				o = ft.newInstanceFromNumber(outer, parseNumber(text, ft.getNewInstanceFromNumberClass()));
+			else if (sType.canCreateNewInstanceFromString(outer))
+				o = sType.newInstanceFromString(outer, text);
+			else if (sType.canCreateNewInstanceFromNumber(outer))
+				o = sType.newInstanceFromNumber(outer, parseNumber(text, sType.getNewInstanceFromNumberClass()));
 			else
-				throw new XMLStreamException("Unexpected characters '"+event.asCharacters().getData()+"' for type '"+nt+"'", event.getLocation());
+				throw new XMLStreamException("Unexpected characters '"+event.asCharacters().getData()+"' for type '"+eType+"'", event.getLocation());
 
 		} else {
 			Tag tag = Tag.forString(event.asStartElement().getName().getLocalPart(), false);
@@ -117,7 +117,7 @@ public final class HtmlParser extends ReaderParser {
 				tableType = attrs.get("type");
 				String c = attrs.get("_class");
 				if (c != null)
-					ft = nt = (ClassMeta<T>)bc.getClassMetaFromString(c);
+					sType = eType = (ClassMeta<T>)bc.getClassMetaFromString(c);
 			}
 
 			boolean isValid = true;
@@ -125,8 +125,8 @@ public final class HtmlParser extends ReaderParser {
 			if (tag == NULL)
 				nextTag(r, xNULL);
 			else if (tag == A)
-				o = parseAnchor(session, event, r, nt);
-			else if (ft.isObject()) {
+				o = parseAnchor(session, event, r, eType);
+			else if (sType.isObject()) {
 				if (tag == STRING)
 					o = text;
 				else if (tag == NUMBER)
@@ -135,70 +135,70 @@ public final class HtmlParser extends ReaderParser {
 					o = Boolean.parseBoolean(text);
 				else if (tag == TABLE) {
 					if (tableType.equals("object")) {
-						o = parseIntoMap(session, r, (Map)new ObjectMap(bc), ft.getKeyType(), ft.getValueType());
+						o = parseIntoMap(session, r, (Map)new ObjectMap(bc), sType.getKeyType(), sType.getValueType());
 					} else if (tableType.equals("array")) {
-						o = parseTableIntoCollection(session, r, (Collection)new ObjectList(bc), ft.getElementType());
+						o = parseTableIntoCollection(session, r, (Collection)new ObjectList(bc), sType.getElementType());
 					} else
 						isValid = false;
 				}
 				else if (tag == UL)
 					o = parseIntoCollection(session, r, new ObjectList(bc), null);
 			}
-			else if (tag == STRING && ft.isCharSequence())
+			else if (tag == STRING && sType.isCharSequence())
 				o = text;
-			else if (tag == STRING && ft.isChar())
+			else if (tag == STRING && sType.isChar())
 				o = text.charAt(0);
-			else if (tag == STRING && ft.canCreateNewInstanceFromString(outer))
-				o = ft.newInstanceFromString(outer, text);
-			else if (tag == NUMBER && ft.isNumber())
-				o = parseNumber(text, (Class<? extends Number>)ft.getInnerClass());
-			else if (tag == NUMBER && ft.canCreateNewInstanceFromNumber(outer))
-				o = ft.newInstanceFromNumber(outer, parseNumber(text, ft.getNewInstanceFromNumberClass()));
-			else if (tag == BOOLEAN && ft.isBoolean())
+			else if (tag == STRING && sType.canCreateNewInstanceFromString(outer))
+				o = sType.newInstanceFromString(outer, text);
+			else if (tag == NUMBER && sType.isNumber())
+				o = parseNumber(text, (Class<? extends Number>)sType.getInnerClass());
+			else if (tag == NUMBER && sType.canCreateNewInstanceFromNumber(outer))
+				o = sType.newInstanceFromNumber(outer, parseNumber(text, sType.getNewInstanceFromNumberClass()));
+			else if (tag == BOOLEAN && sType.isBoolean())
 				o = Boolean.parseBoolean(text);
 			else if (tag == TABLE) {
 				if (tableType.equals("object")) {
-					if (ft.isMap()) {
-						o = parseIntoMap(session, r, (Map)(ft.canCreateNewInstance(outer) ? ft.newInstance(outer) : new ObjectMap(bc)), ft.getKeyType(), ft.getValueType());
-					} else if (ft.canCreateNewInstanceFromObjectMap(outer)) {
+					if (sType.isMap()) {
+						o = parseIntoMap(session, r, (Map)(sType.canCreateNewInstance(outer) ? sType.newInstance(outer) : new ObjectMap(bc)), sType.getKeyType(), sType.getValueType());
+					} else if (sType.canCreateNewInstanceFromObjectMap(outer)) {
 						ObjectMap m = new ObjectMap(bc);
 						parseIntoMap(session, r, m, string(), object());
-						o = ft.newInstanceFromObjectMap(outer, m);
-					} else if (ft.canCreateNewBean(outer)) {
-						BeanMap m = bc.newBeanMap(outer, ft.getInnerClass());
+						o = sType.newInstanceFromObjectMap(outer, m);
+					} else if (sType.canCreateNewBean(outer)) {
+						BeanMap m = bc.newBeanMap(outer, sType.getInnerClass());
 						o = parseIntoBean(session, r, m).getBean();
 					}
 					else
 						isValid = false;
 				} else if (tableType.equals("array")) {
-					if (ft.isCollection())
-						o = parseTableIntoCollection(session, r, (Collection)(ft.canCreateNewInstance(outer) ? ft.newInstance(outer) : new ObjectList(bc)), ft.getElementType());
-					else if (ft.isArray())
-						o = bc.toArray(ft, parseTableIntoCollection(session, r, new ArrayList(), ft.getElementType()));
+					if (sType.isCollection())
+						o = parseTableIntoCollection(session, r, (Collection)(sType.canCreateNewInstance(outer) ? sType.newInstance(outer) : new ObjectList(bc)), sType.getElementType());
+					else if (sType.isArray())
+						o = bc.toArray(sType, parseTableIntoCollection(session, r, new ArrayList(), sType.getElementType()));
 					else
 						isValid = false;
 				} else
 					isValid = false;
 			} else if (tag == UL) {
-				if (ft.isCollection())
-					o = parseIntoCollection(session, r, (Collection)(ft.canCreateNewInstance(outer) ? ft.newInstance(outer) : new ObjectList(bc)), ft.getElementType());
-				else if (ft.isArray())
-					o = bc.toArray(ft, parseIntoCollection(session, r, new ArrayList(), ft.getElementType()));
+				if (sType.isCollection())
+					o = parseIntoCollection(session, r, (Collection)(sType.canCreateNewInstance(outer) ? sType.newInstance(outer) : new ObjectList(bc)), sType.getElementType());
+				else if (sType.isArray())
+					o = bc.toArray(sType, parseIntoCollection(session, r, new ArrayList(), sType.getElementType()));
 				else
 					isValid = false;
 			} else
 				isValid = false;
 
 			if (! isValid)
-				throw new XMLStreamException("Unexpected tag '"+tag+"' for type '"+nt+"'", event.getLocation());
+				throw new XMLStreamException("Unexpected tag '"+tag+"' for type '"+eType+"'", event.getLocation());
 		}
 
 
 		if (transform != null && o != null)
-			o = transform.unswap(o, nt, bc);
+			o = transform.unswap(o, eType, bc);
 
 		if (outer != null)
-			setParent(nt, o, outer);
+			setParent(eType, o, outer);
 
 		return (T)o;
 	}

@@ -24,7 +24,7 @@ import org.apache.juneau.xml.annotation.*;
  */
 @Xml(prefix="per")
 @Rdf(prefix="per")
-@Bean(name="person")
+@Bean(typeName="person")
 public class CreatePerson {
 
 	// Bean properties

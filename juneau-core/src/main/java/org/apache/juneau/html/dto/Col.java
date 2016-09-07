@@ -20,6 +20,6 @@ import org.apache.juneau.annotation.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@Bean(name="col")
+@Bean(typeName="col")
 public class Col extends HtmlElement {
 }

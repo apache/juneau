@@ -20,6 +20,6 @@ import org.apache.juneau.annotation.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@Bean(name="bdi")
+@Bean(typeName="bdi")
 public class Bdi extends HtmlElement {
 }

@@ -20,6 +20,6 @@ import org.apache.juneau.annotation.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@Bean(name="ruby")
+@Bean(typeName="ruby")
 public class Ruby extends HtmlElement {
 }

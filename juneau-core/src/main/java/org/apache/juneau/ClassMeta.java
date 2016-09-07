@@ -83,7 +83,7 @@ public final class ClassMeta<T> implements Type {
 		isMemberClass;                                 // True if this is a non-static member class.
 
 	private MetadataMap extMeta = new MetadataMap();  // Extended metadata
-	private ClassLexicon classLexicon;                // The class lexicon defined on this bean or pojo.
+	private TypeDictionary typeDictionary;            // The class dictionary defined on this bean or pojo.
 	private String name;                              // The lexical name associated with this bean or pojo.
 
 	private Throwable initException;                  // Any exceptions thrown in the init() method.
@@ -131,18 +131,12 @@ public final class ClassMeta<T> implements Type {
 			beanFilter = findBeanFilter(beanContext);
 			pojoSwap = findPojoSwap(beanContext);
 
-			classLexicon = beanContext.getClassLexicon();
-			for (Pojo p : ReflectionUtils.findAnnotationsParentFirst(Pojo.class, innerClass)) {
-				if (p.classLexicon().length > 0)
-					classLexicon = new ClassLexicon(p.classLexicon());
-				if (! p.name().isEmpty())
-					name = p.name();
-			}
+			typeDictionary = beanContext.getTypeDictionary();
 			for (Bean b : ReflectionUtils.findAnnotationsParentFirst(Bean.class, innerClass)) {
-				if (b.classLexicon().length > 0)
-					classLexicon = new ClassLexicon(b.classLexicon());
-				if (! b.name().isEmpty())
-					name = b.name();
+				if (b.typeDictionary().length > 0)
+					typeDictionary = new TypeDictionary(b.typeDictionary());
+				if (! b.typeName().isEmpty())
+					name = b.typeName();
 			}
 
 			serializedClassMeta = (pojoSwap == null ? this : beanContext.getClassMeta(pojoSwap.getSwapClass()));
@@ -392,27 +386,27 @@ public final class ClassMeta<T> implements Type {
 	}
 
 	/**
-	 * Returns the class lexicon in use for this class.
-	 * The order of lookup for the lexicon is as follows:
+	 * Returns the class dictionary in use for this class.
+	 * The order of lookup for the dictionary is as follows:
 	 * <ol>
-	 * 	<li>Lexicon defined via {@link Bean#classLexicon()} or {@link Pojo#classLexicon()} (or {@link BeanFilter} equivalent).
-	 * 	<li>Lexicon defined via {@link BeanContext#BEAN_classLexicon} context property.
+	 * 	<li>Dictionary defined via {@link Bean#typeDictionary()} (or {@link BeanFilter} equivalent).
+	 * 	<li>Dictionary defined via {@link BeanContext#BEAN_typeDictionary} context property.
 	 * </ol>
 	 *
-	 * @return The class lexicon in use for this class.  Never <jk>null</jk>.
+	 * @return The class dictionary in use for this class.  Never <jk>null</jk>.
 	 */
-	public ClassLexicon getClassLexicon() {
-		return classLexicon;
+	public TypeDictionary getDictionary() {
+		return typeDictionary;
 	}
 
 	/**
 	 * Returns the lexical name associated with this class.
 	 * <p>
-	 * The lexical name is defined by either {@link Bean#name()} or {@link Pojo#name()}.
+	 * The lexical name is defined by {@link Bean#typeName()}.
 	 *
 	 * @return The lexical name associated with this class, or <jk>null</jk> if there is no lexical name defined.
 	 */
-	public String getLexiconName() {
+	public String getDictionaryName() {
 		return name;
 	}
 

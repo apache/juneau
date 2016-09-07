@@ -42,7 +42,7 @@ import org.apache.juneau.xml.annotation.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@Bean(name="link")
+@Bean(typeName="link")
 public class Link extends Common {
 
 	private String href;

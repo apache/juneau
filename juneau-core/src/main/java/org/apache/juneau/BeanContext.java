@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -447,19 +447,19 @@ public class BeanContext extends Context {
 	public static final String BEAN_implClasses_put = "BeanContext.implClasses.map.put";
 
 	/**
-	 * Specifies the list of classes that make up the class lexicon for this bean context (<code>List&lt;Class&gt;</code>).
+	 * Specifies the list of classes that make up the class dictionary for this bean context (<code>List&lt;Class&gt;</code>).
 	 */
-	public static final String BEAN_classLexicon = "BeanContext.classLexicon.list";
+	public static final String BEAN_typeDictionary = "BeanContext.typeDictionary.list";
 
 	/**
-	 * Add to the class lexicon list.
+	 * Add to the class dictionary list.
 	 */
-	public static final String BEAN_classLexicon_add = "BeanContext.classLexicon.list.add";
+	public static final String BEAN_typeDictionary_add = "BeanContext.typeDictionary.list.add";
 
 	/**
-	 * Remove from the class lexicon list.
+	 * Remove from the class dictionary list.
 	 */
-	public static final String BEAN_classLexicon_remove = "BeanContext.classLexicon.list.remove";
+	public static final String BEAN_typeDictionary_remove = "BeanContext.typeDictionary.list.remove";
 
 	/**
 	 * Specifies the default parser to use when converting <code>Strings</code> to POJOs in the {@link BeanContext#convertToType(Object, Class)} method (<code>Class</code>).
@@ -540,7 +540,7 @@ public class BeanContext extends Context {
 	final String[] notBeanPackageNames, notBeanPackagePrefixes;
 	final BeanFilter<?>[] beanFilters;
 	final PojoSwap<?,?>[] pojoSwaps;
-	final ClassLexicon classLexicon;
+	final TypeDictionary typeDictionary;
 	final Map<Class<?>,Class<?>> implClasses;
 	final Class<?>[] implKeyClasses, implValueClasses;
 	final ClassLoader classLoader;
@@ -631,7 +631,7 @@ public class BeanContext extends Context {
 		}
  		pojoSwaps = lpf.toArray(new PojoSwap[0]);
 
- 		classLexicon = new ClassLexicon(pm.get(BEAN_classLexicon, Class[].class, new Class[0]));
+ 		typeDictionary = new TypeDictionary(pm.get(BEAN_typeDictionary, Class[].class, new Class[0]));
 
  		implClasses = new TreeMap<Class<?>,Class<?>>(new ClassComparator());
  		Map<Class,Class> m = pm.getMap(BEAN_implClasses, Class.class, Class.class, null);
@@ -1475,12 +1475,12 @@ public class BeanContext extends Context {
 	}
 
 	/**
-	 * Returns the class lexicon defined in this bean context defined by {@link BeanContext#BEAN_classLexicon}.
+	 * Returns the type dictionary defined in this bean context defined by {@link BeanContext#BEAN_typeDictionary}.
 	 *
-	 * @return The class lexicon defined in this bean context.  Never <jk>null</jk>.
+	 * @return The type dictionary defined in this bean context.  Never <jk>null</jk>.
 	 */
-	protected ClassLexicon getClassLexicon() {
-		return classLexicon;
+	protected TypeDictionary getTypeDictionary() {
+		return typeDictionary;
 	}
 
 	/**

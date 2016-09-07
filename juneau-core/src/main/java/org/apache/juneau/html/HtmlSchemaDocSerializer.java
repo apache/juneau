@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -94,22 +94,22 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 		ObjectMap out = new ObjectMap();
 
 		ClassMeta<?> aType;			// The actual type (will be null if recursion occurs)
-		ClassMeta<?> gType;			// The generic type
+		ClassMeta<?> sType;			// The serialized type
 
 		aType = session.push(attrName, eType, null);
 
-		gType = eType.getSerializedClassMeta();
+		sType = eType.getSerializedClassMeta();
 		String type = null;
 
-		if (gType.isEnum() || gType.isCharSequence() || gType.isChar())
+		if (sType.isEnum() || sType.isCharSequence() || sType.isChar())
 			type = "string";
-		else if (gType.isNumber())
+		else if (sType.isNumber())
 			type = "number";
-		else if (gType.isBoolean())
+		else if (sType.isBoolean())
 			type = "boolean";
-		else if (gType.isBean() || gType.isMap())
+		else if (sType.isBean() || sType.isMap())
 			type = "object";
-		else if (gType.isCollection() || gType.isArray())
+		else if (sType.isCollection() || sType.isArray())
 			type = "array";
 		else
 			type = "any";
@@ -121,16 +121,16 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 			out.put("transform", t);
 
 		if (aType != null) {
-			if (gType.isEnum())
-				out.put("enum", getEnumStrings((Class<Enum<?>>)gType.getInnerClass()));
-			else if (gType.isCollection() || gType.isArray()) {
-				ClassMeta componentType = gType.getElementType();
-				if (gType.isCollection() && isParentClass(Set.class, gType.getInnerClass()))
+			if (sType.isEnum())
+				out.put("enum", getEnumStrings((Class<Enum<?>>)sType.getInnerClass()));
+			else if (sType.isCollection() || sType.isArray()) {
+				ClassMeta componentType = sType.getElementType();
+				if (sType.isCollection() && isParentClass(Set.class, sType.getInnerClass()))
 					out.put("uniqueItems", true);
 				out.put("items", getSchema(session, componentType, "items", pNames));
-			} else if (gType.isBean()) {
+			} else if (sType.isBean()) {
 				ObjectMap properties = new ObjectMap();
-				BeanMeta bm = session.getBeanContext().getBeanMeta(gType.getInnerClass());
+				BeanMeta bm = session.getBeanContext().getBeanMeta(sType.getInnerClass());
 				if (pNames != null)
 					bm = new BeanMetaFiltered(bm, pNames);
 				for (Iterator<BeanPropertyMeta> i = bm.getPropertyMetas().iterator(); i.hasNext();) {

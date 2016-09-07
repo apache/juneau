@@ -335,7 +335,7 @@ public class XmlCollapsedTest {
 		}
 	}
 
-	@Bean(name="xf1")
+	@Bean(typeName="xf1")
 	public static class F1 {
 
 		@Xml(format=CONTENT)

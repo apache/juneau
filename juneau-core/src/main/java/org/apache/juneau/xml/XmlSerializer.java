@@ -304,7 +304,7 @@ public class XmlSerializer extends WriterSerializer {
 		int indent = session.indent;       // Current indentation
 		ClassMeta<?> aType = null;     // The actual type
 		ClassMeta<?> wType = null;     // The wrapped type
-		ClassMeta<?> gType = object(); // The generic type
+		ClassMeta<?> sType = object(); // The serialized type
 
 		aType = session.push(elementName, o, eType);
 
@@ -324,7 +324,7 @@ public class XmlSerializer extends WriterSerializer {
 				aType = ((Delegate)o).getClassMeta();
 			}
 
-			gType = aType.getSerializedClassMeta();
+			sType = aType.getSerializedClassMeta();
 
 			// Swap if necessary
 			PojoSwap swap = aType.getPojoSwap();
@@ -333,11 +333,11 @@ public class XmlSerializer extends WriterSerializer {
 
 				// If the getSwapClass() method returns Object, we need to figure out
 				// the actual type now.
-				if (gType.isObject())
-					gType = bc.getClassMetaForObject(o);
+				if (sType.isObject())
+					sType = bc.getClassMetaForObject(o);
 			}
 		} else {
-			gType = eType.getSerializedClassMeta();
+			sType = eType.getSerializedClassMeta();
 		}
 
 		String classAttr = null;
@@ -349,23 +349,23 @@ public class XmlSerializer extends WriterSerializer {
 		}
 
 		// char '\0' is interpreted as null.
-		if (o != null && gType.isChar() && ((Character)o).charValue() == 0)
+		if (o != null && sType.isChar() && ((Character)o).charValue() == 0)
 			o = null;
 
 		boolean isCollapsed = false;		// If 'true', this is a collection and we're not rendering the outer element.
 
 		// Get the JSON type string.
-		if (gType.isCharSequence() || gType.isChar())
+		if (sType.isCharSequence() || sType.isChar())
 			ts = "string";
-		else if (gType.isNumber())
+		else if (sType.isNumber())
 			ts = "number";
-		else if (gType.isBoolean())
+		else if (sType.isBoolean())
 			ts = "boolean";
-		else if (gType.isMap() || gType.isBean() || gType.hasToObjectMapMethod()) {
-			isCollapsed = gType.getExtendedMeta(XmlClassMeta.class).getFormat() == XmlFormat.COLLAPSED;
+		else if (sType.isMap() || sType.isBean() || sType.hasToObjectMapMethod()) {
+			isCollapsed = sType.getExtendedMeta(XmlClassMeta.class).getFormat() == XmlFormat.COLLAPSED;
 			ts = "object";
 		}
-		else if (gType.isCollection() || gType.isArray()) {
+		else if (sType.isCollection() || sType.isArray()) {
 			isCollapsed = (format == COLLAPSED && ! addNamespaceUris);
 			ts = "array";
 		}
@@ -375,9 +375,9 @@ public class XmlSerializer extends WriterSerializer {
 
 		// Is there a name associated with this bean?
 		if (elementName == null)
-			elementName = gType.getLexiconName();
+			elementName = sType.getDictionaryName();
 		if (elementName == null)
-			elementName = aType.getLexiconName();
+			elementName = aType.getDictionaryName();
 
 		// If the value is null then it's either going to be <null/> or <XmlSerializer nil='true'/>
 		// depending on whether the element has a name.
@@ -388,7 +388,7 @@ public class XmlSerializer extends WriterSerializer {
 
 		if (session.isEnableNamespaces()) {
 			if (elementNamespace == null)
-				elementNamespace = gType.getExtendedMeta(XmlClassMeta.class).getNamespace();
+				elementNamespace = sType.getExtendedMeta(XmlClassMeta.class).getNamespace();
 			if (elementNamespace == null)
 				elementNamespace = aType.getExtendedMeta(XmlClassMeta.class).getNamespace();
 			if (elementNamespace != null && elementNamespace.uri == null)
@@ -400,7 +400,7 @@ public class XmlSerializer extends WriterSerializer {
 		}
 
 		// Do we need a carriage return after the start tag?
-		boolean cr = o != null && (gType.isMap() || gType.isCollection() || gType.isArray() || gType.isBean() || gType.hasToObjectMapMethod());
+		boolean cr = o != null && (sType.isMap() || sType.isCollection() || sType.isArray() || sType.isBean() || sType.hasToObjectMapMethod());
 
 		String en = (elementName == null ? ts : elementName);
 		boolean encodeEn = elementName != null;
@@ -434,14 +434,14 @@ public class XmlSerializer extends WriterSerializer {
 			if (o == null) {
 				if (! isNullTag)
 					out.attr(xsi, "nil", "true");
-				if ((gType.isBoolean() || gType.isNumber()) && ! gType.isNullable())
-					o = gType.getPrimitiveDefault();
+				if ((sType.isBoolean() || sType.isNumber()) && ! sType.isNullable())
+					o = sType.getPrimitiveDefault();
 			}
 
-			if (o != null && !(gType.isMap() || gType.isBean() || gType.hasToObjectMapMethod()))
+			if (o != null && !(sType.isMap() || sType.isBean() || sType.hasToObjectMapMethod()))
 				out.append('>');
 
-			if (cr && !(gType.isMap() || gType.isBean() || gType.hasToObjectMapMethod()))
+			if (cr && !(sType.isMap() || sType.isBean() || sType.hasToObjectMapMethod()))
 				out.nl();
 		}
 
@@ -449,33 +449,33 @@ public class XmlSerializer extends WriterSerializer {
 
 		// Render the tag contents.
 		if (o != null) {
-			if (gType.isUri() || (pMeta != null && pMeta.isUri()))
+			if (sType.isUri() || (pMeta != null && pMeta.isUri()))
 				out.appendUri(o);
-			else if (gType.isCharSequence() || gType.isChar())
+			else if (sType.isCharSequence() || sType.isChar())
 				out.encodeText(session.trim(o));
-			else if (gType.isNumber() || gType.isBoolean())
+			else if (sType.isNumber() || sType.isBoolean())
 				out.append(o);
-			else if (gType.isMap() || (wType != null && wType.isMap())) {
+			else if (sType.isMap() || (wType != null && wType.isMap())) {
 				if (o instanceof BeanMap)
 					hasChildren = serializeBeanMap(session, out, (BeanMap)o, elementNamespace, isCollapsed);
 				else
-					hasChildren = serializeMap(session, out, (Map)o, gType);
+					hasChildren = serializeMap(session, out, (Map)o, sType);
 			}
-			else if (gType.hasToObjectMapMethod())
-				hasChildren = serializeMap(session, out, gType.toObjectMap(o), gType);
-			else if (gType.isBean())
+			else if (sType.hasToObjectMapMethod())
+				hasChildren = serializeMap(session, out, sType.toObjectMap(o), sType);
+			else if (sType.isBean())
 				hasChildren = serializeBeanMap(session, out, bc.forBean(o), elementNamespace, isCollapsed);
-			else if (gType.isCollection() || (wType != null && wType.isCollection())) {
+			else if (sType.isCollection() || (wType != null && wType.isCollection())) {
 				if (isCollapsed)
 					session.indent--;
-				serializeCollection(session, out, (Collection)o, gType, pMeta);
+				serializeCollection(session, out, (Collection)o, sType, pMeta);
 				if (isCollapsed)
 					session.indent++;
 			}
-			else if (gType.isArray()) {
+			else if (sType.isArray()) {
 				if (isCollapsed)
 					session.indent--;
-				serializeCollection(session, out, toList(gType.getInnerClass(), o), gType, pMeta);
+				serializeCollection(session, out, toList(sType.getInnerClass(), o), sType, pMeta);
 				if (isCollapsed)
 					session.indent++;
 			}
@@ -621,7 +621,7 @@ public class XmlSerializer extends WriterSerializer {
 		}
 
 		if (eName == null && ! elementType.isObject()) {
-			eName = elementType.getLexiconName();
+			eName = elementType.getDictionaryName();
 			eNs = elementType.getExtendedMeta(XmlClassMeta.class).getNamespace();
 		}
 

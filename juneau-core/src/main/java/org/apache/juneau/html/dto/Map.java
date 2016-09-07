@@ -20,6 +20,6 @@ import org.apache.juneau.annotation.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@Bean(name="map")
+@Bean(typeName="map")
 public class Map extends HtmlElement {
 }

@@ -173,7 +173,7 @@ public class JsonSerializer extends WriterSerializer {
 
 		boolean addClassAttr;		// Add "_class" attribute to element?
 		ClassMeta<?> aType;			// The actual type
-		ClassMeta<?> gType;			// The generic type
+		ClassMeta<?> sType;			// The serialized type
 
 		aType = session.push(attrName, o, eType);
 		boolean isRecursion = aType == null;
@@ -184,7 +184,7 @@ public class JsonSerializer extends WriterSerializer {
 			aType = object();
 		}
 
-		gType = aType.getSerializedClassMeta();
+		sType = aType.getSerializedClassMeta();
 		addClassAttr = (session.isAddClassAttrs() && ! eType.equals(aType));
 
 		// Swap if necessary
@@ -194,44 +194,44 @@ public class JsonSerializer extends WriterSerializer {
 
 			// If the getSwapClass() method returns Object, we need to figure out
 			// the actual type now.
-			if (gType.isObject())
-				gType = bc.getClassMetaForObject(o);
+			if (sType.isObject())
+				sType = bc.getClassMetaForObject(o);
 		}
 
-		String wrapperAttr = gType.getExtendedMeta(JsonClassMeta.class).getWrapperAttr();
+		String wrapperAttr = sType.getExtendedMeta(JsonClassMeta.class).getWrapperAttr();
 		if (wrapperAttr != null) {
 			out.append('{').cr(session.indent).attr(wrapperAttr).append(':').s();
 			session.indent++;
 		}
 
 		// '\0' characters are considered null.
-		if (o == null || (gType.isChar() && ((Character)o).charValue() == 0))
+		if (o == null || (sType.isChar() && ((Character)o).charValue() == 0))
 			out.append("null");
-		else if (gType.isNumber() || gType.isBoolean())
+		else if (sType.isNumber() || sType.isBoolean())
 			out.append(o);
-		else if (gType.hasToObjectMapMethod())
-			serializeMap(session, out, gType.toObjectMap(o), gType);
-		else if (gType.isBean())
+		else if (sType.hasToObjectMapMethod())
+			serializeMap(session, out, sType.toObjectMap(o), sType);
+		else if (sType.isBean())
 			serializeBeanMap(session, out, bc.forBean(o), addClassAttr);
-		else if (gType.isUri() || (pMeta != null && pMeta.isUri()))
+		else if (sType.isUri() || (pMeta != null && pMeta.isUri()))
 			out.q().appendUri(o).q();
-		else if (gType.isMap()) {
+		else if (sType.isMap()) {
 			if (o instanceof BeanMap)
 				serializeBeanMap(session, out, (BeanMap)o, addClassAttr);
 			else
 				serializeMap(session, out, (Map)o, eType);
 		}
-		else if (gType.isCollection()) {
+		else if (sType.isCollection()) {
 			if (addClassAttr)
-				serializeCollectionMap(session, out, (Collection)o, gType);
+				serializeCollectionMap(session, out, (Collection)o, sType);
 			else
 				serializeCollection(session, out, (Collection) o, eType);
 		}
-		else if (gType.isArray()) {
+		else if (sType.isArray()) {
 			if (addClassAttr)
-				serializeCollectionMap(session, out, toList(gType.getInnerClass(), o), gType);
+				serializeCollectionMap(session, out, toList(sType.getInnerClass(), o), sType);
 			else
-				serializeCollection(session, out, toList(gType.getInnerClass(), o), eType);
+				serializeCollection(session, out, toList(sType.getInnerClass(), o), eType);
 		}
 		else
 			out.stringValue(session.toString(o));

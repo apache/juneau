@@ -20,6 +20,6 @@ import org.apache.juneau.annotation.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@Bean(name="h5")
+@Bean(typeName="h5")
 public class H5 extends HtmlElement {
 }

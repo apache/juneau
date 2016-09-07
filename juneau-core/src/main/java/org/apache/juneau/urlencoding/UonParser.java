@@ -81,20 +81,20 @@ public class UonParser extends ReaderParser {
 	 * Workhorse method.
 	 *
 	 * @param session The parser context for this parse.
-	 * @param nt The class type being parsed, or <jk>null</jk> if unknown.
+	 * @param eType The class type being parsed, or <jk>null</jk> if unknown.
 	 * @param r The reader being parsed.
 	 * @param outer The outer object (for constructing nested inner classes).
 	 * @param isUrlParamValue If <jk>true</jk>, then we're parsing a top-level URL-encoded value which is treated a bit different than the default case.
 	 * @return The parsed object.
 	 * @throws Exception
 	 */
-	protected <T> T parseAnything(UonParserSession session, ClassMeta<T> nt, ParserReader r, Object outer, boolean isUrlParamValue) throws Exception {
+	protected <T> T parseAnything(UonParserSession session, ClassMeta<T> eType, ParserReader r, Object outer, boolean isUrlParamValue) throws Exception {
 
 		BeanContext bc = session.getBeanContext();
-		if (nt == null)
-			nt = (ClassMeta<T>)object();
-		PojoSwap<T,Object> transform = (PojoSwap<T,Object>)nt.getPojoSwap();
-		ClassMeta<?> ft = nt.getSerializedClassMeta();
+		if (eType == null)
+			eType = (ClassMeta<T>)object();
+		PojoSwap<T,Object> transform = (PojoSwap<T,Object>)eType.getPojoSwap();
+		ClassMeta<?> sType = eType.getSerializedClassMeta();
 
 		Object o = null;
 
@@ -105,14 +105,14 @@ public class UonParser extends ReaderParser {
 
 		if (c == -1 || c == AMP) {
 			// If parameter is blank and it's an array or collection, return an empty list.
-			if (ft.isArray() || ft.isCollection())
-				o = ft.newInstance();
-			else if (ft.isString() || ft.isObject())
+			if (sType.isArray() || sType.isCollection())
+				o = sType.newInstance();
+			else if (sType.isString() || sType.isObject())
 				o = "";
-			else if (ft.isPrimitive())
-				o = ft.getPrimitiveDefault();
+			else if (sType.isPrimitive())
+				o = sType.getPrimitiveDefault();
 			// Otherwise, leave null.
-		} else if (ft.isObject()) {
+		} else if (sType.isObject()) {
 			if (flag == 0 || flag == 's') {
 				o = parseString(session, r, isUrlParamValue);
 			} else if (flag == 'b') {
@@ -125,23 +125,23 @@ public class UonParser extends ReaderParser {
 				o = m.cast();
 			} else if (flag == 'a') {
 				Collection l = new ObjectList(bc);
-				o = parseIntoCollection(session, r, l, ft.getElementType(), isUrlParamValue);
+				o = parseIntoCollection(session, r, l, sType.getElementType(), isUrlParamValue);
 			} else {
 				throw new ParseException(session, "Unexpected flag character ''{0}''.", flag);
 			}
-		} else if (ft.isBoolean()) {
+		} else if (sType.isBoolean()) {
 			o = parseBoolean(session, r);
-		} else if (ft.isCharSequence()) {
+		} else if (sType.isCharSequence()) {
 			o = parseString(session, r, isUrlParamValue);
-		} else if (ft.isChar()) {
+		} else if (sType.isChar()) {
 			String s = parseString(session, r, isUrlParamValue);
 			o = s == null ? null : s.charAt(0);
-		} else if (ft.isNumber()) {
-			o = parseNumber(session, r, (Class<? extends Number>)ft.getInnerClass());
-		} else if (ft.isMap()) {
-			Map m = (ft.canCreateNewInstance(outer) ? (Map)ft.newInstance(outer) : new ObjectMap(bc));
-			o = parseIntoMap(session, r, m, ft.getKeyType(), ft.getValueType());
-		} else if (ft.isCollection()) {
+		} else if (sType.isNumber()) {
+			o = parseNumber(session, r, (Class<? extends Number>)sType.getInnerClass());
+		} else if (sType.isMap()) {
+			Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : new ObjectMap(bc));
+			o = parseIntoMap(session, r, m, sType.getKeyType(), sType.getValueType());
+		} else if (sType.isCollection()) {
 			if (flag == 'o') {
 				ObjectMap m = new ObjectMap(bc);
 				parseIntoMap(session, r, m, string(), object());
@@ -150,29 +150,29 @@ public class UonParser extends ReaderParser {
 					o = m.cast();
 				// Handle case where it's a collection, but only a single value was specified.
 				else {
-					Collection l = (ft.canCreateNewInstance(outer) ? (Collection)ft.newInstance(outer) : new ObjectList(bc));
-					l.add(m.cast(ft.getElementType()));
+					Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance(outer) : new ObjectList(bc));
+					l.add(m.cast(sType.getElementType()));
 					o = l;
 				}
 			} else {
-				Collection l = (ft.canCreateNewInstance(outer) ? (Collection)ft.newInstance(outer) : new ObjectList(bc));
-				o = parseIntoCollection(session, r, l, ft.getElementType(), isUrlParamValue);
+				Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance(outer) : new ObjectList(bc));
+				o = parseIntoCollection(session, r, l, sType.getElementType(), isUrlParamValue);
 			}
-		} else if (ft.canCreateNewInstanceFromObjectMap(outer)) {
+		} else if (sType.canCreateNewInstanceFromObjectMap(outer)) {
 			ObjectMap m = new ObjectMap(bc);
 			parseIntoMap(session, r, m, string(), object());
-			o = ft.newInstanceFromObjectMap(outer, m);
-		} else if (ft.canCreateNewBean(outer)) {
-			BeanMap m = bc.newBeanMap(outer, ft.getInnerClass());
+			o = sType.newInstanceFromObjectMap(outer, m);
+		} else if (sType.canCreateNewBean(outer)) {
+			BeanMap m = bc.newBeanMap(outer, sType.getInnerClass());
 			m = parseIntoBeanMap(session, r, m);
 			o = m == null ? null : m.getBean();
-		} else if (ft.canCreateNewInstanceFromString(outer)) {
+		} else if (sType.canCreateNewInstanceFromString(outer)) {
 			String s = parseString(session, r, isUrlParamValue);
 			if (s != null)
-				o = ft.newInstanceFromString(outer, s);
-		} else if (ft.canCreateNewInstanceFromNumber(outer)) {
-			o = ft.newInstanceFromNumber(outer, parseNumber(session, r, ft.getNewInstanceFromNumberClass()));
-		} else if (ft.isArray()) {
+				o = sType.newInstanceFromString(outer, s);
+		} else if (sType.canCreateNewInstanceFromNumber(outer)) {
+			o = sType.newInstanceFromNumber(outer, parseNumber(session, r, sType.getNewInstanceFromNumberClass()));
+		} else if (sType.isArray()) {
 			if (flag == 'o') {
 				ObjectMap m = new ObjectMap(bc);
 				parseIntoMap(session, r, m, string(), object());
@@ -182,12 +182,12 @@ public class UonParser extends ReaderParser {
 				// Handle case where it's an array, but only a single value was specified.
 				else {
 					ArrayList l = new ArrayList(1);
-					l.add(m.cast(ft.getElementType()));
-					o = bc.toArray(ft, l);
+					l.add(m.cast(sType.getElementType()));
+					o = bc.toArray(sType, l);
 				}
 			} else {
-				ArrayList l = (ArrayList)parseIntoCollection(session, r, new ArrayList(), ft.getElementType(), isUrlParamValue);
-				o = bc.toArray(ft, l);
+				ArrayList l = (ArrayList)parseIntoCollection(session, r, new ArrayList(), sType.getElementType(), isUrlParamValue);
+				o = bc.toArray(sType, l);
 			}
 		} else if (flag == 'o') {
 			// It could be a non-bean with _class attribute.
@@ -196,16 +196,16 @@ public class UonParser extends ReaderParser {
 			if (m.containsKey("_class"))
 				o = m.cast();
 			else
-				throw new ParseException(session, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", ft.getInnerClass().getName(), ft.getNotABeanReason());
+				throw new ParseException(session, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.getInnerClass().getName(), sType.getNotABeanReason());
 		} else {
-			throw new ParseException(session, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", ft.getInnerClass().getName(), ft.getNotABeanReason());
+			throw new ParseException(session, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.getInnerClass().getName(), sType.getNotABeanReason());
 		}
 
 		if (transform != null && o != null)
-			o = transform.unswap(o, nt, bc);
+			o = transform.unswap(o, eType, bc);
 
 		if (outer != null)
-			setParent(nt, o, outer);
+			setParent(eType, o, outer);
 
 		return (T)o;
 	}

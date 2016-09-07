@@ -47,7 +47,7 @@ import org.apache.juneau.transforms.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@Bean(name="entry")
+@Bean(typeName="entry")
 public class Entry extends CommonEntry {
 
 	private Content content;

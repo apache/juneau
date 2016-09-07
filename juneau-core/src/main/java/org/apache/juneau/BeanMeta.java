@@ -141,7 +141,7 @@ public class BeanMeta<T> {
 		MetadataMap extMeta = new MetadataMap();
 		BeanPropertyMeta subTypeIdProperty;
 		PropertyNamer propertyNamer;
-		ClassLexicon classLexicon;
+		TypeDictionary typeDictionary;
 
 		private Builder(ClassMeta<T> classMeta, BeanContext ctx, BeanFilter<? extends T> beanFilter, String[] pNames) {
 			this.classMeta = classMeta;
@@ -225,7 +225,7 @@ public class BeanMeta<T> {
 					if (beanFilter.getPropertyNamer() != null)
 						propertyNamer = beanFilter.getPropertyNamer();
 
-					classLexicon = beanFilter.getClassLexicon();
+					typeDictionary = beanFilter.getTypeDictionary();
 				}
 
 				if (propertyNamer == null)
@@ -337,8 +337,8 @@ public class BeanMeta<T> {
 					properties.put(subTypeProperty, this.subTypeIdProperty);
 				}
 
-				if (classLexicon == null)
-					classLexicon = ctx.getClassLexicon();
+				if (typeDictionary == null)
+					typeDictionary = ctx.getTypeDictionary();
 
 				properties.putAll(normalProps);
 

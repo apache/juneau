@@ -37,7 +37,7 @@ import org.apache.juneau.xml.annotation.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@Bean(name="generator")
+@Bean(typeName="generator")
 public class Generator extends Common {
 
 	private URI uri;

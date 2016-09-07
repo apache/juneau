@@ -20,6 +20,6 @@ import org.apache.juneau.annotation.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@Bean(name="bdo")
+@Bean(typeName="bdo")
 public class Bdo extends HtmlElement {
 }

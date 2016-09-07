@@ -23,7 +23,7 @@ import org.apache.juneau.xml.annotation.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@Bean(name="a")
+@Bean(typeName="a")
 @SuppressWarnings("javadoc")
 public class A extends HtmlElement {
 

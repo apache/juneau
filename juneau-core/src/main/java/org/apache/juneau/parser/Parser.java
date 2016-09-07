@@ -580,21 +580,21 @@ public abstract class Parser extends CoreApi {
 		if (type == null)
 			type = (ClassMeta<T>)object();
 		PojoSwap transform = type.getPojoSwap();
-		ClassMeta<?> gType = type.getSerializedClassMeta();
+		ClassMeta<?> sType = type.getSerializedClassMeta();
 
 		Object o = s;
-		if (gType.isChar())
+		if (sType.isChar())
 			o = s.charAt(0);
-		else if (gType.isNumber())
+		else if (sType.isNumber())
 			if (type.canCreateNewInstanceFromNumber(outer))
 				o = type.newInstanceFromNumber(outer, parseNumber(s, type.getNewInstanceFromNumberClass()));
 			else
-				o = parseNumber(s, (Class<? extends Number>)gType.getInnerClass());
-		else if (gType.isBoolean())
+				o = parseNumber(s, (Class<? extends Number>)sType.getInnerClass());
+		else if (sType.isBoolean())
 			o = Boolean.parseBoolean(s);
-		else if (! (gType.isCharSequence() || gType.isObject())) {
-			if (gType.canCreateNewInstanceFromString(outer))
-				o = gType.newInstanceFromString(outer, s);
+		else if (! (sType.isCharSequence() || sType.isObject())) {
+			if (sType.canCreateNewInstanceFromString(outer))
+				o = sType.newInstanceFromString(outer, s);
 			else
 				throw new ParseException(session, "Invalid conversion from string to class ''{0}''", type);
 		}

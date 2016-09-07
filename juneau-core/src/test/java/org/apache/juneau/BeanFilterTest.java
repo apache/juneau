@@ -62,12 +62,12 @@ public class BeanFilterTest {
 		public B fb;
 	}
 
-	@Bean(name="A1")
+	@Bean(typeName="A1")
 	public static class A1 extends A {
 		public String f1;
 	}
 
-	@Bean(name="A2")
+	@Bean(typeName="A2")
 	public static class A2 extends A {
 		public String f2;
 	}
@@ -80,12 +80,12 @@ public class BeanFilterTest {
 		public String f0b = "f0b";
 	}
 
-	@Bean(name="B1")
+	@Bean(typeName="B1")
 	public static class B1 extends B {
 		public String f1;
 	}
 
-	@Bean(name="B2")
+	@Bean(typeName="B2")
 	public static class B2 extends B {
 		public String f2;
 	}

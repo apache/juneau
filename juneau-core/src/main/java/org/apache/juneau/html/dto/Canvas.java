@@ -20,6 +20,6 @@ import org.apache.juneau.annotation.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@Bean(name="canvas")
+@Bean(typeName="canvas")
 public class Canvas extends HtmlElement {
 }

@@ -255,7 +255,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		public String f0 = "f0";
 	}
 
-	@Bean(name="B1")
+	@Bean(typeName="B1")
 	public static class B1 extends B {
 		public String f1;
 		public static B1 create() {
@@ -266,7 +266,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		}
 	}
 
-	@Bean(name="B2")
+	@Bean(typeName="B2")
 	public static class B2 extends B {
 		public int f2;
 		public static B2 create() {
@@ -277,7 +277,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		}
 	}
 
-	@Bean(name="B3")
+	@Bean(typeName="B3")
 	public static class B3 extends B {
 		public XMLGregorianCalendar f3;
 		public static B3 create() throws Exception {
@@ -397,7 +397,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		public String f0a, subType, f0b;
 	}
 
-	@Bean(name="BA1")
+	@Bean(typeName="BA1")
 	public static class BA1 extends BA {
 		public String f1;
 		public static BA1 create() {
@@ -410,7 +410,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		}
 	}
 
-	@Bean(name="BA2")
+	@Bean(typeName="BA2")
 	public static class BA2 extends BA {
 		public String f2;
 	}
