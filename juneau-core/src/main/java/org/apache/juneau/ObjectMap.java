@@ -1164,8 +1164,6 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	public Object cast(TypeDictionary typeDictionary) {
 		String c = (String)get(beanContext.getTypePropertyName());
 		if (c == null) {
-			if (containsKey("_value"))
-				return get("_value");
 			return this;
 		}
 		if (typeDictionary != null) {

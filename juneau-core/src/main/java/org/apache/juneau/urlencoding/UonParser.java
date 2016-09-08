@@ -146,7 +146,7 @@ public class UonParser extends ReaderParser {
 				ObjectMap m = new ObjectMap(bc);
 				parseIntoMap(session, r, m, string(), object());
 				// Handle case where it's a collection, but serialized as a map with a _type or _value key.
-				if (m.containsKey(bc.getTypePropertyName()) || m.containsKey("_value"))
+				if (m.containsKey(bc.getTypePropertyName()))
 					o = m.cast();
 				// Handle case where it's a collection, but only a single value was specified.
 				else {
@@ -177,7 +177,7 @@ public class UonParser extends ReaderParser {
 				ObjectMap m = new ObjectMap(bc);
 				parseIntoMap(session, r, m, string(), object());
 				// Handle case where it's an array, but serialized as a map with a _type or _value key.
-				if (m.containsKey(bc.getTypePropertyName()) || m.containsKey("_value"))
+				if (m.containsKey(bc.getTypePropertyName()))
 					o = m.cast();
 				// Handle case where it's an array, but only a single value was specified.
 				else {

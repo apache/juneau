@@ -86,7 +86,10 @@ public class UrlEncodingParser extends UonParser {
 		if (sType.isObject()) {
 			ObjectMap m = new ObjectMap(bc);
 			parseIntoMap(session, r, m, bc.string(), bc.object());
-			o = m.cast();
+			if (m.containsKey("_value"))
+				o = m.get("_value");
+			else
+				o = m.cast();
 		} else if (sType.isMap()) {
 			Map m = (sType.canCreateNewInstance() ? (Map)sType.newInstance() : new ObjectMap(bc));
 			o = parseIntoMap(session, r, m, sType.getKeyType(), sType.getValueType());

@@ -26,7 +26,6 @@ import org.apache.juneau.xml.*;
  * <p>
  * 	Can be used for the following:
  * <ul class='spaced-list'>
- * 	<li>Override the element name on the XML representation of a bean or object.
  * 	<li>Override the child element name on the XML representation of collection or array properties.
  * 	<li>Specify the XML namespace on a package, class, or method.
  * 	<li>Override the XML format on a POJO.
