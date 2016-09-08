@@ -56,19 +56,7 @@ public class TypeDictionary {
 	 * 	</ul>
 	 */
 	public TypeDictionary(Class<?>...classes) {
-		this(null, classes);
-	}
-
-	/**
-	 * Constructor with optional copy-from dictionary.
-	 *
-	 * @param copyFrom The dictionary to initialize the contents of this dictionary with.
-	 * @param classes List of classes to add to this dictionary.
-	 */
-	public TypeDictionary(TypeDictionary copyFrom, Class<?>...classes) {
 		Map<String,Class<?>> m = new HashMap<String,Class<?>>();
-		if (copyFrom != null)
-			m.putAll(copyFrom.map);
 		for (Class<?> c : classes) {
 			if (c != null) {
 				if (ClassUtils.isParentClass(TypeDictionary.class, c)) {
