@@ -321,6 +321,7 @@ public class HtmlSerializer extends XmlSerializer {
 
 	private void serializeBeanMap(HtmlSerializerSession session, HtmlWriter out, BeanMap<?> m, String classAttr, BeanPropertyMeta ppMeta) throws Exception {
 		int i = session.getIndent();
+		BeanContext bc = session.getBeanContext();
 
 		Object o = m.getBean();
 
@@ -335,7 +336,7 @@ public class HtmlSerializer extends XmlSerializer {
 
 		out.oTag(i, "table").attr("type", "object");
 		if (classAttr != null)
-			out.attr("_class", classAttr);
+			out.attr(bc.getTypePropertyName(), classAttr);
 		out.append('>').nl();
 		if (! (m.getClassMeta().getExtendedMeta(HtmlClassMeta.class).isNoTableHeaders() || (ppMeta != null && ppMeta.getExtendedMeta(HtmlBeanPropertyMeta.class).isNoTableHeaders()))) {
 			out.sTag(i+1, "tr").nl();
@@ -400,7 +401,7 @@ public class HtmlSerializer extends XmlSerializer {
 
 			out.oTag(i, "table").attr("type", "array");
 			if (classAttr != null)
-				out.attr("_class", classAttr);
+				out.attr(bc.getTypePropertyName(), classAttr);
 			out.append('>').nl();
 			out.sTag(i+1, "tr").nl();
 			for (String key : th)
@@ -417,7 +418,7 @@ public class HtmlSerializer extends XmlSerializer {
 				}
 
 				if (cm != null && session.isAddClassAttrs() && elementType.getInnerClass() != o.getClass())
-					out.oTag(i+1, "tr").attr("_class", o.getClass().getName()).append('>').nl();
+					out.oTag(i+1, "tr").attr(bc.getTypePropertyName(), o.getClass().getName()).append('>').nl();
 				else
 					out.sTag(i+1, "tr").nl();
 

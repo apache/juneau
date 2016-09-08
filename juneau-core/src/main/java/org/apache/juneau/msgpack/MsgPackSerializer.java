@@ -61,7 +61,7 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 		if (eType == null)
 			eType = object();
 
-		boolean addClassAttr;		// Add "_class" attribute to element?
+		boolean addClassAttr;		// Add "_type" attribute to element?
 		ClassMeta<?> aType;			// The actual type
 		ClassMeta<?> sType;			// The serialized type
 
@@ -152,9 +152,9 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 
 	@SuppressWarnings({ "rawtypes" })
 	private void serializeCollectionMap(MsgPackSerializerSession session, MsgPackOutputStream out, Collection o, ClassMeta<?> type) throws Exception {
-
+		BeanContext bc = session.getBeanContext();
 		out.startMap(2);
-		serializeAnything(session, out, "_class", null, null, null);
+		serializeAnything(session, out, bc.getTypePropertyName(), null, null, null);
 		serializeAnything(session, out, type.getInnerClass().getName(), null, null, null);
 		serializeAnything(session, out, "items", null, null, null);
 		serializeCollection(session, out, o, type);

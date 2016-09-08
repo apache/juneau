@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -86,7 +86,7 @@ public class XmlParser extends ReaderParser {
 				jsonType = getJsonType(elementName);
 		}
 		if (! sType.canCreateNewInstance(outer)) {
-			String c = r.getAttributeValue(null, "_class");
+			String c = r.getAttributeValue(null, bc.getTypePropertyName());
 			if (c != null) {
 				sType = eType = (ClassMeta<T>)bc.getClassMetaFromString(c);
 			}

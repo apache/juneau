@@ -204,21 +204,20 @@ public @interface Bean {
 	 * 	<jc>// Abstract superclass</jc>
 	 * 	<ja>@Bean</ja>(
 	 * 		subTypeProperty=<js>"subType"</js>,
-	 * 		subTypes={
-	 * 			<ja>@BeanSubType</ja>(type=A1.<jk>class</jk>, id=<js>"A1"</js>),
-	 * 			<ja>@BeanSubType</ja>(type=A2.<jk>class</jk>, id=<js>"A2"</js>)
-	 * 		}
+	 * 		subTypes={A1.class, A2.class}
 	 * 	)
 	 * 	<jk>public class</jk> A {
 	 * 		<jk>public</jk> String <jf>f0</jf> = <js>"f0"</js>;
 	 * 	}
 	 *
 	 * 	<jc>// Subclass 1</jc>
+	 * 	<ja>@Bean</ja>(typeName=<js>"A1"</js>)
 	 * 	<jk>public class</jk> A1 <jk>extends</jk> A {
 	 * 		<jk>public</jk> String <jf>f1</jf>;
 	 * 	}
 	 *
 	 * 	<jc>// Subclass 2</jc>
+	 * 	<ja>@Bean</ja>(typeName=<js>"A2"</js>)
 	 * 	<jk>public class</jk> A2 <jk>extends</jk> A {
 	 * 		<jk>public</jk> String <jf>f2</jf>;
 	 * 	}
@@ -242,7 +241,7 @@ public @interface Bean {
 	 * <p>
 	 * 	This annotation is an alternative to using the {@link BeanFilter} class with an implemented {@link BeanFilter#getSubTypeProperty()} method.
 	 */
-	String subTypeProperty() default "_class";
+	String subTypeProperty() default "_subtype";
 
 	/**
 	 * Used in conjunction with {@link #subTypeProperty()} to set up bean subtypes.

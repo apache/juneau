@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -99,11 +99,11 @@ public class UrlEncodingParser extends UonParser {
 			m = parseIntoBeanMap(session, r, m);
 			o = m == null ? null : m.getBean();
 		} else {
-			// It could be a non-bean with _class attribute.
+			// It could be a non-bean with _type attribute.
 			ObjectMap m = new ObjectMap(bc);
 			ClassMeta<Object> valueType = object();
 			parseIntoMap(session, r, m, string(), valueType);
-			if (m.containsKey("_class"))
+			if (m.containsKey(bc.getTypePropertyName()))
 				o = m.cast();
 			else if (m.containsKey("_value"))
 				o = session.getBeanContext().convertToType(m.get("_value"), sType);
@@ -220,6 +220,8 @@ public class UrlEncodingParser extends UonParser {
 
 	private <T> BeanMap<T> parseIntoBeanMap(UrlEncodingParserSession session, ParserReader r, BeanMap<T> m) throws Exception {
 
+		BeanContext bc = session.getBeanContext();
+
 		int c = r.peek();
 		if (c == -1)
 			return m;
@@ -258,7 +260,7 @@ public class UrlEncodingParser extends UonParser {
 					}
 				} else if (state == S3) {
 					if (c == -1 || c == '\u0001') {
-						if (! currAttr.equals("_class")) {
+						if (! currAttr.equals(bc.getTypePropertyName())) {
 							BeanPropertyMeta pMeta = m.getPropertyMeta(currAttr);
 							if (pMeta == null) {
 								if (m.getMeta().isSubTyped()) {
@@ -280,7 +282,7 @@ public class UrlEncodingParser extends UonParser {
 							return m;
 						state = S1;
 					} else {
-						if (! currAttr.equals("_class")) {
+						if (! currAttr.equals(bc.getTypePropertyName())) {
 							BeanPropertyMeta pMeta = m.getPropertyMeta(currAttr);
 							if (pMeta == null) {
 								if (m.getMeta().isSubTyped()) {

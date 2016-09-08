@@ -257,7 +257,7 @@ public class UonSerializer extends WriterSerializer {
 		if (eType == null)
 			eType = object();
 
-		boolean addClassAttr;		// Add "_class" attribute to element?
+		boolean addClassAttr;		// Add "_type" attribute to element?
 		ClassMeta<?> aType;			// The actual type
 		ClassMeta<?> sType;			// The serialized type
 
@@ -351,9 +351,10 @@ public class UonSerializer extends WriterSerializer {
 
 	@SuppressWarnings({ "rawtypes" })
 	private SerializerWriter serializeCollectionMap(UonSerializerSession session, UonWriter out, Collection o, ClassMeta<?> type) throws Exception {
+		BeanContext bc = session.getBeanContext();
 		int i = session.getIndent();
 		out.startFlag('o').nl();
-		out.append(i, "_class=").appendObject(type, false, false, false).append(',').nl();
+		out.append(i, bc.getTypePropertyName()).append("=").appendObject(type, false, false, false).append(',').nl();
 		out.append(i, "items=");
 		session.indent++;
 		serializeCollection(session, out, o, type);

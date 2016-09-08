@@ -171,7 +171,7 @@ public class JsonSerializer extends WriterSerializer {
 		if (eType == null)
 			eType = object();
 
-		boolean addClassAttr;		// Add "_class" attribute to element?
+		boolean addClassAttr;		// Add "_type" attribute to element?
 		ClassMeta<?> aType;			// The actual type
 		ClassMeta<?> sType;			// The serialized type
 
@@ -279,9 +279,10 @@ public class JsonSerializer extends WriterSerializer {
 
 	@SuppressWarnings({ "rawtypes" })
 	private SerializerWriter serializeCollectionMap(JsonSerializerSession session, JsonWriter out, Collection o, ClassMeta<?> type) throws Exception {
+		BeanContext bc = session.getBeanContext();
 		int i = session.getIndent();
 		out.append('{');
-		out.cr(i).attr("_class").append(':').s().q().append(type.getInnerClass().getName()).q().append(',').s();
+		out.cr(i).attr(bc.getTypePropertyName()).append(':').s().q().append(type.getInnerClass().getName()).q().append(',').s();
 		out.cr(i).attr("items").append(':').s();
 		session.indent++;
 		serializeCollection(session, out, o, type);

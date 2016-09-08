@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -145,8 +145,8 @@ public class UonParser extends ReaderParser {
 			if (flag == 'o') {
 				ObjectMap m = new ObjectMap(bc);
 				parseIntoMap(session, r, m, string(), object());
-				// Handle case where it's a collection, but serialized as a map with a _class or _value key.
-				if (m.containsKey("_class") || m.containsKey("_value"))
+				// Handle case where it's a collection, but serialized as a map with a _type or _value key.
+				if (m.containsKey(bc.getTypePropertyName()) || m.containsKey("_value"))
 					o = m.cast();
 				// Handle case where it's a collection, but only a single value was specified.
 				else {
@@ -176,8 +176,8 @@ public class UonParser extends ReaderParser {
 			if (flag == 'o') {
 				ObjectMap m = new ObjectMap(bc);
 				parseIntoMap(session, r, m, string(), object());
-				// Handle case where it's an array, but serialized as a map with a _class or _value key.
-				if (m.containsKey("_class") || m.containsKey("_value"))
+				// Handle case where it's an array, but serialized as a map with a _type or _value key.
+				if (m.containsKey(bc.getTypePropertyName()) || m.containsKey("_value"))
 					o = m.cast();
 				// Handle case where it's an array, but only a single value was specified.
 				else {
@@ -190,10 +190,10 @@ public class UonParser extends ReaderParser {
 				o = bc.toArray(sType, l);
 			}
 		} else if (flag == 'o') {
-			// It could be a non-bean with _class attribute.
+			// It could be a non-bean with _type attribute.
 			ObjectMap m = new ObjectMap(bc);
 			parseIntoMap(session, r, m, string(), object());
-			if (m.containsKey("_class"))
+			if (m.containsKey(bc.getTypePropertyName()))
 				o = m.cast();
 			else
 				throw new ParseException(session, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.getInnerClass().getName(), sType.getNotABeanReason());
@@ -375,6 +375,8 @@ public class UonParser extends ReaderParser {
 
 	private <T> BeanMap<T> parseIntoBeanMap(UonParserSession session, ParserReader r, BeanMap<T> m) throws Exception {
 
+		BeanContext bc = session.getBeanContext();
+
 		int c = r.read();
 		if (c == -1 || c == NUL || c == AMP)
 			return null;
@@ -419,7 +421,7 @@ public class UonParser extends ReaderParser {
 					}
 				} else if (state == S3) {
 					if (c == -1 || c == ',' || c == ')' || c == AMP) {
-						if (! currAttr.equals("_class")) {
+						if (! currAttr.equals(bc.getTypePropertyName())) {
 							BeanPropertyMeta pMeta = m.getPropertyMeta(currAttr);
 							if (pMeta == null) {
 								if (m.getMeta().isSubTyped()) {
@@ -436,7 +438,7 @@ public class UonParser extends ReaderParser {
 							return m;
 						state = S1;
 					} else {
-						if (! currAttr.equals("_class")) {
+						if (! currAttr.equals(bc.getTypePropertyName())) {
 							BeanPropertyMeta pMeta = m.getPropertyMeta(currAttr);
 							if (pMeta == null) {
 								if (m.getMeta().isSubTyped()) {

@@ -742,7 +742,7 @@ public class SerializerSession extends Session {
 	}
 
 	/**
-	 * Create a "_class" property that represents the name of the bean.
+	 * Create a "_type" property that represents the name of the bean.
 	 *
 	 * @param m
 	 * 	The bean map to create a class property on.

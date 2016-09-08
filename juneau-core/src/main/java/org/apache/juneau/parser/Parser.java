@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -650,7 +650,8 @@ public abstract class Parser extends CoreApi {
 	 * @param <T> The class type of the bean map that doesn't have the expected property.
 	 */
 	protected <T> void onUnknownProperty(ParserSession session, String propertyName, BeanMap<T> beanMap, int line, int col) throws ParseException {
-		if (propertyName.equals("uri") || propertyName.equals("type") || propertyName.equals("_class"))
+		BeanContext bc = session.getBeanContext();
+		if (propertyName.equals("uri") || propertyName.equals("type") || propertyName.equals(bc.getTypePropertyName()))
 			return;
 		if (! session.getBeanContext().isIgnoreUnknownBeanProperties())
 			throw new ParseException(session, "Unknown property ''{0}'' encountered while trying to parse into class ''{1}''", propertyName, beanMap.getClassMeta());

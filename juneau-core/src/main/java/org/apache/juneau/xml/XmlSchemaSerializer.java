@@ -333,6 +333,7 @@ public class XmlSchemaSerializer extends XmlSerializer {
 			int i = session.getIndent() + 1;
 
 			cm = cm.getSerializedClassMeta();
+			BeanContext bc = cm.getBeanContext();
 
 			w.oTag(i, "complexType")
 				.attr("name", name);
@@ -501,7 +502,7 @@ public class XmlSchemaSerializer extends XmlSerializer {
 
 				if (session.isAddClassAttrs()) {
 					w.oTag(i+1, "attribute")
-						.attr("name", "_class")
+						.attr("name", bc.getTypePropertyName())
 						.attr("type", "string")
 						.ceTag().nl();
 				}

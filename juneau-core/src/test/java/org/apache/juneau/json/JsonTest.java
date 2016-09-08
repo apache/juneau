@@ -281,7 +281,7 @@ public class JsonTest {
 		JsonSerializer s = new JsonSerializer().setProperty(SERIALIZER_addClassAttrs, true);
 		Map<String,Object> o = new HashMap<String,Object>();
 		o.put("c", new C());
-		assertEquals("{\"c\":{\"_class\":\"org.apache.juneau.json.JsonTest$C\",\"items\":[]}}", s.serialize(o));
+		assertEquals("{\"c\":{\"_type\":\"org.apache.juneau.json.JsonTest$C\",\"items\":[]}}", s.serialize(o));
 	}
 
 	public static class C extends LinkedList<String> {

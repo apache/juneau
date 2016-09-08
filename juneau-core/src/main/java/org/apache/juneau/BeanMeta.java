@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -94,7 +94,7 @@ public class BeanMeta<T> {
 
 	// Other fields
 	final BeanPropertyMeta subTypeIdProperty;                           // The property indentified as the sub type differentiator property (identified by @Bean.subTypeProperty annotation).
-	private final BeanPropertyMeta classProperty;                       // "_class" mock bean property.
+	private final BeanPropertyMeta classProperty;                       // "_type" mock bean property.
 
 	final String notABeanReason;
 
@@ -123,7 +123,7 @@ public class BeanMeta<T> {
 		this.constructorArgs = b.constructorArgs;
 		this.extMeta = b.extMeta;
 		this.subTypeIdProperty = b.subTypeIdProperty;
-		this.classProperty = new BeanPropertyMeta(this, "_class", ctx.string());
+		this.classProperty = new BeanPropertyMeta(this, ctx.getTypePropertyName(), ctx.string());
 	}
 
 
@@ -438,7 +438,7 @@ public class BeanMeta<T> {
 	}
 
 	/**
-	 * Returns a mock bean property that resolves to the name <js>"_class"</js> and whose value always resolves
+	 * Returns a mock bean property that resolves to the name <js>"_type"</js> and whose value always resolves
 	 * 	to the class name of the bean.
 	 *
 	 * @return The class name property.

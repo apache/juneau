@@ -458,22 +458,22 @@ public class BeanMapTest {
 		assertEquals("default", t.b.s);
 
 		JsonParser p = new JsonParser().setClassLoader(BeanMapTest.class.getClassLoader());
-		m.put("lb1", new ObjectList("[{_class:'"+D2.class.getName()+"',s:'foobar'}]", p));
+		m.put("lb1", new ObjectList("[{_type:'"+D2.class.getName()+"',s:'foobar'}]", p));
 		assertEquals(ObjectList.class.getName(), t.lb1.getClass().getName());
 		assertEquals(D2.class.getName(), t.lb1.get(0).getClass().getName());
 		assertEquals("foobar", (t.lb1.get(0)).s);
 
-		m.put("lb2", new ObjectList("[{_class:'"+D2.class.getName()+"',s:'foobar'}]", p));
+		m.put("lb2", new ObjectList("[{_type:'"+D2.class.getName()+"',s:'foobar'}]", p));
 		assertEquals(ArrayList.class.getName(), t.lb2.getClass().getName());
 		assertEquals(D2.class.getName(), t.lb2.get(0).getClass().getName());
 		assertEquals("foobar", (t.lb2.get(0)).s);
 
-		m.put("ab1", new ObjectList("[{_class:'"+D2.class.getName()+"',s:'foobar'}]", p));
+		m.put("ab1", new ObjectList("[{_type:'"+D2.class.getName()+"',s:'foobar'}]", p));
 		assertEquals("[L"+D2.class.getName()+";", t.ab1.getClass().getName());
 		assertEquals(D2.class.getName(), t.ab1[0].getClass().getName());
 		assertEquals("foobar", t.ab1[0].s);
 
-		m.put("ab2", new ObjectList("[{_class:'"+D2.class.getName()+"',s:'foobar'}]", p));
+		m.put("ab2", new ObjectList("[{_type:'"+D2.class.getName()+"',s:'foobar'}]", p));
 		assertEquals("[L"+D2.class.getName()+";", t.ab2.getClass().getName());
 		assertEquals(D2.class.getName(), t.ab2[0].getClass().getName());
 		assertEquals("foobar", t.ab2[0].s);
@@ -644,7 +644,7 @@ public class BeanMapTest {
 
 		// Create instance directly from JSON.
 		JsonParser p = new JsonParser().setClassLoader(BeanMapTest.class.getClassLoader());
-		t7 = (H)p.parse("{_class:'"+H.class.getName()+"',enum1:'THREE',enum2:'ONE'}", Object.class);
+		t7 = (H)p.parse("{_type:'"+H.class.getName()+"',enum1:'THREE',enum2:'ONE'}", Object.class);
 		assertEquals("{enum1:'THREE',enum2:'ONE'}", serializer.serialize(t7));
 		assertEquals(HEnum.THREE, t7.enum1);
 		assertEquals(HEnum.ONE, t7.getEnum2());
@@ -1117,9 +1117,9 @@ public class BeanMapTest {
 	public void testCastWithNormalBean() throws Exception {
 		BeanContext bc = getBeanContext();
 
-		// With _class
+		// With _type
 		ObjectMap m = new ObjectMap(bc);
-		m.put("_class", R2.class.getName());
+		m.put("_type", R2.class.getName());
 		m.put("f1", 1);
 		m.put("f2", "2");
 
@@ -1134,7 +1134,7 @@ public class BeanMapTest {
 		assertEquals(1, t.f1);
 		assertEquals(2, t.f2);
 
-		// Without _class
+		// Without _type
 		m = new ObjectMap(bc);
 		m.put("f1", 1);
 		m.put("f2", "2");
@@ -1168,10 +1168,10 @@ public class BeanMapTest {
 	public void testCastWithNestedBean() throws Exception {
 		BeanContext bc = getBeanContext();
 
-		// With _class
+		// With _type
 		ObjectMap m = new ObjectMap(bc);
-		m.put("_class", S.class.getName());
-		m.put("f1", new ObjectMap(bc).append("_class", R1.class.getName()).append("f1", 1));
+		m.put("_type", S.class.getName());
+		m.put("f1", new ObjectMap(bc).append("_type", R1.class.getName()).append("f1", 1));
 
 		S t = (S)m.cast();
 		assertEquals(1, t.f1.f1);
@@ -1182,9 +1182,9 @@ public class BeanMapTest {
 		t = m.cast(bc.getClassMeta(S.class));
 		assertEquals(1, t.f1.f1);
 
-		// Without _class
+		// Without _type
 		m = new ObjectMap(bc);
-		m.put("f1", new ObjectMap(bc).append("_class", R1.class.getName()).append("f1", 1));
+		m.put("f1", new ObjectMap(bc).append("_type", R1.class.getName()).append("f1", 1));
 
 		m = (ObjectMap)m.cast();
 		assertEquals(1, t.f1.f1);
@@ -1208,9 +1208,9 @@ public class BeanMapTest {
 		BeanContext bc = BeanContext.DEFAULT;
 		Map m2;
 
-		// With _class
+		// With _type
 		ObjectMap m = new ObjectMap();
-		m.put("_class", TreeMap.class.getName());
+		m.put("_type", TreeMap.class.getName());
 		m.put("1", "ONE");
 
 		m2 = (Map)m.cast();
@@ -1246,7 +1246,7 @@ public class BeanMapTest {
 		assertTrue(e.getValue() instanceof TEnum);
 		assertEquals(TEnum.ONE, m2.get(1));
 
-		// Without _class
+		// Without _type
 		m = new ObjectMap();
 		m.put("1", "ONE");
 
@@ -1288,9 +1288,9 @@ public class BeanMapTest {
 	public void testCastToLinkedList() throws Exception {
 		BeanContext bc = BeanContext.DEFAULT;
 
-		// With _class
+		// With _type
 		ObjectMap m = new ObjectMap();
-		m.put("_class", LinkedList.class.getName());
+		m.put("_type", LinkedList.class.getName());
 		m.put("items", new ObjectList().append("1").append("2"));
 
 		List l = (List)m.cast();
@@ -1309,7 +1309,7 @@ public class BeanMapTest {
 		assertTrue(l instanceof ArrayList);
 		assertEquals("1", l.get(0));
 
-		// Without _class
+		// Without _type
 		m = new ObjectMap();
 		m.put("items", new ObjectList().append("1").append("2"));
 
@@ -1342,9 +1342,9 @@ public class BeanMapTest {
 	public void testToLinkedListInteger() throws Exception {
 		BeanContext bc = BeanContext.DEFAULT;
 
-		// With _class
+		// With _type
 		ObjectMap m = new ObjectMap();
-		m.put("_class", LinkedList.class.getName() + "<java.lang.Integer>");
+		m.put("_type", LinkedList.class.getName() + "<java.lang.Integer>");
 		m.put("items", new ObjectList().append("1").append("2"));
 
 		List l = (List)m.cast();
@@ -1372,7 +1372,7 @@ public class BeanMapTest {
 		assertTrue(l.get(0) instanceof String);
 		assertEquals("1", l.get(0));
 
-		// Without _class
+		// Without _type
 		m = new ObjectMap();
 		m.put("items", new ObjectList().append("1").append("2"));
 
@@ -1405,9 +1405,9 @@ public class BeanMapTest {
 	public void testCastToLinkedListBean() throws Exception {
 		BeanContext bc = getBeanContext();
 
-		// With _class
+		// With _type
 		ObjectMap m = new ObjectMap(bc);
-		m.put("_class", LinkedList.class.getName() + "<"+R1.class.getName()+">");
+		m.put("_type", LinkedList.class.getName() + "<"+R1.class.getName()+">");
 		m.put("items", new ObjectList(bc).append("{f1:1}"));
 
 		List l = (List)m.cast();
@@ -1440,7 +1440,7 @@ public class BeanMapTest {
 		assertTrue(l.get(0) instanceof HashMap);
 		assertEquals(1, ((Map)l.get(0)).get("f1"));
 
-		// Without _class
+		// Without _type
 		m = new ObjectMap(bc);
 		m.put("items", new ObjectList(bc).append("{f1:1}"));
 
@@ -1487,9 +1487,9 @@ public class BeanMapTest {
 	public void testCastToLinkedListUsingSwap() throws Exception {
 		BeanContext bc = ContextFactory.create().addPojoSwaps(CalendarSwap.ISO8601DTZ.class).getBeanContext();
 
-		// With _class
+		// With _type
 		ObjectMap m = new ObjectMap(bc);
-		m.put("_class", LinkedList.class.getName() + "<"+Calendar.class.getName()+">");
+		m.put("_type", LinkedList.class.getName() + "<"+Calendar.class.getName()+">");
 		m.put("items", new ObjectList().append("2001-07-04T15:30:45Z"));
 
 		List l = (List)m.cast();
@@ -1519,7 +1519,7 @@ public class BeanMapTest {
 		assertTrue(l.get(0) instanceof String);
 		assertEquals("2001-07-04T15:30:45Z", l.get(0));
 
-		// Without _class
+		// Without _type
 		m = new ObjectMap().setBeanContext(bc);
 		m.put("items", new ObjectList().append("2001-07-04T15:30:45Z"));
 
@@ -1550,9 +1550,9 @@ public class BeanMapTest {
 	public void testCastToStringArray() throws Exception {
 		BeanContext bc = BeanContext.DEFAULT;
 
-		// With _class
+		// With _type
 		ObjectMap m = new ObjectMap();
-		m.put("_class", String[].class.getName());
+		m.put("_type", String[].class.getName());
 		m.put("items", new ObjectList().append("1").append("2"));
 
 		String[] l = (String[])m.cast();
@@ -1576,7 +1576,7 @@ public class BeanMapTest {
 		l3 = m.cast(bc.getClassMeta(int[].class));
 		assertEquals("1", l2[0].toString());
 
-		// Without _class
+		// Without _type
 		m = new ObjectMap();
 		m.put("items", new ObjectList().append("1").append("2"));
 
@@ -1597,9 +1597,9 @@ public class BeanMapTest {
 	public void testCastToIntArray() throws Exception {
 		BeanContext bc = BeanContext.DEFAULT;
 
-		// With _class
+		// With _type
 		ObjectMap m = new ObjectMap();
-		m.put("_class", int[].class.getName());
+		m.put("_type", int[].class.getName());
 		m.put("items", new ObjectList().append("1").append("2"));
 
 		int[] l = (int[])m.cast();
@@ -1619,7 +1619,7 @@ public class BeanMapTest {
 		l2 = m.cast(bc.getClassMeta(long[].class));
 		assertEquals(1, l2[0]);
 
-		// Without _class
+		// Without _type
 		m = new ObjectMap();
 		m.put("items", new ObjectList().append("1").append("2"));
 
@@ -1643,9 +1643,9 @@ public class BeanMapTest {
 	public void testCastToString2dArray() throws Exception {
 		BeanContext bc = BeanContext.DEFAULT;
 
-		// With _class
+		// With _type
 		ObjectMap m = new ObjectMap();
-		m.put("_class", String[][].class.getName());
+		m.put("_type", String[][].class.getName());
 		m.put("items", new ObjectList().append(new ObjectList().append("1")).append(new ObjectList().append("2")));
 
 		String[][] l = (String[][])m.cast();
@@ -1658,7 +1658,7 @@ public class BeanMapTest {
 		l = m.cast(bc.getClassMeta(String[][].class));
 		assertEquals("2", l[1][0]);
 
-		// Without _class
+		// Without _type
 		m = new ObjectMap();
 		m.put("items", new ObjectList().append(new ObjectList().append("1")).append(new ObjectList().append("2")));
 
@@ -1676,9 +1676,9 @@ public class BeanMapTest {
 	public void testCastToInt2dArray() throws Exception {
 		BeanContext bc = BeanContext.DEFAULT;
 
-		// With _class
+		// With _type
 		ObjectMap m = new ObjectMap();
-		m.put("_class", int[][].class.getName());
+		m.put("_type", int[][].class.getName());
 		m.put("items", new ObjectList().append(new ObjectList().append("1")).append(new ObjectList().append("2")));
 
 		int[][] l = (int[][])m.cast();
@@ -1691,7 +1691,7 @@ public class BeanMapTest {
 		l = m.cast(bc.getClassMeta(int[][].class));
 		assertEquals(2, l[1][0]);
 
-		// Without _class
+		// Without _type
 		m = new ObjectMap();
 		m.put("items", new ObjectList().append(new ObjectList().append("1")).append(new ObjectList().append("2")));
 

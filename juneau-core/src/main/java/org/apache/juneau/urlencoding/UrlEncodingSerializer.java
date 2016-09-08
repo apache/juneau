@@ -228,7 +228,7 @@ public class UrlEncodingSerializer extends UonSerializer {
 	private SerializerWriter serializeAnything(UrlEncodingSerializerSession session, UonWriter out, Object o) throws Exception {
 		BeanContext bc = session.getBeanContext();
 
-		boolean addClassAttr;		// Add "_class" attribute to element?
+		boolean addClassAttr;		// Add "_type" attribute to element?
 		ClassMeta<?> aType;			// The actual type
 		ClassMeta<?> sType;			// The serialized type
 

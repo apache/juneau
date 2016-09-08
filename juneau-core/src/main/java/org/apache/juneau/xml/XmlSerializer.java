@@ -430,7 +430,7 @@ public class XmlSerializer extends WriterSerializer {
 			if (elementName != null && session.isAddJsonTypeAttrs() && (session.isAddJsonStringTypeAttrs() || ! ts.equals("string")))
 				out.attr(dns, "type", ts);
 			if (classAttr != null)
-				out.attr(dns, "_class", classAttr);
+				out.attr(dns, bc.getTypePropertyName(), classAttr);
 			if (o == null) {
 				if (! isNullTag)
 					out.attr(xsi, "nil", "true");

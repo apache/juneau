@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -121,7 +121,7 @@ public final class MsgPackParser extends InputStreamParser {
 						String pName = parseAnything(session, string(), is, m.getBean(false));
 						BeanPropertyMeta bpm = m.getPropertyMeta(pName);
 						if (bpm == null) {
-							if (pName.equals("_class"))
+							if (pName.equals(bc.getTypePropertyName()))
 								parseAnything(session, bc.string(), is, null);
 							else
 								onUnknownProperty(session, pName, m, 0, is.getPosition());
@@ -172,7 +172,7 @@ public final class MsgPackParser extends InputStreamParser {
 				ObjectMap m = new ObjectMap(bc);
 				for (int i = 0; i < length; i++)
 					m.put(parseAnything(session, string(), is, outer), parseAnything(session, object(), is, m));
-				if (m.containsKey("_class"))
+				if (m.containsKey(bc.getTypePropertyName()))
 					o = m.cast();
 				else
 					throw new ParseException(session, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.getInnerClass().getName(), sType.getNotABeanReason());

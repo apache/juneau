@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -51,7 +51,7 @@ import org.apache.juneau.transform.*;
  * 	This parser handles the following input, and automatically returns the corresponding Java class.
  * 	<ul class='spaced-list'>
  * 		<li> JSON objects (<js>"{...}"</js>) are converted to {@link ObjectMap ObjectMaps}.  <br>
- * 				Note:  If a <code><xa>_class</xa>=<xs>'xxx'</xs></code> attribute is specified on the object, then an attempt is made to convert the object
+ * 				Note:  If a <code><xa>_type</xa>=<xs>'xxx'</xs></code> attribute is specified on the object, then an attempt is made to convert the object
  * 				to an instance of the specified Java bean class.  See the classProperty setting on the {@link ContextFactory} for more information
  * 				about parsing beans from JSON.
  * 		<li> JSON arrays (<js>"[...]"</js>) are converted to {@link ObjectList ObjectLists}.
@@ -65,7 +65,7 @@ import org.apache.juneau.transform.*;
  * <p>
  * 	Input can be any of the following:<br>
  * 	<ul class='spaced-list'>
- * 		<li> <js>"{...}"</js> - Converted to a {@link ObjectMap} or an instance of a Java bean if a <xa>_class</xa> attribute is present.
+ * 		<li> <js>"{...}"</js> - Converted to a {@link ObjectMap} or an instance of a Java bean if a <xa>_type</xa> attribute is present.
  *  		<li> <js>"[...]"</js> - Converted to a {@link ObjectList}.
  *  		<li> <js>"123..."</js> - Converted to a {@link Number} (either {@link Integer}, {@link Long}, {@link Float}, or {@link Double}).
  *  		<li> <js>"true"</js>/<js>"false"</js> - Converted to a {@link Boolean}.
@@ -188,7 +188,7 @@ public final class JsonParser extends ReaderParser {
 		} else if (c == '{') {
 			Map m = new ObjectMap(bc);
 			parseIntoMap2(session, r, m, sType.getKeyType(), sType.getValueType());
-			if (m.containsKey("_class"))
+			if (m.containsKey(bc.getTypePropertyName()))
 				o = ((ObjectMap)m).cast();
 			else
 				throw new ParseException(session, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.getInnerClass().getName(), sType.getNotABeanReason());
@@ -425,6 +425,8 @@ public final class JsonParser extends ReaderParser {
 
 	private <T> BeanMap<T> parseIntoBeanMap2(JsonParserSession session, ParserReader r, BeanMap<T> m) throws Exception {
 
+		BeanContext bc = session.getBeanContext();
+
 		int S0=0; // Looking for outer {
 		int S1=1; // Looking for attrName start.
 		int S3=3; // Found attrName end, looking for :.
@@ -459,7 +461,7 @@ public final class JsonParser extends ReaderParser {
 				if (c == '/') {
 					skipCommentsAndSpace(session, r.unread());
 				} else if (! Character.isWhitespace(c)) {
-					if (! currAttr.equals("_class")) {
+					if (! currAttr.equals(bc.getTypePropertyName())) {
 						BeanPropertyMeta pMeta = m.getPropertyMeta(currAttr);
 						session.setCurrentProperty(pMeta);
 						if (pMeta == null) {

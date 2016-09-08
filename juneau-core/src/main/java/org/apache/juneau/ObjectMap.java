@@ -1063,7 +1063,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	}
 
 	/**
-	 * Converts this map into the class type specified by the <js>"_class"</js> entry value.
+	 * Converts this map into the class type specified by the <js>"_type"</js> entry value.
 	 * <p>
 	 * 	This method can be used to convert <code>ObjectMap</code> objects to a variety of POJO types.
 	 *
@@ -1075,7 +1075,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * 		</p>
 	 * 		<p class='bcode'>
 	 * 	{
-	 * 		_class: <js>'com.ibm.sample.addressBook.Person'</js>,
+	 * 		_type: <js>'com.ibm.sample.addressBook.Person'</js>,
 	 * 		name: <js>'John Smith'</js>,
 	 * 		...
 	 * 	}
@@ -1086,13 +1086,13 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * 		<p class='bcode'>
 	 * 	<jc>// Generic TreeMap (String keys, Object values)</jc>
 	 * 	{
-	 * 		_class: <js>'java.util.TreeMap'</js>,
+	 * 		_type: <js>'java.util.TreeMap'</js>,
 	 * 		name: <js>'John Smith'</js>,
 	 * 		...
 	 * 	}
 	 * 	<jc>// TreeMap where values are forced to be strings.</jc>
 	 * 	{
-	 * 		_class: <js>'java.util.TreeMap&lt;java.lang.String,java.lang.String&gt;'</js>,
+	 * 		_type: <js>'java.util.TreeMap&lt;java.lang.String,java.lang.String&gt;'</js>,
 	 * 		name: <js>'John Smith'</js>,
 	 * 		...
 	 * 	}
@@ -1103,12 +1103,12 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * 		<p class='bcode'>
 	 * 	<jc>// LinkedList of strings</jc>
 	 * 	{
-	 * 		_class: <js>'java.util.LinkedList'</js>,
+	 * 		_type: <js>'java.util.LinkedList'</js>,
 	 * 		items: [ <js>'John Smith'</js>, ... ]
 	 * 	}
 	 * 	<jc>// LinkedList of beans</jc>
 	 * 	{
-	 * 		_class: <js>'java.util.LinkedList&lt;com.ibm.sample.addressBook.Person&gt;'</js>,
+	 * 		_type: <js>'java.util.LinkedList&lt;com.ibm.sample.addressBook.Person&gt;'</js>,
 	 * 		items: [ { name: <js>'John Smith'</js>, ... }, ... ]
 	 * 	}
 	 * 		</p>
@@ -1118,12 +1118,12 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * 		<p class='bcode'>
 	 * 	<jc>// Array of strings</jc>
 	 * 	{
-	 * 		_class: <js>'java.lang.String[]'</js>,
+	 * 		_type: <js>'java.lang.String[]'</js>,
 	 * 		items: [ <js>'John Smith'</js>, ... ]
 	 * 	}
 	 * 	<jc>// Array of beans</jc>
 	 * 	{
-	 * 		_class: <js>'com.ibm.sample.addressBook.Person[]'</js>,
+	 * 		_type: <js>'com.ibm.sample.addressBook.Person[]'</js>,
 	 * 		items: [ { name: <js>'John Smith'</js>, ... }, ... ]
 	 * 	}
 	 * 		</p>
@@ -1133,7 +1133,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * 			For example, if the bean context has a {@link CalendarSwap} associated with it, it can convert a string value to a calendar.
 	 * 		<p class='bcode'>
 	 * 	{
-	 * 		_class: <js>'java.util.GregorianCalendar'</js>,
+	 * 		_type: <js>'java.util.GregorianCalendar'</js>,
 	 * 		value: <js>'2001-07-04T15:30:45-05:00'</js>
 	 * 	}
 	 * 		</p>
@@ -1158,11 +1158,11 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 *
 	 * @param typeDictionary
 	 * 	The class lexicon to resolve the name.  Can be <jk>null</jk>.
-	 * @return The new Java object of type specified by the <js>"_class"</js> entry value, or this
+	 * @return The new Java object of type specified by the <js>"_type"</js> entry value, or this
 	 * 	same object if entry does not exist.
 	 */
 	public Object cast(TypeDictionary typeDictionary) {
-		String c = (String)get("_class");
+		String c = (String)get(beanContext.getTypePropertyName());
 		if (c == null) {
 			if (containsKey("_value"))
 				return get("_value");
@@ -1181,18 +1181,18 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * <p>
 	 * The rules are the same as those specified in {@link #cast()}.
 	 * <p>
-	 * If this map contains a <js>"_class"</js> entry, it must be the same as or a subclass
+	 * If this map contains a <js>"_type"</js> entry, it must be the same as or a subclass
 	 * 	of the <code>type</code>.
 	 *
 	 * @param <T> The class type to convert this map object to.
 	 * @param type The class type to convert this map object to.
 	 * @return The new object.
-	 * @throws ClassCastException If the <js>"_class"</js> entry is present and not assignable
+	 * @throws ClassCastException If the <js>"_type"</js> entry is present and not assignable
 	 * 	from <code>type</code>
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> T cast(Class<T> type) {
-		ClassMeta<?> c1 = beanContext.getClassMetaFromString((String)get("_class"));
+		ClassMeta<?> c1 = beanContext.getClassMetaFromString((String)get(beanContext.getTypePropertyName()));
 		ClassMeta<?> c2 = beanContext.getClassMeta(type);
 		ClassMeta<?> c = narrowClassMeta(c1, c2);
 		return (T)cast2(c);
@@ -1204,18 +1204,18 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * @param <T> The class type to convert this map object to.
 	 * @param cm The class type to convert this map object to.
 	 * @return The new object.
-	 * @throws ClassCastException If the <js>"_class"</js> entry is present and not assignable
+	 * @throws ClassCastException If the <js>"_type"</js> entry is present and not assignable
 	 * 	from <code>type</code>
 	 */
 	@SuppressWarnings({"unchecked"})
 	public <T> T cast(ClassMeta<T> cm) {
-		ClassMeta<?> c1 = beanContext.getClassMetaFromString((String)get("_class"));
+		ClassMeta<?> c1 = beanContext.getClassMetaFromString((String)get(beanContext.getTypePropertyName()));
 		ClassMeta<?> c = narrowClassMeta(c1, cm);
 		return (T)cast2(c);
 	}
 
 	/*
-	 * Combines the class specified by a "_class" attribute with the ClassMeta
+	 * Combines the class specified by a "_type" attribute with the ClassMeta
 	 * passed in through the cast(ClassMeta) method.
 	 * The rule is that child classes superceed parent classes, and c2 superceeds c1
 	 * if one isn't the parent of another.
@@ -1262,7 +1262,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 				for (Map.Entry<String,Object> e : entrySet()) {
 					Object k = e.getKey();
 					Object v = e.getValue();
-					if (! k.equals("_class")) {
+					if (! k.equals(beanContext.getTypePropertyName())) {
 
 						// Attempt to recursively cast child maps.
 						if (v instanceof ObjectMap)
@@ -1283,7 +1283,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 				for (Map.Entry<String,Object> e : entrySet()) {
 					String k = e.getKey();
 					Object v = e.getValue();
-					if (! k.equals("_class")) {
+					if (! k.equals(beanContext.getTypePropertyName())) {
 
 						// Attempt to recursively cast child maps.
 						if (v instanceof ObjectMap)

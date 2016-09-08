@@ -31,7 +31,7 @@ import org.apache.juneau.internal.*;
  * <p>
  * The dictionary is used by the framework in the following ways:
  * <ul>
- * 	<li>If a class type cannot be inferred through reflection during parsing, then a helper <js>"_class"</js> is added to the serialized output
+ * 	<li>If a class type cannot be inferred through reflection during parsing, then a helper <js>"_type"</js> is added to the serialized output
  * 		using the name defined for that class in this dictionary.  This helps determine the real class at parse time.
  * 	<li>The dictionary name is used as element names when serialized to XML.
  * </ul>

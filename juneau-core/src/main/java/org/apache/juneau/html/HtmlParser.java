@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -115,7 +115,7 @@ public final class HtmlParser extends ReaderParser {
 			if (tag == TABLE) {
 				Map<String,String> attrs = getAttributes(event);
 				tableType = attrs.get("type");
-				String c = attrs.get("_class");
+				String c = attrs.get(bc.getTypePropertyName());
 				if (c != null)
 					sType = eType = (ClassMeta<T>)bc.getClassMetaFromString(c);
 			}
@@ -348,7 +348,7 @@ public final class HtmlParser extends ReaderParser {
 				}
 				l.add(m == null ? null : (E)m.getBean());
 			} else {
-				String c = getAttributes(event).get("_class");
+				String c = getAttributes(event).get(bc.getTypePropertyName());
 				Map m = (Map)(elementType.isMap() && elementType.canCreateNewInstance(l) ? elementType.newInstance(l) : new ObjectMap(bc));
 				for (int i = 0; i < keys.size(); i++) {
 					tag = nextTag(r, TD, NULL);
@@ -368,7 +368,7 @@ public final class HtmlParser extends ReaderParser {
 				}
 				if (m != null && c != null) {
 					ObjectMap m2 = (m instanceof ObjectMap ? (ObjectMap)m : new ObjectMap(m).setBeanContext(session.getBeanContext()));
-					m2.put("_class", c);
+					m2.put(bc.getTypePropertyName(), c);
 					l.add((E)m2.cast());
 				} else {
 					l.add((E)m);

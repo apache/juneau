@@ -90,7 +90,7 @@ public class PojoRestTest {
 
 		// Serialize it to JSON.
 		String s = serializer.serialize(p);
-		String expectedValue = "{_class:'org.apache.juneau.utils.PojoRestTest$Person',name:'some name',age:123,addresses:[{street:'street A',city:'city A',state:'state A',zip:12345,isCurrent:true},{street:'street B',city:'city B',state:'state B',zip:12345,isCurrent:false}]}";
+		String expectedValue = "{_type:'org.apache.juneau.utils.PojoRestTest$Person',name:'some name',age:123,addresses:[{street:'street A',city:'city A',state:'state A',zip:12345,isCurrent:true},{street:'street B',city:'city B',state:'state B',zip:12345,isCurrent:false}]}";
 		assertEquals(expectedValue, s);
 
 		// Parse it back to Java objects.
@@ -101,7 +101,7 @@ public class PojoRestTest {
 
 		// Parse it back into JSON again.
 		s = serializer.serialize(p);
-		expectedValue = "{_class:'org.apache.juneau.utils.PojoRestTest$Person',name:'some name',age:123,addresses:[{street:'street A',city:'city A',state:'state A',zip:12345,isCurrent:true},{street:'street B',city:'city B',state:'state B',zip:12345,isCurrent:false}]}";
+		expectedValue = "{_type:'org.apache.juneau.utils.PojoRestTest$Person',name:'some name',age:123,addresses:[{street:'street A',city:'city A',state:'state A',zip:12345,isCurrent:true},{street:'street B',city:'city B',state:'state B',zip:12345,isCurrent:false}]}";
 		assertEquals(expectedValue, s);
 
 		// Try adding an address
