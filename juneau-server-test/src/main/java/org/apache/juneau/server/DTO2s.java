@@ -14,10 +14,12 @@ package org.apache.juneau.server;
 
 import java.util.*;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.urlencoding.annotation.*;
 
 public class DTO2s {
 
+	@Bean(sort=true)
 	public static class A {
 		public String a;
 		public int b;
@@ -34,16 +36,17 @@ public class DTO2s {
 	}
 
 	@SuppressWarnings("serial")
+	@Bean(sort=true)
 	public static class B {
-		public String[] f1;
-		public List<String> f2;
-		public int[] f3;
-		public List<Integer> f4;
-		public String[][] f5;
-		public List<String[]> f6;
-		public A[] f7;
-		public List<A> f8;
-		public A[][] f9;
+		public String[] f01;
+		public List<String> f02;
+		public int[] f03;
+		public List<Integer> f04;
+		public String[][] f05;
+		public List<String[]> f06;
+		public A[] f07;
+		public List<A> f08;
+		public A[][] f09;
 		public List<List<A>> f10;
 
 		private String[] f11;
@@ -81,15 +84,15 @@ public class DTO2s {
 
 		static B create() {
 			B t = new B();
-			t.f1 = new String[]{"a","b"};
-			t.f2 = new ArrayList<String>(){{add("c");add("d");}};
-			t.f3 = new int[]{1,2};
-			t.f4 = new ArrayList<Integer>(){{add(3);add(4);}};
-			t.f5 = new String[][]{{"e","f"},{"g","h"}};
-			t.f6 = new ArrayList<String[]>(){{add(new String[]{"i","j"});add(new String[]{"k","l"});}};
-			t.f7 = new A[]{A.create(),A.create()};
-			t.f8 = new ArrayList<A>(){{add(A.create());add(A.create());}};
-			t.f9 = new A[][]{{A.create()},{A.create()}};
+			t.f01 = new String[]{"a","b"};
+			t.f02 = new ArrayList<String>(){{add("c");add("d");}};
+			t.f03 = new int[]{1,2};
+			t.f04 = new ArrayList<Integer>(){{add(3);add(4);}};
+			t.f05 = new String[][]{{"e","f"},{"g","h"}};
+			t.f06 = new ArrayList<String[]>(){{add(new String[]{"i","j"});add(new String[]{"k","l"});}};
+			t.f07 = new A[]{A.create(),A.create()};
+			t.f08 = new ArrayList<A>(){{add(A.create());add(A.create());}};
+			t.f09 = new A[][]{{A.create()},{A.create()}};
 			t.f10 = new ArrayList<List<A>>(){{add(Arrays.asList(A.create()));add(Arrays.asList(A.create()));}};
 			t.setF11(new String[]{"a","b"});
 			t.setF12(new ArrayList<String>(){{add("c");add("d");}});
@@ -110,15 +113,15 @@ public class DTO2s {
 		@SuppressWarnings("serial")
 		static C create() {
 			C t = new C();
-			t.f1 = new String[]{"a","b"};
-			t.f2 = new ArrayList<String>(){{add("c");add("d");}};
-			t.f3 = new int[]{1,2};
-			t.f4 = new ArrayList<Integer>(){{add(3);add(4);}};
-			t.f5 = new String[][]{{"e","f"},{"g","h"}};
-			t.f6 = new ArrayList<String[]>(){{add(new String[]{"i","j"});add(new String[]{"k","l"});}};
-			t.f7 = new A[]{A.create(),A.create()};
-			t.f8 = new ArrayList<A>(){{add(A.create());add(A.create());}};
-			t.f9 = new A[][]{{A.create()},{A.create()}};
+			t.f01 = new String[]{"a","b"};
+			t.f02 = new ArrayList<String>(){{add("c");add("d");}};
+			t.f03 = new int[]{1,2};
+			t.f04 = new ArrayList<Integer>(){{add(3);add(4);}};
+			t.f05 = new String[][]{{"e","f"},{"g","h"}};
+			t.f06 = new ArrayList<String[]>(){{add(new String[]{"i","j"});add(new String[]{"k","l"});}};
+			t.f07 = new A[]{A.create(),A.create()};
+			t.f08 = new ArrayList<A>(){{add(A.create());add(A.create());}};
+			t.f09 = new A[][]{{A.create()},{A.create()}};
 			t.f10 = new ArrayList<List<A>>(){{add(Arrays.asList(A.create()));add(Arrays.asList(A.create()));}};
 			t.setF11(new String[]{"a","b"});
 			t.setF12(new ArrayList<String>(){{add("c");add("d");}});
