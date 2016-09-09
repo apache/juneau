@@ -255,16 +255,10 @@ public class HtmlSerializer extends XmlSerializer {
 					serializeMap(session, out, (Map)o, eType, classAttr, pMeta);
 			}
 			else if (sType.isCollection()) {
-				if (classAttr != null)
-					serializeCollection(session, out, (Collection)o, sType, name, classAttr, pMeta);
-				else
-					serializeCollection(session, out, (Collection)o, eType, name, null, pMeta);
+				serializeCollection(session, out, (Collection)o, eType, name, null, pMeta);
 			}
 			else if (sType.isArray()) {
-				if (classAttr != null)
-					serializeCollection(session, out, toList(sType.getInnerClass(), o), sType, name, classAttr, pMeta);
-				else
-					serializeCollection(session, out, toList(sType.getInnerClass(), o), eType, name, null, pMeta);
+				serializeCollection(session, out, toList(sType.getInnerClass(), o), eType, name, null, pMeta);
 			}
 			else if (session.isUri(sType, pMeta, o)) {
 				String label = session.getAnchorText(pMeta, o);
@@ -383,6 +377,8 @@ public class HtmlSerializer extends XmlSerializer {
 
 		BeanContext bc = session.getBeanContext();
 		ClassMeta<?> elementType = type.getElementType();
+		if (elementType == null)
+			elementType = bc.object();
 
 		int i = session.getIndent();
 		if (c.isEmpty()) {

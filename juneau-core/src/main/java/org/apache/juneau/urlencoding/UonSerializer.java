@@ -300,16 +300,10 @@ public class UonSerializer extends WriterSerializer {
 				serializeMap(session, out, (Map)o, eType);
 		}
 		else if (sType.isCollection()) {
-			if (addClassAttr)
-				serializeCollectionMap(session, out, (Collection)o, sType);
-			else
-				serializeCollection(session, out, (Collection) o, eType);
+			serializeCollection(session, out, (Collection) o, eType);
 		}
 		else if (sType.isArray()) {
-			if (addClassAttr)
-				serializeCollectionMap(session, out, toList(sType.getInnerClass(), o), sType);
-			else
-				serializeCollection(session, out, toList(sType.getInnerClass(), o), eType);
+			serializeCollection(session, out, toList(sType.getInnerClass(), o), eType);
 		}
 		else {
 			out.appendObject(o, quoteEmptyStrings, false, isTop);
@@ -344,24 +338,6 @@ public class UonSerializer extends WriterSerializer {
 
 		if (m.size() > 0)
 			out.cr(depth-1);
-		out.append(')');
-
-		return out;
-	}
-
-	@SuppressWarnings({ "rawtypes" })
-	private SerializerWriter serializeCollectionMap(UonSerializerSession session, UonWriter out, Collection o, ClassMeta<?> type) throws Exception {
-		BeanContext bc = session.getBeanContext();
-		int i = session.getIndent();
-		out.startFlag('o').nl();
-		out.append(i, bc.getTypePropertyName()).append("=").appendObject(type, false, false, false).append(',').nl();
-		out.append(i, "items=");
-		session.indent++;
-		serializeCollection(session, out, o, type);
-		session.indent--;
-
-		if (o.size() > 0)
-			out.cr(i-1);
 		out.append(')');
 
 		return out;

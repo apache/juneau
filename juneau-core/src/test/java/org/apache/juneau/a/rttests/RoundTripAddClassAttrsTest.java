@@ -172,9 +172,6 @@ public class RoundTripAddClassAttrsTest extends RoundTripTest {
 
 		ti = roundTrip(t, IA[].class);
 		assertEquals("foo", ti[0].getF1());
-
-		t = (A[])roundTrip(t, Object.class);
-		assertEquals("foo", t[0].getF1());
 	}
 
 	//====================================================================================================

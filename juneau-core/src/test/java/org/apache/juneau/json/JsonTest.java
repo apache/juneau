@@ -274,14 +274,14 @@ public class JsonTest {
 	}
 
 	//====================================================================================================
-	// testAddClassAttrs
+	// testSubclassedList
 	//====================================================================================================
 	@Test
-	public void testAddClassAttrs() throws Exception {
-		JsonSerializer s = new JsonSerializer().setProperty(SERIALIZER_addClassAttrs, true);
+	public void testSubclassedList() throws Exception {
+		JsonSerializer s = new JsonSerializer();
 		Map<String,Object> o = new HashMap<String,Object>();
 		o.put("c", new C());
-		assertEquals("{\"c\":{\"_type\":\"org.apache.juneau.json.JsonTest$C\",\"items\":[]}}", s.serialize(o));
+		assertEquals("{\"c\":[]}", s.serialize(o));
 	}
 
 	public static class C extends LinkedList<String> {

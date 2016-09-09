@@ -108,16 +108,10 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 				serializeMap(session, out, (Map)o, eType);
 		}
 		else if (sType.isCollection()) {
-			if (addClassAttr)
-				serializeCollectionMap(session, out, (Collection)o, sType);
-			else
-				serializeCollection(session, out, (Collection) o, eType);
+			serializeCollection(session, out, (Collection) o, eType);
 		}
 		else if (sType.isArray()) {
-			if (addClassAttr)
-				serializeCollectionMap(session, out, toList(sType.getInnerClass(), o), sType);
-			else
-				serializeCollection(session, out, toList(sType.getInnerClass(), o), eType);
+			serializeCollection(session, out, toList(sType.getInnerClass(), o), eType);
 		} else
 			out.appendString(session.toString(o));
 
@@ -148,16 +142,6 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 			serializeAnything(session, out, key, keyType, null, null);
 			serializeAnything(session, out, value, valueType, null, null);
 		}
-	}
-
-	@SuppressWarnings({ "rawtypes" })
-	private void serializeCollectionMap(MsgPackSerializerSession session, MsgPackOutputStream out, Collection o, ClassMeta<?> type) throws Exception {
-		BeanContext bc = session.getBeanContext();
-		out.startMap(2);
-		serializeAnything(session, out, bc.getTypePropertyName(), null, null, null);
-		serializeAnything(session, out, type.getInnerClass().getName(), null, null, null);
-		serializeAnything(session, out, "items", null, null, null);
-		serializeCollection(session, out, o, type);
 	}
 
 	private void serializeBeanMap(MsgPackSerializerSession session, MsgPackOutputStream out, final BeanMap<?> m, boolean addClassAttr) throws Exception {

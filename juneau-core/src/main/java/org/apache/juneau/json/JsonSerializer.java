@@ -222,16 +222,10 @@ public class JsonSerializer extends WriterSerializer {
 				serializeMap(session, out, (Map)o, eType);
 		}
 		else if (sType.isCollection()) {
-			if (addClassAttr)
-				serializeCollectionMap(session, out, (Collection)o, sType);
-			else
-				serializeCollection(session, out, (Collection) o, eType);
+			serializeCollection(session, out, (Collection) o, eType);
 		}
 		else if (sType.isArray()) {
-			if (addClassAttr)
-				serializeCollectionMap(session, out, toList(sType.getInnerClass(), o), sType);
-			else
-				serializeCollection(session, out, toList(sType.getInnerClass(), o), eType);
+			serializeCollection(session, out, toList(sType.getInnerClass(), o), eType);
 		}
 		else
 			out.stringValue(session.toString(o));
@@ -274,20 +268,6 @@ public class JsonSerializer extends WriterSerializer {
 
 		out.cr(depth-1).append('}');
 
-		return out;
-	}
-
-	@SuppressWarnings({ "rawtypes" })
-	private SerializerWriter serializeCollectionMap(JsonSerializerSession session, JsonWriter out, Collection o, ClassMeta<?> type) throws Exception {
-		BeanContext bc = session.getBeanContext();
-		int i = session.getIndent();
-		out.append('{');
-		out.cr(i).attr(bc.getTypePropertyName()).append(':').s().q().append(type.getInnerClass().getName()).q().append(',').s();
-		out.cr(i).attr("items").append(':').s();
-		session.indent++;
-		serializeCollection(session, out, o, type);
-		session.indent--;
-		out.cr(i-1).append('}');
 		return out;
 	}
 
