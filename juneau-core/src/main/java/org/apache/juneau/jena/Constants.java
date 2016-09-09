@@ -67,7 +67,7 @@ public final class Constants {
 	 * <p>
 	 * Property added to bean resources to identify the class type.
 	 * <p>
-	 * Added if {@link SerializerContext#SERIALIZER_addClassAttrs} setting is enabled.
+	 * Added if {@link SerializerContext#SERIALIZER_addBeanTypeProperties} setting is enabled.
 	 */
 	public static final String RDF_juneauNs_CLASS = "class";
 

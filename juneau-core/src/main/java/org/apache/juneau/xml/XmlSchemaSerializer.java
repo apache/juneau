@@ -500,9 +500,9 @@ public class XmlSchemaSerializer extends XmlSerializer {
 					w.eTag(i+1, "sequence").nl();
 				}
 
-				if (session.isAddClassAttrs()) {
+				if (session.isAddBeanTypeProperties()) {
 					w.oTag(i+1, "attribute")
-						.attr("name", bc.getTypePropertyName())
+						.attr("name", bc.getBeanTypePropertyName())
 						.attr("type", "string")
 						.ceTag().nl();
 				}

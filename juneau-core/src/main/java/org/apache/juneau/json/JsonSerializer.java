@@ -171,7 +171,7 @@ public class JsonSerializer extends WriterSerializer {
 		if (eType == null)
 			eType = object();
 
-		boolean addClassAttr;		// Add "_type" attribute to element?
+		boolean addTypeProperty;		// Add "_type" attribute to element?
 		ClassMeta<?> aType;			// The actual type
 		ClassMeta<?> sType;			// The serialized type
 
@@ -185,7 +185,7 @@ public class JsonSerializer extends WriterSerializer {
 		}
 
 		sType = aType.getSerializedClassMeta();
-		addClassAttr = (session.isAddClassAttrs() && ! eType.equals(aType));
+		addTypeProperty = (session.isAddBeanTypeProperties() && ! eType.equals(aType));
 
 		// Swap if necessary
 		PojoSwap swap = aType.getPojoSwap();
@@ -212,12 +212,12 @@ public class JsonSerializer extends WriterSerializer {
 		else if (sType.hasToObjectMapMethod())
 			serializeMap(session, out, sType.toObjectMap(o), sType);
 		else if (sType.isBean())
-			serializeBeanMap(session, out, bc.forBean(o), addClassAttr);
+			serializeBeanMap(session, out, bc.forBean(o), addTypeProperty);
 		else if (sType.isUri() || (pMeta != null && pMeta.isUri()))
 			out.q().appendUri(o).q();
 		else if (sType.isMap()) {
 			if (o instanceof BeanMap)
-				serializeBeanMap(session, out, (BeanMap)o, addClassAttr);
+				serializeBeanMap(session, out, (BeanMap)o, addTypeProperty);
 			else
 				serializeMap(session, out, (Map)o, eType);
 		}

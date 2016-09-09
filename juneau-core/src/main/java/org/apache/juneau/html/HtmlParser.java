@@ -115,7 +115,7 @@ public final class HtmlParser extends ReaderParser {
 			if (tag == TABLE) {
 				Map<String,String> attrs = getAttributes(event);
 				tableType = attrs.get("type");
-				String c = attrs.get(bc.getTypePropertyName());
+				String c = attrs.get(bc.getBeanTypePropertyName());
 				if (c != null)
 					sType = eType = (ClassMeta<T>)bc.getClassMetaFromString(c);
 			}
@@ -348,7 +348,7 @@ public final class HtmlParser extends ReaderParser {
 				}
 				l.add(m == null ? null : (E)m.getBean());
 			} else {
-				String c = getAttributes(event).get(bc.getTypePropertyName());
+				String c = getAttributes(event).get(bc.getBeanTypePropertyName());
 				Map m = (Map)(elementType.isMap() && elementType.canCreateNewInstance(l) ? elementType.newInstance(l) : new ObjectMap(bc));
 				for (int i = 0; i < keys.size(); i++) {
 					tag = nextTag(r, TD, NULL);
@@ -368,7 +368,7 @@ public final class HtmlParser extends ReaderParser {
 				}
 				if (m != null && c != null) {
 					ObjectMap m2 = (m instanceof ObjectMap ? (ObjectMap)m : new ObjectMap(m).setBeanContext(session.getBeanContext()));
-					m2.put(bc.getTypePropertyName(), c);
+					m2.put(bc.getBeanTypePropertyName(), c);
 					l.add((E)m2.cast());
 				} else {
 					l.add((E)m);

@@ -265,7 +265,7 @@ public class RdfSerializer extends WriterSerializer {
 			n = m.createLiteral(session.encodeTextInvalidChars(session.toString(o)));
 		}
 
-		if (session.isAddClassAttrs() && n != null && n.isResource()) {
+		if (session.isAddBeanTypeProperties() && n != null && n.isResource()) {
 			if (o != null && ! eType.equals(aType))
 				n.asResource().addProperty(session.getClassProperty(), aType.toString());
 			else if (o == null)

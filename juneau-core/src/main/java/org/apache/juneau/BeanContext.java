@@ -469,9 +469,9 @@ public class BeanContext extends Context {
 	public static final String BEAN_beanDictionary_remove = "BeanContext.beanDictionary.list.remove";
 
 	/**
-	 * The name to use for the type property used to represent a bean type.  ({@link String}, default=<js>"_type"</js>).
+	 * The name to use for the bean type properties used to represent a bean type.  ({@link String}, default=<js>"_type"</js>).
 	 */
-	public static final String BEAN_typePropertyName = "BeanContext.typePropertyName";
+	public static final String BEAN_beanTypePropertyName = "BeanContext.beanTypePropertyName";
 
 	/**
 	 * Specifies the default parser to use when converting <code>Strings</code> to POJOs in the {@link BeanContext#convertToType(Object, Class)} method (<code>Class</code>).
@@ -565,7 +565,7 @@ public class BeanContext extends Context {
 	// Optional default parser set by setDefaultParser().
 	final ReaderParser defaultParser;
 
-	final String typePropertyName;
+	final String beanTypePropertyName;
 
 	// Holds pending ClassMetas (created, but not yet initialized).
 	final Deque<ClassMeta> pendingClassMetas = new LinkedList<ClassMeta>();
@@ -600,7 +600,7 @@ public class BeanContext extends Context {
 		ignoreInvocationExceptionsOnSetters = pm.get(BEAN_ignoreInvocationExceptionsOnSetters, boolean.class, false);
 		useJavaBeanIntrospector = pm.get(BEAN_useJavaBeanIntrospector, boolean.class, false);
 		sortProperties = pm.get(BEAN_sortProperties, boolean.class, false);
-		typePropertyName = pm.get(BEAN_typePropertyName, String.class, "_type");
+		beanTypePropertyName = pm.get(BEAN_beanTypePropertyName, String.class, "_type");
 
 		beanConstructorVisibility = pm.get(BEAN_beanConstructorVisibility, Visibility.class, PUBLIC);
 		beanClassVisibility = pm.get(BEAN_beanClassVisibility, Visibility.class, PUBLIC);
@@ -1490,12 +1490,12 @@ public class BeanContext extends Context {
 	}
 
 	/**
-	 * Returns the type property name as defined by {@link BeanContext#BEAN_typePropertyName}.
+	 * Returns the type property name as defined by {@link BeanContext#BEAN_beanTypePropertyName}.
 	 *
 	 * @return The type property name.  Never <jk>null</jk>.
 	 */
-	public final String getTypePropertyName() {
-		return typePropertyName;
+	public final String getBeanTypePropertyName() {
+		return beanTypePropertyName;
 	}
 
 	/**

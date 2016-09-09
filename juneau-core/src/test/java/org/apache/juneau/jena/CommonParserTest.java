@@ -110,7 +110,7 @@ public class CommonParserTest {
 		t2.add(new A3("name1","value1"));
 		t1.list = t2;
 
-		s.setProperty(SERIALIZER_addClassAttrs, true);
+		s.setProperty(SERIALIZER_addBeanTypeProperties, true);
 		in = strip(s.serialize(t1));
 		assertEquals("<rdf:Description><j:class>"+A1.class.getName()+"</j:class><jp:list><rdf:Seq><rdf:li rdf:parseType='Resource'><jp:name>name0</jp:name><jp:value>value0</jp:value></rdf:li><rdf:li rdf:parseType='Resource'><jp:name>name1</jp:name><jp:value>value1</jp:value></rdf:li></rdf:Seq></jp:list></rdf:Description>", in);
 		in = wrap(in);

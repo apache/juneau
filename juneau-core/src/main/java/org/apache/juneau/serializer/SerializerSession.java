@@ -49,7 +49,7 @@ public class SerializerSession extends Session {
 		detectRecursions,
 		ignoreRecursions,
 		useIndentation,
-		addClassAttrs,
+		addBeanTypeProperties,
 		trimNulls,
 		trimEmptyLists,
 		trimEmptyMaps,
@@ -113,7 +113,7 @@ public class SerializerSession extends Session {
 			detectRecursions = ctx.detectRecursions;
 			ignoreRecursions = ctx.ignoreRecursions;
 			useIndentation = ctx.useIndentation;
-			addClassAttrs = ctx.addClassAttrs;
+			addBeanTypeProperties = ctx.addBeanTypeProperties;
 			trimNulls = ctx.trimNulls;
 			trimEmptyLists = ctx.trimEmptyLists;
 			trimEmptyMaps = ctx.trimEmptyMaps;
@@ -131,7 +131,7 @@ public class SerializerSession extends Session {
 			detectRecursions = op.getBoolean(SERIALIZER_detectRecursions, ctx.detectRecursions);
 			ignoreRecursions = op.getBoolean(SERIALIZER_ignoreRecursions, ctx.ignoreRecursions);
 			useIndentation = op.getBoolean(SERIALIZER_useIndentation, ctx.useIndentation);
-			addClassAttrs = op.getBoolean(SERIALIZER_addClassAttrs, ctx.addClassAttrs);
+			addBeanTypeProperties = op.getBoolean(SERIALIZER_addBeanTypeProperties, ctx.addBeanTypeProperties);
 			trimNulls = op.getBoolean(SERIALIZER_trimNullProperties, ctx.trimNulls);
 			trimEmptyLists = op.getBoolean(SERIALIZER_trimEmptyLists, ctx.trimEmptyLists);
 			trimEmptyMaps = op.getBoolean(SERIALIZER_trimEmptyMaps, ctx.trimEmptyMaps);
@@ -320,12 +320,12 @@ public class SerializerSession extends Session {
 	}
 
 	/**
-	 * Returns the {@link SerializerContext#SERIALIZER_addClassAttrs} setting value for this session.
+	 * Returns the {@link SerializerContext#SERIALIZER_addBeanTypeProperties} setting value for this session.
 	 *
-	 * @return The {@link SerializerContext#SERIALIZER_addClassAttrs} setting value for this session.
+	 * @return The {@link SerializerContext#SERIALIZER_addBeanTypeProperties} setting value for this session.
 	 */
-	public final boolean isAddClassAttrs() {
-		return addClassAttrs;
+	public final boolean isAddBeanTypeProperties() {
+		return addBeanTypeProperties;
 	}
 
 	/**

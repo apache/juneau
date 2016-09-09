@@ -124,7 +124,7 @@ public class BeanMeta<T> {
 		this.constructorArgs = b.constructorArgs;
 		this.extMeta = b.extMeta;
 		this.subTypeProperty = b.subTypeIdProperty;
-		this.typeProperty = new BeanPropertyMeta(this, ctx.getTypePropertyName(), ctx.string());
+		this.typeProperty = new BeanPropertyMeta(this, ctx.getBeanTypePropertyName(), ctx.string());
 	}
 
 

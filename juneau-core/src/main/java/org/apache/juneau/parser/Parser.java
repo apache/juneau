@@ -651,7 +651,7 @@ public abstract class Parser extends CoreApi {
 	 */
 	protected <T> void onUnknownProperty(ParserSession session, String propertyName, BeanMap<T> beanMap, int line, int col) throws ParseException {
 		BeanContext bc = session.getBeanContext();
-		if (propertyName.equals("uri") || propertyName.equals("type") || propertyName.equals(bc.getTypePropertyName()))
+		if (propertyName.equals("type") || propertyName.equals(bc.getBeanTypePropertyName()))
 			return;
 		if (! session.getBeanContext().isIgnoreUnknownBeanProperties())
 			throw new ParseException(session, "Unknown property ''{0}'' encountered while trying to parse into class ''{1}''", propertyName, beanMap.getClassMeta());

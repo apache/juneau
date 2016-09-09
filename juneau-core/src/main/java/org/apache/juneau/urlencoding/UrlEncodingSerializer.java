@@ -228,7 +228,7 @@ public class UrlEncodingSerializer extends UonSerializer {
 	private SerializerWriter serializeAnything(UrlEncodingSerializerSession session, UonWriter out, Object o) throws Exception {
 		BeanContext bc = session.getBeanContext();
 
-		boolean addClassAttr;		// Add "_type" attribute to element?
+		boolean addTypeProperty;		// Add "_type" attribute to element?
 		ClassMeta<?> aType;			// The actual type
 		ClassMeta<?> sType;			// The serialized type
 
@@ -238,7 +238,7 @@ public class UrlEncodingSerializer extends UonSerializer {
 			aType = object();
 
 		sType = aType.getSerializedClassMeta();
-		addClassAttr = (session.isAddClassAttrs());
+		addTypeProperty = (session.isAddBeanTypeProperties());
 
 		// Swap if necessary
 		PojoSwap swap = aType.getPojoSwap();
@@ -253,13 +253,13 @@ public class UrlEncodingSerializer extends UonSerializer {
 
 		if (sType.isMap()) {
 			if (o instanceof BeanMap)
-				serializeBeanMap(session, out, (BeanMap)o, addClassAttr);
+				serializeBeanMap(session, out, (BeanMap)o, addTypeProperty);
 			else
 				serializeMap(session, out, (Map)o, sType);
 		} else if (sType.hasToObjectMapMethod()) {
 			serializeMap(session, out, sType.toObjectMap(o), sType);
 		} else if (sType.isBean()) {
-			serializeBeanMap(session, out, bc.forBean(o), addClassAttr);
+			serializeBeanMap(session, out, bc.forBean(o), addTypeProperty);
 		} else if (sType.isCollection()) {
 			serializeMap(session, out, getCollectionMap((Collection)o), bc.getMapClassMeta(Map.class, Integer.class, sType.getElementType()));
 		} else {

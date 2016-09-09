@@ -84,7 +84,7 @@ public class CommonParserTest {
 		tl.add(new A3("name0","value0"));
 		tl.add(new A3("name1","value1"));
 		b.list = tl;
-		String json = new JsonSerializer().setProperty(SERIALIZER_addClassAttrs, true).serialize(b);
+		String json = new JsonSerializer().setProperty(SERIALIZER_addBeanTypeProperties, true).serialize(b);
 		b = (A1)p.parse(json, Object.class);
 		assertEquals("value1", b.list.get(1).value);
 

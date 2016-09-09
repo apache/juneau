@@ -446,7 +446,7 @@ public class CommonTest {
 			fail("Locked exception not thrown");
 		} catch (LockedException e) {}
 		try {
-			s.setProperty(SerializerContext.SERIALIZER_addClassAttrs, true);
+			s.setProperty(SerializerContext.SERIALIZER_addBeanTypeProperties, true);
 			fail("Locked exception not thrown");
 		} catch (LockedException e) {}
 		try {

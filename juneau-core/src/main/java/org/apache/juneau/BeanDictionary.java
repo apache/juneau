@@ -37,12 +37,12 @@ public class BeanDictionary {
 	private final Map<String,ClassMeta<?>> map;
 	private final Map<Class<?>,String> reverseMap;
 	private final BeanContext beanContext;
-	private final String typePropertyName;
+	private final String beanTypePropertyName;
 	private final BeanDictionary parent;
 
 	BeanDictionary(BeanContext beanContext, BeanDictionary parent, Map<String,Class<?>> map) {
 		this.beanContext = beanContext;
-		this.typePropertyName = beanContext.getTypePropertyName();
+		this.beanTypePropertyName = beanContext.getBeanTypePropertyName();
 		this.parent = parent == null ? beanContext.getBeanDictionary() : parent;
 		Map<String,ClassMeta<?>> m1 = new HashMap<String,ClassMeta<?>>();
 		for (Map.Entry<String,Class<?>> e : map.entrySet()) {
@@ -75,7 +75,7 @@ public class BeanDictionary {
 	 * @return The new bean, or the original <code>ObjectMap</code> if no <js>"_type"</js> entry was found.
 	 */
 	public Object cast(ObjectMap m) {
-		Object o = m.get(typePropertyName);
+		Object o = m.get(beanTypePropertyName);
 		if (o == null)
 			return m;
 		String typeName = o.toString();
@@ -86,7 +86,7 @@ public class BeanDictionary {
 		for (Map.Entry<String,Object> e : m.entrySet()) {
 			String k = e.getKey();
 			Object v = e.getValue();
-			if (! k.equals(typePropertyName)) {
+			if (! k.equals(beanTypePropertyName)) {
 				// Attempt to recursively cast child maps.
 				if (v instanceof ObjectMap)
 					v = cast((ObjectMap)v);

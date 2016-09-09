@@ -1162,7 +1162,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * 	same object if entry does not exist.
 	 */
 	public Object cast(BeanDictionary typeDictionary) {
-		String c = (String)get(beanContext.getTypePropertyName());
+		String c = (String)get(beanContext.getBeanTypePropertyName());
 		if (c == null) {
 			return this;
 		}
@@ -1185,7 +1185,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> T cast(Class<T> type) {
-		ClassMeta<?> c1 = beanContext.getClassMetaFromString((String)get(beanContext.getTypePropertyName()));
+		ClassMeta<?> c1 = beanContext.getClassMetaFromString((String)get(beanContext.getBeanTypePropertyName()));
 		ClassMeta<?> c2 = beanContext.getClassMeta(type);
 		ClassMeta<?> c = narrowClassMeta(c1, c2);
 		return (T)cast2(c);
@@ -1202,7 +1202,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 */
 	@SuppressWarnings({"unchecked"})
 	public <T> T cast(ClassMeta<T> cm) {
-		ClassMeta<?> c1 = beanContext.getClassMetaFromString((String)get(beanContext.getTypePropertyName()));
+		ClassMeta<?> c1 = beanContext.getClassMetaFromString((String)get(beanContext.getBeanTypePropertyName()));
 		ClassMeta<?> c = narrowClassMeta(c1, cm);
 		return (T)cast2(c);
 	}
@@ -1255,7 +1255,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 				for (Map.Entry<String,Object> e : entrySet()) {
 					Object k = e.getKey();
 					Object v = e.getValue();
-					if (! k.equals(beanContext.getTypePropertyName())) {
+					if (! k.equals(beanContext.getBeanTypePropertyName())) {
 
 						// Attempt to recursively cast child maps.
 						if (v instanceof ObjectMap)
@@ -1276,7 +1276,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 				for (Map.Entry<String,Object> e : entrySet()) {
 					String k = e.getKey();
 					Object v = e.getValue();
-					if (! k.equals(beanContext.getTypePropertyName())) {
+					if (! k.equals(beanContext.getBeanTypePropertyName())) {
 
 						// Attempt to recursively cast child maps.
 						if (v instanceof ObjectMap)

@@ -106,7 +106,7 @@ public class UrlEncodingParser extends UonParser {
 			ObjectMap m = new ObjectMap(bc);
 			ClassMeta<Object> valueType = object();
 			parseIntoMap(session, r, m, string(), valueType);
-			if (m.containsKey(bc.getTypePropertyName()))
+			if (m.containsKey(bc.getBeanTypePropertyName()))
 				o = m.cast();
 			else if (m.containsKey("_value"))
 				o = session.getBeanContext().convertToType(m.get("_value"), sType);
@@ -263,7 +263,7 @@ public class UrlEncodingParser extends UonParser {
 					}
 				} else if (state == S3) {
 					if (c == -1 || c == '\u0001') {
-						if (! currAttr.equals(bc.getTypePropertyName())) {
+						if (! currAttr.equals(bc.getBeanTypePropertyName())) {
 							BeanPropertyMeta pMeta = m.getPropertyMeta(currAttr);
 							if (pMeta == null) {
 								if (m.getMeta().isSubTyped()) {
@@ -285,7 +285,7 @@ public class UrlEncodingParser extends UonParser {
 							return m;
 						state = S1;
 					} else {
-						if (! currAttr.equals(bc.getTypePropertyName())) {
+						if (! currAttr.equals(bc.getBeanTypePropertyName())) {
 							BeanPropertyMeta pMeta = m.getPropertyMeta(currAttr);
 							if (pMeta == null) {
 								if (m.getMeta().isSubTyped()) {

@@ -88,13 +88,13 @@ public class SerializerContext extends Context {
 	public static final String SERIALIZER_useIndentation = "Serializer.useIndentation";
 
 	/**
-	 * Add class attributes to output ({@link Boolean}, default=<jk>false</jk>).
+	 * Add <js>"_type"</js> properties to output when needed.({@link Boolean}, default=<jk>false</jk>).
 	 * <p>
-	 * If <jk>true</jk>, then <js>"_type"</js> attributes will be added to beans if their type cannot be inferred through reflection.
+	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred through reflection.
 	 * This is used to recreate the correct objects during parsing if the object types cannot be inferred.
 	 * For example, when serializing a {@code Map<String,Object>} field, where the bean class cannot be determined from the value type.
 	 */
-	public static final String SERIALIZER_addClassAttrs = "Serializer.addClassAttrs";
+	public static final String SERIALIZER_addBeanTypeProperties = "Serializer.addBeanTypeProperties";
 
 	/**
 	 * Quote character ({@link Character}, default=<js>'"'</js>).
@@ -234,7 +234,7 @@ public class SerializerContext extends Context {
 		detectRecursions,
 		ignoreRecursions,
 		useIndentation,
-		addClassAttrs,
+		addBeanTypeProperties,
 		trimNulls,
 		trimEmptyLists,
 		trimEmptyMaps,
@@ -259,7 +259,7 @@ public class SerializerContext extends Context {
 		detectRecursions = cf.getProperty(SERIALIZER_detectRecursions, boolean.class, false);
 		ignoreRecursions = cf.getProperty(SERIALIZER_ignoreRecursions, boolean.class, false);
 		useIndentation = cf.getProperty(SERIALIZER_useIndentation, boolean.class, false);
-		addClassAttrs = cf.getProperty(SERIALIZER_addClassAttrs, boolean.class, false);
+		addBeanTypeProperties = cf.getProperty(SERIALIZER_addBeanTypeProperties, boolean.class, false);
 		trimNulls = cf.getProperty(SERIALIZER_trimNullProperties, boolean.class, true);
 		trimEmptyLists = cf.getProperty(SERIALIZER_trimEmptyLists, boolean.class, false);
 		trimEmptyMaps = cf.getProperty(SERIALIZER_trimEmptyMaps, boolean.class, false);

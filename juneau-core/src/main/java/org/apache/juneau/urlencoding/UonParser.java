@@ -146,7 +146,7 @@ public class UonParser extends ReaderParser {
 				ObjectMap m = new ObjectMap(bc);
 				parseIntoMap(session, r, m, string(), object());
 				// Handle case where it's a collection, but serialized as a map with a _type or _value key.
-				if (m.containsKey(bc.getTypePropertyName()))
+				if (m.containsKey(bc.getBeanTypePropertyName()))
 					o = m.cast();
 				// Handle case where it's a collection, but only a single value was specified.
 				else {
@@ -177,7 +177,7 @@ public class UonParser extends ReaderParser {
 				ObjectMap m = new ObjectMap(bc);
 				parseIntoMap(session, r, m, string(), object());
 				// Handle case where it's an array, but serialized as a map with a _type or _value key.
-				if (m.containsKey(bc.getTypePropertyName()))
+				if (m.containsKey(bc.getBeanTypePropertyName()))
 					o = m.cast();
 				// Handle case where it's an array, but only a single value was specified.
 				else {
@@ -193,7 +193,7 @@ public class UonParser extends ReaderParser {
 			// It could be a non-bean with _type attribute.
 			ObjectMap m = new ObjectMap(bc);
 			parseIntoMap(session, r, m, string(), object());
-			if (m.containsKey(bc.getTypePropertyName()))
+			if (m.containsKey(bc.getBeanTypePropertyName()))
 				o = m.cast();
 			else
 				throw new ParseException(session, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.getInnerClass().getName(), sType.getNotABeanReason());
@@ -421,7 +421,7 @@ public class UonParser extends ReaderParser {
 					}
 				} else if (state == S3) {
 					if (c == -1 || c == ',' || c == ')' || c == AMP) {
-						if (! currAttr.equals(bc.getTypePropertyName())) {
+						if (! currAttr.equals(bc.getBeanTypePropertyName())) {
 							BeanPropertyMeta pMeta = m.getPropertyMeta(currAttr);
 							if (pMeta == null) {
 								if (m.getMeta().isSubTyped()) {
@@ -438,7 +438,7 @@ public class UonParser extends ReaderParser {
 							return m;
 						state = S1;
 					} else {
-						if (! currAttr.equals(bc.getTypePropertyName())) {
+						if (! currAttr.equals(bc.getBeanTypePropertyName())) {
 							BeanPropertyMeta pMeta = m.getPropertyMeta(currAttr);
 							if (pMeta == null) {
 								if (m.getMeta().isSubTyped()) {

@@ -340,12 +340,12 @@ public class XmlSerializer extends WriterSerializer {
 			sType = eType.getSerializedClassMeta();
 		}
 
-		String classAttr = null;
-		if (session.isAddClassAttrs()) {
+		String typeName = null;
+		if (session.isAddBeanTypeProperties()) {
 			if (o != null && ! eType.equals(aType))
-				classAttr = aType.toString();
+				typeName = aType.toString();
 			else if (o == null)
-				classAttr = eType.toString();
+				typeName = eType.toString();
 		}
 
 		// char '\0' is interpreted as null.
@@ -429,8 +429,8 @@ public class XmlSerializer extends WriterSerializer {
 			}
 			if (elementName != null && session.isAddJsonTypeAttrs() && (session.isAddJsonStringTypeAttrs() || ! ts.equals("string")))
 				out.attr(dns, "type", ts);
-			if (classAttr != null)
-				out.attr(dns, bc.getTypePropertyName(), classAttr);
+			if (typeName != null)
+				out.attr(dns, bc.getBeanTypePropertyName(), typeName);
 			if (o == null) {
 				if (! isNullTag)
 					out.attr(xsi, "nil", "true");

@@ -86,7 +86,7 @@ public class XmlParser extends ReaderParser {
 				jsonType = getJsonType(elementName);
 		}
 		if (! sType.canCreateNewInstance(outer)) {
-			String c = r.getAttributeValue(null, bc.getTypePropertyName());
+			String c = r.getAttributeValue(null, bc.getBeanTypePropertyName());
 			if (c != null) {
 				sType = eType = (ClassMeta<T>)bc.getClassMetaFromString(c);
 			}

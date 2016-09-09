@@ -188,7 +188,7 @@ public final class JsonParser extends ReaderParser {
 		} else if (c == '{') {
 			Map m = new ObjectMap(bc);
 			parseIntoMap2(session, r, m, sType.getKeyType(), sType.getValueType());
-			if (m.containsKey(bc.getTypePropertyName()))
+			if (m.containsKey(bc.getBeanTypePropertyName()))
 				o = ((ObjectMap)m).cast();
 			else
 				throw new ParseException(session, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.getInnerClass().getName(), sType.getNotABeanReason());
@@ -461,7 +461,7 @@ public final class JsonParser extends ReaderParser {
 				if (c == '/') {
 					skipCommentsAndSpace(session, r.unread());
 				} else if (! Character.isWhitespace(c)) {
-					if (! currAttr.equals(bc.getTypePropertyName())) {
+					if (! currAttr.equals(bc.getBeanTypePropertyName())) {
 						BeanPropertyMeta pMeta = m.getPropertyMeta(currAttr);
 						session.setCurrentProperty(pMeta);
 						if (pMeta == null) {

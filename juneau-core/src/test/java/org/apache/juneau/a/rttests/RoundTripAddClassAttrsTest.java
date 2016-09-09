@@ -42,61 +42,61 @@ public class RoundTripAddClassAttrsTest extends RoundTripTest {
 		return Arrays.asList(new Object[][] {
 			{ /* 0 */
 				"JsonSerializer.DEFAULT/JsonParser.DEFAULT",
-				new JsonSerializer().setProperty(SERIALIZER_addClassAttrs, true).setClassLoader(RoundTripAddClassAttrsTest.class.getClassLoader()),
+				new JsonSerializer().setProperty(SERIALIZER_addBeanTypeProperties, true).setClassLoader(RoundTripAddClassAttrsTest.class.getClassLoader()),
 				new JsonParser().setProperty(BEAN_useInterfaceProxies, false).setClassLoader(RoundTripAddClassAttrsTest.class.getClassLoader()),
 				0
 			},
 			{ /* 1 */
 				"JsonSerializer.DEFAULT_LAX/JsonParser.DEFAULT",
-				new JsonSerializer.Simple().setProperty(SERIALIZER_addClassAttrs, true).setClassLoader(RoundTripAddClassAttrsTest.class.getClassLoader()),
+				new JsonSerializer.Simple().setProperty(SERIALIZER_addBeanTypeProperties, true).setClassLoader(RoundTripAddClassAttrsTest.class.getClassLoader()),
 				new JsonParser().setProperty(BEAN_useInterfaceProxies, false).setClassLoader(RoundTripAddClassAttrsTest.class.getClassLoader()),
 				0
 			},
 			{ /* 2 */
 				"JsonSerializer.DEFAULT_SQ/JsonParser.DEFAULT",
-				new JsonSerializer.Simple().setProperty(SERIALIZER_addClassAttrs, true).setClassLoader(RoundTripAddClassAttrsTest.class.getClassLoader()),
+				new JsonSerializer.Simple().setProperty(SERIALIZER_addBeanTypeProperties, true).setClassLoader(RoundTripAddClassAttrsTest.class.getClassLoader()),
 				new JsonParser().setProperty(BEAN_useInterfaceProxies, false).setClassLoader(RoundTripAddClassAttrsTest.class.getClassLoader()),
 				0
 			},
 			{ /* 3 */
 				"XmlSerializer.DEFAULT/XmlParser.DEFAULT",
-				new XmlSerializer.XmlJson().setProperty(SERIALIZER_addClassAttrs, true).setClassLoader(RoundTripAddClassAttrsTest.class.getClassLoader()),
+				new XmlSerializer.XmlJson().setProperty(SERIALIZER_addBeanTypeProperties, true).setClassLoader(RoundTripAddClassAttrsTest.class.getClassLoader()),
 				new XmlParser().setProperty(BEAN_useInterfaceProxies, false).setClassLoader(RoundTripAddClassAttrsTest.class.getClassLoader()),
 				CHECK_XML_WHITESPACE | VALIDATE_XML
 			},
 			{ /* 4 */
 				"HtmlSerializer.DEFAULT/HtmlParser.DEFAULT",
-				new HtmlSerializer().setProperty(SERIALIZER_addClassAttrs, true).setClassLoader(RoundTripAddClassAttrsTest.class.getClassLoader()),
+				new HtmlSerializer().setProperty(SERIALIZER_addBeanTypeProperties, true).setClassLoader(RoundTripAddClassAttrsTest.class.getClassLoader()),
 				new HtmlParser().setProperty(BEAN_useInterfaceProxies, false).setClassLoader(RoundTripAddClassAttrsTest.class.getClassLoader()),
 				CHECK_XML_WHITESPACE
 			},
 			{ /* 5 */
 				"UonSerializer.DEFAULT_ENCODING/UonParser.DEFAULT_DECODING",
-				new UonSerializer.Encoding().setProperty(SERIALIZER_addClassAttrs, true).setClassLoader(RoundTripAddClassAttrsTest.class.getClassLoader()),
+				new UonSerializer.Encoding().setProperty(SERIALIZER_addBeanTypeProperties, true).setClassLoader(RoundTripAddClassAttrsTest.class.getClassLoader()),
 				new UonParser.Decoding().setProperty(BEAN_useInterfaceProxies, false).setClassLoader(RoundTripAddClassAttrsTest.class.getClassLoader()),
 				0
 			},
 			{ /* 6 */
 				"UonSerializer.DEFAULT/UonParser.DEFAULT",
-				new UonSerializer().setProperty(SERIALIZER_addClassAttrs, true).setClassLoader(RoundTripAddClassAttrsTest.class.getClassLoader()),
+				new UonSerializer().setProperty(SERIALIZER_addBeanTypeProperties, true).setClassLoader(RoundTripAddClassAttrsTest.class.getClassLoader()),
 				new UonParser().setProperty(BEAN_useInterfaceProxies, false).setClassLoader(RoundTripAddClassAttrsTest.class.getClassLoader()),
 				0
 			},
 			{ /* 7 */
 				"UrlEncodingSerializer.DEFAULT/UrlEncodingParser.DEFAULT",
-				new UrlEncodingSerializer().setProperty(SERIALIZER_addClassAttrs, true).setClassLoader(RoundTripAddClassAttrsTest.class.getClassLoader()),
+				new UrlEncodingSerializer().setProperty(SERIALIZER_addBeanTypeProperties, true).setClassLoader(RoundTripAddClassAttrsTest.class.getClassLoader()),
 				new UrlEncodingParser().setProperty(BEAN_useInterfaceProxies, false).setClassLoader(RoundTripAddClassAttrsTest.class.getClassLoader()),
 				0
 			},
 			{ /* 8 */
 				"RdfSerializer.Xml/RdfParser.Xml",
-				new RdfSerializer.Xml().setProperty(SERIALIZER_addClassAttrs, true).setClassLoader(RoundTripAddClassAttrsTest.class.getClassLoader()),
+				new RdfSerializer.Xml().setProperty(SERIALIZER_addBeanTypeProperties, true).setClassLoader(RoundTripAddClassAttrsTest.class.getClassLoader()),
 				new RdfParser.Xml().setProperty(BEAN_useInterfaceProxies, false).setClassLoader(RoundTripAddClassAttrsTest.class.getClassLoader()),
 				0
 			},
 			{ /* 9 */
 				"MsgPackSerializer.DEFAULT/MsgPackParser.DEFAULT",
-				new MsgPackSerializer().setProperty(SERIALIZER_addClassAttrs, true).setClassLoader(RoundTripAddClassAttrsTest.class.getClassLoader()),
+				new MsgPackSerializer().setProperty(SERIALIZER_addBeanTypeProperties, true).setClassLoader(RoundTripAddClassAttrsTest.class.getClassLoader()),
 				new MsgPackParser().setProperty(BEAN_useInterfaceProxies, false).setClassLoader(RoundTripAddClassAttrsTest.class.getClassLoader()),
 				0
 			}
