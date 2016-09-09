@@ -742,21 +742,21 @@ public class SerializerSession extends Session {
 	}
 
 	/**
-	 * Create a "_type" property that represents the name of the bean.
+	 * Create a "_type" property that contains the dictionary name of the bean.
 	 *
 	 * @param m
 	 * 	The bean map to create a class property on.
-	 * @param typeDictionary
+	 * @param beanDictionary
 	 * 	The bean dictionary map to use to resolve the name of the bean class.
 	 * @return
 	 * 	A new bean property value.
 	 */
-	public BeanPropertyValue createBeanClassProperty(BeanMap<?> m, TypeDictionary typeDictionary) {
+	public BeanPropertyValue createBeanTypeNameProperty(BeanMap<?> m, BeanDictionary beanDictionary) {
 		BeanMeta<?> bm = m.getMeta();
 		Class<?> c = bm.getClassMeta().getInnerClass();
-		String name = (typeDictionary == null ? null : typeDictionary.getNameForClass(c));
+		String name = (beanDictionary == null ? null : beanDictionary.getNameForClass(c));
 		if (name == null)
 			name = c.getName();
-		return new BeanPropertyValue(bm.getClassProperty(), name, null);
+		return new BeanPropertyValue(bm.getTypeProperty(), name, null);
 	}
 }

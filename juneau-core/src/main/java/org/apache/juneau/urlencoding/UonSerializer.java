@@ -374,7 +374,7 @@ public class UonSerializer extends WriterSerializer {
 
 		boolean addComma = false;
 
-		for (BeanPropertyValue p : m.getValues(session.isTrimNulls(), addClassAttr ? session.createBeanClassProperty(m, null) : null)) {
+		for (BeanPropertyValue p : m.getValues(session.isTrimNulls(), addClassAttr ? session.createBeanTypeNameProperty(m, null) : null)) {
 			BeanPropertyMeta pMeta = p.getMeta();
 			ClassMeta<?> cMeta = p.getClassMeta();
 

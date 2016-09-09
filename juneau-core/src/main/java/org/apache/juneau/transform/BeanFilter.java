@@ -73,7 +73,7 @@ public abstract class BeanFilter<T> {
 	private final PropertyNamer propertyNamer;
 	private final Class<?> interfaceClass, stopClass;
 	private final boolean sortProperties;
-	private final TypeDictionary typeDictionary;
+	private final String typeName;
 
 	/**
 	 * Constructor.
@@ -81,6 +81,8 @@ public abstract class BeanFilter<T> {
 	 * @param beanClass
 	 * 	The bean class that this filter applies to.
 	 * 	If <jk>null</jk>, then the value is inferred through reflection.
+	 * @param typeName
+	 * 	The dictionary name associated with this bean.
 	 * @param properties
 	 * 	Specifies the set and order of names of properties associated with a bean class.
 	 * 	The order specified is the same order that the entries will be returned by the {@link BeanMap#entrySet()} and related methods.
@@ -144,8 +146,6 @@ public abstract class BeanFilter<T> {
 	 * 	Sort properties in alphabetical order.
 	 * @param propertyNamer
 	 * 	The property namer to use to name bean properties.
-	 * @param typeDictionary
-	 * 	The class dictionary to use for resolving class identifier names from classes.
 	 * @param subTypeProperty
 	 * 	Defines a virtual property on a superclass that identifies bean subtype classes.
 	 * 	<p>
@@ -200,7 +200,7 @@ public abstract class BeanFilter<T> {
 	 * @param subTypes
 	 */
 	@SuppressWarnings("unchecked")
-	public BeanFilter(Class<T> beanClass, String[] properties, String[] excludeProperties, Class<?> interfaceClass, Class<?> stopClass, boolean sortProperties, PropertyNamer propertyNamer, TypeDictionary typeDictionary, String subTypeProperty, Map<Class<?>,String> subTypes) {
+	public BeanFilter(Class<T> beanClass, String typeName, String[] properties, String[] excludeProperties, Class<?> interfaceClass, Class<?> stopClass, boolean sortProperties, PropertyNamer propertyNamer, String subTypeProperty, Map<Class<?>,String> subTypes) {
 
 		if (beanClass == null) {
 			Class<?> c = this.getClass().getSuperclass();
@@ -226,13 +226,13 @@ public abstract class BeanFilter<T> {
 		}
 
 		this.beanClass = beanClass;
+		this.typeName = typeName;
 		this.properties = StringUtils.split(properties, ',');
 		this.excludeProperties = StringUtils.split(excludeProperties, ',');
 		this.interfaceClass = interfaceClass;
 		this.stopClass = stopClass;
 		this.sortProperties = sortProperties;
 		this.propertyNamer = propertyNamer;
-		this.typeDictionary = typeDictionary;
 		this.subTypeAttr = subTypeProperty;
 		this.subTypes = subTypes == null ? null : Collections.unmodifiableMap(subTypes);
 	}
@@ -244,7 +244,7 @@ public abstract class BeanFilter<T> {
 	 */
 	@SuppressWarnings("unchecked")
 	public BeanFilter(Class<?> interfaceClass) {
-		this((Class<T>)interfaceClass, null, null, interfaceClass, null, false, null, null, null, null);
+		this((Class<T>)interfaceClass, null, null, null, interfaceClass, null, false, null, null, null);
 	}
 
 	/**
@@ -253,7 +253,7 @@ public abstract class BeanFilter<T> {
 	 * @param properties
 	 */
 	public BeanFilter(String...properties) {
-		this(null, properties, null, null, null, false, null, null, null, null);
+		this(null, null, properties, null, null, null, false, null, null, null);
 	}
 
 	/**
@@ -269,6 +269,15 @@ public abstract class BeanFilter<T> {
 	 */
 	public Class<T> getBeanClass() {
 		return beanClass;
+	}
+
+	/**
+	 * Returns the dictionary name associated with this bean.
+	 *
+	 * @return The dictionary name associated with this bean, or <jk>null</jk> if no name is defined.
+	 */
+	public String getTypeName() {
+		return typeName;
 	}
 
 	/**
@@ -316,15 +325,6 @@ public abstract class BeanFilter<T> {
 	 */
 	public String getSubTypeProperty() {
 		return subTypeAttr;
-	}
-
-	/**
-	 * Returns the class dictionary to use for this bean.
-	 *
-	 * @return The class dictionary to use for this bean.
-	 */
-	public TypeDictionary getTypeDictionary() {
-		return typeDictionary;
 	}
 
 	/**

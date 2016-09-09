@@ -447,19 +447,26 @@ public class BeanContext extends Context {
 	public static final String BEAN_implClasses_put = "BeanContext.implClasses.map.put";
 
 	/**
-	 * Specifies the list of classes that make up the class dictionary for this bean context (<code>List&lt;Class&gt;</code>).
+	 * Specifies the list of classes that make up the bean dictionary for this bean context (<code>List&lt;Class&gt;</code>).
+	 * <p>
+	 * This list can consist of the following class types:
+	 * <ul>
+	 * 	<li>Any bean class that specifies a value for {@link Bean#typeName() @Bean.typeName()};
+	 * 	<li>Any subclass of {@link BeanDictionaryBuilder} that defines an entire subset of mappings.
+	 * 		Note that the subclass MUST implement a no-arg constructor so that it can be instantiated.
+	 * </ul>
 	 */
-	public static final String BEAN_typeDictionary = "BeanContext.typeDictionary.list";
+	public static final String BEAN_beanDictionary = "BeanContext.beanDictionary.list";
 
 	/**
-	 * Add to the class dictionary list.
+	 * Add to the bean dictionary list.
 	 */
-	public static final String BEAN_typeDictionary_add = "BeanContext.typeDictionary.list.add";
+	public static final String BEAN_beanDictionary_add = "BeanContext.beanDictionary.list.add";
 
 	/**
-	 * Remove from the class dictionary list.
+	 * Remove from the bean dictionary list.
 	 */
-	public static final String BEAN_typeDictionary_remove = "BeanContext.typeDictionary.list.remove";
+	public static final String BEAN_beanDictionary_remove = "BeanContext.beanDictionary.list.remove";
 
 	/**
 	 * The name to use for the type property used to represent a bean type.  ({@link String}, default=<js>"_type"</js>).
@@ -545,7 +552,7 @@ public class BeanContext extends Context {
 	final String[] notBeanPackageNames, notBeanPackagePrefixes;
 	final BeanFilter<?>[] beanFilters;
 	final PojoSwap<?,?>[] pojoSwaps;
-	final TypeDictionary typeDictionary;
+	final BeanDictionary beanDictionary;
 	final Map<Class<?>,Class<?>> implClasses;
 	final Class<?>[] implKeyClasses, implValueClasses;
 	final ClassLoader classLoader;
@@ -639,7 +646,7 @@ public class BeanContext extends Context {
 		}
  		pojoSwaps = lpf.toArray(new PojoSwap[0]);
 
- 		typeDictionary = new TypeDictionary(pm.get(BEAN_typeDictionary, Class[].class, new Class[0]));
+ 		beanDictionary = new BeanDictionaryBuilder().add(pm.get(BEAN_beanDictionary, Class[].class, new Class[0])).setBeanContext(this).build();
 
  		implClasses = new TreeMap<Class<?>,Class<?>>(new ClassComparator());
  		Map<Class,Class> m = pm.getMap(BEAN_implClasses, Class.class, Class.class, null);
@@ -1492,12 +1499,12 @@ public class BeanContext extends Context {
 	}
 
 	/**
-	 * Returns the type dictionary defined in this bean context defined by {@link BeanContext#BEAN_typeDictionary}.
+	 * Returns the bean dictionary defined in this bean context defined by {@link BeanContext#BEAN_beanDictionary}.
 	 *
-	 * @return The type dictionary defined in this bean context.  Never <jk>null</jk>.
+	 * @return The bean dictionary defined in this bean context.  Never <jk>null</jk>.
 	 */
-	protected TypeDictionary getTypeDictionary() {
-		return typeDictionary;
+	protected BeanDictionary getBeanDictionary() {
+		return beanDictionary;
 	}
 
 	/**

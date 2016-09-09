@@ -83,9 +83,6 @@ public final class ClassMeta<T> implements Type {
 		isMemberClass;                                 // True if this is a non-static member class.
 
 	private MetadataMap extMeta = new MetadataMap();  // Extended metadata
-	private TypeDictionary typeDictionary;            // The class dictionary defined on this bean or pojo.
-	private String name;                              // The lexical name associated with this bean or pojo.
-
 	private Throwable initException;                  // Any exceptions thrown in the init() method.
 	private boolean hasChildPojoSwaps;                // True if this class or any subclass of this class has a PojoSwap associated with it.
 	private Object primitiveDefault;                  // Default value for primitive type classes.
@@ -130,14 +127,6 @@ public final class ClassMeta<T> implements Type {
 		try {
 			beanFilter = findBeanFilter(beanContext);
 			pojoSwap = findPojoSwap(beanContext);
-
-			typeDictionary = beanContext.getTypeDictionary();
-			for (Bean b : ReflectionUtils.findAnnotationsParentFirst(Bean.class, innerClass)) {
-				if (b.typeDictionary().length > 0)
-					typeDictionary = new TypeDictionary(b.typeDictionary());
-				if (! b.typeName().isEmpty())
-					name = b.typeName();
-			}
 
 			serializedClassMeta = (pojoSwap == null ? this : beanContext.getClassMeta(pojoSwap.getSwapClass()));
 			if (serializedClassMeta == null)
@@ -386,28 +375,16 @@ public final class ClassMeta<T> implements Type {
 	}
 
 	/**
-	 * Returns the class dictionary in use for this class.
-	 * The order of lookup for the dictionary is as follows:
-	 * <ol>
-	 * 	<li>Dictionary defined via {@link Bean#typeDictionary()} (or {@link BeanFilter} equivalent).
-	 * 	<li>Dictionary defined via {@link BeanContext#BEAN_typeDictionary} context property.
-	 * </ol>
-	 *
-	 * @return The class dictionary in use for this class.  Never <jk>null</jk>.
-	 */
-	public TypeDictionary getDictionary() {
-		return typeDictionary;
-	}
-
-	/**
-	 * Returns the lexical name associated with this class.
+	 * Returns the bean dictionary name associated with this class.
 	 * <p>
 	 * The lexical name is defined by {@link Bean#typeName()}.
 	 *
-	 * @return The lexical name associated with this class, or <jk>null</jk> if there is no lexical name defined.
+	 * @return The type name associated with this bean class, or <jk>null</jk> if there is no type name defined or this isn't a bean.
 	 */
 	public String getDictionaryName() {
-		return name;
+		if (beanMeta != null)
+			return beanMeta.getDictionaryName();
+		return null;
 	}
 
 	/**

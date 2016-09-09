@@ -187,7 +187,7 @@ public class RdfParser extends ReaderParser {
 		if (rbm.hasBeanUri() && r2.getURI() != null)
 			rbm.getBeanUriProperty().set(m, r2.getURI());
 		Property subTypeIdProperty = null;
-		BeanPropertyMeta stp = bm.getSubTypeIdProperty();
+		BeanPropertyMeta stp = bm.getSubTypeProperty();
 		if (stp != null) {
 			subTypeIdProperty = session.getProperty(stp.getName());
 			Statement st = r2.getProperty(subTypeIdProperty);

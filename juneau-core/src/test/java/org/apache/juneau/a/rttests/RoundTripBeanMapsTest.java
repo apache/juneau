@@ -357,7 +357,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 
 	public static class CFilter extends BeanFilter<C> {
 		public CFilter() {
-			super(C.class, null, null, null, null, false, null, null, "subType", createSubTypes());
+			super(C.class, null, null, null, null, null, false, null, "subType", createSubTypes());
 		}
 
 		private static Map<Class<?>,String> createSubTypes() {
@@ -458,7 +458,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 
 	public static class CAFilter extends BeanFilter<CA> {
 		public CAFilter() {
-			super(CA.class, null, null, null, null, false, null, null, "subType",
+			super(CA.class, null, null, null, null, null, false, null, "subType",
 				new HashMap<Class<?>,String>(){{put(CA1.class,"CA1");put(CA2.class,"CA2");}}
 			);
 		}
@@ -588,7 +588,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	}
 	public static class E2Filter extends BeanFilter<E2> {
 		public E2Filter() {
-			super(null, null, new String[]{"f2"}, null, null, false, null, null, null, null);
+			super(null, null, null, new String[]{"f2"}, null, null, false, null, null, null);
 		}
 	}
 

@@ -182,25 +182,6 @@ public class XmlTest {
 	}
 
 	//====================================================================================================
-	// Element name on collection.
-	//====================================================================================================
-	@Test
-	public void testElementNameOnCollection() throws Exception {
-		XmlSerializer s = XmlSerializer.DEFAULT_SIMPLE_SQ;
-		XmlParser p = XmlParser.DEFAULT;
-		F t = new F();
-		t.add("bar");
-		String r = s.serialize(t);
-		assertEquals("<foo><string>bar</string></foo>", r);
-		t = p.parse(r, F.class);
-		assertEquals("bar", t.get(0));
-		validateXml(t);
-	}
-
-	@Bean(typeName="foo")
-	public static class F extends LinkedList<String>{}
-
-	//====================================================================================================
 	// Field of type collection with element name.
 	// Element name should be ignored.
 	//====================================================================================================
@@ -216,49 +197,13 @@ public class XmlTest {
 		validateXml(t);
 	}
 
+	@Bean(typeName="foo")
+	public static class F extends LinkedList<String>{}
+
 	@Bean(typeName="bar")
 	public static class G {
 		public F f1 = new F();
 	}
-
-//	//====================================================================================================
-//	// Element name on not-a-bean.
-//	//====================================================================================================
-//	@Test
-//	public void testElementNameOnNotABean() throws Exception {
-//		XmlSerializer s = XmlSerializer.DEFAULT_SIMPLE_SQ;
-//		H t = new H();
-//		String r = s.serialize(t);
-//		assertEquals("<foo>bar</foo>", r);
-//	}
-//
-//	@Pojo(name="foo")
-//	public static class H {
-//		@Override /* Object */
-//		public String toString() {
-//			return "bar";
-//		}
-//	}
-//
-//	//====================================================================================================
-//	// Fields with element name on not-a-beans.
-//	// Element name should be used on array field entries, but not regular field.
-//	//====================================================================================================
-//	@Test
-//	public void testFieldsWithElementNameOnNotABeans() throws Exception {
-//		XmlSerializer s = XmlSerializer.DEFAULT_SIMPLE_SQ;
-//		I t = new I();
-//		String r = s.serialize(t);
-//		assertEquals("<object><f1>bar</f1><f2><foo>bar</foo><foo>bar</foo></f2></object>", r);
-//	}
-//
-//	public static class I {
-//		public H f1 = new H();
-//		public H[] f2 = {
-//			new H(),
-//			new H()
-//		};
-//	}
 
 	//====================================================================================================
 	// Element name on beans of a collection.

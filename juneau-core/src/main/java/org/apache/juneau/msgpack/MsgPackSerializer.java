@@ -162,7 +162,7 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 
 	private void serializeBeanMap(MsgPackSerializerSession session, MsgPackOutputStream out, final BeanMap<?> m, boolean addClassAttr) throws Exception {
 
-		List<BeanPropertyValue> values = m.getValues(session.isTrimNulls(), addClassAttr ? session.createBeanClassProperty(m, null) : null);
+		List<BeanPropertyValue> values = m.getValues(session.isTrimNulls(), addClassAttr ? session.createBeanTypeNameProperty(m, null) : null);
 
 		int size = values.size();
 		for (BeanPropertyValue p : values)

@@ -1150,7 +1150,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * 	same object if entry does not exist.
 	 */
 	public Object cast() {
-		return cast((TypeDictionary)null);
+		return cast((BeanDictionary)null);
 	}
 
 	/**
@@ -1161,15 +1161,10 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * @return The new Java object of type specified by the <js>"_type"</js> entry value, or this
 	 * 	same object if entry does not exist.
 	 */
-	public Object cast(TypeDictionary typeDictionary) {
+	public Object cast(BeanDictionary typeDictionary) {
 		String c = (String)get(beanContext.getTypePropertyName());
 		if (c == null) {
 			return this;
-		}
-		if (typeDictionary != null) {
-			Class<?> c2 = typeDictionary.getClassForName(c);
-			if (c2 != null)
-				return cast2(beanContext.getClassMeta(c2));
 		}
 		return cast2(beanContext.getClassMetaFromString(c));
 	}
@@ -1264,7 +1259,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 
 						// Attempt to recursively cast child maps.
 						if (v instanceof ObjectMap)
-							v = ((ObjectMap)v).cast(beanContext.typeDictionary);
+							v = ((ObjectMap)v).cast(beanContext.beanDictionary);
 
 						k = (kType.isString() ? k : beanContext.convertToType(k, kType));
 						v = (vType.isObject() ? v : beanContext.convertToType(v, vType));
@@ -1285,7 +1280,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 
 						// Attempt to recursively cast child maps.
 						if (v instanceof ObjectMap)
-							v = ((ObjectMap)v).cast(beanContext.typeDictionary);
+							v = ((ObjectMap)v).cast(beanContext.beanDictionary);
 
 						bm.put(k, v);
 					}

@@ -169,18 +169,18 @@ public @interface BeanProperty {
 	String[] properties() default {};
 
 	/**
-	 * The list of classes that make up the class dictionary for this bean proeprty.
+	 * The list of classes that make up the bean dictionary for this bean property.
 	 * <p>
 	 * The dictionary is a name/class mapping used to find class types during parsing when they cannot be inferred through reflection.
-	 * The names are defined through the {@link #name()} annotation defined on the bean or POJO classes.
+	 * The names are defined through the {@link Bean#typeName()} annotation defined on the bean class.
 	 * <p>
 	 * This list can consist of the following class types:
 	 * <ul>
 	 * 	<li>Any bean class that specifies a value for {@link Bean#typeName() @Bean.name()};
-	 * 	<li>Any subclass of {@link TypeDictionary} that defines an entire set of mappings.
+	 * 	<li>Any subclass of {@link BeanDictionaryBuilder} that defines an entire set of mappings.
 	 * 		Note that the subclass MUST implement a no-arg constructor so that it can be instantiated.
 	 * </ul>
 	 */
-	Class<?>[] typeDictionary() default {};
+	Class<?>[] beanDictionary() default {};
 }
 

@@ -58,7 +58,7 @@ public class BeanPropertyMeta {
 	private PojoSwap swap;                     // PojoSwap defined only via @BeanProperty annotation.
 
 	private MetadataMap extMeta = new MetadataMap();  // Extended metadata
-	private TypeDictionary typeDictionary;
+	private BeanDictionary beanDictionary;
 
 	/**
 	 * Constructor.
@@ -144,18 +144,17 @@ public class BeanPropertyMeta {
 	}
 
 	/**
-	 * Returns the class dictionary in use for this bean property.
+	 * Returns the bean dictionary in use for this bean property.
 	 * The order of lookup for the dictionary is as follows:
 	 * <ol>
-	 * 	<li>Dictionary defined via {@link BeanProperty#typeDictionary()}.
-	 * 	<li>Dictionary defined via {@link Bean#typeDictionary()} (or {@link BeanFilter} equivalent).
-	 * 	<li>Dictionary defined via {@link BeanContext#BEAN_typeDictionary} context property.
+	 * 	<li>Dictionary defined via {@link BeanProperty#beanDictionary()}.
+	 * 	<li>Dictionary defined via {@link BeanContext#BEAN_beanDictionary} context property.
 	 * </ol>
 	 *
-	 * @return The class dictionary in use for this bean property.  Never <jk>null</jk>.
+	 * @return The bean dictionary in use for this bean property.  Never <jk>null</jk>.
 	 */
-	public TypeDictionary getTypeDictionary() {
-		return typeDictionary;
+	public BeanDictionary getBeanDictionary() {
+		return beanDictionary;
 	}
 
 	/**
@@ -256,8 +255,8 @@ public class BeanPropertyMeta {
 				swap = getPropertyPojoSwap(p);
 				if (p.properties().length != 0)
 					properties = p.properties();
-				if (p.typeDictionary().length > 0)
-					this.typeDictionary = new TypeDictionary(p.typeDictionary());
+				if (p.beanDictionary().length > 0)
+					this.beanDictionary = new BeanDictionaryBuilder().add(p.beanDictionary()).setBeanContext(this.beanMeta.ctx).build();
 			}
 		}
 
@@ -271,8 +270,8 @@ public class BeanPropertyMeta {
 					swap = getPropertyPojoSwap(p);
 				if (properties != null && p.properties().length != 0)
 					properties = p.properties();
-				if (p.typeDictionary().length > 0)
-					this.typeDictionary = new TypeDictionary(p.typeDictionary());
+				if (p.beanDictionary().length > 0)
+					this.beanDictionary = new BeanDictionaryBuilder().add(p.beanDictionary()).setBeanContext(this.beanMeta.ctx).build();
 			}
 		}
 
@@ -286,8 +285,8 @@ public class BeanPropertyMeta {
 				swap = getPropertyPojoSwap(p);
 				if (properties != null && p.properties().length != 0)
 					properties = p.properties();
-				if (p.typeDictionary().length > 0)
-					this.typeDictionary = new TypeDictionary(p.typeDictionary());
+				if (p.beanDictionary().length > 0)
+					this.beanDictionary = new BeanDictionaryBuilder().add(p.beanDictionary()).setBeanContext(this.beanMeta.ctx).build();
 			}
 		}
 
@@ -398,7 +397,7 @@ public class BeanPropertyMeta {
 
 			// If this bean has subtypes, and we haven't set the subtype yet,
 			// store the property in a temporary cache until the bean can be instantiated.
-			if (m.meta.subTypeIdProperty != null && m.propertyCache == null)
+			if (m.meta.subTypeProperty != null && m.propertyCache == null)
 				m.propertyCache = new TreeMap<String,Object>();
 
 			// Read-only beans get their properties stored in a cache.

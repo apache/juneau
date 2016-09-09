@@ -49,7 +49,7 @@ public @interface Bean {
 	 * 	output so that the class can be determined during parsing.
 	 * It is also used to specify element names in XML.
 	 * <p>
-	 * The name is used in combination with the class dictionary defined through {@link #typeDictionary()}.  Together, they make up
+	 * The name is used in combination with the bean dictionary defined through {@link BeanProperty#beanDictionary()} or {@link BeanContext#BEAN_beanDictionary}.  Together, they make up
 	 * 	a simple name/value mapping of names to classes.
 	 * Names do not need to be universally unique.  However, they must be unique within a dictionary.
 	 *
@@ -95,21 +95,6 @@ public @interface Bean {
 	 * </dl>
 	 */
 	String typeName() default "";
-
-	/**
-	 * The list of classes that make up the class dictionary for this class.
-	 * <p>
-	 * The dictionary is a name/class mapping used to find class types during parsing when they cannot be inferred through reflection.
-	 * The names are defined through the {@link #typeName()} annotation defined on the bean or POJO classes.
-	 * <p>
-	 * This list can consist of the following class types:
-	 * <ul>
-	 * 	<li>Any bean class that specifies a value for {@link Bean#typeName() @Bean.name()};
-	 * 	<li>Any subclass of {@link TypeDictionary} that defines an entire set of mappings.
-	 * 		Note that the subclass MUST implement a no-arg constructor so that it can be instantiated.
-	 * </ul>
-	 */
-	Class<?>[] typeDictionary() default {};
 
 	/**
 	 * The set and order of names of properties associated with a bean class.

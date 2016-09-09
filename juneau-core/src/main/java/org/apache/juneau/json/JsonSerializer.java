@@ -296,7 +296,7 @@ public class JsonSerializer extends WriterSerializer {
 		out.append('{');
 
 		boolean addComma = false;
-		for (BeanPropertyValue p : m.getValues(session.isTrimNulls(), addClassAttr ? session.createBeanClassProperty(m, null) : null)) {
+		for (BeanPropertyValue p : m.getValues(session.isTrimNulls(), addClassAttr ? session.createBeanTypeNameProperty(m, null) : null)) {
 			BeanPropertyMeta pMeta = p.getMeta();
 			ClassMeta<?> cMeta = p.getClassMeta();
 			String key = p.getName();

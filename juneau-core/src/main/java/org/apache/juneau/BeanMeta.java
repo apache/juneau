@@ -93,10 +93,10 @@ public class BeanMeta<T> {
 	private final MetadataMap extMeta;  // Extended metadata
 
 	// Other fields
-	final BeanPropertyMeta subTypeIdProperty;                           // The property indentified as the sub type differentiator property (identified by @Bean.subTypeProperty annotation).
-	private final BeanPropertyMeta classProperty;                       // "_type" mock bean property.
-
-	final String notABeanReason;
+	final BeanPropertyMeta subTypeProperty;                             // The property indentified as the sub type differentiator property (identified by @Bean.subTypeProperty annotation).
+	private final BeanPropertyMeta typeProperty;                        // "_type" mock bean property.
+	private final String dictionaryName;                                // The @Bean.typeName() annotation defined on this bean class.
+	final String notABeanReason;                                        // Readable string explaining why this class wasn't a bean.
 
 	/**
 	 * Constructor.
@@ -115,6 +115,7 @@ public class BeanMeta<T> {
 		this.notABeanReason = b.init(this);
 
 		this.beanFilter = beanFilter;
+		this.dictionaryName = (beanFilter == null ? null : beanFilter.getTypeName());
 		this.properties = b.properties;
 		this.getterProps = Collections.unmodifiableMap(b.getterProps);
 		this.setterProps = Collections.unmodifiableMap(b.setterProps);
@@ -122,8 +123,8 @@ public class BeanMeta<T> {
 		this.constructor = b.constructor;
 		this.constructorArgs = b.constructorArgs;
 		this.extMeta = b.extMeta;
-		this.subTypeIdProperty = b.subTypeIdProperty;
-		this.classProperty = new BeanPropertyMeta(this, ctx.getTypePropertyName(), ctx.string());
+		this.subTypeProperty = b.subTypeIdProperty;
+		this.typeProperty = new BeanPropertyMeta(this, ctx.getTypePropertyName(), ctx.string());
 	}
 
 
@@ -141,7 +142,6 @@ public class BeanMeta<T> {
 		MetadataMap extMeta = new MetadataMap();
 		BeanPropertyMeta subTypeIdProperty;
 		PropertyNamer propertyNamer;
-		TypeDictionary typeDictionary;
 
 		private Builder(ClassMeta<T> classMeta, BeanContext ctx, BeanFilter<? extends T> beanFilter, String[] pNames) {
 			this.classMeta = classMeta;
@@ -224,8 +224,6 @@ public class BeanMeta<T> {
 
 					if (beanFilter.getPropertyNamer() != null)
 						propertyNamer = beanFilter.getPropertyNamer();
-
-					typeDictionary = beanFilter.getTypeDictionary();
 				}
 
 				if (propertyNamer == null)
@@ -337,9 +335,6 @@ public class BeanMeta<T> {
 					properties.put(subTypeProperty, this.subTypeIdProperty);
 				}
 
-				if (typeDictionary == null)
-					typeDictionary = ctx.getTypeDictionary();
-
 				properties.putAll(normalProps);
 
 				// If a beanFilter is defined, look for inclusion and exclusion lists.
@@ -417,14 +412,23 @@ public class BeanMeta<T> {
 	}
 
 	/**
-	 * Returns the subtype ID property of this bean if it has one.
+	 * Returns the dictionary name for this bean as defined through the {@link Bean#typeName()} annotation.
+	 *
+	 * @return The dictioanry name for this bean, or <jk>null</jk> if it has no dictionary name defined.
+	 */
+	public String getDictionaryName() {
+		return dictionaryName;
+	}
+
+	/**
+	 * Returns the subtype property of this bean if it has one.
 	 * <p>
-	 * The subtype id is specified using the {@link Bean#subTypeProperty()} annotation.
+	 * The subtype is specified using the {@link Bean#subTypeProperty()} annotation.
 	 *
 	 * @return The meta property for the sub type property, or <jk>null</jk> if no subtype is defined for this bean.
 	 */
-	public BeanPropertyMeta getSubTypeIdProperty() {
-		return subTypeIdProperty;
+	public BeanPropertyMeta getSubTypeProperty() {
+		return subTypeProperty;
 	}
 
 	/**
@@ -434,17 +438,17 @@ public class BeanMeta<T> {
 	 * @return <jk>true</jk> if this bean has subtypes associated with it.
 	 */
 	public boolean isSubTyped() {
-		return subTypeIdProperty != null;
+		return subTypeProperty != null;
 	}
 
 	/**
 	 * Returns a mock bean property that resolves to the name <js>"_type"</js> and whose value always resolves
-	 * 	to the class name of the bean.
+	 * 	to the dictionary name of the bean.
 	 *
-	 * @return The class name property.
+	 * @return The type name property.
 	 */
-	public BeanPropertyMeta getClassProperty() {
-		return classProperty;
+	public BeanPropertyMeta getTypeProperty() {
+		return typeProperty;
 	}
 
 	/*

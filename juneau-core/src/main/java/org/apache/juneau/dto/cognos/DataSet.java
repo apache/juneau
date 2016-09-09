@@ -137,9 +137,22 @@ public class DataSet {
 	 * @author James Bognar (james.bognar@salesforce.com)
 	 */
 	@Bean(typeName="row")
-	@Xml(childName="value")
-	public static class Row extends LinkedList<String> {
-		private static final long serialVersionUID = 1L;
+	public static class Row {
+		private List<String> values = new LinkedList<String>();
+
+		private void add(String value) {
+			values.add(value);
+		}
+
+		/**
+		 * Returns the values in this row.
+		 *
+		 * @return The values in this row.
+		 */
+		@Xml(format=XmlFormat.COLLAPSED, childName="value")
+		public List<String> getValues() {
+			return values;
+		}
 	}
 
 
