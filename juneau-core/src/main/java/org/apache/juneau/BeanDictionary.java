@@ -38,11 +38,11 @@ public class BeanDictionary {
 	private final BeanContext beanContext;
 	private final String beanTypePropertyName;
 
-	BeanDictionary(BeanContext beanContext, Map<String,Class<?>> map) {
-		this.beanContext = beanContext;
+	BeanDictionary(BeanDictionaryBuilder builder) {
+		this.beanContext = builder.beanContext;
 		this.beanTypePropertyName = beanContext.getBeanTypePropertyName();
 		Map<String,ClassMeta<?>> m1 = new HashMap<String,ClassMeta<?>>();
-		for (Map.Entry<String,Class<?>> e : map.entrySet()) {
+		for (Map.Entry<String,Class<?>> e : builder.map.entrySet()) {
 			ClassMeta<?> cm = beanContext.getClassMeta(e.getValue());
 			if (! cm.isBean())
 				throw new BeanRuntimeException("Invalid class type passed to dictionary.  ''{0}'' is not a bean.", cm);

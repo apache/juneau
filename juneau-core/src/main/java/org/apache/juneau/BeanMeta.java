@@ -79,7 +79,7 @@ public class BeanMeta<T> {
 	protected final BeanContext ctx;
 
 	/** Optional bean filter associated with the target class. */
-	protected final BeanFilter<? extends T> beanFilter;
+	protected final BeanFilter beanFilter;
 
 	/** Type variables implemented by this bean. */
 	protected final Map<Class<?>,Class<?>[]> typeVarImpls;
@@ -106,7 +106,7 @@ public class BeanMeta<T> {
 	 * @param beanFilter Optional bean filter associated with the target class.  Can be <jk>null</jk>.
 	 * @param pNames Explicit list of property names and order of properties.  If <jk>null</jk>, determine automatically.
 	 */
-	protected BeanMeta(final ClassMeta<T> classMeta, BeanContext ctx, BeanFilter<? extends T> beanFilter, String[] pNames) {
+	protected BeanMeta(final ClassMeta<T> classMeta, BeanContext ctx, BeanFilter beanFilter, String[] pNames) {
 		this.classMeta = classMeta;
 		this.ctx = ctx;
 		this.c = classMeta.getInnerClass();
@@ -131,7 +131,7 @@ public class BeanMeta<T> {
 	private static final class Builder<T> {
 		ClassMeta<T> classMeta;
 		BeanContext ctx;
-		BeanFilter<? extends T> beanFilter;
+		BeanFilter beanFilter;
 		String[] pNames;
 		Map<String,BeanPropertyMeta> properties;
 		Map<Method,String> getterProps = new HashMap<Method,String>();
@@ -143,7 +143,7 @@ public class BeanMeta<T> {
 		BeanPropertyMeta subTypeIdProperty;
 		PropertyNamer propertyNamer;
 
-		private Builder(ClassMeta<T> classMeta, BeanContext ctx, BeanFilter<? extends T> beanFilter, String[] pNames) {
+		private Builder(ClassMeta<T> classMeta, BeanContext ctx, BeanFilter beanFilter, String[] pNames) {
 			this.classMeta = classMeta;
 			this.ctx = ctx;
 			this.beanFilter = beanFilter;

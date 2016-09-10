@@ -27,8 +27,8 @@ import org.apache.juneau.internal.*;
  */
 public class BeanDictionaryBuilder {
 
-	private Map<String,Class<?>> map = new HashMap<String,Class<?>>();
-	private BeanContext beanContext;
+	Map<String,Class<?>> map = new HashMap<String,Class<?>>();
+	BeanContext beanContext;
 
 	/**
 	 * Add the specified classes to this type dictionary.
@@ -70,6 +70,6 @@ public class BeanDictionaryBuilder {
 	}
 
 	BeanDictionary build() {
-		return new BeanDictionary(beanContext, map);
+		return new BeanDictionary(this);
 	}
 }

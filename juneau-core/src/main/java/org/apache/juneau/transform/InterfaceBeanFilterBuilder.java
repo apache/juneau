@@ -18,20 +18,20 @@ import org.apache.juneau.*;
  * Simple bean filter that simply identifies a class to be used as an interface
  * 	class for all child classes.
  * <p>
- * 	These objects are created when you pass in non-<code>BeanFilter</code> classes to {@link ContextFactory#addToProperty(String,Object)},
+ * 	These objects are created when you pass in non-<code>BeanFilterBuilder</code> classes to {@link ContextFactory#addToProperty(String,Object)},
  * 		and are equivalent to adding a <code><ja>@Bean</ja>(interfaceClass=Foo.<jk>class</jk>)</code> annotation on the <code>Foo</code> class.
  *
  * @author James Bognar (james.bognar@salesforce.com)
- * @param <T> The class type that this bean filter applies to.
  */
-public class InterfaceBeanFilter<T> extends BeanFilter<T> {
+public class InterfaceBeanFilterBuilder extends BeanFilterBuilder {
 
 	/**
 	 * Constructor.
 	 *
 	 * @param interfaceClass The class to use as an interface on all child classes.
 	 */
-	public InterfaceBeanFilter(Class<T> interfaceClass) {
+	public InterfaceBeanFilterBuilder(Class<?> interfaceClass) {
 		super(interfaceClass);
+		setInterfaceClass(interfaceClass);
 	}
 }

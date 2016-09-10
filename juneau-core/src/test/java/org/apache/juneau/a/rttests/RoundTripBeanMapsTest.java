@@ -355,17 +355,13 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		}
 	}
 
-	public static class CFilter extends BeanFilter<C> {
+	public static class CFilter extends BeanFilterBuilder {
 		public CFilter() {
-			super(C.class, null, null, null, null, null, false, null, "subType", createSubTypes());
-		}
-
-		private static Map<Class<?>,String> createSubTypes() {
-			HashMap<Class<?>,String> m = new HashMap<Class<?>,String>();
-			m.put(C1.class,"C1");
-			m.put(C2.class,"C2");
-			m.put(C3.class,"C3");
-			return m;
+			super(C.class);
+			setSubTypeProperty("subType");
+			addSubType("C1", C1.class);
+			addSubType("C2", C2.class);
+			addSubType("C3", C3.class);
 		}
 	}
 
@@ -456,11 +452,12 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		public String f2;
 	}
 
-	public static class CAFilter extends BeanFilter<CA> {
+	public static class CAFilter extends BeanFilterBuilder {
 		public CAFilter() {
-			super(CA.class, null, null, null, null, null, false, null, "subType",
-				new HashMap<Class<?>,String>(){{put(CA1.class,"CA1");put(CA2.class,"CA2");}}
-			);
+			super(CA.class);
+			setSubTypeProperty("subType");
+			addSubType("CA1", CA1.class);
+			addSubType("CA2", CA2.class);
 		}
 	}
 
@@ -524,9 +521,10 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 			return this;
 		}
 	}
-	public static class D2Filter extends BeanFilter<D2> {
+	public static class D2Filter extends BeanFilterBuilder {
 		public D2Filter() {
-			super("f3","f2");
+			super(D2.class);
+			setProperties("f3,f2");
 		}
 	}
 
@@ -586,9 +584,10 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 			return this;
 		}
 	}
-	public static class E2Filter extends BeanFilter<E2> {
+	public static class E2Filter extends BeanFilterBuilder {
 		public E2Filter() {
-			super(null, null, null, new String[]{"f2"}, null, null, false, null, null, null);
+			super(E2.class);
+			setExcludeProperties("f2");
 		}
 	}
 
@@ -678,12 +677,12 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 			return this;
 		}
 	}
-	public static class FB1Filter extends BeanFilter<FB1> {
+	public static class FB1Filter extends InterfaceBeanFilterBuilder {
 		public FB1Filter() {
 			super(FB1.class);
 		}
 	}
-	public static class FB2Filter extends BeanFilter<FB2> {
+	public static class FB2Filter extends InterfaceBeanFilterBuilder {
 		public FB2Filter() {
 			super(FB1.class);
 		}

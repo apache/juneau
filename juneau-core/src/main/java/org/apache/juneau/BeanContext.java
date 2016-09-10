@@ -393,10 +393,18 @@ public class BeanContext extends Context {
 	/**
 	 * List of bean filters registered on the bean context (<code>List&lt;Class&gt;</code>).
 	 * <p>
+	 * This is a programmatic equivalent to the {@link Bean @Bean} annotation.
+	 * It's useful when you want to use the Bean annotation functionality, but you don't have the ability
+	 * 	to alter the bean classes.
+	 * <p>
 	 * There are two category of classes that can be passed in through this method:
 	 * <ul class='spaced-list'>
-	 * 	<li>Subclasses of {@link BeanFilter}.
-	 * 	<li>Bean interface classes.  A shortcut for defining a {@link InterfaceBeanFilter}.
+	 * 	<li>Subclasses of {@link BeanFilterBuilder}.  
+	 * 		These must have a public no-arg constructor.
+	 * 	<li>Bean interface classes.  
+	 * 		A shortcut for defining a {@link InterfaceBeanFilterBuilder}.
+	 * 		Any subclasses of an interface class will only have properties defined on the interface.
+	 * 		All other bean properties will be ignored.
 	 * </ul>
 	 */
 	public static final String BEAN_beanFilters = "BeanContext.beanFilters.list";
@@ -550,7 +558,7 @@ public class BeanContext extends Context {
 
 	final Class<?>[] notBeanClasses;
 	final String[] notBeanPackageNames, notBeanPackagePrefixes;
-	final BeanFilter<?>[] beanFilters;
+	final BeanFilter[] beanFilters;
 	final PojoSwap<?,?>[] pojoSwaps;
 	final BeanDictionary beanDictionary;
 	final Map<Class<?>,Class<?>> implClasses;
@@ -620,13 +628,15 @@ public class BeanContext extends Context {
 		notBeanPackageNames = l1.toArray(new String[l1.size()]);
 		notBeanPackagePrefixes = l2.toArray(new String[l2.size()]);
 
-		LinkedList<BeanFilter<?>> lbf = new LinkedList<BeanFilter<?>>();
+		LinkedList<BeanFilter> lbf = new LinkedList<BeanFilter>();
  		try {
 			for (Class<?> c : pm.get(BEAN_beanFilters, Class[].class, new Class[0])) {
 				if (isParentClass(BeanFilter.class, c))
-					lbf.add((BeanFilter<?>)c.newInstance());
+					lbf.add((BeanFilter)c.newInstance());
+				else if (isParentClass(BeanFilterBuilder.class, c))
+					lbf.add(((BeanFilterBuilder)c.newInstance()).build());
 				else
-					lbf.add(new InterfaceBeanFilter(c));
+					lbf.add(new InterfaceBeanFilterBuilder(c).build());
 			}
 		} catch (Exception e) {
 			throw new RuntimeException(e);

@@ -76,7 +76,7 @@ public final class ClassMeta<T> implements Type {
 	Method parentPropertyMethod;                      // The method to set the parent on an object (if it has one).
 	String notABeanReason;                            // If this isn't a bean, the reason why.
 	PojoSwap<T,?> pojoSwap;                           // The object POJO swap associated with this bean (if it has one).
-	BeanFilter<? extends T> beanFilter;               // The bean filter associated with this bean (if it has one).
+	BeanFilter beanFilter;                            // The bean filter associated with this bean (if it has one).
 	boolean
 		isDelegate,                                    // True if this class extends Delegate.
 		isAbstract,                                    // True if this class is abstract.
@@ -437,17 +437,16 @@ public final class ClassMeta<T> implements Type {
 		return hasChildPojoSwaps;
 	}
 
-	@SuppressWarnings("unchecked")
-	private BeanFilter<? extends T> findBeanFilter(BeanContext context) {
+	private BeanFilter findBeanFilter(BeanContext context) {
 		try {
 			if (context == null)
 				return null;
-			BeanFilter<? extends T> f = context.findBeanFilter(innerClass);
+			BeanFilter f = context.findBeanFilter(innerClass);
 			if (f != null)
 				return f;
 			List<Bean> ba = ReflectionUtils.findAnnotations(Bean.class, innerClass);
 			if (! ba.isEmpty())
-				f = new AnnotationBeanFilter<T>(innerClass, ba);
+				f = new AnnotationBeanFilterBuilder(innerClass, ba).build();
 			return f;
 		} catch (Exception e) {
 			throw new RuntimeException(e);

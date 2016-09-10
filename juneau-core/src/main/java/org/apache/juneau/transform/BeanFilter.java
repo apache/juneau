@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transform;
 
-import java.beans.*;
-import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -29,44 +27,11 @@ import org.apache.juneau.internal.*;
  * 	Thus, it can be used to perform the same function as the <code>@Bean</code> annotation when you don't have
  * 		the ability to annotate those classes (e.g. you don't have access to the source code).
  *
- * <p>
- * 	When defining bean filters, you can either call the setters in the contructor, or override getters.
- *
- * <h6 class='topic'>Example</h6>
- * <p class='bcode'>
- * 	<jc>// Create our serializer with a bean filter.</jc>
- * 	WriterSerializer s = <jk>new</jk> JsonSerializer().addBeanFilters(AddressFilter.<jk>class</jk>);
- *
- * 	Address a = <jk>new</jk> Address();
- * 	String json = s.serialize(a); <jc>// Serializes only street, city, state.</jc>
- *
- * 	<jc>// Filter class defined via setters</jc>
- * 	<jk>public class</jk> AddressFilter <jk>extends</jk> BeanFilter&lt;Address&gt; {
- * 		<jk>public</jk> AddressFilter() {
- * 			setProperties(<js>"street"</js>,<js>"city"</js>,<js>"state"</js>);
- * 		}
- * 	}
- *
- * 	<jc>// Filter class defined by overriding getters</jc>
- * 	<jk>public class</jk> AddressFilter <jk>extends</jk> BeanFilter&lt;Address&gt; {
- * 		<jk>public</jk> String[] getProperties() {
- * 			<jk>return new</jk> String[]{<js>"street"</js>,<js>"city"</js>,<js>"state"</js>};
- * 		}
- * 	}
- * </p>
- * <p>
- * 	The examples in this class use the setters approach.
- *
- * <h6 class='topic'>Additional information</h6>
- * 	See {@link org.apache.juneau.transform} for more information.
- *
- *
  * @author James Bognar (james.bognar@salesforce.com)
- * @param <T> The class type that this filter applies to.
  */
-public abstract class BeanFilter<T> {
+public class BeanFilter {
 
-	private final Class<T> beanClass;
+	private final Class<?> beanClass;
 	private final String[] properties, excludeProperties;
 	private final Map<Class<?>, String> subTypes;
 	private final String subTypeAttr;
@@ -77,197 +42,25 @@ public abstract class BeanFilter<T> {
 
 	/**
 	 * Constructor.
-	 *
-	 * @param beanClass
-	 * 	The bean class that this filter applies to.
-	 * 	If <jk>null</jk>, then the value is inferred through reflection.
-	 * @param typeName
-	 * 	The dictionary name associated with this bean.
-	 * @param properties
-	 * 	Specifies the set and order of names of properties associated with a bean class.
-	 * 	The order specified is the same order that the entries will be returned by the {@link BeanMap#entrySet()} and related methods.
-	 * 	Entries in the list can also contain comma-delimited lists that will be split.
-	 * @param excludeProperties
-	 * 	Specifies a list of properties to ignore on a bean.
-	 * @param interfaceClass
-	 * 	Identifies a class to be used as the interface class for this and all subclasses.
-	 * 	<p>
-	 * 	When specified, only the list of properties defined on the interface class will be used during serialization.
-	 * 	Additional properties on subclasses will be ignored.
-	 * 	<p class='bcode'>
-	 * 	<jc>// Parent class</jc>
-	 * 	<jk>public abstract class</jk> A {
-	 * 		<jk>public</jk> String <jf>f0</jf> = <js>"f0"</js>;
-	 * 	}
-	 *
-	 * 	<jc>// Sub class</jc>
-	 * 	<jk>public class</jk> A1 <jk>extends</jk> A {
-	 * 		<jk>public</jk> String <jf>f1</jf> = <js>"f1"</js>;
-	 * 	}
-	 *
-	 * 	<jc>// Filter class</jc>
-	 * 	<jk>public class</jk> AFilter <jk>extends</jk> BeanFilter&lt;A&gt; {
-	 * 		<jk>public</jk> AFilter() {
-	 * 			setInterfaceClass(A.<jk>class</jk>);
-	 * 		}
-	 * 	}
-	 *
-	 * 	JsonSerializer s = new JsonSerializer().addBeanFilters(AFilter.<jk>class</jk>);
-	 * 	A1 a1 = <jk>new</jk> A1();
-	 * 	String r = s.serialize(a1);
-	 * 	<jsm>assertEquals</jsm>(<js>"{f0:'f0'}"</js>, r);  <jc>// Note f1 is not serialized</jc>
-	 * 	</p>
-	 *	 	<p>
-	 * 	Note that this filter can be used on the parent class so that it filters to all child classes,
-	 * 		or can be set individually on the child classes.
-	 * @param stopClass
-	 * 	Identifies a stop class for this class and all subclasses.
-	 * 	<p>
-	 * 	Identical in purpose to the stop class specified by {@link Introspector#getBeanInfo(Class, Class)}.
-	 * 	Any properties in the stop class or in its base classes will be ignored during analysis.
-	 * 	<p>
-	 * 	For example, in the following class hierarchy, instances of <code>C3</code> will include property <code>p3</code>, but
-	 * 		not <code>p1</code> or <code>p2</code>.
-	 * 	<p class='bcode'>
-	 * 	<jk>public class</jk> C1 {
-	 * 		<jk>public int</jk> getP1();
-	 * 	}
-	 *
-	 * 	<jk>public class</jk> C2 <jk>extends</jk> C1 {
-	 * 		<jk>public int</jk> getP2();
-	 * 	}
-	 *
-	 * 	<ja>@Bean</ja>(stopClass=C2.<jk>class</jk>)
-	 * 	<jk>public class</jk> C3 <jk>extends</jk> C2 {
-	 * 		<jk>public int</jk> getP3();
-	 * 	}
-	 * 	</p>
-	 * @param sortProperties
-	 * 	Sort properties in alphabetical order.
-	 * @param propertyNamer
-	 * 	The property namer to use to name bean properties.
-	 * @param subTypeProperty
-	 * 	Defines a virtual property on a superclass that identifies bean subtype classes.
-	 * 	<p>
-	 * 	In the following example, the abstract class has two subclasses that are differentiated
-	 * 		by a property called <code>subType</code>
-	 *
-	 * 	<p class='bcode'>
-	 * 	<jc>// Abstract superclass</jc>
-	 * 	<jk>public abstract class</jk> A {
-	 * 		<jk>public</jk> String <jf>f0</jf> = <js>"f0"</js>;
-	 * 	}
-	 *
-	 * 	<jc>// Subclass 1</jc>
-	 * 	<jk>public class</jk> A1 <jk>extends</jk> A {
-	 * 		<jk>public</jk> String <jf>f1</jf>;
-	 * 	}
-	 *
-	 * 	<jc>// Subclass 2</jc>
-	 * 	<jk>public class</jk> A2 <jk>extends</jk> A {
-	 * 		<jk>public</jk> String <jf>f2</jf>;
-	 * 	}
-	 *
-	 * 	<jc>// Filter for defining subtypes</jc>
-	 * 	<jk>public class</jk> AFilter <jk>extends</jk> BeanFilter&lt;A&gt; {
-	 * 		<jk>public</jk> AFilter() {
-	 * 			<jk>super</jk>(A.<jk>class</jk>, <jk>null</jk>, <jk>null</jk>, <jk>null</jk>, <jk>null</jk>, <jk>false</jk>, <jk>null</jk>, <jk>null</jk>, <js>"subType"</js>, <jsm>createSubTypes</jsm>())
-	 * 		}
-	 * 		<jk>private static</jk> Map&lt;Class&lt;?&gt;,String&gt; <jsm>createSubTypes</jsm>() {
-	 * 			HashMap&lt;Class&lt;?&gt;,String&gt; m = new HashMap&lt;Class&lt;?&gt;,String&gt;();
-	 * 			m.put(A1.<jk>class</jk>,<js>"A1"</js>);
-	 * 			m.put(A2.<jk>class</jk>,<js>"A2"</js>);
-	 * 			<jk>return</jk> m;
-	 * 		}
-	 * 	}
-	 * 	</p>
-	 * 	<p>
-	 * 	The following shows what happens when serializing a subclassed object to JSON:
-	 * 	<p class='bcode'>
-	 * 	JsonSerializer s = <jk>new</jk> JsonSerializer().addBeanFilters(AFilter.<jk>class</jk>);
-	 * 	A1 a1 = <jk>new</jk> A1();
-	 * 	a1.<jf>f1</jf> = <js>"f1"</js>;
-	 * 	String r = s.serialize(a1);
-	 * 	<jsm>assertEquals</jsm>(<js>"{subType:'A1',f1:'f1',f0:'f0'}"</js>, r);
-	 *		</p>
-	 * 	<p>
-	 * 	The following shows what happens when parsing back into the original object.
-	 * 	<p class='bcode'>
-	 * 	JsonParser p = <jk>new</jk> JsonParser().addBeanFilters(AFilter.<jk>class</jk>);
-	 * 	A a = p.parse(r, A.<jk>class</jk>);
-	 * 	<jsm>assertTrue</jsm>(a <jk>instanceof</jk> A1);
-	 * 	</p>
-	 * @param subTypes
 	 */
-	@SuppressWarnings("unchecked")
-	public BeanFilter(Class<T> beanClass, String typeName, String[] properties, String[] excludeProperties, Class<?> interfaceClass, Class<?> stopClass, boolean sortProperties, PropertyNamer propertyNamer, String subTypeProperty, Map<Class<?>,String> subTypes) {
-
-		if (beanClass == null) {
-			Class<?> c = this.getClass().getSuperclass();
-			Type t = this.getClass().getGenericSuperclass();
-			while (c != BeanFilter.class) {
-				t = c.getGenericSuperclass();
-				c = c.getSuperclass();
-			}
-
-			// Attempt to determine the T and G classes using reflection.
-			if (t instanceof ParameterizedType) {
-				ParameterizedType pt = (ParameterizedType)t;
-				Type[] pta = pt.getActualTypeArguments();
-				if (pta.length > 0) {
-					Type nType = pta[0];
-					if (nType instanceof Class)
-						beanClass = (Class<T>)nType;
-
-					else
-						throw new RuntimeException("Unsupported parameter type: " + nType);
-				}
-			}
-		}
-
-		this.beanClass = beanClass;
-		this.typeName = typeName;
-		this.properties = StringUtils.split(properties, ',');
-		this.excludeProperties = StringUtils.split(excludeProperties, ',');
-		this.interfaceClass = interfaceClass;
-		this.stopClass = stopClass;
-		this.sortProperties = sortProperties;
-		this.propertyNamer = propertyNamer;
-		this.subTypeAttr = subTypeProperty;
-		this.subTypes = subTypes == null ? null : Collections.unmodifiableMap(subTypes);
-	}
-
-	/**
-	 * Convenience constructor for defining interface bean filters.
-	 *
-	 * @param interfaceClass The interface class.
-	 */
-	@SuppressWarnings("unchecked")
-	public BeanFilter(Class<?> interfaceClass) {
-		this((Class<T>)interfaceClass, null, null, null, interfaceClass, null, false, null, null, null);
-	}
-
-	/**
-	 * Convenience constructor for defining a bean filter that simply specifies the properties and order of properties for a bean.
-	 *
-	 * @param properties
-	 */
-	public BeanFilter(String...properties) {
-		this(null, null, properties, null, null, null, false, null, null, null);
-	}
-
-	/**
-	 * Dummy constructor.
-	 */
-	public BeanFilter() {
-		this((Class<T>)null);
+	BeanFilter(BeanFilterBuilder builder) {
+		this.beanClass = builder.beanClass;
+		this.typeName = builder.typeName;
+		this.properties = StringUtils.split(builder.properties, ',');
+		this.excludeProperties = StringUtils.split(builder.excludeProperties, ',');
+		this.interfaceClass = builder.interfaceClass;
+		this.stopClass = builder.stopClass;
+		this.sortProperties = builder.sortProperties;
+		this.propertyNamer = builder.propertyNamer;
+		this.subTypeAttr = builder.subTypeProperty;
+		this.subTypes = builder.subTypes == null ? null : Collections.unmodifiableMap(builder.subTypes);
 	}
 
 	/**
 	 * Returns the bean class that this filter applies to.
 	 * @return The bean class that this filter applies to.
 	 */
-	public Class<T> getBeanClass() {
+	public Class<?> getBeanClass() {
 		return beanClass;
 	}
 

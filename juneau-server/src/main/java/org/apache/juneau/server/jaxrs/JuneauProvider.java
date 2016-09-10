@@ -47,8 +47,8 @@ public @interface JuneauProvider {
 	 * <p>
 	 * 	These filters are applied to all serializers and parsers being used by the provider.
 	 * <p>
-	 * 	If the specified class is an instance of {@link BeanFilter}, then that filter is added.
-	 * 	Any other classes are wrapped in a {@link InterfaceBeanFilter} to indicate that subclasses should
+	 * 	If the specified class is an instance of {@link BeanFilterBuilder}, then a filter built from that builder is added.
+	 * 	Any other classes are wrapped in a {@link InterfaceBeanFilterBuilder} to indicate that subclasses should
 	 * 		be treated as the specified class type.
 	 */
 	Class<?>[] beanFilters() default {};
