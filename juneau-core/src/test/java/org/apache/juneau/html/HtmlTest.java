@@ -40,50 +40,50 @@ public class HtmlTest {
 
 		t = new Object[] {new A1(), new A1()};
 		html = s.serialize(t);
-		assertEquals("<table type='array'><tr><th>f1</th></tr><tr><td><string>f1</string></td></tr><tr><td><string>f1</string></td></tr></table>", html);
+		assertEquals("<table _type='array'><tr><th>f1</th></tr><tr><td><string>f1</string></td></tr><tr><td><string>f1</string></td></tr></table>", html);
 
 		t = new Object[] {new A1(), new A2()};
 		html = s.serialize(t);
-		assertEquals("<table type='array'><tr><th>f1</th></tr><tr><td><string>f1</string></td></tr><tr><td><string>f1</string></td></tr></table>", html);
+		assertEquals("<table _type='array'><tr><th>f1</th></tr><tr><td><string>f1</string></td></tr><tr><td><string>f1</string></td></tr></table>", html);
 
 		t = new Object[] {new A1(), new ObjectMap("{f1:'f1'}")};
 		html = s.serialize(t);
-		assertEquals("<table type='array'><tr><th>f1</th></tr><tr><td><string>f1</string></td></tr><tr><td><string>f1</string></td></tr></table>", html);
+		assertEquals("<table _type='array'><tr><th>f1</th></tr><tr><td><string>f1</string></td></tr><tr><td><string>f1</string></td></tr></table>", html);
 
 		t = new Object[] {new ObjectMap("{f1:'f1'}"), new A1()};
 		html = s.serialize(t);
-		assertEquals("<table type='array'><tr><th>f1</th></tr><tr><td><string>f1</string></td></tr><tr><td><string>f1</string></td></tr></table>", html);
+		assertEquals("<table _type='array'><tr><th>f1</th></tr><tr><td><string>f1</string></td></tr><tr><td><string>f1</string></td></tr></table>", html);
 
 		// This should be serialized as a list since the objects have different properties.
 		t = new Object[] {new A1(), new ObjectMap("{f2:'f2'}")};
 		html = s.serialize(t);
-		assertEquals("<ul><li><table type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f1</string></td><td><string>f1</string></td></tr></table></li><li><table type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f2</string></td><td><string>f2</string></td></tr></table></li></ul>", html);
+		assertEquals("<ul><li><table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f1</string></td><td><string>f1</string></td></tr></table></li><li><table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f2</string></td><td><string>f2</string></td></tr></table></li></ul>", html);
 
 		// Tables with some beans with @Bean#properties annotations.
 		t = new Object[] {new A1(), new A3()};
 		html = s.serialize(t);
-		assertEquals("<table type='array'><tr><th>f1</th></tr><tr><td><string>f1</string></td></tr><tr><td><string>f1</string></td></tr></table>", html);
+		assertEquals("<table _type='array'><tr><th>f1</th></tr><tr><td><string>f1</string></td></tr><tr><td><string>f1</string></td></tr></table>", html);
 
 		t = new Object[] {new A3(), new A1()};
 		html = s.serialize(t);
-		assertEquals("<table type='array'><tr><th>f1</th></tr><tr><td><string>f1</string></td></tr><tr><td><string>f1</string></td></tr></table>", html);
+		assertEquals("<table _type='array'><tr><th>f1</th></tr><tr><td><string>f1</string></td></tr><tr><td><string>f1</string></td></tr></table>", html);
 
 		// Tables with some beans with @Bean#transforms annotations.
 		t = new Object[] {new A4(), new A1()};
 		html = s.serialize(t);
-		assertEquals("<table type='array'><tr><th>f1</th></tr><tr><td><string>f1</string></td></tr><tr><td><string>f1</string></td></tr></table>", html);
+		assertEquals("<table _type='array'><tr><th>f1</th></tr><tr><td><string>f1</string></td></tr><tr><td><string>f1</string></td></tr></table>", html);
 
 		t = new Object[] {new A1(), new A4()};
 		html = s.serialize(t);
-		assertEquals("<table type='array'><tr><th>f1</th></tr><tr><td><string>f1</string></td></tr><tr><td><string>f1</string></td></tr></table>", html);
+		assertEquals("<table _type='array'><tr><th>f1</th></tr><tr><td><string>f1</string></td></tr><tr><td><string>f1</string></td></tr></table>", html);
 
 		t = new Object[] {new A5(), new A1()};
 		html = s.serialize(t);
-		assertEquals("<table type='array'><tr><th>f1</th></tr><tr><td><string>f1</string></td></tr><tr><td><string>f1</string></td></tr></table>", html);
+		assertEquals("<table _type='array'><tr><th>f1</th></tr><tr><td><string>f1</string></td></tr><tr><td><string>f1</string></td></tr></table>", html);
 
 		t = new Object[] {new A1(), new A5()};
 		html = s.serialize(t);
-		assertEquals("<table type='array'><tr><th>f1</th></tr><tr><td><string>f1</string></td></tr><tr><td><string>f1</string></td></tr></table>", html);
+		assertEquals("<table _type='array'><tr><th>f1</th></tr><tr><td><string>f1</string></td></tr><tr><td><string>f1</string></td></tr></table>", html);
 	}
 
 	public static class A1 {
@@ -300,7 +300,7 @@ public class HtmlTest {
 
 	private String strip(String html) {
 		return html
-			.replace("<table type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr>", "")
+			.replace("<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr>", "")
 			.replace("</table>", "")
 			.replace("<tr><td><string>", "\n[")
 			.replace("</string></td><td>", "]=")
@@ -322,7 +322,7 @@ public class HtmlTest {
 
 		o = new B2();
 		r = s.serialize(o);
-		assertEquals("<table type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f1</string></td><td><f1></td></tr></table>", r);
+		assertEquals("<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f1</string></td><td><f1></td></tr></table>", r);
 	}
 
 	@Html(asPlainText=true)
@@ -354,7 +354,7 @@ public class HtmlTest {
 
 		o = new C2();
 		r = s.serialize(o);
-		assertEquals("<table type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f1</string></td><td><string>&lt;f1&gt;</string></td></tr></table>", r);
+		assertEquals("<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f1</string></td><td><string>&lt;f1&gt;</string></td></tr></table>", r);
 	}
 
 	@Html(asXml=true)
@@ -380,7 +380,7 @@ public class HtmlTest {
 		m.put("foo", "bar");
 		o = new ObjectList().append(m);
 		r = s.serialize(o);
-		assertEquals("<ul><li><table type='object'><tr><td><string>foo</string></td><td><string>bar</string></td></tr></table></li></ul>", r);
+		assertEquals("<ul><li><table _type='object'><tr><td><string>foo</string></td><td><string>bar</string></td></tr></table></li></ul>", r);
 	}
 
 	@Html(noTables=true, noTableHeaders=true)

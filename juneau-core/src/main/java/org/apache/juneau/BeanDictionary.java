@@ -92,4 +92,14 @@ public class BeanDictionary {
 			throw new BeanRuntimeException("Could not find bean type ''{0}'' in dictionary.", typeName);
 		return cm;
 	}
+
+	/**
+	 * Returns <jk>true</jk> if this dictionary has an entry for the specified type name.
+	 *
+	 * @param typeName The bean type name.
+	 * @return <jk>true</jk> if this dictionary has an entry for the specified type name.
+	 */
+	public boolean hasName(String typeName) {
+		return map.containsKey(typeName);
+	}
 }

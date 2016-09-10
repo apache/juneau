@@ -243,22 +243,22 @@ public class HtmlSerializer extends XmlSerializer {
 			else if (sType.hasToObjectMapMethod())
 				serializeMap(session, out, sType.toObjectMap(o), eType, typeName, pMeta);
 			else if (sType.isBean())
-				serializeBeanMap(session, out, bc.forBean(o), typeName, pMeta);
+				serializeBeanMap(session, out, bc.forBean(o), pMeta);
 			else if (sType.isNumber())
 				out.sTag(i, "number").append(o).eTag("number").nl();
 			else if (sType.isBoolean())
 				out.sTag(i, "boolean").append(o).eTag("boolean").nl();
 			else if (sType.isMap()) {
 				if (o instanceof BeanMap)
-					serializeBeanMap(session, out, (BeanMap)o, typeName, pMeta);
+					serializeBeanMap(session, out, (BeanMap)o, pMeta);
 				else
 					serializeMap(session, out, (Map)o, eType, typeName, pMeta);
 			}
 			else if (sType.isCollection()) {
-				serializeCollection(session, out, (Collection)o, eType, name, null, pMeta);
+				serializeCollection(session, out, (Collection)o, eType, name, pMeta);
 			}
 			else if (sType.isArray()) {
-				serializeCollection(session, out, toList(sType.getInnerClass(), o), eType, name, null, pMeta);
+				serializeCollection(session, out, toList(sType.getInnerClass(), o), eType, name, pMeta);
 			}
 			else if (session.isUri(sType, pMeta, o)) {
 				String label = session.getAnchorText(pMeta, o);
@@ -274,14 +274,15 @@ public class HtmlSerializer extends XmlSerializer {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private void serializeMap(HtmlSerializerSession session, HtmlWriter out, Map m, ClassMeta<?> type, String classAttr, BeanPropertyMeta ppMeta) throws Exception {
+	private void serializeMap(HtmlSerializerSession session, HtmlWriter out, Map m, ClassMeta<?> type, String typeName, BeanPropertyMeta ppMeta) throws Exception {
 		ClassMeta<?> keyType = type.getKeyType(), valueType = type.getValueType();
 		ClassMeta<?> aType = session.getBeanContext().getClassMetaForObject(m);       // The actual type
+		BeanContext bc = session.getBeanContext();
 
 		int i = session.getIndent();
-		out.oTag(i, "table").attr("type", "object");
-		if (classAttr != null)
-			out.attr("class", classAttr);
+		if (typeName == null)
+			typeName = "object";
+		out.oTag(i, "table").attr(bc.getBeanTypePropertyName(), typeName);
 		out.appendln(">");
 		if (! (aType.getExtendedMeta(HtmlClassMeta.class).isNoTableHeaders() || (ppMeta != null && ppMeta.getExtendedMeta(HtmlBeanPropertyMeta.class).isNoTableHeaders()))) {
 			out.sTag(i+1, "tr").nl();
@@ -313,7 +314,7 @@ public class HtmlSerializer extends XmlSerializer {
 		out.eTag(i, "table").nl();
 	}
 
-	private void serializeBeanMap(HtmlSerializerSession session, HtmlWriter out, BeanMap<?> m, String classAttr, BeanPropertyMeta ppMeta) throws Exception {
+	private void serializeBeanMap(HtmlSerializerSession session, HtmlWriter out, BeanMap<?> m, BeanPropertyMeta ppMeta) throws Exception {
 		int i = session.getIndent();
 		BeanContext bc = session.getBeanContext();
 
@@ -328,9 +329,10 @@ public class HtmlSerializer extends XmlSerializer {
 			return;
 		}
 
-		out.oTag(i, "table").attr("type", "object");
-		if (classAttr != null)
-			out.attr(bc.getBeanTypePropertyName(), classAttr);
+		String typeName = m.getMeta().getDictionaryName();
+		if (typeName == null)
+			typeName = "object";
+		out.oTag(i, "table").attr(bc.getBeanTypePropertyName(), typeName);
 		out.append('>').nl();
 		if (! (m.getClassMeta().getExtendedMeta(HtmlClassMeta.class).isNoTableHeaders() || (ppMeta != null && ppMeta.getExtendedMeta(HtmlBeanPropertyMeta.class).isNoTableHeaders()))) {
 			out.sTag(i+1, "tr").nl();
@@ -373,7 +375,7 @@ public class HtmlSerializer extends XmlSerializer {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private void serializeCollection(HtmlSerializerSession session, HtmlWriter out, Collection c, ClassMeta<?> type, String name, String classAttr, BeanPropertyMeta ppMeta) throws Exception {
+	private void serializeCollection(HtmlSerializerSession session, HtmlWriter out, Collection c, ClassMeta<?> type, String name, BeanPropertyMeta ppMeta) throws Exception {
 
 		BeanContext bc = session.getBeanContext();
 		ClassMeta<?> elementType = type.getElementType();
@@ -395,9 +397,7 @@ public class HtmlSerializer extends XmlSerializer {
 
 		if (th != null) {
 
-			out.oTag(i, "table").attr("type", "array");
-			if (classAttr != null)
-				out.attr(bc.getBeanTypePropertyName(), classAttr);
+			out.oTag(i, "table").attr(bc.getBeanTypePropertyName(), "array");
 			out.append('>').nl();
 			out.sTag(i+1, "tr").nl();
 			for (String key : th)

@@ -963,7 +963,7 @@ public class BeanMapTest {
 		}
 
 		// HTML
-		String html = "<table type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>baz</string></td><td><number>789</number></td></tr><tr><td><string>foo</string></td><td><number>123</number></td></tr><tr><td><string>bar</string></td><td><number>456</number></td></tr></table>";
+		String html = "<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>baz</string></td><td><number>789</number></td></tr><tr><td><string>foo</string></td><td><number>123</number></td></tr><tr><td><string>bar</string></td><td><number>456</number></td></tr></table>";
 		p = new HtmlParser().setProperty(BEAN_ignoreUnknownBeanProperties, true);
 		t = p.parse(html, O.class);
 		assertEquals(123, t.foo);

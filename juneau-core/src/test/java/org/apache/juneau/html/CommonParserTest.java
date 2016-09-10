@@ -35,27 +35,27 @@ public class CommonParserTest {
 		Map m = null;
 		String in;
 
-		in = "<table type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>a</string></td><td><number>1</number></td></tr></table>";
+		in = "<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>a</string></td><td><number>1</number></td></tr></table>";
 		m = (Map)p.parse(in, Object.class);
 		assertEquals(1, m.get("a"));
 
-		in = "<table type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>a</string></td><td><number>1</number></td></tr><tr><td><string>b</string></td><td><string>foo bar</string></td></tr></table>";
+		in = "<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>a</string></td><td><number>1</number></td></tr><tr><td><string>b</string></td><td><string>foo bar</string></td></tr></table>";
 		m = (Map)p.parse(in, Object.class);
 		assertEquals(1, m.get("a"));
 		assertEquals("foo bar", m.get("b"));
 
-		in = "<table type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>a</string></td><td><number>1</number></td></tr><tr><td><string>b</string></td><td><string>foo bar</string></td></tr><tr><td><string>c</string></td><td><boolean>false</boolean></td></tr></table>";
+		in = "<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>a</string></td><td><number>1</number></td></tr><tr><td><string>b</string></td><td><string>foo bar</string></td></tr><tr><td><string>c</string></td><td><boolean>false</boolean></td></tr></table>";
 		m = (Map)p.parse(in, Object.class);
 		assertEquals(1, m.get("a"));
 		assertEquals(false, m.get("c"));
 
-		in = " <table type='object'> <tr> <th> <string> key </string> </th> <th> <string> value </string> </th> </tr> <tr> <td> <string> a </string> </td> <td> <number> 1 </number> </td> </tr> <tr> <td> <string> b </string> </td> <td> <string> foo </string> </td> </tr> <tr> <td> <string> c </string> </td> <td> <boolean> false </boolean> </td> </tr> </table> ";
+		in = " <table _type='object'> <tr> <th> <string> key </string> </th> <th> <string> value </string> </th> </tr> <tr> <td> <string> a </string> </td> <td> <number> 1 </number> </td> </tr> <tr> <td> <string> b </string> </td> <td> <string> foo </string> </td> </tr> <tr> <td> <string> c </string> </td> <td> <boolean> false </boolean> </td> </tr> </table> ";
 		m = (Map)p.parse(in, Object.class);
 		assertEquals(1, m.get("a"));
 		assertEquals("foo", m.get("b"));
 		assertEquals(false, m.get("c"));
 
-		in = "<table type='array'><tr><th>attribute</th></tr><tr><td><string>value</string></td></tr><tr><td><string>value</string></td></tr></table>";
+		in = "<table _type='array'><tr><th>attribute</th></tr><tr><td><string>value</string></td></tr><tr><td><string>value</string></td></tr></table>";
 		ObjectList jl = (ObjectList)p.parse(in, Object.class);
 		assertEquals("value", jl.getObjectMap(0).getString("attribute"));
 		assertEquals("value", jl.getObjectMap(1).getString("attribute"));
@@ -100,7 +100,7 @@ public class CommonParserTest {
 		ReaderParser p = new HtmlParser().setProperty(BEAN_ignoreUnknownBeanProperties, true);
 		B t;
 
-		String in = "<table type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>a</string></td><td><number>1</number></td></tr><tr><td><string>unknown</string></td><td><number>1</number></td></tr><tr><td><string>b</string></td><td><number>2</number></td></tr></table>";
+		String in = "<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>a</string></td><td><number>1</number></td></tr><tr><td><string>unknown</string></td><td><number>1</number></td></tr><tr><td><string>b</string></td><td><number>2</number></td></tr></table>";
 		t = p.parse(in, B.class);
 		assertEquals(t.a, 1);
 		assertEquals(t.b, 2);
@@ -123,7 +123,7 @@ public class CommonParserTest {
 	public void testCollectionPropertiesWithNoSetters() throws Exception {
 		ReaderParser p = HtmlParser.DEFAULT;
 
-		String in = "<table type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>ints</string></td><td><ul><li><number>1</number></li><li><number>2</number></li><li><number>3</number></li></ul></td></tr><tr><td><string>beans</string></td><td><table type='array'><tr><th>a</th><th>b</th></tr><tr><td><number>1</number></td><td><number>2</number></td></tr></table></td></tr></table>";
+		String in = "<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>ints</string></td><td><ul><li><number>1</number></li><li><number>2</number></li><li><number>3</number></li></ul></td></tr><tr><td><string>beans</string></td><td><table _type='array'><tr><th>a</th><th>b</th></tr><tr><td><number>1</number></td><td><number>2</number></td></tr></table></td></tr></table>";
 		C t = p.parse(in, C.class);
 		assertEquals(t.getInts().size(), 3);
 		assertEquals(t.getBeans().get(0).b, 2);
@@ -156,7 +156,7 @@ public class CommonParserTest {
 			}
 		);
 
-		String in = "<table type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>a</string></td><td><number>1</number></td></tr><tr><td><string>unknown</string></td><td><string>/foo</string></td></tr><tr><td><string>b</string></td><td><number>2</number></td></tr></table>";
+		String in = "<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>a</string></td><td><number>1</number></td></tr><tr><td><string>unknown</string></td><td><string>/foo</string></td></tr><tr><td><string>b</string></td><td><number>2</number></td></tr></table>";
 		p.parse(in, B.class);
 		assertEquals(1, events.size());
 		assertEquals("unknown,-1,-1", events.get(0));

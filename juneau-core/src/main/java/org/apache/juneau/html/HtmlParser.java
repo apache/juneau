@@ -107,7 +107,13 @@ public final class HtmlParser extends ReaderParser {
 
 		} else {
 			Tag tag = Tag.forString(event.asStartElement().getName().getLocalPart(), false);
-			String tableType = "object";
+
+			// The _type attribute can be any of the following:
+			// "object" - A map.
+			// "array" - An array.
+			// "X" - A bean type name as defined through @Bean.typeName().
+
+			String typeName = "object";
 			String text = "";
 
 			if (tag.isOneOf(STRING, NUMBER, BOOLEAN, BR, FF, BS, TB))
@@ -115,10 +121,12 @@ public final class HtmlParser extends ReaderParser {
 
 			if (tag == TABLE) {
 				Map<String,String> attrs = getAttributes(event);
-				tableType = attrs.get("type");
-				String c = attrs.get(bc.getBeanTypePropertyName());
-				if (c != null)
-					sType = eType = (ClassMeta<T>)bd.getClassMeta(c);
+				typeName = attrs.get(bc.getBeanTypePropertyName());
+				if (bd.hasName(typeName))
+					sType = eType = (ClassMeta<T>)bd.getClassMeta(typeName);
+				// Reset to "object" if it was a bean type name.
+				if (! typeName.equals("array"))
+					typeName = "object";
 			}
 
 			boolean isValid = true;
@@ -135,9 +143,9 @@ public final class HtmlParser extends ReaderParser {
 				else if (tag == BOOLEAN)
 					o = Boolean.parseBoolean(text);
 				else if (tag == TABLE) {
-					if (tableType.equals("object")) {
+					if (typeName.equals("object")) {
 						o = parseIntoMap(session, r, (Map)new ObjectMap(bc), sType.getKeyType(), sType.getValueType(), pMeta);
-					} else if (tableType.equals("array")) {
+					} else if (typeName.equals("array")) {
 						o = parseTableIntoCollection(session, r, (Collection)new ObjectList(bc), sType.getElementType(), pMeta);
 					} else
 						isValid = false;
@@ -158,7 +166,7 @@ public final class HtmlParser extends ReaderParser {
 			else if (tag == BOOLEAN && sType.isBoolean())
 				o = Boolean.parseBoolean(text);
 			else if (tag == TABLE) {
-				if (tableType.equals("object")) {
+				if (typeName.equals("object")) {
 					if (sType.isMap()) {
 						o = parseIntoMap(session, r, (Map)(sType.canCreateNewInstance(outer) ? sType.newInstance(outer) : new ObjectMap(bc)), sType.getKeyType(), sType.getValueType(), pMeta);
 					} else if (sType.canCreateNewInstanceFromObjectMap(outer)) {
@@ -171,7 +179,7 @@ public final class HtmlParser extends ReaderParser {
 					}
 					else
 						isValid = false;
-				} else if (tableType.equals("array")) {
+				} else if (typeName.equals("array")) {
 					if (sType.isCollection())
 						o = parseTableIntoCollection(session, r, (Collection)(sType.canCreateNewInstance(outer) ? sType.newInstance(outer) : new ObjectList(bc)), sType.getElementType(), pMeta);
 					else if (sType.isArray())

@@ -42,13 +42,13 @@ public class CommonTest {
 
 		s.setProperty(SERIALIZER_trimNullProperties, false);
 		String r = s.serialize(t1);
-		assertEquals("<table type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>s1</string></td><td><null/></td></tr><tr><td><string>s2</string></td><td><string>s2</string></td></tr></table>", r);
+		assertEquals("<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>s1</string></td><td><null/></td></tr><tr><td><string>s2</string></td><td><string>s2</string></td></tr></table>", r);
 		t2 = p.parse(r, A.class);
 		assertEqualObjects(t1, t2);
 
 		s.setProperty(SERIALIZER_trimNullProperties, true);
 		r = s.serialize(t1);
-		assertEquals("<table type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>s2</string></td><td><string>s2</string></td></tr></table>", r);
+		assertEquals("<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>s2</string></td><td><string>s2</string></td></tr></table>", r);
 		t2 = p.parse(r, A.class);
 		assertEqualObjects(t1, t2);
 	}
@@ -75,13 +75,13 @@ public class CommonTest {
 
 		s.setProperty(SERIALIZER_trimEmptyMaps, false);
 		r = s.serialize(t1);
-		assertEquals("<table type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f1</string></td><td><table type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr></table></td></tr><tr><td><string>f2</string></td><td><table type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f2a</string></td><td><null/></td></tr><tr><td><string>f2b</string></td><td><table type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>s2</string></td><td><string>s2</string></td></tr></table></td></tr></table></td></tr></table>", r);
+		assertEquals("<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f1</string></td><td><table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr></table></td></tr><tr><td><string>f2</string></td><td><table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f2a</string></td><td><null/></td></tr><tr><td><string>f2b</string></td><td><table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>s2</string></td><td><string>s2</string></td></tr></table></td></tr></table></td></tr></table>", r);
 		t2 = p.parse(r, B.class);
 		assertEqualObjects(t1, t2);
 
 		s.setProperty(SERIALIZER_trimEmptyMaps, true);
 		r = s.serialize(t1);
-		assertEquals("<table type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f2</string></td><td><table type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f2a</string></td><td><null/></td></tr><tr><td><string>f2b</string></td><td><table type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>s2</string></td><td><string>s2</string></td></tr></table></td></tr></table></td></tr></table>", r);
+		assertEquals("<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f2</string></td><td><table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f2a</string></td><td><null/></td></tr><tr><td><string>f2b</string></td><td><table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>s2</string></td><td><string>s2</string></td></tr></table></td></tr></table></td></tr></table>", r);
 		t2 = p.parse(r, B.class);
 		assertNull(t2.f1);
 	}
@@ -109,13 +109,13 @@ public class CommonTest {
 
 		s.setProperty(SERIALIZER_trimEmptyLists, false);
 		r = s.serialize(t1);
-		assertEquals("<table type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f1</string></td><td><ul></ul></td></tr><tr><td><string>f2</string></td><td><table type='array'><tr><th>s1</th><th>s2</th></tr><tr><null/></tr><tr><td><null/></td><td><string>s2</string></td></tr></table></td></tr></table>", r);
+		assertEquals("<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f1</string></td><td><ul></ul></td></tr><tr><td><string>f2</string></td><td><table _type='array'><tr><th>s1</th><th>s2</th></tr><tr><null/></tr><tr><td><null/></td><td><string>s2</string></td></tr></table></td></tr></table>", r);
 		t2 = p.parse(r, C.class);
 		assertEqualObjects(t1, t2);
 
 		s.setProperty(SERIALIZER_trimEmptyLists, true);
 		r = s.serialize(t1);
-		assertEquals("<table type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f2</string></td><td><table type='array'><tr><th>s1</th><th>s2</th></tr><tr><null/></tr><tr><td><null/></td><td><string>s2</string></td></tr></table></td></tr></table>", r);
+		assertEquals("<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f2</string></td><td><table _type='array'><tr><th>s1</th><th>s2</th></tr><tr><null/></tr><tr><td><null/></td><td><string>s2</string></td></tr></table></td></tr></table>", r);
 		t2 = p.parse(r, C.class);
 		assertNull(t2.f1);
 	}
@@ -143,13 +143,13 @@ public class CommonTest {
 
 		s.setProperty(SERIALIZER_trimEmptyLists, false);
 		r = s.serialize(t1);
-		assertEquals("<table type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f1</string></td><td><ul></ul></td></tr><tr><td><string>f2</string></td><td><table type='array'><tr><th>s1</th><th>s2</th></tr><tr><null/></tr><tr><td><null/></td><td><string>s2</string></td></tr></table></td></tr></table>", r);
+		assertEquals("<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f1</string></td><td><ul></ul></td></tr><tr><td><string>f2</string></td><td><table _type='array'><tr><th>s1</th><th>s2</th></tr><tr><null/></tr><tr><td><null/></td><td><string>s2</string></td></tr></table></td></tr></table>", r);
 		t2 = p.parse(r, D.class);
 		assertEqualObjects(t1, t2);
 
 		s.setProperty(SERIALIZER_trimEmptyLists, true);
 		r = s.serialize(t1);
-		assertEquals("<table type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f2</string></td><td><table type='array'><tr><th>s1</th><th>s2</th></tr><tr><null/></tr><tr><td><null/></td><td><string>s2</string></td></tr></table></td></tr></table>", r);
+		assertEquals("<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f2</string></td><td><table _type='array'><tr><th>s1</th><th>s2</th></tr><tr><null/></tr><tr><td><null/></td><td><string>s2</string></td></tr></table></td></tr></table>", r);
 		t2 = p.parse(r, D.class);
 		assertNull(t2.f1);
 	}
@@ -175,7 +175,7 @@ public class CommonTest {
 		String r;
 
 		r = s.serialize(t);
-		assertEquals("<table type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>x1</string></td><td><table type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f1</string></td><td><number>1</number></td></tr></table></td></tr><tr><td><string>x2</string></td><td><table type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f1</string></td><td><number>1</number></td></tr></table></td></tr><tr><td><string>x3</string></td><td><table type='array'><tr><th>f1</th></tr><tr><td><number>1</number></td></tr></table></td></tr><tr><td><string>x4</string></td><td><table type='array'><tr><th>f1</th></tr><tr><td><number>1</number></td></tr></table></td></tr><tr><td><string>x5</string></td><td><table type='array'><tr><th>f1</th></tr><tr><td><number>1</number></td></tr></table></td></tr><tr><td><string>x6</string></td><td><table type='array'><tr><th>f1</th></tr><tr><td><number>1</number></td></tr></table></td></tr></table>", r);
+		assertEquals("<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>x1</string></td><td><table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f1</string></td><td><number>1</number></td></tr></table></td></tr><tr><td><string>x2</string></td><td><table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f1</string></td><td><number>1</number></td></tr></table></td></tr><tr><td><string>x3</string></td><td><table _type='array'><tr><th>f1</th></tr><tr><td><number>1</number></td></tr></table></td></tr><tr><td><string>x4</string></td><td><table _type='array'><tr><th>f1</th></tr><tr><td><number>1</number></td></tr></table></td></tr><tr><td><string>x5</string></td><td><table _type='array'><tr><th>f1</th></tr><tr><td><number>1</number></td></tr></table></td></tr><tr><td><string>x6</string></td><td><table _type='array'><tr><th>f1</th></tr><tr><td><number>1</number></td></tr></table></td></tr></table>", r);
 		r = s.getSchemaSerializer().serialize(new E1());
 		assertTrue(r.indexOf("f2") == -1);
 	}
@@ -211,7 +211,7 @@ public class CommonTest {
 		t.x1.add(new F());
 		l.add(t);
 		String html = s.serialize(l);
-		assertEquals("<table type='array'><tr><th>x1</th><th>x2</th></tr><tr><td><table type='array'><tr><th>x2</th></tr><tr><td><number>2</number></td></tr></table></td><td><number>2</number></td></tr></table>", html);
+		assertEquals("<table _type='array'><tr><th>x1</th><th>x2</th></tr><tr><td><table _type='array'><tr><th>x2</th></tr><tr><td><number>2</number></td></tr></table></td><td><number>2</number></td></tr></table>", html);
 	}
 
 	public static class F {
@@ -428,7 +428,7 @@ public class CommonTest {
 
 	private String strip(String html) {
 		return html
-			.replace("<table type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr>", "")
+			.replace("<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr>", "")
 			.replace("</table>", "")
 			.replace("<tr><td><string>", "\n[")
 			.replace("</string></td><td>", "]=")
@@ -492,7 +492,7 @@ public class CommonTest {
 		}
 
 		s.setProperty(SERIALIZER_ignoreRecursions, true);
-		assertEquals("<table type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>name</string></td><td><string>foo</string></td></tr><tr><td><string>r2</string></td><td><table type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>name</string></td><td><string>bar</string></td></tr><tr><td><string>r3</string></td><td><table type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>name</string></td><td><string>baz</string></td></tr></table></td></tr></table></td></tr></table>",
+		assertEquals("<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>name</string></td><td><string>foo</string></td></tr><tr><td><string>r2</string></td><td><table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>name</string></td><td><string>bar</string></td></tr><tr><td><string>r3</string></td><td><table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>name</string></td><td><string>baz</string></td></tr></table></td></tr></table></td></tr></table>",
 			s.serialize(r1));
 
 		// Make sure this doesn't blow up.
@@ -523,7 +523,7 @@ public class CommonTest {
 		a.setF1("J");
 		a.setF2(100);
 		a.setF3(true);
-		assertEquals("<table type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f1</string></td><td><string>J</string></td></tr><tr><td><string>f2</string></td><td><number>100</number></td></tr><tr><td><string>f3</string></td><td><boolean>true</boolean></td></tr></table>", s.serialize(a));
+		assertEquals("<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f1</string></td><td><string>J</string></td></tr><tr><td><string>f2</string></td><td><number>100</number></td></tr><tr><td><string>f3</string></td><td><boolean>true</boolean></td></tr></table>", s.serialize(a));
 	}
 
 	public static class J {

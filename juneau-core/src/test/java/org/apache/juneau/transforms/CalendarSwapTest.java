@@ -430,7 +430,7 @@ public class CalendarSwapTest {
 		Class<?> f = CalendarMapSwap.class;
 		WriterSerializer s = new HtmlSerializer.Sq().addPojoSwaps(f);
 		ReaderParser p = new HtmlParser().addPojoSwaps(f);
-		doTest(s, p, true, "<table type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>time</string></td><td><number>-2172116928000</number></td></tr><tr><td><string>timeZone</string></td><td><string>PST</string></td></tr></table>");
+		doTest(s, p, true, "<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>time</string></td><td><number>-2172116928000</number></td></tr><tr><td><string>timeZone</string></td><td><string>PST</string></td></tr></table>");
 	}
 
 	//====================================================================================================
@@ -579,7 +579,7 @@ public class CalendarSwapTest {
 		Calendar c = testDate;
 		A t = new A(c);
 		String html = s.serialize(t);
-		assertEquals("<table type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>d1</string></td><td><string>1901-03-03T18:11:12Z</string></td></tr><tr><td><string>d2</string></td><td><string>Sun, 03 Mar 1901 18:11:12 GMT</string></td></tr><tr><td><string>d3</string></td><td><number>-2172116928000</number></td></tr></table>", html);
+		assertEquals("<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>d1</string></td><td><string>1901-03-03T18:11:12Z</string></td></tr><tr><td><string>d2</string></td><td><string>Sun, 03 Mar 1901 18:11:12 GMT</string></td></tr><tr><td><string>d3</string></td><td><number>-2172116928000</number></td></tr></table>", html);
 		t = p.parse(html, A.class);
 		assertEquals(t.d1.getTime().getTime(), c.getTime().getTime());
 		assertEquals(t.getD2().getTime().getTime(), c.getTime().getTime());

@@ -117,7 +117,7 @@ public class RoundTripMapsTest extends RoundTripTest {
 		assertEquals(e, r);
 
 		s = new HtmlSerializer.Sq().addPojoSwaps(getPojoSwaps()).setProperty(SERIALIZER_trimNullProperties, false);
-		e = "<table type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>AQID</string></td><td><string>a</string></td></tr><tr><td><string>BAUG</string></td><td><null/></td></tr><tr><td><null/></td><td><string>b</string></td></tr></table>";
+		e = "<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>AQID</string></td><td><string>a</string></td></tr><tr><td><string>BAUG</string></td><td><null/></td></tr><tr><td><null/></td><td><string>b</string></td></tr></table>";
 		r = s.serialize(t);
 		assertEquals(e, r);
 
