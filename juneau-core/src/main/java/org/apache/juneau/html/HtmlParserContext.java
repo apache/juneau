@@ -30,6 +30,7 @@ import org.apache.juneau.parser.*;
  * 	<li>{@link HtmlParser#addNotBeanClasses(Class[])}
  * 	<li>{@link HtmlParser#addBeanFilters(Class[])}
  * 	<li>{@link HtmlParser#addPojoSwaps(Class[])}
+ * 	<li>{@link HtmlParser#addToDictionary(Class[])}
  * 	<li>{@link HtmlParser#addImplClass(Class,Class)}
  * </ul>
  * <p>

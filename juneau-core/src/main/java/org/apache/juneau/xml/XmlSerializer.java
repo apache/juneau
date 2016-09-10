@@ -690,6 +690,12 @@ public class XmlSerializer extends WriterSerializer {
 	}
 
 	@Override /* CoreApi */
+	public XmlSerializer addToDictionary(Class<?>...classes) throws LockedException {
+		super.addToDictionary(classes);
+		return this;
+	}
+
+	@Override /* CoreApi */
 	public <T> XmlSerializer addImplClass(Class<T> interfaceClass, Class<? extends T> implClass) throws LockedException {
 		super.addImplClass(interfaceClass, implClass);
 		return this;

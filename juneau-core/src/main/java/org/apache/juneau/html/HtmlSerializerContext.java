@@ -28,6 +28,7 @@ import org.apache.juneau.xml.*;
  * 	<li>{@link HtmlSerializer#addNotBeanClasses(Class[])}
  * 	<li>{@link HtmlSerializer#addBeanFilters(Class[])}
  * 	<li>{@link HtmlSerializer#addPojoSwaps(Class[])}
+ * 	<li>{@link HtmlSerializer#addToDictionary(Class[])}
  * 	<li>{@link HtmlSerializer#addImplClass(Class,Class)}
  * </ul>
  * <p>

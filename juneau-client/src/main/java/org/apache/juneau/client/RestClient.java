@@ -926,6 +926,18 @@ public class RestClient extends CoreApi {
 	}
 
 	@Override /* CoreAPI */
+	public RestClient addToDictionary(Class<?>...classes) throws LockedException {
+		super.addToDictionary(classes);
+		if (serializer != null)
+			serializer.addToDictionary(classes);
+		if (parser != null)
+			parser.addToDictionary(classes);
+		if (urlEncodingSerializer != null)
+			urlEncodingSerializer.addToDictionary(classes);
+		return this;
+	}
+
+	@Override /* CoreAPI */
 	public <T> RestClient addImplClass(Class<T> interfaceClass, Class<? extends T> implClass) throws LockedException {
 		super.addImplClass(interfaceClass, implClass);
 		if (serializer != null)

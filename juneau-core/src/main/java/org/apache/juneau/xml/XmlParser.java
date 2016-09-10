@@ -62,7 +62,7 @@ public class XmlParser extends ReaderParser {
 	private static final int UNKNOWN=0, OBJECT=1, ARRAY=2, STRING=3, NUMBER=4, BOOLEAN=5, NULL=6;
 
 
-	private <T> T parseAnything(XmlParserSession session, ClassMeta<T> eType, String currAttr, XMLStreamReader r, Object outer, boolean isRoot) throws Exception {
+	private <T> T parseAnything(XmlParserSession session, ClassMeta<T> eType, String currAttr, XMLStreamReader r, Object outer, boolean isRoot, BeanPropertyMeta pMeta) throws Exception {
 
 		BeanContext bc = session.getBeanContext();
 		if (eType == null)
@@ -70,6 +70,7 @@ public class XmlParser extends ReaderParser {
 		PojoSwap<T,Object> transform = (PojoSwap<T,Object>)eType.getPojoSwap();
 		ClassMeta<?> sType = eType.getSerializedClassMeta();
 		session.setCurrentClass(sType);
+		BeanDictionary bd = (pMeta == null ? bc.getBeanDictionary() : pMeta.getBeanDictionary());
 
 		String wrapperAttr = (isRoot && session.isPreserveRootElement()) ? r.getName().getLocalPart() : null;
 		String typeAttr = r.getAttributeValue(null, "type");
@@ -108,12 +109,12 @@ public class XmlParser extends ReaderParser {
 		if (sType.isObject()) {
 			if (jsonType == OBJECT) {
 				ObjectMap m = new ObjectMap(bc);
-				parseIntoMap(session, r, m, string(), object());
+				parseIntoMap(session, r, m, string(), object(), pMeta);
 				if (wrapperAttr != null)
 					m = new ObjectMap(bc).append(wrapperAttr, m);
-				o = m.cast();
+				o = bd.cast(m);
 			} else if (jsonType == ARRAY)
-				o = parseIntoCollection(session, r, new ObjectList(bc), object());
+				o = parseIntoCollection(session, r, new ObjectList(bc), object(), pMeta);
 			else if (jsonType == STRING) {
 				o = session.decodeString(r.getElementText());
 				if (sType.isChar())
@@ -133,17 +134,17 @@ public class XmlParser extends ReaderParser {
 			o = session.decodeString(r.getElementText()).charAt(0);
 		} else if (sType.isMap()) {
 			Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : new ObjectMap(bc));
-			o = parseIntoMap(session, r, m, sType.getKeyType(), sType.getValueType());
+			o = parseIntoMap(session, r, m, sType.getKeyType(), sType.getValueType(), pMeta);
 			if (wrapperAttr != null)
 				o = new ObjectMap(bc).append(wrapperAttr, m);
 		} else if (sType.isCollection()) {
 			Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance(outer) : new ObjectList(bc));
-			o = parseIntoCollection(session, r, l, sType.getElementType());
+			o = parseIntoCollection(session, r, l, sType.getElementType(), pMeta);
 		} else if (sType.isNumber()) {
 			o = parseNumber(session.decodeLiteral(r.getElementText()), (Class<? extends Number>)sType.getInnerClass());
 		} else if (sType.canCreateNewInstanceFromObjectMap(outer)) {
 			ObjectMap m = new ObjectMap(bc);
-			parseIntoMap(session, r, m, string(), object());
+			parseIntoMap(session, r, m, string(), object(), pMeta);
 			o = sType.newInstanceFromObjectMap(outer, m);
 		} else if (sType.canCreateNewBean(outer)) {
 			if (sType.getExtendedMeta(XmlClassMeta.class).getFormat() == XmlFormat.COLLAPSED) {
@@ -151,7 +152,7 @@ public class XmlParser extends ReaderParser {
 				BeanMap<?> m = bc.newBeanMap(outer, sType.getInnerClass());
 				BeanPropertyMeta bpm = m.getMeta().getExtendedMeta(XmlBeanMeta.class).getPropertyMeta(fieldName);
 				ClassMeta<?> cm = m.getMeta().getClassMeta();
-				Object value = parseAnything(session, cm, currAttr, r, m.getBean(false), false);
+				Object value = parseAnything(session, cm, currAttr, r, m.getBean(false), false, null);
 				setName(cm, value, currAttr);
 				bpm.set(m, value);
 				o = m.getBean();
@@ -160,7 +161,7 @@ public class XmlParser extends ReaderParser {
 				o = parseIntoBean(session, r, m).getBean();
 			}
 		} else if (sType.isArray()) {
-			ArrayList l = (ArrayList)parseIntoCollection(session, r, new ArrayList(), sType.getElementType());
+			ArrayList l = (ArrayList)parseIntoCollection(session, r, new ArrayList(), sType.getElementType(), pMeta);
 			o = bc.toArray(sType, l);
 		} else if (sType.canCreateNewInstanceFromString(outer)) {
 			o = sType.newInstanceFromString(outer, session.decodeString(r.getElementText()));
@@ -179,7 +180,7 @@ public class XmlParser extends ReaderParser {
 		return (T)o;
 	}
 
-	private <K,V> Map<K,V> parseIntoMap(XmlParserSession session, XMLStreamReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType) throws Exception {
+	private <K,V> Map<K,V> parseIntoMap(XmlParserSession session, XMLStreamReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta) throws Exception {
 		BeanContext bc = session.getBeanContext();
 		int depth = 0;
 		for (int i = 0; i < r.getAttributeCount(); i++) {
@@ -199,7 +200,7 @@ public class XmlParser extends ReaderParser {
 				depth++;
 				currAttr = session.decodeString(r.getLocalName());
 				K key = convertAttrToType(session, m, currAttr, keyType);
-				V value = parseAnything(session, valueType, currAttr, r, m, false);
+				V value = parseAnything(session, valueType, currAttr, r, m, false, pMeta);
 				setName(valueType, value, currAttr);
 				if (valueType.isObject() && m.containsKey(key)) {
 					Object o = m.get(key);
@@ -218,13 +219,13 @@ public class XmlParser extends ReaderParser {
 		return m;
 	}
 
-	private <E> Collection<E> parseIntoCollection(XmlParserSession session, XMLStreamReader r, Collection<E> l, ClassMeta<E> elementType) throws Exception {
+	private <E> Collection<E> parseIntoCollection(XmlParserSession session, XMLStreamReader r, Collection<E> l, ClassMeta<E> elementType, BeanPropertyMeta pMeta) throws Exception {
 		int depth = 0;
 		do {
 			int event = r.nextTag();
 			if (event == START_ELEMENT) {
 				depth++;
-				E value = parseAnything(session, elementType, null, r, l, false);
+				E value = parseAnything(session, elementType, null, r, l, false, pMeta);
 				l.add(value);
 			} else if (event == END_ELEMENT) {
 				depth--;
@@ -242,7 +243,7 @@ public class XmlParser extends ReaderParser {
 			int event = r.nextTag();
 			if (event == START_ELEMENT) {
 				depth++;
-				o[i] = parseAnything(session, argTypes[i], null, r, null, false);
+				o[i] = parseAnything(session, argTypes[i], null, r, null, false, null);
 				i++;
 			} else if (event == END_ELEMENT) {
 				depth--;
@@ -315,7 +316,7 @@ public class XmlParser extends ReaderParser {
 				BeanPropertyMeta pMeta = xmlMeta.getPropertyMeta(currAttr);
 				if (pMeta == null) {
 					if (m.getMeta().isSubTyped()) {
-						Object value = parseAnything(session, string(), currAttr, r, m.getBean(false), false);
+						Object value = parseAnything(session, string(), currAttr, r, m.getBean(false), false, null);
 						m.put(currAttr, value);
 					} else {
 						Location l = r.getLocation();
@@ -327,7 +328,7 @@ public class XmlParser extends ReaderParser {
 					XmlFormat xf = pMeta.getExtendedMeta(XmlBeanPropertyMeta.class).getXmlFormat();
 					if (xf == COLLAPSED) {
 						ClassMeta<?> et = pMeta.getClassMeta().getElementType();
-						Object value = parseAnything(session, et, currAttr, r, m.getBean(false), false);
+						Object value = parseAnything(session, et, currAttr, r, m.getBean(false), false, pMeta);
 						setName(et, value, currAttr);
 						pMeta.add(m, value);
 					} else if (xf == ATTR)  {
@@ -335,7 +336,7 @@ public class XmlParser extends ReaderParser {
 						r.nextTag();
 					} else {
 						ClassMeta<?> cm = pMeta.getClassMeta();
-						Object value = parseAnything(session, cm, currAttr, r, m.getBean(false), false);
+						Object value = parseAnything(session, cm, currAttr, r, m.getBean(false), false, pMeta);
 						setName(cm, value, currAttr);
 						pMeta.set(m, value);
 					}
@@ -399,7 +400,7 @@ public class XmlParser extends ReaderParser {
 						depth++;
 						currAttr = session.decodeString(r.getLocalName());
 						String key = convertAttrToType(session, null, currAttr, string());
-						Object value = parseAnything(session, object(), currAttr, r, null, false);
+						Object value = parseAnything(session, object(), currAttr, r, null, false, null);
 						if (m.containsKey(key)) {
 							Object o = m.get(key);
 							if (o instanceof ObjectList)
@@ -446,7 +447,7 @@ public class XmlParser extends ReaderParser {
 	protected <T> T doParse(ParserSession session, ClassMeta<T> type) throws Exception {
 		XmlParserSession s = (XmlParserSession)session;
 		type = s.getBeanContext().normalizeClassMeta(type);
-		return parseAnything(s, type, null, s.getXmlStreamReader(), s.getOuter(), true);
+		return parseAnything(s, type, null, s.getXmlStreamReader(), s.getOuter(), true, null);
 	}
 
 	@Override /* ReaderParser */
@@ -496,6 +497,12 @@ public class XmlParser extends ReaderParser {
 	@Override /* CoreApi */
 	public XmlParser addPojoSwaps(Class<?>...classes) throws LockedException {
 		super.addPojoSwaps(classes);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public XmlParser addToDictionary(Class<?>...classes) throws LockedException {
+		super.addToDictionary(classes);
 		return this;
 	}
 

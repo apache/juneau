@@ -28,6 +28,7 @@ import org.apache.juneau.parser.*;
  * 	<li>{@link UonParser#addNotBeanClasses(Class[])}
  * 	<li>{@link UonParser#addBeanFilters(Class[])}
  * 	<li>{@link UonParser#addPojoSwaps(Class[])}
+ * 	<li>{@link UonParser#addToDictionary(Class[])}
  * 	<li>{@link UonParser#addImplClass(Class,Class)}
  * </ul>
  * <p>

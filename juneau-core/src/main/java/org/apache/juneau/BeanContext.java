@@ -646,8 +646,6 @@ public class BeanContext extends Context {
 		}
  		pojoSwaps = lpf.toArray(new PojoSwap[0]);
 
- 		beanDictionary = new BeanDictionaryBuilder().add(pm.get(BEAN_beanDictionary, Class[].class, new Class[0])).setBeanContext(this).build();
-
  		implClasses = new TreeMap<Class<?>,Class<?>>(new ClassComparator());
  		Map<Class,Class> m = pm.getMap(BEAN_implClasses, Class.class, Class.class, null);
  		if (m != null)
@@ -666,6 +664,8 @@ public class BeanContext extends Context {
 		this.cmString = cmCache.get(String.class);
 		this.cmObject = cmCache.get(Object.class);
 		this.cmClass = cmCache.get(Class.class);
+
+		beanDictionary = new BeanDictionaryBuilder().add(pm.get(BEAN_beanDictionary, Class[].class, new Class[0])).setBeanContext(this).build();
 	}
 
 	/**
@@ -1503,7 +1503,7 @@ public class BeanContext extends Context {
 	 *
 	 * @return The bean dictionary defined in this bean context.  Never <jk>null</jk>.
 	 */
-	protected BeanDictionary getBeanDictionary() {
+	public BeanDictionary getBeanDictionary() {
 		return beanDictionary;
 	}
 

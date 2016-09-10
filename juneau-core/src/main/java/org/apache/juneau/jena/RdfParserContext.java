@@ -31,6 +31,7 @@ import org.apache.juneau.xml.*;
  * 	<li>{@link RdfParser#addNotBeanClasses(Class[])}
  * 	<li>{@link RdfParser#addBeanFilters(Class[])}
  * 	<li>{@link RdfParser#addPojoSwaps(Class[])}
+ * 	<li>{@link RdfParser#addToDictionary(Class[])}
  * 	<li>{@link RdfParser#addImplClass(Class,Class)}
  * </ul>
  * <p>

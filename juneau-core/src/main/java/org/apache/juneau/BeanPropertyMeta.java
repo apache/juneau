@@ -49,6 +49,7 @@ public class BeanPropertyMeta {
 	private boolean isConstructorArg, isUri;
 
 	private final BeanMeta<?> beanMeta;
+	private final BeanContext beanContext;
 
 	private String name;
 	private ClassMeta<?>
@@ -68,6 +69,7 @@ public class BeanPropertyMeta {
 	 */
 	protected BeanPropertyMeta(BeanMeta<?> beanMeta, String name) {
 		this.beanMeta = beanMeta;
+		this.beanContext = beanMeta.ctx;
 		this.name = name;
 	}
 
@@ -139,7 +141,7 @@ public class BeanPropertyMeta {
 	 */
 	public ClassMeta<?> getClassMeta() {
 		if (typeMeta == null)
-			typeMeta = (swap != null ? swap.getSwapClassMeta(beanMeta.ctx) : rawTypeMeta == null ? beanMeta.ctx.object() : rawTypeMeta.getSerializedClassMeta());
+			typeMeta = (swap != null ? swap.getSwapClassMeta(beanContext) : rawTypeMeta == null ? beanContext.object() : rawTypeMeta.getSerializedClassMeta());
 		return typeMeta;
 	}
 
@@ -154,7 +156,7 @@ public class BeanPropertyMeta {
 	 * @return The bean dictionary in use for this bean property.  Never <jk>null</jk>.
 	 */
 	public BeanDictionary getBeanDictionary() {
-		return beanDictionary;
+		return beanDictionary == null ? beanContext.getBeanDictionary() : beanDictionary;
 	}
 
 	/**
@@ -256,7 +258,7 @@ public class BeanPropertyMeta {
 				if (p.properties().length != 0)
 					properties = p.properties();
 				if (p.beanDictionary().length > 0)
-					this.beanDictionary = new BeanDictionaryBuilder().add(p.beanDictionary()).setBeanContext(this.beanMeta.ctx).build();
+					this.beanDictionary = new BeanDictionaryBuilder().add(p.beanDictionary()).setBeanContext(beanContext).build();
 			}
 		}
 
@@ -271,7 +273,7 @@ public class BeanPropertyMeta {
 				if (properties != null && p.properties().length != 0)
 					properties = p.properties();
 				if (p.beanDictionary().length > 0)
-					this.beanDictionary = new BeanDictionaryBuilder().add(p.beanDictionary()).setBeanContext(this.beanMeta.ctx).build();
+					this.beanDictionary = new BeanDictionaryBuilder().add(p.beanDictionary()).setBeanContext(beanContext).build();
 			}
 		}
 
@@ -286,7 +288,7 @@ public class BeanPropertyMeta {
 				if (properties != null && p.properties().length != 0)
 					properties = p.properties();
 				if (p.beanDictionary().length > 0)
-					this.beanDictionary = new BeanDictionaryBuilder().add(p.beanDictionary()).setBeanContext(this.beanMeta.ctx).build();
+					this.beanDictionary = new BeanDictionaryBuilder().add(p.beanDictionary()).setBeanContext(beanContext).build();
 			}
 		}
 
@@ -369,7 +371,7 @@ public class BeanPropertyMeta {
 		} catch (SerializeException e) {
 			throw new BeanRuntimeException(e);
 		} catch (Throwable e) {
-			if (beanMeta.ctx.ignoreInvocationExceptionsOnGetters) {
+			if (beanContext.ignoreInvocationExceptionsOnGetters) {
 				if (rawTypeMeta.isPrimitive())
 					return rawTypeMeta.getPrimitiveDefault();
 				return null;
@@ -391,7 +393,6 @@ public class BeanPropertyMeta {
 		try {
 			// Comvert to raw form.
 			value = unswap(value);
-			BeanContext bc = this.beanMeta.ctx;
 
 		if (m.bean == null) {
 
@@ -411,7 +412,7 @@ public class BeanPropertyMeta {
 			boolean isCollection = rawTypeMeta.isCollection();
 
 		if (field == null && setter == null && ! (isMap || isCollection)) {
-			if ((value == null && bc.ignoreUnknownNullBeanProperties) || bc.ignorePropertiesWithoutSetters)
+			if ((value == null && beanContext.ignoreUnknownNullBeanProperties) || beanContext.ignorePropertiesWithoutSetters)
 				return null;
 			throw new BeanRuntimeException(beanMeta.c, "Setter or public field not defined on property ''{0}''", name);
 		}
@@ -420,7 +421,7 @@ public class BeanPropertyMeta {
 
 		try {
 
-			Object r = beanMeta.ctx.beanMapPutReturnsOldValue || isMap || isCollection ? get(m) : null;
+			Object r = beanContext.beanMapPutReturnsOldValue || isMap || isCollection ? get(m) : null;
 				Class<?> propertyClass = rawTypeMeta.getInnerClass();
 
 			if (value == null && (isMap || isCollection)) {
@@ -438,7 +439,7 @@ public class BeanPropertyMeta {
 
 				if (! (value instanceof Map)) {
 					if (value instanceof CharSequence)
-						value = new ObjectMap((CharSequence)value).setBeanContext(beanMeta.ctx);
+						value = new ObjectMap((CharSequence)value).setBeanContext(beanContext);
 					else
 						throw new BeanRuntimeException(beanMeta.c, "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}''", name, propertyClass.getName(), findClassName(value));
 				}
@@ -489,7 +490,7 @@ public class BeanPropertyMeta {
 					Object k = e.getKey();
 					Object v = e.getValue();
 					if (! valueType.isObject())
-						v = beanMeta.ctx.convertToType(v, valueType);
+						v = beanContext.convertToType(v, valueType);
 					propMap.put(k, v);
 				}
 
@@ -497,7 +498,7 @@ public class BeanPropertyMeta {
 
 				if (! (value instanceof Collection)) {
 					if (value instanceof CharSequence)
-						value = new ObjectList((CharSequence)value).setBeanContext(beanMeta.ctx);
+						value = new ObjectList((CharSequence)value).setBeanContext(beanContext);
 					else
 						throw new BeanRuntimeException(beanMeta.c, "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}''", name, propertyClass.getName(), findClassName(value));
 				}
@@ -519,7 +520,7 @@ public class BeanPropertyMeta {
 									for (ListIterator<Object> i = l.listIterator(); i.hasNext(); ) {
 										Object v = i.next();
 										if (v != null && (! elementType.getInnerClass().isInstance(v))) {
-											i.set(bc.convertToType(v, elementType));
+											i.set(beanContext.convertToType(v, elementType));
 										}
 									}
 									valueList = l;
@@ -550,15 +551,15 @@ public class BeanPropertyMeta {
 				// Set the values.
 				for (Object v : valueList) {
 					if (! elementType.isObject())
-						v = beanMeta.ctx.convertToType(v, elementType);
+						v = beanContext.convertToType(v, elementType);
 					propList.add(v);
 				}
 
 			} else {
 				if (swap != null && value != null && isParentClass(swap.getSwapClass(), value.getClass())) {
-						value = swap.unswap(value, rawTypeMeta, beanMeta.ctx);
+						value = swap.unswap(value, rawTypeMeta, beanContext);
 				} else {
-						value = beanMeta.ctx.convertToType(value, rawTypeMeta);
+						value = beanContext.convertToType(value, rawTypeMeta);
 					}
 				if (setter != null)
 					setter.invoke(bean, new Object[] { value });
@@ -572,7 +573,7 @@ public class BeanPropertyMeta {
 			throw e;
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (beanMeta.ctx.ignoreInvocationExceptionsOnSetters) {
+			if (beanContext.ignoreInvocationExceptionsOnSetters) {
 					if (rawTypeMeta.isPrimitive())
 						return rawTypeMeta.getPrimitiveDefault();
 				return null;
@@ -615,12 +616,10 @@ public class BeanPropertyMeta {
 	 */
 	public void add(BeanMap<?> m, Object value) throws BeanRuntimeException {
 
-		BeanContext bc = beanMeta.ctx;
-
 		// Read-only beans get their properties stored in a cache.
 		if (m.bean == null) {
 			if (! m.propertyCache.containsKey(name))
-				m.propertyCache.put(name, new ObjectList(bc));
+				m.propertyCache.put(name, new ObjectList(beanContext));
 			((ObjectList)m.propertyCache.get(name)).add(value);
 			return;
 		}
@@ -636,7 +635,7 @@ public class BeanPropertyMeta {
 		ClassMeta<?> elementType = rawTypeMeta.getElementType();
 
 		try {
-			Object v = bc.convertToType(value, elementType);
+			Object v = beanContext.convertToType(value, elementType);
 
 			if (isCollection) {
 				Collection c = null;
@@ -656,7 +655,7 @@ public class BeanPropertyMeta {
 				if (rawTypeMeta.canCreateNewInstance())
 					c = (Collection)rawTypeMeta.newInstance();
 				else
-					c = new ObjectList(bc);
+					c = new ObjectList(beanContext);
 
 				c.add(v);
 
@@ -729,31 +728,31 @@ public class BeanPropertyMeta {
 	private Object transform(Object o) throws SerializeException {
 		// First use swap defined via @BeanProperty.
 		if (swap != null)
-			return swap.swap(o, beanMeta.ctx);
+			return swap.swap(o, beanContext);
 		if (o == null)
 			return null;
 		// Otherwise, look it up via bean context.
 		if (rawTypeMeta.hasChildPojoSwaps()) {
 			Class c = o.getClass();
-			ClassMeta<?> cm = rawTypeMeta.innerClass == c ? rawTypeMeta : beanMeta.ctx.getClassMeta(c);
+			ClassMeta<?> cm = rawTypeMeta.innerClass == c ? rawTypeMeta : beanContext.getClassMeta(c);
 			PojoSwap f = cm.getPojoSwap();
 			if (f != null)
-				return f.swap(o, beanMeta.ctx);
+				return f.swap(o, beanContext);
 		}
 		return o;
 	}
 
 	private Object unswap(Object o) throws ParseException {
 		if (swap != null)
-			return swap.unswap(o, rawTypeMeta, beanMeta.ctx);
+			return swap.unswap(o, rawTypeMeta, beanContext);
 		if (o == null)
 			return null;
 		if (rawTypeMeta.hasChildPojoSwaps()) {
 			Class c = o.getClass();
-			ClassMeta<?> cm = rawTypeMeta.innerClass == c ? rawTypeMeta : beanMeta.ctx.getClassMeta(c);
+			ClassMeta<?> cm = rawTypeMeta.innerClass == c ? rawTypeMeta : beanContext.getClassMeta(c);
 			PojoSwap f = cm.getPojoSwap();
 			if (f != null)
-				return f.unswap(o, rawTypeMeta, beanMeta.ctx);
+				return f.unswap(o, rawTypeMeta, beanContext);
 		}
 		return o;
 	}
@@ -768,7 +767,7 @@ public class BeanPropertyMeta {
 		if (cm.isObject()) {
 			if (o instanceof Map)
 				return new FilteredMap((Map)o, properties);
-			BeanMeta bm = this.getBeanMeta().ctx.getBeanMeta(o.getClass());
+			BeanMeta bm = beanContext.getBeanMeta(o.getClass());
 			if (bm != null)
 				return new BeanMap(o, new BeanMetaFiltered(cm.getBeanMeta(), properties));
 		}

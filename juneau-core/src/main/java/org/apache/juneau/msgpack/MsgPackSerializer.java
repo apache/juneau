@@ -144,9 +144,9 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 		}
 	}
 
-	private void serializeBeanMap(MsgPackSerializerSession session, MsgPackOutputStream out, final BeanMap<?> m, boolean addClassAttr) throws Exception {
+	private void serializeBeanMap(MsgPackSerializerSession session, MsgPackOutputStream out, final BeanMap<?> m, boolean addTypeProperty) throws Exception {
 
-		List<BeanPropertyValue> values = m.getValues(session.isTrimNulls(), addClassAttr ? session.createBeanTypeNameProperty(m, null) : null);
+		List<BeanPropertyValue> values = m.getValues(session.isTrimNulls(), addTypeProperty ? session.createBeanTypeNameProperty(m) : null);
 
 		int size = values.size();
 		for (BeanPropertyValue p : values)
@@ -237,6 +237,12 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 	@Override /* CoreApi */
 	public MsgPackSerializer addPojoSwaps(Class<?>...classes) throws LockedException {
 		super.addPojoSwaps(classes);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public MsgPackSerializer addToDictionary(Class<?>...classes) throws LockedException {
+		super.addToDictionary(classes);
 		return this;
 	}
 

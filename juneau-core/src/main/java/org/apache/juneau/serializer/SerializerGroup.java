@@ -303,6 +303,20 @@ public final class SerializerGroup extends Lockable {
 	}
 
 	/**
+	 * Shortcut for calling {@link Serializer#addToDictionary(Class[])} on all serializers in this group.
+	 *
+	 * @param classes The classes to add to the bean dictionary on the underlying bean context of all serializers in this group.
+	 * @throws LockedException If {@link #lock()} was called on this object.
+	 * @return This object (for method chaining).
+	 */
+	public SerializerGroup addToDictionary(Class<?>...classes) throws LockedException {
+		checkLock();
+		for (Serializer s : serializers)
+			s.addToDictionary(classes);
+		return this;
+	}
+
+	/**
 	 * Shortcut for calling {@link Serializer#addImplClass(Class, Class)} on all serializers in this group.
 	 *
 	 * @param <T> The interface or abstract class type.

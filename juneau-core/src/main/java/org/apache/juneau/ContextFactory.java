@@ -711,7 +711,7 @@ public final class ContextFactory extends Lockable {
 	}
 
 	/**
-	 * Shortcut for calling <code>addTo(<jsf>BEAN_transforms</jsf>, <jf>classes</jf>)</code>.
+	 * Shortcut for calling <code>addTo(<jsf>BEAN_pojoSwaps</jsf>, <jf>classes</jf>)</code>.
 	 *
 	 * @param classes The new setting value for the bean context.
 	 * @throws LockedException If {@link ContextFactory#lock()} was called on this class or the bean context.
@@ -722,6 +722,21 @@ public final class ContextFactory extends Lockable {
 	public ContextFactory addPojoSwaps(Class<?>...classes) throws LockedException {
 		checkLock();
 		addToProperty(BEAN_pojoSwaps, classes);
+		return this;
+	}
+
+	/**
+	 * Shortcut for calling <code>addTo(<jsf>BEAN_beanDictionary</jsf>, <jf>classes</jf>)</code>.
+	 *
+	 * @param classes The new setting value for the bean context.
+	 * @throws LockedException If {@link ContextFactory#lock()} was called on this class or the bean context.
+	 * @return This object (for method chaining).
+	 * @see ContextFactory#addToProperty(String, Object)
+	 * @see BeanContext#BEAN_beanDictionary
+	 */
+	public ContextFactory addToDictionary(Class<?>...classes) throws LockedException {
+		checkLock();
+		addToProperty(BEAN_beanDictionary, classes);
 		return this;
 	}
 

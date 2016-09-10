@@ -85,16 +85,18 @@ public class UonParser extends ReaderParser {
 	 * @param r The reader being parsed.
 	 * @param outer The outer object (for constructing nested inner classes).
 	 * @param isUrlParamValue If <jk>true</jk>, then we're parsing a top-level URL-encoded value which is treated a bit different than the default case.
+	 * @param pMeta The current bean property being parsed.
 	 * @return The parsed object.
 	 * @throws Exception
 	 */
-	protected <T> T parseAnything(UonParserSession session, ClassMeta<T> eType, ParserReader r, Object outer, boolean isUrlParamValue) throws Exception {
+	protected <T> T parseAnything(UonParserSession session, ClassMeta<T> eType, ParserReader r, Object outer, boolean isUrlParamValue, BeanPropertyMeta pMeta) throws Exception {
 
 		BeanContext bc = session.getBeanContext();
 		if (eType == null)
 			eType = (ClassMeta<T>)object();
 		PojoSwap<T,Object> transform = (PojoSwap<T,Object>)eType.getPojoSwap();
 		ClassMeta<?> sType = eType.getSerializedClassMeta();
+		BeanDictionary bd = (pMeta == null ? bc.getBeanDictionary() : pMeta.getBeanDictionary());
 
 		Object o = null;
 
@@ -121,11 +123,11 @@ public class UonParser extends ReaderParser {
 				o = parseNumber(session, r, null);
 			} else if (flag == 'o') {
 				ObjectMap m = new ObjectMap(bc);
-				parseIntoMap(session, r, m, string(), object());
-				o = m.cast();
+				parseIntoMap(session, r, m, string(), object(), pMeta);
+				o = bd.cast(m);
 			} else if (flag == 'a') {
 				Collection l = new ObjectList(bc);
-				o = parseIntoCollection(session, r, l, sType.getElementType(), isUrlParamValue);
+				o = parseIntoCollection(session, r, l, sType.getElementType(), isUrlParamValue, pMeta);
 			} else {
 				throw new ParseException(session, "Unexpected flag character ''{0}''.", flag);
 			}
@@ -140,14 +142,14 @@ public class UonParser extends ReaderParser {
 			o = parseNumber(session, r, (Class<? extends Number>)sType.getInnerClass());
 		} else if (sType.isMap()) {
 			Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : new ObjectMap(bc));
-			o = parseIntoMap(session, r, m, sType.getKeyType(), sType.getValueType());
+			o = parseIntoMap(session, r, m, sType.getKeyType(), sType.getValueType(), pMeta);
 		} else if (sType.isCollection()) {
 			if (flag == 'o') {
 				ObjectMap m = new ObjectMap(bc);
-				parseIntoMap(session, r, m, string(), object());
+				parseIntoMap(session, r, m, string(), object(), pMeta);
 				// Handle case where it's a collection, but serialized as a map with a _type or _value key.
 				if (m.containsKey(bc.getBeanTypePropertyName()))
-					o = m.cast();
+					o = bd.cast(m);
 				// Handle case where it's a collection, but only a single value was specified.
 				else {
 					Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance(outer) : new ObjectList(bc));
@@ -156,11 +158,11 @@ public class UonParser extends ReaderParser {
 				}
 			} else {
 				Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance(outer) : new ObjectList(bc));
-				o = parseIntoCollection(session, r, l, sType.getElementType(), isUrlParamValue);
+				o = parseIntoCollection(session, r, l, sType.getElementType(), isUrlParamValue, pMeta);
 			}
 		} else if (sType.canCreateNewInstanceFromObjectMap(outer)) {
 			ObjectMap m = new ObjectMap(bc);
-			parseIntoMap(session, r, m, string(), object());
+			parseIntoMap(session, r, m, string(), object(), pMeta);
 			o = sType.newInstanceFromObjectMap(outer, m);
 		} else if (sType.canCreateNewBean(outer)) {
 			BeanMap m = bc.newBeanMap(outer, sType.getInnerClass());
@@ -175,10 +177,10 @@ public class UonParser extends ReaderParser {
 		} else if (sType.isArray()) {
 			if (flag == 'o') {
 				ObjectMap m = new ObjectMap(bc);
-				parseIntoMap(session, r, m, string(), object());
+				parseIntoMap(session, r, m, string(), object(), pMeta);
 				// Handle case where it's an array, but serialized as a map with a _type or _value key.
 				if (m.containsKey(bc.getBeanTypePropertyName()))
-					o = m.cast();
+					o = bd.cast(m);
 				// Handle case where it's an array, but only a single value was specified.
 				else {
 					ArrayList l = new ArrayList(1);
@@ -186,15 +188,15 @@ public class UonParser extends ReaderParser {
 					o = bc.toArray(sType, l);
 				}
 			} else {
-				ArrayList l = (ArrayList)parseIntoCollection(session, r, new ArrayList(), sType.getElementType(), isUrlParamValue);
+				ArrayList l = (ArrayList)parseIntoCollection(session, r, new ArrayList(), sType.getElementType(), isUrlParamValue, pMeta);
 				o = bc.toArray(sType, l);
 			}
 		} else if (flag == 'o') {
 			// It could be a non-bean with _type attribute.
 			ObjectMap m = new ObjectMap(bc);
-			parseIntoMap(session, r, m, string(), object());
+			parseIntoMap(session, r, m, string(), object(), pMeta);
 			if (m.containsKey(bc.getBeanTypePropertyName()))
-				o = m.cast();
+				o = bd.cast(m);
 			else
 				throw new ParseException(session, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.getInnerClass().getName(), sType.getNotABeanReason());
 		} else {
@@ -210,7 +212,7 @@ public class UonParser extends ReaderParser {
 		return (T)o;
 	}
 
-	private <K,V> Map<K,V> parseIntoMap(UonParserSession session, ParserReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType) throws Exception {
+	private <K,V> Map<K,V> parseIntoMap(UonParserSession session, ParserReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta) throws Exception {
 
 		if (keyType == null)
 			keyType = (ClassMeta<K>)string();
@@ -266,7 +268,7 @@ public class UonParser extends ReaderParser {
 							return m;
 						state = S1;
 					} else  {
-						V value = parseAnything(session, valueType, r.unread(), m, false);
+						V value = parseAnything(session, valueType, r.unread(), m, false, pMeta);
 						setName(valueType, value, currAttr);
 						m.put(currAttr, value);
 						state = S4;
@@ -294,7 +296,7 @@ public class UonParser extends ReaderParser {
 		return null; // Unreachable.
 	}
 
-	private <E> Collection<E> parseIntoCollection(UonParserSession session, ParserReader r, Collection<E> l, ClassMeta<E> elementType, boolean isUrlParamValue) throws Exception {
+	private <E> Collection<E> parseIntoCollection(UonParserSession session, ParserReader r, Collection<E> l, ClassMeta<E> elementType, boolean isUrlParamValue, BeanPropertyMeta pMeta) throws Exception {
 
 		int c = r.read();
 		if (c == -1 || c == NUL || c == AMP)
@@ -320,14 +322,14 @@ public class UonParser extends ReaderParser {
 				if (state == S1 || state == S2) {
 					if (c == ')') {
 						if (state == S2) {
-							l.add(parseAnything(session, elementType, r.unread(), l, false));
+							l.add(parseAnything(session, elementType, r.unread(), l, false, pMeta));
 							r.read();
 						}
 						return l;
 					} else if ((c == '\n' || c == '\r') && session.isWhitespaceAware()) {
 						skipSpace(r);
 					} else {
-						l.add(parseAnything(session, elementType, r.unread(), l, false));
+						l.add(parseAnything(session, elementType, r.unread(), l, false, pMeta));
 						state = S3;
 					}
 				} else if (state == S3) {
@@ -354,7 +356,7 @@ public class UonParser extends ReaderParser {
 					if ((c == '\n' || c == '\r') && session.isWhitespaceAware()) {
 						skipSpace(r);
 					} else {
-						l.add(parseAnything(session, elementType, r.unread(), l, false));
+						l.add(parseAnything(session, elementType, r.unread(), l, false, pMeta));
 						state = S2;
 					}
 				} else if (state == S2) {
@@ -442,16 +444,16 @@ public class UonParser extends ReaderParser {
 							BeanPropertyMeta pMeta = m.getPropertyMeta(currAttr);
 							if (pMeta == null) {
 								if (m.getMeta().isSubTyped()) {
-									Object value = parseAnything(session, object(), r.unread(), m.getBean(false), false);
+									Object value = parseAnything(session, object(), r.unread(), m.getBean(false), false, null);
 									m.put(currAttr, value);
 								} else {
 									onUnknownProperty(session, currAttr, m, currAttrLine, currAttrCol);
-									parseAnything(session, object(), r.unread(), m.getBean(false), false); // Read content anyway to ignore it
+									parseAnything(session, object(), r.unread(), m.getBean(false), false, null); // Read content anyway to ignore it
 								}
 							} else {
 								session.setCurrentProperty(pMeta);
 								ClassMeta<?> cm = pMeta.getClassMeta();
-								Object value = parseAnything(session, cm, r.unread(), m.getBean(false), false);
+								Object value = parseAnything(session, cm, r.unread(), m.getBean(false), false, pMeta);
 								setName(cm, value, currAttr);
 								pMeta.set(m, value);
 								session.setCurrentProperty(null);
@@ -700,7 +702,7 @@ public class UonParser extends ReaderParser {
 			if (state == S1) {
 				if (c == ')')
 					return o;
-				o[i] = parseAnything(session, argTypes[i], r.unread(), session.getOuter(), false);
+				o[i] = parseAnything(session, argTypes[i], r.unread(), session.getOuter(), false, null);
 				i++;
 				state = S2;
 			} else if (state == S2) {
@@ -743,7 +745,7 @@ public class UonParser extends ReaderParser {
 		UonParserSession s = (UonParserSession)session;
 		type = s.getBeanContext().normalizeClassMeta(type);
 		UonReader r = s.getReader();
-		T o = parseAnything(s, type, r, s.getOuter(), true);
+		T o = parseAnything(s, type, r, s.getOuter(), true, null);
 		validateEnd(s, r);
 		return o;
 	}
@@ -753,7 +755,7 @@ public class UonParser extends ReaderParser {
 		UonParserSession s = (UonParserSession)session;
 		UonReader r = s.getReader();
 		readFlag(s, r, 'o');
-		m = parseIntoMap(s, r, m, s.getBeanContext().getClassMeta(keyType), s.getBeanContext().getClassMeta(valueType));
+		m = parseIntoMap(s, r, m, s.getBeanContext().getClassMeta(keyType), s.getBeanContext().getClassMeta(valueType), null);
 		validateEnd(s, r);
 		return m;
 	}
@@ -763,7 +765,7 @@ public class UonParser extends ReaderParser {
 		UonParserSession s = (UonParserSession)session;
 		UonReader r = s.getReader();
 		readFlag(s, r, 'a');
-		c = parseIntoCollection(s, r, c, s.getBeanContext().getClassMeta(elementType), false);
+		c = parseIntoCollection(s, r, c, s.getBeanContext().getClassMeta(elementType), false, null);
 		validateEnd(s, r);
 		return c;
 	}
@@ -804,6 +806,12 @@ public class UonParser extends ReaderParser {
 	@Override /* CoreApi */
 	public UonParser addPojoSwaps(Class<?>...classes) throws LockedException {
 		super.addPojoSwaps(classes);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser addToDictionary(Class<?>...classes) throws LockedException {
+		super.addToDictionary(classes);
 		return this;
 	}
 

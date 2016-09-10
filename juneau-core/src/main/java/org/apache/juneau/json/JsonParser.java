@@ -99,7 +99,7 @@ public final class JsonParser extends ReaderParser {
 	/** Default parser, all default settings.*/
 	public static final JsonParser DEFAULT_STRICT = new JsonParser().setProperty(JSON_strictMode, true).lock();
 
-	private <T> T parseAnything(JsonParserSession session, ClassMeta<T> eType, ParserReader r, Object outer) throws Exception {
+	private <T> T parseAnything(JsonParserSession session, ClassMeta<T> eType, ParserReader r, Object outer, BeanPropertyMeta pMeta) throws Exception {
 
 		BeanContext bc = session.getBeanContext();
 		if (eType == null)
@@ -108,6 +108,7 @@ public final class JsonParser extends ReaderParser {
 		ClassMeta<?> sType = eType.getSerializedClassMeta();
 		session.setCurrentClass(sType);
 		String wrapperAttr = sType.getExtendedMeta(JsonClassMeta.class).getWrapperAttr();
+		BeanDictionary bd = pMeta == null ? bc.getBeanDictionary() : pMeta.getBeanDictionary();
 
 		Object o = null;
 
@@ -127,10 +128,10 @@ public final class JsonParser extends ReaderParser {
 		} else if (sType.isObject()) {
 			if (c == '{') {
 				ObjectMap m2 = new ObjectMap(bc);
-				parseIntoMap2(session, r, m2, string(), object());
-				o = m2.cast();
+				parseIntoMap2(session, r, m2, string(), object(), pMeta);
+				o = bd.cast(m2);
 			} else if (c == '[')
-				o = parseIntoCollection2(session, r, new ObjectList(bc), object());
+				o = parseIntoCollection2(session, r, new ObjectList(bc), object(), pMeta);
 			else if (c == '\'' || c == '"') {
 				o = parseString(session, r);
 				if (sType.isChar())
@@ -155,19 +156,19 @@ public final class JsonParser extends ReaderParser {
 			o = parseNumber(session, r, (Class<? extends Number>)sType.getInnerClass());
 		} else if (sType.isMap()) {
 			Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : new ObjectMap(bc));
-			o = parseIntoMap2(session, r, m, sType.getKeyType(), sType.getValueType());
+			o = parseIntoMap2(session, r, m, sType.getKeyType(), sType.getValueType(), pMeta);
 		} else if (sType.isCollection()) {
 			if (c == '{') {
 				ObjectMap m = new ObjectMap(bc);
-				parseIntoMap2(session, r, m, string(), object());
-				o = m.cast();
+				parseIntoMap2(session, r, m, string(), object(), pMeta);
+				o = bd.cast(m);
 			} else {
 				Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance() : new ObjectList(bc));
-				o = parseIntoCollection2(session, r, l, sType.getElementType());
+				o = parseIntoCollection2(session, r, l, sType.getElementType(), pMeta);
 			}
 		} else if (sType.canCreateNewInstanceFromObjectMap(outer)) {
 			ObjectMap m = new ObjectMap(bc);
-			parseIntoMap2(session, r, m, string(), object());
+			parseIntoMap2(session, r, m, string(), object(), pMeta);
 			o = sType.newInstanceFromObjectMap(outer, m);
 		} else if (sType.canCreateNewBean(outer)) {
 			BeanMap m = bc.newBeanMap(outer, sType.getInnerClass());
@@ -179,17 +180,17 @@ public final class JsonParser extends ReaderParser {
 		} else if (sType.isArray()) {
 			if (c == '{') {
 				ObjectMap m = new ObjectMap(bc);
-				parseIntoMap2(session, r, m, string(), object());
-				o = m.cast();
+				parseIntoMap2(session, r, m, string(), object(), pMeta);
+				o = bd.cast(m);
 			} else {
-				ArrayList l = (ArrayList)parseIntoCollection2(session, r, new ArrayList(), sType.getElementType());
+				ArrayList l = (ArrayList)parseIntoCollection2(session, r, new ArrayList(), sType.getElementType(), pMeta);
 				o = bc.toArray(sType, l);
 			}
 		} else if (c == '{') {
 			Map m = new ObjectMap(bc);
-			parseIntoMap2(session, r, m, sType.getKeyType(), sType.getValueType());
+			parseIntoMap2(session, r, m, sType.getKeyType(), sType.getValueType(), pMeta);
 			if (m.containsKey(bc.getBeanTypePropertyName()))
-				o = ((ObjectMap)m).cast();
+				o = bd.cast((ObjectMap)m);
 			else
 				throw new ParseException(session, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.getInnerClass().getName(), sType.getNotABeanReason());
 		} else if (sType.canCreateNewInstanceFromString(outer) && ! session.isStrictMode()) {
@@ -247,7 +248,7 @@ public final class JsonParser extends ReaderParser {
 	}
 
 
-	private <K,V> Map<K,V> parseIntoMap2(JsonParserSession session, ParserReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType) throws Exception {
+	private <K,V> Map<K,V> parseIntoMap2(JsonParserSession session, ParserReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta) throws Exception {
 
 		if (keyType == null)
 			keyType = (ClassMeta<K>)string();
@@ -283,7 +284,7 @@ public final class JsonParser extends ReaderParser {
 					skipCommentsAndSpace(session, r.unread());
 				} else if (! Character.isWhitespace(c)) {
 					K key = convertAttrToType(session, m, currAttr, keyType);
-					V value = parseAnything(session, valueType, r.unread(), m);
+					V value = parseAnything(session, valueType, r.unread(), m, pMeta);
 					setName(valueType, value, key);
 					m.put(key, value);
 					state = S5;
@@ -335,7 +336,7 @@ public final class JsonParser extends ReaderParser {
 		throw new ParseException(session, "Could not find the end of the field name.");
 	}
 
-	private <E> Collection<E> parseIntoCollection2(JsonParserSession session, ParserReader r, Collection<E> l, ClassMeta<E> elementType) throws Exception {
+	private <E> Collection<E> parseIntoCollection2(JsonParserSession session, ParserReader r, Collection<E> l, ClassMeta<E> elementType, BeanPropertyMeta pMeta) throws Exception {
 
 		int S0=0; // Looking for outermost [
 		int S1=1; // Looking for starting [ or { or " or ' or LITERAL
@@ -354,7 +355,7 @@ public final class JsonParser extends ReaderParser {
 				} else if (c == '/') {
 					skipCommentsAndSpace(session, r.unread());
 				} else if (! Character.isWhitespace(c)) {
-					l.add(parseAnything(session, elementType, r.unread(), l));
+					l.add(parseAnything(session, elementType, r.unread(), l, pMeta));
 					state = S2;
 				}
 			} else if (state == S2) {
@@ -399,7 +400,7 @@ public final class JsonParser extends ReaderParser {
 				} else if (c == '/') {
 					skipCommentsAndSpace(session, r.unread());
 				} else if (! Character.isWhitespace(c)) {
-					o[i] = parseAnything(session, argTypes[i], r.unread(), session.getOuter());
+					o[i] = parseAnything(session, argTypes[i], r.unread(), session.getOuter(), null);
 					i++;
 					state = S2;
 				}
@@ -466,15 +467,15 @@ public final class JsonParser extends ReaderParser {
 						session.setCurrentProperty(pMeta);
 						if (pMeta == null) {
 							if (m.getMeta().isSubTyped()) {
-								Object value = parseAnything(session, object(), r.unread(), m.getBean(false));
+								Object value = parseAnything(session, object(), r.unread(), m.getBean(false), null);
 								m.put(currAttr, value);
 							} else {
 								onUnknownProperty(session, currAttr, m, currAttrLine, currAttrCol);
-								parseAnything(session, object(), r.unread(), m.getBean(false)); // Read content anyway to ignore it
+								parseAnything(session, object(), r.unread(), m.getBean(false), null); // Read content anyway to ignore it
 							}
 						} else {
 							ClassMeta<?> cm = pMeta.getClassMeta();
-							Object value = parseAnything(session, cm, r.unread(), m.getBean(false));
+							Object value = parseAnything(session, cm, r.unread(), m.getBean(false), pMeta);
 							setName(cm, value, currAttr);
 							pMeta.set(m, value);
 						}
@@ -740,7 +741,7 @@ public final class JsonParser extends ReaderParser {
 		ParserReader r = s.getReader();
 		if (r == null)
 			return null;
-		T o = parseAnything(s, type, r, s.getOuter());
+		T o = parseAnything(s, type, r, s.getOuter(), null);
 		validateEnd(s, r);
 		return o;
 	}
@@ -749,7 +750,7 @@ public final class JsonParser extends ReaderParser {
 	protected <K,V> Map<K,V> doParseIntoMap(ParserSession session, Map<K,V> m, Type keyType, Type valueType) throws Exception {
 		JsonParserSession s = (JsonParserSession)session;
 		ParserReader r = s.getReader();
-		m = parseIntoMap2(s, r, m, s.getBeanContext().getClassMeta(keyType), s.getBeanContext().getClassMeta(valueType));
+		m = parseIntoMap2(s, r, m, s.getBeanContext().getClassMeta(keyType), s.getBeanContext().getClassMeta(valueType), null);
 		validateEnd(s, r);
 		return m;
 	}
@@ -758,7 +759,7 @@ public final class JsonParser extends ReaderParser {
 	protected <E> Collection<E> doParseIntoCollection(ParserSession session, Collection<E> c, Type elementType) throws Exception {
 		JsonParserSession s = (JsonParserSession)session;
 		ParserReader r = s.getReader();
-		c = parseIntoCollection2(s, r, c, s.getBeanContext().getClassMeta(elementType));
+		c = parseIntoCollection2(s, r, c, s.getBeanContext().getClassMeta(elementType), null);
 		validateEnd(s, r);
 		return c;
 	}
@@ -799,6 +800,12 @@ public final class JsonParser extends ReaderParser {
 	@Override /* CoreApi */
 	public JsonParser addPojoSwaps(Class<?>...classes) throws LockedException {
 		super.addPojoSwaps(classes);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser addToDictionary(Class<?>...classes) throws LockedException {
+		super.addToDictionary(classes);
 		return this;
 	}
 

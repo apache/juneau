@@ -31,6 +31,7 @@ import org.apache.juneau.xml.*;
  * 	<li>{@link RdfSerializer#addNotBeanClasses(Class[])}
  * 	<li>{@link RdfSerializer#addBeanFilters(Class[])}
  * 	<li>{@link RdfSerializer#addPojoSwaps(Class[])}
+ * 	<li>{@link RdfSerializer#addToDictionary(Class[])}
  * 	<li>{@link RdfSerializer#addImplClass(Class,Class)}
  * </ul>
  * <p>

@@ -476,6 +476,12 @@ public class RdfParser extends ReaderParser {
 	}
 
 	@Override /* CoreApi */
+	public RdfParser addToDictionary(Class<?>...classes) throws LockedException {
+		super.addToDictionary(classes);
+		return this;
+	}
+
+	@Override /* CoreApi */
 	public <T> RdfParser addImplClass(Class<T> interfaceClass, Class<? extends T> implClass) throws LockedException {
 		super.addImplClass(interfaceClass, implClass);
 		return this;

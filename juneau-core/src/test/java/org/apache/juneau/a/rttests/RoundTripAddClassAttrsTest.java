@@ -19,6 +19,7 @@ import static org.junit.Assert.*;
 
 import java.util.*;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.jena.*;
 import org.apache.juneau.json.*;
@@ -107,6 +108,11 @@ public class RoundTripAddClassAttrsTest extends RoundTripTest {
 		super(label, s, p, flags);
 	}
 
+	@Override
+	public Class<?>[] getDictionary() {
+		return new Class<?>[]{A.class, B.class, C.class, D.class, E.class, F.class};
+	}
+
 	//====================================================================================================
 	// testBean
 	//====================================================================================================
@@ -137,6 +143,7 @@ public class RoundTripAddClassAttrsTest extends RoundTripTest {
 	public static abstract class AA implements IA {
 	}
 
+	@Bean(typeName="A")
 	public static class A extends AA {
 		private String f1;
 
@@ -193,6 +200,7 @@ public class RoundTripAddClassAttrsTest extends RoundTripTest {
 		assertEquals("foo", ((A)t.f2d).getF1());
 	}
 
+	@Bean(typeName="B")
 	public static class B {
 		public A f2a;
 		public AA f2b;
@@ -223,6 +231,7 @@ public class RoundTripAddClassAttrsTest extends RoundTripTest {
 		assertEquals("foo", t.f3d.get("foo").getF1());
 	}
 
+	@Bean(typeName="C")
 	public static class C {
 		public Map<String,A> f3a = new HashMap<String,A>();
 		public Map<String,A> f3b = new HashMap<String,A>();
@@ -258,6 +267,7 @@ public class RoundTripAddClassAttrsTest extends RoundTripTest {
 		assertEquals("foo", ((A)t.f4d[0]).getF1());
 	}
 
+	@Bean(typeName="D")
 	public static class D {
 		public A[] f4a;
 		public AA[] f4b;
@@ -293,6 +303,7 @@ public class RoundTripAddClassAttrsTest extends RoundTripTest {
 		assertEquals("foo", ((A)t.f5d.get(0)).getF1());
 	}
 
+	@Bean(typeName="E")
 	public static class E {
 		public List<A> f5a = new LinkedList<A>();
 		public List<AA> f5b = new LinkedList<AA>();
@@ -328,6 +339,7 @@ public class RoundTripAddClassAttrsTest extends RoundTripTest {
 		assertEquals("foo", ((A)t.f6d.get(0)[0]).getF1());
 	}
 
+	@Bean(typeName="F")
 	public static class F {
 		public List<A[]> f6a = new LinkedList<A[]>();
 		public List<AA[]> f6b = new LinkedList<AA[]>();

@@ -439,6 +439,12 @@ public class RdfSerializer extends WriterSerializer {
 	}
 
 	@Override /* CoreApi */
+	public RdfSerializer addToDictionary(Class<?>...classes) throws LockedException {
+		super.addToDictionary(classes);
+		return this;
+	}
+
+	@Override /* CoreApi */
 	public <T> RdfSerializer addImplClass(Class<T> interfaceClass, Class<? extends T> implClass) throws LockedException {
 		super.addImplClass(interfaceClass, implClass);
 		return this;

@@ -76,6 +76,7 @@ public class UrlEncodingParser extends UonParser {
 			eType = (ClassMeta<T>)object();
 		PojoSwap<T,Object> transform = (PojoSwap<T,Object>)eType.getPojoSwap();
 		ClassMeta<?> sType = eType.getSerializedClassMeta();
+		BeanDictionary bd = bc.getBeanDictionary();
 
 		int c = r.peek();
 		if (c == '?')
@@ -89,7 +90,7 @@ public class UrlEncodingParser extends UonParser {
 			if (m.containsKey("_value"))
 				o = m.get("_value");
 			else
-				o = m.cast();
+				o = bd.cast(m);
 		} else if (sType.isMap()) {
 			Map m = (sType.canCreateNewInstance() ? (Map)sType.newInstance() : new ObjectMap(bc));
 			o = parseIntoMap(session, r, m, sType.getKeyType(), sType.getValueType());
@@ -107,7 +108,7 @@ public class UrlEncodingParser extends UonParser {
 			ClassMeta<Object> valueType = object();
 			parseIntoMap(session, r, m, string(), valueType);
 			if (m.containsKey(bc.getBeanTypePropertyName()))
-				o = m.cast();
+				o = bd.cast(m);
 			else if (m.containsKey("_value"))
 				o = session.getBeanContext().convertToType(m.get("_value"), sType);
 			else if (sType.isCollection()) {
@@ -183,7 +184,7 @@ public class UrlEncodingParser extends UonParser {
 						state = S1;
 					} else  {
 						// For performance, we bypass parseAnything for string values.
-						V value = (V)(valueType.isString() ? super.parseString(session, r.unread(), true) : super.parseAnything(session, valueType, r.unread(), m, true));
+						V value = (V)(valueType.isString() ? super.parseString(session, r.unread(), true) : super.parseAnything(session, valueType, r.unread(), m, true, null));
 
 						// If we already encountered this parameter, turn it into a list.
 						if (m.containsKey(currAttr) && valueType.isObject()) {
@@ -289,22 +290,22 @@ public class UrlEncodingParser extends UonParser {
 							BeanPropertyMeta pMeta = m.getPropertyMeta(currAttr);
 							if (pMeta == null) {
 								if (m.getMeta().isSubTyped()) {
-									Object value = parseAnything(session, object(), r.unread(), m.getBean(false), true);
+									Object value = parseAnything(session, object(), r.unread(), m.getBean(false), true, null);
 									m.put(currAttr, value);
 								} else {
 									onUnknownProperty(session, currAttr, m, currAttrLine, currAttrCol);
-									parseAnything(session, object(), r.unread(), m.getBean(false), true); // Read content anyway to ignore it
+									parseAnything(session, object(), r.unread(), m.getBean(false), true, null); // Read content anyway to ignore it
 								}
 							} else {
 								session.setCurrentProperty(pMeta);
 								if (session.shouldUseExpandedParams(pMeta)) {
 									ClassMeta et = pMeta.getClassMeta().getElementType();
-									Object value = parseAnything(session, et, r.unread(), m.getBean(false), true);
+									Object value = parseAnything(session, et, r.unread(), m.getBean(false), true, pMeta);
 									setName(et, value, currAttr);
 									pMeta.add(m, value);
 								} else {
 									ClassMeta<?> cm = pMeta.getClassMeta();
-									Object value = parseAnything(session, cm, r.unread(), m.getBean(false), true);
+									Object value = parseAnything(session, cm, r.unread(), m.getBean(false), true, pMeta);
 									setName(cm, value, currAttr);
 									pMeta.set(m, value);
 								}
@@ -431,7 +432,7 @@ public class UrlEncodingParser extends UonParser {
 			throw new ParseException(session, "Argument lengths don't match.  vals={0}, argTypes={1}", vals.length, argTypes.length);
 		for (int i = 0; i < vals.length; i++) {
 			String s = String.valueOf(vals[i]);
-			vals[i] = super.parseAnything(session, argTypes[i], new UonReader(s, false), session.getOuter(), true);
+			vals[i] = super.parseAnything(session, argTypes[i], new UonReader(s, false), session.getOuter(), true, null);
 		}
 
 		return vals;
@@ -451,7 +452,7 @@ public class UrlEncodingParser extends UonParser {
 		UonParserSession session = createParameterContext(in);
 		try {
 			UonReader r = session.getReader();
-			return super.parseAnything(session, type, r, null, true);
+			return super.parseAnything(session, type, r, null, true, null);
 		} catch (ParseException e) {
 			throw e;
 		} catch (Exception e) {
@@ -536,6 +537,12 @@ public class UrlEncodingParser extends UonParser {
 	@Override /* CoreApi */
 	public UrlEncodingParser addPojoSwaps(Class<?>...classes) throws LockedException {
 		super.addPojoSwaps(classes);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UrlEncodingParser addToDictionary(Class<?>...classes) throws LockedException {
+		super.addToDictionary(classes);
 		return this;
 	}
 

@@ -457,23 +457,23 @@ public class BeanMapTest {
 		m.put("b", new D2());
 		assertEquals("default", t.b.s);
 
-		JsonParser p = new JsonParser().setClassLoader(BeanMapTest.class.getClassLoader());
-		m.put("lb1", new ObjectList("[{_type:'"+D2.class.getName()+"',s:'foobar'}]", p));
+		JsonParser p = new JsonParser().setClassLoader(BeanMapTest.class.getClassLoader()).addToDictionary(D2.class);
+		m.put("lb1", new ObjectList("[{_type:'D2',s:'foobar'}]", p));
 		assertEquals(ObjectList.class.getName(), t.lb1.getClass().getName());
 		assertEquals(D2.class.getName(), t.lb1.get(0).getClass().getName());
 		assertEquals("foobar", (t.lb1.get(0)).s);
 
-		m.put("lb2", new ObjectList("[{_type:'"+D2.class.getName()+"',s:'foobar'}]", p));
+		m.put("lb2", new ObjectList("[{_type:'D2',s:'foobar'}]", p));
 		assertEquals(ArrayList.class.getName(), t.lb2.getClass().getName());
 		assertEquals(D2.class.getName(), t.lb2.get(0).getClass().getName());
 		assertEquals("foobar", (t.lb2.get(0)).s);
 
-		m.put("ab1", new ObjectList("[{_type:'"+D2.class.getName()+"',s:'foobar'}]", p));
+		m.put("ab1", new ObjectList("[{_type:'D2',s:'foobar'}]", p));
 		assertEquals("[L"+D2.class.getName()+";", t.ab1.getClass().getName());
 		assertEquals(D2.class.getName(), t.ab1[0].getClass().getName());
 		assertEquals("foobar", t.ab1[0].s);
 
-		m.put("ab2", new ObjectList("[{_type:'"+D2.class.getName()+"',s:'foobar'}]", p));
+		m.put("ab2", new ObjectList("[{_type:'D2',s:'foobar'}]", p));
 		assertEquals("[L"+D2.class.getName()+";", t.ab2.getClass().getName());
 		assertEquals(D2.class.getName(), t.ab2[0].getClass().getName());
 		assertEquals("foobar", t.ab2[0].s);
@@ -487,6 +487,7 @@ public class BeanMapTest {
 		public D2[] ab2 = new D2[0];
 	}
 
+	@Bean(typeName="D2")
 	public static class D2 {
 		public String s = "default";
 	}
@@ -643,8 +644,8 @@ public class BeanMapTest {
 		assertEquals(HEnum.THREE, t7.getEnum2());
 
 		// Create instance directly from JSON.
-		JsonParser p = new JsonParser().setClassLoader(BeanMapTest.class.getClassLoader());
-		t7 = (H)p.parse("{_type:'"+H.class.getName()+"',enum1:'THREE',enum2:'ONE'}", Object.class);
+		JsonParser p = new JsonParser().setClassLoader(BeanMapTest.class.getClassLoader()).addToDictionary(H.class);
+		t7 = (H)p.parse("{_type:'H',enum1:'THREE',enum2:'ONE'}", Object.class);
 		assertEquals("{enum1:'THREE',enum2:'ONE'}", serializer.serialize(t7));
 		assertEquals(HEnum.THREE, t7.enum1);
 		assertEquals(HEnum.ONE, t7.getEnum2());
@@ -654,6 +655,7 @@ public class BeanMapTest {
 		ONE, TWO, THREE
 	}
 
+	@Bean(typeName="H")
 	public static class H {
 
 		public HEnum enum1;

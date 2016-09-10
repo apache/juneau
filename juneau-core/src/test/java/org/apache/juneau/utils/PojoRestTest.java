@@ -18,6 +18,7 @@ import static org.junit.Assert.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.junit.*;
@@ -90,18 +91,18 @@ public class PojoRestTest {
 
 		// Serialize it to JSON.
 		String s = serializer.serialize(p);
-		String expectedValue = "{_type:'org.apache.juneau.utils.PojoRestTest$Person',name:'some name',age:123,addresses:[{street:'street A',city:'city A',state:'state A',zip:12345,isCurrent:true},{street:'street B',city:'city B',state:'state B',zip:12345,isCurrent:false}]}";
+		String expectedValue = "{_type:'Person',name:'some name',age:123,addresses:[{street:'street A',city:'city A',state:'state A',zip:12345,isCurrent:true},{street:'street B',city:'city B',state:'state B',zip:12345,isCurrent:false}]}";
 		assertEquals(expectedValue, s);
 
 		// Parse it back to Java objects.
-		p = (Person)JsonParser.DEFAULT.clone().setClassLoader(getClass().getClassLoader()).parse(s, Object.class);
+		p = (Person)JsonParser.DEFAULT.clone().setClassLoader(getClass().getClassLoader()).addToDictionary(Person.class).parse(s, Object.class);
 		expectedValue = "city B";
 		s = p.addresses[1].city;
 		assertEquals(expectedValue, s);
 
 		// Parse it back into JSON again.
 		s = serializer.serialize(p);
-		expectedValue = "{_type:'org.apache.juneau.utils.PojoRestTest$Person',name:'some name',age:123,addresses:[{street:'street A',city:'city A',state:'state A',zip:12345,isCurrent:true},{street:'street B',city:'city B',state:'state B',zip:12345,isCurrent:false}]}";
+		expectedValue = "{_type:'Person',name:'some name',age:123,addresses:[{street:'street A',city:'city A',state:'state A',zip:12345,isCurrent:true},{street:'street B',city:'city B',state:'state B',zip:12345,isCurrent:false}]}";
 		assertEquals(expectedValue, s);
 
 		// Try adding an address
@@ -242,6 +243,7 @@ public class PojoRestTest {
 		}
 	}
 
+	@Bean(typeName="Person")
 	public static class Person {
 		public String name;
 		public int age;

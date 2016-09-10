@@ -280,6 +280,20 @@ public final class ParserGroup extends Lockable {
 	}
 
 	/**
+	 * Shortcut for calling {@link Parser#addToDictionary(Class[])} on all parsers in this group.
+	 *
+	 * @param classes The classes to add to the bean dictionary on the underlying bean context of all parsers in this group.
+	 * @throws LockedException If {@link #lock()} was called on this object.
+	 * @return This object (for method chaining).
+	 */
+	public ParserGroup addToDictionary(Class<?>...classes) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.addToDictionary(classes);
+		return this;
+	}
+
+	/**
 	 * Shortcut for calling {@link Parser#addImplClass(Class, Class)} on all parsers in this group.
 	 *
 	 * @param <T> The interface or abstract class type.

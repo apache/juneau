@@ -343,14 +343,14 @@ public class UonSerializer extends WriterSerializer {
 		return out;
 	}
 
-	private SerializerWriter serializeBeanMap(UonSerializerSession session, UonWriter out, BeanMap<?> m, boolean addClassAttr) throws Exception {
+	private SerializerWriter serializeBeanMap(UonSerializerSession session, UonWriter out, BeanMap<?> m, boolean addTypeProperty) throws Exception {
 		int depth = session.getIndent();
 
 		out.startFlag('o');
 
 		boolean addComma = false;
 
-		for (BeanPropertyValue p : m.getValues(session.isTrimNulls(), addClassAttr ? session.createBeanTypeNameProperty(m, null) : null)) {
+		for (BeanPropertyValue p : m.getValues(session.isTrimNulls(), addTypeProperty ? session.createBeanTypeNameProperty(m) : null)) {
 			BeanPropertyMeta pMeta = p.getMeta();
 			ClassMeta<?> cMeta = p.getClassMeta();
 
@@ -448,6 +448,12 @@ public class UonSerializer extends WriterSerializer {
 	@Override /* CoreApi */
 	public UonSerializer addPojoSwaps(Class<?>...classes) throws LockedException {
 		super.addPojoSwaps(classes);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer addToDictionary(Class<?>...classes) throws LockedException {
+		super.addToDictionary(classes);
 		return this;
 	}
 

@@ -28,7 +28,6 @@ import org.apache.juneau.internal.*;
 public class BeanDictionaryBuilder {
 
 	private Map<String,Class<?>> map = new HashMap<String,Class<?>>();
-	private BeanDictionary parent;
 	private BeanContext beanContext;
 
 	/**
@@ -57,16 +56,11 @@ public class BeanDictionaryBuilder {
 				} else {
 					Bean b = c.getAnnotation(Bean.class);
 					if (b == null || b.typeName().isEmpty())
-						throw new BeanRuntimeException("Class ''{0}'' was passed to TypeDictionaryBuilder but it doesn't have a @Bean.typeName() annotation defined.");
+						throw new BeanRuntimeException("Class ''{0}'' was passed to TypeDictionaryBuilder but it doesn't have a @Bean.typeName() annotation defined.", c.getName());
 					map.put(b.typeName(), c);
 				}
 			}
 		}
-		return this;
-	}
-
-	BeanDictionaryBuilder setParent(BeanDictionary parent) {
-		this.parent = parent;
 		return this;
 	}
 
@@ -76,8 +70,6 @@ public class BeanDictionaryBuilder {
 	}
 
 	BeanDictionary build() {
-		if (map.isEmpty())
-			return parent;
-		return new BeanDictionary(beanContext, parent, map);
+		return new BeanDictionary(beanContext, map);
 	}
 }

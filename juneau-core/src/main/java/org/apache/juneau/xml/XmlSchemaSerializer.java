@@ -473,19 +473,11 @@ public class XmlSchemaSerializer extends XmlSerializer {
 						Namespace cNs = first(elementType.getExtendedMeta(XmlClassMeta.class).getNamespace(), cm.getExtendedMeta(XmlClassMeta.class).getNamespace(), defaultNs);
 						schemas.queueType(cNs, null, elementType);
 						w.sTag(i+1, "sequence").nl();
-						w.oTag(i+2, "choice")
-							.attr("minOccurs", 0)
+						w.oTag(i+2, "any")
+							.attr("processContents", "skip")
 							.attr("maxOccurs", "unbounded")
-							.cTag().nl();
-						w.oTag(i+3, "element")
-							.attr("name", XmlUtils.encodeElementName(getElementName(elementType)))
-							.attr("type", getXmlType(cNs, elementType))
+							.attr("minOccurs", "0")
 							.ceTag().nl();
-						w.oTag(i+3, "element")
-							.attr("name", "null")
-							.attr("type", "string")
-							.ceTag().nl();
-						w.eTag(i+2, "choice").nl();
 						w.eTag(i+1, "sequence").nl();
 					}
 

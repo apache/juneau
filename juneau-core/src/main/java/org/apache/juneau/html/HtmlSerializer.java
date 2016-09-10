@@ -219,7 +219,7 @@ public class HtmlSerializer extends XmlSerializer {
 			sType = aType.getSerializedClassMeta();
 			String typeName = null;
 			if (session.isAddBeanTypeProperties() && ! eType.equals(aType))
-				typeName = aType.toString();
+				typeName = aType.getDictionaryName();
 
 			// Swap if necessary
 			PojoSwap swap = aType.getPojoSwap();
@@ -414,7 +414,7 @@ public class HtmlSerializer extends XmlSerializer {
 				}
 
 				if (cm != null && session.isAddBeanTypeProperties() && elementType.getInnerClass() != o.getClass())
-					out.oTag(i+1, "tr").attr(bc.getBeanTypePropertyName(), o.getClass().getName()).append('>').nl();
+					out.oTag(i+1, "tr").attr(bc.getBeanTypePropertyName(), cm.getDictionaryName()).append('>').nl();
 				else
 					out.sTag(i+1, "tr").nl();
 
@@ -612,6 +612,12 @@ public class HtmlSerializer extends XmlSerializer {
 	@Override /* CoreApi */
 	public HtmlSerializer addPojoSwaps(Class<?>...classes) throws LockedException {
 		super.addPojoSwaps(classes);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer addToDictionary(Class<?>...classes) throws LockedException {
+		super.addToDictionary(classes);
 		return this;
 	}
 

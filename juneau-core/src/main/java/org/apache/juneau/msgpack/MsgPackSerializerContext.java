@@ -28,6 +28,7 @@ import org.apache.juneau.serializer.*;
  * 	<li>{@link MsgPackSerializer#addNotBeanClasses(Class[])}
  * 	<li>{@link MsgPackSerializer#addBeanFilters(Class[])}
  * 	<li>{@link MsgPackSerializer#addPojoSwaps(Class[])}
+ * 	<li>{@link MsgPackSerializer#addToDictionary(Class[])}
  * 	<li>{@link MsgPackSerializer#addImplClass(Class,Class)}
  * </ul>
  * <p>

@@ -20,6 +20,7 @@ import static org.junit.Assert.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;
@@ -27,7 +28,7 @@ import org.junit.*;
 @SuppressWarnings({"rawtypes","hiding","serial","javadoc"})
 public class CommonParser_UrlEncodingTest {
 
-	ReaderParser p = UrlEncodingParser.DEFAULT.clone().setClassLoader(getClass().getClassLoader());
+	ReaderParser p = UrlEncodingParser.DEFAULT.clone().setClassLoader(getClass().getClassLoader()).addToDictionary(A1.class);
 
 	//====================================================================================================
 	// testFromSerializer
@@ -81,6 +82,7 @@ public class CommonParser_UrlEncodingTest {
 		assertEquals("value1", b.list.get(1).value);
 	}
 
+	@Bean(typeName="A1")
 	public static class A1 {
 		public A2 list;
 	}

@@ -146,6 +146,21 @@ public abstract class CoreApi extends Lockable {
 	}
 
 	/**
+	 * Shortcut for calling <code>getContextFactory().addToDictionary(<jf>classes</jf>)</code>.
+	 *
+	 * @param classes The bean classes (or BeanDictionaryBuilder) classes to add to the bean dictionary.
+	 * @throws LockedException If {@link ContextFactory#lock()} was called on this class or the bean context.
+	 * @return This object (for method chaining).
+	 * @see ContextFactory#addToProperty(String, Object)
+	 * @see BeanContext#BEAN_beanDictionary
+	 */
+	public CoreApi addToDictionary(Class<?>...classes) throws LockedException {
+		checkLock();
+		contextFactory.addToDictionary(classes);
+		return this;
+	}
+
+	/**
 	 * Shortcut for calling <code>getContextFactory().addImplClass(<jf>interfaceClass</jf>, <jf>implClass</jf>)</code>.
 	 *
 	 * @param interfaceClass The interface class.

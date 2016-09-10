@@ -35,15 +35,12 @@ import org.apache.juneau.annotation.*;
 public class BeanDictionary {
 
 	private final Map<String,ClassMeta<?>> map;
-	private final Map<Class<?>,String> reverseMap;
 	private final BeanContext beanContext;
 	private final String beanTypePropertyName;
-	private final BeanDictionary parent;
 
-	BeanDictionary(BeanContext beanContext, BeanDictionary parent, Map<String,Class<?>> map) {
+	BeanDictionary(BeanContext beanContext, Map<String,Class<?>> map) {
 		this.beanContext = beanContext;
 		this.beanTypePropertyName = beanContext.getBeanTypePropertyName();
-		this.parent = parent == null ? beanContext.getBeanDictionary() : parent;
 		Map<String,ClassMeta<?>> m1 = new HashMap<String,ClassMeta<?>>();
 		for (Map.Entry<String,Class<?>> e : map.entrySet()) {
 			ClassMeta<?> cm = beanContext.getClassMeta(e.getValue());
@@ -52,20 +49,6 @@ public class BeanDictionary {
 			m1.put(e.getKey(), cm);
 		}
 		this.map = Collections.unmodifiableMap(m1);
-		Map<Class<?>,String> m2 = new HashMap<Class<?>,String>();
-		for (Map.Entry<String,Class<?>> e : map.entrySet())
-			m2.put(e.getValue(), e.getKey());
-		this.reverseMap = Collections.unmodifiableMap(m2);
-	}
-
-	/**
-	 * Returns the name associated with the specified class.
-	 *
-	 * @param c The class associated with the name.
-	 * @return The name associated with the specified class, or <jk>null</jk> if no association exists.
-	 */
-	public String getNameForClass(Class<?> c) {
-		return reverseMap.get(c);
 	}
 
 	/**
@@ -79,7 +62,7 @@ public class BeanDictionary {
 		if (o == null)
 			return m;
 		String typeName = o.toString();
-		ClassMeta<?> cm = findClassMeta(typeName);
+		ClassMeta<?> cm = getClassMeta(typeName);
 		BeanMap<?> bm = beanContext.newBeanMap(cm.getInnerClass());
 
 		// Iterate through all the entries in the map and set the individual field values.
@@ -96,10 +79,15 @@ public class BeanDictionary {
 		return bm.getBean();
 	}
 
-	private ClassMeta<?> findClassMeta(String typeName) {
+	/**
+	 * Gets the class metadata for the specified bean type name.
+	 *
+	 * @param typeName The bean type name as defined by {@link Bean#typeName()}.
+	 * @return The class metadata for the bean.
+	 * @throws BeanRuntimeException If name wasn't found in this dictionary.
+	 */
+	public ClassMeta<?> getClassMeta(String typeName) {
 		ClassMeta<?> cm = map.get(typeName);
-		if (cm == null && parent != null)
-			cm = parent.findClassMeta(typeName);
 		if (cm == null)
 			throw new BeanRuntimeException("Could not find bean type ''{0}'' in dictionary.", typeName);
 		return cm;

@@ -710,6 +710,12 @@ public abstract class Parser extends CoreApi {
 	}
 
 	@Override /* CoreApi */
+	public Parser addToDictionary(Class<?>...classes) throws LockedException {
+		super.addToDictionary(classes);
+		return this;
+	}
+
+	@Override /* CoreApi */
 	public <T> Parser addImplClass(Class<T> interfaceClass, Class<? extends T> implClass) throws LockedException {
 		super.addImplClass(interfaceClass, implClass);
 		return this;

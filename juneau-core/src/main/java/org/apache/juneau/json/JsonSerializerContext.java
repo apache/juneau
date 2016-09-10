@@ -28,6 +28,7 @@ import org.apache.juneau.serializer.*;
  * 	<li>{@link JsonSerializer#addNotBeanClasses(Class[])}
  * 	<li>{@link JsonSerializer#addBeanFilters(Class[])}
  * 	<li>{@link JsonSerializer#addPojoSwaps(Class[])}
+ * 	<li>{@link JsonSerializer#addToDictionary(Class[])}
  * 	<li>{@link JsonSerializer#addImplClass(Class,Class)}
  * </ul>
  * <p>

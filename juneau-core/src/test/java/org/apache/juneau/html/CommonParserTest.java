@@ -19,6 +19,7 @@ import static org.junit.Assert.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
 import org.junit.*;
 
@@ -30,7 +31,7 @@ public class CommonParserTest {
 	//====================================================================================================
 	@Test
 	public void testFromSerializer() throws Exception {
-		ReaderParser p = HtmlParser.DEFAULT.clone().setClassLoader(getClass().getClassLoader());
+		ReaderParser p = HtmlParser.DEFAULT.clone().setClassLoader(getClass().getClassLoader()).addToDictionary(A1.class);
 		Map m = null;
 		String in;
 
@@ -65,6 +66,7 @@ public class CommonParserTest {
 		t2.add(new A3("name1","value1"));
 		t1.list = t2;
 		in = new HtmlSerializer().setProperty(SERIALIZER_addBeanTypeProperties, true).serialize(t1);
+		System.err.println(in);
 		t1 = (A1)p.parse(in, Object.class);
 		assertEquals("value1", t1.list.get(1).value);
 
@@ -73,6 +75,7 @@ public class CommonParserTest {
 		assertEquals("value1", t1.list.get(1).value);
 	}
 
+	@Bean(typeName="A1")
 	public static class A1 {
 		public A2 list;
 	}

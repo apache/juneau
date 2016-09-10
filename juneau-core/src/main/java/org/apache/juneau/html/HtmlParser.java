@@ -67,7 +67,7 @@ public final class HtmlParser extends ReaderParser {
 	 * 	Precondition:  Must be pointing at START_ELEMENT or CHARACTERS event.
 	 * 	Postcondition:  Pointing at next event to be processed.
 	 */
-	private <T> T parseAnything(HtmlParserSession session, ClassMeta<T> eType, XMLEventReader r, Object outer) throws Exception {
+	private <T> T parseAnything(HtmlParserSession session, ClassMeta<T> eType, XMLEventReader r, Object outer, BeanPropertyMeta pMeta) throws Exception {
 
 		BeanContext bc = session.getBeanContext();
 		if (eType == null)
@@ -75,6 +75,7 @@ public final class HtmlParser extends ReaderParser {
 		PojoSwap<T,Object> transform = (PojoSwap<T,Object>)eType.getPojoSwap();
 		ClassMeta<?> sType = eType.getSerializedClassMeta();
 		session.setCurrentClass(sType);
+		BeanDictionary bd = (pMeta == null ? bc.getBeanDictionary() : pMeta.getBeanDictionary());
 
 		Object o = null;
 
@@ -117,7 +118,7 @@ public final class HtmlParser extends ReaderParser {
 				tableType = attrs.get("type");
 				String c = attrs.get(bc.getBeanTypePropertyName());
 				if (c != null)
-					sType = eType = (ClassMeta<T>)bc.getClassMetaFromString(c);
+					sType = eType = (ClassMeta<T>)bd.getClassMeta(c);
 			}
 
 			boolean isValid = true;
@@ -135,14 +136,14 @@ public final class HtmlParser extends ReaderParser {
 					o = Boolean.parseBoolean(text);
 				else if (tag == TABLE) {
 					if (tableType.equals("object")) {
-						o = parseIntoMap(session, r, (Map)new ObjectMap(bc), sType.getKeyType(), sType.getValueType());
+						o = parseIntoMap(session, r, (Map)new ObjectMap(bc), sType.getKeyType(), sType.getValueType(), pMeta);
 					} else if (tableType.equals("array")) {
-						o = parseTableIntoCollection(session, r, (Collection)new ObjectList(bc), sType.getElementType());
+						o = parseTableIntoCollection(session, r, (Collection)new ObjectList(bc), sType.getElementType(), pMeta);
 					} else
 						isValid = false;
 				}
 				else if (tag == UL)
-					o = parseIntoCollection(session, r, new ObjectList(bc), null);
+					o = parseIntoCollection(session, r, new ObjectList(bc), null, pMeta);
 			}
 			else if (tag == STRING && sType.isCharSequence())
 				o = text;
@@ -159,10 +160,10 @@ public final class HtmlParser extends ReaderParser {
 			else if (tag == TABLE) {
 				if (tableType.equals("object")) {
 					if (sType.isMap()) {
-						o = parseIntoMap(session, r, (Map)(sType.canCreateNewInstance(outer) ? sType.newInstance(outer) : new ObjectMap(bc)), sType.getKeyType(), sType.getValueType());
+						o = parseIntoMap(session, r, (Map)(sType.canCreateNewInstance(outer) ? sType.newInstance(outer) : new ObjectMap(bc)), sType.getKeyType(), sType.getValueType(), pMeta);
 					} else if (sType.canCreateNewInstanceFromObjectMap(outer)) {
 						ObjectMap m = new ObjectMap(bc);
-						parseIntoMap(session, r, m, string(), object());
+						parseIntoMap(session, r, m, string(), object(), pMeta);
 						o = sType.newInstanceFromObjectMap(outer, m);
 					} else if (sType.canCreateNewBean(outer)) {
 						BeanMap m = bc.newBeanMap(outer, sType.getInnerClass());
@@ -172,18 +173,18 @@ public final class HtmlParser extends ReaderParser {
 						isValid = false;
 				} else if (tableType.equals("array")) {
 					if (sType.isCollection())
-						o = parseTableIntoCollection(session, r, (Collection)(sType.canCreateNewInstance(outer) ? sType.newInstance(outer) : new ObjectList(bc)), sType.getElementType());
+						o = parseTableIntoCollection(session, r, (Collection)(sType.canCreateNewInstance(outer) ? sType.newInstance(outer) : new ObjectList(bc)), sType.getElementType(), pMeta);
 					else if (sType.isArray())
-						o = bc.toArray(sType, parseTableIntoCollection(session, r, new ArrayList(), sType.getElementType()));
+						o = bc.toArray(sType, parseTableIntoCollection(session, r, new ArrayList(), sType.getElementType(), pMeta));
 					else
 						isValid = false;
 				} else
 					isValid = false;
 			} else if (tag == UL) {
 				if (sType.isCollection())
-					o = parseIntoCollection(session, r, (Collection)(sType.canCreateNewInstance(outer) ? sType.newInstance(outer) : new ObjectList(bc)), sType.getElementType());
+					o = parseIntoCollection(session, r, (Collection)(sType.canCreateNewInstance(outer) ? sType.newInstance(outer) : new ObjectList(bc)), sType.getElementType(), pMeta);
 				else if (sType.isArray())
-					o = bc.toArray(sType, parseIntoCollection(session, r, new ArrayList(), sType.getElementType()));
+					o = bc.toArray(sType, parseIntoCollection(session, r, new ArrayList(), sType.getElementType(), pMeta));
 				else
 					isValid = false;
 			} else
@@ -235,7 +236,7 @@ public final class HtmlParser extends ReaderParser {
 	 * Precondition:  Must be pointing at <table> event.
 	 * Postcondition:  Pointing at next START_ELEMENT or END_DOCUMENT event.
 	 */
-	private <K,V> Map<K,V> parseIntoMap(HtmlParserSession session, XMLEventReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType) throws Exception {
+	private <K,V> Map<K,V> parseIntoMap(HtmlParserSession session, XMLEventReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta) throws Exception {
 		Tag tag = nextTag(r, TR);
 
 		// Skip over the column headers.
@@ -250,10 +251,10 @@ public final class HtmlParser extends ReaderParser {
 			if (tag == xTABLE)
 				break;
 			nextTag(r, TD);
-			K key = parseAnything(session, keyType, r, m);
+			K key = parseAnything(session, keyType, r, m, pMeta);
 			nextTag(r, xTD);
 			nextTag(r, TD);
-			V value = parseAnything(session, valueType, r, m);
+			V value = parseAnything(session, valueType, r, m, pMeta);
 			setName(valueType, value, key);
 			m.put(key, value);
 			nextTag(r, xTD);
@@ -268,12 +269,12 @@ public final class HtmlParser extends ReaderParser {
 	 * Precondition:  Must be pointing at event following <ul> event.
 	 * Postcondition:  Pointing at next START_ELEMENT or END_DOCUMENT event.
 	 */
-	private <E> Collection<E> parseIntoCollection(HtmlParserSession session, XMLEventReader r, Collection<E> l, ClassMeta<E> elementType) throws Exception {
+	private <E> Collection<E> parseIntoCollection(HtmlParserSession session, XMLEventReader r, Collection<E> l, ClassMeta<E> elementType, BeanPropertyMeta pMeta) throws Exception {
 		while (true) {
 			Tag tag = nextTag(r, LI, xUL);
 			if (tag == xUL)
 				break;
-			l.add(parseAnything(session, elementType, r, l));
+			l.add(parseAnything(session, elementType, r, l, pMeta));
 			nextTag(r, xLI);
 		}
 		return l;
@@ -291,7 +292,7 @@ public final class HtmlParser extends ReaderParser {
 			Tag tag = nextTag(r, LI, xUL);
 			if (tag == xUL)
 				break;
-			o[i] = parseAnything(session, argTypes[i], r, session.getOuter());
+			o[i] = parseAnything(session, argTypes[i], r, session.getOuter(), null);
 			i++;
 			nextTag(r, xLI);
 		}
@@ -303,11 +304,12 @@ public final class HtmlParser extends ReaderParser {
 	 * Precondition:  Must be pointing at event following <ul> event.
 	 * Postcondition:  Pointing at next START_ELEMENT or END_DOCUMENT event.
 	 */
-	private <E> Collection<E> parseTableIntoCollection(HtmlParserSession session, XMLEventReader r, Collection<E> l, ClassMeta<E> elementType) throws Exception {
+	private <E> Collection<E> parseTableIntoCollection(HtmlParserSession session, XMLEventReader r, Collection<E> l, ClassMeta<E> elementType, BeanPropertyMeta pMeta) throws Exception {
 
 		BeanContext bc = session.getBeanContext();
 		if (elementType == null)
 			elementType = (ClassMeta<E>)object();
+		BeanDictionary bd = (pMeta == null ? bc.getBeanDictionary() : pMeta.getBeanDictionary());
 
 		Tag tag = nextTag(r, TR);
 		List<String> keys = new ArrayList<String>();
@@ -336,11 +338,11 @@ public final class HtmlParser extends ReaderParser {
 					BeanMapEntry e = m.getProperty(key);
 					if (e == null) {
 						//onUnknownProperty(key, m, -1, -1);
-						parseAnything(session, object(), r, l);
+						parseAnything(session, object(), r, l, null);
 					} else {
 						BeanPropertyMeta bpm = e.getMeta();
 						ClassMeta<?> cm = bpm.getClassMeta();
-						Object value = parseAnything(session, cm, r, m.getBean(false));
+						Object value = parseAnything(session, cm, r, m.getBean(false), bpm);
 						setName(cm, value, key);
 						bpm.set(m, value);
 					}
@@ -360,7 +362,7 @@ public final class HtmlParser extends ReaderParser {
 					String key = keys.get(i);
 					if (m != null) {
 						ClassMeta<?> et = elementType.getElementType();
-						Object value = parseAnything(session, et, r, l);
+						Object value = parseAnything(session, et, r, l, pMeta);
 						setName(et, value, key);
 						m.put(key, value);
 					}
@@ -369,7 +371,7 @@ public final class HtmlParser extends ReaderParser {
 				if (m != null && c != null) {
 					ObjectMap m2 = (m instanceof ObjectMap ? (ObjectMap)m : new ObjectMap(m).setBeanContext(session.getBeanContext()));
 					m2.put(bc.getBeanTypePropertyName(), c);
-					l.add((E)m2.cast());
+					l.add((E)bd.cast(m2));
 				} else {
 					l.add((E)m);
 				}
@@ -404,15 +406,15 @@ public final class HtmlParser extends ReaderParser {
 			BeanPropertyMeta pMeta = m.getPropertyMeta(key);
 			if (pMeta == null) {
 				if (m.getMeta().isSubTyped()) {
-					Object value = parseAnything(session, object(), r, m.getBean(false));
+					Object value = parseAnything(session, object(), r, m.getBean(false), null);
 					m.put(key, value);
 				} else {
 					onUnknownProperty(session, key, m, -1, -1);
-					parseAnything(session, object(), r, null);
+					parseAnything(session, object(), r, null, null);
 				}
 			} else {
 				ClassMeta<?> cm = pMeta.getClassMeta();
-				Object value = parseAnything(session, cm, r, m.getBean(false));
+				Object value = parseAnything(session, cm, r, m.getBean(false), pMeta);
 				setName(cm, value, key);
 				pMeta.set(m, value);
 			}
@@ -658,19 +660,19 @@ public final class HtmlParser extends ReaderParser {
 	protected <T> T doParse(ParserSession session, ClassMeta<T> type) throws Exception {
 		type = session.getBeanContext().normalizeClassMeta(type);
 		HtmlParserSession s = (HtmlParserSession)session;
-		return parseAnything(s, type, s.getXmlEventReader(), session.getOuter());
+		return parseAnything(s, type, s.getXmlEventReader(), session.getOuter(), null);
 	}
 
 	@Override /* ReaderParser */
 	protected <K,V> Map<K,V> doParseIntoMap(ParserSession session, Map<K,V> m, Type keyType, Type valueType) throws Exception {
 		HtmlParserSession s = (HtmlParserSession)session;
-		return parseIntoMap(s, s.getXmlEventReader(), m, s.getBeanContext().getClassMeta(keyType), s.getBeanContext().getClassMeta(valueType));
+		return parseIntoMap(s, s.getXmlEventReader(), m, s.getBeanContext().getClassMeta(keyType), s.getBeanContext().getClassMeta(valueType), null);
 	}
 
 	@Override /* ReaderParser */
 	protected <E> Collection<E> doParseIntoCollection(ParserSession session, Collection<E> c, Type elementType) throws Exception {
 		HtmlParserSession s = (HtmlParserSession)session;
-		return parseIntoCollection(s, s.getXmlEventReader(), c, s.getBeanContext().getClassMeta(elementType));
+		return parseIntoCollection(s, s.getXmlEventReader(), c, s.getBeanContext().getClassMeta(elementType), null);
 	}
 
 	@Override /* ReaderParser */
@@ -706,6 +708,12 @@ public final class HtmlParser extends ReaderParser {
 	@Override /* CoreApi */
 	public HtmlParser addPojoSwaps(Class<?>...classes) throws LockedException {
 		super.addPojoSwaps(classes);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlParser addToDictionary(Class<?>...classes) throws LockedException {
+		super.addToDictionary(classes);
 		return this;
 	}
 

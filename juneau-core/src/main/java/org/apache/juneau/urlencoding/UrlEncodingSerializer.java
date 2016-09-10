@@ -321,12 +321,12 @@ public class UrlEncodingSerializer extends UonSerializer {
 	}
 
 	@SuppressWarnings({ "rawtypes" })
-	private SerializerWriter serializeBeanMap(UrlEncodingSerializerSession session, UonWriter out, BeanMap<?> m, boolean addClassAttr) throws Exception {
+	private SerializerWriter serializeBeanMap(UrlEncodingSerializerSession session, UonWriter out, BeanMap<?> m, boolean addTypeProperty) throws Exception {
 		int depth = session.getIndent();
 
 		boolean addAmp = false;
 
-		for (BeanPropertyValue p : m.getValues(session.isTrimNulls(), addClassAttr ? session.createBeanTypeNameProperty(m, null) : null)) {
+		for (BeanPropertyValue p : m.getValues(session.isTrimNulls(), addTypeProperty ? session.createBeanTypeNameProperty(m) : null)) {
 			BeanPropertyMeta pMeta = p.getMeta();
 			ClassMeta<?> cMeta = p.getClassMeta();
 
@@ -440,6 +440,12 @@ public class UrlEncodingSerializer extends UonSerializer {
 	@Override /* CoreApi */
 	public UrlEncodingSerializer addPojoSwaps(Class<?>...classes) throws LockedException {
 		super.addPojoSwaps(classes);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UrlEncodingSerializer addToDictionary(Class<?>...classes) throws LockedException {
+		super.addToDictionary(classes);
 		return this;
 	}
 

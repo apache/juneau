@@ -316,6 +316,12 @@ public abstract class Serializer extends CoreApi {
 	}
 
 	@Override /* CoreApi */
+	public Serializer addToDictionary(Class<?>...classes) throws LockedException {
+		super.addToDictionary(classes);
+		return this;
+	}
+
+	@Override /* CoreApi */
 	public <T> Serializer addImplClass(Class<T> interfaceClass, Class<? extends T> implClass) throws LockedException {
 		super.addImplClass(interfaceClass, implClass);
 		return this;
