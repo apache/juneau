@@ -343,9 +343,7 @@ public class XmlSerializer extends WriterSerializer {
 		String typeName = null;
 		if (session.isAddBeanTypeProperties()) {
 			if (o != null && ! eType.equals(aType))
-				typeName = aType.toString();
-			else if (o == null)
-				typeName = eType.toString();
+				typeName = aType.getDictionaryName();
 		}
 
 		// char '\0' is interpreted as null.
@@ -372,12 +370,9 @@ public class XmlSerializer extends WriterSerializer {
 		else
 			ts = "string";
 
-
 		// Is there a name associated with this bean?
 		if (elementName == null)
 			elementName = sType.getDictionaryName();
-		if (elementName == null)
-			elementName = aType.getDictionaryName();
 
 		// If the value is null then it's either going to be <null/> or <XmlSerializer nil='true'/>
 		// depending on whether the element has a name.
@@ -427,9 +422,9 @@ public class XmlSerializer extends WriterSerializer {
 				if (xsiNs != null)
 					out.attr("xmlns", xsiNs.name, xsiNs.uri);
 			}
-			if (elementName != null && session.isAddJsonTypeAttrs() && (session.isAddJsonStringTypeAttrs() || ! ts.equals("string")))
-				out.attr(dns, "type", ts);
-			if (typeName != null)
+			if (typeName == null && elementName != null && session.isAddJsonTypeAttrs() && (session.isAddJsonStringTypeAttrs() || ! ts.equals("string")))
+				typeName = ts;
+			if (typeName != null && ! typeName.equals(elementName))
 				out.attr(dns, bc.getBeanTypePropertyName(), typeName);
 			if (o == null) {
 				if (! isNullTag)

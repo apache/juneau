@@ -73,9 +73,9 @@ public class XmlTest {
 	@Test
 	public void testBeanNameAnnotation() throws Exception {
 		String e =
-			  "<Person1 type='object'>\n"
+			  "<Person1 _type='object'>\n"
 			+ "	<name>John Smith</name>\n"
-			+ "	<age type='number'>123</age>\n"
+			+ "	<age _type='number'>123</age>\n"
 			+ "</Person1>\n";
 		String r = new XmlSerializer.SimpleXmlJsonSq().setProperty(SERIALIZER_useIndentation, true).serialize(new Person1("John Smith", 123));
 		assertEquals(e, r);
@@ -104,8 +104,8 @@ public class XmlTest {
 	@Test
 	public void testTrimNulls() throws Exception {
 		String e =
-			  "<Person1 type='object'>\n"
-			+ "	<age type='number'>123</age>\n"
+			  "<Person1 _type='object'>\n"
+			+ "	<age _type='number'>123</age>\n"
 			+ "</Person1>\n";
 		String r = new XmlSerializer.SimpleXmlJsonSq().setProperty(SERIALIZER_useIndentation, true).serialize(new Person1(null, 123));
 		assertEquals(e, r);

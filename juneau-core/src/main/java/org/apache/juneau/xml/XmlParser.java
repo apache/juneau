@@ -73,23 +73,26 @@ public class XmlParser extends ReaderParser {
 		BeanDictionary bd = (pMeta == null ? bc.getBeanDictionary() : pMeta.getBeanDictionary());
 
 		String wrapperAttr = (isRoot && session.isPreserveRootElement()) ? r.getName().getLocalPart() : null;
-		String typeAttr = r.getAttributeValue(null, "type");
+		String typeAttr = r.getAttributeValue(null, bc.getBeanTypePropertyName());
 		int jsonType = getJsonType(typeAttr);
 		String b = r.getAttributeValue(session.getXsiNs(), "nil");
 		if (b == null)
 			b = r.getAttributeValue(null, "nil");
 		boolean isNull = b != null && b.equals("true");
+		String elementName = session.decodeString(r.getLocalName());
 		if (jsonType == 0) {
-			String elementName = session.decodeString(r.getLocalName());
 			if (elementName == null || elementName.equals(currAttr))
 				jsonType = UNKNOWN;
-			else
+			else {
+				typeAttr = elementName;
 				jsonType = getJsonType(elementName);
+			}
 		}
 		if (! sType.canCreateNewInstance(outer)) {
-			String c = r.getAttributeValue(null, bc.getBeanTypePropertyName());
-			if (c != null) {
-				sType = eType = (ClassMeta<T>)bc.getClassMetaFromString(c);
+			if (bd.hasName(typeAttr)) {
+				sType = eType = (ClassMeta<T>)bd.getClassMeta(typeAttr);
+			} else if (bd.hasName(elementName)) {
+				sType = eType = (ClassMeta<T>)bd.getClassMeta(elementName);
 			}
 		}
 		Object o = null;
@@ -186,7 +189,7 @@ public class XmlParser extends ReaderParser {
 		for (int i = 0; i < r.getAttributeCount(); i++) {
 			String a = r.getAttributeLocalName(i);
 			// TODO - Need better handling of namespaces here.
-			if (! (a.equals("type"))) {
+			if (! (a.equals(bc.getBeanTypePropertyName()))) {
 				K key = session.trim(convertAttrToType(session, m, a, keyType));
 				V value = session.trim(convertAttrToType(session, m, r.getAttributeValue(i), valueType));
 				setName(valueType, value, key);
@@ -374,7 +377,7 @@ public class XmlParser extends ReaderParser {
 			for (int i = 0; i < r.getAttributeCount(); i++) {
 				String key = session.decodeString(r.getAttributeLocalName(i));
 				String val = r.getAttributeValue(i);
-				if (! key.equals("type"))
+				if (! key.equals(bc.getBeanTypePropertyName()))
 					m.put(key, val);
 			}
 		}

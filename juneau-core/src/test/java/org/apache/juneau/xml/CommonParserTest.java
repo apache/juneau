@@ -32,20 +32,20 @@ public class CommonParserTest {
 		ReaderParser p = XmlParser.DEFAULT;
 
 		Map m = null;
-		m = (Map)p.parse("<object><a type='number'>1</a></object>", Object.class);
+		m = (Map)p.parse("<object><a _type='number'>1</a></object>", Object.class);
 		assertEquals(1, m.get("a"));
-		m = (Map)p.parse("<object><a type='number'>1</a><b type='string'>foo bar</b></object>", Object.class);
+		m = (Map)p.parse("<object><a _type='number'>1</a><b _type='string'>foo bar</b></object>", Object.class);
 		assertEquals(1, m.get("a"));
 		assertEquals("foo bar", m.get("b"));
-		m = (Map)p.parse("<object><a type='number'>1</a><b type='string'>foo bar</b><c type='boolean'>false</c></object>", Object.class);
+		m = (Map)p.parse("<object><a _type='number'>1</a><b _type='string'>foo bar</b><c _type='boolean'>false</c></object>", Object.class);
 		assertEquals(1, m.get("a"));
 		assertEquals(false, m.get("c"));
-		m = (Map)p.parse("   <object>	<a type='number'>	1	</a>	<b type='string'>	foo	</b>	<c type='boolean'>	false 	</c>	</object>	", Object.class);
+		m = (Map)p.parse("   <object>	<a _type='number'>	1	</a>	<b _type='string'>	foo	</b>	<c _type='boolean'>	false 	</c>	</object>	", Object.class);
 		assertEquals(1, m.get("a"));
 		assertEquals("foo", m.get("b"));
 		assertEquals(false, m.get("c"));
 
-		m = (Map)p.parse("<object><x type='string'>org.apache.juneau.test.Person</x><addresses type='array'><object><x type='string'>org.apache.juneau.test.Address</x><city type='string'>city A</city><state type='string'>state A</state><street type='string'>street A</street><zip type='number'>12345</zip></object></addresses></object>", Object.class);
+		m = (Map)p.parse("<object><x _type='string'>org.apache.juneau.test.Person</x><addresses _type='array'><object><x _type='string'>org.apache.juneau.test.Address</x><city _type='string'>city A</city><state _type='string'>state A</state><street _type='string'>street A</street><zip _type='number'>12345</zip></object></addresses></object>", Object.class);
 		assertEquals("org.apache.juneau.test.Person", m.get("x"));
 		List l = (List)m.get("addresses");
 		assertNotNull(l);
@@ -57,12 +57,12 @@ public class CommonParserTest {
 		assertEquals("street A", m.get("street"));
 		assertEquals(12345, m.get("zip"));
 
-		ObjectList jl = (ObjectList)p.parse("<array><object><attribute type='string'>value</attribute></object><object><attribute type='string'>value</attribute></object></array>", Object.class);
+		ObjectList jl = (ObjectList)p.parse("<array><object><attribute _type='string'>value</attribute></object><object><attribute _type='string'>value</attribute></object></array>", Object.class);
 		assertEquals("value", jl.getObjectMap(0).getString("attribute"));
 		assertEquals("value", jl.getObjectMap(1).getString("attribute"));
 
 		try {
-			jl = (ObjectList)p.parse("<array><object><attribute type='string'>value</attribute></object><object><attribute type='string'>value</attribute></object></array>", Object.class);
+			jl = (ObjectList)p.parse("<array><object><attribute _type='string'>value</attribute></object><object><attribute _type='string'>value</attribute></object></array>", Object.class);
 			assertEquals("value", jl.getObjectMap(0).getString("attribute"));
 			assertEquals("value", jl.getObjectMap(1).getString("attribute"));
 		} catch (Exception e) {
@@ -112,7 +112,7 @@ public class CommonParserTest {
 		assertEquals(t.a, 1);
 		assertEquals(t.b, 2);
 
-		in =  "<object><a>1</a><unknown><object><a type='string'>foo</a></object></unknown><b>2</b></object>";
+		in =  "<object><a>1</a><unknown><object><a _type='string'>foo</a></object></unknown><b>2</b></object>";
 		t = p.parse(in, B.class);
 		assertEquals(t.a, 1);
 		assertEquals(t.b, 2);
@@ -137,7 +137,7 @@ public class CommonParserTest {
 
 		ReaderParser p = XmlParser.DEFAULT;
 
-		String in = "<object><ints type='array'><number>1</number><number>2</number><number>3</number></ints><beans type='array'><object><a type='number'>1</a><b type='number'>2</b></object></beans></object>";
+		String in = "<object><ints _type='array'><number>1</number><number>2</number><number>3</number></ints><beans _type='array'><object><a _type='number'>1</a><b _type='number'>2</b></object></beans></object>";
 		C t = p.parse(in, C.class);
 		assertEquals(t.getInts().size(), 3);
 		assertEquals(t.getBeans().get(0).b, 2);
@@ -170,7 +170,7 @@ public class CommonParserTest {
 			}
 		);
 
-		String in = "<object><a type='number'>1</a><unknownProperty type='string'>foo</unknownProperty><b type='number'>2</b></object>";
+		String in = "<object><a _type='number'>1</a><unknownProperty _type='string'>foo</unknownProperty><b _type='number'>2</b></object>";
 		p.parse(in, B.class);
 		assertEquals(1, events.size());
 		// XML parser may or may not support line numbers.

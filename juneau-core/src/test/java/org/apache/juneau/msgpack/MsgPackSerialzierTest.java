@@ -201,9 +201,6 @@ public class MsgPackSerialzierTest {
 		test(new ObjectMap("{1:1}"), "81 A1 31 01");
 		test(new ObjectMap("{1:1,2:1,3:1,4:1,5:1,6:1,7:1,8:1,9:1,a:1,b:1,c:1,d:1,e:1,f:1}"), "8F A1 31 01 A1 32 01 A1 33 01 A1 34 01 A1 35 01 A1 36 01 A1 37 01 A1 38 01 A1 39 01 A1 61 01 A1 62 01 A1 63 01 A1 64 01 A1 65 01 A1 66 01");
 		test(new ObjectMap("{1:1,2:1,3:1,4:1,5:1,6:1,7:1,8:1,9:1,a:1,b:1,c:1,d:1,e:1,f:1,g:1}"), "DE 00 10 A1 31 01 A1 32 01 A1 33 01 A1 34 01 A1 35 01 A1 36 01 A1 37 01 A1 38 01 A1 39 01 A1 61 01 A1 62 01 A1 63 01 A1 64 01 A1 65 01 A1 66 01 A1 67 01");
-
-		byte[] b = MsgPackSerializer.DEFAULT.serialize(new Person());
-		System.err.println(TestUtils.toReadableBytes2(b));
 	}
 
 	public static class Person {

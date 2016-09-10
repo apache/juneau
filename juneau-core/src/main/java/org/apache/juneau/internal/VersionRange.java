@@ -41,7 +41,6 @@ public class VersionRange {
 			int c = range.indexOf(',');
 			if (c > -1 && (c1 == '[' || c1 == '(') && (c2 == ']' || c2 == ')')) {
 				String v1 = range.substring(1, c), v2 = range.substring(c+1, range.length()-1);
-				//System.err.println("v1=["+v1+"], v2=["+v2+"]");
 				minVersion = new Version(v1);
 				maxVersion = new Version(v2);
 				minExclusive = c1 == '(';

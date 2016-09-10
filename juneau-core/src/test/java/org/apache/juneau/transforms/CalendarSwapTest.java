@@ -419,7 +419,7 @@ public class CalendarSwapTest {
 		Class<?> f = CalendarMapSwap.class;
 		WriterSerializer s = new XmlSerializer.SimpleXmlJsonSq().addPojoSwaps(f);
 		ReaderParser p = new XmlParser().addPojoSwaps(f);
-		doTest(s, p, true, "<object><time type='number'>-2172116928000</time><timeZone>PST</timeZone></object>");
+		doTest(s, p, true, "<object><time _type='number'>-2172116928000</time><timeZone>PST</timeZone></object>");
 	}
 
 	//====================================================================================================

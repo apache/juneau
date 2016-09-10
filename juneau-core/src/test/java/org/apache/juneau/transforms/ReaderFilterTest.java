@@ -40,7 +40,7 @@ public class ReaderFilterTest {
 		assertEquals("{X:{foo:'bar',baz:'quz'}}", s.serialize(m));
 
 		s.addPojoSwaps(ReaderSwap.Xml.class);
-		r = new StringReader("<object><foo type='string'>bar</foo><baz type='string'>quz</baz></object>");
+		r = new StringReader("<object><foo _type='string'>bar</foo><baz _type='string'>quz</baz></object>");
 		m = new HashMap<String,Object>();
 		m.put("X", r);
 		assertEquals("{X:{foo:'bar',baz:'quz'}}", s.serialize(m));

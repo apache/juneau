@@ -354,7 +354,7 @@ public class XmlSchemaSerializer extends XmlSerializer {
 				if (session.isAddJsonTypeAttrs() || (session.isAddJsonStringTypeAttrs() && base.equals("string"))) {
 					w.cTag().nl();
 					w.oTag(i+3, "attribute")
-						.attr("name", "type")
+						.attr("name", bc.getBeanTypePropertyName())
 						.attr("type", "string")
 						.ceTag().nl();
 					w.eTag(i+2, "extension").nl();
@@ -492,15 +492,9 @@ public class XmlSchemaSerializer extends XmlSerializer {
 					w.eTag(i+1, "sequence").nl();
 				}
 
-				if (session.isAddBeanTypeProperties()) {
+				if (session.isAddBeanTypeProperties() || session.isAddJsonTypeAttrs()) {
 					w.oTag(i+1, "attribute")
 						.attr("name", bc.getBeanTypePropertyName())
-						.attr("type", "string")
-						.ceTag().nl();
-				}
-				if (session.isAddJsonTypeAttrs()) {
-					w.oTag(i+1, "attribute")
-						.attr("name", "type")
 						.attr("type", "string")
 						.ceTag().nl();
 				}
