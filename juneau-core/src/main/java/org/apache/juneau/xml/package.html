@@ -73,7 +73,6 @@
 		<ol>
 			<li><p><a class='doclink' href='#AutoDetectNamespaces'>Auto-detection of namespaces</a></p>
 		</ol>
-		<li><p><a class='doclink' href='#UriProperties'>URI properties</a></p>
 		<li><p><a class='doclink' href='#BeanAnnotations'>@Bean and @BeanProperty annotations</a></p>
 		<li><p><a class='doclink' href='#Collections'>Collections</a></p>
 		<li><p><a class='doclink' href='#XmlSchemaSupport'>XML-Schema support</a></p>
@@ -304,14 +303,14 @@
 
 		<!-- ======================================================================================================== -->
 		<a id="XmlName"></a>
-		<h4 class='topic' onclick='toggle(this)'>2.1.1 - @Xml.name()</h4>
+		<h4 class='topic' onclick='toggle(this)'>2.1.1 - @Bean.typeName()</h4>
 		<div class='topic'>
 			<p>
-				The {@link org.apache.juneau.xml.annotation.Xml#name()} annotation can be used to override the Juneau default name on unnamed objects. 
+				The {@link org.apache.juneau.annotation.Bean#typeName()} annotation can be used to override the Juneau default name on unnamed objects. 
 			</p>
 			<h6 class='figure'>Example</h6>
 			<p class='bcode'>
-	<ja>@Xml</ja>(name=<js>"person"</js>)
+	<ja>@Bean</ja>(typeName=<js>"person"</js>)
 	<jk>public class</jk> Person {
 		...
 			</p>
@@ -427,7 +426,7 @@
 			</p>
 			<h6 class='figure'>Example</h6>
 			<p class='bcode'>
-	<ja>@Xml</ja>(name=<js>"MyBean"</js>)
+	<ja>@Bean</ja>(typeName=<js>"MyBean"</js>)
 	<jk>public class</jk> MyBean {
 
 		<ja>@Xml</ja>(format=XmlFormat.<jsf>CONTENT</jsf>)
@@ -634,7 +633,8 @@
 			On our bean class, we'll specify to use the <js>"http://www.ibm.com/person/"</js> namespace:
 		</p>
 		<p class='bcode'>
-	<ja>@Xml</ja>(name=<js>"person"</js>, prefix=<js>"per"</js>)
+	<ja>@Xml</ja>(prefix=<js>"per"</js>)
+	<ja>@Bean</ja>(typeName=<js>"person"</js>)
 	<jk>public class</jk> Person {
 		...
 		</p>
@@ -698,137 +698,10 @@
 		</div>
 		
 	</div>
-
-	<!-- ======================================================================================================== -->
-	<a id="UriProperties"></a>
-	<h3 class='topic' onclick='toggle(this)'>2.3 - URI properties</h3>
-	<div class='topic'>
-		<p>
-			The {@link org.apache.juneau.annotation.BeanProperty#beanUri} annotation is used to identify the URI 
-				of a bean.<br>
-			Typically, this property will have a class type of {@link java.net.URI} or {@link java.net.URL}, although
-				it can essentially be any type that resolves to a simple serializable type.
-		</p>
-		<p>
-			In the following code, we're adding 2 new properties.<br>
-			The first property is annotated with <ja>@BeanProperty</ja> to identify that this property is the
-				resource identifier for this bean.<br>
-			The second unannotated property is interpreted as a normal property.
-		</p>
-		<p class='bcode'>	
-	<ja>@Xml</ja>(name=<js>"person"</js>, prefix=<js>"per"</js>)
-	<jk>public class</jk> Person {
-		
-		<jc>// Bean properties</jc>
-		<ja>@BeanProperty</ja>(beanUri=<jk>true</jk>) 
-		<jk>public</jk> URI <jf>uri</jf>;
-		
-		<jk>public</jk> URI <jf>addressBookUri</jf>;
-	
-		...
-		
-		<jc>// Normal constructor</jc>
-		<jk>public</jk> Person(<jk>int</jk> id, String name, String uri, String addressBookUri) <jk>throws</jk> URISyntaxException {
-			<jk>this</jk>.<jf>id</jf> = id;
-			<jk>this</jk>.<jf>name</jf> = name;
-			<jk>this</jk>.<jf>uri</jf> = <jk>new</jk> URI(uri);
-			<jk>this</jk>.<jf>addressBookUri</jf> = <jk>new</jk> URI(addressBookUri);
-		}
-	}
-		</p>
-		<p>
-			We alter our code to pass in values for these new properties.
-		</p>
-		<p class='bcode'>
-	<jc>// Create our bean.</jc>
-	Person p = <jk>new</jk> Person(1, <js>"John Smith"</js>, <js>"http://sample/addressBook/person/1"</js>, <js>"http://sample/addressBook"</js>);
-		</p>
-		<p>
-			Now when we run the sample code, we get the following:
-		</p>
-		<p class='bcode'>
-	<xt>&lt;per:person</xt> 
-			<xa>xmlns</xa>=<xs>'http://www.ibm.com/2013/Juneau'</xs>
-			<xa>xmlns:per</xa>=<xs>'http://www.ibm.com/person/'</xs> 
-			<xa>xmlns:xsi</xa>=<xs>'http://www.w3.org/2001/XMLSchema-instance'</xs> 
-			<xa>uri</xa>=<xs>'http://sample/addressBook/person/1'</xs><xt>&gt;</xt>
-		<xt>&lt;per:id&gt;</xt>1<xt>&lt;/per:id&gt;</xt>
-		<xt>&lt;per:name&gt;</xt>John Smith<xt>&lt;/per:name&gt;</xt>
-		<xt>&lt;per:addressBookUri&gt;</xt>http://sample/addressBook<xt>&lt;/per:addressBookUri&gt;</xt>
-	<xt>&lt;/per:person&gt;</xt>
-		</p>
-		<p>
-			Notice how the bean URI property is serialized as an XML attribute while the normal URI property is
-				serialized normally as an element.
-		</p>
-		<p>
-			Bean properties that resolve as XML attributes can also be assigned namespaces.<br>
-			For example, let's assign our bean URI to another namespace.
-		</p>
-		<p class='bcode'>
-	<ja>@BeanProperty</ja>(beanUri=<jk>true</jk>)
-	<ja>@Xml</ja>(prefix=<js>"ab"</js>)
-	<jk>public</jk> URI <jf>uri</jf>;
-		</p>
-		<p>
-			Now when we run the sample code, we see that our <xa>uri</xa> attribute is assigned that namespace prefix.		
-		</p>
-		<p class='bcode'>
-	<xt>&lt;per:person</xt> 
-			<xa>xmlns</xa>=<xs>'http://www.ibm.com/2013/Juneau'</xs> 
-			<xa>xmlns:per</xa>=<xs>'http://www.ibm.com/person/'</xs> 
-			<xa>xmlns:ab</xa>=<xs>'http://www.ibm.com/addressBook/'</xs> 
-			<xa>xmlns:xsi</xa>=<xs>'http://www.w3.org/2001/XMLSchema-instance'</xs> 
-			<xa>ab:uri</xa>=<xs>'http://sample/addressBook/person/1'</xs><xt>&gt;</xt>
-		<xt>&lt;per:id&gt;</xt>1<xt>&lt;/per:id&gt;</xt>
-		<xt>&lt;per:name&gt;</xt>John Smith<xt>&lt;/per:name&gt;</xt>
-		<xt>&lt;per:addressBookUri&gt;</xt>http://sample/addressBook<xt>&lt;/per:addressBookUri&gt;</xt>
-	<xt>&lt;/per:person&gt;</xt>		
-		</p>
-		<p>
-			The {@link org.apache.juneau.annotation.URI} annotation can also be used on classes and properties 
-				to identify them as URLs when they're not instances of <code>java.net.URI</code> or <code>java.net.URL</code> 
-				(not needed if <code><ja>@BeanProperty</ja>(beanUri=<jk>true</jk>)</code> is already specified).
-		</p>
-		<p>
-			The following properties would have produced the same output as before. 
-		</p>
-		<p class='bcode'>
-	<jk>public class</jk> Person {
-		
-		<jc>// Bean properties</jc>
-		<ja>@BeanProperty</ja>(beanUri=<jk>true</jk>) <jk>public</jk> String <jf>uri</jf>;
-		</p>
-		<p>
-			Also take note of the {@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_absolutePathUriBase SERIALIZER_absolutePathUriBase} and 
-				{@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_relativeUriBase SERIALIZER_relativeUriBase}
-				settings that can be specified on the serializer to resolve relative and context-root-relative URIs to fully-qualfied URIs.
-		</p>
-		<p>
-			This can be useful if you want to keep the URI authority and context root information out of the bean logic layer.
-		</p>
-		<p>
-			The following code produces the same output as before, but the URIs on the beans are relative.
-		</p>
-		<p class='bcode'>
-	<jc>// Create a new serializer with readable output.</jc>
-	XmlSerializer s = <jk>new</jk> XmlSerializer()
-		.setProperty(SerializerContext.<jsf>SERIALIZER_useIndentation</jsf>, <jk>true</jk>)
-		.setProperty(SerializerContext.<jsf>SERIALIZER_quoteChar</jsf>, <js>'\''</js>)
-		.setProperty(SerializerContext.<jsf>SERIALIZER_relativeUriBase</jsf>, <js>"http://myhost/sample"</js>);
-		.setProperty(SerializerContext.<jsf>SERIALIZER_absolutePathUriBase</jsf>, <js>"http://myhost"</js>);
-		
-	<jc>// Create our bean.</jc>
-	Person p = <jk>new</jk> Person(1, <js>"John Smith"</js>, <js>"person/1"</js>, <js>"/"</js>);
-
-	<jc>// Serialize the bean to RDF/XML.</jc>
-	String rdfXml = s.serialize(p);
-		</p>		
-	</div>
 	
 	<!-- ======================================================================================================== -->
 	<a id="BeanAnnotations"></a>
-	<h3 class='topic' onclick='toggle(this)'>2.4 - @Bean and @BeanProperty annotations</h3>
+	<h3 class='topic' onclick='toggle(this)'>2.3 - @Bean and @BeanProperty annotations</h3>
 	<div class='topic'>
 		<p>
 			The {@link org.apache.juneau.annotation.Bean @Bean} and {@link org.apache.juneau.annotation.BeanProperty @BeanProperty} annotations
@@ -848,11 +721,12 @@
 			Using transforms, we can convert them to standardized string forms.
 		</p>
 		<p class='bcode'>	
-	<ja>@Xml</ja>(name=<js>"person"</js>, prefix=<js>"per"</js>)
+	<ja>@Xml</ja>(prefix=<js>"per"</js>)
+	<ja>@Bean</ja>(typeName=<js>"person"</js>)
 	<jk>public class</jk> Person {
 		
 		<jc>// Bean properties</jc>
-		<ja>@BeanProperty</ja>(transform=CalendarSwap.ISO8601DTZ.<jk>class</jk>) <jk>public</jk> Calendar birthDate;
+		<ja>@BeanProperty</ja>(swap=CalendarSwap.ISO8601DTZ.<jk>class</jk>) <jk>public</jk> Calendar birthDate;
 		...
 		
 		<jc>// Normal constructor</jc>
@@ -893,8 +767,8 @@
 		</p>
 		<h6 class='figure'>Example</h6>
 		<p class='bcode'>	
-	<ja>@Xml</ja>(name=<js>"person"</js>, prefix=<js>"per"</js>)
-	<ja>@Bean</ja>(propertyNamer=PropertyNamerDashedLC.<jk>class</jk>)
+	<ja>@Xml</ja>(prefix=<js>"per"</js>)
+	<ja>@Bean</ja>(typeName=<js>"person"</js>,propertyNamer=PropertyNamerDashedLC.<jk>class</jk>)
 	<jk>public class</jk> Person {
 		...
 		</p>
@@ -916,7 +790,7 @@
 		
 	<!-- ======================================================================================================== -->
 	<a id="Collections"></a>
-	<h3 class='topic' onclick='toggle(this)'>2.5 - Collections</h3>
+	<h3 class='topic' onclick='toggle(this)'>2.4 - Collections</h3>
 	<div class='topic'>
 		<p>
 			In our example, let's add a list-of-beans property to our sample class:
@@ -933,11 +807,12 @@
 			The <code>Address</code> class has the following properties defined:
 		</p>
 		<p class='bcode'>
-	<ja>@Xml</ja>(name=<js>"address"</js>, prefix=<js>"addr"</js>)
+	<ja>@Xml</ja>(prefix=<js>"addr"</js>)
+	<ja>@Bean</ja>(typeName=<js>"address"</js>)
 	<jk>public class</jk> Address {
 
 		<jc>// Bean properties</jc>
-		<ja>@BeanProperty</ja>(beanUri=<jk>true</jk>) <jk>public</jk> URI <jf>uri</jf>;
+		<ja>@Xml</ja>(format=<jsf>ATTR</jsf>) <jk>public</jk> URI <jf>uri</jf>;
 		<jk>public</jk> URI <jf>personUri</jf>;
 		<jk>public int</jk> <jf>id</jf>;
 		<ja>@Xml</ja>(prefix=<js>"mail"</js>) <jk>public</jk> String <jf>street</jf>, <jf>city</jf>, <jf>state</jf>;
@@ -1000,7 +875,7 @@
 
 	<!-- ======================================================================================================== -->
 	<a id="XmlSchemaSupport"></a>
-	<h3 class='topic' onclick='toggle(this)'>2.6 - XML-Schema support</h3>
+	<h3 class='topic' onclick='toggle(this)'>2.5 - XML-Schema support</h3>
 	<div class='topic'>
 		<p>
 			Juneau provides the {@link org.apache.juneau.xml.XmlSchemaSerializer} class for generating XML-Schema documents
@@ -1024,14 +899,14 @@
 			Since we have not defined a default namespace, everything is defined under the default Juneau namespace.
 		</p>
 		<p class='bcode'>
-	<ja>@Xml</ja>(name=<js>"person"</js>)
+	<ja>@Bean</ja>(typeName=<js>"person"</js>)
 	<jk>public class</jk> Person {
 		<jc>// Bean properties</jc>
 		<jk>public int</jk> <jf>id</jf>;
 		<jk>public</jk> String <jf>name</jf>;
-		<ja>@BeanProperty</ja>(beanUri=<jk>true</jk>) <jk>public</jk> URI <jf>uri</jf>;
+		<ja>@Xml</ja>(format=<jsf>ATTR</jsf>) <jk>public</jk> URI <jf>uri</jf>;
 		<jk>public</jk> URI <jf>addressBookUri</jf>;
-		<ja>@BeanProperty</ja>(transform=CalendarSwap.ISO8601DTZ.<jk>class</jk>) <jk>public</jk> Calendar <jf>birthDate</jf>;
+		<ja>@BeanProperty</ja>(swap=CalendarSwap.ISO8601DTZ.<jk>class</jk>) <jk>public</jk> Calendar <jf>birthDate</jf>;
 		<jk>public</jk> LinkedList&lt;Address&gt; <jf>addresses</jf> = <jk>new</jk> LinkedList&lt;Address&gt;();
 
 		<jc>// Bean constructor (needed by parser)</jc>
@@ -1048,10 +923,10 @@
 		}
 	}
 
-	<ja>@Xml</ja>(name=<js>"address"</js>)
+	<ja>@Bean</ja>(typeName=<js>"address"</js>)
 	<jk>public class</jk> Address {
 		<jc>// Bean properties</jc>
-		<ja>@BeanProperty</ja>(beanUri=<jk>true</jk>) <jk>public</jk> URI <jf>uri</jf>;
+		<ja>@Xml</ja>(format=<jsf>ATTR</jsf>) <jk>public</jk> URI <jf>uri</jf>;
 		<jk>public</jk> URI <jf>personUri</jf>;
 		<jk>public int</jk> <jf>id</jf>;
 		<jk>public</jk> String <jf>street</jf>, <jf>city</jf>, <jf>state</jf>;
@@ -1164,12 +1039,14 @@
 			Now if we add in some namespaces, we'll see how multiple namespaces are handled.
 		</p>
 		<p class='bcode'>
-	<ja>@Xml</ja></ja>(name=<js>"person"</js>, prefix=<js>"per"</js>)
+	<ja>@Xml</ja></ja>(prefix=<js>"per"</js>)
+	<ja>@Bean</ja></ja>(typeName=<js>"person"</js>)
 	<jk>public class</jk> Person {
 	...
 	}
 
-	<ja>@Xml</ja>(name=<js>"address"</js>, prefix=<js>"addr"</js>)
+	<ja>@Xml</ja>(prefix=<js>"addr"</js>)
+	<ja>@Bean</ja>(typeName=<js>"address"</js>)
 	<jk>public class</jk> Address {
 		...
 		<ja>@Xml</ja>(prefix=<js>"mail"</js>) <jk>public</jk> String <jf>street</jf>, <jf>city</jf>, <jf>state</jf>;
@@ -1330,7 +1207,7 @@
 
 	<!-- ======================================================================================================== -->
 	<a id="Recursion"></a>
-	<h3 class='topic' onclick='toggle(this)'>2.7 - Non-tree models and recursion detection</h3>
+	<h3 class='topic' onclick='toggle(this)'>2.6 - Non-tree models and recursion detection</h3>
 	<div class='topic'>
 		<p>
 			The XML serializer is designed to be used against POJO tree structures. <br> 
@@ -1348,7 +1225,7 @@
 			For example, let's make a POJO model out of the following classes:
 		</p>
 		<p class='bcode'>
-	<ja>@Xml</ja>(name=<js>"a"</js>)
+	<ja>@Bean</ja>(typeName=<js>"a"</js>)
 	<jk>public class</jk> A {
 		<jk>public</jk> B b;
 	}
@@ -1403,7 +1280,7 @@
 
 	<!-- ======================================================================================================== -->
 	<a id="SerializerConfigurableProperties"></a>
-	<h3 class='topic' onclick='toggle(this)'>2.8 - Configurable properties</h3>
+	<h3 class='topic' onclick='toggle(this)'>2.7 - Configurable properties</h3>
 	<div class='topic'>
 		<p>
 			See the following classes for all configurable properties that can be used on this serializer:
@@ -1417,7 +1294,7 @@
 
 	<!-- ======================================================================================================== -->
 	<a id="SerializerOtherNotes"></a>
-	<h3 class='topic' onclick='toggle(this)'>2.9 - Other notes</h3>
+	<h3 class='topic' onclick='toggle(this)'>2.8 - Other notes</h3>
 	<div class='topic'>
 		<ul class='spaced-list'>
 			<li>Like all other Juneau serializers, the XML serializer is thread safe and maintains an internal cache of bean classes encountered.<br>

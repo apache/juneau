@@ -34,19 +34,100 @@ import org.apache.juneau.serializer.*;
  * <p>
  * See {@link ContextFactory} for more information about context properties.
  *
+ *
+ * <h6 class='topic' id='ConfigProperties'>Configurable properties on the XML serializer</h6>
+ * <table class='styled' style='border-collapse: collapse;'>
+ * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th></tr>
+ * 	<tr>
+ * 		<td>{@link #XML_addJsonTypeAttrs}</td>
+ * 		<td>Add JSON type attributes to output.</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>false</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #XML_addJsonStringTypeAttrs}</td>
+ * 		<td>Add JSON type attributes for strings to output.</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>false</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #XML_enableNamespaces}</td>
+ * 		<td>Enable support for XML namespaces.</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>true</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #XML_autoDetectNamespaces}</td>
+ * 		<td>Auto-detect namespace usage.</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>true</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #XML_addNamespaceUrisToRoot}</td>
+ * 		<td>Add namespace URLs to the root element.</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>true</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #XML_defaultNamespaceUri}</td>
+ * 		<td>Default namespace URI.</td>
+ * 		<td><code>String</code></td>
+ * 		<td><jk>null</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #XML_xsNamespace}</td>
+ * 		<td>XMLSchema namespace.</td>
+ * 		<td>{@link Namespace}</td>
+ * 		<td><code>{name:<js>'xs'</js>,uri:<js>'http://www.w3.org/2001/XMLSchema'</js>}</code></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #XML_xsiNamespace}</td>
+ * 		<td>XMLSchema-Instance namespace.</td>
+ * 		<td>{@link Namespace}</td>
+ * 		<td><code>{name:<js>'xsi'</js>,uri:<js>'http://www.w3.org/2001/XMLSchema-instance'</js>}</code></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #XML_namespaces}</td>
+ * 		<td>Default namespaces.</td>
+ * 		<td><code>Set&lt;{@link Namespace}&gt;</code></td>
+ * 		<td>empty set</td>
+ * 	</tr>
+ * </table>
+ *
+ * <h6 class='topic'>Configurable properties inherited from parent classes</h6>
+ * <ul class='javahierarchy'>
+ * 	<li class='c'><a class='doclink' href='../BeanContext.html#ConfigProperties'>BeanContext</a> - Properties associated with handling beans on serializers and parsers.
+ * 	<ul>
+ * 		<li class='c'><a class='doclink' href='../serializer/SerializerContext.html#ConfigProperties'>SerializerContext</a> - Configurable properties common to all serializers.
+ * 	</ul>
+ * </ul>
+*
+ *
  * @author James Bognar (james.bognar@salesforce.com)
  */
 public class XmlSerializerContext extends SerializerContext {
 
 	/**
-	 * Add JSON type attributes to output ({@link Boolean}, default=<jk>false</jk>).
+	 * <b>Configuration property:</b>  Add JSON type attributes to output.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"XmlSerializer.addJsonTypeAttrs"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * </ul>
 	 * <p>
 	 * If <js>true</jk>, {@code type} attributes will be added to elements in the XML for number/boolean/null nodes.
 	 */
 	public static final String XML_addJsonTypeAttrs = "XmlSerializer.addJsonTypeAttrs";
 
 	/**
-	 * Add JSON type attributes for strings to output ({@link Boolean}, default=<jk>false</jk>).
+	 * <b>Configuration property:</b>  Add JSON type attributes for strings to output.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"XmlSerializer.addJsonStringTypeAttrs"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, {@code type} attributes will be added to elements in the XML for string nodes.
 	 * <p>
@@ -58,14 +139,26 @@ public class XmlSerializerContext extends SerializerContext {
 	public static final String XML_addJsonStringTypeAttrs = "XmlSerializer.addJsonStringTypeAttrs";
 
 	/**
-	 * Enable support for XML namespaces ({@link Boolean}, default=<jk>true</jk>).
+	 * <b>Configuration property:</b>  Enable support for XML namespaces.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"XmlSerializer.enableNamespaces"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>true</jk>
+	 * </ul>
 	 * <p>
 	 * If not enabled, XML output will not contain any namespaces regardless of any other settings.
 	 */
 	public static final String XML_enableNamespaces = "XmlSerializer.enableNamespaces";
 
 	/**
-	 * Auto-detect namespace usage ({@link Boolean}, default=<jk>true</jk>).
+	 * <b>Configuration property:</b>  Auto-detect namespace usage.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"XmlSerializer.autoDetectNamespaces"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>true</jk>
+	 * </ul>
 	 * <p>
 	 * Detect namespace usage before serialization.
 	 * <p>
@@ -87,7 +180,13 @@ public class XmlSerializerContext extends SerializerContext {
 	public static final String XML_autoDetectNamespaces = "XmlSerializer.autoDetectNamespaces";
 
 	/**
-	 * Add namespace URLs to the root element ({@link Boolean}, default=<jk>true</jk>).
+	 * <b>Configuration property:</b>  Add namespace URLs to the root element.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"XmlSerializer.addNamespaceUrisToRoot"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>true</jk>
+	 * </ul>
 	 * <p>
 	 * Use this setting to add {@code xmlns:x} attributes to the root
 	 * element for the default and all mapped namespaces.
@@ -97,14 +196,26 @@ public class XmlSerializerContext extends SerializerContext {
 	public static final String XML_addNamespaceUrisToRoot = "XmlSerializer.addNamespaceUrisToRoot";
 
 	/**
-	 * Default namespace URI ({@link String}, default=<jk>null</jk>).
+	 * <b>Configuration property:</b>  Default namespace URI.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"XmlSerializer.defaultNamespaceUri"</js>
+	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Default:</b> <jk>null</jk>
+	 * </ul>
 	 * <p>
 	 * Specifies the default namespace URI for this document.
 	 */
 	public static final String XML_defaultNamespaceUri = "XmlSerializer.defaultNamespaceUri";
 
 	/**
-	 * XMLSchema namespace ({@link Namespace}, default=<code>{name:<js>'xs'</js>,uri:<js>'http://www.w3.org/2001/XMLSchema'</js>}</code>).
+	 * <b>Configuration property:</b>  XMLSchema namespace.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"XmlSerializer.xsNamespace"</js>
+	 * 	<li><b>Data type:</b> {@link Namespace}
+	 * 	<li><b>Default:</b> <code>{name:<js>'xs'</js>,uri:<js>'http://www.w3.org/2001/XMLSchema'</js>}</code>
+	 * </ul>
 	 * <p>
 	 * Specifies the namespace for the <code>XMLSchema</code> namespace, used by the schema generated
 	 * by the {@link XmlSchemaSerializer} class.
@@ -112,14 +223,26 @@ public class XmlSerializerContext extends SerializerContext {
 	public static final String XML_xsNamespace = "XmlSerializer.xsNamespace";
 
 	/**
-	 * XMLSchema-Instance namespace ({@link Namespace}, default=<code>{name:<js>'xsi'</js>,uri:<js>'http://www.w3.org/2001/XMLSchema-instance'</js>}</code>).
+	 * <b>Configuration property:</b>  XMLSchema-Instance namespace.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"XmlSerializer.xsiNamespace"</js>
+	 * 	<li><b>Data type:</b> {@link Namespace}
+	 * 	<li><b>Default:</b> <code>{name:<js>'xsi'</js>,uri:<js>'http://www.w3.org/2001/XMLSchema-instance'</js>}</code>
+	 * </ul>
 	 * <p>
 	 * Specifies the namespace of the <code>XMLSchema-instance</code> namespace used for<code>nil=<jk>true</jk></code> attributes.
 	 */
 	public static final String XML_xsiNamespace = "XmlSerializer.xsiNamespace";
 
 	/**
-	 * Default namespaces (<code>Set&lt;Namespace&gt;</code>, default=empty set).
+	 * <b>Configuration property:</b>  Default namespaces.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"XmlSerializer.namespaces"</js>
+	 * 	<li><b>Data type:</b> <code>Set&lt;{@link Namespace}&gt;</code>
+	 * 	<li><b>Default:</b> empty set
+	 * </ul>
 	 * <p>
 	 * The default list of namespaces associated with this serializer.
 	 */

@@ -40,13 +40,73 @@ import org.apache.juneau.*;
  * 	Several built-in runtime variable types are defined, and the API can be extended to include user-defined variables.
  * </p>
  *
+ *
+ * <h6 class='topic' id='ConfigProperties'>Configurable properties on the HTML document serializer</h6>
+ * <table class='styled' style='border-collapse: collapse;'>
+ * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th></tr>
+ * 	<tr>
+ * 		<td>{@link #HTMLDOC_title}</td>
+ * 		<td>Page title.</td>
+ * 		<td><code>String</code></td>
+ * 		<td><jk>null</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #HTMLDOC_description}</td>
+ * 		<td>Page description.</td>
+ * 		<td><code>String</code></td>
+ * 		<td><jk>null</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #HTMLDOC_links}<br>{@link #HTMLDOC_links_put}</td>
+ * 		<td>Page links.</td>
+ * 		<td><code>Map&lt;String,String&gt;</code></td>
+ * 		<td>empty map</td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #HTMLDOC_cssUrl}</td>
+ * 		<td>Stylesheet URL.</td>
+ * 		<td><code>String</code></td>
+ * 		<td><js>"style.css"</js></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #HTMLDOC_cssImports}<br>{@link #HTMLDOC_cssImports_add}</td>
+ * 		<td>CSS imports.</td>
+ * 		<td><code>List&lt;String&gt;</code></td>
+ * 		<td>empty list</td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #HTMLDOC_nowrap}</td>
+ * 		<td>Prevent word wrap on page.</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>false</jk></td>
+ * 	</tr>
+ * </table>
+ *
+ * <h6 class='topic'>Configurable properties inherited from parent classes</h6>
+ * <ul class='javahierarchy'>
+ * 	<li class='c'><a class='doclink' href='../BeanContext.html#ConfigProperties'>BeanContext</a> - Properties associated with handling beans on serializers and parsers.
+ * 	<ul>
+ * 		<li class='c'><a class='doclink' href='../serializer/SerializerContext.html#ConfigProperties'>SerializerContext</a> - Configurable properties common to all serializers.
+ * 		<ul>
+ * 			<li class='c'><a class='doclink' href='../html/HtmlSerializerContext.html#ConfigProperties'>HtmlSerializerContext</a> - Configurable properties on the HTML serializer.
+ * 		</ul>
+ * 	</ul>
+ * </ul>
+ *
+ *
  * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 
 	/**
-	 * Adds a title at the top of a page.
-	 *
+	 * <b>Configuration property:</b>  Page title.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"HtmlSerializer.title"</js>
+	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Default:</b> <jk>null</jk>
+	 * </ul>
+	 * <p>
 	 * <dl>
 	 * 	<dt>Example:</dt>
 	 * 	<dd>
@@ -78,8 +138,14 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	public static final String HTMLDOC_title = "HtmlSerializer.title";
 
 	/**
-	 * Adds a description right below the title of a page.
-	 *
+	 * <b>Configuration property:</b>  Page description.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"HtmlSerializer.description"</js>
+	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Default:</b> <jk>null</jk>
+	 * </ul>
+	 * <p>
 	 * <dl>
 	 * 	<dt>Example:</dt>
 	 * 	<dd>
@@ -111,6 +177,14 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	public static final String HTMLDOC_description = "HtmlSerializer.description";
 
 	/**
+	 * <b>Configuration property:</b>  Page links.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.links.map"</js>
+	 * 	<li><b>Data type:</b> <code>Map&lt;String,String&gt;</code>
+	 * 	<li><b>Default:</b> empty map
+	 * </ul>
+	 * <p>
 	 * Adds a list of hyperlinks immediately under the title and description but above the content of the page.
 	 * <p>
 	 * 	This can be used to provide convenient hyperlinks when viewing the REST interface from a browser.
@@ -145,32 +219,56 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * 	</dd>
 	 * </dl>
 	 */
-	public static final String HTMLDOC_links = "HtmlDocSerializer.links";
+	public static final String HTMLDOC_links = "HtmlDocSerializer.links.map";
 
 	/**
-	 * Similar to {@link #HTMLDOC_links} except appends on to the existing list of links.
+	 * <b>Configuration property:</b>  Add to the {@link #HTMLDOC_links} property.
 	 */
-	public static final String HTMLDOC_links_add = "HtmlDocSerializer.links.add";
+	public static final String HTMLDOC_links_put = "HtmlDocSerializer.links.map.put";
 
 	/**
-	 * Adds a link to the specified stylesheet URL (<l>String</l>, default=<jk>null</jk>).
+	 * <b>Configuration property:</b>  Stylesheet URL.
 	 * <p>
-	 * 	If not specified, defaults to the built-in stylesheet located at <js>"/servletPath/style.css"</js>.
-	 * 	Note that this stylesheet is controlled by the <code><ja>@RestResource</ja>.style()</code> annotation.
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.cssUrl"</js>
+	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Default:</b> <js>"style.css"</js>
+	 * </ul>
+	 * <p>
+	 * Adds a link to the specified stylesheet URL.
+	 * <p>
+	 * 	If not specified, defaults to the built-in stylesheet located at <js>"style.css"</js>.
+	 * 	Note that this stylesheet is controlled by the <code><ja>@RestResource</ja>.stylesheet()</code> annotation.
 	 */
 	public static final String HTMLDOC_cssUrl = "HtmlDocSerializer.cssUrl";
 
 	/**
-	 * Imports the specified CSS page URLs into the page (<l>String[]</l>, default=<code>[]</code>).
+	 * <b>Configuration property:</b>  CSS imports.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.cssImports.list"</js>
+	 * 	<li><b>Data type:</b> <code>List&lt;String&gt;</code>
+	 * 	<li><b>Default:</b> empty list
+	 * </ul>
+	 * <p>
+	 * Imports the specified CSS page URLs into the page.
 	 */
-	public static final String HTMLDOC_cssImports = "HtmlDocSerializer.cssImports";
+	public static final String HTMLDOC_cssImports = "HtmlDocSerializer.cssImports.list";
 
 	/**
-	 * Append to the {@link #HTMLDOC_cssImports} property.
+	 * <b>Configuration property:</b>  Add to the {@link #HTMLDOC_cssImports} property.
 	 */
-	public static final String HTMLDOC_cssImports_add = "HtmlDocSerializer.cssImports.add";
+	public static final String HTMLDOC_cssImports_add = "HtmlDocSerializer.cssImports.list.add";
 
 	/**
+	 * <b>Configuration property:</b>  Prevent word wrap on page.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.nowrap"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * </ul>
+	 * <p>
 	 * Adds <js>"* {white-space:nowrap}"</js> to the style header to prevent word wrapping.
 	 */
 	public static final String HTMLDOC_nowrap = "HtmlDocSerializer.nowrap";

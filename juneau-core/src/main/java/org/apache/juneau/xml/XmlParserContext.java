@@ -37,26 +37,113 @@ import org.apache.juneau.parser.*;
  * <p>
  * See {@link ContextFactory} for more information about context properties.
  *
+ *
+ * <h6 class='topic' id='ConfigProperties'>Configurable properties on the XML parser</h6>
+ * <table class='styled' style='border-collapse: collapse;'>
+ * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th></tr>
+ * 	<tr>
+ * 		<td>{@link #XML_xsiNs}</td>
+ * 		<td>XMLSchema-instance namespace URI.</td>
+ * 		<td><code>String<code></td>
+ * 		<td><js>"http://www.w3.org/2001/XMLSchema-instance"</js></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #XML_trimWhitespace}</td>
+ * 		<td>Trim whitespace from text elements.</td>
+ * 		<td><code>Boolean<code></td>
+ * 		<td><jk>true</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #XML_validating}</td>
+ * 		<td>Enable validation.</td>
+ * 		<td><code>Boolean<code></td>
+ * 		<td><jk>false</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #XML_coalescing}</td>
+ * 		<td>Enable text element coalescing.</td>
+ * 		<td><code>Boolean<code></td>
+ * 		<td><jk>false</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #XML_replaceEntityReferences}</td>
+ * 		<td>Replace entity references.</td>
+ * 		<td><code>Boolean<code></td>
+ * 		<td><jk>true</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #XML_reporter}</td>
+ * 		<td>XML reporter.</td>
+ * 		<td>{@link XMLReporter}</td>
+ * 		<td><jk>null</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #XML_resolver}</td>
+ * 		<td>XML resolver.</td>
+ * 		<td>{@link XMLResolver}</td>
+ * 		<td><jk>null</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #XML_eventAllocator}</td>
+ * 		<td>XML event allocator.</td>
+ * 		<td>{@link XMLEventAllocator}</td>
+ * 		<td><jk>null</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #XML_preserveRootElement}</td>
+ * 		<td>Preserve root element during generalized parsing.</td>
+ * 		<td><code>Boolean<code></td>
+ * 		<td><jk>false</jk></td>
+ * 	</tr>
+ * </table>
+ *
+ * <h6 class='topic'>Configurable properties inherited from parent classes</h6>
+ * <ul class='javahierarchy'>
+ * 	<li class='c'><a class='doclink' href='../BeanContext.html#ConfigProperties'>BeanContext</a> - Properties associated with handling beans on serializers and parsers.
+ * 	<ul>
+ * 		<li class='c'><a class='doclink' href='../parser/ParserContext.html#ConfigProperties'>ParserContext</a> - Configurable properties common to all parsers.
+ * 	</ul>
+ * </ul>
+ *
+ *
  * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class XmlParserContext extends ParserContext {
 
 	/**
-	 * XMLSchema-instance namespace URI ({@link String}, default=<js>"http://www.w3.org/2001/XMLSchema-instance"</js>).
+	 * <b>Configuration property:</b>  XMLSchema-instance namespace URI.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"XmlParser.xsiNs"</js>
+	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Default:</b> <js>"http://www.w3.org/2001/XMLSchema-instance"</js>
+	 * </ul>
 	 * <p>
 	 * The XMLSchema namespace.
 	 */
 	public static final String XML_xsiNs = "XmlParser.xsiNs";
 
 	/**
-	 * Trim whitespace from text elements ({@link Boolean}, default=<jk>true</jk>).
+	 * <b>Configuration property:</b>  Trim whitespace from text elements.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"XmlParser.trimWhitespace"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>true</jk>
+	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, whitespace in text elements will be automatically trimmed.
 	 */
 	public static final String XML_trimWhitespace = "XmlParser.trimWhitespace";
 
 	/**
-	 * Set validating mode ({@link Boolean}, default=<jk>false</jk>).
+	 * <b>Configuration property:</b>  Enable validation.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"XmlParser.validating"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, XML document will be validated.
 	 * See {@link XMLInputFactory#IS_VALIDATING} for more info.
@@ -64,7 +151,13 @@ public final class XmlParserContext extends ParserContext {
 	public static final String XML_validating = "XmlParser.validating";
 
 	/**
-	 * Set coalescing mode ({@link Boolean}, default=<jk>false</jk>).
+	 * <b>Configuration property:</b>  Enable text element coalescing.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"XmlParser.coalescing"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, XML text elements will be coalesced.
 	 * See {@link XMLInputFactory#IS_COALESCING} for more info.
@@ -72,7 +165,13 @@ public final class XmlParserContext extends ParserContext {
 	public static final String XML_coalescing = "XmlParser.coalescing";
 
 	/**
-	 * Replace entity references ({@link Boolean}, default=<jk>true</jk>).
+	 * <b>Configuration property:</b>  Replace entity references.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"XmlParser.replaceEntityReferences"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>true</jk>
+	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, entity references will be replace during parsing.
 	 * See {@link XMLInputFactory#IS_REPLACING_ENTITY_REFERENCES} for more info.
@@ -80,7 +179,13 @@ public final class XmlParserContext extends ParserContext {
 	public static final String XML_replaceEntityReferences = "XmlParser.replaceEntityReferences";
 
 	/**
-	 * XML reporter ({@link XMLReporter}, default=<jk>null</jk>).
+	 * <b>Configuration property:</b>  XML reporter.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"XmlParser.reporter"</js>
+	 * 	<li><b>Data type:</b> {@link XMLReporter}
+	 * 	<li><b>Default:</b> <jk>null</jk>
+	 * </ul>
 	 * <p>
 	 * Associates an {@link XMLReporter} with this parser.
 	 * <p>
@@ -89,21 +194,39 @@ public final class XmlParserContext extends ParserContext {
 	public static final String XML_reporter = "XmlParser.reporter";
 
 	/**
-	 * XML resolver ({@link XMLResolver}, default=<jk>null</jk>).
+	 * <b>Configuration property:</b>  XML resolver.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"XmlParser.resolver"</js>
+	 * 	<li><b>Data type:</b> {@link XMLResolver}
+	 * 	<li><b>Default:</b> <jk>null</jk>
+	 * </ul>
 	 * <p>
 	 * Associates an {@link XMLResolver} with this parser.
 	 */
 	public static final String XML_resolver = "XmlParser.resolver";
 
 	/**
-	 * XML event allocator. ({@link XMLEventAllocator}, default=<jk>false</jk>).
+	 * <b>Configuration property:</b>  XML event allocator.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"XmlParser.eventAllocator"</js>
+	 * 	<li><b>Data type:</b> {@link XMLEventAllocator}
+	 * 	<li><b>Default:</b> <jk>null</jk>
+	 * </ul>
 	 * <p>
 	 * Associates an {@link XMLEventAllocator} with this parser.
 	 */
 	public static final String XML_eventAllocator = "XmlParser.eventAllocator";
 
 	/**
-	 * Preserve root element during generalized parsing ({@link Boolean}, default=<jk>false</jk>).
+	 * <b>Configuration property:</b>  Preserve root element during generalized parsing.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"XmlParser.preserveRootElement"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, when parsing into a generic {@link ObjectMap}, the map will
 	 * 	contain a single entry whose key is the root element name.

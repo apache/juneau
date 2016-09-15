@@ -55,8 +55,8 @@ import org.apache.juneau.transform.*;
  * 	The settings on a bean context are fixed at the point they are created by the factory.
  *
  *
- * <h5 class='topic'>BeanContext settings</h5>
- * 	<code>BeanContexts</code> have several settings that can be used to tweak behavior on how beans are handled.
+ * <h5 class='topic'>BeanContext configuration properties</h5>
+ * 	<code>BeanContexts</code> have several configuration properties that can be used to tweak behavior on how beans are handled.
  * 	These are denoted as the static <jsf>BEAN_*</jsf> fields on this class.
  * <p>
  * 	Some settings (e.g. {@link BeanContext#BEAN_beansRequireDefaultConstructor}) are used to differentiate between bean and non-bean classes.
@@ -83,6 +83,189 @@ import org.apache.juneau.transform.*;
  * 		.addNotBeanClasses(Foo.<jk>class</jk>)
  * 		.getBeanContext();
  * </p>
+ *
+ *
+ * <h6 class='topic' id='ConfigProperties'>Properties associated with handling beans on serializers and parsers</h6>
+ * <table class='styled' style='border-collapse: collapse;'>
+ * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th></tr>
+ * 	<tr>
+ * 		<td>{@link #BEAN_beansRequireDefaultConstructor}</td>
+ * 		<td>Beans require no-arg constructors.</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>false</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #BEAN_beansRequireSerializable}</td>
+ * 		<td>Beans require Serializable interface.</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>false</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #BEAN_beansRequireSettersForGetters}</td>
+ * 		<td>Beans require setters for getters.</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>false</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #BEAN_beansRequireSomeProperties}</td>
+ * 		<td>Beans require at least one property.</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>true</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #BEAN_beanMapPutReturnsOldValue}</td>
+ * 		<td>{@link BeanMap#put(String,Object) BeanMap.put()} method will return old property value.</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>false</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #BEAN_beanConstructorVisibility}</td>
+ * 		<td>Look for bean constructors with specified minimum visibility.</td>
+ * 		<td>{@link Visibility}</td>
+ * 		<td>{@link Visibility#PUBLIC}</td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #BEAN_beanClassVisibility}</td>
+ * 		<td>Look for bean classes with specified minimum visibility.</td>
+ * 		<td>{@link Visibility}</td>
+ * 		<td>{@link Visibility#PUBLIC}</td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #BEAN_beanFieldVisibility}</td>
+ * 		<td>Look for bean fields with specified minimum visibility.</td>
+ * 		<td>{@link Visibility}</td>
+ * 		<td>{@link Visibility#PUBLIC}</td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #BEAN_methodVisibility}</td>
+ * 		<td>Look for bean methods with specified minimum visibility.</td>
+ * 		<td>{@link Visibility}</td>
+ * 		<td>{@link Visibility#PUBLIC}</td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #BEAN_useJavaBeanIntrospector}</td>
+ * 		<td>Use Java {@link Introspector} for determining bean properties.</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>false</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #BEAN_useInterfaceProxies}</td>
+ * 		<td>Use interface proxies.</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>true</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #BEAN_ignoreUnknownBeanProperties}</td>
+ * 		<td>Ignore unknown properties.</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>false</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #BEAN_ignoreUnknownNullBeanProperties}</td>
+ * 		<td>Ignore unknown properties with null values.</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>true</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #BEAN_ignorePropertiesWithoutSetters}</td>
+ * 		<td>Ignore bean properties without setters.</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>true</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #BEAN_ignoreInvocationExceptionsOnGetters}</td>
+ * 		<td>Ignore invocation errors on getters.</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>false</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #BEAN_ignoreInvocationExceptionsOnSetters}</td>
+ * 		<td>Ignore invocation errors on setters.</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>false</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #BEAN_sortProperties}</td>
+ * 		<td>Sort bean properties in alphabetical order.</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>false</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>
+ * 			{@link #BEAN_notBeanPackages}<br>
+ * 			{@link #BEAN_notBeanPackages_add}<br>
+ * 			{@link #BEAN_notBeanPackages_remove}
+ * 		</td>
+ * 		<td>Packages whose classes should not be considered beans.</td>
+ * 		<td><code>Set&lt;String&gt;</code></td>
+ * 		<td>See details</td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>
+ * 			{@link #BEAN_notBeanClasses}<br>
+ * 			{@link #BEAN_notBeanClasses_add}<br>
+ * 			{@link #BEAN_notBeanClasses_remove}
+ * 		</td>
+ * 		<td>Classes that should not be considered beans.</td>
+ * 		<td><code>Set&lt;Class&gt;</code></td>
+ * 		<td>empty set</td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>
+ * 			{@link #BEAN_beanFilters}<br>
+ * 			{@link #BEAN_beanFilters_add}<br>
+ * 			{@link #BEAN_beanFilters_remove}
+ * 		</td>
+ * 		<td>Bean filters to apply to beans.</td>
+ * 		<td><code>List&lt;Class&gt;</code></td>
+ * 		<td>empty list</td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>
+ * 			{@link #BEAN_pojoSwaps}<br>
+ * 			{@link #BEAN_pojoSwaps_add}<br>
+ * 			{@link #BEAN_pojoSwaps_remove}
+ * 		</td>
+ * 		<td>POJO swaps to apply to java objects.</td>
+ * 		<td><code>List&lt;Class&gt;</code></td>
+ * 		<td>empty list</td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>
+ * 			{@link #BEAN_implClasses}<br>
+ * 			{@link #BEAN_implClasses_put}
+ * 		</td>
+ * 		<td>Implementation classes for interfaces and abstract classes.</td>
+ * 		<td><code>Map&lt;Class,Class&gt;</code></td>
+ * 		<td>empty map</td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>
+ * 			{@link #BEAN_beanDictionary}<br>
+ * 			{@link #BEAN_beanDictionary_add}<br>
+ * 			{@link #BEAN_beanDictionary_remove}
+ * 		</td>
+ * 		<td>Bean lookup dictionary.</td>
+ * 		<td><code>List&lt;Class&gt;</code></td>
+ * 		<td>empty list</td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>
+ * 			{@link #BEAN_beanTypePropertyName}
+ * 		</td>
+ * 		<td>Name to use for the bean type property used to represent a bean type.</td>
+ * 		<td><code>String</code></td>
+ * 		<td><js>"_type"</js></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>
+ * 			{@link #BEAN_defaultParser}
+ * 		</td>
+ * 		<td>Default parser to use when converting <code>Strings</code> to POJOs.</td>
+ * 		<td><code>Class</code></td>
+ * 		<td>{@link JsonParser}</td>
+ * 	</tr>
+ *	</table>
  *
  *
  * <h5 class='topic'>Bean Maps</h5>
@@ -190,9 +373,14 @@ import org.apache.juneau.transform.*;
 @SuppressWarnings({"unchecked","rawtypes"})
 public class BeanContext extends Context {
 
-
 	/**
-	 * Require no-arg constructor ({@link Boolean}, default=<jk>false</jk>).
+	 * <b>Configuration property:</b>  Beans require no-arg constructors.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"BeanContext.beansRequireDefaultConstructor"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, a Java class must implement a default no-arg constructor to be considered a bean.
 	 * <p>
@@ -201,7 +389,13 @@ public class BeanContext extends Context {
 	public static final String BEAN_beansRequireDefaultConstructor = "BeanContext.beansRequireDefaultConstructor";
 
 	/**
-	 * Require {@link Serializable} interface ({@link Boolean}, default=<jk>false</jk>).
+	 * <b>Configuration property:</b>  Beans require {@link Serializable} interface.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"BeanContext.beansRequireSerializable"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, a Java class must implement the {@link Serializable} interface to be considered a bean.
 	 * <p>
@@ -210,7 +404,13 @@ public class BeanContext extends Context {
 	public static final String BEAN_beansRequireSerializable = "BeanContext.beansRequireSerializable";
 
 	/**
-	 * Require setters for getters ({@link Boolean}, default=<jk>false</jk>).
+	 * <b>Configuration property:</b>  Beans require setters for getters.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"BeanContext.beansRequireSettersForGetters"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, only getters that have equivalent setters will be considered as properties on a bean.
 	 * Otherwise, they will be ignored.
@@ -218,7 +418,13 @@ public class BeanContext extends Context {
 	public static final String BEAN_beansRequireSettersForGetters = "BeanContext.beansRequireSettersForGetters";
 
 	/**
-	 * Require some properties ({@link Boolean}, default=<jk>true</jk>).
+	 * <b>Configuration property:</b>  Beans require at least one property.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"BeanContext.beansRequireSomeProperties"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>true</jk>
+	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, then a Java class must contain at least 1 property to be considered a bean.
 	 * <p>
@@ -227,7 +433,13 @@ public class BeanContext extends Context {
 	public static final String BEAN_beansRequireSomeProperties = "BeanContext.beansRequireSomeProperties";
 
 	/**
-	 * Put returns old value ({@link Boolean}, default=<jk>false</jk>).
+	 * <b>Configuration property:</b>  {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property value.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"BeanContext.beanMapPutReturnsOldValue"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, then the {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property values.
 	 * <p>
@@ -236,12 +448,25 @@ public class BeanContext extends Context {
 	public static final String BEAN_beanMapPutReturnsOldValue = "BeanContext.beanMapPutReturnsOldValue";
 
 	/**
-	 * Look for bean constructors with the specified minimum visibility ({@link Visibility}, default={@link Visibility#PUBLIC}).
+	 * <b>Configuration property:</b>  Look for bean constructors with the specified minimum visibility.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"BeanContext.beanConstructorVisibility"</js>
+	 * 	<li><b>Data type:</b> {@link Visibility}
+	 * 	<li><b>Default:</b> {@link Visibility#PUBLIC}
+	 * </ul>
+	 * <p>
 	 */
 	public static final String BEAN_beanConstructorVisibility = "BeanContext.beanConstructorVisibility";
 
 	/**
-	 * Look for bean classes with the specified minimum visibility ({@link Visibility}, default={@link Visibility#PUBLIC}).
+	 * <b>Configuration property:</b>  Look for bean classes with the specified minimum visibility.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"BeanContext.beanClassVisibility"</js>
+	 * 	<li><b>Data type:</b> {@link Visibility}
+	 * 	<li><b>Default:</b> {@link Visibility#PUBLIC}
+	 * </ul>
 	 * <p>
 	 * Classes are not considered beans unless they meet the minimum visibility requirements.
 	 * For example, if the visibility is <code>PUBLIC</code> and the bean class is <jk>protected</jk>, then
@@ -250,7 +475,13 @@ public class BeanContext extends Context {
 	public static final String BEAN_beanClassVisibility = "BeanContext.beanClassVisibility";
 
 	/**
-	 * Look for bean fields with the specified minimum visibility ({@link Visibility}, default={@link Visibility#PUBLIC}).
+	 * <b>Configuration property:</b>  Look for bean fields with the specified minimum visibility.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"BeanContext.beanFieldVisibility"</js>
+	 * 	<li><b>Data type:</b> {@link Visibility}
+	 * 	<li><b>Default:</b> {@link Visibility#PUBLIC}
+	 * </ul>
 	 * <p>
 	 * Fields are not considered bean properties unless they meet the minimum visibility requirements.
 	 * For example, if the visibility is <code>PUBLIC</code> and the bean field is <jk>protected</jk>, then
@@ -261,7 +492,13 @@ public class BeanContext extends Context {
 	public static final String BEAN_beanFieldVisibility = "BeanContext.beanFieldVisibility";
 
 	/**
-	 * Look for bean methods with the specified minimum visibility ({@link Visibility}, default={@link Visibility#PUBLIC}).
+	 * <b>Configuration property:</b>  Look for bean methods with the specified minimum visibility.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"BeanContext.methodVisibility"</js>
+	 * 	<li><b>Data type:</b> {@link Visibility}
+	 * 	<li><b>Default:</b> {@link Visibility#PUBLIC}
+	 * </ul>
 	 * <p>
 	 * Methods are not considered bean getters/setters unless they meet the minimum visibility requirements.
 	 * For example, if the visibility is <code>PUBLIC</code> and the bean method is <jk>protected</jk>, then
@@ -270,7 +507,13 @@ public class BeanContext extends Context {
 	public static final String BEAN_methodVisibility = "BeanContext.methodVisibility";
 
 	/**
-	 * Use Java {@link Introspector} for determining bean properties ({@link Boolean}, default=<jk>false</jk>).
+	 * <b>Configuration property:</b>  Use Java {@link Introspector} for determining bean properties.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"BeanContext.useJavaBeanIntrospector"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * </ul>
 	 * <p>
 	 * Using the built-in Java bean introspector will not pick up fields or non-standard getters/setters.
 	 * Most {@link Bean @Bean} annotations will be ignored.
@@ -278,7 +521,13 @@ public class BeanContext extends Context {
 	public static final String BEAN_useJavaBeanIntrospector = "BeanContext.useJavaBeanIntrospector";
 
 	/**
-	 * Use interface proxies ({@link Boolean}, default=<jk>true</jk>).
+	 * <b>Configuration property:</b>  Use interface proxies.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"BeanContext.useInterfaceProxies"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>true</jk>
+	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, then interfaces will be instantiated as proxy classes through the use of an {@link InvocationHandler}
 	 * if there is no other way of instantiating them.
@@ -286,7 +535,13 @@ public class BeanContext extends Context {
 	public static final String BEAN_useInterfaceProxies = "BeanContext.useInterfaceProxies";
 
 	/**
-	 * Ignore unknown properties ({@link Boolean}, default=<jk>false</jk>).
+	 * <b>Configuration property:</b>  Ignore unknown properties.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"BeanContext.ignoreUnknownBeanProperties"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, trying to set a value on a non-existent bean property will silently be ignored.
 	 * Otherwise, a {@code RuntimeException} is thrown.
@@ -294,7 +549,13 @@ public class BeanContext extends Context {
 	public static final String BEAN_ignoreUnknownBeanProperties = "BeanContext.ignoreUnknownBeanProperties";
 
 	/**
-	 * Ignore unknown properties with null values ({@link Boolean}, default=<jk>true</jk>).
+	 * <b>Configuration property:</b>  Ignore unknown properties with null values.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"BeanContext.ignoreUnknownNullBeanProperties"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>true</jk>
+	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, trying to set a <jk>null</jk> value on a non-existent bean property will silently be ignored.
 	 * Otherwise, a {@code RuntimeException} is thrown.
@@ -302,7 +563,13 @@ public class BeanContext extends Context {
 	public static final String BEAN_ignoreUnknownNullBeanProperties = "BeanContext.ignoreUnknownNullBeanProperties";
 
 	/**
-	 * Ignore properties without setters ({@link Boolean}, default=<jk>true</jk>).
+	 * <b>Configuration property:</b>  Ignore properties without setters.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"BeanContext.ignorePropertiesWithoutSetters"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>true</jk>
+	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, trying to set a value on a bean property without a setter will silently be ignored.
 	 * Otherwise, a {@code RuntimeException} is thrown.
@@ -310,7 +577,13 @@ public class BeanContext extends Context {
 	public static final String BEAN_ignorePropertiesWithoutSetters = "BeanContext.ignorePropertiesWithoutSetters";
 
 	/**
-	 * Ignore invocation errors on getters ({@link Boolean}, default=<jk>false</jk>).
+	 * <b>Configuration property:</b>  Ignore invocation errors on getters.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"BeanContext.ignoreInvocationExceptionsOnGetters"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, errors thrown when calling bean getter methods will silently be ignored.
 	 * Otherwise, a {@code BeanRuntimeException} is thrown.
@@ -318,7 +591,13 @@ public class BeanContext extends Context {
 	public static final String BEAN_ignoreInvocationExceptionsOnGetters = "BeanContext.ignoreInvocationExceptionsOnGetters";
 
 	/**
-	 * Ignore invocation errors on setters ({@link Boolean}, default=<jk>false</jk>).
+	 * <b>Configuration property:</b>  Ignore invocation errors on setters.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"BeanContext.ignoreInvocationExceptionsOnSetters"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, errors thrown when calling bean setter methods will silently be ignored.
 	 * Otherwise, a {@code BeanRuntimeException} is thrown.
@@ -326,7 +605,13 @@ public class BeanContext extends Context {
 	public static final String BEAN_ignoreInvocationExceptionsOnSetters = "BeanContext.ignoreInvocationExceptionsOnSetters";
 
 	/**
-	 * Sort bean properties in alphabetical order ({@link Boolean}, default=<jk>false</jk>).
+	 * <b>Configuration property:</b>  Sort bean properties in alphabetical order.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"BeanContext.sortProperties"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * </ul>
 	 * <p>
 	 * When <jk>true</jk>, all bean properties will be serialized and access in alphabetical order.
 	 * Otherwise, the natural order of the bean properties is used which is dependent on the
@@ -341,20 +626,25 @@ public class BeanContext extends Context {
 	public static final String BEAN_sortProperties = "BeanContext.sortProperties";
 
 	/**
-	 * List of packages whose classes should not be considered beans (<code>Set&lt;String&gt;</code>).
+	 * <b>Configuration property:</b>  Packages whose classes should not be considered beans.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"BeanContext.notBeanPackages.set"</js>
+	 * 	<li><b>Data type:</b> <code>Set&lt;String&gt;</code>
+	 * 	<li><b>Default:</b>
+	 * 	<ul>
+	 * 		<li><code>java.lang</code>
+	 * 		<li><code>java.lang.annotation</code>
+	 * 		<li><code>java.lang.ref</code>
+	 * 		<li><code>java.lang.reflect</code>
+	 * 		<li><code>java.io</code>
+	 * 		<li><code>java.net</code>
+	 * 		<li><code>java.nio.*</code>
+	 * 		<li><code>java.util.*</code>
+	 * 	</ul>
+	 * </ul>
 	 * <p>
 	 * When specified, the current list of ignore packages are appended to.
-	 * The default list of ignore packages are as follows:
-	 * <ul>
-	 * 	<li><code>java.lang</code>
-	 * 	<li><code>java.lang.annotation</code>
-	 * 	<li><code>java.lang.ref</code>
-	 * 	<li><code>java.lang.reflect</code>
-	 * 	<li><code>java.io</code>
-	 * 	<li><code>java.net</code>
-	 * 	<li><code>java.nio.*</code>
-	 * 	<li><code>java.util.*</code>
-	 * </ul>
 	 * <p>
 	 * Any classes within these packages will be serialized to strings using {@link Object#toString()}.
 	 * <p>
@@ -363,17 +653,23 @@ public class BeanContext extends Context {
 	public static final String BEAN_notBeanPackages = "BeanContext.notBeanPackages.set";
 
 	/**
-	 * Add to the list of packages whose classes should not be considered beans.
+	 * <b>Configuration property:</b>  Add to packages whose classes should not be considered beans.
 	 */
 	public static final String BEAN_notBeanPackages_add = "BeanContext.notBeanPackages.set.add";
 
 	/**
-	 * Remove from the list of packages whose classes should not be considered beans.
+	 * <b>Configuration property:</b>  Remove from packages whose classes should not be considered beans.
 	 */
 	public static final String BEAN_notBeanPackages_remove = "BeanContext.notBeanPackages.set.remove";
 
 	/**
-	 * An explicit list of Java classes to be excluded from consideration as being beans (<code>Set&lt;Class&gt;</code>).
+	 * <b>Configuration property:</b>  Classes to be excluded from consideration as being beans.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"BeanContext.notBeanClasses.set"</js>
+	 * 	<li><b>Data type:</b> <code>Set&lt;Class&gt;</code>
+	 * 	<li><b>Default:</b> empty set
+	 * </ul>
 	 * <p>
 	 * Not-bean classes are typically converted to <code>Strings</code> during serialization even if they
 	 * appear to be bean-like.
@@ -381,17 +677,23 @@ public class BeanContext extends Context {
 	public static final String BEAN_notBeanClasses = "BeanContext.notBeanClasses.set";
 
 	/**
-	 * Add to the list of packages whose classes should not be considered beans.
+	 * <b>Configuration property:</b>  Add to classes that should not be considered beans.
 	 */
 	public static final String BEAN_notBeanClasses_add = "BeanContext.notBeanClasses.set.add";
 
 	/**
-	 * Remove from the list of packages whose classes should not be considered beans.
+	 * <b>Configuration property:</b>  Remove from classes that should not be considered beans.
 	 */
 	public static final String BEAN_notBeanClasses_remove = "BeanContext.notBeanClasses.set.remove";
 
 	/**
-	 * List of bean filters registered on the bean context (<code>List&lt;Class&gt;</code>).
+	 * <b>Configuration property:</b>  Bean filters to apply to beans.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"BeanContext.beanFilters.list"</js>
+	 * 	<li><b>Data type:</b> <code>List&lt;Class&gt;</code>
+	 * 	<li><b>Default:</b> empty list
+	 * </ul>
 	 * <p>
 	 * This is a programmatic equivalent to the {@link Bean @Bean} annotation.
 	 * It's useful when you want to use the Bean annotation functionality, but you don't have the ability
@@ -399,9 +701,9 @@ public class BeanContext extends Context {
 	 * <p>
 	 * There are two category of classes that can be passed in through this method:
 	 * <ul class='spaced-list'>
-	 * 	<li>Subclasses of {@link BeanFilterBuilder}.  
+	 * 	<li>Subclasses of {@link BeanFilterBuilder}.
 	 * 		These must have a public no-arg constructor.
-	 * 	<li>Bean interface classes.  
+	 * 	<li>Bean interface classes.
 	 * 		A shortcut for defining a {@link InterfaceBeanFilterBuilder}.
 	 * 		Any subclasses of an interface class will only have properties defined on the interface.
 	 * 		All other bean properties will be ignored.
@@ -410,20 +712,26 @@ public class BeanContext extends Context {
 	public static final String BEAN_beanFilters = "BeanContext.beanFilters.list";
 
 	/**
-	 * Add to the list of bean filters.
+	 * <b>Configuration property:</b>  Add to bean filters.
 	 */
 	public static final String BEAN_beanFilters_add = "BeanContext.beanFilters.list.add";
 
 	/**
-	 * Remove from the list of bean filters.
+	 * <b>Configuration property:</b>  Remove from bean filters.
 	 */
 	public static final String BEAN_beanFilters_remove = "BeanContext.beanFilters.list.remove";
 
 	/**
-	 * List of POJO swaps registered on the bean context (<code>List&lt;Class&gt;</code>).
+	 * <b>Configuration property:</b>  POJO swaps to apply to Java objects.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"BeanContext.pojoSwaps.list"</js>
+	 * 	<li><b>Data type:</b> <code>List&lt;Class&gt;</code>
+	 * 	<li><b>Default:</b> empty list
+	 * </ul>
 	 * <p>
 	 * There are two category of classes that can be passed in through this method:
-	 * <ul class='spaced-list'>
+	 * <ul>
 	 * 	<li>Subclasses of {@link PojoSwap}.
 	 * 	<li>Surrogate classes.  A shortcut for defining a {@link SurrogateSwap}.
 	 * </ul>
@@ -431,17 +739,23 @@ public class BeanContext extends Context {
 	public static final String BEAN_pojoSwaps = "BeanContext.pojoSwaps.list";
 
 	/**
-	 * Add to the list of POJO swap classes.
+	 * <b>Configuration property:</b>  Add to POJO swap classes.
 	 */
 	public static final String BEAN_pojoSwaps_add = "BeanContext.pojoSwaps.list.add";
 
 	/**
-	 * Remove from the list of POJO swap classes.
+	 * <b>Configuration property:</b>  Remove from POJO swap classes.
 	 */
 	public static final String BEAN_pojoSwaps_remove = "BeanContext.pojoSwaps.list.remove";
 
 	/**
-	 * Specifies implementation classes for an interface or abstract class (<code>Map&lt;Class,Class&gt;</code>).
+	 * <b>Configuration property:</b>  Implementation classes for interfaces and abstract classes.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"BeanContext.implClasses.map"</js>
+	 * 	<li><b>Data type:</b> <code>Map&lt;Class,Class&gt;</code>
+	 * 	<li><b>Default:</b> empty map
+	 * </ul>
 	 * <p>
 	 * For interfaces and abstract classes this method can be used to specify an implementation
 	 * 	class for the interface/abstract class so that instances of the implementation
@@ -450,12 +764,18 @@ public class BeanContext extends Context {
 	public static final String BEAN_implClasses = "BeanContext.implClasses.map";
 
 	/**
-	 * Adds a new map entry to the {@link #BEAN_implClasses} property.
+	 * <b>Configuration property:</b>  Add an implementation class.
 	 */
 	public static final String BEAN_implClasses_put = "BeanContext.implClasses.map.put";
 
 	/**
-	 * Specifies the list of classes that make up the bean dictionary for this bean context (<code>List&lt;Class&gt;</code>).
+	 * <b>Configuration property:</b>  Bean lookup dictionary.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"BeanContext.beanDictionary.list"</js>
+	 * 	<li><b>Data type:</b> <code>List&lt;Class&gt;</code>
+	 * 	<li><b>Default:</b> empty list
+	 * </ul>
 	 * <p>
 	 * This list can consist of the following class types:
 	 * <ul>
@@ -467,22 +787,37 @@ public class BeanContext extends Context {
 	public static final String BEAN_beanDictionary = "BeanContext.beanDictionary.list";
 
 	/**
-	 * Add to the bean dictionary list.
+	 * <b>Configuration property:</b>  Add to bean dictionary.
 	 */
 	public static final String BEAN_beanDictionary_add = "BeanContext.beanDictionary.list.add";
 
 	/**
-	 * Remove from the bean dictionary list.
+	 * <b>Configuration property:</b>  Remove from bean dictionary.
 	 */
 	public static final String BEAN_beanDictionary_remove = "BeanContext.beanDictionary.list.remove";
 
 	/**
-	 * The name to use for the bean type properties used to represent a bean type.  ({@link String}, default=<js>"_type"</js>).
+	 * <b>Configuration property:</b>  Name to use for the bean type properties used to represent a bean type.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"BeanContext.beanTypePropertyName"</js>
+	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Default:</b> <js>"_type"</js>
+	 * </ul>
+	 * <p>
 	 */
 	public static final String BEAN_beanTypePropertyName = "BeanContext.beanTypePropertyName";
 
 	/**
-	 * Specifies the default parser to use when converting <code>Strings</code> to POJOs in the {@link BeanContext#convertToType(Object, Class)} method (<code>Class</code>).
+	 * <b>Configuration property:</b>  Default parser to use when converting <code>Strings</code> to POJOs.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"BeanContext.defaultParser"</js>
+	 * 	<li><b>Data type:</b> <code>Class</code>
+	 * 	<li><b>Default:</b> {@link JsonSerializer}
+	 * </ul>
+	 * <p>
+	 * Used in the in the {@link BeanContext#convertToType(Object, Class)} method.ß
 	 */
 	public static final String BEAN_defaultParser = "BeanContext.defaultParser";
 

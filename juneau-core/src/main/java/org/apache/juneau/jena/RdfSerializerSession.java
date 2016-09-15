@@ -37,7 +37,7 @@ public final class RdfSerializerSession extends SerializerSession {
 
 	private final String rdfLanguage;
 	private final Namespace juneauNs, juneauBpNs;
-	private final boolean addLiteralTypes, addRootProperty, useXmlNamespaces, looseCollection, autoDetectNamespaces;
+	private final boolean addLiteralTypes, addRootProperty, useXmlNamespaces, looseCollections, autoDetectNamespaces;
 	private final Property pRoot, pValue, pClass;
 	private final Model model;
 	private final RDFWriter writer;
@@ -68,7 +68,7 @@ public final class RdfSerializerSession extends SerializerSession {
 			this.addLiteralTypes = ctx.addLiteralTypes;
 			this.addRootProperty = ctx.addRootProperty;
 			this.collectionFormat = ctx.collectionFormat;
-			this.looseCollection = ctx.looseCollection;
+			this.looseCollections = ctx.looseCollections;
 			this.useXmlNamespaces = ctx.useXmlNamespaces;
 			this.autoDetectNamespaces = ctx.autoDetectNamespaces;
 			this.namespaces = ctx.namespaces;
@@ -84,7 +84,7 @@ public final class RdfSerializerSession extends SerializerSession {
 					jenaSettings.put(key.substring(9), e.getValue());
 			}
 			this.collectionFormat = RdfCollectionFormat.valueOf(op.getString(RDF_collectionFormat, "DEFAULT"));
-			this.looseCollection = op.getBoolean(RDF_looseCollection, ctx.looseCollection);
+			this.looseCollections = op.getBoolean(RDF_looseCollections, ctx.looseCollections);
 			this.useXmlNamespaces = op.getBoolean(RDF_useXmlNamespaces, ctx.useXmlNamespaces);
 			this.autoDetectNamespaces = op.getBoolean(RDF_autoDetectNamespaces, ctx.autoDetectNamespaces);
 			this.namespaces = op.get(Namespace[].class, RDF_namespaces, ctx.namespaces);
@@ -137,12 +137,12 @@ public final class RdfSerializerSession extends SerializerSession {
 	}
 
 	/**
-	 * Returns the {@link RdfCommonContext#RDF_looseCollection} setting value for this session.
+	 * Returns the {@link RdfCommonContext#RDF_looseCollections} setting value for this session.
 	 *
-	 * @return The {@link RdfCommonContext#RDF_looseCollection} setting value for this session.
+	 * @return The {@link RdfCommonContext#RDF_looseCollections} setting value for this session.
 	 */
-	public final boolean isLooseCollection() {
-		return looseCollection;
+	public final boolean isLooseCollections() {
+		return looseCollections;
 	}
 
 	/**

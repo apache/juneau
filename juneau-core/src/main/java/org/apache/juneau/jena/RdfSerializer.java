@@ -131,7 +131,7 @@ public class RdfSerializer extends WriterSerializer {
 		Resource r = null;
 
 		ClassMeta<?> cm = s.getBeanContext().getClassMetaForObject(o);
-		if (s.isLooseCollection() && cm != null && (cm.isCollection() || cm.isArray())) {
+		if (s.isLooseCollections() && cm != null && (cm.isCollection() || cm.isArray())) {
 			Collection c = s.sort(cm.isCollection() ? (Collection)o : toList(cm.getInnerClass(), o));
 			for (Object o2 : c)
 				serializeAnything(s, o2, false, object(), "root", null, null);

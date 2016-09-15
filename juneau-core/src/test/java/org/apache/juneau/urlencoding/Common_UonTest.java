@@ -105,13 +105,13 @@ public class Common_UonTest {
 		C t1 = C.create(), t2;
 		String r;
 
-		s.setProperty(SERIALIZER_trimEmptyLists, false);
+		s.setProperty(SERIALIZER_trimEmptyCollections, false);
 		r = s.serialize(t1);
 		assertEquals("$o(f1=$a(),f2=$a(%00,$o(s2=s2)))", r);
 		t2 = pe.parse(r, C.class);
 		assertEqualObjects(t1, t2);
 
-		s.setProperty(SERIALIZER_trimEmptyLists, true);
+		s.setProperty(SERIALIZER_trimEmptyCollections, true);
 		r = s.serialize(t1);
 		assertEquals("$o(f2=$a(%00,$o(s2=s2)))", r);
 		t2 = pe.parse(r, C.class);
@@ -138,13 +138,13 @@ public class Common_UonTest {
 		D t1 = D.create(), t2;
 		String r;
 
-		s.setProperty(SERIALIZER_trimEmptyLists, false);
+		s.setProperty(SERIALIZER_trimEmptyCollections, false);
 		r = s.serialize(t1);
 		assertEquals("$o(f1=$a(),f2=$a(%00,$o(s2=s2)))", r);
 		t2 = pe.parse(r, D.class);
 		assertEqualObjects(t1, t2);
 
-		s.setProperty(SERIALIZER_trimEmptyLists, true);
+		s.setProperty(SERIALIZER_trimEmptyCollections, true);
 		r = s.serialize(t1);
 		assertEquals("$o(f2=$a(%00,$o(s2=s2)))", r);
 		t2 = pe.parse(r, D.class);

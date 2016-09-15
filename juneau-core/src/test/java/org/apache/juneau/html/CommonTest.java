@@ -107,13 +107,13 @@ public class CommonTest {
 		C t1 = C.create(), t2;
 		String r;
 
-		s.setProperty(SERIALIZER_trimEmptyLists, false);
+		s.setProperty(SERIALIZER_trimEmptyCollections, false);
 		r = s.serialize(t1);
 		assertEquals("<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f1</string></td><td><ul></ul></td></tr><tr><td><string>f2</string></td><td><table _type='array'><tr><th>s1</th><th>s2</th></tr><tr><null/></tr><tr><td><null/></td><td><string>s2</string></td></tr></table></td></tr></table>", r);
 		t2 = p.parse(r, C.class);
 		assertEqualObjects(t1, t2);
 
-		s.setProperty(SERIALIZER_trimEmptyLists, true);
+		s.setProperty(SERIALIZER_trimEmptyCollections, true);
 		r = s.serialize(t1);
 		assertEquals("<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f2</string></td><td><table _type='array'><tr><th>s1</th><th>s2</th></tr><tr><null/></tr><tr><td><null/></td><td><string>s2</string></td></tr></table></td></tr></table>", r);
 		t2 = p.parse(r, C.class);
@@ -141,13 +141,13 @@ public class CommonTest {
 		D t1 = D.create(), t2;
 		String r;
 
-		s.setProperty(SERIALIZER_trimEmptyLists, false);
+		s.setProperty(SERIALIZER_trimEmptyCollections, false);
 		r = s.serialize(t1);
 		assertEquals("<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f1</string></td><td><ul></ul></td></tr><tr><td><string>f2</string></td><td><table _type='array'><tr><th>s1</th><th>s2</th></tr><tr><null/></tr><tr><td><null/></td><td><string>s2</string></td></tr></table></td></tr></table>", r);
 		t2 = p.parse(r, D.class);
 		assertEqualObjects(t1, t2);
 
-		s.setProperty(SERIALIZER_trimEmptyLists, true);
+		s.setProperty(SERIALIZER_trimEmptyCollections, true);
 		r = s.serialize(t1);
 		assertEquals("<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f2</string></td><td><table _type='array'><tr><th>s1</th><th>s2</th></tr><tr><null/></tr><tr><td><null/></td><td><string>s2</string></td></tr></table></td></tr></table>", r);
 		t2 = p.parse(r, D.class);

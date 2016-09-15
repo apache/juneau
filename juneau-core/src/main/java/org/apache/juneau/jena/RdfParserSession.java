@@ -38,7 +38,7 @@ public class RdfParserSession extends ParserSession {
 	private final Namespace juneauNs, juneauBpNs;
 	private final Property pRoot, pValue, pClass, pType;
 	private final Model model;
-	private final boolean trimWhitespace, looseCollection;
+	private final boolean trimWhitespace, looseCollections;
 	private final RDFReader rdfReader;
 	private final Set<Resource> urisVisited = new HashSet<Resource>();
 	private final RdfCollectionFormat collectionFormat;
@@ -72,14 +72,14 @@ public class RdfParserSession extends ParserSession {
 			this.juneauBpNs = ctx.juneauBpNs;
 			this.trimWhitespace = ctx.trimWhitespace;
 			this.collectionFormat = ctx.collectionFormat;
-			this.looseCollection = ctx.looseCollection;
+			this.looseCollections = ctx.looseCollections;
 		} else {
 			this.rdfLanguage = op.getString(RDF_language, ctx.rdfLanguage);
 			this.juneauNs = (op.containsKey(RDF_juneauNs) ? NamespaceFactory.parseNamespace(op.get(RDF_juneauNs)) : ctx.juneauNs);
 			this.juneauBpNs = (op.containsKey(RDF_juneauBpNs) ? NamespaceFactory.parseNamespace(op.get(RDF_juneauBpNs)) : ctx.juneauBpNs);
 			this.trimWhitespace = op.getBoolean(RdfParserContext.RDF_trimWhitespace, ctx.trimWhitespace);
 			this.collectionFormat = RdfCollectionFormat.valueOf(op.getString(RDF_collectionFormat, "DEFAULT"));
-			this.looseCollection = op.getBoolean(RDF_looseCollection, ctx.looseCollection);
+			this.looseCollections = op.getBoolean(RDF_looseCollections, ctx.looseCollections);
 		}
 		this.model = ModelFactory.createDefaultModel();
 		addModelPrefix(juneauNs);
@@ -171,12 +171,12 @@ public class RdfParserSession extends ParserSession {
 	}
 
 	/**
-	 * Returns the {@link RdfCommonContext#RDF_looseCollection} setting value for this session.
+	 * Returns the {@link RdfCommonContext#RDF_looseCollections} setting value for this session.
 	 *
-	 * @return The {@link RdfCommonContext#RDF_looseCollection} setting value for this session.
+	 * @return The {@link RdfCommonContext#RDF_looseCollections} setting value for this session.
 	 */
-	public final boolean isLooseCollection() {
-		return looseCollection;
+	public final boolean isLooseCollections() {
+		return looseCollections;
 	}
 
 	/**

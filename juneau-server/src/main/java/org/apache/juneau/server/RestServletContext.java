@@ -32,12 +32,65 @@ import org.apache.juneau.server.annotation.*;
  * <p>
  * See {@link ContextFactory} for more information about context properties.
  *
+ * <h6 class='topic' id='ConfigProperties'>Configurable properties on the REST servlet</h6>
+ * <table class='styled' style='border-collapse: collapse;'>
+ * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th></tr>
+ * 	<tr>
+ * 		<td>{@link #REST_allowHeaderParams}</td>
+ * 		<td>Enable header URL parameters.</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>true</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #REST_allowMethodParam}</td>
+ * 		<td>Enable <js>"method"</js> URL parameter for specific HTTP methods.</td>
+ * 		<td><code>String</code></td>
+ * 		<td><js>""</js></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #REST_allowContentParam}</td>
+ * 		<td>Enable <js>"content"</js> URL parameter.</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>true</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #REST_renderResponseStackTraces}</td>
+ * 		<td>Render stack traces in HTTP response bodies when errors occur.</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>false</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #REST_useStackTraceHashes}</td>
+ * 		<td>Use stack trace hashes.</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>false</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #REST_defaultCharset}</td>
+ * 		<td>Default character encoding.</td>
+ * 		<td><code>String</code></td>
+ * 		<td><js>"utf-8"</js></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #REST_paramFormat}</td>
+ * 		<td>Expected format of request parameters.</td>
+ * 		<td><code>String</code></td>
+ * 		<td><js>"UON"</js></td>
+ * 	</tr>
+ * </table>
+ *
  * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class RestServletContext extends Context {
 
 	/**
-	 * Allow header URL parameters ({@link Boolean}, default=<jk>true</jk>).
+	 * <b>Configuration property:</b>  Enable header URL parameters.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestServlet.allowHeaderParams"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>true</jk>
+	 * </ul>
 	 * <p>
 	 * When enabled, headers such as <js>"Accept"</js> and <js>"Content-Type"</js> to be passed in as URL query parameters.
 	 * For example:  <js>"?Accept=text/json&Content-Type=text/json"</js>
@@ -51,22 +104,39 @@ public final class RestServletContext extends Context {
 	public static final String REST_allowHeaderParams = "RestServlet.allowHeaderParams";
 
 	/**
-	 * Allow <js>"method"</js> URL parameter for specific HTTP methods (String, default=<js>""</js>, example=<js>"HEAD,OPTIONS"</js>).
+	 * <b>Configuration property:</b>  Enable <js>"method"</js> URL parameter for specific HTTP methods.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestServlet.allowMethodParam"</js>
+	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Default:</b> <js>""</js>
+	 * </ul>
 	 * <p>
 	 * When specified, the HTTP method can be overridden by passing in a <js>"method"</js> URL parameter on a regular GET request.
 	 * For example:  <js>"?method=OPTIONS"</js>
 	 * <p>
-	 * Parameter name is case-insensitive.  Use "*" to represent all methods.  For backwards compatibility, "true" also means "*".
+	 * Format is a comma-delimited list of HTTP method names that can be passed in as a method parameter.
+	 * Parameter name is case-insensitive.
+	 * Use "*" to represent all methods.
+	 * For backwards compatibility, "true" also means "*".
 	 * <p>
 	 * Note that per the <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html">HTTP specification</a>, special care should
 	 * 	be taken when allowing non-safe (POST, PUT, DELETE) methods to be invoked through GET requests.
 	 * <p>
 	 * Applicable to servlet class only.
+	 * <p>
+	 * Example: <js>"HEAD,OPTIONS"</js>
 	 */
 	public static final String REST_allowMethodParam = "RestServlet.allowMethodParam";
 
 	/**
-	 * Allow <js>"content"</js> URL parameter ({@link Boolean}, default=<jk>true</jk>).
+	 * <b>Configuration property:</b>  Enable <js>"content"</js> URL parameter.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestServlet.allowContentParam"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>true</jk>
+	 * </ul>
 	 * <p>
 	 * When enabled, the HTTP body content on PUT and POST requests can be passed in as text using the <js>"content"</js> URL parameter.
 	 * For example:  <js>"?content={name:'John%20Smith',age:45}"</js>
@@ -80,7 +150,15 @@ public final class RestServletContext extends Context {
 	public static final String REST_allowContentParam = "RestServlet.allowContentParam";
 
 	/**
-	 * Render stack traces in HTTP response bodies when errors occur ({@link Boolean}, default=<jk>false</jk>).
+	 * <b>Configuration property:</b>  Render stack traces.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestServlet.renderResponseStackTraces"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * </ul>
+	 * <p>
+	 * Render stack traces in HTTP response bodies when errors occur.
 	 * <p>
 	 * When enabled, Java stack traces will be rendered in the output response.
 	 * Useful for debugging, although allowing stack traces to be rendered may cause security concerns.
@@ -90,7 +168,13 @@ public final class RestServletContext extends Context {
 	public static final String REST_renderResponseStackTraces = "RestServlet.renderResponseStackTraces";
 
 	/**
-	 * Use stack trace hashes ({@link Boolean}, default=<jk>true</jk>).
+	 * <b>Configuration property:</b>  Use stack trace hashes.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestServlet.useStackTraceHashes"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>true</jk>
+	 * </ul>
 	 * <p>
 	 * When enabled, the number of times an exception has occurred will be determined based on stack trace hashsums,
 	 * made available through the {@link RestException#getOccurrence()} method.
@@ -100,14 +184,28 @@ public final class RestServletContext extends Context {
 	public static final String REST_useStackTraceHashes = "RestServlet.useStackTraceHashes";
 
 	/**
-	 * The default character encoding for the request and response if not specified on the request ({@link String}>, default=<js>"utf-8"</js>).
+	 * <b>Configuration property:</b>  Default character encoding.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestServlet.defaultCharset"</js>
+	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Default:</b> <js>"utf-8"</js>
+	 * </ul>
+	 * <p>
+	 * The default character encoding for the request and response if not specified on the request.
 	 * <p>
 	 * Applicable to servlet class and methods.
 	 */
 	public static final String REST_defaultCharset = "RestServlet.defaultCharset";
 
 	/**
-	 * The expected format of request parameters ({@link String}, default=<js>"UON"</js>).
+	 * <b>Configuration property:</b>  Expected format of request parameters.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RestServlet.paramFormat"</js>
+	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Default:</b> <js>"UON"</js>
+	 * </ul>
 	 * <p>
 	 * Possible values:
 	 * <ul class='spaced-list'>

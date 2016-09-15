@@ -37,18 +37,48 @@ import org.apache.juneau.xml.*;
  * <p>
  * See {@link ContextFactory} for more information about context properties.
  *
+ *
+ * <h6 class='topic' id='ConfigProperties'>Configurable properties on the RDF parsers</h6>
+ * <table class='styled' style='border-collapse: collapse;'>
+ * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th></tr>
+ * 	<tr>
+ * 		<td>{@link #RDF_trimWhitespace}</td>
+ * 		<td>Trim whitespace from text elements.</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>false</jk></td>
+ * 	</tr>
+ * </table>
+ *
+ * <h6 class='topic' id='ConfigProperties'>Configurable properties inherited by the RDF parsers</h6>
+ * <ul class='javahierarchy'>
+ * 	<li class='c'><a class='doclink' href='../BeanContext.html#ConfigProperties'>BeanContext</a> - Properties associated with handling beans on serializers and parsers.
+ * 	<ul>
+ * 		<li class='c'><a class='doclink' href='../parser/ParserContext.html#ConfigProperties'>ParserContext</a> - Configurable properties common to all parsers.
+ * 		<ul>
+ * 			<li class='i'><a class='doclink' href='RdfCommonContext.html#ConfigProperties'>RdfCommonContext</a> - Configurable properties common to the RDF serializers and parsers.
+ * 		</ul>
+ * 	</ul>
+ * </ul>
+ *
+ *
  * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class RdfParserContext extends ParserContext implements RdfCommonContext {
 
 	/**
-	 * Trim whitespace from text elements ({@link Boolean}, default=<jk>false</jk>).
+	 * <b>Configuration property:</b>  Trim whitespace from text elements.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RdfParser.trimWhitespace"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, whitespace in text elements will be automatically trimmed.
 	 */
 	public static final String RDF_trimWhitespace = "RdfParser.trimWhitespace";
 
-	final boolean trimWhitespace, looseCollection;
+	final boolean trimWhitespace, looseCollections;
 	final String rdfLanguage;
 	final Namespace juneauNs, juneauBpNs;
 	final RdfCollectionFormat collectionFormat;
@@ -64,7 +94,7 @@ public final class RdfParserContext extends ParserContext implements RdfCommonCo
 	public RdfParserContext(ContextFactory cf) {
 		super(cf);
 		trimWhitespace = cf.getProperty(RDF_trimWhitespace, boolean.class, false);
-		looseCollection = cf.getProperty(RDF_looseCollection, boolean.class, false);
+		looseCollections = cf.getProperty(RDF_looseCollections, boolean.class, false);
 		rdfLanguage = cf.getProperty(RDF_language, String.class, "RDF/XML-ABBREV");
 		juneauNs = cf.getProperty(RDF_juneauNs, Namespace.class, new Namespace("j", "http://www.ibm.com/juneau/"));
 		juneauBpNs = cf.getProperty(RDF_juneauBpNs, Namespace.class, new Namespace("j", "http://www.ibm.com/juneaubp/"));

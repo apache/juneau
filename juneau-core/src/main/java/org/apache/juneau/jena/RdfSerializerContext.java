@@ -37,17 +37,71 @@ import org.apache.juneau.xml.*;
  * <p>
  * See {@link ContextFactory} for more information about context properties.
  *
+ *
+ * <h6 class='topic' id='ConfigProperties'>Configurable properties on the RDF serializers</h6>
+ * <table class='styled' style='border-collapse: collapse;'>
+ * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th></tr>
+ * 	<tr>
+ * 		<td>{@link #RDF_addLiteralTypes}</td>
+ * 		<td>Add XSI data types to non-<code>String</code> literals.</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>false</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #RDF_addRootProperty}</td>
+ * 		<td>Add RDF root identifier property to root node.</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>false</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #RDF_autoDetectNamespaces}</td>
+ * 		<td>Auto-detect namespace usage.</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>true</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #RDF_namespaces}</td>
+ * 		<td>Default namespaces.</td>
+ * 		<td><code>List&lt;{@link Namespace}&gt;</code></td>
+ * 		<td>empty list</td>
+ * 	</tr>
+ * </table>
+ *
+ * <h6 class='topic' id='ConfigProperties'>Configurable properties inherited by the RDF serializers</h6>
+ * <ul class='javahierarchy'>
+ * 	<li class='c'><a class='doclink' href='../BeanContext.html#ConfigProperties'>BeanContext</a> - Properties associated with handling beans on serializers and parsers.
+ * 	<ul>
+ * 		<li class='c'><a class='doclink' href='../serializer/SerializerContext.html#ConfigProperties'>SerializerContext</a> - Configurable properties common to all serializers.
+ * 		<ul>
+ * 			<li class='c'><a class='doclink' href='RdfCommonContext.html#ConfigProperties'>RdfCommonContext</a> - Configurable properties common to the RDF serializers and parsers.
+ * 		</ul>
+ * 	</ul>
+ * </ul>
+ *
+ *
  * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class RdfSerializerContext extends SerializerContext implements RdfCommonContext {
 
 	/**
-	 * Add XSI data types to non-<code>String</code> literals ({@link Boolean}, default=<jk>false</jk>).
+	 * <b>Configuration property:</b>  Add XSI data types to non-<code>String</code> literals.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RdfSerializer.addLiteralTypes"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * </ul>
 	 */
 	public static final String RDF_addLiteralTypes = "RdfSerializer.addLiteralTypes";
 
 	/**
-	 * Add RDF root identifier property to root node ({@link Boolean}, default=<jk>false</jk>).
+	 * <b>Configuration property:</b>  Add RDF root identifier property to root node.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RdfSerializer.addRootProperty"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * </ul>
 	 * <p>
 	 * When enabled an RDF property <code>http://www.ibm.com/juneau/root</code> is added with a value of <js>"true"</js>
 	 * 	to identify the root node in the graph.
@@ -60,7 +114,13 @@ public final class RdfSerializerContext extends SerializerContext implements Rdf
 	public static final String RDF_addRootProperty = "RdfSerializer.addRootProperty";
 
 	/**
-	 * Auto-detect namespace usage ({@link Boolean}, default=<jk>true</jk>).
+	 * <b>Configuration property:</b>  Auto-detect namespace usage.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RdfSerializer.autoDetectNamespaces"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>true</jk>
+	 * </ul>
 	 * <p>
 	 * Detect namespace usage before serialization.
 	 * <p>
@@ -71,14 +131,20 @@ public final class RdfSerializerContext extends SerializerContext implements Rdf
 	public static final String RDF_autoDetectNamespaces = "RdfSerializer.autoDetectNamespaces";
 
 	/**
-	 * Default namespaces (<code>List&lt;Namespace&gt;</code>, default=<code>Namespace[0]</code>).
+	 * <b>Configuration property:</b>  Default namespaces.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RdfSerializer.namespaces.list"</js>
+	 * 	<li><b>Data type:</b> <code>List&lt;{@link Namespace}&gt;</code>
+	 * 	<li><b>Default:</b> empty list
+	 * </ul>
 	 * <p>
 	 * The default list of namespaces associated with this serializer.
 	 */
 	public static final String RDF_namespaces = "RdfSerializer.namespaces.list";
 
 
-	final boolean addLiteralTypes, addRootProperty, useXmlNamespaces, looseCollection, autoDetectNamespaces;
+	final boolean addLiteralTypes, addRootProperty, useXmlNamespaces, looseCollections, autoDetectNamespaces;
 	final String rdfLanguage;
 	final Namespace juneauNs;
 	final Namespace juneauBpNs;
@@ -98,7 +164,7 @@ public final class RdfSerializerContext extends SerializerContext implements Rdf
 		addLiteralTypes = cf.getProperty(RDF_addLiteralTypes, boolean.class, false);
 		addRootProperty = cf.getProperty(RDF_addRootProperty, boolean.class, false);
 		useXmlNamespaces = cf.getProperty(RDF_useXmlNamespaces, boolean.class, true);
-		looseCollection = cf.getProperty(RDF_looseCollection, boolean.class, false);
+		looseCollections = cf.getProperty(RDF_looseCollections, boolean.class, false);
 		autoDetectNamespaces = cf.getProperty(RDF_autoDetectNamespaces, boolean.class, true);
 		rdfLanguage = cf.getProperty(RDF_language, String.class, "RDF/XML-ABBREV");
 		juneauNs = cf.getProperty(RDF_juneauNs, Namespace.class, new Namespace("j", "http://www.ibm.com/juneau/"));

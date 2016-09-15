@@ -61,24 +61,44 @@ import org.apache.juneau.xml.annotation.*;
  * 		<js>'fico score'</js>:  <js>' &gt; 640'</js>
  * 	}
  * <p>
- * 	...maps to the following XML...
+ * 	...maps to the following XML using the default serializer...
  * <p class='bcode'>
  * 	<xt>&lt;object&gt;</xt>
- * 		<xt>&lt;name</xt> <xa>type</xa>=<xs>'string'</xs><xt>&gt;</xt>John Smith<xt>&lt;/name&gt;</xt>
- * 		<xt>&lt;address</xt> <xa>type</xa>=<xs>'object'</xs><xt>&gt;</xt>
- * 			<xt>&lt;streetAddress</xt> <xa>type</xa>=<xs>'string'</xs><xt>&gt;</xt>21 2nd Street<xt>&lt;/streetAddress&gt;</xt>
- * 			<xt>&lt;city</xt> <xa>type</xa>=<xs>'string'</xs><xt>&gt;</xt>New York<xt>&lt;/city&gt;</xt>
- * 			<xt>&lt;state</xt> <xa>type</xa>=<xs>'string'</xs><xt>&gt;</xt>NY<xt>&lt;/state&gt;</xt>
- * 			<xt>&lt;postalCode</xt> <xa>type</xa>=<xs>'number'</xs><xt>&gt;</xt>10021<xt>&lt;/postalCode&gt;</xt>
+ * 		<xt>&lt;name&gt;</xt>John Smith<xt>&lt;/name&gt;</xt>
+ * 		<xt>&lt;address&gt;</xt>
+ * 			<xt>&lt;streetAddress&gt;</xt>21 2nd Street<xt>&lt;/streetAddress&gt;</xt>
+ * 			<xt>&lt;city&gt;</xt>New York<xt>&lt;/city&gt;</xt>
+ * 			<xt>&lt;state&gt;</xt>NY<xt>&lt;/state&gt;</xt>
+ * 			<xt>&lt;postalCode&gt;</xt>10021<xt>&lt;/postalCode&gt;</xt>
  * 		<xt>&lt;/address&gt;</xt>
- * 		<xt>&lt;phoneNumbers</xt> <xa>type</xa>=<xs>'array'</xs><xt>&gt;</xt>
+ * 		<xt>&lt;phoneNumbers&gt;</xt>
  * 			<xt>&lt;string&gt;</xt>212 555-1111<xt>&lt;/string&gt;</xt>
  * 			<xt>&lt;string&gt;</xt>212 555-2222<xt>&lt;/string&gt;</xt>
  * 		<xt>&lt;/phoneNumbers&gt;</xt>
- * 		<xt>&lt;additionalInfo</xt> <xa>type</xa>=<xs>'null'</xs><xt>&gt;&lt;/additionalInfo&gt;</xt>
- * 		<xt>&lt;remote</xt> <xa>type</xa>=<xs>'boolean'</xs><xt>&gt;</xt>false<xt>&lt;/remote&gt;</xt>
- * 		<xt>&lt;height</xt> <xa>type</xa>=<xs>'number'</xs><xt>&gt;</xt>62.4<xt>&lt;/height&gt;</xt>
- * 		<xt>&lt;fico_x0020_score</xt> <xa>type</xa>=<xs>'string'</xs><xt>&gt;</xt> &amp;gt; 640<xt>&lt;/fico_x0020_score&gt;</xt>
+ * 		<xt>&lt;additionalInfo</xt> <xa>_type</xa>=<xs>'null'</xs><xt>&gt;&lt;/additionalInfo&gt;</xt>
+ * 		<xt>&lt;remote&gt;</xt>false<xt>&lt;/remote&gt;</xt>
+ * 		<xt>&lt;height&gt;</xt>62.4<xt>&lt;/height&gt;</xt>
+ * 		<xt>&lt;fico_x0020_score&gt;</xt> &amp;gt; 640<xt>&lt;/fico_x0020_score&gt;</xt>
+ * 	<xt>&lt;/object&gt;</xt>
+ * <p>
+ * 	An additional "add-json-properties" mode is also provided to prevent loss of JSON data types...
+ * <p class='bcode'>
+ * 	<xt>&lt;object&gt;</xt>
+ * 		<xt>&lt;name</xt> <xa>_type</xa>=<xs>'string'</xs><xt>&gt;</xt>John Smith<xt>&lt;/name&gt;</xt>
+ * 		<xt>&lt;address</xt> <xa>_type</xa>=<xs>'object'</xs><xt>&gt;</xt>
+ * 			<xt>&lt;streetAddress</xt> <xa>_type</xa>=<xs>'string'</xs><xt>&gt;</xt>21 2nd Street<xt>&lt;/streetAddress&gt;</xt>
+ * 			<xt>&lt;city</xt> <xa>_type</xa>=<xs>'string'</xs><xt>&gt;</xt>New York<xt>&lt;/city&gt;</xt>
+ * 			<xt>&lt;state</xt> <xa>_type</xa>=<xs>'string'</xs><xt>&gt;</xt>NY<xt>&lt;/state&gt;</xt>
+ * 			<xt>&lt;postalCode</xt> <xa>_type</xa>=<xs>'number'</xs><xt>&gt;</xt>10021<xt>&lt;/postalCode&gt;</xt>
+ * 		<xt>&lt;/address&gt;</xt>
+ * 		<xt>&lt;phoneNumbers</xt> <xa>_type</xa>=<xs>'array'</xs><xt>&gt;</xt>
+ * 			<xt>&lt;string&gt;</xt>212 555-1111<xt>&lt;/string&gt;</xt>
+ * 			<xt>&lt;string&gt;</xt>212 555-2222<xt>&lt;/string&gt;</xt>
+ * 		<xt>&lt;/phoneNumbers&gt;</xt>
+ * 		<xt>&lt;additionalInfo</xt> <xa>_type</xa>=<xs>'null'</xs><xt>&gt;&lt;/additionalInfo&gt;</xt>
+ * 		<xt>&lt;remote</xt> <xa>_type</xa>=<xs>'boolean'</xs><xt>&gt;</xt>false<xt>&lt;/remote&gt;</xt>
+ * 		<xt>&lt;height</xt> <xa>_type</xa>=<xs>'number'</xs><xt>&gt;</xt>62.4<xt>&lt;/height&gt;</xt>
+ * 		<xt>&lt;fico_x0020_score</xt> <xa>_type</xa>=<xs>'string'</xs><xt>&gt;</xt> &amp;gt; 640<xt>&lt;/fico_x0020_score&gt;</xt>
  * 	<xt>&lt;/object&gt;</xt>
  * <p>
  * 	This serializer provides several serialization options.  Typically, one of the predefined <jsf>DEFAULT</jsf> serializers will be sufficient.

@@ -18,6 +18,6 @@ Bundle-SymbolicName: org.apache.juneau.server.test
 Bundle-Version: 5.1.1000.qualifier
 Bundle-Vendor: Apache Software Foundation, Juneau
 Main-Class: org.apache.juneau.microservice.RestMicroservice
-Rest-Resources: org.apache.juneau.server.Root
+Rest-Resources: org.apache.juneau.server.test.Root
 Main-ConfigFile: juneau-server-test.cfg
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

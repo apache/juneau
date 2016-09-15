@@ -51,7 +51,7 @@ public class SerializerSession extends Session {
 		useIndentation,
 		addBeanTypeProperties,
 		trimNulls,
-		trimEmptyLists,
+		trimEmptyCollections,
 		trimEmptyMaps,
 		trimStrings,
 		sortCollections,
@@ -115,7 +115,7 @@ public class SerializerSession extends Session {
 			useIndentation = ctx.useIndentation;
 			addBeanTypeProperties = ctx.addBeanTypeProperties;
 			trimNulls = ctx.trimNulls;
-			trimEmptyLists = ctx.trimEmptyLists;
+			trimEmptyCollections = ctx.trimEmptyCollections;
 			trimEmptyMaps = ctx.trimEmptyMaps;
 			trimStrings = ctx.trimStrings;
 			quoteChar = ctx.quoteChar;
@@ -133,7 +133,7 @@ public class SerializerSession extends Session {
 			useIndentation = op.getBoolean(SERIALIZER_useIndentation, ctx.useIndentation);
 			addBeanTypeProperties = op.getBoolean(SERIALIZER_addBeanTypeProperties, ctx.addBeanTypeProperties);
 			trimNulls = op.getBoolean(SERIALIZER_trimNullProperties, ctx.trimNulls);
-			trimEmptyLists = op.getBoolean(SERIALIZER_trimEmptyLists, ctx.trimEmptyLists);
+			trimEmptyCollections = op.getBoolean(SERIALIZER_trimEmptyCollections, ctx.trimEmptyCollections);
 			trimEmptyMaps = op.getBoolean(SERIALIZER_trimEmptyMaps, ctx.trimEmptyMaps);
 			trimStrings = op.getBoolean(SERIALIZER_trimStrings, ctx.trimStrings);
 			quoteChar = op.getString(SERIALIZER_quoteChar, ""+ctx.quoteChar).charAt(0);
@@ -347,12 +347,12 @@ public class SerializerSession extends Session {
 	}
 
 	/**
-	 * Returns the {@link SerializerContext#SERIALIZER_trimEmptyLists} setting value for this session.
+	 * Returns the {@link SerializerContext#SERIALIZER_trimEmptyCollections} setting value for this session.
 	 *
-	 * @return The {@link SerializerContext#SERIALIZER_trimEmptyLists} setting value for this session.
+	 * @return The {@link SerializerContext#SERIALIZER_trimEmptyCollections} setting value for this session.
 	 */
-	public final boolean isTrimEmptyLists() {
-		return trimEmptyLists;
+	public final boolean isTrimEmptyCollections() {
+		return trimEmptyCollections;
 	}
 
 	/**
@@ -563,7 +563,7 @@ public class SerializerSession extends Session {
 		if (cm == null)
 			cm = getBeanContext().object();
 
-		if (trimEmptyLists) {
+		if (trimEmptyCollections) {
 			if (cm.isArray() || (cm.isObject() && value.getClass().isArray())) {
 				if (((Object[])value).length == 0)
 					return true;

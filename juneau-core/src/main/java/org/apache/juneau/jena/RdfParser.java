@@ -124,7 +124,7 @@ public class RdfParser extends ReaderParser {
 		List<Resource> roots = getRoots(s, model);
 
 		// Special case where we're parsing a loose collection of resources.
-		if (s.isLooseCollection() && (type.isCollection() || type.isArray())) {
+		if (s.isLooseCollections() && (type.isCollection() || type.isArray())) {
 			Collection c = null;
 			if (type.isArray())
 				c = new ArrayList();

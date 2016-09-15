@@ -109,13 +109,13 @@ public class CommonTest {
 		C t1 = C.create(), t2;
 		String r;
 
-		s.setProperty(SERIALIZER_trimEmptyLists, false);
+		s.setProperty(SERIALIZER_trimEmptyCollections, false);
 		r = s.serialize(t1);
 		assertEquals("<object><f1></f1><f2><null/><object><s2>s2</s2></object></f2></object>", r);
 		t2 = p.parse(r, C.class);
 		assertEqualObjects(t1, t2);
 
-		s.setProperty(SERIALIZER_trimEmptyLists, true);
+		s.setProperty(SERIALIZER_trimEmptyCollections, true);
 		r = s.serialize(t1);
 		assertEquals("<object><f2><null/><object><s2>s2</s2></object></f2></object>", r);
 		t2 = p.parse(r, C.class);
@@ -143,13 +143,13 @@ public class CommonTest {
 		D t1 = D.create(), t2;
 		String r;
 
-		s.setProperty(SERIALIZER_trimEmptyLists, false);
+		s.setProperty(SERIALIZER_trimEmptyCollections, false);
 		r = s.serialize(t1);
 		assertEquals("<object><f1></f1><f2><null/><object><s2>s2</s2></object></f2></object>", r);
 		t2 = p.parse(r, D.class);
 		assertEqualObjects(t1, t2);
 
-		s.setProperty(SERIALIZER_trimEmptyLists, true);
+		s.setProperty(SERIALIZER_trimEmptyCollections, true);
 		r = s.serialize(t1);
 		assertEquals("<object><f2><null/><object><s2>s2</s2></object></f2></object>", r);
 		t2 = p.parse(r, D.class);

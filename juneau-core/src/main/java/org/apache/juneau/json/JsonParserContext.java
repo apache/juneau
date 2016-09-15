@@ -34,12 +34,38 @@ import org.apache.juneau.parser.*;
  * <p>
  * See {@link ContextFactory} for more information about context properties.
  *
+ *
+ * <h6 class='topic' id='ConfigProperties'>Configurable properties on the JSON parser</h6>
+ * <table class='styled' style='border-collapse: collapse;'>
+ * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th></tr>
+ * 	<tr>
+ * 		<td>{@link #JSON_strictMode}</td>
+ * 		<td>Strict mode</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>false</jk></td>
+ * 	</tr>
+ * </table>
+ *
+ * <h6 class='topic'>Configurable properties inherited from parent classes</h6>
+ * <ul class='javahierarchy'>
+ * 	<li class='c'><a class='doclink' href='../BeanContext.html#ConfigProperties'>BeanContext</a> - Properties associated with handling beans on serializers and parsers.
+ * 	<ul>
+ * 		<li class='c'><a class='doclink' href='../parser/ParserContext.html#ConfigProperties'>ParserContext</a> - Configurable properties common to all parsers.
+ * 	</ul>
+ * </ul>
+ *
  * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class JsonParserContext extends ParserContext {
 
 	/**
-	 * Set strict mode ({@link Boolean}, default=<jk>false</jk>).
+	 * <b>Configuration property:</b>  Strict mode.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"JsonParser.strictMode"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * </ul>
 	 * <p>
 	 * When in strict mode, parser throws exceptions on the following invalid JSON syntax:
 	 * <ul class='spaced-list'>

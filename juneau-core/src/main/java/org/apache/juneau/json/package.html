@@ -324,7 +324,7 @@
 		<jk>public</jk> URI <jf>uri</jf>;
 		<jk>public</jk> URI <jf>addressBookUri</jf>;
 
-		<ja>@BeanProperty</ja>(transform=CalendarSwap.ISO8601DTZ.<jk>class</jk>) <jk>public</jk> Calendar <jf>birthDate</jf>;
+		<ja>@BeanProperty</ja>(swap=CalendarSwap.ISO8601DTZ.<jk>class</jk>) <jk>public</jk> Calendar <jf>birthDate</jf>;
 
 
 		<jc>// Bean constructor (needed by parser)</jc>
@@ -487,7 +487,7 @@
 		<jk>public</jk> String <jf>name</jf>;
 		<jk>public</jk> URI <jf>uri</jf>;
 		<jk>public</jk> URI <jf>addressBookUri</jf>;
-		<ja>@BeanProperty</ja>(transform=CalendarSwap.ISO8601DTZ.<jk>class</jk>) <jk>public</jk> Calendar <jf>birthDate</jf>;
+		<ja>@BeanProperty</ja>(swap=CalendarSwap.ISO8601DTZ.<jk>class</jk>) <jk>public</jk> Calendar <jf>birthDate</jf>;
 		<jk>public</jk> LinkedList&lt;Address&gt; <jf>addresses</jf> = <jk>new</jk> LinkedList&lt;Address&gt;();
 
 		<jc>// Bean constructor (needed by parser)</jc>

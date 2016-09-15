@@ -15,14 +15,39 @@ package org.apache.juneau.parser;
 import org.apache.juneau.*;
 
 /**
- * Parent class for all parser contexts.
+ * Configurable properties common to all parsers.
+ *
+ *
+ * <h6 class='topic' id='ConfigProperties'>Configurable properties common to all parsers</h6>
+ * <table class='styled' style='border-collapse: collapse;'>
+ * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th></tr>
+ * 	<tr>
+ * 		<td>{@link #PARSER_debug}</td>
+ * 		<td>Debug mode.</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>false</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #PARSER_trimStrings}</td>
+ * 		<td>Trim parsed strings.</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>false</jk></td>
+ * 	</tr>
+ * </table>
+ *
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
 public class ParserContext extends Context {
 
 	/**
-	 * Debug mode ({@link Boolean}, default=<jk>false</jk>).
+	 * <b>Configuration property:</b>  Debug mode.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Parser.debug"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * </ul>
 	 * <p>
 	 * Enables the following additional information during parsing:
 	 * <ul class='spaced-list'>
@@ -33,7 +58,13 @@ public class ParserContext extends Context {
 	public static final String PARSER_debug = "Parser.debug";
 
 	/**
-	 * Trim parsed strings ({@link Boolean}, default=<jk>false</jk>).
+	 * <b>Configuration property:</b>  Trim parsed strings.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Parser.trimStrings"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to the POJO.
 	 */
@@ -44,8 +75,6 @@ public class ParserContext extends Context {
 
 	/**
 	 * Constructor.
-	 * <p>
-	 * Typically only called from {@link ContextFactory#getContext(Class)}.
 	 *
 	 * @param cf The factory that created this context.
 	 */

@@ -34,12 +34,51 @@ import org.apache.juneau.serializer.*;
  * <p>
  * See {@link ContextFactory} for more information about context properties.
  *
+ *
+ * <h6 class='topic' id='ConfigProperties'>Configurable properties on the URL-Encoding and UON serializers</h6>
+ * <table class='styled' style='border-collapse: collapse;'>
+ * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th></tr>
+ * 	<tr>
+ * 		<td>{@link #UON_simpleMode}</td>
+ * 		<td>Use simplified output.</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>false</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #UON_useWhitespace}</td>
+ * 		<td>Use whitespace.</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>false</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #UON_encodeChars}</td>
+ * 		<td>Encode non-valid URI characters.</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>false</jk> for {@link UonSerializer}<br><jk>true</jk> for {@link UrlEncodingSerializer}</td>
+ * 	</tr>
+ * </table>
+ *
+ * <h6 class='topic'>Configurable properties inherited from parent classes</h6>
+ * <ul class='javahierarchy'>
+ * 	<li class='c'><a class='doclink' href='../BeanContext.html#ConfigProperties'>BeanContext</a> - Properties associated with handling beans on serializers and parsers.
+ * 	<ul>
+ * 		<li class='c'><a class='doclink' href='../serializer/SerializerContext.html#ConfigProperties'>SerializerContext</a> - Configurable properties common to all serializers.
+ * 	</ul>
+ * </ul>
+ *
+ *
  * @author James Bognar (james.bognar@salesforce.com)
  */
 public class UonSerializerContext extends SerializerContext {
 
 	/**
-	 * Use simplified output ({@link Boolean}, default=<jk>false</jk>).
+	 * <b>Configuration property:</b>  Use simplified output.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"UonSerializer.simpleMode"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, type flags will not be prepended to values in most cases.
 	 * <p>
@@ -92,14 +131,28 @@ public class UonSerializerContext extends SerializerContext {
 	public static final String UON_simpleMode = "UonSerializer.simpleMode";
 
 	/**
-	 * Use whitespace in output ({@link Boolean}, default=<jk>false</jk>).
+	 * <b>Configuration property:</b>  Use whitespace.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"UonSerializer.useWhitespace"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, whitespace is added to the output to improve readability.
 	 */
 	public static final String UON_useWhitespace = "UonSerializer.useWhitespace";
 
 	/**
-	 * Encode non-valid URI characters to <js>"%xx"</js> constructs. ({@link Boolean}, default=<jk>false</jk> for {@link UonSerializer}, <jk>true</jk> for {@link UrlEncodingSerializer}).
+	 * <b>Configuration property:</b>  Encode non-valid URI characters.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"UonSerializer.encodeChars"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk> for {@link UonSerializer}, <jk>true</jk> for {@link UrlEncodingSerializer}
+	 * </ul>
+	 * <p>
+	 * Encode non-valid URI characters with <js>"%xx"</js> constructs.
 	 * <p>
 	 * If <jk>true</jk>, non-valid URI characters will be converted to <js>"%xx"</js> sequences.
 	 * Set to <jk>false</jk> if parameter value is being passed to some other code that will already

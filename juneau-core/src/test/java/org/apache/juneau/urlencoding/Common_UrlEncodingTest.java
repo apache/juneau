@@ -104,13 +104,13 @@ public class Common_UrlEncodingTest {
 		C t1 = C.create(), t2;
 		String r;
 
-		s.setProperty(SERIALIZER_trimEmptyLists, false);
+		s.setProperty(SERIALIZER_trimEmptyCollections, false);
 		r = s.serialize(t1);
 		assertEquals("f1=$a()&f2=$a(%00,$o(s2=s2))", r);
 		t2 = p.parse(r, C.class);
 		assertEqualObjects(t1, t2);
 
-		s.setProperty(SERIALIZER_trimEmptyLists, true);
+		s.setProperty(SERIALIZER_trimEmptyCollections, true);
 		r = s.serialize(t1);
 		assertEquals("f2=$a(%00,$o(s2=s2))", r);
 		t2 = p.parse(r, C.class);
@@ -137,13 +137,13 @@ public class Common_UrlEncodingTest {
 		D t1 = D.create(), t2;
 		String r;
 
-		s.setProperty(SERIALIZER_trimEmptyLists, false);
+		s.setProperty(SERIALIZER_trimEmptyCollections, false);
 		r = s.serialize(t1);
 		assertEquals("f1=$a()&f2=$a(%00,$o(s2=s2))", r);
 		t2 = p.parse(r, D.class);
 		assertEqualObjects(t1, t2);
 
-		s.setProperty(SERIALIZER_trimEmptyLists, true);
+		s.setProperty(SERIALIZER_trimEmptyCollections, true);
 		r = s.serialize(t1);
 		assertEquals("f2=$a(%00,$o(s2=s2))", r);
 		t2 = p.parse(r, D.class);

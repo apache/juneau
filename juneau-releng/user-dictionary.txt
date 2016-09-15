@@ -1,0 +1,12 @@
+abbrev
+juneau
+juno
+servlet
+microservice
+lax
+jena
+zip
+json
+xml
+html
+javadoc

@@ -34,12 +34,51 @@ import org.apache.juneau.serializer.*;
  * <p>
  * See {@link ContextFactory} for more information about context properties.
  *
+ *
+ * <h6 class='topic' id='ConfigProperties'>Configurable properties on the JSON serializer</h6>
+ * <table class='styled' style='border-collapse: collapse;'>
+ * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th></tr>
+ * 	<tr>
+ * 		<td>{@link #JSON_simpleMode}</td>
+ * 		<td>Simple JSON mode.</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>false</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #JSON_useWhitespace}</td>
+ * 		<td>Use whitespace.</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>false</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #JSON_escapeSolidus}</td>
+ * 		<td>Prefix solidus <js>'/'</js> characters with escapes.</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>false</jk></td>
+ * 	</tr>
+ * </table>
+ *
+ * <h6 class='topic'>Configurable properties inherited from parent classes</h6>
+ * <ul class='javahierarchy'>
+ * 	<li class='c'><a class='doclink' href='../BeanContext.html#ConfigProperties'>BeanContext</a> - Properties associated with handling beans on serializers and parsers.
+ * 	<ul>
+ * 		<li class='c'><a class='doclink' href='../serializer/SerializerContext.html#ConfigProperties'>SerializerContext</a> - Configurable properties common to all serializers.
+ * 	</ul>
+ * </ul>
+ *
+ *
  * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class JsonSerializerContext extends SerializerContext {
 
 	/**
-	 * Simple JSON mode ({@link Boolean}, default=<jk>false</jk>).
+	 * <b>Configuration property:</b>  Simple JSON mode.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"JsonSerializer.simpleMode"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, JSON attribute names will only be quoted when necessary.
 	 * Otherwise, they are always quoted.
@@ -47,14 +86,26 @@ public final class JsonSerializerContext extends SerializerContext {
 	public static final String JSON_simpleMode = "JsonSerializer.simpleMode";
 
 	/**
-	 * Use whitespace in output ({@link Boolean}, default=<jk>false</jk>).
+	 * <b>Configuration property:</b>  Use whitespace.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"JsonSerializer.useWhitespace"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, whitespace is added to the output to improve readability.
 	 */
 	public static final String JSON_useWhitespace = "JsonSerializer.useWhitespace";
 
 	/**
-	 * Prefix solidus <js>'/'</js> characters with escapes ({@link Boolean}, default=<jk>false</jk>).
+	 * <b>Configuration property:</b>  Prefix solidus <js>'/'</js> characters with escapes.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"JsonSerializer.escapeSolidus"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, solidus (e.g. slash) characters should be escaped.
 	 * The JSON specification allows for either format.

@@ -21,11 +21,204 @@ import org.apache.juneau.xml.annotation.*;
 /**
  * Configurable properties common to both the {@link RdfSerializer} and {@link RdfParser} classes.
  *
+ *
+ * <h6 class='topic' id='ConfigProperties'>Configurable properties common to the RDF serializers and parsers</h6>
+ * <table class='styled' style='border-collapse: collapse;'>
+ * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th></tr>
+ * 	<tr>
+ * 		<td>{@link #RDF_language}</td>
+ * 		<td>RDF language.</td>
+ * 		<td><code>String</code></td>
+ * 		<td><js>"RDF/XML-ABBREV"</js></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #RDF_juneauNs}</td>
+ * 		<td>XML namespace for Juneau properties.</td>
+ * 		<td>{@link Namespace}</td>
+ * 		<td><code>{j:<js>'http://www.ibm.com/juneau/'</js>}</code></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #RDF_juneauBpNs}</td>
+ * 		<td>Default XML namespace for bean properties.</td>
+ * 		<td>{@link Namespace}</td>
+ * 		<td><code>{j:<js>'http://www.ibm.com/juneaubp/'</js>}</code></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #RDF_useXmlNamespaces}</td>
+ * 		<td>Reuse XML namespaces when RDF namespaces not specified.</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>true</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #RDF_arp_iriRules}</td>
+ * 		<td>RDF/XML property: <code>iri_rules</code>.</td>
+ * 		<td><code>String</code></td>
+ * 		<td><js>"lax"</js></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #RDF_arp_errorMode}</td>
+ * 		<td>RDF/XML ARP property: <code>error-mode</code>.</td>
+ * 		<td><code>String</code></td>
+ * 		<td><js>"lax"</js></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #RDF_arp_embedding}</td>
+ * 		<td>RDF/XML ARP property: <code>embedding</code>.</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>false</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #RDF_arp_err_}</td>
+ * 		<td>RDF/XML ARP property: <code>ERR_xxx</code>.</td>
+ * 		<td><code>String</code></td>
+ * 		<td></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #RDF_arp_warn_}</td>
+ * 		<td>RDF/XML ARP property: <code>WARN_xxx</code>.</td>
+ * 		<td><code>String</code></td>
+ * 		<td></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #RDF_arp_ign_}</td>
+ * 		<td>RDF/XML ARP property: <code>IGN_xxx</code>.</td>
+ * 		<td><code>String</code></td>
+ * 		<td></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #RDF_rdfxml_xmlBase}</td>
+ * 		<td>RDF/XML property: <code>xmlbase</code>.</td>
+ * 		<td><code>String</code></td>
+ * 		<td><jk>null</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #RDF_rdfxml_longId}</td>
+ * 		<td>RDF/XML property: <code>longId</code>.</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>false</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #RDF_rdfxml_allowBadUris}</td>
+ * 		<td>RDF/XML property: <code>allowBadURIs</code>.</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>false</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #RDF_rdfxml_relativeUris}</td>
+ * 		<td>RDF/XML property: <code>relativeURIs</code>.</td>
+ * 		<td><code>String</code></td>
+ * 		<td><js>"same-document, absolute, relative, parent"</js></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #RDF_rdfxml_showXmlDeclaration}</td>
+ * 		<td>RDF/XML property: <code>showXmlDeclaration</code>.</td>
+ * 		<td><code>String</code></td>
+ * 		<td><js>"default"</js></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #RDF_rdfxml_showDoctypeDeclaration}</td>
+ * 		<td>RDF/XML property: <code>showDoctypeDeclaration</code>.</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>true</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #RDF_rdfxml_tab}</td>
+ * 		<td>RDF/XML property: <code>tab</code>.</td>
+ * 		<td><code>Integer</code></td>
+ * 		<td><code>2</code></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #RDF_rdfxml_attributeQuoteChar}</td>
+ * 		<td>RDF/XML property: <code>attributeQuoteChar</code>.</td>
+ * 		<td><code>Character</code></td>
+ * 		<td><js>'"'</js></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #RDF_rdfxml_blockRules}</td>
+ * 		<td>RDF/XML property: <code>blockRules</code>.</td>
+ * 		<td><code>String</code></td>
+ * 		<td><js>""</js></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #RDF_n3_minGap}</td>
+ * 		<td>N3/Turtle property: <code>minGap</code>.</td>
+ * 		<td><code>Integer</code></td>
+ * 		<td><code>1</code></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #RDF_n3_objectLists}</td>
+ * 		<td>N3/Turtle property: <code>objectLists</code>.</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>true</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #RDF_n3_subjectColumn}</td>
+ * 		<td>N3/Turtle property: <code>subjectColumn</code>.</td>
+ * 		<td>code>Integer</code></td>
+ * 		<td>indent column</td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #RDF_n3_propertyColumn}</td>
+ * 		<td>N3/Turtle property: <code>propertyColumn</code>.</td>
+ * 		<td><code>Integer</code></td>
+ * 		<td><code>8</code></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #RDF_n3_indentProperty}</td>
+ * 		<td>N3/Turtle property: <code>indentProperty</code>.</td>
+ * 		<td><code>Integer</code></td>
+ * 		<td><code>6</code></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #RDF_n3_widePropertyLen}</td>
+ * 		<td>N3/Turtle property: <code>widePropertyLen</code>.</td>
+ * 		<td><code>Integer</code></td>
+ * 		<td><code>20</code></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #RDF_n3_abbrevBaseUri}</td>
+ * 		<td>N3/Turtle property: <code>abbrevBaseURI</code>.</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>true</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #RDF_n3_usePropertySymbols}</td>
+ * 		<td>N3/Turtle property: <code>usePropertySymbols</code>.</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>true</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #RDF_n3_useTripleQuotedStrings}</td>
+ * 		<td>N3/Turtle property: <code>useTripleQuotedStrings</code>.</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>true</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #RDF_n3_useDoubles}</td>
+ * 		<td>N3/Turtle property: <code>useDoubles</code>.</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>true</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #RDF_collectionFormat}</td>
+ * 		<td>RDF format for representing collections and arrays.</td>
+ * 		<td><code>String</code></td>
+ * 		<td><js>"DEFAULT"</js></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #RDF_looseCollections}</td>
+ * 		<td>Collections should be serialized and parsed as loose collections.</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>false</jk></td>
+ * 	</tr>
+ * </table>
+ *
+ *
  * @author James Bognar (james.bognar@salesforce.com)
  */
 @SuppressWarnings("serial")
 public interface RdfCommonContext {
-// TODO - RENAME?
+
 	/**
 	 * Maps RDF writer names to property prefixes that apply to them.
 	 */
@@ -41,7 +234,13 @@ public interface RdfCommonContext {
 	}};
 
 	/**
-	 * The RDF language to serialize to ({@link String}, default=<js>"RDF/XML-ABBREV"</js>).
+	 * <b>Configuration property:</b>  RDF language.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Rdf.language"</js>
+	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Default:</b> <js>"RDF/XML-ABBREV"</js>
+	 * </ul>
 	 * <p>
 	 * 	Can be any of the following:
 	 * <ul class='spaced-list'>
@@ -64,17 +263,35 @@ public interface RdfCommonContext {
 	public static final String RDF_language = "Rdf.language";
 
 	/**
-	 * The XML namespace for Juneau properties ({@link Namespace}, default=<js>{j:'http://www.ibm.com/juneau/'}</js>).
+	 * <b>Configuration property:</b>  XML namespace for Juneau properties.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Rdf.juneauNs"</js>
+	 * 	<li><b>Data type:</b> {@link Namespace}
+	 * 	<li><b>Default:</b> <code>{j:<js>'http://www.ibm.com/juneau/'</js>}</code>
+	 * </ul>
 	 */
 	public static final String RDF_juneauNs = "Rdf.juneauNs";
 
 	/**
-	 * The default XML namespace for bean properties ({@link Namespace}, default=<js>{j:'http://www.ibm.com/juneaubp/'}</js>).
+	 * <b>Configuration property:</b>  Default XML namespace for bean properties.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Rdf.juneauBpNs"</js>
+	 * 	<li><b>Data type:</b> {@link Namespace}
+	 * 	<li><b>Default:</b> <code>{j:<js>'http://www.ibm.com/juneaubp/'</js>}</code>
+	 * </ul>
 	 */
 	public static final String RDF_juneauBpNs = "Rdf.juneauBpNs";
 
 	/**
-	 * Reuse XML namespaces when RDF namespaces not specified ({@link Boolean}, default=<jk>true</jk>).
+	 * <b>Configuration property:</b>  Reuse XML namespaces when RDF namespaces not specified.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Rdf.useXmlNamespaces"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>true</jk>
+	 * </ul>
 	 * <p>
 	 * 	When specified, namespaces defined using {@link XmlNs} and {@link Xml} will be inherited by the RDF serializers.
 	 * 	Otherwise, namespaces will be defined using {@link RdfNs} and {@link Rdf}.
@@ -82,7 +299,13 @@ public interface RdfCommonContext {
 	public static final String RDF_useXmlNamespaces = "Rdf.useXmlNamespaces";
 
 	/**
-	 * RDF/XML property: <code>iri_rules</code> ({@link String}, default=<js>"lax"</js>).
+	 * <b>Configuration property:</b>  RDF/XML property: <code>iri_rules</code>.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Rdf.jena.rdfXml.iri-rules"</js>
+	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Default:</b> <js>"lax"</js>
+	 * </ul>
 	 * <p>
 	 *  	Set the engine for checking and resolving.
 	 * <p>
@@ -96,7 +319,13 @@ public interface RdfCommonContext {
 	public static final String RDF_arp_iriRules = "Rdf.jena.rdfXml.iri-rules";
 
 	/**
-	 * RDF/XML ARP property: <code>error-mode</code> ({@link String}, default=<js>"lax"</js>).
+	 * <b>Configuration property:</b>  RDF/XML ARP property: <code>error-mode</code>.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Rdf.jena.rdfXml.error-mode"</js>
+	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Default:</b> <js>"lax"</js>
+	 * </ul>
 	 * <p>
 	 * 	This allows a coarse-grained approach to control of error handling.
 	 * <p>
@@ -122,7 +351,13 @@ public interface RdfCommonContext {
 	public static final String RDF_arp_errorMode = "Rdf.jena.rdfXml.error-mode";
 
 	/**
-	 * RDF/XML ARP property: <code>embedding</code> ({@link Boolean}, default=<jk>false</jk>).
+	 * <b>Configuration property:</b>  RDF/XML ARP property: <code>embedding</code>.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Rdf.jena.rdfXml.embedding"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * </ul>
 	 * <p>
 	 * 	Sets ARP to look for RDF embedded within an enclosing XML document.
 	 * <p>
@@ -134,7 +369,12 @@ public interface RdfCommonContext {
 	public static final String RDF_arp_embedding = "Rdf.jena.rdfXml.embedding";
 
 	/**
-	 * RDF/XML ARP property: <code>ERR_xxx</code> ({@link String}).
+	 * <b>Configuration property:</b>  RDF/XML ARP property: <code>ERR_xxx</code>.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Rdf.jena.rdfXml.ERR_"</js>
+	 * 	<li><b>Data type:</b> <code>String</code>
+	 * </ul>
 	 * <p>
 	 * 	Provides fine-grained control over detected error conditions.
 	 * <p>
@@ -155,28 +395,50 @@ public interface RdfCommonContext {
 	public static final String RDF_arp_err_ = "Rdf.jena.rdfXml.ERR_";
 
 	/**
-	 * RDF/XML ARP property: <code>WARN_xxx</code> ({@link String}).
+	 * <b>Configuration property:</b>  RDF/XML ARP property: <code>WARN_xxx</code>.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Rdf.jena.rdfXml.WARN_"</js>
+	 * 	<li><b>Data type:</b> <code>String</code>
+	 * </ul>
 	 * <p>
 	 * 	See {@link #RDF_arp_err_} for details.
 	 */
 	public static final String RDF_arp_warn_ = "Rdf.jena.rdfXml.WARN_";
 
 	/**
-	 * RDF/XML ARP property: <code>IGN_xxx</code> ({@link String}).
+	 * RDF/XML ARP property: <code>IGN_xxx</code>.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Rdf.jena.rdfXml.IGN_"</js>
+	 * 	<li><b>Data type:</b> <code>String</code>
+	 * </ul>
 	 * <p>
 	 * 	See {@link #RDF_arp_err_} for details.
 	 */
 	public static final String RDF_arp_ign_ = "Rdf.jena.rdfXml.IGN_";
 
 	/**
-	 * RDF/XML property: <code>xmlbase</code> ({@link String}, default=<jk>null</jk>).
+	 * <b>Configuration property:</b>  RDF/XML property: <code>xmlbase</code>.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Rdf.jena.rdfXml.xmlbase"</js>
+	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Default:</b> <jk>null</jk>
+	 * </ul>
 	 * <p>
 	 * 	The value to be included for an <xa>xml:base</xa> attribute on the root element in the file.
 	 */
 	public static final String RDF_rdfxml_xmlBase = "Rdf.jena.rdfXml.xmlbase";
 
 	/**
-	 * RDF/XML property: <code>longId</code> ({@link Boolean}, default=<jk>false</jk>).
+	 * <b>Configuration property:</b>  RDF/XML property: <code>longId</code>.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Rdf.jena.rdfXml.longId"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * </ul>
 	 * <p>
 	 *  	Whether to use long ID's for anon resources.
 	 *  	Short ID's are easier to read, but can run out of memory on very large models.
@@ -184,14 +446,26 @@ public interface RdfCommonContext {
 	public static final String RDF_rdfxml_longId = "Rdf.jena.rdfXml.longId";
 
 	/**
-	 * RDF/XML property: <code>allowBadURIs</code> ({@link Boolean}, default=<jk>false</jk>).
+	 * <b>Configuration property:</b>  RDF/XML property: <code>allowBadURIs</code>.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Rdf.jena.rdfXml.allowBadURIs"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * </ul>
 	 * <p>
 	 * 	URIs in the graph are, by default, checked prior to serialization.
 	 */
 	public static final String RDF_rdfxml_allowBadUris = "Rdf.jena.rdfXml.allowBadURIs";
 
 	/**
-	 * RDF/XML property: <code>relativeURIs</code> ({@link String}).
+	 * <b>Configuration property:</b>  RDF/XML property: <code>relativeURIs</code>.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Rdf.jena.rdfXml.relativeURIs"</js>
+	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Default:</b> <js>"same-document, absolute, relative, parent"</js>
+	 * </ul>
 	 * <p>
 	 * 	What sort of relative URIs should be used.
 	 * <p>
@@ -212,7 +486,13 @@ public interface RdfCommonContext {
 	public static final String RDF_rdfxml_relativeUris = "Rdf.jena.rdfXml.relativeURIs";
 
 	/**
-	 * RDF/XML property: <code>showXmlDeclaration</code> ({@link String}, default=<js>"default"</js>).
+	 * <b>Configuration property:</b>  RDF/XML property: <code>showXmlDeclaration</code>.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Rdf.jena.rdfXml.showXmlDeclaration"</js>
+	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Default:</b> <js>"default"</js>
+	 * </ul>
 	 * <p>
 	 * 	Possible values:
 	 * <ul class='spaced-list'>
@@ -225,7 +505,13 @@ public interface RdfCommonContext {
 	public static final String RDF_rdfxml_showXmlDeclaration = "Rdf.jena.rdfXml.showXmlDeclaration";
 
 	/**
-	 * RDF/XML property: <code>showDoctypeDeclaration</code> ({@link Boolean}, default=<jk>true</jk>).
+	 * <b>Configuration property:</b>  RDF/XML property: <code>showDoctypeDeclaration</code>.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Rdf.jena.rdfXml.showDoctypeDeclaration"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>true</jk>
+	 * </ul>
 	 * <p>
 	 * 	If true, an XML Doctype declaration is included in the output.
 	 * 	This declaration includes a <code>!ENTITY</code> declaration for each prefix mapping in the model, and any attribute value that starts with the URI of that mapping is written as starting with the corresponding entity invocation.
@@ -233,63 +519,117 @@ public interface RdfCommonContext {
 	public static final String RDF_rdfxml_showDoctypeDeclaration = "Rdf.jena.rdfXml.showDoctypeDeclaration";
 
 	/**
-	 * RDF/XML property: <code>tab</code> ({@link Integer}, default=<code>2</code>).
+	 * <b>Configuration property:</b>  RDF/XML property: <code>tab</code>.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Rdf.jena.rdfXml.tab"</js>
+	 * 	<li><b>Data type:</b> <code>Integer</code>
+	 * 	<li><b>Default:</b> <code>2</code>
+	 * </ul>
 	 * <p>
 	 * 	The number of spaces with which to indent XML child elements.
 	 */
 	public static final String RDF_rdfxml_tab = "Rdf.jena.rdfXml.tab";
 
 	/**
-	 * RDF/XML property: <code>attributeQuoteChar</code> ({@link Character}, default=<js>'"'</js>).
+	 * <b>Configuration property:</b>  RDF/XML property: <code>attributeQuoteChar</code>.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Rdf.jena.rdfXml.attributeQuoteChar"</js>
+	 * 	<li><b>Data type:</b> <code>Character</code>
+	 * 	<li><b>Default:</b> <js>'"'</js>
+	 * </ul>
 	 * <p>
 	 * 	The XML attribute quote character.
 	 */
 	public static final String RDF_rdfxml_attributeQuoteChar = "Rdf.jena.rdfXml.attributeQuoteChar";
 
 	/**
-	 * RDF/XML property: <code>blockRules</code> ({@link String}, default=<js>""</js>).
+	 * <b>Configuration property:</b>  RDF/XML property: <code>blockRules</code>.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Rdf.jena.rdfXml.blockRules"</js>
+	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Default:</b> <js>""</js>
+	 * </ul>
 	 * <p>
 	 * 	A list of <code>Resource</code> or a <code>String</code> being a comma separated list of fragment IDs from <a href='http://www.w3.org/TR/rdf-syntax-grammar'>RDF Syntax Grammar</a> indicating grammar rules that will not be used.
 	 */
 	public static final String RDF_rdfxml_blockRules = "Rdf.jena.rdfXml.blockRules";
 
 	/**
-	 * N3/Turtle property: <code>minGap</code> ({@link Integer}, default=<code>1</code>).
+	 * <b>Configuration property:</b>  N3/Turtle property: <code>minGap</code>.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Rdf.jena.n3.minGap"</js>
+	 * 	<li><b>Data type:</b> <code>Integer</code>
+	 * 	<li><b>Default:</b> <code>1</code>
+	 * </ul>
 	 * <p>
 	 * 	Minimum gap between items on a line.
 	 */
 	public static final String RDF_n3_minGap = "Rdf.jena.n3.minGap";
 
 	/**
-	 * N3/Turtle property: <code>objectLists</code> ({@link Boolean}, default=<jk>true</jk>).
+	 * <b>Configuration property:</b>  N3/Turtle property: <code>objectLists</code>.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Rdf.jena.n3.objectLists"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>true</jk>
+	 * </ul>
 	 * <p>
 	 * 	Print object lists as comma separated lists.
 	 */
 	public static final String RDF_n3_objectLists = "Rdf.jena.n3.objectLists";
 
 	/**
-	 * N3/Turtle property: <code>subjectColumn</code> ({@link Integer}, default=indentProperty).
+	 * <b>Configuration property:</b>  N3/Turtle property: <code>subjectColumn</code>.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Rdf.jena.n3.subjectColumn"</js>
+	 * 	<li><b>Data type:</b> <code>Integer</code>
+	 * 	<li><b>Default:</b> indentProperty
+	 * </ul>
 	 * <p>
 	 * 	If the subject is shorter than this value, the first property may go on the same line.
 	 */
 	public static final String RDF_n3_subjectColumn = "Rdf.jena.n3.subjectColumn";
 
 	/**
-	 * N3/Turtle property: <code>propertyColumn</code> ({@link Integer}, default=<code>8</code>).
+	 * <b>Configuration property:</b>  N3/Turtle property: <code>propertyColumn</code>.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Rdf.jena.n3.propertyColumn"</js>
+	 * 	<li><b>Data type:</b> <code>Integer</code>
+	 * 	<li><b>Default:</b> <code>8</code>
+	 * </ul>
 	 * <p>
 	 *  	Width of the property column.
 	 */
 	public static final String RDF_n3_propertyColumn = "Rdf.jena.n3.propertyColumn";
 
 	/**
-	 * N3/Turtle property: <code>indentProperty</code> ({@link Integer}, default=<code>6</code>).
+	 * <b>Configuration property:</b>  N3/Turtle property: <code>indentProperty</code>.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Rdf.jena.n3.indentProperty"</js>
+	 * 	<li><b>Data type:</b> <code>Integer</code>
+	 * 	<li><b>Default:</b> <code>6</code>
+	 * </ul>
 	 * <p>
 	 * 	Width to indent properties.
 	 */
 	public static final String RDF_n3_indentProperty = "Rdf.jena.n3.indentProperty";
 
 	/**
-	 * N3/Turtle property: <code>widePropertyLen</code> ({@link Integer}, default=<code>20</code>).
+	 * <b>Configuration property:</b>  N3/Turtle property: <code>widePropertyLen</code>.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Rdf.jena.n3.widePropertyLen"</js>
+	 * 	<li><b>Data type:</b> <code>Integer</code>
+	 * 	<li><b>Default:</b> <code>20</code>
+	 * </ul>
 	 * <p>
 	 * 	Width of the property column.
 	 * 	Must be longer than <code>propertyColumn</code>.
@@ -297,35 +637,65 @@ public interface RdfCommonContext {
 	public static final String RDF_n3_widePropertyLen = "Rdf.jena.n3.widePropertyLen";
 
 	/**
-	 * N3/Turtle property: <code>abbrevBaseURI</code> ({@link Boolean}, default=<jk>true</jk>).
+	 * <b>Configuration property:</b>  N3/Turtle property: <code>abbrevBaseURI</code>.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Rdf.jena.n3.abbrevBaseURI"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>true</jk>
+	 * </ul>
 	 * <p>
 	 * 	Control whether to use abbreviations <code>&lt;&gt;</code> or <code>&lt;#&gt;</code>.
 	 */
 	public static final String RDF_n3_abbrevBaseUri = "Rdf.jena.n3.abbrevBaseURI";
 
 	/**
-	 * N3/Turtle property: <code>usePropertySymbols</code> ({@link Boolean}, default=<jk>true</jk>).
+	 * <b>Configuration property:</b>  N3/Turtle property: <code>usePropertySymbols</code>.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Rdf.jena.n3.usePropertySymbols"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>true</jk>
+	 * </ul>
 	 * <p>
 	 * 	Control whether to use <code>a</code>, <code>=</code> and <code>=&gt;</code> in output
 	 */
 	public static final String RDF_n3_usePropertySymbols = "Rdf.jena.n3.usePropertySymbols";
 
 	/**
-	 * N3/Turtle property: <code>useTripleQuotedStrings</code> ({@link Boolean}, default=<jk>true</jk>).
+	 * <b>Configuration property:</b>  N3/Turtle property: <code>useTripleQuotedStrings</code>.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Rdf.jena.n3.useTripleQuotedStrings"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>true</jk>
+	 * </ul>
 	 * <p>
 	 * 	Allow the use of <code>"""</code> to delimit long strings.
 	 */
 	public static final String RDF_n3_useTripleQuotedStrings = "Rdf.jena.n3.useTripleQuotedStrings";
 
 	/**
-	 * N3/Turtle property: <code>useDoubles</code> ({@link Boolean}, default=<jk>true</jk>).
+	 * <b>Configuration property:</b>  N3/Turtle property: <code>useDoubles</code>.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Rdf.jena.n3.useDoubles"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>true</jk>
+	 * </ul>
 	 * <p>
 	 * 	Allow the use doubles as <code>123.456</code>.
 	 */
 	public static final String RDF_n3_useDoubles = "Rdf.jena.n3.useDoubles";
 
 	/**
-	 * The RDF format for representing collections and arrays.  ({@link String}, default=<js>"DEFAULT"</js>).
+	 * <b>Configuration property:</b>  RDF format for representing collections and arrays.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Rdf.collectionFormat"</js>
+	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Default:</b> <js>"DEFAULT"</js>
+	 * </ul>
 	 * <p>
 	 * 	Possible values:
 	 * 	<ul class='spaced-list'>
@@ -343,7 +713,13 @@ public interface RdfCommonContext {
 	public static final String RDF_collectionFormat = "Rdf.collectionFormat";
 
 	/**
-	 * Specifies that collections should be serialized and parsed as loose collections.  ({@link Boolean}, default=<jk>false</jk>).
+	 * <b>Configuration property:</b>  Collections should be serialized and parsed as loose collections.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Rdf.looseCollections"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * </ul>
 	 * <p>
 	 * When specified, collections of resources are handled as loose collections of resources in RDF instead of
 	 * resources that are children of an RDF collection (e.g. Sequence, Bag).
@@ -381,5 +757,5 @@ public interface RdfCommonContext {
 	 * 	</dd>
 	 * </dl>
 	 */
-	public static final String RDF_looseCollection = "Rdf.looseCollection";
+	public static final String RDF_looseCollections = "Rdf.looseCollections";
 }

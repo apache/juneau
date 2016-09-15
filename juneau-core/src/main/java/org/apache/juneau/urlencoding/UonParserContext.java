@@ -34,12 +34,45 @@ import org.apache.juneau.parser.*;
  * <p>
  * See {@link ContextFactory} for more information about context properties.
  *
+ *
+ * <h6 class='topic' id='ConfigProperties'>Configurable properties on the URL-Encoding and UON parsers</h6>
+ * <table class='styled' style='border-collapse: collapse;'>
+ * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th></tr>
+ * 	<tr>
+ * 		<td>{@link #UON_decodeChars}</td>
+ * 		<td>Decode <js>"%xx"</js> sequences</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>false</jk> for {@link UonParser}<br><jk>true</jk> for {@link UrlEncodingParser}</td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #UON_whitespaceAware}</td>
+ * 		<td>Whitespace aware</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>false</jk></td>
+ * 	</tr>
+ * </table>
+ *
+ * <h6 class='topic'>Configurable properties inherited from parent classes</h6>
+ * <ul class='javahierarchy'>
+ * 	<li class='c'><a class='doclink' href='../BeanContext.html#ConfigProperties'>BeanContext</a> - Properties associated with handling beans on serializers and parsers.
+ * 	<ul>
+ * 		<li class='c'><a class='doclink' href='../parser/ParserContext.html#ConfigProperties'>ParserContext</a> - Configurable properties common to all parsers.
+ * 	</ul>
+ * </ul>
+ *
+ *
  * @author James Bognar (james.bognar@salesforce.com)
  */
 public class UonParserContext extends ParserContext {
 
 	/**
-	 * Decode <js>"%xx"</js> sequences. ({@link Boolean}, default=<jk>false</jk> for {@link UonParser}, <jk>true</jk> for {@link UrlEncodingParser}).
+	 * <b>Configuration property:</b> Decode <js>"%xx"</js> sequences.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"UonParser.decodeChars"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk> for {@link UonParser}, <jk>true</jk> for {@link UrlEncodingParser}
+	 * </ul>
 	 * <p>
 	 * Specify <jk>true</jk> if URI encoded characters should be decoded, <jk>false</jk>
 	 * 	if they've already been decoded before being passed to this parser.
@@ -47,7 +80,15 @@ public class UonParserContext extends ParserContext {
 	public static final String UON_decodeChars = "UonParser.decodeChars";
 
 	/**
-	 * Expect input to contain readable whitespace characters from using the {@link UonSerializerContext#UON_useWhitespace} setting ({@link Boolean}, default=<jk>false</jk>).
+	 * <b>Configuration property:</b> Whitespace aware.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"UonParser.whitespaceAware"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * </ul>
+	 * <p>
+	 * Expect input to contain readable whitespace characters from using the {@link UonSerializerContext#UON_useWhitespace} setting.
 	 */
 	public static final String UON_whitespaceAware = "UonParser.whitespaceAware";
 
