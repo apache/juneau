@@ -133,6 +133,7 @@
                         <excludes>
                             <exclude>**/rat.txt</exclude>
                             <exclude>**/*.log</exclude>
+                            <exclude>**/*.log.*</exclude>
                         </excludes>
                     </configuration>
                     <executions>
