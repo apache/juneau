@@ -21,23 +21,22 @@ import org.junit.runners.Suite.*;
 public class _TestSuite {
 	static RestMicroservice microservice;
 
-   @BeforeClass
-   public static void setUp() {
-   	try {
+	@BeforeClass
+	public static void setUp() {
+		try {
 			microservice = new RestMicroservice(new String[0]);
 			microservice.start();
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
-   }
-   
-   @AfterClass
-   public static void tearDown() {
-   	try {
+	}
+
+	@AfterClass
+	public static void tearDown() {
+		try {
 			microservice.stop();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-   }
+	}
 }
