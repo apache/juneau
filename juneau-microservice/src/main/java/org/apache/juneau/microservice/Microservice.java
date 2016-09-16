@@ -430,10 +430,24 @@ public abstract class Microservice {
 	 * <p>
 	 * Overridden methods MUST call this method FIRST so that the {@link #onStart()} method is called.
 	 *
+	 * @return This object (for method chaining).
 	 * @throws Exception
 	 */
-	protected void start() throws Exception {
+	protected Microservice start() throws Exception {
 		onStart();
+		return this;
+	}
+
+	/**
+	 * Joins the application with the current thread.
+	 * <p>
+	 * Default implementation is a no-op.
+	 *
+	 * @return This object (for method chaining).
+	 * @throws Exception
+	 */
+	protected Microservice join() throws Exception {
+		return this;
 	}
 
 	/**
@@ -442,9 +456,12 @@ public abstract class Microservice {
 	 * Default implementation simply calls {@link #onStop()}.
 	 * <p>
 	 * Overridden methods MUST call this method LAST so that the {@link #onStop()} method is called.
+	 * 
+	 * @return This object (for method chaining).
 	 */
-	protected void stop() {
+	protected Microservice stop() {
 		onStop();
+		return this;
 	}
 
 	/**

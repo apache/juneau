@@ -81,7 +81,7 @@ public class RestMicroservice extends Microservice {
 	 * @throws Exception
 	 */
 	public static void main(String[] args) throws Exception {
-		new RestMicroservice(args).start();
+		new RestMicroservice(args).start().join();
 	}
 
 	/**
@@ -99,15 +99,22 @@ public class RestMicroservice extends Microservice {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Microservice */
-	protected void start() throws Exception {
+	public RestMicroservice start() throws Exception {
 		super.start();
 		initLogging();
 		createServer();
 		startServer();
+		return this;
 	}
 
 	@Override /* Microservice */
-	public void stop() {
+	public RestMicroservice join() throws Exception {
+		server.join();
+		return this;
+	}
+
+	@Override /* Microservice */
+	public RestMicroservice stop() {
 		Thread t = new Thread() {
 			@Override /* Thread */
 			public void run() {
@@ -130,6 +137,7 @@ public class RestMicroservice extends Microservice {
 			e.printStackTrace();
 		}
 		super.stop();
+		return this;
 	}
 
 	//--------------------------------------------------------------------------------
@@ -351,7 +359,7 @@ public class RestMicroservice extends Microservice {
 	 * Method used to start the Jetty server created by {@link #createServer()}.
 	 * <p>
 	 * Subclasses can override this method to customize server startup.
-	 *
+	 * 
 	 * @throws Exception
 	 */
 	protected void startServer() throws Exception {
@@ -359,7 +367,6 @@ public class RestMicroservice extends Microservice {
 		server.start();
 		logger.warning("Server started on port " + port);
 		onPostStartServer();
-		server.join();
 	}
 
 	/**
