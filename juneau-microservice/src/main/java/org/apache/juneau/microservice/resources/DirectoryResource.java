@@ -129,9 +129,12 @@ public class DirectoryResource extends Resource {
 
 		if (f.isDirectory()) {
 			List<FileResource> l = new LinkedList<FileResource>();
-			for (File fc : f.listFiles()) {
-				URL fUrl = new URL(req.getRequestURL().append("/").append(fc.getName()).toString());
-				l.add(new FileResource(fc, fUrl));
+			File[] files = f.listFiles();
+			if (files != null) {
+				for (File fc : files) {
+					URL fUrl = new URL(req.getRequestURL().append("/").append(fc.getName()).toString());
+					l.add(new FileResource(fc, fUrl));
+				}
 			}
 			return l;
 		}
@@ -346,9 +349,13 @@ public class DirectoryResource extends Resource {
 	/** Utility method */
 	private void deleteFile(File f) {
 		try {
-			if (f.isDirectory())
-				for (File fc : f.listFiles())
-					deleteFile(fc);
+			if (f.isDirectory()) {
+				File[] files = f.listFiles();
+				if (files != null) {
+					for (File fc : files)
+						deleteFile(fc);
+				}
+			}
 			f.delete();
 		} catch (Exception e) {
 			logger.log(WARNING, "Cannot delete file '" + f.getAbsolutePath() + "'", e);

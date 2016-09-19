@@ -180,35 +180,6 @@ public abstract class Microservice {
 				onConfigChange(cf, changes);
 			}
 		});
-
-		// --------------------------------------------------------------------------------
-		// Add exit listeners.
-		// --------------------------------------------------------------------------------
-		new Thread() {
-			@Override /* Thread */
-			public void run() {
-				Console c = System.console();
-				if (c == null)
-					System.out.println("No available console.");
-				else {
-					while (true) {
-						String l = c.readLine("\nEnter 'exit' to exit.\n");
-						if (l == null || l.equals("exit")) {
-							Microservice.this.stop();
-							break;
-						}
-					}
-				}
-			}
-		}.start();
-		Runtime.getRuntime().addShutdownHook(
-			new Thread() {
-				@Override /* Thread */
-				public void run() {
-					Microservice.this.stop();
-				}
-			}
-		);
 	}
 
 	/**
@@ -434,6 +405,34 @@ public abstract class Microservice {
 	 * @throws Exception
 	 */
 	protected Microservice start() throws Exception {
+		// --------------------------------------------------------------------------------
+		// Add exit listeners.
+		// --------------------------------------------------------------------------------
+		new Thread() {
+			@Override /* Thread */
+			public void run() {
+				Console c = System.console();
+				if (c == null)
+					System.out.println("No available console.");
+				else {
+					while (true) {
+						String l = c.readLine("\nEnter 'exit' to exit.\n");
+						if (l == null || l.equals("exit")) {
+							Microservice.this.stop();
+							break;
+						}
+					}
+				}
+			}
+		}.start();
+		Runtime.getRuntime().addShutdownHook(
+			new Thread() {
+				@Override /* Thread */
+				public void run() {
+					Microservice.this.stop();
+				}
+			}
+		);
 		onStart();
 		return this;
 	}

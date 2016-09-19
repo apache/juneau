@@ -85,9 +85,12 @@ public class LogsResource extends Resource {
 
 		if (f.isDirectory()) {
 			Set<FileResource> l = new TreeSet<FileResource>(new FileResourceComparator());
-			for (File fc : f.listFiles(filter)) {
-				URL fUrl = new URL(req.getTrimmedRequestURL().append('/').append(fc.getName()).toString());
-				l.add(new FileResource(fc, fUrl));
+			File[] files = f.listFiles(filter);
+			if (files != null) {
+				for (File fc : files) {
+					URL fUrl = new URL(req.getTrimmedRequestURL().append('/').append(fc.getName()).toString());
+					l.add(new FileResource(fc, fUrl));
+				}
 			}
 			properties.put(HTMLDOC_description, "Contents of " + f.getAbsolutePath());
 			return l;
