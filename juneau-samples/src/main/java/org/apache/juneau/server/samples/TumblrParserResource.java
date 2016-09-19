@@ -19,7 +19,7 @@ import java.lang.Object;
 import org.apache.juneau.*;
 import org.apache.juneau.client.*;
 import org.apache.juneau.dto.Link;
-import org.apache.juneau.html.dto.*;
+import org.apache.juneau.html.dto.proto.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.server.annotation.*;
