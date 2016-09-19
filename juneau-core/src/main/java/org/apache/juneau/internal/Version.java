@@ -121,7 +121,7 @@ public class Version {
 	 * @param v The version to compare to.
 	 * @return <jk>true</jk> if the specified version is equal to this version.
 	 */
-	public boolean equals(Version v) {
+	public boolean isEqualsTo(Version v) {
 		for (int i = 0; i < Math.min(parts.length, v.parts.length); i++)
 			if (v.parts[i] - parts[i] != 0)
 				return false;

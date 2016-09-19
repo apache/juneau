@@ -621,7 +621,12 @@ public class SerializerSession extends Session {
 	public String resolveUri(String uri) {
 		if (uri.indexOf("://") != -1 || (absolutePathUriBase == null && relativeUriBase == null))
 			return uri;
-		StringBuilder sb = new StringBuilder(uri.length() + absolutePathUriBase.length() + 1 + relativeUriBase.length());
+		StringBuilder sb = new StringBuilder(
+			uri.length()
+			+ (absolutePathUriBase == null ? 0 : absolutePathUriBase.length())
+			+ 1
+			+ (relativeUriBase == null ? 0 : relativeUriBase.length())
+		);
 		if (StringUtils.startsWith(uri, '/')) {
 			if (absolutePathUriBase != null)
 				sb.append(absolutePathUriBase);
