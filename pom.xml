@@ -15,6 +15,7 @@
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.apache.juneau</groupId>
 	<artifactId>juneau</artifactId>
@@ -22,16 +23,19 @@
 	<packaging>pom</packaging>
 	<name>Apache Juneau (incubating)</name>
 	<description>All the Apache Juneau content in one convenient package.</description>
+
 	<parent>
 		<groupId>org.apache</groupId>
 		<artifactId>apache</artifactId>
 		<version>18</version>
 	</parent>
+
 	<properties>
 		<juneau.version>6.0.0-incubating-SNAPSHOT</juneau.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<encoding>UTF-8</encoding>
 	</properties>
+
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -91,29 +95,64 @@
 		<module>juneau-microservice</module>
 		<module>juneau-samples</module>
 		<module>juneau-server-test</module>
+		<module>juneau-all</module>
 		<module>juneau-distrib</module>
 	</modules>
 
+	<distributionManagement>
+		<site>
+			<id>${project.artifactId}-site</id>
+			<url>file://${project.baseUri}</url>
+		</site>
+	</distributionManagement>
+
 	<build>
+		<plugins>
+			<!-- 
+				Runs Apache Rat against all source code to make sure all files have licenses. 
+			-->
+			<plugin>
+				<groupId>org.apache.rat</groupId>
+				<artifactId>apache-rat-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>**/*.log</exclude>
+						<exclude>**/*.log.*</exclude>
+						<exclude>**/target/**</exclude>
+					</excludes>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>verify</phase>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- Generates the source code xref pages. -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>3.0.0</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<phase>source</phase>
+						<goals>
+							<goal>aggregate</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+
 		<pluginManagement>
 			<plugins>
-				<plugin>
-					<artifactId>maven-assembly-plugin</artifactId>
-					<version>2.6</version>
-					<configuration>
-						<descriptors>
-							<descriptor>src/assembly/all.xml</descriptor>
-						</descriptors>
-					</configuration>
-				</plugin>
-				<plugin>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.3</version>
-					<configuration>
-						<source>1.6</source>
-						<target>1.6</target>
-					</configuration>
-				</plugin>
+		
+				<!-- Generates the javadocs for all non-test projects. -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-javadoc-plugin</artifactId>
@@ -147,61 +186,27 @@
 						</execution>
 						<execution>
 							<id>aggregate</id>
-							<phase>package</phase>
+							<phase>site</phase>
 							<goals>
-								<goal>aggregate-jar</goal>
+								<goal>aggregate</goal>
 							</goals>
 						</execution>
 					</executions>
 				</plugin>
+
+				<!-- Forces all modules to compile at Java 6. -->
 				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-source-plugin</artifactId>
-					<version>3.0.0</version>
-					<executions>
-						<execution>
-							<id>attach-sources</id>
-							<goals>
-								<goal>jar</goal>
-							</goals>
-						</execution>
-					</executions>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<configuration>
+						<source>1.6</source>
+						<target>1.6</target>
+					</configuration>
 				</plugin>
-                <plugin>
-                    <groupId>org.apache.rat</groupId>
-                    <artifactId>apache-rat-plugin</artifactId>
-                    <configuration>
-                        <excludes>
-                            <exclude>**/rat.txt</exclude>
-                            <exclude>**/*.log</exclude>
-                            <exclude>**/*.log.*</exclude>
-                        </excludes>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <phase>validate</phase>
-                            <goals>
-                                <goal>check</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-				<plugin>
-					<groupId>org.jacoco</groupId>
-					<artifactId>jacoco-maven-plugin</artifactId>
-					<version>0.7.2.201409121644</version>
-					<executions>
-						<execution>
-							<id>default-prepare-agent</id>
-							<goals>
-								<goal>prepare-agent</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
+
 			</plugins>
 		</pluginManagement>
 	</build>
+
 	<reporting>
 		<plugins>
 			<plugin>
@@ -226,10 +231,20 @@
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>0.7.2.201409121644</version>
+				<configuration>
+					<fileSets>
+						<fileSet implementation="org.apache.maven.shared.model.fileset.FileSet">
+							<directory>${project.parent.build.directory}</directory>
+							<includes>
+								<include>*.exec</include>
+							</includes>
+						</fileSet>
+					</fileSets>
+				</configuration>
 			</plugin>
- 		</plugins>
+		</plugins>
 	</reporting>
-	
+
 	<url>http://juneau.incubator.apache.org</url>
 	<organization>
 		<name>Apache</name>
@@ -249,5 +264,5 @@
 			<unsubscribe>list-unsubscribe@juneau.apache.org</unsubscribe>
 			<archive>https://lists.apache.org/list.html?dev@juneau.apache.org</archive>
 		</mailingList>
-	</mailingLists>  
+	</mailingLists>
 </project>

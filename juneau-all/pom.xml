@@ -17,54 +17,70 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>juneau-server-test</artifactId>
-	<name>Apache Juneau Server Test</name>
-	<description>Tests for Juneau Client and Server.</description>
-	
+	<artifactId>juneau-all</artifactId>
+	<name>Apache Juneau UberJar</name>
+	<description>Combined contents of Core/Server/Client/Microservice jars</description>
+	<packaging>jar</packaging>
+
 	<parent>
 		<groupId>org.apache.juneau</groupId>
 		<artifactId>juneau</artifactId>
 		<version>6.0.0-incubating-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
-	
-	<properties>
-		<encoding>UTF-8</encoding>
-		<maven.javadoc.skip>true</maven.javadoc.skip>
-	</properties>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-samples</artifactId>
+			<artifactId>juneau-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-server</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>javax.ws.rs</groupId>
-			<artifactId>jsr311-api</artifactId>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-client</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-microservice</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
+
 	<build>
 		<plugins>
+		
+			<!--
+				Creates our juneau-all jar file that's a combo of our 4 modules.
+			-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.19.1</version>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>2.4.3</version>
 				<configuration>
-					<includes>
-						<include>
-							**/_TestSuite.java
-						</include>
-					</includes>
+					<createDependencyReducedPom>false</createDependencyReducedPom>
+					<artifactSet>
+						<includes>
+							<include>org.apache.juneau:juneau-core</include>
+							<include>org.apache.juneau:juneau-server</include>
+							<include>org.apache.juneau:juneau-client</include>
+							<include>org.apache.juneau:juneau-microservice</include>
+						</includes>
+					</artifactSet>
 				</configuration>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

@@ -19,7 +19,7 @@
 	<artifactId>juneau-distrib</artifactId>
 	<packaging>pom</packaging>
 	<name>Apache Juneau Distribution</name>
-	<description>Location to find fully build Juneau distributions.</description>
+	<description>Location to find fully built Juneau distributions.</description>
 
 	<parent>
 		<groupId>org.apache.juneau</groupId>
@@ -28,60 +28,76 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-core</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-microservice</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-	</dependencies>
-
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-all</artifactId>
+									<version>${project.version}</version>
+								</artifactItem>
+								<artifactItem>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-core</artifactId>
+									<version>${project.version}</version>
+								</artifactItem>
+								<artifactItem>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-server</artifactId>
+									<version>${project.version}</version>
+								</artifactItem>
+								<artifactItem>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-client</artifactId>
+									<version>${project.version}</version>
+								</artifactItem>
+								<artifactItem>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-microservice</artifactId>
+									<version>${project.version}</version>
+								</artifactItem>
+								<artifactItem>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-samples</artifactId>
+									<version>${project.version}</version>
+								</artifactItem>
+								<artifactItem>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-samples</artifactId>
+									<version>${project.version}</version>
+									<classifier>samples</classifier>
+									<type>cfg</type>
+									<destFileName>samples.cfg</destFileName>
+								</artifactItem>
+							</artifactItems>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<executions>
 					<execution>
-						<id>juneau-distro-assembly</id>
+						<id>juneau-assembly</id>
 						<phase>package</phase>
 						<goals>
 							<goal>single</goal>
 						</goals>
 						<configuration>
 							<descriptors>
-								<descriptor>src/assembly/all.xml</descriptor>
+								<descriptor>src/assembly/bin.xml</descriptor>
 							</descriptors>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<artifactId>maven-resources-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>copy-resources</id>
-						<phase>package</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${basedir}/target/</outputDirectory>
-							<resources>
-								<resource>
-									<directory>${basedir}/../target</directory>
-									<includes>
-										<include>
-											juneau-all-${juneau.version}-javadoc.jar
-										</include>
-									</includes>
-									<filtering>true</filtering>
-								</resource>
-							</resources>
 						</configuration>
 					</execution>
 				</executions>

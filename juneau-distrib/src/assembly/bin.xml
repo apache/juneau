@@ -13,59 +13,34 @@
  * specific language governing permissions and limitations under the License.                                              *
  ***************************************************************************************************************************
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	
-	<modelVersion>4.0.0</modelVersion>
-	<artifactId>juneau-server-test</artifactId>
-	<name>Apache Juneau Server Test</name>
-	<description>Tests for Juneau Client and Server.</description>
-	
-	<parent>
-		<groupId>org.apache.juneau</groupId>
-		<artifactId>juneau</artifactId>
-		<version>6.0.0-incubating-SNAPSHOT</version>
-		<relativePath>../pom.xml</relativePath>
-	</parent>
-	
-	<properties>
-		<encoding>UTF-8</encoding>
-		<maven.javadoc.skip>true</maven.javadoc.skip>
-	</properties>
-	
-	<dependencies>
-		<dependency>
-			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-samples</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>javax.ws.rs</groupId>
-			<artifactId>jsr311-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-		</dependency>
-	</dependencies>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.19.1</version>
-				<configuration>
-					<includes>
-						<include>
-							**/_TestSuite.java
-						</include>
-					</includes>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
-</project>
+<assembly
+	xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.3"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.3 http://maven.apache.org/xsd/assembly-1.1.3.xsd">
+	<id>all</id>
+	<formats>
+		<format>dir</format>
+		<format>zip</format>
+	</formats>
+	<includeBaseDirectory>false</includeBaseDirectory>
+	<fileSets>
+		<fileSet>
+			<includes>
+				<include>*core*</include>
+				<include>*client*</include>
+				<include>*server*</include>
+				<include>*microservice*</include>
+			</includes>
+			<directory>target/dependency</directory>
+			<outputDirectory>/osgi</outputDirectory>
+		</fileSet>
+		<fileSet>
+			<includes>
+				<include>*all*</include>
+				<include>*samples*</include>
+			</includes>
+			<directory>target/dependency</directory>
+			<outputDirectory>/</outputDirectory>
+		</fileSet>
+	</fileSets>
+</assembly>

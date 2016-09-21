@@ -15,10 +15,12 @@
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>juneau-core</artifactId>
 	<name>Apache Juneau Core</name>
 	<description>Base toolkit for serializers, parsers, and bean contexts.</description>
+	<packaging>bundle</packaging>
 
 	<parent>
 		<groupId>org.apache.juneau</groupId>
@@ -31,14 +33,26 @@
 		<dependency>
 			<groupId>org.apache.jena</groupId>
 			<artifactId>jena-core</artifactId>
+			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 		</dependency>
-	</dependencies>
+   	</dependencies>
+
+	<properties>
+		<!-- Skip javadoc generation since we generate them in the aggregate pom -->
+		<maven.javadoc.skip>true</maven.javadoc.skip>
+	</properties>
+
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<extensions>true</extensions>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
