@@ -32,7 +32,7 @@
 				<include>*microservice*</include>
 			</includes>
 			<directory>target/dependency</directory>
-			<outputDirectory>/osgi</outputDirectory>
+			<outputDirectory>/osgi-bundles</outputDirectory>
 		</fileSet>
 		<fileSet>
 			<includes>
