@@ -119,6 +119,7 @@
 						<exclude>**/*.log</exclude>
 						<exclude>**/*.log.*</exclude>
 						<exclude>**/target/**</exclude>
+						<consoleOutput>true</consoleOutput>
 					</excludes>
 				</configuration>
 				<executions>
