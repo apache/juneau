@@ -17,7 +17,7 @@
 	xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.3"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.3 http://maven.apache.org/xsd/assembly-1.1.3.xsd">
-	<id>bin</id>
+	<id>src</id>
 	<formats>
 		<format>zip</format>
 	</formats>
@@ -27,7 +27,7 @@
 			<includes>
 				<include>**</include>
 			</includes>
-			<directory>target/bin</directory>
+			<directory>target/src</directory>
 			<outputDirectory>/</outputDirectory>
 		</fileSet>
 	</fileSets>

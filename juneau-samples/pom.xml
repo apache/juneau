@@ -60,6 +60,21 @@
 	<build>
 		<plugins>
 		
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>3.0.1</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
 			<!-- 
 				This runs the _TestSuite class. 
 				You must run within the testsuite so the REST microservice is started for the tests.
