@@ -31,12 +31,12 @@ import org.junit.runners.Suite.*;
 	TestMultiPartFormPostsTest.class
 })
 public class _TestSuite {
-	static RestMicroservice microservice;
+	static Microservice microservice;
 
 	@BeforeClass
 	public static void setUp() {
 		try {
-			microservice = new RestMicroservice(new String[0]);
+			microservice = new RestMicroservice().setConfig("samples.cfg", false);
 			microservice.start();
 		} catch (Exception e) {
 			throw new RuntimeException(e);

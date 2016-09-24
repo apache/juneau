@@ -34,7 +34,7 @@ public class ConfigTest {
 
 		ConfigFile cf = c.doGet(URL).getResponse(ConfigFileImpl.class);
 
-		assertObjectEquals("{int1:'1',int2:'1,2,3',int3:'$C{Test/int1, -1}',int4:'$C{Test/int3, -1}',int5:'$C{XXX, -1}',boolean1:'true',boolean2:'true,true',path:'$E{PATH}',mainClass:'$MF{Main-Class}',importPackage:'$MF{Import-Package}'}", cf.get("Test"));
+		assertObjectEquals("{int1:'1',int2:'1,2,3',int3:'$C{Test/int1, -1}',int4:'$C{Test/int3, -1}',int5:'$C{XXX, -1}',boolean1:'true',boolean2:'true,true',path:'$E{PATH}',testManifestEntry:'$MF{Test-Entry}'}", cf.get("Test"));
 
 		assertEquals("'1'", c.doGet(URL + "/Test%2Fint1/" + getName(String.class)).getResponseAsString());
 		assertEquals("['1']", c.doGet(URL + "/Test%2Fint1/" + getName(String[].class)).getResponseAsString());
@@ -48,7 +48,7 @@ public class ConfigTest {
 		assertEquals("true", c.doGet(URL + "/Test%2Fboolean1/" + getName(Boolean.class)).getResponseAsString());
 		assertEquals("[true,true]", c.doGet(URL + "/Test%2Fboolean2/" + getName(Boolean[].class)).getResponseAsString());
 		assertTrue(c.doGet(URL + "/Test%2Fpath/" + getName(String.class)).getResponseAsString().length() > 10);
-		assertEquals("'org.apache.juneau.microservice.RestMicroservice'", c.doGet(URL + "/Test%2FmainClass/" + getName(String.class)).getResponseAsString());
+		assertEquals("'test-value'", c.doGet(URL + "/Test%2FtestManifestEntry/" + getName(String.class)).getResponseAsString());
 
 		c.closeQuietly();
 	}

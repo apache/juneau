@@ -62,12 +62,16 @@ import org.junit.runners.Suite.*;
 	UrlPathPatternTest.class
 })
 public class _TestSuite {
-	static RestMicroservice microservice;
+	static Microservice microservice;
 
 	@BeforeClass
 	public static void setUp() {
 		try {
-			microservice = new RestMicroservice(new String[0]);
+			microservice = new RestMicroservice()
+				.setConfig("juneau-server-test.cfg", false)
+				.setManifestContents(
+					"Test-Entry: test-value"
+				);
 			microservice.start();
 		} catch (Exception e) {
 			throw new RuntimeException(e);

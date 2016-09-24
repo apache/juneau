@@ -95,91 +95,116 @@ public abstract class Microservice {
 	private static Args args;
 	private static ConfigFile cf;
 	private static ManifestFile mf;
+	
+	private String cfPath;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param args2 Command line arguments.
+	 * @param args Command line arguments.
 	 * @throws Exception
 	 */
-	protected Microservice(String[] args2) throws Exception {
-		Microservice.args = new Args(args2);
-
-		// --------------------------------------------------------------------------------
-		// Try to get the manifest file.
-		// --------------------------------------------------------------------------------
-		Manifest m = new Manifest();
-
-		// If running within an eclipse workspace, need to get it from the file system.
-		File f = new File("META-INF/MANIFEST.MF");
-		if (f.exists()) {
-			try {
-				m.read(new FileInputStream(f));
-			} catch (IOException e) {
-				System.err.println("Problem detected in MANIFEST.MF.  Contents below:\n" + IOUtils.read(f));
-				throw e;
-			}
-		} else {
-			// Otherwise, read from manifest file in the jar file containing the main class.
-			URLClassLoader cl = (URLClassLoader)getClass().getClassLoader();
-			URL url = cl.findResource("META-INF/MANIFEST.MF");
-			if (url != null) {
-				try {
-					m.read(url.openStream());
-				} catch (IOException e) {
-					System.err.println("Problem detected in MANIFEST.MF.  Contents below:\n" + IOUtils.read(url.openStream()));
-					throw e;
-				}
-			}
+	protected Microservice(String...args) throws Exception {
+		Microservice.args = new Args(args);
+	}
+	
+	/**
+	 * Specifies the path of the config file for this microservice.
+	 * <p>
+	 * If you do not specify the config file location, we attempt to resolve it through the following methods:
+	 * <ol>
+	 * 	<li>The first argument in the command line arguments passed in through the constructor.
+	 * 	<li>The value of the <code>Main-ConfigFile</code> entry in the manifest file.
+	 * 	<li>A config file in the same location and with the same name as the executable jar file.
+	 * 		(e.g. <js>"java -jar myjar.jar"</js> will look for <js>"myjar.cfg"</js>).
+	 * </ol>
+	 * If this path does not exist, a {@link FileNotFoundException} will be thrown from the {@link #start()} command.
+	 * 
+	 * @param cfPath The absolute or relative path of the config file.
+	 * @param create Create the file if it doesn't exist.
+	 * @return This object (for method chaining).
+	 * @throws IOException If config file does not exist at the specified location or could not be read or created.
+	 */
+	public Microservice setConfig(String cfPath, boolean create) throws IOException {
+		File f = new File(cfPath);
+		if (! f.exists()) {
+			if (! create)
+				throw new FileNotFoundException("Could not locate config file at '"+f.getAbsolutePath()+"'");
+			if (! f.createNewFile())
+				throw new FileNotFoundException("Could not create config file at '"+f.getAbsolutePath()+"'");
 		}
-		mf = new ManifestFile(m);
+		this.cfPath = cfPath;
+		return this;
+	}
+	
+	/**
+	 * Specifies the config file for this microservice.
+	 * <p>
+	 * Note that if you use this method instead of {@link #setConfig(String,boolean)}, the config file will not use
+	 * the variable resolver constructed from {@link #createVarResolver()}.  
+	 *
+	 * @param cf The config file for this application, or <jk>null</jk> if no config file is needed.
+	 * @return This object (for method chaining).
+	 */
+	public Microservice setConfig(ConfigFile cf) {
+		Microservice.cf = cf;
+		return this;
+	}
 
-		// --------------------------------------------------------------------------------
-		// Find config file.
-		// Can either be passed in as first parameter, or we discover it using
-		// the 'sun.java.command' system property.
-		// --------------------------------------------------------------------------------
-		String cFile = null;
-		if (args.hasArg(0))
-			cFile = args.getArg(0);
-		else if (mf.containsKey("Main-ConfigFile"))
-			cFile = mf.getString("Main-ConfigFile");
-		else {
-			String cmd = System.getProperty("sun.java.command", "not_found").split("\\s+")[0];
-			if (cmd.endsWith(".jar"))
-				cFile = cmd.replace(".jar", ".cfg");
-		}
+	/**
+	 * Specifies the manifest file of the jar file this microservice is contained within.
+	 * <p>
+	 * If you do not specify the manifest file, we attempt to resolve it through the following methods:
+	 * <ol>
+	 * 	<li>Looking on the file system for a file at <js>"META-INF/MANIFEST.MF"</js>.
+	 * 		This is primarily to allow for running microservices from within eclipse workspaces where the manifest file
+	 * 		is located in the project root.
+	 * 	<li>Using the class loader for this class to find the file at the URL <js>"META-INF/MANIFEST.MF"</js>.
+	 * </ol>
+	 * 
+	 * @param mf The manifest file of this microservice.
+	 * @return This object (for method chaining).
+	 */
+	public Microservice setManifest(Manifest mf) {
+		Microservice.mf = new ManifestFile(mf);
+		return this;
+	}
 
-		if (cFile == null) {
-			System.err.println("Running class ["+getClass().getSimpleName()+"] without a config file.");
-			cf = ConfigMgr.DEFAULT.create();
-		} else {
-			System.out.println("Running class ["+getClass().getSimpleName()+"] using config file ["+cFile+"]");
-			System.setProperty("juneau.configFile", cFile);
-			cf = ConfigMgr.DEFAULT.get(cFile).getResolving(createVarResolver());
-		}
+	/**
+	 * Convenience method for specifying the manifest contents directly.
+	 * 
+	 * @param contents The lines in the manifest file.
+	 * @return This object (for method chaining).
+	 * @throws IOException
+	 */
+	public Microservice setManifestContents(String...contents) throws IOException {
+		String s = StringUtils.join(contents, "\n") + "\n";
+		Microservice.mf = new ManifestFile(new Manifest(new ByteArrayInputStream(s.getBytes("UTF-8"))));
+		return this;
+	}
 
-		// --------------------------------------------------------------------------------
-		// Set system properties.
-		// --------------------------------------------------------------------------------
-		Set<String> spKeys = cf.getSectionKeys("SystemProperties");
-		if (spKeys != null)
-			for (String key : spKeys)
-				System.setProperty(key, cf.get("SystemProperties", key));
+	/**
+	 * Same as {@link #setManifest(Manifest)} except specified through a {@link File} object.
+	 * 
+	 * @param f The manifest file of this microservice.
+	 * @return This object (for method chaining).
+	 * @throws IOException If a problem occurred while trying to read the manifest file.
+	 */
+	public Microservice setManifest(File f) throws IOException {
+		Microservice.mf = new ManifestFile(f);
+		return this;
+	}
 
-		// --------------------------------------------------------------------------------
-		// Add a config file change listener.
-		// --------------------------------------------------------------------------------
-		cf.addListener(new ConfigFileListener() {
-			@Override /* ConfigFileListener */
-			public void onSave(ConfigFile cf) {
-				onConfigSave(cf);
-			}
-			@Override /* ConfigFileListener */
-			public void onChange(ConfigFile cf, Set<String> changes) {
-				onConfigChange(cf, changes);
-			}
-		});
+	/**
+	 * Same as {@link #setManifest(Manifest)} except finds and loads the manifest file of the jar file that the specified class is contained within.
+	 * 
+	 * @param c The class whose jar file contains the manifest to use for this microservice.
+	 * @return This object (for method chaining).
+	 * @throws IOException If a problem occurred while trying to read the manifest file.
+	 */
+	public Microservice setManifest(Class<?> c) throws IOException {
+		Microservice.mf = new ManifestFile(c);
+		return this;
 	}
 
 	/**
@@ -249,17 +274,6 @@ public abstract class Microservice {
 	 */
 	protected static Args getArgs() {
 		return args;
-	}
-
-	/**
-	 * Overrides the value returned by {@link #getArgs()}.
-	 *
-	 * @param args The new arguments.
-	 * @return This object (for method chaining).
-	 */
-	protected Microservice setArgs(String[] args) {
-		Microservice.args = new Args(args);
-		return this;
 	}
 
 	/**
@@ -354,17 +368,6 @@ public abstract class Microservice {
 	}
 
 	/**
-	 * Overrides the value returned by {@link #getConfig()}.
-	 *
-	 * @param cf The config file for this application, or <jk>null</jk> if no config file is configured.
-	 * @return This object (for method chaining).
-	 */
-	protected Microservice setConfig(ConfigFile cf) {
-		Microservice.cf = cf;
-		return this;
-	}
-
-	/**
 	 * Returns the main jar manifest file contents as a simple {@link ObjectMap}.
 	 * <p>
 	 * This map consists of the contents of {@link Manifest#getMainAttributes()} with the keys
@@ -404,7 +407,95 @@ public abstract class Microservice {
 	 * @return This object (for method chaining).
 	 * @throws Exception
 	 */
-	protected Microservice start() throws Exception {
+	public Microservice start() throws Exception {
+		
+		// --------------------------------------------------------------------------------
+		// Try to get the manifest file if it wasn't already set.
+		// --------------------------------------------------------------------------------
+		if (mf == null) {
+			Manifest m = new Manifest();
+
+			// If running within an eclipse workspace, need to get it from the file system.
+			File f = new File("META-INF/MANIFEST.MF");
+			if (f.exists()) {
+				try {
+					m.read(new FileInputStream(f));
+				} catch (IOException e) {
+					System.err.println("Problem detected in MANIFEST.MF.  Contents below:\n" + IOUtils.read(f));
+					throw e;
+				}
+			} else {
+				// Otherwise, read from manifest file in the jar file containing the main class.
+				URLClassLoader cl = (URLClassLoader)getClass().getClassLoader();
+				URL url = cl.findResource("META-INF/MANIFEST.MF");
+				if (url != null) {
+					try {
+						m.read(url.openStream());
+					} catch (IOException e) {
+						System.err.println("Problem detected in MANIFEST.MF.  Contents below:\n" + IOUtils.read(url.openStream()));
+						throw e;
+					}
+				}
+			}
+			mf = new ManifestFile(m);
+		}
+
+		// --------------------------------------------------------------------------------
+		// Resolve the config file if the path was specified.
+		// --------------------------------------------------------------------------------
+		if (cfPath != null) 
+			cf = ConfigMgr.DEFAULT.get(cfPath).getResolving(createVarResolver());
+		
+		// --------------------------------------------------------------------------------
+		// Find config file.
+		// Can either be passed in as first parameter, or we discover it using
+		// the 'sun.java.command' system property.
+		// --------------------------------------------------------------------------------
+		if (cf == null) {
+			if (args.hasArg(0))
+				cfPath = args.getArg(0);
+			else if (mf.containsKey("Main-ConfigFile"))
+				cfPath = mf.getString("Main-ConfigFile");
+			else {
+				String cmd = System.getProperty("sun.java.command", "not_found").split("\\s+")[0];
+				if (cmd.endsWith(".jar"))
+					cfPath = cmd.replace(".jar", ".cfg");
+			}
+
+			if (cfPath == null) {
+				System.err.println("Running class ["+getClass().getSimpleName()+"] without a config file.");
+				cf = ConfigMgr.DEFAULT.create();
+			} else {
+				System.out.println("Running class ["+getClass().getSimpleName()+"] using config file ["+cfPath+"]");
+				cf = ConfigMgr.DEFAULT.get(cfPath).getResolving(createVarResolver());
+			}
+		}
+
+		if (cfPath != null)
+			System.setProperty("juneau.configFile", cfPath);
+
+		// --------------------------------------------------------------------------------
+		// Set system properties.
+		// --------------------------------------------------------------------------------
+		Set<String> spKeys = cf.getSectionKeys("SystemProperties");
+		if (spKeys != null)
+			for (String key : spKeys)
+				System.setProperty(key, cf.get("SystemProperties", key));
+
+		// --------------------------------------------------------------------------------
+		// Add a config file change listener.
+		// --------------------------------------------------------------------------------
+		cf.addListener(new ConfigFileListener() {
+			@Override /* ConfigFileListener */
+			public void onSave(ConfigFile cf) {
+				onConfigSave(cf);
+			}
+			@Override /* ConfigFileListener */
+			public void onChange(ConfigFile cf, Set<String> changes) {
+				onConfigChange(cf, changes);
+			}
+		});
+		
 		// --------------------------------------------------------------------------------
 		// Add exit listeners.
 		// --------------------------------------------------------------------------------
@@ -445,7 +536,7 @@ public abstract class Microservice {
 	 * @return This object (for method chaining).
 	 * @throws Exception
 	 */
-	protected Microservice join() throws Exception {
+	public Microservice join() throws Exception {
 		return this;
 	}
 
@@ -458,7 +549,7 @@ public abstract class Microservice {
 	 * 
 	 * @return This object (for method chaining).
 	 */
-	protected Microservice stop() {
+	public Microservice stop() {
 		onStop();
 		return this;
 	}
@@ -466,7 +557,7 @@ public abstract class Microservice {
 	/**
 	 * Kill the JVM by calling <code>System.exit(2);</code>.
 	 */
-	protected void kill() {
+	public void kill() {
 		// This triggers the shutdown hook.
 		System.exit(2);
 	}

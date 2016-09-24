@@ -19,7 +19,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>juneau-client</artifactId>
 	<name>Apache Juneau Client</name>
-	<description>REST client API.</description>
+	<description>REST client API</description>
 	<packaging>bundle</packaging>
 
 	<parent>

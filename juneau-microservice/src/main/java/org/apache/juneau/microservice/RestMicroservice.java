@@ -90,7 +90,7 @@ public class RestMicroservice extends Microservice {
 	 * @param args The command line arguments.
 	 * @throws Exception
 	 */
-	public RestMicroservice(String[] args) throws Exception {
+	public RestMicroservice(String...args) throws Exception {
 		super(args);
 	}
 
