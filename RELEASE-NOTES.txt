@@ -12,7 +12,7 @@
 ***************************************************************************************************************************
 
 ===========================================================================================================================
-= Release notes for Juneau Server                                                                                         =
+= Release notes for Juneau                                                                                                =
 ===========================================================================================================================
 
 ---------------------------------------------------------------------------------------------------------------------------
@@ -25,6 +25,8 @@ This release is binary compatible with previous releases.
 However it is not source compatible with releases before x.x, as some methods were added to the interface x.x
 
 The code now requires a minimum of Java 1.X.
+
+--- Juneau Core ---                                                                                                            -
 
 New features:
 o 1

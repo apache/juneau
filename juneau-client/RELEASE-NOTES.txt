@@ -15,17 +15,6 @@
 = Release notes for Juneau Client                                                                                         =
 ===========================================================================================================================
 
----------------------------------------------------------------------------------------------------------------------------
-- X.X.X (Date)                                                                                                            -
----------------------------------------------------------------------------------------------------------------------------
-
-This is mainly a bug-fix release. See further details below.
-
-This release is binary compatible with previous releases.
-However it is not source compatible with releases before x.x, as some methods were added to the interface x.x
-
-The code now requires a minimum of Java 1.X.
-
 New features:
 o 1
 o 2
