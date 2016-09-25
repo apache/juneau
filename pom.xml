@@ -100,10 +100,11 @@
 	</modules>
 
 	<distributionManagement>
-		<site>
+		<!-- Uncomment to generate Maven site in /tmp/site --> 
+		<!--site>
 			<id>${project.artifactId}-site</id>
-			<url>file://${project.baseUri}</url>
-		</site>
+			<url>file:///tmp/site</url>
+		</site-->
 	</distributionManagement>
 
 	<build>
