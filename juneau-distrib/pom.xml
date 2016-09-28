@@ -148,6 +148,7 @@
 							<goal>single</goal>
 						</goals>
 						<configuration>
+							<finalName>apache-juneau-${project.version}</finalName>
 							<descriptors>
 								<descriptor>src/assembly/src.xml</descriptor>
 								<descriptor>src/assembly/bin.xml</descriptor>
