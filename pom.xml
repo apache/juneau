@@ -23,6 +23,10 @@
 	<packaging>pom</packaging>
 	<name>Apache Juneau (incubating)</name>
 	<description>All the Apache Juneau content in one convenient package.</description>
+	
+	<prerequisites>
+		<maven>3.2.0</maven>
+	</prerequisites>
 
 	<parent>
 		<groupId>org.apache</groupId>
@@ -31,7 +35,6 @@
 	</parent>
 
 	<properties>
-		<juneau.version>6.0.0-incubating-SNAPSHOT</juneau.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<encoding>UTF-8</encoding>
 	</properties>
@@ -252,9 +255,13 @@
 		<url>http://www.apache.org/</url>
 	</organization>
 	<scm>
-		<url>https://git-wip-us.apache.org/repos/asf?p=incubator-juneau.git</url>
+		<connection>scm:git:https://git-wip-us.apache.org/repos/asf/incubator-juneau.git</connection>
+		<developerConnection>scm:git:https://git-wip-us.apache.org/repos/asf/incubator-juneau.git</developerConnection>
+		<url>https://github.com/apache/incubator-juneau</url>
+		<tag>HEAD</tag>
 	</scm>
 	<issueManagement>
+		<system>Jira</system>
 		<url>https://issues.apache.org/jira/browse/JUNEAU</url>
 	</issueManagement>
 	<mailingLists>
@@ -266,4 +273,14 @@
 			<archive>https://lists.apache.org/list.html?dev@juneau.apache.org</archive>
 		</mailingList>
 	</mailingLists>
+	<developers>
+		<developer>
+			<id>JamesBognar</id>
+			<email>james.bognar@salesforce.com</email>
+			<name>James Bognar</name>
+			<roles>
+				<role>commiter</role>
+			</roles>
+		</developer>
+	</developers>
 </project>
