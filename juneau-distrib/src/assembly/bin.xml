@@ -32,6 +32,7 @@
 		</fileSet>
 		<fileSet>
 			<includes>
+				<include>DISCLAIMER</include>
 				<include>LICENSE</include>
 				<include>NOTICE</include>
 				<include>RELEASE-NOTES.txt</include>
