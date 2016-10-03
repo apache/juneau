@@ -18,7 +18,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.apache.juneau</groupId>
 	<artifactId>juneau</artifactId>
-	<version>6.0.1-incubating-SNAPSHOT</version>
+	<version>6.0.0-incubating-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Apache Juneau (incubating)</name>
 	<description>All the Apache Juneau content in one convenient package.</description>
