@@ -11,29 +11,23 @@
 * specific language governing permissions and limitations under the License.                                              *
 ***************************************************************************************************************************
 
-===========================================================================================================================
-= Release notes for Juneau                                                                                                =
-===========================================================================================================================
+Release Notes - Juneau - Version 6.0.0
 
----------------------------------------------------------------------------------------------------------------------------
-- X.X.X (Date)                                                                                                            -
----------------------------------------------------------------------------------------------------------------------------
+** Bug
+    * [JUNEAU-1] - Cannot run org.apache.juneau.samples unit tests.
+    * [JUNEAU-2] - org.apache.juneau.jena.CT_Rdf.testLooseCollectionsOfBeans()
+    * [JUNEAU-4] - Testcase failure: CT_Visibility.testClassDefault
 
-This is mainly a bug-fix release. See further details below.
+** Improvement
+    * [JUNEAU-13] - Rename PojoTransform to PojoSwap
 
-This release is binary compatible with previous releases.
-However it is not source compatible with releases before x.x, as some methods were added to the interface x.x
-
-The code now requires a minimum of Java 1.X.
-
---- Juneau Core ---                                                                                                            -
-
-New features:
-o 1
-o 2
-o 3
-
-Fixed bugs:
-o 1
-o 2
-o 3
+** Task
+    * [JUNEAU-5] - Update root README.md file.
+    * [JUNEAU-6] - Complete work on Juneau website (http://juneau.incubator.apache.org/)
+    * [JUNEAU-7] - Complete work on setting up Confluence workspace (https://cwiki.apache.org/confluence/display/JUNEAU/Juneau+Home)
+    * [JUNEAU-8] - Update contents of incubator status page (http://incubator.apache.org/projects/juneau.html)
+    * [JUNEAU-9] - Set up Jenkins builds for Juneau artifacts.
+    * [JUNEAU-10] - Figure out hosting options for generated Javadocs.
+    * [JUNEAU-11] - Create root pom.xml
+    * [JUNEAU-12] - Add Maven instructions to Dev setup guide.
+    * [JUNEAU-14] - Add SerializerGroup and ParserGroup info to web site about page.
