@@ -24,5 +24,6 @@
 <booleanAttribute key="org.eclipse.jdt.debug.ui.INCLUDE_EXTERNAL_JARS" value="true"/>
 <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_START_ON_FIRST_THREAD" value="true"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.apache.juneau.microservice.RestMicroservice"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="juneau-server-test.cfg"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="juneau-server-test"/>
 </launchConfiguration>
