@@ -20,18 +20,19 @@ import java.lang.annotation.*;
 import org.apache.juneau.server.*;
 
 /**
- * Identical to {@link HasParam @HasParam}, but only checks the existing of the parameter in the
+ * Identical to {@link FormData @FormData}, but only retrieves the parameter from the
  * 	URL string, not URL-encoded form posts.
  * <p>
- * Unlike {@link HasParam @HasParam}, using this annotation does not result in the servlet reading the contents
+ * Unlike {@link FormData @FormData}, using this annotation does not result in the servlet reading the contents
  * 	of URL-encoded form posts.
- * Therefore, this annotation can be used in conjunction with the {@link Content @Content} annotation
- * 	or {@link RestRequest#getInput(Class)} method for <code>application/x-www-form-urlencoded POST</code> calls.
+ * Therefore, this annotation can be used in conjunction with the {@link Body @Body} annotation
+ * 	or {@link RestRequest#getBody(Class)} method for <code>application/x-www-form-urlencoded POST</code> calls.
  *
  * <h6 class='topic'>Example</h6>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>)
- * 	<jk>public void</jk> doPost(<ja>@HasQParam</ja>(<js>"p1"</js>) <jk>boolean</jk> p1, <ja>@Content</ja> Bean myBean) {
+ * 	<jk>public void</jk> doGet(RestRequest req, RestResponse res,
+ * 				<ja>@Query</ja>(<js>"p1"</js>) <jk>int</jk> p1, <ja>@Query</ja>(<js>"p2"</js>) String p2, <ja>@Query</ja>(<js>"p3"</js>) UUID p3) {
  * 		...
  * 	}
  * </p>
@@ -40,8 +41,10 @@ import org.apache.juneau.server.*;
  * </p>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>)
- * 	<jk>public void</jk> doGet(RestRequest req) {
- * 		<jk>boolean</jk> p1 = req.hasQueryParameter(<js>"p1"</js>);
+ * 	<jk>public void</jk> doGet(RestRequest req, RestResponse res) {
+ * 		<jk>int</jk> p1 = req.getQueryParameter(<jk>int</jk>.<jk>class</jk>, <js>"p1"</js>, 0);
+ * 		String p2 = req.getQueryParameter(String.<jk>class</jk>, <js>"p2"</js>);
+ * 		UUID p3 = req.getQueryParameter(UUID.<jk>class</jk>, <js>"p3"</js>);
  * 		...
  * 	}
  * </p>
@@ -52,10 +55,40 @@ import org.apache.juneau.server.*;
 @Target(PARAMETER)
 @Retention(RUNTIME)
 @Inherited
-public @interface HasQParam {
+public @interface Query {
 
 	/**
 	 * URL parameter name.
 	 */
 	String value();
+
+	/**
+	 * Specify <jk>true</jk> if using multi-part parameters to represent collections and arrays.
+	 * <p>
+	 * 	Normally, we expect single parameters to be specified in UON notation for representing
+	 * 	collections of values (e.g. <js>"&key=(1,2,3)"</js>.
+	 * 	This annotation allows the use of multi-part parameters to represent collections
+	 * 	(e.g. <js>"&key=1&key=2&key=3"</js>.
+	 * <p>
+	 *		This setting should only be applied to Java parameters of type array or Collection.
+	 */
+	boolean multipart() default false;
+
+	/**
+	 * The expected format of the request parameter.
+	 * <p>
+	 * Possible values:
+	 * <ul class='spaced-list'>
+	 * 	<li><js>"UON"</js> - URL-Encoded Object Notation.<br>
+	 *			This notation allows for request parameters to contain arbitrarily complex POJOs.
+	 * 	<li><js>"PLAIN"</js> - Plain text.<br>
+	 *			This treats request parameters as plain text.<br>
+	 *			Only POJOs directly convertable from <l>Strings</l> can be represented in parameters when using this mode.
+	 * 	<li><js>"INHERIT"</js> (default) - Inherit from the {@link RestServletContext#REST_paramFormat} property on the servlet method or class.
+	 * </ul>
+	 * <p>
+	 * Note that the parameter value <js>"(foo)"</js> is interpreted as <js>"(foo)"</js> when using plain mode, but
+	 * 	<js>"foo"</js> when using UON mode.
+	 */
+	String format() default "INHERIT";
 }

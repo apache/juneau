@@ -42,7 +42,7 @@ import org.apache.juneau.transform.*;
  * @author James Bognar (james.bognar@salesforce.com)
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })
-@Consumes({"octal/msgpack"})
+@Consumes("octal/msgpack")
 public final class MsgPackParser extends InputStreamParser {
 
 	/** Default parser, all default settings.*/

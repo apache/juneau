@@ -35,47 +35,47 @@ public class ContentResource extends RestServletDefault {
 	// Basic tests
 	//====================================================================================================
 	@RestMethod(name="POST", path="/boolean")
-	public boolean testBool(@Content boolean b) {
+	public boolean testBool(@Body boolean b) {
 		return b;
 	}
 
 	@RestMethod(name="POST", path="/Boolean")
-	public Boolean testBoolean(@Content Boolean b) {
+	public Boolean testBoolean(@Body Boolean b) {
 		return b;
 	}
 
 	@RestMethod(name="POST", path="/int")
-	public int testInt(@Content int i) {
+	public int testInt(@Body int i) {
 		return i;
 	}
 
 	@RestMethod(name="POST", path="/Integer")
-	public Integer testInteger(@Content Integer i) {
+	public Integer testInteger(@Body Integer i) {
 		return i;
 	}
 
 	@RestMethod(name="POST", path="/float")
-	public float testFloat(@Content float f) {
+	public float testFloat(@Body float f) {
 		return f;
 	}
 
 	@RestMethod(name="POST", path="/Float")
-	public Float testFloat2(@Content Float f) {
+	public Float testFloat2(@Body Float f) {
 		return f;
 	}
 
 	@RestMethod(name="POST", path="/Map")
-	public TreeMap<String,String> testMap(@Content TreeMap<String,String> m) {
+	public TreeMap<String,String> testMap(@Body TreeMap<String,String> m) {
 		return m;
 	}
 
 	@RestMethod(name="POST", path="/B")
-	public DTO2s.B testPojo1(@Content DTO2s.B b) {
+	public DTO2s.B testPojo1(@Body DTO2s.B b) {
 		return b;
 	}
 
 	@RestMethod(name="POST", path="/C")
-	public DTO2s.C testPojo2(@Content DTO2s.C c) {
+	public DTO2s.C testPojo2(@Body DTO2s.C c) {
 		return c;
 	}
 }

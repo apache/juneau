@@ -180,16 +180,16 @@ public class CommonTest {
 	}
 
 	public static class E1 {
-		@BeanProperty(properties={"f1","f2"}) public E2 x1 = new E2();
-		@BeanProperty(properties={"f1","f2"}) public Map<String,Integer> x2 = new LinkedHashMap<String,Integer>() {{
+		@BeanProperty(properties="f1,f2") public E2 x1 = new E2();
+		@BeanProperty(properties="f1,f2") public Map<String,Integer> x2 = new LinkedHashMap<String,Integer>() {{
 			put("f1",1); put("f3",3);
 		}};
-		@BeanProperty(properties={"f1","f2"}) public E2[] x3 = {new E2()};
-		@BeanProperty(properties={"f1","f2"}) public List<E2> x4 = new LinkedList<E2>() {{
+		@BeanProperty(properties="f1,f2") public E2[] x3 = {new E2()};
+		@BeanProperty(properties="f1,f2") public List<E2> x4 = new LinkedList<E2>() {{
 			add(new E2());
 		}};
-		@BeanProperty(properties={"f1"}) public ObjectMap[] x5 = {new ObjectMap().append("f1",1).append("f3",3)};
-		@BeanProperty(properties={"f1"}) public List<ObjectMap> x6 = new LinkedList<ObjectMap>() {{
+		@BeanProperty(properties="f1") public ObjectMap[] x5 = {new ObjectMap().append("f1",1).append("f3",3)};
+		@BeanProperty(properties="f1") public List<ObjectMap> x6 = new LinkedList<ObjectMap>() {{
 			add(new ObjectMap().append("f1",1).append("f3",3));
 		}};
 	}
@@ -216,7 +216,7 @@ public class CommonTest {
 	}
 
 	public static class Test7b {
-		@BeanProperty(properties={"x2"}) public List<Test7b> x1 = new LinkedList<Test7b>();
+		@BeanProperty(properties="x2") public List<Test7b> x1 = new LinkedList<Test7b>();
 		public int x2 = 2;
 	}
 

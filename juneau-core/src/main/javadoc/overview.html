@@ -755,7 +755,7 @@
 			<p class='bcode'>
 	<jc>// Address class with only street/city/state properties (in that order).</jc>
 	<jc>// All other properties are ignored.</jc>
-	<ja>@Bean</ja>(properties={<js>"street"</js>,<js>"city"</js>,<js>"state"</js>})
+	<ja>@Bean</ja>(properties=<js>"street,city,state"</js>)
 	<jk>public class</jk> Address {
  			...
 			</p>
@@ -1388,8 +1388,8 @@
 	
 		<jd>/** [OPTIONS /*] - Show resource options. */</jd>
 		<ja>@RestMethod</ja>(name=<js>"OPTIONS"</js>, path=<js>"/*"</js>)
-		<jk>public</jk> ResourceOptions getOptions(RestRequest req) {
-			<jk>return new</jk> ResourceOptions(<jk>this</jk>, req);
+		<jk>public</jk> Swagger getOptions(RestRequest req) {
+			<jk>return</jk> req.getSwagger();
 		}
 		
 		<jd>/** [GET /] - Get all system properties. */</jd>
@@ -1400,20 +1400,20 @@
 	
 		<jd>/** [GET /{propertyName}] - Get system property with specified name. */</jd>
 		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/{propertyName}"</js>)
-		<jk>public</jk> String getSystemProperty(<ja>@Attr</ja> String propertyName) <jk>throws</jk> Throwable {
+		<jk>public</jk> String getSystemProperty(<ja>@Path</ja> String propertyName) <jk>throws</jk> Throwable {
 			<jk>return</jk> System.<jsm>getProperty</jsm>(propertyName);
 		}
 		
 		<jd>/** [PUT /{propertyName}] - Set system property with specified name. */</jd>
 		<ja>@RestMethod</ja>(name=<js>"PUT"</js>, path=<js>"/{propertyName}"</js>, guards=AdminGuard.<jk>class</jk>)
-		<jk>public</jk> Redirect setSystemProperty(<ja>@Attr</ja> String propertyName, <ja>@Content</ja> String value) {
+		<jk>public</jk> Redirect setSystemProperty(<ja>@Path</ja> String propertyName, <ja>@Body</ja> String value) {
 			System.<jsm>setProperty</jsm>(propertyName, value);
 			<jk>return new</jk> Redirect();
 		}
 	
 		<jd>/** [DELETE /{propertyName}] - Delete system property with specified name. */</jd>
 		<ja>@RestMethod</ja>(name=<js>"DELETE"</js>, path=<js>"/{propertyName}"</js>, guards=AdminGuard.<jk>class</jk>)
-		<jk>public</jk> Redirect deleteSystemProperty(<ja>@Attr</ja> String propertyName) {
+		<jk>public</jk> Redirect deleteSystemProperty(<ja>@Path</ja> String propertyName) {
 			System.<jsm>clearProperty</jsm>(propertyName);
 			<jk>return new</jk> Redirect();
 		}
@@ -1947,12 +1947,12 @@
 	<cc>#--------------------------------------------------------------------------------
 	# RootResources labels
 	#--------------------------------------------------------------------------------</cc>
-	<ck>label</ck> = <cv>Root resources</cv>
+	<ck>title</ck> = <cv>Root resources</cv>
 	<ck>description</ck> = <cv>This is an example of a router resource that is used to access other resources.</cv>
 		</p>
 		<p>
-			The <l>label</l> and <l>description</l> keys identify the localized values
-			return by the {@link org.apache.juneau.server.RestServlet#getLabel(RestRequest)} and {@link org.apache.juneau.server.RestServlet#getDescription(RestRequest)} methods.
+			The <l>title</l> and <l>description</l> keys identify the localized values
+			return by the {@link org.apache.juneau.server.RestServlet#getTitle(RestRequest)} and {@link org.apache.juneau.server.RestServlet#getDescription(RestRequest)} methods.
 		</p>
 		<p>
 			The <l>children</l> annotation defines the child resources of this router resource.
@@ -2104,12 +2104,12 @@
 		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/example1/{a1}/{a2}/{a3}/*"</js>, rc={200}) 
 		<jk>public</jk> String doGetExample1( 
 			<ja>@Method</ja> String method, 
-			<ja>@Attr</ja> String a1, 
-			<ja>@Attr</ja> <jk>int</jk> a2, 
-			<ja>@Attr</ja> UUID a3, 
-			<ja>@Param</ja>(<js>"p1"</js>) <jk>int</jk> p1, 
-			<ja>@Param</ja>(<js>"p2"</js>) String p2, 
-			<ja>@Param</ja>(<js>"p3"</js>) UUID p3, 
+			<ja>@Path</ja> String a1, 
+			<ja>@Path</ja> <jk>int</jk> a2, 
+			<ja>@Path</ja> UUID a3, 
+			<ja>@Query</ja>(<js>"p1"</js>) <jk>int</jk> p1, 
+			<ja>@Query</ja>(<js>"p2"</js>) String p2, 
+			<ja>@Query</ja>(<js>"p3"</js>) UUID p3, 
 			<ja>@PathRemainder</ja> String remainder, 
 			<ja>@Header</ja>(<js>"Accept-Language"</js>) String lang, 
 			<ja>@Header</ja>(<js>"Accept"</js>) String accept, 
@@ -2161,8 +2161,8 @@
 			<li class='m'><l>doGetExample1()</l>
 				<br>Shows how to use the following annotations:
 				<ul>
-					<li class='n'>{@link org.apache.juneau.server.annotation.Attr @Attr}
-					<li class='n'>{@link org.apache.juneau.server.annotation.Param @Param}
+					<li class='n'>{@link org.apache.juneau.server.annotation.Path @Path}
+					<li class='n'>{@link org.apache.juneau.server.annotation.Query @Query}
 					<li class='n'>{@link org.apache.juneau.server.annotation.Header @Header}
 					<li class='n'>{@link org.apache.juneau.server.annotation.Method @Method}
 					<li class='n'>{@link org.apache.juneau.server.annotation.PathRemainder @PathRemainder}
@@ -2199,7 +2199,7 @@
 			One of the main features of Juneau is that it produces OPTIONS pages for self-documenting designs (i.e. REST interfaces that document themselves).
 		</p>
 		<p>
-			To facilitate this, the {@link org.apache.juneau.server.labels.ResourceOptions} class is provided.
+			To facilitate this, the <del><code>ResourceOptions</code></del> class is provided.
 			It inspects a <l>RestServlet</l> and its methods, and returns a serializable POJO data structure
 				that describes the options for that resource and pulls localized strings from the resource
 				bundle associated with the servlet.
@@ -2211,8 +2211,8 @@
 		<p class='bcode'>
 	<jd>/** OPTIONS request handler */</jd>
 	<ja>@RestMethod</ja>(name=<js>"OPTIONS"</js>, path=<js>"/*"</js>)
-	<jk>public</jk> ResourceOptions doOptions(RestRequest req) {
-		<jk>return new</jk> ResourceOptions(<jk>this</jk>, req);
+	<jk>public</jk> Swagger getOptions(RestRequest req) {
+		<jk>return</jk> req.getSwagger();
 	}			
 		</p>
 		<p>
@@ -2310,7 +2310,7 @@
 		
 		<jd>/** POST request handler */</jd> 
 		<ja>@RestMethod</ja>(name=<js>"POST"</js>, path=<js>"/"</js>) 
-		<jk>public</jk> Object doPost(<ja>@Content</ja> FormInputBean input) <jk>throws</jk> Exception { 
+		<jk>public</jk> Object doPost(<ja>@Body</ja> FormInputBean input) <jk>throws</jk> Exception { 
 			<jc>// Just mirror back the request</jc> 
 			<jk>return</jk> input; 
 		} 
@@ -2345,7 +2345,7 @@
 		<xt>&lt;/script&gt;</xt> 
 	<xt>&lt;/head&gt;</xt> 
 	<xt>&lt;body&gt;</xt> 
-		<xt>&lt;h3</xt> <xa>class</xa>=<xs>'title'</xs><xt>&gt;</xt>$R{servletLabel}<xt>&lt;/h3&gt;</xt> 
+		<xt>&lt;h3</xt> <xa>class</xa>=<xs>'title'</xs><xt>&gt;</xt>$R{servletTitle}<xt>&lt;/h3&gt;</xt> 
 		<xt>&lt;h5</xt> <xa>class</xa>=<xs>"description"</xs><xt>&gt;</xt>$R{servletDescription}<xt>&lt;/h5&gt;</xt> 
 		<xt>&lt;div</xt> <xa>class</xa>=<xs>'data'</xs><xt>&gt;</xt> 
 			<xt>&lt;form</xt> <xa>id</xa>=<xs>'form'</xs> <xa>action</xa>=<xs>'$R{servletURI}'</xs> <xa>method</xa>=<xs>'POST'</xs> <xa>target</xa>=<xs>'buff'</xs><xt>&gt;</xt> 
@@ -2392,8 +2392,8 @@
 		</p>
 		<p>
 			The <l>$R</l> variables are request string variables.  
-			In this case, <l>$R{servletLabel}</l> and <l>$R{servletDescription}</l> resolve to the values returned by 
-				{@link org.apache.juneau.server.RestRequest#getServletLabel()} and {@link org.apache.juneau.server.RestRequest#getServletDescription()}.
+			In this case, <l>$R{servletTitle}</l> and <l>$R{servletDescription}</l> resolve to the values returned by 
+				{@link org.apache.juneau.server.RestRequest#getServletTitle()} and {@link org.apache.juneau.server.RestRequest#getServletDescription()}.
 		</p>
 		<p>
 			Pointing a browser to the resource shows the following:
@@ -2990,7 +2990,7 @@
 		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/people/{id}/*"</js>, 
 			converters={Traversable.<jk>class</jk>,Queryable.<jk>class</jk>,Introspectable.<jk>class</jk>} 
 		) 
-		<jk>public</jk> Person getPerson(<ja>@Attr</ja> <jk>int</jk> id) <jk>throws</jk> Exception { 
+		<jk>public</jk> Person getPerson(<ja>@Path</ja> <jk>int</jk> id) <jk>throws</jk> Exception { 
 			<jk>return</jk> findPerson(id); 
 		} 
 		
@@ -3012,7 +3012,7 @@
 		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/addresses/{id}/*"</js>, 
 			converters={Traversable.<jk>class</jk>,Queryable.<jk>class</jk>} 
 		) 
-		<jk>public</jk> Address getAddress(<ja>@Attr</ja> <jk>int</jk> id) <jk>throws</jk> Exception { 
+		<jk>public</jk> Address getAddress(<ja>@Path</ja> <jk>int</jk> id) <jk>throws</jk> Exception { 
 			<jk>return</jk> findAddress(id); 
 		} 
 		
@@ -3023,7 +3023,7 @@
 		<ja>@RestMethod</ja>(name=<js>"POST"</js>, path=<js>"/people"</js>, 
 			guards=AdminGuard.<jk>class</jk> 
 		) 
-		<jk>public</jk> Redirect createPerson(<ja>@Content</ja> CreatePerson cp) <jk>throws</jk> Exception { 
+		<jk>public</jk> Redirect createPerson(<ja>@Body</ja> CreatePerson cp) <jk>throws</jk> Exception { 
 		Person p = <jf>addressBook</jf>.createPerson(cp); 
 			<jk>return new</jk> Redirect(<js>"people/{0}"</js>, p.id); 
 		} 
@@ -3035,7 +3035,7 @@
 		<ja>@RestMethod</ja>(name=<js>"POST"</js>, path=<js>"/people/{id}/addresses"</js>, 
 			guards=AdminGuard.<jk>class</jk> 
 		) 
-		<jk>public</jk> Redirect createAddress(<ja>@Attr</ja> <jk>int</jk> id, <ja>@Content</ja> CreateAddress ca) <jk>throws</jk> Exception { 
+		<jk>public</jk> Redirect createAddress(<ja>@Path</ja> <jk>int</jk> id, <ja>@Body</ja> CreateAddress ca) <jk>throws</jk> Exception { 
 			Person p = findPerson(id); 
 			Address a = p.createAddress(ca); 
 			<jk>return new</jk> Redirect(<js>"addresses/{0}"</js>, a.id); 
@@ -3048,7 +3048,7 @@
 		<ja>@RestMethod</ja>(name=<js>"DELETE"</js>, path=<js>"/people/{id}"</js>, 
 			guards=AdminGuard.<jk>class</jk>, 
 		) 
-		<jk>public</jk> String deletePerson(<ja>@Attr</ja> <jk>int</jk> id) <jk>throws</jk> Exception { 
+		<jk>public</jk> String deletePerson(<ja>@Path</ja> <jk>int</jk> id) <jk>throws</jk> Exception { 
 			<jf>addressBook</jf>.removePerson(id); 
 			<jk>return</jk> <js>"DELETE successful"</js>; 
 		} 
@@ -3060,7 +3060,7 @@
 		<ja>@RestMethod</ja>(name=<js>"DELETE"</js>, path=<js>"/addresses/{id}"</js>, 
 			guards=AdminGuard.<jk>class</jk> 
 		) 
-		<jk>public</jk> String deleteAddress(<ja>@Attr</ja> <jk>int</jk> addressId) <jk>throws</jk> Exception { 
+		<jk>public</jk> String deleteAddress(<ja>@Path</ja> <jk>int</jk> addressId) <jk>throws</jk> Exception { 
 			Person p = <jf>addressBook</jf>.findPersonWithAddress(addressId); 
 			<jk>if</jk> (p == <jk>null</jk>) 
 				<jk>throw new</jk> RestException(<jsf>SC_NOT_FOUND</jsf>, <js>"Person not found"</js>); 
@@ -3076,13 +3076,13 @@
 		<ja>@RestMethod</ja>(name=<js>"PUT"</js>, path=<js>"/people/{id}/*"</js>, 
 			guards=AdminGuard.<jk>class</jk> 
 		) 
-		<jk>public</jk> String updatePerson(RestRequest req, <ja>@Attr</ja> <jk>int</jk> id) <jk>throws</jk> Exception { 
+		<jk>public</jk> String updatePerson(RestRequest req, <ja>@Path</ja> <jk>int</jk> id) <jk>throws</jk> Exception { 
 			<jk>try</jk> { 
 				Person p = findPerson(id); 
 				String pathRemainder = req.getPathRemainder(); 
 				PojoRest r = <jk>new</jk> PojoRest(p); 
 				ClassMeta&lt;?&gt; cm = r.getClassMeta(pathRemainder); 
-				Object in = req.getInput(cm); 
+				Object in = req.getBody(cm); 
 				r.put(pathRemainder, in); 
 				<jk>return</jk> <js>"PUT successful"</js>; 
 			} <jk>catch</jk> (Exception e) { 
@@ -3097,13 +3097,13 @@
 		<ja>@RestMethod</ja>(name=<js>"PUT"</js>, path=<js>"/addresses/{id}/*"</js>, 
 			guards=AdminGuard.<jk>class</jk> 
 		) 
-		<jk>public</jk> String updateAddress(RestRequest req, <ja>@Attr</ja> <jk>int</jk> id) <jk>throws</jk> Exception { 
+		<jk>public</jk> String updateAddress(RestRequest req, <ja>@Path</ja> <jk>int</jk> id) <jk>throws</jk> Exception { 
 			<jk>try</jk> { 
 				Address a = findAddress(id); 
 				String pathInfo = req.getPathInfo(); 
 				PojoRest r = <jk>new</jk> PojoRest(a); 
 				ClassMeta&lt;?&gt; cm = r.getClassMeta(pathInfo); 
-				Object in = req.getInput(cm); 
+				Object in = req.getBody(cm); 
 				r.put(pathInfo, in); 
 				<jk>return</jk> <js>"PUT successful"</js>; 
 			} <jk>catch</jk> (Exception e) { 
@@ -3154,8 +3154,8 @@
 		*/</jd> 
 		<ja>@Override</ja> /* RestServletJenaDefault */ 
 		<ja>@RestMethod</ja>(name=<js>"OPTIONS"</js>, path=<js>"/*"</js>) 
-		<jk>public</jk> ResourceOptions getOptions(RestRequest req) { 
-			<jk>return new</jk> Options(req); 
+		<jk>public</jk> Swagger getOptions(RestRequest req) { 
+			<jk>return</jk> req.getSwagger(); 
 		} 
 		
 		<jd>/** Convenience method - Find a person by ID */</jd> 
@@ -3172,22 +3172,6 @@
 			<jk>if</jk> (a == <jk>null</jk>) 
 				<jk>throw new</jk> RestException(<jsf>SC_NOT_FOUND</jsf>, <js>"Address not found"</js>); 
 			<jk>return</jk> a; 
-		} 
-		
-		<jd>/** 
-		* Output POJO for OPTIONS requests. 
-		* Note that you're extending the existing ResourceOptions class. 
-		*/</jd> 
-		<jk>public class</jk> Options <jk>extends</jk> ResourceOptions { 
-			<jk>public</jk> ParamDescription[] <jf>queryableParameters</jf>; 
-			<jk>public</jk> String[] <jf>otherNotes</jf>; 
-			
-			<jk>public</jk> Options(RestRequest req) { 
-				<jk>super</jk>(AddressBookResource.<jk>this</jk>, req); 
-				Locale locale = req.getLocale(); 
-				<jf>queryableParameters</jf> = getQueryableParamDescriptions(locale); 
-				<jf>otherNotes</jf> = getMessage(locale, <js>"otherNotes"</js>).split(<js>"\\.\\s*"</js>); 
-			} 
 		} 
 	} 	
 			</p>
@@ -3720,7 +3704,7 @@
 		<xt>&lt;/style&gt;</xt>
 	<xt>&lt;/head&gt;</xt>
 	<xt>&lt;body&gt;</xt>
-		<xt>&lt;h3</xt> <xa>class</xa>=<xs>'title'</xs><xt>&gt;</xt>$R{servletLabel}<xt>&lt;/h3&gt;</xt>
+		<xt>&lt;h3</xt> <xa>class</xa>=<xs>'title'</xs><xt>&gt;</xt>$R{servletTitle}<xt>&lt;/h3&gt;</xt>
 		<xt>&lt;h5</xt> <xa>class</xa>=<xs>"description"</xs><xt>&gt;</xt>$R{servletDescription}<xt>&lt;/h5&gt;</xt>
 		<xt>&lt;div</xt> <xa>class</xa>=<xs>'data'</xs><xt>&gt;</xt>
 			<xt>&lt;form</xt> <xa>id</xa>=<xs>'form'</xs> <xa>action</xa>=<xs>'$R{servletURI}/upload'</xs> <xa>method</xa>=<xs>'POST'</xs> <xa>target</xa>=<xs>'buff'</xs> <xa>enctype</xa>=<xs>"multipart/form-data"</xs><xt>&gt;</xt>
@@ -3902,7 +3886,7 @@
 		* Replaces the feed with the specified content, and then mirrors it as the response. 
 		*/</jd> 
 		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/search"</js>) 
-		<jk>public</jk> QueryResults query(<ja>@Param</ja>(<js>"q"</js>) String q) <jk>throws</jk> Exception { 
+		<jk>public</jk> QueryResults query(<ja>@Query</ja>(<js>"q"</js>) String q) <jk>throws</jk> Exception { 
 			String url = <jf>registryUrl</jf> + <js>"/search"</js> + (q == <jk>null</jk> ? <js>""</js> : <js>"?q="</js> + q); 
 			<jk>return</jk> <jf>rc</jf>.doGet(url).getResponse(QueryResults.<jk>class</jk>); 
 		} 
@@ -3973,7 +3957,7 @@
 		} 
 		
 		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/{blogName}"</js>) 
-		<jk>public</jk> ObjectList parseBlog(<ja>@Attr</ja> String blogName) <jk>throws</jk> Exception { 
+		<jk>public</jk> ObjectList parseBlog(<ja>@Path</ja> String blogName) <jk>throws</jk> Exception { 
 			ObjectList l = <jk>new</jk> ObjectList(); 
 			RestClient rc = <jk>new</jk> RestClient(JsonSerializer.<jk>class</jk>, JsonParser.<jk>class</jk>); 
 			String site = <js>"http:<jc>//"</js> + blogName + <js>".tumblr.com/api/read/json"</js>;</jc> 
@@ -4095,7 +4079,7 @@
 		
 		<jd>/** GET request handler for single photo */</jd>
 		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/{id}"</js>, serializers=ImageSerializer.<jk>class</jk>)
-		<jk>public</jk> BufferedImage getPhoto(RestRequest req, <ja>@Attr</ja> int id) <jk>throws</jk> Exception {
+		<jk>public</jk> BufferedImage getPhoto(RestRequest req, <ja>@Path</ja> int id) <jk>throws</jk> Exception {
 			Photo p = photos.get(id);
 			if (p == <jk>null</jk>)
 				<jk>throw new</jk> RestException(<jsf>SC_NOT_FOUND</jsf>, <js>"Photo not found"</js>);
@@ -4104,14 +4088,14 @@
 		
 		<jd>/** PUT request handler */</jd>
 		<ja>@RestMethod</ja>(name=<js>"PUT"</js>, path=<js>"/{id}"</js>, parsers=ImageParser.<jk>class</jk>)
-		<jk>public</jk> String addPhoto(RestRequest req, <ja>@Attr</ja> <jk>int</jk> id, <ja>@Content</ja> BufferedImage image) <jk>throws</jk> Exception {
+		<jk>public</jk> String addPhoto(RestRequest req, <ja>@Path</ja> <jk>int</jk> id, <ja>@Body</ja> BufferedImage image) <jk>throws</jk> Exception {
 			photos.put(id, <jk>new</jk> Photo(id, image));
 			<jk>return</jk> <js>"OK"</js>;
 		}
 		
 		<jd>/** POST request handler */</jd>
 		<ja>@RestMethod</ja>(name=<js>"POST"</js>, path=<js>"/"</js>, parsers=ImageParser.<jk>class</jk>)
-		<jk>public</jk> Photo setPhoto(RestRequest req, <ja>@Content</ja> BufferedImage image) <jk>throws</jk> Exception {
+		<jk>public</jk> Photo setPhoto(RestRequest req, <ja>@Body</ja> BufferedImage image) <jk>throws</jk> Exception {
 			<jk>int</jk> id = photos.size();
 			Photo p = <jk>new</jk> Photo(id, image);
 			photos.put(id, p);
@@ -4120,7 +4104,7 @@
 		
 		<jd>/** DELETE request handler */</jd>
 		<ja>@RestMethod</ja>(name=<js>"DELETE"</js>, path=<js>"/{id}"</js>)
-		<jk>public</jk> String deletePhoto(RestRequest req, <ja>@Attr</ja> <jk>int</jk> id) <jk>throws</jk> Exception {
+		<jk>public</jk> String deletePhoto(RestRequest req, <ja>@Path</ja> <jk>int</jk> id) <jk>throws</jk> Exception {
 			Photo p = photos.remove(id);
 			if (p == <jk>null</jk>)
 				<jk>throw new</jk> RestException(<jsf>SC_NOT_FOUND</jsf>, <js>"Photo not found"</js>);
@@ -4129,12 +4113,12 @@
 	
 		<jd>/** OPTIONS request handler */</jd>
 		<ja>@RestMethod</ja>(name=<js>"OPTIONS"</js>, path=<js>"/*"</js>)
-		<jk>public</jk> ResourceOptions doOptions(RestRequest req) {
-			<jk>return new</jk> ResourceOptions(<jk>this</jk>, req);
+		<jk>public</jk> Swagger getOptions(RestRequest req) {
+			<jk>return</jk> req.getSwagger();
 		}
 
 		<jd>/** Serializer for converting images to byte streams */</jd>
-		<ja>@Produces</ja>({<js>"image/png"</js>,<js>"image/jpeg"</js>})
+		<ja>@Produces</ja>(<js>"image/png,image/jpeg"</js>)
 		<jk>public static class</jk> ImageSerializer <jk>extends</jk> OutputStreamSerializer {
 			<ja>@Override</ja>
 			<jk>public void</jk> serialize(Object o, OutputStream out, SerializerSession session) <jk>throws</jk> IOException, SerializeException {
@@ -4145,7 +4129,7 @@
 		}
 		
 		<jd>/** Parser for converting byte streams to images */</jd>
-		<ja>@Consumes</ja>({<js>"image/png"</js>,<js>"image/jpeg"</js>})
+		<ja>@Consumes</ja>(<js>"image/png,image/jpeg"</js>)
 		<jk>public static class</jk> ImageParser <jk>extends</jk> InputStreamParser {
 			<ja>@Override</ja>
 			<jk>public</jk> &lt;T&gt; T parse(InputStream in, ClassMeta&lt;T&gt; type, ParserSession session) <jk>throws</jk> ParseException, IOException {
@@ -4227,7 +4211,7 @@
 		* Replaces the schema document with the specified content, and then mirrors it as the response. 
 		*/</jd> 
 		<ja>@RestMethod</ja>(name=<js>"PUT"</js>, path=<js>"/"</js>) 
-		<jk>public</jk> Schema setSchema(<ja>@Content</ja> Schema schema) <jk>throws</jk> Exception { 
+		<jk>public</jk> Schema setSchema(<ja>@Body</ja> Schema schema) <jk>throws</jk> Exception { 
 			<jk>this</jk>.<jf>schema</jf> = schema; 
 			<jk>return</jk> schema; 
 		} 
@@ -4301,7 +4285,7 @@
 		
 		<jd>/** POST request handler - Execute the query. */</jd> 
 		<ja>@RestMethod</ja>(name=<js>"POST"</js>, path=<js>"/"</js>) 
-		<jk>public</jk> List&lt;Object&gt; doPost(<ja>@Content</ja> PostInput in) <jk>throws</jk> Exception { 
+		<jk>public</jk> List&lt;Object&gt; doPost(<ja>@Body</ja> PostInput in) <jk>throws</jk> Exception { 
 			
 			List&lt;Object&gt; results = <jk>new</jk> LinkedList&lt;Object&gt;(); 
 			
@@ -4504,10 +4488,10 @@
 		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/{section}"</js>, 
 			description=<js>"Show config file section."</js>, 
 			input={ 
-				<ja>@Var</ja>(category=<jsf>ATTR</jsf>, name=<js>"section"</js>, description=<js>"Section name."</js>) 
+				<ja>@Var</ja>(in=<js>"path"</js>, name=<js>"section"</js>, description=<js>"Section name."</js>) 
 			} 
 		) 
-		<jk>public</jk> ObjectMap getConfigSection(<ja>@Attr</ja>(<js>"section"</js>) String section) <jk>throws</jk> Exception { 
+		<jk>public</jk> ObjectMap getConfigSection(<ja>@Path</ja>(<js>"section"</js>) String section) <jk>throws</jk> Exception { 
 			<jk>return</jk> getSection(section); 
 		} 
 		
@@ -4522,11 +4506,11 @@
 		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/{section}/{key}"</js>, 
 			description=<js>"Show config file entry."</js>, 
 			input={ 
-				<ja>@Var</ja>(category=<jsf>ATTR</jsf>, name=<js>"section"</js>, description=<js>"Section name."</js>), 
-				<ja>@Var</ja>(category=<jsf>ATTR</jsf>, name=<js>"key"</js>, description=<js>"Entry name."</js>) 
+				<ja>@Var</ja>(in=<js>"path"</js>, name=<js>"section"</js>, description=<js>"Section name."</js>), 
+				<ja>@Var</ja>(in=<js>"path"</js>, name=<js>"key"</js>, description=<js>"Entry name."</js>) 
 			} 
 		) 
-		<jk>public</jk> String getConfigEntry(<ja>@Attr</ja>(<js>"section"</js>) String section, <ja>@Attr</ja>(<js>"key"</js>) String key) <jk>throws</jk> Exception { 
+		<jk>public</jk> String getConfigEntry(<ja>@Path</ja>(<js>"section"</js>) String section, <ja>@Path</ja>(<js>"key"</js>) String key) <jk>throws</jk> Exception { 
 			<jk>return</jk> getSection(section).getString(key); 
 		} 
 		
@@ -4540,10 +4524,10 @@
 		<ja>@RestMethod</ja>(name=<js>"POST"</js>, path=<js>"/"</js>, 
 			description=<js>"Sets contents of config file from a FORM post."</js>, 
 			input={ 
-				<ja>@Var</ja>(category=<jsf>PARAM</jsf>, name=<js>"contents"</js>, description=<js>"New contents in INI file format."</js>) 
+				<ja>@Var</ja>(in=<js>"formData"</js>, name=<js>"contents"</js>, description=<js>"New contents in INI file format."</js>) 
 			} 
 		) 
-		<jk>public</jk> ConfigFile setConfigContentsFormPost(<ja>@Param</ja>(<js>"contents"</js>) String contents) <jk>throws</jk> Exception { 
+		<jk>public</jk> ConfigFile setConfigContentsFormPost(<ja>@FormData</ja>(<js>"contents"</js>) String contents) <jk>throws</jk> Exception { 
 			<jk>return</jk> setConfigContents(<jk>new</jk> StringReader(contents)); 
 		} 
 		
@@ -4557,10 +4541,10 @@
 		<ja>@RestMethod</ja>(name=<js>"PUT"</js>, path=<js>"/"</js>, 
 			description=<js>"Sets contents of config file."</js>, 
 			input={ 
-				<ja>@Var</ja>(category=<jsf>CONTENT</jsf>, description=<js>"New contents in INI file format."</js>) 
+				<ja>@Var</ja>(in=<js>"body"</js>, description=<js>"New contents in INI file format."</js>) 
 			} 
 		) 
-		<jk>public</jk> ConfigFile setConfigContents(<ja>@Content</ja> Reader contents) <jk>throws</jk> Exception { 
+		<jk>public</jk> ConfigFile setConfigContents(<ja>@Body</ja> Reader contents) <jk>throws</jk> Exception { 
 			ConfigFile cf2 = ConfigMgr.<jsf>DEFAULT</jsf>.create().load(contents); 
 			<jk>return</jk> getConfig().merge(cf2).save(); 
 		} 
@@ -4576,11 +4560,11 @@
 		<ja>@RestMethod</ja>(name=<js>"PUT"</js>, path=<js>"/{section}"</js>, 
 			description=<js>"Add or overwrite a config file section."</js>, 
 			input={ 
-				<ja>@Var</ja>(category=<jsf>ATTR</jsf>, name=<js>"section"</js>, description=<js>"Section name."</js>), 
-				<ja>@Var</ja>(category=<jsf>CONTENT</jsf>, description=<js>"New contents for section as a simple map with string keys and values."</js>) 
+				<ja>@Var</ja>(in=<js>"path"</js>, name=<js>"section"</js>, description=<js>"Section name."</js>), 
+				<ja>@Var</ja>(in=<js>"body"</js>, description=<js>"New contents for section as a simple map with string keys and values."</js>) 
 			} 
 		) 
-		<jk>public</jk> ObjectMap setConfigSection(<ja>@Attr</ja>(<js>"section"</js>) String section, <ja>@Content</ja> Map&lt;String,String&gt; contents) <jk>throws</jk> Exception { 
+		<jk>public</jk> ObjectMap setConfigSection(<ja>@Path</ja>(<js>"section"</js>) String section, <ja>@Body</ja> Map&lt;String,String&gt; contents) <jk>throws</jk> Exception { 
 			getConfig().setSection(section, contents); 
 			<jk>return</jk> getSection(section); 
 		} 
@@ -4597,12 +4581,12 @@
 		<ja>@RestMethod</ja>(name=<js>"PUT"</js>, path=<js>"/{section}/{key}"</js>, 
 			description=<js>"Add or overwrite a config file entry."</js>, 
 			input={ 
-				<ja>@Var</ja>(category=<jsf>ATTR</jsf>, name=<js>"section"</js>, description=<js>"Section name."</js>), 
-				<ja>@Var</ja>(category=<jsf>ATTR</jsf>, name=<js>"key"</js>, description=<js>"Entry name."</js>), 
-				<ja>@Var</ja>(category=<jsf>CONTENT</jsf>, description=<js>"New value as a string."</js>) 
+				<ja>@Var</ja>(in=<js>"path"</js>, name=<js>"section"</js>, description=<js>"Section name."</js>), 
+				<ja>@Var</ja>(in=<js>"path"</js>, name=<js>"key"</js>, description=<js>"Entry name."</js>), 
+				<ja>@Var</ja>(in=<js>"body"</js>, description=<js>"New value as a string."</js>) 
 			} 
 		) 
-		<jk>public</jk> String setConfigSection(<ja>@Attr</ja>(<js>"section"</js>) String section, <ja>@Attr</ja>(<js>"key"</js>) String key, <ja>@Content</ja> String value) <jk>throws</jk> Exception { 
+		<jk>public</jk> String setConfigSection(<ja>@Path</ja>(<js>"section"</js>) String section, <ja>@Path</ja>(<js>"key"</js>) String key, <ja>@Body</ja> String value) <jk>throws</jk> Exception { 
 			getConfig().put(section, key, value, <jk>false</jk>); 
 			<jk>return</jk> getSection(section).getString(key); 
 		} 
@@ -4625,7 +4609,7 @@
 		<xt>&lt;/style&gt;</xt> 
 	<xt>&lt;/head&gt;</xt> 
 	<xt>&lt;body&gt;</xt> 
-		<xt>&lt;h3</xt> <xa>class</xa>=<xs>'title'</xs><xt>&gt;</xt>$R{servletLabel}<xt>&lt;/h3&gt;</xt> 
+		<xt>&lt;h3</xt> <xa>class</xa>=<xs>'title'</xs><xt>&gt;</xt>$R{servletTitle}<xt>&lt;/h3&gt;</xt> 
 		<xt>&lt;h5</xt> <xa>class</xa>=<xs>'description'</xs><xt>&gt;</xt>Edit config file<xt>&lt;/h5&gt;</xt> 
 		<xt>&lt;p</xt> <xa>class</xa>=<xs>'links'</xs><xt>&gt;</xt><xt>&lt;a</xt> <xa>href</xa>=<xs>'$R{requestParentURI}'</xs><xt>&gt;</xt>up<xt>&lt;/a&gt;</xt> - <xt>&lt;a</xt> <xa>href=<xs>'$R{servletURI}?method</xa>=OPTIONS'</xs><xt>&gt;</xt>options<xt>&lt;/a&gt;</xt><xt>&lt;/p&gt;</xt> 
 		<xt>&lt;form</xt> <xa>id</xa>=<xs>'form'</xs> <xa>action</xa>=<xs>'$R{servletURI}'</xs> <xa>method</xa>=<xs>'POST'</xs> <xa>enctype</xa>=<xs>'application/x-www-form-urlencoded'</xs><xt>&gt;</xt> 
@@ -5029,11 +5013,36 @@
 				</ul>
 			</li>
 			<li>Renamed <code>@Transform</code> annotation to {@link org.apache.juneau.annotation.Pojo @Pojo} so that it can be used for various POJO-related behavior, not just associating transforms.  
+			<li>Introduced {@link org.apache.juneau.dto.swagger Swagger DTOs}.
 		</ul>		
 
 		<h6 class='topic'>org.apache.juneau.server</h6>
 		<ul class='spaced-list'>
-			<li>Methods on OPTIONS pages are now sorted.
+			<li>OPTIONS pages replaced with Swagger documents.
+				Lots of changes related to supporting Swagger.
+				<ul>
+					<li>Annotation name changes to conform to Swagger specs:  <ja>@Attr</ja>-&gt;<ja>@Path</ja>, <ja>@QParam</ja>-&gt;<ja>@Query</ja>, <ja>@Param</ja>-&gt;<ja>@FormData</ja>, <ja>@Content</ja>-&gt;<ja>@Body</ja>
+					<li>Eliminated <code>ResourceOptions</code> and related code.
+					<li>New annotations and related methods:
+						<ul>
+							<li>{@link org.apache.juneau.server.annotation.RestResource#title() @RestResource.title()} / {@link org.apache.juneau.server.RestServlet#getTitle(RestRequest)}
+							<li>{@link org.apache.juneau.server.annotation.RestResource#description() @RestResource.description()} / {@link org.apache.juneau.server.RestServlet#getDescription(RestRequest)}
+							<li>{@link org.apache.juneau.server.annotation.RestResource#termsOfService() @RestResource.termsOfService()} / {@link org.apache.juneau.server.RestServlet#getTermsOfService(RestRequest)}
+							<li>{@link org.apache.juneau.server.annotation.RestResource#contact() @RestResource.contact()} / {@link org.apache.juneau.server.RestServlet#getContact(RestRequest)}
+							<li>{@link org.apache.juneau.server.annotation.RestResource#license() @RestResource.license()} / {@link org.apache.juneau.server.RestServlet#getLicense(RestRequest)}
+							<li>{@link org.apache.juneau.server.annotation.RestResource#version() @RestResource.version()} / {@link org.apache.juneau.server.RestServlet#getVersion(RestRequest)}
+							<li>{@link org.apache.juneau.server.annotation.RestResource#tags() @RestResource.tags()} / {@link org.apache.juneau.server.RestServlet#getTags(RestRequest)}
+							<li>{@link org.apache.juneau.server.annotation.RestResource#externalDocs() @RestResource.externalDocs()} / {@link org.apache.juneau.server.RestServlet#getExternalDocs(RestRequest)}
+							<li>{@link org.apache.juneau.server.annotation.RestMethod#summary() @RestMethod.summary()} / {@link org.apache.juneau.server.RestServlet#getMethodSummary(String,RestRequest)}
+							<li>{@link org.apache.juneau.server.annotation.RestMethod#description() @RestMethod.description()} / {@link org.apache.juneau.server.RestServlet#getMethodDescription(String,RestRequest)}
+							<li>{@link org.apache.juneau.server.annotation.RestMethod#externalDocs() @RestMethod.externalDocs()} 
+							<li>{@link org.apache.juneau.server.annotation.RestMethod#tags() @RestMethod.tags()} 
+							<li>{@link org.apache.juneau.server.annotation.RestMethod#deprecated() @RestMethod.deprecated()} 
+							<li>{@link org.apache.juneau.server.annotation.RestMethod#parameters() @RestMethod.parameters()} 
+							<li>{@link org.apache.juneau.server.annotation.RestMethod#responses() @RestMethod.responses()} 
+						</ul>
+					</li>					
+				</ul>
 			<li>New {@link org.apache.juneau.server.RestServletContext#paramFormat} context property.
 			<li>New/updated methods on {@link org.apache.juneau.server.RestServlet}:
 				<ul>
@@ -5604,9 +5613,9 @@
 					<li>New <js>"$C{...}"</js> variable that resolve to INI config file values.
 					<li>New <js>"$UE{...}"</js> variable that  URL-encodes the value inside the variable.
 					<li>New convenience methods for retrieving classpath resource files:<br>  
-						{@link org.apache.juneau.server.RestServlet#getResource(String)}<br>
-						{@link org.apache.juneau.server.RestServlet#getResourceAsString(String)}<br>
-						{@link org.apache.juneau.server.RestServlet#getResource(Class,String,String)}.
+						<del><code>RestServlet.getResource(String)</code></del><br>
+						<del><code>RestServlet.getResourceAsString(String)</code></del><br>
+						<del><code>RestServlet.getResource(Class,String,String)</code></del>.
 							Useful if you want to load predefined POJOs from JSON files in your classpath.
 					<li>New {@link org.apache.juneau.server.RestServlet#handleNotFound(int,RestRequest,RestResponse)} method for customized handling
 						of when a resource or method was not found.  
@@ -5701,7 +5710,7 @@
 		<ul class='spaced-list'>
 			<li>Fixed bug where localized strings weren't resolving when using chained resource bundles.
 			<li>Servlet and method labels and descriptions can now contain embedded string variables.
-			<li>New {@link org.apache.juneau.server.annotation.RestMethod#input()} and org.apache.juneau.server.annotation.RestMethod#responses()}
+			<li>New <del><code>RestMethod.input()</code></del> and org.apache.juneau.server.annotation.RestMethod#responses()}
 				annotations.
 				These replace the various <code>description</code> annotations added 2 days ago with a simpler design.
 			<li>New methods on {@link org.apache.juneau.server.RestServlet}:
@@ -5713,7 +5722,7 @@
 					<li>{@link org.apache.juneau.server.RestServlet#resolveChild(Class)} and {@link org.apache.juneau.server.RestServlet#replaceChild(RestServlet)}
 						classes that allows customized resolution of servlet instances (e.g. if services are defined in OSGi).
 				</ul> 
-			<li>Reverted the {@link org.apache.juneau.server.labels.MethodDescription} back to 5.1.0.16 since it was being used by someone.
+			<li>Reverted the <del><code>MethodDescription</code></del> back to 5.1.0.16 since it was being used by someone.
 		</ul>
 	</div>
 	
@@ -5774,7 +5783,7 @@
 							<li>{@link org.apache.juneau.server.RestRequest#getPathRemainderUndecoded()}
 							<li>{@link org.apache.juneau.server.RestRequest#getTrimmedRequestURI()}
 							<li>{@link org.apache.juneau.server.RestRequest#getTrimmedRequestURL()}
-							<li>{@link org.apache.juneau.server.RestRequest#getServletLabel()}
+							<li>{@link org.apache.juneau.server.RestRequest#getServletTitle()}
 							<li>{@link org.apache.juneau.server.RestRequest#getServletDescription()}
 							<li>{@link org.apache.juneau.server.RestRequest#getMethodDescription()}
 						</ul>
@@ -5789,16 +5798,16 @@
 				<ul>
 					<li><code>$R{contextPath}</code> - Returns value from {@link org.apache.juneau.server.RestRequest#getContextPath()}
 					<li><code>$R{methodDescription}</code> - Returns value from {@link org.apache.juneau.server.RestRequest#getMethodDescription()}
-					<li><code>$R{servletLabel}</code> - Returns value from {@link org.apache.juneau.server.RestRequest#getServletLabel()}
+					<li><code>$R{servletTitle}</code> - Returns value from {@link org.apache.juneau.server.RestRequest#getServletTitle()}
 					<li><code>$R{servletDescription}</code> - Returns value from {@link org.apache.juneau.server.RestRequest#getServletDescription()}
 					<li><code>$R{trimmedRequestURI}</code> - Returns value from {@link org.apache.juneau.server.RestRequest#getTrimmedRequestURI()}
 					<li><code>$E{var}</code> - Environment variables.
 				</ul>
-			<li>Added methods {@link org.apache.juneau.server.RestServlet#getDescription(RestRequest)} and {@link org.apache.juneau.server.RestServlet#getLabel(RestRequest)}.
+			<li>Added methods {@link org.apache.juneau.server.RestServlet#getDescription(RestRequest)} and <del><code>RestServlet.getLabel(RestRequest)</code></del>.
 			<li>{@link org.apache.juneau.server.RestServletDefault} and {@link org.apache.juneau.server.jena.RestServletJenaDefault} now provide default HTML titles
 				and descriptions:
 				<p class='bcode'>
-	<ja>@Property</ja>(name=<jsf>HTMLDOC_title</jsf>, value=<js>"$R{servletLabel}"</js>),
+	<ja>@Property</ja>(name=<jsf>HTMLDOC_title</jsf>, value=<js>"$R{servletTitle}"</js>),
 	<ja>@Property</ja>(name=<jsf>HTMLDOC_description</jsf>, value=<js>"$R{servletDescription}"</js>)
 				</p>
 			<li>Options pages on {@link org.apache.juneau.server.RestServletDefault} and {@link org.apache.juneau.server.jena.RestServletJenaDefault} now provide default descriptions and back links:
@@ -5812,17 +5821,17 @@
 			<li>New annotations for providing labels and descriptions.  Useful if you don't plan on having to support other languages, so you don't 
 				want to provide labels in resource bundles.
 				<ul>
-					<li>{@link org.apache.juneau.server.annotation.RestResource#label()}
+					<li><del><code>RestResource.label()</code></del>
 					<li>{@link org.apache.juneau.server.annotation.RestResource#description()}
 					<li>{@link org.apache.juneau.server.annotation.RestMethod#description()}
 					<li>{@link org.apache.juneau.server.annotation.RestMethod#responses()}
-					<li><code>Attr.description()</code>
-					<li><code>Content.description()</code>
-					<li><code>HasParam.description()</code>
-					<li><code>HasQParam.description()</code>
-					<li><code>Header.description()</code>
-					<li><code>Param.description()</code>
-					<li><code>QParam.description()</code>
+					<li><del><code>Attr.description()</code></del>
+					<li><del><code>Content.description()</code></del>
+					<li><del><code>HasParam.description()</code></del>
+					<li><del><code>HasQParam.description()</code></del>
+					<li><del><code>Header.description()</code></del>
+					<li><del><code>Param.description()</code></del>
+					<li><del><code>QParam.description()</code></del>
 				</ul>
 			<li>Support for sorting resources by name in {@link org.apache.juneau.server.labels.ChildResourceDescriptions}.
 		</ul>
@@ -6065,10 +6074,10 @@
 
 		<h6 class='topic'>com.ibm.team.juno.server</h6>		
 		<ul class='spaced-list'>
-			<li>REST method parameters can now be generic types (e.g. <code><ja>@Param</ja>(<js>"foo"</js>) Map&lt;String,Integer&gt; foo</code>).
+			<li>REST method parameters can now be generic types (e.g. <del><ja>@Param</ja></del>(<js>"foo"</js>) Map&lt;String,Integer&gt; foo</code>).
 				This applies to headers, attributes, and parameters.
-			<li>New {@link org.apache.juneau.server.annotation.Param#multipart() @Param.multipart()} 
-				and {@link org.apache.juneau.server.annotation.QParam#multipart() @QParam.multipart()} annotations
+			<li>New <del><code>@Param.multipart()</code></del>
+				and <del><code>@Query.multipart()</code></del> annotations
 				for handling multi-part GET and POST parameters.	
 			<li>GET parameters are now CASE-SENSITIVE per W3C standards.
 				<ul>
@@ -6146,7 +6155,7 @@
 				class from being able to parse the content.  Updated code no longer inadvertantly calls this method.
 			<li>New {@link org.apache.juneau.server.RestRequest#getQueryParameter(String)}, {@link org.apache.juneau.server.RestRequest#hasQueryParameter(String)}, and {@link org.apache.juneau.server.RestRequest#hasAnyQueryParameters(String[])}
 				methods that only look for parameters in the URL query string to prevent loading and parsing of URL-Encoded form posts.
-			<li>New {@link org.apache.juneau.server.annotation.QParam @QParam} and {@link org.apache.juneau.server.annotation.HasQParam @HasQParam} annotations for accessing query parameters from the URL query string.
+			<li>New <del><code>@QParam</code></del> and <del><code>@HasQParam</code></del> annotations for accessing query parameters from the URL query string.
 			<li><code>&amp;plainText</code> parameter can now specify a false value.
 			<li>Removed properties parameters from {@link org.apache.juneau.server.RestServlet#onPreCall(RestRequest)} and {@link org.apache.juneau.server.RestServlet#onPostCall(RestRequest,RestResponse)} methods
 				since the properties are already accessible through <code>RestRequest.getProperties()</code>.
@@ -6288,7 +6297,7 @@
 				See {@link org.apache.juneau.transform.SurrogateSwap} for details.
 			<li>New {@link org.apache.juneau.html.annotation.Html @Html} annotation.
 				Will allow the definition of standard XHTML DTOs in future releases.  
-				For now, {@link org.apache.juneau.html.dto.proto.Img} is an example of defining an XHTML element using Juno DTOs.
+				For now, <del><code>Img</code></del> is an example of defining an XHTML element using Juno DTOs.
 			<li>{@link org.apache.juneau.json.JsonParser} now ignores trailing <code>';'</code> characters in input so that it can 
 				parse strings of the form <js>"var x = {'foo':'bar'};"</js>.
 			<li>New <code>TumblrParserResource</code> in the samples war file showing how to combine the REST client and server APIs into a single
@@ -6534,7 +6543,7 @@
 	<ja>@RestResource</ja>(
 		messages=<js>"nls/Messages"</js>,
 		properties={
-			<ja>@Property</ja>(name=<js>"label"</js>,value=<js>"$L{servletLabel}"</js>),  <jc>// Localized variable in Messages.properties</jc>
+			<ja>@Property</ja>(name=<js>"label"</js>,value=<js>"$L{servletTitle}"</js>),  <jc>// Localized variable in Messages.properties</jc>
 			<ja>@Property</ja>(name=<js>"javaVendor"</js>,value=<js>"$S{java.vendor}"</js>),  <jc>// System property</jc>
 			<ja>@Property</ja>(name=<js>"foo"</js>,value=<js>"bar"</js>),
 			<ja>@Property</ja>(name=<js>"bar"</js>,value=<js>"baz"</js>),
@@ -6838,7 +6847,7 @@
     			{@link org.apache.juneau.server.RestServletDefault} now includes {@link org.apache.juneau.plaintext.PlainTextSerializer} and {@link org.apache.juneau.plaintext.PlainTextParser} for plain-text support.
     		</li>
     		<li>
-				Child resources now render on default <code>OPTIONS</code> pages through new method {@link org.apache.juneau.server.labels.ResourceOptions#getChildren()}.
+				Child resources now render on default <code>OPTIONS</code> pages through new method <del><code>ResourceOptions.getChildren()</code></del>.
 			</li>
 			<li>
 				Changes to {@link org.apache.juneau.urlencoding.UrlEncodingSerializer}/{@link org.apache.juneau.urlencoding.UrlEncodingParser} to reduce the need for quoted string values.<br>
@@ -7029,7 +7038,7 @@
 				</ul>
 			</li>
 			<li>
-				Path variables annotated with {@link org.apache.juneau.server.annotation.Attr @Attr} are now automatically URL-decoded.
+				Path variables annotated with <del><code>@Attr</code></del> are now automatically URL-decoded.
 			</li>
 		</ul>		
 	</div>
@@ -7384,7 +7393,7 @@
 				Useful for debugging purposes.
 			</li>
      		<li>
-				<code>Readers</code> and <code>InputStreams</code> can now be passed in as {@link org.apache.juneau.server.annotation.Content @Content} parameters if you need direct access to the HTTP body content without involving the parsers.<br> 
+				<code>Readers</code> and <code>InputStreams</code> can now be passed in as <del><code>@Content</code></del> parameters if you need direct access to the HTTP body content without involving the parsers.<br> 
 				Equivalent to previously calling {@link org.apache.juneau.server.RestRequest#getInputStream()} and {@link org.apache.juneau.server.RestRequest#getReader()}.
      		</li>
      		<li>
@@ -7471,8 +7480,8 @@
 			<li>New {@link org.apache.juneau.server.annotation.RestMethod#properties() @RestMethod.properties} annotation.</li>
 			<li>New {@link org.apache.juneau.server.annotation.RestMethod#defaultRequestHeaders() @RestMethod.defaultRequestHeaders} annotation.</li>
 			<li>New {@link org.apache.juneau.server.annotation.RestMethod#matchers() @RestMethod.matchers} annotation and {@link org.apache.juneau.server.RestMatcher} class.</li>
-			<li><code>Readers</code> and <code>InputStreams</code> can be specified on {@link org.apache.juneau.server.annotation.Content @Content} annotated parameters.</li>
-			<li>New {@link org.apache.juneau.server.annotation.HasParam @HasParam} annotation.</li>
+			<li><code>Readers</code> and <code>InputStreams</code> can be specified on <del><code>@Content</code></del> annotated parameters.</li>
+			<li>New <del><code>@HasParam</code></del> annotation.</li>
 			<li>Full RFC2616 support for matching <code>Accept</code> headers to serializers.</li>		
 		</ul>
 		<h6 class='topic'>Other notes</h6>
@@ -7633,11 +7642,11 @@
 			<li>				
 				New annotations on REST method parameters with automatic conversion:
 				<ul>
-					<li>{@link org.apache.juneau.server.annotation.Attr @Attr} - A parameter or URL variable value as a parsed POJO.</li>
-					<li>{@link org.apache.juneau.server.annotation.Param @Param} - A query parameter value as a parsed POJO.</li>
+					<li><del><code>@Attr</code></del> - A parameter or URL variable value as a parsed POJO.</li>
+					<li><del><code>@Param</code></del> - A query parameter value as a parsed POJO.</li>
 					<li>{@link org.apache.juneau.server.annotation.PathRemainder @PathRemainder} - The remainder after a URL pattern match as a String.</li>
 					<li>{@link org.apache.juneau.server.annotation.Header @Header} - An HTTP header value as a parsed POJO.</li>
-					<li>{@link org.apache.juneau.server.annotation.Content @Content} - The HTTP content as a parsed POJO.</li>
+					<li><del><code>@Content</code></del> - The HTTP content as a parsed POJO.</li>
 					<li>{@link org.apache.juneau.server.annotation.Method @Method} - The HTTP method name as a String.</li>
 				</ul>
 			</li>

@@ -201,7 +201,7 @@ public class InheritanceResource extends RestServlet {
 		// Should show {p1:'x',p2:'x',p3:'x',p4:'x',p5:'x'} when override is true.
 		@RestMethod(name="GET", path="/test2",
 			properties={@Property(name="p4",value="v4a"), @Property(name="p5", value="v5")})
-		public ObjectMap test2(@Properties ObjectMap properties, @HasParam("override") boolean override) {
+		public ObjectMap test2(@Properties ObjectMap properties, @HasQuery("override") boolean override) {
 			if (override) {
 				properties.put("p1", "x");
 				properties.put("p2", "x");

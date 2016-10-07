@@ -151,7 +151,7 @@ public @interface BeanProperty {
 	 * 	<jk>public class</jk> MyClass {
 	 *
 	 * 		<jc>// Only render 'f1' when serializing this bean property.</jc>
-	 * 		<ja>@BeanProperty</ja>(properties={<js>"f1"</js>})
+	 * 		<ja>@BeanProperty</ja>(properties=<js>"f1"</js>)
 	 * 		<jk>public</jk> MyChildClass x1 = <jk>new</jk> MyChildClass();
 	 * 	}
 	 *
@@ -166,7 +166,7 @@ public @interface BeanProperty {
 	 * 	</dd>
 	 * </dl>
 	 */
-	String[] properties() default {};
+	String properties() default "";
 
 	/**
 	 * The list of classes that make up the bean dictionary for this bean property.

@@ -49,7 +49,7 @@ public class GzipResource {
 			return "foo";
 		}
 		@RestMethod(name="PUT", path="/")
-		public String test1put(@Content String in) {
+		public String test1put(@Body String in) {
 			return in;
 		}
 	}
@@ -70,7 +70,7 @@ public class GzipResource {
 			return "foo";
 		}
 		@RestMethod(name="PUT", path="/")
-		public String test1put(@Content String in) {
+		public String test1put(@Body String in) {
 			return in;
 		}
 		// This method bypasses the content type and encoding from

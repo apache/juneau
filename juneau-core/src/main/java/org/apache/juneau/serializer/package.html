@@ -114,7 +114,7 @@
 		The following example shows a simple serializer that converts images to output streams using standard JRE classes.
 	</p>
 	<p class='bcode'>
-	<ja>@Produces</ja>({<js>"image/png"</js>,<js>"image/jpeg"</js>})
+	<ja>@Produces</ja>(<js>"image/png,image/jpeg"</js>)
 	<jk>public static class</jk> ImageSerializer <jk>extends</jk> OutputStreamSerializer {
 		<ja>@Override</ja>
 		<jk>public void</jk> serialize(Object o, OutputStream out, SerializerSession session) <jk>throws</jk> IOException, SerializeException {

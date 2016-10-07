@@ -17,42 +17,31 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.server.*;
+
 /**
- * Annotation that can be applied to a parameter of a {@link RestMethod} annotated method
- * 	to identify it as a variable in a URL path pattern converted to a POJO.
+ * Identical to {@link HasFormData @HasFormData}, but only checks the existing of the parameter in the
+ * 	URL string, not URL-encoded form posts.
+ * <p>
+ * Unlike {@link HasFormData @HasFormData}, using this annotation does not result in the servlet reading the contents
+ * 	of URL-encoded form posts.
+ * Therefore, this annotation can be used in conjunction with the {@link Body @Body} annotation
+ * 	or {@link RestRequest#getBody(Class)} method for <code>application/x-www-form-urlencoded POST</code> calls.
  *
  * <h6 class='topic'>Example</h6>
  * <p class='bcode'>
- * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/myurl/{foo}/{bar}/{baz}/*"</js>)
- * 	<jk>public void</jk> doGet(RestRequest req, RestResponse res,
- * 			<ja>@Attr</ja> String foo, <ja>@Attr</ja> <jk>int</jk> bar, <ja>@Attr</ja> UUID baz) {
+ * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>)
+ * 	<jk>public void</jk> doPost(<ja>@HasQuery</ja>(<js>"p1"</js>) <jk>boolean</jk> p1, <ja>@Body</ja> Bean myBean) {
  * 		...
  * 	}
  * </p>
  * <p>
- * 	The <ja>@Attr</ja> annotation is optional if the parameters are specified immediately
- * 	following the <code>RestRequest</code> and <code>RestResponse</code> parameters,
- * 	and are specified in the same order as the variables in the URL path pattern.
- * 	The following example is equivalent to the previous example.
+ * 	This is functionally equivalent to the following code...
  * </p>
  * <p class='bcode'>
- * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/myurl/{foo}/{bar}/{baz}/*"</js>)
- * 	<jk>public void</jk> doGet(RestRequest req, RestResponse res,
- * 			String foo, <jk>int</jk> bar, UUID baz) {
- * 		...
- * 	}
- * </p>
- * <p>
- * 	If the order of parameters is not the default order shown above, the
- * 	attribute names must be specified (since parameter names are lost during compilation).
- * 	The following example is equivalent to the previous example, except
- * 	the parameter order has been switched, requiring the use of the <ja>@Attr</ja>
- * 	annotations.
- * <p>
- * <p class='bcode'>
- * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/myurl/{foo}/{bar}/{baz}/*"</js>)
- * 	<jk>public void</jk> doGet(RestRequest req, RestResponse res,
- * 			<ja>@Attr</ja>(<js>"baz"</js>) UUID baz, <ja>@Attr</ja>(<js>"foo"</js>) String foo, <ja>@Attr</ja>(<js>"bar"</js>) <jk>int</jk> bar) {
+ * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>)
+ * 	<jk>public void</jk> doGet(RestRequest req) {
+ * 		<jk>boolean</jk> p1 = req.hasQueryParameter(<js>"p1"</js>);
  * 		...
  * 	}
  * </p>
@@ -63,12 +52,10 @@ import java.lang.annotation.*;
 @Target(PARAMETER)
 @Retention(RUNTIME)
 @Inherited
-public @interface Attr {
+public @interface HasQuery {
 
 	/**
-	 * URL variable name.
-	 * <p>
-	 * 	Optional if the attributes are specified in the same order as in the URL path pattern.
+	 * URL parameter name.
 	 */
-	String value() default "";
+	String value();
 }

@@ -113,108 +113,108 @@ public class ParamsResource extends RestServletDefault {
 	}
 
 	//====================================================================================================
-	// @Param annotation - GET
+	// @FormData annotation - GET
 	//====================================================================================================
 	@RestMethod(name="GET", path="/testParamGet/*")
-	public String testParamGet(RestRequest req, @Param("p1") String p1, @Param("p2") int p2) throws Exception {
+	public String testParamGet(RestRequest req, @Query("p1") String p1, @Query("p2") int p2) throws Exception {
 		return "p1=["+p1+","+req.getParameter("p1")+","+req.getParameter("p1", String.class)+"],p2=["+p2+","+req.getParameter("p2")+","+req.getParameter("p2", int.class)+"]";
 	}
 
 	//====================================================================================================
-	// @Param annotation - POST
+	// @FormData annotation - POST
 	//====================================================================================================
 	@RestMethod(name="POST", path="/testParamPost/*")
-	public String testParamPost(RestRequest req, @Param("p1") String p1, @Param("p2") int p2) throws Exception {
+	public String testParamPost(RestRequest req, @FormData("p1") String p1, @FormData("p2") int p2) throws Exception {
 		return "p1=["+p1+","+req.getParameter("p1")+","+req.getParameter("p1", String.class)+"],p2=["+p2+","+req.getParameter("p2")+","+req.getParameter("p2", int.class)+"]";
 	}
 
 	//====================================================================================================
-	// @QParam annotation - GET
+	// @Query annotation - GET
 	//====================================================================================================
 	@RestMethod(name="GET", path="/testQParamGet/*")
-	public String testQParamGet(RestRequest req, @QParam("p1") String p1, @QParam("p2") int p2) throws Exception {
+	public String testQParamGet(RestRequest req, @Query("p1") String p1, @Query("p2") int p2) throws Exception {
 		return "p1=["+p1+","+req.getQueryParameter("p1")+","+req.getQueryParameter("p1", String.class)+"],p2=["+p2+","+req.getQueryParameter("p2")+","+req.getQueryParameter("p2", int.class)+"]";
 	}
 
 	//====================================================================================================
-	// @QParam annotation - POST
+	// @Query annotation - POST
 	//====================================================================================================
 	@RestMethod(name="POST", path="/testQParamPost/*")
-	public String testQParamPost(RestRequest req, @QParam("p1") String p1, @QParam("p2") int p2) throws Exception {
+	public String testQParamPost(RestRequest req, @Query("p1") String p1, @Query("p2") int p2) throws Exception {
 		return "p1=["+p1+","+req.getQueryParameter("p1")+","+req.getQueryParameter("p1", String.class)+"],p2=["+p2+","+req.getQueryParameter("p2")+","+req.getQueryParameter("p2", int.class)+"]";
 	}
 
 	//====================================================================================================
-	// @Param(format=PLAIN) annotation - GET
+	// @FormData(format=PLAIN) annotation - GET
 	//====================================================================================================
 	@RestMethod(name="GET", path="/testPlainParamGet/*")
-	public String testPlainParamGet(RestRequest req, @Param(value="p1",format="PLAIN") String p1) throws Exception {
+	public String testPlainParamGet(RestRequest req, @Query(value="p1",format="PLAIN") String p1) throws Exception {
 		return "p1=["+p1+","+req.getParameter("p1")+","+req.getParameter("p1", String.class)+"]";
 	}
 
 	//====================================================================================================
-	// @Param(format=PLAIN) annotation - POST
+	// @FormData(format=PLAIN) annotation - POST
 	//====================================================================================================
 	@RestMethod(name="POST", path="/testPlainParamPost/*")
-	public String testPlainParamPost(RestRequest req, @Param(value="p1",format="PLAIN") String p1) throws Exception {
+	public String testPlainParamPost(RestRequest req, @FormData(value="p1",format="PLAIN") String p1) throws Exception {
 		return "p1=["+p1+","+req.getParameter("p1")+","+req.getParameter("p1", String.class)+"]";
 	}
 
 	//====================================================================================================
-	// @QParam(format=PLAIN) annotation - GET
+	// @Query(format=PLAIN) annotation - GET
 	//====================================================================================================
 	@RestMethod(name="GET", path="/testPlainQParamGet/*")
-	public String testPlainQParamGet(RestRequest req, @QParam(value="p1",format="PLAIN") String p1) throws Exception {
+	public String testPlainQParamGet(RestRequest req, @Query(value="p1",format="PLAIN") String p1) throws Exception {
 		return "p1=["+p1+","+req.getQueryParameter("p1")+","+req.getQueryParameter("p1", String.class)+"]";
 	}
 
 	//====================================================================================================
-	// @QParam(format=PLAIN) annotation - POST
+	// @Query(format=PLAIN) annotation - POST
 	//====================================================================================================
 	@RestMethod(name="POST", path="/testPlainQParamPost/*")
-	public String testPlainQParamPost(RestRequest req, @QParam(value="p1",format="PLAIN") String p1) throws Exception {
+	public String testPlainQParamPost(RestRequest req, @Query(value="p1",format="PLAIN") String p1) throws Exception {
 		return "p1=["+p1+","+req.getQueryParameter("p1")+","+req.getQueryParameter("p1", String.class)+"]";
 	}
 
 	//====================================================================================================
-	// @HasParam annotation - GET
+	// @HasQuery annotation - GET
 	//====================================================================================================
 	@RestMethod(name="GET", path="/testHasParamGet/*")
-	public String testHasParamGet(RestRequest req, @HasParam("p1") boolean p1, @HasParam("p2") Boolean p2) throws Exception {
+	public String testHasParamGet(RestRequest req, @HasQuery("p1") boolean p1, @HasQuery("p2") Boolean p2) throws Exception {
 		return "p1=["+p1+","+req.hasParameter("p1")+"],p2=["+p2+","+req.hasParameter("p2")+"]";
 	}
 
 	//====================================================================================================
-	// @HasParam annotation - POST
+	// @HasQuery annotation - POST
 	//====================================================================================================
 	@RestMethod(name="POST", path="/testHasParamPost/*")
-	public String testHasParamPost(RestRequest req, @HasParam("p1") boolean p1, @HasParam("p2") Boolean p2) throws Exception {
+	public String testHasParamPost(RestRequest req, @HasFormData("p1") boolean p1, @HasFormData("p2") Boolean p2) throws Exception {
 		return "p1=["+p1+","+req.hasParameter("p1")+"],p2=["+p2+","+req.hasParameter("p2")+"]";
 	}
 
 	//====================================================================================================
-	// @HasQParam annotation - GET
+	// @HasQuery annotation - GET
 	//====================================================================================================
 	@RestMethod(name="GET", path="/testHasQParamGet/*")
-	public String testHasQParamGet(RestRequest req, @HasQParam("p1") boolean p1, @HasQParam("p2") Boolean p2) throws Exception {
+	public String testHasQParamGet(RestRequest req, @HasQuery("p1") boolean p1, @HasQuery("p2") Boolean p2) throws Exception {
 		return "p1=["+p1+","+req.hasQueryParameter("p1")+"],p2=["+p2+","+req.hasQueryParameter("p2")+"]";
 	}
 
 	//====================================================================================================
-	// @HasQParam annotation - POST
+	// @HasQuery annotation - POST
 	//====================================================================================================
 	@RestMethod(name="POST", path="/testHasQParamPost/*")
-	public String testHasQParamPost_post(RestRequest req, @HasQParam("p1") boolean p1, @HasQParam("p2") Boolean p2) throws Exception {
+	public String testHasQParamPost_post(RestRequest req, @HasQuery("p1") boolean p1, @HasQuery("p2") Boolean p2) throws Exception {
 		return "p1=["+p1+","+req.hasQueryParameter("p1")+"],p2=["+p2+","+req.hasQueryParameter("p2")+"]";
 	}
 
 	//====================================================================================================
-	// Form POSTS with @Content parameter
+	// Form POSTS with @Body parameter
 	//====================================================================================================
 	@RestMethod(name="POST", path="/testFormPostAsContent/*")
-	public String testFormPostAsContent(@Content Test6Bean bean,
-			@HasQParam("p1") boolean hqp1, @HasQParam("p2") boolean hqp2,
-			@QParam("p1") String qp1, @QParam("p2") int qp2) throws Exception {
+	public String testFormPostAsContent(@Body Test6Bean bean,
+			@HasQuery("p1") boolean hqp1, @HasQuery("p2") boolean hqp2,
+			@Query("p1") String qp1, @Query("p2") int qp2) throws Exception {
 		return "bean=["+JsonSerializer.DEFAULT_LAX.toString(bean)+"],qp1=["+qp1+"],qp2=["+qp2+"],hqp1=["+hqp1+"],hqp2=["+hqp2+"]";
 	}
 
@@ -224,22 +224,22 @@ public class ParamsResource extends RestServletDefault {
 	}
 
 	//====================================================================================================
-	// Test @Param and @QParam annotations when using multi-part parameters (e.g. &key=val1,&key=val2).
+	// Test @FormData and @Query annotations when using multi-part parameters (e.g. &key=val1,&key=val2).
 	//====================================================================================================
 	@RestMethod(name="GET", path="/testMultiPartParams")
 	public String testMultiPartParams(
-			@QParam(value="p1",multipart=true) String[] p1,
-			@QParam(value="p2",multipart=true) int[] p2,
-			@QParam(value="p3",multipart=true) List<String> p3,
-			@QParam(value="p4",multipart=true) List<Integer> p4,
-			@Param(value="p5",multipart=true) String[] p5,
-			@Param(value="p6",multipart=true) int[] p6,
-			@Param(value="p7",multipart=true) List<String> p7,
-			@Param(value="p8",multipart=true) List<Integer> p8,
-			@QParam(value="p9",multipart=true) A[] p9,
-			@QParam(value="p10",multipart=true) List<A> p10,
-			@Param(value="p11",multipart=true) A[] p11,
-			@Param(value="p12",multipart=true) List<A> p12) throws Exception {
+			@Query(value="p1",multipart=true) String[] p1,
+			@Query(value="p2",multipart=true) int[] p2,
+			@Query(value="p3",multipart=true) List<String> p3,
+			@Query(value="p4",multipart=true) List<Integer> p4,
+			@Query(value="p5",multipart=true) String[] p5,
+			@Query(value="p6",multipart=true) int[] p6,
+			@Query(value="p7",multipart=true) List<String> p7,
+			@Query(value="p8",multipart=true) List<Integer> p8,
+			@Query(value="p9",multipart=true) A[] p9,
+			@Query(value="p10",multipart=true) List<A> p10,
+			@Query(value="p11",multipart=true) A[] p11,
+			@Query(value="p12",multipart=true) List<A> p12) throws Exception {
 		ObjectMap m = new ObjectMap()
 			.append("p1", p1)
 			.append("p2", p2)
@@ -273,7 +273,7 @@ public class ParamsResource extends RestServletDefault {
 			@Property(name=UonSerializerContext.UON_simpleMode, value="true")
 		}
 	)
-	public DTO2s.B testFormPostsWithMultiParamsViaProperty(@Content DTO2s.B content) throws Exception {
+	public DTO2s.B testFormPostsWithMultiParamsViaProperty(@Body DTO2s.B content) throws Exception {
 		return content;
 	}
 
@@ -287,7 +287,7 @@ public class ParamsResource extends RestServletDefault {
 			@Property(name=UonSerializerContext.UON_simpleMode, value="true")
 		}
 	)
-	public DTO2s.C testFormPostsWithMultiParamsUsingAnnotation(@Content DTO2s.C content) throws Exception {
+	public DTO2s.C testFormPostsWithMultiParamsUsingAnnotation(@Body DTO2s.C content) throws Exception {
 		return content;
 	}
 }

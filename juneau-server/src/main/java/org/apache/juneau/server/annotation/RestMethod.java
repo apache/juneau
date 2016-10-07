@@ -108,9 +108,9 @@ public @interface RestMethod {
 	/**
 	 * Overrides the list of serializers assigned at the method level.
 	 * <p>
-	 * Use this annotation when the list of serializers assigned to a method differs from the list of serializers assigned at the servlet level.
+	 * 	Use this annotation when the list of serializers assigned to a method differs from the list of serializers assigned at the servlet level.
 	 * <p>
-	 * To append to the list of serializers assigned at the servlet level, use <code>serializersInherit=<jsf>SERIALIZERS</jsf></code>.
+	 * 	To append to the list of serializers assigned at the servlet level, use <code>serializersInherit=<jsf>SERIALIZERS</jsf></code>.
 	 *
 	 * <p class='bcode'>
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
@@ -132,8 +132,7 @@ public @interface RestMethod {
 	/**
 	 * Used in conjunction with {@link #serializers()} to identify what class-level settings are inherited by the method serializer group.
 	 * <p>
-	 * Possible values:
-	 * </p>
+	 * 	Possible values:
 	 * <ul>
 	 * 	<li>{@link Inherit#SERIALIZERS} - Inherit class-level serializers.
 	 * 	<li>{@link Inherit#PROPERTIES} - Inherit class-level properties.
@@ -155,9 +154,9 @@ public @interface RestMethod {
 	/**
 	 * Overrides the list of parsers assigned at the method level.
 	 * <p>
-	 * Use this annotation when the list of parsers assigned to a method differs from the list of parsers assigned at the servlet level.
+	 * 	Use this annotation when the list of parsers assigned to a method differs from the list of parsers assigned at the servlet level.
 	 * <p>
-	 * To append to the list of serializers assigned at the servlet level, use <code>serializersInherit=<jsf>SERIALIZERS</jsf></code>.
+	 * 	To append to the list of serializers assigned at the servlet level, use <code>serializersInherit=<jsf>SERIALIZERS</jsf></code>.
 	 *
 	 * <p class='bcode'>
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
@@ -179,7 +178,7 @@ public @interface RestMethod {
 	/**
 	 * Used in conjunction with {@link #parsers()} to identify what class-level settings are inherited by the method parser group.
 	 * <p>
-	 * Possible values:
+	 * 	Possible values:
 	 * <ul>
 	 * 	<li>{@link Inherit#PARSERS} - Inherit class-level parsers.
 	 * 	<li>{@link Inherit#PROPERTIES} - Inherit class-level properties.
@@ -187,7 +186,6 @@ public @interface RestMethod {
 	 * </ul>
 	 * <p>
 	 * 	For example, to inherit all parsers, properties, and transforms from the servlet class:
-	 * </p>
 	 * <p class='bcode'>
 	 * 	<ja>@RestMethod</ja>(
 	 * 		path=<js>"/foo"</js>,
@@ -201,9 +199,9 @@ public @interface RestMethod {
 	/**
 	 * Appends to the list of {@link Encoder encoders} specified on the servlet.
 	 * <p>
-	 * Use this annotation when the list of encoders assigned to a method differs from the list of encoders assigned at the servlet level.
+	 * 	Use this annotation when the list of encoders assigned to a method differs from the list of encoders assigned at the servlet level.
 	 * <p>
-	 * These can be used to enable various kinds of compression (e.g. <js>"gzip"</js>) on requests and responses.
+	 * 	These can be used to enable various kinds of compression (e.g. <js>"gzip"</js>) on requests and responses.
 	 *
 	 * <p class='bcode'>
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
@@ -218,8 +216,8 @@ public @interface RestMethod {
 	 * 		}
 	 * 	}
 	 * </p>
-	 *
-	 * If you want to OVERRIDE the set of encoders specified by the servlet, combine this annotation with <code><ja>@RestMethod</ja>(inheritEncoders=<jk>false</jk>)</code>.
+	 * <p>
+	 * 	If you want to OVERRIDE the set of encoders specified by the servlet, combine this annotation with <code><ja>@RestMethod</ja>(inheritEncoders=<jk>false</jk>)</code>.
 	 */
 	Class<? extends Encoder>[] encoders() default {};
 
@@ -231,7 +229,7 @@ public @interface RestMethod {
 	/**
 	 * Same as {@link RestResource#properties()}, except defines property values by default when this method is called.
 	 * <p>
-	 * This is equivalent to simply calling <code>res.addProperties()</code> in the Java method, but is provided for convenience.
+	 * 	This is equivalent to simply calling <code>res.addProperties()</code> in the Java method, but is provided for convenience.
 	 */
 	Property[] properties() default {};
 
@@ -246,36 +244,18 @@ public @interface RestMethod {
 	Class<?>[] pojoSwaps() default {};
 
 	/**
-	 * Possible HTTP response codes from this method.
-	 * <p>
-	 * 	This annotation is provided for documentation purposes.
-	 * 	It is used in conjunction with the following NLS resource bundle keys to populate options pages:
-	 * <ul class='spaced-list'>
-	 * 	<li><js>"(className.?)[javaMethodName].res.[rc]"</js> - Response description (defaults to HTTP status message).
-	 * 		e.g. <js>"MyClass.myMethod.res.404 = Sorry...I couldn't find that."</js> or <js>"myMethod.res.404 = Sorry...I couldn't find that."</js>
-	 * 	<li><js>"(className.?)[javaMethodName].res.[rc].[varCategory].[varName]"</js> - Response variable .
-	 * 		e.g. <js>"MyClass.myMethod.res.302.[header].[Location] = Set to the location where the thing can be found."</js> or  <js>"myMethod.res.302.[header].[Location] = Set to the location where the thing can be found."</js>
-	 * </ul>
-	 * <p>
-	 * Note that you can still define the keys in the resource bundle and not use this annotation.
-	 * However, the annotation is provided if you just want the OPTIONS page to show the possible status codes with
-	 * default HTTP status messages.
-	 */
-	int[] rc() default {};
-
-	/**
 	 * Specifies default values for request headers.
 	 * <p>
-	 * Strings are of the format <js>"Header-Name: header-value"</js>.
+	 * 	Strings are of the format <js>"Header-Name: header-value"</js>.
 	 * <p>
-	 * Affects values returned by {@link RestRequest#getHeader(String)} when the header is not present on the request.
+	 * 	Affects values returned by {@link RestRequest#getHeader(String)} when the header is not present on the request.
 	 * <p>
-	 * The most useful reason for this annotation is to provide a default <code>Accept</code> header when one is not specified
+	 * 	The most useful reason for this annotation is to provide a default <code>Accept</code> header when one is not specified
 	 * 	so that a particular default {@link Serializer} is picked.
 	 * <p>
-	 * Only one header value can be specified per entry (i.e. it's not a delimited list of header entries).
+	 * 	Only one header value can be specified per entry (i.e. it's not a delimited list of header entries).
 	 * <p>
-	 * Header values specified at the method level override header values specified at the servlet level.
+	 * 	Header values specified at the method level override header values specified at the servlet level.
 	 *
 	 * <dl>
 	 * 	<dt>Example:</dt>
@@ -293,67 +273,146 @@ public @interface RestMethod {
 	String[] defaultRequestHeaders() default {};
 
 	/**
-	 * Optional description.
+	 * Optional summary for the exposed API.
 	 * <p>
-	 * 	This description is used in the following locations:
-	 * 	<ul class='spaced-list'>
-	 * 		<li>The value returned by {@link RestRequest#getMethodDescription()}.
-	 * 		<li>The <js>"$R{methodDescription}"</js> variable.
-	 * 		<li>The description of the method in the OPTIONS page.
-	 * 	</ul>
+	 * 	This summary is used in the following locations:
+	 * <ul class='spaced-list'>
+	 * 	<li>The value returned by {@link RestRequest#getMethodSummary()}.
+	 * 	<li>The <js>"$R{methodSummary}"</js> variable.
+	 * 	<li>The summary of the method in the Swagger page.
+	 * </ul>
 	 * <p>
 	 * 	The default value pulls the description from the <code>(className.?)[javaMethodName]</code> entry in the servlet resource bundle.
-	 * 	(e.g. <js>"MyClass.myMethod = foo"</js> or <js>"myMethod = foo"</js>).
+	 * 	(e.g. <js>"MyClass.myMethod.summary = foo"</js> or <js>"myMethod.summary = foo"</js>).
 	 * <p>
 	 * 	This field value can contain variables (e.g. "$L{my.localized.variable}").
+	 * <p>
+	 * 	Corresponds to the swagger field <code>/paths/{path}/{method}/summary</code>.
+	 */
+	String summary() default "";
+
+	/**
+	 * Optional description for the exposed API.
+	 * <p>
+	 * 	This description is used in the following locations:
+	 * <ul class='spaced-list'>
+	 * 	<li>The value returned by {@link RestRequest#getMethodDescription()}.
+	 * 	<li>The <js>"$R{methodDescription}"</js> variable.
+	 * 	<li>The description of the method in the Swagger page.
+	 * </ul>
+	 * <p>
+	 * 	The default value pulls the description from the <code>(className.?)[javaMethodName]</code> entry in the servlet resource bundle.
+	 * 	(e.g. <js>"MyClass.myMethod.description = foo"</js> or <js>"myMethod.description = foo"</js>).
+	 * <p>
+	 * 	This field value can contain variables (e.g. "$L{my.localized.variable}").
+	 * <p>
+	 * 	Corresponds to the swagger field <code>/paths/{path}/{method}/description</code>.
 	 */
 	String description() default "";
 
 	/**
-	 * Optional input description.
+	 * Optional external documentation information for the exposed API.
 	 * <p>
-	 * 	This annotation is provided for documentation purposes and is used to populate the method <js>"input"</js> column
-	 * 		on the OPTIONS page.
+	 * 	Used to populate the Swagger external documentation field.
 	 * <p>
-	 * Example:
+	 * 	A simplified JSON string with the following fields:
+	 * <p class='bcode'>
+	 * 	{
+	 * 		description: string,
+	 * 		url: string
+	 * 	}
+	 * </p>
+	 * <p>
+	 * 	Example:
+	 * <p class='bcode'>
+	 * 	<ja>@RestMethod</ja>(externalDocs=<js>"{url:'http://juneau.apache.org'}"</js>)
+	 * </p>
+	 * <p>
+	 * 	This field can contain variables (e.g. "$L{my.localized.variable}").
+	 * <p>
+	 * 	Corresponds to the swagger field <code>/paths/{path}/{method}/externalDocs</code>.
+	 */
+	String externalDocs() default "";
+
+	/**
+	 * Optional tagging information for the exposed API.
+	 * <p>
+	 * 	Used to populate the Swagger tags field.
+	 * <p>
+	 * 	A comma-delimited list of tags for API documentation control.
+	 * 	Tags can be used for logical grouping of operations by resources or any other qualifier.
+	 * <p>
+	 * 	Example:
+	 * <p class='bcode'>
+	 * 	<ja>@RestMethod</ja>(tags=<js>"foo,bar"</js>)
+	 * </p>
+	 * <p>
+	 * 	This field can contain variables (e.g. "$L{my.localized.variable}").
+	 * <p>
+	 * 	Corresponds to the swagger field <code>/paths/{path}/{method}/tags</code>.
+	 */
+	String tags() default "";
+
+	/**
+	 * Optional deprecated flag for the exposed API.
+	 * <p>
+	 * 	Used to populate the Swagger deprecated field.
+	 * <p>
+	 * 	Example:
+	 * <p class='bcode'>
+	 * 	<ja>@RestMethod</ja>(deprecated=<jk>true</jk>)
+	 * </p>
+	 * <p>
+	 * 	This field can contain variables (e.g. "$L{my.localized.variable}").
+	 * <p>
+	 * 	Corresponds to the swagger field <code>/paths/{path}/{method}/deprecated</code>.
+	 */
+	boolean deprecated() default false;
+
+	/**
+	 * Optional parameter descriptions.
+	 * <p>
+	 * 	This annotation is provided for documentation purposes and is used to populate the method <js>"parameters"</js> column
+	 * 		on the Swagger page.
+	 * <p>
+	 * 	Example:
 	 * <p class='bcode'>
 	 * 	<ja>@RestMethod</ja>(
 	 * 		name=<js>"POST"</js>, path=<js>"/{a}"</js>,
 	 * 		description=<js>"This is my method."</js>,
-	 * 		input={
-	 * 			<ja>@Var</ja>(category=<js>"attr"</js>, name=<js>"a"</js>, description=<js>"The 'a' attribute"</js>),
-	 * 			<ja>@Var</ja>(category=<js>"param"</js>, name=<js>"b"</js>, description=<js>"The 'b' parameter"</js>),
-	 * 			<ja>@Var</ja>(category=<js>"content"</js>, description=<js>"The HTTP content"</js>),
-	 * 			<ja>@Var</ja>(category=<js>"header"</js>, name=<js>"D"</js>, description=<js>"The 'D' header"</js>),
-	 * 			<ja>@Var</ja>(category=<js>"foo"</js>, name=<js>"bar"</js>, description=<js>"An arbitrary category"</js>)
+	 * 		parameters={
+	 * 			<ja>@Var</ja>(in=<js>"path"</js>, name=<js>"a"</js>, description=<js>"The 'a' attribute"</js>),
+	 * 			<ja>@Var</ja>(in=<js>"query"</js>, name=<js>"b"</js>, description=<js>"The 'b' parameter"</js>, required=<jk>true</jk>),
+	 * 			<ja>@Var</ja>(in=<js>"body"</js>, description=<js>"The HTTP content"</js>),
+	 * 			<ja>@Var</ja>(in=<js>"header"</js>, name=<js>"D"</js>, description=<js>"The 'D' header"</js>),
 	 * 		}
 	 * 	)
 	 * </p>
-	 * This is functionally equivalent to specifying the following keys in the resource bundle for the class, except in this case
-	 * the strings are internationalized.
+	 * 	This is functionally equivalent to specifying the following keys in the resource bundle for the class, except in this case
+	 * 	the strings are internationalized.
 	 * <p class='bcode'>
 	 * 	<jk>MyClass.myMethod</jk> = <js>This is my method.</js>
-	 * 	<jk>MyClass.myMethod.req.attr.a</jk> = <js>The 'a' attribute</js>
-	 * 	<jk>MyClass.myMethod.req.param.b</jk> = <js>The 'b' parameter</js>
-	 * 	<jk>MyClass.myMethod.req.content</jk> = <js>The HTTP content</js>
-	 * 	<jk>MyClass.myMethod.req.header.d</jk> = <js>The 'D' header</js>
-	 * 	<jk>MyClass.myMethod.req.foo.bar</jk> = <js>An arbitrary category</js>
+	 * 	<jk>MyClass.myMethod.parameters.path.a.description</jk> = <js>The 'a' attribute</js>
+	 * 	<jk>MyClass.myMethod.parameters.query.b.description</jk> = <js>The 'b' parameter</js>
+	 * 	<jk>MyClass.myMethod.parameters.body.description</jk> = <js>The HTTP content</js>
+	 * 	<jk>MyClass.myMethod.parameters.header.d.description</jk> = <js>The 'D' header</js>
 	 * <p>
-	 * As a general rule, use annotations when you don't care about internationalization (i.e. you only want to support English),
-	 * and use resource bundles if you need to support localization.
+	 * 	As a general rule, use annotations when you don't care about internationalization (i.e. you only want to support English),
+	 * 	and use resource bundles if you need to support localization.
 	 * <p>
 	 * 	These annotations can contain variables (e.g. "$L{my.localized.variable}").
+	 * <p>
+	 * 	Corresponds to the swagger field <code>/paths/{path}/{method}/parameters</code>.
 	 */
-	Var[] input() default {};
-
+	Var[] parameters() default {};
 
 	/**
 	 * Optional output description.
 	 * <p>
 	 * 	This annotation is provided for documentation purposes and is used to populate the method <js>"responses"</js> column
-	 * 		on the OPTIONS page.
+	 * 		on the Swagger page.
 	 * <p>
-	 * Example:
+	 * 	Example:
 	 * <p class='bcode'>
 	 * 	<ja>@RestMethod</ja>(
 	 * 		name=<js>"GET"</js>, path=<js>"/"</js>,
@@ -369,15 +428,15 @@ public @interface RestMethod {
 	 * 		}
 	 * 	)
 	 * </p>
-	 * This is functionally equivalent to specifying the following keys in the resource bundle for the class, except in this case
-	 * the strings are internationalized.
+	 * 	This is functionally equivalent to specifying the following keys in the resource bundle for the class, except in this case
+	 * 	the strings are internationalized.
 	 * <p class='bcode'>
 	 * 	<jk>MyClass.myMethod.res.200</jk> = <js>OK</js>
 	 * 	<jk>MyClass.myMethod.res.302</jk> = <js>Thing wasn't found here</js>
 	 * 	<jk>MyClass.myMethod.res.302.header.Location</jk> = <js>The place to find the thing</js>
 	 * <p>
-	 * As a general rule, use annotations when you don't care about internationalization (i.e. you only want to support English),
-	 * and use resource bundles if you need to support localization.
+	 * 	As a general rule, use annotations when you don't care about internationalization (i.e. you only want to support English),
+	 * 	and use resource bundles if you need to support localization.
 	 * <p>
 	 * 	These annotations can contain variables (e.g. "$L{my.localized.variable}").
 	 */

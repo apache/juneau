@@ -449,7 +449,7 @@
 		 * Replaces the schema document with the specified content, and then mirrors it as the response. 
 		 */</jd>
 		<ja>@RestMethod</ja>(name=<js>"PUT"</js>, path=<js>"/"</js>)
-		<jk>public</jk> Schema setSchema(<ja>@Content</ja> Schema schema) <jk>throws</jk> Exception {
+		<jk>public</jk> Schema setSchema(<ja>@Body</ja> Schema schema) <jk>throws</jk> Exception {
 			<jk>this</jk>.<jf>schema</jf> = schema;
 			<jk>return</jk> <jk>this</jk>.<jf>schema</jf>;
 		}

@@ -44,7 +44,7 @@ public class CodeFormatterResource extends Resource {
 
 	/** [POST /] - Execute SQL query. */
 	@RestMethod(name="POST", path="/")
-	public String executeQuery(@Param("code") String code, @Param("lang") String lang) throws Exception {
+	public String executeQuery(@FormData("code") String code, @FormData("lang") String lang) throws Exception {
 		return SourceResource.highlight(code, lang);
 	}
 }

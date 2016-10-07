@@ -26,7 +26,7 @@ public class NoParserInputTest {
 	private static boolean debug = false;
 
 	//====================================================================================================
-	// @Content annotated InputStream.
+	// @Body annotated InputStream.
 	//====================================================================================================
 	@Test
 	public void testInputStream() throws Exception {
@@ -38,7 +38,7 @@ public class NoParserInputTest {
 	}
 
 	//====================================================================================================
-	// @Content annotated Reader.
+	// @Body annotated Reader.
 	//====================================================================================================
 	@Test
 	public void testReader() throws Exception {
@@ -50,7 +50,7 @@ public class NoParserInputTest {
 	}
 
 	//====================================================================================================
-	// @Content annotated PushbackReader.
+	// @Body annotated PushbackReader.
 	// This should always fail since the servlet reader is not a pushback reader.
 	//====================================================================================================
 	@Test

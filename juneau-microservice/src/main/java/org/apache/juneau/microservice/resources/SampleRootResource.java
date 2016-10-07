@@ -22,7 +22,7 @@ import org.apache.juneau.server.annotation.*;
  */
 @RestResource(
 	path="/",
-	label="Sample Root Resource",
+	title="Sample Root Resource",
 	description="This is a sample router page",
 	children={ConfigResource.class,LogsResource.class}
 )

@@ -43,7 +43,7 @@ public class SourceResource extends Resource {
 
 	/** View source on the specified classes. */
 	@RestMethod(name="GET", path="/")
-	public Object getSource(@Param("classes") String[] classes) throws Exception {
+	public Object getSource(@Query("classes") String[] classes) throws Exception {
 		if (classes == null)
 			return "Specify classes using ?classes=(class1,class2,....) attribute";
 		List<Object> l = new LinkedList<Object>();

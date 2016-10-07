@@ -67,7 +67,7 @@ public class SqlQueryResource extends Resource {
 
 	/** POST request handler - Execute the query. */
 	@RestMethod(name="POST", path="/")
-	public List<Object> doPost(@Content PostInput in) throws Exception {
+	public List<Object> doPost(@Body PostInput in) throws Exception {
 
 		List<Object> results = new LinkedList<Object>();
 

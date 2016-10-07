@@ -38,7 +38,7 @@ import org.apache.juneau.transforms.*;
  */
 @RestResource(
 	path="/logs",
-	label="Log files",
+	title="Log files",
 	description="Log files from this service",
 	properties={
 		@Property(name=HTML_uriAnchorText, value=PROPERTY_NAME),
@@ -78,7 +78,7 @@ public class LogsResource extends Resource {
 	 * @return The log file.
 	 * @throws Exception
 	 */
-	@RestMethod(name="GET", path="/*", rc={200,404})
+	@RestMethod(name="GET", path="/*", responses={@Response(200),@Response(404)})
 	public Object getFileOrDirectory(RestRequest req, @Properties ObjectMap properties, @PathRemainder String path) throws Exception {
 
 		File f = getFile(path);
@@ -115,9 +115,9 @@ public class LogsResource extends Resource {
 	 * @param severity Optional severity filter.  Only show log entries with the specified severity.  Example: "&severity=(ERROR,WARN)".
 	 * @throws Exception
 	 */
-	@RestMethod(name="VIEW", path="/*", rc={200,404})
+	@RestMethod(name="VIEW", path="/*", responses={@Response(200),@Response(404)})
 	@SuppressWarnings("nls")
-	public void viewFile(RestRequest req, RestResponse res, @PathRemainder String path, @Properties ObjectMap properties, @Param("highlight") boolean highlight, @Param("start") String start, @Param("end") String end, @Param("thread") String thread, @Param("loggers") String[] loggers, @Param("severity") String[] severity) throws Exception {
+	public void viewFile(RestRequest req, RestResponse res, @PathRemainder String path, @Properties ObjectMap properties, @Query("highlight") boolean highlight, @Query("start") String start, @Query("end") String end, @Query("thread") String thread, @Query("loggers") String[] loggers, @Query("severity") String[] severity) throws Exception {
 
 		File f = getFile(path);
 		if (f.isDirectory())
@@ -188,8 +188,8 @@ public class LogsResource extends Resource {
 	 * @return The parsed contents of the log file.
 	 * @throws Exception
 	 */
-	@RestMethod(name="PARSE", path="/*", converters=Queryable.class, rc={200,404})
-	public LogParser viewParsedEntries(RestRequest req, @PathRemainder String path, @Param("start") String start, @Param("end") String end, @Param("thread") String thread, @Param("loggers") String[] loggers, @Param("severity") String[] severity) throws Exception {
+	@RestMethod(name="PARSE", path="/*", converters=Queryable.class, responses={@Response(200),@Response(404)})
+	public LogParser viewParsedEntries(RestRequest req, @PathRemainder String path, @Query("start") String start, @Query("end") String end, @Query("thread") String thread, @Query("loggers") String[] loggers, @Query("severity") String[] severity) throws Exception {
 
 		File f = getFile(path);
 		Date startDate = StringUtils.parseISO8601Date(start), endDate = StringUtils.parseISO8601Date(end);
@@ -208,7 +208,7 @@ public class LogsResource extends Resource {
 	 * @return The contents of the log file.
 	 * @throws Exception
 	 */
-	@RestMethod(name="DOWNLOAD", path="/*", rc={200,404})
+	@RestMethod(name="DOWNLOAD", path="/*", responses={@Response(200),@Response(404)})
 	public Object downloadFile(RestResponse res, @PathRemainder String path) throws Exception {
 
 		File f = getFile(path);
@@ -228,7 +228,7 @@ public class LogsResource extends Resource {
 	 * @return A redirect object to the root.
 	 * @throws Exception
 	 */
-	@RestMethod(name="DELETE", path="/*", rc={200,404})
+	@RestMethod(name="DELETE", path="/*", responses={@Response(200),@Response(404)})
 	public Object deleteFile(@PathRemainder String path) throws Exception {
 
 		File f = getFile(path);

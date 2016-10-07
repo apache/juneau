@@ -15,17 +15,19 @@ package org.apache.juneau.server.annotation;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
-import java.io.*;
 import java.lang.annotation.*;
+
+import org.apache.juneau.server.*;
 
 /**
  * Annotation that can be applied to a parameter of a {@link RestMethod} annotated method
- * 	to identify it as the HTTP request body converted to a POJO.
- *
+ * 	to identify whether or not the request has the specified multipart form POST parameter.
+ * <p>
+ * Note that this can be used to detect the existence of a parameter when it's not set to a particular value.
  * <h6 class='topic'>Example</h6>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<js>"POST"</js>)
- * 	<jk>public void</jk> doPostPerson(RestRequest req, RestResponse res, <ja>@Content</ja> Person person) {
+ * 	<jk>public void</jk> doPost(<ja>@HasFormData</ja>(<js>"p1"</js>) <jk>boolean</jk> p1) {
  * 		...
  * 	}
  * </p>
@@ -34,25 +36,60 @@ import java.lang.annotation.*;
  * </p>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<js>"POST"</js>)
- * 	<jk>public void</jk> doPostPerson(RestRequest req, RestResponse res) {
- * 		Person person = req.getInput(Person.<jk>class</jk>);
+ * 	<jk>public void</jk> doPost(RestRequest req) {
+ * 		<jk>boolean</jk> p1 = req.hasFormData(<js>"p1"</js>);
  * 		...
  * 	}
  * </p>
  * <p>
- * 	{@link Reader Readers} and {@link InputStream InputStreams} can also be specified as content parameters.
- * 	When specified, any registered parsers are bypassed.
- * </p>
- * <p class='bcode'>
- * 	<ja>@RestMethod</ja>(name=<js>"POST"</js>)
- * 	<jk>public void</jk> doPostPerson(<ja>@Header</ja> String mediaType, <ja>@Content</ja> InputStream input) {
- * 		...
- * 	}
- * </p>
+ * The following table shows the behavioral differences between <code>@HasFormData</code> and <code>@FormData</code>...
+ * <table class='styled'>
+ * 	<tr>
+ * 		<th><code>Body content</code></th>
+ * 		<th><code><ja>@HasFormData</ja>(<js>"a"</js>)</code></th>
+ * 		<th><code><ja>@FormData</ja>(<js>"a"</js>)</code></th>
+ * 	</tr>
+ * 	<tr>
+ * 		<td><code>a=foo</code></td>
+ * 		<td><code><jk>true</jk></td>
+ * 		<td><code><js>"foo"</js></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td><code>a=</code></td>
+ * 		<td><code><jk>true</jk></td>
+ * 		<td><code><js>""</js></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td><code>a</code></td>
+ * 		<td><code><jk>true</jk></td>
+ * 		<td><code><jk>null</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td><code>b=foo</code></td>
+ * 		<td><code><jk>false</jk></td>
+ * 		<td><code><jk>null</jk></td>
+ * 	</tr>
+ * </table>
+ *
+ * <h6 class='topic'>Important note concerning FORM posts</h6>
+ * <p>
+ * This annotation should not be combined with the {@link Body @Body} annotation or {@link RestRequest#getBody(Class)} method
+ * 	for <code>application/x-www-form-urlencoded POST</code> posts, since it will trigger the underlying servlet API to parse the body
+ * 	content as key-value pairs, resulting in empty content.
+ * <p>
+ * The {@link HasQuery @HasQuery} annotation can be used to check for the existing of a URL parameter
+ * 	in the URL string without triggering the servlet to drain the body content.
+ *
  * @author James Bognar (james.bognar@salesforce.com)
  */
 @Documented
 @Target(PARAMETER)
 @Retention(RUNTIME)
 @Inherited
-public @interface Content {}
+public @interface HasFormData {
+
+	/**
+	 * URL parameter name.
+	 */
+	String value();
+}

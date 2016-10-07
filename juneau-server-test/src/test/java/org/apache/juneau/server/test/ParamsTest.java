@@ -173,7 +173,7 @@ public class ParamsTest {
 	}
 
 	//====================================================================================================
-	// @Param annotation - GET
+	// @FormData annotation - GET
 	//====================================================================================================
 	@Test
 	public void testParamGet() throws Exception {
@@ -210,7 +210,7 @@ public class ParamsTest {
 	}
 
 	//====================================================================================================
-	// @Param(format=PLAIN) annotation - GET
+	// @FormData(format=PLAIN) annotation - GET
 	//====================================================================================================
 	@Test
 	public void testPlainParamGet() throws Exception {
@@ -228,7 +228,7 @@ public class ParamsTest {
 	}
 
 	//====================================================================================================
-	// @Param annotation - POST
+	// @FormData annotation - POST
 	//====================================================================================================
 	@Test
 	public void testParamPost() throws Exception {
@@ -264,7 +264,7 @@ public class ParamsTest {
 	}
 
 	//====================================================================================================
-	// @Param(format=PLAIN) annotation - POST
+	// @FormData(format=PLAIN) annotation - POST
 	//====================================================================================================
 	@Test
 	public void testPlainParamPost() throws Exception {
@@ -290,7 +290,7 @@ public class ParamsTest {
 	}
 
 	//====================================================================================================
-	// @QParam annotation - GET
+	// @Query annotation - GET
 	//====================================================================================================
 	@Test
 	public void testQParamGet() throws Exception {
@@ -327,7 +327,7 @@ public class ParamsTest {
 	}
 
 	//====================================================================================================
-	// @QParam(format=PLAIN) annotation - GET
+	// @Query(format=PLAIN) annotation - GET
 	//====================================================================================================
 	@Test
 	public void testPlainQParamGet() throws Exception {
@@ -345,7 +345,7 @@ public class ParamsTest {
 	}
 
 	//====================================================================================================
-	// @QParam annotation - POST
+	// @Query annotation - POST
 	//====================================================================================================
 	@Test
 	public void testQParamPost() throws Exception {
@@ -381,7 +381,7 @@ public class ParamsTest {
 	}
 
 	//====================================================================================================
-	// @HasParam annotation - GET
+	// @HasQuery annotation - GET
 	//====================================================================================================
 	@Test
 	public void testHasParamGet() throws Exception {
@@ -418,7 +418,7 @@ public class ParamsTest {
 	}
 
 	//====================================================================================================
-	// @HasParam annotation - POST
+	// @HasQuery annotation - POST
 	//====================================================================================================
 	@Test
 	public void testHasParamPost() throws Exception {
@@ -454,7 +454,7 @@ public class ParamsTest {
 	}
 
 	//====================================================================================================
-	// @HasQParam annotation - GET
+	// @HasQuery annotation - GET
 	//====================================================================================================
 	@Test
 	public void testHasQParamGet() throws Exception {
@@ -491,7 +491,7 @@ public class ParamsTest {
 	}
 
 	//====================================================================================================
-	// @HasQParam annotation - POST
+	// @HasQuery annotation - POST
 	//====================================================================================================
 	@Test
 	public void testHasQParamPost() throws Exception {
@@ -527,7 +527,7 @@ public class ParamsTest {
 	}
 
 	//====================================================================================================
-	// Form POSTS with @Content parameter
+	// Form POSTS with @Body parameter
 	//====================================================================================================
 	@Test
 	public void testFormPostAsContent() throws Exception {
@@ -551,7 +551,7 @@ public class ParamsTest {
 	}
 
 	//====================================================================================================
-	// Test @Param and @QParam annotations when using multi-part parameters (e.g. &key=val1,&key=val2).
+	// Test @FormData and @Query annotations when using multi-part parameters (e.g. &key=val1,&key=val2).
 	//====================================================================================================
 	@Test
 	public void testMultiPartParams() throws Exception {

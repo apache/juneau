@@ -191,7 +191,7 @@ public class UrlEncodingSerializer extends UonSerializer {
 	/**
 	 * Equivalent to <code><jk>new</jk> UrlEncodingSerializer().setProperty(UonSerializerContext.<jsf>UON_simpleMode</jsf>,<jk>true</jk>);</code>.
 	 */
-	@Produces(value={"application/x-www-form-urlencoded-simple"},contentType="application/x-www-form-urlencoded")
+	@Produces(value="application/x-www-form-urlencoded-simple",contentType="application/x-www-form-urlencoded")
 	public static class Simple extends UrlEncodingSerializer {
 		/** Constructor */
 		public Simple() {
@@ -202,7 +202,7 @@ public class UrlEncodingSerializer extends UonSerializer {
 	/**
 	 * Equivalent to <code><jk>new</jk> UrlEncodingSerializer().setProperty(UonSerializerContext.<jsf>UON_simpleMode</jsf>,<jk>true</jk>).setProperty(UonSerializerContext.<jsf>URLENC_expandedParams</jsf>,<jk>true</jk>);</code>.
 	 */
-	@Produces(value={"application/x-www-form-urlencoded-simple"},contentType="application/x-www-form-urlencoded")
+	@Produces(value="application/x-www-form-urlencoded-simple",contentType="application/x-www-form-urlencoded")
 	public static class SimpleExpanded extends Simple {
 		/** Constructor */
 		public SimpleExpanded() {

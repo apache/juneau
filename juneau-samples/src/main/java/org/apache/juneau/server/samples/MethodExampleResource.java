@@ -40,15 +40,15 @@ public class MethodExampleResource extends Resource {
 	}
 
 	/** Example GET request using annotated attributes */
-	@RestMethod(name="GET", path="/example1/{a1}/{a2}/{a3}/*", rc={200})
+	@RestMethod(name="GET", path="/example1/{a1}/{a2}/{a3}/*", responses={@Response(200)})
 	public String doGetExample1(
 			@Method String method,
-			@Attr String a1,
-			@Attr int a2,
-			@Attr UUID a3,
-			@Param("p1") int p1,
-			@Param("p2") String p2,
-			@Param("p3") UUID p3,
+			@Path String a1,
+			@Path int a2,
+			@Path UUID a3,
+			@Query("p1") int p1,
+			@Query("p2") String p2,
+			@Query("p3") UUID p3,
 			@PathRemainder String remainder,
 			@Header("Accept-Language") String lang,
 			@Header("Accept") String accept,
@@ -61,7 +61,7 @@ public class MethodExampleResource extends Resource {
 	}
 
 	/** Example GET request using methods on RestRequest and RestResponse */
-	@RestMethod(name="GET", path="/example2/{a1}/{a2}/{a3}/*", rc={200})
+	@RestMethod(name="GET", path="/example2/{a1}/{a2}/{a3}/*", responses={@Response(200)})
 	public void doGetExample2(RestRequest req, RestResponse res) throws Exception {
 		String method = req.getMethod();
 

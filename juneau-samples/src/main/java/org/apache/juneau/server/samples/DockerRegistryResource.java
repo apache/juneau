@@ -30,7 +30,7 @@ import org.apache.juneau.server.labels.*;
  */
 @RestResource(
 	path="/docker",
-	label="Sample Docker resource",
+	title="Sample Docker resource",
 	properties={
 		@Property(name=HTMLDOC_links, value="{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$R{servletParentURI}/source?classes=(org.apache.juneau.server.samples.AtomFeedResource)'}")
 	}
@@ -69,7 +69,7 @@ public class DockerRegistryResource extends Resource {
 	 * Replaces the feed with the specified content, and then mirrors it as the response.
 	 */
 	@RestMethod(name="GET", path="/search")
-	public QueryResults query(@Param("q") String q) throws Exception {
+	public QueryResults query(@Query("q") String q) throws Exception {
 		String url = registryUrl + "/search" + (q == null ? "" : "?q=" + q);
 		synchronized(rc) {
 			return rc.doGet(url).getResponse(QueryResults.class);

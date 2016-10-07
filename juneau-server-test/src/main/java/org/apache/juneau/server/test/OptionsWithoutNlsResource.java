@@ -12,9 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.server.test;
 
+import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.server.*;
 import org.apache.juneau.server.annotation.*;
-import org.apache.juneau.server.labels.*;
 
 /**
  * JUnit automated testcase resource.
@@ -29,8 +29,8 @@ public class OptionsWithoutNlsResource extends RestServletDefault {
 	// Should get to the options page without errors
 	//====================================================================================================
 	@RestMethod(name="OPTIONS", path="/testOptions/*")
-	public ResourceOptions testOptions(RestRequest req) {
-		return new ResourceOptions(this, req);
+	public Swagger testOptions(RestRequest req) {
+		return req.getSwagger();
 	}
 
 	//====================================================================================================

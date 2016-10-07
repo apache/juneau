@@ -29,12 +29,12 @@ public class UrlContentResource extends RestServlet {
 	private static final long serialVersionUID = 1L;
 
 	@RestMethod(name="GET", path="/testString")
-	public String testString(@Content String content) {
+	public String testString(@Body String content) {
 		return String.format("class=%s, value=%s", content.getClass().getName(), content.toString());
 	}
 
 	@RestMethod(name="GET", path="/testEnum")
-	public String testEnum(@Content TestEnum content) {
+	public String testEnum(@Body TestEnum content) {
 		return String.format("class=%s, value=%s", content.getClass().getName(), content.toString());
 	}
 
@@ -43,7 +43,7 @@ public class UrlContentResource extends RestServlet {
 	}
 
 	@RestMethod(name="GET", path="/testBean")
-	public String testBean(@Content TestBean content) throws Exception {
+	public String testBean(@Body TestBean content) throws Exception {
 		return String.format("class=%s, value=%s", content.getClass().getName(), JsonSerializer.DEFAULT_LAX.serialize(content));
 	}
 
@@ -53,7 +53,7 @@ public class UrlContentResource extends RestServlet {
 	}
 
 	@RestMethod(name="GET", path="/testInt")
-	public String testString(@Content Integer content) {
+	public String testString(@Body Integer content) {
 		return String.format("class=%s, value=%s", content.getClass().getName(), content.toString());
 	}
 }

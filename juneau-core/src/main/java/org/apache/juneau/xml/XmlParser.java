@@ -53,7 +53,7 @@ import org.apache.juneau.xml.annotation.*;
  * @author James Bognar (james.bognar@salesforce.com)
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })
-@Consumes({"text/xml","application/xml"})
+@Consumes("text/xml,application/xml")
 public class XmlParser extends ReaderParser {
 
 	/** Default parser, all default settings.*/

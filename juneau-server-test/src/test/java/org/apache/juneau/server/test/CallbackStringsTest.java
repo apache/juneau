@@ -20,7 +20,7 @@ import org.junit.*;
 public class CallbackStringsTest {
 
 	//====================================================================================================
-	// Basic tests using &Content parameter
+	// Basic tests using @Body parameter
 	//====================================================================================================
 	@Test
 	public void test() throws Exception {

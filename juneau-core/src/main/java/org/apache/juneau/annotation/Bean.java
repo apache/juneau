@@ -109,14 +109,14 @@ public @interface Bean {
 	 * 		<p class='bcode'>
 	 * 	<jc>// Address class with only street/city/state properties (in that order).</jc>
 	 * 	<jc>// All other properties are ignored.</jc>
-	 * 	<ja>@Bean</ja>(properties={<js>"street"</js>,<js>"city"</js>,<js>"state"</js>})
+	 * 	<ja>@Bean</ja>(properties=<js>"street,city,state"</js>)
 	 * 	<jk>public class</jk> Address {
 	 * 	...
 	 * 		</p>
 	 * 	</dd>
 	 * </dl>
 	 */
-	String[] properties() default {};
+	String properties() default "";
 
 	/**
 	 * Sort bean properties in alphabetical order.
@@ -147,14 +147,14 @@ public @interface Bean {
 	 * 		<p class='bcode'>
 	 * 	<jc>// Address class with only street/city/state properties (in that order).</jc>
 	 * 	<jc>// All other properties are ignored.</jc>
-	 * 	<ja>@Bean</ja>(excludeProperties={<js>"city"</js>,<js>"state"</js>})
+	 * 	<ja>@Bean</ja>(excludeProperties=<js>"city,state"</js>})
 	 * 	<jk>public class</jk> Address {
 	 * 		...
 	 * 		</p>
 	 * 	</dd>
 	 * </dl>
 	 */
-	String[] excludeProperties() default {};
+	String excludeProperties() default "";
 
 	/**
 	 * Associates a {@link PropertyNamer} with this bean to tailor the names of the bean properties.

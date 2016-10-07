@@ -27,6 +27,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.encoders.Encoder;
 import org.apache.juneau.ini.*;
@@ -34,8 +35,6 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.server.labels.*;
-import org.apache.juneau.server.labels.Var;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.utils.*;
@@ -69,7 +68,7 @@ import org.apache.juneau.utils.*;
 public final class RestRequest extends HttpServletRequestWrapper {
 
 	private final RestServlet servlet;
-	private String method, pathRemainder, content;
+	private String method, pathRemainder, body;
 	Method javaMethod;
 	private ObjectMap properties;
 	private SerializerGroup serializerGroup;
@@ -87,6 +86,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	private String charset, defaultCharset;
 	private ObjectMap headers;
 	private ConfigFile cf;
+	private Swagger swagger, fileSwagger;
 
 	/**
 	 * Constructor.
@@ -114,8 +114,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			if (! StringUtils.isEmpty(m) && (servlet.context.allowMethodParams.contains(m) || servlet.context.allowMethodParams.contains("*")))
 				method = m;
 
-			if (servlet.context.allowContentParam)
-				content = getQueryParameter("content");
+			if (servlet.context.allowBodyParam)
+				body = getQueryParameter("body");
 
 			defaultServletHeaders = servlet.getDefaultRequestHeaders();
 
@@ -205,7 +205,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	public String getMediaType() {
 		String cm = getHeader("Content-Type");
 		if (cm == null) {
-			if (content != null)
+			if (body != null)
 				return "text/uon";
 			return "text/json";
 		}
@@ -1084,7 +1084,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Same as {@link #getInput(ClassMeta)}, except a shortcut for passing in regular {@link Class} objects
+	 * Same as {@link #getBody(ClassMeta)}, except a shortcut for passing in regular {@link Class} objects
 	 * 	instead of having to look up {@link ClassMeta} objects.
 	 *
 	 * @param type The class type to instantiate.
@@ -1093,27 +1093,27 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @throws IOException If a problem occurred trying to read from the reader.
 	 * @throws ParseException If the input contains a syntax error or is malformed for the requested {@code Accept} header or is not valid for the specified type.
 	 */
-	public <T> T getInput(Class<T> type) throws IOException, ParseException {
-		return getInput(beanContext.getClassMeta(type));
+	public <T> T getBody(Class<T> type) throws IOException, ParseException {
+		return getBody(beanContext.getClassMeta(type));
 	}
 
 	/**
-	 * Same as {@link #getInput(Class)} except works on parameterized
+	 * Same as {@link #getBody(Class)} except works on parameterized
 	 * types such as those returned by {@link Method#getGenericParameterTypes()}
 	 *
 	 * @param type The class type to instantiate.
 	 * @param <T> The class type to instantiate.
 	 * @return The input parsed to a POJO.
 	 */
-	public <T> T getInput(Type type) {
-		return (T)getInput(beanContext.getClassMeta(type));
+	public <T> T getBody(Type type) {
+		return (T)getBody(beanContext.getClassMeta(type));
 	}
 
 	/**
 	 * Reads the input from the HTTP request as JSON, XML, or HTML and converts the input to the specified class type.
 	 * <p>
 	 * 	If {@code allowHeaderParams} init parameter is <jk>true</jk>, then first looks
-	 * 	for {@code &content=xxx} in the URL query string.
+	 * 	for {@code &body=xxx} in the URL query string.
 	 * <p>
 	 * 	If type is <jk>null</jk> or <code>Object.<jk>class</jk></code>, then the actual type will be determined automatically based on the
 	 * 	following input:
@@ -1164,7 +1164,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return The input parsed to a POJO.
 	 * @throws RestException If a problem occurred trying to read the input.
 	 */
-	public <T> T getInput(ClassMeta<T> type) throws RestException {
+	public <T> T getBody(ClassMeta<T> type) throws RestException {
 
 		try {
 			if (type.isReader())
@@ -1242,16 +1242,16 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * Returns the HTTP body content as a plain string.
 	 * <p>
 	 * 	If {@code allowHeaderParams} init parameter is true, then first looks
-	 * 	for {@code &content=xxx} in the URL query string.
+	 * 	for {@code &body=xxx} in the URL query string.
 	 *
 	 * @return The incoming input from the connection as a plain string.
 	 * @throws IOException If a problem occurred trying to read from the reader.
 	 */
-	public String getInputAsString() throws IOException {
-		if (content != null)
-			return content;
-		content = IOUtils.read(getReader()).toString();
-		return content;
+	public String getBodyAsString() throws IOException {
+		if (body != null)
+			return body;
+		body = IOUtils.read(getReader()).toString();
+		return body;
 	}
 
 	/**
@@ -1279,7 +1279,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * Returns the HTTP body content as a {@link Reader}.
 	 * <p>
 	 * 	If {@code allowHeaderParams} init parameter is true, then first looks
-	 * 	for {@code &content=xxx} in the URL query string.
+	 * 	for {@code &body=xxx} in the URL query string.
 	 * <p>
 	 * 	Automatically handles GZipped input streams.
 	 */
@@ -1300,8 +1300,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @throws IOException
 	 */
 	protected Reader getUnbufferedReader() throws IOException {
-		if (content != null)
-			return new CharSequenceReader(content);
+		if (body != null)
+			return new CharSequenceReader(body);
 		return new InputStreamReader(getInputStream(), getCharacterEncoding());
 	}
 
@@ -1462,17 +1462,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Shortcut method for calling {@link RestServlet#getMethodDescriptions(RestRequest)} based
-	 * 	on the request locale.
-	 *
-	 * @return The localized method descriptions.
-	 * @throws RestServletException
-	 */
-	public Collection<MethodDescription> getMethodDescriptions() throws RestServletException {
-		return servlet.getMethodDescriptions(this);
-	}
-
-	/**
 	 * Returns the resource bundle for the request locale.
 	 *
 	 * @return The resource bundle.  Never <jk>null</jk>.
@@ -1621,13 +1610,13 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Returns the localized servlet label.
-	 * Equivalent to calling {@link RestServlet#getLabel(RestRequest)} with this object.
+	 * Returns the localized servlet title.
+	 * Equivalent to calling {@link RestServlet#getTitle(RestRequest)} with this object.
 	 *
 	 * @return The localized servlet label.
 	 */
-	public String getServletLabel() {
-		return servlet.getLabel(this);
+	public String getServletTitle() {
+		return servlet.getTitle(this);
 	}
 
 	/**
@@ -1638,6 +1627,16 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 */
 	public String getServletDescription() {
 		return servlet.getDescription(this);
+	}
+
+	/**
+	 * Returns the localized method summary.
+	 * Equivalent to calling {@link RestServlet#getMethodSummary(String, RestRequest)} with this object.
+	 *
+	 * @return The localized method description.
+	 */
+	public String getMethodSummary() {
+		return servlet.getMethodSummary(javaMethod.getName(), this);
 	}
 
 	/**
@@ -1683,7 +1682,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @throws IOException
 	 */
 	public ReaderResource getReaderResource(String name, boolean resolveVars, String contentType) throws IOException {
-		String s = servlet.getResourceAsString(name);
+		String s = servlet.getResourceAsString(name, getLocale());
 		if (s == null)
 			return null;
 		ReaderResource rr = new ReaderResource(s, contentType);
@@ -1728,6 +1727,35 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		return cf;
 	}
 
+	/**
+	 * Returns the localized swagger associated with the servlet.
+	 *
+	 * @return The swagger associated with the servlet.  Never <jk>null</jk>.
+	 */
+	public Swagger getSwagger() {
+		if (swagger == null)
+			swagger = servlet.getSwagger(this);
+		return swagger;
+	}
+
+	/**
+	 * Returns the localized Swagger from the file system.
+	 * <p>
+	 * Looks for a file called <js>"{ServletClass}_{locale}.json"</js> in the same package
+	 * as this servlet and returns it as a parsed {@link Swagger} object.
+	 * <p>
+	 * Returned objects are cached for later quick-lookup.
+	 *
+	 * @return The parsed swagger object, or <jk>null</jk> if the swagger file could not be found.
+	 */
+	protected Swagger getSwaggerFromFile() {
+		if (fileSwagger == null)
+			fileSwagger = servlet.getSwaggerFromFile(this.getLocale());
+		if (fileSwagger == null)
+			fileSwagger = Swagger.NULL;
+		return fileSwagger == Swagger.NULL ? null : fileSwagger;
+	}
+
 	@Override /* Object */
 	public String toString() {
 		StringBuilder sb = new StringBuilder("\n").append(getDescription()).append("\n");
@@ -1741,9 +1769,9 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			sb.append("\t").append(e.getKey()).append(": ").append(e.getValue()).append("\n");
 		}
 		if (method.equals("PUT") || method.equals("POST")) {
-			sb.append("---Content---\n");
+			sb.append("---Body---\n");
 			try {
-				sb.append(getInputAsString()).append("\n");
+				sb.append(getBodyAsString()).append("\n");
 			} catch (Exception e1) {
 				sb.append(e1.getLocalizedMessage());
 				servlet.log(WARNING, e1, "Error occurred while trying to read debug input.");

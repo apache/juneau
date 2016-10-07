@@ -33,7 +33,7 @@ import org.apache.juneau.*;
  * 		<jk>private final</jk> String <jf>name</jf>;
  * 		<jk>private final int</jk> <jf>age</jf>;
  *
- * 		<ja>@BeanConstructor</ja>(properties={<js>"name"</js>,<js>"age"</js>})
+ * 		<ja>@BeanConstructor</ja>(properties=<js>"name,age"</js>})
  * 		<jk>public</jk> Person(String name, <jk>int</jk> age) {
  * 			<jk>this</jk>.<jf>name</jf> = name;
  * 			<jk>this</jk>.<jf>age</jf> = age;
@@ -82,5 +82,5 @@ public @interface BeanConstructor {
 	 * <p>
 	 * 	The number of properties listed must match the number of arguments in the constructor.
 	 */
-	String[] properties() default {};
+	String properties() default "";
 }

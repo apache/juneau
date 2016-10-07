@@ -599,24 +599,24 @@
 			<li>Parameter of type {@link javax.servlet.http.HttpServletRequest}
 			<li>Parameter of type {@link org.apache.juneau.server.RestResponse}
 			<li>Parameter of type {@link javax.servlet.http.HttpServletResponse}
-			<li>Parameters annotated with {@link org.apache.juneau.server.annotation.Attr @Attr}
+			<li>Parameters annotated with {@link org.apache.juneau.server.annotation.Path @Path}
 				<br>These match variables in matched URL path patterns.
-			<li>Parameters annotated with with {@link org.apache.juneau.server.annotation.Param @Param}
-				<br>These denote query parameter values.
-			<li>Parameters annotated with {@link org.apache.juneau.server.annotation.HasParam @HasParam}
-				<br>Similar to <ja>@Param</ja>, but resolves to a simple boolean <jk>true/false</jk> denoting whether the query parameter exists.
-			<li>Parameters annotated with {@link org.apache.juneau.server.annotation.QParam @QParam} 
-				<br>Same as <ja>@Param</ja>, but only looks for actual query parameters, not form post query parameters.
+			<li>Parameters annotated with with {@link org.apache.juneau.server.annotation.FormData @FormData}
+				<br>These denote multipart form post parameter values.
+			<li>Parameters annotated with {@link org.apache.juneau.server.annotation.HasFormData @HasFormData}
+				<br>Similar to <ja>@FormData</ja>, but resolves to a simple boolean <jk>true/false</jk> denoting whether the form data parameter exists.
+			<li>Parameters annotated with {@link org.apache.juneau.server.annotation.Query @Query} 
+				<br>These denote query parameters.
 				<br>Using this prevents the HTTP body from being processed as a URL-Encoded form post.
-			<li>Parameters annotated with {@link org.apache.juneau.server.annotation.HasQParam @HasQParam}
-				<br>Similar to <ja>@QParam</ja>, but resolves to a simple boolean <jk>true/false</jk> denoting whether the query parameter exists.
+			<li>Parameters annotated with {@link org.apache.juneau.server.annotation.HasQuery @HasQuery}
+				<br>Similar to <ja>@Query</ja>, but resolves to a simple boolean <jk>true/false</jk> denoting whether the query parameter exists.
 			<li>Parameters annotated with {@link org.apache.juneau.server.annotation.Header @Header}
 				<br>These denote header values.
 			<li>Parameter annotated with {@link org.apache.juneau.server.annotation.Method @Method} 
 				<br>This denotes the HTTP method name.
 			<li>Parameter annotated with {@link org.apache.juneau.server.annotation.PathRemainder @PathRemainder}
 				<br>This denotes the path remainder value after path pattern match.
-			<li>Parameter annotated with {@link org.apache.juneau.server.annotation.Content @Content} 
+			<li>Parameter annotated with {@link org.apache.juneau.server.annotation.Body @Body} 
 				<br>This denotes the HTTP content parsed as a POJO.
 				<br>The type can be any parsable POJO type as defined in <a class='doclink' href='../../../../overview-summary.html#Core.PojoCategories'>POJO Categories</a>
 			<li>Parameter annotated with {@link org.apache.juneau.server.annotation.Messages @Messages} 
@@ -631,13 +631,13 @@
 		RestRequest req,
 		RestResponse res,
 		<ja>@Method</ja> String method,
-		<ja>@Attr</ja> String a1,
-		<ja>@Attr</ja> <jk>int</jk> a2,
-		<ja>@Attr</ja> UUID a3,
-		<ja>@Param</ja>(<js>"p1"</js>) <jk>int</jk> p1,
-		<ja>@Param</ja>(<js>"p2"</js>) String p2,
-		<ja>@Param</ja>(<js>"p3"</js>) UUID p3,
-		<ja>@HasParam</ja>(<js>"p3"</js>) boolean hasP3,
+		<ja>@Path</ja> String a1,
+		<ja>@Path</ja> <jk>int</jk> a2,
+		<ja>@Path</ja> UUID a3,
+		<ja>@Query</ja>(<js>"p1"</js>) <jk>int</jk> p1,
+		<ja>@Query</ja>(<js>"p2"</js>) String p2,
+		<ja>@Query</ja>(<js>"p3"</js>) UUID p3,
+		<ja>@HasQuery</ja>(<js>"p3"</js>) boolean hasP3,
 		<ja>@PathRemainder</ja> String remainder,
 		<ja>@Header</ja>(<js>"Accept-Language"</js>) String lang,
 		<ja>@Header</ja>(<js>"Accept"</js>) String accept,
@@ -649,7 +649,7 @@
 	}
 		</p>
 		<p>
-			All the annotated parameters (with the exception of <l>@Content</l>) can be any POJO type convertable from a <l>String</l>.
+			All the annotated parameters (with the exception of <l>@Body</l>) can be any POJO type convertable from a <l>String</l>.
 			(See <a class='doclink' href='#PojosConvertableFromString'>POJOs Convertable From String</a>)
 		</p>
 		<p>
@@ -671,7 +671,7 @@
 			<li class='m'>{@link org.apache.juneau.server.RestRequest#hasParameter(String)}
 			<li class='m'>{@link org.apache.juneau.server.RestRequest#getQueryParameter(String,Class)}
 			<li class='m'>{@link org.apache.juneau.server.RestRequest#hasQueryParameter(String)}
-			<li class='m'>{@link org.apache.juneau.server.RestRequest#getInput(Class)}
+			<li class='m'>{@link org.apache.juneau.server.RestRequest#getBody(Class)}
 			<li class='m'>{@link org.apache.juneau.server.RestRequest#getHeader(String,Class)}
 			<li class='m'>{@link org.apache.juneau.server.RestRequest#getMethod()}
 			<li class='m'>{@link org.apache.juneau.server.RestRequest#getPathRemainder()}
@@ -709,7 +709,7 @@
 
 	<jc>// Method with path pattern with arguments</jc>
 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/xxx/{foo}/{bar}/{baz}/{bing}"</js>)
-	<jk>public void</jk> doGetWithArgs(<ja>@Attr</ja> String foo, <ja>@Attr</ja> <jk>int</jk> bar, <ja>@Attr</ja> MyEnum baz, <ja>@Attr</ja> UUID bing) {
+	<jk>public void</jk> doGetWithArgs(<ja>@Path</ja> String foo, <ja>@Path</ja> <jk>int</jk> bar, <ja>@Path</ja> MyEnum baz, <ja>@Path</ja> UUID bing) {
 		...
 	}
 		</p>
@@ -774,7 +774,7 @@
 			<p class='bcode'>
 	<jc>// Example GET request with access to query parameters</jc>
 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/urlWithParams"</js>)
-	<jk>public</jk> String doGetWithParams(<ja>@Param</ja>(<js>"foo"</js>) String foo, <ja>@Param</ja>(<js>"bar"</js>) <jk>int</jk> bar, <ja>@Param</ja>(<js>"baz"</js>) UUID baz) <jk>throws</jk> Exception {
+	<jk>public</jk> String doGetWithParams(<ja>@Query</ja>(<js>"foo"</js>) String foo, <ja>@Query</ja>(<js>"bar"</js>) <jk>int</jk> bar, <ja>@Query</ja>(<js>"baz"</js>) UUID baz) <jk>throws</jk> Exception {
 		<jk>return</jk> <js>"GET /urlWithParams?foo="</js>+foo+<js>"&amp;bar="</js>+bar+<js>"&amp;baz="</js>+baz);
 	}
 		</p>
@@ -836,26 +836,26 @@
 		<p class='bcode'>
 	<jc>// Example POST of a bean</jc>
 	<ja>@RestMethod</ja>(name=<js>"POST"</js>, path=<js>"/"</js>)
-	<jk>public void</jk> doPost(<ja>@Content</ja> Person person) <jk>throws</jk> Exception {
+	<jk>public void</jk> doPost(<ja>@Body</ja> Person person) <jk>throws</jk> Exception {
 		<jc>// Do something with person.</jc>
 	}
 		</p>
 		<p>
 			The HTTP body of a request can be retrieved as a parsed POJO using either the 
-				{@link org.apache.juneau.server.RestRequest#getInput(Class)} method, or a parameter 
-				annotated with {@link org.apache.juneau.server.annotation.Content @Content}.
+				{@link org.apache.juneau.server.RestRequest#getBody(Class)} method, or a parameter 
+				annotated with {@link org.apache.juneau.server.annotation.Body @Body}.
 		</p>
 		<p class='bcode'>
 	<jc>// Equivalent method 1</jc>
 	<ja>@RestMethod</ja>(name=<js>"POST"</js>, path=<js>"/example1"</js>)
-	<jk>public void</jk> doPost1(<ja>@Content</ja> Person p) {
+	<jk>public void</jk> doPost1(<ja>@Body</ja> Person p) {
 		<jc>// Do something with p.</jc>
 	}
 
 	<jc>// Equivalent method 2</jc>
 	<ja>@RestMethod</ja>(name=<js>"POST"</js>, path=<js>"/example2"</js>)
 	<jk>public void</jk> doPost2(RestRequest req) {
-		Person p = req.getInput(Person.<jk>class</jk>);
+		Person p = req.getBody(Person.<jk>class</jk>);
 		<jc>// Do something with p.</jc>
 	}
 		</p>
@@ -885,7 +885,7 @@
 
 		<jd>/** POST request handler */</jd>
 		<ja>@RestMethod</ja>(name=<js>"POST"</js>, path=<js>"/"</js>)
-		<jk>public</jk> Object doPost(<ja>@Content</ja> FormInputBean input) <jk>throws</jk> Exception {
+		<jk>public</jk> Object doPost(<ja>@Body</ja> FormInputBean input) <jk>throws</jk> Exception {
 			<jc>// Just mirror back the request</jc>
 			<jk>return</jk> input;
 		}
@@ -904,7 +904,7 @@
 			<p class='bcode'>
 	<jd>/** POST request handler */</jd>
 	<ja>@RestMethod</ja>(name=<js>"POST"</js>, path=<js>"/"</js>)
-	<jk>public</jk> Object doPost(<ja>@Param</ja>(<js>"aString"</js>) String aString, <ja>@Param</ja>(<js>"aNumber"</js>) <jk>int</jk> aNumber, <ja>@Param</ja>(<js>"aDate"</js>) Calendar aDate) <jk>throws</jk> Exception {
+	<jk>public</jk> Object doPost(<ja>@FormData</ja>(<js>"aString"</js>) String aString, <ja>@FormData</ja>(<js>"aNumber"</js>) <jk>int</jk> aNumber, <ja>@FormData</ja>(<js>"aDate"</js>) Calendar aDate) <jk>throws</jk> Exception {
 		...
 	}
 		</p>
@@ -913,12 +913,12 @@
 					in addition to URL-Encoding.  The latter approach only supports URL-Encoding.
 			</p>
 			<p class='severe'>
-				If you're using form input beans, DO NOT use the <l>@Param</l> attribute
+				If you're using form input beans, DO NOT use the <l>@FormData</l> attribute
 					or {@link org.apache.juneau.server.RestRequest#getParameter(String)} method since this will
 					cause the underlying JEE servlet to parse the HTTP body as a form post.
 				Your input bean will end up being null since there won't be any content left
 					after the servlet has parsed the body of the request.
-				This applies to WHENEVER you use <l>@Content</l> or {@link org.apache.juneau.server.RestRequest#getInput(Class)}.
+				This applies to WHENEVER you use <l>@Body</l> or {@link org.apache.juneau.server.RestRequest#getBody(Class)}.
 		</p>	
 		</div>
 
@@ -987,14 +987,14 @@
 		<p class='bcode'>
 	<jc>// Equivalent method 1</jc>
 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/example1/{personId}"</js>)
-	<jk>public</jk> Person doGet1(<ja>@Attr</ja> UUID personId) {
+	<jk>public</jk> Person doGet1(<ja>@Path</ja> UUID personId) {
 		Person p = getPersonById(personId);
 		<jk>return</jk> p;
 	}
 
 	<jc>// Equivalent method 2</jc>
 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/example2/{personId}"</js>)
-	<jk>public void</jk> doGet2(RestResponse res, <ja>@Attr</ja> UUID personId) {
+	<jk>public void</jk> doGet2(RestResponse res, <ja>@Path</ja> UUID personId) {
 		Person p = getPersonById(personId);
 		res.setOutput(p);
 	}
@@ -1002,7 +1002,7 @@
 	<jc>// (Sorta) Equivalent method 3</jc>
 	<jc>// (Ignores any converters or method-level properties)</jc>
 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/example3/{personId}"</js>)
-	<jk>public void</jk> doGet3(RestRequest req, RestResponse res, <ja>@Attr</ja> UUID personId) {
+	<jk>public void</jk> doGet3(RestRequest req, RestResponse res, <ja>@Path</ja> UUID personId) {
 		Person p = getPersonById(personId);
 		String accept = req.getHeader(<js>"Accept"</js>, <js>"text/json"</js>);
 		WriterSerializer s = res.getSerializerGroup().getWriterSerializer(accept);
@@ -1022,7 +1022,7 @@
 		<h6 class='figure'>OPTIONS page for HelloWorld sample resource</h6>
 	 	<img class='bordered' src='doc-files/OptionsPage.png'>
 		<p>
-			To facilitate this, the {@link org.apache.juneau.server.labels.ResourceOptions} class is provided that 
+			To facilitate this, the <del>ResourceOptions</del> class is provided that 
 				inspects a <l>RestServlet</l> and its methods, and returns a serializable POJO data structure
 				that describes the options for that resource and pulling localized strings from the resource
 				bundle associated with the servlet.
@@ -1046,13 +1046,13 @@
 		},
 		description=<js>"Resource options"</js>
 	)
-	<jk>public</jk> ResourceOptions getOptions(RestRequest req) {
-		<jk>return new</jk> ResourceOptions(<jk>this</jk>, req);
+	<jk>public</jk> Swagger getOptions(RestRequest req) {
+		<jk>return</jk> req.getSwagger();
 	}
 	 	</p>
 	 	<p>
 	 		The <l>AddressBookResource</l> class in the samples shows an example of augmenting the existing 
-	 			{@link org.apache.juneau.server.labels.ResourceOptions} bean with some additional information.
+	 			<del>ResourceOptions</del> bean with some additional information.
 		</p>
 		<p class='bcode'>
 	<jd>/** OPTIONS request handler */</jd>
@@ -1135,18 +1135,18 @@
 	 		The localized label and description are also available through the following methods:
 		</p>
 	 	<ul class='javahierarchy'>
-	 		<li class='m'>{@link org.apache.juneau.server.RestRequest#getServletLabel()}
+	 		<li class='m'>{@link org.apache.juneau.server.RestRequest#getServletTitle()}
 	 		<li class='m'>{@link org.apache.juneau.server.RestRequest#getServletDescription()}
 	 	</ul>
 		<p>
-	 		They are also made available as the request string variables <js>"$R{servletLabel}"</js> and <js>"$R{servletDescription}"</js>.
+	 		They are also made available as the request string variables <js>"$R{servletTitle}"</js> and <js>"$R{servletDescription}"</js>.
 	 		These variable facilitate the localized label and descriptions on the HTML pages when using {@link org.apache.juneau.server.RestServletDefault}:
 		</p>
 		<p class='bcode'>
 	<ja>@RestResource</ja>(
 		properties={
 			<jc>// Provide a default title on HTML pages.</jc>
-			<ja>@Property</ja>(name=<jsf>HTMLDOC_title</jsf>, value=<js>"$R{servletLabel}"</js>),
+			<ja>@Property</ja>(name=<jsf>HTMLDOC_title</jsf>, value=<js>"$R{servletTitle}"</js>),
 			<jc>// Provide a default description on HTML pages.</jc>
 			<ja>@Property</ja>(name=<jsf>HTMLDOC_description</jsf>, value=<js>"$R{servletDescription}"</js>)
 		}
@@ -1167,7 +1167,7 @@
 	<jk>public class</jk> ExampleResource <jk>extends</jk> RestServletDefault {
 		</p>
 		<p>
-			Another option is to override the {@link org.apache.juneau.server.RestServlet#getLabel(RestRequest)} 
+			Another option is to override the {@link org.apache.juneau.server.RestServlet#getTitle(RestRequest)} 
 				and {@link org.apache.juneau.server.RestServlet#getDescription(RestRequest)} methods.
 		</p>	 	
 	 	<h6 class='topic'>Method Description, Input, and Responses</h6>
@@ -1183,7 +1183,7 @@
 		<img class='bordered' src='doc-files/Options2.png'>
 		<p>
 			This method is described through the {@link org.apache.juneau.server.annotation.RestMethod#description() @RestMethod.description()}, 
-				{@link org.apache.juneau.server.annotation.RestMethod#input() @RestMethod.input()},
+				{@link org.apache.juneau.server.annotation.RestMethod#parameters() @RestMethod.parameters()},
 				and {@link org.apache.juneau.server.annotation.RestMethod#responses() @RestMethod.responses()} annotations.
 		</p>
 		<p class='bcode'>
@@ -1193,19 +1193,19 @@
 		converters={Traversable.<jk>class</jk>,Queryable.<jk>class</jk>,Introspectable.<jk>class</jk>}, 
 		description=<js>"Get a person by id in the address book"</js>,
 		input={
-			<ja>@Var</ja>(category=VarCategory.<jsf>ATTR</jsf>, name=<js>"id"</js>, description=<js>"Person UUID"</js>)
+			<ja>@Var</ja>(in=<js>"path"</js>, name=<js>"id"</js>, description=<js>"Person UUID"</js>)
 		},
 		responses={
 			<ja>@Response</ja>(
 				value=200,
 				output={
-					<ja>@Var</ja>(category=VarCategory.<jsf>CONTENT</jsf>, description=<js>"Person bean"</js>)
+					<ja>@Var</ja>(in=<js>"body"</js>, description=<js>"Person bean"</js>)
 				}
 			),
 			<ja>@Response</ja>(value=404, description=<js>"Person with specified id not found"</js>)
 		}
 	)
-	<jk>public</jk> Person getPerson(<ja>@Attr</ja> <jk>int</jk> id) throws Exception {
+	<jk>public</jk> Person getPerson(<ja>@Path</ja> <jk>int</jk> id) throws Exception {
 		<jk>return</jk> findPerson(id);
 	}
 		</p> 	
@@ -1219,7 +1219,7 @@
 		converters={Traversable.<jk>class</jk>,Queryable.<jk>class</jk>,Introspectable.<jk>class</jk>}
 		<jc>// Don't specify annotations for labels...they'll be detected in resource bundle.</jc> 
 	)
-	<jk>public</jk> Person getPerson(<ja>@Attr</ja> <jk>int</jk> id) throws Exception {
+	<jk>public</jk> Person getPerson(<ja>@Path</ja> <jk>int</jk> id) throws Exception {
 		<jk>return</jk> findPerson(id);
 	}
 		</p> 	
@@ -1245,8 +1245,8 @@
 			<tr>
 				<td><ck>label</ck></td>
 				<td>Servlet label</td>
-				<td>{@link org.apache.juneau.server.annotation.RestResource#label() @RestResource.label()}</td>
-				<td>{@link org.apache.juneau.server.RestServlet#getLabel(RestRequest)}</td>
+				<td>{@link org.apache.juneau.server.annotation.RestResource#title() @RestResource.title()}</td>
+				<td>{@link org.apache.juneau.server.RestServlet#getTitle(RestRequest)}</td>
 			</tr>
 			<tr>
 				<td><ck>description</ck></td>
@@ -1258,15 +1258,13 @@
 				<td><ck>[javaMethodName]</ck></td>
 				<td>Java method description</td>
 				<td>{@link org.apache.juneau.server.annotation.RestMethod#description() @RestMethod.description()}</td>
-				<td>{@link org.apache.juneau.server.RestServlet#getMethodDescriptions(RestRequest)}</td>
 			</tr>
 			<tr>
 				<td><ck>[javaMethodName].req.content</ck></td>
 				<td>
 					A description of the HTTP request content.
 				</td>
-				<td>{@link org.apache.juneau.server.annotation.RestMethod#input() @RestMethod.input()}</td>
-				<td>{@link org.apache.juneau.server.RestServlet#getMethodDescriptions(RestRequest)}</td>
+				<td>{@link org.apache.juneau.server.annotation.RestMethod#parameters() @RestMethod.parameters()}</td>
 			</tr>
 			<tr>
 				<td><ck>[javaMethodName].req.[category].[name]</ck></td>
@@ -1274,8 +1272,7 @@
 					A request input variable.
 					<br>Categories: <l>ATTR, PARAM, HEADER</l>
 				</td>
-				<td>{@link org.apache.juneau.server.annotation.RestMethod#input() @RestMethod.input()}</td>
-				<td>{@link org.apache.juneau.server.RestServlet#getMethodDescriptions(RestRequest)}</td>
+				<td>{@link org.apache.juneau.server.annotation.RestMethod#parameters() @RestMethod.parameters()}</td>
 			</tr>
 			<tr>
 				<td><ck>[javaMethodName].res.[code]</ck></td>
@@ -1283,7 +1280,6 @@
 					A possible HTTP response code and description.
 				</td>
 				<td>{@link org.apache.juneau.server.annotation.RestMethod#responses() @RestMethod.responses()}</td>
-				<td>{@link org.apache.juneau.server.RestServlet#getMethodDescriptions(RestRequest)}</td>
 			</tr>
 			<tr>
 				<td><ck>[javaMethodName].res.[code].content</ck></td>
@@ -1291,7 +1287,6 @@
 					A description of response content for the specified HTTP response.
 				</td>
 				<td>{@link org.apache.juneau.server.annotation.RestMethod#responses() @RestMethod.responses()}</td>
-				<td>{@link org.apache.juneau.server.RestServlet#getMethodDescriptions(RestRequest)}</td>
 			</tr>
 			<tr>
 				<td><ck>[javaMethodName].res.[code].[category].[name]</ck></td>
@@ -1300,19 +1295,16 @@
 					<br>Categories: <l>ATTR, PARAM, HEADER</l>
 				</td>
 				<td>{@link org.apache.juneau.server.annotation.RestMethod#responses() @RestMethod.responses()}</td>
-				<td>{@link org.apache.juneau.server.RestServlet#getMethodDescriptions(RestRequest)}</td>
 			</tr>
 		</table>
 		<h6 class='topic'>Additional Information</h6>
 		<ul class='javahierarchy'>
 			<li class='n'>{@link org.apache.juneau.server.annotation.RestMethod#description() @RestMethod.description()}
-			<li class='n'>{@link org.apache.juneau.server.annotation.RestMethod#input() @RestMethod.input()}
+			<li class='n'>{@link org.apache.juneau.server.annotation.RestMethod#parameters() @RestMethod.parameters()}
 			<li class='n'>{@link org.apache.juneau.server.annotation.RestMethod#responses() @RestMethod.responses()}
-			<li class='n'>{@link org.apache.juneau.server.annotation.RestMethod#rc() @RestMethod.rc()}
-			<li class='m'>{@link org.apache.juneau.server.RestRequest#getServletLabel()}
+			<li class='m'>{@link org.apache.juneau.server.RestRequest#getServletTitle()}
 			<li class='m'>{@link org.apache.juneau.server.RestRequest#getServletDescription()}
 			<li class='m'>{@link org.apache.juneau.server.RestRequest#getMethodDescription()}
-			<li class='m'>{@link org.apache.juneau.server.RestRequest#getMethodDescriptions()}
 		</ul>
 	</div>
 
@@ -1413,7 +1405,7 @@
 	 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/*"</js>
 			parsers={JsonParser.<jk>class</jk>, XmlParser.<jk>class</jk>}
 		)
-		<jk>public void</jk> doPut(<ja>@Content</ja> Foo input) {
+		<jk>public void</jk> doPut(<ja>@Body</ja> Foo input) {
 			...
 		}
 	
@@ -1681,7 +1673,7 @@
 			name=<js>"GET"</js>, path=<js>"/people/{id}/*"</js>,
 			converters={Traversable.<jk>class</jk>,Queryable.<jk>class</jk>}
 	)
-	<jk>public</jk> Person getPerson(<ja>@Attr</ja> <jk>int</jk> id) {
+	<jk>public</jk> Person getPerson(<ja>@Path</ja> <jk>int</jk> id) {
 		<jk>return</jk> findPerson(id);
 	}
 		</p>	
@@ -2124,7 +2116,7 @@
 						<li><ck>$R{requestParentURI}</ck> - Value returned by {@link org.apache.juneau.server.RestRequest#getRequestParentURI()}.
 						<li><ck>$R{requestURI}</ck> - Value returned by {@link org.apache.juneau.server.RestRequest#getRequestURI()}.
 						<li><ck>$R{servletDescription}</ck> - Value returned by {@link org.apache.juneau.server.RestRequest#getServletDescription()}.
-						<li><ck>$R{servletLabel}</ck> - Value returned by {@link org.apache.juneau.server.RestRequest#getServletLabel()}.
+						<li><ck>$R{servletTitle}</ck> - Value returned by {@link org.apache.juneau.server.RestRequest#getServletTitle()}.
 						<li><ck>$R{servletParentURI}</ck> - Value returned by {@link org.apache.juneau.server.RestRequest#getServletParentURI()}.
 						<li><ck>$R{servletPath}</ck> - Value returned by {@link org.apache.juneau.server.RestRequest#getServletPath()}.
 						<li><ck>$R{servletURI}</ck> - Value returned by {@link org.apache.juneau.server.RestRequest#getServletURI()}.
@@ -2161,7 +2153,7 @@
 			<xt>&lt;/style&gt;</xt> 
 		<xt>&lt;/head&gt;</xt> 
 		<xt>&lt;body&gt;</xt> 
-			<xt>&lt;h3</xt> <xa>class</xa>=<xs>'title'</xs><xt>&gt;</xt>$R{servletLabel}<xt>&lt;/h3&gt;</xt> 
+			<xt>&lt;h3</xt> <xa>class</xa>=<xs>'title'</xs><xt>&gt;</xt>$R{servletTitle}<xt>&lt;/h3&gt;</xt> 
 			<xt>&lt;h5</xt> <xa>class</xa>=<xs>"description"</xs><xt>&gt;</xt>$R{servletDescription}<xt>&lt;/h5&gt;</xt> 
 			<xt>&lt;div</xt> <xa>class</xa>=<xs>'data'</xs><xt>&gt;</xt> 
 				<xt>&lt;form</xt> <xa>id</xa>=<xs>'form'</xs> <xa>action</xa>=<xs>'$R{servletURI}'</xs> <xa>method</xa>=<xs>'POST'</xs><xt>&gt;</xt> 
@@ -2212,7 +2204,7 @@
 		
 		<jd>/** POST request handler */</jd> 
 		<ja>@RestMethod</ja>(name=<js>"POST"</js>, path=<js>"/"</js>) 
-		<jk>public</jk> Object doPost(<ja>@Content</ja> FormInputBean input) <jk>throws</jk> Exception { 
+		<jk>public</jk> Object doPost(<ja>@Body</ja> FormInputBean input) <jk>throws</jk> Exception { 
 			<jc>// Just mirror back the request</jc> 
 			<jk>return</jk> input; 
 		} 
@@ -2748,7 +2740,7 @@
 				</td>
 			</tr>
 			<tr>
-				<td>{@link org.apache.juneau.server.annotation.RestResource#label() label()}</td>
+				<td>{@link org.apache.juneau.server.annotation.RestResource#title() title()}</td>
 				<td>
 					Label is searched for in child-to-parent order.
 				</td>
@@ -2929,7 +2921,7 @@
 				<td>
 					Pass in the HTTP body content on PUT and POST methods as a UON-encoded GET parameter.
 					<br>
-					<br>Must be enabled via {@link org.apache.juneau.server.RestServletContext#REST_allowContentParam} property.
+					<br>Must be enabled via {@link org.apache.juneau.server.RestServletContext#REST_allowBodyParam} property.
 				</td>
 			</tr>
 		</table>
@@ -2994,7 +2986,7 @@
 		
 		<jd>/** GET request handler for single photo */</jd>
 		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/{id}"</js>, serializers=ImageSerializer.<jk>class</jk>)
-		<jk>public</jk> BufferedImage getPhoto(RestRequest req, <ja>@Attr</ja> int id) <jk>throws</jk> Exception {
+		<jk>public</jk> BufferedImage getPhoto(RestRequest req, <ja>@Path</ja> int id) <jk>throws</jk> Exception {
 			Photo p = photos.get(id);
 			if (p == <jk>null</jk>)
 				<jk>throw new</jk> RestException(<jsf>SC_NOT_FOUND</jsf>, <js>"Photo not found"</js>);
@@ -3003,14 +2995,14 @@
 		
 		<jd>/** PUT request handler */</jd>
 		<ja>@RestMethod</ja>(name=<js>"PUT"</js>, path=<js>"/{id}"</js>, parsers=ImageParser.<jk>class</jk>)
-		<jk>public</jk> String addPhoto(RestRequest req, <ja>@Attr</ja> <jk>int</jk> id, <ja>@Content</ja> BufferedImage image) <jk>throws</jk> Exception {
+		<jk>public</jk> String addPhoto(RestRequest req, <ja>@Path</ja> <jk>int</jk> id, <ja>@Body</ja> BufferedImage image) <jk>throws</jk> Exception {
 			photos.put(id, <jk>new</jk> Photo(id, image));
 			<jk>return</jk> <js>"OK"</js>;
 		}
 		
 		<jd>/** POST request handler */</jd>
 		<ja>@RestMethod</ja>(name=<js>"POST"</js>, path=<js>"/"</js>, parsers=ImageParser.<jk>class</jk>)
-		<jk>public</jk> Photo setPhoto(RestRequest req, <ja>@Content</ja> BufferedImage image) <jk>throws</jk> Exception {
+		<jk>public</jk> Photo setPhoto(RestRequest req, <ja>@Body</ja> BufferedImage image) <jk>throws</jk> Exception {
 			<jk>int</jk> id = photos.size();
 			Photo p = <jk>new</jk> Photo(id, image);
 			photos.put(id, p);
@@ -3019,7 +3011,7 @@
 		
 		<jd>/** DELETE request handler */</jd>
 		<ja>@RestMethod</ja>(name=<js>"DELETE"</js>, path=<js>"/{id}"</js>)
-		<jk>public</jk> String deletePhoto(RestRequest req, <ja>@Attr</ja> <jk>int</jk> id) <jk>throws</jk> Exception {
+		<jk>public</jk> String deletePhoto(RestRequest req, <ja>@Path</ja> <jk>int</jk> id) <jk>throws</jk> Exception {
 			Photo p = photos.remove(id);
 			if (p == <jk>null</jk>)
 				<jk>throw new</jk> RestException(<jsf>SC_NOT_FOUND</jsf>, <js>"Photo not found"</js>);
@@ -3028,12 +3020,12 @@
 	
 		<jd>/** OPTIONS request handler */</jd>
 		<ja>@RestMethod</ja>(name=<js>"OPTIONS"</js>, path=<js>"/*"</js>)
-		<jk>public</jk> ResourceOptions doOptions(RestRequest req) {
-			<jk>return new</jk> ResourceOptions(<jk>this</jk>, req);
+		<jk>public</jk> Swagger getOptions(RestRequest req) {
+			<jk>return</jk> req.getSwagger();
 		}
 
 		<jd>/** Serializer for converting images to byte streams */</jd>
-		<ja>@Produces</ja>({<js>"image/png"</js>,<js>"image/jpeg"</js>})
+		<ja>@Produces</ja>(<js>"image/png,image/jpeg"</js>)
 		<jk>public static class</jk> ImageSerializer <jk>extends</jk> OutputStreamSerializer {
 			<ja>@Override</ja>
 			<jk>public void</jk> serialize(Object o, OutputStream out, SerializerSession session) <jk>throws</jk> IOException, SerializeException {
@@ -3044,7 +3036,7 @@
 		}
 		
 		<jd>/** Parser for converting byte streams to images */</jd>
-		<ja>@Consumes</ja>({<js>"image/png"</js>,<js>"image/jpeg"</js>})
+		<ja>@Consumes</ja>(<js>"image/png,image/jpeg"</js>)
 		<jk>public static class</jk> ImageParser <jk>extends</jk> InputStreamParser {
 			<ja>@Override</ja>
 			<jk>public</jk> &lt;T&gt; T parse(InputStream in, ClassMeta&lt;T&gt; type, ParserSession session) <jk>throws</jk> ParseException, IOException {
@@ -3332,7 +3324,7 @@
 		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/people/{id}/*"</js>, 
 			converters={Traversable.<jk>class</jk>,Queryable.<jk>class</jk>,Introspectable.<jk>class</jk>} 
 		) 
-		<jk>public</jk> Person getPerson(<ja>@Attr</ja> <jk>int</jk> id) <jk>throws</jk> Exception { 
+		<jk>public</jk> Person getPerson(<ja>@Path</ja> <jk>int</jk> id) <jk>throws</jk> Exception { 
 			<jk>return</jk> findPerson(id); 
 		} 
 		
@@ -3354,7 +3346,7 @@
 		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/addresses/{id}/*"</js>, 
 			converters={Traversable.<jk>class</jk>,Queryable.<jk>class</jk>} 
 		) 
-		<jk>public</jk> Address getAddress(<ja>@Attr</ja> <jk>int</jk> id) <jk>throws</jk> Exception { 
+		<jk>public</jk> Address getAddress(<ja>@Path</ja> <jk>int</jk> id) <jk>throws</jk> Exception { 
 			<jk>return</jk> findAddress(id); 
 		} 
 		
@@ -3365,7 +3357,7 @@
 		<ja>@RestMethod</ja>(name=<js>"POST"</js>, path=<js>"/people"</js>, 
 			guards=AdminGuard.<jk>class</jk> 
 		) 
-		<jk>public</jk> Redirect createPerson(<ja>@Content</ja> CreatePerson cp) <jk>throws</jk> Exception { 
+		<jk>public</jk> Redirect createPerson(<ja>@Body</ja> CreatePerson cp) <jk>throws</jk> Exception { 
 		Person p = <jf>addressBook</jf>.createPerson(cp); 
 			<jk>return new</jk> Redirect(<js>"people/{0}"</js>, p.id); 
 		} 
@@ -3377,7 +3369,7 @@
 		<ja>@RestMethod</ja>(name=<js>"POST"</js>, path=<js>"/people/{id}/addresses"</js>, 
 			guards=AdminGuard.<jk>class</jk> 
 		) 
-		<jk>public</jk> Redirect createAddress(<ja>@Attr</ja> <jk>int</jk> id, <ja>@Content</ja> CreateAddress ca) <jk>throws</jk> Exception { 
+		<jk>public</jk> Redirect createAddress(<ja>@Path</ja> <jk>int</jk> id, <ja>@Body</ja> CreateAddress ca) <jk>throws</jk> Exception { 
 			Person p = findPerson(id); 
 			Address a = p.createAddress(ca); 
 			<jk>return new</jk> Redirect(<js>"addresses/{0}"</js>, a.id); 
@@ -3390,7 +3382,7 @@
 		<ja>@RestMethod</ja>(name=<js>"DELETE"</js>, path=<js>"/people/{id}"</js>, 
 			guards=AdminGuard.<jk>class</jk>, 
 		) 
-		<jk>public</jk> String deletePerson(<ja>@Attr</ja> <jk>int</jk> id) <jk>throws</jk> Exception { 
+		<jk>public</jk> String deletePerson(<ja>@Path</ja> <jk>int</jk> id) <jk>throws</jk> Exception { 
 			<jf>addressBook</jf>.removePerson(id); 
 			<jk>return</jk> <js>"DELETE successful"</js>; 
 		} 
@@ -3402,7 +3394,7 @@
 		<ja>@RestMethod</ja>(name=<js>"DELETE"</js>, path=<js>"/addresses/{id}"</js>, 
 			guards=AdminGuard.<jk>class</jk> 
 		) 
-		<jk>public</jk> String deleteAddress(<ja>@Attr</ja> <jk>int</jk> addressId) <jk>throws</jk> Exception { 
+		<jk>public</jk> String deleteAddress(<ja>@Path</ja> <jk>int</jk> addressId) <jk>throws</jk> Exception { 
 			Person p = <jf>addressBook</jf>.findPersonWithAddress(addressId); 
 			<jk>if</jk> (p == <jk>null</jk>) 
 				<jk>throw new</jk> RestException(<jsf>SC_NOT_FOUND</jsf>, <js>"Person not found"</js>); 
@@ -3418,13 +3410,13 @@
 		<ja>@RestMethod</ja>(name=<js>"PUT"</js>, path=<js>"/people/{id}/*"</js>, 
 			guards=AdminGuard.<jk>class</jk> 
 		) 
-		<jk>public</jk> String updatePerson(RestRequest req, <ja>@Attr</ja> <jk>int</jk> id) <jk>throws</jk> Exception { 
+		<jk>public</jk> String updatePerson(RestRequest req, <ja>@Path</ja> <jk>int</jk> id) <jk>throws</jk> Exception { 
 			<jk>try</jk> { 
 				Person p = findPerson(id); 
 				String pathRemainder = req.getPathRemainder(); 
 				PojoRest r = <jk>new</jk> PojoRest(p); 
 				ClassMeta&lt;?&gt; cm = r.getClassMeta(pathRemainder); 
-				Object in = req.getInput(cm); 
+				Object in = req.getBody(cm); 
 				r.put(pathRemainder, in); 
 				<jk>return</jk> <js>"PUT successful"</js>; 
 			} <jk>catch</jk> (Exception e) { 
@@ -3439,13 +3431,13 @@
 		<ja>@RestMethod</ja>(name=<js>"PUT"</js>, path=<js>"/addresses/{id}/*"</js>, 
 			guards=AdminGuard.<jk>class</jk> 
 		) 
-		<jk>public</jk> String updateAddress(RestRequest req, <ja>@Attr</ja> <jk>int</jk> id) <jk>throws</jk> Exception { 
+		<jk>public</jk> String updateAddress(RestRequest req, <ja>@Path</ja> <jk>int</jk> id) <jk>throws</jk> Exception { 
 			<jk>try</jk> { 
 				Address a = findAddress(id); 
 				String pathInfo = req.getPathInfo(); 
 				PojoRest r = <jk>new</jk> PojoRest(a); 
 				ClassMeta&lt;?&gt; cm = r.getClassMeta(pathInfo); 
-				Object in = req.getInput(cm); 
+				Object in = req.getBody(cm); 
 				r.put(pathInfo, in); 
 				<jk>return</jk> <js>"PUT successful"</js>; 
 			} <jk>catch</jk> (Exception e) { 
@@ -3496,8 +3488,8 @@
 		*/</jd> 
 		<ja>@Override</ja> /* RestServletJenaDefault */ 
 		<ja>@RestMethod</ja>(name=<js>"OPTIONS"</js>, path=<js>"/*"</js>) 
-		<jk>public</jk> ResourceOptions getOptions(RestRequest req) { 
-			<jk>return new</jk> Options(req); 
+		<jk>public</jk> Swagger getOptions(RestRequest req) { 
+			<jk>return</jk> req.getSwagger(); 
 		} 
 		
 		<jd>/** Convenience method - Find a person by ID */</jd> 
@@ -3514,22 +3506,6 @@
 			<jk>if</jk> (a == <jk>null</jk>) 
 				<jk>throw new</jk> RestException(<jsf>SC_NOT_FOUND</jsf>, <js>"Address not found"</js>); 
 			<jk>return</jk> a; 
-		} 
-		
-		<jd>/** 
-		* Output POJO for OPTIONS requests. 
-		* Note that we're extending the existing ResourceOptions class. 
-		*/</jd> 
-		<jk>public class</jk> Options <jk>extends</jk> ResourceOptions { 
-			<jk>public</jk> ParamDescription[] <jf>queryableParameters</jf>; 
-			<jk>public</jk> String[] <jf>otherNotes</jf>; 
-			
-			<jk>public</jk> Options(RestRequest req) { 
-				<jk>super</jk>(AddressBookResource.<jk>this</jk>, req); 
-				Locale locale = req.getLocale(); 
-				<jf>queryableParameters</jf> = getQueryableParamDescriptions(locale); 
-				<jf>otherNotes</jf> = getMessage(locale, <js>"otherNotes"</js>).split(<js>"\\.\\s*"</js>); 
-			} 
 		} 
 	} 	
 		</p>

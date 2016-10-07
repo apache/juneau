@@ -55,7 +55,7 @@ import org.apache.juneau.utils.*;
  * </p>
  */
 @RestResource(
-	label="File System Explorer",
+	title="File System Explorer",
 	description="Contents of $A{path}",
 	messages="nls/DirectoryResource",
 	properties={

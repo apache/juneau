@@ -59,7 +59,7 @@ public class PropertiesResource extends RestServletDefault {
 		res.setOutput(null);
 	}
 
-	@Produces({"application/json","text/json"})
+	@Produces("application/json,text/json")
 	public static class PropertySerializer1 extends WriterSerializer {
 		@Override /* Serializer */
 		protected void doSerialize(SerializerSession session, Object output) throws Exception {
@@ -78,7 +78,7 @@ public class PropertiesResource extends RestServletDefault {
 		res.setOutput(null);
 	}
 
-	@Produces({"application/json","text/json"})
+	@Produces("application/json,text/json")
 	public static class PropertySerializer2 extends WriterSerializer {
 		@Override /* Serializer */
 		protected void doSerialize(SerializerSession session, Object output) throws Exception {
@@ -86,5 +86,4 @@ public class PropertiesResource extends RestServletDefault {
 			session.getWriter().write(format("A=%s,P=%s,H=%s", p.get("A"), p.get("P"), p.get("h")));
 		}
 	}
-
 }

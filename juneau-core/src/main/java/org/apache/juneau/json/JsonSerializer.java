@@ -95,7 +95,7 @@ import org.apache.juneau.transform.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@Produces({"application/json","text/json"})
+@Produces("application/json,text/json")
 public class JsonSerializer extends WriterSerializer {
 
 	/** Default serializer, all default settings.*/
@@ -126,7 +126,7 @@ public class JsonSerializer extends WriterSerializer {
 	}
 
 	/** Default serializer, single quotes, simple mode. */
-	@Produces(value={"application/json+simple","text/json+simple"},contentType="application/json")
+	@Produces(value="application/json+simple,text/json+simple",contentType="application/json")
 	public static class Simple extends JsonSerializer {
 		/** Constructor */
 		public Simple() {

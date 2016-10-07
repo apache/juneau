@@ -51,18 +51,30 @@ public @interface Response {
 	/**
 	 * Optional description.
 	 * <p>
-	 * 	The default value pulls the description from the <code>description</code> entry in the servlet resource bundle.
-	 * 	(e.g. <js>"myMethod.res.[code] = foo"</js> or <js>"MyServlet.myMethod.res.[code] = foo"</js>).
+	 * The default value pulls the description from the <code>description</code> entry in the servlet resource bundle.
+	 * (e.g. <js>"myMethod.res.[code].description = foo"</js> or <js>"MyServlet.myMethod.res.[code].description = foo"</js>).
 	 * <p>
-	 * 	This field can contain variables (e.g. "$L{my.localized.variable}").
+	 * This field can contain variables (e.g. "$L{my.localized.variable}").
+	 * <p>
+	 * Corresponds to the swagger field <code>/paths/{path}/{method}/responses/{code}/description</code>.
 	 */
 	String description() default "";
 
 	/**
-	 * Optional response variables.
+	 * A definition of the response structure.
 	 * <p>
-	 * 	Response variables can also be defined in the servlet resource bundle.
+	 * It can be a primitive, an array or an object.
+	 * If this field does not exist, it means no content is returned as part of the response.
+	 * As an extension to the <a href='http://swagger.io/specification/#schemaObject'>Schema Object</a>, its root type value may also be <js>"file"</js>.
+	 * This SHOULD be accompanied by a relevant produces mime-type.
+	 */
+	String schema() default "";
+
+	/**
+	 * Optional response headers.
+	 * <p>
+	 * Response variables can also be defined in the servlet resource bundle.
 	 * 	(e.g. <js>"myMethod.res.[code].[category].[name] = foo"</js> or <js>"MyServlet.myMethod.res.[code].[category].[name] = foo"</js>).
 	 */
-	Var[] output() default {};
+	Var[] headers() default {};
 }

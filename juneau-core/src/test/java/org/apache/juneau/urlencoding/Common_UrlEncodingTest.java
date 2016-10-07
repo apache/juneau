@@ -175,16 +175,16 @@ public class Common_UrlEncodingTest {
 	}
 
 	public static class E1 {
-		@BeanProperty(properties={"f1"}) public E2 x1 = new E2();
-		@BeanProperty(properties={"f1"}) public Map<String,Integer> x2 = new LinkedHashMap<String,Integer>() {{
+		@BeanProperty(properties="f1") public E2 x1 = new E2();
+		@BeanProperty(properties="f1") public Map<String,Integer> x2 = new LinkedHashMap<String,Integer>() {{
 			put("f1",1); put("f2",2);
 		}};
-		@BeanProperty(properties={"f1"}) public E2[] x3 = {new E2()};
-		@BeanProperty(properties={"f1"}) public List<E2> x4 = new LinkedList<E2>() {{
+		@BeanProperty(properties="f1") public E2[] x3 = {new E2()};
+		@BeanProperty(properties="f1") public List<E2> x4 = new LinkedList<E2>() {{
 			add(new E2());
 		}};
-		@BeanProperty(properties={"f1"}) public ObjectMap[] x5 = {new ObjectMap().append("f1",1).append("f2",2)};
-		@BeanProperty(properties={"f1"}) public List<ObjectMap> x6 = new LinkedList<ObjectMap>() {{
+		@BeanProperty(properties="f1") public ObjectMap[] x5 = {new ObjectMap().append("f1",1).append("f2",2)};
+		@BeanProperty(properties="f1") public List<ObjectMap> x6 = new LinkedList<ObjectMap>() {{
 			add(new ObjectMap().append("f1",1).append("f2",2));
 		}};
 	}
@@ -212,7 +212,7 @@ public class Common_UrlEncodingTest {
 	}
 
 	public static class F {
-		@BeanProperty(properties={"x2"}) public List<F> x1 = new LinkedList<F>();
+		@BeanProperty(properties="x2") public List<F> x1 = new LinkedList<F>();
 		public int x2 = 2;
 	}
 

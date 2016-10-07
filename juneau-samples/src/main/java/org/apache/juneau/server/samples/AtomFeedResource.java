@@ -99,7 +99,7 @@ public class AtomFeedResource extends ResourceJena {
 	 * Replaces the feed with the specified content, and then mirrors it as the response.
 	 */
 	@RestMethod(name="PUT", path="/")
-	public Feed setFeed(@org.apache.juneau.server.annotation.Content Feed feed) throws Exception {
+	public Feed setFeed(@Body Feed feed) throws Exception {
 		this.feed = feed;
 		return feed;
 	}

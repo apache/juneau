@@ -284,7 +284,7 @@ public class HtmlSerializer extends XmlSerializer {
 			typeName = "object";
 		out.oTag(i, "table").attr(bc.getBeanTypePropertyName(), typeName);
 		out.appendln(">");
-		if (! (aType.getExtendedMeta(HtmlClassMeta.class).isNoTableHeaders() || (ppMeta != null && ppMeta.getExtendedMeta(HtmlBeanPropertyMeta.class).isNoTableHeaders()))) {
+		if (session.isAddKeyValueTableHeaders() && ! (aType.getExtendedMeta(HtmlClassMeta.class).isNoTableHeaders() || (ppMeta != null && ppMeta.getExtendedMeta(HtmlBeanPropertyMeta.class).isNoTableHeaders()))) {
 			out.sTag(i+1, "tr").nl();
 			out.sTag(i+2, "th").nl().appendln(i+3, "<string>key</string>").eTag(i+2, "th").nl();
 			out.sTag(i+2, "th").nl().appendln(i+3, "<string>value</string>").eTag(i+2, "th").nl();
@@ -334,7 +334,7 @@ public class HtmlSerializer extends XmlSerializer {
 			typeName = "object";
 		out.oTag(i, "table").attr(bc.getBeanTypePropertyName(), typeName);
 		out.append('>').nl();
-		if (! (m.getClassMeta().getExtendedMeta(HtmlClassMeta.class).isNoTableHeaders() || (ppMeta != null && ppMeta.getExtendedMeta(HtmlBeanPropertyMeta.class).isNoTableHeaders()))) {
+		if (session.isAddKeyValueTableHeaders() && ! (m.getClassMeta().getExtendedMeta(HtmlClassMeta.class).isNoTableHeaders() || (ppMeta != null && ppMeta.getExtendedMeta(HtmlBeanPropertyMeta.class).isNoTableHeaders()))) {
 			out.sTag(i+1, "tr").nl();
 			out.sTag(i+2, "th").nl().appendln(i+3, "<string>key</string>").eTag(i+2, "th").nl();
 			out.sTag(i+2, "th").nl().appendln(i+3, "<string>value</string>").eTag(i+2, "th").nl();
@@ -424,11 +424,9 @@ public class HtmlSerializer extends XmlSerializer {
 				} else if (cm.isMap() && ! (cm.isBeanMap())) {
 					Map m2 = session.sort((Map)o);
 
-					Iterator mapEntries = m2.entrySet().iterator();
-					while (mapEntries.hasNext()) {
-						Map.Entry e = (Map.Entry)mapEntries.next();
+					for (String k : th) {
 						out.sTag(i+2, "td").nl();
-						serializeAnything(session, out, e.getValue(), elementType, e.getKey().toString(), 2, null);
+						serializeAnything(session, out, m2.get(k), elementType, k, 2, null);
 						out.eTag(i+2, "td").nl();
 					}
 				} else {
@@ -437,10 +435,9 @@ public class HtmlSerializer extends XmlSerializer {
 						m2 = (BeanMap)o;
 					else
 						m2 = bc.forBean(o);
-
-					Iterator mapEntries = m2.entrySet().iterator();
-					while (mapEntries.hasNext()) {
-						BeanMapEntry p = (BeanMapEntry)mapEntries.next();
+					
+					for (String k : th) {
+						BeanMapEntry p = m2.getProperty(k);
 						BeanPropertyMeta pMeta = p.getMeta();
 						out.sTag(i+2, "td").nl();
 						serializeAnything(session, out, p.getValue(), pMeta.getClassMeta(), p.getKey().toString(), 2, pMeta);
@@ -502,17 +499,33 @@ public class HtmlSerializer extends XmlSerializer {
 		if (session.canIgnoreValue(cm, null, o1))
 			return null;
 		if (cm.isMap() && ! cm.isBeanMap()) {
-			Map m = (Map)o1;
-			th = new String[m.size()];
-			int i = 0;
-			for (Object k : m.keySet())
-				th[i++] = (k == null ? null : k.toString());
+			Set<String> set = new LinkedHashSet<String>();
+			for (Object o : c) {
+				if (! session.canIgnoreValue(cm, null, o)) {
+					if (! cm.isInstance(o))
+						return null;
+					Map m = session.sort((Map)o);
+					for (Map.Entry e : (Set<Map.Entry>)m.entrySet()) {
+						if (e.getValue() != null)
+							set.add(e.getKey() == null ? null : e.getKey().toString());
+					}
+				}
+			}
+			th = set.toArray(new String[set.size()]);
 		} else {
-			BeanMap<?> bm = (o1 instanceof BeanMap ? (BeanMap)o1 : bc.forBean(o1));
-			List<String> l = new LinkedList<String>();
-			for (String k : bm.keySet())
-				l.add(k);
-			th = l.toArray(new String[l.size()]);
+			Set<String> set = new LinkedHashSet<String>();
+			for (Object o : c) {
+				if (! session.canIgnoreValue(cm, null, o)) {
+					if (! cm.isInstance(o))
+						return null;
+					BeanMap<?> bm = (o instanceof BeanMap ? (BeanMap)o : bc.forBean(o));
+					for (Map.Entry<String,Object> e : bm.entrySet()) {
+						if (e.getValue() != null)
+							set.add(e.getKey());
+					}
+				}
+			}
+			th = set.toArray(new String[set.size()]);
 		}
 		prevC.add(cm);
 		s.addAll(Arrays.asList(th));

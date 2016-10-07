@@ -87,7 +87,7 @@ public class PhotosResource extends Resource {
 
 	/** GET request handler for single photo */
 	@RestMethod(name="GET", path="/{id}", serializers=ImageSerializer.class)
-	public BufferedImage getPhoto(@Attr int id) throws Exception {
+	public BufferedImage getPhoto(@Path int id) throws Exception {
 		Photo p = photos.get(id);
 		if (p == null)
 			throw new RestException(SC_NOT_FOUND, "Photo not found");
@@ -96,14 +96,14 @@ public class PhotosResource extends Resource {
 
 	/** PUT request handler */
 	@RestMethod(name="PUT", path="/{id}", parsers=ImageParser.class)
-	public String addPhoto(@Attr int id, @Content BufferedImage image) throws Exception {
+	public String addPhoto(@Path int id, @Body BufferedImage image) throws Exception {
 		photos.put(id, new Photo(id, image));
 		return "OK";
 	}
 
 	/** POST request handler */
 	@RestMethod(name="POST", path="/", parsers=ImageParser.class)
-	public Photo setPhoto(@Content BufferedImage image) throws Exception {
+	public Photo setPhoto(@Body BufferedImage image) throws Exception {
 		int id = photos.size();
 		Photo p = new Photo(id, image);
 		photos.put(id, p);
@@ -112,7 +112,7 @@ public class PhotosResource extends Resource {
 
 	/** DELETE request handler */
 	@RestMethod(name="DELETE", path="/{id}")
-	public String deletePhoto(@Attr int id) throws Exception {
+	public String deletePhoto(@Path int id) throws Exception {
 		Photo p = photos.remove(id);
 		if (p == null)
 			throw new RestException(SC_NOT_FOUND, "Photo not found");
@@ -120,7 +120,7 @@ public class PhotosResource extends Resource {
 	}
 
 	/** Serializer for converting images to byte streams */
-	@Produces({"image/png","image/jpeg"})
+	@Produces("image/png,image/jpeg")
 	public static class ImageSerializer extends OutputStreamSerializer {
 		@Override /* Serializer */
 		protected void doSerialize(SerializerSession session, Object o) throws Exception {
@@ -131,7 +131,7 @@ public class PhotosResource extends Resource {
 	}
 
 	/** Parser for converting byte streams to images */
-	@Consumes({"image/png","image/jpeg"})
+	@Consumes("image/png,image/jpeg")
 	public static class ImageParser extends InputStreamParser {
 		@Override /* Parser */
 		@SuppressWarnings("unchecked")

@@ -85,7 +85,7 @@ public class SerializersResource extends RestServletDefault {
 		return "test4";
 	}
 
-	@Produces(value={"text/a","text/d"},contentType="text/d")
+	@Produces(value="text/a,text/d",contentType="text/d")
 	public static class TestSerializerD extends WriterSerializer {
 		@Override /* Serializer */
 		protected void doSerialize(SerializerSession session, Object o) throws Exception {

@@ -84,7 +84,7 @@ public abstract class RemoteableServlet extends RestServletDefault {
 	 * @throws Exception
 	 */
 	@RestMethod(name="GET", path="/{javaInterface}")
-	public Collection<String> listMethods(@Attr String javaInterface) throws Exception {
+	public Collection<String> listMethods(@Path String javaInterface) throws Exception {
 		return getMethods(javaInterface).keySet();
 	}
 
@@ -98,7 +98,7 @@ public abstract class RemoteableServlet extends RestServletDefault {
 	 * @throws Exception
 	 */
 	@RestMethod(name="POST", path="/{javaInterface}/{javaMethod}")
-	public Object invoke(RestRequest req, @Attr String javaInterface, @Attr String javaMethod) throws Exception {
+	public Object invoke(RestRequest req, @Path String javaInterface, @Path String javaMethod) throws Exception {
 
 		// Find the parser.
 		ReaderParser p = req.getReaderParser();

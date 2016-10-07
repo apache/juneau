@@ -35,7 +35,7 @@ import org.apache.juneau.server.annotation.*;
 public class OnPostCallResource extends RestServlet {
 	private static final long serialVersionUID = 1L;
 
-	@Produces({"text/s1","text/s2","text/s3"})
+	@Produces("text/s1,text/s2,text/s3")
 	public static class TestSerializer extends WriterSerializer {
 		@Override /* Serializer */
 		protected void doSerialize(SerializerSession session, Object o) throws Exception {

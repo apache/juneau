@@ -15,13 +15,13 @@ package org.apache.juneau.server;
 import static org.apache.juneau.html.HtmlDocSerializerContext.*;
 import static org.apache.juneau.server.RestServletContext.*;
 
+import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.jso.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.plaintext.*;
 import org.apache.juneau.server.annotation.*;
-import org.apache.juneau.server.labels.*;
 import org.apache.juneau.soap.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
@@ -200,7 +200,7 @@ import org.apache.juneau.xml.*;
 		// Allow &method parameter on safe HTTP methods.
 		@Property(name=REST_allowMethodParam, value="OPTIONS"),
 		// Provide a default title on HTML pages.
-		@Property(name=HTMLDOC_title, value="$R{servletLabel}"),
+		@Property(name=HTMLDOC_title, value="$R{servletTitle}"),
 		// Provide a default description on HTML pages.
 		@Property(name=HTMLDOC_description, value="$R{servletDescription}")
 	},
@@ -224,8 +224,8 @@ public abstract class RestServletDefault extends RestServlet {
 		},
 		description="Resource options"
 	)
-	public ResourceOptions getOptions(RestRequest req) {
-		return new ResourceOptions(this, req);
+	public Swagger getOptions(RestRequest req) {
+		return req.getSwagger();
 	}
 
 	@Override /* RestServlet */

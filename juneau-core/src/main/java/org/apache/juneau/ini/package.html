@@ -631,10 +631,10 @@
 	<ja>@RestMethod</ja>(name=<js>"PUT"</js>, path=<js>"/"</js>,
 		description=<js>"Sets contents of config file."</js>,
 		input={
-			<ja>@Var</ja>(category=<jsf>CONTENT</jsf>, description=<js>"New contents in INI file format."</js>)
+			<ja>@Var</ja>(in=<js>"body"</js>, description=<js>"New contents in INI file format."</js>)
 		}
 	)
-	<jk>public</jk> ConfigFile setConfigContents(<ja>@Content</ja> Reader contents) <jk>throws</jk> Exception {
+	<jk>public</jk> ConfigFile setConfigContents(<ja>@Body</ja> Reader contents) <jk>throws</jk> Exception {
 		
 		<jc>// Create a new in-memory config file based on the contents of the HTTP request.</jc>
 		ConfigFile cf2 = ConfigMgr.<jsf>DEFAULT</jsf>.create().load(contents);

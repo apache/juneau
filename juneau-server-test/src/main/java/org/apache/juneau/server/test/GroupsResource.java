@@ -29,7 +29,7 @@ import org.apache.juneau.server.annotation.*;
 public class GroupsResource extends RestServlet {
 	private static final long serialVersionUID = 1L;
 
-	@Produces({"text/s1","text/s2"})
+	@Produces("text/s1,text/s2")
 	public static class SSerializer extends WriterSerializer {
 		@Override /* Serializer */
 		protected void doSerialize(SerializerSession session, Object output) throws Exception {
@@ -37,7 +37,7 @@ public class GroupsResource extends RestServlet {
 		}
 	}
 
-	@Consumes({"text/p1","text/p2"})
+	@Consumes("text/p1,text/p2")
 	public static class PParser extends ReaderParser {
 		@SuppressWarnings("unchecked")
 		@Override /* Parser */
@@ -66,7 +66,7 @@ public class GroupsResource extends RestServlet {
 	}
 
 	@RestMethod(name="PUT", path="/testSerializerDefinedOnClass")
-	public String testSerializerDefinedOnClass_put(@Content String in) {
+	public String testSerializerDefinedOnClass_put(@Body String in) {
 		return in;
 	}
 }

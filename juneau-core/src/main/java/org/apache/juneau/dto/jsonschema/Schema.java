@@ -30,11 +30,12 @@ import org.apache.juneau.transform.*;
  */
 @SuppressWarnings("hiding")
 @Bean(typeName="schema",
-	properties={"id","$schema","$ref", "title","description","type","definitions","properties",
-	"patternProperties","dependencies","items","multipleOf","maximum","exclusiveMaximum",
-	"minimum","exclusiveMinimum","maxLength","minLength","pattern","additionalItems",
-	"maxItems","minItems","uniqueItems","maxProperties","minProperties","required",
-	"additionalProperties","enum","allOf","anyOf","oneOf","not"})
+	properties="id,$schema,$ref, title,description,type,definitions,properties,"
+		+ "patternProperties,dependencies,items,multipleOf,maximum,exclusiveMaximum,"
+		+ "minimum,exclusiveMinimum,maxLength,minLength,pattern,additionalItems,"
+		+ "maxItems,minItems,uniqueItems,maxProperties,minProperties,required,"
+		+ "additionalProperties,enum,allOf,anyOf,oneOf,not"
+)
 public class Schema {
 	private String name;                                   // Property name.  Not serialized.
 	private URI id;

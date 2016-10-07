@@ -406,12 +406,12 @@ public class BeanConfigTest {
 	}
 
 
-	@Bean(properties={"name","age"})
+	@Bean(properties="name,age")
 	public static class ReadOnlyPerson {
 		private final String name;
 		private final int age;
 
-		@BeanConstructor(properties = { "name", "age" })
+		@BeanConstructor(properties="name,age")
 		public ReadOnlyPerson(String name, int age) {
 			this.name = name;
 			this.age = age;

@@ -37,7 +37,7 @@ import org.apache.juneau.parser.*;
  * <p>
  * 	Standard example:
  * <p class='bcode'>
- * 	<ja>@Consumes</ja>({<js>"application/json"</js>,<js>"text/json"</js>})
+ * 	<ja>@Consumes</ja>(<js>"application/json,text/json"</js>)
  * 	<jk>public class</jk> JsonParser <jk>extends</jk> ReaderParser {...}
  * </p>
  * <p>
@@ -45,11 +45,11 @@ import org.apache.juneau.parser.*;
  * 		<a href='http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1'>RFC2616/14.1</a>.
  * <p class='bcode'>
  * 	<jc>// Consumes any text</jc>
- * 	<ja>@Consumes</ja>({<js>"text\/*"</js>})
+ * 	<ja>@Consumes</ja>(<js>"text\/*"</js>)
  * 	<jk>public class</jk> AnythingParser <jk>extends</jk> ReaderParser {...}
  *
  * 	<jc>// Consumes anything</jc>
- * 	<ja>@Consumes</ja>({<js>"*\/*"</js>})
+ * 	<ja>@Consumes</ja>(<js>"*\/*"</js>)
  * 	<jk>public class</jk> AnythingParser <jk>extends</jk> ReaderParser {...}
  * </p>
  *
@@ -63,11 +63,11 @@ import org.apache.juneau.parser.*;
 public @interface Consumes {
 
 	/**
-	 * The media types that the parser can handle.
+	 * A comma-delimited list of media types that the parser can handle.
 	 * <p>
 	 * 	Can contain meta-characters per the <code>media-type</code> specification of
 	 * 	<a href='http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1'>RFC2616/14.1</a>
 	 * @return The media types that the parser can handle.
 	 */
-	String[] value() default {};
+	String value() default "";
 }

@@ -37,6 +37,8 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.dto.swagger.*;
+import org.apache.juneau.dto.swagger.Parameter;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.encoders.Encoder;
 import org.apache.juneau.ini.*;
@@ -46,9 +48,10 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.server.annotation.*;
+import org.apache.juneau.server.annotation.Header;
 import org.apache.juneau.server.annotation.Properties;
+import org.apache.juneau.server.annotation.Response;
 import org.apache.juneau.server.annotation.Var;
-import org.apache.juneau.server.labels.*;
 import org.apache.juneau.server.response.*;
 import org.apache.juneau.server.vars.*;
 import org.apache.juneau.svl.*;
@@ -109,7 +112,7 @@ public abstract class RestServlet extends HttpServlet {
 	private MimetypesFileTypeMap mimetypesFileTypeMap;
 	private BeanContext beanContext;
 	private VarResolver varResolver;
-	private String label="", description="";
+	private String title, description, termsOfService, contact, license, version, tags, externalDocs;
 	private Map<String,byte[]> resourceStreams = new ConcurrentHashMap<String,byte[]>();
 	private Map<String,String> resourceStrings = new ConcurrentHashMap<String,String>();
 	private ConfigFile configFile, resolvingConfigFile;
@@ -119,6 +122,7 @@ public abstract class RestServlet extends HttpServlet {
 	private String[] staticFilesPrefixes;
 	private ResponseHandler[] responseHandlers;
 	private String clientVersionHeader = "";
+	private Map<Locale,Swagger> swaggers = new ConcurrentHashMap<Locale,Swagger>();
 
 	RestServletContext context;
 
@@ -171,13 +175,28 @@ public abstract class RestServlet extends HttpServlet {
 					else
 						msgs.addSearchPath(c, r.messages());
 				}
-				if (label.isEmpty())
-					label = r.label();
-				if (description.isEmpty())
-					description = r.description();
-				if (clientVersionHeader.isEmpty())
-					clientVersionHeader = r.clientVersionHeader();
 			}
+			for (RestResource r : restResourceAnnotationsParentFirst.values()) {
+				if (! r.title().isEmpty())
+					title = r.title();
+				if (! r.description().isEmpty())
+					description = r.description();
+				if (! r.clientVersionHeader().isEmpty())
+					clientVersionHeader = r.clientVersionHeader();
+				if (! r.termsOfService().isEmpty())
+					termsOfService = r.termsOfService();
+				if (! r.contact().isEmpty())
+					contact = r.contact();
+				if (! r.license().isEmpty())
+					license = r.license();
+				if (! r.version().isEmpty())
+					version = r.version();
+				if (! r.tags().isEmpty())
+					tags = r.tags();
+				if (! r.externalDocs().isEmpty())
+					externalDocs = r.externalDocs();
+			}
+
 			if (msgs == null)
 				msgs = new MessageBundle(this.getClass(), "");
 			if (clientVersionHeader.isEmpty())
@@ -255,21 +274,21 @@ public abstract class RestServlet extends HttpServlet {
 			// Thrown RestExceptions are simply caught and rethrown on subsequent calls to service().
 			initException = e;
 			log(SEVERE, e, "Servlet init error on class ''{0}''", getClass().getName());
-			label = String.valueOf(initException.getLocalizedMessage());
+			title = String.valueOf(initException.getLocalizedMessage());
 		} catch (ServletException e) {
 			initException = e;
 			log(SEVERE, e, "Servlet init error on class ''{0}''", getClass().getName());
-			label = String.valueOf(initException.getLocalizedMessage());
+			title = String.valueOf(initException.getLocalizedMessage());
 			throw e;
 		} catch (Exception e) {
 			initException = e;
 			log(SEVERE, e, "Servlet init error on class ''{0}''", getClass().getName());
-			label = String.valueOf(initException.getLocalizedMessage());
+			title = String.valueOf(initException.getLocalizedMessage());
 			throw new ServletException(e);
 		} catch (Throwable e) {
 			initException = new Exception(e);
 			log(SEVERE, e, "Servlet init error on class ''{0}''", getClass().getName());
-			label = String.valueOf(initException.getLocalizedMessage());
+			title = String.valueOf(initException.getLocalizedMessage());
 			throw new ServletException(e);
 		} finally {
 			isInitialized = true;
@@ -764,6 +783,76 @@ public abstract class RestServlet extends HttpServlet {
 	//--------------------------------------------------------------------------------
 	// Other methods
 	//--------------------------------------------------------------------------------
+
+	/**
+	 * Returns the localized Swagger from the file system.
+	 * <p>
+	 * Looks for a file called <js>"{ServletClass}_{locale}.json"</js> in the same package
+	 * as this servlet and returns it as a parsed {@link Swagger} object.
+	 * <p>
+	 * Returned objects are cached for later quick-lookup.
+	 *
+	 * @param locale The locale of the swagger.
+	 * @return The parsed swagger object, or <jk>null</jk> if the swagger file could not be found.
+	 * @throws RestException
+	 */
+	protected Swagger getSwaggerFromFile(Locale locale) throws RestException {
+		Swagger s = swaggers.get(locale);
+		if (s == null) {
+			try {
+				s = getResource(Swagger.class, "text/json", getClass().getSimpleName() + ".json", locale);
+				swaggers.putIfAbsent(locale, s == null ? Swagger.NULL : s);
+			} catch (Exception e) {
+				throw new RestException(SC_INTERNAL_SERVER_ERROR, e);
+			}
+		}
+		return s == Swagger.NULL ? null : s;
+	}
+
+
+	/**
+	 * Returns the localized swagger for this REST resource.
+	 *
+	 * @param req The incoming HTTP request.
+	 * @return A new Swagger instance.
+	 * @throws RestException
+	 */
+	protected Swagger getSwagger(RestRequest req) throws RestException {
+		try {
+			// If a file is defined, use that.
+			Swagger s = req.getSwaggerFromFile();
+			if (s != null)
+				return s;
+
+			Info info = Info.create(getTitle(req), getVersion(req))
+				.setContact(getContact(req))
+				.setLicense(getLicense(req))
+				.setDescription(getDescription(req))
+				.setTermsOfService(getTermsOfService(req));
+
+			s = Swagger.create(info)
+				.addConsumes(getSupportedAcceptTypes())
+				.addProduces(getSupportedContentTypes())
+				.setTags(getTags(req))
+				.setExternalDocs(getExternalDocs(req));
+
+			for (MethodMeta sm : javaRestMethods.values()) {
+				if (sm.isRequestAllowed(req)) {
+					Operation o = sm.getSwaggerOperation(req);
+					s.addPath(
+						sm.pathPattern.patternString,
+						sm.httpMethod.toLowerCase(),
+						o
+					);
+				}
+			}
+			return s;
+		} catch (RestException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new RestException(SC_INTERNAL_SERVER_ERROR, e);
+		}
+	}
 
 	/**
 	 * Sets the parent of this resource.
@@ -1295,7 +1384,7 @@ public abstract class RestServlet extends HttpServlet {
 					String remainder = (p.equals(key) ? "" : p.substring(key.length()));
 					if (remainder.isEmpty() || remainder.startsWith("/")) {
 						String p2 = RestUtils.trimSlashes(e.getValue()) + remainder;
-						InputStream is = getResource(p2);
+						InputStream is = getResource(p2, null);
 						if (is != null) {
 							try {
 								int i = p2.lastIndexOf('/');
@@ -1355,51 +1444,30 @@ public abstract class RestServlet extends HttpServlet {
 	}
 
 	/**
-	 * Returns localized descriptions of all REST methods defined on this class that the user of the current
-	 * 	request is allowed to access.
+	 * Returns the localized summary of the specified java method on this servlet.
 	 * <p>
-	 * 	Useful for OPTIONS pages.
+	 * 	Subclasses can override this method to provide their own summary.
 	 * </p>
 	 * <p>
-	 * 	This method does not cache results, since it's expected to be called infrequently.
-	 * </p>
-	 *
-	 * @param req The current request.
-	 * @return Localized descriptions of all REST methods defined on this class.
-	 * @throws RestServletException
-	 */
-	public Collection<MethodDescription> getMethodDescriptions(RestRequest req) throws RestServletException {
-		List<MethodDescription> l = new LinkedList<MethodDescription>();
-		for (MethodMeta sm : javaRestMethods.values())
-			if (sm.isRequestAllowed(req))
-				l.add(getMethodDescription(sm.method, sm, req));
-		return l;
-	}
-
-	/**
-	 * Returns the localized description of this REST resource.
-	 * <p>
-	 * 	Subclasses can override this method to provide their own description.
-	 * </p>
-	 * <p>
-	 * 	The default implementation returns the description from the following locations (whichever matches first):
+	 * 	The default implementation returns the summary from the following locations (whichever matches first):
 	 * </p>
 	 * <ol>
-	 * 	<li>{@link RestResource#description() @RestResource.description()} annotation on this class, and then any parent classes.
-	 * 	<li><ck>[ClassName].description</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
+	 * 	<li>{@link RestMethod#summary() @RestMethod.summary()} annotation on the method.
+	 * 	<li><ck>[ClassName].[javaMethodName].summary</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
 	 * 		annotation for this class, then any parent classes.
-	 * 	<li><ck>description</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
+	 * 	<li><ck>[javaMethodName].summary</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
 	 * 		annotation for this class, then any parent classes.
 	 * </ol>
 	 *
+	 * @param javaMethodName The name of the Java method whose description we're retrieving.
 	 * @param req The current request.
-	 * @return The localized description of this REST resource, or a blank string if no resource description was found.
+	 * @return The localized summary of the method, or a blank string if no summary was found.
 	 */
-	public String getDescription(RestRequest req) {
-		if (! description.isEmpty())
-			return req.getVarResolverSession().resolve(description);
-		String description = msgs.findFirstString(req.getLocale(), "description");
-		return (description == null ? "" : req.getVarResolverSession().resolve(description));
+	public String getMethodSummary(String javaMethodName, RestRequest req) {
+		MethodMeta m = javaRestMethods.get(javaMethodName);
+		if (m != null)
+			return m.getSummary(req);
+		return "";
 	}
 
 	/**
@@ -1412,9 +1480,9 @@ public abstract class RestServlet extends HttpServlet {
 	 * </p>
 	 * <ol>
 	 * 	<li>{@link RestMethod#description() @RestMethod.description()} annotation on the method.
-	 * 	<li><ck>[ClassName].[javaMethodName]</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
+	 * 	<li><ck>[ClassName].[javaMethodName].description</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
 	 * 		annotation for this class, then any parent classes.
-	 * 	<li><ck>[javaMethodName]</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
+	 * 	<li><ck>[javaMethodName].description</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
 	 * 		annotation for this class, then any parent classes.
 	 * </ol>
 	 *
@@ -1430,29 +1498,273 @@ public abstract class RestServlet extends HttpServlet {
 	}
 
 	/**
-	 * Returns the localized label of this REST resource.
+	 * Returns the localized title of this REST resource.
 	 * <p>
-	 * 	Subclasses can override this method to provide their own description.
-	 * </p>
+	 * 	Subclasses can override this method to provide their own title.
 	 * <p>
 	 * 	The default implementation returns the description from the following locations (whichever matches first):
-	 * </p>
+	 * <p>
 	 * <ol>
-	 * 	<li>{@link RestResource#label() @RestResourcel.label()} annotation on this class, and then any parent classes.
-	 * 	<li><ck>[ClassName].label</ck> property in resource bundle identified by {@link RestResource#messages() @ResourceBundle.messages()}
+	 * 	<li>{@link RestResource#title() @RestResourcel.title()} annotation on this class, and then any parent classes.
+	 * 	<li><ck>[ClassName].title</ck> property in resource bundle identified by {@link RestResource#messages() @ResourceBundle.messages()}
 	 * 		annotation for this class, then any parent classes.
-	 * 	<li><ck>label</ck> in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
+	 * 	<li><ck>title</ck> in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
 	 * 		annotation for this class, then any parent classes.
+	 * 	<li><ck>/info/title</ck> entry in swagger file.
 	 * </ol>
 	 *
 	 * @param req The current request.
-	 * @return The localized description of this REST resource, or a blank string if no resource description was found.
+	 * @return The localized description of this REST resource, or <jk>null</jk> if no resource description was found.
 	 */
-	public String getLabel(RestRequest req) {
-		if (! label.isEmpty())
-			return req.getVarResolverSession().resolve(label);
-		String label = msgs.findFirstString(req.getLocale(), "label");
-		return (label == null ? "" : req.getVarResolverSession().resolve(label));
+	public String getTitle(RestRequest req) {
+		VarResolverSession vr = req.getVarResolverSession();
+		if (title != null)
+			return vr.resolve(title);
+		String title = msgs.findFirstString(req.getLocale(), "title");
+		if (title != null)
+			return vr.resolve(title);
+		Swagger s = req.getSwaggerFromFile();
+		if (s != null && s.getInfo() != null)
+			return s.getInfo().getTitle();
+		return null;
+	}
+
+	/**
+	 * Returns the localized description of this REST resource.
+	 * <p>
+	 * 	Subclasses can override this method to provide their own description.
+	 * <p>
+	 * 	The default implementation returns the description from the following locations (whichever matches first):
+	 * <ol>
+	 * 	<li>{@link RestResource#description() @RestResource.description()} annotation on this class, and then any parent classes.
+	 * 	<li><ck>[ClassName].description</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
+	 * 		annotation for this class, then any parent classes.
+	 * 	<li><ck>description</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
+	 * 		annotation for this class, then any parent classes.
+	 * 	<li><ck>/info/description</ck> entry in swagger file.
+	 * </ol>
+	 *
+	 * @param req The current request.
+	 * @return The localized description of this REST resource, or <jk>null</jk> if no resource description was found.
+	 */
+	public String getDescription(RestRequest req) {
+		VarResolverSession vr = req.getVarResolverSession();
+		if (description != null)
+			return vr.resolve(description);
+		String description = msgs.findFirstString(req.getLocale(), "description");
+		if (description != null)
+			return vr.resolve(description);
+		Swagger s = req.getSwaggerFromFile();
+		if (s != null && s.getInfo() != null)
+			return s.getInfo().getDescription();
+		return null;
+	}
+
+	/**
+	 * Returns the localized contact information of this REST resource.
+	 * <p>
+	 * 	Subclasses can override this method to provide their own contact information.
+	 * <p>
+	 * 	The default implementation returns the contact information from the following locations (whichever matches first):
+	 * <ol>
+	 * 	<li>{@link RestResource#contact() @RestResource.contact()} annotation on this class, and then any parent classes.
+	 * 	<li><ck>[ClassName].contact</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
+	 * 		annotation for this class, then any parent classes.
+	 * 	<li><ck>contact</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
+	 * 		annotation for this class, then any parent classes.
+	 * 	<li><ck>/info/contact</ck> entry in swagger file.
+	 * </ol>
+	 *
+	 * @param req The current request.
+	 * @return The localized contact information of this REST resource, or <jk>null</jk> if no contact information was found.
+	 */
+	public Contact getContact(RestRequest req) {
+		VarResolverSession vr = req.getVarResolverSession();
+		JsonParser jp = JsonParser.DEFAULT;
+		try {
+			if (contact != null)
+				return jp.parse(vr.resolve(contact), Contact.class);
+			String contact = msgs.findFirstString(req.getLocale(), "contact");
+			if (contact != null)
+				return jp.parse(vr.resolve(contact), Contact.class);
+			Swagger s = req.getSwaggerFromFile();
+			if (s != null && s.getInfo() != null)
+				return s.getInfo().getContact();
+			return null;
+		} catch (ParseException e) {
+			throw new RestException(SC_INTERNAL_SERVER_ERROR, e);
+		}
+	}
+
+	/**
+	 * Returns the localized license information of this REST resource.
+	 * <p>
+	 * 	Subclasses can override this method to provide their own license information.
+	 * <p>
+	 * 	The default implementation returns the license information from the following locations (whichever matches first):
+	 * <ol>
+	 * 	<li>{@link RestResource#license() @RestResource.license()} annotation on this class, and then any parent classes.
+	 * 	<li><ck>[ClassName].license</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
+	 * 		annotation for this class, then any parent classes.
+	 * 	<li><ck>license</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
+	 * 		annotation for this class, then any parent classes.
+	 * 	<li><ck>/info/license</ck> entry in swagger file.
+	 * </ol>
+	 *
+	 * @param req The current request.
+	 * @return The localized contact information of this REST resource, or <jk>null</jk> if no contact information was found.
+	 */
+	public License getLicense(RestRequest req) {
+		VarResolverSession vr = req.getVarResolverSession();
+		JsonParser jp = JsonParser.DEFAULT;
+		try {
+			if (license != null)
+				return jp.parse(vr.resolve(license), License.class);
+			String license = msgs.findFirstString(req.getLocale(), "license");
+			if (license != null)
+				return jp.parse(vr.resolve(license), License.class);
+			Swagger s = req.getSwaggerFromFile();
+			if (s != null && s.getInfo() != null)
+				return s.getInfo().getLicense();
+			return null;
+		} catch (ParseException e) {
+			throw new RestException(SC_INTERNAL_SERVER_ERROR, e);
+		}
+	}
+
+	/**
+	 * Returns the terms-of-service information of this REST resource.
+	 * <p>
+	 * 	Subclasses can override this method to provide their own terms-of-service information.
+	 * <p>
+	 * 	The default implementation returns the terms-of-service information from the following locations (whichever matches first):
+	 * <ol>
+	 * 	<li>{@link RestResource#termsOfService() @RestResource.termsOfService()} annotation on this class, and then any parent classes.
+	 * 	<li><ck>[ClassName].termsOfService</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
+	 * 		annotation for this class, then any parent classes.
+	 * 	<li><ck>termsOfService</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
+	 * 		annotation for this class, then any parent classes.
+	 * 	<li><ck>/info/termsOfService</ck> entry in swagger file.
+	 * </ol>
+	 *
+	 * @param req The current request.
+	 * @return The localized contact information of this REST resource, or <jk>null</jk> if no contact information was found.
+	 */
+	public String getTermsOfService(RestRequest req) {
+		VarResolverSession vr = req.getVarResolverSession();
+		if (termsOfService != null)
+			return vr.resolve(termsOfService);
+		String termsOfService = msgs.findFirstString(req.getLocale(), "termsOfService");
+		if (termsOfService != null)
+			return vr.resolve(termsOfService);
+		Swagger s = req.getSwaggerFromFile();
+		if (s != null && s.getInfo() != null)
+			return s.getInfo().getTermsOfService();
+		return null;
+	}
+
+	/**
+	 * Returns the version information of this REST resource.
+	 * <p>
+	 * 	Subclasses can override this method to provide their own version information.
+	 * <p>
+	 * 	The default implementation returns the version information from the following locations (whichever matches first):
+	 * <ol>
+	 * 	<li>{@link RestResource#version() @RestResource.version()} annotation on this class, and then any parent classes.
+	 * 	<li><ck>[ClassName].version</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
+	 * 		annotation for this class, then any parent classes.
+	 * 	<li><ck>version</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
+	 * 		annotation for this class, then any parent classes.
+	 * 	<li><ck>/info/version</ck> entry in swagger file.
+	 * </ol>
+	 *
+	 * @param req The current request.
+	 * @return The localized contact information of this REST resource, or <jk>null</jk> if no contact information was found.
+	 */
+	public String getVersion(RestRequest req) {
+		VarResolverSession vr = req.getVarResolverSession();
+		if (version != null)
+			return vr.resolve(version);
+		String version = msgs.findFirstString(req.getLocale(), "version");
+		if (version != null)
+			return vr.resolve(version);
+		Swagger s = req.getSwaggerFromFile();
+		if (s != null && s.getInfo() != null)
+			return s.getInfo().getVersion();
+		return null;
+	}
+
+	/**
+	 * Returns the version information of this REST resource.
+	 * <p>
+	 * 	Subclasses can override this method to provide their own version information.
+	 * <p>
+	 * 	The default implementation returns the version information from the following locations (whichever matches first):
+	 * <ol>
+	 * 	<li>{@link RestResource#version() @RestResource.version()} annotation on this class, and then any parent classes.
+	 * 	<li><ck>[ClassName].version</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
+	 * 		annotation for this class, then any parent classes.
+	 * 	<li><ck>version</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
+	 * 		annotation for this class, then any parent classes.
+	 * 	<li><ck>/info/version</ck> entry in swagger file.
+	 * </ol>
+	 *
+	 * @param req The current request.
+	 * @return The localized contact information of this REST resource, or <jk>null</jk> if no contact information was found.
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Tag> getTags(RestRequest req) {
+		VarResolverSession vr = req.getVarResolverSession();
+		JsonParser jp = JsonParser.DEFAULT;
+		try {
+			if (tags != null)
+				return jp.parseCollection(vr.resolve(tags), ArrayList.class, Tag.class);
+			String tags = msgs.findFirstString(req.getLocale(), "tags");
+			if (tags != null)
+				return jp.parseCollection(vr.resolve(tags), ArrayList.class, Tag.class);
+			Swagger s = req.getSwaggerFromFile();
+			if (s != null)
+				return s.getTags();
+			return null;
+		} catch (Exception e) {
+			throw new RestException(SC_INTERNAL_SERVER_ERROR, e);
+		}
+	}
+
+	/**
+	 * Returns the version information of this REST resource.
+	 * <p>
+	 * 	Subclasses can override this method to provide their own version information.
+	 * <p>
+	 * 	The default implementation returns the version information from the following locations (whichever matches first):
+	 * <ol>
+	 * 	<li>{@link RestResource#version() @RestResource.version()} annotation on this class, and then any parent classes.
+	 * 	<li><ck>[ClassName].version</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
+	 * 		annotation for this class, then any parent classes.
+	 * 	<li><ck>version</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
+	 * 		annotation for this class, then any parent classes.
+	 * 	<li><ck>/info/version</ck> entry in swagger file.
+	 * </ol>
+	 *
+	 * @param req The current request.
+	 * @return The localized contact information of this REST resource, or <jk>null</jk> if no contact information was found.
+	 */
+	public ExternalDocumentation getExternalDocs(RestRequest req) {
+		VarResolverSession vr = req.getVarResolverSession();
+		JsonParser jp = JsonParser.DEFAULT;
+		try {
+			if (externalDocs != null)
+				return jp.parse(vr.resolve(externalDocs), ExternalDocumentation.class);
+			String externalDocs = msgs.findFirstString(req.getLocale(), "externalDocs");
+			if (externalDocs != null)
+				return jp.parse(vr.resolve(externalDocs), ExternalDocumentation.class);
+			Swagger s = req.getSwaggerFromFile();
+			if (s != null)
+				return s.getExternalDocs();
+			return null;
+		} catch (Exception e) {
+			throw new RestException(SC_INTERNAL_SERVER_ERROR, e);
+		}
 	}
 
 	/**
@@ -1609,7 +1921,7 @@ public abstract class RestServlet extends HttpServlet {
 		for (RestResource r : restResourceAnnotationsChildFirst.values()) {
 			if (! r.stylesheet().isEmpty()) {
 				String path = getVarResolver().resolve(r.stylesheet());
-				InputStream is = getResource(path);
+				InputStream is = getResource(path, null);
 				if (is != null) {
 					try {
 						return new StreamResource(is, "text/css");
@@ -1643,7 +1955,7 @@ public abstract class RestServlet extends HttpServlet {
 		for (RestResource r : restResourceAnnotationsChildFirst.values()) {
 			if (! r.favicon().isEmpty()) {
 				String path = getVarResolver().resolve(r.favicon());
-				InputStream is = getResource(path);
+				InputStream is = getResource(path, null);
 				if (is != null) {
 					try {
 						return new StreamResource(is, "image/x-icon");
@@ -1723,13 +2035,24 @@ public abstract class RestServlet extends HttpServlet {
 	}
 
 	static enum ParamType {
-		REQ, RES, ATTR, CONTENT, HEADER, METHOD, PARAM, QPARAM, HASPARAM, HASQPARAM, PATHREMAINDER, PROPS, MESSAGES;
+		REQ, RES, PATH, BODY, HEADER, METHOD, FORMDATA, QUERY, HASFORMDATA, HASQUERY, PATHREMAINDER, PROPS, MESSAGES;
 
 		boolean isOneOf(ParamType...pt) {
 			for (ParamType ptt : pt)
 				if (this == ptt)
 					return true;
 			return false;
+		}
+
+		public String getSwaggerParameterType() {
+			switch(this) {
+				case PATH: return "path";
+				case HEADER: return "header";
+				case FORMDATA: return "formData";
+				case QUERY: return "query";
+				case BODY: return "body";
+				default: return null;
+			}
 		}
 	}
 
@@ -1748,40 +2071,40 @@ public abstract class RestServlet extends HttpServlet {
 			else if (isClass && isParentClass(HttpServletResponse.class, (Class)type))
 				paramType = RES;
 			else for (Annotation a : annotations) {
-				if (a instanceof Attr) {
-					Attr a2 = (Attr)a;
-					paramType = ATTR;
+				if (a instanceof Path) {
+					Path a2 = (Path)a;
+					paramType = PATH;
 					name = a2.value();
 				} else if (a instanceof Header) {
 					Header h = (Header)a;
 					paramType = HEADER;
 					name = h.value();
-				} else if (a instanceof Param) {
-					Param p = (Param)a;
+				} else if (a instanceof FormData) {
+					FormData p = (FormData)a;
 					if (p.multipart())
 						assertCollection(type, method);
-					paramType = PARAM;
+					paramType = FORMDATA;
 					multiPart = p.multipart();
 					plainParams = p.format().equals("INHERIT") ? mm.mPlainParams : p.format().equals("PLAIN");
 					name = p.value();
-				} else if (a instanceof QParam) {
-					QParam p = (QParam)a;
+				} else if (a instanceof Query) {
+					Query p = (Query)a;
 					if (p.multipart())
 						assertCollection(type, method);
-					paramType = QPARAM;
+					paramType = QUERY;
 					multiPart = p.multipart();
 					plainParams = p.format().equals("INHERIT") ? mm.mPlainParams : p.format().equals("PLAIN");
 					name = p.value();
-				} else if (a instanceof HasParam) {
-					HasParam p = (HasParam)a;
-					paramType = HASPARAM;
+				} else if (a instanceof HasFormData) {
+					HasFormData p = (HasFormData)a;
+					paramType = HASFORMDATA;
 					name = p.value();
-				} else if (a instanceof HasQParam) {
-					HasQParam p = (HasQParam)a;
-					paramType = HASQPARAM;
+				} else if (a instanceof HasQuery) {
+					HasQuery p = (HasQuery)a;
+					paramType = HASQUERY;
 					name = p.value();
-				} else if (a instanceof Content) {
-					paramType = CONTENT;
+				} else if (a instanceof Body) {
+					paramType = BODY;
 				} else if (a instanceof org.apache.juneau.server.annotation.Method) {
 					paramType = METHOD;
 					if (type != String.class)
@@ -1799,7 +2122,7 @@ public abstract class RestServlet extends HttpServlet {
 				}
 			}
 			if (paramType == null)
-				paramType = ATTR;
+				paramType = PATH;
 		}
 
 		/**
@@ -1817,29 +2140,29 @@ public abstract class RestServlet extends HttpServlet {
 			switch(paramType) {
 				case REQ:        return req;
 				case RES:        return res;
-				case ATTR:       return req.getAttribute(name, type);
-				case CONTENT:    return req.getInput(type);
+				case PATH:       return req.getAttribute(name, type);
+				case BODY:       return req.getBody(type);
 				case HEADER:     return req.getHeader(name, type);
 				case METHOD:     return req.getMethod();
-				case PARAM: {
+				case FORMDATA: {
 					if (multiPart)
 						return req.getParameters(name, type);
 					if (plainParams)
 						return bc.convertToType(req.getParameter(name), bc.getClassMeta(type));
 					return req.getParameter(name, type);
 				}
-				case QPARAM: {
+				case QUERY: {
 					if (multiPart)
 						return req.getQueryParameters(name, type);
 					if (plainParams)
 						return bc.convertToType(req.getQueryParameter(name), bc.getClassMeta(type));
 					return req.getQueryParameter(name, type);
 				}
-				case HASPARAM:   return bc.convertToType(req.hasParameter(name), bc.getClassMeta(type));
-				case HASQPARAM:   return bc.convertToType(req.hasQueryParameter(name), bc.getClassMeta(type));
-				case PATHREMAINDER:  return req.getPathRemainder();
-				case PROPS: return res.getProperties();
-				case MESSAGES:   return req.getResourceBundle();
+				case HASFORMDATA:   return bc.convertToType(req.hasParameter(name), bc.getClassMeta(type));
+				case HASQUERY:      return bc.convertToType(req.hasQueryParameter(name), bc.getClassMeta(type));
+				case PATHREMAINDER: return req.getPathRemainder();
+				case PROPS:         return res.getProperties();
+				case MESSAGES:      return req.getResourceBundle();
 			}
 			return null;
 		}
@@ -1864,9 +2187,11 @@ public abstract class RestServlet extends HttpServlet {
 		private ObjectMap mProperties;                          // Method-level properties
 		private Map<String,String> mDefaultRequestHeaders;      // Method-level default request headers
 		private String mDefaultEncoding;
-		private boolean mPlainParams;
-		private String description;
+		private boolean mPlainParams, deprecated;
+		private String description, tags, summary, externalDocs;
 		private Integer priority;
+		private Var[] parameters;
+		private Response[] responses;
 
 		private MethodMeta(java.lang.reflect.Method method) throws RestServletException {
 			try {
@@ -1876,7 +2201,17 @@ public abstract class RestServlet extends HttpServlet {
 				if (m == null)
 					throw new RestServletException("@RestMethod annotation not found on method ''{0}.{1}''", method.getDeclaringClass().getName(), method.getName());
 
-				this.description = m.description();
+				if (! m.description().isEmpty())
+					description = m.description();
+				if (! m.tags().isEmpty())
+					tags = m.tags();
+				if (! m.summary().isEmpty())
+					summary = m.summary();
+				if (! m.externalDocs().isEmpty())
+					externalDocs = m.externalDocs();
+				deprecated = m.deprecated();
+				this.parameters = m.parameters();
+				this.responses = m.responses();
 				this.mSerializers = getSerializers();
 				this.mParsers = getParsers();
 				this.mUrlEncodingParser = getUrlEncodingParser();
@@ -2007,7 +2342,7 @@ public abstract class RestServlet extends HttpServlet {
 				params = new MethodParam[pt.length];
 				for (int i = 0; i < params.length; i++) {
 					params[i] = new MethodParam(this, pt[i], method, pa[i]);
-					if (params[i].paramType == ATTR && params[i].name.isEmpty()) {
+					if (params[i].paramType == PATH && params[i].name.isEmpty()) {
 						if (pathPattern.vars.length <= attrIdx)
 							throw new RestServletException("Number of attribute parameters in method ''{0}'' exceeds the number of URL pattern variables.", method.getName());
 						params[i].name = pathPattern.vars[attrIdx++];
@@ -2025,11 +2360,298 @@ public abstract class RestServlet extends HttpServlet {
 			}
 		}
 
+		private Operation getSwaggerOperation(RestRequest req) throws ParseException {
+			Operation o = Operation.create()
+				.setOperationId(method.getName())
+				.setDescription(getDescription(req))
+				.setTags(getTags(req))
+				.setSummary(getSummary(req))
+				.setExternalDocs(getExternalDocs(req))
+				.setParameters(getParameters(req))
+				.setResponses(getResponses(req));
+
+			if (isDeprecated())
+				o.setDeprecated(true);
+
+			if (! mParsers.getSupportedMediaTypes().equals(getParsers().getSupportedMediaTypes()))
+				o.setConsumes(mParsers.getSupportedMediaTypes());
+
+			if (! mSerializers.getSupportedMediaTypes().equals(getSerializers().getSupportedMediaTypes()))
+				o.setProduces(mSerializers.getSupportedMediaTypes());
+
+			return o;
+		}
+
+		private Operation getSwaggerOperationFromFile(RestRequest req) {
+			Swagger s = req.getSwaggerFromFile();
+			if (s != null && s.getPaths() != null && s.getPaths().get(pathPattern.patternString) != null)
+				return s.getPaths().get(pathPattern.patternString).get(httpMethod);
+			return null;
+		}
+
 		private String getDescription(RestRequest req) {
-			if (! description.isEmpty())
-				return req.getVarResolverSession().resolve(description);
-			String description = msgs.findFirstString(req.getLocale(), method.getName());
-			return (description == null ? "" : req.getVarResolverSession().resolve(description));
+			VarResolverSession vr = req.getVarResolverSession();
+			if (description != null)
+				return vr.resolve(description);
+			String description = msgs.findFirstString(req.getLocale(), method.getName() + ".description");
+			if (description != null)
+				return vr.resolve(description);
+			Operation o = getSwaggerOperationFromFile(req);
+			if (o != null)
+				return o.getDescription();
+			return null;
+		}
+
+		@SuppressWarnings("unchecked")
+		private List<String> getTags(RestRequest req) {
+			VarResolverSession vr = req.getVarResolverSession();
+			JsonParser jp = JsonParser.DEFAULT;
+			try {
+				if (tags != null)
+					return jp.parseCollection(vr.resolve(tags), ArrayList.class, String.class);
+				String tags = msgs.findFirstString(req.getLocale(), method.getName() + ".tags");
+				if (tags != null)
+					return jp.parseCollection(vr.resolve(tags), ArrayList.class, String.class);
+				Operation o = getSwaggerOperationFromFile(req);
+				if (o != null)
+					return o.getTags();
+				return null;
+			} catch (Exception e) {
+				throw new RestException(SC_INTERNAL_SERVER_ERROR, e);
+			}
+		}
+
+		private String getSummary(RestRequest req) {
+			VarResolverSession vr = req.getVarResolverSession();
+			if (summary != null)
+				return vr.resolve(summary);
+			String summary = msgs.findFirstString(req.getLocale(), method.getName() + ".summary");
+			if (summary != null)
+				return vr.resolve(summary);
+			Operation o = getSwaggerOperationFromFile(req);
+			if (o != null)
+				return o.getSummary();
+			return null;
+		}
+
+		private ExternalDocumentation getExternalDocs(RestRequest req) {
+			VarResolverSession vr = req.getVarResolverSession();
+			JsonParser jp = JsonParser.DEFAULT;
+			try {
+				if (externalDocs != null)
+					return jp.parse(vr.resolve(externalDocs), ExternalDocumentation.class);
+				String externalDocs = msgs.findFirstString(req.getLocale(), method.getName() + ".externalDocs");
+				if (externalDocs != null)
+					return jp.parse(vr.resolve(externalDocs), ExternalDocumentation.class);
+				Operation o = getSwaggerOperationFromFile(req);
+				if (o != null)
+					return o.getExternalDocs();
+				return null;
+			} catch (Exception e) {
+				throw new RestException(SC_INTERNAL_SERVER_ERROR, e);
+			}
+		}
+
+		private boolean isDeprecated() {
+			return deprecated;
+		}
+
+		private List<Parameter> getParameters(RestRequest req) throws ParseException {
+			Operation o = getSwaggerOperationFromFile(req);
+			if (o != null && o.getParameters() != null)
+				return o.getParameters();
+
+			VarResolverSession vr = req.getVarResolverSession();
+			JsonParser jp = JsonParser.DEFAULT;
+			Map<String,Parameter> m = new TreeMap<String,Parameter>();
+
+			// First parse @RestMethod.parameters() annotation.
+			for (Var v : parameters) {
+				String in = vr.resolve(v.in());
+				Parameter p = Parameter.createStrict(in, vr.resolve(v.name()));
+
+				if (! v.description().isEmpty())
+					p.setDescription(vr.resolve(v.description()));
+				if (v.required())
+					p.setRequired(v.required());
+
+				if ("body".equals(in)) {
+					if (! v.schema().isEmpty())
+						p.setSchema(jp.parse(vr.resolve(v.schema()), Schema.class));
+				} else {
+					if (v.allowEmptyValue())
+						p.setAllowEmptyValue(v.allowEmptyValue());
+					if (! v.collectionFormat().isEmpty())
+						p.setCollectionFormat(vr.resolve(v.collectionFormat()));
+					if (! v._default().isEmpty())
+						p.setDefault(vr.resolve(v._default()));
+					if (! v.format().isEmpty())
+						p.setFormat(vr.resolve(v.format()));
+					if (! v.items().isEmpty())
+						p.setItems(jp.parse(vr.resolve(v.items()), Items.class));
+					p.setType(vr.resolve(v.type()));
+				}
+				m.put(p.getIn() + '.' + p.getName(), p);
+			}
+
+			// Next, look in resource bundle.
+			String prefix = method.getName() + ".req";
+			for (String key : msgs.keySet(prefix)) {
+				if (key.length() > prefix.length()) {
+					String value = vr.resolve(msgs.getString(key));
+					String[] parts = key.substring(prefix.length() + 1).split("\\.");
+					String in = parts[0], name, field;
+					boolean isBody = "body".equals(in);
+					if (parts.length == (isBody ? 2 : 3)) {
+						if ("body".equals(in)) {
+							name = null;
+							field = parts[1];
+						} else {
+							name = parts[1];
+							field = parts[2];
+						}
+						String k2 = in + '.' + name;
+						Parameter p = m.get(k2);
+						if (p == null) {
+							p = Parameter.createStrict(in, name);
+							m.put(k2, p);
+						}
+
+						if (field.equals("description"))
+							p.setDescription(value);
+						else if (field.equals("required"))
+							p.setRequired(Boolean.valueOf(value));
+
+						if ("body".equals(in)) {
+							if (field.equals("schema"))
+								p.setSchema(jp.parse(value, Schema.class));
+						} else {
+							if (field.equals("allowEmptyValue"))
+								p.setAllowEmptyValue(Boolean.valueOf(value));
+							else if (field.equals("collectionFormat"))
+								p.setCollectionFormat(value);
+							else if (field.equals("default"))
+								p.setDefault(value);
+							else if (field.equals("format"))
+								p.setFormat(value);
+							else if (field.equals("items"))
+								p.setItems(jp.parse(value, Items.class));
+							else if (field.equals("type"))
+								p.setType(value);
+						}
+					} else {
+						System.err.println("Unknown bundle key '"+key+"'");
+					}
+				}
+			}
+
+			// Finally, look for parameters defined on method.
+			for (MethodParam mp : this.params) {
+				String in = mp.paramType.getSwaggerParameterType();
+				if (in != null) {
+					String k2 = in + '.' + ("body".equals(in) ? null : mp.name);
+					Parameter p = m.get(k2);
+					if (p == null) {
+						p = Parameter.createStrict(in, mp.name);
+						m.put(k2, p);
+					}
+				}
+			}
+
+			if (m.isEmpty())
+				return null;
+			return new ArrayList<Parameter>(m.values());
+		}
+
+		@SuppressWarnings("unchecked")
+		private Map<String,org.apache.juneau.dto.swagger.Response> getResponses(RestRequest req) throws ParseException {
+			Operation o = getSwaggerOperationFromFile(req);
+			if (o != null && o.getResponses() != null)
+				return o.getResponses();
+
+			VarResolverSession vr = req.getVarResolverSession();
+			JsonParser jp = JsonParser.DEFAULT;
+			Map<String,org.apache.juneau.dto.swagger.Response> m = new TreeMap<String,org.apache.juneau.dto.swagger.Response>();
+			Map<String,org.apache.juneau.dto.swagger.Header> m2 = new TreeMap<String,org.apache.juneau.dto.swagger.Header>();
+
+			// First parse @RestMethod.parameters() annotation.
+			for (Response r : responses) {
+				String httpCode = String.valueOf(r.value());
+				String description = r.description().isEmpty() ? RestUtils.getHttpResponseText(r.value()) : vr.resolve(r.description());
+				org.apache.juneau.dto.swagger.Response r2 = org.apache.juneau.dto.swagger.Response.create(description);
+
+				if (r.headers().length > 0) {
+					for (Var v : r.headers()) {
+						org.apache.juneau.dto.swagger.Header h = org.apache.juneau.dto.swagger.Header.createStrict(vr.resolve(v.type()));
+						if (! v.collectionFormat().isEmpty())
+							h.setCollectionFormat(vr.resolve(v.collectionFormat()));
+						if (! v._default().isEmpty())
+							h.setDefault(vr.resolve(v._default()));
+						if (! v.description().isEmpty())
+							h.setDescription(vr.resolve(v.description()));
+						if (! v.format().isEmpty())
+							h.setFormat(vr.resolve(v.format()));
+						if (! v.items().isEmpty())
+							h.setItems(jp.parse(vr.resolve(v.items()), Items.class));
+						r2.addHeader(v.name(), h);
+						m2.put(httpCode + '.' + v.name(), h);
+					}
+				}
+				m.put(httpCode, r2);
+			}
+
+			// Next, look in resource bundle.
+			String prefix = method.getName() + ".res";
+			for (String key : msgs.keySet(prefix)) {
+				if (key.length() > prefix.length()) {
+					String value = vr.resolve(msgs.getString(key));
+					String[] parts = key.substring(prefix.length() + 1).split("\\.");
+					String httpCode = parts[0];
+					org.apache.juneau.dto.swagger.Response r2 = m.get(httpCode);
+					if (r2 == null) {
+						r2 = org.apache.juneau.dto.swagger.Response.create(null);
+						m.put(httpCode, r2);
+					}
+
+					String name = parts.length > 1 ? parts[1] : "";
+
+					if ("header".equals(name) && parts.length > 3) {
+						String headerName = parts[2];
+						String field = parts[3];
+
+						String k2 = httpCode + '.' + headerName;
+						org.apache.juneau.dto.swagger.Header h = m2.get(k2);
+						if (h == null) {
+							h = org.apache.juneau.dto.swagger.Header.createStrict(null);
+							m2.put(k2, h);
+							r2.addHeader(name, h);
+						}
+						if (field.equals("collectionFormat"))
+							h.setCollectionFormat(value);
+						else if (field.equals("default"))
+							h.setDefault(value);
+						else if (field.equals("description"))
+							h.setDescription(value);
+						else if (field.equals("format"))
+							h.setFormat(value);
+						else if (field.equals("items"))
+							h.setItems(jp.parse(value, Items.class));
+						else if (field.equals("type"))
+							h.setType(value);
+
+					} else if ("description".equals(name)) {
+						r2.setDescription(value);
+					} else if ("schema".equals(name)) {
+						r2.setSchema(jp.parse(value, Schema.class));
+					} else if ("examples".equals(name)) {
+						r2.setExamples(jp.parseMap(value, TreeMap.class, String.class, Object.class));
+					} else {
+						System.err.println("Unknown bundle key '"+key+"'");
+					}
+				}
+			}
+
+			return m.isEmpty() ? null : m;
 		}
 
 		private boolean isRequestAllowed(RestRequest req) {
@@ -2235,94 +2857,6 @@ public abstract class RestServlet extends HttpServlet {
 	}
 
 	/**
-	 * Returns the method description for the specified method for the OPTIONS page of this servlet.
-	 * <p>
-	 * 	Subclasses can override this method to provide their own implementations.
-	 * </p>
-	 *
-	 * @param method The Java method.
-	 * @param meta Metadata about the Java method.
-	 * @param req The HTTP request.
-	 * @return The bean for populating the OPTIONS page of the servlet.
-	 * @throws RestServletException
-	 */
-	protected MethodDescription getMethodDescription(Method method, MethodMeta meta, RestRequest req) throws RestServletException {
-		RestMethod rm = method.getAnnotation(RestMethod.class);
-		String rbPrefix = method.getName();
-		VarResolverSession vr = req.getVarResolverSession();
-
-		MethodDescription d = new MethodDescription();
-		d.setJavaMethod(method.getName());
-		d.setHttpMethod(meta.httpMethod);
-		d.setPath(meta.pathPattern.patternString);
-
-		d.setDescription(meta.getDescription(req));
-
-		if (rm != null) {
-
-			d.setConverters(rm.converters());
-			d.setGuards(rm.guards());
-			d.setMatchers(rm.matchers());
-
-			if (! meta.mParsers.getSupportedMediaTypes().equals(getParsers().getSupportedMediaTypes()))
-				d.setConsumes(meta.mParsers.getSupportedMediaTypes());
-
-			if (! meta.mSerializers.getSupportedMediaTypes().equals(getSerializers().getSupportedMediaTypes()))
-				d.setProduces(meta.mSerializers.getSupportedMediaTypes());
-
-			// URL variable descriptions
-			for (MethodParam p : meta.params) {
-				if (p.paramType.isOneOf(ATTR, HEADER, PARAM, QPARAM, CONTENT)) {
-					String category = p.paramType.name().toLowerCase(Locale.ENGLISH);
-					d.addRequestVar(category, p.name);
-				}
-			}
-
-			for (Var v : rm.input())
-				d.addRequestVar(v.category(), v.name()).setDescription(vr.resolve(v.description()));
-
-			for (Response r : rm.responses()) {
-				org.apache.juneau.server.labels.MethodDescription.Response r2 = d.addResponse(r.value());
-				r2.description = r.description().isEmpty() ? RestUtils.getHttpResponseText(r.value()) : vr.resolve(r.description());
-				for (Var rv : r.output())
-					r2.addResponseVar(rv.category(), rv.name()).setDescription(vr.resolve(rv.description()));
-			}
-
-			for (int rc : rm.rc())
-				d.addResponse(rc).setDescription(RestUtils.getHttpResponseText(rc));
-
-			MessageBundle rb = getMessages(req.getLocale());
-			for (String k : rb.keySet(rbPrefix)) {
-				if (k.equals(rbPrefix))
-					d.setDescription(vr.resolve(rb.getString(k)));
-				else {
-					String[] k2 = k.substring(rbPrefix.length()+1).split("\\.");
-					if (k2.length > 0) {
-						if (k2[0].equals("req") && k2.length > 1) {
-							String cat = k2[1], name = (k2.length > 2 ? k2[2] : null);
-							d.addRequestVar(cat, name).setDescription(vr.resolve(rb.getString(k)));
-						} else if (k2[0].equals("res") && k2.length > 1) {
-							if (StringUtils.isNumeric(k2[1])) {
-								int status = Integer.parseInt(k2[1]);
-								if (k2.length == 2)
-									d.addResponse(status).setDescription(vr.resolve(rb.getString(k)));
-								else if (k2.length > 2) {
-									// Is format res.[status].[category].[name] = [description]
-									String cat = k2[2], name = (k2.length > 3 ? k2[3] : null);
-									d.addResponse(status).addResponseVar(cat, name).setDescription(vr.resolve(rb.getString(k)));
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-
-		return d;
-	}
-
-
-	/**
 	 * Returns the variable resolver for this servlet created by the {@link #createVarResolver()} method.
 	 * <p>
 	 * 	Variable resolvers are used to replace variables in property values.
@@ -2332,7 +2866,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * 	<ja>@RestResource</ja>(
 	 * 		messages=<js>"nls/Messages"</js>,
 	 * 		properties={
-	 * 			<ja>@Property</ja>(name=<js>"label"</js>,value=<js>"$L{label}"</js>),  <jc>// Localized variable in Messages.properties</jc>
+	 * 			<ja>@Property</ja>(name=<js>"title"</js>,value=<js>"$L{title}"</js>),  <jc>// Localized variable in Messages.properties</jc>
 	 * 			<ja>@Property</ja>(name=<js>"javaVendor"</js>,value=<js>"$S{java.vendor,Oracle}"</js>),  <jc>// System property with default value</jc>
 	 * 			<ja>@Property</ja>(name=<js>"foo"</js>,value=<js>"bar"</js>),
 	 * 			<ja>@Property</ja>(name=<js>"bar"</js>,value=<js>"baz"</js>),
@@ -2355,7 +2889,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * 			)
 	 * 		}
 	 * 	)
-	 * 	<jk>public</jk> LoggerEntry getLogger(RestRequest req, <ja>@Attr</ja> String name) <jk>throws</jk> Exception {
+	 * 	<jk>public</jk> LoggerEntry getLogger(RestRequest req, <ja>@Path</ja> String name) <jk>throws</jk> Exception {
 	 * </p>
 	 * <p>
 	 * 	Calls to <code>req.getProperties().getString(<js>"key"</js>)</code> returns strings with variables resolved.
@@ -2475,6 +3009,14 @@ public abstract class RestServlet extends HttpServlet {
 						return req.getRequestURI();
 					if (k.equals(REST_method))
 						return req.getMethod();
+					if (k.equals(REST_servletTitle))
+						return req.getServletTitle();
+					if (k.equals(REST_servletDescription))
+						return req.getServletDescription();
+					if (k.equals(REST_methodSummary))
+						return req.getMethodSummary();
+					if (k.equals(REST_methodDescription))
+						return req.getMethodDescription();
 					o = req.getAttribute(k);
 					if (o == null)
 						o = req.getHeader(k);
@@ -2746,51 +3288,67 @@ public abstract class RestServlet extends HttpServlet {
 	 * <p>
 	 * 	If the resource cannot be found in the classpath, then an attempt is made to look in the
 	 * 		JVM working directory.
-	 * </p>
+	 * <p>
+	 * 	If the <code>locale</code> is specified, then we look for resources whose name matches that locale.
+	 * 	For example, if looking for the resource <js>"MyResource.txt"</js> for the Japanese locale, we will
+	 * 	look for files in the following order:
+	 * <ol>
+	 * 	<li><js>"MyResource_ja_JP.txt"</js>
+	 * 	<li><js>"MyResource_ja.txt"</js>
+	 * 	<li><js>"MyResource.txt"</js>
+	 * </ol>
 	 *
 	 * @param name The resource name.
+	 * @param locale Optional locale.
 	 * @return An input stream of the resource, or <jk>null</jk> if the resource could not be found.
 	 * @throws IOException
 	 */
-	protected InputStream getResource(String name) throws IOException {
-		if (! resourceStreams.containsKey(name)) {
-			InputStream is = ReflectionUtils.getResource(getClass(), name);
+	protected InputStream getResource(String name, Locale locale) throws IOException {
+		String n = (locale == null || locale.toString().isEmpty() ? name : name + '|' + locale);
+		if (! resourceStreams.containsKey(n)) {
+			InputStream is = ReflectionUtils.getLocalizedResource(getClass(), name, locale);
 			if (is == null && name.indexOf("..") == -1) {
-				File f = new File(name);
-				if (f.exists() && f.canRead())
-					is = new FileInputStream(f);
+				for (String n2 : FileUtils.getCandidateFileNames(name, locale)) {
+					File f = new File(n2);
+					if (f.exists() && f.canRead()) {
+						is = new FileInputStream(f);
+						break;
+					}
+				}
 			}
 			if (is != null) {
 				try {
-					resourceStreams.put(name, ByteArrayCache.DEFAULT.cache(is));
+					resourceStreams.put(n, ByteArrayCache.DEFAULT.cache(is));
 				} finally {
 					is.close();
 				}
 			}
 		}
-		byte[] b = resourceStreams.get(name);
+		byte[] b = resourceStreams.get(n);
 		return b == null ? null : new ByteArrayInputStream(b);
 	}
 
 	/**
-	 * Reads the input stream from {@link #getResource(String)} into a String.
+	 * Reads the input stream from {@link #getResource(String, Locale)} into a String.
 	 *
 	 * @param name The resource name.
+	 * @param locale Optional locale.
 	 * @return The contents of the stream as a string, or <jk>null</jk> if the resource could not be found.
 	 * @throws IOException
 	 */
-	public String getResourceAsString(String name) throws IOException {
-		if (! resourceStrings.containsKey(name)) {
-			String s = IOUtils.read(getResource(name));
+	public String getResourceAsString(String name, Locale locale) throws IOException {
+		String n = (locale == null || locale.toString().isEmpty() ? name : name + '|' + locale);
+		if (! resourceStrings.containsKey(n)) {
+			String s = IOUtils.read(getResource(name, locale));
 			if (s == null)
 				throw new IOException("Resource '"+name+"' not found.");
-			resourceStrings.put(name, s);
+			resourceStrings.put(n, s);
 		}
-		return resourceStrings.get(name);
+		return resourceStrings.get(n);
 	}
 
 	/**
-	 * Reads the input stream from {@link #getResource(String)} and parses it into a POJO
+	 * Reads the input stream from {@link #getResource(String, Locale)} and parses it into a POJO
 	 * 	using the parser matched by the specified media type.
 	 * <p>
 	 * 	Useful if you want to load predefined POJOs from JSON files in your classpath.
@@ -2799,12 +3357,13 @@ public abstract class RestServlet extends HttpServlet {
 	 * @param c The class type of the POJO to create.
 	 * @param mediaType The media type of the data in the stream (e.g. <js>"text/json"</js>)
 	 * @param name The resource name (e.g. "htdocs/styles.css").
+	 * @param locale Optional locale.
 	 * @return The parsed resource, or <jk>null</jk> if the resource could not be found.
 	 * @throws IOException
 	 * @throws ServletException
 	 */
-	public <T> T getResource(Class<T> c, String mediaType, String name) throws IOException, ServletException {
-		InputStream is = getResource(name);
+	public <T> T getResource(Class<T> c, String mediaType, String name, Locale locale) throws IOException, ServletException {
+		InputStream is = getResource(name, locale);
 		if (is == null)
 			return null;
 		try {

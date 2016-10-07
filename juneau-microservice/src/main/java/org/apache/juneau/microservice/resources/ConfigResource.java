@@ -14,7 +14,6 @@ package org.apache.juneau.microservice.resources;
 
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.html.HtmlDocSerializerContext.*;
-import static org.apache.juneau.server.annotation.VarCategory.*;
 
 import java.io.*;
 import java.util.*;
@@ -30,7 +29,7 @@ import org.apache.juneau.server.annotation.*;
  */
 @RestResource(
 	path="/config",
-	label="Configuration",
+	title="Configuration",
 	description="Contents of configuration file.",
 	properties={
 		@Property(name=HTMLDOC_links, value="{up:'$R{requestParentURI}',options:'$R{servletURI}?method=OPTIONS',edit:'$R{servletURI}/edit'}"),
@@ -74,11 +73,11 @@ public class ConfigResource extends Resource {
 	 */
 	@RestMethod(name="GET", path="/{section}",
 		description="Show config file section.",
-		input={
-			@Var(category=ATTR, name="section", description="Section name.")
+		parameters={
+			@Var(in="path", name="section", description="Section name.")
 		}
 	)
-	public ObjectMap getConfigSection(@Attr("section") String section) throws Exception {
+	public ObjectMap getConfigSection(@Path("section") String section) throws Exception {
 		return getSection(section);
 	}
 
@@ -92,12 +91,12 @@ public class ConfigResource extends Resource {
 	 */
 	@RestMethod(name="GET", path="/{section}/{key}",
 		description="Show config file entry.",
-		input={
-			@Var(category=ATTR, name="section", description="Section name."),
-			@Var(category=ATTR, name="key", description="Entry name.")
+		parameters={
+			@Var(in="path", name="section", description="Section name."),
+			@Var(in="path", name="key", description="Entry name.")
 		}
 	)
-	public String getConfigEntry(@Attr("section") String section, @Attr("key") String key) throws Exception {
+	public String getConfigEntry(@Path("section") String section, @Path("key") String key) throws Exception {
 		return getSection(section).getString(key);
 	}
 
@@ -110,11 +109,11 @@ public class ConfigResource extends Resource {
 	 */
 	@RestMethod(name="POST", path="/",
 		description="Sets contents of config file from a FORM post.",
-		input={
-			@Var(category=PARAM, name="contents", description="New contents in INI file format.")
+		parameters={
+			@Var(in="formData", name="contents", description="New contents in INI file format.")
 		}
 	)
-	public ConfigFile setConfigContentsFormPost(@Param("contents") String contents) throws Exception {
+	public ConfigFile setConfigContentsFormPost(@FormData("contents") String contents) throws Exception {
 		return setConfigContents(new StringReader(contents));
 	}
 
@@ -127,11 +126,11 @@ public class ConfigResource extends Resource {
 	 */
 	@RestMethod(name="PUT", path="/",
 		description="Sets contents of config file.",
-		input={
-			@Var(category=CONTENT, description="New contents in INI file format.")
+		parameters={
+			@Var(in="body", description="New contents in INI file format.")
 		}
 	)
-	public ConfigFile setConfigContents(@Content Reader contents) throws Exception {
+	public ConfigFile setConfigContents(@Body Reader contents) throws Exception {
 		ConfigFile cf2 = ConfigMgr.DEFAULT.create().load(contents);
 		return getConfig().merge(cf2).save();
 	}
@@ -146,12 +145,12 @@ public class ConfigResource extends Resource {
 	 */
 	@RestMethod(name="PUT", path="/{section}",
 		description="Add or overwrite a config file section.",
-		input={
-			@Var(category=ATTR, name="section", description="Section name."),
-			@Var(category=CONTENT, description="New contents for section as a simple map with string keys and values.")
+		parameters={
+			@Var(in="path", name="section", description="Section name."),
+			@Var(in="body", description="New contents for section as a simple map with string keys and values.")
 		}
 	)
-	public ObjectMap setConfigSection(@Attr("section") String section, @Content Map<String,String> contents) throws Exception {
+	public ObjectMap setConfigSection(@Path("section") String section, @Body Map<String,String> contents) throws Exception {
 		getConfig().setSection(section, contents);
 		return getSection(section);
 	}
@@ -167,13 +166,13 @@ public class ConfigResource extends Resource {
 	 */
 	@RestMethod(name="PUT", path="/{section}/{key}",
 		description="Add or overwrite a config file entry.",
-		input={
-			@Var(category=ATTR, name="section", description="Section name."),
-			@Var(category=ATTR, name="key", description="Entry name."),
-			@Var(category=CONTENT, description="New value as a string.")
+		parameters={
+			@Var(in="path", name="section", description="Section name."),
+			@Var(in="path", name="key", description="Entry name."),
+			@Var(in="body", description="New value as a string.")
 		}
 	)
-	public String setConfigSection(@Attr("section") String section, @Attr("key") String key, @Content String value) throws Exception {
+	public String setConfigSection(@Path("section") String section, @Path("key") String key, @Body String value) throws Exception {
 		getConfig().put(section, key, value, false);
 		return getSection(section).getString(key);
 	}

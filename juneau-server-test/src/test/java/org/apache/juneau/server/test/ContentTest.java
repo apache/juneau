@@ -28,7 +28,7 @@ public class ContentTest {
 	private static String URL = "/testContent";
 
 	//====================================================================================================
-	// Basic tests using &Content parameter
+	// Basic tests using @Body parameter
 	//====================================================================================================
 	@Test
 	public void testUsingContentParam() throws Exception {
@@ -36,29 +36,29 @@ public class ContentTest {
 		String r;
 
 		//	@RestMethod(name="POST", path="/boolean")
-		//	public boolean testBool(@Content boolean b) {
+		//	public boolean testBool(@Body boolean b) {
 		//		return b;
 		//	}
-		r = c.doPost(URL + "/boolean?content=true", null).getResponseAsString();
+		r = c.doPost(URL + "/boolean?body=true", null).getResponseAsString();
 		assertEquals("true", r);
-		r = c.doPost(URL + "/boolean?content=(true)", null).getResponseAsString();
+		r = c.doPost(URL + "/boolean?body=(true)", null).getResponseAsString();
 		assertEquals("true", r);
-		r = c.doPost(URL + "/boolean?content=$b(true)", null).getResponseAsString();
+		r = c.doPost(URL + "/boolean?body=$b(true)", null).getResponseAsString();
 		assertEquals("true", r);
-		r = c.doPost(URL + "/boolean?content=false", null).getResponseAsString();
+		r = c.doPost(URL + "/boolean?body=false", null).getResponseAsString();
 		assertEquals("false", r);
-		r = c.doPost(URL + "/boolean?content=(false)", null).getResponseAsString();
+		r = c.doPost(URL + "/boolean?body=(false)", null).getResponseAsString();
 		assertEquals("false", r);
-		r = c.doPost(URL + "/boolean?content=$b(false)", null).getResponseAsString();
+		r = c.doPost(URL + "/boolean?body=$b(false)", null).getResponseAsString();
 		assertEquals("false", r);
 		try {
-			r = c.doPost(URL + "/boolean?content=%00&noTrace=true", null).getResponseAsString();
+			r = c.doPost(URL + "/boolean?body=%00&noTrace=true", null).getResponseAsString();
 			fail("Exception expected!");
 		} catch (RestCallException e) {
 			assertEquals(400, e.getResponseCode());
 		}
 		try {
-			r = c.doPost(URL + "/boolean?content=bad&noTrace=true", null).getResponseAsString();
+			r = c.doPost(URL + "/boolean?body=bad&noTrace=true", null).getResponseAsString();
 			fail("Exception expected!");
 		} catch (RestCallException e) {
 			assertEquals(400, e.getResponseCode());
@@ -66,154 +66,154 @@ public class ContentTest {
 
 
 		//	@RestMethod(name="POST", path="/Boolean")
-		//	public Boolean testBoolean(@Content Boolean b) {
+		//	public Boolean testBoolean(@Body Boolean b) {
 		//		return b;
 		//	}
-		r = c.doPost(URL + "/Boolean?content=true", null).getResponseAsString();
+		r = c.doPost(URL + "/Boolean?body=true", null).getResponseAsString();
 		assertEquals("true", r);
-		r = c.doPost(URL + "/Boolean?content=(true)", null).getResponseAsString();
+		r = c.doPost(URL + "/Boolean?body=(true)", null).getResponseAsString();
 		assertEquals("true", r);
-		r = c.doPost(URL + "/Boolean?content=$b(true)", null).getResponseAsString();
+		r = c.doPost(URL + "/Boolean?body=$b(true)", null).getResponseAsString();
 		assertEquals("true", r);
-		r = c.doPost(URL + "/Boolean?content=false", null).getResponseAsString();
+		r = c.doPost(URL + "/Boolean?body=false", null).getResponseAsString();
 		assertEquals("false", r);
-		r = c.doPost(URL + "/Boolean?content=(false)", null).getResponseAsString();
+		r = c.doPost(URL + "/Boolean?body=(false)", null).getResponseAsString();
 		assertEquals("false", r);
-		r = c.doPost(URL + "/Boolean?content=$b(false)", null).getResponseAsString();
+		r = c.doPost(URL + "/Boolean?body=$b(false)", null).getResponseAsString();
 		assertEquals("false", r);
-		r = c.doPost(URL + "/Boolean?content=%00", null).getResponseAsString();
+		r = c.doPost(URL + "/Boolean?body=%00", null).getResponseAsString();
 		assertEquals("null", r);
 		try {
-			r = c.doPost(URL + "/Boolean?content=bad&noTrace=true", null).getResponseAsString();
+			r = c.doPost(URL + "/Boolean?body=bad&noTrace=true", null).getResponseAsString();
 			fail("Exception expected!");
 		} catch (RestCallException e) {
 			assertEquals(400, e.getResponseCode());
 		}
 
 		//	@RestMethod(name="POST", path="/int")
-		//	public int testInt(@Content int i) {
+		//	public int testInt(@Body int i) {
 		//		return i;
 		//	}
-		r = c.doPost(URL + "/int?content=-123", null).getResponseAsString();
+		r = c.doPost(URL + "/int?body=-123", null).getResponseAsString();
 		assertEquals("-123", r);
-		r = c.doPost(URL + "/int?content=(-123)", null).getResponseAsString();
+		r = c.doPost(URL + "/int?body=(-123)", null).getResponseAsString();
 		assertEquals("-123", r);
-		r = c.doPost(URL + "/int?content=$n(-123)", null).getResponseAsString();
+		r = c.doPost(URL + "/int?body=$n(-123)", null).getResponseAsString();
 		assertEquals("-123", r);
 		try {
-			r = c.doPost(URL + "/int?content=%00&noTrace=true", null).getResponseAsString();
+			r = c.doPost(URL + "/int?body=%00&noTrace=true", null).getResponseAsString();
 			fail("Exception expected!");
 		} catch (RestCallException e) {
 			assertEquals(400, e.getResponseCode());
 		}
 		try {
-			r = c.doPost(URL + "/int?content=bad&noTrace=true", null).getResponseAsString();
+			r = c.doPost(URL + "/int?body=bad&noTrace=true", null).getResponseAsString();
 			fail("Exception expected!");
 		} catch (RestCallException e) {
 			assertEquals(400, e.getResponseCode());
 		}
 
 		//	@RestMethod(name="POST", path="/Integer")
-		//	public Integer testInteger(@Content Integer i) {
+		//	public Integer testInteger(@Body Integer i) {
 		//		return i;
 		//	}
-		r = c.doPost(URL + "/Integer?content=-123", null).getResponseAsString();
+		r = c.doPost(URL + "/Integer?body=-123", null).getResponseAsString();
 		assertEquals("-123", r);
-		r = c.doPost(URL + "/Integer?content=(-123)", null).getResponseAsString();
+		r = c.doPost(URL + "/Integer?body=(-123)", null).getResponseAsString();
 		assertEquals("-123", r);
-		r = c.doPost(URL + "/Integer?content=$n(-123)", null).getResponseAsString();
+		r = c.doPost(URL + "/Integer?body=$n(-123)", null).getResponseAsString();
 		assertEquals("-123", r);
-		r = c.doPost(URL + "/Integer?content=%00", null).getResponseAsString();
+		r = c.doPost(URL + "/Integer?body=%00", null).getResponseAsString();
 		assertEquals("null", r);
 		try {
-			r = c.doPost(URL + "/Integer?content=bad&noTrace=true", null).getResponseAsString();
+			r = c.doPost(URL + "/Integer?body=bad&noTrace=true", null).getResponseAsString();
 			fail("Exception expected!");
 		} catch (RestCallException e) {
 			assertEquals(400, e.getResponseCode());
 		}
 
 		//	@RestMethod(name="POST", path="/float")
-		//	public float testFloat(@Content float f) {
+		//	public float testFloat(@Body float f) {
 		//		return f;
 		//	}
-		r = c.doPost(URL + "/float?content=-1.23", null).getResponseAsString();
+		r = c.doPost(URL + "/float?body=-1.23", null).getResponseAsString();
 		assertEquals("-1.23", r);
-		r = c.doPost(URL + "/float?content=(-1.23)", null).getResponseAsString();
+		r = c.doPost(URL + "/float?body=(-1.23)", null).getResponseAsString();
 		assertEquals("-1.23", r);
-		r = c.doPost(URL + "/float?content=$n(-1.23)", null).getResponseAsString();
+		r = c.doPost(URL + "/float?body=$n(-1.23)", null).getResponseAsString();
 		assertEquals("-1.23", r);
 		try {
-			r = c.doPost(URL + "/float?content=%00&noTrace=true", null).getResponseAsString();
+			r = c.doPost(URL + "/float?body=%00&noTrace=true", null).getResponseAsString();
 			fail("Exception expected!");
 		} catch (RestCallException e) {
 			assertEquals(400, e.getResponseCode());
 		}
 		try {
-			r = c.doPost(URL + "/float?content=bad&noTrace=true", null).getResponseAsString();
+			r = c.doPost(URL + "/float?body=bad&noTrace=true", null).getResponseAsString();
 			fail("Exception expected!");
 		} catch (RestCallException e) {
 			assertEquals(400, e.getResponseCode());
 		}
 
 		//	@RestMethod(name="POST", path="/Float")
-		//	public Float testFloat2(@Content Float f) {
+		//	public Float testFloat2(@Body Float f) {
 		//		return f;
 		//	}
-		r = c.doPost(URL + "/Float?content=-1.23", null).getResponseAsString();
+		r = c.doPost(URL + "/Float?body=-1.23", null).getResponseAsString();
 		assertEquals("-1.23", r);
-		r = c.doPost(URL + "/Float?content=(-1.23)", null).getResponseAsString();
+		r = c.doPost(URL + "/Float?body=(-1.23)", null).getResponseAsString();
 		assertEquals("-1.23", r);
-		r = c.doPost(URL + "/Float?content=$n(-1.23)", null).getResponseAsString();
+		r = c.doPost(URL + "/Float?body=$n(-1.23)", null).getResponseAsString();
 		assertEquals("-1.23", r);
-		r = c.doPost(URL + "/Float?content=%00", null).getResponseAsString();
+		r = c.doPost(URL + "/Float?body=%00", null).getResponseAsString();
 		assertEquals("null", r);
 		try {
-			r = c.doPost(URL + "/Float?content=bad&noTrace=true", null).getResponseAsString();
+			r = c.doPost(URL + "/Float?body=bad&noTrace=true", null).getResponseAsString();
 			fail("Exception expected!");
 		} catch (RestCallException e) {
 			assertEquals(400, e.getResponseCode());
 		}
 
 		//	@RestMethod(name="POST", path="/Map")
-		//	public TreeMap<String,String> testMap(@Content TreeMap<String,String> m) {
+		//	public TreeMap<String,String> testMap(@Body TreeMap<String,String> m) {
 		//		return m;
 		//	}
-		r = c.doPost(URL + "/Map?content=(a=b,c=d)", null).getResponseAsString();
+		r = c.doPost(URL + "/Map?body=(a=b,c=d)", null).getResponseAsString();
 		assertEquals("{a:'b',c:'d'}", r);
-		r = c.doPost(URL + "/Map?content=%00", null).getResponseAsString();
+		r = c.doPost(URL + "/Map?body=%00", null).getResponseAsString();
 		assertEquals("null", r);
 		try {
-			r = c.doPost(URL + "/Map?content=bad&noTrace=true", null).getResponseAsString();
+			r = c.doPost(URL + "/Map?body=bad&noTrace=true", null).getResponseAsString();
 			fail("Exception expected!");
 		} catch (RestCallException e) {
 			assertEquals(400, e.getResponseCode());
 		}
 
 		//	@RestMethod(name="POST", path="/B")
-		//	public DTO2s.B testPojo1(@Content DTO2s.B b) {
+		//	public DTO2s.B testPojo1(@Body DTO2s.B b) {
 		//		return b;
 		//	}
 		DTOs.B b = DTOs.B.create();
-		r = c.doPost(URL + "/B?content=" + UonSerializer.DEFAULT.serialize(b), null).getResponseAsString();
+		r = c.doPost(URL + "/B?body=" + UonSerializer.DEFAULT.serialize(b), null).getResponseAsString();
 		assertEquals("{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}", r);
-		r = c.doPost(URL + "/B?content=" + UonSerializer.DEFAULT_SIMPLE.serialize(b), null).getResponseAsString();
+		r = c.doPost(URL + "/B?body=" + UonSerializer.DEFAULT_SIMPLE.serialize(b), null).getResponseAsString();
 		assertEquals("{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}", r);
 
 		//	@RestMethod(name="POST", path="/C")
-		//	public DTO2s.C testPojo2(@Content DTO2s.C c) {
+		//	public DTO2s.C testPojo2(@Body DTO2s.C c) {
 		//		return c;
 		//	}
 		DTOs.C x = DTOs.C.create();
-		r = c.doPost(URL + "/C?content=" + UonSerializer.DEFAULT.serialize(x), null).getResponseAsString();
+		r = c.doPost(URL + "/C?body=" + UonSerializer.DEFAULT.serialize(x), null).getResponseAsString();
 		assertEquals("{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}", r);
-		r = c.doPost(URL + "/C?content=" + UonSerializer.DEFAULT_SIMPLE.serialize(x), null).getResponseAsString();
+		r = c.doPost(URL + "/C?body=" + UonSerializer.DEFAULT_SIMPLE.serialize(x), null).getResponseAsString();
 		assertEquals("{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}", r);
 
 		c.closeQuietly();
 	}
 
 	//====================================================================================================
-	// Basic tests using &Content parameter with &Accept=text/json
+	// Basic tests using &Body parameter with &Accept=text/json
 	//====================================================================================================
 	@Test
 	public void testUsingContentParamJsonHeader() throws Exception {
@@ -221,21 +221,21 @@ public class ContentTest {
 		String r;
 
 		//	@RestMethod(name="POST", path="/boolean")
-		//	public boolean testBool(@Content boolean b) {
+		//	public boolean testBool(@Body boolean b) {
 		//		return b;
 		//	}
-		r = c.doPost(URL + "/boolean?content=true", null).getResponseAsString();
+		r = c.doPost(URL + "/boolean?body=true", null).getResponseAsString();
 		assertEquals("true", r);
-		r = c.doPost(URL + "/boolean?content=false", null).getResponseAsString();
+		r = c.doPost(URL + "/boolean?body=false", null).getResponseAsString();
 		assertEquals("false", r);
 		try {
-			r = c.doPost(URL + "/boolean?content=null&noTrace=true", null).getResponseAsString();
+			r = c.doPost(URL + "/boolean?body=null&noTrace=true", null).getResponseAsString();
 			fail("Exception expected!");
 		} catch (RestCallException e) {
 			assertEquals(400, e.getResponseCode());
 		}
 		try {
-			r = c.doPost(URL + "/boolean?content=bad&noTrace=true", null).getResponseAsString();
+			r = c.doPost(URL + "/boolean?body=bad&noTrace=true", null).getResponseAsString();
 			fail("Exception expected!");
 		} catch (RestCallException e) {
 			assertEquals(400, e.getResponseCode());
@@ -243,126 +243,126 @@ public class ContentTest {
 
 
 		//	@RestMethod(name="POST", path="/Boolean")
-		//	public Boolean testBoolean(@Content Boolean b) {
+		//	public Boolean testBoolean(@Body Boolean b) {
 		//		return b;
 		//	}
-		r = c.doPost(URL + "/Boolean?content=true", null).getResponseAsString();
+		r = c.doPost(URL + "/Boolean?body=true", null).getResponseAsString();
 		assertEquals("true", r);
-		r = c.doPost(URL + "/Boolean?content=false", null).getResponseAsString();
+		r = c.doPost(URL + "/Boolean?body=false", null).getResponseAsString();
 		assertEquals("false", r);
-		r = c.doPost(URL + "/Boolean?content=null", null).getResponseAsString();
+		r = c.doPost(URL + "/Boolean?body=null", null).getResponseAsString();
 		assertEquals("null", r);
 		try {
-			r = c.doPost(URL + "/Boolean?content=bad&noTrace=true", null).getResponseAsString();
+			r = c.doPost(URL + "/Boolean?body=bad&noTrace=true", null).getResponseAsString();
 			fail("Exception expected!");
 		} catch (RestCallException e) {
 			assertEquals(400, e.getResponseCode());
 		}
 
 		//	@RestMethod(name="POST", path="/int")
-		//	public int testInt(@Content int i) {
+		//	public int testInt(@Body int i) {
 		//		return i;
 		//	}
-		r = c.doPost(URL + "/int?content=-123", null).getResponseAsString();
+		r = c.doPost(URL + "/int?body=-123", null).getResponseAsString();
 		assertEquals("-123", r);
 		try {
-			r = c.doPost(URL + "/int?content=null&noTrace=true", null).getResponseAsString();
+			r = c.doPost(URL + "/int?body=null&noTrace=true", null).getResponseAsString();
 			fail("Exception expected!");
 		} catch (RestCallException e) {
 			assertEquals(400, e.getResponseCode());
 		}
 		try {
-			r = c.doPost(URL + "/int?content=bad&noTrace=true", null).getResponseAsString();
+			r = c.doPost(URL + "/int?body=bad&noTrace=true", null).getResponseAsString();
 			fail("Exception expected!");
 		} catch (RestCallException e) {
 			assertEquals(400, e.getResponseCode());
 		}
 
 		//	@RestMethod(name="POST", path="/Integer")
-		//	public Integer testInteger(@Content Integer i) {
+		//	public Integer testInteger(@Body Integer i) {
 		//		return i;
 		//	}
-		r = c.doPost(URL + "/Integer?content=-123", null).getResponseAsString();
+		r = c.doPost(URL + "/Integer?body=-123", null).getResponseAsString();
 		assertEquals("-123", r);
-		r = c.doPost(URL + "/Integer?content=null", null).getResponseAsString();
+		r = c.doPost(URL + "/Integer?body=null", null).getResponseAsString();
 		assertEquals("null", r);
 		try {
-			r = c.doPost(URL + "/Integer?content=bad&noTrace=true", null).getResponseAsString();
+			r = c.doPost(URL + "/Integer?body=bad&noTrace=true", null).getResponseAsString();
 			fail("Exception expected!");
 		} catch (RestCallException e) {
 			assertEquals(400, e.getResponseCode());
 		}
 
 		//	@RestMethod(name="POST", path="/float")
-		//	public float testFloat(@Content float f) {
+		//	public float testFloat(@Body float f) {
 		//		return f;
 		//	}
-		r = c.doPost(URL + "/float?content=-1.23", null).getResponseAsString();
+		r = c.doPost(URL + "/float?body=-1.23", null).getResponseAsString();
 		assertEquals("-1.23", r);
 		try {
-			r = c.doPost(URL + "/float?content=null&noTrace=true", null).getResponseAsString();
+			r = c.doPost(URL + "/float?body=null&noTrace=true", null).getResponseAsString();
 			fail("Exception expected!");
 		} catch (RestCallException e) {
 			assertEquals(400, e.getResponseCode());
 		}
 		try {
-			r = c.doPost(URL + "/float?content=bad&noTrace=true", null).getResponseAsString();
+			r = c.doPost(URL + "/float?body=bad&noTrace=true", null).getResponseAsString();
 			fail("Exception expected!");
 		} catch (RestCallException e) {
 			assertEquals(400, e.getResponseCode());
 		}
 
 		//	@RestMethod(name="POST", path="/Float")
-		//	public Float testFloat2(@Content Float f) {
+		//	public Float testFloat2(@Body Float f) {
 		//		return f;
 		//	}
-		r = c.doPost(URL + "/Float?content=-1.23", null).getResponseAsString();
+		r = c.doPost(URL + "/Float?body=-1.23", null).getResponseAsString();
 		assertEquals("-1.23", r);
-		r = c.doPost(URL + "/Float?content=null", null).getResponseAsString();
+		r = c.doPost(URL + "/Float?body=null", null).getResponseAsString();
 		assertEquals("null", r);
 		try {
-			r = c.doPost(URL + "/Float?content=bad&noTrace=true", null).getResponseAsString();
+			r = c.doPost(URL + "/Float?body=bad&noTrace=true", null).getResponseAsString();
 			fail("Exception expected!");
 		} catch (RestCallException e) {
 			assertEquals(400, e.getResponseCode());
 		}
 
 		//	@RestMethod(name="POST", path="/Map")
-		//	public TreeMap<String,String> testMap(@Content TreeMap<String,String> m) {
+		//	public TreeMap<String,String> testMap(@Body TreeMap<String,String> m) {
 		//		return m;
 		//	}
-		r = c.doPost(URL + "/Map?content=" + encode("{a:'b',c:'d'}"), null).getResponseAsString();
+		r = c.doPost(URL + "/Map?body=" + encode("{a:'b',c:'d'}"), null).getResponseAsString();
 		assertEquals("{a:'b',c:'d'}", r);
-		r = c.doPost(URL + "/Map?content=null", null).getResponseAsString();
+		r = c.doPost(URL + "/Map?body=null", null).getResponseAsString();
 		assertEquals("null", r);
 		try {
-			r = c.doPost(URL + "/Map?content=bad&noTrace=true", null).getResponseAsString();
+			r = c.doPost(URL + "/Map?body=bad&noTrace=true", null).getResponseAsString();
 			fail("Exception expected!");
 		} catch (RestCallException e) {
 			assertEquals(400, e.getResponseCode());
 		}
 
 		//	@RestMethod(name="POST", path="/B")
-		//	public DTO2s.B testPojo1(@Content DTO2s.B b) {
+		//	public DTO2s.B testPojo1(@Body DTO2s.B b) {
 		//		return b;
 		//	}
 		DTOs.B b = DTOs.B.create();
-		r = c.doPost(URL + "/B?content=" + encode(JsonSerializer.DEFAULT_LAX.serialize(b)), null).getResponseAsString();
+		r = c.doPost(URL + "/B?body=" + encode(JsonSerializer.DEFAULT_LAX.serialize(b)), null).getResponseAsString();
 		assertEquals("{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}", r);
 
 		//	@RestMethod(name="POST", path="/C")
-		//	public DTO2s.C testPojo2(@Content DTO2s.C c) {
+		//	public DTO2s.C testPojo2(@Body DTO2s.C c) {
 		//		return c;
 		//	}
 		DTOs.C x = DTOs.C.create();
-		r = c.doPost(URL + "/C?content=" + encode(JsonSerializer.DEFAULT_LAX.serialize(x)), null).getResponseAsString();
+		r = c.doPost(URL + "/C?body=" + encode(JsonSerializer.DEFAULT_LAX.serialize(x)), null).getResponseAsString();
 		assertEquals("{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}", r);
 
 		c.closeQuietly();
 	}
 
 	//====================================================================================================
-	// Basic tests using &Content parameter with &Accept=text/json
+	// Basic tests using &Body parameter with &Accept=text/json
 	//====================================================================================================
 	@Test
 	public void testUsingContentParamJsonParam() throws Exception {
@@ -370,21 +370,21 @@ public class ContentTest {
 		String r;
 
 		//	@RestMethod(name="POST", path="/boolean")
-		//	public boolean testBool(@Content boolean b) {
+		//	public boolean testBool(@Body boolean b) {
 		//		return b;
 		//	}
-		r = c.doPost(URL + "/boolean?content=true&Content-Type=text/json", null).getResponseAsString();
+		r = c.doPost(URL + "/boolean?body=true&Content-Type=text/json", null).getResponseAsString();
 		assertEquals("true", r);
-		r = c.doPost(URL + "/boolean?content=false&Content-Type=text/json", null).getResponseAsString();
+		r = c.doPost(URL + "/boolean?body=false&Content-Type=text/json", null).getResponseAsString();
 		assertEquals("false", r);
 		try {
-			r = c.doPost(URL + "/boolean?content=null&Content-Type=text/json&noTrace=true", null).getResponseAsString();
+			r = c.doPost(URL + "/boolean?body=null&Content-Type=text/json&noTrace=true", null).getResponseAsString();
 			fail("Exception expected!");
 		} catch (RestCallException e) {
 			assertEquals(400, e.getResponseCode());
 		}
 		try {
-			r = c.doPost(URL + "/boolean?content=bad&Content-Type=text/json&noTrace=true", null).getResponseAsString();
+			r = c.doPost(URL + "/boolean?body=bad&Content-Type=text/json&noTrace=true", null).getResponseAsString();
 			fail("Exception expected!");
 		} catch (RestCallException e) {
 			assertEquals(400, e.getResponseCode());
@@ -392,119 +392,119 @@ public class ContentTest {
 
 
 		//	@RestMethod(name="POST", path="/Boolean")
-		//	public Boolean testBoolean(@Content Boolean b) {
+		//	public Boolean testBoolean(@Body Boolean b) {
 		//		return b;
 		//	}
-		r = c.doPost(URL + "/Boolean?content=true&Content-Type=text/json", null).getResponseAsString();
+		r = c.doPost(URL + "/Boolean?body=true&Content-Type=text/json", null).getResponseAsString();
 		assertEquals("true", r);
-		r = c.doPost(URL + "/Boolean?content=false&Content-Type=text/json", null).getResponseAsString();
+		r = c.doPost(URL + "/Boolean?body=false&Content-Type=text/json", null).getResponseAsString();
 		assertEquals("false", r);
-		r = c.doPost(URL + "/Boolean?content=null&Content-Type=text/json", null).getResponseAsString();
+		r = c.doPost(URL + "/Boolean?body=null&Content-Type=text/json", null).getResponseAsString();
 		assertEquals("null", r);
 		try {
-			r = c.doPost(URL + "/Boolean?content=bad&Content-Type=text/json&noTrace=true", null).getResponseAsString();
+			r = c.doPost(URL + "/Boolean?body=bad&Content-Type=text/json&noTrace=true", null).getResponseAsString();
 			fail("Exception expected!");
 		} catch (RestCallException e) {
 			assertEquals(400, e.getResponseCode());
 		}
 
 		//	@RestMethod(name="POST", path="/int")
-		//	public int testInt(@Content int i) {
+		//	public int testInt(@Body int i) {
 		//		return i;
 		//	}
-		r = c.doPost(URL + "/int?content=-123&Content-Type=text/json", null).getResponseAsString();
+		r = c.doPost(URL + "/int?body=-123&Content-Type=text/json", null).getResponseAsString();
 		assertEquals("-123", r);
 		try {
-			r = c.doPost(URL + "/int?content=null&Content-Type=text/json&noTrace=true", null).getResponseAsString();
+			r = c.doPost(URL + "/int?body=null&Content-Type=text/json&noTrace=true", null).getResponseAsString();
 			fail("Exception expected!");
 		} catch (RestCallException e) {
 			assertEquals(400, e.getResponseCode());
 		}
 		try {
-			r = c.doPost(URL + "/int?content=bad&Content-Type=text/json&noTrace=true", null).getResponseAsString();
+			r = c.doPost(URL + "/int?body=bad&Content-Type=text/json&noTrace=true", null).getResponseAsString();
 			fail("Exception expected!");
 		} catch (RestCallException e) {
 			assertEquals(400, e.getResponseCode());
 		}
 
 		//	@RestMethod(name="POST", path="/Integer")
-		//	public Integer testInteger(@Content Integer i) {
+		//	public Integer testInteger(@Body Integer i) {
 		//		return i;
 		//	}
-		r = c.doPost(URL + "/Integer?content=-123&Content-Type=text/json", null).getResponseAsString();
+		r = c.doPost(URL + "/Integer?body=-123&Content-Type=text/json", null).getResponseAsString();
 		assertEquals("-123", r);
-		r = c.doPost(URL + "/Integer?content=null&Content-Type=text/json", null).getResponseAsString();
+		r = c.doPost(URL + "/Integer?body=null&Content-Type=text/json", null).getResponseAsString();
 		assertEquals("null", r);
 		try {
-			r = c.doPost(URL + "/Integer?content=bad&Content-Type=text/json&noTrace=true", null).getResponseAsString();
+			r = c.doPost(URL + "/Integer?body=bad&Content-Type=text/json&noTrace=true", null).getResponseAsString();
 			fail("Exception expected!");
 		} catch (RestCallException e) {
 			assertEquals(400, e.getResponseCode());
 		}
 
 		//	@RestMethod(name="POST", path="/float")
-		//	public float testFloat(@Content float f) {
+		//	public float testFloat(@Body float f) {
 		//		return f;
 		//	}
-		r = c.doPost(URL + "/float?content=-1.23&Content-Type=text/json", null).getResponseAsString();
+		r = c.doPost(URL + "/float?body=-1.23&Content-Type=text/json", null).getResponseAsString();
 		assertEquals("-1.23", r);
 		try {
-			r = c.doPost(URL + "/float?content=null&Content-Type=text/json&noTrace=true", null).getResponseAsString();
+			r = c.doPost(URL + "/float?body=null&Content-Type=text/json&noTrace=true", null).getResponseAsString();
 			fail("Exception expected!");
 		} catch (RestCallException e) {
 			assertEquals(400, e.getResponseCode());
 		}
 		try {
-			r = c.doPost(URL + "/float?content=bad&Content-Type=text/json&noTrace=true", null).getResponseAsString();
+			r = c.doPost(URL + "/float?body=bad&Content-Type=text/json&noTrace=true", null).getResponseAsString();
 			fail("Exception expected!");
 		} catch (RestCallException e) {
 			assertEquals(400, e.getResponseCode());
 		}
 
 		//	@RestMethod(name="POST", path="/Float")
-		//	public Float testFloat2(@Content Float f) {
+		//	public Float testFloat2(@Body Float f) {
 		//		return f;
 		//	}
-		r = c.doPost(URL + "/Float?content=-1.23&Content-Type=text/json", null).getResponseAsString();
+		r = c.doPost(URL + "/Float?body=-1.23&Content-Type=text/json", null).getResponseAsString();
 		assertEquals("-1.23", r);
-		r = c.doPost(URL + "/Float?content=null&Content-Type=text/json", null).getResponseAsString();
+		r = c.doPost(URL + "/Float?body=null&Content-Type=text/json", null).getResponseAsString();
 		assertEquals("null", r);
 		try {
-			r = c.doPost(URL + "/Float?content=bad&Content-Type=text/json&noTrace=true", null).getResponseAsString();
+			r = c.doPost(URL + "/Float?body=bad&Content-Type=text/json&noTrace=true", null).getResponseAsString();
 			fail("Exception expected!");
 		} catch (RestCallException e) {
 			assertEquals(400, e.getResponseCode());
 		}
 
 		//	@RestMethod(name="POST", path="/Map")
-		//	public TreeMap<String,String> testMap(@Content TreeMap<String,String> m) {
+		//	public TreeMap<String,String> testMap(@Body TreeMap<String,String> m) {
 		//		return m;
 		//	}
-		r = c.doPost(URL + "/Map?content=" + encode("{a:'b',c:'d'}") + "&Content-Type=text/json", null).getResponseAsString();
+		r = c.doPost(URL + "/Map?body=" + encode("{a:'b',c:'d'}") + "&Content-Type=text/json", null).getResponseAsString();
 		assertEquals("{a:'b',c:'d'}", r);
-		r = c.doPost(URL + "/Map?content=null&Content-Type=text/json", null).getResponseAsString();
+		r = c.doPost(URL + "/Map?body=null&Content-Type=text/json", null).getResponseAsString();
 		assertEquals("null", r);
 		try {
-			r = c.doPost(URL + "/Map?content=bad&Content-Type=text/json&noTrace=true", null).getResponseAsString();
+			r = c.doPost(URL + "/Map?body=bad&Content-Type=text/json&noTrace=true", null).getResponseAsString();
 			fail("Exception expected!");
 		} catch (RestCallException e) {
 			assertEquals(400, e.getResponseCode());
 		}
 
 		//	@RestMethod(name="POST", path="/B")
-		//	public DTO2s.B testPojo1(@Content DTO2s.B b) {
+		//	public DTO2s.B testPojo1(@Body DTO2s.B b) {
 		//		return b;
 		//	}
 		DTOs.B b = DTOs.B.create();
-		r = c.doPost(URL + "/B?content=" + encode(JsonSerializer.DEFAULT_LAX.serialize(b)) + "&Content-Type=text/json", null).getResponseAsString();
+		r = c.doPost(URL + "/B?body=" + encode(JsonSerializer.DEFAULT_LAX.serialize(b)) + "&Content-Type=text/json", null).getResponseAsString();
 		assertEquals("{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}", r);
 
 		//	@RestMethod(name="POST", path="/C")
-		//	public DTO2s.C testPojo2(@Content DTO2s.C c) {
+		//	public DTO2s.C testPojo2(@Body DTO2s.C c) {
 		//		return c;
 		//	}
 		DTOs.C x = DTOs.C.create();
-		r = c.doPost(URL + "/C?content=" + encode(JsonSerializer.DEFAULT_LAX.serialize(x)) + "&Content-Type=text/json", null).getResponseAsString();
+		r = c.doPost(URL + "/C?body=" + encode(JsonSerializer.DEFAULT_LAX.serialize(x)) + "&Content-Type=text/json", null).getResponseAsString();
 		assertEquals("{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}", r);
 
 		c.closeQuietly();
@@ -519,7 +519,7 @@ public class ContentTest {
 		String r;
 
 		//	@RestMethod(name="POST", path="/boolean")
-		//	public boolean testBool(@Content boolean b) {
+		//	public boolean testBool(@Body boolean b) {
 		//		return b;
 		//	}
 		r = c.doPost(URL + "/boolean", "true").getResponseAsString();
@@ -549,7 +549,7 @@ public class ContentTest {
 
 
 		//	@RestMethod(name="POST", path="/Boolean")
-		//	public Boolean testBoolean(@Content Boolean b) {
+		//	public Boolean testBoolean(@Body Boolean b) {
 		//		return b;
 		//	}
 		r = c.doPost(URL + "/Boolean", "true").getResponseAsString();
@@ -574,7 +574,7 @@ public class ContentTest {
 		}
 
 		//	@RestMethod(name="POST", path="/int")
-		//	public int testInt(@Content int i) {
+		//	public int testInt(@Body int i) {
 		//		return i;
 		//	}
 		r = c.doPost(URL + "/int", "-123").getResponseAsString();
@@ -597,7 +597,7 @@ public class ContentTest {
 		}
 
 		//	@RestMethod(name="POST", path="/Integer")
-		//	public Integer testInteger(@Content Integer i) {
+		//	public Integer testInteger(@Body Integer i) {
 		//		return i;
 		//	}
 		r = c.doPost(URL + "/Integer", "-123").getResponseAsString();
@@ -616,7 +616,7 @@ public class ContentTest {
 		}
 
 		//	@RestMethod(name="POST", path="/float")
-		//	public float testFloat(@Content float f) {
+		//	public float testFloat(@Body float f) {
 		//		return f;
 		//	}
 		r = c.doPost(URL + "/float", "-1.23").getResponseAsString();
@@ -639,7 +639,7 @@ public class ContentTest {
 		}
 
 		//	@RestMethod(name="POST", path="/Float")
-		//	public Float testFloat2(@Content Float f) {
+		//	public Float testFloat2(@Body Float f) {
 		//		return f;
 		//	}
 		r = c.doPost(URL + "/Float", "-1.23").getResponseAsString();
@@ -658,7 +658,7 @@ public class ContentTest {
 		}
 
 		//	@RestMethod(name="POST", path="/Map")
-		//	public TreeMap<String,String> testMap(@Content TreeMap<String,String> m) {
+		//	public TreeMap<String,String> testMap(@Body TreeMap<String,String> m) {
 		//		return m;
 		//	}
 		r = c.doPost(URL + "/Map", "(a=b,c=d)").getResponseAsString();
@@ -673,7 +673,7 @@ public class ContentTest {
 		}
 
 		//	@RestMethod(name="POST", path="/B")
-		//	public DTO2s.B testPojo1(@Content DTO2s.B b) {
+		//	public DTO2s.B testPojo1(@Body DTO2s.B b) {
 		//		return b;
 		//	}
 		DTOs.B b = DTOs.B.create();
@@ -683,7 +683,7 @@ public class ContentTest {
 		assertEquals("{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}", r);
 
 		//	@RestMethod(name="POST", path="/C")
-		//	public DTO2s.C testPojo2(@Content DTO2s.C c) {
+		//	public DTO2s.C testPojo2(@Body DTO2s.C c) {
 		//		return c;
 		//	}
 		DTOs.C x = DTOs.C.create();

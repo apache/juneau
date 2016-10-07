@@ -47,7 +47,7 @@ import org.apache.juneau.utils.*;
  * @author James Bognar (james.bognar@salesforce.com)
  * @param <T> The class type of the wrapped class.
  */
-@Bean(properties={"innerClass","classCategory","elementType","keyType","valueType","notABeanReason","initException","beanMeta"})
+@Bean(properties="innerClass,classCategory,elementType,keyType,valueType,notABeanReason,initException,beanMeta")
 public final class ClassMeta<T> implements Type {
 
 	/** Class categories. */

@@ -153,8 +153,20 @@ public class HtmlSerializerContext extends XmlSerializerContext {
 	 */
 	public static final String HTML_labelParameter = "HtmlSerializer.labelParameter";
 
+	/**
+	 * <b>Configuration property:</b>  Add key/value headers on bean/map tables.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"HtmlSerializer.addKeyValueTableHeaders"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * </ul>
+	 * <p>
+	 */
+	public static final String HTML_addKeyValueTableHeaders = "HtmlSerializer.addKeyValueTableHeaders";
+
 	final String uriAnchorText;
-	final boolean lookForLabelParameters, detectLinksInStrings;
+	final boolean lookForLabelParameters, detectLinksInStrings, addKeyValueTableHeaders;
 	final String labelParameter;
 
 	/**
@@ -170,5 +182,6 @@ public class HtmlSerializerContext extends XmlSerializerContext {
 		lookForLabelParameters = cf.getProperty(HTML_lookForLabelParameters, Boolean.class, true);
 		detectLinksInStrings = cf.getProperty(HTML_detectLinksInStrings, Boolean.class, true);
 		labelParameter = cf.getProperty(HTML_labelParameter, String.class, "label");
+		addKeyValueTableHeaders = cf.getProperty(HTML_addKeyValueTableHeaders, Boolean.class, false);
 	}
 }

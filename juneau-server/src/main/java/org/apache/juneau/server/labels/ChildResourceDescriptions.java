@@ -49,7 +49,7 @@ public class ChildResourceDescriptions extends LinkedList<ResourceDescription> {
 	public ChildResourceDescriptions(RestServlet servlet, RestRequest req, boolean sort) {
 		String uri = req.getTrimmedRequestURI();
 		for (Map.Entry<String,RestServlet> e : servlet.getChildResources().entrySet())
-			add(new ResourceDescription(uri, e.getKey(), e.getValue().getLabel(req)));
+			add(new ResourceDescription(uri, e.getKey(), e.getValue().getTitle(req)));
 		if (sort)
 			Collections.sort(this);
 	}

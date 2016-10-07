@@ -152,7 +152,7 @@ public class ErrorConditionsTest {
 			fail("Exception expected");
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_BAD_REQUEST,
-				"Could not convert PARAM 'p1' to type 'int' on method 'org.apache.juneau.server.test.ErrorConditionsResource.testSetParameterToInvalidTypes'");
+				"Could not convert QUERY 'p1' to type 'int' on method 'org.apache.juneau.server.test.ErrorConditionsResource.testSetParameterToInvalidTypes'");
 		}
 
 		try {
@@ -160,7 +160,7 @@ public class ErrorConditionsTest {
 			fail("Exception expected");
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_BAD_REQUEST,
-				"Could not convert ATTR 'a1' to type 'int' on method 'org.apache.juneau.server.test.ErrorConditionsResource.testSetParameterToInvalidTypes'");
+				"Could not convert PATH 'a1' to type 'int' on method 'org.apache.juneau.server.test.ErrorConditionsResource.testSetParameterToInvalidTypes'");
 		}
 
 		try {

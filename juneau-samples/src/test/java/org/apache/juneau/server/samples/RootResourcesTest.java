@@ -18,6 +18,7 @@ import java.net.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.client.*;
+import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.server.labels.*;
@@ -55,7 +56,7 @@ public class RootResourcesTest {
 
 		r = jsonClient.doOptions("");
 		ObjectMap x2 = r.getResponse(ObjectMap.class);
-		String s = x2.getString("description");
+		String s = x2.getObjectMap("info").getString("description");
 		if (debug) System.err.println(s);
 		assertTrue(s, s.startsWith("This is an example"));
 
@@ -76,7 +77,7 @@ public class RootResourcesTest {
 
 		r = jsonClient.doOptions("");
 		ObjectMap x2 = r.getResponse(ObjectMap.class);
-		String s = x2.getString("description");
+		String s = x2.getObjectMap("info").getString("description");
 		if (debug) System.err.println(s);
 		assertTrue(s, s.startsWith("This is an example"));
 
@@ -97,7 +98,7 @@ public class RootResourcesTest {
 
 		r = jsonClient.doOptions("").setHeader("Accept", "text/json");
 		ObjectMap x2 = r.getResponse(ObjectMap.class);
-		String s = x2.getString("description");
+		String s = x2.getObjectMap("info").getString("description");
 		if (debug) System.err.println(s);
 		assertTrue(s, s.startsWith("This is an example"));
 
@@ -139,8 +140,8 @@ public class RootResourcesTest {
 	@Test
 	public void testOptionsPage() throws Exception {
 		RestCall r = jsonClient.doOptions("");
-		ResourceOptions o = r.getResponse(ResourceOptions.class);
+		Swagger o = r.getResponse(Swagger.class);
 		if (debug) System.err.println(o);
-		assertEquals("This is an example of a router resource that is used to access other resources.", o.getDescription());
+		assertEquals("This is an example of a router resource that is used to access other resources.", o.getInfo().getDescription());
 	}
 }

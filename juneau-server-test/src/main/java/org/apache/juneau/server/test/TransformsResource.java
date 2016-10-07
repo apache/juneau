@@ -36,11 +36,11 @@ public class TransformsResource extends TransformsParentResource {
 		return new A();
 	}
 	@RestMethod(name="PUT", path="/testClassTransformOverridesParentClassTransform")
-	public A test1b(@Content A a) {
+	public A test1b(@Body A a) {
 		return a;
 	}
 	@RestMethod(name="PUT", path="/testClassTransformOverridesParentClassTransform/{a}")
-	public A test1c(@Attr A a) {
+	public A test1c(@Path A a) {
 		return a;
 	}
 
@@ -53,11 +53,11 @@ public class TransformsResource extends TransformsParentResource {
 		return new A();
 	}
 	@RestMethod(name="PUT", path="/testMethodTransformOverridesClassTransform", pojoSwaps={SwapA3.class})
-	public A test2b(@Content A a) {
+	public A test2b(@Body A a) {
 		return a;
 	}
 	@RestMethod(name="PUT", path="/testMethodTransformOverridesClassTransform/{a}", pojoSwaps={SwapA3.class})
-	public A test2c(@Attr A a) {
+	public A test2c(@Path A a) {
 		return a;
 	}
 
