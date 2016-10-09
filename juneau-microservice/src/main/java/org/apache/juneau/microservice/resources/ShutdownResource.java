@@ -20,7 +20,7 @@ import org.apache.juneau.server.annotation.*;
  */
 @RestResource(
 	path="/shutdown",
-	label="Shut down this resource"
+	title="Shut down this resource"
 )
 public class ShutdownResource extends Resource {
 

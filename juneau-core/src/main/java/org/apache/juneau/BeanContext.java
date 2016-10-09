@@ -310,7 +310,7 @@ import org.apache.juneau.transform.*;
  * <h6 class='topic'>Examples</h6>
  * <p class='bcode'>
  * 	<jc>// Bean class definition where only property 'name' is detected.</jc>
- * 	<ja>&#64;Bean</ja>(properties={<js>"name"</js>})
+ * 	<ja>&#64;Bean</ja>(properties=<js>"name"</js>)
  * 	<jk>public class</jk> Person {
  * 		<jk>public</jk> String getName();
  * 		<jk>public void</jk> setName(String name);

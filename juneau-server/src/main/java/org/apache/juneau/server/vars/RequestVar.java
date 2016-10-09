@@ -28,7 +28,7 @@ import org.apache.juneau.svl.*;
  * 	<li><code>$R{requestParentURI}</code> - Value returned by {@link RestRequest#getRequestParentURI()}.
  * 	<li><code>$R{requestURI}</code> - Value returned by {@link RestRequest#getRequestURI()}.
  * 	<li><code>$R{servletDescription}</code> - Value returned by {@link RestRequest#getServletDescription()}.
- * 	<li><code>$R{servletLabel}</code> - Value returned by {@link RestRequest#getServletLabel()}.
+ * 	<li><code>$R{servletTitle}</code> - Value returned by {@link RestRequest#getServletTitle()}.
  * 	<li><code>$R{servletParentURI}</code> - Value returned by {@link RestRequest#getServletParentURI()}.
  * 	<li><code>$R{servletPath}</code> - Value returned by {@link RestRequest#getServletPath()}.
  * 	<li><code>$R{servletURI}</code> - Value returned by {@link RestRequest#getServletURI()}.
@@ -88,8 +88,8 @@ public class RequestVar extends SimpleVar {
 						return req.getServletURI();
 					if (key.equals("servletParentURI"))
 						return req.getServletParentURI();
-					if (key.equals("servletLabel"))
-						return req.getServletLabel();
+					if (key.equals("servletTitle"))
+						return req.getServletTitle();
 					if (key.equals("servletDescription"))
 						return req.getServletDescription();
 				} else if (c == 't') {

@@ -15,8 +15,8 @@ package org.apache.juneau.server.test;
 import static org.junit.Assert.*;
 
 import org.apache.juneau.client.*;
+import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.server.labels.*;
 import org.junit.*;
 
 public class OptionsWithoutNlsTest {
@@ -30,8 +30,8 @@ public class OptionsWithoutNlsTest {
 	public void testOptions() throws Exception {
 		RestClient client = new TestRestClient(JsonSerializer.DEFAULT, JsonParser.DEFAULT);
 		RestCall r = client.doOptions(URL + "/testOptions");
-		ResourceOptions o = r.getResponse(ResourceOptions.class);
-		assertEquals("", o.getDescription());
+		Swagger o = r.getResponse(Swagger.class);
+		assertNotNull(o.getInfo());
 
 		client.closeQuietly();
 	}

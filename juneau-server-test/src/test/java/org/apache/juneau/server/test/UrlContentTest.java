@@ -33,42 +33,42 @@ public class UrlContentTest {
 	}
 
 	//====================================================================================================
-	// Test URL &Content parameter containing a String
+	// Test URL &Body parameter containing a String
 	//====================================================================================================
 	@Test
 	public void testString() throws Exception {
 		String r;
-		r = client.doGet(URL + "/testString?content=\'xxx\'&Content-Type=text/json").getResponseAsString();
+		r = client.doGet(URL + "/testString?body=\'xxx\'&Content-Type=text/json").getResponseAsString();
 		assertEquals("class=java.lang.String, value=xxx", r);
 	}
 
 	//====================================================================================================
-	// Test URL &Content parameter containing an Enum
+	// Test URL &Body parameter containing an Enum
 	//====================================================================================================
 	@Test
 	public void testEnum() throws Exception {
 		String r;
-		r = client.doGet(URL + "/testEnum?content='X1'&Content-Type=text/json").getResponseAsString();
+		r = client.doGet(URL + "/testEnum?body='X1'&Content-Type=text/json").getResponseAsString();
 		assertEquals("class=org.apache.juneau.server.test.UrlContentResource$TestEnum, value=X1", r);
 	}
 
 	//====================================================================================================
-	// Test URL &Content parameter containing a Bean
+	// Test URL &Body parameter containing a Bean
 	//====================================================================================================
 	@Test
 	public void testBean() throws Exception {
 		String r;
-		r = client.doGet(URL + "/testBean?content=%7Bf1:1,f2:'foobar'%7D&Content-Type=text/json").getResponseAsString();
+		r = client.doGet(URL + "/testBean?body=%7Bf1:1,f2:'foobar'%7D&Content-Type=text/json").getResponseAsString();
 		assertEquals("class=org.apache.juneau.server.test.UrlContentResource$TestBean, value={f1:1,f2:'foobar'}", r);
 	}
 
 	//====================================================================================================
-	// Test URL &Content parameter containing an int
+	// Test URL &Body parameter containing an int
 	//====================================================================================================
 	@Test
 	public void testInt() throws Exception {
 		String r;
-		r = client.doGet(URL + "/testInt?content=123&Content-Type=text/json").getResponseAsString();
+		r = client.doGet(URL + "/testInt?body=123&Content-Type=text/json").getResponseAsString();
 		assertEquals("class=java.lang.Integer, value=123", r);
 	}
 }

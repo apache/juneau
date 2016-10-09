@@ -16,6 +16,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Bean filter builder initialized from the contents of a {@link Bean @Bean} annotation found on a class.
@@ -40,8 +41,8 @@ public final class AnnotationBeanFilterBuilder extends BeanFilterBuilder {
 		while (li.hasPrevious()) {
 			Bean b = li.previous();
 
-			if (b.properties().length > 0)
-				setProperties(b.properties());
+			if (! b.properties().isEmpty())
+				setProperties(StringUtils.split(b.properties(), ','));
 
 			if (! b.typeName().isEmpty())
 				setTypeName(b.typeName());
@@ -49,8 +50,8 @@ public final class AnnotationBeanFilterBuilder extends BeanFilterBuilder {
 			if (b.sort())
 				setSortProperties(true);
 
-			if (b.excludeProperties().length > 0)
-				setExcludeProperties(b.excludeProperties());
+			if (! b.excludeProperties().isEmpty())
+				setExcludeProperties(StringUtils.split(b.excludeProperties(), ','));
 
 			if (b.propertyNamer() != PropertyNamerDefault.class)
 				setPropertyNamer(b.propertyNamer());

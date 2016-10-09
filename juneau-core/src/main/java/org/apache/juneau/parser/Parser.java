@@ -148,7 +148,7 @@ public abstract class Parser extends CoreApi {
 		Consumes c = ReflectionUtils.getAnnotation(Consumes.class, getClass());
 		if (c == null)
 			throw new RuntimeException(MessageFormat.format("Class ''{0}'' is missing the @Consumes annotation", getClass().getName()));
-		this.mediaTypes = c.value();
+		this.mediaTypes = StringUtils.split(c.value(), ',');
 		for (int i = 0; i < mediaTypes.length; i++) {
 			mediaTypes[i] = mediaTypes[i].toLowerCase(Locale.ENGLISH);
 		}

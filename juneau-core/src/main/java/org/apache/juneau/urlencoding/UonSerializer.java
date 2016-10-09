@@ -187,7 +187,7 @@ public class UonSerializer extends WriterSerializer {
 	/**
 	 * Equivalent to <code><jk>new</jk> UonSerializer().setProperty(UonSerializerContext.<jsf>UON_simpleMode</jsf>,<jk>true</jk>);</code>.
 	 */
-	@Produces(value={"text/uon-simple"},contentType="text/uon")
+	@Produces(value="text/uon-simple",contentType="text/uon")
 	public static class Simple extends UonSerializer {
 		/** Constructor */
 		public Simple() {
@@ -219,7 +219,7 @@ public class UonSerializer extends WriterSerializer {
 	/**
 	 * Equivalent to <code><jk>new</jk> UonSerializer().setProperty(UonSerializerContext.<jsf>UON_simpleMode</jsf>,<jk>true</jk>).setProperty(UonSerializerContext.<jsf>UON_encodeChars</jsf>,<jk>true</jk>);</code>.
 	 */
-	@Produces(value={"text/uon-simple"},contentType="text/uon")
+	@Produces(value="text/uon-simple",contentType="text/uon")
 	public static class SimpleEncoding extends UonSerializer {
 		/** Constructor */
 		public SimpleEncoding() {

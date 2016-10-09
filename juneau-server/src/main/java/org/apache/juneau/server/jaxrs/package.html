@@ -158,23 +158,23 @@
 	</p>
 	<p class='bcode'>
 	<ja>@Provider</ja>
-	<ja>@Produces</ja>({
-		<js>"application/json"</js>, <js>"text/json"</js>,                 <jc>// JsonSerializer</jc>
-		<js>"application/json+schema"</js>,<js>"text/json+schema"</js>,    <jc>// JsonSchemaSerializer</jc>
-		<js>"text/xml"</js>,                                      <jc>// XmlDocSerializer</jc>
-		<js>"text/xml+schema"</js>,                               <jc>// XmlDocSerializer</jc>
-		<js>"text/html"</js>,                                     <jc>// HtmlDocSerializer</jc>
-		<js>"application/x-www-form-urlencoded"</js>,             <jc>// UrlEncodingSerializer</jc>
-		<js>"text/xml+soap"</js>,                                 <jc>// SoapXmlSerializer</jc>
-		<js>"text/xml+rdf"</js>,                                  <jc>// RdfXmlDocSerializer</jc>
-		<js>"application/x-java-serialized-object"</js>           <jc>// JavaSerializedObjectSerializer</jc>
-	})
-	<ja>@Consumes</ja>({
-		<js>"application/json"</js>, <js>"text/json"</js>,                 <jc>// JsonParser</jc>
-		<js>"text/xml"</js>,                                      <jc>// XmlParser</jc>
-		<js>"text/html"</js>,                                     <jc>// HtmlParser</jc>
-		<js>"application/x-www-form-urlencoded"</js>,             <jc>// UrlEncodingParser</jc>
-	})
+	<ja>@Produces</ja>(
+		<js>"application/json,text/json,"</js>+                    <jc>// JsonSerializer</jc>
+		<js>"application/json+schema,text/json+schema,"</js>+      <jc>// JsonSchemaSerializer</jc>
+		<js>"text/xml,"</js>+                                      <jc>// XmlDocSerializer</jc>
+		<js>"text/xml+schema,"</js>+                               <jc>// XmlDocSerializer</jc>
+		<js>"text/html,"</js>+                                     <jc>// HtmlDocSerializer</jc>
+		<js>"application/x-www-form-urlencoded,"</js>+             <jc>// UrlEncodingSerializer</jc>
+		<js>"text/xml+soap,"</js>+                                 <jc>// SoapXmlSerializer</jc>
+		<js>"text/xml+rdf,"</js>+                                  <jc>// RdfXmlDocSerializer</jc>
+		<js>"application/x-java-serialized-object"</js>            <jc>// JavaSerializedObjectSerializer</jc>
+	)
+	<ja>@Consumes</ja>(
+		<js>"application/json,text/json,"</js>+                    <jc>// JsonParser</jc>
+		<js>"text/xml,"</js>+                                      <jc>// XmlParser</jc>
+		<js>"text/html,"</js>+                                     <jc>// HtmlParser</jc>
+		<js>"application/x-www-form-urlencoded"</js>               <jc>// UrlEncodingParser</jc>
+	)
 	<ja>@JuneauProvider</ja>(
 		serializers={
 			JsonSerializer.<jk>class</jk>,

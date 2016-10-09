@@ -40,7 +40,7 @@ public class NlsResource extends RestServletGroupDefault {
 	@RestResource(
 		path="/test1",
 		messages="NlsResource",
-		label="Test1.a",
+		title="Test1.a",
 		description="Test1.b"
 	)
 	public static class Test1 extends RestServletDefault {
@@ -48,28 +48,27 @@ public class NlsResource extends RestServletGroupDefault {
 		@RestMethod(
 			name="POST", path="/{a}",
 			description="Test1.c",
-			input={
-				@Var(category="attr", name="a", description="Test1.d"),
-				@Var(category="param", name="b", description="Test1.e"),
-				@Var(category="content", description="Test1.f"),
-				@Var(category="header", name="D", description="Test1.g"),
-				@Var(category="attr", name="a2", description="Test1.h"),
-				@Var(category="param", name="b2", description="Test1.i"),
-				@Var(category="header", name="D2", description="Test1.j"),
-				@Var(category="foo", name="bar", description="Test1.k"),
+			parameters={
+				@Var(in="path", name="a", description="Test1.d"),
+				@Var(in="query", name="b", description="Test1.e"),
+				@Var(in="body", description="Test1.f"),
+				@Var(in="header", name="D", description="Test1.g"),
+				@Var(in="path", name="a2", description="Test1.h"),
+				@Var(in="query", name="b2", description="Test1.i"),
+				@Var(in="header", name="D2", description="Test1.j"),
 			},
 			responses={
 				@Response(200),
 				@Response(value=201,
 					description="Test1.l",
-					output={
-						@Var(category="foo", name="bar", description="Test1.m"),
+					headers={
+						@Var(in="foo", name="bar", description="Test1.m"),
 					}
 				)
 			}
 		)
-		public String test1(@Attr("a") String a, @Param("b") String b, @Content String c, @Header("D") String d,
-				@Attr("e") String e, @Param("f") String f, @Header("g") String g) {
+		public String test1(@Path("a") String a, @Query("b") String b, @Body String c, @Header("D") String d,
+				@Path("e") String e, @Query("f") String f, @Header("g") String g) {
 			return null;
 		}
 	}
@@ -86,8 +85,8 @@ public class NlsResource extends RestServletGroupDefault {
 		@RestMethod(
 			name="POST", path="/{a}"
 		)
-		public String test2(@Attr("a") String a, @Param("b") String b, @Content String c, @Header("D") String d,
-				@Attr("e") String e, @Param("f") String f, @Header("g") String g) {
+		public String test2(@Path("a") String a, @Query("b") String b, @Body String c, @Header("D") String d,
+				@Path("e") String e, @Query("f") String f, @Header("g") String g) {
 			return null;
 		}
 	}
@@ -104,8 +103,8 @@ public class NlsResource extends RestServletGroupDefault {
 		@RestMethod(
 			name="POST", path="/{a}"
 		)
-		public String test3(@Attr("a") String a, @Param("b") String b, @Content String c, @Header("D") String d,
-				@Attr("e") String e, @Param("f") String f, @Header("g") String g) {
+		public String test3(@Path("a") String a, @Query("b") String b, @Body String c, @Header("D") String d,
+				@Path("e") String e, @Query("f") String f, @Header("g") String g) {
 			return null;
 		}
 
@@ -129,8 +128,8 @@ public class NlsResource extends RestServletGroupDefault {
 		@RestMethod(
 			name="POST", path="/{a}"
 		)
-		public String test4(@Attr("a") String a, @Param("b") String b, @Content String c, @Header("D") String d,
-				@Attr("e") String e, @Param("f") String f, @Header("g") String g) {
+		public String test4(@Path("a") String a, @Query("b") String b, @Body String c, @Header("D") String d,
+				@Path("e") String e, @Query("f") String f, @Header("g") String g) {
 			return null;
 		}
 	}
@@ -147,8 +146,8 @@ public class NlsResource extends RestServletGroupDefault {
 		@RestMethod(
 			name="POST", path="/{a}"
 		)
-		public String test5(@Attr("a") String a, @Param("b") String b, @Content String c, @Header("D") String d,
-				@Attr("e") String e, @Param("f") String f, @Header("g") String g) {
+		public String test5(@Path("a") String a, @Query("b") String b, @Body String c, @Header("D") String d,
+				@Path("e") String e, @Query("f") String f, @Header("g") String g) {
 			return null;
 		}
 	}
@@ -159,7 +158,7 @@ public class NlsResource extends RestServletGroupDefault {
 	@RestResource(
 		path="/test6",
 		messages="NlsResource",
-		label="$L{foo}",
+		title="$L{foo}",
 		description="$L{foo}"
 	)
 	public static class Test6 extends RestServletDefault {
@@ -167,28 +166,27 @@ public class NlsResource extends RestServletGroupDefault {
 		@RestMethod(
 			name="POST", path="/{a}",
 			description="$L{foo}",
-			input={
-				@Var(category="attr", name="a", description="$L{foo}"),
-				@Var(category="param", name="b", description="$L{foo}"),
-				@Var(category="content", description="$L{foo}"),
-				@Var(category="header", name="D", description="$L{foo}"),
-				@Var(category="attr", name="a2", description="$L{foo}"),
-				@Var(category="param", name="b2", description="$L{foo}"),
-				@Var(category="header", name="D2", description="$L{foo}"),
-				@Var(category="foo", name="bar", description="$L{foo}"),
+			parameters={
+				@Var(in="path", name="a", description="$L{foo}"),
+				@Var(in="query", name="b", description="$L{foo}"),
+				@Var(in="body", description="$L{foo}"),
+				@Var(in="header", name="D", description="$L{foo}"),
+				@Var(in="path", name="a2", description="$L{foo}"),
+				@Var(in="query", name="b2", description="$L{foo}"),
+				@Var(in="header", name="D2", description="$L{foo}")
 			},
 			responses={
 				@Response(200),
 				@Response(value=201,
 					description="$L{foo}",
-					output={
-						@Var(category="foo", name="bar", description="$L{foo}"),
+					headers={
+						@Var(in="foo", name="bar", description="$L{foo}"),
 					}
 				)
 			}
 		)
-		public String test6(@Attr("a") String a, @Param("b") String b, @Content String c, @Header("D") String d,
-				@Attr("e") String e, @Param("f") String f, @Header("g") String g) {
+		public String test6(@Path("a") String a, @Query("b") String b, @Body String c, @Header("D") String d,
+				@Path("e") String e, @Query("f") String f, @Header("g") String g) {
 			return null;
 		}
 	}

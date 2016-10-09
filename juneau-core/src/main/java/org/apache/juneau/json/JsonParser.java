@@ -90,7 +90,7 @@ import org.apache.juneau.transform.*;
  * @author James Bognar (james.bognar@salesforce.com)
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })
-@Consumes({"application/json","text/json"})
+@Consumes("application/json,text/json")
 public final class JsonParser extends ReaderParser {
 
 	/** Default parser, all default settings.*/

@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transforms;
 
+import static org.apache.juneau.html.HtmlSerializerContext.*;
 import static org.apache.juneau.jena.RdfCommonContext.*;
-import static org.apache.juneau.serializer.SerializerContext.*;
 import static org.junit.Assert.*;
 
 import java.net.*;
@@ -428,7 +428,7 @@ public class CalendarSwapTest {
 	@Test
 	public void testDefaultMapHtml() throws Exception {
 		Class<?> f = CalendarMapSwap.class;
-		WriterSerializer s = new HtmlSerializer.Sq().addPojoSwaps(f);
+		WriterSerializer s = new HtmlSerializer.Sq().addPojoSwaps(f).setProperty(HTML_addKeyValueTableHeaders, true);
 		ReaderParser p = new HtmlParser().addPojoSwaps(f);
 		doTest(s, p, true, "<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>time</string></td><td><number>-2172116928000</number></td></tr><tr><td><string>timeZone</string></td><td><string>PST</string></td></tr></table>");
 	}
@@ -573,7 +573,7 @@ public class CalendarSwapTest {
 	//====================================================================================================
 	@Test
 	public void testBeanProperyFilterHtml() throws Exception {
-		WriterSerializer s = HtmlSerializer.DEFAULT_SQ;
+		WriterSerializer s = HtmlSerializer.DEFAULT_SQ.clone().setProperty(HTML_addKeyValueTableHeaders, true);
 		ReaderParser p = HtmlParser.DEFAULT;
 
 		Calendar c = testDate;

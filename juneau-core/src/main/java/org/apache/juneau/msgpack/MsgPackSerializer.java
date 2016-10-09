@@ -41,7 +41,7 @@ import org.apache.juneau.transform.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@Produces({"octal/msgpack"})
+@Produces("octal/msgpack")
 public class MsgPackSerializer extends OutputStreamSerializer {
 
 	/** Default serializer, all default settings.*/

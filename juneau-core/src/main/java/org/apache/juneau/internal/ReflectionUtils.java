@@ -173,4 +173,34 @@ public final class ReflectionUtils {
 		}
 		return null;
 	}
+
+	/**
+	 * Similar to {@link #getResource(Class, String)} except looks for localized versions of the specified resource.
+	 * <p>
+	 * For example, if looking in the Japanese locale, the order of lookup on the <js>"MyResource.txt"</js> file is:
+	 * <ol>
+	 * 	<li><js>"MyResource_ja_JP.txt"</js>
+	 * 	<li><js>"MyResource_ja.txt"</js>
+	 * 	<li><js>"MyResource.txt"</js>
+	 * </ol>
+	 *
+	 * @param c The class to return the resource on.
+	 * @param name The resource name.
+	 * @param locale The locale of the resource.
+	 * @return An input stream on the specified resource, or <jk>null</jk> if the resource could not be found.
+	 */
+	public static InputStream getLocalizedResource(Class<?> c, String name, Locale locale) {
+		if (locale == null || locale.toString().isEmpty())
+			return getResource(c, name);
+		while (c != null) {
+			for (String n : FileUtils.getCandidateFileNames(name, locale)) {
+				InputStream is = c.getResourceAsStream(n);
+				if (is != null)
+					return is;
+			}
+			c = c.getSuperclass();
+		}
+		return null;
+	}
 }
+

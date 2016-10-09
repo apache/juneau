@@ -191,7 +191,7 @@ public class BeanMeta<T> {
 						if (constructor != null)
 							throw new BeanRuntimeException(c, "Multiple instances of '@BeanConstructor' found.");
 						constructor = (Constructor<T>)x;
-						constructorArgs = x.getAnnotation(BeanConstructor.class).properties();
+						constructorArgs = StringUtils.split(x.getAnnotation(BeanConstructor.class).properties(), ',');
 						if (constructorArgs.length != x.getParameterTypes().length)
 							throw new BeanRuntimeException(c, "Number of properties defined in '@BeanConstructor' annotation does not match number of parameters in constructor.");
 						if (! setAccessible(constructor))

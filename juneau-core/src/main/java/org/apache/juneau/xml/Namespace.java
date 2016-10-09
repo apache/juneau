@@ -35,7 +35,7 @@ public final class Namespace implements Comparable<Namespace> {
 	 * @param name The long and short name of this schema.
 	 * @param uri The URI of this schema.
 	 */
-	@BeanConstructor(properties={"name","uri"})
+	@BeanConstructor(properties="name,uri")
 	public Namespace(String name, String uri) {
 		this.name = name;
 		this.uri = uri;

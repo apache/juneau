@@ -37,7 +37,7 @@ import org.apache.juneau.serializer.*;
  * <p>
  * 	Standard example:
  * <p class='bcode'>
- * 	<ja>@Produces</ja>({<js>"application/json"</js>,<js>"text/json"</js>})
+ * 	<ja>@Produces</ja>(<js>"application/json,text/json"</js>)
  * 	<jk>public class</jk> JsonSerializer <jk>extends</jk> WriterSerializer {...}
  * </p>
  * <p>
@@ -66,13 +66,13 @@ import org.apache.juneau.serializer.*;
 public @interface Produces {
 
 	/**
-	 * The media types that the serializer can handle.
+	 * A comma-delimited list of the media types that the serializer can handle.
 	 * <p>
 	 * 	Can contain meta-characters per the <code>media-type</code> specification of
 	 * 	<a href='http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1'>RFC2616/14.1</a>
 	 * @return The media types that the parser can handle.
 	 */
-	String[] value() default {};
+	String value() default "";
 
 	/**
 	 * The content type that this serializer produces.

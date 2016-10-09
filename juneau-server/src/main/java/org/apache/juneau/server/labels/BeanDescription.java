@@ -25,7 +25,7 @@ import org.apache.juneau.annotation.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@Bean(properties={"type","properties"})
+@Bean(properties="type,properties")
 public final class BeanDescription {
 
 	/** The bean class type. */

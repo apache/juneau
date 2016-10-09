@@ -180,7 +180,7 @@ public class XmlCollapsedTest {
 		validateXml(t, s);
 	}
 
-	@Bean(properties={"f1","f2","f3","f4"})
+	@Bean(properties="f1,f2,f3,f4")
 	public static class D {
 
 		private List<String> f1 = new LinkedList<String>(), f3 = new LinkedList<String>();
@@ -237,7 +237,7 @@ public class XmlCollapsedTest {
 		validateXml(t, s);
 	}
 
-	@Bean(properties={"f1","f2"})
+	@Bean(properties="f1,f2")
 	public static class E {
 
 		private LinkedList<String> f1, f2;

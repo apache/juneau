@@ -21,7 +21,7 @@ import org.apache.juneau.annotation.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@Bean(properties={"name","description"})
+@Bean(properties="name,description")
 public class NameDescription {
 
 	private Object name;

@@ -82,7 +82,7 @@ public class XmlTest {
 	}
 
 	/** Class with explicitly specified properties */
-	@Bean(typeName="Person1", properties = { "name", "age" })
+	@Bean(typeName="Person1", properties="name,age")
 	public static class Person1 {
 		public int age;
 		private String name;
@@ -218,7 +218,7 @@ public class XmlTest {
 
 	@Bean(typeName="foo")
 	public static class J1 {
-		@BeanProperty(properties={"f2"}) public List<J2> f1 = new LinkedList<J2>() {{
+		@BeanProperty(properties="f2") public List<J2> f1 = new LinkedList<J2>() {{
 			add(new J2());
 		}};}
 

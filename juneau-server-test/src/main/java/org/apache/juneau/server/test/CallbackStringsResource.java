@@ -32,7 +32,7 @@ public class CallbackStringsResource extends RestServletDefault {
 	//====================================================================================================
 	@RestMethod(name="GET", path="/")
 	public ObjectMap test1(RestRequest req) throws Exception {
-		return new ObjectMap().append("method","GET").append("headers", getFooHeaders(req)).append("content", req.getInputAsString());
+		return new ObjectMap().append("method","GET").append("headers", getFooHeaders(req)).append("content", req.getBodyAsString());
 	}
 
 	//====================================================================================================
@@ -40,7 +40,7 @@ public class CallbackStringsResource extends RestServletDefault {
 	//====================================================================================================
 	@RestMethod(name="PUT", path="/")
 	public ObjectMap testCharsetOnResponse(RestRequest req) throws Exception {
-		return new ObjectMap().append("method","PUT").append("headers", getFooHeaders(req)).append("content", req.getInputAsString());
+		return new ObjectMap().append("method","PUT").append("headers", getFooHeaders(req)).append("content", req.getBodyAsString());
 	}
 
 	private Map<String,Object> getFooHeaders(RestRequest req) {

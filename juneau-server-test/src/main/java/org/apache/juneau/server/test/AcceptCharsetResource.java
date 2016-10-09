@@ -50,7 +50,7 @@ public class AcceptCharsetResource extends RestServlet {
 	// Validate various Accept-Charset variations.
 	//====================================================================================================
 	@RestMethod(name="PUT", path="/testCharsetOnResponse", parsers=TestParser.class, serializers=TestSerializer.class)
-	public String testCharsetOnResponse(@Content String in) {
+	public String testCharsetOnResponse(@Body String in) {
 		return in;
 	}
 

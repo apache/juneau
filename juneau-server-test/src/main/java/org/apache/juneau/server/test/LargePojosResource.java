@@ -33,7 +33,7 @@ public class LargePojosResource extends RestServletJenaDefault {
 	}
 
 	@RestMethod(name="PUT", path="/")
-	public String testPut(@Content LargePojo in) {
+	public String testPut(@Body LargePojo in) {
 		return "ok";
 	}
 }

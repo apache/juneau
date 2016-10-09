@@ -39,7 +39,7 @@ public class UrlEncodedFormResource extends Resource {
 
 	/** POST request handler */
 	@RestMethod(name="POST", path="/")
-	public Object doPost(@Content FormInputBean input) throws Exception {
+	public Object doPost(@Body FormInputBean input) throws Exception {
 		// Just mirror back the request
 		return input;
 	}

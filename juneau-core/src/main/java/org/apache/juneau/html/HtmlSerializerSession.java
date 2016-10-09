@@ -32,7 +32,7 @@ import org.apache.juneau.xml.*;
 public class HtmlSerializerSession extends XmlSerializerSession {
 
 	private final AnchorText anchorText;
-	private final boolean detectLinksInStrings, lookForLabelParameters;
+	private final boolean detectLinksInStrings, lookForLabelParameters, addKeyValueTableHeaders;
 	private final Pattern urlPattern = Pattern.compile("http[s]?\\:\\/\\/.*");
 	private final Pattern labelPattern;
 	private final String absolutePathUriBase, relativeUriBase;
@@ -62,11 +62,13 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			detectLinksInStrings = ctx.detectLinksInStrings;
 			lookForLabelParameters = ctx.lookForLabelParameters;
 			labelParameter = ctx.labelParameter;
+			addKeyValueTableHeaders = ctx.addKeyValueTableHeaders;
 		} else {
 			anchorText = Enum.valueOf(AnchorText.class, op.getString(HTML_uriAnchorText, ctx.uriAnchorText));
 			detectLinksInStrings = op.getBoolean(HTML_detectLinksInStrings, ctx.detectLinksInStrings);
 			lookForLabelParameters = op.getBoolean(HTML_lookForLabelParameters, ctx.lookForLabelParameters);
 			labelParameter = op.getString(HTML_labelParameter, ctx.labelParameter);
+			addKeyValueTableHeaders = op.getBoolean(HTML_addKeyValueTableHeaders, ctx.addKeyValueTableHeaders);
 		}
 		labelPattern = Pattern.compile("[\\?\\&]" + Pattern.quote(labelParameter) + "=([^\\&]*)");
 		this.absolutePathUriBase = getAbsolutePathUriBase();
@@ -150,4 +152,14 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				return o.toString();
 		}
 	}
+
+	/**
+	 * Returns the {@link HtmlSerializerContext#HTML_addKeyValueTableHeaders} setting value for this session.
+	 *
+	 * @return The {@link HtmlSerializerContext#HTML_addKeyValueTableHeaders} setting value for this session.
+	 */
+	public final boolean isAddKeyValueTableHeaders() {
+		return addKeyValueTableHeaders;
+	}
+
 }

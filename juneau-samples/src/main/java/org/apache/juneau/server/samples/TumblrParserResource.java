@@ -42,7 +42,7 @@ public class TumblrParserResource extends Resource {
 	}
 
 	@RestMethod(name="GET", path="/{blogName}")
-	public ObjectList parseBlog(@Attr String blogName) throws Exception {
+	public ObjectList parseBlog(@Path String blogName) throws Exception {
 		ObjectList l = new ObjectList();
 		RestClient rc = new RestClient(JsonSerializer.class, JsonParser.class);
 		try {

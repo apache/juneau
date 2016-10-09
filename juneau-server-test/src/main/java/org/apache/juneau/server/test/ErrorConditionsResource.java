@@ -29,7 +29,7 @@ public class ErrorConditionsResource extends RestServletDefault {
 	// Test non-existent properties
 	//====================================================================================================
 	@RestMethod(name="PUT", path="/testNonExistentBeanProperties")
-	public String testNonExistentBeanProperties(@Content Test1 in) {
+	public String testNonExistentBeanProperties(@Body Test1 in) {
 		return "OK";
 	}
 
@@ -41,7 +41,7 @@ public class ErrorConditionsResource extends RestServletDefault {
 	// Test trying to set properties to wrong data type
 	//====================================================================================================
 	@RestMethod(name="PUT", path="/testWrongDataType")
-	public String testWrongDataType(@Content Test2 in) {
+	public String testWrongDataType(@Body Test2 in) {
 		return "OK";
 	}
 
@@ -53,7 +53,7 @@ public class ErrorConditionsResource extends RestServletDefault {
 	// Test trying to parse into class with non-public no-arg constructor.
 	//====================================================================================================
 	@RestMethod(name="PUT", path="/testParseIntoNonConstructableBean")
-	public String testParseIntoNonConstructableBean(@Content Test3a in) {
+	public String testParseIntoNonConstructableBean(@Body Test3a in) {
 		return "OK";
 	}
 
@@ -66,7 +66,7 @@ public class ErrorConditionsResource extends RestServletDefault {
 	// Test trying to parse into non-static inner class
 	//====================================================================================================
 	@RestMethod(name="PUT", path="/testParseIntoNonStaticInnerClass")
-	public String testParseIntoNonStaticInnerClass(@Content Test3b in) {
+	public String testParseIntoNonStaticInnerClass(@Body Test3b in) {
 		return "OK";
 	}
 
@@ -78,7 +78,7 @@ public class ErrorConditionsResource extends RestServletDefault {
 	// Test trying to parse into non-public inner class
 	//====================================================================================================
 	@RestMethod(name="PUT", path="/testParseIntoNonPublicInnerClass")
-	public String testParseIntoNonPublicInnerClass(@Content Test3b1 in) {
+	public String testParseIntoNonPublicInnerClass(@Body Test3b1 in) {
 		return "OK";
 	}
 
@@ -90,7 +90,7 @@ public class ErrorConditionsResource extends RestServletDefault {
 	// Test exception thrown during bean construction.
 	//====================================================================================================
 	@RestMethod(name="PUT", path="/testThrownConstructorException")
-	public String testThrownConstructorException(@Content Test3c in) {
+	public String testThrownConstructorException(@Body Test3c in) {
 		return "OK";
 	}
 
@@ -106,7 +106,7 @@ public class ErrorConditionsResource extends RestServletDefault {
 	// Test trying to set parameters to invalid types.
 	//====================================================================================================
 	@RestMethod(name="PUT", path="/testSetParameterToInvalidTypes/{a1}")
-	public String testSetParameterToInvalidTypes(@Param("p1") int t1, @Attr int a1, @Header("h1") int h1) {
+	public String testSetParameterToInvalidTypes(@Query("p1") int t1, @Path int a1, @Header("h1") int h1) {
 		return "OK";
 	}
 

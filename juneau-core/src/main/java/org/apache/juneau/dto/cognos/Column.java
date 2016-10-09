@@ -27,7 +27,7 @@ import org.apache.juneau.xml.annotation.*;
  * @author James Bognar (james.bognar@salesforce.com)
  */
 @SuppressWarnings({"rawtypes","hiding"})
-@Bean(typeName="item",properties={"name","type","length"})
+@Bean(typeName="item", properties="name,type,length")
 public class Column {
 
 	private String name, type;

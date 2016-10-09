@@ -37,7 +37,7 @@ import org.apache.juneau.server.annotation.*;
 public class OnPreCallResource extends RestServlet {
 	private static final long serialVersionUID = 1L;
 
-	@Consumes({"text/a1","text/a2","text/a3"})
+	@Consumes("text/a1,text/a2,text/a3")
 	public static class TestParserA extends ReaderParser {
 		@SuppressWarnings("unchecked")
 		@Override /* Parser */
@@ -69,7 +69,7 @@ public class OnPreCallResource extends RestServlet {
 			@Property(name="p4",value="mp4")
 		}
 	)
-	public String testPropertiesOverriddenByAnnotation(@Content String in) {
+	public String testPropertiesOverriddenByAnnotation(@Body String in) {
 		return in;
 	}
 
@@ -80,6 +80,6 @@ public class OnPreCallResource extends RestServlet {
 	public String testPropertiesOverriddenProgrammatically(RestRequest req, @Properties ObjectMap properties) throws Exception {
 		properties.put("p3", "pp3");
 		properties.put("p4", "pp4");
-		return req.getInput(String.class);
+		return req.getBody(String.class);
 	}
 }

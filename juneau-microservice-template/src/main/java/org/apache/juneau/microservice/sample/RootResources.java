@@ -25,7 +25,7 @@ import org.apache.juneau.server.annotation.RestResource;
  */
 @RestResource(
 	path="/",
-	label="Juneau Microservice Template",
+	title="Juneau Microservice Template",
 	description="Template for creating REST microservices",
 	properties={
 		@Property(name=HTMLDOC_links, value="{options:'$R{servletURI}?method=OPTIONS'}")

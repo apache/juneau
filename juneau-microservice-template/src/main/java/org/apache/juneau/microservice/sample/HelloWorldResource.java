@@ -20,7 +20,7 @@ import org.apache.juneau.server.annotation.RestResource;
  * Sample REST resource that prints out a simple "Hello world!" message.
  */
 @RestResource(
-	label="Hello World example",
+	title="Hello World example",
 	path="/helloworld",
 	description="Simplest possible REST resource"
 )

@@ -18,20 +18,19 @@ import static org.apache.juneau.jena.RdfCommonContext.*;
 import static org.apache.juneau.jena.RdfSerializerContext.*;
 import static org.apache.juneau.samples.addressbook.AddressBook.*;
 import static org.apache.juneau.server.RestServletContext.*;
-import static org.apache.juneau.server.labels.DefaultLabels.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.dto.*;
 import org.apache.juneau.dto.cognos.*;
+import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.samples.addressbook.*;
 import org.apache.juneau.server.*;
 import org.apache.juneau.server.annotation.*;
 import org.apache.juneau.server.converters.*;
-import org.apache.juneau.server.labels.*;
 import org.apache.juneau.server.samples.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.utils.*;
@@ -54,7 +53,13 @@ import org.apache.juneau.utils.*;
 		@Property(name=SERIALIZER_relativeUriBase, value="$R{servletURI}"),
 	},
 	stylesheet="styles/devops.css",
-	encoders=GzipEncoder.class
+	encoders=GzipEncoder.class,
+	contact="{name:'John Smith',email:'john@smith.com'}",
+	license="{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}",
+	version="2.0",
+	termsOfService="You're on your own.",
+	tags="[{name:'Java',description:'Java utility',externalDocs:{description:'Home page',url:'http://juneau.apache.org'}}]",
+	externalDocs="{description:'Home page',url:'http://juneau.apache.org'}"
 )
 public class AddressBookResource extends ResourceJena {
 	private static final long serialVersionUID = 1L;
@@ -128,7 +133,7 @@ public class AddressBookResource extends ResourceJena {
 	@RestMethod(name="GET", path="/people/{id}/*",
 		converters={Traversable.class,Queryable.class,Introspectable.class}
 	)
-	public Person getPerson(@Attr int id) throws Exception {
+	public Person getPerson(@Path int id) throws Exception {
 		return findPerson(id);
 	}
 
@@ -150,7 +155,7 @@ public class AddressBookResource extends ResourceJena {
 	@RestMethod(name="GET", path="/addresses/{id}/*",
 		converters={Traversable.class,Queryable.class}
 	)
-	public Address getAddress(@Attr int id) throws Exception {
+	public Address getAddress(@Path int id) throws Exception {
 		return findAddress(id);
 	}
 
@@ -161,7 +166,7 @@ public class AddressBookResource extends ResourceJena {
 	@RestMethod(name="POST", path="/people",
 		guards=AdminGuard.class
 	)
-	public Redirect createPerson(@Content CreatePerson cp) throws Exception {
+	public Redirect createPerson(@Body CreatePerson cp) throws Exception {
 		Person p = addressBook.createPerson(cp);
 		return new Redirect("people/{0}", p.id);
 	}
@@ -173,7 +178,7 @@ public class AddressBookResource extends ResourceJena {
 	@RestMethod(name="POST", path="/people/{id}/addresses",
 		guards=AdminGuard.class
 	)
-	public Redirect createAddress(@Attr int id, @Content CreateAddress ca) throws Exception {
+	public Redirect createAddress(@Path int id, @Body CreateAddress ca) throws Exception {
 		Person p = findPerson(id);
 		Address a = p.createAddress(ca);
 		return new Redirect("addresses/{0}", a.id);
@@ -186,7 +191,7 @@ public class AddressBookResource extends ResourceJena {
 	@RestMethod(name="DELETE", path="/people/{id}",
 		guards=AdminGuard.class
 	)
-	public String deletePerson(@Attr int id) throws Exception {
+	public String deletePerson(@Path int id) throws Exception {
 		addressBook.removePerson(id);
 		return "DELETE successful";
 	}
@@ -198,7 +203,7 @@ public class AddressBookResource extends ResourceJena {
 	@RestMethod(name="DELETE", path="/addresses/{id}",
 		guards=AdminGuard.class
 	)
-	public String deleteAddress(@Attr int addressId) throws Exception {
+	public String deleteAddress(@Path int addressId) throws Exception {
 		Person p = addressBook.findPersonWithAddress(addressId);
 		if (p == null)
 			throw new RestException(SC_NOT_FOUND, "Person not found");
@@ -214,13 +219,13 @@ public class AddressBookResource extends ResourceJena {
 	@RestMethod(name="PUT", path="/people/{id}/*",
 		guards=AdminGuard.class
 	)
-	public String updatePerson(RestRequest req, @Attr int id) throws Exception {
+	public String updatePerson(RestRequest req, @Path int id) throws Exception {
 		try {
 			Person p = findPerson(id);
 			String pathRemainder = req.getPathRemainder();
 			PojoRest r = new PojoRest(p);
 			ClassMeta<?> cm = r.getClassMeta(pathRemainder);
-			Object in = req.getInput(cm);
+			Object in = req.getBody(cm);
 			r.put(pathRemainder, in);
 			return "PUT successful";
 		} catch (Exception e) {
@@ -235,13 +240,13 @@ public class AddressBookResource extends ResourceJena {
 	@RestMethod(name="PUT", path="/addresses/{id}/*",
 		guards=AdminGuard.class
 	)
-	public String updateAddress(RestRequest req, @Attr int id) throws Exception {
+	public String updateAddress(RestRequest req, @Path int id) throws Exception {
 		try {
 			Address a = findAddress(id);
 			String pathInfo = req.getPathInfo();
 			PojoRest r = new PojoRest(a);
 			ClassMeta<?> cm = r.getClassMeta(pathInfo);
-			Object in = req.getInput(cm);
+			Object in = req.getBody(cm);
 			r.put(pathInfo, in);
 			return "PUT successful";
 		} catch (Exception e) {
@@ -292,8 +297,8 @@ public class AddressBookResource extends ResourceJena {
 	 */
 	@Override /* RestServletJenaDefault */
 	@RestMethod(name="OPTIONS", path="/*")
-	public ResourceOptions getOptions(RestRequest req) {
-		return new Options(req);
+	public Swagger getOptions(RestRequest req) {
+		return req.getSwagger();
 	}
 
 	/** Convenience method - Find a person by ID */
@@ -310,22 +315,6 @@ public class AddressBookResource extends ResourceJena {
 		if (a == null)
 			throw new RestException(SC_NOT_FOUND, "Address not found");
 		return a;
-	}
-
-	/**
-	 * Output POJO for OPTIONS requests.
-	 * Note that we're extending the existing ResourceOptions class.
-	 */
-	public class Options extends ResourceOptions {
-		public ParamDescription[] queryableParameters;
-		public String[] otherNotes;
-
-		public Options(RestRequest req) {
-			super(AddressBookResource.this, req);
-			Locale locale = req.getLocale();
-			queryableParameters = getQueryableParamDescriptions(locale);
-			otherNotes = getMessage(locale, "otherNotes").split("\\.\\s*");
-		}
 	}
 }
 

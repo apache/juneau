@@ -480,7 +480,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		assertObjectEquals("{f3:'f3',f2:'f2'}", d);
 	}
 
-	@Bean(properties={"f3","f2"})
+	@Bean(properties="f3,f2")
 	public static class D1 {
 		public String f1, f2, f3;
 		public D1 init() {
@@ -546,7 +546,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		assertObjectEquals("{f1:'f1',f3:'f3'}", e);
 	}
 
-	@Bean(excludeProperties={"f2"})
+	@Bean(excludeProperties="f2")
 	public static class E1 {
 		public String f1, f2, f3;
 		public E1 init() {

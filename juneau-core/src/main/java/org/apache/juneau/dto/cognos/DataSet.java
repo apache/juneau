@@ -75,7 +75,7 @@ import org.apache.juneau.xml.annotation.*;
  * @author James Bognar (james.bognar@salesforce.com)
  */
 @SuppressWarnings("unchecked")
-@Bean(typeName="dataset", properties={"metadata","data"})
+@Bean(typeName="dataset", properties="metadata,data")
 public class DataSet {
 
 	private Column[] metaData;

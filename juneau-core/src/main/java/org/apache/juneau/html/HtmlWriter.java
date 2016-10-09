@@ -74,7 +74,7 @@ public class HtmlWriter extends XmlWriter {
 			else if (test == '\b')
 				append("<bs/>");
 			else if (test == '\t')
-				append("<tb/>");
+				append("<tb>&emsp;</tb>");
 			else if (Character.isISOControl(test))
 				append("&#" + (int) test + ";");
 			else

@@ -67,7 +67,7 @@ public class JsonSchemaResource extends ResourceJena {
 	 * Replaces the schema document with the specified content, and then mirrors it as the response.
 	 */
 	@RestMethod(name="PUT", path="/")
-	public Schema setSchema(@Content Schema schema) throws Exception {
+	public Schema setSchema(@Body Schema schema) throws Exception {
 		this.schema = schema;
 		return schema;
 	}

@@ -1040,21 +1040,21 @@
 			<p class='bcode'>
 	<jc>// GET person request handler</jc>
 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/people/{id}/*"</js>, rc={200,404})
-	<jk>public</jk> Person getPerson(RestRequest req, <ja>@Attr</ja> <jk>int</jk> id) throws Exception {
+	<jk>public</jk> Person getPerson(RestRequest req, <ja>@Path</ja> <jk>int</jk> id) throws Exception {
 		properties.put(HtmlDocSerializerContext.<jsf>HTMLDOC_title</jsf>, req.getPathInfo());
 		<jk>return</jk> findPerson(id);
 	}
 	
 	<jc>// POST person handler</jc>
 	<ja>@RestMethod</ja>(name=<js>"POST"</js>, path=<js>"/people"</js>, guards=AdminGuard.<jk>class</jk>, rc={307,404})
-	<jk>public void</jk> createPerson(RestResponse res, <ja>@Content</ja> CreatePerson cp) <jk>throws</jk> Exception {
+	<jk>public void</jk> createPerson(RestResponse res, <ja>@Body</ja> CreatePerson cp) <jk>throws</jk> Exception {
 		Person p = addressBook.createPerson(cp);
 		res.sendRedirect(p.<jf>uri</jf>);
 	}
 
 	<jc>// DELETE person handler</jc>
 	<ja>@RestMethod</ja>(name=<js>"DELETE"</js>, path=<js>"/people/{id}"</js>, guards=AdminGuard.<jk>class</jk>, rc={200,404})
-	<jk>public</jk> String deletePerson(RestResponse res, <ja>@Attr</ja> <jk>int</jk> id) <jk>throws</jk> Exception {
+	<jk>public</jk> String deletePerson(RestResponse res, <ja>@Path</ja> <jk>int</jk> id) <jk>throws</jk> Exception {
 		Person p = findPerson(id);
 		addressBook.remove(p);
 		<jk>return</jk> <js>"DELETE successful"</js>;			
@@ -1100,7 +1100,7 @@
 			<ja>@Property</ja>(name=SerializerContext.<jsf>SERIALIZER_quoteChar</jsf>, value=<js>"'"</js>)
 		}
 	)
-	<jk>public</jk> Person getPerson(RestRequest req, <ja>@Attr</ja> <jk>int</jk> id) throws Exception {
+	<jk>public</jk> Person getPerson(RestRequest req, <ja>@Path</ja> <jk>int</jk> id) throws Exception {
 		properties.put(HtmlDocSerializerContext.<jsf>HTMLDOC_title</jsf>, req.getPathInfo());
 		<jk>return</jk> findPerson(id);
 	}
@@ -1126,25 +1126,25 @@
 			</p>
 			<p class='bcode'>
 	<ja>@Provider</ja>
-	<ja>@Produces</ja>({
-		<js>"application/json"</js>, <js>"text/json"</js>,                 <jc>// JsonSerializer</jc>
-		<js>"application/json+simple"</js>,<js>"text/json+simple"</js>,    <jc>// JsonSerializer.Simple</jc>
-		<js>"application/json+schema"</js>,<js>"text/json+schema"</js>,    <jc>// JsonSchemaSerializer</jc>
-		<js>"text/xml"</js>,                                      <jc>// XmlDocSerializer</jc>
-		<js>"text/xml+simple"</js>,                               <jc>// XmlDocSerializer.Simple</jc>
-		<js>"text/xml+schema"</js>,                               <jc>// XmlSchemaDocSerializer</jc>
-		<js>"text/html"</js>,                                     <jc>// HtmlDocSerializer</jc>
-		<js>"application/x-www-form-urlencoded"</js>,             <jc>// UrlEncodingSerializer</jc>
-		<js>"text/xml+soap"</js>,                                 <jc>// SoapXmlSerializer</jc>
+	<ja>@Produces</ja>(
+		<js>"application/json,text/json,"</js>+                   <jc>// JsonSerializer</jc>
+		<js>"application/json+simple,text/json+simple"</js>+      <jc>// JsonSerializer.Simple</jc>
+		<js>"application/json+schema,text/json+schema"</js>+      <jc>// JsonSchemaSerializer</jc>
+		<js>"text/xml"</js>+                                      <jc>// XmlDocSerializer</jc>
+		<js>"text/xml+simple"</js>+                               <jc>// XmlDocSerializer.Simple</jc>
+		<js>"text/xml+schema"</js>+                               <jc>// XmlSchemaDocSerializer</jc>
+		<js>"text/html"</js>+                                     <jc>// HtmlDocSerializer</jc>
+		<js>"application/x-www-form-urlencoded"</js>+             <jc>// UrlEncodingSerializer</jc>
+		<js>"text/xml+soap"</js>+                                 <jc>// SoapXmlSerializer</jc>
 		<js>"application/x-java-serialized-object"</js>           <jc>// JavaSerializedObjectSerializer</jc>
-	})
-	<ja>@Consumes</ja>({
-		<js>"application/json"</js>, <js>"text/json"</js>,                 <jc>// JsonParser</jc>
-		<js>"text/xml"</js>,                                      <jc>// XmlParser</jc>
-		<js>"text/html"</js>,                                     <jc>// HtmlParser</jc>
-		<js>"application/x-www-form-urlencoded"</js>,             <jc>// UrlEncodingParser</jc>
+	)
+	<ja>@Consumes</ja>(
+		<js>"application/json,text/json,"</js>+                   <jc>// JsonParser</jc>
+		<js>"text/xml,"</js>+                                     <jc>// XmlParser</jc>
+		<js>"text/html,"</js>+                                    <jc>// HtmlParser</jc>
+		<js>"application/x-www-form-urlencoded,"</js>+            <jc>// UrlEncodingParser</jc>
 		<js>"application/x-java-serialized-object"</js>           <jc>// JavaSerializedObjectParser</jc>
-	})
+	)
 	<ja>@JuneauProvider</ja>(
 		serializers={
 			JsonSerializer.<jk>class</jk>,
@@ -1236,14 +1236,14 @@
 			</p>
 			<p class='bcode'>
 	<ja>@Provider</ja>
-	<ja>@Produces</ja>({
-		<js>"application/json"</js>, <js>"text/json"</js>,                 <jc>// JsonSerializer</jc>
-		<js>"application/json+simple"</js>,<js>"text/json+simple"</js>,    <jc>// JsonSerializer.Simple</jc>
-		<js>"application/json+schema"</js>,<js>"text/json+schema"</js>     <jc>// JsonSchemaSerializer</jc>
-	})
-	<ja>@Consumes</ja>({
-		<js>"application/json"</js>, <js>"text/json"</js>                  <jc>// JsonParser</jc>
-	})
+	<ja>@Produces</ja>(
+		<js>"application/json,text/json,"</js>+                 <jc>// JsonSerializer</jc>
+		<js>"application/json+simple,text/json+simple,"</js>+   <jc>// JsonSerializer.Simple</jc>
+		<js>"application/json+schema,text/json+schema"</js>     <jc>// JsonSchemaSerializer</jc>
+	)
+	<ja>@Consumes</ja>(
+		<js>"application/json,text/json"</js>                   <jc>// JsonParser</jc>
+	)
 	<ja>@JuneauProvider</ja>(
 		serializers={
 			JsonSerializer.<jk>class</jk>,

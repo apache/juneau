@@ -40,7 +40,7 @@ import org.apache.juneau.transform.*;
  *
  * @author James Bognar (james.bognar@salesforce.com)
  */
-@Produces(value={"application/json+schema","text/json+schema"},contentType="application/json")
+@Produces(value="application/json+schema,text/json+schema",contentType="application/json")
 public final class JsonSchemaSerializer extends JsonSerializer {
 
 	/**

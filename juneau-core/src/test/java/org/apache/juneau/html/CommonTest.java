@@ -36,7 +36,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testTrimNullsFromBeans() throws Exception {
-		HtmlSerializer s = new HtmlSerializer.Sq();
+		HtmlSerializer s = new HtmlSerializer.Sq().setProperty(HTML_addKeyValueTableHeaders, true);
 		HtmlParser p = HtmlParser.DEFAULT;
 		A t1 = A.create(), t2;
 
@@ -68,7 +68,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testTrimEmptyMaps() throws Exception {
-		HtmlSerializer s = new HtmlSerializer.Sq();
+		HtmlSerializer s = new HtmlSerializer.Sq().setProperty(HTML_addKeyValueTableHeaders, true);
 		HtmlParser p = HtmlParser.DEFAULT;
 		B t1 = B.create(), t2;
 		String r;
@@ -102,20 +102,20 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testTrimEmptyLists() throws Exception {
-		HtmlSerializer s = new HtmlSerializer.Sq();
+		HtmlSerializer s = new HtmlSerializer.Sq().setProperty(HTML_addKeyValueTableHeaders, true);
 		HtmlParser p = HtmlParser.DEFAULT;
 		C t1 = C.create(), t2;
 		String r;
 
 		s.setProperty(SERIALIZER_trimEmptyCollections, false);
 		r = s.serialize(t1);
-		assertEquals("<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f1</string></td><td><ul></ul></td></tr><tr><td><string>f2</string></td><td><table _type='array'><tr><th>s1</th><th>s2</th></tr><tr><null/></tr><tr><td><null/></td><td><string>s2</string></td></tr></table></td></tr></table>", r);
+		assertEquals("<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f1</string></td><td><ul></ul></td></tr><tr><td><string>f2</string></td><td><table _type='array'><tr><th>s2</th></tr><tr><null/></tr><tr><td><string>s2</string></td></tr></table></td></tr></table>", r);
 		t2 = p.parse(r, C.class);
 		assertEqualObjects(t1, t2);
 
 		s.setProperty(SERIALIZER_trimEmptyCollections, true);
 		r = s.serialize(t1);
-		assertEquals("<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f2</string></td><td><table _type='array'><tr><th>s1</th><th>s2</th></tr><tr><null/></tr><tr><td><null/></td><td><string>s2</string></td></tr></table></td></tr></table>", r);
+		assertEquals("<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f2</string></td><td><table _type='array'><tr><th>s2</th></tr><tr><null/></tr><tr><td><string>s2</string></td></tr></table></td></tr></table>", r);
 		t2 = p.parse(r, C.class);
 		assertNull(t2.f1);
 	}
@@ -136,20 +136,20 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testTrimEmptyArrays() throws Exception {
-		HtmlSerializer s = new HtmlSerializer.Sq();
+		HtmlSerializer s = new HtmlSerializer.Sq().setProperty(HTML_addKeyValueTableHeaders, true);
 		HtmlParser p = HtmlParser.DEFAULT;
 		D t1 = D.create(), t2;
 		String r;
 
 		s.setProperty(SERIALIZER_trimEmptyCollections, false);
 		r = s.serialize(t1);
-		assertEquals("<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f1</string></td><td><ul></ul></td></tr><tr><td><string>f2</string></td><td><table _type='array'><tr><th>s1</th><th>s2</th></tr><tr><null/></tr><tr><td><null/></td><td><string>s2</string></td></tr></table></td></tr></table>", r);
+		assertEquals("<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f1</string></td><td><ul></ul></td></tr><tr><td><string>f2</string></td><td><table _type='array'><tr><th>s2</th></tr><tr><null/></tr><tr><td><string>s2</string></td></tr></table></td></tr></table>", r);
 		t2 = p.parse(r, D.class);
 		assertEqualObjects(t1, t2);
 
 		s.setProperty(SERIALIZER_trimEmptyCollections, true);
 		r = s.serialize(t1);
-		assertEquals("<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f2</string></td><td><table _type='array'><tr><th>s1</th><th>s2</th></tr><tr><null/></tr><tr><td><null/></td><td><string>s2</string></td></tr></table></td></tr></table>", r);
+		assertEquals("<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f2</string></td><td><table _type='array'><tr><th>s2</th></tr><tr><null/></tr><tr><td><string>s2</string></td></tr></table></td></tr></table>", r);
 		t2 = p.parse(r, D.class);
 		assertNull(t2.f1);
 	}
@@ -170,7 +170,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testBeanPropertyProperties() throws Exception {
-		HtmlSerializer s = HtmlSerializer.DEFAULT_SQ;
+		HtmlSerializer s = HtmlSerializer.DEFAULT_SQ.clone().setProperty(HTML_addKeyValueTableHeaders, true);
 		E1 t = new E1();
 		String r;
 
@@ -181,16 +181,16 @@ public class CommonTest {
 	}
 
 	public static class E1 {
-		@BeanProperty(properties={"f1"}) public E2 x1 = new E2();
-		@BeanProperty(properties={"f1"}) public Map<String,Integer> x2 = new LinkedHashMap<String,Integer>() {{
+		@BeanProperty(properties="f1") public E2 x1 = new E2();
+		@BeanProperty(properties="f1") public Map<String,Integer> x2 = new LinkedHashMap<String,Integer>() {{
 			put("f1",1); put("f2",2);
 		}};
-		@BeanProperty(properties={"f1"}) public E2[] x3 = {new E2()};
-		@BeanProperty(properties={"f1"}) public List<E2> x4 = new LinkedList<E2>() {{
+		@BeanProperty(properties="f1") public E2[] x3 = {new E2()};
+		@BeanProperty(properties="f1") public List<E2> x4 = new LinkedList<E2>() {{
 			add(new E2());
 		}};
-		@BeanProperty(properties={"f1"}) public ObjectMap[] x5 = {new ObjectMap().append("f1",1).append("f2",2)};
-		@BeanProperty(properties={"f1"}) public List<ObjectMap> x6 = new LinkedList<ObjectMap>() {{
+		@BeanProperty(properties="f1") public ObjectMap[] x5 = {new ObjectMap().append("f1",1).append("f2",2)};
+		@BeanProperty(properties="f1") public List<ObjectMap> x6 = new LinkedList<ObjectMap>() {{
 			add(new ObjectMap().append("f1",1).append("f2",2));
 		}};
 	}
@@ -215,7 +215,7 @@ public class CommonTest {
 	}
 
 	public static class F {
-		@BeanProperty(properties={"x2"}) public List<F> x1 = new LinkedList<F>();
+		@BeanProperty(properties="x2") public List<F> x1 = new LinkedList<F>();
 		public int x2 = 2;
 	}
 
@@ -250,7 +250,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testUris() throws Exception {
-		HtmlSerializer s = new HtmlSerializer.Sq().setProperty(HTML_uriAnchorText, PROPERTY_NAME).setProperty(SERIALIZER_useIndentation, false);
+		HtmlSerializer s = new HtmlSerializer.Sq().setProperty(HTML_uriAnchorText, PROPERTY_NAME).setProperty(SERIALIZER_useIndentation, false).setProperty(HTML_addKeyValueTableHeaders, true);
 		TestURI t = new TestURI();
 		String r;
 		String expected;
@@ -460,7 +460,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testRecursion() throws Exception {
-		HtmlSerializer s = new HtmlSerializer.Sq();
+		HtmlSerializer s = new HtmlSerializer.Sq().setProperty(HTML_addKeyValueTableHeaders, true);
 
 		R1 r1 = new R1();
 		R2 r2 = new R2();
@@ -517,7 +517,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testBasicBean() throws Exception {
-		WriterSerializer s = new HtmlSerializer.Sq().setProperty(SERIALIZER_trimNullProperties, false).setProperty(BEAN_sortProperties, true);
+		WriterSerializer s = new HtmlSerializer.Sq().setProperty(SERIALIZER_trimNullProperties, false).setProperty(BEAN_sortProperties, true).setProperty(HTML_addKeyValueTableHeaders, true);
 
 		J a = new J();
 		a.setF1("J");

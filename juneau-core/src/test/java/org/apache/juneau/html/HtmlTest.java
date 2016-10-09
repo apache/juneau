@@ -18,12 +18,8 @@ import static org.junit.Assert.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
-import org.apache.juneau.annotation.Pojo;
 import org.apache.juneau.html.annotation.*;
-import org.apache.juneau.serializer.*;
 import org.apache.juneau.testbeans.*;
-import org.apache.juneau.transform.*;
 import org.junit.*;
 
 @SuppressWarnings({"javadoc","unchecked","rawtypes","serial"})
@@ -42,86 +38,10 @@ public class HtmlTest {
 		html = s.serialize(t);
 		assertEquals("<table _type='array'><tr><th>f1</th></tr><tr><td><string>f1</string></td></tr><tr><td><string>f1</string></td></tr></table>", html);
 
-		t = new Object[] {new A1(), new A2()};
-		html = s.serialize(t);
-		assertEquals("<table _type='array'><tr><th>f1</th></tr><tr><td><string>f1</string></td></tr><tr><td><string>f1</string></td></tr></table>", html);
-
-		t = new Object[] {new A1(), new ObjectMap("{f1:'f1'}")};
-		html = s.serialize(t);
-		assertEquals("<table _type='array'><tr><th>f1</th></tr><tr><td><string>f1</string></td></tr><tr><td><string>f1</string></td></tr></table>", html);
-
-		t = new Object[] {new ObjectMap("{f1:'f1'}"), new A1()};
-		html = s.serialize(t);
-		assertEquals("<table _type='array'><tr><th>f1</th></tr><tr><td><string>f1</string></td></tr><tr><td><string>f1</string></td></tr></table>", html);
-
-		// This should be serialized as a list since the objects have different properties.
-		t = new Object[] {new A1(), new ObjectMap("{f2:'f2'}")};
-		html = s.serialize(t);
-		assertEquals("<ul><li><table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f1</string></td><td><string>f1</string></td></tr></table></li><li><table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f2</string></td><td><string>f2</string></td></tr></table></li></ul>", html);
-
-		// Tables with some beans with @Bean#properties annotations.
-		t = new Object[] {new A1(), new A3()};
-		html = s.serialize(t);
-		assertEquals("<table _type='array'><tr><th>f1</th></tr><tr><td><string>f1</string></td></tr><tr><td><string>f1</string></td></tr></table>", html);
-
-		t = new Object[] {new A3(), new A1()};
-		html = s.serialize(t);
-		assertEquals("<table _type='array'><tr><th>f1</th></tr><tr><td><string>f1</string></td></tr><tr><td><string>f1</string></td></tr></table>", html);
-
-		// Tables with some beans with @Bean#transforms annotations.
-		t = new Object[] {new A4(), new A1()};
-		html = s.serialize(t);
-		assertEquals("<table _type='array'><tr><th>f1</th></tr><tr><td><string>f1</string></td></tr><tr><td><string>f1</string></td></tr></table>", html);
-
-		t = new Object[] {new A1(), new A4()};
-		html = s.serialize(t);
-		assertEquals("<table _type='array'><tr><th>f1</th></tr><tr><td><string>f1</string></td></tr><tr><td><string>f1</string></td></tr></table>", html);
-
-		t = new Object[] {new A5(), new A1()};
-		html = s.serialize(t);
-		assertEquals("<table _type='array'><tr><th>f1</th></tr><tr><td><string>f1</string></td></tr><tr><td><string>f1</string></td></tr></table>", html);
-
-		t = new Object[] {new A1(), new A5()};
-		html = s.serialize(t);
-		assertEquals("<table _type='array'><tr><th>f1</th></tr><tr><td><string>f1</string></td></tr><tr><td><string>f1</string></td></tr></table>", html);
 	}
 
 	public static class A1 {
 		public String f1 = "f1";
-	}
-
-	public static class A2 {
-		public String f1 = "f1";
-	}
-
-	@Bean(properties="f1")
-	public static class A3 {
-		public String f1 = "f1";
-		public String f2 = "f2";
-	}
-
-	@Pojo(swap=A4Swap.class)
-	public static class A4 {
-		public String f2 = "f2";
-	}
-
-	public static class A4Swap extends PojoSwap<A4,A1> {
-		@Override /* PojoSwap */
-		public A1 swap(A4 o) throws SerializeException {
-			return new A1();
-		}
-	}
-
-	@Pojo(swap=A5Swap.class)
-	public static class A5 {
-		public String f2 = "f2";
-	}
-
-	public static class A5Swap extends PojoSwap<A5,ObjectMap> {
-		@Override /* PojoSwap */
-		public ObjectMap swap(A5 o) {
-			return new ObjectMap().append("f1", "f1");
-		}
 	}
 
 	//====================================================================================================
@@ -129,7 +49,7 @@ public class HtmlTest {
 	//====================================================================================================
 	@Test
 	public void testAnchorTextOptions() throws Exception {
-		HtmlSerializer s = new HtmlSerializer.Sq();
+		HtmlSerializer s = new HtmlSerializer.Sq().setProperty(HTML_addKeyValueTableHeaders, true);
 		TestURI t = new TestURI();
 		String r;
 		String expected = null;
@@ -312,7 +232,7 @@ public class HtmlTest {
 	//====================================================================================================
 	@Test
 	public void testHtmlAnnotationAsPlainText() throws Exception {
-		HtmlSerializer s = new HtmlSerializer.Sq();
+		HtmlSerializer s = new HtmlSerializer.Sq().setProperty(HTML_addKeyValueTableHeaders, true);
 		Object o = null;
 		String r;
 
@@ -344,7 +264,7 @@ public class HtmlTest {
 	//====================================================================================================
 	@Test
 	public void testHtmlAnnotationAsXml() throws Exception {
-		HtmlSerializer s = new HtmlSerializer.Sq();
+		HtmlSerializer s = new HtmlSerializer.Sq().setProperty(HTML_addKeyValueTableHeaders, true);
 		Object o = null;
 		String r;
 

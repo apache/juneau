@@ -55,7 +55,7 @@ import org.apache.juneau.transform.*;
  * @author James Bognar (james.bognar@salesforce.com)
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })
-@Consumes({"text/html","text/html+stripped"})
+@Consumes("text/html,text/html+stripped")
 public final class HtmlParser extends ReaderParser {
 
 	/** Default parser, all default settings.*/
@@ -245,20 +245,19 @@ public final class HtmlParser extends ReaderParser {
 	 * Postcondition:  Pointing at next START_ELEMENT or END_DOCUMENT event.
 	 */
 	private <K,V> Map<K,V> parseIntoMap(HtmlParserSession session, XMLEventReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta) throws Exception {
-		Tag tag = nextTag(r, TR);
-
-		// Skip over the column headers.
-		nextTag(r, TH);
-		parseElementText(r, xTH);
-		nextTag(r, TH);
-		parseElementText(r, xTH);
-		nextTag(r, xTR);
-
 		while (true) {
-			tag = nextTag(r, TR, xTABLE);
+			Tag tag = nextTag(r, TR, xTABLE);
 			if (tag == xTABLE)
 				break;
-			nextTag(r, TD);
+			tag = nextTag(r, TD, TH);
+			// Skip over the column headers.
+			if (tag == TH) {
+				parseElementText(r, xTH);
+				nextTag(r, TH);
+				parseElementText(r, xTH);
+				nextTag(r, xTR);
+				continue;
+			}
 			K key = parseAnything(session, keyType, r, m, pMeta);
 			nextTag(r, xTD);
 			nextTag(r, TD);
@@ -395,20 +394,19 @@ public final class HtmlParser extends ReaderParser {
 	 * Postcondition:  Pointing at next START_ELEMENT or END_DOCUMENT event.
 	 */
 	private <T> BeanMap<T> parseIntoBean(HtmlParserSession session, XMLEventReader r, BeanMap<T> m) throws Exception {
-		Tag tag = nextTag(r, TR);
-
-		// Skip over the column headers.
-		nextTag(r, TH);
-		parseElementText(r, xTH);
-		nextTag(r, TH);
-		parseElementText(r, xTH);
-		nextTag(r, xTR);
-
 		while (true) {
-			tag = nextTag(r, TR, xTABLE);
+			Tag tag = nextTag(r, TR, xTABLE);
 			if (tag == xTABLE)
 				break;
-			nextTag(r, TD);
+			tag = nextTag(r, TD, TH);
+			// Skip over the column headers.
+			if (tag == TH) {
+				parseElementText(r, xTH);
+				nextTag(r, TH);
+				parseElementText(r, xTH);
+				nextTag(r, xTR);
+				continue;
+			}
 			String key = parseElementText(r, xTD);
 			nextTag(r, TD);
 			BeanPropertyMeta pMeta = m.getPropertyMeta(key);

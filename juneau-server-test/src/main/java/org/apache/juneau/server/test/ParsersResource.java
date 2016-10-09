@@ -47,7 +47,7 @@ public class ParsersResource extends RestServletDefault {
 	// Parser defined on class.
 	//====================================================================================================
 	@RestMethod(name="PUT", path="/testParserOnClass")
-	public String testParserOnClass(@Content String in) {
+	public String testParserOnClass(@Body String in) {
 		return in;
 	}
 
@@ -55,7 +55,7 @@ public class ParsersResource extends RestServletDefault {
 	// Parser defined on method.
 	//====================================================================================================
 	@RestMethod(name="PUT", path="/testParserOnMethod", parsers=TestParserB.class)
-	public String testParserOnMethod(@Content String in) {
+	public String testParserOnMethod(@Body String in) {
 		return in;
 	}
 
@@ -72,7 +72,7 @@ public class ParsersResource extends RestServletDefault {
 	// Parser overridden on method.
 	//====================================================================================================
 	@RestMethod(name="PUT", path="/testParserOverriddenOnMethod", parsers={TestParserB.class,TestParserC.class}, parsersInherit=PARSERS)
-	public String testParserOverriddenOnMethod(@Content String in) {
+	public String testParserOverriddenOnMethod(@Body String in) {
 		return in;
 	}
 
@@ -89,11 +89,11 @@ public class ParsersResource extends RestServletDefault {
 	// Parser with different Accept than Content-Type.
 	//====================================================================================================
 	@RestMethod(name="PUT", path="/testParserWithDifferentMediaTypes", parsers={TestParserD.class}, parsersInherit=PARSERS)
-	public String testParserWithDifferentMediaTypes(@Content String in) {
+	public String testParserWithDifferentMediaTypes(@Body String in) {
 		return in;
 	}
 
-	@Consumes({"text/a","text/d"})
+	@Consumes("text/a,text/d")
 	public static class TestParserD extends ReaderParser {
 		@SuppressWarnings("unchecked")
 		@Override /* Parser */
@@ -106,7 +106,7 @@ public class ParsersResource extends RestServletDefault {
 	// Check for valid error response.
 	//====================================================================================================
 	@RestMethod(name="PUT", path="/testValidErrorResponse")
-	public String testValidErrorResponse(@Content String in) {
+	public String testValidErrorResponse(@Body String in) {
 		return in;
 	}
 }

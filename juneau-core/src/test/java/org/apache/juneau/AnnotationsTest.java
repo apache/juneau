@@ -44,7 +44,7 @@ public class AnnotationsTest {
 	}
 
 	/** Class with explicitly specified properties */
-	@Bean(properties = { "age", "name" })
+	@Bean(properties="age,name")
 	public static class Person1 {
 		public int age;
 		private String name;

@@ -30,27 +30,27 @@ public class NoParserInputResource extends RestServlet {
 	private static final long serialVersionUID = 1L;
 
 	//====================================================================================================
-	// @Content annotated InputStream.
+	// @Body annotated InputStream.
 	//====================================================================================================
 	@RestMethod(name="PUT", path="/testInputStream")
-	public String testInputStream(@Content InputStream in) throws Exception {
+	public String testInputStream(@Body InputStream in) throws Exception {
 		return IOUtils.read(in);
 	}
 
 	//====================================================================================================
-	// @Content annotated Reader.
+	// @Body annotated Reader.
 	//====================================================================================================
 	@RestMethod(name="PUT", path="/testReader")
-	public String testReader(@Content Reader in) throws Exception {
+	public String testReader(@Body Reader in) throws Exception {
 		return IOUtils.read(in);
 	}
 
 	//====================================================================================================
-	// @Content annotated PushbackReader.
+	// @Body annotated PushbackReader.
 	// This should always fail since the servlet reader is not a pushback reader.
 	//====================================================================================================
 	@RestMethod(name="PUT", path="/testPushbackReader")
-	public String testPushbackReader(@Content PushbackReader in) throws Exception {
+	public String testPushbackReader(@Body PushbackReader in) throws Exception {
 		return IOUtils.read(in);
 	}
 }

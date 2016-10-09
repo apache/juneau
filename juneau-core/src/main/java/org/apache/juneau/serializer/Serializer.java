@@ -58,7 +58,7 @@ public abstract class Serializer extends CoreApi {
 		Produces p = ReflectionUtils.getAnnotation(Produces.class, getClass());
 		if (p == null)
 			throw new RuntimeException(MessageFormat.format("Class ''{0}'' is missing the @Produces annotation", getClass().getName()));
-		this.mediaTypes = p.value();
+		this.mediaTypes = StringUtils.split(p.value(), ',');
 		for (int i = 0; i < mediaTypes.length; i++) {
 			mediaTypes[i] = mediaTypes[i].toLowerCase(Locale.ENGLISH);
 		}
@@ -68,7 +68,7 @@ public abstract class Serializer extends CoreApi {
 			l.addAll(Arrays.asList(MediaRange.parse(mediaTypes[i])));
 		mediaRanges = l.toArray(new MediaRange[l.size()]);
 
-		String ct = p.contentType().isEmpty() ? p.value()[0] : p.contentType();
+		String ct = p.contentType().isEmpty() ? this.mediaTypes[0] : p.contentType();
 		contentType = ct.isEmpty() ? null : ct;
 	}
 

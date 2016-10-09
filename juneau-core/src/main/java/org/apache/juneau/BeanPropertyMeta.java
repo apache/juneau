@@ -255,8 +255,8 @@ public class BeanPropertyMeta {
 			isUri |= (rawTypeMeta.isUri() || field.isAnnotationPresent(org.apache.juneau.annotation.URI.class));
 			if (p != null) {
 				swap = getPropertyPojoSwap(p);
-				if (p.properties().length != 0)
-					properties = p.properties();
+				if (! p.properties().isEmpty())
+					properties = StringUtils.split(p.properties(), ',');
 				if (p.beanDictionary().length > 0)
 					this.beanDictionary = new BeanDictionaryBuilder().add(p.beanDictionary()).setBeanContext(beanContext).build();
 			}
@@ -270,8 +270,8 @@ public class BeanPropertyMeta {
 			if (p != null) {
 				if (swap == null)
 					swap = getPropertyPojoSwap(p);
-				if (properties != null && p.properties().length != 0)
-					properties = p.properties();
+				if (properties != null && ! p.properties().isEmpty())
+					properties = StringUtils.split(p.properties(), ',');
 				if (p.beanDictionary().length > 0)
 					this.beanDictionary = new BeanDictionaryBuilder().add(p.beanDictionary()).setBeanContext(beanContext).build();
 			}
@@ -285,8 +285,8 @@ public class BeanPropertyMeta {
 			if (p != null) {
 			if (swap == null)
 				swap = getPropertyPojoSwap(p);
-				if (properties != null && p.properties().length != 0)
-					properties = p.properties();
+				if (properties != null && ! p.properties().isEmpty())
+					properties = StringUtils.split(p.properties(), ',');
 				if (p.beanDictionary().length > 0)
 					this.beanDictionary = new BeanDictionaryBuilder().add(p.beanDictionary()).setBeanContext(beanContext).build();
 			}

@@ -12,25 +12,47 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.server.annotation;
 
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.*;
+
+import java.io.*;
+import java.lang.annotation.*;
+
 /**
- * Predefined string constants for the {@link Var#category()} annotation.
+ * Annotation that can be applied to a parameter of a {@link RestMethod} annotated method
+ * 	to identify it as the HTTP request body converted to a POJO.
  *
+ * <h6 class='topic'>Example</h6>
+ * <p class='bcode'>
+ * 	<ja>@RestMethod</ja>(name=<js>"POST"</js>)
+ * 	<jk>public void</jk> doPostPerson(RestRequest req, RestResponse res, <ja>@Body</ja> Person person) {
+ * 		...
+ * 	}
+ * </p>
+ * <p>
+ * 	This is functionally equivalent to the following code...
+ * </p>
+ * <p class='bcode'>
+ * 	<ja>@RestMethod</ja>(name=<js>"POST"</js>)
+ * 	<jk>public void</jk> doPostPerson(RestRequest req, RestResponse res) {
+ * 		Person person = req.getBody(Person.<jk>class</jk>);
+ * 		...
+ * 	}
+ * </p>
+ * <p>
+ * 	{@link Reader Readers} and {@link InputStream InputStreams} can also be specified as content parameters.
+ * 	When specified, any registered parsers are bypassed.
+ * </p>
+ * <p class='bcode'>
+ * 	<ja>@RestMethod</ja>(name=<js>"POST"</js>)
+ * 	<jk>public void</jk> doPostPerson(<ja>@Header</ja> String mediaType, <ja>@Body</ja> InputStream input) {
+ * 		...
+ * 	}
+ * </p>
  * @author James Bognar (james.bognar@salesforce.com)
  */
-public class VarCategory {
-
-	/** Constant: 'attr'*/
-	public static final String ATTR = "attr";
-
-	/** Constant: 'param'*/
-	public static final String PARAM = "param";
-
-	/** Constant: 'content'*/
-	public static final String CONTENT = "content";
-
-	/** Constant: 'header'*/
-	public static final String HEADER = "header";
-
-	/** Constant: 'other'*/
-	public static final String OTHER = "other";
-}
+@Documented
+@Target(PARAMETER)
+@Retention(RUNTIME)
+@Inherited
+public @interface Body {}

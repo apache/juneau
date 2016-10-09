@@ -49,7 +49,7 @@ public class CharsetEncodingsResource extends RestServlet {
 	}
 
 	@RestMethod(name="PUT", path="/")
-	public String test1(RestRequest req, @Content String in) {
+	public String test1(RestRequest req, @Body String in) {
 		return req.getCharacterEncoding() + "/" + in + "/" + req.getCharacterEncoding();
 	}
 }
