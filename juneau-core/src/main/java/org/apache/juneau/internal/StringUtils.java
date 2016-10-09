@@ -145,8 +145,9 @@ public final class StringUtils {
 
 			if (type == Double.class || type == Double.TYPE) {
 				Double d = Double.valueOf(s);
-				if (isAutoDetect && (! isDecimal) && d >= -Float.MAX_VALUE && d <= Float.MAX_VALUE)
-					return d.floatValue();
+				Float f = Float.valueOf(s);
+				if (isAutoDetect && (!isDecimal) && d.toString().equals(f.toString()))
+					return f;
 				return d;
 			}
 			if (type == Float.class || type == Float.TYPE)

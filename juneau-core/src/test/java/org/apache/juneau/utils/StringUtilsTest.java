@@ -87,6 +87,27 @@ public class StringUtilsTest {
 
 		assertFalse(isNumeric("0.123.4"));
 
+		assertTrue(isNumeric("0.84370821629078d"));
+		assertEquals(0.84370821629078d, parseNumber("0.84370821629078d", null));
+
+		assertTrue(isNumeric("84370821629078.8437d"));
+		assertEquals(84370821629078.8437d, parseNumber("84370821629078.8437d", null));
+
+		assertTrue(isNumeric("0.16666666666666666d"));
+		assertEquals(0.16666666666666666d, parseNumber("0.16666666666666666d", null));
+
+		assertTrue(isNumeric("0.16666666f"));
+		assertEquals(0.16666666f, parseNumber("0.16666666f", null));
+
+		assertTrue(isNumeric("0.16666666d"));
+		assertEquals(0.16666666f, parseNumber("0.16666666d", null));
+
+		assertTrue(isNumeric("3.140000000000000124344978758017532527446746826171875d"));
+		assertEquals(3.14f, parseNumber("3.140000000000000124344978758017532527446746826171875d", null));
+
+		assertTrue(isNumeric("12345.678f"));
+		assertEquals(1.2345678e4f, parseNumber("12345.678f", null));
+
 		// Scientific notation
 		assertTrue(isNumeric("1e1"));
 		assertEquals(1e1f, parseNumber("1e1", null));
