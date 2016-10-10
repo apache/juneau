@@ -207,6 +207,10 @@ public class FileUtils {
 							ext = getExtension(fileName);
 						return baseName + "_" + l2.toString() + (ext.isEmpty() ? "" : ('.' + ext));
 					}
+					@Override
+					public void remove() {
+						throw new UnsupportedOperationException();
+					}
 				};
 			}
 		};
