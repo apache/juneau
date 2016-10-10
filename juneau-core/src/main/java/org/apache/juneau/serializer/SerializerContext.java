@@ -335,29 +335,26 @@ public class SerializerContext extends Context {
 	 * (i.e. URIs not containing a schema and not starting with <js>'/'</js>).
 	 * (e.g. <js>"foo/bar"</js>)
 	 *
-	 * <dl>
-	 * 	<dt>Examples:</dt>
-	 * 	<dd>
-	 * 		<table class='styled'>
-	 * 			<tr><th>SERIALIZER_relativeUriBase</th><th>URI</th><th>Serialized URI</th></tr>
-	 * 			<tr>
-	 * 				<td><code>http://foo:9080/bar/baz</code></td>
-	 * 				<td><code>mywebapp</code></td>
-	 * 				<td><code>http://foo:9080/bar/baz/mywebapp</code></td>
-	 * 			</tr>
-	 * 			<tr>
-	 * 				<td><code>http://foo:9080/bar/baz</code></td>
-	 * 				<td><code>/mywebapp</code></td>
-	 * 				<td><code>/mywebapp</code></td>
-	 * 			</tr>
-	 * 			<tr>
-	 * 				<td><code>http://foo:9080/bar/baz</code></td>
-	 * 				<td><code>http://mywebapp</code></td>
-	 * 				<td><code>http://mywebapp</code></td>
-	 * 			</tr>
-	 * 		</table>
-	 * 	</dd>
-	 * </dl>
+	 *
+	 * <h6 class='topic'>Example:</h6>
+	 * <table class='styled'>
+	 *		<tr><th>SERIALIZER_relativeUriBase</th><th>URI</th><th>Serialized URI</th></tr>
+	 * 	<tr>
+	 * 		<td><code>http://foo:9080/bar/baz</code></td>
+	 * 		<td><code>mywebapp</code></td>
+	 * 		<td><code>http://foo:9080/bar/baz/mywebapp</code></td>
+	 * 	</tr>
+	 * 	<tr>
+	 * 		<td><code>http://foo:9080/bar/baz</code></td>
+	 * 		<td><code>/mywebapp</code></td>
+	 * 		<td><code>/mywebapp</code></td>
+	 * 	</tr>
+	 * 	<tr>
+	 * 		<td><code>http://foo:9080/bar/baz</code></td>
+	 * 		<td><code>http://mywebapp</code></td>
+	 * 		<td><code>http://mywebapp</code></td>
+	 * 	</tr>
+	 * </table>
 	 */
 	public static final String SERIALIZER_relativeUriBase = "Serializer.relativeUriBase";
 
@@ -374,29 +371,26 @@ public class SerializerContext extends Context {
 	 * (i.e. URIs starting with <js>'/'</js>).
 	 * (e.g. <js>"/foo/bar"</js>)
 	 *
-	 * <dl>
-	 * 	<dt>Examples:</dt>
-	 * 	<dd>
-	 * 		<table class='styled'>
-	 * 			<tr><th>SERIALIZER_absolutePathUriBase</th><th>URI</th><th>Serialized URI</th></tr>
-	 * 			<tr>
-	 * 				<td><code>http://foo:9080/bar/baz</code></td>
-	 * 				<td><code>mywebapp</code></td>
-	 * 				<td><code>mywebapp</code></td>
-	 * 			</tr>
-	 * 			<tr>
-	 * 				<td><code>http://foo:9080/bar/baz</code></td>
-	 * 				<td><code>/mywebapp</code></td>
-	 * 				<td><code>http://foo:9080/bar/baz/mywebapp</code></td>
-	 * 			</tr>
-	 * 			<tr>
-	 * 				<td><code>http://foo:9080/bar/baz</code></td>
-	 * 				<td><code>http://mywebapp</code></td>
-	 * 				<td><code>http://mywebapp</code></td>
-	 * 			</tr>
-	 * 		</table>
-	 * 	</dd>
-	 * </dl>
+	 *
+	 * <h6 class='topic'>Examples:</h6>
+	 * <table class='styled'>
+	 * 	<tr><th>SERIALIZER_absolutePathUriBase</th><th>URI</th><th>Serialized URI</th></tr>
+	 * 	<tr>
+	 * 		<td><code>http://foo:9080/bar/baz</code></td>
+	 * 		<td><code>mywebapp</code></td>
+	 * 		<td><code>mywebapp</code></td>
+	 * 	</tr>
+	 * 	<tr>
+	 * 		<td><code>http://foo:9080/bar/baz</code></td>
+	 * 		<td><code>/mywebapp</code></td>
+	 * 		<td><code>http://foo:9080/bar/baz/mywebapp</code></td>
+	 * 	</tr>
+	 * 	<tr>
+	 * 		<td><code>http://foo:9080/bar/baz</code></td>
+	 * 		<td><code>http://mywebapp</code></td>
+	 * 		<td><code>http://mywebapp</code></td>
+	 * 	</tr>
+	 * </table>
 	 */
 	public static final String SERIALIZER_absolutePathUriBase = "Serializer.absolutePathUriBase";
 

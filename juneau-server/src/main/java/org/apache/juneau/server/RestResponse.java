@@ -37,7 +37,7 @@ import org.apache.juneau.xml.*;
  * 	convenience methods, or revert to using lower level methods like any other servlet response.
  * </p>
  *
- * <h6 class='topic'>Examples</h6>
+ * <h6 class='topic'>Example:</h6>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>)
  * 	<jk>public void</jk> doGet(RestRequest req, RestResponse res) {
@@ -200,9 +200,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	/**
 	 * Shortcut method that allows you to use varargs to simplify setting array output.
 	 *
-	 * <dl>
-	 * 	<dt>Example:</dt>
-	 * 	<dd>
+	 * <h6 class='topic'>Example:</h6>
 	 * <p class='bcode'>
 	 * 	<jc>// Instead of...</jc>
 	 * 	response.setOutput(<jk>new</jk> Object[]{x,y,z});
@@ -210,8 +208,6 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * 	<jc>// ...call this...</jc>
 	 * 	response.setOutput(x,y,z);
 	 * </p>
-	 * 	</dd>
-	 * </dl>
 	 *
 	 * @param output The output to serialize to the connection.
 	 * @return This object (for method chaining).

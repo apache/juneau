@@ -23,7 +23,7 @@ import org.apache.juneau.*;
  * 	Bean filter builders must have a public no-arg constructor.
  * 	Builder settings should be set in the constructor using the provided setters on this class.
  *
- * <h6 class='topic'>Example</h6>
+ * <h6 class='topic'>Example:</h6>
  * <p class='bcode'>
  * 	<jc>// Create our serializer with a bean filter.</jc>
  * 	WriterSerializer s = <jk>new</jk> JsonSerializer().addBeanFilters(AddressFilter.<jk>class</jk>);

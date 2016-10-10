@@ -32,7 +32,7 @@ import org.apache.juneau.utils.*;
  * 	constructor is provided for converting a JSON array string directly into a {@link List}.  It also contains
  * 	accessor methods for to avoid common typecasting when accessing elements in a list.
  *
- * <h6 class='topic'>Examples</h6>
+ * <h6 class='topic'>Example:</h6>
  * <p class='bcode'>
  * 	<jc>// Construct an empty List</jc>
  * 	List l = <jk>new</jk> ObjectList();
@@ -458,10 +458,8 @@ public class ObjectList extends LinkedList<Object> {
 	 * <p>
 	 * See {@link BeanContext#convertToType(Object, ClassMeta)} for a description of valid conversions.
 	 *
-	 * <dl>
-	 * 	<dt>Example:</dt>
-	 * 	<dd>
-	 * 		<p class='bcode'>
+	 * <h6 class='topic'>Example:</h6>
+	 * <p class='bcode'>
 	 * 	<jc>// Iterate over a list of ObjectMaps.</jc>
 	 * 	ObjectList l = <jk>new</jk> ObjectList(<js>"[{foo:'bar'},{baz:123}]"</js>);
 	 * 	for (ObjectMap m : l.elements(ObjectMap.<jk>class</jk>)) {
@@ -480,9 +478,7 @@ public class ObjectList extends LinkedList<Object> {
 	 * 	for (Person p : l.elements(Person.<jk>class</jk>)) {
 	 * 		<jc>// Do something with p.</jc>
 	 * 	}
-	 * 		</p>
-	 * 	</dd>
-	 * </dl>
+	 * </p>
 	 *
 	 * @param <E> The child object type.
 	 * @param childType The child object type.

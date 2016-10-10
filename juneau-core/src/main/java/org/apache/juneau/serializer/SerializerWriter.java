@@ -23,7 +23,7 @@ import org.apache.juneau.internal.*;
  * Modeled after the Java ProcessBuilder class so that you can chain commands to reduce
  * 	the need for string concatenation for performance reasons.
  *
- * <h6 class='topic'>Example</h6>
+ * <h6 class='topic'>Example:</h6>
  * <p class='bcode'>
  * 	writer.append(<js>"foo"</js>).nl().i(5).append(<js>"bar"</js>);
  * </p>

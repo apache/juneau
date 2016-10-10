@@ -44,39 +44,36 @@ public @interface Xml {
 	 * <p>
 	 * 	Applies only to collection and array bean properties.
 	 *
-	 * <dl>
-	 * 	<dt>Example:</dt>
-	 * 	<dd>
-	 * 		<p class='bcode'>
+	 *
+	 * <h6 class='topic'>Example:</h6>
+	 * <p class='bcode'>
 	 * 	<jk>public class</jk> MyBean {
 	 * 		<ja>@Xml</ja>(childName=<js>"child"</js>}
 	 * 		<jk>public</jk> String[] <jf>children</jf> = {<js>"foo"</js>,<js>"bar"</js>};
 	 * 	}
-	 * 		</p>
-	 * 		<p>
-	 * 			Without the <ja>@Xml</ja> annotation, serializing this bean as XML would have produced the following...
-	 * 		</p>
-	 * 		<p class='bcode'>
+	 * </p>
+	 * <p>
+	 * 	Without the <ja>@Xml</ja> annotation, serializing this bean as XML would have produced the following...
+	 * </p>
+	 * <p class='bcode'>
 	 * 	<xt>&lt;object&gt;</xt>
 	 * 		<xt>&lt;children&gt;</xt>
 	 * 			<xt>&lt;string&gt;</xt>foo<xt>&lt;/string&gt;</xt>
 	 * 			<xt>&lt;string&gt;</xt>bar<xt>&lt;/string&gt;</xt>
 	 * 		<xt>&lt;/children&gt;</xt>
 	 * 	<xt>&lt;/object&gt;</xt>
-	 * 		</p>
-	 * 		<p>
-	 * 			With the annotations, serializing this bean as XML produces the following...
-	 * 		</p>
-	 * 		<p class='bcode'>
+	 * </p>
+	 * <p>
+	 * 	With the annotations, serializing this bean as XML produces the following...
+	 * </p>
+	 * <p class='bcode'>
 	 * 	<xt>&lt;object&gt;</xt>
 	 * 		<xt>&lt;children&gt;</xt>
 	 * 			<xt>&lt;child&gt;</xt>foo<xt>&lt;/child&gt;</xt>
 	 * 			<xt>&lt;child&gt;</xt>bar<xt>&lt;/child&gt;</xt>
 	 * 		<xt>&lt;/children&gt;</xt>
 	 * 	<xt>&lt;/object&gt;</xt>
-	 * 		</p>
-	 * 	</dd>
-	 * </dl>
+	 * </p>
 	 */
 	String childName() default "";
 
@@ -106,10 +103,8 @@ public @interface Xml {
 	/**
 	 * The {@link XmlFormat} to use for serializing this object type.
 	 *
-	 * <dl>
-	 * 	<dt>Example:</dt>
-	 * 	<dd>
-	 * 		<p class='bcode'>
+	 * <h6 class='topic'>Example:</h6>
+	 * <p class='bcode'>
 	 * 	<jk>public class</jk> MyBean {
 	 *
 	 * 		<jc>// Normally, bean properties would be rendered as child elements of the bean element.</jc>
@@ -128,11 +123,11 @@ public @interface Xml {
 	 * 		<ja>@Xml</ja>(format=XmlFormat.<jsf>COLLAPSED</jsf>, childName=<js>"child"</js>}
 	 * 		<jk>public</jk> String[] <jf>children</jf> = <js>"foo"</js>,<js>"bar"</js>};
 	 * 	}
-	 * 		</p>
-	 * 		<p>
-	 * 			Without the <ja>@Xml</ja> annotations, serializing this bean as XML would have produced the following...
-	 * 		</p>
-	 * 		<p class='bcode'>
+	 * </p>
+	 * <p>
+	 * 	Without the <ja>@Xml</ja> annotations, serializing this bean as XML would have produced the following...
+	 * </p>
+	 * <p class='bcode'>
 	 * 	<xt>&lt;object</xt> <xa>href</xa>=<js>'http://foo'</js><xt>&gt;</xt>
 	 * 		<xt>&lt;f1&gt;</xt>123<xt>&lt;/f1&gt;</xt>
 	 * 		<xt>&lt;children&gt;</xt>
@@ -140,19 +135,17 @@ public @interface Xml {
 	 * 			<xt>&lt;string&gt;</xt>bar<xt>&lt;/string&gt;</xt>
 	 * 		<xt>&lt;/children&gt;</xt>
 	 * 	<xt>&lt;/object&gt;</xt>
-	 * 		</p>
-	 * 		<p>
-	 * 			With the annotations, serializing this bean as XML produces the following...
-	 * 		</p>
-	 * 		<p class='bcode'>
+	 * </p>
+	 * <p>
+	 * 	With the annotations, serializing this bean as XML produces the following...
+	 * </p>
+	 * <p class='bcode'>
 	 * 	<xt>&lt;object</xt> <xa>f1</xa>=<js>'123'</js><xt>&gt;</xt>
 	 * 		<xt>&lt;href&gt;</xt>http://foo<xt>&lt;/href&gt;</xt>
 	 * 		<xt>&lt;child&gt;</xt>foo<xt>&lt;/child&gt;</xt>
 	 * 		<xt>&lt;child&gt;</xt>bar<xt>&lt;/child&gt;</xt>
 	 * 	<xt>&lt;/object&gt;</xt>
-	 * 		</p>
-	 * 	</dd>
-	 * </dl>
+	 * </p>
 	 */
 	XmlFormat format() default XmlFormat.NORMAL;
 

@@ -42,7 +42,7 @@ import org.apache.juneau.parser.*;
  * <p>
  * 	Leading slashes in URLs are ignored.  So <js>"/xxx/yyy/zzz"</js> and <js>"xxx/yyy/zzz"</js> are considered identical.
  *
- * <h6 class='topic'>Examples</h6>
+ * <h6 class='topic'>Example:</h6>
  * <p class='bcode'>
  * 	<jc>// Construct an unstructured POJO model</jc>
  * 	ObjectMap m = <jk>new</jk> ObjectMap(<js>""</js>
@@ -106,7 +106,7 @@ import org.apache.juneau.parser.*;
  * 	can be used in lieu of index numbers on GET requests to return a map/bean with a specified attribute value.<br>
  * 	The syntax is {@code @attr=val}, where attr is the attribute name on the child map, and val is the matching value.
  *
- * <h6 class='topic'>Examples</h6>
+ * <h6 class='topic'>Example:</h6>
  * <p class='bcode'>
  * 	<jc>// Get map/bean with name attribute value of 'foo' from a list of items</jc>
  * 	Map m = pojoRest.getMap(<js>"/items/@name=foo"</js>);

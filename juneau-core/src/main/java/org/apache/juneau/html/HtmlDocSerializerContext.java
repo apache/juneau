@@ -22,7 +22,7 @@ import org.apache.juneau.*;
  * 	These are typically specified via <ja>@RestResource.properties()</ja> and <ja>@RestMethod.properties()</ja> annotations,
  * 		although they can also be set programmatically via the <code>RestResponse.setProperty()</code> method.
  *
- * <h6 class='topic'>Example</h6>
+ * <h6 class='topic'>Example:</h6>
  * <p class='bcode'>
  * 	<ja>@RestResource</ja>(
  * 		messages=<js>"nls/AddressBookResource"</js>,
@@ -107,9 +107,8 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * 	<li><b>Default:</b> <jk>null</jk>
 	 * </ul>
 	 * <p>
-	 * <dl>
-	 * 	<dt>Example:</dt>
-	 * 	<dd>
+	 *
+	 * <h6 class='topic'>Example:</h6>
 	 * <p>
 	 * 	The <code>AddressBookResource</code> sample class uses this property...
 	 * </p>
@@ -131,9 +130,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * <p>
 	 * 	...to produce this title on the HTML page...
 	 * </p>
-	 * 		<img class='bordered' src='doc-files/HTML_TITLE.png'>
-	 * 	</dd>
-	 * </dl>
+	 * <img class='bordered' src='doc-files/HTML_TITLE.png'>
 	 */
 	public static final String HTMLDOC_title = "HtmlSerializer.title";
 
@@ -146,9 +143,8 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * 	<li><b>Default:</b> <jk>null</jk>
 	 * </ul>
 	 * <p>
-	 * <dl>
-	 * 	<dt>Example:</dt>
-	 * 	<dd>
+	 *
+	 * <h6 class='topic'>Example:</h6>
 	 * <p>
 	 * 	The <code>AddressBookResource</code> sample class uses this property...
 	 * </p>
@@ -170,9 +166,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * <p>
 	 * 	...to produce this description on the HTML page...
 	 * </p>
-	 * 		<img class='bordered' src='doc-files/HTML_DESCRIPTION.png'>
-	 * 	</dd>
-	 * </dl>
+	 *	<img class='bordered' src='doc-files/HTML_DESCRIPTION.png'>
 	 */
 	public static final String HTMLDOC_description = "HtmlSerializer.description";
 
@@ -197,9 +191,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * 	Absolute (<js>"/myOtherContext/foo"</js>) and fully-qualified (<js>"http://localhost2/foo"</js>) URLs
 	 * 		can also be used.
 	 *
-	 * <dl>
-	 * 	<dt>Example:</dt>
-	 * 	<dd>
+	 * <h6 class='topic'>Example:</h6>
 	 * <p>
 	 * 	The <code>AddressBookResource</code> sample class uses this property...
 	 * </p>
@@ -215,9 +207,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * <p>
 	 * 	...to produce this list of links on the HTML page...
 	 * </p>
-	 * 		<img class='bordered' src='doc-files/HTML_LINKS.png'>
-	 * 	</dd>
-	 * </dl>
+	 * <img class='bordered' src='doc-files/HTML_LINKS.png'>
 	 */
 	public static final String HTMLDOC_links = "HtmlDocSerializer.links.map";
 

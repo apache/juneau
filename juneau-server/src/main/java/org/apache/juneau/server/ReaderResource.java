@@ -16,12 +16,13 @@ import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.server.annotation.*;
 import org.apache.juneau.server.response.*;
 import org.apache.juneau.svl.*;
 
 /**
  * Represents the contents of a text file with convenience methods for resolving
- * 	{@link Var} variables and adding HTTP response headers.
+ * 	{@link Parameter} variables and adding HTTP response headers.
  * <p>
  * This class is handled special by the {@link WritableHandler} class.
  *
@@ -58,7 +59,7 @@ public class ReaderResource implements Writable {
 	}
 
 	/**
-	 * Use the specified {@link VarResolver} to resolve any {@link Var StringVars} in the
+	 * Use the specified {@link VarResolver} to resolve any {@link Parameter StringVars} in the
 	 * contents of this file when the {@link #writeTo(Writer)} or {@link #toString()} methods are called.
 	 *
 	 * @param varSession The string variable resolver to use to resolve string variables.

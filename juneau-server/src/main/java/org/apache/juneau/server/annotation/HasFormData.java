@@ -23,8 +23,9 @@ import org.apache.juneau.server.*;
  * Annotation that can be applied to a parameter of a {@link RestMethod} annotated method
  * 	to identify whether or not the request has the specified multipart form POST parameter.
  * <p>
- * Note that this can be used to detect the existence of a parameter when it's not set to a particular value.
- * <h6 class='topic'>Example</h6>
+ * 	Note that this can be used to detect the existence of a parameter when it's not set to a particular value.
+ *
+ * <h6 class='topic'>Example:</h6>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<js>"POST"</js>)
  * 	<jk>public void</jk> doPost(<ja>@HasFormData</ja>(<js>"p1"</js>) <jk>boolean</jk> p1) {

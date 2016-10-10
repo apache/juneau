@@ -109,8 +109,8 @@ div.data {
 
 div.data td {
 	vertical-align: top;
-	border-bottom:1px solid #E9EACB;
-	border-right:1px solid #E9EACB;
+	border-bottom:1px solid #d9dcde;
+	border-right:1px solid #d9dcde;
 	padding:0.2em 0.5em;
 	color:#26343F;
 	font-size:12px;
@@ -141,11 +141,11 @@ a:hover {
 }
 
 th, .header {
-	border-top:1px solid #CCCC99;
+	border-top:1px solid #d9dcde;
 	padding: 4px 8px;
 	font-weight: bold;
 	text-align:center;
-	background-color: #e9eacb;
+	background-color: rgb(244,246,249);
 	font-family: sans-serif;
 	font-size: 12px;
 	color: #26343f;

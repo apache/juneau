@@ -16,8 +16,8 @@ import org.apache.juneau.annotation.*;
 
 /**
  * License information for the exposed API.
- * <p>
- * Example:
+ *
+ * <h6 class='topic'>Example:</h6>
  * <p class='bcode'>
  * 	{
  * 		<js>"name"</js>: <js>"Apache 2.0"</js>,
@@ -35,7 +35,7 @@ public class License {
 
 	/**
 	 * Convenience method for creating a new License object.
-	 * 
+	 *
 	 * @param name Required. The license name used for the API.
 	 * @return A new License object.
 	 */

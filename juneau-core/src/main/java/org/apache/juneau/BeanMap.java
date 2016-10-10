@@ -162,9 +162,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * 	{@link BeanProperty#swap() @BeanProperty.swap()} annotation, the value being passed in must be
 	 * 	a String containing an ISO8601 date-time string value.
 	 *
-	 * <dl>
-	 * 	<dt>Example:</dt>
-	 * 	<dd>
+	 * <h6 class='topic'>Example:</h6>
 	 * <p class='bcode'>
 	 * 	<jc>// Construct a bean with a 'birthDate' Date field</jc>
 	 * 	Person p = <jk>new</jk> Person();
@@ -178,8 +176,6 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * 	<jc>// Set the field</jc>
 	 * 	myBeanMap.put(<js>"birthDate"</js>, <js>"'1901-03-03T04:05:06-5000'"</js>);
 	 * </p>
-	 * 	</dd>
-	 * </dl>
 	 *
 	 * @param property The name of the property to set.
 	 * @param value The value to set the property to.
@@ -246,9 +242,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * 	{@link BeanProperty#swap() @BeanProperty.swap()} annotation, this method will return a String
 	 * 	containing an ISO8601 date-time string value.
 	 *
-	 * <dl>
-	 * 	<dt>Example:</dt>
-	 * 	<dd>
+	 * <h6 class='topic'>Example:</h6>
 	 * <p class='bcode'>
 	 * 	<jc>// Construct a bean with a 'birthDate' Date field</jc>
 	 * 	Person p = <jk>new</jk> Person();
@@ -263,8 +257,6 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * 	<jc>// Get the field as a string (i.e. "'1901-03-03T04:05:06-5000'")</jc>
 	 * 	String s = myBeanMap.get(<js>"birthDate"</js>);
 	 * </p>
-	 * 	</dd>
-	 * </dl>
 	 *
 	 * @param property The name of the property to get.
 	 * @throws RuntimeException if any of the following occur.
@@ -291,14 +283,10 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * 	depends on the default parser specified by the {@link BeanContext#BEAN_defaultParser} property
 	 * 	value on the config that created the context that created this map.
 	 *
-	 * <dl>
-	 * 	<dt>Example:</dt>
-	 * 	<dd>
+	 * <h6 class='topic'>Example:</h6>
 	 * <p class='bcode'>
 	 * 	aPersonBean.load(<js>"{name:'John Smith',age:21}"</js>)
 	 * </p>
-	 * 	</dd>
-	 * </dl>
 	 *
 	 * @param input The text that will get parsed into a map and then added to this map.
 	 * @return This object (for method chaining).

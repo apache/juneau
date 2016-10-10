@@ -195,16 +195,12 @@ public final class Args extends ObjectMap {
 	 * <p>
 	 * If the optional arg has multiple values, returns only the first converted value.
 	 *
-	 * <dl>
-	 * 	<dt>Example:</dt>
-	 * 	<dd>
-	 *			<p class='bcode'>
+	 * <h6 class='topic'>Example:</h6>
+	 *	<p class='bcode'>
 	 * 	<jc>// Command:  java com.sample.MyClass -verbose true -debug 5</jc>
 	 * 	<jk>boolean</jk> b = args.getArg(<jk>boolean</jk>.<jk>class</jk>, <js>"verbose"</js>);
 	 * 	<jk>int</jk> i = args.getArg(<jk>int</jk>.<jk>class</jk>, <js>"debug"</js>);
-	 * 		</p>
-	 * 	</dd>
-	 * </dl>
+	 * </p>
 	 *
 	 * @param c The class type to convert the value to.
 	 * @param <T> The class type to convert the value to.
@@ -221,16 +217,12 @@ public final class Args extends ObjectMap {
 	/**
 	 * Returns the optional argument values as a list of strings.
 	 *
-	 * <dl>
-	 * 	<dt>Example:</dt>
-	 * 	<dd>
-	 * 		<p class='bcode'>
+	 * <h6 class='topic'>Example:</h6>
+	 * <p class='bcode'>
 	 * 	<jc>// Command:  java com.sample.MyClass -extraArgs foo bar baz</jc>
 	 * 	List&lt;String&gt; l1 = args.getArgs(<js>"extraArgs"</js>); <jc>// ['foo','bar','baz']</jc>
 	 * 	List&lt;String&gt; l2 = args.getArgs(<js>"nonExistentArgs"</js>); <jc>// An empty list</jc>
-	 * 		</p>
-	 * 	</dd>
-	 * </dl>
+	 * </p>
 	 *
 	 * @param name The optional argument name.
 	 * @return The optional argument values, or an empty list if the optional argument was not specified.

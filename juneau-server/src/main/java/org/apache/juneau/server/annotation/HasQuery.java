@@ -28,7 +28,7 @@ import org.apache.juneau.server.*;
  * Therefore, this annotation can be used in conjunction with the {@link Body @Body} annotation
  * 	or {@link RestRequest#getBody(Class)} method for <code>application/x-www-form-urlencoded POST</code> calls.
  *
- * <h6 class='topic'>Example</h6>
+ * <h6 class='topic'>Example:</h6>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>)
  * 	<jk>public void</jk> doPost(<ja>@HasQuery</ja>(<js>"p1"</js>) <jk>boolean</jk> p1, <ja>@Body</ja> Bean myBean) {

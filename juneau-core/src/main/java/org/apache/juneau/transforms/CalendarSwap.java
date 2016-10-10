@@ -50,14 +50,10 @@ public class CalendarSwap extends PojoSwap<Calendar,String> {
 	/**
 	 * Transforms {@link Calendar Calendars} to {@link String Strings} using the {@code Date.toString()} method.
 	 *
-	 * <dl>
-	 * 	<dt>Example output:</dt>
-	 * 	<dd>
-	 * 		<ul>
-	 * 			<li><js>"Wed Jul 04 15:30:45 EST 2001"</js>
-	 * 		</ul>
-	 * 	</dd>
-	 * </dl>
+	 * <h6 class='topic'>Example output:</h6>
+	 * 	<ul>
+	 * 	<li><js>"Wed Jul 04 15:30:45 EST 2001"</js>
+	 * </ul>
 	 */
 	public static class ToString extends CalendarSwap {
 		/** Constructor */
@@ -69,27 +65,22 @@ public class CalendarSwap extends PojoSwap<Calendar,String> {
 	/**
 	 * Transforms {@link Calendar Calendars} to ISO8601 date-time strings.
 	 *
-	 * <dl>
-	 * 	<dt>Example output:</dt>
-	 * 	<dd>
-	 * 		<ul>
-	 * 			<li><js>"2001-07-04T15:30:45-05:00"</js>
-	 * 			<li><js>"2001-07-04T15:30:45Z"</js>
-	 * 		</ul>
-	 * 	</dd>
-	 * 	<dt>Example input:</dt>
-	 * 	<dd>
-	 * 		<ul>
-	 * 			<li><js>"2001-07-04T15:30:45-05:00"</js>
-	 * 			<li><js>"2001-07-04T15:30:45Z"</js>
-	 * 			<li><js>"2001-07-04T15:30:45.1Z"</js>
-	 * 			<li><js>"2001-07-04T15:30Z"</js>
-	 * 			<li><js>"2001-07-04"</js>
-	 * 			<li><js>"2001-07"</js>
-	 * 			<li><js>"2001"</js>
-	 *			 </ul>
-	 * 	</dd>
-	 * </dl>
+	 * <h6 class='topic'>Example output:</h6>
+	 * <ul>
+	 * 	<li><js>"2001-07-04T15:30:45-05:00"</js>
+	 * 	<li><js>"2001-07-04T15:30:45Z"</js>
+	 * </ul>
+	 *
+	 * <h6 class='topic'>Example input:</h6>
+	 * <ul>
+	 * 	<li><js>"2001-07-04T15:30:45-05:00"</js>
+	 * 	<li><js>"2001-07-04T15:30:45Z"</js>
+	 * 	<li><js>"2001-07-04T15:30:45.1Z"</js>
+	 * 	<li><js>"2001-07-04T15:30Z"</js>
+	 * 	<li><js>"2001-07-04"</js>
+	 * 	<li><js>"2001-07"</js>
+	 * 	<li><js>"2001"</js>
+	 *	 </ul>
 	 */
 	public static class ISO8601DT extends CalendarSwap {
 
@@ -115,8 +106,9 @@ public class CalendarSwap extends PojoSwap<Calendar,String> {
 
 	/**
 	 * Same as {@link ISO8601DT}, except always serializes in GMT.
-	 * <p>
-	 * Example output: <js>"2001-07-04T15:30:45Z"</js>
+	 *
+	 * <h6 class='topic'>Example output:</h6>
+	 * <js>"2001-07-04T15:30:45Z"</js>
 	 */
 	public static class ISO8601DTZ extends CalendarSwap {
 
@@ -157,8 +149,9 @@ public class CalendarSwap extends PojoSwap<Calendar,String> {
 
 	/**
 	 * Same as {@link RFC2822DT}, except always serializes in GMT.
-	 * <p>
-	 * Example output: <js>"Wed, 31 Jan 2001 12:34:56 +0000"</js>
+	 *
+	 * <h6 class='topic'>Example output:</h6>
+	 * <js>"Wed, 31 Jan 2001 12:34:56 +0000"</js>
 	 */
 	public static class RFC2822DTZ extends CalendarSwap {
 		/** Constructor */

@@ -53,10 +53,9 @@ public @interface Bean {
 	 * 	a simple name/value mapping of names to classes.
 	 * Names do not need to be universally unique.  However, they must be unique within a dictionary.
 	 *
-	 * <dl>
-	 * 	<dt>Example:</dt>
-	 * 	<dd>
-	 * 		<p class='bcode'>
+	 *
+	 * <h6 class='topic'>Example:</h6>
+	 * <p class='bcode'>
 	 * 	<ja>@Bean</ja>(typeName=<js>"foo"</js>)
 	 * 	<jk>public class</jk> Foo {
 	 * 		<jc>// A bean property where the object types cannot be inferred since it's an Object[].</jc>
@@ -69,30 +68,29 @@ public @interface Bean {
 	 *
 	 * 	<ja>@Bean</ja>(typeName=<js>"baz"</js>)
 	 * 	<jk>public class</jk> Baz {}
-	 * 		</p>
-	 * 		<p>
-	 * 			When serialized as XML, the bean is rendered as:
-	 * 		</p>
-	 * 		<p class='bcode'>
+	 * </p>
+	 * <p>
+	 * 	When serialized as XML, the bean is rendered as:
+	 * </p>
+	 * <p class='bcode'>
 	 * 	<xt>&lt;foo&gt;</xt>
 	 * 	   <xt>&lt;x&gt;</xt>
 	 * 	      <xt>&lt;bar/&gt;v
 	 * 	      <xt>&lt;baz/&gt;</xt>
 	 * 	   <xt>&lt;/x&gt;</xt>
 	 * 	<xt>&lt;/foo&gt;</xt>
-	 * 		</p>
-	 * 		<p>
-	 * 			When serialized as JSON, <js>'n'</js> attributes would be added when needed to infer the type during parsing:
-	 * 		</p>
-	 * 		<p class='bcode'>
+	 * </p>
+	 * <p>
+	 * 	When serialized as JSON, <js>'n'</js> attributes would be added when needed to infer the type during parsing:
+	 * </p>
+	 * <p class='bcode'>
 	 * 	{
 	 * 	   <jsa>x</jsa>: [
 	 * 	      {<jsa>_type</jsa>:<jss>'bar'</jss>},
 	 * 	      {<jsa>_type</jsa>:<jss>'baz'</jss>}
 	 * 	   ]
 	 * 	}	 *
-	 * 	</dd>
-	 * </dl>
+	 * </p>
 	 */
 	String typeName() default "";
 
@@ -103,18 +101,15 @@ public @interface Bean {
 	 * <p>
 	 * 	This annotation is an alternative to using the {@link BeanFilter} class with an implemented {@link BeanFilter#getProperties()} method.
 	 *
-	 * <dl>
-	 * 	<dt>Example:</dt>
-	 * 	<dd>
-	 * 		<p class='bcode'>
+	 *
+	 * <h6 class='topic'>Example:</h6>
+	 * <p class='bcode'>
 	 * 	<jc>// Address class with only street/city/state properties (in that order).</jc>
 	 * 	<jc>// All other properties are ignored.</jc>
 	 * 	<ja>@Bean</ja>(properties=<js>"street,city,state"</js>)
 	 * 	<jk>public class</jk> Address {
 	 * 	...
-	 * 		</p>
-	 * 	</dd>
-	 * </dl>
+	 * </p>
 	 */
 	String properties() default "";
 
@@ -141,18 +136,14 @@ public @interface Bean {
 	 * <p>
 	 * 	This annotation is an alternative to using the {@link BeanFilter} class with an implemented {@link BeanFilter#getExcludeProperties()} method.
 	 *
-	 * <dl>
-	 * 	<dt>Example:</dt>
-	 * 	<dd>
-	 * 		<p class='bcode'>
+	 * <h6 class='topic'>Example:</h6>
+	 * <p class='bcode'>
 	 * 	<jc>// Address class with only street/city/state properties (in that order).</jc>
 	 * 	<jc>// All other properties are ignored.</jc>
 	 * 	<ja>@Bean</ja>(excludeProperties=<js>"city,state"</js>})
 	 * 	<jk>public class</jk> Address {
 	 * 		...
-	 * 		</p>
-	 * 	</dd>
-	 * </dl>
+	 * </p>
 	 */
 	String excludeProperties() default "";
 
@@ -165,18 +156,14 @@ public @interface Bean {
 	 * <p>
 	 * 	This annotation is an alternative to using the {@link BeanFilter} class with an implemented {@link BeanFilter#getPropertyNamer()} method.
 	 *
-	 * <dl>
-	 * 	<dt>Example:</dt>
-	 * 	<dd>
-	 * 		<p class='bcode'>
+	 * <h6 class='topic'>Example:</h6>
+	 * <p class='bcode'>
 	 * 	<jc>// Define a class with dashed-lowercase property names.</jc>
 	 * 	<ja>@Bean</ja>(propertyNamer=PropertyNamerDashedLC.<jk>class</jk>)
 	 * 	<jk>public class</jk> MyClass {
 	 * 		...
 	 * 	}
-	 * 		</p>
-	 * 	</dd>
-	 * </dl>
+	 *	</p>
 	 */
 	Class<? extends PropertyNamer> propertyNamer() default PropertyNamerDefault.class;
 

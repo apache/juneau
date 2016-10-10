@@ -20,7 +20,7 @@ import java.lang.annotation.*;
 /**
  * Annotation used in conjunction with {@link RestMethod#responses()} to identify possible responses by the method.
  *
- * <h6 class='topic'>Example</h6>
+ * <h6 class='topic'>Example:</h6>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(
  * 		name=<js>"*"</js>,
@@ -67,6 +67,15 @@ public @interface Response {
 	 * If this field does not exist, it means no content is returned as part of the response.
 	 * As an extension to the <a href='http://swagger.io/specification/#schemaObject'>Schema Object</a>, its root type value may also be <js>"file"</js>.
 	 * This SHOULD be accompanied by a relevant produces mime-type.
+	 *
+	 * <h6 class='topic'>Example:</h6>
+	 * <p class='bcode'>
+	 * 	<ja>@RestMethod</ja>(
+	 * 		name=<js>"*"</js>,
+	 * 		responses={
+	 * 			<ja>@Response</ja>(value=200,schema=<js>"{type:'string',description:'A serialized Person bean.'}"</js>),
+	 * 		}
+	 * </p>
 	 */
 	String schema() default "";
 
@@ -76,5 +85,5 @@ public @interface Response {
 	 * Response variables can also be defined in the servlet resource bundle.
 	 * 	(e.g. <js>"myMethod.res.[code].[category].[name] = foo"</js> or <js>"MyServlet.myMethod.res.[code].[category].[name] = foo"</js>).
 	 */
-	Var[] headers() default {};
+	Parameter[] headers() default {};
 }

@@ -46,7 +46,7 @@ import org.apache.juneau.*;
  * 	will result in the order <code>P3, P4, P1, P2</code>.
  *
  *
- * <h6 class='topic'>Examples</h6>
+ * <h6 class='topic'>Example:</h6>
  * <p class='bcode'>
  * 	<jc>// Construct a new parser group</jc>
  * 	ParserGroup g = <jk>new</jk> ParserGroup();

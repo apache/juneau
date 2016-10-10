@@ -42,7 +42,7 @@ import org.apache.juneau.*;
  * 	will result in the order <code>E3, E4, E1, E2</code>.
  *
  *
- * <h6 class='topic'>Example</h6>
+ * <h6 class='topic'>Example:</h6>
  * <p class='bcode'>
  * 	<jc>// Create an encoder group with support for gzip compression.</jc>
  * 	EncoderGroup g = <jk>new</jk> EncoderGroup().append(GzipEncoder.<jk>class</jk>);

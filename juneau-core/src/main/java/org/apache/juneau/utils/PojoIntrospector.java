@@ -22,8 +22,8 @@ import org.apache.juneau.parser.*;
 
 /**
  * Used to invoke methods on {@code Objects} using arguments in serialized form.
- *	<p>
- *	Example:
+ *
+ * <h6 class='topic'>Example:</h6>
  *	<p class='bcode'>
  *		String s = <js>"foobar"</js>;
  *		String s2 = (String)<jk>new</jk> PojoIntrospector(s).invoke(<js>"substring(int,int)"</js>, <js>"[3,6]"</js>);  <jc>// "bar"</jc>

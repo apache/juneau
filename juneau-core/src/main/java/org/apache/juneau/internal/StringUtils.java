@@ -896,8 +896,8 @@ public final class StringUtils {
 
 	/**
 	 * Returns <jk>true</jk> if the specified path string is prefixed with the specified prefix.
-	 * <p>
-	 * Examples:
+	 *
+	 * <h6 class='topic'>Example:</h6>
 	 * <p class='bcode'>
 	 * 	pathStartsWith(<js>"foo"</js>, <js>"foo"</js>);  <jc>// true</jc>
 	 * 	pathStartsWith(<js>"foo/bar"</js>, <js>"foo"</js>);  <jc>// true</jc>
@@ -996,5 +996,15 @@ public final class StringUtils {
 		if (start == 0)
 			return def;
 		return s.substring(start);
+	}
+
+	/**
+	 * Calls {@link #toString()} on the specified object if it's not null.
+	 *
+	 * @param o The object to convert to a string.
+	 * @return The object converted to a string, or <jk>null</jk> if the object was null.
+	 */
+	public static String toString(Object o) {
+		return (o == null ? null : o.toString());
 	}
 }

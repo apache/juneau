@@ -56,7 +56,7 @@ import org.apache.juneau.utils.*;
  */
 @RestResource(
 	title="File System Explorer",
-	description="Contents of $A{path}",
+	description="Contents of $R{attribute.path}",
 	messages="nls/DirectoryResource",
 	properties={
 		@Property(name=HTML_uriAnchorText, value=PROPERTY_NAME),

@@ -16,8 +16,8 @@ import org.apache.juneau.annotation.*;
 
 /**
  * Contact information for the exposed API.
- * <p>
- * Example:
+ *
+ * <h6 class='topic'>Example:</h6>
  * <p class='bcode'>
  * 	{
  * 		<js>"name"</js>: <js>"API Support"</js>,

@@ -18,8 +18,8 @@ import org.apache.juneau.annotation.*;
  * Allows adding meta data to a single tag that is used by the <a href='http://swagger.io/specification/#operationObject'>Operation Object</a>.
  * <p>
  * It is not mandatory to have a Tag Object per tag used there.
- * <p>
- * Example:
+ *
+ * <h6 class='topic'>Example:</h6>
  * <p class='bcode'>
  * 	{
  * 		<js>"name"</js>: <js>"pet"</js>,
@@ -37,7 +37,7 @@ public class Tag {
 
 	/**
 	 * Convenience method for creating a new Tag object.
-	 * 
+	 *
 	 * @param name Required. The name of the tag.
 	 * @return A new Tag object.
 	 */

@@ -29,7 +29,7 @@ import org.apache.juneau.annotation.*;
  * @author james.bognar
  */
 @Bean(properties="format,title,description,default,multipleOf,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,maxProperties,minProperties,required,enum,type,items,allOf,properties,additionalProperties,discriminator,readOnly,xml,externalDocs,example")
-public class Schema {
+public class SchemaInfo {
 
 	private String format;
 	private String title;
@@ -80,7 +80,7 @@ public class Schema {
 	 * @param format The new value for the <property>format</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Schema setFormat(String format) {
+	public SchemaInfo setFormat(String format) {
 		this.format = format;
 		return this;
 	}
@@ -100,7 +100,7 @@ public class Schema {
 	 * @param title The new value for the <property>title</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Schema setTitle(String title) {
+	public SchemaInfo setTitle(String title) {
 		this.title = title;
 		return this;
 	}
@@ -124,7 +124,7 @@ public class Schema {
 	 * @param description The new value for the <property>description</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Schema setDescription(String description) {
+	public SchemaInfo setDescription(String description) {
 		this.description = description;
 		return this;
 	}
@@ -148,7 +148,7 @@ public class Schema {
 	 * @param _default The new value for the <property>default</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Schema setDefault(Object _default) {
+	public SchemaInfo setDefault(Object _default) {
 		this._default = _default;
 		return this;
 	}
@@ -168,7 +168,7 @@ public class Schema {
 	 * @param multipleOf The new value for the <property>multipleOf</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Schema setMultipleOf(Number multipleOf) {
+	public SchemaInfo setMultipleOf(Number multipleOf) {
 		this.multipleOf = multipleOf;
 		return this;
 	}
@@ -188,7 +188,7 @@ public class Schema {
 	 * @param maximum The new value for the <property>maximum</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Schema setMaximum(Number maximum) {
+	public SchemaInfo setMaximum(Number maximum) {
 		this.maximum = maximum;
 		return this;
 	}
@@ -208,7 +208,7 @@ public class Schema {
 	 * @param exclusiveMaximum The new value for the <property>exclusiveMaximum</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Schema setExclusiveMaximum(Boolean exclusiveMaximum) {
+	public SchemaInfo setExclusiveMaximum(Boolean exclusiveMaximum) {
 		this.exclusiveMaximum = exclusiveMaximum;
 		return this;
 	}
@@ -228,7 +228,7 @@ public class Schema {
 	 * @param minimum The new value for the <property>minimum</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Schema setMinimum(Number minimum) {
+	public SchemaInfo setMinimum(Number minimum) {
 		this.minimum = minimum;
 		return this;
 	}
@@ -248,7 +248,7 @@ public class Schema {
 	 * @param exclusiveMinimum The new value for the <property>exclusiveMinimum</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Schema setExclusiveMinimum(Boolean exclusiveMinimum) {
+	public SchemaInfo setExclusiveMinimum(Boolean exclusiveMinimum) {
 		this.exclusiveMinimum = exclusiveMinimum;
 		return this;
 	}
@@ -268,7 +268,7 @@ public class Schema {
 	 * @param maxLength The new value for the <property>maxLength</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Schema setMaxLength(Integer maxLength) {
+	public SchemaInfo setMaxLength(Integer maxLength) {
 		this.maxLength = maxLength;
 		return this;
 	}
@@ -288,7 +288,7 @@ public class Schema {
 	 * @param minLength The new value for the <property>minLength</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Schema setMinLength(Integer minLength) {
+	public SchemaInfo setMinLength(Integer minLength) {
 		this.minLength = minLength;
 		return this;
 	}
@@ -308,7 +308,7 @@ public class Schema {
 	 * @param pattern The new value for the <property>pattern</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Schema setPattern(String pattern) {
+	public SchemaInfo setPattern(String pattern) {
 		this.pattern = pattern;
 		return this;
 	}
@@ -328,7 +328,7 @@ public class Schema {
 	 * @param maxItems The new value for the <property>maxItems</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Schema setMaxItems(Integer maxItems) {
+	public SchemaInfo setMaxItems(Integer maxItems) {
 		this.maxItems = maxItems;
 		return this;
 	}
@@ -348,7 +348,7 @@ public class Schema {
 	 * @param minItems The new value for the <property>minItems</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Schema setMinItems(Integer minItems) {
+	public SchemaInfo setMinItems(Integer minItems) {
 		this.minItems = minItems;
 		return this;
 	}
@@ -367,7 +367,7 @@ public class Schema {
 	 * @param uniqueItems The new value for the <property>uniqueItems</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Schema setUniqueItems(Boolean uniqueItems) {
+	public SchemaInfo setUniqueItems(Boolean uniqueItems) {
 		this.uniqueItems = uniqueItems;
 		return this;
 	}
@@ -387,7 +387,7 @@ public class Schema {
 	 * @param maxProperties The new value for the <property>maxProperties</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Schema setMaxProperties(Integer maxProperties) {
+	public SchemaInfo setMaxProperties(Integer maxProperties) {
 		this.maxProperties = maxProperties;
 		return this;
 	}
@@ -407,7 +407,7 @@ public class Schema {
 	 * @param minProperties The new value for the <property>minProperties</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Schema setMinProperties(Integer minProperties) {
+	public SchemaInfo setMinProperties(Integer minProperties) {
 		this.minProperties = minProperties;
 		return this;
 	}
@@ -427,7 +427,7 @@ public class Schema {
 	 * @param required The new value for the <property>required</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Schema setRequired(Boolean required) {
+	public SchemaInfo setRequired(Boolean required) {
 		this.required = required;
 		return this;
 	}
@@ -447,7 +447,7 @@ public class Schema {
 	 * @param _enum The new value for the <property>enum</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Schema setEnum(List<Object> _enum) {
+	public SchemaInfo setEnum(List<Object> _enum) {
 		this._enum = _enum;
 		return this;
 	}
@@ -459,7 +459,7 @@ public class Schema {
 	 * @return This object (for method chaining).
 	 */
 	@SuppressWarnings("hiding")
-	public Schema addEnum(Object..._enum) {
+	public SchemaInfo addEnum(Object..._enum) {
 		return addEnum(Arrays.asList(_enum));
 	}
 
@@ -470,7 +470,7 @@ public class Schema {
 	 * @return This object (for method chaining).
 	 */
 	@SuppressWarnings("hiding")
-	public Schema addEnum(Collection<Object> _enum) {
+	public SchemaInfo addEnum(Collection<Object> _enum) {
 		if (this._enum == null)
 			this._enum = new LinkedList<Object>();
 		this._enum.addAll(_enum);
@@ -492,7 +492,7 @@ public class Schema {
 	 * @param type The new value for the <property>type</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Schema setType(String type) {
+	public SchemaInfo setType(String type) {
 		this.type = type;
 		return this;
 	}
@@ -512,7 +512,7 @@ public class Schema {
 	 * @param items The new value for the <property>items</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Schema setItems(Items items) {
+	public SchemaInfo setItems(Items items) {
 		this.items = items;
 		return this;
 	}
@@ -532,7 +532,7 @@ public class Schema {
 	 * @param allOf The new value for the <property>allOf</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Schema setAllOf(List<Object> allOf) {
+	public SchemaInfo setAllOf(List<Object> allOf) {
 		this.allOf = allOf;
 		return this;
 	}
@@ -544,7 +544,7 @@ public class Schema {
 	 * @return This object (for method chaining).
 	 */
 	@SuppressWarnings("hiding")
-	public Schema addAllOf(Object...allOf) {
+	public SchemaInfo addAllOf(Object...allOf) {
 		return addAllOf(Arrays.asList(allOf));
 	}
 
@@ -555,7 +555,7 @@ public class Schema {
 	 * @return This object (for method chaining).
 	 */
 	@SuppressWarnings("hiding")
-	public Schema addAllOf(Collection<Object> allOf) {
+	public SchemaInfo addAllOf(Collection<Object> allOf) {
 		if (this.allOf == null)
 			this.allOf = new LinkedList<Object>();
 		this.allOf.addAll(allOf);
@@ -577,7 +577,7 @@ public class Schema {
 	 * @param properties The new value for the <property>properties</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Schema setProperties(Map<String,Map<String,Object>> properties) {
+	public SchemaInfo setProperties(Map<String,Map<String,Object>> properties) {
 		this.properties = properties;
 		return this;
 	}
@@ -589,7 +589,7 @@ public class Schema {
 	 * @param propertyProperties The properties of the property.
 	 * @return This object (for method chaining).
 	 */
-	public Schema addProperty(String name, Map<String,Object> propertyProperties) {
+	public SchemaInfo addProperty(String name, Map<String,Object> propertyProperties) {
 		if (this.properties == null)
 			this.properties = new TreeMap<String,Map<String,Object>>();
 		this.properties.put(name, propertyProperties);
@@ -611,7 +611,7 @@ public class Schema {
 	 * @param additionalProperties The new value for the <property>additionalProperties</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Schema setAdditionalProperties(Map<String,Object> additionalProperties) {
+	public SchemaInfo setAdditionalProperties(Map<String,Object> additionalProperties) {
 		this.additionalProperties = additionalProperties;
 		return this;
 	}
@@ -631,7 +631,7 @@ public class Schema {
 	 * @param discriminator The new value for the <property>discriminator</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Schema setDiscriminator(String discriminator) {
+	public SchemaInfo setDiscriminator(String discriminator) {
 		this.discriminator = discriminator;
 		return this;
 	}
@@ -651,7 +651,7 @@ public class Schema {
 	 * @param readOnly The new value for the <property>readOnly</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Schema setReadOnly(Boolean readOnly) {
+	public SchemaInfo setReadOnly(Boolean readOnly) {
 		this.readOnly = readOnly;
 		return this;
 	}
@@ -671,7 +671,7 @@ public class Schema {
 	 * @param xml The new value for the <property>xml</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Schema setXml(Xml xml) {
+	public SchemaInfo setXml(Xml xml) {
 		this.xml = xml;
 		return this;
 	}
@@ -691,7 +691,7 @@ public class Schema {
 	 * @param externalDocs The new value for the <property>externalDocs</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Schema setExternalDocs(ExternalDocumentation externalDocs) {
+	public SchemaInfo setExternalDocs(ExternalDocumentation externalDocs) {
 		this.externalDocs = externalDocs;
 		return this;
 	}
@@ -711,7 +711,7 @@ public class Schema {
 	 * @param example The new value for the <property>example</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Schema setExample(Object example) {
+	public SchemaInfo setExample(Object example) {
 		this.example = example;
 		return this;
 	}

@@ -19,7 +19,7 @@ package org.apache.juneau.dto.jsonschema;
  * 		that override the default serialization/parsing behavior of <code>Enum</code> types
  * 		so that they are represented in lowercase form (as per the specification).
  *
- * <h6 class='figure'>Example</h6>
+ * <h6 class='topic'>Example:</h6>
  * <p class='bcode'>
  * 	// Produces 'number', not 'NUMBER'.
  * 	String json = JsonSerializer.DEFAULT.serialize(JsonType.NUMBER);

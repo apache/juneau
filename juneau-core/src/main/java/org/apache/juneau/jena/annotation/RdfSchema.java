@@ -54,9 +54,7 @@ public @interface RdfSchema {
 	 * <p>
 	 * 	Inherited by child packages.
 	 *
-	 * <dl>
-	 * 	<dt>Example:</dt>
-	 * 	<dd>
+	 * <h6 class='topic'>Example:</h6>
 	 * <p>
 	 * 	Contents of <code>package-info.java</code>...
 	 * </p>
@@ -91,8 +89,6 @@ public @interface RdfSchema {
 	 * 		<jk>public</jk> String <jf>street</jf>, <jf>city</jf>, <jf>state</jf>;
 	 * 	}
 	 * </p>
-	 * 	</dd>
-	 * </dl>
 	 */
 	public RdfNs[] rdfNs() default {};
 }

@@ -46,7 +46,7 @@ import org.apache.juneau.*;
  * 	will result in the order <code>S3, S4, S1, S2</code>.
  *
  *
- * <h6 class='topic'>Examples</h6>
+ * <h6 class='topic'>Example:</h6>
  * <p class='bcode'>
  * 	<jc>// Construct a new serializer group</jc>
  * 	SerializerGroup g = <jk>new</jk> SerializerGroup();

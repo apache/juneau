@@ -18,8 +18,8 @@ import org.apache.juneau.annotation.*;
 
 /**
  * Describes a single response from an API Operation.
- * <p>
- * Example:
+ *
+ * <h6 class='topic'>Example:</h6>
  * <p class='bcode'>
  * 	{
  * 		<js>"description"</js>: <js>"A complex object array response"</js>,
@@ -34,22 +34,22 @@ import org.apache.juneau.annotation.*;
  * @author james.bognar
  */
 @Bean(properties="description,schema,headers,examples")
-public class Response {
+public class ResponseInfo {
 
 	private String description;
-	private Schema schema;
-	private Map<String,Header> headers;
+	private SchemaInfo schema;
+	private Map<String,HeaderInfo> headers;
 	private Map<String,Object> examples;
 
 	/**
 	 * Convenience method for creating a new Response object.
-	 * 
+	 *
 	 * @param description A short description of the response.
 	 * 	<a href='https://help.github.com/articles/github-flavored-markdown'>GFM syntax</a> can be used for rich text representation.
 	 * @return A new Header object.
 	 */
-	public static Response create(String description) {
-		return new Response().setDescription(description);
+	public static ResponseInfo create(String description) {
+		return new ResponseInfo().setDescription(description);
 	}
 
 	/**
@@ -73,7 +73,7 @@ public class Response {
 	 * @param description The new value for the <property>description</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Response setDescription(String description) {
+	public ResponseInfo setDescription(String description) {
 		this.description = description;
 		return this;
 	}
@@ -89,7 +89,7 @@ public class Response {
 	 *
 	 * @return The value of the <property>schema</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public Schema getSchema() {
+	public SchemaInfo getSchema() {
 		return schema;
 	}
 
@@ -105,7 +105,7 @@ public class Response {
 	 * @param schema The new value for the <property>schema</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Response setSchema(Schema schema) {
+	public ResponseInfo setSchema(SchemaInfo schema) {
 		this.schema = schema;
 		return this;
 	}
@@ -117,7 +117,7 @@ public class Response {
 	 *
 	 * @return The value of the <property>headers</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,Header> getHeaders() {
+	public Map<String,HeaderInfo> getHeaders() {
 		return headers;
 	}
 
@@ -129,7 +129,7 @@ public class Response {
 	 * @param headers The new value for the <property>headers</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Response setHeaders(Map<String,Header> headers) {
+	public ResponseInfo setHeaders(Map<String,HeaderInfo> headers) {
 		this.headers = headers;
 		return this;
 	}
@@ -143,9 +143,9 @@ public class Response {
 	 * @param header The header descriptions
 	 * @return This object (for method chaining).
 	 */
-	public Response addHeader(String name, Header header) {
+	public ResponseInfo addHeader(String name, HeaderInfo header) {
 		if (headers == null)
-			headers = new TreeMap<String,Header>();
+			headers = new TreeMap<String,HeaderInfo>();
 		headers.put(name, header);
 		return this;
 	}
@@ -171,7 +171,7 @@ public class Response {
 	 * @param examples The new value for the <property>examples</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Response setExamples(Map<String,Object> examples) {
+	public ResponseInfo setExamples(Map<String,Object> examples) {
 		this.examples = examples;
 		return this;
 	}
@@ -185,7 +185,7 @@ public class Response {
 	 * @param example The example output.
 	 * @return This object (for method chaining).
 	 */
-	public Response addExample(String mimeType, Object example) {
+	public ResponseInfo addExample(String mimeType, Object example) {
 		if (examples == null)
 			examples = new TreeMap<String,Object>();
 		examples.put(mimeType, example);

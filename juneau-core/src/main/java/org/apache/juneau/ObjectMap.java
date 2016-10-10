@@ -37,7 +37,7 @@ import org.apache.juneau.utils.*;
  * 	constructor is provided for converting a JSON object string directly into a {@link Map}.  It also contains
  * 	accessor methods for to avoid common typecasting when accessing elements in a list.
  *
- * <h6 class='topic'>Examples</h6>
+ * <h6 class='topic'>Example:</h6>
  * <p class='bcode'>
  * 	<jc>// Construct an empty Map</jc>
  * 	Map m = <jk>new</jk> ObjectMap();
@@ -1067,23 +1067,22 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * <p>
 	 * 	This method can be used to convert <code>ObjectMap</code> objects to a variety of POJO types.
 	 *
-	 * <dl>
-	 * 	<dt>Example of valid class types:</dt>
-	 * 	<dd>
-	 * 		<p>
-	 * 			An object map can be converted to a bean.
-	 * 		</p>
-	 * 		<p class='bcode'>
+	 *
+	 * <h6 class='topic'>Examples of valid class types:</h6>
+	 * <p>
+	 * 	An object map can be converted to a bean.
+	 * </p>
+	 * <p class='bcode'>
 	 * 	{
 	 * 		_type: <js>'com.ibm.sample.addressBook.Person'</js>,
 	 * 		name: <js>'John Smith'</js>,
 	 * 		...
 	 * 	}
-	 * 		</p>
-	 * 		<p>
-	 * 			It can also be converted into another map type.
-	 * 		</p>
-	 * 		<p class='bcode'>
+	 * </p>
+	 * <p>
+	 * 	It can also be converted into another map type.
+	 * </p>
+	 * <p class='bcode'>
 	 * 	<jc>// Generic TreeMap (String keys, Object values)</jc>
 	 * 	{
 	 * 		_type: <js>'java.util.TreeMap'</js>,
@@ -1096,11 +1095,11 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * 		name: <js>'John Smith'</js>,
 	 * 		...
 	 * 	}
-	 * 		</p>
-	 * 		<p>
-	 * 			It can also be converted to Collections objects if map defines an <code>items</code> entry of type array.
-	 * 		</p>
-	 * 		<p class='bcode'>
+	 * </p>
+	 * <p>
+	 * 	It can also be converted to Collections objects if map defines an <code>items</code> entry of type array.
+	 * </p>
+	 * <p class='bcode'>
 	 * 	<jc>// LinkedList of strings</jc>
 	 * 	{
 	 * 		_type: <js>'java.util.LinkedList'</js>,
@@ -1111,11 +1110,11 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * 		_type: <js>'java.util.LinkedList&lt;com.ibm.sample.addressBook.Person&gt;'</js>,
 	 * 		items: [ { name: <js>'John Smith'</js>, ... }, ... ]
 	 * 	}
-	 * 		</p>
-	 * 		<p>
-	 * 			It can also be converted to arrays.
-	 * 		</p>
-	 * 		<p class='bcode'>
+	 * </p>
+	 * <p>
+	 * 	It can also be converted to arrays.
+	 * </p>
+	 * <p class='bcode'>
 	 * 	<jc>// Array of strings</jc>
 	 * 	{
 	 * 		_type: <js>'java.lang.String[]'</js>,
@@ -1126,25 +1125,22 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * 		_type: <js>'com.ibm.sample.addressBook.Person[]'</js>,
 	 * 		items: [ { name: <js>'John Smith'</js>, ... }, ... ]
 	 * 	}
-	 * 		</p>
-	 * 		<p>
-	 * 			It can also be converted to any type that can be handled by the {@link BeanContext#convertToType(Object, Class)} method.
-	 * 			In this case, the value is specified by an <code>value</code> entry of any type.
-	 * 			For example, if the bean context has a {@link CalendarSwap} associated with it, it can convert a string value to a calendar.
-	 * 		<p class='bcode'>
+	 * </p>
+	 * <p>
+	 * 	It can also be converted to any type that can be handled by the {@link BeanContext#convertToType(Object, Class)} method.
+	 * 	In this case, the value is specified by an <code>value</code> entry of any type.
+	 * 	For example, if the bean context has a {@link CalendarSwap} associated with it, it can convert a string value to a calendar.
+	 * <p class='bcode'>
 	 * 	{
 	 * 		_type: <js>'java.util.GregorianCalendar'</js>,
 	 * 		value: <js>'2001-07-04T15:30:45-05:00'</js>
 	 * 	}
-	 * 		</p>
-	 * 	</dd>
-	 * 	<dt>Notes:</dt>
-	 * 	<dd>
-	 * 		<ul>
-	 * 			<li>This method is recursive.  It will also recursively convert any descendant entries to POJOs.
-	 * 		</ul>
-	 * 	</dd>
-	 * </dl>
+	 * </p>
+	 *
+	 * <h6 class='topic'>Notes:</h6>
+	 * <ul>
+	 * 	<li>This method is recursive.  It will also recursively convert any descendant entries to POJOs.
+	 * </ul>
 	 *
 	 * @return The new Java object of type specified by the <js>"_class"</js> entry value, or this
 	 * 	same object if entry does not exist.

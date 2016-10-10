@@ -30,6 +30,7 @@ import org.apache.juneau.server.samples.addressbook.*;
 	},
 	children={
 		HelloWorldResource.class,
+		SystemPropertiesResource.class,
 		MethodExampleResource.class,
 		RequestEchoResource.class,
 		TempDirResource.class,

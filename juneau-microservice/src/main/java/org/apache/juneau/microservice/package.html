@@ -163,7 +163,7 @@
 	 */</jd>
 	<ja>@RestResource</ja>(
 		path=<js>"/"</js>,
-		label=<js>"Juneau Microservice Template"</js>,
+		title=<js>"Juneau Microservice Template"</js>,
 		description=<js>"Template for creating REST microservices"</js>,
 		properties={
 			<ja>@Property</ja>(name=<jsf>HTMLDOC_links</jsf>, value=<js>"{options:'$R{servletURI}?method=OPTIONS'}"</js>)
@@ -644,14 +644,18 @@
 				The following variables are available in addition to the variables defined above:
 				<ul>
 					<li><l>$L{key}, $L{key,args}</l> - Localized variables pulled from {@link org.apache.juneau.server.RestRequest#getMessage(String, Object...)}.
-					<li><l>$A{key}, $A{key,default}</l> - Request attributes pulled from {@link org.apache.juneau.server.RestRequest#getAttribute(String)}.
-					<li><l>$P{key}, $P{key,default}</l> - Request parameters pulled from {@link org.apache.juneau.server.RestRequest#getParameter(String)}.
 					<li><l>$R{key}</l> - Request variables.
 					<ul>
+			 			<li><l>$R{attribute.X}</l> - Value returned by {@link org.apache.juneau.server.RestRequest#getAttribute(String)} converted to a string.
 			 			<li><l>$R{contextPath}</l> - Value returned by {@link org.apache.juneau.server.RestRequest#getContextPath()}.
+			 			<li><l>$R{formData.X}</l> - Value returned by {@link org.apache.juneau.server.RestRequest#getFormDataParameter(String)}.
+			 			<li><l>$R{header.X}</l> - Value returned by {@link org.apache.juneau.server.RestRequest#getHeader(String)}.
 			 			<li><l>$R{method}</l> - Value returned by {@link org.apache.juneau.server.RestRequest#getMethod()}.
+			 			<li><l>$R{methodSummary}</l> - Value returned by {@link org.apache.juneau.server.RestRequest#getMethodSummary()}.
 			 			<li><l>$R{methodDescription}</l> - Value returned by {@link org.apache.juneau.server.RestRequest#getMethodDescription()}.
+			 			<li><l>$R{path.X}</l> - Value returned by {@link org.apache.juneau.server.RestRequest#getPathParameter(String)}.
 			 			<li><l>$R{pathInfo}</l> - Value returned by {@link org.apache.juneau.server.RestRequest#getPathInfo()}.
+			 			<li><l>$R{query.X}</l> - Value returned by {@link org.apache.juneau.server.RestRequest#getQueryParameter(String)}.
 			 			<li><l>$R{requestParentURI}</l> - Value returned by {@link org.apache.juneau.server.RestRequest#getRequestParentURI()}.
 			 			<li><l>$R{requestURI}</l> - Value returned by {@link org.apache.juneau.server.RestRequest#getRequestURI()}.
 			 			<li><l>$R{servletDescription}</l> - Value returned by {@link org.apache.juneau.server.RestRequest#getServletDescription()}.
@@ -661,6 +665,7 @@
 			 			<li><l>$R{servletURI}</l> - Value returned by {@link org.apache.juneau.server.RestRequest#getServletURI()}.
 			 			<li><l>$R{trimmedRequestURI}</l> - Value returned by {@link org.apache.juneau.server.RestRequest#getTrimmedRequestURI()}.
 					</ul>
+					<li><l>$SA{key,mediaType}</l> - Object returned by {@link org.apache.juneau.server.RestRequest#getAttribute(String)} converted to a string using the serializer registered to handle the specified media type.
 					<li><l>$UE{...}</l> - URL-Encode the specified value by calling {@link org.apache.juneau.server.RestUtils#encode(String)}.
 				</ul>
 				<h6 class='figure'>Example usage:</h6>
@@ -669,8 +674,8 @@
 	<cc># Contents of microservice.cfg </cc>
 	<cc>#-----------------------------</cc>
 	<cs>[MyHelloResource]</cs>
-	<ck>greeting</ck> = <cv>Hello $A{person}!</cv> 
-	<ck>localizedGreeting</ck> = <cv>$L{HelloMessage,$A{person}}</cv> 
+	<ck>greeting</ck> = <cv>Hello $R{path.person}!</cv> 
+	<ck>localizedGreeting</ck> = <cv>$L{HelloMessage,$R{path.person}}</cv> 
 				</p>
 				<p class='bcode'>
 	<cc>#---------------------------------</cc>
@@ -714,7 +719,7 @@
 			<li>The HTTP call matches the <l>/localized/{person}</l> path on the <l>sayLocalizedHello()</l> method.
 			<li>The request attribute <l>person</l> gets assigned the value <l>"Bob"</l>.
 			<li>The call to <l>req.getConfig().getString("MyHelloResource/localizedGreeting")</l> 
-				finds the value <l>"$L{HelloMessage,$A{person}}"</l>.
+				finds the value <l>"$L{HelloMessage,$R{path.person}}"</l>.
 			<li>The arguments in the <l>$L{}</l> variable get resolved, resulting in <l>"$L{HelloMessage,Bob}"</l>.
 			<li>The <l>$L{}</l> variable gets resolved to the message <l>"Hello {0}!"</l> in the localized properties file of the servlet based on the <l>Accept-Language</l> header on the request.
 			<li>The arguments get replaced in the message resulting in <l>"Hello Bob!"</l>. 
@@ -743,7 +748,7 @@
 	 */</jd>
 	<ja>@RestResource</ja>(
 		path=<js>"/"</js>,
-		label=<js>"Juneau Microservice Template"</js>,
+		title=<js>"Juneau Microservice Template"</js>,
 		description=<js>"Template for creating REST microservices"</js>,
 		properties={
 			<ja>@Property</ja>(name=<jsf>HTMLDOC_links</jsf>, value=<js>"{options:'$R{servletURI}?method=OPTIONS'}"</js>)
@@ -782,7 +787,7 @@
 	 */</jd>
 	<ja>@RestResource</ja>(
 		path=<js>"/helloWorld"</js>,
-		label=<js>"Hello World example"</js>,
+		title=<js>"Hello World example"</js>,
 		description=<js>"Simplest possible REST resource"</js>
 	)
 	<jk>public class</jk> HelloWorldResource <jk>extends</jk> Resource {

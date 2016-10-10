@@ -47,7 +47,8 @@ public enum Visibility {
 
 	/**
 	 * Identifies if the specified mod matches this visibility.
-	 * Example:
+	 *
+	 * <h6 class='topic'>Example:</h6>
 	 * <code>
 	 * 	<jsf>PUBLIC</jsf>.isVisible(MyPublicClass.<jk>class</jk>.getModifiers()); <jc>//true</jk>
 	 * 	<jsf>PUBLIC</jsf>.isVisible(MyPrivateClass.<jk>class</jk>.getModifiers()); <jc>//false</jk>

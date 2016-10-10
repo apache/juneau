@@ -221,10 +221,9 @@ public abstract class Microservice {
 	 * </ul>
 	 * <p>
 	 * Subclasses can override this method to provide their own variables.
-	 * <dl>
-	 * 	<dt>Examples:</dt>
-	 * 	<dd>
-	 * 		<p class='bcode'>
+	 * 
+	 * <h6 class='topic'>Example:</h6>
+	 * <p class='bcode'>
 	 * 	<jd>/**
 	 * 	 * Augment default var resolver with a custom $B{...} variable that simply wraps strings inside square brackets.
 	 * 	 * /</jd>
@@ -240,8 +239,8 @@ public abstract class Microservice {
 	 * 				}
 	 * 			);
 	 * 	}
-	 * 		</p>
-	 * 		<p class='bcode'>
+	 * </p>
+	 * <p class='bcode'>
 	 * 	<cc># Example config file</cc>
 	 * 	<cs>[MySection]</cs>
 	 * 	<ck>myEntry</ck> = $B{foo}
@@ -249,9 +248,7 @@ public abstract class Microservice {
 	 * 		<p class='bcode'>
 	 * 	<jc>// Example java code</jc>
 	 * 	String myentry = getConfig().getString(<js>"MySection/myEntry"</js>); <jc>// == "[foo]"</js>
-	 * 		</p>
-	 * 	</dd>
-	 * </dl>
+	 * </p>
 	 *
 	 * @return A new {@link VarResolver}.
 	 */
@@ -293,10 +290,9 @@ public abstract class Microservice {
 	 * String variables defined by {@link #createVarResolver()} are automatically resolved when using this method.
 	 * <p>
 	 * This method can be called from the class constructor.
-	 * <dl>
-	 * 	<dt>Examples:</dt>
-	 * 	<dd>
-	 * 		<p class='bcode'>
+	 * 
+	 * <h6 class='topic'>Example:</h6>
+	 * <p class='bcode'>
 	 * 	<cc>#--------------------------</cc>
 	 * 	<cc># My section</cc>
 	 * 	<cc>#--------------------------</cc>
@@ -357,9 +353,7 @@ public abstract class Microservice {
 	 * 	<jk>int</jk> sameAsAnInt = cf.getInt(<js>"MySection/sameAsAnInt"</js>);
 	 * 	String myArg = cf.getString(<js>"MySection/myArg"</js>);
 	 * 	String firstArg = cf.getString(<js>"MySection/firstArg"</js>);
-	 * 		</p>
-	 * 	</dd>
-	 * </dl>
+	 * </p>
 	 *
 	 * @return The config file for this application, or <jk>null</jk> if no config file is configured.
 	 */
@@ -374,18 +368,15 @@ public abstract class Microservice {
 	 * 	and entries converted to simple strings.
 	 * <p>
 	 * This method can be called from the class constructor.
-	 * <dl>
-	 * 	<dt>Examples:</dt>
-	 * 	<dd>
-	 * 		<p class='bcode'>
+	 * 
+	 * <h6 class='topic'>Example:</h6>
+	 * <p class='bcode'>
 	 * 	<jc>// Get Main-Class from manifest file.</jc>
 	 * 	String mainClass = Microservice.<jsm>getManifest</jsm>().getString(<js>"Main-Class"</js>, <js>"unknown"</js>);
 	 *
 	 * 	<jc>// Get Rest-Resources from manifest file.</jc>
 	 * 	String[] restResources = Microservice.<jsm>getManifest</jsm>().getStringArray(<js>"Rest-Resources"</js>);
-	 * 		</p>
-	 * 	</dd>
-	 * </dl>
+	 * </p>
 	 *
 	 * @return The manifest file from the main jar, or <jk>null</jk> if the manifest file could not be retrieved.
 	 */

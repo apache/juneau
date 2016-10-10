@@ -306,10 +306,10 @@
 	</p>
 	<img class='bordered' src="doc-files/HelloWorldResourceOptions.png">
 	<p>
-		The OPTIONS page is generated automatically by introspection of the class itself combined with
-			labels in the messages properties file.
+		The OPTIONS page is a serialized Swagger DTO bean populated by introspection of the class itself combined with
+			labels in the messages properties file and annotations.
 		It's composed of a POJO that gets serialized just like any other POJO.  
-		Therefore, the POJO can be searialized to any of the supported languages, like JSON.	  
+		Therefore, the POJO can be searialized to any of the supported languages, like Swagger JSON.	  
 	</p>
 	<img class='bordered' src="doc-files/HelloWorldResourceOptionsJson.png">
 </div>
@@ -666,9 +666,9 @@
 			All annotations have programmatic equivalents on the {@link org.apache.juneau.server.RestRequest} class:
 		</p>
 		<ul class='javahierarchy'>
-			<li class='m'>{@link org.apache.juneau.server.RestRequest#getAttribute(String,Class)}
-			<li class='m'>{@link org.apache.juneau.server.RestRequest#getParameter(String,Class)}
-			<li class='m'>{@link org.apache.juneau.server.RestRequest#hasParameter(String)}
+			<li class='m'>{@link org.apache.juneau.server.RestRequest#getPathParameter(String,Class)}
+			<li class='m'>{@link org.apache.juneau.server.RestRequest#getFormDataParameter(String,Class)}
+			<li class='m'>{@link org.apache.juneau.server.RestRequest#hasFormDataParameter(String)}
 			<li class='m'>{@link org.apache.juneau.server.RestRequest#getQueryParameter(String,Class)}
 			<li class='m'>{@link org.apache.juneau.server.RestRequest#hasQueryParameter(String)}
 			<li class='m'>{@link org.apache.juneau.server.RestRequest#getBody(Class)}
@@ -1020,17 +1020,30 @@
 			One of the most useful features of Juneau is that it can produce OPTIONS pages for self-documenting designs (i.e. REST interfaces that document themselves).
 		</p>
 		<h6 class='figure'>OPTIONS page for HelloWorld sample resource</h6>
-	 	<img class='bordered' src='doc-files/OptionsPage.png'>
+	 	<img class='bordered' src='doc-files/HelloWorldResourceOptions.png'>
 		<p>
-			To facilitate this, the <del>ResourceOptions</del> class is provided that 
-				inspects a <l>RestServlet</l> and its methods, and returns a serializable POJO data structure
-				that describes the options for that resource and pulling localized strings from the resource
-				bundle associated with the servlet.
+			This page is constructed through reflection on the servlet class and it's methods, combined with information provided in the following locations:
+		</p>
+		<ul>
+			<li>Annotations (i.e. {@link org.apache.juneau.server.annotation.RestResource @RestResource} and {@link org.apache.juneau.server.annotation.RestMethod @RestMethod}).
+			<li>Resource bundle properties.
+			<li>Swagger JSON files.
+		</ul>
+		<p>
+			Swagger JSON files are specified with the same name as the servlet (e.g. <code>MyResource.java</code> -&gt; <code>MyResource.json</code>).
+			Localized versions of Swagger JSON files can be specified by appending the locale to the file name (e.g. <code>MyResource_ja_JP.json</code>).
+			The existence of Swagger JSON files will override any auto-generation of the OPTIONS pages.
+			This allows you to fully control the contents of the OPTIONS page with your own Swagger spec.
+		</p>
+		<p>
+			The framework takes the information above and populates a {@link org.apache.juneau.dto.swagger.Swagger} bean.
+			This bean is then serialized just like any other POJO to produce the page shown above.
 		</p>
 		<p>
 	 		{@link org.apache.juneau.server.RestServletDefault} provides a default OPTIONS page by implementing 
 	 			a {@link org.apache.juneau.server.RestServletDefault#getOptions(RestRequest)} method that returns a POJO consisting
 	 			of beans describing the class.
+	 		It uses the {@link org.apache.juneau.server.RestRequest#getSwagger()} method that returns a localized swagger bean.
 	 	</p>
 	 	<p class='bcode'>
 	<jd>/**
@@ -1050,48 +1063,23 @@
 		<jk>return</jk> req.getSwagger();
 	}
 	 	</p>
+	 	<h6 class='topic'>Title and Description</h6>
 	 	<p>
-	 		The <l>AddressBookResource</l> class in the samples shows an example of augmenting the existing 
-	 			<del>ResourceOptions</del> bean with some additional information.
-		</p>
-		<p class='bcode'>
-	<jd>/** OPTIONS request handler */</jd>
-	<ja>@Override</ja> <jc>/* RestServletJenaDefault */</jc>
-	<ja>@RestMethod</ja>(name=<js>"OPTIONS"</js>, path=<js>"/*"</js>)
-	<jk>public</jk> ResourceOptions getOptions(RestRequest req) {
-		<jk>return new</jk> Options(req);
-	}			
-
-	<jd>/**
-	 * Output POJO for OPTIONS requests.
-	 * Note that we're extending the existing ResourceOptions class.
-	 */</jd>
-	<jk>public class</jk> Options <jk>extends</jk> ResourceOptions {
-		<jk>public</jk> ParamDescription[] queryableParameters;
-		<jk>public</jk> String[] otherNotes;
-
-		<jk>public</jk> Options(RestRequest req) {
-			<jk>super</jk>(AddressBookResource.<jk>this</jk>, req);
-			Locale locale = req.getLocale();
-			queryableParameters = getQueryableParamDescriptions(locale);
-			otherNotes = getMessage(locale, <js>"otherNotes"</js>).split(<js>"\\.\\s*"</js>);
-		}
-	}
+	 		The title and description can be defined in the following ways.
 	 	</p>
-	 	<p>
-	 		Refer to <a class='doclink' href='#AddressBookResource'>Address Book Resource</a> for a complete example.
-	 	</p>
-	 	<h6 class='topic'>Label and Description</h6>
-	 	<p>
-	 		The label and description can be defined in two ways.
-	 	</p>
+	 	<ul>
+	 		<li>Annotations:  {@link org.apache.juneau.server.annotation.RestResource#title()}, {@link org.apache.juneau.server.annotation.RestResource#description()}
+	 		<li>By overriding methods on the servlet class:  {@link org.apache.juneau.server.RestServlet#getTitle(RestRequest)}, {@link org.apache.juneau.server.RestServlet#getDescription(RestRequest)} 
+	 		<li>By defining properties in the resource bundle.
+	 		<li>By specifying them in a Swagger JSON file.
+	 	</ul>
 		<p>
 	 		If you don't care about internationalization, then the easiest way is to use annotations on the servlet.
 	 	</p>
 		<p class='bcode'>
 	<ja>@RestResource</ja>(
 		path=<js>"/example"</js>,
-		label=<js>"Example Resource"</js>,
+		title=<js>"Example Resource"</js>,
 		description=<js>"This shows how to use labels and descriptions."</js>
 	)
 	<jk>public class</jk> ExampleResource <jk>extends</jk> RestServletDefault {
@@ -1109,13 +1097,13 @@
 	<jk>public class</jk> ExampleResource <jk>extends</jk> RestServletDefault {
 		</p>	 	
 		<p>
-			The label and description are specified as special properties in the resource bundle:
+			The title and description are specified as special properties in the resource bundle:
 		</p>
 		<p class='bcode'>
 	<cc>#--------------------------------------------------------------------------------
 	# Contents of Messages.properties
 	#--------------------------------------------------------------------------------</cc>
-	<ck>label</ck> = <cv>Example Resource</cv>
+	<ck>title</ck> = <cv>Example Resource</cv>
 	<ck>description</ck> = <cv>This shows how to use labels and descriptions.</cv>
 		</p>	 	
 		<p>
@@ -1125,7 +1113,7 @@
 	<cc>#--------------------------------------------------------------------------------
 	# Contents of Messages.properties
 	#--------------------------------------------------------------------------------</cc>
-	<ck>ExampleResource.label</ck> = <cv>Example Resource</cv>
+	<ck>ExampleResource.title</ck> = <cv>Example Resource</cv>
 	<ck>ExampleResource.description</ck> = <cv>This shows how to use labels and descriptions.</cv>
 		</p>	 	
 	 	<p>
@@ -1154,14 +1142,14 @@
 	<jk>public abstract class</jk> RestServletDefault <jk>extends</jk> RestServlet {
 	 	</p>
 	 	<p>
-	 		The label and description annotations support string variables.
+	 		The title and description annotations support string variables.
 	 		So in theory, you could also provide localized messages using <js>"$L"</js> variables pointing to your own resource bundle properties:
 	 	</p>
 		<p class='bcode'>
 	<ja>@RestResource</ja>(
 		path=<js>"/example"</js>,
 		messages=<js>"nls/Messages"</js>
-		label=<js>"$L{my.resource.label}"</js>,
+		title=<js>"$L{my.resource.label}"</js>,
 		description=<js>"$L{my.resource.description}"</js>
 	)
 	<jk>public class</jk> ExampleResource <jk>extends</jk> RestServletDefault {
@@ -1192,16 +1180,11 @@
 		path=<js>"/people/{id}/*"</js>, 
 		converters={Traversable.<jk>class</jk>,Queryable.<jk>class</jk>,Introspectable.<jk>class</jk>}, 
 		description=<js>"Get a person by id in the address book"</js>,
-		input={
-			<ja>@Var</ja>(in=<js>"path"</js>, name=<js>"id"</js>, description=<js>"Person UUID"</js>)
+		parameters={
+			<ja>@Parameter</ja>(in=<js>"path"</js>, name=<js>"id"</js>, description=<js>"Person UUID"</js>)
 		},
 		responses={
-			<ja>@Response</ja>(
-				value=200,
-				output={
-					<ja>@Var</ja>(in=<js>"body"</js>, description=<js>"Person bean"</js>)
-				}
-			),
+			<ja>@Response</ja>(value=200, description="Person bean"),
 			<ja>@Response</ja>(value=404, description=<js>"Person with specified id not found"</js>)
 		}
 	)
@@ -1227,10 +1210,10 @@
 	<cc>#--------------------------------------------------------------------------------
 	# Contents of AddressBookResource.properties
 	#--------------------------------------------------------------------------------</cc>
-	<ck>getPerson</ck> = <cv>Get a person by id in the address book</cv>
-	<ck>getPerson.req.attr.id</ck> = <cv>Person UUID</cv>
-	<ck>getPerson.res.200</ck> = <cv>Person found</cv>
-	<ck>getPerson.res.404</ck> = <cv>Person with specified id not found</cv>
+	<ck>getPerson.summary</ck> = <cv>Get a person by id in the address book</cv>
+	<ck>getPerson.req.path.id.description</ck> = <cv>Person UUID</cv>
+	<ck>getPerson.res.200.description</ck> = <cv>Person found</cv>
+	<ck>getPerson.res.404.description</ck> = <cv>Person with specified id not found</cv>
 		</p>		
 		<p>
 			The following table shows the predefined resource bundle message property names:
@@ -1255,44 +1238,48 @@
 				<td>{@link org.apache.juneau.server.RestServlet#getDescription(RestRequest)}</td>
 			</tr>
 			<tr>
-				<td><ck>[javaMethodName]</ck></td>
+				<td><ck>[javaMethodName].summary</ck></td>
+				<td>Java method summary</td>
+				<td>{@link org.apache.juneau.server.annotation.RestMethod#summary() @RestMethod.summary()}</td>
+			</tr>
+			<tr>
+				<td><ck>[javaMethodName].description</ck></td>
 				<td>Java method description</td>
 				<td>{@link org.apache.juneau.server.annotation.RestMethod#description() @RestMethod.description()}</td>
 			</tr>
 			<tr>
-				<td><ck>[javaMethodName].req.content</ck></td>
+				<td><ck>[javaMethodName].req.body.description</ck></td>
 				<td>
-					A description of the HTTP request content.
+					A description of the HTTP request body.
 				</td>
 				<td>{@link org.apache.juneau.server.annotation.RestMethod#parameters() @RestMethod.parameters()}</td>
 			</tr>
 			<tr>
-				<td><ck>[javaMethodName].req.[category].[name]</ck></td>
+				<td><ck>[javaMethodName].req.[category].[name].description</ck></td>
 				<td>
 					A request input variable.
-					<br>Categories: <l>ATTR, PARAM, HEADER</l>
+					<br>Categories: <l>path, query, formData, header</l>
 				</td>
 				<td>{@link org.apache.juneau.server.annotation.RestMethod#parameters() @RestMethod.parameters()}</td>
 			</tr>
 			<tr>
-				<td><ck>[javaMethodName].res.[code]</ck></td>
+				<td><ck>[javaMethodName].res.[code].description</ck></td>
 				<td>
 					A possible HTTP response code and description.
 				</td>
 				<td>{@link org.apache.juneau.server.annotation.RestMethod#responses() @RestMethod.responses()}</td>
 			</tr>
 			<tr>
-				<td><ck>[javaMethodName].res.[code].content</ck></td>
+				<td><ck>[javaMethodName].res.[code].body.description</ck></td>
 				<td>
 					A description of response content for the specified HTTP response.
 				</td>
 				<td>{@link org.apache.juneau.server.annotation.RestMethod#responses() @RestMethod.responses()}</td>
 			</tr>
 			<tr>
-				<td><ck>[javaMethodName].res.[code].[category].[name]</ck></td>
+				<td><ck>[javaMethodName].res.[code].header.[name].description</ck></td>
 				<td>
-					A response output variable.
-					<br>Categories: <l>ATTR, PARAM, HEADER</l>
+					A response header.
 				</td>
 				<td>{@link org.apache.juneau.server.annotation.RestMethod#responses() @RestMethod.responses()}</td>
 			</tr>
@@ -1947,7 +1934,7 @@
 		</p>
 		<p class='bcode'>
 	<ja>@RestResource</ja>(
-		label=<js>"$L{my.label}"</js>
+		title=<js>"$L{my.label}"</js>
  		properties={
  			<ja>@Property</ja>(name=<jsf>HTMLDOC_links</jsf>, value=<js>"{options:'$R{servletURI}?method=OPTIONS'"</js>)
  		}
@@ -2091,28 +2078,20 @@
 				</td>
 			</tr>
 			<tr>
-				<td><ck>$A{key}</ck><br><ck>$A{key,default}</ck></td>
-				<td>Request attributes.
-					<br>Resolves to the value returned by {@link org.apache.juneau.server.RestRequest#getAttribute(String)}.
-					<br>Can include a default value (e.g. <l>"$A{myAttribute,myDefaultValue}"</l>)
-				</td>
-			</tr>
-			<tr>
-				<td><ck>$P{key}</ck><br><ck>$P{key,default}</ck></td>
-				<td>Request parameters.
-					<br>Resolves to the value returned by {@link org.apache.juneau.server.RestRequest#getParameter(String)}.
-					<br>Can include a default value (e.g. <l>"$P{myAttribute,myDefaultValue}"</l>)
-				</td>
-			</tr>
-			<tr>
 				<td><ck>$R{key}</ck></td>
 				<td>Request-specific variables.
 					<br>Possible values:
 					<ul>
+						<li><ck>$R{attribute.X}</ck> - Value returned by {@link org.apache.juneau.server.RestRequest#getAttribute(String)} converted to a string.
 						<li><ck>$R{contextPath}</ck> - Value returned by {@link org.apache.juneau.server.RestRequest#getContextPath()}.
+						<li><ck>$R{formData.X}</ck> - Value returned by {@link org.apache.juneau.server.RestRequest#getFormDataParameter(String)}.
+						<li><ck>$R{header.X}</ck> - Value returned by {@link org.apache.juneau.server.RestRequest#getHeader(String)}.
 						<li><ck>$R{method}</ck> - Value returned by {@link org.apache.juneau.server.RestRequest#getMethod()}.
+						<li><ck>$R{methodSummary}</ck> - Value returned by {@link org.apache.juneau.server.RestRequest#getMethodSummary()}.
 						<li><ck>$R{methodDescription}</ck> - Value returned by {@link org.apache.juneau.server.RestRequest#getMethodDescription()}.
+						<li><ck>$R{path.X}</ck> - Value returned by {@link org.apache.juneau.server.RestRequest#getPathParameter(String)}.
 						<li><ck>$R{pathInfo}</ck> - Value returned by {@link org.apache.juneau.server.RestRequest#getPathInfo()}.
+						<li><ck>$R{query.X}</ck> - Value returned by {@link org.apache.juneau.server.RestRequest#getQueryParameter(String)}.
 						<li><ck>$R{requestParentURI}</ck> - Value returned by {@link org.apache.juneau.server.RestRequest#getRequestParentURI()}.
 						<li><ck>$R{requestURI}</ck> - Value returned by {@link org.apache.juneau.server.RestRequest#getRequestURI()}.
 						<li><ck>$R{servletDescription}</ck> - Value returned by {@link org.apache.juneau.server.RestRequest#getServletDescription()}.
@@ -2563,7 +2542,7 @@
 	<cc>#-------------------------------------</cc>
 	<cs>[HelloWorldResource]</cs>
 	<ck>defaultPerson</ck> = you
-	<ck>message</ck> = <cv>Hello $P{person,$C{HelloWorldResource/defaultPerson}}!</cv>
+	<ck>message</ck> = <cv>Hello $R{query.person,$C{HelloWorldResource/defaultPerson}}!</cv>
 		</p>
 		<p class='bcode'>
 	<jd>/** 
@@ -2594,7 +2573,7 @@
 	<cc>#-------------------------------------</cc>
 	<cs>[HelloWorldResource]</cs>
 	<ck>defaultPerson</ck> = you
-	<ck>message</ck> = <cv>$L{localizedMessage,$P{person,$C{HelloWorldResource/defaultPerson}}}</cv>
+	<ck>message</ck> = <cv>$L{localizedMessage,$R{query.person,$C{HelloWorldResource/defaultPerson}}}</cv>
 		</p>
 		<p class='bcode'>
 	<cc>#-------------------------------------------</cc>
@@ -3189,7 +3168,7 @@
 <div class='topic'>
 		<p>
 		Certain methods in the REST server API allow you to specify class types that can be convertable
-			from <l>Strings</l> (e.g. {@link org.apache.juneau.server.RestRequest#getAttribute(String,Class)}).
+			from <l>Strings</l> (e.g. {@link org.apache.juneau.server.RestRequest#getPathParameter(String,Class)}).
 		</p>
 		<p>
 		POJOs convertable from <l>Strings</l> have one of the following:

@@ -70,19 +70,16 @@ public @interface BeanProperty {
 	 * <p>
 	 * 	This property must denote a concrete bean class with a no-arg constructor.
 	 *
-	 * <dl>
-	 * 	<dt>Example:</dt>
-	 * 	<dd>
-	 * 		<p class='bcode'>
+	 *
+	 * <h6 class='topic'>Example:</h6>
+	 * <p class='bcode'>
 	 * 	<jk>public class</jk> MyBean {
 	 *
 	 * 		<jc>// Identify concrete map type.</jc>
 	 * 		<ja>@BeanProperty</ja>(type=HashMap.<jk>class</jk>)
 	 * 		<jk>public</jk> Map <jf>p1</jf>;
 	 * 	}
-	 * 		</p>
-	 * 	</dd>
-	 * </dl>
+	 * </p>
 	 */
 	Class<?> type() default Object.class;
 
@@ -91,19 +88,15 @@ public @interface BeanProperty {
 	 * the class types of the contents of the bean property object when the generic parameter
 	 * types are interfaces or abstract classes.
 	 *
-	 * <dl>
-	 * 	<dt>Example:</dt>
-	 * 	<dd>
-	 * 		<p class='bcode'>
+	 * <h6 class='topic'>Example:</h6>
+	 * <p class='bcode'>
 	 * 	<jk>public class</jk> MyBean {
 	 *
 	 * 		<jc>// Identify concrete map type with String keys and Integer values.</jc>
 	 * 		<ja>@BeanProperty</ja>(type=HashMap.<jk>class</jk>, params={String.<jk>class</jk>,Integer.<jk>class</jk>})
 	 * 		<jk>public</jk> Map <jf>p1</jf>;
 	 * 	}
-	 * 		</p>
-	 * 	</dd>
-	 * </dl>
+	 * </p>
 	 */
 	Class<?>[] params() default {};
 
@@ -117,19 +110,15 @@ public @interface BeanProperty {
 	 * Typically used for rendering {@link Date Dates} and {@link Calendar Calendars}
 	 * 	as a particular string format.
 	 *
-	 * <dl>
-	 * 	<dt>Example:</dt>
-	 * 	<dd>
-	 * 		<p class='bcode'>
+	 * <h6 class='topic'>Example:</h6>
+	 * <p class='bcode'>
 	 * 	<jk>public class</jk> MyClass {
 	 *
 	 * 		<jc>// During serialization, convert to ISO8601 date-time string.</jc>
 	 * 		<ja>@BeanProperty</ja>(pojoSwap=CalendarSwap.ISO8601DT.<jk>class</jk>)
 	 * 		<jk>public</jk> Calendar getTime();
 	 * 	}
-	 * 		</p>
-	 * 	</dd>
-	 * </dl>
+	 * </p>
 	 */
 	Class<?> swap() default Null.class;
 
@@ -144,10 +133,9 @@ public @interface BeanProperty {
 	 * 	<li>Bean/Map collections - Same, but applied to each element in the collection.
 	 * </ul>
 	 *
-	 * <dl>
-	 * 	<dt>Example:</dt>
-	 * 	<dd>
-	 * 		<p class='bcode'>
+	 *
+	 * <h6 class='topic'>Example:</h6>
+	 * <p class='bcode'>
 	 * 	<jk>public class</jk> MyClass {
 	 *
 	 * 		<jc>// Only render 'f1' when serializing this bean property.</jc>
@@ -162,9 +150,7 @@ public @interface BeanProperty {
 	 *
 	 * 	<jc>// Renders "{x1:{f1:1}}"</jc>
 	 * 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jk>new</jk> MyClass());
-	 * 		</p>
-	 * 	</dd>
-	 * </dl>
+	 * </p>
 	 */
 	String properties() default "";
 

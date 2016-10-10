@@ -30,7 +30,7 @@ import org.apache.juneau.server.annotation.*;
  * This is opposite from the {@link RestMethod#guards()} annotation, where all guards
  * 	are required to match in order to execute the method.
  *
- * <h6 class='topic'>Example</h6>
+ * <h6 class='topic'>Example:</h6>
  * <p class='bcode'>
  * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
  *

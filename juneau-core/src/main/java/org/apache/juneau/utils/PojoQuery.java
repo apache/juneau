@@ -66,7 +66,7 @@ import org.apache.juneau.internal.*;
  * 	Search patterns can be either {@code Strings} or {@code Maps}.<br>
  * 	Multiple search patterns are ANDed (i.e. all patterns must match for the row to be returned).
  *
- * <h6 class='topic'>Examples</h6>
+ * <h6 class='topic'>Example:</h6>
  * <ul class='spaced-list'>
  * 	<li><tt>{fi:'123'}</tt> - Return only rows where the <tt>fi</tt> column is 123.
  * 	<li><tt>{fs:'foobar'}</tt> - Return only rows where the <tt>fs</tt> column is 'foobar'.
@@ -85,7 +85,7 @@ import org.apache.juneau.internal.*;
  * 	searched are not strings, then the patterns are matched against whatever is
  * 	return by the {@code Object#toString()} method.
  *
- * <h6 class='topic'>Example string query patterns</h6>
+ * <h6 class='topic'>Example string query patterns:</h6>
  * <ul>
  * 	<li><tt>foo</tt> - The string 'foo'
  * 	<li><tt>foo bar</tt> - The string 'foo' or the string 'bar'
@@ -106,7 +106,7 @@ import org.apache.juneau.internal.*;
  * <p>
  * 	Any object of type {@link Number} (or numeric primitives) can be searched using numeric patterns.
  *
- * <h6 class='topic'>Example numeric query patterns</h6>
+ * <h6 class='topic'>Example numeric query patterns:</h6>
  * <ul>
  * 	<li><tt>123</tt> - The single number 123
  * 	<li><tt>1 2 3</tt>	- 1, 2, or 3
@@ -139,7 +139,7 @@ import org.apache.juneau.internal.*;
  * 	<li><tt>yyyy</tt>
  * </ul>
  *
- * <h6 class='topic'>Example date query patterns</h6>
+ * <h6 class='topic'>Example date query patterns:</h6>
  * <ul>
  * 	<li><tt>2001</tt> - A specific year.
  * 	<li><tt>2001.01.01.10.50</tt> - A specific time.
@@ -160,7 +160,7 @@ import org.apache.juneau.internal.*;
  * 	specified order.<br>
  * 	The view parameter is a list of either <tt>Strings</tt> or <tt>Maps</tt>.
  *
- * <h6 class='topic'>Example view parameters</h6>
+ * <h6 class='topic'>Example view parameters:</h6>
  * <ul>
  * 	<li><tt>['f1']</tt> - Return only column 'f1'.
  * 	<li><tt>['f2','f1']</tt> - Return only columns 'f2' and 'f1'.
@@ -175,7 +175,7 @@ import org.apache.juneau.internal.*;
  * 	<tt>Strings</tt> represent column names to sort ascending.  If you want
  * 	to sort descending, you need to specify a <tt>Map</tt> of the form <tt>{colname:'d'}</tt>
  *
- * <h6 class='topic'>Example sort parameters</h6>
+ * <h6 class='topic'>Example sort parameters:</h6>
  * <ul>
  * 	<li><tt>['f1']</tt> - Sort rows by column 'f1' ascending.
  * 	<li><tt>[{f1:'a'}]</tt> - Sort rows by column 'f1' ascending.
@@ -1147,7 +1147,7 @@ public final class PojoQuery {
 
 	}
 
-	/**
+	/*
 	 * Same as split(String, char), but does not split on characters inside
 	 * single quotes.
 	 * Does not split on escaped delimiters, and escaped quotes are also ignored.

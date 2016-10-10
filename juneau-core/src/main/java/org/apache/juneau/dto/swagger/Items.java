@@ -20,8 +20,8 @@ import org.apache.juneau.json.*;
 
 /**
  * A limited subset of JSON-Schema's items object. It is used by parameter definitions that are not located in "body".
- * <p>
- * Example:
+ *
+ * <h6 class='topic'>Example:</h6>
  * <p class='bcode'>
  * 	{
  * 		<js>"type"</js>: <js>"string"</js>,
@@ -58,7 +58,7 @@ public class Items {
 
 	/**
 	 * Convenience method for creating a new Items object.
-	 * 
+	 *
 	 * @param type Required. The internal type of the array.
 	 * 	The value MUST be one of <js>"string"</js>, <js>"number"</js>, <js>"integer"</js>, <js>"boolean"</js>, or <js>"array"</js>.
 	 * 	Files and models are not allowed.

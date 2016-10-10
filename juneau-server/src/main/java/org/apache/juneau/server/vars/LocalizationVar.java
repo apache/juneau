@@ -43,7 +43,7 @@ public class LocalizationVar extends MultipartVar {
 		super("L");
 	}
 
-	@Override /* Var */
+	@Override /* Parameter */
 	public String resolve(VarResolverSession session, String[] args) {
 		if (args.length > 0) {
 			String key = args[0];

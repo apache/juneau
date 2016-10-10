@@ -80,7 +80,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	private BeanContext beanContext;
 	private VarResolverSession varSession;
 	private Map<String,String[]> queryParams;
-	private Map<String,String> defaultServletHeaders, defaultMethodHeaders, overriddenHeaders, overriddenParams;
+	private Map<String,String> defaultServletHeaders, defaultMethodHeaders, overriddenHeaders, overriddenQueryParams, overriddenFormDataParams, pathParameters;
 	private boolean isPost;
 	private String servletURI, relativeServletURI;
 	private String charset, defaultCharset;
@@ -149,19 +149,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the request contains any of the specified parameters.
-	 *
-	 * @param params The list of parameters to check for.
-	 * @return <jk>true</jk> if the request contains any of the specified parameters.
-	 */
-	public boolean hasAnyQueryParameters(String...params) {
-		for (String p : params)
-			if (hasQueryParameter(p))
-				return true;
-		return false;
-	}
-
-	/**
 	 * Returns a string of the form <js>"HTTP method-name full-url"</js>
 	 *
 	 * @return A description of the request.
@@ -170,6 +157,10 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		String qs = getQueryString();
 		return "HTTP " + getMethod() + " " + getRequestURI() + (qs == null ? "" : "?" + qs);
 	}
+
+	//--------------------------------------------------------------------------------
+	// Properties
+	//--------------------------------------------------------------------------------
 
 	/**
 	 * Servlet calls this method to initialize the properties.
@@ -181,7 +172,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Retrieve the properties active for this request.
-	 * These properties can be modified by the request.
+	 * <p>
+	 * 	These properties can be modified by the request.
 	 *
 	 * @return The properties active for this request.
 	 */
@@ -189,104 +181,12 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		return this.properties;
 	}
 
-	/**
-	 * Returns the <code>Content-Type</code> header value on the request, stripped
-	 * 	of any parameters such as <js>";charset=X"</js>.
-	 * <p>
-	 * Example: <js>"text/json"</js>.
-	 * <p>
-	 * If the content type is not specified, and the content is specified via a
-	 * 	<code>&content</code> query parameter, the content type is assumed to be
-	 * 	<js>"text/uon"</js>.  Otherwise, the
-	 * 	content type is assumed to be <js>"text/json"</js>.
-	 *
-	 * @return The <code>Accept</code> media-type header values on the request.
-	 */
-	public String getMediaType() {
-		String cm = getHeader("Content-Type");
-		if (cm == null) {
-			if (body != null)
-				return "text/uon";
-			return "text/json";
-		}
-		int j = cm.indexOf(';');
-		if (j != -1)
-			cm = cm.substring(0, j);
-		return cm;
-	}
+	//--------------------------------------------------------------------------------
+	// Headers
+	//--------------------------------------------------------------------------------
 
 	/**
-	 * Returns the media types that are valid for <code>Content-Type</code> headers on the request.
-	 *
-	 * @return The set of media types registered in the parser group of this request.
-	 */
-	public List<String> getSupportedMediaTypes() {
-		return parserGroup.getSupportedMediaTypes();
-	}
-
-	/**
-	 * Returns the charset specified on the <code>Content-Type</code> header, or
-	 * <js>"UTF-8"</js> if not specified.
-	 */
-	@Override /* ServletRequest */
-	public String getCharacterEncoding() {
-		if (charset == null) {
-			// Determine charset
-			// NOTE:  Don't use super.getCharacterEncoding() because the spec is implemented inconsistently.
-			// Jetty returns the default charset instead of null if the character is not specified on the request.
-			String h = getHeader("Content-Type");
-			if (h != null) {
-				int i = h.indexOf(";charset=");
-				if (i > 0)
-					charset = h.substring(i+9).trim();
-			}
-			if (charset == null)
-				charset = defaultCharset;
-			if (! RestServlet.availableCharsets.containsKey(charset))
-				throw new RestException(SC_UNSUPPORTED_MEDIA_TYPE, "Unsupported charset in header ''Content-Type'': ''{0}''", h);
-		}
-		return charset;
-	}
-
-	/**
-	 * Sets the charset to expect on the request body.
-	 */
-	@Override /* ServletRequest */
-	public void setCharacterEncoding(String charset) {
-		this.charset = charset;
-	}
-
-	/**
-	 * Returns the specified header value, or <jk>null</jk> if the header value isn't present.
-	 * <p>
-	 * 	If {@code allowHeaderParams} init parameter is <jk>true</jk>, then first looks
-	 * 	for {@code &HeaderName=x} in the URL query string.
-	 */
-	@Override /* ServletRequest */
-	public String getHeader(String name) {
-		return getHeader(name, (String)null);
-	}
-
-	/**
-	 * Returns all the request headers as an {@link ObjectMap}.
-	 * <p>
-	 * Altering entries in this map does not alter headers in the underlying request.
-	 *
-	 * @return The request headers.  Never <jk>null</jk>.
-	 */
-	public ObjectMap getHeaders() {
-		if (headers == null) {
-			headers = new ObjectMap();
-			for (Enumeration<String> e = getHeaderNames(); e.hasMoreElements();) {
-				String key = e.nextElement();
-				headers.put(key, getHeader(key));
-			}
-		}
-		return headers;
-	}
-
-	/**
-	 * Set the request header to the specified value.
+	 * Sets a request header value.
 	 *
 	 * @param name The header name.
 	 * @param value The header value.
@@ -297,21 +197,20 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		overriddenHeaders.put(name, value);
 	}
 
+
 	/**
-	 * Set the request parameter to the specified value.
-	 *
-	 * @param name The parameter name.
-	 * @param value The parameter value.
+	 * Returns the specified header value, or <jk>null</jk> if the header doesn't exist.
+	 * <p>
+	 * 	If {@code allowHeaderParams} init parameter is <jk>true</jk>, then first looks
+	 * 	for {@code &HeaderName=x} in the URL query string.
 	 */
-	public void setParameter(String name, Object value) {
-		if (overriddenParams == null)
-			overriddenParams = new TreeMap<String,String>(String.CASE_INSENSITIVE_ORDER);
-		overriddenParams.put(name, value == null ? null : value.toString());
+	@Override /* ServletRequest */
+	public String getHeader(String name) {
+		return getHeader(name, (String)null);
 	}
 
 	/**
-	 * Returns the specified header value, or the specified default value if the
-	 * 	header value isn't present.
+	 * Returns the specified header value, or a default value if the header doesn't exist.
 	 * <p>
 	 * 	If {@code allowHeaderParams} init parameter is <jk>true</jk>, then first looks
 	 * 	for {@code &HeaderName=x} in the URL query string.
@@ -338,6 +237,71 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		return def;
 	}
 
+	/**
+	 * Returns the specified header value converted to a POJO.
+	 * <p>
+	 * 	The type can be any POJO type convertable from a <code>String</code> (See <a class='doclink' href='package-summary.html#PojosConvertableFromString'>POJOs Convertable From Strings</a>).
+	 *
+	 * @param name The HTTP header name.
+	 * @param c The class type to convert the header value to.
+	 * @param def The default value if the header was not specified or is <jk>null</jk>.
+	 * @param <T> The class type to convert the header value to.
+	 * @return The parameter value converted to the specified class type.
+	 */
+	public <T> T getHeader(String name, Class<T> c, T def) {
+		String h = getHeader(name);
+		if (h == null)
+			return def;
+		return beanContext.convertToType(h, c);
+	}
+
+	/**
+	 * Returns the specified header value converted to a POJO.
+	 * <p>
+	 * 	The type can be any POJO type convertable from a <code>String</code> (See <a class='doclink' href='package-summary.html#PojosConvertableFromString'>POJOs Convertable From Strings</a>).
+	 *
+	 * @param name The HTTP header name.
+	 * @param c The class type to convert the header value to.
+	 * @param <T> The class type to convert the header value to.
+	 * @return The parameter value converted to the specified class type.
+	 */
+	public <T> T getHeader(String name, Class<T> c) {
+		String h = getHeader(name);
+		return beanContext.convertToType(h, c);
+	}
+
+	/**
+	 * Same as {@link #getHeader(String, Class)} except works on parameterized
+	 * types such as those returned by {@link Method#getGenericParameterTypes()}
+	 *
+	 * @param name The HTTP header name.
+	 * @param c The class type to convert the header value to.
+	 * @param <T> The class type to convert the header value to.
+	 * @return The parameter value converted to the specified class type.
+	 */
+	public <T> T getHeader(String name, Type c) {
+		String h = getHeader(name);
+		return (T)beanContext.convertToType(null, h, beanContext.getClassMeta(c));
+	}
+
+	/**
+	 * Returns all the request headers as an {@link ObjectMap}.
+	 * <p>
+	 * 	Altering entries in this map does not alter headers in the underlying request.
+	 *
+	 * @return The request headers.  Never <jk>null</jk>.
+	 */
+	public ObjectMap getHeaders() {
+		if (headers == null) {
+			headers = new ObjectMap();
+			for (Enumeration<String> e = getHeaderNames(); e.hasMoreElements();) {
+				String key = e.nextElement();
+				headers.put(key, getHeader(key));
+			}
+		}
+		return headers;
+	}
+
 	@Override /* ServletRequest */
 	public Enumeration<String> getHeaders(String name) {
 		String h = getOverriddenHeader(name);
@@ -346,22 +310,70 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		return super.getHeaders(name);
 	}
 
-	/*
-	 * Returns header value from URL-parameters or set via setHeader() meant
-	 * to override actual header values on the request.
+	/**
+	 * Returns the <code>Content-Type</code> header value on the request, stripped
+	 * 	of any parameters such as <js>";charset=X"</js>.
+	 * <p>
+	 * 	Example: <js>"text/json"</js>.
+	 * <p>
+	 * 	If the content type is not specified, and the content is specified via a
+	 * 	<code>&body</code> query parameter, the content type is assumed to be
+	 * 	<js>"text/uon"</js>.  Otherwise, the content type is assumed to be <js>"text/json"</js>.
+	 *
+	 * @return The <code>Accept</code> media-type header value on the request.
 	 */
-	private String getOverriddenHeader(String name) {
-		String h = null;
-		if (servlet.context.allowHeaderParams)
-			h = getQueryParameter(name);
-		if (h != null)
-			return h;
-		if (overriddenHeaders != null) {
-			h = overriddenHeaders.get(name);
-			if (h != null)
-				return h;
+	public String getMediaType() {
+		String cm = getHeader("Content-Type");
+		if (cm == null) {
+			if (body != null)
+				return "text/uon";
+			return "text/json";
 		}
-		return h;
+		int j = cm.indexOf(';');
+		if (j != -1)
+			cm = cm.substring(0, j);
+		return cm;
+	}
+
+	/**
+	 * Returns the media types that are valid for <code>Content-Type</code> headers on the request.
+	 *
+	 * @return The set of media types registered in the parser group of this request.
+	 */
+	public List<String> getSupportedMediaTypes() {
+		return parserGroup.getSupportedMediaTypes();
+	}
+
+	/**
+	 * Sets the charset to expect on the request body.
+	 */
+	@Override /* ServletRequest */
+	public void setCharacterEncoding(String charset) {
+		this.charset = charset;
+	}
+
+	/**
+	 * Returns the charset specified on the <code>Content-Type</code> header, or
+	 * <js>"UTF-8"</js> if not specified.
+	 */
+	@Override /* ServletRequest */
+	public String getCharacterEncoding() {
+		if (charset == null) {
+			// Determine charset
+			// NOTE:  Don't use super.getCharacterEncoding() because the spec is implemented inconsistently.
+			// Jetty returns the default charset instead of null if the character is not specified on the request.
+			String h = getHeader("Content-Type");
+			if (h != null) {
+				int i = h.indexOf(";charset=");
+				if (i > 0)
+					charset = h.substring(i+9).trim();
+			}
+			if (charset == null)
+				charset = defaultCharset;
+			if (! RestServlet.availableCharsets.containsKey(charset))
+				throw new RestException(SC_UNSUPPORTED_MEDIA_TYPE, "Unsupported charset in header ''Content-Type'': ''{0}''", h);
+		}
+		return charset;
 	}
 
 	@Override /* ServletRequest */
@@ -390,291 +402,26 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		return super.getLocales();
 	}
 
-	/**
-	 * Converts an Accept-Header value entry to a Locale.
-	 */
-	private Locale toLocale(String lang) {
-      String country = "";
-      int i = lang.indexOf('-');
-      if (i > -1) {
-          country = lang.substring(i+1).trim();
-          lang = lang.substring(0,i).trim();
-      }
-      return new Locale(lang, country);
-	}
+	//--------------------------------------------------------------------------------
+	// Query parameters
+	//--------------------------------------------------------------------------------
 
 	/**
-	 * Returns the serializers associated with this request.
-	 *
-	 * @return The serializers associated with this request.
-	 */
-	public SerializerGroup getSerializerGroup() {
-		return serializerGroup;
-	}
-
-	/**
-	 * Returns the parsers associated with this request.
-	 *
-	 * @return The parsers associated with this request.
-	 */
-	public ParserGroup getParserGroup() {
-		return parserGroup;
-	}
-
-	/**
-	 * Returns the method of this request.
-	 * <p>
-	 * 	If <code>allowHeaderParams</code> init parameter is <jk>true</jk>, then first looks
-	 * 	for <code>&method=xxx</code> in the URL query string.
-	 */
-	@Override /* ServletRequest */
-	public String getMethod() {
-		return method;
-	}
-
-	/**
-	 * Returns the parameter with the specified name.
-	 * <p>
-	 * Returns <jk>null</jk> for parameters with no value (e.g. <js>"&foo"</js>).
-	 * This is consistent with WAS, but differs from Tomcat behavior.
-	 * The presence of parameter <js>"&foo"</js> in this case can be determined using {@link #hasParameter(String)}.
-	 * <p>
-	 * Parameter lookup is case-insensitive (consistent with WAS, but differs from Tomcat).
-	 * <p>
-	 * <i>Note:</i> Calling this method on URL-Encoded FORM posts causes the body content to be loaded and parsed by
-	 * 	the underlying servlet API.
-	 * <p>
-	 * <i>Note:</i> This method returns the raw unparsed value, and differs from calling <code>getParameter(name, String.<jk>class</js>)</code>
-	 * 	which will convert the value from UON notation:
-	 * <ul>
-	 * 	<li><js>"\u0000"</js> =&gt; <jk>null</jk>
-	 * 	<li><js>"$s(foo)"</js> =&gt; <js>"foo"</js>
-	 * 	<li><js>"(foo)"</js> =&gt; <js>"foo"</js>
-	 * </ul>
-	 */
-	@Override /* ServletRequest */
-	public String getParameter(String name) {
-		String s = null;
-		if (overriddenParams != null)
-			s = overriddenParams.get(name);
-		if (s != null)
-			return s;
-
-		String val = super.getParameter(name);
-
-		// Fix for behavior difference between Tomcat and WAS.
-		// getParameter("foo") on "&foo" in Tomcat returns "".
-		// getParameter("foo") on "&foo" in WAS returns null.
-		if (val != null && val.isEmpty())
-			if (queryParams.containsKey(name))
-				val = null;
-
-		return val;
-	}
-
-	/**
-	 * Same as {@link #getParameter(String)} except returns the default value
-	 * 	if <jk>null</jk> or empty.
-	 *
-	 * @param name The query parameter name.
-	 * @param def The default value.
-	 * @return The parameter value, or the default value if <jk>null</jk> or empty.
-	 */
-	public String getParameter(String name, String def) {
-		String val = getParameter(name);
-		if (val == null || val.isEmpty())
-			return def;
-		return val;
-	}
-
-	/**
-	 * Returns the specified URL parameter value parsed to the specified class type using the
-	 * 	{@link UrlEncodingParser} registered with this servlet.
-	 * <p>
-	 * <i>Note:</i> Calling this method on URL-Encoded FORM posts causes the body content to be loaded and parsed by
-	 * 	the underlying servlet API.
+	 * Sets a request query parameter value.
 	 *
 	 * @param name The parameter name.
-	 * @param c The class type to convert the parameter value to.
-	 * @param def The default value if the parameter was not specified or is <jk>null</jk>.
-	 * @param <T> The class type to convert the parameter value to.
-	 * @return The parameter value converted to the specified class type.
-	 * @throws ParseException
+	 * @param value The parameter value.
 	 */
-	public <T> T getParameter(String name, Class<T> c, T def) throws ParseException {
-		return getParameter(name, beanContext.getClassMeta(c), def);
+	public void setQueryParameter(String name, Object value) {
+		if (overriddenQueryParams == null)
+			overriddenQueryParams = new TreeMap<String,String>(String.CASE_INSENSITIVE_ORDER);
+		overriddenQueryParams.put(name, value == null ? null : value.toString());
 	}
 
 	/**
-	 * Returns the specified URL parameter value parsed to the specified class type using the
-	 * 	{@link UrlEncodingParser} registered with this servlet.
+	 * Returns a query parameter value.
 	 * <p>
-	 * <i>Note:</i> Calling this method on URL-Encoded FORM posts causes the body content to be loaded and parsed by
-	 * 	the underlying servlet API.
-	 * <p>
-	 * Unlike {@link #getParameter(String, Class, Object)}, this method can be used to parse parameters
-	 * 	of complex types involving JCF classes.
-	 * <p class='bcode'>
-	 * 	ClassMeta&ltMap&lt;String,Integer&gt;&gt; cm = request.getBeanContext().getMapClassMeta(TreeMap.<jk>class</jk>, String.<jk>class</jk>, Integer.<jk>class</jk>);
-	 * 	Map&lt;String,Integer&gt; m = request.getParameter(<js>"myParameter"</js>, cm, <jk>new</jk> TreeMap&lt;String,Integer&gt;());
-	 * </p>
-	 *
-	 * @param name The parameter name.
-	 * @param cm The class type to convert the parameter value to.
-	 * @param def The default value if the parameter was not specified or is <jk>null</jk>.
-	 * @param <T> The class type to convert the parameter value to.
-	 * @return The parameter value converted to the specified class type.
-	 * @throws ParseException
-	 */
-	public <T> T getParameter(String name, ClassMeta<T> cm, T def) throws ParseException {
-		String val = getParameter(name);
-		if (val == null)
-			return def;
-		return parseParameter(val, cm);
-	}
-
-	/**
-	 * Returns the specified URL parameter value parsed to the specified class type using the
-	 * 	{@link UrlEncodingParser} registered with this servlet.
-	 * <p>
-	 * <i>Note:</i> Calling this method on URL-Encoded FORM posts causes the body content to be loaded and parsed by
-	 * 	the underlying servlet API.
-	 *
-	 * @param name The parameter name.
-	 * @param c The class type to convert the parameter value to.
-	 * @param <T> The class type to convert the parameter value to.
-	 * @return The parameter value converted to the specified class type.
-	 * @throws ParseException
-	 */
-	public <T> T getParameter(String name, Class<T> c) throws ParseException {
-		return getParameter(name, beanContext.getClassMeta(c));
-	}
-
-	/**
-	 * Same as {@link #getParameter(String, Class)} except for use on multi-part parameters
-	 * 	(e.g. <js>"&key=1&key=2&key=3"</js> instead of <js>"&key=(1,2,3)"</js>)
-	 * <p>
-	 * 	This method must only be called when parsing into classes of type Collection or array.
-	 *
-	 * @param name The parameter name.
-	 * @param c The class type to convert the parameter value to.
-	 * @return The parameter value converted to the specified class type.
-	 * @throws ParseException
-	 */
-	public <T> T getParameters(String name, Class<T> c) throws ParseException {
-		return getParameters(name, beanContext.getClassMeta(c));
-	}
-
-	/**
-	 * Same as {@link #getParameter(String, Class)} except works on parameterized
-	 * types such as those returned by {@link Method#getGenericParameterTypes()}
-	 *
-	 * @param name The parameter name.
-	 * @param c The class type to convert the parameter value to.
-	 * @return The parameter value converted to the specified class type.
-	 * @throws ParseException
-	 */
-	public <T> T getParameter(String name, Type c) throws ParseException {
-		return (T)getParameter(name, beanContext.getClassMeta(c));
-	}
-
-	/**
-	 * Same as {@link #getParameter(String, Class)} except for use on multi-part parameters
-	 * 	(e.g. <js>"&key=1&key=2&key=3"</js> instead of <js>"&key=(1,2,3)"</js>)
-	 * <p>
-	 * 	This method must only be called when parsing into classes of type Collection or array.
-	 *
-	 * @param name The parameter name.
-	 * @param c The class type to convert the parameter value to.
-	 * @return The parameter value converted to the specified class type.
-	 * @throws ParseException
-	 */
-	public <T> T getParameters(String name, Type c) throws ParseException {
-		return (T)getParameters(name, beanContext.getClassMeta(c));
-	}
-
-	/**
-	 * Returns the specified URL parameter value parsed to the specified class type using the
-	 * 	{@link UrlEncodingParser} registered with this servlet.
-	 * <p>
-	 * <i>Note:</i> Calling this method on URL-Encoded FORM posts causes the body content to be loaded and parsed by
-	 * 	the underlying servlet API.
-	 * <p>
-	 * Unlike {@link #getParameter(String, Class)}, this method can be used to parse parameters
-	 * 	of complex types involving JCF classes.
-	 * <p class='bcode'>
-	 * 	ClassMeta&lt;Map&lt;String,Integer&gt;&gt; cm = request.getBeanContext().getMapClassMeta(TreeMap.<jk>class</jk>, String.<jk>class</jk>, Integer.<jk>class</jk>);
-	 * 	Map&lt;String,Integer&gt; m = request.getParameter(<js>"myParameter"</js>, cm);
-	 * </p>
-	 *
-	 * @param name The parameter name.
-	 * @param cm The class type to convert the parameter value to.
-	 * @param <T> The class type to convert the parameter value to.
-	 * @return The parameter value converted to the specified class type.
-	 * @throws ParseException
-	 */
-	public <T> T getParameter(String name, ClassMeta<T> cm) throws ParseException {
-
-		String val = getParameter(name);
-
-		if (cm.isPrimitive() && (val == null || val.isEmpty()))
-			return cm.getPrimitiveDefault();
-
-		return parseParameter(val, cm);
-	}
-
-	/**
-	 * Same as {@link #getParameter(String, ClassMeta)} except for use on multi-part parameters
-	 * 	(e.g. <js>"&key=1&key=2&key=3"</js> instead of <js>"&key=(1,2,3)"</js>)
-	 * <p>
-	 * 	This method must only be called when parsing into classes of type Collection or array.
-	 *
-	 * @param name The parameter name.
-	 * @param cm The class type to convert the parameter value to.
-	 * @param <T> The class type to convert the parameter value to.
-	 * @return The parameter value converted to the specified class type.
-	 * @throws ParseException
-	 */
-	@SuppressWarnings("rawtypes")
-	public <T> T getParameters(String name, ClassMeta<T> cm) throws ParseException {
-		String[] p = getParameterValues(name);
-		if (p == null)
-			return null;
-		if (cm.isArray()) {
-			List c = new ArrayList();
-			for (int i = 0; i < p.length; i++)
-				c.add(parseParameter(p[i], cm.getElementType()));
-			return (T)ArrayUtils.toArray(c, cm.getElementType().getInnerClass());
-		} else if (cm.isCollection()) {
-			try {
-				Collection c = (Collection)(cm.canCreateNewInstance() ? cm.newInstance() : new ObjectList());
-				for (int i = 0; i < p.length; i++)
-					c.add(parseParameter(p[i], cm.getElementType()));
-				return (T)c;
-			} catch (ParseException e) {
-				throw e;
-			} catch (Exception e) {
-				// Typically an instantiation exception.
-				throw new ParseException(e);
-			}
-		}
-		throw new ParseException("Invalid call to getParameters(String, ClassMeta).  Class type must be a Collection or array.");
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the URL parameters on this request contains the specified entry.
-	 * <p>
-	 * Note that this returns <jk>true</jk> even if the value is set to null (e.g. <js>"?key"</js>).
-	 *
-	 * @param name The URL parameter name.
-	 * @return <jk>true</jk> if the URL parameters on this request contains the specified entry.
-	 */
-	public boolean hasParameter(String name) {
-		return getParameterMap().containsKey(name);
-	}
-
-	/**
-	 * Same as {@link #getParameter(String)} except only looks in the URL string,
+	 * 	Same as {@link #getParameter(String)} except only looks in the URL string,
 	 * 	not parameters from URL-Encoded FORM posts.
 	 * <p>
 	 * This method can be used to retrieve a parameter without triggering the underlying
@@ -685,8 +432,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 */
 	public String getQueryParameter(String name) {
 		String s = null;
-		if (overriddenParams != null)
-			s = overriddenParams.get(name);
+		if (overriddenQueryParams != null)
+			s = overriddenQueryParams.get(name);
 		if (s != null)
 			return s;
 		String[] v = queryParams.get(name);
@@ -699,7 +446,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			if (queryParams.containsKey(name))
 				return null;
 		}
-
 		return v[0];
 	}
 
@@ -717,8 +463,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Same as {@link #getParameter(String, Class, Object)} except only looks in the URL string,
-	 * 	not parameters from URL-Encoded FORM posts.
+	 * Returns the specified query parameter value converted to a POJO.
 	 * <p>
 	 * This method can be used to retrieve a parameter without triggering the underlying
 	 * 	servlet API to load and parse the request body.
@@ -735,8 +480,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Same as {@link #getParameter(String, ClassMeta, Object)} except only looks in the URL string,
-	 * 	not parameters from URL-Encoded FORM posts.
+	 * Returns the specified query parameter value converted to a POJO.
 	 * <p>
 	 * This method can be used to retrieve a parameter without triggering the underlying
 	 * 	servlet API to load and parse the request body.
@@ -756,8 +500,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Same as {@link #getParameter(String, ClassMeta, Object)} except only looks in the URL string,
-	 * 	not parameters from URL-Encoded FORM posts.
+	 * Returns the specified query parameter value converted to a POJO.
 	 * <p>
 	 * This method can be used to retrieve a parameter without triggering the underlying
 	 * 	servlet API to load and parse the request body.
@@ -819,10 +562,9 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Same as {@link #getParameter(String, ClassMeta)} except only looks in the URL string,
-	 * 	not parameters from URL-Encoded FORM posts.
+	 * Returns the specified query parameter value converted to a POJO.
 	 * <p>
-	 * This method can be used to retrieve a parameter without triggering the underlying
+	 * 	This method can be used to retrieve a parameter without triggering the underlying
 	 * 	servlet API to load and parse the request body.
 	 *
 	 * @param name The parameter name.
@@ -880,10 +622,11 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the list of all query parameters with the specified name.
-	 * Same as {@link #getParameterValues(String)} except only looks in the URL string,
+	 * <p>
+	 * 	Same as {@link #getParameterValues(String)} except only looks in the URL string,
 	 * 	not parameters from URL-Encoded FORM posts.
 	 * <p>
-	 * This method can be used to retrieve parameters without triggering the underlying
+	 * 	This method can be used to retrieve parameters without triggering the underlying
 	 * 	servlet API to load and parse the request body.
 	 *
 	 * @param name
@@ -894,11 +637,11 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the URL parameters on this request contains the specified entry.
+	 * Returns <jk>true</jk> if the query parameters on this request contains the specified entry.
 	 * <p>
-	 * Note that this returns <jk>true</jk> even if the value is set to null (e.g. <js>"?key"</js>).
+	 * 	Note that this returns <jk>true</jk> even if the value is set to null (e.g. <js>"?key"</js>).
 	 * <p>
-	 * This method can be used to check the existence of a parameter without triggering the underlying
+	 * 	This method can be used to check the existence of a parameter without triggering the underlying
 	 * 	servlet API to load and parse the request body.
 	 *
 	 * @param name The URL parameter name.
@@ -909,12 +652,25 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if the request contains any of the specified query parameters.
+	 *
+	 * @param params The list of parameters to check for.
+	 * @return <jk>true</jk> if the request contains any of the specified query parameters.
+	 */
+	public boolean hasAnyQueryParameters(String...params) {
+		for (String p : params)
+			if (hasQueryParameter(p))
+				return true;
+		return false;
+	}
+
+	/**
 	 * Equivalent to {@link #getParameterMap()}, but only looks for query parameters in the URL, not form posts.
 	 * <p>
-	 * This method can be used to retrieve query parameters without triggering the underlying
+	 * 	This method can be used to retrieve query parameters without triggering the underlying
 	 * 	servlet API to load and parse the request body.
 	 * <p>
-	 * This object is modifiable.
+	 * 	This object is modifiable.
 	 *
 	 * @return The query parameters as a modifiable map.
 	 */
@@ -925,10 +681,10 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	/**
 	 * Equivalent to {@link #getParameterNames()}, but only looks for query parameters in the URL, not form posts.
 	 * <p>
-	 * This method can be used to retrieve query parameters without triggering the underlying
+	 * 	This method can be used to retrieve query parameters without triggering the underlying
 	 * 	servlet API to load and parse the request body.
 	 * <p>
-	 * This object is modifiable.
+	 * 	This object is modifiable.
 	 *
 	 * @return An iterator of query parameter names.
 	 */
@@ -936,68 +692,283 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		return queryParams.keySet().iterator();
 	}
 
-	private <T> T parseParameter(String val, ClassMeta<T> c) throws ParseException {
-		if (val == null)
-			return null;
-		// Shortcut - If we're returning a string and the value doesn't start with '$' or '(', then
-		// just return the string since it's a plain value.
-		if (c.getInnerClass() == String.class && val.length() > 0) {
-			char x = val.charAt(0);
-			if (x != '(' && x != '$' && x != '\u0000' && val.indexOf('~') == -1)
-				return (T)val;
-		}
-		return urlEncodingParser.parseParameter(val, c);
+	//--------------------------------------------------------------------------------
+	// Form data parameters
+	//--------------------------------------------------------------------------------
+
+	/**
+	 * Sets a request form data parameter value.
+	 *
+	 * @param name The parameter name.
+	 * @param value The parameter value.
+	 */
+	public void setFormDataParameter(String name, Object value) {
+		if (overriddenFormDataParams == null)
+			overriddenFormDataParams = new TreeMap<String,String>(String.CASE_INSENSITIVE_ORDER);
+		overriddenFormDataParams.put(name, value == null ? null : value.toString());
 	}
 
 	/**
-	 * Shortcut for calling <code>getHeaders().get(c, name, def);</code>
+	 * Returns a form data parameter value.
 	 * <p>
-	 * 	The type can be any POJO type convertable from a <code>String</code> (See <a class='doclink' href='package-summary.html#PojosConvertableFromString'>POJOs Convertable From Strings</a>).
+	 * 	Parameter lookup is case-insensitive (consistent with WAS, but differs from Tomcat).
+	 * <p>
+	 * 	<i>Note:</i> Calling this method on URL-Encoded FORM posts causes the body content to be loaded and parsed by
+	 * 	the underlying servlet API.
+	 * <p>
+	 * 	<i>Note:</i> This method returns the raw unparsed value, and differs from calling <code>getFormDataParameter(name, String.<jk>class</js>)</code>
+	 * 	which will convert the value from UON notation:
+	 * <ul>
+	 * 	<li><js>"\u0000"</js> =&gt; <jk>null</jk>
+	 * 	<li><js>"$s(foo)"</js> =&gt; <js>"foo"</js>
+	 * 	<li><js>"(foo)"</js> =&gt; <js>"foo"</js>
+	 * </ul>
 	 *
-	 * @param name The HTTP header name.
-	 * @param c The class type to convert the header value to.
-	 * @param def The default value if the header was not specified or is <jk>null</jk>.
-	 * @param <T> The class type to convert the header value to.
-	 * @return The parameter value converted to the specified class type.
+	 * @param name The form data parameter name.
+	 * @return The parameter value, or <jk>null</jk> if parameter does not exist.
 	 */
-	public <T> T getHeader(String name, Class<T> c, T def) {
-		String h = getHeader(name);
-		if (h == null)
+	public String getFormDataParameter(String name) {
+		String s = null;
+		if (overriddenFormDataParams != null)
+			s = overriddenFormDataParams.get(name);
+		if (s != null)
+			return s;
+
+		return super.getParameter(name);
+	}
+
+	/**
+	 * Same as {@link #getFormDataParameter(String)} except returns a default value if <jk>null</jk> or empty.
+	 *
+	 * @param name The form data parameter name.
+	 * @param def The default value.
+	 * @return The parameter value, or the default value if <jk>null</jk> or empty.
+	 */
+	public String getFormDataParameter(String name, String def) {
+		String val = getParameter(name);
+		if (val == null || val.isEmpty())
 			return def;
-		return beanContext.convertToType(h, c);
+		return val;
 	}
 
 	/**
-	 * Shortcut for calling <code>getHeaders().get(c, name);</code>
+	 * Returns the specified form data parameter value converted to a POJO using the
+	 * 	{@link UrlEncodingParser} registered with this servlet.
 	 * <p>
-	 * 	The type can be any POJO type convertable from a <code>String</code> (See <a class='doclink' href='package-summary.html#PojosConvertableFromString'>POJOs Convertable From Strings</a>).
+	 * 	<i>Note:</i> Calling this method on URL-Encoded FORM posts causes the body content to be loaded and parsed by
+	 * 	the underlying servlet API.
 	 *
-	 * @param name The HTTP header name.
-	 * @param c The class type to convert the header value to.
-	 * @param <T> The class type to convert the header value to.
+	 * @param name The parameter name.
+	 * @param c The class type to convert the parameter value to.
+	 * @param def The default value if the parameter was not specified or is <jk>null</jk>.
+	 * @param <T> The class type to convert the parameter value to.
 	 * @return The parameter value converted to the specified class type.
+	 * @throws ParseException
 	 */
-	public <T> T getHeader(String name, Class<T> c) {
-		String h = getHeader(name);
-		return beanContext.convertToType(h, c);
+	public <T> T getFormDataParameter(String name, Class<T> c, T def) throws ParseException {
+		return getFormDataParameter(name, beanContext.getClassMeta(c), def);
 	}
 
 	/**
-	 * Same as {@link #getHeader(String, Class)} except works on parameterized
+	 * Returns the specified form data parameter value converted to a POJO using the
+	 * 	{@link UrlEncodingParser} registered with this servlet.
+	 * <p>
+	 * 	<i>Note:</i> Calling this method on URL-Encoded FORM posts causes the body content to be loaded and parsed by
+	 * 	the underlying servlet API.
+	 * <p>
+	 * 	Unlike {@link #getFormDataParameter(String, Class, Object)}, this method can be used to parse parameters
+	 * 	of complex types involving JCF classes.
+	 * <p class='bcode'>
+	 * 	ClassMeta&ltMap&lt;String,Integer&gt;&gt; cm = request.getBeanContext().getMapClassMeta(TreeMap.<jk>class</jk>, String.<jk>class</jk>, Integer.<jk>class</jk>);
+	 * 	Map&lt;String,Integer&gt; m = request.getFormDataParameter(<js>"myParameter"</js>, cm, <jk>new</jk> TreeMap&lt;String,Integer&gt;());
+	 * </p>
+	 *
+	 * @param name The parameter name.
+	 * @param cm The class type to convert the parameter value to.
+	 * @param def The default value if the parameter was not specified or is <jk>null</jk>.
+	 * @param <T> The class type to convert the parameter value to.
+	 * @return The parameter value converted to the specified class type.
+	 * @throws ParseException
+	 */
+	public <T> T getFormDataParameter(String name, ClassMeta<T> cm, T def) throws ParseException {
+		String val = getParameter(name);
+		if (val == null)
+			return def;
+		return parseParameter(val, cm);
+	}
+
+	/**
+	 * Returns the specified form data parameter value converted to a POJO using the
+	 * 	{@link UrlEncodingParser} registered with this servlet.
+	 * <p>
+	 * <i>Note:</i> Calling this method on URL-Encoded FORM posts causes the body content to be loaded and parsed by
+	 * 	the underlying servlet API.
+	 *
+	 * @param name The parameter name.
+	 * @param c The class type to convert the parameter value to.
+	 * @param <T> The class type to convert the parameter value to.
+	 * @return The parameter value converted to the specified class type.
+	 * @throws ParseException
+	 */
+	public <T> T getFormDataParameter(String name, Class<T> c) throws ParseException {
+		return getFormDataParameter(name, beanContext.getClassMeta(c));
+	}
+
+	/**
+	 * Same as {@link #getFormDataParameter(String, Class)} except for use on multi-part parameters
+	 * 	(e.g. <js>"key=1&key=2&key=3"</js> instead of <js>"key=(1,2,3)"</js>)
+	 * <p>
+	 * 	This method must only be called when parsing into classes of type Collection or array.
+	 *
+	 * @param name The parameter name.
+	 * @param c The class type to convert the parameter value to.
+	 * @return The parameter value converted to the specified class type.
+	 * @throws ParseException
+	 */
+	public <T> T getFormDataParameters(String name, Class<T> c) throws ParseException {
+		return getFormDataParameters(name, beanContext.getClassMeta(c));
+	}
+
+	/**
+	 * Same as {@link #getFormDataParameter(String, Class)} except works on parameterized
 	 * types such as those returned by {@link Method#getGenericParameterTypes()}
 	 *
-	 * @param name The HTTP header name.
-	 * @param c The class type to convert the header value to.
-	 * @param <T> The class type to convert the header value to.
+	 * @param name The parameter name.
+	 * @param c The class type to convert the parameter value to.
 	 * @return The parameter value converted to the specified class type.
+	 * @throws ParseException
 	 */
-	public <T> T getHeader(String name, Type c) {
-		String h = getHeader(name);
-		return (T)beanContext.convertToType(null, h, beanContext.getClassMeta(c));
+	public <T> T getFormDataParameter(String name, Type c) throws ParseException {
+		return (T)getFormDataParameter(name, beanContext.getClassMeta(c));
 	}
 
 	/**
-	 * Returns the specified request attribute converted to the specified class type.
+	 * Same as {@link #getFormDataParameter(String, Class)} except for use on multi-part parameters
+	 * 	(e.g. <js>"key=1&key=2&key=3"</js> instead of <js>"key=(1,2,3)"</js>)
+	 * <p>
+	 * 	This method must only be called when parsing into classes of type Collection or array.
+	 *
+	 * @param name The parameter name.
+	 * @param c The class type to convert the parameter value to.
+	 * @return The parameter value converted to the specified class type.
+	 * @throws ParseException
+	 */
+	public <T> T getFormDataParameters(String name, Type c) throws ParseException {
+		return (T)getFormDataParameters(name, beanContext.getClassMeta(c));
+	}
+
+	/**
+	 * Returns the specified form data parameter value converted to a POJO using the
+	 * 	{@link UrlEncodingParser} registered with this servlet.
+	 * <p>
+	 * 	<i>Note:</i> Calling this method on URL-Encoded FORM posts causes the body content to be loaded and parsed by
+	 * 	the underlying servlet API.
+	 * <p>
+	 * 	Unlike {@link #getFormDataParameter(String, Class)}, this method can be used to parse parameters
+	 * 	of complex types involving JCF classes.
+	 * <p class='bcode'>
+	 * 	ClassMeta&lt;Map&lt;String,Integer&gt;&gt; cm = request.getBeanContext().getMapClassMeta(TreeMap.<jk>class</jk>, String.<jk>class</jk>, Integer.<jk>class</jk>);
+	 * 	Map&lt;String,Integer&gt; m = request.getFormDataParameter(<js>"myParameter"</js>, cm);
+	 * </p>
+	 *
+	 * @param name The parameter name.
+	 * @param cm The class type to convert the parameter value to.
+	 * @param <T> The class type to convert the parameter value to.
+	 * @return The parameter value converted to the specified class type.
+	 * @throws ParseException
+	 */
+	public <T> T getFormDataParameter(String name, ClassMeta<T> cm) throws ParseException {
+
+		String val = getParameter(name);
+
+		if (cm.isPrimitive() && (val == null || val.isEmpty()))
+			return cm.getPrimitiveDefault();
+
+		return parseParameter(val, cm);
+	}
+
+	/**
+	 * Same as {@link #getFormDataParameter(String, ClassMeta)} except for use on multi-part parameters
+	 * 	(e.g. <js>"key=1&key=2&key=3"</js> instead of <js>"key=(1,2,3)"</js>)
+	 * <p>
+	 * 	This method must only be called when parsing into classes of type Collection or array.
+	 *
+	 * @param name The parameter name.
+	 * @param cm The class type to convert the parameter value to.
+	 * @param <T> The class type to convert the parameter value to.
+	 * @return The parameter value converted to the specified class type.
+	 * @throws ParseException
+	 */
+	@SuppressWarnings("rawtypes")
+	public <T> T getFormDataParameters(String name, ClassMeta<T> cm) throws ParseException {
+		String[] p = getParameterValues(name);
+		if (p == null)
+			return null;
+		if (cm.isArray()) {
+			List c = new ArrayList();
+			for (int i = 0; i < p.length; i++)
+				c.add(parseParameter(p[i], cm.getElementType()));
+			return (T)ArrayUtils.toArray(c, cm.getElementType().getInnerClass());
+		} else if (cm.isCollection()) {
+			try {
+				Collection c = (Collection)(cm.canCreateNewInstance() ? cm.newInstance() : new ObjectList());
+				for (int i = 0; i < p.length; i++)
+					c.add(parseParameter(p[i], cm.getElementType()));
+				return (T)c;
+			} catch (ParseException e) {
+				throw e;
+			} catch (Exception e) {
+				// Typically an instantiation exception.
+				throw new ParseException(e);
+			}
+		}
+		throw new ParseException("Invalid call to getParameters(String, ClassMeta).  Class type must be a Collection or array.");
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the form data parameters on this request contains the specified entry.
+	 * <p>
+	 * 	Note that this returns <jk>true</jk> even if the value is set to null (e.g. <js>"?key"</js>).
+	 *
+	 * @param name The URL parameter name.
+	 * @return <jk>true</jk> if the URL parameters on this request contains the specified entry.
+	 */
+	public boolean hasFormDataParameter(String name) {
+		return getParameterMap().containsKey(name);
+	}
+
+	//--------------------------------------------------------------------------------
+	// Path parameters
+	//--------------------------------------------------------------------------------
+
+	/**
+	 * Sets a path parameter value.
+	 * <p>
+	 * 	A path parameter is a variable in the path pattern such as <js>"/{foo}"</js>
+	 *
+	 * @param name The parameter name.
+	 * @param value The parameter value.
+	 */
+	public void setPathParameter(String name, String value) {
+		if (pathParameters == null)
+			pathParameters = new TreeMap<String,String>(String.CASE_INSENSITIVE_ORDER);
+		pathParameters.put(name, value == null ? null : value.toString());
+	}
+
+	/**
+	 * Returns a path parameter value.
+	 * <p>
+	 * 	A path parameter is a variable in the path pattern such as <js>"/{foo}"</js>
+	 *
+	 * @param name The parameter name.
+	 * @return The paramter value, or <jk>null</jk> if path parameter not specified.
+	 */
+	public String getPathParameter(String name) {
+		return (pathParameters == null ? null : pathParameters.get(name));
+	}
+
+	/**
+	 * Returns the specified path parameter converted to a POJO.
 	 * <p>
 	 * 	The type can be any POJO type convertable from a <code>String</code> (See <a class='doclink' href='package-summary.html#PojosConvertableFromString'>POJOs Convertable From Strings</a>).
 	 *
@@ -1007,12 +978,12 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return The attribute value converted to the specified class type.
 	 * @throws ParseException
 	 */
-	public <T> T getAttribute(String name, Class<T> c) throws ParseException {
-		return getAttribute(name, beanContext.getClassMeta(c));
+	public <T> T getPathParameter(String name, Class<T> c) throws ParseException {
+		return getPathParameter(name, beanContext.getClassMeta(c));
 	}
 
 	/**
-	 * Same as {@link #getAttribute(String, Class)} except works on parameterized
+	 * Same as {@link #getPathParameter(String, Class)} except works on parameterized
 	 * types such as those returned by {@link Method#getGenericParameterTypes()}
 	 *
 	 * @param name The attribute name.
@@ -1021,12 +992,12 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return The attribute value converted to the specified class type.
 	 * @throws ParseException
 	 */
-	public <T> T getAttribute(String name, Type c) throws ParseException {
-		return (T)getAttribute(name, beanContext.getClassMeta(c));
+	public <T> T getPathParameter(String name, Type c) throws ParseException {
+		return (T)getPathParameter(name, beanContext.getClassMeta(c));
 	}
 
 	/**
-	 * Returns the specified request attribute converted to the specified class type.
+	 * Returns the specified path parameter converted to a POJO.
 	 * <p>
 	 * 	The type can be any POJO type convertable from a <code>String</code> (See <a class='doclink' href='package-summary.html#PojosConvertableFromString'>POJOs Convertable From Strings</a>).
 	 *
@@ -1036,8 +1007,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return The attribute value converted to the specified class type.
 	 * @throws ParseException
 	 */
-	public <T> T getAttribute(String name, ClassMeta<T> cm) throws ParseException {
-		Object attr = getAttribute(name);
+	public <T> T getPathParameter(String name, ClassMeta<T> cm) throws ParseException {
+		Object attr = getPathParameter(name);
 		T t = null;
 		if (attr != null)
 			t = urlEncodingParser.parseParameter(attr.toString(), cm);
@@ -1046,42 +1017,9 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		return t;
 	}
 
-	/**
-	 * Same as {@link HttpServletRequest#getPathInfo()} except returns the path undecoded.
-	 *
-	 * @return The undecoded portion of the URL after the resource URL path pattern match.
-	 */
-	public String getPathInfoUndecoded() {
-		return RestUtils.getPathInfoUndecoded(this);
-	}
-
-	/**
-	 * Returns the value {@link #getPathInfo()} split on the <js>'/'</js> character.
-	 * <p>
-	 * If path info is <jk>null</jk>, returns an empty list.
-	 * <p>
-	 * URL-encoded characters in segments are automatically decoded by this method.
-	 *
-	 * @return The decoded segments, or an empty list if path info is <jk>null</jk>.
-	 */
-	public String[] getPathInfoParts() {
-		String s = getPathInfoUndecoded();
-		if (s == null || s.isEmpty() || s.equals("/"))
-			return new String[0];
-		s = s.substring(1);
-		if (s.endsWith("/"))
-			s = s.substring(0, s.length()-1);
-		boolean needsDecode = (s.indexOf('%') != -1 || s.indexOf('+') != -1);
-		String[] l = s.split("/", Integer.MAX_VALUE);
-		try {
-			if (needsDecode)
-				for (int i = 0; i < l.length; i++)
-					l[i] = URLDecoder.decode(l[i], "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();  // Won't happen.
-		}
-		return l;
-	}
+	//--------------------------------------------------------------------------------
+	// Body methods
+	//--------------------------------------------------------------------------------
 
 	/**
 	 * Same as {@link #getBody(ClassMeta)}, except a shortcut for passing in regular {@link Class} objects
@@ -1110,7 +1048,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Reads the input from the HTTP request as JSON, XML, or HTML and converts the input to the specified class type.
+	 * Reads the input from the HTTP request as JSON, XML, or HTML and converts the input to a POJO.
 	 * <p>
 	 * 	If {@code allowHeaderParams} init parameter is <jk>true</jk>, then first looks
 	 * 	for {@code &body=xxx} in the URL query string.
@@ -1209,36 +1147,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Returns the parser matching the request <code>Accept</code> header.
-	 *
-	 * @return The parser matching the request <code>Accept</code> header, or <jk>null</jk>
-	 * 	if no matching parser was found.
-	 */
-	public Parser getParser() {
-		String mediaType = getMediaType();
-		Parser p = parserGroup.getParser(mediaType);
-
-		// If no patching parser for URL-encoding, use the one defined on the servlet.
-		if (p == null && mediaType.equals("application/x-www-form-urlencoded"))
-			p = urlEncodingParser;
-
-		return p;
-	}
-
-	/**
-	 * Returns the reader parser matching the request <code>Accept</code> header.
-	 *
-	 * @return The reader parser matching the request <code>Accept</code> header, or <jk>null</jk>
-	 * 	if no matching reader parser was found, or the matching parser was an input stream parser.
-	 */
-	public ReaderParser getReaderParser() {
-		Parser p = getParser();
-		if (p.isReaderParser())
-			return (ReaderParser)p;
-		return null;
-	}
-
-	/**
 	 * Returns the HTTP body content as a plain string.
 	 * <p>
 	 * 	If {@code allowHeaderParams} init parameter is true, then first looks
@@ -1252,27 +1160,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			return body;
 		body = IOUtils.read(getReader()).toString();
 		return body;
-	}
-
-	/**
-	 * Returns a resolved URL.
-	 * <p>
-	 * <ul class='spaced-list'>
-	 * 	<li>Fully-qualified absolute URLs (e.g. <js>"http://..."</js>, <js>"https://"</js>) are simply converted to a URL.
-	 * 	<li>Absolute URLs (e.g. <js>"/foo/..."</js>) are interpreted as relative to the server hostname.
-	 * 	<li>Relative URLs (e.g. <js>"foo/..."</js>) are interpreted as relative to this servlet path.
-	 * </ul>
-	 *
-	 * @param path The URL path to resolve.
-	 * @return The resolved URL.
-	 * @throws MalformedURLException If path is not a valid URL component.
-	 */
-	public URL getURL(String path) throws MalformedURLException {
-		if (path.startsWith("http://") || path.startsWith("https://"))
-			return new URL(path);
-		if (StringUtils.startsWith(path, '/'))
-			return new URL(getScheme(), getLocalName(), getLocalPort(), path);
-		return new URL(getScheme(), getLocalName(), getLocalPort(), getContextPath() + getServletPath() + (StringUtils.isEmpty(path) ? "" : ('/' + path)));
 	}
 
 	/**
@@ -1336,46 +1223,76 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		return is;
 	}
 
-	private Encoder getEncoder() {
-		if (encoder == null) {
-			String ce = getHeader("content-encoding");
-			if (! (ce == null || ce.isEmpty())) {
-				ce = ce.trim();
-				encoder = servlet.getEncoders().getEncoder(ce);
-				if (encoder == null)
-					throw new RestException(SC_UNSUPPORTED_MEDIA_TYPE,
-						"Unsupported encoding in request header ''Content-Encoding'': ''{0}''\n\tSupported codings: {1}",
-						getHeader("content-encoding"), servlet.getEncoders().getSupportedEncodings()
-					);
-			}
+	//--------------------------------------------------------------------------------
+	// URI-related methods
+	//--------------------------------------------------------------------------------
 
-			if (encoder != null)
-				contentLength = -1;
-		}
-		// Note that if this is the identity encoder, we want to return null
-		// so that we don't needlessly wrap the input stream.
-		if (encoder == IdentityEncoder.INSTANCE)
-			return null;
-		return encoder;
-	}
-
-	@Override /* ServletRequest */
-	public int getContentLength() {
-		return contentLength == 0 ? super.getContentLength() : contentLength;
+	/**
+	 * Same as {@link HttpServletRequest#getPathInfo()} except returns the path undecoded.
+	 *
+	 * @return The undecoded portion of the URL after the resource URL path pattern match.
+	 */
+	public String getPathInfoUndecoded() {
+		return RestUtils.getPathInfoUndecoded(this);
 	}
 
 	/**
-	 * Returns <jk>true</jk> if <code>&plainText=true</code> was specified as a URL parameter.
+	 * Returns the value {@link #getPathInfo()} split on the <js>'/'</js> character.
 	 * <p>
-	 * 	This indicates that the <code>Content-Type</code> of the output should always be set to <js>"text/plain"</js>
-	 * 	to make it easy to render in a browser.
+	 * 	If path info is <jk>null</jk>, returns an empty list.
 	 * <p>
-	 * 	This feature is useful for debugging.
+	 * 	URL-encoded characters in segments are automatically decoded by this method.
 	 *
-	 * @return <jk>true</jk> if {@code &plainText=true} was specified as a URL parameter
+	 * @return The decoded segments, or an empty list if path info is <jk>null</jk>.
 	 */
-	public boolean isPlainText() {
-		return "true".equals(getQueryParameter("plainText", "false"));
+	public String[] getPathInfoParts() {
+		String s = getPathInfoUndecoded();
+		if (s == null || s.isEmpty() || s.equals("/"))
+			return new String[0];
+		s = s.substring(1);
+		if (s.endsWith("/"))
+			s = s.substring(0, s.length()-1);
+		boolean needsDecode = (s.indexOf('%') != -1 || s.indexOf('+') != -1);
+		String[] l = s.split("/", Integer.MAX_VALUE);
+		try {
+			if (needsDecode)
+				for (int i = 0; i < l.length; i++)
+					l[i] = URLDecoder.decode(l[i], "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();  // Won't happen.
+		}
+		return l;
+	}
+
+	/**
+	 * Returns a resolved URL.
+	 * <p>
+	 * <ul class='spaced-list'>
+	 * 	<li>Fully-qualified absolute URLs (e.g. <js>"http://..."</js>, <js>"https://"</js>) are simply converted to a URL.
+	 * 	<li>Absolute URLs (e.g. <js>"/foo/..."</js>) are interpreted as relative to the server hostname.
+	 * 	<li>Relative URLs (e.g. <js>"foo/..."</js>) are interpreted as relative to this servlet path.
+	 * </ul>
+	 *
+	 * @param path The URL path to resolve.
+	 * @return The resolved URL.
+	 * @throws MalformedURLException If path is not a valid URL component.
+	 */
+	public URL getURL(String path) throws MalformedURLException {
+		if (path.startsWith("http://") || path.startsWith("https://"))
+			return new URL(path);
+		if (StringUtils.startsWith(path, '/'))
+			return new URL(getScheme(), getLocalName(), getLocalPort(), path);
+		return new URL(getScheme(), getLocalName(), getLocalPort(), getContextPath() + getServletPath() + (StringUtils.isEmpty(path) ? "" : ('/' + path)));
+	}
+
+	/**
+	 * Returns the URI of the parent of this servlet.
+	 *
+	 * @return The URI of the parent of this servlet.
+	 */
+	public String getServletParentURI() {
+		String s = getServletURI();
+		return s.substring(0, s.lastIndexOf('/'));
 	}
 
 	/**
@@ -1418,10 +1335,9 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 		</tr>
 	 * 	</table>
 	 *
-	 * <dl>
-	 * 	<dt>Example:</dt>
-	 * 	<dd>
-	 * 		<p class='bcode'>
+	 *
+	 * <h6 class='topic'>Example:</h6>
+	 * <p class='bcode'>
 	 * 	<jc>// REST method</jc>
 	 * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>,path=<js>"/foo/{bar}/*"</js>)
 	 * 	<jk>public</jk> doGetById(RestServlet res, RestResponse res, <jk>int</jk> bar) {
@@ -1430,9 +1346,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * 	<jc>// Prints "path/remainder"</jc>
 	 * 	<jk>new</jk> RestCall(servletPath + <js>"/foo/123/path/remainder"</js>).connect();
-	 * 		</p>
-	 * 	</dd>
-	 * </dl>
+	 * </p>
 	 *
 	 * @return The path remainder string.
 	 */
@@ -1450,60 +1364,11 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Shortcut method for calling {@link RestServlet#getMessage(Locale, String, Object...)} based
-	 * 	on the request locale.
-	 *
-	 * @param key The message key.
-	 * @param args Optional {@link MessageFormat} variable values in the value.
-	 * @return The localized message.
-	 */
-	public String getMessage(String key, Object...args) {
-		return servlet.getMessage(getLocale(), key, args);
-	}
-
-	/**
-	 * Returns the resource bundle for the request locale.
-	 *
-	 * @return The resource bundle.  Never <jk>null</jk>.
-	 */
-	public MessageBundle getResourceBundle() {
-		return servlet.getMessages(getLocale());
-	}
-
-	/**
-	 * Returns the servlet handling the request.
-	 * <p>
-	 * Can be used to access servlet-init parameters or annotations during requests,
-	 * 	such as in calls to {@link RestGuard#guard(RestRequest, RestResponse)}..
-	 *
-	 * @return The servlet handling the request.
-	 */
-	public RestServlet getServlet() {
-		return servlet;
-	}
-
-	/**
-	 * Returns the java method handling the request.
-	 * <p>
-	 * Can be used to access the method name or method annotations during requests, such
-	 * 	as in calls to {@link RestGuard#guard(RestRequest, RestResponse)}.
-	 * <p>
-	 * Note:  This returns null when evaluating servlet-level guards since the method
-	 * 	has not been resolved at that point of execution.
-	 *
-	 * @return The Java method handling the request, or <code>null</code> if the method
-	 * 	has not yet been resolved.
-	 */
-	public Method getJavaMethod() {
-		return javaMethod;
-	}
-
-	/**
 	 * Returns the URI of the parent resource.
 	 * <p>
-	 * Trailing slashes in the path are ignored by this method.
+	 * 	Trailing slashes in the path are ignored by this method.
 	 * <p>
-	 * The behavior is shown below:
+	 * 	The behavior is shown below:
 	 * 	<table class='styled'>
 	 * 		<tr>
 	 * 			<th>getRequestURI</th>
@@ -1600,18 +1465,14 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		return RestUtils.trimPathInfo(getRequestURL(), getContextPath(), getServletPath());
 	}
 
-	/**
-	 * Returns the {@link BeanContext} associated with this request.
-	 *
-	 * @return The request bean context.
-	 */
-	public BeanContext getBeanContext() {
-		return beanContext;
-	}
+	//--------------------------------------------------------------------------------
+	// Labels
+	//--------------------------------------------------------------------------------
 
 	/**
 	 * Returns the localized servlet title.
-	 * Equivalent to calling {@link RestServlet#getTitle(RestRequest)} with this object.
+	 * <p>
+	 * 	Equivalent to calling {@link RestServlet#getTitle(RestRequest)} with this object.
 	 *
 	 * @return The localized servlet label.
 	 */
@@ -1621,7 +1482,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the localized servlet description.
-	 * Equivalent to calling {@link RestServlet#getDescription(RestRequest)} with this object.
+	 * <p>
+	 * 	Equivalent to calling {@link RestServlet#getDescription(RestRequest)} with this object.
 	 *
 	 * @return The localized servlet description.
 	 */
@@ -1631,7 +1493,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the localized method summary.
-	 * Equivalent to calling {@link RestServlet#getMethodSummary(String, RestRequest)} with this object.
+	 * <p>
+	 * 	Equivalent to calling {@link RestServlet#getMethodSummary(String, RestRequest)} with this object.
 	 *
 	 * @return The localized method description.
 	 */
@@ -1641,12 +1504,154 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns the localized method description.
-	 * Equivalent to calling {@link RestServlet#getMethodDescription(String, RestRequest)} with this object.
+	 * <p>
+	 * 	Equivalent to calling {@link RestServlet#getMethodDescription(String, RestRequest)} with this object.
 	 *
 	 * @return The localized method description.
 	 */
 	public String getMethodDescription() {
 		return servlet.getMethodDescription(javaMethod.getName(), this);
+	}
+
+	//--------------------------------------------------------------------------------
+	// Other methods
+	//--------------------------------------------------------------------------------
+
+	/**
+	 * Returns the serializers associated with this request.
+	 *
+	 * @return The serializers associated with this request.
+	 */
+	public SerializerGroup getSerializerGroup() {
+		return serializerGroup;
+	}
+
+	/**
+	 * Returns the parsers associated with this request.
+	 *
+	 * @return The parsers associated with this request.
+	 */
+	public ParserGroup getParserGroup() {
+		return parserGroup;
+	}
+
+	/**
+	 * Returns the parser matching the request <code>Accept</code> header.
+	 *
+	 * @return The parser matching the request <code>Accept</code> header, or <jk>null</jk>
+	 * 	if no matching parser was found.
+	 */
+	public Parser getParser() {
+		String mediaType = getMediaType();
+		Parser p = parserGroup.getParser(mediaType);
+
+		// If no patching parser for URL-encoding, use the one defined on the servlet.
+		if (p == null && mediaType.equals("application/x-www-form-urlencoded"))
+			p = urlEncodingParser;
+
+		return p;
+	}
+
+	/**
+	 * Returns the reader parser matching the request <code>Accept</code> header.
+	 *
+	 * @return The reader parser matching the request <code>Accept</code> header, or <jk>null</jk>
+	 * 	if no matching reader parser was found, or the matching parser was an input stream parser.
+	 */
+	public ReaderParser getReaderParser() {
+		Parser p = getParser();
+		if (p.isReaderParser())
+			return (ReaderParser)p;
+		return null;
+	}
+
+	/**
+	 * Returns the method of this request.
+	 * <p>
+	 * 	If <code>allowHeaderParams</code> init parameter is <jk>true</jk>, then first looks
+	 * 	for <code>&method=xxx</code> in the URL query string.
+	 */
+	@Override /* ServletRequest */
+	public String getMethod() {
+		return method;
+	}
+
+
+	@Override /* ServletRequest */
+	public int getContentLength() {
+		return contentLength == 0 ? super.getContentLength() : contentLength;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if <code>&plainText=true</code> was specified as a URL parameter.
+	 * <p>
+	 * 	This indicates that the <code>Content-Type</code> of the output should always be set to <js>"text/plain"</js>
+	 * 	to make it easy to render in a browser.
+	 * <p>
+	 * 	This feature is useful for debugging.
+	 *
+	 * @return <jk>true</jk> if {@code &plainText=true} was specified as a URL parameter
+	 */
+	public boolean isPlainText() {
+		return "true".equals(getQueryParameter("plainText", "false"));
+	}
+
+	/**
+	 * Shortcut method for calling {@link RestServlet#getMessage(Locale, String, Object...)} based
+	 * 	on the request locale.
+	 *
+	 * @param key The message key.
+	 * @param args Optional {@link MessageFormat} variable values in the value.
+	 * @return The localized message.
+	 */
+	public String getMessage(String key, Object...args) {
+		return servlet.getMessage(getLocale(), key, args);
+	}
+
+	/**
+	 * Returns the resource bundle for the request locale.
+	 *
+	 * @return The resource bundle.  Never <jk>null</jk>.
+	 */
+	public MessageBundle getResourceBundle() {
+		return servlet.getMessages(getLocale());
+	}
+
+	/**
+	 * Returns the servlet handling the request.
+	 * <p>
+	 * 	Can be used to access servlet-init parameters or annotations during requests,
+	 * 	such as in calls to {@link RestGuard#guard(RestRequest, RestResponse)}..
+	 *
+	 * @return The servlet handling the request.
+	 */
+	public RestServlet getServlet() {
+		return servlet;
+	}
+
+	/**
+	 * Returns the java method handling the request.
+	 * <p>
+	 * 	Can be used to access the method name or method annotations during requests, such
+	 * 	as in calls to {@link RestGuard#guard(RestRequest, RestResponse)}.
+	 * <p>
+	 * 	Note:  This returns null when evaluating servlet-level guards since the method
+	 * 	has not been resolved at that point of execution.
+	 *
+	 * @return The Java method handling the request, or <code>null</code> if the method
+	 * 	has not yet been resolved.
+	 */
+	public Method getJavaMethod() {
+		return javaMethod;
+	}
+
+	/**
+	 * Returns the {@link BeanContext} associated with this request.
+	 *
+	 * @return The request bean context.
+	 */
+	public BeanContext getBeanContext() {
+		return beanContext;
 	}
 
 	/**
@@ -1672,10 +1677,9 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Returns an instance of a {@link ReaderResource} that represents the contents of a resource text file from the classpath.
-	 * <p>
 	 *
 	 * @param name The name of the resource (i.e. the value normally passed to {@link Class#getResourceAsStream(String)}.
-	 * @param resolveVars If <jk>true</jk>, any {@link Var} variables will be resolved by the variable resolver returned
+	 * @param resolveVars If <jk>true</jk>, any {@link org.apache.juneau.server.annotation.Parameter} variables will be resolved by the variable resolver returned
 	 * 	by {@link #getVarResolverSession()}.
 	 * @param contentType The value to set as the <js>"Content-Type"</js> header for this object.
 	 * @return A new reader resource, or <jk>null</jk> if resource could not be found.
@@ -1696,7 +1700,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * to determine the media type.
 	 *
 	 * @param name The name of the resource (i.e. the value normally passed to {@link Class#getResourceAsStream(String)}.
-	 * @param resolveVars If <jk>true</jk>, any {@link Var} variables will be resolved by the variable resolver returned
+	 * @param resolveVars If <jk>true</jk>, any {@link org.apache.juneau.server.annotation.Parameter} variables will be resolved by the variable resolver returned
 	 * 	by {@link #getVarResolverSession()}.
 	 * @return A new reader resource, or <jk>null</jk> if resource could not be found.
 	 * @throws IOException
@@ -1741,10 +1745,10 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	/**
 	 * Returns the localized Swagger from the file system.
 	 * <p>
-	 * Looks for a file called <js>"{ServletClass}_{locale}.json"</js> in the same package
-	 * as this servlet and returns it as a parsed {@link Swagger} object.
+	 * 	Looks for a file called <js>"{ServletClass}_{locale}.json"</js> in the same package
+	 * 	as this servlet and returns it as a parsed {@link Swagger} object.
 	 * <p>
-	 * Returned objects are cached for later quick-lookup.
+	 * 	Returned objects are cached for later quick-lookup.
 	 *
 	 * @return The parsed swagger object, or <jk>null</jk> if the swagger file could not be found.
 	 */
@@ -1780,13 +1784,74 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		return sb.toString();
 	}
 
-	/**
-	 * Returns the URI of the parent of this servlet.
-	 *
-	 * @return The URI of the parent of this servlet.
+	//--------------------------------------------------------------------------------
+	// Utility methods
+	//--------------------------------------------------------------------------------
+
+	private <T> T parseParameter(String val, ClassMeta<T> c) throws ParseException {
+		if (val == null)
+			return null;
+		// Shortcut - If we're returning a string and the value doesn't start with '$' or '(', then
+		// just return the string since it's a plain value.
+		if (c.getInnerClass() == String.class && val.length() > 0) {
+			char x = val.charAt(0);
+			if (x != '(' && x != '$' && x != '\u0000' && val.indexOf('~') == -1)
+				return (T)val;
+		}
+		return urlEncodingParser.parseParameter(val, c);
+	}
+
+	/*
+	 * Converts an Accept-Language value entry to a Locale.
 	 */
-	public String getServletParentURI() {
-		String s = getServletURI();
-		return s.substring(0, s.lastIndexOf('/'));
+	private Locale toLocale(String lang) {
+      String country = "";
+      int i = lang.indexOf('-');
+      if (i > -1) {
+          country = lang.substring(i+1).trim();
+          lang = lang.substring(0,i).trim();
+      }
+      return new Locale(lang, country);
+	}
+
+	private Encoder getEncoder() {
+		if (encoder == null) {
+			String ce = getHeader("content-encoding");
+			if (! (ce == null || ce.isEmpty())) {
+				ce = ce.trim();
+				encoder = servlet.getEncoders().getEncoder(ce);
+				if (encoder == null)
+					throw new RestException(SC_UNSUPPORTED_MEDIA_TYPE,
+						"Unsupported encoding in request header ''Content-Encoding'': ''{0}''\n\tSupported codings: {1}",
+						getHeader("content-encoding"), servlet.getEncoders().getSupportedEncodings()
+					);
+			}
+
+			if (encoder != null)
+				contentLength = -1;
+		}
+		// Note that if this is the identity encoder, we want to return null
+		// so that we don't needlessly wrap the input stream.
+		if (encoder == IdentityEncoder.INSTANCE)
+			return null;
+		return encoder;
+	}
+
+	/*
+	 * Returns header value from URL-parameters or set via setHeader() meant
+	 * to override actual header values on the request.
+	 */
+	private String getOverriddenHeader(String name) {
+		String h = null;
+		if (servlet.context.allowHeaderParams)
+			h = getQueryParameter(name);
+		if (h != null)
+			return h;
+		if (overriddenHeaders != null) {
+			h = overriddenHeaders.get(name);
+			if (h != null)
+				return h;
+		}
+		return h;
 	}
 }

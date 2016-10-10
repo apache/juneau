@@ -64,8 +64,8 @@ public final class ClassUtils {
 
 	/**
 	 * Converts the specified class name to a readable form when class name is a special construct like <js>"[[Z"</js>.
-	 * <p>
-	 * Examples:
+	 *
+	 * <h6 class='topic'>Example:</h6>
 	 * <p class='bcode'>
 	 * 	<jsm>getReadableClassName</jsm>(<js>"java.lang.Object"</js>);  <jc>// Returns "java.lang.Object"</jc>
 	 * 	<jsm>getReadableClassName</jsm>(<js>"boolean"</js>);  <jc>// Returns "boolean"</jc>

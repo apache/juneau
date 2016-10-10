@@ -23,7 +23,7 @@ import org.apache.juneau.server.*;
  * Annotation that can be applied to a parameter of a {@link RestMethod} annotated method
  * 	to identify it as a form post entry converted to a POJO.
  *
- * <h6 class='topic'>Example</h6>
+ * <h6 class='topic'>Example:</h6>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<js>"POST"</js>)
  * 	<jk>public void</jk> doPost(RestRequest req, RestResponse res,
@@ -46,11 +46,11 @@ import org.apache.juneau.server.*;
  *
  * <h6 class='topic'>Important note concerning FORM posts</h6>
  * <p>
- * This annotation should not be combined with the {@link Body @Body} annotation or {@link RestRequest#getBody(Class)} method
+ * 	This annotation should not be combined with the {@link Body @Body} annotation or {@link RestRequest#getBody(Class)} method
  * 	for <code>application/x-www-form-urlencoded POST</code> posts, since it will trigger the underlying servlet
  * 	API to parse the body content as key-value pairs resulting in empty content.
  * <p>
- * The {@link Query @Query} annotation can be used to retrieve a URL parameter
+ * 	The {@link Query @Query} annotation can be used to retrieve a URL parameter
  * 	in the URL string without triggering the servlet to drain the body content.
  *
  * @author James Bognar (james.bognar@salesforce.com)

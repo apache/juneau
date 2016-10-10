@@ -54,13 +54,11 @@ public @interface XmlSchema {
 	 * <p>
 	 * 	Inherited by child packages.
 	 *
-	 * <dl>
-	 * 	<dt>Example:</dt>
-	 * 	<dd>
-	 * 		<p>
-	 * 			Contents of <code>package-info.java</code>...
-	 * 		</p>
-	 * 		<p class='bcode'>
+	 * <h6 class='topic'>Example:</h6>
+	 * <p>
+	 * 	Contents of <code>package-info.java</code>...
+	 * </p>
+	 * <p class='bcode'>
 	 * 	<jc>// XML namespaces used within this package.</jc>
 	 * 	<ja>@XmlSchema</ja>(prefix=<js>"ab"</js>,
 	 * 		namespaces={
@@ -72,11 +70,11 @@ public @interface XmlSchema {
 	 * 	)
 	 * 	<jk>package</jk> com.ibm.sample.addressbook;
 	 * 	<jk>import</jk> org.apache.juneau.xml.annotation.*;
-	 * 		</p>
-	 * 		<p>
-	 * 			Class in package using defined namespaces...
-	 * 		</p>
-	 * 		<p class='bcode'>
+	 * </p>
+	 * <p>
+	 * 	Class in package using defined namespaces...
+	 * </p>
+	 * <p class='bcode'>
 	 * 	<jk>package</jk> com.ibm.sample.addressbook;
 	 *
 	 * 	<jc>// Bean class, override "ab" namespace on package.</jc>
@@ -90,9 +88,7 @@ public @interface XmlSchema {
 	 * 		<ja>@Xml</ja>(prefix=<js>"mail"</js>)
 	 * 		<jk>public</jk> String <jf>street</jf>, <jf>city</jf>, <jf>state</jf>;
 	 * 	}
-	 * 		</p>
-	 * 	</dd>
-	 * </dl>
+	 * </p>
 	 */
 	public XmlNs[] xmlNs() default {};
 }

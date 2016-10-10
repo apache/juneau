@@ -33,7 +33,7 @@ import org.apache.juneau.parser.*;
  * 		be overridden by subclasses to return the media types programmatically.
  *
  *
- * <h6 class='topic'>Examples</h6>
+ * <h6 class='topic'>Example:</h6>
  * <p>
  * 	Standard example:
  * <p class='bcode'>

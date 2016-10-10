@@ -16,8 +16,8 @@ import org.apache.juneau.annotation.*;
 
 /**
  * The object provides metadata about the API. The metadata can be used by the clients if needed, and can be presented in the Swagger-UI for convenience.
- * <p>
- * Example:
+ *
+ * <h6 class='topic'>Example:</h6>
  * <p class='bcode'>
  * 	{
  * 		<js>"title"</js>: <js>"Swagger Sample App"</js>,
@@ -50,7 +50,7 @@ public class Info {
 
 	/**
 	 * Convenience method for creating a new Info object.
-	 * 
+	 *
 	 * @param title Required.  The title of the application.
 	 * @param version Required.  Provides the version of the application API (not to be confused with the specification version).
 	 * @return A new Info object.

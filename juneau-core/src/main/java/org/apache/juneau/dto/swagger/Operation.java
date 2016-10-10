@@ -18,8 +18,8 @@ import org.apache.juneau.annotation.*;
 
 /**
  * Describes a single API operation on a path.
- * <p>
- * Example:
+ *
+ * <h6 class='topic'>Example:</h6>
  * <p class='bcode'>
  * 	{
  * 		<js>"tags"</js>: [
@@ -89,8 +89,8 @@ public class Operation {
 	private String operationId;
 	private List<String> consumes;
 	private List<String> produces;
-	private List<Parameter> parameters;
-	private Map<String,Response> responses;
+	private List<ParameterInfo> parameters;
+	private Map<String,ResponseInfo> responses;
 	private List<String> schemes;
 	private Boolean deprecated;
 	private List<Map<String,List<String>>> security;
@@ -389,7 +389,7 @@ public class Operation {
 	 *
 	 * @return The value of the <property>parameters</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public List<Parameter> getParameters() {
+	public List<ParameterInfo> getParameters() {
 		return parameters;
 	}
 
@@ -406,7 +406,7 @@ public class Operation {
 	 * @param parameters The new value for the <property>parameters</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Operation setParameters(List<Parameter> parameters) {
+	public Operation setParameters(List<ParameterInfo> parameters) {
 		this.parameters = parameters;
 		return this;
 	}
@@ -424,9 +424,9 @@ public class Operation {
 	 * @param parameter The new value to add to the <property>parameters</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Operation addParameter(Parameter parameter) {
+	public Operation addParameter(ParameterInfo parameter) {
 		if (parameters == null)
-			parameters = new LinkedList<Parameter>();
+			parameters = new LinkedList<ParameterInfo>();
 		parameters.add(parameter);
 		return this;
 	}
@@ -438,7 +438,7 @@ public class Operation {
 	 *
 	 * @return The value of the <property>responses</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,Response> getResponses() {
+	public Map<String,ResponseInfo> getResponses() {
 		return responses;
 	}
 
@@ -450,7 +450,7 @@ public class Operation {
 	 * @param responses The new value for the <property>responses</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Operation setResponses(Map<String,Response> responses) {
+	public Operation setResponses(Map<String,ResponseInfo> responses) {
 		this.responses = responses;
 		return this;
 	}
@@ -464,9 +464,9 @@ public class Operation {
 	 * @param response The response description.
 	 * @return This object (for method chaining).
 	 */
-	public Operation addResponse(String statusCode, Response response) {
+	public Operation addResponse(String statusCode, ResponseInfo response) {
 		if (responses == null)
-			responses = new TreeMap<String,Response>();
+			responses = new TreeMap<String,ResponseInfo>();
 		responses.put(statusCode, response);
 		return this;
 	}

@@ -38,7 +38,6 @@ import javax.servlet.http.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.dto.swagger.*;
-import org.apache.juneau.dto.swagger.Parameter;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.encoders.Encoder;
 import org.apache.juneau.ini.*;
@@ -48,10 +47,8 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.server.annotation.*;
-import org.apache.juneau.server.annotation.Header;
+import org.apache.juneau.server.annotation.Parameter;
 import org.apache.juneau.server.annotation.Properties;
-import org.apache.juneau.server.annotation.Response;
-import org.apache.juneau.server.annotation.Var;
 import org.apache.juneau.server.response.*;
 import org.apache.juneau.server.vars.*;
 import org.apache.juneau.svl.*;
@@ -261,11 +258,8 @@ public abstract class RestServlet extends HttpServlet {
 
 			varResolver.addVars(
 				LocalizationVar.class,
-				RequestAttrVar.class,
-				RequestParamVar.class,
 				RequestVar.class,
 				SerializedRequestAttrVar.class,
-				SerializedRequestParamVar.class,
 				ServletInitParamVar.class,
 				UrlEncodeVar.class
 			);
@@ -1251,14 +1245,10 @@ public abstract class RestServlet extends HttpServlet {
 	 * 		it's safe to use this method from within debug log statements.
 	 *	</p>
 	 *
-	 * <dl>
-	 * 	<dt>Example:</dt>
-	 * 	<dd>
-	 * 		<p class='bcode'>
+	 * <h6 class='topic'>Example:</h6>
+	 * <p class='bcode'>
 	 * 	logObjects(<jsf>DEBUG</jsf>, <js>"Pojo contents:\n{0}"</js>, myPojo);
-	 * 		</p>
-	 * 	</dd>
-	 * </dl>
+	 * </p>
 	 *
 	 * @param level The log level.
 	 * @param msg The message to log.
@@ -2140,16 +2130,16 @@ public abstract class RestServlet extends HttpServlet {
 			switch(paramType) {
 				case REQ:        return req;
 				case RES:        return res;
-				case PATH:       return req.getAttribute(name, type);
+				case PATH:       return req.getPathParameter(name, type);
 				case BODY:       return req.getBody(type);
 				case HEADER:     return req.getHeader(name, type);
 				case METHOD:     return req.getMethod();
 				case FORMDATA: {
 					if (multiPart)
-						return req.getParameters(name, type);
+						return req.getFormDataParameters(name, type);
 					if (plainParams)
-						return bc.convertToType(req.getParameter(name), bc.getClassMeta(type));
-					return req.getParameter(name, type);
+						return bc.convertToType(req.getFormDataParameter(name), bc.getClassMeta(type));
+					return req.getFormDataParameter(name, type);
 				}
 				case QUERY: {
 					if (multiPart)
@@ -2158,7 +2148,7 @@ public abstract class RestServlet extends HttpServlet {
 						return bc.convertToType(req.getQueryParameter(name), bc.getClassMeta(type));
 					return req.getQueryParameter(name, type);
 				}
-				case HASFORMDATA:   return bc.convertToType(req.hasParameter(name), bc.getClassMeta(type));
+				case HASFORMDATA:   return bc.convertToType(req.hasFormDataParameter(name), bc.getClassMeta(type));
 				case HASQUERY:      return bc.convertToType(req.hasQueryParameter(name), bc.getClassMeta(type));
 				case PATHREMAINDER: return req.getPathRemainder();
 				case PROPS:         return res.getProperties();
@@ -2190,7 +2180,7 @@ public abstract class RestServlet extends HttpServlet {
 		private boolean mPlainParams, deprecated;
 		private String description, tags, summary, externalDocs;
 		private Integer priority;
-		private Var[] parameters;
+		private org.apache.juneau.server.annotation.Parameter[] parameters;
 		private Response[] responses;
 
 		private MethodMeta(java.lang.reflect.Method method) throws RestServletException {
@@ -2456,19 +2446,19 @@ public abstract class RestServlet extends HttpServlet {
 			return deprecated;
 		}
 
-		private List<Parameter> getParameters(RestRequest req) throws ParseException {
+		private List<ParameterInfo> getParameters(RestRequest req) throws ParseException {
 			Operation o = getSwaggerOperationFromFile(req);
 			if (o != null && o.getParameters() != null)
 				return o.getParameters();
 
 			VarResolverSession vr = req.getVarResolverSession();
 			JsonParser jp = JsonParser.DEFAULT;
-			Map<String,Parameter> m = new TreeMap<String,Parameter>();
+			Map<String,ParameterInfo> m = new TreeMap<String,ParameterInfo>();
 
 			// First parse @RestMethod.parameters() annotation.
-			for (Var v : parameters) {
+			for (org.apache.juneau.server.annotation.Parameter v : parameters) {
 				String in = vr.resolve(v.in());
-				Parameter p = Parameter.createStrict(in, vr.resolve(v.name()));
+				ParameterInfo p = ParameterInfo.createStrict(in, vr.resolve(v.name()));
 
 				if (! v.description().isEmpty())
 					p.setDescription(vr.resolve(v.description()));
@@ -2477,7 +2467,7 @@ public abstract class RestServlet extends HttpServlet {
 
 				if ("body".equals(in)) {
 					if (! v.schema().isEmpty())
-						p.setSchema(jp.parse(vr.resolve(v.schema()), Schema.class));
+						p.setSchema(jp.parse(vr.resolve(v.schema()), SchemaInfo.class));
 				} else {
 					if (v.allowEmptyValue())
 						p.setAllowEmptyValue(v.allowEmptyValue());
@@ -2511,9 +2501,9 @@ public abstract class RestServlet extends HttpServlet {
 							field = parts[2];
 						}
 						String k2 = in + '.' + name;
-						Parameter p = m.get(k2);
+						ParameterInfo p = m.get(k2);
 						if (p == null) {
-							p = Parameter.createStrict(in, name);
+							p = ParameterInfo.createStrict(in, name);
 							m.put(k2, p);
 						}
 
@@ -2524,7 +2514,7 @@ public abstract class RestServlet extends HttpServlet {
 
 						if ("body".equals(in)) {
 							if (field.equals("schema"))
-								p.setSchema(jp.parse(value, Schema.class));
+								p.setSchema(jp.parse(value, SchemaInfo.class));
 						} else {
 							if (field.equals("allowEmptyValue"))
 								p.setAllowEmptyValue(Boolean.valueOf(value));
@@ -2550,9 +2540,9 @@ public abstract class RestServlet extends HttpServlet {
 				String in = mp.paramType.getSwaggerParameterType();
 				if (in != null) {
 					String k2 = in + '.' + ("body".equals(in) ? null : mp.name);
-					Parameter p = m.get(k2);
+					ParameterInfo p = m.get(k2);
 					if (p == null) {
-						p = Parameter.createStrict(in, mp.name);
+						p = ParameterInfo.createStrict(in, mp.name);
 						m.put(k2, p);
 					}
 				}
@@ -2560,29 +2550,29 @@ public abstract class RestServlet extends HttpServlet {
 
 			if (m.isEmpty())
 				return null;
-			return new ArrayList<Parameter>(m.values());
+			return new ArrayList<ParameterInfo>(m.values());
 		}
 
 		@SuppressWarnings("unchecked")
-		private Map<String,org.apache.juneau.dto.swagger.Response> getResponses(RestRequest req) throws ParseException {
+		private Map<String,ResponseInfo> getResponses(RestRequest req) throws ParseException {
 			Operation o = getSwaggerOperationFromFile(req);
 			if (o != null && o.getResponses() != null)
 				return o.getResponses();
 
 			VarResolverSession vr = req.getVarResolverSession();
 			JsonParser jp = JsonParser.DEFAULT;
-			Map<String,org.apache.juneau.dto.swagger.Response> m = new TreeMap<String,org.apache.juneau.dto.swagger.Response>();
-			Map<String,org.apache.juneau.dto.swagger.Header> m2 = new TreeMap<String,org.apache.juneau.dto.swagger.Header>();
+			Map<String,ResponseInfo> m = new TreeMap<String,ResponseInfo>();
+			Map<String,HeaderInfo> m2 = new TreeMap<String,HeaderInfo>();
 
 			// First parse @RestMethod.parameters() annotation.
 			for (Response r : responses) {
 				String httpCode = String.valueOf(r.value());
 				String description = r.description().isEmpty() ? RestUtils.getHttpResponseText(r.value()) : vr.resolve(r.description());
-				org.apache.juneau.dto.swagger.Response r2 = org.apache.juneau.dto.swagger.Response.create(description);
+				ResponseInfo r2 = ResponseInfo.create(description);
 
 				if (r.headers().length > 0) {
-					for (Var v : r.headers()) {
-						org.apache.juneau.dto.swagger.Header h = org.apache.juneau.dto.swagger.Header.createStrict(vr.resolve(v.type()));
+					for (Parameter v : r.headers()) {
+						HeaderInfo h = HeaderInfo.createStrict(vr.resolve(v.type()));
 						if (! v.collectionFormat().isEmpty())
 							h.setCollectionFormat(vr.resolve(v.collectionFormat()));
 						if (! v._default().isEmpty())
@@ -2607,9 +2597,9 @@ public abstract class RestServlet extends HttpServlet {
 					String value = vr.resolve(msgs.getString(key));
 					String[] parts = key.substring(prefix.length() + 1).split("\\.");
 					String httpCode = parts[0];
-					org.apache.juneau.dto.swagger.Response r2 = m.get(httpCode);
+					ResponseInfo r2 = m.get(httpCode);
 					if (r2 == null) {
-						r2 = org.apache.juneau.dto.swagger.Response.create(null);
+						r2 = ResponseInfo.create(null);
 						m.put(httpCode, r2);
 					}
 
@@ -2620,9 +2610,9 @@ public abstract class RestServlet extends HttpServlet {
 						String field = parts[3];
 
 						String k2 = httpCode + '.' + headerName;
-						org.apache.juneau.dto.swagger.Header h = m2.get(k2);
+						HeaderInfo h = m2.get(k2);
 						if (h == null) {
-							h = org.apache.juneau.dto.swagger.Header.createStrict(null);
+							h = HeaderInfo.createStrict("string");
 							m2.put(k2, h);
 							r2.addHeader(name, h);
 						}
@@ -2642,7 +2632,7 @@ public abstract class RestServlet extends HttpServlet {
 					} else if ("description".equals(name)) {
 						r2.setDescription(value);
 					} else if ("schema".equals(name)) {
-						r2.setSchema(jp.parse(value, Schema.class));
+						r2.setSchema(jp.parse(value, SchemaInfo.class));
 					} else if ("examples".equals(name)) {
 						r2.setExamples(jp.parseMap(value, TreeMap.class, String.class, Object.class));
 					} else {
@@ -2674,7 +2664,7 @@ public abstract class RestServlet extends HttpServlet {
 			if (patternVals.length > pathPattern.vars.length)
 				remainder = patternVals[pathPattern.vars.length];
 			for (int i = 0; i < pathPattern.vars.length; i++)
-				req.setAttribute(pathPattern.vars[i], patternVals[i]);
+				req.setPathParameter(pathPattern.vars[i], patternVals[i]);
 
 			req.init(method, remainder, createRequestProperties(mProperties, req), mDefaultRequestHeaders, mDefaultEncoding, mSerializers, mParsers, mUrlEncodingParser);
 			res.init(req.getProperties(), mDefaultEncoding, mSerializers, mUrlEncodingSerializer, mEncoders);
@@ -2861,7 +2851,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * <p>
 	 * 	Variable resolvers are used to replace variables in property values.
 	 * </p>
-	 * <h6 class='figure'>Example</h6>
+	 * <h6 class='figure'>Example:</h6>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		messages=<js>"nls/Messages"</js>,
@@ -2885,7 +2875,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * 		properties={
 	 * 			<ja>@Property</ja>(
 	 * 				name=<jsf>HTMLDOC_links</jsf>,
-	 * 				value=<js>"{up:'$R{requestParentURI}', options:'?method=OPTIONS', editLevel:'$R{servletURI}/editLevel?logger=$A{name}'}"</js>
+	 * 				value=<js>"{up:'$R{requestParentURI}', options:'?method=OPTIONS', editLevel:'$R{servletURI}/editLevel?logger=$R{attribute.name}'}"</js>
 	 * 			)
 	 * 		}
 	 * 	)
@@ -2942,7 +2932,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * <p>
 	 * 	Subclasses can augment this list by adding their own variables.
 	 * </p>
-	 * <h6 class='figure'>Example</h6>
+	 * <h6 class='topic'>Example:</h6>
 	 * <p class='bcode'>
 	 * 	<ja>@Override</ja>
 	 * 	<jk>protected</jk> StringVarResolver createVarResolver() {
@@ -2977,8 +2967,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * Creates a properties map for the specified request.
 	 * <p>
 	 * 	This map will automatically resolve any <js>"$X{...}"</js> variables using the {@link VarResolver}
-	 * 		returned by {@link #getVarResolver()}.
-	 * </p>
+	 * 	returned by {@link #getVarResolver()}.
 	 *
 	 * @param methodProperties The method-level properties.
 	 * @param req The HTTP servlet request.
@@ -2992,6 +2981,18 @@ public abstract class RestServlet extends HttpServlet {
 				Object o = super.get(key);
 				if (o == null) {
 					String k = key.toString();
+					if (k.indexOf('.') != -1) {
+						String prefix = k.substring(0, k.indexOf('.'));
+						String remainder = k.substring(k.indexOf('.')+1);
+						if ("path".equals(prefix))
+							return req.getPathParameter(remainder);
+						if ("query".equals(prefix))
+							return req.getQueryParameter(remainder);
+						if ("formData".equals(prefix))
+							return req.getFormDataParameter(remainder);
+						if ("header".equals(prefix))
+							return req.getHeader(remainder);
+					}
 					if (k.equals(SERIALIZER_absolutePathUriBase)) {
 						int serverPort = req.getServerPort();
 						String serverName = req.getServerName();
@@ -3017,7 +3018,7 @@ public abstract class RestServlet extends HttpServlet {
 						return req.getMethodSummary();
 					if (k.equals(REST_methodDescription))
 						return req.getMethodDescription();
-					o = req.getAttribute(k);
+					o = req.getPathParameter(k);
 					if (o == null)
 						o = req.getHeader(k);
 				}
@@ -3033,18 +3034,15 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Returns the class-level properties associated with this servlet.
 	 * <p>
-	 * Created by the {@link #createGuards(ObjectMap)} method.
+	 * 	Created by the {@link #createGuards(ObjectMap)} method.
 	 * <p>
-	 * <b>Important note:</b>  The returned {@code Map} is mutable.  Therefore, subclasses are free to override
-	 * or set additional initialization parameters in their {@code init()} method.
+	 * 	<b>Important note:</b>  The returned {@code Map} is mutable.  Therefore, subclasses are free to override
+	 * 	or set additional initialization parameters in their {@code init()} method.
 	 * <p>
-	 * This method can be called from {@link HttpServlet#init(ServletConfig)} or {@link HttpServlet#init()}.
-	 * </p>
+	 * 	This method can be called from {@link HttpServlet#init(ServletConfig)} or {@link HttpServlet#init()}.
 	 *
-	 * <dl>
-	 * 	<dt>Example:</dt>
-	 * 	<dd>
-	 * 		<p class='bcode'>
+	 * <h6 class='topic'>Example:</h6>
+	 * <p class='bcode'>
 	 * 	<jc>// Old way of getting a boolean init parameter</jc>
 	 * 	String s = getInitParam(<js>"allowMethodParam"</js>);
 	 * 	if (s == <jk>null</jk>)
@@ -3053,9 +3051,7 @@ public abstract class RestServlet extends HttpServlet {
 	 *
 	 * 	<jc>// New simplified way of getting a boolean init parameter</jc>
 	 * 	<jk>boolean</jk> b = getProperties().getBoolean(<js>"allowMethodParam"</js>, <jk>false</jk>);
-	 * 		</p>
-	 * 	</dd>
-	 * </dl>
+	 * </p>
 	 *
 	 * @return The resource properties as an {@link ObjectMap}.
 	 */

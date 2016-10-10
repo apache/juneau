@@ -1261,7 +1261,7 @@
 			<li>APIs for updating, modifying, and saving configuration files without losing comments or formatting.
 			<li>Extensive listener APIs.
 		</ul>
-		<h6 class='topic'>Examples</h6>
+		<h6 class='topic'>Example:</h6>
 		<p class='bcode'>
 	<cc>#--------------------------</cc>
 	<cc># My section</cc>
@@ -1361,8 +1361,7 @@
 <h2 class='topic' onclick='toggle(this)'>3 - Juneau Server (org.apache.juneau.server)</h2>
 <div class='topic'>
 	<p>
-		The Juneau REST Server API provides a variety of servlet-based REST resource classes that provides REST interfaces on top of existing POJOs, 
-			allowing manipulation of those models using familiar GET, PUT, POST, and DELETE operations.
+		The Juneau REST Server API provides servlet-based REST resources on top of existing POJOs.
 	</p>
 	<p>
 		The API automatically detects <l>Accept</l> header of requests and converts POJOs to any of the supported languages.  
@@ -1376,46 +1375,131 @@
 	</p>
 	<p class='bcode'>
 	<ja>@RestResource</ja>(
-		messages=<js>"nls/messages"</js>,
+		path=<js>"/systemProperties"</js>,
+		title=<js>"System properties resource"</js>,
+		description=<js>"REST interface for performing CRUD operations on system properties."</js>,
 		properties={
-			<ja>@Property</ja>(name=HtmlDocSerializerContext.<jsf>HTMLDOC_title</jsf>, value=<js>"$L{label}"</js>),	
-			<ja>@Property</ja>(name=HtmlDocSerializerContext.<jsf>HTMLDOC_description</jsf>, value=<js>"$L{description}"</js>),	
-			<ja>@Property</ja>(name=HtmlDocSerializerContext.<jsf>HTMLDOC_links</jsf>, value=<js>"{up:'$R{requestParentURI}',options:'?method=OPTIONS'}"</js>),
-			<ja>@Property</ja>(name=HtmlSerializerContext.<jsf>HTML_uriAnchorText</jsf>, value=<jsf>PROPERTY_NAME</jsf>)
-		}
+			<ja>@Property</ja>(name=<jsf>SERIALIZER_quoteChar</jsf>, value=<js>"'"</js>),
+			<ja>@Property</ja>(name=<jsf>HTMLDOC_links</jsf>, value=<js>"{up:'$R{requestParentURI}',options:'$R{servletURI}?method=OPTIONS'}"</js>),
+		},
+		stylesheet=<js>"styles/devops.css"</js>,
+		encoders=GzipEncoder.<jk>class</jk>,
+		contact=<js>"{name:'John Smith',email:'john@smith.com'}"</js>,
+		license=<js>"{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}"</js>,
+		version=<js>"2.0"</js>,
+		termsOfService=<js>"You're on your own."</js>,
+		tags=<js>"[{name:'Java',description:'Java utility',externalDocs:{description:'Home page',url:'http://juneau.apache.org'}}]"</js>,
+		externalDocs=<js>"{description:'Home page',url:'http://juneau.apache.org'}"</js>
 	)
-	<jk>public class</jk> SystemPropertiesService <jk>extends</jk> RestServletJenaDefault {
+	<jk>public class</jk> SystemPropertiesResource <jk>extends</jk> RestServletDefault {
 	
-		<jd>/** [OPTIONS /*] - Show resource options. */</jd>
-		<ja>@RestMethod</ja>(name=<js>"OPTIONS"</js>, path=<js>"/*"</js>)
-		<jk>public</jk> Swagger getOptions(RestRequest req) {
-			<jk>return</jk> req.getSwagger();
-		}
-		
-		<jd>/** [GET /] - Get all system properties. */</jd>
-		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/"</js>)
-		<jk>public</jk> TreeMap&lt;String,String&gt; getSystemProperties() <jk>throws</jk> Throwable {
-			<jk>return new</jk> TreeMap(System.<jsm>getProperties()</jsm>);
+		<ja>@RestMethod</ja>(
+			name=<js>"GET"</js>, path=<js>"/"</js>,
+			summary=<js>"Show all system properties"</js>,
+			description=<js>"Returns all system properties defined in the JVM."</js>,
+			parameters={
+				<ja>@Parameter</ja>(in=<js>"query"</js>, name=<js>"sort"</js>, description=<js>"Sort results alphabetically."</js>, _default=<js>"false"</js>)
+			},
+			responses={
+				<ja>@Response</ja>(value=200, description=<js>"Returns a map of key/value pairs."</js>)
+			}
+		)
+		<jk>public</jk> Map getSystemProperties(<ja>@Query</ja>(<js>"sort"</js>) <jk>boolean</jk> sort) <jk>throws</jk> Throwable {
+			<jk>if</jk> (sort)
+				<jk>return new</jk> TreeMap(System.<jsm>getProperties</jsm>());
+			<jk>return</jk> System.<jsm>getProperties</jsm>();
 		}
 	
-		<jd>/** [GET /{propertyName}] - Get system property with specified name. */</jd>
-		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/{propertyName}"</js>)
+		<ja>@RestMethod</ja>(
+			name=<js>"GET"</js>, path=<js>"/{propertyName}"</js>,
+			summary=<js>"Get system property"</js>,
+			description=<js>"Returns the value of the specified system property."</js>,
+			parameters={
+				<ja>@Parameter</ja>(in=<js>"path"</js>, name=<js>"propertyName"</js>, description=<js>"The system property name."</js>)
+			},
+			responses={
+				<ja>@Response</ja>(value=200, description=<js>"The system property value, or null if not found."</js>)
+			}
+		)
 		<jk>public</jk> String getSystemProperty(<ja>@Path</ja> String propertyName) <jk>throws</jk> Throwable {
 			<jk>return</jk> System.<jsm>getProperty</jsm>(propertyName);
 		}
-		
-		<jd>/** [PUT /{propertyName}] - Set system property with specified name. */</jd>
-		<ja>@RestMethod</ja>(name=<js>"PUT"</js>, path=<js>"/{propertyName}"</js>, guards=AdminGuard.<jk>class</jk>)
+	
+		<ja>@RestMethod</ja>(
+			name=<js>"PUT"</js>, path=<js>"/{propertyName}"</js>, 
+			summary=<js>"Replace system property"</js>,
+			description=<js>"Sets a new value for the specified system property."</js>,
+			guards=AdminGuard.<jk>class</jk>,
+			parameters={
+				<ja>@Parameter</ja>(in=<js>"path"</js>, name=<js>"propertyName"</js>, description=<js>"The system property name."</js>),
+				<ja>@Parameter</ja>(in=<js>"body"</js>, description=<js>"The new system property value."</js>),
+			},
+			responses={
+				<ja>@Response</ja>(value=302, 
+					headers={
+						<ja>@Parameter</ja>(name=<js>"Location"</js>, description=<js>"The root URL of this resource."</js>)
+					}
+				),	
+				<ja>@Response</ja>(value=403, description=<js>"User is not an admin."</js>) 
+			}
+		)
 		<jk>public</jk> Redirect setSystemProperty(<ja>@Path</ja> String propertyName, <ja>@Body</ja> String value) {
 			System.<jsm>setProperty</jsm>(propertyName, value);
 			<jk>return new</jk> Redirect();
 		}
 	
-		<jd>/** [DELETE /{propertyName}] - Delete system property with specified name. */</jd>
-		<ja>@RestMethod</ja>(name=<js>"DELETE"</js>, path=<js>"/{propertyName}"</js>, guards=AdminGuard.<jk>class</jk>)
+		<ja>@RestMethod</ja>(
+			name=<js>"POST"</js>, path=<js>"/"</js>, 
+			summary=<js>"Add an entire set of system properties"</js>,
+			description=<js>"Takes in a map of key/value pairs and creates a set of new system properties."</js>,
+			guards=AdminGuard.<jk>class</jk>,
+			parameters={
+				<ja>@Parameter</ja>(in=<js>"path"</js>, name=<js>"propertyName"</js>, description=<js>"The system property key."</js>),
+				<ja>@Parameter</ja>(in=<js>"body"</js>, description=<js>"The new system property values.", schema="{example:{key1:'val1',key2:123}}"</js>),
+			},
+			responses={
+				<ja>@Response</ja>(value=302, 
+					headers={
+						<ja>@Parameter</ja>(name=<js>"Location"</js>, description=<js>"The root URL of this resource."</js>)
+					}
+				),	
+				<ja>@Response</ja>(value=403, description=<js>"Unauthorized:  User is not an admin."</js>) 
+			}
+		)
+		<jk>public</jk> Redirect setSystemProperties(<ja>@Body</ja> java.util.Properties newProperties) {
+			System.<jsm>setProperties</jsm>(newProperties);
+			<jk>return new</jk> Redirect();
+		}
+	
+		<ja>@RestMethod</ja>(
+			name=<js>"DELETE"</js>, path=<js>"/{propertyName}"</js>, 
+			summary=<js>"Delete system property"</js>,
+			description=<js>"Deletes the specified system property."</js>,
+			guards=AdminGuard.<jk>class</jk>,
+			parameters={
+				<ja>@Parameter</ja>(in=<js>"path"</js>, name=<js>"propertyName"</js>, description=<js>"The system property name."</js>),
+			},
+			responses={
+				<ja>@Response</ja>(value=302, 
+					headers={
+						<ja>@Parameter</ja>(name=<js>"Location"</js>, description=<js>"The root URL of this resource."</js>)
+					}
+				),	
+				<ja>@Response</ja>(value=403, description=<js>"Unauthorized:  User is not an admin"</js>) 
+			}
+		)
 		<jk>public</jk> Redirect deleteSystemProperty(<ja>@Path</ja> String propertyName) {
 			System.<jsm>clearProperty</jsm>(propertyName);
 			<jk>return new</jk> Redirect();
+		}
+	
+		<ja>@RestMethod</ja>(
+			name=<js>"OPTIONS"</js>, path=<js>"/*"</js>,
+			summary=<js>"Show resource options"</js>,
+			description=<js>"Show resource options as a Swagger doc"</js>
+		)
+		<jk>public</jk> Swagger getOptions(RestRequest req) {
+			<jk>return</jk> req.getSwagger();
 		}
 	}
 	</p>
@@ -1436,7 +1520,12 @@
 	<xt>&lt;/web-app&gt;</xt>
 	</p>
 	<p>
-		One of the most useful aspects of using this API is the self-discovering, self-documenting OPTIONS pages that describe how to use the resource using labels pulled from the associated resource bundle:
+		Pointing your browser to the resource renders the POJOs as HTML (since that's what the browser specifies in the <code>Accept</code> header).
+	</p>
+	<img class='bordered' src="doc-files/Server.SystemPropertiesResource.png">
+	<p>
+		One of the most useful aspects of using this API is the self-discovering, self-documenting OPTIONS pages.
+		These are constructed automatically using reflection, augmented with information pulled from annotations (as shown above), resource bundles, or Swagger JSON files:
 	</p>
 	<img class='bordered' src="doc-files/Server.Options.png">
 	
@@ -2024,9 +2113,9 @@
 	<cc>#--------------------------------------------------------------------------------
 	# HelloWorldResource labels
 	#--------------------------------------------------------------------------------</cc>
-	<ck>label</ck> = <cv>Hello World sample resource</cv>
+	<ck>title</ck> = <cv>Hello World sample resource</cv>
 	<ck>description</ck> = <cv>Simplest possible resource</cv>
-	<ck>sayHello</ck> = <cv>Responds with "Hello world!"</cv> 	
+	<ck>sayHello.summary</ck> = <cv>Responds with "Hello world!"</cv> 	
 		</p>
 		<p>
 			The class hierarchy for this class is:
@@ -2055,11 +2144,6 @@
 				allows us to see this page rendered as JSON:
 		</p>		
 		<img class='bordered' src='doc-files/Samples.HelloWorldResource.2.png'>
-		<p>
-			Clicking the OPTIONS link on the page shows the OPTIONS for this resource.  
-			Note how the <l>sayHello</l> Java method description is pulled from the resource bundle.
-		</p>
-		<img class='bordered' src='doc-files/Samples.HelloWorldResource.3.png'>
 	</div>	
 
 	<!-- ======================================================================================================== -->
@@ -2127,14 +2211,14 @@
 			String method = req.getMethod(); 
 			
 			<jc>// Attributes (from URL pattern variables)</jc> 
-			String a1 = req.getAttribute(<js>"a1"</js>, String.<jk>class</jk>); 
-			<jk>int</jk> a2 = req.getAttribute(<js>"a2"</js>, <jk>int</jk>.<jk>class</jk>); 
-			UUID a3 = req.getAttribute(<js>"a3"</js>, UUID.<jk>class</jk>); 
+			String a1 = req.getPathParameter(<js>"a1"</js>, String.<jk>class</jk>); 
+			<jk>int</jk> a2 = req.getPathParameter(<js>"a2"</js>, <jk>int</jk>.<jk>class</jk>); 
+			UUID a3 = req.getPathParameter(<js>"a3"</js>, UUID.<jk>class</jk>); 
 			
 			<jc>// Optional GET parameters</jc> 
-			<jk>int</jk> p1 = req.getParameter(<js>"p1"</js>, <jk>int</jk>.<jk>class</jk>, 0); 
-			String p2 = req.getParameter(<js>"p2"</js>, String.<jk>class</jk>); 
-			UUID p3 = req.getParameter(<js>"p3"</js>, UUID.<jk>class</jk>); 
+			<jk>int</jk> p1 = req.getQueryParameter(<js>"p1"</js>, <jk>int</jk>.<jk>class</jk>, 0); 
+			String p2 = req.getQueryParameter(<js>"p2"</js>, String.<jk>class</jk>); 
+			UUID p3 = req.getQueryParameter(<js>"p3"</js>, UUID.<jk>class</jk>); 
 			
 			<jc>// URL pattern post-match</jc> 
 			String remainder = req.getPathRemainder(); 
@@ -2171,8 +2255,8 @@
 			<li class='m'><l>doGetExample2()</l>
 				<br>Identical to <l>doGetExample1()</l> but shows how to use the {@link org.apache.juneau.server.RestRequest} and {@link org.apache.juneau.server.RestResponse} objects:
 				<ul>
-					<li class='m'>{@link org.apache.juneau.server.RestRequest#getAttribute(String,Class)}
-					<li class='m'>{@link org.apache.juneau.server.RestRequest#getParameter(String,Class)}
+					<li class='m'>{@link org.apache.juneau.server.RestRequest#getPathParameter(String,Class)}
+					<li class='m'>{@link org.apache.juneau.server.RestRequest#getQueryParameter(String,Class)}
 					<li class='m'>{@link org.apache.juneau.server.RestRequest#getHeader(String,Class)}
 					<li class='m'>{@link org.apache.juneau.server.RestRequest#getMethod()}
 					<li class='m'>{@link org.apache.juneau.server.RestRequest#getPathRemainder()}
@@ -2194,15 +2278,24 @@
 		<p>
 			Notice how the conversion to POJOs is automatically done for us, even for non-standard POJOs such as UUID.
 		</p>
-		<h6 class='topic'>Self-documenting design through OPTIONS pages</h6>
+		<h6 class='topic'>Self-documenting design through Swagger OPTIONS pages</h6>
 		<p>
-			One of the main features of Juneau is that it produces OPTIONS pages for self-documenting designs (i.e. REST interfaces that document themselves).
+			One of the main features of Juneau is that it produces OPTIONS pages for self-documenting design (i.e. REST interfaces that document themselves).
 		</p>
 		<p>
-			To facilitate this, the <del><code>ResourceOptions</code></del> class is provided.
-			It inspects a <l>RestServlet</l> and its methods, and returns a serializable POJO data structure
-				that describes the options for that resource and pulls localized strings from the resource
-				bundle associated with the servlet.
+			Much of the information populated on the OPTIONS page is determined through reflection.
+			This basic information can be augmented with information defined through:
+		</p>
+		<ul>
+			<li>Annotations - An example of this was shown in the <code>SystemPropertiesResource</code> example above.<br>
+				Localized strings can be pulled from resource bundles using the <code>$L</code> localization variable.
+			<li>Resource bundle properties - Described in detail in this section.
+			<li>Swagger JSON files with the same name and location as the resource class (e.g. <code>MethodExampleResource.json</code>).<br>
+				Localized versions are defined by appending the locale to the file name (e.g. <code>MethodExampleResource_ja_JP.json</code>);
+		</ul>
+		<p>
+			OPTIONS pages are simply serialized {@link org.apache.juneau.dto.swagger.Swagger} DTO beans.
+			Localized versions of these beans are retrieved using the {@link org.apache.juneau.server.RestRequest#getSwagger()} method.
 		</p>
 		<p>
 			To define an OPTIONS request handler, the {@link org.apache.juneau.server.RestServletDefault} class defines the following Java method:
@@ -2243,28 +2336,28 @@
 	<cc>#--------------------------------------------------------------------------------
 	# MethodExampleResource labels
 	#--------------------------------------------------------------------------------</cc>
-	<ck>label = <cv>A simple REST method example resource</cv>
+	<ck>title = <cv>A simple REST method example resource</cv>
 	
-	<ck>doGetExample</ck> = <cv>Sample GET method</cv>
-	<ck>doGetExample1</ck> = <cv>Sample GET using annotations</cv>
-	<ck>doGetExample1.req.attr.a1</ck> = <cv>Sample variable</cv>
-	<ck>doGetExample1.req.attr.a2</ck> = <cv>Sample variable</cv>
-	<ck>doGetExample1.req.attr.a3</ck> = <cv>Sample variable</cv>
-	<ck>doGetExample1.req.param.p1</ck> = <cv>Sample parameter</cv>
-	<ck>doGetExample1.req.param.p2</ck> = <cv>Sample parameter</cv>
-	<ck>doGetExample1.req.param.p3</ck> = <cv>Sample parameter</cv>
-	<ck>doGetExample1.req.header.Accept-Language</ck> = <cv>Sample header</cv>
-	<ck>doGetExample1.req.header.DNT</ck> = <cv>Sample header</cv>
-	<ck>doGetExample2</ck> = <cv>Sample GET using Java APIs</cv>
-	<ck>doGetExample2.req.attr.a1</ck> = <cv>Sample variable</cv>
-	<ck>doGetExample2.req.attr.a2</ck> = <cv>Sample variable</cv>
-	<ck>doGetExample2.req.attr.a3</ck> = <cv>Sample variable</cv>
-	<ck>doGetExample2.req.param.p1</ck> = <cv>Sample parameter</cv>
-	<ck>doGetExample2.req.param.p2</ck> = <cv>Sample parameter</cv>
-	<ck>doGetExample2.req.param.p3</ck> = <cv>Sample parameter</cv>
-	<ck>doGetExample2.req.header.Accept-Language</ck> = <cv>Sample header</cv>
-	<ck>doGetExample2.req.header.DNT</ck> = <cv>Sample header</cv>
-	<ck>getOptions</ck> = <cv>View these options</cv>
+	<ck>doGetExample.summary</ck> = <cv>Sample GET method</cv>
+	<ck>doGetExample1.summary</ck> = <cv>Sample GET using annotations</cv>
+	<ck>doGetExample1.req.path.a1.description</ck> = <cv>Sample variable</cv>
+	<ck>doGetExample1.req.path.a2.description</ck> = <cv>Sample variable</cv>
+	<ck>doGetExample1.req.path.a3.description</ck> = <cv>Sample variable</cv>
+	<ck>doGetExample1.req.query.p1.description</ck> = <cv>Sample parameter</cv>
+	<ck>doGetExample1.req.query.p2.description</ck> = <cv>Sample parameter</cv>
+	<ck>doGetExample1.req.query.p3.description</ck> = <cv>Sample parameter</cv>
+	<ck>doGetExample1.req.header.Accept-Language.description</ck> = <cv>Sample header</cv>
+	<ck>doGetExample1.req.header.DNT.description</ck> = <cv>Sample header</cv>
+	<ck>doGetExample2.summary</ck> = <cv>Sample GET using Java APIs</cv>
+	<ck>doGetExample2.req.path.a1.description</ck> = <cv>Sample variable</cv>
+	<ck>doGetExample2.req.path.a2.description</ck> = <cv>Sample variable</cv>
+	<ck>doGetExample2.req.path.a3.description</ck> = <cv>Sample variable</cv>
+	<ck>doGetExample2.req.query.p1.description</ck> = <cv>Sample parameter</cv>
+	<ck>doGetExample2.req.query.p2.description</ck> = <cv>Sample parameter</cv>
+	<ck>doGetExample2.req.query.p3.description</ck> = <cv>Sample parameter</cv>
+	<ck>doGetExample2.req.header.Accept-Language.description</ck> = <cv>Sample header</cv>
+	<ck>doGetExample2.req.header.DNT.description</ck> = <cv>Sample header</cv>
+	<ck>getOptions.summary</ck> = <cv>View these options</cv>
 		</p>
 		<p>
 			Clicking the <l>options</l> link on the page presents you with information about how to use this resource:
@@ -2383,7 +2476,7 @@
 	<cc>#--------------------------------------------------------------------------------
 	# UrlEncodedFormResource labels
 	#--------------------------------------------------------------------------------</cc>
-	<ck>label</ck> = <cv>URL-Encoded Form Post Example</cv>
+	<ck>title</ck> = <cv>URL-Encoded Form Post Example</cv>
 	<ck>description</ck> = <cv>Shows how URL-Encoded form input can be loaded into POJOs.  POJO is simply echoed back.</cv>
 	<ck>aString</ck> = <cv>A String:</cv>
 	<ck>aNumber</ck> = <cv>A Number:</cv>
@@ -2556,10 +2649,6 @@
 			Pointing a browser to the resource shows the following:
 		</p>
 		<img class='bordered' src='doc-files/Samples.AddressBookResource.1.png'>
-		<p>
-			If you click the <l>options</l> link, you can see the following self-documenting OPTIONS page:
-		</p>
-		<img class='bordered' src='doc-files/Samples.AddressBookResource.2.png'>
 		
 		<!-- ======================================================================================================== -->
 		<a id="Samples.AddressBookResource.Classes"></a>
@@ -2916,7 +3005,13 @@
 			<ja>@Property</ja>(name=<jsf>SERIALIZER_relativeUriBase</jsf>, value=<js>"$R{servletURI}"</js>), 
 		}, 
 		stylesheet=<js>"styles/devops.css"</js>,
-		encoders=GzipEncoder.<jk>class</jk> 
+		encoders=GzipEncoder.<jk>class</jk>,
+		contact=<js>"{name:'John Smith',email:'john@smith.com'}"</js>,
+		license=<js>"{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}"</js>,
+		version=<js>"2.0"</js>,
+		termsOfService=<js>"You're on your own."</js>,
+		tags=<js>"[{name:'Java',description:'Java utility',externalDocs:{description:'Home page',url:'http://juneau.apache.org'}}]"</js>,
+		externalDocs=<js>"{description:'Home page',url:'http://juneau.apache.org'}"</js>
 	) 
 	<jk>public class</jk> AddressBookResource <jk>extends</jk> ResourceJena { 
 		<jk>private static final long</jk> <jsf>serialVersionUID</jsf> = 1L; 
@@ -3197,65 +3292,80 @@
 			</p>
 			<h6 class='figure'>AddressBookResource.properties</h6>
 			<p class='bcode'>
-	<ck>label</ck> = <cv>AddressBook sample resource</cv>
+	<ck>title</ck> = <cv>AddressBook sample resource</cv>
 	<ck>description</ck> = <cv>Proof-of-concept resource that shows off the capabilities of working with POJO resources</cv>
 	
-	<ck>getRoot</ck> = <cv>Get root page</cv>
+	<ck>getRoot.summary</ck> = <cv>Get root page</cv>
+	<ck>getRoot.description</ck> = <cv>Jumping off page for top-level Person and Address beans.</cv>
 	
-	<ck>getAllPeople</ck> = <cv>Get all people in the address book</cv>
-	<ck>getAllPeople.res.200.content</ck> = <cv>List&lt;Person&gt;</cv>
+	<ck>doInit.summary</ck> = <cv>Reinitialize this resource</cv>
+	<ck>doInit.description</ck> = <cv>Resets the address book to the original contents.</cv>
+	<ck>doInit.res.200.description</ck> = <cv>Returns the string "OK"</cv>
 	
-	<ck>getPerson</ck> = <cv>Get a single person by ID</cv>
-	<ck>getPerson.req.attr.id</ck> = <cv>Person UUID</cv>
-	<ck>getPerson.res.200.content</ck> = <cv>Person bean</cv>
-	<ck>getPerson.res.404</ck> = <cv>Person ID not found</cv>
+	<ck>getAllPeople.summary</ck> = <cv>Get all people in the address book</cv>
+	<ck>getAllPeople.res.200.description</ck> = <cv>Returns a serialized List&lt;Person&gt;</cv>
+	<ck>getAllPeople.res.200.examples</ck> = <cv>{'text/json':"[\n\t{\n\t\turi:'http://hostname/addressBook/person/1',\n\t\taddressBookUri:'http://localhost/addressBook',\n\t\tid:1,\n\t\tname:'John Smith',\n\t\tbirthDate:'Jan 1, 2000',\n\t\taddresses:[\n\t\t\t{\n\t\t\t\turi:'http://localhost/addressBook/addresses/1',\n\t\t\t\tpersonUri:'http://localhost/addressBook/people/1',\n\t\t\t\tid:1,\n\t\t\t\tstreet:'101 Main St',\n\t\t\t\tcity:'Anywhere',\n\t\t\t\tstate:'NY',\n\t\t\t\tzip:12345,\n\t\t\t\tisCurrent:true\n\t\t\t}\n\t\t]\n\t}\n]"}</cv>
 	
-	<ck>getAllAddresses</ck> = <cv>Get all addresses in the address book</cv>
-	<ck>getAllAddresses.res.200.content</ck> = <cv>List&lt;Address&gt;</cv>
+	<ck>getPerson.summary</ck> = <cv>Get a single person by ID</cv>
+	<ck>getPerson.req.path.id.description</ck> = <cv>Person ID</cv>
+	<ck>getPerson.req.path.id.type</ck> = <cv>integer</cv>
+	<ck>getPerson.res.200.description</ck> = <cv>Returns a serialized Person bean</cv>
+	<ck>getPerson.res.200.examples</ck> = <cv>{'text/json':"{\n\turi:'http://hostname/addressBook/person/1',\n\taddressBookUri:'http://localhost/addressBook',\n\tid:1,\n\tname:'John Smith',\n\tbirthDate:'Jan 1, 2000',\n\taddresses:[\n\t\t{\n\t\t\turi:'http://localhost/addressBook/addresses/1',\n\t\t\tpersonUri:'http://localhost/addressBook/people/1',\n\t\t\tid:1,\n\t\t\tstreet:'101 Main St',\n\t\t\tcity:'Anywhere',\n\t\t\tstate:'NY',\n\t\t\tzip:12345,\n\t\t\tisCurrent:true\n\t\t}\n\t]\n\}"}</cv>
+	<ck>getPerson.res.404.description</ck> = <cv>Person ID not found</cv>
 	
-	<ck>getAddress</ck> = <cv>Get a single address by ID</cv>
-	<ck>getAddress.req.attr.id</ck> = <cv>Address UUID</cv>
-	<ck>getAddress.res.200.content</ck> = <cv>Address bean</cv>
-	<ck>getAddress.res.404</ck> = <cv>Address ID not found</cv>
+	<ck>getAllAddresses.summary</ck> = <cv>Get all addresses in the address book</cv>
+	<ck>getAllAddresses.res.200.description</ck> = <cv>Returns a serialized List&lt;Address&gt;</cv>
+	<ck>getAllAddresses.res.200.examples</ck> = <cv>{'text/json':"[\n\t{\n\t\turi:'http://localhost/addressBook/addresses/1',\n\t\tpersonUri:'http://localhost/addressBook/people/1',\n\t\tid:1,\n\t\tstreet:'101 Main St',\n\t\tcity:'Anywhere',\n\t\tstate:'NY',\n\t\tzip:12345,\n\t\tisCurrent:true\n\t}\n]"}</cv>
 	
-	<ck>createPerson</ck> = <cv>Create a new Person bean </cv>
-	<ck>createPerson.res.307.header.Location</ck> = <cv>URL of new person</cv>
+	<ck>getAddress.summary</ck> = <cv>Get a single address by ID</cv>
+	<ck>getAddress.req.path.id.description</ck> = <cv>Address ID</cv>
+	<ck>getAddress.req.path.id.type</ck> = <cv>integer</cv>
+	<ck>getAddress.res.200.description</ck> = <cv>Returns a serialized Address bean</cv>
+	<ck>getAddress.res.200.examples</ck> = <cv>{'text/json':"{\n\turi:'http://localhost/addressBook/addresses/1',\n\tpersonUri:'http://localhost/addressBook/people/1',\n\tid:1,\n\tstreet:'101 Main St',\n\tcity:'Anywhere',\n\tstate:'NY',\n\tzip:12345,\n\tisCurrent:true\n}"}</cv>
+	<ck>getAddress.res.404.description</ck> = <cv>Address ID not found</cv>
 	
-	<ck>createAddress</ck> = <cv>Create a new Address bean</cv>
-	<ck>createAddress.req.attr.id</ck> = <cv>Person UUID</cv>
-	<ck>createAddress.res.307.header.Location</ck> = <cv>URL of new address</cv>
+	<ck>createPerson.summary</ck> = <cv>Create a new Person bean </cv>
+	<ck>createPerson.req.body.description</ck> = <cv>Serialized CreatePerson bean</cv>
+	<ck>createPerson.req.body.schema</ck> = <cv>{example:"{\n\tname:'John Smith',\n\tbirthDate:'Jan 1, 2000',\n\taddresses:[\n\t\t{\n\t\t\tstreet:'101 Main St',\n\t\t\tcity:'Anywhere',\n\t\t\tstate:'NY',\n\t\t\tzip:12345,\n\t\t\tisCurrent:true\n\t\t}\n\t]\n\}"}</cv>
+	<ck>createPerson.res.307.header.Location.description</ck> = <cv>URL of new person</cv>
 	
-	<ck>deletePerson</ck> = <cv>Delete a Person bean</cv>
-	<ck>deletePerson.req.attr.id</ck> = <cv>Person UUID</cv>
-	<ck>deletePerson.res.200.content</ck> = <cv>"DELETE successful"</cv>
-	<ck>deletePerson.res.404</ck> = <cv>Person ID not found</cv>
+	<ck>createAddress.summary</ck> = <cv>Create a new Address bean</cv>
+	<ck>createAddress.req.path.id.description</ck> = <cv>Person ID</cv>
+	<ck>createAddress.req.path.id.type</ck> = <cv>integer</cv>
+	<ck>createAddress.req.body.schema</ck> = <cv>{example:"{\n\tstreet:'101 Main St',\n\tcity:'Anywhere',\n\tstate:'NY',\n\tzip:12345,\n\tisCurrent:true\n}"}</cv>
+	<ck>createAddress.res.307.header.Location.description</ck> = <cv>URL of new address</cv>
 	
-	<ck>deleteAddress</ck> = <cv>Delete an Address bean</cv>
-	<ck>deleteAddress.req.attr.id</ck> = <cv>Address UUID</cv>
-	<ck>deleteAddress.res.200.content</ck> = <cv>"DELETE successful"</cv>
-	<ck>deleteAddress.res.404</ck> = <cv>Address ID not found</cv>
+	<ck>deletePerson.summary</ck> = <cv>Delete a Person bean</cv>
+	<ck>deletePerson.req.path.id.description</ck> = <cv>Person ID</cv>
+	<ck>deletePerson.req.path.id.type</ck> = <cv>integer</cv>
+	<ck>deletePerson.res.200.description</ck> = <cv>Returns the string "DELETE successful"</cv>
+	<ck>deletePerson.res.404.description</ck> = <cv>Person ID not found</cv>
 	
-	<ck>updatePerson</ck> = <cv>Change property on Person bean</cv>
-	<ck>updatePerson.req.attr.id</ck> = <cv>Person UUID</cv>
-	<ck>updatePerson.req.content</ck> = <cv>Anything</cv>
-	<ck>updatePerson.res.200.content</ck> = <cv>"PUT successful"</cv>
-	<ck>updatePerson.res.400</ck> = <cv>Invalid object type used</cv>
-	<ck>updatePerson.res.404</ck> = <cv>Person ID not found</cv>
+	<ck>deleteAddress.summary</ck> = <cv>Delete an Address bean</cv>
+	<ck>deleteAddress.req.path.id.description</ck> = <cv>Address ID</cv>
+	<ck>deleteAddress.res.200.description</ck> = <cv>Returns the string "DELETE successful"</cv>
+	<ck>deleteAddress.res.404.description</ck> = <cv>Address ID not found</cv>
 	
-	<ck>updateAddress</ck> = <cv>Change property on Address bean</cv>
-	<ck>updateAddress.req.attr.id</ck> = <cv>Address UUID</cv>
-	<ck>updateAddress.req.content</ck> = <cv>Anything</cv>
-	<ck>updateAddress.res.200.content</ck> = <cv>"PUT successful"</cv>
-	<ck>updateAddress.res.400</ck> = <cv>Invalid object type used</cv>
-	<ck>updateAddress.res.404</ck> = <cv>Address ID not found</cv>
+	<ck>updatePerson.summary</ck> = <cv>Change property on Person bean</cv>
+	<ck>updatePerson.req.path.id.description</ck> = <cv>Person ID</cv>
+	<ck>updatePerson.req.path.id.type</ck> = <cv>integer</cv>
+	<ck>updatePerson.req.body.description</ck> = <cv>Any object matching the field</cv>
+	<ck>updatePerson.res.200.description</ck> = <cv>Returns the string "PUT successful"</cv>
+	<ck>updatePerson.res.400.description</ck> = <cv>Invalid object type used</cv>
+	<ck>updatePerson.res.404.description</ck> = <cv>Person ID not found</cv>
 	
-	<ck>doInit</ck> = <cv>Reinitialize this resource</cv>
-	<ck>doInit.res.200.content</ck> = <cv>"OK"</cv>
+	<ck>updateAddress.summary</ck> = <cv>Change property on Address bean</cv>
+	<ck>updateAddress.req.path.id.description</ck> = <cv>Address ID</cv>
+	<ck>updateAddress.req.path.id.type</ck> = <cv>integer</cv>
+	<ck>updateAddress.req.body.description</ck> = <cv>Any object matching the field</cv>
+	<ck>updateAddress.res.200.description</ck> = <cv>Returns the string "PUT successful"</cv>
+	<ck>updateAddress.res.400.description</ck> = <cv>Invalid object type used</cv>
+	<ck>updateAddress.res.404.description</ck> = <cv>Address ID not foundv
 	
-	<ck>getOptions</ck> = <cv>View resource options</cv>
+	<ck>getOptions.summary</ck> = <cv>View resource options</cv>
 	
-	<ck>getCognosData</ck> = <cv>Get data in Cognos/XML format</cv>
-	<ck>getCognosData.res.200.content</ck> = <cv>DataSet</cv>
+	<ck>getCognosData.summary</ck> = <cv>Get data in Cognos/XML format</cv>
+	<ck>getCognosData.res.200.description</ck> = <cv>Returns a serialized DataSet</cv>
 	
 	<ck>otherNotes</ck> = <cv>GZip support enabled.  Public methods can be invoked by using the &amp;Method URL parameter.  'text/cognos+xml' support available under root resource only</cv>
 			</p>
@@ -3322,6 +3432,10 @@
 				Clicking on the first <l>personUri</l> link executes the <l>getPerson()</l> method, which renders a serialized <l>Person</l> object:
 			</p>
 			<img class='bordered' src="doc-files/Samples.AddressBookResource.Demo.10.png">
+			<p>
+				Clicking on the OPTIONS link on the page shows you the Swagger doc generated from our annotations and resource bundle properties:
+			</p>
+			<img class='bordered' src="doc-files/Samples.AddressBookResource.Options.png">
 		</div>
 		
 		<!-- ======================================================================================================== -->
@@ -3688,7 +3802,7 @@
 	<cc>#--------------------------------------------------------------------------------
 	# TempDirResource labels
 	#--------------------------------------------------------------------------------</cc>
-	<ck>label</ck> = <cv>Temp Directory View Service</cv>
+	<ck>title</ck> = <cv>Temp Directory View Service</cv>
 	<ck>description</ck> = <cv>View and download files in the '$S{java.io.tmpdir}' directory.</cv>
 		</p>
 		<p>
@@ -3860,7 +3974,7 @@
 	*/</jd> 
 	<ja>@RestResource</ja>( 
 		path=<js>"/docker"</js>, 
-		label=<js>"Sample Docker resource"</js>, 
+		title=<js>"Sample Docker resource"</js>, 
 		properties={ 
 			<ja>@Property</ja>(name=<jsf>HTMLDOC_links</jsf>, value=<js>"{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$R{servletParentURI}/source?classes=(org.apache.juneau.server.samples.AtomFeedResource)'}"</js>) 
 		} 
@@ -4425,10 +4539,6 @@
 		</p>
 		<img class='bordered' src='doc-files/Samples.ConfigResource.1.png'>
 		<p>
-			The OPTIONS page shows the REST methods available to alter the config files:
-		</p>
-		<img class='bordered' src='doc-files/Samples.ConfigResource.2.png'>
-		<p>
 			An edit page is provided for altering the raw config file:
 		</p>
 		<img class='bordered' src='doc-files/Samples.ConfigResource.3.png'>
@@ -4443,7 +4553,7 @@
 	*/</jd> 
 	<ja>@RestResource</ja>( 
 		path=<js>"/config"</js>, 
-		label=<js>"Configuration"</js>, 
+		title=<js>"Configuration"</js>, 
 		description=<js>"Contents of configuration file."</js>, 
 		properties={ 
 			<ja>@Property</ja>(name=<jsf>HTMLDOC_links</jsf>, value=<js>"{up:'$R{requestParentURI}',options:'$R{servletURI}?method=OPTIONS',edit:'$R{servletURI}/edit'}"</js>), 
@@ -4487,8 +4597,8 @@
 		*/</jd> 
 		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/{section}"</js>, 
 			description=<js>"Show config file section."</js>, 
-			input={ 
-				<ja>@Var</ja>(in=<js>"path"</js>, name=<js>"section"</js>, description=<js>"Section name."</js>) 
+			parameters={ 
+				<ja>@Parameter</ja>(in=<js>"path"</js>, name=<js>"section"</js>, description=<js>"Section name."</js>) 
 			} 
 		) 
 		<jk>public</jk> ObjectMap getConfigSection(<ja>@Path</ja>(<js>"section"</js>) String section) <jk>throws</jk> Exception { 
@@ -4505,9 +4615,9 @@
 		*/</jd> 
 		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/{section}/{key}"</js>, 
 			description=<js>"Show config file entry."</js>, 
-			input={ 
-				<ja>@Var</ja>(in=<js>"path"</js>, name=<js>"section"</js>, description=<js>"Section name."</js>), 
-				<ja>@Var</ja>(in=<js>"path"</js>, name=<js>"key"</js>, description=<js>"Entry name."</js>) 
+			parameters={ 
+				<ja>@Parameter</ja>(in=<js>"path"</js>, name=<js>"section"</js>, description=<js>"Section name."</js>), 
+				<ja>@Parameter</ja>(in=<js>"path"</js>, name=<js>"key"</js>, description=<js>"Entry name."</js>) 
 			} 
 		) 
 		<jk>public</jk> String getConfigEntry(<ja>@Path</ja>(<js>"section"</js>) String section, <ja>@Path</ja>(<js>"key"</js>) String key) <jk>throws</jk> Exception { 
@@ -4523,8 +4633,8 @@
 		*/</jd> 
 		<ja>@RestMethod</ja>(name=<js>"POST"</js>, path=<js>"/"</js>, 
 			description=<js>"Sets contents of config file from a FORM post."</js>, 
-			input={ 
-				<ja>@Var</ja>(in=<js>"formData"</js>, name=<js>"contents"</js>, description=<js>"New contents in INI file format."</js>) 
+			parameters={ 
+				<ja>@Parameter</ja>(in=<js>"formData"</js>, name=<js>"contents"</js>, description=<js>"New contents in INI file format."</js>) 
 			} 
 		) 
 		<jk>public</jk> ConfigFile setConfigContentsFormPost(<ja>@FormData</ja>(<js>"contents"</js>) String contents) <jk>throws</jk> Exception { 
@@ -4540,8 +4650,8 @@
 		*/</jd> 
 		<ja>@RestMethod</ja>(name=<js>"PUT"</js>, path=<js>"/"</js>, 
 			description=<js>"Sets contents of config file."</js>, 
-			input={ 
-				<ja>@Var</ja>(in=<js>"body"</js>, description=<js>"New contents in INI file format."</js>) 
+			parameters={ 
+				<ja>@Parameter</ja>(in=<js>"body"</js>, description=<js>"New contents in INI file format."</js>) 
 			} 
 		) 
 		<jk>public</jk> ConfigFile setConfigContents(<ja>@Body</ja> Reader contents) <jk>throws</jk> Exception { 
@@ -4559,9 +4669,9 @@
 		*/</jd> 
 		<ja>@RestMethod</ja>(name=<js>"PUT"</js>, path=<js>"/{section}"</js>, 
 			description=<js>"Add or overwrite a config file section."</js>, 
-			input={ 
-				<ja>@Var</ja>(in=<js>"path"</js>, name=<js>"section"</js>, description=<js>"Section name."</js>), 
-				<ja>@Var</ja>(in=<js>"body"</js>, description=<js>"New contents for section as a simple map with string keys and values."</js>) 
+			parameters={ 
+				<ja>@Parameter</ja>(in=<js>"path"</js>, name=<js>"section"</js>, description=<js>"Section name."</js>), 
+				<ja>@Parameter</ja>(in=<js>"body"</js>, description=<js>"New contents for section as a simple map with string keys and values."</js>) 
 			} 
 		) 
 		<jk>public</jk> ObjectMap setConfigSection(<ja>@Path</ja>(<js>"section"</js>) String section, <ja>@Body</ja> Map&lt;String,String&gt; contents) <jk>throws</jk> Exception { 
@@ -4580,10 +4690,10 @@
 		*/</jd> 
 		<ja>@RestMethod</ja>(name=<js>"PUT"</js>, path=<js>"/{section}/{key}"</js>, 
 			description=<js>"Add or overwrite a config file entry."</js>, 
-			input={ 
-				<ja>@Var</ja>(in=<js>"path"</js>, name=<js>"section"</js>, description=<js>"Section name."</js>), 
-				<ja>@Var</ja>(in=<js>"path"</js>, name=<js>"key"</js>, description=<js>"Entry name."</js>), 
-				<ja>@Var</ja>(in=<js>"body"</js>, description=<js>"New value as a string."</js>) 
+			parameters={ 
+				<ja>@Parameter</ja>(in=<js>"path"</js>, name=<js>"section"</js>, description=<js>"Section name."</js>), 
+				<ja>@Parameter</ja>(in=<js>"path"</js>, name=<js>"key"</js>, description=<js>"Entry name."</js>), 
+				<ja>@Parameter</ja>(in=<js>"body"</js>, description=<js>"New value as a string."</js>) 
 			} 
 		) 
 		<jk>public</jk> String setConfigSection(<ja>@Path</ja>(<js>"section"</js>) String section, <ja>@Path</ja>(<js>"key"</js>) String key, <ja>@Body</ja> String value) <jk>throws</jk> Exception { 
@@ -4617,7 +4727,7 @@
 				<xt>&lt;table&gt;</xt> 
 					<xt>&lt;tr&gt;</xt><xt>&lt;td</xt> <xa>colspan</xa>=<xs>'2'</xs> <xa>align</xa>=<xs>'right'</xs><xt>&gt;</xt><xt>&lt;button</xt> <xa>type</xa>=<xs>'submit'</xs><xt>&gt;</xt>Submit<xt>&lt;/button&gt;</xt><xt>&lt;button</xt> <xa>type</xa>=<xs>'reset'</xs><xt>&gt;</xt>Reset<xt>&lt;/button&gt;</xt><xt>&lt;/td&gt;</xt><xt>&lt;/tr&gt;</xt> 
 					<xt>&lt;tr&gt;</xt><xt>&lt;th</xt> <xa>colspan</xa>=<xs>'2'</xs><xt>&gt;</xt>Contents<xt>&lt;/th&gt;</xt><xt>&lt;/tr&gt;</xt> 
-					<xt>&lt;tr&gt;</xt><xt>&lt;td</xt> <xa>colspan</xa>=<xs>'2'</xs><xt>&gt;</xt><xt>&lt;textarea</xt> <xa>name</xa>=<xs>'contents'</xs> <xa>rows</xa>=<xs>'40'</xs> <xa>cols</xa>=<xs>'120'</xs> <xa>style</xa>=<xs>'white-space: pre; word-wrap: normal; overflow-x: scroll;'</xs><xt>&gt;</xt>$A{contents}<xt>&lt;/textarea&gt;</xt><xt>&lt;/td&gt;</xt><xt>&lt;/tr&gt;</xt> 
+					<xt>&lt;tr&gt;</xt><xt>&lt;td</xt> <xa>colspan</xa>=<xs>'2'</xs><xt>&gt;</xt><xt>&lt;textarea</xt> <xa>name</xa>=<xs>'contents'</xs> <xa>rows</xa>=<xs>'40'</xs> <xa>cols</xa>=<xs>'120'</xs> <xa>style</xa>=<xs>'white-space: pre; word-wrap: normal; overflow-x: scroll;'</xs><xt>&gt;</xt>$SA{contents}<xt>&lt;/textarea&gt;</xt><xt>&lt;/td&gt;</xt><xt>&lt;/tr&gt;</xt> 
 				<xt>&lt;/table&gt;</xt> 
 			<xt>&lt;/div&gt;</xt> 
 		<xt>&lt;/form&gt;</xt> 
@@ -6092,7 +6202,7 @@
 			<li>Performance improvements around query parameters.
 			<li>New methods on {@link org.apache.juneau.server.RestRequest} for handling multi-part parameters:
 				<ul>
-					<li>{@link org.apache.juneau.server.RestRequest#getParameters(String,Class)}
+					<li><del><code>RestRequest.getParameters(String,Class)</code></del>
 					<li>{@link org.apache.juneau.server.RestRequest#getQueryParameters(String,Class)}
 				</ul>
 			</li>
@@ -6151,7 +6261,7 @@
 		<h6 class='topic'>com.ibm.team.juno.server</h6>		
 		<ul class='spaced-list'>
 			<li>Fixed major issue that prevented parsing URL-Encoded form posts into POJOs.
-				Calling <code>HttpServlet.getParameter(String)</code> was forcing the underlying servlet code to process the HTTP body itself, preventing the <code>UrlEncodingSerializer</code>
+				Calling <del><code>HttpServlet.getParameter(String)</code></del> was forcing the underlying servlet code to process the HTTP body itself, preventing the <code>UrlEncodingSerializer</code>
 				class from being able to parse the content.  Updated code no longer inadvertantly calls this method.
 			<li>New {@link org.apache.juneau.server.RestRequest#getQueryParameter(String)}, {@link org.apache.juneau.server.RestRequest#hasQueryParameter(String)}, and {@link org.apache.juneau.server.RestRequest#hasAnyQueryParameters(String[])}
 				methods that only look for parameters in the URL query string to prevent loading and parsing of URL-Encoded form posts.
@@ -6399,7 +6509,7 @@
 			<li>New {@link org.apache.juneau.server.RestRequest#getJavaMethod()} method for getting access to the method used to handle a request.
 				Useful for accessing the method name or annotations during requests, such as in calls to {@link org.apache.juneau.server.RestGuard#guard(RestRequest,RestResponse)}.
 			<li>Fixed bug when using Jetty where you tried to read text input after a header was written.
-			<li>Added new string variables <code>$A{...}</code> (request attributes) and <code>$P{...}</code> (request parameters) to <code>RestServlet.createRequestVarResolver(RestRequest)</code>.
+			<li>Added new string variables <del><code>$A{...}</code></del> (request attributes) and <del><code>$P{...}</code></del> (request parameters) to <code>RestServlet.createRequestVarResolver(RestRequest)</code>.
 		</ul>
 	</div>
 
@@ -6489,7 +6599,7 @@
 			<li>More consistent handling of exceptions across all parsers.
 			<li>Minor changes to {@link org.apache.juneau.server.RestRequest} class.
 			<ul>
-				<li>Changed the order of parameters on {@link org.apache.juneau.server.RestRequest#getParameter(String,Class)}.
+				<li>Changed the order of parameters on <del><code>RestRequest#getParameter(String,Class)</code></del>.
 				<li>Added <code>RestRequest.getMapParameter(String,Class,Class,Class)</code> and 
 					<code>RestRequest.getCollectionParameter(String,Class,Class)}</code> methods.
 			</ul>

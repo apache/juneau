@@ -69,7 +69,7 @@ import org.apache.juneau.transform.*;
  * <p>
  * 	Settings are specified using the {@link ContextFactory#setProperty(String, Object)} method and related convenience methods.
  *
- * <h6 class='topic'>Examples</h6>
+ * <h6 class='topic'>Example:</h6>
  * <p class='bcode'>
  * 	<jc>// Construct a context from scratch.</jc>
  * 	BeanContext beanContext = ContextFactory.<jsm>create</jsm>()
@@ -280,7 +280,7 @@ import org.apache.juneau.transform.*;
  * 	</ol>
  *
  *
- * <h6 class='topic'>Examples</h6>
+ * <h6 class='topic'>Example:</h6>
  * <p class='bcode'>
  * 	<jc>// A sample bean class</jc>
  * 	<jk>public class</jk> Person {
@@ -307,7 +307,7 @@ import org.apache.juneau.transform.*;
  * <p>
  * 	This package contains annotations that can be applied to
  * 	class definitions to override what properties are detected on a bean.
- * <h6 class='topic'>Examples</h6>
+ * <h6 class='topic'>Example:</h6>
  * <p class='bcode'>
  * 	<jc>// Bean class definition where only property 'name' is detected.</jc>
  * 	<ja>&#64;Bean</ja>(properties=<js>"name"</js>)
@@ -1078,15 +1078,11 @@ public class BeanContext extends Context {
 	 * <p>
 	 * 	If object is not a true bean, then throws a {@link BeanRuntimeException} with an explanation of why it's not a bean.
 	 *
-	 * <dl>
-	 * 	<dt>Example:</dt>
-	 * 	<dd>
+	 * <h6 class='topic'>Example:</h6>
 	 * <p class='bcode'>
 	 * 	<jc>// Construct a bean map around a bean instance</jc>
 	 * 	BeanMap&lt;Person&gt; bm = BeanContext.<jsf>DEFAULT</jsf>.forBean(<jk>new</jk> Person());
 	 * </p>
-	 * 	</dd>
-	 * </dl>
 	 *
 	 * @param <T> The class of the object being wrapped.
 	 * @param o The object to wrap in a map interface.  Must not be null.
@@ -1124,9 +1120,7 @@ public class BeanContext extends Context {
 	 * <p>
 	 * 	If object is not a true bean, throws a {@link BeanRuntimeException} with an explanation of why it's not a bean.
 	 *
-	 * <dl>
-	 * 	<dt>Example:</dt>
-	 * 	<dd>
+	 * <h6 class='topic'>Example:</h6>
 	 * <p class='bcode'>
 	 * 	<jc>// Construct a bean map for new bean using only properties defined in a superclass</jc>
 	 * 	BeanMap&lt;MySubBean&gt; bm = BeanContext.<jsf>DEFAULT</jsf>.forBean(<jk>new</jk> MySubBean(), MySuperBean.<jk>class</jk>);
@@ -1134,8 +1128,6 @@ public class BeanContext extends Context {
 	 * 	<jc>// Construct a bean map for new bean using only properties defined in an interface</jc>
 	 * 	BeanMap&lt;MySubBean&gt; bm = BeanContext.<jsf>DEFAULT</jsf>.forBean(<jk>new</jk> MySubBean(), MySuperInterface.<jk>class</jk>);
 	 * </p>
-	 * 	</dd>
-	 * </dl>
 	 *
 	 * @param <T> The class of the object being wrapped.
 	 * @param o The object to wrap in a bean interface.  Must not be null.
@@ -1166,15 +1158,11 @@ public class BeanContext extends Context {
 	 * <p>
 	 * 	If object is not a true bean, then throws a {@link BeanRuntimeException} with an explanation of why it's not a bean.
 	 *
-	 * <dl>
-	 * 	<dt>Example:</dt>
-	 * 	<dd>
+	 * <h6 class='topic'>Example:</h6>
 	 * <p class='bcode'>
 	 * 	<jc>// Construct a new bean map wrapped around a new Person object</jc>
 	 * 	BeanMap&lt;Person&gt; bm = BeanContext.<jsf>DEFAULT</jsf>.newBeanMap(Person.<jk>class</jk>);
 	 * </p>
-	 * 	</dd>
-	 * </dl>
 	 *
 	 * @param <T> The class of the object being wrapped.
 	 * @param c The name of the class to create a new instance of.
@@ -1212,15 +1200,11 @@ public class BeanContext extends Context {
 	 * Creates a new empty bean of the specified type, except used for instantiating inner member classes that must
 	 * 	be instantiated within another class instance.
 	 *
-	 * <dl>
-	 * 	<dt>Example:</dt>
-	 * 	<dd>
+	 * <h6 class='topic'>Example:</h6>
 	 * <p class='bcode'>
 	 * 	<jc>// Construct a new instance of the specified bean class</jc>
 	 * 	Person p = BeanContext.<jsf>DEFAULT</jsf>.newBean(Person.<jk>class</jk>);
 	 * </p>
-	 * 	</dd>
-	 * </dl>
 	 *
 	 * @param <T> The class type of the bean being created.
 	 * @param c The class type of the bean being created.
@@ -1680,17 +1664,13 @@ public class BeanContext extends Context {
 	/**
 	 * Converts class name strings to ClassMeta objects.
 	 *
-	 * <dl>
-	 * 	<dt>Example:</dt>
-	 * 	<dd>
+	 * <h6 class='topic'>Example:</h6>
 	 * <ul>
 	 * 	<li><js>"java.lang.String"</js>
 	 * 	<li><js>"com.ibm.sample.MyBean[]"</js>
 	 * 	<li><js>"java.util.HashMap<java.lang.String,java.lang.Integer>"</js>
 	 * 	<li><js>"[Ljava.lang.String;"</js> (i.e. the value of <code>String[].<jk>class</jk>.getName()</code>)
 	 * </ul>
-	 * 	</dd>
-	 * </dl>
 	 *
 	 * @param s The class name.
 	 * @return The ClassMeta corresponding to the class name string.

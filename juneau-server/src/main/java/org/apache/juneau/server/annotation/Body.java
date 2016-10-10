@@ -22,7 +22,7 @@ import java.lang.annotation.*;
  * Annotation that can be applied to a parameter of a {@link RestMethod} annotated method
  * 	to identify it as the HTTP request body converted to a POJO.
  *
- * <h6 class='topic'>Example</h6>
+ * <h6 class='topic'>Example:</h6>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<js>"POST"</js>)
  * 	<jk>public void</jk> doPostPerson(RestRequest req, RestResponse res, <ja>@Body</ja> Person person) {
@@ -45,7 +45,7 @@ import java.lang.annotation.*;
  * </p>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<js>"POST"</js>)
- * 	<jk>public void</jk> doPostPerson(<ja>@Header</ja> String mediaType, <ja>@Body</ja> InputStream input) {
+ * 	<jk>public void</jk> doPostPerson(<ja>@Header</ja>(<js>"Content-Type"</js>) String mediaType, <ja>@Body</ja> InputStream input) {
  * 		...
  * 	}
  * </p>

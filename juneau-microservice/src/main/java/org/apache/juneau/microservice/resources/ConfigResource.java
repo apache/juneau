@@ -74,7 +74,7 @@ public class ConfigResource extends Resource {
 	@RestMethod(name="GET", path="/{section}",
 		description="Show config file section.",
 		parameters={
-			@Var(in="path", name="section", description="Section name.")
+			@Parameter(in="path", name="section", description="Section name.")
 		}
 	)
 	public ObjectMap getConfigSection(@Path("section") String section) throws Exception {
@@ -92,8 +92,8 @@ public class ConfigResource extends Resource {
 	@RestMethod(name="GET", path="/{section}/{key}",
 		description="Show config file entry.",
 		parameters={
-			@Var(in="path", name="section", description="Section name."),
-			@Var(in="path", name="key", description="Entry name.")
+			@Parameter(in="path", name="section", description="Section name."),
+			@Parameter(in="path", name="key", description="Entry name.")
 		}
 	)
 	public String getConfigEntry(@Path("section") String section, @Path("key") String key) throws Exception {
@@ -110,7 +110,7 @@ public class ConfigResource extends Resource {
 	@RestMethod(name="POST", path="/",
 		description="Sets contents of config file from a FORM post.",
 		parameters={
-			@Var(in="formData", name="contents", description="New contents in INI file format.")
+			@Parameter(in="formData", name="contents", description="New contents in INI file format.")
 		}
 	)
 	public ConfigFile setConfigContentsFormPost(@FormData("contents") String contents) throws Exception {
@@ -127,7 +127,7 @@ public class ConfigResource extends Resource {
 	@RestMethod(name="PUT", path="/",
 		description="Sets contents of config file.",
 		parameters={
-			@Var(in="body", description="New contents in INI file format.")
+			@Parameter(in="body", description="New contents in INI file format.")
 		}
 	)
 	public ConfigFile setConfigContents(@Body Reader contents) throws Exception {
@@ -146,8 +146,8 @@ public class ConfigResource extends Resource {
 	@RestMethod(name="PUT", path="/{section}",
 		description="Add or overwrite a config file section.",
 		parameters={
-			@Var(in="path", name="section", description="Section name."),
-			@Var(in="body", description="New contents for section as a simple map with string keys and values.")
+			@Parameter(in="path", name="section", description="Section name."),
+			@Parameter(in="body", description="New contents for section as a simple map with string keys and values.")
 		}
 	)
 	public ObjectMap setConfigSection(@Path("section") String section, @Body Map<String,String> contents) throws Exception {
@@ -167,9 +167,9 @@ public class ConfigResource extends Resource {
 	@RestMethod(name="PUT", path="/{section}/{key}",
 		description="Add or overwrite a config file entry.",
 		parameters={
-			@Var(in="path", name="section", description="Section name."),
-			@Var(in="path", name="key", description="Entry name."),
-			@Var(in="body", description="New value as a string.")
+			@Parameter(in="path", name="section", description="Section name."),
+			@Parameter(in="path", name="key", description="Entry name."),
+			@Parameter(in="body", description="New value as a string.")
 		}
 	)
 	public String setConfigSection(@Path("section") String section, @Path("key") String key, @Body String value) throws Exception {

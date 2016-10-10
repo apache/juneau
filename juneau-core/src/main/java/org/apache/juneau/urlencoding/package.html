@@ -410,7 +410,7 @@
 			The {@link org.apache.juneau.PropertyNamerDashedLC} is an example of an alternate property namer.
 			It converts bean property names to lowercase-dashed format.
 		</p>
-		<h6 class='figure'>Example</h6>
+		<h6 class='figure'>Example:</h6>
 		<p class='bcode'>	
 	<ja>@Bean</ja>(propertyNamer=PropertyNamerDashedLC.<jk>class</jk>)
 	<jk>public class</jk> Person {
@@ -660,7 +660,7 @@
 		The <code>UonParser</code> class converts UON-encoded parameter values to POJOs.
 		The <code>UrlEncodingParser</code> class converts entire URL-Encoded strings to POJOs using <code>UonSerializer</code> to serialize indivisual values.
 		If you're trying to parse an entire URL-Encoded string, use <code>UrlEncodingParser</code>. 
-		If you're trying to parse an individual value (such as that returned by <code>RestServlet.getParameter(name)</code>), use <code>UonParser</code>.
+		If you're trying to parse an individual value (such as that returned by <code>RestServlet.getQueryParameter(name)</code>), use <code>UonParser</code>.
 	</p>	
 	<p>
 		The following static reusable instances of <code>UrlEncodingParser</code> are provided for convenience:
@@ -675,7 +675,7 @@
 	</p>
 	<ul class='spaced-list'>
 		<li>Use the <code>DEFAULT</code> parser for parameter values that have already had <code>%xx</code> sequences decoded, 
-			such as when using <code>HttpServletRequest.getParameter(name)</code>.
+			such as when using <code>HttpServletRequest.getQueryParameter(name)</code>.
 		<li>Use the <code>DEFAULT_ENCODED</code> parser if the input has not already had <code>%xx</code> sequences decoded.
 	</ul>
 	<p>
@@ -1236,7 +1236,7 @@
 				is run against the <code>AddressBookResource</code> class running within the sample app.<br>
 			It shows how the client can be used to interact with the REST API while completely hiding the negotiated content type and working with nothing more than beans.
 		</p>
-		<h6 class='figure'>Example</h6>
+		<h6 class='figure'>Example:</h6>
 		<p class='bcode'>
 	String root = <js>"http://localhost:9080/sample/addressBook"</js>;
 	

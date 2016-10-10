@@ -72,7 +72,8 @@ public class ProcBuilder {
 	/**
 	 * Command arguments if the specified matcher matches.
 	 * Can be used for specifying os-specific commands.
-	 * Example:
+	 *
+	 * <h6 class='topic'>Example:</h6>
 	 * <p class='bcode'>
 	 * 	ProcessBuilder pb = ProcessBuilder
 	 * 		.create()

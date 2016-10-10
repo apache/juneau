@@ -34,7 +34,7 @@ import org.apache.juneau.serializer.*;
  * <p>
  * 	This annotation can be applied to classes, interfaces, or bean property methods for fields.
  *
- * <h6 class='topic'>Examples</h6>
+ * <h6 class='topic'>Example:</h6>
  * <p class='bcode'>
  *
  * 	<jc>// Applied to a class whose toString() method returns a URI.</jc>

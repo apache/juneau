@@ -19,54 +19,27 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 
 /**
- * Describes a single operation parameter.
- * <p>
- * A unique parameter is defined by a combination of a name and location.
- * <p>
- * There are five possible parameter types.
- * <ul>
- * 	<li><js>"path"</js> - Used together with Path Templating, where the parameter value is actually part of the operation's URL.
- * 		This does not include the host or base path of the API.
- * 		For example, in <code>/items/{itemId}</code>, the path parameter is <code>itemId</code>.
- * 	<li><js>"query"</js> - Parameters that are appended to the URL.
- * 		For example, in <code>/items?id=###</code>, the query parameter is <code>id</code>.
- * 	<li><js>"header"</js> - Custom headers that are expected as part of the request.
- * 	<li><js>"body"</js> - The payload that's appended to the HTTP request.
- * 		Since there can only be one payload, there can only be one body parameter.
- * 		The name of the body parameter has no effect on the parameter itself and is used for documentation purposes only.
- * 		Since Form parameters are also in the payload, body and form parameters cannot exist together for the same operation.
- * 	<li><js>"formData"</js> - Used to describe the payload of an HTTP request when either <code>application/x-www-form-urlencoded</code>, <code>multipart/form-data</code> or both are used as the content type of the request (in Swagger's definition, the consumes property of an operation).
- * 		This is the only parameter type that can be used to send files, thus supporting the file type.
- * 		Since form parameters are sent in the payload, they cannot be declared together with a body parameter for the same operation.
- * 		Form parameters have a different format based on the content-type used (for further details, consult <code>http://www.w3.org/TR/html401/interact/forms.html#h-17.13.4</code>):
- * 		<ul>
- * 			<li><js>"application/x-www-form-urlencoded"</js> - Similar to the format of Query parameters but as a payload. 
- * 				For example, <code>foo=1&bar=swagger</code> - both <code>foo</code> and <code>bar</code> are form parameters.
- * 				This is normally used for simple parameters that are being transferred.
- * 			<li><js>"multipart/form-data"</js> - each parameter takes a section in the payload with an internal header.
- * 				For example, for the header <code>Content-Disposition: form-data; name="submit-name"<code> the name of the parameter is <code>submit-name</code>.
- * 				This type of form parameters is more commonly used for file transfers.
- * 		</ul>
- * 	</li>
- * </ul>
+ * Describes a single HTTP header.
+ *
+ * <h6 class='topic'>Example:</h6>
+ * <p class='bcode'>
+ * 	{
+ * 		<js>"description"</js>: <js>"The number of allowed requests in the current period"</js>,
+ * 		<js>"type"</js>: <js>"integer"</js>
+ * 	}
+ * </p>
  *
  * @author james.bognar
  */
-@Bean(properties="in,name,type,description,required,schema,format,allowEmptyValue,items,collectionFormat,default,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,enum,multipleOf")
-public class Parameter {
+@Bean(properties="description,type,format,items,collectionFormat,default,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,enum,multipleOf")
+public class HeaderInfo {
 
-	private static final String[] VALID_IN = {"query", "header", "path", "formData", "body"};
-	private static final String[] VALID_TYPES = {"string", "number", "integer", "boolean", "array", "file"};
-	private static final String[] VALID_COLLECTION_FORMATS = {"csv", "ssv", "tsv", "pipes", "multi"};
+	private static final String[] VALID_TYPES = {"string", "number", "integer", "boolean", "array"};
+	private static final String[] VALID_COLLECTION_FORMATS = {"csv","ssv","tsv","pipes","multi"};
 
-	private String name;
-	private String in;
 	private String description;
-	private Boolean required;
-	private Schema schema;
 	private String type;
 	private String format;
-	private Boolean allowEmptyValue;
 	private Items items;
 	private String collectionFormat;
 	private Object _default;
@@ -85,112 +58,37 @@ public class Parameter {
 	private boolean strict;
 
 	/**
-	 * Convenience method for creating a new Parameter object.
+	 * Convenience method for creating a new Header object.
 	 *
-	 * @param in Required. The location of the parameter.
-	 * 	Possible values are <js>"query"</js>, <js>"header"</js>, <js>"path"</js>, <js>"formData"</js> or <js>"body"</js>.
-	 * @param name Required. The name of the parameter.
-	 * 	Parameter names are case sensitive.
-	 * 	If <code>in</code> is <js>"path"</js>, the <code>name</code> field MUST correspond to the associated path segment from the <code>path</code> field in the <a href='http://swagger.io/specification/#pathsObject'>Paths Object</a>.
-	 * 	See <a href='http://swagger.io/specification/#pathTemplating'>Path Templating</a> for further information.
-	 * 	For all other cases, the name corresponds to the parameter name used based on the <code>in</code> property.
-	 * @return A new Parameter object.
+	 * @param type Required. The type of the object.
+	 * 	The value MUST be one of <js>"string"</js>, <js>"number"</js>, <js>"integer"</js>, <js>"boolean"</js>, or <js>"array"</js>.
+	 * @return A new Header object.
 	 */
-	public static Parameter create(String in, String name) {
-		return new Parameter().setIn(in).setName(name);
+	public static HeaderInfo create(String type) {
+		return new HeaderInfo().setType(type);
 	}
 
 	/**
-	 * Same as {@link #create(String, String)} except methods will throw runtime exceptions if you attempt
+	 * Same as {@link #create(String)} except methods will throw runtime exceptions if you attempt
 	 * to pass in invalid values per the Swagger spec.
 	 *
-	 * @param in Required. The location of the parameter.
-	 * 	Possible values are <js>"query"</js>, <js>"header"</js>, <js>"path"</js>, <js>"formData"</js> or <js>"body"</js>.
-	 * @param name Required. The name of the parameter.
-	 * 	Parameter names are case sensitive.
-	 * 	If <code>in</code> is <js>"path"</js>, the <code>name</code> field MUST correspond to the associated path segment from the <code>path</code> field in the <a href='http://swagger.io/specification/#pathsObject'>Paths Object</a>.
-	 * 	See <a href='http://swagger.io/specification/#pathTemplating'>Path Templating</a> for further information.
-	 * 	For all other cases, the name corresponds to the parameter name used based on the <code>in</code> property.
-	 * @return A new Parameter object.
+	 * @param type Required. The type of the object.
+	 * 	The value MUST be one of <js>"string"</js>, <js>"number"</js>, <js>"integer"</js>, <js>"boolean"</js>, or <js>"array"</js>.
+	 * @return A new Header object.
 	 */
-	public static Parameter createStrict(String in, String name) {
-		return new Parameter().setStrict().setIn(in).setName(name);
+	public static HeaderInfo createStrict(String type) {
+		return new HeaderInfo().setStrict().setType(type);
 	}
 
-	private Parameter setStrict() {
+	private HeaderInfo setStrict() {
 		this.strict = true;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>name</property>.
-	 * <p>
-	 * Required. The name of the parameter.
-	 * Parameter names are case sensitive.
-	 * If <code>in</code> is <js>"path"</js>, the <code>name</code> field MUST correspond to the associated path segment from the <code>path</code> field in the <a href='http://swagger.io/specification/#pathsObject'>Paths Object</a>.
-	 * See <a href='http://swagger.io/specification/#pathTemplating'>Path Templating</a> for further information.
-	 * For all other cases, the name corresponds to the parameter name used based on the <code>in</code> property.
-	 *
-	 * @return The value of the <property>name</property> property on this bean, or <jk>null</jk> if it is not set.
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * Bean property setter:  <property>name</property>.
-	 * <p>
-	 * Required. The name of the parameter.
-	 * Parameter names are case sensitive.
-	 * If <code>in</code> is <js>"path"</js>, the <code>name</code> field MUST correspond to the associated path segment from the <code>path</code> field in the <a href='http://swagger.io/specification/#pathsObject'>Paths Object</a>.
-	 * See <a href='http://swagger.io/specification/#pathTemplating'>Path Templating</a> for further information.
-	 * For all other cases, the name corresponds to the parameter name used based on the <code>in</code> property.
-	 *
-	 * @param name The new value for the <property>name</property> property on this bean.
-	 * @return This object (for method chaining).
-	 */
-	public Parameter setName(String name) {
-		if (! "body".equals(in))
-			this.name = name;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>in</property>.
-	 * <p>
-	 * Required. The location of the parameter.
-	 * Possible values are <js>"query"</js>, <js>"header"</js>, <js>"path"</js>, <js>"formData"</js> or <js>"body"</js>.
-	 *
-	 * @return The value of the <property>in</property> property on this bean, or <jk>null</jk> if it is not set.
-	 */
-	public String getIn() {
-		return in;
-	}
-
-	/**
-	 * Bean property setter:  <property>in</property>.
-	 * <p>
-	 * Required. The location of the parameter.
-	 * Possible values are <js>"query"</js>, <js>"header"</js>, <js>"path"</js>, <js>"formData"</js> or <js>"body"</js>.
-	 *
-	 * @param in The new value for the <property>in</property> property on this bean.
-	 * @return This object (for method chaining).
-	 */
-	public Parameter setIn(String in) {
-		if (strict && ! ArrayUtils.contains(in, VALID_IN))
-			throw new RuntimeException("Invalid value passed in to setIn(String).  Value='"+in+"', valid values=" + JsonSerializer.DEFAULT_LAX.toString(VALID_IN));
-		this.in = in;
-		if ("path".equals(in))
-			required = true;
 		return this;
 	}
 
 	/**
 	 * Bean property getter:  <property>description</property>.
 	 * <p>
-	 * A brief description of the parameter.
-	 * This could contain examples of use.
-	 * <a href='https://help.github.com/articles/github-flavored-markdown'>GFM syntax</a> can be used for rich text representation.
+	 * A short description of the header.
 	 *
 	 * @return The value of the <property>description</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -201,77 +99,21 @@ public class Parameter {
 	/**
 	 * Bean property setter:  <property>description</property>.
 	 * <p>
-	 * A brief description of the parameter.
-	 * This could contain examples of use.
-	 * <a href='https://help.github.com/articles/github-flavored-markdown'>GFM syntax</a> can be used for rich text representation.
+	 * A short description of the header.
 	 *
 	 * @param description The new value for the <property>description</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Parameter setDescription(String description) {
+	public HeaderInfo setDescription(String description) {
 		this.description = description;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>required</property>.
-	 * <p>
-	 * Determines whether this parameter is mandatory.
-	 * If the parameter is <code>in</code> <js>"path"</js>, this property is required and its value MUST be <jk>true</jk>.
-	 * Otherwise, the property MAY be included and its default value is <jk>false</jk>.
-	 *
-	 * @return The value of the <property>required</property> property on this bean, or <jk>null</jk> if it is not set.
-	 */
-	public Boolean getRequired() {
-		return required;
-	}
-
-	/**
-	 * Bean property setter:  <property>required</property>.
-	 * <p>
-	 * Determines whether this parameter is mandatory.
-	 * If the parameter is <code>in</code> <js>"path"</js>, this property is required and its value MUST be <jk>true</jk>.
-	 * Otherwise, the property MAY be included and its default value is <jk>false</jk>.
-	 *
-	 * @param required The new value for the <property>required</property> property on this bean.
-	 * @return This object (for method chaining).
-	 */
-	public Parameter setRequired(Boolean required) {
-		this.required = required;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>schema</property>.
-	 * <p>
-	 * Required. The schema defining the type used for the body parameter.
-	 *
-	 * @return The value of the <property>schema</property> property on this bean, or <jk>null</jk> if it is not set.
-	 */
-	public Schema getSchema() {
-		return schema;
-	}
-
-	/**
-	 * Bean property setter:  <property>schema</property>.
-	 * <p>
-	 * Required. The schema defining the type used for the body parameter.
-	 *
-	 * @param schema The new value for the <property>schema</property> property on this bean.
-	 * @return This object (for method chaining).
-	 */
-	public Parameter setSchema(Schema schema) {
-		this.schema = schema;
 		return this;
 	}
 
 	/**
 	 * Bean property getter:  <property>type</property>.
 	 * <p>
-	 * Required. The type of the parameter.
-	 * Since the parameter is not located at the request body, it is limited to simple types (that is, not an object).
-	 * The value MUST be one of <js>"string"</js>, <js>"number"</js>, <js>"integer"</js>, <js>"boolean"</js>, <js>"array"</js> or <js>"file"</js>.
-	 * If type is <js>"file"</js>, the <code>consumes</code> MUST be either <js>"multipart/form-data"</js>, <js>"application/x-www-form-urlencoded"</js> or both and the parameter MUST be <code>in</code> <js>"formData"</js>.
+	 * Required. The type of the object.
+	 * The value MUST be one of <js>"string"</js>, <js>"number"</js>, <js>"integer"</js>, <js>"boolean"</js>, or <js>"array"</js>.
 	 *
 	 * @return The value of the <property>type</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -282,15 +124,13 @@ public class Parameter {
 	/**
 	 * Bean property setter:  <property>type</property>.
 	 * <p>
-	 * Required. The type of the parameter.
-	 * Since the parameter is not located at the request body, it is limited to simple types (that is, not an object).
-	 * The value MUST be one of <js>"string"</js>, <js>"number"</js>, <js>"integer"</js>, <js>"boolean"</js>, <js>"array"</js> or <js>"file"</js>.
-	 * If type is <js>"file"</js>, the <code>consumes</code> MUST be either <js>"multipart/form-data"</js>, <js>"application/x-www-form-urlencoded"</js> or both and the parameter MUST be <code>in</code> <js>"formData"</js>.
+	 * Required. The type of the object.
+	 * The value MUST be one of <js>"string"</js>, <js>"number"</js>, <js>"integer"</js>, <js>"boolean"</js>, or <js>"array"</js>.
 	 *
 	 * @param type The new value for the <property>type</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Parameter setType(String type) {
+	public HeaderInfo setType(String type) {
 		if (strict && ! ArrayUtils.contains(type, VALID_TYPES))
 			throw new RuntimeException("Invalid value passed in to setType(String).  Value='"+type+"', valid values=" + JsonSerializer.DEFAULT_LAX.toString(VALID_TYPES));
 		this.type = type;
@@ -300,8 +140,7 @@ public class Parameter {
 	/**
 	 * Bean property getter:  <property>format</property>.
 	 * <p>
-	 * The extending format for the previously mentioned type.
-	 * See <a href='http://swagger.io/specification/#dataTypeFormat'>Data Type Formats</a> for further details.
+	 * The extending format for the previously mentioned <code>type</code>. See <a href='http://swagger.io/specification/#dataTypeFormat'>Data Type Formats</a> for further details.
 	 *
 	 * @return The value of the <property>format</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -312,42 +151,13 @@ public class Parameter {
 	/**
 	 * Bean property setter:  <property>format</property>.
 	 * <p>
-	 * The extending format for the previously mentioned type.
-	 * See <a href='http://swagger.io/specification/#dataTypeFormat'>Data Type Formats</a> for further details.
+	 * The extending format for the previously mentioned <code>type</code>. See <a href='http://swagger.io/specification/#dataTypeFormat'>Data Type Formats</a> for further details.
 	 *
 	 * @param format The new value for the <property>format</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Parameter setFormat(String format) {
+	public HeaderInfo setFormat(String format) {
 		this.format = format;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>allowEmptyValue</property>.
-	 * <p>
-	 * Sets the ability to pass empty-valued parameters.
-	 * This is valid only for either <code>query</code> or <code>formData</code> parameters and allows you to send a parameter with a name only or an empty value.
-	 * Default value is <jk>false</jk>.
-	 *
-	 * @return The value of the <property>allowEmptyValue</property> property on this bean, or <jk>null</jk> if it is not set.
-	 */
-	public Boolean getAllowEmptyValue() {
-		return allowEmptyValue;
-	}
-
-	/**
-	 * Bean property setter:  <property>allowEmptyValue</property>.
-	 * <p>
-	 * Sets the ability to pass empty-valued parameters.
-	 * This is valid only for either <code>query</code> or <code>formData</code> parameters and allows you to send a parameter with a name only or an empty value.
-	 * Default value is <jk>false</jk>.
-	 *
-	 * @param allowEmptyValue The new value for the <property>allowEmptyValue</property> property on this bean.
-	 * @return This object (for method chaining).
-	 */
-	public Parameter setAllowEmptyValue(Boolean allowEmptyValue) {
-		this.allowEmptyValue = allowEmptyValue;
 		return this;
 	}
 
@@ -372,7 +182,7 @@ public class Parameter {
 	 * @param items The new value for the <property>items</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Parameter setItems(Items items) {
+	public HeaderInfo setItems(Items items) {
 		this.items = items;
 		return this;
 	}
@@ -388,8 +198,6 @@ public class Parameter {
 	 * 	<li><code>ssv</code> - space separated values <code>foo bar</code>.
 	 * 	<li><code>tsv</code> - tab separated values <code>foo\tbar</code>.
 	 * 	<li><code>pipes</code> - pipe separated values <code>foo|bar</code>.
-	 * 	<li><code>multi</code> - corresponds to multiple parameter instances instead of multiple values for a single instance <code>foo=bar&amp;foo=baz</code>.
-	 * 		This is valid only for parameters <code>in</code> <js>"query"</js> or <js>"formData"</js>.
 	 * </ul>
 	 * <p>
 	 * Default value is <code>csv</code>.
@@ -411,8 +219,6 @@ public class Parameter {
 	 * 	<li><code>ssv</code> - space separated values <code>foo bar</code>.
 	 * 	<li><code>tsv</code> - tab separated values <code>foo\tbar</code>.
 	 * 	<li><code>pipes</code> - pipe separated values <code>foo|bar</code>.
-	 * 	<li><code>multi</code> - corresponds to multiple parameter instances instead of multiple values for a single instance <code>foo=bar&amp;foo=baz</code>.
-	 * 		This is valid only for parameters <code>in</code> <js>"query"</js> or <js>"formData"</js>.
 	 * </ul>
 	 * <p>
 	 * Default value is <code>csv</code>.
@@ -420,7 +226,7 @@ public class Parameter {
 	 * @param collectionFormat The new value for the <property>collectionFormat</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Parameter setCollectionFormat(String collectionFormat) {
+	public HeaderInfo setCollectionFormat(String collectionFormat) {
 		if (strict && ! ArrayUtils.contains(collectionFormat, VALID_COLLECTION_FORMATS))
 			throw new RuntimeException("Invalid value passed in to setCollectionFormat(String).  Value='"+collectionFormat+"', valid values=" + JsonSerializer.DEFAULT_LAX.toString(VALID_COLLECTION_FORMATS));
 		this.collectionFormat = collectionFormat;
@@ -430,12 +236,12 @@ public class Parameter {
 	/**
 	 * Bean property getter:  <property>default</property>.
 	 * <p>
-	 * Declares the value of the parameter that the server will use if none is provided, for example a <js>"count"</js> to control the number of results per page might default to 100 if not supplied by the client in the request.
-	 * (Note: <js>"default"</js> has no meaning for required parameters.)
+	 * Declares the value of the header that the server will use if none is provided.
+	 * (Note: <js>"default"</js> has no meaning for required items.)
 	 * See <a href='http://json-schema.org/latest/json-schema-validation.html#anchor101'>http://json-schema.org/latest/json-schema-validation.html#anchor101</a>.
-	 * Unlike JSON Schema this value MUST conform to the defined <code>type</code> for this parameter.
+	 * Unlike JSON Schema this value MUST conform to the defined <code>type</code> for the header.
 	 *
-	 * @return The value of the <property>default</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return The value of the <property>_default</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	public Object getDefault() {
 		return _default;
@@ -444,15 +250,15 @@ public class Parameter {
 	/**
 	 * Bean property setter:  <property>default</property>.
 	 * <p>
-	 * Declares the value of the parameter that the server will use if none is provided, for example a <js>"count"</js> to control the number of results per page might default to 100 if not supplied by the client in the request.
-	 * (Note: <js>"default"</js> has no meaning for required parameters.)
+	 * Declares the value of the header that the server will use if none is provided.
+	 * (Note: <js>"default"</js> has no meaning for required items.)
 	 * See <a href='http://json-schema.org/latest/json-schema-validation.html#anchor101'>http://json-schema.org/latest/json-schema-validation.html#anchor101</a>.
-	 * Unlike JSON Schema this value MUST conform to the defined <code>type</code> for this parameter.
+	 * Unlike JSON Schema this value MUST conform to the defined <code>type</code> for the header.
 	 *
-	 * @param _default The new value for the <property>default</property> property on this bean.
+	 * @param _default The new value for the <property>_default</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Parameter setDefault(Object _default) {
+	public HeaderInfo setDefault(Object _default) {
 		this._default = _default;
 		return this;
 	}
@@ -476,7 +282,7 @@ public class Parameter {
 	 * @param maximum The new value for the <property>maximum</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Parameter setMaximum(Number maximum) {
+	public HeaderInfo setMaximum(Number maximum) {
 		this.maximum = maximum;
 		return this;
 	}
@@ -500,7 +306,7 @@ public class Parameter {
 	 * @param exclusiveMaximum The new value for the <property>exclusiveMaximum</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Parameter setExclusiveMaximum(Boolean exclusiveMaximum) {
+	public HeaderInfo setExclusiveMaximum(Boolean exclusiveMaximum) {
 		this.exclusiveMaximum = exclusiveMaximum;
 		return this;
 	}
@@ -524,7 +330,7 @@ public class Parameter {
 	 * @param minimum The new value for the <property>minimum</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Parameter setMinimum(Number minimum) {
+	public HeaderInfo setMinimum(Number minimum) {
 		this.minimum = minimum;
 		return this;
 	}
@@ -548,7 +354,7 @@ public class Parameter {
 	 * @param exclusiveMinimum The new value for the <property>exclusiveMinimum</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Parameter setExclusiveMinimum(Boolean exclusiveMinimum) {
+	public HeaderInfo setExclusiveMinimum(Boolean exclusiveMinimum) {
 		this.exclusiveMinimum = exclusiveMinimum;
 		return this;
 	}
@@ -572,7 +378,7 @@ public class Parameter {
 	 * @param maxLength The new value for the <property>maxLength</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Parameter setMaxLength(Integer maxLength) {
+	public HeaderInfo setMaxLength(Integer maxLength) {
 		this.maxLength = maxLength;
 		return this;
 	}
@@ -596,7 +402,7 @@ public class Parameter {
 	 * @param minLength The new value for the <property>minLength</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Parameter setMinLength(Integer minLength) {
+	public HeaderInfo setMinLength(Integer minLength) {
 		this.minLength = minLength;
 		return this;
 	}
@@ -620,7 +426,7 @@ public class Parameter {
 	 * @param pattern The new value for the <property>pattern</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Parameter setPattern(String pattern) {
+	public HeaderInfo setPattern(String pattern) {
 		this.pattern = pattern;
 		return this;
 	}
@@ -644,7 +450,7 @@ public class Parameter {
 	 * @param maxItems The new value for the <property>maxItems</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Parameter setMaxItems(Integer maxItems) {
+	public HeaderInfo setMaxItems(Integer maxItems) {
 		this.maxItems = maxItems;
 		return this;
 	}
@@ -668,7 +474,7 @@ public class Parameter {
 	 * @param minItems The new value for the <property>minItems</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Parameter setMinItems(Integer minItems) {
+	public HeaderInfo setMinItems(Integer minItems) {
 		this.minItems = minItems;
 		return this;
 	}
@@ -692,7 +498,7 @@ public class Parameter {
 	 * @param uniqueItems The new value for the <property>uniqueItems</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Parameter setUniqueItems(Boolean uniqueItems) {
+	public HeaderInfo setUniqueItems(Boolean uniqueItems) {
 		this.uniqueItems = uniqueItems;
 		return this;
 	}
@@ -716,7 +522,7 @@ public class Parameter {
 	 * @param _enum The new value for the <property>enum</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Parameter setEnum(List<Object> _enum) {
+	public HeaderInfo setEnum(List<Object> _enum) {
 		this._enum = _enum;
 		return this;
 	}
@@ -730,7 +536,7 @@ public class Parameter {
 	 * @return This object (for method chaining).
 	 */
 	@SuppressWarnings("hiding")
-	public Parameter addEnum(Object..._enum) {
+	public HeaderInfo addEnum(Object..._enum) {
 		return addEnum(Arrays.asList(_enum));
 	}
 
@@ -743,7 +549,7 @@ public class Parameter {
 	 * @return This object (for method chaining).
 	 */
 	@SuppressWarnings("hiding")
-	public Parameter addEnum(Collection<Object> _enum) {
+	public HeaderInfo addEnum(Collection<Object> _enum) {
 		if (this._enum == null)
 			this._enum = new LinkedList<Object>();
 		this._enum.addAll(_enum);
@@ -769,7 +575,7 @@ public class Parameter {
 	 * @param multipleOf The new value for the <property>multipleOf</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Parameter setMultipleOf(Number multipleOf) {
+	public HeaderInfo setMultipleOf(Number multipleOf) {
 		this.multipleOf = multipleOf;
 		return this;
 	}

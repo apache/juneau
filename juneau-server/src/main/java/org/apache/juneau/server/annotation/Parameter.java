@@ -21,12 +21,12 @@ import java.lang.annotation.*;
  * Annotation used in conjunction with {@link RestMethod#parameters()} to identify content and header descriptions
  * 	on specific method requests.
  *
- * <h6 class='topic'>Example</h6>
+ * <h6 class='topic'>Example:</h6>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(
  * 		name=<js>"*"</js>,
  * 		parameters={
- * 			<ja>@Var</ja>(in=<js>"header"</js>, name=<js>"Range"</js>, description=<js>"$L{ContentRange.description}"</js>)
+ * 			<ja>@Parameter</ja>(in=<js>"header"</js>, name=<js>"Range"</js>, description=<js>"$L{ContentRange.description}"</js>)
  * 		}
  * 	)
  * 	<jk>public void</jk> doAnything(RestRequest req, RestResponse res, <ja>@Method</ja> String method) {
@@ -40,7 +40,7 @@ import java.lang.annotation.*;
 @Target(PARAMETER)
 @Retention(RUNTIME)
 @Inherited
-public @interface Var {
+public @interface Parameter {
 
 	/**
 	 * The location of the parameter.
@@ -59,7 +59,7 @@ public @interface Var {
 	/**
 	 * The name of the parameter (e.g. <js>"Content-Range"</js>).
 	 * <p>
-	 * Var names are case sensitive.
+	 * Parameter names are case sensitive.
 	 * If <code>in</code> is <js>"path"</js>, the name field MUST correspond to the associated path segment from the <code>path</code> field in the <a href='http://swagger.io/specification/#pathsObject'>Paths Object</a>.
 	 * See <a href='http://swagger.io/specification/#pathTemplating'>Path Templating</a> for further information.
 	 * For all other cases, the name corresponds to the parameter name used based on the <code>in</code> property.
@@ -67,7 +67,7 @@ public @interface Var {
 	String name() default "";
 
 	/**
-	 * Var description (e.g. <js>"Indicates the range returned when Range header is present in the request"</js>).
+	 * Parameter description (e.g. <js>"Indicates the range returned when Range header is present in the request"</js>).
 	 * <p>
 	 * A brief description of the parameter.
 	 * This could contain examples of use.
@@ -89,14 +89,30 @@ public @interface Var {
 	/**
 	 * The schema defining the type used for the body parameter.
 	 * <p>
-	 * Only applicable for <code>in</code> of type <js>"body"</js>.
+	 * 	Only applicable for <code>in</code> of type <js>"body"</js>.
 	 * <p>
-	 * The schema is a JSON object specified <a href='http://swagger.io/specification/#schemaObject'>here</a>.
+	 * 	The schema is a JSON object specified <a href='http://swagger.io/specification/#schemaObject'>here</a>.
+	 *
+	 * <h6 class='topic'>Example:</h6>
+	 * <p class='bcode'>
+	 * 	<ja>@RestMethod</ja>(
+	 * 		parameters={
+	 * 			<ja>@Parameter</ja>(
+	 * 				in=<js>"header"</js>,
+	 * 				name=<js>"Foo"</js>,
+	 * 				schema=<js>"{format:'string',title:'Foo header',description:'Header that contains the Foo value.'}"</js>)
+	 * 		}
+	 * 	)
+	 * 	<jk>public void</jk> doAnything() {
+	 * </p>
 	 */
 	String schema() default "";
 
 	/**
 	 * The type of the parameter.
+	 * <p>
+	 * The value MUST be one of <js>"string"</js>, <js>"number"</js>, <js>"integer"</js>, <js>"boolean"</js>, <js>"array"</js> or <js>"file"</js>.
+	 * If type is <js>"file"</js>, the consumes MUST be either <js>"multipart/form-data"</js>, <js>"application/x-www-form-urlencoded"</js> or both and the parameter MUST be in <js>"formData"</js>.
 	 */
 	String type() default "string";
 
@@ -119,6 +135,22 @@ public @interface Var {
 	 * Required if <code>type</code> is <js>"array"</js>.
 	 * <p>
 	 * Describes the type of items in the array.
+	 *
+	 * <h6 class='topic'>Example:</h6>
+	 * <p class='bcode'>
+	 * 	<ja>@RestMethod</ja>(
+	 * 		parameters={
+	 * 			<ja>@Parameter</ja>(
+	 * 				in=<js>"header"</js>,
+	 * 				name=<js>"Foo"</js>,
+	 * 				type=<js>"array"</js>,
+	 * 				items=<js>"{type:'string',collectionFormat:'csv'}"</js>)
+	 * 		}
+	 * 	)
+	 * 	<jk>public void</jk> doAnything() {
+	 * </p>
+	 * <p>
+	 * See <a href='http://swagger.io/specification/#itemsObject'>Items Object</a> for further details.
 	 */
 	String items() default "";
 

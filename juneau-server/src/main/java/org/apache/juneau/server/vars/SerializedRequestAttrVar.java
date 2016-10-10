@@ -14,7 +14,6 @@ package org.apache.juneau.server.vars;
 
 import java.io.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.server.*;
@@ -23,16 +22,13 @@ import org.apache.juneau.svl.*;
 /**
  * Serialized request attribute variable resolver.
  * <p>
- * The format for this var is <js>"$SA{contentType,key}"</js> or <js>"$SA{contentType,key,defaultValue}"</js>.
+ * 	The format for this var is <js>"$SA{contentType,key}"</js> or <js>"$SA{contentType,key,defaultValue}"</js>.
  * <p>
- * This variable resolver requires that a {@link RestRequest} object be set as a context object on the resolver or a
+ * 	This variable resolver requires that a {@link RestRequest} object be set as a context object on the resolver or a
  * 	session object on the resolver session.
  * <p>
- * Similar to the {@link RequestAttrVar} class except uses the {@link RestRequest#getAttribute(String)} object
- * 	and passes the value to the {@link Serializer} whose {@link Produces @Produces} annotation matches the specified content type.
- * <p>
- * Since this is a {@link SimpleVar}, any variables contained in the result will be recursively resolved.
- * Likewise, if the arguments contain any variables, those will be resolved before they are passed to this var.
+ * 	Since this is a {@link SimpleVar}, any variables contained in the result will be recursively resolved.
+ * 	Likewise, if the arguments contain any variables, those will be resolved before they are passed to this var.
  *
  * @see org.apache.juneau.svl
  * @author James Bognar (james.bognar@salesforce.com)
@@ -46,16 +42,16 @@ public class SerializedRequestAttrVar extends StreamedVar {
 		super("SA");
 	}
 
-	@Override /* Var */
+	@Override /* Parameter */
 	public void resolveTo(VarResolverSession session, Writer w, String key) {
 		try {
 			int i = key.indexOf(',');
 			if (i == -1)
-				throw new RuntimeException("Invalid format for $SP var.  Must be of the format $SP{contentType,key[,defaultValue]}");
+				throw new RuntimeException("Invalid format for $SA var.  Must be of the format $SA{contentType,key[,defaultValue]}");
 			String[] s2 = StringUtils.split(key, ',');
 			RestRequest req = session.getSessionObject(RestRequest.class, RequestVar.SESSION_req);
 			if (req != null) {
-				Object o = req.getParameter(key, Object.class);
+				Object o = req.getAttribute(key);
 				if (o == null)
 					o = key;
 				Serializer s = req.getSerializerGroup().getSerializer(s2[0]);

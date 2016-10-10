@@ -16,8 +16,8 @@ import java.beans.*;
 
 /**
  * Default property namer.
- * <p>
- * 	Examples:
+ *
+ * <h6 class='topic'>Examples:</h6>
  * <ul>
  * 	<li><js>"fooBar"</js> -&gt; <js>"fooBar"</js>
  * 	<li><js>"fooBarURL"</js> -&gt; <js>"fooBarURL"</js>

@@ -73,8 +73,7 @@ import org.apache.juneau.transform.*;
  * 	<li>{@link SimpleReadable} - Default serializer, single quotes, simple mode, with whitespace.
  * </ul>
  *
- *
- * <h6 class='topic'>Examples</h6>
+ * <h6 class='topic'>Example:</h6>
  * <p class='bcode'>
  * 	<jc>// Use one of the default serializers to serialize a POJO</jc>
  * 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(someObject);

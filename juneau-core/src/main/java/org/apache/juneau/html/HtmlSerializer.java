@@ -68,8 +68,7 @@ import org.apache.juneau.xml.annotation.*;
  * 	<li>{@link SqReadable} - Default serializer, single quotes, whitespace added.
  * </ul>
  *
- *
- * <h6 class='topic'>Examples</h6>
+ * <h6 class='topic'>Example:</h6>
  * <p class='bcode'>
  * 	<jc>// Use one of the default serializers to serialize a POJO</jc>
  * 		String html = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(someObject);
@@ -435,7 +434,7 @@ public class HtmlSerializer extends XmlSerializer {
 						m2 = (BeanMap)o;
 					else
 						m2 = bc.forBean(o);
-					
+
 					for (String k : th) {
 						BeanMapEntry p = m2.getProperty(k);
 						BeanPropertyMeta pMeta = p.getMeta();

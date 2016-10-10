@@ -21,7 +21,7 @@ import org.apache.http.client.entity.*;
  * Convenience class for constructing instances of <code>List&lt;NameValuePair&gt;</code>
  * 	for the {@link UrlEncodedFormEntity} class.
  *
- * <h6 class='topic'>Example</h6>
+ * <h6 class='topic'>Example:</h6>
  * <p class='bcode'>
  * 	NameValuePairs params = <jk>new</jk> NameValuePairs()
  * 		.append(<jk>new</jk> BasicNameValuePair(<js>"j_username"</js>, user))

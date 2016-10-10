@@ -357,15 +357,11 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * <p>
 	 * <js>"M"</js> and <js>"K"</js> can be used to identify millions and thousands.
 	 *
-	 * <dl>
-	 * 	<dt>Example:</dt>
-	 * 	<dd>
-	 * 		<ul class='spaced-list'>
-	 * 			<li><code><js>"100K"</js> => 1024000</code>
-	 * 			<li><code><js>"100M"</js> => 104857600</code>
-	 * 		</ul>
-	 * 	</dd>
-	 * </dl>
+	 * <h6 class='topic'>Example:</h6>
+	 * <ul class='spaced-list'>
+	 * 	<li><code><js>"100K"</js> => 1024000</code>
+	 * 	<li><code><js>"100M"</js> => 104857600</code>
+	 * </ul>
 	 *
 	 * @param key The key.  See {@link #getString(String)} for a description of the key.
 	 * @param def The default value if config file or value does not exist.

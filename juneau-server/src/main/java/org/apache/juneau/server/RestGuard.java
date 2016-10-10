@@ -42,7 +42,7 @@ import org.apache.juneau.server.annotation.*;
  * 	Guards must implement a no-args constructor.
  *
  *
- * <h6 class='topic'>Example usage</h6>
+ * <h6 class='topic'>Example usage:</h6>
  * <p class='bcode'>
  * 	<jk>public</jk> MyResource <jk>extends</jk> RestServlet {
  *
@@ -53,7 +53,7 @@ import org.apache.juneau.server.annotation.*;
  * </p>
  *
  *
- * <h6 class='topic'>Example implementation</h6>
+ * <h6 class='topic'>Example implementation:</h6>
  * <p class='bcode'>
  * 	<jc>// Define a guard that only lets Billy make a request</jc>
  * 	<jk>public</jk> BillyGuard <jk>extends</jk> RestGuard {

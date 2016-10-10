@@ -23,7 +23,7 @@ import java.lang.annotation.*;
  * <p>
  * 	Typically used for HTTP method handlers of type <js>"*"</js> (i.e. handle all requests).
  *
- * <h6 class='topic'>Example</h6>
+ * <h6 class='topic'>Example:</h6>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<js>"*"</js>)
  * 	<jk>public void</jk> doAnything(RestRequest req, RestResponse res, <ja>@Method</ja> String method) {

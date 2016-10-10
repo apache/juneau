@@ -247,10 +247,8 @@ public abstract class Parser extends CoreApi {
 	/**
 	 * Parses input into the specified object type.
 	 *
-	 * <dl>
-	 * 	<dt>Example:</dt>
-	 * 	<dd>
-	 * 		<p class='bcode'>
+	 * <h6 class='topic'>Example:</h6>
+	 * <p class='bcode'>
 	 * 	ReaderParser p = JsonParser.<jsf>DEFAULT</jsf>;
 	 * 	MyBean b = p.parse(json, MyBean.<jk>class</jk>);
 	 * 		</p>
@@ -260,9 +258,7 @@ public abstract class Parser extends CoreApi {
 	 * 	ReaderParser p = JsonParser.<jsf>DEFAULT</jsf>;
 	 * 	ClassMeta&lt;MyBean&gt; cm = p.getBeanContext().getClassMeta(MyBean.<jk>class</jk>);
 	 * 	MyBean b = p.parse(json, cm, <jk>null</jk>);
-	 * 		</p>
-	 * 	</dd>
-	 * </dl>
+	 * </p>
 	 *
 	 * @param <T> The class type of the object to create.
 	 * @param input The input.  See {@link #parse(Object, ClassMeta)} for supported input types.
@@ -278,32 +274,28 @@ public abstract class Parser extends CoreApi {
 	/**
 	 * Parses input into a map with specified key and value types.
 	 *
-	 * <dl>
-	 * 	<dt>Example:</dt>
-	 * 	<dd>
-	 * 		<p class='bcode'>
+	 * <h6 class='topic'>Example:</h6>
+	 * <p class='bcode'>
 	 * 	ReaderParser p = JsonParser.<jsf>DEFAULT</jsf>;
 	 * 	Map&lt;String,MyBean&gt; m = p.parseMap(json, LinkedHashMap.<jk>class</jk>, String.<jk>class</jk>, MyBean.<jk>class</jk>);
-	 * 		</p>
-	 * 		<p>
-	 * 			A simpler approach is often to just extend the map class you want and just use the normal {@link #parse(Object, Class)} method:
-	 * 		</p>
-	 * 		<p class='bcode'>
+	 * </p>
+	 * <p>
+	 * 	A simpler approach is often to just extend the map class you want and just use the normal {@link #parse(Object, Class)} method:
+	 * </p>
+	 * <p class='bcode'>
 	 * 	<jk>public static class</jk> MyMap <jk>extends</jk> LinkedHashMap&lt;String,MyBean&gt; {}
 	 *
 	 * 	ReaderParser p = JsonParser.<jsf>DEFAULT</jsf>;
 	 * 	Map&lt;String,MyBean&gt; m = p.parse(json, MyMap.<jk>class</jk>);
-	 * 		</p>
-	 * 		<p>
-	 * 			This method equivalent to the following code:
-	 * 		</p>
-	 * 		<p class='bcode'>
+	 * </p>
+	 * <p>
+	 * 	This method equivalent to the following code:
+	 * </p>
+	 * <p class='bcode'>
 	 * 	ReaderParser p = JsonParser.<jsf>DEFAULT</jsf>;
 	 * 	ClassMeta&lt;Map&lt;String,MyBean&gt;&gt; cm = p.getBeanContext().getMapClassMeta(LinkedList.<jk>class</jk>, String.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 * 	Map&ltString,MyBean&gt; m = p.parse(json, cm, <jk>null</jk>);
-	 * 		</p>
-	 * 	</dd>
-	 * </dl>
+	 * </p>
 	 *
 	 * @param <T> The class type of the object to create.
 	 * @param input The input.  See {@link #parse(Object, ClassMeta)} for supported input types.
@@ -321,17 +313,15 @@ public abstract class Parser extends CoreApi {
 	/**
 	 * Parses input into a collection with a specified element type.
 	 *
-	 * <dl>
-	 * 	<dt>Example:</dt>
-	 * 	<dd>
-	 * 		<p class='bcode'>
+	 * <h6 class='topic'>Example:</h6>
+	 * <p class='bcode'>
 	 * 	ReaderParser p = JsonParser.<jsf>DEFAULT</jsf>;
 	 * 	List&lt;MyBean&gt; l = p.parseCollection(json, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
-	 * 		</p>
-	 * 		<p>
-	 * 			A simpler approach is often to just extend the collection class you want and just use the normal {@link #parse(Object, Class)} method:
-	 * 		</p>
-	 * 		<p class='bcode'>
+	 * </p>
+	 * <p>
+	 * 	A simpler approach is often to just extend the collection class you want and just use the normal {@link #parse(Object, Class)} method:
+	 * </p>
+	 * <p class='bcode'>
 	 * 	<jk>public static class</jk> MyBeanCollection <jk>extends</jk> LinkedList&lt;MyBean&gt; {}
 	 *
 	 * 	ReaderParser p = JsonParser.<jsf>DEFAULT</jsf>;
@@ -344,9 +334,7 @@ public abstract class Parser extends CoreApi {
 	 * 	ReaderParser p = JsonParser.<jsf>DEFAULT</jsf>;
 	 * 	ClassMeta&lt;List&lt;MyBean&gt;&gt; cm = p.getBeanContext().getCollectionClassMeta(LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 * 	List&lt;MyBean&gt; l = p.parse(json, cm, <jk>null</jk>);
-	 * 		</p>
-	 * 	</dd>
-	 * </dl>
+	 * </p>
 	 *
 	 * @param <T> The class type of the object to create.
 	 * @param input The input.  See {@link #parse(Object, ClassMeta)} for supported input types.

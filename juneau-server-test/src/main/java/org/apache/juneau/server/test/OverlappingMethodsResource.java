@@ -45,14 +45,14 @@ public class OverlappingMethodsResource extends RestServletDefault {
 	public static class Test1Guard extends RestGuard {
 		@Override /* RestGuard */
 		public boolean isRequestAllowed(RestRequest req) {
-			return req.getParameter("t1","").equals("1");
+			return req.getQueryParameter("t1","").equals("1");
 		}
 	}
 
 	public static class Test2Guard extends RestGuard {
 		@Override /* RestGuard */
 		public boolean isRequestAllowed(RestRequest req) {
-			return req.getParameter("t2","").equals("2");
+			return req.getQueryParameter("t2","").equals("2");
 		}
 	}
 
@@ -77,14 +77,14 @@ public class OverlappingMethodsResource extends RestServletDefault {
 	public static class Test3aMatcher extends RestMatcher {
 		@Override /* RestMatcher */
 		public boolean matches(RestRequest req) {
-			return req.getParameter("t1","").equals("1");
+			return req.getQueryParameter("t1","").equals("1");
 		}
 	}
 
 	public static class Test3bMatcher extends RestMatcher {
 		@Override /* RestMatcher */
 		public boolean matches(RestRequest req) {
-			return req.getParameter("t2","").equals("2");
+			return req.getQueryParameter("t2","").equals("2");
 		}
 	}
 

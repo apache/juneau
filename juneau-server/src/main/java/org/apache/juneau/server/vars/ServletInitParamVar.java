@@ -40,7 +40,7 @@ public class ServletInitParamVar extends DefaultingVar {
 		super("I");
 	}
 
-	@Override /* Var */
+	@Override /* Parameter */
 	public String resolve(VarResolverSession session, String key) {
 		return session.getSessionObject(RestRequest.class, RequestVar.SESSION_req).getServlet().getServletConfig().getInitParameter(key);
 	}

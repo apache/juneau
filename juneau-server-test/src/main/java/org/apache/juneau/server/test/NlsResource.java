@@ -49,20 +49,20 @@ public class NlsResource extends RestServletGroupDefault {
 			name="POST", path="/{a}",
 			description="Test1.c",
 			parameters={
-				@Var(in="path", name="a", description="Test1.d"),
-				@Var(in="query", name="b", description="Test1.e"),
-				@Var(in="body", description="Test1.f"),
-				@Var(in="header", name="D", description="Test1.g"),
-				@Var(in="path", name="a2", description="Test1.h"),
-				@Var(in="query", name="b2", description="Test1.i"),
-				@Var(in="header", name="D2", description="Test1.j"),
+				@Parameter(in="path", name="a", description="Test1.d"),
+				@Parameter(in="query", name="b", description="Test1.e"),
+				@Parameter(in="body", description="Test1.f"),
+				@Parameter(in="header", name="D", description="Test1.g"),
+				@Parameter(in="path", name="a2", description="Test1.h"),
+				@Parameter(in="query", name="b2", description="Test1.i"),
+				@Parameter(in="header", name="D2", description="Test1.j"),
 			},
 			responses={
 				@Response(200),
 				@Response(value=201,
 					description="Test1.l",
 					headers={
-						@Var(in="foo", name="bar", description="Test1.m"),
+						@Parameter(in="foo", name="bar", description="Test1.m"),
 					}
 				)
 			}
@@ -167,20 +167,20 @@ public class NlsResource extends RestServletGroupDefault {
 			name="POST", path="/{a}",
 			description="$L{foo}",
 			parameters={
-				@Var(in="path", name="a", description="$L{foo}"),
-				@Var(in="query", name="b", description="$L{foo}"),
-				@Var(in="body", description="$L{foo}"),
-				@Var(in="header", name="D", description="$L{foo}"),
-				@Var(in="path", name="a2", description="$L{foo}"),
-				@Var(in="query", name="b2", description="$L{foo}"),
-				@Var(in="header", name="D2", description="$L{foo}")
+				@Parameter(in="path", name="a", description="$L{foo}"),
+				@Parameter(in="query", name="b", description="$L{foo}"),
+				@Parameter(in="body", description="$L{foo}"),
+				@Parameter(in="header", name="D", description="$L{foo}"),
+				@Parameter(in="path", name="a2", description="$L{foo}"),
+				@Parameter(in="query", name="b2", description="$L{foo}"),
+				@Parameter(in="header", name="D2", description="$L{foo}")
 			},
 			responses={
 				@Response(200),
 				@Response(value=201,
 					description="$L{foo}",
 					headers={
-						@Var(in="foo", name="bar", description="$L{foo}"),
+						@Parameter(in="foo", name="bar", description="$L{foo}"),
 					}
 				)
 			}

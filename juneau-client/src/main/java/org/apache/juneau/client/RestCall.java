@@ -341,17 +341,13 @@ public final class RestCall {
 	 * This method uses {@link #getCapturedResponse()} to read the response text and so does not affect the other output
 	 * 	methods such as {@link #getResponseAsString()}.
 	 *
-	 * <dl>
-	 * 	<dt>Example:</dt>
-	 * 	<dd>
+	 * <h6 class='topic'>Example:</h6>
 	 * <p class='bcode'>
 	 * 	<jc>// Throw a RestCallException if FAILURE or ERROR is found in the output.</jc>
 	 * 	restClient.doGet(<jsf>URL</jsf>)
 	 * 		.failurePattern(<js>"FAILURE|ERROR"</js>)
 	 * 		.run();
 	 * </p>
-	 * 	</dd>
-	 * </dl>
 	 *
 	 * @param errorPattern A regular expression to look for in the response output.
 	 * @return This object (for method chaining).
@@ -376,17 +372,13 @@ public final class RestCall {
 	 * This method uses {@link #getCapturedResponse()} to read the response text and so does not affect the other output
 	 * 	methods such as {@link #getResponseAsString()}.
 	 *
-	 * <dl>
-	 * 	<dt>Example:</dt>
-	 * 	<dd>
+	 * <h6 class='topic'>Example:</h6>
 	 * <p class='bcode'>
 	 * 	<jc>// Throw a RestCallException if SUCCESS is not found in the output.</jc>
 	 * 	restClient.doGet(<jsf>URL</jsf>)
 	 * 		.successPattern(<js>"SUCCESS"</js>)
 	 * 		.run();
 	 * </p>
-	 * 	</dd>
-	 * </dl>
 	 *
 	 * @param successPattern A regular expression to look for in the response output.
 	 * @return This object (for method chaining).
@@ -456,9 +448,7 @@ public final class RestCall {
 	 * The response entity is discarded unless one of the pipe methods have been specified to pipe the
 	 * 	 output to an output stream or writer.
 	 *
-	 * <dl>
-	 * 	<dt>Example:</dt>
-	 * 	<dd>
+	 * <h6 class='topic'>Example:</h6>
 	 * <p class='bcode'>
 	 * 	<jk>try</jk> {
 	 * 		RestClient client = <jk>new</jk> RestClient();
@@ -468,8 +458,6 @@ public final class RestCall {
 	 * 		<jc>// Failed!</jc>
 	 * 	}
 	 * </p>
-	 * 	</dd>
-	 * </dl>
 	 *
 	 * @return This object (for method chaining).
 	 * @throws RestCallException If an exception or non-200 response code occurred during the connection attempt.
@@ -788,22 +776,19 @@ public final class RestCall {
 	/**
 	 * Convenience method when you want to parse into a Map&lt;K,V&gt; object.
 	 *
-	 * <dl>
-	 * 	<dt>Example:</dt>
-	 * 	<dd>
+	 *
+	 * <h6 class='topic'>Example:</h6>
 	 * <p class='bcode'>
 	 * 	Map&lt;String,MyBean&gt; m = client.doGet(url).getResponseMap(LinkedHashMap.<jk>class</jk>, String.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 * </p>
-	 * 		<p>
-	 * A simpler approach is often to just extend the map class you want and just use the normal {@link #getResponse(Class)} method:
-	 * 		</p>
+	 * <p>
+	 * 	A simpler approach is often to just extend the map class you want and just use the normal {@link #getResponse(Class)} method:
+	 * </p>
 	 * <p class='bcode'>
 	 * 	<jk>public static class</jk> MyMap <jk>extends</jk> LinkedHashMap&lt;String,MyBean&gt; {}
 	 *
 	 * 	Map&lt;String,MyBean&gt; m = client.doGet(url).getResponse(MyMap.<jk>class</jk>);
 	 * </p>
-	 * 	</dd>
-	 * </dl>
 	 *
 	 * @param mapClass The map class to use (e.g. <code>TreeMap</code>)
 	 * @param keyClass The class type of the keys (e.g. <code>String</code>)
@@ -820,22 +805,19 @@ public final class RestCall {
 	/**
 	 * Convenience method when you want to parse into a Collection&lt;E&gt; object.
 	 *
-	 * <dl>
-	 * 	<dt>Example:</dt>
-	 * 	<dd>
+	 *
+	 * <h6 class='topic'>Example:</h6>
 	 * <p class='bcode'>
 	 * 	List&lt;MyBean&gt; l = client.doGet(url).getResponseCollection(LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 * </p>
-	 * 		<p>
-	 * 			A simpler approach is often to just extend the collection class you want and just use the normal {@link #getResponse(Class)} method:
+	 * <p>
+	 * 	A simpler approach is often to just extend the collection class you want and just use the normal {@link #getResponse(Class)} method:
 	 * </p>
 	 * <p class='bcode'>
 	 * 	<jk>public static class</jk> MyList <jk>extends</jk> LinkedList&lt;MyBean&gt; {}
 	 *
 	 * 	List&lt;MyBean&gt; l = client.doGet(url).getResponse(MyList.<jk>class</jk>);
 	 * </p>
-	 * 	</dd>
-	 * </dl>
 	 *
 	 * @param collectionClass The collection class to use (e.g. <code>LinkedList</code>)
 	 * @param entryClass The class type of the values (e.g. <code>MyBean</code>)

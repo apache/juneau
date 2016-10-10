@@ -22,8 +22,8 @@ import org.apache.juneau.json.*;
  * Allows the definition of a security scheme that can be used by the operations.
  * <p>
  * Supported schemes are basic authentication, an API key (either as a header or as a query parameter) and OAuth2's common flows (implicit, password, application and access code).
- * <p>
- * Example:
+ *
+ * <h6 class='topic'>Example:</h6>
  * <p class='bcode'>
  * 	<jc>// Basic authentication sample</jc>
  * 	{
@@ -68,7 +68,7 @@ public class SecurityScheme {
 
 	/**
 	 * Convenience method for creating a new SecurityScheme object.
-	 * 
+	 *
 	 * @param type Required. The type of the security scheme.
 	 * 	Valid values are <js>"basic"</js>, <js>"apiKey"</js> or <js>"oauth2"</js>.
 	 * @return A new SecurityScheme object.

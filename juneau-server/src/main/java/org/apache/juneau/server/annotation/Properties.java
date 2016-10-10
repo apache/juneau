@@ -23,7 +23,7 @@ import org.apache.juneau.*;
  * Annotation that can be applied to a parameter of a {@link RestMethod} annotated method
  * 	to identify the request-duration properties object for the current request.
  *
- * <h6 class='topic'>Example</h6>
+ * <h6 class='topic'>Example:</h6>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>)
  * 	<jk>public Person</jk> doGetPerson(<ja>@Properties</ja> ObjectMap properties) {

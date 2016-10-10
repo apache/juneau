@@ -42,35 +42,31 @@ public @interface Json {
 	 * <p>
 	 * 	This annotation can be applied to beans as well as other objects serialized to other types (e.g. strings).
 	 *
-	 * <dl>
-	 * 	<dt>Example:</dt>
-	 * 	<dd>
-	 * 		<p class='bcode'>
+	 * <h6 class='topic'>Example:</h6>
+	 * <p class='bcode'>
 	 * 	<ja>@Json</ja>(wrapperAttr=<js>"myWrapper"</js>)
 	 * 	<jk>public class</jk> MyBean {
 	 * 		<jk>public int</jk> f1 = 123;
 	 * 	}
-	 * 		</p>
-	 * 		<p>
-	 * 			Without the <ja>@Xml</ja> annotations, serializing this bean as JSON would have produced the following...
-	 * 		</p>
-	 * 		<p class='bcode'>
+	 * </p>
+	 * <p>
+	 * 	Without the <ja>@Xml</ja> annotations, serializing this bean as JSON would have produced the following...
+	 * </p>
+	 * <p class='bcode'>
 	 * 	{
 	 * 		f1: 123
 	 * 	}
-	 * 		</p>
-	 * 		<p>
-	 * 			With the annotations, serializing this bean as XML produces the following...
-	 * 		</p>
-	 * 		<p class='bcode'>
+	 * </p>
+	 * <p>
+	 * 	With the annotations, serializing this bean as XML produces the following...
+	 * </p>
+	 * <p class='bcode'>
 	 * 	{
 	 * 		myWrapper: {
 	 * 			f1: 123
 	 * 		}
 	 * 	}
-	 * 		</p>
-	 * 	</dd>
-	 * </dl>
+	 * </p>
 	 */
 	String wrapperAttr() default "";
 }

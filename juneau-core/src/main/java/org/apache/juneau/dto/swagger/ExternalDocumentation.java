@@ -16,8 +16,8 @@ import org.apache.juneau.annotation.*;
 
 /**
  * Allows referencing an external resource for extended documentation.
- * <p>
- * Example:
+ *
+ * <h6 class='topic'>Example:</h6>
  * <p class='bcode'>
  * 	{
  * 		<js>"description"</js>: <js>"Find more info here"</js>,
@@ -35,7 +35,7 @@ public class ExternalDocumentation {
 
 	/**
 	 * Convenience method for creating a new ExternalDocumentation object.
-	 * 
+	 *
 	 * @param url Required.  The URL for the target documentation. Value MUST be in the format of a URL.
 	 * @return A new ExternalDocumentation object.
 	 */

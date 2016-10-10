@@ -179,18 +179,15 @@ public @interface RestResource {
 	 * <p>
 	 * 	This annotation can only be used on {@link Encoder} classes that have no-arg constructors.
 	 *
-	 * <dl>
-	 * 	<dt>Example:</dt>
-	 * 	<dd>
-	 * 		<p class='bcode'>
+	 *
+	 * <h6 class='topic'>Example:</h6>
+	 * <p class='bcode'>
 	 * 	<jc>// Servlet with automated support for GZIP compression</jc>
 	 * 	<ja>@RestResource</ja>(encoders={GzipEncoder.<jk>class</jk>})
 	 * 	<jk>public</jk> MyRestServlet <jk>extends</jk> RestServlet {
 	 * 		...
 	 * 	}
-	 * 		</p>
-	 * 	</dd>
-	 * </dl>
+	 * </p>
 	 */
 	Class<? extends Encoder>[] encoders() default {};
 
@@ -206,18 +203,14 @@ public @interface RestResource {
 	 * <p>
 	 * 	Only one header value can be specified per entry (i.e. it's not a delimited list of header entries).
 	 *
-	 * <dl>
-	 * 	<dt>Example:</dt>
-	 * 	<dd>
-	 * 		<p class='bcode'>
+	 * <h6 class='topic'>Example:</h6>
+	 * <p class='bcode'>
 	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
 	 * 	<ja>@RestResource</ja>(defaultRequestHeaders={<js>"Accept: text/json"</js>})
 	 * 	<jk>public</jk> MyRestServlet <jk>extends</jk> RestServlet {
 	 * 		...
 	 * 	}
-	 * 		</p>
-	 * 	</dd>
-	 * </dl>
+	 * </p>
 	 */
 	String[] defaultRequestHeaders() default {};
 
@@ -232,18 +225,14 @@ public @interface RestResource {
 	 * <p>
 	 * 	Only one header value can be specified per entry (i.e. it's not a delimited list of header entries).
 	 *
-	 * <dl>
-	 * 	<dt>Example:</dt>
-	 * 	<dd>
-	 * 		<p class='bcode'>
+	 * <h6 class='topic'>Example:</h6>
+	 * <p class='bcode'>
 	 * 	<jc>// Add a version header attribute to all responses</jc>
 	 * 	<ja>@RestResource</ja>(defaultResponseHeaders={<js>"X-Version: 1.0"</js>})
 	 * 	<jk>public</jk> MyRestServlet <jk>extends</jk> RestServlet {
 	 * 		...
 	 * 	}
-	 * 		</p>
-	 * 	</dd>
-	 * </dl>
+	 * </p>
 	 */
 	String[] defaultResponseHeaders() default {};
 
@@ -305,7 +294,7 @@ public @interface RestResource {
 	 * 	This value can be retrieved programmatically through the {@link RestServlet#getTitle(RestRequest)} method.
 	 * <p>
 	 * 	The default value pulls the label from the <code>label</code> entry in the servlet resource bundle.
-	 * 	(e.g. <js>"label = foo"</js> or <js>"MyServlet.label = foo"</js>).
+	 * 	(e.g. <js>"title = foo"</js> or <js>"MyServlet.title = foo"</js>).
 	 * <p>
 	 * 	This field can contain variables (e.g. "$L{my.localized.variable}").
 	 * <p>
@@ -334,6 +323,9 @@ public @interface RestResource {
 	 * 	It is used to populate the Swagger terms-of-service field.
 	 * 	This value can be retrieved programmatically through the {@link RestServlet#getTermsOfService(RestRequest)} method.
 	 * <p>
+	 * 	The default value pulls the description from the <code>termsOfService</code> entry in the servlet resource bundle.
+	 * 	(e.g. <js>"termsOfService = foo"</js> or <js>"MyServlet.termsOfService = foo"</js>).
+	 * <p>
 	 * 	This field can contain variables (e.g. "$L{my.localized.variable}").
 	 * <p>
 	 * 	Corresponds to the swagger field <code>/info/termsOfService</code>.
@@ -355,7 +347,10 @@ public @interface RestResource {
 	 * 	}
 	 * </p>
 	 * <p>
-	 * 	Example:
+	 * 	The default value pulls the description from the <code>contact</code> entry in the servlet resource bundle.
+	 * 	(e.g. <js>"contact = {name:'John Smith',email:'john.smith@foo.bar'}"</js> or <js>"MyServlet.contact = {name:'John Smith',email:'john.smith@foo.bar'}"</js>).
+	 *
+	 * <h6 class='topic'>Example:</h6>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(contact=<js>"{name:'John Smith',email:'john.smith@foo.bar'}"</js>)
 	 * </p>
@@ -380,7 +375,10 @@ public @interface RestResource {
 	 * 	}
 	 * </p>
 	 * <p>
-	 * 	Example:
+	 * 	The default value pulls the description from the <code>license</code> entry in the servlet resource bundle.
+	 * 	(e.g. <js>"license = {name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}"</js> or <js>"MyServlet.license = {name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}"</js>).
+	 *
+	 * <h6 class='topic'>Example:</h6>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(license=<js>"{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}"</js>)
 	 * </p>
@@ -396,6 +394,9 @@ public @interface RestResource {
 	 * <p>
 	 * 	It is used to populate the Swagger version field and to display on HTML pages.
 	 * 	This value can be retrieved programmatically through the {@link RestServlet#getVersion(RestRequest)} method.
+	 * <p>
+	 * 	The default value pulls the description from the <code>version</code> entry in the servlet resource bundle.
+	 * 	(e.g. <js>"version = 2.0"</js> or <js>"MyServlet.version = 2.0"</js>).
 	 * <p>
 	 * 	This field can contain variables (e.g. "$L{my.localized.variable}").
 	 * <p>
@@ -423,7 +424,10 @@ public @interface RestResource {
 	 * 	]
 	 * </p>
 	 * <p>
-	 * 	Example:
+	 * 	The default value pulls the description from the <code>tags</code> entry in the servlet resource bundle.
+	 * 	(e.g. <js>"tags = [{name:'Foo',description:'Foobar'}]"</js> or <js>"MyServlet.tags = [{name:'Foo',description:'Foobar'}]"</js>).
+	 *
+	 * <h6 class='topic'>Example:</h6>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(tags=<js>"[{name:'Foo',description:'Foobar'}]"</js>)
 	 * </p>
@@ -448,7 +452,10 @@ public @interface RestResource {
 	 * 	}
 	 * </p>
 	 * <p>
-	 * 	Example:
+	 * 	The default value pulls the description from the <code>externalDocs</code> entry in the servlet resource bundle.
+	 * 	(e.g. <js>"externalDocs = {url:'http://juneau.apache.org'}"</js> or <js>"MyServlet.externalDocs = {url:'http://juneau.apache.org'}"</js>).
+	 *
+	 * <h6 class='topic'>Example:</h6>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(externalDocs=<js>"{url:'http://juneau.apache.org'}"</js>)
 	 * </p>
@@ -491,10 +498,8 @@ public @interface RestResource {
 	 * <p>
 	 * 	If the file cannot be located, the request to <js>"[servletpath]/style.css"</js> will return {@link HttpServletResponse#SC_NOT_FOUND}.
 	 *
-	 * <dl>
-	 * 	<dt>Example:</dt>
-	 * 	<dd>
-	 * 		<p class='bcode'>
+	 * <h6 class='topic'>Example:</h6>
+	 * <p class='bcode'>
 	 * 	<jk>package</jk> com.ibm.mypackage;
 	 *
 	 * 	<ja>@RestResource</ja>(
@@ -502,17 +507,15 @@ public @interface RestResource {
 	 * 	)
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServletDefault {
 	 * 	}
-	 * 		</p>
-	 * 		<p>
-	 * 			In this example, the servlet will attempt to find the <code>mycss.css</code> file in the following ordered locations:
-	 * 		</p>
-	 * 		<ol>
-	 * 			<li><code>com.ibm.mypackage.mystyles</code> package.
-	 * 			<li><code>org.apache.juneau.server.mystyles</code> package (since <code>RestServletDefault</code> is in <code>org.apache.juneau.server</code>).
-	 * 			<li><code>[working-dir]/mystyles</code> directory.
-	 * 		</ol>
-	 * 	</dd>
-	 * </dl>
+	 * </p>
+	 * <p>
+	 * 	In this example, the servlet will attempt to find the <code>mycss.css</code> file in the following ordered locations:
+	 * </p>
+	 * <ol>
+	 * 	<li><code>com.ibm.mypackage.mystyles</code> package.
+	 * 	<li><code>org.apache.juneau.server.mystyles</code> package (since <code>RestServletDefault</code> is in <code>org.apache.juneau.server</code>).
+	 * 	<li><code>[working-dir]/mystyles</code> directory.
+	 *	</ol>
 	 */
 	String stylesheet() default "";
 
@@ -525,10 +528,8 @@ public @interface RestResource {
 	 * <p>
 	 * 	If the file cannot be located, the request to <js>"[servletpath]/favicon.ico"</js> will return {@link HttpServletResponse#SC_NOT_FOUND}.
 	 *
-	 * <dl>
-	 * 	<dt>Example:</dt>
-	 * 	<dd>
-	 * 		<p class='bcode'>
+	 * <h6 class='topic'>Example:</h6>
+	 * <p class='bcode'>
 	 * 	<jk>package</jk> com.ibm.mypackage;
 	 *
 	 * 	<ja>@RestResource</ja>(
@@ -536,17 +537,15 @@ public @interface RestResource {
 	 * 	)
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServletDefault {
 	 * 	}
-	 * 		</p>
-	 * 		<p>
-	 * 			In this example, the servlet will attempt to find the <code>myicon.ico</code> file in the following ordered locations:
-	 * 		</p>
-	 * 		<ol>
-	 * 			<li><code>com.ibm.mypackage.mydocs</code> package.
-	 * 			<li><code>org.apache.juneau.server.mydocs</code> package (since <code>RestServletDefault</code> is in <code>org.apache.juneau.server</code>).
-	 * 			<li><code>[working-dir]/mydocs</code> directory.
-	 * 		</ol>
-	 * 	</dd>
-	 * </dl>
+	 * </p>
+	 * <p>
+	 * 	In this example, the servlet will attempt to find the <code>myicon.ico</code> file in the following ordered locations:
+	 * </p>
+	 * <ol>
+	 * 	<li><code>com.ibm.mypackage.mydocs</code> package.
+	 * 	<li><code>org.apache.juneau.server.mydocs</code> package (since <code>RestServletDefault</code> is in <code>org.apache.juneau.server</code>).
+	 * 	<li><code>[working-dir]/mydocs</code> directory.
+	 * </ol>
 	 */
 	String favicon() default "";
 
@@ -561,10 +560,8 @@ public @interface RestResource {
 	 * <p>
 	 * 	The media type on the response is determined by the {@link RestServlet#getMimetypesFileTypeMap()} method.
 	 *
-	 * <dl>
-	 * 	<dt>Example:</dt>
-	 * 	<dd>
-	 * 		<p class='bcode'>
+	 * <h6 class='topic'>Example:</h6>
+	 * <p class='bcode'>
 	 * 	<jk>package</jk> com.ibm.mypackage;
 	 *
 	 * 	<ja>@RestResource</ja>(
@@ -573,18 +570,16 @@ public @interface RestResource {
 	 * 	)
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServletDefault {
 	 * 	}
-	 * 		</p>
-	 * 		<p>
-	 * 			In this example, given a GET request to <code>/myresource/htdocs/foobar.html</code>, the servlet will attempt to find the <code>foobar.html</code> file
-	 * 			in the following ordered locations:
-	 * 		</p>
-	 * 		<ol>
-	 * 			<li><code>com.ibm.mypackage.docs</code> package.
-	 * 			<li><code>org.apache.juneau.server.docs</code> package (since <code>RestServletDefault</code> is in <code>org.apache.juneau.server</code>).
-	 * 			<li><code>[working-dir]/docs</code> directory.
-	 * 		</ol>
-	 * 	</dd>
-	 * </dl>
+	 * </p>
+	 * <p>
+	 * 	In this example, given a GET request to <code>/myresource/htdocs/foobar.html</code>, the servlet will attempt to find the <code>foobar.html</code> file
+	 * 	in the following ordered locations:
+	 * </p>
+	 * <ol>
+	 * 	<li><code>com.ibm.mypackage.docs</code> package.
+	 * 	<li><code>org.apache.juneau.server.docs</code> package (since <code>RestServletDefault</code> is in <code>org.apache.juneau.server</code>).
+	 * 	<li><code>[working-dir]/docs</code> directory.
+	 * </ol>
 	 */
 	String staticFiles() default "";
 

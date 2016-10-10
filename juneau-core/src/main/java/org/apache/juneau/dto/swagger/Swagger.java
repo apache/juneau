@@ -34,9 +34,9 @@ public class Swagger {
 	private List<String> consumes;
 	private List<String> produces;
 	private Map<String,Map<String,Operation>> paths;
-	private Map<String,Schema> definitions;
-	private Map<String,Parameter> parameters;
-	private Map<String,Response> responses;
+	private Map<String,SchemaInfo> definitions;
+	private Map<String,ParameterInfo> parameters;
+	private Map<String,ResponseInfo> responses;
 	private Map<String,SecurityScheme> securityDefinitions;
 	private List<Map<String,List<String>>> security;
 	private List<Tag> tags;
@@ -391,7 +391,7 @@ public class Swagger {
 			paths = new TreeMap<String,Map<String,Operation>>();
 		Map<String,Operation> p = paths.get(path);
 		if (p == null) {
-			p = new TreeMap<String,Operation>();
+			p = new TreeMap<String,Operation>(new MethodSorter());
 			paths.put(path, p);
 		}
 		p.put(methodName, operation);
@@ -405,7 +405,7 @@ public class Swagger {
 	 *
 	 * @return The value of the <property>definitions</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,Schema> getDefinitions() {
+	public Map<String,SchemaInfo> getDefinitions() {
 		return definitions;
 	}
 
@@ -417,7 +417,7 @@ public class Swagger {
 	 * @param definitions The new value for the <property>definitions</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Swagger setDefinitions(Map<String,Schema> definitions) {
+	public Swagger setDefinitions(Map<String,SchemaInfo> definitions) {
 		this.definitions = definitions;
 		return this;
 	}
@@ -431,9 +431,9 @@ public class Swagger {
 	 * @param schema The schema that the name defines.
 	 * @return This object (for method chaining).
 	 */
-	public Swagger addDefinition(String name, Schema schema) {
+	public Swagger addDefinition(String name, SchemaInfo schema) {
 		if (definitions == null)
-			definitions = new TreeMap<String,Schema>();
+			definitions = new TreeMap<String,SchemaInfo>();
 		definitions.put(name, schema);
 		return this;
 	}
@@ -446,7 +446,7 @@ public class Swagger {
 	 *
 	 * @return The value of the <property>parameters</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,Parameter> getParameters() {
+	public Map<String,ParameterInfo> getParameters() {
 		return parameters;
 	}
 
@@ -459,7 +459,7 @@ public class Swagger {
 	 * @param parameters The new value for the <property>parameters</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Swagger setParameters(Map<String,Parameter> parameters) {
+	public Swagger setParameters(Map<String,ParameterInfo> parameters) {
 		this.parameters = parameters;
 		return this;
 	}
@@ -474,9 +474,9 @@ public class Swagger {
 	 * @param parameter The parameter definition.
 	 * @return This object (for method chaining).
 	 */
-	public Swagger addParameter(String name, Parameter parameter) {
+	public Swagger addParameter(String name, ParameterInfo parameter) {
 		if (parameters == null)
-			parameters = new TreeMap<String,Parameter>();
+			parameters = new TreeMap<String,ParameterInfo>();
 		parameters.put(name, parameter);
 		return this;
 	}
@@ -489,7 +489,7 @@ public class Swagger {
 	 *
 	 * @return The value of the <property>responses</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,Response> getResponses() {
+	public Map<String,ResponseInfo> getResponses() {
 		return responses;
 	}
 
@@ -502,7 +502,7 @@ public class Swagger {
 	 * @param responses The new value for the <property>responses</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Swagger setResponses(Map<String,Response> responses) {
+	public Swagger setResponses(Map<String,ResponseInfo> responses) {
 		this.responses = responses;
 		return this;
 	}
@@ -517,9 +517,9 @@ public class Swagger {
 	 * @param response The response definition.
 	 * @return This object (for method chaining).
 	 */
-	public Swagger addResponse(String name, Response response) {
+	public Swagger addResponse(String name, ResponseInfo response) {
 		if (responses == null)
-			responses = new TreeMap<String,Response>();
+			responses = new TreeMap<String,ResponseInfo>();
 		responses.put(name, response);
 		return this;
 	}
@@ -684,5 +684,29 @@ public class Swagger {
 	public Swagger setExternalDocs(ExternalDocumentation externalDocs) {
 		this.externalDocs = externalDocs;
 		return this;
+	}
+
+	private static class MethodSorter implements Comparator<String> {
+		@SuppressWarnings("serial")
+		private final Map<String,Integer> methods = new HashMap<String,Integer>(){{
+			put("get",7);
+			put("put",6);
+			put("post",5);
+			put("delete",4);
+			put("options",3);
+			put("head",2);
+			put("patch",1);
+		}};
+
+		@Override
+		public int compare(String o1, String o2) {
+			Integer i1 = methods.get(o1);
+			Integer i2 = methods.get(o2);
+			if (i1 == null)
+				i1 = 0;
+			if (i2 == null)
+				i2 = 0;
+			return i2.compareTo(i1);
+		}
 	}
 }

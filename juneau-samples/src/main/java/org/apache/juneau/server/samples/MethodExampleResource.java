@@ -66,14 +66,14 @@ public class MethodExampleResource extends Resource {
 		String method = req.getMethod();
 
 		// Attributes (from URL pattern variables)
-		String a1 = req.getAttribute("a1", String.class);
-		int a2 = req.getAttribute("a2", int.class);
-		UUID a3 = req.getAttribute("a3", UUID.class);
+		String a1 = req.getPathParameter("a1", String.class);
+		int a2 = req.getPathParameter("a2", int.class);
+		UUID a3 = req.getPathParameter("a3", UUID.class);
 
 		// Optional GET parameters
-		int p1 = req.getParameter("p1", int.class, 0);
-		String p2 = req.getParameter("p2", String.class);
-		UUID p3 = req.getParameter("p3", UUID.class);
+		int p1 = req.getQueryParameter("p1", int.class, 0);
+		String p2 = req.getQueryParameter("p2", String.class);
+		UUID p3 = req.getQueryParameter("p3", UUID.class);
 
 		// URL pattern post-match
 		String remainder = req.getPathRemainder();

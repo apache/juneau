@@ -50,15 +50,11 @@ public class DateSwap extends PojoSwap<Date,String> {
 
 	/**
 	 * Transforms {@link Date Dates} to {@link String Strings} using the {@code Date.toString()} method.
-	 * <p>
-	 * <dl>
-	 * 	<dt>Example output:</dt>
-	 * 	<dd>
+	 *
+	 * <h6 class='topic'>Example output:</h6>
 	 * <ul>
 	 * 	<li><js>"Wed Jul 04 15:30:45 EST 2001"</js>
 	 * </ul>
-	 * 	</dd>
-	 * </dl>
 	 */
 	public static class ToString extends DateSwap {
 		/** Constructor */
@@ -70,16 +66,13 @@ public class DateSwap extends PojoSwap<Date,String> {
 	/**
 	 * Transforms {@link Date Dates} to ISO8601 date-time strings.
 	 *
-	 * <dl>
-	 * 	<dt>Example output:</dt>
-	 * 	<dd>
+	 * <h6 class='topic'>Example output:</h6>
 	 * <ul>
 	 * 	<li><js>"2001-07-04T15:30:45-05:00"</js>
 	 * 	<li><js>"2001-07-04T15:30:45Z"</js>
 	 * </ul>
-	 * 	</dd>
-	 * 	<dt>Example input:</dt>
-	 * 	<dd>
+	 *
+	 * <h6 class='topic'>Example input:</h6>
 	 * <ul>
 	 * 	<li><js>"2001-07-04T15:30:45-05:00"</js>
 	 * 	<li><js>"2001-07-04T15:30:45Z"</js>
@@ -89,8 +82,6 @@ public class DateSwap extends PojoSwap<Date,String> {
 	 * 	<li><js>"2001-07"</js>
 	 * 	<li><js>"2001"</js>
 	 * </ul>
-	 * 	</dd>
-	 * </dl>
 	 */
 	public static class ISO8601DT extends DateSwap {
 		private SimpleDateFormat tzFormat = new SimpleDateFormat("Z");
@@ -134,8 +125,9 @@ public class DateSwap extends PojoSwap<Date,String> {
 
 	/**
 	 * Same as {@link ISO8601DT} except serializes to millisecond precision.
-	 * <p>
-	 * Example output: <js>"2001-07-04T15:30:45.123-05:00"</js>
+	 *
+	 * <h6 class='topic'>Example output:</h6>
+	 * <js>"2001-07-04T15:30:45.123-05:00"</js>
 	 */
 	public static class ISO8601DTP extends ISO8601DT {
 
@@ -147,8 +139,9 @@ public class DateSwap extends PojoSwap<Date,String> {
 
 	/**
 	 * Same as {@link ISO8601DT} except serializes to millisecond precision and doesn't include timezone.
-	 * <p>
-	 * Example output: <js>"2001-07-04T15:30:45.123"</js>
+	 *
+	 * <h6 class='topic'>Example output:</h6>
+	 * <js>"2001-07-04T15:30:45.123"</js>
 	 */
 	public static class ISO8601DTPNZ extends DateSwap {
 
@@ -160,8 +153,9 @@ public class DateSwap extends PojoSwap<Date,String> {
 
 	/**
 	 * Same as {@link ISO8601DT}, except always serializes in GMT.
-	 * <p>
-	 * Example output:  <js>"2001-07-04T15:30:45Z"</js>
+	 *
+	 * <h6 class='topic'>Example output:</h6>
+	 * <js>"2001-07-04T15:30:45Z"</js>
 	 */
 	public static class ISO8601DTZ extends DateSwap {
 
@@ -195,8 +189,9 @@ public class DateSwap extends PojoSwap<Date,String> {
 
 	/**
 	 * Same as {@link ISO8601DTZ} except serializes to millisecond precision.
-	 * <p>
-	 * Example output:  <js>"2001-07-04T15:30:45.123Z"</js>
+	 *
+	 * <h6 class='topic'>Example output:</h6>
+	 * <js>"2001-07-04T15:30:45.123Z"</js>
 	 */
 	public static class ISO8601DTZP extends ISO8601DT {
 
@@ -218,8 +213,9 @@ public class DateSwap extends PojoSwap<Date,String> {
 
 	/**
 	 * Same as {@link RFC2822DT}, except always serializes in GMT.
-	 * <p>
-	 * Example output:  <js>"2001-07-04T15:30:45Z"</js>
+	 *
+	 * <h6 class='topic'>Example output:</h6>
+	 * <js>"2001-07-04T15:30:45Z"</js>
 	 */
 	public static class RFC2822DTZ extends DateSwap {
 		/** Constructor */

@@ -27,8 +27,8 @@ import org.apache.juneau.utils.*;
 
 /**
  * Manager for retrieving shared instances of {@link ConfigFile ConfigFiles}.
- * <p>
- * Example:
+ *
+ * <h6 class='topic'>Example:</h6>
  * <p class='bcode'>
  * 	ConfigFile cf = ConfigMgr.<jsf>DEFAULT</jsf>.get(<js>"MyConfig.cfg"</js>);
  * 	String setting = cf.get(<js>"MySection/mysetting"</js>);

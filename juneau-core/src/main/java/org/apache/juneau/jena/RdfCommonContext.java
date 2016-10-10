@@ -731,9 +731,7 @@ public interface RdfCommonContext {
 	 *	This setting is typically only useful if the beans being parsed into do not have a bean property
 	 *	annotated with {@link Rdf#beanUri @Rdf(beanUri=true)}.
 	 *
-	 * <dl>
-	 * 	<dt>Example:</dt>
-	 * 	<dd>
+	 * <h6 class='topic'>Example:</h6>
 	 * <p class='bcode'>
 	 * 	WriterSerializer s = <jk>new</jk> RdfSerializer.XmlAbbrev().setProperty(<jsf>RDF_looseCollection</jsf>, <jk>true</jk>);
 	 * 	ReaderParser p = <jk>new</jk> RdfParser.Xml().setProperty(<jsf>RDF_looseCollection</jsf>, <jk>true</jk>);
@@ -754,8 +752,6 @@ public interface RdfCommonContext {
 	 *		<jc>// Parse back into a bean array</jc>
 	 * 	b = p.parse(rdfXml, MyBean[].<jk>class</jk>);
 	 * </p>
-	 * 	</dd>
-	 * </dl>
 	 */
 	public static final String RDF_looseCollections = "Rdf.looseCollections";
 }

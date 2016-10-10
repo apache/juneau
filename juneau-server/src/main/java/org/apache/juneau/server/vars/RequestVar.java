@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.server.vars;
 
+import org.apache.juneau.internal.*;
 import org.apache.juneau.server.*;
 import org.apache.juneau.svl.*;
 
@@ -58,10 +59,25 @@ public class RequestVar extends SimpleVar {
 		super("R");
 	}
 
-	@Override /* Var */
+	@Override /* Parameter */
 	public String resolve(VarResolverSession session, String key) {
 		RestRequest req = session.getSessionObject(RestRequest.class, SESSION_req);
 		if (key.length() > 0) {
+				String k = key.toString();
+				if (k.indexOf('.') != -1) {
+					String prefix = k.substring(0, k.indexOf('.'));
+					String remainder = k.substring(k.indexOf('.')+1);
+					if ("path".equals(prefix))
+						return req.getPathParameter(remainder);
+					if ("query".equals(prefix))
+						return req.getQueryParameter(remainder);
+					if ("formData".equals(prefix))
+						return req.getFormDataParameter(remainder);
+					if ("header".equals(prefix))
+						return req.getHeader(remainder);
+					if ("attribute".equals(prefix))
+						return StringUtils.toString(req.getAttribute(remainder));
+				}
 				char c = key.charAt(0);
 				if (c == 'c') {
 					if (key.equals("contextPath"))
@@ -69,6 +85,8 @@ public class RequestVar extends SimpleVar {
 				} else if (c == 'm') {
 					if (key.equals("method"))
 						return req.getMethod();
+					if (key.equals("methodSummary"))
+						return req.getMethodSummary();
 					if (key.equals("methodDescription"))
 						return req.getMethodDescription();
 				} else if (c == 'p') {
@@ -99,6 +117,7 @@ public class RequestVar extends SimpleVar {
 				Object o = req.getProperties().get(key);
 				if (o != null)
 					return o.toString();
+				return req.getPathParameter(key);
 			}
 		return null;
 	}

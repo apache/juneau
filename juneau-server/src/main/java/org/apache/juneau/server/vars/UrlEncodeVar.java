@@ -37,7 +37,7 @@ public class UrlEncodeVar extends SimpleVar {
 		super("UE");
 	}
 
-	@Override /* Var */
+	@Override /* Parameter */
 	public String resolve(VarResolverSession session, String key) {
 		return RestUtils.encode(key);
 	}
