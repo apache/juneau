@@ -119,7 +119,7 @@ public abstract class RestServlet extends HttpServlet {
 	private String[] staticFilesPrefixes;
 	private ResponseHandler[] responseHandlers;
 	private String clientVersionHeader = "";
-	private Map<Locale,Swagger> swaggers = new ConcurrentHashMap<Locale,Swagger>();
+	private ConcurrentHashMap<Locale,Swagger> swaggers = new ConcurrentHashMap<Locale,Swagger>();
 
 	RestServletContext context;
 
