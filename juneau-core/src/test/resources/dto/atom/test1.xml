@@ -49,7 +49,7 @@
 	<link href='http://example.org/' hreflang='en' rel='alternate' type='text/html'/>
 	<link href='http://example.org/feed.atom' rel='self' type='application/atom+xml'/>
 	<rights>
-		Copyright (c) 2003, Mark Pilgrim
+		Copyright (c) 2003, Foobar Inc
 	</rights>
 	<subtitle type='html'>
 		A &lt;em&gt;lot&lt;/em&gt; of effort went into making this effortless

@@ -1099,11 +1099,32 @@
 			<tr class='dark bb' style='background-color:lightyellow'>
 				<td style='text-align:center'>5</td>
 				<td>
+					<b>Objects with standardized static methods and/or constructors for converting to another POJO that's serializable.</b><br>
+				</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+			</tr>		
+			<tr class='light bb' style='background-color:lightyellow'>
+				<td style='text-align:center'>5a</td>
+				<td>
 					<b>Objects with standardized <code>static T valueOf(String)</code>/<code>static T fromString(String)</code> methods, or constructors with a <code>String</code> argument.</b><br>
 					During serialization, objects are converted to strings using the <code>toString()</code> method.
 					During parsing, strings are converted to objects using one of these static methods or constructors.				
 				</td>
 				<td><code>java.util.UUID</code></td>
+				<td style='background-color:lightgreen;text-align:center'><b>yes</b></td>
+				<td style='background-color:lightgreen;text-align:center'><b>yes</b></td>
+			</tr>		
+			<tr class='light bb' style='background-color:lightyellow'>
+				<td style='text-align:center'>5b</td>
+				<td>
+					<b>Objects with standardized <code>static T valueOf(ObjectMap)</code>/<code>static T fromObjectMap(ObjectMap)</code> methods, or constructors with an <code>ObjectMap</code> argument, 
+					and having a <code>toObjectMap()</code> method.</b><br>
+					During serialization, objects are converted to {@link org.apache.juneau.core.ObjectMap ObjectMaps} using the <code>toObjectMap()</code> method.
+					During parsing, maps are converted to objects using one of these static methods or constructors.				
+				</td>
+				<td>&nbsp;</td>
 				<td style='background-color:lightgreen;text-align:center'><b>yes</b></td>
 				<td style='background-color:lightgreen;text-align:center'><b>yes</b></td>
 			</tr>			

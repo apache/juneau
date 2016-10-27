@@ -55,7 +55,7 @@ public class PhotosResource extends Resource {
 	public void init() {
 		try {
 			// Preload an image.
-			InputStream is = getClass().getResourceAsStream("averycutedog.jpg");
+			InputStream is = getClass().getResourceAsStream("averycutecat.jpg");
 			BufferedImage image = ImageIO.read(is);
 			Photo photo = new Photo(0, image);
 			photos.put(photo.id, photo);

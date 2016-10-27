@@ -42,7 +42,7 @@ public class AtomTest {
 				new Link("alternate", "text/html", "http://example.org/").setHreflang("en"),
 				new Link("self", "application/atom+xml", "http://example.org/feed.atom")
 			)
-			.setRights(new Text("Copyright (c) 2003, Mark Pilgrim"))
+			.setRights(new Text("Copyright (c) 2016, Apache Foundation"))
 			.setGenerator(new Generator("Example Toolkit").setUri(new URI("http://www.example.com/")).setVersion("1.0"))
 			.addEntries(
 				new Entry()
