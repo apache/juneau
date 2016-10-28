@@ -117,21 +117,6 @@
 									<type>jar</type>
 									<classifier>sources</classifier>
 								</artifactItem>
-								<artifactItem>
-									<outputDirectory>${project.build.directory}/bin</outputDirectory>
-									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-samples</artifactId>
-									<version>${project.version}</version>
-								</artifactItem>
-								<artifactItem>
-									<outputDirectory>${project.build.directory}/bin</outputDirectory>
-									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-samples</artifactId>
-									<version>${project.version}</version>
-									<classifier>samples</classifier>
-									<type>cfg</type>
-									<destFileName>samples.cfg</destFileName>
-								</artifactItem>
 							</artifactItems>
 						</configuration>
 					</execution>
