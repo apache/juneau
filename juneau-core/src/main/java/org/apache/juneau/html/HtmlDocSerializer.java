@@ -50,6 +50,7 @@ import org.apache.juneau.serializer.*;
  * @author James Bognar (james.bognar@salesforce.com)
  */
 @Produces("text/html")
+@SuppressWarnings("hiding")
 public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 
 	// Properties defined in RestServletProperties
@@ -57,6 +58,9 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		REST_method = "RestServlet.method",
 		REST_relativeServletURI = "RestServlet.relativeServletURI";
 
+
+	/** Default serializer, all default settings. */
+	public static final HtmlDocSerializer DEFAULT = new HtmlDocSerializer().lock();
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods
@@ -164,5 +168,69 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		if (o.getClass().isArray() && Array.getLength(o) == 0)
 			return true;
 		return false;
+	}
+
+	//--------------------------------------------------------------------------------
+	// Overridden methods
+	//--------------------------------------------------------------------------------
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer setProperty(String property, Object value) throws LockedException {
+		super.setProperty(property, value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer setProperties(ObjectMap properties) throws LockedException {
+		super.setProperties(properties);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer addNotBeanClasses(Class<?>...classes) throws LockedException {
+		super.addNotBeanClasses(classes);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer addBeanFilters(Class<?>...classes) throws LockedException {
+		super.addBeanFilters(classes);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer addPojoSwaps(Class<?>...classes) throws LockedException {
+		super.addPojoSwaps(classes);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer addToDictionary(Class<?>...classes) throws LockedException {
+		super.addToDictionary(classes);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public <T> HtmlDocSerializer addImplClass(Class<T> interfaceClass, Class<? extends T> implClass) throws LockedException {
+		super.addImplClass(interfaceClass, implClass);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer setClassLoader(ClassLoader classLoader) throws LockedException {
+		super.setClassLoader(classLoader);
+		return this;
+	}
+
+	@Override /* Lockable */
+	public HtmlDocSerializer lock() {
+		super.lock();
+		return this;
+	}
+
+	@Override /* Lockable */
+	public HtmlDocSerializer clone() {
+		HtmlDocSerializer c = (HtmlDocSerializer)super.clone();
+		return c;
 	}
 }
