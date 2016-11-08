@@ -223,7 +223,8 @@ public final class JsonParser extends ReaderParser {
 
 	private Number parseNumber(JsonParserSession session, String s, Class<? extends Number> type) throws Exception {
 
-		// JSON has slightly different number rules.
+		// JSON has slightly different number rules from Java.
+		// Strict mode enforces these different rules, lax does not.
 		if (session.isStrict()) {
 
 			// Lax allows blank strings to represent 0.
@@ -233,7 +234,6 @@ public final class JsonParser extends ReaderParser {
 
 			// Need to weed out octal and hexadecimal formats:  0123,-0123,0x123,-0x123.
 			// Don't weed out 0 or -0.
-			// All other number formats are supported in JSON.
 			boolean isNegative = false;
 			char c = (s.length() == 0 ? 'x' : s.charAt(0));
 			if (c == '-') {
@@ -241,18 +241,18 @@ public final class JsonParser extends ReaderParser {
 				c = (s.length() == 1 ? 'x' : s.charAt(1));
 			}
 
-			// .123 and -.123 are not valid numbers.
+			// JSON doesn't allow '.123' and '-.123'.
 			if (c == '.')
 				throw new ParseException(session, "Invalid JSON number: '"+s+"'");
 
-			// 01 is not a valid number, but 0.1, 0e1, 0e+1 are valid.
+			// '01' is not a valid number, but '0.1', '0e1', '0e+1' are valid.
 			if (c == '0' && s.length() > (isNegative ? 2 : 1)) {
 				 char c2 = s.charAt((isNegative ? 2 : 1));
 				 if (c2 != '.' && c2 != 'e' && c2 != 'E')
 						throw new ParseException(session, "Invalid JSON number: '"+s+"'");
 			}
 
-			// JSON doesn't allow [1.] or [0.e1], but Java does.
+			// JSON doesn't allow '1.' or '0.e1'.
 			int i = s.indexOf('.');
 			if (i != -1 && (s.length() == (i+1) || ! decChars.contains(s.charAt(i+1))))
 				throw new ParseException(session, "Invalid JSON number: '"+s+"'");
