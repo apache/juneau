@@ -157,6 +157,24 @@ public final class IOUtils {
 		}
 	}
 
+	/**
+	 * Reads a raw stream of bytes from the specified file.
+	 *
+	 * @param f The file to read.
+	 * @return A byte array containing the contents of the file.
+	 * @throws IOException
+	 */
+	public static byte[] readBytes(File f) throws IOException {
+		if (f == null || ! (f.exists() && f.canRead()))
+			return null;
+
+		FileInputStream fis = new FileInputStream(f);
+		try {
+			return readBytes(fis, (int)f.length());
+		} finally {
+			fis.close();
+		}
+	}
 
 	/**
 	 * Reads the specified input into a {@link String} until the end of the input is reached.

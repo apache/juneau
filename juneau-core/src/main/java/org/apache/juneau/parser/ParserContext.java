@@ -13,6 +13,7 @@
 package org.apache.juneau.parser;
 
 import org.apache.juneau.*;
+import org.apache.juneau.json.*;
 
 /**
  * Configurable properties common to all parsers.
@@ -70,8 +71,82 @@ public class ParserContext extends Context {
 	 */
 	public static final String PARSER_trimStrings = "Parser.trimStrings";
 
+	/**
+	 * <b>Configuration property:</b>  Strict mode.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Parser.strict"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * </ul>
+	 * <p>
+	 * If <jk>true</jk>, strict mode for the parser is enabled.
+	 * <p>
+	 * Strict mode can mean different things for different parsers.
+	 * However, all reader-based parsers will
+	 * <p>
+	 * <table class='styled'>
+	 * 	<tr><th>Parser class</th><th>Strict behavior</td></tr>
+	 * 	<tr>
+	 * 		<td>All reader-based parsers</td>
+	 * 		<td>
+	 * 			When enabled, throws {@link ParseException ParseExceptions} on malformed charset input.
+	 * 			Otherwise, malformed input is ignored.
+	 * 		</td>
+	 * 	</tr>
+	 * 	<tr>
+	 * 		<td>{@link JsonParser}</td>
+	 * 		<td>
+	 * 			When enabled, throws exceptions on the following invalid JSON syntax:
+	 * 			<ul>
+	 * 				<li>Unquoted attributes.
+	 * 				<li>Missing attribute values.
+	 * 				<li>Concatenated strings.
+	 * 				<li>Javascript comments.
+	 * 				<li>Numbers and booleans when Strings are expected.
+	 * 				<li>Numbers valid in Java but not JSON (e.g. octal notation, etc...)
+	 * 			</ul>
+	 * 		</td>
+	 * 	</tr>
+	 * </table>
+	 */
+	public static final String PARSER_strict = "Parser.strict";
 
-	final boolean debug, trimStrings;
+	/**
+	 * <b>Configuration property:</b>  Input stream charset.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Parser.inputStreamCharset"</js>
+	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Default:</b> <js>"UTF-8"</js>
+	 * </ul>
+	 * <p>
+	 * The character set to use for converting <code>InputStreams</code> and byte arrays to readers.
+	 * <p>
+	 * Used when passing in input streams and byte arrays to {@link Parser#parse(Object, Class)}.
+	 */
+	public static final String PARSER_inputStreamCharset = "Parser.inputStreamCharset";
+
+	/**
+	 * <b>Configuration property:</b>  File charset.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Parser.fileCharset"</js>
+	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Default:</b> <js>"default"</js>
+	 * </ul>
+	 * <p>
+	 * The character set to use for reading <code>Files</code> from the file system.
+	 * <p>
+	 * Used when passing in files to {@link Parser#parse(Object, Class)}.
+	 * <p>
+	 * <js>"default"</js> can be used to indicate the JVM default file system charset.
+	 */
+	public static final String PARSER_fileCharset = "Parser.fileCharset";
+
+
+	final boolean debug, trimStrings, strict;
+	final String inputStreamCharset, fileCharset;
 
 	/**
 	 * Constructor.
@@ -82,5 +157,8 @@ public class ParserContext extends Context {
 		super(cf);
 		this.debug = cf.getProperty(PARSER_debug, boolean.class, false);
 		this.trimStrings = cf.getProperty(PARSER_trimStrings, boolean.class, false);
+		this.strict = cf.getProperty(PARSER_strict, boolean.class, false);
+		this.inputStreamCharset = cf.getProperty(PARSER_inputStreamCharset, String.class, "UTF-8");
+		this.fileCharset = cf.getProperty(PARSER_fileCharset, String.class, "default");
 	}
 }

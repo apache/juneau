@@ -230,7 +230,7 @@ public class JsonParserTest {
 			r = p2.parse(s, Number.class);
 			fail("Exception expected");
 		} catch (ParseException e) {
-			assertTrue(e.getMessage().endsWith("Invalid JSON number ''"));
+			assertTrue(e.getMessage().contains("Invalid JSON number"));
 		}
 
 		// Either should allow 0 or -0.
@@ -259,7 +259,7 @@ public class JsonParserTest {
 			r = p2.parse(s, Number.class);
 			fail("Exception expected");
 		} catch (ParseException e) {
-			assertTrue(e.getMessage().endsWith("Invalid JSON number '0123'"));
+			assertTrue(e.getMessage().contains("Invalid JSON number"));
 		}
 		s = "-0123";
 		r = p1.parse(s, Number.class);
@@ -269,7 +269,7 @@ public class JsonParserTest {
 			r = p2.parse(s, Number.class);
 			fail("Exception expected");
 		} catch (ParseException e) {
-			assertTrue(e.getMessage().endsWith("Invalid JSON number '-0123'"));
+			assertTrue(e.getMessage().contains("Invalid JSON number"));
 		}
 
 		// Lax allows 0x123 and -0x123, strict does not.
@@ -281,7 +281,7 @@ public class JsonParserTest {
 			r = p2.parse(s, Number.class);
 			fail("Exception expected");
 		} catch (ParseException e) {
-			assertTrue(e.getMessage().endsWith("Invalid JSON number '0x123'"));
+			assertTrue(e.getMessage().contains("Invalid JSON number"));
 		}
 		s = "-0x123";
 		r = p1.parse(s, Number.class);
@@ -291,7 +291,7 @@ public class JsonParserTest {
 			r = p2.parse(s, Number.class);
 			fail("Exception expected");
 		} catch (ParseException e) {
-			assertTrue(e.getMessage().endsWith("Invalid JSON number '-0x123'"));
+			assertTrue(e.getMessage().contains("Invalid JSON number"));
 		}
 	}
 

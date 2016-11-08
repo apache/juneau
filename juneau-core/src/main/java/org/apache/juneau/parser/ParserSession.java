@@ -16,6 +16,7 @@ import static org.apache.juneau.parser.ParserContext.*;
 
 import java.io.*;
 import java.lang.reflect.*;
+import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -32,7 +33,8 @@ public class ParserSession extends Session {
 
 	private static JuneauLogger logger = JuneauLogger.getLogger(ParserSession.class);
 
-	private final boolean debug, trimStrings;
+	private final boolean debug, trimStrings, strict;
+	private final String inputStreamCharset, fileCharset;
 	private boolean closed;
 	private final BeanContext beanContext;
 	private final List<String> warnings = new LinkedList<String>();
@@ -58,8 +60,9 @@ public class ParserSession extends Session {
 	 * 		<li><jk>null</jk>
 	 * 		<li>{@link Reader}
 	 * 		<li>{@link CharSequence}
-	 * 		<li>{@link InputStream} containing UTF-8 encoded text.
-	 * 		<li>{@link File} containing system encoded text.
+	 * 		<li>{@link InputStream} containing UTF-8 encoded text (or whatever the encoding specified by {@link ParserContext#PARSER_inputStreamCharset}).
+	 * 		<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or whatever the encoding specified by {@link ParserContext#PARSER_inputStreamCharset}).
+	 * 		<li>{@link File} containing system encoded text (or whatever the encoding specified by {@link ParserContext#PARSER_fileCharset}).
 	 * 	</ul>
 	 * 	<br>For byte-based parsers, this can be any of the following types:
 	 * 	<ul>
@@ -78,9 +81,15 @@ public class ParserSession extends Session {
 		if (op == null || op.isEmpty()) {
 			debug = ctx.debug;
 			trimStrings = ctx.trimStrings;
+			strict = ctx.strict;
+			inputStreamCharset = ctx.inputStreamCharset;
+			fileCharset = ctx.fileCharset;
 		} else {
 			debug = op.getBoolean(PARSER_debug, ctx.debug);
 			trimStrings = op.getBoolean(PARSER_trimStrings, ctx.trimStrings);
+			strict = op.getBoolean(PARSER_strict, ctx.strict);
+			inputStreamCharset = op.getString(PARSER_inputStreamCharset, ctx.inputStreamCharset);
+			fileCharset = op.getString(PARSER_fileCharset, ctx.fileCharset);
 		}
 		this.beanContext = beanContext;
 		this.input = input;
@@ -131,14 +140,33 @@ public class ParserSession extends Session {
 				reader = new ParserReader((CharSequence)input);
 			return reader;
 		}
-		if (input instanceof InputStream) {
-			if (noCloseReader == null)
-				noCloseReader = new InputStreamReader((InputStream)input, IOUtils.UTF8);
+		if (input instanceof InputStream || input instanceof byte[]) {
+			InputStream is = (input instanceof InputStream ? (InputStream)input : new ByteArrayInputStream((byte[])input));
+			if (noCloseReader == null) {
+				CharsetDecoder cd = ("default".equalsIgnoreCase(inputStreamCharset) ? Charset.defaultCharset() : Charset.forName(inputStreamCharset)).newDecoder();
+				if (strict) {
+					cd.onMalformedInput(CodingErrorAction.REPORT);
+					cd.onUnmappableCharacter(CodingErrorAction.REPORT);
+				} else {
+					cd.onMalformedInput(CodingErrorAction.REPLACE);
+					cd.onUnmappableCharacter(CodingErrorAction.REPLACE);
+				}
+				noCloseReader = new InputStreamReader(is, cd);
+			}
 			return noCloseReader;
 		}
 		if (input instanceof File) {
-			if (reader == null)
-				reader = new FileReader((File)input);
+			if (reader == null) {
+				CharsetDecoder cd = ("default".equalsIgnoreCase(fileCharset) ? Charset.defaultCharset() : Charset.forName(fileCharset)).newDecoder();
+				if (strict) {
+					cd.onMalformedInput(CodingErrorAction.REPORT);
+					cd.onUnmappableCharacter(CodingErrorAction.REPORT);
+				} else {
+					cd.onMalformedInput(CodingErrorAction.REPLACE);
+					cd.onUnmappableCharacter(CodingErrorAction.REPLACE);
+				}
+				reader = new InputStreamReader(new FileInputStream((File)input), cd);
+			}
 			return reader;
 		}
 		throw new ParseException("Cannot convert object of type {0} to a Reader.", input.getClass().getName());
@@ -230,6 +258,15 @@ public class ParserSession extends Session {
 	 */
 	public final boolean isTrimStrings() {
 		return trimStrings;
+	}
+
+	/**
+	 * Returns the {@link ParserContext#PARSER_strict} setting value for this session.
+	 *
+	 * @return The {@link ParserContext#PARSER_strict} setting value for this session.
+	 */
+	public final boolean isStrict() {
+		return strict;
 	}
 
 	/**

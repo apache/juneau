@@ -97,7 +97,9 @@ public final class JsonParser extends ReaderParser {
 	public static final JsonParser DEFAULT = new JsonParser().lock();
 
 	/** Default parser, all default settings.*/
-	public static final JsonParser DEFAULT_STRICT = new JsonParser().setProperty(JSON_strictMode, true).lock();
+	public static final JsonParser DEFAULT_STRICT = new JsonParser().setProperty(PARSER_strict, true).lock();
+
+	private static final AsciiSet decChars = new AsciiSet("0123456789");
 
 	private <T> T parseAnything(JsonParserSession session, ClassMeta<T> eType, ParserReader r, Object outer, BeanPropertyMeta pMeta) throws Exception {
 
@@ -117,9 +119,11 @@ public final class JsonParser extends ReaderParser {
 			skipWrapperAttrStart(session, r, wrapperAttr);
 		int c = r.peek();
 		if (c == -1) {
+			if (session.isStrict())
+				throw new ParseException(session, "Empty input.");
 			// Let o be null.
 		} else if ((c == ',' || c == '}' || c == ']')) {
-			if (session.isStrictMode())
+			if (session.isStrict())
 				throw new ParseException(session, "Missing value detected.");
 			// Handle bug in Cognos 10.2.1 that can product non-existent values.
 			// Let o be null;
@@ -130,16 +134,15 @@ public final class JsonParser extends ReaderParser {
 				ObjectMap m2 = new ObjectMap(bc);
 				parseIntoMap2(session, r, m2, string(), object(), pMeta);
 				o = bd.cast(m2);
-			} else if (c == '[')
+			} else if (c == '[') {
 				o = parseIntoCollection2(session, r, new ObjectList(bc), object(), pMeta);
-			else if (c == '\'' || c == '"') {
+			} else if (c == '\'' || c == '"') {
 				o = parseString(session, r);
 				if (sType.isChar())
 					o = o.toString().charAt(0);
-			}
-			else if (c >= '0' && c <= '9' || c == '-')
+			} else if (c >= '0' && c <= '9' || c == '-' || c == '.') {
 				o = parseNumber(session, r, null);
-			else if (c == 't') {
+			} else if (c == 't') {
 				parseKeyword(session, "true", r);
 				o = Boolean.TRUE;
 			} else {
@@ -193,7 +196,7 @@ public final class JsonParser extends ReaderParser {
 				o = bd.cast((ObjectMap)m);
 			else
 				throw new ParseException(session, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.getInnerClass().getName(), sType.getNotABeanReason());
-		} else if (sType.canCreateNewInstanceFromString(outer) && ! session.isStrictMode()) {
+		} else if (sType.canCreateNewInstanceFromString(outer) && ! session.isStrict()) {
 			o = sType.newInstanceFromString(outer, parseString(session, r));
 		} else {
 			throw new ParseException(session, "Unrecognized syntax for class type ''{0}'', starting character ''{1}''", sType, (char)c);
@@ -219,7 +222,15 @@ public final class JsonParser extends ReaderParser {
 	}
 
 	private Number parseNumber(JsonParserSession session, String s, Class<? extends Number> type) throws Exception {
-		if (session.isStrictMode()) {
+
+		// JSON has slightly different number rules.
+		if (session.isStrict()) {
+
+			// Lax allows blank strings to represent 0.
+			// Strict does not allow blank strings.
+			if (s.length() == 0)
+				throw new ParseException(session, "Invalid JSON number: '"+s+"'");
+
 			// Need to weed out octal and hexadecimal formats:  0123,-0123,0x123,-0x123.
 			// Don't weed out 0 or -0.
 			// All other number formats are supported in JSON.
@@ -229,8 +240,23 @@ public final class JsonParser extends ReaderParser {
 				isNegative = true;
 				c = (s.length() == 1 ? 'x' : s.charAt(1));
 			}
-			if (c == 'x' || (c == '0' && s.length() > (isNegative ? 2 : 1)))
-				throw new NumberFormatException("Invalid JSON number '"+s+"'");
+
+			// .123 and -.123 are not valid numbers.
+			if (c == '.')
+				throw new ParseException(session, "Invalid JSON number: '"+s+"'");
+
+			// 01 is not a valid number, but 0.1, 0e1, 0e+1 are valid.
+			if (c == '0' && s.length() > (isNegative ? 2 : 1)) {
+				 char c2 = s.charAt((isNegative ? 2 : 1));
+				 if (c2 != '.' && c2 != 'e' && c2 != 'E')
+						throw new ParseException(session, "Invalid JSON number: '"+s+"'");
+			}
+
+			// JSON doesn't allow [1.] or [0.e1], but Java does.
+			int i = s.indexOf('.');
+			if (i != -1 && (s.length() == (i+1) || ! decChars.contains(s.charAt(i+1))))
+				throw new ParseException(session, "Invalid JSON number: '"+s+"'");
+
 		}
 		return StringUtils.parseNumber(s, type);
 	}
@@ -258,6 +284,7 @@ public final class JsonParser extends ReaderParser {
 		int S3=3; // Found attrName end, looking for :.
 		int S4=4; // Found :, looking for valStart: { [ " ' LITERAL.
 		int S5=5; // Looking for , or }
+		int S6=6; // Found , looking for attr start.
 
 		int state = S0;
 		String currAttr = null;
@@ -270,9 +297,9 @@ public final class JsonParser extends ReaderParser {
 			} else if (state == S1) {
 				if (c == '}') {
 					return m;
-				} else if (c == '/') {
+				} else if (session.isCommentOrWhitespace(c)) {
 					skipCommentsAndSpace(session, r.unread());
-				} else if (! Character.isWhitespace(c)) {
+				} else {
 					currAttr = parseFieldName(session, r.unread());
 					state = S3;
 				}
@@ -280,9 +307,9 @@ public final class JsonParser extends ReaderParser {
 				if (c == ':')
 					state = S4;
 			} else if (state == S4) {
-				if (c == '/') {
+				if (session.isCommentOrWhitespace(c)) {
 					skipCommentsAndSpace(session, r.unread());
-				} else if (! Character.isWhitespace(c)) {
+				} else {
 					K key = convertAttrToType(session, m, currAttr, keyType);
 					V value = parseAnything(session, valueType, r.unread(), m, pMeta);
 					setName(valueType, value, key);
@@ -291,11 +318,22 @@ public final class JsonParser extends ReaderParser {
 				}
 			} else if (state == S5) {
 				if (c == ',')
-					state = S1;
-				else if (c == '/')
+					state = S6;
+				else if (session.isCommentOrWhitespace(c))
 					skipCommentsAndSpace(session, r.unread());
 				else if (c == '}') {
 					return m;
+				} else {
+					break;
+				}
+			} else if (state == S6) {
+				if (c == '}') {
+					break;
+				} else if (session.isCommentOrWhitespace(c)) {
+					skipCommentsAndSpace(session, r.unread());
+				} else {
+					currAttr = parseFieldName(session, r.unread());
+					state = S3;
 				}
 			}
 		}
@@ -309,6 +347,8 @@ public final class JsonParser extends ReaderParser {
 			throw new ParseException(session, "Expected one of the following characters: {,[,',\",LITERAL.");
 		if (state == S5)
 			throw new ParseException(session, "Could not find '}' marking end of JSON object.");
+		if (state == S6)
+			throw new ParseException(session, "Unexpected '}' found in JSON object.");
 
 		return null; // Unreachable.
 	}
@@ -321,13 +361,13 @@ public final class JsonParser extends ReaderParser {
 		int c = r.peek();
 		if (c == '\'' || c == '"')
 			return parseString(session, r);
-		if (session.isStrictMode())
+		if (session.isStrict())
 			throw new ParseException(session, "Unquoted attribute detected.");
 		r.mark();
 		// Look for whitespace.
 		while (c != -1) {
 			c = r.read();
-			if (c == ':' || Character.isWhitespace(c) || c == '/') {
+			if (c == ':' || session.isWhitespace(c) || c == '/') {
 				r.unread();
 				String s = r.getMarked().intern();
 				return s.equals("null") ? null : s;
@@ -339,8 +379,9 @@ public final class JsonParser extends ReaderParser {
 	private <E> Collection<E> parseIntoCollection2(JsonParserSession session, ParserReader r, Collection<E> l, ClassMeta<E> elementType, BeanPropertyMeta pMeta) throws Exception {
 
 		int S0=0; // Looking for outermost [
-		int S1=1; // Looking for starting [ or { or " or ' or LITERAL
+		int S1=1; // Looking for starting [ or { or " or ' or LITERAL or ]
 		int S2=2; // Looking for , or ]
+		int S3=3; // Looking for starting [ or { or " or ' or LITERAL
 
 		int state = S0;
 		int c = 0;
@@ -352,19 +393,30 @@ public final class JsonParser extends ReaderParser {
 			} else if (state == S1) {
 				if (c == ']') {
 					return l;
-				} else if (c == '/') {
+				} else if (session.isCommentOrWhitespace(c)) {
 					skipCommentsAndSpace(session, r.unread());
-				} else if (! Character.isWhitespace(c)) {
+				} else if (c != -1) {
 					l.add(parseAnything(session, elementType, r.unread(), l, pMeta));
 					state = S2;
 				}
 			} else if (state == S2) {
 				if (c == ',') {
-					state = S1;
-				} else if (c == '/') {
+					state = S3;
+				} else if (session.isCommentOrWhitespace(c)) {
 					skipCommentsAndSpace(session, r.unread());
 				} else if (c == ']') {
 					return l;
+				} else {
+					break;  // Invalid character found.
+				}
+			} else if (state == S3) {
+				if (session.isCommentOrWhitespace(c)) {
+					skipCommentsAndSpace(session, r.unread());
+				} else if (c == ']') {
+					break;
+				} else if (c != -1) {
+					l.add(parseAnything(session, elementType, r.unread(), l, pMeta));
+					state = S2;
 				}
 			}
 		}
@@ -374,6 +426,8 @@ public final class JsonParser extends ReaderParser {
 			throw new ParseException(session, "Expected one of the following characters: {,[,',\",LITERAL.");
 		if (state == S2)
 			throw new ParseException(session, "Expected ',' or ']'.");
+		if (state == S3)
+			throw new ParseException(session, "Unexpected trailing comma in array.");
 
 		return null;  // Unreachable.
 	}
@@ -397,9 +451,9 @@ public final class JsonParser extends ReaderParser {
 			} else if (state == S1) {
 				if (c == ']') {
 					return o;
-				} else if (c == '/') {
+				} else if (session.isCommentOrWhitespace(c)) {
 					skipCommentsAndSpace(session, r.unread());
-				} else if (! Character.isWhitespace(c)) {
+				} else {
 					o[i] = parseAnything(session, argTypes[i], r.unread(), session.getOuter(), null);
 					i++;
 					state = S2;
@@ -407,7 +461,7 @@ public final class JsonParser extends ReaderParser {
 			} else if (state == S2) {
 				if (c == ',') {
 					state = S1;
-				} else if (c == '/') {
+				} else if (session.isCommentOrWhitespace(c)) {
 					skipCommentsAndSpace(session, r.unread());
 				} else if (c == ']') {
 					return o;
@@ -446,9 +500,9 @@ public final class JsonParser extends ReaderParser {
 			} else if (state == S1) {
 				if (c == '}') {
 					return m;
-				} else if (c == '/') {
+				} else if (session.isCommentOrWhitespace(c)) {
 					skipCommentsAndSpace(session, r.unread());
-				} else if (! Character.isWhitespace(c)) {
+				} else {
 					r.unread();
 					currAttrLine= r.getLine();
 					currAttrCol = r.getColumn();
@@ -459,9 +513,9 @@ public final class JsonParser extends ReaderParser {
 				if (c == ':')
 					state = S4;
 			} else if (state == S4) {
-				if (c == '/') {
+				if (session.isCommentOrWhitespace(c)) {
 					skipCommentsAndSpace(session, r.unread());
-				} else if (! Character.isWhitespace(c)) {
+				} else {
 					if (! currAttr.equals(bc.getBeanTypePropertyName())) {
 						BeanPropertyMeta pMeta = m.getPropertyMeta(currAttr);
 						session.setCurrentProperty(pMeta);
@@ -486,7 +540,7 @@ public final class JsonParser extends ReaderParser {
 			} else if (state == S5) {
 				if (c == ',')
 					state = S1;
-				else if (c == '/')
+				else if (session.isCommentOrWhitespace(c))
 					skipCommentsAndSpace(session, r.unread());
 				else if (c == '}') {
 					return m;
@@ -516,7 +570,7 @@ public final class JsonParser extends ReaderParser {
 	private String parseString(JsonParserSession session, ParserReader r) throws Exception  {
 		r.mark();
 		int qc = r.read();		// The quote character being used (" or ')
-		if (qc != '"' && session.isStrictMode()) {
+		if (qc != '"' && session.isStrict()) {
 			String msg = (qc == '\'' ? "Invalid quote character \"{0}\" being used." : "Did not find quote character marking beginning of string.  Character=\"{0}\"");
 			throw new ParseException(session, msg, (char)qc);
 		}
@@ -526,6 +580,9 @@ public final class JsonParser extends ReaderParser {
 		int c = 0;
 		while (c != -1) {
 			c = r.read();
+			// Strict syntax requires that all control characters be escaped.
+			if (session.isStrict() && c <= 0x1F)
+				throw new ParseException("Unescaped control character encountered: ''0x{0}''", String.format("%04X", c));
 			if (isInEscape) {
 				switch (c) {
 					case 'n': r.replace('\n'); break;
@@ -539,7 +596,11 @@ public final class JsonParser extends ReaderParser {
 					case '"': r.replace('"'); break;
 					case 'u': {
 						String n = r.read(4);
-						r.replace(Integer.parseInt(n, 16), 6);
+						try {
+							r.replace(Integer.parseInt(n, 16), 6);
+						} catch (NumberFormatException e) {
+							throw new ParseException(session, "Invalid Unicode escape sequence in string.");
+						}
 						break;
 					}
 					default:
@@ -556,7 +617,7 @@ public final class JsonParser extends ReaderParser {
 						break;
 					}
 				} else {
-					if (c == ',' || c == '}' || Character.isWhitespace(c)) {
+					if (c == ',' || c == '}' || session.isWhitespace(c)) {
 						s = r.getMarked(0, -1);
 						r.unread();
 						break;
@@ -573,7 +634,7 @@ public final class JsonParser extends ReaderParser {
 		// Look for concatenated string (i.e. whitespace followed by +).
 		skipCommentsAndSpace(session, r);
 		if (r.peek() == '+') {
-			if (session.isStrictMode())
+			if (session.isStrict())
 				throw new ParseException(session, "String concatenation detected.");
 			r.read();	// Skip past '+'
 			skipCommentsAndSpace(session, r);
@@ -606,9 +667,9 @@ public final class JsonParser extends ReaderParser {
 	private void skipCommentsAndSpace(JsonParserSession session, ParserReader r) throws Exception {
 		int c = 0;
 		while ((c = r.read()) != -1) {
-			if (! Character.isWhitespace(c)) {
+			if (! session.isWhitespace(c)) {
 				if (c == '/') {
-					if (session.isStrictMode())
+					if (session.isStrict())
 						throw new ParseException(session, "Javascript comment detected.");
 					skipComments(session, r);
 				} else {
@@ -639,9 +700,9 @@ public final class JsonParser extends ReaderParser {
 				if (c == '{')
 					state = S1;
 			} else if (state == S1) {
-				if (c == '/') {
+				if (session.isCommentOrWhitespace(c)) {
 					skipCommentsAndSpace(session, r.unread());
-				} else if (! Character.isWhitespace(c)) {
+				} else {
 					currAttr = parseFieldName(session, r.unread());
 					if (! currAttr.equals(wrapperAttr))
 						throw new ParseException(session, "Expected to find wrapper attribute ''{0}'' but found attribute ''{1}''", wrapperAttr, currAttr);
@@ -651,9 +712,9 @@ public final class JsonParser extends ReaderParser {
 				if (c == ':')
 					state = S4;
 			} else if (state == S4) {
-				if (c == '/') {
+				if (session.isCommentOrWhitespace(c)) {
 					skipCommentsAndSpace(session, r.unread());
-				} else if (! Character.isWhitespace(c)) {
+				} else {
 					r.unread();
 					return;
 				}
@@ -676,9 +737,9 @@ public final class JsonParser extends ReaderParser {
 	private void skipWrapperAttrEnd(JsonParserSession session, ParserReader r) throws ParseException, IOException {
 		int c = 0;
 		while ((c = r.read()) != -1) {
-			if (! Character.isWhitespace(c)) {
+			if (! session.isWhitespace(c)) {
 				if (c == '/') {
-					if (session.isStrictMode())
+					if (session.isStrict())
 						throw new ParseException(session, "Javascript comment detected.");
 					skipComments(session, r);
 				} else if (c == '}') {

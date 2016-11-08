@@ -204,8 +204,12 @@ public abstract class Parser extends CoreApi {
 			return doParse(session, type);
 		} catch (ParseException e) {
 			throw e;
+		} catch (StackOverflowError e) {
+			throw new ParseException(session, "Depth too deep.  Stack overflow occurred.");
+		} catch (IOException e) {
+			throw new ParseException(session, "I/O exception occurred.  exception={0}, message={1}.", e.getClass().getSimpleName(), e.getLocalizedMessage()).initCause(e);
 		} catch (Exception e) {
-			throw new ParseException(session, e);
+			throw new ParseException(session, "Exception occurred.  exception={0}, message={1}.", e.getClass().getSimpleName(), e.getLocalizedMessage()).initCause(e);
 		} finally {
 			session.close();
 		}
@@ -222,8 +226,9 @@ public abstract class Parser extends CoreApi {
 	 * 		<li><jk>null</jk>
 	 * 		<li>{@link Reader}
 	 * 		<li>{@link CharSequence}
-	 * 		<li>{@link InputStream} containing UTF-8 encoded text.
-	 * 		<li>{@link File} containing system encoded text.
+	 * 		<li>{@link InputStream} containing UTF-8 encoded text (or charset defined by {@link ParserContext#PARSER_inputStreamCharset} property value).
+	 * 		<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or charset defined by {@link ParserContext#PARSER_inputStreamCharset} property value).
+	 * 		<li>{@link File} containing system encoded text (or charset defined by {@link ParserContext#PARSER_fileCharset} property value).
 	 * 	</ul>
 	 * 	<br>Stream-based parsers can handle the following input class types:
 	 * 	<ul>

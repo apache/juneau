@@ -38,12 +38,6 @@ import org.apache.juneau.parser.*;
  * <h6 class='topic' id='ConfigProperties'>Configurable properties on the JSON parser</h6>
  * <table class='styled' style='border-collapse: collapse;'>
  * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th></tr>
- * 	<tr>
- * 		<td>{@link #JSON_strictMode}</td>
- * 		<td>Strict mode</td>
- * 		<td><code>Boolean</code></td>
- * 		<td><jk>false</jk></td>
- * 	</tr>
  * </table>
  *
  * <h6 class='topic'>Configurable properties inherited from parent classes</h6>
@@ -59,28 +53,6 @@ import org.apache.juneau.parser.*;
 public final class JsonParserContext extends ParserContext {
 
 	/**
-	 * <b>Configuration property:</b>  Strict mode.
-	 * <p>
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"JsonParser.strictMode"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * </ul>
-	 * <p>
-	 * When in strict mode, parser throws exceptions on the following invalid JSON syntax:
-	 * <ul class='spaced-list'>
-	 * 	<li>Unquoted attributes.
-	 * 	<li>Missing attribute values.
-	 * 	<li>Concatenated strings.
-	 * 	<li>Javascript comments.
-	 * 	<li>Numbers and booleans when Strings are expected.
-	 * </ul>
-	 */
-	public static final String JSON_strictMode = "JsonParser.strictMode";
-
-	final boolean strictMode;
-
-	/**
 	 * Constructor.
 	 * <p>
 	 * Typically only called from {@link ContextFactory#getContext(Class)}.
@@ -89,6 +61,5 @@ public final class JsonParserContext extends ParserContext {
 	 */
 	public JsonParserContext(ContextFactory cf) {
 		super(cf);
-		this.strictMode = cf.getProperty(JSON_strictMode, boolean.class, false);
 	}
 }

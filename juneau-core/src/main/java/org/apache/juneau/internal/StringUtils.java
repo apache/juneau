@@ -16,6 +16,8 @@ import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.io.*;
 import java.math.*;
+import java.nio.*;
+import java.nio.charset.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 import java.util.regex.*;
@@ -184,7 +186,7 @@ public final class StringUtils {
 				return new AtomicInteger(Integer.decode(s));
 			throw new ParseException("Unsupported Number type: {0}", type.getName());
 		} catch (NumberFormatException e) {
-			throw new ParseException("Could not convert string ''{0}'' to class ''{1}''", s, type.getName()).initCause(e);
+			throw new ParseException("Invalid number: ''{0}'', class=''{1}''", s, type.getSimpleName()).initCause(e);
 		}
 	}
 
@@ -1006,5 +1008,65 @@ public final class StringUtils {
 	 */
 	public static String toString(Object o) {
 		return (o == null ? null : o.toString());
+	}
+
+	/**
+	 * Converts a hexadecimal byte stream (e.g. "34A5BC") into a UTF-8 encoded string.
+	 *
+	 * @param hex The hexadecimal string.
+	 * @return The UTF-8 string.
+	 */
+	public static String fromHexToUTF8(String hex) {
+		ByteBuffer buff = ByteBuffer.allocate(hex.length()/2);
+		for (int i = 0; i < hex.length(); i+=2)
+		    buff.put((byte)Integer.parseInt(hex.substring(i, i+2), 16));
+		buff.rewind();
+		Charset cs = Charset.forName("UTF-8");
+		return cs.decode(buff).toString();
+	}
+
+	private final static char[] HEX = "0123456789ABCDEF".toCharArray();
+
+	/**
+	 * Converts a byte array into a simple hexadecimal character string.
+	 *
+	 * @param bytes The bytes to convert to hexadecimal.
+	 * @return A new string consisting of hexadecimal characters.
+	 */
+	public static String toHex(byte[] bytes) {
+		StringBuilder sb = new StringBuilder(bytes.length * 2);
+	    for ( int j = 0; j < bytes.length; j++ ) {
+	        int v = bytes[j] & 0xFF;
+	        sb.append(HEX[v >>> 4]).append(HEX[v & 0x0F]);
+	    }
+	    return sb.toString();
+	}
+
+	/**
+	 * Converts a hexadecimal character string to a byte array.
+	 *
+	 * @param hex The string to convert to a byte array.
+	 * @return A new byte array.
+	 */
+	public static byte[] fromHex(String hex) {
+		ByteBuffer buff = ByteBuffer.allocate(hex.length()/2);
+		for (int i = 0; i < hex.length(); i+=2)
+		    buff.put((byte)Integer.parseInt(hex.substring(i, i+2), 16));
+		buff.rewind();
+		return buff.array();
+	}
+
+	/**
+	 * Creates a repeated pattern.
+	 *
+	 * @param count The number of times to repeat the pattern.
+	 * @param pattern The pattern to repeat.
+	 * @return A new string consisting of the repeated pattern.
+	 */
+	public static String repeat(int count, String pattern) {
+		StringBuilder sb = new StringBuilder(pattern.length() * count);
+		for (int i = 0; i < count; i++)
+			sb.append(pattern);
+		return sb.toString();
 	}
 }

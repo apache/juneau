@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.json;
 
-import static org.apache.juneau.json.JsonParserContext.*;
-
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
@@ -30,7 +28,6 @@ import org.apache.juneau.parser.*;
  */
 public final class JsonParserSession extends ParserSession {
 
-	private final boolean strictMode;
 	private ParserReader reader;
 
 	/**
@@ -54,20 +51,6 @@ public final class JsonParserSession extends ParserSession {
 	 */
 	public JsonParserSession(JsonParserContext ctx, BeanContext beanContext, Object input, ObjectMap op, Method javaMethod, Object outer) {
 		super(ctx, beanContext, input, op, javaMethod, outer);
-		if (op == null || op.isEmpty()) {
-			strictMode = ctx.strictMode;
-		} else {
-			strictMode = op.getBoolean(JSON_strictMode, ctx.strictMode);
-		}
-	}
-
-	/**
-	 * Returns the {@link JsonParserContext#JSON_strictMode} setting value for this session.
-	 *
-	 * @return The {@link JsonParserContext#JSON_strictMode} setting value for this session.
-	 */
-	public final boolean isStrictMode() {
-		return strictMode;
 	}
 
 	@Override /* ParserSession */
@@ -82,6 +65,36 @@ public final class JsonParserSession extends ParserSession {
 				reader = new ParserReader(super.getReader());
 		}
 		return reader;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified character is whitespace.
+	 * <p>
+	 * The definition of whitespace is different for strict vs lax mode.
+	 * Strict mode only interprets 0x20 (space), 0x09 (tab), 0x0A (line feed) and 0x0D (carriage return) as whitespace.
+	 * Lax mode uses {@link Character#isWhitespace(int)} to make the determination.
+	 *
+	 * @param cp The codepoint.
+	 * @return <jk>true</jk> if the specified character is whitespace.
+	 */
+	public final boolean isWhitespace(int cp) {
+		if (isStrict())
+				return cp <= 0x20 && (cp == 0x09 || cp == 0x0A || cp == 0x0D || cp == 0x20);
+		return Character.isWhitespace(cp);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified character is whitespace or '/'.
+	 *
+	 * @param cp The codepoint.
+	 * @return <jk>true</jk> if the specified character is whitespace or '/'.
+	 */
+	public final boolean isCommentOrWhitespace(int cp) {
+		if (cp == '/')
+			return true;
+		if (isStrict())
+			return cp <= 0x20 && (cp == 0x09 || cp == 0x0A || cp == 0x0D || cp == 0x20);
+	return Character.isWhitespace(cp);
 	}
 
 	@Override /* ParserSession */

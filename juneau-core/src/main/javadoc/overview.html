@@ -4981,6 +4981,7 @@
 	
 	<h5 class='toc'>What's new in each release</h5>
 	<ul class='toc'>
+		<li><p><a class='doclink' href='#6.0.1'>6.0.1 (TBD)</a></p>
 		<li><p><a class='doclink' href='#6.0.0'>6.0.0 (Oct 3, 2016)</a></p>
 		<li><p><a class='doclink' href='#5.2.0.1'>5.2.0.1 (Mar 23, 2016)</a></p>
 		<li><p><a class='doclink' href='#5.2.0.0'>5.2.0.0 (Dec 30, 2015)</a></p>
@@ -5045,6 +5046,42 @@
 	</ul>
 
 
+	<!-- ======================================================================================================== -->
+	<a id="6.0.1"></a>
+	<h3 class='topic' onclick='toggle(this)'>6.0.1 (TBD)</h3>
+	<div class='topic'>
+		<p>
+		</p>
+
+		<h6 class='topic'>org.apache.juneau</h6>
+		<ul class='spaced-list'>
+			<li>General improvements to JSON parser.
+				<ul>
+					<li>Several fixes to handle obscure edge cases.
+				</ul>
+			<li>New properties in {@link org.apache.juneau.parser.ParserContext}.
+				<ul>
+					<li>{@link org.apache.juneau.parser.ParserContext#PARSER_strict}
+					<li>{@link org.apache.juneau.parser.ParserContext#PARSER_inputStreamCharset}
+					<li>{@link org.apache.juneau.parser.ParserContext#PARSER_fileCharset}
+				</ul>
+			<li>Removed <code>JsonParserContext.JSON_strictMode</code>.  Replaced by <code>PARSER_strict</code>.		
+			<li><code><jk>byte[]</jk></code> arrays can now be passed to {@link org.apache.juneau.parser.Parser#parse(Object,Class)} for reader-based parsers.	
+		</ul>			
+		
+		<h6 class='topic'>org.apache.juneau.server</h6>
+		<ul class='spaced-list'>
+		</ul>	
+				
+		<h6 class='topic'>org.apache.juneau.client</h6>
+		<ul class='spaced-list'>
+		</ul>			
+
+		<h6 class='topic'>org.apache.juneau.microservice</h6>
+		<ul class='spaced-list'>
+		</ul>			
+	</div>
+	
 	<!-- ======================================================================================================== -->
 	<a id="6.0.0"></a>
 	<h3 class='topic' onclick='toggle(this)'>6.0.0 (Oct 3, 2016)</h3>
