@@ -168,7 +168,7 @@ public class ConfigMgr {
 	 * Delete all configuration files registered with this config manager.
 	 */
 	public void deleteAll() {
-		for (File f : configs.keySet())
+		for (File f : Collections.list(configs.keys()))  // Don't use keySet(), otherwise fails on Java 6/7 if compiled using Java 8.
 			FileUtils.delete(f);
 		files.clear();
 		configs.clear();

@@ -48,7 +48,7 @@ public class JsonParserEdgeCasesTest {
 			{ 15, "ix_string_unicode_U+FDD0_nonchar", "5B225C7546444430225D"/*["buFDD0"]*/, null },
 			{ 16, "ix_string_unicode_U+FFFE_nonchar", "5B225C7546464645225D"/*["buFFFE"]*/, null },
 			{ 17, "ix_string_UTF-16LE_with_BOM", "FFFE5B002200E90022005D00"/*[fffd][fffd][[0]"[0][fffd][0]"[0]][0]*/, null },
-			{ 18, "ix_string_UTF-8_invalid_sequence", "5B22E697A5D188FA225D"/*["[65e5][448][fffd]"]*/, "I/O exception occurred.  exception=MalformedInputException" },
+			{ 18, "ix_string_UTF-8_invalid_sequence", "5B22E697A5D188FA225D"/*["[65e5][448][fffd]"]*/, null },
 			{ 19, "ix_structure_UTF-8_BOM_empty_object", "EFBBBF7B7D"/*[feff]{}*/, "Unrecognized syntax" },
 			{ 20, "n_array_1_true_without_comma", "[1 true]", "Expected ',' or ']'" },
 			{ 21, "n_array_colon_instead_of_comma", "[\"\": 1]", "Expected ',' or ']'" },
@@ -233,7 +233,7 @@ public class JsonParserEdgeCasesTest {
 			{ 200, "nx_string_unescaped_newline", "5B226E65770A6C696E65225D"/*["new[a]line"]*/, null },
 			{ 201, "nx_string_unescaped_tab", "5B2209225D"/*["[9]"]*/, null },
 			{ 202, "nx_string_unicode_CapitalU", "225C554136364422"/*"\UA66D"*/, "Invalid escape sequence" },
-			{ 203, "nx_string_UTF8_surrogate_U+D800", "5B22EDA080225D"/*["[fffd]"]*/, "MalformedInputException" },
+			{ 203, "ix_string_UTF8_surrogate_U+D800", "5B22EDA080225D"/*["[fffd]"]*/, null },  // Succeeds on Java 8, fails on Java 6 & 7.
 			{ 204, "nx_structure_ascii-unicode-identifier", "61C3A5"/*a[e5]*/, "Unrecognized syntax" },
 			{ 205, "nx_structure_incomplete_UTF8_BOM", "EFBB7B7D"/*[fffd]{}*/, null },
 			{ 206, "nx_structure_lone-invalid-utf-8", "E5"/*[fffd]*/, null },
@@ -479,7 +479,6 @@ public class JsonParserEdgeCasesTest {
 	static {
 		errors.put(/*11*/ "ix_string_not_in_unicode_range", "I/O exception occurred.  exception=MalformedInputException");
 		errors.put(/*12*/ "ix_string_truncated-utf-8", "I/O exception occurred.  exception=MalformedInputException");
-		errors.put(/*18*/ "ix_string_UTF-8_invalid_sequence", "I/O exception occurred.  exception=MalformedInputException");
 		errors.put(/*19*/ "ix_structure_UTF-8_BOM_empty_object", "Unrecognized syntax");
 		errors.put(/*20*/ "n_array_1_true_without_comma", "Expected ',' or ']'");
 		errors.put(/*21*/ "n_array_colon_instead_of_comma", "Expected ',' or ']'");

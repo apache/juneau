@@ -74,8 +74,7 @@ public class ErrorConditionsTest {
 			fail("Exception expected");
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_BAD_REQUEST,
-				"Could not convert request body content to class type 'org.apache.juneau.server.test.ErrorConditionsResource$Test2' using parser 'org.apache.juneau.json.JsonParser'.",
-				"Could not convert string 'foo' to class 'int'");
+				"Invalid number");
 		}
 	}
 
