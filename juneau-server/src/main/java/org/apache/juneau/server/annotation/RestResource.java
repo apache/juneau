@@ -57,8 +57,8 @@ public @interface RestResource {
 	 * 	used in the properties file.
 	 * <p>
 	 * 	The value can be a relative path like <js>"nls/Messages"</js>, indicating to look for the
-	 * 	resource bundle <js>"com.ibm.sample.nls.Messages"</js> if the resource class
-	 * 	is in <js>"com.ibm.sample"</js>, or it can be an absolute path, like <js>"com.ibm.sample.nls.Messages"</js>
+	 * 	resource bundle <js>"com.foo.sample.nls.Messages"</js> if the resource class
+	 * 	is in <js>"com.foo.sample"</js>, or it can be an absolute path, like <js>"com.foo.sample.nls.Messages"</js>
 	 */
 	String messages() default "";
 
@@ -500,7 +500,7 @@ public @interface RestResource {
 	 *
 	 * <h6 class='topic'>Example:</h6>
 	 * <p class='bcode'>
-	 * 	<jk>package</jk> com.ibm.mypackage;
+	 * 	<jk>package</jk> com.foo.mypackage;
 	 *
 	 * 	<ja>@RestResource</ja>(
 	 * 		stylesheet=<js>"mystyles/mycss.css"</js>
@@ -512,7 +512,7 @@ public @interface RestResource {
 	 * 	In this example, the servlet will attempt to find the <code>mycss.css</code> file in the following ordered locations:
 	 * </p>
 	 * <ol>
-	 * 	<li><code>com.ibm.mypackage.mystyles</code> package.
+	 * 	<li><code>com.foo.mypackage.mystyles</code> package.
 	 * 	<li><code>org.apache.juneau.server.mystyles</code> package (since <code>RestServletDefault</code> is in <code>org.apache.juneau.server</code>).
 	 * 	<li><code>[working-dir]/mystyles</code> directory.
 	 *	</ol>
@@ -530,7 +530,7 @@ public @interface RestResource {
 	 *
 	 * <h6 class='topic'>Example:</h6>
 	 * <p class='bcode'>
-	 * 	<jk>package</jk> com.ibm.mypackage;
+	 * 	<jk>package</jk> com.foo.mypackage;
 	 *
 	 * 	<ja>@RestResource</ja>(
 	 * 		favicon=<js>"mydocs/myicon.ico"</js>
@@ -542,7 +542,7 @@ public @interface RestResource {
 	 * 	In this example, the servlet will attempt to find the <code>myicon.ico</code> file in the following ordered locations:
 	 * </p>
 	 * <ol>
-	 * 	<li><code>com.ibm.mypackage.mydocs</code> package.
+	 * 	<li><code>com.foo.mypackage.mydocs</code> package.
 	 * 	<li><code>org.apache.juneau.server.mydocs</code> package (since <code>RestServletDefault</code> is in <code>org.apache.juneau.server</code>).
 	 * 	<li><code>[working-dir]/mydocs</code> directory.
 	 * </ol>
@@ -562,7 +562,7 @@ public @interface RestResource {
 	 *
 	 * <h6 class='topic'>Example:</h6>
 	 * <p class='bcode'>
-	 * 	<jk>package</jk> com.ibm.mypackage;
+	 * 	<jk>package</jk> com.foo.mypackage;
 	 *
 	 * 	<ja>@RestResource</ja>(
 	 * 		path=<js>"/myresource"</js>,
@@ -576,7 +576,7 @@ public @interface RestResource {
 	 * 	in the following ordered locations:
 	 * </p>
 	 * <ol>
-	 * 	<li><code>com.ibm.mypackage.docs</code> package.
+	 * 	<li><code>com.foo.mypackage.docs</code> package.
 	 * 	<li><code>org.apache.juneau.server.docs</code> package (since <code>RestServletDefault</code> is in <code>org.apache.juneau.server</code>).
 	 * 	<li><code>[working-dir]/docs</code> directory.
 	 * </ol>

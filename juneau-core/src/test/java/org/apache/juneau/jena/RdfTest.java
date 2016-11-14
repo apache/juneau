@@ -43,7 +43,7 @@ public class RdfTest {
 		// Normal format - Sequence
 		//--------------------------------------------------------------------------------
 		expected =
-			"<rdf:RDF a='http://ns/' j='http://www.ibm.com/juneau/' jp='http://www.ibm.com/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
+			"<rdf:RDF a='http://ns/' j='http://www.apache.org/juneau/' jp='http://www.apache.org/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
 			+ "\n   <rdf:Description about='http://test/a'>"
 			+ "\n      <a:f2>"
 			+ "\n         <rdf:Seq>"
@@ -71,7 +71,7 @@ public class RdfTest {
 		//--------------------------------------------------------------------------------
 		s.setProperty(RDF_collectionFormat, RdfCollectionFormat.SEQ);
 		expected =
-			"<rdf:RDF a='http://ns/' j='http://www.ibm.com/juneau/' jp='http://www.ibm.com/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
+			"<rdf:RDF a='http://ns/' j='http://www.apache.org/juneau/' jp='http://www.apache.org/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
 			+ "\n   <rdf:Description about='http://test/a'>"
 			+ "\n      <a:f2>"
 			+ "\n         <rdf:Seq>"
@@ -99,7 +99,7 @@ public class RdfTest {
 		//--------------------------------------------------------------------------------
 		s.setProperty(RDF_collectionFormat, RdfCollectionFormat.BAG);
 		expected =
-			"<rdf:RDF a='http://ns/' j='http://www.ibm.com/juneau/' jp='http://www.ibm.com/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
+			"<rdf:RDF a='http://ns/' j='http://www.apache.org/juneau/' jp='http://www.apache.org/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
 			+ "\n   <rdf:Description about='http://test/a'>"
 			+ "\n      <a:f2>"
 			+ "\n         <rdf:Bag>"
@@ -127,7 +127,7 @@ public class RdfTest {
 		//--------------------------------------------------------------------------------
 		s.setProperty(RDF_collectionFormat, RdfCollectionFormat.LIST);
 		expected =
-			   "<rdf:RDF a='http://ns/' j='http://www.ibm.com/juneau/' jp='http://www.ibm.com/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
+			   "<rdf:RDF a='http://ns/' j='http://www.apache.org/juneau/' jp='http://www.apache.org/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
 			 + "\n   <rdf:Description about='http://test/a'>"
 			 + "\n      <a:f2 parseType='Resource'>"
 			 + "\n         <rdf:first>f2a</rdf:first>"
@@ -157,7 +157,7 @@ public class RdfTest {
 		//--------------------------------------------------------------------------------
 		s.setProperty(RDF_collectionFormat, RdfCollectionFormat.MULTI_VALUED);
 		expected =
-			"<rdf:RDF a='http://ns/' j='http://www.ibm.com/juneau/' jp='http://www.ibm.com/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
+			"<rdf:RDF a='http://ns/' j='http://www.apache.org/juneau/' jp='http://www.apache.org/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
 			+ "\n   <rdf:Description about='http://test/a'>"
 			 + "\n      <a:f2>f2a</a:f2>"
 			 + "\n      <a:f2>f2b</a:f2>"
@@ -204,7 +204,7 @@ public class RdfTest {
 		//--------------------------------------------------------------------------------
 
 		expected =
-			 "<rdf:RDF b='http://ns/' j='http://www.ibm.com/juneau/' jp='http://www.ibm.com/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
+			 "<rdf:RDF b='http://ns/' j='http://www.apache.org/juneau/' jp='http://www.apache.org/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
 			 + "\n   <rdf:Description about='http://test/b'>"
 			 + "\n      <b:f2>"
 			 + "\n         <rdf:Seq>"
@@ -274,7 +274,7 @@ public class RdfTest {
 		//--------------------------------------------------------------------------------
 		s.setProperty(RDF_collectionFormat, RdfCollectionFormat.BAG);
 		expected =
-			 "<rdf:RDF b='http://ns/' j='http://www.ibm.com/juneau/' jp='http://www.ibm.com/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
+			 "<rdf:RDF b='http://ns/' j='http://www.apache.org/juneau/' jp='http://www.apache.org/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
 			 + "\n   <rdf:Description about='http://test/b'>"
 			 + "\n      <b:f2>"
 			 + "\n         <rdf:Seq>"
@@ -437,7 +437,7 @@ public class RdfTest {
 		//--------------------------------------------------------------------------------
 		s.setProperty(RDF_collectionFormat, RdfCollectionFormat.BAG);
 		expected =
-			 "<rdf:RDF b='http://ns/' j='http://www.ibm.com/juneau/' jp='http://www.ibm.com/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
+			 "<rdf:RDF b='http://ns/' j='http://www.apache.org/juneau/' jp='http://www.apache.org/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
 			 + "\n   <rdf:Description about='http://test/b'>"
 			 + "\n      <b:f2>"
 			 + "\n         <rdf:Seq>"
@@ -536,7 +536,7 @@ public class RdfTest {
 
 		rdfXml = s.serialize(l);
 		expected =
-			"<rdf:RDF j='http://www.ibm.com/juneau/' jp='http://www.ibm.com/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
+			"<rdf:RDF j='http://www.apache.org/juneau/' jp='http://www.apache.org/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
 				+ "\n   <rdf:Description about='http://localhost/f1/2'>"
 				+ "\n      <jp:f2>f2</jp:f2>"
 				+ "\n      <jp:f3 resource='http://localhost/f3/2'/>"
@@ -552,7 +552,7 @@ public class RdfTest {
 		D[] da = l.toArray(new D[l.size()]);
 		rdfXml = s.serialize(da);
 		expected =
-			"<rdf:RDF j='http://www.ibm.com/juneau/' jp='http://www.ibm.com/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
+			"<rdf:RDF j='http://www.apache.org/juneau/' jp='http://www.apache.org/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
 				+ "\n   <rdf:Description about='http://localhost/f1/2'>"
 				+ "\n      <jp:f2>f2</jp:f2>"
 				+ "\n      <jp:f3 resource='http://localhost/f3/2'/>"
@@ -567,7 +567,7 @@ public class RdfTest {
 		da = p.parse(rdfXml, D[].class);
 		rdfXml = s.serialize(da);
 		expected =
-			"<rdf:RDF j='http://www.ibm.com/juneau/' jp='http://www.ibm.com/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
+			"<rdf:RDF j='http://www.apache.org/juneau/' jp='http://www.apache.org/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
 				+ "\n   <rdf:Description about='http://localhost/f1/2'>"
 				+ "\n      <jp:f2>f2</jp:f2>"
 				+ "\n      <jp:f3 resource='http://localhost/f3/2'/>"

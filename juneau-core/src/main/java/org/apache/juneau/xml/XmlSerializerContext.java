@@ -278,7 +278,7 @@ public class XmlSerializerContext extends SerializerContext {
 		autoDetectNamespaces = cf.getProperty(XML_autoDetectNamespaces, boolean.class, true);
 		enableNamespaces = cf.getProperty(XML_enableNamespaces, boolean.class, true);
 		addNamespaceUrlsToRoot = cf.getProperty(XML_addNamespaceUrisToRoot, boolean.class, true);
-		defaultNamespace = cf.getProperty(XML_defaultNamespaceUri, String.class, "{juneau:'http://www.ibm.com/2013/Juneau'}");
+		defaultNamespace = cf.getProperty(XML_defaultNamespaceUri, String.class, "{juneau:'http://www.apache.org/2013/Juneau'}");
 		xsNamespace = cf.getProperty(XML_xsNamespace, Namespace.class, new Namespace("xs", "http://www.w3.org/2001/XMLSchema"));
 		xsiNamespace = cf.getProperty(XML_xsiNamespace, Namespace.class, new Namespace("xsi", "http://www.w3.org/2001/XMLSchema-instance"));
 		namespaces = cf.getProperty(XML_namespaces, Namespace[].class, new Namespace[0]);

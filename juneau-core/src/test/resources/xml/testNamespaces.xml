@@ -13,7 +13,7 @@
  * specific language governing permissions and limitations under the License.                                              *
  ***************************************************************************************************************************
 -->
-<object xmlns='http://www.ibm.com' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>
+<object xmlns='http://www.apache.org' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>
 	<name>John Smith</name>
 	<address _type='object'>
 		<streetAddress>21 2nd Street</streetAddress>

@@ -47,7 +47,7 @@ class Sample {
 		};
 
 		// Get schema from the schema map.
-		Schema purchaseOrderSchema = schemaMap.get("http://www.ibm.com/purchase-order/PurchaseOrder#");
+		Schema purchaseOrderSchema = schemaMap.get("http://www.apache.org/purchase-order/PurchaseOrder#");
 
 		JsonType streetType = purchaseOrderSchema
 			.getProperty("address",true)                         // Get "address" property, resolved to Address schema.

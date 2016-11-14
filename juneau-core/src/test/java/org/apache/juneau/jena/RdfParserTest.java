@@ -42,7 +42,7 @@ public class RdfParserTest {
 		   .setProperty(RDF_addRootProperty, true);
 
 		String expected =
-			 "<rdf:RDF a='http://ns/' a1='http://ns2/' j='http://www.ibm.com/juneau/' jp='http://www.ibm.com/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
+			 "<rdf:RDF a='http://ns/' a1='http://ns2/' j='http://www.apache.org/juneau/' jp='http://www.apache.org/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
 			 + "\n   <rdf:Description about='http://test/a'>"
 			 + "\n      <a:f1>1</a:f1>"
 			 + "\n      <a:f2>f2</a:f2>"

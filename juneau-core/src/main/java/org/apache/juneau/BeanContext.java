@@ -1667,7 +1667,7 @@ public class BeanContext extends Context {
 	 * <h6 class='topic'>Example:</h6>
 	 * <ul>
 	 * 	<li><js>"java.lang.String"</js>
-	 * 	<li><js>"com.ibm.sample.MyBean[]"</js>
+	 * 	<li><js>"com.foo.sample.MyBean[]"</js>
 	 * 	<li><js>"java.util.HashMap<java.lang.String,java.lang.Integer>"</js>
 	 * 	<li><js>"[Ljava.lang.String;"</js> (i.e. the value of <code>String[].<jk>class</jk>.getName()</code>)
 	 * </ul>

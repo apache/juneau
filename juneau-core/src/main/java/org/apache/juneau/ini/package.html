@@ -397,7 +397,7 @@
 	<p>
 		The <code>org.apache.juneau.microservice.resources.ConfigResource</code> is a predefined REST interface that
 			allows access to the config file used by a microservice.<br>
-		The <code>com.ibm.team.juneau.samples</code> project is a microservice that includes this resource
+		The <code>juneau-samples</code> project is a microservice that includes this resource
 			at <code>http://localhost:10000/sample/config</code>.<br>
 		The sample microservice uses the following config file <code>juneau-samples.cfg</code>:
 	</p>
@@ -418,7 +418,7 @@
 	
 	<cc># A JSON map of servlet paths to servlet classes.
 	# Example:  
-	# 	resourceMap = {'/*':'com.ibm.MyServlet'}
+	# 	resourceMap = {'/*':'com.foo.MyServlet'}
 	# Either resourceMap or resources must be specified.</cc>
 	<ck>resourceMap</ck> = 
 
@@ -426,7 +426,7 @@
 	# Resource paths are pulled from @RestResource.path() annotation, or
 	# 	"/*" if annotation not specified.
 	# Example:  
-	# 	resources = com.ibm.MyServlet
+	# 	resources = com.foo.MyServlet
 	# Default is Rest-Resources in manifest file.
 	# Either resourceMap or resources must be specified.</cc>
 	<ck>resources</ck> = 

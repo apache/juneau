@@ -14,19 +14,19 @@
 @XmlSchema(
 	prefix="ab",
 	xmlNs={
-		@XmlNs(prefix="ab", namespaceURI="http://www.ibm.com/addressBook/"),
-		@XmlNs(prefix="per", namespaceURI="http://www.ibm.com/person/"),
-		@XmlNs(prefix="addr", namespaceURI="http://www.ibm.com/address/"),
-		@XmlNs(prefix="mail", namespaceURI="http://www.ibm.com/mail/")
+		@XmlNs(prefix="ab", namespaceURI="http://www.apache.org/addressBook/"),
+		@XmlNs(prefix="per", namespaceURI="http://www.apache.org/person/"),
+		@XmlNs(prefix="addr", namespaceURI="http://www.apache.org/address/"),
+		@XmlNs(prefix="mail", namespaceURI="http://www.apache.org/mail/")
 	}
 )
 @RdfSchema(
 	prefix="ab",
 	rdfNs={
-		@RdfNs(prefix="ab", namespaceURI="http://www.ibm.com/addressBook/"),
-		@RdfNs(prefix="per", namespaceURI="http://www.ibm.com/person/"),
-		@RdfNs(prefix="addr", namespaceURI="http://www.ibm.com/address/"),
-		@RdfNs(prefix="mail", namespaceURI="http://www.ibm.com/mail/")
+		@RdfNs(prefix="ab", namespaceURI="http://www.apache.org/addressBook/"),
+		@RdfNs(prefix="per", namespaceURI="http://www.apache.org/person/"),
+		@RdfNs(prefix="addr", namespaceURI="http://www.apache.org/address/"),
+		@RdfNs(prefix="mail", namespaceURI="http://www.apache.org/mail/")
 	}
 )
 package org.apache.juneau.samples.addressbook;

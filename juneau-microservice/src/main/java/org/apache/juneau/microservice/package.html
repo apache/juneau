@@ -371,7 +371,7 @@
 	
 	<cc># A JSON map of servlet paths to servlet classes.
 	# Example:  
-	# 	resourceMap = {'/*':'com.ibm.MyServlet'}
+	# 	resourceMap = {'/*':'com.foo.MyServlet'}
 	# Either resourceMap or resources must be specified.</cc>
 	<ck>resourceMap</ck> = 
 
@@ -379,7 +379,7 @@
 	# Resource paths are pulled from @RestResource.path() annotation, or
 	# 	"/*" if annotation not specified.
 	# Example:  
-	# 	resources = com.ibm.MyServlet
+	# 	resources = com.foo.MyServlet
 	# Default is Rest-Resources in manifest file.
 	# Either resourceMap or resources must be specified.</cc>
 	<ck>resources</ck> = 
@@ -838,13 +838,13 @@
 		<p>
 			This example shows how the {@link org.apache.juneau.microservice.RestMicroservice} class
 			can be extended to implement lifecycle listener methods or override existing methods.
-			We'll create a new class <l>com.ibm.SampleCustomRestMicroservice</l>.
+			We'll create a new class <l>com.foo.SampleCustomRestMicroservice</l>.
 		</p>
 		<p>
 			First, the manifest file needs to be modified to point to our new microservice:
 		</p>
 		<p class='bcode'>
-	<mk>Main-Class:</mk> com.ibm.SampleCustomRestMicroservice
+	<mk>Main-Class:</mk> com.foo.SampleCustomRestMicroservice
 		</p>
 		<p>
 			Then we define the following class:

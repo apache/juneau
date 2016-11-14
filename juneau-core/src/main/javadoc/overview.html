@@ -1532,7 +1532,7 @@
 	<xt>&lt;web-app</xt> <xa>version</xa>=<xs>"2.3"</xs><xt>&gt;</xt>
 	  <xt>&lt;servlet&gt;</xt>
 		 <xt>&lt;servlet-name&gt;</xt>SystemPropertiesService<xt>&lt;/servlet-name&gt;</xt>
-		 <xt>&lt;servlet-class&gt;</xt>com.ibm.sample.SystemPropertiesService<xt>&lt;/servlet-class&gt;</xt>
+		 <xt>&lt;servlet-class&gt;</xt>org.apache.juneau.samples.SystemPropertiesService<xt>&lt;/servlet-class&gt;</xt>
 	  <xt>&lt;/servlet&gt;</xt>
 	  <xt>&lt;servlet-mapping&gt;</xt>
 		 <xt>&lt;servlet-name&gt;</xt>SystemPropertiesService<xt>&lt;/servlet-name&gt;</xt>
@@ -1554,7 +1554,7 @@
 		Arbitrarily complex POJO models can be serialized using any of the supported serializers, and content can be parsed using any of the supported parsers.
 	</p>
 	<p>
-		The <l>com.ibm.team.juneau.samples</l> project contains various REST resource examples in an easy-to-use REST microservice. 
+		The <l>juneau-samples</l> project contains various REST resource examples in an easy-to-use REST microservice. 
 		One of these is <l>AddressBookResource</l> which serializes <l>AddressBook</l> objects defined below (some code omitted):
 	</p>
 	<p class='bcode'>
@@ -1562,13 +1562,13 @@
 	<ja>@XmlSchema</ja>( 
 		prefix=<js>"ab"</js>, 
 		xmlNs={ 
-			<ja>@XmlNs</ja>(prefix=<js>"ab"</js>, namespaceURI=<js>"http://www.ibm.com/addressBook/"</js>),
-			<ja>@XmlNs</ja>(prefix=<js>"per"</js>, namespaceURI=<js>"http://www.ibm.com/person/"</js>),
-			<ja>@XmlNs</ja>(prefix=<js>"addr"</js>, namespaceURI=<js>"http://www.ibm.com/address/"</js>), 
-			<ja>@XmlNs</ja>(prefix=<js>"mail"</js>, namespaceURI=<js>"http://www.ibm.com/mail/"</js>)
+			<ja>@XmlNs</ja>(prefix=<js>"ab"</js>, namespaceURI=<js>"http://www.apache.org/addressBook/"</js>),
+			<ja>@XmlNs</ja>(prefix=<js>"per"</js>, namespaceURI=<js>"http://www.apache.org/person/"</js>),
+			<ja>@XmlNs</ja>(prefix=<js>"addr"</js>, namespaceURI=<js>"http://www.apache.org/address/"</js>), 
+			<ja>@XmlNs</ja>(prefix=<js>"mail"</js>, namespaceURI=<js>"http://www.apache.org/mail/"</js>)
 		} 
 	) 
-	<jk>package</jk> com.ibm.sample.addressbook; 
+	<jk>package</jk> org.apache.juneau.samples.addressBook; 
 	<jk>import</jk> org.apache.juneau.xml.annotation.*;
 	&nbsp;
 	<jd>/** Address book bean */</jd> 
@@ -2700,21 +2700,21 @@
 	<jc>// XML and RDF namespaces used in this package</jc>
 	<ja>@Xml</ja>(ns=<js>"ab"</js>,
 		namespaces={
-			<ja>@XmlNs</ja>(name=<js>"ab"</js>, uri=<js>"http://www.ibm.com/addressBook/"</js>),
-			<ja>@XmlNs</ja>(name=<js>"per"</js>, uri=<js>"http://www.ibm.com/person/"</js>),
-			<ja>@XmlNs</ja>(name=<js>"addr"</js>, uri=<js>"http://www.ibm.com/address/"</js>),
-			<ja>@XmlNs</ja>(name=<js>"mail"</js>, uri=<js>"http://www.ibm.com/mail/"</js>)
+			<ja>@XmlNs</ja>(name=<js>"ab"</js>, uri=<js>"http://www.apache.org/addressBook/"</js>),
+			<ja>@XmlNs</ja>(name=<js>"per"</js>, uri=<js>"http://www.apache.org/person/"</js>),
+			<ja>@XmlNs</ja>(name=<js>"addr"</js>, uri=<js>"http://www.apache.org/address/"</js>),
+			<ja>@XmlNs</ja>(name=<js>"mail"</js>, uri=<js>"http://www.apache.org/mail/"</js>)
 		}
 	)
 	<ja>@Rdf</ja>(ns=<js>"ab"</js>,
 		namespaces={
-			<ja>@RdfNs</ja>(name=<js>"ab"</js>, uri=<js>"http://www.ibm.com/addressBook/"</js>),
-			<ja>@RdfNs</ja>(name=<js>"per"</js>, uri=<js>"http://www.ibm.com/person/"</js>),
-			<ja>@RdfNs</ja>(name=<js>"addr"</js>, uri=<js>"http://www.ibm.com/address/"</js>),
-			<ja>@RdfNs</ja>(name=<js>"mail"</js>, uri=<js>"http://www.ibm.com/mail/"</js>)
+			<ja>@RdfNs</ja>(name=<js>"ab"</js>, uri=<js>"http://www.apache.org/addressBook/"</js>),
+			<ja>@RdfNs</ja>(name=<js>"per"</js>, uri=<js>"http://www.apache.org/person/"</js>),
+			<ja>@RdfNs</ja>(name=<js>"addr"</js>, uri=<js>"http://www.apache.org/address/"</js>),
+			<ja>@RdfNs</ja>(name=<js>"mail"</js>, uri=<js>"http://www.apache.org/mail/"</js>)
 		}
 	)
-	<jk>package</jk> com.ibm.sample.addressbook;
+	<jk>package</jk> org.apache.juneau.samples.addressBook;
 	<jk>import</jk> org.apache.juneau.xml.annotation.*;
 			</p>
 			<p> 
@@ -3293,7 +3293,7 @@
 			</p>
 			<h6 class='topic'>Notes</h6>
 			<ul class='spaced-list'>
-				<li>The <l>@RestResource.messages()</l> annotation identifies <l>com/ibm/sample/addressbook/nls/AddressBookResource.properties</l> as the resource bundle for localized message for this class.
+				<li>The <l>@RestResource.messages()</l> annotation identifies <l>org/apache/juneau/samples/addressbook/nls/AddressBookResource.properties</l> as the resource bundle for localized message for this class.
 				<li>You are setting <l>XML_enableNamespaces</l> to <l>true</l> to enable XML namespaces. 
 					By default, XML namespace support is disabled  per {@link org.apache.juneau.xml.XmlSerializerContext#XML_enableNamespaces}, 
 						so you have to explicitly enable it on our serializers.
@@ -3914,8 +3914,8 @@
 						<jk>new</jk> Link(<js>"alternate"</js>, <js>"text/html"</js>, <js>"http://www.sample.com/"</js>).setHreflang(<js>"en"</js>), 
 						<jk>new</jk> Link(<js>"self"</js>, <js>"application/atom+xml"</js>, <js>"http://www.sample.com/feed.atom"</js>)
 					) 
-					.setRights(<jk>new</jk> Text(<js>"Copyright (c) 2013, IBM"</js>)) 
-					.setGenerator(<jk>new</jk> Generator(<js>"Juneau"</js>).setUri(<jk>new</jk> URI(<js>"http://juneau.ibm.com/"</js>)).setVersion(<js>"1.0"</js>)) 
+					.setRights(<jk>new</jk> Text(<js>"Copyright (c) 2016, Apache Foundation"</js>)) 
+					.setGenerator(<jk>new</jk> Generator(<js>"Juneau"</js>).setUri(<jk>new</jk> URI(<js>"http://juneau.apache.org/"</js>)).setVersion(<js>"1.0"</js>)) 
 					.addEntries( 
 						<jk>new</jk> Entry() 
 							.setTitle(<jk>new</jk> Text(<js>"Juneau ATOM specification snapshot"</js>)) 
@@ -3933,7 +3933,7 @@
 					.setContent( 
 						<jk>new</jk> Content() 
 							.setLang(<js>"en"</js>) 
-							.setBase(<jk>new</jk> URI(<js>"http://www.ibm.com/"</js>)) 
+							.setBase(<jk>new</jk> URI(<js>"http://www.apache.org/"</js>)) 
 							.setType(<js>"xhtml"</js>) 
 							.setText(<js>"&lt;div xmlns=\"http://www.w3.org/1999/xhtml\"&gt;&lt;p&gt;&lt;i&gt;[Update: Juneau supports ATOM.]&lt;/i&gt;&lt;/p&gt;&lt;/div&gt;"</js>) 
 					) 
@@ -4046,7 +4046,7 @@
 	# DockerRegistryResource properties
 	#================================================================================</cc>
 	<cs>[DockerRegistry]</cs>
-	<ck>url</ck> = <cv>http://clmdocker02.ratl.swg.usma.ibm.com:5000/v1</cv>
+	<ck>url</ck> = <cv>http://clmdocker02.ratl.swg.usma.apache.org:5000/v1</cv>
 		</p>
 		<h6 class='topic'>Additional Information</h6>
 		<ul class='javahierarchy'>
@@ -5253,7 +5253,7 @@
 			Juno 5.2.0.1 is a moderate update.
 		</p>
 
-		<h6 class='topic'>com.ibm.team.juno</h6>
+		<h6 class='topic'>com.<h6 class='topic'>Core</h6>.team.juno</h6>
 		<ul class='spaced-list'>
 			<li>Improved support for multi-line values in config files.
 				Any line that begins with whitespace is interpreted as a continuation of the previous line.
@@ -5288,7 +5288,7 @@
 			<li>Default value for {@link org.apache.juneau.xml.XmlParserContext#XML_trimWhitespace} changed to <jk>true</jk>.			
 		</ul>
 
-		<h6 class='topic'>com.ibm.team.juno.server</h6>
+		<h6 class='topic'>Server</h6>
 		<ul class='spaced-list'>
 			<li>New methods on {@link org.apache.juneau.server.RestServlet}:
 				<ul>
@@ -5297,7 +5297,7 @@
 				</ul>
 		</ul>
 
-		<h6 class='topic'>com.ibm.team.juno.client</h6>
+		<h6 class='topic'>Client</h6>
 		<ul class='spaced-list'>
 			<li>Fixed potential issue in {@link org.apache.juneau.client.RestClient} where the HTTP connection pool could end up exhausted if an error occurred.
 			<li>Improved thread safety on {@link org.apache.juneau.client.RestClient}.
@@ -5315,7 +5315,7 @@
 			Major changes have been made to the microservice architecture and config INI file APIs.
 		</p>
 		
-		<h6 class='topic'>com.ibm.team.juno</h6>
+		<h6 class='topic'>Core</h6>
 		<ul class='spaced-list'>
 			<li>Significant changes and enhancements to the {@link org.apache.juneau.ini} API.
 				<ul>
@@ -5502,7 +5502,7 @@
 			<li>New {@link org.apache.juneau.utils.PojoQuery} modified to handle bean getters that throw exceptions.
 		</ul>
 
-		<h6 class='topic'>com.ibm.team.juno.client</h6>
+		<h6 class='topic'>Client</h6>
 		<ul class='spaced-list'>
 			<li>Upgraded to use Apache HttpClient 4.5.
 			<li>New classes:
@@ -5614,7 +5614,7 @@
 				</ul>
 		</ul>
 
-		<h6 class='topic'>com.ibm.team.juno.server</h6>
+		<h6 class='topic'>Server</h6>
 		<ul class='spaced-list'>
 			<li>New {@link org.apache.juneau.server.ReaderResource} class.   
 				Represents the contents of a text file with convenience methods for resolving
@@ -5674,7 +5674,7 @@
 			<li>New {@link org.apache.juneau.server.RestUtils#trimPathInfo(StringBuffer,String,String)} method.
 		</ul>
 
-		<h6 class='topic'>com.ibm.team.juno.microservice</h6>
+		<h6 class='topic'>Microservice</h6>
 		<ul class='spaced-list'>
 			<li>Completely revamped API.
 			<li>New {@link org.apache.juneau.microservice.Microservice} class that serves as a generic
@@ -5713,7 +5713,7 @@
 				</ul>
 		</ul>
 		
-		<h6 class='topic'>com.ibm.team.juno.samples</h6>
+		<h6 class='topic'>Samples</h6>
 		<ul class='spaced-list'>
 			<li>Converted to a REST microservice.
 			<li>Look-and-feel changed to IBM DevOps.
@@ -5740,7 +5740,7 @@
 			The biggest improvement is the ability to associate external INI config files with REST servlets using the {@link org.apache.juneau.ini.ConfigFile} functionality.
 		</p>
 		
-		<h6 class='topic'>com.ibm.team.juno</h6>
+		<h6 class='topic'>Core</h6>
 		<ul class='spaced-list'>
 			<li>Significant API changes to {@link org.apache.juneau.ini} API.
 				<ul>
@@ -5769,7 +5769,7 @@
 				This affects the way most parsers handle blank values.
 		</ul>
 		
-		<h6 class='topic'>com.ibm.team.juno.server</h6>
+		<h6 class='topic'>Server</h6>
 		<ul class='spaced-list'>
 			<li>You can now parse into non-static inner classes of a servlet for parameters/attributes/content.
 				Useful if you like to define your marshaller beans inside your servlet.
@@ -5815,7 +5815,7 @@
 				</ul>
 		</ul>
 				
-		<h6 class='topic'>com.ibm.team.juno.microservice</h6>
+		<h6 class='topic'>Microservice</h6>
 		<ul class='spaced-list'>
 			<li>New juneau-microservice.jar file that encapsulates all 3 juneau jars with code necessary for creating fast and efficent jetty-powered REST microservices.<br>
 				Contains the following:
@@ -5837,7 +5837,7 @@
 			But it introduces a <a class='doclink' href='#Microservices'>Microservices</a> project for building REST microservices and docker containers.
 		</p>
 
-		<h6 class='topic'>com.ibm.team.juno</h6>
+		<h6 class='topic'>Core</h6>
 		<ul class='spaced-list'>
 			<li>Beans can now be serialized to and parsed from {@link org.apache.juneau.ObjectMap ObjectMaps}.
 				See <a class='doclink' href='org/apache/juneau/transform/package-summary.html#ToObjectMaps'>Serializing to ObjectMaps</a> for details.
@@ -5847,12 +5847,12 @@
 			<li>Behavior change on <del><code>StringVarResolver</code></del>.  <jk>null</jk> input now results in blank strings instead of <jk>null</jk>.
 		</ul>
 		
-		<h6 class='topic'>com.ibm.team.juno.client</h6>
+		<h6 class='topic'>Client</h6>
 		<ul class='spaced-list'>
 			<li>New {@link org.apache.juneau.client.RestClient#doCallback(String)} method.
 		</ul>
 		
-		<h6 class='topic'>com.ibm.team.juno.server</h6>
+		<h6 class='topic'>Server</h6>
 		<ul class='spaced-list'>
 			<li>New {@link org.apache.juneau.server.RestRequest#getHeaders()} method.
 			<li>New <code>RestResponse.getUnbufferedWriter()</code> method.
@@ -5874,7 +5874,7 @@
 			Juno 5.1.0.18 is a minor update affecting the server component only.
 		</p>
 
-		<h6 class='topic'>com.ibm.team.juno.server</h6>
+		<h6 class='topic'>Server</h6>
 		<ul class='spaced-list'>
 			<li>Fixed bug where localized strings weren't resolving when using chained resource bundles.
 			<li>Servlet and method labels and descriptions can now contain embedded string variables.
@@ -5902,7 +5902,7 @@
 			Juno 5.1.0.17 is a major update.
 		</p>
 
-		<h6 class='topic'>com.ibm.team.juno</h6>
+		<h6 class='topic'>Core</h6>
 		<ul class='spaced-list'>
 			<li>{@link org.apache.juneau.BeanMap#get(Object)} and {@link org.apache.juneau.BeanMap#put(String,Object)} now
 				automatically performs filtering if filters are defined on the bean property or bean property class.
@@ -5933,7 +5933,7 @@
 		</ul>
 		
 
-		<h6 class='topic'>com.ibm.team.juno.server</h6>
+		<h6 class='topic'>Server</h6>
 		<ul class='spaced-list'>
 			<li>New {@link org.apache.juneau.server.response.ZipFileListResponseHandler} class.
 			<li>Simplified lables in servlet resource bundles:
@@ -6004,7 +6004,7 @@
 			<li>Support for sorting resources by name in {@link org.apache.juneau.server.labels.ChildResourceDescriptions}.
 		</ul>
 		
-		<h6 class='topic'>com.ibm.team.juno.samples</h6>
+		<h6 class='topic'>Samples</h6>
 		<ul class='spaced-list'>
 			<li>Added <code>/tempDir/upload</code> showing how to use <code>ServletFileUpload</code> with multipart form posts.
 		</ul>
@@ -6019,7 +6019,7 @@
 			Juno 5.1.0.16 is a moderate update.
 		</p>
 		
-		<h6 class='topic'>com.ibm.team.juno</h6>
+		<h6 class='topic'>Core</h6>
 		<ul class='spaced-list'>
 			<li>New methods on {@link org.apache.juneau.ClassMeta} that eliminates language-specific code in 
 				the general class metadata.
@@ -6047,14 +6047,14 @@
 			<li>FindBug fixes.
 		</ul>
 
-		<h6 class='topic'>com.ibm.team.juno.server</h6>
+		<h6 class='topic'>Server</h6>
 		<ul class='spaced-list'>
 			<li>New {@link org.apache.juneau.server.RestRequest#getServletParentURI()} method.
 			<li>New <code>$R{servletParentURI}</code> variable.
 			<li>Removed final modifier from {@link org.apache.juneau.server.labels.ChildResourceDescriptions}.
 		</ul>
 		
-		<h6 class='topic'>com.ibm.team.juno.samples</h6>
+		<h6 class='topic'>Samples</h6>
 		<ul class='spaced-list'>
 			<li>Added source code links to examples.
 		</ul>
@@ -6068,7 +6068,7 @@
 			Juno 5.1.0.15 is a minor update.
 		</p>
 		
-		<h6 class='topic'>com.ibm.team.juno</h6>
+		<h6 class='topic'>Core</h6>
 		<ul class='spaced-list'>
 			<li>New properties in {@link org.apache.juneau.serializer.SerializerContext}:
 				<ol>
@@ -6080,7 +6080,7 @@
 			<li>Improvements in {@link org.apache.juneau.csv.CsvSerializer}.
 		</ul>
 	
-		<h6 class='topic'>com.ibm.team.juno.server</h6>
+		<h6 class='topic'>Server</h6>
 		<ul class='spaced-list'>
 			<li>New properties in <code>RestServletProperties</code>:
 				<ol>
@@ -6091,7 +6091,7 @@
 			<li>Improvements involving path calculations when servlets deployed outside of a war file with a context root.
 		</ul>
 		
-		<h6 class='topic'>com.ibm.team.juno.client</h6>
+		<h6 class='topic'>Client</h6>
 		<ul class='spaced-list'>
 			<li>New convenience methods in {@link org.apache.juneau.client.RestCall}:
 				<ol>
@@ -6114,13 +6114,13 @@
 				to invoke server-side POJO methods through client-side proxy interfaces.
 		</p>
 		
-		<h6 class='topic'>com.ibm.team.juno</h6>		
+		<h6 class='topic'>Core</h6>		
 		<ul class='spaced-list'>
 			<li>Simplified {@link org.apache.juneau.utils.PojoIntrospector} class.
 			<li>New {@link org.apache.juneau.internal.ClassUtils#getMethodSignature(Method)} method.
 		</ul>
 		
-		<h6 class='topic'>com.ibm.team.juno.client</h6>		
+		<h6 class='topic'>Client</h6>		
 		<ul class='spaced-list'>
 			<li>New methods in {@link org.apache.juneau.client.RestClient} for working with remoteable services:
 			<ul>
@@ -6129,7 +6129,7 @@
 			</ul>
 		</ul>
 
-		<h6 class='topic'>com.ibm.team.juno.server</h6>		
+		<h6 class='topic'>Server</h6>		
 		<ul class='spaced-list'>
 			<li>Added a default OPTIONS page to {@link org.apache.juneau.server.RestServletDefault} and {@link org.apache.juneau.server.jena.RestServletJenaDefault}.
 			<li><code>RestServletProperties.REST_allowMethodParam</code> has been enhanced to allow you to
@@ -6150,7 +6150,7 @@
 			Juno 5.1.0.13 is a minor update.
 		</p>
 
-		<h6 class='topic'>com.ibm.team.juno</h6>		
+		<h6 class='topic'>Core</h6>		
 		<ul class='spaced-list'>
 			<li>{@link org.apache.juneau.ClassMeta#newInstance()} method can now create new instances of arrays.
 			<li>Arguments passed to {@link org.apache.juneau.dto.Link} are now serialized using {@link org.apache.juneau.urlencoding.UrlEncodingSerializer}, so arbitrary POJOs can now be passed as arguments.
@@ -6162,7 +6162,7 @@
 			<li>Improved implementation of {@link org.apache.juneau.urlencoding.UrlEncodingSerializer#serializeUrlPart(Object)} method.
 		</ul>
 
-		<h6 class='topic'>com.ibm.team.juno.server</h6>		
+		<h6 class='topic'>Server</h6>		
 		<ul class='spaced-list'>
 			<li>{@link org.apache.juneau.server.RestConverter} API fixed to handle the existence of POJO filters.
 				{@link org.apache.juneau.server.converters.Introspectable}/{@link org.apache.juneau.server.converters.Queryable}/{@link org.apache.juneau.server.converters.Traversable} classes can now work with filtered POJOs.  
@@ -6171,7 +6171,7 @@
 			<li>Fixed bug where two REST java methods mapped to the same path pattern wasn't triggering an exception when it was supposed to.
 		</ul>
 		
-		<h6 class='topic'>com.ibm.team.juno.client</h6>		
+		<h6 class='topic'>Client</h6>		
 		<ul class='spaced-list'>	
 			<li>New {@link org.apache.juneau.client.RestCall#setRedirectMaxAttempts(int)} method to prevent endless redirection loops.
 			<li>New {@link org.apache.juneau.client.RestCall#setRetryable(int,long,RetryOn)} method to automatically retry on failed connection attempts.
@@ -6187,14 +6187,14 @@
 			Juno 5.1.0.12 is a minor update.
 		</p>
 
-		<h6 class='topic'>com.ibm.team.juno</h6>		
+		<h6 class='topic'>Core</h6>		
 		<ul class='spaced-list'>
 			<li>Fixed {@link org.apache.juneau.ini.ConfigFile#isEmpty()} method.
 			<li>Changed behavior on {@link org.apache.juneau.urlencoding.UonParser} to not treat <js>'~'</js> characters as escapes
 				unless followed by one of the following characters:  <code>( ) , $ = ~</code>.
 		</ul>
 
-		<h6 class='topic'>com.ibm.team.juno.client</h6>		
+		<h6 class='topic'>Client</h6>		
 		<ul class='spaced-list'>
 			<li>New class {@link org.apache.juneau.client.RestCallInterceptor}.  
 				Allows responses to be inspected and modified before being processed.  
@@ -6211,7 +6211,7 @@
 			Juno 5.1.0.11 is a moderate update.
 		</p>
 
-		<h6 class='topic'>com.ibm.team.juno</h6>		
+		<h6 class='topic'>Core</h6>		
 		<ul class='spaced-list'>
 			<li>Additions to {@link org.apache.juneau.html.annotation.Html @Html} bean annotation.
 				<ul>
@@ -6240,7 +6240,7 @@
 			<li>Config INI files now support keys with name <js>"*"</js>.
 		</ul>
 
-		<h6 class='topic'>com.ibm.team.juno.server</h6>		
+		<h6 class='topic'>Server</h6>		
 		<ul class='spaced-list'>
 			<li>REST method parameters can now be generic types (e.g. <del><ja>@Param</ja></del>(<js>"foo"</js>) Map&lt;String,Integer&gt; foo</code>).
 				This applies to headers, attributes, and parameters.
@@ -6272,7 +6272,7 @@
 				of {@link org.apache.juneau.server.RestServletDefault} and {@link org.apache.juneau.server.jena.RestServletJenaDefault}.
 		</ul>
 				
-		<h6 class='topic'>com.ibm.team.juno.client</h6>		
+		<h6 class='topic'>Client</h6>		
 		<ul class='spaced-list'>
 			<li>New method {@link org.apache.juneau.client.RestCall#allowRedirectsOnPosts(boolean)}.
 			<li>New method <code>RestCall.peekInputStream()</code> allows you to read response bodies without interrupting execution flow.
@@ -6286,8 +6286,8 @@
 
 		<h6 class='topic'>Other changes</h6>	
 		<ul class='spaced-list'>
-			<li><code>com.ibm.team.juno.samples.ear</code> and <code>com.ibm.team.juno.samples.war</code> projects
-				have been replaced with an OSGi bundle with activated servlets in <code>com.ibm.team.juno.samples</code>.
+			<li><code>samples.ear</code> and <code>samples.war</code> projects
+				have been replaced with an OSGi bundle with activated servlets in <code>juno.samples</code>.
 		</ul>
 	</div>
 
@@ -6299,7 +6299,7 @@
 			Juno 5.1.0.10 is a moderate update.
 		</p>
 
-		<h6 class='topic'>com.ibm.team.juno</h6>		
+		<h6 class='topic'>Core</h6>		
 		<ul class='spaced-list'>
 			<li>Major changes to URL-Encoded serializer and parser.
 				<ul>
@@ -6316,7 +6316,7 @@
 			<li>New {@link org.apache.juneau.serializer.WriterSerializer#toString(Object)} method that's identical to the serialize method but throws <code>RuntimeExceptions</code> to make the serializer easier to use for debugging.
 		</ul>
 
-		<h6 class='topic'>com.ibm.team.juno.server</h6>		
+		<h6 class='topic'>Server</h6>		
 		<ul class='spaced-list'>
 			<li>Fixed major issue that prevented parsing URL-Encoded form posts into POJOs.
 				Calling <del><code>HttpServlet.getParameter(String)</code></del> was forcing the underlying servlet code to process the HTTP body itself, preventing the <code>UrlEncodingSerializer</code>
@@ -6331,7 +6331,7 @@
 				{@link org.apache.juneau.server.RestServletDefault} and {@link org.apache.juneau.server.jena.RestServletJenaDefault}.
 		</ul>
 		
-		<h6 class='topic'>com.ibm.team.juno.client</h6>		
+		<h6 class='topic'>Client</h6>		
 		<ul class='spaced-list'>
 			<li>Moved to Apache HttpClient 4.3 to match Jazz 6.0.
 			<li>Renamed <code>RestResponseEntity</code> to {@link org.apache.juneau.client.RestRequestEntity}.
@@ -6347,7 +6347,7 @@
 			<li>Renamed <code>RestClient.shutdown()</code> to {@link org.apache.juneau.client.RestClient#close()} to mirror change in Apache API.		
 		</ul>
 
-		<h6 class='topic'>com.ibm.team.juno.samples.war</h6>		
+		<h6 class='topic'>Samples</h6>		
 		<ul class='spaced-list'>
 			<li>New <code>CodeFormatterResource</code> for quickly formatting Java and XML code samples in Javadocs.
 			<li>New <code>UrlEncodedFormResource</code> for showing how to work with URL-Encoded form posts.

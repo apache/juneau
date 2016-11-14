@@ -96,8 +96,8 @@ public final class RdfParserContext extends ParserContext implements RdfCommonCo
 		trimWhitespace = cf.getProperty(RDF_trimWhitespace, boolean.class, false);
 		looseCollections = cf.getProperty(RDF_looseCollections, boolean.class, false);
 		rdfLanguage = cf.getProperty(RDF_language, String.class, "RDF/XML-ABBREV");
-		juneauNs = cf.getProperty(RDF_juneauNs, Namespace.class, new Namespace("j", "http://www.ibm.com/juneau/"));
-		juneauBpNs = cf.getProperty(RDF_juneauBpNs, Namespace.class, new Namespace("j", "http://www.ibm.com/juneaubp/"));
+		juneauNs = cf.getProperty(RDF_juneauNs, Namespace.class, new Namespace("j", "http://www.apache.org/juneau/"));
+		juneauBpNs = cf.getProperty(RDF_juneauBpNs, Namespace.class, new Namespace("j", "http://www.apache.org/juneaubp/"));
 		collectionFormat = cf.getProperty(RDF_collectionFormat, RdfCollectionFormat.class, RdfCollectionFormat.DEFAULT);
 	}
 }

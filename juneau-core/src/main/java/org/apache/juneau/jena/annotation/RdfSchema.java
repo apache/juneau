@@ -62,20 +62,20 @@ public @interface RdfSchema {
 	 * 	<jc>// XML namespaces used within this package.</jc>
 	 * 	<ja>@RdfSchema</ja>(prefix=<js>"ab"</js>,
 	 * 		namespaces={
-	 * 			<ja>@RdfNs</ja>(prefix=<js>"ab"</js>, namespaceURI=<js>"http://www.ibm.com/addressBook/"</js>),
-	 * 			<ja>@RdfNs</ja>(prefix=<js>"per"</js>, namespaceURI=<js>"http://www.ibm.com/person/"</js>),
-	 * 			<ja>@RdfNs</ja>(prefix=<js>"addr"</js>, namespaceURI=<js>"http://www.ibm.com/address/"</js>),
-	 * 			<ja>@RdfNs</ja>(prefix=<js>"mail"</js>, namespaceURI="<js>http://www.ibm.com/mail/"</js>)
+	 * 			<ja>@RdfNs</ja>(prefix=<js>"ab"</js>, namespaceURI=<js>"http://www.apache.org/addressBook/"</js>),
+	 * 			<ja>@RdfNs</ja>(prefix=<js>"per"</js>, namespaceURI=<js>"http://www.apache.org/person/"</js>),
+	 * 			<ja>@RdfNs</ja>(prefix=<js>"addr"</js>, namespaceURI=<js>"http://www.apache.org/address/"</js>),
+	 * 			<ja>@RdfNs</ja>(prefix=<js>"mail"</js>, namespaceURI="<js>http://www.apache.org/mail/"</js>)
 	 * 		}
 	 * 	)
-	 * 	<jk>package</jk> com.ibm.sample.addressbook;
+	 * 	<jk>package</jk> org.apache.juneau.samples.addressbook;
 	 * 	<jk>import</jk> org.apache.juneau.rdf.annotation.*;
 	 * </p>
 	 * <p>
 	 * 	Class in package using defined namespaces...
 	 * </p>
 	 * <p class='bcode'>
-	 * 	<jk>package</jk> com.ibm.sample.addressbook;
+	 * 	<jk>package</jk> org.apache.juneau.samples.addressbook;
 	 *
 	 * 	<jc>// Bean class, override "ab" namespace on package.</jc>
 	 * 	<ja>@Rdf</ja>(prefix=<js>"addr"</js>)

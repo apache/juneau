@@ -35,13 +35,13 @@ import org.apache.juneau.xml.annotation.*;
  * 		<td>{@link #RDF_juneauNs}</td>
  * 		<td>XML namespace for Juneau properties.</td>
  * 		<td>{@link Namespace}</td>
- * 		<td><code>{j:<js>'http://www.ibm.com/juneau/'</js>}</code></td>
+ * 		<td><code>{j:<js>'http://www.apache.org/juneau/'</js>}</code></td>
  * 	</tr>
  * 	<tr>
  * 		<td>{@link #RDF_juneauBpNs}</td>
  * 		<td>Default XML namespace for bean properties.</td>
  * 		<td>{@link Namespace}</td>
- * 		<td><code>{j:<js>'http://www.ibm.com/juneaubp/'</js>}</code></td>
+ * 		<td><code>{j:<js>'http://www.apache.org/juneaubp/'</js>}</code></td>
  * 	</tr>
  * 	<tr>
  * 		<td>{@link #RDF_useXmlNamespaces}</td>
@@ -268,7 +268,7 @@ public interface RdfCommonContext {
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Rdf.juneauNs"</js>
 	 * 	<li><b>Data type:</b> {@link Namespace}
-	 * 	<li><b>Default:</b> <code>{j:<js>'http://www.ibm.com/juneau/'</js>}</code>
+	 * 	<li><b>Default:</b> <code>{j:<js>'http://www.apache.org/juneau/'</js>}</code>
 	 * </ul>
 	 */
 	public static final String RDF_juneauNs = "Rdf.juneauNs";
@@ -279,7 +279,7 @@ public interface RdfCommonContext {
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Rdf.juneauBpNs"</js>
 	 * 	<li><b>Data type:</b> {@link Namespace}
-	 * 	<li><b>Default:</b> <code>{j:<js>'http://www.ibm.com/juneaubp/'</js>}</code>
+	 * 	<li><b>Default:</b> <code>{j:<js>'http://www.apache.org/juneaubp/'</js>}</code>
 	 * </ul>
 	 */
 	public static final String RDF_juneauBpNs = "Rdf.juneauBpNs";

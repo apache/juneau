@@ -386,7 +386,7 @@ public class RestMicroservice extends Microservice {
 	 *
 	 * 	<cc># A JSON map of servlet paths to servlet classes.
 	 * 	# Example:
-	 * 	# 	resourceMap = {'/*':'com.ibm.MyServlet'}
+	 * 	# 	resourceMap = {'/*':'com.foo.MyServlet'}
 	 * 	# Either resourceMap or resources must be specified if it's not defined in
 	 * 	# the manifest file.</cc>
 	 * 	<ck>resourceMap</ck> =
@@ -395,7 +395,7 @@ public class RestMicroservice extends Microservice {
 	 * 	# Resource paths are pulled from @RestResource.path() annotation, or
 	 * 	# 	"/*" if annotation not specified.
 	 * 	# Example:
-	 * 	# 	resources = com.ibm.MyServlet
+	 * 	# 	resources = com.foo.MyServlet
 	 * 	 * 	# Default is Rest-Resources in manifest file.
 	 * 	# Either resourceMap or resources must be specified if it's not defined in
 	 * 	# the manifest file.</cc>

@@ -57,8 +57,8 @@ public class AtomFeedResource extends ResourceJena {
 					new Link("alternate", "text/html", "http://www.sample.com/").setHreflang("en"),
 					new Link("self", "application/atom+xml", "http://www.sample.com/feed.atom")
 				)
-				.setRights(new Text("Copyright (c) 2013, IBM"))
-				.setGenerator(new Generator("Juneau").setUri(new URI("http://juneau.ibm.com/")).setVersion("1.0"))
+				.setRights(new Text("Copyright (c) 2016, Apache Foundation"))
+				.setGenerator(new Generator("Juneau").setUri(new URI("http://juneau.apache.org/")).setVersion("1.0"))
 				.addEntries(
 					new Entry()
 						.setTitle(new Text("Juneau ATOM specification snapshot"))
@@ -76,7 +76,7 @@ public class AtomFeedResource extends ResourceJena {
 						.setContent(
 							new Content()
 								.setLang("en")
-								.setBase(new URI("http://www.ibm.com/"))
+								.setBase(new URI("http://www.apache.org/"))
 								.setType("xhtml")
 								.setText("<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><i>[Update: Juneau supports ATOM.]</i></p></div>")
 						)

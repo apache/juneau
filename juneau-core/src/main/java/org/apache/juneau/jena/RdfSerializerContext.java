@@ -103,7 +103,7 @@ public final class RdfSerializerContext extends SerializerContext implements Rdf
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * </ul>
 	 * <p>
-	 * When enabled an RDF property <code>http://www.ibm.com/juneau/root</code> is added with a value of <js>"true"</js>
+	 * When enabled an RDF property <code>http://www.apache.org/juneau/root</code> is added with a value of <js>"true"</js>
 	 * 	to identify the root node in the graph.
 	 * This helps locate the root node during parsing.
 	 * <p>
@@ -167,8 +167,8 @@ public final class RdfSerializerContext extends SerializerContext implements Rdf
 		looseCollections = cf.getProperty(RDF_looseCollections, boolean.class, false);
 		autoDetectNamespaces = cf.getProperty(RDF_autoDetectNamespaces, boolean.class, true);
 		rdfLanguage = cf.getProperty(RDF_language, String.class, "RDF/XML-ABBREV");
-		juneauNs = cf.getProperty(RDF_juneauNs, Namespace.class, new Namespace("j", "http://www.ibm.com/juneau/"));
-		juneauBpNs = cf.getProperty(RDF_juneauBpNs, Namespace.class, new Namespace("jp", "http://www.ibm.com/juneaubp/"));
+		juneauNs = cf.getProperty(RDF_juneauNs, Namespace.class, new Namespace("j", "http://www.apache.org/juneau/"));
+		juneauBpNs = cf.getProperty(RDF_juneauBpNs, Namespace.class, new Namespace("jp", "http://www.apache.org/juneaubp/"));
 		collectionFormat = cf.getProperty(RDF_collectionFormat, RdfCollectionFormat.class, RdfCollectionFormat.DEFAULT);
 		namespaces = cf.getProperty(RDF_namespaces, Namespace[].class, new Namespace[0]);
 	}

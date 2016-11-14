@@ -154,7 +154,7 @@ public class RdfParser extends ReaderParser {
 	private List<Resource> getRoots(RdfParserSession session, Model m) {
 		List<Resource> l = new LinkedList<Resource>();
 
-		// First try to find the root using the "http://www.ibm.com/juneau/root" property.
+		// First try to find the root using the "http://www.apache.org/juneau/root" property.
 		Property root = m.createProperty(session.getJuneauNsUri(), RDF_juneauNs_ROOT);
 		for (ResIterator i  = m.listResourcesWithProperty(root); i.hasNext();)
 			l.add(i.next());

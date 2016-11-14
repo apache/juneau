@@ -34,37 +34,37 @@ public class AtomTest {
 		Feed f2;
 
 		Feed f = new Feed()
-			.setTitle(new Text("text", "dive into mark"))
-			.setSubTitle(new Text("html", "A <em>lot</em> of effort went into making this effortless"))
-			.setUpdated(parseDateTime("2005-07-31T12:29:29Z"))
-			.setId(new Id("tag:example.org,2003:3"))
+			.setTitle(new Text("text", "Title"))
+			.setSubTitle(new Text("html", "Subtitle"))
+			.setUpdated(parseDateTime("2016-12-31T01:02:03-04:00"))
+			.setId(new Id("tag:foo.org"))
 			.addLinks(
-				new Link("alternate", "text/html", "http://example.org/").setHreflang("en"),
-				new Link("self", "application/atom+xml", "http://example.org/feed.atom")
+				new Link("alternate", "text/html", "http://foo.org/").setHreflang("en"),
+				new Link("self", "application/atom+xml", "http://foo.org/feed.atom")
 			)
 			.setRights(new Text("Copyright (c) 2016, Apache Foundation"))
-			.setGenerator(new Generator("Example Toolkit").setUri(new URI("http://www.example.com/")).setVersion("1.0"))
+			.setGenerator(new Generator("Example Toolkit").setUri(new URI("http://www.foo.org/")).setVersion("1.0"))
 			.addEntries(
 				new Entry()
-					.setTitle(new Text("Atom draft-07 snapshot"))
+					.setTitle(new Text("Title"))
 					.addLinks(
-						new Link("alternate", "text/html", "http://example.org/2005/04/02/atom"),
-						new Link("enclosure", "audio/mpeg", "http://example.org/audio/ph34r_my_podcast.mp3").setLength(1337)
+						new Link("alternate", "text/html", "http://foo.org/2005/04/02/atom"),
+						new Link("enclosure", "audio/mpeg", "http://foo.org/audio/foobar.mp3").setLength(1337)
 					)
-					.setId(new Id("tag:example.org,2003:3.2397"))
-					.setUpdated(parseDateTime("2005-07-31T12:29:29Z"))
-					.setPublished(parseDateTime("2003-12-13T08:29:29-04:00"))
-					.addAuthors(new Person("Mark Pilgrim").setUri(new URI("http://example.org/")).setEmail("f8dy@example.com"))
+					.setId(new Id("tag:foo.org"))
+					.setUpdated(parseDateTime("2016-12-31T01:02:03-04:00"))
+					.setPublished(parseDateTime("2016-12-31T01:02:03-04:00"))
+					.addAuthors(new Person("John Smith").setUri(new URI("http://foo.org/")).setEmail("foo@foo.org"))
 					.addContributors(
-						new Person("Sam Ruby"),
-						new Person("Joe Gregorio")
+						new Person("John Smith"),
+						new Person("Jane Smith")
 					)
 					.setContent(
 						new Content()
 							.setLang("en")
-							.setBase(new URI("http://diveintomark.org/"))
+							.setBase(new URI("http://foo.org/"))
 							.setType("xhtml")
-							.setText("<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><i>[Update: The Atom draft is finished.]</i></p></div>")
+							.setText("<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><i>[Sample content]</i></p></div>")
 					)
 			)
 		;

@@ -296,18 +296,18 @@ public class CommonTest {
 			+"\n<<rdf:Description rdf:about='f0/x0'>"
 			+"\n<jp:f1 rdf:resource='f1/x1'/>"
 			+"\n<jp:f2 rdf:resource='/f2/x2'/>"
-			+"\n<jp:f3 rdf:resource='http://www.ibm.com/f3/x3'/>"
+			+"\n<jp:f3 rdf:resource='http://www.apache.org/f3/x3'/>"
 			+"\n<jp:f4 rdf:resource='f4/x4'/>"
 			+"\n<jp:f5 rdf:resource='/f5/x5'/>"
-			+"\n<jp:f6 rdf:resource='http://www.ibm.com/f6/x6'/>"
-			+"\n<jp:f7 rdf:resource='http://www.ibm.com/f7/x7'/>"
+			+"\n<jp:f6 rdf:resource='http://www.apache.org/f6/x6'/>"
+			+"\n<jp:f7 rdf:resource='http://www.apache.org/f7/x7'/>"
 			+"\n<jp:f8 rdf:resource='f8/x8'/>"
 			+"\n<jp:f9 rdf:resource='f9/x9'/>"
-			+"\n<jp:fa>http://www.ibm.com/fa/xa#MY_LABEL</jp:fa>"
-			+"\n<jp:fb>http://www.ibm.com/fb/xb?label=MY_LABEL&amp;foo=bar</jp:fb>"
-			+"\n<jp:fc>http://www.ibm.com/fc/xc?foo=bar&amp;label=MY_LABEL</jp:fc>"
-			+"\n<jp:fd>http://www.ibm.com/fd/xd?label2=MY_LABEL&amp;foo=bar</jp:fd>"
-			+"\n<jp:fe>http://www.ibm.com/fe/xe?foo=bar&amp;label2=MY_LABEL</jp:fe>"
+			+"\n<jp:fa>http://www.apache.org/fa/xa#MY_LABEL</jp:fa>"
+			+"\n<jp:fb>http://www.apache.org/fb/xb?label=MY_LABEL&amp;foo=bar</jp:fb>"
+			+"\n<jp:fc>http://www.apache.org/fc/xc?foo=bar&amp;label=MY_LABEL</jp:fc>"
+			+"\n<jp:fd>http://www.apache.org/fd/xd?label2=MY_LABEL&amp;foo=bar</jp:fd>"
+			+"\n<jp:fe>http://www.apache.org/fe/xe?foo=bar&amp;label2=MY_LABEL</jp:fe>"
 		;
 		assertEquals(expected, r);
 
@@ -322,18 +322,18 @@ public class CommonTest {
 			+"\n<<rdf:Description rdf:about='/cr/f0/x0'>"
 			+"\n<jp:f1 rdf:resource='/cr/f1/x1'/>"
 			+"\n<jp:f2 rdf:resource='/f2/x2'/>"
-			+"\n<jp:f3 rdf:resource='http://www.ibm.com/f3/x3'/>"
+			+"\n<jp:f3 rdf:resource='http://www.apache.org/f3/x3'/>"
 			+"\n<jp:f4 rdf:resource='/cr/f4/x4'/>"
 			+"\n<jp:f5 rdf:resource='/f5/x5'/>"
-			+"\n<jp:f6 rdf:resource='http://www.ibm.com/f6/x6'/>"
-			+"\n<jp:f7 rdf:resource='http://www.ibm.com/f7/x7'/>"
+			+"\n<jp:f6 rdf:resource='http://www.apache.org/f6/x6'/>"
+			+"\n<jp:f7 rdf:resource='http://www.apache.org/f7/x7'/>"
 			+"\n<jp:f8 rdf:resource='/cr/f8/x8'/>"
 			+"\n<jp:f9 rdf:resource='/cr/f9/x9'/>"
-			+"\n<jp:fa>http://www.ibm.com/fa/xa#MY_LABEL</jp:fa>"
-			+"\n<jp:fb>http://www.ibm.com/fb/xb?label=MY_LABEL&amp;foo=bar</jp:fb>"
-			+"\n<jp:fc>http://www.ibm.com/fc/xc?foo=bar&amp;label=MY_LABEL</jp:fc>"
-			+"\n<jp:fd>http://www.ibm.com/fd/xd?label2=MY_LABEL&amp;foo=bar</jp:fd>"
-			+"\n<jp:fe>http://www.ibm.com/fe/xe?foo=bar&amp;label2=MY_LABEL</jp:fe>"
+			+"\n<jp:fa>http://www.apache.org/fa/xa#MY_LABEL</jp:fa>"
+			+"\n<jp:fb>http://www.apache.org/fb/xb?label=MY_LABEL&amp;foo=bar</jp:fb>"
+			+"\n<jp:fc>http://www.apache.org/fc/xc?foo=bar&amp;label=MY_LABEL</jp:fc>"
+			+"\n<jp:fd>http://www.apache.org/fd/xd?label2=MY_LABEL&amp;foo=bar</jp:fd>"
+			+"\n<jp:fe>http://www.apache.org/fe/xe?foo=bar&amp;label2=MY_LABEL</jp:fe>"
 		;
 		assertEquals(expected, r);
 
@@ -348,18 +348,18 @@ public class CommonTest {
 			+"\n<<rdf:Description rdf:about='/f0/x0'>"
 			+"\n<jp:f1 rdf:resource='/f1/x1'/>"
 			+"\n<jp:f2 rdf:resource='/f2/x2'/>"
-			+"\n<jp:f3 rdf:resource='http://www.ibm.com/f3/x3'/>"
+			+"\n<jp:f3 rdf:resource='http://www.apache.org/f3/x3'/>"
 			+"\n<jp:f4 rdf:resource='/f4/x4'/>"
 			+"\n<jp:f5 rdf:resource='/f5/x5'/>"
-			+"\n<jp:f6 rdf:resource='http://www.ibm.com/f6/x6'/>"
-			+"\n<jp:f7 rdf:resource='http://www.ibm.com/f7/x7'/>"
+			+"\n<jp:f6 rdf:resource='http://www.apache.org/f6/x6'/>"
+			+"\n<jp:f7 rdf:resource='http://www.apache.org/f7/x7'/>"
 			+"\n<jp:f8 rdf:resource='/f8/x8'/>"
 			+"\n<jp:f9 rdf:resource='/f9/x9'/>"
-			+"\n<jp:fa>http://www.ibm.com/fa/xa#MY_LABEL</jp:fa>"
-			+"\n<jp:fb>http://www.ibm.com/fb/xb?label=MY_LABEL&amp;foo=bar</jp:fb>"
-			+"\n<jp:fc>http://www.ibm.com/fc/xc?foo=bar&amp;label=MY_LABEL</jp:fc>"
-			+"\n<jp:fd>http://www.ibm.com/fd/xd?label2=MY_LABEL&amp;foo=bar</jp:fd>"
-			+"\n<jp:fe>http://www.ibm.com/fe/xe?foo=bar&amp;label2=MY_LABEL</jp:fe>"
+			+"\n<jp:fa>http://www.apache.org/fa/xa#MY_LABEL</jp:fa>"
+			+"\n<jp:fb>http://www.apache.org/fb/xb?label=MY_LABEL&amp;foo=bar</jp:fb>"
+			+"\n<jp:fc>http://www.apache.org/fc/xc?foo=bar&amp;label=MY_LABEL</jp:fc>"
+			+"\n<jp:fd>http://www.apache.org/fd/xd?label2=MY_LABEL&amp;foo=bar</jp:fd>"
+			+"\n<jp:fe>http://www.apache.org/fe/xe?foo=bar&amp;label2=MY_LABEL</jp:fe>"
 		;
 		assertEquals(expected, r);
 
@@ -372,18 +372,18 @@ public class CommonTest {
 			+"\n<<rdf:Description rdf:about='f0/x0'>"
 			+"\n<jp:f1 rdf:resource='f1/x1'/>"
 			+"\n<jp:f2 rdf:resource='http://foo/f2/x2'/>"
-			+"\n<jp:f3 rdf:resource='http://www.ibm.com/f3/x3'/>"
+			+"\n<jp:f3 rdf:resource='http://www.apache.org/f3/x3'/>"
 			+"\n<jp:f4 rdf:resource='f4/x4'/>"
 			+"\n<jp:f5 rdf:resource='http://foo/f5/x5'/>"
-			+"\n<jp:f6 rdf:resource='http://www.ibm.com/f6/x6'/>"
-			+"\n<jp:f7 rdf:resource='http://www.ibm.com/f7/x7'/>"
+			+"\n<jp:f6 rdf:resource='http://www.apache.org/f6/x6'/>"
+			+"\n<jp:f7 rdf:resource='http://www.apache.org/f7/x7'/>"
 			+"\n<jp:f8 rdf:resource='f8/x8'/>"
 			+"\n<jp:f9 rdf:resource='f9/x9'/>"
-			+"\n<jp:fa>http://www.ibm.com/fa/xa#MY_LABEL</jp:fa>"
-			+"\n<jp:fb>http://www.ibm.com/fb/xb?label=MY_LABEL&amp;foo=bar</jp:fb>"
-			+"\n<jp:fc>http://www.ibm.com/fc/xc?foo=bar&amp;label=MY_LABEL</jp:fc>"
-			+"\n<jp:fd>http://www.ibm.com/fd/xd?label2=MY_LABEL&amp;foo=bar</jp:fd>"
-			+"\n<jp:fe>http://www.ibm.com/fe/xe?foo=bar&amp;label2=MY_LABEL</jp:fe>"
+			+"\n<jp:fa>http://www.apache.org/fa/xa#MY_LABEL</jp:fa>"
+			+"\n<jp:fb>http://www.apache.org/fb/xb?label=MY_LABEL&amp;foo=bar</jp:fb>"
+			+"\n<jp:fc>http://www.apache.org/fc/xc?foo=bar&amp;label=MY_LABEL</jp:fc>"
+			+"\n<jp:fd>http://www.apache.org/fd/xd?label2=MY_LABEL&amp;foo=bar</jp:fd>"
+			+"\n<jp:fe>http://www.apache.org/fe/xe?foo=bar&amp;label2=MY_LABEL</jp:fe>"
 		;
 		assertEquals(expected, r);
 
@@ -398,18 +398,18 @@ public class CommonTest {
 			+"\n<<rdf:Description rdf:about='f0/x0'>"
 			+"\n<jp:f1 rdf:resource='f1/x1'/>"
 			+"\n<jp:f2 rdf:resource='/f2/x2'/>"
-			+"\n<jp:f3 rdf:resource='http://www.ibm.com/f3/x3'/>"
+			+"\n<jp:f3 rdf:resource='http://www.apache.org/f3/x3'/>"
 			+"\n<jp:f4 rdf:resource='f4/x4'/>"
 			+"\n<jp:f5 rdf:resource='/f5/x5'/>"
-			+"\n<jp:f6 rdf:resource='http://www.ibm.com/f6/x6'/>"
-			+"\n<jp:f7 rdf:resource='http://www.ibm.com/f7/x7'/>"
+			+"\n<jp:f6 rdf:resource='http://www.apache.org/f6/x6'/>"
+			+"\n<jp:f7 rdf:resource='http://www.apache.org/f7/x7'/>"
 			+"\n<jp:f8 rdf:resource='f8/x8'/>"
 			+"\n<jp:f9 rdf:resource='f9/x9'/>"
-			+"\n<jp:fa>http://www.ibm.com/fa/xa#MY_LABEL</jp:fa>"
-			+"\n<jp:fb>http://www.ibm.com/fb/xb?label=MY_LABEL&amp;foo=bar</jp:fb>"
-			+"\n<jp:fc>http://www.ibm.com/fc/xc?foo=bar&amp;label=MY_LABEL</jp:fc>"
-			+"\n<jp:fd>http://www.ibm.com/fd/xd?label2=MY_LABEL&amp;foo=bar</jp:fd>"
-			+"\n<jp:fe>http://www.ibm.com/fe/xe?foo=bar&amp;label2=MY_LABEL</jp:fe>"
+			+"\n<jp:fa>http://www.apache.org/fa/xa#MY_LABEL</jp:fa>"
+			+"\n<jp:fb>http://www.apache.org/fb/xb?label=MY_LABEL&amp;foo=bar</jp:fb>"
+			+"\n<jp:fc>http://www.apache.org/fc/xc?foo=bar&amp;label=MY_LABEL</jp:fc>"
+			+"\n<jp:fd>http://www.apache.org/fd/xd?label2=MY_LABEL&amp;foo=bar</jp:fd>"
+			+"\n<jp:fe>http://www.apache.org/fe/xe?foo=bar&amp;label2=MY_LABEL</jp:fe>"
 		;
 		assertEquals(expected, r);
 	}
@@ -495,8 +495,8 @@ public class CommonTest {
 			"</rdf:RDF>\n"
 		));
 		assertTrue(r.contains("xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#"));
-		assertTrue(r.contains("xmlns:j='http://www.ibm.com/juneau/"));
-		assertTrue(r.contains("xmlns:jp='http://www.ibm.com/juneaubp/"));
+		assertTrue(r.contains("xmlns:j='http://www.apache.org/juneau/"));
+		assertTrue(r.contains("xmlns:jp='http://www.apache.org/juneaubp/"));
 	}
 
 	public static class R1 {

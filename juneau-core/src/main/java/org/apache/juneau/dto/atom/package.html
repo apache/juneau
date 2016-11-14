@@ -101,7 +101,7 @@
 			<jk>new</jk> Link(<js>"self"</js>, <js>"application/atom+xml"</js>, <js>"http://www.sample.com/feed.atom"</js>)
 		)
 		.setRights(<jk>new</jk> Text(<js>"Copyright (c) 2016, Apache Foundation"</js>))
-		.setGenerator(<jk>new</jk> Generator(<js>"Juneau"</js>).setUri(<jk>new</jk> URI(<js>"http://juneau.ibm.com/"</js>)).setVersion(<js>"1.0"</js>))
+		.setGenerator(<jk>new</jk> Generator(<js>"Juneau"</js>).setUri(<jk>new</jk> URI(<js>"http://juneau.apache.org/"</js>)).setVersion(<js>"1.0"</js>))
 		.addEntries(
 			<jk>new</jk> Entry()
 				.setTitle(<jk>new</jk> Text(<js>"Juneau ATOM specification snapshot"</js>))
@@ -119,7 +119,7 @@
 				.setContent(
 					<jk>new</jk> Content()
 						.setLang(<js>"en"</js>)
-						.setBase(<jk>new</jk> URI(<js>"http://www.ibm.com/"</js>))
+						.setBase(<jk>new</jk> URI(<js>"http://www.apache.org/"</js>))
 						.setType(<js>"xhtml"</js>)
 						.setText(<js>"&lt;div xmlns=\"http://www.w3.org/1999/xhtml\"&gt;&lt;p&gt;*lt;i&gt;[Update: Juneau supports ATOM.]&lt;/i&gt;&lt;/p&gt;&lt;/div&gt;"</js>)
 				)
@@ -154,7 +154,7 @@
 			Juneau ATOM specification
 		<xt>&lt;/title&gt;</xt>
 		<xt>&lt;updated&gt;</xt>2013-05-08T12:29:29Z<xt>&lt;/updated&gt;</xt>
-		<xt>&lt;generator</xt> <xa>uri</xa>=<xs>'http://juneau.ibm.com/'</xs> <xa>version</xa>=<xs>'1.0'</xs><xt>&gt;</xt>
+		<xt>&lt;generator</xt> <xa>uri</xa>=<xs>'http://juneau.apache.org/'</xs> <xa>version</xa>=<xs>'1.0'</xs><xt>&gt;</xt>
 			Juneau
 		<xt>&lt;/generator&gt;</xt>
 		<xt>&lt;subtitle</xt> <xa>type</xa>=<xs>'html'</xs><xt>&gt;</xt>
@@ -178,7 +178,7 @@
 				Juneau ATOM specification snapshot
 			<xt>&lt;/title&gt;</xt>
 			<xt>&lt;updated&gt;</xt>2013-05-08T12:29:29Z<xt>&lt;/updated&gt;</xt>
-			<xt>&lt;content</xt> <xa>base</xa>=<xs>'http://www.ibm.com/'</xs> <xa>lang</xa>=<xs>'en'</xs> <xa>type</xa>=<xs>'xhtml'</xs><xt>&gt;</xt>
+			<xt>&lt;content</xt> <xa>base</xa>=<xs>'http://www.apache.org/'</xs> <xa>lang</xa>=<xs>'en'</xs> <xa>type</xa>=<xs>'xhtml'</xs><xt>&gt;</xt>
 				<xt>&lt;div</xt> <xa>xmlns</xa>=<xs>"http://www.w3.org/1999/xhtml"</xs><xt>&gt;&lt;p&gt;&lt;i&gt;</xt>[Update: Juneau supports ATOM.]<xt>&lt;/i&gt;&lt;/p&gt;&lt;/div&gt;</xt>
 			<xt>&lt;/content&gt;</xt>
 			<xt>&lt;published&gt;</xt>2013-05-08T12:29:29Z<xt>&lt;/published&gt;</xt>
@@ -202,7 +202,7 @@
 		<h6 class='figure'>Results</h6>
 		<p class='bcode'>
 	<xt>&lt;atom:feed</xt> 
-			<xa>xmlns</xa>=<xs>'http://www.ibm.com/2013/Juneau'</xs> 
+			<xa>xmlns</xa>=<xs>'http://www.apache.org/2013/Juneau'</xs> 
 			<xa>xmlns:atom</xa>=<xs>'http://www.w3.org/2005/Atom/'</xs> 
 			<xa>xmlns:xml</xa>=<xs>'http://www.w3.org/XML/1998/namespace'</xs> 
 			<xa>xmlns:xsi</xa>=<xs>'http://www.w3.org/2001/XMLSchema-instance'</xs><xt>&gt;</xt>
@@ -218,7 +218,7 @@
 			Juneau ATOM specification
 		<xt>&lt;/atom:title&gt;</xt>
 		<xt>&lt;atom:updated&gt;</xt>2013-05-08T12:29:29Z<xt>&lt;/atom:updated&gt;</xt>
-		<xt>&lt;atom:generator</xt> <xa>uri</xa>=<xs>'http://juneau.ibm.com/'</xs> <xa>version</xa>=<xs>'1.0'</xs><xt>&gt;</xt>
+		<xt>&lt;atom:generator</xt> <xa>uri</xa>=<xs>'http://juneau.apache.org/'</xs> <xa>version</xa>=<xs>'1.0'</xs><xt>&gt;</xt>
 			Juneau
 		<xt>&lt;/atom:generator&gt;</xt>
 		<xt>&lt;atom:subtitle</xt> <xa>type</xa>=<xs>'html'</xs><xt>&gt;</xt>
@@ -242,7 +242,7 @@
 				Juneau ATOM specification snapshot
 			<xt>&lt;/atom:title&gt;</xt>
 			<xt>&lt;atom:updated&gt;</xt>2013-05-08T12:29:29Z<xt>&lt;/atom:updated&gt;</xt>
-			<xt>&lt;atom:content</xt> <xa>xml:base</xa>=<xs>'http://www.ibm.com/'</xs> <xa>xml:lang</xa>=<xs>'en'</xs> <xa>type</xa>=<xs>'xhtml'</xs><xt>&gt;</xt>
+			<xt>&lt;atom:content</xt> <xa>xml:base</xa>=<xs>'http://www.apache.org/'</xs> <xa>xml:lang</xa>=<xs>'en'</xs> <xa>type</xa>=<xs>'xhtml'</xs><xt>&gt;</xt>
 				<xt>&lt;div</xt> <xa>xmlns</xa>=<xs>"http://www.w3.org/1999/xhtml"</xs><xt>&gt;</xt><xt>&lt;p&gt;</xt><xt>&lt;i&gt;</xt>[Update: Juneau supports ATOM.]<xt>&lt;/i&gt;</xt><xt>&lt;/p&gt;</xt><xt>&lt;/div&gt;</xt>
 			<xt>&lt;/atom:content&gt;</xt>
 			<xt>&lt;atom:published&gt;</xt>2013-05-08T12:29:29Z<xt>&lt;/atom:published&gt;</xt>
@@ -281,7 +281,7 @@
 			Juneau ATOM specification
 		<xt>&lt;/title&gt;</xt>
 		<xt>&lt;updated&gt;</xt>2013-05-08T12:29:29Z<xt>&lt;/updated&gt;</xt>
-		<xt>&lt;generator</xt> <xa>uri</xa>=<xs>'http://juneau.ibm.com/'</xs> <xa>version</xa>=<xs>'1.0'</xs><xt>&gt;</xt>
+		<xt>&lt;generator</xt> <xa>uri</xa>=<xs>'http://juneau.apache.org/'</xs> <xa>version</xa>=<xs>'1.0'</xs><xt>&gt;</xt>
 			Juneau
 		<xt>&lt;/generator&gt;</xt>
 		<xt>&lt;subtitle</xt> <xa>type</xa>=<xs>'html'</xs><xt>&gt;</xt>
@@ -305,7 +305,7 @@
 				Juneau ATOM specification snapshot
 			<xt>&lt;/title&gt;</xt>
 			<xt>&lt;updated&gt;</xt>2013-05-08T12:29:29Z<xt>&lt;/updated&gt;</xt>
-			<xt>&lt;content</xt> <xa>xml:base</xa>=<xs>'http://www.ibm.com/'</xs> <xa>xml:lang</xa>=<xs>'en'</xs> <xa>type</xa>=<xs>'xhtml'</xs><xt>&gt;</xt>
+			<xt>&lt;content</xt> <xa>xml:base</xa>=<xs>'http://www.apache.org/'</xs> <xa>xml:lang</xa>=<xs>'en'</xs> <xa>type</xa>=<xs>'xhtml'</xs><xt>&gt;</xt>
 				<xt>&lt;div</xt> <xa>xmlns</xa>=<xs>"http://www.w3.org/1999/xhtml"</xs><xt>&gt;</xt><xt>&lt;p&gt;</xt><xt>&lt;i&gt;</xt>[Update: Juneau supports ATOM.]<xt>&lt;/i&gt;</xt><xt>&lt;/p&gt;</xt><xt>&lt;/div&gt;</xt>
 			<xt>&lt;/content&gt;</xt>
 			<xt>&lt;published&gt;</xt>2013-05-08T12:29:29Z<xt>&lt;/published&gt;</xt>
@@ -359,7 +359,7 @@
 		}, 
 		updated: <js>'2013-05-08T12:29:29Z'</js>, 
 		generator: {
-			uri: <js>'http://juneau.ibm.com/'</js>, 
+			uri: <js>'http://juneau.apache.org/'</js>, 
 			version: <js>'1.0'</js>, 
 			text: <js>'Juneau'</js>
 		}, 
@@ -402,7 +402,7 @@
 				}, 
 				updated: <js>'2013-05-08T12:29:29Z'</js>, 
 				content: {
-					base: <js>'http://www.ibm.com/'</js>, 
+					base: <js>'http://www.apache.org/'</js>, 
 					lang: <js>'en'</js>, 
 					type: <js>'xhtml'</js>, 
 					text: <js>'&lt;div xmlns="http://www.w3.org/1999/xhtml"&gt;&lt;p&gt;&lt;i&gt;[Update: Juneau supports ATOM.]&lt;/i&gt;&lt;/p&gt;&lt;/div&gt;'</js>
@@ -439,8 +439,8 @@
 			<p class='bcode'>
 	<xt>&lt;rdf:RDF</xt>
 	    <xa>xmlns:rdf</xa>=<xs>'http://www.w3.org/1999/02/22-rdf-syntax-ns#'</xs>
-	    <xa>xmlns:j</xa>=<xs>'http://www.ibm.com/juneau/'</xs>
-	    <xa>xmlns:jp</xa>=<xs>'http://www.ibm.com/juneaubp/'</xs>
+	    <xa>xmlns:j</xa>=<xs>'http://www.apache.org/juneau/'</xs>
+	    <xa>xmlns:jp</xa>=<xs>'http://www.apache.org/juneaubp/'</xs>
 	    <xa>xmlns:atom</xa>=<xs>'http://www.w3.org/2005/Atom/'</xs>
 	    <xa>xmlns:j.0</xa>=<xs>'http://www.w3.org/XML/1998/'</xs><xt>&gt;</xt>
 	   <xt>&lt;rdf:Description&gt;</xt>
@@ -471,7 +471,7 @@
 	      <xt>&lt;/atom:title&gt;</xt>
 	      <xt>&lt;atom:updated&gt;</xt>2013-05-08T12:29:29Z<xt>&lt;/atom:updated&gt;</xt>
 	      <xt>&lt;atom:generator</xt> <xa>rdf:parseType</xa>=<xs>'Resource'</xs><xt>&gt;</xt>
-	         <xt>&lt;atom:uri</xt> <xa>rdf:resource</xa>=<xs>'http://juneau.ibm.com/'</xs><xt>/&gt;</xt>
+	         <xt>&lt;atom:uri</xt> <xa>rdf:resource</xa>=<xs>'http://juneau.apache.org/'</xs><xt>/&gt;</xt>
 	         <xt>&lt;atom:version&gt;</xt>1.0<xt>&lt;/atom:version&gt;</xt>
 	         <xt>&lt;atom:text&gt;</xt>Juneau<xt>&lt;/atom:text&gt;</xt>
 	      <xt>&lt;/atom:generator&gt;</xt>
@@ -521,7 +521,7 @@
 	               <xt>&lt;/atom:title&gt;</xt>
 	               <xt>&lt;atom:updated&gt;</xt>2013-05-08T12:29:29Z<xt>&lt;/atom:updated&gt;</xt>
 	               <xt>&lt;atom:content</xt> <xa>rdf:parseType</xa>=<xs>'Resource'</xs><xt>&gt;</xt>
-	                  <xt>&lt;j.0:namespacebase</xt> <xa>rdf:resource</xa>=<xs>'http://www.ibm.com/'</xs><xt>/&gt;</xt>
+	                  <xt>&lt;j.0:namespacebase</xt> <xa>rdf:resource</xa>=<xs>'http://www.apache.org/'</xs><xt>/&gt;</xt>
 	                  <xt>&lt;j.0:namespacelang&gt;</xt>en<xt>&lt;/j.0:namespacelang&gt;</xt>
 	                  <xt>&lt;atom:type&gt;</xt>xhtml<xt>&lt;/atom:type&gt;</xt>
 	                  <xt>&lt;atom:text&gt;</xt>&amp;lt;div xmlns="http://www.w3.org/1999/xhtml"&amp;gt;&amp;lt;p&amp;gt;&amp;lt;i&amp;gt;[Update: Juneau supports ATOM.]&amp;lt;/i&amp;gt;&amp;lt;/p&amp;gt;&amp;lt;/div&amp;gt;<xt>&lt;/atom:text&gt;</xt>

@@ -579,7 +579,7 @@
 		</p>
 		<p class='bcode'>
 	<xt>&lt;object</xt> 
-			<xa>xmlns</xa>=<xs>'http://www.ibm.com/2013/Juneau'</xs> 
+			<xa>xmlns</xa>=<xs>'http://www.apache.org/2013/Juneau'</xs> 
 			<xa>xmlns:xsi</xa>=<xs>'http://www.w3.org/2001/XMLSchema-instance'</xs><xt>&gt;</xt>
 		<xt>&lt;id&gt;</xt>1<xt>&lt;/id&gt;</xt>
 		<xt>&lt;name&gt;</xt>John Smith<xt>&lt;/name&gt;</xt>
@@ -607,17 +607,17 @@
 	<ja>@XmlSchema</ja>(
 		prefix=<js>"ab"</js>,
 		xmlNs={
-			<ja>@XmlNs</ja>(prefix=<js>"ab"</js>, namespaceURI=<js>"http://www.ibm.com/addressBook/"</js>),
-			<ja>@XmlNs</ja>(prefix=<js>"per"</js>, namespaceURI=<js>"http://www.ibm.com/person/"</js>),
-			<ja>@XmlNs</ja>(prefix=<js>"addr"</js>, namespaceURI=<js>"http://www.ibm.com/address/"</js>),
-			<ja>@XmlNs</ja>(prefix=<js>"mail"</js>, namespaceURI=<js>"http://www.ibm.com/mail/"</js>)
+			<ja>@XmlNs</ja>(prefix=<js>"ab"</js>, namespaceURI=<js>"http://www.apache.org/addressBook/"</js>),
+			<ja>@XmlNs</ja>(prefix=<js>"per"</js>, namespaceURI=<js>"http://www.apache.org/person/"</js>),
+			<ja>@XmlNs</ja>(prefix=<js>"addr"</js>, namespaceURI=<js>"http://www.apache.org/address/"</js>),
+			<ja>@XmlNs</ja>(prefix=<js>"mail"</js>, namespaceURI=<js>"http://www.apache.org/mail/"</js>)
 		}
 	)
-	<jk>package</jk> com.ibm.sample.addressbook;
+	<jk>package</jk> org.apache.juneau.samples.addressbook;
 	<jk>import</jk> org.apache.juneau.xml.annotation.*;
 		</p>
 		<p>
-			We're defining four namespaces in this package and designating <js>"http://www.ibm.com/addressBook/"</js> as the default
+			We're defining four namespaces in this package and designating <js>"http://www.apache.org/addressBook/"</js> as the default
 				namespace for all classes and properties within this package.
 		</p>
 		<p>
@@ -630,7 +630,7 @@
 			This may change in some future implementation, but for now it was decided that having separate Juneau XML annotations was less confusing.
 		</p>
 		<p>
-			On our bean class, we'll specify to use the <js>"http://www.ibm.com/person/"</js> namespace:
+			On our bean class, we'll specify to use the <js>"http://www.apache.org/person/"</js> namespace:
 		</p>
 		<p class='bcode'>
 	<ja>@Xml</ja>(prefix=<js>"per"</js>)
@@ -643,8 +643,8 @@
 		</p>
 		<p class='bcode'>
 	<xt>&lt;per:person</xt> 
-			<xa>xmlns</xa>=<xs>'http://www.ibm.com/2013/Juneau'</xs> 
-			<xa>xmlns:per</xa>=<xs>'http://www.ibm.com/person/'</xs> 
+			<xa>xmlns</xa>=<xs>'http://www.apache.org/2013/Juneau'</xs> 
+			<xa>xmlns:per</xa>=<xs>'http://www.apache.org/person/'</xs> 
 			<xa>xmlns:xsi</xa>=<xs>'http://www.w3.org/2001/XMLSchema-instance'</xs><xt>&gt;</xt>
 		<xt>&lt;per:id&gt;</xt>1<xt>&lt;/per:id&gt;</xt>
 		<xt>&lt;per:name&gt;</xt>John Smith<xt>&lt;/per:name&gt;</xt>
@@ -658,15 +658,15 @@
 	XmlSerializer s = <jk>new</jk> XmlSerializer()
 		.setProperty(SerializerContext.<jsf>SERIALIZER_useIndentation</jsf>, <jk>true</jk>)
 		.setProperty(SerializerContext.<jsf>SERIALIZER_quoteChar</jsf>, <js>'\''</js>)
-		.setProperty(XmlSerializerContext.<jsf>XML_defaultNamespaceUri</jsf>, <js>"http://www.ibm.com/person/"</js>);
+		.setProperty(XmlSerializerContext.<jsf>XML_defaultNamespaceUri</jsf>, <js>"http://www.apache.org/person/"</js>);
 		</p>
 		<p>
 			This produces the following equivalent where the elements don't need prefixes since they're already in the default document namespace:
 		</p>
 		<p class='bcode'>
 	<xt>&lt;person</xt> 
-			<xa>xmlns</xa>=<xs>'http://www.ibm.com/person/'</xs>
-			<xa>xmlns:juneau</xa>=<xs>'http://www.ibm.com/2013/Juneau'</xs>
+			<xa>xmlns</xa>=<xs>'http://www.apache.org/person/'</xs>
+			<xa>xmlns:juneau</xa>=<xs>'http://www.apache.org/2013/Juneau'</xs>
 			<xa>xmlns:xsi</xa>=<xs>'http://www.w3.org/2001/XMLSchema-instance'</xs><xt>&gt;</xt>
 		<xt>&lt;id&gt;</xt>1<xt>&lt;/id&gt;</xt>
 		<xt>&lt;name&gt;</xt>John Smith<xt>&lt;/name&gt;</xt>
@@ -693,7 +693,7 @@
 		.setProperty(SerializerContext.<jsf>SERIALIZER_useIndentation</jsf>, <jk>true</jk>)
 		.setProperty(SerializerContext.<jsf>SERIALIZER_quoteChar</jsf>, <js>'\''</js>)
 		.setProperty(XmlSerializerContext.<jsf>XML_autoDetectNamespaces</jsf>, <jk>false</jk>)
-		.setProperty(XmlSerializerContext.<jsf>XML_namespaces</jsf>, <js>"{per:'http://www.ibm.com/person/'}"</js>);
+		.setProperty(XmlSerializerContext.<jsf>XML_namespaces</jsf>, <js>"{per:'http://www.apache.org/person/'}"</js>);
 			</p>
 		</div>
 		
@@ -749,8 +749,8 @@
 		</p>
 		<p class='bcode'>
 	<xt>&lt;per:person</xt> 
-			<xa>xmlns</xa>=<xs>'http://www.ibm.com/2013/Juneau'</xs> 
-			<xa>xmlns:per</xa>=<xs>'http://www.ibm.com/person/'</xs> 
+			<xa>xmlns</xa>=<xs>'http://www.apache.org/2013/Juneau'</xs> 
+			<xa>xmlns:per</xa>=<xs>'http://www.apache.org/person/'</xs> 
 			<xa>xmlns:xsi</xa>=<xs>'http://www.w3.org/2001/XMLSchema-instance'</xs> 
 			<xa>uri</xa>=<xs>'http://sample/addressBook/person/1'</xs><xt>&gt;</xt>
 		<xt>&lt;per:id&gt;</xt>1<xt>&lt;/per:id&gt;</xt>
@@ -775,8 +775,8 @@
 		<h6 class='figure'>Results</h6>
 		<p class='bcode'>
 	<xt>&lt;per:person</xt> 
-			<xa>xmlns</xa>=<xs>'http://www.ibm.com/2013/Juneau'</xs> 
-			<xa>xmlns:per</xa>=<xs>'http://www.ibm.com/person/'</xs> 
+			<xa>xmlns</xa>=<xs>'http://www.apache.org/2013/Juneau'</xs> 
+			<xa>xmlns:per</xa>=<xs>'http://www.apache.org/person/'</xs> 
 			<xa>xmlns:xsi</xa>=<xs>'http://www.w3.org/2001/XMLSchema-instance'</xs> 
 			<xa>uri</xa>=<xs>'http://sample/addressBook/person/1'</xs><xt>&gt;</xt>
 		<xt>&lt;per:id&gt;</xt>1<xt>&lt;/per:id&gt;</xt>
@@ -847,10 +847,10 @@
 		</p>
 		<p class='bcode'>
 	<xt>&lt;per:person</xt> 
-			<xa>xmlns</xa>=<xs>'http://www.ibm.com/2013/Juneau'</xs> 
-			<xa>xmlns:per</xa>=<xs>'http://www.ibm.com/person/'</xs> 
-			<xa>xmlns:addr</xa>=<xs>'http://www.ibm.com/address/'</xs> 
-			<xa>xmlns:mail</xa>=<xs>'http://www.ibm.com/mail/'</xs> 
+			<xa>xmlns</xa>=<xs>'http://www.apache.org/2013/Juneau'</xs> 
+			<xa>xmlns:per</xa>=<xs>'http://www.apache.org/person/'</xs> 
+			<xa>xmlns:addr</xa>=<xs>'http://www.apache.org/address/'</xs> 
+			<xa>xmlns:mail</xa>=<xs>'http://www.apache.org/mail/'</xs> 
 			<xa>xmlns:xsi</xa>=<xs>'http://www.w3.org/2001/XMLSchema-instance'</xs>
 			<xa>uri</xa>=<xs>'http://sample/addressBook/person/1'</xs><xt>&gt;</xt>
 		<xt>&lt;per:id&gt;</xt>1<xt>&lt;/per:id&gt;</xt>
@@ -970,7 +970,7 @@
 		<h6 class='figure'>XML results</h6>
 		<p class='bcode'>
 	<xt>&lt;person</xt> 
-			<xa>xmlns</xa>=<xs>'http://www.ibm.com/2013/Juneau'</xs> 
+			<xa>xmlns</xa>=<xs>'http://www.apache.org/2013/Juneau'</xs> 
 			<xa>xmlns:xsi</xa>=<xs>'http://www.w3.org/2001/XMLSchema-instance'</xs> 
 			<xa>uri</xa>=<xs>'http://sample/addressBook/person/1'</xs><xt>&gt;</xt>
 		<xt>&lt;id&gt;</xt>1<xt>&lt;/id&gt;</xt>
@@ -994,17 +994,17 @@
 		<p class='bcode'>
 	<xt>&lt;schema</xt> 
 			<xa>xmlns</xa>=<xs>'http://www.w3.org/2001/XMLSchema'</xs> 
-			<xa>targetNamespace</xa>=<xs>'http://www.ibm.com/2013/Juneau'</xs> 
+			<xa>targetNamespace</xa>=<xs>'http://www.apache.org/2013/Juneau'</xs> 
 			<xa>elementFormDefault</xa>=<xs>'qualified'</xs> 
-			<xa>xmlns:juneau</xa>=<xs>'http://www.ibm.com/2013/Juneau'</xs><xt>&gt;</xt>
-		<xt>&lt;element</xt> <xa>name</xa>=<xs>'person'</xs> <xa>type</xa>=<xs>'juneau:com.ibm.sample.Person'</xs><xt>/&gt;</xt>
-		<xt>&lt;complexType</xt> <xa>name</xa>=<xs>'com.ibm.sample.Person'</xs><xt>&gt;</xt>
+			<xa>xmlns:juneau</xa>=<xs>'http://www.apache.org/2013/Juneau'</xs><xt>&gt;</xt>
+		<xt>&lt;element</xt> <xa>name</xa>=<xs>'person'</xs> <xa>type</xa>=<xs>'juneau:org.apache.juneau.samples.addressbook.Person'</xs><xt>/&gt;</xt>
+		<xt>&lt;complexType</xt> <xa>name</xa>=<xs>'org.apache.juneau.samples.addressbook.Person'</xs><xt>&gt;</xt>
 			<xt>&lt;sequence&gt;</xt>
 				<xt>&lt;element</xt> <xa>name</xa>=<xs>'id'</xs> <xa>type</xa>=<xs>'integer'</xs> <xa>minOccurs</xa>=<xs>'0'</xs><xt>/&gt;</xt>
 				<xt>&lt;element</xt> <xa>name</xa>=<xs>'name'</xs> <xa>type</xa>=<xs>'string'</xs> <xa>minOccurs</xa>=<xs>'0'</xs><xt>/&gt;</xt>
 				<xt>&lt;element</xt> <xa>name</xa>=<xs>'addressBookUri'</xs> <xa>type</xa>=<xs>'string'</xs> <xa>minOccurs</xa>=<xs>'0'</xs><xt>/&gt;</xt>
 				<xt>&lt;element</xt> <xa>name</xa>=<xs>'birthDate'</xs> <xa>type</xa>=<xs>'juneau:java.util.Calendar'</xs> <xa>minOccurs</xa>=<xs>'0'</xs><xt>/&gt;</xt>
-				<xt>&lt;element</xt> <xa>name</xa>=<xs>'addresses'</xs> <xa>type</xa>=<xs>'juneau:java.util.LinkedList_x003C_com.ibm.sample.Address_x003E_'</xs> <xa>minOccurs</xa>=<xs>'0'</xs><xt>/&gt;</xt>
+				<xt>&lt;element</xt> <xa>name</xa>=<xs>'addresses'</xs> <xa>type</xa>=<xs>'juneau:java.util.LinkedList_x003C_org.apache.juneau.samples.addressbook.Address_x003E_'</xs> <xa>minOccurs</xa>=<xs>'0'</xs><xt>/&gt;</xt>
 			<xt>&lt;/sequence&gt;</xt>
 			<xt>&lt;attribute</xt> <xa>name</xa>=<xs>'uri'</xs> <xa>type</xa>=<xs>'string'</xs><xt>/&gt;</xt>
 		<xt>&lt;/complexType&gt;</xt>
@@ -1013,15 +1013,15 @@
 				<xt>&lt;any</xt> <xa>processContents</xa>=<xs>'skip'</xs> <xa>maxOccurs</xa>=<xs>'unbounded'</xs> <xa>minOccurs</xa>=<xs>'0'</xs><xt>/&gt;</xt>
 			<xt>&lt;/sequence&gt;</xt>
 		<xt>&lt;/complexType&gt;</xt>
-		<xt>&lt;complexType</xt> <xa>name</xa>=<xs>'java.util.LinkedList_x003C_com.ibm.sample.Address_x003E_'</xs><xt>&gt;</xt>
+		<xt>&lt;complexType</xt> <xa>name</xa>=<xs>'java.util.LinkedList_x003C_org.apache.juneau.samples.addressbook.Address_x003E_'</xs><xt>&gt;</xt>
 			<xt>&lt;sequence&gt;</xt>
 				<xt>&lt;choice</xt> <xa>minOccurs</xa>=<xs>'0'</xs> <xa>maxOccurs</xa>=<xs>'unbounded'</xs><xt>&gt;</xt>
-					<xt>&lt;element</xt> <xa>name</xa>=<xs>'address'</xs> <xa>type</xa>=<xs>'juneau:com.ibm.sample.Address'</xs><xt>/&gt;</xt>
+					<xt>&lt;element</xt> <xa>name</xa>=<xs>'address'</xs> <xa>type</xa>=<xs>'juneau:org.apache.juneau.samples.addressbook.Address'</xs><xt>/&gt;</xt>
 					<xt>&lt;element</xt> <xa>name</xa>=<xs>'null'</xs> <xa>type</xa>=<xs>'string'</xs><xt>/&gt;</xt>
 				<xt>&lt;/choice&gt;</xt>
 			<xt>&lt;/sequence&gt;</xt>
 		<xt>&lt;/complexType&gt;</xt>
-		<xt>&lt;complexType</xt> <xa>name</xa>=<xs>'com.ibm.sample.Address'</xs><xt>&gt;</xt>
+		<xt>&lt;complexType</xt> <xa>name</xa>=<xs>'org.apache.juneau.samples.addressbook.Address'</xs><xt>&gt;</xt>
 			<xt>&lt;sequence&gt;</xt>
 				<xt>&lt;element</xt> <xa>name</xa>=<xs>'personUri'</xs> <xa>type</xa>=<xs>'string'</xs> <xa>minOccurs</xa>=<xs>'0'</xs><xt>/&gt;</xt>
 				<xt>&lt;element</xt> <xa>name</xa>=<xs>'id'</xs> <xa>type</xa>=<xs>'integer'</xs> <xa>minOccurs</xa>=<xs>'0'</xs><xt>/&gt;</xt>
@@ -1057,10 +1057,10 @@
 		<h6 class='figure'>XML results</h6>
 		<p class='bcode'>
 	<xt>&lt;per:person</xt> 
-			<xa>xmlns</xa>=<xs>'http://www.ibm.com/2013/Juneau'</xs> 
-			<xa>xmlns:per</xa>=<xs>'http://www.ibm.com/person/'</xs> 
-			<xa>xmlns:addr</xa>=<xs>'http://www.ibm.com/address/'</xs> 
-			<xa>xmlns:mail</xa>=<xs>'http://www.ibm.com/mail/'</xs> 
+			<xa>xmlns</xa>=<xs>'http://www.apache.org/2013/Juneau'</xs> 
+			<xa>xmlns:per</xa>=<xs>'http://www.apache.org/person/'</xs> 
+			<xa>xmlns:addr</xa>=<xs>'http://www.apache.org/address/'</xs> 
+			<xa>xmlns:mail</xa>=<xs>'http://www.apache.org/mail/'</xs> 
 			<xa>xmlns:xsi</xa>=<xs>'http://www.w3.org/2001/XMLSchema-instance'</xs> 
 			<xa>uri</xa>=<xs>'http://sample/addressBook/person/1'</xs><xt>&gt;</xt>
 		<xt>&lt;per:id&gt;</xt>1<xt>&lt;/per:id&gt;</xt>
@@ -1087,15 +1087,15 @@
 		<p class='bcode'>
 	<xt>&lt;schema</xt> 
 			<xa>xmlns</xa>=<xs>'http://www.w3.org/2001/XMLSchema'</xs> 
-			<xa>targetNamespace</xa>=<xs>'http://www.ibm.com/2013/Juneau'</xs> 
+			<xa>targetNamespace</xa>=<xs>'http://www.apache.org/2013/Juneau'</xs> 
 			<xa>elementFormDefault</xa>=<xs>'qualified'</xs> 
-			<xa>xmlns:juneau</xa>=<xs>'http://www.ibm.com/2013/Juneau'</xs> 
-			<xa>xmlns:per</xa>=<xs>'http://www.ibm.com/person/'</xs> 
-			<xa>xmlns:addr</xa>=<xs>'http://www.ibm.com/address/'</xs> 
-			<xa>xmlns:mail</xa>=<xs>'http://www.ibm.com/mail/'</xs><xt>&gt;</xt>
-		<xt>&lt;import</xt> <xa>namespace</xa>=<xs>'http://www.ibm.com/person/'</xs> <xa>schemaLocation</xa>=<xs>'per.xsd'</xs><xt>/&gt;</xt>
-		<xt>&lt;import</xt> <xa>namespace</xa>=<xs>'http://www.ibm.com/address/'</xs> <xa>schemaLocation</xa>=<xs>'addr.xsd'</xs><xt>/&gt;</xt>
-		<xt>&lt;import</xt> <xa>namespace</xa>=<xs>'http://www.ibm.com/mail/'</xs> <xa>schemaLocation</xa>=<xs>'mail.xsd'</xs><xt>/&gt;</xt>
+			<xa>xmlns:juneau</xa>=<xs>'http://www.apache.org/2013/Juneau'</xs> 
+			<xa>xmlns:per</xa>=<xs>'http://www.apache.org/person/'</xs> 
+			<xa>xmlns:addr</xa>=<xs>'http://www.apache.org/address/'</xs> 
+			<xa>xmlns:mail</xa>=<xs>'http://www.apache.org/mail/'</xs><xt>&gt;</xt>
+		<xt>&lt;import</xt> <xa>namespace</xa>=<xs>'http://www.apache.org/person/'</xs> <xa>schemaLocation</xa>=<xs>'per.xsd'</xs><xt>/&gt;</xt>
+		<xt>&lt;import</xt> <xa>namespace</xa>=<xs>'http://www.apache.org/address/'</xs> <xa>schemaLocation</xa>=<xs>'addr.xsd'</xs><xt>/&gt;</xt>
+		<xt>&lt;import</xt> <xa>namespace</xa>=<xs>'http://www.apache.org/mail/'</xs> <xa>schemaLocation</xa>=<xs>'mail.xsd'</xs><xt>/&gt;</xt>
 		<xt>&lt;complexType</xt> <xa>name</xa>=<xs>'int'</xs><xt>&gt;</xt>
 			<xt>&lt;simpleContent&gt;</xt>
 				<xt>&lt;extension</xt> <xa>base</xa>=<xs>'integer'</xs><xt>/&gt;</xt>
@@ -1116,10 +1116,10 @@
 				<xt>&lt;any</xt> <xa>processContents</xa>=<xs>'skip'</xs> <xa>maxOccurs</xa>=<xs>'unbounded'</xs> <xa>minOccurs</xa>=<xs>'0'</xs><xt>/&gt;</xt>
 			<xt>&lt;/sequence&gt;</xt>
 		<xt>&lt;/complexType&gt;</xt>
-		<xt>&lt;complexType</xt> <xa>name</xa>=<xs>'java.util.LinkedList_x003C_com.ibm.sample.Address_x003E_'</xs><xt>&gt;</xt>
+		<xt>&lt;complexType</xt> <xa>name</xa>=<xs>'java.util.LinkedList_x003C_org.apache.juneau.samples.addressbook.Address_x003E_'</xs><xt>&gt;</xt>
 			<xt>&lt;sequence&gt;</xt>
 				<xt>&lt;choice</xt> <xa>minOccurs</xa>=<xs>'0'</xs> <xa>maxOccurs</xa>=<xs>'unbounded'</xs><xt>&gt;</xt>
-					<xt>&lt;element</xt> <xa>name</xa>=<xs>'address'</xs> <xa>type</xa>=<xs>'addr:com.ibm.sample.Address'</xs><xt>/&gt;</xt>
+					<xt>&lt;element</xt> <xa>name</xa>=<xs>'address'</xs> <xa>type</xa>=<xs>'addr:org.apache.juneau.samples.addressbook.Address'</xs><xt>/&gt;</xt>
 					<xt>&lt;element</xt> <xa>name</xa>=<xs>'null'</xs> <xa>type</xa>=<xs>'string'</xs><xt>/&gt;</xt>
 				<xt>&lt;/choice&gt;</xt>
 			<xt>&lt;/sequence&gt;</xt>
@@ -1133,18 +1133,18 @@
 	[\u0000]
 	<xt>&lt;schema</xt> 
 			<xa>xmlns</xa>=<xs>'http://www.w3.org/2001/XMLSchema'</xs> 
-			<xa>targetNamespace</xa>=<xs>'http://www.ibm.com/person/'</xs> 
+			<xa>targetNamespace</xa>=<xs>'http://www.apache.org/person/'</xs> 
 			<xa>elementFormDefault</xa>=<xs>'qualified'</xs> 
 			<xa>attributeFormDefault</xa>=<xs>'qualified'</xs> 
-			<xa>xmlns:juneau</xa>=<xs>'http://www.ibm.com/2013/Juneau'</xs> 
-			<xa>xmlns:per</xa>=<xs>'http://www.ibm.com/person/'</xs> 
-			<xa>xmlns:addr</xa>=<xs>'http://www.ibm.com/address/'</xs> 
-			<xa>xmlns:mail</xa>=<xs>'http://www.ibm.com/mail/'</xs><xt>&gt;</xt>
-		<xt>&lt;impor</xt>t <xa>namespace</xa>=<xs>'http://www.ibm.com/2013/Juneau'</xs> <xa>schemaLocation</xa>=<xs>'juneau.xsd'</xs><xt>/&gt;</xt>
-		<xt>&lt;import</xt> <xa>namespace</xa>=<xs>'http://www.ibm.com/address/'</xs> <xa>schemaLocation</xa>=<xs>'addr.xsd'</xs><xt>/&gt;</xt>
-		<xt>&lt;import</xt> <xa>namespace</xa>=<xs>'http://www.ibm.com/mail/'</xs> <xa>schemaLocation</xa>=<xs>'mail.xsd'</xs><xt>/&gt;</xt>
-		<xt>&lt;element</xt> <xa>name</xa>=<xs>'person'</xs> <xa>type</xa>=<xs>'per:com.ibm.sample.Person'</xs><xt>/&gt;</xt>
-		<xt>&lt;complexType</xt> <xa>name</xa>=<xs>'com.ibm.sample.Person'</xs><xt>&gt;</xt>
+			<xa>xmlns:juneau</xa>=<xs>'http://www.apache.org/2013/Juneau'</xs> 
+			<xa>xmlns:per</xa>=<xs>'http://www.apache.org/person/'</xs> 
+			<xa>xmlns:addr</xa>=<xs>'http://www.apache.org/address/'</xs> 
+			<xa>xmlns:mail</xa>=<xs>'http://www.apache.org/mail/'</xs><xt>&gt;</xt>
+		<xt>&lt;impor</xt>t <xa>namespace</xa>=<xs>'http://www.apache.org/2013/Juneau'</xs> <xa>schemaLocation</xa>=<xs>'juneau.xsd'</xs><xt>/&gt;</xt>
+		<xt>&lt;import</xt> <xa>namespace</xa>=<xs>'http://www.apache.org/address/'</xs> <xa>schemaLocation</xa>=<xs>'addr.xsd'</xs><xt>/&gt;</xt>
+		<xt>&lt;import</xt> <xa>namespace</xa>=<xs>'http://www.apache.org/mail/'</xs> <xa>schemaLocation</xa>=<xs>'mail.xsd'</xs><xt>/&gt;</xt>
+		<xt>&lt;element</xt> <xa>name</xa>=<xs>'person'</xs> <xa>type</xa>=<xs>'per:org.apache.juneau.samples.addressbook.Person'</xs><xt>/&gt;</xt>
+		<xt>&lt;complexType</xt> <xa>name</xa>=<xs>'org.apache.juneau.samples.addressbook.Person'</xs><xt>&gt;</xt>
 			<xt>&lt;sequence&gt;</xt>
 				<xt>&lt;any</xt> <xa>minOccurs</xa>=<xs>'0'</xs> <xa>maxOccurs</xa>=<xs>'unbounded'</xs><xt>/&gt;</xt>
 			<xt>&lt;/sequence&gt;</xt>
@@ -1154,22 +1154,22 @@
 		<xt>&lt;element</xt> <xa>name</xa>=<xs>'name'</xs> <xa>type</xa>=<xs>'juneau:java.lang.String'</xs><xt>/&gt;</xt>
 		<xt>&lt;element</xt> <xa>name</xa>=<xs>'addressBookUri'</xs> <xa>type</xa>=<xs>'juneau:java.net.URI'</xs><xt>/&gt;</xt>
 		<xt>&lt;element</xt> <xa>name</xa>=<xs>'birthDate'</xs> <xa>type</xa>=<xs>'juneau:java.util.Calendar'</xs><xt>/&gt;</xt>
-		<xt>&lt;element</xt> <xa>name</xa>=<xs>'addresses'</xs> <xa>type</xa>=<xs>'juneau:java.util.LinkedList_x003C_com.ibm.sample.Address_x003E_'</xs><xt>/&gt;</xt>
+		<xt>&lt;element</xt> <xa>name</xa>=<xs>'addresses'</xs> <xa>type</xa>=<xs>'juneau:java.util.LinkedList_x003C_org.apache.juneau.samples.addressbook.Address_x003E_'</xs><xt>/&gt;</xt>
 	<xt>&lt;/schema&gt;</xt>
 	[\u0000]
 	<xt>&lt;schema</xt> 
 			<xa>xmlns</xa>=<xs>'http://www.w3.org/2001/XMLSchema'</xs> 
-			<xa>targetNamespace</xa>=<xs>'http://www.ibm.com/address/'</xs> 
+			<xa>targetNamespace</xa>=<xs>'http://www.apache.org/address/'</xs> 
 			<xa>elementFormDefault</xa>=<xs>'qualified'</xs> 
 			<xa>attributeFormDefault</xa>=<xs>'qualified'</xs> 
-			<xa>xmlns:juneau</xa>=<xs>'http://www.ibm.com/2013/Juneau'</xs> 
-			<xa>xmlns:per</xa>=<xs>'http://www.ibm.com/person/'</xs> 
-			<xa>xmlns:addr</xa>=<xs>'http://www.ibm.com/address/'</xs> 
-			<xa>xmlns:mail</xa>=<xs>'http://www.ibm.com/mail/'</xs><xt>&gt;</xt>
-		<xt>&lt;import</xt> <xa>namespace</xa>=<xs>'http://www.ibm.com/2013/Juneau'</xs> <xa>schemaLocation</xa>=<xs>'juneau.xsd'</xs><xt>/&gt;</xt>
-		<xt>&lt;import</xt> <xa>namespace</xa>=<xs>'http://www.ibm.com/person/'</xs> <xa>schemaLocation</xa>=<xs>'per.xsd'</xs><xt>/&gt;</xt>
-		<xt>&lt;import</xt> <xa>namespace</xa>=<xs>'http://www.ibm.com/mail/'</xs> <xa>schemaLocation</xa>=<xs>'mail.xsd'</xs><xt>/&gt;</xt>
-		<xt>&lt;complexType</xt> <xa>name</xa>=<xs>'com.ibm.sample.Address'</xs><xt>&gt;</xt>
+			<xa>xmlns:juneau</xa>=<xs>'http://www.apache.org/2013/Juneau'</xs> 
+			<xa>xmlns:per</xa>=<xs>'http://www.apache.org/person/'</xs> 
+			<xa>xmlns:addr</xa>=<xs>'http://www.apache.org/address/'</xs> 
+			<xa>xmlns:mail</xa>=<xs>'http://www.apache.org/mail/'</xs><xt>&gt;</xt>
+		<xt>&lt;import</xt> <xa>namespace</xa>=<xs>'http://www.apache.org/2013/Juneau'</xs> <xa>schemaLocation</xa>=<xs>'juneau.xsd'</xs><xt>/&gt;</xt>
+		<xt>&lt;import</xt> <xa>namespace</xa>=<xs>'http://www.apache.org/person/'</xs> <xa>schemaLocation</xa>=<xs>'per.xsd'</xs><xt>/&gt;</xt>
+		<xt>&lt;import</xt> <xa>namespace</xa>=<xs>'http://www.apache.org/mail/'</xs> <xa>schemaLocation</xa>=<xs>'mail.xsd'</xs><xt>/&gt;</xt>
+		<xt>&lt;complexType</xt> <xa>name</xa>=<xs>'org.apache.juneau.samples.addressbook.Address'</xs><xt>&gt;</xt>
 			<xt>&lt;sequence&gt;</xt>
 				<xt>&lt;any</xt> <xa>minOccurs</xa>=<xs>'0'</xs> <xa>maxOccurs</xa>=<xs>'unbounded'</xs><xt>/&gt;</xt>
 			<xt>&lt;/sequence&gt;</xt>
@@ -1182,16 +1182,16 @@
 	[\u0000]
 	<xt>&lt;schema</xt> 
 			<xa>xmlns</xa>=<xs>'http://www.w3.org/2001/XMLSchema'</xs> 
-			<xa>targetNamespace</xa>=<xs>'http://www.ibm.com/mail/'</xs> 
+			<xa>targetNamespace</xa>=<xs>'http://www.apache.org/mail/'</xs> 
 			<xa>elementFormDefault</xa>=<xs>'qualified'</xs> 
 			<xa>attributeFormDefault</xa>=<xs>'qualified'</xs> 
-			<xa>xmlns:juneau</xa>=<xs>'http://www.ibm.com/2013/Juneau'</xs> 
-			<xa>xmlns:per</xa>=<xs>'http://www.ibm.com/person/'</xs> 
-			<xa>xmlns:addr</xa>=<xs>'http://www.ibm.com/address/'</xs> 
-			<xa>xmlns:mail</xa>=<xs>'http://www.ibm.com/mail/'</xs><xt>&gt;</xt>
-		<xt>&lt;import</xt> <xa>namespace</xa>=<xs>'http://www.ibm.com/2013/Juneau'</xs> <xa>schemaLocation</xa>=<xs>'juneau.xsd'</xs><xt>/&gt;</xt>
-		<xt>&lt;import</xt> <xa>namespace</xa>=<xs>'http://www.ibm.com/person/'</xs> <xa>schemaLocation</xa>=<xs>'per.xsd'</xs><xt>/&gt;</xt>
-		<xt>&lt;import</xt> <xa>namespace</xa>=<xs>'http://www.ibm.com/address/'</xs> <xa>schemaLocation</xa>=<xs>'addr.xsd'</xs><xt>/&gt;</xt>
+			<xa>xmlns:juneau</xa>=<xs>'http://www.apache.org/2013/Juneau'</xs> 
+			<xa>xmlns:per</xa>=<xs>'http://www.apache.org/person/'</xs> 
+			<xa>xmlns:addr</xa>=<xs>'http://www.apache.org/address/'</xs> 
+			<xa>xmlns:mail</xa>=<xs>'http://www.apache.org/mail/'</xs><xt>&gt;</xt>
+		<xt>&lt;import</xt> <xa>namespace</xa>=<xs>'http://www.apache.org/2013/Juneau'</xs> <xa>schemaLocation</xa>=<xs>'juneau.xsd'</xs><xt>/&gt;</xt>
+		<xt>&lt;import</xt> <xa>namespace</xa>=<xs>'http://www.apache.org/person/'</xs> <xa>schemaLocation</xa>=<xs>'per.xsd'</xs><xt>/&gt;</xt>
+		<xt>&lt;import</xt> <xa>namespace</xa>=<xs>'http://www.apache.org/address/'</xs> <xa>schemaLocation</xa>=<xs>'addr.xsd'</xs><xt>/&gt;</xt>
 		<xt>&lt;element</xt> <xa>name</xa>=<xs>'street'</xs> <xa>type</xa>=<xs>'juneau:java.lang.String'</xs><xt>/&gt;</xt>
 		<xt>&lt;element</xt> <xa>name</xa>=<xs>'city'</xs> <xa>type</xa>=<xs>'juneau:java.lang.String'</xs><xt>/&gt;</xt>
 		<xt>&lt;element</xt> <xa>name</xa>=<xs>'state'</xs> <xa>type</xa>=<xs>'juneau:java.lang.String'</xs><xt>/&gt;</xt>
@@ -1348,10 +1348,10 @@
 	</p>
 	<p class='bcode'>
 	<xt>&lt;per:person</xt> 
-			<xa>xmlns</xa>=<xs>'http://www.ibm.com/2013/Juneau'</xs> 
-			<xa>xmlns:per</xa>=<xs>'http://www.ibm.com/person/'</xs> 
-			<xa>xmlns:addr</xa>=<xs>'http://www.ibm.com/address/'</xs> 
-			<xa>xmlns:mail</xa>=<xs>'http://www.ibm.com/mail/'</xs> 
+			<xa>xmlns</xa>=<xs>'http://www.apache.org/2013/Juneau'</xs> 
+			<xa>xmlns:per</xa>=<xs>'http://www.apache.org/person/'</xs> 
+			<xa>xmlns:addr</xa>=<xs>'http://www.apache.org/address/'</xs> 
+			<xa>xmlns:mail</xa>=<xs>'http://www.apache.org/mail/'</xs> 
 			<xa>xmlns:xsi</xa>=<xs>'http://www.w3.org/2001/XMLSchema-instance'</xs>
 			<xa>uri</xa>=<xs>'http://sample/addressBook/person/1'</xs><xt>&gt;</xt>
 		<xt>&lt;per:id&gt;</xt>1<xt>&lt;/per:id&gt;</xt>
@@ -1445,10 +1445,10 @@
 			</p>
 			<p class='bcode'>
 	<xt>&lt;per:person</xt> 
-			<xa>xmlns</xa>=<xs>'http://www.ibm.com/2013/Juneau'</xs> 
-			<xa>xmlns:per</xa>=<xs>'http://www.ibm.com/person/'</xs> 
-			<xa>xmlns:addr</xa>=<xs>'http://www.ibm.com/address/'</xs> 
-			<xa>xmlns:mail</xa>=<xs>'http://www.ibm.com/mail/'</xs> 
+			<xa>xmlns</xa>=<xs>'http://www.apache.org/2013/Juneau'</xs> 
+			<xa>xmlns:per</xa>=<xs>'http://www.apache.org/person/'</xs> 
+			<xa>xmlns:addr</xa>=<xs>'http://www.apache.org/address/'</xs> 
+			<xa>xmlns:mail</xa>=<xs>'http://www.apache.org/mail/'</xs> 
 			<xa>xmlns:xsi</xa>=<xs>'http://www.w3.org/2001/XMLSchema-instance'</xs>
 			<xa>uri</xa>=<xs>'http://sample/addressBook/person/1'</xs><xt>&gt;</xt>
 		<xt>&lt;per:id&gt;</xt>1<xt>&lt;/per:id&gt;</xt>
@@ -1522,10 +1522,10 @@
 			<h6 class='figure'>Results</h6>
 			<p class='bcode'>
 	<xt>&lt;per:person</xt> 
-			<xa>xmlns</xa>=<xs>'http://www.ibm.com/2013/Juneau'</xs> 
-			<xa>xmlns:per</xa>=<xs>'http://www.ibm.com/person/'</xs> 
-			<xa>xmlns:addr</xa>=<xs>'http://www.ibm.com/address/'</xs> 
-			<xa>xmlns:mail</xa>=<xs>'http://www.ibm.com/mail/'</xs> 
+			<xa>xmlns</xa>=<xs>'http://www.apache.org/2013/Juneau'</xs> 
+			<xa>xmlns:per</xa>=<xs>'http://www.apache.org/person/'</xs> 
+			<xa>xmlns:addr</xa>=<xs>'http://www.apache.org/address/'</xs> 
+			<xa>xmlns:mail</xa>=<xs>'http://www.apache.org/mail/'</xs> 
 			<xa>xmlns:xsi</xa>=<xs>'http://www.w3.org/2001/XMLSchema-instance'</xs>
 			<xa>uri</xa>=<xs>'http://sample/addressBook/person/1'</xs><xt>&gt;</xt>
 		<xt>&lt;per:id</xt> <xa>type</xa>=<xs>'number'</xs><xt>&gt;</xt>1<xt>&lt;/per:id&gt;</xt>

@@ -1074,7 +1074,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * </p>
 	 * <p class='bcode'>
 	 * 	{
-	 * 		_type: <js>'com.ibm.sample.addressBook.Person'</js>,
+	 * 		_type: <js>'org.apache.juneau.samples.addressbook.Person'</js>,
 	 * 		name: <js>'John Smith'</js>,
 	 * 		...
 	 * 	}
@@ -1107,7 +1107,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * 	}
 	 * 	<jc>// LinkedList of beans</jc>
 	 * 	{
-	 * 		_type: <js>'java.util.LinkedList&lt;com.ibm.sample.addressBook.Person&gt;'</js>,
+	 * 		_type: <js>'java.util.LinkedList&lt;org.apache.juneau.samples.addressbook.Person&gt;'</js>,
 	 * 		items: [ { name: <js>'John Smith'</js>, ... }, ... ]
 	 * 	}
 	 * </p>
@@ -1122,7 +1122,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * 	}
 	 * 	<jc>// Array of beans</jc>
 	 * 	{
-	 * 		_type: <js>'com.ibm.sample.addressBook.Person[]'</js>,
+	 * 		_type: <js>'org.apache.juneau.samples.addressbook.Person[]'</js>,
 	 * 		items: [ { name: <js>'John Smith'</js>, ... }, ... ]
 	 * 	}
 	 * </p>

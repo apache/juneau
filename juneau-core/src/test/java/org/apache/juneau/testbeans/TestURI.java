@@ -46,17 +46,17 @@ public class TestURI {
 	public TestURI() throws Exception {
 		f1 = new URI("f1/x1");
 		f2 = new URI("/f2/x2");
-		f3 = new URI("http://www.ibm.com/f3/x3");
+		f3 = new URI("http://www.apache.org/f3/x3");
 		f4 = "f4/x4";
 		f5 = "/f5/x5";
-		f6 = "http://www.ibm.com/f6/x6";
-		f7 = new URL("http://www.ibm.com/f7/x7");
+		f6 = "http://www.apache.org/f6/x6";
+		f7 = new URL("http://www.apache.org/f7/x7");
 		f8 = new TestURIb();
-		fa = "http://www.ibm.com/fa/xa#MY_LABEL";
-		fb = "http://www.ibm.com/fb/xb?label=MY_LABEL&foo=bar";
-		fc = "http://www.ibm.com/fc/xc?foo=bar&label=MY_LABEL";
-		fd = "http://www.ibm.com/fd/xd?label2=MY_LABEL&foo=bar";
-		fe = "http://www.ibm.com/fe/xe?foo=bar&label2=MY_LABEL";
+		fa = "http://www.apache.org/fa/xa#MY_LABEL";
+		fb = "http://www.apache.org/fb/xb?label=MY_LABEL&foo=bar";
+		fc = "http://www.apache.org/fc/xc?foo=bar&label=MY_LABEL";
+		fd = "http://www.apache.org/fd/xd?label2=MY_LABEL&foo=bar";
+		fe = "http://www.apache.org/fe/xe?foo=bar&label2=MY_LABEL";
 	}
 
 	@org.apache.juneau.annotation.URI

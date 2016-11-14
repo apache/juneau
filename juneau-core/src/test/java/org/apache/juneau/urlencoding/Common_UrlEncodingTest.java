@@ -258,18 +258,18 @@ public class Common_UrlEncodingTest {
 			+"f0=f0/x0"
 			+"&f1=f1/x1"
 			+"&f2=/f2/x2"
-			+"&f3=http://www.ibm.com/f3/x3"
+			+"&f3=http://www.apache.org/f3/x3"
 			+"&f4=f4/x4"
 			+"&f5=/f5/x5"
-			+"&f6=http://www.ibm.com/f6/x6"
-			+"&f7=http://www.ibm.com/f7/x7"
+			+"&f6=http://www.apache.org/f6/x6"
+			+"&f7=http://www.apache.org/f7/x7"
 			+"&f8=f8/x8"
 			+"&f9=f9/x9"
-			+"&fa=http://www.ibm.com/fa/xa%23MY_LABEL"
-			+"&fb=http://www.ibm.com/fb/xb?label=MY_LABEL%26foo=bar"
-			+"&fc=http://www.ibm.com/fc/xc?foo=bar%26label=MY_LABEL"
-			+"&fd=http://www.ibm.com/fd/xd?label2=MY_LABEL%26foo=bar"
-			+"&fe=http://www.ibm.com/fe/xe?foo=bar%26label2=MY_LABEL";
+			+"&fa=http://www.apache.org/fa/xa%23MY_LABEL"
+			+"&fb=http://www.apache.org/fb/xb?label=MY_LABEL%26foo=bar"
+			+"&fc=http://www.apache.org/fc/xc?foo=bar%26label=MY_LABEL"
+			+"&fd=http://www.apache.org/fd/xd?label2=MY_LABEL%26foo=bar"
+			+"&fe=http://www.apache.org/fe/xe?foo=bar%26label2=MY_LABEL";
 		assertEquals(expected, r);
 
 		s.setProperty(SERIALIZER_relativeUriBase, "");  // Same as null.
@@ -282,18 +282,18 @@ public class Common_UrlEncodingTest {
 			+"f0=/cr/f0/x0"
 			+"&f1=/cr/f1/x1"
 			+"&f2=/f2/x2"
-			+"&f3=http://www.ibm.com/f3/x3"
+			+"&f3=http://www.apache.org/f3/x3"
 			+"&f4=/cr/f4/x4"
 			+"&f5=/f5/x5"
-			+"&f6=http://www.ibm.com/f6/x6"
-			+"&f7=http://www.ibm.com/f7/x7"
+			+"&f6=http://www.apache.org/f6/x6"
+			+"&f7=http://www.apache.org/f7/x7"
 			+"&f8=/cr/f8/x8"
 			+"&f9=/cr/f9/x9"
-			+"&fa=http://www.ibm.com/fa/xa%23MY_LABEL"
-			+"&fb=http://www.ibm.com/fb/xb?label=MY_LABEL%26foo=bar"
-			+"&fc=http://www.ibm.com/fc/xc?foo=bar%26label=MY_LABEL"
-			+"&fd=http://www.ibm.com/fd/xd?label2=MY_LABEL%26foo=bar"
-			+"&fe=http://www.ibm.com/fe/xe?foo=bar%26label2=MY_LABEL";
+			+"&fa=http://www.apache.org/fa/xa%23MY_LABEL"
+			+"&fb=http://www.apache.org/fb/xb?label=MY_LABEL%26foo=bar"
+			+"&fc=http://www.apache.org/fc/xc?foo=bar%26label=MY_LABEL"
+			+"&fd=http://www.apache.org/fd/xd?label2=MY_LABEL%26foo=bar"
+			+"&fe=http://www.apache.org/fe/xe?foo=bar%26label2=MY_LABEL";
 		assertEquals(expected, r);
 
 		s.setProperty(SERIALIZER_relativeUriBase, "/cr/");  // Same as above
@@ -306,18 +306,18 @@ public class Common_UrlEncodingTest {
 			+"f0=/f0/x0"
 			+"&f1=/f1/x1"
 			+"&f2=/f2/x2"
-			+"&f3=http://www.ibm.com/f3/x3"
+			+"&f3=http://www.apache.org/f3/x3"
 			+"&f4=/f4/x4"
 			+"&f5=/f5/x5"
-			+"&f6=http://www.ibm.com/f6/x6"
-			+"&f7=http://www.ibm.com/f7/x7"
+			+"&f6=http://www.apache.org/f6/x6"
+			+"&f7=http://www.apache.org/f7/x7"
 			+"&f8=/f8/x8"
 			+"&f9=/f9/x9"
-			+"&fa=http://www.ibm.com/fa/xa%23MY_LABEL"
-			+"&fb=http://www.ibm.com/fb/xb?label=MY_LABEL%26foo=bar"
-			+"&fc=http://www.ibm.com/fc/xc?foo=bar%26label=MY_LABEL"
-			+"&fd=http://www.ibm.com/fd/xd?label2=MY_LABEL%26foo=bar"
-			+"&fe=http://www.ibm.com/fe/xe?foo=bar%26label2=MY_LABEL";
+			+"&fa=http://www.apache.org/fa/xa%23MY_LABEL"
+			+"&fb=http://www.apache.org/fb/xb?label=MY_LABEL%26foo=bar"
+			+"&fc=http://www.apache.org/fc/xc?foo=bar%26label=MY_LABEL"
+			+"&fd=http://www.apache.org/fd/xd?label2=MY_LABEL%26foo=bar"
+			+"&fe=http://www.apache.org/fe/xe?foo=bar%26label2=MY_LABEL";
 		assertEquals(expected, r);
 
 		s.setProperty(SERIALIZER_relativeUriBase, null);
@@ -328,18 +328,18 @@ public class Common_UrlEncodingTest {
 			+"f0=f0/x0"
 			+"&f1=f1/x1"
 			+"&f2=http://foo/f2/x2"
-			+"&f3=http://www.ibm.com/f3/x3"
+			+"&f3=http://www.apache.org/f3/x3"
 			+"&f4=f4/x4"
 			+"&f5=http://foo/f5/x5"
-			+"&f6=http://www.ibm.com/f6/x6"
-			+"&f7=http://www.ibm.com/f7/x7"
+			+"&f6=http://www.apache.org/f6/x6"
+			+"&f7=http://www.apache.org/f7/x7"
 			+"&f8=f8/x8"
 			+"&f9=f9/x9"
-			+"&fa=http://www.ibm.com/fa/xa%23MY_LABEL"
-			+"&fb=http://www.ibm.com/fb/xb?label=MY_LABEL%26foo=bar"
-			+"&fc=http://www.ibm.com/fc/xc?foo=bar%26label=MY_LABEL"
-			+"&fd=http://www.ibm.com/fd/xd?label2=MY_LABEL%26foo=bar"
-			+"&fe=http://www.ibm.com/fe/xe?foo=bar%26label2=MY_LABEL";
+			+"&fa=http://www.apache.org/fa/xa%23MY_LABEL"
+			+"&fb=http://www.apache.org/fb/xb?label=MY_LABEL%26foo=bar"
+			+"&fc=http://www.apache.org/fc/xc?foo=bar%26label=MY_LABEL"
+			+"&fd=http://www.apache.org/fd/xd?label2=MY_LABEL%26foo=bar"
+			+"&fe=http://www.apache.org/fe/xe?foo=bar%26label2=MY_LABEL";
 		assertEquals(expected, r);
 
 		s.setProperty(SERIALIZER_absolutePathUriBase, "http://foo/");
@@ -352,18 +352,18 @@ public class Common_UrlEncodingTest {
 			+"f0=f0/x0"
 			+"&f1=f1/x1"
 			+"&f2=/f2/x2"
-			+"&f3=http://www.ibm.com/f3/x3"
+			+"&f3=http://www.apache.org/f3/x3"
 			+"&f4=f4/x4"
 			+"&f5=/f5/x5"
-			+"&f6=http://www.ibm.com/f6/x6"
-			+"&f7=http://www.ibm.com/f7/x7"
+			+"&f6=http://www.apache.org/f6/x6"
+			+"&f7=http://www.apache.org/f7/x7"
 			+"&f8=f8/x8"
 			+"&f9=f9/x9"
-			+"&fa=http://www.ibm.com/fa/xa%23MY_LABEL"
-			+"&fb=http://www.ibm.com/fb/xb?label=MY_LABEL%26foo=bar"
-			+"&fc=http://www.ibm.com/fc/xc?foo=bar%26label=MY_LABEL"
-			+"&fd=http://www.ibm.com/fd/xd?label2=MY_LABEL%26foo=bar"
-			+"&fe=http://www.ibm.com/fe/xe?foo=bar%26label2=MY_LABEL";
+			+"&fa=http://www.apache.org/fa/xa%23MY_LABEL"
+			+"&fb=http://www.apache.org/fb/xb?label=MY_LABEL%26foo=bar"
+			+"&fc=http://www.apache.org/fc/xc?foo=bar%26label=MY_LABEL"
+			+"&fd=http://www.apache.org/fd/xd?label2=MY_LABEL%26foo=bar"
+			+"&fe=http://www.apache.org/fe/xe?foo=bar%26label2=MY_LABEL";
 		assertEquals(expected, r);
 	}
 

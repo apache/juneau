@@ -62,20 +62,20 @@ public @interface XmlSchema {
 	 * 	<jc>// XML namespaces used within this package.</jc>
 	 * 	<ja>@XmlSchema</ja>(prefix=<js>"ab"</js>,
 	 * 		namespaces={
-	 * 			<ja>@XmlNs</ja>(prefix=<js>"ab"</js>, namespaceURI=<js>"http://www.ibm.com/addressBook/"</js>),
-	 * 			<ja>@XmlNs</ja>(prefix=<js>"per"</js>, namespaceURI=<js>"http://www.ibm.com/person/"</js>),
-	 * 			<ja>@XmlNs</ja>(prefix=<js>"addr"</js>, namespaceURI=<js>"http://www.ibm.com/address/"</js>),
-	 * 			<ja>@XmlNs</ja>(prefix=<js>"mail"</js>, namespaceURI="<js>http://www.ibm.com/mail/"</js>)
+	 * 			<ja>@XmlNs</ja>(prefix=<js>"ab"</js>, namespaceURI=<js>"http://www.apache.org/addressBook/"</js>),
+	 * 			<ja>@XmlNs</ja>(prefix=<js>"per"</js>, namespaceURI=<js>"http://www.apache.org/person/"</js>),
+	 * 			<ja>@XmlNs</ja>(prefix=<js>"addr"</js>, namespaceURI=<js>"http://www.apache.org/address/"</js>),
+	 * 			<ja>@XmlNs</ja>(prefix=<js>"mail"</js>, namespaceURI="<js>http://www.apache.org/mail/"</js>)
 	 * 		}
 	 * 	)
-	 * 	<jk>package</jk> com.ibm.sample.addressbook;
+	 * 	<jk>package</jk> org.apache.juneau.samples.addressbook;
 	 * 	<jk>import</jk> org.apache.juneau.xml.annotation.*;
 	 * </p>
 	 * <p>
 	 * 	Class in package using defined namespaces...
 	 * </p>
 	 * <p class='bcode'>
-	 * 	<jk>package</jk> com.ibm.sample.addressbook;
+	 * 	<jk>package</jk> corg.apache.juneau.samples.addressbook;
 	 *
 	 * 	<jc>// Bean class, override "ab" namespace on package.</jc>
 	 * 	<ja>@Xml</ja>(prefix=<js>"addr"</js>)

@@ -150,7 +150,7 @@
 	</p>
 	<p class='bcode'>
 	org.apache.juneau.server.jaxrs.DefaultProvider		
-	com.ibm.sample.jaxrs.HelloWorldResource
+	com.foo.sample.jaxrs.HelloWorldResource
 	</p>
 	<p>
 		Interestingly, the <code>DefaultProvider</code> itself is a subclass of <code>BaseProvider</code>
@@ -326,7 +326,7 @@
 	<p class='bcode'>
 	C:\>curl.exe -H "Accept: application/x-java-serialized-object" -X GET http://localhost:9080/sample/wink/helloworld
 	<ja>detailMessaget ↕Ljava/lang/String;[ ption(Vx τå▬5☻  xr ↔java.io.ObjectStreamExceptiond├Σkì9√▀☻  xr ‼java.io.IOExcept
-	stackTracet ▲[Ljava/lang/StackTraceElement;xpq t /com.ibm.sample.jaxrs.HelloWorldResource$Messageur ▲[Ljava.lang.Sta
+	stackTracet ▲[Ljava/lang/StackTraceElement;xpq t /org.apache.juneau.samples.jaxrs.HelloWorldResource$Messageur ▲[Ljava.lang.Sta
 	lineNumberL ♫declaringClassq ~ ♠LfileNameq ~ ♠L
 	methodNameq ~ ♠xp  ♦át →java.io.ObjectOutputStreamt ↨ObjectOutputStream.javat ♀writeObject0sq ~ ♀  ☺[t →java.io.Obje
 	 3org.apache.juneau.serializer.OutputStreamSerializert ←OutputStreamSerializer.javat    serializesq ~ ♀   ^t &amp;com.ib
@@ -342,7 +342,7 @@
 	nnectionInitialReadCallback.javat ¶sendToDiscriminatorssq ~ ♀   qt &lt;com.ibm.ws.tcp.channel.impl.NewConnectionInitial
 	  ┘t $com.ibm.io.async.AbstractAsyncFuturet ↑AbstractAsyncFuture.javat ♫invokeCallbacksq ~ ♀   ít #com.ibm.io.async.
 	t ↕ResultHandler.javatcompletesq ~ ♀  ♥t ▲com.ibm.io.async.ResultHandlert ↕ResultHandler.javat ▬runEventProcessingLo
-	on: java.io.NotSerializableException: com.ibm.sample.jaxrs.HelloWorldResource$Message</ja>
+	on: java.io.NotSerializableException: org.apache.juneau.samples.jaxrs.HelloWorldResource$Message</ja>
 	</p>
 	<p>
 		The following shows the PUT method being invoked.  

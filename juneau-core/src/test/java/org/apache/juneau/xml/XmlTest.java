@@ -60,7 +60,7 @@ public class XmlTest {
 		ObjectMap m = (ObjectMap) JsonParser.DEFAULT.parse(readFile(getClass().getResource("/xml/testComparisonWithJson.json").getPath()), Object.class);
 		String r = new XmlSerializer.XmlJsonSq()
 			.setProperty(XML_addNamespaceUrisToRoot, true)
-			.setProperty(XML_defaultNamespaceUri, "http://www.ibm.com")
+			.setProperty(XML_defaultNamespaceUri, "http://www.apache.org")
 			.setProperty(SERIALIZER_useIndentation, true)
 			.setProperty(SERIALIZER_trimNullProperties, false)
 			.serialize(m);
@@ -287,7 +287,7 @@ public class XmlTest {
 		s.setProperty(XML_enableNamespaces, true).setProperty(XML_addNamespaceUrisToRoot, true).setProperty(XML_autoDetectNamespaces, true).setProperty(SERIALIZER_trimNullProperties, false);
 		t.f1 = 4; t.f2 = 5; t.f3 = 6;
 		r = s.serialize(t);
-		assertEquals("<object xmlns='http://www.ibm.com/2013/Juneau' xmlns:bar='http://bar' xmlns:foo='http://foo' xmlns:baz='http://baz' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' bar:f1='4' foo:f2='5' baz:f3='6'/>", r);
+		assertEquals("<object xmlns='http://www.apache.org/2013/Juneau' xmlns:bar='http://bar' xmlns:foo='http://foo' xmlns:baz='http://baz' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' bar:f1='4' foo:f2='5' baz:f3='6'/>", r);
 		t = p.parse(r, M.class);
 		assertEquals(4, t.f1);
 		assertEquals(5, t.f2);
@@ -462,7 +462,7 @@ public class XmlTest {
 		// Only xsi should be added to root.
 		s.setProperty(XML_addNamespaceUrisToRoot, true);
 		r = s.serialize(t);
-		assertEquals("<object xmlns='http://www.ibm.com/2013/Juneau' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><foo:f1>1</foo:f1><bar:f2>2</bar:f2><foo:f3>3</foo:f3><baz:f4>4</baz:f4></object>", r);
+		assertEquals("<object xmlns='http://www.apache.org/2013/Juneau' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><foo:f1>1</foo:f1><bar:f2>2</bar:f2><foo:f3>3</foo:f3><baz:f4>4</baz:f4></object>", r);
 
 		// Manually set namespaces
 		s.setProperty(XML_namespaces,
@@ -473,7 +473,7 @@ public class XmlTest {
 			}
 		);
 		r = s.serialize(t);
-		assertEquals("<object xmlns='http://www.ibm.com/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><foo:f1>1</foo:f1><bar:f2>2</bar:f2><foo:f3>3</foo:f3><baz:f4>4</baz:f4></object>", r);
+		assertEquals("<object xmlns='http://www.apache.org/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><foo:f1>1</foo:f1><bar:f2>2</bar:f2><foo:f3>3</foo:f3><baz:f4>4</baz:f4></object>", r);
 		assertTrue(t.equals(p.parse(r, T1.class)));
 		validateXml(t, s);
 
@@ -490,7 +490,7 @@ public class XmlTest {
 
 		s.setProperty(XML_enableNamespaces, true);
 		r = s.serialize(t);
-		assertEquals("<object xmlns='http://www.ibm.com/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><foo:f1>1</foo:f1><bar:f2>2</bar:f2><foo:f3>3</foo:f3><baz:f4>4</baz:f4></object>", r);
+		assertEquals("<object xmlns='http://www.apache.org/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><foo:f1>1</foo:f1><bar:f2>2</bar:f2><foo:f3>3</foo:f3><baz:f4>4</baz:f4></object>", r);
 		assertTrue(t.equals(p.parse(r, T1.class)));
 		validateXml(t, s);
 	}
@@ -516,7 +516,7 @@ public class XmlTest {
 		// Only xsi should be added to root.
 		s.setProperty(XML_addNamespaceUrisToRoot, true);
 		r = s.serialize(t);
-		assertEquals("<foo:T2 xmlns='http://www.ibm.com/2013/Juneau' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><foo:f1>1</foo:f1><bar:f2>2</bar:f2><foo:f3>3</foo:f3><baz:f4>4</baz:f4></foo:T2>", r);
+		assertEquals("<foo:T2 xmlns='http://www.apache.org/2013/Juneau' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><foo:f1>1</foo:f1><bar:f2>2</bar:f2><foo:f3>3</foo:f3><baz:f4>4</baz:f4></foo:T2>", r);
 
 		// Manually set namespaces
 		s.setProperty(XML_namespaces,
@@ -527,7 +527,7 @@ public class XmlTest {
 			}
 		);
 		r = s.serialize(t);
-		assertEquals("<foo:T2 xmlns='http://www.ibm.com/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><foo:f1>1</foo:f1><bar:f2>2</bar:f2><foo:f3>3</foo:f3><baz:f4>4</baz:f4></foo:T2>", r);
+		assertEquals("<foo:T2 xmlns='http://www.apache.org/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><foo:f1>1</foo:f1><bar:f2>2</bar:f2><foo:f3>3</foo:f3><baz:f4>4</baz:f4></foo:T2>", r);
 		assertTrue(t.equals(p.parse(r, T2.class)));
 		validateXml(t, s);
 
@@ -542,7 +542,7 @@ public class XmlTest {
 
 		s.setProperty(XML_enableNamespaces, true);
 		r = s.serialize(t);
-		assertEquals("<foo:T2 xmlns='http://www.ibm.com/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><foo:f1>1</foo:f1><bar:f2>2</bar:f2><foo:f3>3</foo:f3><baz:f4>4</baz:f4></foo:T2>", r);
+		assertEquals("<foo:T2 xmlns='http://www.apache.org/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><foo:f1>1</foo:f1><bar:f2>2</bar:f2><foo:f3>3</foo:f3><baz:f4>4</baz:f4></foo:T2>", r);
 		assertTrue(t.equals(p.parse(r, T2.class)));
 		validateXml(t, s);
 	}
@@ -570,7 +570,7 @@ public class XmlTest {
 		// Only xsi should be added to root.
 		s.setProperty(XML_addNamespaceUrisToRoot, true).setProperty(XML_autoDetectNamespaces, false);
 		r = s.serialize(t);
-		assertEquals("<object xmlns='http://www.ibm.com/2013/Juneau' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><p1:f1>1</p1:f1><bar:f2>2</bar:f2><p1:f3>3</p1:f3><baz:f4>4</baz:f4></object>", r);
+		assertEquals("<object xmlns='http://www.apache.org/2013/Juneau' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><p1:f1>1</p1:f1><bar:f2>2</bar:f2><p1:f3>3</p1:f3><baz:f4>4</baz:f4></object>", r);
 
 		// Manually set namespaces
 		s.setProperty(XML_autoDetectNamespaces, false);
@@ -582,7 +582,7 @@ public class XmlTest {
 			}
 		);
 		r = s.serialize(t);
-		assertEquals("<object xmlns='http://www.ibm.com/2013/Juneau' xmlns:p1='http://p1' xmlns:bar='http://bar' xmlns:baz='http://baz' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><p1:f1>1</p1:f1><bar:f2>2</bar:f2><p1:f3>3</p1:f3><baz:f4>4</baz:f4></object>", r);
+		assertEquals("<object xmlns='http://www.apache.org/2013/Juneau' xmlns:p1='http://p1' xmlns:bar='http://bar' xmlns:baz='http://baz' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><p1:f1>1</p1:f1><bar:f2>2</bar:f2><p1:f3>3</p1:f3><baz:f4>4</baz:f4></object>", r);
 		assertTrue(t.equals(p.parse(r, T3.class)));
 		validateXml(t, s);
 
@@ -597,7 +597,7 @@ public class XmlTest {
 
 		s.setProperty(XML_enableNamespaces, true);
 		r = s.serialize(t);
-		assertEquals("<object xmlns='http://www.ibm.com/2013/Juneau' xmlns:p1='http://p1' xmlns:bar='http://bar' xmlns:baz='http://baz' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><p1:f1>1</p1:f1><bar:f2>2</bar:f2><p1:f3>3</p1:f3><baz:f4>4</baz:f4></object>", r);
+		assertEquals("<object xmlns='http://www.apache.org/2013/Juneau' xmlns:p1='http://p1' xmlns:bar='http://bar' xmlns:baz='http://baz' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><p1:f1>1</p1:f1><bar:f2>2</bar:f2><p1:f3>3</p1:f3><baz:f4>4</baz:f4></object>", r);
 		assertTrue(t.equals(p.parse(r, T3.class)));
 		validateXml(t, s);
 	}
@@ -623,7 +623,7 @@ public class XmlTest {
 		// Only xsi should be added to root.
 		s.setProperty(XML_addNamespaceUrisToRoot, true);
 		r = s.serialize(t);
-		assertEquals("<p1:T4 xmlns='http://www.ibm.com/2013/Juneau' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><p1:f1>1</p1:f1><bar:f2>2</bar:f2><p1:f3>3</p1:f3><baz:f4>4</baz:f4></p1:T4>", r);
+		assertEquals("<p1:T4 xmlns='http://www.apache.org/2013/Juneau' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><p1:f1>1</p1:f1><bar:f2>2</bar:f2><p1:f3>3</p1:f3><baz:f4>4</baz:f4></p1:T4>", r);
 
 		// Manually set namespaces
 		s.setProperty(XML_namespaces,
@@ -635,7 +635,7 @@ public class XmlTest {
 			}
 		);
 		r = s.serialize(t);
-		assertEquals("<p1:T4 xmlns='http://www.ibm.com/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz' xmlns:p1='http://p1' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><p1:f1>1</p1:f1><bar:f2>2</bar:f2><p1:f3>3</p1:f3><baz:f4>4</baz:f4></p1:T4>", r);
+		assertEquals("<p1:T4 xmlns='http://www.apache.org/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz' xmlns:p1='http://p1' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><p1:f1>1</p1:f1><bar:f2>2</bar:f2><p1:f3>3</p1:f3><baz:f4>4</baz:f4></p1:T4>", r);
 		assertTrue(t.equals(p.parse(r, T4.class)));
 		validateXml(t, s);
 
@@ -650,7 +650,7 @@ public class XmlTest {
 
 		s.setProperty(XML_enableNamespaces, true);
 		r = s.serialize(t);
-		assertEquals("<p1:T4 xmlns='http://www.ibm.com/2013/Juneau' xmlns:p1='http://p1' xmlns:bar='http://bar' xmlns:baz='http://baz' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><p1:f1>1</p1:f1><bar:f2>2</bar:f2><p1:f3>3</p1:f3><baz:f4>4</baz:f4></p1:T4>", r);
+		assertEquals("<p1:T4 xmlns='http://www.apache.org/2013/Juneau' xmlns:p1='http://p1' xmlns:bar='http://bar' xmlns:baz='http://baz' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><p1:f1>1</p1:f1><bar:f2>2</bar:f2><p1:f3>3</p1:f3><baz:f4>4</baz:f4></p1:T4>", r);
 		assertTrue(t.equals(p.parse(r, T4.class)));
 		validateXml(t, s);
 	}
@@ -677,7 +677,7 @@ public class XmlTest {
 		// Only xsi should be added to root.
 		s.setProperty(XML_addNamespaceUrisToRoot, true);
 		r = s.serialize(t);
-		assertEquals("<foo:T5 xmlns='http://www.ibm.com/2013/Juneau' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><foo:f1>1</foo:f1><bar:f2>2</bar:f2><foo:f3>3</foo:f3><baz:f4>4</baz:f4></foo:T5>", r);
+		assertEquals("<foo:T5 xmlns='http://www.apache.org/2013/Juneau' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><foo:f1>1</foo:f1><bar:f2>2</bar:f2><foo:f3>3</foo:f3><baz:f4>4</baz:f4></foo:T5>", r);
 
 		// Manually set namespaces
 		s.setProperty(XML_namespaces,
@@ -688,7 +688,7 @@ public class XmlTest {
 			}
 		);
 		r = s.serialize(t);
-		assertEquals("<foo:T5 xmlns='http://www.ibm.com/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><foo:f1>1</foo:f1><bar:f2>2</bar:f2><foo:f3>3</foo:f3><baz:f4>4</baz:f4></foo:T5>", r);
+		assertEquals("<foo:T5 xmlns='http://www.apache.org/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><foo:f1>1</foo:f1><bar:f2>2</bar:f2><foo:f3>3</foo:f3><baz:f4>4</baz:f4></foo:T5>", r);
 		assertTrue(t.equals(p.parse(r, T5.class)));
 		validateXml(t, s);
 
@@ -705,7 +705,7 @@ public class XmlTest {
 
 		s.setProperty(XML_enableNamespaces, true);
 		r = s.serialize(t);
-		assertEquals("<foo:T5 xmlns='http://www.ibm.com/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><foo:f1>1</foo:f1><bar:f2>2</bar:f2><foo:f3>3</foo:f3><baz:f4>4</baz:f4></foo:T5>", r);
+		assertEquals("<foo:T5 xmlns='http://www.apache.org/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><foo:f1>1</foo:f1><bar:f2>2</bar:f2><foo:f3>3</foo:f3><baz:f4>4</baz:f4></foo:T5>", r);
 		assertTrue(t.equals(p.parse(r, T5.class)));
 		validateXml(t, s);
 	}
@@ -731,7 +731,7 @@ public class XmlTest {
 		// Only xsi should be added to root.
 		s.setProperty(XML_addNamespaceUrisToRoot, true).setProperty(XML_autoDetectNamespaces, false);
 		r = s.serialize(t);
-		assertEquals("<object xmlns='http://www.ibm.com/2013/Juneau' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><foo:f1>1</foo:f1><bar:f2>2</bar:f2><foo:f3>3</foo:f3><baz:f4>4</baz:f4></object>", r);
+		assertEquals("<object xmlns='http://www.apache.org/2013/Juneau' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><foo:f1>1</foo:f1><bar:f2>2</bar:f2><foo:f3>3</foo:f3><baz:f4>4</baz:f4></object>", r);
 
 		// Manually set namespaces
 		s.setProperty(XML_namespaces,
@@ -742,7 +742,7 @@ public class XmlTest {
 			}
 		);
 		r = s.serialize(t);
-		assertEquals("<object xmlns='http://www.ibm.com/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><foo:f1>1</foo:f1><bar:f2>2</bar:f2><foo:f3>3</foo:f3><baz:f4>4</baz:f4></object>", r);
+		assertEquals("<object xmlns='http://www.apache.org/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><foo:f1>1</foo:f1><bar:f2>2</bar:f2><foo:f3>3</foo:f3><baz:f4>4</baz:f4></object>", r);
 		assertTrue(t.equals(p.parse(r, T6.class)));
 		validateXml(t, s);
 
@@ -759,7 +759,7 @@ public class XmlTest {
 
 		s.setProperty(XML_enableNamespaces, true);
 		r = s.serialize(t);
-		assertEquals("<object xmlns='http://www.ibm.com/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><foo:f1>1</foo:f1><bar:f2>2</bar:f2><foo:f3>3</foo:f3><baz:f4>4</baz:f4></object>", r);
+		assertEquals("<object xmlns='http://www.apache.org/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><foo:f1>1</foo:f1><bar:f2>2</bar:f2><foo:f3>3</foo:f3><baz:f4>4</baz:f4></object>", r);
 		assertTrue(t.equals(p.parse(r, T6.class)));
 		validateXml(t, s);
 	}
@@ -785,7 +785,7 @@ public class XmlTest {
 		// Only xsi should be added to root.
 		s.setProperty(XML_addNamespaceUrisToRoot, true).setProperty(XML_autoDetectNamespaces, false);
 		r = s.serialize(t);
-		assertEquals("<object xmlns='http://www.ibm.com/2013/Juneau' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><p1:g1>1</p1:g1><bar:g2>2</bar:g2><p1:g3>3</p1:g3><baz:g4>4</baz:g4></object>", r);
+		assertEquals("<object xmlns='http://www.apache.org/2013/Juneau' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><p1:g1>1</p1:g1><bar:g2>2</bar:g2><p1:g3>3</p1:g3><baz:g4>4</baz:g4></object>", r);
 
 		// Manually set namespaces
 		s.setProperty(XML_namespaces,
@@ -797,7 +797,7 @@ public class XmlTest {
 			}
 		);
 		r = s.serialize(t);
-		assertEquals("<object xmlns='http://www.ibm.com/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz' xmlns:p1='http://p1' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><p1:g1>1</p1:g1><bar:g2>2</bar:g2><p1:g3>3</p1:g3><baz:g4>4</baz:g4></object>", r);
+		assertEquals("<object xmlns='http://www.apache.org/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz' xmlns:p1='http://p1' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><p1:g1>1</p1:g1><bar:g2>2</bar:g2><p1:g3>3</p1:g3><baz:g4>4</baz:g4></object>", r);
 		assertTrue(t.equals(p.parse(r, T7.class)));
 
 		// Auto-detect namespaces.
@@ -811,7 +811,7 @@ public class XmlTest {
 
 		s.setProperty(XML_enableNamespaces, true);
 		r = s.serialize(t);
-		assertEquals("<object xmlns='http://www.ibm.com/2013/Juneau' xmlns:p1='http://p1' xmlns:bar='http://bar' xmlns:baz='http://baz' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><p1:g1>1</p1:g1><bar:g2>2</bar:g2><p1:g3>3</p1:g3><baz:g4>4</baz:g4></object>", r);
+		assertEquals("<object xmlns='http://www.apache.org/2013/Juneau' xmlns:p1='http://p1' xmlns:bar='http://bar' xmlns:baz='http://baz' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><p1:g1>1</p1:g1><bar:g2>2</bar:g2><p1:g3>3</p1:g3><baz:g4>4</baz:g4></object>", r);
 		assertTrue(t.equals(p.parse(r, T7.class)));
 		validateXml(t, s);
 	}
@@ -837,7 +837,7 @@ public class XmlTest {
 		// Only xsi should be added to root.
 		s.setProperty(XML_addNamespaceUrisToRoot, true);
 		r = s.serialize(t);
-		assertEquals("<object xmlns='http://www.ibm.com/2013/Juneau' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><p2:f1>1</p2:f1><p1:f2>2</p1:f2><c1:f3>3</c1:f3><f1:f4>4</f1:f4></object>", r);
+		assertEquals("<object xmlns='http://www.apache.org/2013/Juneau' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><p2:f1>1</p2:f1><p1:f2>2</p1:f2><c1:f3>3</c1:f3><f1:f4>4</f1:f4></object>", r);
 
 		// Manually set namespaces
 		s.setProperty(XML_namespaces,
@@ -848,7 +848,7 @@ public class XmlTest {
 			}
 		);
 		r = s.serialize(t);
-		assertEquals("<object xmlns='http://www.ibm.com/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><p2:f1>1</p2:f1><p1:f2>2</p1:f2><c1:f3>3</c1:f3><f1:f4>4</f1:f4></object>", r);
+		assertEquals("<object xmlns='http://www.apache.org/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><p2:f1>1</p2:f1><p1:f2>2</p1:f2><c1:f3>3</c1:f3><f1:f4>4</f1:f4></object>", r);
 
 		// Auto-detect namespaces.
 		s = new XmlSerializer.SimpleSq().setProperty(XML_autoDetectNamespaces, true);
@@ -864,7 +864,7 @@ public class XmlTest {
 
 		s.setProperty(XML_enableNamespaces, true);
 		r = s.serialize(t);
-		assertEquals("<object xmlns='http://www.ibm.com/2013/Juneau' xmlns:p2='http://p2' xmlns:p1='http://p1' xmlns:c1='http://c1' xmlns:f1='http://f1' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><p2:f1>1</p2:f1><p1:f2>2</p1:f2><c1:f3>3</c1:f3><f1:f4>4</f1:f4></object>", r);
+		assertEquals("<object xmlns='http://www.apache.org/2013/Juneau' xmlns:p2='http://p2' xmlns:p1='http://p1' xmlns:c1='http://c1' xmlns:f1='http://f1' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><p2:f1>1</p2:f1><p1:f2>2</p1:f2><c1:f3>3</c1:f3><f1:f4>4</f1:f4></object>", r);
 		assertTrue(t.equals(p.parse(r, T8.class)));
 		validateXml(t, s);
 	}
@@ -890,7 +890,7 @@ public class XmlTest {
 		// Only xsi should be added to root.
 		s.setProperty(XML_addNamespaceUrisToRoot, true);
 		r = s.serialize(t);
-		assertEquals("<object xmlns='http://www.ibm.com/2013/Juneau' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><p1:f1>1</p1:f1></object>", r);
+		assertEquals("<object xmlns='http://www.apache.org/2013/Juneau' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><p1:f1>1</p1:f1></object>", r);
 
 		// Manually set namespaces
 		s.setProperty(XML_namespaces,
@@ -901,7 +901,7 @@ public class XmlTest {
 			}
 		);
 		r = s.serialize(t);
-		assertEquals("<object xmlns='http://www.ibm.com/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><p1:f1>1</p1:f1></object>", r);
+		assertEquals("<object xmlns='http://www.apache.org/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><p1:f1>1</p1:f1></object>", r);
 
 		// Auto-detect namespaces.
 		s = new XmlSerializer.SimpleSq().setProperty(XML_autoDetectNamespaces, true);
@@ -917,7 +917,7 @@ public class XmlTest {
 
 		s.setProperty(XML_enableNamespaces, true);
 		r = s.serialize(t);
-		assertEquals("<object xmlns='http://www.ibm.com/2013/Juneau' xmlns:p1='http://p1' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><p1:f1>1</p1:f1></object>", r);
+		assertEquals("<object xmlns='http://www.apache.org/2013/Juneau' xmlns:p1='http://p1' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><p1:f1>1</p1:f1></object>", r);
 		assertTrue(t.equals(p.parse(r, T9.class)));
 		validateXml(t, s);
 	}
@@ -944,7 +944,7 @@ public class XmlTest {
 
 		s.setProperty(XML_enableNamespaces, true).setProperty(XML_addNamespaceUrisToRoot, true).setProperty(XML_autoDetectNamespaces, true);
 		r = s.serialize(t);
-		assertEquals("<object xmlns='http://www.ibm.com/2013/Juneau' xmlns:ns='http://ns' xmlns:nsf1='http://nsf1' xmlns:nsf3='http://nsf3' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' nsf1:f1='http://xf1' ns:f2='xf2' nsf3:x3='xf3'/>", r);
+		assertEquals("<object xmlns='http://www.apache.org/2013/Juneau' xmlns:ns='http://ns' xmlns:nsf1='http://nsf1' xmlns:nsf3='http://nsf3' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' nsf1:f1='http://xf1' ns:f2='xf2' nsf3:x3='xf3'/>", r);
 		validateXml(t, s);
 
 		t = p.parse(r, Q.class);

@@ -60,18 +60,18 @@ public class HtmlTest {
 			+"\n[f0]=<a href='f0/x0'>f0/x0</a>"
 			+"\n[f1]=<a href='f1/x1'>f1/x1</a>"
 			+"\n[f2]=<a href='/f2/x2'>/f2/x2</a>"
-			+"\n[f3]=<a href='http://www.ibm.com/f3/x3'>http://www.ibm.com/f3/x3</a>"
+			+"\n[f3]=<a href='http://www.apache.org/f3/x3'>http://www.apache.org/f3/x3</a>"
 			+"\n[f4]=<a href='f4/x4'>f4/x4</a>"
 			+"\n[f5]=<a href='/f5/x5'>/f5/x5</a>"
-			+"\n[f6]=<a href='http://www.ibm.com/f6/x6'>http://www.ibm.com/f6/x6</a>"
-			+"\n[f7]=<a href='http://www.ibm.com/f7/x7'>http://www.ibm.com/f7/x7</a>"
+			+"\n[f6]=<a href='http://www.apache.org/f6/x6'>http://www.apache.org/f6/x6</a>"
+			+"\n[f7]=<a href='http://www.apache.org/f7/x7'>http://www.apache.org/f7/x7</a>"
 			+"\n[f8]=<a href='f8/x8'>f8/x8</a>"
 			+"\n[f9]=<a href='f9/x9'>f9/x9</a>"
-			+"\n[fa]=<a href='http://www.ibm.com/fa/xa#MY_LABEL'>http://www.ibm.com/fa/xa#MY_LABEL</a>"
-			+"\n[fb]=<a href='http://www.ibm.com/fb/xb?label=MY_LABEL&foo=bar'>MY_LABEL</a>"
-			+"\n[fc]=<a href='http://www.ibm.com/fc/xc?foo=bar&label=MY_LABEL'>MY_LABEL</a>"
-			+"\n[fd]=<a href='http://www.ibm.com/fd/xd?label2=MY_LABEL&foo=bar'>http://www.ibm.com/fd/xd?label2=MY_LABEL&foo=bar</a>"
-			+"\n[fe]=<a href='http://www.ibm.com/fe/xe?foo=bar&label2=MY_LABEL'>http://www.ibm.com/fe/xe?foo=bar&label2=MY_LABEL</a>";
+			+"\n[fa]=<a href='http://www.apache.org/fa/xa#MY_LABEL'>http://www.apache.org/fa/xa#MY_LABEL</a>"
+			+"\n[fb]=<a href='http://www.apache.org/fb/xb?label=MY_LABEL&foo=bar'>MY_LABEL</a>"
+			+"\n[fc]=<a href='http://www.apache.org/fc/xc?foo=bar&label=MY_LABEL'>MY_LABEL</a>"
+			+"\n[fd]=<a href='http://www.apache.org/fd/xd?label2=MY_LABEL&foo=bar'>http://www.apache.org/fd/xd?label2=MY_LABEL&foo=bar</a>"
+			+"\n[fe]=<a href='http://www.apache.org/fe/xe?foo=bar&label2=MY_LABEL'>http://www.apache.org/fe/xe?foo=bar&label2=MY_LABEL</a>";
 		assertEquals(expected, r);
 
 		s.setProperty(SERIALIZER_absolutePathUriBase, "http://myhost");
@@ -82,18 +82,18 @@ public class HtmlTest {
 			+"\n[f0]=<a href='/cr/f0/x0'>f0/x0</a>"
 			+"\n[f1]=<a href='/cr/f1/x1'>f1/x1</a>"
 			+"\n[f2]=<a href='http://myhost/f2/x2'>/f2/x2</a>"
-			+"\n[f3]=<a href='http://www.ibm.com/f3/x3'>http://www.ibm.com/f3/x3</a>"
+			+"\n[f3]=<a href='http://www.apache.org/f3/x3'>http://www.apache.org/f3/x3</a>"
 			+"\n[f4]=<a href='/cr/f4/x4'>f4/x4</a>"
 			+"\n[f5]=<a href='http://myhost/f5/x5'>/f5/x5</a>"
-			+"\n[f6]=<a href='http://www.ibm.com/f6/x6'>http://www.ibm.com/f6/x6</a>"
-			+"\n[f7]=<a href='http://www.ibm.com/f7/x7'>http://www.ibm.com/f7/x7</a>"
+			+"\n[f6]=<a href='http://www.apache.org/f6/x6'>http://www.apache.org/f6/x6</a>"
+			+"\n[f7]=<a href='http://www.apache.org/f7/x7'>http://www.apache.org/f7/x7</a>"
 			+"\n[f8]=<a href='/cr/f8/x8'>f8/x8</a>"
 			+"\n[f9]=<a href='/cr/f9/x9'>f9/x9</a>"
-			+"\n[fa]=<a href='http://www.ibm.com/fa/xa#MY_LABEL'>http://www.ibm.com/fa/xa#MY_LABEL</a>"
-			+"\n[fb]=<a href='http://www.ibm.com/fb/xb?label=MY_LABEL&foo=bar'>MY_LABEL</a>"
-			+"\n[fc]=<a href='http://www.ibm.com/fc/xc?foo=bar&label=MY_LABEL'>MY_LABEL</a>"
-			+"\n[fd]=<a href='http://www.ibm.com/fd/xd?label2=MY_LABEL&foo=bar'>http://www.ibm.com/fd/xd?label2=MY_LABEL&foo=bar</a>"
-			+"\n[fe]=<a href='http://www.ibm.com/fe/xe?foo=bar&label2=MY_LABEL'>http://www.ibm.com/fe/xe?foo=bar&label2=MY_LABEL</a>";
+			+"\n[fa]=<a href='http://www.apache.org/fa/xa#MY_LABEL'>http://www.apache.org/fa/xa#MY_LABEL</a>"
+			+"\n[fb]=<a href='http://www.apache.org/fb/xb?label=MY_LABEL&foo=bar'>MY_LABEL</a>"
+			+"\n[fc]=<a href='http://www.apache.org/fc/xc?foo=bar&label=MY_LABEL'>MY_LABEL</a>"
+			+"\n[fd]=<a href='http://www.apache.org/fd/xd?label2=MY_LABEL&foo=bar'>http://www.apache.org/fd/xd?label2=MY_LABEL&foo=bar</a>"
+			+"\n[fe]=<a href='http://www.apache.org/fe/xe?foo=bar&label2=MY_LABEL'>http://www.apache.org/fe/xe?foo=bar&label2=MY_LABEL</a>";
 		assertEquals(expected, r);
 
 		s.setProperty(HTML_uriAnchorText, URI);
@@ -102,18 +102,18 @@ public class HtmlTest {
 			+"\n[f0]=<a href='/cr/f0/x0'>/cr/f0/x0</a>"
 			+"\n[f1]=<a href='/cr/f1/x1'>/cr/f1/x1</a>"
 			+"\n[f2]=<a href='http://myhost/f2/x2'>http://myhost/f2/x2</a>"
-			+"\n[f3]=<a href='http://www.ibm.com/f3/x3'>http://www.ibm.com/f3/x3</a>"
+			+"\n[f3]=<a href='http://www.apache.org/f3/x3'>http://www.apache.org/f3/x3</a>"
 			+"\n[f4]=<a href='/cr/f4/x4'>/cr/f4/x4</a>"
 			+"\n[f5]=<a href='http://myhost/f5/x5'>http://myhost/f5/x5</a>"
-			+"\n[f6]=<a href='http://www.ibm.com/f6/x6'>http://www.ibm.com/f6/x6</a>"
-			+"\n[f7]=<a href='http://www.ibm.com/f7/x7'>http://www.ibm.com/f7/x7</a>"
+			+"\n[f6]=<a href='http://www.apache.org/f6/x6'>http://www.apache.org/f6/x6</a>"
+			+"\n[f7]=<a href='http://www.apache.org/f7/x7'>http://www.apache.org/f7/x7</a>"
 			+"\n[f8]=<a href='/cr/f8/x8'>/cr/f8/x8</a>"
 			+"\n[f9]=<a href='/cr/f9/x9'>/cr/f9/x9</a>"
-			+"\n[fa]=<a href='http://www.ibm.com/fa/xa#MY_LABEL'>http://www.ibm.com/fa/xa#MY_LABEL</a>"
-			+"\n[fb]=<a href='http://www.ibm.com/fb/xb?label=MY_LABEL&foo=bar'>MY_LABEL</a>"
-			+"\n[fc]=<a href='http://www.ibm.com/fc/xc?foo=bar&label=MY_LABEL'>MY_LABEL</a>"
-			+"\n[fd]=<a href='http://www.ibm.com/fd/xd?label2=MY_LABEL&foo=bar'>http://www.ibm.com/fd/xd?label2=MY_LABEL&foo=bar</a>"
-			+"\n[fe]=<a href='http://www.ibm.com/fe/xe?foo=bar&label2=MY_LABEL'>http://www.ibm.com/fe/xe?foo=bar&label2=MY_LABEL</a>";
+			+"\n[fa]=<a href='http://www.apache.org/fa/xa#MY_LABEL'>http://www.apache.org/fa/xa#MY_LABEL</a>"
+			+"\n[fb]=<a href='http://www.apache.org/fb/xb?label=MY_LABEL&foo=bar'>MY_LABEL</a>"
+			+"\n[fc]=<a href='http://www.apache.org/fc/xc?foo=bar&label=MY_LABEL'>MY_LABEL</a>"
+			+"\n[fd]=<a href='http://www.apache.org/fd/xd?label2=MY_LABEL&foo=bar'>http://www.apache.org/fd/xd?label2=MY_LABEL&foo=bar</a>"
+			+"\n[fe]=<a href='http://www.apache.org/fe/xe?foo=bar&label2=MY_LABEL'>http://www.apache.org/fe/xe?foo=bar&label2=MY_LABEL</a>";
 		assertEquals(expected, r);
 
 		s.setProperty(HTML_uriAnchorText, LAST_TOKEN);
@@ -122,18 +122,18 @@ public class HtmlTest {
 			+"\n[f0]=<a href='/cr/f0/x0'>x0</a>"
 			+"\n[f1]=<a href='/cr/f1/x1'>x1</a>"
 			+"\n[f2]=<a href='http://myhost/f2/x2'>x2</a>"
-			+"\n[f3]=<a href='http://www.ibm.com/f3/x3'>x3</a>"
+			+"\n[f3]=<a href='http://www.apache.org/f3/x3'>x3</a>"
 			+"\n[f4]=<a href='/cr/f4/x4'>x4</a>"
 			+"\n[f5]=<a href='http://myhost/f5/x5'>x5</a>"
-			+"\n[f6]=<a href='http://www.ibm.com/f6/x6'>x6</a>"
-			+"\n[f7]=<a href='http://www.ibm.com/f7/x7'>x7</a>"
+			+"\n[f6]=<a href='http://www.apache.org/f6/x6'>x6</a>"
+			+"\n[f7]=<a href='http://www.apache.org/f7/x7'>x7</a>"
 			+"\n[f8]=<a href='/cr/f8/x8'>x8</a>"
 			+"\n[f9]=<a href='/cr/f9/x9'>x9</a>"
-			+"\n[fa]=<a href='http://www.ibm.com/fa/xa#MY_LABEL'>xa</a>"
-			+"\n[fb]=<a href='http://www.ibm.com/fb/xb?label=MY_LABEL&foo=bar'>MY_LABEL</a>"
-			+"\n[fc]=<a href='http://www.ibm.com/fc/xc?foo=bar&label=MY_LABEL'>MY_LABEL</a>"
-			+"\n[fd]=<a href='http://www.ibm.com/fd/xd?label2=MY_LABEL&foo=bar'>xd</a>"
-			+"\n[fe]=<a href='http://www.ibm.com/fe/xe?foo=bar&label2=MY_LABEL'>xe</a>";
+			+"\n[fa]=<a href='http://www.apache.org/fa/xa#MY_LABEL'>xa</a>"
+			+"\n[fb]=<a href='http://www.apache.org/fb/xb?label=MY_LABEL&foo=bar'>MY_LABEL</a>"
+			+"\n[fc]=<a href='http://www.apache.org/fc/xc?foo=bar&label=MY_LABEL'>MY_LABEL</a>"
+			+"\n[fd]=<a href='http://www.apache.org/fd/xd?label2=MY_LABEL&foo=bar'>xd</a>"
+			+"\n[fe]=<a href='http://www.apache.org/fe/xe?foo=bar&label2=MY_LABEL'>xe</a>";
 		assertEquals(expected, r);
 
 		s.setProperty(HTML_uriAnchorText, URI_ANCHOR);
@@ -142,18 +142,18 @@ public class HtmlTest {
 			+"\n[f0]=<a href='/cr/f0/x0'>f0/x0</a>"
 			+"\n[f1]=<a href='/cr/f1/x1'>f1/x1</a>"
 			+"\n[f2]=<a href='http://myhost/f2/x2'>/f2/x2</a>"
-			+"\n[f3]=<a href='http://www.ibm.com/f3/x3'>http://www.ibm.com/f3/x3</a>"
+			+"\n[f3]=<a href='http://www.apache.org/f3/x3'>http://www.apache.org/f3/x3</a>"
 			+"\n[f4]=<a href='/cr/f4/x4'>f4/x4</a>"
 			+"\n[f5]=<a href='http://myhost/f5/x5'>/f5/x5</a>"
-			+"\n[f6]=<a href='http://www.ibm.com/f6/x6'>http://www.ibm.com/f6/x6</a>"
-			+"\n[f7]=<a href='http://www.ibm.com/f7/x7'>http://www.ibm.com/f7/x7</a>"
+			+"\n[f6]=<a href='http://www.apache.org/f6/x6'>http://www.apache.org/f6/x6</a>"
+			+"\n[f7]=<a href='http://www.apache.org/f7/x7'>http://www.apache.org/f7/x7</a>"
 			+"\n[f8]=<a href='/cr/f8/x8'>f8/x8</a>"
 			+"\n[f9]=<a href='/cr/f9/x9'>f9/x9</a>"
-			+"\n[fa]=<a href='http://www.ibm.com/fa/xa#MY_LABEL'>MY_LABEL</a>"
-			+"\n[fb]=<a href='http://www.ibm.com/fb/xb?label=MY_LABEL&foo=bar'>MY_LABEL</a>"
-			+"\n[fc]=<a href='http://www.ibm.com/fc/xc?foo=bar&label=MY_LABEL'>MY_LABEL</a>"
-			+"\n[fd]=<a href='http://www.ibm.com/fd/xd?label2=MY_LABEL&foo=bar'>http://www.ibm.com/fd/xd?label2=MY_LABEL&foo=bar</a>"
-			+"\n[fe]=<a href='http://www.ibm.com/fe/xe?foo=bar&label2=MY_LABEL'>http://www.ibm.com/fe/xe?foo=bar&label2=MY_LABEL</a>";
+			+"\n[fa]=<a href='http://www.apache.org/fa/xa#MY_LABEL'>MY_LABEL</a>"
+			+"\n[fb]=<a href='http://www.apache.org/fb/xb?label=MY_LABEL&foo=bar'>MY_LABEL</a>"
+			+"\n[fc]=<a href='http://www.apache.org/fc/xc?foo=bar&label=MY_LABEL'>MY_LABEL</a>"
+			+"\n[fd]=<a href='http://www.apache.org/fd/xd?label2=MY_LABEL&foo=bar'>http://www.apache.org/fd/xd?label2=MY_LABEL&foo=bar</a>"
+			+"\n[fe]=<a href='http://www.apache.org/fe/xe?foo=bar&label2=MY_LABEL'>http://www.apache.org/fe/xe?foo=bar&label2=MY_LABEL</a>";
 		assertEquals(expected, r);
 
 		s.setProperty(HTML_labelParameter, "label2");
@@ -162,18 +162,18 @@ public class HtmlTest {
 			+"\n[f0]=<a href='/cr/f0/x0'>f0/x0</a>"
 			+"\n[f1]=<a href='/cr/f1/x1'>f1/x1</a>"
 			+"\n[f2]=<a href='http://myhost/f2/x2'>/f2/x2</a>"
-			+"\n[f3]=<a href='http://www.ibm.com/f3/x3'>http://www.ibm.com/f3/x3</a>"
+			+"\n[f3]=<a href='http://www.apache.org/f3/x3'>http://www.apache.org/f3/x3</a>"
 			+"\n[f4]=<a href='/cr/f4/x4'>f4/x4</a>"
 			+"\n[f5]=<a href='http://myhost/f5/x5'>/f5/x5</a>"
-			+"\n[f6]=<a href='http://www.ibm.com/f6/x6'>http://www.ibm.com/f6/x6</a>"
-			+"\n[f7]=<a href='http://www.ibm.com/f7/x7'>http://www.ibm.com/f7/x7</a>"
+			+"\n[f6]=<a href='http://www.apache.org/f6/x6'>http://www.apache.org/f6/x6</a>"
+			+"\n[f7]=<a href='http://www.apache.org/f7/x7'>http://www.apache.org/f7/x7</a>"
 			+"\n[f8]=<a href='/cr/f8/x8'>f8/x8</a>"
 			+"\n[f9]=<a href='/cr/f9/x9'>f9/x9</a>"
-			+"\n[fa]=<a href='http://www.ibm.com/fa/xa#MY_LABEL'>MY_LABEL</a>"
-			+"\n[fb]=<a href='http://www.ibm.com/fb/xb?label=MY_LABEL&foo=bar'>http://www.ibm.com/fb/xb?label=MY_LABEL&foo=bar</a>"
-			+"\n[fc]=<a href='http://www.ibm.com/fc/xc?foo=bar&label=MY_LABEL'>http://www.ibm.com/fc/xc?foo=bar&label=MY_LABEL</a>"
-			+"\n[fd]=<a href='http://www.ibm.com/fd/xd?label2=MY_LABEL&foo=bar'>MY_LABEL</a>"
-			+"\n[fe]=<a href='http://www.ibm.com/fe/xe?foo=bar&label2=MY_LABEL'>MY_LABEL</a>";
+			+"\n[fa]=<a href='http://www.apache.org/fa/xa#MY_LABEL'>MY_LABEL</a>"
+			+"\n[fb]=<a href='http://www.apache.org/fb/xb?label=MY_LABEL&foo=bar'>http://www.apache.org/fb/xb?label=MY_LABEL&foo=bar</a>"
+			+"\n[fc]=<a href='http://www.apache.org/fc/xc?foo=bar&label=MY_LABEL'>http://www.apache.org/fc/xc?foo=bar&label=MY_LABEL</a>"
+			+"\n[fd]=<a href='http://www.apache.org/fd/xd?label2=MY_LABEL&foo=bar'>MY_LABEL</a>"
+			+"\n[fe]=<a href='http://www.apache.org/fe/xe?foo=bar&label2=MY_LABEL'>MY_LABEL</a>";
 		assertEquals(expected, r);
 
 		s.setProperty(HTML_detectLinksInStrings, false);
@@ -182,18 +182,18 @@ public class HtmlTest {
 			+"\n[f0]=<a href='/cr/f0/x0'>f0/x0</a>"
 			+"\n[f1]=<a href='/cr/f1/x1'>f1/x1</a>"
 			+"\n[f2]=<a href='http://myhost/f2/x2'>/f2/x2</a>"
-			+"\n[f3]=<a href='http://www.ibm.com/f3/x3'>http://www.ibm.com/f3/x3</a>"
+			+"\n[f3]=<a href='http://www.apache.org/f3/x3'>http://www.apache.org/f3/x3</a>"
 			+"\n[f4]=<a href='/cr/f4/x4'>f4/x4</a>"
 			+"\n[f5]=<a href='http://myhost/f5/x5'>/f5/x5</a>"
-			+"\n[f6]=<a href='http://www.ibm.com/f6/x6'>http://www.ibm.com/f6/x6</a>"
-			+"\n[f7]=<a href='http://www.ibm.com/f7/x7'>http://www.ibm.com/f7/x7</a>"
+			+"\n[f6]=<a href='http://www.apache.org/f6/x6'>http://www.apache.org/f6/x6</a>"
+			+"\n[f7]=<a href='http://www.apache.org/f7/x7'>http://www.apache.org/f7/x7</a>"
 			+"\n[f8]=<a href='/cr/f8/x8'>f8/x8</a>"
 			+"\n[f9]=<a href='/cr/f9/x9'>f9/x9</a>"
-			+"\n[fa]=<string>http://www.ibm.com/fa/xa#MY_LABEL</string>"
-			+"\n[fb]=<string>http://www.ibm.com/fb/xb?label=MY_LABEL&amp;foo=bar</string>"
-			+"\n[fc]=<string>http://www.ibm.com/fc/xc?foo=bar&amp;label=MY_LABEL</string>"
-			+"\n[fd]=<string>http://www.ibm.com/fd/xd?label2=MY_LABEL&amp;foo=bar</string>"
-			+"\n[fe]=<string>http://www.ibm.com/fe/xe?foo=bar&amp;label2=MY_LABEL</string>";
+			+"\n[fa]=<string>http://www.apache.org/fa/xa#MY_LABEL</string>"
+			+"\n[fb]=<string>http://www.apache.org/fb/xb?label=MY_LABEL&amp;foo=bar</string>"
+			+"\n[fc]=<string>http://www.apache.org/fc/xc?foo=bar&amp;label=MY_LABEL</string>"
+			+"\n[fd]=<string>http://www.apache.org/fd/xd?label2=MY_LABEL&amp;foo=bar</string>"
+			+"\n[fe]=<string>http://www.apache.org/fe/xe?foo=bar&amp;label2=MY_LABEL</string>";
 			assertEquals(expected, r);
 
 			s.setProperty(HTML_detectLinksInStrings, true);
@@ -203,18 +203,18 @@ public class HtmlTest {
 				+"\n[f0]=<a href='/cr/f0/x0'>f0/x0</a>"
 				+"\n[f1]=<a href='/cr/f1/x1'>f1/x1</a>"
 				+"\n[f2]=<a href='http://myhost/f2/x2'>/f2/x2</a>"
-				+"\n[f3]=<a href='http://www.ibm.com/f3/x3'>http://www.ibm.com/f3/x3</a>"
+				+"\n[f3]=<a href='http://www.apache.org/f3/x3'>http://www.apache.org/f3/x3</a>"
 				+"\n[f4]=<a href='/cr/f4/x4'>f4/x4</a>"
 				+"\n[f5]=<a href='http://myhost/f5/x5'>/f5/x5</a>"
-				+"\n[f6]=<a href='http://www.ibm.com/f6/x6'>http://www.ibm.com/f6/x6</a>"
-				+"\n[f7]=<a href='http://www.ibm.com/f7/x7'>http://www.ibm.com/f7/x7</a>"
+				+"\n[f6]=<a href='http://www.apache.org/f6/x6'>http://www.apache.org/f6/x6</a>"
+				+"\n[f7]=<a href='http://www.apache.org/f7/x7'>http://www.apache.org/f7/x7</a>"
 				+"\n[f8]=<a href='/cr/f8/x8'>f8/x8</a>"
 				+"\n[f9]=<a href='/cr/f9/x9'>f9/x9</a>"
-				+"\n[fa]=<a href='http://www.ibm.com/fa/xa#MY_LABEL'>MY_LABEL</a>"
-				+"\n[fb]=<a href='http://www.ibm.com/fb/xb?label=MY_LABEL&foo=bar'>http://www.ibm.com/fb/xb?label=MY_LABEL&foo=bar</a>"
-				+"\n[fc]=<a href='http://www.ibm.com/fc/xc?foo=bar&label=MY_LABEL'>http://www.ibm.com/fc/xc?foo=bar&label=MY_LABEL</a>"
-				+"\n[fd]=<a href='http://www.ibm.com/fd/xd?label2=MY_LABEL&foo=bar'>http://www.ibm.com/fd/xd?label2=MY_LABEL&foo=bar</a>"
-				+"\n[fe]=<a href='http://www.ibm.com/fe/xe?foo=bar&label2=MY_LABEL'>http://www.ibm.com/fe/xe?foo=bar&label2=MY_LABEL</a>";
+				+"\n[fa]=<a href='http://www.apache.org/fa/xa#MY_LABEL'>MY_LABEL</a>"
+				+"\n[fb]=<a href='http://www.apache.org/fb/xb?label=MY_LABEL&foo=bar'>http://www.apache.org/fb/xb?label=MY_LABEL&foo=bar</a>"
+				+"\n[fc]=<a href='http://www.apache.org/fc/xc?foo=bar&label=MY_LABEL'>http://www.apache.org/fc/xc?foo=bar&label=MY_LABEL</a>"
+				+"\n[fd]=<a href='http://www.apache.org/fd/xd?label2=MY_LABEL&foo=bar'>http://www.apache.org/fd/xd?label2=MY_LABEL&foo=bar</a>"
+				+"\n[fe]=<a href='http://www.apache.org/fe/xe?foo=bar&label2=MY_LABEL'>http://www.apache.org/fe/xe?foo=bar&label2=MY_LABEL</a>";
 			assertEquals(expected, r);
 	}
 

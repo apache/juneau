@@ -62,7 +62,6 @@ public class SSLOpts {
 	 * The default value is <jk>"SSL_TLS,TLS,SSL"</js> unless overridden by one of the following
 	 * 	system properties:
 	 * <ul>
-	 * 	<li><js>"com.ibm.team.repository.transport.client.protocol"</js>
 	 * 	<li><js>"transport.client.protocol"</js>
 	 * </ul>
 	 * <p>
@@ -71,9 +70,7 @@ public class SSLOpts {
 	 * @return The comma-delimited list of supported protocols.
 	 */
 	protected String getDefaultProtocols() {
-		String sp = System.getProperty("com.ibm.team.repository.transport.client.protocol");
-		if (StringUtils.isEmpty(sp))
-			sp = System.getProperty("transport.client.protocol");
+		String sp = System.getProperty("transport.client.protocol");
 		if (StringUtils.isEmpty(sp))
 			sp = "SSL_TLS,TLS,SSL";
 		return sp;

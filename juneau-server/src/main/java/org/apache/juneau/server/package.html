@@ -209,7 +209,7 @@
 	<xt>&lt;web-app</xt> <xa>version</xa>=<xs>"2.3"</xs><xt>&gt;</xt>
 		<xt>&lt;servlet&gt;</xt>
 			<xt>&lt;servlet-name&gt;</xt>HelloWorldResource<xt>&lt;/servlet-name&gt;</xt>
-			<xt>&lt;servlet-class&gt;</xt>com.ibm.sample.HelloWorldResource<xt>&lt;/servlet-class&gt;</xt>
+			<xt>&lt;servlet-class&gt;</xt>com.foo.sample.HelloWorldResource<xt>&lt;/servlet-class&gt;</xt>
 		<xt>&lt;/servlet&gt;</xt>
 		<xt>&lt;servlet-mapping&gt;</xt>
 			<xt>&lt;servlet-name&gt;</xt>HelloWorldResource<xt>&lt;/servlet-name&gt;</xt>
@@ -350,12 +350,6 @@
 					<br>Subclass intented to be used in REST microservices.
 					<li class='a'>{@link org.apache.juneau.server.jena.RestServletJenaGroupDefault org.apache.juneau.server.jena.RestServletJenaGroupDefault}
 					<br>Same as {@link org.apache.juneau.server.RestServletGroupDefault}, but adds RDF support.
-				</ul>
-				<li class='a'><code>com.ibm.team.repository.service.JazzRestResource</code>
-				<br>Parent class in Jazz Foundation for REST-based services.
-				<ul>
-					<li class='a'><code>com.ibm.team.repository.service.JazzDefaultRestResource</code>
-					<br>Provides a default set of serializers, parsers, options page, stylesheet, and other common settings.
 				</ul>
 			</ul>
 		</ul>
@@ -2230,7 +2224,7 @@
 		</p>
 		<h6 class='figure'>Example:</h6>
 		<p class='bcode'>
-	<jk>package</jk> com.ibm.mypackage;
+	<jk>package</jk> com.foo.mypackage;
 
 	<ja>@RestResource</ja>(
 		path=<js>"/myresource"</js>,
@@ -2248,7 +2242,7 @@
 				in the following ordered locations:
 		</p>
 		<ol>
-			<li><l>com.ibm.mypackage.docs</l> package.
+			<li><l>com.foo.mypackage.docs</l> package.
 			<li><l>org.apache.juneau.server.docs</l> package (since <l>RestServletDefault</l> is in <l>org.apache.juneau.server</l>).
 			<li><l>[working-dir]/docs</l> directory.
 		</ol>
@@ -2320,7 +2314,7 @@
 			Custom stylesheets can be defined by specifying your own stylesheet annotation value:
 		</p>
 		<p class='bcode'>
-	<jk>package</jk> com.ibm.mypackage;
+	<jk>package</jk> com.foo.mypackage;
 	<ja>@RestResource</ja>(
 		stylesheet=<js>"mystyles/mycss.css"</js>
 	)
@@ -2331,7 +2325,7 @@
 			In this example, the servlet will attempt to find the <l>mycss.css</l> file in the following ordered locations:
 		</p>			
 		<ol>
-			<li><l>com.ibm.mypackage.mystyles</l> package.
+			<li><l>com.foo.mypackage.mystyles</l> package.
 			<li><l>org.apache.juneau.server.mystyles</l> package (since <l>RestServletDefault</l> is in <l>org.apache.juneau.server</l>).
 			<li><l>[working-dir]/mystyles</l> directory.
 		</ol>

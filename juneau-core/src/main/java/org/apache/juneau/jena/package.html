@@ -133,7 +133,7 @@
 		The predefined serializers and parsers convert POJOs to and from RDF models and then uses Jena to convert them to and from the various RDF languages.	
 	</p>
 	<p>
-		Since Juneau is 100% pure IBM code, the Jena libraries must be provided on the classpath separately if you plan on making use of the RDF support.
+		Jena libraries must be provided on the classpath separately if you plan on making use of the RDF support.
 	</p>
 	<p>
 		The minimum list of required jars are:
@@ -259,8 +259,8 @@
 	<p class='bcode'>
 	<xt>&lt;rdf:RDF</xt>
 	    <xa>xmlns:rdf</xa>=<xs>"http://www.w3.org/1999/02/22-rdf-syntax-ns#"</xs>
-	    <xa>xmlns:j</xa>=<xs>"http://www.ibm.com/juneau/"</xs>
-	    <xa>xmlns:jp</xa>=<xs>"http://www.ibm.com/juneaubp/"</xs><xt>&gt;</xt>
+	    <xa>xmlns:j</xa>=<xs>"http://www.apache.org/juneau/"</xs>
+	    <xa>xmlns:jp</xa>=<xs>"http://www.apache.org/juneaubp/"</xs><xt>&gt;</xt>
 	   <xt>&lt;rdf:Description&gt;</xt>
 	      <xt>&lt;jp:id&gt;</xt>1<xt>&lt;/jp:id&gt;</xt>
 	      <xt>&lt;jp:name&gt;</xt>John Smith<xt>&lt;/jp:name&gt;</xt>
@@ -307,13 +307,13 @@
 	<ja>@RdfSchema</ja>(
 		prefix=<js>"ab"</js>,
 		rdfNs={
-			<ja>@RdfNs</ja>(prefix=<js>"ab"</js>, namespaceURI=<js>"http://www.ibm.com/addressBook/"</js>),
-			<ja>@RdfNs</ja>(prefix=<js>"per"</js>, namespaceURI=<js>"http://www.ibm.com/person/"</js>),
-			<ja>@RdfNs</ja>(prefix=<js>"addr"</js>, namespaceURI=<js>"http://www.ibm.com/address/"</js>),
-			<ja>@RdfNs</ja>(prefix=<js>"mail"</js>, namespaceURI=<js>"http://www.ibm.com/mail/"</js>)
+			<ja>@RdfNs</ja>(prefix=<js>"ab"</js>, namespaceURI=<js>"http://www.apache.org/addressBook/"</js>),
+			<ja>@RdfNs</ja>(prefix=<js>"per"</js>, namespaceURI=<js>"http://www.apache.org/person/"</js>),
+			<ja>@RdfNs</ja>(prefix=<js>"addr"</js>, namespaceURI=<js>"http://www.apache.org/address/"</js>),
+			<ja>@RdfNs</ja>(prefix=<js>"mail"</js>, namespaceURI=<js>"http://www.apache.org/mail/"</js>)
 		}
 	)
-	<jk>package</jk> com.ibm.sample.addressbook;
+	<jk>package</jk> org.apache.juneau.sample.addressbook;
 	<jk>import</jk> org.apache.juneau.xml.annotation.*;
 		</p>
 		<p>
@@ -326,9 +326,9 @@
 		<p class='bcode'>
 	<xt>&lt;rdf:RDF</xt>
 	    <xa>xmlns:rdf</xa>=<xs>"http://www.w3.org/1999/02/22-rdf-syntax-ns#"</xs>
-	    <xa>xmlns:j</xa>=<xs>"http://www.ibm.com/juneau/"</xs>
-	    <xa>xmlns:jp</xa>=<xs>"http://www.ibm.com/juneaubp/"</xs>
-	    <xa>xmlns:per</xa>=<xs>"http://www.ibm.com/person/"</xs><xt>&gt;</xt>
+	    <xa>xmlns:j</xa>=<xs>"http://www.apache.org/juneau/"</xs>
+	    <xa>xmlns:jp</xa>=<xs>"http://www.apache.org/juneaubp/"</xs>
+	    <xa>xmlns:per</xa>=<xs>"http://www.apache.org/person/"</xs><xt>&gt;</xt>
 	   <xt>&lt;rdf:Description&gt;</xt>
 	      <xt>&lt;per:id&gt;</xt>1<xt>&lt;/per:id&gt;</xt>
 	      <xt>&lt;per:name&gt;</xt>John Smith<xt>&lt;/per:name&gt;</xt>
@@ -347,7 +347,7 @@
 	RdfSerializer s = <jk>new</jk> RdfSerializer.XmlAbbrev()
 		.setProperty(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3)
 		.setProperty(XmlSerializerContext.<jsf>XML_autoDetectNamespaces</jsf>, <jk>false</jk>)
-		.setProperty(XmlSerializerContext.<jsf>XML_namespaces</jsf>, <js>"{per:'http://www.ibm.com/person/'}"</js>);
+		.setProperty(XmlSerializerContext.<jsf>XML_namespaces</jsf>, <js>"{per:'http://www.apache.org/person/'}"</js>);
 	</p>
 		<p>
 			This code change will produce the same output as before, but will perform slightly better since it doesn't have to crawl the POJO tree before serializing the result.
@@ -401,9 +401,9 @@
 		<p class='bcode'>
 	<xt>&lt;rdf:RDF</xt>
 	    <xa>xmlns:rdf</xa>=<xs>"http://www.w3.org/1999/02/22-rdf-syntax-ns#"</xs>
-	    <xa>xmlns:j</xa>=<xs>"http://www.ibm.com/juneau/"</xs>
-	    <xa>xmlns:jp</xa>=<xs>"http://www.ibm.com/juneaubp/"</xs>
-	    <xa>xmlns:per</xa>=<xs>"http://www.ibm.com/person/"</xs><xt>&gt;</xt>
+	    <xa>xmlns:j</xa>=<xs>"http://www.apache.org/juneau/"</xs>
+	    <xa>xmlns:jp</xa>=<xs>"http://www.apache.org/juneaubp/"</xs>
+	    <xa>xmlns:per</xa>=<xs>"http://www.apache.org/person/"</xs><xt>&gt;</xt>
 	   <xt>&lt;rdf:Description <b><xa>rdf:about</xa>=<xs>"http://sample/addressBook/person/1"</xs></b>&gt;</xt>
 	      <xt>&lt;per:addressBookUri</xt> <xa>rdf:resource</xa>=<xs>"http://sample/addressBook"</xs><xt>/&gt;</xt>
 	      <xt>&lt;per:id&gt;</xt>1<xt>&lt;/per:id&gt;</xt>
@@ -502,9 +502,9 @@
 		<p class='bcode'>
 	<xt>&lt;rdf:RDF</xt>
 	    <xa>xmlns:rdf</xa>=<xs>"http://www.w3.org/1999/02/22-rdf-syntax-ns#"</xs>
-	    <xa>xmlns:j</xa>=<xs>"http://www.ibm.com/juneau/"</xs>
-	    <xa>xmlns:jp</xa>=<xs>"http://www.ibm.com/juneaubp/"</xs>
-	    <xa>xmlns:per</xa>=<xs>"http://www.ibm.com/person/"</xs><xt>&gt;</xt>
+	    <xa>xmlns:j</xa>=<xs>"http://www.apache.org/juneau/"</xs>
+	    <xa>xmlns:jp</xa>=<xs>"http://www.apache.org/juneaubp/"</xs>
+	    <xa>xmlns:per</xa>=<xs>"http://www.apache.org/person/"</xs><xt>&gt;</xt>
 	   <xt>&lt;rdf:Description <xa>rdf:about</xa>=<xs>"http://sample/addressBook/person/1"</xs>&gt;</xt>
 	      <xt>&lt;per:addressBookUri</xt> <xa>rdf:resource</xa>=<xs>"http://sample/addressBook"</xs><xt>/&gt;</xt>
 	      <xt>&lt;per:id&gt;</xt>1<xt>&lt;/per:id&gt;</xt>
@@ -580,11 +580,11 @@
 		<p class='bcode'>
 	<xt>&lt;rdf:RDF</xt>
 	    <xa>xmlns:rdf</xa>=<xs>"http://www.w3.org/1999/02/22-rdf-syntax-ns#"</xs>
-	    <xa>xmlns:j</xa>=<xs>"http://www.ibm.com/juneau/"</xs>
-	    <xa>xmlns:jp</xa>=<xs>"http://www.ibm.com/juneaubp/"</xs>
-	    <xa>xmlns:per</xa>=<xs>"http://www.ibm.com/person/"</xs>
-	    <b><xa>xmlns:mail</xa>=<xs>"http://www.ibm.com/mail/"</xs></b>
-	    <b><xa>xmlns:addr</xa>=<xs>"http://www.ibm.com/address/"</xs></b><xt>&gt;</xt>
+	    <xa>xmlns:j</xa>=<xs>"http://www.apache.org/juneau/"</xs>
+	    <xa>xmlns:jp</xa>=<xs>"http://www.apache.org/juneaubp/"</xs>
+	    <xa>xmlns:per</xa>=<xs>"http://www.apache.org/person/"</xs>
+	    <b><xa>xmlns:mail</xa>=<xs>"http://www.apache.org/mail/"</xs></b>
+	    <b><xa>xmlns:addr</xa>=<xs>"http://www.apache.org/address/"</xs></b><xt>&gt;</xt>
 	   <xt>&lt;rdf:Description <xa>rdf:about</xa>=<xs>"http://sample/addressBook/person/1"</xs>&gt;</xt>
 	      <xt>&lt;per:addressBookUri</xt> <xa>rdf:resource</xa>=<xs>"http://sample/addressBook"</xs><xt>/&gt;</xt>
 	      <xt>&lt;per:id&gt;</xt>1<xt>&lt;/per:id&gt;</xt>
@@ -645,11 +645,11 @@
 		<p class='bcode'>
 	<xt>&lt;rdf:RDF</xt>
 	    <xa>xmlns:rdf</xa>=<xs>"http://www.w3.org/1999/02/22-rdf-syntax-ns#"</xs>
-	    <xa>xmlns:j</xa>=<xs>"http://www.ibm.com/juneau/"</xs>
-	    <xa>xmlns:jp</xa>=<xs>"http://www.ibm.com/juneaubp/"</xs>
-	    <xa>xmlns:per</xa>=<xs>"http://www.ibm.com/person/"</xs>
-	    <xa>xmlns:mail</xa>=<xs>"http://www.ibm.com/mail/"</xs>
-	    <xa>xmlns:addr</xa>=<xs>"http://www.ibm.com/address/"</xs><xt>&gt;</xt>
+	    <xa>xmlns:j</xa>=<xs>"http://www.apache.org/juneau/"</xs>
+	    <xa>xmlns:jp</xa>=<xs>"http://www.apache.org/juneaubp/"</xs>
+	    <xa>xmlns:per</xa>=<xs>"http://www.apache.org/person/"</xs>
+	    <xa>xmlns:mail</xa>=<xs>"http://www.apache.org/mail/"</xs>
+	    <xa>xmlns:addr</xa>=<xs>"http://www.apache.org/address/"</xs><xt>&gt;</xt>
 	   <xt>&lt;rdf:Description <xa>rdf:about</xa>=<xs>"http://sample/addressBook/person/1"</xs>&gt;</xt>
   	      <b><xt>&lt;j:root&gt;</xt>true<xt>&lt;/j:root&gt;</xt></b>
   	      <xt>&lt;per:addressBookUri</xt> <xa>rdf:resource</xa>=<xs>"http://sample/addressBook"</xs><xt>/&gt;</xt>
@@ -699,11 +699,11 @@
 		<p class='bcode'>
 	<xt>&lt;rdf:RDF</xt>
 	    <xa>xmlns:rdf</xa>=<xs>"http://www.w3.org/1999/02/22-rdf-syntax-ns#"</xs>
-	    <xa>xmlns:j</xa>=<xs>"http://www.ibm.com/juneau/"</xs>
-	    <xa>xmlns:jp</xa>=<xs>"http://www.ibm.com/juneaubp/"</xs>
-	    <xa>xmlns:per</xa>=<xs>"http://www.ibm.com/person/"</xs>
-	    <xa>xmlns:mail</xa>=<xs>"http://www.ibm.com/mail/"</xs>
-	    <xa>xmlns:addr</xa>=<xs>"http://www.ibm.com/address/"</xs><xt>&gt;</xt>
+	    <xa>xmlns:j</xa>=<xs>"http://www.apache.org/juneau/"</xs>
+	    <xa>xmlns:jp</xa>=<xs>"http://www.apache.org/juneaubp/"</xs>
+	    <xa>xmlns:per</xa>=<xs>"http://www.apache.org/person/"</xs>
+	    <xa>xmlns:mail</xa>=<xs>"http://www.apache.org/mail/"</xs>
+	    <xa>xmlns:addr</xa>=<xs>"http://www.apache.org/address/"</xs><xt>&gt;</xt>
 	   <xt>&lt;rdf:Description <xa>rdf:about</xa>=<xs>"http://sample/addressBook/person/1"</xs>&gt;</xt>
   	      <xt>&lt;per:addressBookUri</xt> <xa>rdf:resource</xa>=<xs>"http://sample/addressBook"</xs><xt>/&gt;</xt>
 	      <xt>&lt;per:id</xt> <b><xa>rdf:datatype</xa>=<xs>"http://www.w3.org/2001/XMLSchema#int"</xs></b><xt>&gt;</xt>1<xt>&lt;/per:id&gt;</xt>
