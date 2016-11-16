@@ -93,12 +93,12 @@
 		<p class='bcode'>
 	Feed feed = <jk>new</jk> Feed()
 		.setTitle(<jk>new</jk> Text(<js>"text"</js>, <js>"Juneau ATOM specification"</js>))
-		.setSubTitle(<jk>new</jk> Text(<js>"html"</js>, <js>"A &lt;em&gt;lot&lt;/em&gt; of effort went into making this effortless"</js>))
-		.setUpdated(<jsm>parseDateTime</jsm>(<js>"2013-05-08T12:29:29Z"</js>))
-		.setId(<jk>new</jk> Id(<js>"tag:juneau.sample.com,2013:1"</js>))
+		.setSubTitle(<jk>new</jk> Text(<js>"html"</js>, <js>"Describes &lt;em&gt;stuff&lt;/em&gt; about Juneau"</js>))
+		.setUpdated(<jsm>parseDateTime</jsm>(<js>"2016-01-02T03:04:05Z"</js>))
+		.setId(<jk>new</jk> Id(<js>"tag:juneau.apache.org"</js>))
 		.addLinks(
-			<jk>new</jk> Link(<js>"alternate"</js>, <js>"text/html"</js>, <js>"http://www.sample.com/"</js>).setHreflang(<js>"en"</js>),
-			<jk>new</jk> Link(<js>"self"</js>, <js>"application/atom+xml"</js>, <js>"http://www.sample.com/feed.atom"</js>)
+			<jk>new</jk> Link(<js>"alternate"</js>, <js>"text/html"</js>, <js>"http://juneau.apache.org/"</js>).setHreflang(<js>"en"</js>),
+			<jk>new</jk> Link(<js>"self"</js>, <js>"application/atom+xml"</js>, <js>"http://juneau.apache.org/feed.atom"</js>)
 		)
 		.setRights(<jk>new</jk> Text(<js>"Copyright (c) 2016, Apache Foundation"</js>))
 		.setGenerator(<jk>new</jk> Generator(<js>"Juneau"</js>).setUri(<jk>new</jk> URI(<js>"http://juneau.apache.org/"</js>)).setVersion(<js>"1.0"</js>))
@@ -106,13 +106,13 @@
 			<jk>new</jk> Entry()
 				.setTitle(<jk>new</jk> Text(<js>"Juneau ATOM specification snapshot"</js>))
 				.addLinks(
-					<jk>new</jk> Link(<js>"alternate"</js>, <js>"text/html"</js>, <js>"http://www.sample.com/2012/05/08/juneau.atom"</js>),
-					<jk>new</jk> Link(<js>"enclosure"</js>, <js>"audio/mpeg"</js>, <js>""http://www.sample.com/audio/juneau_podcast.mp3"</js>).setLength(12345)
+					<jk>new</jk> Link(<js>"alternate"</js>, <js>"text/html"</js>, <js>"http://juneau.apache.org/juneau.atom"</js>),
+					<jk>new</jk> Link(<js>"enclosure"</js>, <js>"audio/mpeg"</js>, <js>""http://juneau.apache.org/audio/juneau_podcast.mp3"</js>).setLength(12345)
 				)
-				.setId(<jk>new</jk> Id(<js>"tag:juneau.sample.com,2013:1.2345"</js>))
-				.setUpdated(<jsm>parseDateTime</jsm>(<js>"2013-05-08T12:29:29Z"</js>))
-				.setPublished(<jsm>parseDateTime</jsm>(<js>"2013-05-08T12:29:29Z"</js>))
-				.addAuthors(<jk>new</jk> Person(<js>"James Bognar"</js>).setUri(<jk>new</jk> URI(<js>"http://www.sample.com/"</js>)).setEmail(<js>"james.bognar@salesforce.com"</js>))
+				.setId(<jk>new</jk> Id(<js>"tag:juneau.apache.org"</js>))
+				.setUpdated(<jsm>parseDateTime</jsm>(<js>"2016-01-02T03:04:05Z"</js>))
+				.setPublished(<jsm>parseDateTime</jsm>(<js>"2016-01-02T03:04:05Z"</js>))
+				.addAuthors(<jk>new</jk> Person(<js>"James Bognar"</js>).setUri(<jk>new</jk> URI(<js>"http://juneau.apache.org/"</js>)).setEmail(<js>"james.bognar@apache.org"</js>))
 				.addContributors(
 					<jk>new</jk> Person(<js>"Barry M. Caceres"</js>)
 				)
@@ -143,45 +143,45 @@
 		<p class='bcode'>
 	<xt>&lt;feed&gt;</xt>
 		<xt>&lt;id&gt;</xt>
-			tag:juneau.sample.com,2013:1
+			tag:juneau.apache.org
 		<xt>&lt;/id&gt;</xt>
-		<xt>&lt;link</xt> <xa>href</xa>=<xs>'http://www.sample.com/'</xs> <xa>rel</xa>=<xs>'alternate'</xs> <xa>type</xa>=<xs>'text/html'</xs> <xa>hreflang</xa>=<xs>'en'</xs>/<xt>&gt;</xt>
-		<xt>&lt;link</xt> <xa>href</xa>=<xs>'http://www.sample.com/feed.atom'</xs> <xa>rel</xa>=<xs>'self'</xs> <xa>type</xa>=<xs>'application/atom+xml'</xs>/<xt>&gt;</xt>
+		<xt>&lt;link</xt> <xa>href</xa>=<xs>'http://juneau.apache.org/'</xs> <xa>rel</xa>=<xs>'alternate'</xs> <xa>type</xa>=<xs>'text/html'</xs> <xa>hreflang</xa>=<xs>'en'</xs>/<xt>&gt;</xt>
+		<xt>&lt;link</xt> <xa>href</xa>=<xs>'http://juneau.apache.org/feed.atom'</xs> <xa>rel</xa>=<xs>'self'</xs> <xa>type</xa>=<xs>'application/atom+xml'</xs>/<xt>&gt;</xt>
 		<xt>&lt;rights&gt;</xt>
 			Copyright (c) 2016, Apache Foundation
 		<xt>&lt;/rights&gt;</xt>
 		<xt>&lt;title</xt> <xa>type</xa>=<xs>'text'</xs>&gt;</xt>
 			Juneau ATOM specification
 		<xt>&lt;/title&gt;</xt>
-		<xt>&lt;updated&gt;</xt>2013-05-08T12:29:29Z<xt>&lt;/updated&gt;</xt>
+		<xt>&lt;updated&gt;</xt>2016-01-02T03:04:05Z<xt>&lt;/updated&gt;</xt>
 		<xt>&lt;generator</xt> <xa>uri</xa>=<xs>'http://juneau.apache.org/'</xs> <xa>version</xa>=<xs>'1.0'</xs><xt>&gt;</xt>
 			Juneau
 		<xt>&lt;/generator&gt;</xt>
 		<xt>&lt;subtitle</xt> <xa>type</xa>=<xs>'html'</xs><xt>&gt;</xt>
-			A &amp;lt;em&amp;gt;lot&amp;lt;/em&amp;gt; of effort went into making this effortless
+			Describes &lt;em&gt;stuff&lt;/em&gt; about Juneau
 		<xt>&lt;/subtitle&gt;</xt>
 		<xt>&lt;entry&gt;</xt>
 			<xt>&lt;author&gt;</xt>
 				<xt>&lt;name&gt;</xt>James Bognar<xt>&lt;/name&gt;</xt>
-				<xt>&lt;uri&gt;</xt>http://www.sample.com/<xt>&lt;/uri&gt;</xt>
-				<xt>&lt;email&gt;</xt>james.bognar@salesforce.com<xt>&lt;/email&gt;</xt>
+				<xt>&lt;uri&gt;</xt>http://juneau.apache.org/<xt>&lt;/uri&gt;</xt>
+				<xt>&lt;email&gt;</xt>james.bognar@apache.org<xt>&lt;/email&gt;</xt>
 			<xt>&lt;/author&gt;</xt>
 			<xt>&lt;contributor&gt;</xt>
 				<xt>&lt;name&gt;</xt>Barry M. Caceres<xt>&lt;/name&gt;</xt>
 			<xt>&lt;/contributor&gt;</xt>
 			<xt>&lt;id&gt;</xt>
-				tag:juneau.sample.com,2013:1.2345
+				tag:juneau.apache.org
 			<xt>&lt;/id&gt;</xt>
-			<xt>&lt;link</xt> <xa>href</xa>=<xs>'http://www.sample.com/2012/05/08/juneau.atom'</xs> <xa>rel</xa>=<xs>'alternate'</xs> <xa>type</xa>=<xs>'text/html'</xs>/<xt>&gt;</xt>
-			<xt>&lt;link</xt> <xa>href</xa>=<xs>'http://www.sample.com/audio/juneau_podcast.mp3'</xs> <xa>rel</xa>=<xs>'enclosure'</xs> <xa>type</xa>=<xs>'audio/mpeg'</xs> <xa>length</xa>=<xs>'12345'</xs>/<xt>&gt;</xt>
+			<xt>&lt;link</xt> <xa>href</xa>=<xs>'http://juneau.apache.org/juneau.atom'</xs> <xa>rel</xa>=<xs>'alternate'</xs> <xa>type</xa>=<xs>'text/html'</xs>/<xt>&gt;</xt>
+			<xt>&lt;link</xt> <xa>href</xa>=<xs>'http://juneau.apache.org/audio/juneau_podcast.mp3'</xs> <xa>rel</xa>=<xs>'enclosure'</xs> <xa>type</xa>=<xs>'audio/mpeg'</xs> <xa>length</xa>=<xs>'12345'</xs>/<xt>&gt;</xt>
 			<xt>&lt;title&gt;</xt>
 				Juneau ATOM specification snapshot
 			<xt>&lt;/title&gt;</xt>
-			<xt>&lt;updated&gt;</xt>2013-05-08T12:29:29Z<xt>&lt;/updated&gt;</xt>
+			<xt>&lt;updated&gt;</xt>2016-01-02T03:04:05Z<xt>&lt;/updated&gt;</xt>
 			<xt>&lt;content</xt> <xa>base</xa>=<xs>'http://www.apache.org/'</xs> <xa>lang</xa>=<xs>'en'</xs> <xa>type</xa>=<xs>'xhtml'</xs><xt>&gt;</xt>
 				<xt>&lt;div</xt> <xa>xmlns</xa>=<xs>"http://www.w3.org/1999/xhtml"</xs><xt>&gt;&lt;p&gt;&lt;i&gt;</xt>[Update: Juneau supports ATOM.]<xt>&lt;/i&gt;&lt;/p&gt;&lt;/div&gt;</xt>
 			<xt>&lt;/content&gt;</xt>
-			<xt>&lt;published&gt;</xt>2013-05-08T12:29:29Z<xt>&lt;/published&gt;</xt>
+			<xt>&lt;published&gt;</xt>2016-01-02T03:04:05Z<xt>&lt;/published&gt;</xt>
 		<xt>&lt;/entry&gt;</xt>
 	<xt>&lt;/feed&gt;</xt>		
 		</p>
@@ -207,45 +207,45 @@
 			<xa>xmlns:xml</xa>=<xs>'http://www.w3.org/XML/1998/namespace'</xs> 
 			<xa>xmlns:xsi</xa>=<xs>'http://www.w3.org/2001/XMLSchema-instance'</xs><xt>&gt;</xt>
 		<xt>&lt;atom:id&gt;</xt>
-			tag:juneau.sample.com,2013:1
+			tag:juneau.apache.org
 		<xt>&lt;/atom:id&gt;</xt>
-		<xt>&lt;atom:link</xt> <xa>href</xa>=<xs>'http://www.sample.com/'</xs> <xa>rel</xa>=<xs>'alternate'</xs> <xa>type</xa>=<xs>'text/html'</xs> <xa>hreflang</xa>=<xs>'en'</xs><xt>/&gt;</xt>
-		<xt>&lt;atom:link</xt> <xa>href</xa>=<xs>'http://www.sample.com/feed.atom'</xs> <xa>rel</xa>=<xs>'self'</xs> <xa>type</xa>=<xs>'application/atom+xml'</xs><xt>/&gt;</xt>
+		<xt>&lt;atom:link</xt> <xa>href</xa>=<xs>'http://juneau.apache.org/'</xs> <xa>rel</xa>=<xs>'alternate'</xs> <xa>type</xa>=<xs>'text/html'</xs> <xa>hreflang</xa>=<xs>'en'</xs><xt>/&gt;</xt>
+		<xt>&lt;atom:link</xt> <xa>href</xa>=<xs>'http://juneau.apache.org/feed.atom'</xs> <xa>rel</xa>=<xs>'self'</xs> <xa>type</xa>=<xs>'application/atom+xml'</xs><xt>/&gt;</xt>
 		<xt>&lt;atom:rights&gt;</xt>
 			Copyright (c) 2016, Apache Foundation
 		<xt>&lt;/atom:rights&gt;</xt>
 		<xt>&lt;atom:title</xt> <xa>type</xa>=<xs>'text'</xs><xt>&gt;</xt>
 			Juneau ATOM specification
 		<xt>&lt;/atom:title&gt;</xt>
-		<xt>&lt;atom:updated&gt;</xt>2013-05-08T12:29:29Z<xt>&lt;/atom:updated&gt;</xt>
+		<xt>&lt;atom:updated&gt;</xt>2016-01-02T03:04:05Z<xt>&lt;/atom:updated&gt;</xt>
 		<xt>&lt;atom:generator</xt> <xa>uri</xa>=<xs>'http://juneau.apache.org/'</xs> <xa>version</xa>=<xs>'1.0'</xs><xt>&gt;</xt>
 			Juneau
 		<xt>&lt;/atom:generator&gt;</xt>
 		<xt>&lt;atom:subtitle</xt> <xa>type</xa>=<xs>'html'</xs><xt>&gt;</xt>
-			A &amp;lt;em&amp;gt;lot&amp;lt;/em&amp;gt; of effort went into making this effortless
+			Describes &lt;em&gt;stuff&lt;/em&gt; about Juneau
 		<xt>&lt;/atom:subtitle&gt;</xt>
 		<xt>&lt;atom:entry&gt;</xt>
 			<xt>&lt;atom:author&gt;</xt>
 				<xt>&lt;atom:name&gt;</xt>James Bognar<xt>&lt;/atom:name&gt;</xt>
-				<xt>&lt;atom:uri&gt;</xt>http://www.sample.com/<xt>&lt;/atom:uri&gt;</xt>
-				<xt>&lt;atom:email&gt;</xt>james.bognar@salesforce.com<xt>&lt;/atom:email&gt;</xt>
+				<xt>&lt;atom:uri&gt;</xt>http://juneau.apache.org/<xt>&lt;/atom:uri&gt;</xt>
+				<xt>&lt;atom:email&gt;</xt>james.bognar@apache.org<xt>&lt;/atom:email&gt;</xt>
 			<xt>&lt;/atom:author&gt;</xt>
 			<xt>&lt;atom:contributor&gt;</xt>
 				<xt>&lt;atom:name&gt;</xt>Barry M. Caceres<xt>&lt;/atom:name&gt;</xt>
 			<xt>&lt;/atom:contributor&gt;</xt>
 			<xt>&lt;atom:id&gt;</xt>
-				tag:juneau.sample.com,2013:1.2345
+				tag:juneau.apache.org
 			<xt>&lt;/atom:id&gt;</xt>
-			<xt>&lt;atom:link</xt> <xa>href</xa>=<xs>'http://www.sample.com/2012/05/08/juneau.atom'</xs> <xa>rel</xa>=<xs>'alternate'</xs> <xa>type</xa>=<xs>'text/html'</xs><xt>/&gt;</xt>
-			<xt>&lt;atom:link</xt> <xa>href</xa>=<xs>'http://www.sample.com/audio/juneau_podcast.mp3'</xs> <xa>rel</xa>=<xs>'enclosure'</xs> <xa>type</xa>=<xs>'audio/mpeg'</xs> <xa>length</xa>=<xs>'12345'</xs><xt>/&gt;</xt>
+			<xt>&lt;atom:link</xt> <xa>href</xa>=<xs>'http://juneau.apache.org/juneau.atom'</xs> <xa>rel</xa>=<xs>'alternate'</xs> <xa>type</xa>=<xs>'text/html'</xs><xt>/&gt;</xt>
+			<xt>&lt;atom:link</xt> <xa>href</xa>=<xs>'http://juneau.apache.org/audio/juneau_podcast.mp3'</xs> <xa>rel</xa>=<xs>'enclosure'</xs> <xa>type</xa>=<xs>'audio/mpeg'</xs> <xa>length</xa>=<xs>'12345'</xs><xt>/&gt;</xt>
 			<xt>&lt;atom:title&gt;</xt>
 				Juneau ATOM specification snapshot
 			<xt>&lt;/atom:title&gt;</xt>
-			<xt>&lt;atom:updated&gt;</xt>2013-05-08T12:29:29Z<xt>&lt;/atom:updated&gt;</xt>
+			<xt>&lt;atom:updated&gt;</xt>2016-01-02T03:04:05Z<xt>&lt;/atom:updated&gt;</xt>
 			<xt>&lt;atom:content</xt> <xa>xml:base</xa>=<xs>'http://www.apache.org/'</xs> <xa>xml:lang</xa>=<xs>'en'</xs> <xa>type</xa>=<xs>'xhtml'</xs><xt>&gt;</xt>
 				<xt>&lt;div</xt> <xa>xmlns</xa>=<xs>"http://www.w3.org/1999/xhtml"</xs><xt>&gt;</xt><xt>&lt;p&gt;</xt><xt>&lt;i&gt;</xt>[Update: Juneau supports ATOM.]<xt>&lt;/i&gt;</xt><xt>&lt;/p&gt;</xt><xt>&lt;/div&gt;</xt>
 			<xt>&lt;/atom:content&gt;</xt>
-			<xt>&lt;atom:published&gt;</xt>2013-05-08T12:29:29Z<xt>&lt;/atom:published&gt;</xt>
+			<xt>&lt;atom:published&gt;</xt>2016-01-02T03:04:05Z<xt>&lt;/atom:published&gt;</xt>
 		<xt>&lt;/atom:entry&gt;</xt>
 	<xt>&lt;/atom:feed&gt;</xt>
 		</p>
@@ -270,45 +270,45 @@
 			<xa>xmlns:xml</xa>=<xs>'http://www.w3.org/XML/1998/namespace'</xs> 
 			<xa>xmlns:xsi</xa>=<xs>'http://www.w3.org/2001/XMLSchema-instance'</xs><xt>&gt;</xt>
 		<xt>&lt;id&gt;</xt>
-			tag:juneau.sample.com,2013:1
+			tag:juneau.apache.org
 		<xt>&lt;/id&gt;</xt>
-		<xt>&lt;link</xt> <xa>href</xa>=<xs>'http://www.sample.com/'</xs> <xa>rel</xa>=<xs>'alternate'</xs> <xa>type</xa>=<xs>'text/html'</xs> <xa>hreflang</xa>=<xs>'en'</xs><xt>/&gt;</xt>
-		<xt>&lt;link</xt> <xa>href</xa>=<xs>'http://www.sample.com/feed.atom'</xs> <xa>rel</xa>=<xs>'self'</xs> <xa>type</xa>=<xs>'application/atom+xml'</xs><xt>/&gt;</xt>
+		<xt>&lt;link</xt> <xa>href</xa>=<xs>'http://juneau.apache.org/'</xs> <xa>rel</xa>=<xs>'alternate'</xs> <xa>type</xa>=<xs>'text/html'</xs> <xa>hreflang</xa>=<xs>'en'</xs><xt>/&gt;</xt>
+		<xt>&lt;link</xt> <xa>href</xa>=<xs>'http://juneau.apache.org/feed.atom'</xs> <xa>rel</xa>=<xs>'self'</xs> <xa>type</xa>=<xs>'application/atom+xml'</xs><xt>/&gt;</xt>
 		<xt>&lt;rights&gt;</xt>
 			Copyright (c) 2016, Apache Foundation
 		<xt>&lt;/rights&gt;</xt>
 		<xt>&lt;title</xt> <xa>type</xa>=<xs>'text'</xs><xt>&gt;</xt>
 			Juneau ATOM specification
 		<xt>&lt;/title&gt;</xt>
-		<xt>&lt;updated&gt;</xt>2013-05-08T12:29:29Z<xt>&lt;/updated&gt;</xt>
+		<xt>&lt;updated&gt;</xt>2016-01-02T03:04:05Z<xt>&lt;/updated&gt;</xt>
 		<xt>&lt;generator</xt> <xa>uri</xa>=<xs>'http://juneau.apache.org/'</xs> <xa>version</xa>=<xs>'1.0'</xs><xt>&gt;</xt>
 			Juneau
 		<xt>&lt;/generator&gt;</xt>
 		<xt>&lt;subtitle</xt> <xa>type</xa>=<xs>'html'</xs><xt>&gt;</xt>
-			A &amp;lt;em&amp;gt;lot&amp;lt;/em&amp;gt; of effort went into making this effortless
+			Describes &amp;lt;em&amp;stuff&amp;lt;/em&amp;gt; about Juneau
 		<xt>&lt;/subtitle&gt;</xt>
 		<xt>&lt;entry&gt;</xt>
 			<xt>&lt;author&gt;</xt>
 				<xt>&lt;name&gt;</xt>James Bognar<xt>&lt;/name&gt;</xt>
-				<xt>&lt;uri&gt;</xt>http://www.sample.com/<xt>&lt;/uri&gt;</xt>
-				<xt>&lt;email&gt;</xt>james.bognar@salesforce.com<xt>&lt;/email&gt;</xt>
+				<xt>&lt;uri&gt;</xt>http://juneau.apache.org/<xt>&lt;/uri&gt;</xt>
+				<xt>&lt;email&gt;</xt>james.bognar@apache.org<xt>&lt;/email&gt;</xt>
 			<xt>&lt;/author&gt;</xt>
 			<xt>&lt;contributor&gt;</xt>
 				<xt>&lt;name&gt;</xt>Barry M. Caceres<xt>&lt;/name&gt;</xt>
 			<xt>&lt;/contributor&gt;</xt>
 			<xt>&lt;id&gt;</xt>
-				tag:juneau.sample.com,2013:1.2345
+				tag:juneau.apache.org
 			<xt>&lt;/id&gt;</xt>
-			<xt>&lt;link</xt> <xa>href</xa>=<xs>'http://www.sample.com/2012/05/08/juneau.atom'</xs> <xa>rel</xa>=<xs>'alternate'</xs> <xa>type</xa>=<xs>'text/html'</xs><xt>/&gt;</xt>
-			<xt>&lt;link</xt> <xa>href</xa>=<xs>'http://www.sample.com/audio/juneau_podcast.mp3'</xs> <xa>rel</xa>=<xs>'enclosure'</xs> <xa>type</xa>=<xs>'audio/mpeg'</xs> <xa>length</xa>=<xs>'12345'</xs><xt>/&gt;</xt>
+			<xt>&lt;link</xt> <xa>href</xa>=<xs>'http://juneau.apache.org/juneau.atom'</xs> <xa>rel</xa>=<xs>'alternate'</xs> <xa>type</xa>=<xs>'text/html'</xs><xt>/&gt;</xt>
+			<xt>&lt;link</xt> <xa>href</xa>=<xs>'http://juneau.apache.org/audio/juneau_podcast.mp3'</xs> <xa>rel</xa>=<xs>'enclosure'</xs> <xa>type</xa>=<xs>'audio/mpeg'</xs> <xa>length</xa>=<xs>'12345'</xs><xt>/&gt;</xt>
 			<xt>&lt;title&gt;</xt>
 				Juneau ATOM specification snapshot
 			<xt>&lt;/title&gt;</xt>
-			<xt>&lt;updated&gt;</xt>2013-05-08T12:29:29Z<xt>&lt;/updated&gt;</xt>
+			<xt>&lt;updated&gt;</xt>2016-01-02T03:04:05Z<xt>&lt;/updated&gt;</xt>
 			<xt>&lt;content</xt> <xa>xml:base</xa>=<xs>'http://www.apache.org/'</xs> <xa>xml:lang</xa>=<xs>'en'</xs> <xa>type</xa>=<xs>'xhtml'</xs><xt>&gt;</xt>
 				<xt>&lt;div</xt> <xa>xmlns</xa>=<xs>"http://www.w3.org/1999/xhtml"</xs><xt>&gt;</xt><xt>&lt;p&gt;</xt><xt>&lt;i&gt;</xt>[Update: Juneau supports ATOM.]<xt>&lt;/i&gt;</xt><xt>&lt;/p&gt;</xt><xt>&lt;/div&gt;</xt>
 			<xt>&lt;/content&gt;</xt>
-			<xt>&lt;published&gt;</xt>2013-05-08T12:29:29Z<xt>&lt;/published&gt;</xt>
+			<xt>&lt;published&gt;</xt>2016-01-02T03:04:05Z<xt>&lt;/published&gt;</xt>
 		<xt>&lt;/entry&gt;</xt>
 	<xt>&lt;/feed&gt;</xt>
 		</p>		
@@ -335,17 +335,17 @@
 			<p class='bcode'>
 	{
 		id: {
-			text: <js>'tag:juneau.sample.com,2013:1'</js>
+			text: <js>'tag:juneau.apache.org'</js>
 		}, 
 		links: [
 			{
-				href: <js>'http://www.sample.com/'</js>, 
+				href: <js>'http://juneau.apache.org/'</js>, 
 				rel: <js>'alternate'</js>, 
 				type: <js>'text/html'</js>, 
 				hreflang: <js>'en'</js>
 			}, 
 			{
-				href: <js>'http://www.sample.com/feed.atom'</js>, 
+				href: <js>'http://juneau.apache.org/juneau.atom'</js>, 
 				rel: <js>'self'</js>, 
 				type: <js>'application/atom+xml'</js>
 			}
@@ -357,7 +357,7 @@
 			type: <js>'text'</js>, 
 			text: <js>'Juneau ATOM specification'</js>
 		}, 
-		updated: <js>'2013-05-08T12:29:29Z'</js>, 
+		updated: <js>'2016-01-02T03:04:05Z'</js>, 
 		generator: {
 			uri: <js>'http://juneau.apache.org/'</js>, 
 			version: <js>'1.0'</js>, 
@@ -365,15 +365,15 @@
 		}, 
 		subtitle: {
 			type: <js>'html'</js>, 
-			text: <js>'A &lt;em&gt;lot&lt;/em&gt; of effort went into making this effortless'</js>
+			text: <js>'Describes &lt;em&gt;stuff&lt;/em&gt; about Juneau'</js>
 		}, 
 		entries: [
 			{
 				authors: [
 					{
 						name: <js>'James Bognar'</js>, 
-						uri: <js>'http://www.sample.com/'</js>, 
-						email: <js>'james.bognar@salesforce.com'</js>
+						uri: <js>'http://juneau.apache.org/'</js>, 
+						email: <js>'james.bognar@apache.org'</js>
 					}
 				], 
 				contributors: [
@@ -382,16 +382,16 @@
 					}
 				], 
 				id: {
-					text: <js>'tag:juneau.sample.com,2013:1.2345'</js>
+					text: <js>'tag:juneau.apache.org'</js>
 				}, 
 				links: [
 					{
-						href: <js>'http://www.sample.com/2012/05/08/juneau.atom'</js>, 
+						href: <js>'http://juneau.apache.org/juneau.atom'</js>, 
 						rel: <js>'alternate'</js>, 
 						type: <js>'text/html'</js>
 					}, 
 					{
-						href: <js>'http://www.sample.com/audio/juneau_podcast.mp3'</js>, 
+						href: <js>'http://juneau.apache.org/audio/juneau_podcast.mp3'</js>, 
 						rel: <js>'enclosure'</js>, 
 						type: <js>'audio/mpeg'</js>, 
 						length: <jk>12345</jk>
@@ -400,14 +400,14 @@
 				title: {
 					text: <js>'Juneau ATOM specification snapshot'</js>
 				}, 
-				updated: <js>'2013-05-08T12:29:29Z'</js>, 
+				updated: <js>'2016-01-02T03:04:05Z'</js>, 
 				content: {
 					base: <js>'http://www.apache.org/'</js>, 
 					lang: <js>'en'</js>, 
 					type: <js>'xhtml'</js>, 
 					text: <js>'&lt;div xmlns="http://www.w3.org/1999/xhtml"&gt;&lt;p&gt;&lt;i&gt;[Update: Juneau supports ATOM.]&lt;/i&gt;&lt;/p&gt;&lt;/div&gt;'</js>
 				}, 
-				published: <js>'2013-05-08T12:29:29Z'</js>
+				published: <js>'2016-01-02T03:04:05Z'</js>
 			}
 		]
 	}
@@ -445,18 +445,18 @@
 	    <xa>xmlns:j.0</xa>=<xs>'http://www.w3.org/XML/1998/'</xs><xt>&gt;</xt>
 	   <xt>&lt;rdf:Description&gt;</xt>
 	      <xt>&lt;atom:id</xt> <xa>rdf:parseType</xa>=<xs>'Resource'</xs><xt>&gt;</xt>
-	         <xt>&lt;atom:text&gt;</xt>tag:juneau.sample.com,2013:1<xt>&lt;/atom:text&gt;</xt>
+	         <xt>&lt;atom:text&gt;</xt>tag:juneau.apache.org<xt>&lt;/atom:text&gt;</xt>
 	      <xt>&lt;/atom:id&gt;</xt>
 	      <xt>&lt;atom:links&gt;</xt>
 	         <xt>&lt;rdf:Seq&gt;</xt>
 	            <xt>&lt;rdf:li</xt> <xa>rdf:parseType</xa>=<xs>'Resource'</xs><xt>&gt;</xt>
-	               <xt>&lt;atom:href&gt;</xt>http://www.sample.com/<xt>&lt;/atom:href&gt;</xt>
+	               <xt>&lt;atom:href&gt;</xt>http://juneau.apache.org/<xt>&lt;/atom:href&gt;</xt>
 	               <xt>&lt;atom:rel&gt;</xt>alternate<xt>&lt;/atom:rel&gt;</xt>
 	               <xt>&lt;atom:type&gt;</xt>text/html<xt>&lt;/atom:type&gt;</xt>
 	               <xt>&lt;atom:hreflang&gt;</xt>en<xt>&lt;/atom:hreflang&gt;</xt>
 	            <xt>&lt;/rdf:li&gt;</xt>
 	            <xt>&lt;rdf:li</xt> <xa>rdf:parseType</xa>=<xs>'Resource'</xs><xt>&gt;</xt>
-	               <xt>&lt;atom:href&gt;</xt>http://www.sample.com/feed.atom<xt>&lt;/atom:href&gt;</xt>
+	               <xt>&lt;atom:href&gt;</xt>http://juneau.apache.org/feed.atom<xt>&lt;/atom:href&gt;</xt>
 	               <xt>&lt;atom:rel&gt;</xt>self<xt>&lt;/atom:rel&gt;</xt>
 	               <xt>&lt;atom:type&gt;</xt>application/atom+xml<xt>&lt;/atom:type&gt;</xt>
 	            <xt>&lt;/rdf:li&gt;</xt>
@@ -469,7 +469,7 @@
 	         <xt>&lt;atom:type&gt;</xt>text<xt>&lt;/atom:type&gt;</xt>
 	         <xt>&lt;atom:text&gt;</xt>Juneau ATOM specification<xt>&lt;/atom:text&gt;</xt>
 	      <xt>&lt;/atom:title&gt;</xt>
-	      <xt>&lt;atom:updated&gt;</xt>2013-05-08T12:29:29Z<xt>&lt;/atom:updated&gt;</xt>
+	      <xt>&lt;atom:updated&gt;</xt>2016-01-02T03:04:05Z<xt>&lt;/atom:updated&gt;</xt>
 	      <xt>&lt;atom:generator</xt> <xa>rdf:parseType</xa>=<xs>'Resource'</xs><xt>&gt;</xt>
 	         <xt>&lt;atom:uri</xt> <xa>rdf:resource</xa>=<xs>'http://juneau.apache.org/'</xs><xt>/&gt;</xt>
 	         <xt>&lt;atom:version&gt;</xt>1.0<xt>&lt;/atom:version&gt;</xt>
@@ -486,7 +486,7 @@
 	                  <xt>&lt;rdf:Seq&gt;</xt>
 	                     <xt>&lt;rdf:li</xt> <xa>rdf:parseType</xa>=<xs>'Resource'</xs><xt>&gt;</xt>
 	                        <xt>&lt;atom:name&gt;</xt>James Bognar<xt>&lt;/atom:name&gt;</xt>
-	                        <xt>&lt;atom:uri</xt> <xa>rdf:resource</xa>=<xs>'http://www.sample.com/'</xs><xt>/&gt;</xt>
+	                        <xt>&lt;atom:uri</xt> <xa>rdf:resource</xa>=<xs>'http://juneau.apache.org/'</xs><xt>/&gt;</xt>
 	                        <xt>&lt;atom:email&gt;</xt>james.bognar@salesforce.com<xt>&lt;/atom:email&gt;</xt>
 	                     <xt>&lt;/rdf:li&gt;</xt>
 	                  <xt>&lt;/rdf:Seq&gt;</xt>
@@ -499,17 +499,17 @@
 	                  <xt>&lt;/rdf:Seq&gt;</xt>
 	               <xt>&lt;/atom:contributors&gt;</xt>
 	               <xt>&lt;atom:id</xt> <xa>rdf:parseType</xa>=<xs>'Resource'</xs><xt>&gt;</xt>
-	                  <xt>&lt;atom:text&gt;</xt>tag:juneau.sample.com,2013:1.2345<xt>&lt;/atom:text&gt;</xt>
+	                  <xt>&lt;atom:text&gt;</xt>tag:juneau.apache.org<xt>&lt;/atom:text&gt;</xt>
 	               <xt>&lt;/atom:id&gt;</xt>
 	               <xt>&lt;atom:links&gt;</xt>
 	                  <xt>&lt;rdf:Seq&gt;</xt>
 	                     <xt>&lt;rdf:li</xt> <xa>rdf:parseType</xa>=<xs>'Resource'</xs><xt>&gt;</xt>
-	                        <xt>&lt;atom:href&gt;</xt>http://www.sample.com/2012/05/08/juneau.atom<xt>&lt;/atom:href&gt;</xt>
+	                        <xt>&lt;atom:href&gt;</xt>http://juneau.apache.org/juneau.atom<xt>&lt;/atom:href&gt;</xt>
 	                        <xt>&lt;atom:rel&gt;</xt>alternate<xt>&lt;/atom:rel&gt;</xt>
 	                        <xt>&lt;atom:type&gt;</xt>text/html<xt>&lt;/atom:type&gt;</xt>
 	                     <xt>&lt;/rdf:li&gt;</xt>
 	                     <xt>&lt;rdf:li</xt> <xa>rdf:parseType</xa>=<xs>'Resource'</xs><xt>&gt;</xt>
-	                        <xt>&lt;atom:href&gt;</xt>http://www.sample.com/audio/juneau_podcast.mp3<xt>&lt;/atom:href&gt;</xt>
+	                        <xt>&lt;atom:href&gt;</xt>http://juneau.apache.org/audio/juneau_podcast.mp3<xt>&lt;/atom:href&gt;</xt>
 	                        <xt>&lt;atom:rel&gt;</xt>enclosure<xt>&lt;/atom:rel&gt;</xt>
 	                        <xt>&lt;atom:type&gt;</xt>audio/mpeg<xt>&lt;/atom:type&gt;</xt>
 	                        <xt>&lt;atom:length&gt;</xt>12345<xt>&lt;/atom:length&gt;</xt>
@@ -519,14 +519,14 @@
 	               <xt>&lt;atom:title</xt> <xa>rdf:parseType</xa>=<xs>'Resource'</xs><xt>&gt;</xt>
 	                  <xt>&lt;atom:text&gt;</xt>Juneau ATOM specification snapshot<xt>&lt;/atom:text&gt;</xt>
 	               <xt>&lt;/atom:title&gt;</xt>
-	               <xt>&lt;atom:updated&gt;</xt>2013-05-08T12:29:29Z<xt>&lt;/atom:updated&gt;</xt>
+	               <xt>&lt;atom:updated&gt;</xt>2016-01-02T03:04:05Z<xt>&lt;/atom:updated&gt;</xt>
 	               <xt>&lt;atom:content</xt> <xa>rdf:parseType</xa>=<xs>'Resource'</xs><xt>&gt;</xt>
 	                  <xt>&lt;j.0:namespacebase</xt> <xa>rdf:resource</xa>=<xs>'http://www.apache.org/'</xs><xt>/&gt;</xt>
 	                  <xt>&lt;j.0:namespacelang&gt;</xt>en<xt>&lt;/j.0:namespacelang&gt;</xt>
 	                  <xt>&lt;atom:type&gt;</xt>xhtml<xt>&lt;/atom:type&gt;</xt>
 	                  <xt>&lt;atom:text&gt;</xt>&amp;lt;div xmlns="http://www.w3.org/1999/xhtml"&amp;gt;&amp;lt;p&amp;gt;&amp;lt;i&amp;gt;[Update: Juneau supports ATOM.]&amp;lt;/i&amp;gt;&amp;lt;/p&amp;gt;&amp;lt;/div&amp;gt;<xt>&lt;/atom:text&gt;</xt>
 	               <xt>&lt;/atom:content&gt;</xt>
-	               <xt>&lt;atom:published&gt;</xt>2013-05-08T12:29:29Z<xt>&lt;/atom:published&gt;</xt>
+	               <xt>&lt;atom:published&gt;</xt>2016-01-02T03:04:05Z<xt>&lt;/atom:published&gt;</xt>
 	            <xt>&lt;/rdf:li&gt;</xt>
 	         <xt>&lt;/rdf:Seq&gt;</xt>
 	      <xt>&lt;/atom:entries&gt;</xt>

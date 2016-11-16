@@ -3907,12 +3907,12 @@
 			<jk>try</jk> { 
 				<jf>feed</jf> = <jk>new</jk> Feed() 
 					.setTitle(<jk>new</jk> Text(<js>"text"</js>, <js>"Juneau ATOM specification"</js>)) 
-					.setSubTitle(<jk>new</jk> Text(<js>"html"</js>, <js>"A &lt;em&gt;lot&lt;/em&gt; of effort went into making this effortless"</js>)) 
-					.setUpdated(<jsm>parseDateTime</jsm>(<js>"2013-05-08T12:29:29Z"</js>)) 
-					.setId(<jk>new</jk> Id(<js>"tag:juneau.sample.com,2013:1"</js>)) 
+					.setSubTitle(<jk>new</jk> Text(<js>"html"</js>, <js>"Decribes &lt;em&gt;stuff&lt;/em&gt; about Juneau"</js>)) 
+					.setUpdated(<jsm>parseDateTime</jsm>(<js>"2016-01-02T03:04:05Z"</js>)) 
+					.setId(<jk>new</jk> Id(<js>"tag:juneau.apache.org"</js>)) 
 					.addLinks( 
-						<jk>new</jk> Link(<js>"alternate"</js>, <js>"text/html"</js>, <js>"http://www.sample.com/"</js>).setHreflang(<js>"en"</js>), 
-						<jk>new</jk> Link(<js>"self"</js>, <js>"application/atom+xml"</js>, <js>"http://www.sample.com/feed.atom"</js>)
+						<jk>new</jk> Link(<js>"alternate"</js>, <js>"text/html"</js>, <js>"http://juneau.apache.org/"</js>).setHreflang(<js>"en"</js>), 
+						<jk>new</jk> Link(<js>"self"</js>, <js>"application/atom+xml"</js>, <js>"http://juneau.apache.org/feed.atom"</js>)
 					) 
 					.setRights(<jk>new</jk> Text(<js>"Copyright (c) 2016, Apache Foundation"</js>)) 
 					.setGenerator(<jk>new</jk> Generator(<js>"Juneau"</js>).setUri(<jk>new</jk> URI(<js>"http://juneau.apache.org/"</js>)).setVersion(<js>"1.0"</js>)) 
@@ -3920,13 +3920,13 @@
 						<jk>new</jk> Entry() 
 							.setTitle(<jk>new</jk> Text(<js>"Juneau ATOM specification snapshot"</js>)) 
 							.addLinks( 
-								<jk>new</jk> Link(<js>"alternate"</js>, <js>"text/html"</js>, <js>"http://www.sample.com/2012/05/08/juneau.atom"</js>),
-								<jk>new</jk> Link(<js>"enclosure"</js>, <js>"audio/mpeg"</js>, <js>"http://www.sample.com/audio/juneau_podcast.mp3"</js>).setLength(12345) 
+								<jk>new</jk> Link(<js>"alternate"</js>, <js>"text/html"</js>, <js>"http://juneau.apache.org/juneau.atom"</js>),
+								<jk>new</jk> Link(<js>"enclosure"</js>, <js>"audio/mpeg"</js>, <js>"http://juneau.apache.org/audio/juneau_podcast.mp3"</js>).setLength(12345) 
 					) 
-					.setId(<jk>new</jk> Id(<js>"tag:juneau.sample.com,2013:1.2345"</js>)) 
-					.setUpdated(<jsm>parseDateTime</jsm>(<js>"2013-05-08T12:29:29Z"</js>)) 
-					.setPublished(<jsm>parseDateTime</jsm>(<js>"2013-05-08T12:29:29Z"</js>)) 
-					.addAuthors(<jk>new</jk> Person(<js>"James Bognar"</js>).setUri(<jk>new</jk> URI(<js>"http://www.sample.com/"</js>)).setEmail(<js>"james.bognar@salesforce.com"</js>)) 
+					.setId(<jk>new</jk> Id(<js>"tag:juneau.apache.org"</js>)) 
+					.setUpdated(<jsm>parseDateTime</jsm>(<js>"2016-01-02T03:04:05Z"</js>)) 
+					.setPublished(<jsm>parseDateTime</jsm>(<js>"2016-01-02T03:04:05Z"</js>)) 
+					.addAuthors(<jk>new</jk> Person(<js>"James Bognar"</js>).setUri(<jk>new</jk> URI(<js>"http://juneau.apache.org/"</js>)).setEmail(<js>"james.bognar@apache.org"</js>)) 
 					.addContributors( 
 						<jk>new</jk> Person(<js>"Barry M. Caceres"</js>) 
 					) 
