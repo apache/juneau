@@ -487,7 +487,7 @@
 			The <l>ObjectMap</l> and <l>ObjectList</l> classes are very similar to the <l>JSONObject</l> and <l>JSONArray</l>
 				classes found in other libraries.  However, the names were chosen  
 				because the concepts of <l>Maps</l> and <l>Lists</l> are already familiar to 
-				Java programmers, and these classes can be used with any of the serialzers or parsers.
+				Java programmers, and these classes can be used with any of the serializers or parsers.
 		</p>
 		<p>
 			These object can be serialized in one of two ways:
@@ -2092,7 +2092,7 @@
 		<p class='info'>
 			Let's step back and describe what's going on here:<br>
 			During servlet initialization of the <l>RootResources</l> object, the toolkit looks for the <l>@RestResource.children()</l> annotation.  
-			If it finds it, it instantiates instances of each class and recursively peforms servlet initialization on them.  
+			If it finds it, it instantiates instances of each class and recursively performs servlet initialization on them.  
 			It then associates the child resource with the parent by the name specified by the <l>@RestResource.path()</l> annotation on the child class.  
 			When a request for the child URL (<l>/helloWorld</l>) is received, the <l>RootResources</l> servlet gets the request and sees that the URL remainder matches one of its child resources.  
 			It then forwards the request to the child resource for processing.  
