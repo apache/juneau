@@ -186,7 +186,7 @@ public final class RdfSerializerSession extends SerializerSession {
 	 *
 	 * @return The {@link RdfSerializerContext#RDF_addRootProperty} setting value for this session.
 	 */
-	public final boolean isAddRootProperty() {
+	public final boolean isAddRootProp() {
 		return addRootProperty;
 	}
 
@@ -204,7 +204,7 @@ public final class RdfSerializerSession extends SerializerSession {
 	 *
 	 * @return The RDF property that identifies the root node in the RDF model.
 	 */
-	public final Property getRootProperty() {
+	public final Property getRootProp() {
 		return pRoot;
 	}
 

@@ -144,8 +144,8 @@ public class RdfSerializer extends WriterSerializer {
 				r = n.asResource();
 			}
 
-			if (s.isAddRootProperty())
-				r.addProperty(s.getRootProperty(), "true");
+			if (s.isAddRootProp())
+				r.addProperty(s.getRootProp(), "true");
 		}
 
 		s.getRdfWriter().write(model, session.getWriter(), "http://unknown/");
