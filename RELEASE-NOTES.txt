@@ -11,6 +11,20 @@
 * specific language governing permissions and limitations under the License.                                              *
 ***************************************************************************************************************************
 
+Release Notes - Juneau - Version 6.0.1
+
+** Bug
+    * [JUNEAU-17] - Resolve various small issues pointed out during release of 6.0.0
+    * [JUNEAU-19] - Fix various JSON parser edge cases
+    * [JUNEAU-21] - Scrub references to IBM from code.
+
+** Improvement
+    * [JUNEAU-18] - Add HtmlDocSerializer.DEFAULT field.
+
+** Task
+    * [JUNEAU-20] - Remove references to ibm.com from website
+
+
 Release Notes - Juneau - Version 6.0.0
 
 ** Bug
