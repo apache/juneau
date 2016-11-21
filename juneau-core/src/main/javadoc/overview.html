@@ -1121,7 +1121,7 @@
 				<td>
 					<b>Objects with standardized <code>static T valueOf(ObjectMap)</code>/<code>static T fromObjectMap(ObjectMap)</code> methods, or constructors with an <code>ObjectMap</code> argument, 
 					and having a <code>toObjectMap()</code> method.</b><br>
-					During serialization, objects are converted to {@link org.apache.juneau.core.ObjectMap ObjectMaps} using the <code>toObjectMap()</code> method.
+					During serialization, objects are converted to {@link org.apache.juneau.ObjectMap ObjectMaps} using the <code>toObjectMap()</code> method.
 					During parsing, maps are converted to objects using one of these static methods or constructors.				
 				</td>
 				<td>&nbsp;</td>
@@ -6919,7 +6919,7 @@
 				Added {@link org.apache.juneau.transforms.XMLGregorianCalendarSwap} to convert these to ISO8601 strings during serialization, and vice versa during parsing.
 			</li>
 			<li>
-				Added a {@link org.apache.juneau.json.JsonParserContext#JSON_strictMode strict} mode to {@link org.apache.juneau.json.JsonParser}.
+				Added a strict mode to {@link org.apache.juneau.json.JsonParser}.
 			</li>
 			<li>
 				Added default {@link org.apache.juneau.json.JsonParser#DEFAULT_STRICT} parser.
