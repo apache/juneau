@@ -792,7 +792,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * All methods on this class annotated with {@link Remoteable @Remotable}, or all public methods if class is annotated.
-	 * Keys are method signatures (see {@link ClassUtils#getMethodSignature(Method)})
+	 * Keys are method signatures.
 	 *
 	 * @return All remoteable methods on this class.
 	 */
@@ -802,7 +802,7 @@ public final class ClassMeta<T> implements Type {
 
 	/**
 	 * All public methods on this class including static methods.
-	 * Keys are method signatures (see {@link ClassUtils#getMethodSignature(Method)}).
+	 * Keys are method signatures.
 	 *
 	 * @return The public methods on this class.
 	 */

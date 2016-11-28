@@ -778,7 +778,7 @@ public final class ContextFactory extends Lockable {
 	 * Hashcode generator that treats strings and primitive values the same.
 	 * (e.g. <code>123</code> and <js>"123"</js> result in the same hashcode.)
 	 */
-	protected static class NormalizingHashCode extends HashCode {
+	private static class NormalizingHashCode extends HashCode {
 		@Override /* HashCode */
 		protected Object unswap(Object o) {
 			return ContextFactory.unswap(o);
