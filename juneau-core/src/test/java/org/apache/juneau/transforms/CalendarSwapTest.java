@@ -42,6 +42,19 @@ public class CalendarSwapTest {
 		testDate.set(1901, 2, 3, 10, 11, 12);
 	}
 
+	private Locale systemLocale;  // Tests are locale-sensitive.  Must use US locale.
+
+	@Before
+	public void beforeTest() {
+		systemLocale = Locale.getDefault();
+		Locale.setDefault(Locale.US);
+	}
+
+	@After
+	public void afterTest() {
+		Locale.setDefault(systemLocale);
+	}
+
 	private RdfSerializer getRdfSerializer() {
 		return new RdfSerializer()
 			.setProperty(SERIALIZER_quoteChar, '\'')

@@ -22,6 +22,19 @@ import org.junit.*;
 @SuppressWarnings({"unchecked","rawtypes","javadoc"})
 public class DataConversionTest {
 
+	private Locale systemLocale;  // Tests are locale-sensitive.  Must use US locale.
+
+	@Before
+	public void beforeTest() {
+		systemLocale = Locale.getDefault();
+		Locale.setDefault(Locale.US);
+	}
+
+	@After
+	public void afterTest() {
+		Locale.setDefault(systemLocale);
+	}
+
 	//====================================================================================================
 	// testBasic
 	//====================================================================================================
