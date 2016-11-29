@@ -98,7 +98,7 @@
 		<module>juneau-samples</module>
 		<module>juneau-server-test</module>
 		<module>juneau-all</module>
-		<!--  module>juneau-distrib</module-->
+		<module>juneau-distrib</module>
 	</modules>
 
 	<distributionManagement>
@@ -132,118 +132,6 @@
 						<goals>
 							<goal>check</goal>
 						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>copy</id>
-						<phase>package</phase>
-						<goals>
-							<goal>copy</goal>
-						</goals>
-						<configuration>
-							<artifactItems>
-								
-								<artifactItem>
-									<outputDirectory>${project.build.directory}/bin</outputDirectory>
-									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-all</artifactId>
-									<version>${project.version}</version>
-								</artifactItem>
-								
-								<artifactItem>
-									<outputDirectory>${project.build.directory}/src/osgi-bundles</outputDirectory>
-									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-core</artifactId>
-									<version>${project.version}</version>
-									<type>jar</type>
-									<classifier>sources</classifier>
-								</artifactItem>
-								<artifactItem>
-									<outputDirectory>${project.build.directory}/bin/osgi-bundles</outputDirectory>
-									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-core</artifactId>
-									<version>${project.version}</version>
-								</artifactItem>
-								
-								<artifactItem>
-									<outputDirectory>${project.build.directory}/src/osgi-bundles</outputDirectory>
-									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-server</artifactId>
-									<version>${project.version}</version>
-									<type>jar</type>
-									<classifier>sources</classifier>
-								</artifactItem>
-								<artifactItem>
-									<outputDirectory>${project.build.directory}/bin/osgi-bundles</outputDirectory>
-									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-server</artifactId>
-									<version>${project.version}</version>
-								</artifactItem>
-								
-								<artifactItem>
-									<outputDirectory>${project.build.directory}/src/osgi-bundles</outputDirectory>
-									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-client</artifactId>
-									<version>${project.version}</version>
-									<type>jar</type>
-									<classifier>sources</classifier>
-								</artifactItem>
-								<artifactItem>
-									<outputDirectory>${project.build.directory}/bin/osgi-bundles</outputDirectory>
-									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-client</artifactId>
-									<version>${project.version}</version>
-								</artifactItem>
-								
-								<artifactItem>
-									<outputDirectory>${project.build.directory}/src/osgi-bundles</outputDirectory>
-									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-microservice</artifactId>
-									<version>${project.version}</version>
-									<type>jar</type>
-									<classifier>sources</classifier>
-								</artifactItem>
-								<artifactItem>
-									<outputDirectory>${project.build.directory}/bin/osgi-bundles</outputDirectory>
-									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-microservice</artifactId>
-									<version>${project.version}</version>
-								</artifactItem>
-								
-								<artifactItem>
-									<outputDirectory>${project.build.directory}/src</outputDirectory>
-									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-samples</artifactId>
-									<version>${project.version}</version>
-									<type>jar</type>
-									<classifier>sources</classifier>
-								</artifactItem>
-							</artifactItems>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>juneau-assembly</id>
-						<phase>package</phase>
-						<goals>
-							<goal>single</goal>
-						</goals>
-						<configuration>
-							<descriptors>
-								<descriptor>src.xml</descriptor>
-								<descriptor>bin.xml</descriptor>
-							</descriptors>
-						</configuration>
 					</execution>
 				</executions>
 			</plugin>

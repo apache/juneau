@@ -28,7 +28,7 @@
 				<include>**</include>
 			</includes>
 			<directory>target/bin</directory>
-			<outputDirectory>/</outputDirectory>
+			<outputDirectory></outputDirectory>
 		</fileSet>
 		<fileSet>
 			<includes>
@@ -38,7 +38,7 @@
 				<include>RELEASE-NOTES.txt</include>
 			</includes>
 			<directory>..</directory>
-			<outputDirectory>/</outputDirectory>
+			<outputDirectory></outputDirectory>
 		</fileSet>
 	</fileSets>
 </assembly>
