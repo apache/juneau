@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.server.test;
 
+import java.util.*;
+
 import org.apache.juneau.microservice.*;
 import org.junit.*;
 import org.junit.runner.*;
@@ -67,6 +69,7 @@ public class _TestSuite {
 	@BeforeClass
 	public static void setUp() {
 		try {
+			Locale.setDefault(Locale.US);
 			microservice = new RestMicroservice()
 				.setConfig("juneau-server-test.cfg", false)
 				.setManifestContents(
