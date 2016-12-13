@@ -27,11 +27,9 @@ import org.apache.juneau.transform.*;
 /**
  * Parses any valid JSON text into a POJO model.
  *
- *
  * <h6 class='topic'>Media types</h6>
  * <p>
  * 	Handles <code>Content-Type</code> types: <code>application/json, text/json</code>
- *
  *
  * <h6 class='topic'>Description</h6>
  * <p>
@@ -78,16 +76,12 @@ import org.apache.juneau.transform.*;
  * 	TIP:  If you know you're parsing a JSON object or array, it can be easier to parse it using the {@link ObjectMap#ObjectMap(CharSequence) ObjectMap(CharSequence)}
  * 		or {@link ObjectList#ObjectList(CharSequence) ObjectList(CharSequence)} constructors instead of using this class.  The end result should be the same.
  *
- *
  * <h6 class='topic'>Configurable properties</h6>
  * <p>
  * 	This class has the following properties associated with it:
  * <ul>
  * 	<li>{@link JsonParserContext}
  * </ul>
- *
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })
 @Consumes("application/json,text/json")

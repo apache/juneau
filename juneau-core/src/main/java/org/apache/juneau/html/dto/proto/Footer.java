@@ -17,8 +17,6 @@ import org.apache.juneau.annotation.*;
 /**
  * DTO for an HTML <a href='https://www.w3.org/TR/html5/sections.html#the-footer-element'>&lt;footer&gt;</a> element.
  * <p>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @Bean(typeName="footer")
 public class Footer extends HtmlElement {

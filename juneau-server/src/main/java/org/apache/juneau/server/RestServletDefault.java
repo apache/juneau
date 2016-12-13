@@ -165,8 +165,6 @@ import org.apache.juneau.xml.*;
  * 	<li>Provides a default classpath entry "htdocs" by setting {@link RestResource#staticFiles() @RestResource.staticFiles()} to <js>"{htdocs:'htdocs'}"</js>.
  * 		This allows files inside the <code>[servletPackage].htdocs</code> package to be served up under the URL <code>/servletPath/htdocs</code>.
  * </ul>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @RestResource(
 	serializers={

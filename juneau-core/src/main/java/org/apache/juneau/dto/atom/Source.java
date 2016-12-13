@@ -41,8 +41,6 @@ import java.util.*;
  * <p>
  * 	Refer to {@link org.apache.juneau.dto.atom} for further information about ATOM support.
  * </p>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class Source extends CommonEntry {
 

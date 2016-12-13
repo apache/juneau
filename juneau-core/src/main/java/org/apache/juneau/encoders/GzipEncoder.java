@@ -17,8 +17,6 @@ import java.util.zip.*;
 
 /**
  * Encoder for handling <js>"gzip"</js> encoding and decoding.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class GzipEncoder extends Encoder {
 

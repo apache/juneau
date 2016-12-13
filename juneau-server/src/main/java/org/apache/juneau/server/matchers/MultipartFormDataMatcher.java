@@ -16,8 +16,6 @@ import org.apache.juneau.server.*;
 
 /**
  * Predefined matcher for matching requests with content type <js>"multipart/form-data"</js>.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class MultipartFormDataMatcher extends RestMatcher {
 	@Override /* RestMatcher */

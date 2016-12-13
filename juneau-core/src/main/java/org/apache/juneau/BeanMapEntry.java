@@ -39,8 +39,6 @@ import org.apache.juneau.transform.*;
  * 	<jc>// Or if the DateSwap.DEFAULT_ISO8601DT is registered with the bean context, set a transformed value</jc>
  * 	birthDate.setValue(<js>"'1901-03-03T04:05:06-5000'"</js>);
  * </p>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class BeanMapEntry implements Map.Entry<String,Object> {
 	private final BeanMap<?> beanMap;

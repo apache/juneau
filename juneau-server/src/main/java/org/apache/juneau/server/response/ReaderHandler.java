@@ -24,8 +24,6 @@ import org.apache.juneau.utils.*;
  * <p>
  * This handler is registered by default on {@link RestServlet RestServlets} via the
  * 	default implementation of the {@link RestServlet#createResponseHandlers} method.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class ReaderHandler implements ResponseHandler {
 

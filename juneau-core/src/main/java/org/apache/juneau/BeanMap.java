@@ -24,14 +24,12 @@ import org.apache.juneau.xml.annotation.*;
 /**
  * Java bean wrapper class.
  *
- *
  * <h6 class='topic'>Description</h6>
  * <p>
  * 	A wrapper that wraps Java bean instances inside of a {@link Map} interface that allows
  * 	properties on the wrapped object can be accessed using the {@link Map#get(Object) get()} and {@link Map#put(Object,Object) put()} methods.
  * <p>
  * 	Use the {@link BeanContext} class to create instances of this class.
- *
  *
  * <h6 class='topic'>Bean property order</h6>
  * <p>
@@ -44,15 +42,12 @@ import org.apache.juneau.xml.annotation.*;
  * 	<br>
  * 	The order can also be overridden through the use of a {@link BeanFilter}.
  *
- *
  * <h6 class='topic'>POJO swaps</h6>
  * <p>
  * 	If {@link PojoSwap PojoSwaps} are defined on the class types of the properties of this bean or the bean properties themselves, the
  * 	{@link #get(Object)} and {@link #put(String, Object)} methods will automatically
  * 	transform the property value to and from the serialized form.
  *
- * @author Barry M. Caceres
- * @author James Bognar (james.bognar@salesforce.com)
  * @param <T> Specifies the type of object that this map encapsulates.
  */
 public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T> {

@@ -26,8 +26,6 @@ import org.apache.juneau.server.*;
  * 	<jc>// ...use this simpler equivalent...</jc>
  * 	<jk>new</jk> ResourceLink(uri, <js>"httpTool"</js>, <js>"HTTP request test client"</js>);
  * </p>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class ResourceDescription extends NameDescription implements Comparable<ResourceDescription> {
 

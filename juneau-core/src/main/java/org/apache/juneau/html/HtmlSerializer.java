@@ -28,13 +28,11 @@ import org.apache.juneau.xml.annotation.*;
 /**
  * Serializes POJO models to HTML.
  *
- *
  * <h6 class='topic'>Media types</h6>
  * <p>
  * 	Handles <code>Accept</code> types: <code>text/html</code>
  * <p>
  * 	Produces <code>Content-Type</code> types: <code>text/html</code>
- *
  *
  * <h6 class='topic'>Description</h6>
  * <p>
@@ -51,14 +49,12 @@ import org.apache.juneau.xml.annotation.*;
  * <p>
  * 	The {@link HtmlLink} annotation can be used on beans to add hyperlinks to the output.
  *
- *
  * <h6 class='topic'>Configurable properties</h6>
  * <p>
  * 	This class has the following properties associated with it:
  * <ul class='spaced-list'>
  * 	<li>{@link HtmlSerializerContext}
  * </ul>
- *
  *
  * <h6 class='topic'>Behavior-specific subclasses</h6>
  * <p>
@@ -129,9 +125,6 @@ import org.apache.juneau.xml.annotation.*;
  * 		m.put(<js>"someSubMap"</js>, new ObjectMap(<js>"{a:'b'}"</js>));
  * 		String html = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(m);
  * </p>
- *
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @Produces("text/html")
 @SuppressWarnings("hiding")

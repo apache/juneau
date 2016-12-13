@@ -15,8 +15,6 @@ package org.apache.juneau.server.annotation;
 /**
  * Inheritance values for the {@link RestMethod#serializersInherit()} and {@link RestMethod#parsersInherit()}
  * 	annotations.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public enum Inherit {
 

@@ -25,20 +25,15 @@ import org.apache.juneau.transform.*;
 /**
  * Serializes POJO metadata to HTTP responses as JSON.
  *
- *
  * <h6 class='topic'>Media types</h6>
  * <p>
  * 	Handles <code>Accept</code> types: <code>application/json+schema, text/json+schema</code>
  * <p>
  * 	Produces <code>Content-Type</code> types: <code>application/json</code>
  *
- *
  * <h6 class='topic'>Description</h6>
  * <p>
  * 	Produces the JSON-schema for the JSON produced by the {@link JsonSerializer} class with the same properties.
- *
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @Produces(value="application/json+schema,text/json+schema",contentType="application/json")
 public final class JsonSchemaSerializer extends JsonSerializer {

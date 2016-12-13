@@ -33,8 +33,6 @@ import org.apache.juneau.server.*;
  * <p>
  * This handler is registered by default on {@link RestServlet RestServlets} via the
  * 	default implementation of the {@link RestServlet#createResponseHandlers} method.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class DefaultHandler implements ResponseHandler {
 

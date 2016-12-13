@@ -23,7 +23,6 @@ import java.util.*;
  * <p>
  * 	Note:  This class is NOT thread safe, and is intended for use on small lists.
  *
- * @author James Bognar (james.bognar@salesforce.com)
  * @param <T> Entry type.
  */
 public class IdentityList<T> extends LinkedList<T> {

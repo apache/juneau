@@ -17,8 +17,6 @@ import org.apache.juneau.annotation.*;
 /**
  * DTO for an HTML <a href='https://www.w3.org/TR/html5/grouping-content.html#the-ol-element'>&lt;ol&gt;</a> element.
  * <p>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @Bean(typeName="ol")
 public class Ol extends HtmlElement {

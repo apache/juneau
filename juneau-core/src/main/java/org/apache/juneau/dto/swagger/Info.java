@@ -35,8 +35,6 @@ import org.apache.juneau.annotation.*;
  * 		<js>"version"</js>: <js>"1.0.1"</js>
  * 	}
  * </p>
- *
- * @author james.bognar
  */
 @Bean(properties="title,description,termsOfService,contact,license,version")
 public class Info {

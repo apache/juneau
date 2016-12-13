@@ -19,8 +19,6 @@ import java.util.*;
 
 /**
  * Quick and dirty utilities for working with arrays.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class ArrayUtils {
 

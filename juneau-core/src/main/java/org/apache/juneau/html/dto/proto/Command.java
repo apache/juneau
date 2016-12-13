@@ -17,8 +17,6 @@ import org.apache.juneau.annotation.*;
 /**
  * DTO for an HTML <a href=''>&lt;command&gt;</a> element.
  * <p>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @Bean(typeName="command")
 public class Command extends HtmlElement {

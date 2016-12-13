@@ -25,8 +25,6 @@ import org.apache.juneau.transforms.*;
 
 /**
  * Wraps and extends the {@link java.util.logging.Logger} class to provide some additional convenience methods.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class JuneauLogger extends java.util.logging.Logger {
 

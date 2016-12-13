@@ -51,8 +51,6 @@ import org.apache.juneau.utils.*;
  * <ul>
  * 	<li><a class='doclink' href='package-summary.html#RestClient'>org.apache.juneau.client &gt; REST client API</a> for more information and code examples.
  * </ul>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class RestCall {
 
@@ -776,7 +774,6 @@ public final class RestCall {
 	/**
 	 * Convenience method when you want to parse into a Map&lt;K,V&gt; object.
 	 *
-	 *
 	 * <h6 class='topic'>Example:</h6>
 	 * <p class='bcode'>
 	 * 	Map&lt;String,MyBean&gt; m = client.doGet(url).getResponseMap(LinkedHashMap.<jk>class</jk>, String.<jk>class</jk>, MyBean.<jk>class</jk>);
@@ -804,7 +801,6 @@ public final class RestCall {
 
 	/**
 	 * Convenience method when you want to parse into a Collection&lt;E&gt; object.
-	 *
 	 *
 	 * <h6 class='topic'>Example:</h6>
 	 * <p class='bcode'>

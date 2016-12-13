@@ -17,8 +17,6 @@ import org.apache.juneau.annotation.*;
 /**
  * DTO for an HTML <a href='https://www.w3.org/TR/html5/grouping-content.html#the-ul-element'>&lt;ul&gt;</a> element.
  * <p>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @Bean(typeName="ul")
 public class Ul extends HtmlElement {

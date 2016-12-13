@@ -19,8 +19,6 @@ import java.lang.annotation.*;
 
 /**
  * Identifies the default RDF namespaces at the package level.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @Documented
 @Target(PACKAGE)

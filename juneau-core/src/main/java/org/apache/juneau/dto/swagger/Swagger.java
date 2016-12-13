@@ -18,8 +18,6 @@ import org.apache.juneau.annotation.*;
 
 /**
  * This is the root document object for the API specification.
- *
- * @author james.bognar
  */
 @Bean(properties="swagger,info,tags,externalDocs,basePath,schemes,consumes,produces,paths,definitions,parameters,responses,securityDefinitions,security")
 public class Swagger {

@@ -16,8 +16,6 @@ import org.apache.juneau.serializer.*;
 
 /**
  * Constants used by the {@link RdfSerializer} and {@link RdfParser} classes.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class Constants {
 

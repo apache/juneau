@@ -19,8 +19,6 @@ import org.apache.juneau.xml.annotation.*;
 
 /**
  * DTO for an HTML <a href='https://www.w3.org/TR/html5/embedded-content-0.html#the-img-element'>&lt;img&gt;</a> element.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @Bean(typeName="img")
 public class Img extends HtmlElement {

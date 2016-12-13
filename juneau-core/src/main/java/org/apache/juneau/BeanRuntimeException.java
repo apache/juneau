@@ -14,8 +14,6 @@ package org.apache.juneau;
 
 /**
  * General bean runtime operation exception.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class BeanRuntimeException extends FormattedRuntimeException {
 

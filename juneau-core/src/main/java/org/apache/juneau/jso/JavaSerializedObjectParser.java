@@ -21,13 +21,9 @@ import org.apache.juneau.parser.*;
 /**
  * Parses POJOs from HTTP responses as Java {@link ObjectInputStream ObjectInputStreams}.
  *
- *
  * <h6 class='topic'>Media types</h6>
  * <p>
  * 	Consumes <code>Content-Type</code> types: <code>application/x-java-serialized-object</code>
- *
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @Consumes("application/x-java-serialized-object")
 public final class JavaSerializedObjectParser extends InputStreamParser {

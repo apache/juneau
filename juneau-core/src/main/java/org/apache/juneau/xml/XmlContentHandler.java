@@ -90,9 +90,7 @@ import org.apache.juneau.xml.annotation.*;
  * 	<li>The {@link Xml#contentHandler()} annotation can only be specified on a bean class, or a bean property
  * 		of format {@link XmlFormat#CONTENT}.
  * </ul>
- *
- *
- * @author James Bognar (james.bognar@salesforce.com)
+ * 
  * @param <T> The class type of the bean
  */
 public interface XmlContentHandler<T> {

@@ -87,8 +87,6 @@ import org.apache.juneau.utils.*;
  * <ul class='spaced-list'>
  * 	<li>{@link #createVarResolver()} - Creates the {@link VarResolver} used to resolve variables in the config file returned by {@link #getConfig()}.
  * </ul>
- *
- * @author james.bognar@salesforce.com
  */
 public abstract class Microservice {
 

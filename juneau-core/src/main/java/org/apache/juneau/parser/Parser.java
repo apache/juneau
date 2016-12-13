@@ -29,13 +29,11 @@ import org.apache.juneau.utils.*;
 /**
  * Parent class for all Juneau parsers.
  *
- *
  * <h6 class='topic'>@Consumes annotation</h6>
  * <p>
  * 	The media types that this parser can handle is specified through the {@link Consumes @Consumes} annotation.
  * <p>
  * 	However, the media types can also be specified programmatically by overriding the {@link #getMediaTypes()} method.
- *
  *
  * <a id='ValidDataConversions'></a><h6 class='topic'>Valid data conversions</h6>
  * 	Parsers can parse any parsable POJO types, as specified in the <a class='doclink' href='../package-summary.html#PojoCategories'>POJO Categories</a>.
@@ -114,7 +112,6 @@ import org.apache.juneau.utils.*;
  * 	<tr><td>string</td><td>{@link String}</td></tr>
  * </table>
  *
- *
  * <a id='SupportedTypes'></a><h6 class='topic'>Supported types</h6>
  * <p>
  * 	Several of the methods below take {@link Type} parameters to identify the type of
@@ -132,9 +129,6 @@ import org.apache.juneau.utils.*;
  * <p>
  * 	Passing in <jk>null</jk> or <code>Object.<jk>class</jk></code> typically signifies that it's up to the parser
  * 	to determine what object type is being parsed parsed based on the rules above.
-
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public abstract class Parser extends CoreApi {
 

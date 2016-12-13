@@ -27,8 +27,6 @@ import java.lang.annotation.*;
  * 	Applies to fields that should not be interpreted as bean property fields.
  * <p>
  * 	Applies to getters or setters that should not be interpreted as bean property getters or setters.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @Documented
 @Target({FIELD,METHOD,TYPE})

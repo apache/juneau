@@ -26,8 +26,6 @@ import org.apache.juneau.serializer.*;
  * Session object that lives for the duration of a single use of {@link XmlSerializer}.
  * <p>
  * This class is NOT thread safe.  It is meant to be discarded after one-time use.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @SuppressWarnings("hiding")
 public class XmlSerializerSession extends SerializerSession {

@@ -26,8 +26,6 @@ import org.apache.juneau.server.*;
  * Identifies a REST Java method on a {@link RestServlet} implementation class.
  * <p>
  *		Refer to {@link org.apache.juneau.server} doc for information on using this class.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @Documented
 @Target(METHOD)

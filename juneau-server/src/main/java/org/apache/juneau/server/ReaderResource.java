@@ -25,8 +25,6 @@ import org.apache.juneau.svl.*;
  * 	{@link Parameter} variables and adding HTTP response headers.
  * <p>
  * This class is handled special by the {@link WritableHandler} class.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class ReaderResource implements Writable {
 

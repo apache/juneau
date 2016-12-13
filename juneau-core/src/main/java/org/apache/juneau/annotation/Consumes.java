@@ -22,7 +22,6 @@ import org.apache.juneau.parser.*;
 /**
  * Annotation used on subclasses of {@link Parser} to identify the media types that it consumes.
  *
- *
  * <h6 class='topic'>Description</h6>
  * <p>
  * 	Provides a way to define the contents of {@link Parser#getMediaTypes()} through an annotation.
@@ -31,7 +30,6 @@ import org.apache.juneau.parser.*;
  * 		for this annotation.
  * 	It should be noted that this annotation is optional and that the {@link Parser#getMediaTypes()} method can
  * 		be overridden by subclasses to return the media types programmatically.
- *
  *
  * <h6 class='topic'>Example:</h6>
  * <p>
@@ -52,9 +50,6 @@ import org.apache.juneau.parser.*;
  * 	<ja>@Consumes</ja>(<js>"*\/*"</js>)
  * 	<jk>public class</jk> AnythingParser <jk>extends</jk> ReaderParser {...}
  * </p>
- *
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @Documented
 @Target(TYPE)

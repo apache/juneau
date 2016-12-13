@@ -26,8 +26,6 @@ import java.lang.annotation.*;
  * <ul class='spaced-list'>
  * 	<li>Wrap bean instances inside wrapper object (e.g. <code>{'wrapperAttr':bean}</code>).
  * </ul>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @Documented
 @Target({TYPE})

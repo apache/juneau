@@ -195,8 +195,6 @@ import org.apache.juneau.xml.*;
  *		Note that the list of serializers and parsers can be appended to using the {@link RestResource#serializers() @RestResource.serializers()}
  *			and {@link RestResource#parsers() @RestResource.parsers()} annotations on subclasses.
  * </p>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @RestResource(
 	serializers={
@@ -255,7 +253,6 @@ public abstract class RestServletJenaDefault extends RestServlet {
 	 *
 	 * @param req The HTTP request.
 	 * @return The bean containing the contents of the OPTIONS page.
-	 *
 	 */
 	@RestMethod(name="OPTIONS", path="/*",
 		properties={

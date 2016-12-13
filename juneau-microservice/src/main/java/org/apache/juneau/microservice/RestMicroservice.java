@@ -64,8 +64,6 @@ import org.eclipse.jetty.util.ssl.*;
  * 	<li>{@link #onStopServer()} - Gets executed before {@link #stop()}.
  * 	<li>{@link #onPostStopServer()} - Gets executed after {@link #stop()}.
  * </ul>
- *
- * @author james.bognar@salesforce.com
  */
 public class RestMicroservice extends Microservice {
 

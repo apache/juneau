@@ -14,7 +14,5 @@ package org.apache.juneau.annotation;
 
 /**
  * Represents a null entry in a class annotation.
- *
- * @author james.bognar
  */
 public class Null {}

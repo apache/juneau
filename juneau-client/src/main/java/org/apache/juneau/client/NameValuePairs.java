@@ -28,8 +28,6 @@ import org.apache.http.client.entity.*;
  * 		.append(<jk>new</jk> BasicNameValuePair(<js>"j_password"</js>, pw));
  * 	request.setEntity(<jk>new</jk> UrlEncodedFormEntity(params));
  * </p>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class NameValuePairs extends LinkedList<NameValuePair> {
 

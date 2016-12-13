@@ -14,8 +14,6 @@ package org.apache.juneau.internal;
 
 /**
  * Various utility methods.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class Utils {
 

@@ -37,7 +37,6 @@ import org.apache.juneau.parser.*;
  * <p>
  * See {@link ContextFactory} for more information about context properties.
  *
- *
  * <h6 class='topic' id='ConfigProperties'>Configurable properties on the XML parser</h6>
  * <table class='styled' style='border-collapse: collapse;'>
  * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th></tr>
@@ -104,9 +103,6 @@ import org.apache.juneau.parser.*;
  * 		<li class='c'><a class='doclink' href='../parser/ParserContext.html#ConfigProperties'>ParserContext</a> - Configurable properties common to all parsers.
  * 	</ul>
  * </ul>
- *
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class XmlParserContext extends ParserContext {
 
@@ -244,7 +240,6 @@ public final class XmlParserContext extends ParserContext {
 	 *			<td><code>{ root: { a:<js>'foobar'</js> }}</code></td>
 	 *		</tr>
 	 *	</table>
-	 *
 	 */
 	public static final String XML_preserveRootElement = "XmlParser.preserveRootElement";
 

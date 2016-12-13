@@ -36,8 +36,6 @@ import org.apache.juneau.transform.*;
  * </ul>
  * <p>
  * This class is NOT thread safe.  It is meant to be discarded after one-time use.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class SerializerSession extends Session {
 

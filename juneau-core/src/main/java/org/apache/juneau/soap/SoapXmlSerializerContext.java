@@ -34,8 +34,6 @@ package org.apache.juneau.soap;
  * 		<li class='c'><a class='doclink' href='../serializer/SerializerContext.html#ConfigProperties'>SerializerContext</a> - Configurable properties common to all serializers.
  * 	</ul>
  * </ul>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class SoapXmlSerializerContext {
 

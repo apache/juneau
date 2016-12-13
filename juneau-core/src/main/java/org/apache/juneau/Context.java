@@ -23,7 +23,6 @@ package org.apache.juneau;
  * 	It should NOT be used for storing temporary or state information.
  *
  * @see ContextFactory
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public abstract class Context {
 

@@ -54,7 +54,6 @@ import org.apache.juneau.urlencoding.*;
 /**
  * Utility class for interfacing with remote REST interfaces.
  *
- *
  * <h6 class='topic'>Features</h6>
  * <ul class='spaced-list'>
  * 	<li>Convert POJOs directly to HTTP request message bodies using {@link Serializer} class.
@@ -64,13 +63,10 @@ import org.apache.juneau.urlencoding.*;
  * 	<li>API for interacting with remoteable services.
  * </ul>
  *
- *
  * <h6 class='topic'>Additional Information</h6>
  * <ul>
  * 	<li><a class='doclink' href='package-summary.html#RestClient'>org.apache.juneau.client &gt; REST client API</a> for more information and code examples.
  * </ul>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class RestClient extends CoreApi {
 

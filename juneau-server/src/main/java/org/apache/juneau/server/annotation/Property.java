@@ -44,8 +44,6 @@ import org.apache.juneau.xml.*;
  * 		correct type (e.g. <code>Boolean</code>, etc...).
  * <p>
  * 	See {@link RestResource#properties} for more information.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @Documented
 @Target(ANNOTATION_TYPE)

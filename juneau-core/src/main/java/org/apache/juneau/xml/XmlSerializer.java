@@ -29,13 +29,11 @@ import org.apache.juneau.xml.annotation.*;
 /**
  * Serializes POJO models to XML.
  *
- *
  * <h6 class='topic'>Media types</h6>
  * <p>
  * 	Handles <code>Accept</code> types: <code>text/xml</code>
  * <p>
  * 	Produces <code>Content-Type</code> types: <code>text/xml</code>
- *
  *
  * <h6 class='topic'>Description</h6>
  * <p>
@@ -106,7 +104,6 @@ import org.apache.juneau.xml.annotation.*;
  * <p>
  * 	If an attribute name contains any non-valid XML element characters, they will be escaped using standard {@code _x####_} notation.
  *
- *
  * <h6 class='topic'>Configurable properties</h6>
  * <p>
  * 	This class has the following properties associated with it:
@@ -114,7 +111,6 @@ import org.apache.juneau.xml.annotation.*;
  * 	<li>{@link XmlSerializerContext}
  * 	<li>{@link BeanContext}
  * </ul>
- *
  *
  * <h6 class='topic'>Behavior-specific subclasses</h6>
  * <p>
@@ -125,9 +121,6 @@ import org.apache.juneau.xml.annotation.*;
  * 	<li>{@link XmlJson} - Default serializer with JSON attribute tags.
  * 	<li>{@link XmlJsonSq} - Default serializer with JSON attribute tags, single quotes.
  * </ul>
- *
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })
 @Produces("text/xml")

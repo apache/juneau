@@ -17,8 +17,6 @@ import org.apache.juneau.annotation.*;
 /**
  * DTO for an HTML <a href='https://www.w3.org/TR/html5/text-level-semantics.html#the-i-element'>&lt;i&gt;</a> element.
  * <p>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @Bean(typeName="i")
 public class I extends HtmlElement {

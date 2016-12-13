@@ -42,8 +42,6 @@ import org.apache.juneau.*;
  *
  * <h6 class='topic'>Additional information</h6>
  * 	See {@link org.apache.juneau.transform} for more information.
- *
- * @author james.bognar
  */
 public abstract class BeanFilterBuilder {
 

@@ -18,7 +18,6 @@ import org.apache.juneau.internal.*;
 /**
  * Configurable properties common to all serializers.
  *
- *
  * <h6 class='topic' id='ConfigProperties'>Configurable properties common to all serializers</h6>
  * <table class='styled' style='border-collapse: collapse;'>
  * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th></tr>
@@ -119,9 +118,6 @@ import org.apache.juneau.internal.*;
  * 		<td><jk>false</jk></td>
  * 	</tr>
  * </table>
- *
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class SerializerContext extends Context {
 
@@ -335,7 +331,6 @@ public class SerializerContext extends Context {
 	 * (i.e. URIs not containing a schema and not starting with <js>'/'</js>).
 	 * (e.g. <js>"foo/bar"</js>)
 	 *
-	 *
 	 * <h6 class='topic'>Example:</h6>
 	 * <table class='styled'>
 	 *		<tr><th>SERIALIZER_relativeUriBase</th><th>URI</th><th>Serialized URI</th></tr>
@@ -370,7 +365,6 @@ public class SerializerContext extends Context {
 	 * Prepended to relative absolute-path URIs during serialization.
 	 * (i.e. URIs starting with <js>'/'</js>).
 	 * (e.g. <js>"/foo/bar"</js>)
-	 *
 	 *
 	 * <h6 class='topic'>Examples:</h6>
 	 * <table class='styled'>

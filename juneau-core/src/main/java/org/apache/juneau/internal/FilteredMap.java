@@ -21,7 +21,6 @@ import java.util.*;
  *
  * @param <K> The key class type.
  * @param <V> The value class type.
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class FilteredMap<K,V> extends AbstractMap<K,V> {
 

@@ -25,8 +25,6 @@ import org.apache.juneau.xml.annotation.*;
  * <p>
  * These are beans that when serialized using {@link HtmlSerializer} generate
  * valid HTML5 elements.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @org.apache.juneau.html.annotation.Html(asXml=true)
 @SuppressWarnings("hiding")

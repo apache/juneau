@@ -19,8 +19,6 @@ import org.apache.juneau.annotation.*;
  * <p>
  * 	In general, the simple name will be used as the XML prefix mapping unless
  * 	there are conflicts or prefix remappings in the serializer.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @Bean(sort=true)
 public final class Namespace implements Comparable<Namespace> {

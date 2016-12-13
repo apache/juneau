@@ -19,8 +19,6 @@ package org.apache.juneau.internal;
  * <p class='bcode'>
  * 	int hashCode = new HashCode().add("foobar").add(myobject).add(123).get();
  * </p>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class HashCode {
 

@@ -61,8 +61,6 @@ import org.apache.juneau.utils.*;
  * <p>
  * 	Refer to <a class='doclink' href='package-summary.html#TOC'>REST Servlet API</a> for information about using this class.
  * </p>
- *
- * @author jbognar
  */
 @SuppressWarnings("unchecked")
 public final class RestRequest extends HttpServletRequestWrapper {
@@ -1334,7 +1332,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 			<th><js>"a/b"</js></th>
 	 * 		</tr>
 	 * 	</table>
-	 *
 	 *
 	 * <h6 class='topic'>Example:</h6>
 	 * <p class='bcode'>

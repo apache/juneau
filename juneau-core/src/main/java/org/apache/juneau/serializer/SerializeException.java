@@ -20,8 +20,6 @@ import org.apache.juneau.json.*;
 
 /**
  * General exception thrown whenever an error occurs during serialization.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class SerializeException extends FormattedException {
 

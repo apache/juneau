@@ -56,8 +56,6 @@ import org.apache.juneau.*;
  * 		<li>{@link ObjectMap}
  * 		<li><code>Map&lt;String,Object&gt;</code>
  * 	</ul>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @Documented
 @Target(PARAMETER)

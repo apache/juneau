@@ -20,21 +20,17 @@ import org.apache.juneau.serializer.*;
 /**
  * Serializes POJOs to HTTP responses as XML.
  *
- *
  * <h6 class='topic'>Media types</h6>
  * <p>
  * 	Handles <code>Accept</code> types: <code>text/xml</code>
  * <p>
  * 	Produces <code>Content-Type</code> types: <code>text/xml</code>
  *
- *
  * <h6 class='topic'>Description</h6>
  * <p>
  * 	Same as {@link XmlSerializer}, except prepends <code><xt>&lt;?xml</xt> <xa>version</xa>=<xs>'1.0'</xs> <xa>encoding</xa>=<xs>'UTF-8'</xs><xt>?&gt;</xt></code> to the response
  * 	to make it a valid XML document.
  *
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class XmlDocSerializer extends XmlSerializer {
 

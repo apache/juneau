@@ -111,8 +111,6 @@ import org.apache.juneau.parser.*;
  * 	<jc>// Get map/bean with name attribute value of 'foo' from a list of items</jc>
  * 	Map m = pojoRest.getMap(<js>"/items/@name=foo"</js>);
  * </p>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @SuppressWarnings({"unchecked","rawtypes"})
 public final class PojoRest {

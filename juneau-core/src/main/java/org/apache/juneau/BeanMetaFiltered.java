@@ -21,7 +21,6 @@ import org.apache.juneau.annotation.*;
  * by a {@link BeanProperty#properties()} annotation.
  *
  * @param <T> The class type that this metadata applies to.
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class BeanMetaFiltered<T> extends BeanMeta<T> {
 

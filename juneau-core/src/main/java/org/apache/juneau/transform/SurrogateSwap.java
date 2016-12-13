@@ -119,7 +119,6 @@ import org.apache.juneau.serializer.*;
  * 	}
  * </p>
  *
- * @author James Bognar (james.bognar@salesforce.com)
  * @param <T> The class type that this transform applies to.
  * @param <F> The transformed class type.
  */

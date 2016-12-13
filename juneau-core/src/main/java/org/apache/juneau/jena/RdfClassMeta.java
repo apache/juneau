@@ -21,8 +21,6 @@ import org.apache.juneau.xml.*;
 
 /**
  * Metadata on classes specific to the RDF serializers and parsers pulled from the {@link Rdf @Rdf} annotation on the class.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class RdfClassMeta extends ClassMetaExtended {
 

@@ -14,9 +14,6 @@ package org.apache.juneau.client;
 
 /**
  * Enumeration of HTTP methods.
- * <p>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public enum HttpMethod {
 

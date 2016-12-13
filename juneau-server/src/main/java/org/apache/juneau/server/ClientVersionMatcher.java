@@ -19,8 +19,6 @@ import org.apache.juneau.server.annotation.*;
  * Specialized matcher for matching client versions.
  * <p>
  * See {@link RestResource#clientVersionHeader} and {@link RestMethod#clientVersion} for more info.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class ClientVersionMatcher extends RestMatcherReflecting {
 

@@ -17,8 +17,6 @@ import org.apache.juneau.annotation.*;
 /**
  * DTO for an HTML <a href='https://www.w3.org/TR/html5/tabular-data.html#the-table-element'>&lt;table&gt;</a> element.
  * <p>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @Bean(typeName="table")
 public class Table extends HtmlElement {

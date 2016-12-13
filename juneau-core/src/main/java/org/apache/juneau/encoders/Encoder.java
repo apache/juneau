@@ -17,15 +17,11 @@ import java.io.*;
 /**
  * Used for enabling decompression on requests and compression on responses, such as support for GZIP compression.
  *
- *
  * <h6 class='topic'>Description</h6>
  * <p>
  * 	Used to wrap input and output streams withing compression/decompression streams.
  * <p>
  * 	Encoders are registered with <code>RestServlets</code> through the <ja>@RestResource.encoders()</ja> annotation.
- *
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public abstract class Encoder {
 

@@ -30,8 +30,6 @@ import com.hp.hpl.jena.rdf.model.*;
  * Session object that lives for the duration of a single use of {@link RdfSerializer}.
  * <p>
  * This class is NOT thread safe.  It is meant to be discarded after one-time use.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class RdfSerializerSession extends SerializerSession {
 

@@ -25,13 +25,11 @@ import org.apache.juneau.transform.*;
 /**
  * Serializes POJO models to JSON.
  *
- *
  * <h6 class='topic'>Media types</h6>
  * <p>
  * 	Handles <code>Accept</code> types: <code>application/json, text/json</code>
  * <p>
  * 	Produces <code>Content-Type</code> types: <code>application/json</code>
- *
  *
  * <h6 class='topic'>Description</h6>
  * <p>
@@ -54,7 +52,6 @@ import org.apache.juneau.transform.*;
  * 	This serializer provides several serialization options.  Typically, one of the predefined DEFAULT serializers will be sufficient.
  * 	However, custom serializers can be constructed to fine-tune behavior.
  *
- *
  * <h6 class='topic'>Configurable properties</h6>
  * <p>
  * 	This class has the following properties associated with it:
@@ -63,7 +60,6 @@ import org.apache.juneau.transform.*;
  * 	<li>{@link SerializerContext}
  * 	<li>{@link BeanContext}
  * </ul>
- *
  *
  * <h6 class='topic'>Behavior-specific subclasses</h6>
  * <p>
@@ -90,9 +86,6 @@ import org.apache.juneau.transform.*;
  * 	<jc>// Serialize a POJO to JSON</jc>
  * 	String json = serializer.serialize(someObject);
  * </p>
- *
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @Produces("application/json,text/json")
 public class JsonSerializer extends WriterSerializer {

@@ -23,7 +23,6 @@ import org.apache.juneau.serializer.*;
 /**
  * Used to swap out non-serializable objects with serializable replacements during serialization, and vis-versa during parsing.
  *
- *
  * <h6 class='topic'>Description</h6>
  * <p>
  * 	<code>PojoSwaps</code> are used to extend the functionality of the serializers and parsers to be able to handle POJOs
@@ -48,7 +47,6 @@ import org.apache.juneau.serializer.*;
  * 	{@link Serializer Serializers} use swaps to convert objects of type T into objects of type S, and on calls to {@link BeanMap#get(Object)}.<br>
  * 	{@link Parser Parsers} use swaps to convert objects of type S into objects of type T, and on calls to {@link BeanMap#put(String,Object)}.
  *
- *
  * <h6 class='topic'>Swap Class Type {@code <S>}</h6>
  * <p>
  * 	The swapped object representation of an object must be an object type that the serializers can
@@ -63,11 +61,9 @@ import org.apache.juneau.serializer.*;
  * 		<li>An array of anything on this list.
  * 	</ul>
  *
- *
  * <h6 class='topic'>Normal Class Type {@code <T>}</h6>
  * <p>
  * 	The normal object representation of an object.<br>
- *
  *
  * <h6 class='topic'>One-way vs. Two-way Serialization</h6>
  * <p>
@@ -80,12 +76,9 @@ import org.apache.juneau.serializer.*;
  * 	in which case it's not possible to reparse it back into a {@code Date}, since there is no way for the {@code Parser} to
  * 	know it's a {@code Date} from just the JSON or XML text.
  *
- *
  * <h6 class='topic'>Additional information</h6>
  * 	See {@link org.apache.juneau.transform} for more information.
  *
- *
- * @author James Bognar (james.bognar@salesforce.com)
  * @param <T> The normal form of the class.
  * @param <S> The swapped form of the class.
  */

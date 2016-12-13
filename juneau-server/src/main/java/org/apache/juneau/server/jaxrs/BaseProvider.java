@@ -30,8 +30,6 @@ import org.apache.juneau.server.annotation.*;
 
 /**
  * Base class for defining JAX-RS providers based on Juneau serializers and parsers.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWriter<Object> {
 

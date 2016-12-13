@@ -18,8 +18,6 @@ import java.util.*;
  * Represents a list of {@link JsonType} objects.
  * <p>
  * 	Refer to {@link org.apache.juneau.dto.jsonschema} for usage information.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class JsonTypeArray extends LinkedList<JsonType> {
 

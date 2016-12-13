@@ -18,9 +18,6 @@ import java.util.concurrent.*;
 
 /**
  * A utility class for caching byte arrays in memory so that duplicate arrays can be reused.
- * <p>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class ByteArrayCache {
 

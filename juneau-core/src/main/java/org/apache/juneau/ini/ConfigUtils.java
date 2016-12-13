@@ -14,8 +14,6 @@ package org.apache.juneau.ini;
 
 /**
  * Internal utility methods.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class ConfigUtils {
 

@@ -27,8 +27,6 @@ import org.apache.juneau.utils.*;
  * <p>
  * 	When encountered by the {@link HtmlSerializer} class, this object gets converted to a hyperlink.<br>
  * 	All other serializers simply convert it to a simple bean.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @HtmlLink(nameProperty = "name", hrefProperty = "href")
 public class Link implements Comparable<Link> {

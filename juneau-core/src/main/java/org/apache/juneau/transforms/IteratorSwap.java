@@ -20,8 +20,6 @@ import org.apache.juneau.transform.*;
  * Transforms {@link Iterator Iterators} to {@code List<Object>} objects.
  * <p>
  * 	This is a one-way transform, since {@code Iterators} cannot be reconstituted.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @SuppressWarnings({"unchecked","rawtypes"})
 public class IteratorSwap extends PojoSwap<Iterator,List> {

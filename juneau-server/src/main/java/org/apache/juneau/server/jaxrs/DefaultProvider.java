@@ -25,8 +25,6 @@ import org.apache.juneau.xml.*;
 
 /**
  * JAX-RS provider for the same serialize/parse support provided by the {@link RestServletDefault} class.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @Provider
 @Produces({

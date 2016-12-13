@@ -26,8 +26,6 @@ import org.apache.juneau.xml.annotation.*;
 
 /**
  * XML utility methods.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class XmlUtils {
 

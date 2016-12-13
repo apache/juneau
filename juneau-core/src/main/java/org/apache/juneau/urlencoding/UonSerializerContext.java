@@ -34,7 +34,6 @@ import org.apache.juneau.serializer.*;
  * <p>
  * See {@link ContextFactory} for more information about context properties.
  *
- *
  * <h6 class='topic' id='ConfigProperties'>Configurable properties on the URL-Encoding and UON serializers</h6>
  * <table class='styled' style='border-collapse: collapse;'>
  * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th></tr>
@@ -65,9 +64,6 @@ import org.apache.juneau.serializer.*;
  * 		<li class='c'><a class='doclink' href='../serializer/SerializerContext.html#ConfigProperties'>SerializerContext</a> - Configurable properties common to all serializers.
  * 	</ul>
  * </ul>
- *
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class UonSerializerContext extends SerializerContext {
 

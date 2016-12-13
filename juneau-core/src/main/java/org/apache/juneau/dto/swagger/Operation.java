@@ -76,8 +76,6 @@ import org.apache.juneau.annotation.*;
  * 		]
  * 	}
  * </p>
- *
- * @author james.bognar
  */
 @Bean(properties="operationId,summary,description,tags,externalDocs,consumes,produces,parameters,responses,schemes,deprecated,security")
 public class Operation {

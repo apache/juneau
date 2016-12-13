@@ -30,12 +30,10 @@ import com.hp.hpl.jena.util.iterator.*;
 /**
  * Parses RDF into POJOs.
  *
- *
  * <h6 class='topic'>Configurable properties</h6>
  * <p>
  * 	Refer to <a class='doclink' href='package-summary.html#ParserConfigurableProperties'>Configurable Properties</a>
  * 		for the entire list of configurable properties.
- *
  *
  * <h6 class='topic'>Behavior-specific subclasses</h6>
  * <p>
@@ -47,13 +45,9 @@ import com.hp.hpl.jena.util.iterator.*;
  * 	<li>{@link RdfParser.N3} - N3.
  * </ul>
  *
- *
  * <h6 class='topic'>Additional Information</h6>
  * <p>
  * 	See <a class='doclink' href='package-summary.html#TOC'>RDF Overview</a> for an overview of RDF support in Juneau.
- *
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @Consumes(value="text/xml+rdf")
 public class RdfParser extends ReaderParser {

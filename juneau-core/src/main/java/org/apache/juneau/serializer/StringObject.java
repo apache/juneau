@@ -28,8 +28,6 @@ import org.apache.juneau.*;
  * 	<jc>// The POJO will not be serialized unless DEBUG is enabled.</jc>
  * 	logger.log(<jsf>DEBUG</jsf>, <js>"Object contents are: {0}"</js>, JsonSerializer.<jsf>DEFAULT</jsf>.toObjectString(myPojo));
  * </p>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class StringObject implements CharSequence, Writable {
 

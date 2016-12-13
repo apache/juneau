@@ -40,7 +40,6 @@ import org.apache.juneau.*;
  * 	Several built-in runtime variable types are defined, and the API can be extended to include user-defined variables.
  * </p>
  *
- *
  * <h6 class='topic' id='ConfigProperties'>Configurable properties on the HTML document serializer</h6>
  * <table class='styled' style='border-collapse: collapse;'>
  * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th></tr>
@@ -92,9 +91,6 @@ import org.apache.juneau.*;
  * 		</ul>
  * 	</ul>
  * </ul>
- *
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 

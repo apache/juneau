@@ -25,8 +25,6 @@ import org.apache.juneau.internal.*;
  * <p>
  * Copies the contents of a {@link Manifest} into an {@link ObjectMap} so that the various
  * 	convenience methods on that class can be used to retrieve values.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class ManifestFile extends ObjectMap {
 

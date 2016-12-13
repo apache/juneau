@@ -19,8 +19,6 @@ import org.apache.juneau.server.*;
 
 /**
  * A simple link to a child of a parent resource.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class ResourceLink extends Link {
 

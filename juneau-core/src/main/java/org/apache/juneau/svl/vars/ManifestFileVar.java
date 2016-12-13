@@ -40,7 +40,6 @@ import org.apache.juneau.utils.*;
  *
  * @see org.apache.juneau.utils.ManifestFile
  * @see org.apache.juneau.svl
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class ManifestFileVar extends DefaultingVar {
 

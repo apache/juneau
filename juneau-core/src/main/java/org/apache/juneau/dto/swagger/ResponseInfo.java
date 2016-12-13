@@ -31,7 +31,6 @@ import org.apache.juneau.annotation.*;
  * 		}
  * 	}
  * </p>
- * @author james.bognar
  */
 @Bean(properties="description,schema,headers,examples")
 public class ResponseInfo {

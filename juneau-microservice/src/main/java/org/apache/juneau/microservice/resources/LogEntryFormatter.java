@@ -33,8 +33,6 @@ import org.apache.juneau.internal.*;
  * 	</ul>
  * <p>
  * 	This class converts the format strings into a regular expression that can be used to parse the resulting log file.
- *
- * @author jbognar
  */
 public class LogEntryFormatter extends Formatter {
 

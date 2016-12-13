@@ -97,8 +97,6 @@ import org.apache.juneau.utils.*;
  * <p>
  * 	This class is not thread safe.
  * </p>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class ObjectMap extends LinkedHashMap<String,Object> {
 	private static final long serialVersionUID = 1L;
@@ -1066,7 +1064,6 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * Converts this map into the class type specified by the <js>"_type"</js> entry value.
 	 * <p>
 	 * 	This method can be used to convert <code>ObjectMap</code> objects to a variety of POJO types.
-	 *
 	 *
 	 * <h6 class='topic'>Examples of valid class types:</h6>
 	 * <p>

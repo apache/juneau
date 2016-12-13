@@ -28,8 +28,6 @@ import org.apache.juneau.jena.*;
  * <ul class='spaced-list'>
  * 	<li>Override the default behavior of how collections and arrays are serialized.
  * </ul>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @Documented
 @Target({PACKAGE,TYPE,FIELD,METHOD})

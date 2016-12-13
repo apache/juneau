@@ -31,8 +31,6 @@ import org.apache.juneau.svl.vars.*;
  * <p>
  * This class overrides the {@link #getString(String, String)} to resolve string variables.
  * All other method calls are passed through to the inner config file.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class ConfigFileWrapped extends ConfigFile {
 

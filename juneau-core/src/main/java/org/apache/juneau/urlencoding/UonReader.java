@@ -26,8 +26,6 @@ import org.apache.juneau.parser.*;
  * 	<li><js>'&'</js> -&gt; <js>'\u0001'</js>
  * 	<li><js>'='</js> -&gt; <js>'\u0002'</js>
  * </ul>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class UonReader extends ParserReader {
 

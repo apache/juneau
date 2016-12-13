@@ -34,8 +34,6 @@ import org.apache.juneau.xml.*;
  * Optionally used to associate metadata on an instance of {@link RestServlet}.
  * <p>
  *		Refer to {@link org.apache.juneau.server} doc for information on using this class.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @Documented
 @Target(TYPE)
@@ -178,7 +176,6 @@ public @interface RestResource {
 	 * 	These can be used to enable various kinds of compression (e.g. <js>"gzip"</js>) on requests and responses.
 	 * <p>
 	 * 	This annotation can only be used on {@link Encoder} classes that have no-arg constructors.
-	 *
 	 *
 	 * <h6 class='topic'>Example:</h6>
 	 * <p class='bcode'>

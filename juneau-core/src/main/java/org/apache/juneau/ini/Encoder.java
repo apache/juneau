@@ -14,8 +14,6 @@ package org.apache.juneau.ini;
 
 /**
  * API for defining a string encoding/decoding mechanism for entries in {@link ConfigFile}.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public interface Encoder {
 

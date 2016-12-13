@@ -28,8 +28,6 @@ import org.apache.juneau.json.*;
  * 		<js>"minLength"</js>: 2
  * 	}
  * </p>
- *
- * @author james.bognar
  */
 @Bean(properties="type,format,items,collectionFormat,default,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,enum,multipleOf")
 public class Items {

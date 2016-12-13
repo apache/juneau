@@ -30,8 +30,6 @@ import org.apache.juneau.serializer.*;
  * <p>
  * 	This class is NOT thread safe.  It is meant to be discarded after one-time use.
  * </p>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class HtmlDocSerializerSession extends HtmlSerializerSession {
 

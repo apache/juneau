@@ -25,13 +25,11 @@ import org.apache.juneau.soap.*;
 /**
  * Parent class for all Juneau serializers.
  *
- *
  * <h6 class='topic'>Description</h6>
  * <p>
  * 	Base serializer class that serves as the parent class for all serializers.
  * <p>
  * 	Subclasses should extend directly from {@link OutputStreamSerializer} or {@link WriterSerializer}.
- *
  *
  * <h6 class='topic'>@Produces annotation</h6>
  * <p>
@@ -40,12 +38,9 @@ import org.apache.juneau.soap.*;
  * 	However, the media types can also be specified programmatically by overriding the {@link #getMediaTypes()}
  * 		and {@link #getResponseContentType()} methods.
  *
- *
  * <h6 class='topic'>Configurable properties</h6>
  * 	See {@link SerializerContext} for a list of configurable properties that can be set on this class
  * 	using the {@link #setProperty(String, Object)} method.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public abstract class Serializer extends CoreApi {
 

@@ -80,8 +80,6 @@ import org.apache.juneau.server.*;
  * <p>
  * The {@link HasQuery @HasQuery} annotation can be used to check for the existing of a URL parameter
  * 	in the URL string without triggering the servlet to drain the body content.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @Documented
 @Target(PARAMETER)

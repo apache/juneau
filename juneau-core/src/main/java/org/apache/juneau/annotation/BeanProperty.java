@@ -38,8 +38,6 @@ import org.apache.juneau.transform.*;
  * </ul>
  * <p>
  * 	This annotation is applied to public fields and public getter/setter methods of beans.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @Documented
 @Target({FIELD,METHOD})
@@ -68,7 +66,6 @@ public @interface BeanProperty {
 	 * 	cause an {@link InstantiationException} when trying to set these fields.
 	 * <p>
 	 * 	This property must denote a concrete bean class with a no-arg constructor.
-	 *
 	 *
 	 * <h6 class='topic'>Example:</h6>
 	 * <p class='bcode'>
@@ -131,7 +128,6 @@ public @interface BeanProperty {
 	 * 	<li>Bean/Map arrays - Same, but applied to each element in the array.
 	 * 	<li>Bean/Map collections - Same, but applied to each element in the collection.
 	 * </ul>
-	 *
 	 *
 	 * <h6 class='topic'>Example:</h6>
 	 * <p class='bcode'>

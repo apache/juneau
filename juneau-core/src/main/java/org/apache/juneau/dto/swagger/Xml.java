@@ -18,8 +18,6 @@ import org.apache.juneau.annotation.*;
  * A metadata object that allows for more fine-tuned XML model definitions.
  * <p>
  * When using arrays, XML element names are not inferred (for singular/plural forms) and the name property should be used to add that information.
- *
- * @author james.bognar
  */
 @Bean(properties="name,namespace,prefix,attribute,wrapped")
 public class Xml {

@@ -24,8 +24,6 @@ import org.apache.http.message.*;
  * <p class='bcode'>
  * 	Header h = <jk>new</jk> Header(name, DateUtils.<jsm>formatDate</jsm>(value));
  * </p>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class DateHeader extends BasicHeader {
 

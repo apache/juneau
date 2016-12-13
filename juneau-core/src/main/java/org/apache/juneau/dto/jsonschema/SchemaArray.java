@@ -18,8 +18,6 @@ import java.util.*;
  * Represents a list of {@link Schema} objects.
  * <p>
  * 	Refer to {@link org.apache.juneau.dto.jsonschema} for usage information.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class SchemaArray extends LinkedList<Schema> {
 

@@ -16,8 +16,6 @@ import java.text.*;
 
 /**
  * Subclass of runtime exceptions that take in a message and zero or more arguments.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class FormattedRuntimeException extends RuntimeException {
 

@@ -37,7 +37,6 @@ import java.io.*;
  * </ul>
  *
  * @see org.apache.juneau.svl
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public abstract class Var {
 

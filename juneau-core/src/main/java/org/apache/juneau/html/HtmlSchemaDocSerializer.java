@@ -32,7 +32,6 @@ import org.apache.juneau.transform.*;
  * <p>
  * 	Produces <code>Content-Type</code> types: <code>text/html</code>
  *
- *
  * <h6 class='topic'>Description</h6>
  * <p>
  * 	Essentially the same as {@link HtmlSerializer}, except serializes the POJO metamodel
@@ -42,8 +41,6 @@ import org.apache.juneau.transform.*;
  * <p>
  * 	The easiest way to create instances of this class is through the {@link HtmlSerializer#getSchemaSerializer()},
  * 		which will create a schema serializer with the same settings as the originating serializer.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @Produces(value="text/html+schema", contentType="text/html")
 public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {

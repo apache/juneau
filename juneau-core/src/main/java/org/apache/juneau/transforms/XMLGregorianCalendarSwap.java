@@ -25,8 +25,6 @@ import org.apache.juneau.transform.*;
  * 	Objects are converted to strings using {@link XMLGregorianCalendar#toXMLFormat()}.
  * <p>
  * 	Strings are converted to objects using {@link DatatypeFactory#newXMLGregorianCalendar(String)}.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class XMLGregorianCalendarSwap extends PojoSwap<XMLGregorianCalendar,String> {
 

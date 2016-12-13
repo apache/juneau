@@ -26,8 +26,6 @@ import org.apache.juneau.ini.*;
  * For example, the {@link Section} class cannot exist outside the scope of a parent
  * {@link ConfigFileImpl} class, so parsers will add a reference to the config file
  * using the {@link Section#setParent(ConfigFileImpl)} method.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @Target({METHOD})
 @Retention(RUNTIME)

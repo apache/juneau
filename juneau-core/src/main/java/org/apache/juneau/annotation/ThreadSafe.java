@@ -20,8 +20,6 @@ import java.lang.annotation.*;
  * Identifies a class as being thread-safe.
  * <p>
  * Used for documentation purposes only.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @Documented
 @Target(TYPE)

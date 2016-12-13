@@ -30,8 +30,6 @@ import org.apache.juneau.xml.*;
  * 	<li>Specify the XML namespace on a package, class, or method.
  * 	<li>Override the XML format on a POJO.
  * </ul>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @Documented
 @Target({TYPE,FIELD,METHOD})
@@ -43,7 +41,6 @@ public @interface Xml {
 	 * Sets the name of the XML child elements for bean properties of type collection and array.
 	 * <p>
 	 * 	Applies only to collection and array bean properties.
-	 *
 	 *
 	 * <h6 class='topic'>Example:</h6>
 	 * <p class='bcode'>

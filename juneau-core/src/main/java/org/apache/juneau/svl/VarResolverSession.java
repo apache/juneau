@@ -33,7 +33,6 @@ import org.apache.juneau.*;
  * Instances of this class are NOT guaranteed to be thread safe.
  *
  * @see org.apache.juneau.svl
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class VarResolverSession extends Session {
 

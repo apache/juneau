@@ -20,8 +20,6 @@ import java.lang.reflect.*;
  * 	Essentially the same as {@link RestMatcher} except has a constructor where the
  * 	Java method is passed in so that you can access annotations defined on it to tailor
  * 	the behavior of the matcher.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public abstract class RestMatcherReflecting extends RestMatcher {
 

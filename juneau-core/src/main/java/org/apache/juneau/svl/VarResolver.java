@@ -92,7 +92,6 @@ import org.apache.juneau.svl.vars.*;
  * </p>
  *
  * @see org.apache.juneau.svl
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class VarResolver extends CoreApi {
 

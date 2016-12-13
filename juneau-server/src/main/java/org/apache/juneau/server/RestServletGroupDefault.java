@@ -22,8 +22,6 @@ import org.apache.juneau.server.labels.*;
  * 	They're meant to be used as jumping-off points for child resources.
  * <p>
  * 	Child resources are specified using the {@link RestResource#children()} annotation.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @RestResource()
 public abstract class RestServletGroupDefault extends RestServletDefault {

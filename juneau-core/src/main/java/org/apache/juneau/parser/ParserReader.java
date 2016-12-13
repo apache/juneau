@@ -25,8 +25,6 @@ import org.apache.juneau.internal.*;
  * 	mark points and capture characters from the previous mark point.
  * <p>
  * 	<b>Warning:</b>  Not thread safe.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class ParserReader extends Reader {
 

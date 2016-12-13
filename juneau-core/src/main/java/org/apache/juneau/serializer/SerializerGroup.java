@@ -23,7 +23,6 @@ import org.apache.juneau.*;
 /**
  * Represents a group of {@link Serializer Serializers} that can be looked up by media type.
  *
- *
  * <h6 class='topic'>Description</h6>
  * <p>
  * 	Provides the following features:
@@ -34,7 +33,6 @@ import org.apache.juneau.*;
  * 	<li>Clones existing groups and all serializers within the group in a single method call.
  * </ul>
  *
- *
  * <h6 class='topic'>Match ordering</h6>
  * <p>
  * 	Serializers are matched against <code>Accept</code> strings in the order they exist in this group.
@@ -44,7 +42,6 @@ import org.apache.juneau.*;
  * <p>
  * 	For example, calling <code>g.append(S1.<jk>class</jk>,S2.<jk>class</jk>).append(S3.<jk>class</jk>,S4.<jk>class</jk>)</code>
  * 	will result in the order <code>S3, S4, S1, S2</code>.
- *
  *
  * <h6 class='topic'>Example:</h6>
  * <p class='bcode'>
@@ -67,8 +64,6 @@ import org.apache.juneau.*;
  * 	AddressBook addressBook = <jk>new</jk> AddressBook();  <jc>// Bean to serialize.</jc>
  * 	String json = s.serialize(addressBook);
  * </p>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class SerializerGroup extends Lockable {
 

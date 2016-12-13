@@ -26,8 +26,6 @@ import java.text.*;
  * 	<li>{@link HttpURLConnection#HTTP_NOT_FOUND HTTP_NOT_FOUND} - Attempting to access a non-existent node in the tree.
  * 	<li>{@link HttpURLConnection#HTTP_FORBIDDEN HTTP_FORBIDDEN} - Attempting to overwrite the root object.
  * </ul>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class PojoRestException extends RuntimeException {
 

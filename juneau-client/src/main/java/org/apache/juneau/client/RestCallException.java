@@ -25,8 +25,6 @@ import org.apache.juneau.internal.*;
 
 /**
  * Exception representing a <code>400+</code> HTTP response code against a remote resource.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class RestCallException extends IOException {
 

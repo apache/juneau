@@ -29,12 +29,9 @@ import org.apache.juneau.xml.*;
 /**
  * Annotations applicable to subclasses of {@link BaseProvider}.
  *
- *
  * <h6 class='topic'>Description</h6>
  * <p>
  * 	Used to associate serializers, parsers, filters, and properties with instances of {@link BaseProvider}.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @Documented
 @Target(TYPE)

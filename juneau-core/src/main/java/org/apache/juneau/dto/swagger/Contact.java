@@ -25,8 +25,6 @@ import org.apache.juneau.annotation.*;
  * 		<js>"email"</js>: <js>"support@swagger.io"</js>
  * 	}
  * </p>
- *
- * @author james.bognar
  */
 @Bean(properties="name,url,email")
 public class Contact {

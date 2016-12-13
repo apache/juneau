@@ -21,7 +21,6 @@ import org.apache.juneau.annotation.*;
 /**
  * Subclass of {@link Serializer} for character-based serializers.
  *
- *
  * <h6 class='topic'>Description</h6>
  * <p>
  * 	This class is typically the parent class of all character-based serializers.
@@ -31,15 +30,12 @@ import org.apache.juneau.annotation.*;
  * 	<li>{@link #doSerialize(SerializerSession, Object)}
  * </ul>
  *
- *
  * <h6 class='topic'>@Produces annotation</h6>
  * <p>
  * 	The media types that this serializer can produce is specified through the {@link Produces @Produces} annotation.
  * <p>
  * 	However, the media types can also be specified programmatically by overriding the {@link #getMediaTypes()}
  * 		and {@link #getResponseContentType()} methods.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public abstract class WriterSerializer extends Serializer {
 

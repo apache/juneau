@@ -18,7 +18,6 @@ import javax.servlet.*;
 
 /**
  * General exception thrown from {@link RestServlet} during construction or initialization.
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class RestServletException extends ServletException {
 

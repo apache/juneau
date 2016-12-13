@@ -36,7 +36,6 @@ import org.apache.juneau.parser.*;
  * 				Used by serializers and parsers to retrieve context properties and to be used as scratchpads.
  * 	</ul>
  *
- *
  * <h6 class='topic'>ContextFactory objects</h6>
  * <p>
  * 	Context factories can be thought of as consisting of the following:
@@ -192,7 +191,6 @@ import org.apache.juneau.parser.*;
  * <p>
  * 	As a general rule, only {@link Context} objects will use these read methods.
  *
- *
  * <h6 class='topic'>Context objects</h6>
  * <p>
  * 	A Context object can be thought of as unmodifiable snapshot of a factory.<br>
@@ -220,7 +218,6 @@ import org.apache.juneau.parser.*;
  * 	<jsm>assertFalse</jsm>(bc1 == bc2);
  * </p>
  *
- *
  * <h6 class='topic'>Session objects</h6>
  * <p>
  * 	Session objects are created through {@link Context} objects, typically through a <code>createContext()</code> method.<br>
@@ -230,9 +227,6 @@ import org.apache.juneau.parser.*;
  * <p>
  * 	Session objects are also often used as scratchpads for information such as keeping track of call stack
  * 	information to detect recursive loops when serializing beans.
- *
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class ContextFactory extends Lockable {
 
@@ -792,8 +786,6 @@ public final class ContextFactory extends Lockable {
 	 * <p>
 	 * 	The {@link PropertyMap#hashCode()} and {@link PropertyMap#equals(Object)} methods
 	 * 	can be used to compare with other property maps.
-	 *
-	 * @author James Bognar (james.bognar@salesforce.com)
 	 */
 	@SuppressWarnings("hiding")
 	public class PropertyMap {

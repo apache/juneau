@@ -20,7 +20,6 @@ import java.util.*;
  * Encapsulates multiple collections so they can be iterated over as if they
  * were all part of the same collection.
  *
- * @author James Bognar (james.bognar@salesforce.com)
  * @param <E> The object type of this set.
  */
 public class MultiSet<E> extends AbstractSet<E> {

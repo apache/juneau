@@ -18,8 +18,6 @@ import static org.apache.juneau.internal.StringUtils.*;
  * Represents a version string such as <js>"1.2"</js> or <js>"1.2.3"</js>
  * <p>
  * Used to compare version numbers.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class Version {
 

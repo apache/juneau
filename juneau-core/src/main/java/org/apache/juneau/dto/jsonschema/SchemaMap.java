@@ -26,8 +26,6 @@ import org.apache.juneau.json.*;
  * 	<li>{@link #getReader(URI)} - If schemas should be loaded from readers and automatically parsed.
  * 	<li>{@link #load(URI)} - If you want control over construction of {@link Schema} objects.
  * </ul>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public abstract class SchemaMap extends ConcurrentHashMap<URI,Schema> {
 

@@ -90,8 +90,6 @@ import org.apache.juneau.utils.*;
  * <p>
  * 	This class is not thread safe.
  * </p>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class ObjectList extends LinkedList<Object> {
 	private static final long serialVersionUID = 1L;

@@ -39,8 +39,6 @@ import org.apache.juneau.xml.annotation.*;
  * <p>
  * 	Refer to {@link org.apache.juneau.dto.atom} for further information about ATOM support.
  * </p>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @Bean(typeName="link")
 public class Link extends Common {

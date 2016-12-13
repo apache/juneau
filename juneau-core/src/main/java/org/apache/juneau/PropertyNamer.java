@@ -21,8 +21,6 @@ import org.apache.juneau.annotation.*;
  * 	property namer will convert this to <js>"foo-bar-url"</js>.
  * <p>
  * Property namers are associated with beans through the {@link Bean#propertyNamer} annotation.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public interface PropertyNamer {
 

@@ -26,7 +26,6 @@ import org.apache.juneau.internal.*;
  * See {@link ContextFactory} for more information about context properties.
  *
  * @see org.apache.juneau.svl
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class VarResolverContext extends Context {
 

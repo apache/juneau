@@ -15,8 +15,6 @@ package org.apache.juneau;
 /**
  * Represents a simple bean property value and the meta-data associated with it.
  * <p>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class BeanPropertyValue {
 

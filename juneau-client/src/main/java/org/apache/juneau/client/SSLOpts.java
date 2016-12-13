@@ -16,8 +16,6 @@ import org.apache.juneau.internal.*;
 
 /**
  * SSL configuration options that get passed to {@link RestClient#enableSSL(SSLOpts)}.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class SSLOpts {
 

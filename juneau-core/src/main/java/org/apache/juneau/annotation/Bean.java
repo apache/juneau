@@ -32,8 +32,6 @@ import org.apache.juneau.transform.*;
  * </ul>
  * <p>
  * 	This annotation can be applied to classes and interfaces.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @Documented
 @Target(TYPE)
@@ -52,7 +50,6 @@ public @interface Bean {
 	 * The name is used in combination with the bean dictionary defined through {@link BeanProperty#beanDictionary()} or {@link BeanContext#BEAN_beanDictionary}.  Together, they make up
 	 * 	a simple name/value mapping of names to classes.
 	 * Names do not need to be universally unique.  However, they must be unique within a dictionary.
-	 *
 	 *
 	 * <h6 class='topic'>Example:</h6>
 	 * <p class='bcode'>
@@ -100,7 +97,6 @@ public @interface Bean {
 	 * 	The order specified is the same order that the entries will be returned by the {@link BeanMap#entrySet()} and related methods.
 	 * <p>
 	 * 	This annotation is an alternative to using the {@link BeanFilter} class with an implemented {@link BeanFilter#getProperties()} method.
-	 *
 	 *
 	 * <h6 class='topic'>Example:</h6>
 	 * <p class='bcode'>

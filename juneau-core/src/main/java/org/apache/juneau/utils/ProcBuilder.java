@@ -24,8 +24,6 @@ import org.apache.juneau.utils.IOPipe.*;
  * Utility class for running operating system processes.
  * <p>
  * Similar to {@link java.lang.ProcessBuilder} but with additional features.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @SuppressWarnings("hiding")
 public class ProcBuilder {

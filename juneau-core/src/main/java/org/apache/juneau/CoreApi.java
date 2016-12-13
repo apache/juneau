@@ -23,8 +23,6 @@ package org.apache.juneau;
  * Provides several duplicate convenience methods from the {@link ContextFactory} class to set properties on that class from this class.
  * <p>
  * Also implements the {@link Lockable} interface to allow for easy locking and cloning.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public abstract class CoreApi extends Lockable {
 

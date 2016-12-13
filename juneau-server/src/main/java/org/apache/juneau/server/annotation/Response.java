@@ -34,8 +34,6 @@ import java.lang.annotation.*;
  * 		...
  * 	}
  * </p>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @Documented
 @Target(PARAMETER)

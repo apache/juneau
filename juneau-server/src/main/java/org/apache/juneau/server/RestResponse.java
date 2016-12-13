@@ -48,8 +48,6 @@ import org.apache.juneau.xml.*;
  * <p>
  * 	Refer to <a class='doclink' href='package-summary.html#TOC'>REST Servlet API</a> for information about using this class.
  * </p>
- *
- * @author jbognar
  */
 public final class RestResponse extends HttpServletResponseWrapper {
 

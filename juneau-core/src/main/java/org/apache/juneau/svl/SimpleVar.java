@@ -25,7 +25,6 @@ import java.io.*;
  * Subclasses must implement the {@link #resolve(VarResolverSession, String)} method.
  *
  * @see org.apache.juneau.svl
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public abstract class SimpleVar extends Var {
 

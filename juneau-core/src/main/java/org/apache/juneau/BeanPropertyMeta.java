@@ -38,8 +38,6 @@ import org.apache.juneau.utils.*;
  * <p>
  * 	Developers will typically not need access to this class.  The information provided by it is already
  * 	exposed through several methods on the {@link BeanMap} API.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class BeanPropertyMeta {

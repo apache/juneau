@@ -21,8 +21,6 @@ package org.apache.juneau.internal;
  * 	<li><js>"[0,1.0]"</js> = Less than or equal to 1.0.  Note that 1.0.1 will match.
  * 	<li><js>"1.0"</js> = At least 1.0.  1.0 and 2.0 will match.
  * </ul>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class VersionRange {
 

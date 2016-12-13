@@ -22,8 +22,6 @@ import org.apache.juneau.internal.*;
  * <p>
  * This class is a programmatic equivalent to the {@link BeanProperty#beanDictionary()} annotation and {@link BeanContext#BEAN_beanDictionary} property.
  * It allows bean dictionaries to be constructed
- *
- * @author james.bognar
  */
 public class BeanDictionaryBuilder {
 

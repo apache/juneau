@@ -20,8 +20,6 @@ import org.apache.juneau.transform.*;
 
 /**
  * Transforms {@link Calendar Calendars} to {@link Map Maps} of the format <code>{time:long,timeZone:string}</code>.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @SuppressWarnings("rawtypes")
 public class CalendarMapSwap extends PojoSwap<Calendar,Map> {

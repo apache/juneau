@@ -22,8 +22,6 @@ import org.apache.juneau.xml.*;
 
 /**
  * Metadata on bean properties specific to the RDF serializers and parsers pulled from the {@link Rdf @Rdf} annotation on the bean property.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class RdfBeanPropertyMeta extends BeanPropertyMetaExtended {
 

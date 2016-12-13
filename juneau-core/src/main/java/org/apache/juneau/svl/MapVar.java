@@ -18,7 +18,6 @@ import java.util.*;
  * A subclass of {@link DefaultingVar} that simply pulls values from a {@link Map}.
  *
  * @see org.apache.juneau.svl
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @SuppressWarnings("rawtypes")
 public abstract class MapVar extends DefaultingVar {

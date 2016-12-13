@@ -16,8 +16,6 @@ import java.text.*;
 
 /**
  * Various utility methods for creating and working with throwables.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class ThrowableUtils {
 

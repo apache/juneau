@@ -26,8 +26,6 @@ import org.apache.juneau.internal.*;
  * 	This class can be considered a programmatic equivalent to using the {@link Bean @Bean} annotation on bean classes.
  * 	Thus, it can be used to perform the same function as the <code>@Bean</code> annotation when you don't have
  * 		the ability to annotate those classes (e.g. you don't have access to the source code).
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class BeanFilter {
 

@@ -25,11 +25,9 @@ import org.apache.juneau.transform.*;
 /**
  * Parses a MessagePack stream into a POJO model.
  *
- *
  * <h6 class='topic'>Media types</h6>
  * <p>
  * 	Handles <code>Content-Type</code> types: <code>octal/msgpack</code>
- *
  *
  * <h6 class='topic'>Configurable properties</h6>
  * <p>
@@ -37,9 +35,6 @@ import org.apache.juneau.transform.*;
  * <ul>
  * 	<li>{@link MsgPackParserContext}
  * </ul>
- *
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })
 @Consumes("octal/msgpack")

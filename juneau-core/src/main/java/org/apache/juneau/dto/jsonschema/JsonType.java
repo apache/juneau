@@ -27,8 +27,6 @@ package org.apache.juneau.dto.jsonschema;
  *
  * <p>
  * 	Refer to {@link org.apache.juneau.dto.jsonschema} for usage information.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public enum JsonType {
 

@@ -21,8 +21,6 @@ import org.apache.juneau.json.*;
  * General invalid conversion exception.
  * <p>
  * 	Exception that gets thrown if you try to perform an invalid conversion, such as when calling {@code ObjectMap.getInt(...)} on a non-numeric <code>String</code>.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class InvalidDataConversionException extends RuntimeException {
 

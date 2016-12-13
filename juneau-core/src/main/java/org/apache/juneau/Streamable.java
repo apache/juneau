@@ -20,8 +20,6 @@ import java.io.*;
  * 	Instances must identify the media type of the content by implementing the
  * 	{@link #getMediaType()} method.
  * </p>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public interface Streamable {
 

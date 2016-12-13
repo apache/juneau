@@ -37,8 +37,6 @@ import org.apache.juneau.svl.vars.*;
  * 			String mainClass = request.getVarResolver().resolve(<js>"$MF{Main-Class}"</js>);  <jc>// Main class. </jc>
  * 		</p>
  * </ul>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @SuppressWarnings("serial")
 @RestResource(

@@ -23,8 +23,6 @@ import org.apache.juneau.server.response.*;
  * Represents the contents of a byte stream file with convenience methods for adding HTTP response headers.
  * <p>
  * This class is handled special by the {@link StreamableHandler} class.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class StreamResource implements Streamable {
 

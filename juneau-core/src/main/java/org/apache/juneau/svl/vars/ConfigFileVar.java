@@ -41,7 +41,6 @@ import org.apache.juneau.svl.*;
  *
  * @see org.apache.juneau.ini.ConfigFile
  * @see org.apache.juneau.svl
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class ConfigFileVar extends DefaultingVar {
 

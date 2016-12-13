@@ -21,7 +21,6 @@ import org.apache.juneau.xml.annotation.*;
 /**
  * Configurable properties common to both the {@link RdfSerializer} and {@link RdfParser} classes.
  *
- *
  * <h6 class='topic' id='ConfigProperties'>Configurable properties common to the RDF serializers and parsers</h6>
  * <table class='styled' style='border-collapse: collapse;'>
  * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th></tr>
@@ -212,9 +211,6 @@ import org.apache.juneau.xml.annotation.*;
  * 		<td><jk>false</jk></td>
  * 	</tr>
  * </table>
- *
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @SuppressWarnings("serial")
 public interface RdfCommonContext {

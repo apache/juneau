@@ -18,8 +18,6 @@ import org.apache.juneau.xml.*;
 
 /**
  * Specialized writer for serializing HTML.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class HtmlWriter extends XmlWriter {
 

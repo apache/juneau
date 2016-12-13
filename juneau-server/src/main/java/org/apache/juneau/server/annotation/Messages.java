@@ -42,8 +42,6 @@ import org.apache.juneau.utils.*;
  * 		<jk>return</jk> req.getMessage(<js>"myLocalizedMessage"</js>);
  * 	}
  * </p>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @Documented
 @Target(PARAMETER)

@@ -23,8 +23,6 @@ import org.apache.juneau.server.remoteable.*;
 
 /**
  * Class showing the functionality of the RemoteableServlet class.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @SuppressWarnings("serial")
 @RestResource(

@@ -22,18 +22,15 @@ import org.apache.juneau.xml.*;
 /**
  * Serializes POJOs to HTTP responses as XML+SOAP.
  *
- *
  * <h6 class='topic'>Media types</h6>
  * <p>
  * 	Handles <code>Accept</code> types: <code>text/xml+soap</code>
  * <p>
  * 	Produces <code>Content-Type</code> types: <code>text/xml+soap</code>
  *
- *
  * <h6 class='topic'>Description</h6>
  * <p>
  * 	Essentially the same output as {@link XmlDocSerializer}, except wrapped in a standard SOAP envelope.
- *
  *
  * <h6 class='topic'>Configurable properties</h6>
  * <p>
@@ -42,9 +39,6 @@ import org.apache.juneau.xml.*;
  * 	<li>{@link SoapXmlSerializerContext}
  * 	<li>{@link BeanContext}
  * </ul>
- *
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @Produces(value="text/xml+soap",contentType="text/xml")
 public final class SoapXmlSerializer extends XmlSerializer {

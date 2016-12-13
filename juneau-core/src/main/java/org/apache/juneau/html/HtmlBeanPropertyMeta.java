@@ -17,8 +17,6 @@ import org.apache.juneau.html.annotation.*;
 
 /**
  * Metadata on bean properties specific to the HTML serializers and parsers pulled from the {@link Html @Html} annotation on the bean property.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class HtmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 

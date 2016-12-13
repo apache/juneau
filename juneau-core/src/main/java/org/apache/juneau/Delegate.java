@@ -19,7 +19,6 @@ package org.apache.juneau;
  * <p>
  * 	For example, {@link BeanMap} is a map representation of a bean.
  *
- * @author James Bognar (james.bognar@salesforce.com)
  * @param <T> The represented class type.
  */
 public interface Delegate<T> {

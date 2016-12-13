@@ -20,8 +20,6 @@ import java.text.*;
  * 	REST methods on subclasses of {@link RestServlet} can throw
  * 	this exception to trigger an HTTP status other than the automatically-generated
  * 	<code>404</code>, <code>405</code>, and <code>500</code> statuses.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class RestException extends RuntimeException {
 

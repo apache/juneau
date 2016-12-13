@@ -76,8 +76,6 @@ import java.util.regex.*;
  * 		{@link ResponsePattern} objects are reusable and thread-safe.
  * 	</p>
  * </ol>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public abstract class ResponsePattern {
 

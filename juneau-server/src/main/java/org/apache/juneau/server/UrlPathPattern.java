@@ -24,8 +24,6 @@ import org.apache.juneau.server.annotation.*;
  * A parsed path pattern constructed from a {@link RestMethod#path()} value.
  * <p>
  * Handles aspects of matching and precedence ordering.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class UrlPathPattern implements Comparable<UrlPathPattern> {
 	private Pattern pattern;

@@ -61,8 +61,6 @@ import org.apache.juneau.utils.*;
  * <p>
  * 	Refer to <a class='doclink' href='package-summary.html#TOC'>REST Servlet API</a> for information about using this class.
  * </p>
- *
- * @author jbognar
  */
 @SuppressWarnings({"rawtypes","hiding"})
 public abstract class RestServlet extends HttpServlet {

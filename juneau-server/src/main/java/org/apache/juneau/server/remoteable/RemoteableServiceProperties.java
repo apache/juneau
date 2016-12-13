@@ -24,8 +24,6 @@ import org.apache.juneau.server.annotation.*;
  * These properties can also be passed in as servlet init parameters.
  * <p>
  * These properties are only valid at the class level, not the method level.  Setting them on {@link RestMethod#properties()} has no effect.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class RemoteableServiceProperties {
 

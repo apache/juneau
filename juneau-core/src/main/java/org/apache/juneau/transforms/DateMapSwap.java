@@ -20,8 +20,6 @@ import org.apache.juneau.transform.*;
 
 /**
  * Transforms {@link Date Dates} to {@link Map Maps} of the format <tt>{value:long}</tt>.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @SuppressWarnings("rawtypes")
 public class DateMapSwap extends PojoSwap<Date,Map> {

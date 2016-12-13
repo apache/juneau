@@ -25,7 +25,6 @@ import org.apache.juneau.transform.*;
 /**
  * Transforms {@link Calendar Calendars} to {@link String Strings}.
  *
- *
  * <h6 class='topic'>Behavior-specific subclasses</h6>
  * <p>
  * 	The following direct subclasses are provided for convenience:
@@ -39,9 +38,6 @@ import org.apache.juneau.transform.*;
  * 	<li>{@link Simple} - Transforms to simple <js>"yyyy/MM/dd HH:mm:ss"</js> strings.
  * 	<li>{@link Medium} - Transforms to {@link DateFormat#MEDIUM} strings.
  * </ul>
- *
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class CalendarSwap extends PojoSwap<Calendar,String> {
 

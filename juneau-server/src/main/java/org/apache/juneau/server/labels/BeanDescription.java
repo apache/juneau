@@ -22,8 +22,6 @@ import org.apache.juneau.annotation.*;
  * 	the fully-qualified class name and the properties associated with the class.
  * <p>
  * 	Useful for rendering simple information about a bean during REST OPTIONS requests.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @Bean(properties="type,properties")
 public final class BeanDescription {

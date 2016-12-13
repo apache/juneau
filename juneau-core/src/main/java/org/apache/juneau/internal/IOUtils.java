@@ -21,8 +21,6 @@ import org.apache.juneau.utils.*;
 
 /**
  * Various I/O related utility methods.
- *
- * @author jbognar
  */
 public final class IOUtils {
 

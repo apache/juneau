@@ -52,8 +52,6 @@ import org.apache.juneau.server.*;
  * <p>
  * 	The {@link Query @Query} annotation can be used to retrieve a URL parameter
  * 	in the URL string without triggering the servlet to drain the body content.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @Documented
 @Target(PARAMETER)

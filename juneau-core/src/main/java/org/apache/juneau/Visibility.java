@@ -25,8 +25,6 @@ import java.lang.reflect.*;
  * 	<li>{@link BeanContext#BEAN_beanFieldVisibility}
  * 	<li>{@link BeanContext#BEAN_methodVisibility}
  * </ul>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public enum Visibility {
 

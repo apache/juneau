@@ -20,8 +20,6 @@ import org.apache.juneau.transform.*;
  * Transforms {@link Enumeration Enumerations} to {@code List<Object>} objects.
  * <p>
  * 	This is a one-way transform, since {@code Enumerations} cannot be reconstituted.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @SuppressWarnings({"unchecked","rawtypes"})
 public class EnumerationSwap extends PojoSwap<Enumeration,List> {

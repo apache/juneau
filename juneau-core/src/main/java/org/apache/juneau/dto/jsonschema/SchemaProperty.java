@@ -16,8 +16,6 @@ package org.apache.juneau.dto.jsonschema;
  * Represents a JSON property in the JSON-Schema core specification.
  * <p>
  * 	Refer to {@link org.apache.juneau.dto.jsonschema} for usage information.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class SchemaProperty extends Schema {
 

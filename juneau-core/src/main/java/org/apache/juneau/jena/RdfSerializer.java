@@ -30,12 +30,10 @@ import com.hp.hpl.jena.rdf.model.*;
 /**
  * Serializes POJOs to RDF.
  *
- *
  * <h6 class='topic'>Configurable properties</h6>
  * <p>
  * 	Refer to <a class='doclink' href='package-summary.html#SerializerConfigurableProperties'>Configurable Properties</a>
  * 		for the entire list of configurable properties.
- *
  *
  * <h6 class='topic'>Behavior-specific subclasses</h6>
  * <p>
@@ -48,13 +46,9 @@ import com.hp.hpl.jena.rdf.model.*;
  * 	<li>{@link RdfSerializer.N3} - N3.
  * </ul>
  *
- *
  * <h6 class='topic'>Additional Information</h6>
  * <p>
  * 	See <a class='doclink' href='package-summary.html#TOC'>RDF Overview</a> for an overview of RDF support in Juneau.
- *
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })
 @Produces(value="text/xml+rdf+abbrev", contentType="text/xml+rdf")

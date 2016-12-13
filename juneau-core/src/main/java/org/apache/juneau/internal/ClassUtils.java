@@ -20,8 +20,6 @@ import org.apache.juneau.*;
 
 /**
  * Class-related utility methods.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class ClassUtils {
 
@@ -148,8 +146,6 @@ public final class ClassUtils {
 
 	/**
 	 * Comparator for use with {@link TreeMap TreeMaps} with {@link Class} keys.
-	 *
-	 * @author James Bognar (james.bognar@salesforce.com)
 	 */
 	public final static class ClassComparator implements Comparator<Class<?>>, Serializable {
 

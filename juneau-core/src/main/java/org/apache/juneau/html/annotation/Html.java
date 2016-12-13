@@ -22,8 +22,6 @@ import org.apache.juneau.html.*;
 /**
  * Annotation that can be applied to classes, fields, and methods to tweak how
  * they are handled by {@link HtmlSerializer}.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @Documented
 @Target({TYPE,FIELD,METHOD})

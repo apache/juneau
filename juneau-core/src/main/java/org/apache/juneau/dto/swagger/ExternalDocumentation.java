@@ -24,8 +24,6 @@ import org.apache.juneau.annotation.*;
  * 		<js>"url"</js>: <js>"https://swagger.io"</js>
  * 	}
  * </p>
- *
- * @author james.bognar
  */
 @Bean(properties="description,url")
 public class ExternalDocumentation {

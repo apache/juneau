@@ -23,7 +23,6 @@ import org.apache.juneau.transform.*;
 /**
  * Serializes POJO models to MessagePack.
  *
- *
  * <h6 class='topic'>Media types</h6>
  * <p>
  * 	Handles <code>Accept</code> types: <code>octal/msgpack</code>
@@ -38,8 +37,6 @@ import org.apache.juneau.transform.*;
  * 	<li>{@link SerializerContext}
  * 	<li>{@link BeanContext}
  * </ul>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @Produces("octal/msgpack")
 public class MsgPackSerializer extends OutputStreamSerializer {

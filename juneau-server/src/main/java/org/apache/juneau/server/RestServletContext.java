@@ -78,8 +78,6 @@ import org.apache.juneau.server.annotation.*;
  * 		<td><js>"UON"</js></td>
  * 	</tr>
  * </table>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class RestServletContext extends Context {
 

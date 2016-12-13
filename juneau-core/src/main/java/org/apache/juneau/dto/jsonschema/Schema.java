@@ -25,8 +25,6 @@ import org.apache.juneau.transform.*;
  * Represents a top-level schema object bean in the JSON-Schema core specification.
  * <p>
  * 	Refer to {@link org.apache.juneau.dto.jsonschema} for usage information.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @SuppressWarnings("hiding")
 @Bean(typeName="schema",

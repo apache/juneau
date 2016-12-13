@@ -18,8 +18,6 @@ import org.apache.juneau.internal.*;
  * Simply XOR+Base64 encoder for obscuring passwords and other sensitive data in INI config files.
  * <p>
  * This is not intended to be used as strong encryption.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class XorEncoder implements Encoder {
 

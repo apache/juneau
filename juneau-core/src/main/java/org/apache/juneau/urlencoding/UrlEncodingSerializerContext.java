@@ -32,8 +32,6 @@ import org.apache.juneau.*;
  * </ul>
  * <p>
  * See {@link ContextFactory} for more information about context properties.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class UrlEncodingSerializerContext extends UonSerializerContext {
 

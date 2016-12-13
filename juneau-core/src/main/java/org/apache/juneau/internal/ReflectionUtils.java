@@ -20,8 +20,6 @@ import java.util.*;
 
 /**
  * Reflection utilities.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class ReflectionUtils {
 

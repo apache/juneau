@@ -17,8 +17,6 @@ import org.apache.juneau.server.annotation.*;
 
 /**
  * Sample root REST resource.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @RestResource(
 	path="/",

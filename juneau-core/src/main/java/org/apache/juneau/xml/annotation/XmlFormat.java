@@ -14,8 +14,6 @@ package org.apache.juneau.xml.annotation;
 
 /**
  * XML format to use when serializing a POJO.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public enum XmlFormat {
 

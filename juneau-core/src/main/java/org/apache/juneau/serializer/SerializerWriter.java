@@ -27,8 +27,6 @@ import org.apache.juneau.internal.*;
  * <p class='bcode'>
  * 	writer.append(<js>"foo"</js>).nl().i(5).append(<js>"bar"</js>);
  * </p>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class SerializerWriter extends Writer {
 

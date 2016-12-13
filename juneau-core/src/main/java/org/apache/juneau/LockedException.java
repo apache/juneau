@@ -19,8 +19,6 @@ package org.apache.juneau;
  * Certain objects that are meant for reuse, such as serializers and parsers, provide
  * the ability to lock the current settings so that they cannot be later changed.
  * This exception indicates that a setting change was attempted on a previously locked object.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class LockedException extends RuntimeException {
 

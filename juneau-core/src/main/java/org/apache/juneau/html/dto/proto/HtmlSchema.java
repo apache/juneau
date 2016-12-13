@@ -15,8 +15,6 @@ package org.apache.juneau.html.dto.proto;
 /**
  * TODO
  * <p>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @SuppressWarnings("javadoc")
 public class HtmlSchema {

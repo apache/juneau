@@ -14,8 +14,6 @@ package org.apache.juneau.client;
 
 /**
  * Used to determine whether a request should be retried based on the HTTP response code.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public interface RetryOn {
 

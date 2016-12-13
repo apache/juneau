@@ -18,7 +18,6 @@ import org.apache.juneau.json.*;
 /**
  * Configurable properties common to all parsers.
  *
- *
  * <h6 class='topic' id='ConfigProperties'>Configurable properties common to all parsers</h6>
  * <table class='styled' style='border-collapse: collapse;'>
  * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th></tr>
@@ -35,9 +34,6 @@ import org.apache.juneau.json.*;
  * 		<td><jk>false</jk></td>
  * 	</tr>
  * </table>
- *
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class ParserContext extends Context {
 

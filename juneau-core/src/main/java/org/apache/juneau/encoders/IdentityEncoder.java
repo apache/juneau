@@ -16,8 +16,6 @@ import java.io.*;
 
 /**
  * Encoder for handling <js>"identity"</js> encoding and decoding (e.g. no encoding at all).
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class IdentityEncoder extends Encoder {
 

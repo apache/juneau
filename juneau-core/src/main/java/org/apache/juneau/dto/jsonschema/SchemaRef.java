@@ -22,8 +22,6 @@ import java.net.*;
  * <p class='bcode'>
  * 	Schema s = <jk>new</jk> Schema().setRef(uri);
  * </p>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class SchemaRef extends Schema {
 

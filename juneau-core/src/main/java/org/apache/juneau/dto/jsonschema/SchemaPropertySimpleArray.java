@@ -24,8 +24,6 @@ package org.apache.juneau.dto.jsonschema;
  * 			<jk>new</jk> Schema().setType(elementType)
  * 		);
  * </p>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class SchemaPropertySimpleArray extends SchemaProperty {
 

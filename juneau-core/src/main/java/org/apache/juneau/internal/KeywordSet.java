@@ -22,8 +22,6 @@ import static org.apache.juneau.internal.ThrowableUtils.*;
  * 	<li>2 or more characters in length.
  * 	<li>Lowercase ASCII.
  * </ul>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class KeywordSet {
 	final char[][][][] store;

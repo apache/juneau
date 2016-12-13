@@ -16,8 +16,6 @@ import org.apache.juneau.server.*;
 
 /**
  * Predefined matcher for matching requests with content type <js>"application/x-www-form-urlencoded"</js>.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class UrlEncodedFormMatcher extends RestMatcher {
 	@Override /* RestMatcher */

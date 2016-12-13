@@ -34,7 +34,6 @@ import org.apache.juneau.serializer.*;
  * <p>
  * See {@link ContextFactory} for more information about context properties.
  *
- *
  * <h6 class='topic' id='ConfigProperties'>Configurable properties on the MessagePack serializer</h6>
  * <p>
  * 	None.
@@ -46,8 +45,6 @@ import org.apache.juneau.serializer.*;
  * 		<li class='c'><a class='doclink' href='../serializer/SerializerContext.html#ConfigProperties'>SerializerContext</a> - Configurable properties common to all serializers.
  * 	</ul>
  * </ul>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class MsgPackSerializerContext extends SerializerContext {
 

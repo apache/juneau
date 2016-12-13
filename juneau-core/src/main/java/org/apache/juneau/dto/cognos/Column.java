@@ -23,8 +23,6 @@ import org.apache.juneau.xml.annotation.*;
  * <p class='bcode'>
  * 	<xt>&lt;item</xt> <xa>name</xa>=<xs>'name'</xs> <xa>type</xa>=<xs>'xs:String'</xs> <xa>length</xa>=<xs>'255'</xs>/&gt;
  * </p>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @SuppressWarnings({"rawtypes","hiding"})
 @Bean(typeName="item", properties="name,type,length")

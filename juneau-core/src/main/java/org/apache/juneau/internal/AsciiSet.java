@@ -14,8 +14,6 @@ package org.apache.juneau.internal;
 
 /**
  * Stores a set of ASCII characters for quick lookup.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class AsciiSet {
 	final boolean[] store = new boolean[128];

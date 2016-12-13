@@ -71,8 +71,6 @@ import org.apache.juneau.xml.annotation.*;
  *
  * 	String xml = XmlSerializer.<jsf>DEFAULT_SQ</jsf>.serialize(ds);
  * </p>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @SuppressWarnings("unchecked")
 @Bean(typeName="dataset", properties="metadata,data")
@@ -133,8 +131,6 @@ public class DataSet {
 	 * 		<xt>&lt;value&gt;</xt>2<xt>&lt;/value&gt;</xt>
 	 * 	<xt>&lt;/row&gt;</xt>
 	 * </p>
-	 *
-	 * @author James Bognar (james.bognar@salesforce.com)
 	 */
 	@Bean(typeName="row")
 	public static class Row {

@@ -16,8 +16,6 @@ import java.util.*;
 
 /**
  * Utility methods for collections.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class CollectionUtils {
 

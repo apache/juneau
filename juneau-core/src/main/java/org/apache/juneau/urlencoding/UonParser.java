@@ -26,16 +26,13 @@ import org.apache.juneau.transform.*;
 /**
  * Parses UON (a notation for URL-encoded query parameter values) text into POJO models.
  *
- *
  * <h6 class='topic'>Media types</h6>
  * <p>
  * 	Handles <code>Content-Type</code> types: <code>text/uon</code>
  *
- *
  * <h6 class='topic'>Description</h6>
  * <p>
  * 	This parser uses a state machine, which makes it very fast and efficient.
- *
  *
  * <h6 class='topic'>Configurable properties</h6>
  * <p>
@@ -45,9 +42,6 @@ import org.apache.juneau.transform.*;
  * 	<li>{@link ParserContext}
  * 	<li>{@link BeanContext}
  * </ul>
- *
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })
 @Consumes("text/uon")

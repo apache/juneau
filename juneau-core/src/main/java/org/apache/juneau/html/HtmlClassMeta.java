@@ -18,8 +18,6 @@ import org.apache.juneau.internal.*;
 
 /**
  * Metadata on classes specific to the HTML serializers and parsers pulled from the {@link Html @Html} annotation on the class.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class HtmlClassMeta extends ClassMetaExtended {
 

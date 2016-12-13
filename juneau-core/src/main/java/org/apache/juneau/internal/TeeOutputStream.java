@@ -17,8 +17,6 @@ import java.util.*;
 
 /**
  * Output stream that can send output to multiple output streams.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class TeeOutputStream extends OutputStream {
 	private OutputStream[] outputStreams = new OutputStream[0];

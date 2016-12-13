@@ -18,8 +18,6 @@ import org.apache.juneau.urlencoding.annotation.*;
 
 /**
  * Metadata on classes specific to the URL-Encoding serializers and parsers pulled from the {@link UrlEncoding @UrlEncoding} annotation on the class.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class UrlEncodingClassMeta extends ClassMetaExtended {
 

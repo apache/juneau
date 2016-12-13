@@ -26,8 +26,6 @@ import java.beans.*;
  * </ul>
  * <p>
  * 	See {@link Introspector#decapitalize(String)} for exact rules.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class PropertyNamerDefault implements PropertyNamer {
 

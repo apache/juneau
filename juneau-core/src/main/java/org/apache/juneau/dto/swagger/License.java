@@ -24,8 +24,6 @@ import org.apache.juneau.annotation.*;
  * 		<js>"url"</js>: <js>"http://www.apache.org/licenses/LICENSE-2.0.html"</js>
  * 	}
  * </p>
- *
- * @author james.bognar
  */
 @Bean(properties="name,url")
 public class License {

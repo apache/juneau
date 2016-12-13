@@ -21,8 +21,6 @@ import org.apache.juneau.serializer.*;
  * Specialized writer for serializing JSON.
  * <p>
  * 	<b>Note:  This class is not intended for external use.</b>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class JsonWriter extends SerializerWriter {
 

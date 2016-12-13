@@ -17,8 +17,6 @@ import org.apache.juneau.jena.annotation.*;
 
 /**
  * Metadata on beans specific to the RDF serializers and parsers pulled from the {@link Rdf @Rdf} annotation on the class.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class RdfBeanMeta extends BeanMetaExtended {
 

@@ -20,8 +20,6 @@ import org.apache.juneau.*;
  * <p>
  * 	These objects are created when you pass in non-<code>BeanFilterBuilder</code> classes to {@link ContextFactory#addToProperty(String,Object)},
  * 		and are equivalent to adding a <code><ja>@Bean</ja>(interfaceClass=Foo.<jk>class</jk>)</code> annotation on the <code>Foo</code> class.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class InterfaceBeanFilterBuilder extends BeanFilterBuilder {
 

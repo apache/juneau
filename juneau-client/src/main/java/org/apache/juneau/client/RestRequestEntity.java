@@ -22,8 +22,6 @@ import org.apache.juneau.utils.*;
 
 /**
  * HttpEntity for serializing POJOs as the body of HTTP requests.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class RestRequestEntity extends BasicHttpEntity {
 	final Object output;

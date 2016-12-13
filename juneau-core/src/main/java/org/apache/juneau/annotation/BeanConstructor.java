@@ -68,8 +68,6 @@ import org.apache.juneau.*;
  * 	Multiple calls to {@link BeanMap#getBean()} will return the same bean instance.
  * <p>
  * 	Beans can be defined with a combination of read-only and read-write properties.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @Documented
 @Target(CONSTRUCTOR)

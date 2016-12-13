@@ -21,8 +21,6 @@ package org.apache.juneau;
  * 	<li><js>"fooBarURL"</js> -&gt; <js>"foo-bar-url"</js>
  * 	<li><js>"FooBarURL"</js> -&gt; <js>"foo-bar-url"</js>
  * </ul>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class PropertyNamerDashedLC implements PropertyNamer {
 

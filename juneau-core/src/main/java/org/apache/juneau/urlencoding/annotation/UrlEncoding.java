@@ -22,8 +22,6 @@ import org.apache.juneau.urlencoding.*;
 /**
  * Annotation that can be applied to classes, fields, and methods to tweak how
  * they are handled by {@link UrlEncodingSerializer} and {@link UrlEncodingParser}.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @Documented
 @Target({TYPE})

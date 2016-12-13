@@ -36,8 +36,6 @@ import org.apache.juneau.internal.*;
  * 		For example, if the class is <code>MyClass</code> and the properties file contains <js>"MyClass.myMessage"</js>,
  * 		the message can be retrieved using <code>getString(<js>"myMessage"</js>)</code>.
  * </ul>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @ThreadSafe
 public class MessageBundle extends ResourceBundle {

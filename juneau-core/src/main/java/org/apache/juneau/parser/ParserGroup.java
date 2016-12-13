@@ -23,7 +23,6 @@ import org.apache.juneau.*;
 /**
  * Represents a group of {@link Parser Parsers} that can be looked up by media type.
  *
- *
  * <h6 class='topic'>Description</h6>
  * <p>
  * 	Provides the following features:
@@ -34,7 +33,6 @@ import org.apache.juneau.*;
  * 	<li>Clones existing groups and all parsers within the group in a single method call.
  * </ul>
  *
- *
  * <h6 class='topic'>Match ordering</h6>
  * <p>
  * 	Parsers are matched against <code>Content-Type</code> strings in the order they exist in this group.
@@ -44,7 +42,6 @@ import org.apache.juneau.*;
  * <p>
  * 	For example, calling <code>g.append(P1.<jk>class</jk>,P2.<jk>class</jk>).append(P3.<jk>class</jk>,P4.<jk>class</jk>)</code>
  * 	will result in the order <code>P3, P4, P1, P2</code>.
- *
  *
  * <h6 class='topic'>Example:</h6>
  * <p class='bcode'>
@@ -66,8 +63,6 @@ import org.apache.juneau.*;
  * 	String json = <js>"{...}"</js>;
  * 	AddressBook addressBook = p.parse(json, AddressBook.<jk>class</jk>);
  * </p>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class ParserGroup extends Lockable {
 

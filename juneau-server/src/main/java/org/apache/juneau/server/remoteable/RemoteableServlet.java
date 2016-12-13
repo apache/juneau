@@ -32,8 +32,6 @@ import org.apache.juneau.server.annotation.*;
  * 	maps java interfaces to POJO instances.
  *
  * See {@link org.apache.juneau.server.remoteable} for details.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @SuppressWarnings("serial")
 public abstract class RemoteableServlet extends RestServletDefault {

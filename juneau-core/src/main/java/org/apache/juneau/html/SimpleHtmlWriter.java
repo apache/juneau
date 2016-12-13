@@ -21,8 +21,6 @@ import java.io.*;
  * <p class='bcode'>
  * 	String table = <jk>new</jk> SimpleHtmlWriter().sTag(<js>"table"</js>).sTag(<js>"tr"</js>).sTag(<js>"td"</js>).append(<js>"hello"</js>).eTag(<js>"td"</js>).eTag(<js>"tr"</js>).eTag(<js>"table"</js>).toString();
  * </p>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class SimpleHtmlWriter extends HtmlWriter {
 

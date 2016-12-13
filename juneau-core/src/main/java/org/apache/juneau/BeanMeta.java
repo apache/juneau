@@ -29,14 +29,12 @@ import org.apache.juneau.utils.*;
 /**
  * Encapsulates all access to the properties of a bean class (like a souped-up {@link java.beans.BeanInfo}).
  *
- *
  * <h6 class='topic'>Description</h6>
  * <p>
  * 	Uses introspection to find all the properties associated with this class.  If the {@link Bean @Bean} annotation
  * 	is present on the class, or the class has a {@link BeanFilter} registered with it in the bean context,
  * 	then that information is used to determine the properties on the class.
  * 	Otherwise, the {@code BeanInfo} functionality in Java is used to determine the properties on the class.
- *
  *
  * <h6 class='topic'>Bean property ordering</h6>
  * <p>
@@ -53,10 +51,7 @@ import org.apache.juneau.utils.*;
  * 	<br>
  * 	The order can also be overridden through the use of an {@link BeanFilter}.
  *
- *
  * @param <T> The class type that this metadata applies to.
- * @author Barry M. Caceres
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class BeanMeta<T> {
 

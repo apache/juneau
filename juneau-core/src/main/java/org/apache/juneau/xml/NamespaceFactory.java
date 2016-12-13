@@ -26,8 +26,6 @@ import org.apache.juneau.parser.*;
  * 	For this to work property, namespaces with the same name and URI must only be represented by a single
  * 	{@link Namespace} instance.
  * 	This factory class ensures this identity uniqueness.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class NamespaceFactory {
 

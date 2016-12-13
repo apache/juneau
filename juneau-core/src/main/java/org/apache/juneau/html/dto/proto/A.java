@@ -20,8 +20,6 @@ import org.apache.juneau.xml.annotation.*;
 /**
  * DTO for an HTML <a href='https://www.w3.org/TR/html5/text-level-semantics.html#the-a-element'>&lt;a&gt;</a> element.
  * <p>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @Bean(typeName="a")
 @SuppressWarnings("javadoc")

@@ -23,7 +23,6 @@ import org.apache.juneau.*;
  * 	Provides the {@link #filterKeys(List)} method for specifying the keys to keep in the bean map
  * 		and in what order they should appear.
  *
- * @author James Bognar (james.bognar@salesforce.com)
  * @param <T> The class type of the wrapped bean.
  */
 @SuppressWarnings("hiding")

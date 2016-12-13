@@ -23,7 +23,6 @@ package org.apache.juneau.svl;
  * Subclasses must implement the {@link #resolveTo(VarResolverSession, java.io.Writer, String)} method.
  *
  * @see org.apache.juneau.svl
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public abstract class StreamedVar extends Var {
 

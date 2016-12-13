@@ -20,8 +20,6 @@ import org.apache.juneau.serializer.*;
  * Specialized writer for serializing XML.
  * <p>
  * 	<b>Note:  This class is not intended for external use.</b>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class XmlWriter extends SerializerWriter {
 

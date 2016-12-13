@@ -30,8 +30,6 @@ import org.apache.juneau.svl.vars.*;
 
 /**
  * Implementation class for {@link ConfigFile}.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class ConfigFileImpl extends ConfigFile {
 

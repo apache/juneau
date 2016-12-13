@@ -16,8 +16,6 @@ import java.io.*;
 
 /**
  * Subclass of a ByteArrayOutputStream that avoids a byte array copy when reading from an input stream.
- * <p>
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class ByteArrayInOutStream extends ByteArrayOutputStream {
 

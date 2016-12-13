@@ -23,8 +23,6 @@ import org.apache.juneau.internal.*;
  * Class instances are created once and then cached.
  * <p>
  * Classes must have a constructor that takes in a single argument.
- *
- * @author james.bognar
  */
 public class MetadataMap {
 

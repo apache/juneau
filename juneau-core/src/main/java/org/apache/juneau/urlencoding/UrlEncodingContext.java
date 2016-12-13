@@ -17,8 +17,6 @@ package org.apache.juneau.urlencoding;
  * <p>
  * 	Use the {@link UrlEncodingSerializer#setProperty(String, Object)} and
  * 	{@link UrlEncodingParser#setProperty(String, Object)} methods to set property values.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class UrlEncodingContext implements Cloneable {
 

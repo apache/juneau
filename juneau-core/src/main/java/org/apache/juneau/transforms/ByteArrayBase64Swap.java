@@ -19,8 +19,6 @@ import org.apache.juneau.transform.*;
 
 /**
  * Transforms <code><jk>byte</jk>[]</code> arrays to BASE-64 encoded {@link String Strings}.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class ByteArrayBase64Swap extends PojoSwap<byte[],String> {
 

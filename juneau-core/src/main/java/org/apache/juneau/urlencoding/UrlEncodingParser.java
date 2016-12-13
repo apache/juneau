@@ -26,11 +26,9 @@ import org.apache.juneau.transform.*;
 /**
  * Parses URL-encoded text into POJO models.
  *
- *
  * <h6 class='topic'>Media types</h6>
  * <p>
  * 	Handles <code>Content-Type</code> types: <code>application/x-www-form-urlencoded</code>
- *
  *
  * <h6 class='topic'>Description</h6>
  * <p>
@@ -40,7 +38,6 @@ import org.apache.juneau.transform.*;
  * <p>
  * 	This parser uses a state machine, which makes it very fast and efficient.
  *
- *
  * <h6 class='topic'>Configurable properties</h6>
  * <p>
  * 	This class has the following properties associated with it:
@@ -48,9 +45,6 @@ import org.apache.juneau.transform.*;
  * 	<li>{@link UonParserContext}
  * 	<li>{@link BeanContext}
  * </ul>
- *
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @SuppressWarnings({ "rawtypes", "unchecked", "hiding" })
 @Consumes("application/x-www-form-urlencoded")

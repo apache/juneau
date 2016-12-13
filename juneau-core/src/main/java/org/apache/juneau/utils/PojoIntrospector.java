@@ -28,8 +28,6 @@ import org.apache.juneau.parser.*;
  *		String s = <js>"foobar"</js>;
  *		String s2 = (String)<jk>new</jk> PojoIntrospector(s).invoke(<js>"substring(int,int)"</js>, <js>"[3,6]"</js>);  <jc>// "bar"</jc>
  *	</p>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class PojoIntrospector {
 

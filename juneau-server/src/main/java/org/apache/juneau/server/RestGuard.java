@@ -19,7 +19,6 @@ import org.apache.juneau.server.annotation.*;
 /**
  * REST method guard.
  *
- *
  * <h6 class='topic'>Description</h6>
  * <p>
  * 	Implements a guard mechanism for REST method calls that allows requests to be
@@ -29,7 +28,6 @@ import org.apache.juneau.server.annotation.*;
  * 	Guards are applied to REST methods declaratively through the {@link RestResource#guards()} or {@link RestMethod#guards()} annotations.
  * <p>
  * 	If multiple guards are specified, ALL guards must pass in order for the request to proceed.
- *
  *
  * <h6 class='topic'>How to implement</h6>
  * <p>
@@ -41,7 +39,6 @@ import org.apache.juneau.server.annotation.*;
  * <p>
  * 	Guards must implement a no-args constructor.
  *
- *
  * <h6 class='topic'>Example usage:</h6>
  * <p class='bcode'>
  * 	<jk>public</jk> MyResource <jk>extends</jk> RestServlet {
@@ -51,7 +48,6 @@ import org.apache.juneau.server.annotation.*;
  * 		<jk>public</jk> doDelete(RestRequest req, RestResponse res) <jk>throws</jk> Exception {...}
  * 	}
  * </p>
- *
  *
  * <h6 class='topic'>Example implementation:</h6>
  * <p class='bcode'>

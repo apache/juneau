@@ -18,8 +18,6 @@ import org.apache.juneau.json.annotation.*;
 
 /**
  * Metadata on classes specific to the JSON serializers and parsers pulled from the {@link Json @Json} annotation on the class.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class JsonClassMeta extends ClassMetaExtended {
 

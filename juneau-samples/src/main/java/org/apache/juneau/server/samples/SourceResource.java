@@ -26,8 +26,6 @@ import org.apache.juneau.server.annotation.*;
  * Servlet for viewing source code on classes whose Java files are present on the classpath.
  * <p>
  * This class is by no means perfect but is pretty much the best you can get using only regular expression matching.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @SuppressWarnings("serial")
 @RestResource(

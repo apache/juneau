@@ -43,7 +43,6 @@ import org.apache.juneau.transform.*;
  * 				for serializing and parsing Java beans.
  * 	</ul>
  *
- *
  * <h5 class='topic'>Bean Contexts</h5>
  * <p>
  * 	Typically, it will be sufficient to use the existing {@link #DEFAULT} contexts for creating
@@ -53,7 +52,6 @@ import org.apache.juneau.transform.*;
  * <p>
  * 	Bean contexts are created by {@link ContextFactory context factories}.
  * 	The settings on a bean context are fixed at the point they are created by the factory.
- *
  *
  * <h5 class='topic'>BeanContext configuration properties</h5>
  * 	<code>BeanContexts</code> have several configuration properties that can be used to tweak behavior on how beans are handled.
@@ -83,7 +81,6 @@ import org.apache.juneau.transform.*;
  * 		.addNotBeanClasses(Foo.<jk>class</jk>)
  * 		.getBeanContext();
  * </p>
- *
  *
  * <h6 class='topic' id='ConfigProperties'>Properties associated with handling beans on serializers and parsers</h6>
  * <table class='styled' style='border-collapse: collapse;'>
@@ -267,7 +264,6 @@ import org.apache.juneau.transform.*;
  * 	</tr>
  *	</table>
  *
- *
  * <h5 class='topic'>Bean Maps</h5>
  * <p>
  * 	{@link BeanMap BeanMaps} are wrappers around Java beans that allow properties to be retrieved and
@@ -278,7 +274,6 @@ import org.apache.juneau.transform.*;
  * 		<li> {@link BeanContext#forBean(Object) BeanContext.forBean()} - Wraps an existing bean inside a {@code Map} wrapper.
  * 		<li> {@link BeanContext#newBeanMap(Class) BeanContext.newInstance()} - Create a new bean instance wrapped in a {@code Map} wrapper.
  * 	</ol>
- *
  *
  * <h6 class='topic'>Example:</h6>
  * <p class='bcode'>
@@ -302,7 +297,6 @@ import org.apache.juneau.transform.*;
  * 	Person p = m2.getBean();  <jc>// Get the bean instance that was created.</jc>
  * </p>
  *
- *
  * <h5 class='topic'>Bean Annotations</h5>
  * <p>
  * 	This package contains annotations that can be applied to
@@ -319,7 +313,6 @@ import org.apache.juneau.transform.*;
  * 	}
  * <p>
  * 	See {@link Bean @Bean} and {@link BeanProperty @BeanProperty} for more information.
- *
  *
  * <h5 class='topic'>Beans with read-only properties</h5>
  * <p>
@@ -340,7 +333,6 @@ import org.apache.juneau.transform.*;
  * <p>
  * 	See {@link BeanConstructor @BeanConstructor} for more information.
  *
- *
  * <h5 class='topic'>BeanFilters and PojoSwaps</h5>
  * <p>
  * 	{@link BeanFilter BeanFilters} and {@link PojoSwap PojoSwaps} are used to tailor how beans and POJOs are handled.<br>
@@ -354,7 +346,6 @@ import org.apache.juneau.transform.*;
  * <p>
  * 	See {@link org.apache.juneau.transform} for more information.
  *
- *
  * <h5 class='topic'>ClassMetas</h5>
  * <p>
  * 	The {@link ClassMeta} class is a wrapper around {@link Class} object that provides cached information
@@ -366,9 +357,6 @@ import org.apache.juneau.transform.*;
  * 	improves performance.
  * <p>
  * 	See {@link ClassMeta} for more information.
- *
- * @author Barry M. Caceres
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @SuppressWarnings({"unchecked","rawtypes"})
 public class BeanContext extends Context {

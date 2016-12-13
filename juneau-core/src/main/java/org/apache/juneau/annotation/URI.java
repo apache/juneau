@@ -58,8 +58,6 @@ import org.apache.juneau.serializer.*;
  * 		}
  * 	}
  * </p>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @Documented
 @Target({TYPE,FIELD,METHOD})

@@ -31,8 +31,6 @@ import org.apache.juneau.urlencoding.*;
  * 		.append(<jk>new</jk> BasicNameValuePair(<js>"someOtherParam"</js>, <js>"foobar"</js>));
  * 	request.setEntity(<jk>new</jk> UrlEncodedFormEntity(params));
  * </p>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class SerializedNameValuePair implements NameValuePair {
 	private String name;

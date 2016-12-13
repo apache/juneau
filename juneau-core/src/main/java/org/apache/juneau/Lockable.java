@@ -27,8 +27,6 @@ package org.apache.juneau;
  * 	to be thrown.
  * <p>
  * As a rule, cloned objects are unlocked by default.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public abstract class Lockable implements Cloneable {
 

@@ -48,8 +48,6 @@ import org.apache.juneau.json.*;
  * 		}
  * 	}
  * </p>
- *
- * @author james.bognar
  */
 @Bean(properties="type,description,name,in,flow,authorizationUrl,tokenUrl,scopes")
 public class SecurityScheme {

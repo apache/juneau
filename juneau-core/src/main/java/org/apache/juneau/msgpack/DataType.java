@@ -14,8 +14,6 @@ package org.apache.juneau.msgpack;
 
 /**
  * Constants for the MessagePack format.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 enum DataType {
 	NULL, BOOLEAN, INT, LONG, FLOAT, DOUBLE, STRING, BIN, EXT, ARRAY, MAP, INVALID;

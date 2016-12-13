@@ -29,19 +29,16 @@ import org.apache.juneau.transform.*;
 /**
  * Serializes POJO models to URL-encoded notation with UON-encoded values (a notation for URL-encoded query paramter values).
  *
- *
  * <h6 class='topic'>Media types</h6>
  * <p>
  * 	Handles <code>Accept</code> types: <code>application/x-www-form-urlencoded</code>
  * <p>
  * 	Produces <code>Content-Type</code> types: <code>application/x-www-form-urlencoded</code>
  *
- *
  * <h6 class='topic'>Description</h6>
  * <p>
  * 	This serializer provides several serialization options.  Typically, one of the predefined DEFAULT serializers will be sufficient.
  * 	However, custom serializers can be constructed to fine-tune behavior.
- *
  *
  * <h6 class='topic'>Configurable properties</h6>
  * <p>
@@ -124,7 +121,6 @@ import org.apache.juneau.transform.*;
  * 	)
  * </p>
  *
- *
  * <h6 class='topic'>Example:</h6>
  * <p class='bcode'>
  * 	<jc>// Serialize a Map</jc>
@@ -162,8 +158,6 @@ import org.apache.juneau.transform.*;
  * 	<jc>// Produces "name=John+Doe&amp;age=23&amp;address=(street=123+Main+St,city=Anywhere,state=NY,zip=12345)&amp;deceased=false)"</jc>
  * 	String s = UrlEncodingSerializer.<jsf>DEFAULT_SIMPLE</jsf>.serialize(s);
  * </p>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @Produces("application/x-www-form-urlencoded")
 @SuppressWarnings("hiding")

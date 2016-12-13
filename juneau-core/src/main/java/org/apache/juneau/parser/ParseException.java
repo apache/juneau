@@ -20,8 +20,6 @@ import org.apache.juneau.json.*;
 
 /**
  * Exception that indicates invalid syntax encountered during parsing.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class ParseException extends FormattedException {
 

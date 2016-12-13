@@ -16,8 +16,6 @@ import java.io.*;
 
 /**
  * Similar to {@link StringReader} except reads from a generic {@link CharSequenceReader}.
- *
- * @author jbognar
  */
 public final class CharSequenceReader extends BufferedReader {
 

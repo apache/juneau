@@ -22,8 +22,6 @@ import org.apache.juneau.internal.*;
  * Specialized input stream for parsing MessagePack streams.
  * <p>
  * 	<b>Note:  This class is not intended for external use.</b>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class MsgPackInputStream extends InputStream {
 

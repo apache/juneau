@@ -20,8 +20,6 @@ import org.apache.juneau.*;
  * 	Listeners can be registered with parsers through the {@link Parser#addListener(ParserListener)} method.
  * </p>
  * 	It should be noted that listeners are not automatically copied over to new parsers when a parser is cloned.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class ParserListener {
 

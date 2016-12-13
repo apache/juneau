@@ -44,7 +44,6 @@ import org.apache.juneau.utils.*;
  * 	This class is tied to the {@link BeanContext} class because it's that class that makes the determination
  * 	of what is a bean.
  *
- * @author James Bognar (james.bognar@salesforce.com)
  * @param <T> The class type of the wrapped class.
  */
 @Bean(properties="innerClass,classCategory,elementType,keyType,valueType,notABeanReason,initException,beanMeta")

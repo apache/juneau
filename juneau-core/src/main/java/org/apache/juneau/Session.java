@@ -19,7 +19,6 @@ package org.apache.juneau;
  * 	as a scratchpad during serialize and parse actions.
  *
  * @see ContextFactory
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public abstract class Session {
 

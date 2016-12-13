@@ -18,8 +18,6 @@ import java.io.*;
  * Similar to {@link StringWriter}, but uses a {@link StringBuilder} instead to avoid synchronization overhead.
  * <p>
  * Note that this class is NOT thread safe.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class StringBuilderWriter extends Writer {
 

@@ -27,8 +27,6 @@ import java.util.*;
  * 	Does not support adding or removing entries.
  * <p>
  * 	Setting values overwrites the value on the underlying value array.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class SimpleMap extends AbstractMap<String,Object> {
 

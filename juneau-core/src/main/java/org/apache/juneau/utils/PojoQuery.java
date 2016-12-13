@@ -193,8 +193,6 @@ import org.apache.juneau.internal.*;
  * 	<li>Calling <tt>filterMap()</tt> or <tt>filterCollection()</tt> always returns a new data
  * 		structure, so the methods can be called multiple times against the same input.
  * </ul>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @SuppressWarnings({"unchecked","rawtypes"})
 public final class PojoQuery {

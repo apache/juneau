@@ -20,7 +20,6 @@ import org.apache.juneau.internal.*;
  * (e.g. <js>"$X{foo, bar, baz}"</js>)
  *
  * @see org.apache.juneau.svl
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public abstract class MultipartVar extends SimpleVar {
 

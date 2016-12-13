@@ -22,7 +22,6 @@ import org.apache.juneau.serializer.*;
 /**
  * Annotation used on subclasses of {@link Serializer} to identify the media types that it produces.
  *
- *
  * <h6 class='topic'>Description</h6>
  * <p>
  * 	Provides a way to define the contents of {@link Serializer#getMediaTypes()} through an annotation.
@@ -31,7 +30,6 @@ import org.apache.juneau.serializer.*;
  * 		for this annotation.
  * 	It should be noted that this annotation is optional and that the {@link Serializer#getMediaTypes()} method can
  * 		be overridden by subclasses to return the media types programmatically.
- *
  *
  * <h6 class='topic'>Example:</h6>
  * <p>
@@ -55,9 +53,6 @@ import org.apache.juneau.serializer.*;
  * 	<ja>@Produces</ja>(value=<js>"*\/*"</js>, contentType=<js>"text/plain"</js>)
  * 	<jk>public class</jk> AnythingSerializer <jk>extends</jk> WriterSerializer {...}
  * </p>
- *
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @Documented
 @Target(TYPE)

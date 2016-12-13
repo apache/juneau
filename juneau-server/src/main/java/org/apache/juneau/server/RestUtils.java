@@ -22,8 +22,6 @@ import org.apache.juneau.internal.*;
 
 /**
  * Various reusable utility methods.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class RestUtils {
 

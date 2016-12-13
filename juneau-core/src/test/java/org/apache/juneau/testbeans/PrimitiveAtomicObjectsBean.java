@@ -18,8 +18,6 @@ import java.util.concurrent.atomic.*;
 /**
  * Test bean fields of type AtomicInteger and AtomicLong.
  * Note that Jena parsers cannot handle these types, so we only test non-Jena parsers.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @SuppressWarnings({"serial","javadoc"})
 public class PrimitiveAtomicObjectsBean {

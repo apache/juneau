@@ -17,7 +17,6 @@ package org.apache.juneau;
  * <p>
  * Serializers and parsers can implement their own language-specific metadata on a bean and retrieve
  * the metadata using the {@link BeanMeta#getExtendedMeta(Class)} method.
- *
  */
 public class BeanMetaExtended {
 

@@ -21,13 +21,11 @@ import org.apache.juneau.transform.*;
 /**
  * Parsers HTTP plain text request bodies into <a href='../package-summary.html#PojoCategories'>Group 5</a> POJOs.
  *
- *
  * <h6 class='topic'>Media types</h6>
  * <p>
  * 	Handles <code>Accept</code> types: <code>text/plain</code>
  * <p>
  * 	Produces <code>Content-Type</code> types: <code>text/plain</code>
- *
  *
  * <h6 class='topic'>Description</h6>
  * <p>
@@ -36,16 +34,12 @@ import org.apache.juneau.transform.*;
  * <p>
  * 	Also parses objects using a transform if the object class has an {@link PojoSwap PojoSwap&lt;?,String&gt;} transform defined on it.
  *
- *
  * <h6 class='topic'>Configurable properties</h6>
  * <p>
  * 	This class has the following properties associated with it:
  * <ul>
  * 	<li>{@link ParserContext}
  * </ul>
- *
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @Consumes("text/plain")
 public final class PlainTextParser extends ReaderParser {

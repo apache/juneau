@@ -92,8 +92,6 @@ import org.apache.juneau.internal.*;
  * </p>
  * <p>
  * Equivalent operations are available on optional arguments through the {@link #getArg(Class, String)} method.
- *
- * @author jbognar
  */
 public final class Args extends ObjectMap {
 

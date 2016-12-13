@@ -40,7 +40,7 @@ import org.apache.juneau.json.*;
  * 		Since form parameters are sent in the payload, they cannot be declared together with a body parameter for the same operation.
  * 		Form parameters have a different format based on the content-type used (for further details, consult <code>http://www.w3.org/TR/html401/interact/forms.html#h-17.13.4</code>):
  * 		<ul>
- * 			<li><js>"application/x-www-form-urlencoded"</js> - Similar to the format of Query parameters but as a payload. 
+ * 			<li><js>"application/x-www-form-urlencoded"</js> - Similar to the format of Query parameters but as a payload.
  * 				For example, <code>foo=1&bar=swagger</code> - both <code>foo</code> and <code>bar</code> are form parameters.
  * 				This is normally used for simple parameters that are being transferred.
  * 			<li><js>"multipart/form-data"</js> - each parameter takes a section in the payload with an internal header.
@@ -49,8 +49,6 @@ import org.apache.juneau.json.*;
  * 		</ul>
  * 	</li>
  * </ul>
- *
- * @author james.bognar
  */
 @Bean(properties="in,name,type,description,required,schema,format,allowEmptyValue,items,collectionFormat,default,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,enum,multipleOf")
 public class ParameterInfo {

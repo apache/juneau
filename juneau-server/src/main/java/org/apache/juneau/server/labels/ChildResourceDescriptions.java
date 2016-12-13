@@ -21,8 +21,6 @@ import org.apache.juneau.server.*;
  * <p>
  * Typically used in top-level GET methods of router resources to render a list of
  * 	available child resources.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class ChildResourceDescriptions extends LinkedList<ResourceDescription> {
 

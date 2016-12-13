@@ -19,8 +19,6 @@ import org.apache.juneau.server.jena.*;
 
 /**
  * Superclass for all REST resources with RDF support.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @SuppressWarnings("serial")
 @RestResource(

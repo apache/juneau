@@ -19,8 +19,6 @@ import org.apache.juneau.xml.annotation.*;
 
 /**
  * Metadata on bean properties specific to the XML serializers and parsers pulled from the {@link Xml @Xml} annotation on the bean property.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class XmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 

@@ -19,8 +19,6 @@ import org.apache.http.impl.client.*;
  * <p>
  * Note:  This class is similar to <code>org.apache.http.impl.client.LaxRedirectStrategy</code>
  * 	in Apache HttpClient 4.2, but also allows for redirects on <code>PUTs</code> and <code>DELETEs</code>.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class AllowAllRedirects extends DefaultRedirectStrategy {
 

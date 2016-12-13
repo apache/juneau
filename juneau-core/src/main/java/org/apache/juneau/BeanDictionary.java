@@ -29,8 +29,6 @@ import org.apache.juneau.annotation.*;
  * 		using the name defined for that class in this dictionary.  This helps determine the real class at parse time.
  * 	<li>The dictionary name is used as element names when serialized to XML.
  * </ul>
- *
- * @author james.bognar
  */
 public class BeanDictionary {
 

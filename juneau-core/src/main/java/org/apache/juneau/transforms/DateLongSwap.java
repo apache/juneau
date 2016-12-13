@@ -20,8 +20,6 @@ import org.apache.juneau.transform.*;
 
 /**
  * Transforms {@link Date Dates} to {@link Long Longs}.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class DateLongSwap extends PojoSwap<Date,Long> {
 

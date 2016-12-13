@@ -17,8 +17,6 @@ import java.util.*;
 
 /**
  * Writer that can send output to multiple writers.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class TeeWriter extends Writer {
 	private Writer[] writers = new Writer[0];

@@ -20,8 +20,6 @@ import org.apache.juneau.transform.*;
 
 /**
  * Transforms {@link Calendar Calendars} to {@link Long Longs} using {@code Calender.getTime().getTime()}.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public class CalendarLongSwap extends PojoSwap<Calendar,Long> {
 

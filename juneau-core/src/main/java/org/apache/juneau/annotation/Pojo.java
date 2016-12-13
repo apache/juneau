@@ -21,8 +21,6 @@ import org.apache.juneau.transform.*;
 
 /**
  * Used to tailor how POJOs get interpreted by the framework.
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @Documented
 @Target(TYPE)

@@ -21,7 +21,6 @@ import org.apache.juneau.*;
 /**
  * Represents the group of {@link Encoder encoders} keyed by codings.
  *
- *
  * <h6 class='topic'>Description</h6>
  * <p>
  * 	Maintains a set of encoders and the codings that they can handle.
@@ -29,7 +28,6 @@ import org.apache.juneau.*;
  * 	The {@link #findMatch(String)} and {@link #getEncoder(String)} methods are then
  * 		used to find appropriate encoders for specific <code>Accept-Encoding</code>
  * 		and <code>Content-Encoding</code> header values.
- *
  *
  * <h6 class='topic'>Match ordering</h6>
  * <p>
@@ -40,7 +38,6 @@ import org.apache.juneau.*;
  * <p>
  * 	For example, calling <code>g.append(E1.<jk>class</jk>,E2.<jk>class</jk>).append(E3.<jk>class</jk>,E4.<jk>class</jk>)</code>
  * 	will result in the order <code>E3, E4, E1, E2</code>.
- *
  *
  * <h6 class='topic'>Example:</h6>
  * <p class='bcode'>
@@ -53,9 +50,6 @@ import org.apache.juneau.*;
  * 	<jc>// Get the encoder</jc>
  * 	IEncoder encoder = g.getEncoder(matchedCoding);
  * </p>
- *
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 public final class EncoderGroup {
 

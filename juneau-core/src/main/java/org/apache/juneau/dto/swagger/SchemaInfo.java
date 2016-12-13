@@ -25,8 +25,6 @@ import org.apache.juneau.annotation.*;
  * <p>
  * Further information about the properties can be found in JSON Schema Core and JSON Schema Validation.
  * Unless stated otherwise, the property definitions follow the JSON Schema specification as referenced here.
- *
- * @author james.bognar
  */
 @Bean(properties="format,title,description,default,multipleOf,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,maxProperties,minProperties,required,enum,type,items,allOf,properties,additionalProperties,discriminator,readOnly,xml,externalDocs,example")
 public class SchemaInfo {

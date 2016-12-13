@@ -35,18 +35,15 @@ import org.w3c.dom.ls.*;
 /**
  * Serializes POJO metadata to HTTP responses as XML.
  *
- *
  * <h6 class='topic'>Media types</h6>
  * <p>
  * 	Handles <code>Accept</code> types: <code>text/xml+schema</code>
  * <p>
  * 	Produces <code>Content-Type</code> types: <code>text/xml</code>
  *
- *
  * <h6 class='topic'>Description</h6>
  * <p>
  * 	Produces the XML-schema representation of the XML produced by the {@link XmlSerializer} class with the same properties.
- *
  *
  * <h6 class='topic'>Configurable properties</h6>
  * <p>
@@ -55,8 +52,6 @@ import org.w3c.dom.ls.*;
  * 	<li>{@link XmlSerializerContext}
  * 	<li>{@link BeanContext}
  * </ul>
- *
- * @author James Bognar (james.bognar@salesforce.com)
  */
 @Produces(value="text/xml+schema",contentType="text/xml")
 public class XmlSchemaSerializer extends XmlSerializer {

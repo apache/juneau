@@ -26,7 +26,6 @@ import org.apache.juneau.annotation.*;
  * 		<js>"description"</js>: <js>"Pets operations"</js>
  * 	}
  * </p>
- * @author james.bognar
  */
 @Bean(properties="name,description,externalDocs")
 public class Tag {
