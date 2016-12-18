@@ -4,3 +4,5 @@ old_source/
 /out.html
 /TESTS-TestSuites.xml
 /target/
+/.settings/
+/.classpath

@@ -2,3 +2,5 @@
 /.DS_Store
 /derby.log
 /target/
+/.settings/
+/.classpath
