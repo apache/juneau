@@ -19,6 +19,7 @@ Release Notes - Juneau - Version 6.0.1
     * [JUNEAU-21] - Scrub references to IBM from code.
     * [JUNEAU-22] - Localization bugs in CalendarSwap JUnits
     * [JUNEAU-23] - Fix various maven build warnings.
+    * [JUNEAU-24] - Fix release issues discovered by Stian
 
 ** Improvement
     * [JUNEAU-18] - Add HtmlDocSerializer.DEFAULT field.
