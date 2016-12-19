@@ -43,14 +43,14 @@
 							<artifactItems>
 								
 								<artifactItem>
-									<outputDirectory>${project.build.directory}/bin/apache-juneau-${project.version}</outputDirectory>
+									<outputDirectory>${project.build.directory}/bin</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
 									<artifactId>juneau-all</artifactId>
 									<version>${project.version}</version>
 								</artifactItem>
 								
 								<artifactItem>
-									<outputDirectory>${project.build.directory}/src/apache-juneau-${project.version}/osgi-bundles</outputDirectory>
+									<outputDirectory>${project.build.directory}/src/osgi-bundles</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
 									<artifactId>juneau-core</artifactId>
 									<version>${project.version}</version>
@@ -58,14 +58,14 @@
 									<classifier>sources</classifier>
 								</artifactItem>
 								<artifactItem>
-									<outputDirectory>${project.build.directory}/bin/apache-juneau-${project.version}/osgi-bundles</outputDirectory>
+									<outputDirectory>${project.build.directory}/bin/osgi-bundles</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
 									<artifactId>juneau-core</artifactId>
 									<version>${project.version}</version>
 								</artifactItem>
 								
 								<artifactItem>
-									<outputDirectory>${project.build.directory}/src/apache-juneau-${project.version}/osgi-bundles</outputDirectory>
+									<outputDirectory>${project.build.directory}/src/osgi-bundles</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
 									<artifactId>juneau-server</artifactId>
 									<version>${project.version}</version>
@@ -73,14 +73,14 @@
 									<classifier>sources</classifier>
 								</artifactItem>
 								<artifactItem>
-									<outputDirectory>${project.build.directory}/bin/apache-juneau-${project.version}/osgi-bundles</outputDirectory>
+									<outputDirectory>${project.build.directory}/bin/osgi-bundles</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
 									<artifactId>juneau-server</artifactId>
 									<version>${project.version}</version>
 								</artifactItem>
 								
 								<artifactItem>
-									<outputDirectory>${project.build.directory}/src/apache-juneau-${project.version}/osgi-bundles</outputDirectory>
+									<outputDirectory>${project.build.directory}/src/osgi-bundles</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
 									<artifactId>juneau-client</artifactId>
 									<version>${project.version}</version>
@@ -88,14 +88,14 @@
 									<classifier>sources</classifier>
 								</artifactItem>
 								<artifactItem>
-									<outputDirectory>${project.build.directory}/bin/apache-juneau-${project.version}/osgi-bundles</outputDirectory>
+									<outputDirectory>${project.build.directory}/bin/osgi-bundles</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
 									<artifactId>juneau-client</artifactId>
 									<version>${project.version}</version>
 								</artifactItem>
 								
 								<artifactItem>
-									<outputDirectory>${project.build.directory}/src/apache-juneau-${project.version}/osgi-bundles</outputDirectory>
+									<outputDirectory>${project.build.directory}/src/osgi-bundles</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
 									<artifactId>juneau-microservice</artifactId>
 									<version>${project.version}</version>
@@ -103,14 +103,14 @@
 									<classifier>sources</classifier>
 								</artifactItem>
 								<artifactItem>
-									<outputDirectory>${project.build.directory}/bin/apache-juneau-${project.version}/osgi-bundles</outputDirectory>
+									<outputDirectory>${project.build.directory}/bin/osgi-bundles</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
 									<artifactId>juneau-microservice</artifactId>
 									<version>${project.version}</version>
 								</artifactItem>
 								
 								<artifactItem>
-									<outputDirectory>${project.build.directory}/src/apache-juneau-${project.version}</outputDirectory>
+									<outputDirectory>${project.build.directory}/src</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
 									<artifactId>juneau-samples</artifactId>
 									<version>${project.version}</version>
@@ -132,6 +132,7 @@
 							<goal>single</goal>
 						</goals>
 						<configuration>
+							<finalName>apache-juneau-${project.version}</finalName>
 							<descriptors>
 								<descriptor>src/assembly/src.xml</descriptor>
 								<descriptor>src/assembly/bin.xml</descriptor>
