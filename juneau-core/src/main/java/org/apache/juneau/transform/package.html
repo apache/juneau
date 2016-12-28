@@ -433,13 +433,13 @@
 		
 		<jd>/** Converts a Date object to an ISO8601 string. */</jd>
 		<ja>@Override</ja>
-		<jk>public</jk> String swap(Date o) {
+		<jk>public</jk> String swap(BeanSession session, Date o) {
 			<jk>return</jk> <jf>format</jf>.format(o);
 		}
 		
 		<jd>/** Converts an ISO8601 string to a Date object. */</jd>
 		<ja>@Override</ja>
-		<jk>public</jk> Date unswap(String o) <jk>throws</jk> ParseException {
+		<jk>public</jk> Date unswap(BeanSession session, String o, ClassMeta hint) <jk>throws</jk> ParseException {
 			<jk>try</jk> {
 				<jk>return</jk> <jf>format</jf>.parse(o);
 			} <jk>catch</jk> (java.text.ParseException e) {

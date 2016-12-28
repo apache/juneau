@@ -281,14 +281,14 @@ public class AddressBookResource extends ResourceJena {
 				.addPojoSwap(
 					new PojoSwap<Person,Integer>() {
 						@Override /* PojoSwap */
-						public Integer swap(Person p) {
+						public Integer swap(BeanSession session, Person p) {
 							return p.addresses.size();
 						}
 					}
 				)
 		};
 
-		return new DataSet(items, addressBook, this.getBeanContext());
+		return new DataSet(items, addressBook, this.getBeanContext().createSession());
 	}
 
 	/**

@@ -22,6 +22,7 @@ import java.util.*;
 
 import javax.xml.bind.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.jena.*;
@@ -42,17 +43,14 @@ public class CalendarSwapTest {
 		testDate.set(1901, 2, 3, 10, 11, 12);
 	}
 
-	private Locale systemLocale;  // Tests are locale-sensitive.  Must use US locale.
-
 	@Before
 	public void beforeTest() {
-		systemLocale = Locale.getDefault();
-		Locale.setDefault(Locale.US);
+		TestUtils.setLocale(Locale.US);
 	}
 
 	@After
 	public void afterTest() {
-		Locale.setDefault(systemLocale);
+		TestUtils.unsetLocale();
 	}
 
 	private RdfSerializer getRdfSerializer() {
@@ -76,6 +74,7 @@ public class CalendarSwapTest {
 		PojoSwap<Calendar,String> f;
 		String s;
 		Calendar c;
+		BeanSession session = BeanContext.DEFAULT.createSession();
 
 		//--------------------
 		// ISO8601DT
@@ -84,15 +83,15 @@ public class CalendarSwapTest {
 
 		s = "2001-01-31T12:34:56Z";
 		c = DatatypeConverter.parseDateTime(s);
-		assertEquals(s, f.swap(c));
+		assertEquals(s, f.swap(session, c));
 
 		s = "2001-01-31T09:34:56-03:00";
 		c = DatatypeConverter.parseDateTime(s);
-		assertEquals(s, f.swap(c));
+		assertEquals(s, f.swap(session, c));
 
 		s = "2001-01-31T06:34:56-06:00";
 		c = DatatypeConverter.parseDateTime(s);
-		assertEquals(s, f.swap(c));
+		assertEquals(s, f.swap(session, c));
 
 
 		//--------------------
@@ -102,15 +101,15 @@ public class CalendarSwapTest {
 
 		s = "2001-01-31T12:34:56Z";
 		c = DatatypeConverter.parseDateTime(s);
-		assertEquals(s, f.swap(c));
+		assertEquals(s, f.swap(session, c));
 
 		s = "2001-01-31T09:34:56-03:00";
 		c = DatatypeConverter.parseDateTime(s);
-		assertEquals("2001-01-31T12:34:56Z", f.swap(c));
+		assertEquals("2001-01-31T12:34:56Z", f.swap(session, c));
 
 		s = "2001-01-31T06:34:56-06:00";
 		c = DatatypeConverter.parseDateTime(s);
-		assertEquals("2001-01-31T12:34:56Z", f.swap(c));
+		assertEquals("2001-01-31T12:34:56Z", f.swap(session, c));
 
 		//--------------------
 		// RFC2822DTZ
@@ -119,15 +118,15 @@ public class CalendarSwapTest {
 
 		s = "2001-01-31T12:34:56Z";
 		c = DatatypeConverter.parseDateTime(s);
-		assertEquals("Wed, 31 Jan 2001 12:34:56 +0000", f.swap(c));
+		assertEquals("Wed, 31 Jan 2001 12:34:56 +0000", f.swap(session, c));
 
 		s = "2001-01-31T09:34:56-03:00";
 		c = DatatypeConverter.parseDateTime(s);
-		assertEquals("Wed, 31 Jan 2001 09:34:56 -0300", f.swap(c));
+		assertEquals("Wed, 31 Jan 2001 09:34:56 -0300", f.swap(session, c));
 
 		s = "2001-01-31T06:34:56-06:00";
 		c = DatatypeConverter.parseDateTime(s);
-		assertEquals("Wed, 31 Jan 2001 06:34:56 -0600", f.swap(c));
+		assertEquals("Wed, 31 Jan 2001 06:34:56 -0600", f.swap(session, c));
 
 		//--------------------
 		// RFC2822DTZ
@@ -136,15 +135,15 @@ public class CalendarSwapTest {
 
 		s = "2001-01-31T12:34:56Z";
 		c = DatatypeConverter.parseDateTime(s);
-		assertEquals("Wed, 31 Jan 2001 12:34:56 GMT", f.swap(c));
+		assertEquals("Wed, 31 Jan 2001 12:34:56 GMT", f.swap(session, c));
 
 		s = "2001-01-31T09:34:56-03:00";
 		c = DatatypeConverter.parseDateTime(s);
-		assertEquals("Wed, 31 Jan 2001 12:34:56 GMT", f.swap(c));
+		assertEquals("Wed, 31 Jan 2001 12:34:56 GMT", f.swap(session, c));
 
 		s = "2001-01-31T06:34:56-06:00";
 		c = DatatypeConverter.parseDateTime(s);
-		assertEquals("Wed, 31 Jan 2001 12:34:56 GMT", f.swap(c));
+		assertEquals("Wed, 31 Jan 2001 12:34:56 GMT", f.swap(session, c));
 	}
 
 
@@ -484,7 +483,7 @@ public class CalendarSwapTest {
 	//====================================================================================================
 	@Test
 	public void testDefaultMediumJson() throws Exception {
-		Class<?> f = CalendarSwap.Medium.class;
+		Class<?> f = CalendarSwap.DateMedium.class;
 		WriterSerializer s = new JsonSerializer.Simple().addPojoSwaps(f);
 		ReaderParser p = new JsonParser().addPojoSwaps(f);
 		doTest(s, p, false, "'Mar 3, 1901'");
@@ -495,7 +494,7 @@ public class CalendarSwapTest {
 	//====================================================================================================
 	@Test
 	public void testDefaultMediumXml() throws Exception {
-		Class<?> f = CalendarSwap.Medium.class;
+		Class<?> f = CalendarSwap.DateMedium.class;
 		WriterSerializer s = new XmlSerializer.SimpleSq().addPojoSwaps(f);
 		ReaderParser p = new XmlParser().addPojoSwaps(f);
 		doTest(s, p, false, "<string>Mar 3, 1901</string>");
@@ -506,7 +505,7 @@ public class CalendarSwapTest {
 	//====================================================================================================
 	@Test
 	public void testDefaultMediumHtml() throws Exception {
-		Class<?> f = CalendarSwap.Medium.class;
+		Class<?> f = CalendarSwap.DateMedium.class;
 		WriterSerializer s = new HtmlSerializer().addPojoSwaps(f);
 		ReaderParser p = new HtmlParser().addPojoSwaps(f);
 		doTest(s, p, false, "<string>Mar 3, 1901</string>");
@@ -517,7 +516,7 @@ public class CalendarSwapTest {
 	//====================================================================================================
 	@Test
 	public void testDefaultMediumUon() throws Exception {
-		Class<?> f = CalendarSwap.Medium.class;
+		Class<?> f = CalendarSwap.DateMedium.class;
 		WriterSerializer s = new UonSerializer.Encoding().addPojoSwaps(f);
 		ReaderParser p = UonParser.DEFAULT_DECODING.clone().addPojoSwaps(f);
 		doTest(s, p, false, "Mar+3,+1901");
@@ -528,7 +527,7 @@ public class CalendarSwapTest {
 	//====================================================================================================
 	@Test
 	public void testDefaultMediumUrlEncoding() throws Exception {
-		Class<?> f = CalendarSwap.Medium.class;
+		Class<?> f = CalendarSwap.DateMedium.class;
 		WriterSerializer s = new UrlEncodingSerializer().addPojoSwaps(f);
 		ReaderParser p = UrlEncodingParser.DEFAULT.clone().addPojoSwaps(f);
 		doTest(s, p, false, "_value=Mar+3,+1901");
@@ -539,7 +538,7 @@ public class CalendarSwapTest {
 	//====================================================================================================
 	@Test
 	public void testDefaultMediumRdfXml() throws Exception {
-		Class<?> f = CalendarSwap.Medium.class;
+		Class<?> f = CalendarSwap.DateMedium.class;
 		WriterSerializer s = getRdfSerializer().addPojoSwaps(f);
 		ReaderParser p = new RdfParser.Xml().addPojoSwaps(f);
 		doTest(s, p, false, "<rdf:Description><j:value>Mar 3, 1901</j:value></rdf:Description>");

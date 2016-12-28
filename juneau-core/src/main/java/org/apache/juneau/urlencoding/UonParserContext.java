@@ -36,18 +36,20 @@ import org.apache.juneau.parser.*;
  *
  * <h6 class='topic' id='ConfigProperties'>Configurable properties on the URL-Encoding and UON parsers</h6>
  * <table class='styled' style='border-collapse: collapse;'>
- * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th></tr>
+ * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th><th>Session overridable</th></tr>
  * 	<tr>
  * 		<td>{@link #UON_decodeChars}</td>
  * 		<td>Decode <js>"%xx"</js> sequences</td>
  * 		<td><code>Boolean</code></td>
  * 		<td><jk>false</jk> for {@link UonParser}<br><jk>true</jk> for {@link UrlEncodingParser}</td>
+ * 		<td><jk>true</jk></td>
  * 	</tr>
  * 	<tr>
  * 		<td>{@link #UON_whitespaceAware}</td>
  * 		<td>Whitespace aware</td>
  * 		<td><code>Boolean</code></td>
  * 		<td><jk>false</jk></td>
+ * 		<td><jk>true</jk></td>
  * 	</tr>
  * </table>
  *
@@ -68,6 +70,7 @@ public class UonParserContext extends ParserContext {
 	 * 	<li><b>Name:</b> <js>"UonParser.decodeChars"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk> for {@link UonParser}, <jk>true</jk> for {@link UrlEncodingParser}
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
 	 * Specify <jk>true</jk> if URI encoded characters should be decoded, <jk>false</jk>
@@ -82,6 +85,7 @@ public class UonParserContext extends ParserContext {
 	 * 	<li><b>Name:</b> <js>"UonParser.whitespaceAware"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
 	 * Expect input to contain readable whitespace characters from using the {@link UonSerializerContext#UON_useWhitespace} setting.

@@ -327,6 +327,9 @@ public class BeanPropertyMeta {
 	 */
 	public Object get(BeanMap<?> m) {
 		try {
+
+			BeanSession session = m.getBeanSession();
+
 			// Read-only beans have their properties stored in a cache until getBean() is called.
 			Object bean = m.bean;
 			if (bean == null)
@@ -343,7 +346,7 @@ public class BeanPropertyMeta {
 			else if (field != null)
 				o = field.get(bean);
 
-			o = transform(o);
+			o = transform(session, o);
 			if (o == null)
 				return null;
 			if (properties != null) {
@@ -352,17 +355,17 @@ public class BeanPropertyMeta {
 					List l = new ArrayList(a.length);
 					ClassMeta childType = rawTypeMeta.getElementType();
 					for (Object c : a)
-						l.add(applyChildPropertiesFilter(childType, c));
+						l.add(applyChildPropertiesFilter(session, childType, c));
 					return l;
 				} else if (rawTypeMeta.isCollection()) {
 					Collection c = (Collection)o;
 					List l = new ArrayList(c.size());
 					ClassMeta childType = rawTypeMeta.getElementType();
 					for (Object cc : c)
-						l.add(applyChildPropertiesFilter(childType, cc));
+						l.add(applyChildPropertiesFilter(session, childType, cc));
 					return l;
 				} else {
-					return applyChildPropertiesFilter(rawTypeMeta, o);
+					return applyChildPropertiesFilter(session, rawTypeMeta, o);
 				}
 			}
 			return o;
@@ -389,195 +392,198 @@ public class BeanPropertyMeta {
 	 */
 	public Object set(BeanMap<?> m, Object value) throws BeanRuntimeException {
 		try {
+
+			BeanSession session = m.getBeanSession();
+
 			// Comvert to raw form.
-			value = unswap(value);
+			value = unswap(session, value);
 
-		if (m.bean == null) {
+			if (m.bean == null) {
 
-			// If this bean has subtypes, and we haven't set the subtype yet,
-			// store the property in a temporary cache until the bean can be instantiated.
-			if (m.meta.subTypeProperty != null && m.propertyCache == null)
-				m.propertyCache = new TreeMap<String,Object>();
+				// If this bean has subtypes, and we haven't set the subtype yet,
+				// store the property in a temporary cache until the bean can be instantiated.
+				if (m.meta.subTypeProperty != null && m.propertyCache == null)
+					m.propertyCache = new TreeMap<String,Object>();
 
-			// Read-only beans get their properties stored in a cache.
-			if (m.propertyCache != null)
-				return m.propertyCache.put(name, value);
+				// Read-only beans get their properties stored in a cache.
+				if (m.propertyCache != null)
+					return m.propertyCache.put(name, value);
 
-			throw new BeanRuntimeException("Non-existent bean instance on bean.");
-		}
-
-			boolean isMap = rawTypeMeta.isMap();
-			boolean isCollection = rawTypeMeta.isCollection();
-
-		if (field == null && setter == null && ! (isMap || isCollection)) {
-			if ((value == null && beanContext.ignoreUnknownNullBeanProperties) || beanContext.ignorePropertiesWithoutSetters)
-				return null;
-			throw new BeanRuntimeException(beanMeta.c, "Setter or public field not defined on property ''{0}''", name);
-		}
-
-		Object bean = m.getBean(true);  // Don't use getBean() because it triggers array creation!
-
-		try {
-
-			Object r = beanContext.beanMapPutReturnsOldValue || isMap || isCollection ? get(m) : null;
-				Class<?> propertyClass = rawTypeMeta.getInnerClass();
-
-			if (value == null && (isMap || isCollection)) {
-				if (setter != null) {
-					setter.invoke(bean, new Object[] { null });
-					return r;
-				} else if (field != null) {
-					field.set(bean, null);
-					return r;
-				}
-				throw new BeanRuntimeException(beanMeta.c, "Cannot set property ''{0}'' to null because no setter or public field is defined", name);
+				throw new BeanRuntimeException("Non-existent bean instance on bean.");
 			}
 
-			if (isMap) {
+				boolean isMap = rawTypeMeta.isMap();
+				boolean isCollection = rawTypeMeta.isCollection();
 
-				if (! (value instanceof Map)) {
-					if (value instanceof CharSequence)
-						value = new ObjectMap((CharSequence)value).setBeanContext(beanContext);
-					else
-						throw new BeanRuntimeException(beanMeta.c, "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}''", name, propertyClass.getName(), findClassName(value));
+			if (field == null && setter == null && ! (isMap || isCollection)) {
+				if ((value == null && beanContext.ignoreUnknownNullBeanProperties) || beanContext.ignorePropertiesWithoutSetters)
+					return null;
+				throw new BeanRuntimeException(beanMeta.c, "Setter or public field not defined on property ''{0}''", name);
+			}
+
+			Object bean = m.getBean(true);  // Don't use getBean() because it triggers array creation!
+
+			try {
+
+				Object r = beanContext.beanMapPutReturnsOldValue || isMap || isCollection ? get(m) : null;
+					Class<?> propertyClass = rawTypeMeta.getInnerClass();
+
+				if (value == null && (isMap || isCollection)) {
+					if (setter != null) {
+						setter.invoke(bean, new Object[] { null });
+						return r;
+					} else if (field != null) {
+						field.set(bean, null);
+						return r;
+					}
+					throw new BeanRuntimeException(beanMeta.c, "Cannot set property ''{0}'' to null because no setter or public field is defined", name);
 				}
 
-				Map valueMap = (Map)value;
-				Map propMap = (Map)r;
-					ClassMeta<?> valueType = rawTypeMeta.getValueType();
+				if (isMap) {
 
-				// If the property type is abstract, then we either need to reuse the existing
-				// map (if it's not null), or try to assign the value directly.
-					if (! rawTypeMeta.canCreateNewInstance()) {
-					if (propMap == null) {
-						if (setter == null && field == null)
-							throw new BeanRuntimeException(beanMeta.c, "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter or public field is defined, and the current value is null", name, propertyClass.getName(), findClassName(value));
-
-						if (propertyClass.isInstance(valueMap)) {
-							if (! valueType.isObject()) {
-								for (Map.Entry e : (Set<Map.Entry>)valueMap.entrySet()) {
-									Object v = e.getValue();
-									if (v != null && ! valueType.getInnerClass().isInstance(v))
-										throw new BeanRuntimeException(beanMeta.c, "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because the value types in the assigned map do not match the specified ''elementClass'' attribute on the property, and the property value is currently null", name, propertyClass.getName(), findClassName(value));
-								}
-							}
-							if (setter != null)
-								setter.invoke(bean, valueMap);
-							else
-								field.set(bean, valueMap);
-							return r;
-						}
-						throw new BeanRuntimeException(beanMeta.c, "Cannot set property ''{0}'' of type ''{2}'' to object of type ''{2}'' because the assigned map cannot be converted to the specified type because the property type is abstract, and the property value is currently null", name, propertyClass.getName(), findClassName(value));
-					}
-				} else {
-					if (propMap == null) {
-						propMap = (Map)propertyClass.newInstance();
-						if (setter != null)
-							setter.invoke(bean, propMap);
-						else if (field != null)
-							field.set(bean, propMap);
+					if (! (value instanceof Map)) {
+						if (value instanceof CharSequence)
+							value = new ObjectMap((CharSequence)value).setBeanSession(session);
 						else
-							throw new BeanRuntimeException(beanMeta.c, "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter or public field is defined on this property, and the existing property value is null", name, propertyClass.getName(), findClassName(value));
-					} else {
-						propMap.clear();
+							throw new BeanRuntimeException(beanMeta.c, "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}''", name, propertyClass.getName(), findClassName(value));
 					}
-				}
 
-				// Set the values.
-				for (Map.Entry e : (Set<Map.Entry>)valueMap.entrySet()) {
-					Object k = e.getKey();
-					Object v = e.getValue();
-					if (! valueType.isObject())
-						v = beanContext.convertToType(v, valueType);
-					propMap.put(k, v);
-				}
+					Map valueMap = (Map)value;
+					Map propMap = (Map)r;
+						ClassMeta<?> valueType = rawTypeMeta.getValueType();
 
-			} else if (isCollection) {
+					// If the property type is abstract, then we either need to reuse the existing
+					// map (if it's not null), or try to assign the value directly.
+						if (! rawTypeMeta.canCreateNewInstance()) {
+						if (propMap == null) {
+							if (setter == null && field == null)
+								throw new BeanRuntimeException(beanMeta.c, "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter or public field is defined, and the current value is null", name, propertyClass.getName(), findClassName(value));
 
-				if (! (value instanceof Collection)) {
-					if (value instanceof CharSequence)
-						value = new ObjectList((CharSequence)value).setBeanContext(beanContext);
-					else
-						throw new BeanRuntimeException(beanMeta.c, "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}''", name, propertyClass.getName(), findClassName(value));
-				}
-
-				Collection valueList = (Collection)value;
-				Collection propList = (Collection)r;
-					ClassMeta elementType = rawTypeMeta.getElementType();
-
-				// If the property type is abstract, then we either need to reuse the existing
-				// collection (if it's not null), or try to assign the value directly.
-					if (! rawTypeMeta.canCreateNewInstance()) {
-					if (propList == null) {
-						if (setter == null && field == null)
-							throw new BeanRuntimeException(beanMeta.c, "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter or public field is defined, and the current value is null", name, propertyClass.getName(), findClassName(value));
-
-						if (propertyClass.isInstance(valueList)) {
-							if (! elementType.isObject()) {
-									List l = new ObjectList(valueList);
-									for (ListIterator<Object> i = l.listIterator(); i.hasNext(); ) {
-										Object v = i.next();
-										if (v != null && (! elementType.getInnerClass().isInstance(v))) {
-											i.set(beanContext.convertToType(v, elementType));
-										}
+							if (propertyClass.isInstance(valueMap)) {
+								if (! valueType.isObject()) {
+									for (Map.Entry e : (Set<Map.Entry>)valueMap.entrySet()) {
+										Object v = e.getValue();
+										if (v != null && ! valueType.getInnerClass().isInstance(v))
+											throw new BeanRuntimeException(beanMeta.c, "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because the value types in the assigned map do not match the specified ''elementClass'' attribute on the property, and the property value is currently null", name, propertyClass.getName(), findClassName(value));
 									}
-									valueList = l;
 								}
-							if (setter != null)
-								setter.invoke(bean, valueList);
-							else
-								field.set(bean, valueList);
-							return r;
+								if (setter != null)
+									setter.invoke(bean, valueMap);
+								else
+									field.set(bean, valueMap);
+								return r;
+							}
+							throw new BeanRuntimeException(beanMeta.c, "Cannot set property ''{0}'' of type ''{2}'' to object of type ''{2}'' because the assigned map cannot be converted to the specified type because the property type is abstract, and the property value is currently null", name, propertyClass.getName(), findClassName(value));
 						}
-						throw new BeanRuntimeException(beanMeta.c, "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because the assigned map cannot be converted to the specified type because the property type is abstract, and the property value is currently null", name, propertyClass.getName(), findClassName(value));
-					}
-					propList.clear();
-				} else {
-					if (propList == null) {
-						propList = (Collection)propertyClass.newInstance();
-						if (setter != null)
-							setter.invoke(bean, propList);
-						else if (field != null)
-							field.set(bean, propList);
-						else
-							throw new BeanRuntimeException(beanMeta.c, "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter is defined on this property, and the existing property value is null", name, propertyClass.getName(), findClassName(value));
 					} else {
+						if (propMap == null) {
+							propMap = (Map)propertyClass.newInstance();
+							if (setter != null)
+								setter.invoke(bean, propMap);
+							else if (field != null)
+								field.set(bean, propMap);
+							else
+								throw new BeanRuntimeException(beanMeta.c, "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter or public field is defined on this property, and the existing property value is null", name, propertyClass.getName(), findClassName(value));
+						} else {
+							propMap.clear();
+						}
+					}
+
+					// Set the values.
+					for (Map.Entry e : (Set<Map.Entry>)valueMap.entrySet()) {
+						Object k = e.getKey();
+						Object v = e.getValue();
+						if (! valueType.isObject())
+							v = session.convertToType(v, valueType);
+						propMap.put(k, v);
+					}
+
+				} else if (isCollection) {
+
+					if (! (value instanceof Collection)) {
+						if (value instanceof CharSequence)
+							value = new ObjectList((CharSequence)value).setBeanSession(session);
+						else
+							throw new BeanRuntimeException(beanMeta.c, "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}''", name, propertyClass.getName(), findClassName(value));
+					}
+
+					Collection valueList = (Collection)value;
+					Collection propList = (Collection)r;
+						ClassMeta elementType = rawTypeMeta.getElementType();
+
+					// If the property type is abstract, then we either need to reuse the existing
+					// collection (if it's not null), or try to assign the value directly.
+						if (! rawTypeMeta.canCreateNewInstance()) {
+						if (propList == null) {
+							if (setter == null && field == null)
+								throw new BeanRuntimeException(beanMeta.c, "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter or public field is defined, and the current value is null", name, propertyClass.getName(), findClassName(value));
+
+							if (propertyClass.isInstance(valueList)) {
+								if (! elementType.isObject()) {
+										List l = new ObjectList(valueList);
+										for (ListIterator<Object> i = l.listIterator(); i.hasNext(); ) {
+											Object v = i.next();
+											if (v != null && (! elementType.getInnerClass().isInstance(v))) {
+												i.set(session.convertToType(v, elementType));
+											}
+										}
+										valueList = l;
+									}
+								if (setter != null)
+									setter.invoke(bean, valueList);
+								else
+									field.set(bean, valueList);
+								return r;
+							}
+							throw new BeanRuntimeException(beanMeta.c, "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because the assigned map cannot be converted to the specified type because the property type is abstract, and the property value is currently null", name, propertyClass.getName(), findClassName(value));
+						}
 						propList.clear();
+					} else {
+						if (propList == null) {
+							propList = (Collection)propertyClass.newInstance();
+							if (setter != null)
+								setter.invoke(bean, propList);
+							else if (field != null)
+								field.set(bean, propList);
+							else
+								throw new BeanRuntimeException(beanMeta.c, "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter is defined on this property, and the existing property value is null", name, propertyClass.getName(), findClassName(value));
+						} else {
+							propList.clear();
+						}
 					}
-				}
 
-				// Set the values.
-				for (Object v : valueList) {
-					if (! elementType.isObject())
-						v = beanContext.convertToType(v, elementType);
-					propList.add(v);
-				}
+					// Set the values.
+					for (Object v : valueList) {
+						if (! elementType.isObject())
+							v = session.convertToType(v, elementType);
+						propList.add(v);
+					}
 
-			} else {
-				if (swap != null && value != null && isParentClass(swap.getSwapClass(), value.getClass())) {
-						value = swap.unswap(value, rawTypeMeta, beanContext);
 				} else {
-						value = beanContext.convertToType(value, rawTypeMeta);
-					}
-				if (setter != null)
-					setter.invoke(bean, new Object[] { value });
-				else if (field != null)
-					field.set(bean, value);
-			}
+					if (swap != null && value != null && isParentClass(swap.getSwapClass(), value.getClass())) {
+							value = swap.unswap(session, value, rawTypeMeta);
+					} else {
+							value = session.convertToType(value, rawTypeMeta);
+						}
+					if (setter != null)
+						setter.invoke(bean, new Object[] { value });
+					else if (field != null)
+						field.set(bean, value);
+				}
 
-			return r;
+				return r;
 
-		} catch (BeanRuntimeException e) {
-			throw e;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (beanContext.ignoreInvocationExceptionsOnSetters) {
-					if (rawTypeMeta.isPrimitive())
-						return rawTypeMeta.getPrimitiveDefault();
-				return null;
+			} catch (BeanRuntimeException e) {
+				throw e;
+			} catch (Exception e) {
+				e.printStackTrace();
+				if (beanContext.ignoreInvocationExceptionsOnSetters) {
+						if (rawTypeMeta.isPrimitive())
+							return rawTypeMeta.getPrimitiveDefault();
+					return null;
+				}
+				throw new BeanRuntimeException(beanMeta.c, "Error occurred trying to set property ''{0}''", name).initCause(e);
 			}
-			throw new BeanRuntimeException(beanMeta.c, "Error occurred trying to set property ''{0}''", name).initCause(e);
-		}
 		} catch (ParseException e) {
 			throw new BeanRuntimeException(e);
 		}
@@ -617,10 +623,12 @@ public class BeanPropertyMeta {
 		// Read-only beans get their properties stored in a cache.
 		if (m.bean == null) {
 			if (! m.propertyCache.containsKey(name))
-				m.propertyCache.put(name, new ObjectList(beanContext));
+				m.propertyCache.put(name, new ObjectList(m.getBeanSession()));
 			((ObjectList)m.propertyCache.get(name)).add(value);
 			return;
 		}
+
+		BeanSession session = m.getBeanSession();
 
 		boolean isCollection = rawTypeMeta.isCollection();
 		boolean isArray = rawTypeMeta.isArray();
@@ -633,7 +641,7 @@ public class BeanPropertyMeta {
 		ClassMeta<?> elementType = rawTypeMeta.getElementType();
 
 		try {
-			Object v = beanContext.convertToType(value, elementType);
+			Object v = session.convertToType(value, elementType);
 
 			if (isCollection) {
 				Collection c = null;
@@ -653,7 +661,7 @@ public class BeanPropertyMeta {
 				if (rawTypeMeta.canCreateNewInstance())
 					c = (Collection)rawTypeMeta.newInstance();
 				else
-					c = new ObjectList(beanContext);
+					c = new ObjectList(session);
 
 				c.add(v);
 
@@ -723,10 +731,10 @@ public class BeanPropertyMeta {
 		return l;
 	}
 
-	private Object transform(Object o) throws SerializeException {
+	private Object transform(BeanSession session, Object o) throws SerializeException {
 		// First use swap defined via @BeanProperty.
 		if (swap != null)
-			return swap.swap(o, beanContext);
+			return swap.swap(session, o);
 		if (o == null)
 			return null;
 		// Otherwise, look it up via bean context.
@@ -735,14 +743,14 @@ public class BeanPropertyMeta {
 			ClassMeta<?> cm = rawTypeMeta.innerClass == c ? rawTypeMeta : beanContext.getClassMeta(c);
 			PojoSwap f = cm.getPojoSwap();
 			if (f != null)
-				return f.swap(o, beanContext);
+				return f.swap(session, o);
 		}
 		return o;
 	}
 
-	private Object unswap(Object o) throws ParseException {
+	private Object unswap(BeanSession session, Object o) throws ParseException {
 		if (swap != null)
-			return swap.unswap(o, rawTypeMeta, beanContext);
+			return swap.unswap(session, o, rawTypeMeta);
 		if (o == null)
 			return null;
 		if (rawTypeMeta.hasChildPojoSwaps()) {
@@ -750,16 +758,16 @@ public class BeanPropertyMeta {
 			ClassMeta<?> cm = rawTypeMeta.innerClass == c ? rawTypeMeta : beanContext.getClassMeta(c);
 			PojoSwap f = cm.getPojoSwap();
 			if (f != null)
-				return f.unswap(o, rawTypeMeta, beanContext);
+				return f.unswap(session, o, rawTypeMeta);
 		}
 		return o;
 	}
 
-	private Object applyChildPropertiesFilter(ClassMeta cm, Object o) {
+	private Object applyChildPropertiesFilter(BeanSession session, ClassMeta cm, Object o) {
 		if (o == null)
 			return null;
 		if (cm.isBean())
-			return new BeanMap(o, new BeanMetaFiltered(cm.getBeanMeta(), properties));
+			return new BeanMap(session, o, new BeanMetaFiltered(cm.getBeanMeta(), properties));
 		if (cm.isMap())
 			return new FilteredMap((Map)o, properties);
 		if (cm.isObject()) {
@@ -767,7 +775,7 @@ public class BeanPropertyMeta {
 				return new FilteredMap((Map)o, properties);
 			BeanMeta bm = beanContext.getBeanMeta(o.getClass());
 			if (bm != null)
-				return new BeanMap(o, new BeanMetaFiltered(cm.getBeanMeta(), properties));
+				return new BeanMap(session, o, new BeanMetaFiltered(cm.getBeanMeta(), properties));
 		}
 		return o;
 	}

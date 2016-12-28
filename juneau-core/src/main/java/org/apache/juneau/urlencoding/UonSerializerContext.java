@@ -36,24 +36,27 @@ import org.apache.juneau.serializer.*;
  *
  * <h6 class='topic' id='ConfigProperties'>Configurable properties on the URL-Encoding and UON serializers</h6>
  * <table class='styled' style='border-collapse: collapse;'>
- * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th></tr>
+ * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th><th>Session overridable</th></tr>
  * 	<tr>
  * 		<td>{@link #UON_simpleMode}</td>
  * 		<td>Use simplified output.</td>
  * 		<td><code>Boolean</code></td>
  * 		<td><jk>false</jk></td>
+ * 		<td><jk>true</jk></td>
  * 	</tr>
  * 	<tr>
  * 		<td>{@link #UON_useWhitespace}</td>
  * 		<td>Use whitespace.</td>
  * 		<td><code>Boolean</code></td>
  * 		<td><jk>false</jk></td>
+ * 		<td><jk>true</jk></td>
  * 	</tr>
  * 	<tr>
  * 		<td>{@link #UON_encodeChars}</td>
  * 		<td>Encode non-valid URI characters.</td>
  * 		<td><code>Boolean</code></td>
  * 		<td><jk>false</jk> for {@link UonSerializer}<br><jk>true</jk> for {@link UrlEncodingSerializer}</td>
+ * 		<td><jk>true</jk></td>
  * 	</tr>
  * </table>
  *
@@ -74,6 +77,7 @@ public class UonSerializerContext extends SerializerContext {
 	 * 	<li><b>Name:</b> <js>"UonSerializer.simpleMode"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, type flags will not be prepended to values in most cases.
@@ -133,6 +137,7 @@ public class UonSerializerContext extends SerializerContext {
 	 * 	<li><b>Name:</b> <js>"UonSerializer.useWhitespace"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, whitespace is added to the output to improve readability.
@@ -146,6 +151,7 @@ public class UonSerializerContext extends SerializerContext {
 	 * 	<li><b>Name:</b> <js>"UonSerializer.encodeChars"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk> for {@link UonSerializer}, <jk>true</jk> for {@link UrlEncodingSerializer}
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
 	 * Encode non-valid URI characters with <js>"%xx"</js> constructs.

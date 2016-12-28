@@ -49,7 +49,7 @@ public final class PlainTextSerializer extends WriterSerializer {
 
 	@Override /* Serializer */
 	protected void doSerialize(SerializerSession session, Object o) throws Exception {
-		session.getWriter().write(o == null ? "null" : session.getBeanContext().convertToType(o, String.class));
+		session.getWriter().write(o == null ? "null" : session.convertToType(o, String.class));
 	}
 
 	@Override /* Serializer */

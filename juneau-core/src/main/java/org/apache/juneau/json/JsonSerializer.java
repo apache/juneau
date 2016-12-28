@@ -153,7 +153,6 @@ public class JsonSerializer extends WriterSerializer {
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	SerializerWriter serializeAnything(JsonSerializerSession session, JsonWriter out, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta) throws Exception {
-		BeanContext bc = session.getBeanContext();
 
 		if (o == null) {
 			out.append("null");
@@ -182,12 +181,12 @@ public class JsonSerializer extends WriterSerializer {
 		// Swap if necessary
 		PojoSwap swap = aType.getPojoSwap();
 		if (swap != null) {
-			o = swap.swap(o, bc);
+			o = swap.swap(session, o);
 
 			// If the getSwapClass() method returns Object, we need to figure out
 			// the actual type now.
 			if (sType.isObject())
-				sType = bc.getClassMetaForObject(o);
+				sType = session.getClassMetaForObject(o);
 		}
 
 		String wrapperAttr = sType.getExtendedMeta(JsonClassMeta.class).getWrapperAttr();
@@ -204,7 +203,7 @@ public class JsonSerializer extends WriterSerializer {
 		else if (sType.hasToObjectMapMethod())
 			serializeMap(session, out, sType.toObjectMap(o), sType);
 		else if (sType.isBean())
-			serializeBeanMap(session, out, bc.forBean(o), addTypeProperty);
+			serializeBeanMap(session, out, session.toBeanMap(o), addTypeProperty);
 		else if (sType.isUri() || (pMeta != null && pMeta.isUri()))
 			out.q().appendUri(o).q();
 		else if (sType.isMap()) {
@@ -332,8 +331,8 @@ public class JsonSerializer extends WriterSerializer {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Serializer */
-	public JsonSerializerSession createSession(Object output, ObjectMap properties, Method javaMethod) {
-		return new JsonSerializerSession(getContext(JsonSerializerContext.class), getBeanContext(), output, properties, javaMethod);
+	public JsonSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone) {
+		return new JsonSerializerSession(getContext(JsonSerializerContext.class), op, output, javaMethod, locale, timeZone);
 	}
 
 	@Override /* Serializer */

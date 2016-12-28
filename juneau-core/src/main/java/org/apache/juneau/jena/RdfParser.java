@@ -108,12 +108,11 @@ public class RdfParser extends ReaderParser {
 
 		RdfParserSession s = (RdfParserSession)session;
 
-		type = session.getBeanContext().normalizeClassMeta(type);
+		type = session.normalizeClassMeta(type);
 
 		Model model = s.getModel();
 		RDFReader r = s.getRdfReader();
 		r.read(model, session.getReader(), null);
-		BeanContext bc = session.getBeanContext();
 
 		List<Resource> roots = getRoots(s, model);
 
@@ -123,12 +122,12 @@ public class RdfParser extends ReaderParser {
 			if (type.isArray())
 				c = new ArrayList();
 			else
-				c = (type.canCreateNewInstance(session.getOuter()) ? (Collection<?>)type.newInstance(session.getOuter()) : new ObjectList(bc));
+				c = (type.canCreateNewInstance(session.getOuter()) ? (Collection<?>)type.newInstance(session.getOuter()) : new ObjectList(session));
 			for (Resource resource : roots)
 				c.add(parseAnything(s, type.getElementType(), resource, session.getOuter()));
 
 			if (type.isArray())
-				return (T)bc.toArray(type, c);
+				return (T)session.toArray(type, c);
 			return (T)c;
 		}
 
@@ -234,8 +233,6 @@ public class RdfParser extends ReaderParser {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private <T> T parseAnything(RdfParserSession session, ClassMeta<T> eType, RDFNode n, Object outer) throws Exception {
 
-		BeanContext bc = session.getBeanContext();
-
 		if (eType == null)
 			eType = (ClassMeta<T>)object();
 		PojoSwap<T,Object> transform = (PojoSwap<T,Object>)eType.getPojoSwap();
@@ -247,7 +244,7 @@ public class RdfParser extends ReaderParser {
 				Statement st = n.asResource().getProperty(session.getClassProperty());
 				if (st != null) {
  					String c = st.getLiteral().getString();
-					sType = eType = (ClassMeta<T>)bc.getClassMetaFromString(c);
+					sType = eType = (ClassMeta<T>)session.getClassMetaFromString(c);
 				}
 			}
 		}
@@ -269,13 +266,13 @@ public class RdfParser extends ReaderParser {
 				else if (r.getProperty(session.getValueProperty()) != null) {
 					o = parseAnything(session, object(), n.asResource().getProperty(session.getValueProperty()).getObject(), outer);
 				} else if (isSeq(session, r)) {
-					o = new ObjectList(bc);
+					o = new ObjectList(session);
 					parseIntoCollection(session, r.as(Seq.class), (Collection)o, sType.getElementType());
 				} else if (isBag(session, r)) {
-					o = new ObjectList(bc);
+					o = new ObjectList(session);
 					parseIntoCollection(session, r.as(Bag.class), (Collection)o, sType.getElementType());
 				} else if (r.canAs(RDFList.class)) {
-					o = new ObjectList(bc);
+					o = new ObjectList(session);
 					parseIntoCollection(session, r.as(RDFList.class), (Collection)o, sType.getElementType());
 				} else {
 					// If it has a URI and no child properties, we interpret this as an
@@ -284,7 +281,7 @@ public class RdfParser extends ReaderParser {
 					if (uri != null && ! r.listProperties().hasNext()) {
 						o = r.getURI();
 					} else {
-						o = new ObjectMap(bc);
+						o = new ObjectMap(session);
 						parseIntoMap(session, r, (Map)o, null, null);
 					}
 				}
@@ -292,7 +289,7 @@ public class RdfParser extends ReaderParser {
 				throw new ParseException(session, "Unrecognized node type ''{0}'' for object", n);
 			}
 		} else if (sType.isBoolean()) {
-			o = bc.convertToType(getValue(session, n, outer), boolean.class);
+			o = session.convertToType(getValue(session, n, outer), boolean.class);
 		} else if (sType.isCharSequence()) {
 			o = session.decodeString(getValue(session, n, outer));
 		} else if (sType.isChar()) {
@@ -303,13 +300,13 @@ public class RdfParser extends ReaderParser {
 			Resource r = n.asResource();
 			if (session.wasAlreadyProcessed(r))
 				return null;
-			Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : new ObjectMap(bc));
+			Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : new ObjectMap(session));
 			o = parseIntoMap(session, r, m, eType.getKeyType(), eType.getValueType());
 		} else if (sType.isCollection() || sType.isArray()) {
 			if (sType.isArray())
 				o = new ArrayList();
 			else
-				o = (sType.canCreateNewInstance(outer) ? (Collection<?>)sType.newInstance(outer) : new ObjectList(bc));
+				o = (sType.canCreateNewInstance(outer) ? (Collection<?>)sType.newInstance(outer) : new ObjectList(session));
 			Resource r = n.asResource();
 			if (session.wasAlreadyProcessed(r))
 				return null;
@@ -323,32 +320,32 @@ public class RdfParser extends ReaderParser {
 				throw new ParseException("Unrecognized node type ''{0}'' for collection", n);
 			}
 			if (sType.isArray())
-				o = bc.toArray(sType, (Collection)o);
+				o = session.toArray(sType, (Collection)o);
 		} else if (sType.canCreateNewInstanceFromObjectMap(outer)) {
 			Resource r = n.asResource();
 			if (session.wasAlreadyProcessed(r))
 				return null;
-			Map m = new ObjectMap(bc);
+			Map m = new ObjectMap(session);
 			parseIntoMap(session, r, m, eType.getKeyType(), eType.getValueType());
 			o = sType.newInstanceFromObjectMap(outer, (ObjectMap)m);
 		} else if (sType.canCreateNewBean(outer)) {
 			Resource r = n.asResource();
 			if (session.wasAlreadyProcessed(r))
 				return null;
-			BeanMap<?> bm = bc.newBeanMap(outer, sType.getInnerClass());
+			BeanMap<?> bm = session.newBeanMap(outer, sType.getInnerClass());
 			o = parseIntoBeanMap(session, r, bm).getBean();
 		} else if (sType.isUri() && n.isResource()) {
 			o = sType.newInstanceFromString(outer, session.decodeString(n.asResource().getURI()));
 		} else if (sType.canCreateNewInstanceFromString(outer)) {
 			o = sType.newInstanceFromString(outer, session.decodeString(getValue(session, n, outer)));
 		} else if (sType.canCreateNewInstanceFromNumber(outer)) {
-			o = sType.newInstanceFromNumber(outer, parseNumber(getValue(session, n, outer).toString(), sType.getNewInstanceFromNumberClass()));
+			o = sType.newInstanceFromNumber(session, outer, parseNumber(getValue(session, n, outer).toString(), sType.getNewInstanceFromNumberClass()));
 		} else {
 			throw new ParseException("Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.getInnerClass().getName(), sType.getNotABeanReason());
 		}
 
 		if (transform != null && o != null)
-			o = transform.unswap(o, eType, bc);
+			o = transform.unswap(session, o, eType);
 
 		if (outer != null)
 			setParent(eType, o, outer);
@@ -435,8 +432,8 @@ public class RdfParser extends ReaderParser {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Parser */
-	public RdfParserSession createSession(Object input, ObjectMap op, Method javaMethod, Object outer) {
-		return new RdfParserSession(getContext(RdfParserContext.class), getBeanContext(), input, op, javaMethod, outer);
+	public RdfParserSession createSession(Object input, ObjectMap op, Method javaMethod, Object outer, Locale locale, TimeZone timeZone) {
+		return new RdfParserSession(getContext(RdfParserContext.class), op, input, javaMethod, outer, locale, timeZone);
 	}
 
 	@Override /* CoreApi */

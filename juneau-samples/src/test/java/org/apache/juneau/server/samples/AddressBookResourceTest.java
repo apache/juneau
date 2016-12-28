@@ -43,8 +43,8 @@ public class AddressBookResourceTest {
 			new SamplesRestClient(XmlSerializer.class,  HtmlParser.class).setAccept("text/html+stripped")
 		};
 		for (RestClient c : clients) {
-			c.getSerializer().addPojoSwaps(CalendarSwap.Medium.class);
-			c.getParser().addPojoSwaps(CalendarSwap.Medium.class);
+			c.getSerializer().addPojoSwaps(CalendarSwap.DateMedium.class);
+			c.getParser().addPojoSwaps(CalendarSwap.DateMedium.class);
 			c.getSerializer().setProperty(XmlSerializerContext.XML_autoDetectNamespaces, true);
 		}
 	}
@@ -62,7 +62,7 @@ public class AddressBookResourceTest {
 	@Test
 	public void testBasic() throws Exception {
 		String in = IOUtils.read(getClass().getResourceAsStream("/org/apache/juneau/server/test/AddressBookResource_test0Test.json"));
-		JsonParser p = new JsonParser().addPojoSwaps(CalendarSwap.Medium.class);
+		JsonParser p = new JsonParser().addPojoSwaps(CalendarSwap.DateMedium.class);
 		Person person = p.parse(in, Person.class);
 		if (debug) System.err.println(person);
 	}
@@ -100,7 +100,7 @@ public class AddressBookResourceTest {
 
 			// POST an address as JSON
 			CreateAddress ca = new CreateAddress("a1","b1","c1",1,false);
-			Address a = client.doPost(p.uri + "/addresses", new ObjectMap(BeanContext.DEFAULT.forBean(ca))).getResponse(Address.class);
+			Address a = client.doPost(p.uri + "/addresses", new ObjectMap(BeanContext.DEFAULT.createSession().toBeanMap(ca))).getResponse(Address.class);
 			assertEquals("a1", a.street);
 			a = client.doGet(a.uri).getResponse(Address.class);
 			assertEquals("a1", a.street);

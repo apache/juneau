@@ -36,24 +36,27 @@ import org.apache.juneau.serializer.*;
  *
  * <h6 class='topic' id='ConfigProperties'>Configurable properties on the JSON serializer</h6>
  * <table class='styled' style='border-collapse: collapse;'>
- * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th></tr>
+ * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th><th>Session overridable</th></tr>
  * 	<tr>
  * 		<td>{@link #JSON_simpleMode}</td>
  * 		<td>Simple JSON mode.</td>
  * 		<td><code>Boolean</code></td>
  * 		<td><jk>false</jk></td>
+ * 		<td><jk>true</jk></td>
  * 	</tr>
  * 	<tr>
  * 		<td>{@link #JSON_useWhitespace}</td>
  * 		<td>Use whitespace.</td>
  * 		<td><code>Boolean</code></td>
  * 		<td><jk>false</jk></td>
+ * 		<td><jk>true</jk></td>
  * 	</tr>
  * 	<tr>
  * 		<td>{@link #JSON_escapeSolidus}</td>
  * 		<td>Prefix solidus <js>'/'</js> characters with escapes.</td>
  * 		<td><code>Boolean</code></td>
  * 		<td><jk>false</jk></td>
+ * 		<td><jk>true</jk></td>
  * 	</tr>
  * </table>
  *
@@ -74,6 +77,7 @@ public final class JsonSerializerContext extends SerializerContext {
 	 * 	<li><b>Name:</b> <js>"JsonSerializer.simpleMode"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, JSON attribute names will only be quoted when necessary.
@@ -88,6 +92,7 @@ public final class JsonSerializerContext extends SerializerContext {
 	 * 	<li><b>Name:</b> <js>"JsonSerializer.useWhitespace"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, whitespace is added to the output to improve readability.
@@ -101,6 +106,7 @@ public final class JsonSerializerContext extends SerializerContext {
 	 * 	<li><b>Name:</b> <js>"JsonSerializer.escapeSolidus"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, solidus (e.g. slash) characters should be escaped.

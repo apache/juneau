@@ -553,7 +553,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 		assertFieldNotNull(c, "c");
 		readLock();
 		try {
-			BeanMap<T> bm = getParser().getBeanContext().newBeanMap(c);
+			BeanMap<T> bm = getParser().getBeanContext().createSession().newBeanMap(c);
 			for (String k : getSectionKeys(sectionName)) {
 				BeanPropertyMeta bpm = bm.getPropertyMeta(k);
 				if (bpm == null) {

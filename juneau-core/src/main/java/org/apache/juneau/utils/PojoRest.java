@@ -119,7 +119,7 @@ public final class PojoRest {
 	private static final int GET=1, PUT=2, POST=3, DELETE=4;
 
 	private ReaderParser parser = JsonParser.DEFAULT;
-	private final BeanContext bc;
+	private final BeanSession session;
 
 	/** If true, the root cannot be overwritten */
 	private boolean rootLocked = false;
@@ -150,8 +150,8 @@ public final class PojoRest {
 		if (parser == null)
 			parser = JsonParser.DEFAULT;
 		this.parser = parser;
-		this.bc = parser.getBeanContext();
-		this.root = new JsonNode(null, null, o, bc.object());
+		this.session = parser.getBeanContext().createSession();
+		this.root = new JsonNode(null, null, o, session.object());
 	}
 
 	/**
@@ -200,7 +200,7 @@ public final class PojoRest {
 	/**
 	 * Retrieves the element addressed by the URL as the specified object type.
 	 * <p>
-	 * Will convert object to the specified type per {@link BeanContext#convertToType(Object, ClassMeta)}.
+	 * Will convert object to the specified type per {@link BeanSession#convertToType(Object, ClassMeta)}.
 	 *
 	 * @param type The specified object type.
 	 * @param url The URL of the element to retrieve.
@@ -216,7 +216,7 @@ public final class PojoRest {
 	/**
 	 * Retrieves the element addressed by the URL as the specified object type.
 	 * <p>
-	 * Will convert object to the specified type per {@link BeanContext#convertToType(Object, ClassMeta)}.
+	 * Will convert object to the specified type per {@link BeanSession#convertToType(Object, ClassMeta)}.
 	 *
 	 * @param type The specified object type.
 	 * @param url The URL of the element to retrieve.
@@ -230,7 +230,7 @@ public final class PojoRest {
 		Object o = service(GET, url, null);
 		if (o == null)
 			return def;
-		return bc.convertToType(o, type);
+		return session.convertToType(o, type);
 	}
 
 	/**
@@ -495,7 +495,7 @@ public final class PojoRest {
 		Object o = get(url);
 		if (o == null)
 			return null;
-		return bc.getClassMeta(o.getClass()).getPublicMethods().keySet();
+		return session.getClassMeta(o.getClass()).getPublicMethods().keySet();
 	}
 
 	/**
@@ -605,7 +605,7 @@ public final class PojoRest {
 				if (rootLocked)
 					throw new PojoRestException(HTTP_FORBIDDEN, "Cannot overwrite root object");
 				Object o = root.o;
-				root = new JsonNode(null, null, val, bc.object());
+				root = new JsonNode(null, null, val, session.object());
 				return o;
 			}
 			JsonNode n = (parentUrl == null ? root : getNode(parentUrl, root));
@@ -626,14 +626,14 @@ public final class PojoRest {
 					return url;
 				}
 				if (pct.isBean()) {
-					BeanMap m = bc.forBean(po);
+					BeanMap m = session.toBeanMap(po);
 					m.put(n.keyName, o);
 					return url;
 				}
 				throw new PojoRestException(HTTP_BAD_REQUEST, "Cannot perform PUT on ''{0}'' with parent node type ''{1}''", url, pct);
 			}
 			if (cm.isBean())
-				return bc.forBean(o).put(childKey, val);
+				return session.toBeanMap(o).put(childKey, val);
 			throw new PojoRestException(HTTP_BAD_REQUEST, "Cannot perform PUT on ''{0}'' whose parent is of type ''{1}''", url, cm);
 		}
 
@@ -668,7 +668,7 @@ public final class PojoRest {
 					return url + "/" + (o2.length-1);
 				}
 				if (pct.isBean()) {
-					BeanMap m = bc.forBean(po);
+					BeanMap m = session.toBeanMap(po);
 					m.put(childKey, o2);
 					return url + "/" + (o2.length-1);
 				}
@@ -687,7 +687,7 @@ public final class PojoRest {
 				if (rootLocked)
 					throw new PojoRestException(HTTP_FORBIDDEN, "Cannot overwrite root object");
 				Object o = root.o;
-				root = new JsonNode(null, null, null, bc.object());
+				root = new JsonNode(null, null, null, session.object());
 				return o;
 			}
 			JsonNode n = (parentUrl == null ? root : getNode(parentUrl, root));
@@ -708,14 +708,14 @@ public final class PojoRest {
 					return old;
 				}
 				if (pct.isBean()) {
-					BeanMap m = bc.forBean(po);
+					BeanMap m = session.toBeanMap(po);
 					m.put(n.keyName, o2);
 					return old;
 				}
 				throw new PojoRestException(HTTP_BAD_REQUEST, "Cannot perform POST on ''{0}'' with parent node type ''{1}''", url, pct);
 			}
 			if (cm.isBean())
-				return bc.forBean(o).put(childKey, null);
+				return session.toBeanMap(o).put(childKey, null);
 			throw new PojoRestException(HTTP_BAD_REQUEST, "Cannot perform PUT on ''{0}'' whose parent is of type ''{1}''", url, cm);
 		}
 
@@ -764,9 +764,9 @@ public final class PojoRest {
 			this.parent = parent;
 			if (cm == null || cm.isObject()) {
 				if (o == null)
-					cm = bc.object();
+					cm = session.object();
 				else
-					cm = bc.getClassMetaForObject(o);
+					cm = session.getClassMetaForObject(o);
 			}
 			this.cm = cm;
 		}
@@ -808,7 +808,7 @@ public final class PojoRest {
 			o2 = a[key];
 			ct2 = cm.getElementType();
 		} else if (cm.isBean()) {
-			BeanMap m = bc.forBean(o);
+			BeanMap m = session.toBeanMap(o);
 			o2 = m.get(parentKey);
 			BeanPropertyMeta pMeta = m.getPropertyMeta(parentKey);
 			if (pMeta == null)
@@ -829,7 +829,7 @@ public final class PojoRest {
 		if (cm == null)
 			return in;
 		if (cm.isBean() && in instanceof Map)
-			return bc.convertToType(in, cm);
+			return session.convertToType(in, cm);
 		return in;
 	}
 

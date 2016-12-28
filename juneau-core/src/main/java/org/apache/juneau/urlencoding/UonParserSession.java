@@ -36,7 +36,6 @@ public class UonParserSession extends ParserSession {
 	 *
 	 * @param ctx The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
-	 * @param beanContext The bean context being used.
 	 * @param input The input.  Can be any of the following types:
 	 * 	<ul>
 	 * 		<li><jk>null</jk>
@@ -49,9 +48,13 @@ public class UonParserSession extends ParserSession {
 	 * 	These override any context properties defined in the context.
 	 * @param javaMethod The java method that called this parser, usually the method in a REST servlet.
 	 * @param outer The outer object for instantiating top-level non-static inner classes.
+	 * @param locale The session locale.
+	 * 	If <jk>null</jk>, then the locale defined on the context is used.
+	 * @param timeZone The session timezone.
+	 * 	If <jk>null</jk>, then the timezone defined on the context is used.
 	 */
-	public UonParserSession(UonParserContext ctx, BeanContext beanContext, Object input, ObjectMap op, Method javaMethod, Object outer) {
-		super(ctx, beanContext, input, op, javaMethod, outer);
+	public UonParserSession(UonParserContext ctx, ObjectMap op, Object input, Method javaMethod, Object outer, Locale locale, TimeZone timeZone) {
+		super(ctx, op, input, javaMethod, outer, locale, timeZone);
 		if (op == null || op.isEmpty()) {
 			decodeChars = ctx.decodeChars;
 			whitespaceAware = ctx.whitespaceAware;
@@ -67,7 +70,6 @@ public class UonParserSession extends ParserSession {
 	 * The main difference is that characters are never decoded, and the {@link UonParserContext#UON_decodeChars} property is always ignored.
 	 *
 	 * @param ctx The context to copy setting from.
-	 * @param beanContext The bean context being used.
 	 * @param input The input.  Can be any of the following types:
 	 * 	<ul>
 	 * 		<li><jk>null</jk>
@@ -77,8 +79,8 @@ public class UonParserSession extends ParserSession {
 	 * 		<li>{@link File} - Read as system-default encoded stream.
 	 * 	</ul>
 	 */
-	public UonParserSession(UonParserContext ctx, BeanContext beanContext, Object input) {
-		super(ctx, beanContext, input, null, null, null);
+	public UonParserSession(UonParserContext ctx, Object input) {
+		super(ctx, null, input, null, null, null, null);
 		decodeChars = false;
 		whitespaceAware = ctx.whitespaceAware;
 	}

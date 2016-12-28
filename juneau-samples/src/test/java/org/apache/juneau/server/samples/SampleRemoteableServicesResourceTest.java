@@ -35,7 +35,7 @@ public class SampleRemoteableServicesResourceTest {
 			new SamplesRestClient(UonSerializer.class, UonParser.class),
 		};
 		for (RestClient c : clients) {
-			c.addPojoSwaps(CalendarSwap.Medium.class);
+			c.addPojoSwaps(CalendarSwap.DateMedium.class);
 			c.setRemoteableServletUri("/remoteable");
 			c.setProperty(XmlSerializerContext.XML_autoDetectNamespaces, true);
 		}

@@ -27,11 +27,11 @@ public class AnnotationsTest {
 	//====================================================================================================
 	@Test
 	public void testBeanWithExplicitProperties() throws Exception {
-		BeanContext bc = BeanContext.DEFAULT;
+		BeanSession session = BeanContext.DEFAULT.createSession();
 		BeanMap bm = null;
 
 		// Basic test
-		bm = bc.newBeanMap(Person1.class).load("{age:21,name:'foobar'}");
+		bm = session.newBeanMap(Person1.class).load("{age:21,name:'foobar'}");
 		assertNotNull(bm);
 		assertNotNull(bm.getBean());
 		assertEquals(bm.get("age"), 21);
@@ -61,11 +61,11 @@ public class AnnotationsTest {
 	//====================================================================================================
 	@Test
 	public void testForOnlyPublicFields() throws Exception {
-		BeanContext bc = BeanContext.DEFAULT;
+		BeanSession session = BeanContext.DEFAULT.createSession();
 		BeanMap bm = null;
 
 		// Make sure only public fields are detected
-		bm = bc.newBeanMap(A.class).load("{publicField:123}");
+		bm = session.newBeanMap(A.class).load("{publicField:123}");
 		assertNotNull("F1", bm);
 		assertNotNull("F2", bm.getBean());
 		assertObjectEquals("{publicField:123}", bm.getBean());

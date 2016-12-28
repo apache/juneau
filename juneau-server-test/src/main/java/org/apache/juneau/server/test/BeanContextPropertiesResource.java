@@ -15,6 +15,7 @@ package org.apache.juneau.server.test;
 import java.io.*;
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.server.*;
 import org.apache.juneau.server.annotation.*;
 import org.apache.juneau.transforms.*;
@@ -35,8 +36,9 @@ public class BeanContextPropertiesResource extends RestServletDefault {
 	@RestMethod(name="GET", path="/testClassTransforms/{d1}")
 	public Reader testClassTransforms(@Path("d1") Date d1, @Query("d2") Date d2, @Header("X-D3") Date d3) throws Exception {
 		DateSwap df = DateSwap.ISO8601DTZ.class.newInstance();
+		BeanSession session = BeanContext.DEFAULT.createSession();
 		return new StringReader(
-			"d1="+df.swap(d1)+",d2="+df.swap(d2)+",d3="+df.swap(d3)+""
+			"d1="+df.swap(session, d1)+",d2="+df.swap(session, d2)+",d3="+df.swap(session, d3)+""
 		);
 	}
 }

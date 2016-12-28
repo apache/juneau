@@ -97,14 +97,13 @@ public final class JsonParser extends ReaderParser {
 
 	private <T> T parseAnything(JsonParserSession session, ClassMeta<T> eType, ParserReader r, Object outer, BeanPropertyMeta pMeta) throws Exception {
 
-		BeanContext bc = session.getBeanContext();
 		if (eType == null)
 			eType = (ClassMeta<T>)object();
 		PojoSwap<T,Object> transform = (PojoSwap<T,Object>)eType.getPojoSwap();
 		ClassMeta<?> sType = eType.getSerializedClassMeta();
 		session.setCurrentClass(sType);
 		String wrapperAttr = sType.getExtendedMeta(JsonClassMeta.class).getWrapperAttr();
-		BeanDictionary bd = pMeta == null ? bc.getBeanDictionary() : pMeta.getBeanDictionary();
+		BeanDictionary bd = pMeta == null ? session.getBeanDictionary() : pMeta.getBeanDictionary();
 
 		Object o = null;
 
@@ -125,11 +124,11 @@ public final class JsonParser extends ReaderParser {
 			parseKeyword(session, "null", r);
 		} else if (sType.isObject()) {
 			if (c == '{') {
-				ObjectMap m2 = new ObjectMap(bc);
+				ObjectMap m2 = new ObjectMap(session);
 				parseIntoMap2(session, r, m2, string(), object(), pMeta);
 				o = bd.cast(m2);
 			} else if (c == '[') {
-				o = parseIntoCollection2(session, r, new ObjectList(bc), object(), pMeta);
+				o = parseIntoCollection2(session, r, new ObjectList(session), object(), pMeta);
 			} else if (c == '\'' || c == '"') {
 				o = parseString(session, r);
 				if (sType.isChar())
@@ -152,41 +151,41 @@ public final class JsonParser extends ReaderParser {
 		} else if (sType.isNumber()) {
 			o = parseNumber(session, r, (Class<? extends Number>)sType.getInnerClass());
 		} else if (sType.isMap()) {
-			Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : new ObjectMap(bc));
+			Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : new ObjectMap(session));
 			o = parseIntoMap2(session, r, m, sType.getKeyType(), sType.getValueType(), pMeta);
 		} else if (sType.isCollection()) {
 			if (c == '{') {
-				ObjectMap m = new ObjectMap(bc);
+				ObjectMap m = new ObjectMap(session);
 				parseIntoMap2(session, r, m, string(), object(), pMeta);
 				o = bd.cast(m);
 			} else {
-				Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance() : new ObjectList(bc));
+				Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance() : new ObjectList(session));
 				o = parseIntoCollection2(session, r, l, sType.getElementType(), pMeta);
 			}
 		} else if (sType.canCreateNewInstanceFromObjectMap(outer)) {
-			ObjectMap m = new ObjectMap(bc);
+			ObjectMap m = new ObjectMap(session);
 			parseIntoMap2(session, r, m, string(), object(), pMeta);
 			o = sType.newInstanceFromObjectMap(outer, m);
 		} else if (sType.canCreateNewBean(outer)) {
-			BeanMap m = bc.newBeanMap(outer, sType.getInnerClass());
+			BeanMap m = session.newBeanMap(outer, sType.getInnerClass());
 			o = parseIntoBeanMap2(session, r, m).getBean();
 		} else if (sType.canCreateNewInstanceFromString(outer) && (c == '\'' || c == '"')) {
 			o = sType.newInstanceFromString(outer, parseString(session, r));
 		} else if (sType.canCreateNewInstanceFromNumber(outer) && StringUtils.isFirstNumberChar((char)c)) {
-			o = sType.newInstanceFromNumber(outer, parseNumber(session, r, sType.getNewInstanceFromNumberClass()));
+			o = sType.newInstanceFromNumber(session, outer, parseNumber(session, r, sType.getNewInstanceFromNumberClass()));
 		} else if (sType.isArray()) {
 			if (c == '{') {
-				ObjectMap m = new ObjectMap(bc);
+				ObjectMap m = new ObjectMap(session);
 				parseIntoMap2(session, r, m, string(), object(), pMeta);
 				o = bd.cast(m);
 			} else {
 				ArrayList l = (ArrayList)parseIntoCollection2(session, r, new ArrayList(), sType.getElementType(), pMeta);
-				o = bc.toArray(sType, l);
+				o = session.toArray(sType, l);
 			}
 		} else if (c == '{') {
-			Map m = new ObjectMap(bc);
+			Map m = new ObjectMap(session);
 			parseIntoMap2(session, r, m, sType.getKeyType(), sType.getValueType(), pMeta);
-			if (m.containsKey(bc.getBeanTypePropertyName()))
+			if (m.containsKey(session.getBeanTypePropertyName()))
 				o = bd.cast((ObjectMap)m);
 			else
 				throw new ParseException(session, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.getInnerClass().getName(), sType.getNotABeanReason());
@@ -200,7 +199,7 @@ public final class JsonParser extends ReaderParser {
 			skipWrapperAttrEnd(session, r);
 
 		if (transform != null && o != null)
-			o = transform.unswap(o, eType, bc);
+			o = transform.unswap(session, o, eType);
 
 		if (outer != null)
 			setParent(eType, o, outer);
@@ -474,8 +473,6 @@ public final class JsonParser extends ReaderParser {
 
 	private <T> BeanMap<T> parseIntoBeanMap2(JsonParserSession session, ParserReader r, BeanMap<T> m) throws Exception {
 
-		BeanContext bc = session.getBeanContext();
-
 		int S0=0; // Looking for outer {
 		int S1=1; // Looking for attrName start.
 		int S3=3; // Found attrName end, looking for :.
@@ -510,7 +507,7 @@ public final class JsonParser extends ReaderParser {
 				if (session.isCommentOrWhitespace(c)) {
 					skipCommentsAndSpace(session, r.unread());
 				} else {
-					if (! currAttr.equals(bc.getBeanTypePropertyName())) {
+					if (! currAttr.equals(session.getBeanTypePropertyName())) {
 						BeanPropertyMeta pMeta = m.getPropertyMeta(currAttr);
 						session.setCurrentProperty(pMeta);
 						if (pMeta == null) {
@@ -785,14 +782,14 @@ public final class JsonParser extends ReaderParser {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Parser */
-	public JsonParserSession createSession(Object input, ObjectMap op, Method javaMethod, Object outer) {
-		return new JsonParserSession(getContext(JsonParserContext.class), getBeanContext(), input, op, javaMethod, outer);
+	public JsonParserSession createSession(Object input, ObjectMap op, Method javaMethod, Object outer, Locale locale, TimeZone timeZone) {
+		return new JsonParserSession(getContext(JsonParserContext.class), op, input, javaMethod, outer, locale, timeZone);
 	}
 
 	@Override /* Parser */
 	protected <T> T doParse(ParserSession session, ClassMeta<T> type) throws Exception {
 		JsonParserSession s = (JsonParserSession)session;
-		type = s.getBeanContext().normalizeClassMeta(type);
+		type = s.normalizeClassMeta(type);
 		ParserReader r = s.getReader();
 		if (r == null)
 			return null;
@@ -805,7 +802,7 @@ public final class JsonParser extends ReaderParser {
 	protected <K,V> Map<K,V> doParseIntoMap(ParserSession session, Map<K,V> m, Type keyType, Type valueType) throws Exception {
 		JsonParserSession s = (JsonParserSession)session;
 		ParserReader r = s.getReader();
-		m = parseIntoMap2(s, r, m, s.getBeanContext().getClassMeta(keyType), s.getBeanContext().getClassMeta(valueType), null);
+		m = parseIntoMap2(s, r, m, s.getClassMeta(keyType), s.getClassMeta(valueType), null);
 		validateEnd(s, r);
 		return m;
 	}
@@ -814,7 +811,7 @@ public final class JsonParser extends ReaderParser {
 	protected <E> Collection<E> doParseIntoCollection(ParserSession session, Collection<E> c, Type elementType) throws Exception {
 		JsonParserSession s = (JsonParserSession)session;
 		ParserReader r = s.getReader();
-		c = parseIntoCollection2(s, r, c, s.getBeanContext().getClassMeta(elementType), null);
+		c = parseIntoCollection2(s, r, c, s.getClassMeta(elementType), null);
 		validateEnd(s, r);
 		return c;
 	}

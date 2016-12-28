@@ -61,8 +61,8 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Serializer */
-	public HtmlDocSerializerSession createSession(Object output, ObjectMap properties, Method javaMethod) {
-		return new HtmlDocSerializerSession(getContext(HtmlDocSerializerContext.class), getBeanContext(), output, properties, javaMethod);
+	public HtmlDocSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone) {
+		return new HtmlDocSerializerSession(getContext(HtmlDocSerializerContext.class), op, output, javaMethod, locale, timeZone);
 	}
 
 	@Override /* Serializer */
@@ -71,9 +71,9 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		HtmlDocSerializerSession s = (HtmlDocSerializerSession)session;
 		HtmlWriter w = s.getWriter();
 
-		ObjectMap properties = s.getProperties();
+		ObjectMap op = s.getProperties();
 
-		boolean isOptionsPage = properties.containsKey(REST_method) && properties.getString(REST_method).equalsIgnoreCase("OPTIONS");
+		boolean isOptionsPage = op.containsKey(REST_method) && op.getString(REST_method).equalsIgnoreCase("OPTIONS");
 
 		// Render the header.
 		w.sTag("html").nl();
@@ -81,7 +81,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 
 		String cssUrl = s.getCssUrl();
 		if (cssUrl == null)
-			cssUrl = properties.getString(REST_relativeServletURI) + "/style.css";
+			cssUrl = op.getString(REST_relativeServletURI) + "/style.css";
 
 		w.oTag(1, "style")
 			.attr("type", "text/css")
@@ -115,7 +115,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 				for (Map.Entry<String,String> e : htmlLinks.entrySet()) {
 					String uri = e.getValue();
 					if (uri.indexOf("://") == -1 && ! StringUtils.startsWith(uri, '/')) {
-						StringBuilder sb = new StringBuilder(properties.getString(REST_relativeServletURI));
+						StringBuilder sb = new StringBuilder(op.getString(REST_relativeServletURI));
 						if (! (uri.isEmpty() || uri.charAt(0) == '?' || uri.charAt(0) == '/'))
 							sb.append('/');
 						sb.append(uri);

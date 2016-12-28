@@ -220,7 +220,6 @@ public class UrlEncodingSerializer extends UonSerializer {
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private SerializerWriter serializeAnything(UrlEncodingSerializerSession session, UonWriter out, Object o) throws Exception {
-		BeanContext bc = session.getBeanContext();
 
 		boolean addTypeProperty;		// Add "_type" attribute to element?
 		ClassMeta<?> aType;			// The actual type
@@ -237,12 +236,12 @@ public class UrlEncodingSerializer extends UonSerializer {
 		// Swap if necessary
 		PojoSwap swap = aType.getPojoSwap();
 		if (swap != null) {
-			o = swap.swap(o, bc);
+			o = swap.swap(session, o);
 
 			// If the getSwapClass() method returns Object, we need to figure out
 			// the actual type now.
 			if (sType.isObject())
-				sType = bc.getClassMetaForObject(o);
+				sType = session.getClassMetaForObject(o);
 		}
 
 		if (sType.isMap()) {
@@ -253,9 +252,9 @@ public class UrlEncodingSerializer extends UonSerializer {
 		} else if (sType.hasToObjectMapMethod()) {
 			serializeMap(session, out, sType.toObjectMap(o), sType);
 		} else if (sType.isBean()) {
-			serializeBeanMap(session, out, bc.forBean(o), addTypeProperty);
+			serializeBeanMap(session, out, session.toBeanMap(o), addTypeProperty);
 		} else if (sType.isCollection()) {
-			serializeMap(session, out, getCollectionMap((Collection)o), bc.getMapClassMeta(Map.class, Integer.class, sType.getElementType()));
+			serializeMap(session, out, getCollectionMap((Collection)o), session.getMapClassMeta(Map.class, Integer.class, sType.getElementType()));
 		} else {
 			// All other types can't be serialized as key/value pairs, so we create a
 			// mock key/value pair with a "_value" key.
@@ -367,7 +366,7 @@ public class UrlEncodingSerializer extends UonSerializer {
 	//--------------------------------------------------------------------------------
 
 	/**
-	 * Converts the specified object to a string using this serializers {@link BeanContext#convertToType(Object, Class)} method
+	 * Converts the specified object to a string using this serializers {@link BeanSession#convertToType(Object, Class)} method
 	 * 	and runs {@link URLEncoder#encode(String,String)} against the results.
 	 * Useful for constructing URL parts.
 	 *
@@ -383,7 +382,7 @@ public class UrlEncodingSerializer extends UonSerializer {
 					return o.toString();
 
 			StringWriter w = new StringWriter();
-			UonSerializerSession s = createSession(w, null, null);
+			UonSerializerSession s = createSession(w, null, null, null, null);
 			super.doSerialize(s, o);
 			return w.toString();
 		} catch (Exception e) {
@@ -397,8 +396,8 @@ public class UrlEncodingSerializer extends UonSerializer {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Serializer */
-	public UrlEncodingSerializerSession createSession(Object output, ObjectMap properties, Method javaMethod) {
-		return new UrlEncodingSerializerSession(getContext(UrlEncodingSerializerContext.class), getBeanContext(), output, properties, javaMethod);
+	public UrlEncodingSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone) {
+		return new UrlEncodingSerializerSession(getContext(UrlEncodingSerializerContext.class), op, output, javaMethod, locale, timeZone);
 	}
 
 	@Override /* Serializer */

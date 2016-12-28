@@ -50,7 +50,7 @@ public final class PlainTextParser extends ReaderParser {
 
 	@Override /* Parser */
 	protected <T> T doParse(ParserSession session, ClassMeta<T> type) throws Exception {
-		return session.getBeanContext().convertToType(IOUtils.read(session.getReader()), type);
+		return session.convertToType(IOUtils.read(session.getReader()), type);
 	}
 
 	@Override /* Lockable */

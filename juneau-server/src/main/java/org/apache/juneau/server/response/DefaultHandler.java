@@ -64,13 +64,13 @@ public class DefaultHandler implements ResponseHandler {
 				if (! s.isWriterSerializer()) {
 					OutputStreamSerializer s2 = (OutputStreamSerializer)s;
 					OutputStream os = res.getNegotiatedOutputStream();
-					SerializerSession session = s.createSession(os, p, req.getJavaMethod());
+					SerializerSession session = s.createSession(os, p, req.getJavaMethod(), req.getLocale(), req.getTimeZone());
 					s2.serialize(session, output);
 					os.close();
 				} else {
 					WriterSerializer s2 = (WriterSerializer)s;
 					Writer w = res.getNegotiatedWriter();
-					SerializerSession session = s.createSession(w, p, req.getJavaMethod());
+					SerializerSession session = s.createSession(w, p, req.getJavaMethod(), req.getLocale(), req.getTimeZone());
 					s2.serialize(session, output);
 					w.close();
 				}

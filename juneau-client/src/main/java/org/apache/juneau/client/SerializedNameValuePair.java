@@ -59,7 +59,7 @@ public final class SerializedNameValuePair implements NameValuePair {
 			char c = name.charAt(0);
 			if (c == '$' || c == '(') {
 				try {
-					UonSerializerSession s = serializer.createSession(new StringWriter(), op, null);
+					UonSerializerSession s = serializer.createSession(new StringWriter(), op, null, null, null);
 					serializer.serialize(s, name);
 					return s.getWriter().toString();
 				} catch (Exception e) {
@@ -73,7 +73,7 @@ public final class SerializedNameValuePair implements NameValuePair {
 	@Override /* NameValuePair */
 	public String getValue() {
 		try {
-			UonSerializerSession s = serializer.createSession(new StringWriter(), op, null);
+			UonSerializerSession s = serializer.createSession(new StringWriter(), op, null, null, null);
 			serializer.serialize(s, value);
 			return s.getWriter().toString();
 		} catch (Exception e) {

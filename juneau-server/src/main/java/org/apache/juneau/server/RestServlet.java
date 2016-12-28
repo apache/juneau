@@ -2124,7 +2124,7 @@ public abstract class RestServlet extends HttpServlet {
 
 		@SuppressWarnings("unchecked")
 		private Object getValue(RestRequest req, RestResponse res) throws Exception {
-			BeanContext bc = req.getServlet().getBeanContext();
+			BeanSession session = req.getBeanSession();
 			switch(paramType) {
 				case REQ:        return req;
 				case RES:        return res;
@@ -2136,18 +2136,18 @@ public abstract class RestServlet extends HttpServlet {
 					if (multiPart)
 						return req.getFormDataParameters(name, type);
 					if (plainParams)
-						return bc.convertToType(req.getFormDataParameter(name), bc.getClassMeta(type));
+						return session.convertToType(req.getFormDataParameter(name), session.getClassMeta(type));
 					return req.getFormDataParameter(name, type);
 				}
 				case QUERY: {
 					if (multiPart)
 						return req.getQueryParameters(name, type);
 					if (plainParams)
-						return bc.convertToType(req.getQueryParameter(name), bc.getClassMeta(type));
+						return session.convertToType(req.getQueryParameter(name), session.getClassMeta(type));
 					return req.getQueryParameter(name, type);
 				}
-				case HASFORMDATA:   return bc.convertToType(req.hasFormDataParameter(name), bc.getClassMeta(type));
-				case HASQUERY:      return bc.convertToType(req.hasQueryParameter(name), bc.getClassMeta(type));
+				case HASFORMDATA:   return session.convertToType(req.hasFormDataParameter(name), session.getClassMeta(type));
+				case HASQUERY:      return session.convertToType(req.hasQueryParameter(name), session.getClassMeta(type));
 				case PATHREMAINDER: return req.getPathRemainder();
 				case PROPS:         return res.getProperties();
 				case MESSAGES:      return req.getResourceBundle();

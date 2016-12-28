@@ -20,39 +20,38 @@ import org.apache.juneau.json.*;
  *
  * <h6 class='topic' id='ConfigProperties'>Configurable properties common to all parsers</h6>
  * <table class='styled' style='border-collapse: collapse;'>
- * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th></tr>
- * 	<tr>
- * 		<td>{@link #PARSER_debug}</td>
- * 		<td>Debug mode.</td>
- * 		<td><code>Boolean</code></td>
- * 		<td><jk>false</jk></td>
- * 	</tr>
+ * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th><th>Session overridable</th></tr>
  * 	<tr>
  * 		<td>{@link #PARSER_trimStrings}</td>
  * 		<td>Trim parsed strings.</td>
  * 		<td><code>Boolean</code></td>
  * 		<td><jk>false</jk></td>
+ * 		<td><jk>true</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #PARSER_strict}</td>
+ * 		<td>Strict mode.</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>false</jk></td>
+ * 		<td><jk>true</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #PARSER_inputStreamCharset}</td>
+ * 		<td>Input stream charset.</td>
+ * 		<td><code>String</code></td>
+ * 		<td><js>"UTF-8"</js></td>
+ * 		<td><jk>true</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>{@link #PARSER_fileCharset}</td>
+ * 		<td>File charset.</td>
+ * 		<td><code>String</code></td>
+ * 		<td><js>"default"</js></td>
+ * 		<td><jk>true</jk></td>
  * 	</tr>
  * </table>
  */
-public class ParserContext extends Context {
-
-	/**
-	 * <b>Configuration property:</b>  Debug mode.
-	 * <p>
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Parser.debug"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * </ul>
-	 * <p>
-	 * Enables the following additional information during parsing:
-	 * <ul class='spaced-list'>
-	 * 	<li>When bean setters throws exceptions, the exception includes the object stack information
-	 * 		in order to determine how that method was invoked.
-	 * </ul>
-	 */
-	public static final String PARSER_debug = "Parser.debug";
+public class ParserContext extends BeanContext {
 
 	/**
 	 * <b>Configuration property:</b>  Trim parsed strings.
@@ -61,6 +60,7 @@ public class ParserContext extends Context {
 	 * 	<li><b>Name:</b> <js>"Parser.trimStrings"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to the POJO.
@@ -74,6 +74,7 @@ public class ParserContext extends Context {
 	 * 	<li><b>Name:</b> <js>"Parser.strict"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, strict mode for the parser is enabled.
@@ -115,6 +116,7 @@ public class ParserContext extends Context {
 	 * 	<li><b>Name:</b> <js>"Parser.inputStreamCharset"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
 	 * 	<li><b>Default:</b> <js>"UTF-8"</js>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
 	 * The character set to use for converting <code>InputStreams</code> and byte arrays to readers.
@@ -130,6 +132,7 @@ public class ParserContext extends Context {
 	 * 	<li><b>Name:</b> <js>"Parser.fileCharset"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
 	 * 	<li><b>Default:</b> <js>"default"</js>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
 	 * The character set to use for reading <code>Files</code> from the file system.
@@ -141,7 +144,7 @@ public class ParserContext extends Context {
 	public static final String PARSER_fileCharset = "Parser.fileCharset";
 
 
-	final boolean debug, trimStrings, strict;
+	final boolean trimStrings, strict;
 	final String inputStreamCharset, fileCharset;
 
 	/**
@@ -151,7 +154,6 @@ public class ParserContext extends Context {
 	 */
 	public ParserContext(ContextFactory cf) {
 		super(cf);
-		this.debug = cf.getProperty(PARSER_debug, boolean.class, false);
 		this.trimStrings = cf.getProperty(PARSER_trimStrings, boolean.class, false);
 		this.strict = cf.getProperty(PARSER_strict, boolean.class, false);
 		this.inputStreamCharset = cf.getProperty(PARSER_inputStreamCharset, String.class, "UTF-8");

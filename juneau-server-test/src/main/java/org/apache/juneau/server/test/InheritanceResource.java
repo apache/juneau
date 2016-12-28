@@ -296,21 +296,21 @@ public class InheritanceResource extends RestServlet {
 
 	public static class F1Swap extends PojoSwap<Foo1,String> {
 		@Override /* PojoSwap */
-		public String swap(Foo1 o) throws SerializeException {
+		public String swap(BeanSession session, Foo1 o) throws SerializeException {
 			return "F1";
 		}
 	}
 
 	public static class F2Swap extends PojoSwap<Foo2,String> {
 		@Override /* PojoSwap */
-		public String swap(Foo2 o) throws SerializeException {
+		public String swap(BeanSession session, Foo2 o) throws SerializeException {
 			return "F2";
 		}
 	}
 
 	public static class F3Swap extends PojoSwap<Foo3,String> {
 		@Override /* PojoSwap */
-		public String swap(Foo3 o) throws SerializeException {
+		public String swap(BeanSession session, Foo3 o) throws SerializeException {
 			return "F3";
 		}
 	}

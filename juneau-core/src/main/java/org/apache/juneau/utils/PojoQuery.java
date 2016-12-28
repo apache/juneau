@@ -199,18 +199,18 @@ public final class PojoQuery {
 
 	private Object input;
 	private ClassMeta type;
-	private BeanContext beanContext;
+	private BeanSession session;
 
 	/**
 	 * Constructor.
 	 *
 	 * @param input The POJO we're going to be filtering.
-	 * @param beanContext The bean context to use to create bean maps for beans.
+	 * @param session The bean session to use to create bean maps for beans.
 	 */
-	public PojoQuery(Object input, BeanContext beanContext) {
+	public PojoQuery(Object input, BeanSession session) {
 		this.input = input;
-		this.type = beanContext.getClassMetaForObject(input);
-		this.beanContext = beanContext;
+		this.type = session.getClassMetaForObject(input);
+		this.session = session;
 	}
 
 	/**
@@ -293,16 +293,16 @@ public final class PojoQuery {
 	private Object replaceWithMutables(Object o) {
 		if (o == null)
 			return null;
-		ClassMeta cm = beanContext.getClassMetaForObject(o);
+		ClassMeta cm = session.getClassMetaForObject(o);
 		if (cm.isCollection()) {
-			ObjectList l = new DelegateList(beanContext.getClassMetaForObject(o));
+			ObjectList l = new DelegateList(session.getClassMetaForObject(o));
 			for (Object o2 : (Collection)o)
 				l.add(replaceWithMutables(o2));
 			return l;
 		}
 		if (cm.isMap() && o instanceof BeanMap) {
 			BeanMap bm = (BeanMap)o;
-			DelegateBeanMap dbm = new DelegateBeanMap(bm.getBean(), beanContext);
+			DelegateBeanMap dbm = new DelegateBeanMap(bm.getBean(), session);
 			for (BeanMapEntry e : (Set<BeanMapEntry>)bm.entrySet()) {
 				ClassMeta ct1 = e.getMeta().getClassMeta();
 				if (ct1.isArray() || ct1.isBean() || ct1.isCollection() || ct1.isMap() || ct1.isObject())
@@ -313,8 +313,8 @@ public final class PojoQuery {
 			return dbm;
 		}
 		if (cm.isBean()) {
-			BeanMap bm = beanContext.forBean(o);
-			DelegateBeanMap dbm = new DelegateBeanMap(bm.getBean(), beanContext);
+			BeanMap bm = session.toBeanMap(o);
+			DelegateBeanMap dbm = new DelegateBeanMap(bm.getBean(), session);
 			for (BeanMapEntry e : (Set<BeanMapEntry>)bm.entrySet()) {
 				ClassMeta ct1 = e.getMeta().getClassMeta();
 				if (ct1.isArray() || ct1.isBean() || ct1.isCollection() || ct1.isMap() || ct1.isObject()) {
@@ -333,7 +333,7 @@ public final class PojoQuery {
 		}
 		if (cm.isMap()) {
 			Map m = (Map)o;
-			DelegateMap dm = new DelegateMap(beanContext.getClassMetaForObject(m));
+			DelegateMap dm = new DelegateMap(session.getClassMetaForObject(m));
 			for (Map.Entry e : (Set<Map.Entry>)m.entrySet())
 				dm.put(e.getKey().toString(), replaceWithMutables(e.getValue()));
 			return dm;
@@ -484,7 +484,7 @@ public final class PojoQuery {
 				Object value = e.getValue();
 				IMatcher matcher = null;
 				if (value instanceof String)
-					matcher = getObjectMatcherForType((String)value, ignoreCase, beanContext.object());
+					matcher = getObjectMatcherForType((String)value, ignoreCase, session.object());
 				else if (value instanceof ObjectMap)
 					matcher = new MapMatcher((ObjectMap)value, ignoreCase);
 				else

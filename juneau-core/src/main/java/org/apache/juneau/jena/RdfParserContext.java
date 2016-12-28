@@ -39,12 +39,13 @@ import org.apache.juneau.xml.*;
  *
  * <h6 class='topic' id='ConfigProperties'>Configurable properties on the RDF parsers</h6>
  * <table class='styled' style='border-collapse: collapse;'>
- * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th></tr>
+ * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th><th>Session overridable</th></tr>
  * 	<tr>
  * 		<td>{@link #RDF_trimWhitespace}</td>
  * 		<td>Trim whitespace from text elements.</td>
  * 		<td><code>Boolean</code></td>
  * 		<td><jk>false</jk></td>
+ * 		<td><jk>true</jk></td>
  * 	</tr>
  * </table>
  *
@@ -68,6 +69,7 @@ public final class RdfParserContext extends ParserContext implements RdfCommonCo
 	 * 	<li><b>Name:</b> <js>"RdfParser.trimWhitespace"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, whitespace in text elements will be automatically trimmed.

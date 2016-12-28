@@ -32,7 +32,7 @@ public class BeanStringSwap<T> extends PojoSwap<T,String> {
 	 * Converts the specified bean to a {@link String}.
 	 */
 	@Override /* PojoSwap */
-	public String swap(T o) {
+	public String swap(BeanSession session, T o) {
 		return o.toString();
 	}
 }

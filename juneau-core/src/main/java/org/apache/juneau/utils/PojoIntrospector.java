@@ -79,7 +79,7 @@ public final class PojoIntrospector {
 	public Object invokeMethod(Method method, Reader args) throws InvocationTargetException, IllegalArgumentException, IllegalAccessException, ParseException, IOException {
 		if (o == null)
 			return null;
-		ClassMeta<?>[] argTypes = p.getBeanContext().getClassMetas(method.getParameterTypes());
+		ClassMeta<?>[] argTypes = p.getBeanContext().createSession().getClassMetas(method.getParameterTypes());
 		Object[] params = args == null ? null : p.parseArgs(args, argTypes);
 		return method.invoke(o, params);
 	}
@@ -108,7 +108,7 @@ public final class PojoIntrospector {
 	public Object invokeMethod(String method, String args) throws NoSuchMethodException, IllegalArgumentException, InvocationTargetException, IllegalAccessException, ParseException, IOException {
 		if (o == null)
 			return null;
-		Method m = p.getBeanContext().getClassMeta(o.getClass()).getPublicMethods().get(method);
+		Method m = p.getBeanContext().createSession().getClassMeta(o.getClass()).getPublicMethods().get(method);
 		if (m == null)
 			throw new NoSuchMethodException(method);
 		return invokeMethod(m, args == null ? null : new StringReader(args));

@@ -45,12 +45,12 @@ public class PojoSwapTest {
 
 	public static class ASwap extends PojoSwap<String,String> {
 		@Override
-		public String swap(String o) throws SerializeException {
+		public String swap(BeanSession session, String o) throws SerializeException {
 			return "x" + o + "x";
 		}
 
 		@Override
-		public String unswap(String f) throws ParseException {
+		public String unswap(BeanSession session, String f, ClassMeta<?> hint) throws ParseException {
 			return f.substring(1, f.length()-1);
 		}
 	}

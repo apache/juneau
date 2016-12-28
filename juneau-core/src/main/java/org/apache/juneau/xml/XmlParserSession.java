@@ -16,6 +16,7 @@ import static org.apache.juneau.xml.XmlParserContext.*;
 
 import java.io.*;
 import java.lang.reflect.*;
+import java.util.*;
 
 import javax.xml.stream.*;
 import javax.xml.stream.util.*;
@@ -48,7 +49,6 @@ public final class XmlParserSession extends ParserSession {
 	 *
 	 * @param ctx The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
-	 * @param beanContext The bean context being used.
 	 * @param input The input.  Can be any of the following types:
 	 * 	<ul>
 	 * 		<li><jk>null</jk>
@@ -61,9 +61,13 @@ public final class XmlParserSession extends ParserSession {
 	 * 	These override any context properties defined in the context.
 	 * @param javaMethod The java method that called this parser, usually the method in a REST servlet.
 	 * @param outer The outer object for instantiating top-level non-static inner classes.
+	 * @param locale The session locale.
+	 * 	If <jk>null</jk>, then the locale defined on the context is used.
+	 * @param timeZone The session timezone.
+	 * 	If <jk>null</jk>, then the timezone defined on the context is used.
 	 */
-	public XmlParserSession(XmlParserContext ctx, BeanContext beanContext, Object input, ObjectMap op, Method javaMethod, Object outer) {
-		super(ctx, beanContext, input, op, javaMethod, outer);
+	public XmlParserSession(XmlParserContext ctx, ObjectMap op, Object input, Method javaMethod, Object outer, Locale locale, TimeZone timeZone) {
+		super(ctx, op, input, javaMethod, outer, locale, timeZone);
 		if (op == null || op.isEmpty()) {
 			xsiNs = ctx.xsiNs;
 			trimWhitespace = ctx.trimWhitespace;
@@ -175,13 +179,16 @@ public final class XmlParserSession extends ParserSession {
 	 * Silently closes the XML stream.
 	 */
 	@Override /* ParserContext */
-	public void close() throws ParseException {
-		super.close();
-		try {
-			if (xmlStreamReader != null)
-				xmlStreamReader.close();
-		} catch (XMLStreamException e) {
-			// Ignore.
+	public boolean close() {
+		if (super.close()) {
+			try {
+				if (xmlStreamReader != null)
+					xmlStreamReader.close();
+			} catch (XMLStreamException e) {
+				// Ignore.
+			}
+			return true;
 		}
+		return false;
 	}
 }

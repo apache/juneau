@@ -37,7 +37,7 @@ public class PojoQueryTest {
 		int pos = 0;
 		int limit = 0;
 		boolean ignoreCase = false;
-		BeanContext bc = BeanContext.DEFAULT;
+		BeanSession session = BeanContext.DEFAULT.createSession();
 		List results;
 
 		List<A> in = new LinkedList<A>() {{
@@ -46,7 +46,7 @@ public class PojoQueryTest {
 			add(new A("baz"));
 		}};
 
-		PojoQuery filter = new PojoQuery(in, bc);
+		PojoQuery filter = new PojoQuery(in, session);
 
 		query = new ObjectMap("{f:'foo'}");
 		results = filter.filterCollection(query, view, sort, pos, limit, ignoreCase);
@@ -86,8 +86,8 @@ public class PojoQueryTest {
 		int pos = 0;
 		int limit = 0;
 		boolean ignoreCase = false;
-		BeanContext bc = BeanContext.DEFAULT;
-		WriterSerializer s = new JsonSerializer.Simple().addPojoSwaps(CalendarSwap.Simple.class);
+		BeanSession session = BeanContext.DEFAULT.createSession();
+		WriterSerializer s = new JsonSerializer.Simple().addPojoSwaps(CalendarSwap.DateTimeSimple.class);
 		B[] in;
 		PojoQuery filter;
 
@@ -99,7 +99,7 @@ public class PojoQueryTest {
 			new B(2011, 0, 31),
 			new B(2012, 0, 1)
 		};
-		filter = new PojoQuery(in, bc);
+		filter = new PojoQuery(in, session);
 
 		query = new ObjectMap("{f:'2011'}");
 		results = filter.filterCollection(query, view, sort, pos, limit, ignoreCase);
@@ -119,7 +119,7 @@ public class PojoQueryTest {
 			new B(2011, 00, 01, 12, 59, 59),
 			new B(2011, 00, 01, 13, 00, 00)
 		};
-		filter = new PojoQuery(in, bc);
+		filter = new PojoQuery(in, session);
 
 		query = new ObjectMap("{f:'2011.01.01.12'}");
 		results = filter.filterCollection(query, view, sort, pos, limit, ignoreCase);
@@ -131,7 +131,7 @@ public class PojoQueryTest {
 			new B(2011, 00, 01, 12, 30, 59),
 			new B(2011, 00, 01, 12, 31, 00)
 		};
-		filter = new PojoQuery(in, bc);
+		filter = new PojoQuery(in, session);
 		query = new ObjectMap("{f:'2011.01.01.12.30'}");
 		results = filter.filterCollection(query, view, sort, pos, limit, ignoreCase);
 		assertEquals("[{f:'2011/01/01 12:30:00'},{f:'2011/01/01 12:30:59'}]", s.serialize(results));
@@ -141,7 +141,7 @@ public class PojoQueryTest {
 			new B(2011, 00, 01, 12, 30, 30),
 			new B(2011, 00, 01, 12, 30, 31)
 		};
-		filter = new PojoQuery(in, bc);
+		filter = new PojoQuery(in, session);
 		query = new ObjectMap("{f:'2011.01.01.12.30.30'}");
 		results = filter.filterCollection(query, view, sort, pos, limit, ignoreCase);
 		assertEquals("[{f:'2011/01/01 12:30:30'}]", s.serialize(results));
@@ -152,7 +152,7 @@ public class PojoQueryTest {
 			new B(2000, 11, 31),
 			new B(2001, 00, 01)
 		};
-		filter = new PojoQuery(in, bc);
+		filter = new PojoQuery(in, session);
 
 		query = new ObjectMap("{f:'>2000'}");
 		results = filter.filterCollection(query, view, sort, pos, limit, ignoreCase);
@@ -174,7 +174,7 @@ public class PojoQueryTest {
 			new B(2011, 00, 01, 12, 29, 59),
 			new B(2011, 00, 01, 12, 30, 00)
 		};
-		filter = new PojoQuery(in, bc);
+		filter = new PojoQuery(in, session);
 
 		query = new ObjectMap("{f:'>=2011.01.01.12.30'}");
 		results = filter.filterCollection(query, view, sort, pos, limit, ignoreCase);
@@ -188,7 +188,7 @@ public class PojoQueryTest {
 			new B(2011, 00, 01, 12, 30, 59),
 			new B(2011, 00, 01, 12, 31, 00)
 		};
-		filter = new PojoQuery(in, bc);
+		filter = new PojoQuery(in, session);
 
 		query = new ObjectMap("{f:'>2011.01.01.12.30'}");
 		results = filter.filterCollection(query, view, sort, pos, limit, ignoreCase);
@@ -206,7 +206,7 @@ public class PojoQueryTest {
 			new B(2003, 05, 30, 23, 59, 59),
 			new B(2003, 06, 01, 00, 00, 00)
 		};
-		filter = new PojoQuery(in, bc);
+		filter = new PojoQuery(in, session);
 
 		query = new ObjectMap("{f:'2001 - 2003.06.30'}");
 		results = filter.filterCollection(query, view, sort, pos, limit, ignoreCase);
@@ -220,7 +220,7 @@ public class PojoQueryTest {
 			new B(2001, 11, 31),
 			new B(2002, 00, 01)
 		};
-		filter = new PojoQuery(in, bc);
+		filter = new PojoQuery(in, session);
 
 		query = new ObjectMap("{f:'2001 2003 2005'}");
 		results = filter.filterCollection(query, view, sort, pos, limit, ignoreCase);
@@ -232,7 +232,7 @@ public class PojoQueryTest {
 			new B(2003, 11, 31),
 			new B(2004, 00, 01)
 		};
-		filter = new PojoQuery(in, bc);
+		filter = new PojoQuery(in, session);
 
 		query = new ObjectMap("{f:'2001 2003 2005'}");
 		results = filter.filterCollection(query, view, sort, pos, limit, ignoreCase);
@@ -244,7 +244,7 @@ public class PojoQueryTest {
 			new B(2005, 11, 31),
 			new B(2006, 00, 01)
 		};
-		filter = new PojoQuery(in, bc);
+		filter = new PojoQuery(in, session);
 
 		query = new ObjectMap("{f:'2001 2003 2005'}");
 		results = filter.filterCollection(query, view, sort, pos, limit, ignoreCase);
@@ -276,7 +276,7 @@ public class PojoQueryTest {
 		int pos = 0;
 		int limit = 0;
 		boolean ignoreCase = false;
-		BeanContext bc = BeanContext.DEFAULT;
+		BeanSession session = BeanContext.DEFAULT.createSession();
 		List results;
 
 		List<C> in = new LinkedList<C>() {{
@@ -285,7 +285,7 @@ public class PojoQueryTest {
 			add(new C(3));
 		}};
 
-		PojoQuery filter = new PojoQuery(in, bc);
+		PojoQuery filter = new PojoQuery(in, session);
 
 		query = new ObjectMap("{f:'1'}");
 		results = filter.filterCollection(query, view, sort, pos, limit, ignoreCase);
@@ -333,7 +333,7 @@ public class PojoQueryTest {
 		int pos = 0;
 		int limit = 0;
 		boolean ignoreCase = false;
-		BeanContext bc = BeanContext.DEFAULT;
+		BeanSession session = BeanContext.DEFAULT.createSession();
 		List results;
 
 		List<D1> in = new LinkedList<D1>() {{
@@ -342,7 +342,7 @@ public class PojoQueryTest {
 			add(new D1("baz"));
 		}};
 
-		PojoQuery filter = new PojoQuery(in, bc);
+		PojoQuery filter = new PojoQuery(in, session);
 
 		query = new ObjectMap("{f:{f:'foo'}}");
 		results = filter.filterCollection(query, view, sort, pos, limit, ignoreCase);
@@ -391,7 +391,7 @@ public class PojoQueryTest {
 		int pos = 0;
 		int limit = 0;
 		boolean ignoreCase = false;
-		BeanContext bc = BeanContext.DEFAULT;
+		BeanSession session = BeanContext.DEFAULT.createSession();
 		List results;
 
 		List<E> in = new LinkedList<E>() {{
@@ -400,7 +400,7 @@ public class PojoQueryTest {
 			add(new E("baz", 3, true));
 		}};
 
-		PojoQuery filter = new PojoQuery(in, bc);
+		PojoQuery filter = new PojoQuery(in, session);
 
 		view = new ObjectList("['f1']");
 		results = filter.filterCollection(query, view, sort, pos, limit, ignoreCase);
@@ -444,7 +444,7 @@ public class PojoQueryTest {
 		int pos = 0;
 		int limit = 0;
 		boolean ignoreCase = false;
-		BeanContext bc = BeanContext.DEFAULT;
+		BeanSession session = BeanContext.DEFAULT.createSession();
 		List results;
 
 		List<F1> in = new LinkedList<F1>() {{
@@ -453,7 +453,7 @@ public class PojoQueryTest {
 			add(new F1("baz"));
 		}};
 
-		PojoQuery filter = new PojoQuery(in, bc);
+		PojoQuery filter = new PojoQuery(in, session);
 
 		view = new ObjectList("['f1']");
 		results = filter.filterCollection(query, view, sort, pos, limit, ignoreCase);
@@ -503,11 +503,11 @@ public class PojoQueryTest {
 	@Test
 	public void testFilterMapOneLevel() throws Exception {
 		ObjectList view = null;
-		BeanContext bc = BeanContext.DEFAULT;
+		BeanSession session = BeanContext.DEFAULT.createSession();
 		Map results;
 
 		G in = new G("foo", 1, true);
-		PojoQuery filter = new PojoQuery(in, bc);
+		PojoQuery filter = new PojoQuery(in, session);
 
 		view = new ObjectList("['f1']");
 		results = filter.filterMap(view);
@@ -542,12 +542,12 @@ public class PojoQueryTest {
 	@Test
 	public void testFilterMapTwoLevel() throws Exception {
 		ObjectList view = null;
-		BeanContext bc = BeanContext.DEFAULT;
+		BeanSession session = BeanContext.DEFAULT.createSession();
 		Map results;
 
 		H1 in = new H1("foo");
 
-		PojoQuery filter = new PojoQuery(in, bc);
+		PojoQuery filter = new PojoQuery(in, session);
 
 		view = new ObjectList("['f1']");
 		results = filter.filterMap(view);
@@ -602,8 +602,8 @@ public class PojoQueryTest {
 		int pos = 0;
 		int limit = 0;
 		boolean ignoreCase = false;
-		BeanContext bc = BeanContext.DEFAULT;
-		WriterSerializer s = new JsonSerializer.Simple().addPojoSwaps(CalendarSwap.Simple.class);
+		BeanSession session = BeanContext.DEFAULT.createSession();
+		WriterSerializer s = new JsonSerializer.Simple().addPojoSwaps(CalendarSwap.DateTimeSimple.class);
 		List results;
 
 		I[] in = new I[] {
@@ -612,7 +612,7 @@ public class PojoQueryTest {
 			new I(3, "baz", true, 2012, 1, 1),
 		};
 
-		PojoQuery filter = new PojoQuery(in, bc);
+		PojoQuery filter = new PojoQuery(in, session);
 
 		sort = new ObjectList("['f2']");
 		view = new ObjectList("['f1','f2']");

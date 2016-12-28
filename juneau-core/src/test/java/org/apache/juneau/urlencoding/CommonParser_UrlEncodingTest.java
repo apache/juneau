@@ -180,7 +180,7 @@ public class CommonParser_UrlEncodingTest {
 		assertEquals("0=foo&1=bar", s.serialize(l));
 
 		String in =  "0=foo&1=bar";
-		ClassMeta<LinkedList<String>> cm = p.getBeanContext().getCollectionClassMeta(LinkedList.class, String.class);
+		ClassMeta<LinkedList<String>> cm = p.getBeanContext().createSession().getCollectionClassMeta(LinkedList.class, String.class);
 		l = p.parse(in, cm);
 		assertObjectEquals("['foo','bar']",l);
 	}

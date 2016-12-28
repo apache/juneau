@@ -15,6 +15,7 @@ package org.apache.juneau.json;
 import static org.apache.juneau.json.JsonSerializerContext.*;
 
 import java.lang.reflect.*;
+import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.serializer.*;
@@ -33,14 +34,17 @@ public final class JsonSerializerSession extends SerializerSession {
 	 *
 	 * @param ctx The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
-	 * @param beanContext The bean context being used.
 	 * @param output The output object.  See {@link JsonSerializerSession#getWriter()} for valid class types.
 	 * @param op The override properties.
 	 * 	These override any context properties defined in the context.
 	 * @param javaMethod The java method that called this parser, usually the method in a REST servlet.
+	 * @param locale The session locale.
+	 * 	If <jk>null</jk>, then the locale defined on the context is used.
+	 * @param timeZone The session timezone.
+	 * 	If <jk>null</jk>, then the timezone defined on the context is used.
 	 */
-	protected JsonSerializerSession(JsonSerializerContext ctx, BeanContext beanContext, Object output, ObjectMap op, Method javaMethod) {
-		super(ctx, beanContext, output, op, javaMethod);
+	protected JsonSerializerSession(JsonSerializerContext ctx, ObjectMap op, Object output, Method javaMethod, Locale locale, TimeZone timeZone) {
+		super(ctx, op, output, javaMethod, locale, timeZone);
 		if (op == null || op.isEmpty()) {
 			simpleMode = ctx.simpleMode;
 			useWhitespace = ctx.useWhitespace;

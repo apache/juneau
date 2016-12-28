@@ -50,7 +50,7 @@ public class XmlContentTest {
 		t.f2 = null;
 
 		sw = new StringWriter();
-		session = s1.createSession(sw, new ObjectMap("{"+SERIALIZER_trimNullProperties+":false}"), null);
+		session = s1.createSession(sw, new ObjectMap("{"+SERIALIZER_trimNullProperties+":false}"), null, null, null);
 		s1.serialize(session, t);
 		r = sw.toString();
 		assertEquals("<A f1='f1'>_x0000_</A>", r);
@@ -58,7 +58,7 @@ public class XmlContentTest {
 		assertEqualObjects(t, t2);
 
 		sw = new StringWriter();
-		session = s2.createSession(sw, new ObjectMap("{"+SERIALIZER_trimNullProperties+":false}"), null);
+		session = s2.createSession(sw, new ObjectMap("{"+SERIALIZER_trimNullProperties+":false}"), null, null, null);
 		s2.serialize(session, t);
 		r = sw.toString();
 		assertEquals("<A f1='f1'>\n\t_x0000_\n</A>\n", r);
@@ -158,7 +158,7 @@ public class XmlContentTest {
 		t.f2 = null;
 
 		sw = new StringWriter();
-		session = s1.createSession(sw, new ObjectMap("{"+SERIALIZER_trimNullProperties+":false}"), null);
+		session = s1.createSession(sw, new ObjectMap("{"+SERIALIZER_trimNullProperties+":false}"), null, null, null);
 		s1.serialize(session, t);
 		r = sw.toString();
 		assertEquals("<A f1='f1'>_x0000_</A>", r);
@@ -166,7 +166,7 @@ public class XmlContentTest {
 		assertEqualObjects(t, t2);
 
 		sw = new StringWriter();
-		session = s2.createSession(sw, new ObjectMap("{"+SERIALIZER_trimNullProperties+":false}"), null);
+		session = s2.createSession(sw, new ObjectMap("{"+SERIALIZER_trimNullProperties+":false}"), null, null, null);
 		s2.serialize(session, t);
 		r = sw.toString();
 		assertEquals("<A f1='f1'>\n\t_x0000_\n</A>\n", r);

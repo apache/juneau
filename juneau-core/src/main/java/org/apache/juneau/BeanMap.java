@@ -64,13 +64,17 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	/** The BeanMeta associated with the class of the object. */
 	protected BeanMeta<T> meta;
 
+	private final BeanSession session;
+
 	/**
 	 * Instance of this class are instantiated through the BeanContext class.
 	 *
+	 * @param session The bean session object that created this bean map.
 	 * @param bean The bean to wrap inside this map.
 	 * @param meta The metadata associated with the bean class.
 	 */
-	protected BeanMap(T bean, BeanMeta<T> meta) {
+	protected BeanMap(BeanSession session, T bean, BeanMeta<T> meta) {
+		this.session = session;
 		this.bean = bean;
 		this.meta = meta;
 		if (meta.constructorArgs.length > 0)
@@ -84,6 +88,15 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 */
 	public BeanMeta<T> getMeta() {
 		return meta;
+	}
+
+	/**
+	 * Returns the bean session that created this bean map.
+	 *
+	 * @return The bean session that created this bean map.
+	 */
+	public final BeanSession getBeanSession() {
+		return session;
 	}
 
 	/**

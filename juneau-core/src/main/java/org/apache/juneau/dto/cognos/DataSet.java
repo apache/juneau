@@ -88,10 +88,10 @@ public class DataSet {
 	 * @param columns The meta-data that represents the columns in the dataset.
 	 * @param o The POJO being serialized to Cognos.
 	 * 	Must be an array/collection of beans/maps.
-	 * @param beanContext The bean context used to convert POJOs to strings.
+	 * @param session The bean session used to convert POJOs to strings.
 	 * @throws Exception An error occurred trying to serialize the POJO.
 	 */
-	public DataSet(Column[] columns, Object o, BeanContext beanContext) throws Exception {
+	public DataSet(Column[] columns, Object o, BeanSession session) throws Exception {
 		metaData = columns;
 		data = new LinkedList<Row>();
 		if (o != null) {
@@ -105,11 +105,11 @@ public class DataSet {
 					if (o2 instanceof Map)
 						m = (Map<?,?>)o2;
 					else
-						m = beanContext.forBean(o2);
+						m = session.toBeanMap(o2);
 					for (Column col : columns) {
 						Object v;
 						if (col.pojoSwap != null)
-							v = col.pojoSwap.swap(o2, beanContext);
+							v = col.pojoSwap.swap(session, o2);
 						else
 							v = m.get(col.getName());
 						r.add(v == null ? null : v.toString());

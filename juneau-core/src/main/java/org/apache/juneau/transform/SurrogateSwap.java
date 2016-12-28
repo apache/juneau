@@ -183,7 +183,7 @@ public class SurrogateSwap<T,F> extends PojoSwap<T,F> {
 	}
 
 	@Override /* PojoSwap */
-	public F swap(T o) throws SerializeException {
+	public F swap(BeanSession session, T o) throws SerializeException {
 		try {
 			return constructor.newInstance(o);
 		} catch (Exception e) {
@@ -193,7 +193,7 @@ public class SurrogateSwap<T,F> extends PojoSwap<T,F> {
 
 	@Override /* PojoSwap */
 	@SuppressWarnings("unchecked")
-	public T unswap(F f) throws ParseException {
+	public T unswap(BeanSession session, F f, ClassMeta<?> hint) throws ParseException {
 		if (untransformMethod == null)
 			throw new ParseException("static valueOf({0}) method not implement on surrogate class ''{1}''", f.getClass().getName(), getNormalClass().getName());
 		try {

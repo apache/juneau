@@ -64,7 +64,7 @@ public final class JsonSchemaSerializer extends JsonSerializer {
 	@Override /* JsonSerializer */
 	protected void doSerialize(SerializerSession session, Object o) throws Exception {
 		JsonSerializerSession s = (JsonSerializerSession)session;
-		ObjectMap schema = getSchema(s, s.getBeanContext().getClassMetaForObject(o), "root", null);
+		ObjectMap schema = getSchema(s, session.getClassMetaForObject(o), "root", null);
 		serializeAnything(s, s.getWriter(), schema, null, "root", null);
 	}
 
@@ -121,7 +121,7 @@ public final class JsonSchemaSerializer extends JsonSerializer {
 				out.put("items", getSchema(session, componentType, "items", pNames));
 			} else if (sType.isBean()) {
 				ObjectMap properties = new ObjectMap();
-				BeanMeta bm = session.getBeanContext().getBeanMeta(sType.getInnerClass());
+				BeanMeta bm = session.getBeanMeta(sType.getInnerClass());
 				if (pNames != null)
 					bm = new BeanMetaFiltered(bm, pNames);
 				for (Iterator<BeanPropertyMeta> i = bm.getPropertyMetas().iterator(); i.hasNext();) {

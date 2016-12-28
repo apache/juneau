@@ -14,7 +14,6 @@ package org.apache.juneau.transforms;
 
 import static org.junit.Assert.*;
 
-import java.text.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -26,21 +25,17 @@ import org.junit.*;
 @SuppressWarnings({"deprecation","javadoc"})
 public class DateFilterTest {
 
-	private static TimeZone tz;
-
 	@BeforeClass
 	public static void beforeClass() {
-		tz = TimeZone.getDefault();
-		TimeZone.setDefault(TimeZone.getTimeZone("GMT-5"));
+		TestUtils.setTimeZone("GMT-5");
 	}
 
 	@AfterClass
 	public static void afterClass() {
-		TimeZone.setDefault(tz);
+		TestUtils.unsetTimeZone();
 	}
 
 	private Date testDate = new Date(1, 2, 3, 4, 5, 6);
-	private String tz1 = new SimpleDateFormat("zzz").format(testDate);
 
 	//====================================================================================================
 	// testString - DEFAULT_STRING
@@ -50,7 +45,7 @@ public class DateFilterTest {
 		Class<?> f = DateSwap.ToString.class;
 		WriterSerializer s = new JsonSerializer.Simple().addPojoSwaps(f);
 		ReaderParser p = new JsonParser().addPojoSwaps(f);
-		doTest(s, p, "'Sun Mar 03 04:05:06 "+tz1+" 1901'");
+		doTest(s, p, "'Sun Mar 03 04:05:06 GMT-05:00 1901'");
 	}
 
 	//====================================================================================================
@@ -72,7 +67,7 @@ public class DateFilterTest {
 		Class<?> f = DateSwap.RFC2822DT.class;
 		WriterSerializer s = new JsonSerializer.Simple().addPojoSwaps(f);
 		ReaderParser p = new JsonParser().addPojoSwaps(f);
-		doTest(s, p, "'Sun, 03 Mar 1901 04:05:06 "+tz1+"'");
+		doTest(s, p, "'Sun, 03 Mar 1901 04:05:06 -0500'");
 	}
 
 	//====================================================================================================
@@ -154,7 +149,7 @@ public class DateFilterTest {
 		final DateSwap.ISO8601DT dateSwap = new DateSwap.ISO8601DT();
 		// this works
 		final String sValue = data.getString("birthday"); //$NON-NLS-1$
-		dateSwap.unswap(sValue, data.getBeanContext().getClassMeta(Date.class), null);
+		dateSwap.unswap(null, sValue, data.getBeanSession().getClassMeta(Date.class));
 		// this does not work
 		data.get(dateSwap, "birthday"); //$NON-NLS-1$
 	}

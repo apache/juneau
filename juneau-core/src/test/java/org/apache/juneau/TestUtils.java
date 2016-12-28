@@ -439,4 +439,37 @@ public class TestUtils {
 		}
 		return null;
 	}
+
+	private static ThreadLocal<TimeZone> systemTimeZone = new ThreadLocal<TimeZone>();
+	private static ThreadLocal<Locale> systemLocale = new ThreadLocal<Locale>();
+
+	/**
+	 * Temporarily sets the default system timezone to the specified timezone ID.
+	 * Use {@link #unsetTimeZone()} to unset it.
+	 *
+	 * @param name
+	 */
+	public static void setTimeZone(String name) {
+		systemTimeZone.set(TimeZone.getDefault());
+		TimeZone.setDefault(TimeZone.getTimeZone(name));
+	}
+
+	public static void unsetTimeZone() {
+		TimeZone.setDefault(systemTimeZone.get());
+	}
+
+	/**
+	 * Temporarily sets the default system locale to the specified locale.
+	 * Use {@link #unsetLocale()} to unset it.
+	 *
+	 * @param name
+	 */
+	public static void setLocale(Locale locale) {
+		systemLocale.set(Locale.getDefault());
+		Locale.setDefault(locale);
+	}
+
+	public static void unsetLocale() {
+		Locale.setDefault(systemLocale.get());
+	}
 }

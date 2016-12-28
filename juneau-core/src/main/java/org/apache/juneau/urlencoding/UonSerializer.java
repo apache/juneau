@@ -241,7 +241,6 @@ public class UonSerializer extends WriterSerializer {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected SerializerWriter serializeAnything(UonSerializerSession session, UonWriter out, Object o, ClassMeta<?> eType,
 			String attrName, BeanPropertyMeta pMeta, boolean quoteEmptyStrings, boolean isTop) throws Exception {
-		BeanContext bc = session.getBeanContext();
 
 		if (o == null) {
 			out.appendObject(null, false, false, isTop);
@@ -270,12 +269,12 @@ public class UonSerializer extends WriterSerializer {
 		// Swap if necessary
 		PojoSwap swap = aType.getPojoSwap();
 		if (swap != null) {
-			o = swap.swap(o, bc);
+			o = swap.swap(session, o);
 
 			// If the getSwapClass() method returns Object, we need to figure out
 			// the actual type now.
 			if (sType.isObject())
-				sType = bc.getClassMetaForObject(o);
+				sType = session.getClassMetaForObject(o);
 		}
 
 		// '\0' characters are considered null.
@@ -284,7 +283,7 @@ public class UonSerializer extends WriterSerializer {
 		else if (sType.hasToObjectMapMethod())
 			serializeMap(session, out, sType.toObjectMap(o), eType);
 		else if (sType.isBean())
-			serializeBeanMap(session, out, bc.forBean(o), addTypeProperty);
+			serializeBeanMap(session, out, session.toBeanMap(o), addTypeProperty);
 		else if (sType.isUri() || (pMeta != null && pMeta.isUri()))
 			out.appendUri(o, isTop);
 		else if (sType.isMap()) {
@@ -405,8 +404,8 @@ public class UonSerializer extends WriterSerializer {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Serializer */
-	public UonSerializerSession createSession(Object output, ObjectMap properties, Method javaMethod) {
-		return new UonSerializerSession(getContext(UonSerializerContext.class), getBeanContext(), output, properties, javaMethod);
+	public UonSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone) {
+		return new UonSerializerSession(getContext(UonSerializerContext.class), op, output, javaMethod, locale, timeZone);
 	}
 
 	@Override /* Serializer */

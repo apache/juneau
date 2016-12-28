@@ -14,7 +14,6 @@ package org.apache.juneau;
 
 import static org.apache.juneau.Visibility.*;
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.beans.*;
 import java.io.*;
@@ -22,10 +21,8 @@ import java.lang.reflect.*;
 import java.text.*;
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
@@ -42,16 +39,28 @@ import org.apache.juneau.transform.*;
  * 		<li>Serves as a common utility class for all {@link Serializer Serializers} and {@link Parser Parsers}
  * 				for serializing and parsing Java beans.
  * 	</ul>
+ * <p>
+ * 	All serializer and parser contexts extend from this context.
  *
  * <h5 class='topic'>Bean Contexts</h5>
+ * 	Bean contexts are created through the {@link ContextFactory#getContext(Class)} method.
+ * 	These context objects are read-only, reusable, and thread-safe.
+ * 	The {@link ContextFactory} class will typically cache copies of <code>Context</code> objects based on
+ * 		the current settings on the factory.
  * <p>
- * 	Typically, it will be sufficient to use the existing {@link #DEFAULT} contexts for creating
- * 	bean maps.  However, if you want to tweak any of the settings on the context, you must
- * 	either clone the default context or create a new one from scratch (whichever is simpler for you).
- * 	You'll notice that this context class uses a fluent interface for defining settings.
+ * 	Each bean context maintains a cache of {@link ClassMeta} objects that describe information about classes encountered.
+ * 	These <code>ClassMeta</code> objects are time-consuming to construct.
+ * 	Therefore, instances of {@link BeanContext} that share the same <js>"BeanContext.*"</js> property values share
+ * 		the same cache.  This allows for efficient reuse of <code>ClassMeta</code> objects so that the information about
+ * 		classes only needs to be calculated once.
+ *  Because of this, many of the properties defined on the {@link BeanContext} class cannot be overridden on the session.
+ *
+ * <h5 class='topic'>Bean Sessions</h5>
  * <p>
- * 	Bean contexts are created by {@link ContextFactory context factories}.
- * 	The settings on a bean context are fixed at the point they are created by the factory.
+ * 	Whereas <code>BeanContext</code> objects are permanent, unchangeable, cached, and thread-safe,
+ * 		{@link BeanSession} objects are ephemeral and not thread-safe.
+ * 	They are meant to be used as quickly-constructed scratchpads for creating bean maps.
+ * 	{@link BeanMap} objects can only be created through the session.
  *
  * <h5 class='topic'>BeanContext configuration properties</h5>
  * 	<code>BeanContexts</code> have several configuration properties that can be used to tweak behavior on how beans are handled.
@@ -84,11 +93,12 @@ import org.apache.juneau.transform.*;
  *
  * <h6 class='topic' id='ConfigProperties'>Properties associated with handling beans on serializers and parsers</h6>
  * <table class='styled' style='border-collapse: collapse;'>
- * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th></tr>
+ * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th><th>Session overridable</th></tr>
  * 	<tr>
  * 		<td>{@link #BEAN_beansRequireDefaultConstructor}</td>
  * 		<td>Beans require no-arg constructors.</td>
  * 		<td><code>Boolean</code></td>
+ * 		<td><jk>false</jk></td>
  * 		<td><jk>false</jk></td>
  * 	</tr>
  * 	<tr>
@@ -96,11 +106,13 @@ import org.apache.juneau.transform.*;
  * 		<td>Beans require Serializable interface.</td>
  * 		<td><code>Boolean</code></td>
  * 		<td><jk>false</jk></td>
+ * 		<td><jk>false</jk></td>
  * 	</tr>
  * 	<tr>
  * 		<td>{@link #BEAN_beansRequireSettersForGetters}</td>
  * 		<td>Beans require setters for getters.</td>
  * 		<td><code>Boolean</code></td>
+ * 		<td><jk>false</jk></td>
  * 		<td><jk>false</jk></td>
  * 	</tr>
  * 	<tr>
@@ -108,11 +120,13 @@ import org.apache.juneau.transform.*;
  * 		<td>Beans require at least one property.</td>
  * 		<td><code>Boolean</code></td>
  * 		<td><jk>true</jk></td>
+ * 		<td><jk>false</jk></td>
  * 	</tr>
  * 	<tr>
  * 		<td>{@link #BEAN_beanMapPutReturnsOldValue}</td>
  * 		<td>{@link BeanMap#put(String,Object) BeanMap.put()} method will return old property value.</td>
  * 		<td><code>Boolean</code></td>
+ * 		<td><jk>false</jk></td>
  * 		<td><jk>false</jk></td>
  * 	</tr>
  * 	<tr>
@@ -120,29 +134,34 @@ import org.apache.juneau.transform.*;
  * 		<td>Look for bean constructors with specified minimum visibility.</td>
  * 		<td>{@link Visibility}</td>
  * 		<td>{@link Visibility#PUBLIC}</td>
+ * 		<td><jk>false</jk></td>
  * 	</tr>
  * 	<tr>
  * 		<td>{@link #BEAN_beanClassVisibility}</td>
  * 		<td>Look for bean classes with specified minimum visibility.</td>
  * 		<td>{@link Visibility}</td>
  * 		<td>{@link Visibility#PUBLIC}</td>
+ * 		<td><jk>false</jk></td>
  * 	</tr>
  * 	<tr>
  * 		<td>{@link #BEAN_beanFieldVisibility}</td>
  * 		<td>Look for bean fields with specified minimum visibility.</td>
  * 		<td>{@link Visibility}</td>
  * 		<td>{@link Visibility#PUBLIC}</td>
+ * 		<td><jk>false</jk></td>
  * 	</tr>
  * 	<tr>
  * 		<td>{@link #BEAN_methodVisibility}</td>
  * 		<td>Look for bean methods with specified minimum visibility.</td>
  * 		<td>{@link Visibility}</td>
  * 		<td>{@link Visibility#PUBLIC}</td>
+ * 		<td><jk>false</jk></td>
  * 	</tr>
  * 	<tr>
  * 		<td>{@link #BEAN_useJavaBeanIntrospector}</td>
  * 		<td>Use Java {@link Introspector} for determining bean properties.</td>
  * 		<td><code>Boolean</code></td>
+ * 		<td><jk>false</jk></td>
  * 		<td><jk>false</jk></td>
  * 	</tr>
  * 	<tr>
@@ -150,11 +169,13 @@ import org.apache.juneau.transform.*;
  * 		<td>Use interface proxies.</td>
  * 		<td><code>Boolean</code></td>
  * 		<td><jk>true</jk></td>
+ * 		<td><jk>false</jk></td>
  * 	</tr>
  * 	<tr>
  * 		<td>{@link #BEAN_ignoreUnknownBeanProperties}</td>
  * 		<td>Ignore unknown properties.</td>
  * 		<td><code>Boolean</code></td>
+ * 		<td><jk>false</jk></td>
  * 		<td><jk>false</jk></td>
  * 	</tr>
  * 	<tr>
@@ -162,17 +183,20 @@ import org.apache.juneau.transform.*;
  * 		<td>Ignore unknown properties with null values.</td>
  * 		<td><code>Boolean</code></td>
  * 		<td><jk>true</jk></td>
+ * 		<td><jk>false</jk></td>
  * 	</tr>
  * 	<tr>
  * 		<td>{@link #BEAN_ignorePropertiesWithoutSetters}</td>
  * 		<td>Ignore bean properties without setters.</td>
  * 		<td><code>Boolean</code></td>
  * 		<td><jk>true</jk></td>
+ * 		<td><jk>false</jk></td>
  * 	</tr>
  * 	<tr>
  * 		<td>{@link #BEAN_ignoreInvocationExceptionsOnGetters}</td>
  * 		<td>Ignore invocation errors on getters.</td>
  * 		<td><code>Boolean</code></td>
+ * 		<td><jk>false</jk></td>
  * 		<td><jk>false</jk></td>
  * 	</tr>
  * 	<tr>
@@ -180,11 +204,13 @@ import org.apache.juneau.transform.*;
  * 		<td>Ignore invocation errors on setters.</td>
  * 		<td><code>Boolean</code></td>
  * 		<td><jk>false</jk></td>
+ * 		<td><jk>false</jk></td>
  * 	</tr>
  * 	<tr>
  * 		<td>{@link #BEAN_sortProperties}</td>
  * 		<td>Sort bean properties in alphabetical order.</td>
  * 		<td><code>Boolean</code></td>
+ * 		<td><jk>false</jk></td>
  * 		<td><jk>false</jk></td>
  * 	</tr>
  * 	<tr>
@@ -196,6 +222,7 @@ import org.apache.juneau.transform.*;
  * 		<td>Packages whose classes should not be considered beans.</td>
  * 		<td><code>Set&lt;String&gt;</code></td>
  * 		<td>See details</td>
+ * 		<td><jk>false</jk></td>
  * 	</tr>
  * 	<tr>
  * 		<td>
@@ -206,6 +233,7 @@ import org.apache.juneau.transform.*;
  * 		<td>Classes that should not be considered beans.</td>
  * 		<td><code>Set&lt;Class&gt;</code></td>
  * 		<td>empty set</td>
+ * 		<td><jk>false</jk></td>
  * 	</tr>
  * 	<tr>
  * 		<td>
@@ -216,6 +244,7 @@ import org.apache.juneau.transform.*;
  * 		<td>Bean filters to apply to beans.</td>
  * 		<td><code>List&lt;Class&gt;</code></td>
  * 		<td>empty list</td>
+ * 		<td><jk>false</jk></td>
  * 	</tr>
  * 	<tr>
  * 		<td>
@@ -226,6 +255,7 @@ import org.apache.juneau.transform.*;
  * 		<td>POJO swaps to apply to java objects.</td>
  * 		<td><code>List&lt;Class&gt;</code></td>
  * 		<td>empty list</td>
+ * 		<td><jk>false</jk></td>
  * 	</tr>
  * 	<tr>
  * 		<td>
@@ -235,6 +265,7 @@ import org.apache.juneau.transform.*;
  * 		<td>Implementation classes for interfaces and abstract classes.</td>
  * 		<td><code>Map&lt;Class,Class&gt;</code></td>
  * 		<td>empty map</td>
+ * 		<td><jk>false</jk></td>
  * 	</tr>
  * 	<tr>
  * 		<td>
@@ -245,6 +276,7 @@ import org.apache.juneau.transform.*;
  * 		<td>Bean lookup dictionary.</td>
  * 		<td><code>List&lt;Class&gt;</code></td>
  * 		<td>empty list</td>
+ * 		<td><jk>false</jk></td>
  * 	</tr>
  * 	<tr>
  * 		<td>
@@ -253,6 +285,7 @@ import org.apache.juneau.transform.*;
  * 		<td>Name to use for the bean type property used to represent a bean type.</td>
  * 		<td><code>String</code></td>
  * 		<td><js>"_type"</js></td>
+ * 		<td><jk>false</jk></td>
  * 	</tr>
  * 	<tr>
  * 		<td>
@@ -261,8 +294,37 @@ import org.apache.juneau.transform.*;
  * 		<td>Default parser to use when converting <code>Strings</code> to POJOs.</td>
  * 		<td><code>Class</code></td>
  * 		<td>{@link JsonParser}</td>
+ * 		<td><jk>false</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>
+ * 			{@link #BEAN_locale}
+ * 		</td>
+ * 		<td>User locale.</td>
+ * 		<td><code>Locale</code></td>
+ * 		<td>{@link Locale#getDefault()}</td>
+ * 		<td><jk>true</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>
+ * 			{@link #BEAN_timeZone}
+ * 		</td>
+ * 		<td>User timezone.</td>
+ * 		<td><code>TimeZone</code></td>
+ * 		<td><jk>null</jk></td>
+ * 		<td><jk>true</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>
+ * 			{@link #BEAN_debug}
+ * 		</td>
+ * 		<td>Debug mode.</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>false</jk></td>
+ * 		<td><jk>true</jk></td>
  * 	</tr>
  *	</table>
+ *
  *
  * <h5 class='topic'>Bean Maps</h5>
  * <p>
@@ -271,8 +333,8 @@ import org.apache.juneau.transform.*;
  * 	<br>
  * 	Bean maps are created in two ways...
  * 	<ol>
- * 		<li> {@link BeanContext#forBean(Object) BeanContext.forBean()} - Wraps an existing bean inside a {@code Map} wrapper.
- * 		<li> {@link BeanContext#newBeanMap(Class) BeanContext.newInstance()} - Create a new bean instance wrapped in a {@code Map} wrapper.
+ * 		<li> {@link BeanSession#toBeanMap(Object) BeanSession.toBeanMap()} - Wraps an existing bean inside a {@code Map} wrapper.
+ * 		<li> {@link BeanSession#newBeanMap(Class) BeanSession.newBeanMap()} - Create a new bean instance wrapped in a {@code Map} wrapper.
  * 	</ol>
  *
  * <h6 class='topic'>Example:</h6>
@@ -285,13 +347,16 @@ import org.apache.juneau.transform.*;
  * 		<jk>public void</jk> setAge(<jk>int</jk> age);
  * 	}
  *
+ * 	<jc>// Create a new bean session</jc>
+ *  BeanSession session = BeanContext.<jsf>DEFAULT</jsf>.createSession();
+ *
  * 	<jc>// Wrap an existing bean in a new bean map</jc>
- * 	BeanMap&lt;Person&gt; m1 = BeanContext.<jsf>DEFAULT</jsf>.forBean(<jk>new</jk> Person());
+ * 	BeanMap&lt;Person&gt; m1 = session.toBeanMap(<jk>new</jk> Person());
  * 	m1.put(<js>"name"</js>, <js>"John Smith"</js>);
  * 	m1.put(<js>"age"</js>, 45);
  *
  * 	<jc>// Create a new bean instance wrapped in a new bean map</jc>
- * 	BeanMap&lt;Person&gt; m2 = BeanContext.<jsf>DEFAULT</jsf>.newInstance(Person.<jk>class</jk>);
+ * 	BeanMap&lt;Person&gt; m2 = session.newBeanMap(Person.<jk>class</jk>);
  * 	m2.put(<js>"name"</js>, <js>"John Smith"</js>);
  * 	m2.put(<js>"age"</js>, 45);
  * 	Person p = m2.getBean();  <jc>// Get the bean instance that was created.</jc>
@@ -358,7 +423,7 @@ import org.apache.juneau.transform.*;
  * <p>
  * 	See {@link ClassMeta} for more information.
  */
-@SuppressWarnings({"unchecked","rawtypes"})
+@SuppressWarnings({"unchecked","rawtypes","hiding"})
 public class BeanContext extends Context {
 
 	/**
@@ -368,6 +433,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b> <js>"BeanContext.beansRequireDefaultConstructor"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, a Java class must implement a default no-arg constructor to be considered a bean.
@@ -383,6 +449,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b> <js>"BeanContext.beansRequireSerializable"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, a Java class must implement the {@link Serializable} interface to be considered a bean.
@@ -398,6 +465,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b> <js>"BeanContext.beansRequireSettersForGetters"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, only getters that have equivalent setters will be considered as properties on a bean.
@@ -412,6 +480,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b> <js>"BeanContext.beansRequireSomeProperties"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, then a Java class must contain at least 1 property to be considered a bean.
@@ -427,6 +496,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b> <js>"BeanContext.beanMapPutReturnsOldValue"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, then the {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property values.
@@ -442,6 +512,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b> <js>"BeanContext.beanConstructorVisibility"</js>
 	 * 	<li><b>Data type:</b> {@link Visibility}
 	 * 	<li><b>Default:</b> {@link Visibility#PUBLIC}
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
 	 * <p>
 	 */
@@ -454,6 +525,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b> <js>"BeanContext.beanClassVisibility"</js>
 	 * 	<li><b>Data type:</b> {@link Visibility}
 	 * 	<li><b>Default:</b> {@link Visibility#PUBLIC}
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
 	 * <p>
 	 * Classes are not considered beans unless they meet the minimum visibility requirements.
@@ -469,6 +541,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b> <js>"BeanContext.beanFieldVisibility"</js>
 	 * 	<li><b>Data type:</b> {@link Visibility}
 	 * 	<li><b>Default:</b> {@link Visibility#PUBLIC}
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
 	 * <p>
 	 * Fields are not considered bean properties unless they meet the minimum visibility requirements.
@@ -486,6 +559,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b> <js>"BeanContext.methodVisibility"</js>
 	 * 	<li><b>Data type:</b> {@link Visibility}
 	 * 	<li><b>Default:</b> {@link Visibility#PUBLIC}
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
 	 * <p>
 	 * Methods are not considered bean getters/setters unless they meet the minimum visibility requirements.
@@ -501,6 +575,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b> <js>"BeanContext.useJavaBeanIntrospector"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
 	 * <p>
 	 * Using the built-in Java bean introspector will not pick up fields or non-standard getters/setters.
@@ -515,6 +590,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b> <js>"BeanContext.useInterfaceProxies"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, then interfaces will be instantiated as proxy classes through the use of an {@link InvocationHandler}
@@ -529,6 +605,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b> <js>"BeanContext.ignoreUnknownBeanProperties"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, trying to set a value on a non-existent bean property will silently be ignored.
@@ -543,6 +620,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b> <js>"BeanContext.ignoreUnknownNullBeanProperties"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, trying to set a <jk>null</jk> value on a non-existent bean property will silently be ignored.
@@ -557,6 +635,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b> <js>"BeanContext.ignorePropertiesWithoutSetters"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, trying to set a value on a bean property without a setter will silently be ignored.
@@ -571,6 +650,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b> <js>"BeanContext.ignoreInvocationExceptionsOnGetters"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, errors thrown when calling bean getter methods will silently be ignored.
@@ -585,6 +665,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b> <js>"BeanContext.ignoreInvocationExceptionsOnSetters"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, errors thrown when calling bean setter methods will silently be ignored.
@@ -599,6 +680,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b> <js>"BeanContext.sortProperties"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
 	 * <p>
 	 * When <jk>true</jk>, all bean properties will be serialized and access in alphabetical order.
@@ -630,6 +712,7 @@ public class BeanContext extends Context {
 	 * 		<li><code>java.nio.*</code>
 	 * 		<li><code>java.util.*</code>
 	 * 	</ul>
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
 	 * <p>
 	 * When specified, the current list of ignore packages are appended to.
@@ -657,6 +740,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b> <js>"BeanContext.notBeanClasses.set"</js>
 	 * 	<li><b>Data type:</b> <code>Set&lt;Class&gt;</code>
 	 * 	<li><b>Default:</b> empty set
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
 	 * <p>
 	 * Not-bean classes are typically converted to <code>Strings</code> during serialization even if they
@@ -681,6 +765,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b> <js>"BeanContext.beanFilters.list"</js>
 	 * 	<li><b>Data type:</b> <code>List&lt;Class&gt;</code>
 	 * 	<li><b>Default:</b> empty list
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
 	 * <p>
 	 * This is a programmatic equivalent to the {@link Bean @Bean} annotation.
@@ -716,6 +801,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b> <js>"BeanContext.pojoSwaps.list"</js>
 	 * 	<li><b>Data type:</b> <code>List&lt;Class&gt;</code>
 	 * 	<li><b>Default:</b> empty list
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
 	 * <p>
 	 * There are two category of classes that can be passed in through this method:
@@ -743,6 +829,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b> <js>"BeanContext.implClasses.map"</js>
 	 * 	<li><b>Data type:</b> <code>Map&lt;Class,Class&gt;</code>
 	 * 	<li><b>Default:</b> empty map
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
 	 * <p>
 	 * For interfaces and abstract classes this method can be used to specify an implementation
@@ -763,6 +850,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b> <js>"BeanContext.beanDictionary.list"</js>
 	 * 	<li><b>Data type:</b> <code>List&lt;Class&gt;</code>
 	 * 	<li><b>Default:</b> empty list
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
 	 * <p>
 	 * This list can consist of the following class types:
@@ -791,6 +879,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b> <js>"BeanContext.beanTypePropertyName"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
 	 * 	<li><b>Default:</b> <js>"_type"</js>
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
 	 * <p>
 	 */
@@ -803,11 +892,65 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b> <js>"BeanContext.defaultParser"</js>
 	 * 	<li><b>Data type:</b> <code>Class</code>
 	 * 	<li><b>Default:</b> {@link JsonSerializer}
+	 * 	<li><b>Session-overridable:</b> <jk>false</jk>
 	 * </ul>
 	 * <p>
-	 * Used in the in the {@link BeanContext#convertToType(Object, Class)} method.ß
+	 * Used in the in the {@link BeanSession#convertToType(Object, Class)} method.
 	 */
 	public static final String BEAN_defaultParser = "BeanContext.defaultParser";
+
+	/**
+	 * <b>Configuration property:</b>  Locale.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"BeanContext.locale"</js>
+	 * 	<li><b>Data type:</b> <code>Locale</code>
+	 * 	<li><b>Default:</b> <code>Locale.getDefault()</code>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * Used in the in the {@link BeanSession#convertToType(Object, Class)} method.ß
+	 */
+	public static final String BEAN_locale = "BeanContext.locale";
+
+	/**
+	 * <b>Configuration property:</b>  TimeZone.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"BeanContext.timeZone"</js>
+	 * 	<li><b>Data type:</b> <code>TimeZone</code>
+	 * 	<li><b>Default:</b> <jk>null</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * Used in the in the {@link BeanSession#convertToType(Object, Class)} method.ß
+	 */
+	public static final String BEAN_timeZone = "BeanContext.timeZone";
+
+	/**
+	 * <b>Configuration property:</b>  Debug mode.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"BeanContext.debug"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * Enables the following additional information during serialization:
+	 * <ul class='spaced-list'>
+	 * 	<li>When bean getters throws exceptions, the exception includes the object stack information
+	 * 		in order to determine how that method was invoked.
+	 * 	<li>Enables {@link SerializerContext#SERIALIZER_detectRecursions}.
+	 * </ul>
+	 * <p>
+	 * Enables the following additional information during parsing:
+	 * <ul class='spaced-list'>
+	 * 	<li>When bean setters throws exceptions, the exception includes the object stack information
+	 * 		in order to determine how that method was invoked.
+	 * </ul>
+	 */
+	public static final String BEAN_debug = "BeanContext.debug";
 
 	/*
 	 * The default package pattern exclusion list.
@@ -871,7 +1014,8 @@ public class BeanContext extends Context {
 		ignoreInvocationExceptionsOnGetters,
 		ignoreInvocationExceptionsOnSetters,
 		useJavaBeanIntrospector,
-		sortProperties;
+		sortProperties,
+		debug;
 
 	final Visibility
 		beanConstructorVisibility,
@@ -887,6 +1031,8 @@ public class BeanContext extends Context {
 	final Map<Class<?>,Class<?>> implClasses;
 	final Class<?>[] implKeyClasses, implValueClasses;
 	final ClassLoader classLoader;
+	final Locale locale;
+	final TimeZone timeZone;
 
 	final Map<Class,ClassMeta> cmCache;
 	final ClassMeta<Object> cmObject;  // Reusable ClassMeta that represents general Objects.
@@ -932,6 +1078,7 @@ public class BeanContext extends Context {
 		useJavaBeanIntrospector = pm.get(BEAN_useJavaBeanIntrospector, boolean.class, false);
 		sortProperties = pm.get(BEAN_sortProperties, boolean.class, false);
 		beanTypePropertyName = pm.get(BEAN_beanTypePropertyName, String.class, "_type");
+		debug = cf.getProperty(BEAN_debug, boolean.class, false);
 
 		beanConstructorVisibility = pm.get(BEAN_beanConstructorVisibility, Visibility.class, PUBLIC);
 		beanClassVisibility = pm.get(BEAN_beanClassVisibility, Visibility.class, PUBLIC);
@@ -987,6 +1134,9 @@ public class BeanContext extends Context {
 		implKeyClasses = implClasses.keySet().toArray(new Class[0]);
 		implValueClasses = implClasses.values().toArray(new Class[0]);
 
+		locale = pm.get(BEAN_locale, Locale.class, Locale.getDefault());
+		timeZone = pm.get(BEAN_timeZone, TimeZone.class, null);
+
 		if (! cmCacheCache.containsKey(hashCode)) {
 			ConcurrentHashMap<Class,ClassMeta> cm = new ConcurrentHashMap<Class,ClassMeta>();
 			cm.put(String.class, new ClassMeta(String.class, this));
@@ -1002,24 +1152,45 @@ public class BeanContext extends Context {
 	}
 
 	/**
+	 * Create a new bean session based on the properties defined on this context.
+	 *
+	 * @param op The override properties.
+	 * 	This map can contain values to override properties defined on this context.
+	 * 	Note that only session-overridable settings can be overridden.
+	 * @param locale The bean session locale.
+	 * 	Typically used by {@link PojoSwap PojoSwaps} to provide locale-specific output.
+	 * 	If <jk>null</jk>, the system default locale is assumed.
+	 * @param timeZone The bean session timezone.
+	 * 	Typically used by time-sensitive {@link PojoSwap PojoSwaps} to provide timezone-specific output.
+	 * 	If <jk>null</jk> the system default timezone is assumed on {@link Date} objects, or the
+	 * 		locale specified on {@link Calendar} objects are used.
+	 * @return A new session object.
+	 */
+	public BeanSession createSession(ObjectMap op, Locale locale, TimeZone timeZone) {
+		return new BeanSession(this, op, locale, timeZone);
+	}
+
+	/**
+	 * Create a new bean session based on the properties defined on this context.
+	 * <p>
+	 * Use this method for creating sessions if you don't need to override any
+	 * properties or locale/timezone currently set on this context.
+	 *
+	 * @return A new session object.
+	 */
+	public BeanSession createSession() {
+		return new BeanSession(this, null, this.locale, this.timeZone);
+	}
+
+	/**
 	 * Returns <jk>true</jk> if the specified bean context shares the same cache as this bean context.
 	 * Useful for testing purposes.
 	 *
 	 * @param bc The bean context to compare to.
 	 * @return <jk>true</jk> if the bean contexts have equivalent settings and thus share caches.
 	 */
-	public boolean hasSameCache(BeanContext bc) {
+	public final boolean hasSameCache(BeanContext bc) {
 		return bc.cmCache == this.cmCache;
-	}
-
-	/**
-	 * Bean property getter:  <property>ignoreUnknownBeanProperties</property>.
-	 * See {@link BeanContext#BEAN_ignoreUnknownBeanProperties}.
-	 *
-	 * @return The value of the <property>ignoreUnknownBeanProperties</property> property on this bean.
-	 */
-	public boolean isIgnoreUnknownBeanProperties() {
-		return ignoreUnknownBeanProperties;
 	}
 
 	/**
@@ -1029,7 +1200,7 @@ public class BeanContext extends Context {
 	 * @param c The class type being tested.
 	 * @return <jk>true</jk> if the specified class matches any of the exclusion parameters.
 	 */
-	protected boolean isNotABean(Class<?> c) {
+	protected final boolean isNotABean(Class<?> c) {
 		if (c.isArray() || c.isPrimitive() || c.isEnum() || c.isAnnotation())
 			return true;
 		Package p = c.getPackage();
@@ -1062,180 +1233,6 @@ public class BeanContext extends Context {
 	}
 
 	/**
-	 * Wraps an object inside a {@link BeanMap} object (i.e. a modifiable {@link Map}).
-	 * <p>
-	 * 	If object is not a true bean, then throws a {@link BeanRuntimeException} with an explanation of why it's not a bean.
-	 *
-	 * <h6 class='topic'>Example:</h6>
-	 * <p class='bcode'>
-	 * 	<jc>// Construct a bean map around a bean instance</jc>
-	 * 	BeanMap&lt;Person&gt; bm = BeanContext.<jsf>DEFAULT</jsf>.forBean(<jk>new</jk> Person());
-	 * </p>
-	 *
-	 * @param <T> The class of the object being wrapped.
-	 * @param o The object to wrap in a map interface.  Must not be null.
-	 * @return The wrapped object.
-	 */
-	public <T> BeanMap<T> forBean(T o) {
-		return this.forBean(o, (Class<T>)o.getClass());
-	}
-
-	/**
-	 * Determines whether the specified object matches the requirements on this context of being a bean.
-	 *
-	 * @param o The object being tested.
-	 * @return <jk>true</jk> if the specified object is considered a bean.
-	 */
-	public boolean isBean(Object o) {
-		if (o == null)
-			return false;
-		return isBean(o.getClass());
-	}
-
-	/**
-	 * Determines whether the specified class matches the requirements on this context of being a bean.
-	 *
-	 * @param c The class being tested.
-	 * @return <jk>true</jk> if the specified class is considered a bean.
-	 */
-	public boolean isBean(Class<?> c) {
-		return getBeanMeta(c) != null;
-	}
-
-	/**
-	 * Wraps an object inside a {@link BeanMap} object (i.e.: a modifiable {@link Map})
-	 * defined as a bean for one of its class, a super class, or an implemented interface.
-	 * <p>
-	 * 	If object is not a true bean, throws a {@link BeanRuntimeException} with an explanation of why it's not a bean.
-	 *
-	 * <h6 class='topic'>Example:</h6>
-	 * <p class='bcode'>
-	 * 	<jc>// Construct a bean map for new bean using only properties defined in a superclass</jc>
-	 * 	BeanMap&lt;MySubBean&gt; bm = BeanContext.<jsf>DEFAULT</jsf>.forBean(<jk>new</jk> MySubBean(), MySuperBean.<jk>class</jk>);
-	 *
-	 * 	<jc>// Construct a bean map for new bean using only properties defined in an interface</jc>
-	 * 	BeanMap&lt;MySubBean&gt; bm = BeanContext.<jsf>DEFAULT</jsf>.forBean(<jk>new</jk> MySubBean(), MySuperInterface.<jk>class</jk>);
-	 * </p>
-	 *
-	 * @param <T> The class of the object being wrapped.
-	 * @param o The object to wrap in a bean interface.  Must not be null.
-	 * @param c The superclass to narrow the bean properties to.  Must not be null.
-	 * @return The bean representation, or <jk>null</jk> if the object is not a true bean.
-	 * @throws NullPointerException If either parameter is null.
-	 * @throws IllegalArgumentException If the specified object is not an an instance of the specified class.
-	 * @throws BeanRuntimeException If specified object is not a bean according to the bean rules
-	 * 		specified in this context class.
-	 */
-	public <T> BeanMap<T> forBean(T o, Class<? super T> c) throws BeanRuntimeException {
-		assertFieldNotNull(o, "o");
-		assertFieldNotNull(c, "c");
-
-		if (! c.isInstance(o))
-			illegalArg("The specified object is not an instance of the specified class.  class=''{0}'', objectClass=''{1}'', object=''{2}''", c.getName(), o.getClass().getName(), 0);
-
-		ClassMeta cm = getClassMeta(c);
-
-		BeanMeta m = cm.getBeanMeta();
-		if (m == null)
-			throw new BeanRuntimeException(c, "Class is not a bean.  Reason=''{0}''", cm.getNotABeanReason());
-		return new BeanMap<T>(o, m);
-	}
-
-	/**
-	 * Creates a new {@link BeanMap} object (i.e. a modifiable {@link Map}) of the given class with uninitialized property values.
-	 * <p>
-	 * 	If object is not a true bean, then throws a {@link BeanRuntimeException} with an explanation of why it's not a bean.
-	 *
-	 * <h6 class='topic'>Example:</h6>
-	 * <p class='bcode'>
-	 * 	<jc>// Construct a new bean map wrapped around a new Person object</jc>
-	 * 	BeanMap&lt;Person&gt; bm = BeanContext.<jsf>DEFAULT</jsf>.newBeanMap(Person.<jk>class</jk>);
-	 * </p>
-	 *
-	 * @param <T> The class of the object being wrapped.
-	 * @param c The name of the class to create a new instance of.
-	 * @return A new instance of the class.
-	 */
-	public <T> BeanMap<T> newBeanMap(Class<T> c) {
-		return newBeanMap(null, c);
-	}
-
-	/**
-	 * Same as {@link #newBeanMap(Class)}, except used for instantiating inner member classes that must
-	 * 	be instantiated within another class instance.
-	 *
-	 * @param <T> The class of the object being wrapped.
-	 * @param c The name of the class to create a new instance of.
-	 * @param outer If class is a member class, this is the instance of the containing class.
-	 * 	Should be <jk>null</jk> if not a member class.
-	 * @return A new instance of the class.
-	 */
-	public <T> BeanMap<T> newBeanMap(Object outer, Class<T> c) {
-		BeanMeta m = getBeanMeta(c);
-		if (m == null)
-			return null;
-		T bean = null;
-		if (m.constructorArgs.length == 0) {
-			bean = newBean(outer, c);
-			// Beans with subtypes won't be instantiated until the sub type property is specified.
-			if (bean == null && ! m.getClassMeta().hasSubTypes())
-				return null;
-		}
-		return new BeanMap<T>(bean, m);
-	}
-
-	/**
-	 * Creates a new empty bean of the specified type, except used for instantiating inner member classes that must
-	 * 	be instantiated within another class instance.
-	 *
-	 * <h6 class='topic'>Example:</h6>
-	 * <p class='bcode'>
-	 * 	<jc>// Construct a new instance of the specified bean class</jc>
-	 * 	Person p = BeanContext.<jsf>DEFAULT</jsf>.newBean(Person.<jk>class</jk>);
-	 * </p>
-	 *
-	 * @param <T> The class type of the bean being created.
-	 * @param c The class type of the bean being created.
-	 * @return A new bean object.
-	 * @throws BeanRuntimeException If the specified class is not a valid bean.
-	 */
-	public <T> T newBean(Class<T> c) throws BeanRuntimeException {
-		return newBean(null, c);
-	}
-
-	/**
-	 * Same as {@link #newBean(Class)}, except used for instantiating inner member classes that must
-	 * 	be instantiated within another class instance.
-	 *
-	 * @param <T> The class type of the bean being created.
-	 * @param c The class type of the bean being created.
-	 * @param outer If class is a member class, this is the instance of the containing class.
-	 * 	Should be <jk>null</jk> if not a member class.
-	 * @return A new bean object.
-	 * @throws BeanRuntimeException If the specified class is not a valid bean.
-	 */
-	public <T> T newBean(Object outer, Class<T> c) throws BeanRuntimeException {
-		ClassMeta<T> cm = getClassMeta(c);
-		BeanMeta m = cm.getBeanMeta();
-		if (m == null)
-			return null;
-		try {
-			T o = (T)m.newBean(outer);
-			if (o == null) {
-				// Beans with subtypes won't be instantiated until the sub type property is specified.
-				if (cm.beanFilter != null && cm.beanFilter.getSubTypeProperty() != null)
-					return null;
-				throw new BeanRuntimeException(c, "Class does not have a no-arg constructor.");
-			}
-			return o;
-		} catch (BeanRuntimeException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new BeanRuntimeException(e);
-		}
-	}
-
-	/**
 	 * Returns the {@link BeanMeta} class for the specified class.
 	 *
 	 * @param <T> The class type to get the meta-data on.
@@ -1243,7 +1240,7 @@ public class BeanContext extends Context {
 	 * @return The {@link BeanMeta} for the specified class, or <jk>null</jk> if the class
 	 * 	is not a bean per the settings on this context.
 	 */
-	public <T> BeanMeta<T> getBeanMeta(Class<T> c) {
+	public final <T> BeanMeta<T> getBeanMeta(Class<T> c) {
 		if (c == null)
 			return null;
 		return getClassMeta(c).getBeanMeta();
@@ -1262,7 +1259,7 @@ public class BeanContext extends Context {
 	 * @param cm The class type.
 	 * @return The class type bound by this bean context.
 	 */
-	public <T> ClassMeta<T> normalizeClassMeta(ClassMeta<T> cm) {
+	protected final <T> ClassMeta<T> normalizeClassMeta(ClassMeta<T> cm) {
 		if (cm == null)
 			return (ClassMeta<T>)object();
 		if (cm.beanContext == this || cm.beanContext.equals(this))
@@ -1289,7 +1286,7 @@ public class BeanContext extends Context {
 	 * @return If the class is not an array, returns a cached {@link ClassMeta} object.
 	 * 	Otherwise, returns a new {@link ClassMeta} object every time.<br>
 	 */
-	public <T> ClassMeta<T> getClassMeta(Class<T> c) {
+	public final <T> ClassMeta<T> getClassMeta(Class<T> c) {
 
 		// If this is an array, then we want it wrapped in an uncached ClassMeta object.
 		// Note that if it has a pojo swap, we still want to cache it so that
@@ -1343,7 +1340,7 @@ public class BeanContext extends Context {
 	 * @return If the key and value types are OBJECT, returns a cached {@link ClassMeta} object.<br>
 	 * 	Otherwise, returns a new {@link ClassMeta} object every time.
 	 */
-	public <K,V,T extends Map<K,V>> ClassMeta<T> getMapClassMeta(Class<T> c, ClassMeta<K> keyType, ClassMeta<V> valueType) {
+	public final <K,V,T extends Map<K,V>> ClassMeta<T> getMapClassMeta(Class<T> c, ClassMeta<K> keyType, ClassMeta<V> valueType) {
 		if (keyType.isObject() && valueType.isObject())
 			return getClassMeta(c);
 		return new ClassMeta(c, this).setKeyType(keyType).setValueType(valueType);
@@ -1361,7 +1358,7 @@ public class BeanContext extends Context {
 	 * @return If the key and value types are Object, returns a cached {@link ClassMeta} object.<br>
 	 * 	Otherwise, returns a new {@link ClassMeta} object every time.
 	 */
-	public <K,V,T extends Map<K,V>> ClassMeta<T> getMapClassMeta(Class<T> c, Class<K> keyType, Class<V> valueType) {
+	public final <K,V,T extends Map<K,V>> ClassMeta<T> getMapClassMeta(Class<T> c, Class<K> keyType, Class<V> valueType) {
 		return getMapClassMeta(c, getClassMeta(keyType), getClassMeta(valueType));
 	}
 
@@ -1375,7 +1372,7 @@ public class BeanContext extends Context {
 	 * @return If the key and value types are Object, returns a cached {@link ClassMeta} object.<br>
 	 * 	Otherwise, returns a new {@link ClassMeta} object every time.
 	 */
-	public <T extends Map> ClassMeta<T> getMapClassMeta(Class<T> c, Type keyType, Type valueType) {
+	public final <T extends Map> ClassMeta<T> getMapClassMeta(Class<T> c, Type keyType, Type valueType) {
 		return getMapClassMeta(c, getClassMeta(keyType), getClassMeta(valueType));
 	}
 
@@ -1389,7 +1386,7 @@ public class BeanContext extends Context {
 	 * @return If the element type is <code>OBJECT</code>, returns a cached {@link ClassMeta} object.<br>
 	 * 	Otherwise, returns a new {@link ClassMeta} object every time.
 	 */
-	public <E,T extends Collection<E>> ClassMeta<T> getCollectionClassMeta(Class<T> c, ClassMeta<E> elementType) {
+	public final <E,T extends Collection<E>> ClassMeta<T> getCollectionClassMeta(Class<T> c, ClassMeta<E> elementType) {
 		if (elementType.isObject())
 			return getClassMeta(c);
 		return new ClassMeta(c, this).setElementType(elementType);
@@ -1405,7 +1402,7 @@ public class BeanContext extends Context {
 	 * @return If the element type is <code>OBJECT</code>, returns a cached {@link ClassMeta} object.<br>
 	 * 	Otherwise, returns a new {@link ClassMeta} object every time.
 	 */
-	public <E,T extends Collection<E>> ClassMeta<T> getCollectionClassMeta(Class<T> c, Class<E> elementType) {
+	public final <E,T extends Collection<E>> ClassMeta<T> getCollectionClassMeta(Class<T> c, Class<E> elementType) {
 		return getCollectionClassMeta(c, getClassMeta(elementType));
 	}
 
@@ -1418,7 +1415,7 @@ public class BeanContext extends Context {
 	 * @return If the element type is <code>OBJECT</code>, returns a cached {@link ClassMeta} object.<br>
 	 * 	Otherwise, returns a new {@link ClassMeta} object every time.
 	 */
-	public <T extends Collection> ClassMeta<T> getCollectionClassMeta(Class<T> c, Type elementType) {
+	public final <T extends Collection> ClassMeta<T> getCollectionClassMeta(Class<T> c, Type elementType) {
 		return getCollectionClassMeta(c, getClassMeta(elementType));
 	}
 
@@ -1435,11 +1432,11 @@ public class BeanContext extends Context {
 	 * 	</ul>
 	 * @return A ClassMeta object, or <jk>null</jk> if the object is null.
 	 */
-	public ClassMeta getClassMeta(Type o) {
+	public final ClassMeta getClassMeta(Type o) {
 		return getClassMeta(o, null);
 	}
 
-	ClassMeta getClassMeta(Type o, Map<Class<?>,Class<?>[]> typeVarImpls) {
+	final ClassMeta getClassMeta(Type o, Map<Class<?>,Class<?>[]> typeVarImpls) {
 		if (o == null)
 			return null;
 
@@ -1525,22 +1522,7 @@ public class BeanContext extends Context {
 		return rawType;
 	}
 
-	/**
-	 * Given an array of {@link Class} objects, returns an array of corresponding {@link ClassMeta} objects.
-	 * Constructs a new array on each call.
-	 *
-	 * @param classes The array of classes to get class metas for.
-	 * @return An array of {@link ClassMeta} objects corresponding to the classes.  Never <jk>null</jk>.
-	 */
-	public ClassMeta<?>[] getClassMetas(Class<?>[] classes) {
-		assertFieldNotNull(classes, "classes");
-		ClassMeta<?>[] cm = new ClassMeta<?>[classes.length];
-		for (int i = 0; i < classes.length; i++)
-			cm[i] = getClassMeta(classes[i]);
-		return cm;
-	}
-
-	ClassMeta[] findParameters(Type o, Class c) {
+	final ClassMeta[] findParameters(Type o, Class c) {
 		if (o == null)
 			o = c;
 
@@ -1584,7 +1566,7 @@ public class BeanContext extends Context {
 	 * @param o The class to find the class type for.
 	 * @return The ClassMeta object, or <jk>null</jk> if {@code o} is <jk>null</jk>.
 	 */
-	public <T> ClassMeta<T> getClassMetaForObject(T o) {
+	public final <T> ClassMeta<T> getClassMetaForObject(T o) {
 		if (o == null)
 			return null;
 		return (ClassMeta<T>)getClassMeta(o.getClass());
@@ -1603,7 +1585,7 @@ public class BeanContext extends Context {
 	 * 	Can be <jk>null</jk> if the information is not known.
 	 * @return The new {@code ClassMeta} object wrapped around the {@code Type} object.
 	 */
-	protected <T> ClassMeta<T> getClassMeta(BeanProperty p, Type t, Map<Class<?>,Class<?>[]> typeVarImpls) {
+	protected final <T> ClassMeta<T> getClassMeta(BeanProperty p, Type t, Map<Class<?>,Class<?>[]> typeVarImpls) {
 		ClassMeta<T> cm = getClassMeta(t, typeVarImpls);
 		ClassMeta<T> cm2 = cm;
 		if (p != null) {
@@ -1663,7 +1645,7 @@ public class BeanContext extends Context {
 	 * @param s The class name.
 	 * @return The ClassMeta corresponding to the class name string.
 	 */
-	public ClassMeta<?> getClassMetaFromString(String s) {
+	protected final ClassMeta<?> getClassMetaFromString(String s) {
 		int d = 0;
 		if (s == null || s.isEmpty())
 			return null;
@@ -1764,7 +1746,7 @@ public class BeanContext extends Context {
 	 * @param c The class associated with the swap.
 	 * @return The swap associated with the class, or null if there is no association.
 	 */
-	protected <T> PojoSwap findPojoSwap(Class<T> c) {
+	protected final <T> PojoSwap findPojoSwap(Class<T> c) {
 		// Note:  On first
 		if (c != null)
 			for (PojoSwap f : pojoSwaps)
@@ -1778,7 +1760,7 @@ public class BeanContext extends Context {
 	 * @param c The class to check.
 	 * @return <jk>true</jk> if the specified class or one of its subclasses has a {@link PojoSwap} associated with it.
 	 */
-	protected boolean hasChildPojoSwaps(Class<?> c) {
+	protected final boolean hasChildPojoSwaps(Class<?> c) {
 		if (c != null)
 			for (PojoSwap f : pojoSwaps)
 				if (isParentClass(c, f.getNormalClass()))
@@ -1794,7 +1776,7 @@ public class BeanContext extends Context {
 	 * @param c The class associated with the bean filter.
 	 * @return The bean filter associated with the class, or null if there is no association.
 	 */
-	protected <T> BeanFilter findBeanFilter(Class<T> c) {
+	protected final <T> BeanFilter findBeanFilter(Class<T> c) {
 		if (c != null)
 			for (BeanFilter f : beanFilters)
 				if (isParentClass(f.getBeanClass(), c))
@@ -1807,7 +1789,7 @@ public class BeanContext extends Context {
 	 *
 	 * @return The type property name.  Never <jk>null</jk>.
 	 */
-	public final String getBeanTypePropertyName() {
+	protected final String getBeanTypePropertyName() {
 		return beanTypePropertyName;
 	}
 
@@ -1816,7 +1798,7 @@ public class BeanContext extends Context {
 	 *
 	 * @return The bean dictionary defined in this bean context.  Never <jk>null</jk>.
 	 */
-	public BeanDictionary getBeanDictionary() {
+	protected final BeanDictionary getBeanDictionary() {
 		return beanDictionary;
 	}
 
@@ -1828,7 +1810,7 @@ public class BeanContext extends Context {
 	 * @param v The minimum visibility for the constructor.
 	 * @return The no arg constructor, or <jk>null</jk> if the class has no no-arg constructor.
 	 */
-	protected <T> Constructor<? extends T> getImplClassConstructor(Class<T> c, Visibility v) {
+	protected final <T> Constructor<? extends T> getImplClassConstructor(Class<T> c, Visibility v) {
 		if (implClasses.isEmpty())
 			return null;
 		Class cc = c;
@@ -1847,40 +1829,6 @@ public class BeanContext extends Context {
 	}
 
 	/**
-	 * Converts the specified value to the specified class type.
-	 * <p>
-	 * 	See {@link #convertToType(Object, ClassMeta)} for the list of valid conversions.
-	 *
-	 * @param <T> The class type to convert the value to.
-	 * @param value The value to convert.
-	 * @param type The class type to convert the value to.
-	 * @throws InvalidDataConversionException If the specified value cannot be converted to the specified type.
-	 * @return The converted value.
-	 */
-	public <T> T convertToType(Object value, Class<T> type) throws InvalidDataConversionException {
-		// Shortcut for most common case.
-		if (value != null && value.getClass() == type)
-			return (T)value;
-		return convertToType(null, value, getClassMeta(type));
-	}
-
-	/**
-	 * Same as {@link #convertToType(Object, Class)}, except used for instantiating inner member classes that must
-	 * 	be instantiated within another class instance.
-	 *
-	 * @param <T> The class type to convert the value to.
-	 * @param outer If class is a member class, this is the instance of the containing class.
-	 * 	Should be <jk>null</jk> if not a member class.
-	 * @param value The value to convert.
-	 * @param type The class type to convert the value to.
-	 * @throws InvalidDataConversionException If the specified value cannot be converted to the specified type.
-	 * @return The converted value.
-	 */
-	public <T> T convertToType(Object outer, Object value, Class<T> type) throws InvalidDataConversionException {
-		return convertToType(outer, value, getClassMeta(type));
-	}
-
-	/**
 	 * Returns a reusable {@link ClassMeta} representation for the class <code>Object</code>.
 	 * <p>
 	 * This <code>ClassMeta</code> is often used to represent "any object type" when an object type
@@ -1891,7 +1839,7 @@ public class BeanContext extends Context {
 	 *
 	 * @return The {@link ClassMeta} object associated with the <code>Object</code> class.
 	 */
-	public ClassMeta<Object> object() {
+	protected final ClassMeta<Object> object() {
 		return cmObject;
 	}
 
@@ -1905,7 +1853,7 @@ public class BeanContext extends Context {
 	 *
 	 * @return The {@link ClassMeta} object associated with the <code>String</code> class.
 	 */
-	public ClassMeta<String> string() {
+	protected final ClassMeta<String> string() {
 		return cmString;
 	}
 
@@ -1919,473 +1867,8 @@ public class BeanContext extends Context {
 	 *
 	 * @return The {@link ClassMeta} object associated with the <code>String</code> class.
 	 */
-	public ClassMeta<Class> _class() {
+	protected final ClassMeta<Class> _class() {
 		return cmClass;
-	}
-
-	/**
-	 * Casts the specified value into the specified type.
-	 * <p>
-	 * 	If the value isn't an instance of the specified type, then converts
-	 * 	the value if possible.<br>
-	 * <p>
-	 * 	The following conversions are valid:
-	 * 	<table class='styled'>
-	 * 		<tr><th>Convert to type</th><th>Valid input value types</th><th>Notes</th></tr>
-	 * 		<tr>
-	 * 			<td>
-	 * 				A class that is the normal type of a registered {@link PojoSwap}.
-	 * 			</td>
-	 * 			<td>
-	 * 				A value whose class matches the transformed type of that registered {@link PojoSwap}.
-	 * 			</td>
-	 * 			<td>&nbsp;</td>
-	 * 		</tr>
-	 * 		<tr>
-	 * 			<td>
-	 * 				A class that is the transformed type of a registered {@link PojoSwap}.
-	 * 			</td>
-	 * 			<td>
-	 * 				A value whose class matches the normal type of that registered {@link PojoSwap}.
-	 * 			</td>
-	 * 			<td>&nbsp;</td>
-	 * 		</tr>
-	 * 		<tr>
-	 * 			<td>
-	 * 				{@code Number} (e.g. {@code Integer}, {@code Short}, {@code Float},...)<br>
-	 * 				<code>Number.<jsf>TYPE</jsf></code> (e.g. <code>Integer.<jsf>TYPE</jsf></code>, <code>Short.<jsf>TYPE</jsf></code>, <code>Float.<jsf>TYPE</jsf></code>,...)
-	 * 			</td>
-	 * 			<td>
-	 * 				{@code Number}, {@code String}, <jk>null</jk>
-	 * 			</td>
-	 * 			<td>
-	 * 				For primitive {@code TYPES}, <jk>null</jk> returns the JVM default value for that type.
-	 * 			</td>
-	 * 		</tr>
-	 * 		<tr>
-	 * 			<td>
-	 * 				{@code Map} (e.g. {@code Map}, {@code HashMap}, {@code TreeMap}, {@code ObjectMap})
-	 * 			</td>
-	 * 			<td>
-	 * 				{@code Map}
-	 * 			</td>
-	 * 			<td>
-	 * 				If {@code Map} is not constructible, a {@code ObjectMap} is created.
-	 * 			</td>
-	 * 		</tr>
-	 * 		<tr>
-	 * 			<td>
-	 * 			{@code Collection} (e.g. {@code List}, {@code LinkedList}, {@code HashSet}, {@code ObjectList})
-	 * 			</td>
-	 * 			<td>
-	 * 				{@code Collection<Object>}<br>
-	 * 				{@code Object[]}
-	 * 			</td>
-	 * 			<td>
-	 * 				If {@code Collection} is not constructible, a {@code ObjectList} is created.
-	 * 			</td>
-	 * 		</tr>
-	 * 		<tr>
-	 * 			<td>
-	 * 				{@code X[]} (array of any type X)<br>
-	 * 			</td>
-	 * 			<td>
-	 * 				{@code List<X>}<br>
-	 * 			</td>
-	 * 			<td>&nbsp;</td>
-	 * 		</tr>
-	 * 		<tr>
-	 * 			<td>
-	 * 				{@code X[][]} (multi-dimensional arrays)<br>
-	 * 			</td>
-	 * 			<td>
-	 * 				{@code List<List<X>>}<br>
-	 * 				{@code List<X[]>}<br>
-	 * 				{@code List[]<X>}<br>
-	 * 			</td>
-	 * 			<td>&nbsp;</td>
-	 * 		</tr>
-	 * 		<tr>
-	 * 			<td>
-	 * 				{@code Enum}<br>
-	 * 			</td>
-	 * 			<td>
-	 * 				{@code String}<br>
-	 * 			</td>
-	 * 			<td>&nbsp;</td>
-	 * 		</tr>
-	 * 		<tr>
-	 * 			<td>
-	 * 				Bean<br>
-	 * 			</td>
-	 * 			<td>
-	 * 				{@code Map}<br>
-	 * 			</td>
-	 * 			<td>&nbsp;</td>
-	 * 		</tr>
-	 * 		<tr>
-	 * 			<td>
-	 * 				{@code String}<br>
-	 * 			</td>
-	 * 			<td>
-	 * 				Anything<br>
-	 * 			</td>
-	 * 			<td>
-	 * 				Arrays are converted to JSON arrays<br>
-	 * 			</td>
-	 * 		</tr>
-	 * 		<tr>
-	 * 			<td>
-	 * 				Anything with one of the following methods:<br>
-	 * 				<code><jk>public static</jk> T fromString(String)</code><br>
-	 * 				<code><jk>public static</jk> T valueOf(String)</code><br>
-	 * 				<code><jk>public</jk> T(String)</code><br>
-	 * 			</td>
-	 * 			<td>
-	 * 				<code>String</code><br>
-	 * 			</td>
-	 * 			<td>
-	 * 				<br>
-	 * 			</td>
-	 * 		</tr>
-	 * 	</table>
-	 *
-	 * @param <T> The class type to convert the value to.
-	 * @param value The value to be converted.
-	 * @param type The target object type.
-	 * @return The converted type.
-	 * @throws InvalidDataConversionException If the specified value cannot be converted to the specified type.
-	 */
-	public <T> T convertToType(Object value, ClassMeta<T> type) throws InvalidDataConversionException {
-		return convertToType(null, value, type);
-	}
-
-	/**
-	 * Same as {@link #convertToType(Object, ClassMeta)}, except used for instantiating inner member classes that must
-	 * 	be instantiated within another class instance.
-	 *
-	 * @param <T> The class type to convert the value to.
-	 * @param outer If class is a member class, this is the instance of the containing class.
-	 * 	Should be <jk>null</jk> if not a member class.
-	 * @param value The value to convert.
-	 * @param type The class type to convert the value to.
-	 * @throws InvalidDataConversionException If the specified value cannot be converted to the specified type.
-	 * @return The converted value.
-	 */
-	public <T> T convertToType(Object outer, Object value, ClassMeta<T> type) throws InvalidDataConversionException {
-		if (type == null)
-			type = (ClassMeta<T>)object();
-
-		try {
-			// Handle the case of a null value.
-			if (value == null) {
-
-				// If it's a primitive, then use the converters to get the default value for the primitive type.
-				if (type.isPrimitive())
-					return type.getPrimitiveDefault();
-
-				// Otherwise, just return null.
-				return null;
-			}
-
-			Class<T> tc = type.getInnerClass();
-
-			// If no conversion needed, then just return the value.
-			// Don't include maps or collections, because child elements may need conversion.
-			if (tc.isInstance(value))
-				if (! ((type.isMap() && type.getValueType().isNotObject()) || (type.isCollection() && type.getElementType().isNotObject())))
-					return (T)value;
-
-			if (tc == Class.class)
-				return (T)(classLoader.loadClass(value.toString()));
-
-			if (type.getPojoSwap() != null) {
-				PojoSwap f = type.getPojoSwap();
-				Class<?> nc = f.getNormalClass(), fc = f.getSwapClass();
-				if (isParentClass(nc, tc) && isParentClass(fc, value.getClass()))
-					return (T)f.unswap(value, type, this);
-			}
-
-			ClassMeta<?> vt = getClassMetaForObject(value);
-			if (vt.getPojoSwap() != null) {
-				PojoSwap f = vt.getPojoSwap();
-				Class<?> nc = f.getNormalClass(), fc = f.getSwapClass();
-				if (isParentClass(nc, vt.getInnerClass()) && isParentClass(fc, tc))
-					return (T)f.swap(value, this);
-			}
-
-			if (type.isPrimitive()) {
-				if (value.toString().isEmpty())
-					return type.getPrimitiveDefault();
-
-				if (type.isNumber()) {
-					if (value instanceof Number) {
-						Number n = (Number)value;
-						if (tc == Integer.TYPE)
-							return (T)Integer.valueOf(n.intValue());
-						if (tc == Short.TYPE)
-							return (T)Short.valueOf(n.shortValue());
-						if (tc == Long.TYPE)
-							return (T)Long.valueOf(n.longValue());
-						if (tc == Float.TYPE)
-							return (T)Float.valueOf(n.floatValue());
-						if (tc == Double.TYPE)
-							return (T)Double.valueOf(n.doubleValue());
-						if (tc == Byte.TYPE)
-							return (T)Byte.valueOf(n.byteValue());
-					} else {
-						String n = null;
-						if (value instanceof Boolean)
-							n = ((Boolean)value).booleanValue() ? "1" : "0";
-						else
-							n = value.toString();
-						if (tc == Integer.TYPE)
-							return (T)Integer.valueOf(n);
-						if (tc == Short.TYPE)
-							return (T)Short.valueOf(n);
-						if (tc == Long.TYPE)
-							return (T)Long.valueOf(n);
-						if (tc == Float.TYPE)
-							return (T)new Float(n);
-						if (tc == Double.TYPE)
-							return (T)new Double(n);
-						if (tc == Byte.TYPE)
-							return (T)Byte.valueOf(n);
-					}
-				} else if (type.isChar()) {
-					String s = value.toString();
-					return (T)Character.valueOf(s.length() == 0 ? 0 : s.charAt(0));
-				} else if (type.isBoolean()) {
-					if (value instanceof Number) {
-						int i = ((Number)value).intValue();
-						return (T)(i == 0 ? Boolean.FALSE : Boolean.TRUE);
-					}
-					return (T)Boolean.valueOf(value.toString());
-				}
-			}
-
-			if (type.isNumber()) {
-				if (value instanceof Number) {
-					Number n = (Number)value;
-					if (tc == Integer.class)
-						return (T)Integer.valueOf(n.intValue());
-					if (tc == Short.class)
-						return (T)Short.valueOf(n.shortValue());
-					if (tc == Long.class)
-						return (T)Long.valueOf(n.longValue());
-					if (tc == Float.class)
-						return (T)Float.valueOf(n.floatValue());
-					if (tc == Double.class)
-						return (T)Double.valueOf(n.doubleValue());
-					if (tc == Byte.class)
-						return (T)Byte.valueOf(n.byteValue());
-					if (tc == Byte.class)
-						return (T)Byte.valueOf(n.byteValue());
-					if (tc == AtomicInteger.class)
-						return (T)new AtomicInteger(n.intValue());
-					if (tc == AtomicLong.class)
-						return (T)new AtomicLong(n.intValue());
-				} else {
-					if (value.toString().isEmpty())
-						return null;
-					String n = null;
-					if (value instanceof Boolean)
-						n = ((Boolean)value).booleanValue() ? "1" : "0";
-					else
-						n = value.toString();
-					if (tc == Integer.class)
-						return (T)Integer.valueOf(n);
-					if (tc == Short.class)
-						return (T)Short.valueOf(n);
-					if (tc == Long.class)
-						return (T)Long.valueOf(n);
-					if (tc == Float.class)
-						return (T)new Float(n);
-					if (tc == Double.class)
-						return (T)new Double(n);
-					if (tc == Byte.class)
-						return (T)Byte.valueOf(n);
-					if (tc == AtomicInteger.class)
-						return (T)new AtomicInteger(Integer.valueOf(n));
-					if (tc == AtomicLong.class)
-						return (T)new AtomicLong(Long.valueOf(n));
-				}
-			}
-
-			if (type.isChar()) {
-				String s = value.toString();
-				return (T)Character.valueOf(s.length() == 0 ? 0 : s.charAt(0));
-			}
-
-			// Handle setting of array properties
-			if (type.isArray()) {
-				if (vt.isCollection())
-					return (T)toArray(type, (Collection)value);
-				else if (vt.isArray())
-					return (T)toArray(type, Arrays.asList((Object[])value));
-				else if (StringUtils.startsWith(value.toString(), '['))
-					return (T)toArray(type, new ObjectList(value.toString()).setBeanContext(this));
-			}
-
-			// Target type is some sort of Map that needs to be converted.
-			if (type.isMap()) {
-				try {
-					if (value instanceof Map) {
-						Map m = type.canCreateNewInstance(outer) ? (Map)type.newInstance(outer) : new ObjectMap(this);
-						ClassMeta keyType = type.getKeyType(), valueType = type.getValueType();
-						for (Map.Entry e : (Set<Map.Entry>)((Map)value).entrySet()) {
-							Object k = e.getKey();
-							if (keyType.isNotObject()) {
-								if (keyType.isString() && k.getClass() != Class.class)
-									k = k.toString();
-								else
-									k = convertToType(m, k, keyType);
-							}
-							Object v = e.getValue();
-							if (valueType.isNotObject())
-								v = convertToType(m, v, valueType);
-							m.put(k, v);
-						}
-						return (T)m;
-					} else if (!type.canCreateNewInstanceFromString(outer)) {
-						ObjectMap m = new ObjectMap(value.toString(), defaultParser);
-						return convertToType(outer, m, type);
-					}
-				} catch (Exception e) {
-					throw new InvalidDataConversionException(value.getClass(), type, e);
-				}
-			}
-
-			// Target type is some sort of Collection
-			if (type.isCollection()) {
-				try {
-					Collection l = type.canCreateNewInstance(outer) ? (Collection)type.newInstance(outer) : new ObjectList(this);
-					ClassMeta elementType = type.getElementType();
-
-					if (value.getClass().isArray())
-						for (Object o : (Object[])value)
-							l.add(elementType.isObject() ? o : convertToType(l, o, elementType));
-					else if (value instanceof Collection)
-						for (Object o : (Collection)value)
-							l.add(elementType.isObject() ? o : convertToType(l, o, elementType));
-					else if (value instanceof Map)
-						l.add(elementType.isObject() ? value : convertToType(l, value, elementType));
-					else if (! value.toString().isEmpty())
-						throw new InvalidDataConversionException(value.getClass(), type, null);
-					return (T)l;
-				} catch (InvalidDataConversionException e) {
-					throw e;
-				} catch (Exception e) {
-					throw new InvalidDataConversionException(value.getClass(), type, e);
-				}
-			}
-
-			if (type.isEnum()) {
-				if (type.canCreateNewInstanceFromString(outer))
-					return type.newInstanceFromString(outer, value.toString());
-				return (T)Enum.valueOf((Class<? extends Enum>)tc, value.toString());
-			}
-
-			if (type.isString()) {
-				if (vt.isArray() || vt.isMap() || vt.isCollection() || vt.isBean()) {
-					if (JsonSerializer.DEFAULT_LAX != null)
-						return (T)JsonSerializer.DEFAULT_LAX.serialize(value);
-				} else if (vt.isClass()) {
-					return (T)ClassUtils.getReadableClassName((Class<?>)value);
-				}
-				return (T)value.toString();
-			}
-
-			if (type.isCharSequence()) {
-				Class<?> c = value.getClass();
-				if (c.isArray()) {
-					if (c.getComponentType().isPrimitive()) {
-						ObjectList l = new ObjectList(this);
-						int size = Array.getLength(value);
-						for (int i = 0; i < size; i++)
-							l.add(Array.get(value, i));
-						value = l;
-					}
-					value = new ObjectList((Object[])value).setBeanContext(this);
-				}
-
-				return type.newInstanceFromString(outer, value.toString());
-			}
-
-			if (type.isBoolean()) {
-				if (value instanceof Number)
-					return (T)(Boolean.valueOf(((Number)value).intValue() != 0));
-				return (T)Boolean.valueOf(value.toString());
-			}
-
-			// It's a bean being initialized with a Map
-			if (type.isBean() && value instanceof Map)
-				return newBeanMap(tc).load((Map<?,?>) value).getBean();
-
-			if (type.canCreateNewInstanceFromObjectMap(outer) && value instanceof ObjectMap)
-				return type.newInstanceFromObjectMap(outer, (ObjectMap)value);
-
-			if (type.canCreateNewInstanceFromNumber(outer) && value instanceof Number)
-				return type.newInstanceFromNumber(outer, (Number)value);
-
-			if (type.canCreateNewInstanceFromString(outer))
-				return type.newInstanceFromString(outer, value.toString());
-
-			if (type.isBean())
-				return newBeanMap(type.getInnerClass()).load(value.toString()).getBean();
-
-		} catch (Exception e) {
-			throw new InvalidDataConversionException(value, type, e);
-		}
-
-		throw new InvalidDataConversionException(value, type, null);
-	}
-
-	/**
-	 * Converts the contents of the specified list into an array.
-	 * <p>
-	 * 	Works on both object and primitive arrays.
-	 * <p>
-	 * 	In the case of multi-dimensional arrays, the incoming list must
-	 * 	contain elements of type n-1 dimension.  i.e. if {@code type} is <code><jk>int</jk>[][]</code>
-	 * 	then {@code list} must have entries of type <code><jk>int</jk>[]</code>.
-	 *
-	 * @param type The type to convert to.  Must be an array type.
-	 * @param list The contents to populate the array with.
-	 * @return A new object or primitive array.
-	 */
-	public Object toArray(ClassMeta<?> type, Collection<?> list) {
-		if (list == null)
-			return null;
-		ClassMeta<?> componentType = type.getElementType();
-		Object array = Array.newInstance(componentType.getInnerClass(), list.size());
-		int i = 0;
-		for (Object o : list) {
-			if (! type.getInnerClass().isInstance(o)) {
-				if (componentType.isArray() && o instanceof Collection)
-					o = toArray(componentType, (Collection<?>)o);
-				else if (o == null && componentType.isPrimitive())
-					o = componentType.getPrimitiveDefault();
-				else
-					o = convertToType(null, o, componentType);
-			}
-			try {
-				Array.set(array, i++, o);
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-				throw e;
-			}
-		}
-		return array;
-	}
-
-
-	/**
-	 * Returns the classloader associated with this bean context.
-	 * @return The classloader associated with this bean context.
-	 */
-	public ClassLoader getClassLoader() {
-		return classLoader;
 	}
 
 	@Override /* Object */
@@ -2400,9 +1883,14 @@ public class BeanContext extends Context {
 		return false;
 	}
 
-	@Override /* Object */
-	public String toString() {
-		ObjectMap m = new ObjectMap()
+	/**
+	 * Returns the properties defined on this bean context as a simple map.
+	 * Useful for debugging purposes.
+	 *
+	 * @return A new map containing the properties defined on this context.
+	 */
+	public ObjectMap asMap() {
+		return new ObjectMap()
 			.append("id", System.identityHashCode(this))
 			.append("beansRequireDefaultConstructor", beansRequireDefaultConstructor)
 			.append("beansRequireSerializable", beansRequireSerializable)
@@ -2425,8 +1913,12 @@ public class BeanContext extends Context {
 			.append("notBeanClasses", notBeanClasses)
 			.append("implClasses", implClasses)
 			.append("sortProperties", sortProperties);
+	}
+
+	@Override /* Object */
+	public String toString() {
 		try {
-			return m.toString(JsonSerializer.DEFAULT_LAX_READABLE);
+			return asMap().toString(JsonSerializer.DEFAULT_LAX_READABLE);
 		} catch (SerializeException e) {
 			return e.getLocalizedMessage();
 		}

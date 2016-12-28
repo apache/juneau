@@ -75,7 +75,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	private int contentLength;
 	private final boolean debug;
 	private UrlEncodingParser urlEncodingParser;   // The parser used to parse URL attributes and parameters (beanContext also used to parse headers)
-	private BeanContext beanContext;
+	private BeanSession beanSession;
 	private VarResolverSession varSession;
 	private Map<String,String[]> queryParams;
 	private Map<String,String> defaultServletHeaders, defaultMethodHeaders, overriddenHeaders, overriddenQueryParams, overriddenFormDataParams, pathParameters;
@@ -142,7 +142,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		this.serializerGroup = mSerializers;
 		this.parserGroup = mParsers;
 		this.urlEncodingParser = mUrlEncodingParser;
-		this.beanContext = urlEncodingParser.getBeanContext();
+		this.beanSession = urlEncodingParser.getBeanContext().createSession();
 		this.defaultCharset = defaultCharset;
 	}
 
@@ -250,7 +250,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		String h = getHeader(name);
 		if (h == null)
 			return def;
-		return beanContext.convertToType(h, c);
+		return beanSession.convertToType(h, c);
 	}
 
 	/**
@@ -265,7 +265,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 */
 	public <T> T getHeader(String name, Class<T> c) {
 		String h = getHeader(name);
-		return beanContext.convertToType(h, c);
+		return beanSession.convertToType(h, c);
 	}
 
 	/**
@@ -279,7 +279,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 */
 	public <T> T getHeader(String name, Type c) {
 		String h = getHeader(name);
-		return (T)beanContext.convertToType(null, h, beanContext.getClassMeta(c));
+		return (T)beanSession.convertToType(null, h, beanSession.getClassMeta(c));
 	}
 
 	/**
@@ -318,7 +318,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	<code>&body</code> query parameter, the content type is assumed to be
 	 * 	<js>"text/uon"</js>.  Otherwise, the content type is assumed to be <js>"text/json"</js>.
 	 *
-	 * @return The <code>Accept</code> media-type header value on the request.
+	 * @return The <code>Content-Type</code> media-type header value on the request.
 	 */
 	public String getMediaType() {
 		String cm = getHeader("Content-Type");
@@ -331,6 +331,20 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		if (j != -1)
 			cm = cm.substring(0, j);
 		return cm;
+	}
+
+	/**
+	 * Returns the <code>Time-Zone</code> header value on the request if there is one.
+	 * <p>
+	 * 	Example: <js>"GMT"</js>.
+	 *
+	 * @return The <code>Time-Zone</code> header value on the request, or <jk>null</jk> if not present.
+	 */
+	public TimeZone getTimeZone() {
+		String tz = getHeader("Time-Zone");
+		if (tz != null)
+			return TimeZone.getTimeZone(tz);
+		return null;
 	}
 
 	/**
@@ -474,7 +488,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @throws ParseException
 	 */
 	public <T> T getQueryParameter(String name, Class<T> c, T def) throws ParseException {
-		return getQueryParameter(name, beanContext.getClassMeta(c), def);
+		return getQueryParameter(name, beanSession.getClassMeta(c), def);
 	}
 
 	/**
@@ -510,7 +524,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @throws ParseException
 	 */
 	public <T> T getQueryParameter(String name, Class<T> c) throws ParseException {
-		return getQueryParameter(name, beanContext.getClassMeta(c));
+		return getQueryParameter(name, beanSession.getClassMeta(c));
 	}
 
 	/**
@@ -526,7 +540,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @throws ParseException
 	 */
 	public <T> T getQueryParameters(String name, Class<T> c) throws ParseException {
-		return getQueryParameters(name, beanContext.getClassMeta(c));
+		return getQueryParameters(name, beanSession.getClassMeta(c));
 	}
 
 	/**
@@ -540,7 +554,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @throws ParseException
 	 */
 	public <T> T getQueryParameter(String name, Type c) throws ParseException {
-		return (T)getQueryParameter(name, beanContext.getClassMeta(c));
+		return (T)getQueryParameter(name, beanSession.getClassMeta(c));
 	}
 
 	/**
@@ -556,7 +570,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @throws ParseException
 	 */
 	public <T> T getQueryParameters(String name, Type c) throws ParseException {
-		return (T)getQueryParameters(name, beanContext.getClassMeta(c));
+		return (T)getQueryParameters(name, beanSession.getClassMeta(c));
 	}
 
 	/**
@@ -764,7 +778,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @throws ParseException
 	 */
 	public <T> T getFormDataParameter(String name, Class<T> c, T def) throws ParseException {
-		return getFormDataParameter(name, beanContext.getClassMeta(c), def);
+		return getFormDataParameter(name, beanSession.getClassMeta(c), def);
 	}
 
 	/**
@@ -809,7 +823,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @throws ParseException
 	 */
 	public <T> T getFormDataParameter(String name, Class<T> c) throws ParseException {
-		return getFormDataParameter(name, beanContext.getClassMeta(c));
+		return getFormDataParameter(name, beanSession.getClassMeta(c));
 	}
 
 	/**
@@ -824,7 +838,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @throws ParseException
 	 */
 	public <T> T getFormDataParameters(String name, Class<T> c) throws ParseException {
-		return getFormDataParameters(name, beanContext.getClassMeta(c));
+		return getFormDataParameters(name, beanSession.getClassMeta(c));
 	}
 
 	/**
@@ -837,7 +851,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @throws ParseException
 	 */
 	public <T> T getFormDataParameter(String name, Type c) throws ParseException {
-		return (T)getFormDataParameter(name, beanContext.getClassMeta(c));
+		return (T)getFormDataParameter(name, beanSession.getClassMeta(c));
 	}
 
 	/**
@@ -852,7 +866,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @throws ParseException
 	 */
 	public <T> T getFormDataParameters(String name, Type c) throws ParseException {
-		return (T)getFormDataParameters(name, beanContext.getClassMeta(c));
+		return (T)getFormDataParameters(name, beanSession.getClassMeta(c));
 	}
 
 	/**
@@ -977,7 +991,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @throws ParseException
 	 */
 	public <T> T getPathParameter(String name, Class<T> c) throws ParseException {
-		return getPathParameter(name, beanContext.getClassMeta(c));
+		return getPathParameter(name, beanSession.getClassMeta(c));
 	}
 
 	/**
@@ -991,7 +1005,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @throws ParseException
 	 */
 	public <T> T getPathParameter(String name, Type c) throws ParseException {
-		return (T)getPathParameter(name, beanContext.getClassMeta(c));
+		return (T)getPathParameter(name, beanSession.getClassMeta(c));
 	}
 
 	/**
@@ -1030,7 +1044,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @throws ParseException If the input contains a syntax error or is malformed for the requested {@code Accept} header or is not valid for the specified type.
 	 */
 	public <T> T getBody(Class<T> type) throws IOException, ParseException {
-		return getBody(beanContext.getClassMeta(type));
+		return getBody(beanSession.getClassMeta(type));
 	}
 
 	/**
@@ -1042,7 +1056,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return The input parsed to a POJO.
 	 */
 	public <T> T getBody(Type type) {
-		return (T)getBody(beanContext.getClassMeta(type));
+		return (T)getBody(beanSession.getClassMeta(type));
 	}
 
 	/**
@@ -1110,6 +1124,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 				return (T)getInputStream();
 
 			String mediaType = getMediaType();
+			TimeZone timeZone = getTimeZone();
+			Locale locale = getLocale();
 			Parser p = getParser();
 
 			if (p != null) {
@@ -1117,11 +1133,11 @@ public final class RestRequest extends HttpServletRequestWrapper {
 					properties.append("mediaType", mediaType).append("characterEncoding", getCharacterEncoding());
 					if (! p.isReaderParser()) {
 						InputStreamParser p2 = (InputStreamParser)p;
-						ParserSession session = p2.createSession(getInputStream(), properties, getJavaMethod(), getServlet());
+						ParserSession session = p2.createSession(getInputStream(), properties, getJavaMethod(), getServlet(), locale, timeZone);
 						return p2.parse(session, type);
 					}
 					ReaderParser p2 = (ReaderParser)p;
-					ParserSession session = p2.createSession(getUnbufferedReader(), properties, getJavaMethod(), getServlet());
+					ParserSession session = p2.createSession(getUnbufferedReader(), properties, getJavaMethod(), getServlet(), locale, timeZone);
 					return p2.parse(session, type);
 				} catch (ParseException e) {
 					throw new RestException(SC_BAD_REQUEST,
@@ -1643,12 +1659,12 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Returns the {@link BeanContext} associated with this request.
+	 * Returns the {@link BeanSession} associated with this request.
 	 *
-	 * @return The request bean context.
+	 * @return The request bean session.
 	 */
-	public BeanContext getBeanContext() {
-		return beanContext;
+	public BeanSession getBeanSession() {
+		return beanSession;
 	}
 
 	/**

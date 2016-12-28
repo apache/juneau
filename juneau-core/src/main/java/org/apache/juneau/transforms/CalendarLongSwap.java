@@ -27,7 +27,7 @@ public class CalendarLongSwap extends PojoSwap<Calendar,Long> {
 	 * Converts the specified {@link Calendar} to a {@link Long}.
 	 */
 	@Override /* PojoSwap */
-	public Long swap(Calendar o) {
+	public Long swap(BeanSession session, Calendar o) {
 		return o.getTime().getTime();
 	}
 
@@ -36,11 +36,11 @@ public class CalendarLongSwap extends PojoSwap<Calendar,Long> {
 	 */
 	@Override /* PojoSwap */
 	@SuppressWarnings("unchecked")
-	public Calendar unswap(Long o, ClassMeta<?> hint, BeanContext bc) throws ParseException {
+	public Calendar unswap(BeanSession session, Long o, ClassMeta<?> hint) throws ParseException {
 		ClassMeta<? extends Calendar> tt;
 		try {
 			if (hint == null || ! hint.canCreateNewInstance())
-				hint = bc.getClassMeta(GregorianCalendar.class);
+				hint = session.getClassMeta(GregorianCalendar.class);
 			tt = (ClassMeta<? extends Calendar>)hint;
 			Calendar c = tt.newInstance();
 			c.setTimeInMillis(o);

@@ -222,6 +222,14 @@ public final class ClassMeta<T> implements Type {
 				}
 			}
 
+			// Special cases
+			try {
+				if (c == TimeZone.class)
+					this.fromStringMethod = c.getMethod("getTimeZone", String.class);
+				else if (c == Locale.class) 
+					this.fromStringMethod = LocaleAsString.class.getMethod("fromString", String.class);  
+			} catch (NoSuchMethodException e1) {}
+
 			// Find toObjectMap() method if present.
 			for (Method m : c.getMethods()) {
 				if (isPublic(m) && isNotDeprecated(m) && ! isStatic(m)) {
@@ -1106,6 +1114,7 @@ public final class ClassMeta<T> implements Type {
 	 * 	<li><code><jk>public</jk> T(Number in);</code>
 	 * </ul>
 	 *
+	 * @param session The current bean session.
 	 * @param outer The outer class object for non-static member classes.  Can be <jk>null</jk> for non-member or static classes.
 	 * @param arg The input argument value.
 	 * @return A new instance of the object, or <jk>null</jk> if there is no numeric constructor on the object.
@@ -1115,10 +1124,10 @@ public final class ClassMeta<T> implements Type {
 	 * 	does not have one of the methods described above.
 	 * @throws InvocationTargetException If the underlying constructor throws an exception.
 	 */
-	public T newInstanceFromNumber(Object outer, Number arg) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, InstantiationException {
+	public T newInstanceFromNumber(BeanSession session, Object outer, Number arg) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, InstantiationException {
 		Constructor<T> c = numberConstructor;
 		if (c != null) {
-			Object arg2 = beanContext.convertToType(arg, numberConstructor.getParameterTypes()[0]);
+			Object arg2 = session.convertToType(arg, numberConstructor.getParameterTypes()[0]);
 			if (isMemberClass)
 				return c.newInstance(outer, arg2);
 			return c.newInstance(arg2);
@@ -1289,6 +1298,36 @@ public final class ClassMeta<T> implements Type {
 	 */
 	public String getReadableName() {
 		return ClassUtils.getReadableClassName(this.innerClass);
+	}
+
+	private static class LocaleAsString {
+		private static Method forLanguageTagMethod;
+		static {
+			try {
+				forLanguageTagMethod = Locale.class.getMethod("forLanguageTag", String.class);
+			} catch (NoSuchMethodException e) {}
+		}
+
+		@SuppressWarnings("unused")
+		public static final Locale fromString(String localeString) {
+			if (forLanguageTagMethod != null) {
+				if (localeString.indexOf('_') != -1)
+					localeString = localeString.replace('_', '-');
+				try {
+					return (Locale)forLanguageTagMethod.invoke(null, localeString);
+				} catch (Exception e) {
+					throw new BeanRuntimeException(e);
+				}
+			}
+			String[] v = localeString.toString().split("[\\-\\_]");
+			if (v.length == 1)
+				return new Locale(v[0]);
+			else if (v.length == 2)
+				return new Locale(v[0], v[1]);
+			else if (v.length == 3)
+				return new Locale(v[0], v[1], v[2]);
+			throw new BeanRuntimeException("Could not convert string ''{0}'' to a Locale.", localeString);
+		}
 	}
 
 	@Override /* Object */

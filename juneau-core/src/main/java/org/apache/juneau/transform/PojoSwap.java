@@ -47,6 +47,13 @@ import org.apache.juneau.serializer.*;
  * 	{@link Serializer Serializers} use swaps to convert objects of type T into objects of type S, and on calls to {@link BeanMap#get(Object)}.<br>
  * 	{@link Parser Parsers} use swaps to convert objects of type S into objects of type T, and on calls to {@link BeanMap#put(String,Object)}.
  *
+ * <h6 class='topic'>Localization</h6>
+ * <p>
+ * 	Swaps have access to the session locale and timezone through the {@link BeanSession#getLocale()} and {@link BeanSession#getTimeZone()}
+ * 	methods.  This allows you to specify localized swap values when needed.
+ * 	If using the REST server API, the locale and timezone are set based on the <code>Accept-Language</code> and <code>Time-Zone</code> headers
+ * 	on the request.
+ *
  * <h6 class='topic'>Swap Class Type {@code <S>}</h6>
  * <p>
  * 	The swapped object representation of an object must be an object type that the serializers can
@@ -68,7 +75,7 @@ import org.apache.juneau.serializer.*;
  * <h6 class='topic'>One-way vs. Two-way Serialization</h6>
  * <p>
  * 	Note that while there is a unified interface for handling swaps during both serialization and parsing,
- * 	in many cases only one of the {@link #swap(Object)} or {@link #unswap(Object)} methods will be defined
+ * 	in many cases only one of the {@link #swap(BeanSession, Object)} or {@link #unswap(BeanSession, Object, ClassMeta)} methods will be defined
  * 	because the swap is one-way.  For example, a swap may be defined to convert an {@code Iterator} to a {@code ObjectList}, but
  * 	it's not possible to unswap an {@code Iterator}.  In that case, the {@code swap(Object}} method would
  * 	be implemented, but the {@code unswap(ObjectMap)} object would not, and the swap would be associated on
@@ -161,54 +168,31 @@ public abstract class PojoSwap<T,S> {
 	 * 		<li>A java bean with properties of anything on this list.
 	 * 		<li>An array of anything on this list.
 	 * 	</ul>
-	 *
+	 * @param session The bean session to use to get the class meta.
+	 * 	This is always going to be the same bean context that created this swap.
 	 * @param o The object to be transformed.
+	 *
 	 * @return The transformed object.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
-	public S swap(T o) throws SerializeException {
+	public S swap(BeanSession session, T o) throws SerializeException {
 		throw new SerializeException("Swap method not implemented on PojoSwap ''{0}''", this.getClass().getName());
 	}
 
 	/**
-	 *	Same as {@link #swap(Object)}, but override this method instead if you want access to the bean context that created this swap.
-	 *
-	 * @param o The object to be transformed.
-	 * @param beanContext The bean context to use to get the class meta.
-	 * 	This is always going to be the same bean context that created this swap.
-	 * @return The transformed object.
-	 * @throws SerializeException If a problem occurred trying to convert the output.
-	 */
-	public S swap(T o, BeanContext beanContext) throws SerializeException {
-		return swap(o);
-	}
-
-	/**
 	 * If this transform is to be used to reconstitute POJOs that aren't true Java beans, it must implement this method.
-	 *
-	 * @param f The transformed object.
-	 * 	This may be <jk>null</jk> if the parser cannot make this determination.
-	 * @return The narrowed object.
-	 * @throws ParseException If this method is not implemented.
-	 */
-	public T unswap(S f) throws ParseException {
-		throw new ParseException("Unswap method not implemented on PojoSwap ''{0}''", this.getClass().getName());
-	}
-
-	/**
-	 *	Same as {@link #unswap(Object)}, but override this method if you need access to the real class type or the bean context that created this swap.
-	 *
+	 * @param session The bean session to use to get the class meta.
+	 * 	This is always going to be the same bean context that created this swap.
 	 * @param f The transformed object.
 	 * @param hint If possible, the parser will try to tell you the object type being created.  For example,
 	 * 	on a serialized date, this may tell you that the object being created must be of type {@code GregorianCalendar}.<br>
 	 * 	This may be <jk>null</jk> if the parser cannot make this determination.
-	 * @param beanContext The bean context to use to get the class meta.
-	 * 	This is always going to be the same bean context that created this swap.
+	 *
 	 * @return The narrowed object.
 	 * @throws ParseException If this method is not implemented.
 	 */
-	public T unswap(S f, ClassMeta<?> hint, BeanContext beanContext) throws ParseException {
-		return unswap(f);
+	public T unswap(BeanSession session, S f, ClassMeta<?> hint) throws ParseException {
+		throw new ParseException("Unswap method not implemented on PojoSwap ''{0}''", this.getClass().getName());
 	}
 
 	/**

@@ -65,12 +65,11 @@ public class UrlEncodingParser extends UonParser {
 
 	private <T> T parseAnything(UrlEncodingParserSession session, ClassMeta<T> eType, ParserReader r, Object outer) throws Exception {
 
-		BeanContext bc = session.getBeanContext();
 		if (eType == null)
 			eType = (ClassMeta<T>)object();
 		PojoSwap<T,Object> transform = (PojoSwap<T,Object>)eType.getPojoSwap();
 		ClassMeta<?> sType = eType.getSerializedClassMeta();
-		BeanDictionary bd = bc.getBeanDictionary();
+		BeanDictionary bd = session.getBeanDictionary();
 
 		int c = r.peek();
 		if (c == '?')
@@ -79,40 +78,40 @@ public class UrlEncodingParser extends UonParser {
 		Object o;
 
 		if (sType.isObject()) {
-			ObjectMap m = new ObjectMap(bc);
-			parseIntoMap(session, r, m, bc.string(), bc.object());
+			ObjectMap m = new ObjectMap(session);
+			parseIntoMap(session, r, m, session.string(), session.object());
 			if (m.containsKey("_value"))
 				o = m.get("_value");
 			else
 				o = bd.cast(m);
 		} else if (sType.isMap()) {
-			Map m = (sType.canCreateNewInstance() ? (Map)sType.newInstance() : new ObjectMap(bc));
+			Map m = (sType.canCreateNewInstance() ? (Map)sType.newInstance() : new ObjectMap(session));
 			o = parseIntoMap(session, r, m, sType.getKeyType(), sType.getValueType());
 		} else if (sType.canCreateNewInstanceFromObjectMap(outer)) {
-			ObjectMap m = new ObjectMap(bc);
+			ObjectMap m = new ObjectMap(session);
 			parseIntoMap(session, r, m, string(), object());
 			o = sType.newInstanceFromObjectMap(outer, m);
 		} else if (sType.canCreateNewBean(outer)) {
-			BeanMap m = bc.newBeanMap(outer, sType.getInnerClass());
+			BeanMap m = session.newBeanMap(outer, sType.getInnerClass());
 			m = parseIntoBeanMap(session, r, m);
 			o = m == null ? null : m.getBean();
 		} else {
 			// It could be a non-bean with _type attribute.
-			ObjectMap m = new ObjectMap(bc);
+			ObjectMap m = new ObjectMap(session);
 			ClassMeta<Object> valueType = object();
 			parseIntoMap(session, r, m, string(), valueType);
-			if (m.containsKey(bc.getBeanTypePropertyName()))
+			if (m.containsKey(session.getBeanTypePropertyName()))
 				o = bd.cast(m);
 			else if (m.containsKey("_value"))
-				o = session.getBeanContext().convertToType(m.get("_value"), sType);
+				o = session.convertToType(m.get("_value"), sType);
 			else if (sType.isCollection()) {
 				// ?1=foo&2=bar...
-				Collection c2 = sType.canCreateNewInstance() ? (Collection)sType.newInstance() : new ObjectList(bc);
+				Collection c2 = sType.canCreateNewInstance() ? (Collection)sType.newInstance() : new ObjectList(session);
 				Map<Integer,Object> t = new TreeMap<Integer,Object>();
 				for (Map.Entry<String,Object> e : m.entrySet()) {
 					String k = e.getKey();
 					if (StringUtils.isNumeric(k))
-						t.put(Integer.valueOf(k), bc.convertToType(e.getValue(), sType.getElementType()));
+						t.put(Integer.valueOf(k), session.convertToType(e.getValue(), sType.getElementType()));
 				}
 				c2.addAll(t.values());
 				o = c2;
@@ -124,7 +123,7 @@ public class UrlEncodingParser extends UonParser {
 		}
 
 		if (transform != null && o != null)
-			o = transform.unswap(o, eType, bc);
+			o = transform.unswap(session, o, eType);
 
 		if (outer != null)
 			setParent(eType, o, outer);
@@ -157,7 +156,7 @@ public class UrlEncodingParser extends UonParser {
 						return m;
 					r.unread();
 					Object attr = parseAttr(session, r, true);
-					currAttr = session.trim(session.getBeanContext().convertToType(attr, keyType));
+					currAttr = session.trim(session.convertToType(attr, keyType));
 					state = S2;
 					c = 0; // Avoid isInEscape if c was '\'
 				} else if (state == S2) {
@@ -184,7 +183,7 @@ public class UrlEncodingParser extends UonParser {
 						if (m.containsKey(currAttr) && valueType.isObject()) {
 							Object v2 = m.get(currAttr);
 							if (! (v2 instanceof ObjectList)) {
-								v2 = new ObjectList(v2);
+								v2 = new ObjectList(v2).setBeanSession(session);
 								m.put(currAttr, (V)v2);
 							}
 							((ObjectList)v2).add(value);
@@ -217,8 +216,6 @@ public class UrlEncodingParser extends UonParser {
 	}
 
 	private <T> BeanMap<T> parseIntoBeanMap(UrlEncodingParserSession session, ParserReader r, BeanMap<T> m) throws Exception {
-
-		BeanContext bc = session.getBeanContext();
 
 		int c = r.peek();
 		if (c == -1)
@@ -258,7 +255,7 @@ public class UrlEncodingParser extends UonParser {
 					}
 				} else if (state == S3) {
 					if (c == -1 || c == '\u0001') {
-						if (! currAttr.equals(bc.getBeanTypePropertyName())) {
+						if (! currAttr.equals(session.getBeanTypePropertyName())) {
 							BeanPropertyMeta pMeta = m.getPropertyMeta(currAttr);
 							if (pMeta == null) {
 								if (m.getMeta().isSubTyped()) {
@@ -280,7 +277,7 @@ public class UrlEncodingParser extends UonParser {
 							return m;
 						state = S1;
 					} else {
-						if (! currAttr.equals(bc.getBeanTypePropertyName())) {
+						if (! currAttr.equals(session.getBeanTypePropertyName())) {
 							BeanPropertyMeta pMeta = m.getPropertyMeta(currAttr);
 							if (pMeta == null) {
 								if (m.getMeta().isSubTyped()) {
@@ -418,8 +415,7 @@ public class UrlEncodingParser extends UonParser {
 
 	private Object[] parseArgs(UrlEncodingParserSession session, ParserReader r, ClassMeta<?>[] argTypes) throws Exception {
 		// TODO - This can be made more efficient.
-		BeanContext bc = session.getBeanContext();
-		ClassMeta<TreeMap<Integer,String>> cm = bc.getMapClassMeta(TreeMap.class, Integer.class, String.class);
+		ClassMeta<TreeMap<Integer,String>> cm = session.getMapClassMeta(TreeMap.class, Integer.class, String.class);
 		TreeMap<Integer,String> m = parseAnything(session, cm, r, session.getOuter());
 		Object[] vals = m.values().toArray(new Object[m.size()]);
 		if (vals.length != argTypes.length)
@@ -443,7 +439,7 @@ public class UrlEncodingParser extends UonParser {
 	public <T> T parseParameter(CharSequence in, ClassMeta<T> type) throws ParseException {
 		if (in == null)
 			return null;
-		UonParserSession session = createParameterContext(in);
+		UonParserSession session = createParameterSession(in);
 		try {
 			UonReader r = session.getReader();
 			return super.parseAnything(session, type, r, null, true, null);
@@ -465,7 +461,19 @@ public class UrlEncodingParser extends UonParser {
 	 * @throws ParseException
 	 */
 	public <T> T parseParameter(CharSequence in, Class<T> type) throws ParseException {
-		return parseParameter(in, getBeanContext().getClassMeta(type));
+		if (in == null)
+			return null;
+		UonParserSession session = createParameterSession(in);
+		try {
+			UonReader r = session.getReader();
+			return super.parseAnything(session, session.getClassMeta(type), r, null, true, null);
+		} catch (ParseException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new ParseException(session, e);
+		} finally {
+			session.close();
+		}
 	}
 
 	//--------------------------------------------------------------------------------
@@ -473,14 +481,14 @@ public class UrlEncodingParser extends UonParser {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Parser */
-	public UrlEncodingParserSession createSession(Object input, ObjectMap properties, Method javaMethod, Object outer) {
-		return new UrlEncodingParserSession(getContext(UrlEncodingParserContext.class), getBeanContext(), input, properties, javaMethod, outer);
+	public UrlEncodingParserSession createSession(Object input, ObjectMap op, Method javaMethod, Object outer, Locale locale, TimeZone timeZone) {
+		return new UrlEncodingParserSession(getContext(UrlEncodingParserContext.class), op, input, javaMethod, outer, locale, timeZone);
 	}
 
 	@Override /* Parser */
 	protected <T> T doParse(ParserSession session, ClassMeta<T> type) throws Exception {
 		UrlEncodingParserSession s = (UrlEncodingParserSession)session;
-		type = s.getBeanContext().normalizeClassMeta(type);
+		type = session.normalizeClassMeta(type);
 		UonReader r = s.getReader();
 		T o = parseAnything(s, type, r, s.getOuter());
 		return o;
@@ -500,7 +508,7 @@ public class UrlEncodingParser extends UonParser {
 		UonReader r = s.getReader();
 		if (r.peek() == '?')
 			r.read();
-		m = parseIntoMap(s, r, m, s.getBeanContext().getClassMeta(keyType), s.getBeanContext().getClassMeta(valueType));
+		m = parseIntoMap(s, r, m, session.getClassMeta(keyType), session.getClassMeta(valueType));
 		return m;
 	}
 

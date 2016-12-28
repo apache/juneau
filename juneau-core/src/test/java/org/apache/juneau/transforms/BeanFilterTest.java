@@ -27,17 +27,17 @@ public class BeanFilterTest {
 	//====================================================================================================
 	@Test
 	public void testInterfaceBeanFilters() throws Exception {
-		BeanContext bc;
+		BeanSession session;
 		BeanMap<A3> bm;
 
-		bc = ContextFactory.create().addBeanFilters(A1.class).getBeanContext();
-		bm = bc.newBeanMap(A3.class);
+		session = ContextFactory.create().addBeanFilters(A1.class).getBeanContext().createSession();
+		bm = session.newBeanMap(A3.class);
 		assertEquals("f1", bm.get("f1"));
 		assertNull(bm.get("f2"));
 		assertNull(bm.get("f3"));
 
-		bc = ContextFactory.create().addBeanFilters(A2.class).getBeanContext();
-		bm = bc.newBeanMap(A3.class);
+		session = ContextFactory.create().addBeanFilters(A2.class).getBeanContext().createSession();
+		bm = session.newBeanMap(A3.class);
 		assertEquals("f1", bm.get("f1"));
 		assertEquals("f2", bm.get("f2"));
 		assertNull(bm.get("f3"));
@@ -70,17 +70,17 @@ public class BeanFilterTest {
 	//====================================================================================================
 	@Test
 	public void testAbstractClassBeanFilters() throws Exception {
-		BeanContext bc;
+		BeanSession session;
 		BeanMap<Test2> bm;
 
-		bc = ContextFactory.create().addBeanFilters(B1.class).getBeanContext();
-		bm = bc.newBeanMap(Test2.class);
+		session = ContextFactory.create().addBeanFilters(B1.class).getBeanContext().createSession();
+		bm = session.newBeanMap(Test2.class);
 		assertEquals("f1", bm.get("f1"));
 		assertNull(bm.get("f2"));
 		assertNull(bm.get("f3"));
 
-		bc = ContextFactory.create().addBeanFilters(B2.class).getBeanContext();
-		bm = bc.newBeanMap(Test2.class);
+		session = ContextFactory.create().addBeanFilters(B2.class).getBeanContext().createSession();
+		bm = session.newBeanMap(Test2.class);
 		assertEquals("f1", bm.get("f1"));
 		assertEquals("f2", bm.get("f2"));
 		assertNull(bm.get("f3"));

@@ -124,7 +124,7 @@ public class RdfSerializer extends WriterSerializer {
 		Model model = s.getModel();
 		Resource r = null;
 
-		ClassMeta<?> cm = s.getBeanContext().getClassMetaForObject(o);
+		ClassMeta<?> cm = session.getClassMetaForObject(o);
 		if (s.isLooseCollections() && cm != null && (cm.isCollection() || cm.isArray())) {
 			Collection c = s.sort(cm.isCollection() ? (Collection)o : toList(cm.getInnerClass(), o));
 			for (Object o2 : c)
@@ -147,7 +147,6 @@ public class RdfSerializer extends WriterSerializer {
 
 	private RDFNode serializeAnything(RdfSerializerSession session, Object o, boolean isURI, ClassMeta<?> eType, String attrName, BeanPropertyMeta bpm, Resource parentResource) throws SerializeException {
 		Model m = session.getModel();
-		BeanContext bc = session.getBeanContext();
 
 		ClassMeta<?> aType = null;       // The actual type
 		ClassMeta<?> wType = null;       // The wrapped type
@@ -176,12 +175,12 @@ public class RdfSerializer extends WriterSerializer {
 			// Swap if necessary
 			PojoSwap swap = aType.getPojoSwap();
 			if (swap != null) {
-				o = swap.swap(o, bc);
+				o = swap.swap(session, o);
 
 				// If the getSwapClass() method returns Object, we need to figure out
 				// the actual type now.
 				if (sType.isObject())
-					sType = bc.getClassMetaForObject(o);
+					sType = session.getClassMetaForObject(o);
 			}
 		} else {
 			sType = eType.getSerializedClassMeta();
@@ -232,7 +231,7 @@ public class RdfSerializer extends WriterSerializer {
 			serializeMap(session, m2, (Resource)n, sType);
 
 		} else if (sType.isBean()) {
-			BeanMap bm = bc.forBean(o);
+			BeanMap bm = session.toBeanMap(o);
 			Object uri = null;
 			RdfBeanMeta rbm = (RdfBeanMeta)bm.getMeta().getExtendedMeta(RdfBeanMeta.class);
 			if (rbm.hasBeanUri())
@@ -398,8 +397,8 @@ public class RdfSerializer extends WriterSerializer {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Serializer */
-	public RdfSerializerSession createSession(Object output, ObjectMap properties, Method javaMethod) {
-		return new RdfSerializerSession(getContext(RdfSerializerContext.class), getBeanContext(), output, properties, javaMethod);
+	public RdfSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone) {
+		return new RdfSerializerSession(getContext(RdfSerializerContext.class), op, output, javaMethod, locale, timeZone);
 	}
 
 	@Override /* CoreApi */

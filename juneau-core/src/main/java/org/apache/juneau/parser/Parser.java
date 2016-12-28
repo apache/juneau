@@ -159,7 +159,7 @@ public abstract class Parser extends CoreApi {
 
 	/**
 	 * Workhorse method.  Subclasses are expected to implement this method.
-	 * @param session The runtime session object returned by {@link #createSession(Object, ObjectMap, Method, Object)}.
+	 * @param session The runtime session object returned by {@link #createSession(Object, ObjectMap, Method, Object, Locale, TimeZone)}.
 	 * 	If <jk>null</jk>, one will be created using {@link #createSession(Object)}.
 	 * @param type The class type of the object to create.
 	 * 	If <jk>null</jk> or <code>Object.<jk>class</jk></code>, object type is based on what's being parsed.
@@ -184,7 +184,7 @@ public abstract class Parser extends CoreApi {
 
 	/**
 	 * Parses the content of the reader and creates an object of the specified type.
-	 * @param session The runtime session returned by {@link #createSession(Object, ObjectMap, Method, Object)}.
+	 * @param session The runtime session returned by {@link #createSession(Object, ObjectMap, Method, Object, Locale, TimeZone)}.
 	 * @param type The class type of the object to create.
 	 * 	If <jk>null</jk> or <code>Object.<jk>class</jk></code>, object type is based on what's being parsed.
 	 * 	For example, when parsing JSON text, it may return a <code>String</code>, <code>Number</code>, <code>ObjectMap</code>, etc...
@@ -266,8 +266,8 @@ public abstract class Parser extends CoreApi {
 	 * @throws ParseException If the input contains a syntax error or is malformed, or is not valid for the specified type.
 	 */
 	public final <T> T parse(Object input, Class<T> type) throws ParseException {
-		ClassMeta<T> cm = getBeanContext().getClassMeta(type);
-		return parse(input, cm);
+		ParserSession session = createSession(input);
+		return parse(session, session.getClassMeta(type));
 	}
 
 	/**
@@ -305,8 +305,9 @@ public abstract class Parser extends CoreApi {
 	 * @throws ParseException If the input contains a syntax error or is malformed, or is not valid for the specified type.
 	 */
 	public final <K,V,T extends Map<K,V>> T parseMap(Object input, Class<T> mapClass, Class<K> keyClass, Class<V> valueClass) throws ParseException {
-		ClassMeta<T> cm = getBeanContext().getMapClassMeta(mapClass, keyClass, valueClass);
-		return parse(input, cm);
+		ParserSession session = createSession(input);
+		ClassMeta<T> cm = session.getMapClassMeta(mapClass, keyClass, valueClass);
+		return parse(session, cm);
 	}
 
 	/**
@@ -344,8 +345,9 @@ public abstract class Parser extends CoreApi {
 	 * @throws IOException If a problem occurred trying to read from the reader.
 	 */
 	public final <E,T extends Collection<E>> T parseCollection(Object input, Class<T> collectionClass, Class<E> entryClass) throws ParseException, IOException {
-		ClassMeta<T> cm = getBeanContext().getCollectionClassMeta(collectionClass, entryClass);
-		return parse(input, cm);
+		ParserSession session = createSession(input);
+		ClassMeta<T> cm = session.getCollectionClassMeta(collectionClass, entryClass);
+		return parse(session, cm);
 	}
 
 	/**
@@ -355,15 +357,19 @@ public abstract class Parser extends CoreApi {
 	 * 	it's going to be a subclass of {@link ParserSession}.
 	 *
 	 * @param input The input.  See {@link #parse(Object, ClassMeta)} for supported input types.
-	 * @param properties Optional additional properties.
+	 * @param op Optional additional properties.
 	 * @param javaMethod Java method that invoked this serializer.
 	 * 	When using the REST API, this is the Java method invoked by the REST call.
 	 * 	Can be used to access annotations defined on the method or class.
 	 * @param outer The outer object for instantiating top-level non-static inner classes.
-	 * @return The new context.
+	 * @param locale The session locale.
+	 * 	If <jk>null</jk>, then the locale defined on the context is used.
+	 * @param timeZone The session timezone.
+	 * 	If <jk>null</jk>, then the timezone defined on the context is used.
+	 * @return The new session.
 	 */
-	public ParserSession createSession(Object input, ObjectMap properties, Method javaMethod, Object outer) {
-		return new ParserSession(getContext(ParserContext.class), getBeanContext(), input, properties, javaMethod, outer);
+	public ParserSession createSession(Object input, ObjectMap op, Method javaMethod, Object outer, Locale locale, TimeZone timeZone) {
+		return new ParserSession(getContext(ParserContext.class), op, input, javaMethod, outer, locale, timeZone);
 	}
 
 	/**
@@ -375,7 +381,7 @@ public abstract class Parser extends CoreApi {
 	 * @return The new context.
 	 */
 	protected final ParserSession createSession(Object input) {
-		return createSession(input, null, null, null);
+		return createSession(input, null, null, null, null, null);
 	}
 
 	//--------------------------------------------------------------------------------
@@ -418,7 +424,7 @@ public abstract class Parser extends CoreApi {
 	/**
 	 * Implementation method.
 	 * Default implementation throws an {@link UnsupportedOperationException}.
-	 * @param session The runtime session object returned by {@link #createSession(Object, ObjectMap, Method, Object)}.
+	 * @param session The runtime session object returned by {@link #createSession(Object, ObjectMap, Method, Object, Locale, TimeZone)}.
 	 * 	If <jk>null</jk>, one will be created using {@link #createSession(Object)}.
 	 * @param m The map being loaded.
 	 * @param keyType The class type of the keys, or <jk>null</jk> to default to <code>String.<jk>class</jk></code>.<br>
@@ -463,7 +469,7 @@ public abstract class Parser extends CoreApi {
 	/**
 	 * Implementation method.
 	 * Default implementation throws an {@link UnsupportedOperationException}.
-	 * @param session The runtime session object returned by {@link #createSession(Object, ObjectMap, Method, Object)}.
+	 * @param session The runtime session object returned by {@link #createSession(Object, ObjectMap, Method, Object, Locale, TimeZone)}.
 	 * 	If <jk>null</jk>, one will be created using {@link #createSession(Object)}.
 	 * @param c The collection being loaded.
 	 * @param elementType The class type of the elements, or <jk>null</jk> to default to whatever is being parsed.
@@ -511,7 +517,7 @@ public abstract class Parser extends CoreApi {
 	/**
 	 * Implementation method.
 	 * Default implementation throws an {@link UnsupportedOperationException}.
-	 * @param session The runtime session object returned by {@link #createSession(Object, ObjectMap, Method, Object)}.
+	 * @param session The runtime session object returned by {@link #createSession(Object, ObjectMap, Method, Object, Locale, TimeZone)}.
 	 * 	If <jk>null</jk>, one will be created using {@link #createSession(Object)}.
 	 * @param argTypes Specifies the type of objects to create for each entry in the array.
 	 *
@@ -574,7 +580,7 @@ public abstract class Parser extends CoreApi {
 			o = s.charAt(0);
 		else if (sType.isNumber())
 			if (type.canCreateNewInstanceFromNumber(outer))
-				o = type.newInstanceFromNumber(outer, parseNumber(s, type.getNewInstanceFromNumberClass()));
+				o = type.newInstanceFromNumber(session, outer, parseNumber(s, type.getNewInstanceFromNumberClass()));
 			else
 				o = parseNumber(s, (Class<? extends Number>)sType.getInnerClass());
 		else if (sType.isBoolean())
@@ -587,7 +593,7 @@ public abstract class Parser extends CoreApi {
 		}
 
 		if (transform != null)
-			o = transform.unswap(o, type, session.getBeanContext());
+			o = transform.unswap(session, o, type);
 
 		return (T)o;
 	}
@@ -637,10 +643,9 @@ public abstract class Parser extends CoreApi {
 	 * @param <T> The class type of the bean map that doesn't have the expected property.
 	 */
 	protected <T> void onUnknownProperty(ParserSession session, String propertyName, BeanMap<T> beanMap, int line, int col) throws ParseException {
-		BeanContext bc = session.getBeanContext();
-		if (propertyName.equals("type") || propertyName.equals(bc.getBeanTypePropertyName()))
+		if (propertyName.equals("type") || propertyName.equals(session.getBeanTypePropertyName()))
 			return;
-		if (! session.getBeanContext().isIgnoreUnknownBeanProperties())
+		if (! session.isIgnoreUnknownBeanProperties())
 			throw new ParseException(session, "Unknown property ''{0}'' encountered while trying to parse into class ''{1}''", propertyName, beanMap.getClassMeta());
 		if (listeners.size() > 0)
 			for (ParserListener listener : listeners)

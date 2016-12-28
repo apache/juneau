@@ -101,7 +101,7 @@ import org.apache.juneau.utils.*;
 public class ObjectMap extends LinkedHashMap<String,Object> {
 	private static final long serialVersionUID = 1L;
 
-	private transient BeanContext beanContext = BeanContext.DEFAULT;
+	private transient BeanSession session;
 	private ObjectMap inner;
 	private transient PojoRest pojoRest;
 
@@ -148,11 +148,11 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * @throws ParseException If the input contains a syntax error or is malformed.
 	 */
 	public ObjectMap(CharSequence s, Parser p) throws ParseException {
-		this(p == null ? BeanContext.DEFAULT : p.getBeanContext());
+		this(p == null ? BeanContext.DEFAULT.createSession() : p.getBeanContext().createSession());
 		if (p == null)
 			p = JsonParser.DEFAULT;
 		if (s != null)
-			p.parseIntoMap(s, this, beanContext.string(), beanContext.object());
+			p.parseIntoMap(s, this, session.string(), session.object());
 	}
 
 	/**
@@ -191,24 +191,24 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	private void parseReader(Reader r, Parser p) throws ParseException {
 		if (p == null)
 			p = JsonParser.DEFAULT;
-		p.parseIntoMap(r, this, beanContext.string(), beanContext.object());
+		p.parseIntoMap(r, this, session.string(), session.object());
 	}
 
 	/**
 	 * Construct an empty JSON object (i.e. an empty {@link LinkedHashMap}).
 	 */
 	public ObjectMap() {
-		this(BeanContext.DEFAULT);
+		this(BeanContext.DEFAULT.createSession());
 	}
 
 	/**
 	 * Construct an empty JSON object (i.e. an empty {@link LinkedHashMap}) with the specified bean context.
 	 *
-	 * @param beanContext The bean context to use for creating beans.
+	 * @param session The bean session to use for creating beans.
 	 */
-	public ObjectMap(BeanContext beanContext) {
+	public ObjectMap(BeanSession session) {
 		super();
-		this.beanContext = beanContext;
+		this.session = session;
 	}
 
 	/**
@@ -271,27 +271,27 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	}
 
 	/**
-	 * Override the default bean context used for converting POJOs.
+	 * Override the default bean session used for converting POJOs.
 	 * <p>
 	 * Default is {@link BeanContext#DEFAULT}, which is sufficient in most cases.
 	 * <p>
 	 * Useful if you're serializing/parsing beans with transforms defined.
 	 *
-	 * @param beanContext The new bean context.
+	 * @param session The new bean session.
 	 * @return This object (for method chaining).
 	 */
-	public ObjectMap setBeanContext(BeanContext beanContext) {
-		this.beanContext = beanContext;
+	public ObjectMap setBeanSession(BeanSession session) {
+		this.session = session;
 		return this;
 	}
 
 	/**
-	 * Returns the {@link BeanContext} currently associated with this map.
+	 * Returns the {@link BeanSession} currently associated with this map.
 	 *
-	 * @return The {@link BeanContext} currently associated with this map.
+	 * @return The {@link BeanSession} currently associated with this map.
 	 */
-	public BeanContext getBeanContext() {
-		return beanContext;
+	public BeanSession getBeanSession() {
+		return session;
 	}
 
 	/**
@@ -333,7 +333,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	/**
 	 * Same as {@link Map#get(Object) get()}, but casts or converts the value to the specified class type.
 	 * <p>
-	 * 	See {@link BeanContext#convertToType(Object, ClassMeta)} for the list of valid data conversions.
+	 * 	See {@link BeanSession#convertToType(Object, ClassMeta)} for the list of valid data conversions.
 	 *
 	 * @param <T> The class type.
 	 * @param type The class type.
@@ -359,13 +359,13 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 		if (o == null)
 			return null;
 		PojoSwap swap = pojoSwap;
-		return (T)swap.unswap(o, null, beanContext);
+		return (T)swap.unswap(session, o, null);
 	}
 
 	/**
 	 * Same as {@link Map#get(Object) get()}, but casts or converts the value to the specified class type.
 	 * <p>
-	 * 	See {@link BeanContext#convertToType(Object, ClassMeta)} for the list of valid data conversions.
+	 * 	See {@link BeanSession#convertToType(Object, ClassMeta)} for the list of valid data conversions.
 	 *
 	 * @param <T> The class type.
 	 * @param type The class type.
@@ -377,7 +377,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 		Object o = get(key);
 		if (o == null)
 			return def;
-		T t = beanContext.convertToType(o, type);
+		T t = session.convertToType(o, type);
 		if (t == null)
 			return def;
 		return t;
@@ -386,7 +386,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	/**
 	 * Same as {@link Map#get(Object) get()}, but casts or converts the value to the specified class type.
 	 * <p>
-	 * 	See {@link BeanContext#convertToType(Object, ClassMeta)} for the list of valid data conversions.
+	 * 	See {@link BeanSession#convertToType(Object, ClassMeta)} for the list of valid data conversions.
 	 *
 	 * @param <T> The class type.
 	 * @param type The class type.
@@ -400,7 +400,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	/**
 	 * Same as {@link Map#get(Object) get()}, but casts or converts the value to the specified class type.
 	 * <p>
-	 * 	See {@link BeanContext#convertToType(Object, ClassMeta)} for the list of valid data conversions.
+	 * 	See {@link BeanSession#convertToType(Object, ClassMeta)} for the list of valid data conversions.
 	 *
 	 * @param <T> The class type.
 	 * @param type The class type.
@@ -412,7 +412,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 		Object o = get(key);
 		if (o == null)
 			return def;
-		return beanContext.convertToType(o, type);
+		return session.convertToType(o, type);
 	}
 
 	/**
@@ -433,7 +433,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * <p>
 	 * 	Casts or converts the value to the specified class type.
 	 * <p>
-	 * 	See {@link BeanContext#convertToType(Object, ClassMeta)} for the list of valid data conversions.
+	 * 	See {@link BeanSession#convertToType(Object, ClassMeta)} for the list of valid data conversions.
 	 *
 	 * @param type The class type to convert the value to.
 	 * @param <T> The class type to convert the value to.
@@ -938,7 +938,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * @return The data type of the object at the specified key, or <jk>null</jk> if the value is null or does not exist.
 	 */
 	public ClassMeta<?> getClassMeta(String key) {
-		return beanContext.getClassMetaForObject(get(key));
+		return session.getClassMetaForObject(get(key));
 	}
 
 	/**
@@ -1124,7 +1124,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * 	}
 	 * </p>
 	 * <p>
-	 * 	It can also be converted to any type that can be handled by the {@link BeanContext#convertToType(Object, Class)} method.
+	 * 	It can also be converted to any type that can be handled by the {@link BeanSession#convertToType(Object, Class)} method.
 	 * 	In this case, the value is specified by an <code>value</code> entry of any type.
 	 * 	For example, if the bean context has a {@link CalendarSwap} associated with it, it can convert a string value to a calendar.
 	 * <p class='bcode'>
@@ -1155,11 +1155,11 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * 	same object if entry does not exist.
 	 */
 	public Object cast(BeanDictionary typeDictionary) {
-		String c = (String)get(beanContext.getBeanTypePropertyName());
+		String c = (String)get(session.getBeanTypePropertyName());
 		if (c == null) {
 			return this;
 		}
-		return cast2(beanContext.getClassMetaFromString(c));
+		return cast2(session.getClassMetaFromString(c));
 	}
 
 	/**
@@ -1178,8 +1178,8 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> T cast(Class<T> type) {
-		ClassMeta<?> c1 = beanContext.getClassMetaFromString((String)get(beanContext.getBeanTypePropertyName()));
-		ClassMeta<?> c2 = beanContext.getClassMeta(type);
+		ClassMeta<?> c1 = session.getClassMetaFromString((String)get(session.getBeanTypePropertyName()));
+		ClassMeta<?> c2 = session.getClassMeta(type);
 		ClassMeta<?> c = narrowClassMeta(c1, c2);
 		return (T)cast2(c);
 	}
@@ -1195,7 +1195,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 */
 	@SuppressWarnings({"unchecked"})
 	public <T> T cast(ClassMeta<T> cm) {
-		ClassMeta<?> c1 = beanContext.getClassMetaFromString((String)get(beanContext.getBeanTypePropertyName()));
+		ClassMeta<?> c1 = session.getClassMetaFromString((String)get(session.getBeanTypePropertyName()));
 		ClassMeta<?> c = narrowClassMeta(c1, cm);
 		return (T)cast2(c);
 	}
@@ -1214,11 +1214,11 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 		if (c1.isMap()) {
 			ClassMeta<?> k = getNarrowedClassMeta(c1.getKeyType(), c2.getKeyType());
 			ClassMeta<?> v = getNarrowedClassMeta(c1.getValueType(), c2.getValueType());
-			return beanContext.getMapClassMeta((Class<? extends Map<?,?>>)c.getInnerClass(), k, v);
+			return session.getMapClassMeta((Class<? extends Map<?,?>>)c.getInnerClass(), k, v);
 		}
 		if (c1.isCollection()) {
 			ClassMeta<?> e = getNarrowedClassMeta(c1.getElementType(), c2.getElementType());
-			return beanContext.getCollectionClassMeta((Class<? extends Collection<?>>)c.getInnerClass(), e);
+			return session.getCollectionClassMeta((Class<? extends Collection<?>>)c.getInnerClass(), e);
 		}
 		return c;
 	}
@@ -1243,19 +1243,19 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 			Object value = get("value");
 
 			if (cm.isMap()) {
-				Map m2 = (cm.canCreateNewInstance() ? (Map)cm.newInstance() : new ObjectMap(beanContext));
+				Map m2 = (cm.canCreateNewInstance() ? (Map)cm.newInstance() : new ObjectMap(session));
 				ClassMeta<?> kType = cm.getKeyType(), vType = cm.getValueType();
 				for (Map.Entry<String,Object> e : entrySet()) {
 					Object k = e.getKey();
 					Object v = e.getValue();
-					if (! k.equals(beanContext.getBeanTypePropertyName())) {
+					if (! k.equals(session.getBeanTypePropertyName())) {
 
 						// Attempt to recursively cast child maps.
 						if (v instanceof ObjectMap)
-							v = ((ObjectMap)v).cast(beanContext.beanDictionary);
+							v = ((ObjectMap)v).cast(session.getBeanDictionary());
 
-						k = (kType.isString() ? k : beanContext.convertToType(k, kType));
-						v = (vType.isObject() ? v : beanContext.convertToType(v, vType));
+						k = (kType.isString() ? k : session.convertToType(k, kType));
+						v = (vType.isObject() ? v : session.convertToType(v, vType));
 
 						m2.put(k, v);
 					}
@@ -1263,17 +1263,17 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 				return (T)m2;
 
 			} else if (cm.isBean()) {
-				BeanMap<? extends T> bm = beanContext.newBeanMap(cm.getInnerClass());
+				BeanMap<? extends T> bm = session.newBeanMap(cm.getInnerClass());
 
 				// Iterate through all the entries in the map and set the individual field values.
 				for (Map.Entry<String,Object> e : entrySet()) {
 					String k = e.getKey();
 					Object v = e.getValue();
-					if (! k.equals(beanContext.getBeanTypePropertyName())) {
+					if (! k.equals(session.getBeanTypePropertyName())) {
 
 						// Attempt to recursively cast child maps.
 						if (v instanceof ObjectMap)
-							v = ((ObjectMap)v).cast(beanContext.beanDictionary);
+							v = ((ObjectMap)v).cast(session.getBeanDictionary());
 
 						bm.put(k, v);
 					}
@@ -1283,10 +1283,10 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 
 			} else if (cm.isArray() || cm.isCollection()) {
 				List items = (List)get("items");
-				return beanContext.convertToType(items, cm);
+				return session.convertToType(items, cm);
 
 			} else if (value != null) {
-				return beanContext.convertToType(value, cm);
+				return session.convertToType(value, cm);
 			}
 
 		} catch (Exception e) {

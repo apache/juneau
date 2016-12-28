@@ -185,7 +185,6 @@ public class HtmlSerializer extends XmlSerializer {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected void serializeAnything(HtmlSerializerSession session, HtmlWriter out, Object o, ClassMeta<?> eType, String name, int indent, BeanPropertyMeta pMeta) throws Exception {
 
-		BeanContext bc = session.getBeanContext();
 		ClassMeta<?> aType = null;       // The actual type
 		ClassMeta<?> sType = object();   // The serialized type
 
@@ -216,12 +215,12 @@ public class HtmlSerializer extends XmlSerializer {
 			// Swap if necessary
 			PojoSwap swap = aType.getPojoSwap();
 			if (swap != null) {
-				o = swap.swap(o, bc);
+				o = swap.swap(session, o);
 
 				// If the getSwapClass() method returns Object, we need to figure out
 				// the actual type now.
 				if (sType.isObject())
-					sType = bc.getClassMetaForObject(o);
+					sType = session.getClassMetaForObject(o);
 			}
 
 			HtmlClassMeta html = sType.getExtendedMeta(HtmlClassMeta.class);
@@ -235,7 +234,7 @@ public class HtmlSerializer extends XmlSerializer {
 			else if (sType.hasToObjectMapMethod())
 				serializeMap(session, out, sType.toObjectMap(o), eType, typeName, pMeta);
 			else if (sType.isBean())
-				serializeBeanMap(session, out, bc.forBean(o), pMeta);
+				serializeBeanMap(session, out, session.toBeanMap(o), pMeta);
 			else if (sType.isNumber())
 				out.sTag(i, "number").append(o).eTag("number").nl();
 			else if (sType.isBoolean())
@@ -268,13 +267,12 @@ public class HtmlSerializer extends XmlSerializer {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void serializeMap(HtmlSerializerSession session, HtmlWriter out, Map m, ClassMeta<?> type, String typeName, BeanPropertyMeta ppMeta) throws Exception {
 		ClassMeta<?> keyType = type.getKeyType(), valueType = type.getValueType();
-		ClassMeta<?> aType = session.getBeanContext().getClassMetaForObject(m);       // The actual type
-		BeanContext bc = session.getBeanContext();
+		ClassMeta<?> aType = session.getClassMetaForObject(m);       // The actual type
 
 		int i = session.getIndent();
 		if (typeName == null)
 			typeName = "object";
-		out.oTag(i, "table").attr(bc.getBeanTypePropertyName(), typeName);
+		out.oTag(i, "table").attr(session.getBeanTypePropertyName(), typeName);
 		out.appendln(">");
 		if (session.isAddKeyValueTableHeaders() && ! (aType.getExtendedMeta(HtmlClassMeta.class).isNoTableHeaders() || (ppMeta != null && ppMeta.getExtendedMeta(HtmlBeanPropertyMeta.class).isNoTableHeaders()))) {
 			out.sTag(i+1, "tr").nl();
@@ -308,7 +306,6 @@ public class HtmlSerializer extends XmlSerializer {
 
 	private void serializeBeanMap(HtmlSerializerSession session, HtmlWriter out, BeanMap<?> m, BeanPropertyMeta ppMeta) throws Exception {
 		int i = session.getIndent();
-		BeanContext bc = session.getBeanContext();
 
 		Object o = m.getBean();
 
@@ -324,7 +321,7 @@ public class HtmlSerializer extends XmlSerializer {
 		String typeName = m.getMeta().getDictionaryName();
 		if (typeName == null)
 			typeName = "object";
-		out.oTag(i, "table").attr(bc.getBeanTypePropertyName(), typeName);
+		out.oTag(i, "table").attr(session.getBeanTypePropertyName(), typeName);
 		out.append('>').nl();
 		if (session.isAddKeyValueTableHeaders() && ! (m.getClassMeta().getExtendedMeta(HtmlClassMeta.class).isNoTableHeaders() || (ppMeta != null && ppMeta.getExtendedMeta(HtmlBeanPropertyMeta.class).isNoTableHeaders()))) {
 			out.sTag(i+1, "tr").nl();
@@ -369,10 +366,9 @@ public class HtmlSerializer extends XmlSerializer {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void serializeCollection(HtmlSerializerSession session, HtmlWriter out, Collection c, ClassMeta<?> type, String name, BeanPropertyMeta ppMeta) throws Exception {
 
-		BeanContext bc = session.getBeanContext();
 		ClassMeta<?> elementType = type.getElementType();
 		if (elementType == null)
-			elementType = bc.object();
+			elementType = session.object();
 
 		int i = session.getIndent();
 		if (c.isEmpty()) {
@@ -389,7 +385,7 @@ public class HtmlSerializer extends XmlSerializer {
 
 		if (th != null) {
 
-			out.oTag(i, "table").attr(bc.getBeanTypePropertyName(), "array");
+			out.oTag(i, "table").attr(session.getBeanTypePropertyName(), "array");
 			out.append('>').nl();
 			out.sTag(i+1, "tr").nl();
 			for (String key : th)
@@ -397,16 +393,16 @@ public class HtmlSerializer extends XmlSerializer {
 			out.eTag(i+1, "tr").nl();
 
 			for (Object o : c) {
-				ClassMeta<?> cm = bc.getClassMetaForObject(o);
+				ClassMeta<?> cm = session.getClassMetaForObject(o);
 
 				if (cm != null && cm.getPojoSwap() != null) {
 					PojoSwap f = cm.getPojoSwap();
-					o = f.swap(o, bc);
+					o = f.swap(session, o);
 					cm = cm.getSerializedClassMeta();
 				}
 
 				if (cm != null && session.isAddBeanTypeProperties() && elementType.getInnerClass() != o.getClass())
-					out.oTag(i+1, "tr").attr(bc.getBeanTypePropertyName(), cm.getDictionaryName()).append('>').nl();
+					out.oTag(i+1, "tr").attr(session.getBeanTypePropertyName(), cm.getDictionaryName()).append('>').nl();
 				else
 					out.sTag(i+1, "tr").nl();
 
@@ -426,7 +422,7 @@ public class HtmlSerializer extends XmlSerializer {
 					if (o instanceof BeanMap)
 						m2 = (BeanMap)o;
 					else
-						m2 = bc.forBean(o);
+						m2 = session.toBeanMap(o);
 
 					for (String k : th) {
 						BeanMapEntry p = m2.getProperty(k);
@@ -458,7 +454,6 @@ public class HtmlSerializer extends XmlSerializer {
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private String[] getTableHeaders(SerializerSession session, Collection c, BeanPropertyMeta pMeta) throws Exception {
-		BeanContext bc = session.getBeanContext();
 		if (c.size() == 0)
 			return null;
 		c = session.sort(c);
@@ -473,10 +468,10 @@ public class HtmlSerializer extends XmlSerializer {
 			}
 		if (o1 == null)
 			return null;
-		ClassMeta<?> cm = bc.getClassMetaForObject(o1);
+		ClassMeta<?> cm = session.getClassMetaForObject(o1);
 		if (cm.getPojoSwap() != null) {
 			PojoSwap f = cm.getPojoSwap();
-			o1 = f.swap(o1, bc);
+			o1 = f.swap(session, o1);
 			cm = cm.getSerializedClassMeta();
 		}
 		if (cm == null || ! (cm.isMap() || cm.isBean()))
@@ -510,7 +505,7 @@ public class HtmlSerializer extends XmlSerializer {
 				if (! session.canIgnoreValue(cm, null, o)) {
 					if (! cm.isInstance(o))
 						return null;
-					BeanMap<?> bm = (o instanceof BeanMap ? (BeanMap)o : bc.forBean(o));
+					BeanMap<?> bm = (o instanceof BeanMap ? (BeanMap)o : session.toBeanMap(o));
 					for (Map.Entry<String,Object> e : bm.entrySet()) {
 						if (e.getValue() != null)
 							set.add(e.getKey());
@@ -525,10 +520,10 @@ public class HtmlSerializer extends XmlSerializer {
 		for (Object o : c) {
 			if (o == null)
 				continue;
-			cm = bc.getClassMetaForObject(o);
+			cm = session.getClassMetaForObject(o);
 			if (cm != null && cm.getPojoSwap() != null) {
 				PojoSwap f = cm.getPojoSwap();
-				o = f.swap(o);
+				o = f.swap(session, o);
 				cm = cm.getSerializedClassMeta();
 			}
 			if (prevC.contains(cm))
@@ -547,7 +542,7 @@ public class HtmlSerializer extends XmlSerializer {
 					if (! s.contains(k.toString()))
 						return null;
 			} else {
-				BeanMap<?> bm = (o instanceof BeanMap ? (BeanMap)o : bc.forBean(o));
+				BeanMap<?> bm = (o instanceof BeanMap ? (BeanMap)o : session.toBeanMap(o));
 				int l = 0;
 				for (String k : bm.keySet()) {
 					if (! s.contains(k))
@@ -580,8 +575,8 @@ public class HtmlSerializer extends XmlSerializer {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Serializer */
-	public HtmlSerializerSession createSession(Object output, ObjectMap properties, Method javaMethod) {
-		return new HtmlSerializerSession(getContext(HtmlSerializerContext.class), getBeanContext(), output, properties, javaMethod);
+	public HtmlSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone) {
+		return new HtmlSerializerSession(getContext(HtmlSerializerContext.class), op, output, javaMethod, locale, timeZone);
 	}
 
 	@Override /* Serializer */

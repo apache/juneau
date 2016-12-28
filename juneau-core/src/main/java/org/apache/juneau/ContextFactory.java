@@ -253,6 +253,9 @@ public final class ContextFactory extends Lockable {
 	// Parser to use to convert JSON strings to POJOs
 	ReaderParser defaultParser;
 
+	// Bean session for converting strings to POJOs.
+	private static BeanSession beanSession;
+
 	// Used to keep properties in alphabetical order regardless of whether
 	// they're not strings.
 	private static Comparator<Object> PROPERTY_COMPARATOR = new Comparator<Object>() {
@@ -628,8 +631,8 @@ public final class ContextFactory extends Lockable {
 			if (pm != null)
 				return pm.get(name, type, def);
 			String s = System.getProperty(name);
-			if (! StringUtils.isEmpty(s))
-				return BeanContext.DEFAULT.convertToType(s, type);
+			if ((! StringUtils.isEmpty(s)) && isBeanSessionAvailable())
+				return getBeanSession().convertToType(s, type);
 			return def;
 		} finally {
 			rl.unlock();
@@ -830,9 +833,9 @@ public final class ContextFactory extends Lockable {
 				if (p == null || type == null)
 					return def;
 				try {
-					if (BeanContext.DEFAULT == null)
+					if (! isBeanSessionAvailable())
 						return def;
-					return BeanContext.DEFAULT.convertToType(p.value, type);
+					return getBeanSession().convertToType(p.value, type);
 				} catch (InvalidDataConversionException e) {
 					throw new ConfigException("Could not retrieve config property ''{0}''.  {1}", p.name, e.getMessage());
 				}
@@ -861,9 +864,10 @@ public final class ContextFactory extends Lockable {
 				if (p == null || keyType == null || valueType == null)
 					return def;
 				try {
-					BeanContext bc = BeanContext.DEFAULT;
-					if (bc != null)
-						return (Map<K,V>)bc.convertToType(p.value, bc.getMapClassMeta(LinkedHashMap.class, keyType, valueType));
+					if (isBeanSessionAvailable()) {
+						BeanSession session = getBeanSession();
+						return (Map<K,V>)session.convertToType(p.value, session.getMapClassMeta(LinkedHashMap.class, keyType, valueType));
+					}
 					return def;
 				} catch (InvalidDataConversionException e) {
 					throw new ConfigException("Could not retrieve config property ''{0}''.  {1}", p.name, e.getMessage());
@@ -1193,8 +1197,8 @@ public final class ContextFactory extends Lockable {
 		@Override
 		void put(Object val) {
 			try {
-				if (BeanContext.DEFAULT != null && ! (val instanceof Map))
-					val = BeanContext.DEFAULT.convertToType(val, Map.class);
+				if (isBeanSessionAvailable() && ! (val instanceof Map))
+					val = getBeanSession().convertToType(val, Map.class);
 				if (val instanceof Map) {
 					Map m = (Map)val;
 					for (Map.Entry e : (Set<Map.Entry>)m.entrySet())
@@ -1230,6 +1234,21 @@ public final class ContextFactory extends Lockable {
 		if (o instanceof Number || o instanceof Boolean)
 			return o.toString();
 		return o;
+	}
+
+	private static BeanSession getBeanSession() {
+		if (beanSession == null && BeanContext.DEFAULT != null)
+			beanSession = BeanContext.DEFAULT.createSession();
+		return beanSession;
+	}
+
+	/**
+	 * Returns true if a bean session is available.
+	 * Note that a bean session will not be available when constructing the BeanContext.DEFAULT context.
+	 * (it's a chicken-and-egg thing).
+	 */
+	private static boolean isBeanSessionAvailable() {
+		return getBeanSession() != null;
 	}
 
 	/*

@@ -22,17 +22,14 @@ import org.junit.*;
 @SuppressWarnings({"unchecked","rawtypes","javadoc"})
 public class DataConversionTest {
 
-	private Locale systemLocale;  // Tests are locale-sensitive.  Must use US locale.
-
 	@Before
 	public void beforeTest() {
-		systemLocale = Locale.getDefault();
-		Locale.setDefault(Locale.US);
+		TestUtils.setLocale(Locale.US);
 	}
 
 	@After
 	public void afterTest() {
-		Locale.setDefault(systemLocale);
+		TestUtils.unsetLocale();
 	}
 
 	//====================================================================================================
@@ -147,12 +144,12 @@ public class DataConversionTest {
 	@Test
 	public void testObjectSwaps() throws Exception {
 		String s = "Jan 12, 2001";
-		BeanContext bc = ContextFactory.create().addPojoSwaps(CalendarSwap.Medium.class).getBeanContext();
-		Calendar c = bc.convertToType(s, GregorianCalendar.class);
+		BeanSession session = ContextFactory.create().addPojoSwaps(CalendarSwap.DateMedium.class).getBeanContext().createSession();
+		Calendar c = session.convertToType(s, GregorianCalendar.class);
 		assertEquals(2001, c.get(Calendar.YEAR));
-		c = bc.convertToType(s, Calendar.class);
+		c = session.convertToType(s, Calendar.class);
 		assertEquals(2001, c.get(Calendar.YEAR));
-		s = bc.convertToType(c, String.class);
+		s = session.convertToType(c, String.class);
 		assertEquals("Jan 12, 2001", s);
 	}
 }

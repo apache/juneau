@@ -76,7 +76,7 @@ public class CognosXmlTest {
 
 		XmlSerializer s = new XmlSerializer().setProperty(SERIALIZER_useIndentation, true).setProperty(SERIALIZER_quoteChar, '\'').setProperty(XML_defaultNamespaceUri, "cognos");
 
-		DataSet ds = new DataSet(c, rows, BeanContext.DEFAULT);
+		DataSet ds = new DataSet(c, rows, BeanContext.DEFAULT.createSession());
 
 		String out = s.serialize(ds);
 

@@ -115,7 +115,7 @@ public abstract class RemoteableServlet extends RestServletDefault {
 			throw new RestException(SC_NOT_FOUND, "Method not found"); //$NON-NLS-1$
 
 		// Parse the args and invoke the method.
-		ClassMeta<?>[] argTypes = p.getBeanContext().getClassMetas(m.getParameterTypes());
+		ClassMeta<?>[] argTypes = req.getBeanSession().getClassMetas(m.getParameterTypes());
 		Object[] params = p.parseArgs(req.getReader(), argTypes);
 		return m.invoke(service, params);
 	}

@@ -36,17 +36,19 @@ import org.apache.juneau.xml.*;
  *
  * <h6 class='topic' id='ConfigProperties'>Configurable properties on the HTML serializer</h6>
  * <table class='styled' style='border-collapse: collapse;'>
- * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th></tr>
+ * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th><th>Session overridable</th></tr>
  * 	<tr>
  * 		<td>{@link #HTML_uriAnchorText}</td>
  * 		<td>Anchor text source.</td>
  * 		<td><code>String</code></td>
  * 		<td><js>"TO_STRING"</js></td>
+ * 		<td><jk>true</jk></td>
  * 	</tr>
  * 	<tr>
  * 		<td>{@link #HTML_detectLinksInStrings}</td>
  * 		<td>Look for URLs in {@link String Strings}.</td>
  * 		<td><code>Boolean</code></td>
+ * 		<td><jk>true</jk></td>
  * 		<td><jk>true</jk></td>
  * 	</tr>
  * 	<tr>
@@ -54,12 +56,14 @@ import org.apache.juneau.xml.*;
  * 		<td>Look for link labels in the <js>"label"</js> parameter of the URL.</td>
  * 		<td><code>Boolean</code></td>
  * 		<td><jk>true</jk></td>
+ * 		<td><jk>true</jk></td>
  * 	</tr>
  * 	<tr>
  * 		<td>{@link #HTML_labelParameter}</td>
  * 		<td>The parameter name to use when using {@link #HTML_lookForLabelParameters}.</td>
  * 		<td><code>String</code></td>
  * 		<td><js>"label"</js></td>
+ * 		<td><jk>true</jk></td>
  * 	</tr>
  * </table>
  *
@@ -80,6 +84,7 @@ public class HtmlSerializerContext extends XmlSerializerContext {
 	 * 	<li><b>Name:</b> <js>"HtmlSerializer.uriAnchorText"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
 	 * 	<li><b>Default:</b> <js>"toString"</js>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
 	 * When creating anchor tags (e.g. <code><xt>&lt;a</xt> <xa>href</xa>=<xs>'...'</xs><xt>&gt;</xt>text<xt>&lt;/a&gt;</xt></code>)
@@ -115,6 +120,7 @@ public class HtmlSerializerContext extends XmlSerializerContext {
 	 * 	<li><b>Name:</b> <js>"HtmlSerializer.detectLinksInStrings"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
 	 * If a string looks like a URL (e.g. starts with <js>"http://"</js> or <js>"https://"</js>, then treat it like a URL
@@ -129,6 +135,7 @@ public class HtmlSerializerContext extends XmlSerializerContext {
 	 * 	<li><b>Name:</b> <js>"HtmlSerializer.lookForLabelParameters"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
 	 * If the URL has a label parameter (e.g. <js>"?label=foobar"</js>), then use that as the anchor text of the link.
@@ -144,6 +151,7 @@ public class HtmlSerializerContext extends XmlSerializerContext {
 	 * 	<li><b>Name:</b> <js>"HtmlSerializer.labelParameter"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
 	 * 	<li><b>Default:</b> <js>"label"</js>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
 	 */
@@ -156,6 +164,7 @@ public class HtmlSerializerContext extends XmlSerializerContext {
 	 * 	<li><b>Name:</b> <js>"HtmlSerializer.addKeyValueTableHeaders"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
 	 */

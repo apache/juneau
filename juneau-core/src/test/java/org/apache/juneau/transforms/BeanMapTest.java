@@ -26,8 +26,8 @@ public class BeanMapTest {
 	//====================================================================================================
 	@Test
 	public void testFilteredEntry() throws Exception {
-		BeanContext bc = ContextFactory.create().addPojoSwaps(ByteArrayBase64Swap.class).getBeanContext();
-		BeanMap<A> m = bc.forBean(new A());
+		BeanSession session = ContextFactory.create().addPojoSwaps(ByteArrayBase64Swap.class).getBeanContext().createSession();
+		BeanMap<A> m = session.toBeanMap(new A());
 
 		assertEquals("AQID", m.get("f1"));
 		m.put("f1", "BAUG");
@@ -48,13 +48,13 @@ public class BeanMapTest {
 	//====================================================================================================
 	@Test
 	public void testFilteredEntryWithMultipleMatchingFilters() throws Exception {
-		BeanContext bc = ContextFactory.create().addPojoSwaps(B2Swap.class,B1Swap.class).getBeanContext();
-		BeanMap<B> bm = bc.forBean(B.create());
+		BeanSession session = ContextFactory.create().addPojoSwaps(B2Swap.class,B1Swap.class).getBeanContext().createSession();
+		BeanMap<B> bm = session.toBeanMap(B.create());
 		ObjectMap om = (ObjectMap)bm.get("b1");
 		assertEquals("b2", om.getString("type"));
 
-		bc = ContextFactory.create().addPojoSwaps(B1Swap.class,B2Swap.class).getBeanContext();
-		bm = bc.forBean(B.create());
+		session = ContextFactory.create().addPojoSwaps(B1Swap.class,B2Swap.class).getBeanContext().createSession();
+		bm = session.toBeanMap(B.create());
 		om = (ObjectMap)bm.get("b1");
 		assertEquals("b1", om.getString("type"));
 	}
@@ -83,14 +83,14 @@ public class BeanMapTest {
 
 	public static class B1Swap extends PojoSwap<B1,ObjectMap> {
 		@Override /* PojoSwap */
-		public ObjectMap swap(B1 b1) {
+		public ObjectMap swap(BeanSession session, B1 b1) {
 			return new ObjectMap().append("type", "b1").append("f1", b1.f1);
 		}
 	}
 
 	public static class B2Swap extends PojoSwap<B2,ObjectMap> {
 		@Override /* PojoSwap */
-		public ObjectMap swap(B2 b2) {
+		public ObjectMap swap(BeanSession session, B2 b2) {
 			return new ObjectMap().append("type", "b2").append("f1", b2.f1);
 		}
 	}

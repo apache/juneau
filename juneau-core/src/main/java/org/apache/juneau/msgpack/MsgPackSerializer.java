@@ -50,7 +50,6 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	MsgPackOutputStream serializeAnything(MsgPackSerializerSession session, MsgPackOutputStream out, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta) throws Exception {
-		BeanContext bc = session.getBeanContext();
 
 		if (o == null)
 			return out.appendNull();
@@ -77,12 +76,12 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 		// Swap if necessary
 		PojoSwap swap = aType.getPojoSwap();
 		if (swap != null) {
-			o = swap.swap(o, bc);
+			o = swap.swap(session, o);
 
 			// If the getSwapClass() method returns Object, we need to figure out
 			// the actual type now.
 			if (sType.isObject())
-				sType = bc.getClassMetaForObject(o);
+				sType = session.getClassMetaForObject(o);
 		}
 
 		// '\0' characters are considered null.
@@ -95,7 +94,7 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 		else if (sType.hasToObjectMapMethod())
 			serializeMap(session, out, sType.toObjectMap(o), sType);
 		else if (sType.isBean())
-			serializeBeanMap(session, out, bc.forBean(o), addTypeProperty);
+			serializeBeanMap(session, out, session.toBeanMap(o), addTypeProperty);
 		else if (sType.isUri() || (pMeta != null && pMeta.isUri()))
 			out.appendString(session.resolveUri(o.toString()));
 		else if (sType.isMap()) {
@@ -197,8 +196,8 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Serializer */
-	public MsgPackSerializerSession createSession(Object output, ObjectMap properties, Method javaMethod) {
-		return new MsgPackSerializerSession(getContext(MsgPackSerializerContext.class), getBeanContext(), output, properties, javaMethod);
+	public MsgPackSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone) {
+		return new MsgPackSerializerSession(getContext(MsgPackSerializerContext.class), op, output, javaMethod, locale, timeZone);
 	}
 
 	@Override /* Serializer */

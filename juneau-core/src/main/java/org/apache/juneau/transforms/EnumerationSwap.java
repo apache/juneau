@@ -14,6 +14,7 @@ package org.apache.juneau.transforms;
 
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.transform.*;
 
 /**
@@ -28,7 +29,7 @@ public class EnumerationSwap extends PojoSwap<Enumeration,List> {
 	 * Converts the specified {@link Enumeration} to a {@link List}.
 	 */
 	@Override /* PojoSwap */
-	public List swap(Enumeration o) {
+	public List swap(BeanSession session, Enumeration o) {
 		List l = new LinkedList();
 		while (o.hasMoreElements())
 			l.add(o.nextElement());

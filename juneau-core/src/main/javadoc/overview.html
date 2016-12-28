@@ -675,13 +675,13 @@
 		
 		<jd>/** Converts a Date object to an ISO8601 string. */</jd>
 		<ja>@Override</ja>
-		<jk>public</jk> String swap(Date o) {
+		<jk>public</jk> String swap(BeanSession session, Date o) {
 			<jk>return</jk> <jf>format</jf>.format(o);
 		}
 		
 		<jd>/** Converts an ISO8601 string to a Date object. */</jd>
 		<ja>@Override</ja>
-		<jk>public</jk> Date unswap(String o) <jk>throws</jk> ParseException {
+		<jk>public</jk> Date unswap(BeanSession session, String o, ClassMeta hint) <jk>throws</jk> ParseException {
 			<jk>try</jk> {
 				<jk>return</jk> <jf>format</jf>.parse(o);
 			} <jk>catch</jk> (java.text.ParseException e) {
@@ -1606,6 +1606,10 @@
 		Adding <l>&amp;plainText=true</l> forces the response <l>Content-Type</l> to be <l>text/plain.</l>
 	<h6 class='figure'>HTML</h6>
 	<img class='bordered' src="doc-files/Server.Html.png">
+	<p>
+		Also, localization can be tested by passing in an <l>Accept-Language</l> header.
+	<h6 class='figure'>HTML/french</h6>
+	<img class='bordered' src="doc-files/Server.Html.french.png">
 	<h6 class='figure'>JSON</h6>
 	<img class='bordered' src="doc-files/Server.Json.png">
 	<h6 class='figure'>XML</h6>
@@ -3254,7 +3258,7 @@
 				.addPojoSwap( 
 					<jk>new</jk> PojoSwap&lt;Person,Integer&gt;() { 
 						<ja>@Override</ja> /* PojoSwap */ 
-						<jk>public</jk> Integer swap(Person p) { 
+						<jk>public</jk> Integer swap(BeanSession session, Person p) { 
 							<jk>return</jk> p.addresses.size(); 
 						} 
 					} 
@@ -4825,7 +4829,7 @@
 
 		<jk>public static class</jk> DoubleSwap <jk>extends</jk> PojoSwap&lt;Double,String&gt; {
 			<ja>@Override</ja> <jc>/* PojoSwap */</jc>
-			<jk>public</jk> String swap(Double o) <jk>throws</jk> SerializeException {
+			<jk>public</jk> String swap(BeanSession session, Double o) <jk>throws</jk> SerializeException {
 				<jk>return</jk> <jsf>FORMAT</jsf>.format(o);
 			}		
 		}
@@ -4981,6 +4985,7 @@
 	
 	<h5 class='toc'>What's new in each release</h5>
 	<ul class='toc'>
+		<li><p><a class='doclink' href='#6.0.1'>6.0.2 (TBD)</a></p>
 		<li><p><a class='doclink' href='#6.0.1'>6.0.1 (TBD)</a></p>
 		<li><p><a class='doclink' href='#6.0.0'>6.0.0 (Oct 3, 2016)</a></p>
 		<li><p><a class='doclink' href='#5.2.0.1'>5.2.0.1 (Mar 23, 2016)</a></p>
@@ -5046,6 +5051,77 @@
 	</ul>
 
 
+	<!-- ======================================================================================================== -->
+	<a id="6.0.2"></a>
+	<h3 class='topic' onclick='toggle(this)'>6.0.2 (TBD)</h3>
+	<div class='topic'>
+		<p>
+			Juneau 6.0.2 is a moderate update that provides localized serialization and parsing.
+			For example, dates can now be serialized to and parsed from locale-targeted formats.
+		</p>
+		<p>
+			In particular, this release cleans up the {@link org.apache.juneau.BeanContext} API to match
+			the {@link org.apache.juneau.ContextFactory}/{@link org.apache.juneau.Context}/{@link org.apache.juneau.Session} paradigm
+			previously used in the serializer and parser APIs.
+		</p>
+
+		<h6 class='topic'>org.apache.juneau</h6>
+		<ul class='spaced-list'>
+			<li>{@link org.apache.juneau.BeanContext} class split into separate {@link org.apache.juneau.BeanContext} and {@link org.apache.juneau.BeanSession} classes.
+			<ul>
+				<li>Session object meant to be single-use that can be discarded after use and contains session-level object cache and overridable Locale and TimeZone.
+			</ul>  
+			<li>{@link org.apache.juneau.serializer.SerializerContext} and {@link org.apache.juneau.parser.ParserContext}
+				now extend directly from {@link org.apache.juneau.BeanContext}.
+			<li>{@link org.apache.juneau.serializer.SerializerSession} and {@link org.apache.juneau.parser.ParserSession}
+				now extend directly from {@link org.apache.juneau.BeanSession}.
+			<li>New settings in {@link org.apache.juneau.BeanContext}:
+			<ul>
+				<li>{@link org.apache.juneau.BeanContext#BEAN_debug} - Debug setting.  Replaces individual debug properties in the serializer and parser contexts.
+				<li>{@link org.apache.juneau.BeanContext#BEAN_locale} - Specifies a default locale at the context level.
+				<li>{@link org.apache.juneau.BeanContext#BEAN_timeZone} - Specifies a default timezone at the context level.
+			</ul>
+			<li>Simplified {@link org.apache.juneau.transform.PojoSwap} class.  Now just two methods:
+			<ul>
+				<li>{@link org.apache.juneau.transform.PojoSwap#swap(BeanSession,Object)}
+				<li>{@link org.apache.juneau.transform.PojoSwap#unswap(BeanSession,Object,ClassMeta)}
+			</ul>
+			<li>Several new {@link java.util.Calendar} and {@link java.util.Date} swaps:
+			<ul>
+				<li>{@link org.apache.juneau.transforms.CalendarSwap.ToString},{@link org.apache.juneau.transforms.DateSwap.ToString} - To {@link java.lang.String Strings} using the {@code Date.toString()} method.
+				<li>{@link org.apache.juneau.transforms.CalendarSwap.ISO8601DT},{@link org.apache.juneau.transforms.DateSwap.ISO8601DT} - To ISO8601 date-time strings.
+				<li>{@link org.apache.juneau.transforms.CalendarSwap.ISO8601DTZ},{@link org.apache.juneau.transforms.DateSwap.ISO8601DTZ} - Same as <jsf>ISO8601DT</jsf>, except always serializes in GMT.
+				<li>{@link org.apache.juneau.transforms.CalendarSwap.ISO8601DTP},{@link org.apache.juneau.transforms.DateSwap.ISO8601DTP} - Same as <jsf>ISO8601DT</jsf> except with millisecond precision.
+				<li>{@link org.apache.juneau.transforms.CalendarSwap.ISO8601DTPZ},{@link org.apache.juneau.transforms.DateSwap.ISO8601DTPZ} - Same as <jsf>ISO8601DTZ</jsf> except with millisecond precision.
+				<li>{@link org.apache.juneau.transforms.CalendarSwap.RFC2822DT},{@link org.apache.juneau.transforms.DateSwap.RFC2822DT} - To RFC2822 date-time strings.
+				<li>{@link org.apache.juneau.transforms.CalendarSwap.RFC2822DTZ},{@link org.apache.juneau.transforms.DateSwap.RFC2822DTZ} - Same as <jsf>RFC2822DT</jsf>, except always serializes in GMT.
+				<li>{@link org.apache.juneau.transforms.CalendarSwap.RFC2822D},{@link org.apache.juneau.transforms.DateSwap.RFC2822D} - To RFC2822 date strings.
+				<li>{@link org.apache.juneau.transforms.CalendarSwap.DateTimeSimple},{@link org.apache.juneau.transforms.DateSwap.DateTimeSimple} - To simple <js>"yyyy/MM/dd HH:mm:ss"</js> date-time strings.
+				<li>{@link org.apache.juneau.transforms.CalendarSwap.DateSimple},{@link org.apache.juneau.transforms.DateSwap.DateSimple} - To simple <js>"yyyy/MM/dd"</js> date strings.
+				<li>{@link org.apache.juneau.transforms.CalendarSwap.TimeSimple},{@link org.apache.juneau.transforms.DateSwap.TimeSimple} - To simple <js>"HH:mm:ss"</js> time strings.
+				<li>{@link org.apache.juneau.transforms.CalendarSwap.DateFull},{@link org.apache.juneau.transforms.DateSwap.DateFull} - To {@link java.text.DateFormat#FULL} date strings.
+				<li>{@link org.apache.juneau.transforms.CalendarSwap.DateLong},{@link org.apache.juneau.transforms.DateSwap.DateLong} - To {@link java.text.DateFormat#LONG} date strings.
+				<li>{@link org.apache.juneau.transforms.CalendarSwap.DateMedium},{@link org.apache.juneau.transforms.DateSwap.DateMedium} - To {@link java.text.DateFormat#MEDIUM} date strings.
+				<li>{@link org.apache.juneau.transforms.CalendarSwap.DateShort},{@link org.apache.juneau.transforms.DateSwap.DateShort} - To {@link java.text.DateFormat#SHORT} date strings.
+				<li>{@link org.apache.juneau.transforms.CalendarSwap.TimeFull},{@link org.apache.juneau.transforms.DateSwap.TimeFull} - To {@link java.text.DateFormat#FULL} time strings.
+				<li>{@link org.apache.juneau.transforms.CalendarSwap.TimeLong},{@link org.apache.juneau.transforms.DateSwap.TimeLong} - To {@link java.text.DateFormat#LONG} time strings.
+				<li>{@link org.apache.juneau.transforms.CalendarSwap.TimeMedium},{@link org.apache.juneau.transforms.DateSwap.TimeMedium} - To {@link java.text.DateFormat#MEDIUM} time strings.
+				<li>{@link org.apache.juneau.transforms.CalendarSwap.TimeShort},{@link org.apache.juneau.transforms.DateSwap.TimeShort} - To {@link java.text.DateFormat#SHORT} time strings.
+				<li>{@link org.apache.juneau.transforms.CalendarSwap.DateTimeFull},{@link org.apache.juneau.transforms.DateSwap.DateTimeFull} - To {@link java.text.DateFormat#FULL} date-time strings.
+				<li>{@link org.apache.juneau.transforms.CalendarSwap.DateTimeLong},{@link org.apache.juneau.transforms.DateSwap.DateTimeLong} - To {@link java.text.DateFormat#LONG} date-time strings.
+				<li>{@link org.apache.juneau.transforms.CalendarSwap.DateTimeMedium},{@link org.apache.juneau.transforms.DateSwap.DateTimeMedium} - To {@link java.text.DateFormat#MEDIUM} date-time strings.
+				<li>{@link org.apache.juneau.transforms.CalendarSwap.DateTimeShort},{@link org.apache.juneau.transforms.DateSwap.DateTimeShort} - To {@link java.text.DateFormat#SHORT} date-time strings.
+			</ul>  
+		</ul>
+		
+		<h6 class='topic'>org.apache.juneau.server</h6>
+		<ul class='spaced-list'>
+			<li>{@link org.apache.juneau.server.RestRequest} now passes locale and timezone to serializers/parsers/transforms.
+			<li>New {@link org.apache.juneau.server.RestRequest#getTimeZone()} method.
+		</ul>
+	</div>
+	
+	
 	<!-- ======================================================================================================== -->
 	<a id="6.0.1"></a>
 	<h3 class='topic' onclick='toggle(this)'>6.0.1 (TBD)</h3>
@@ -5153,7 +5229,7 @@
 			<li>Serializers and parsers now automatically convert {@link java.lang.Class} objects to readable names via {@link org.apache.juneau.internal.ClassUtils#getReadableClassName(Class)}.
 			<li>Eliminated the <code>ClassFilter</code> class since it's no longer needed.
 			<li>Code and concurrency improvements to {@link org.apache.juneau.serializer.SerializerGroup} and {@link org.apache.juneau.parser.ParserGroup}.
-			<li>Various enhancements to {@link org.apache.juneau.BeanContext#convertToType(Object,Class)}.
+			<li>Various enhancements to <code><del>BeanContext.convertToType(Object,Class)</del></code>.
 			<li>New properties on {@link org.apache.juneau.html.HtmlSerializer}:
 				<ul>
 					<li>{@link org.apache.juneau.html.HtmlSerializerContext#HTML_detectLinksInStrings} - Automatically detect hyperlinks in strings.
@@ -6420,7 +6496,7 @@
 		</p>
 		<ul class='spaced-list'>
 			<li>Improved error handling.  
-			<li>New {@link org.apache.juneau.parser.ParserContext#PARSER_debug} and {@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_debug}
+			<li>New <code><del>ParserContext.PARSER_debug</del></code> and <code><del>SerializerContext.SERIALIZER_debug</del></code>.
 				settings for logging additional information for debugging problems.
 			<li>New {@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_ignoreRecursions} setting for explicitely ignoring recursions when 
 				serializing models.  Previously, the <jsf>SERIALIZER_detectRecursions</jsf> setting did this, but now it simply looks for recursions 
@@ -6642,7 +6718,7 @@
 			<li>Removed lazy-initialization that required locking in {@link org.apache.juneau.ClassMeta}.  
 			<li>New <code>BeanContext.setDefaultParser(ReaderParser)</code> method added for specifying 
 				a default parser to use in a bean context (used when converting beans to <code>Strings</code> using 
-				{@link org.apache.juneau.BeanContext#convertToType(Object,Class)}).
+				<code><del>BeanContext.convertToType(Object,Class)</del></code>.
 				Old behavior simply used the default JSON serializer in these cases.
 			<li>More consistent handling of exceptions across all parsers.
 			<li>Minor changes to {@link org.apache.juneau.server.RestRequest} class.
@@ -7867,7 +7943,7 @@
 				See {@link org.apache.juneau.server.RestServlet} for more information.
 			</li>
 			<li>
-				Enhancements to {@link org.apache.juneau.BeanContext#convertToType(Object,Class)} to be able to convert <code>Strings</code> to classes with 
+				Enhancements to <code><del>BeanContext.convertToType(Object,Class)</del></code> to be able to convert <code>Strings</code> to classes with 
 				<code>fromString(String)</code>/<code>valueOf(String)</code> static methods or <code>T(String)</code> constructors.
 			</li>	
 		</ul>

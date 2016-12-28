@@ -47,14 +47,17 @@ public final class RdfSerializerSession extends SerializerSession {
 	 *
 	 * @param ctx The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
-	 * @param beanContext The bean context being used.
 	 * @param output The output object.  See {@link JsonSerializerSession#getWriter()} for valid class types.
 	 * @param op The override properties.
 	 * 	These override any context properties defined in the context.
 	 * @param javaMethod The java method that called this parser, usually the method in a REST servlet.
+	 * @param locale The session locale.
+	 * 	If <jk>null</jk>, then the locale defined on the context is used.
+	 * @param timeZone The session timezone.
+	 * 	If <jk>null</jk>, then the timezone defined on the context is used.
 	 */
-	protected RdfSerializerSession(RdfSerializerContext ctx, BeanContext beanContext, Object output, ObjectMap op, Method javaMethod) {
-		super(ctx, beanContext, output, op, javaMethod);
+	protected RdfSerializerSession(RdfSerializerContext ctx, ObjectMap op, Object output, Method javaMethod, Locale locale, TimeZone timeZone) {
+		super(ctx, op, output, javaMethod, locale, timeZone);
 		ObjectMap jenaSettings = new ObjectMap();
 		jenaSettings.put("rdfXml.tab", isUseIndentation() ? 2 : 0);
 		jenaSettings.put("rdfXml.attributeQuoteChar", Character.toString(getQuoteChar()));

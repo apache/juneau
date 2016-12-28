@@ -94,11 +94,11 @@ public class ReaderSwap extends PojoSwap<Reader,Object> {
 	 * by the contents of the reader.
 	 */
 	@Override /* PojoSwap */
-	public Object swap(Reader o, BeanContext bc) throws SerializeException {
+	public Object swap(BeanSession session, Reader o) throws SerializeException {
 		try {
 			if (parser == null)
 				return IOUtils.read(o);
-			return parser.parse(o, bc.object());
+			return parser.parse(o, session.object());
 		} catch (IOException e) {
 			return e.getLocalizedMessage();
 		} catch (Exception e) {

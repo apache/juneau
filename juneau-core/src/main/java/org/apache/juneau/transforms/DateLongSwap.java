@@ -27,7 +27,7 @@ public class DateLongSwap extends PojoSwap<Date,Long> {
 	 * Converts the specified {@link Date} to a {@link Long}.
 	 */
 	@Override /* PojoSwap */
-	public Long swap(Date o) {
+	public Long swap(BeanSession session, Date o) {
 		return o.getTime();
 	}
 
@@ -35,7 +35,7 @@ public class DateLongSwap extends PojoSwap<Date,Long> {
 	 * Converts the specified {@link Long} to a {@link Date}.
 	 */
 	@Override /* PojoSwap */
-	public Date unswap(Long o, ClassMeta<?> hint, BeanContext bc) throws ParseException {
+	public Date unswap(BeanSession session, Long o, ClassMeta<?> hint) throws ParseException {
 		Class<?> c = (hint == null ? java.util.Date.class : hint.getInnerClass());
 		if (c == java.util.Date.class)
 			return new java.util.Date(o);

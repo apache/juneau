@@ -82,7 +82,7 @@ public abstract class Serializer extends CoreApi {
 	 * Serializes a POJO to the specified output stream or writer.
 	 * <p>
 	 * This method should NOT close the context object.
-	 * @param session The serializer session object return by {@link #createSession(Object, ObjectMap, Method)}.<br>
+	 * @param session The serializer session object return by {@link #createSession(Object, ObjectMap, Method, Locale, TimeZone)}.<br>
 	 * 	If <jk>null</jk>, session is created using {@link #createSession(Object)}.
 	 * @param o The object to serialize.
 	 *
@@ -110,7 +110,7 @@ public abstract class Serializer extends CoreApi {
 	/**
 	 * Serialize the specified object using the specified session.
 	 *
-	 * @param session The serializer session object return by {@link #createSession(Object, ObjectMap, Method)}.<br>
+	 * @param session The serializer session object return by {@link #createSession(Object, ObjectMap, Method, Locale, TimeZone)}.<br>
 	 * 	If <jk>null</jk>, session is created using {@link #createSession(Object)}.
 	 * @param o The object to serialize.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
@@ -172,14 +172,18 @@ public abstract class Serializer extends CoreApi {
 	 * 		<li>{@link OutputStream}
 	 * 		<li>{@link File}
 	 * 	</ul>
-	 * @param properties Optional additional properties.
+	 * @param op Optional additional properties.
 	 * @param javaMethod Java method that invoked this serializer.
 	 * 	When using the REST API, this is the Java method invoked by the REST call.
 	 * 	Can be used to access annotations defined on the method or class.
+	 * @param locale The session locale.
+	 * 	If <jk>null</jk>, then the locale defined on the context is used.
+	 * @param timeZone The session timezone.
+	 * 	If <jk>null</jk>, then the timezone defined on the context is used.
 	 * @return The new session.
 	 */
-	public SerializerSession createSession(Object output, ObjectMap properties, Method javaMethod) {
-		return new SerializerSession(getContext(SerializerContext.class), getBeanContext(), output, properties, javaMethod);
+	public SerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone) {
+		return new SerializerSession(getContext(SerializerContext.class), op, output, javaMethod, locale, timeZone);
 	}
 
 	/**
@@ -202,7 +206,7 @@ public abstract class Serializer extends CoreApi {
 	 * @return The new session.
 	 */
 	protected SerializerSession createSession(Object output) {
-		return createSession(output, null, null);
+		return createSession(output, null, null, null, null);
 	}
 
 	/**
@@ -263,7 +267,7 @@ public abstract class Serializer extends CoreApi {
 	 * 	Can be <jk>null</jk>.
 	 */
 	public ObjectMap getResponseHeaders(ObjectMap properties) {
-		return new ObjectMap(getBeanContext());
+		return ObjectMap.EMPTY_MAP;
 	}
 
 	/**

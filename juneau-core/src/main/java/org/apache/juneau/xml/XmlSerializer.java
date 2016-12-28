@@ -217,7 +217,6 @@ public class XmlSerializer extends WriterSerializer {
 	 * @throws SerializeException
 	 */
 	protected void findNsfMappings(XmlSerializerSession session, Object o) throws SerializeException {
-		BeanContext bc = session.getBeanContext();
 		ClassMeta<?> aType = null;						// The actual type
 		aType = session.push(null, o, null);
 
@@ -238,7 +237,7 @@ public class XmlSerializer extends WriterSerializer {
 			if (aType.isBeanMap()) {
 				bm = (BeanMap)o;
 			} else if (aType.isBean()) {
-				bm = bc.forBean(o);
+				bm = session.toBeanMap(o);
 			} else if (aType.isDelegate()) {
 				ClassMeta<?> innerType = ((Delegate)o).getClassMeta();
 				Namespace ns = innerType.getExtendedMeta(XmlClassMeta.class).getNamespace();
@@ -312,7 +311,6 @@ public class XmlSerializer extends WriterSerializer {
 			ClassMeta eType, String elementName, Namespace elementNamespace, boolean addNamespaceUris,
 			XmlFormat format, BeanPropertyMeta pMeta) throws Exception {
 
-		BeanContext bc = session.getBeanContext();
 		String ts = null;              // The type string (e.g. <type> or <x x='type'>
 		int indent = session.indent;       // Current indentation
 		ClassMeta<?> aType = null;     // The actual type
@@ -342,12 +340,12 @@ public class XmlSerializer extends WriterSerializer {
 			// Swap if necessary
 			PojoSwap swap = aType.getPojoSwap();
 			if (swap != null) {
-				o = swap.swap(o, bc);
+				o = swap.swap(session, o);
 
 				// If the getSwapClass() method returns Object, we need to figure out
 				// the actual type now.
 				if (sType.isObject())
-					sType = bc.getClassMetaForObject(o);
+					sType = session.getClassMetaForObject(o);
 			}
 		} else {
 			sType = eType.getSerializedClassMeta();
@@ -438,7 +436,7 @@ public class XmlSerializer extends WriterSerializer {
 			if (typeName == null && elementName != null && session.isAddJsonTypeAttrs() && (session.isAddJsonStringTypeAttrs() || ! ts.equals("string")))
 				typeName = ts;
 			if (typeName != null && ! typeName.equals(elementName))
-				out.attr(dns, bc.getBeanTypePropertyName(), typeName);
+				out.attr(dns, session.getBeanTypePropertyName(), typeName);
 			if (o == null) {
 				if (! isNullTag)
 					out.attr(xsi, "nil", "true");
@@ -472,7 +470,7 @@ public class XmlSerializer extends WriterSerializer {
 			else if (sType.hasToObjectMapMethod())
 				hasChildren = serializeMap(session, out, sType.toObjectMap(o), sType);
 			else if (sType.isBean())
-				hasChildren = serializeBeanMap(session, out, bc.forBean(o), elementNamespace, isCollapsed);
+				hasChildren = serializeBeanMap(session, out, session.toBeanMap(o), elementNamespace, isCollapsed);
 			else if (sType.isCollection() || (wType != null && wType.isCollection())) {
 				if (isCollapsed)
 					session.indent--;
@@ -663,8 +661,8 @@ public class XmlSerializer extends WriterSerializer {
 	}
 
 	@Override /* Serializer */
-	public XmlSerializerSession createSession(Object output, ObjectMap properties, Method javaMethod) {
-		return new XmlSerializerSession(getContext(XmlSerializerContext.class), getBeanContext(), output, properties, javaMethod);
+	public XmlSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone) {
+		return new XmlSerializerSession(getContext(XmlSerializerContext.class), op, output, javaMethod, locale, timeZone);
 	}
 
 	@Override /* CoreApi */

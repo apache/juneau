@@ -52,7 +52,7 @@ public class MessagesResource extends RestServletDefault {
 
 	public static class ResourceBundleSwap extends PojoSwap<ResourceBundle,ObjectMap> {
 		@Override /* Transform */
-		public ObjectMap swap(ResourceBundle o) throws SerializeException {
+		public ObjectMap swap(BeanSession session, ResourceBundle o) throws SerializeException {
 			ObjectMap m = new ObjectMap();
 			for (String k : o.keySet())
 				m.put(k, o.getString(k));

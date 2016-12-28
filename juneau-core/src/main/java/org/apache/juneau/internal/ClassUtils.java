@@ -315,5 +315,4 @@ public final class ClassUtils {
 	public static boolean isPublic(Constructor<?> c) {
 		return Modifier.isPublic(c.getModifiers());
 	}
-
 }

@@ -61,7 +61,7 @@ public class BeanDictionary {
 			return m;
 		String typeName = o.toString();
 		ClassMeta<?> cm = getClassMeta(typeName);
-		BeanMap<?> bm = beanContext.newBeanMap(cm.getInnerClass());
+		BeanMap<?> bm = m.getBeanSession().newBeanMap(cm.getInnerClass());
 
 		// Iterate through all the entries in the map and set the individual field values.
 		for (Map.Entry<String,Object> e : m.entrySet()) {

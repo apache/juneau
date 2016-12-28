@@ -65,14 +65,14 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 	}
 
 	@Override /* Serializer */
-	public HtmlDocSerializerSession createSession(Object output, ObjectMap properties, Method javaMethod) {
-		return new HtmlDocSerializerSession(getContext(HtmlDocSerializerContext.class), getBeanContext(), output, properties, javaMethod);
+	public HtmlDocSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone) {
+		return new HtmlDocSerializerSession(getContext(HtmlDocSerializerContext.class), op, output, javaMethod, locale, timeZone);
 	}
 
 	@Override /* ISchemaSerializer */
 	protected void doSerialize(SerializerSession session, Object o) throws Exception {
 		HtmlSerializerSession s = (HtmlSerializerSession)session;
-		ObjectMap schema = getSchema(s, s.getBeanContext().getClassMetaForObject(o), "root", null);
+		ObjectMap schema = getSchema(s, session.getClassMetaForObject(o), "root", null);
 		super.doSerialize(s, schema);
 	}
 
@@ -127,7 +127,7 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 				out.put("items", getSchema(session, componentType, "items", pNames));
 			} else if (sType.isBean()) {
 				ObjectMap properties = new ObjectMap();
-				BeanMeta bm = session.getBeanContext().getBeanMeta(sType.getInnerClass());
+				BeanMeta bm = session.getBeanMeta(sType.getInnerClass());
 				if (pNames != null)
 					bm = new BeanMetaFiltered(bm, pNames);
 				for (Iterator<BeanPropertyMeta> i = bm.getPropertyMetas().iterator(); i.hasNext();) {

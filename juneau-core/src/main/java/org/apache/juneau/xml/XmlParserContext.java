@@ -39,17 +39,19 @@ import org.apache.juneau.parser.*;
  *
  * <h6 class='topic' id='ConfigProperties'>Configurable properties on the XML parser</h6>
  * <table class='styled' style='border-collapse: collapse;'>
- * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th></tr>
+ * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th><th>Session overridable</th></tr>
  * 	<tr>
  * 		<td>{@link #XML_xsiNs}</td>
  * 		<td>XMLSchema-instance namespace URI.</td>
  * 		<td><code>String<code></td>
  * 		<td><js>"http://www.w3.org/2001/XMLSchema-instance"</js></td>
+ * 		<td><jk>true</jk></td>
  * 	</tr>
  * 	<tr>
  * 		<td>{@link #XML_trimWhitespace}</td>
  * 		<td>Trim whitespace from text elements.</td>
  * 		<td><code>Boolean<code></td>
+ * 		<td><jk>true</jk></td>
  * 		<td><jk>true</jk></td>
  * 	</tr>
  * 	<tr>
@@ -57,17 +59,20 @@ import org.apache.juneau.parser.*;
  * 		<td>Enable validation.</td>
  * 		<td><code>Boolean<code></td>
  * 		<td><jk>false</jk></td>
+ * 		<td><jk>true</jk></td>
  * 	</tr>
  * 	<tr>
  * 		<td>{@link #XML_coalescing}</td>
  * 		<td>Enable text element coalescing.</td>
  * 		<td><code>Boolean<code></td>
  * 		<td><jk>false</jk></td>
+ * 		<td><jk>true</jk></td>
  * 	</tr>
  * 	<tr>
  * 		<td>{@link #XML_replaceEntityReferences}</td>
  * 		<td>Replace entity references.</td>
  * 		<td><code>Boolean<code></td>
+ * 		<td><jk>true</jk></td>
  * 		<td><jk>true</jk></td>
  * 	</tr>
  * 	<tr>
@@ -75,24 +80,28 @@ import org.apache.juneau.parser.*;
  * 		<td>XML reporter.</td>
  * 		<td>{@link XMLReporter}</td>
  * 		<td><jk>null</jk></td>
+ * 		<td><jk>true</jk></td>
  * 	</tr>
  * 	<tr>
  * 		<td>{@link #XML_resolver}</td>
  * 		<td>XML resolver.</td>
  * 		<td>{@link XMLResolver}</td>
  * 		<td><jk>null</jk></td>
+ * 		<td><jk>true</jk></td>
  * 	</tr>
  * 	<tr>
  * 		<td>{@link #XML_eventAllocator}</td>
  * 		<td>XML event allocator.</td>
  * 		<td>{@link XMLEventAllocator}</td>
  * 		<td><jk>null</jk></td>
+ * 		<td><jk>true</jk></td>
  * 	</tr>
  * 	<tr>
  * 		<td>{@link #XML_preserveRootElement}</td>
  * 		<td>Preserve root element during generalized parsing.</td>
  * 		<td><code>Boolean<code></td>
  * 		<td><jk>false</jk></td>
+ * 		<td><jk>true</jk></td>
  * 	</tr>
  * </table>
  *
@@ -113,6 +122,7 @@ public final class XmlParserContext extends ParserContext {
 	 * 	<li><b>Name:</b> <js>"XmlParser.xsiNs"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
 	 * 	<li><b>Default:</b> <js>"http://www.w3.org/2001/XMLSchema-instance"</js>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
 	 * The XMLSchema namespace.
@@ -126,6 +136,7 @@ public final class XmlParserContext extends ParserContext {
 	 * 	<li><b>Name:</b> <js>"XmlParser.trimWhitespace"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, whitespace in text elements will be automatically trimmed.
@@ -139,6 +150,7 @@ public final class XmlParserContext extends ParserContext {
 	 * 	<li><b>Name:</b> <js>"XmlParser.validating"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, XML document will be validated.
@@ -153,6 +165,7 @@ public final class XmlParserContext extends ParserContext {
 	 * 	<li><b>Name:</b> <js>"XmlParser.coalescing"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, XML text elements will be coalesced.
@@ -167,6 +180,7 @@ public final class XmlParserContext extends ParserContext {
 	 * 	<li><b>Name:</b> <js>"XmlParser.replaceEntityReferences"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, entity references will be replace during parsing.
@@ -181,6 +195,7 @@ public final class XmlParserContext extends ParserContext {
 	 * 	<li><b>Name:</b> <js>"XmlParser.reporter"</js>
 	 * 	<li><b>Data type:</b> {@link XMLReporter}
 	 * 	<li><b>Default:</b> <jk>null</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
 	 * Associates an {@link XMLReporter} with this parser.
@@ -196,6 +211,7 @@ public final class XmlParserContext extends ParserContext {
 	 * 	<li><b>Name:</b> <js>"XmlParser.resolver"</js>
 	 * 	<li><b>Data type:</b> {@link XMLResolver}
 	 * 	<li><b>Default:</b> <jk>null</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
 	 * Associates an {@link XMLResolver} with this parser.
@@ -209,6 +225,7 @@ public final class XmlParserContext extends ParserContext {
 	 * 	<li><b>Name:</b> <js>"XmlParser.eventAllocator"</js>
 	 * 	<li><b>Data type:</b> {@link XMLEventAllocator}
 	 * 	<li><b>Default:</b> <jk>null</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
 	 * Associates an {@link XMLEventAllocator} with this parser.
@@ -222,6 +239,7 @@ public final class XmlParserContext extends ParserContext {
 	 * 	<li><b>Name:</b> <js>"XmlParser.preserveRootElement"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
 	 * If <jk>true</jk>, when parsing into a generic {@link ObjectMap}, the map will

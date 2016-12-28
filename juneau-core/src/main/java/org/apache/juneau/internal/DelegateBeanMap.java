@@ -35,12 +35,12 @@ public class DelegateBeanMap<T> extends BeanMap<T> {
 	 * Constructor.
 	 *
 	 * @param bean The bean being wrapped.
-	 * @param bc The bean context that created this bean map.
+	 * @param session The bean session that created this bean map.
 	 */
 	@SuppressWarnings("unchecked")
 	public
-	DelegateBeanMap(T bean, BeanContext bc) {
-		super(bean, bc.getBeanMeta((Class<T>)bean.getClass()));
+	DelegateBeanMap(T bean, BeanSession session) {
+		super(session, bean, session.getBeanMeta((Class<T>)bean.getClass()));
 	}
 
 	/**

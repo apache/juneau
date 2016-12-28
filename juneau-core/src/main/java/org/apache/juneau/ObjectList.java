@@ -94,7 +94,7 @@ import org.apache.juneau.utils.*;
 public class ObjectList extends LinkedList<Object> {
 	private static final long serialVersionUID = 1L;
 
-	private transient BeanContext beanContext = BeanContext.DEFAULT;
+	private transient BeanSession session = null;
 	private transient PojoRest pojoRest;
 
 	/**
@@ -137,11 +137,11 @@ public class ObjectList extends LinkedList<Object> {
 	 * @throws ParseException If the input contains a syntax error or is malformed.
 	 */
 	public ObjectList(CharSequence s, Parser p) throws ParseException {
-		this(p == null ? BeanContext.DEFAULT : p.getBeanContext());
+		this(p == null ? BeanContext.DEFAULT.createSession() : p.getBeanContext().createSession());
 		if (p == null)
 			p = JsonParser.DEFAULT;
 		if (s != null)
-			p.parseIntoCollection(s, this, beanContext.object());
+			p.parseIntoCollection(s, this, session.object());
 	}
 
 	/**
@@ -169,24 +169,24 @@ public class ObjectList extends LinkedList<Object> {
 	private void parseReader(Reader r, Parser p) throws ParseException {
 		if (p == null)
 			p = JsonParser.DEFAULT;
-		p.parseIntoCollection(r, this, beanContext.object());
+		p.parseIntoCollection(r, this, session.object());
 	}
 
 	/**
 	 * Construct an empty JSON array. (i.e. an empty {@link LinkedList}).
 	 */
 	public ObjectList() {
-		this(BeanContext.DEFAULT);
+		this(BeanContext.DEFAULT.createSession());
 	}
 
 	/**
 	 * Construct an empty JSON array with the specified bean context. (i.e. an empty {@link LinkedList}).
 	 *
-	 * @param beanContext The bean context to associate with this object list for creating beans.
+	 * @param session The bean context to associate with this object list for creating beans.
 	 */
-	public ObjectList(BeanContext beanContext) {
+	public ObjectList(BeanSession session) {
 		super();
-		this.beanContext = beanContext;
+		this.session = session;
 	}
 
 	/**
@@ -208,17 +208,17 @@ public class ObjectList extends LinkedList<Object> {
 	}
 
 	/**
-	 * Override the default bean context used for converting POJOs.
+	 * Override the default bean session used for converting POJOs.
 	 * <p>
 	 * Default is {@link BeanContext#DEFAULT}, which is sufficient in most cases.
 	 * <p>
 	 * Useful if you're serializing/parsing beans with transforms defined.
 	 *
-	 * @param beanContext The new bean context.
+	 * @param session The new bean session.
 	 * @return This object (for method chaining).
 	 */
-	public ObjectList setBeanContext(BeanContext beanContext) {
-		this.beanContext = beanContext;
+	public ObjectList setBeanSession(BeanSession session) {
+		this.session = session;
 		return this;
 	}
 
@@ -236,7 +236,7 @@ public class ObjectList extends LinkedList<Object> {
 	/**
 	 * Get the entry at the specified index, converted to the specified type (if possible).
 	 * <p>
-	 * 	See {@link BeanContext#convertToType(Object, ClassMeta)} for the list of valid data conversions.
+	 * 	See {@link BeanSession#convertToType(Object, ClassMeta)} for the list of valid data conversions.
 	 *
 	 * @param type The type of object to convert the entry to.
 	 * @param index The index into this list.
@@ -244,7 +244,7 @@ public class ObjectList extends LinkedList<Object> {
 	 * @return The converted entry.
 	 */
 	public <T> T get(Class<T> type, int index) {
-		return beanContext.convertToType(get(index), type);
+		return session.convertToType(get(index), type);
 	}
 
 	/**
@@ -454,7 +454,7 @@ public class ObjectList extends LinkedList<Object> {
 	 * The <code>next()</code> method on the returned iterator may throw a {@link InvalidDataConversionException} if
 	 * 	the next element cannot be converted to the specified type.
 	 * <p>
-	 * See {@link BeanContext#convertToType(Object, ClassMeta)} for a description of valid conversions.
+	 * See {@link BeanSession#convertToType(Object, ClassMeta)} for a description of valid conversions.
 	 *
 	 * <h6 class='topic'>Example:</h6>
 	 * <p class='bcode'>
@@ -497,7 +497,7 @@ public class ObjectList extends LinkedList<Object> {
 
 					@Override /* Iterator */
 					public E next() {
-						return beanContext.convertToType(i.next(), childType);
+						return session.convertToType(i.next(), childType);
 					}
 
 					@Override /* Iterator */
@@ -517,7 +517,7 @@ public class ObjectList extends LinkedList<Object> {
 	 * @return The data type of the object at the specified index, or <jk>null</jk> if the value is null.
 	 */
 	public ClassMeta<?> getClassMeta(int index) {
-		return beanContext.getClassMetaForObject(get(index));
+		return session.getClassMetaForObject(get(index));
 	}
 
 	private PojoRest getPojoRest() {

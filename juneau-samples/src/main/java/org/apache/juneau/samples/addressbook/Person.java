@@ -35,7 +35,7 @@ public class Person {
 	public URI addressBookUri;
 	public int id;
 	public String name;
-	@BeanProperty(swap=CalendarSwap.Medium.class) public Calendar birthDate;
+	@BeanProperty(swap=CalendarSwap.DateMedium.class) public Calendar birthDate;
 	public LinkedList<Address> addresses = new LinkedList<Address>();
 
 	/** Bean constructor - Needed for instantiating on server side */

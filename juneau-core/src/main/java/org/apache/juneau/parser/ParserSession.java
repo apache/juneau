@@ -20,24 +20,17 @@ import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link Parser}.
  * <p>
  * This class is NOT thread safe.  It is meant to be discarded after one-time use.
  */
-public class ParserSession extends Session {
+public class ParserSession extends BeanSession {
 
-	private static JuneauLogger logger = JuneauLogger.getLogger(ParserSession.class);
-
-	private final boolean debug, trimStrings, strict;
+	private final boolean trimStrings, strict;
 	private final String inputStreamCharset, fileCharset;
-	private boolean closed;
-	private final BeanContext beanContext;
-	private final List<String> warnings = new LinkedList<String>();
 
-	private final ObjectMap properties;
 	private final Method javaMethod;
 	private final Object outer;
 	private final Object input;
@@ -51,7 +44,6 @@ public class ParserSession extends Session {
 	 *
 	 * @param ctx The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
-	 * @param beanContext The bean context being used.
 	 * @param input The input.
 	 * 	<br>For character-based parsers, this can be any of the following types:
 	 * 	<ul>
@@ -73,25 +65,25 @@ public class ParserSession extends Session {
 	 * 	These override any context properties defined in the context.
 	 * @param javaMethod The java method that called this parser, usually the method in a REST servlet.
 	 * @param outer The outer object for instantiating top-level non-static inner classes.
+	 * @param locale The session locale.
+	 * 	If <jk>null</jk>, then the locale defined on the context is used.
+	 * @param timeZone The session timezone.
+	 * 	If <jk>null</jk>, then the timezone defined on the context is used.
 	 */
-	public ParserSession(ParserContext ctx, BeanContext beanContext, Object input, ObjectMap op, Method javaMethod, Object outer) {
-		super(ctx);
+	public ParserSession(ParserContext ctx, ObjectMap op, Object input, Method javaMethod, Object outer, Locale locale, TimeZone timeZone) {
+		super(ctx, op, locale, timeZone);
 		if (op == null || op.isEmpty()) {
-			debug = ctx.debug;
 			trimStrings = ctx.trimStrings;
 			strict = ctx.strict;
 			inputStreamCharset = ctx.inputStreamCharset;
 			fileCharset = ctx.fileCharset;
 		} else {
-			debug = op.getBoolean(PARSER_debug, ctx.debug);
 			trimStrings = op.getBoolean(PARSER_trimStrings, ctx.trimStrings);
 			strict = op.getBoolean(PARSER_strict, ctx.strict);
 			inputStreamCharset = op.getString(PARSER_inputStreamCharset, ctx.inputStreamCharset);
 			fileCharset = op.getString(PARSER_fileCharset, ctx.fileCharset);
 		}
-		this.beanContext = beanContext;
 		this.input = input;
-		this.properties = op;
 		this.javaMethod = javaMethod;
 		this.outer = outer;
 	}
@@ -194,15 +186,6 @@ public class ParserSession extends Session {
 	}
 
 	/**
-	 * Returns the bean context in use for this session.
-	 *
-	 * @return The bean context in use for this session.
-	 */
-	public final BeanContext getBeanContext() {
-		return beanContext;
-	}
-
-	/**
 	 * Returns the Java method that invoked this parser.
 	 * <p>
 	 * When using the REST API, this is the Java method invoked by the REST call.
@@ -241,15 +224,6 @@ public class ParserSession extends Session {
 	}
 
 	/**
-	 * Returns the {@link ParserContext#PARSER_debug} setting value for this session.
-	 *
-	 * @return The {@link ParserContext#PARSER_debug} setting value for this session.
-	 */
-	public final boolean isDebug() {
-		return debug;
-	}
-
-	/**
 	 * Returns the {@link ParserContext#PARSER_trimStrings} setting value for this session.
 	 *
 	 * @return The {@link ParserContext#PARSER_trimStrings} setting value for this session.
@@ -265,27 +239,6 @@ public class ParserSession extends Session {
 	 */
 	public final boolean isStrict() {
 		return strict;
-	}
-
-	/**
-	 * Returns the runtime properties associated with this context.
-	 *
-	 * @return The runtime properties associated with this context.
-	 */
-	public final ObjectMap getProperties() {
-		return properties;
-	}
-
-	/**
-	 * Logs a warning message.
-	 *
-	 * @param msg The warning message.
-	 * @param args Optional printf arguments to replace in the error message.
-	 */
-	public void addWarning(String msg, Object... args) {
-		logger.warning(msg, args);
-		msg = args.length == 0 ? msg : String.format(msg, args);
-		warnings.add((warnings.size() + 1) + ": " + msg);
 	}
 
 	/**
@@ -316,30 +269,20 @@ public class ParserSession extends Session {
 
 	/**
 	 * Perform cleanup on this context object if necessary.
-	 *
-	 * @throws ParseException If called more than once, or in debug mode and warnings occurred.
 	 */
-	public void close() throws ParseException {
-		if (closed)
-			throw new ParseException("Attempt to close ParserSession more than once.");
-
-		try {
-			if (inputStream != null)
-				inputStream.close();
-			if (reader != null)
-				reader.close();
-		} catch (IOException e) {
-			throw new ParseException(e);
+	@Override
+	public boolean close() {
+		if (super.close()) {
+			try {
+				if (inputStream != null)
+					inputStream.close();
+				if (reader != null)
+					reader.close();
+			} catch (IOException e) {
+				throw new BeanRuntimeException(e);
+			}
+			return true;
 		}
-
-		if (debug && warnings.size() > 0)
-			throw new ParseException("Warnings occurred during parsing: \n" + StringUtils.join(warnings, "\n"));
-		closed = true;
-	}
-
-	@Override /* Object */
-	protected void finalize() throws Throwable {
-		if (! closed)
-			throw new RuntimeException("ParserSession was not closed.");
+		return false;
 	}
 }

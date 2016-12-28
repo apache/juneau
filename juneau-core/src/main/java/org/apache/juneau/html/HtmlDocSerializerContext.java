@@ -42,42 +42,48 @@ import org.apache.juneau.*;
  *
  * <h6 class='topic' id='ConfigProperties'>Configurable properties on the HTML document serializer</h6>
  * <table class='styled' style='border-collapse: collapse;'>
- * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th></tr>
+ * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th><th>Session overridable</th></tr>
  * 	<tr>
  * 		<td>{@link #HTMLDOC_title}</td>
  * 		<td>Page title.</td>
  * 		<td><code>String</code></td>
  * 		<td><jk>null</jk></td>
+ * 		<td><jk>true</jk></td>
  * 	</tr>
  * 	<tr>
  * 		<td>{@link #HTMLDOC_description}</td>
  * 		<td>Page description.</td>
  * 		<td><code>String</code></td>
  * 		<td><jk>null</jk></td>
+ * 		<td><jk>true</jk></td>
  * 	</tr>
  * 	<tr>
  * 		<td>{@link #HTMLDOC_links}<br>{@link #HTMLDOC_links_put}</td>
  * 		<td>Page links.</td>
  * 		<td><code>Map&lt;String,String&gt;</code></td>
  * 		<td>empty map</td>
+ * 		<td><jk>true</jk></td>
  * 	</tr>
  * 	<tr>
  * 		<td>{@link #HTMLDOC_cssUrl}</td>
  * 		<td>Stylesheet URL.</td>
  * 		<td><code>String</code></td>
  * 		<td><js>"style.css"</js></td>
+ * 		<td><jk>true</jk></td>
  * 	</tr>
  * 	<tr>
  * 		<td>{@link #HTMLDOC_cssImports}<br>{@link #HTMLDOC_cssImports_add}</td>
  * 		<td>CSS imports.</td>
  * 		<td><code>List&lt;String&gt;</code></td>
  * 		<td>empty list</td>
+ * 		<td><jk>true</jk></td>
  * 	</tr>
  * 	<tr>
  * 		<td>{@link #HTMLDOC_nowrap}</td>
  * 		<td>Prevent word wrap on page.</td>
  * 		<td><code>Boolean</code></td>
  * 		<td><jk>false</jk></td>
+ * 		<td><jk>true</jk></td>
  * 	</tr>
  * </table>
  *
@@ -101,6 +107,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * 	<li><b>Name:</b> <js>"HtmlSerializer.title"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
 	 * 	<li><b>Default:</b> <jk>null</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
 	 *
@@ -137,6 +144,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * 	<li><b>Name:</b> <js>"HtmlSerializer.description"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
 	 * 	<li><b>Default:</b> <jk>null</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
 	 *
@@ -173,6 +181,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.links.map"</js>
 	 * 	<li><b>Data type:</b> <code>Map&lt;String,String&gt;</code>
 	 * 	<li><b>Default:</b> empty map
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
 	 * Adds a list of hyperlinks immediately under the title and description but above the content of the page.
@@ -219,6 +228,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.cssUrl"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
 	 * 	<li><b>Default:</b> <js>"style.css"</js>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
 	 * Adds a link to the specified stylesheet URL.
@@ -235,6 +245,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.cssImports.list"</js>
 	 * 	<li><b>Data type:</b> <code>List&lt;String&gt;</code>
 	 * 	<li><b>Default:</b> empty list
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
 	 * Imports the specified CSS page URLs into the page.
@@ -253,6 +264,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.nowrap"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
 	 * Adds <js>"* {white-space:nowrap}"</js> to the style header to prevent word wrapping.

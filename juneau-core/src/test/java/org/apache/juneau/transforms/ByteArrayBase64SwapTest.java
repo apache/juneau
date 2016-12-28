@@ -17,6 +17,7 @@ import static org.junit.Assert.*;
 
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.a.rttests.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
@@ -63,13 +64,15 @@ public class ByteArrayBase64SwapTest extends RoundTripTest {
 		if (p == null)
 			return;
 
+		BeanSession session = p.getBeanContext().createSession();
+
 		List<byte[]> fl = new ArrayList<byte[]>() {{
 			add(new byte[]{1,2,3});
 			add(new byte[]{4,5,6});
 			add(null);
 		}};
 		assertEquals("['AQID','BAUG',null]", s.serialize(fl));
-		fl = roundTrip(fl, p.getBeanContext().getCollectionClassMeta(List.class, byte[].class));
+		fl = roundTrip(fl, session.getCollectionClassMeta(List.class, byte[].class));
 		assertEquals(1, fl.get(0)[0]);
 		assertEquals(5, fl.get(1)[1]);
 		assertNull(fl.get(2));
@@ -80,7 +83,7 @@ public class ByteArrayBase64SwapTest extends RoundTripTest {
 			put(null, new byte[]{4,5,6});
 			put("null", new byte[]{7,8,9});
 		}};
-		fm = roundTrip(fm, p.getBeanContext().getMapClassMeta(Map.class, String.class, byte[].class));
+		fm = roundTrip(fm, session.getMapClassMeta(Map.class, String.class, byte[].class));
 		assertEquals(1, fm.get("foo")[0]);
 		assertNull(fm.get(1));
 		assertEquals(5, fm.get(null)[1]);

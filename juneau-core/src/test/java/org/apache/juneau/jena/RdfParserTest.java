@@ -31,17 +31,14 @@ import org.junit.*;
 @SuppressWarnings("javadoc")
 public class RdfParserTest {
 
-	private Locale systemLocale;  // Tests are locale-sensitive.  Must use US locale.
-
 	@Before
 	public void beforeTest() {
-		systemLocale = Locale.getDefault();
-		Locale.setDefault(Locale.US);
+		TestUtils.setLocale(Locale.US);
 	}
 
 	@After
 	public void afterTest() {
-		Locale.setDefault(systemLocale);
+		TestUtils.unsetLocale();
 	}
 
 	@Test

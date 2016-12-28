@@ -167,7 +167,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 	public void testSwapBeans2() throws Exception {
 		Class<?>[] f = {
 			ByteArrayBase64Swap.class,
-			CalendarSwap.Medium.class,
+			CalendarSwap.DateMedium.class,
 			DateSwap.RFC2822DT.class,
 		};
 		s.addPojoSwaps(f);
@@ -235,11 +235,11 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 
 	public static class BSwap extends PojoSwap<B,String> {
 		@Override /* PojoSwap */
-		public String swap(B o) throws SerializeException {
+		public String swap(BeanSession session, B o) throws SerializeException {
 			return o.f1;
 		}
 		@Override /* PojoSwap */
-		public B unswap(String f) throws ParseException {
+		public B unswap(BeanSession session, String f, ClassMeta<?> hint) throws ParseException {
 			B b1 = new B();
 			b1.f1 = f;
 			return b1;

@@ -35,9 +35,8 @@ import org.apache.juneau.parser.*;
  * See {@link ContextFactory} for more information about context properties.
  *
  * <h6 class='topic' id='ConfigProperties'>Configurable properties on the MessagePack parser</h6>
- * <table class='styled' style='border-collapse: collapse;'>
- * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th></tr>
- * </table>
+ * <p>
+ * 	None.
  *
  * <h6 class='topic'>Configurable properties inherited from parent classes</h6>
  * <ul class='javahierarchy'>

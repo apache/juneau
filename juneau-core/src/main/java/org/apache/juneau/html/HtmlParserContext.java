@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
-import java.lang.reflect.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
 
@@ -37,9 +35,8 @@ import org.apache.juneau.parser.*;
  * See {@link ContextFactory} for more information about context properties.
  *
  * <h6 class='topic' id='ConfigProperties'>Configurable properties on the HTML parser</h6>
- * <table class='styled' style='border-collapse: collapse;'>
- * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th></tr>
- * </table>
+ * <p>
+ * 	None.
  *
  * <h6 class='topic'>Configurable properties inherited from parent classes</h6>
  * <ul class='javahierarchy'>
@@ -60,16 +57,5 @@ public final class HtmlParserContext extends ParserContext {
 	 */
 	public HtmlParserContext(ContextFactory cf) {
 		super(cf);
-	}
-
-	/**
-	 * Constructor.
-	 * <p>
-	 * Typically only called from {@link ContextFactory#getContext(Class)}.
-	 *
-	 * @param cf The factory that created this context.
-	 */
-	HtmlParserSession createSession(BeanContext beanContext, Object input, ObjectMap op, Method javaMethod, Object outer) {
-		return new HtmlParserSession(this, beanContext, input, op, javaMethod, outer);
 	}
 }

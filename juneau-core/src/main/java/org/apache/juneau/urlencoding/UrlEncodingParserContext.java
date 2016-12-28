@@ -32,11 +32,30 @@ import org.apache.juneau.*;
  * </ul>
  * <p>
  * See {@link ContextFactory} for more information about context properties.
+ *
+ * <h6 class='topic' id='ConfigProperties'>Configurable properties on the URL-Encoding parser</h6>
+ * <table class='styled' style='border-collapse: collapse;'>
+ * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th><th>Session overridable</th></tr>
+ * 	<tr>
+ * 		<td>{@link #URLENC_expandedParams}</td>
+ * 		<td>Serialize bean property collections/arrays as separate key/value pairs.</td>
+ * 		<td><code>Boolean</code></td>
+ * 		<td><jk>false</jk></td>
+ * 		<td><jk>true</jk></td>
+ * 	</tr>
+ * </table>
  */
 public class UrlEncodingParserContext extends UonParserContext {
 
 	/**
-	 * Serialize bean property collections/arrays as separate key/value pairs ({@link Boolean}, default=<jk>false</jk>).
+	 * <b>Configuration property:</b> Serialize bean property collections/arrays as separate key/value pairs.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"UrlEncoding.expandedParams"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
 	 * <p>
 	 * 	If <jk>false</jk>, serializing the array <code>[1,2,3]</code> results in <code>?key=$a(1,2,3)</code>.
 	 * 	If <jk>true</jk>, serializing the same array results in <code>?key=1&key=2&key=3</code>.

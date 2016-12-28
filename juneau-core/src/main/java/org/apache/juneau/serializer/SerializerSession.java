@@ -17,7 +17,6 @@ import static org.apache.juneau.serializer.SerializerContext.*;
 
 import java.io.*;
 import java.lang.reflect.*;
-import java.text.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -37,13 +36,10 @@ import org.apache.juneau.transform.*;
  * <p>
  * This class is NOT thread safe.  It is meant to be discarded after one-time use.
  */
-public class SerializerSession extends Session {
-
-	private static JuneauLogger logger = JuneauLogger.getLogger(SerializerSession.class);
+public class SerializerSession extends BeanSession {
 
 	private final int maxDepth, initialDepth;
 	private final boolean
-		debug,
 		detectRecursions,
 		ignoreRecursions,
 		useIndentation,
@@ -57,17 +53,12 @@ public class SerializerSession extends Session {
 	private final char quoteChar;
 	private final String relativeUriBase, absolutePathUriBase;
 
-	private final ObjectMap overrideProperties;
-
 	/** The current indentation depth into the model. */
 	public int indent;
 
-	private boolean closed;
 	private final Map<Object,Object> set;                                           // Contains the current objects in the current branch of the model.
 	private final LinkedList<StackElement> stack = new LinkedList<StackElement>();  // Contains the current objects in the current branch of the model.
 	private boolean isBottom;                                                       // If 'true', then we're at a leaf in the model (i.e. a String, Number, Boolean, or null).
-	private final List<String> warnings = new LinkedList<String>();                 // Any warnings encountered.
-	private final BeanContext beanContext;                                          // The bean context being used for this session.
 	private final Method javaMethod;                                                // Java method that invoked this serializer.
 	private final Object output;
 	private OutputStream outputStream;
@@ -81,7 +72,6 @@ public class SerializerSession extends Session {
 	 *
 	 * @param ctx The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
-	 * @param beanContext The bean context being used.
 	 * @param output The output object.
 	 * 	<br>Character-based serializers can handle the following output class types:
 	 * 	<ul>
@@ -97,17 +87,18 @@ public class SerializerSession extends Session {
 	 * @param op The override properties.
 	 * 	These override any context properties defined in the context.
 	 * @param javaMethod The java method that called this parser, usually the method in a REST servlet.
+	 * @param locale The session locale.
+	 * 	If <jk>null</jk>, then the locale defined on the context is used.
+	 * @param timeZone The session timezone.
+	 * 	If <jk>null</jk>, then the timezone defined on the context is used.
 	 */
-	public SerializerSession(SerializerContext ctx, BeanContext beanContext, Object output, ObjectMap op, Method javaMethod) {
-		super(ctx);
-		this.beanContext = beanContext;
+	public SerializerSession(SerializerContext ctx, ObjectMap op, Object output, Method javaMethod, Locale locale, TimeZone timeZone) {
+		super(ctx, op, locale, timeZone);
 		this.javaMethod = javaMethod;
 		this.output = output;
 		if (op == null || op.isEmpty()) {
-			overrideProperties = new ObjectMap();
 			maxDepth = ctx.maxDepth;
 			initialDepth = ctx.initialDepth;
-			debug = ctx.debug;
 			detectRecursions = ctx.detectRecursions;
 			ignoreRecursions = ctx.ignoreRecursions;
 			useIndentation = ctx.useIndentation;
@@ -122,10 +113,8 @@ public class SerializerSession extends Session {
 			sortCollections = ctx.sortCollections;
 			sortMaps = ctx.sortMaps;
 		} else {
-			overrideProperties = op;
 			maxDepth = op.getInt(SERIALIZER_maxDepth, ctx.maxDepth);
 			initialDepth = op.getInt(SERIALIZER_initialDepth, ctx.initialDepth);
-			debug = op.getBoolean(SERIALIZER_debug, ctx.debug);
 			detectRecursions = op.getBoolean(SERIALIZER_detectRecursions, ctx.detectRecursions);
 			ignoreRecursions = op.getBoolean(SERIALIZER_ignoreRecursions, ctx.ignoreRecursions);
 			useIndentation = op.getBoolean(SERIALIZER_useIndentation, ctx.useIndentation);
@@ -142,7 +131,7 @@ public class SerializerSession extends Session {
 		}
 
 		this.indent = initialDepth;
-		if (detectRecursions || debug) {
+		if (detectRecursions || isDebug()) {
 			set = new IdentityHashMap<Object,Object>();
 		} else {
 			set = Collections.emptyMap();
@@ -234,15 +223,6 @@ public class SerializerSession extends Session {
 	}
 
 	/**
-	 * Returns the bean context in use for this session.
-	 *
-	 * @return The bean context in use for this session.
-	 */
-	public final BeanContext getBeanContext() {
-		return beanContext;
-	}
-
-	/**
 	 * Returns the Java method that invoked this serializer.
 	 * <p>
 	 * When using the REST API, this is the Java method invoked by the REST call.
@@ -252,15 +232,6 @@ public class SerializerSession extends Session {
 	*/
 	public final Method getJavaMethod() {
 		return javaMethod;
-	}
-
-	/**
-	 * Returns the override properties passed in to the constructor.
-	 *
-	 * @return The override properties pass in to the constructor.
-	 */
-	public final ObjectMap getProperties() {
-		return overrideProperties;
 	}
 
 	/**
@@ -279,15 +250,6 @@ public class SerializerSession extends Session {
 	 */
 	public final int getInitialDepth() {
 		return initialDepth;
-	}
-
-	/**
-	 * Returns the {@link SerializerContext#SERIALIZER_debug} setting value for this session.
-	 *
-	 * @return The {@link SerializerContext#SERIALIZER_debug} setting value for this session.
-	 */
-	public final boolean isDebug() {
-		return debug;
 	}
 
 	/**
@@ -423,18 +385,18 @@ public class SerializerSession extends Session {
 		if (o == null)
 			return null;
 		Class<?> c = o.getClass();
-		ClassMeta<?> cm = (eType != null && c == eType.getInnerClass()) ? eType : beanContext.getClassMeta(c);
+		ClassMeta<?> cm = (eType != null && c == eType.getInnerClass()) ? eType : getClassMeta(c);
 		if (cm.isCharSequence() || cm.isNumber() || cm.isBoolean())
 			return cm;
-		if (detectRecursions || debug) {
+		if (detectRecursions || isDebug()) {
 			if (stack.size() > maxDepth)
 				return null;
 			if (willRecurse(attrName, o, cm))
 				return null;
 			isBottom = false;
 			stack.add(new StackElement(stack.size(), attrName, o, cm));
-			if (debug)
-				logger.info(getStack(false));
+			if (isDebug())
+				getLogger().info(getStack(false));
 			set.put(o, o);
 		}
 		return cm;
@@ -451,11 +413,11 @@ public class SerializerSession extends Session {
 	 * @throws SerializeException If recursion occurred.
 	 */
 	public boolean willRecurse(String attrName, Object o, ClassMeta<?> cm) throws SerializeException {
-		if (! (detectRecursions || debug))
+		if (! (detectRecursions || isDebug()))
 			return false;
 		if (! set.containsKey(o))
 			return false;
-		if (ignoreRecursions && ! debug)
+		if (ignoreRecursions && ! isDebug())
 			return true;
 
 		stack.add(new StackElement(stack.size(), attrName, o, cm));
@@ -467,7 +429,7 @@ public class SerializerSession extends Session {
 	 */
 	public void pop() {
 		indent--;
-		if ((detectRecursions || debug) && ! isBottom)  {
+		if ((detectRecursions || isDebug()) && ! isBottom)  {
 			Object o = stack.removeLast().o;
 			Object o2 = set.remove(o);
 			if (o2 == null)
@@ -486,25 +448,13 @@ public class SerializerSession extends Session {
 	}
 
 	/**
-	 * Logs a warning message.
-	 *
-	 * @param msg The warning message.
-	 * @param args Optional printf arguments to replace in the error message.
-	 */
-	public void addWarning(String msg, Object... args) {
-		logger.warning(msg, args);
-		msg = args.length == 0 ? msg : MessageFormat.format(msg, args);
-		warnings.add((warnings.size() + 1) + ": " + msg);
-	}
-
-	/**
 	 * Specialized warning when an exception is thrown while executing a bean getter.
 	 *
 	 * @param p The bean map entry representing the bean property.
 	 * @param t The throwable that the bean getter threw.
 	 */
 	public void addBeanGetterWarning(BeanPropertyMeta p, Throwable t) {
-		String prefix = (debug ? getStack(false) + ": " : "");
+		String prefix = (isDebug() ? getStack(false) + ": " : "");
 		addWarning("{0}Could not call getValue() on property ''{1}'' of class ''{2}'', exception = {3}", prefix, p.getName(), p.getBeanMeta().getClassMeta(), t.getLocalizedMessage());
 	}
 
@@ -535,10 +485,10 @@ public class SerializerSession extends Session {
 	public final Object generalize(Object o, ClassMeta<?> type) throws SerializeException {
 		if (o == null)
 			return null;
-		PojoSwap f = (type == null || type.isObject() ? getBeanContext().getClassMeta(o.getClass()).getPojoSwap() : type.getPojoSwap());
+		PojoSwap f = (type == null || type.isObject() ? getClassMeta(o.getClass()).getPojoSwap() : type.getPojoSwap());
 		if (f == null)
 			return o;
-		return f.swap(o, getBeanContext());
+		return f.swap(this, o);
 	}
 
 	/**
@@ -559,7 +509,7 @@ public class SerializerSession extends Session {
 			return false;
 
 		if (cm == null)
-			cm = getBeanContext().object();
+			cm = object();
 
 		if (trimEmptyCollections) {
 			if (cm.isArray() || (cm.isObject() && value.getClass().isArray())) {
@@ -656,36 +606,22 @@ public class SerializerSession extends Session {
 		return s;
 	}
 
-	/**
-	 * Perform cleanup on this context object if necessary.
-	 *
-	 * @throws SerializeException If we're in debug mode and one or more warnings occurred.
-	 */
-	public void close() throws SerializeException {
-		if (closed)
-			throw new SerializeException("Attempt to close SerializerSession more than once.");
-
-		try {
-			if (outputStream != null)
-				outputStream.close();
-			if (flushOnlyWriter != null)
-				flushOnlyWriter.flush();
-			if (writer != null)
-				writer.close();
-		} catch (IOException e) {
-			throw new SerializeException(e);
+	@Override
+	public boolean close() {
+		if (super.close()) {
+			try {
+				if (outputStream != null)
+					outputStream.close();
+				if (flushOnlyWriter != null)
+					flushOnlyWriter.flush();
+				if (writer != null)
+					writer.close();
+			} catch (IOException e) {
+				throw new BeanRuntimeException(e);
+			}
+			return true;
 		}
-
-		if (debug && warnings.size() > 0)
-			throw new SerializeException("Warnings occurred during serialization: \n" + StringUtils.join(warnings, "\n"));
-
-		closed = true;
-	}
-
-	@Override /* Object */
-	protected void finalize() throws Throwable {
-		if (! closed)
-			throw new RuntimeException("SerializerSession was not closed.");
+		return false;
 	}
 
 	private static class StackElement {

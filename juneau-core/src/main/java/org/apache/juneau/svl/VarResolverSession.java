@@ -36,7 +36,6 @@ import org.apache.juneau.*;
  */
 public class VarResolverSession extends Session {
 
-	private final Map<String,Object> sessionObjects;
 	private final VarResolverContext context;
 
 	/**
@@ -47,9 +46,9 @@ public class VarResolverSession extends Session {
 	 * @param sessionObjects
 	 */
 	public VarResolverSession(VarResolverContext context, Map<String,Object> sessionObjects) {
-		super(context);
+		super(context, null);
 		this.context = context;
-		this.sessionObjects = (sessionObjects == null ? new TreeMap<String,Object>() : sessionObjects);
+		addToCache(sessionObjects);
 	}
 
 	/**
@@ -60,7 +59,7 @@ public class VarResolverSession extends Session {
 	 * @return This method (for method chaining).
 	 */
 	public VarResolverSession setSessionObject(String name, Object o) {
-		this.sessionObjects.put(name, o);
+		addToCache(name, o);
 		return this;
 	}
 
@@ -267,14 +266,13 @@ public class VarResolverSession extends Session {
 	 * @return The session object.  Never <jk>null</jk>.
 	 * @throws RuntimeException If session object with specified name does not exist.
 	 */
-	@SuppressWarnings("unchecked")
 	public <T> T getSessionObject(Class<T> c, String name) {
 		T t = null;
 		try {
-			t = (T)sessionObjects.get(name);
+			t = getFromCache(c, name);
 			if (t == null) {
-				sessionObjects.put(name, this.context.getContextObject(name));
-				t = (T)sessionObjects.get(name);
+				addToCache(name, this.context.getContextObject(name));
+				t = getFromCache(c, name);
 			}
 		} catch (Exception e) {
 			throw new RuntimeException(format("Session object ''{0}'' or context object ''SvlContext.{0}'' could not be converted to type ''{1}''.", name, c.getName()));

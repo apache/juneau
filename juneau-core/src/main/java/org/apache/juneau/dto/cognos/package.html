@@ -110,7 +110,7 @@
 			.addPojoSwap(
 				<jk>new</jk> PojoSwap&lt;Person,Integer&gt;() {
 					<ja>@Override</ja>
-					<jk>public</jk> Integer swap(Person p) {
+					<jk>public</jk> Integer swap(BeanSession session, Person p) {
 						<jk>return</jk> p.<jf>addresses</jf>.size();
 					}
 				}

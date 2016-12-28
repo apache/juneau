@@ -39,23 +39,26 @@ import org.apache.juneau.xml.*;
  *
  * <h6 class='topic' id='ConfigProperties'>Configurable properties on the RDF serializers</h6>
  * <table class='styled' style='border-collapse: collapse;'>
- * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th></tr>
+ * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th><th>Session overridable</th></tr>
  * 	<tr>
  * 		<td>{@link #RDF_addLiteralTypes}</td>
  * 		<td>Add XSI data types to non-<code>String</code> literals.</td>
  * 		<td><code>Boolean</code></td>
  * 		<td><jk>false</jk></td>
+ * 		<td><jk>true</jk></td>
  * 	</tr>
  * 	<tr>
  * 		<td>{@link #RDF_addRootProperty}</td>
  * 		<td>Add RDF root identifier property to root node.</td>
  * 		<td><code>Boolean</code></td>
  * 		<td><jk>false</jk></td>
+ * 		<td><jk>true</jk></td>
  * 	</tr>
  * 	<tr>
  * 		<td>{@link #RDF_autoDetectNamespaces}</td>
  * 		<td>Auto-detect namespace usage.</td>
  * 		<td><code>Boolean</code></td>
+ * 		<td><jk>true</jk></td>
  * 		<td><jk>true</jk></td>
  * 	</tr>
  * 	<tr>
@@ -63,6 +66,7 @@ import org.apache.juneau.xml.*;
  * 		<td>Default namespaces.</td>
  * 		<td><code>List&lt;{@link Namespace}&gt;</code></td>
  * 		<td>empty list</td>
+ * 		<td><jk>true</jk></td>
  * 	</tr>
  * </table>
  *
@@ -86,6 +90,7 @@ public final class RdfSerializerContext extends SerializerContext implements Rdf
 	 * 	<li><b>Name:</b> <js>"RdfSerializer.addLiteralTypes"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 */
 	public static final String RDF_addLiteralTypes = "RdfSerializer.addLiteralTypes";
@@ -97,6 +102,7 @@ public final class RdfSerializerContext extends SerializerContext implements Rdf
 	 * 	<li><b>Name:</b> <js>"RdfSerializer.addRootProperty"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
 	 * When enabled an RDF property <code>http://www.apache.org/juneau/root</code> is added with a value of <js>"true"</js>
@@ -116,6 +122,7 @@ public final class RdfSerializerContext extends SerializerContext implements Rdf
 	 * 	<li><b>Name:</b> <js>"RdfSerializer.autoDetectNamespaces"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
 	 * Detect namespace usage before serialization.
@@ -133,6 +140,7 @@ public final class RdfSerializerContext extends SerializerContext implements Rdf
 	 * 	<li><b>Name:</b> <js>"RdfSerializer.namespaces.list"</js>
 	 * 	<li><b>Data type:</b> <code>List&lt;{@link Namespace}&gt;</code>
 	 * 	<li><b>Default:</b> empty list
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
 	 * The default list of namespaces associated with this serializer.

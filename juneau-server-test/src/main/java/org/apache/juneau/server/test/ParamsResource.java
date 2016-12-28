@@ -109,7 +109,7 @@ public class ParamsResource extends RestServletDefault {
 
 	@Override /* RestServlet */
 	public Class<?>[] createPojoSwaps() {
-		return new Class[]{CalendarSwap.Medium.class};
+		return new Class[]{CalendarSwap.DateMedium.class};
 	}
 
 	//====================================================================================================

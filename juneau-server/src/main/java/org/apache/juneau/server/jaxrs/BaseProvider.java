@@ -17,6 +17,7 @@ import static javax.servlet.http.HttpServletResponse.*;
 import java.io.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
+import java.util.*;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
@@ -96,16 +97,18 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 			Serializer s = serializers.getSerializer(mt);
 			ObjectMap mp = getMethodProperties(a);
 			mp.append("mediaType", mediaType.toString());
+			Locale locale = getLocale(headers);
+			TimeZone timeZone = getTimeZone(headers);
 			if (s.isWriterSerializer()) {
 				WriterSerializer s2 = (WriterSerializer)s;
 				OutputStreamWriter w = new OutputStreamWriter(out, IOUtils.UTF8);
-				SerializerSession session = s.createSession(w, mp, null);
+				SerializerSession session = s.createSession(w, mp, null, locale, timeZone);
 				s2.serialize(session, o);
 				w.flush();
 				w.close();
 			} else {
 				OutputStreamSerializer s2 = (OutputStreamSerializer)s;
-				SerializerSession session = s.createSession(s2, mp, null);
+				SerializerSession session = s.createSession(s2, mp, null, locale, timeZone);
 				s2.serialize(session, o);
 				out.flush();
 				out.close();
@@ -132,17 +135,55 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 			ClassMeta<?> cm = bc.getClassMeta(gType);
 			ObjectMap mp = getMethodProperties(a);
 			mp.put("mediaType", mediaType.toString());
+			Locale locale = getLocale(headers);
+			TimeZone timeZone = getTimeZone(headers);
 			if (p.isReaderParser()) {
 				ReaderParser p2 = (ReaderParser)p;
 				InputStreamReader r = new InputStreamReader(in, IOUtils.UTF8);
-				ParserSession session = p2.createSession(r, mp, null, null);
+				ParserSession session = p2.createSession(r, mp, null, null, locale, timeZone);
 				return p2.parse(session, cm);
 			}
 			InputStreamParser p2 = (InputStreamParser)p;
-			ParserSession session = p2.createSession(in, mp, null, null);
+			ParserSession session = p2.createSession(in, mp, null, null, locale, timeZone);
 			return p2.parse(session, cm);
 		} catch (ParseException e) {
 			throw new IOException(e);
 		}
 	}
+
+	@SuppressWarnings("rawtypes")
+	private static Locale getLocale(MultivaluedMap headers) {
+		if (headers.containsKey("Accept-Language") && headers.get("Accept-Language") != null) {
+			String h = String.valueOf(headers.get("Accept-Language"));
+			if (h != null) {
+				MediaRange[] mr = MediaRange.parse(h);
+				if (mr.length > 0)
+					return toLocale(mr[0].getType());
+			}
+		}
+		return null;
+	}
+
+	/*
+	 * Converts an Accept-Language value entry to a Locale.
+	 */
+	private static Locale toLocale(String lang) {
+      String country = "";
+      int i = lang.indexOf('-');
+      if (i > -1) {
+          country = lang.substring(i+1).trim();
+          lang = lang.substring(0,i).trim();
+      }
+      return new Locale(lang, country);
+	}
+
+	@SuppressWarnings("rawtypes")
+	private static TimeZone getTimeZone(MultivaluedMap headers) {
+		if (headers.containsKey("Time-Zone") && headers.get("Time-Zone") != null) {
+			String h = String.valueOf(headers.get("Time-Zone"));
+			return TimeZone.getTimeZone(h);
+		}
+		return null;
+	}
+
 }

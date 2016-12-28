@@ -46,7 +46,6 @@ public class RdfParserSession extends ParserSession {
 	 *
 	 * @param ctx The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
-	 * @param beanContext The bean context being used.
 	 * @param input The input.  Can be any of the following types:
 	 * 	<ul>
 	 * 		<li><jk>null</jk>
@@ -59,9 +58,13 @@ public class RdfParserSession extends ParserSession {
 	 * 	These override any context properties defined in the context.
 	 * @param javaMethod The java method that called this parser, usually the method in a REST servlet.
 	 * @param outer The outer object for instantiating top-level non-static inner classes.
+	 * @param locale The session locale.
+	 * 	If <jk>null</jk>, then the locale defined on the context is used.
+	 * @param timeZone The session timezone.
+	 * 	If <jk>null</jk>, then the timezone defined on the context is used.
 	 */
-	protected RdfParserSession(RdfParserContext ctx, BeanContext beanContext, Object input, ObjectMap op, Method javaMethod, Object outer) {
-		super(ctx, beanContext, input, op, javaMethod, outer);
+	protected RdfParserSession(RdfParserContext ctx, ObjectMap op, Object input, Method javaMethod, Object outer, Locale locale, TimeZone timeZone) {
+		super(ctx, op, input, javaMethod, outer, locale, timeZone);
 		ObjectMap jenaSettings = new ObjectMap();
 		jenaSettings.putAll(ctx.jenaSettings);
 		if (op == null || op.isEmpty()) {
