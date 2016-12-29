@@ -181,4 +181,14 @@ public class UonSerializerContext extends SerializerContext {
 		useWhitespace = cf.getProperty(UON_useWhitespace, boolean.class, false);
 		encodeChars = cf.getProperty(UON_encodeChars, boolean.class, false);
 	}
+
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("UonSerializerContext", new ObjectMap()
+				.append("simpleMode", simpleMode)
+				.append("useWhitespace", useWhitespace)
+				.append("encodeChars", encodeChars)
+			);
+	}
 }

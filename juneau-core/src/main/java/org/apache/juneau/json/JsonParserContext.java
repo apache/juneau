@@ -58,4 +58,11 @@ public final class JsonParserContext extends ParserContext {
 	public JsonParserContext(ContextFactory cf) {
 		super(cf);
 	}
+
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("JsonParserContext", new ObjectMap()
+			);
+	}
 }

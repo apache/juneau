@@ -135,4 +135,14 @@ public final class JsonSerializerContext extends SerializerContext {
 		useWhitespace = cf.getProperty(JSON_useWhitespace, boolean.class, false);
 		escapeSolidus = cf.getProperty(JSON_escapeSolidus, boolean.class, false);
 	}
+
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("JsonSerializerContext", new ObjectMap()
+				.append("simpleMode", simpleMode)
+				.append("useWhitespace", useWhitespace)
+				.append("escapeSolidus", escapeSolidus)
+			);
+	}
 }

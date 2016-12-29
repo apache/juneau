@@ -15,7 +15,10 @@ package org.apache.juneau;
 import java.text.*;
 import java.util.*;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.json.*;
+import org.apache.juneau.serializer.*;
 
 /**
  * A one-time-use non-thread-safe object that's meant to be used once and then thrown away.
@@ -136,6 +139,25 @@ public abstract class Session {
 		if (logger == null)
 			logger = JuneauLogger.getLogger(getClass());
 		return logger;
+	}
+
+	/**
+	 * Returns the properties defined on this bean context as a simple map for debugging purposes.
+	 *
+	 * @return A new map containing the properties defined on this context.
+	 */
+	@Overrideable
+	public ObjectMap asMap() {
+		return new ObjectMap();
+	}
+
+	@Override /* Object */
+	public String toString() {
+		try {
+			return asMap().toString(JsonSerializer.DEFAULT_LAX_READABLE);
+		} catch (SerializeException e) {
+			return e.getLocalizedMessage();
+		}
 	}
 
 	/**

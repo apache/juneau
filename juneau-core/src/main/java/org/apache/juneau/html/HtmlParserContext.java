@@ -58,4 +58,11 @@ public final class HtmlParserContext extends ParserContext {
 	public HtmlParserContext(ContextFactory cf) {
 		super(cf);
 	}
+
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("HtmlParserContext", new ObjectMap()
+			);
+	}
 }

@@ -109,4 +109,13 @@ public class UonParserContext extends ParserContext {
 		this.decodeChars = cf.getProperty(UON_decodeChars, boolean.class, false);
 		this.whitespaceAware = cf.getProperty(UON_whitespaceAware, boolean.class, false);
 	}
+
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("UonParserContext", new ObjectMap()
+				.append("decodeChars", decodeChars)
+				.append("whitespaceAware", whitespaceAware)
+			);
+	}
 }

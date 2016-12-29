@@ -292,4 +292,17 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 		nowrap = cf.getProperty(HTMLDOC_nowrap, boolean.class, false);
 		links = cf.getMap(HTMLDOC_links, String.class, String.class, Collections.<String,String>emptyMap());
 	}
+
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("HtmlDocSerializerContext", new ObjectMap()
+				.append("cssImports", cssImports)
+				.append("title", title)
+				.append("description", description)
+				.append("cssUrl", cssUrl)
+				.append("nowrap", nowrap)
+				.append("links", links)
+			);
+	}
 }

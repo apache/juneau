@@ -105,10 +105,10 @@
 	
 	<!-- ======================================================================================================== -->
 	<a id="BeanContext"></a>
-	<h3 class='topic' onclick='toggle(this)'>1.2 - The BeanContext class</h3>
+	<h3 class='topic' onclick='toggle(this)'>1.2 - The BeanContext and BeanSession classes</h3>
 	<div class='topic'>
 		<p>
-			The {@link org.apache.juneau.BeanContext} class is the workhorse class used to wrap Java beans inside {@link org.apache.juneau.BeanMap BeanMaps}. 
+			The {@link org.apache.juneau.BeanContext} and {@link org.apache.juneau.BeanSession} classes are the workhorse class used to wrap Java beans inside {@link org.apache.juneau.BeanMap BeanMaps}. 
 			There are several options provided on the {@link org.apache.juneau.BeanContext} class to tailor the definition of a bean.
 		</p>
 		<p>
@@ -126,11 +126,11 @@
 	
 	<jc>// Get an instance of a bean context.
 	// In this case, just use the default bean context.</jc>
-	BeanContext beanContext = BeanContext.<jsf>DEFAULT</jsf>;
+	BeanSession beanSession = BeanContext.<jsf>DEFAULT</jsf>.createSession();
 	
 	<jc>// Create an instance of our bean and wrap it in a bean map.</jc>
 	Person p = <jk>new</jk> Person();
-	BeanMap&lt;Person&gt; m = beanContext.forBean(p);
+	BeanMap&lt;Person&gt; m = beanSession.toBeanMap(p);
 	
 	<jc>// Set some properties on the bean.</jc>
 	m.put(<js>"name"</js>, <js>"John Smith"</js>);

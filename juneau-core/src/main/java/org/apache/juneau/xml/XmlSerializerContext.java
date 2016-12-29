@@ -297,4 +297,20 @@ public class XmlSerializerContext extends SerializerContext {
 		xsiNamespace = cf.getProperty(XML_xsiNamespace, Namespace.class, new Namespace("xsi", "http://www.w3.org/2001/XMLSchema-instance"));
 		namespaces = cf.getProperty(XML_namespaces, Namespace[].class, new Namespace[0]);
 	}
+
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("XmlSerializerContext", new ObjectMap()
+				.append("addJsonTypeAttrs", addJsonTypeAttrs)
+				.append("addJsonStringTypeAttrs", addJsonStringTypeAttrs)
+				.append("autoDetectNamespaces", autoDetectNamespaces)
+				.append("enableNamespaces", enableNamespaces)
+				.append("addNamespaceUrlsToRoot", addNamespaceUrlsToRoot)
+				.append("defaultNamespace", defaultNamespace)
+				.append("xsNamespace", xsNamespace)
+				.append("xsiNamespace", xsiNamespace)
+				.append("namespaces", namespaces)
+			);
+	}
 }

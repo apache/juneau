@@ -97,4 +97,12 @@ public class UrlEncodingParserContext extends UonParserContext {
 		super(cf);
 		this.expandedParams = cf.getProperty(URLENC_expandedParams, boolean.class, false);
 	}
+
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("UrlEncodingParserContext", new ObjectMap()
+				.append("expandedParams", expandedParams)
+			);
+	}
 }

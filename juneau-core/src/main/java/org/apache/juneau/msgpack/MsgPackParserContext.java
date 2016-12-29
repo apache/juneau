@@ -58,4 +58,11 @@ public final class MsgPackParserContext extends ParserContext {
 	public MsgPackParserContext(ContextFactory cf) {
 		super(cf);
 	}
+
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("MsgPackParserContext", new ObjectMap()
+			);
+	}
 }

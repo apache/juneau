@@ -477,4 +477,26 @@ public class SerializerContext extends BeanContext {
 			s = s.substring(0, s.length()-1);
 		return s;
 	}
+
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("SerializerContext", new ObjectMap()
+				.append("maxDepth", maxDepth)
+				.append("initialDepth", initialDepth)
+				.append("detectRecursions", detectRecursions)
+				.append("ignoreRecursions", ignoreRecursions)
+				.append("useIndentation", useIndentation)
+				.append("addBeanTypeProperties", addBeanTypeProperties)
+				.append("trimNulls", trimNulls)
+				.append("trimEmptyCollections", trimEmptyCollections)
+				.append("trimEmptyMaps", trimEmptyMaps)
+				.append("trimStrings", trimStrings)
+				.append("sortCollections", sortCollections)
+				.append("sortMaps", sortMaps)
+				.append("quoteChar", quoteChar)
+				.append("relativeUriBase", relativeUriBase)
+				.append("absolutePathUriBase", absolutePathUriBase)
+			);
+	}
 }

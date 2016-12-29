@@ -1883,44 +1883,34 @@ public class BeanContext extends Context {
 		return false;
 	}
 
-	/**
-	 * Returns the properties defined on this bean context as a simple map.
-	 * Useful for debugging purposes.
-	 *
-	 * @return A new map containing the properties defined on this context.
-	 */
+	@Override /* Context */
 	public ObjectMap asMap() {
-		return new ObjectMap()
-			.append("id", System.identityHashCode(this))
-			.append("beansRequireDefaultConstructor", beansRequireDefaultConstructor)
-			.append("beansRequireSerializable", beansRequireSerializable)
-			.append("beansRequireSettersForGetters", beansRequireSettersForGetters)
-			.append("beansRequireSomeProperties", beansRequireSomeProperties)
-			.append("beanMapPutReturnsOldValue", beanMapPutReturnsOldValue)
-			.append("beanConstructorVisibility", beanConstructorVisibility)
-			.append("beanClassVisibility", beanClassVisibility)
-			.append("beanMethodVisibility", beanMethodVisibility)
-			.append("beanFieldVisibility", beanFieldVisibility)
-			.append("useInterfaceProxies", useInterfaceProxies)
-			.append("ignoreUnknownBeanProperties", ignoreUnknownBeanProperties)
-			.append("ignoreUnknownNullBeanProperties", ignoreUnknownNullBeanProperties)
-			.append("ignorePropertiesWithoutSetters", ignorePropertiesWithoutSetters)
-			.append("ignoreInvocationExceptionsOnGetters", ignoreInvocationExceptionsOnGetters)
-			.append("ignoreInvocationExceptionsOnSetters", ignoreInvocationExceptionsOnSetters)
-			.append("useJavaBeanIntrospector", useJavaBeanIntrospector)
-			.append("beanFilters", beanFilters)
-			.append("pojoSwaps", pojoSwaps)
-			.append("notBeanClasses", notBeanClasses)
-			.append("implClasses", implClasses)
-			.append("sortProperties", sortProperties);
-	}
-
-	@Override /* Object */
-	public String toString() {
-		try {
-			return asMap().toString(JsonSerializer.DEFAULT_LAX_READABLE);
-		} catch (SerializeException e) {
-			return e.getLocalizedMessage();
-		}
+		return super.asMap()
+			.append("BeanContext", new ObjectMap()
+				.append("id", System.identityHashCode(this))
+				.append("beansRequireDefaultConstructor", beansRequireDefaultConstructor)
+				.append("beansRequireSerializable", beansRequireSerializable)
+				.append("beansRequireSettersForGetters", beansRequireSettersForGetters)
+				.append("beansRequireSomeProperties", beansRequireSomeProperties)
+				.append("beanMapPutReturnsOldValue", beanMapPutReturnsOldValue)
+				.append("beanConstructorVisibility", beanConstructorVisibility)
+				.append("beanClassVisibility", beanClassVisibility)
+				.append("beanMethodVisibility", beanMethodVisibility)
+				.append("beanFieldVisibility", beanFieldVisibility)
+				.append("useInterfaceProxies", useInterfaceProxies)
+				.append("ignoreUnknownBeanProperties", ignoreUnknownBeanProperties)
+				.append("ignoreUnknownNullBeanProperties", ignoreUnknownNullBeanProperties)
+				.append("ignorePropertiesWithoutSetters", ignorePropertiesWithoutSetters)
+				.append("ignoreInvocationExceptionsOnGetters", ignoreInvocationExceptionsOnGetters)
+				.append("ignoreInvocationExceptionsOnSetters", ignoreInvocationExceptionsOnSetters)
+				.append("useJavaBeanIntrospector", useJavaBeanIntrospector)
+				.append("beanFilters", beanFilters)
+				.append("pojoSwaps", pojoSwaps)
+				.append("notBeanClasses", notBeanClasses)
+				.append("implClasses", implClasses)
+				.append("sortProperties", sortProperties)
+				.append("locale", locale)
+				.append("timeZone", timeZone)
+			);
 	}
 }

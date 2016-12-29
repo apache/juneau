@@ -189,4 +189,16 @@ public class HtmlSerializerContext extends XmlSerializerContext {
 		labelParameter = cf.getProperty(HTML_labelParameter, String.class, "label");
 		addKeyValueTableHeaders = cf.getProperty(HTML_addKeyValueTableHeaders, Boolean.class, false);
 	}
+
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("HtmlSerializerContext", new ObjectMap()
+				.append("uriAnchorText", uriAnchorText)
+				.append("lookForLabelParameters", lookForLabelParameters)
+				.append("detectLinksInStrings", detectLinksInStrings)
+				.append("labelParameter", labelParameter)
+				.append("addKeyValueTableHeaders", addKeyValueTableHeaders)
+			);
+	}
 }

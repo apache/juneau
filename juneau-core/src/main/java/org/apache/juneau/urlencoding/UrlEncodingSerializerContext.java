@@ -98,4 +98,12 @@ public class UrlEncodingSerializerContext extends UonSerializerContext {
 		super(cf);
 		this.expandedParams = cf.getProperty(URLENC_expandedParams, boolean.class, false);
 	}
+
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("UrlEncodingSerializerContext", new ObjectMap()
+				.append("expandedParams", expandedParams)
+			);
+	}
 }

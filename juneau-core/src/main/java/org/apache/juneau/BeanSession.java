@@ -52,7 +52,7 @@ public class BeanSession extends Session {
 	 * @param timeZone The session timezone.
 	 * 	If <jk>null</jk>, then the timezone defined on the context is used.
 	 */
-	public BeanSession(BeanContext ctx, ObjectMap op, Locale locale, TimeZone timeZone) {
+	protected BeanSession(BeanContext ctx, ObjectMap op, Locale locale, TimeZone timeZone) {
 		super(ctx, op);
 		this.ctx = ctx;
 		if (op == null || op.isEmpty()) {
@@ -128,7 +128,7 @@ public class BeanSession extends Session {
 	 * @throws InvalidDataConversionException If the specified value cannot be converted to the specified type.
 	 * @return The converted value.
 	 */
-	public <T> T convertToType(Object value, Class<T> type) throws InvalidDataConversionException {
+	public final <T> T convertToType(Object value, Class<T> type) throws InvalidDataConversionException {
 		// Shortcut for most common case.
 		if (value != null && value.getClass() == type)
 			return (T)value;
@@ -147,7 +147,7 @@ public class BeanSession extends Session {
 	 * @throws InvalidDataConversionException If the specified value cannot be converted to the specified type.
 	 * @return The converted value.
 	 */
-	public <T> T convertToType(Object outer, Object value, Class<T> type) throws InvalidDataConversionException {
+	public final <T> T convertToType(Object outer, Object value, Class<T> type) throws InvalidDataConversionException {
 		return convertToType(outer, value, ctx.getClassMeta(type));
 	}
 
@@ -284,7 +284,7 @@ public class BeanSession extends Session {
 	 * @return The converted type.
 	 * @throws InvalidDataConversionException If the specified value cannot be converted to the specified type.
 	 */
-	public <T> T convertToType(Object value, ClassMeta<T> type) throws InvalidDataConversionException {
+	public final <T> T convertToType(Object value, ClassMeta<T> type) throws InvalidDataConversionException {
 		return convertToType(null, value, type);
 	}
 
@@ -300,7 +300,7 @@ public class BeanSession extends Session {
 	 * @throws InvalidDataConversionException If the specified value cannot be converted to the specified type.
 	 * @return The converted value.
 	 */
-	public <T> T convertToType(Object outer, Object value, ClassMeta<T> type) throws InvalidDataConversionException {
+	public final <T> T convertToType(Object outer, Object value, ClassMeta<T> type) throws InvalidDataConversionException {
 		if (type == null)
 			type = (ClassMeta<T>)ctx.object();
 
@@ -582,7 +582,7 @@ public class BeanSession extends Session {
 	 * @param list The contents to populate the array with.
 	 * @return A new object or primitive array.
 	 */
-	public Object toArray(ClassMeta<?> type, Collection<?> list) {
+	public final Object toArray(ClassMeta<?> type, Collection<?> list) {
 		if (list == null)
 			return null;
 		ClassMeta<?> componentType = type.getElementType();
@@ -622,7 +622,7 @@ public class BeanSession extends Session {
 	 * @param o The object to wrap in a map interface.  Must not be null.
 	 * @return The wrapped object.
 	 */
-	public <T> BeanMap<T> toBeanMap(T o) {
+	public final <T> BeanMap<T> toBeanMap(T o) {
 		return this.toBeanMap(o, (Class<T>)o.getClass());
 	}
 
@@ -632,7 +632,7 @@ public class BeanSession extends Session {
 	 * @param o The object being tested.
 	 * @return <jk>true</jk> if the specified object is considered a bean.
 	 */
-	public boolean isBean(Object o) {
+	public final boolean isBean(Object o) {
 		if (o == null)
 			return false;
 		return isBean(o.getClass());
@@ -644,7 +644,7 @@ public class BeanSession extends Session {
 	 * @param c The class being tested.
 	 * @return <jk>true</jk> if the specified class is considered a bean.
 	 */
-	public boolean isBean(Class<?> c) {
+	public final boolean isBean(Class<?> c) {
 		return getBeanMeta(c) != null;
 	}
 
@@ -672,7 +672,7 @@ public class BeanSession extends Session {
 	 * @throws BeanRuntimeException If specified object is not a bean according to the bean rules
 	 * 		specified in this context class.
 	 */
-	public <T> BeanMap<T> toBeanMap(T o, Class<? super T> c) throws BeanRuntimeException {
+	public final <T> BeanMap<T> toBeanMap(T o, Class<? super T> c) throws BeanRuntimeException {
 		assertFieldNotNull(o, "o");
 		assertFieldNotNull(c, "c");
 
@@ -702,7 +702,7 @@ public class BeanSession extends Session {
 	 * @param c The name of the class to create a new instance of.
 	 * @return A new instance of the class.
 	 */
-	public <T> BeanMap<T> newBeanMap(Class<T> c) {
+	public final <T> BeanMap<T> newBeanMap(Class<T> c) {
 		return newBeanMap(null, c);
 	}
 
@@ -716,7 +716,7 @@ public class BeanSession extends Session {
 	 * 	Should be <jk>null</jk> if not a member class.
 	 * @return A new instance of the class.
 	 */
-	public <T> BeanMap<T> newBeanMap(Object outer, Class<T> c) {
+	public final <T> BeanMap<T> newBeanMap(Object outer, Class<T> c) {
 		BeanMeta m = getBeanMeta(c);
 		if (m == null)
 			return null;
@@ -745,7 +745,7 @@ public class BeanSession extends Session {
 	 * @return A new bean object.
 	 * @throws BeanRuntimeException If the specified class is not a valid bean.
 	 */
-	public <T> T newBean(Class<T> c) throws BeanRuntimeException {
+	public final <T> T newBean(Class<T> c) throws BeanRuntimeException {
 		return newBean(null, c);
 	}
 
@@ -760,7 +760,7 @@ public class BeanSession extends Session {
 	 * @return A new bean object.
 	 * @throws BeanRuntimeException If the specified class is not a valid bean.
 	 */
-	public <T> T newBean(Object outer, Class<T> c) throws BeanRuntimeException {
+	public final <T> T newBean(Object outer, Class<T> c) throws BeanRuntimeException {
 		ClassMeta<T> cm = getClassMeta(c);
 		BeanMeta m = cm.getBeanMeta();
 		if (m == null)
@@ -789,7 +789,7 @@ public class BeanSession extends Session {
 	 * @return The {@link BeanMeta} for the specified class, or <jk>null</jk> if the class
 	 * 	is not a bean per the settings on this context.
 	 */
-	public <T> BeanMeta<T> getBeanMeta(Class<T> c) {
+	public final <T> BeanMeta<T> getBeanMeta(Class<T> c) {
 		if (c == null)
 			return null;
 		return getClassMeta(c).getBeanMeta();
@@ -808,7 +808,7 @@ public class BeanSession extends Session {
 	 * @param cm The class type.
 	 * @return The class type bound by this bean context.
 	 */
-	public <T> ClassMeta<T> normalizeClassMeta(ClassMeta<T> cm) {
+	public final <T> ClassMeta<T> normalizeClassMeta(ClassMeta<T> cm) {
 		return ctx.normalizeClassMeta(cm);
 	}
 
@@ -821,7 +821,7 @@ public class BeanSession extends Session {
 	 * @return If the class is not an array, returns a cached {@link ClassMeta} object.
 	 * 	Otherwise, returns a new {@link ClassMeta} object every time.<br>
 	 */
-	public <T> ClassMeta<T> getClassMeta(Class<T> c) {
+	public final <T> ClassMeta<T> getClassMeta(Class<T> c) {
 		return ctx.getClassMeta(c);
 	}
 
@@ -837,7 +837,7 @@ public class BeanSession extends Session {
 	 * @return If the key and value types are OBJECT, returns a cached {@link ClassMeta} object.<br>
 	 * 	Otherwise, returns a new {@link ClassMeta} object every time.
 	 */
-	public <K,V,T extends Map<K,V>> ClassMeta<T> getMapClassMeta(Class<T> c, ClassMeta<K> keyType, ClassMeta<V> valueType) {
+	public final <K,V,T extends Map<K,V>> ClassMeta<T> getMapClassMeta(Class<T> c, ClassMeta<K> keyType, ClassMeta<V> valueType) {
 		return ctx.getMapClassMeta(c, keyType, valueType);
 	}
 
@@ -853,7 +853,7 @@ public class BeanSession extends Session {
 	 * @return If the key and value types are Object, returns a cached {@link ClassMeta} object.<br>
 	 * 	Otherwise, returns a new {@link ClassMeta} object every time.
 	 */
-	public <K,V,T extends Map<K,V>> ClassMeta<T> getMapClassMeta(Class<T> c, Class<K> keyType, Class<V> valueType) {
+	public final <K,V,T extends Map<K,V>> ClassMeta<T> getMapClassMeta(Class<T> c, Class<K> keyType, Class<V> valueType) {
 		return getMapClassMeta(c, getClassMeta(keyType), getClassMeta(valueType));
 	}
 
@@ -867,7 +867,7 @@ public class BeanSession extends Session {
 	 * @return If the key and value types are Object, returns a cached {@link ClassMeta} object.<br>
 	 * 	Otherwise, returns a new {@link ClassMeta} object every time.
 	 */
-	public <T extends Map> ClassMeta<T> getMapClassMeta(Class<T> c, Type keyType, Type valueType) {
+	public final <T extends Map> ClassMeta<T> getMapClassMeta(Class<T> c, Type keyType, Type valueType) {
 		return getMapClassMeta(c, getClassMeta(keyType), getClassMeta(valueType));
 	}
 
@@ -881,7 +881,7 @@ public class BeanSession extends Session {
 	 * @return If the element type is <code>OBJECT</code>, returns a cached {@link ClassMeta} object.<br>
 	 * 	Otherwise, returns a new {@link ClassMeta} object every time.
 	 */
-	public <E,T extends Collection<E>> ClassMeta<T> getCollectionClassMeta(Class<T> c, ClassMeta<E> elementType) {
+	public final <E,T extends Collection<E>> ClassMeta<T> getCollectionClassMeta(Class<T> c, ClassMeta<E> elementType) {
 		return ctx.getCollectionClassMeta(c, elementType);
 	}
 
@@ -895,7 +895,7 @@ public class BeanSession extends Session {
 	 * @return If the element type is <code>OBJECT</code>, returns a cached {@link ClassMeta} object.<br>
 	 * 	Otherwise, returns a new {@link ClassMeta} object every time.
 	 */
-	public <E,T extends Collection<E>> ClassMeta<T> getCollectionClassMeta(Class<T> c, Class<E> elementType) {
+	public final <E,T extends Collection<E>> ClassMeta<T> getCollectionClassMeta(Class<T> c, Class<E> elementType) {
 		return getCollectionClassMeta(c, getClassMeta(elementType));
 	}
 
@@ -908,7 +908,7 @@ public class BeanSession extends Session {
 	 * @return If the element type is <code>OBJECT</code>, returns a cached {@link ClassMeta} object.<br>
 	 * 	Otherwise, returns a new {@link ClassMeta} object every time.
 	 */
-	public <T extends Collection> ClassMeta<T> getCollectionClassMeta(Class<T> c, Type elementType) {
+	public final <T extends Collection> ClassMeta<T> getCollectionClassMeta(Class<T> c, Type elementType) {
 		return getCollectionClassMeta(c, getClassMeta(elementType));
 	}
 
@@ -925,7 +925,7 @@ public class BeanSession extends Session {
 	 * 	</ul>
 	 * @return A ClassMeta object, or <jk>null</jk> if the object is null.
 	 */
-	public ClassMeta getClassMeta(Type o) {
+	public final ClassMeta getClassMeta(Type o) {
 		return ctx.getClassMeta(o, null);
 	}
 
@@ -936,7 +936,7 @@ public class BeanSession extends Session {
 	 * @param classes The array of classes to get class metas for.
 	 * @return An array of {@link ClassMeta} objects corresponding to the classes.  Never <jk>null</jk>.
 	 */
-	public ClassMeta<?>[] getClassMetas(Class<?>[] classes) {
+	public final ClassMeta<?>[] getClassMetas(Class<?>[] classes) {
 		assertFieldNotNull(classes, "classes");
 		ClassMeta<?>[] cm = new ClassMeta<?>[classes.length];
 		for (int i = 0; i < classes.length; i++)
@@ -951,7 +951,7 @@ public class BeanSession extends Session {
 	 * @param o The class to find the class type for.
 	 * @return The ClassMeta object, or <jk>null</jk> if {@code o} is <jk>null</jk>.
 	 */
-	public <T> ClassMeta<T> getClassMetaForObject(T o) {
+	public final <T> ClassMeta<T> getClassMetaForObject(T o) {
 		if (o == null)
 			return null;
 		return (ClassMeta<T>)getClassMeta(o.getClass());
@@ -971,7 +971,7 @@ public class BeanSession extends Session {
 	 * @param s The class name.
 	 * @return The ClassMeta corresponding to the class name string.
 	 */
-	public ClassMeta<?> getClassMetaFromString(String s) {
+	public final ClassMeta<?> getClassMetaFromString(String s) {
 		return ctx.getClassMetaFromString(s);
 	}
 
@@ -1045,22 +1045,14 @@ public class BeanSession extends Session {
 		return ctx.classLoader;
 	}
 
-	/**
-	 * Returns the settings on this session object as a simple map of key/value pairs.
-	 *
-	 * @return A new map containing the settings on this session.
-	 */
-	public ObjectMap asMap() {
-		return ctx.asMap().append("locale", locale).append("timeZone", timeZone);
-	}
-
-	@Override /* Object */
-	public String toString() {
-		try {
-			return asMap().toString(JsonSerializer.DEFAULT_LAX_READABLE);
-		} catch (SerializeException e) {
-			return e.getLocalizedMessage();
-		}
+	@Override /* Session */
+	public final ObjectMap asMap() {
+		return super.asMap()
+			.appendAll(ctx.asMap())
+			.append("BeanSession", new ObjectMap()
+				.append("locale", locale)
+				.append("timeZone", timeZone)
+			);
 	}
 
 	@Override /* Session */

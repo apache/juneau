@@ -176,4 +176,21 @@ public final class RdfSerializerContext extends SerializerContext implements Rdf
 		collectionFormat = cf.getProperty(RDF_collectionFormat, RdfCollectionFormat.class, RdfCollectionFormat.DEFAULT);
 		namespaces = cf.getProperty(RDF_namespaces, Namespace[].class, new Namespace[0]);
 	}
+
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("RdfSerializerContext", new ObjectMap()
+				.append("addLiteralTypes", addLiteralTypes)
+				.append("addRootProperty", addRootProperty)
+				.append("useXmlNamespaces", useXmlNamespaces)
+				.append("looseCollections", looseCollections)
+				.append("autoDetectNamespaces", autoDetectNamespaces)
+				.append("rdfLanguage", rdfLanguage)
+				.append("juneauNs", juneauNs)
+				.append("juneauBpNs", juneauBpNs)
+				.append("collectionFormat", collectionFormat)
+				.append("namespaces", namespaces)
+			);
+	}
 }

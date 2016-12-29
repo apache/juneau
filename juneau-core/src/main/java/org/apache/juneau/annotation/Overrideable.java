@@ -10,51 +10,16 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau;
+package org.apache.juneau.annotation;
 
-import org.apache.juneau.annotation.*;
-import org.apache.juneau.json.*;
-import org.apache.juneau.serializer.*;
+import static java.lang.annotation.ElementType.*;
+
+import java.lang.annotation.*;
 
 /**
- * A reusable stateless thread-safe read-only configuration, typically used for creating one-time use {@link Session} objects.
- * <p>
- * 	Contexts are created through the {@link ContextFactory#getContext(Class)} method.
- * <p>
- * 	Subclasses MUST implement a constructor method that takes in a {@link ContextFactory} parameter.
- * 	Besides that restriction, a context object can do anything you desire.  However, it MUST
- * 		be thread-safe and all fields should be declared final to prevent modification.
- * 	It should NOT be used for storing temporary or state information.
- *
- * @see ContextFactory
+ * Identifies a method as specifically designed to be overridden and augmented.
  */
-public abstract class Context {
-
-	/**
-	 * Constructor for this class.
-	 * <p>
-	 * Subclasses MUST implement the same constructor.
-	 *
-	 * @param configFactory The factory that created this config.
-	 */
-	public Context(ContextFactory configFactory) {}
-
-	/**
-	 * Returns the properties defined on this bean context as a simple map for debugging purposes.
-	 *
-	 * @return A new map containing the properties defined on this context.
-	 */
-	@Overrideable
-	public ObjectMap asMap() {
-		return new ObjectMap();
-	}
-
-	@Override /* Object */
-	public final String toString() {
-		try {
-			return asMap().toString(JsonSerializer.DEFAULT_LAX_READABLE);
-		} catch (SerializeException e) {
-			return e.getLocalizedMessage();
-		}
-	}
-}
+@Documented
+@Target({METHOD})
+@Inherited
+public @interface Overrideable {}

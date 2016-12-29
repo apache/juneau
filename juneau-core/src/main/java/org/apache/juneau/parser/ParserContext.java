@@ -159,4 +159,15 @@ public class ParserContext extends BeanContext {
 		this.inputStreamCharset = cf.getProperty(PARSER_inputStreamCharset, String.class, "UTF-8");
 		this.fileCharset = cf.getProperty(PARSER_fileCharset, String.class, "default");
 	}
+
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("ParserContext", new ObjectMap()
+				.append("trimStrings", trimStrings)
+				.append("strict", strict)
+				.append("inputStreamCharset", inputStreamCharset)
+				.append("fileCharset", fileCharset)
+			);
+	}
 }

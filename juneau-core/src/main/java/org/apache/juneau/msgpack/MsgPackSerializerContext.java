@@ -58,4 +58,11 @@ public final class MsgPackSerializerContext extends SerializerContext {
 	public MsgPackSerializerContext(ContextFactory cf) {
 		super(cf);
 	}
+
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("MsgPackSerializerContext", new ObjectMap()
+			);
+	}
 }

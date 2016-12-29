@@ -291,4 +291,20 @@ public final class XmlParserContext extends ParserContext {
 		resolver = cf.getProperty(XML_resolver, XMLResolver.class, null);
 		eventAllocator = cf.getProperty(XML_eventAllocator, XMLEventAllocator.class, null);
 	}
+
+	@Override /* Context */
+	public ObjectMap asMap() {
+		return super.asMap()
+			.append("XmlParserContext", new ObjectMap()
+				.append("xsiNs", xsiNs)
+				.append("trimWhitespace", trimWhitespace)
+				.append("validating", validating)
+				.append("coalescing", coalescing)
+				.append("replaceEntityReferences", replaceEntityReferences)
+				.append("preserveRootElement", preserveRootElement)
+				.append("reporter", reporter)
+				.append("resolver", resolver)
+				.append("eventAllocator", eventAllocator)
+			);
+	}
 }

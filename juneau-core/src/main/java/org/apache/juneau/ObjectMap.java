@@ -309,6 +309,20 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 		return this;
 	}
 
+	/**
+	 * Convenience method for adding a contents of another map to this map.
+	 * <p>
+	 * 	Equivalent to calling {@code putAll(m)}, but returns
+	 * 	this map so that the method can be chained.
+	 *
+	 * @param m The map whose contents should be added to this map.
+	 * @return This object (for method chaining).
+	 */
+	public ObjectMap appendAll(Map<String,Object> m) {
+		putAll(m);
+		return this;
+	}
+
 	@Override /* Map */
 	public Object get(Object key) {
 		Object o = super.get(key);
