@@ -15,7 +15,6 @@ package org.apache.juneau.rest.test;
 import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.client.*;
-import org.apache.juneau.rest.test.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
 import org.junit.*;
