@@ -14,8 +14,8 @@ package org.apache.juneau.microservice;
 
 import static org.apache.juneau.html.HtmlDocSerializerContext.*;
 
-import org.apache.juneau.server.annotation.*;
-import org.apache.juneau.server.jena.*;
+import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.jena.*;
 
 /**
  * Superclass for all REST resources with RDF support.

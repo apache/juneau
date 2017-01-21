@@ -18,9 +18,9 @@
   <comment>Sample code packaged as a microservice. NO_M2ECLIPSE_SUPPORT: Project files created with the maven-eclipse-plugin are not supported in M2Eclipse.</comment>
   <projects>
     <project>juneau-microservice</project>
-    <project>juneau-server</project>
+    <project>juneau-rest</project>
     <project>juneau-core</project>
-    <project>juneau-client</project>
+    <project>juneau-rest-client</project>
   </projects>
   <buildSpec>
     <buildCommand>

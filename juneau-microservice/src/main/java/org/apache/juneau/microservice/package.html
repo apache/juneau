@@ -611,7 +611,7 @@
 					<li><l>$ARG{key}, $ARG{key,default}</l> - Command-line arguments.
 				</ul>
 				Additional user-defined variables can be defined by overriding the {@link org.apache.juneau.microservice.Microservice#createVarResolver()} method.
-			<li class='m'>{@link org.apache.juneau.server.RestServlet#getConfig()} - An instance method to access it from inside a REST servlet.<br>
+			<li class='m'>{@link org.apache.juneau.rest.RestServlet#getConfig()} - An instance method to access it from inside a REST servlet.<br>
 				The following variables are available in addition to the variables defined above:
 				<ul>
 					<li><l>$I{key}, $I{key,default}</l> - Servlet initialization parameters.
@@ -640,33 +640,33 @@
 				<p>
 					Additional user-defined variables can be defined at this level by overriding the {@link org.apache.juneau.microservice.Resource#createVarResolver()} method.
 				</p>
-			<li class='m'>{@link org.apache.juneau.server.RestRequest#getConfig()} - An instance method to access it from inside a REST method.<br>
+			<li class='m'>{@link org.apache.juneau.rest.RestRequest#getConfig()} - An instance method to access it from inside a REST method.<br>
 				The following variables are available in addition to the variables defined above:
 				<ul>
-					<li><l>$L{key}, $L{key,args}</l> - Localized variables pulled from {@link org.apache.juneau.server.RestRequest#getMessage(String, Object...)}.
+					<li><l>$L{key}, $L{key,args}</l> - Localized variables pulled from {@link org.apache.juneau.rest.RestRequest#getMessage(String, Object...)}.
 					<li><l>$R{key}</l> - Request variables.
 					<ul>
-			 			<li><l>$R{attribute.X}</l> - Value returned by {@link org.apache.juneau.server.RestRequest#getAttribute(String)} converted to a string.
-			 			<li><l>$R{contextPath}</l> - Value returned by {@link org.apache.juneau.server.RestRequest#getContextPath()}.
-			 			<li><l>$R{formData.X}</l> - Value returned by {@link org.apache.juneau.server.RestRequest#getFormDataParameter(String)}.
-			 			<li><l>$R{header.X}</l> - Value returned by {@link org.apache.juneau.server.RestRequest#getHeader(String)}.
-			 			<li><l>$R{method}</l> - Value returned by {@link org.apache.juneau.server.RestRequest#getMethod()}.
-			 			<li><l>$R{methodSummary}</l> - Value returned by {@link org.apache.juneau.server.RestRequest#getMethodSummary()}.
-			 			<li><l>$R{methodDescription}</l> - Value returned by {@link org.apache.juneau.server.RestRequest#getMethodDescription()}.
-			 			<li><l>$R{path.X}</l> - Value returned by {@link org.apache.juneau.server.RestRequest#getPathParameter(String)}.
-			 			<li><l>$R{pathInfo}</l> - Value returned by {@link org.apache.juneau.server.RestRequest#getPathInfo()}.
-			 			<li><l>$R{query.X}</l> - Value returned by {@link org.apache.juneau.server.RestRequest#getQueryParameter(String)}.
-			 			<li><l>$R{requestParentURI}</l> - Value returned by {@link org.apache.juneau.server.RestRequest#getRequestParentURI()}.
-			 			<li><l>$R{requestURI}</l> - Value returned by {@link org.apache.juneau.server.RestRequest#getRequestURI()}.
-			 			<li><l>$R{servletDescription}</l> - Value returned by {@link org.apache.juneau.server.RestRequest#getServletDescription()}.
-			 			<li><l>$R{servletTitle}</l> - Value returned by {@link org.apache.juneau.server.RestRequest#getServletTitle()}.
-			 			<li><l>$R{servletParentURI}</l> - Value returned by {@link org.apache.juneau.server.RestRequest#getServletParentURI()}.
-			 			<li><l>$R{servletPath}</l> - Value returned by {@link org.apache.juneau.server.RestRequest#getServletPath()}.
-			 			<li><l>$R{servletURI}</l> - Value returned by {@link org.apache.juneau.server.RestRequest#getServletURI()}.
-			 			<li><l>$R{trimmedRequestURI}</l> - Value returned by {@link org.apache.juneau.server.RestRequest#getTrimmedRequestURI()}.
+			 			<li><l>$R{attribute.X}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getAttribute(String)} converted to a string.
+			 			<li><l>$R{contextPath}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getContextPath()}.
+			 			<li><l>$R{formData.X}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getFormDataParameter(String)}.
+			 			<li><l>$R{header.X}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getHeader(String)}.
+			 			<li><l>$R{method}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getMethod()}.
+			 			<li><l>$R{methodSummary}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getMethodSummary()}.
+			 			<li><l>$R{methodDescription}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getMethodDescription()}.
+			 			<li><l>$R{path.X}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getPathParameter(String)}.
+			 			<li><l>$R{pathInfo}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getPathInfo()}.
+			 			<li><l>$R{query.X}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getQueryParameter(String)}.
+			 			<li><l>$R{requestParentURI}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getRequestParentURI()}.
+			 			<li><l>$R{requestURI}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getRequestURI()}.
+			 			<li><l>$R{servletDescription}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getServletDescription()}.
+			 			<li><l>$R{servletTitle}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getServletTitle()}.
+			 			<li><l>$R{servletParentURI}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getServletParentURI()}.
+			 			<li><l>$R{servletPath}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getServletPath()}.
+			 			<li><l>$R{servletURI}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getServletURI()}.
+			 			<li><l>$R{trimmedRequestURI}</l> - Value returned by {@link org.apache.juneau.rest.RestRequest#getTrimmedRequestURI()}.
 					</ul>
-					<li><l>$SA{key,mediaType}</l> - Object returned by {@link org.apache.juneau.server.RestRequest#getAttribute(String)} converted to a string using the serializer registered to handle the specified media type.
-					<li><l>$UE{...}</l> - URL-Encode the specified value by calling {@link org.apache.juneau.server.RestUtils#encode(String)}.
+					<li><l>$SA{key,mediaType}</l> - Object returned by {@link org.apache.juneau.rest.RestRequest#getAttribute(String)} converted to a string using the serializer registered to handle the specified media type.
+					<li><l>$UE{...}</l> - URL-Encode the specified value by calling {@link org.apache.juneau.rest.RestUtils#encode(String)}.
 				</ul>
 				<h6 class='figure'>Example usage:</h6>
 				<p class='bcode'>
@@ -707,7 +707,7 @@
 	<ck>MyHelloResource.HelloMessage</ck> = <cv>Hello {0}!</cv> 
 				</p>
 				<p>
-					Additional user-defined variables can be defined at this level by overriding the {@link org.apache.juneau.server.RestServlet#createVarResolver()} method.
+					Additional user-defined variables can be defined at this level by overriding the {@link org.apache.juneau.rest.RestServlet#createVarResolver()} method.
 				</p>
 		</ul>
 		<p>
@@ -805,7 +805,7 @@
 	</p>
 	<h6 class='topic'>Additional Information</h6>
 	<ul class='javahierarchy'>
-		<li class='p'><a href='../server/package-summary.html#TOC'><l>org.apache.juneau.server</l></a> - Juneau Server API Javadocs.
+		<li class='p'><a href='../server/package-summary.html#TOC'><l>org.apache.juneau.rest</l></a> - Juneau Server API Javadocs.
 	</ul>
 </div>
 

@@ -67,7 +67,7 @@
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/src/osgi-bundles</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-server</artifactId>
+									<artifactId>juneau-rest</artifactId>
 									<version>${project.version}</version>
 									<type>jar</type>
 									<classifier>sources</classifier>
@@ -75,14 +75,14 @@
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/bin/osgi-bundles</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-server</artifactId>
+									<artifactId>juneau-rest</artifactId>
 									<version>${project.version}</version>
 								</artifactItem>
 								
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/src/osgi-bundles</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-client</artifactId>
+									<artifactId>juneau-rest-client</artifactId>
 									<version>${project.version}</version>
 									<type>jar</type>
 									<classifier>sources</classifier>
@@ -90,7 +90,7 @@
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/bin/osgi-bundles</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-client</artifactId>
+									<artifactId>juneau-rest-client</artifactId>
 									<version>${project.version}</version>
 								</artifactItem>
 								

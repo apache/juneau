@@ -24,7 +24,7 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.microservice.resources.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.server.annotation.*;
+import org.apache.juneau.rest.annotation.*;
 import org.eclipse.jetty.security.*;
 import org.eclipse.jetty.security.authentication.*;
 import org.eclipse.jetty.server.*;

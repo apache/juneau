@@ -13,7 +13,7 @@
 package org.apache.juneau.microservice.resources;
 
 import org.apache.juneau.microservice.*;
-import org.apache.juneau.server.annotation.*;
+import org.apache.juneau.rest.annotation.*;
 
 /**
  * Provides the capability to shut down this REST microservice through a REST call.

@@ -107,7 +107,7 @@
 						<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 							<manifestEntries>
 								<Main-Class>org.apache.juneau.microservice.RestMicroservice</Main-Class>
-								<Rest-Resources>org.apache.juneau.server.samples.RootResources</Rest-Resources>
+								<Rest-Resources>org.apache.juneau.rest.samples.RootResources</Rest-Resources>
 								<Main-ConfigFile>samples.cfg</Main-ConfigFile>
 							</manifestEntries>
 						</transformer>

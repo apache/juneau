@@ -17,9 +17,9 @@
   <name>juneau-microservice</name>
   <comment>API for creating standalone executable jars that can be used to start lightweight configurable REST interfaces. NO_M2ECLIPSE_SUPPORT: Project files created with the maven-eclipse-plugin are not supported in M2Eclipse.</comment>
   <projects>
-    <project>juneau-server</project>
+    <project>juneau-rest</project>
     <project>juneau-core</project>
-    <project>juneau-client</project>
+    <project>juneau-rest-client</project>
   </projects>
   <buildSpec>
     <buildCommand>

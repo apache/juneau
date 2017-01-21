@@ -21,15 +21,15 @@
 		 
 	<servlet>
 		<servlet-name>sample</servlet-name>
-		<servlet-class>org.apache.juneau.server.samples.RootResources</servlet-class>
+		<servlet-class>org.apache.juneau.rest.samples.RootResources</servlet-class>
 	</servlet>
 	<servlet>
 		<servlet-name>test</servlet-name>
-		<servlet-class>org.apache.juneau.server.samples.test.Root</servlet-class>
+		<servlet-class>org.apache.juneau.rest.samples.test.Root</servlet-class>
 	</servlet>
 	<servlet>
 		<servlet-name>testuris</servlet-name>
-		<servlet-class>org.apache.juneau.server.samples.test.TestUris</servlet-class>
+		<servlet-class>org.apache.juneau.rest.samples.test.TestUris</servlet-class>
 	</servlet>
 	
 	<servlet-mapping>

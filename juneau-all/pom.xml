@@ -36,12 +36,12 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-server</artifactId>
+			<artifactId>juneau-rest</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-client</artifactId>
+			<artifactId>juneau-rest-client</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -66,8 +66,8 @@
 					<artifactSet>
 						<includes>
 							<include>org.apache.juneau:juneau-core</include>
-							<include>org.apache.juneau:juneau-server</include>
-							<include>org.apache.juneau:juneau-client</include>
+							<include>org.apache.juneau:juneau-rest</include>
+							<include>org.apache.juneau:juneau-rest-client</include>
 							<include>org.apache.juneau:juneau-microservice</include>
 						</includes>
 					</artifactSet>

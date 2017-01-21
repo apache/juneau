@@ -21,8 +21,8 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.ini.*;
 import org.apache.juneau.microservice.*;
-import org.apache.juneau.server.*;
-import org.apache.juneau.server.annotation.*;
+import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.annotation.*;
 
 /**
  * Shows contents of the microservice configuration file.

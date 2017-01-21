@@ -92,11 +92,11 @@
 
 	<modules>
 		<module>juneau-core</module>
-		<module>juneau-client</module>
-		<module>juneau-server</module>
+		<module>juneau-rest-client</module>
+		<module>juneau-rest</module>
 		<module>juneau-microservice</module>
 		<module>juneau-samples</module>
-		<module>juneau-server-test</module>
+		<module>juneau-rest-test</module>
 		<module>juneau-all</module>
 		<module>juneau-distrib</module>
 	</modules>
@@ -120,6 +120,7 @@
 				<configuration>
 					<excludes>
 						<exclude>**/*.log</exclude>
+						<exclude>**/*.classpath</exclude>
 						<exclude>**/*.log.*</exclude>
 						<exclude>**/target/**</exclude>
 						<exclude>DEPENDENCIES</exclude>

@@ -14,7 +14,7 @@ package org.apache.juneau.microservice.resources;
 
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.html.HtmlDocSerializerContext.*;
-import static org.apache.juneau.server.RestServletContext.*;
+import static org.apache.juneau.rest.RestServletContext.*;
 
 import java.io.*;
 import java.net.*;
@@ -27,10 +27,10 @@ import org.apache.juneau.dto.*;
 import org.apache.juneau.ini.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.microservice.*;
-import org.apache.juneau.server.*;
-import org.apache.juneau.server.annotation.*;
-import org.apache.juneau.server.annotation.Properties;
-import org.apache.juneau.server.converters.*;
+import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.annotation.Properties;
+import org.apache.juneau.rest.converters.*;
 import org.apache.juneau.transforms.*;
 
 /**

@@ -35,12 +35,12 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-server</artifactId>
+			<artifactId>juneau-rest</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-client</artifactId>
+			<artifactId>juneau-rest-client</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

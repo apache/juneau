@@ -15,7 +15,7 @@ package org.apache.juneau.microservice.resources;
 import static java.util.logging.Level.*;
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.html.HtmlDocSerializerContext.*;
-import static org.apache.juneau.server.RestServletContext.*;
+import static org.apache.juneau.rest.RestServletContext.*;
 
 import java.io.*;
 import java.net.*;
@@ -27,9 +27,9 @@ import javax.servlet.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.microservice.*;
-import org.apache.juneau.server.*;
-import org.apache.juneau.server.annotation.*;
-import org.apache.juneau.server.converters.*;
+import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.converters.*;
 import org.apache.juneau.transforms.*;
 import org.apache.juneau.utils.*;
 
@@ -60,7 +60,7 @@ import org.apache.juneau.utils.*;
 	messages="nls/DirectoryResource",
 	properties={
 		@Property(name=HTML_uriAnchorText, value=PROPERTY_NAME),
-		@Property(name=HTMLDOC_links, value="{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$R{servletParentURI}/source?classes=(org.apache.juneau.server.samples.DirectoryResource)'}"),
+		@Property(name=HTMLDOC_links, value="{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$R{servletParentURI}/source?classes=(org.apache.juneau.rest.samples.DirectoryResource)'}"),
 		@Property(name=REST_allowMethodParam, value="*"),
 		@Property(name="DirectoryResource.rootDir", value=""),
 		@Property(name="DirectoryResource.allowViews", value="false"),
