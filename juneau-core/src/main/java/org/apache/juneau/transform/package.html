@@ -82,6 +82,11 @@
 		<li>{@link org.apache.juneau.transform.BeanFilter} - Transforms that alter the way beans are handled.
 		<li>{@link org.apache.juneau.transform.PojoSwap} - Transforms that swap non-serializable POJOs with serializable POJOs during serialization 
 			(and optionally vis-versa during parsing).
+			<ol>
+				<li>{@link org.apache.juneau.transform.StringSwap} - Convenience subclass for swaps that convert objects to strings.
+				<li>{@link org.apache.juneau.transform.MapSwap} - Convenience subclass for swaps that convert objects to maps.
+			</ol>
+		</li>
 	</ul>
 	<p>
 		Transforms are added to serializers and parsers in a variety of ways:
@@ -426,7 +431,7 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Sample swap for converting Dates to ISO8601 strings.</jc>
-	<jk>public class</jk> MyDateSwap <jk>extends</jk> PojoSwap&lt;Date,String&gt; {
+	<jk>public class</jk> MyDateSwap <jk>extends</jk> StringSwap&lt;Date&gt; {
 		
 		<jc>// ISO8601 formatter.</jc>
 		<jk>private</jk> DateFormat <jf>format</jf> = <jk>new</jk> SimpleDateFormat(<js>"yyyy-MM-dd'T'HH:mm:ssZ"</js>);
@@ -492,7 +497,7 @@
 			Another example of a <code>PojoSwap</code> is one that converts <code><jk>byte</jk>[]</code> arrays to BASE64-encoded strings:
 		</p>
 		<p class='bcode'>
-	<jk>public class</jk> ByteArrayBase64Swap <jk>extends</jk> PojoSwap&lt;<jk>byte</jk>[],String&gt; {
+	<jk>public class</jk> ByteArrayBase64Swap <jk>extends</jk> StringSwap&lt;<jk>byte</jk>[]&gt; {
 	
 		<ja>@Override</ja>
 		<jk>public</jk> String swap(<jk>byte</jk>[] b) <jk>throws</jk> SerializeException {
@@ -556,7 +561,7 @@
 		
 		<h6 class='topic'>Valid swapped class types</h6>
 		<p>
-			The swapped class type can be any serializable class type as defined in the <a href='../package-summary.html#PojoCategories'>POJO categories</a> table.
+			The swapped class type can be any serializable class type as defined in the <a href='../../../../overview-summary.html#Core.PojoCategories'>POJO categories</a> table.
 		</p>
 	</div>
 	

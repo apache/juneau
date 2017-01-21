@@ -32,7 +32,7 @@ public class CognosXmlTest {
 	@Test
 	public void test() throws Exception {
 		String expected = ""
-			+ "<dataset xmlns='http://developer.cognos.com/schemas/xmldata/1/' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>\n"
+			+ "<dataset xmlns='http://developer.cognos.com/schemas/xmldata/1/'>\n"
 			+ "	<metadata>\n"
 			+ "		<item name='asOfDate' type='xs:string' length='12'/>\n"
 			+ "		<item name='rateOfReturn' type='xs:double'/>\n"
@@ -74,7 +74,12 @@ public class CognosXmlTest {
 			new Column("productLineCode", "xs:int")
 		};
 
-		XmlSerializer s = new XmlSerializer().setProperty(SERIALIZER_useIndentation, true).setProperty(SERIALIZER_quoteChar, '\'').setProperty(XML_defaultNamespaceUri, "cognos");
+		XmlSerializer s = new XmlSerializer()
+			.setProperty(SERIALIZER_useIndentation, true)
+			.setProperty(SERIALIZER_quoteChar, '\'')
+			.setProperty(XML_defaultNamespace, "cognos")
+			.setProperty(XML_enableNamespaces, true)
+			.setProperty(XML_addNamespaceUrisToRoot, true);
 
 		DataSet ds = new DataSet(c, rows, BeanContext.DEFAULT.createSession());
 

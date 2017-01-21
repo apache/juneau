@@ -1107,7 +1107,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 		</tr>
 	 * 	</table>
 	 * <p>
-	 * 	Refer to <a href='../core/package-summary.html#PojoCategories' class='doclink'>POJO Categories</a> for a complete definition of supported POJOs.
+	 * 	Refer to <a href='../../../../overview-summary.html#Core.PojoCategories' class='doclink'>POJO Categories</a> for a complete definition of supported POJOs.
 	 *
 	 * @param type The class type to instantiate.
 	 * @param <T> The class type to instantiate.

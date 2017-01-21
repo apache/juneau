@@ -43,7 +43,7 @@ public class XmlClassMeta extends ClassMetaExtended {
 			this.childName = StringUtils.nullIfEmpty(xml.childName());
 
 		} else {
-			this.format = XmlFormat.NORMAL;
+			this.format = XmlFormat.DEFAULT;
 			this.childName = null;
 		}
 	}
@@ -60,7 +60,7 @@ public class XmlClassMeta extends ClassMetaExtended {
 	/**
 	 * Returns the {@link Xml#format()} annotation defined on the class.
 	 *
-	 * @return The value of the {@link Xml#format()} annotation, or {@link XmlFormat#NORMAL} if not specified.
+	 * @return The value of the {@link Xml#format()} annotation, or {@link XmlFormat#DEFAULT} if not specified.
 	 */
 	protected XmlFormat getFormat() {
 		return format;

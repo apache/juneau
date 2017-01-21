@@ -89,7 +89,7 @@ public class UonParser extends ReaderParser {
 			eType = (ClassMeta<T>)object();
 		PojoSwap<T,Object> transform = (PojoSwap<T,Object>)eType.getPojoSwap();
 		ClassMeta<?> sType = eType.getSerializedClassMeta();
-		BeanDictionary bd = (pMeta == null ? session.getBeanDictionary() : pMeta.getBeanDictionary());
+		BeanRegistry breg = (pMeta == null ? session.getBeanRegistry() : pMeta.getBeanRegistry());
 
 		Object o = null;
 
@@ -100,7 +100,7 @@ public class UonParser extends ReaderParser {
 
 		if (c == -1 || c == AMP) {
 			// If parameter is blank and it's an array or collection, return an empty list.
-			if (sType.isArray() || sType.isCollection())
+			if (sType.isCollectionOrArray())
 				o = sType.newInstance();
 			else if (sType.isString() || sType.isObject())
 				o = "";
@@ -117,7 +117,7 @@ public class UonParser extends ReaderParser {
 			} else if (flag == 'o') {
 				ObjectMap m = new ObjectMap(session);
 				parseIntoMap(session, r, m, string(), object(), pMeta);
-				o = bd.cast(m);
+				o = breg.cast(m);
 			} else if (flag == 'a') {
 				Collection l = new ObjectList(session);
 				o = parseIntoCollection(session, r, l, sType.getElementType(), isUrlParamValue, pMeta);
@@ -142,7 +142,7 @@ public class UonParser extends ReaderParser {
 				parseIntoMap(session, r, m, string(), object(), pMeta);
 				// Handle case where it's a collection, but serialized as a map with a _type or _value key.
 				if (m.containsKey(session.getBeanTypePropertyName()))
-					o = bd.cast(m);
+					o = breg.cast(m);
 				// Handle case where it's a collection, but only a single value was specified.
 				else {
 					Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance(outer) : new ObjectList(session));
@@ -173,7 +173,7 @@ public class UonParser extends ReaderParser {
 				parseIntoMap(session, r, m, string(), object(), pMeta);
 				// Handle case where it's an array, but serialized as a map with a _type or _value key.
 				if (m.containsKey(session.getBeanTypePropertyName()))
-					o = bd.cast(m);
+					o = breg.cast(m);
 				// Handle case where it's an array, but only a single value was specified.
 				else {
 					ArrayList l = new ArrayList(1);
@@ -189,7 +189,7 @@ public class UonParser extends ReaderParser {
 			ObjectMap m = new ObjectMap(session);
 			parseIntoMap(session, r, m, string(), object(), pMeta);
 			if (m.containsKey(session.getBeanTypePropertyName()))
-				o = bd.cast(m);
+				o = breg.cast(m);
 			else
 				throw new ParseException(session, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.getInnerClass().getName(), sType.getNotABeanReason());
 		} else {

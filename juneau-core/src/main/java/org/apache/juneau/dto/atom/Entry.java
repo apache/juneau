@@ -17,6 +17,7 @@ import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.transforms.*;
+import static org.apache.juneau.dto.atom.Utils.*;
 
 /**
  * Represents an <code>atomEntry</code> construct in the RFC4287 specification.
@@ -42,10 +43,10 @@ import org.apache.juneau.transforms.*;
  * 		}
  * </p>
  * <p>
- * 	Refer to {@link org.apache.juneau.dto.atom} for further information about ATOM support.
- * </p>
+ * Refer to {@link org.apache.juneau.dto.atom} for further information about ATOM support.
  */
 @Bean(typeName="entry")
+@SuppressWarnings("hiding")
 public class Entry extends CommonEntry {
 
 	private Content content;
@@ -61,6 +62,17 @@ public class Entry extends CommonEntry {
 	 * @param updated The updated timestamp of this entry.
 	 */
 	public Entry(Id id, Text title, Calendar updated) {
+		super(id, title, updated);
+	}
+
+	/**
+	 * Normal constructor.
+	 *
+	 * @param id The ID of this entry.
+	 * @param title The title of this entry.
+	 * @param updated The updated timestamp of this entry.
+	 */
+	public Entry(String id, String title, String updated) {
 		super(id, title, updated);
 	}
 
@@ -87,7 +99,8 @@ public class Entry extends CommonEntry {
 	 * @param content The content of this entry.
 	 * @return This object (for method chaining).
 	 */
-	public Entry setContent(Content content) {
+	@BeanProperty(name="content")
+	public Entry content(Content content) {
 		this.content = content;
 		return this;
 	}
@@ -108,8 +121,21 @@ public class Entry extends CommonEntry {
 	 * @param published The publish timestamp of this entry.
 	 * @return This object (for method chaining).
 	 */
- 	public Entry setPublished(Calendar published) {
+	@BeanProperty(name="published")
+ 	public Entry published(Calendar published) {
  		this.published = published;
+ 		return this;
+ 	}
+
+	/**
+	 * Sets the publish timestamp of this entry.
+	 *
+	 * @param published The publish timestamp of this entry in ISO8601 format.
+	 * @return This object (for method chaining).
+	 */
+	@BeanProperty(name="published")
+ 	public Entry published(String published) {
+ 		this.published = parseDateTime(published);
  		return this;
  	}
 
@@ -128,7 +154,8 @@ public class Entry extends CommonEntry {
 	 * @param source The source of this entry.
 	 * @return This object (for method chaining).
 	 */
-	public Entry setSource(Source source) {
+	@BeanProperty(name="source")
+	public Entry source(Source source) {
 		this.source = source;
 		return this;
 	}
@@ -148,97 +175,103 @@ public class Entry extends CommonEntry {
 	 * @param summary The summary of this entry.
 	 * @return This object (for method chaining).
 	 */
-	public Entry setSummary(Text summary) {
+	@BeanProperty(name="summary")
+	public Entry summary(Text summary) {
 		this.summary = summary;
 		return this;
 	}
 
+	/**
+	 * Sets the summary of this entry.
+	 *
+	 * @param summary The summary of this entry.
+	 * @return This object (for method chaining).
+	 */
+	@BeanProperty(name="summary")
+	public Entry summary(String summary) {
+		this.summary = new Text(summary);
+		return this;
+	}
 
 	//--------------------------------------------------------------------------------
 	// Overridden setters (to simplify method chaining)
 	//--------------------------------------------------------------------------------
 
 	@Override /* CommonEntry */
-	public Entry setAuthors(List<Person> authors) {
-		super.setAuthors(authors);
+	public Entry authors(Person...authors) {
+		super.authors(authors);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Entry addAuthors(Person...authors) {
-		super.addAuthors(authors);
+	public Entry categories(Category...categories) {
+		super.categories(categories);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Entry setCategories(List<Category> categories) {
-		super.setCategories(categories);
+	public Entry contributors(Person...contributors) {
+		super.contributors(contributors);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Entry addCategories(Category...categories) {
-		super.addCategories(categories);
+	public Entry id(Id id) {
+		super.id(id);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Entry setContributors(List<Person> contributors) {
-		super.setContributors(contributors);
+	public Entry links(Link...links) {
+		super.links(links);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Entry addContributors(Person...contributors) {
-		super.addContributors(contributors);
+	public Entry rights(Text rights) {
+		super.rights(rights);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Entry setId(Id id) {
-		super.setId(id);
+	public Entry rights(String rights) {
+		super.rights(rights);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Entry setLinks(List<Link> links) {
-		super.setLinks(links);
+	public Entry title(Text title) {
+		super.title(title);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Entry addLinks(Link...links) {
-		super.addLinks(links);
+	public Entry title(String title) {
+		super.title(title);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Entry setRights(Text rights) {
-		super.setRights(rights);
+	public Entry updated(Calendar updated) {
+		super.updated(updated);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Entry setTitle(Text title) {
-		super.setTitle(title);
-		return this;
-	}
-
-	@Override /* CommonEntry */
-	public Entry setUpdated(Calendar updated) {
-		super.setUpdated(updated);
+	public Entry updated(String updated) {
+		super.updated(updated);
 		return this;
 	}
 
 	@Override /* Common */
-	public Entry setBase(URI base) {
-		super.setBase(base);
+	public Entry base(URI base) {
+		super.base(base);
 		return this;
 	}
 
 	@Override /* Common */
-	public Entry setLang(String lang) {
-		super.setLang(lang);
+	public Entry lang(String lang) {
+		super.lang(lang);
 		return this;
 	}
 }

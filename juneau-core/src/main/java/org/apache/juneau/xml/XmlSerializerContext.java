@@ -38,24 +38,10 @@ import org.apache.juneau.serializer.*;
  * <table class='styled' style='border-collapse: collapse;'>
  * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th><th>Session overridable</th></tr>
  * 	<tr>
- * 		<td>{@link #XML_addJsonTypeAttrs}</td>
- * 		<td>Add JSON type attributes to output.</td>
- * 		<td><code>Boolean</code></td>
- * 		<td><jk>false</jk></td>
- * 		<td><jk>true</jk></td>
- * 	</tr>
- * 	<tr>
- * 		<td>{@link #XML_addJsonStringTypeAttrs}</td>
- * 		<td>Add JSON type attributes for strings to output.</td>
- * 		<td><code>Boolean</code></td>
- * 		<td><jk>false</jk></td>
- * 		<td><jk>true</jk></td>
- * 	</tr>
- * 	<tr>
  * 		<td>{@link #XML_enableNamespaces}</td>
  * 		<td>Enable support for XML namespaces.</td>
  * 		<td><code>Boolean</code></td>
- * 		<td><jk>true</jk></td>
+ * 		<td><jk>false</jk></td>
  * 		<td><jk>true</jk></td>
  * 	</tr>
  * 	<tr>
@@ -69,11 +55,11 @@ import org.apache.juneau.serializer.*;
  * 		<td>{@link #XML_addNamespaceUrisToRoot}</td>
  * 		<td>Add namespace URLs to the root element.</td>
  * 		<td><code>Boolean</code></td>
- * 		<td><jk>true</jk></td>
+ * 		<td><jk>false</jk></td>
  * 		<td><jk>true</jk></td>
  * 	</tr>
  * 	<tr>
- * 		<td>{@link #XML_defaultNamespaceUri}</td>
+ * 		<td>{@link #XML_defaultNamespace}</td>
  * 		<td>Default namespace URI.</td>
  * 		<td><code>String</code></td>
  * 		<td><jk>null</jk></td>
@@ -84,13 +70,6 @@ import org.apache.juneau.serializer.*;
  * 		<td>XMLSchema namespace.</td>
  * 		<td>{@link Namespace}</td>
  * 		<td><code>{name:<js>'xs'</js>,uri:<js>'http://www.w3.org/2001/XMLSchema'</js>}</code></td>
- * 		<td><jk>true</jk></td>
- * 	</tr>
- * 	<tr>
- * 		<td>{@link #XML_xsiNamespace}</td>
- * 		<td>XMLSchema-Instance namespace.</td>
- * 		<td>{@link Namespace}</td>
- * 		<td><code>{name:<js>'xsi'</js>,uri:<js>'http://www.w3.org/2001/XMLSchema-instance'</js>}</code></td>
  * 		<td><jk>true</jk></td>
  * 	</tr>
  * 	<tr>
@@ -113,45 +92,12 @@ import org.apache.juneau.serializer.*;
 public class XmlSerializerContext extends SerializerContext {
 
 	/**
-	 * <b>Configuration property:</b>  Add JSON type attributes to output.
-	 * <p>
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"XmlSerializer.addJsonTypeAttrs"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
-	 * <p>
-	 * If <js>true</jk>, {@code type} attributes will be added to elements in the XML for number/boolean/null nodes.
-	 */
-	public static final String XML_addJsonTypeAttrs = "XmlSerializer.addJsonTypeAttrs";
-
-	/**
-	 * <b>Configuration property:</b>  Add JSON type attributes for strings to output.
-	 * <p>
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"XmlSerializer.addJsonStringTypeAttrs"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
-	 * <p>
-	 * If <jk>true</jk>, {@code type} attributes will be added to elements in the XML for string nodes.
-	 * <p>
-	 * By default, these attributes are not added, and the parser will assume that the content type
-	 * of the node is string by default.
-	 * <p>
-	 * This feature is disabled if {@link #XML_addJsonTypeAttrs} is disabled.
-	 */
-	public static final String XML_addJsonStringTypeAttrs = "XmlSerializer.addJsonStringTypeAttrs";
-
-	/**
 	 * <b>Configuration property:</b>  Enable support for XML namespaces.
 	 * <p>
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"XmlSerializer.enableNamespaces"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>true</jk>
+	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
@@ -194,7 +140,7 @@ public class XmlSerializerContext extends SerializerContext {
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"XmlSerializer.addNamespaceUrisToRoot"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>true</jk>
+	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
@@ -206,18 +152,18 @@ public class XmlSerializerContext extends SerializerContext {
 	public static final String XML_addNamespaceUrisToRoot = "XmlSerializer.addNamespaceUrisToRoot";
 
 	/**
-	 * <b>Configuration property:</b>  Default namespace URI.
+	 * <b>Configuration property:</b>  Default namespace.
 	 * <p>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"XmlSerializer.defaultNamespaceUri"</js>
+	 * 	<li><b>Name:</b> <js>"XmlSerializer.defaultNamespace"</js>
 	 * 	<li><b>Data type:</b> <code>String</code>
-	 * 	<li><b>Default:</b> <jk>null</jk>
+	 * 	<li><b>Default:</b> <js>"{juneau:'http://www.apache.org/2013/Juneau'}"</js>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
 	 * Specifies the default namespace URI for this document.
 	 */
-	public static final String XML_defaultNamespaceUri = "XmlSerializer.defaultNamespaceUri";
+	public static final String XML_defaultNamespace = "XmlSerializer.defaultNamespace";
 
 	/**
 	 * <b>Configuration property:</b>  XMLSchema namespace.
@@ -235,20 +181,6 @@ public class XmlSerializerContext extends SerializerContext {
 	public static final String XML_xsNamespace = "XmlSerializer.xsNamespace";
 
 	/**
-	 * <b>Configuration property:</b>  XMLSchema-Instance namespace.
-	 * <p>
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"XmlSerializer.xsiNamespace"</js>
-	 * 	<li><b>Data type:</b> {@link Namespace}
-	 * 	<li><b>Default:</b> <code>{name:<js>'xsi'</js>,uri:<js>'http://www.w3.org/2001/XMLSchema-instance'</js>}</code>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
-	 * <p>
-	 * Specifies the namespace of the <code>XMLSchema-instance</code> namespace used for<code>nil=<jk>true</jk></code> attributes.
-	 */
-	public static final String XML_xsiNamespace = "XmlSerializer.xsiNamespace";
-
-	/**
 	 * <b>Configuration property:</b>  Default namespaces.
 	 * <p>
 	 * <ul>
@@ -260,12 +192,10 @@ public class XmlSerializerContext extends SerializerContext {
 	 * <p>
 	 * The default list of namespaces associated with this serializer.
 	 */
-	public static final String XML_namespaces = "XmlSerializer.namespaces";
+	public static final String XML_namespaces = "XmlSerializer.namespaces.list";
 
 
 	final boolean
-		addJsonTypeAttrs,
-		addJsonStringTypeAttrs,
 		autoDetectNamespaces,
 		enableNamespaces,
 		addNamespaceUrlsToRoot;
@@ -273,7 +203,6 @@ public class XmlSerializerContext extends SerializerContext {
 	final String defaultNamespace;
 
 	final Namespace
-		xsiNamespace,
 		xsNamespace;
 
 	final Namespace[] namespaces;
@@ -287,14 +216,11 @@ public class XmlSerializerContext extends SerializerContext {
 	 */
 	public XmlSerializerContext(ContextFactory cf) {
 		super(cf);
-		addJsonTypeAttrs = cf.getProperty(XML_addJsonTypeAttrs, boolean.class, false);
-		addJsonStringTypeAttrs = cf.getProperty(XML_addJsonStringTypeAttrs, boolean.class, false);
 		autoDetectNamespaces = cf.getProperty(XML_autoDetectNamespaces, boolean.class, true);
-		enableNamespaces = cf.getProperty(XML_enableNamespaces, boolean.class, true);
-		addNamespaceUrlsToRoot = cf.getProperty(XML_addNamespaceUrisToRoot, boolean.class, true);
-		defaultNamespace = cf.getProperty(XML_defaultNamespaceUri, String.class, "{juneau:'http://www.apache.org/2013/Juneau'}");
+		enableNamespaces = cf.getProperty(XML_enableNamespaces, boolean.class, false);
+		addNamespaceUrlsToRoot = cf.getProperty(XML_addNamespaceUrisToRoot, boolean.class, false);
+		defaultNamespace = cf.getProperty(XML_defaultNamespace, String.class, "{juneau:'http://www.apache.org/2013/Juneau'}");
 		xsNamespace = cf.getProperty(XML_xsNamespace, Namespace.class, new Namespace("xs", "http://www.w3.org/2001/XMLSchema"));
-		xsiNamespace = cf.getProperty(XML_xsiNamespace, Namespace.class, new Namespace("xsi", "http://www.w3.org/2001/XMLSchema-instance"));
 		namespaces = cf.getProperty(XML_namespaces, Namespace[].class, new Namespace[0]);
 	}
 
@@ -302,14 +228,11 @@ public class XmlSerializerContext extends SerializerContext {
 	public ObjectMap asMap() {
 		return super.asMap()
 			.append("XmlSerializerContext", new ObjectMap()
-				.append("addJsonTypeAttrs", addJsonTypeAttrs)
-				.append("addJsonStringTypeAttrs", addJsonStringTypeAttrs)
 				.append("autoDetectNamespaces", autoDetectNamespaces)
 				.append("enableNamespaces", enableNamespaces)
 				.append("addNamespaceUrlsToRoot", addNamespaceUrlsToRoot)
 				.append("defaultNamespace", defaultNamespace)
 				.append("xsNamespace", xsNamespace)
-				.append("xsiNamespace", xsiNamespace)
 				.append("namespaces", namespaces)
 			);
 	}

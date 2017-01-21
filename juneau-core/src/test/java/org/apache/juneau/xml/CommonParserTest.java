@@ -74,11 +74,11 @@ public class CommonParserTest {
 		t2.add(new A3("name0","value0"));
 		t2.add(new A3("name1","value1"));
 		t1.list = t2;
-		String r = XmlSerializer.DEFAULT.serialize(t1);
+		String r = XmlSerializer.DEFAULT_NS.serialize(t1);
 		t1 = p.parse(r, A1.class);
 		assertEquals("value1", t1.list.get(1).value);
 
-		r = XmlSerializer.DEFAULT.serialize(t1);
+		r = XmlSerializer.DEFAULT_NS.serialize(t1);
 		t1 = p.parse(r, A1.class);
 		assertEquals("value1", t1.list.get(1).value);
 	}

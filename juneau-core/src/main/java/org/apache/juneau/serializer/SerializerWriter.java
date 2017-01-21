@@ -235,6 +235,19 @@ public class SerializerWriter extends Writer {
 	}
 
 	/**
+	 * Writes a newline to the writer if the {@code useIndentation} setting is enabled and the boolean flag is true.
+	 *
+	 * @param b The boolean flag.
+	 * @return This object (for method chaining).
+	 * @throws IOException If a problem occurred trying to write to the writer.
+	 */
+	public SerializerWriter nlIf(boolean b) throws IOException {
+		if (b && useIndentation)
+			out.write('\n');
+		return this;
+	}
+
+	/**
 	 * Writes the specified text to the writer.
 	 *
 	 * @param text The text to write.

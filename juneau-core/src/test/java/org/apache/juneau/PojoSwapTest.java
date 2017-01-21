@@ -43,7 +43,7 @@ public class PojoSwapTest {
 		assertEquals("{xfoox:'xbarx'}", r);
 	}
 
-	public static class ASwap extends PojoSwap<String,String> {
+	public static class ASwap extends StringSwap<String> {
 		@Override
 		public String swap(BeanSession session, String o) throws SerializeException {
 			return "x" + o + "x";

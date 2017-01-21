@@ -53,7 +53,7 @@ public final class MsgPackParser extends InputStreamParser {
 		PojoSwap<T,Object> transform = (PojoSwap<T,Object>)eType.getPojoSwap();
 		ClassMeta<?> sType = eType.getSerializedClassMeta();
 		session.setCurrentClass(sType);
-		BeanDictionary bd = (pMeta == null ? session.getBeanDictionary() : pMeta.getBeanDictionary());
+		BeanRegistry breg = (pMeta == null ? session.getBeanRegistry() : pMeta.getBeanRegistry());
 
 		Object o = null;
 		DataType dt = is.readDataType();
@@ -83,7 +83,7 @@ public final class MsgPackParser extends InputStreamParser {
 				ObjectMap om = new ObjectMap(session);
 				for (int i = 0; i < length; i++)
 					om.put(parseAnything(session, string(), is, outer, pMeta), parseAnything(session, object(), is, om, pMeta));
-				o = bd.cast(om);
+				o = breg.cast(om);
 			}
 
 			if (sType.isObject()) {
@@ -140,7 +140,7 @@ public final class MsgPackParser extends InputStreamParser {
 					ObjectMap m = new ObjectMap(session);
 					for (int i = 0; i < length; i++)
 						m.put(parseAnything(session, string(), is, outer, pMeta), parseAnything(session, object(), is, m, pMeta));
-					o = bd.cast(m);
+					o = breg.cast(m);
 				} else if (dt == ARRAY) {
 					Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance() : new ObjectList(session));
 					for (int i = 0; i < length; i++)
@@ -154,7 +154,7 @@ public final class MsgPackParser extends InputStreamParser {
 					ObjectMap m = new ObjectMap(session);
 					for (int i = 0; i < length; i++)
 						m.put(parseAnything(session, string(), is, outer, pMeta), parseAnything(session, object(), is, m, pMeta));
-					o = bd.cast(m);
+					o = breg.cast(m);
 				} else if (dt == ARRAY) {
 					Collection l = (sType.isCollection() && sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance() : new ObjectList(session));
 					for (int i = 0; i < length; i++)
@@ -168,7 +168,7 @@ public final class MsgPackParser extends InputStreamParser {
 				for (int i = 0; i < length; i++)
 					m.put(parseAnything(session, string(), is, outer, pMeta), parseAnything(session, object(), is, m, pMeta));
 				if (m.containsKey(session.getBeanTypePropertyName()))
-					o = bd.cast(m);
+					o = breg.cast(m);
 				else
 					throw new ParseException(session, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.getInnerClass().getName(), sType.getNotABeanReason());
 			} else {

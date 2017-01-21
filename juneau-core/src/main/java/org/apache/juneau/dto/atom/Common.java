@@ -14,9 +14,11 @@ package org.apache.juneau.dto.atom;
 
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
-import java.net.*;
+import java.net.URI;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.annotation.*;
+import static org.apache.juneau.dto.atom.Utils.*;
 
 /**
  * Represents an <code>atomCommonAttributes</code> construct in the RFC4287 specification.
@@ -29,9 +31,9 @@ import org.apache.juneau.xml.annotation.*;
  * 		undefinedAttribute*
  * </p>
  * <p>
- * 	Refer to {@link org.apache.juneau.dto.atom} for further information about ATOM support.
- * </p>
+ * Refer to {@link org.apache.juneau.dto.atom} for further information about ATOM support.
  */
+@SuppressWarnings("hiding")
 public abstract class Common {
 
 	private URI base;
@@ -58,8 +60,20 @@ public abstract class Common {
 	 * @param base The URI base of this object.
 	 * @return This object (for method chaining).
 	 */
-	public Common setBase(URI base) {
+	@BeanProperty(name="base")
+	public Common base(URI base) {
 		this.base = base;
+		return this;
+	}
+
+	/**
+	 * Sets the URI base of this object.
+	 *
+	 * @param base The URI base of this object.
+	 * @return This object (for method chaining).
+	 */
+	public Common base(String base) {
+		this.base = toURI(base);
 		return this;
 	}
 
@@ -79,7 +93,8 @@ public abstract class Common {
 	 * @param lang The language of this object.
 	 * @return This object (for method chaining).
 	 */
-	public Common setLang(String lang) {
+	@BeanProperty(name="lang")
+	public Common lang(String lang) {
 		this.lang = lang;
 		return this;
 	}

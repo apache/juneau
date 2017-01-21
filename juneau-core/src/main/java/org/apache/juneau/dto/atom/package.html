@@ -88,43 +88,50 @@
 	<div class='topic'>
 		<p>
 			The Juneau ATOM feed DTOs are simply beans with fluent-style setters.<br>
-			The following code shows a feed being created programmatically: 
+			The following code shows a feed being created programmatically using 
 		</p>
 		<p class='bcode'>
-	Feed feed = <jk>new</jk> Feed()
-		.setTitle(<jk>new</jk> Text(<js>"text"</js>, <js>"Juneau ATOM specification"</js>))
-		.setSubTitle(<jk>new</jk> Text(<js>"html"</js>, <js>"Describes &lt;em&gt;stuff&lt;/em&gt; about Juneau"</js>))
-		.setUpdated(<jsm>parseDateTime</jsm>(<js>"2016-01-02T03:04:05Z"</js>))
-		.setId(<jk>new</jk> Id(<js>"tag:juneau.apache.org"</js>))
-		.addLinks(
-			<jk>new</jk> Link(<js>"alternate"</js>, <js>"text/html"</js>, <js>"http://juneau.apache.org/"</js>).setHreflang(<js>"en"</js>),
-			<jk>new</jk> Link(<js>"self"</js>, <js>"application/atom+xml"</js>, <js>"http://juneau.apache.org/feed.atom"</js>)
+		
+	<jk>import static</jk> org.apache.juneau.dto.atom.AtomBuilder.*;
+	<jk>import</jk> org.apache.juneau.dto.html.HtmlBuilder;
+	
+	Feed feed = 
+		feed(<js>"tag:juneau.apache.org"</js>, <js>"Juneau ATOM specification"</js>, <js>"2016-01-02T03:04:05Z"</js>)
+		.subtitle(text(<js>"html"</js>).children(<js>"Describes &lt;em&gt;stuff&lt;/em&gt; about Juneau"</js>))
+		.links(
+			link(<js>"alternate"</js>, <js>"text/html"</js>, <js>"http://www.sample.com/"</js>).hreflang(<js>"en"</js>),
+			link(<js>"self"</js>, <js>"application/atom+xml"</js>, <js>"http://www.sample.com/feed.atom"</js>)
 		)
-		.setRights(<jk>new</jk> Text(<js>"Copyright (c) 2016, Apache Foundation"</js>))
-		.setGenerator(<jk>new</jk> Generator(<js>"Juneau"</js>).setUri(<jk>new</jk> URI(<js>"http://juneau.apache.org/"</js>)).setVersion(<js>"1.0"</js>))
-		.addEntries(
-			<jk>new</jk> Entry()
-				.setTitle(<jk>new</jk> Text(<js>"Juneau ATOM specification snapshot"</js>))
-				.addLinks(
-					<jk>new</jk> Link(<js>"alternate"</js>, <js>"text/html"</js>, <js>"http://juneau.apache.org/juneau.atom"</js>),
-					<jk>new</jk> Link(<js>"enclosure"</js>, <js>"audio/mpeg"</js>, <js>""http://juneau.apache.org/audio/juneau_podcast.mp3"</js>).setLength(12345)
-				)
-				.setId(<jk>new</jk> Id(<js>"tag:juneau.apache.org"</js>))
-				.setUpdated(<jsm>parseDateTime</jsm>(<js>"2016-01-02T03:04:05Z"</js>))
-				.setPublished(<jsm>parseDateTime</jsm>(<js>"2016-01-02T03:04:05Z"</js>))
-				.addAuthors(<jk>new</jk> Person(<js>"James Bognar"</js>).setUri(<jk>new</jk> URI(<js>"http://juneau.apache.org/"</js>)).setEmail(<js>"james.bognar@apache.org"</js>))
-				.addContributors(
-					<jk>new</jk> Person(<js>"Barry M. Caceres"</js>)
-				)
-				.setContent(
-					<jk>new</jk> Content()
-						.setLang(<js>"en"</js>)
-						.setBase(<jk>new</jk> URI(<js>"http://www.apache.org/"</js>))
-						.setType(<js>"xhtml"</js>)
-						.setText(<js>"&lt;div xmlns=\"http://www.w3.org/1999/xhtml\"&gt;&lt;p&gt;*lt;i&gt;[Update: Juneau supports ATOM.]&lt;/i&gt;&lt;/p&gt;&lt;/div&gt;"</js>)
-				)
+		.rights(<js>"Copyright (c) 2016, Apache Foundation"</js>)
+		.generator(
+			generator(<js>"Juneau"</js>).uri(<js>"http://juneau.apache.org/"</js>).version(<js>"1.0"</js>)
 		)
-	;
+		.entries(
+			entry(<js>"tag:juneau.sample.com,2013:1.2345"</js>, <js>"Juneau ATOM specification snapshot"</js>, <js>"2016-01-02T03:04:05Z"</js>)
+			.links(
+				link<js>"alternate"</js>, <js>"text/html"</js>, <js>"http://www.sample.com/2012/05/08/juneau.atom"</js>),
+				link(<js>"enclosure"</js>, <js>"audio/mpeg"</js>, <js>"http://www.sample.com/audio/juneau_podcast.mp3"</js>).length(1337)
+			)
+			.published(<js>"2016-01-02T03:04:05Z"</js>)
+			.authors(
+				person(<js>"James Bognar"</js>).uri(<js>"http://www.sample.com/"</js>).email(<js>"jamesbognar@apache.org"</js>)
+			)
+			.contributors(
+				person(<js>"Barry M. Caceres"</js>)
+			)
+			.content(
+				content(<js>"xhtml"</js>)
+				.lang(<js>"en"</js>)
+				.base(<js>"http://www.apache.org/"</js>)
+				.children(
+					HtmlBuilder.div().child(
+						HtmlBuilder.p(
+							HtmlBuilder.i(<js>"[Update: Juneau supports ATOM.]"</js>)
+						)
+					)
+				)
+			)
+		);
 		</p>
 		<p>
 			To serialize this to ATOM, use the {@link org.apache.juneau.xml.XmlSerializer} class:
@@ -133,7 +140,7 @@
 		<h6 class='figure'>Example with no namespaces</h6>
 		<p class='bcode'>
 	<jc>// Create a serializer with readable output, no namespaces yet.</jc>
-	XmlSerializer s = <jk>new</jk> XmlSerializer.SqReadable().setProperty(XmlSerializerContext.<jsf>XML_enableNamespaces</jsf>, <jk>false</jk>);
+	XmlSerializer s = <jk>new</jk> XmlSerializer.SqReadable();
 
 	<jc>// Serialize to ATOM/XML</jc>
 	String atomXml = s.serialize(feed);
@@ -164,7 +171,7 @@
 			<xt>&lt;author&gt;</xt>
 				<xt>&lt;name&gt;</xt>James Bognar<xt>&lt;/name&gt;</xt>
 				<xt>&lt;uri&gt;</xt>http://juneau.apache.org/<xt>&lt;/uri&gt;</xt>
-				<xt>&lt;email&gt;</xt>james.bognar@apache.org<xt>&lt;/email&gt;</xt>
+				<xt>&lt;email&gt;</xt>jamesbognar@apache.org<xt>&lt;/email&gt;</xt>
 			<xt>&lt;/author&gt;</xt>
 			<xt>&lt;contributor&gt;</xt>
 				<xt>&lt;name&gt;</xt>Barry M. Caceres<xt>&lt;/name&gt;</xt>
@@ -228,7 +235,7 @@
 			<xt>&lt;atom:author&gt;</xt>
 				<xt>&lt;atom:name&gt;</xt>James Bognar<xt>&lt;/atom:name&gt;</xt>
 				<xt>&lt;atom:uri&gt;</xt>http://juneau.apache.org/<xt>&lt;/atom:uri&gt;</xt>
-				<xt>&lt;atom:email&gt;</xt>james.bognar@apache.org<xt>&lt;/atom:email&gt;</xt>
+				<xt>&lt;atom:email&gt;</xt>jamesbognar@apache.org<xt>&lt;/atom:email&gt;</xt>
 			<xt>&lt;/atom:author&gt;</xt>
 			<xt>&lt;atom:contributor&gt;</xt>
 				<xt>&lt;atom:name&gt;</xt>Barry M. Caceres<xt>&lt;/atom:name&gt;</xt>
@@ -291,7 +298,7 @@
 			<xt>&lt;author&gt;</xt>
 				<xt>&lt;name&gt;</xt>James Bognar<xt>&lt;/name&gt;</xt>
 				<xt>&lt;uri&gt;</xt>http://juneau.apache.org/<xt>&lt;/uri&gt;</xt>
-				<xt>&lt;email&gt;</xt>james.bognar@apache.org<xt>&lt;/email&gt;</xt>
+				<xt>&lt;email&gt;</xt>jamesbognar@apache.org<xt>&lt;/email&gt;</xt>
 			<xt>&lt;/author&gt;</xt>
 			<xt>&lt;contributor&gt;</xt>
 				<xt>&lt;name&gt;</xt>Barry M. Caceres<xt>&lt;/name&gt;</xt>
@@ -373,7 +380,7 @@
 					{
 						name: <js>'James Bognar'</js>, 
 						uri: <js>'http://juneau.apache.org/'</js>, 
-						email: <js>'james.bognar@apache.org'</js>
+						email: <js>'jamesbognar@apache.org'</js>
 					}
 				], 
 				contributors: [

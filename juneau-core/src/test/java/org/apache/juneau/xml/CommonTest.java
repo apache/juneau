@@ -38,13 +38,13 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testTrimNullsFromBeans() throws Exception {
-		XmlSerializer s = new XmlSerializer.SimpleSq();
+		XmlSerializer s = new XmlSerializer.Sq();
 		XmlParser p = new XmlParser();
 		A t1 = A.create(), t2;
 
 		s.setProperty(SERIALIZER_trimNullProperties, false);
 		String r = s.serialize(t1);
-		assertEquals("<object><s1 nil='true'/><s2>s2</s2></object>", r);
+		assertEquals("<object><s1 _type='null'/><s2>s2</s2></object>", r);
 		t2 = p.parse(r, A.class);
 		assertEqualObjects(t1, t2);
 
@@ -70,20 +70,20 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testTrimEmptyMaps() throws Exception {
-		XmlSerializer s = new XmlSerializer.SimpleSq();
+		XmlSerializer s = new XmlSerializer.Sq();
 		XmlParser p = XmlParser.DEFAULT;
 		B t1 = B.create(), t2;
 		String r;
 
 		s.setProperty(SERIALIZER_trimEmptyMaps, false);
 		r = s.serialize(t1);
-		assertEquals("<object><f1/><f2><f2a nil='true'/><f2b><s2>s2</s2></f2b></f2></object>", r);
+		assertEquals("<object><f1/><f2><f2a _type='null'/><f2b><s2>s2</s2></f2b></f2></object>", r);
 		t2 = p.parse(r, B.class);
 		assertEqualObjects(t1, t2);
 
 		s.setProperty(SERIALIZER_trimEmptyMaps, true);
 		r = s.serialize(t1);
-		assertEquals("<object><f2><f2a nil='true'/><f2b><s2>s2</s2></f2b></f2></object>", r);
+		assertEquals("<object><f2><f2a _type='null'/><f2b><s2>s2</s2></f2b></f2></object>", r);
 		t2 = p.parse(r, B.class);
 		assertNull(t2.f1);
 	}
@@ -104,7 +104,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testTrimEmptyLists() throws Exception {
-		XmlSerializer s = new XmlSerializer.SimpleSq();
+		XmlSerializer s = new XmlSerializer.Sq();
 		XmlParser p = XmlParser.DEFAULT;
 		C t1 = C.create(), t2;
 		String r;
@@ -138,7 +138,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testTrimEmptyArrays() throws Exception {
-		XmlSerializer s = new XmlSerializer.SimpleSq();
+		XmlSerializer s = new XmlSerializer.Sq();
 		XmlParser p = XmlParser.DEFAULT;
 		D t1 = D.create(), t2;
 		String r;
@@ -172,10 +172,19 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testBeanPropertyProperties() throws Exception {
-		XmlSerializer s = XmlSerializer.DEFAULT_SIMPLE_SQ;
+		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		E1 t = new E1();
 		String r = s.serialize(t);
-		assertEquals("<object><x1 f2='2'><f1>1</f1></x1><x2><f1>1</f1></x2><x3><object f2='2'><f1>1</f1></object></x3><x4><object f2='2'><f1>1</f1></object></x4><x5><object><f1>1</f1></object></x5><x6><object><f1>1</f1></object></x6></object>", r);
+		assertEquals(
+			"<object>"
+				+"<x1 f2='2'><f1>1</f1></x1>"
+				+"<x2><f1>1</f1></x2>"
+				+"<x3><object f2='2'><f1>1</f1></object></x3>"
+				+"<x4><object f2='2'><f1>1</f1></object></x4>"
+				+"<x5><object><f1 _type='number'>1</f1></object></x5>"
+				+"<x6><object><f1 _type='number'>1</f1></object></x6>"
+			+"</object>",
+			r);
 		TestUtils.validateXml(t);
 	}
 
@@ -206,7 +215,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testBeanPropertyPropertiesOnListOfBeans() throws Exception {
-		XmlSerializer s = XmlSerializer.DEFAULT_SIMPLE_SQ;
+		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		List<Test7b> l = new LinkedList<Test7b>();
 		Test7b t = new Test7b();
 		t.x1.add(new Test7b());
@@ -225,7 +234,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testURIAttr() throws Exception {
-		XmlSerializer s = XmlSerializer.DEFAULT_SIMPLE_SQ;
+		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		XmlParser p = XmlParser.DEFAULT;
 
 		G t = new G();
@@ -251,7 +260,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testUris() throws Exception {
-		WriterSerializer s = new XmlSerializer.SimpleSq();
+		WriterSerializer s = new XmlSerializer.Sq();
 		TestURI t = new TestURI();
 		String r;
 		String expected;

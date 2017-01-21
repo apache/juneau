@@ -18,21 +18,30 @@ package org.apache.juneau.xml.annotation;
 public enum XmlFormat {
 
 	/**
-	 * Normal formatting (default)
+	 * Normal formatting (default).
+	 * <p>
+	 * On a bean class, implies {@link #ELEMENTS} meaning bean properties will be serialized as child elements by default.
+	 * <p>
+	 * On a bean property, implies {@link #ELEMENT} meaning the bean property will be serialized as a child element.
 	 */
-	NORMAL,
+	DEFAULT,
 
 	/**
-	 * Render property as an attribute instead of an element.
+	 * Render a bean property as an attribute instead of an element.
 	 * <p>
-	 * 	Can only be applied to properties (methods/fields) of class types that can be convertible to <code>Strings</code>.
+	 * Only applicable for bean properties, not bean classes.
+	 * <p>
+	 * Can only be applied to properties (methods/fields) of class types that can be convertible to <code>Strings</code>.
 	 */
 	ATTR,
 
 	/**
 	 * Render property as attributes instead of an element.
 	 * <p>
-	 * 	Can only be applied to properties (methods/fields) of class type <code>Map&lt;Object,Object&gt;</code> where both
+	 * On a bean class, implies bean properties will be serialized as attributes instead of child elements by default.
+	 * <p>
+	 * On bean properties, implies that the bean property value itself should be serialized as attributes on the bean element.
+	 * The bean property data type must be of class type <code>Map&lt;Object,Object&gt;</code> where both
 	 * 	objects are convertible to <code>Strings</code>.
 	 */
 	ATTRS,
@@ -40,29 +49,75 @@ public enum XmlFormat {
 	/**
 	 * Render property as an element instead of an attribute.
 	 * <p>
-	 * 	Can be applied to URL and ID bean properties that would normally be rendered as attributes.
+	 * Only applicable for bean properties, not bean classes.
+	 * <p>
+	 * Used to override the behavior of the {@link #ATTRS} format applied to the bean class.
 	 */
 	ELEMENT,
 
 	/**
+	 * Render property value directly as the contents of the element.
+	 * <p>
+	 * On a bean class, implies that bean properties will be serialized as child elements.
+	 * Note that this is equivalent to {@link #DEFAULT}.
+	 * <p>
+	 * Only applicable for objects of type array/Collection.
+	 * <p>
+	 * On a bean property, implies that the bean property value itself should be serialized as child elements of the bean element.
+	 */
+	ELEMENTS,
+
+	/**
+	 * Same as {@link #ELEMENTS} except primitive types (e.g. string/boolean/number/null) are not wrapped in elements.
+	 * <p>
+	 * Only applicable for bean properties, not bean classes.
+	 * <p>
+	 * Only applicable for objects of type array/Collection.
+	 * <p>
+	 * Use of this format may cause data type loss during parsing if the types cannot be inferred through reflection.
+	 */
+	MIXED,
+
+	/**
+	 * Render property value as the text content of the element.
+	 * <p>
+	 * Similar to {@link #MIXED} but value must be a single value, not a collection.
+	 * <p>
+	 * Only applicable for bean properties, not bean classes.
+	 * <p>
+	 * Use of this format may cause data type loss during parsing if the type cannot be inferred through reflection.
+	 */
+	TEXT,
+
+	/**
+	 * Same as {@link #TEXT} except the content is expected to be fully-formed XML that will
+	 * get serialized as-is.
+	 * <p>
+	 * During parsing, this XML text will be reserialized and set on the property.
+	 * <p>
+	 * Only applicable for bean properties, not bean classes.
+	 * <p>
+	 * Use of this format may cause data type loss during parsing if the type cannot be inferred through reflection.
+	 */
+	XMLTEXT,
+
+	/**
 	 * Prevents collections and arrays from being enclosed in <xt>&lt;array&gt;</xt> elements.
 	 * <p>
-	 * 	Can only be applied to properties (methods/fields) of type collection or array, or collection classes.
+	 * Can only be applied to properties (methods/fields) of type collection or array, or collection classes.
 	 */
-	COLLAPSED,
+	COLLAPSED;
 
 	/**
-	 * Render property value directly as content of element.
-	 * <p>
-	 * 	By default, content is converted to plain text.
-	 * <p>
-	 * 	Can be used in combination with {@link Xml#contentHandler()} to produce something other
-	 * 	than plain text, such as embedded XML.
+	 * Returns <jk>true</jk> if this format is one of those specified.
+	 *
+	 * @param formats The formats to match against.
+	 * @return <jk>true</jk> if this format is one of those specified.
 	 */
-	CONTENT,
-
-	/**
-	 * Render a collection/array as mixed child content of the element.
-	 */
-	MIXED
+	public boolean isOneOf(XmlFormat...formats) {
+		for (XmlFormat format : formats)
+			if (format == this)
+				return true;
+		return false;
+	}
 }

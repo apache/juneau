@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transform;
 
-import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -46,6 +45,14 @@ import org.apache.juneau.serializer.*;
  * 	<br>
  * 	{@link Serializer Serializers} use swaps to convert objects of type T into objects of type S, and on calls to {@link BeanMap#get(Object)}.<br>
  * 	{@link Parser Parsers} use swaps to convert objects of type S into objects of type T, and on calls to {@link BeanMap#put(String,Object)}.
+ *
+ * <h6 class='topic'>Subtypes</h6>
+ * <p>
+ * 	The following abstract subclasses are provided for common swap types:
+ * 	<ol>
+ * 		<li>{@link StringSwap} - Objects swapped with strings.
+ * 		<li>{@link MapSwap} - Objects swapped with {@link ObjectMap ObjectMaps}.
+ * 	</ol>
  *
  * <h6 class='topic'>Localization</h6>
  * <p>
@@ -100,48 +107,8 @@ public abstract class PojoSwap<T,S> {
 	 */
 	@SuppressWarnings("unchecked")
 	protected PojoSwap() {
-
-		Class<?> t_normalClass = null, t_swapClass = null;
-
-		Class<?> c = this.getClass().getSuperclass();
-		Type t = this.getClass().getGenericSuperclass();
-		while (c != PojoSwap.class) {
-			t = c.getGenericSuperclass();
-			c = c.getSuperclass();
-		}
-
-		// Attempt to determine the T and G classes using reflection.
-		if (t instanceof ParameterizedType) {
-			ParameterizedType pt = (ParameterizedType)t;
-			Type[] pta = pt.getActualTypeArguments();
-			if (pta.length == 2) {
-				Type nType = pta[0];
-				if (nType instanceof Class) {
-					t_normalClass = (Class<T>)nType;
-
-				// <byte[],x> ends up containing a GenericArrayType, so it has to
-				// be handled as a special case.
-				} else if (nType instanceof GenericArrayType) {
-					Class<?> cmpntType = (Class<?>)((GenericArrayType)nType).getGenericComponentType();
-					t_normalClass = Array.newInstance(cmpntType, 0).getClass();
-
-				// <Class<?>,x> ends up containing a ParameterizedType, so just use the raw type.
-				} else if (nType instanceof ParameterizedType) {
-					t_normalClass = (Class<T>)((ParameterizedType)nType).getRawType();
-
-				} else
-					throw new RuntimeException("Unsupported parameter type: " + nType);
-				if (pta[1] instanceof Class)
-					t_swapClass = (Class<S>)pta[1];
-				else if (pta[1] instanceof ParameterizedType)
-					t_swapClass = (Class<S>)((ParameterizedType)pta[1]).getRawType();
-				else
-					throw new RuntimeException("Unexpected transformed class type: " + pta[1].getClass().getName());
-			}
-		}
-
-		this.normalClass = (Class<T>)t_normalClass;
-		this.swapClass = (Class<S>)t_swapClass;
+		normalClass = (Class<T>)ClassUtils.resolveParameterType(PojoSwap.class, 0, this);
+		swapClass = (Class<S>)ClassUtils.resolveParameterType(PojoSwap.class, 1, this);
 	}
 
 	/**

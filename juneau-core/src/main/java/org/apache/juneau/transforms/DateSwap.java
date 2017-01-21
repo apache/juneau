@@ -54,7 +54,7 @@ import org.apache.juneau.transform.*;
  * 	<li>{@link DateTimeShort} - To {@link DateFormat#SHORT} date-time strings.
  * </ul>
  */
-public class DateSwap extends PojoSwap<Date,String> {
+public class DateSwap extends StringSwap<Date> {
 
 	private static final TimeZone GMT = TimeZone.getTimeZone("GMT");
 	private final int dateStyle, timeStyle;

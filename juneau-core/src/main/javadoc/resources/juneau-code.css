@@ -43,6 +43,7 @@
  * 	<xa> - XML attribute
  * 	<xc> - XML comment
  * 	<xs> - XML string
+ * 	<xv> - XML value
  * 	<mk> - Manifest file key
  * 	<mv> - Manifest file value
  *  <cc> - Config file comment	
@@ -110,6 +111,7 @@ xt { color: DarkCyan; }
 xa { color: purple; }
 xc { color: mediumblue; }
 xs { color: blue; font-style: italic; }
+xv { color: black; }
 
 /*--- Manifest-file code effects ---*/
 mk { color: DarkRed; font-weight: bold; }

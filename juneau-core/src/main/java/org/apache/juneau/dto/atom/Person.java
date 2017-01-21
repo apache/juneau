@@ -12,7 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.atom;
 
-import java.net.*;
+import java.net.URI;
+
+import org.apache.juneau.annotation.*;
+import static org.apache.juneau.dto.atom.Utils.*;
 
 /**
  * Represents an <code>atomPersonConstruct</code> construct in the RFC4287 specification.
@@ -27,9 +30,9 @@ import java.net.*;
  * 		& extensionElement*)
  * </p>
  * <p>
- * 	Refer to {@link org.apache.juneau.dto.atom} for further information about ATOM support.
- * </p>
+ * Refer to {@link org.apache.juneau.dto.atom} for further information about ATOM support.
  */
+@SuppressWarnings("hiding")
 public class Person extends Common {
 
 	private String name;
@@ -43,7 +46,7 @@ public class Person extends Common {
 	 * @param name The name of the person.
 	 */
 	public Person(String name) {
-		this.name = name;
+		name(name);
 	}
 
 	/** Bean constructor. */
@@ -69,7 +72,8 @@ public class Person extends Common {
 	 * @param name The name of the person.
 	 * @return This object (for method chaining).
 	 */
-	public Person setName(String name) {
+	@BeanProperty(name="name")
+	public Person name(String name) {
 		this.name = name;
 		return this;
 	}
@@ -89,8 +93,21 @@ public class Person extends Common {
 	 * @param uri The URI of the person.
 	 * @return This object (for method chaining).
 	 */
-	public Person setUri(URI uri) {
+	@BeanProperty(name="uri")
+	public Person uri(URI uri) {
 		this.uri = uri;
+		return this;
+	}
+
+	/**
+	 * Sets the URI of the person.
+	 *
+	 * @param uri The URI of the person.
+	 * @return This object (for method chaining).
+	 */
+	@BeanProperty(name="uri")
+	public Person uri(String uri) {
+		this.uri = toURI(uri);
 		return this;
 	}
 
@@ -109,7 +126,8 @@ public class Person extends Common {
 	 * @param email The email address of the person.
 	 * @return This object (for method chaining).
 	 */
-	public Person setEmail(String email) {
+	@BeanProperty(name="email")
+	public Person email(String email) {
 		this.email = email;
 		return this;
 	}
@@ -120,14 +138,14 @@ public class Person extends Common {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Common */
-	public Person setBase(URI base) {
-		super.setBase(base);
+	public Person base(URI base) {
+		super.base(base);
 		return this;
 	}
 
 	@Override /* Common */
-	public Person setLang(String lang) {
-		super.setLang(lang);
+	public Person lang(String lang) {
+		super.lang(lang);
 		return this;
 	}
 }

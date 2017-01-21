@@ -1,0 +1,391 @@
+// ***************************************************************************************************************************
+// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
+// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
+// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
+// * with the License.  You may obtain a copy of the License at                                                              *
+// *                                                                                                                         *
+// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
+// *                                                                                                                         *
+// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *
+// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
+// * specific language governing permissions and limitations under the License.                                              *
+// ***************************************************************************************************************************
+package org.apache.juneau.dto.html5;
+
+import org.apache.juneau.annotation.*;
+
+/**
+ * DTO for an HTML <a href='https://www.w3.org/TR/html5/forms.html#the-input-element'>&lt;input&gt;</a> element.
+ * <p>
+ */
+@Bean(typeName="input")
+public class Input extends HtmlElementEmpty {
+
+	/**
+	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-input-accept'>accept</a> attribute.
+	 * Hint for expected file type in file upload controls.
+	 * @param accept - The new value for this attribute.
+	 * @return This object (for method chaining).
+	 */
+	public final Input accept(String accept) {
+		attrs.put("accept", accept);
+		return this;
+	}
+
+	/**
+	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-input-alt'>alt</a> attribute.
+	 * Replacement text for use when images are not available.
+	 * @param alt - The new value for this attribute.
+	 * @return This object (for method chaining).
+	 */
+	public final Input alt(String alt) {
+		attrs.put("alt", alt);
+		return this;
+	}
+
+	/**
+	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-fe-autocomplete'>autocomplete</a> attribute.
+	 * Hint for form autofill feature.
+	 * @param autocomplete - The new value for this attribute.
+	 * @return This object (for method chaining).
+	 */
+	public final Input autocomplete(String autocomplete) {
+		attrs.put("autocomplete", autocomplete);
+		return this;
+	}
+
+	/**
+	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-fe-autofocus'>autofocus</a> attribute.
+	 * Automatically focus the form control when the page is loaded.
+	 * @param autofocus - The new value for this attribute.
+	 * @return This object (for method chaining).
+	 */
+	public final Input autofocus(String autofocus) {
+		attrs.put("autofocus", autofocus);
+		return this;
+	}
+
+	/**
+	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-input-checked'>checked</a> attribute.
+	 * Whether the command or control is checked.
+	 * @param checked - The new value for this attribute.
+	 * @return This object (for method chaining).
+	 */
+	public final Input checked(String checked) {
+		attrs.put("checked", checked);
+		return this;
+	}
+
+	/**
+	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-fe-dirname'>dirname</a> attribute.
+	 * Name of form field to use for sending the element's directionality in form submission.
+	 * @param dirname - The new value for this attribute.
+	 * @return This object (for method chaining).
+	 */
+	public final Input dirname(String dirname) {
+		attrs.put("dirname", dirname);
+		return this;
+	}
+
+	/**
+	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-fe-disabled'>disabled</a> attribute.
+	 * Whether the form control is disabled.
+	 * @param disabled - The new value for this attribute.
+	 * @return This object (for method chaining).
+	 */
+	public final Input disabled(String disabled) {
+		attrs.put("disabled", disabled);
+		return this;
+	}
+
+	/**
+	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-fae-form'>form</a> attribute.
+	 * Associates the control with a form element.
+	 * @param form - The new value for this attribute.
+	 * @return This object (for method chaining).
+	 */
+	public final Input form(String form) {
+		attrs.put("form", form);
+		return this;
+	}
+
+	/**
+	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-fs-formaction'>formaction</a> attribute.
+	 * URL to use for form submission.
+	 * @param formaction - The new value for this attribute.
+	 * @return This object (for method chaining).
+	 */
+	public final Input formaction(String formaction) {
+		attrs.put("formaction", formaction);
+		return this;
+	}
+
+	/**
+	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-fs-formenctype'>formenctype</a> attribute.
+	 * Form data set encoding type to use for form submission.
+	 * @param formenctype - The new value for this attribute.
+	 * @return This object (for method chaining).
+	 */
+	public final Input formenctype(String formenctype) {
+		attrs.put("formenctype", formenctype);
+		return this;
+	}
+
+	/**
+	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-fs-formmethod'>formmethod</a> attribute.
+	 * HTTP method to use for form submission.
+	 * @param formmethod - The new value for this attribute.
+	 * @return This object (for method chaining).
+	 */
+	public final Input formmethod(String formmethod) {
+		attrs.put("formmethod", formmethod);
+		return this;
+	}
+
+	/**
+	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-fs-formnovalidate'>formnovalidate</a> attribute.
+	 * Bypass form control validation for form submission.
+	 * @param formnovalidate - The new value for this attribute.
+	 * @return This object (for method chaining).
+	 */
+	public final Input formnovalidate(String formnovalidate) {
+		attrs.put("formnovalidate", formnovalidate);
+		return this;
+	}
+
+	/**
+	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-fs-formtarget'>formtarget</a> attribute.
+	 * Browsing context for form submission.
+	 * @param formtarget - The new value for this attribute.
+	 * @return This object (for method chaining).
+	 */
+	public final Input formtarget(String formtarget) {
+		attrs.put("formtarget", formtarget);
+		return this;
+	}
+
+	/**
+	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-height'>height</a> attribute.
+	 * Vertical dimension.
+	 * @param height - The new value for this attribute.
+	 * @return This object (for method chaining).
+	 */
+	public final Input height(String height) {
+		attrs.put("height", height);
+		return this;
+	}
+
+	/**
+	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-input-inputmode'>inputmode</a> attribute.
+	 * Hint for selecting an input modality.
+	 * @param inputmode - The new value for this attribute.
+	 * @return This object (for method chaining).
+	 */
+	public final Input inputmode(String inputmode) {
+		attrs.put("inputmode", inputmode);
+		return this;
+	}
+
+	/**
+	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-input-list'>list</a> attribute.
+	 * List of autocomplete options.
+	 * @param list - The new value for this attribute.
+	 * @return This object (for method chaining).
+	 */
+	public final Input list(String list) {
+		attrs.put("list", list);
+		return this;
+	}
+
+	/**
+	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-input-max'>max</a> attribute.
+	 * Maximum value.
+	 * @param max - The new value for this attribute.
+	 * @return This object (for method chaining).
+	 */
+	public final Input max(String max) {
+		attrs.put("max", max);
+		return this;
+	}
+
+	/**
+	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-input-maxlength'>maxlength</a> attribute.
+	 * Maximum length of value.
+	 * @param maxlength - The new value for this attribute.
+	 * @return This object (for method chaining).
+	 */
+	public final Input maxlength(String maxlength) {
+		attrs.put("maxlength", maxlength);
+		return this;
+	}
+
+	/**
+	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-input-min'>min</a> attribute.
+	 * Minimum value.
+	 * @param min - The new value for this attribute.
+	 * @return This object (for method chaining).
+	 */
+	public final Input min(String min) {
+		attrs.put("min", min);
+		return this;
+	}
+
+	/**
+	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-input-minlength'>minlength</a> attribute.
+	 * Minimum length of value.
+	 * @param minlength - The new value for this attribute.
+	 * @return This object (for method chaining).
+	 */
+	public final Input minlength(String minlength) {
+		attrs.put("minlength", minlength);
+		return this;
+	}
+
+	/**
+	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-input-multiple'>multiple</a> attribute.
+	 * Whether to allow multiple values.
+	 * @param multiple - The new value for this attribute.
+	 * @return This object (for method chaining).
+	 */
+	public final Input multiple(String multiple) {
+		attrs.put("multiple", multiple);
+		return this;
+	}
+
+	/**
+	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-fe-name'>name</a> attribute.
+	 * Name of form control to use for form submission and in the form.elements API.
+	 * @param name - The new value for this attribute.
+	 * @return This object (for method chaining).
+	 */
+	public final Input name(String name) {
+		attrs.put("name", name);
+		return this;
+	}
+
+	/**
+	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-input-pattern'>pattern</a> attribute.
+	 * Pattern to be matched by the form control's value.
+	 * @param pattern - The new value for this attribute.
+	 * @return This object (for method chaining).
+	 */
+	public final Input pattern(String pattern) {
+		attrs.put("pattern", pattern);
+		return this;
+	}
+
+	/**
+	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-input-placeholder'>placeholder</a> attribute.
+	 * User-visible label to be placed within the form control.
+	 * @param placeholder - The new value for this attribute.
+	 * @return This object (for method chaining).
+	 */
+	public final Input placeholder(String placeholder) {
+		attrs.put("placeholder", placeholder);
+		return this;
+	}
+
+	/**
+	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-input-readonly'>readonly</a> attribute.
+	 * Whether to allow the value to be edited by the user.
+	 * @param readonly - The new value for this attribute.
+	 * @return This object (for method chaining).
+	 */
+	public final Input readonly(String readonly) {
+		attrs.put("readonly", readonly);
+		return this;
+	}
+
+	/**
+	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-input-readonly'>required</a> attribute.
+	 * Whether the control is required for form submission.
+	 * @param required - The new value for this attribute.
+	 * @return This object (for method chaining).
+	 */
+	public final Input required(String required) {
+		attrs.put("required", required);
+		return this;
+	}
+
+	/**
+	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-input-size'>size</a> attribute.
+	 * Size of the control.
+	 * @param size - The new value for this attribute.
+	 * @return This object (for method chaining).
+	 */
+	public final Input size(String size) {
+		attrs.put("size", size);
+		return this;
+	}
+
+	/**
+	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-input-src'>src</a> attribute.
+	 * Address of the resource.
+	 * @param src - The new value for this attribute.
+	 * @return This object (for method chaining).
+	 */
+	public final Input src(String src) {
+		attrs.put("src", src);
+		return this;
+	}
+
+	/**
+	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-input-step'>step</a> attribute.
+	 * Granularity to be matched by the form control's value.
+	 * @param step - The new value for this attribute.
+	 * @return This object (for method chaining).
+	 */
+	public final Input step(String step) {
+		attrs.put("step", step);
+		return this;
+	}
+
+	/**
+	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-input-type'>type</a> attribute.
+	 * Type of form control.
+	 * @param type - The new value for this attribute.
+	 * @return This object (for method chaining).
+	 */
+	public final Input type(String type) {
+		attrs.put("type", type);
+		return this;
+	}
+
+	/**
+	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-input-value'>value</a> attribute.
+	 * Value of the form control.
+	 * @param value - The new value for this attribute.
+	 * @return This object (for method chaining).
+	 */
+	public final Input value(String value) {
+		attrs.put("value", value);
+		return this;
+	}
+
+	/**
+	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-width'>width</a> attribute.
+	 * Horizontal dimension.
+	 * @param width - The new value for this attribute.
+	 * @return This object (for method chaining).
+	 */
+	public final Input width(String width) {
+		attrs.put("width", width);
+		return this;
+	}
+
+	//--------------------------------------------------------------------------------
+	// Overridden methods
+	//--------------------------------------------------------------------------------
+
+	@Override /* HtmlElement */
+	public final Input _class(String _class) {
+		super._class(_class);
+		return this;
+	}
+
+	@Override /* HtmlElement */
+	public final Input id(String id) {
+		super.id(id);
+		return this;
+	}
+}

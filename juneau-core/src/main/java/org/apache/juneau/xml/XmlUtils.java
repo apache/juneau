@@ -234,16 +234,18 @@ public final class XmlUtils {
 	 * Translates any _x####_ sequences (introduced by the various encode methods) back into their original characters.
 	 *
 	 * @param s The string being decoded.
+	 * @param sb The string builder to use as a scratch pad.
 	 * @return The decoded string.
 	 */
-	public static final String decode(String s) {
+	public static final String decode(String s, StringBuilder sb) {
 		if (s == null) return null;
 		if (s.length() == 0)
 			return s;
 		if (s.indexOf('_') == -1)
 			return s;
 
-		StringBuffer sb = new StringBuffer(s.length());
+		if (sb == null)
+			sb = new StringBuilder(s.length());
 		for (int i = 0; i < s.length(); i++) {
 			char c = s.charAt(i);
 			if (c == '_' && isEscapeSequence(s,i)) {
@@ -569,5 +571,46 @@ public final class XmlUtils {
 		}
 
 		return null;
+	}
+
+	/**
+	 * Utility method that converts the current event on the XML stream to something human-readable for debug purposes.
+	 *
+	 * @param r The XML stream reader whose current event is to be converted to a readable string.
+	 * @return The event in human-readable form.
+	 */
+	public static final String toReadableEvent(XMLStreamReader r) {
+		int t = r.getEventType();
+		if (t == 1)
+			return "<"+r.getLocalName()+">";
+		if (t == 2)
+			return "</"+r.getLocalName()+">";
+		if (t == 3)
+			return "PROCESSING_INSTRUCTION";
+		if (t == 4)
+			return "CHARACTERS=[" + r.getText() + "]";
+		if (t == 5)
+			return "COMMENTS=[" + r.getText() + "]";
+		if (t == 6)
+			return "SPACE=[" + r.getText() + "]";
+		if (t == 7)
+			return "START_DOCUMENT";
+		if (t == 8)
+			return "END_DOCUMENT";
+		if (t == 9)
+			return "ENTITY_REFERENCE";
+		if (t == 10)
+			return "ATTRIBUTE";
+		if (t == 11)
+			return "DTD";
+		if (t == 12)
+			return "CDATA=["+r.getText()+"]";
+		if (t == 13)
+			return "NAMESPACE";
+		if (t == 14)
+			return "NOTATION_DECLARATION";
+		if (t == 15)
+			return "ENTITY_DECLARATION";
+		return "UNKNOWN";
 	}
 }

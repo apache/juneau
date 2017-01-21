@@ -328,6 +328,7 @@ public class XmlSchemaSerializer extends XmlSerializer {
 			int i = session.getIndent() + 1;
 
 			cm = cm.getSerializedClassMeta();
+			XmlBeanMeta xbm = cm.isBean() ? cm.getBeanMeta().getExtendedMeta(XmlBeanMeta.class) : null;
 
 			w.oTag(i, "complexType")
 				.attr("name", name);
@@ -335,27 +336,13 @@ public class XmlSchemaSerializer extends XmlSerializer {
 			// This element can have mixed content if:
 			// 	1) It's a generic Object (so it can theoretically be anything)
 			//		2) The bean has a property defined with @XmlFormat.CONTENT.
-			if ((cm.isBean() && cm.getBeanMeta().getExtendedMeta(XmlBeanMeta.class).getXmlContentProperty() != null) || cm.isObject())
+			if ((xbm != null && (xbm.getContentFormat() != null && xbm.getContentFormat().isOneOf(TEXT,MIXED,XMLTEXT))) || ! cm.isMapOrBean())
 				w.attr("mixed", "true");
 
 			w.cTag().nl();
 
-			if (! (cm.isMap() || cm.isBean() || cm.hasToObjectMapMethod() || cm.isCollection() || cm.isArray() || (cm.isAbstract() && ! cm.isNumber()) || cm.isObject())) {
-				String base = getXmlAttrType(cm);
-				w.sTag(i+1, "simpleContent").nl();
-				w.oTag(i+2, "extension")
-					.attr("base", base);
-				if (session.isAddJsonTypeAttrs() || (session.isAddJsonStringTypeAttrs() && base.equals("string"))) {
-					w.cTag().nl();
-					w.oTag(i+3, "attribute")
-						.attr("name", session.getBeanTypePropertyName())
-						.attr("type", "string")
-						.ceTag().nl();
-					w.eTag(i+2, "extension").nl();
-				} else {
-					w.ceTag().nl();
-				}
-				w.eTag(i+1, "simpleContent").nl();
+			if (! (cm.isMapOrBean() || cm.hasToObjectMapMethod() || cm.isCollectionOrArray() || (cm.isAbstract() && ! cm.isNumber()) || cm.isObject())) {
+				w.oTag(i+1, "attribute").attr("name", session.getBeanTypePropertyName()).attr("type", "string").ceTag().nl();
 
 			} else {
 
@@ -365,11 +352,14 @@ public class XmlSchemaSerializer extends XmlSerializer {
 
 					boolean hasChildElements = false;
 
-					for (BeanPropertyMeta pMeta : bm.getPropertyMetas())
-						if (pMeta.getExtendedMeta(XmlBeanPropertyMeta.class).getXmlFormat() != XmlFormat.ATTR && pMeta.getExtendedMeta(XmlBeanPropertyMeta.class).getXmlFormat() != XmlFormat.CONTENT)
+					for (BeanPropertyMeta pMeta : bm.getPropertyMetas()) {
+						XmlFormat pMetaFormat = pMeta.getExtendedMeta(XmlBeanPropertyMeta.class).getXmlFormat();
+						if (pMetaFormat != XmlFormat.ATTR)
 							hasChildElements = true;
+					}
 
-					if (bm.getExtendedMeta(XmlBeanMeta.class).getXmlContentProperty() != null) {
+					XmlBeanMeta xbm2 = bm.getExtendedMeta(XmlBeanMeta.class);
+					if (xbm2.getContentProperty() != null && xbm2.getContentFormat() == ELEMENTS) {
 						w.sTag(i+1, "sequence").nl();
 						w.oTag(i+2, "any")
 							.attr("processContents", "skip")
@@ -378,57 +368,70 @@ public class XmlSchemaSerializer extends XmlSerializer {
 						w.eTag(i+1, "sequence").nl();
 
 					} else if (hasChildElements) {
-						w.sTag(i+1, "sequence").nl();
 
 						boolean hasOtherNsElement = false;
+						boolean hasCollapsed = false;
 
 						for (BeanPropertyMeta pMeta : bm.getPropertyMetas()) {
 							XmlBeanPropertyMeta xmlMeta = pMeta.getExtendedMeta(XmlBeanPropertyMeta.class);
-							if (xmlMeta.getXmlFormat() != XmlFormat.ATTR) {
-								boolean isCollapsed = xmlMeta.getXmlFormat() == COLLAPSED;
-								ClassMeta<?> ct2 = pMeta.getClassMeta();
-								String childName = pMeta.getName();
-								if (isCollapsed) {
-									if (xmlMeta.getChildName() != null)
-										childName = xmlMeta.getChildName();
-									ct2 = pMeta.getClassMeta().getElementType();
-								}
-								Namespace cNs = first(xmlMeta.getNamespace(), ct2.getExtendedMeta(XmlClassMeta.class).getNamespace(), cm.getExtendedMeta(XmlClassMeta.class).getNamespace(), defaultNs);
-								if (xmlMeta.getNamespace() == null) {
-									w.oTag(i+2, "element")
-										.attr("name", XmlUtils.encodeElementName(childName), true)
-										.attr("type", getXmlType(cNs, ct2));
-									if (isCollapsed) {
-										w.attr("minOccurs", 0);
-										w.attr("maxOccurs", "unbounded");
-									} else {
-										if (! session.isTrimNulls())
-											w.attr("nillable", true);
-										else
-											w.attr("minOccurs", 0);
-									}
-
-									w.ceTag().nl();
-								} else {
+							if (xmlMeta.getXmlFormat() != ATTR) {
+								if (xmlMeta.getNamespace() != null) {
+									ClassMeta<?> ct2 = pMeta.getClassMeta();
+									Namespace cNs = first(xmlMeta.getNamespace(), ct2.getExtendedMeta(XmlClassMeta.class).getNamespace(), cm.getExtendedMeta(XmlClassMeta.class).getNamespace(), defaultNs);
 									// Child element is in another namespace.
 									schemas.queueElement(cNs, pMeta.getName(), ct2);
 									hasOtherNsElement = true;
 								}
-
+								if (xmlMeta.getXmlFormat() == COLLAPSED)
+									hasCollapsed = true;
 							}
 						}
 
-						// If this bean has any child elements in another namespace,
-						// we need to add an <any> element.
-						if (hasOtherNsElement)
+						if (hasOtherNsElement || hasCollapsed) {
+							// If this bean has any child elements in another namespace,
+							// we need to add an <any> element.
+							w.oTag(i+1, "choice").attr("maxOccurs", "unbounded").cTag().nl();
 							w.oTag(i+2, "any")
+								.attr("processContents", "skip")
 								.attr("minOccurs", 0)
-								.attr("maxOccurs", "unbounded")
 								.ceTag().nl();
-						w.eTag(i+1, "sequence").nl();
+							w.eTag(i+1, "choice").nl();
+
+						} else {
+							w.sTag(i+1, "all").nl();
+							for (BeanPropertyMeta pMeta : bm.getPropertyMetas()) {
+								XmlBeanPropertyMeta xmlMeta = pMeta.getExtendedMeta(XmlBeanPropertyMeta.class);
+								if (xmlMeta.getXmlFormat() != ATTR) {
+									boolean isCollapsed = xmlMeta.getXmlFormat() == COLLAPSED;
+									ClassMeta<?> ct2 = pMeta.getClassMeta();
+									String childName = pMeta.getName();
+									if (isCollapsed) {
+										if (xmlMeta.getChildName() != null)
+											childName = xmlMeta.getChildName();
+										ct2 = pMeta.getClassMeta().getElementType();
+									}
+									Namespace cNs = first(xmlMeta.getNamespace(), ct2.getExtendedMeta(XmlClassMeta.class).getNamespace(), cm.getExtendedMeta(XmlClassMeta.class).getNamespace(), defaultNs);
+									if (xmlMeta.getNamespace() == null) {
+										w.oTag(i+2, "element")
+											.attr("name", XmlUtils.encodeElementName(childName), true)
+											.attr("type", getXmlType(cNs, ct2))
+											.attr("minOccurs", 0);
+
+										w.ceTag().nl();
+									} else {
+										// Child element is in another namespace.
+										schemas.queueElement(cNs, pMeta.getName(), ct2);
+										hasOtherNsElement = true;
+									}
+
+								}
+							}
+							w.eTag(i+1, "all").nl();
+						}
+
 					}
 
-					for (BeanPropertyMeta pMeta : bm.getExtendedMeta(XmlBeanMeta.class).getXmlAttrProperties().values()) {
+					for (BeanPropertyMeta pMeta : bm.getExtendedMeta(XmlBeanMeta.class).getAttrProperties().values()) {
 						Namespace pNs = pMeta.getExtendedMeta(XmlBeanPropertyMeta.class).getNamespace();
 						if (pNs == null)
 							pNs = defaultNs;
@@ -453,7 +456,7 @@ public class XmlSchemaSerializer extends XmlSerializer {
 					}
 
 				//----- Collection -----
-				} else if (cm.isCollection() || cm.isArray()) {
+				} else if (cm.isCollectionOrArray()) {
 					ClassMeta<?> elementType = cm.getElementType();
 					if (elementType.isObject()) {
 						w.sTag(i+1, "sequence").nl();
@@ -486,12 +489,10 @@ public class XmlSchemaSerializer extends XmlSerializer {
 					w.eTag(i+1, "sequence").nl();
 				}
 
-				if (session.isAddBeanTypeProperties() || session.isAddJsonTypeAttrs()) {
-					w.oTag(i+1, "attribute")
-						.attr("name", session.getBeanTypePropertyName())
-						.attr("type", "string")
-						.ceTag().nl();
-				}
+				w.oTag(i+1, "attribute")
+					.attr("name", session.getBeanTypePropertyName())
+					.attr("type", "string")
+					.ceTag().nl();
 			}
 
 			w.eTag(i, "complexType").nl();
@@ -509,9 +510,9 @@ public class XmlSchemaSerializer extends XmlSerializer {
 					name = "boolean";
 				else if (cm.isNumber())
 					name = "number";
-				else if (cm.isArray() || cm.isCollection())
+				else if (cm.isCollectionOrArray())
 					name = "array";
-				else if (! (cm.isMap() || cm.hasToObjectMapMethod() || cm.isBean() || cm.isCollection() || cm.isArray() || cm.isObject() || cm.isAbstract()))
+				else if (! (cm.isMapOrBean() || cm.hasToObjectMapMethod() || cm.isCollectionOrArray() || cm.isObject() || cm.isAbstract()))
 					name = "string";
 				else
 					name = "object";
@@ -532,18 +533,16 @@ public class XmlSchemaSerializer extends XmlSerializer {
 		private String getXmlType(Namespace currentNs, ClassMeta<?> cm) {
 			String name = null;
 			cm = cm.getSerializedClassMeta();
-			if (currentNs == targetNs && ! session.isAddJsonTypeAttrs()) {
-				if (cm.isBoolean())
-					name = "boolean";
-				else if (cm.isNumber()) {
-					if (cm.isDecimal())
-						name = "decimal";
-					else
-						name = "integer";
-				}
-				if (name == null && ! session.isAddJsonStringTypeAttrs()) {
-					if (! (cm.isMap() || cm.hasToObjectMapMethod() || cm.isBean() || cm.isCollection() || cm.isArray() || cm.isObject() || cm.isAbstract()))
-						name = "string";
+			if (currentNs == targetNs) {
+				if (cm.isPrimitive()) {
+					if (cm.isBoolean())
+						name = "boolean";
+					else if (cm.isNumber()) {
+						if (cm.isDecimal())
+							name = "decimal";
+						else
+							name = "integer";
+					}
 				}
 			}
 			if (name == null) {

@@ -4985,8 +4985,8 @@
 	
 	<h5 class='toc'>What's new in each release</h5>
 	<ul class='toc'>
-		<li><p><a class='doclink' href='#6.0.1'>6.0.2 (TBD)</a></p>
-		<li><p><a class='doclink' href='#6.0.1'>6.0.1 (TBD)</a></p>
+		<li><p><a class='doclink' href='#6.0.2'>6.0.2 (TBD)</a></p>
+		<li><p><a class='doclink' href='#6.0.1'>6.0.1 (Jan 3, 2017)</a></p>
 		<li><p><a class='doclink' href='#6.0.0'>6.0.0 (Oct 3, 2016)</a></p>
 		<li><p><a class='doclink' href='#5.2.0.1'>5.2.0.1 (Mar 23, 2016)</a></p>
 		<li><p><a class='doclink' href='#5.2.0.0'>5.2.0.0 (Dec 30, 2015)</a></p>
@@ -5063,10 +5063,42 @@
 			In particular, this release cleans up the {@link org.apache.juneau.BeanContext} API to match
 			the {@link org.apache.juneau.ContextFactory}/{@link org.apache.juneau.Context}/{@link org.apache.juneau.Session} paradigm
 			previously used in the serializer and parser APIs.
+			It also makes several improvements to the HTML and XML serialization support and introduces HTML5 DTO beans.
 		</p>
 
 		<h6 class='topic'>org.apache.juneau</h6>
 		<ul class='spaced-list'>
+			<li>Improvements to XML serialization support.
+				<ul>
+					<li>New supported XML formats:
+					<ul>
+						<li>{@link org.apache.juneau.xml.annotation.XmlFormat#ATTRS} format can now be applied to bean classes to have all bean properties serialized
+							as attributes instead of elements by default.
+						<li>{@link org.apache.juneau.xml.annotation.XmlFormat#ELEMENT} format can now be applied to bean properties to override the {@link org.apache.juneau.xml.annotation.XmlFormat#ATTRS}
+							setting above on specific bean properties.
+						<li>New {@link org.apache.juneau.xml.annotation.XmlFormat#ELEMENTS} format can be applied to a bean property of type array/Collection to represent the child elements.
+						<li>New {@link org.apache.juneau.xml.annotation.XmlFormat#MIXED} format can be applied to a bean property of type array/Collection to represent mixed content (text + child elements).
+						<li>New {@link org.apache.juneau.xml.annotation.XmlFormat#TEXT} format can be applied to a bean property of a single object to represent a text node as a child.
+						<li>New {@link org.apache.juneau.xml.annotation.XmlFormat#XMLTEXT} format that's identical to {@link org.apache.juneau.xml.annotation.XmlFormat#TEXT} except 
+							XML content is not escaped and serialized directly as the child content.  The parser will reconvert this to the original XML text during parsing.
+					</ul>
+					<li>New support methodology and other improvements to {@link org.apache.juneau.xml} documentation.
+					<li>Eliminated unnecessary <xt>&lt;string&gt;</xt> elements.
+					<li>Eliminated <code><del>XmlContentHandler</del></code> class.
+					<li>Parser efficiency improvements through reuse of string builders.
+					<li>Reworked and simplified the default XML serializers.  The {@link org.apache.juneau.xml.XmlSerializer#DEFAULT} serializer now has namespaces disabled,
+						and {@link org.apache.juneau.xml.XmlSerializer#DEFAULT_NS} has namespaces enabled.  The 'XML-JSON' serializers have been eliminated.
+					<li>Eliminated the <code>addJsonTypeAttrs</code> and <code>addJsonStringTypeAttrs</code> settings.
+					<li>Namespace support is now disabled by default.
+				</ul>
+			<li>Improvements to HTML serialization support.
+				<ul>
+					<li>Parser converted from <code>XMLEventReader</code>-based to <code>XMLStreamReader</code>.
+					<li>Eliminated many unnecessary type tags and <xt>&lt;string&gt;</xt> elements and improved the readable layout.  
+						The new format is much leaner.
+					<li>New support methodology section added to {@link org.apache.juneau.html} documentation.
+				</ul>
+			<li>New HTML5 DTO support:  {@link org.apache.juneau.dto.html5}.
 			<li>{@link org.apache.juneau.BeanContext} class split into separate {@link org.apache.juneau.BeanContext} and {@link org.apache.juneau.BeanSession} classes.
 			<ul>
 				<li>Session object meant to be single-use that can be discarded after use and contains session-level object cache and overridable Locale and TimeZone.
@@ -5112,6 +5144,19 @@
 				<li>{@link org.apache.juneau.transforms.CalendarSwap.DateTimeMedium},{@link org.apache.juneau.transforms.DateSwap.DateTimeMedium} - To {@link java.text.DateFormat#MEDIUM} date-time strings.
 				<li>{@link org.apache.juneau.transforms.CalendarSwap.DateTimeShort},{@link org.apache.juneau.transforms.DateSwap.DateTimeShort} - To {@link java.text.DateFormat#SHORT} date-time strings.
 			</ul>  
+			<li>General improvements to Bean Dictionary support.
+				<ul>
+					<li>New {@link org.apache.juneau.BeanDictionary} class can be used for defining reusable sets of bean dictionaries.
+					<li>New {@link org.apache.juneau.annotation.Bean#beanDictionary()} annotation.
+				</ul>
+			<li>Removed restriction on getters and setters to be prefixed with "getX/setX/isX" if a {@link org.apache.juneau.annotation.BeanProperty#name()} annotation is used.
+			<li>Improvements to ATOM DTO:
+				<ul>
+					<li>New {@link org.apache.juneau.dto.atom.AtomBuilder} class.
+					<li>New setter method names for a better fluent design.
+					<li>Updated {@link org.apache.juneau.dto.atom} documentation.
+				</ul>
+			<li>New {@link org.apache.juneau.transform.MapSwap} and {@link org.apache.juneau.transform.StringSwap} classes.
 		</ul>
 		
 		<h6 class='topic'>org.apache.juneau.server</h6>
@@ -5124,7 +5169,7 @@
 	
 	<!-- ======================================================================================================== -->
 	<a id="6.0.1"></a>
-	<h3 class='topic' onclick='toggle(this)'>6.0.1 (TBD)</h3>
+	<h3 class='topic' onclick='toggle(this)'>6.0.1 (Jan 3, 2017)</h3>
 	<div class='topic'>
 		<p>
 			Juneau 6.0.1 is a minor update.
@@ -5319,7 +5364,7 @@
 			Juno 5.2.0.1 is a moderate update.
 		</p>
 
-		<h6 class='topic'>com.<h6 class='topic'>Core</h6>.team.juno</h6>
+		<h6 class='topic'>com.ibm.team.juno</h6>
 		<ul class='spaced-list'>
 			<li>Improved support for multi-line values in config files.
 				Any line that begins with whitespace is interpreted as a continuation of the previous line.
@@ -6308,7 +6353,7 @@
 
 		<h6 class='topic'>Server</h6>		
 		<ul class='spaced-list'>
-			<li>REST method parameters can now be generic types (e.g. <del><ja>@Param</ja></del>(<js>"foo"</js>) Map&lt;String,Integer&gt; foo</code>).
+			<li>REST method parameters can now be generic types (e.g. <del><ja>@Param</ja>(<js>"foo"</js>) Map&lt;String,Integer&gt; foo</del>).
 				This applies to headers, attributes, and parameters.
 			<li>New <del><code>@Param.multipart()</code></del>
 				and <del><code>@Query.multipart()</code></del> annotations
@@ -7164,11 +7209,11 @@
 				</ul>
 			</li>
 			<li>
-				New {@link org.apache.juneau.xml.annotation.XmlFormat#CONTENT} enum value.<br>
+				New <code><del>XmlFormat.CONTENT</del></code> enum value.<br>
 				Allows bean properties to be persisted as XML element text.
 			</li>
 			<li>
-				New {@link org.apache.juneau.xml.XmlContentHandler} class and {@link org.apache.juneau.xml.annotation.Xml#contentHandler() @Xml.contentHandler} annotation.<br>
+				New <code><del>XmlContentHandler</del></code> class and <code><del>@Xml.contentHandler</del></code> annotation.<br>
 				Allows customized serialization and parsing of beans to XML element text.<br>
 				Added for support of ATOM text content that must support both plain text and embedded XHTML.
 			</li>

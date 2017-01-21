@@ -217,7 +217,7 @@ public class TestUtils {
 	private static Pattern pTargetNs = Pattern.compile("targetNamespace=['\"]([^'\"]+)['\"]");
 
 	public static void validateXml(Object o) throws Exception {
-		validateXml(o, XmlSerializer.DEFAULT_SQ);
+		validateXml(o, XmlSerializer.DEFAULT_NS_SQ);
 	}
 
 	/**

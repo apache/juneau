@@ -61,7 +61,7 @@ public class RoundTripAddClassAttrsTest extends RoundTripTest {
 			},
 			{ /* 3 */
 				"XmlSerializer.DEFAULT/XmlParser.DEFAULT",
-				new XmlSerializer.XmlJson().setProperty(SERIALIZER_addBeanTypeProperties, true).setClassLoader(RoundTripAddClassAttrsTest.class.getClassLoader()),
+				new XmlSerializer().setProperty(SERIALIZER_addBeanTypeProperties, true).setClassLoader(RoundTripAddClassAttrsTest.class.getClassLoader()),
 				new XmlParser().setProperty(BEAN_useInterfaceProxies, false).setClassLoader(RoundTripAddClassAttrsTest.class.getClassLoader()),
 				CHECK_XML_WHITESPACE | VALIDATE_XML
 			},

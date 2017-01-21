@@ -17,8 +17,6 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.xml.*;
-
 /**
  * Annotation for specifying various XML options for the XML and RDF/XML serializers.
  * <p>
@@ -144,12 +142,5 @@ public @interface Xml {
 	 * 	<xt>&lt;/object&gt;</xt>
 	 * </p>
 	 */
-	XmlFormat format() default XmlFormat.NORMAL;
-
-	/**
-	 * Associates a content handler with a bean class or bean property.
-	 * <p>
-	 * 	Refer to {@link XmlContentHandler} for more information.
-	 */
-	Class<? extends XmlContentHandler<?>> contentHandler() default XmlContentHandler.NULL.class;
+	XmlFormat format() default XmlFormat.DEFAULT;
 }

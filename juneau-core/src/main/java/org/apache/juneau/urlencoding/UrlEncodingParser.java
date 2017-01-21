@@ -69,7 +69,7 @@ public class UrlEncodingParser extends UonParser {
 			eType = (ClassMeta<T>)object();
 		PojoSwap<T,Object> transform = (PojoSwap<T,Object>)eType.getPojoSwap();
 		ClassMeta<?> sType = eType.getSerializedClassMeta();
-		BeanDictionary bd = session.getBeanDictionary();
+		BeanRegistry breg = session.getBeanRegistry();
 
 		int c = r.peek();
 		if (c == '?')
@@ -83,7 +83,7 @@ public class UrlEncodingParser extends UonParser {
 			if (m.containsKey("_value"))
 				o = m.get("_value");
 			else
-				o = bd.cast(m);
+				o = breg.cast(m);
 		} else if (sType.isMap()) {
 			Map m = (sType.canCreateNewInstance() ? (Map)sType.newInstance() : new ObjectMap(session));
 			o = parseIntoMap(session, r, m, sType.getKeyType(), sType.getValueType());
@@ -101,7 +101,7 @@ public class UrlEncodingParser extends UonParser {
 			ClassMeta<Object> valueType = object();
 			parseIntoMap(session, r, m, string(), valueType);
 			if (m.containsKey(session.getBeanTypePropertyName()))
-				o = bd.cast(m);
+				o = breg.cast(m);
 			else if (m.containsKey("_value"))
 				o = session.convertToType(m.get("_value"), sType);
 			else if (sType.isCollection()) {

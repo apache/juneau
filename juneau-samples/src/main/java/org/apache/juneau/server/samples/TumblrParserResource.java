@@ -19,7 +19,7 @@ import java.lang.Object;
 import org.apache.juneau.*;
 import org.apache.juneau.client.*;
 import org.apache.juneau.dto.Link;
-import org.apache.juneau.html.dto.proto.*;
+import org.apache.juneau.dto.html5.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.server.annotation.*;
@@ -68,7 +68,7 @@ public class TumblrParserResource extends Resource {
 					else if (type.equals("regular"))
 						e.entry = om.getString("regular-body");
 					else if (type.equals("photo"))
-						e.entry = new Img(om.getString("photo-url-250"));
+						e.entry = new Img().src(om.getString("photo-url-250"));
 					else
 						e.entry = new ObjectMap().append("type", type);
 					l.add(e);

@@ -152,7 +152,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * 	<ul>
 	 * 	  <li> {@link InputStream}
 	 * 	  <li> {@link Reader}
-	 * 	  <li> Any serializable type defined in <a href='../core/package-summary.html#PojoCategories'>POJO Categories</a>
+	 * 	  <li> Any serializable type defined in <a href='../../../../overview-summary.html#Core.PojoCategories'>POJO Categories</a>
 	 * 	</ul>
 	 * <p>
 	 * 	If it's an {@link InputStream} or {@link Reader}, you must also specify the <code>Content-Type</code> using the {@link #setContentType(String)} method.

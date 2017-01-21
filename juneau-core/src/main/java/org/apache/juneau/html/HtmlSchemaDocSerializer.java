@@ -104,9 +104,9 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 			type = "number";
 		else if (sType.isBoolean())
 			type = "boolean";
-		else if (sType.isBean() || sType.isMap())
+		else if (sType.isMapOrBean())
 			type = "object";
-		else if (sType.isCollection() || sType.isArray())
+		else if (sType.isCollectionOrArray())
 			type = "array";
 		else
 			type = "any";
@@ -120,7 +120,7 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 		if (aType != null) {
 			if (sType.isEnum())
 				out.put("enum", getEnumStrings((Class<Enum<?>>)sType.getInnerClass()));
-			else if (sType.isCollection() || sType.isArray()) {
+			else if (sType.isCollectionOrArray()) {
 				ClassMeta componentType = sType.getElementType();
 				if (sType.isCollection() && isParentClass(Set.class, sType.getInnerClass()))
 					out.put("uniqueItems", true);

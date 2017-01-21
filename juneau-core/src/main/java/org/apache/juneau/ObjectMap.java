@@ -1157,18 +1157,18 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * 	same object if entry does not exist.
 	 */
 	public Object cast() {
-		return cast((BeanDictionary)null);
+		return cast((BeanRegistry)null);
 	}
 
 	/**
 	 * Same as {@link #cast()}, but first do a lookup for the name in the specified dictionary.
 	 *
-	 * @param typeDictionary
+	 * @param beanRegistry
 	 * 	The class lexicon to resolve the name.  Can be <jk>null</jk>.
 	 * @return The new Java object of type specified by the <js>"_type"</js> entry value, or this
 	 * 	same object if entry does not exist.
 	 */
-	public Object cast(BeanDictionary typeDictionary) {
+	public Object cast(BeanRegistry beanRegistry) {
 		String c = (String)get(session.getBeanTypePropertyName());
 		if (c == null) {
 			return this;
@@ -1266,7 +1266,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 
 						// Attempt to recursively cast child maps.
 						if (v instanceof ObjectMap)
-							v = ((ObjectMap)v).cast(session.getBeanDictionary());
+							v = ((ObjectMap)v).cast(session.getBeanRegistry());
 
 						k = (kType.isString() ? k : session.convertToType(k, kType));
 						v = (vType.isObject() ? v : session.convertToType(v, vType));
@@ -1287,7 +1287,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 
 						// Attempt to recursively cast child maps.
 						if (v instanceof ObjectMap)
-							v = ((ObjectMap)v).cast(session.getBeanDictionary());
+							v = ((ObjectMap)v).cast(session.getBeanRegistry());
 
 						bm.put(k, v);
 					}
@@ -1295,7 +1295,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 
 				return bm.getBean();
 
-			} else if (cm.isArray() || cm.isCollection()) {
+			} else if (cm.isCollectionOrArray()) {
 				List items = (List)get("items");
 				return session.convertToType(items, cm);
 

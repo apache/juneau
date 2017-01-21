@@ -47,8 +47,7 @@ import org.apache.juneau.xml.annotation.*;
  * 		}
  * </p>
  * <p>
- * 	Refer to {@link org.apache.juneau.dto.atom} for further information about ATOM support.
- * </p>
+ * Refer to {@link org.apache.juneau.dto.atom} for further information about ATOM support.
  */
 @Bean(typeName="feed")
 @SuppressWarnings("hiding")
@@ -58,7 +57,7 @@ public class Feed extends CommonEntry {
 	private Icon icon;            // atomIcon?
 	private Logo logo;            // atomLogo?
 	private Text subtitle;        // atomSubtitle?
-	private List<Entry> entries;  // atomEntry*
+	private Entry[] entries;      // atomEntry*
 
 	/**
 	 * Normal constructor.
@@ -68,6 +67,17 @@ public class Feed extends CommonEntry {
 	 * @param updated The feed updated timestamp.
 	 */
 	public Feed(Id id, Text title, Calendar updated) {
+		super(id, title, updated);
+	}
+
+	/**
+	 * Normal constructor.
+	 *
+	 * @param id The feed identifier.
+	 * @param title The feed title.
+	 * @param updated The feed updated timestamp.
+	 */
+	public Feed(String id, String title, String updated) {
 		super(id, title, updated);
 	}
 
@@ -94,7 +104,8 @@ public class Feed extends CommonEntry {
 	 * @param generator The generator information on this feed.
 	 * @return This object (for method chaining).
 	 */
-	public Feed setGenerator(Generator generator) {
+	@BeanProperty(name="generator")
+	public Feed generator(Generator generator) {
 		this.generator = generator;
 		return this;
 	}
@@ -114,7 +125,8 @@ public class Feed extends CommonEntry {
 	 * @param icon The feed icon.
 	 * @return This object (for method chaining).
 	 */
-	public Feed setIcon(Icon icon) {
+	@BeanProperty(name="icon")
+	public Feed icon(Icon icon) {
 		this.icon = icon;
 		return this;
 	}
@@ -134,7 +146,8 @@ public class Feed extends CommonEntry {
 	 * @param logo The feed logo.
 	 * @return This object (for method chaining).
 	 */
-	public Feed setLogo(Logo logo) {
+	@BeanProperty(name="logo")
+	public Feed logo(Logo logo) {
 		this.logo = logo;
 		return this;
 	}
@@ -156,8 +169,19 @@ public class Feed extends CommonEntry {
 	 * @return This object (for method chaining).
 	 */
 	@BeanProperty(name="subtitle")
-	public Feed setSubTitle(Text subtitle) {
+	public Feed subtitle(Text subtitle) {
 		this.subtitle = subtitle;
+		return this;
+	}
+
+	/**
+	 * Sets the feed subtitle.
+	 *
+	 * @param subtitle The feed subtitle.
+	 * @return This object (for method chaining).
+	 */
+	public Feed subtitle(String subtitle) {
+		this.subtitle = new Text(subtitle);
 		return this;
 	}
 
@@ -167,7 +191,7 @@ public class Feed extends CommonEntry {
 	 * @return The entries in the feed.
 	 */
 	@Xml(format=COLLAPSED)
-	public List<Entry> getEntries() {
+	public Entry[] getEntries() {
 		return entries;
 	}
 
@@ -177,21 +201,9 @@ public class Feed extends CommonEntry {
 	 * @param entries The entries in the feed.
 	 * @return This object (for method chaining).
 	 */
-	public Feed setEntries(List<Entry> entries) {
+	@BeanProperty(name="entries")
+	public Feed entries(Entry...entries) {
 		this.entries = entries;
-		return this;
-	}
-
-	/**
-	 * Adds an entry to the list of entries in the feed.
-	 *
-	 * @param entries The entries to add to the list of entries in the feed.s
-	 * @return This object (for method chaining).
-	 */
-	public Feed addEntries(Entry...entries) {
-		if (this.entries == null)
-			this.entries = new LinkedList<Entry>();
-		this.entries.addAll(Arrays.asList(entries));
 		return this;
 	}
 
@@ -201,86 +213,80 @@ public class Feed extends CommonEntry {
 	//--------------------------------------------------------------------------------
 
 	@Override /* CommonEntry */
-	public Feed setAuthors(List<Person> authors) {
-		super.setAuthors(authors);
+	public Feed authors(Person...authors) {
+		super.authors(authors);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Feed addAuthors(Person...authors) {
-		super.addAuthors(authors);
+	public Feed categories(Category...categories) {
+		super.categories(categories);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Feed setCategories(List<Category> categories) {
-		super.setCategories(categories);
+	public Feed contributors(Person...contributors) {
+		super.contributors(contributors);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Feed addCategories(Category...categories) {
-		super.addCategories(categories);
+	public Feed id(Id id) {
+		super.id(id);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Feed setContributors(List<Person> contributors) {
-		super.setContributors(contributors);
+	public Feed links(Link...links) {
+		super.links(links);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Feed addContributors(Person...contributors) {
-		super.addContributors(contributors);
+	public Feed rights(Text rights) {
+		super.rights(rights);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Feed setId(Id id) {
-		super.setId(id);
+	public Feed rights(String rights) {
+		super.rights(rights);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Feed setLinks(List<Link> links) {
-		super.setLinks(links);
+	public Feed title(Text title) {
+		super.title(title);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Feed addLinks(Link...links) {
-		super.addLinks(links);
+	public Feed title(String title) {
+		super.title(title);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Feed setRights(Text rights) {
-		super.setRights(rights);
+	public Feed updated(Calendar updated) {
+		super.updated(updated);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Feed setTitle(Text title) {
-		super.setTitle(title);
-		return this;
-	}
-
-	@Override /* CommonEntry */
-	public Feed setUpdated(Calendar updated) {
-		super.setUpdated(updated);
+	public Feed updated(String updated) {
+		super.updated(updated);
 		return this;
 	}
 
 	@Override /* Common */
-	public Feed setBase(URI base) {
-		super.setBase(base);
+	public Feed base(URI base) {
+		super.base(base);
 		return this;
 	}
 
 	@Override /* Common */
-	public Feed setLang(String lang) {
-		super.setLang(lang);
+	public Feed lang(String lang) {
+		super.lang(lang);
 		return this;
 	}
 }

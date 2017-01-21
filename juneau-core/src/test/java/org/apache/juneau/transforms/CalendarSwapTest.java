@@ -164,7 +164,7 @@ public class CalendarSwapTest {
 	@Test
 	public void testDefaultStringXml() throws Exception {
 		Class<?> f = CalendarSwap.ToString.class;
-		WriterSerializer s = new XmlSerializer.SimpleSq().addPojoSwaps(f);
+		WriterSerializer s = new XmlSerializer.Sq().addPojoSwaps(f);
 		ReaderParser p = new XmlParser().addPojoSwaps(f);
 		doTest(s, p, true, "<string>Sun Mar 03 10:11:12 PST 1901</string>");
 	}
@@ -231,7 +231,7 @@ public class CalendarSwapTest {
 	@Test
 	public void testISO8601DTXml() throws Exception {
 		Class<?> f = CalendarSwap.ISO8601DT.class;
-		WriterSerializer s = new XmlSerializer.SimpleSq().addPojoSwaps(f);
+		WriterSerializer s = new XmlSerializer.Sq().addPojoSwaps(f);
 		ReaderParser p = new XmlParser().addPojoSwaps(f);
 		doTest(s, p, true, "<string>1901-03-03T10:11:12-08:00</string>");
 	}
@@ -297,7 +297,7 @@ public class CalendarSwapTest {
 	@Test
 	public void testRFC2822DTXml() throws Exception {
 		Class<?> f = CalendarSwap.RFC2822DTZ.class;
-		WriterSerializer s = new XmlSerializer.SimpleSq().addPojoSwaps(f);
+		WriterSerializer s = new XmlSerializer.Sq().addPojoSwaps(f);
 		ReaderParser p = new XmlParser().addPojoSwaps(f);
 		doTest(s, p, true, "<string>Sun, 03 Mar 1901 18:11:12 GMT</string>");
 	}
@@ -363,7 +363,7 @@ public class CalendarSwapTest {
 	@Test
 	public void testDefaultLongXml() throws Exception {
 		Class<?> f = CalendarLongSwap.class;
-		WriterSerializer s = new XmlSerializer.SimpleSq().addPojoSwaps(f);
+		WriterSerializer s = new XmlSerializer.Sq().addPojoSwaps(f);
 		ReaderParser p = new XmlParser().addPojoSwaps(f);
 		doTest(s, p, true, "<number>-2172116928000</number>");
 	}
@@ -429,7 +429,7 @@ public class CalendarSwapTest {
 	@Test
 	public void testDefaultMapXml() throws Exception {
 		Class<?> f = CalendarMapSwap.class;
-		WriterSerializer s = new XmlSerializer.SimpleXmlJsonSq().addPojoSwaps(f);
+		WriterSerializer s = new XmlSerializer.Sq().addPojoSwaps(f);
 		ReaderParser p = new XmlParser().addPojoSwaps(f);
 		doTest(s, p, true, "<object><time _type='number'>-2172116928000</time><timeZone>PST</timeZone></object>");
 	}
@@ -442,7 +442,7 @@ public class CalendarSwapTest {
 		Class<?> f = CalendarMapSwap.class;
 		WriterSerializer s = new HtmlSerializer.Sq().addPojoSwaps(f).setProperty(HTML_addKeyValueTableHeaders, true);
 		ReaderParser p = new HtmlParser().addPojoSwaps(f);
-		doTest(s, p, true, "<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>time</string></td><td><number>-2172116928000</number></td></tr><tr><td><string>timeZone</string></td><td><string>PST</string></td></tr></table>");
+		doTest(s, p, true, "<table><tr><th>key</th><th>value</th></tr><tr><td>time</td><td><number>-2172116928000</number></td></tr><tr><td>timeZone</td><td>PST</td></tr></table>");
 	}
 
 	//====================================================================================================
@@ -495,7 +495,7 @@ public class CalendarSwapTest {
 	@Test
 	public void testDefaultMediumXml() throws Exception {
 		Class<?> f = CalendarSwap.DateMedium.class;
-		WriterSerializer s = new XmlSerializer.SimpleSq().addPojoSwaps(f);
+		WriterSerializer s = new XmlSerializer.Sq().addPojoSwaps(f);
 		ReaderParser p = new XmlParser().addPojoSwaps(f);
 		doTest(s, p, false, "<string>Mar 3, 1901</string>");
 	}
@@ -567,7 +567,7 @@ public class CalendarSwapTest {
 	//====================================================================================================
 	@Test
 	public void testBeanProperyFilterXml() throws Exception {
-		WriterSerializer s = XmlSerializer.DEFAULT_SIMPLE_SQ;
+		WriterSerializer s = XmlSerializer.DEFAULT_SQ;
 		ReaderParser p = XmlParser.DEFAULT;
 
 		Calendar c = testDate;
@@ -591,7 +591,7 @@ public class CalendarSwapTest {
 		Calendar c = testDate;
 		A t = new A(c);
 		String html = s.serialize(t);
-		assertEquals("<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>d1</string></td><td><string>1901-03-03T18:11:12Z</string></td></tr><tr><td><string>d2</string></td><td><string>Sun, 03 Mar 1901 18:11:12 GMT</string></td></tr><tr><td><string>d3</string></td><td><number>-2172116928000</number></td></tr></table>", html);
+		assertEquals("<table><tr><th>key</th><th>value</th></tr><tr><td>d1</td><td>1901-03-03T18:11:12Z</td></tr><tr><td>d2</td><td>Sun, 03 Mar 1901 18:11:12 GMT</td></tr><tr><td>d3</td><td>-2172116928000</td></tr></table>", html);
 		t = p.parse(html, A.class);
 		assertEquals(t.d1.getTime().getTime(), c.getTime().getTime());
 		assertEquals(t.getD2().getTime().getTime(), c.getTime().getTime());

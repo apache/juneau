@@ -36,7 +36,7 @@ public class HtmlTest {
 
 		t = new Object[] {new A1(), new A1()};
 		html = s.serialize(t);
-		assertEquals("<table _type='array'><tr><th>f1</th></tr><tr><td><string>f1</string></td></tr><tr><td><string>f1</string></td></tr></table>", html);
+		assertEquals("<table _type='array'><tr><th>f1</th></tr><tr><td>f1</td></tr><tr><td>f1</td></tr></table>", html);
 
 	}
 
@@ -189,11 +189,11 @@ public class HtmlTest {
 			+"\n[f7]=<a href='http://www.apache.org/f7/x7'>http://www.apache.org/f7/x7</a>"
 			+"\n[f8]=<a href='/cr/f8/x8'>f8/x8</a>"
 			+"\n[f9]=<a href='/cr/f9/x9'>f9/x9</a>"
-			+"\n[fa]=<string>http://www.apache.org/fa/xa#MY_LABEL</string>"
-			+"\n[fb]=<string>http://www.apache.org/fb/xb?label=MY_LABEL&amp;foo=bar</string>"
-			+"\n[fc]=<string>http://www.apache.org/fc/xc?foo=bar&amp;label=MY_LABEL</string>"
-			+"\n[fd]=<string>http://www.apache.org/fd/xd?label2=MY_LABEL&amp;foo=bar</string>"
-			+"\n[fe]=<string>http://www.apache.org/fe/xe?foo=bar&amp;label2=MY_LABEL</string>";
+			+"\n[fa]=http://www.apache.org/fa/xa#MY_LABEL"
+			+"\n[fb]=http://www.apache.org/fb/xb?label=MY_LABEL&amp;foo=bar"
+			+"\n[fc]=http://www.apache.org/fc/xc?foo=bar&amp;label=MY_LABEL"
+			+"\n[fd]=http://www.apache.org/fd/xd?label2=MY_LABEL&amp;foo=bar"
+			+"\n[fe]=http://www.apache.org/fe/xe?foo=bar&amp;label2=MY_LABEL";
 			assertEquals(expected, r);
 
 			s.setProperty(HTML_detectLinksInStrings, true);
@@ -220,10 +220,10 @@ public class HtmlTest {
 
 	private String strip(String html) {
 		return html
-			.replace("<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr>", "")
+			.replace("<table><tr><th>key</th><th>value</th></tr>", "")
 			.replace("</table>", "")
-			.replace("<tr><td><string>", "\n[")
-			.replace("</string></td><td>", "]=")
+			.replace("<tr><td>", "\n[")
+			.replace("</td><td>", "]=")
 			.replace("</td></tr>", "");
 	}
 
@@ -242,7 +242,7 @@ public class HtmlTest {
 
 		o = new B2();
 		r = s.serialize(o);
-		assertEquals("<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f1</string></td><td><f1></td></tr></table>", r);
+		assertEquals("<table><tr><th>key</th><th>value</th></tr><tr><td>f1</td><td><f1></td></tr></table>", r);
 	}
 
 	@Html(asPlainText=true)
@@ -274,7 +274,7 @@ public class HtmlTest {
 
 		o = new C2();
 		r = s.serialize(o);
-		assertEquals("<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>f1</string></td><td><string>&lt;f1&gt;</string></td></tr></table>", r);
+		assertEquals("<table><tr><th>key</th><th>value</th></tr><tr><td>f1</td><td>&lt;f1&gt;</td></tr></table>", r);
 	}
 
 	@Html(asXml=true)
@@ -300,7 +300,7 @@ public class HtmlTest {
 		m.put("foo", "bar");
 		o = new ObjectList().append(m);
 		r = s.serialize(o);
-		assertEquals("<ul><li><table _type='object'><tr><td><string>foo</string></td><td><string>bar</string></td></tr></table></li></ul>", r);
+		assertEquals("<ul><li><table><tr><td>foo</td><td>bar</td></tr></table></li></ul>", r);
 	}
 
 	@Html(noTables=true, noTableHeaders=true)

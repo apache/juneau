@@ -12,8 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.atom;
 
-import java.net.*;
+import java.net.URI;
 import java.util.*;
+
+import org.apache.juneau.annotation.*;
 
 /**
  * Represents an <code>atomSource</code> construct in the RFC4287 specification.
@@ -39,9 +41,9 @@ import java.util.*;
  * 		}
  * </p>
  * <p>
- * 	Refer to {@link org.apache.juneau.dto.atom} for further information about ATOM support.
- * </p>
+ * Refer to {@link org.apache.juneau.dto.atom} for further information about ATOM support.
  */
+@SuppressWarnings("hiding")
 public class Source extends CommonEntry {
 
 	private Generator generator;
@@ -69,7 +71,8 @@ public class Source extends CommonEntry {
 	 * @param generator The generator info of this source.
 	 * @return This object (for method chaining).
 	 */
-	public Source setGenerator(Generator generator) {
+	@BeanProperty(name="generator")
+	public Source generator(Generator generator) {
 		this.generator = generator;
 		return this;
 	}
@@ -89,7 +92,8 @@ public class Source extends CommonEntry {
 	 * @param icon The icon of this source.
 	 * @return This object (for method chaining).
 	 */
-	public Source setIcon(Icon icon) {
+	@BeanProperty(name="icon")
+	public Source icon(Icon icon) {
 		this.icon = icon;
 		return this;
 	}
@@ -109,7 +113,8 @@ public class Source extends CommonEntry {
 	 * @param logo The logo of this source.
 	 * @return This object (for method chaining).
 	 */
-	public Source setLogo(Logo logo) {
+	@BeanProperty(name="logo")
+	public Source logo(Logo logo) {
 		this.logo = logo;
 		return this;
 	}
@@ -129,97 +134,103 @@ public class Source extends CommonEntry {
 	 * @param subtitle The subtitle of this source.
 	 * @return This object (for method chaining).
 	 */
-	public Source setSubtitle(Text subtitle) {
+	@BeanProperty(name="subtitle")
+	public Source subtitle(Text subtitle) {
 		this.subtitle = subtitle;
 		return this;
 	}
 
+	/**
+	 * Sets the subtitle of this source.
+	 *
+	 * @param subtitle The subtitle of this source.
+	 * @return This object (for method chaining).
+	 */
+	@BeanProperty(name="subtitle")
+	public Source subtitle(String subtitle) {
+		this.subtitle = new Text(subtitle);
+		return this;
+	}
 
 	//--------------------------------------------------------------------------------
 	// Overridden setters (to simplify method chaining)
 	//--------------------------------------------------------------------------------
 
 	@Override /* CommonEntry */
-	public Source setAuthors(List<Person> authors) {
-		super.setAuthors(authors);
+	public Source authors(Person...authors) {
+		super.authors(authors);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Source addAuthors(Person...authors) {
-		super.addAuthors(authors);
+	public Source categories(Category...categories) {
+		super.categories(categories);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Source setCategories(List<Category> categories) {
-		super.setCategories(categories);
+	public Source contributors(Person...contributors) {
+		super.contributors(contributors);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Source addCategories(Category...categories) {
-		super.addCategories(categories);
+	public Source id(Id id) {
+		super.id(id);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Source setContributors(List<Person> contributors) {
-		super.setContributors(contributors);
+	public Source links(Link...links) {
+		super.links(links);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Source addContributors(Person...contributors) {
-		super.addContributors(contributors);
+	public Source rights(Text rights) {
+		super.rights(rights);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Source setId(Id id) {
-		super.setId(id);
+	public Source rights(String rights) {
+		super.rights(rights);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Source setLinks(List<Link> links) {
-		super.setLinks(links);
+	public Source title(Text title) {
+		super.title(title);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Source addLinks(Link...links) {
-		super.addLinks(links);
+	public Source title(String title) {
+		super.title(title);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Source setRights(Text rights) {
-		super.setRights(rights);
+	public Source updated(Calendar updated) {
+		super.updated(updated);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Source setTitle(Text title) {
-		super.setTitle(title);
-		return this;
-	}
-
-	@Override /* CommonEntry */
-	public Source setUpdated(Calendar updated) {
-		super.setUpdated(updated);
+	public Source updated(String updated) {
+		super.updated(updated);
 		return this;
 	}
 
 	@Override /* Common */
-	public Source setBase(URI base) {
-		super.setBase(base);
+	public Source base(URI base) {
+		super.base(base);
 		return this;
 	}
 
 	@Override /* Common */
-	public Source setLang(String lang) {
-		super.setLang(lang);
+	public Source lang(String lang) {
+		super.lang(lang);
 		return this;
 	}
 }

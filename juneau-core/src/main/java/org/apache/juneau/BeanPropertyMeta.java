@@ -57,7 +57,7 @@ public class BeanPropertyMeta {
 	private PojoSwap swap;                     // PojoSwap defined only via @BeanProperty annotation.
 
 	private MetadataMap extMeta = new MetadataMap();  // Extended metadata
-	private BeanDictionary beanDictionary;
+	BeanRegistry beanRegistry;
 
 	/**
 	 * Constructor.
@@ -71,9 +71,10 @@ public class BeanPropertyMeta {
 		this.name = name;
 	}
 
-	BeanPropertyMeta(BeanMeta<?> beanMeta, String name, ClassMeta<?> rawTypeMeta) {
+	BeanPropertyMeta(BeanMeta<?> beanMeta, String name, ClassMeta<?> rawTypeMeta, BeanRegistry beanRegistry) {
 		this(beanMeta, name);
 		this.rawTypeMeta = rawTypeMeta;
+		this.beanRegistry = beanRegistry;
 	}
 
 	BeanPropertyMeta(BeanMeta<?> beanMeta, String name, Method getter, Method setter) {
@@ -150,11 +151,10 @@ public class BeanPropertyMeta {
 	 * 	<li>Dictionary defined via {@link BeanProperty#beanDictionary()}.
 	 * 	<li>Dictionary defined via {@link BeanContext#BEAN_beanDictionary} context property.
 	 * </ol>
-	 *
 	 * @return The bean dictionary in use for this bean property.  Never <jk>null</jk>.
 	 */
-	public BeanDictionary getBeanDictionary() {
-		return beanDictionary == null ? beanContext.getBeanDictionary() : beanDictionary;
+	public BeanRegistry getBeanRegistry() {
+		return beanRegistry;
 	}
 
 	/**
@@ -239,7 +239,9 @@ public class BeanPropertyMeta {
 		return extMeta.get(c, this);
 	}
 
-	boolean validate(BeanContext f, Map<Class<?>,Class<?>[]> typeVarImpls) throws Exception {
+	boolean validate(BeanContext f, BeanRegistry parentBeanRegistry, Map<Class<?>,Class<?>[]> typeVarImpls) throws Exception {
+
+		List<Class<?>> bdClasses = new ArrayList<Class<?>>();
 
 		if (field == null && getter == null)
 			return false;
@@ -255,8 +257,7 @@ public class BeanPropertyMeta {
 				swap = getPropertyPojoSwap(p);
 				if (! p.properties().isEmpty())
 					properties = StringUtils.split(p.properties(), ',');
-				if (p.beanDictionary().length > 0)
-					this.beanDictionary = new BeanDictionaryBuilder().add(p.beanDictionary()).setBeanContext(beanContext).build();
+				bdClasses.addAll(Arrays.asList(p.beanDictionary()));
 			}
 		}
 
@@ -270,8 +271,7 @@ public class BeanPropertyMeta {
 					swap = getPropertyPojoSwap(p);
 				if (properties != null && ! p.properties().isEmpty())
 					properties = StringUtils.split(p.properties(), ',');
-				if (p.beanDictionary().length > 0)
-					this.beanDictionary = new BeanDictionaryBuilder().add(p.beanDictionary()).setBeanContext(beanContext).build();
+				bdClasses.addAll(Arrays.asList(p.beanDictionary()));
 			}
 		}
 
@@ -285,13 +285,14 @@ public class BeanPropertyMeta {
 				swap = getPropertyPojoSwap(p);
 				if (properties != null && ! p.properties().isEmpty())
 					properties = StringUtils.split(p.properties(), ',');
-				if (p.beanDictionary().length > 0)
-					this.beanDictionary = new BeanDictionaryBuilder().add(p.beanDictionary()).setBeanContext(beanContext).build();
+				bdClasses.addAll(Arrays.asList(p.beanDictionary()));
 			}
 		}
 
 		if (rawTypeMeta == null)
 			return false;
+
+		this.beanRegistry = new BeanRegistry(beanContext, parentBeanRegistry, bdClasses.toArray(new Class<?>[0]));
 
 		// Do some annotation validation.
 		Class<?> c = rawTypeMeta.getInnerClass();
@@ -327,9 +328,6 @@ public class BeanPropertyMeta {
 	 */
 	public Object get(BeanMap<?> m) {
 		try {
-
-			BeanSession session = m.getBeanSession();
-
 			// Read-only beans have their properties stored in a cache until getBean() is called.
 			Object bean = m.bean;
 			if (bean == null)
@@ -346,13 +344,31 @@ public class BeanPropertyMeta {
 			else if (field != null)
 				o = field.get(bean);
 
+			return toSerializedForm(m.getBeanSession(), o);
+
+		} catch (Throwable e) {
+			if (beanContext.ignoreInvocationExceptionsOnGetters) {
+				if (rawTypeMeta.isPrimitive())
+					return rawTypeMeta.getPrimitiveDefault();
+				return null;
+			}
+			throw new BeanRuntimeException(beanMeta.c, "Exception occurred while getting property ''{0}''", name).initCause(e);
+		}
+	}
+
+	/**
+	 * Converts a raw bean property value to serialized form.
+	 * Applies transforms and child property filters.
+	 */
+	final Object toSerializedForm(BeanSession session, Object o) {
+		try {
 			o = transform(session, o);
 			if (o == null)
 				return null;
 			if (properties != null) {
 				if (rawTypeMeta.isArray()) {
 					Object[] a = (Object[])o;
-					List l = new ArrayList(a.length);
+					List l = new DelegateList(rawTypeMeta);
 					ClassMeta childType = rawTypeMeta.getElementType();
 					for (Object c : a)
 						l.add(applyChildPropertiesFilter(session, childType, c));
@@ -371,13 +387,6 @@ public class BeanPropertyMeta {
 			return o;
 		} catch (SerializeException e) {
 			throw new BeanRuntimeException(e);
-		} catch (Throwable e) {
-			if (beanContext.ignoreInvocationExceptionsOnGetters) {
-				if (rawTypeMeta.isPrimitive())
-					return rawTypeMeta.getPrimitiveDefault();
-				return null;
-			}
-			throw new BeanRuntimeException(beanMeta.c, "Exception occurred while getting property ''{0}''", name).initCause(e);
 		}
 	}
 
@@ -685,9 +694,9 @@ public class BeanPropertyMeta {
 					// Copy any existing array values into the temporary list.
 					Object oldArray;
 				if (getter != null)
-						oldArray = getter.invoke(bean, (Object[])null);
+					oldArray = getter.invoke(bean, (Object[])null);
 				else if (field != null)
-						oldArray = field.get(bean);
+					oldArray = field.get(bean);
 				else
 					throw new BeanRuntimeException(beanMeta.c, "Attempt to append to array property ''{0}'', but no getter or field defined.", name);
 					ArrayUtils.copyToList(oldArray, l);
@@ -695,6 +704,106 @@ public class BeanPropertyMeta {
 
 				// Add new entry to our array.
 				l.add(v);
+			}
+
+		} catch (BeanRuntimeException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new BeanRuntimeException(e);
+		}
+	}
+
+	/**
+	 * Adds a value to a {@link Map} or bean property.
+	 *
+	 * @param m The bean of the field being set.
+	 * @param key The key to add to the field.
+	 * @param value The value to add to the field.
+	 * @throws BeanRuntimeException If field is not a map or array.
+	 */
+	public void add(BeanMap<?> m, String key, Object value) throws BeanRuntimeException {
+
+		// Read-only beans get their properties stored in a cache.
+		if (m.bean == null) {
+			if (! m.propertyCache.containsKey(name))
+				m.propertyCache.put(name, new ObjectMap(m.getBeanSession()));
+			((ObjectMap)m.propertyCache.get(name)).append(key.toString(), value);
+			return;
+		}
+
+		BeanSession session = m.getBeanSession();
+
+		boolean isMap = rawTypeMeta.isMap();
+		boolean isBean = rawTypeMeta.isBean();
+
+		if (! (isBean || isMap))
+			throw new BeanRuntimeException(beanMeta.c, "Attempt to add key/value to property ''{0}'' which is not a map or bean", name);
+
+		Object bean = m.getBean(true);
+
+		ClassMeta<?> elementType = rawTypeMeta.getElementType();
+
+		try {
+			Object v = session.convertToType(value, elementType);
+
+			if (isMap) {
+				Map map = null;
+				if (getter != null) {
+					map = (Map)getter.invoke(bean, (Object[])null);
+				} else if (field != null) {
+					map = (Map)field.get(bean);
+				} else {
+					throw new BeanRuntimeException(beanMeta.c, "Attempt to append to map property ''{0}'', but no getter or field defined.", name);
+				}
+
+				if (map != null) {
+					map.put(key, v);
+					return;
+				}
+
+				if (rawTypeMeta.canCreateNewInstance())
+					map = (Map)rawTypeMeta.newInstance();
+				else
+					map = new ObjectMap(session);
+
+				map.put(key, v);
+
+				if (setter != null)
+					setter.invoke(bean, map);
+				else if (field != null)
+					field.set(bean, map);
+				else
+					throw new BeanRuntimeException(beanMeta.c, "Attempt to initialize map property ''{0}'', but no setter or field defined.", name);
+
+			} else /* isBean() */ {
+
+				Object b = null;
+				if (getter != null) {
+					b = getter.invoke(bean, (Object[])null);
+				} else if (field != null) {
+					b = field.get(bean);
+				} else {
+					throw new BeanRuntimeException(beanMeta.c, "Attempt to append to bean property ''{0}'', but no getter or field defined.", name);
+				}
+
+				if (b != null) {
+					BeanMap bm = session.toBeanMap(b);
+					bm.put(key, v);
+					return;
+				}
+
+				if (rawTypeMeta.canCreateNewInstance(m.getBean(false))) {
+					b = rawTypeMeta.newInstance();
+					BeanMap bm = session.toBeanMap(b);
+					bm.put(key, v);
+				}
+
+				if (setter != null)
+					setter.invoke(bean, b);
+				else if (field != null)
+					field.set(bean, b);
+				else
+					throw new BeanRuntimeException(beanMeta.c, "Attempt to initialize bean property ''{0}'', but no setter or field defined.", name);
 			}
 
 		} catch (BeanRuntimeException e) {
@@ -769,10 +878,10 @@ public class BeanPropertyMeta {
 		if (cm.isBean())
 			return new BeanMap(session, o, new BeanMetaFiltered(cm.getBeanMeta(), properties));
 		if (cm.isMap())
-			return new FilteredMap((Map)o, properties);
+			return new FilteredMap(cm, (Map)o, properties);
 		if (cm.isObject()) {
 			if (o instanceof Map)
-				return new FilteredMap((Map)o, properties);
+				return new FilteredMap(cm, (Map)o, properties);
 			BeanMeta bm = beanContext.getBeanMeta(o.getClass());
 			if (bm != null)
 				return new BeanMap(session, o, new BeanMetaFiltered(cm.getBeanMeta(), properties));

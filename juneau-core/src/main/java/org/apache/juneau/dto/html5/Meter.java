@@ -1,0 +1,118 @@
+// ***************************************************************************************************************************
+// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
+// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
+// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
+// * with the License.  You may obtain a copy of the License at                                                              *
+// *                                                                                                                         *
+// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
+// *                                                                                                                         *
+// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *
+// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
+// * specific language governing permissions and limitations under the License.                                              *
+// ***************************************************************************************************************************
+package org.apache.juneau.dto.html5;
+
+import org.apache.juneau.annotation.*;
+
+/**
+ * DTO for an HTML <a href='https://www.w3.org/TR/html5/forms.html#the-meter-element'>&lt;meter&gt;</a> element.
+ * <p>
+ */
+@Bean(typeName="meter")
+@SuppressWarnings("hiding")
+public class Meter extends HtmlElementMixed {
+
+	/**
+	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-meter-high'>high</a> attribute.
+	 * Low limit of high range.
+	 * @param high - The new value for this attribute.
+	 * @return This object (for method chaining).
+	 */
+	public final Meter high(String high) {
+		attrs.put("high", high);
+		return this;
+	}
+
+	/**
+	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-meter-low'>low</a> attribute.
+	 * High limit of low range.
+	 * @param low - The new value for this attribute.
+	 * @return This object (for method chaining).
+	 */
+	public final Meter low(String low) {
+		attrs.put("low", low);
+		return this;
+	}
+
+	/**
+	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-meter-max'>max</a> attribute.
+	 * Upper bound of range.
+	 * @param max - The new value for this attribute.
+	 * @return This object (for method chaining).
+	 */
+	public final Meter max(String max) {
+		attrs.put("max", max);
+		return this;
+	}
+
+	/**
+	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-meter-min'>min</a> attribute.
+	 * Lower bound of range.
+	 * @param min - The new value for this attribute.
+	 * @return This object (for method chaining).
+	 */
+	public final Meter min(String min) {
+		attrs.put("min", min);
+		return this;
+	}
+
+	/**
+	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-meter-optimum'>optimum</a> attribute.
+	 * Optimum value in gauge.
+	 * @param optimum - The new value for this attribute.
+	 * @return This object (for method chaining).
+	 */
+	public final Meter optimum(String optimum) {
+		attrs.put("optimum", optimum);
+		return this;
+	}
+
+	/**
+	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-meter-value'>value</a> attribute.
+	 * Current value of the element.
+	 * @param value - The new value for this attribute.
+	 * @return This object (for method chaining).
+	 */
+	public final Meter value(String value) {
+		attrs.put("value", value);
+		return this;
+	}
+
+	//--------------------------------------------------------------------------------
+	// Overridden methods
+	//--------------------------------------------------------------------------------
+
+	@Override /* HtmlElement */
+	public final Meter _class(String _class) {
+		super._class(_class);
+		return this;
+	}
+
+	@Override /* HtmlElement */
+	public final Meter id(String id) {
+		super.id(id);
+		return this;
+	}
+
+	@Override /* HtmlElementMixed */
+	public Meter children(Object...children) {
+		super.children(children);
+		return this;
+	}
+
+	@Override /* HtmlElementMixed */
+	public Meter child(Object child) {
+		this.children.add(child);
+		return this;
+	}
+}

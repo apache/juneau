@@ -19,7 +19,6 @@ import static org.junit.Assert.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.annotation.*;
 import org.junit.*;
 
@@ -31,7 +30,7 @@ public class XmlCollapsedTest {
 	//====================================================================================================
 	@Test
 	public void testBasic() throws Exception {
-		XmlSerializer s = XmlSerializer.DEFAULT_SIMPLE_SQ;
+		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		XmlParser p = XmlParser.DEFAULT;
 		A t = new A();
 
@@ -71,7 +70,7 @@ public class XmlCollapsedTest {
 	//====================================================================================================
 	@Test
 	public void testUninitializedFields() throws Exception {
-		XmlSerializer s = XmlSerializer.DEFAULT_SIMPLE_SQ;
+		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		XmlParser p = XmlParser.DEFAULT;
 		B t = new B();
 
@@ -111,7 +110,7 @@ public class XmlCollapsedTest {
 	//====================================================================================================
 	@Test
 	public void testInitializedFields() throws Exception {
-		XmlSerializer s = XmlSerializer.DEFAULT_SIMPLE_SQ;
+		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		XmlParser p = XmlParser.DEFAULT;
 		C t = new C();
 
@@ -158,7 +157,7 @@ public class XmlCollapsedTest {
 	@Test
 	@SuppressWarnings("synthetic-access")
 	public void testGetters() throws Exception {
-		XmlSerializer s = XmlSerializer.DEFAULT_SIMPLE_SQ;
+		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		XmlParser p = XmlParser.DEFAULT;
 		D t = new D();
 
@@ -219,7 +218,7 @@ public class XmlCollapsedTest {
 	@Test
 	@SuppressWarnings("synthetic-access")
 	public void testNullConstructibleCollectionFields() throws Exception {
-		XmlSerializer s = XmlSerializer.DEFAULT_SIMPLE_SQ;
+		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		XmlParser p = XmlParser.DEFAULT;
 		E t = new E();
 
@@ -265,7 +264,7 @@ public class XmlCollapsedTest {
 	//====================================================================================================
 	@Test
 	public void testElementNameOnElementClass() throws Exception {
-		XmlSerializer s = XmlSerializer.DEFAULT_SIMPLE_SQ;
+		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		XmlParser p = XmlParser.DEFAULT;
 		Object t1 = FA.newInstance(), t2;
 		String r;
@@ -282,14 +281,6 @@ public class XmlCollapsedTest {
 		t2 = p.parse(r, FB.class);
 		assertEqualObjects(t1, t2);
 		validateXml(t1, s);
-
-		t1 = FC.newInstance();
-		try {
-			r = s.serialize(t1);
-			fail("Exception expected.");
-		} catch (SerializeException e) {
-			assertEquals("org.apache.juneau.xml.XmlCollapsedTest$FC: Multiple properties found with the name 'xf1'.", e.getLocalizedMessage());
-		}
 	}
 
 	public static class FA {
@@ -320,25 +311,10 @@ public class XmlCollapsedTest {
 		}
 	}
 
-	// Should cause name collision.
-	public static class FC {
-
-		@Xml(format=COLLAPSED)
-		public List<F1> f1;
-
-		@Xml(format=COLLAPSED)
-		public F1[] f2;
-
-		public static FC newInstance() {
-			FC t = new FC();
-			return t;
-		}
-	}
-
 	@Bean(typeName="xf1")
 	public static class F1 {
 
-		@Xml(format=CONTENT)
+		@Xml(format=TEXT)
 		public String text;
 
 		public static F1 newInstance(String text) {
@@ -355,7 +331,7 @@ public class XmlCollapsedTest {
 	//====================================================================================================
 	@Test
 	public void testElementNameOnElementClassOverridden() throws Exception {
-		XmlSerializer s = XmlSerializer.DEFAULT_SIMPLE_SQ;
+		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		XmlParser p = XmlParser.DEFAULT;
 		G t = G.newInstance(), t2;
 
@@ -389,7 +365,7 @@ public class XmlCollapsedTest {
 	//====================================================================================================
 	@Test
 	public void testElementNameOnCollectionClass() throws Exception {
-		XmlSerializer s = XmlSerializer.DEFAULT_SIMPLE_SQ;
+		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		XmlParser p = XmlParser.DEFAULT;
 		H t = H.newInstance(), t2;
 
@@ -428,7 +404,7 @@ public class XmlCollapsedTest {
 	//====================================================================================================
 	@Test
 	public void testElementNameOnCollectionClassOverridden() throws Exception {
-		XmlSerializer s = XmlSerializer.DEFAULT_SIMPLE_SQ;
+		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 		XmlParser p = XmlParser.DEFAULT;
 		G t = G.newInstance(), t2;
 

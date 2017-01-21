@@ -158,10 +158,9 @@ public @interface BeanProperty {
 	 * This list can consist of the following class types:
 	 * <ul>
 	 * 	<li>Any bean class that specifies a value for {@link Bean#typeName() @Bean.name()};
-	 * 	<li>Any subclass of {@link BeanDictionaryBuilder} that defines an entire set of mappings.
+	 * 	<li>Any subclass of {@link BeanDictionary} that defines an entire set of mappings.
 	 * 		Note that the subclass MUST implement a no-arg constructor so that it can be instantiated.
 	 * </ul>
 	 */
 	Class<?>[] beanDictionary() default {};
 }
-

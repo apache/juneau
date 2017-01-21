@@ -60,7 +60,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	 */
 	public final boolean shouldUseExpandedParams(BeanPropertyMeta pMeta) {
 		ClassMeta<?> cm = pMeta.getClassMeta();
-		if (cm.isArray() || cm.isCollection()) {
+		if (cm.isCollectionOrArray()) {
 			if (expandedParams)
 				return true;
 			if (pMeta.getBeanMeta().getClassMeta().getExtendedMeta(UrlEncodingClassMeta.class).isExpandedParams())
@@ -79,7 +79,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 		if (value == null || ! expandedParams)
 			return false;
 		ClassMeta<?> cm = getClassMetaForObject(value).getSerializedClassMeta();
-		if (cm.isArray() || cm.isCollection()) {
+		if (cm.isCollectionOrArray()) {
 			if (expandedParams)
 				return true;
 		}

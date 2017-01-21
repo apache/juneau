@@ -31,7 +31,7 @@ public class CommonXmlTest {
 	@Test
 	public void testBeanUriAnnotation() throws Exception {
 		XmlParser p = XmlParser.DEFAULT;
-		XmlSerializer s = XmlSerializer.DEFAULT_SIMPLE_SQ;
+		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
 
 		A t = new A("http://foo", 123, "bar");
 		String xml = s.serialize(t);

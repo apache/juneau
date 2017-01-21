@@ -32,7 +32,7 @@ public class ClientTest {
 
 			// Create a client to handle XML requests and responses.
 			RestClient client = new RestClient(JsonSerializer.DEFAULT, JsonParser.DEFAULT);
-			RestClient xmlClient = new RestClient(XmlSerializer.DEFAULT, XmlParser.DEFAULT);
+			RestClient xmlClient = new RestClient(XmlSerializer.DEFAULT_NS, XmlParser.DEFAULT);
 			try {
 				String root = "http://localhost:10000/addressBook";
 

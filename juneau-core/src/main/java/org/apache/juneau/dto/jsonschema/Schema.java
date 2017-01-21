@@ -1065,6 +1065,7 @@ public class Schema {
 	 * @return This object (for method chaining).
 	 * @throws BeanRuntimeException If invalid object type passed in.
 	 */
+	@BeanProperty(beanDictionary={Schema.class})
 	public Schema setAdditionalProperties(Object additionalProperties) {
 		this.additionalPropertiesBoolean = null;
 		this.additionalPropertiesSchema = null;

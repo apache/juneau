@@ -855,9 +855,8 @@ public class BeanContext extends Context {
 	 * <p>
 	 * This list can consist of the following class types:
 	 * <ul>
-	 * 	<li>Any bean class that specifies a value for {@link Bean#typeName() @Bean.typeName()};
-	 * 	<li>Any subclass of {@link BeanDictionaryBuilder} that defines an entire subset of mappings.
-	 * 		Note that the subclass MUST implement a no-arg constructor so that it can be instantiated.
+	 * 	<li>Any bean class that specifies a value for {@link Bean#typeName() @Bean.typeName()}.
+	 * 	<li>Any collection of bean classes above.
 	 * </ul>
 	 */
 	public static final String BEAN_beanDictionary = "BeanContext.beanDictionary.list";
@@ -1023,11 +1022,11 @@ public class BeanContext extends Context {
 		beanMethodVisibility,
 		beanFieldVisibility;
 
-	final Class<?>[] notBeanClasses;
+	final Class<?>[] notBeanClasses, beanDictionaryClasses;
 	final String[] notBeanPackageNames, notBeanPackagePrefixes;
 	final BeanFilter[] beanFilters;
 	final PojoSwap<?,?>[] pojoSwaps;
-	final BeanDictionary beanDictionary;
+	final BeanRegistry beanRegistry;
 	final Map<Class<?>,Class<?>> implClasses;
 	final Class<?>[] implKeyClasses, implValueClasses;
 	final ClassLoader classLoader;
@@ -1148,7 +1147,8 @@ public class BeanContext extends Context {
 		this.cmObject = cmCache.get(Object.class);
 		this.cmClass = cmCache.get(Class.class);
 
-		beanDictionary = new BeanDictionaryBuilder().add(pm.get(BEAN_beanDictionary, Class[].class, new Class[0])).setBeanContext(this).build();
+		this.beanDictionaryClasses = pm.get(BEAN_beanDictionary, Class[].class, new Class[0]);
+		this.beanRegistry = new BeanRegistry(this, null);
 	}
 
 	/**
@@ -1794,12 +1794,12 @@ public class BeanContext extends Context {
 	}
 
 	/**
-	 * Returns the bean dictionary defined in this bean context defined by {@link BeanContext#BEAN_beanDictionary}.
+	 * Returns the bean registry defined in this bean context defined by {@link BeanContext#BEAN_beanDictionary}.
 	 *
-	 * @return The bean dictionary defined in this bean context.  Never <jk>null</jk>.
+	 * @return The bean registry defined in this bean context.  Never <jk>null</jk>.
 	 */
-	protected final BeanDictionary getBeanDictionary() {
-		return beanDictionary;
+	protected final BeanRegistry getBeanRegistry() {
+		return beanRegistry;
 	}
 
 	/**

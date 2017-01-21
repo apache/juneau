@@ -41,7 +41,7 @@ public class JacocoDummyTest {
 
 		ConfigFileFormat.valueOf(ConfigFileFormat.INI.toString());
 		RdfCollectionFormat.valueOf(RdfCollectionFormat.DEFAULT.toString());
-		XmlFormat.valueOf(XmlFormat.NORMAL.toString());
+		XmlFormat.valueOf(XmlFormat.DEFAULT.toString());
 		Visibility.valueOf(Visibility.DEFAULT.toString());
 	}
 }

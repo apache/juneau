@@ -19,15 +19,14 @@ import java.util.*;
 import javax.xml.stream.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
-import org.apache.juneau.parser.*;
+import org.apache.juneau.xml.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link HtmlParser}.
  * <p>
  * This class is NOT thread safe.  It is meant to be discarded after one-time use.
  */
-public final class HtmlParserSession extends ParserSession {
+public final class HtmlParserSession extends XmlParserSession {
 
 	private XMLEventReader xmlEventReader;
 
@@ -55,23 +54,6 @@ public final class HtmlParserSession extends ParserSession {
 	 */
 	public HtmlParserSession(HtmlParserContext ctx, ObjectMap op, Object input, Method javaMethod, Object outer, Locale locale, TimeZone timeZone) {
 		super(ctx, op, input, javaMethod, outer, locale, timeZone);
-	}
-
-	/**
-	 * Wraps the specified reader in an {@link XMLEventReader}.
-	 * This event reader gets closed by the {@link #close()} method.
-	 *
-	 * @param in The reader to read from.
-	 * @param estimatedSize The estimated size of the input.  If <code>-1</code>, uses a default size of <code>8196</code>.
-	 * @return A new XML event reader using a new {@link XMLInputFactory}.
-	 * @throws ParseException
-	 */
-	final XMLEventReader getXmlEventReader() throws Exception {
-		Reader r = IOUtils.getBufferedReader(super.getReader());
-		XMLInputFactory factory = XMLInputFactory.newInstance();
-		factory.setProperty(XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES, false);
-		this.xmlEventReader = factory.createXMLEventReader(r);
-		return xmlEventReader;
 	}
 
 	@Override /* ParserSession */

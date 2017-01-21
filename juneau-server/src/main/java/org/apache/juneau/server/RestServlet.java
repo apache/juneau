@@ -2118,7 +2118,7 @@ public abstract class RestServlet extends HttpServlet {
 		 */
 		private void assertCollection(Type t, Method m) throws ServletException {
 			ClassMeta<?> cm = BeanContext.DEFAULT.getClassMeta(t);
-			if (! (cm.isArray() || cm.isCollection()))
+			if (! cm.isCollectionOrArray())
 				throw new ServletException("Use of multipart flag on parameter that's not an array or Collection on method" + m);
 		}
 

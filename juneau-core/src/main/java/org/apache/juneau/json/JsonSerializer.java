@@ -162,7 +162,7 @@ public class JsonSerializer extends WriterSerializer {
 		if (eType == null)
 			eType = object();
 
-		boolean addTypeProperty;		// Add "_type" attribute to element?
+		boolean addTypeProperty;    // Add "_type" attribute to element?
 		ClassMeta<?> aType;			// The actual type
 		ClassMeta<?> sType;			// The serialized type
 

@@ -224,7 +224,7 @@ public final class PojoQuery {
 		if (input == null)
 			return null;
 
-		if (! (type.isBean() || type.isMap()))
+		if (! type.isMapOrBean())
 			throw new RuntimeException("Cannot call filterMap() on class type " + type);
 
 		Map m = (Map)replaceWithMutables(input);
@@ -249,7 +249,7 @@ public final class PojoQuery {
 		if (input == null)
 			return null;
 
-		if (! (type.isArray() || type.isCollection()))
+		if (! type.isCollectionOrArray())
 			throw new RuntimeException("Cannot call filterCollection() on class type " + type);
 
 		if (view == null)
@@ -305,7 +305,7 @@ public final class PojoQuery {
 			DelegateBeanMap dbm = new DelegateBeanMap(bm.getBean(), session);
 			for (BeanMapEntry e : (Set<BeanMapEntry>)bm.entrySet()) {
 				ClassMeta ct1 = e.getMeta().getClassMeta();
-				if (ct1.isArray() || ct1.isBean() || ct1.isCollection() || ct1.isMap() || ct1.isObject())
+				if (ct1.isCollectionOrArray() || ct1.isMapOrBean() || ct1.isObject())
 					dbm.put(e.getKey(), replaceWithMutables(e.getValue()));
 				else
 					dbm.addKey(e.getKey());
@@ -317,7 +317,7 @@ public final class PojoQuery {
 			DelegateBeanMap dbm = new DelegateBeanMap(bm.getBean(), session);
 			for (BeanMapEntry e : (Set<BeanMapEntry>)bm.entrySet()) {
 				ClassMeta ct1 = e.getMeta().getClassMeta();
-				if (ct1.isArray() || ct1.isBean() || ct1.isCollection() || ct1.isMap() || ct1.isObject()) {
+				if (ct1.isCollectionOrArray() || ct1.isMapOrBean() || ct1.isObject()) {
 					Object val = null;
 					try {
 						val = e.getValue();

@@ -270,4 +270,19 @@ public @interface Bean {
 	 * </p>
 	 */
 	Class<?> stopClass() default Object.class;
+
+
+	/**
+	 * The list of classes that make up the bean dictionary for all properties of this bean.
+	 * <p>
+	 * This is a shorthand for setting the {@link BeanProperty#beanDictionary()} on all properties of the bean.
+	 * <p>
+	 * This list can consist of the following class types:
+	 * <ul>
+	 * 	<li>Any bean class that specifies a value for {@link Bean#typeName() @Bean.name()};
+	 * 	<li>Any subclass of {@link BeanDictionary} that defines an entire set of mappings.
+	 * 		Note that the subclass MUST implement a no-arg constructor so that it can be instantiated.
+	 * </ul>
+	 */
+	Class<?>[] beanDictionary() default {};
 }

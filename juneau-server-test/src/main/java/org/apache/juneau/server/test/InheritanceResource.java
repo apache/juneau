@@ -294,21 +294,21 @@ public class InheritanceResource extends RestServlet {
 	public static class Foo2 {@Override public String toString(){return "Foo2";}}
 	public static class Foo3 {@Override public String toString(){return "Foo3";}}
 
-	public static class F1Swap extends PojoSwap<Foo1,String> {
+	public static class F1Swap extends StringSwap<Foo1> {
 		@Override /* PojoSwap */
 		public String swap(BeanSession session, Foo1 o) throws SerializeException {
 			return "F1";
 		}
 	}
 
-	public static class F2Swap extends PojoSwap<Foo2,String> {
+	public static class F2Swap extends StringSwap<Foo2> {
 		@Override /* PojoSwap */
 		public String swap(BeanSession session, Foo2 o) throws SerializeException {
 			return "F2";
 		}
 	}
 
-	public static class F3Swap extends PojoSwap<Foo3,String> {
+	public static class F3Swap extends StringSwap<Foo3> {
 		@Override /* PojoSwap */
 		public String swap(BeanSession session, Foo3 o) throws SerializeException {
 			return "F3";

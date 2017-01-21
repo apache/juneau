@@ -32,8 +32,6 @@ import org.apache.juneau.serializer.*;
 public class XmlSerializerSession extends SerializerSession {
 
 	private final boolean
-		addJsonTypeAttrs,
-		addJsonStringTypeAttrs,
 		autoDetectNamespaces,
 		enableNamespaces,
 		addNamespaceUrlsToRoot;
@@ -41,7 +39,6 @@ public class XmlSerializerSession extends SerializerSession {
 	private Namespace
 		defaultNamespace;
 	private final Namespace
-		xsiNamespace,
 		xsNamespace;
 
 	private Namespace[] namespaces = new Namespace[0];
@@ -63,24 +60,18 @@ public class XmlSerializerSession extends SerializerSession {
 	public XmlSerializerSession(XmlSerializerContext ctx, ObjectMap op, Object output, Method javaMethod, Locale locale, TimeZone timeZone) {
 		super(ctx, op, output, javaMethod, locale, timeZone);
 		if (op == null || op.isEmpty()) {
-			addJsonTypeAttrs = ctx.addJsonTypeAttrs;
-			addJsonStringTypeAttrs = ctx.addJsonStringTypeAttrs;
 			enableNamespaces = ctx.enableNamespaces;
 			autoDetectNamespaces = ctx.autoDetectNamespaces;
 			addNamespaceUrlsToRoot = ctx.addNamespaceUrlsToRoot;
 			addNamespaces(ctx.namespaces);
 			defaultNamespace = findDefaultNamespace(ctx.defaultNamespace);
-			xsiNamespace = ctx.xsiNamespace;
 			xsNamespace = ctx.xsNamespace;
 		} else {
-			addJsonTypeAttrs = op.getBoolean(XML_addJsonTypeAttrs, ctx.addJsonTypeAttrs);
-			addJsonStringTypeAttrs = op.getBoolean(XML_addJsonStringTypeAttrs, ctx.addJsonStringTypeAttrs);
 			enableNamespaces = op.getBoolean(XML_enableNamespaces, ctx.enableNamespaces);
 			autoDetectNamespaces = op.getBoolean(XML_autoDetectNamespaces, ctx.autoDetectNamespaces);
 			addNamespaceUrlsToRoot = op.getBoolean(XML_addNamespaceUrisToRoot, ctx.addNamespaceUrlsToRoot);
 			namespaces = (op.containsKey(XML_namespaces) ? parseNamespaces(op.get(XML_namespaces)) : ctx.namespaces);
-			defaultNamespace = findDefaultNamespace(op.containsKey(XML_defaultNamespaceUri) ? op.getString(XML_defaultNamespaceUri) : ctx.defaultNamespace);
-			xsiNamespace = (op.containsKey(XML_xsiNamespace) ? parseNamespace(op.get(XML_xsiNamespace)) : ctx.xsiNamespace);
+			defaultNamespace = findDefaultNamespace(op.containsKey(XML_defaultNamespace) ? op.getString(XML_defaultNamespace) : ctx.defaultNamespace);
 			xsNamespace = (op.containsKey(XML_xsNamespace) ? parseNamespace(op.get(XML_xsNamespace)) : ctx.xsNamespace);
 		}
 	}
@@ -129,24 +120,6 @@ public class XmlSerializerSession extends SerializerSession {
 	}
 
 	/**
-	 * Returns the {@link XmlSerializerContext#XML_addJsonTypeAttrs} setting value in this context.
-	 *
-	 * @return The {@link XmlSerializerContext#XML_addJsonTypeAttrs} setting value in this context.
-	 */
-	public final boolean isAddJsonTypeAttrs() {
-		return addJsonTypeAttrs;
-	}
-
-	/**
-	 * Returns the {@link XmlSerializerContext#XML_addJsonStringTypeAttrs} setting value in this context.
-	 *
-	 * @return The {@link XmlSerializerContext#XML_addJsonStringTypeAttrs} setting value in this context.
-	 */
-	public final boolean isAddJsonStringTypeAttrs() {
-		return addJsonStringTypeAttrs;
-	}
-
-	/**
 	 * Returns the {@link XmlSerializerContext#XML_autoDetectNamespaces} setting value in this context.
 	 *
 	 * @return The {@link XmlSerializerContext#XML_autoDetectNamespaces} setting value in this context.
@@ -174,21 +147,12 @@ public class XmlSerializerSession extends SerializerSession {
 	}
 
 	/**
-	 * Returns the {@link XmlSerializerContext#XML_defaultNamespaceUri} setting value in this context.
+	 * Returns the {@link XmlSerializerContext#XML_defaultNamespace} setting value in this context.
 	 *
-	 * @return The {@link XmlSerializerContext#XML_defaultNamespaceUri} setting value in this context.
+	 * @return The {@link XmlSerializerContext#XML_defaultNamespace} setting value in this context.
 	 */
 	public final Namespace getDefaultNamespace() {
 		return defaultNamespace;
-	}
-
-	/**
-	 * Returns the {@link XmlSerializerContext#XML_xsiNamespace} setting value in this context.
-	 *
-	 * @return The {@link XmlSerializerContext#XML_xsiNamespace} setting value in this context.
-	 */
-	public final Namespace getXsiNamespace() {
-		return xsiNamespace;
 	}
 
 	/**

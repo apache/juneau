@@ -37,10 +37,10 @@ import org.apache.juneau.xml.annotation.*;
  * 		}
  * </p>
  * <p>
- * 	Refer to {@link org.apache.juneau.dto.atom} for further information about ATOM support.
- * </p>
+ * Refer to {@link org.apache.juneau.dto.atom} for further information about ATOM support.
  */
 @Bean(typeName="link")
+@SuppressWarnings("hiding")
 public class Link extends Common {
 
 	private String href;
@@ -59,9 +59,7 @@ public class Link extends Common {
 	 * @param href The URI of the link.
 	 */
 	public Link(String rel, String type, String href) {
-		this.rel = rel;
-		this.type = type;
-		this.href = href;
+		rel(rel).type(type).href(href);
 	}
 
 	/** Bean constructor. */
@@ -88,7 +86,8 @@ public class Link extends Common {
 	 * @param href The href of the target of this link.
 	 * @return This object (for method chaining).
 	 */
-	public Link setHref(String href) {
+	@BeanProperty(name="href")
+	public Link href(String href) {
 		this.href = href;
 		return this;
 	}
@@ -109,7 +108,8 @@ public class Link extends Common {
 	 * @param rel The rell of this link.
 	 * @return This object (for method chaining).
 	 */
-	public Link setRel(String rel) {
+	@BeanProperty(name="rel")
+	public Link rel(String rel) {
 		this.rel = rel;
 		return this;
 	}
@@ -138,7 +138,8 @@ public class Link extends Common {
 	 * @param type The content type of the target of this link.
 	 * @return This object (for method chaining).
 	 */
-	public Link setType(String type) {
+	@BeanProperty(name="type")
+	public Link type(String type) {
 		this.type = type;
 		return this;
 	}
@@ -159,7 +160,8 @@ public class Link extends Common {
 	 * @param hreflang The language of the target of this link.
 	 * @return This object (for method chaining).
 	 */
-	public Link setHreflang(String hreflang) {
+	@BeanProperty(name="hreflang")
+	public Link hreflang(String hreflang) {
 		this.hreflang = hreflang;
 		return this;
 	}
@@ -180,7 +182,8 @@ public class Link extends Common {
 	 * @param title The title of the target of this link.
 	 * @return This object (for method chaining).
 	 */
-	public Link setTitle(String title) {
+	@BeanProperty(name="title")
+	public Link title(String title) {
 		this.title = title;
 		return this;
 	}
@@ -201,7 +204,8 @@ public class Link extends Common {
 	 * @param length The length of the contents of the target of this link.
 	 * @return This object (for method chaining).
 	 */
-	public Link setLength(Integer length) {
+	@BeanProperty(name="length")
+	public Link length(Integer length) {
 		this.length = length;
 		return this;
 	}
@@ -212,14 +216,14 @@ public class Link extends Common {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Common */
-	public Link setBase(URI base) {
-		super.setBase(base);
+	public Link base(URI base) {
+		super.base(base);
 		return this;
 	}
 
 	@Override /* Common */
-	public Link setLang(String lang) {
-		super.setLang(lang);
+	public Link lang(String lang) {
+		super.lang(lang);
 		return this;
 	}
 }

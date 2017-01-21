@@ -68,7 +68,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 	 */
 	public final boolean shouldUseExpandedParams(BeanPropertyMeta pMeta) {
 		ClassMeta<?> cm = pMeta.getClassMeta();
-		if (cm.isArray() || cm.isCollection()) {
+		if (cm.isCollectionOrArray()) {
 			if (expandedParams)
 				return true;
 			if (pMeta.getBeanMeta().getClassMeta().getExtendedMeta(UrlEncodingClassMeta.class).isExpandedParams())

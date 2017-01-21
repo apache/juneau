@@ -18,6 +18,7 @@ import java.net.URI;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.annotation.*;
+import static org.apache.juneau.dto.atom.Utils.*;
 
 /**
  * Represents an <code>atomIcon</code> construct in the RFC4287 specification.
@@ -30,10 +31,10 @@ import org.apache.juneau.xml.annotation.*;
  * 	}
  * </p>
  * <p>
- * 	Refer to {@link org.apache.juneau.dto.atom} for further information about ATOM support.
- * </p>
+ * Refer to {@link org.apache.juneau.dto.atom} for further information about ATOM support.
  */
 @Bean(typeName="icon")
+@SuppressWarnings("hiding")
 public class Icon extends Common {
 
 	private URI uri;
@@ -45,7 +46,16 @@ public class Icon extends Common {
 	 * @param uri The URI of the icon.
 	 */
 	public Icon(URI uri) {
-		this.uri = uri;
+		uri(uri);
+	}
+
+	/**
+	 * Normal constructor.
+	 *
+	 * @param uri The URI of the icon.
+	 */
+	public Icon(String uri) {
+		uri(uri);
 	}
 
 	/** Bean constructor. */
@@ -61,7 +71,7 @@ public class Icon extends Common {
 	 *
 	 * @return The URI of this icon.
 	 */
-	@Xml(format=CONTENT)
+	@Xml(format=ELEMENTS)
 	public URI getUri() {
 		return uri;
 	}
@@ -72,25 +82,37 @@ public class Icon extends Common {
 	 * @param uri The URI of this icon.
 	 * @return This object (for method chaining).
 	 */
-	public Icon setUri(URI uri) {
+	@BeanProperty(name="uri")
+	public Icon uri(URI uri) {
 		this.uri = uri;
 		return this;
 	}
 
+	/**
+	 * Sets the URI of this icon.
+	 *
+	 * @param uri The URI of this icon.
+	 * @return This object (for method chaining).
+	 */
+	@BeanProperty(name="uri")
+	public Icon uri(String uri) {
+		this.uri = toURI(uri);
+		return this;
+	}
 
 	//--------------------------------------------------------------------------------
 	// Overridden setters (to simplify method chaining)
 	//--------------------------------------------------------------------------------
 
 	@Override /* Common */
-	public Icon setBase(URI base) {
-		super.setBase(base);
+	public Icon base(URI base) {
+		super.base(base);
 		return this;
 	}
 
 	@Override /* Common */
-	public Icon setLang(String lang) {
-		super.setLang(lang);
+	public Icon lang(String lang) {
+		super.lang(lang);
 		return this;
 	}
 }

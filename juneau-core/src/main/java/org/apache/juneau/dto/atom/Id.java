@@ -30,10 +30,10 @@ import org.apache.juneau.xml.annotation.*;
  * 	}
  * </p>
  * <p>
- * 	Refer to {@link org.apache.juneau.dto.atom} for further information about ATOM support.
- * </p>
+ * Refer to {@link org.apache.juneau.dto.atom} for further information about ATOM support.
  */
 @Bean(typeName="id")
+@SuppressWarnings("hiding")
 public class Id extends Common {
 
 	private String text;
@@ -44,7 +44,7 @@ public class Id extends Common {
 	 * @param text The id element contents.
 	 */
 	public Id(String text) {
-		this.text = text;
+		text(text);
 	}
 
 	/** Bean constructor. */
@@ -60,7 +60,7 @@ public class Id extends Common {
 	 *
 	 * @return The content of this identifier.
 	 */
-	@Xml(format=CONTENT)
+	@Xml(format=TEXT)
 	public String getText() {
 		return text;
 	}
@@ -71,7 +71,8 @@ public class Id extends Common {
 	 * @param text The content of this identifier.
 	 * @return This object (for method chaining).
 	 */
-	public Id setText(String text) {
+	@BeanProperty(name="text")
+	public Id text(String text) {
 		this.text = text;
 		return this;
 	}
@@ -82,14 +83,14 @@ public class Id extends Common {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Common */
-	public Id setBase(URI base) {
-		super.setBase(base);
+	public Id base(URI base) {
+		super.base(base);
 		return this;
 	}
 
 	@Override /* Common */
-	public Id setLang(String lang) {
-		super.setLang(lang);
+	public Id lang(String lang) {
+		super.lang(lang);
 		return this;
 	}
 }

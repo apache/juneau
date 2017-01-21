@@ -27,7 +27,7 @@ import org.apache.juneau.transform.*;
  * <p>
  * 	Strings are converted to objects using {@link DatatypeFactory#newXMLGregorianCalendar(String)}.
  */
-public class XMLGregorianCalendarSwap extends PojoSwap<XMLGregorianCalendar,String> {
+public class XMLGregorianCalendarSwap extends StringSwap<XMLGregorianCalendar> {
 
 	private DatatypeFactory dtf;
 

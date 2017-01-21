@@ -30,16 +30,21 @@ public class FilteredMapTest {
 	// testBasic
 	//====================================================================================================
 	@Test
+	@SuppressWarnings("unchecked")
 	public void testBasic() throws Exception {
 		ObjectMap m = new ObjectMap("{a:'1',b:'2'}");
-		FilteredMap<String,Object> m2 = new FilteredMap<String,Object>(m, new String[]{"a"});
+
+		ClassMeta<Map<String,Object>> cm = BeanContext.DEFAULT.getMapClassMeta(Map.class, String.class, Object.class);
+		ClassMeta<Map<String,String>> cm2 = BeanContext.DEFAULT.getMapClassMeta(Map.class, String.class, String.class);
+
+		FilteredMap<String,Object> m2 = new FilteredMap<String,Object>(cm, m, new String[]{"a"});
 
 		assertObjectEquals("{a:'1'}", m2);
 
 		m2.entrySet().iterator().next().setValue("3");
 		assertObjectEquals("{a:'3'}", m2);
 
-		try { m3 = new FilteredMap<String,String>(null, new String[0]); fail(); } catch (IllegalArgumentException e) {}
-		try { m3 = new FilteredMap<String,Object>(m, null); fail(); } catch (IllegalArgumentException e) {}
+		try { m3 = new FilteredMap<String,String>(cm2, null, new String[0]); fail(); } catch (IllegalArgumentException e) {}
+		try { m3 = new FilteredMap<String,Object>(cm, m, null); fail(); } catch (IllegalArgumentException e) {}
 	}
 }

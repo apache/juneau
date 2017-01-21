@@ -39,6 +39,7 @@ public class BeanSession extends Session {
 	private final Locale locale;
 	private final TimeZone timeZone;
 	private final boolean debug;
+	private Stack<StringBuilder> sbStack = new Stack<StringBuilder>();
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -515,7 +516,7 @@ public class BeanSession extends Session {
 			}
 
 			if (type.isString()) {
-				if (vt.isArray() || vt.isMap() || vt.isCollection() || vt.isBean()) {
+				if (vt.isMapOrBean() || vt.isCollectionOrArray()) {
 					if (JsonSerializer.DEFAULT_LAX != null)
 						return (T)JsonSerializer.DEFAULT_LAX.serialize(value);
 				} else if (vt.isClass()) {
@@ -985,12 +986,37 @@ public class BeanSession extends Session {
 	}
 
 	/**
-	 * Returns the bean dictionary defined in this bean context defined by {@link BeanContext#BEAN_beanDictionary}.
+	 * Returns the bean registry defined in this bean context defined by {@link BeanContext#BEAN_beanDictionary}.
 	 *
-	 * @return The bean dictionary defined in this bean context.  Never <jk>null</jk>.
+	 * @return The bean registry defined in this bean context.  Never <jk>null</jk>.
 	 */
-	public final BeanDictionary getBeanDictionary() {
-		return ctx.beanDictionary;
+	public final BeanRegistry getBeanRegistry() {
+		return ctx.beanRegistry;
+	}
+
+	/**
+	 * Creates a reusable {@link StringBuilder} object from an internal pool.
+	 * <p>
+	 * String builders are returned to the pool by calling {@link #returnStringBuilder(StringBuilder)}.
+	 *
+	 * @return A new or previously returned string builder.
+	 */
+	public final StringBuilder getStringBuilder() {
+		if (sbStack.isEmpty())
+			return new StringBuilder();
+		return sbStack.pop();
+	}
+
+	/**
+	 * Returns a {@link StringBuilder} object back into the internal reuse pool.
+	 *
+	 * @param sb The string builder to return to the pool.  No-op if <jk>null</jk>.
+	 */
+	public final void returnStringBuilder(StringBuilder sb) {
+		if (sb == null)
+			return;
+		sb.setLength(0);
+		sbStack.push(sb);
 	}
 
 	/**

@@ -13,7 +13,7 @@
 package org.apache.juneau.html;
 
 import org.apache.juneau.*;
-import org.apache.juneau.parser.*;
+import org.apache.juneau.xml.*;
 
 /**
  * Configurable properties on the {@link HtmlParser} class.
@@ -46,7 +46,7 @@ import org.apache.juneau.parser.*;
  * 	</ul>
  * </ul>
  */
-public final class HtmlParserContext extends ParserContext {
+public final class HtmlParserContext extends XmlParserContext {
 
 	/**
 	 * Constructor.

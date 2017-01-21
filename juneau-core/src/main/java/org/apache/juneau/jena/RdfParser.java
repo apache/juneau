@@ -117,7 +117,7 @@ public class RdfParser extends ReaderParser {
 		List<Resource> roots = getRoots(s, model);
 
 		// Special case where we're parsing a loose collection of resources.
-		if (s.isLooseCollections() && (type.isCollection() || type.isArray())) {
+		if (s.isLooseCollections() && type.isCollectionOrArray()) {
 			Collection c = null;
 			if (type.isArray())
 				c = new ArrayList();
@@ -200,7 +200,7 @@ public class RdfParser extends ReaderParser {
 			if (pMeta != null) {
 				RDFNode o = st.getObject();
 				ClassMeta<?> cm = pMeta.getClassMeta();
-				if ((cm.isArray() || cm.isCollection()) && isMultiValuedCollections(session, pMeta)) {
+				if (cm.isCollectionOrArray() && isMultiValuedCollections(session, pMeta)) {
 					ClassMeta<?> et = cm.getElementType();
 					Object value = parseAnything(session, et, o, m.getBean(false));
 					setName(et, value, key);
@@ -302,7 +302,7 @@ public class RdfParser extends ReaderParser {
 				return null;
 			Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : new ObjectMap(session));
 			o = parseIntoMap(session, r, m, eType.getKeyType(), eType.getValueType());
-		} else if (sType.isCollection() || sType.isArray()) {
+		} else if (sType.isCollectionOrArray()) {
 			if (sType.isArray())
 				o = new ArrayList();
 			else

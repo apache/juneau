@@ -70,13 +70,13 @@ public abstract class RoundTripTest {
 			},
 			{ /* 3 */
 				"Xml - namespaces, validation, readable",
-				new XmlSerializer.XmlJsonSq().setProperty(SERIALIZER_trimNullProperties, false).setProperty(XML_addNamespaceUrisToRoot, true).setProperty(SERIALIZER_useIndentation, true),
+				new XmlSerializer.NsSq().setProperty(SERIALIZER_trimNullProperties, false).setProperty(XML_addNamespaceUrisToRoot, true).setProperty(SERIALIZER_useIndentation, true),
 				XmlParser.DEFAULT,
 				CHECK_XML_WHITESPACE | VALIDATE_XML
 			},
 			{ /* 4 */
 				"Xml - no namespaces, validation",
-				new XmlSerializer.SimpleXmlJsonSq().setProperty(SERIALIZER_trimNullProperties, false),
+				new XmlSerializer.Sq().setProperty(SERIALIZER_trimNullProperties, false),
 				XmlParser.DEFAULT,
 				CHECK_XML_WHITESPACE
 			},

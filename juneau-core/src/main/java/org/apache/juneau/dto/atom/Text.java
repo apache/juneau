@@ -12,14 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.atom;
 
-import static org.apache.juneau.xml.XmlUtils.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
-import java.net.*;
+import java.net.URI;
 
-import javax.xml.stream.*;
-
-import org.apache.juneau.xml.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
@@ -46,33 +43,21 @@ import org.apache.juneau.xml.annotation.*;
  * 	}
  * </p>
  * <p>
- * 	Refer to {@link org.apache.juneau.dto.atom} for further information about ATOM support.
- * </p>
+ * Refer to {@link org.apache.juneau.dto.atom} for further information about ATOM support.
  */
+@SuppressWarnings("hiding")
 public class Text extends Common {
 
 	private String type;
-	String text;
-
+	private String text;
 
 	/**
 	 * Normal content.
 	 *
 	 * @param type The content type of this content.
-	 * @param text The text of this content.
 	 */
-	public Text(String type, String text) {
-		this.type = type;
-		this.text = text;
-	}
-
-	/**
-	 * Normal content.
-	 *
-	 * @param text The text of this content.
-	 */
-	public Text(String text) {
-		this.text = text;
+	public Text(String type) {
+		type(type);
 	}
 
 	/** Bean constructor. */
@@ -107,7 +92,8 @@ public class Text extends Common {
 	 * @param type The content type of this content.
 	 * @return This object (for method chaining).
 	 */
-	public Text setType(String type) {
+	@BeanProperty(name="type")
+	public Text type(String type) {
 		this.type = type;
 		return this;
 	}
@@ -117,7 +103,7 @@ public class Text extends Common {
 	 *
 	 * @return The content of this content.
 	 */
-	@Xml(format=CONTENT, contentHandler=TextContentHandler.class)
+	@Xml(format=XMLTEXT)
 	public String getText() {
 		return text;
 	}
@@ -128,7 +114,8 @@ public class Text extends Common {
 	 * @param text The content of this content.
 	 * @return This object (for method chaining).
 	 */
-	public Text setText(String text) {
+	@BeanProperty(name="text")
+	public Text text(String text) {
 		this.text = text;
 		return this;
 	}
@@ -139,43 +126,20 @@ public class Text extends Common {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Common */
-	public Text setBase(URI base) {
-		super.setBase(base);
+	public Text base(URI base) {
+		super.base(base);
 		return this;
 	}
 
 	@Override /* Common */
-	public Text setLang(String lang) {
-		super.setLang(lang);
+	public Text base(String base) {
+		super.base(base);
 		return this;
 	}
 
-	/**
-	 * Specialized content handler for correctly handling XML element content based
-	 * 	on the <code>type</code> attribute of the element.
-	 * <p>
-	 * 	If the <code>type</code> attribute is <js>"xhtml"</js> the content is treated
-	 * 	as XML.  Otherwise, it's treated as plain text.
-	 */
-	public static class TextContentHandler implements XmlContentHandler<Text> {
-
-		@Override /* XmlContentHandler */
-		public void parse(XMLStreamReader r, Text text) throws Exception {
-			String type = text.type;
-			if (type != null && type.equals("xhtml"))
-				text.text = decode(readXmlContents(r).trim());
-			else
-				text.text = decode(r.getElementText().trim());
-		}
-
-		@Override /* XmlContentHandler */
-		public void serialize(XmlWriter w, Text text) throws Exception {
-			String type = text.type;
-			String content = text.text;
-			if (type != null && type.equals("xhtml"))
-				w.encodeTextInvalidChars(content);
-			else
-				w.encodeText(content);
-		}
+	@Override /* Common */
+	public Text lang(String lang) {
+		super.lang(lang);
+		return this;
 	}
 }

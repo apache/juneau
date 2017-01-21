@@ -112,13 +112,13 @@ public class RoundTripMapsTest extends RoundTripTest {
 		r = s.serialize(t);
 		assertEquals(e, r);
 
-		s = new XmlSerializer.SimpleXmlJsonSq().addPojoSwaps(getPojoSwaps()).setProperty(SERIALIZER_trimNullProperties, false);
-		e = "<object><AQID>a</AQID><BAUG nil='true'/><_x0000_>b</_x0000_></object>";
+		s = new XmlSerializer.NsSq().addPojoSwaps(getPojoSwaps()).setProperty(SERIALIZER_trimNullProperties, false);
+		e = "<object><AQID>a</AQID><BAUG _type='null'/><_x0000_>b</_x0000_></object>";
 		r = s.serialize(t);
 		assertEquals(e, r);
 
 		s = new HtmlSerializer.Sq().addPojoSwaps(getPojoSwaps()).setProperty(SERIALIZER_trimNullProperties, false).setProperty(HTML_addKeyValueTableHeaders, true);
-		e = "<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>AQID</string></td><td><string>a</string></td></tr><tr><td><string>BAUG</string></td><td><null/></td></tr><tr><td><null/></td><td><string>b</string></td></tr></table>";
+		e = "<table><tr><th>key</th><th>value</th></tr><tr><td>AQID</td><td>a</td></tr><tr><td>BAUG</td><td><null/></td></tr><tr><td><null/></td><td>b</td></tr></table>";
 		r = s.serialize(t);
 		assertEquals(e, r);
 

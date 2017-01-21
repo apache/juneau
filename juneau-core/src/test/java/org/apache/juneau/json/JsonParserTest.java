@@ -108,12 +108,6 @@ public class JsonParserTest {
 	}
 
 	@Test
-	public void testCognosJson() throws Exception {
-		String json = TestUtils.readFile(getClass().getResource("/json/BrokenCognosOutput.json").getPath());
-		p.parse(json, ObjectMap.class);
-	}
-
-	@Test
 	public void testStrictMode() throws Exception {
 		JsonParser p = sp;
 

@@ -125,7 +125,7 @@ public class RdfSerializer extends WriterSerializer {
 		Resource r = null;
 
 		ClassMeta<?> cm = session.getClassMetaForObject(o);
-		if (s.isLooseCollections() && cm != null && (cm.isCollection() || cm.isArray())) {
+		if (s.isLooseCollections() && cm != null && cm.isCollectionOrArray()) {
 			Collection c = s.sort(cm.isCollection() ? (Collection)o : toList(cm.getInnerClass(), o));
 			for (Object o2 : c)
 				serializeAnything(s, o2, false, object(), "root", null, null);
@@ -240,7 +240,7 @@ public class RdfSerializer extends WriterSerializer {
 			n = m.createResource(uri2);
 			serializeBeanMap(session, bm, (Resource)n);
 
-		} else if (sType.isCollection() || sType.isArray() || (wType != null && wType.isCollection())) {
+		} else if (sType.isCollectionOrArray() || (wType != null && wType.isCollection())) {
 			Collection c = session.sort(sType.isCollection() ? (Collection)o : toList(sType.getInnerClass(), o));
 			RdfCollectionFormat f = session.getCollectionFormat();
 			RdfClassMeta rcm = sType.getExtendedMeta(RdfClassMeta.class);

@@ -23,8 +23,7 @@ import org.apache.juneau.xml.annotation.*;
 public class XmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 
 	private Namespace namespace = null;
-	private XmlFormat xmlFormat = XmlFormat.NORMAL;
-	private XmlContentHandler<?> xmlContentHandler = null;
+	private XmlFormat xmlFormat = XmlFormat.DEFAULT;
 	private String childName;
 
 	/**
@@ -72,19 +71,10 @@ public class XmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 	/**
 	 * Returns the XML format of this property from the {@link Xml#format} annotation on this bean property.
 	 *
-	 * @return The XML format, or {@link XmlFormat#NORMAL} if annotation not specified.
+	 * @return The XML format, or {@link XmlFormat#DEFAULT} if annotation not specified.
 	 */
 	protected XmlFormat getXmlFormat() {
 		return xmlFormat;
-	}
-
-	/**
-	 * Returns the XML content handler of this property from the {@link Xml#contentHandler} annotation on this bean property.
-	 *
-	 * @return The XML content handler, or <jk>null</jk> if annotation not specified.
-	 */
-	protected XmlContentHandler<?> getXmlContentHandler() {
-		return xmlContentHandler;
 	}
 
 	/**
@@ -108,10 +98,10 @@ public class XmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 		List<XmlSchema> schemas = bpm.findAnnotations(XmlSchema.class);
 		namespace = XmlUtils.findNamespace(xmls, schemas);
 
-		if (xmlFormat == XmlFormat.NORMAL)
+		if (xmlFormat == XmlFormat.DEFAULT)
 			xmlFormat = xml.format();
 
-		boolean isCollection = cmProperty.isCollection() || cmProperty.isArray();
+		boolean isCollection = cmProperty.isCollectionOrArray();
 
 		String cen = xml.childName();
 		if ((! cen.isEmpty()) && (! isCollection))
@@ -130,13 +120,6 @@ public class XmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 			}
 			if (cen.isEmpty() && isCollection)
 				cen = cmProperty.getDictionaryName();
-		}
-
-		try {
-			if (xmlFormat == XmlFormat.CONTENT && xml.contentHandler() != XmlContentHandler.NULL.class)
-				xmlContentHandler = xml.contentHandler().newInstance();
-		} catch (Exception e) {
-			throw new BeanRuntimeException(cmBean.getInnerClass(), "Could not instantiate content handler ''{0}''", xml.contentHandler().getName()).initCause(e);
 		}
 
 		if (! cen.isEmpty())

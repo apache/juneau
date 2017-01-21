@@ -18,6 +18,7 @@ import java.net.URI;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.annotation.*;
+import static org.apache.juneau.dto.atom.Utils.*;
 
 /**
  * Represents an <code>atomLogo</code> construct in the RFC4287 specification.
@@ -30,10 +31,10 @@ import org.apache.juneau.xml.annotation.*;
  * 	}
  * </p>
  * <p>
- * 	Refer to {@link org.apache.juneau.dto.atom} for further information about ATOM support.
- * </p>
+ * Refer to {@link org.apache.juneau.dto.atom} for further information about ATOM support.
  */
 @Bean(typeName="logo")
+@SuppressWarnings("hiding")
 public class Logo extends Common {
 
 	private URI uri;
@@ -45,7 +46,16 @@ public class Logo extends Common {
 	 * @param uri The URI of the logo.
 	 */
 	public Logo(URI uri) {
-		this.uri = uri;
+		uri(uri);
+	}
+
+	/**
+	 * Normal constructor.
+	 *
+	 * @param uri The URI of the logo.
+	 */
+	public Logo(String uri) {
+		uri(uri);
 	}
 
 	/** Bean constructor. */
@@ -61,7 +71,7 @@ public class Logo extends Common {
 	 *
 	 * @return The URI of the logo.
 	 */
-	@Xml(format=CONTENT)
+	@Xml(format=ELEMENTS)
 	public URI getUri() {
 		return uri;
 	}
@@ -72,8 +82,21 @@ public class Logo extends Common {
 	 * @param uri The URI of the logo.
 	 * @return This object (for method chaining).
 	 */
-	public Logo setUri(URI uri) {
+	@BeanProperty(name="uri")
+	public Logo uri(URI uri) {
 		this.uri = uri;
+		return this;
+	}
+
+	/**
+	 * Sets the URI of the logo.
+	 *
+	 * @param uri The URI of the logo.
+	 * @return This object (for method chaining).
+	 */
+	@BeanProperty(name="uri")
+	public Logo uri(String uri) {
+		this.uri = toURI(uri);
 		return this;
 	}
 
@@ -83,14 +106,14 @@ public class Logo extends Common {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Common */
-	public Logo setBase(URI base) {
-		super.setBase(base);
+	public Logo base(URI base) {
+		super.base(base);
 		return this;
 	}
 
 	@Override /* Common */
-	public Logo setLang(String lang) {
-		super.setLang(lang);
+	public Logo lang(String lang) {
+		super.lang(lang);
 		return this;
 	}
 }

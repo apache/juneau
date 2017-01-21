@@ -81,14 +81,14 @@ public class BeanMapTest {
 		public String f2;
 	}
 
-	public static class B1Swap extends PojoSwap<B1,ObjectMap> {
+	public static class B1Swap extends MapSwap<B1> {
 		@Override /* PojoSwap */
 		public ObjectMap swap(BeanSession session, B1 b1) {
 			return new ObjectMap().append("type", "b1").append("f1", b1.f1);
 		}
 	}
 
-	public static class B2Swap extends PojoSwap<B2,ObjectMap> {
+	public static class B2Swap extends MapSwap<B2> {
 		@Override /* PojoSwap */
 		public ObjectMap swap(BeanSession session, B2 b2) {
 			return new ObjectMap().append("type", "b2").append("f1", b2.f1);

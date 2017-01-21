@@ -63,7 +63,8 @@ public final class ClassMeta<T> implements Type {
 		keyType = null,                                // If MAP, the key class type.
 		valueType = null;                              // If MAP, the value class type.
 	InvocationHandler invocationHandler;              // The invocation handler for this class (if it has one).
-	volatile BeanMeta<T> beanMeta;                    // The bean meta for this bean class (if it's a bean).
+	BeanMeta<T> beanMeta;                             // The bean meta for this bean class (if it's a bean).
+	String dictionaryName, resolvedDictionaryName;    // The dictionary name of this class if it has one.
 	Method fromStringMethod;                          // The static valueOf(String) or fromString(String) method (if it has one).
 	Constructor<? extends T> noArgConstructor;        // The no-arg constructor for this class (if it has one).
 	Constructor<T> stringConstructor;                 // The X(String) constructor (if it has one).
@@ -226,8 +227,8 @@ public final class ClassMeta<T> implements Type {
 			try {
 				if (c == TimeZone.class)
 					this.fromStringMethod = c.getMethod("getTimeZone", String.class);
-				else if (c == Locale.class) 
-					this.fromStringMethod = LocaleAsString.class.getMethod("fromString", String.class);  
+				else if (c == Locale.class)
+					this.fromStringMethod = LocaleAsString.class.getMethod("fromString", String.class);
 			} catch (NoSuchMethodException e1) {}
 
 			// Find toObjectMap() method if present.
@@ -378,6 +379,15 @@ public final class ClassMeta<T> implements Type {
 		if (remoteableMethods != null)
 			remoteableMethods = Collections.unmodifiableMap(remoteableMethods);
 
+		if (isBean())
+			dictionaryName = resolvedDictionaryName = getBeanMeta().getDictionaryName();
+
+		if (isArray()) {
+			resolvedDictionaryName = getElementType().getResolvedDictionaryName();
+			if (resolvedDictionaryName != null)
+				resolvedDictionaryName += "^";
+		}
+
 		return this;
 	}
 
@@ -389,9 +399,19 @@ public final class ClassMeta<T> implements Type {
 	 * @return The type name associated with this bean class, or <jk>null</jk> if there is no type name defined or this isn't a bean.
 	 */
 	public String getDictionaryName() {
-		if (beanMeta != null)
-			return beanMeta.getDictionaryName();
-		return null;
+		return dictionaryName;
+	}
+
+	/**
+	 * Returns the resolved bean dictionary name associated with this class.
+	 * <p>
+	 * Unlike {@link #getDictionaryName()}, this method automatically resolves multidimensional arrays
+	 *  (e.g. <js>"X^^"</js> and returns array class metas accordingly if the base class has a type name.
+	 *
+	 * @return The type name associated with this bean class, or <jk>null</jk> if there is no type name defined or this isn't a bean.
+	 */
+	public String getResolvedDictionaryName() {
+		return resolvedDictionaryName;
 	}
 
 	/**
@@ -604,6 +624,15 @@ public final class ClassMeta<T> implements Type {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if this class is a subclass of {@link Map} or it's a bean.
+	 *
+	 * @return <jk>true</jk> if this class is a subclass of {@link Map} or it's a bean.
+	 */
+	public boolean isMapOrBean() {
+		return classCategory == MAP || classCategory == BEANMAP || classCategory == BEAN;
+	}
+
+	/**
 	 * Returns <jk>true</jk> if this class is a subclass of {@link BeanMap}.
 	 *
 	 * @return <jk>true</jk> if this class is a subclass of {@link BeanMap}.
@@ -619,6 +648,15 @@ public final class ClassMeta<T> implements Type {
 	 */
 	public boolean isCollection() {
 		return classCategory == COLLECTION;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is a subclass of {@link Collection} or is an array.
+	 *
+	 * @return <jk>true</jk> if this class is a subclass of {@link Collection} or is an array.
+	 */
+	public boolean isCollectionOrArray() {
+		return classCategory == COLLECTION || classCategory == ARRAY;
 	}
 
 	/**
@@ -1226,6 +1264,19 @@ public final class ClassMeta<T> implements Type {
 			return false;
 		ClassMeta<?> t2 = (ClassMeta<?>)t;
 		return t2.getInnerClass() == this.getInnerClass();
+	}
+
+	/**
+	 * Similar to {@link #equals(Object)} except primitive and Object types that are similar
+	 * are considered the same. (e.g. <jk>boolean</jk> == <code>Boolean</code>).
+	 *
+	 * @param cm The class meta to compare to.
+	 * @return <jk>true</jk> if the specified class-meta is equivalent to this one.
+	 */
+	public boolean same(ClassMeta<?> cm) {
+		if (equals(cm))
+			return true;
+		return (isPrimitive() && classCategory == cm.classCategory);
 	}
 
 	@Override /* Object */

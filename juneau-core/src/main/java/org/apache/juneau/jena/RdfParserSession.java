@@ -226,7 +226,7 @@ public class RdfParserSession extends ParserSession {
 			return s;
 		if (trimWhitespace)
 			s = s.trim();
-		s = XmlUtils.decode(s);
+		s = XmlUtils.decode(s, null);
 		if (isTrimStrings())
 			s = s.trim();
 		return s;

@@ -50,7 +50,7 @@ public class MessagesResource extends RestServletDefault {
 	)
 	public static class Messages2Resource extends MessagesResource {}
 
-	public static class ResourceBundleSwap extends PojoSwap<ResourceBundle,ObjectMap> {
+	public static class ResourceBundleSwap extends MapSwap<ResourceBundle> {
 		@Override /* Transform */
 		public ObjectMap swap(BeanSession session, ResourceBundle o) throws SerializeException {
 			ObjectMap m = new ObjectMap();

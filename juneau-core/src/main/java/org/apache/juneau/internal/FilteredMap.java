@@ -16,27 +16,32 @@ import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.util.*;
 
+import org.apache.juneau.*;
+
 /**
  * Wrapper around a map where the key names are overridden.
  *
  * @param <K> The key class type.
  * @param <V> The value class type.
  */
-public final class FilteredMap<K,V> extends AbstractMap<K,V> {
+public final class FilteredMap<K,V> extends AbstractMap<K,V> implements Delegate<Map<K,V>> {
 
 	private Map<K,V> innerMap;
 	private Set<Map.Entry<K,V>> entries;
+	private final ClassMeta<Map<K,V>> classMeta;
 
 	/**
 	 * Constructor.
-	 *
+	 * 
+	 * @param classMeta The class type of the map being wrapped. 
 	 * @param innerMap The map being wrapped.  Must not be <jk>null</jk>.
 	 * @param keys The keys in the new map.  Must not be <jk>null</jk>.
 	 */
-	public FilteredMap(Map<K,V> innerMap, K[] keys) {
+	public FilteredMap(ClassMeta<Map<K,V>> classMeta, Map<K,V> innerMap, K[] keys) {
 		assertFieldNotNull(innerMap, "innerMap");
 		assertFieldNotNull(keys, "keys");
 
+		this.classMeta = classMeta;
 		this.innerMap = innerMap;
 			List<Map.Entry<K,V>> l = new ArrayList<Map.Entry<K,V>>(keys.length);
 			for (K k : keys)
@@ -91,5 +96,10 @@ public final class FilteredMap<K,V> extends AbstractMap<K,V> {
 		public int size() {
 			return entries.size();
 		}
+	}
+
+	@Override /* Delegate */
+	public ClassMeta<Map<K,V>> getClassMeta() {
+		return classMeta;
 	}
 }

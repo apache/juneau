@@ -67,12 +67,12 @@ public class HtmlWriter extends XmlWriter {
 				append("&gt;");
 			else if (test == '\n')
 				append("<br/>");
-			else if (test == '\f')
+			else if (test == '\f')  // XML 1.0 doesn't support formfeeds or backslashes, so we have to invent something.
 				append("<ff/>");
 			else if (test == '\b')
 				append("<bs/>");
 			else if (test == '\t')
-				append("<tb>&emsp;</tb>");
+				append("<tb>&#x2003;</tb>");
 			else if (Character.isISOControl(test))
 				append("&#" + (int) test + ";");
 			else
@@ -258,7 +258,8 @@ public class HtmlWriter extends XmlWriter {
 
 	@Override /* SerializerWriter */
 	public HtmlWriter cr(int depth) throws IOException {
-		super.cr(depth);
+		if (depth > 0)
+			super.cr(depth);
 		return this;
 	}
 

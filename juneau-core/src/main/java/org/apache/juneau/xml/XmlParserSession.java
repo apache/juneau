@@ -24,25 +24,25 @@ import javax.xml.stream.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.xml.annotation.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link XmlParser}.
  * <p>
  * This class is NOT thread safe.  It is meant to be discarded after one-time use.
  */
-public final class XmlParserSession extends ParserSession {
+public class XmlParserSession extends ParserSession {
 
 	private final String xsiNs;
 	private final boolean
 		trimWhitespace,
 		validating,
-		coalescing,
-		replaceEntityReferences,
 		preserveRootElement;
 	private final XMLReporter reporter;
 	private final XMLResolver resolver;
 	private final XMLEventAllocator eventAllocator;
 	private XMLStreamReader xmlStreamReader;
+	private final StringBuilder sb = new StringBuilder();  // Reusable string builder used in this class.
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -72,8 +72,6 @@ public final class XmlParserSession extends ParserSession {
 			xsiNs = ctx.xsiNs;
 			trimWhitespace = ctx.trimWhitespace;
 			validating = ctx.validating;
-			coalescing = ctx.coalescing;
-			replaceEntityReferences = ctx.replaceEntityReferences;
 			reporter = ctx.reporter;
 			resolver = ctx.resolver;
 			eventAllocator = ctx.eventAllocator;
@@ -82,8 +80,6 @@ public final class XmlParserSession extends ParserSession {
 			xsiNs = op.getString(XML_xsiNs, ctx.xsiNs);
 			trimWhitespace = op.getBoolean(XML_trimWhitespace, ctx.trimWhitespace);
 			validating = op.getBoolean(XML_validating, ctx.validating);
-			coalescing = op.getBoolean(XML_coalescing, ctx.coalescing);
-			replaceEntityReferences = op.getBoolean(XML_replaceEntityReferences, ctx.replaceEntityReferences);
 			reporter = (XMLReporter)op.get(XML_reporter, ctx.reporter);
 			resolver = (XMLResolver)op.get(XML_resolver, ctx.resolver);
 			eventAllocator = (XMLEventAllocator)op.get(XML_eventAllocator, ctx.eventAllocator);
@@ -120,8 +116,8 @@ public final class XmlParserSession extends ParserSession {
 			Reader r = IOUtils.getBufferedReader(getReader());
 			XMLInputFactory factory = XMLInputFactory.newInstance();
 			factory.setProperty(XMLInputFactory.IS_VALIDATING, validating);
-			factory.setProperty(XMLInputFactory.IS_COALESCING, coalescing);
-			factory.setProperty(XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES, replaceEntityReferences);
+			factory.setProperty(XMLInputFactory.IS_COALESCING, true);
+			factory.setProperty(XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES, true);
 			if (factory.isPropertySupported(XMLInputFactory.REPORTER) && reporter != null)
 				factory.setProperty(XMLInputFactory.REPORTER, reporter);
 			if (factory.isPropertySupported(XMLInputFactory.RESOLVER) && resolver != null)
@@ -152,10 +148,22 @@ public final class XmlParserSession extends ParserSession {
 			return s;
 		if (trimWhitespace)
 			s = s.trim();
-		s = XmlUtils.decode(s);
+		sb.setLength(0);
+		s = XmlUtils.decode(s, sb);
 		if (isTrimStrings())
 			s = s.trim();
 		return s;
+	}
+
+	/**
+	 * Shortcut for calling <code>decodeString(r.getElementText());</code>.
+	 *
+	 * @param r The reader to read the element text from.
+	 * @return The decoded text.
+	 * @throws XMLStreamException
+	 */
+	public final String decodeString(XMLStreamReader r) throws XMLStreamException {
+		return decodeString(r.getElementText());
 	}
 
 	/**
@@ -171,8 +179,42 @@ public final class XmlParserSession extends ParserSession {
 		if (s == null || s.isEmpty())
 			return s;
 		s = s.trim();
-		s = XmlUtils.decode(s);
+		sb.setLength(0);
+		s = XmlUtils.decode(s, sb);
 		return s;
+	}
+
+	/**
+	 * Shortcut for calling <code>decodeLiteral(r.getElementText());</code>.
+	 *
+	 * @param r The reader to read the element text from.
+	 * @return The decoded text.
+	 * @throws XMLStreamException
+	 */
+	public final String decodeText(XMLStreamReader r) throws XMLStreamException {
+		return decodeLiteral(r.getElementText());
+	}
+
+	/**
+	 * Takes the element being read from the XML stream reader and reconstructs it as XML.
+	 * <p>
+	 * Used when reconstructing bean properties of type {@link XmlFormat#XMLTEXT}.
+	 *
+	 * @param r The XML stream reader to read the current event from.
+	 * @return The event as XML.
+	 * @throws RuntimeException if the event is not a start or end tag.
+	 */
+	public final String elementAsString(XMLStreamReader r) {
+		int t = r.getEventType();
+		if (t > 2)
+			throw new RuntimeException("Invalid event type on stream reader for elementToString() method: " + XmlUtils.toReadableEvent(r));
+		sb.setLength(0);
+		sb.append("<").append(t == 1 ? "" : "/").append(r.getLocalName());
+		if (t == 1)
+			for (int i = 0; i < r.getAttributeCount(); i++)
+				sb.append(' ').append(r.getAttributeName(i)).append('=').append('\'').append(r.getAttributeValue(i)).append('\'');
+		sb.append('>');
+		return sb.toString();
 	}
 
 	/**

@@ -14,8 +14,9 @@ package org.apache.juneau.dto.atom;
 
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
-import java.net.*;
+import java.net.URI;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
@@ -59,9 +60,9 @@ import org.apache.juneau.xml.annotation.*;
  * 	}
  * </p>
  * <p>
- * 	Refer to {@link org.apache.juneau.dto.atom} for further information about ATOM support.
- * </p>
+ * Refer to {@link org.apache.juneau.dto.atom} for further information about ATOM support.
  */
+@SuppressWarnings("hiding")
 public class Content extends Text {
 
 	private URI src;
@@ -71,24 +72,17 @@ public class Content extends Text {
 	 * Normal content.
 	 *
 	 * @param type The content type of this content.
-	 * @param content The content of this content.
 	 */
-	public Content(String type, String content) {
-		super(type, content);
+	public Content(String type) {
+		super(type);
 	}
 
 	/**
 	 * Normal content.
-	 *
-	 * @param content The content of this content.
 	 */
-	public Content(String content) {
-		super(content);
+	public Content() {
+		super();
 	}
-
-	/** Bean constructor. */
-	public Content() {}
-
 
 	//--------------------------------------------------------------------------------
 	// Bean properties
@@ -110,7 +104,8 @@ public class Content extends Text {
 	 * @param src The source URI.
 	 * @return This object (for method chaining).
 	 */
-	public Content setSrc(URI src) {
+	@BeanProperty(name="src")
+	public Content src(URI src) {
 		this.src = src;
 		return this;
 	}
@@ -121,26 +116,32 @@ public class Content extends Text {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Text */
-	public Content setText(String text) {
-		super.setText(text);
+	public Content text(String text) {
+		super.text(text);
 		return this;
 	}
 
 	@Override /* Text */
-	public Content setType(String type) {
-		super.setType(type);
+	public Content type(String type) {
+		super.type(type);
 		return this;
 	}
 
 	@Override /* Common */
-	public Content setBase(URI base) {
-		super.setBase(base);
+	public Content base(URI base) {
+		super.base(base);
 		return this;
 	}
 
 	@Override /* Common */
-	public Content setLang(String lang) {
-		super.setLang(lang);
+	public Content base(String base) {
+		super.base(base);
+		return this;
+	}
+
+	@Override /* Common */
+	public Content lang(String lang) {
+		super.lang(lang);
 		return this;
 	}
 }

@@ -233,7 +233,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 		public String f1;
 	}
 
-	public static class BSwap extends PojoSwap<B,String> {
+	public static class BSwap extends StringSwap<B> {
 		@Override /* PojoSwap */
 		public String swap(BeanSession session, B o) throws SerializeException {
 			return o.f1;

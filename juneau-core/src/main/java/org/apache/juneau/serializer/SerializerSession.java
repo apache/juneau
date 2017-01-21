@@ -569,12 +569,7 @@ public class SerializerSession extends BeanSession {
 	public String resolveUri(String uri) {
 		if (uri.indexOf("://") != -1 || (absolutePathUriBase == null && relativeUriBase == null))
 			return uri;
-		StringBuilder sb = new StringBuilder(
-			uri.length()
-			+ (absolutePathUriBase == null ? 0 : absolutePathUriBase.length())
-			+ 1
-			+ (relativeUriBase == null ? 0 : relativeUriBase.length())
-		);
+		StringBuilder sb = getStringBuilder();
 		if (StringUtils.startsWith(uri, '/')) {
 			if (absolutePathUriBase != null)
 				sb.append(absolutePathUriBase);
@@ -586,7 +581,9 @@ public class SerializerSession extends BeanSession {
 			}
 		}
 		sb.append(uri);
-		return sb.toString();
+		String s = sb.toString();
+		returnStringBuilder(sb);
+		return s;
 	}
 
 	/**

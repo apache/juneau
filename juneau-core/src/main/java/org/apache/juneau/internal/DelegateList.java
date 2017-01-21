@@ -25,14 +25,17 @@ import org.apache.juneau.*;
 public class DelegateList<T extends Collection<?>> extends ObjectList implements Delegate<T> {
 	private static final long serialVersionUID = 1L;
 
-	private transient ClassMeta<T> classMeta;
+	private final ClassMeta<T> classMeta;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param classMeta The metadata object that created this delegate list.
+	 * @param classMeta The data type represented by this delegate.
 	 */
+	@SuppressWarnings("unchecked")
 	public DelegateList(ClassMeta<T> classMeta) {
+		if (classMeta.isArray())
+			classMeta = classMeta.getBeanContext().getCollectionClassMeta(List.class, classMeta.getElementType());
 		this.classMeta = classMeta;
 	}
 

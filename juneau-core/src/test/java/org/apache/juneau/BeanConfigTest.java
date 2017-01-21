@@ -751,9 +751,9 @@ public class BeanConfigTest {
 		assertDifferentCache(p1, p2);
 	}
 
-	public static class DummyPojoSwapA extends PojoSwap<A,ObjectMap> {}
-	public static class DummyPojoSwapB extends PojoSwap<B,ObjectMap> {}
-	public static class DummyPojoSwapC extends PojoSwap<C,ObjectMap> {}
+	public static class DummyPojoSwapA extends MapSwap<A> {}
+	public static class DummyPojoSwapB extends MapSwap<B> {}
+	public static class DummyPojoSwapC extends MapSwap<C> {}
 	public static class DummyBeanFilterA extends BeanFilterBuilder {
 		public DummyBeanFilterA() {
 			super(A.class);

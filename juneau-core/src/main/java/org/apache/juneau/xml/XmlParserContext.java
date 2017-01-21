@@ -62,20 +62,6 @@ import org.apache.juneau.parser.*;
  * 		<td><jk>true</jk></td>
  * 	</tr>
  * 	<tr>
- * 		<td>{@link #XML_coalescing}</td>
- * 		<td>Enable text element coalescing.</td>
- * 		<td><code>Boolean<code></td>
- * 		<td><jk>false</jk></td>
- * 		<td><jk>true</jk></td>
- * 	</tr>
- * 	<tr>
- * 		<td>{@link #XML_replaceEntityReferences}</td>
- * 		<td>Replace entity references.</td>
- * 		<td><code>Boolean<code></td>
- * 		<td><jk>true</jk></td>
- * 		<td><jk>true</jk></td>
- * 	</tr>
- * 	<tr>
  * 		<td>{@link #XML_reporter}</td>
  * 		<td>XML reporter.</td>
  * 		<td>{@link XMLReporter}</td>
@@ -113,7 +99,7 @@ import org.apache.juneau.parser.*;
  * 	</ul>
  * </ul>
  */
-public final class XmlParserContext extends ParserContext {
+public class XmlParserContext extends ParserContext {
 
 	/**
 	 * <b>Configuration property:</b>  XMLSchema-instance namespace URI.
@@ -157,36 +143,6 @@ public final class XmlParserContext extends ParserContext {
 	 * See {@link XMLInputFactory#IS_VALIDATING} for more info.
 	 */
 	public static final String XML_validating = "XmlParser.validating";
-
-	/**
-	 * <b>Configuration property:</b>  Enable text element coalescing.
-	 * <p>
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"XmlParser.coalescing"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
-	 * <p>
-	 * If <jk>true</jk>, XML text elements will be coalesced.
-	 * See {@link XMLInputFactory#IS_COALESCING} for more info.
-	 */
-	public static final String XML_coalescing = "XmlParser.coalescing";
-
-	/**
-	 * <b>Configuration property:</b>  Replace entity references.
-	 * <p>
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"XmlParser.replaceEntityReferences"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>true</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
-	 * <p>
-	 * If <jk>true</jk>, entity references will be replace during parsing.
-	 * See {@link XMLInputFactory#IS_REPLACING_ENTITY_REFERENCES} for more info.
-	 */
-	public static final String XML_replaceEntityReferences = "XmlParser.replaceEntityReferences";
 
 	/**
 	 * <b>Configuration property:</b>  XML reporter.
@@ -265,8 +221,6 @@ public final class XmlParserContext extends ParserContext {
 	final boolean
 		trimWhitespace,
 		validating,
-		coalescing,
-		replaceEntityReferences,
 		preserveRootElement;
 	final XMLReporter reporter;
 	final XMLResolver resolver;
@@ -284,8 +238,6 @@ public final class XmlParserContext extends ParserContext {
 		xsiNs = cf.getProperty(XML_xsiNs, String.class, "http://www.w3.org/2001/XMLSchema-instance");
 		trimWhitespace = cf.getProperty(XML_trimWhitespace, boolean.class, true);
 		validating = cf.getProperty(XML_validating, boolean.class, false);
-		coalescing = cf.getProperty(XML_coalescing, boolean.class, false);
-		replaceEntityReferences = cf.getProperty(XML_replaceEntityReferences, boolean.class, true);
 		preserveRootElement = cf.getProperty(XML_preserveRootElement, boolean.class, false);
 		reporter = cf.getProperty(XML_reporter, XMLReporter.class, null);
 		resolver = cf.getProperty(XML_resolver, XMLResolver.class, null);
@@ -299,8 +251,6 @@ public final class XmlParserContext extends ParserContext {
 				.append("xsiNs", xsiNs)
 				.append("trimWhitespace", trimWhitespace)
 				.append("validating", validating)
-				.append("coalescing", coalescing)
-				.append("replaceEntityReferences", replaceEntityReferences)
 				.append("preserveRootElement", preserveRootElement)
 				.append("reporter", reporter)
 				.append("resolver", resolver)

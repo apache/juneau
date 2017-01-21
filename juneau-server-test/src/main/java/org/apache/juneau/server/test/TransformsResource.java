@@ -67,7 +67,7 @@ public class TransformsResource extends TransformsParentResource {
 		public int f1;
 	}
 
-	public static class SwapA1 extends PojoSwap<A,String> {
+	public static class SwapA1 extends StringSwap<A> {
 		@Override /* PojoSwap */
 		public String swap(BeanSession session, A a) throws SerializeException {
 			return "A1-" + a.f1;
@@ -82,7 +82,7 @@ public class TransformsResource extends TransformsParentResource {
 		}
 	}
 
-	public static class SwapA2 extends PojoSwap<A,String> {
+	public static class SwapA2 extends StringSwap<A> {
 		@Override /* PojoSwap */
 		public String swap(BeanSession session, A a) throws SerializeException {
 			return "A2-" + a.f1;
@@ -97,7 +97,7 @@ public class TransformsResource extends TransformsParentResource {
 		}
 	}
 
-	public static class SwapA3 extends PojoSwap<A,String> {
+	public static class SwapA3 extends StringSwap<A> {
 		@Override /* PojoSwap */
 		public String swap(BeanSession session, A a) throws SerializeException {
 			return "A3-" + a.f1;
