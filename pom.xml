@@ -99,7 +99,7 @@
 		<module>juneau-rest-client</module>
 		<module>juneau-rest-test</module>
 		<module>juneau-microservice</module>
-		<module>juneau-samples</module>
+		<module>juneau-examples-rest</module>
 		<module>juneau-all</module>
 		<module>juneau-distrib</module>
 	</modules>

@@ -923,16 +923,16 @@
 			Two using the built-in Juneau Server API, and two using the JAX-RS integration component.
 		</p>
 		<ul class='spaced-list'>
-			<li>Create a servlet that subclasses from {@link org.apache.juneau.server.RestServletDefault}.<br>
+			<li>Create a servlet that subclasses from {@link org.apache.juneau.rest.RestServletDefault}.<br>
 					This includes URL-encoding serialization/parsing support by default, in addition to several other media types.
-			<li>Create a servlet that subclasses from {@link org.apache.juneau.server.RestServlet} and specify the
-					URL-encoding serializer and/or parser using the {@link org.apache.juneau.server.annotation.RestResource#serializers()} and
-					{@link org.apache.juneau.server.annotation.RestResource#parsers()} on the entire servlet class, or 
-					the {@link org.apache.juneau.server.annotation.RestMethod#serializers()} and {@link org.apache.juneau.server.annotation.RestMethod#parsers()}
+			<li>Create a servlet that subclasses from {@link org.apache.juneau.rest.RestServlet} and specify the
+					URL-encoding serializer and/or parser using the {@link org.apache.juneau.rest.annotation.RestResource#serializers()} and
+					{@link org.apache.juneau.rest.annotation.RestResource#parsers()} on the entire servlet class, or 
+					the {@link org.apache.juneau.rest.annotation.RestMethod#serializers()} and {@link org.apache.juneau.rest.annotation.RestMethod#parsers()}
 					annotations on individual methods within the class.
-			<li>Register {@link org.apache.juneau.server.jaxrs.DefaultProvider} with JAX-RS.<br>
+			<li>Register {@link org.apache.juneau.rest.jaxrs.DefaultProvider} with JAX-RS.<br>
 					This includes URL-encoding serialization/parsing support by default, in addition to several other media types.
-			<li>Create and register a subclass of {@link org.apache.juneau.server.jaxrs.BaseProvider} and specify the serializers and parsers to use on JAX-RS resources.
+			<li>Create and register a subclass of {@link org.apache.juneau.rest.jaxrs.BaseProvider} and specify the serializers and parsers to use on JAX-RS resources.
 		</ul>
 		<p>
 			In general, the Juneau REST server API is much more configurable and easier to use than JAX-RS, but beware that the author may be slightly biased in this statement.
@@ -943,7 +943,7 @@
 		<h4 class='topic' onclick='toggle(this)'>4.1.1 - Using RestServletDefault</h4>
 		<div class='topic'>
 			<p>
-				The quickest way to implement a REST resource with URL-encoding support is to create a subclass of {@link org.apache.juneau.server.RestServletDefault}.<br>
+				The quickest way to implement a REST resource with URL-encoding support is to create a subclass of {@link org.apache.juneau.rest.RestServletDefault}.<br>
 				This class provides support for JSON, XML, HTML, URL-Encoding, and others.
 			</p>
 			<p>
@@ -975,11 +975,11 @@
  				The <code>$L{...}</code> variable represent localized strings pulled from the resource bundle identified by the <code>messages</code> annotation.
  				These variables are replaced at runtime based on the HTTP request locale.
 				Several built-in runtime variable types are defined, and the API can be extended to include user-defined variables.
-				See {@link org.apache.juneau.server.RestServlet#getVarResolver()} for more information.
+				See {@link org.apache.juneau.rest.RestServlet#getVarResolver()} for more information.
 			</p>
 			<p>
 				This document won't go into all the details of the Juneau <code>RestServlet</code> class.<br>
-				Refer to the {@link org.apache.juneau.server} documentation for more information on the REST servlet class in general.
+				Refer to the {@link org.apache.juneau.rest} documentation for more information on the REST servlet class in general.
 			</p>
 			<p>
 				The rest of the code in the resource class consists of REST methods that simply accept and return POJOs.<br>
@@ -1011,7 +1011,7 @@
 			</p>
 			<p>
 				The resource class can be registered with the web application like any other servlet, or can be 
-					defined as a child of another resource through the {@link org.apache.juneau.server.annotation.RestResource#children()} annotation.
+					defined as a child of another resource through the {@link org.apache.juneau.rest.annotation.RestResource#children()} annotation.
 		</div>
 
 		<!-- ======================================================================================================== -->
@@ -1019,7 +1019,7 @@
 		<h4 class='topic' onclick='toggle(this)'>4.1.2 - Using RestServlet with annotations</h4>
 		<div class='topic'>
 			<p>
-				For fine-tuned control of media types, the {@link org.apache.juneau.server.RestServlet} class 
+				For fine-tuned control of media types, the {@link org.apache.juneau.rest.RestServlet} class 
 					can be subclassed directly.<br>
 				The serializers/parsers can be specified through annotations at the class and/or method levels.
 			</p>
@@ -1055,10 +1055,10 @@
 	}
 			</p>
 			<p>
-				The {@link org.apache.juneau.server.annotation.RestMethod#serializersInherit()} and 
-					{@link org.apache.juneau.server.annotation.RestMethod#parsersInherit()} control how various artifacts
+				The {@link org.apache.juneau.rest.annotation.RestMethod#serializersInherit()} and 
+					{@link org.apache.juneau.rest.annotation.RestMethod#parsersInherit()} control how various artifacts
 					are inherited from the parent class.<br>
-				Refer to {@link org.apache.juneau.server} for additional information on using these annotations.
+				Refer to {@link org.apache.juneau.rest} for additional information on using these annotations.
 			</p>
 		</div>
 
@@ -1067,7 +1067,7 @@
 		<h4 class='topic' onclick='toggle(this)'>4.1.3 - Using JAX-RS DefaultProvider</h4>
 		<div class='topic'>
 			<p>
-				URL-encoding media type support in JAX-RS can be achieved by using the {@link org.apache.juneau.server.jaxrs.DefaultProvider} class.<br>
+				URL-encoding media type support in JAX-RS can be achieved by using the {@link org.apache.juneau.rest.jaxrs.DefaultProvider} class.<br>
 				It implements the JAX-RS <code>MessageBodyReader</code> and <code>MessageBodyWriter</code> interfaces for all Juneau supported media types.
 			</p>
 			<p>
@@ -1143,11 +1143,11 @@
 			<p>
 				Simply include a reference to the provider in the configuration file.
 			<p class='bcode'>
-	org.apache.juneau.server.jaxrs.DefaultProvider
+	org.apache.juneau.rest.jaxrs.DefaultProvider
 			</p>
 			<p>
-				Properties can be specified on providers through the {@link org.apache.juneau.server.jaxrs.JuneauProvider#properties()} annotation.<br>
-				Properties can also be specified at the method level by using the {@link org.apache.juneau.server.annotation.RestMethod#properties} annotation, like so:
+				Properties can be specified on providers through the {@link org.apache.juneau.rest.jaxrs.JuneauProvider#properties()} annotation.<br>
+				Properties can also be specified at the method level by using the {@link org.apache.juneau.rest.annotation.RestMethod#properties} annotation, like so:
 			</p>
 			<p class='bcode'>
 	<ja>@GET</ja>
@@ -1174,8 +1174,8 @@
 					There is currently no way to define this at the class level.<br>
 					You can override properties at the method level, but this can be cumbersome since it would have to be
 						done for all methods in the resource.
-				<li>The Juneau Server API allows you to manipulate properties programatically through the {@link org.apache.juneau.server.RestResponse#setProperty(String,Object)}
-					method, and through the {@link org.apache.juneau.server.annotation.Properties} annotation.<br>
+				<li>The Juneau Server API allows you to manipulate properties programatically through the {@link org.apache.juneau.rest.RestResponse#setProperty(String,Object)}
+					method, and through the {@link org.apache.juneau.rest.annotation.Properties} annotation.<br>
 					There is no equivalent in JAX-RS.
 			</ul>
 		</div>
@@ -1220,7 +1220,7 @@
 	<h3 class='topic' onclick='toggle(this)'>4.2 - REST client support</h3>
 	<div class='topic'>
 		<p>
-			The {@link org.apache.juneau.client.RestClient} class provides an easy-to-use REST client interface with 
+			The {@link org.apache.juneau.rest.client.RestClient} class provides an easy-to-use REST client interface with 
 				pluggable media type handling using any of the Juneau serializers and parsers.<br>
 			Defining a client to support the URL-encoding media type on HTTP requests and responses can be done in one line of code:
 		</p>

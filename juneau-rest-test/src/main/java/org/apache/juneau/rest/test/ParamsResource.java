@@ -20,11 +20,11 @@ import java.util.*;
 import javax.servlet.http.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.examples.addressbook.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.samples.addressbook.*;
 import org.apache.juneau.transforms.*;
 import org.apache.juneau.urlencoding.*;
 

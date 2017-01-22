@@ -150,21 +150,21 @@
 									<li class='c'>{@link org.apache.juneau.svl.vars.ConfigFileVar} - Resolves variables from a {@link org.apache.juneau.ini.ConfigFile} object.
 									<li class='c'>{@link org.apache.juneau.svl.vars.EnvVariablesVar} - Resolves environment variables.
 									<li class='c'>{@link org.apache.juneau.svl.vars.ManifestFileVar} - Resolves variables from a {@link org.apache.juneau.utils.ManifestFile} object.
-									<li class='c'>{@link org.apache.juneau.server.vars.ServletInitParamVar} - Resolves servlet initialization parameters.
+									<li class='c'>{@link org.apache.juneau.rest.vars.ServletInitParamVar} - Resolves servlet initialization parameters.
 								</ul>
 							</li>
 							<li class='a'>{@link org.apache.juneau.svl.MultipartVar} - Variables that consist of 2 or more comma-delimited arguments.
 								<ul>
-									<li class='c'>{@link org.apache.juneau.server.vars.LocalizationVar} - Resolves localized strings for an HTTP request.
+									<li class='c'>{@link org.apache.juneau.rest.vars.LocalizationVar} - Resolves localized strings for an HTTP request.
 								</ul>
 							</li>
-							<li class='c'>{@link org.apache.juneau.server.vars.RequestVar} - Resolves specialized HTTP request values.
-							<li class='c'>{@link org.apache.juneau.server.vars.UrlEncodeVar} - URL-encodes the value inside the variable.
+							<li class='c'>{@link org.apache.juneau.rest.vars.RequestVar} - Resolves specialized HTTP request values.
+							<li class='c'>{@link org.apache.juneau.rest.vars.UrlEncodeVar} - URL-encodes the value inside the variable.
 						</ul>
 					</li>
 					<li class='a'>{@link org.apache.juneau.svl.StreamedVar} - Superclass of all vars that stream their value to writers.
 						<ul>
-							<li class='c'>{@link org.apache.juneau.server.vars.SerializedRequestAttrVar} - Resolves HTTP request attribute values passed through a {@link org.apache.juneau.serializer.Serializer}.
+							<li class='c'>{@link org.apache.juneau.rest.vars.SerializedRequestAttrVar} - Resolves HTTP request attribute values passed through a {@link org.apache.juneau.serializer.Serializer}.
 						</ul>
 					</li>
 				</ul>

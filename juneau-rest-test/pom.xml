@@ -35,7 +35,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-samples</artifactId>
+			<artifactId>juneau-examples-rest</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

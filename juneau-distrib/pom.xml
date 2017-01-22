@@ -112,7 +112,7 @@
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/src</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-samples</artifactId>
+									<artifactId>juneau-examples-rest</artifactId>
 									<version>${project.version}</version>
 									<type>jar</type>
 									<classifier>sources</classifier>

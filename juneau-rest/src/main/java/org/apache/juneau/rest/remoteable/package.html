@@ -77,8 +77,8 @@
 			calling methods on POJOs on the server side.
 	</p>
 	<p>
-		Proxy interfaces are retrieved using the {@link org.apache.juneau.client.RestClient#getRemoteableProxy(Class)} method.
-		The {@link org.apache.juneau.client.RestClient#setRemoteableServletUri(String)} method is used to specify the location
+		Proxy interfaces are retrieved using the {@link org.apache.juneau.rest.client.RestClient#getRemoteableProxy(Class)} method.
+		The {@link org.apache.juneau.rest.client.RestClient#setRemoteableServletUri(String)} method is used to specify the location
 			of the remoteable services servlet running on the server.
 		The remoteable servlet is a specialized subclass of {@link org.apache.juneau.rest.RestServlet} that provides a full-blown
 			REST interface for calling remoteable services (e.g. POJOs) remotely. 
@@ -126,7 +126,7 @@
 <h2 class='topic' onclick='toggle(this)'>2 - Client Side</h2>
 <div class='topic'>
 	<p>
-		Remoteable interface proxies are retrieved through the existing {@link org.apache.juneau.client.RestClient} class.
+		Remoteable interface proxies are retrieved through the existing {@link org.apache.juneau.rest.client.RestClient} class.
 	</p>
 	<p>
 		It may seem that the client-side code would need to be complex.
@@ -263,7 +263,7 @@
 	<p>
 		Next, we can use a tool such as Poster to make the REST call.
 		Methods are invoked by POSTing the serialized object array to the URI of the interface method.
-		In this case, we want to POST our JSON to <code>/juneau/sample/remoteable/org.apache.juneau.samples.addressbook.IAddressBook/createPerson(org.apache.juneau.samples.addressbook.CreatePerson)</code>.
+		In this case, we want to POST our JSON to <code>/juneau/sample/remoteable/org.apache.juneau.examples.addressbook.IAddressBook/createPerson(org.apache.juneau.examples.addressbook.CreatePerson)</code>.
 		Make sure that we specify the <code>Content-Type</code> of the body as <code>text/json</code>.
 		We also want the results to be returned as JSON, so we set the <code>Accept</code> header to <code>text/json</code> as well.
 	</p>

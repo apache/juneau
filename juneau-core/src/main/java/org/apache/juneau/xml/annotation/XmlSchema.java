@@ -66,14 +66,14 @@ public @interface XmlSchema {
 	 * 			<ja>@XmlNs</ja>(prefix=<js>"mail"</js>, namespaceURI="<js>http://www.apache.org/mail/"</js>)
 	 * 		}
 	 * 	)
-	 * 	<jk>package</jk> org.apache.juneau.samples.addressbook;
+	 * 	<jk>package</jk> org.apache.juneau.examples.addressbook;
 	 * 	<jk>import</jk> org.apache.juneau.xml.annotation.*;
 	 * </p>
 	 * <p>
 	 * 	Class in package using defined namespaces...
 	 * </p>
 	 * <p class='bcode'>
-	 * 	<jk>package</jk> corg.apache.juneau.samples.addressbook;
+	 * 	<jk>package</jk> corg.apache.juneau.examples.addressbook;
 	 *
 	 * 	<jc>// Bean class, override "ab" namespace on package.</jc>
 	 * 	<ja>@Xml</ja>(prefix=<js>"addr"</js>)

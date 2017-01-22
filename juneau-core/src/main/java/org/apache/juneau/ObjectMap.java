@@ -22,7 +22,6 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
-import org.apache.juneau.transforms.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -1077,84 +1076,9 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	/**
 	 * Converts this map into the class type specified by the <js>"_type"</js> entry value.
 	 * <p>
-	 * 	This method can be used to convert <code>ObjectMap</code> objects to a variety of POJO types.
+	 * TODO - Needs better description.
 	 *
-	 * <h6 class='topic'>Examples of valid class types:</h6>
-	 * <p>
-	 * 	An object map can be converted to a bean.
-	 * </p>
-	 * <p class='bcode'>
-	 * 	{
-	 * 		_type: <js>'org.apache.juneau.samples.addressbook.Person'</js>,
-	 * 		name: <js>'John Smith'</js>,
-	 * 		...
-	 * 	}
-	 * </p>
-	 * <p>
-	 * 	It can also be converted into another map type.
-	 * </p>
-	 * <p class='bcode'>
-	 * 	<jc>// Generic TreeMap (String keys, Object values)</jc>
-	 * 	{
-	 * 		_type: <js>'java.util.TreeMap'</js>,
-	 * 		name: <js>'John Smith'</js>,
-	 * 		...
-	 * 	}
-	 * 	<jc>// TreeMap where values are forced to be strings.</jc>
-	 * 	{
-	 * 		_type: <js>'java.util.TreeMap&lt;java.lang.String,java.lang.String&gt;'</js>,
-	 * 		name: <js>'John Smith'</js>,
-	 * 		...
-	 * 	}
-	 * </p>
-	 * <p>
-	 * 	It can also be converted to Collections objects if map defines an <code>items</code> entry of type array.
-	 * </p>
-	 * <p class='bcode'>
-	 * 	<jc>// LinkedList of strings</jc>
-	 * 	{
-	 * 		_type: <js>'java.util.LinkedList'</js>,
-	 * 		items: [ <js>'John Smith'</js>, ... ]
-	 * 	}
-	 * 	<jc>// LinkedList of beans</jc>
-	 * 	{
-	 * 		_type: <js>'java.util.LinkedList&lt;org.apache.juneau.samples.addressbook.Person&gt;'</js>,
-	 * 		items: [ { name: <js>'John Smith'</js>, ... }, ... ]
-	 * 	}
-	 * </p>
-	 * <p>
-	 * 	It can also be converted to arrays.
-	 * </p>
-	 * <p class='bcode'>
-	 * 	<jc>// Array of strings</jc>
-	 * 	{
-	 * 		_type: <js>'java.lang.String[]'</js>,
-	 * 		items: [ <js>'John Smith'</js>, ... ]
-	 * 	}
-	 * 	<jc>// Array of beans</jc>
-	 * 	{
-	 * 		_type: <js>'org.apache.juneau.samples.addressbook.Person[]'</js>,
-	 * 		items: [ { name: <js>'John Smith'</js>, ... }, ... ]
-	 * 	}
-	 * </p>
-	 * <p>
-	 * 	It can also be converted to any type that can be handled by the {@link BeanSession#convertToType(Object, Class)} method.
-	 * 	In this case, the value is specified by an <code>value</code> entry of any type.
-	 * 	For example, if the bean context has a {@link CalendarSwap} associated with it, it can convert a string value to a calendar.
-	 * <p class='bcode'>
-	 * 	{
-	 * 		_type: <js>'java.util.GregorianCalendar'</js>,
-	 * 		value: <js>'2001-07-04T15:30:45-05:00'</js>
-	 * 	}
-	 * </p>
-	 *
-	 * <h6 class='topic'>Notes:</h6>
-	 * <ul>
-	 * 	<li>This method is recursive.  It will also recursively convert any descendant entries to POJOs.
-	 * </ul>
-	 *
-	 * @return The new Java object of type specified by the <js>"_class"</js> entry value, or this
-	 * 	same object if entry does not exist.
+	 * @return This object map cast as another object.
 	 */
 	public Object cast() {
 		return cast((BeanRegistry)null);

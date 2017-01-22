@@ -3101,7 +3101,7 @@
 		The following code shows how to register your REST servlets in an OSGi <l>Activator</l>:
 	</p>
 	<p class='bcode'>
-	<jk>package</jk> org.apache.juneau.samples;
+	<jk>package</jk> org.apache.juneau.examples.rest;
 	
 	<jk>import</jk> org.osgi.framework.*;
 	<jk>import</jk> org.osgi.service.http.*;
@@ -3219,7 +3219,7 @@
 			<ja>@Property</ja>(name=<jsf>SERIALIZER_quoteChar</jsf>, value=<js>"'"</js>), 
 			<ja>@Property</ja>(name=<jsf>RDF_rdfxml_tab</jsf>, value=<js>"5"</js>), 
 			<ja>@Property</ja>(name=<jsf>RDF_addRootProperty</jsf>, value=<js>"true"</js>), 
-			<ja>@Property</ja>(name=<jsf>HTMLDOC_links</jsf>, value=<js>"{up:'$R{requestParentURI}',options:'$R{servletURI}?method=OPTIONS',source:'$R{servletParentURI}/source?classes=(org.apache.juneau.rest.samples.addressbook.AddressBookResource,org.apache.juneau.samples.addressbook.Address,org.apache.juneau.samples.addressbook.AddressBook,org.apache.juneau.samples.addressbook.CreateAddress,org.apache.juneau.samples.addressbook.CreatePerson,org.apache.juneau.samples.addressbook.IAddressBook,org.apache.juneau.samples.addressbook.Person)'}"</js>), 
+			<ja>@Property</ja>(name=<jsf>HTMLDOC_links</jsf>, value=<js>"{up:'$R{requestParentURI}',options:'$R{servletURI}?method=OPTIONS',source:'$R{servletParentURI}/source?classes=(org.apache.juneau.rest.samples.addressbook.AddressBookResource,org.apache.juneau.examples.addressbook.Address,org.apache.juneau.examples.addressbook.AddressBook,org.apache.juneau.examples.addressbook.CreateAddress,org.apache.juneau.examples.addressbook.CreatePerson,org.apache.juneau.examples.addressbook.IAddressBook,org.apache.juneau.examples.addressbook.Person)'}"</js>), 
 			<jc>// Resolve all relative URIs so that they're relative to this servlet!</jc> 
 			<ja>@Property</ja>(name=<jsf>SERIALIZER_relativeUriBase</jsf>, value=<js>"$R{servletURI}"</js>), 
 		}, 

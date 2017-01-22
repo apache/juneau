@@ -66,14 +66,14 @@ public @interface RdfSchema {
 	 * 			<ja>@RdfNs</ja>(prefix=<js>"mail"</js>, namespaceURI="<js>http://www.apache.org/mail/"</js>)
 	 * 		}
 	 * 	)
-	 * 	<jk>package</jk> org.apache.juneau.samples.addressbook;
+	 * 	<jk>package</jk> org.apache.juneau.examples.addressbook;
 	 * 	<jk>import</jk> org.apache.juneau.rdf.annotation.*;
 	 * </p>
 	 * <p>
 	 * 	Class in package using defined namespaces...
 	 * </p>
 	 * <p class='bcode'>
-	 * 	<jk>package</jk> org.apache.juneau.samples.addressbook;
+	 * 	<jk>package</jk> org.apache.juneau.examples.addressbook;
 	 *
 	 * 	<jc>// Bean class, override "ab" namespace on package.</jc>
 	 * 	<ja>@Rdf</ja>(prefix=<js>"addr"</js>)
