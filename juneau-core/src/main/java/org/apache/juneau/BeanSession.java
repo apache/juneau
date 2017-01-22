@@ -22,10 +22,9 @@ import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
-
-import com.hp.hpl.jena.reasoner.rulesys.Rule.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link Serializer} or {@link Parser}.

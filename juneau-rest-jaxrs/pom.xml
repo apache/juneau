@@ -16,10 +16,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>juneau-all</artifactId>
-	<name>Apache Juneau UberJar</name>
-	<description>Combined contents of Core/Server/Client/Microservice jars</description>
-	<packaging>jar</packaging>
+	<artifactId>juneau-rest-jaxrs</artifactId>
+	<name>Apache Juneau REST JAX/RS API</name>
+	<description>REST servlet API</description>
+	<packaging>bundle</packaging>
 
 	<parent>
 		<groupId>org.apache.juneau</groupId>
@@ -45,46 +45,52 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-rest-client</artifactId>
-			<version>${project.version}</version>
+			<groupId>javax.ws.rs</groupId>
+			<artifactId>jsr311-api</artifactId>
+			<optional>true</optional>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-microservice</artifactId>
-			<version>${project.version}</version>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
 		</dependency>
 	</dependencies>
+	
+	<properties>
+		<!-- Skip javadoc generation since we generate them in the aggregate pom -->
+		<maven.javadoc.skip>true</maven.javadoc.skip>
+	</properties>
 
 	<build>
 		<plugins>
-		
-			<!--
-				Creates our juneau-all jar file that's a combo of our 4 modules.
-			-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
-				<version>2.4.3</version>
-				<configuration>
-					<createDependencyReducedPom>false</createDependencyReducedPom>
-					<artifactSet>
-						<includes>
-							<include>org.apache.juneau:juneau-core</include>
-							<include>org.apache.juneau:juneau-rest</include>
-							<include>org.apache.juneau:juneau-rest-client</include>
-							<include>org.apache.juneau:juneau-microservice</include>
-						</includes>
-					</artifactSet>
-				</configuration>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>3.0.1</version>
 				<executions>
 					<execution>
-						<phase>package</phase>
+						<id>attach-sources</id>
+						<phase>verify</phase>
 						<goals>
-							<goal>shade</goal>
+							<goal>jar-no-fork</goal>
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<version>3.2.0</version>
+				<extensions>true</extensions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.19.1</version>
+				<configuration>
+					<includes>
+						<include>**/*Test.class</include>
+					</includes>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

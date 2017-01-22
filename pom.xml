@@ -92,11 +92,14 @@
 
 	<modules>
 		<module>juneau-core</module>
-		<module>juneau-rest-client</module>
+		<module>juneau-core-rdf</module>
+		<module>juneau-core-test</module>
 		<module>juneau-rest</module>
+		<module>juneau-rest-jaxrs</module>
+		<module>juneau-rest-client</module>
+		<module>juneau-rest-test</module>
 		<module>juneau-microservice</module>
 		<module>juneau-samples</module>
-		<module>juneau-rest-test</module>
 		<module>juneau-all</module>
 		<module>juneau-distrib</module>
 	</modules>
