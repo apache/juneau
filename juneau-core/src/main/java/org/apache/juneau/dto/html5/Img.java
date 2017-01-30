@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.html5;
 
+import java.net.*;
+
 import org.apache.juneau.annotation.*;
 
 /**
@@ -27,7 +29,7 @@ public class Img extends HtmlElementEmpty {
 	 * @return This object (for method chaining).
 	 */
 	public final Img alt(String alt) {
-		attrs.put("alt", alt);
+		attr("alt", alt);
 		return this;
 	}
 
@@ -38,7 +40,7 @@ public class Img extends HtmlElementEmpty {
 	 * @return This object (for method chaining).
 	 */
 	public final Img crossorigin(String crossorigin) {
-		attrs.put("crossorigin", crossorigin);
+		attr("crossorigin", crossorigin);
 		return this;
 	}
 
@@ -46,10 +48,11 @@ public class Img extends HtmlElementEmpty {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-height'>height</a> attribute.
 	 * Vertical dimension.
 	 * @param height - The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Img height(String height) {
-		attrs.put("height", height);
+	public final Img height(Object height) {
+		attr("height", height);
 		return this;
 	}
 
@@ -57,10 +60,11 @@ public class Img extends HtmlElementEmpty {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-img-ismap'>ismap</a> attribute.
 	 * Whether the image is a server-side image map.
 	 * @param ismap - The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Img ismap(String ismap) {
-		attrs.put("ismap", ismap);
+	public final Img ismap(Object ismap) {
+		attr("ismap", ismap);
 		return this;
 	}
 
@@ -68,10 +72,11 @@ public class Img extends HtmlElementEmpty {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-img-src'>src</a> attribute.
 	 * Address of the resource.
 	 * @param src - The new value for this attribute.
+	 * 	Typically a {@link URL} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Img src(String src) {
-		attrs.put("src", src);
+	public final Img src(Object src) {
+		attr("src", src);
 		return this;
 	}
 
@@ -82,7 +87,7 @@ public class Img extends HtmlElementEmpty {
 	 * @return This object (for method chaining).
 	 */
 	public final Img usemap(String usemap) {
-		attrs.put("usemap", usemap);
+		attr("usemap", usemap);
 		return this;
 	}
 
@@ -90,10 +95,11 @@ public class Img extends HtmlElementEmpty {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-width'>width</a> attribute.
 	 * Horizontal dimension.
 	 * @param width - The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Img width(String width) {
-		attrs.put("width", width);
+	public final Img width(Object width) {
+		attr("width", width);
 		return this;
 	}
 

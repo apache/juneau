@@ -19,7 +19,6 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="form")
-@SuppressWarnings("hiding")
 public class Form extends HtmlElementMixed {
 
 	/**
@@ -29,7 +28,7 @@ public class Form extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final Form acceptcharset(String acceptcharset) {
-		attrs.put("accept-charset", acceptcharset);
+		attr("accept-charset", acceptcharset);
 		return this;
 	}
 
@@ -40,7 +39,7 @@ public class Form extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final Form action(String action) {
-		attrs.put("action", action);
+		attr("action", action);
 		return this;
 	}
 
@@ -51,7 +50,7 @@ public class Form extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final Form autocomplete(String autocomplete) {
-		attrs.put("autocomplete", autocomplete);
+		attr("autocomplete", autocomplete);
 		return this;
 	}
 
@@ -62,7 +61,7 @@ public class Form extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final Form enctype(String enctype) {
-		attrs.put("enctype", enctype);
+		attr("enctype", enctype);
 		return this;
 	}
 
@@ -73,7 +72,7 @@ public class Form extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final Form method(String method) {
-		attrs.put("method", method);
+		attr("method", method);
 		return this;
 	}
 
@@ -84,7 +83,7 @@ public class Form extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final Form name(String name) {
-		attrs.put("name", name);
+		attr("name", name);
 		return this;
 	}
 
@@ -92,10 +91,11 @@ public class Form extends HtmlElementMixed {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-fs-novalidate'>novalidate</a> attribute.
 	 * Bypass form control validation for form submission.
 	 * @param novalidate - The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Form novalidate(String novalidate) {
-		attrs.put("novalidate", novalidate);
+	public final Form novalidate(Boolean novalidate) {
+		attr("novalidate", novalidate);
 		return this;
 	}
 
@@ -106,7 +106,7 @@ public class Form extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final Form target(String target) {
-		attrs.put("target", target);
+		attr("target", target);
 		return this;
 	}
 
@@ -135,7 +135,7 @@ public class Form extends HtmlElementMixed {
 
 	@Override /* HtmlElementMixed */
 	public Form child(Object child) {
-		this.children.add(child);
+		super.child(child);
 		return this;
 	}
 }

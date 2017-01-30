@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.html5;
 
+import java.net.*;
+
 import org.apache.juneau.annotation.*;
 
 /**
@@ -25,10 +27,11 @@ public class Embed extends HtmlElementEmpty {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-height'>height</a> attribute.
 	 * Vertical dimension.
 	 * @param height - The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Embed height(String height) {
-		attrs.put("height", height);
+	public final Embed height(Object height) {
+		attr("height", height);
 		return this;
 	}
 
@@ -36,10 +39,11 @@ public class Embed extends HtmlElementEmpty {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-embed-src'>src</a> attribute.
 	 * Address of the resource.
 	 * @param src - The new value for this attribute.
+	 * 	Typically a {@link URL} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Embed src(String src) {
-		attrs.put("src", src);
+	public final Embed src(Object src) {
+		attr("src", src);
 		return this;
 	}
 
@@ -50,7 +54,7 @@ public class Embed extends HtmlElementEmpty {
 	 * @return This object (for method chaining).
 	 */
 	public final Embed type(String type) {
-		attrs.put("type", type);
+		attr("type", type);
 		return this;
 	}
 
@@ -58,10 +62,11 @@ public class Embed extends HtmlElementEmpty {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-width'>width</a> attribute.
 	 * Horizontal dimension.
 	 * @param width - The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Embed width(String width) {
-		attrs.put("width", width);
+	public final Embed width(Object width) {
+		attr("width", width);
 		return this;
 	}
 

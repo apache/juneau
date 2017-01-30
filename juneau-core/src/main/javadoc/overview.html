@@ -88,6 +88,13 @@
 		<li><p><a class='doclink' href='#Core.ConfigFile'>Configuration Files</a></p>
 		<li><p><a class='doclink' href='#Core.SupportedLanguages'>Supported Languages</a></p>
 	</ol>
+	<li><p><a class='doclink' href='#DTOs'>Juneau Data Transfer Objects (org.apache.juneau.dto)</a></p>
+	<ol>
+		<li><p><a class='doclink' href='#DTOs.HTML5'>HTML5</a></p>
+		<li><p><a class='doclink' href='#DTOs.Atom'>Atom</a></p>
+		<li><p><a class='doclink' href='#DTOs.Swagger'>Swagger</a></p>
+		<li><p><a class='doclink' href='#DTOs.JsonSchema'>JSON-Schema</a></p>
+	</ol>
 	<li><p><a class='doclink' href='#Server'>Juneau Server (org.apache.juneau.rest)</a></p>
 	<li><p><a class='doclink' href='#Client'>Juneau Client (org.apache.juneau.rest.client)</a></p>
 	<li><p><a class='doclink' href='#Remoteable'>Remoteable services (org.apache.juneau.rest.remoteable)</a></p>
@@ -194,10 +201,11 @@
 		<li>
 			<p>Data Transfer Objects:</p>
 			<ul>
+				<li>HTML5
 				<li>ATOM 
+				<li>Swagger
 				<li>Cognos 
 				<li>JSON-Schema 
-				<li>HTML 5 (in progress)
 			</ul>
 			<p>DTOs can be used with any serializers and parsers (e.g. ATOM as JSON).
 		<li>
@@ -1376,10 +1384,225 @@
 		</ul>
 	</div>
 </div>
+
+<!-- ======================================================================================================== -->
+<a id="DTOs"></a>
+<h2 class='topic' onclick='toggle(this)'>3 - Juneau Data Transfer Objects (org.apache.juneau.dto)</h2>
+<div class='topic'>
+	<p>
+		The Juneau Core library contains several predefined POJOs for generating commonly-used document types.
+		This section describes support for these POJOs.
+	</p>
+	
+	<!-- ======================================================================================================== -->
+	<a id="DTOs.HTML5"></a>
+	<h3 class='topic' onclick='toggle(this)'>3.1 - HTML5</h3>
+	<div class='topic'>
+		<p>
+			The Juneau HTML5 DTOs are simply beans with fluent-style setters that allow you to quickly construct HTML
+			fragments as Java objects.  These object can then be serialized to HTML using one of the existing HTML serializers,
+			or to other languages such as JSON using the JSON serializers.
+		</p>
+		<p>
+			The {@link org.apache.juneau.dto.html5.HtmlBuilder} class is a utility class with predefined static methods
+			that allow you to easily construct DTO instances in a minimal amount of code. 
+		</p>
+		<p>
+			The following examples show how to create HTML tables.
+		</p>
+		<table class='styled' style='width:auto'>
+			<tr>
+				<th>Java code</th>
+				<th>HTML</th>
+			</tr>
+			<tr>
+				<td class='code'>
+	<jk>import static</jk> org.apache.juneau.dto.html5.HtmlBuilder.*;
+	
+	Object mytable = 	
+		table(
+			tr(th(<js>"c1"</js>),th(<js>"c2"</js>)),
+			tr(td(<js>"v1"</js>),td(<js>"v2"</js>))
+		);
+
+	String html = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(mytable);
+				</td>
+				<td class='code'><xt>
+	&lt;table&gt;
+		&lt;tr&gt;
+			&lt;th&gt;<xv>c1</xv>&lt;/th&gt;
+			&lt;th&gt;<xv>c2</xv>&lt;/th&gt;
+		&lt;/tr&gt;
+		&lt;tr&gt;
+			&lt;td&gt;<xv>v1</xv>&lt;/td&gt;
+			&lt;td&gt;<xv>v2</xv>&lt;/td&gt;
+		&lt;/tr&gt;
+	&lt;/table&gt;
+				</xt></td>
+			</tr>
+		</table>
+		<p>
+			Using the HTML5 DTOs, you should be able to construct any valid HTML5 from full document bodies
+			to any possible fragements.
+		</p>
+		<p>
+			The {@link org.apache.juneau.html.HtmlParser} class can be used convert these HTML documents back
+			into POJOs.
+		</p>
+		<p>
+			Other serializers and parsers (e.g. {@link org.apache.juneau.json.JsonSerializer}) can be used to 
+			represent these POJOs in languages other than HTML.
+		</p>
+		
+		<h6 class='topic'>Additional Information</h6>
+		<ul class='javahierarchy'>
+			<li class='p'><a class='doclink' href='org/apache/juneau/dto/html5/package-summary.html#TOC'>org.apache.juneau.dto.html5</a> - HTML DTOs.
+		</ul>
+	</div>
+
+	<!-- ======================================================================================================== -->
+	<a id="DTOs.Atom"></a>
+	<h3 class='topic' onclick='toggle(this)'>3.2 - Atom</h3>
+	<div class='topic'>
+		<p>
+			The Juneau ATOM feed DTOs are simply beans with fluent-style setters.<br>
+			The following code shows a feed being created programmatically using the {@link org.apache.juneau.dto.atom.AtomBuilder} class.
+		</p>
+		<p class='bcode'>
+		
+	<jk>import static</jk> org.apache.juneau.dto.atom.AtomBuilder.*;
+	
+	Feed feed = 
+		feed(<js>"tag:juneau.apache.org"</js>, <js>"Juneau ATOM specification"</js>, <js>"2016-01-02T03:04:05Z"</js>)
+		.subtitle(text(<js>"html"</js>).children(<js>"Describes &lt;em&gt;stuff&lt;/em&gt; about Juneau"</js>))
+		.links(
+			link(<js>"alternate"</js>, <js>"text/html"</js>, <js>"http://www.sample.com/"</js>).hreflang(<js>"en"</js>),
+			link(<js>"self"</js>, <js>"application/atom+xml"</js>, <js>"http://www.sample.com/feed.atom"</js>)
+		)
+		.rights(<js>"Copyright (c) 2016, Apache Foundation"</js>)
+		.generator(
+			generator(<js>"Juneau"</js>).uri(<js>"http://juneau.apache.org/"</js>).version(<js>"1.0"</js>)
+		)
+		.entries(
+			entry(<js>"tag:juneau.sample.com,2013:1.2345"</js>, <js>"Juneau ATOM specification snapshot"</js>, <js>"2016-01-02T03:04:05Z"</js>)
+			.links(
+				link<js>"alternate"</js>, <js>"text/html"</js>, <js>"http://www.sample.com/2012/05/08/juneau.atom"</js>),
+				link(<js>"enclosure"</js>, <js>"audio/mpeg"</js>, <js>"http://www.sample.com/audio/juneau_podcast.mp3"</js>).length(1337)
+			)
+			.published(<js>"2016-01-02T03:04:05Z"</js>)
+			.authors(
+				person(<js>"James Bognar"</js>).uri(<js>"http://www.sample.com/"</js>).email(<js>"jamesbognar@apache.org"</js>)
+			)
+			.contributors(
+				person(<js>"Barry M. Caceres"</js>)
+			)
+			.content(
+				content(<js>"xhtml"</js>)
+				.lang(<js>"en"</js>)
+				.base(<js>"http://www.apache.org/"</js>)
+				.children(
+					HtmlBuilder.div().child(
+						HtmlBuilder.p(
+							HtmlBuilder.i(<js>"[Update: Juneau supports ATOM.]"</js>)
+						)
+					)
+				)
+			)
+		);
+		</p>
+		<p>
+			To serialize this to ATOM, use the {@link org.apache.juneau.xml.XmlSerializer} class:
+		</p>
+		
+		<h6 class='figure'>Example with no namespaces</h6>
+		<p class='bcode'>
+	<jc>// Create a serializer with readable output, no namespaces yet.</jc>
+	XmlSerializer s = <jk>new</jk> XmlSerializer.SqReadable();
+
+	<jc>// Serialize to ATOM/XML</jc>
+	String atomXml = s.serialize(feed);
+		</p>
+		
+		<h6 class='figure'>Results</h6>
+		<p class='bcode'>
+	<xt>&lt;feed&gt;</xt>
+		<xt>&lt;id&gt;</xt>
+			tag:juneau.apache.org
+		<xt>&lt;/id&gt;</xt>
+		<xt>&lt;link</xt> <xa>href</xa>=<xs>'http://juneau.apache.org/'</xs> <xa>rel</xa>=<xs>'alternate'</xs> <xa>type</xa>=<xs>'text/html'</xs> <xa>hreflang</xa>=<xs>'en'</xs>/<xt>&gt;</xt>
+		<xt>&lt;link</xt> <xa>href</xa>=<xs>'http://juneau.apache.org/feed.atom'</xs> <xa>rel</xa>=<xs>'self'</xs> <xa>type</xa>=<xs>'application/atom+xml'</xs>/<xt>&gt;</xt>
+		<xt>&lt;rights&gt;</xt>
+			Copyright (c) 2016, Apache Foundation
+		<xt>&lt;/rights&gt;</xt>
+		<xt>&lt;title</xt> <xa>type</xa>=<xs>'text'</xs>&gt;</xt>
+			Juneau ATOM specification
+		<xt>&lt;/title&gt;</xt>
+		<xt>&lt;updated&gt;</xt>2016-01-02T03:04:05Z<xt>&lt;/updated&gt;</xt>
+		<xt>&lt;generator</xt> <xa>uri</xa>=<xs>'http://juneau.apache.org/'</xs> <xa>version</xa>=<xs>'1.0'</xs><xt>&gt;</xt>
+			Juneau
+		<xt>&lt;/generator&gt;</xt>
+		<xt>&lt;subtitle</xt> <xa>type</xa>=<xs>'html'</xs><xt>&gt;</xt>
+			Describes &lt;em&gt;stuff&lt;/em&gt; about Juneau
+		<xt>&lt;/subtitle&gt;</xt>
+		<xt>&lt;entry&gt;</xt>
+			<xt>&lt;author&gt;</xt>
+				<xt>&lt;name&gt;</xt>James Bognar<xt>&lt;/name&gt;</xt>
+				<xt>&lt;uri&gt;</xt>http://juneau.apache.org/<xt>&lt;/uri&gt;</xt>
+				<xt>&lt;email&gt;</xt>jamesbognar@apache.org<xt>&lt;/email&gt;</xt>
+			<xt>&lt;/author&gt;</xt>
+			<xt>&lt;contributor&gt;</xt>
+				<xt>&lt;name&gt;</xt>Barry M. Caceres<xt>&lt;/name&gt;</xt>
+			<xt>&lt;/contributor&gt;</xt>
+			<xt>&lt;id&gt;</xt>
+				tag:juneau.apache.org
+			<xt>&lt;/id&gt;</xt>
+			<xt>&lt;link</xt> <xa>href</xa>=<xs>'http://juneau.apache.org/juneau.atom'</xs> <xa>rel</xa>=<xs>'alternate'</xs> <xa>type</xa>=<xs>'text/html'</xs>/<xt>&gt;</xt>
+			<xt>&lt;link</xt> <xa>href</xa>=<xs>'http://juneau.apache.org/audio/juneau_podcast.mp3'</xs> <xa>rel</xa>=<xs>'enclosure'</xs> <xa>type</xa>=<xs>'audio/mpeg'</xs> <xa>length</xa>=<xs>'12345'</xs>/<xt>&gt;</xt>
+			<xt>&lt;title&gt;</xt>
+				Juneau ATOM specification snapshot
+			<xt>&lt;/title&gt;</xt>
+			<xt>&lt;updated&gt;</xt>2016-01-02T03:04:05Z<xt>&lt;/updated&gt;</xt>
+			<xt>&lt;content</xt> <xa>base</xa>=<xs>'http://www.apache.org/'</xs> <xa>lang</xa>=<xs>'en'</xs> <xa>type</xa>=<xs>'xhtml'</xs><xt>&gt;</xt>
+				<xt>&lt;div</xt> <xa>xmlns</xa>=<xs>"http://www.w3.org/1999/xhtml"</xs><xt>&gt;&lt;p&gt;&lt;i&gt;</xt>[Update: Juneau supports ATOM.]<xt>&lt;/i&gt;&lt;/p&gt;&lt;/div&gt;</xt>
+			<xt>&lt;/content&gt;</xt>
+			<xt>&lt;published&gt;</xt>2016-01-02T03:04:05Z<xt>&lt;/published&gt;</xt>
+		<xt>&lt;/entry&gt;</xt>
+	<xt>&lt;/feed&gt;</xt>		
+		</p>
+		<p>
+			The {@link org.apache.juneau.html.XmlParser} class can be used convert these Atom documents back
+			into POJOs.
+		</p>
+		<p>
+			Other serializers and parsers (e.g. {@link org.apache.juneau.json.JsonSerializer}) can be used to 
+			represent these POJOs in languages other than XML.
+		</p>
+		
+		<h6 class='topic'>Additional Information</h6>
+		<ul class='javahierarchy'>
+			<li class='p'><a class='doclink' href='org/apache/juneau/dto/html5/package-summary.html#TOC'>org.apache.juneau.dto.atom</a> - Atom DTOs.
+		</ul>
+	</div>
+
+	<!-- ======================================================================================================== -->
+	<a id="DTOs.Swagger"></a>
+	<h3 class='topic' onclick='toggle(this)'>3.3 - Swagger</h3>
+	<div class='topic'>
+		TODO
+	</div>
+
+	<!-- ======================================================================================================== -->
+	<a id="DTOs.JsonSchema"></a>
+	<h3 class='topic' onclick='toggle(this)'>3.4 - JSON-Schema</h3>
+	<div class='topic'>
+		TODO
+	</div>
+
+</div>
 	
 <!-- ======================================================================================================== -->
 <a id="Server"></a>
-<h2 class='topic' onclick='toggle(this)'>3 - Juneau Server (org.apache.juneau.rest)</h2>
+<h2 class='topic' onclick='toggle(this)'>4 - Juneau Server (org.apache.juneau.rest)</h2>
 <div class='topic'>
 	<p>
 		The Juneau REST Server API provides servlet-based REST resources on top of existing POJOs.
@@ -1641,7 +1864,7 @@
 			
 <!-- ======================================================================================================== -->
 <a id="Client"></a>
-<h2 class='topic' onclick='toggle(this)'>4 - Juneau Client (org.apache.juneau.rest.client)</h2>
+<h2 class='topic' onclick='toggle(this)'>5 - Juneau Client (org.apache.juneau.rest.client)</h2>
 <div class='topic'>
 	<p>
 		The REST client API provides the ability to access remote REST interfaces and transparently convert the input and output to and from POJOs using any
@@ -1684,7 +1907,7 @@
 	
 <!-- ======================================================================================================== -->
 <a id="Remoteable"></a>
-<h2 class='topic' onclick='toggle(this)'>5 - Remoteable Services (org.apache.juneau.rest.remoteable)</h2>
+<h2 class='topic' onclick='toggle(this)'>6 - Remoteable Services (org.apache.juneau.rest.remoteable)</h2>
 <div class='topic'>
 	<p>
 		Juneau provides the capability of calling methods on POJOs on a server through client-side proxy interfaces.
@@ -1749,7 +1972,7 @@
 	
 <!-- ======================================================================================================== -->
 <a id="Microservices"></a>
-<h2 class='topic' onclick='toggle(this)'>6 - Juneau Microservices (org.apache.juneau.microservice)</h2>
+<h2 class='topic' onclick='toggle(this)'>7 - Juneau Microservices (org.apache.juneau.microservice)</h2>
 <div class='topic'>
 	<p>
 		<b>WARNING - The microservice API is still in beta.  It may be replaced with an OSGi-based architecture.</b>
@@ -1778,7 +2001,7 @@
 
 <!-- ======================================================================================================== -->
 <a id="Samples"></a>
-<h2 class='topic' onclick='toggle(this)'>7 - Samples</h2>
+<h2 class='topic' onclick='toggle(this)'>8 - Samples</h2>
 <div class='topic'>
 	<p>
 		The <l>microservice-samples-project.zip</l> file is a zipped eclipse project that includes everything you 
@@ -1791,7 +2014,7 @@
 		
 	<!-- ======================================================================================================== -->
 	<a id="Samples.Installing"></a>
-	<h3 class='topic' onclick='toggle(this)'>7.1 - Installing in Eclipse</h3>
+	<h3 class='topic' onclick='toggle(this)'>8.1 - Installing in Eclipse</h3>
 	<div class='topic'>
 		<p>
 			Follow these instructions to create the Samples project in Eclipse:
@@ -1867,7 +2090,7 @@
 
 	<!-- ======================================================================================================== -->
 	<a id="Samples.Running"></a>
-	<h3 class='topic' onclick='toggle(this)'>7.2 - Running in Eclipse</h3>
+	<h3 class='topic' onclick='toggle(this)'>8.2 - Running in Eclipse</h3>
 	<div class='topic'>
 		<p>
 			The <l>microservice-samples-project.launch</l> file is already provided to allow you to quickly start
@@ -1893,7 +2116,7 @@
 
 	<!-- ======================================================================================================== -->
 	<a id="Samples.Building"></a>
-	<h3 class='topic' onclick='toggle(this)'>7.3 - Building and Running from Command-Line</h3>
+	<h3 class='topic' onclick='toggle(this)'>8.3 - Building and Running from Command-Line</h3>
 	<div class='topic'>
 		<p>
 			The <l>build.xml</l> file is a very basic ANT script for building the Samples microservice
@@ -1916,7 +2139,7 @@
 	
 	<!-- ======================================================================================================== -->
 	<a id="Samples.RestResource"></a>
-	<h3 class='topic' onclick='toggle(this)'>7.4 - MANIFEST.MF</h3>
+	<h3 class='topic' onclick='toggle(this)'>8.4 - MANIFEST.MF</h3>
 	<div class='topic'>
 		<p>
 			The <l>META-INF/MANIFEST.MF</l> file is used to describe the microservice. 
@@ -1967,7 +2190,7 @@
 
 	<!-- ======================================================================================================== -->
 	<a id="Samples.RootResources"></a>
-	<h3 class='topic' onclick='toggle(this)'>7.5 - RootResources</h3>
+	<h3 class='topic' onclick='toggle(this)'>8.5 - RootResources</h3>
 	<div class='topic'>
 		<p>
 			The <l>RootResources</l> class is the main page for the REST microservice.
@@ -2106,7 +2329,7 @@
 
 	<!-- ======================================================================================================== -->
 	<a id="Samples.HelloWorldResource"></a>
-	<h3 class='topic' onclick='toggle(this)'>7.6 - HelloWorldResource</h3>
+	<h3 class='topic' onclick='toggle(this)'>8.6 - HelloWorldResource</h3>
 	<div class='topic'>
 		<p>
 			The <l>HelloWorldResource</l> class is a simple resource that prints a "Hello world!" message.
@@ -2173,7 +2396,7 @@
 
 	<!-- ======================================================================================================== -->
 	<a id="Samples.MethodExampleResource"></a>
-	<h3 class='topic' onclick='toggle(this)'>7.7 - MethodExampleResource</h3>
+	<h3 class='topic' onclick='toggle(this)'>8.7 - MethodExampleResource</h3>
 	<div class='topic'>
 		<p>
 			The <l>MethodExampleResource</l> class provides examples of the following:
@@ -2395,7 +2618,7 @@
 	
 	<!-- ======================================================================================================== -->
 	<a id="Samples.UrlEncodedFormResource"></a>
-	<h3 class='topic' onclick='toggle(this)'>7.8 - UrlEncodedFormResource</h3>
+	<h3 class='topic' onclick='toggle(this)'>8.8 - UrlEncodedFormResource</h3>
 	<div class='topic'>
 		<p>
 			The <l>UrlEncodedFormResource</l> class provides examples of the following:
@@ -2531,7 +2754,7 @@
 	
 	<!-- ======================================================================================================== -->
 	<a id="Samples.RequestEchoResource"></a>
-	<h3 class='topic' onclick='toggle(this)'>7.9 - RequestEchoResource</h3>
+	<h3 class='topic' onclick='toggle(this)'>8.9 - RequestEchoResource</h3>
 	<div class='topic'>
 		<p>
 			The <l>RequestEchoResource</l> class shows how existing complex POJOs can be serialized to a variety of content types.
@@ -2643,7 +2866,7 @@
 	
 	<!-- ======================================================================================================== -->
 	<a id="Samples.AddressBookResource"></a>
-	<h3 class='topic' onclick='toggle(this)'>7.10 - AddressBookResource</h3>
+	<h3 class='topic' onclick='toggle(this)'>8.10 - AddressBookResource</h3>
 	<div class='topic'>
 		<p>
 			The <l>AddressBookResource</l> class is a proof-of-concept class that shows a true RESTful API using  the Juneau REST toolkit.  
@@ -2677,7 +2900,7 @@
 		
 		<!-- ======================================================================================================== -->
 		<a id="Samples.AddressBookResource.Classes"></a>
-		<h4 class='topic' onclick='toggle(this)'>7.10.1 - Classes</h4>
+		<h4 class='topic' onclick='toggle(this)'>8.10.1 - Classes</h4>
 		<div class='topic'>
 			<p>
 				The code is straightforward, consisting of the following classes:
@@ -3398,7 +3621,7 @@
 		
 		<!-- ======================================================================================================== -->
 		<a id="Samples.AddressBookResource.Demo"></a>
-		<h4 class='topic' onclick='toggle(this)'>7.10.2 - Demo</h4>
+		<h4 class='topic' onclick='toggle(this)'>8.10.2 - Demo</h4>
 		<div class='topic'>
 			<p>
 				Pointing a browser to the resource shows the results of running the <l>getRoot()</l> method:
@@ -3465,7 +3688,7 @@
 		
 		<!-- ======================================================================================================== -->
 		<a id="Samples.AddressBookResource.Traversable"></a>
-		<h4 class='topic' onclick='toggle(this)'>7.10.3 - Traversable</h4>
+		<h4 class='topic' onclick='toggle(this)'>8.10.3 - Traversable</h4>
 		<div class='topic'>
 			<p>
 				Because you added the <l>Traversable</l> converter to the <l>getPerson</l> method, you can also address child nodes in the POJO model
@@ -3478,7 +3701,7 @@
 
 		<!-- ======================================================================================================== -->
 		<a id="Samples.AddressBookResource.Queryable"></a>
-		<h4 class='topic' onclick='toggle(this)'>7.10.4 - Queryable</h4>
+		<h4 class='topic' onclick='toggle(this)'>8.10.4 - Queryable</h4>
 		<div class='topic'>
 			<p>
 				The <l>Queryable</l> converter on the <l>getAllPeople()</l> method allows us to perform search/view/sort functions against the data
@@ -3494,7 +3717,7 @@
 		
 		<!-- ======================================================================================================== -->
 		<a id="Samples.AddressBookResource.Introspectable"></a>
-		<h4 class='topic' onclick='toggle(this)'>7.10.5 - Introspectable</h4>
+		<h4 class='topic' onclick='toggle(this)'>8.10.5 - Introspectable</h4>
 		<div class='topic'>
 			<p>
 				The <l>Introspectable</l> converter on the <l>getPerson</l> method allows us to invoke public methods on the addressed POJO (in this case, public methods on the <l>String</l> class):
@@ -3504,7 +3727,7 @@
 		
 		<!-- ======================================================================================================== -->
 		<a id="Samples.AddressBookResource.RestClient"></a>
-		<h4 class='topic' onclick='toggle(this)'>7.10.6 - ClientTest</h4>
+		<h4 class='topic' onclick='toggle(this)'>8.10.6 - ClientTest</h4>
 		<div class='topic'>
 			<p>
 				The <l>ClientTest</l> class is provided to demonstrate how POJOs can be serialized and parsed 
@@ -3617,7 +3840,7 @@
 	
 		<!-- ======================================================================================================== -->
 		<a id="Samples.AddressBookResource.Browser"></a>
-		<h4 class='topic' onclick='toggle(this)'>7.10.7 - Browser Tips</h4>
+		<h4 class='topic' onclick='toggle(this)'>8.10.7 - Browser Tips</h4>
 		<div class='topic'>
 			<p>
 				The Juneau architecture is designed to make it easy to debug REST resources using nothing more than a browser.
@@ -3648,7 +3871,7 @@
 	
 	<!-- ======================================================================================================== -->
 	<a id="Samples.SampleRemoteableServlet"></a>
-	<h3 class='topic' onclick='toggle(this)'>7.11 - SampleRemoteableServlet</h3>
+	<h3 class='topic' onclick='toggle(this)'>8.11 - SampleRemoteableServlet</h3>
 	<div class='topic'>
 		<p>	
 			The <l>SampleRemoteableServlet</l> class shows examples of the following:
@@ -3747,7 +3970,7 @@
 
 	<!-- ======================================================================================================== -->
 	<a id="Samples.TempDirResource"></a>
-	<h3 class='topic' onclick='toggle(this)'>7.12 - TempDirResource</h3>
+	<h3 class='topic' onclick='toggle(this)'>8.12 - TempDirResource</h3>
 	<div class='topic'>
 		<p>	
 			The <l>TempDirResource</l> class shows examples of the following:
@@ -3864,7 +4087,7 @@
 	
 	<!-- ======================================================================================================== -->
 	<a id="Samples.AtomFeedResource"></a>
-	<h3 class='topic' onclick='toggle(this)'>7.13 - AtomFeedResource</h3>
+	<h3 class='topic' onclick='toggle(this)'>8.13 - AtomFeedResource</h3>
 	<div class='topic'>
 		<p>	
 			The <l>AtomFeedResource</l> class shows examples of the following:
@@ -3974,7 +4197,7 @@
 	
 	<!-- ======================================================================================================== -->
 	<a id="Samples.DockerRegistryResource"></a>
-	<h3 class='topic' onclick='toggle(this)'>7.14 - DockerRegistryResource</h3>
+	<h3 class='topic' onclick='toggle(this)'>8.14 - DockerRegistryResource</h3>
 	<div class='topic'>
 		<p>	
 			The <l>DockerRegistryResource</l> class shows examples of the following:
@@ -4061,7 +4284,7 @@
 	
 	<!-- ======================================================================================================== -->
 	<a id="Samples.TumblrParserResource"></a>
-	<h3 class='topic' onclick='toggle(this)'>7.15 - TumblrParserResource</h3>
+	<h3 class='topic' onclick='toggle(this)'>8.15 - TumblrParserResource</h3>
 	<div class='topic'>
 		<p>	
 			The <l>TumblrParserResource</l> class shows examples of the following:
@@ -4140,7 +4363,7 @@
 	
 	<!-- ======================================================================================================== -->
 	<a id="Samples.PhotosResource"></a>
-	<h3 class='topic' onclick='toggle(this)'>7.16 - PhotosResource</h3>
+	<h3 class='topic' onclick='toggle(this)'>8.16 - PhotosResource</h3>
 	<div class='topic'>
 		<p>	
 			The <l>PhotosResource</l> class shows examples of the following:
@@ -4282,7 +4505,7 @@
 
 	<!-- ======================================================================================================== -->
 	<a id="Samples.JsonSchemaResource"></a>
-	<h3 class='topic' onclick='toggle(this)'>7.17 - JsonSchemaResource</h3>
+	<h3 class='topic' onclick='toggle(this)'>8.17 - JsonSchemaResource</h3>
 	<div class='topic'>
 		<p>	
 			The <l>JsonSchemaResource</l> class shows examples of the following:
@@ -4360,7 +4583,7 @@
 
 	<!-- ======================================================================================================== -->
 	<a id="Samples.SqlQueryResource"></a>
-	<h3 class='topic' onclick='toggle(this)'>7.18 - SqlQueryResource</h3>
+	<h3 class='topic' onclick='toggle(this)'>8.18 - SqlQueryResource</h3>
 	<div class='topic'>
 		<p>	
 			The <l>SqlQueryResource</l> class shows examples of the following:
@@ -4552,7 +4775,7 @@
 
 	<!-- ======================================================================================================== -->
 	<a id="Samples.ConfigResource"></a>
-	<h3 class='topic' onclick='toggle(this)'>7.19 - ConfigResource</h3>
+	<h3 class='topic' onclick='toggle(this)'>8.19 - ConfigResource</h3>
 	<div class='topic'>
 		<p>
 			The {@link org.apache.juneau.microservice.resources.ConfigResource} class is a reusable resource
@@ -4763,7 +4986,7 @@
 
 	<!-- ======================================================================================================== -->
 	<a id="Samples.LogsResource"></a>
-	<h3 class='topic' onclick='toggle(this)'>7.20 - LogsResource</h3>
+	<h3 class='topic' onclick='toggle(this)'>8.20 - LogsResource</h3>
 	<div class='topic'>
 		<p>
 			The {@link org.apache.juneau.microservice.resources.LogsResource} class is a reusable resource
@@ -4787,12 +5010,12 @@
 
 <!-- ======================================================================================================== -->
 <a id="Cookbook"></a>
-<h2 class='topic' onclick='toggle(this)'>8 - Cookbook Examples</h2>
+<h2 class='topic' onclick='toggle(this)'>9 - Cookbook Examples</h2>
 <div class='topic'>
 
 	<!-- ======================================================================================================== -->
 	<a id="Cookbook.Core"></a>
-	<h3 class='topic' onclick='toggle(this)'>8.1 - Core API</h3>
+	<h3 class='topic' onclick='toggle(this)'>9.1 - Core API</h3>
 	<div class='topic'>
 		<h6 class='topic'>TODO topics</h6>
 		<ol>
@@ -4803,11 +5026,11 @@
 	
 	<!-- ======================================================================================================== -->
 	<a id="Cookbook.Server"></a>
-	<h3 class='topic' onclick='toggle(this)'>8.2 - Server API</h3>
+	<h3 class='topic' onclick='toggle(this)'>9.2 - Server API</h3>
 	<div class='topic'>
 		<!-- ======================================================================================================== -->
 		<a id="Cookbook.Server.applyDoubleTransform"></a>
-		<h3 class='topic' onclick='toggle(this)'>8.2.1 - Apply a transform that changes the format of doubles</h3>
+		<h3 class='topic' onclick='toggle(this)'>9.2.1 - Apply a transform that changes the format of doubles</h3>
 		<div class='topic'>
 			<p>
 				The {@link org.apache.juneau.rest.annotation.RestResource#pojoSwaps()} annotation can be used to add 
@@ -4838,7 +5061,7 @@
 			
 		<!-- ======================================================================================================== -->
 		<a id="Cookbook.Server.applyTransformsSubset"></a>
-		<h3 class='topic' onclick='toggle(this)'>8.2.2 - Apply transforms to a subset of serializers or parsers</h3>
+		<h3 class='topic' onclick='toggle(this)'>9.2.2 - Apply transforms to a subset of serializers or parsers</h3>
 		<div class='topic'>
 			<p>
 				The {@link org.apache.juneau.rest.RestServlet#createSerializers(ObjectMap,Class[],Class[])} and {@link org.apache.juneau.rest.RestServlet#createParsers(ObjectMap,Class[],Class[])}
@@ -4919,20 +5142,20 @@
 	
 	<!-- ======================================================================================================== -->
 	<a id="Cookbook.Client"></a>
-	<h3 class='topic' onclick='toggle(this)'>8.3 - Client API</h3>
+	<h3 class='topic' onclick='toggle(this)'>9.3 - Client API</h3>
 	<div class='topic'>
 	</div>
 	
 	<!-- ======================================================================================================== -->
 	<a id="Cookbook.Microservice"></a>
-	<h3 class='topic' onclick='toggle(this)'>8.4 - Microservice API</h3>
+	<h3 class='topic' onclick='toggle(this)'>9.4 - Microservice API</h3>
 	<div class='topic'>
 	</div>
 </div>
 
 <!-- ======================================================================================================== -->
 <a id="BestPractices"></a>
-<h2 class='topic' onclick='toggle(this)'>9 - Best Practices</h2>
+<h2 class='topic' onclick='toggle(this)'>10 - Best Practices</h2>
 <div class='topic'>
 	<ol>
 		<li>Reuse instances of serializers and parsers whenever possible.<br>
@@ -4952,7 +5175,7 @@
 
 <!-- ======================================================================================================== -->
 <a id="ImportantLinks"></a>
-<h2 class='topic' onclick='toggle(this)'>10 - Important Document Links</h2>
+<h2 class='topic' onclick='toggle(this)'>11 - Important Document Links</h2>
 <div class='topic'>
 	<p>
 		All up-to-date Juneau documentation is stored in Javadocs, especially package-level Javadocs.
@@ -4980,7 +5203,7 @@
 
 <!-- ======================================================================================================== -->
 <a id="ReleaseNotes"></a>
-<h2 class='topic' onclick='toggle(this)'>11 - Release Notes</h2>
+<h2 class='topic' onclick='toggle(this)'>12 - Release Notes</h2>
 <div class='topic'>
 	
 	<h5 class='toc'>What's new in each release</h5>
@@ -5078,7 +5301,9 @@
 							setting above on specific bean properties.
 						<li>New {@link org.apache.juneau.xml.annotation.XmlFormat#ELEMENTS} format can be applied to a bean property of type array/Collection to represent the child elements.
 						<li>New {@link org.apache.juneau.xml.annotation.XmlFormat#MIXED} format can be applied to a bean property of type array/Collection to represent mixed content (text + child elements).
+						<li>New {@link org.apache.juneau.xml.annotation.XmlFormat#MIXED_PWS} format.  Identical to <jsf>MIXED</jsf> except preserves whitespace.
 						<li>New {@link org.apache.juneau.xml.annotation.XmlFormat#TEXT} format can be applied to a bean property of a single object to represent a text node as a child.
+						<li>New {@link org.apache.juneau.xml.annotation.XmlFormat#TEXT_PWS} format.  Identical to <jsf>TEXT</jsf> except preserves whitespace.
 						<li>New {@link org.apache.juneau.xml.annotation.XmlFormat#XMLTEXT} format that's identical to {@link org.apache.juneau.xml.annotation.XmlFormat#TEXT} except 
 							XML content is not escaped and serialized directly as the child content.  The parser will reconvert this to the original XML text during parsing.
 					</ul>
@@ -5091,12 +5316,12 @@
 					<li>Eliminated the <code>addJsonTypeAttrs</code> and <code>addJsonStringTypeAttrs</code> settings.
 					<li>Namespace support is now disabled by default.
 				</ul>
-			<li>Improvements to HTML serialization support.
+			<li>Significant modifications and improvements to HTML serialization support.
 				<ul>
 					<li>Parser converted from <code>XMLEventReader</code>-based to <code>XMLStreamReader</code>.
 					<li>Eliminated many unnecessary type tags and <xt>&lt;string&gt;</xt> elements and improved the readable layout.  
 						The new format is much leaner.
-					<li>New support methodology section added to {@link org.apache.juneau.html} documentation.
+					<li>New exhaustive support methodology section added to {@link org.apache.juneau.html} documentation.
 				</ul>
 			<li>New HTML5 DTO support:  {@link org.apache.juneau.dto.html5}.
 			<li>{@link org.apache.juneau.BeanContext} class split into separate {@link org.apache.juneau.BeanContext} and {@link org.apache.juneau.BeanSession} classes.
@@ -5157,6 +5382,8 @@
 					<li>Updated {@link org.apache.juneau.dto.atom} documentation.
 				</ul>
 			<li>New {@link org.apache.juneau.transform.MapSwap} and {@link org.apache.juneau.transform.StringSwap} classes.
+			<li>New {@link org.apache.juneau.serializer.WriterSerializer#println(Object)} method.  Useful for debugging purposes.
+			<li>New section added to this document:	<a class='doclink' href='#DTOs'>Juneau Data Transfer Objects (org.apache.juneau.dto)</a>
 		</ul>
 		
 		<h6 class='topic'>org.apache.juneau.rest</h6>

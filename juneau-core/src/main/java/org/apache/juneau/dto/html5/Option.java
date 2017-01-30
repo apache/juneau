@@ -25,10 +25,11 @@ public class Option extends HtmlElementText {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-option-disabled'>disabled</a> attribute.
 	 * Whether the form control is disabled.
 	 * @param disabled - The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Option disabled(String disabled) {
-		attrs.put("disabled", disabled);
+	public final Option disabled(Object disabled) {
+		attr("disabled", disabled);
 		return this;
 	}
 
@@ -39,7 +40,7 @@ public class Option extends HtmlElementText {
 	 * @return This object (for method chaining).
 	 */
 	public final Option label(String label) {
-		attrs.put("label", label);
+		attr("label", label);
 		return this;
 	}
 
@@ -47,10 +48,11 @@ public class Option extends HtmlElementText {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-option-selected'>selected</a> attribute.
 	 * Whether the option is selected by default.
 	 * @param selected - The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Option selected(String selected) {
-		attrs.put("selected", selected);
+	public final Option selected(Object selected) {
+		attr("selected", selected);
 		return this;
 	}
 
@@ -58,10 +60,11 @@ public class Option extends HtmlElementText {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-option-value'>value</a> attribute.
 	 * Value to be used for form submission.
 	 * @param value - The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Option value(String value) {
-		attrs.put("value", value);
+	public final Option value(Object value) {
+		attr("value", value);
 		return this;
 	}
 

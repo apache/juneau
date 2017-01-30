@@ -90,4 +90,15 @@ public abstract class WriterSerializer extends Serializer {
 	public final StringObject toStringObject(Object o) {
 		return new StringObject(this, o);
 	}
+
+	/**
+	 * Convenience method for serializing an object and sending it to STDOUT.
+	 *
+	 * @param o The object to serialize.
+	 * @return This object (for method chaining).
+	 */
+	public final WriterSerializer println(Object o) {
+		System.out.println(toString(o));
+		return this;
+	}
 }

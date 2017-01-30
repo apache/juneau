@@ -19,7 +19,6 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="nav")
-@SuppressWarnings("hiding")
 public class Nav extends HtmlElementMixed {
 
 	//--------------------------------------------------------------------------------
@@ -46,7 +45,7 @@ public class Nav extends HtmlElementMixed {
 
 	@Override /* HtmlElementMixed */
 	public Nav child(Object child) {
-		this.children.add(child);
+		super.child(child);
 		return this;
 	}
 }

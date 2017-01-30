@@ -19,17 +19,17 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="progress")
-@SuppressWarnings("hiding")
 public class Progress extends HtmlElementMixed {
 
 	/**
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-progress-max'>max</a> attribute.
 	 * Upper bound of range.
 	 * @param max - The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Progress max(String max) {
-		attrs.put("max", max);
+	public final Progress max(Object max) {
+		attr("max", max);
 		return this;
 	}
 
@@ -37,10 +37,11 @@ public class Progress extends HtmlElementMixed {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-progress-value'>value</a> attribute.
 	 * Current value of the element.
 	 * @param value - The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Progress value(String value) {
-		attrs.put("value", value);
+	public final Progress value(Object value) {
+		attr("value", value);
 		return this;
 	}
 
@@ -68,7 +69,7 @@ public class Progress extends HtmlElementMixed {
 
 	@Override /* HtmlElementMixed */
 	public Progress child(Object child) {
-		this.children.add(child);
+		super.child(child);
 		return this;
 	}
 }

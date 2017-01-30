@@ -39,7 +39,7 @@ public class SerializerWriter extends Writer {
 	/** Use-whitespace flag. */
 	protected final boolean useWhitespace;
 
-	/** Use-whitespace flag. */
+	/** Trim strings flag. */
 	protected final boolean trimStrings;
 
 	/** The quote character being used by this writer. */
@@ -183,6 +183,19 @@ public class SerializerWriter extends Writer {
 			}
 		}
 		return append(s);
+	}
+
+	/**
+	 * Appends the specified characters to this writer.
+	 *
+	 * @param characters The characters to append to this writer.
+	 * @return This object (for method chaining).
+	 * @throws IOException
+	 */
+	public SerializerWriter append(char[] characters) throws IOException {
+		for (char c : characters)
+			append(c);
+		return this;
 	}
 
 	/**

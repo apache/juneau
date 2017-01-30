@@ -25,10 +25,11 @@ public class Col extends HtmlElementEmpty {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/tabular-data.html#attr-col-span'>span</a> attribute.
 	 * Number of columns spanned by the element.
 	 * @param span - The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Col span(long span) {
-		attrs.put("span", span);
+	public final Col span(Object span) {
+		attr("span", span);
 		return this;
 	}
 

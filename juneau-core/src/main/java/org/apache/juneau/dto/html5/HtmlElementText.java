@@ -27,9 +27,20 @@ public class HtmlElementText extends HtmlElement {
 	 *
 	 * @return The inner text of this element, or <jk>null</jk> if no text is set.
 	 */
-	@Xml(format=XmlFormat.MIXED)
+	@Xml(format=XmlFormat.TEXT)
 	public Object getText() {
 		return text;
+	}
+
+	/**
+	 * Sets the innter text of this element.
+	 *
+	 * @param text The inner text of this element, or <jk>null</jk> if no text is set.
+	 * @return This object (for method chaining).
+	 */
+	public HtmlElement setText(Object text) {
+		this.text = text;
+		return this;
 	}
 
 	/**

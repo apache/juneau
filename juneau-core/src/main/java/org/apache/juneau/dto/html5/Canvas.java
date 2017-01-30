@@ -25,10 +25,11 @@ public class Canvas extends HtmlElementContainer {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/scripting-1.html#attr-canvas-height'>height</a> attribute.
 	 * Vertical dimension.
 	 * @param height - The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Canvas height(long height) {
-		attrs.put("height", height);
+	public final Canvas height(Object height) {
+		attr("height", height);
 		return this;
 	}
 
@@ -36,10 +37,11 @@ public class Canvas extends HtmlElementContainer {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/scripting-1.html#attr-canvas-width'>width</a> attribute.
 	 * Horizontal dimension.
 	 * @param width - The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Canvas width(long width) {
-		attrs.put("width", width);
+	public final Canvas width(Object width) {
+		attr("width", width);
 		return this;
 	}
 
@@ -56,6 +58,18 @@ public class Canvas extends HtmlElementContainer {
 	@Override /* HtmlElement */
 	public final Canvas id(String id) {
 		super.id(id);
+		return this;
+	}
+
+	@Override /* HtmlElementContainer */
+	public final Canvas children(Object...children) {
+		super.children(children);
+		return this;
+	}
+
+	@Override /* HtmlElementContainer */
+	public final Canvas child(Object child) {
+		super.child(child);
 		return this;
 	}
 }

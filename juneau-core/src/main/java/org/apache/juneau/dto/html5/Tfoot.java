@@ -19,18 +19,11 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="tfoot")
-@SuppressWarnings("hiding")
 public class Tfoot extends HtmlElementContainer {
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods
 	//--------------------------------------------------------------------------------
-
-	@Override /* HtmlElement */
-	public Tfoot children(Object...children) {
-		super.children(children);
-		return this;
-	}
 
 	@Override /* HtmlElement */
 	public final Tfoot _class(String _class) {
@@ -41,6 +34,18 @@ public class Tfoot extends HtmlElementContainer {
 	@Override /* HtmlElement */
 	public final Tfoot id(String id) {
 		super.id(id);
+		return this;
+	}
+
+	@Override /* HtmlElementContainer */
+	public final Tfoot children(Object...children) {
+		super.children(children);
+		return this;
+	}
+
+	@Override /* HtmlElementContainer */
+	public final Tfoot child(Object child) {
+		super.child(child);
 		return this;
 	}
 }

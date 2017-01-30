@@ -19,7 +19,6 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="legend")
-@SuppressWarnings("hiding")
 public class Legend extends HtmlElementMixed {
 
 	//--------------------------------------------------------------------------------
@@ -46,7 +45,7 @@ public class Legend extends HtmlElementMixed {
 
 	@Override /* HtmlElementMixed */
 	public Legend child(Object child) {
-		this.children.add(child);
+		super.child(child);
 		return this;
 	}
 }

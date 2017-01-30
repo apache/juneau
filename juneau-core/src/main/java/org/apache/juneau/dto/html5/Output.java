@@ -19,7 +19,6 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="output")
-@SuppressWarnings("hiding")
 public class Output extends HtmlElementMixed {
 
 	/**
@@ -29,7 +28,7 @@ public class Output extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final Output _for(String _for) {
-		attrs.put("for", _for);
+		attr("for", _for);
 		return this;
 	}
 
@@ -40,7 +39,7 @@ public class Output extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final Output form(String form) {
-		attrs.put("form", form);
+		attr("form", form);
 		return this;
 	}
 
@@ -51,7 +50,7 @@ public class Output extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final Output name(String name) {
-		attrs.put("name", name);
+		attr("name", name);
 		return this;
 	}
 
@@ -79,7 +78,7 @@ public class Output extends HtmlElementMixed {
 
 	@Override /* HtmlElementMixed */
 	public Output child(Object child) {
-		this.children.add(child);
+		super.child(child);
 		return this;
 	}
 }

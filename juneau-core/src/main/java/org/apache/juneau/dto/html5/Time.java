@@ -19,7 +19,6 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="time")
-@SuppressWarnings("hiding")
 public class Time extends HtmlElementMixed {
 
 	/**
@@ -29,7 +28,7 @@ public class Time extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final Time datetime(String datetime) {
-		attrs.put("datetime", datetime);
+		attr("datetime", datetime);
 		return this;
 	}
 
@@ -57,7 +56,7 @@ public class Time extends HtmlElementMixed {
 
 	@Override /* HtmlElementMixed */
 	public Time child(Object child) {
-		this.children.add(child);
+		super.child(child);
 		return this;
 	}
 }

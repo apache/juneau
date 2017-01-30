@@ -28,7 +28,7 @@ public class Meta extends HtmlElementEmpty {
 	 * @return This object (for method chaining).
 	 */
 	public final Meta charset(String charset) {
-		attrs.put("charset", charset);
+		attr("charset", charset);
 		return this;
 	}
 
@@ -39,7 +39,7 @@ public class Meta extends HtmlElementEmpty {
 	 * @return This object (for method chaining).
 	 */
 	public final Meta content(String content) {
-		attrs.put("content", content);
+		attr("content", content);
 		return this;
 	}
 
@@ -50,7 +50,7 @@ public class Meta extends HtmlElementEmpty {
 	 * @return This object (for method chaining).
 	 */
 	public final Meta httpequiv(String httpequiv) {
-		attrs.put("http-equiv", httpequiv);
+		attr("http-equiv", httpequiv);
 		return this;
 	}
 
@@ -61,7 +61,7 @@ public class Meta extends HtmlElementEmpty {
 	 * @return This object (for method chaining).
 	 */
 	public final Meta name(String name) {
-		attrs.put("name", name);
+		attr("name", name);
 		return this;
 	}
 

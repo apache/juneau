@@ -19,29 +19,23 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="colgroup")
-@SuppressWarnings("hiding")
 public class Colgroup extends HtmlElementContainer {
 
 	/**
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/tabular-data.html#attr-colgroup-span'>span</a> attribute.
 	 * Number of columns spanned by the element.
 	 * @param span - The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Colgroup span(long span) {
-		attrs.put("span", span);
+	public final Colgroup span(Object span) {
+		attr("span", span);
 		return this;
 	}
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods
 	//--------------------------------------------------------------------------------
-
-	@Override /* HtmlElement */
-	public Colgroup children(Object...children) {
-		super.children(children);
-		return this;
-	}
 
 	@Override /* HtmlElement */
 	public final Colgroup _class(String _class) {
@@ -52,6 +46,18 @@ public class Colgroup extends HtmlElementContainer {
 	@Override /* HtmlElement */
 	public final Colgroup id(String id) {
 		super.id(id);
+		return this;
+	}
+
+	@Override /* HtmlElementContainer */
+	public final Colgroup children(Object...children) {
+		super.children(children);
+		return this;
+	}
+
+	@Override /* HtmlElementContainer */
+	public final Colgroup child(Object child) {
+		super.child(child);
 		return this;
 	}
 }

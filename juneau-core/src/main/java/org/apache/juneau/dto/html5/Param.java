@@ -28,7 +28,7 @@ public class Param extends HtmlElementEmpty {
 	 * @return This object (for method chaining).
 	 */
 	public final Param name(String name) {
-		attrs.put("name", name);
+		attr("name", name);
 		return this;
 	}
 
@@ -36,10 +36,11 @@ public class Param extends HtmlElementEmpty {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-param-value'>value</a> attribute.
 	 * Value of parameter.
 	 * @param value - The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Param value(String value) {
-		attrs.put("value", value);
+	public final Param value(Object value) {
+		attr("value", value);
 		return this;
 	}
 

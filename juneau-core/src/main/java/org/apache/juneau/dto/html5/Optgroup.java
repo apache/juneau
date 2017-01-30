@@ -19,17 +19,17 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="optgroup")
-@SuppressWarnings("hiding")
 public class Optgroup extends HtmlElementContainer {
 
 	/**
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-optgroup-disabled'>disabled</a> attribute.
 	 * Whether the form control is disabled.
 	 * @param disabled - The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Optgroup disabled(String disabled) {
-		attrs.put("disabled", disabled);
+	public final Optgroup disabled(Object disabled) {
+		attr("disabled", disabled);
 		return this;
 	}
 
@@ -40,19 +40,13 @@ public class Optgroup extends HtmlElementContainer {
 	 * @return This object (for method chaining).
 	 */
 	public final Optgroup label(String label) {
-		attrs.put("label", label);
+		attr("label", label);
 		return this;
 	}
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods
 	//--------------------------------------------------------------------------------
-
-	@Override /* HtmlElement */
-	public Optgroup children(Object...children) {
-		super.children(children);
-		return this;
-	}
 
 	@Override /* HtmlElement */
 	public final Optgroup _class(String _class) {
@@ -63,6 +57,18 @@ public class Optgroup extends HtmlElementContainer {
 	@Override /* HtmlElement */
 	public final Optgroup id(String id) {
 		super.id(id);
+		return this;
+	}
+
+	@Override /* HtmlElementContainer */
+	public final Optgroup children(Object...children) {
+		super.children(children);
+		return this;
+	}
+
+	@Override /* HtmlElementContainer */
+	public final Optgroup child(Object child) {
+		super.child(child);
 		return this;
 	}
 }

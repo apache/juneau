@@ -19,7 +19,6 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="cite")
-@SuppressWarnings("hiding")
 public class Cite extends HtmlElementMixed {
 
 	//--------------------------------------------------------------------------------
@@ -46,7 +45,7 @@ public class Cite extends HtmlElementMixed {
 
 	@Override /* HtmlElementMixed */
 	public Cite child(Object child) {
-		this.children.add(child);
+		super.child(child);
 		return this;
 	}
 }

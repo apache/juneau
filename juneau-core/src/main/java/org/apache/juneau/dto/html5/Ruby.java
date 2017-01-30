@@ -19,7 +19,6 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="ruby")
-@SuppressWarnings("hiding")
 public class Ruby extends HtmlElementMixed {
 
 	//--------------------------------------------------------------------------------
@@ -46,7 +45,7 @@ public class Ruby extends HtmlElementMixed {
 
 	@Override /* HtmlElementMixed */
 	public Ruby child(Object child) {
-		this.children.add(child);
+		super.child(child);
 		return this;
 	}
 }

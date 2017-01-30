@@ -19,18 +19,11 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="dl")
-@SuppressWarnings("hiding")
 public class Dl extends HtmlElementContainer {
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods
 	//--------------------------------------------------------------------------------
-
-	@Override /* HtmlElement */
-	public final Dl children(Object...children) {
-		super.children(children);
-		return this;
-	}
 
 	@Override /* HtmlElement */
 	public final Dl _class(String _class) {
@@ -41,6 +34,18 @@ public class Dl extends HtmlElementContainer {
 	@Override /* HtmlElement */
 	public final Dl id(String id) {
 		super.id(id);
+		return this;
+	}
+
+	@Override /* HtmlElementContainer */
+	public final Dl children(Object...children) {
+		super.children(children);
+		return this;
+	}
+
+	@Override /* HtmlElementContainer */
+	public final Dl child(Object child) {
+		super.child(child);
 		return this;
 	}
 }

@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.html5;
 
+import java.net.*;
+
 import org.apache.juneau.annotation.*;
 
 /**
@@ -19,16 +21,17 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="video")
-public class Video extends HtmlElement {
+public class Video extends HtmlElementContainer {
 
 	/**
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-autoplay'>autoplay</a> attribute.
 	 * Hint that the media resource can be started automatically when the page is loaded.
 	 * @param autoplay - The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Video autoplay(String autoplay) {
-		attrs.put("autoplay", autoplay);
+	public final Video autoplay(Object autoplay) {
+		attr("autoplay", autoplay);
 		return this;
 	}
 
@@ -36,10 +39,11 @@ public class Video extends HtmlElement {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-controls'>controls</a> attribute.
 	 * Show user agent controls.
 	 * @param controls - The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Video controls(String controls) {
-		attrs.put("controls", controls);
+	public final Video controls(Object controls) {
+		attr("controls", controls);
 		return this;
 	}
 
@@ -50,7 +54,7 @@ public class Video extends HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final Video crossorigin(String crossorigin) {
-		attrs.put("crossorigin", crossorigin);
+		attr("crossorigin", crossorigin);
 		return this;
 	}
 
@@ -58,10 +62,11 @@ public class Video extends HtmlElement {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-height'>height</a> attribute.
 	 * Vertical dimension.
 	 * @param height - The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Video height(String height) {
-		attrs.put("height", height);
+	public final Video height(Object height) {
+		attr("height", height);
 		return this;
 	}
 
@@ -69,10 +74,11 @@ public class Video extends HtmlElement {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-loop'>loop</a> attribute.
 	 * Whether to loop the media resource.
 	 * @param loop - The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Video loop(String loop) {
-		attrs.put("loop", loop);
+	public final Video loop(Object loop) {
+		attr("loop", loop);
 		return this;
 	}
 
@@ -83,7 +89,7 @@ public class Video extends HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final Video mediagroup(String mediagroup) {
-		attrs.put("mediagroup", mediagroup);
+		attr("mediagroup", mediagroup);
 		return this;
 	}
 
@@ -91,10 +97,11 @@ public class Video extends HtmlElement {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-muted'>muted</a> attribute.
 	 * Whether to mute the media resource by default.
 	 * @param muted - The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Video muted(String muted) {
-		attrs.put("muted", muted);
+	public final Video muted(Object muted) {
+		attr("muted", muted);
 		return this;
 	}
 
@@ -105,7 +112,7 @@ public class Video extends HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final Video poster(String poster) {
-		attrs.put("poster", poster);
+		attr("poster", poster);
 		return this;
 	}
 
@@ -116,7 +123,7 @@ public class Video extends HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final Video preload(String preload) {
-		attrs.put("preload", preload);
+		attr("preload", preload);
 		return this;
 	}
 
@@ -124,10 +131,11 @@ public class Video extends HtmlElement {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-src'>src</a> attribute.
 	 * Address of the resource.
 	 * @param src - The new value for this attribute.
+	 * 	Typically a {@link URL} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Video src(String src) {
-		attrs.put("src", src);
+	public final Video src(Object src) {
+		attr("src", src);
 		return this;
 	}
 
@@ -135,10 +143,11 @@ public class Video extends HtmlElement {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-width'>width</a> attribute.
 	 * Horizontal dimension.
 	 * @param width - The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Video width(String width) {
-		attrs.put("width", width);
+	public final Video width(Object width) {
+		attr("width", width);
 		return this;
 	}
 
@@ -155,6 +164,18 @@ public class Video extends HtmlElement {
 	@Override /* HtmlElement */
 	public final Video id(String id) {
 		super.id(id);
+		return this;
+	}
+
+	@Override /* HtmlElementContainer */
+	public final Video children(Object...children) {
+		super.children(children);
+		return this;
+	}
+
+	@Override /* HtmlElementContainer */
+	public final Video child(Object child) {
+		super.child(child);
 		return this;
 	}
 }

@@ -19,7 +19,6 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="th")
-@SuppressWarnings("hiding")
 public class Th extends HtmlElementMixed {
 
 	/**
@@ -29,7 +28,7 @@ public class Th extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final Th abbr(String abbr) {
-		attrs.put("abbr", abbr);
+		attr("abbr", abbr);
 		return this;
 	}
 
@@ -37,10 +36,11 @@ public class Th extends HtmlElementMixed {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/tabular-data.html#attr-tdth-colspan'>colspan</a> attribute.
 	 * Number of columns that the cell is to span.
 	 * @param colspan - The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Th colspan(String colspan) {
-		attrs.put("colspan", colspan);
+	public final Th colspan(Object colspan) {
+		attr("colspan", colspan);
 		return this;
 	}
 
@@ -51,7 +51,7 @@ public class Th extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final Th headers(String headers) {
-		attrs.put("headers", headers);
+		attr("headers", headers);
 		return this;
 	}
 
@@ -59,10 +59,11 @@ public class Th extends HtmlElementMixed {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/tabular-data.html#attr-tdth-rowspan'>rowspan</a> attribute.
 	 * Number of rows that the cell is to span.
 	 * @param rowspan - The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Th rowspan(String rowspan) {
-		attrs.put("rowspan", rowspan);
+	public final Th rowspan(Object rowspan) {
+		attr("rowspan", rowspan);
 		return this;
 	}
 
@@ -73,7 +74,7 @@ public class Th extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final Th scope(String scope) {
-		attrs.put("scope", scope);
+		attr("scope", scope);
 		return this;
 	}
 
@@ -84,7 +85,7 @@ public class Th extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final Th sorted(String sorted) {
-		attrs.put("sorted", sorted);
+		attr("sorted", sorted);
 		return this;
 	}
 
@@ -112,7 +113,7 @@ public class Th extends HtmlElementMixed {
 
 	@Override /* HtmlElementMixed */
 	public Th child(Object child) {
-		this.children.add(child);
+		super.child(child);
 		return this;
 	}
 }

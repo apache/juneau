@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.html5;
 
+import java.net.*;
+
 import org.apache.juneau.annotation.*;
 
 /**
@@ -25,10 +27,11 @@ public class Source extends HtmlElementEmpty {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-source-src'>src</a> attribute.
 	 * Address of the resource.
 	 * @param src - The new value for this attribute.
+	 * 	Typically a {@link URL} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Source src(String src) {
-		attrs.put("src", src);
+	public final Source src(Object src) {
+		attr("src", src);
 		return this;
 	}
 
@@ -39,7 +42,7 @@ public class Source extends HtmlElementEmpty {
 	 * @return This object (for method chaining).
 	 */
 	public final Source type(String type) {
-		attrs.put("type", type);
+		attr("type", type);
 		return this;
 	}
 

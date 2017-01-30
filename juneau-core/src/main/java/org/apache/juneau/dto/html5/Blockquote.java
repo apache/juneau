@@ -19,7 +19,6 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="blockquote")
-@SuppressWarnings("hiding")
 public class Blockquote extends HtmlElementMixed {
 
 	/**
@@ -29,7 +28,7 @@ public class Blockquote extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final Blockquote cite(String cite) {
-		attrs.put("cite", cite);
+		attr("cite", cite);
 		return this;
 	}
 
@@ -57,7 +56,7 @@ public class Blockquote extends HtmlElementMixed {
 
 	@Override /* HtmlElementMixed */
 	public Blockquote child(Object child) {
-		this.children.add(child);
+		super.child(child);
 		return this;
 	}
 }

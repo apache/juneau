@@ -13,7 +13,7 @@
 package org.apache.juneau.html;
 
 import static javax.xml.stream.XMLStreamConstants.*;
-import static org.apache.juneau.html.HtmlParser.Tag.*;
+import static org.apache.juneau.html.HtmlTag.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.reflect.*;
@@ -93,12 +93,12 @@ public final class HtmlParser extends XmlParser {
 		Object o = null;
 
 		boolean isValid = true;
-		Tag tag = (event == CHARACTERS ? null : Tag.forString(r.getName().getLocalPart(), false));
+		HtmlTag tag = (event == CHARACTERS ? null : HtmlTag.forString(r.getName().getLocalPart(), false));
 
 		if (isEmpty) {
 			o = "";
-		} else if (tag == null || tag.isOneOf(BR,BS,TB,FF)) {
-			String text = parseCharacters(session, r);
+		} else if (tag == null || tag.isOneOf(BR,BS,FF,SP)) {
+			String text = session.parseText(r);
 			if (sType.isObject() || sType.isCharSequence())
 				o = text;
 			else if (sType.isChar())
@@ -115,7 +115,7 @@ public final class HtmlParser extends XmlParser {
 				isValid = false;
 
 		} else if (tag == STRING) {
-			String text = parseElementText(session, r);
+			String text = session.getElementText(r);
 			if (sType.isObject() || sType.isCharSequence())
 				o = text;
 			else if (sType.isChar())
@@ -129,7 +129,7 @@ public final class HtmlParser extends XmlParser {
 			skipTag(r, xSTRING);
 
 		} else if (tag == NUMBER) {
-			String text = parseElementText(session, r);
+			String text = session.getElementText(r);
 			if (sType.isObject())
 				o = parseNumber(text, Number.class);
 			else if (sType.isNumber())
@@ -141,7 +141,7 @@ public final class HtmlParser extends XmlParser {
 			skipTag(r, xNUMBER);
 
 		} else if (tag == BOOLEAN) {
-			String text = parseElementText(session, r);
+			String text = session.getElementText(r);
 			if (sType.isObject() || sType.isBoolean())
 				o = Boolean.parseBoolean(text);
 			else
@@ -245,7 +245,7 @@ public final class HtmlParser extends XmlParser {
 	 */
 	private <T> T parseAnchor(HtmlParserSession session, XMLStreamReader r, ClassMeta<T> beanType) throws XMLStreamException {
 		String href = r.getAttributeValue(null, "href");
-		String name = parseElementText(session, r);
+		String name = session.getElementText(r);
 		Class<T> beanClass = beanType.getInnerClass();
 		if (beanClass.isAnnotationPresent(HtmlLink.class)) {
 			HtmlLink h = beanClass.getAnnotation(HtmlLink.class);
@@ -271,23 +271,22 @@ public final class HtmlParser extends XmlParser {
 	 */
 	private <K,V> Map<K,V> parseIntoMap(HtmlParserSession session, XMLStreamReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta) throws Exception {
 		while (true) {
-			Tag tag = nextTag(r, TR, xTABLE);
+			HtmlTag tag = nextTag(r, TR, xTABLE);
 			if (tag == xTABLE)
 				break;
 			tag = nextTag(r, TD, TH);
 			// Skip over the column headers.
 			if (tag == TH) {
-				skipElementText(r);
-				nextTag(r, TH);
-				skipElementText(r);
-				nextTag(r, xTR);
-				continue;
+				skipTag(r);
+				r.nextTag();
+				skipTag(r);
+			} else {
+				K key = parseAnything(session, keyType, r, m, false, pMeta);
+				nextTag(r, TD);
+				V value = parseAnything(session, valueType, r, m, false, pMeta);
+				setName(valueType, value, key);
+				m.put(key, value);
 			}
-			K key = parseAnything(session, keyType, r, m, false, pMeta);
-			nextTag(r, TD);
-			V value = parseAnything(session, valueType, r, m, false, pMeta);
-			setName(valueType, value, key);
-			m.put(key, value);
 			nextTag(r, xTR);
 		}
 
@@ -301,7 +300,7 @@ public final class HtmlParser extends XmlParser {
 	 */
 	private <E> Collection<E> parseIntoCollection(HtmlParserSession session, XMLStreamReader r, Collection<E> l, ClassMeta<E> elementType, BeanPropertyMeta pMeta) throws Exception {
 		while (true) {
-			Tag tag = nextTag(r, LI, xUL);
+			HtmlTag tag = nextTag(r, LI, xUL);
 			if (tag == xUL)
 				break;
 			l.add(parseAnything(session, elementType, r, l, false, pMeta));
@@ -318,7 +317,7 @@ public final class HtmlParser extends XmlParser {
 		Object[] o = new Object[argTypes.length];
 		int i = 0;
 		while (true) {
-			Tag tag = nextTag(r, LI, xUL);
+			HtmlTag tag = nextTag(r, LI, xUL);
 			if (tag == xUL)
 				break;
 			o[i] = parseAnything(session, argTypes[i], r, session.getOuter(), false, null);
@@ -338,18 +337,18 @@ public final class HtmlParser extends XmlParser {
 			elementType = (ClassMeta<E>)object();
 		BeanRegistry breg = (pMeta == null ? session.getBeanRegistry() : pMeta.getBeanRegistry());
 
-		Tag tag = nextTag(r, TR);
+		HtmlTag tag = nextTag(r, TR);
 		List<String> keys = new ArrayList<String>();
 		while (true) {
 			tag = nextTag(r, TH, xTR);
 			if (tag == xTR)
 				break;
-			keys.add(parseElementText(session, r));
+			keys.add(session.getElementText(r));
 		}
 
 		while (true) {
 			r.nextTag();
-			tag = Tag.forEvent(r);
+			tag = HtmlTag.forEvent(r);
 			if (tag == xTABLE)
 				break;
 
@@ -419,34 +418,33 @@ public final class HtmlParser extends XmlParser {
 	 */
 	private <T> BeanMap<T> parseIntoBean(HtmlParserSession session, XMLStreamReader r, BeanMap<T> m) throws Exception {
 		while (true) {
-			Tag tag = nextTag(r, TR, xTABLE);
+			HtmlTag tag = nextTag(r, TR, xTABLE);
 			if (tag == xTABLE)
 				break;
 			tag = nextTag(r, TD, TH);
 			// Skip over the column headers.
 			if (tag == TH) {
-				skipElementText(r);
-				nextTag(r, TH);
-				skipElementText(r);
-				nextTag(r, xTR);
-				continue;
-			}
-			String key = parseElementText(session, r);
-			nextTag(r, TD);
-			BeanPropertyMeta pMeta = m.getPropertyMeta(key);
-			if (pMeta == null) {
-				if (m.getMeta().isSubTyped()) {
-					Object value = parseAnything(session, object(), r, m.getBean(false), false, null);
-					m.put(key, value);
-				} else {
-					onUnknownProperty(session, key, m, -1, -1);
-					parseAnything(session, object(), r, null, false, null);
-				}
+				skipTag(r);
+				r.nextTag();
+				skipTag(r);
 			} else {
-				ClassMeta<?> cm = pMeta.getClassMeta();
-				Object value = parseAnything(session, cm, r, m.getBean(false), false, pMeta);
-				setName(cm, value, key);
-				pMeta.set(m, value);
+				String key = session.getElementText(r);
+				nextTag(r, TD);
+				BeanPropertyMeta pMeta = m.getPropertyMeta(key);
+				if (pMeta == null) {
+					if (m.getMeta().isSubTyped()) {
+						Object value = parseAnything(session, object(), r, m.getBean(false), false, null);
+						m.put(key, value);
+					} else {
+						onUnknownProperty(session, key, m, -1, -1);
+						parseAnything(session, object(), r, null, false, null);
+					}
+				} else {
+					ClassMeta<?> cm = pMeta.getClassMeta();
+					Object value = parseAnything(session, cm, r, m.getBean(false), false, pMeta);
+					setName(cm, value, key);
+					pMeta.set(m, value);
+				}
 			}
 			nextTag(r, xTR);
 		}
@@ -454,195 +452,6 @@ public final class HtmlParser extends XmlParser {
 	}
 
 
-	/*
-	 * Parse until the next event is an end tag.
-	 */
-	private String parseCharacters(HtmlParserSession session, XMLStreamReader r) throws XMLStreamException {
-
-		StringBuilder sb = session.getStringBuilder();
-
-		int et = r.getEventType();
-		int depth = (et == START_ELEMENT ? 1 : et == END_ELEMENT ? -1 : 0);
-
-		while (depth >= 0) {
-			if (et == START_ELEMENT) {
-				Tag tag = Tag.forEvent(r);
-				if (tag == BR) {
-					sb.append("\n");
-				} else if (tag == BS) {
-					sb.append("\b");
-				} else if (tag == TB) {
-					sb.append("\t");
-					r.next();
-				} else if (tag == FF) {
-					sb.append("\f");
-				} else if (! tag.isOneOf(STRING, NUMBER, BOOLEAN)) {
-					sb.append('<').append(r.getLocalName());
-					for (int i = 0; i < r.getAttributeCount(); i++)
-						sb.append(' ').append(r.getAttributeName(i)).append('=').append('\'').append(r.getAttributeValue(i)).append('\'');
-					sb.append('>');
-				}
-			} else if (et == END_ELEMENT) {
-				Tag tag = Tag.forEvent(r);
-				if (! tag.isOneOf(xBR, xBS, xTB, xFF, xSTRING, xNUMBER, xBOOLEAN)) {
-					sb.append('<').append(r.getLocalName()).append('>');
-				}
-			} else if (et == CHARACTERS && ! r.isWhiteSpace()) {
-				sb.append(r.getText().trim());
-			}
-			et = r.next();
-			if (et == START_ELEMENT)
-				depth++;
-			else if (et == END_ELEMENT)
-				depth--;
-		}
-
-		String s = sb.toString();
-		session.returnStringBuilder(sb);
-		return s;
-	}
-
-	private void skipCharacters(XMLStreamReader r) throws XMLStreamException {
-
-		int et = r.getEventType();
-
-		int depth = (et == START_ELEMENT ? 1 : et == END_ELEMENT ? -1 : 0);
-		while (depth >= 0) {
-			et = r.next();
-			if (et == START_ELEMENT)
-				depth++;
-			else if (et == END_ELEMENT)
-				depth--;
-		}
-	}
-
-	/*
-	 * Reads the element text of the current element, accounting for <a> and <br> tags.
-	 * Precondition:  Must be pointing at parent START_ELEMENT tag.
-	 * Postcondition:  Pointing at next START_ELEMENT or END_DOCUMENT event.
-	 */
-	private String parseElementText(HtmlParserSession session, XMLStreamReader r/*, Tag endTag*/) throws XMLStreamException {
-		r.next();
-		return parseCharacters(session, r);
-	}
-
-	private void skipElementText(XMLStreamReader r) throws XMLStreamException {
-		r.next();
-		skipCharacters(r);
-	}
-
-	enum Tag {
-
-		TABLE(1,"<table>"),
-		TR(2,"<tr>"),
-		TH(3,"<th>"),
-		TD(4,"<td>"),
-		UL(5,"<ul>"),
-		LI(6,"<li>"),
-		STRING(7,"<string>"),
-		NUMBER(8,"<number>"),
-		BOOLEAN(9,"<boolean>"),
-		NULL(10,"<null>"),
-		A(11,"<a>"),
-		BR(12,"<br>"),		// newline
-		FF(13,"<ff>"),		// formfeed
-		BS(14,"<bs>"),		// backspace
-		TB(15,"<tb>"),		// tab
-		xTABLE(-1,"</table>"),
-		xTR(-2,"</tr>"),
-		xTH(-3,"</th>"),
-		xTD(-4,"</td>"),
-		xUL(-5,"</ul>"),
-		xLI(-6,"</li>"),
-		xSTRING(-7,"</string>"),
-		xNUMBER(-8,"</number>"),
-		xBOOLEAN(-9,"</boolean>"),
-		xNULL(-10,"</null>"),
-		xA(-11,"</a>"),
-		xBR(-12,"</br>"),
-		xFF(-13,"</ff>"),
-		xBS(-14,"</bs>"),
-		xTB(-15,"</tb>");
-
-		private Map<Integer,Tag> cache = new HashMap<Integer,Tag>();
-
-		int id;
-		String label;
-
-		Tag(int id, String label) {
-			this.id = id;
-			this.label = label;
-			cache.put(id, this);
-		}
-
-		static Tag forEvent(XMLStreamReader r) throws XMLStreamException {
-			int et = r.getEventType();
-			if (et == START_ELEMENT)
-				return forString(r.getLocalName(), false);
-			else if (et == END_ELEMENT)
-				return forString(r.getLocalName(), true);
-			throw new XMLStreamException("Invalid call to Tag.forEvent on event of type ["+et+"]");
-		}
-
-		private static Tag forString(String tag, boolean end) throws XMLStreamException {
-			char c = tag.charAt(0);
-			Tag t = null;
-			if (c == 'u')
-				t = (end ? xUL : UL);
-			else if (c == 'l')
-				t = (end ? xLI : LI);
-			else if (c == 's')
-				t = (end ? xSTRING : STRING);
-			else if (c == 'b') {
-				c = tag.charAt(1);
-				if (c == 'o')
-					t = (end ? xBOOLEAN : BOOLEAN);
-				else if (c == 'r')
-					t = (end ? xBR : BR);
-				else if (c == 's')
-					t = (end ? xBS : BS);
-			}
-			else if (c == 'a')
-				t = (end ? xA : A);
-			else if (c == 'n') {
-				c = tag.charAt(2);
-				if (c == 'm')
-					t = (end ? xNUMBER : NUMBER);
-				else if (c == 'l')
-					t = (end ? xNULL : NULL);
-			}
-			else if (c == 't') {
-				c = tag.charAt(1);
-				if (c == 'a')
-					t = (end ? xTABLE : TABLE);
-				else if (c == 'r')
-					t = (end ? xTR : TR);
-				else if (c == 'h')
-					t = (end ? xTH : TH);
-				else if (c == 'd')
-					t = (end ? xTD : TD);
-				else if (c == 'b')
-					t = (end ? xTB : TB);
-			}
-			else if (c == 'f')
-				t = (end ? xFF : FF);
-			if (t == null)
-				throw new XMLStreamException("Unknown tag '"+tag+"' encountered");
-			return t;
-		}
-
-		@Override /* Object */
-		public String toString() {
-			return label;
-		}
-
-		public boolean isOneOf(Tag...tags) {
-			for (Tag tag : tags)
-				if (tag == this)
-					return true;
-			return false;
-		}
-	}
 
 	/*
 	 * Reads the next tag.  Advances past anything that's not a start or end tag.  Throws an exception if
@@ -650,7 +459,7 @@ public final class HtmlParser extends XmlParser {
 	 * Precondition:  Must be pointing before the event we want to parse.
 	 * Postcondition:  Pointing at the tag just parsed.
 	 */
-	private Tag nextTag(XMLStreamReader r, Tag...expected) throws XMLStreamException {
+	private HtmlTag nextTag(XMLStreamReader r, HtmlTag...expected) throws XMLStreamException {
 		int et = r.next();
 
 		while (et != START_ELEMENT && et != END_ELEMENT && et != END_DOCUMENT)
@@ -659,24 +468,57 @@ public final class HtmlParser extends XmlParser {
 		if (et == END_DOCUMENT)
 			throw new XMLStreamException("Unexpected end of document: " + r.getLocation());
 
-		Tag tag = Tag.forEvent(r);
+		HtmlTag tag = HtmlTag.forEvent(r);
 		if (expected.length == 0)
 			return tag;
-		for (Tag t : expected)
+		for (HtmlTag t : expected)
 			if (t == tag)
 				return tag;
 
 		throw new XMLStreamException("Unexpected tag: " + tag + ".  Expected one of the following: " + JsonSerializer.DEFAULT.toString(expected), r.getLocation());
 	}
 
-	private void skipTag(XMLStreamReader r, Tag...expected) throws XMLStreamException {
-		Tag tag = Tag.forEvent(r);
+	/**
+	 * Skips over the current element and advances to the next element.
+	 * <p>
+	 * Precondition:  Pointing to opening tag.
+	 * Postcondition:  Pointing to next opening tag.
+	 *
+	 * @param r The stream being read from.
+	 * @throws XMLStreamException
+	 */
+	private void skipTag(XMLStreamReader r) throws XMLStreamException {
+		int et = r.getEventType();
+
+		if (et != START_ELEMENT)
+			throw new XMLStreamException("skipToNextTag() call on invalid event ["+XmlUtils.toReadableEvent(r)+"].  Must only be called on START_ELEMENT events.");
+
+		String n = r.getLocalName();
+
+		int depth = 0;
+		while (true) {
+			et = r.next();
+			if (et == START_ELEMENT) {
+				String n2 = r.getLocalName();
+					if (n.equals(n2))
+				depth++;
+			} else if (et == END_ELEMENT) {
+				String n2 = r.getLocalName();
+				if (n.equals(n2))
+					depth--;
+				if (depth < 0)
+					return;
+			}
+		}
+	}
+
+	private void skipTag(XMLStreamReader r, HtmlTag...expected) throws XMLStreamException {
+		HtmlTag tag = HtmlTag.forEvent(r);
 		if (tag.isOneOf(expected))
 			r.next();
 		else
 			throw new XMLStreamException("Unexpected tag: " + tag + ".  Expected one of the following: " + JsonSerializer.DEFAULT.toString(expected), r.getLocation());
 	}
-
 
 	private int skipWs(XMLStreamReader r)  throws XMLStreamException {
 		int event = r.getEventType();

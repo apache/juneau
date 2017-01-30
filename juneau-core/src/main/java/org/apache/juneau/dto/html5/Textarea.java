@@ -28,7 +28,7 @@ public class Textarea extends HtmlElementText {
 	 * @return This object (for method chaining).
 	 */
 	public final Textarea autocomplete(String autocomplete) {
-		attrs.put("autocomplete", autocomplete);
+		attr("autocomplete", autocomplete);
 		return this;
 	}
 
@@ -36,10 +36,11 @@ public class Textarea extends HtmlElementText {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-fe-autofocus'>autofocus</a> attribute.
 	 * Automatically focus the form control when the page is loaded.
 	 * @param autofocus - The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Textarea autofocus(String autofocus) {
-		attrs.put("autofocus", autofocus);
+	public final Textarea autofocus(Boolean autofocus) {
+		attr("autofocus", autofocus);
 		return this;
 	}
 
@@ -47,10 +48,11 @@ public class Textarea extends HtmlElementText {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-textarea-cols'>cols</a> attribute.
 	 * Maximum number of characters per line.
 	 * @param cols - The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Textarea cols(String cols) {
-		attrs.put("cols", cols);
+	public final Textarea cols(Object cols) {
+		attr("cols", cols);
 		return this;
 	}
 
@@ -61,7 +63,7 @@ public class Textarea extends HtmlElementText {
 	 * @return This object (for method chaining).
 	 */
 	public final Textarea dirname(String dirname) {
-		attrs.put("dirname", dirname);
+		attr("dirname", dirname);
 		return this;
 	}
 
@@ -69,10 +71,11 @@ public class Textarea extends HtmlElementText {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-fe-disabled'>disabled</a> attribute.
 	 * Whether the form control is disabled.
 	 * @param disabled - The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Textarea disabled(String disabled) {
-		attrs.put("disabled", disabled);
+	public final Textarea disabled(Object disabled) {
+		attr("disabled", disabled);
 		return this;
 	}
 
@@ -83,7 +86,7 @@ public class Textarea extends HtmlElementText {
 	 * @return This object (for method chaining).
 	 */
 	public final Textarea form(String form) {
-		attrs.put("form", form);
+		attr("form", form);
 		return this;
 	}
 
@@ -94,7 +97,7 @@ public class Textarea extends HtmlElementText {
 	 * @return This object (for method chaining).
 	 */
 	public final Textarea inputmode(String inputmode) {
-		attrs.put("inputmode", inputmode);
+		attr("inputmode", inputmode);
 		return this;
 	}
 
@@ -102,10 +105,11 @@ public class Textarea extends HtmlElementText {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-textarea-maxlength'>maxlength</a> attribute.
 	 * Maximum length of value.
 	 * @param maxlength - The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Textarea maxlength(String maxlength) {
-		attrs.put("maxlength", maxlength);
+	public final Textarea maxlength(Object maxlength) {
+		attr("maxlength", maxlength);
 		return this;
 	}
 
@@ -113,10 +117,11 @@ public class Textarea extends HtmlElementText {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-textarea-minlength'>minlength</a> attribute.
 	 * Minimum length of value.
 	 * @param minlength - The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Textarea minlength(String minlength) {
-		attrs.put("minlength", minlength);
+	public final Textarea minlength(Object minlength) {
+		attr("minlength", minlength);
 		return this;
 	}
 
@@ -127,7 +132,7 @@ public class Textarea extends HtmlElementText {
 	 * @return This object (for method chaining).
 	 */
 	public final Textarea name(String name) {
-		attrs.put("name", name);
+		attr("name", name);
 		return this;
 	}
 
@@ -138,7 +143,7 @@ public class Textarea extends HtmlElementText {
 	 * @return This object (for method chaining).
 	 */
 	public final Textarea placeholder(String placeholder) {
-		attrs.put("placeholder", placeholder);
+		attr("placeholder", placeholder);
 		return this;
 	}
 
@@ -146,10 +151,11 @@ public class Textarea extends HtmlElementText {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-textarea-readonly'>readonly</a> attribute.
 	 * Whether to allow the value to be edited by the user.
 	 * @param readonly - The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Textarea readonly(String readonly) {
-		attrs.put("readonly", readonly);
+	public final Textarea readonly(Object readonly) {
+		attr("readonly", readonly);
 		return this;
 	}
 
@@ -157,10 +163,11 @@ public class Textarea extends HtmlElementText {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-textarea-required'>required</a> attribute.
 	 * Whether the control is required for form submission.
 	 * @param required - The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Textarea required(String required) {
-		attrs.put("required", required);
+	public final Textarea required(Object required) {
+		attr("required", required);
 		return this;
 	}
 
@@ -168,10 +175,11 @@ public class Textarea extends HtmlElementText {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-textarea-rows'>rows</a> attribute.
 	 * Number of lines to show.
 	 * @param rows - The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Textarea rows(String rows) {
-		attrs.put("rows", rows);
+	public final Textarea rows(Number rows) {
+		attr("rows", rows);
 		return this;
 	}
 
@@ -182,7 +190,7 @@ public class Textarea extends HtmlElementText {
 	 * @return This object (for method chaining).
 	 */
 	public final Textarea wrap(String wrap) {
-		attrs.put("wrap", wrap);
+		attr("wrap", wrap);
 		return this;
 	}
 

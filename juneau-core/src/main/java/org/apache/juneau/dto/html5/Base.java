@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.html5;
 
+import java.net.*;
+
 import org.apache.juneau.annotation.*;
 
 /**
@@ -25,10 +27,11 @@ public class Base extends HtmlElementEmpty {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/document-metadata.html#attr-base-href'>href</a> attribute.
 	 * Document base URL.
 	 * @param href - The new value for this attribute.
+	 * 	Typically a {@link URL} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Base href(String href) {
-		attrs.put("href", href);
+	public final Base href(Object href) {
+		attr("href", href);
 		return this;
 	}
 
@@ -39,7 +42,7 @@ public class Base extends HtmlElementEmpty {
 	 * @return This object (for method chaining).
 	 */
 	public final Base target(String target) {
-		attrs.put("target", target);
+		attr("target", target);
 		return this;
 	}
 

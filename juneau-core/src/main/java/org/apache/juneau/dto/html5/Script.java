@@ -12,24 +12,27 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.html5;
 
+import java.net.*;
+
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.xml.annotation.*;
 
 /**
  * DTO for an HTML <a href='https://www.w3.org/TR/html5/scripting-1.html#the-script-element'>&lt;script&gt;</a> element.
  * <p>
  */
 @Bean(typeName="script")
-@SuppressWarnings("hiding")
-public class Script extends HtmlElementMixed {
+public class Script extends HtmlElementText {
 
 	/**
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/scripting-1.html#attr-script-async'>async</a> attribute.
 	 * Execute script asynchronously.
 	 * @param async - The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Script async(String async) {
-		attrs.put("async", async);
+	public final Script async(Object async) {
+		attr("async", async);
 		return this;
 	}
 
@@ -40,7 +43,7 @@ public class Script extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final Script charset(String charset) {
-		attrs.put("charset", charset);
+		attr("charset", charset);
 		return this;
 	}
 
@@ -51,7 +54,7 @@ public class Script extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final Script crossorigin(String crossorigin) {
-		attrs.put("crossorigin", crossorigin);
+		attr("crossorigin", crossorigin);
 		return this;
 	}
 
@@ -59,10 +62,11 @@ public class Script extends HtmlElementMixed {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/scripting-1.html#attr-script-defer'>defer</a> attribute.
 	 * Defer script execution.
 	 * @param defer - The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Script defer(String defer) {
-		attrs.put("defer", defer);
+	public final Script defer(Object defer) {
+		attr("defer", defer);
 		return this;
 	}
 
@@ -70,10 +74,11 @@ public class Script extends HtmlElementMixed {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/scripting-1.html#attr-script-src'>src</a> attribute.
 	 * Address of the resource.
 	 * @param src - The new value for this attribute.
+	 * 	Typically a {@link URL} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Script src(String src) {
-		attrs.put("src", src);
+	public final Script src(Object src) {
+		attr("src", src);
 		return this;
 	}
 
@@ -84,13 +89,19 @@ public class Script extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final Script type(String type) {
-		attrs.put("type", type);
+		attr("type", type);
 		return this;
 	}
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods
 	//--------------------------------------------------------------------------------
+
+	@Xml(format=XmlFormat.TEXT_PWS)
+	@Override
+	public Object getText() {
+		return super.getText();
+	}
 
 	@Override /* HtmlElement */
 	public final Script _class(String _class) {
@@ -104,15 +115,9 @@ public class Script extends HtmlElementMixed {
 		return this;
 	}
 
-	@Override /* HtmlElementMixed */
-	public Script children(Object...children) {
-		super.children(children);
-		return this;
-	}
-
-	@Override /* HtmlElementMixed */
-	public Script child(Object child) {
-		this.children.add(child);
+	@Override /* HtmlElementText */
+	public Script text(Object text) {
+		super.text(text);
 		return this;
 	}
 }

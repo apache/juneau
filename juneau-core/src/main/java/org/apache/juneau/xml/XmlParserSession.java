@@ -13,6 +13,7 @@
 package org.apache.juneau.xml;
 
 import static org.apache.juneau.xml.XmlParserContext.*;
+import static  javax.xml.stream.XMLStreamConstants.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -35,7 +36,6 @@ public class XmlParserSession extends ParserSession {
 
 	private final String xsiNs;
 	private final boolean
-		trimWhitespace,
 		validating,
 		preserveRootElement;
 	private final XMLReporter reporter;
@@ -70,7 +70,6 @@ public class XmlParserSession extends ParserSession {
 		super(ctx, op, input, javaMethod, outer, locale, timeZone);
 		if (op == null || op.isEmpty()) {
 			xsiNs = ctx.xsiNs;
-			trimWhitespace = ctx.trimWhitespace;
 			validating = ctx.validating;
 			reporter = ctx.reporter;
 			resolver = ctx.resolver;
@@ -78,7 +77,6 @@ public class XmlParserSession extends ParserSession {
 			preserveRootElement = ctx.preserveRootElement;
 		} else {
 			xsiNs = op.getString(XML_xsiNs, ctx.xsiNs);
-			trimWhitespace = op.getBoolean(XML_trimWhitespace, ctx.trimWhitespace);
 			validating = op.getBoolean(XML_validating, ctx.validating);
 			reporter = (XMLReporter)op.get(XML_reporter, ctx.reporter);
 			resolver = (XMLResolver)op.get(XML_resolver, ctx.resolver);
@@ -117,7 +115,7 @@ public class XmlParserSession extends ParserSession {
 			XMLInputFactory factory = XMLInputFactory.newInstance();
 			factory.setProperty(XMLInputFactory.IS_VALIDATING, validating);
 			factory.setProperty(XMLInputFactory.IS_COALESCING, true);
-			factory.setProperty(XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES, true);
+			factory.setProperty(XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES, true);  // This usually has no effect anyway.
 			if (factory.isPropertySupported(XMLInputFactory.REPORTER) && reporter != null)
 				factory.setProperty(XMLInputFactory.REPORTER, reporter);
 			if (factory.isPropertySupported(XMLInputFactory.RESOLVER) && resolver != null)
@@ -139,15 +137,15 @@ public class XmlParserSession extends ParserSession {
 
 	/**
 	 * Decodes and trims the specified string.
+	 * <p>
+	 * Any <js>'_x####_'</js> sequences in the string will be decoded.
 	 *
 	 * @param s The string to be decoded.
 	 * @return The decoded string.
 	 */
 	public final String decodeString(String s) {
-		if (s == null || s.isEmpty())
-			return s;
-		if (trimWhitespace)
-			s = s.trim();
+		if (s == null)
+			return null;
 		sb.setLength(0);
 		s = XmlUtils.decode(s, sb);
 		if (isTrimStrings())
@@ -156,43 +154,93 @@ public class XmlParserSession extends ParserSession {
 	}
 
 	/**
-	 * Shortcut for calling <code>decodeString(r.getElementText());</code>.
-	 *
-	 * @param r The reader to read the element text from.
-	 * @return The decoded text.
-	 * @throws XMLStreamException
-	 */
-	public final String decodeString(XMLStreamReader r) throws XMLStreamException {
-		return decodeString(r.getElementText());
-	}
-
-	/**
-	 * Decodes the specified literal (e.g. <js>"true"</js>, <js>"123"</js>).
+	 * Returns the name of the current XML element.
 	 * <p>
-	 * Unlike <code>decodeString(String)</code>, the input string is ALWAYS trimmed before decoding, and
-	 * 	NEVER trimmed after decoding.
+	 * Any <js>'_x####_'</js> sequences in the string will be decoded.
 	 *
-	 * @param s The string to trim.
-	 * @return The trimmed string, or <jk>null</jk> if the string was <jk>null</jk>.
+	 * @param r The reader to read from.
+	 * @return The decoded element name.
+	 * @throws XMLStreamException
 	 */
-	public final String decodeLiteral(String s) {
-		if (s == null || s.isEmpty())
-			return s;
-		s = s.trim();
-		sb.setLength(0);
-		s = XmlUtils.decode(s, sb);
-		return s;
+	public final String getElementName(XMLStreamReader r) throws XMLStreamException {
+		return decodeString(r.getLocalName());
 	}
 
 	/**
-	 * Shortcut for calling <code>decodeLiteral(r.getElementText());</code>.
+	 * Returns the name of the specified attribute on the current XML element.
+	 * <p>
+	 * Any <js>'_x####_'</js> sequences in the string will be decoded.
 	 *
-	 * @param r The reader to read the element text from.
-	 * @return The decoded text.
+	 * @param r The reader to read from.
+	 * @param i The attribute index.
+	 * @return The decoded attribute name.
 	 * @throws XMLStreamException
 	 */
-	public final String decodeText(XMLStreamReader r) throws XMLStreamException {
-		return decodeLiteral(r.getElementText());
+	public final String getAttributeName(XMLStreamReader r, int i) throws XMLStreamException {
+		return decodeString(r.getAttributeLocalName(i));
+	}
+
+	/**
+	 * Returns the value of the specified attribute on the current XML element.
+	 * <p>
+	 * Any <js>'_x####_'</js> sequences in the string will be decoded.
+	 *
+	 * @param r The reader to read from.
+	 * @param i The attribute index.
+	 * @return The decoded attribute value.
+	 * @throws XMLStreamException
+	 */
+	public final String getAttributeValue(XMLStreamReader r, int i) throws XMLStreamException {
+		return decodeString(r.getAttributeValue(i));
+	}
+
+	/**
+	 * Returns the text content of the current XML element.
+	 * <p>
+	 * Any <js>'_x####_'</js> sequences in the string will be decoded.
+	 * <p>
+	 * Leading and trailing whitespace (unencoded) will be trimmed from the result.
+	 *
+	 * @param r The reader to read the element text from.
+	 * @return The decoded text.  <jk>null</jk> if the text consists of the sequence <js>'_x0000_'</js>.
+	 * @throws XMLStreamException
+	 */
+	public String getElementText(XMLStreamReader r) throws XMLStreamException {
+		String s = r.getElementText().trim();
+		return decodeString(s);
+	}
+
+	/**
+	 * Returns the content of the current CHARACTERS node.
+	 * <p>
+	 * Any <js>'_x####_'</js> sequences in the string will be decoded.
+	 * <p>
+	 * Leading and trailing whitespace (unencoded) will be trimmed from the result.
+	 *
+	 * @param r The reader to read the element text from.
+	 * @param trim If <jk>true</jk>, trim the contents of the text node BEFORE decoding escape sequences.
+	 * 	Typically <jk>true</jk> for {@link XmlFormat#MIXED_PWS} and {@link XmlFormat#TEXT_PWS}.
+	 * @return The decoded text.  <jk>null</jk> if the text consists of the sequence <js>'_x0000_'</js>.
+	 * @throws XMLStreamException
+	 */
+	public String getText(XMLStreamReader r, boolean trim) throws XMLStreamException {
+		String s = r.getText();
+		if (trim)
+			s = s.trim();
+		if (s.isEmpty())
+			return null;
+		return decodeString(s);
+	}
+
+	/**
+	 * Shortcut for calling <code>getText(r, <jk>true</jk>);</code>.
+	 *
+	 * @param r The reader to read the element text from.
+	 * @return The decoded text.  <jk>null</jk> if the text consists of the sequence <js>'_x0000_'</js>.
+	 * @throws XMLStreamException
+	 */
+	public String getText(XMLStreamReader r) throws XMLStreamException {
+		return getText(r, true);
 	}
 
 	/**
@@ -204,7 +252,7 @@ public class XmlParserSession extends ParserSession {
 	 * @return The event as XML.
 	 * @throws RuntimeException if the event is not a start or end tag.
 	 */
-	public final String elementAsString(XMLStreamReader r) {
+	public final String getElementAsString(XMLStreamReader r) {
 		int t = r.getEventType();
 		if (t > 2)
 			throw new RuntimeException("Invalid event type on stream reader for elementToString() method: " + XmlUtils.toReadableEvent(r));
@@ -215,6 +263,66 @@ public class XmlParserSession extends ParserSession {
 				sb.append(' ').append(r.getAttributeName(i)).append('=').append('\'').append(r.getAttributeValue(i)).append('\'');
 		sb.append('>');
 		return sb.toString();
+	}
+
+	/**
+	 * Parses the current element as text.
+	 * Note that this is different than {@link #getText(XMLStreamReader)} since it
+	 * assumes that we're pointing to a whitespace element.
+	 *
+	 * @param r
+	 * @return The parsed text.
+	 * @throws XMLStreamException
+	 */
+	public String parseText(XMLStreamReader r) throws XMLStreamException {
+		StringBuilder sb2 = getStringBuilder();
+
+		int depth = 0;
+		while (true) {
+			int et = r.getEventType();
+			if (et == START_ELEMENT) {
+				sb2.append(getElementAsString(r));
+				depth++;
+			} else if (et == CHARACTERS) {
+				sb2.append(getText(r));
+			} else if (et == END_ELEMENT) {
+				sb2.append(getElementAsString(r));
+				depth--;
+				if (depth <= 0)
+					break;
+			}
+			et = r.next();
+		}
+		String s = sb2.toString();
+		returnStringBuilder(sb2);
+		return s;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the current element is a whitespace element.
+	 * <p>
+	 * For the XML parser, this always returns <jk>false</jk>.
+	 * However, the HTML parser defines various whitespace elements such as <js>"br"</js> and <js>"sp"</js>.
+	 *
+	 * @param r The XML stream reader to read the current event from.
+	 * @return <jk>true</jk> if the current element is a whitespace element.
+	 */
+	public boolean isWhitespaceElement(XMLStreamReader r) {
+		return false;
+	}
+
+	/**
+	 * Parses the current whitespace element.
+	 * <p>
+	 * For the XML parser, this always returns <jk>null</jk> since there is no concept of a whitespace element.
+	 * However, the HTML parser defines various whitespace elements such as <js>"br"</js> and <js>"sp"</js>.
+	 *
+	 * @param r The XML stream reader to read the current event from.
+	 * @return The whitespace character or characters.
+	 * @throws XMLStreamException
+	 */
+	public String parseWhitespaceElement(XMLStreamReader r) throws XMLStreamException {
+		return null;
 	}
 
 	/**

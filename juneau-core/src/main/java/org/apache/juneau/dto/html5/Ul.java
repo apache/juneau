@@ -19,8 +19,7 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="ul")
-@SuppressWarnings("hiding")
-public class Ul extends HtmlElementMixed {
+public class Ul extends HtmlElementContainer {
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods
@@ -38,15 +37,15 @@ public class Ul extends HtmlElementMixed {
 		return this;
 	}
 
-	@Override /* HtmlElementMixed */
-	public Ul children(Object...children) {
+	@Override /* HtmlElementContainer */
+	public final Ul children(Object...children) {
 		super.children(children);
 		return this;
 	}
 
-	@Override /* HtmlElementMixed */
-	public Ul child(Object child) {
-		this.children.add(child);
+	@Override /* HtmlElementContainer */
+	public final Ul child(Object child) {
+		super.child(child);
 		return this;
 	}
 }

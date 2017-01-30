@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.html5;
 
+import java.net.*;
+
 import org.apache.juneau.annotation.*;
 
 /**
@@ -28,7 +30,7 @@ public class Input extends HtmlElementEmpty {
 	 * @return This object (for method chaining).
 	 */
 	public final Input accept(String accept) {
-		attrs.put("accept", accept);
+		attr("accept", accept);
 		return this;
 	}
 
@@ -39,7 +41,7 @@ public class Input extends HtmlElementEmpty {
 	 * @return This object (for method chaining).
 	 */
 	public final Input alt(String alt) {
-		attrs.put("alt", alt);
+		attr("alt", alt);
 		return this;
 	}
 
@@ -50,7 +52,7 @@ public class Input extends HtmlElementEmpty {
 	 * @return This object (for method chaining).
 	 */
 	public final Input autocomplete(String autocomplete) {
-		attrs.put("autocomplete", autocomplete);
+		attr("autocomplete", autocomplete);
 		return this;
 	}
 
@@ -61,7 +63,7 @@ public class Input extends HtmlElementEmpty {
 	 * @return This object (for method chaining).
 	 */
 	public final Input autofocus(String autofocus) {
-		attrs.put("autofocus", autofocus);
+		attr("autofocus", autofocus);
 		return this;
 	}
 
@@ -69,10 +71,11 @@ public class Input extends HtmlElementEmpty {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-input-checked'>checked</a> attribute.
 	 * Whether the command or control is checked.
 	 * @param checked - The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Input checked(String checked) {
-		attrs.put("checked", checked);
+	public final Input checked(Object checked) {
+		attr("checked", checked);
 		return this;
 	}
 
@@ -83,7 +86,7 @@ public class Input extends HtmlElementEmpty {
 	 * @return This object (for method chaining).
 	 */
 	public final Input dirname(String dirname) {
-		attrs.put("dirname", dirname);
+		attr("dirname", dirname);
 		return this;
 	}
 
@@ -91,10 +94,11 @@ public class Input extends HtmlElementEmpty {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-fe-disabled'>disabled</a> attribute.
 	 * Whether the form control is disabled.
 	 * @param disabled - The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Input disabled(String disabled) {
-		attrs.put("disabled", disabled);
+	public final Input disabled(Object disabled) {
+		attr("disabled", disabled);
 		return this;
 	}
 
@@ -105,7 +109,7 @@ public class Input extends HtmlElementEmpty {
 	 * @return This object (for method chaining).
 	 */
 	public final Input form(String form) {
-		attrs.put("form", form);
+		attr("form", form);
 		return this;
 	}
 
@@ -116,7 +120,7 @@ public class Input extends HtmlElementEmpty {
 	 * @return This object (for method chaining).
 	 */
 	public final Input formaction(String formaction) {
-		attrs.put("formaction", formaction);
+		attr("formaction", formaction);
 		return this;
 	}
 
@@ -127,7 +131,7 @@ public class Input extends HtmlElementEmpty {
 	 * @return This object (for method chaining).
 	 */
 	public final Input formenctype(String formenctype) {
-		attrs.put("formenctype", formenctype);
+		attr("formenctype", formenctype);
 		return this;
 	}
 
@@ -138,7 +142,7 @@ public class Input extends HtmlElementEmpty {
 	 * @return This object (for method chaining).
 	 */
 	public final Input formmethod(String formmethod) {
-		attrs.put("formmethod", formmethod);
+		attr("formmethod", formmethod);
 		return this;
 	}
 
@@ -149,7 +153,7 @@ public class Input extends HtmlElementEmpty {
 	 * @return This object (for method chaining).
 	 */
 	public final Input formnovalidate(String formnovalidate) {
-		attrs.put("formnovalidate", formnovalidate);
+		attr("formnovalidate", formnovalidate);
 		return this;
 	}
 
@@ -160,7 +164,7 @@ public class Input extends HtmlElementEmpty {
 	 * @return This object (for method chaining).
 	 */
 	public final Input formtarget(String formtarget) {
-		attrs.put("formtarget", formtarget);
+		attr("formtarget", formtarget);
 		return this;
 	}
 
@@ -168,10 +172,11 @@ public class Input extends HtmlElementEmpty {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-height'>height</a> attribute.
 	 * Vertical dimension.
 	 * @param height - The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Input height(String height) {
-		attrs.put("height", height);
+	public final Input height(Object height) {
+		attr("height", height);
 		return this;
 	}
 
@@ -182,7 +187,7 @@ public class Input extends HtmlElementEmpty {
 	 * @return This object (for method chaining).
 	 */
 	public final Input inputmode(String inputmode) {
-		attrs.put("inputmode", inputmode);
+		attr("inputmode", inputmode);
 		return this;
 	}
 
@@ -193,7 +198,7 @@ public class Input extends HtmlElementEmpty {
 	 * @return This object (for method chaining).
 	 */
 	public final Input list(String list) {
-		attrs.put("list", list);
+		attr("list", list);
 		return this;
 	}
 
@@ -201,10 +206,11 @@ public class Input extends HtmlElementEmpty {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-input-max'>max</a> attribute.
 	 * Maximum value.
 	 * @param max - The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Input max(String max) {
-		attrs.put("max", max);
+	public final Input max(Object max) {
+		attr("max", max);
 		return this;
 	}
 
@@ -212,10 +218,11 @@ public class Input extends HtmlElementEmpty {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-input-maxlength'>maxlength</a> attribute.
 	 * Maximum length of value.
 	 * @param maxlength - The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Input maxlength(String maxlength) {
-		attrs.put("maxlength", maxlength);
+	public final Input maxlength(Object maxlength) {
+		attr("maxlength", maxlength);
 		return this;
 	}
 
@@ -223,10 +230,11 @@ public class Input extends HtmlElementEmpty {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-input-min'>min</a> attribute.
 	 * Minimum value.
 	 * @param min - The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Input min(String min) {
-		attrs.put("min", min);
+	public final Input min(Object min) {
+		attr("min", min);
 		return this;
 	}
 
@@ -234,10 +242,11 @@ public class Input extends HtmlElementEmpty {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-input-minlength'>minlength</a> attribute.
 	 * Minimum length of value.
 	 * @param minlength - The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Input minlength(String minlength) {
-		attrs.put("minlength", minlength);
+	public final Input minlength(Object minlength) {
+		attr("minlength", minlength);
 		return this;
 	}
 
@@ -245,10 +254,11 @@ public class Input extends HtmlElementEmpty {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-input-multiple'>multiple</a> attribute.
 	 * Whether to allow multiple values.
 	 * @param multiple - The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Input multiple(String multiple) {
-		attrs.put("multiple", multiple);
+	public final Input multiple(Object multiple) {
+		attr("multiple", multiple);
 		return this;
 	}
 
@@ -259,7 +269,7 @@ public class Input extends HtmlElementEmpty {
 	 * @return This object (for method chaining).
 	 */
 	public final Input name(String name) {
-		attrs.put("name", name);
+		attr("name", name);
 		return this;
 	}
 
@@ -270,7 +280,7 @@ public class Input extends HtmlElementEmpty {
 	 * @return This object (for method chaining).
 	 */
 	public final Input pattern(String pattern) {
-		attrs.put("pattern", pattern);
+		attr("pattern", pattern);
 		return this;
 	}
 
@@ -281,7 +291,7 @@ public class Input extends HtmlElementEmpty {
 	 * @return This object (for method chaining).
 	 */
 	public final Input placeholder(String placeholder) {
-		attrs.put("placeholder", placeholder);
+		attr("placeholder", placeholder);
 		return this;
 	}
 
@@ -289,10 +299,11 @@ public class Input extends HtmlElementEmpty {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-input-readonly'>readonly</a> attribute.
 	 * Whether to allow the value to be edited by the user.
 	 * @param readonly - The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Input readonly(String readonly) {
-		attrs.put("readonly", readonly);
+	public final Input readonly(Object readonly) {
+		attr("readonly", readonly);
 		return this;
 	}
 
@@ -300,10 +311,11 @@ public class Input extends HtmlElementEmpty {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-input-readonly'>required</a> attribute.
 	 * Whether the control is required for form submission.
 	 * @param required - The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Input required(String required) {
-		attrs.put("required", required);
+	public final Input required(Object required) {
+		attr("required", required);
 		return this;
 	}
 
@@ -311,10 +323,11 @@ public class Input extends HtmlElementEmpty {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-input-size'>size</a> attribute.
 	 * Size of the control.
 	 * @param size - The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Input size(String size) {
-		attrs.put("size", size);
+	public final Input size(Object size) {
+		attr("size", size);
 		return this;
 	}
 
@@ -322,10 +335,11 @@ public class Input extends HtmlElementEmpty {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-input-src'>src</a> attribute.
 	 * Address of the resource.
 	 * @param src - The new value for this attribute.
+	 * 	Typically a {@link URL} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Input src(String src) {
-		attrs.put("src", src);
+	public final Input src(Object src) {
+		attr("src", src);
 		return this;
 	}
 
@@ -336,7 +350,7 @@ public class Input extends HtmlElementEmpty {
 	 * @return This object (for method chaining).
 	 */
 	public final Input step(String step) {
-		attrs.put("step", step);
+		attr("step", step);
 		return this;
 	}
 
@@ -347,7 +361,7 @@ public class Input extends HtmlElementEmpty {
 	 * @return This object (for method chaining).
 	 */
 	public final Input type(String type) {
-		attrs.put("type", type);
+		attr("type", type);
 		return this;
 	}
 
@@ -355,10 +369,11 @@ public class Input extends HtmlElementEmpty {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-input-value'>value</a> attribute.
 	 * Value of the form control.
 	 * @param value - The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Input value(String value) {
-		attrs.put("value", value);
+	public final Input value(Object value) {
+		attr("value", value);
 		return this;
 	}
 
@@ -366,10 +381,11 @@ public class Input extends HtmlElementEmpty {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-width'>width</a> attribute.
 	 * Horizontal dimension.
 	 * @param width - The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Input width(String width) {
-		attrs.put("width", width);
+	public final Input width(Object width) {
+		attr("width", width);
 		return this;
 	}
 

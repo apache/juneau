@@ -36,6 +36,160 @@
 	</script>
 </head>
 <body>
-<p>HTML Data Transfer Objects</p>
+<p>HTML5 Data Transfer Objects</p>
+<script>
+	function toggle(x) {
+		var div = x.nextSibling;
+		while (div != null && div.nodeType != 1)
+			div = div.nextSibling;
+		if (div != null) {
+			var d = div.style.display;
+			if (d == 'block' || d == '') {
+				div.style.display = 'none';
+				x.className += " closed";
+			} else {
+				div.style.display = 'block';
+				x.className = x.className.replace(/(?:^|\s)closed(?!\S)/g , '' );
+			}
+		}
+	}
+</script>
+<a id='TOC'></a><h5 class='toc'>Table of Contents</h5>
+<ol class='toc'>
+	<li><p><a class='doclink' href='#Overview'>Overview</a></p>
+	<ol>
+		<li><p><a class='doclink' href='#Serialize'>Generating HTML5</a></p>
+		<li><p><a class='doclink' href='#Parse'>Parsing HTML5</a></p>
+	</ol>
+</ol>
+
+
+<!-- ======================================================================================================== -->
+<a id="Overview"></a>
+<h2 class='topic' onclick='toggle(this)'>1 - Overview</h2>
+<div class='topic'>
+	<p>
+		Juneau supports generation and consumption of HTML5 documents and fragments through the use of DTOs (Data Transfer Objects).<br>
+		It uses existing support for serializing and parsing POJOs to and from HTML to define these HTML objects. 
+	</p>
+	
+	
+	<!-- ======================================================================================================== -->
+	<a id="Serialize"></a>
+	<h3 class='topic' onclick='toggle(this)'>1.1 - Generating HTML5</h3>
+	<div class='topic'>
+		<p>
+			The Juneau HTML5 DTOs are simply beans with fluent-style setters that allow you to quickly construct HTML
+			fragments as Java objects.  These object can then be serialized to HTML using one of the existing HTML serializers,
+			or to other languages such as JSON using the JSON serializers.
+		</p>
+		<p>
+			The {@link org.apache.juneau.dto.html5.HtmlBuilder} class is a utility class with predefined static methods
+			that allow you to easily construct DTO instances in a minimal amount of code. 
+		</p>
+		<p>
+			The following examples show how to create HTML tables.
+		</p>
+		<table class='styled' style='width:auto'>
+			<tr>
+				<th>Java code</th>
+				<th>HTML</th>
+			</tr>
+			<tr>
+				<td class='code'>
+	<jk>import static</jk> org.apache.juneau.dto.html5.HtmlBuilder.*;
+	
+	Object mytable = 	
+		table(
+			tr(th(<js>"c1"</js>),th(<js>"c2"</js>)),
+			tr(td(<js>"v1"</js>),td(<js>"v2"</js>))
+		);
+
+	String html = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(mytable);
+				</td>
+				<td class='code'><xt>
+	&lt;table&gt;
+		&lt;tr&gt;
+			&lt;th&gt;<xv>c1</xv>&lt;/th&gt;
+			&lt;th&gt;<xv>c2</xv>&lt;/th&gt;
+		&lt;/tr&gt;
+		&lt;tr&gt;
+			&lt;td&gt;<xv>v1</xv>&lt;/td&gt;
+			&lt;td&gt;<xv>v2</xv>&lt;/td&gt;
+		&lt;/tr&gt;
+	&lt;/table&gt;
+				</xt></td>
+			</tr>
+			<tr>
+				<td class='code'>
+	<jk>import static</jk> org.apache.juneau.dto.html5.HtmlBuilder.*;
+	
+	Object mytable = 	
+		table(
+			caption(<js>"mytable"</js>),
+			colgroup(
+				col()._class(<js>"foo"</js>),
+				col()._class(<js>"bar"</js>)
+			),
+			thead(tr(th(<js>"c1"</js>),th(<js>"c2"</js>))),
+			tbody(tr(td(<js>"v1"</js>),td(<js>"v2"</js>))),
+			tfoot(tr(td(<js>"f1"</js>),td(<js>"f2"</js>)))
+		);
+
+	String html = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(mytable);
+				</td>
+				<td class='code'><xt>
+	&lt;table&gt;
+		&lt;caption&gt;<xv>mytable</xv>&lt;/caption&gt;
+		&lt;colgroup&gt;
+			&lt;col <xa>class</xa>=<xs>'foo'</xs>/&gt;
+			&lt;col <xa>class</xa>=<xs>'bar'</xs>/&gt;
+		&lt;/colgroup&gt;
+		&lt;thead&gt;
+			&lt;tr&gt;
+				&lt;th&gt;<xv>c1</xv>&lt;/th&gt;
+				&lt;th&gt;<xv>c2</xv>&lt;/th&gt;
+			&lt;/tr&gt;
+		&lt;/thead&gt;
+		&lt;tbody&gt;
+			&lt;tr&gt;
+				&lt;td&gt;<xv>v1</xv>&lt;/td&gt;
+				&lt;td&gt;<xv>v2</xv>&lt;/td&gt;
+			&lt;/tr&gt;
+		&lt;/tbody&gt;
+		&lt;tfoot&gt;
+			&lt;tr&gt;
+				&lt;td&gt;<xv>f1</xv>&lt;/td&gt;
+				&lt;td&gt;<xv>f2</xv>&lt;/td&gt;
+			&lt;/tr&gt;
+		&lt;/tfoot&gt;
+	&lt;/table&gt;
+				</xt></td>
+			</tr>
+		</table>
+</div>		
+
+	<!-- ======================================================================================================== -->
+	<a id="Parse"></a>
+	<h3 class='topic' onclick='toggle(this)'>1.2 - Parsing HTML5</h3>
+	<div class='topic'>
+		<p>
+			Use the {@link org.apache.juneau.xml.HtmlParser} to convert HTML5 documents back into their original POJOs:
+		</p>
+		<p class='bcode'>
+	<jc>// Get an HTML parser to convert our generated HTML5 documents back into POJOs.</jc>
+	HtmlParser p = HtmlParser.<jsf>DEFAULT</jsf>;
+	
+	<jc>// Convert an HTML table back into a Table object.</jc>
+	Table table = p.parse(tableHtml, Table.<jk>class</jk>);
+		</p>
+		<p>
+			HTML5 objects can also be constructed from the other media types using the appropriate parsers.
+		</p>
+	</div>
+
+</div>
+<p align="center"><i><b>*** fín ***</b></i></p>
+
 </body>
 </html>

@@ -19,7 +19,6 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="noscript")
-@SuppressWarnings("hiding")
 public class Noscript extends HtmlElementMixed {
 
 	//--------------------------------------------------------------------------------
@@ -47,7 +46,7 @@ public class Noscript extends HtmlElementMixed {
 
 	@Override /* HtmlElementMixed */
 	public Noscript child(Object child) {
-		this.children.add(child);
+		super.child(child);
 		return this;
 	}
 }

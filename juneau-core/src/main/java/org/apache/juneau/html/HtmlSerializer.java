@@ -237,7 +237,7 @@ public class HtmlSerializer extends XmlSerializer {
 			HtmlClassMeta html = sType.getExtendedMeta(HtmlClassMeta.class);
 
 			if (html.isAsXml() || (pMeta != null && pMeta.getExtendedMeta(HtmlBeanPropertyMeta.class).isAsXml())) {
-				super.serializeAnything(session, out, o, null, null, null, false, XmlFormat.MIXED, false, null);
+				super.serializeAnything(session, out, o, null, null, null, false, XmlFormat.MIXED, false, false, null);
 
 			} else if (html.isAsPlainText() || (pMeta != null && pMeta.getExtendedMeta(HtmlBeanPropertyMeta.class).isAsPlainText())) {
 				out.write(o == null ? "null" : o.toString());
@@ -279,7 +279,7 @@ public class HtmlSerializer extends XmlSerializer {
 					HtmlLink h = o.getClass().getAnnotation(HtmlLink.class);
 					Object urlProp = m.get(h.hrefProperty());
 					Object nameProp = m.get(h.nameProperty());
-					out.oTag("a").attrUri("href", urlProp).append('>').encodeText(nameProp).eTag("a");
+					out.oTag("a").attrUri("href", urlProp).append('>').text(nameProp).eTag("a");
 					cr = CR_SIMPLE;
 				} else {
 					out.nlIf(! isRoot);
@@ -299,9 +299,9 @@ public class HtmlSerializer extends XmlSerializer {
 
 			} else {
 				if (isRoot)
-					out.sTag("string").encodeText(session.toString(o)).eTag("string");
+					out.sTag("string").text(session.toString(o)).eTag("string");
 				else
-					out.encodeText(session.toString(o));
+					out.text(session.toString(o));
 				cr = CR_SIMPLE;
 			}
 		}
@@ -398,7 +398,7 @@ public class HtmlSerializer extends XmlSerializer {
 				continue;
 
 			out.sTag(i+1, "tr").nl();
-			out.sTag(i+2, "td").encodeText(key).eTag("td").nl();
+			out.sTag(i+2, "td").text(key).eTag("td").nl();
 			out.sTag(i+2, "td");
 			try {
 				ContentResult cr = serializeAnything(session, out, value, cMeta, key, 2, pMeta, false);

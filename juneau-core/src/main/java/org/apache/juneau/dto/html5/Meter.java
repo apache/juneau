@@ -19,17 +19,17 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="meter")
-@SuppressWarnings("hiding")
 public class Meter extends HtmlElementMixed {
 
 	/**
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-meter-high'>high</a> attribute.
 	 * Low limit of high range.
 	 * @param high - The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Meter high(String high) {
-		attrs.put("high", high);
+	public final Meter high(Object high) {
+		attr("high", high);
 		return this;
 	}
 
@@ -37,10 +37,11 @@ public class Meter extends HtmlElementMixed {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-meter-low'>low</a> attribute.
 	 * High limit of low range.
 	 * @param low - The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Meter low(String low) {
-		attrs.put("low", low);
+	public final Meter low(Object low) {
+		attr("low", low);
 		return this;
 	}
 
@@ -48,10 +49,11 @@ public class Meter extends HtmlElementMixed {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-meter-max'>max</a> attribute.
 	 * Upper bound of range.
 	 * @param max - The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Meter max(String max) {
-		attrs.put("max", max);
+	public final Meter max(Object max) {
+		attr("max", max);
 		return this;
 	}
 
@@ -59,10 +61,11 @@ public class Meter extends HtmlElementMixed {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-meter-min'>min</a> attribute.
 	 * Lower bound of range.
 	 * @param min - The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Meter min(String min) {
-		attrs.put("min", min);
+	public final Meter min(Object min) {
+		attr("min", min);
 		return this;
 	}
 
@@ -70,10 +73,11 @@ public class Meter extends HtmlElementMixed {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-meter-optimum'>optimum</a> attribute.
 	 * Optimum value in gauge.
 	 * @param optimum - The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Meter optimum(String optimum) {
-		attrs.put("optimum", optimum);
+	public final Meter optimum(Object optimum) {
+		attr("optimum", optimum);
 		return this;
 	}
 
@@ -81,10 +85,11 @@ public class Meter extends HtmlElementMixed {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-meter-value'>value</a> attribute.
 	 * Current value of the element.
 	 * @param value - The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Meter value(String value) {
-		attrs.put("value", value);
+	public final Meter value(Object value) {
+		attr("value", value);
 		return this;
 	}
 
@@ -112,7 +117,7 @@ public class Meter extends HtmlElementMixed {
 
 	@Override /* HtmlElementMixed */
 	public Meter child(Object child) {
-		this.children.add(child);
+		super.child(child);
 		return this;
 	}
 }

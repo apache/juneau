@@ -19,7 +19,6 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="figcaption")
-@SuppressWarnings("hiding")
 public class Figcaption extends HtmlElementMixed {
 
 	//--------------------------------------------------------------------------------
@@ -46,7 +45,7 @@ public class Figcaption extends HtmlElementMixed {
 
 	@Override /* HtmlElementMixed */
 	public Figcaption child(Object child) {
-		this.children.add(child);
+		super.child(child);
 		return this;
 	}
 }

@@ -101,9 +101,9 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 			title = "Options";
 		String description = s.getDescription();
 		if (title != null)
-			w.oTag(1, "h3").attr("class", "title").append('>').encodeText(title).eTag("h3").nl();
+			w.oTag(1, "h3").attr("class", "title").append('>').text(title).eTag("h3").nl();
 		if (description != null)
-			w.oTag(1, "h5").attr("class", "description").append('>').encodeText(description).eTag("h5").nl();
+			w.oTag(1, "h5").attr("class", "description").append('>').text(description).eTag("h5").nl();
 
 		// Write the action links that render above the results.
 		List<Link> actions = new LinkedList<Link>();

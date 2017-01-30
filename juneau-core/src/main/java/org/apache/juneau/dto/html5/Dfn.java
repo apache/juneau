@@ -19,7 +19,6 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="dfn")
-@SuppressWarnings("hiding")
 public class Dfn extends HtmlElementMixed {
 
 	//--------------------------------------------------------------------------------
@@ -46,7 +45,7 @@ public class Dfn extends HtmlElementMixed {
 
 	@Override /* HtmlElementMixed */
 	public Dfn child(Object child) {
-		this.children.add(child);
+		super.child(child);
 		return this;
 	}
 }

@@ -12,19 +12,30 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.html5;
 
+import static org.apache.juneau.xml.annotation.XmlFormat.*;
+
+import java.util.*;
+
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.xml.annotation.*;
 
 /**
  * DTO for an HTML <a href='https://www.w3.org/TR/html5/grouping-content.html#the-pre-element'>&lt;pre&gt;</a> element.
  * <p>
  */
 @Bean(typeName="pre")
-@SuppressWarnings("hiding")
 public class Pre extends HtmlElementMixed {
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods
 	//--------------------------------------------------------------------------------
+
+	@Xml(format=MIXED_PWS)
+	@BeanProperty(beanDictionary=HtmlBeanDictionary.class)
+	@Override
+	public LinkedList<Object> getChildren() {
+		return super.getChildren();
+	}
 
 	@Override /* HtmlElement */
 	public final Pre _class(String _class) {
@@ -46,7 +57,7 @@ public class Pre extends HtmlElementMixed {
 
 	@Override /* HtmlElementMixed */
 	public Pre child(Object child) {
-		this.children.add(child);
+		super.child(child);
 		return this;
 	}
 }

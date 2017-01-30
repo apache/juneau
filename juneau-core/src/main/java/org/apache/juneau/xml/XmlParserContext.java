@@ -48,13 +48,6 @@ import org.apache.juneau.parser.*;
  * 		<td><jk>true</jk></td>
  * 	</tr>
  * 	<tr>
- * 		<td>{@link #XML_trimWhitespace}</td>
- * 		<td>Trim whitespace from text elements.</td>
- * 		<td><code>Boolean<code></td>
- * 		<td><jk>true</jk></td>
- * 		<td><jk>true</jk></td>
- * 	</tr>
- * 	<tr>
  * 		<td>{@link #XML_validating}</td>
  * 		<td>Enable validation.</td>
  * 		<td><code>Boolean<code></td>
@@ -114,20 +107,6 @@ public class XmlParserContext extends ParserContext {
 	 * The XMLSchema namespace.
 	 */
 	public static final String XML_xsiNs = "XmlParser.xsiNs";
-
-	/**
-	 * <b>Configuration property:</b>  Trim whitespace from text elements.
-	 * <p>
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"XmlParser.trimWhitespace"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>true</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
-	 * <p>
-	 * If <jk>true</jk>, whitespace in text elements will be automatically trimmed.
-	 */
-	public static final String XML_trimWhitespace = "XmlParser.trimWhitespace";
 
 	/**
 	 * <b>Configuration property:</b>  Enable validation.
@@ -219,7 +198,6 @@ public class XmlParserContext extends ParserContext {
 
 	final String xsiNs;
 	final boolean
-		trimWhitespace,
 		validating,
 		preserveRootElement;
 	final XMLReporter reporter;
@@ -236,7 +214,6 @@ public class XmlParserContext extends ParserContext {
 	public XmlParserContext(ContextFactory cf) {
 		super(cf);
 		xsiNs = cf.getProperty(XML_xsiNs, String.class, "http://www.w3.org/2001/XMLSchema-instance");
-		trimWhitespace = cf.getProperty(XML_trimWhitespace, boolean.class, true);
 		validating = cf.getProperty(XML_validating, boolean.class, false);
 		preserveRootElement = cf.getProperty(XML_preserveRootElement, boolean.class, false);
 		reporter = cf.getProperty(XML_reporter, XMLReporter.class, null);
@@ -249,7 +226,6 @@ public class XmlParserContext extends ParserContext {
 		return super.asMap()
 			.append("XmlParserContext", new ObjectMap()
 				.append("xsiNs", xsiNs)
-				.append("trimWhitespace", trimWhitespace)
 				.append("validating", validating)
 				.append("preserveRootElement", preserveRootElement)
 				.append("reporter", reporter)

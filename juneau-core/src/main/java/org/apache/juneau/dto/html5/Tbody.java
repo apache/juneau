@@ -19,18 +19,11 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="tbody")
-@SuppressWarnings("hiding")
 public class Tbody extends HtmlElementContainer {
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods
 	//--------------------------------------------------------------------------------
-
-	@Override /* HtmlElement */
-	public Tbody children(Object...children) {
-		super.children(children);
-		return this;
-	}
 
 	@Override /* HtmlElement */
 	public final Tbody _class(String _class) {
@@ -41,6 +34,18 @@ public class Tbody extends HtmlElementContainer {
 	@Override /* HtmlElement */
 	public final Tbody id(String id) {
 		super.id(id);
+		return this;
+	}
+
+	@Override /* HtmlElementContainer */
+	public final Tbody children(Object...children) {
+		super.children(children);
+		return this;
+	}
+
+	@Override /* HtmlElementContainer */
+	public final Tbody child(Object child) {
+		super.child(child);
 		return this;
 	}
 }

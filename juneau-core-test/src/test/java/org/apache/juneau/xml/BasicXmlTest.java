@@ -564,16 +564,16 @@ public class BasicXmlTest {
 			{
 				"BeanWithSpecialCharacters",
 				new BeanWithSpecialCharacters().init(),
-				"<object><a>_x000A__x0008__x000C__x0009_</a></object>",
-				"<object>\n\t<a>_x000A__x0008__x000C__x0009_</a>\n</object>\n",
-				"<object><a>_x000A__x0008__x000C__x0009_</a></object>"
+				"<object><a>_x0020_ _x0008__x000C_&#x000a;&#x0009;&#x000d; _x0020_</a></object>",
+				"<object>\n\t<a>_x0020_ _x0008__x000C_&#x000a;&#x0009;&#x000d; _x0020_</a>\n</object>\n",
+				"<object><a>_x0020_ _x0008__x000C_&#x000a;&#x0009;&#x000d; _x0020_</a></object>"
 			},
 			{
 				"BeanWithSpecialCharacters2",
 				new BeanWithSpecialCharacters2().init(),
-				"<_x0024__x0023__x0021_><_x002A__x0028__x0029_>_x000A__x0008__x000C__x0009_</_x002A__x0028__x0029_></_x0024__x0023__x0021_>",
-				"<_x0024__x0023__x0021_>\n\t<_x002A__x0028__x0029_>_x000A__x0008__x000C__x0009_</_x002A__x0028__x0029_>\n</_x0024__x0023__x0021_>\n",
-				"<_x0024__x0023__x0021_><_x002A__x0028__x0029_>_x000A__x0008__x000C__x0009_</_x002A__x0028__x0029_></_x0024__x0023__x0021_>"
+				"<_x0020__x0020__x0008__x000C__x000A__x0009__x000D__x0020__x0020_><_x0020__x0020__x0008__x000C__x000A__x0009__x000D__x0020__x0020_>_x0020_ _x0008__x000C_&#x000a;&#x0009;&#x000d; _x0020_</_x0020__x0020__x0008__x000C__x000A__x0009__x000D__x0020__x0020_></_x0020__x0020__x0008__x000C__x000A__x0009__x000D__x0020__x0020_>",
+				"<_x0020__x0020__x0008__x000C__x000A__x0009__x000D__x0020__x0020_>\n\t<_x0020__x0020__x0008__x000C__x000A__x0009__x000D__x0020__x0020_>_x0020_ _x0008__x000C_&#x000a;&#x0009;&#x000d; _x0020_</_x0020__x0020__x0008__x000C__x000A__x0009__x000D__x0020__x0020_>\n</_x0020__x0020__x0008__x000C__x000A__x0009__x000D__x0020__x0020_>\n",
+				"<_x0020__x0020__x0008__x000C__x000A__x0009__x000D__x0020__x0020_><_x0020__x0020__x0008__x000C__x000A__x0009__x000D__x0020__x0020_>_x0020_ _x0008__x000C_&#x000a;&#x0009;&#x000d; _x0020_</_x0020__x0020__x0008__x000C__x000A__x0009__x000D__x0020__x0020_></_x0020__x0020__x0008__x000C__x000A__x0009__x000D__x0020__x0020_>"
 			},
 			{
 				"BeanWithNullProperties",
@@ -936,7 +936,161 @@ public class BasicXmlTest {
 						+"</o2>"
 					+"</o>"
 				+"</object>",
-			}
+			},
+			{
+				"BeanWithWhitespaceTextFields-1",
+				new BeanWithWhitespaceTextFields().init(null),
+				"<object/>",
+				"<object/>\n",
+				"<object/>",
+			},
+			{
+				"BeanWithWhitespaceTextFields-2",
+				new BeanWithWhitespaceTextFields().init(""),
+				"<object>_xE000_</object>",
+				"<object>_xE000_</object>\n",
+				"<object>_xE000_</object>",
+			},
+			{
+				"BeanWithWhitespaceTextFields-3",
+				new BeanWithWhitespaceTextFields().init(" "),
+				"<object>_x0020_</object>",
+				"<object>_x0020_</object>\n",
+				"<object>_x0020_</object>",
+			},
+			{
+				"BeanWithWhitespaceTextFields-4",
+				new BeanWithWhitespaceTextFields().init("  "),
+				"<object>_x0020__x0020_</object>",
+				"<object>_x0020__x0020_</object>\n",
+				"<object>_x0020__x0020_</object>",
+			},
+			{
+				"BeanWithWhitespaceTextFields-5",
+				new BeanWithWhitespaceTextFields().init(" foo\n\tbar "),
+				"<object>_x0020_foo&#x000a;&#x0009;bar_x0020_</object>",
+				"<object>_x0020_foo&#x000a;&#x0009;bar_x0020_</object>\n",
+				"<object>_x0020_foo&#x000a;&#x0009;bar_x0020_</object>",
+			},
+			{
+				"BeanWithWhitespaceTextPwsFields-1",
+				new BeanWithWhitespaceTextPwsFields().init(null),
+				"<object/>",
+				"<object/>\n",
+				"<object/>",
+			},
+			{
+				"BeanWithWhitespaceTextPwsFields-2",
+				new BeanWithWhitespaceTextPwsFields().init(""),
+				"<object>_xE000_</object>",
+				"<object>_xE000_</object>\n",
+				"<object>_xE000_</object>",
+			},
+			{
+				"BeanWithWhitespaceTextPwsFields-3",
+				new BeanWithWhitespaceTextPwsFields().init(" "),
+				"<object> </object>",
+				"<object> </object>\n",
+				"<object> </object>",
+			},
+			{
+				"BeanWithWhitespaceTextPwsFields-4",
+				new BeanWithWhitespaceTextPwsFields().init("  "),
+				"<object>  </object>",
+				"<object>  </object>\n",
+				"<object>  </object>",
+			},
+			{
+				"BeanWithWhitespaceTextPwsFields-5",
+				new BeanWithWhitespaceTextPwsFields().init("  foobar  "),
+				"<object>  foobar  </object>",
+				"<object>  foobar  </object>\n",
+				"<object>  foobar  </object>",
+			},
+			{
+				"BeanWithWhitespaceMixedFields-1",
+				new BeanWithWhitespaceMixedFields().init(null),
+				"<object/>",
+				"<object/>\n",
+				"<object/>",
+			},
+			{
+				"BeanWithWhitespaceMixedFields-2",
+				new BeanWithWhitespaceMixedFields().init(new String[0]),
+				"<object/>",
+				"<object/>\n",
+				"<object/>",
+			},
+			{
+				"BeanWithWhitespaceMixedFields-3",
+				new BeanWithWhitespaceMixedFields().init(new String[]{""}),
+				"<object>_xE000_</object>",
+				"<object>_xE000_</object>\n",
+				"<object>_xE000_</object>",
+			},
+			{
+				"BeanWithWhitespaceMixedFields-4",
+				new BeanWithWhitespaceMixedFields().init(new String[]{" "}),
+				"<object>_x0020_</object>",
+				"<object>_x0020_</object>\n",
+				"<object>_x0020_</object>",
+			},
+			{
+				"BeanWithWhitespaceMixedFields-5",
+				new BeanWithWhitespaceMixedFields().init(new String[]{"  "}),
+				"<object>_x0020__x0020_</object>",
+				"<object>_x0020__x0020_</object>\n",
+				"<object>_x0020__x0020_</object>",
+			},
+			{
+				"BeanWithWhitespaceMixedFields-6",
+				new BeanWithWhitespaceMixedFields().init(new String[]{"  foobar  "}),
+				"<object>_x0020_ foobar _x0020_</object>",
+				"<object>_x0020_ foobar _x0020_</object>\n",
+				"<object>_x0020_ foobar _x0020_</object>",
+			},
+			{
+				"BeanWithWhitespaceMixedPwsFields-1",
+				new BeanWithWhitespaceMixedPwsFields().init(null),
+				"<object/>",
+				"<object/>\n",
+				"<object/>",
+			},
+			{
+				"BeanWithWhitespaceMixedPwsFields-2",
+				new BeanWithWhitespaceMixedPwsFields().init(new String[0]),
+				"<object/>",
+				"<object/>\n",
+				"<object/>",
+			},
+			{
+				"BeanWithWhitespaceMixedPwsFields-3",
+				new BeanWithWhitespaceMixedPwsFields().init(new String[]{""}),
+				"<object>_xE000_</object>",
+				"<object>_xE000_</object>\n",
+				"<object>_xE000_</object>",
+			},
+			{
+				"BeanWithWhitespaceMixedPwsFields-4",
+				new BeanWithWhitespaceMixedPwsFields().init(new String[]{" "}),
+				"<object> </object>",
+				"<object> </object>\n",
+				"<object> </object>",
+			},
+			{
+				"BeanWithWhitespaceMixedPwsFields-5",
+				new BeanWithWhitespaceMixedPwsFields().init(new String[]{"  "}),
+				"<object>  </object>",
+				"<object>  </object>\n",
+				"<object>  </object>",
+			},
+			{
+				"BeanWithWhitespaceMixedPwsFields-6",
+				new BeanWithWhitespaceMixedPwsFields().init(new String[]{"  foobar  "}),
+				"<object>  foobar  </object>",
+				"<object>  foobar  </object>\n",
+				"<object>  foobar  </object>",
+			},
 		});
 	}
 
@@ -1382,19 +1536,19 @@ public class BasicXmlTest {
 		public String a;
 
 		BeanWithSpecialCharacters init() {
-			a = "\n\b\f\t";
+			a = "  \b\f\n\t\r  ";
 			return this;
 		}
 	}
 
-	@Bean(typeName="$#!")
+	@Bean(typeName="  \b\f\n\t\r  ")
 	public static class BeanWithSpecialCharacters2 {
 
-		@BeanProperty(name="*()")
+		@BeanProperty(name="  \b\f\n\t\r  ")
 		public String a;
 
 		BeanWithSpecialCharacters2 init() {
-			a = "\n\b\f\t";
+			a = "  \b\f\n\t\r  ";
 			return this;
 		}
 	}
@@ -1502,6 +1656,46 @@ public class BasicXmlTest {
 
 		A init() {
 			this.a = "foo";
+			return this;
+		}
+	}
+	
+	public static class BeanWithWhitespaceTextFields {
+		@Xml(format=XmlFormat.TEXT)
+		public String a;
+	
+		public BeanWithWhitespaceTextFields init(String s) {
+			a = s;
+			return this;
+		}
+	}
+	
+	public static class BeanWithWhitespaceTextPwsFields {
+		@Xml(format=XmlFormat.TEXT_PWS)
+		public String a;
+	
+		public BeanWithWhitespaceTextPwsFields init(String s) {
+			a = s;
+			return this;
+		}
+	}
+
+	public static class BeanWithWhitespaceMixedFields {
+		@Xml(format=XmlFormat.MIXED)
+		public String[] a;
+	
+		public BeanWithWhitespaceMixedFields init(String[] s) {
+			a = s;
+			return this;
+		}
+	}
+
+	public static class BeanWithWhitespaceMixedPwsFields {
+		@Xml(format=XmlFormat.MIXED_PWS)
+		public String[] a;
+	
+		public BeanWithWhitespaceMixedPwsFields init(String[] s) {
+			a = s;
 			return this;
 		}
 	}

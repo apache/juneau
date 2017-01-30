@@ -19,7 +19,6 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="bdo")
-@SuppressWarnings("hiding")
 public class Bdo extends HtmlElementMixed {
 
 	//--------------------------------------------------------------------------------
@@ -52,7 +51,7 @@ public class Bdo extends HtmlElementMixed {
 
 	@Override /* HtmlElementMixed */
 	public Bdo child(Object child) {
-		this.children.add(child);
+		super.child(child);
 		return this;
 	}
 }

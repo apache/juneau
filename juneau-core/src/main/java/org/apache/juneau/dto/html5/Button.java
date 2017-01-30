@@ -19,17 +19,17 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="button")
-@SuppressWarnings("hiding")
 public class Button extends HtmlElementMixed {
 
 	/**
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-fe-autofocus'>autofocus</a> attribute.
 	 * Automatically focus the form control when the page is loaded.
 	 * @param autofocus - The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Button autofocus(String autofocus) {
-		attrs.put("autofocus", autofocus);
+	public final Button autofocus(Object autofocus) {
+		attr("autofocus", autofocus);
 		return this;
 	}
 
@@ -37,10 +37,11 @@ public class Button extends HtmlElementMixed {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-fe-disabled'>disabled</a> attribute.
 	 * Whether the form control is disabled.
 	 * @param disabled - The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Button disabled(String disabled) {
-		attrs.put("disabled", disabled);
+	public final Button disabled(Object disabled) {
+		attr("disabled", disabled);
 		return this;
 	}
 
@@ -51,7 +52,7 @@ public class Button extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final Button form(String form) {
-		attrs.put("form", form);
+		attr("form", form);
 		return this;
 	}
 
@@ -62,7 +63,7 @@ public class Button extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final Button formaction(String formaction) {
-		attrs.put("formaction", formaction);
+		attr("formaction", formaction);
 		return this;
 	}
 
@@ -73,7 +74,7 @@ public class Button extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final Button formenctype(String formenctype) {
-		attrs.put("formenctype", formenctype);
+		attr("formenctype", formenctype);
 		return this;
 	}
 
@@ -84,7 +85,7 @@ public class Button extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final Button formmethod(String formmethod) {
-		attrs.put("formmethod", formmethod);
+		attr("formmethod", formmethod);
 		return this;
 	}
 
@@ -95,7 +96,7 @@ public class Button extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final Button formnovalidate(String formnovalidate) {
-		attrs.put("formnovalidate", formnovalidate);
+		attr("formnovalidate", formnovalidate);
 		return this;
 	}
 
@@ -106,7 +107,7 @@ public class Button extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final Button formtarget(String formtarget) {
-		attrs.put("formtarget", formtarget);
+		attr("formtarget", formtarget);
 		return this;
 	}
 
@@ -117,7 +118,7 @@ public class Button extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final Button menu(String menu) {
-		attrs.put("menu", menu);
+		attr("menu", menu);
 		return this;
 	}
 
@@ -128,7 +129,7 @@ public class Button extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final Button name(String name) {
-		attrs.put("name", name);
+		attr("name", name);
 		return this;
 	}
 
@@ -139,7 +140,7 @@ public class Button extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final Button type(String type) {
-		attrs.put("type", type);
+		attr("type", type);
 		return this;
 	}
 
@@ -147,10 +148,11 @@ public class Button extends HtmlElementMixed {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-button-value'>value</a> attribute.
 	 * Value to be used for form submission.
 	 * @param value - The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Button value(String value) {
-		attrs.put("value", value);
+	public final Button value(Object value) {
+		attr("value", value);
 		return this;
 	}
 
@@ -178,7 +180,7 @@ public class Button extends HtmlElementMixed {
 
 	@Override /* HtmlElementMixed */
 	public Button child(Object child) {
-		this.children.add(child);
+		super.child(child);
 		return this;
 	}
 }

@@ -10,42 +10,33 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.dto.html5;
-
-import org.apache.juneau.annotation.*;
+package org.apache.juneau;
 
 /**
- * DTO for an HTML <a href='https://www.w3.org/TR/html5/sections.html#the-footer-element'>&lt;footer&gt;</a> element.
+ * Identifies a class that gets swapped out for another class during serialization.
  * <p>
+ * *** This feature has not yet been implemented ***
+ * <p>
+ * Allows fine-tuned controlling of serialization of classes by allowing you to create a surrogate
+ * form of the class that then gets serialized instead of the original class.
+ * <p>
+ * During serialization, the {@link #swap(String)} method is used to convert this object into a serialized
+ * form.
+ * <p>
+ * Serialized form can be any object that can be serialized by this framework.
+ * <p>
+ * Parsing back into the original object can be accomplished by specifying a public constructor that takes in
+ * a single parameter of type T.
+ *
+ * @param <T> The class of the serialized form of this class.
  */
-@Bean(typeName="footer")
-public class Footer extends HtmlElementMixed {
+public interface Swappable<T> {
 
-	//--------------------------------------------------------------------------------
-	// Overridden methods
-	//--------------------------------------------------------------------------------
-
-	@Override /* HtmlElement */
-	public final Footer _class(String _class) {
-		super._class(_class);
-		return this;
-	}
-
-	@Override /* HtmlElement */
-	public final Footer id(String id) {
-		super.id(id);
-		return this;
-	}
-
-	@Override /* HtmlElementMixed */
-	public Footer children(Object...children) {
-		super.children(children);
-		return this;
-	}
-
-	@Override /* HtmlElementMixed */
-	public Footer child(Object child) {
-		super.child(child);
-		return this;
-	}
+	/**
+	 * Method to implement that converts this object to a surrogate serialized form.
+	 *
+	 * @param mediaType The media type string being serialized to (e.g. <js>"application/json"</js>).
+	 * @return The surrogate object.
+	 */
+	public T swap(String mediaType);
 }

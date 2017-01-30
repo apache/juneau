@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.html5;
 
+import java.net.*;
+
 import org.apache.juneau.annotation.*;
 
 /**
@@ -19,17 +21,17 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="iframe")
-@SuppressWarnings("hiding")
 public class Iframe extends HtmlElementMixed {
 
 	/**
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-height'>height</a> attribute.
 	 * Vertical dimension.
 	 * @param height - The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Iframe height(String height) {
-		attrs.put("height", height);
+	public final Iframe height(Object height) {
+		attr("height", height);
 		return this;
 	}
 
@@ -40,7 +42,7 @@ public class Iframe extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final Iframe name(String name) {
-		attrs.put("name", name);
+		attr("name", name);
 		return this;
 	}
 
@@ -51,7 +53,7 @@ public class Iframe extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final Iframe sandbox(String sandbox) {
-		attrs.put("sandbox", sandbox);
+		attr("sandbox", sandbox);
 		return this;
 	}
 
@@ -59,10 +61,11 @@ public class Iframe extends HtmlElementMixed {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-iframe-src'>src</a> attribute.
 	 * Address of the resource.
 	 * @param src - The new value for this attribute.
+	 * 	Typically a {@link URL} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Iframe src(String src) {
-		attrs.put("src", src);
+	public final Iframe src(Object src) {
+		attr("src", src);
 		return this;
 	}
 
@@ -73,7 +76,7 @@ public class Iframe extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final Iframe srcdoc(String srcdoc) {
-		attrs.put("srcdoc", srcdoc);
+		attr("srcdoc", srcdoc);
 		return this;
 	}
 
@@ -81,10 +84,11 @@ public class Iframe extends HtmlElementMixed {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-width'>width</a> attribute.
 	 * Horizontal dimension.
 	 * @param width - The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Iframe width(String width) {
-		attrs.put("width", width);
+	public final Iframe width(Object width) {
+		attr("width", width);
 		return this;
 	}
 
@@ -112,7 +116,7 @@ public class Iframe extends HtmlElementMixed {
 
 	@Override /* HtmlElementMixed */
 	public Iframe child(Object child) {
-		this.children.add(child);
+		super.child(child);
 		return this;
 	}
 }

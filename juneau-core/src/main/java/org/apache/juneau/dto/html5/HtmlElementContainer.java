@@ -24,7 +24,7 @@ import org.apache.juneau.xml.annotation.*;
  */
 public class HtmlElementContainer extends HtmlElement {
 
-	final List<Object> children = new LinkedList<Object>();
+	private LinkedList<Object> children;
 
 	/**
 	 * The children of this element.
@@ -32,9 +32,20 @@ public class HtmlElementContainer extends HtmlElement {
 	 */
 	@Xml(format=ELEMENTS)
 	@BeanProperty(beanDictionary=HtmlBeanDictionary.class)
-	public List<Object> getChildren() {
+	public LinkedList<Object> getChildren() {
 		return children;
 	}
+
+	/**
+	 * Sets the children for this container.
+	 * @param children The new children for this container.
+	 * @return This object (for method chaining).
+	 */
+	public HtmlElementContainer setChildren(LinkedList<Object> children) {
+		this.children = children;
+		return this;
+	}
+
 	/**
 	 * Adds one or more child elements to this element.
 	 * @param children The children to add as child elements.
@@ -42,8 +53,12 @@ public class HtmlElementContainer extends HtmlElement {
 	 */
 	@SuppressWarnings("hiding")
 	public HtmlElement children(Object...children) {
-		for (Object c : children)
-			this.children.add(c);
+		if (children.length > 0) {
+			if (this.children == null)
+				this.children = new LinkedList<Object>();
+			for (Object c : children)
+				this.children.add(c);
+		}
 		return this;
 	}
 
@@ -53,6 +68,8 @@ public class HtmlElementContainer extends HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public HtmlElement child(Object child) {
+		if (this.children == null)
+			this.children = new LinkedList<Object>();
 		this.children.add(child);
 		return this;
 	}

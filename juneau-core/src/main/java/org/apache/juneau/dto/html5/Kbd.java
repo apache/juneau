@@ -19,7 +19,6 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="kbd")
-@SuppressWarnings("hiding")
 public class Kbd extends HtmlElementMixed {
 
 	//--------------------------------------------------------------------------------
@@ -46,7 +45,7 @@ public class Kbd extends HtmlElementMixed {
 
 	@Override /* HtmlElementMixed */
 	public Kbd child(Object child) {
-		this.children.add(child);
+		super.child(child);
 		return this;
 	}
 }

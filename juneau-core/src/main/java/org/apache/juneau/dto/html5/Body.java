@@ -19,7 +19,6 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="body")
-@SuppressWarnings("hiding")
 public class Body extends HtmlElementMixed {
 
 	/**
@@ -29,7 +28,7 @@ public class Body extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final Body onafterprint(String onafterprint) {
-		attrs.put("onafterprint", onafterprint);
+		attr("onafterprint", onafterprint);
 		return this;
 	}
 
@@ -40,7 +39,7 @@ public class Body extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final Body onbeforeunload(String onbeforeunload) {
-		attrs.put("onbeforeunload", onbeforeunload);
+		attr("onbeforeunload", onbeforeunload);
 		return this;
 	}
 
@@ -51,7 +50,7 @@ public class Body extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final Body onmessage(String onmessage) {
-		attrs.put("onmessage", onmessage);
+		attr("onmessage", onmessage);
 		return this;
 	}
 
@@ -62,7 +61,7 @@ public class Body extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final Body ononline(String ononline) {
-		attrs.put("ononline", ononline);
+		attr("ononline", ononline);
 		return this;
 	}
 
@@ -73,7 +72,7 @@ public class Body extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final Body onpageshow(String onpageshow) {
-		attrs.put("onpageshow", onpageshow);
+		attr("onpageshow", onpageshow);
 		return this;
 	}
 
@@ -84,7 +83,7 @@ public class Body extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final Body onstorage(String onstorage) {
-		attrs.put("onstorage", onstorage);
+		attr("onstorage", onstorage);
 		return this;
 	}
 
@@ -112,7 +111,7 @@ public class Body extends HtmlElementMixed {
 
 	@Override /* HtmlElementMixed */
 	public Body child(Object child) {
-		this.children.add(child);
+		super.child(child);
 		return this;
 	}
 }

@@ -336,7 +336,7 @@ public class XmlSchemaSerializer extends XmlSerializer {
 			// This element can have mixed content if:
 			// 	1) It's a generic Object (so it can theoretically be anything)
 			//		2) The bean has a property defined with @XmlFormat.CONTENT.
-			if ((xbm != null && (xbm.getContentFormat() != null && xbm.getContentFormat().isOneOf(TEXT,MIXED,XMLTEXT))) || ! cm.isMapOrBean())
+			if ((xbm != null && (xbm.getContentFormat() != null && xbm.getContentFormat().isOneOf(TEXT,TEXT_PWS,MIXED,MIXED_PWS,XMLTEXT))) || ! cm.isMapOrBean())
 				w.attr("mixed", "true");
 
 			w.cTag().nl();

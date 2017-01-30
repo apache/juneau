@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.html5;
 
+import java.net.*;
+
 import org.apache.juneau.annotation.*;
 
 /**
@@ -19,7 +21,7 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="area")
-public class Area extends HtmlElement {
+public class Area extends HtmlElementEmpty {
 
 	/**
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-area-alt'>alt</a> attribute.
@@ -28,7 +30,7 @@ public class Area extends HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final Area alt(String alt) {
-		attrs.put("alt", alt);
+		attr("alt", alt);
 		return this;
 	}
 
@@ -39,7 +41,7 @@ public class Area extends HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final Area coords(String coords) {
-		attrs.put("coords", coords);
+		attr("coords", coords);
 		return this;
 	}
 
@@ -47,10 +49,11 @@ public class Area extends HtmlElement {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/links.html#attr-hyperlink-download'>download</a> attribute.
 	 * Whether to download the resource instead of navigating to it, and its file name if so.
 	 * @param download - The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Area download(String download) {
-		attrs.put("download", download);
+	public final Area download(Object download) {
+		attr("download", download);
 		return this;
 	}
 
@@ -58,10 +61,11 @@ public class Area extends HtmlElement {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/links.html#attr-hyperlink-href'>href</a> attribute.
 	 * Address of the hyperlink.
 	 * @param href - The new value for this attribute.
+	 * 	Typically a {@link URL} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Area href(String href) {
-		attrs.put("href", href);
+	public final Area href(Object href) {
+		attr("href", href);
 		return this;
 	}
 
@@ -72,7 +76,7 @@ public class Area extends HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final Area hreflang(String hreflang) {
-		attrs.put("hreflang", hreflang);
+		attr("hreflang", hreflang);
 		return this;
 	}
 
@@ -83,7 +87,7 @@ public class Area extends HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final Area rel(String rel) {
-		attrs.put("rel", rel);
+		attr("rel", rel);
 		return this;
 	}
 
@@ -94,7 +98,7 @@ public class Area extends HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final Area shape(String shape) {
-		attrs.put("shape", shape);
+		attr("shape", shape);
 		return this;
 	}
 
@@ -105,7 +109,7 @@ public class Area extends HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final Area target(String target) {
-		attrs.put("target", target);
+		attr("target", target);
 		return this;
 	}
 
@@ -116,7 +120,7 @@ public class Area extends HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final Area type(String type) {
-		attrs.put("type", type);
+		attr("type", type);
 		return this;
 	}
 

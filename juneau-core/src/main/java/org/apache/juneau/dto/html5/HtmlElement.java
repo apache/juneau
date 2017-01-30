@@ -27,7 +27,7 @@ import org.apache.juneau.xml.annotation.*;
 @org.apache.juneau.html.annotation.Html(asXml=true)
 public abstract class HtmlElement {
 
-	final LinkedHashMap<String,Object> attrs = new LinkedHashMap<String,Object>();
+	private LinkedHashMap<String,Object> attrs;
 
 	/**
 	 * The attributes of this element.
@@ -39,6 +39,16 @@ public abstract class HtmlElement {
 	}
 
 	/**
+	 * Sets the attributes for this element.
+	 * @param attrs The new attributes for this element.
+	 * @return This object (for method chaining).
+	 */
+	public HtmlElement setAttrs(LinkedHashMap<String,Object> attrs) {
+		this.attrs = attrs;
+		return this;
+	}
+
+	/**
 	 * Adds an arbitrary attribute to this element.
 	 * @param key The attribute name.
 	 * @param val The attribute value.
@@ -46,6 +56,8 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public HtmlElement attr(String key, Object val) {
+		if (this.attrs == null)
+			this.attrs = new LinkedHashMap<String,Object>();
 		this.attrs.put(key, val);
 		return this;
 	}
@@ -56,7 +68,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement accesskey(String accesskey) {
-		attrs.put("accesskey", accesskey);
+		attr("accesskey", accesskey);
 		return this;
 	}
 
@@ -66,17 +78,18 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public HtmlElement _class(String _class) {
-		attrs.put("class", _class);
+		attr("class", _class);
 		return this;
 	}
 
 	/**
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/editing.html#attr-contenteditable'>contenteditable</a> attribute.
 	 * @param contenteditable - The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final HtmlElement contenteditable(String contenteditable) {
-		attrs.put("contenteditable", contenteditable);
+	public final HtmlElement contenteditable(Object contenteditable) {
+		attr("contenteditable", contenteditable);
 		return this;
 	}
 
@@ -86,17 +99,18 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public HtmlElement dir(String dir) {
-		attrs.put("dir", dir);
+		attr("dir", dir);
 		return this;
 	}
 
 	/**
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/editing.html#the-hidden-attribute'>hidden</a> attribute.
 	 * @param hidden - The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final HtmlElement hidden(String hidden) {
-		attrs.put("hidden", hidden);
+	public final HtmlElement hidden(Object hidden) {
+		attr("hidden", hidden);
 		return this;
 	}
 
@@ -106,7 +120,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public HtmlElement id(String id) {
-		attrs.put("id", id);
+		attr("id", id);
 		return this;
 	}
 
@@ -116,7 +130,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement lang(String lang) {
-		attrs.put("lang", lang);
+		attr("lang", lang);
 		return this;
 	}
 
@@ -126,7 +140,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement onabort(String onabort) {
-		attrs.put("onabort", onabort);
+		attr("onabort", onabort);
 		return this;
 	}
 
@@ -136,7 +150,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement onblur(String onblur) {
-		attrs.put("onblur", onblur);
+		attr("onblur", onblur);
 		return this;
 	}
 
@@ -146,7 +160,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement oncancel(String oncancel) {
-		attrs.put("oncancel", oncancel);
+		attr("oncancel", oncancel);
 		return this;
 	}
 
@@ -156,7 +170,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement oncanplay(String oncanplay) {
-		attrs.put("oncanplay", oncanplay);
+		attr("oncanplay", oncanplay);
 		return this;
 	}
 
@@ -166,7 +180,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement oncanplaythrough(String oncanplaythrough) {
-		attrs.put("oncanplaythrough", oncanplaythrough);
+		attr("oncanplaythrough", oncanplaythrough);
 		return this;
 	}
 
@@ -176,7 +190,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement onchange(String onchange) {
-		attrs.put("onchange", onchange);
+		attr("onchange", onchange);
 		return this;
 	}
 
@@ -186,7 +200,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement onclick(String onclick) {
-		attrs.put("onclick", onclick);
+		attr("onclick", onclick);
 		return this;
 	}
 
@@ -196,7 +210,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement oncuechange(String oncuechange) {
-		attrs.put("oncuechange", oncuechange);
+		attr("oncuechange", oncuechange);
 		return this;
 	}
 
@@ -206,7 +220,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement ondblclick(String ondblclick) {
-		attrs.put("ondblclick", ondblclick);
+		attr("ondblclick", ondblclick);
 		return this;
 	}
 
@@ -216,7 +230,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement ondurationchange(String ondurationchange) {
-		attrs.put("ondurationchange", ondurationchange);
+		attr("ondurationchange", ondurationchange);
 		return this;
 	}
 
@@ -226,7 +240,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement onemptied(String onemptied) {
-		attrs.put("onemptied", onemptied);
+		attr("onemptied", onemptied);
 		return this;
 	}
 
@@ -236,7 +250,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement onended(String onended) {
-		attrs.put("onended", onended);
+		attr("onended", onended);
 		return this;
 	}
 
@@ -246,7 +260,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement onerror(String onerror) {
-		attrs.put("onerror", onerror);
+		attr("onerror", onerror);
 		return this;
 	}
 
@@ -256,7 +270,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement onfocus(String onfocus) {
-		attrs.put("onfocus", onfocus);
+		attr("onfocus", onfocus);
 		return this;
 	}
 
@@ -266,7 +280,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement oninput(String oninput) {
-		attrs.put("oninput", oninput);
+		attr("oninput", oninput);
 		return this;
 	}
 
@@ -276,7 +290,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement oninvalid(String oninvalid) {
-		attrs.put("oninvalid", oninvalid);
+		attr("oninvalid", oninvalid);
 		return this;
 	}
 
@@ -286,7 +300,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement onkeydown(String onkeydown) {
-		attrs.put("onkeydown", onkeydown);
+		attr("onkeydown", onkeydown);
 		return this;
 	}
 
@@ -296,7 +310,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement onkeypress(String onkeypress) {
-		attrs.put("onkeypress", onkeypress);
+		attr("onkeypress", onkeypress);
 		return this;
 	}
 
@@ -306,7 +320,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement onkeyup(String onkeyup) {
-		attrs.put("onkeyup", onkeyup);
+		attr("onkeyup", onkeyup);
 		return this;
 	}
 
@@ -316,7 +330,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement onload(String onload) {
-		attrs.put("onload", onload);
+		attr("onload", onload);
 		return this;
 	}
 
@@ -326,7 +340,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement onloadeddata(String onloadeddata) {
-		attrs.put("onloadeddata", onloadeddata);
+		attr("onloadeddata", onloadeddata);
 		return this;
 	}
 
@@ -336,7 +350,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement onloadedmetadata(String onloadedmetadata) {
-		attrs.put("onloadedmetadata", onloadedmetadata);
+		attr("onloadedmetadata", onloadedmetadata);
 		return this;
 	}
 
@@ -346,7 +360,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement onloadstart(String onloadstart) {
-		attrs.put("onloadstart", onloadstart);
+		attr("onloadstart", onloadstart);
 		return this;
 	}
 
@@ -356,7 +370,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement onmousedown(String onmousedown) {
-		attrs.put("onmousedown", onmousedown);
+		attr("onmousedown", onmousedown);
 		return this;
 	}
 
@@ -366,7 +380,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement onmouseenter(String onmouseenter) {
-		attrs.put("onmouseenter", onmouseenter);
+		attr("onmouseenter", onmouseenter);
 		return this;
 	}
 
@@ -376,7 +390,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement onmouseleave(String onmouseleave) {
-		attrs.put("onmouseleave", onmouseleave);
+		attr("onmouseleave", onmouseleave);
 		return this;
 	}
 
@@ -386,7 +400,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement onmousemove(String onmousemove) {
-		attrs.put("onmousemove", onmousemove);
+		attr("onmousemove", onmousemove);
 		return this;
 	}
 
@@ -396,7 +410,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement onmouseout(String onmouseout) {
-		attrs.put("onmouseout", onmouseout);
+		attr("onmouseout", onmouseout);
 		return this;
 	}
 
@@ -406,7 +420,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement onmouseover(String onmouseover) {
-		attrs.put("onmouseover", onmouseover);
+		attr("onmouseover", onmouseover);
 		return this;
 	}
 
@@ -416,7 +430,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement onmouseup(String onmouseup) {
-		attrs.put("onmouseup", onmouseup);
+		attr("onmouseup", onmouseup);
 		return this;
 	}
 
@@ -426,7 +440,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement onmousewheel(String onmousewheel) {
-		attrs.put("onmousewheel", onmousewheel);
+		attr("onmousewheel", onmousewheel);
 		return this;
 	}
 
@@ -436,7 +450,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement onpause(String onpause) {
-		attrs.put("onpause", onpause);
+		attr("onpause", onpause);
 		return this;
 	}
 
@@ -446,7 +460,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement onplay(String onplay) {
-		attrs.put("onplay", onplay);
+		attr("onplay", onplay);
 		return this;
 	}
 
@@ -456,7 +470,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement onplaying(String onplaying) {
-		attrs.put("onplaying", onplaying);
+		attr("onplaying", onplaying);
 		return this;
 	}
 
@@ -466,7 +480,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement onprogress(String onprogress) {
-		attrs.put("onprogress", onprogress);
+		attr("onprogress", onprogress);
 		return this;
 	}
 
@@ -476,7 +490,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement onratechange(String onratechange) {
-		attrs.put("onratechange", onratechange);
+		attr("onratechange", onratechange);
 		return this;
 	}
 
@@ -486,7 +500,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement onreset(String onreset) {
-		attrs.put("onreset", onreset);
+		attr("onreset", onreset);
 		return this;
 	}
 
@@ -496,7 +510,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement onresize(String onresize) {
-		attrs.put("onresize", onresize);
+		attr("onresize", onresize);
 		return this;
 	}
 
@@ -506,7 +520,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement onscroll(String onscroll) {
-		attrs.put("onscroll", onscroll);
+		attr("onscroll", onscroll);
 		return this;
 	}
 
@@ -516,7 +530,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement onseeked(String onseeked) {
-		attrs.put("onseeked", onseeked);
+		attr("onseeked", onseeked);
 		return this;
 	}
 
@@ -526,7 +540,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement onseeking(String onseeking) {
-		attrs.put("onseeking", onseeking);
+		attr("onseeking", onseeking);
 		return this;
 	}
 
@@ -536,7 +550,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement onselect(String onselect) {
-		attrs.put("onselect", onselect);
+		attr("onselect", onselect);
 		return this;
 	}
 
@@ -546,7 +560,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement onshow(String onshow) {
-		attrs.put("onshow", onshow);
+		attr("onshow", onshow);
 		return this;
 	}
 
@@ -556,7 +570,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement onstalled(String onstalled) {
-		attrs.put("onstalled", onstalled);
+		attr("onstalled", onstalled);
 		return this;
 	}
 
@@ -566,7 +580,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement onsubmit(String onsubmit) {
-		attrs.put("onsubmit", onsubmit);
+		attr("onsubmit", onsubmit);
 		return this;
 	}
 
@@ -576,7 +590,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement onsuspend(String onsuspend) {
-		attrs.put("onsuspend", onsuspend);
+		attr("onsuspend", onsuspend);
 		return this;
 	}
 
@@ -586,7 +600,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement ontimeupdate(String ontimeupdate) {
-		attrs.put("ontimeupdate", ontimeupdate);
+		attr("ontimeupdate", ontimeupdate);
 		return this;
 	}
 
@@ -596,7 +610,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement ontoggle(String ontoggle) {
-		attrs.put("ontoggle", ontoggle);
+		attr("ontoggle", ontoggle);
 		return this;
 	}
 
@@ -606,7 +620,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement onvolumechange(String onvolumechange) {
-		attrs.put("onvolumechange", onvolumechange);
+		attr("onvolumechange", onvolumechange);
 		return this;
 	}
 
@@ -616,17 +630,18 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public final HtmlElement onwaiting(String onwaiting) {
-		attrs.put("onwaiting", onwaiting);
+		attr("onwaiting", onwaiting);
 		return this;
 	}
 
 	/**
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/editing.html#attr-spellcheck'>spellcheck</a> attribute.
 	 * @param spellcheck - The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final HtmlElement spellcheck(String spellcheck) {
-		attrs.put("spellcheck", spellcheck);
+	public final HtmlElement spellcheck(Object spellcheck) {
+		attr("spellcheck", spellcheck);
 		return this;
 	}
 
@@ -635,18 +650,19 @@ public abstract class HtmlElement {
 	 * @param style - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
-	public final HtmlElement style(String style) {
-		attrs.put("style", style);
+	public HtmlElement style(String style) {
+		attr("style", style);
 		return this;
 	}
 
 	/**
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/editing.html#attr-tabindex'>tabindex</a> attribute.
 	 * @param tabindex - The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final HtmlElement tabindex(String tabindex) {
-		attrs.put("tabindex", tabindex);
+	public final HtmlElement tabindex(Object tabindex) {
+		attr("tabindex", tabindex);
 		return this;
 	}
 
@@ -656,17 +672,18 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public HtmlElement title(String title) {
-		attrs.put("title", title);
+		attr("title", title);
 		return this;
 	}
 
 	/**
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/dom.html#attr-translate'>translate</a> attribute.
 	 * @param translate - The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final HtmlElement translate(String translate) {
-		attrs.put("translate", translate);
+	public final HtmlElement translate(Object translate) {
+		attr("translate", translate);
 		return this;
 	}
 

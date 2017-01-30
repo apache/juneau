@@ -19,7 +19,6 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="code")
-@SuppressWarnings("hiding")
 public class Code extends HtmlElementMixed {
 
 	//--------------------------------------------------------------------------------
@@ -46,7 +45,7 @@ public class Code extends HtmlElementMixed {
 
 	@Override /* HtmlElementMixed */
 	public Code child(Object child) {
-		this.children.add(child);
+		super.child(child);
 		return this;
 	}
 }

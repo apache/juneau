@@ -19,29 +19,23 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="table")
-@SuppressWarnings("hiding")
 public class Table extends HtmlElementContainer {
 
 	/**
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/tabular-data.html#attr-table-border'>border</a> attribute.
 	 * //sortable - Enables a sorting interface for the table.
 	 * @param border - The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Table border(String border) {
-		attrs.put("border", border);
+	public final Table border(Object border) {
+		attr("border", border);
 		return this;
 	}
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods
 	//--------------------------------------------------------------------------------
-
-	@Override /* HtmlElement */
-	public Table children(Object...children) {
-		super.children(children);
-		return this;
-	}
 
 	@Override /* HtmlElement */
 	public final Table _class(String _class) {
@@ -52,6 +46,18 @@ public class Table extends HtmlElementContainer {
 	@Override /* HtmlElement */
 	public final Table id(String id) {
 		super.id(id);
+		return this;
+	}
+
+	@Override /* HtmlElementContainer */
+	public final Table children(Object...children) {
+		super.children(children);
+		return this;
+	}
+
+	@Override /* HtmlElementContainer */
+	public final Table child(Object child) {
+		super.child(child);
 		return this;
 	}
 }

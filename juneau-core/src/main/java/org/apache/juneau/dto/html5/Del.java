@@ -19,7 +19,6 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="del")
-@SuppressWarnings("hiding")
 public class Del extends HtmlElementMixed {
 
 	/**
@@ -29,7 +28,7 @@ public class Del extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final Del cite(String cite) {
-		attrs.put("cite", cite);
+		attr("cite", cite);
 		return this;
 	}
 
@@ -40,7 +39,7 @@ public class Del extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final Del datetime(String datetime) {
-		attrs.put("datetime", datetime);
+		attr("datetime", datetime);
 		return this;
 	}
 
@@ -68,7 +67,7 @@ public class Del extends HtmlElementMixed {
 
 	@Override /* HtmlElementMixed */
 	public Del child(Object child) {
-		this.children.add(child);
+		super.child(child);
 		return this;
 	}
 }

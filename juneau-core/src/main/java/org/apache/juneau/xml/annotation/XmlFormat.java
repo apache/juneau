@@ -79,6 +79,13 @@ public enum XmlFormat {
 	MIXED,
 
 	/**
+	 * Same as {@link XmlFormat#MIXED}, but whitespace in text nodes are not trimmed during parsing.
+	 * <p>
+	 * An example use is HTML5 <xt>&lt;pre&gt;</xt> where whitespace should not be discarded.
+	 */
+	MIXED_PWS,
+
+	/**
 	 * Render property value as the text content of the element.
 	 * <p>
 	 * Similar to {@link #MIXED} but value must be a single value, not a collection.
@@ -88,6 +95,11 @@ public enum XmlFormat {
 	 * Use of this format may cause data type loss during parsing if the type cannot be inferred through reflection.
 	 */
 	TEXT,
+
+	/**
+	 * Same as {@link XmlFormat#TEXT}, but whitespace in text node is not trimmed during parsing.
+	 */
+	TEXT_PWS,
 
 	/**
 	 * Same as {@link #TEXT} except the content is expected to be fully-formed XML that will

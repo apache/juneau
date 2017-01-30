@@ -279,6 +279,7 @@ public class XmlSerializer extends WriterSerializer {
 	 * @param addNamespaceUris Flag indicating that namespace URIs need to be added.
 	 * @param format The format to serialize the output to.
 	 * @param isMixed We're serializing mixed content, so don't use whitespace.
+	 * @param preserveWhitespace <jk>true</jk> if we're serializing {@link XmlFormat#MIXED_PWS} or {@link XmlFormat#TEXT_PWS}.
 	 * @param pMeta The bean property metadata if this is a bean property being serialized.
 	 * @return The same writer passed in so that calls to the writer can be chained.
 	 * @throws Exception If a problem occurred trying to convert the output.
@@ -293,6 +294,7 @@ public class XmlSerializer extends WriterSerializer {
 			boolean addNamespaceUris,
 			XmlFormat format,
 			boolean isMixed,
+			boolean preserveWhitespace,
 			BeanPropertyMeta pMeta) throws Exception {
 
 		JsonType type = null;              // The type string (e.g. <type> or <x x='type'>
@@ -376,7 +378,7 @@ public class XmlSerializer extends WriterSerializer {
 			type = STRING;
 		}
 
-		if (format.isOneOf(MIXED,TEXT,XMLTEXT) && type.isOneOf(NULL,STRING,NUMBER,BOOLEAN))
+		if (format.isOneOf(MIXED,MIXED_PWS,TEXT,TEXT_PWS,XMLTEXT) && type.isOneOf(NULL,STRING,NUMBER,BOOLEAN))
 			isCollapsed = true;
 
 		// Is there a name associated with this bean?
@@ -453,7 +455,7 @@ public class XmlSerializer extends WriterSerializer {
 				if (format == XMLTEXT)
 					out.append(o);
 				else
-					out.encodeText(session.trim(o));
+					out.text(o, preserveWhitespace);
 			} else if (sType.isNumber() || sType.isBoolean()) {
 				out.append(o);
 			} else if (sType.isMap() || (wType != null && wType.isMap())) {
@@ -483,7 +485,7 @@ public class XmlSerializer extends WriterSerializer {
 				if (format == XMLTEXT)
 					out.append(session.toString(o));
 				else
-					out.encodeText(session.toString(o));
+					out.text(session.toString(o));
 			}
 		}
 
@@ -528,7 +530,7 @@ public class XmlSerializer extends WriterSerializer {
 				hasChildren = true;
 				out.append('>').nlIf(! isMixed);
 			}
-			serializeAnything(session, out, value, valueType, session.toString(k), null, false, XmlFormat.DEFAULT, isMixed, null);
+			serializeAnything(session, out, value, valueType, session.toString(k), null, false, XmlFormat.DEFAULT, isMixed, false, null);
 		}
 		return hasChildren ? CR_ELEMENTS : CR_EMPTY;
 	}
@@ -595,7 +597,7 @@ public class XmlSerializer extends WriterSerializer {
 			}
 		}
 
-		boolean hasContent = false;
+		boolean hasContent = false, preserveWhitespace = false;
 
 		for (BeanPropertyValue p : lp) {
 			BeanPropertyMeta pMeta = p.getMeta();
@@ -607,8 +609,14 @@ public class XmlSerializer extends WriterSerializer {
 				contentType = p.getClassMeta();
 				hasContent = true;
 				cf = xbm.getContentFormat();
-				if (cf.isOneOf(MIXED,TEXT,XMLTEXT))
+				if (cf.isOneOf(MIXED,MIXED_PWS,TEXT,TEXT_PWS,XMLTEXT))
 					isMixed = true;
+				if (cf.isOneOf(MIXED_PWS, TEXT_PWS))
+					preserveWhitespace = true;
+				if (contentType.isCollection() && ((Collection)content).isEmpty())
+					hasContent = false;
+				else if (contentType.isArray() && Array.getLength(content) == 0)
+					hasContent = false;
 			} else if (elements.contains(n) || collapsedElements.contains(n)) {
 				String key = p.getName();
 				Object value = p.getValue();
@@ -625,10 +633,10 @@ public class XmlSerializer extends WriterSerializer {
 				}
 
 				XmlBeanPropertyMeta xbpm = pMeta.getExtendedMeta(XmlBeanPropertyMeta.class);
-				serializeAnything(session, out, value, cMeta, key, xbpm.getNamespace(), false, xbpm.getXmlFormat(), isMixed, pMeta);
+				serializeAnything(session, out, value, cMeta, key, xbpm.getNamespace(), false, xbpm.getXmlFormat(), isMixed, false, pMeta);
 			}
 		}
-		if ((! hasContent) || session.canIgnoreValue(string(), null, content))
+		if (! hasContent)
 			return (hasChildren ? CR_ELEMENTS : CR_EMPTY);
 		out.append('>').nlIf(! isMixed);
 
@@ -639,22 +647,22 @@ public class XmlSerializer extends WriterSerializer {
 				Collection c = (Collection)content;
 				for (Iterator i = c.iterator(); i.hasNext();) {
 					Object value = i.next();
-					serializeAnything(session, out, value, contentType.getElementType(), null, null, false, cf, isMixed, null);
+					serializeAnything(session, out, value, contentType.getElementType(), null, null, false, cf, isMixed, preserveWhitespace, null);
 				}
 			} else if (contentType.isArray()) {
 				Collection c = toList(Object[].class, content);
 				for (Iterator i = c.iterator(); i.hasNext();) {
 					Object value = i.next();
-					serializeAnything(session, out, value, contentType.getElementType(), null, null, false, cf, isMixed, null);
+					serializeAnything(session, out, value, contentType.getElementType(), null, null, false, cf, isMixed, preserveWhitespace, null);
 				}
 			} else {
-				serializeAnything(session, out, content, contentType, null, null, false, cf, isMixed, null);
+				serializeAnything(session, out, content, contentType, null, null, false, cf, isMixed, preserveWhitespace, null);
 			}
 		} else {
 			if (! session.isTrimNulls()) {
 				if (! isMixed)
 					out.i(session.indent);
-				out.encodeText(content);
+				out.text(content);
 				if (! isMixed)
 					out.nl();
 			}
@@ -688,7 +696,7 @@ public class XmlSerializer extends WriterSerializer {
 
 		for (Iterator i = c.iterator(); i.hasNext();) {
 			Object value = i.next();
-			serializeAnything(session, out, value, eeType, eName, eNs, false, XmlFormat.DEFAULT, isMixed, null);
+			serializeAnything(session, out, value, eeType, eName, eNs, false, XmlFormat.DEFAULT, isMixed, false, null);
 		}
 		return out;
 	}
@@ -742,7 +750,7 @@ public class XmlSerializer extends WriterSerializer {
 		XmlSerializerSession s = (XmlSerializerSession)session;
 		if (s.isEnableNamespaces() && s.isAutoDetectNamespaces())
 			findNsfMappings(s, o);
-		serializeAnything(s, s.getWriter(), o, null, null, null, s.isEnableNamespaces() && s.isAddNamespaceUrlsToRoot(), XmlFormat.DEFAULT, false, null);
+		serializeAnything(s, s.getWriter(), o, null, null, null, s.isEnableNamespaces() && s.isAddNamespaceUrlsToRoot(), XmlFormat.DEFAULT, false, false, null);
 	}
 
 	@Override /* Serializer */

@@ -15,6 +15,7 @@ package org.apache.juneau.xml;
 import java.io.*;
 
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.xml.annotation.*;
 
 /**
  * Specialized writer for serializing XML.
@@ -58,7 +59,7 @@ public class XmlWriter extends SerializerWriter {
 		if (enableNs && ns != null && ! (ns.isEmpty() || ns.equals(defaultNsPrefix)))
 			append(ns).append(':');
 		if (needsEncoding)
-			encodeElement(name);
+			XmlUtils.encodeElementName(out, name);
 		else
 			append(name);
 		return this;
@@ -164,7 +165,7 @@ public class XmlWriter extends SerializerWriter {
 		if (enableNs && ns != null && ! (ns.isEmpty() || ns.equals(defaultNsPrefix)))
 			append(ns).append(':');
 		if (needsEncoding)
-			encodeElement(name);
+			XmlUtils.encodeElementName(out, name);
 		else
 			append(name);
 		return append('/').append('>');
@@ -323,7 +324,7 @@ public class XmlWriter extends SerializerWriter {
 		if (enableNs && ns != null && ! (ns.isEmpty() || ns.equals(defaultNsPrefix)))
 			append(ns).append(':');
 		if (needsEncoding)
-			encodeElement(name);
+			XmlUtils.encodeElementName(out, name);
 		else
 			append(name);
 		return append('>');
@@ -519,46 +520,27 @@ public class XmlWriter extends SerializerWriter {
 	}
 
 	/**
-	 * Serializes and encodes the specified object as valid XML text.
+	 * Shortcut for calling <code>text(o, <jk>false</jk>);</code>
 	 *
 	 * @param o The object being serialized.
 	 * @return This object (for method chaining).
 	 * @throws IOException If a problem occurred.
 	 */
-	public XmlWriter encodeText(Object o) throws IOException {
-		XmlUtils.encodeText(this, o);
+	public XmlWriter text(Object o) throws IOException {
+		text(o, false);
 		return this;
 	}
 
 	/**
 	 * Serializes and encodes the specified object as valid XML text.
-	 * <p>
-	 * 	Does NOT encode XML characters (<js>'&lt;'</js>, <js>'&gt;'</js>, and <js>'&amp;'</js>).
-	 * <p>
-	 * 	Use on XML text that you just want to replace invalid XML characters with <js>"_x####_"</js> sequences.
 	 *
 	 * @param o The object being serialized.
+	 * @param preserveWhitespace If <jk>true</jk>, then we're serializing {@link XmlFormat#MIXED_PWS} or {@link XmlFormat#TEXT_PWS} content.
 	 * @return This object (for method chaining).
-	 * @throws IOException If a problem occurred.
+	 * @throws IOException
 	 */
-	public XmlWriter encodeTextInvalidChars(Object o) throws IOException {
-		XmlUtils.encodeTextInvalidChars(this, o);
-		return this;
-	}
-
-	/**
-	 * Serializes and encodes the specified object as valid XML text.
-	 * <p>
-	 * 	Only encodes XML characters (<js>'&lt;'</js>, <js>'&gt;'</js>, and <js>'&amp;'</js>).
-	 * <p>
-	 * 	Use on XML text where the invalid characters have already been replaced.
-	 *
-	 * @param o The object being serialized.
-	 * @return This object (for method chaining).
-	 * @throws IOException If a problem occurred.
-	 */
-	public XmlWriter encodeTextXmlChars(Object o) throws IOException {
-		XmlUtils.encodeTextXmlChars(this, o);
+	public XmlWriter text(Object o, boolean preserveWhitespace) throws IOException {
+		XmlUtils.encodeText(this, o, trimStrings, preserveWhitespace);
 		return this;
 	}
 
@@ -571,18 +553,6 @@ public class XmlWriter extends SerializerWriter {
 	 */
 	public XmlWriter encodeAttr(Object o) throws IOException {
 		XmlUtils.encodeAttr(out, o);
-		return this;
-	}
-
-	/**
-	 * Serializes and encodes the specified object as valid XML element name.
-	 *
-	 * @param o The object being serialized.
-	 * @return This object (for method chaining).
-	 * @throws IOException If a problem occurred.
-	 */
-	public XmlWriter encodeElement(Object o) throws IOException {
-		XmlUtils.encodeElementName(out, o);
 		return this;
 	}
 

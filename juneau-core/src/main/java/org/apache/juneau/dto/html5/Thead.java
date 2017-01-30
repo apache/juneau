@@ -19,18 +19,11 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="thead")
-@SuppressWarnings("hiding")
 public class Thead extends HtmlElementContainer {
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods
 	//--------------------------------------------------------------------------------
-
-	@Override /* HtmlElement */
-	public Thead children(Object...children) {
-		super.children(children);
-		return this;
-	}
 
 	@Override /* HtmlElement */
 	public final Thead _class(String _class) {
@@ -41,6 +34,18 @@ public class Thead extends HtmlElementContainer {
 	@Override /* HtmlElement */
 	public final Thead id(String id) {
 		super.id(id);
+		return this;
+	}
+
+	@Override /* HtmlElementContainer */
+	public final Thead children(Object...children) {
+		super.children(children);
+		return this;
+	}
+
+	@Override /* HtmlElementContainer */
+	public final Thead child(Object child) {
+		super.child(child);
 		return this;
 	}
 }

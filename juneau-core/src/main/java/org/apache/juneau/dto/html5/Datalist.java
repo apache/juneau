@@ -19,18 +19,11 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="datalist")
-@SuppressWarnings("hiding")
 public class Datalist extends HtmlElementContainer {
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods
 	//--------------------------------------------------------------------------------
-
-	@Override /* HtmlElement */
-	public Datalist children(Object...children) {
-		super.children(children);
-		return this;
-	}
 
 	@Override /* HtmlElement */
 	public final Datalist _class(String _class) {
@@ -41,6 +34,18 @@ public class Datalist extends HtmlElementContainer {
 	@Override /* HtmlElement */
 	public final Datalist id(String id) {
 		super.id(id);
+		return this;
+	}
+
+	@Override /* HtmlElementContainer */
+	public final Datalist children(Object...children) {
+		super.children(children);
+		return this;
+	}
+
+	@Override /* HtmlElementContainer */
+	public final Datalist child(Object child) {
+		super.child(child);
 		return this;
 	}
 }

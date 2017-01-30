@@ -19,18 +19,11 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="tr")
-@SuppressWarnings("hiding")
 public class Tr extends HtmlElementContainer {
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods
 	//--------------------------------------------------------------------------------
-
-	@Override /* HtmlElement */
-	public Tr children(Object...children) {
-		super.children(children);
-		return this;
-	}
 
 	@Override /* HtmlElement */
 	public final Tr _class(String _class) {
@@ -41,6 +34,18 @@ public class Tr extends HtmlElementContainer {
 	@Override /* HtmlElement */
 	public final Tr id(String id) {
 		super.id(id);
+		return this;
+	}
+
+	@Override /* HtmlElementContainer */
+	public final Tr children(Object...children) {
+		super.children(children);
+		return this;
+	}
+
+	@Override /* HtmlElementContainer */
+	public final Tr child(Object child) {
+		super.child(child);
 		return this;
 	}
 }

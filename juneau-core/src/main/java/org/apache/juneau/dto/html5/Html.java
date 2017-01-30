@@ -19,7 +19,6 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="html")
-@SuppressWarnings("hiding")
 public class Html extends HtmlElementContainer {
 
 	/**
@@ -29,19 +28,13 @@ public class Html extends HtmlElementContainer {
 	 * @return This object (for method chaining).
 	 */
 	public final Html manifest(String manifest) {
-		attrs.put("manifest", manifest);
+		attr("manifest", manifest);
 		return this;
 	}
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods
 	//--------------------------------------------------------------------------------
-
-	@Override /* HtmlElement */
-	public Html children(Object...children) {
-		super.children(children);
-		return this;
-	}
 
 	@Override /* HtmlElement */
 	public final Html _class(String _class) {
@@ -52,6 +45,18 @@ public class Html extends HtmlElementContainer {
 	@Override /* HtmlElement */
 	public final Html id(String id) {
 		super.id(id);
+		return this;
+	}
+
+	@Override /* HtmlElementContainer */
+	public final Html children(Object...children) {
+		super.children(children);
+		return this;
+	}
+
+	@Override /* HtmlElementContainer */
+	public final Html child(Object child) {
+		super.child(child);
 		return this;
 	}
 }

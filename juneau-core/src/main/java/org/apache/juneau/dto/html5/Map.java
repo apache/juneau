@@ -19,7 +19,6 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="map")
-@SuppressWarnings("hiding")
 public class Map extends HtmlElementContainer {
 
 	/**
@@ -29,19 +28,13 @@ public class Map extends HtmlElementContainer {
 	 * @return This object (for method chaining).
 	 */
 	public final Map name(String name) {
-		attrs.put("name", name);
+		attr("name", name);
 		return this;
 	}
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods
 	//--------------------------------------------------------------------------------
-
-	@Override /* HtmlElement */
-	public Map children(Object...children) {
-		super.children(children);
-		return this;
-	}
 
 	@Override /* HtmlElement */
 	public final Map _class(String _class) {
@@ -52,6 +45,18 @@ public class Map extends HtmlElementContainer {
 	@Override /* HtmlElement */
 	public final Map id(String id) {
 		super.id(id);
+		return this;
+	}
+
+	@Override /* HtmlElementContainer */
+	public final Map children(Object...children) {
+		super.children(children);
+		return this;
+	}
+
+	@Override /* HtmlElementContainer */
+	public final Map child(Object child) {
+		super.child(child);
 		return this;
 	}
 }

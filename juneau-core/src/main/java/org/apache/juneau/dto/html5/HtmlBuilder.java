@@ -26,12 +26,12 @@ public class HtmlBuilder {
 	}
 
 	/**
-	 * Creates an {@link A} element with the specified {@link A#href(String)} attribute and {@link A#children(Object[])} nodes.
-	 * @param href The {@link A#href(String)} attribute.
+	 * Creates an {@link A} element with the specified {@link A#href(Object)} attribute and {@link A#children(Object[])} nodes.
+	 * @param href The {@link A#href(Object)} attribute.
 	 * @param children The {@link A#children(Object[])} nodes.
 	 * @return The new element.
 	 */
-	public static final A a(String href, Object...children) {
+	public static final A a(Object href, Object...children) {
 		return a().href(href).children(children);
 	}
 
@@ -79,13 +79,13 @@ public class HtmlBuilder {
 	}
 
 	/**
-	 * Creates an {@link Area} element with the specified {@link Area#shape(String)}, {@link Area#coords(String)}, and {@link Area#href(String)} attributes.
+	 * Creates an {@link Area} element with the specified {@link Area#shape(String)}, {@link Area#coords(String)}, and {@link Area#href(Object)} attributes.
 	 * @param shape The {@link Area#shape(String)} attribute.
 	 * @param coords The {@link Area#coords(String)} attribute.
-	 * @param href The {@link Area#href(String)} attribute.
+	 * @param href The {@link Area#href(Object)} attribute.
 	 * @return The new element.
 	 */
-	public static final Area area(String shape, String coords, String href) {
+	public static final Area area(String shape, String coords, Object href) {
 		return area().shape(shape).coords(coords).href(href);
 	}
 
@@ -95,6 +95,15 @@ public class HtmlBuilder {
 	 */
 	public static final Article article() {
 		return new Article();
+	}
+
+	/**
+	 * Creates an {@link Article} element with the specified child nodes.
+	 * @param children The child nodes.
+	 * @return The new element.
+	 */
+	public static final Article article(Object...children) {
+		return article().children(children);
 	}
 
 	/**
@@ -123,8 +132,8 @@ public class HtmlBuilder {
 	}
 
 	/**
-	 * Creates an {@link Audio} element with the specified {@link Audio#src(String)} attribute.
-	 * @param src The {@link Audio#src(String)} attribute.
+	 * Creates an {@link Audio} element with the specified {@link Audio#src(Object)} attribute.
+	 * @param src The {@link Audio#src(Object)} attribute.
 	 * @return The new element.
 	 */
 	public static final Audio audio(String src) {
@@ -157,11 +166,11 @@ public class HtmlBuilder {
 	}
 
 	/**
-	 * Creates a {@link Base} element with the specified {@link Base#href(String)} attribute.
-	 * @param href The {@link Base#href(String)} attribute.
+	 * Creates a {@link Base} element with the specified {@link Base#href(Object)} attribute.
+	 * @param href The {@link Base#href(Object)} attribute.
 	 * @return The new element.
 	 */
-	public static final Base base(String href) {
+	public static final Base base(Object href) {
 		return base().href(href);
 	}
 
@@ -266,7 +275,7 @@ public class HtmlBuilder {
 	 * @return The new element.
 	 */
 	public static final Button button(String type, Object...children) {
-		return button().type(type).child(children);
+		return button().type(type).children(children);
 	}
 
 	/**
@@ -278,12 +287,12 @@ public class HtmlBuilder {
 	}
 
 	/**
-	 * Creates a {@link Canvas} element with the specified {@link Canvas#width(long)} and {@link Canvas#height(long)} attributes.
-	 * @param width The {@link Canvas#width(long)} attribute.
-	 * @param height The {@link Canvas#height(long)} attribute.
+	 * Creates a {@link Canvas} element with the specified {@link Canvas#width(Object)} and {@link Canvas#height(Object)} attributes.
+	 * @param width The {@link Canvas#width(Object)} attribute.
+	 * @param height The {@link Canvas#height(Object)} attribute.
 	 * @return The new element.
 	 */
-	public static final Canvas canvas(long width, long height) {
+	public static final Canvas canvas(Number width, Number height) {
 		return canvas().width(width).height(height);
 	}
 
@@ -347,11 +356,11 @@ public class HtmlBuilder {
 	}
 
 	/**
-	 * Creates a {@link Col} element with the specified {@link Col#span(long)} attribute.
-	 * @param span The {@link Col#span(long)} attribute.
+	 * Creates a {@link Col} element with the specified {@link Col#span(Object)} attribute.
+	 * @param span The {@link Col#span(Object)} attribute.
 	 * @return The new element.
 	 */
-	public static final Col col(long span) {
+	public static final Col col(Number span) {
 		return col().span(span);
 	}
 
@@ -364,22 +373,12 @@ public class HtmlBuilder {
 	}
 
 	/**
-	 * Creates a {@link Colgroup} element with the specified {@link Colgroup#span(long)} attribute.
-	 * @param span The {@link Colgroup#span(long)} attribute.
-	 * @return The new element.
-	 */
-	public static final Colgroup colgroup(long span) {
-		return colgroup().span(span);
-	}
-
-	/**
-	 * Creates a {@link Colgroup} element with the specified {@link Colgroup#span(long)} attribute and child nodes.
-	 * @param span The {@link Colgroup#span(long)} attribute.
+	 * Creates a {@link Colgroup} element with the specified child nodes.
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
-	public static final Colgroup colgroup(long span, Object...children) {
-		return colgroup().span(span).children(children);
+	public static final Colgroup colgroup(Object...children) {
+		return colgroup().children(children);
 	}
 
 	/**
@@ -391,12 +390,13 @@ public class HtmlBuilder {
 	}
 
 	/**
-	 * Creates a {@link Data} element with the specified {@link Data#value(String)} attribute.
-	 * @param value The {@link Data#value(String)} attribute.
+	 * Creates a {@link Data} element with the specified {@link Data#value(Object)} attribute and child node.
+	 * @param value The {@link Data#value(Object)} attribute.
+	 * @param child The child node.
 	 * @return The new element.
 	 */
-	public static final Data data(String value) {
-		return data().value(value);
+	public static final Data data(String value, Object child) {
+		return data().value(value).child(child);
 	}
 
 	/**
@@ -498,8 +498,8 @@ public class HtmlBuilder {
 	 * @param children The child nodes.
 	 * @return The new element.
 	 */
-	public static final Dl dl(Dd...children) {
-		return dl().children((Object[])children);
+	public static final Dl dl(Object...children) {
+		return dl().children(children);
 	}
 
 	/**
@@ -545,11 +545,11 @@ public class HtmlBuilder {
 	}
 
 	/**
-	 * Creates an {@link Embed} element with the specified {@link Embed#src(String)} attribute.
-	 * @param src The {@link Embed#src(String)} attribute.
+	 * Creates an {@link Embed} element with the specified {@link Embed#src(Object)} attribute.
+	 * @param src The {@link Embed#src(Object)} attribute.
 	 * @return The new element.
 	 */
-	public static final Embed embed(String src) {
+	public static final Embed embed(Object src) {
 		return embed().src(src);
 	}
 
@@ -852,11 +852,11 @@ public class HtmlBuilder {
 	}
 
 	/**
-	 * Creates an {@link Img} element with the specified {@link Img#src(String)} attribute.
-	 * @param src The {@link Img#src(String)} attribute.
+	 * Creates an {@link Img} element with the specified {@link Img#src(Object)} attribute.
+	 * @param src The {@link Img#src(Object)} attribute.
 	 * @return The new element.
 	 */
-	public static final Img img(String src) {
+	public static final Img img(Object src) {
 		return img().src(src);
 	}
 
@@ -979,11 +979,11 @@ public class HtmlBuilder {
 	}
 
 	/**
-	 * Creates a {@link Link} element with the specified {@link Link#href(String)} attribute.
-	 * @param href The {@link Link#href(String)} attribute.
+	 * Creates a {@link Link} element with the specified {@link Link#href(Object)} attribute.
+	 * @param href The {@link Link#href(Object)} attribute.
 	 * @return The new element.
 	 */
-	public static final Link link(String href) {
+	public static final Link link(Object href) {
 		return link().href(href);
 	}
 
@@ -1157,12 +1157,21 @@ public class HtmlBuilder {
 	}
 
 	/**
-	 * Creates an {@link Option} element with the specified {@link Option#value(String)} attribute and {@link Option#text(Object)} node.
-	 * @param value The {@link Option#value(String)} attribute.
+	 * Creates an {@link Option} element with the specified {@link Option#value(Object)} attribute.
+	 * @param value The {@link Option#value(Object)} attribute.
+	 * @return The new element.
+	 */
+	public static final Option option(Object value) {
+		return option().value(value);
+	}
+
+	/**
+	 * Creates an {@link Option} element with the specified {@link Option#value(Object)} attribute and {@link Option#text(Object)} node.
+	 * @param value The {@link Option#value(Object)} attribute.
 	 * @param text The {@link Option#text(Object)} node.
 	 * @return The new element.
 	 */
-	public static final Option option(String value, String text) {
+	public static final Option option(Object value, Object text) {
 		return option().value(value).text(text);
 	}
 
@@ -1209,12 +1218,12 @@ public class HtmlBuilder {
 	}
 
 	/**
-	 * Creates a {@link Param} element with the specified {@link Param#name(String)} and {@link Param#value(String)} attributes.
+	 * Creates a {@link Param} element with the specified {@link Param#name(String)} and {@link Param#value(Object)} attributes.
 	 * @param name The {@link Param#name(String)} attribute.
-	 * @param value The {@link Param#value(String)} attribute.
+	 * @param value The {@link Param#value(Object)} attribute.
 	 * @return The new element.
 	 */
-	public static final Param param(String name, String value) {
+	public static final Param param(String name, Object value) {
 		return param().name(name).value(value);
 	}
 
@@ -1397,12 +1406,13 @@ public class HtmlBuilder {
 	}
 
 	/**
-	 * Creates a {@link Script} element with the specified {@link Script#children(Object[])} nodes.
-	 * @param children The {@link Script#children(Object[])} nodes.
+	 * Creates a {@link Script} element with the specified {@link Script#type(String)} attribute and {@link Script#text(Object)} node.
+	 * @param type The {@link Script#type(String)} attribute.
+	 * @param text The child text node.
 	 * @return The new element.
 	 */
-	public static final Script script(Object...children) {
-		return script().children(children);
+	public static final Script script(String type, String text) {
+		return script().type(type).text(text);
 	}
 
 	/**
@@ -1466,12 +1476,12 @@ public class HtmlBuilder {
 	}
 
 	/**
-	 * Creates a {@link Source} element with the specified {@link Source#src(String)} and {@link Source#type(String)} attributes.
-	 * @param src The {@link Source#src(String)} attribute.
+	 * Creates a {@link Source} element with the specified {@link Source#src(Object)} and {@link Source#type(String)} attributes.
+	 * @param src The {@link Source#src(Object)} attribute.
 	 * @param type The {@link Source#type(String)} attribute.
 	 * @return The new element.
 	 */
-	public static final Source source(String src, String type) {
+	public static final Source source(Object src, String type) {
 		return source().src(src).type(type);
 	}
 
@@ -1518,12 +1528,12 @@ public class HtmlBuilder {
 	}
 
 	/**
-	 * Creates a {@link Style} element with the specified {@link Style#children(Object[])} nodes.
-	 * @param children The {@link Style#children(Object[])} nodes.
+	 * Creates a {@link Style} element with the specified {@link Style#text(Object)} node.
+	 * @param text The {@link Style#text(Object)} node.
 	 * @return The new element.
 	 */
-	public static final Style style(Object...children) {
-		return style().children(children);
+	public static final Style style(Object text) {
+		return style().text(text);
 	}
 
 	/**
@@ -1758,12 +1768,12 @@ public class HtmlBuilder {
 	}
 
 	/**
-	 * Creates a {@link Track} element with the specified {@link Track#src(String)} and {@link Track#kind(String)} attributes.
-	 * @param src The {@link Track#src(String)} attribute.
+	 * Creates a {@link Track} element with the specified {@link Track#src(Object)} and {@link Track#kind(String)} attributes.
+	 * @param src The {@link Track#src(Object)} attribute.
 	 * @param kind The {@link Track#kind(String)} attribute.
 	 * @return The new element.
 	 */
-	public static final Track track(String src, String kind) {
+	public static final Track track(Object src, String kind) {
 		return track().src(src).kind(kind);
 	}
 
@@ -1827,11 +1837,11 @@ public class HtmlBuilder {
 	}
 
 	/**
-	 * Creates a {@link Video} element with the specified {@link Video#src(String)} attribute.
-	 * @param src The {@link Video#src(String)} attribute.
+	 * Creates a {@link Video} element with the specified {@link Video#src(Object)} attribute.
+	 * @param src The {@link Video#src(Object)} attribute.
 	 * @return The new element.
 	 */
-	public static final Video video(String src) {
+	public static final Video video(Object src) {
 		return video().src(src);
 	}
 

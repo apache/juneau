@@ -17,6 +17,9 @@ import static org.junit.Assert.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.html.annotation.Html;
+import org.apache.juneau.xml.annotation.Xml;
+import org.apache.juneau.xml.annotation.XmlFormat;
 import org.junit.*;
 import org.junit.runner.*;
 import org.junit.runners.*;
@@ -841,8 +844,19 @@ public class BasicHtmlTest {
 			{
 				"BeanWithSpecialCharacters",
 				new BeanWithSpecialCharacters().init(),
-				"<table><tr><td>a</td><td><br/><bs/><ff/><tb>&#x2003;</tb></td></tr></table>",
-				"<table>\n\t<tr>\n\t\t<td>a</td>\n\t\t<td><br/><bs/><ff/><tb>&#x2003;</tb></td>\n\t</tr>\n</table>\n"
+				"<table><tr><td>a</td><td><sp> </sp> <bs/><ff/><br/><sp>&#x2003;</sp>&#13; <sp> </sp></td></tr></table>",
+				"<table>\n\t<tr>\n\t\t<td>a</td>\n\t\t<td><sp> </sp> <bs/><ff/><br/><sp>&#x2003;</sp>&#13; <sp> </sp></td>\n\t</tr>\n</table>\n"
+			},
+			{
+				"BeanWithSpecialCharacters2",
+				new BeanWithSpecialCharacters().init(),
+				"<table><tr><td>a</td><td><sp> </sp> <bs/><ff/><br/><sp>&#x2003;</sp>&#13; <sp> </sp></td></tr></table>",
+				"<table>\n"
+				+"	<tr>\n"
+				+"		<td>a</td>\n"
+				+"		<td><sp> </sp> <bs/><ff/><br/><sp>&#x2003;</sp>&#13; <sp> </sp></td>\n"
+				+"	</tr>\n"
+				+"</table>\n"
 			},
 			{
 				"BeanWithNullProperties",
@@ -1251,7 +1265,139 @@ public class BasicHtmlTest {
 						+"\t\t</td>\n"
 					+"\t</tr>\n"
 				+"</table>\n"
-			}
+			},
+			{
+				"BeanWithWhitespaceTextFields-1",
+				new BeanWithWhitespaceTextFields().init(null),
+				"<object/>",
+				"<object/>\n",
+			},
+			{
+				"BeanWithWhitespaceTextFields-2",
+				new BeanWithWhitespaceTextFields().init(""),
+				"<object><sp/></object>",
+				"<object><sp/></object>\n",
+			},
+			{
+				"BeanWithWhitespaceTextFields-3",
+				new BeanWithWhitespaceTextFields().init(" "),
+				"<object><sp> </sp></object>",
+				"<object><sp> </sp></object>\n",
+			},
+			{
+				"BeanWithWhitespaceTextFields-4",
+				new BeanWithWhitespaceTextFields().init("  "),
+				"<object><sp> </sp><sp> </sp></object>",
+				"<object><sp> </sp><sp> </sp></object>\n",
+			},
+			{
+				"BeanWithWhitespaceTextFields-5",
+				new BeanWithWhitespaceTextFields().init("  foobar  "),
+				"<object><sp> </sp> foobar <sp> </sp></object>",
+				"<object><sp> </sp> foobar <sp> </sp></object>\n",
+			},
+			{
+				"BeanWithWhitespaceTextPwsFields-1",
+				new BeanWithWhitespaceTextPwsFields().init(null),
+				"<object/>",
+				"<object/>\n",
+			},
+			{
+				"BeanWithWhitespaceTextPwsFields-2",
+				new BeanWithWhitespaceTextPwsFields().init(""),
+				"<object><sp/></object>",
+				"<object><sp/></object>\n",
+			},
+			{
+				"BeanWithWhitespaceTextPwsFields-3",
+				new BeanWithWhitespaceTextPwsFields().init(" "),
+				"<object> </object>",
+				"<object> </object>\n",
+			},
+			{
+				"BeanWithWhitespaceTextPwsFields-4",
+				new BeanWithWhitespaceTextPwsFields().init("  "),
+				"<object>  </object>",
+				"<object>  </object>\n",
+			},
+			{
+				"BeanWithWhitespaceTextPwsFields-5",
+				new BeanWithWhitespaceTextPwsFields().init("  foobar  "),
+				"<object>  foobar  </object>",
+				"<object>  foobar  </object>\n",
+			},
+			{
+				"BeanWithWhitespaceMixedFields-1",
+				new BeanWithWhitespaceMixedFields().init(null),
+				"<object/>",
+				"<object/>\n",
+			},
+			{
+				"BeanWithWhitespaceMixedFields-2",
+				new BeanWithWhitespaceMixedFields().init(new String[0]),
+				"<object/>",
+				"<object/>\n",
+			},
+			{
+				"BeanWithWhitespaceMixedFields-3",
+				new BeanWithWhitespaceMixedFields().init(new String[]{""}),
+				"<object><sp/></object>",
+				"<object><sp/></object>\n",
+			},
+			{
+				"BeanWithWhitespaceMixedFields-4",
+				new BeanWithWhitespaceMixedFields().init(new String[]{" "}),
+				"<object><sp> </sp></object>",
+				"<object><sp> </sp></object>\n",
+			},
+			{
+				"BeanWithWhitespaceMixedFields-5",
+				new BeanWithWhitespaceMixedFields().init(new String[]{"  "}),
+				"<object><sp> </sp><sp> </sp></object>",
+				"<object><sp> </sp><sp> </sp></object>\n",
+			},
+			{
+				"BeanWithWhitespaceMixedFields-6",
+				new BeanWithWhitespaceMixedFields().init(new String[]{"  foobar  "}),
+				"<object><sp> </sp> foobar <sp> </sp></object>",
+				"<object><sp> </sp> foobar <sp> </sp></object>\n",
+			},
+			{
+				"BeanWithWhitespaceMixedPwsFields-1",
+				new BeanWithWhitespaceMixedPwsFields().init(null),
+				"<object/>",
+				"<object/>\n",
+			},
+			{
+				"BeanWithWhitespaceMixedPwsFields-2",
+				new BeanWithWhitespaceMixedPwsFields().init(new String[0]),
+				"<object/>",
+				"<object/>\n",
+			},
+			{
+				"BeanWithWhitespaceMixedPwsFields-3",
+				new BeanWithWhitespaceMixedPwsFields().init(new String[]{""}),
+				"<object><sp/></object>",
+				"<object><sp/></object>\n",
+			},
+			{
+				"BeanWithWhitespaceMixedPwsFields-4",
+				new BeanWithWhitespaceMixedPwsFields().init(new String[]{" "}),
+				"<object> </object>",
+				"<object> </object>\n",
+			},
+			{
+				"BeanWithWhitespaceMixedPwsFields-5",
+				new BeanWithWhitespaceMixedPwsFields().init(new String[]{"  "}),
+				"<object>  </object>",
+				"<object>  </object>\n",
+			},
+			{
+				"BeanWithWhitespaceMixedPwsFields-6",
+				new BeanWithWhitespaceMixedPwsFields().init(new String[]{"  foobar  "}),
+				"<object>  foobar  </object>",
+				"<object>  foobar  </object>\n",
+			},
 		});
 	}
 
@@ -1525,11 +1671,23 @@ public class BasicHtmlTest {
 		public String a;
 
 		BeanWithSpecialCharacters init() {
-			a = "\n\b\f\t";
+			a = "  \b\f\n\t\r  ";
 			return this;
 		}
 	}
 
+	@Bean(typeName="  \b\f\n\t\r  ")
+	public static class BeanWithSpecialCharacters2 {
+
+		@BeanProperty(name="  \b\f\n\t\r  ")
+		public String a;
+
+		BeanWithSpecialCharacters2 init() {
+			a = "  \b\f\n\t\r  ";
+			return this;
+		}
+	}
+	
 	public static class BeanWithNullProperties {
 		public String a;
 		public String[] b;
@@ -1610,6 +1768,50 @@ public class BasicHtmlTest {
 
 		A init() {
 			this.a = "foo";
+			return this;
+		}
+	}
+	
+	@Html(asXml=true)
+	public static class BeanWithWhitespaceTextFields {
+		@Xml(format=XmlFormat.TEXT)
+		public String a;
+	
+		public BeanWithWhitespaceTextFields init(String s) {
+			a = s;
+			return this;
+		}
+	}
+	
+	@Html(asXml=true)
+	public static class BeanWithWhitespaceTextPwsFields {
+		@Xml(format=XmlFormat.TEXT_PWS)
+		public String a;
+	
+		public BeanWithWhitespaceTextPwsFields init(String s) {
+			a = s;
+			return this;
+		}
+	}
+
+	@Html(asXml=true)
+	public static class BeanWithWhitespaceMixedFields {
+		@Xml(format=XmlFormat.MIXED)
+		public String[] a;
+	
+		public BeanWithWhitespaceMixedFields init(String[] s) {
+			a = s;
+			return this;
+		}
+	}
+
+	@Html(asXml=true)
+	public static class BeanWithWhitespaceMixedPwsFields {
+		@Xml(format=XmlFormat.MIXED_PWS)
+		public String[] a;
+	
+		public BeanWithWhitespaceMixedPwsFields init(String[] s) {
+			a = s;
 			return this;
 		}
 	}

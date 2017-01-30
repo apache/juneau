@@ -19,7 +19,6 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="span")
-@SuppressWarnings("hiding")
 public class Span extends HtmlElementMixed {
 
 	//--------------------------------------------------------------------------------
@@ -38,6 +37,12 @@ public class Span extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Span style(String style) {
+		attr("style", style);
+		return this;
+	}
+
 	@Override /* HtmlElementMixed */
 	public Span children(Object...children) {
 		super.children(children);
@@ -46,7 +51,7 @@ public class Span extends HtmlElementMixed {
 
 	@Override /* HtmlElementMixed */
 	public Span child(Object child) {
-		this.children.add(child);
+		super.child(child);
 		return this;
 	}
 }

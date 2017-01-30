@@ -19,17 +19,17 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="ol")
-@SuppressWarnings("hiding")
 public class Ol extends HtmlElementContainer {
 
 	/**
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/grouping-content.html#attr-ol-reversed'>reversed</a> attribute.
 	 * Number the list backwards..
 	 * @param reversed - The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Ol reversed(String reversed) {
-		attrs.put("reversed", reversed);
+	public final Ol reversed(Object reversed) {
+		attr("reversed", reversed);
 		return this;
 	}
 
@@ -37,10 +37,11 @@ public class Ol extends HtmlElementContainer {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/grouping-content.html#attr-ol-start'>start</a> attribute.
 	 * Ordinal value of the first item.
 	 * @param start - The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Ol start(String start) {
-		attrs.put("start", start);
+	public final Ol start(Object start) {
+		attr("start", start);
 		return this;
 	}
 
@@ -51,19 +52,13 @@ public class Ol extends HtmlElementContainer {
 	 * @return This object (for method chaining).
 	 */
 	public final Ol type(String type) {
-		attrs.put("type", type);
+		attr("type", type);
 		return this;
 	}
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods
 	//--------------------------------------------------------------------------------
-
-	@Override /* HtmlElement */
-	public Ol children(Object...children) {
-		super.children(children);
-		return this;
-	}
 
 	@Override /* HtmlElement */
 	public final Ol _class(String _class) {
@@ -74,6 +69,18 @@ public class Ol extends HtmlElementContainer {
 	@Override /* HtmlElement */
 	public final Ol id(String id) {
 		super.id(id);
+		return this;
+	}
+
+	@Override /* HtmlElementContainer */
+	public final Ol children(Object...children) {
+		super.children(children);
+		return this;
+	}
+
+	@Override /* HtmlElementContainer */
+	public final Ol child(Object child) {
+		super.child(child);
 		return this;
 	}
 }

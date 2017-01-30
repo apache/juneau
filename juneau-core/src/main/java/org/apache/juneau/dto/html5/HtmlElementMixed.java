@@ -24,7 +24,7 @@ import org.apache.juneau.xml.annotation.*;
  */
 public class HtmlElementMixed extends HtmlElement {
 
-	final List<Object> children = new LinkedList<Object>();
+	private LinkedList<Object> children;
 
 	/**
 	 * The children of this element.
@@ -32,8 +32,19 @@ public class HtmlElementMixed extends HtmlElement {
 	 */
 	@Xml(format=MIXED)
 	@BeanProperty(beanDictionary=HtmlBeanDictionary.class)
-	public List<Object> getChildren() {
+	public LinkedList<Object> getChildren() {
 		return children;
+	}
+
+	/**
+	 * Sets the children of this element.
+	 *
+	 * @param children The new children of this element.
+	 * @return This object (for method chaining).
+	 */
+	public HtmlElement setChildren(LinkedList<Object> children) {
+		this.children = children;
+		return this;
 	}
 
 	/**
@@ -44,8 +55,12 @@ public class HtmlElementMixed extends HtmlElement {
 	 */
 	@SuppressWarnings("hiding")
 	public HtmlElement children(Object...children) {
-		for (Object c : children)
-			this.children.add(c);
+		if (children.length != 0) {
+			if (this.children == null)
+				this.children = new LinkedList<Object>();
+			for (Object c : children)
+				this.children.add(c);
+		}
 		return this;
 	}
 
@@ -56,6 +71,8 @@ public class HtmlElementMixed extends HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public HtmlElement child(Object child) {
+		if (this.children == null)
+			this.children = new LinkedList<Object>();
 		this.children.add(child);
 		return this;
 	}

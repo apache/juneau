@@ -23,7 +23,6 @@ import javax.xml.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.xml.annotation.*;
@@ -81,11 +80,7 @@ public class XmlParser extends ReaderParser {
 		String wrapperAttr = (isRoot && session.isPreserveRootElement()) ? r.getName().getLocalPart() : null;
 		String typeAttr = r.getAttributeValue(null, session.getBeanTypePropertyName());
 		int jsonType = getJsonType(typeAttr);
-		String b = r.getAttributeValue(session.getXsiNs(), "nil");
-		if (b == null)
-			b = r.getAttributeValue(null, "nil");
-		boolean isNull = b != null && b.equals("true");
-		String elementName = session.decodeString(r.getLocalName());
+		String elementName = session.getElementName(r);
 		if (jsonType == 0) {
 			if (elementName == null || elementName.equals(currAttr))
 				jsonType = UNKNOWN;
@@ -97,7 +92,7 @@ public class XmlParser extends ReaderParser {
 
 		if (breg.hasName(typeAttr)) {
 			sType = eType = (ClassMeta<T>)breg.getClassMeta(typeAttr);
-		} else if (breg.hasName(elementName)) {
+		} else if (elementName != null && breg.hasName(elementName) && ! elementName.equals(currAttr)) {
 			sType = eType = (ClassMeta<T>)breg.getClassMeta(elementName);
 		}
 
@@ -106,13 +101,6 @@ public class XmlParser extends ReaderParser {
 		if (jsonType == NULL) {
 			r.nextTag();	// Discard end tag
 			return null;
-		}
-		if (isNull) {
-			while (true) {
-				int e = r.next();
-				if (e == END_ELEMENT)
-					return null;
-			}
 		}
 
 		if (sType.isObject()) {
@@ -125,22 +113,22 @@ public class XmlParser extends ReaderParser {
 			} else if (jsonType == ARRAY)
 				o = parseIntoCollection(session, r, new ObjectList(session), object(), pMeta);
 			else if (jsonType == STRING) {
-				o = session.decodeString(r);
+				o = session.getElementText(r);
 				if (sType.isChar())
 					o = o.toString().charAt(0);
 			}
 			else if (jsonType == NUMBER)
-				o = parseNumber(session.decodeText(r), null);
+				o = parseNumber(session.getElementText(r), null);
 			else if (jsonType == BOOLEAN)
-				o = Boolean.parseBoolean(session.decodeText(r));
+				o = Boolean.parseBoolean(session.getElementText(r));
 			else if (jsonType == UNKNOWN)
 				o = getUnknown(session, r);
 		} else if (sType.isBoolean()) {
-			o = Boolean.parseBoolean(session.decodeText(r));
+			o = Boolean.parseBoolean(session.getElementText(r));
 		} else if (sType.isCharSequence()) {
-			o = session.decodeString(r);
+			o = session.getElementText(r);
 		} else if (sType.isChar()) {
-			String s = session.decodeString(r);
+			String s = session.getElementText(r);
 			o = s.length() == 0 ? 0 : s.charAt(0);
 		} else if (sType.isMap()) {
 			Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : new ObjectMap(session));
@@ -151,7 +139,7 @@ public class XmlParser extends ReaderParser {
 			Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance(outer) : new ObjectList(session));
 			o = parseIntoCollection(session, r, l, sType.getElementType(), pMeta);
 		} else if (sType.isNumber()) {
-			o = parseNumber(session.decodeText(r), (Class<? extends Number>)sType.getInnerClass());
+			o = parseNumber(session.getElementText(r), (Class<? extends Number>)sType.getInnerClass());
 		} else if (sType.canCreateNewInstanceFromObjectMap(outer)) {
 			ObjectMap m = new ObjectMap(session);
 			parseIntoMap(session, r, m, string(), object(), pMeta);
@@ -174,9 +162,9 @@ public class XmlParser extends ReaderParser {
 			ArrayList l = (ArrayList)parseIntoCollection(session, r, new ArrayList(), sType.getElementType(), pMeta);
 			o = session.toArray(sType, l);
 		} else if (sType.canCreateNewInstanceFromString(outer)) {
-			o = sType.newInstanceFromString(outer, session.decodeString(r));
+			o = sType.newInstanceFromString(outer, session.getElementText(r));
 		} else if (sType.canCreateNewInstanceFromNumber(outer)) {
-			o = sType.newInstanceFromNumber(session, outer, parseNumber(session.decodeText(r), sType.getNewInstanceFromNumberClass()));
+			o = sType.newInstanceFromNumber(session, outer, parseNumber(session.getElementText(r), sType.getNewInstanceFromNumberClass()));
 		} else {
 			throw new ParseException(session, "Class ''{0}'' could not be instantiated.  Reason: ''{1}'', property: ''{2}''", sType.getInnerClass().getName(), sType.getNotABeanReason(), pMeta == null ? null : pMeta.getName());
 		}
@@ -207,7 +195,7 @@ public class XmlParser extends ReaderParser {
 			String currAttr;
 			if (event == START_ELEMENT) {
 				depth++;
-				currAttr = session.decodeString(r.getLocalName());
+				currAttr = session.getElementName(r);
 				K key = convertAttrToType(session, m, currAttr, keyType);
 				V value = parseAnything(session, valueType, currAttr, r, m, false, pMeta);
 				setName(valueType, value, currAttr);
@@ -288,7 +276,7 @@ public class XmlParser extends ReaderParser {
 		XmlBeanMeta xmlMeta = bMeta.getExtendedMeta(XmlBeanMeta.class);
 
 		for (int i = 0; i < r.getAttributeCount(); i++) {
-			String key = session.decodeString(r.getAttributeLocalName(i));
+			String key = session.getAttributeName(r, i);
 			String val = r.getAttributeValue(i);
 			BeanPropertyMeta bpm = xmlMeta.getPropertyMeta(key);
 			if (bpm == null) {
@@ -307,8 +295,11 @@ public class XmlParser extends ReaderParser {
 
 		BeanPropertyMeta cp = xmlMeta.getContentProperty();
 		XmlFormat cpf = xmlMeta.getContentFormat();
+		boolean trim = cp == null || ! cpf.isOneOf(MIXED_PWS, TEXT_PWS);
 		ClassMeta<?> cpcm = (cp == null ? session.object() : cp.getClassMeta());
-		StringBuilder sb = (cpf != null && cpf.isOneOf(TEXT,XMLTEXT) ? session.getStringBuilder() : null);
+		StringBuilder sb = null;
+		BeanRegistry breg = cp == null ? null : cp.getBeanRegistry();
+		LinkedList<Object> l = null;
 
 		int depth = 0;
 		do {
@@ -317,41 +308,68 @@ public class XmlParser extends ReaderParser {
 			// We only care about text in MIXED mode.
 			// Ignore if in ELEMENTS mode.
 			if (event == CHARACTERS) {
-				if (cpf == MIXED && cp != null) {
-					if (cpcm.isCollectionOrArray())
-						cp.add(m, session.decodeString(r.getText()));
-					else
-						cp.set(m, session.decodeString(r.getText()));
-				} else if (sb != null) {
-					String s = r.getText();
-					if (! StringUtils.isEmpty(s))
+				if (cp != null && cpf.isOneOf(MIXED, MIXED_PWS)) {
+					if (cpcm.isCollectionOrArray()) {
+						if (l == null)
+							l = new LinkedList<Object>();
+						l.add(session.getText(r, false));
+					} else {
+						cp.set(m, session.getText(r, trim));
+					}
+				} else if (cpf != ELEMENTS) {
+					String s = session.getText(r, trim);
+					if (s != null) {
+						if (sb == null)
+							sb = session.getStringBuilder();
 						sb.append(s);
+					}
 				} else {
 					// Do nothing...we're in ELEMENTS mode.
 				}
 			} else if (event == START_ELEMENT) {
-				if (cpf == TEXT) {
-					throw new ParseException("Element found where simple text was expected.  {0}", XmlUtils.toReadableEvent(r));
-				} else if (cpf == XMLTEXT && sb != null) {
-					sb.append(session.elementAsString(r));
+				if (cp != null && cpf.isOneOf(TEXT, TEXT_PWS)) {
+					String s = session.parseText(r);
+					if (s != null) {
+						if (sb == null)
+							sb = session.getStringBuilder();
+						sb.append(s);
+					}
+					depth--;
+				} else if (cpf == XMLTEXT) {
+					if (sb == null)
+						sb = session.getStringBuilder();
+					sb.append(session.getElementAsString(r));
 					depth++;
-				} else if (cpf == MIXED && cp != null) {
-					if (cpcm.isCollectionOrArray())
-						cp.add(m, parseAnything(session, cpcm.getElementType(), cp.getName(), r, m.getBean(false), false, cp));
-					else
-						cp.set(m, parseAnything(session, cpcm, cp.getName(), r, m.getBean(false), false, cp));
-				} else if (cpf == ELEMENTS && cp != null) {
+				} else if (cp != null && cpf.isOneOf(MIXED, MIXED_PWS)) {
+					if (session.isWhitespaceElement(r) && (breg == null || ! breg.hasName(r.getLocalName()))) {
+						if (cpcm.isCollectionOrArray()) {
+							if (l == null)
+								l = new LinkedList<Object>();
+							l.add(session.parseWhitespaceElement(r));
+						} else {
+							cp.set(m, session.parseWhitespaceElement(r));
+						}
+					} else {
+						if (cpcm.isCollectionOrArray()) {
+							if (l == null)
+								l = new LinkedList<Object>();
+							l.add(parseAnything(session, cpcm.getElementType(), cp.getName(), r, m.getBean(false), false, cp));
+						} else {
+							cp.set(m, parseAnything(session, cpcm, cp.getName(), r, m.getBean(false), false, cp));
+						}
+					}
+				} else if (cp != null && cpf == ELEMENTS) {
 					cp.add(m, parseAnything(session, cpcm.getElementType(), cp.getName(), r, m.getBean(false), false, cp));
 				} else {
-					currAttr = session.decodeString(r.getLocalName());
+					currAttr = session.getElementName(r);
 					BeanPropertyMeta pMeta = xmlMeta.getPropertyMeta(currAttr);
 					if (pMeta == null) {
 						if (m.getMeta().isSubTyped()) {
 							Object value = parseAnything(session, string(), currAttr, r, m.getBean(false), false, null);
 							m.put(currAttr, value);
 						} else {
-							Location l = r.getLocation();
-							onUnknownProperty(session, currAttr, m, l.getLineNumber(), l.getColumnNumber());
+							Location loc = r.getLocation();
+							onUnknownProperty(session, currAttr, m, loc.getLineNumber(), loc.getColumnNumber());
 							skipCurrentTag(r);
 						}
 					} else {
@@ -363,7 +381,7 @@ public class XmlParser extends ReaderParser {
 							setName(et, value, currAttr);
 							pMeta.add(m, value);
 						} else if (xf == ATTR)  {
-							pMeta.set(m, session.decodeString(r.getAttributeValue(0)));
+							pMeta.set(m, session.getAttributeValue(r, 0));
 							r.nextTag();
 						} else {
 							ClassMeta<?> cm = pMeta.getClassMeta();
@@ -376,18 +394,25 @@ public class XmlParser extends ReaderParser {
 				}
 			} else if (event == END_ELEMENT) {
 				if (depth > 0) {
-					if (cpf == XMLTEXT && sb != null)
-						sb.append(session.elementAsString(r));
+					if (cpf == XMLTEXT) {
+						if (sb == null)
+							sb = session.getStringBuilder();
+						sb.append(session.getElementAsString(r));
+					}
 					else
 						throw new ParseException("End element found where one was not expected.  {0}", XmlUtils.toReadableEvent(r));
 				}
 				depth--;
 			} else {
-				throw new ParseException("Unexpected event type: {0}", event);
+				throw new ParseException("Unexpected event type: {0}", XmlUtils.toReadableEvent(r));
 			}
 		} while (depth >= 0);
+
 		if (sb != null && cp != null)
-			cp.set(m, session.decodeString(sb.toString()));
+			cp.set(m, sb.toString());
+		else if (l != null && cp != null)
+			cp.set(m, XmlUtils.collapseTextNodes(l));
+
 		session.returnStringBuilder(sb);
 		return m;
 	}
@@ -413,7 +438,7 @@ public class XmlParser extends ReaderParser {
 		if (r.getAttributeCount() > 0) {
 			m = new ObjectMap(session);
 			for (int i = 0; i < r.getAttributeCount(); i++) {
-				String key = session.decodeString(r.getAttributeLocalName(i));
+				String key = session.getAttributeName(r, i);
 				String val = r.getAttributeValue(i);
 				if (! key.equals(session.getBeanTypePropertyName()))
 					m.put(key, val);
@@ -439,7 +464,7 @@ public class XmlParser extends ReaderParser {
 					String currAttr;
 					if (event == START_ELEMENT) {
 						depth++;
-						currAttr = session.decodeString(r.getLocalName());
+						currAttr = session.getElementName(r);
 						String key = convertAttrToType(session, null, currAttr, string());
 						Object value = parseAnything(session, object(), currAttr, r, null, false, null);
 						if (m.containsKey(key)) {

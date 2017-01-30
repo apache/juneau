@@ -14,6 +14,7 @@ package org.apache.juneau.html;
 
 import java.io.*;
 
+import org.apache.juneau.internal.*;
 import org.apache.juneau.xml.*;
 
 /**
@@ -54,9 +55,18 @@ public class HtmlWriter extends XmlWriter {
 	//--------------------------------------------------------------------------------
 
 	@Override /* XmlSerializerWriter */
-	public HtmlWriter encodeText(Object o) throws IOException {
+	public HtmlWriter text(Object o, boolean preserveWhitespace) throws IOException {
 
+		if (o == null) {
+			append("<null/>");
+			return this;
+		}
 		String s = o.toString();
+		if (s.isEmpty()) {
+			append("<sp/>");
+			return this;
+		}
+
 		for (int i = 0; i < s.length(); i++) {
 			char test = s.charAt(i);
 			if (test == '&')
@@ -66,13 +76,21 @@ public class HtmlWriter extends XmlWriter {
 			else if (test == '>')
 				append("&gt;");
 			else if (test == '\n')
-				append("<br/>");
+				append(preserveWhitespace ? "\n" : "<br/>");
 			else if (test == '\f')  // XML 1.0 doesn't support formfeeds or backslashes, so we have to invent something.
-				append("<ff/>");
+				append(preserveWhitespace ? "\f" : "<ff/>");
 			else if (test == '\b')
-				append("<bs/>");
+				append(preserveWhitespace ? "\b" : "<bs/>");
 			else if (test == '\t')
-				append("<tb>&#x2003;</tb>");
+				append(preserveWhitespace ? "\t" : "<sp>&#x2003;</sp>");
+			else if ((i == 0 || i == s.length()-1) && Character.isWhitespace(test)) {
+				if (preserveWhitespace)
+					append(test);
+				else if (test == ' ')
+					append("<sp> </sp>");
+				else
+					append("<sp>&#x").append(StringUtils.toHex(test)).append(";</sp>");
+			}
 			else if (Character.isISOControl(test))
 				append("&#" + (int) test + ";");
 			else

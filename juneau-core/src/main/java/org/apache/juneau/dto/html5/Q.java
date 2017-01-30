@@ -19,7 +19,6 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="q")
-@SuppressWarnings("hiding")
 public class Q extends HtmlElementMixed {
 
 	/**
@@ -29,7 +28,7 @@ public class Q extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final Q cite(String cite) {
-		attrs.put("cite", cite);
+		attr("cite", cite);
 		return this;
 	}
 
@@ -57,7 +56,7 @@ public class Q extends HtmlElementMixed {
 
 	@Override /* HtmlElementMixed */
 	public Q child(Object child) {
-		this.children.add(child);
+		super.child(child);
 		return this;
 	}
 }

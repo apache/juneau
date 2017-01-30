@@ -19,7 +19,6 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="object")
-@SuppressWarnings("hiding")
 public class Object2 extends HtmlElementMixed {
 
 	/**
@@ -29,7 +28,7 @@ public class Object2 extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final Object2 data(String data) {
-		attrs.put("data", data);
+		attr("data", data);
 		return this;
 	}
 
@@ -40,7 +39,7 @@ public class Object2 extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final Object2 form(String form) {
-		attrs.put("form", form);
+		attr("form", form);
 		return this;
 	}
 
@@ -48,10 +47,11 @@ public class Object2 extends HtmlElementMixed {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-height'>height</a> attribute.
 	 * Vertical dimension.
 	 * @param height - The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Object2 height(String height) {
-		attrs.put("height", height);
+	public final Object2 height(Object height) {
+		attr("height", height);
 		return this;
 	}
 
@@ -62,7 +62,7 @@ public class Object2 extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final Object2 name(String name) {
-		attrs.put("name", name);
+		attr("name", name);
 		return this;
 	}
 
@@ -73,7 +73,7 @@ public class Object2 extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final Object2 type(String type) {
-		attrs.put("type", type);
+		attr("type", type);
 		return this;
 	}
 
@@ -81,10 +81,11 @@ public class Object2 extends HtmlElementMixed {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-object-typemustmatch'>typemustmatch</a> attribute.
 	 * Whether the type attribute and the Content-Type value need to match for the resource to be used.
 	 * @param typemustmatch - The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Object2 typemustmatch(String typemustmatch) {
-		attrs.put("typemustmatch", typemustmatch);
+	public final Object2 typemustmatch(Object typemustmatch) {
+		attr("typemustmatch", typemustmatch);
 		return this;
 	}
 
@@ -95,7 +96,7 @@ public class Object2 extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final Object2 usemap(String usemap) {
-		attrs.put("usemap", usemap);
+		attr("usemap", usemap);
 		return this;
 	}
 
@@ -103,10 +104,11 @@ public class Object2 extends HtmlElementMixed {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-width'>width</a> attribute.
 	 * Horizontal dimension.
 	 * @param width - The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Object2 width(String width) {
-		attrs.put("width", width);
+	public final Object2 width(Object width) {
+		attr("width", width);
 		return this;
 	}
 
@@ -134,7 +136,7 @@ public class Object2 extends HtmlElementMixed {
 
 	@Override /* HtmlElementMixed */
 	public Object2 child(Object child) {
-		this.children.add(child);
+		super.child(child);
 		return this;
 	}
 }

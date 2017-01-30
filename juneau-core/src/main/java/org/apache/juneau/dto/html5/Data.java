@@ -19,17 +19,17 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="data")
-@SuppressWarnings("hiding")
 public class Data extends HtmlElementMixed {
 
 	/**
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/text-level-semantics.html#attr-data-value'>value</a> attribute.
 	 * Machine-readable value.
 	 * @param value - The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Data value(String value) {
-		attrs.put("value", value);
+	public final Data value(Object value) {
+		attr("value", value);
 		return this;
 	}
 
@@ -57,7 +57,7 @@ public class Data extends HtmlElementMixed {
 
 	@Override /* HtmlElementMixed */
 	public Data child(Object child) {
-		this.children.add(child);
+		super.child(child);
 		return this;
 	}
 }

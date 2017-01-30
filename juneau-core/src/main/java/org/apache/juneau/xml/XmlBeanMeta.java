@@ -41,7 +41,7 @@ public class XmlBeanMeta extends BeanMetaExtended {
 		Class<?> c = beanMeta.getClassMeta().getInnerClass();
 		Xml xml = c.getAnnotation(Xml.class);
 		XmlFormat defaultFormat = null;
-		XmlFormat _contentFormat = null;
+		XmlFormat _contentFormat = DEFAULT;
 
 		if (xml != null) {
 			XmlFormat xf = xml.format();
@@ -78,8 +78,8 @@ public class XmlBeanMeta extends BeanMetaExtended {
 				if (! pcm.isMapOrBean())
 					throw new BeanRuntimeException(c, "Invalid type for ATTRS property.  Only properties of type Map and bean can be used.");
 				_attrsProperty = p;
-			} else if (xf.isOneOf(ELEMENTS, MIXED, TEXT, XMLTEXT)) {
-				if (xf.isOneOf(ELEMENTS, MIXED) && ! pcm.isCollectionOrArray())
+			} else if (xf.isOneOf(ELEMENTS, MIXED, MIXED_PWS, TEXT, TEXT_PWS, XMLTEXT)) {
+				if (xf.isOneOf(ELEMENTS, MIXED, MIXED_PWS) && ! pcm.isCollectionOrArray())
 					throw new BeanRuntimeException(c, "Invalid type for {0} property.  Only properties of type Collection and array can be used.", xf);
 				if (_contentProperty != null) {
 					if (xf == _contentFormat)
@@ -217,7 +217,9 @@ public class XmlBeanMeta extends BeanMetaExtended {
 	 * <ul>
 	 * 	<li>{@link XmlFormat#ELEMENTS}
 	 * 	<li>{@link XmlFormat#MIXED}
+	 * 	<li>{@link XmlFormat#MIXED_PWS}
 	 * 	<li>{@link XmlFormat#TEXT}
+	 * 	<li>{@link XmlFormat#TEXT_PWS}
 	 * 	<li>{@link XmlFormat#XMLTEXT}
 	 * 	<li><jk>null</jk>
 	 *

@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.html5;
 
+import java.net.*;
+
 import org.apache.juneau.annotation.*;
 
 /**
@@ -19,16 +21,17 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="audio")
-public class Audio extends HtmlElementEmpty {
+public class Audio extends HtmlElementContainer {
 
 	/**
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-autoplay'>autoplay</a> attribute.
 	 * Hint that the media resource can be started automatically when the page is loaded.
 	 * @param autoplay - The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Audio autoplay(String autoplay) {
-		attrs.put("autoplay", autoplay);
+	public final Audio autoplay(Object autoplay) {
+		attr("autoplay", autoplay);
 		return this;
 	}
 
@@ -36,10 +39,11 @@ public class Audio extends HtmlElementEmpty {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-controls'>controls</a> attribute.
 	 * Show user agent controls.
 	 * @param controls - The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Audio controls(String controls) {
-		attrs.put("controls", controls);
+	public final Audio controls(Object controls) {
+		attr("controls", controls);
 		return this;
 	}
 
@@ -50,7 +54,7 @@ public class Audio extends HtmlElementEmpty {
 	 * @return This object (for method chaining).
 	 */
 	public final Audio crossorigin(String crossorigin) {
-		attrs.put("crossorigin", crossorigin);
+		attr("crossorigin", crossorigin);
 		return this;
 	}
 
@@ -58,10 +62,11 @@ public class Audio extends HtmlElementEmpty {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-loop'>loop</a> attribute.
 	 * Whether to loop the media resource.
 	 * @param loop - The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Audio loop(String loop) {
-		attrs.put("loop", loop);
+	public final Audio loop(Object loop) {
+		attr("loop", loop);
 		return this;
 	}
 
@@ -72,7 +77,7 @@ public class Audio extends HtmlElementEmpty {
 	 * @return This object (for method chaining).
 	 */
 	public final Audio mediagroup(String mediagroup) {
-		attrs.put("mediagroup", mediagroup);
+		attr("mediagroup", mediagroup);
 		return this;
 	}
 
@@ -80,10 +85,11 @@ public class Audio extends HtmlElementEmpty {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-muted'>muted</a> attribute.
 	 * Whether to mute the media resource by default.
 	 * @param muted - The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Audio muted(String muted) {
-		attrs.put("muted", muted);
+	public final Audio muted(Object muted) {
+		attr("muted", muted);
 		return this;
 	}
 
@@ -93,8 +99,8 @@ public class Audio extends HtmlElementEmpty {
 	 * @param preload - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
-	public final Audio preload(String preload) {
-		attrs.put("preload", preload);
+	public final Audio preload(Object preload) {
+		attr("preload", preload);
 		return this;
 	}
 
@@ -102,10 +108,11 @@ public class Audio extends HtmlElementEmpty {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-src'>src</a> attribute.
 	 * Address of the resource.
 	 * @param src - The new value for this attribute.
+	 * 	Typically a {@link URL} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Audio src(String src) {
-		attrs.put("src", src);
+	public final Audio src(Object src) {
+		attr("src", src);
 		return this;
 	}
 
@@ -122,6 +129,18 @@ public class Audio extends HtmlElementEmpty {
 	@Override /* HtmlElement */
 	public final Audio id(String id) {
 		super.id(id);
+		return this;
+	}
+
+	@Override /* HtmlElementContainer */
+	public final Audio children(Object...children) {
+		super.children(children);
+		return this;
+	}
+
+	@Override /* HtmlElementContainer */
+	public final Audio child(Object child) {
+		super.child(child);
 		return this;
 	}
 }

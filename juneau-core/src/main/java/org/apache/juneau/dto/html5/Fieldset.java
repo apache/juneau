@@ -19,17 +19,17 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="fieldset")
-@SuppressWarnings("hiding")
 public class Fieldset extends HtmlElementMixed {
 
 	/**
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-fieldset-disabled'>disabled</a> attribute.
 	 * Whether the form control is disabled.
 	 * @param disabled - The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Fieldset disabled(String disabled) {
-		attrs.put("disabled", disabled);
+	public final Fieldset disabled(Boolean disabled) {
+		attr("disabled", disabled);
 		return this;
 	}
 
@@ -40,7 +40,7 @@ public class Fieldset extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final Fieldset form(String form) {
-		attrs.put("form", form);
+		attr("form", form);
 		return this;
 	}
 
@@ -51,7 +51,7 @@ public class Fieldset extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final Fieldset name(String name) {
-		attrs.put("name", name);
+		attr("name", name);
 		return this;
 	}
 
@@ -79,7 +79,7 @@ public class Fieldset extends HtmlElementMixed {
 
 	@Override /* HtmlElementMixed */
 	public Fieldset child(Object child) {
-		this.children.add(child);
+		super.child(child);
 		return this;
 	}
 }

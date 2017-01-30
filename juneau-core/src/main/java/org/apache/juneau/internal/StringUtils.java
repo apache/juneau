@@ -647,6 +647,25 @@ public final class StringUtils {
 	}
 
 	/**
+	 * Converts the specified number into a 4 hexadecimal characters.
+	 *
+	 * @param num The number to convert to hex.
+	 * @return A <code><jk>char</jk>[4]</code> containing the specified characters.
+	 */
+	public static final char[] toHex(int num) {
+		char[] n = new char[4];
+		int a = num%16;
+		n[3] = (char)(a > 9 ? 'A'+a-10 : '0'+a);
+		int base = 16;
+		for (int i = 1; i < 4; i++) {
+			a = (num/base)%16;
+			base <<= 4;
+			n[3-i] = (char)(a > 9 ? 'A'+a-10 : '0'+a);
+		}
+		return n;
+	}
+
+	/**
 	 * Tests two strings for equality, but gracefully handles nulls.
 	 *
 	 * @param s1 String 1.
@@ -1068,5 +1087,31 @@ public final class StringUtils {
 		for (int i = 0; i < count; i++)
 			sb.append(pattern);
 		return sb.toString();
+	}
+
+	/**
+	 * Trims whitespace characters from the beginning of the specified string.
+	 *
+	 * @param s The string to trim.
+	 * @return The trimmed string, or <jk>null</jk> if the string was <jk>null</jk>.
+	 */
+	public static String trimStart(String s) {
+		if (s != null)
+			while (s.length() > 0 && Character.isWhitespace(s.charAt(0)))
+				s = s.substring(1);
+		return s;
+	}
+
+	/**
+	 * Trims whitespace characters from the end of the specified string.
+	 *
+	 * @param s The string to trim.
+	 * @return The trimmed string, or <jk>null</jk> if the string was <jk>null</jk>.
+	 */
+	public static String trimEnd(String s) {
+		if (s != null)
+			while (s.length() > 0 && Character.isWhitespace(s.charAt(s.length()-1)))
+				s = s.substring(0, s.length()-1);
+		return s;
 	}
 }

@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.html5;
 
+import java.net.*;
+
 import org.apache.juneau.annotation.*;
 
 /**
@@ -28,7 +30,7 @@ public class Link extends HtmlElementEmpty {
 	 * @return This object (for method chaining).
 	 */
 	public final Link crossorigin(String crossorigin) {
-		attrs.put("crossorigin", crossorigin);
+		attr("crossorigin", crossorigin);
 		return this;
 	}
 
@@ -36,10 +38,11 @@ public class Link extends HtmlElementEmpty {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/document-metadata.html#attr-link-href'>href</a> attribute.
 	 * Address of the hyperlink.
 	 * @param href - The new value for this attribute.
+	 * 	Typically a {@link URL} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Link href(String href) {
-		attrs.put("href", href);
+	public final Link href(Object href) {
+		attr("href", href);
 		return this;
 	}
 
@@ -50,7 +53,7 @@ public class Link extends HtmlElementEmpty {
 	 * @return This object (for method chaining).
 	 */
 	public final Link hreflang(String hreflang) {
-		attrs.put("hreflang", hreflang);
+		attr("hreflang", hreflang);
 		return this;
 	}
 
@@ -61,7 +64,7 @@ public class Link extends HtmlElementEmpty {
 	 * @return This object (for method chaining).
 	 */
 	public final Link media(String media) {
-		attrs.put("media", media);
+		attr("media", media);
 		return this;
 	}
 
@@ -72,7 +75,7 @@ public class Link extends HtmlElementEmpty {
 	 * @return This object (for method chaining).
 	 */
 	public final Link rel(String rel) {
-		attrs.put("rel", rel);
+		attr("rel", rel);
 		return this;
 	}
 
@@ -83,7 +86,7 @@ public class Link extends HtmlElementEmpty {
 	 * @return This object (for method chaining).
 	 */
 	public final Link sizes(String sizes) {
-		attrs.put("sizes", sizes);
+		attr("sizes", sizes);
 		return this;
 	}
 
@@ -94,7 +97,7 @@ public class Link extends HtmlElementEmpty {
 	 * @return This object (for method chaining).
 	 */
 	public final Link type(String type) {
-		attrs.put("type", type);
+		attr("type", type);
 		return this;
 	}
 

@@ -246,7 +246,7 @@ public final class RdfSerializerSession extends SerializerSession {
 	}
 
 	/**
-	 * XML-encodes the specified string using the {@link XmlUtils#encodeTextInvalidChars(Object)} method.
+	 * XML-encodes the specified string using the {@link XmlUtils#encodeInvalidCharsForText(Object)} method.
 	 *
 	 * @param o The string being encoded.
 	 * @return The encoded string, or <jk>null</jk> if the input was <jk>null</jk>.
@@ -255,7 +255,7 @@ public final class RdfSerializerSession extends SerializerSession {
 		if (o == null)
 			return null;
 		String s = toString(o);
-		return XmlUtils.encodeTextInvalidChars(s);
+		return XmlUtils.encodeInvalidCharsForText(s);
 	}
 
 	/**

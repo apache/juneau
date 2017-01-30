@@ -13,23 +13,25 @@
 package org.apache.juneau.dto.html5;
 
 
+import java.net.*;
+
 import org.apache.juneau.annotation.*;
 
 /**
  * DTO for an HTML <a href='https://www.w3.org/TR/html5/text-level-semantics.html#the-a-element'>&lt;a&gt;</a> element.
  */
 @Bean(typeName="a")
-@SuppressWarnings("hiding")
 public class A extends HtmlElementMixed {
 
 	/**
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/links.html#attr-hyperlink-download'>download</a> attribute.
 	 * Whether to download the resource instead of navigating to it, and its file name if so.
 	 * @param download - The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final A download(String download) {
-		attrs.put("download", download);
+	public final A download(Object download) {
+		attr("download", download);
 		return this;
 	}
 
@@ -37,10 +39,11 @@ public class A extends HtmlElementMixed {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/links.html#attr-hyperlink-href'>href</a> attribute.
 	 * Address of the hyperlink.
 	 * @param href - The new value for this attribute.
+	 * 	Typically a {@link URL} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final A href(String href) {
-		attrs.put("href", href);
+	public final A href(Object href) {
+		attr("href", href);
 		return this;
 	}
 
@@ -51,7 +54,7 @@ public class A extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final A hreflang(String hreflang) {
-		attrs.put("hreflang", hreflang);
+		attr("hreflang", hreflang);
 		return this;
 	}
 
@@ -62,7 +65,7 @@ public class A extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final A rel(String rel) {
-		attrs.put("rel", rel);
+		attr("rel", rel);
 		return this;
 	}
 
@@ -73,7 +76,7 @@ public class A extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final A target(String target) {
-		attrs.put("target", target);
+		attr("target", target);
 		return this;
 	}
 
@@ -84,7 +87,7 @@ public class A extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final A type(String type) {
-		attrs.put("type", type);
+		attr("type", type);
 		return this;
 	}
 
@@ -112,7 +115,7 @@ public class A extends HtmlElementMixed {
 
 	@Override /* HtmlElementMixed */
 	public A child(Object child) {
-		this.children.add(child);
+		super.child(child);
 		return this;
 	}
 }

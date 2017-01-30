@@ -25,10 +25,11 @@ public class Keygen extends HtmlElementEmpty {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-fe-autofocus'>autofocus</a> attribute.
 	 * Automatically focus the form control when the page is loaded.
 	 * @param autofocus - The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Keygen autofocus(String autofocus) {
-		attrs.put("autofocus", autofocus);
+	public final Keygen autofocus(Object autofocus) {
+		attr("autofocus", autofocus);
 		return this;
 	}
 
@@ -39,7 +40,7 @@ public class Keygen extends HtmlElementEmpty {
 	 * @return This object (for method chaining).
 	 */
 	public final Keygen challenge(String challenge) {
-		attrs.put("challenge", challenge);
+		attr("challenge", challenge);
 		return this;
 	}
 
@@ -47,10 +48,11 @@ public class Keygen extends HtmlElementEmpty {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-fe-disabled'>disabled</a> attribute.
 	 * Whether the form control is disabled.
 	 * @param disabled - The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Keygen disabled(String disabled) {
-		attrs.put("disabled", disabled);
+	public final Keygen disabled(Object disabled) {
+		attr("disabled", disabled);
 		return this;
 	}
 
@@ -61,7 +63,7 @@ public class Keygen extends HtmlElementEmpty {
 	 * @return This object (for method chaining).
 	 */
 	public final Keygen form(String form) {
-		attrs.put("form", form);
+		attr("form", form);
 		return this;
 	}
 
@@ -72,7 +74,7 @@ public class Keygen extends HtmlElementEmpty {
 	 * @return This object (for method chaining).
 	 */
 	public final Keygen keytype(String keytype) {
-		attrs.put("keytype", keytype);
+		attr("keytype", keytype);
 		return this;
 	}
 
@@ -83,7 +85,7 @@ public class Keygen extends HtmlElementEmpty {
 	 * @return This object (for method chaining).
 	 */
 	public final Keygen name(String name) {
-		attrs.put("name", name);
+		attr("name", name);
 		return this;
 	}
 

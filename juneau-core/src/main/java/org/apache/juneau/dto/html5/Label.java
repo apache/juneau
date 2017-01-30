@@ -19,7 +19,6 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="label")
-@SuppressWarnings("hiding")
 public class Label extends HtmlElementMixed {
 
 	/**
@@ -29,7 +28,7 @@ public class Label extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final Label _for(String _for) {
-		attrs.put("for", _for);
+		attr("for", _for);
 		return this;
 	}
 
@@ -40,7 +39,7 @@ public class Label extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final Label form(String form) {
-		attrs.put("form", form);
+		attr("form", form);
 		return this;
 	}
 
@@ -68,7 +67,7 @@ public class Label extends HtmlElementMixed {
 
 	@Override /* HtmlElementMixed */
 	public Label child(Object child) {
-		this.children.add(child);
+		super.child(child);
 		return this;
 	}
 }

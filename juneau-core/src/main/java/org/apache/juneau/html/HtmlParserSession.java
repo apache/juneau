@@ -12,6 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
+import static javax.xml.stream.XMLStreamConstants.*;
+import static org.apache.juneau.html.HtmlTag.*;
+
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
@@ -19,6 +22,7 @@ import java.util.*;
 import javax.xml.stream.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.xml.*;
 
 /**
@@ -29,6 +33,11 @@ import org.apache.juneau.xml.*;
 public final class HtmlParserSession extends XmlParserSession {
 
 	private XMLEventReader xmlEventReader;
+	private static final Set<String> whitespaceElements = new HashSet<String>(
+		Arrays.asList(
+			new String[]{"br","bs","sp","ff"}
+		)
+	);
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -54,6 +63,144 @@ public final class HtmlParserSession extends XmlParserSession {
 	 */
 	public HtmlParserSession(HtmlParserContext ctx, ObjectMap op, Object input, Method javaMethod, Object outer, Locale locale, TimeZone timeZone) {
 		super(ctx, op, input, javaMethod, outer, locale, timeZone);
+	}
+
+	/**
+	 * Parses CHARACTERS data.
+	 * <p>
+	 * Precondition:  Pointing to event immediately following opening tag.
+	 * Postcondition:  Pointing to closing tag.
+	 *
+	 * @param r The stream being read from.
+	 * @return The parsed string.
+	 * @throws XMLStreamException
+	 */
+	@Override /* XmlParserSession */
+	public String parseText(XMLStreamReader r) throws XMLStreamException {
+
+		StringBuilder sb = getStringBuilder();
+
+		int et = r.getEventType();
+		if (et == END_ELEMENT)
+			return "";
+
+		int depth = 0;
+
+		String characters = null;
+
+		while (true) {
+			if (et == START_ELEMENT) {
+				if (characters != null) {
+					if (sb.length() == 0)
+						characters = StringUtils.trimStart(characters);
+					sb.append(characters);
+					characters = null;
+				}
+				HtmlTag tag = HtmlTag.forEvent(r);
+				if (tag == BR) {
+					sb.append('\n');
+					r.nextTag();
+				} else if (tag == BS) {
+					sb.append('\b');
+					r.nextTag();
+				} else if (tag == SP) {
+					et = r.next();
+					if (et == CHARACTERS) {
+						String s = r.getText();
+						if (s.length() > 0) {
+							char c = r.getText().charAt(0);
+							if (c == '\u2003')
+								c = '\t';
+							sb.append(c);
+						}
+						r.nextTag();
+					}
+				} else if (tag == FF) {
+					sb.append('\f');
+					r.nextTag();
+				} else if (tag.isOneOf(STRING, NUMBER, BOOLEAN)) {
+					et = r.next();
+					if (et == CHARACTERS) {
+						sb.append(r.getText());
+						r.nextTag();
+					}
+				} else {
+					sb.append('<').append(r.getLocalName());
+					for (int i = 0; i < r.getAttributeCount(); i++)
+						sb.append(' ').append(r.getAttributeName(i)).append('=').append('\'').append(r.getAttributeValue(i)).append('\'');
+					sb.append('>');
+					depth++;
+				}
+			} else if (et == END_ELEMENT) {
+				if (characters != null) {
+					if (sb.length() == 0)
+						characters = StringUtils.trimStart(characters);
+					if (depth == 0)
+						characters = StringUtils.trimEnd(characters);
+					sb.append(characters);
+					characters = null;
+				}
+				if (depth == 0)
+					break;
+				sb.append('<').append(r.getLocalName()).append('>');
+				depth--;
+			} else if (et == CHARACTERS) {
+				characters = r.getText();
+			}
+			et = r.next();
+		}
+
+		String s = trim(sb.toString());
+		returnStringBuilder(sb);
+		return s;
+	}
+
+	/**
+	 * Identical to {@link #parseText(XMLStreamReader)} except assumes the current event
+	 * 	is the opening tag.
+	 * <p>
+	 * Precondition:  Pointing to opening tag.
+	 * Postcondition:  Pointing to closing tag.
+	 *
+	 * @param r The stream being read from.
+	 * @return The parsed string.
+	 * @throws XMLStreamException
+	 */
+	@Override /* XmlParserSession */
+	public String getElementText(XMLStreamReader r) throws XMLStreamException {
+		r.next();
+		return parseText(r);
+	}
+
+	@Override /* XmlParserSession */
+	public boolean isWhitespaceElement(XMLStreamReader r) {
+		String s = r.getLocalName();
+		return whitespaceElements.contains(s);
+	}
+
+	@Override /* XmlParserSession */
+	public String parseWhitespaceElement(XMLStreamReader r) throws XMLStreamException {
+
+		HtmlTag tag = HtmlTag.forEvent(r);
+		int et = r.next();
+		if (tag == BR) {
+			return "\n";
+		} else if (tag == BS) {
+			return "\b";
+		} else if (tag == FF) {
+			return "\f";
+		} else if (tag == SP) {
+			if (et == CHARACTERS) {
+				String s = r.getText();
+				if (s.charAt(0) == '\u2003')
+					s = "\t";
+				r.next();
+				return decodeString(s);
+			}
+			return "";
+		} else {
+			throw new XMLStreamException("Invalid tag found in parseWhitespaceElement(): " + tag);
+		}
 	}
 
 	@Override /* ParserSession */

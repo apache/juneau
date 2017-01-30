@@ -19,17 +19,17 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="select")
-@SuppressWarnings("hiding")
 public class Select extends HtmlElementContainer {
 
 	/**
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-fe-autofocus'>autofocus</a> attribute.
 	 * Automatically focus the form control when the page is loaded.
 	 * @param autofocus - The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Select autofocus(String autofocus) {
-		attrs.put("autofocus", autofocus);
+	public final Select autofocus(Object autofocus) {
+		attr("autofocus", autofocus);
 		return this;
 	}
 
@@ -37,10 +37,11 @@ public class Select extends HtmlElementContainer {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-fe-disabled'>disabled</a> attribute.
 	 * Whether the form control is disabled.
 	 * @param disabled - The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Select disabled(String disabled) {
-		attrs.put("disabled", disabled);
+	public final Select disabled(Object disabled) {
+		attr("disabled", disabled);
 		return this;
 	}
 
@@ -51,7 +52,7 @@ public class Select extends HtmlElementContainer {
 	 * @return This object (for method chaining).
 	 */
 	public final Select form(String form) {
-		attrs.put("form", form);
+		attr("form", form);
 		return this;
 	}
 
@@ -59,10 +60,11 @@ public class Select extends HtmlElementContainer {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-select-multiple'>multiple</a> attribute.
 	 * Whether to allow multiple values.
 	 * @param multiple - The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Select multiple(String multiple) {
-		attrs.put("multiple", multiple);
+	public final Select multiple(Object multiple) {
+		attr("multiple", multiple);
 		return this;
 	}
 
@@ -73,7 +75,7 @@ public class Select extends HtmlElementContainer {
 	 * @return This object (for method chaining).
 	 */
 	public final Select name(String name) {
-		attrs.put("name", name);
+		attr("name", name);
 		return this;
 	}
 
@@ -81,10 +83,11 @@ public class Select extends HtmlElementContainer {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-select-required'>required</a> attribute.
 	 * Whether the control is required for form submission.
 	 * @param required - The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Select required(String required) {
-		attrs.put("required", required);
+	public final Select required(Object required) {
+		attr("required", required);
 		return this;
 	}
 
@@ -92,22 +95,17 @@ public class Select extends HtmlElementContainer {
 	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-select-size'>size</a> attribute.
 	 * Size of the control.
 	 * @param size - The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
-	public final Select size(String size) {
-		attrs.put("size", size);
+	public final Select size(Object size) {
+		attr("size", size);
 		return this;
 	}
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods
 	//--------------------------------------------------------------------------------
-
-	@Override /* HtmlElement */
-	public Select children(Object...children) {
-		super.children(children);
-		return this;
-	}
 
 	@Override /* HtmlElement */
 	public final Select _class(String _class) {
@@ -118,6 +116,18 @@ public class Select extends HtmlElementContainer {
 	@Override /* HtmlElement */
 	public final Select id(String id) {
 		super.id(id);
+		return this;
+	}
+
+	@Override /* HtmlElementContainer */
+	public final Select children(Object...children) {
+		super.children(children);
+		return this;
+	}
+
+	@Override /* HtmlElementContainer */
+	public final Select child(Object child) {
+		super.child(child);
 		return this;
 	}
 }
