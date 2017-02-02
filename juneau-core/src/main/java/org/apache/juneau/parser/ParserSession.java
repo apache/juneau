@@ -69,9 +69,10 @@ public class ParserSession extends BeanSession {
 	 * 	If <jk>null</jk>, then the locale defined on the context is used.
 	 * @param timeZone The session timezone.
 	 * 	If <jk>null</jk>, then the timezone defined on the context is used.
+	 * @param mediaType The session media type (e.g. <js>"application/json"</js>).
 	 */
-	public ParserSession(ParserContext ctx, ObjectMap op, Object input, Method javaMethod, Object outer, Locale locale, TimeZone timeZone) {
-		super(ctx, op, locale, timeZone);
+	public ParserSession(ParserContext ctx, ObjectMap op, Object input, Method javaMethod, Object outer, Locale locale, TimeZone timeZone, MediaType mediaType) {
+		super(ctx, op, locale, timeZone, mediaType);
 		if (op == null || op.isEmpty()) {
 			trimStrings = ctx.trimStrings;
 			strict = ctx.strict;

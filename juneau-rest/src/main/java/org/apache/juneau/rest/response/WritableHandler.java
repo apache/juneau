@@ -33,9 +33,9 @@ public final class WritableHandler implements ResponseHandler {
 		if (output instanceof Writable) {
 			if (output instanceof ReaderResource) {
 				ReaderResource r = (ReaderResource)output;
-				String mediaType = r.getMediaType();
+				MediaType mediaType = r.getMediaType();
 				if (mediaType != null)
-					res.setContentType(mediaType);
+					res.setContentType(mediaType.toString());
 				for (Map.Entry<String,String> h : r.getHeaders().entrySet())
 					res.setHeader(h.getKey(), h.getValue());
 			}

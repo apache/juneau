@@ -989,7 +989,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 
 		Object r = s.serialize(n.n2);
 		n = new N(2);
-		ParserSession session = p.createSession(r, null, null, n, null, null);
+		ParserSession session = p.createSession(r, null, null, n, null, null, null);
 
 		N.N2 n2 = p.parse(session, BeanContext.DEFAULT.getClassMeta(N.N2.class));
 

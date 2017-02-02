@@ -29,7 +29,7 @@ import org.apache.juneau.svl.*;
 public class ReaderResource implements Writable {
 
 	private String contents;
-	private String mediaType;
+	private MediaType mediaType;
 	private VarResolverSession varSession;
 	private Map<String,String> headers = new LinkedHashMap<String,String>();
 
@@ -39,7 +39,7 @@ public class ReaderResource implements Writable {
 	 * @param contents The contents of this resource.
 	 * @param mediaType The HTTP media type.
 	 */
-	protected ReaderResource(String contents, String mediaType) {
+	protected ReaderResource(String contents, MediaType mediaType) {
 		this.contents = contents;
 		this.mediaType = mediaType;
 	}
@@ -86,7 +86,7 @@ public class ReaderResource implements Writable {
 	}
 
 	@Override /* Streamable */
-	public String getMediaType() {
+	public MediaType getMediaType() {
 		return mediaType;
 	}
 

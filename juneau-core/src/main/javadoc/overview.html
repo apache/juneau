@@ -1570,7 +1570,7 @@
 	<xt>&lt;/feed&gt;</xt>		
 		</p>
 		<p>
-			The {@link org.apache.juneau.html.XmlParser} class can be used convert these Atom documents back
+			The {@link org.apache.juneau.xml.XmlParser} class can be used convert these Atom documents back
 			into POJOs.
 		</p>
 		<p>
@@ -5337,12 +5337,15 @@
 				<li>{@link org.apache.juneau.BeanContext#BEAN_debug} - Debug setting.  Replaces individual debug properties in the serializer and parser contexts.
 				<li>{@link org.apache.juneau.BeanContext#BEAN_locale} - Specifies a default locale at the context level.
 				<li>{@link org.apache.juneau.BeanContext#BEAN_timeZone} - Specifies a default timezone at the context level.
+				<li>{@link org.apache.juneau.BeanContext#BEAN_mediaType} - Specifies a default media type at the context level.
 			</ul>
 			<li>Simplified {@link org.apache.juneau.transform.PojoSwap} class.  Now just two methods:
 			<ul>
 				<li>{@link org.apache.juneau.transform.PojoSwap#swap(BeanSession,Object)}
 				<li>{@link org.apache.juneau.transform.PojoSwap#unswap(BeanSession,Object,ClassMeta)}
 			</ul>
+			<li>Session-level media type now available through {@link org.apache.juneau.BeanSession#getMediaType()} method.
+				Allows for swaps and serializer/parser behavior to be tailored to individual media types.
 			<li>Several new {@link java.util.Calendar} and {@link java.util.Date} swaps:
 			<ul>
 				<li>{@link org.apache.juneau.transforms.CalendarSwap.ToString},{@link org.apache.juneau.transforms.DateSwap.ToString} - To {@link java.lang.String Strings} using the {@code Date.toString()} method.
@@ -5369,6 +5372,9 @@
 				<li>{@link org.apache.juneau.transforms.CalendarSwap.DateTimeMedium},{@link org.apache.juneau.transforms.DateSwap.DateTimeMedium} - To {@link java.text.DateFormat#MEDIUM} date-time strings.
 				<li>{@link org.apache.juneau.transforms.CalendarSwap.DateTimeShort},{@link org.apache.juneau.transforms.DateSwap.DateTimeShort} - To {@link java.text.DateFormat#SHORT} date-time strings.
 			</ul>  
+			<li>New method {@link org.apache.juneau.serializer.SerializerGroup#getSerializerMatch(String)} that returns the matched serializer and media type.
+			<li>New method {@link org.apache.juneau.parser.ParserGroup#getParserMatch(String)} that returns the matched parser and media type.
+			<li>New method {@link org.apache.juneau.encoders.EncoderGroup#getEncoderMatch(String)} that returns the matched encoder and encoding.
 			<li>General improvements to Bean Dictionary support.
 				<ul>
 					<li>New {@link org.apache.juneau.BeanDictionary} class can be used for defining reusable sets of bean dictionaries.
@@ -5485,13 +5491,13 @@
 			<li>New methods on {@link org.apache.juneau.parser.Parser}:
 				<ul>
 					<li><code>org.apache.juneau.parser.Parser.createSession(ObjectMap,Method,Object)</code>
-					<li>{@link org.apache.juneau.parser.Parser#getMediaRanges()}
+					<li><code><del>Parser.getMediaRanges()</del></code>
 				</ul>
 			</li>
 			<li>New methods on {@link org.apache.juneau.serializer.Serializer}:
 				<ul>
 					<li><code>org.apache.juneau.serializer.Serializer.createSession(ObjectMap,Method)</code>
-					<li>{@link org.apache.juneau.serializer.Serializer#getMediaRanges()}
+					<li><code><del>Serializer.getMediaRanges()</del></code>
 				</ul>
 			</li>
 			<li>New {@link org.apache.juneau.annotation.Bean#sort() @Bean.sort()} annotation.
@@ -5623,7 +5629,7 @@
 			<li>New <del><code>StringMapVar</code></del> class.
 			<li>New <del><code>StringVars</code></del> class with reusable common <del><code>StringVar</code></del> instances.
 			<li>New {@link org.apache.juneau.internal.JuneauLogger} class.
-			<li>Default value for {@link org.apache.juneau.xml.XmlParserContext#XML_trimWhitespace} changed to <jk>true</jk>.			
+			<li>Default value for <code><del>XmlParserContext.XML_trimWhitespace</del></code> changed to <jk>true</jk>.			
 		</ul>
 
 		<h6 class='topic'>Server</h6>
@@ -5966,7 +5972,7 @@
 				<ul>
 					<li>{@link org.apache.juneau.rest.RestRequest#getReaderResource(String)} - Replaces <code>getVarResource(String)</code>.
 					<li>{@link org.apache.juneau.rest.RestRequest#getReaderResource(String,boolean)} 
-					<li>{@link org.apache.juneau.rest.RestRequest#getReaderResource(String,boolean,String)}
+					<li><code><del>RestRequest.getReaderResource(String,boolean,String)</del></code>
 				</ul>
 			<li>Changes in {@link org.apache.juneau.rest.RestResponse}:
 				<ul>

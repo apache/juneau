@@ -77,7 +77,7 @@ public class StringObject implements CharSequence, Writable {
 	}
 
 	@Override /* Writable */
-	public String getMediaType() {
+	public MediaType getMediaType() {
 		return s.getMediaTypes()[0];
 	}
 }

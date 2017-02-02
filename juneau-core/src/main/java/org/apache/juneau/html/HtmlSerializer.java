@@ -650,8 +650,8 @@ public class HtmlSerializer extends XmlSerializer {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Serializer */
-	public HtmlSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone) {
-		return new HtmlSerializerSession(getContext(HtmlSerializerContext.class), op, output, javaMethod, locale, timeZone);
+	public HtmlSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType) {
+		return new HtmlSerializerSession(getContext(HtmlSerializerContext.class), op, output, javaMethod, locale, timeZone, mediaType);
 	}
 
 	@Override /* Serializer */

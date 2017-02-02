@@ -55,9 +55,10 @@ public final class RdfSerializerSession extends SerializerSession {
 	 * 	If <jk>null</jk>, then the locale defined on the context is used.
 	 * @param timeZone The session timezone.
 	 * 	If <jk>null</jk>, then the timezone defined on the context is used.
+	 * @param mediaType The session media type (e.g. <js>"application/json"</js>).
 	 */
-	protected RdfSerializerSession(RdfSerializerContext ctx, ObjectMap op, Object output, Method javaMethod, Locale locale, TimeZone timeZone) {
-		super(ctx, op, output, javaMethod, locale, timeZone);
+	protected RdfSerializerSession(RdfSerializerContext ctx, ObjectMap op, Object output, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType) {
+		super(ctx, op, output, javaMethod, locale, timeZone, mediaType);
 		ObjectMap jenaSettings = new ObjectMap();
 		jenaSettings.put("rdfXml.tab", isUseIndentation() ? 2 : 0);
 		jenaSettings.put("rdfXml.attributeQuoteChar", Character.toString(getQuoteChar()));

@@ -384,7 +384,7 @@ public class RestClient extends CoreApi {
 	 */
 	public RestClient setParser(Parser parser) {
 		this.parser = parser;
-		this.accept = parser.getMediaTypes()[0];
+		this.accept = StringUtils.toString(parser.getPrimaryMediaType());
 		return this;
 	}
 

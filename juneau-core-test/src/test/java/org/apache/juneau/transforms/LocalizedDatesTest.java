@@ -625,7 +625,7 @@ public class LocalizedDatesTest {
 
 	@Test
 	public void test() {
-		BeanSession session = cf.getBeanContext().createSession(null, sessionLocale, sessionTimeZone);
+		BeanSession session = cf.getBeanContext().createSession(null, sessionLocale, sessionTimeZone, null);
 		String actual = session.convertToType(calendar, String.class);
 		assertEquals(expected, actual);
 		Object c2 = session.convertToType(actual, calendar.getClass());

@@ -101,10 +101,11 @@ public final class RestResponse extends HttpServletResponseWrapper {
 			charset = defaultCharset;
 		else for (MediaRange r : MediaRange.parse(h)) {
 			if (r.getQValue() > 0) {
-				if (r.getType().equals("*"))
+				MediaType mt = r.getMediaType();
+				if (mt.getType().equals("*"))
 					charset = defaultCharset;
-				else if (RestServlet.availableCharsets.containsKey(r.getType()))
-					charset = r.getType();
+				else if (RestServlet.availableCharsets.containsKey(mt.getType()))
+					charset = mt.getType();
 				if (charset != null)
 					break;
 			}
@@ -129,7 +130,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 *
 	 * @return The set of media types registered in the parser group of this request.
 	 */
-	public List<String> getSupportedMediaTypes() {
+	public List<MediaType> getSupportedMediaTypes() {
 		return serializerGroup.getSupportedMediaTypes();
 	}
 
@@ -260,7 +261,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 
 			String ae = request.getHeader("Accept-Encoding");
 			if (! (ae == null || ae.isEmpty())) {
-				String match = encoders != null ? encoders.findMatch(ae) : null;
+				EncoderMatch match = encoders != null ? encoders.getEncoderMatch(ae) : null;
 				if (match == null) {
 					// Identity should always match unless "identity;q=0" or "*;q=0" is specified.
 					if (ae.matches(".*(identity|\\*)\\s*;\\s*q\\s*=\\s*(0(?!\\.)|0\\.0).*")) {
@@ -270,11 +271,12 @@ public final class RestResponse extends HttpServletResponseWrapper {
 						);
 					}
 				} else {
-					encoder = encoders.getEncoder(match);
+					encoder = match.getEncoder();
+					String encoding = match.getEncoding().toString();
 
 					// Some clients don't recognize identity as an encoding, so don't set it.
-					if (! match.equals("identity"))
-					setHeader("content-encoding", match);
+					if (! encoding.equals("identity"))
+						setHeader("content-encoding", encoding);
 				}
 			}
 			os = getOutputStream();
@@ -378,15 +380,8 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 *
 	 * @return The <code>media-type</code> portion of the <code>Content-Type</code> header.
 	 */
-	public String getMediaType() {
-		String contentType = getContentType();
-		if (contentType == null)
-			return null;
-		int i = contentType.indexOf(';');
-		if (i == -1)
-			return contentType;
-		return contentType.substring(0, i).trim();
-
+	public MediaType getMediaType() {
+		return MediaType.forString(getContentType());
 	}
 
 	/**

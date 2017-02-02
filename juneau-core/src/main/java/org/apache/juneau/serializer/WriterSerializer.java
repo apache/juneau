@@ -27,7 +27,7 @@ import org.apache.juneau.annotation.*;
  * 	This class is typically the parent class of all character-based serializers.
  * 	It has 2 abstract methods to implement...
  * <ul class='spaced-list'>
- * 	<li>{@link #createSession(Object, ObjectMap, Method, Locale, TimeZone)}
+ * 	<li>{@link #createSession(Object, ObjectMap, Method, Locale, TimeZone, MediaType)}
  * 	<li>{@link #doSerialize(SerializerSession, Object)}
  * </ul>
  *

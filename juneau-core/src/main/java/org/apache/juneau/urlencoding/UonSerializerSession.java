@@ -43,9 +43,10 @@ public class UonSerializerSession extends SerializerSession {
 	 * 	If <jk>null</jk>, then the locale defined on the context is used.
 	 * @param timeZone The session timezone.
 	 * 	If <jk>null</jk>, then the timezone defined on the context is used.
+	 * @param mediaType The session media type (e.g. <js>"application/json"</js>).
 	 */
-	protected UonSerializerSession(UonSerializerContext ctx, ObjectMap op, Object output, Method javaMethod, Locale locale, TimeZone timeZone) {
-		super(ctx, op, output, javaMethod, locale, timeZone);
+	protected UonSerializerSession(UonSerializerContext ctx, ObjectMap op, Object output, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType) {
+		super(ctx, op, output, javaMethod, locale, timeZone, mediaType);
 		if (op == null || op.isEmpty()) {
 			simpleMode = ctx.simpleMode;
 			useWhitespace = ctx.useWhitespace;

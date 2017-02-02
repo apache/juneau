@@ -20,6 +20,7 @@ import java.text.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.MediaType;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.transform.*;
@@ -134,23 +135,19 @@ public abstract class Parser extends CoreApi {
 
 	/** General serializer properties currently set on this serializer. */
 	private final List<ParserListener> listeners = new LinkedList<ParserListener>();
-	private final String[] mediaTypes;
-	private final MediaRange[] mediaRanges;
+	private final MediaType[] mediaTypes;
 
 	// Hidden constructor to force subclass from InputStreamParser or ReaderParser.
 	Parser() {
 		Consumes c = ReflectionUtils.getAnnotation(Consumes.class, getClass());
 		if (c == null)
 			throw new RuntimeException(MessageFormat.format("Class ''{0}'' is missing the @Consumes annotation", getClass().getName()));
-		this.mediaTypes = StringUtils.split(c.value(), ',');
-		for (int i = 0; i < mediaTypes.length; i++) {
-			mediaTypes[i] = mediaTypes[i].toLowerCase(Locale.ENGLISH);
-		}
 
-		List<MediaRange> l = new LinkedList<MediaRange>();
-		for (int i = 0; i < mediaTypes.length; i++)
-			l.addAll(Arrays.asList(MediaRange.parse(mediaTypes[i])));
-		mediaRanges = l.toArray(new MediaRange[l.size()]);
+		String[] mt = StringUtils.split(c.value(), ',');
+		this.mediaTypes = new MediaType[mt.length];
+		for (int i = 0; i < mt.length; i++) {
+			mediaTypes[i] = MediaType.forString(mt[i]);
+		}
 	}
 
 	//--------------------------------------------------------------------------------
@@ -159,7 +156,7 @@ public abstract class Parser extends CoreApi {
 
 	/**
 	 * Workhorse method.  Subclasses are expected to implement this method.
-	 * @param session The runtime session object returned by {@link #createSession(Object, ObjectMap, Method, Object, Locale, TimeZone)}.
+	 * @param session The runtime session object returned by {@link #createSession(Object, ObjectMap, Method, Object, Locale, TimeZone, MediaType)}.
 	 * 	If <jk>null</jk>, one will be created using {@link #createSession(Object)}.
 	 * @param type The class type of the object to create.
 	 * 	If <jk>null</jk> or <code>Object.<jk>class</jk></code>, object type is based on what's being parsed.
@@ -184,7 +181,7 @@ public abstract class Parser extends CoreApi {
 
 	/**
 	 * Parses the content of the reader and creates an object of the specified type.
-	 * @param session The runtime session returned by {@link #createSession(Object, ObjectMap, Method, Object, Locale, TimeZone)}.
+	 * @param session The runtime session returned by {@link #createSession(Object, ObjectMap, Method, Object, Locale, TimeZone, MediaType)}.
 	 * @param type The class type of the object to create.
 	 * 	If <jk>null</jk> or <code>Object.<jk>class</jk></code>, object type is based on what's being parsed.
 	 * 	For example, when parsing JSON text, it may return a <code>String</code>, <code>Number</code>, <code>ObjectMap</code>, etc...
@@ -366,10 +363,11 @@ public abstract class Parser extends CoreApi {
 	 * 	If <jk>null</jk>, then the locale defined on the context is used.
 	 * @param timeZone The session timezone.
 	 * 	If <jk>null</jk>, then the timezone defined on the context is used.
+	 * @param mediaType The session media type (e.g. <js>"application/json"</js>).
 	 * @return The new session.
 	 */
-	public ParserSession createSession(Object input, ObjectMap op, Method javaMethod, Object outer, Locale locale, TimeZone timeZone) {
-		return new ParserSession(getContext(ParserContext.class), op, input, javaMethod, outer, locale, timeZone);
+	public ParserSession createSession(Object input, ObjectMap op, Method javaMethod, Object outer, Locale locale, TimeZone timeZone, MediaType mediaType) {
+		return new ParserSession(getContext(ParserContext.class), op, input, javaMethod, outer, locale, timeZone, mediaType);
 	}
 
 	/**
@@ -381,7 +379,7 @@ public abstract class Parser extends CoreApi {
 	 * @return The new context.
 	 */
 	protected final ParserSession createSession(Object input) {
-		return createSession(input, null, null, null, null, null);
+		return createSession(input, null, null, null, null, null, getPrimaryMediaType());
 	}
 
 	//--------------------------------------------------------------------------------
@@ -424,7 +422,7 @@ public abstract class Parser extends CoreApi {
 	/**
 	 * Implementation method.
 	 * Default implementation throws an {@link UnsupportedOperationException}.
-	 * @param session The runtime session object returned by {@link #createSession(Object, ObjectMap, Method, Object, Locale, TimeZone)}.
+	 * @param session The runtime session object returned by {@link #createSession(Object, ObjectMap, Method, Object, Locale, TimeZone, MediaType)}.
 	 * 	If <jk>null</jk>, one will be created using {@link #createSession(Object)}.
 	 * @param m The map being loaded.
 	 * @param keyType The class type of the keys, or <jk>null</jk> to default to <code>String.<jk>class</jk></code>.<br>
@@ -469,7 +467,7 @@ public abstract class Parser extends CoreApi {
 	/**
 	 * Implementation method.
 	 * Default implementation throws an {@link UnsupportedOperationException}.
-	 * @param session The runtime session object returned by {@link #createSession(Object, ObjectMap, Method, Object, Locale, TimeZone)}.
+	 * @param session The runtime session object returned by {@link #createSession(Object, ObjectMap, Method, Object, Locale, TimeZone, MediaType)}.
 	 * 	If <jk>null</jk>, one will be created using {@link #createSession(Object)}.
 	 * @param c The collection being loaded.
 	 * @param elementType The class type of the elements, or <jk>null</jk> to default to whatever is being parsed.
@@ -517,7 +515,7 @@ public abstract class Parser extends CoreApi {
 	/**
 	 * Implementation method.
 	 * Default implementation throws an {@link UnsupportedOperationException}.
-	 * @param session The runtime session object returned by {@link #createSession(Object, ObjectMap, Method, Object, Locale, TimeZone)}.
+	 * @param session The runtime session object returned by {@link #createSession(Object, ObjectMap, Method, Object, Locale, TimeZone, MediaType)}.
 	 * 	If <jk>null</jk>, one will be created using {@link #createSession(Object)}.
 	 * @param argTypes Specifies the type of objects to create for each entry in the array.
 	 *
@@ -660,17 +658,17 @@ public abstract class Parser extends CoreApi {
 	 *
 	 * @return The list of media types.  Never <jk>null</jk>.
 	 */
-	public String[] getMediaTypes() {
+	public MediaType[] getMediaTypes() {
 		return mediaTypes;
 	}
 
 	/**
-	 * Returns the results from {@link #getMediaTypes()} parsed as {@link MediaRange MediaRanges}.
+	 * Returns the first media type specified on this parser via the {@link Consumes} annotation.
 	 *
-	 * @return The list of media types parsed as ranges.  Never <jk>null</jk>.
+	 * @return The media type.
 	 */
-	public MediaRange[] getMediaRanges() {
-		return mediaRanges;
+	public MediaType getPrimaryMediaType() {
+		return mediaTypes == null || mediaTypes.length == 0 ? null : mediaTypes[0];
 	}
 
 	//--------------------------------------------------------------------------------

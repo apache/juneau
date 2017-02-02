@@ -36,8 +36,8 @@ public final class RestRequestEntity extends BasicHttpEntity {
 	public RestRequestEntity(Object input, Serializer serializer) {
 		this.output = input;
 		this.serializer = serializer;
-		if (serializer != null)
-			setContentType(new BasicHeader("Content-Type", serializer.getResponseContentType()));
+		if (serializer != null && serializer.getResponseContentType() != null)
+			setContentType(new BasicHeader("Content-Type", serializer.getResponseContentType().toString()));
 	}
 
 	@Override /* BasicHttpEntity */

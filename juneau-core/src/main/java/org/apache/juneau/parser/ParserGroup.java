@@ -16,7 +16,6 @@ import static org.apache.juneau.internal.ArrayUtils.*;
 
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.concurrent.locks.*;
 
 import org.apache.juneau.*;
 
@@ -66,17 +65,25 @@ import org.apache.juneau.*;
  */
 public final class ParserGroup extends Lockable {
 
-	// Maps media-types to parsers.
-	private final Map<String,Parser> parserMap = new ConcurrentHashMap<String,Parser>();
-
-	// Maps Content-Type headers to matching media types.
-	private final Map<String,String> mediaTypeMappings = new ConcurrentHashMap<String,String>();
+	// Maps Content-Type headers to matches.
+	private final Map<String,ParserMatch> cache = new ConcurrentHashMap<String,ParserMatch>();
 
 	private final CopyOnWriteArrayList<Parser> parsers = new CopyOnWriteArrayList<Parser>();
 
-	private final ReadWriteLock lock = new ReentrantReadWriteLock();
-	private final Lock rl = lock.readLock(), wl = lock.writeLock();
-
+	/**
+	 * Adds the specified parser to the beginning of this group.
+	 *
+	 * @param p - The parser to add to this group.
+	 * @return This object (for method chaining).
+	 */
+	public ParserGroup append(Parser p) {
+		checkLock();
+		synchronized(parsers) {
+			cache.clear();
+			parsers.add(0, p);
+		}
+		return this;
+	}
 
 	/**
 	 * Registers the specified parsers with this group.
@@ -86,22 +93,8 @@ public final class ParserGroup extends Lockable {
 	 * @throws Exception Thrown if {@link Parser} could not be constructed.
 	 */
 	public ParserGroup append(Class<? extends Parser>...p) throws Exception {
-		checkLock();
-		wl.lock();
-		try {
-			for (Class<? extends Parser> c : reverse(p)) {
-				parserMap.clear();
-				mediaTypeMappings.clear();
-				try {
-					append(c);
-				} catch (NoClassDefFoundError e) {
-					// Ignore if dependent library not found (e.g. Jena).
-					System.err.println(e);
-				}
-			}
-		} finally {
-			wl.unlock();
-		}
+		for (Class<? extends Parser> pp : reverse(p))
+			append(pp);
 		return this;
 	}
 
@@ -113,74 +106,85 @@ public final class ParserGroup extends Lockable {
 	 * @throws Exception Thrown if {@link Parser} could not be constructed.
 	 */
 	public ParserGroup append(Class<? extends Parser> p) throws Exception {
-		checkLock();
-		wl.lock();
 		try {
-			parserMap.clear();
-			mediaTypeMappings.clear();
-			parsers.add(0, p.newInstance());
+			append(p.newInstance());
 		} catch (NoClassDefFoundError e) {
 			// Ignore if dependent library not found (e.g. Jena).
 			System.err.println(e);
-		} finally {
-			wl.unlock();
 		}
 		return this;
 	}
 
 	/**
-	 * Returns the parser registered to handle the specified media type.
-	 * <p>
-	 * The media-type string must not contain any parameters such as <js>";charset=X"</js>.
+	 * Adds the parsers in the specified group to this group.
 	 *
-	 * @param mediaType The media-type string (e.g. <js>"text/json"</js>).
-	 * @return The REST parser that handles the specified request content type, or <jk>null</jk> if
-	 * 		no parser is registered to handle it.
+	 * @param g The group containing the parsers to add to this group.
+	 * @return This object (for method chaining).
 	 */
-	public Parser getParser(String mediaType) {
-		Parser p = parserMap.get(mediaType);
-		if (p == null) {
-			String mt = findMatch(mediaType);
-			if (mt != null)
-				p = parserMap.get(mt);
-		}
-		return p;
+	public ParserGroup append(ParserGroup g) {
+		for (Parser p : reverse(g.parsers.toArray(new Parser[g.parsers.size()])))
+			append(p);
+		return this;
 	}
 
 	/**
 	 * Searches the group for a parser that can handle the specified <l>Content-Type</l> header value.
 	 *
 	 * @param contentTypeHeader The HTTP <l>Content-Type</l> header value.
-	 * @return The media type registered by one of the parsers that matches the <code>mediaType</code> string,
-	 * 	or <jk>null</jk> if no media types matched.
+	 * @return The parser and media type that matched the content type header, or <jk>null</jk> if no match was made.
 	 */
-	public String findMatch(String contentTypeHeader) {
-		rl.lock();
-		try {
-			String mt = mediaTypeMappings.get(contentTypeHeader);
-			if (mt != null)
-				return mt;
+	public ParserMatch getParserMatch(String contentTypeHeader) {
+		ParserMatch pm = cache.get(contentTypeHeader);
+		if (pm != null)
+			return pm;
 
-			MediaRange[] mr = MediaRange.parse(contentTypeHeader);
-			if (mr.length == 0)
-				mr = MediaRange.parse("*/*");
+		MediaType mt = MediaType.forString(contentTypeHeader);
+		return getParserMatch(mt);
+	}
 
-			for (MediaRange a : mr) {
-				for (Parser p : parsers) {
-					for (MediaRange a2 : p.getMediaRanges()) {
-						if (a.matches(a2)) {
-							mt = a2.getMediaType();
-							mediaTypeMappings.put(contentTypeHeader, mt);
-							parserMap.put(mt, p);
-							return mt;
-						}
-					}
+	/**
+	 * Same as {@link #getParserMatch(String)} but matches using a {@link MediaType} instance.
+	 *
+	 * @param mediaType The HTTP <l>Content-Type</l> header value as a media type.
+	 * @return The parser and media type that matched the media type, or <jk>null</jk> if no match was made.
+	 */
+	public ParserMatch getParserMatch(MediaType mediaType) {
+		ParserMatch pm = cache.get(mediaType.toString());
+		if (pm != null)
+			return pm;
+
+		for (Parser p : parsers) {
+			for (MediaType a2 : p.getMediaTypes()) {
+				if (mediaType.matches(a2)) {
+					pm = new ParserMatch(a2, p);
+					cache.put(mediaType.toString(), pm);
+					return pm;
 				}
 			}
-			return null;
-		} finally {
-			rl.unlock();
 		}
+		return null;
+	}
+
+	/**
+	 * Same as {@link #getParserMatch(String)} but returns just the matched parser.
+	 *
+	 * @param contentTypeHeader The HTTP <l>Content-Type</l> header string.
+	 * @return The parser that matched the content type header, or <jk>null</jk> if no match was made.
+	 */
+	public Parser getParser(String contentTypeHeader) {
+		ParserMatch pm = getParserMatch(contentTypeHeader);
+		return pm == null ? null : pm.getParser();
+	}
+
+	/**
+	 * Same as {@link #getParserMatch(MediaType)} but returns just the matched parser.
+	 *
+	 * @param mediaType The HTTP media type.
+	 * @return The parser that matched the media type, or <jk>null</jk> if no match was made.
+	 */
+	public Parser getParser(MediaType mediaType) {
+		ParserMatch pm = getParserMatch(mediaType);
+		return pm == null ? null : pm.getParser();
 	}
 
 	/**
@@ -190,10 +194,10 @@ public final class ParserGroup extends Lockable {
 	 *
 	 * @return The list of media types.
 	 */
-	public List<String> getSupportedMediaTypes() {
-		List<String> l = new ArrayList<String>();
+	public List<MediaType> getSupportedMediaTypes() {
+		List<MediaType> l = new ArrayList<MediaType>();
 		for (Parser p : parsers)
-			for (String mt : p.getMediaTypes())
+			for (MediaType mt : p.getMediaTypes())
 				if (! l.contains(mt))
 					l.add(mt);
 		return l;

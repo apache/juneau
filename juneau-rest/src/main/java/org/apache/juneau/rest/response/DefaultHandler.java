@@ -40,15 +40,13 @@ public class DefaultHandler implements ResponseHandler {
 	public boolean handle(RestRequest req, RestResponse res, Object output) throws IOException, RestException {
 		SerializerGroup g = res.getSerializerGroup();
 		String accept = req.getHeader("Accept", "");
-		String matchingAccept = g.findMatch(accept);
-		if (matchingAccept != null) {
-			Serializer s = g.getSerializer(matchingAccept);
-			String contentType = s.getResponseContentType();
-			if (contentType == null)
-				contentType = res.getContentType();
-			if (contentType == null)
-				contentType = matchingAccept;
-			res.setContentType(contentType);
+		SerializerMatch sm = g.getSerializerMatch(accept);
+		if (sm != null) {
+			Serializer s = sm.getSerializer();
+			MediaType mediaType = res.getMediaType();
+			if (mediaType == null)
+				mediaType = sm.getMediaType();
+			res.setContentType(mediaType.toString());
 			ObjectMap headers = s.getResponseHeaders(res.getProperties());
 			if (headers != null)
 				for (String key : headers.keySet())
@@ -60,17 +58,17 @@ public class DefaultHandler implements ResponseHandler {
 					p.put(SerializerContext.SERIALIZER_useIndentation, true);
 					res.setContentType("text/plain");
 				}
-				p.append("mediaType", matchingAccept).append("characterEncoding", res.getCharacterEncoding());
+				p.append("mediaType", mediaType).append("characterEncoding", res.getCharacterEncoding());
 				if (! s.isWriterSerializer()) {
 					OutputStreamSerializer s2 = (OutputStreamSerializer)s;
 					OutputStream os = res.getNegotiatedOutputStream();
-					SerializerSession session = s.createSession(os, p, req.getJavaMethod(), req.getLocale(), req.getTimeZone());
+					SerializerSession session = s.createSession(os, p, req.getJavaMethod(), req.getLocale(), req.getTimeZone(), mediaType);
 					s2.serialize(session, output);
 					os.close();
 				} else {
 					WriterSerializer s2 = (WriterSerializer)s;
 					Writer w = res.getNegotiatedWriter();
-					SerializerSession session = s.createSession(w, p, req.getJavaMethod(), req.getLocale(), req.getTimeZone());
+					SerializerSession session = s.createSession(w, p, req.getJavaMethod(), req.getLocale(), req.getTimeZone(), mediaType);
 					s2.serialize(session, output);
 					w.close();
 				}

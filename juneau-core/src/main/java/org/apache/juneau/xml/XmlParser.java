@@ -22,6 +22,7 @@ import java.util.*;
 import javax.xml.stream.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.MediaType;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.transform.*;
@@ -506,8 +507,8 @@ public class XmlParser extends ReaderParser {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Parser */
-	public XmlParserSession createSession(Object input, ObjectMap op, Method javaMethod, Object outer, Locale locale, TimeZone timeZone) {
-		return new XmlParserSession(getContext(XmlParserContext.class), op, input, javaMethod, outer, locale, timeZone);
+	public XmlParserSession createSession(Object input, ObjectMap op, Method javaMethod, Object outer, Locale locale, TimeZone timeZone, MediaType mediaType) {
+		return new XmlParserSession(getContext(XmlParserContext.class), op, input, javaMethod, outer, locale, timeZone, mediaType);
 	}
 
 	@Override /* Parser */

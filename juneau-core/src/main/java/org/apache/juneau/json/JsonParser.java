@@ -19,6 +19,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.MediaType;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
@@ -782,8 +783,8 @@ public final class JsonParser extends ReaderParser {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Parser */
-	public JsonParserSession createSession(Object input, ObjectMap op, Method javaMethod, Object outer, Locale locale, TimeZone timeZone) {
-		return new JsonParserSession(getContext(JsonParserContext.class), op, input, javaMethod, outer, locale, timeZone);
+	public JsonParserSession createSession(Object input, ObjectMap op, Method javaMethod, Object outer, Locale locale, TimeZone timeZone, MediaType mediaType) {
+		return new JsonParserSession(getContext(JsonParserContext.class), op, input, javaMethod, outer, locale, timeZone, mediaType);
 	}
 
 	@Override /* Parser */

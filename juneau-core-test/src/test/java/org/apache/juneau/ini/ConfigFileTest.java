@@ -1270,8 +1270,8 @@ public class ConfigFileTest {
 		cfw.toWritable().writeTo(sw);
 		assertTextEquals("a = b|", sw);
 
-		assertEquals("text/plain", cf.toWritable().getMediaType());
-		assertEquals("text/plain", cfw.toWritable().getMediaType());
+		assertEquals("text/plain", cf.toWritable().getMediaType().toString());
+		assertEquals("text/plain", cfw.toWritable().getMediaType().toString());
 	}
 
 	//====================================================================================================

@@ -14,6 +14,7 @@ package org.apache.juneau.dto.swagger;
 
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 
 /**
@@ -85,8 +86,8 @@ public class Operation {
 	private String description;
 	private ExternalDocumentation externalDocs;
 	private String operationId;
-	private List<String> consumes;
-	private List<String> produces;
+	private List<MediaType> consumes;
+	private List<MediaType> produces;
 	private List<ParameterInfo> parameters;
 	private Map<String,ResponseInfo> responses;
 	private List<String> schemes;
@@ -271,7 +272,7 @@ public class Operation {
 	 *
 	 * @return The value of the <property>consumes</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public List<String> getConsumes() {
+	public List<MediaType> getConsumes() {
 		return consumes;
 	}
 
@@ -286,7 +287,7 @@ public class Operation {
 	 * @param consumes The new value for the <property>consumes</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Operation setConsumes(List<String> consumes) {
+	public Operation setConsumes(List<MediaType> consumes) {
 		this.consumes = consumes;
 		return this;
 	}
@@ -303,7 +304,7 @@ public class Operation {
 	 * @return This object (for method chaining).
 	 */
 	@SuppressWarnings("hiding")
-	public Operation addConsumes(String...consumes) {
+	public Operation addConsumes(MediaType...consumes) {
 		return addConsumes(Arrays.asList(consumes));
 	}
 
@@ -319,9 +320,9 @@ public class Operation {
 	 * @return This object (for method chaining).
 	 */
 	@SuppressWarnings("hiding")
-	public Operation addConsumes(Collection<String> consumes) {
+	public Operation addConsumes(Collection<MediaType> consumes) {
 		if (this.consumes == null)
-			this.consumes = new LinkedList<String>();
+			this.consumes = new LinkedList<MediaType>();
 		this.consumes.addAll(consumes);
 		return this;
 	}
@@ -336,7 +337,7 @@ public class Operation {
 	 *
 	 * @return The value of the <property>produces</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public List<String> getProduces() {
+	public List<MediaType> getProduces() {
 		return produces;
 	}
 
@@ -351,7 +352,7 @@ public class Operation {
 	 * @param produces The new value for the <property>produces</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Operation setProduces(List<String> produces) {
+	public Operation setProduces(List<MediaType> produces) {
 		this.produces = produces;
 		return this;
 	}
@@ -368,9 +369,9 @@ public class Operation {
 	 * @return This object (for method chaining).
 	 */
 	@SuppressWarnings("hiding")
-	public Operation addProduces(String...produces) {
+	public Operation addProduces(MediaType...produces) {
 		if (this.produces == null)
-			this.produces = new LinkedList<String>();
+			this.produces = new LinkedList<MediaType>();
 		this.produces.addAll(Arrays.asList(produces));
 		return this;
 	}

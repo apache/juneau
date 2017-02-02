@@ -927,6 +927,20 @@ public class BeanContext extends Context {
 	public static final String BEAN_timeZone = "BeanContext.timeZone";
 
 	/**
+	 * <b>Configuration property:</b>  Media type.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"BeanContext.mediaType"</js>
+	 * 	<li><b>Data type:</b> <code>MediaType</code>
+	 * 	<li><b>Default:</b> <jk>null</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * Specifies a default media type value for serializer and parser sessions.
+	 */
+	public static final String BEAN_mediaType = "BeanContext.mediaType";
+
+	/**
 	 * <b>Configuration property:</b>  Debug mode.
 	 * <p>
 	 * <ul>
@@ -1032,6 +1046,7 @@ public class BeanContext extends Context {
 	final ClassLoader classLoader;
 	final Locale locale;
 	final TimeZone timeZone;
+	final MediaType mediaType;
 
 	final Map<Class,ClassMeta> cmCache;
 	final ClassMeta<Object> cmObject;  // Reusable ClassMeta that represents general Objects.
@@ -1135,6 +1150,7 @@ public class BeanContext extends Context {
 
 		locale = pm.get(BEAN_locale, Locale.class, Locale.getDefault());
 		timeZone = pm.get(BEAN_timeZone, TimeZone.class, null);
+		mediaType = pm.get(BEAN_mediaType, MediaType.class, null);
 
 		if (! cmCacheCache.containsKey(hashCode)) {
 			ConcurrentHashMap<Class,ClassMeta> cm = new ConcurrentHashMap<Class,ClassMeta>();
@@ -1164,10 +1180,11 @@ public class BeanContext extends Context {
 	 * 	Typically used by time-sensitive {@link PojoSwap PojoSwaps} to provide timezone-specific output.
 	 * 	If <jk>null</jk> the system default timezone is assumed on {@link Date} objects, or the
 	 * 		locale specified on {@link Calendar} objects are used.
+	 * @param mediaType The session media type (e.g. <js>"application/json"</js>).
 	 * @return A new session object.
 	 */
-	public BeanSession createSession(ObjectMap op, Locale locale, TimeZone timeZone) {
-		return new BeanSession(this, op, locale, timeZone);
+	public BeanSession createSession(ObjectMap op, Locale locale, TimeZone timeZone, MediaType mediaType) {
+		return new BeanSession(this, op, locale, timeZone, mediaType);
 	}
 
 	/**
@@ -1179,7 +1196,7 @@ public class BeanContext extends Context {
 	 * @return A new session object.
 	 */
 	public BeanSession createSession() {
-		return new BeanSession(this, null, this.locale, this.timeZone);
+		return new BeanSession(this, null, this.locale, this.timeZone, this.mediaType);
 	}
 
 	/**
@@ -1911,6 +1928,7 @@ public class BeanContext extends Context {
 				.append("sortProperties", sortProperties)
 				.append("locale", locale)
 				.append("timeZone", timeZone)
+				.append("mediaType", mediaType)
 			);
 	}
 }

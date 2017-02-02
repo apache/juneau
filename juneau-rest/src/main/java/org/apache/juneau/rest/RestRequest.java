@@ -320,17 +320,14 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * @return The <code>Content-Type</code> media-type header value on the request.
 	 */
-	public String getMediaType() {
+	public MediaType getMediaType() {
 		String cm = getHeader("Content-Type");
 		if (cm == null) {
 			if (body != null)
-				return "text/uon";
-			return "text/json";
+				return MediaType.UON;
+			return MediaType.JSON;
 		}
-		int j = cm.indexOf(';');
-		if (j != -1)
-			cm = cm.substring(0, j);
-		return cm;
+		return MediaType.forString(cm);
 	}
 
 	/**
@@ -352,7 +349,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * @return The set of media types registered in the parser group of this request.
 	 */
-	public List<String> getSupportedMediaTypes() {
+	public List<MediaType> getSupportedMediaTypes() {
 		return parserGroup.getSupportedMediaTypes();
 	}
 
@@ -394,7 +391,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		if (h != null) {
 			MediaRange[] mr = MediaRange.parse(h);
 			if (mr.length > 0)
-				return toLocale(mr[0].getType());
+				return toLocale(mr[0].getMediaType().getType());
 		}
 		return super.getLocale();
 	}
@@ -407,7 +404,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			if (mr.length > 0) {
 				List<Locale> l = new ArrayList<Locale>(mr.length);
 				for (MediaRange r : mr)
-					l.add(toLocale(r.getType()));
+					l.add(toLocale(r.getMediaType().getType()));
 				return enumeration(l);
 			}
 		}
@@ -1123,21 +1120,22 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			if (type.isInputStream())
 				return (T)getInputStream();
 
-			String mediaType = getMediaType();
 			TimeZone timeZone = getTimeZone();
 			Locale locale = getLocale();
-			Parser p = getParser();
+			ParserMatch pm = getParserMatch();
 
-			if (p != null) {
+			if (pm != null) {
+				Parser p = pm.getParser();
+				MediaType mediaType = pm.getMediaType();
 				try {
 					properties.append("mediaType", mediaType).append("characterEncoding", getCharacterEncoding());
 					if (! p.isReaderParser()) {
 						InputStreamParser p2 = (InputStreamParser)p;
-						ParserSession session = p2.createSession(getInputStream(), properties, getJavaMethod(), getServlet(), locale, timeZone);
+						ParserSession session = p2.createSession(getInputStream(), properties, getJavaMethod(), getServlet(), locale, timeZone, mediaType);
 						return p2.parse(session, type);
 					}
 					ReaderParser p2 = (ReaderParser)p;
-					ParserSession session = p2.createSession(getUnbufferedReader(), properties, getJavaMethod(), getServlet(), locale, timeZone);
+					ParserSession session = p2.createSession(getUnbufferedReader(), properties, getJavaMethod(), getServlet(), locale, timeZone, mediaType);
 					return p2.parse(session, type);
 				} catch (ParseException e) {
 					throw new RestException(SC_BAD_REQUEST,
@@ -1549,31 +1547,43 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Returns the parser matching the request <code>Accept</code> header.
+	 * Returns the parser and media type matching the request <code>Content-Type</code> header.
 	 *
-	 * @return The parser matching the request <code>Accept</code> header, or <jk>null</jk>
+	 * @return The parser matching the request <code>Content-Type</code> header, or <jk>null</jk>
 	 * 	if no matching parser was found.
+	 * 	Includes the matching media type.
 	 */
-	public Parser getParser() {
-		String mediaType = getMediaType();
-		Parser p = parserGroup.getParser(mediaType);
+	public ParserMatch getParserMatch() {
+		MediaType mediaType = getMediaType();
+		ParserMatch pm = parserGroup.getParserMatch(mediaType);
 
 		// If no patching parser for URL-encoding, use the one defined on the servlet.
-		if (p == null && mediaType.equals("application/x-www-form-urlencoded"))
-			p = urlEncodingParser;
+		if (pm == null && mediaType.equals("application/x-www-form-urlencoded"))
+			pm = new ParserMatch(MediaType.URLENCODING, urlEncodingParser);
 
-		return p;
+		return pm;
 	}
 
 	/**
-	 * Returns the reader parser matching the request <code>Accept</code> header.
+	 * Returns the parser matching the request <code>Content-Type</code> header.
 	 *
-	 * @return The reader parser matching the request <code>Accept</code> header, or <jk>null</jk>
+	 * @return The parser matching the request <code>Content-Type</code> header, or <jk>null</jk>
+	 * 	if no matching parser was found.
+	 */
+	public Parser getParser() {
+		ParserMatch pm = getParserMatch();
+		return (pm == null ? null : pm.getParser());
+	}
+
+	/**
+	 * Returns the reader parser matching the request <code>Content-Type</code> header.
+	 *
+	 * @return The reader parser matching the request <code>Content-Type</code> header, or <jk>null</jk>
 	 * 	if no matching reader parser was found, or the matching parser was an input stream parser.
 	 */
 	public ReaderParser getReaderParser() {
 		Parser p = getParser();
-		if (p.isReaderParser())
+		if (p != null && p.isReaderParser())
 			return (ReaderParser)p;
 		return null;
 	}
@@ -1694,22 +1704,22 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @param name The name of the resource (i.e. the value normally passed to {@link Class#getResourceAsStream(String)}.
 	 * @param resolveVars If <jk>true</jk>, any {@link org.apache.juneau.rest.annotation.Parameter} variables will be resolved by the variable resolver returned
 	 * 	by {@link #getVarResolverSession()}.
-	 * @param contentType The value to set as the <js>"Content-Type"</js> header for this object.
+	 * @param mediaType The value to set as the <js>"Content-Type"</js> header for this object.
 	 * @return A new reader resource, or <jk>null</jk> if resource could not be found.
 	 * @throws IOException
 	 */
-	public ReaderResource getReaderResource(String name, boolean resolveVars, String contentType) throws IOException {
+	public ReaderResource getReaderResource(String name, boolean resolveVars, MediaType mediaType) throws IOException {
 		String s = servlet.getResourceAsString(name, getLocale());
 		if (s == null)
 			return null;
-		ReaderResource rr = new ReaderResource(s, contentType);
+		ReaderResource rr = new ReaderResource(s, mediaType);
 		if (resolveVars)
 			rr.setVarSession(getVarResolverSession());
 		return rr;
 	}
 
 	/**
-	 * Same as {@link #getReaderResource(String, boolean, String)} except uses {@link RestServlet#getMimetypesFileTypeMap()}
+	 * Same as {@link #getReaderResource(String, boolean, MediaType)} except uses {@link RestServlet#getMimetypesFileTypeMap()}
 	 * to determine the media type.
 	 *
 	 * @param name The name of the resource (i.e. the value normally passed to {@link Class#getResourceAsStream(String)}.
@@ -1719,7 +1729,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @throws IOException
 	 */
 	public ReaderResource getReaderResource(String name, boolean resolveVars) throws IOException {
-		return getReaderResource(name, resolveVars, servlet.getMimetypesFileTypeMap().getContentType(name));
+		return getReaderResource(name, resolveVars, MediaType.forString(servlet.getMimetypesFileTypeMap().getContentType(name)));
 	}
 
 	/**
@@ -1730,7 +1740,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @throws IOException
 	 */
 	public ReaderResource getReaderResource(String name) throws IOException {
-		return getReaderResource(name, false, servlet.getMimetypesFileTypeMap().getContentType(name));
+		return getReaderResource(name, false, MediaType.forString(servlet.getMimetypesFileTypeMap().getContentType(name)));
 	}
 
 	/**

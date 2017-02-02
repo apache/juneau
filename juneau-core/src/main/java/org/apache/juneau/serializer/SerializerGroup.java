@@ -16,7 +16,6 @@ import static org.apache.juneau.internal.ArrayUtils.*;
 
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.concurrent.locks.*;
 
 import org.apache.juneau.*;
 
@@ -67,17 +66,25 @@ import org.apache.juneau.*;
  */
 public final class SerializerGroup extends Lockable {
 
-	// Maps media-types to serializers.
-	private final Map<String,Serializer> serializerMap = new ConcurrentHashMap<String,Serializer>();
-
-	// Maps Accept headers to matching media types.
-	private final Map<String,String> mediaTypeMappings = new ConcurrentHashMap<String,String>();
+	// Maps Accept headers to matching serializers.
+	private final Map<String,SerializerMatch> cache = new ConcurrentHashMap<String,SerializerMatch>();
 
 	private final CopyOnWriteArrayList<Serializer> serializers = new CopyOnWriteArrayList<Serializer>();
 
-	private final ReadWriteLock lock = new ReentrantReadWriteLock();
-	private final Lock rl = lock.readLock(), wl = lock.writeLock();
-
+	/**
+	 * Adds the specified serializer to the beginning of this group.
+	 *
+	 * @param s - The serializer to add to this group.
+	 * @return This object (for method chaining).
+	 */
+	public SerializerGroup append(Serializer s) {
+		checkLock();
+		synchronized(serializers) {
+			cache.clear();
+			serializers.add(0, s);
+		}
+		return this;
+	}
 
 	/**
 	 * Registers the specified serializers with this group.
@@ -87,62 +94,38 @@ public final class SerializerGroup extends Lockable {
 	 * @throws Exception Thrown if {@link Serializer} could not be constructed.
 	 */
 	public SerializerGroup append(Class<? extends Serializer>...s) throws Exception {
-		checkLock();
-		wl.lock();
-		try {
-			serializerMap.clear();
-			mediaTypeMappings.clear();
-			for (Class<? extends Serializer> ss : reverse(s)) {
-				try {
-					append(ss);
-				} catch (NoClassDefFoundError e) {
-					// Ignore if dependent library not found (e.g. Jena).
-					System.err.println(e);
-				}
-			}
-		} finally {
-			wl.unlock();
-		}
+		for (Class<? extends Serializer> ss : reverse(s))
+			append(ss);
 		return this;
 	}
 
 	/**
 	 * Same as {@link #append(Class[])}, except specify a single class to avoid unchecked compile warnings.
 	 *
-	 * @param c The serializer to append to this group.
+	 * @param s The serializer to append to this group.
 	 * @return This object (for method chaining).
 	 * @throws Exception Thrown if {@link Serializer} could not be constructed.
 	 */
-	public SerializerGroup append(Class<? extends Serializer> c) throws Exception {
-		checkLock();
-		wl.lock();
+	public SerializerGroup append(Class<? extends Serializer> s) throws Exception {
 		try {
-			serializerMap.clear();
-			mediaTypeMappings.clear();
-			serializers.add(0, c.newInstance());
+			append(s.newInstance());
 		} catch (NoClassDefFoundError e) {
 			// Ignore if dependent library not found (e.g. Jena).
 			System.err.println(e);
-		} finally {
-			wl.unlock();
 		}
 		return this;
 	}
 
 	/**
-	 * Returns the serializer registered to handle the specified media type.
-	 * <p>
-	 * The media-type string must not contain any parameters or q-values.
+	 * Adds the serializers in the specified group to this group.
 	 *
-	 * @param mediaType The media-type string (e.g. <js>"text/json"</js>
-	 * @return The serializer that handles the specified accept content type, or <jk>null</jk> if
-	 * 		no serializer is registered to handle it.
+	 * @param g The group containing the serializers to add to this group.
+	 * @return This object (for method chaining).
 	 */
-	public Serializer getSerializer(String mediaType) {
-		Serializer s = serializerMap.get(mediaType);
-		if (s == null)
-			s = serializerMap.get(findMatch(mediaType));
-		return s;
+	public SerializerGroup append(SerializerGroup g) {
+		for (Serializer s : reverse(g.serializers.toArray(new Serializer[g.serializers.size()])))
+			append(s);
+		return this;
 	}
 
 	/**
@@ -174,36 +157,68 @@ public final class SerializerGroup extends Lockable {
 	 * </p>
 	 *
 	 * @param acceptHeader The HTTP <l>Accept</l> header string.
-	 * @return The media type registered by one of the parsers that matches the <code>accept</code> string,
-	 * 	or <jk>null</jk> if no media types matched.
+	 * @return The serializer and media type that matched the accept header, or <jk>null</jk> if no match was made.
 	 */
-	public String findMatch(String acceptHeader) {
-		rl.lock();
-		try {
-			String mt = mediaTypeMappings.get(acceptHeader);
-			if (mt != null)
-				return mt;
+	public SerializerMatch getSerializerMatch(String acceptHeader) {
+		SerializerMatch sm = cache.get(acceptHeader);
+		if (sm != null)
+			return sm;
 
-			MediaRange[] mr = MediaRange.parse(acceptHeader);
-			if (mr.length == 0)
-				mr = MediaRange.parse("*/*");
+		MediaRange[] mr = MediaRange.parse(acceptHeader);
+		if (mr.length == 0)
+			mr = MediaRange.parse("*/*");
 
-			for (MediaRange a : mr) {
-				for (Serializer s : serializers) {
-					for (MediaRange a2 : s.getMediaRanges()) {
-						if (a.matches(a2)) {
-							mt = a2.getMediaType();
-							mediaTypeMappings.put(acceptHeader, mt);
-							serializerMap.put(mt, s);
-							return mt;
-						}
+		Map<Float,SerializerMatch> m = null;
+
+		for (MediaRange a : mr) {
+			for (Serializer s : serializers) {
+				for (MediaType a2 : s.getMediaTypes()) {
+					float q = a.matches(a2);
+					if (q == 1) {
+						sm = new SerializerMatch(a2, s);
+						cache.put(acceptHeader, sm);
+						return sm;
+					} else if (q > 0) {
+						if (m == null)
+							m = new TreeMap<Float,SerializerMatch>(Collections.reverseOrder());
+						m.put(q, new SerializerMatch(a2, s));
 					}
 				}
 			}
-			return null;
-		} finally {
-			rl.unlock();
 		}
+
+		return (m == null ? null : m.values().iterator().next());
+	}
+
+	/**
+	 * Same as {@link #getSerializerMatch(String)} but matches using a {@link MediaType} instance.
+	 *
+	 * @param mediaType The HTTP media type.
+	 * @return The serializer and media type that matched the media type, or <jk>null</jk> if no match was made.
+	 */
+	public SerializerMatch getSerializerMatch(MediaType mediaType) {
+		return getSerializerMatch(mediaType.toString());
+	}
+
+	/**
+	 * Same as {@link #getSerializerMatch(String)} but returns just the matched serializer.
+	 *
+	 * @param acceptHeader The HTTP <l>Accept</l> header string.
+	 * @return The serializer that matched the accept header, or <jk>null</jk> if no match was made.
+	 */
+	public Serializer getSerializer(String acceptHeader) {
+		SerializerMatch sm = getSerializerMatch(acceptHeader);
+		return sm == null ? null : sm.getSerializer();
+	}
+
+	/**
+	 * Same as {@link #getSerializerMatch(MediaType)} but returns just the matched serializer.
+	 *
+	 * @param mediaType The HTTP media type.
+	 * @return The serializer that matched the accept header, or <jk>null</jk> if no match was made.
+	 */
+	public Serializer getSerializer(MediaType mediaType) {
+		return getSerializer(mediaType == null ? null : mediaType.toString());
 	}
 
 	/**
@@ -213,10 +228,10 @@ public final class SerializerGroup extends Lockable {
 	 *
 	 * @return The list of media types.
 	 */
-	public List<String> getSupportedMediaTypes() {
-		List<String> l = new ArrayList<String>();
+	public List<MediaType> getSupportedMediaTypes() {
+		List<MediaType> l = new ArrayList<MediaType>();
 		for (Serializer s : serializers)
-			for (String mt : s.getMediaTypes())
+			for (MediaType mt : s.getMediaTypes())
 				if (! l.contains(mt))
 					l.add(mt);
 		return l;

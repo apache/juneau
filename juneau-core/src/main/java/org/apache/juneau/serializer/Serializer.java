@@ -44,27 +44,23 @@ import org.apache.juneau.soap.*;
  */
 public abstract class Serializer extends CoreApi {
 
-	private final String[] mediaTypes;
-	private final MediaRange[] mediaRanges;
-	private final String contentType;
+	private final MediaType[] mediaTypes;
+	private final MediaType contentType;
 
 	// Hidden constructors to force subclass from OuputStreamSerializer or WriterSerializer.
 	Serializer() {
 		Produces p = ReflectionUtils.getAnnotation(Produces.class, getClass());
 		if (p == null)
 			throw new RuntimeException(MessageFormat.format("Class ''{0}'' is missing the @Produces annotation", getClass().getName()));
-		this.mediaTypes = StringUtils.split(p.value(), ',');
-		for (int i = 0; i < mediaTypes.length; i++) {
-			mediaTypes[i] = mediaTypes[i].toLowerCase(Locale.ENGLISH);
+
+		String[] mt = StringUtils.split(p.value(), ',');
+		this.mediaTypes = new MediaType[mt.length];
+		for (int i = 0; i < mt.length; i++) {
+			mediaTypes[i] = MediaType.forString(mt[i]);
 		}
 
-		List<MediaRange> l = new LinkedList<MediaRange>();
-		for (int i = 0; i < mediaTypes.length; i++)
-			l.addAll(Arrays.asList(MediaRange.parse(mediaTypes[i])));
-		mediaRanges = l.toArray(new MediaRange[l.size()]);
-
-		String ct = p.contentType().isEmpty() ? this.mediaTypes[0] : p.contentType();
-		contentType = ct.isEmpty() ? null : ct;
+		String ct = p.contentType().isEmpty() ? this.mediaTypes[0].toString() : p.contentType();
+		contentType = ct.isEmpty() ? null : MediaType.forString(ct);
 	}
 
 	/**
@@ -82,7 +78,7 @@ public abstract class Serializer extends CoreApi {
 	 * Serializes a POJO to the specified output stream or writer.
 	 * <p>
 	 * This method should NOT close the context object.
-	 * @param session The serializer session object return by {@link #createSession(Object, ObjectMap, Method, Locale, TimeZone)}.<br>
+	 * @param session The serializer session object return by {@link #createSession(Object, ObjectMap, Method, Locale, TimeZone, MediaType)}.<br>
 	 * 	If <jk>null</jk>, session is created using {@link #createSession(Object)}.
 	 * @param o The object to serialize.
 	 *
@@ -110,7 +106,7 @@ public abstract class Serializer extends CoreApi {
 	/**
 	 * Serialize the specified object using the specified session.
 	 *
-	 * @param session The serializer session object return by {@link #createSession(Object, ObjectMap, Method, Locale, TimeZone)}.<br>
+	 * @param session The serializer session object return by {@link #createSession(Object, ObjectMap, Method, Locale, TimeZone, MediaType)}.<br>
 	 * 	If <jk>null</jk>, session is created using {@link #createSession(Object)}.
 	 * @param o The object to serialize.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
@@ -180,10 +176,11 @@ public abstract class Serializer extends CoreApi {
 	 * 	If <jk>null</jk>, then the locale defined on the context is used.
 	 * @param timeZone The session timezone.
 	 * 	If <jk>null</jk>, then the timezone defined on the context is used.
+	 * @param mediaType The session media type (e.g. <js>"application/json"</js>).
 	 * @return The new session.
 	 */
-	public SerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone) {
-		return new SerializerSession(getContext(SerializerContext.class), op, output, javaMethod, locale, timeZone);
+	public SerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType) {
+		return new SerializerSession(getContext(SerializerContext.class), op, output, javaMethod, locale, timeZone, mediaType);
 	}
 
 	/**
@@ -206,7 +203,7 @@ public abstract class Serializer extends CoreApi {
 	 * @return The new session.
 	 */
 	protected SerializerSession createSession(Object output) {
-		return createSession(output, null, null, null, null);
+		return createSession(output, null, null, null, null, getPrimaryMediaType());
 	}
 
 	/**
@@ -241,17 +238,17 @@ public abstract class Serializer extends CoreApi {
 	 *
 	 * @return The list of media types.  Never <jk>null</jk>.
 	 */
-	public String[] getMediaTypes() {
+	public MediaType[] getMediaTypes() {
 		return mediaTypes;
 	}
 
 	/**
-	 * Returns the results from {@link #getMediaTypes()} parsed as {@link MediaRange MediaRanges}.
+	 * Returns the first media type specified on this parser via the {@link Produces} annotation.
 	 *
-	 * @return The list of media types parsed as ranges.  Never <jk>null</jk>.
+	 * @return The media type.
 	 */
-	public MediaRange[] getMediaRanges() {
-		return mediaRanges;
+	public MediaType getPrimaryMediaType() {
+		return mediaTypes == null || mediaTypes.length == 0 ? null : mediaTypes[0];
 	}
 
 	/**
@@ -282,7 +279,7 @@ public abstract class Serializer extends CoreApi {
 	 *
 	 * @return The response content type.  If <jk>null</jk>, then the matched media type is used.
 	 */
-	public String getResponseContentType() {
+	public MediaType getResponseContentType() {
 		return contentType;
 	}
 

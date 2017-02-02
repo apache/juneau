@@ -61,8 +61,8 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Serializer */
-	public HtmlDocSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone) {
-		return new HtmlDocSerializerSession(getContext(HtmlDocSerializerContext.class), op, output, javaMethod, locale, timeZone);
+	public HtmlDocSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType) {
+		return new HtmlDocSerializerSession(getContext(HtmlDocSerializerContext.class), op, output, javaMethod, locale, timeZone, mediaType);
 	}
 
 	@Override /* Serializer */

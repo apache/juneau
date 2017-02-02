@@ -52,9 +52,10 @@ public class UonParserSession extends ParserSession {
 	 * 	If <jk>null</jk>, then the locale defined on the context is used.
 	 * @param timeZone The session timezone.
 	 * 	If <jk>null</jk>, then the timezone defined on the context is used.
+	 * @param mediaType The session media type (e.g. <js>"application/json"</js>).
 	 */
-	public UonParserSession(UonParserContext ctx, ObjectMap op, Object input, Method javaMethod, Object outer, Locale locale, TimeZone timeZone) {
-		super(ctx, op, input, javaMethod, outer, locale, timeZone);
+	public UonParserSession(UonParserContext ctx, ObjectMap op, Object input, Method javaMethod, Object outer, Locale locale, TimeZone timeZone, MediaType mediaType) {
+		super(ctx, op, input, javaMethod, outer, locale, timeZone, mediaType);
 		if (op == null || op.isEmpty()) {
 			decodeChars = ctx.decodeChars;
 			whitespaceAware = ctx.whitespaceAware;
@@ -80,7 +81,7 @@ public class UonParserSession extends ParserSession {
 	 * 	</ul>
 	 */
 	public UonParserSession(UonParserContext ctx, Object input) {
-		super(ctx, null, input, null, null, null, null);
+		super(ctx, null, input, null, null, null, null, null);
 		decodeChars = false;
 		whitespaceAware = ctx.whitespaceAware;
 	}

@@ -37,6 +37,7 @@ public class BeanSession extends Session {
 	private final BeanContext ctx;
 	private final Locale locale;
 	private final TimeZone timeZone;
+	private final MediaType mediaType;
 	private final boolean debug;
 	private Stack<StringBuilder> sbStack = new Stack<StringBuilder>();
 
@@ -51,18 +52,21 @@ public class BeanSession extends Session {
 	 * 	If <jk>null</jk>, then the locale defined on the context is used.
 	 * @param timeZone The session timezone.
 	 * 	If <jk>null</jk>, then the timezone defined on the context is used.
+	 * @param mediaType The session media type (e.g. <js>"application/json"</js>).
 	 */
-	protected BeanSession(BeanContext ctx, ObjectMap op, Locale locale, TimeZone timeZone) {
+	protected BeanSession(BeanContext ctx, ObjectMap op, Locale locale, TimeZone timeZone, MediaType mediaType) {
 		super(ctx, op);
 		this.ctx = ctx;
 		if (op == null || op.isEmpty()) {
 			this.locale = (locale != null ? locale : ctx.locale);
 			this.timeZone = (timeZone != null ? timeZone : ctx.timeZone);
 			this.debug = ctx.debug;
+			this.mediaType = mediaType != null ? mediaType : ctx.mediaType;
 		} else {
 			this.locale = (locale == null ? op.get(Locale.class, BEAN_locale, ctx.locale) : locale);
 			this.timeZone = (timeZone == null ? op.get(TimeZone.class, BEAN_timeZone, ctx.timeZone) : timeZone);
 			this.debug = op.getBoolean(BEAN_debug, false);
+			this.mediaType = (mediaType == null ? op.get(MediaType.class, BEAN_mediaType, ctx.mediaType) : mediaType);
 		}
 	}
 
@@ -1068,6 +1072,17 @@ public class BeanSession extends Session {
 	 */
 	public final ClassLoader getClassLoader() {
 		return ctx.classLoader;
+	}
+
+	/**
+	 * Returns the media type specified for this session.
+	 * <p>
+	 * For example, <js>"application/json"</js>.
+	 *
+	 * @return The media type for this session, or <jk>null</jk> if not specified.
+	 */
+	public final MediaType getMediaType() {
+		return mediaType;
 	}
 
 	@Override /* Session */

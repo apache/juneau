@@ -14,6 +14,7 @@ package org.apache.juneau.dto.swagger;
 
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 
 /**
@@ -29,8 +30,8 @@ public class Swagger {
 	private Info info;
 	private String host, basePath;
 	private List<String> schemes;
-	private List<String> consumes;
-	private List<String> produces;
+	private List<MediaType> consumes;
+	private List<MediaType> produces;
 	private Map<String,Map<String,Operation>> paths;
 	private Map<String,SchemaInfo> definitions;
 	private Map<String,ParameterInfo> parameters;
@@ -237,7 +238,7 @@ public class Swagger {
 	 *
 	 * @return The value of the <property>consumes</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public List<String> getConsumes() {
+	public List<MediaType> getConsumes() {
 		return consumes;
 	}
 
@@ -251,7 +252,7 @@ public class Swagger {
 	 * @param consumes The new value for the <property>consumes</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Swagger setConsumes(List<String> consumes) {
+	public Swagger setConsumes(List<MediaType> consumes) {
 		this.consumes = consumes;
 		return this;
 	}
@@ -267,7 +268,7 @@ public class Swagger {
 	 * @return This object (for method chaining).
 	 */
 	@SuppressWarnings("hiding")
-	public Swagger addConsumes(String...consumes) {
+	public Swagger addConsumes(MediaType...consumes) {
 		return addConsumes(Arrays.asList(consumes));
 	}
 
@@ -282,9 +283,9 @@ public class Swagger {
 	 * @return This object (for method chaining).
 	 */
 	@SuppressWarnings("hiding")
-	public Swagger addConsumes(Collection<String> consumes) {
+	public Swagger addConsumes(Collection<MediaType> consumes) {
 		if (this.consumes == null)
-			this.consumes = new LinkedList<String>();
+			this.consumes = new LinkedList<MediaType>();
 		this.consumes.addAll(consumes);
 		return this;
 	}
@@ -298,7 +299,7 @@ public class Swagger {
 	 *
 	 * @return The value of the <property>produces</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public List<String> getProduces() {
+	public List<MediaType> getProduces() {
 		return produces;
 	}
 
@@ -312,7 +313,7 @@ public class Swagger {
 	 * @param produces The new value for the <property>produces</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Swagger setProduces(List<String> produces) {
+	public Swagger setProduces(List<MediaType> produces) {
 		this.produces = produces;
 		return this;
 	}
@@ -328,7 +329,7 @@ public class Swagger {
 	 * @return This object (for method chaining).
 	 */
 	@SuppressWarnings("hiding")
-	public Swagger addProduces(String...produces) {
+	public Swagger addProduces(MediaType...produces) {
 		return addProduces(Arrays.asList(produces));
 	}
 
@@ -343,9 +344,9 @@ public class Swagger {
 	 * @return This object (for method chaining).
 	 */
 	@SuppressWarnings("hiding")
-	public Swagger addProduces(Collection<String> produces) {
+	public Swagger addProduces(Collection<MediaType> produces) {
 		if (this.produces == null)
-			this.produces = new LinkedList<String>();
+			this.produces = new LinkedList<MediaType>();
 		this.produces.addAll(produces);
 		return this;
 	}

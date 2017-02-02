@@ -38,7 +38,7 @@ class ConfigFileWritable implements Writable {
 	}
 
 	@Override /* Writable */
-	public String getMediaType() {
-		return "text/plain";
+	public MediaType getMediaType() {
+		return MediaType.PLAIN;
 	}
 }

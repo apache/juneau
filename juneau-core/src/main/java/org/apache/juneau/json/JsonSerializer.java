@@ -331,8 +331,8 @@ public class JsonSerializer extends WriterSerializer {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Serializer */
-	public JsonSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone) {
-		return new JsonSerializerSession(getContext(JsonSerializerContext.class), op, output, javaMethod, locale, timeZone);
+	public JsonSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType) {
+		return new JsonSerializerSession(getContext(JsonSerializerContext.class), op, output, javaMethod, locale, timeZone, mediaType);
 	}
 
 	@Override /* Serializer */

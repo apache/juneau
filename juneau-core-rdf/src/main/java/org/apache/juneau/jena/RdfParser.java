@@ -432,8 +432,8 @@ public class RdfParser extends ReaderParser {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Parser */
-	public RdfParserSession createSession(Object input, ObjectMap op, Method javaMethod, Object outer, Locale locale, TimeZone timeZone) {
-		return new RdfParserSession(getContext(RdfParserContext.class), op, input, javaMethod, outer, locale, timeZone);
+	public RdfParserSession createSession(Object input, ObjectMap op, Method javaMethod, Object outer, Locale locale, TimeZone timeZone, MediaType mediaType) {
+		return new RdfParserSession(getContext(RdfParserContext.class), op, input, javaMethod, outer, locale, timeZone, mediaType);
 	}
 
 	@Override /* CoreApi */

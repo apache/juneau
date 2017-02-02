@@ -18,6 +18,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.MediaType;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.transform.*;
@@ -190,8 +191,8 @@ public final class MsgPackParser extends InputStreamParser {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Parser */
-	public MsgPackParserSession createSession(Object input, ObjectMap op, Method javaMethod, Object outer, Locale locale, TimeZone timeZone) {
-		return new MsgPackParserSession(getContext(MsgPackParserContext.class), op, input, javaMethod, outer, locale, timeZone);
+	public MsgPackParserSession createSession(Object input, ObjectMap op, Method javaMethod, Object outer, Locale locale, TimeZone timeZone, MediaType mediaType) {
+		return new MsgPackParserSession(getContext(MsgPackParserContext.class), op, input, javaMethod, outer, locale, timeZone, mediaType);
 	}
 
 	@Override /* Parser */

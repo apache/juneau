@@ -21,6 +21,7 @@ import java.util.*;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.*;
 
 import org.apache.juneau.*;
@@ -84,17 +85,17 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 
 	@Override /* MessageBodyWriter */
 	public boolean isWriteable(Class<?> type, Type gType, Annotation[] a, MediaType mediaType) {
-		return serializers.findMatch(mediaType.toString()) != null;
+		return serializers.getSerializerMatch(mediaType.toString()) != null;
 	}
 
 	@Override /* MessageBodyWriter */
 	public void writeTo(Object o, Class<?> type, Type gType, Annotation[] a, MediaType mediaType,
 			MultivaluedMap<String,Object> headers, OutputStream out) throws IOException, WebApplicationException {
 		try {
-			String mt = serializers.findMatch(mediaType.toString());
-			if (mt == null)
+			SerializerMatch sm = serializers.getSerializerMatch(mediaType.toString());
+			if (sm == null)
 				throw new WebApplicationException(SC_NOT_ACCEPTABLE);
-			Serializer s = serializers.getSerializer(mt);
+			Serializer s = sm.getSerializer();
 			ObjectMap mp = getMethodProperties(a);
 			mp.append("mediaType", mediaType.toString());
 			Locale locale = getLocale(headers);
@@ -102,13 +103,13 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 			if (s.isWriterSerializer()) {
 				WriterSerializer s2 = (WriterSerializer)s;
 				OutputStreamWriter w = new OutputStreamWriter(out, IOUtils.UTF8);
-				SerializerSession session = s.createSession(w, mp, null, locale, timeZone);
+				SerializerSession session = s.createSession(w, mp, null, locale, timeZone, sm.getMediaType());
 				s2.serialize(session, o);
 				w.flush();
 				w.close();
 			} else {
 				OutputStreamSerializer s2 = (OutputStreamSerializer)s;
-				SerializerSession session = s.createSession(s2, mp, null, locale, timeZone);
+				SerializerSession session = s.createSession(s2, mp, null, locale, timeZone, sm.getMediaType());
 				s2.serialize(session, o);
 				out.flush();
 				out.close();
@@ -120,17 +121,17 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 
 	@Override /* MessageBodyReader */
 	public boolean isReadable(Class<?> type, Type gType, Annotation[] a, MediaType mediaType) {
-		return parsers.findMatch(mediaType.toString()) != null;
+		return parsers.getParserMatch(mediaType.toString()) != null;
 	}
 
 	@Override /* MessageBodyReader */
 	public Object readFrom(Class<Object> type, Type gType, Annotation[] a, MediaType mediaType,
 			MultivaluedMap<String,String> headers, InputStream in) throws IOException, WebApplicationException {
 		try {
-			String mt = parsers.findMatch(mediaType.toString());
-			if (mt == null)
+			ParserMatch pm = parsers.getParserMatch(mediaType.toString());
+			if (pm == null)
 				throw new WebApplicationException(SC_UNSUPPORTED_MEDIA_TYPE);
-			Parser p = parsers.getParser(mt);
+			Parser p = pm.getParser();
 			BeanContext bc = p.getBeanContext();
 			ClassMeta<?> cm = bc.getClassMeta(gType);
 			ObjectMap mp = getMethodProperties(a);
@@ -140,11 +141,11 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 			if (p.isReaderParser()) {
 				ReaderParser p2 = (ReaderParser)p;
 				InputStreamReader r = new InputStreamReader(in, IOUtils.UTF8);
-				ParserSession session = p2.createSession(r, mp, null, null, locale, timeZone);
+				ParserSession session = p2.createSession(r, mp, null, null, locale, timeZone, pm.getMediaType());
 				return p2.parse(session, cm);
 			}
 			InputStreamParser p2 = (InputStreamParser)p;
-			ParserSession session = p2.createSession(in, mp, null, null, locale, timeZone);
+			ParserSession session = p2.createSession(in, mp, null, null, locale, timeZone, pm.getMediaType());
 			return p2.parse(session, cm);
 		} catch (ParseException e) {
 			throw new IOException(e);
@@ -158,7 +159,7 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 			if (h != null) {
 				MediaRange[] mr = MediaRange.parse(h);
 				if (mr.length > 0)
-					return toLocale(mr[0].getType());
+					return toLocale(mr[0].getMediaType().getType());
 			}
 		}
 		return null;

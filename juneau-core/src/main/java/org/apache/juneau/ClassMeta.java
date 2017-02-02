@@ -24,6 +24,8 @@ import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.parser.*;
+import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.utils.*;
 
@@ -65,13 +67,15 @@ public final class ClassMeta<T> implements Type {
 	InvocationHandler invocationHandler;              // The invocation handler for this class (if it has one).
 	BeanMeta<T> beanMeta;                             // The bean meta for this bean class (if it's a bean).
 	String dictionaryName, resolvedDictionaryName;    // The dictionary name of this class if it has one.
-	Method fromStringMethod;                          // The static valueOf(String) or fromString(String) method (if it has one).
+	Method fromStringMethod;                          // The static valueOf(String) or fromString(String) or forString(String) method (if it has one).
 	Constructor<? extends T> noArgConstructor;        // The no-arg constructor for this class (if it has one).
 	Constructor<T> stringConstructor;                 // The X(String) constructor (if it has one).
 	Constructor<T> numberConstructor;                 // The X(Number) constructor (if it has one).
+	Constructor<T> swapConstructor;                   // The X(Swappable) constructor (if it has one).
 	Class<? extends Number> numberConstructorType;    // The class type of the object in the number constructor.
 	Constructor<T> objectMapConstructor;              // The X(ObjectMap) constructor (if it has one).
 	Method toObjectMapMethod;                         // The toObjectMap() method (if it has one).
+	Method swapMethod;                                // The swap() method (if it has one).
 	Method namePropertyMethod;                        // The method to set the name on an object (if it has one).
 	Method parentPropertyMethod;                      // The method to set the parent on an object (if it has one).
 	String notABeanReason;                            // If this isn't a bean, the reason why.
@@ -206,7 +210,7 @@ public final class ClassMeta<T> implements Type {
 			// valueOf() is used by enums.
 			// parse() is used by the java logging Level class.
 			// forName() is used by Class and Charset
-			for (String methodName : new String[]{"fromString","valueOf","parse","parseString","forName"}) {
+			for (String methodName : new String[]{"fromString","valueOf","parse","parseString","forName","forString"}) {
 				if (this.fromStringMethod == null) {
 					for (Method m : c.getMethods()) {
 						if (isStatic(m) && isPublic(m) && isNotDeprecated(m)) {
@@ -240,6 +244,11 @@ public final class ClassMeta<T> implements Type {
 							this.toObjectMapMethod = m;
 							break;
 						}
+					} else if (mName.equals("swap")) {
+						if (m.getParameterTypes().length == 1 && m.getParameterTypes()[0] == BeanSession.class) {
+							this.swapMethod = m;
+							break;
+						}
 					}
 				}
 			}
@@ -266,12 +275,37 @@ public final class ClassMeta<T> implements Type {
 							this.stringConstructor = cs;
 						else if (ObjectMap.class.isAssignableFrom(arg))
 							this.objectMapConstructor = cs;
+						else if (swapMethod != null && swapMethod.getReturnType().getClass().isAssignableFrom(arg))
+							this.swapConstructor = cs;
 						else if (classCategory != NUMBER && (Number.class.isAssignableFrom(arg) || (arg.isPrimitive() && (arg == int.class || arg == short.class || arg == long.class || arg == float.class || arg == double.class)))) {
 							this.numberConstructor = cs;
 							this.numberConstructorType = (Class<? extends Number>)ClassUtils.getWrapperIfPrimitive(arg);
 						}
 					}
 				}
+			}
+
+			if (swapMethod != null) {
+				this.pojoSwap = new PojoSwap<T,Object>(c, swapMethod.getReturnType()) {
+					@Override
+					public Object swap(BeanSession session, Object o) throws SerializeException {
+						try {
+							return swapMethod.invoke(o, session);
+						} catch (Exception e) {
+							throw new SerializeException(e);
+						}
+					}
+					@Override
+					public T unswap(BeanSession session, Object f, ClassMeta<?> hint) throws ParseException {
+						try {
+							if (swapConstructor != null)
+								return swapConstructor.newInstance(f);
+							return super.unswap(session, f, hint);
+						} catch (Exception e) {
+							throw new ParseException(e);
+						}
+					}
+				};
 			}
 
 			// Note:  Primitive types are normally abstract.

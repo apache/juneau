@@ -10,35 +10,44 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau;
+package org.apache.juneau.parser;
+
+import org.apache.juneau.*;
 
 /**
- * Identifies a class that gets swapped out for another class during serialization.
- * <p>
- * *** This feature has not yet been implemented ***
- * <p>
- * Allows fine-tuned controlling of serialization of classes by allowing you to create a surrogate
- * form of the class that then gets serialized instead of the original class.
- * <p>
- * During serialization, the {@link #swap(BeanSession)} method is used to convert this object into a serialized
- * form.
- * <p>
- * Serialized form can be any object that can be serialized by this framework.
- * <p>
- * Parsing back into the original object can be accomplished by specifying a public constructor that takes in
- * a single parameter of type T.
- *
- * @param <T> The class of the serialized form of this class.
+ * Represents a parser and media type that matches an HTTP <code>Content-Type</code> header value.
  */
-public interface Swappable<T> {
+public final class ParserMatch {
+
+	private final MediaType mediaType;
+	private final Parser parser;
 
 	/**
-	 * Method to implement that converts this object to a surrogate serialized form.
+	 * Constructor.
 	 *
-	 * @param session The current bean session.
-	 * 	For example, you can use this to access the media type (e.g. <js>"application/json"</js>) and return
-	 * 	different values for different media types.
-	 * @return The surrogate object.
+	 * @param mediaType - The media type of the match.
+	 * @param parser - The parser that matched.
 	 */
-	public T swap(BeanSession session);
+	public ParserMatch(MediaType mediaType, Parser parser) {
+		this.mediaType = mediaType;
+		this.parser = parser;
+	}
+
+	/**
+	 * Returns the media type of the parser that matched the HTTP <code>Content-Type</code> header value.
+	 *
+	 * @return The media type of the match.
+	 */
+	public MediaType getMediaType() {
+		return mediaType;
+	}
+
+	/**
+	 * Returns the parser that matched the HTTP <code>Content-Type</code> header value.
+	 *
+	 * @return The parser of the match.
+	 */
+	public Parser getParser() {
+		return parser;
+	}
 }

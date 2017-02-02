@@ -99,8 +99,8 @@ import org.apache.juneau.serializer.*;
 public abstract class PojoSwap<T,S> {
 
 	private final Class<T> normalClass;
-	private final Class<S> swapClass;
-	private ClassMeta<S> swapClassMeta;
+	private final Class<?> swapClass;
+	private ClassMeta<?> swapClassMeta;
 
 	/**
 	 * Constructor.
@@ -108,7 +108,7 @@ public abstract class PojoSwap<T,S> {
 	@SuppressWarnings("unchecked")
 	protected PojoSwap() {
 		normalClass = (Class<T>)ClassUtils.resolveParameterType(PojoSwap.class, 0, this);
-		swapClass = (Class<S>)ClassUtils.resolveParameterType(PojoSwap.class, 1, this);
+		swapClass = ClassUtils.resolveParameterType(PojoSwap.class, 1, this);
 	}
 
 	/**
@@ -117,7 +117,7 @@ public abstract class PojoSwap<T,S> {
 	 * @param normalClass The normal class (cannot be serialized).
 	 * @param swapClass The transformed class (serializable).
 	 */
-	protected PojoSwap(Class<T> normalClass, Class<S> swapClass) {
+	protected PojoSwap(Class<T> normalClass, Class<?> swapClass) {
 		this.normalClass = normalClass;
 		this.swapClass = swapClass;
 	}
@@ -179,7 +179,7 @@ public abstract class PojoSwap<T,S> {
 	 *
 	 * @return The transformed form of this class.
 	 */
-	public Class<S> getSwapClass() {
+	public Class<?> getSwapClass() {
 		return swapClass;
 	}
 
@@ -191,7 +191,7 @@ public abstract class PojoSwap<T,S> {
 	 * 	This is always going to be the same bean context that created this swap.
 	 * @return The {@link ClassMeta} of the transformed class type.
 	 */
-	public ClassMeta<S> getSwapClassMeta(BeanContext beanContext) {
+	public ClassMeta<?> getSwapClassMeta(BeanContext beanContext) {
 		if (swapClassMeta == null)
 			swapClassMeta = beanContext.getClassMeta(swapClass);
 		return swapClassMeta;

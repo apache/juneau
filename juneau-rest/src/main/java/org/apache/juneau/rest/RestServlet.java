@@ -792,7 +792,7 @@ public abstract class RestServlet extends HttpServlet {
 		Swagger s = swaggers.get(locale);
 		if (s == null) {
 			try {
-				s = getResource(Swagger.class, "text/json", getClass().getSimpleName() + ".json", locale);
+				s = getResource(Swagger.class, MediaType.JSON, getClass().getSimpleName() + ".json", locale);
 				swaggers.putIfAbsent(locale, s == null ? Swagger.NULL : s);
 			} catch (Exception e) {
 				throw new RestException(SC_INTERNAL_SERVER_ERROR, e);
@@ -1407,7 +1407,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * @return The list of valid {@code Accept} content types for this resource.
 	 * @throws RestServletException
 	 */
-	public Collection<String> getSupportedAcceptTypes() throws RestServletException {
+	public Collection<MediaType> getSupportedAcceptTypes() throws RestServletException {
 		return getParsers().getSupportedMediaTypes();
 	}
 
@@ -1427,7 +1427,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * @return The list of valid {@code Content-Type} header values for this resource.
 	 * @throws RestServletException
 	 */
-	public Collection<String> getSupportedContentTypes() throws RestServletException {
+	public Collection<MediaType> getSupportedContentTypes() throws RestServletException {
 		return getSerializers().getSupportedMediaTypes();
 	}
 
@@ -3356,7 +3356,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * @throws IOException
 	 * @throws ServletException
 	 */
-	public <T> T getResource(Class<T> c, String mediaType, String name, Locale locale) throws IOException, ServletException {
+	public <T> T getResource(Class<T> c, MediaType mediaType, String name, Locale locale) throws IOException, ServletException {
 		InputStream is = getResource(name, locale);
 		if (is == null)
 			return null;

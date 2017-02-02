@@ -236,7 +236,7 @@ public class GzipTest {
 
 		// Should match identity
 		r = c.doGet(url).setHeader("Accept-Encoding", "*;q=0.8,myencoding;q=0.6");
-		assertEquals("foo", decompress(r.getInputStream()));
+		assertEquals("foo", r.getResponseAsString());
 
 		// Shouldn't match
 		try {

@@ -18,6 +18,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.MediaType;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
@@ -727,8 +728,8 @@ public class UonParser extends ReaderParser {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Parser */
-	public UonParserSession createSession(Object input, ObjectMap op, Method javaMethod, Object outer, Locale locale, TimeZone timeZone) {
-		return new UonParserSession(getContext(UonParserContext.class), op, input, javaMethod, outer, locale, timeZone);
+	public UonParserSession createSession(Object input, ObjectMap op, Method javaMethod, Object outer, Locale locale, TimeZone timeZone, MediaType mediaType) {
+		return new UonParserSession(getContext(UonParserContext.class), op, input, javaMethod, outer, locale, timeZone, mediaType);
 	}
 
 	@Override /* Parser */

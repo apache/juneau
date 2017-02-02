@@ -397,8 +397,8 @@ public class RdfSerializer extends WriterSerializer {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Serializer */
-	public RdfSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone) {
-		return new RdfSerializerSession(getContext(RdfSerializerContext.class), op, output, javaMethod, locale, timeZone);
+	public RdfSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType) {
+		return new RdfSerializerSession(getContext(RdfSerializerContext.class), op, output, javaMethod, locale, timeZone, mediaType);
 	}
 
 	@Override /* CoreApi */

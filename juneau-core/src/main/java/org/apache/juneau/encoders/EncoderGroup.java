@@ -15,8 +15,11 @@ package org.apache.juneau.encoders;
 import static org.apache.juneau.internal.ArrayUtils.*;
 
 import java.util.*;
+import java.util.concurrent.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.internal.*;
+import org.apache.juneau.serializer.*;
 
 /**
  * Represents the group of {@link Encoder encoders} keyed by codings.
@@ -25,7 +28,7 @@ import org.apache.juneau.*;
  * <p>
  * 	Maintains a set of encoders and the codings that they can handle.
  * <p>
- * 	The {@link #findMatch(String)} and {@link #getEncoder(String)} methods are then
+ * 	The {@link #getEncoderMatch(String)} and {@link #getEncoder(String)} methods are then
  * 		used to find appropriate encoders for specific <code>Accept-Encoding</code>
  * 		and <code>Content-Encoding</code> header values.
  *
@@ -51,11 +54,69 @@ import org.apache.juneau.*;
  * 	IEncoder encoder = g.getEncoder(matchedCoding);
  * </p>
  */
-public final class EncoderGroup {
+public final class EncoderGroup extends Lockable {
 
-	private Map<String,EncoderEntry> entryMap = new TreeMap<String,EncoderEntry>(String.CASE_INSENSITIVE_ORDER);
-	private LinkedList<EncoderEntry> tempEntries = new LinkedList<EncoderEntry>();
-	private EncoderEntry[] entries;
+	// Maps Accept-Encoding headers to matching encoders.
+	private final Map<String,EncoderMatch> cache = new ConcurrentHashMap<String,EncoderMatch>();
+
+	private final CopyOnWriteArrayList<Encoder> encoders = new CopyOnWriteArrayList<Encoder>();
+
+	/**
+	 * Adds the specified encoder to the beginning of this group.
+	 *
+	 * @param e - The encoder to add to this group.
+	 * @return This object (for method chaining).
+	 */
+	public EncoderGroup append(Encoder e) {
+		checkLock();
+		synchronized(encoders) {
+			cache.clear();
+			encoders.add(0, e);
+		}
+		return this;
+	}
+
+	/**
+	 * Registers the specified encoders with this group.
+	 *
+	 * @param e The encoders to append to this group.
+	 * @return This object (for method chaining).
+	 * @throws Exception Thrown if {@link Encoder} could not be constructed.
+	 */
+	public EncoderGroup append(Class<? extends Encoder>...e) throws Exception {
+		for (Class<? extends Encoder> ee : ArrayUtils.reverse(e))
+			append(ee);
+		return this;
+	}
+
+	/**
+	 * Same as {@link #append(Class[])}, except specify a single class to avoid unchecked compile warnings.
+	 *
+	 * @param e The encoder to append to this group.
+	 * @return This object (for method chaining).
+	 * @throws Exception Thrown if {@link Serializer} could not be constructed.
+	 */
+	public EncoderGroup append(Class<? extends Encoder> e) throws Exception {
+		try {
+			append(e.newInstance());
+		} catch (NoClassDefFoundError x) {
+			// Ignore if dependent library not found (e.g. Jena).
+			System.err.println(e);
+		}
+		return this;
+	}
+
+	/**
+	 * Adds the encoders in the specified group to this group.
+	 *
+	 * @param g The group containing the encoders to add to this group.
+	 * @return This object (for method chaining).
+	 */
+	public EncoderGroup append(EncoderGroup g) {
+		for (Encoder e : reverse(g.encoders.toArray(new Encoder[g.encoders.size()])))
+			append(e);
+		return this;
+	}
 
 	/**
 	 * Returns the coding string for the matching encoder that can handle the specified <code>Accept-Encoding</code>
@@ -68,76 +129,39 @@ public final class EncoderGroup {
 	 * @param acceptEncoding The <code>Accept-Encoding</code> or <code>Content-Encoding</code> value.
 	 * @return The coding value (e.g. <js>"gzip"</js>).
 	 */
-	public String findMatch(String acceptEncoding) {
-		if (getEntries().length == 0)
+	public EncoderMatch getEncoderMatch(String acceptEncoding) {
+		if (encoders.size() == 0)
 			return null;
+
+		EncoderMatch em = cache.get(acceptEncoding);
+		if (em != null)
+			return em;
 
 		MediaRange[] ae = MediaRange.parse(acceptEncoding);
 
 		if (ae.length == 0)
-			ae = MediaRange.parse("*");
+			ae = MediaRange.parse("*/*");
 
-		for (MediaRange a : ae)
-			for (EncoderEntry e : getEntries())
-				for (MediaRange a2 : e.encodingRanges)
-					if (a.matches(a2))
-						return a2.getType();
+		Map<Float,EncoderMatch> m = null;
 
-		return null;
-	}
-
-	/**
-	 * Adds the specified encoders to this group.
-	 *
-	 * @param e The encoders to instantiate and add to this group.
-	 * @return This object (for method chaining).
-	 * @throws Exception If an instantiation error occurred.
-	 */
-	public EncoderGroup append(Class<? extends Encoder>...e) throws Exception {
-		for (Class<? extends Encoder> r : reverse(e))
-			append(r.newInstance());
-		return this;
-	}
-
-	/**
-	 * Adds the specified encoders to this group.
-	 *
-	 * @param e The encoder to instantiate and add to this group.
-	 * @return This object (for method chaining).
-	 * @throws Exception If an instantiation error occurred.
-	 */
-	public EncoderGroup append(Class<? extends Encoder> e) throws Exception {
-		append(e.newInstance());
-		return this;
-	}
-
-	/**
-	 * Adds the specified encoders to this group.
-	 *
-	 * @param e The encoders to add to this group.
-	 * @return This object (for method chaining).
-	 */
-	public EncoderGroup append(Encoder...e) {
-		entries = null;
-		for (Encoder r : reverse(e)) {
-			EncoderEntry ee = new EncoderEntry(r);
-			tempEntries.addFirst(ee);
-			for (String s : ee.encodings)
-				this.entryMap.put(s, ee);
+		for (MediaRange a : ae) {
+			for (Encoder e : encoders) {
+				for (String c : e.getCodings()) {
+					MediaType mt = MediaType.forString(c);
+					float q = a.matches(mt);
+					if (q == 1) {
+						em = new EncoderMatch(mt, e);
+						cache.put(acceptEncoding, em);
+						return em;
+					} else if (q > 0) {
+						if (m == null)
+							m = new TreeMap<Float,EncoderMatch>(Collections.reverseOrder());
+						m.put(q, new EncoderMatch(mt, e));
+					}
+				}
+			}
 		}
-		return this;
-	}
-
-	/**
-	 * Adds the encoders in the specified group to this group.
-	 *
-	 * @param g The group containing the encoders to add to this group.
-	 * @return This object (for method chaining).
-	 */
-	public EncoderGroup append(EncoderGroup g) {
-		for (EncoderEntry e : reverse(g.getEntries()))
-			append(e.encoder);
-		return this;
+		return (m == null ? null : m.values().iterator().next());
 	}
 
 	/**
@@ -147,8 +171,8 @@ public final class EncoderGroup {
 	 * @return The encoder, or <jk>null</jk> if encoder isn't registered with that coding.
 	 */
 	public Encoder getEncoder(String coding) {
-		EncoderEntry e = entryMap.get(coding);
-		return (e == null ? null : e.encoder);
+		EncoderMatch em = getEncoderMatch(coding);
+		return (em == null ? null : em.getEncoder());
 	}
 
 	/**
@@ -158,36 +182,10 @@ public final class EncoderGroup {
 	 */
 	public List<String> getSupportedEncodings() {
 		List<String> l = new ArrayList<String>();
-		for (EncoderEntry e : getEntries())
-			for (String enc : e.encodings)
+		for (Encoder e : encoders)
+			for (String enc : e.getCodings())
 				if (! l.contains(enc))
 					l.add(enc);
 		return l;
-	}
-
-	private EncoderEntry[] getEntries() {
-		if (entries == null)
-			entries = tempEntries.toArray(new EncoderEntry[tempEntries.size()]);
-		return entries;
-	}
-
-	static class EncoderEntry {
-		Encoder encoder;
-		MediaRange[] encodingRanges;
-		String[] encodings;
-
-		EncoderEntry(Encoder e) {
-			encoder = e;
-
-			encodings = new String[e.getCodings().length];
-			int i = 0;
-			for (String enc : e.getCodings())
-				encodings[i++] = enc;
-
-			List<MediaRange> l = new LinkedList<MediaRange>();
-			for (i = 0; i < encodings.length; i++)
-				l.addAll(Arrays.asList(MediaRange.parse(encodings[i])));
-			encodingRanges = l.toArray(new MediaRange[l.size()]);
-		}
 	}
 }

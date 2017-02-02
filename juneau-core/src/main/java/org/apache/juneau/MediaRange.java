@@ -13,18 +13,98 @@
 package org.apache.juneau;
 
 import java.util.*;
+import java.util.Map;
 import java.util.Map.*;
+
+import org.apache.juneau.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Describes a single type used in content negotiation between an HTTP client and server, as described in
  * Section 14.1 and 14.7 of RFC2616 (the HTTP/1.1 specification).
  */
+@BeanIgnore
 public final class MediaRange implements Comparable<MediaRange>  {
 
-	private final String type;								// The media type (e.g. "text" for Accept, "utf-8" for Accept-Charset)
-	private final String subType;                   // The media sub-type (e.g. "json" for Accept, not used for Accept-Charset)
+	private static final MediaRange[] DEFAULT = new MediaRange[]{new MediaRange("*/*")};
+
+	private final MediaType mediaType;
 	private final Float qValue;
 	private final Map<String,Set<String>> parameters, extensions;
+
+	/**
+	 * Parses a media range fragement of an <code>Accept</code> header value into a single media range object..
+	 * <p>
+	 * The syntax expected to be found in the referenced <code>value</code> complies with the syntax described in RFC2616, Section 14.1, as described below:
+	 * <p class='bcode'>
+	 * 	media-range    = ( "*\/*"
+	 * 	                  | ( type "/" "*" )
+	 * 	                  | ( type "/" subtype )
+	 * 	                  ) *( ";" parameter )
+	 * 	accept-params  = ";" "q" "=" qvalue *( accept-extension )
+	 * 	accept-extension = ";" token [ "=" ( token | quoted-string ) ]
+	 * </p>
+	 * @param mediaRangeFragment The media range fragement string.
+	 */
+	private MediaRange(String mediaRangeFragment) {
+
+		String r = mediaRangeFragment;
+		Float _qValue = 1f;
+		MediaType _mediaType = null;
+		Map<String,Set<String>> _parameters = null;
+		Map<String,Set<String>> _extensions = null;
+
+		r = r.trim();
+
+		int i = r.indexOf(';');
+
+		if (i == -1) {
+			_mediaType = MediaType.forString(r);
+
+		} else {
+
+			_mediaType = MediaType.forString(r.substring(0, i));
+
+			String[] tokens = r.substring(i+1).split(";");
+
+			// Only the type of the range is specified
+			if (tokens.length > 0) {
+
+				boolean isInExtensions = false;
+				for (int j = 0; j < tokens.length; j++) {
+					String[] parm = tokens[j].split("=");
+					if (parm.length == 2) {
+						String k = parm[0], v = parm[1];
+						if (isInExtensions) {
+							if (_extensions == null)
+								_extensions = new TreeMap<String,Set<String>>();
+							if (! _extensions.containsKey(parm[0]))
+								_extensions.put(parm[0], new TreeSet<String>());
+							_extensions.get(parm[0]).add(parm[1]);
+						} else if (k.equals("q")) {
+							_qValue = new Float(v);
+							isInExtensions = true;
+						} else /*(! isInExtensions)*/ {
+							if (_parameters == null)
+								_parameters = new TreeMap<String,Set<String>>();
+							if (! _parameters.containsKey(parm[0]))
+								_parameters.put(parm[0], new TreeSet<String>());
+							_parameters.get(parm[0]).add(parm[1]);
+						}
+					}
+				}
+			}
+		}
+		if (_parameters == null)
+			_parameters = Collections.emptyMap();
+		if (_extensions == null)
+			_extensions = Collections.emptyMap();
+
+		this.mediaType = _mediaType;
+		this.parameters = _parameters;
+		this.qValue = _qValue;
+		this.extensions = _extensions;
+	}
 
 	/**
 	 * Returns the media type enclosed by this media range.
@@ -38,17 +118,8 @@ public final class MediaRange implements Comparable<MediaRange>  {
 	 *
 	 * @return The media type of this media range, lowercased, never <jk>null</jk>.
 	 */
-	public String getMediaType() {
-		return type + "/" + subType;
-	}
-
-	/**
-	 * Return just the type portion of this media range.
-	 *
-	 * @return The type portion of this media range.
-	 */
-	public String getType() {
-		return type;
+	public MediaType getMediaType() {
+		return mediaType;
 	}
 
 	/**
@@ -99,14 +170,13 @@ public final class MediaRange implements Comparable<MediaRange>  {
 	 */
 	@Override /* Object */
 	public String toString() {
-		StringBuffer sb = new StringBuffer().append(type).append('/').append(subType);
+		StringBuffer sb = new StringBuffer().append(mediaType);
 
-		if (! parameters.isEmpty())
-			for (Entry<String,Set<String>> e : parameters.entrySet()) {
-				String k = e.getKey();
-				for (String v : e.getValue())
-					sb.append(';').append(k).append('=').append(v);
-			}
+		for (Entry<String,Set<String>> e : parameters.entrySet()) {
+			String k = e.getKey();
+			for (String v : e.getValue())
+				sb.append(';').append(k).append('=').append(v);
+		}
 
 		// '1' is equivalent to specifying no qValue. If there's no extensions, then we won't include a qValue.
 		if (qValue.floatValue() == 1.0) {
@@ -145,8 +215,7 @@ public final class MediaRange implements Comparable<MediaRange>  {
 
 		MediaRange o2 = (MediaRange) o;
 		return qValue.equals(o2.qValue)
-			&& type.equals(o2.type)
-			&& subType.equals(o2.subType)
+			&& mediaType.equals(o2.mediaType)
 			&& parameters.equals(o2.parameters)
 			&& extensions.equals(o2.extensions);
 	}
@@ -158,24 +227,7 @@ public final class MediaRange implements Comparable<MediaRange>  {
 	 */
 	@Override /* Object */
 	public int hashCode() {
-		return type.hashCode() + subType.hashCode();
-	}
-
-	/**
-	 * Creates a <code>MediaRange</code> object with the referenced values.
-	 *
-	 * @param type The MIME type of this media range (e.g. <js>"application"</js> in <js>"application/json"</js>)
-	 * @param subType The MIME subtype of this media range (e.g. <js>"json"</js> in <js>"application/json"</js>).
-	 * @param parameters The optional parameters for this range.
-	 * @param qValue The quality value of this range.  Must be between <code>0</code> and <code>1.0</code>.
-	 * @param extensions The optional extensions to this quality value.
-	 */
-	private MediaRange(String type, String subType, Map<String,Set<String>> parameters, Float qValue, Map<String,Set<String>> extensions) {
-		this.type = type;
-		this.subType = subType;
-		this.parameters = (parameters == null ? new TreeMap<String,Set<String>>() : parameters);
-		this.extensions = (extensions == null ? new TreeMap<String,Set<String>>() : extensions);
-		this.qValue = qValue;
+		return mediaType.hashCode();
 	}
 
 	/**
@@ -207,58 +259,23 @@ public final class MediaRange implements Comparable<MediaRange>  {
 	 */
 	public static MediaRange[] parse(String value) {
 
-		Set<MediaRange> ranges = new TreeSet<MediaRange>();
-
 		if (value == null || value.length() == 0)
-			return new MediaRange[]{new MediaRange("*", "*", null, 1f, null)};
+			return DEFAULT;
 
 		value = value.toLowerCase(Locale.ENGLISH);
 
-		for (String r : value.trim().split("\\s*,\\s*")) {
+		if (value.indexOf(',') == -1)
+			return new MediaRange[]{new MediaRange(value)};
+
+		Set<MediaRange> ranges = new TreeSet<MediaRange>();
+
+		for (String r : StringUtils.split(value, ',')) {
 			r = r.trim();
 
 			if (r.isEmpty())
 				continue;
 
-			String[] tokens = r.split("\\s*;\\s*");
-
-			tokens[0] = tokens[0].replace(' ', '+');
-
-			// There is at least a type.
-			String[] t = tokens[0].split("/");
-			String type = t[0], subType = (t.length == 1 ? "*" : t[1]);
-
-			// Only the type of the range is specified
-			if (tokens.length == 1) {
-				ranges.add(new MediaRange(type, subType, null, 1f, null));
-				continue;
-			}
-
-			Float qValue = 1f;
-			Map<String,Set<String>> params = new TreeMap<String,Set<String>>();
-			Map<String,Set<String>> exts = new TreeMap<String,Set<String>>();
-
-			boolean isInExtensions = false;
-			for (int i = 1; i < tokens.length; i++) {
-				String[] parm = tokens[i].split("\\s*=\\s*");
-				if (parm.length == 2) {
-					String k = parm[0], v = parm[1];
-					if (isInExtensions) {
-						if (! exts.containsKey(parm[0]))
-							exts.put(parm[0], new TreeSet<String>());
-						exts.get(parm[0]).add(parm[1]);
-					} else if (k.equals("q")) {
-						qValue = new Float(v);
-						isInExtensions = true;
-					} else /*(! isInExtensions)*/ {
-						if (! params.containsKey(parm[0]))
-							params.put(parm[0], new TreeSet<String>());
-						params.get(parm[0]).add(parm[1]);
-					}
-				}
-			}
-
-			ranges.add(new MediaRange(type, subType, params, qValue, exts));
+			ranges.add(new MediaRange(r));
 		}
 
 		return ranges.toArray(new MediaRange[ranges.size()]);
@@ -286,31 +303,20 @@ public final class MediaRange implements Comparable<MediaRange>  {
 
 		// Compare media-types.
 		// Note that '*' comes alphabetically before letters, so just do a reverse-alphabetical comparison.
-		int i = o.type.compareTo(type);
-		if (i == 0)
-			i = o.subType.compareTo(subType);
+		int i = o.mediaType.toString().compareTo(mediaType.toString());
 		return i;
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the specified <code>MediaRange</code> matches this range.
-	 * <p>
-	 * This implies the types and subtypes are the same as or encompasses the other (e.g. <js>'application/xml'</js> and <js>'application/*'</js>).
+	 * Matches the specified media type against this range and returns a q-value
+	 * between 0 and 1 indicating the quality of the match.
 	 *
-	 * @param o The other media rage.
-	 * @return <jk>true</jk> if the media ranges are the same or one encompasses the other.
+	 * @param o The media type to match against.
+	 * @return A float between 0 and 1.  1 is a perfect match.  0 is no match at all.
 	 */
-	public boolean matches(MediaRange o) {
-		if (this == o)
-			return true;
-
-		if (qValue == 0 || o.qValue == 0)
-			return false;
-
-		if (type.equals(o.type) || (type.equals("*")) || (o.type.equals("*")))
-			if (subType.equals(o.subType) || subType.equals("*") || o.subType.equals("*"))
-				return true;
-
-		return false;
+	public float matches(MediaType o) {
+		if (this.mediaType == o || mediaType.matches(o))
+			return qValue;
+		return 0;
 	}
 }

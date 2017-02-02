@@ -16,6 +16,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.MediaType;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 
@@ -39,9 +40,10 @@ public final class MsgPackSerializerSession extends SerializerSession {
 	 * 	If <jk>null</jk>, then the locale defined on the context is used.
 	 * @param timeZone The session timezone.
 	 * 	If <jk>null</jk>, then the timezone defined on the context is used.
+	 * @param mediaType The session media type (e.g. <js>"application/json"</js>).
 	 */
-	protected MsgPackSerializerSession(MsgPackSerializerContext ctx, ObjectMap op, Object output, Method javaMethod, Locale locale, TimeZone timeZone) {
-		super(ctx, op, output, javaMethod, locale, timeZone);
+	protected MsgPackSerializerSession(MsgPackSerializerContext ctx, ObjectMap op, Object output, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType) {
+		super(ctx, op, output, javaMethod, locale, timeZone, mediaType);
 	}
 
 	@Override
