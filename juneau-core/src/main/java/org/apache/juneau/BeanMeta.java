@@ -210,7 +210,7 @@ public class BeanMeta<T> {
 					constructor = (Constructor<T>)ctx.getImplClassConstructor(c, conVis);
 
 				if (constructor == null)
-					constructor = (Constructor<T>)ClassMeta.findNoArgConstructor(c, conVis);
+					constructor = (Constructor<T>)findNoArgConstructor(c, conVis);
 
 				if (constructor == null && beanFilter == null && ctx.beansRequireDefaultConstructor)
 					return "Class does not have the required no-arg constructor";

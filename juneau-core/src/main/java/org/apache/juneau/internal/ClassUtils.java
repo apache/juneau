@@ -316,19 +316,43 @@ public final class ClassUtils {
 		return Modifier.isPublic(c.getModifiers());
 	}
 
+
+	/**
+	 * Locates the no-arg constructor for the specified class.
+	 * Constructor must match the visibility requirements specified by parameter 'v'.
+	 * If class is abstract, always returns <jk>null</jk>.
+	 * Note that this also returns the 1-arg constructor for non-static member classes.
+	 *
+	 * @param c The class from which to locate the no-arg constructor.
+	 * @param v The minimum visibility.
+	 * @return The constructor, or <jk>null</jk> if no no-arg constructor exists with the required visibility.
+	 */
+	@SuppressWarnings({"rawtypes","unchecked"})
+	public static final <T> Constructor<T> findNoArgConstructor(Class<T> c, Visibility v) {
+		int mod = c.getModifiers();
+		if (Modifier.isAbstract(mod))
+			return null;
+		boolean isMemberClass = c.isMemberClass() && ! isStatic(c);
+		for (Constructor cc : c.getConstructors()) {
+			mod = cc.getModifiers();
+			if (cc.getParameterTypes().length == (isMemberClass ? 1 : 0) && v.isVisible(mod) && isNotDeprecated(cc))
+				return v.transform(cc);
+		}
+		return null;
+	}
+
 	/**
 	 * Finds the real parameter type of the specified class.
 	 *
 	 * @param c The class containing the parameters (e.g. PojoSwap<T,S>)
 	 * @param index The zero-based index of the parameter to resolve.
-	 * @param o The object we're trying to resolve the parameter type for.
+	 * @param oc The class we're trying to resolve the parameter type for.
 	 * @return The resolved real class.
 	 */
-	public static Class<?> resolveParameterType(Class<?> c, int index, Object o) {
+	public static Class<?> resolveParameterType(Class<?> c, int index, Class<?> oc) {
 
 		// We need to make up a mapping of type names.
 		Map<Type,Type> typeMap = new HashMap<Type,Type>();
-		Class<?> oc = o.getClass();
 		while (c != oc.getSuperclass()) {
 			extractTypes(typeMap, oc);
 			oc = oc.getSuperclass();
@@ -352,9 +376,7 @@ public final class ClassUtils {
 			List<Class<?>> nestedOuterTypes = new LinkedList<Class<?>>();
 			for (Class<?> ec = oc.getEnclosingClass(); ec != null; ec = ec.getEnclosingClass()) {
 				try {
-					Field this$0 = oc.getDeclaredField("this$0");
-					Object outerInstance = this$0.get(o);
-					Class<?> outerClass = outerInstance.getClass();
+					Class<?> outerClass = oc.getClass();
 					nestedOuterTypes.add(outerClass);
 					Map<Type,Type> outerTypeMap = new HashMap<Type,Type>();
 					extractTypes(outerTypeMap, outerClass);

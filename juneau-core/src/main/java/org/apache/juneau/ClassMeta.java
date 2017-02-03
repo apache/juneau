@@ -12,14 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.ClassMeta.ClassCategory.*;
-import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.ClassMetaSimple.ClassCategory.*;
 
-import java.io.*;
 import java.lang.reflect.*;
 import java.lang.reflect.Proxy;
-import java.net.*;
-import java.net.URI;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
@@ -49,16 +45,9 @@ import org.apache.juneau.utils.*;
  * @param <T> The class type of the wrapped class.
  */
 @Bean(properties="innerClass,classCategory,elementType,keyType,valueType,notABeanReason,initException,beanMeta")
-public final class ClassMeta<T> implements Type {
-
-	/** Class categories. */
-	enum ClassCategory {
-		MAP, COLLECTION, CLASS, NUMBER, DECIMAL, BOOLEAN, CHAR, DATE, ARRAY, ENUM, BEAN, UNKNOWN, OTHER, CHARSEQ, STR, OBJ, URI, BEANMAP, READER, INPUTSTREAM
-	}
+public final class ClassMeta<T> extends ClassMetaSimple<T> {
 
 	final BeanContext beanContext;                    // The bean context that created this object.
-	ClassCategory classCategory = UNKNOWN;            // The class category.
-	final Class<T> innerClass;                        // The class being wrapped.
 	ClassMeta<?>
 		serializedClassMeta,                           // The transformed class type (if class has swap associated with it).
 		elementType = null,                            // If ARRAY or COLLECTION, the element class type.
@@ -67,40 +56,13 @@ public final class ClassMeta<T> implements Type {
 	InvocationHandler invocationHandler;              // The invocation handler for this class (if it has one).
 	BeanMeta<T> beanMeta;                             // The bean meta for this bean class (if it's a bean).
 	String dictionaryName, resolvedDictionaryName;    // The dictionary name of this class if it has one.
-	Method fromStringMethod;                          // The static valueOf(String) or fromString(String) or forString(String) method (if it has one).
-	Constructor<? extends T> noArgConstructor;        // The no-arg constructor for this class (if it has one).
-	Constructor<T> stringConstructor;                 // The X(String) constructor (if it has one).
-	Constructor<T> numberConstructor;                 // The X(Number) constructor (if it has one).
-	Constructor<T> swapConstructor;                   // The X(Swappable) constructor (if it has one).
-	Class<? extends Number> numberConstructorType;    // The class type of the object in the number constructor.
-	Constructor<T> objectMapConstructor;              // The X(ObjectMap) constructor (if it has one).
-	Method toObjectMapMethod;                         // The toObjectMap() method (if it has one).
-	Method swapMethod;                                // The swap() method (if it has one).
-	Method namePropertyMethod;                        // The method to set the name on an object (if it has one).
-	Method parentPropertyMethod;                      // The method to set the parent on an object (if it has one).
 	String notABeanReason;                            // If this isn't a bean, the reason why.
 	PojoSwap<T,?> pojoSwap;                           // The object POJO swap associated with this bean (if it has one).
 	BeanFilter beanFilter;                            // The bean filter associated with this bean (if it has one).
-	boolean
-		isDelegate,                                    // True if this class extends Delegate.
-		isAbstract,                                    // True if this class is abstract.
-		isMemberClass;                                 // True if this is a non-static member class.
 
 	private MetadataMap extMeta = new MetadataMap();  // Extended metadata
 	private Throwable initException;                  // Any exceptions thrown in the init() method.
 	private boolean hasChildPojoSwaps;                // True if this class or any subclass of this class has a PojoSwap associated with it.
-	private Object primitiveDefault;                  // Default value for primitive type classes.
-	private Map<String,Method> remoteableMethods,     // Methods annotated with @Remoteable.  Contains all public methods if class is annotated with @Remotable.
-		publicMethods;                                 // All public methods, including static methods.
-
-	private static final Boolean BOOLEAN_DEFAULT = false;
-	private static final Character CHARACTER_DEFAULT = (char)0;
-	private static final Short SHORT_DEFAULT = (short)0;
-	private static final Integer INTEGER_DEFAULT = 0;
-	private static final Long LONG_DEFAULT = 0l;
-	private static final Float FLOAT_DEFAULT = 0f;
-	private static final Double DOUBLE_DEFAULT = 0d;
-	private static final Byte BYTE_DEFAULT = (byte)0;
 
 	/**
 	 * Shortcut for calling <code>ClassMeta(innerClass, beanContext, <jk>false</jk>)</code>.
@@ -118,7 +80,7 @@ public final class ClassMeta<T> implements Type {
 	 * 	Used for delayed initialization when the possibility of class reference loops exist.
 	 */
 	ClassMeta(Class<T> innerClass, BeanContext beanContext, boolean delayedInit) {
-		this.innerClass = innerClass;
+		super(innerClass);
 		this.beanContext = beanContext;
 		if (! delayedInit)
 			init();
@@ -132,161 +94,14 @@ public final class ClassMeta<T> implements Type {
 			beanFilter = findBeanFilter(beanContext);
 			pojoSwap = findPojoSwap(beanContext);
 
-			serializedClassMeta = (pojoSwap == null ? this : beanContext.getClassMeta(pojoSwap.getSwapClass()));
-			if (serializedClassMeta == null)
-				serializedClassMeta = this;
-
-			if (innerClass != Object.class) {
-				this.noArgConstructor = beanContext.getImplClassConstructor(innerClass, Visibility.PUBLIC);
-				if (noArgConstructor == null)
-					noArgConstructor = findNoArgConstructor(innerClass, Visibility.PUBLIC);
+			if (innerClass != Object.class && this.noArgConstructor == null) {
+				this.noArgConstructor = (Constructor<T>) beanContext.getImplClassConstructor(innerClass, Visibility.PUBLIC);
 			}
 
 			this.hasChildPojoSwaps = beanContext.hasChildPojoSwaps(innerClass);
 
-			Class c = innerClass;
-
-			if (c.isPrimitive()) {
-				if (c == Boolean.TYPE)
-					classCategory = BOOLEAN;
-				else if (c == Byte.TYPE || c == Short.TYPE || c == Integer.TYPE || c == Long.TYPE || c == Float.TYPE || c == Double.TYPE) {
-					if (c == Float.TYPE || c == Double.TYPE)
-						classCategory = DECIMAL;
-					else
-						classCategory = NUMBER;
-				}
-				else if (c == Character.TYPE)
-					classCategory = CHAR;
-			} else {
-				if (isParentClass(Delegate.class, c))
-					isDelegate = true;
-				if (c == Object.class)
-					classCategory = OBJ;
-				else if (c.isEnum())
-					classCategory = ENUM;
-				else if (c.equals(Class.class))
-					classCategory = CLASS;
-				else if (isParentClass(CharSequence.class, c)) {
-					if (c.equals(String.class))
-						classCategory = STR;
-					else
-						classCategory = CHARSEQ;
-				}
-				else if (isParentClass(Number.class, c)) {
-					if (isParentClass(Float.class, c) || isParentClass(Double.class, c))
-						classCategory = DECIMAL;
-					else
-						classCategory = NUMBER;
-				}
-				else if (isParentClass(Collection.class, c))
-					classCategory = COLLECTION;
-				else if (isParentClass(Map.class, c)) {
-					if (isParentClass(BeanMap.class, c))
-						classCategory = BEANMAP;
-					else
-						classCategory = MAP;
-				}
-				else if (c == Character.class)
-					classCategory = CHAR;
-				else if (c == Boolean.class)
-					classCategory = BOOLEAN;
-				else if (isParentClass(Date.class, c) || isParentClass(Calendar.class, c))
-					classCategory = DATE;
-				else if (c.isArray())
-					classCategory = ARRAY;
-				else if (isParentClass(URL.class, c) || isParentClass(URI.class, c) || c.isAnnotationPresent(org.apache.juneau.annotation.URI.class))
-					classCategory = URI;
-				else if (isParentClass(Reader.class, c))
-					classCategory = READER;
-				else if (isParentClass(InputStream.class, c))
-					classCategory = INPUTSTREAM;
-			}
-
-			isMemberClass = c.isMemberClass() && ! isStatic(c);
-
-			// Find static fromString(String) or equivalent method.
-			// fromString() must be checked before valueOf() so that Enum classes can create their own
-			//		specialized fromString() methods to override the behavior of Enum.valueOf(String).
-			// valueOf() is used by enums.
-			// parse() is used by the java logging Level class.
-			// forName() is used by Class and Charset
-			for (String methodName : new String[]{"fromString","valueOf","parse","parseString","forName","forString"}) {
-				if (this.fromStringMethod == null) {
-					for (Method m : c.getMethods()) {
-						if (isStatic(m) && isPublic(m) && isNotDeprecated(m)) {
-							String mName = m.getName();
-							if (mName.equals(methodName) && m.getReturnType() == innerClass) {
-								Class<?>[] args = m.getParameterTypes();
-								if (args.length == 1 && args[0] == String.class) {
-									this.fromStringMethod = m;
-									break;
-								}
-							}
-						}
-					}
-				}
-			}
-
-			// Special cases
-			try {
-				if (c == TimeZone.class)
-					this.fromStringMethod = c.getMethod("getTimeZone", String.class);
-				else if (c == Locale.class)
-					this.fromStringMethod = LocaleAsString.class.getMethod("fromString", String.class);
-			} catch (NoSuchMethodException e1) {}
-
-			// Find toObjectMap() method if present.
-			for (Method m : c.getMethods()) {
-				if (isPublic(m) && isNotDeprecated(m) && ! isStatic(m)) {
-					String mName = m.getName();
-					if (mName.equals("toObjectMap")) {
-						if (m.getParameterTypes().length == 0 && m.getReturnType() == ObjectMap.class) {
-							this.toObjectMapMethod = m;
-							break;
-						}
-					} else if (mName.equals("swap")) {
-						if (m.getParameterTypes().length == 1 && m.getParameterTypes()[0] == BeanSession.class) {
-							this.swapMethod = m;
-							break;
-						}
-					}
-				}
-			}
-
-			// Find @NameProperty and @ParentProperty methods if present.
-			for (Method m : c.getDeclaredMethods()) {
-				if (m.isAnnotationPresent(ParentProperty.class) && m.getParameterTypes().length == 1) {
-					m.setAccessible(true);
-					parentPropertyMethod = m;
-				}
-				if (m.isAnnotationPresent(NameProperty.class) && m.getParameterTypes().length == 1) {
-					m.setAccessible(true);
-					namePropertyMethod = m;
-				}
-			}
-
-			// Find constructor(String) method if present.
-			for (Constructor cs : c.getConstructors()) {
-				if (isPublic(cs) && isNotDeprecated(cs)) {
-					Class<?>[] args = cs.getParameterTypes();
-					if (args.length == (isMemberClass ? 2 : 1)) {
-						Class<?> arg = args[(isMemberClass ? 1 : 0)];
-						if (arg == String.class)
-							this.stringConstructor = cs;
-						else if (ObjectMap.class.isAssignableFrom(arg))
-							this.objectMapConstructor = cs;
-						else if (swapMethod != null && swapMethod.getReturnType().getClass().isAssignableFrom(arg))
-							this.swapConstructor = cs;
-						else if (classCategory != NUMBER && (Number.class.isAssignableFrom(arg) || (arg.isPrimitive() && (arg == int.class || arg == short.class || arg == long.class || arg == float.class || arg == double.class)))) {
-							this.numberConstructor = cs;
-							this.numberConstructorType = (Class<? extends Number>)ClassUtils.getWrapperIfPrimitive(arg);
-						}
-					}
-				}
-			}
-
 			if (swapMethod != null) {
-				this.pojoSwap = new PojoSwap<T,Object>(c, swapMethod.getReturnType()) {
+				this.pojoSwap = new PojoSwap<T,Object>(innerClass, swapMethod.getReturnType()) {
 					@Override
 					public Object swap(BeanSession session, Object o) throws SerializeException {
 						try {
@@ -308,15 +123,16 @@ public final class ClassMeta<T> implements Type {
 				};
 			}
 
-			// Note:  Primitive types are normally abstract.
-			isAbstract = Modifier.isAbstract(c.getModifiers()) && ! isPrimitive();
+			serializedClassMeta = (pojoSwap == null ? this : beanContext.getClassMeta(pojoSwap.getSwapClass()));
+			if (serializedClassMeta == null)
+				serializedClassMeta = this;
 
 			// If this is an array, get the element type.
-			if (classCategory == ARRAY)
+			if (cc == ARRAY)
 				elementType = beanContext.getClassMeta(innerClass.getComponentType());
 
 			// If this is a MAP, see if it's parameterized (e.g. AddressBook extends HashMap<String,Person>)
-			else if (classCategory == MAP) {
+			else if (cc == MAP) {
 				ClassMeta[] parameters = beanContext.findParameters(innerClass, innerClass);
 				if (parameters != null && parameters.length == 2) {
 					keyType = parameters[0];
@@ -328,7 +144,7 @@ public final class ClassMeta<T> implements Type {
 			}
 
 			// If this is a COLLECTION, see if it's parameterized (e.g. AddressBook extends LinkedList<Person>)
-			else if (classCategory == COLLECTION) {
+			else if (cc == COLLECTION) {
 				ClassMeta[] parameters = beanContext.findParameters(innerClass, innerClass);
 				if (parameters != null && parameters.length == 1) {
 					elementType = parameters[0];
@@ -339,7 +155,7 @@ public final class ClassMeta<T> implements Type {
 
 			// If the category is unknown, see if it's a bean.
 			// Note that this needs to be done after all other initialization has been done.
-			else if (classCategory == UNKNOWN) {
+			else if (cc == OTHER) {
 
 				BeanMeta newMeta = null;
 				try {
@@ -349,69 +165,17 @@ public final class ClassMeta<T> implements Type {
 					notABeanReason = e.getMessage();
 					throw e;
 				}
-				if (notABeanReason != null)
-					classCategory = OTHER;
-				else {
+				if (notABeanReason == null) {
 					beanMeta = newMeta;
-					classCategory = BEAN;
 				}
 			}
 
-			if (c.isPrimitive()) {
-				if (c == Boolean.TYPE)
-					primitiveDefault = BOOLEAN_DEFAULT;
-				else if (c == Character.TYPE)
-					primitiveDefault = CHARACTER_DEFAULT;
-				else if (c == Short.TYPE)
-					primitiveDefault = SHORT_DEFAULT;
-				else if (c == Integer.TYPE)
-					primitiveDefault = INTEGER_DEFAULT;
-				else if (c == Long.TYPE)
-					primitiveDefault = LONG_DEFAULT;
-				else if (c == Float.TYPE)
-					primitiveDefault = FLOAT_DEFAULT;
-				else if (c == Double.TYPE)
-					primitiveDefault = DOUBLE_DEFAULT;
-				else if (c == Byte.TYPE)
-					primitiveDefault = BYTE_DEFAULT;
-			} else {
-				if (c == Boolean.class)
-					primitiveDefault = BOOLEAN_DEFAULT;
-				else if (c == Character.class)
-					primitiveDefault = CHARACTER_DEFAULT;
-				else if (c == Short.class)
-					primitiveDefault = SHORT_DEFAULT;
-				else if (c == Integer.class)
-					primitiveDefault = INTEGER_DEFAULT;
-				else if (c == Long.class)
-					primitiveDefault = LONG_DEFAULT;
-				else if (c == Float.class)
-					primitiveDefault = FLOAT_DEFAULT;
-				else if (c == Double.class)
-					primitiveDefault = DOUBLE_DEFAULT;
-				else if (c == Byte.class)
-					primitiveDefault = BYTE_DEFAULT;
-			}
 		} catch (NoClassDefFoundError e) {
 			this.initException = e;
 		} catch (RuntimeException e) {
 			this.initException = e;
 			throw e;
 		}
-
-		if (innerClass.getAnnotation(Remoteable.class) != null) {
-			remoteableMethods = getPublicMethods();
-		} else {
-			for (Method m : innerClass.getMethods()) {
-				if (m.getAnnotation(Remoteable.class) != null) {
-					if (remoteableMethods == null)
-						remoteableMethods = new LinkedHashMap<String,Method>();
-					remoteableMethods.put(ClassUtils.getMethodSignature(m), m);
-				}
-			}
-		}
-		if (remoteableMethods != null)
-			remoteableMethods = Collections.unmodifiableMap(remoteableMethods);
 
 		if (isBean())
 			dictionaryName = resolvedDictionaryName = getBeanMeta().getDictionaryName();
@@ -449,41 +213,12 @@ public final class ClassMeta<T> implements Type {
 	}
 
 	/**
-	 * Returns the category of this class.
-	 *
-	 * @return The category of this class.
-	 */
-	public ClassCategory getClassCategory() {
-		return classCategory;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this class is a superclass of or the same as the specified class.
-	 *
-	 * @param c The comparison class.
-	 * @return <jk>true</jk> if this class is a superclass of or the same as the specified class.
-	 */
-	public boolean isAssignableFrom(Class<?> c) {
-		return isParentClass(innerClass, c);
-	}
-
-	/**
 	 * Returns <jk>true</jk> if this class as subtypes defined through {@link Bean#subTypes}.
 	 *
 	 * @return <jk>true</jk> if this class has subtypes.
 	 */
 	public boolean hasSubTypes() {
 		return beanFilter != null && beanFilter.getSubTypeProperty() != null;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this class is a subclass of or the same as the specified class.
-	 *
-	 * @param c The comparison class.
-	 * @return <jk>true</jk> if this class is a subclass of or the same as the specified class.
-	 */
-	public boolean isInstanceOf(Class<?> c) {
-		return isParentClass(c, innerClass);
 	}
 
 	/**
@@ -519,10 +254,10 @@ public final class ClassMeta<T> implements Type {
 		try {
 			Pojo p = innerClass.getAnnotation(Pojo.class);
 			if (p != null) {
-				Class<?> c = p.swap();
-				if (c != Null.class) {
-					if (ClassUtils.isParentClass(PojoSwap.class, c))
-						return (PojoSwap<T,?>)c.newInstance();
+				Class<?> swapClass = p.swap();
+				if (swapClass != Null.class) {
+					if (ClassUtils.isParentClass(PojoSwap.class, swapClass))
+						return (PojoSwap<T,?>)swapClass.newInstance();
 					throw new RuntimeException("TODO - Surrogate classes not yet supported.");
 				}
 			}
@@ -533,30 +268,6 @@ public final class ClassMeta<T> implements Type {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-	}
-
-	/**
-	 * Locates the no-arg constructor for the specified class.
-	 * Constructor must match the visibility requirements specified by parameter 'v'.
-	 * If class is abstract, always returns <jk>null</jk>.
-	 * Note that this also returns the 1-arg constructor for non-static member classes.
-	 *
-	 * @param c The class from which to locate the no-arg constructor.
-	 * @param v The minimum visibility.
-	 * @return The constructor, or <jk>null</jk> if no no-arg constructor exists with the required visibility.
-	 */
-	@SuppressWarnings({"rawtypes","unchecked"})
-	protected static <T> Constructor<? extends T> findNoArgConstructor(Class<T> c, Visibility v) {
-		int mod = c.getModifiers();
-		if (Modifier.isAbstract(mod))
-			return null;
-		boolean isMemberClass = c.isMemberClass() && ! isStatic(c);
-		for (Constructor cc : c.getConstructors()) {
-			mod = cc.getModifiers();
-			if (cc.getParameterTypes().length == (isMemberClass ? 1 : 0) && v.isVisible(mod) && isNotDeprecated(cc))
-				return v.transform(cc);
-		}
-		return null;
 	}
 
 	/**
@@ -590,15 +301,6 @@ public final class ClassMeta<T> implements Type {
 	protected ClassMeta<T> setValueType(ClassMeta<?> valueType) {
 		this.valueType = valueType;
 		return this;
-	}
-
-	/**
-	 * Returns the {@link Class} object that this class type wraps.
-	 *
-	 * @return The wrapped class object.
-	 */
-	public Class<T> getInnerClass() {
-		return innerClass;
 	}
 
 	/**
@@ -639,22 +341,12 @@ public final class ClassMeta<T> implements Type {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this class implements {@link Delegate}, meaning
-	 * 	it's a representation of some other object.
+	 * Returns <jk>true</jk> if this class is a bean.
 	 *
-	 * @return <jk>true</jk> if this class implements {@link Delegate}.
+	 * @return <jk>true</jk> if this class is a bean.
 	 */
-	public boolean isDelegate() {
-		return isDelegate;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this class is a subclass of {@link Map}.
-	 *
-	 * @return <jk>true</jk> if this class is a subclass of {@link Map}.
-	 */
-	public boolean isMap() {
-		return classCategory == MAP || classCategory == BEANMAP;
+	public boolean isBean() {
+		return beanMeta != null;
 	}
 
 	/**
@@ -663,239 +355,7 @@ public final class ClassMeta<T> implements Type {
 	 * @return <jk>true</jk> if this class is a subclass of {@link Map} or it's a bean.
 	 */
 	public boolean isMapOrBean() {
-		return classCategory == MAP || classCategory == BEANMAP || classCategory == BEAN;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this class is a subclass of {@link BeanMap}.
-	 *
-	 * @return <jk>true</jk> if this class is a subclass of {@link BeanMap}.
-	 */
-	public boolean isBeanMap() {
-		return classCategory == BEANMAP;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this class is a subclass of {@link Collection}.
-	 *
-	 * @return <jk>true</jk> if this class is a subclass of {@link Collection}.
-	 */
-	public boolean isCollection() {
-		return classCategory == COLLECTION;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this class is a subclass of {@link Collection} or is an array.
-	 *
-	 * @return <jk>true</jk> if this class is a subclass of {@link Collection} or is an array.
-	 */
-	public boolean isCollectionOrArray() {
-		return classCategory == COLLECTION || classCategory == ARRAY;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this class is {@link Class}.
-	 *
-	 * @return <jk>true</jk> if this class is {@link Class}.
-	 */
-	public boolean isClass() {
-		return classCategory == CLASS;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this class is an {@link Enum}.
-	 *
-	 * @return <jk>true</jk> if this class is an {@link Enum}.
-	 */
-	public boolean isEnum() {
-		return classCategory == ENUM;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this class is an array.
-	 *
-	 * @return <jk>true</jk> if this class is an array.
-	 */
-	public boolean isArray() {
-		return classCategory == ARRAY;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this class is a bean.
-	 *
-	 * @return <jk>true</jk> if this class is a bean.
-	 */
-	public boolean isBean() {
-		return classCategory == BEAN;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this class is {@link Object}.
-	 *
-	 * @return <jk>true</jk> if this class is {@link Object}.
-	 */
-	public boolean isObject() {
-		return classCategory == OBJ;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this class is not {@link Object}.
-	 *
-	 * @return <jk>true</jk> if this class is not {@link Object}.
-	 */
-	public boolean isNotObject() {
-		return classCategory != OBJ;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this class is a subclass of {@link Number}.
-	 *
-	 * @return <jk>true</jk> if this class is a subclass of {@link Number}.
-	 */
-	public boolean isNumber() {
-		return classCategory == NUMBER || classCategory == DECIMAL;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this class is a subclass of {@link Float} or {@link Double}.
-	 *
-	 * @return <jk>true</jk> if this class is a subclass of {@link Float} or {@link Double}.
-	 */
-	public boolean isDecimal() {
-		return classCategory == DECIMAL;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this class is a {@link Boolean}.
-	 *
-	 * @return <jk>true</jk> if this class is a {@link Boolean}.
-	 */
-	public boolean isBoolean() {
-		return classCategory == BOOLEAN;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this class is a subclass of {@link CharSequence}.
-	 *
-	 * @return <jk>true</jk> if this class is a subclass of {@link CharSequence}.
-	 */
-	public boolean isCharSequence() {
-		return classCategory == STR || classCategory == CHARSEQ;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this class is a {@link String}.
-	 *
-	 * @return <jk>true</jk> if this class is a {@link String}.
-	 */
-	public boolean isString() {
-		return classCategory == STR;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this class is a {@link Character}.
-	 *
-	 * @return <jk>true</jk> if this class is a {@link Character}.
-	 */
-	public boolean isChar() {
-		return classCategory == CHAR;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this class is a primitive.
-	 *
-	 * @return <jk>true</jk> if this class is a primitive.
-	 */
-	public boolean isPrimitive() {
-		return innerClass.isPrimitive();
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this class is a {@link Date} or {@link Calendar}.
-	 *
-	 * @return <jk>true</jk> if this class is a {@link Date} or {@link Calendar}.
-	 */
-	public boolean isDate() {
-		return classCategory == DATE;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this class is a {@link URI} or {@link URL}.
-	 *
-	 * @return <jk>true</jk> if this class is a {@link URI} or {@link URL}.
-	 */
-	public boolean isUri() {
-		return classCategory == URI;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this class is a {@link Reader}.
-	 *
-	 * @return <jk>true</jk> if this class is a {@link Reader}.
-	 */
-	public boolean isReader() {
-		return classCategory == READER;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this class is an {@link InputStream}.
-	 *
-	 * @return <jk>true</jk> if this class is an {@link InputStream}.
-	 */
-	public boolean isInputStream() {
-		return classCategory == INPUTSTREAM;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if instance of this object can be <jk>null</jk>.
-	 * <p>
-	 * 	Objects can be <jk>null</jk>, but primitives cannot, except for chars which can be represented
-	 * 	by <code>(<jk>char</jk>)0</code>.
-	 *
-	 * @return <jk>true</jk> if instance of this class can be null.
-	 */
-	public boolean isNullable() {
-		if (innerClass.isPrimitive())
-			return classCategory == CHAR;
-		return true;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this class or one of it's methods are annotated with {@link Remoteable @Remotable}.
-	 *
-	 * @return <jk>true</jk> if this class is remoteable.
-	 */
-	public boolean isRemoteable() {
-		return remoteableMethods != null;
-	}
-
-	/**
-	 * All methods on this class annotated with {@link Remoteable @Remotable}, or all public methods if class is annotated.
-	 * Keys are method signatures.
-	 *
-	 * @return All remoteable methods on this class.
-	 */
-	public Map<String,Method> getRemoteableMethods() {
-		return remoteableMethods;
-	}
-
-	/**
-	 * All public methods on this class including static methods.
-	 * Keys are method signatures.
-	 *
-	 * @return The public methods on this class.
-	 */
-	public Map<String,Method> getPublicMethods() {
-		if (publicMethods == null) {
-			synchronized(this) {
-				Map<String,Method> map = new LinkedHashMap<String,Method>();
-				for (Method m : innerClass.getMethods())
-					if (isPublic(m) && isNotDeprecated(m))
-						map.put(ClassUtils.getMethodSignature(m), m);
-				publicMethods = Collections.unmodifiableMap(map);
-			}
-		}
-		return publicMethods;
+		return cc == MAP || cc == BEANMAP || beanMeta != null;
 	}
 
 	/**
@@ -930,11 +390,11 @@ public final class ClassMeta<T> implements Type {
 	/**
 	 * Returns the language-specified extended metadata on this class.
 	 *
-	 * @param c The name of the metadata class to create.
+	 * @param extMetaClass The name of the metadata class to create.
 	 * @return Extended metadata on this class.  Never <jk>null</jk>.
 	 */
-	public <M extends ClassMetaExtended> M getExtendedMeta(Class<M> c) {
-		return extMeta.get(c, this);
+	public <M extends ClassMetaExtended> M getExtendedMeta(Class<M> extMetaClass) {
+		return extMeta.get(extMetaClass, this);
 	}
 
 	/**
@@ -1057,50 +517,6 @@ public final class ClassMeta<T> implements Type {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this class has an <code>ObjectMap toObjectMap()</code> method.
-	 *
-	 * @return <jk>true</jk> if class has a <code>toObjectMap()</code> method.
-	 */
-	public boolean hasToObjectMapMethod() {
-		return toObjectMapMethod != null;
-	}
-
-	/**
-	 * Returns the method annotated with {@link NameProperty @NameProperty}.
-	 *
-	 * @return The method annotated with {@link NameProperty @NameProperty} or <jk>null</jk> if method does not exist.
-	 */
-	public Method getNameProperty() {
-		return namePropertyMethod;
- 	}
-
-	/**
-	 * Returns the method annotated with {@link ParentProperty @ParentProperty}.
-	 *
-	 * @return The method annotated with {@link ParentProperty @ParentProperty} or <jk>null</jk> if method does not exist.
-	 */
-	public Method getParentProperty() {
-		return parentPropertyMethod;
- 	}
-
-	/**
-	 * Converts an instance of this class to an {@link ObjectMap}.
-	 *
-	 * @param t The object to convert to a map.
-	 * @return The converted object, or <jk>null</jk> if method does not have a <code>toObjectMap()</code> method.
-	 * @throws BeanRuntimeException Thrown by <code>toObjectMap()</code> method invocation.
-	 */
-	public ObjectMap toObjectMap(Object t) throws BeanRuntimeException {
-		try {
-			if (toObjectMapMethod != null)
-				return (ObjectMap)toObjectMapMethod.invoke(t);
-			return null;
-		} catch (Exception e) {
-			throw new BeanRuntimeException(e);
-		}
-	}
-
-	/**
 	 * Returns the reason why this class is not a bean, or <jk>null</jk> if it is a bean.
 	 *
 	 * @return The reason why this class is not a bean, or <jk>null</jk> if it is a bean.
@@ -1136,16 +552,6 @@ public final class ClassMeta<T> implements Type {
 	}
 
 	/**
-	 * Returns the default value for primitives such as <jk>int</jk> or <jk>Integer</jk>.
-	 *
-	 * @return The default value, or <jk>null</jk> if this class type is not a primitive.
-	 */
-	@SuppressWarnings("unchecked")
-	public T getPrimitiveDefault() {
-		return (T)primitiveDefault;
-	}
-
-	/**
 	 * Create a new instance of the main class of this declared type from a <code>String</code> input.
 	 * <p>
 	 * In order to use this method, the class must have one of the following methods:
@@ -1169,11 +575,11 @@ public final class ClassMeta<T> implements Type {
 		Method m = fromStringMethod;
 		if (m != null)
 			return (T)m.invoke(null, arg);
-		Constructor<T> c = stringConstructor;
-		if (c != null) {
+		Constructor<T> con = stringConstructor;
+		if (con != null) {
 			if (isMemberClass)
-				return c.newInstance(outer, arg);
-			return c.newInstance(arg);
+				return con.newInstance(outer, arg);
+			return con.newInstance(arg);
 		}
 		throw new InstantiationError("No string constructor or valueOf(String) method found for class '"+getInnerClass().getName()+"'");
 	}
@@ -1197,12 +603,12 @@ public final class ClassMeta<T> implements Type {
 	 * @throws InvocationTargetException If the underlying constructor throws an exception.
 	 */
 	public T newInstanceFromNumber(BeanSession session, Object outer, Number arg) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, InstantiationException {
-		Constructor<T> c = numberConstructor;
-		if (c != null) {
+		Constructor<T> con = numberConstructor;
+		if (con != null) {
 			Object arg2 = session.convertToType(arg, numberConstructor.getParameterTypes()[0]);
 			if (isMemberClass)
-				return c.newInstance(outer, arg2);
-			return c.newInstance(arg2);
+				return con.newInstance(outer, arg2);
+			return con.newInstance(arg2);
 		}
 		throw new InstantiationError("No string constructor or valueOf(Number) method found for class '"+getInnerClass().getName()+"'");
 	}
@@ -1225,11 +631,11 @@ public final class ClassMeta<T> implements Type {
 	 * @throws InvocationTargetException If the underlying constructor throws an exception.
 	 */
 	public T newInstanceFromObjectMap(Object outer, ObjectMap arg) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, InstantiationException {
-		Constructor<T> c = objectMapConstructor;
-		if (c != null) {
+		Constructor<T> con = objectMapConstructor;
+		if (con != null) {
 			if (isMemberClass)
-				return c.newInstance(outer, arg);
-			return c.newInstance(arg);
+				return con.newInstance(outer, arg);
+			return con.newInstance(arg);
 		}
 		throw new InstantiationError("No map constructor method found for class '"+getInnerClass().getName()+"'");
 	}
@@ -1253,9 +659,9 @@ public final class ClassMeta<T> implements Type {
 	public T newInstance() throws IllegalArgumentException, InstantiationException, IllegalAccessException, InvocationTargetException {
 		if (isArray())
 			return (T)Array.newInstance(getInnerClass().getComponentType(), 0);
-		Constructor<? extends T> c = getConstructor();
-		if (c != null)
-			return c.newInstance((Object[])null);
+		Constructor<? extends T> con = getConstructor();
+		if (con != null)
+			return con.newInstance((Object[])null);
 		InvocationHandler h = getProxyInvocationHandler();
 		if (h != null)
 			return (T)Proxy.newProxyInstance(this.getClass().getClassLoader(), new Class[] { getInnerClass(), java.io.Serializable.class }, h);
@@ -1310,7 +716,7 @@ public final class ClassMeta<T> implements Type {
 	public boolean same(ClassMeta<?> cm) {
 		if (equals(cm))
 			return true;
-		return (isPrimitive() && classCategory == cm.classCategory);
+		return (isPrimitive() && cc == cm.cc);
 	}
 
 	@Override /* Object */
@@ -1341,51 +747,26 @@ public final class ClassMeta<T> implements Type {
 			int i = n.lastIndexOf('.');
 			n = n.substring(i == -1 ? 0 : i+1).replace('$', '.');
 		}
-		switch(classCategory) {
-			case ARRAY:
-				return elementType.toString(sb, simple).append('[').append(']');
-			case MAP:
-				return sb.append(n).append(keyType.isObject() && valueType.isObject() ? "" : "<"+keyType.toString(simple)+","+valueType.toString(simple)+">");
-			case BEANMAP:
-				return sb.append(BeanMap.class.getName()).append('<').append(n).append('>');
-			case COLLECTION:
-				return sb.append(n).append(elementType.isObject() ? "" : "<"+elementType.toString(simple)+">");
-			case OTHER:
-				if (simple)
-					return sb.append(n);
-				sb.append("OTHER-").append(n).append(",notABeanReason=").append(notABeanReason);
-				if (initException != null)
-					sb.append(",initException=").append(initException);
-				return sb;
-			default:
+		if (cc == ARRAY)
+			return elementType.toString(sb, simple).append('[').append(']');
+		if (cc == MAP)
+			return sb.append(n).append(keyType.isObject() && valueType.isObject() ? "" : "<"+keyType.toString(simple)+","+valueType.toString(simple)+">");
+		if (cc == BEANMAP)
+			return sb.append(BeanMap.class.getName()).append('<').append(n).append('>');
+		if (cc == COLLECTION)
+			return sb.append(n).append(elementType.isObject() ? "" : "<"+elementType.toString(simple)+">");
+		if (cc == OTHER && beanMeta == null) {
+			if (simple)
 				return sb.append(n);
+			sb.append("OTHER-").append(n).append(",notABeanReason=").append(notABeanReason);
+			if (initException != null)
+				sb.append(",initException=").append(initException);
+			return sb;
 		}
+		return sb.append(n);
 	}
 
-	/**
-	 * Returns <jk>true</jk> if the specified object is an instance of this class.
-	 * This is a simple comparison on the base class itself and not on
-	 * any generic parameters.
-	 *
-	 * @param o The object to check.
-	 * @return <jk>true</jk> if the specified object is an instance of this class.
-	 */
-	public boolean isInstance(Object o) {
-		if (o != null)
-			return ClassUtils.isParentClass(this.innerClass, o.getClass());
-		return false;
-	}
-
-	/**
-	 * Returns a readable name for this class (e.g. <js>"java.lang.String"</js>, <js>"boolean[]"</js>).
-	 *
-	 * @return The readable name for this class.
-	 */
-	public String getReadableName() {
-		return ClassUtils.getReadableClassName(this.innerClass);
-	}
-
-	private static class LocaleAsString {
+	static class LocaleAsString {
 		private static Method forLanguageTagMethod;
 		static {
 			try {
@@ -1393,7 +774,6 @@ public final class ClassMeta<T> implements Type {
 			} catch (NoSuchMethodException e) {}
 		}
 
-		@SuppressWarnings("unused")
 		public static final Locale fromString(String localeString) {
 			if (forLanguageTagMethod != null) {
 				if (localeString.indexOf('_') != -1)
