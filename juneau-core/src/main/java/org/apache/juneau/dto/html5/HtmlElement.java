@@ -17,6 +17,7 @@ import static org.apache.juneau.xml.annotation.XmlFormat.*;
 import java.util.*;
 
 import org.apache.juneau.html.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
@@ -60,6 +61,18 @@ public abstract class HtmlElement {
 			this.attrs = new LinkedHashMap<String,Object>();
 		this.attrs.put(key, val);
 		return this;
+	}
+
+	/**
+	 * Returns the attribute with the specified name.
+	 *
+	 * @param key The attribute name.
+	 * @return The attribute value, or <jk>null</jk> if the named attribute does not exist.
+	 */
+	public String getAttr(String key) {
+		if (attrs == null)
+			return null;
+		return StringUtils.toString(attrs.get(key));
 	}
 
 	/**

@@ -351,7 +351,12 @@ public class XmlSerializer extends WriterSerializer {
 		}
 
 		String resolvedDictionaryName = isExpectedType ? null : aType.getResolvedDictionaryName();
+
+		// Note that the dictionary name may be specified on the actual type or the serialized type.
+		// HTML templates will have them defined on the serialized type.
 		String dictionaryName = aType.getDictionaryName();
+		if (dictionaryName == null)
+			dictionaryName = sType.getDictionaryName();
 
 		// char '\0' is interpreted as null.
 		if (o != null && sType.isChar() && ((Character)o).charValue() == 0)

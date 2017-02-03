@@ -107,8 +107,8 @@ public abstract class PojoSwap<T,S> {
 	 */
 	@SuppressWarnings("unchecked")
 	protected PojoSwap() {
-		normalClass = (Class<T>)ClassUtils.resolveParameterType(PojoSwap.class, 0, this);
-		swapClass = ClassUtils.resolveParameterType(PojoSwap.class, 1, this);
+		normalClass = (Class<T>)ClassUtils.resolveParameterType(PojoSwap.class, 0, this.getClass());
+		swapClass = ClassUtils.resolveParameterType(PojoSwap.class, 1, this.getClass());
 	}
 
 	/**
