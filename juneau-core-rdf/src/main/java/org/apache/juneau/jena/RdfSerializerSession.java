@@ -36,7 +36,7 @@ public final class RdfSerializerSession extends SerializerSession {
 	private final String rdfLanguage;
 	private final Namespace juneauNs, juneauBpNs;
 	private final boolean addLiteralTypes, addRootProperty, useXmlNamespaces, looseCollections, autoDetectNamespaces;
-	private final Property pRoot, pValue, pClass;
+	private final Property pRoot, pValue, pType;
 	private final Model model;
 	private final RDFWriter writer;
 	private final RdfCollectionFormat collectionFormat;
@@ -98,7 +98,7 @@ public final class RdfSerializerSession extends SerializerSession {
 			addModelPrefix(ns);
 		this.pRoot = model.createProperty(juneauNs.getUri(), RDF_juneauNs_ROOT);
 		this.pValue = model.createProperty(juneauNs.getUri(), RDF_juneauNs_VALUE);
-		this.pClass = model.createProperty(juneauNs.getUri(), RDF_juneauNs_CLASS);
+		this.pType = model.createProperty(juneauNs.getUri(), RDF_juneauNs_TYPE);
 		writer = model.getWriter(rdfLanguage);
 
 		// Only apply properties with this prefix!
@@ -224,8 +224,8 @@ public final class RdfSerializerSession extends SerializerSession {
 	 *
 	 * @return The RDF property that represents a class in the RDF model.
 	 */
-	public final Property getClassProperty() {
-		return pClass;
+	public final Property getTypeProperty() {
+		return pType;
 	}
 
 	/**

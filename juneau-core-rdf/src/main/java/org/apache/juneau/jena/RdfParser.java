@@ -124,7 +124,7 @@ public class RdfParser extends ReaderParser {
 			else
 				c = (type.canCreateNewInstance(session.getOuter()) ? (Collection<?>)type.newInstance(session.getOuter()) : new ObjectList(session));
 			for (Resource resource : roots)
-				c.add(parseAnything(s, type.getElementType(), resource, session.getOuter()));
+				c.add(parseAnything(s, type.getElementType(), resource, session.getOuter(), null));
 
 			if (type.isArray())
 				return (T)session.toArray(type, c);
@@ -137,7 +137,7 @@ public class RdfParser extends ReaderParser {
 			throw new ParseException(session, "Too many root nodes found in model:  {0}", roots.size());
 		Resource resource = roots.get(0);
 
-		return parseAnything(s, type, resource, session.getOuter());
+		return parseAnything(s, type, resource, session.getOuter(), null);
 	}
 
 	/*
@@ -202,18 +202,18 @@ public class RdfParser extends ReaderParser {
 				ClassMeta<?> cm = pMeta.getClassMeta();
 				if (cm.isCollectionOrArray() && isMultiValuedCollections(session, pMeta)) {
 					ClassMeta<?> et = cm.getElementType();
-					Object value = parseAnything(session, et, o, m.getBean(false));
+					Object value = parseAnything(session, et, o, m.getBean(false), pMeta);
 					setName(et, value, key);
 					pMeta.add(m, value);
 				} else {
-					Object value = parseAnything(session, cm, o, m.getBean(false));
+					Object value = parseAnything(session, cm, o, m.getBean(false), pMeta);
 					setName(cm, value, key);
 					pMeta.set(m, value);
 				}
-			} else if (! (p.equals(session.getRootProperty()) || p.equals(session.getClassProperty()) || p.equals(subTypeIdProperty))) {
+			} else if (! (p.equals(session.getRootProperty()) || p.equals(session.getTypeProperty()) || p.equals(subTypeIdProperty))) {
 				if (bm.isSubTyped()) {
 					RDFNode o = st.getObject();
-					Object value = parseAnything(session, object(), o, m.getBean(false));
+					Object value = parseAnything(session, object(), o, m.getBean(false), pMeta);
 					m.put(key, value);
 				} else {
 					onUnknownProperty(session, key, m, -1, -1);
@@ -231,20 +231,22 @@ public class RdfParser extends ReaderParser {
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private <T> T parseAnything(RdfParserSession session, ClassMeta<T> eType, RDFNode n, Object outer) throws Exception {
+	private <T> T parseAnything(RdfParserSession session, ClassMeta<T> eType, RDFNode n, Object outer, BeanPropertyMeta pMeta) throws Exception {
 
 		if (eType == null)
 			eType = (ClassMeta<T>)object();
 		PojoSwap<T,Object> transform = (PojoSwap<T,Object>)eType.getPojoSwap();
 		ClassMeta<?> sType = eType.getSerializedClassMeta();
 		session.setCurrentClass(sType);
+		BeanRegistry breg = pMeta == null ? session.getBeanRegistry() : pMeta.getBeanRegistry();
 
 		if (! sType.canCreateNewInstance(outer)) {
 			if (n.isResource()) {
-				Statement st = n.asResource().getProperty(session.getClassProperty());
+				Statement st = n.asResource().getProperty(session.getTypeProperty());
 				if (st != null) {
  					String c = st.getLiteral().getString();
-					sType = eType = (ClassMeta<T>)session.getClassMetaFromString(c);
+ 					if (breg.hasName(c))
+ 						sType = eType = (ClassMeta<T>)breg.getClassMeta(c);
 				}
 			}
 		}
@@ -264,7 +266,7 @@ public class RdfParser extends ReaderParser {
 				if (session.wasAlreadyProcessed(r))
 					o = r.getURI();
 				else if (r.getProperty(session.getValueProperty()) != null) {
-					o = parseAnything(session, object(), n.asResource().getProperty(session.getValueProperty()).getObject(), outer);
+					o = parseAnything(session, object(), n.asResource().getProperty(session.getValueProperty()).getObject(), outer, null);
 				} else if (isSeq(session, r)) {
 					o = new ObjectList(session);
 					parseIntoCollection(session, r.as(Seq.class), (Collection)o, sType.getElementType());
@@ -355,7 +357,7 @@ public class RdfParser extends ReaderParser {
 
 	private boolean isSeq(RdfParserSession session, RDFNode n) {
 		if (n.isResource()) {
-			Statement st = n.asResource().getProperty(session.getTypeProperty());
+			Statement st = n.asResource().getProperty(session.getRdfTypeProperty());
 			if (st != null)
 				return RDF_SEQ.equals(st.getResource().getURI());
 		}
@@ -364,7 +366,7 @@ public class RdfParser extends ReaderParser {
 
 	private boolean isBag(RdfParserSession session, RDFNode n) {
 		if (n.isResource()) {
-			Statement st = n.asResource().getProperty(session.getTypeProperty());
+			Statement st = n.asResource().getProperty(session.getRdfTypeProperty());
 			if (st != null)
 				return RDF_BAG.equals(st.getResource().getURI());
 		}
@@ -380,7 +382,7 @@ public class RdfParser extends ReaderParser {
 				n = st.getObject();
 				if (n.isLiteral())
 					return n.asLiteral().getValue();
-				return parseAnything(session, object(), st.getObject(), outer);
+				return parseAnything(session, object(), st.getObject(), outer, null);
 			}
 		}
 		throw new ParseException(session, "Unknown value type for node ''{0}''", n);
@@ -401,7 +403,7 @@ public class RdfParser extends ReaderParser {
 				key = session.decodeString(key);
 				RDFNode o = st.getObject();
 				K key2 = convertAttrToType(session, m, key, keyType);
-				V value = parseAnything(session, valueType, o, m);
+				V value = parseAnything(session, valueType, o, m, null);
 				setName(valueType, value, key);
 				m.put(key2, value);
 			}
@@ -413,7 +415,7 @@ public class RdfParser extends ReaderParser {
 
 	private <E> Collection<E> parseIntoCollection(RdfParserSession session, Container c, Collection<E> l, ClassMeta<E> et) throws Exception {
 		for (NodeIterator ni = c.iterator(); ni.hasNext();) {
-			E e = parseAnything(session, et, ni.next(), l);
+			E e = parseAnything(session, et, ni.next(), l, null);
 			l.add(e);
 		}
 		return l;
@@ -421,7 +423,7 @@ public class RdfParser extends ReaderParser {
 
 	private <E> Collection<E> parseIntoCollection(RdfParserSession session, RDFList list, Collection<E> l, ClassMeta<E> et) throws Exception {
 		for (ExtendedIterator<RDFNode> ni = list.iterator(); ni.hasNext();) {
-			E e = parseAnything(session, et, ni.next(), l);
+			E e = parseAnything(session, et, ni.next(), l, null);
 			l.add(e);
 		}
 		return l;

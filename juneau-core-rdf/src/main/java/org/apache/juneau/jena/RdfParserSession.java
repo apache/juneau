@@ -34,7 +34,7 @@ public class RdfParserSession extends ParserSession {
 
 	private final String rdfLanguage;
 	private final Namespace juneauNs, juneauBpNs;
-	private final Property pRoot, pValue, pClass, pType;
+	private final Property pRoot, pValue, pType, pRdfType;
 	private final Model model;
 	private final boolean trimWhitespace, looseCollections;
 	private final RDFReader rdfReader;
@@ -88,8 +88,8 @@ public class RdfParserSession extends ParserSession {
 		addModelPrefix(juneauBpNs);
 		this.pRoot = model.createProperty(juneauNs.getUri(), RDF_juneauNs_ROOT);
 		this.pValue = model.createProperty(juneauNs.getUri(), RDF_juneauNs_VALUE);
-		this.pClass = model.createProperty(juneauNs.getUri(), RDF_juneauNs_CLASS);
-		this.pType = model.createProperty("http://www.w3.org/1999/02/22-rdf-syntax-ns#type");
+		this.pType = model.createProperty(juneauNs.getUri(), RDF_juneauNs_TYPE);
+		this.pRdfType = model.createProperty("http://www.w3.org/1999/02/22-rdf-syntax-ns#type");
 		rdfReader = model.getReader(rdfLanguage);
 
 		// Note: NTripleReader throws an exception if you try to set any properties on it.
@@ -128,12 +128,12 @@ public class RdfParserSession extends ParserSession {
 	}
 
 	/**
-	 * Returns the RDF property identifier <js>"class"</js>.
+	 * Returns the RDF property identifier <js>"_type"</js>.
 	 *
-	 * @return The RDF property identifier <js>"class"</js>.
+	 * @return The RDF property identifier <js>"_type"</js>.
 	 */
-	public final Property getClassProperty() {
-		return pClass;
+	public final Property getTypeProperty() {
+		return pType;
 	}
 
 	/**
@@ -141,8 +141,8 @@ public class RdfParserSession extends ParserSession {
 	 *
 	 * @return The RDF property identifier <js>"type"</js>.
 	 */
-	public final Property getTypeProperty() {
-		return pType;
+	public final Property getRdfTypeProperty() {
+		return pRdfType;
 	}
 
 	/**

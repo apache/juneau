@@ -20,6 +20,7 @@ import static org.junit.Assert.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.Bean;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;
@@ -112,14 +113,13 @@ public class CommonParserTest {
 
 		s.setProperty(SERIALIZER_addBeanTypeProperties, true);
 		in = strip(s.serialize(t1));
-		assertEquals("<rdf:Description><j:class>"+A1.class.getName()+"</j:class><jp:list><rdf:Seq><rdf:li rdf:parseType='Resource'><jp:name>name0</jp:name><jp:value>value0</jp:value></rdf:li><rdf:li rdf:parseType='Resource'><jp:name>name1</jp:name><jp:value>value1</jp:value></rdf:li></rdf:Seq></jp:list></rdf:Description>", in);
+		assertEquals("<rdf:Description><j:_type>A1</j:_type><jp:list><rdf:Seq><rdf:li rdf:parseType='Resource'><jp:name>name0</jp:name><jp:value>value0</jp:value></rdf:li><rdf:li rdf:parseType='Resource'><jp:name>name1</jp:name><jp:value>value1</jp:value></rdf:li></rdf:Seq></jp:list></rdf:Description>", in);
 		in = wrap(in);
-		t1 = (A1)p.parse(in, Object.class);
-		assertEquals("value1", t1.list.get(1).value);
 		t1 = p.parse(in, A1.class);
 		assertEquals("value1", t1.list.get(1).value);
 	}
 
+	@Bean(typeName="A1")
 	public static class A1 {
 		public A2 list;
 	}

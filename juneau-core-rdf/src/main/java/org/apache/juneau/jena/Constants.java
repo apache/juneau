@@ -67,7 +67,7 @@ public final class Constants {
 	 * <p>
 	 * Added if {@link SerializerContext#SERIALIZER_addBeanTypeProperties} setting is enabled.
 	 */
-	public static final String RDF_juneauNs_CLASS = "class";
+	public static final String RDF_juneauNs_TYPE = "_type";
 
 	/**
 	 * RDF property identifier <js>"value"</js>.
