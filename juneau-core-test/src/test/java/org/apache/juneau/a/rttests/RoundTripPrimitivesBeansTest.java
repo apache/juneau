@@ -274,7 +274,7 @@ public class RoundTripPrimitivesBeansTest extends RoundTripTest {
 		}};
 		if (p == null)
 			return;
-		t = roundTrip(t, p.getBeanContext().getCollectionClassMeta(List.class, PrimitivesBean.class));
+		t = roundTrip(t, p.getBeanContext().createSession().getCollectionClassMeta(List.class, PrimitivesBean.class));
 
 		PrimitivesBean t2 = t.get(2);
 

@@ -248,7 +248,7 @@ public abstract class RoundTripTest {
 		Object out = serialize(object, this.s);
 		if (p == null)
 			return object;
-		ClassMeta<? extends T> cm = p.getBeanContext().getMapClassMeta(c, k, v);
+		ClassMeta<? extends T> cm = p.getBeanContext().getClassMeta(c, k, v);
 		T o = this.p.parse(out, cm);
 		return (returnOriginalObject ? object : o);
 	}
@@ -256,7 +256,7 @@ public abstract class RoundTripTest {
 		Object out = serialize(object, this.s);
 		if (p == null)
 			return object;
-		ClassMeta<? extends T> cm = p.getBeanContext().getCollectionClassMeta(c, e);
+		ClassMeta<? extends T> cm = p.getBeanContext().getClassMeta(c, e);
 		T o = this.p.parse(out, cm);
 		return (returnOriginalObject ? object : o);
 	}

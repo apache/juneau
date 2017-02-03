@@ -817,36 +817,49 @@ public class BeanSession extends Session {
 	}
 
 	/**
-	 * Construct a {@code ClassMeta} wrapper around a {@link Class} object.
+	 * Returns a {@code ClassMeta} wrapper around a {@link Class} object.
 	 *
 	 * @param <T> The class type being wrapped.
 	 * @param c The class being wrapped.
-	 * 	of type {@link Class} or {@link ClassMeta}.
-	 * @return If the class is not an array, returns a cached {@link ClassMeta} object.
-	 * 	Otherwise, returns a new {@link ClassMeta} object every time.<br>
+	 * @return The class meta object containing information about the class.
 	 */
 	public final <T> ClassMeta<T> getClassMeta(Class<T> c) {
 		return ctx.getClassMeta(c);
 	}
 
 	/**
-	 * Construct a {@code ClassMeta} wrapper around a {@link Map} object.
+	 * Returns a {@code ClassMeta} wrapper around a {@link Class} or {@link Type} object.
 	 *
-	 * @param <K> The map key class type.
-	 * @param <V> The map value class type.
-	 * @param <T> The map class type.
-	 * @param c The map class type.
-	 * @param keyType The map key class type.
-	 * @param valueType The map value class type.
-	 * @return If the key and value types are OBJECT, returns a cached {@link ClassMeta} object.<br>
-	 * 	Otherwise, returns a new {@link ClassMeta} object every time.
+	 * @param <T> The class type being wrapped.
+	 * @param c The class being wrapped.
+	 * @return The class meta object containing information about the class.
 	 */
-	public final <K,V,T extends Map<K,V>> ClassMeta<T> getMapClassMeta(Class<T> c, ClassMeta<K> keyType, ClassMeta<V> valueType) {
-		return ctx.getMapClassMeta(c, keyType, valueType);
+	public final <T> ClassMeta<T> getClassMeta(Object c) {
+		return ctx.getClassMeta(c);
 	}
 
 	/**
-	 * Construct a {@code ClassMeta} wrapper around a {@link Map} object.
+	 * Returns a {@link ClassMeta} wrapper around a {@link Map} or {@link Collection} class.
+	 * <p>
+	 * Handles the following object arrays:
+	 * <ul>
+	 * 	<li><code>Object[2]</code> containing <code>{Class&lt;? extends Collection&gt;, Object}</code>
+	 * 		where the 2nd entry is the entry type which can be a Class/Type or another array.
+	 * 	<li><code>Object[3]</code> containing <code>{Class&lt;? extends Map&gt;, Object, Object}</code>
+	 * 		where the 2nd entry is the key type which can be a Class/Type and 3rd entry is the value type which can be a Class/Type or another array.
+	 * </ul>
+	 *
+	 * @param c The object array being resolved.
+	 * @return The class meta object containing information about the class.
+	 */
+	public final <T> ClassMeta<T> getClassMeta(Object...c) {
+		return ctx.getClassMeta(c);
+	}
+
+	/**
+	 * Convenience method for creating a {@link Map} class meta.
+	 * <p>
+	 * Equivalent to calling <code>getClassMeta(c, keyType, valueType)</code>.
 	 *
 	 * @param <K> The map key class type.
 	 * @param <V> The map value class type.
@@ -858,39 +871,13 @@ public class BeanSession extends Session {
 	 * 	Otherwise, returns a new {@link ClassMeta} object every time.
 	 */
 	public final <K,V,T extends Map<K,V>> ClassMeta<T> getMapClassMeta(Class<T> c, Class<K> keyType, Class<V> valueType) {
-		return getMapClassMeta(c, getClassMeta(keyType), getClassMeta(valueType));
+		return getClassMeta(c, keyType, valueType);
 	}
 
 	/**
-	 * Construct a {@code ClassMeta} wrapper around a {@link Map} object.
-	 *
-	 * @param <T> The map class type.
-	 * @param c The map class type.
-	 * @param keyType The map key class type.
-	 * @param valueType The map value class type.
-	 * @return If the key and value types are Object, returns a cached {@link ClassMeta} object.<br>
-	 * 	Otherwise, returns a new {@link ClassMeta} object every time.
-	 */
-	public final <T extends Map> ClassMeta<T> getMapClassMeta(Class<T> c, Type keyType, Type valueType) {
-		return getMapClassMeta(c, getClassMeta(keyType), getClassMeta(valueType));
-	}
-
-	/**
-	 * Construct a {@code ClassMeta} wrapper around a {@link Collection} object.
-	 *
-	 * @param <E> The collection element class type.
-	 * @param <T> The collection class type.
-	 * @param c The collection class type.
-	 * @param elementType The collection element class type.
-	 * @return If the element type is <code>OBJECT</code>, returns a cached {@link ClassMeta} object.<br>
-	 * 	Otherwise, returns a new {@link ClassMeta} object every time.
-	 */
-	public final <E,T extends Collection<E>> ClassMeta<T> getCollectionClassMeta(Class<T> c, ClassMeta<E> elementType) {
-		return ctx.getCollectionClassMeta(c, elementType);
-	}
-
-	/**
-	 * Construct a {@code ClassMeta} wrapper around a {@link Collection} object.
+	 * Convenience method for creating a {@link Collection} class meta.
+	 * <p>
+	 * Equivalent to calling <code>getClassMeta(c, keyType, valueType)</code>.
 	 *
 	 * @param <E> The collection element class type.
 	 * @param <T> The collection class type.
@@ -900,20 +887,7 @@ public class BeanSession extends Session {
 	 * 	Otherwise, returns a new {@link ClassMeta} object every time.
 	 */
 	public final <E,T extends Collection<E>> ClassMeta<T> getCollectionClassMeta(Class<T> c, Class<E> elementType) {
-		return getCollectionClassMeta(c, getClassMeta(elementType));
-	}
-
-	/**
-	 * Construct a {@code ClassMeta} wrapper around a {@link Collection} object.
-	 *
-	 * @param <T> The collection class type.
-	 * @param c The collection class type.
-	 * @param elementType The collection element class type.
-	 * @return If the element type is <code>OBJECT</code>, returns a cached {@link ClassMeta} object.<br>
-	 * 	Otherwise, returns a new {@link ClassMeta} object every time.
-	 */
-	public final <T extends Collection> ClassMeta<T> getCollectionClassMeta(Class<T> c, Type elementType) {
-		return getCollectionClassMeta(c, getClassMeta(elementType));
+		return getClassMeta(c, getClassMeta(elementType));
 	}
 
 	/**
@@ -959,24 +933,6 @@ public class BeanSession extends Session {
 		if (o == null)
 			return null;
 		return (ClassMeta<T>)getClassMeta(o.getClass());
-	}
-
-	/**
-	 * Converts class name strings to ClassMeta objects.
-	 *
-	 * <h6 class='topic'>Example:</h6>
-	 * <ul>
-	 * 	<li><js>"java.lang.String"</js>
-	 * 	<li><js>"com.foo.sample.MyBean[]"</js>
-	 * 	<li><js>"java.util.HashMap<java.lang.String,java.lang.Integer>"</js>
-	 * 	<li><js>"[Ljava.lang.String;"</js> (i.e. the value of <code>String[].<jk>class</jk>.getName()</code>)
-	 * </ul>
-	 *
-	 * @param s The class name.
-	 * @return The ClassMeta corresponding to the class name string.
-	 */
-	public final ClassMeta<?> getClassMetaFromString(String s) {
-		return ctx.getClassMetaFromString(s);
 	}
 
 	/**

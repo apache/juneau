@@ -5377,7 +5377,10 @@
 			<li>New method {@link org.apache.juneau.encoders.EncoderGroup#getEncoderMatch(String)} that returns the matched encoder and encoding.
 			<li>General improvements to Bean Dictionary support.
 				<ul>
-					<li>New {@link org.apache.juneau.BeanDictionary} class can be used for defining reusable sets of bean dictionaries.
+					<li>New {@link org.apache.juneau.BeanDictionaryList} class can be used for defining reusable sets of bean dictionaries consisting
+						of classes annotated with {@link org.apache.juneau.annotation.Bean#typeName()}.
+					<li>New {@link org.apache.juneau.BeanDictionaryMap} class can be used for defining reusable sets of bean dictionaries consisting
+						of classes not annotated with {@link org.apache.juneau.annotation.Bean#typeName()}.
 					<li>New {@link org.apache.juneau.annotation.Bean#beanDictionary()} annotation.
 				</ul>
 			<li>Removed restriction on getters and setters to be prefixed with "getX/setX/isX" if a {@link org.apache.juneau.annotation.BeanProperty#name()} annotation is used.
@@ -5389,6 +5392,9 @@
 				</ul>
 			<li>New {@link org.apache.juneau.transform.MapSwap} and {@link org.apache.juneau.transform.StringSwap} classes.
 			<li>New {@link org.apache.juneau.serializer.WriterSerializer#println(Object)} method.  Useful for debugging purposes.
+			<li>New {@link org.apache.juneau.BeanContext#getClassMeta(Object[])} and {@link org.apache.juneau.BeanSession#getClassMeta(Object[])}
+				methods for retrieving Map and Collection class metas.  
+				Replaces the various <code>getMapClassMeta()</code>/<code>getCollectionClassMeta()</code> methods.  
 			<li>New section added to this document:	<a class='doclink' href='#DTOs'>Juneau Data Transfer Objects (org.apache.juneau.dto)</a>
 		</ul>
 		

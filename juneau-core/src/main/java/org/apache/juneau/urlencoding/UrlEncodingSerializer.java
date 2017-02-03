@@ -254,7 +254,7 @@ public class UrlEncodingSerializer extends UonSerializer {
 		} else if (sType.isBean()) {
 			serializeBeanMap(session, out, session.toBeanMap(o), addTypeProperty);
 		} else if (sType.isCollection()) {
-			serializeMap(session, out, getCollectionMap((Collection)o), session.getMapClassMeta(Map.class, Integer.class, sType.getElementType()));
+			serializeMap(session, out, getCollectionMap((Collection)o), session.getClassMeta(Map.class, Integer.class, sType.getElementType()));
 		} else {
 			// All other types can't be serialized as key/value pairs, so we create a
 			// mock key/value pair with a "_value" key.

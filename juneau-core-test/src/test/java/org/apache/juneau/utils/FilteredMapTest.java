@@ -30,12 +30,11 @@ public class FilteredMapTest {
 	// testBasic
 	//====================================================================================================
 	@Test
-	@SuppressWarnings("unchecked")
 	public void testBasic() throws Exception {
 		ObjectMap m = new ObjectMap("{a:'1',b:'2'}");
 
-		ClassMeta<Map<String,Object>> cm = BeanContext.DEFAULT.getMapClassMeta(Map.class, String.class, Object.class);
-		ClassMeta<Map<String,String>> cm2 = BeanContext.DEFAULT.getMapClassMeta(Map.class, String.class, String.class);
+		ClassMeta<Map<String,Object>> cm = BeanContext.DEFAULT.getClassMeta(Map.class, String.class, Object.class);
+		ClassMeta<Map<String,String>> cm2 = BeanContext.DEFAULT.getClassMeta(Map.class, String.class, String.class);
 
 		FilteredMap<String,Object> m2 = new FilteredMap<String,Object>(cm, m, new String[]{"a"});
 

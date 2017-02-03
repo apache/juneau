@@ -18,17 +18,25 @@ import org.apache.juneau.annotation.*;
 
 /**
  * Represents a collection of bean classes that make up a bean dictionary.
+ * <p>
+ * The classes in the list must be one of the following:
+ * <ul>
+ * 	<li>Beans that provide a dictionary name using the {@link Bean#typeName()} annotation.
+ * 	<li>Other subclasses of {@link BeanDictionaryList}.
+ * 	<li>Other subclasses of {@link BeanDictionaryMap}.
+ * <p>
+ * Subclasses must implement a public no-arg constructor so that it can be instantiated by the bean context code.
  */
-public class BeanDictionary extends ArrayList<Class<?>> {
+public class BeanDictionaryList extends ArrayList<Class<?>> {
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Constructor.
 	 *
 	 * @param c The list of bean classes to add to this dictionary.
-	 * 	Classes must either specify a {@link Bean#typeName()} value or be another subclass of <code>BeanDictionary</code>.
+	 * 	Classes must either specify a {@link Bean#typeName()} value or be another subclass of <code>BeanDictionaryList</code>.
 	 */
-	public BeanDictionary(Class<?>...c) {
+	public BeanDictionaryList(Class<?>...c) {
 		append(c);
 	}
 
@@ -36,10 +44,10 @@ public class BeanDictionary extends ArrayList<Class<?>> {
 	 * Append one or more bean classes to this bean dictionary.
 	 *
 	 * @param c The list of bean classes to add to this dictionary.
-	 * 	Classes must either specify a {@link Bean#typeName()} value or be another subclass of <code>BeanDictionary</code>.
+	 * 	Classes must either specify a {@link Bean#typeName()} value or be another subclass of <code>BeanDictionaryList</code>.
 	 * @return This object (for method chaining).
 	 */
-	public BeanDictionary append(Class<?>...c) {
+	protected BeanDictionaryList append(Class<?>...c) {
 		for (Class<?> cc : c)
 			add(cc);
 		return this;

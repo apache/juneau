@@ -54,26 +54,35 @@ public class BeanRegistry {
 	}
 
 	private void addClass(Class<?> c) {
-		if (c != null) {
-			if (ClassUtils.isParentClass(Collection.class, c)) {
-				try {
+		try {
+			if (c != null) {
+				if (ClassUtils.isParentClass(Collection.class, c)) {
 					@SuppressWarnings("rawtypes")
 					Collection cc = (Collection)c.newInstance();
 					for (Object o : cc) {
 						if (o instanceof Class)
 							addClass((Class<?>)o);
 						else
-							throw new BeanRuntimeException("Collection class passed to BeanRegistry does not contain Class objects.", c.getName());
+							throw new BeanRuntimeException("Collection class ''{0}'' passed to BeanRegistry does not contain Class objects.", c.getName());
 					}
-				} catch (Exception e) {
-					throw new BeanRuntimeException(e);
+				} else if (ClassUtils.isParentClass(Map.class, c)) {
+					Map<?,?> m = (Map<?,?>)c.newInstance();
+					for (Map.Entry<?,?> e : m.entrySet()) {
+						String typeName = StringUtils.toString(e.getKey());
+						ClassMeta<?> val = beanContext.getClassMeta(e.getValue());
+						map.put(typeName, val);
+					}
+				} else {
+					Bean b = c.getAnnotation(Bean.class);
+					if (b == null || b.typeName().isEmpty())
+						throw new BeanRuntimeException("Class ''{0}'' was passed to BeanRegistry but it doesn't have a @Bean.typeName() annotation defined.", c.getName());
+					map.put(b.typeName(), beanContext.getClassMeta(c));
 				}
-			} else {
-				Bean b = c.getAnnotation(Bean.class);
-				if (b == null || b.typeName().isEmpty())
-					throw new BeanRuntimeException("Class ''{0}'' was passed to BeanRegistry but it doesn't have a @Bean.typeName() annotation defined.", c.getName());
-				map.put(b.typeName(), beanContext.getClassMeta(c));
 			}
+		} catch (BeanRuntimeException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new BeanRuntimeException(e);
 		}
 	}
 

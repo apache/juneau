@@ -18,7 +18,7 @@ import org.apache.juneau.*;
  * Defines the Java classes that make up the HTML DTO type dictionary.
  * <p>
  */
-public class HtmlBeanDictionary extends BeanDictionary {
+public class HtmlBeanDictionary extends BeanDictionaryList {
 	private static final long serialVersionUID = 1L;
 
 	/**

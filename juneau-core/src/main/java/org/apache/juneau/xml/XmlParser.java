@@ -521,14 +521,14 @@ public class XmlParser extends ReaderParser {
 	@Override /* ReaderParser */
 	protected <K,V> Map<K,V> doParseIntoMap(ParserSession session, Map<K,V> m, Type keyType, Type valueType) throws Exception {
 		XmlParserSession s = (XmlParserSession)session;
-		ClassMeta cm = session.getMapClassMeta(m.getClass(), keyType, valueType);
+		ClassMeta cm = session.getClassMeta(m.getClass(), keyType, valueType);
 		return parseIntoMap(s, m, cm.getKeyType(), cm.getValueType());
 	}
 
 	@Override /* ReaderParser */
 	protected <E> Collection<E> doParseIntoCollection(ParserSession session, Collection<E> c, Type elementType) throws Exception {
 		XmlParserSession s = (XmlParserSession)session;
-		ClassMeta cm = session.getCollectionClassMeta(c.getClass(), elementType);
+		ClassMeta cm = session.getClassMeta(c.getClass(), elementType);
 		return parseIntoCollection(s,c, cm.getElementType());
 	}
 

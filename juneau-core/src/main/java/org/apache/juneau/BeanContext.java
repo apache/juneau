@@ -856,7 +856,8 @@ public class BeanContext extends Context {
 	 * This list can consist of the following class types:
 	 * <ul>
 	 * 	<li>Any bean class that specifies a value for {@link Bean#typeName() @Bean.typeName()}.
-	 * 	<li>Any collection of bean classes above.
+	 * 	<li>Any subclass of {@link BeanDictionaryList} containing a collection of bean classes with type name annotations.
+	 * 	<li>Any subclass of {@link BeanDictionaryMap} containing a mapping of type names to classes without type name annotations.
 	 * </ul>
 	 */
 	public static final String BEAN_beanDictionary = "BeanContext.beanDictionary.list";
@@ -1283,15 +1284,88 @@ public class BeanContext extends Context {
 			return cm;
 		if (cm.isMap()) {
 			ClassMeta<Map> cm2 = (ClassMeta<Map>)cm;
-			cm2 = getMapClassMeta(cm2.getInnerClass(), cm2.getKeyType().getInnerClass(), cm2.getValueType().getInnerClass());
+			cm2 = getClassMeta(cm2.getInnerClass(), cm2.getKeyType().getInnerClass(), cm2.getValueType().getInnerClass());
 			return (ClassMeta<T>)cm2;
 		}
 		if (cm.isCollection()) {
 			ClassMeta<Collection> cm2 = (ClassMeta<Collection>)cm;
-			cm2 = getCollectionClassMeta(cm2.getInnerClass(), cm2.getElementType().getInnerClass());
+			cm2 = getClassMeta(cm2.getInnerClass(), cm2.getElementType().getInnerClass());
 			return (ClassMeta<T>)cm2;
 		}
 		return getClassMeta(cm.getInnerClass());
+	}
+
+	/**
+	 * Resolves the following types of objects:
+	 * <ul>
+	 * 	<li>{@link Class}
+	 * 	<li><code>Object[2]</code> containing <code>{Class&lt;? extends Collection&gt;, Object}</code>
+	 * 		where the 2nd entry is the entry type which can be anything on this list.
+	 * 	<li><code>Object[3]</code> containing <code>{Class&lt;? extends Map&gt;, Object, Object}</code>
+	 * 		where the 2nd entry is the key type and 3rd entry is the value type which can be anything on this list.
+	 * </ul>
+	 *
+	 * @param o
+	 * @return The resolved class meta.
+	 */
+	public final <T> ClassMeta<T> getClassMeta(Object o) {
+		if (o == null)
+			return null;
+		if (o instanceof Class)
+			return getClassMeta((Class)o);
+		if (o instanceof Type)
+			return getClassMeta((Type)o);
+		if (List.class.isAssignableFrom(o.getClass())) {
+			List l = (List)o;
+			o = l.toArray(new Object[l.size()]);
+			return getClassMeta((Object[])o);
+		}
+		if (o.getClass().isArray())
+			return getClassMeta((Object[])o);
+		throw new BeanRuntimeException("Invalid object type passed to getClassMeta(): ''{0}''.  Only Class or arrays containing Class is supported.", o.getClass().getName());
+	}
+
+	/**
+	 * Resolves the following types of objects:
+	 * <ul>
+	 * 	<li><code>Object[2]</code> containing <code>{Class&lt;? extends Collection&gt;, Object}</code>
+	 * 		where the 2nd entry is the entry type which can be anything on this list.
+	 * 	<li><code>Object[3]</code> containing <code>{Class&lt;? extends Map&gt;, Object, Object}</code>
+	 * 		where the 2nd entry is the key type and 3rd entry is the value type which can be anything on this list.
+	 * </ul>
+	 *
+	 * @param o
+	 * @return The resolved class meta.
+	 */
+	public final <T> ClassMeta<T> getClassMeta(Object...o) {
+		if (o == null)
+			return null;
+		int len = o.length;
+		if (len == 2) {
+			Object oc = Array.get(o, 0);
+			if (oc instanceof Class) {
+				Class c = (Class)oc;
+				if (Collection.class.isAssignableFrom(c)) {
+					ClassMeta<?> ce = getClassMeta(Array.get(o, 1));
+					if (ce.isObject())
+						return getClassMeta(c);
+					return new ClassMeta(c, this).setElementType(ce);
+				}
+			}
+		} else if (len == 3) {
+			Object oc = Array.get(o, 0);
+			if (oc instanceof Class) {
+				Class c = (Class)oc;
+				if (Map.class.isAssignableFrom(c)) {
+					ClassMeta<?> ck = getClassMeta(Array.get(o, 1));
+					ClassMeta<?> cv = getClassMeta(Array.get(o, 2));
+					if (ck.isObject() && cv.isObject())
+						return getClassMeta(c);
+					return new ClassMeta(c, this).setKeyType(ck).setValueType(cv);
+				}
+			}
+		}
+		throw new BeanRuntimeException("Invalid object type passed to getClassMeta(): ''{0}''.  Only Class or arrays containing Class is supported.", o.getClass().getName());
 	}
 
 	/**
@@ -1343,97 +1417,6 @@ public class BeanContext extends Context {
 			}
 		}
 		return cm;
-	}
-
-	/**
-	 * Construct a {@code ClassMeta} wrapper around a {@link Map} object.
-	 *
-	 * @param <K> The map key class type.
-	 * @param <V> The map value class type.
-	 * @param <T> The map class type.
-	 * @param c The map class type.
-	 * @param keyType The map key class type.
-	 * @param valueType The map value class type.
-	 * @return If the key and value types are OBJECT, returns a cached {@link ClassMeta} object.<br>
-	 * 	Otherwise, returns a new {@link ClassMeta} object every time.
-	 */
-	public final <K,V,T extends Map<K,V>> ClassMeta<T> getMapClassMeta(Class<T> c, ClassMeta<K> keyType, ClassMeta<V> valueType) {
-		if (keyType.isObject() && valueType.isObject())
-			return getClassMeta(c);
-		return new ClassMeta(c, this).setKeyType(keyType).setValueType(valueType);
-	}
-
-	/**
-	 * Construct a {@code ClassMeta} wrapper around a {@link Map} object.
-	 *
-	 * @param <K> The map key class type.
-	 * @param <V> The map value class type.
-	 * @param <T> The map class type.
-	 * @param c The map class type.
-	 * @param keyType The map key class type.
-	 * @param valueType The map value class type.
-	 * @return If the key and value types are Object, returns a cached {@link ClassMeta} object.<br>
-	 * 	Otherwise, returns a new {@link ClassMeta} object every time.
-	 */
-	public final <K,V,T extends Map<K,V>> ClassMeta<T> getMapClassMeta(Class<T> c, Class<K> keyType, Class<V> valueType) {
-		return getMapClassMeta(c, getClassMeta(keyType), getClassMeta(valueType));
-	}
-
-	/**
-	 * Construct a {@code ClassMeta} wrapper around a {@link Map} object.
-	 *
-	 * @param <T> The map class type.
-	 * @param c The map class type.
-	 * @param keyType The map key class type.
-	 * @param valueType The map value class type.
-	 * @return If the key and value types are Object, returns a cached {@link ClassMeta} object.<br>
-	 * 	Otherwise, returns a new {@link ClassMeta} object every time.
-	 */
-	public final <T extends Map> ClassMeta<T> getMapClassMeta(Class<T> c, Type keyType, Type valueType) {
-		return getMapClassMeta(c, getClassMeta(keyType), getClassMeta(valueType));
-	}
-
-	/**
-	 * Construct a {@code ClassMeta} wrapper around a {@link Collection} object.
-	 *
-	 * @param <E> The collection element class type.
-	 * @param <T> The collection class type.
-	 * @param c The collection class type.
-	 * @param elementType The collection element class type.
-	 * @return If the element type is <code>OBJECT</code>, returns a cached {@link ClassMeta} object.<br>
-	 * 	Otherwise, returns a new {@link ClassMeta} object every time.
-	 */
-	public final <E,T extends Collection<E>> ClassMeta<T> getCollectionClassMeta(Class<T> c, ClassMeta<E> elementType) {
-		if (elementType.isObject())
-			return getClassMeta(c);
-		return new ClassMeta(c, this).setElementType(elementType);
-	}
-
-	/**
-	 * Construct a {@code ClassMeta} wrapper around a {@link Collection} object.
-	 *
-	 * @param <E> The collection element class type.
-	 * @param <T> The collection class type.
-	 * @param c The collection class type.
-	 * @param elementType The collection element class type.
-	 * @return If the element type is <code>OBJECT</code>, returns a cached {@link ClassMeta} object.<br>
-	 * 	Otherwise, returns a new {@link ClassMeta} object every time.
-	 */
-	public final <E,T extends Collection<E>> ClassMeta<T> getCollectionClassMeta(Class<T> c, Class<E> elementType) {
-		return getCollectionClassMeta(c, getClassMeta(elementType));
-	}
-
-	/**
-	 * Construct a {@code ClassMeta} wrapper around a {@link Collection} object.
-	 *
-	 * @param <T> The collection class type.
-	 * @param c The collection class type.
-	 * @param elementType The collection element class type.
-	 * @return If the element type is <code>OBJECT</code>, returns a cached {@link ClassMeta} object.<br>
-	 * 	Otherwise, returns a new {@link ClassMeta} object every time.
-	 */
-	public final <T extends Collection> ClassMeta<T> getCollectionClassMeta(Class<T> c, Type elementType) {
-		return getCollectionClassMeta(c, getClassMeta(elementType));
 	}
 
 	/**
@@ -1648,112 +1631,115 @@ public class BeanContext extends Context {
 		return cmObject;
 	}
 
-	/**
-	 * Converts class name strings to ClassMeta objects.
-	 *
-	 * <h6 class='topic'>Example:</h6>
-	 * <ul>
-	 * 	<li><js>"java.lang.String"</js>
-	 * 	<li><js>"com.foo.sample.MyBean[]"</js>
-	 * 	<li><js>"java.util.HashMap<java.lang.String,java.lang.Integer>"</js>
-	 * 	<li><js>"[Ljava.lang.String;"</js> (i.e. the value of <code>String[].<jk>class</jk>.getName()</code>)
-	 * </ul>
-	 *
-	 * @param s The class name.
-	 * @return The ClassMeta corresponding to the class name string.
-	 */
-	protected final ClassMeta<?> getClassMetaFromString(String s) {
-		int d = 0;
-		if (s == null || s.isEmpty())
-			return null;
-
-		// Check for Class.getName() on array class types.
-		if (s.charAt(0) == '[') {
-			try {
-				return getClassMeta(findClass(s));
-			} catch (ClassNotFoundException e) {
-				throw new RuntimeException(e);
-			}
-		}
-
-		int i1 = 0;
-		int i2 = 0;
-		int dim = 0;
-		List<ClassMeta<?>> p = null;
-		for (int i = 0; i < s.length(); i++) {
-			char c = s.charAt(i);
-			if (c == '<') {
-				if (d == 0) {
-					i1 = i;
-					i2 = i+1;
-					p = new LinkedList<ClassMeta<?>>();
-				}
-				d++;
-			} else if (c == '>') {
-				d--;
-				if (d == 0 && p != null)
-					p.add(getClassMetaFromString(s.substring(i2, i)));
-			} else if (c == ',' && d == 1) {
-				if (p != null)
-					p.add(getClassMetaFromString(s.substring(i2, i)));
-				i2 = i+1;
-			}
-			if (c == '[') {
-				if (i1 == 0)
-					i1 = i;
-				dim++;
-			}
-		}
-		if (i1 == 0)
-			i1 = s.length();
-		try {
-			String name = s.substring(0, i1).trim();
-			char x = name.charAt(0);
-			Class<?> c = null;
-			if (x >= 'b' && x <= 's') {
-				if (x == 'b' && name.equals("boolean"))
-					c = boolean.class;
-				else if (x == 'b' && name.equals("byte"))
-					c = byte.class;
-				else if (x == 'c' && name.equals("char"))
-					c = char.class;
-				else if (x == 'd' && name.equals("double"))
-					c = double.class;
-				else if (x == 'i' && name.equals("int"))
-					c = int.class;
-				else if (x == 'l' && name.equals("long"))
-					c = long.class;
-				else if (x == 's' && name.equals("short"))
-					c = short.class;
-				else
-					c = findClass(name);
-			} else {
-				c = findClass(name);
-			}
-
-			ClassMeta<?> cm = getClassMeta(c);
-
-			if (p != null) {
-				if (cm.isMap())
-					cm = new ClassMeta(c, this).setKeyType(p.get(0)).setValueType(p.get(1));
-				if (cm.isCollection())
-					cm = new ClassMeta(c, this).setElementType(p.get(0));
-			}
-
-			while (dim > 0) {
-				cm = new ClassMeta(Array.newInstance(cm.getInnerClass(), 0).getClass(), this);
-				dim--;
-			}
-
-			return cm;
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	private Class<?> findClass(String name) throws ClassNotFoundException {
-		return classLoader == null ? Class.forName(name) : Class.forName(name, true, classLoader);
-	}
+//
+//  This code is inherently unsafe (but still potentially useful?)
+// 
+//	/**
+//	 * Converts class name strings to ClassMeta objects.
+//	 *
+//	 * <h6 class='topic'>Example:</h6>
+//	 * <ul>
+//	 * 	<li><js>"java.lang.String"</js>
+//	 * 	<li><js>"com.foo.sample.MyBean[]"</js>
+//	 * 	<li><js>"java.util.HashMap<java.lang.String,java.lang.Integer>"</js>
+//	 * 	<li><js>"[Ljava.lang.String;"</js> (i.e. the value of <code>String[].<jk>class</jk>.getName()</code>)
+//	 * </ul>
+//	 *
+//	 * @param s The class name.
+//	 * @return The ClassMeta corresponding to the class name string.
+//	 */
+//	protected final ClassMeta<?> getClassMetaFromString(String s) {
+//		int d = 0;
+//		if (s == null || s.isEmpty())
+//			return null;
+//
+//		// Check for Class.getName() on array class types.
+//		if (s.charAt(0) == '[') {
+//			try {
+//				return getClassMeta(findClass(s));
+//			} catch (ClassNotFoundException e) {
+//				throw new RuntimeException(e);
+//			}
+//		}
+//
+//		int i1 = 0;
+//		int i2 = 0;
+//		int dim = 0;
+//		List<ClassMeta<?>> p = null;
+//		for (int i = 0; i < s.length(); i++) {
+//			char c = s.charAt(i);
+//			if (c == '<') {
+//				if (d == 0) {
+//					i1 = i;
+//					i2 = i+1;
+//					p = new LinkedList<ClassMeta<?>>();
+//				}
+//				d++;
+//			} else if (c == '>') {
+//				d--;
+//				if (d == 0 && p != null)
+//					p.add(getClassMetaFromString(s.substring(i2, i)));
+//			} else if (c == ',' && d == 1) {
+//				if (p != null)
+//					p.add(getClassMetaFromString(s.substring(i2, i)));
+//				i2 = i+1;
+//			}
+//			if (c == '[') {
+//				if (i1 == 0)
+//					i1 = i;
+//				dim++;
+//			}
+//		}
+//		if (i1 == 0)
+//			i1 = s.length();
+//		try {
+//			String name = s.substring(0, i1).trim();
+//			char x = name.charAt(0);
+//			Class<?> c = null;
+//			if (x >= 'b' && x <= 's') {
+//				if (x == 'b' && name.equals("boolean"))
+//					c = boolean.class;
+//				else if (x == 'b' && name.equals("byte"))
+//					c = byte.class;
+//				else if (x == 'c' && name.equals("char"))
+//					c = char.class;
+//				else if (x == 'd' && name.equals("double"))
+//					c = double.class;
+//				else if (x == 'i' && name.equals("int"))
+//					c = int.class;
+//				else if (x == 'l' && name.equals("long"))
+//					c = long.class;
+//				else if (x == 's' && name.equals("short"))
+//					c = short.class;
+//				else
+//					c = findClass(name);
+//			} else {
+//				c = findClass(name);
+//			}
+//
+//			ClassMeta<?> cm = getClassMeta(c);
+//
+//			if (p != null) {
+//				if (cm.isMap())
+//					cm = new ClassMeta(c, this).setKeyType(p.get(0)).setValueType(p.get(1));
+//				if (cm.isCollection())
+//					cm = new ClassMeta(c, this).setElementType(p.get(0));
+//			}
+//
+//			while (dim > 0) {
+//				cm = new ClassMeta(Array.newInstance(cm.getInnerClass(), 0).getClass(), this);
+//				dim--;
+//			}
+//
+//			return cm;
+//		} catch (ClassNotFoundException e) {
+//			throw new RuntimeException(e);
+//		}
+//	}
+//
+//	private Class<?> findClass(String name) throws ClassNotFoundException {
+//		return classLoader == null ? Class.forName(name) : Class.forName(name, true, classLoader);
+//	}
 
 	/**
 	 * Returns the {@link PojoSwap} associated with the specified class, or <jk>null</jk> if there is no

@@ -30,7 +30,7 @@ import org.apache.juneau.testbeans.*;
 import org.apache.juneau.xml.*;
 import org.junit.*;
 
-@SuppressWarnings({"unchecked","serial","javadoc"})
+@SuppressWarnings({"serial","javadoc"})
 public class CommonTest {
 
 	private RdfSerializer getBasicSerializer() {
@@ -236,7 +236,7 @@ public class CommonTest {
 
 		String r = s.serialize(l1);
 		assertEquals("<rdf:Seq><rdf:li rdf:parseType='Resource'><jp:x1><rdf:Seq><rdf:li rdf:parseType='Resource'><jp:x2>2</jp:x2></rdf:li></rdf:Seq></jp:x1><jp:x2>2</jp:x2></rdf:li></rdf:Seq>", strip(r));
-		ClassMeta<LinkedList<F>> cm = p.getBeanContext().getCollectionClassMeta(LinkedList.class, F.class);
+		ClassMeta<LinkedList<F>> cm = p.getBeanContext().getClassMeta(LinkedList.class, F.class);
 		l2 = p.parse(r, cm);
 		assertEqualObjects(l1, l2);
 	}

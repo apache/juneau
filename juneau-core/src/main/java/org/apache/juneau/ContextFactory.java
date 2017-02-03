@@ -866,7 +866,7 @@ public final class ContextFactory extends Lockable {
 				try {
 					if (isBeanSessionAvailable()) {
 						BeanSession session = getBeanSession();
-						return (Map<K,V>)session.convertToType(p.value, session.getMapClassMeta(LinkedHashMap.class, keyType, valueType));
+						return (Map<K,V>)session.convertToType(p.value, session.getClassMeta(LinkedHashMap.class, keyType, valueType));
 					}
 					return def;
 				} catch (InvalidDataConversionException e) {

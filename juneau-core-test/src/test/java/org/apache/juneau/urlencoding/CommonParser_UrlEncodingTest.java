@@ -170,7 +170,6 @@ public class CommonParser_UrlEncodingTest {
 		assertEquals("unknownProperty,1,4", events.get(0));
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testCollections() throws Exception {
 		WriterSerializer s = new UrlEncodingSerializer().setProperty(UonSerializerContext.UON_simpleMode, true);
@@ -180,7 +179,7 @@ public class CommonParser_UrlEncodingTest {
 		assertEquals("0=foo&1=bar", s.serialize(l));
 
 		String in =  "0=foo&1=bar";
-		ClassMeta<LinkedList<String>> cm = p.getBeanContext().createSession().getCollectionClassMeta(LinkedList.class, String.class);
+		ClassMeta<LinkedList<String>> cm = p.getBeanContext().createSession().getClassMeta(LinkedList.class, String.class);
 		l = p.parse(in, cm);
 		assertObjectEquals("['foo','bar']",l);
 	}

@@ -50,13 +50,13 @@ public class RoundTripToObjectMapsTest extends RoundTripTest {
 		assertEquals(2, aa[0].f2);
 
 		List<A> a2 = new ArrayList<A>(){{add(new A(new ObjectMap("{f1:'a',f2:2}")));}};
-		a2 = roundTrip(a2, BeanContext.DEFAULT.getCollectionClassMeta(List.class, A.class));
+		a2 = roundTrip(a2, BeanContext.DEFAULT.createSession().getCollectionClassMeta(List.class, A.class));
 		assertEquals(1, a2.size());
 		assertEquals("a", a2.get(0).f1);
 		assertEquals(2, a2.get(0).f2);
 
 		Map<String,A> a3 = new LinkedHashMap<String,A>(){{put("a", new A(new ObjectMap("{f1:'a',f2:2}")));}};
-		a3 = roundTrip(a3, BeanContext.DEFAULT.getMapClassMeta(Map.class, String.class, A.class));
+		a3 = roundTrip(a3, BeanContext.DEFAULT.createSession().getMapClassMeta(Map.class, String.class, A.class));
 		assertEquals(1, a3.size());
 		assertEquals("a", a3.get("a").f1);
 		assertEquals(2, a3.get("a").f2);

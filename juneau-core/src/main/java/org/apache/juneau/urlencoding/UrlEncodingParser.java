@@ -416,7 +416,7 @@ public class UrlEncodingParser extends UonParser {
 
 	private Object[] parseArgs(UrlEncodingParserSession session, ParserReader r, ClassMeta<?>[] argTypes) throws Exception {
 		// TODO - This can be made more efficient.
-		ClassMeta<TreeMap<Integer,String>> cm = session.getMapClassMeta(TreeMap.class, Integer.class, String.class);
+		ClassMeta<TreeMap<Integer,String>> cm = session.getClassMeta(TreeMap.class, Integer.class, String.class);
 		TreeMap<Integer,String> m = parseAnything(session, cm, r, session.getOuter());
 		Object[] vals = m.values().toArray(new Object[m.size()]);
 		if (vals.length != argTypes.length)

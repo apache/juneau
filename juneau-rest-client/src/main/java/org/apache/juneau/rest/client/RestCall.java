@@ -795,7 +795,7 @@ public final class RestCall {
 	 * @throws IOException
 	 */
 	public final <K,V,T extends Map<K,V>> T getResponseMap(Class<T> mapClass, Class<K> keyClass, Class<V> valueClass) throws ParseException, IOException {
-		ClassMeta<T> cm = getBeanContext().getMapClassMeta(mapClass, keyClass, valueClass);
+		ClassMeta<T> cm = getBeanContext().getClassMeta(mapClass, keyClass, valueClass);
 		return getResponse(cm);
 	}
 
@@ -822,7 +822,7 @@ public final class RestCall {
 	 * @throws IOException
 	 */
 	public final <E,T extends Collection<E>> T getResponseCollection(Class<T> collectionClass, Class<E> entryClass) throws ParseException, IOException {
-		ClassMeta<T> cm = getBeanContext().getCollectionClassMeta(collectionClass, entryClass);
+		ClassMeta<T> cm = getBeanContext().getClassMeta(collectionClass, entryClass);
 		return getResponse(cm);
 	}
 

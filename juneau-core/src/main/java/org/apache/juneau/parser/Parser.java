@@ -303,7 +303,7 @@ public abstract class Parser extends CoreApi {
 	 */
 	public final <K,V,T extends Map<K,V>> T parseMap(Object input, Class<T> mapClass, Class<K> keyClass, Class<V> valueClass) throws ParseException {
 		ParserSession session = createSession(input);
-		ClassMeta<T> cm = session.getMapClassMeta(mapClass, keyClass, valueClass);
+		ClassMeta<T> cm = session.getClassMeta(mapClass, keyClass, valueClass);
 		return parse(session, cm);
 	}
 
@@ -343,7 +343,7 @@ public abstract class Parser extends CoreApi {
 	 */
 	public final <E,T extends Collection<E>> T parseCollection(Object input, Class<T> collectionClass, Class<E> entryClass) throws ParseException, IOException {
 		ParserSession session = createSession(input);
-		ClassMeta<T> cm = session.getCollectionClassMeta(collectionClass, entryClass);
+		ClassMeta<T> cm = session.getClassMeta(collectionClass, entryClass);
 		return parse(session, cm);
 	}
 

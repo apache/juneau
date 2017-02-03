@@ -538,19 +538,6 @@ public class BeanConfigTest {
 	}
 
 	//====================================================================================================
-	// testGetClassMetaFromString
-	//====================================================================================================
-	@Test
-	public void testGetClassMetaFromString() throws Exception {
-		BeanContext bc = BeanContext.DEFAULT;
-		assertEquals("java.lang.String[]", bc.getClassMetaFromString("java.lang.String[]").toString());
-		assertEquals("java.lang.String[]", bc.getClassMetaFromString("[Ljava.lang.String;").toString());
-		assertEquals("java.lang.String[][]", bc.getClassMetaFromString("java.lang.String[][]").toString());
-		assertEquals("java.lang.String[][]", bc.getClassMetaFromString("[[Ljava.lang.String;").toString());
-		assertEquals("boolean", bc.getClassMetaFromString("boolean").toString());
-	}
-
-	//====================================================================================================
 	// testFluentStyleSetters
 	//====================================================================================================
 	@Test

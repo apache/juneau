@@ -165,7 +165,7 @@ public class UrlEncodingParserTest {
 		l = (List)l.get(0);
 		assertTrue(l.isEmpty());
 		t = "(())";
-		l = (List)p.parseParameter(t, p.getBeanContext().getCollectionClassMeta(LinkedList.class, List.class));
+		l = (List)p.parseParameter(t, p.getBeanContext().getClassMeta(LinkedList.class, List.class));
 		assertTrue(l.size() == 1);
 		l = (List)l.get(0);
 		assertTrue(l.isEmpty());
@@ -185,7 +185,7 @@ public class UrlEncodingParserTest {
 		assertTrue(l.size() == 1);
 		assertEquals("", l.get(0));
 		t = "(())";
-		l = (List)p.parseParameter(t, p.getBeanContext().getCollectionClassMeta(List.class, String.class));
+		l = (List)p.parseParameter(t, p.getBeanContext().getClassMeta(List.class, String.class));
 		assertTrue(l.size() == 1);
 		assertEquals("", l.get(0));
 
@@ -217,7 +217,7 @@ public class UrlEncodingParserTest {
 		assertEquals("", l.get(1));
 		assertEquals("", l.get(2));
 		t = "(,,)";
-		l = (List)p.parseParameter(t, p.getBeanContext().getCollectionClassMeta(List.class, Object.class));
+		l = (List)p.parseParameter(t, p.getBeanContext().getClassMeta(List.class, Object.class));
 		assertTrue(l.size() == 3);
 		assertEquals("", l.get(0));
 		assertEquals("", l.get(1));

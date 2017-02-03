@@ -1081,7 +1081,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * @return This object map cast as another object.
 	 */
 	public Object cast() {
-		return cast((BeanRegistry)null);
+		return cast(session.getBeanRegistry());
 	}
 
 	/**
@@ -1094,10 +1094,12 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 */
 	public Object cast(BeanRegistry beanRegistry) {
 		String c = (String)get(session.getBeanTypePropertyName());
-		if (c == null) {
+		if (c == null || beanRegistry == null)
 			return this;
-		}
-		return cast2(session.getClassMetaFromString(c));
+		ClassMeta<?> cm = beanRegistry.getClassMeta(c);
+		if (cm == null)
+			return this;
+		return cast2(cm);
 	}
 
 	/**
@@ -1116,7 +1118,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> T cast(Class<T> type) {
-		ClassMeta<?> c1 = session.getClassMetaFromString((String)get(session.getBeanTypePropertyName()));
+		ClassMeta<?> c1 = session.getBeanRegistry().getClassMeta((String)get(session.getBeanTypePropertyName()));
 		ClassMeta<?> c2 = session.getClassMeta(type);
 		ClassMeta<?> c = narrowClassMeta(c1, c2);
 		return (T)cast2(c);
@@ -1133,7 +1135,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 */
 	@SuppressWarnings({"unchecked"})
 	public <T> T cast(ClassMeta<T> cm) {
-		ClassMeta<?> c1 = session.getClassMetaFromString((String)get(session.getBeanTypePropertyName()));
+		ClassMeta<?> c1 = session.getBeanRegistry().getClassMeta((String)get(session.getBeanTypePropertyName()));
 		ClassMeta<?> c = narrowClassMeta(c1, cm);
 		return (T)cast2(c);
 	}
@@ -1144,7 +1146,6 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * The rule is that child classes superceed parent classes, and c2 superceeds c1
 	 * if one isn't the parent of another.
 	 */
-	@SuppressWarnings("unchecked")
 	private ClassMeta<?> narrowClassMeta(ClassMeta<?> c1, ClassMeta<?> c2) {
 		if (c1 == null)
 			return c2;
@@ -1152,11 +1153,11 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 		if (c1.isMap()) {
 			ClassMeta<?> k = getNarrowedClassMeta(c1.getKeyType(), c2.getKeyType());
 			ClassMeta<?> v = getNarrowedClassMeta(c1.getValueType(), c2.getValueType());
-			return session.getMapClassMeta((Class<? extends Map<?,?>>)c.getInnerClass(), k, v);
+			return session.getClassMeta(c.getInnerClass(), k, v);
 		}
 		if (c1.isCollection()) {
 			ClassMeta<?> e = getNarrowedClassMeta(c1.getElementType(), c2.getElementType());
-			return session.getCollectionClassMeta((Class<? extends Collection<?>>)c.getInnerClass(), e);
+			return session.getClassMeta(c.getInnerClass(), e);
 		}
 		return c;
 	}

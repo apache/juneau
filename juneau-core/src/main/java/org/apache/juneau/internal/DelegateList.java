@@ -32,10 +32,9 @@ public class DelegateList<T extends Collection<?>> extends ObjectList implements
 	 *
 	 * @param classMeta The data type represented by this delegate.
 	 */
-	@SuppressWarnings("unchecked")
 	public DelegateList(ClassMeta<T> classMeta) {
 		if (classMeta.isArray())
-			classMeta = classMeta.getBeanContext().getCollectionClassMeta(List.class, classMeta.getElementType());
+			classMeta = classMeta.getBeanContext().getClassMeta(List.class, classMeta.getElementType());
 		this.classMeta = classMeta;
 	}
 

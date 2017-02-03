@@ -33,13 +33,36 @@ public class BeanMapTest {
 
 	JsonSerializer serializer = JsonSerializer.DEFAULT_LAX.clone().setClassLoader(BeanMapTest.class.getClassLoader());
 
+	BeanContext bc = ContextFactory.create()
+			.setClassLoader(this.getClass().getClassLoader())
+			.addToDictionary(MyBeanDictionaryMap.class)
+			.addPojoSwaps(CalendarSwap.ISO8601DTZ.class)
+			.getBeanContext();
+	BeanSession session = bc.createSession();
+
+	public static class MyBeanDictionaryMap extends BeanDictionaryMap {
+		public MyBeanDictionaryMap() {
+			addClass("StringArray", String[].class);
+			addClass("String2dArray", String[][].class);
+			addClass("IntArray", int[].class);
+			addClass("Int2dArray", int[][].class);
+			addClass("S", S.class);
+			addClass("R1", R1.class);
+			addClass("R2", R2.class);
+			addClass("LinkedList", LinkedList.class);
+			addClass("TreeMap", TreeMap.class);
+			addCollectionClass("LinkedListOfInts", LinkedList.class, Integer.class);
+			addCollectionClass("LinkedListOfR1", LinkedList.class, R1.class);
+			addCollectionClass("LinkedListOfCalendar", LinkedList.class, Calendar.class);
+		}
+	}
+	
 	//====================================================================================================
 	// Primitive field properties
 	//====================================================================================================
 	@Test
 	public void testPrimitiveFieldProperties() {
 		A t = new A();
-		BeanSession session = BeanContext.DEFAULT.createSession();
 		Map m = session.toBeanMap(t);
 
 		// Make sure setting primitive values to null causes them to get default values.
@@ -119,7 +142,6 @@ public class BeanMapTest {
 	@Test
 	public void testPrimitiveMethodProperties() {
 		B t = new B();
-		BeanSession session = BeanContext.DEFAULT.createSession();
 		Map m = session.toBeanMap(t);
 
 		// Make sure setting primitive values to null causes them to get default values.
@@ -229,7 +251,6 @@ public class BeanMapTest {
 	@Test
 	public void testCollectionFieldProperties() throws Exception {
 		C t = new C();
-		BeanSession session = BeanContext.DEFAULT.createSession();
 		Map m = session.toBeanMap(t);
 
 		// Non-initialized list fields.
@@ -311,7 +332,6 @@ public class BeanMapTest {
 	@Test
 	public void testCollectionMethodProperties() throws Exception {
 		D t = new D();
-		BeanSession session = BeanContext.DEFAULT.createSession();
 		Map m = session.toBeanMap(t);
 
 		// Non-initialized list fields.
@@ -446,7 +466,6 @@ public class BeanMapTest {
 	@Test
 	public void testArrayProperties() throws Exception {
 		D1 t = new D1();
-		BeanSession session = getBeanContext().createSession();
 		Map m = session.toBeanMap(t);
 		m.put("b", new ObjectMap("{s:'foo'}"));
 		assertNotNull(t.b);
@@ -502,7 +521,6 @@ public class BeanMapTest {
 	@Test
 	public void testArrayPropertiesInObjectList() throws Exception {
 		E t = new E();
-		BeanSession session = BeanContext.DEFAULT.createSession();
 		Map m = session.toBeanMap(t);
 		m.put("s", new ObjectList("['foo']"));
 		m.put("s2", new ObjectList("[['foo']]"));
@@ -528,7 +546,6 @@ public class BeanMapTest {
 	public void testInvokeMethod() throws Exception {
 		F t5 = new F();
 		ReaderParser p = JsonParser.DEFAULT;
-		BeanSession session = BeanContext.DEFAULT.createSession();
 		BeanMap m = session.toBeanMap(t5);
 		new PojoIntrospector(t5, p).invokeMethod("doSetAProperty(java.lang.String)", "['baz']");
 		assertEquals("baz", m.get("prop"));
@@ -549,7 +566,6 @@ public class BeanMapTest {
 	@Test
 	public void testBeanPropertyAnnotation() throws Exception {
 		G1 t6 = new G1();
-		BeanSession session = BeanContext.DEFAULT.createSession();
 		BeanMap m = session.toBeanMap(t6);
 
 		try {
@@ -632,7 +648,6 @@ public class BeanMapTest {
 	//====================================================================================================
 	@Test
 	public void testEnum() throws Exception {
-		BeanSession session = getBeanContext().createSession();
 
 		// Initialize existing bean.
 		H t7 = new H();
@@ -761,7 +776,7 @@ public class BeanMapTest {
 	//====================================================================================================
 	@Test
 	public void testOverridingDetectionOfGenericTypes2() throws Exception {
-		BeanMap bm = BeanContext.DEFAULT.createSession().newBeanMap(K.class);
+		BeanMap bm = session.newBeanMap(K.class);
 		assertEquals(Float.class, bm.getProperty("p1").getMeta().getClassMeta().getElementType().getInnerClass());
 		assertEquals(Float.class, bm.getProperty("p2").getMeta().getClassMeta().getElementType().getInnerClass());
 		assertEquals(Float.class, bm.getProperty("p3").getMeta().getClassMeta().getElementType().getInnerClass());
@@ -803,7 +818,7 @@ public class BeanMapTest {
 	//====================================================================================================
 	@Test
 	public void testGenericListSubclass() throws Exception {
-		BeanMap<L> bm = BeanContext.DEFAULT.createSession().newBeanMap(L.class);
+		BeanMap<L> bm = session.newBeanMap(L.class);
 		bm.put("list", "[{name:'1',value:'1'},{name:'2',value:'2'}]");
 		L b = bm.getBean();
 		assertEquals("1", b.list.get(0).name);
@@ -830,7 +845,6 @@ public class BeanMapTest {
 	//====================================================================================================
 	@Test
 	public void testGenericFields() throws Exception {
-		BeanSession session = BeanContext.DEFAULT.createSession();
 
 		M2 t1 = new M2();
 		BeanMap<M2> bm = session.toBeanMap(t1);
@@ -882,7 +896,6 @@ public class BeanMapTest {
 	//====================================================================================================
 	@Test
 	public void testGenericMethods() throws Exception {
-		BeanSession session = BeanContext.DEFAULT.createSession();
 
 		N2 t1 = new N2();
 		BeanMap<N2> bm = session.toBeanMap(t1);
@@ -1024,7 +1037,6 @@ public class BeanMapTest {
 	//====================================================================================================
 	@Test
 	public void testPropertyNameFactoryDashedLC1() throws Exception {
-		BeanSession session = BeanContext.DEFAULT.createSession();
 		BeanMap<P1> m = session.newBeanMap(P1.class).load("{'foo':1,'bar-baz':2,'bing-boo-url':3}");
 		assertEquals(1, m.get("foo"));
 		assertEquals(2, m.get("bar-baz"));
@@ -1126,11 +1138,10 @@ public class BeanMapTest {
 	//====================================================================================================
 	@Test
 	public void testCastWithNormalBean() throws Exception {
-		BeanSession session = getBeanContext().createSession();
 
 		// With _type
 		ObjectMap m = new ObjectMap(session);
-		m.put("_type", R2.class.getName());
+		m.put("_type", "R2");
 		m.put("f1", 1);
 		m.put("f2", "2");
 
@@ -1177,12 +1188,11 @@ public class BeanMapTest {
 	//====================================================================================================
 	@Test
 	public void testCastWithNestedBean() throws Exception {
-		BeanSession session = getBeanContext().createSession();
 
 		// With _type
 		ObjectMap m = new ObjectMap(session);
-		m.put("_type", S.class.getName());
-		m.put("f1", new ObjectMap(session).append("_type", R1.class.getName()).append("f1", 1));
+		m.put("_type", "S");
+		m.put("f1", new ObjectMap(session).append("_type", "R1").append("f1", 1));
 
 		S t = (S)m.cast();
 		assertEquals(1, t.f1.f1);
@@ -1216,12 +1226,11 @@ public class BeanMapTest {
 	//====================================================================================================
 	@Test
 	public void testCastToAnotherMapType() throws Exception {
-		BeanContext bc = BeanContext.DEFAULT;
 		Map m2;
 
 		// With _type
-		ObjectMap m = new ObjectMap();
-		m.put("_type", TreeMap.class.getName());
+		ObjectMap m = new ObjectMap(session);
+		m.put("_type", "TreeMap");
 		m.put("1", "ONE");
 
 		m2 = (Map)m.cast();
@@ -1236,7 +1245,7 @@ public class BeanMapTest {
 		assertTrue(m2 instanceof TreeMap);
 		assertEquals("ONE", m2.get("1"));
 
-		m2 = (Map)m.cast(bc.getMapClassMeta(TreeMap.class, Integer.class, TEnum.class));
+		m2 = (Map)m.cast(bc.getClassMeta(TreeMap.class, Integer.class, TEnum.class));
 		assertTrue(m2 instanceof TreeMap);
 		Map.Entry e = (Map.Entry)m2.entrySet().iterator().next();
 		assertTrue(e.getKey() instanceof Integer);
@@ -1250,7 +1259,7 @@ public class BeanMapTest {
 		assertTrue(e.getValue() instanceof String);
 		assertEquals("ONE", m2.get("1"));
 
-		m2 = (Map)m.cast(bc.getMapClassMeta(HashMap.class, Integer.class, TEnum.class));
+		m2 = (Map)m.cast(bc.getClassMeta(HashMap.class, Integer.class, TEnum.class));
 		assertTrue(m2 instanceof HashMap);
 		e = (Map.Entry)m2.entrySet().iterator().next();
 		assertTrue(e.getKey() instanceof Integer);
@@ -1273,7 +1282,7 @@ public class BeanMapTest {
 		assertTrue(m2 instanceof TreeMap);
 		assertEquals("ONE", m2.get("1"));
 
-		m2 = (Map)m.cast(bc.getMapClassMeta(TreeMap.class, Integer.class, TEnum.class));
+		m2 = (Map)m.cast(bc.getClassMeta(TreeMap.class, Integer.class, TEnum.class));
 		assertTrue(m2 instanceof TreeMap);
 		e = (Map.Entry)m2.entrySet().iterator().next();
 		assertTrue(e.getKey() instanceof Integer);
@@ -1297,11 +1306,10 @@ public class BeanMapTest {
 	//====================================================================================================
 	@Test
 	public void testCastToLinkedList() throws Exception {
-		BeanContext bc = BeanContext.DEFAULT;
 
 		// With _type
-		ObjectMap m = new ObjectMap();
-		m.put("_type", LinkedList.class.getName());
+		ObjectMap m = new ObjectMap(session);
+		m.put("_type", "LinkedList");
 		m.put("items", new ObjectList().append("1").append("2"));
 
 		List l = (List)m.cast();
@@ -1340,7 +1348,7 @@ public class BeanMapTest {
 		assertTrue(l instanceof ArrayList);
 		assertEquals("1", l.get(0));
 
-		l = (List)m.cast(bc.getCollectionClassMeta(List.class, Integer.class));
+		l = (List)m.cast(bc.getClassMeta(List.class, Integer.class));
 		assertTrue(l instanceof LinkedList);
 		assertTrue(l.get(0) instanceof Integer);
 		assertEquals(1, l.get(0));
@@ -1351,11 +1359,10 @@ public class BeanMapTest {
 	//====================================================================================================
 	@Test
 	public void testToLinkedListInteger() throws Exception {
-		BeanContext bc = BeanContext.DEFAULT;
-
+		
 		// With _type
-		ObjectMap m = new ObjectMap();
-		m.put("_type", LinkedList.class.getName() + "<java.lang.Integer>");
+		ObjectMap m = new ObjectMap(session);
+		m.put("_type", "LinkedListOfInts");
 		m.put("items", new ObjectList().append("1").append("2"));
 
 		List l = (List)m.cast();
@@ -1378,7 +1385,7 @@ public class BeanMapTest {
 		assertTrue(l instanceof ArrayList);
 		assertEquals(1, l.get(0));
 
-		l = (List)m.cast(bc.getCollectionClassMeta(List.class, String.class));
+		l = (List)m.cast(bc.getClassMeta(List.class, String.class));
 		assertTrue(l instanceof LinkedList);
 		assertTrue(l.get(0) instanceof String);
 		assertEquals("1", l.get(0));
@@ -1403,7 +1410,7 @@ public class BeanMapTest {
 		assertTrue(l instanceof ArrayList);
 		assertEquals("1", l.get(0));
 
-		l = (List)m.cast(bc.getCollectionClassMeta(List.class, Integer.class));
+		l = (List)m.cast(bc.getClassMeta(List.class, Integer.class));
 		assertTrue(l instanceof ObjectList);
 		assertTrue(l.get(0) instanceof Integer);
 		assertEquals(1, l.get(0));
@@ -1414,11 +1421,10 @@ public class BeanMapTest {
 	//====================================================================================================
 	@Test
 	public void testCastToLinkedListBean() throws Exception {
-		BeanSession session = getBeanContext().createSession();
 
 		// With _type
 		ObjectMap m = new ObjectMap(session);
-		m.put("_type", LinkedList.class.getName() + "<"+R1.class.getName()+">");
+		m.put("_type", "LinkedListOfR1");
 		m.put("items", new ObjectList(session).append("{f1:1}"));
 
 		List l = (List)m.cast();
@@ -1446,7 +1452,7 @@ public class BeanMapTest {
 		assertTrue(l.get(0) instanceof R1);
 		assertEquals(1, ((R1)l.get(0)).f1);
 
-		l = (List)m.cast(session.getCollectionClassMeta(List.class, HashMap.class));
+		l = (List)m.cast(session.getClassMeta(List.class, HashMap.class));
 		assertTrue(l instanceof LinkedList);
 		assertTrue(l.get(0) instanceof HashMap);
 		assertEquals(1, ((Map)l.get(0)).get("f1"));
@@ -1475,17 +1481,17 @@ public class BeanMapTest {
 		assertTrue(l.get(0) instanceof String);
 		assertEquals("{f1:1}", l.get(0));
 
-		l = (List)m.cast(session.getCollectionClassMeta(List.class, R1.class));
+		l = (List)m.cast(session.getClassMeta(List.class, R1.class));
 		assertTrue(l instanceof LinkedList);
 		assertTrue(l.get(0) instanceof R1);
 		assertEquals(1, ((R1)l.get(0)).f1);
 
-		l = (List)m.cast(session.getCollectionClassMeta(List.class, HashMap.class));
+		l = (List)m.cast(session.getClassMeta(List.class, HashMap.class));
 		assertTrue(l instanceof LinkedList);
 		assertTrue(l.get(0) instanceof HashMap);
 		assertEquals(1, ((Map)l.get(0)).get("f1"));
 
-		l = (List)m.cast(session.getCollectionClassMeta(List.class, Map.class));
+		l = (List)m.cast(session.getClassMeta(List.class, Map.class));
 		assertTrue(l instanceof LinkedList);
 		assertTrue(l.get(0) instanceof ObjectMap);
 		assertEquals(1, ((Map)l.get(0)).get("f1"));
@@ -1496,11 +1502,10 @@ public class BeanMapTest {
 	//====================================================================================================
 	@Test
 	public void testCastToLinkedListUsingSwap() throws Exception {
-		BeanSession session = ContextFactory.create().addPojoSwaps(CalendarSwap.ISO8601DTZ.class).getBeanContext().createSession();
 
 		// With _type
 		ObjectMap m = new ObjectMap(session);
-		m.put("_type", LinkedList.class.getName() + "<"+Calendar.class.getName()+">");
+		m.put("_type", "LinkedListOfCalendar");
 		m.put("items", new ObjectList().append("2001-07-04T15:30:45Z"));
 
 		List l = (List)m.cast();
@@ -1525,7 +1530,7 @@ public class BeanMapTest {
 		assertTrue(l instanceof ArrayList);
 		assertEquals(2001, ((Calendar)l.get(0)).get(Calendar.YEAR));
 
-		l = (List)m.cast(session.getCollectionClassMeta(List.class, String.class));
+		l = (List)m.cast(session.getClassMeta(List.class, String.class));
 		assertTrue(l instanceof LinkedList);
 		assertTrue(l.get(0) instanceof String);
 		assertEquals("2001-07-04T15:30:45Z", l.get(0));
@@ -1548,7 +1553,7 @@ public class BeanMapTest {
 		l = m.cast(session.getClassMeta(ArrayList.class));
 		assertTrue(l instanceof ArrayList);
 
-		l = (List)m.cast(session.getCollectionClassMeta(List.class, Calendar.class));
+		l = (List)m.cast(session.getClassMeta(List.class, Calendar.class));
 		assertTrue(l instanceof LinkedList);
 		assertTrue(l.get(0) instanceof Calendar);
 		assertEquals(2001, ((Calendar)l.get(0)).get(Calendar.YEAR));
@@ -1559,11 +1564,10 @@ public class BeanMapTest {
 	//====================================================================================================
 	@Test
 	public void testCastToStringArray() throws Exception {
-		BeanContext bc = BeanContext.DEFAULT;
-
+		
 		// With _type
-		ObjectMap m = new ObjectMap();
-		m.put("_type", String[].class.getName());
+		ObjectMap m = new ObjectMap(session);
+		m.put("_type", "StringArray");
 		m.put("items", new ObjectList().append("1").append("2"));
 
 		String[] l = (String[])m.cast();
@@ -1600,17 +1604,16 @@ public class BeanMapTest {
 		l2 = m.cast(bc.getClassMeta(StringBuffer[].class));
 		assertEquals("1", l[0].toString());
 	}
-
+	
 	//====================================================================================================
 	// testCastToIntArray - cast() to int[]
 	//====================================================================================================
 	@Test
 	public void testCastToIntArray() throws Exception {
-		BeanContext bc = BeanContext.DEFAULT;
 
 		// With _type
-		ObjectMap m = new ObjectMap();
-		m.put("_type", int[].class.getName());
+		ObjectMap m = new ObjectMap(session);
+		m.put("_type", "IntArray");
 		m.put("items", new ObjectList().append("1").append("2"));
 
 		int[] l = (int[])m.cast();
@@ -1652,11 +1655,10 @@ public class BeanMapTest {
 	//====================================================================================================
 	@Test
 	public void testCastToString2dArray() throws Exception {
-		BeanContext bc = BeanContext.DEFAULT;
 
 		// With _type
-		ObjectMap m = new ObjectMap();
-		m.put("_type", String[][].class.getName());
+		ObjectMap m = new ObjectMap(session);
+		m.put("_type", "String2dArray");
 		m.put("items", new ObjectList().append(new ObjectList().append("1")).append(new ObjectList().append("2")));
 
 		String[][] l = (String[][])m.cast();
@@ -1685,11 +1687,10 @@ public class BeanMapTest {
 	//====================================================================================================
 	@Test
 	public void testCastToInt2dArray() throws Exception {
-		BeanContext bc = BeanContext.DEFAULT;
 
 		// With _type
-		ObjectMap m = new ObjectMap();
-		m.put("_type", int[][].class.getName());
+		ObjectMap m = new ObjectMap(session);
+		m.put("_type", "Int2dArray");
 		m.put("items", new ObjectList().append(new ObjectList().append("1")).append(new ObjectList().append("2")));
 
 		int[][] l = (int[][])m.cast();
@@ -1879,10 +1880,6 @@ public class BeanMapTest {
 		public void setF2(Integer f2) {
 			this.f2 = f2;
 		}
-	}
-
-	private BeanContext getBeanContext() {
-		return ContextFactory.create().setClassLoader(this.getClass().getClassLoader()).getBeanContext();
 	}
 
 	@Test
