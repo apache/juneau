@@ -25,7 +25,7 @@ import org.apache.juneau.annotation.*;
 @BeanIgnore
 public final class MediaType {
 
-	private static final Map<String,MediaType> cache = new ConcurrentHashMap<String,MediaType>();
+	private static final ConcurrentHashMap<String,MediaType> cache = new ConcurrentHashMap<String,MediaType>();
 
 	/** Reusable predefined media type */
 	@SuppressWarnings("javadoc")
