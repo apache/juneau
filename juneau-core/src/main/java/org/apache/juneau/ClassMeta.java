@@ -85,7 +85,6 @@ public final class ClassMeta<T> implements Type {
 		remoteableMethods,                                   // Methods annotated with @Remoteable.  Contains all public methods if class is annotated with @Remotable.
 		publicMethods;                                       // All public methods, including static methods.
 	final PojoSwap<?,?>[] childPojoSwaps;                   // Any PojoSwaps where the normal type is a subclass of this class.
-<<<<<<< HEAD
 	final ConcurrentHashMap<Class<?>,PojoSwap<?,?>>
 		childSwapMap,                                        // Maps normal subclasses to PojoSwaps.
 		childUnswapMap;                                      // Maps swap subclasses to PojoSwaps.
@@ -93,12 +92,6 @@ public final class ClassMeta<T> implements Type {
 	final BeanFilter beanFilter;                            // The bean filter associated with this bean (if it has one).
 
 	private final MetadataMap extMeta;                      // Extended metadata
-
-=======
-	final ConcurrentHashMap<Class<?>,PojoSwap<?,?>> 
-		childSwapMap,                                        // Maps normal subclasses to PojoSwaps.
-		childUnswapMap;                                      // Maps swap subclasses to PojoSwaps.
->>>>>>> master
 
 	final BeanContext beanContext;                    // The bean context that created this object.
 	ClassMeta<?>
@@ -429,10 +422,7 @@ public final class ClassMeta<T> implements Type {
 		this.remoteableMethods = _remoteableMethods;
 		this.beanFilter = beanFilter;
 		this.pojoSwap = ps;
-<<<<<<< HEAD
 		this.extMeta = new MetadataMap();
-=======
->>>>>>> master
 
 		if (! delayedInit)
 			init();
