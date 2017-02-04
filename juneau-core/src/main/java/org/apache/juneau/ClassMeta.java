@@ -93,6 +93,7 @@ public final class ClassMeta<T> implements Type {
 
 	private final MetadataMap extMeta;                      // Extended metadata
 
+
 	final BeanContext beanContext;                    // The bean context that created this object.
 	ClassMeta<?>
 		serializedClassMeta,                           // The transformed class type (if class has swap associated with it).
