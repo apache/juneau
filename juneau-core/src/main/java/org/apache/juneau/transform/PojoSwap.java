@@ -98,6 +98,12 @@ import org.apache.juneau.serializer.*;
  */
 public abstract class PojoSwap<T,S> {
 
+	/**
+	 * Represents a non-existent pojo swap.
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public final static PojoSwap NULL = new PojoSwap(null, null) {};
+
 	private final Class<T> normalClass;
 	private final Class<?> swapClass;
 	private ClassMeta<?> swapClassMeta;

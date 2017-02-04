@@ -21,6 +21,7 @@ import java.lang.reflect.Proxy;
 import java.net.*;
 import java.net.URI;
 import java.util.*;
+import java.util.concurrent.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
@@ -57,9 +58,10 @@ public final class ClassMeta<T> implements Type {
 	}
 
 	final Class<T> innerClass;                              // The class being wrapped.
+	final Class<? extends T> implClass;                     // The implementation class to use if this is an interface.
 	final ClassCategory cc;                                 // The class category.
 	final Method fromStringMethod;                          // The static valueOf(String) or fromString(String) or forString(String) method (if it has one).
-	Constructor<? extends T>
+	final Constructor<? extends T>
 		noArgConstructor;                                    // The no-arg constructor for this class (if it has one).
 	final Constructor<T>
 		stringConstructor,                                   // The X(String) constructor (if it has one).
@@ -82,7 +84,10 @@ public final class ClassMeta<T> implements Type {
 	final Map<String,Method>
 		remoteableMethods,                                   // Methods annotated with @Remoteable.  Contains all public methods if class is annotated with @Remotable.
 		publicMethods;                                       // All public methods, including static methods.
-
+	final PojoSwap<?,?>[] childPojoSwaps;                   // Any PojoSwaps where the normal type is a subclass of this class.
+	final ConcurrentHashMap<Class<?>,PojoSwap<?,?>>
+		childSwapMap,                                        // Maps normal subclasses to PojoSwaps.
+		childUnswapMap;                                      // Maps swap subclasses to PojoSwaps.
 
 	final BeanContext beanContext;                    // The bean context that created this object.
 	ClassMeta<?>
@@ -99,7 +104,6 @@ public final class ClassMeta<T> implements Type {
 
 	private MetadataMap extMeta = new MetadataMap();  // Extended metadata
 	private Throwable initException;                  // Any exceptions thrown in the init() method.
-	private boolean hasChildPojoSwaps;                // True if this class or any subclass of this class has a PojoSwap associated with it.
 
 	private static final Boolean BOOLEAN_DEFAULT = false;
 	private static final Character CHARACTER_DEFAULT = (char)0;
@@ -113,8 +117,8 @@ public final class ClassMeta<T> implements Type {
 	/**
 	 * Shortcut for calling <code>ClassMeta(innerClass, beanContext, <jk>false</jk>)</code>.
 	 */
-	ClassMeta(Class<T> innerClass, BeanContext beanContext) {
-		this(innerClass, beanContext, false);
+	ClassMeta(Class<T> innerClass, BeanContext beanContext, Class<? extends T> implClass, BeanFilter beanFilter, PojoSwap<T,?> pojoSwap, PojoSwap<?,?>[] childPojoSwaps) {
+		this(innerClass, beanContext, implClass, beanFilter, pojoSwap, childPojoSwaps, false);
 	}
 
 	/**
@@ -122,13 +126,26 @@ public final class ClassMeta<T> implements Type {
 	 *
 	 * @param innerClass The class being wrapped.
 	 * @param beanContext The bean context that created this object.
+	 * @param implClass For interfaces and abstract classes, this represents the "real" class to instantiate.
+	 * 	Can be <jk>null</jk>.
+	 * @param beanFilter The {@link BeanFilter} programmatically associated with this class.
+	 * 	Can be <jk>null</jk>.
+	 * @param pojoSwap The {@link PojoSwap} programmatically associated with this class.
+	 * 	Can be <jk>null</jk>.
+	 * @param childPojoSwap The child {@link PojoSwap PojoSwaps} programmatically associated with this class.
+	 * 	These are the <code>PojoSwaps</code> that have normal classes that are subclasses of this class.
+	 * 	Can be <jk>null</jk>.
 	 * @param delayedInit Don't call init() in constructor.
 	 * 	Used for delayed initialization when the possibility of class reference loops exist.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	ClassMeta(Class<T> innerClass, BeanContext beanContext, boolean delayedInit) {
+	ClassMeta(Class<T> innerClass, BeanContext beanContext, Class<? extends T> implClass, BeanFilter beanFilter, PojoSwap<T,?> pojoSwap, PojoSwap<?,?>[] childPojoSwaps, boolean delayedInit) {
 		this.innerClass = innerClass;
 		this.beanContext = beanContext;
+		this.implClass = implClass;
+		this.childPojoSwaps = childPojoSwaps;
+		this.childSwapMap = childPojoSwaps == null ? null : new ConcurrentHashMap<Class<?>,PojoSwap<?,?>>();
+		this.childUnswapMap = childPojoSwaps == null ? null : new ConcurrentHashMap<Class<?>,PojoSwap<?,?>>();
 
 		Class<T> c = innerClass;
 		ClassCategory _cc = ClassCategory.OTHER;
@@ -351,6 +368,41 @@ public final class ClassMeta<T> implements Type {
 			}
 		}
 
+		if (innerClass != Object.class) {
+			_noArgConstructor = (Constructor<T>)findNoArgConstructor(implClass == null ? innerClass : implClass, Visibility.PUBLIC);
+		}
+
+		if (beanFilter == null)
+			beanFilter = findBeanFilter();
+
+		PojoSwap ps = null;
+		if (_swapMethod != null) {
+			ps = new PojoSwap<T,Object>(c, _swapMethod.getReturnType()) {
+				@Override
+				public Object swap(BeanSession session, Object o) throws SerializeException {
+					try {
+						return swapMethod.invoke(o, session);
+					} catch (Exception e) {
+						throw new SerializeException(e);
+					}
+				}
+				@Override
+				public T unswap(BeanSession session, Object f, ClassMeta<?> hint) throws ParseException {
+					try {
+						if (swapConstructor != null)
+							return swapConstructor.newInstance(f);
+						return super.unswap(session, f, hint);
+					} catch (Exception e) {
+						throw new ParseException(e);
+					}
+				}
+			};
+		}
+		if (ps == null)
+			ps = findPojoSwap();
+		if (ps == null)
+			ps = pojoSwap;
+
 		this.cc = _cc;
 		this.isDelegate = _isDelegate;
 		this.fromStringMethod = _fromStringMethod;
@@ -368,6 +420,8 @@ public final class ClassMeta<T> implements Type {
 		this.primitiveDefault = _primitiveDefault;
 		this.publicMethods = _publicMethods;
 		this.remoteableMethods = _remoteableMethods;
+		this.beanFilter = beanFilter;
+		this.pojoSwap = ps;
 
 		if (! delayedInit)
 			init();
@@ -379,6 +433,10 @@ public final class ClassMeta<T> implements Type {
 	 */
 	ClassMeta(ClassMeta<T> mainType, ClassMeta<?> keyType, ClassMeta<?> valueType, ClassMeta<?> elementType) {
 		this.innerClass = mainType.innerClass;
+		this.implClass = mainType.implClass;
+		this.childPojoSwaps = mainType.childPojoSwaps;
+		this.childSwapMap = mainType.childSwapMap;
+		this.childUnswapMap = mainType.childUnswapMap;
 		this.cc = mainType.cc;
 		this.fromStringMethod = mainType.fromStringMethod;
 		this.noArgConstructor = mainType.noArgConstructor;
@@ -412,23 +470,12 @@ public final class ClassMeta<T> implements Type {
 		this.beanFilter = mainType.beanFilter;
 		this.extMeta = mainType.extMeta;
 		this.initException = mainType.initException;
-		this.hasChildPojoSwaps = mainType.hasChildPojoSwaps;
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	ClassMeta init() {
 
 		try {
-			beanFilter = findBeanFilter(beanContext);
-			pojoSwap = findPojoSwap(beanContext);
-
-			if (innerClass != Object.class) {
-				this.noArgConstructor = beanContext.getImplClassConstructor(innerClass, Visibility.PUBLIC);
-				if (noArgConstructor == null)
-					noArgConstructor = findNoArgConstructor(innerClass, Visibility.PUBLIC);
-			}
-
-			this.hasChildPojoSwaps = beanContext.hasChildPojoSwaps(innerClass);
 
 			Class c = innerClass;
 
@@ -528,6 +575,35 @@ public final class ClassMeta<T> implements Type {
 		return beanContext.findParameters(innerClass, innerClass);
 	}
 
+	private BeanFilter findBeanFilter() {
+		try {
+			List<Bean> ba = ReflectionUtils.findAnnotations(Bean.class, innerClass);
+			if (! ba.isEmpty())
+				return new AnnotationBeanFilterBuilder(innerClass, ba).build();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	private PojoSwap<T,?> findPojoSwap() {
+		try {
+			Pojo p = innerClass.getAnnotation(Pojo.class);
+			if (p != null) {
+				Class<?> c = p.swap();
+				if (c != Null.class) {
+					if (ClassUtils.isParentClass(PojoSwap.class, c))
+						return (PojoSwap<T,?>)c.newInstance();
+					throw new RuntimeException("TODO - Surrogate classes not yet supported.");
+				}
+			}
+			return null;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 	/**
 	 * Returns the bean dictionary name associated with this class.
 	 * <p>
@@ -597,45 +673,58 @@ public final class ClassMeta<T> implements Type {
 	 *
 	 * @return <jk>true</jk> if this class or any child classes has a {@link PojoSwap} associated with it.
 	 */
-	public boolean hasChildPojoSwaps() {
-		return hasChildPojoSwaps;
+	protected boolean hasChildPojoSwaps() {
+		return childPojoSwaps != null;
 	}
 
-	private BeanFilter findBeanFilter(BeanContext context) {
-		try {
-			if (context == null)
-				return null;
-			BeanFilter f = context.findBeanFilter(innerClass);
-			if (f != null)
-				return f;
-			List<Bean> ba = ReflectionUtils.findAnnotations(Bean.class, innerClass);
-			if (! ba.isEmpty())
-				f = new AnnotationBeanFilterBuilder(innerClass, ba).build();
-			return f;
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	private PojoSwap<T,?> findPojoSwap(BeanContext context) {
-		try {
-			Pojo p = innerClass.getAnnotation(Pojo.class);
-			if (p != null) {
-				Class<?> c = p.swap();
-				if (c != Null.class) {
-					if (ClassUtils.isParentClass(PojoSwap.class, c))
-						return (PojoSwap<T,?>)c.newInstance();
-					throw new RuntimeException("TODO - Surrogate classes not yet supported.");
-				}
+	/**
+	 * Returns the {@link PojoSwap} where the specified class is the same/subclass of the normal class of
+	 * one of the child pojo swaps associated with this class.
+	 *
+	 * @param normalClass The normal class being resolved.
+	 * @return The resolved {@link PojoSwap} or <jk>null</jk> if none were found.
+	 */
+	protected PojoSwap<?,?> getChildPojoSwapForSwap(Class<?> normalClass) {
+		if (childSwapMap != null) {
+			PojoSwap<?,?> s = childSwapMap.get(normalClass);
+			if (s == null) {
+				for (PojoSwap<?,?> f : childPojoSwaps)
+					if (s == null && isParentClass(f.getNormalClass(), normalClass))
+						s = f;
+				if (s == null)
+					 s = PojoSwap.NULL;
+				childSwapMap.putIfAbsent(normalClass, s);
 			}
-			if (context == null)
+			if (s == PojoSwap.NULL)
 				return null;
-			PojoSwap<T,?> f = context.findPojoSwap(innerClass);
-			return f;
-		} catch (Exception e) {
-			throw new RuntimeException(e);
+			return s;
 		}
+		return null;
+	}
+
+	/**
+	 * Returns the {@link PojoSwap} where the specified class is the same/subclass of the swap class of
+	 * one of the child pojo swaps associated with this class.
+	 *
+	 * @param swapClass The swap class being resolved.
+	 * @return The resolved {@link PojoSwap} or <jk>null</jk> if none were found.
+	 */
+	protected PojoSwap<?,?> getChildPojoSwapForUnswap(Class<?> swapClass) {
+		if (childUnswapMap != null) {
+			PojoSwap<?,?> s = childUnswapMap.get(swapClass);
+			if (s == null) {
+				for (PojoSwap<?,?> f : childPojoSwaps)
+					if (s == null && isParentClass(f.getSwapClass(), swapClass))
+						s = f;
+				if (s == null)
+					 s = PojoSwap.NULL;
+				childUnswapMap.putIfAbsent(swapClass, s);
+			}
+			if (s == PojoSwap.NULL)
+				return null;
+			return s;
+		}
+		return null;
 	}
 
 	/**
@@ -1512,31 +1601,31 @@ public final class ClassMeta<T> implements Type {
 	public int hashCode() {
 		return super.hashCode();
 	}
-
-	public abstract static class CreateSession {
-		LinkedList<ClassMeta<?>> stack;
-
-		public CreateSession push(ClassMeta<?> cm) {
-			if (stack == null)
-				stack = new LinkedList<ClassMeta<?>>();
-			stack.add(cm);
-			return this;
-		}
-
-		public CreateSession pop(ClassMeta<?> expected) {
-			if (stack == null || stack.removeLast() != expected)
-				throw new BeanRuntimeException("ClassMetaSession creation stack corruption!");
-			return this;
-		}
-
-		public <T> ClassMeta<T> getClassMeta(Class<T> c) {
-			if (stack != null)
-				for (ClassMeta<?> cm : stack)
-					if (cm.innerClass == c)
-						return (ClassMeta<T>)cm;
-			return createClassMeta(c);
-		}
-
-		public abstract <T> ClassMeta<T> createClassMeta(Class<T> c);
-	}
+//
+//	public abstract static class CreateSession {
+//		LinkedList<ClassMeta<?>> stack;
+//
+//		public CreateSession push(ClassMeta<?> cm) {
+//			if (stack == null)
+//				stack = new LinkedList<ClassMeta<?>>();
+//			stack.add(cm);
+//			return this;
+//		}
+//
+//		public CreateSession pop(ClassMeta<?> expected) {
+//			if (stack == null || stack.removeLast() != expected)
+//				throw new BeanRuntimeException("ClassMetaSession creation stack corruption!");
+//			return this;
+//		}
+//
+//		public <T> ClassMeta<T> getClassMeta(Class<T> c) {
+//			if (stack != null)
+//				for (ClassMeta<?> cm : stack)
+//					if (cm.innerClass == c)
+//						return (ClassMeta<T>)cm;
+//			return createClassMeta(c);
+//		}
+//
+//		public abstract <T> ClassMeta<T> createClassMeta(Class<T> c);
+//	}
 }
