@@ -848,9 +848,7 @@ public class BeanPropertyMeta {
 			return null;
 		// Otherwise, look it up via bean context.
 		if (rawTypeMeta.hasChildPojoSwaps()) {
-			Class c = o.getClass();
-			ClassMeta<?> cm = rawTypeMeta.innerClass == c ? rawTypeMeta : beanContext.getClassMeta(c);
-			PojoSwap f = cm.getPojoSwap();
+			PojoSwap f = rawTypeMeta.getChildPojoSwapForSwap(o.getClass());
 			if (f != null)
 				return f.swap(session, o);
 		}
@@ -863,9 +861,7 @@ public class BeanPropertyMeta {
 		if (o == null)
 			return null;
 		if (rawTypeMeta.hasChildPojoSwaps()) {
-			Class c = o.getClass();
-			ClassMeta<?> cm = rawTypeMeta.innerClass == c ? rawTypeMeta : beanContext.getClassMeta(c);
-			PojoSwap f = cm.getPojoSwap();
+			PojoSwap f = rawTypeMeta.getChildPojoSwapForUnswap(o.getClass());
 			if (f != null)
 				return f.unswap(session, o, rawTypeMeta);
 		}

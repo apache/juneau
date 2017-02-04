@@ -1155,8 +1155,8 @@ public class BeanContext extends Context {
 
 		if (! cmCacheCache.containsKey(hashCode)) {
 			ConcurrentHashMap<Class,ClassMeta> cm = new ConcurrentHashMap<Class,ClassMeta>();
-			cm.put(String.class, new ClassMeta(String.class, this));
-			cm.put(Object.class, new ClassMeta(Object.class, this));
+			cm.put(String.class, new ClassMeta(String.class, this, null, null, findPojoSwap(String.class), findChildPojoSwaps(String.class)));
+			cm.put(Object.class, new ClassMeta(Object.class, this, null, null, findPojoSwap(Object.class), findChildPojoSwaps(Object.class)));
 			cmCacheCache.putIfAbsent(hashCode, cm);
 		}
 		this.cmCache = cmCacheCache.get(hashCode);
@@ -1346,10 +1346,11 @@ public class BeanContext extends Context {
 			if (oc instanceof Class) {
 				Class c = (Class)oc;
 				if (Collection.class.isAssignableFrom(c)) {
+					ClassMeta<?> rawType = getClassMeta(c);
 					ClassMeta<?> ce = getClassMeta(Array.get(o, 1));
 					if (ce.isObject())
-						return getClassMeta(c);
-					return new ClassMeta(c, this).setElementType(ce);
+						return (ClassMeta<T>)rawType;
+					return new ClassMeta(rawType, null, null, ce);
 				}
 			}
 		} else if (len == 3) {
@@ -1357,11 +1358,12 @@ public class BeanContext extends Context {
 			if (oc instanceof Class) {
 				Class c = (Class)oc;
 				if (Map.class.isAssignableFrom(c)) {
+					ClassMeta<?> rawType = getClassMeta(c);
 					ClassMeta<?> ck = getClassMeta(Array.get(o, 1));
 					ClassMeta<?> cv = getClassMeta(Array.get(o, 2));
 					if (ck.isObject() && cv.isObject())
-						return getClassMeta(c);
-					return new ClassMeta(c, this).setKeyType(ck).setValueType(cv);
+						return (ClassMeta<T>)rawType;
+					return new ClassMeta(rawType, ck, cv, null);
 				}
 			}
 		}
@@ -1383,7 +1385,7 @@ public class BeanContext extends Context {
 		// Note that if it has a pojo swap, we still want to cache it so that
 		// we can cache something like byte[] with ByteArrayBase64Swap.
 		if (c.isArray() && findPojoSwap(c) == null)
-			return new ClassMeta(c, this);
+			return new ClassMeta(c, this, findImplClass(c), findBeanFilter(c), findPojoSwap(c), findChildPojoSwaps(c));
 
 		// This can happen if we have transforms defined against String or Object.
 		if (cmCache == null)
@@ -1405,7 +1407,7 @@ public class BeanContext extends Context {
 						if (pcm.innerClass == c)
 							return pcm;
 
-					cm = new ClassMeta<T>(c, this, true);
+					cm = new ClassMeta<T>(c, this, findImplClass(c), findBeanFilter(c), findPojoSwap(c), findChildPojoSwaps(c), true);
 					pendingClassMetas.addLast(cm);
 					try {
 						cm.init();
@@ -1601,7 +1603,7 @@ public class BeanContext extends Context {
 				ClassMeta<?> valueType = resolveType(pParams[1], cm2.getValueType(), cm.getValueType());
 				if (keyType.isObject() && valueType.isObject())
 					return cm2;
-				return new ClassMeta<T>(cm2.innerClass, this).setKeyType(keyType).setValueType(valueType);
+				return new ClassMeta<T>(cm2, keyType, valueType, null);
 			}
 
 			if (cm2.isCollection()) {
@@ -1611,7 +1613,7 @@ public class BeanContext extends Context {
 				ClassMeta<?> elementType = resolveType(pParams[0], cm2.getElementType(), cm.getElementType());
 				if (elementType.isObject())
 					return cm2;
-				return new ClassMeta<T>(cm2.innerClass, this).setElementType(elementType);
+				return new ClassMeta<T>(cm2, null, null, elementType);
 			}
 
 			return cm2;
@@ -1749,7 +1751,7 @@ public class BeanContext extends Context {
 	 * @param c The class associated with the swap.
 	 * @return The swap associated with the class, or null if there is no association.
 	 */
-	protected final <T> PojoSwap findPojoSwap(Class<T> c) {
+	private final <T> PojoSwap findPojoSwap(Class<T> c) {
 		// Note:  On first
 		if (c != null)
 			for (PojoSwap f : pojoSwaps)
@@ -1763,12 +1765,18 @@ public class BeanContext extends Context {
 	 * @param c The class to check.
 	 * @return <jk>true</jk> if the specified class or one of its subclasses has a {@link PojoSwap} associated with it.
 	 */
-	protected final boolean hasChildPojoSwaps(Class<?> c) {
-		if (c != null)
-			for (PojoSwap f : pojoSwaps)
-				if (isParentClass(c, f.getNormalClass()))
-					return true;
-		return false;
+	private final PojoSwap[] findChildPojoSwaps(Class<?> c) {
+		if (c == null || pojoSwaps.length == 0)
+			return null;
+		List<PojoSwap> l = null;
+		for (PojoSwap f : pojoSwaps) {
+			if (isParentClass(c, f.getNormalClass())) {
+				if (l == null)
+					l = new ArrayList<PojoSwap>();
+				l.add(f);
+			}
+		}
+		return l == null ? null : l.toArray(new PojoSwap[l.size()]);
 	}
 
 	/**
@@ -1779,7 +1787,7 @@ public class BeanContext extends Context {
 	 * @param c The class associated with the bean filter.
 	 * @return The bean filter associated with the class, or null if there is no association.
 	 */
-	protected final <T> BeanFilter findBeanFilter(Class<T> c) {
+	private final <T> BeanFilter findBeanFilter(Class<T> c) {
 		if (c != null)
 			for (BeanFilter f : beanFilters)
 				if (isParentClass(f.getBeanClass(), c))
@@ -1825,6 +1833,24 @@ public class BeanContext extends Context {
 				implClass = implClasses.get(ic);
 				if (implClass != null)
 					return findNoArgConstructor(implClass, v);
+			}
+			cc = cc.getSuperclass();
+		}
+		return null;
+	}
+
+	private final <T> Class<? extends T> findImplClass(Class<T> c) {
+		if (implClasses.isEmpty())
+			return null;
+		Class cc = c;
+		while (cc != null) {
+			Class implClass = implClasses.get(cc);
+			if (implClass != null)
+				return implClass;
+			for (Class ic : cc.getInterfaces()) {
+				implClass = implClasses.get(ic);
+				if (implClass != null)
+					return implClass;
 			}
 			cc = cc.getSuperclass();
 		}
