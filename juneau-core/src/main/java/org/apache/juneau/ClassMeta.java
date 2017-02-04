@@ -53,11 +53,11 @@ public final class ClassMeta<T> implements Type {
 
 	/** Class categories. */
 	enum ClassCategory {
-		MAP, COLLECTION, CLASS, NUMBER, DECIMAL, BOOLEAN, CHAR, DATE, ARRAY, ENUM, BEAN, UNKNOWN, OTHER, CHARSEQ, STR, OBJ, URI, BEANMAP, READER, INPUTSTREAM
+		MAP, COLLECTION, CLASS, NUMBER, DECIMAL, BOOLEAN, CHAR, DATE, ARRAY, ENUM, OTHER, CHARSEQ, STR, OBJ, URI, BEANMAP, READER, INPUTSTREAM
 	}
 
 	final BeanContext beanContext;                    // The bean context that created this object.
-	ClassCategory classCategory = UNKNOWN;            // The class category.
+	ClassCategory classCategory = OTHER;              // The class category.
 	final Class<T> innerClass;                        // The class being wrapped.
 	ClassMeta<?>
 		serializedClassMeta,                           // The transformed class type (if class has swap associated with it).
@@ -339,7 +339,7 @@ public final class ClassMeta<T> implements Type {
 
 			// If the category is unknown, see if it's a bean.
 			// Note that this needs to be done after all other initialization has been done.
-			else if (classCategory == UNKNOWN) {
+			else if (classCategory == OTHER) {
 
 				BeanMeta newMeta = null;
 				try {
@@ -349,12 +349,8 @@ public final class ClassMeta<T> implements Type {
 					notABeanReason = e.getMessage();
 					throw e;
 				}
-				if (notABeanReason != null)
-					classCategory = OTHER;
-				else {
+				if (notABeanReason == null)
 					beanMeta = newMeta;
-					classCategory = BEAN;
-				}
 			}
 
 			if (c.isPrimitive()) {
@@ -663,7 +659,7 @@ public final class ClassMeta<T> implements Type {
 	 * @return <jk>true</jk> if this class is a subclass of {@link Map} or it's a bean.
 	 */
 	public boolean isMapOrBean() {
-		return classCategory == MAP || classCategory == BEANMAP || classCategory == BEAN;
+		return classCategory == MAP || classCategory == BEANMAP || beanMeta != null;
 	}
 
 	/**
@@ -726,7 +722,7 @@ public final class ClassMeta<T> implements Type {
 	 * @return <jk>true</jk> if this class is a bean.
 	 */
 	public boolean isBean() {
-		return classCategory == BEAN;
+		return beanMeta != null;
 	}
 
 	/**
@@ -1341,25 +1337,23 @@ public final class ClassMeta<T> implements Type {
 			int i = n.lastIndexOf('.');
 			n = n.substring(i == -1 ? 0 : i+1).replace('$', '.');
 		}
-		switch(classCategory) {
-			case ARRAY:
-				return elementType.toString(sb, simple).append('[').append(']');
-			case MAP:
-				return sb.append(n).append(keyType.isObject() && valueType.isObject() ? "" : "<"+keyType.toString(simple)+","+valueType.toString(simple)+">");
-			case BEANMAP:
-				return sb.append(BeanMap.class.getName()).append('<').append(n).append('>');
-			case COLLECTION:
-				return sb.append(n).append(elementType.isObject() ? "" : "<"+elementType.toString(simple)+">");
-			case OTHER:
-				if (simple)
-					return sb.append(n);
-				sb.append("OTHER-").append(n).append(",notABeanReason=").append(notABeanReason);
-				if (initException != null)
-					sb.append(",initException=").append(initException);
-				return sb;
-			default:
+		if (classCategory == ARRAY)
+			return elementType.toString(sb, simple).append('[').append(']');
+		if (classCategory == MAP)
+			return sb.append(n).append(keyType.isObject() && valueType.isObject() ? "" : "<"+keyType.toString(simple)+","+valueType.toString(simple)+">");
+		if (classCategory == BEANMAP)
+			return sb.append(BeanMap.class.getName()).append('<').append(n).append('>');
+		if (classCategory == COLLECTION)
+			return sb.append(n).append(elementType.isObject() ? "" : "<"+elementType.toString(simple)+">");
+		if (classCategory == OTHER && beanMeta == null) {
+			if (simple)
 				return sb.append(n);
+			sb.append("OTHER-").append(n).append(",notABeanReason=").append(notABeanReason);
+			if (initException != null)
+				sb.append(",initException=").append(initException);
+			return sb;
 		}
+		return sb.append(n);
 	}
 
 	/**
