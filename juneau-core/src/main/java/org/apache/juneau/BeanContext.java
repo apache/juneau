@@ -1346,10 +1346,11 @@ public class BeanContext extends Context {
 			if (oc instanceof Class) {
 				Class c = (Class)oc;
 				if (Collection.class.isAssignableFrom(c)) {
+					ClassMeta<?> rawType = getClassMeta(c);
 					ClassMeta<?> ce = getClassMeta(Array.get(o, 1));
 					if (ce.isObject())
-						return getClassMeta(c);
-					return new ClassMeta(c, this).setElementType(ce);
+						return (ClassMeta<T>)rawType;
+					return new ClassMeta(rawType, null, null, ce);
 				}
 			}
 		} else if (len == 3) {
@@ -1357,11 +1358,12 @@ public class BeanContext extends Context {
 			if (oc instanceof Class) {
 				Class c = (Class)oc;
 				if (Map.class.isAssignableFrom(c)) {
+					ClassMeta<?> rawType = getClassMeta(c);
 					ClassMeta<?> ck = getClassMeta(Array.get(o, 1));
 					ClassMeta<?> cv = getClassMeta(Array.get(o, 2));
 					if (ck.isObject() && cv.isObject())
-						return getClassMeta(c);
-					return new ClassMeta(c, this).setKeyType(ck).setValueType(cv);
+						return (ClassMeta<T>)rawType;
+					return new ClassMeta(rawType, ck, cv, null);
 				}
 			}
 		}
@@ -1601,7 +1603,7 @@ public class BeanContext extends Context {
 				ClassMeta<?> valueType = resolveType(pParams[1], cm2.getValueType(), cm.getValueType());
 				if (keyType.isObject() && valueType.isObject())
 					return cm2;
-				return new ClassMeta<T>(cm2.innerClass, this).setKeyType(keyType).setValueType(valueType);
+				return new ClassMeta<T>(cm2, keyType, valueType, null);
 			}
 
 			if (cm2.isCollection()) {
@@ -1611,7 +1613,7 @@ public class BeanContext extends Context {
 				ClassMeta<?> elementType = resolveType(pParams[0], cm2.getElementType(), cm.getElementType());
 				if (elementType.isObject())
 					return cm2;
-				return new ClassMeta<T>(cm2.innerClass, this).setElementType(elementType);
+				return new ClassMeta<T>(cm2, null, null, elementType);
 			}
 
 			return cm2;

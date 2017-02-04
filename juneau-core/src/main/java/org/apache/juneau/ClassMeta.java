@@ -455,33 +455,33 @@ public final class ClassMeta<T> implements Type {
 				};
 			}
 
-			serializedClassMeta = (pojoSwap == null ? this : beanContext.getClassMeta(pojoSwap.getSwapClass()));
+			serializedClassMeta = (pojoSwap == null ? this : findClassMeta(pojoSwap.getSwapClass()));
 			if (serializedClassMeta == null)
 				serializedClassMeta = this;
 
 			// If this is an array, get the element type.
 			if (cc == ARRAY)
-				elementType = beanContext.getClassMeta(innerClass.getComponentType());
+				elementType = findClassMeta(innerClass.getComponentType());
 
 			// If this is a MAP, see if it's parameterized (e.g. AddressBook extends HashMap<String,Person>)
 			else if (cc == MAP) {
-				ClassMeta[] parameters = beanContext.findParameters(innerClass, innerClass);
+				ClassMeta[] parameters = findParameters();
 				if (parameters != null && parameters.length == 2) {
 					keyType = parameters[0];
 					valueType = parameters[1];
 				} else {
-					keyType = beanContext.getClassMeta(Object.class);
-					valueType = beanContext.getClassMeta(Object.class);
+					keyType = findClassMeta(Object.class);
+					valueType = findClassMeta(Object.class);
 				}
 			}
 
 			// If this is a COLLECTION, see if it's parameterized (e.g. AddressBook extends LinkedList<Person>)
 			else if (cc == COLLECTION) {
-				ClassMeta[] parameters = beanContext.findParameters(innerClass, innerClass);
+				ClassMeta[] parameters = findParameters();
 				if (parameters != null && parameters.length == 1) {
 					elementType = parameters[0];
 				} else {
-					elementType = beanContext.getClassMeta(Object.class);
+					elementType = findClassMeta(Object.class);
 				}
 			}
 
@@ -518,6 +518,14 @@ public final class ClassMeta<T> implements Type {
 		}
 
 		return this;
+	}
+
+	private ClassMeta<?> findClassMeta(Class<?> c) {
+		return beanContext.getClassMeta(c);
+	}
+
+	private ClassMeta<?>[] findParameters() {
+		return beanContext.findParameters(innerClass, innerClass);
 	}
 
 	/**
@@ -1503,5 +1511,32 @@ public final class ClassMeta<T> implements Type {
 	@Override /* Object */
 	public int hashCode() {
 		return super.hashCode();
+	}
+
+	public abstract static class CreateSession {
+		LinkedList<ClassMeta<?>> stack;
+
+		public CreateSession push(ClassMeta<?> cm) {
+			if (stack == null)
+				stack = new LinkedList<ClassMeta<?>>();
+			stack.add(cm);
+			return this;
+		}
+
+		public CreateSession pop(ClassMeta<?> expected) {
+			if (stack == null || stack.removeLast() != expected)
+				throw new BeanRuntimeException("ClassMetaSession creation stack corruption!");
+			return this;
+		}
+
+		public <T> ClassMeta<T> getClassMeta(Class<T> c) {
+			if (stack != null)
+				for (ClassMeta<?> cm : stack)
+					if (cm.innerClass == c)
+						return (ClassMeta<T>)cm;
+			return createClassMeta(c);
+		}
+
+		public abstract <T> ClassMeta<T> createClassMeta(Class<T> c);
 	}
 }
