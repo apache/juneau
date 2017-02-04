@@ -1508,14 +1508,14 @@ public class BeanContext extends Context {
 					return rawType;
 				if (params[0].isObject() && params[1].isObject())
 					return rawType;
-				return new ClassMeta(rawType.innerClass, this).setKeyType(params[0]).setValueType(params[1]);
+				return new ClassMeta(rawType, params[0], params[1], null);
 			}
 			if (rawType.isCollection()) {
 				if (params.length != 1)
 					return rawType;
 				if (params[0].isObject())
 					return rawType;
-				return new ClassMeta(rawType.innerClass, this).setElementType(params[0]);
+				return new ClassMeta(rawType, null, null, params[0]);
 			}
 		}
 
@@ -1633,7 +1633,7 @@ public class BeanContext extends Context {
 
 //
 //  This code is inherently unsafe (but still potentially useful?)
-// 
+//
 //	/**
 //	 * Converts class name strings to ClassMeta objects.
 //	 *

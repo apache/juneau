@@ -373,6 +373,48 @@ public final class ClassMeta<T> implements Type {
 			init();
 	}
 
+	/**
+	 * Copy constructor.
+	 * Used for creating Map and Collection class metas that shouldn't be cached.
+	 */
+	ClassMeta(ClassMeta<T> mainType, ClassMeta<?> keyType, ClassMeta<?> valueType, ClassMeta<?> elementType) {
+		this.innerClass = mainType.innerClass;
+		this.cc = mainType.cc;
+		this.fromStringMethod = mainType.fromStringMethod;
+		this.noArgConstructor = mainType.noArgConstructor;
+		this.stringConstructor = mainType.stringConstructor;
+		this.numberConstructor = mainType.numberConstructor;
+		this.swapConstructor = mainType.swapConstructor;
+		this.objectMapConstructor = mainType.objectMapConstructor;
+		this.swapMethodType = mainType.swapMethodType;
+		this.numberConstructorType = mainType.numberConstructorType;
+		this.toObjectMapMethod = mainType.toObjectMapMethod;
+		this.swapMethod = mainType.swapMethod;
+		this.namePropertyMethod = mainType.namePropertyMethod;
+		this.parentPropertyMethod = mainType.parentPropertyMethod;
+		this.isDelegate = mainType.isDelegate;
+		this.isAbstract = mainType.isAbstract;
+		this.isMemberClass = mainType.isMemberClass;
+		this.primitiveDefault = mainType.primitiveDefault;
+		this.remoteableMethods = mainType.remoteableMethods;
+		this.publicMethods = mainType.publicMethods;
+		this.beanContext = mainType.beanContext;
+		this.serializedClassMeta = this;
+		this.elementType = elementType;
+		this.keyType = keyType;
+		this.valueType = valueType;
+		this.invocationHandler = mainType.invocationHandler;
+		this.beanMeta = mainType.beanMeta;
+		this.dictionaryName = mainType.dictionaryName;
+		this.resolvedDictionaryName = mainType.resolvedDictionaryName;
+		this.notABeanReason = mainType.notABeanReason;
+		this.pojoSwap = mainType.pojoSwap;
+		this.beanFilter = mainType.beanFilter;
+		this.extMeta = mainType.extMeta;
+		this.initException = mainType.initException;
+		this.hasChildPojoSwaps = mainType.hasChildPojoSwaps;
+	}
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	ClassMeta init() {
 
