@@ -88,6 +88,11 @@ public final class ClassMeta<T> implements Type {
 	final ConcurrentHashMap<Class<?>,PojoSwap<?,?>>
 		childSwapMap,                                        // Maps normal subclasses to PojoSwaps.
 		childUnswapMap;                                      // Maps swap subclasses to PojoSwaps.
+	final PojoSwap<T,?> pojoSwap;                           // The object POJO swap associated with this bean (if it has one).
+	final BeanFilter beanFilter;                            // The bean filter associated with this bean (if it has one).
+
+	private final MetadataMap extMeta;                      // Extended metadata
+
 
 	final BeanContext beanContext;                    // The bean context that created this object.
 	ClassMeta<?>
@@ -99,10 +104,6 @@ public final class ClassMeta<T> implements Type {
 	BeanMeta<T> beanMeta;                             // The bean meta for this bean class (if it's a bean).
 	String dictionaryName, resolvedDictionaryName;    // The dictionary name of this class if it has one.
 	String notABeanReason;                            // If this isn't a bean, the reason why.
-	PojoSwap<T,?> pojoSwap;                           // The object POJO swap associated with this bean (if it has one).
-	BeanFilter beanFilter;                            // The bean filter associated with this bean (if it has one).
-
-	private MetadataMap extMeta = new MetadataMap();  // Extended metadata
 	private Throwable initException;                  // Any exceptions thrown in the init() method.
 
 	private static final Boolean BOOLEAN_DEFAULT = false;
@@ -422,6 +423,7 @@ public final class ClassMeta<T> implements Type {
 		this.remoteableMethods = _remoteableMethods;
 		this.beanFilter = beanFilter;
 		this.pojoSwap = ps;
+		this.extMeta = new MetadataMap();
 
 		if (! delayedInit)
 			init();
@@ -476,31 +478,6 @@ public final class ClassMeta<T> implements Type {
 	ClassMeta init() {
 
 		try {
-
-			Class c = innerClass;
-
-			if (swapMethod != null) {
-				this.pojoSwap = new PojoSwap<T,Object>(c, swapMethod.getReturnType()) {
-					@Override
-					public Object swap(BeanSession session, Object o) throws SerializeException {
-						try {
-							return swapMethod.invoke(o, session);
-						} catch (Exception e) {
-							throw new SerializeException(e);
-						}
-					}
-					@Override
-					public T unswap(BeanSession session, Object f, ClassMeta<?> hint) throws ParseException {
-						try {
-							if (swapConstructor != null)
-								return swapConstructor.newInstance(f);
-							return super.unswap(session, f, hint);
-						} catch (Exception e) {
-							throw new ParseException(e);
-						}
-					}
-				};
-			}
 
 			serializedClassMeta = (pojoSwap == null ? this : findClassMeta(pojoSwap.getSwapClass()));
 			if (serializedClassMeta == null)
