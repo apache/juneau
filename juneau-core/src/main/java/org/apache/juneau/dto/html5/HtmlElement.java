@@ -17,7 +17,7 @@ import static org.apache.juneau.xml.annotation.XmlFormat.*;
 import java.util.*;
 
 import org.apache.juneau.html.*;
-import org.apache.juneau.internal.*;
+import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
@@ -70,9 +70,19 @@ public abstract class HtmlElement {
 	 * @return The attribute value, or <jk>null</jk> if the named attribute does not exist.
 	 */
 	public String getAttr(String key) {
-		if (attrs == null)
-			return null;
-		return StringUtils.toString(attrs.get(key));
+		return getAttr(String.class, key);
+	}
+
+	/**
+	 * Returns the attribute with the specified name converted to the specified class type.
+	 *
+	 * @param type The class type to convert this class to.
+	 * 	See {@link ObjectUtils} for a list of supported conversion types.
+	 * @param key The attribute name.
+	 * @return The attribute value, or <jk>null</jk> if the named attribute does not exist.
+	 */
+	public <T> T getAttr(Class<T> type, String key) {
+		return attrs == null ? null : ObjectUtils.convertToType(attrs.get(key), type);
 	}
 
 	/**

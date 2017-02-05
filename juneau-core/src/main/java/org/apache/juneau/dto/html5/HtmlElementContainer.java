@@ -16,7 +16,9 @@ import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
@@ -44,6 +46,28 @@ public class HtmlElementContainer extends HtmlElement {
 	public HtmlElementContainer setChildren(LinkedList<Object> children) {
 		this.children = children;
 		return this;
+	}
+
+	/**
+	 * Returns the child node at the specified index.
+	 *
+	 * @param index The index of the node in the list of children.
+	 * @return The child node, or <jk>null</jk> if it doesn't exist.
+	 */
+	public Object getChild(int index) {
+		return (children == null || children.size() <= index || index < 0 ? null : children.get(index));
+	}
+
+	/**
+	 * Returns the child node at the specified index.
+	 *
+	 * @param type The class type of the node.
+	 * @param index The index of the node in the list of children.
+	 * @return The child node, or <jk>null</jk> if it doesn't exist.
+	 * @throws InvalidDataConversionException If node is not the expected type.
+	 */
+	public <T> T getChild(Class<T> type, int index) {
+		return (children == null || children.size() <= index || index < 0 ? null : ObjectUtils.convertToType(children.get(index), type));
 	}
 
 	/**
