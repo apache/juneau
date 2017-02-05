@@ -666,7 +666,7 @@ public class BeanMeta<T> {
 	 */
 	@SuppressWarnings("unchecked")
 	protected T newBean(Object outer) throws IllegalArgumentException, InstantiationException, IllegalAccessException, InvocationTargetException {
-		if (classMeta.isMemberClass) {
+		if (classMeta.isMemberClass()) {
 			if (constructor != null)
 				return constructor.newInstance(outer);
 		} else {
@@ -674,7 +674,7 @@ public class BeanMeta<T> {
 				return constructor.newInstance((Object[])null);
 			InvocationHandler h = classMeta.getProxyInvocationHandler();
 			if (h != null) {
-				ClassLoader cl = classMeta.beanContext.classLoader;
+				ClassLoader cl = classMeta.getBeanContext().classLoader;
 				if (cl == null)
 					cl = this.getClass().getClassLoader();
 				return (T)Proxy.newProxyInstance(cl, new Class[] { classMeta.innerClass, java.io.Serializable.class }, h);

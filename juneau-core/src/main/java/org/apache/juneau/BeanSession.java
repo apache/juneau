@@ -773,7 +773,7 @@ public class BeanSession extends Session {
 			T o = (T)m.newBean(outer);
 			if (o == null) {
 				// Beans with subtypes won't be instantiated until the sub type property is specified.
-				if (cm.beanFilter != null && cm.beanFilter.getSubTypeProperty() != null)
+				if (cm.hasSubTypes())
 					return null;
 				throw new BeanRuntimeException(c, "Class does not have a no-arg constructor.");
 			}

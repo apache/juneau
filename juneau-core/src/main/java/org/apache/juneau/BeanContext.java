@@ -1059,9 +1059,6 @@ public class BeanContext extends Context {
 
 	final String beanTypePropertyName;
 
-	// Holds pending ClassMetas (created, but not yet initialized).
-	final Deque<ClassMeta> pendingClassMetas = new LinkedList<ClassMeta>();
-
 	final int hashCode;
 
 	/**
@@ -1280,7 +1277,7 @@ public class BeanContext extends Context {
 	protected final <T> ClassMeta<T> normalizeClassMeta(ClassMeta<T> cm) {
 		if (cm == null)
 			return (ClassMeta<T>)object();
-		if (cm.beanContext == this || cm.beanContext.equals(this))
+		if (cm.getBeanContext().equals(this))
 			return cm;
 		if (cm.isMap()) {
 			ClassMeta<Map> cm2 = (ClassMeta<Map>)cm;
@@ -1395,27 +1392,10 @@ public class BeanContext extends Context {
 		if (cm == null) {
 
 			synchronized (this) {
-
 				// Make sure someone didn't already set it while this thread was blocked.
 				cm = cmCache.get(c);
-				if (cm == null) {
-
-					// Note:  Bean properties add the possibility that class reference loops exist.
-					// To handle this possibility, we create a set of pending ClassMetas, and
-					// call init (which finds the bean properties) after it's been added to the pending set.
-					for (ClassMeta pcm : pendingClassMetas)
-						if (pcm.innerClass == c)
-							return pcm;
-
-					cm = new ClassMeta<T>(c, this, findImplClass(c), findBeanFilter(c), findPojoSwap(c), findChildPojoSwaps(c), true);
-					pendingClassMetas.addLast(cm);
-					try {
-						cm.init();
-					} finally {
-						pendingClassMetas.removeLast();
-					}
-					cmCache.put(c, cm);
-				}
+				if (cm == null)
+					cm = new ClassMeta<T>(c, this, findImplClass(c), findBeanFilter(c), findPojoSwap(c), findChildPojoSwaps(c));
 			}
 		}
 		return cm;
@@ -1907,6 +1887,8 @@ public class BeanContext extends Context {
 
 	@Override /* Object */
 	public boolean equals(Object o) {
+		if (this == o)
+			return true;
 		if (o instanceof BeanContext)
 			return ((BeanContext)o).hashCode == hashCode;
 		return false;

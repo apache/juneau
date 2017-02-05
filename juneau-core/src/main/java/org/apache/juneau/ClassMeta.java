@@ -58,53 +58,53 @@ public final class ClassMeta<T> implements Type {
 	}
 
 	final Class<T> innerClass;                              // The class being wrapped.
-	final Class<? extends T> implClass;                     // The implementation class to use if this is an interface.
-	final ClassCategory cc;                                 // The class category.
-	final Method fromStringMethod;                          // The static valueOf(String) or fromString(String) or forString(String) method (if it has one).
-	final Constructor<? extends T>
+
+	private final Class<? extends T> implClass;             // The implementation class to use if this is an interface.
+	private final ClassCategory cc;                         // The class category.
+	private final Method fromStringMethod;                  // The static valueOf(String) or fromString(String) or forString(String) method (if it has one).
+	private final Constructor<? extends T>
 		noArgConstructor;                                    // The no-arg constructor for this class (if it has one).
-	final Constructor<T>
+	private final Constructor<T>
 		stringConstructor,                                   // The X(String) constructor (if it has one).
 		numberConstructor,                                   // The X(Number) constructor (if it has one).
 		swapConstructor,                                     // The X(Swappable) constructor (if it has one).
 		objectMapConstructor;                                // The X(ObjectMap) constructor (if it has one).
-	final Class<?>
+	private final Class<?>
 		swapMethodType,                                      // The class type of the object in the number constructor.
 		numberConstructorType;
-	final Method
+	private final Method
 		toObjectMapMethod,                                   // The toObjectMap() method (if it has one).
 		swapMethod,                                          // The swap() method (if it has one).
 		namePropertyMethod,                                  // The method to set the name on an object (if it has one).
 		parentPropertyMethod;                                // The method to set the parent on an object (if it has one).
-	final boolean
+	private final boolean
 		isDelegate,                                          // True if this class extends Delegate.
 		isAbstract,                                          // True if this class is abstract.
 		isMemberClass;                                       // True if this is a non-static member class.
-	final Object primitiveDefault;                          // Default value for primitive type classes.
-	final Map<String,Method>
+	private final Object primitiveDefault;                  // Default value for primitive type classes.
+	private final Map<String,Method>
 		remoteableMethods,                                   // Methods annotated with @Remoteable.  Contains all public methods if class is annotated with @Remotable.
 		publicMethods;                                       // All public methods, including static methods.
-	final PojoSwap<?,?>[] childPojoSwaps;                   // Any PojoSwaps where the normal type is a subclass of this class.
-	final ConcurrentHashMap<Class<?>,PojoSwap<?,?>>
+	private final PojoSwap<?,?>[] childPojoSwaps;           // Any PojoSwaps where the normal type is a subclass of this class.
+	private final ConcurrentHashMap<Class<?>,PojoSwap<?,?>>
 		childSwapMap,                                        // Maps normal subclasses to PojoSwaps.
 		childUnswapMap;                                      // Maps swap subclasses to PojoSwaps.
-	final PojoSwap<T,?> pojoSwap;                           // The object POJO swap associated with this bean (if it has one).
-	final BeanFilter beanFilter;                            // The bean filter associated with this bean (if it has one).
-
+	private final PojoSwap<T,?> pojoSwap;                   // The object POJO swap associated with this bean (if it has one).
+	private final BeanFilter beanFilter;                    // The bean filter associated with this bean (if it has one).
 	private final MetadataMap extMeta;                      // Extended metadata
-
-
-	final BeanContext beanContext;                    // The bean context that created this object.
-	ClassMeta<?>
-		serializedClassMeta,                           // The transformed class type (if class has swap associated with it).
-		elementType = null,                            // If ARRAY or COLLECTION, the element class type.
-		keyType = null,                                // If MAP, the key class type.
-		valueType = null;                              // If MAP, the value class type.
-	InvocationHandler invocationHandler;              // The invocation handler for this class (if it has one).
-	BeanMeta<T> beanMeta;                             // The bean meta for this bean class (if it's a bean).
-	String dictionaryName, resolvedDictionaryName;    // The dictionary name of this class if it has one.
-	String notABeanReason;                            // If this isn't a bean, the reason why.
-	private Throwable initException;                  // Any exceptions thrown in the init() method.
+	private final BeanContext beanContext;                  // The bean context that created this object.
+	private final ClassMeta<?>
+		serializedClassMeta,                                 // The transformed class type (if class has swap associated with it).
+		elementType,                                         // If ARRAY or COLLECTION, the element class type.
+		keyType,                                             // If MAP, the key class type.
+		valueType;                                           // If MAP, the value class type.
+	private final BeanMeta<T> beanMeta;                     // The bean meta for this bean class (if it's a bean).
+	private final String
+		notABeanReason,                                      // If this isn't a bean, the reason why.
+		dictionaryName,                                      // The dictionary name of this class if it has one.
+		resolvedDictionaryName;                              // The name if this is an array type (e.g. "X^^").
+	private final Throwable initException;                  // Any exceptions thrown in the init() method.
+	private final InvocationHandler invocationHandler;      // The invocation handler for this class (if it has one).
 
 	private static final Boolean BOOLEAN_DEFAULT = false;
 	private static final Character CHARACTER_DEFAULT = (char)0;
@@ -114,13 +114,6 @@ public final class ClassMeta<T> implements Type {
 	private static final Float FLOAT_DEFAULT = 0f;
 	private static final Double DOUBLE_DEFAULT = 0d;
 	private static final Byte BYTE_DEFAULT = (byte)0;
-
-	/**
-	 * Shortcut for calling <code>ClassMeta(innerClass, beanContext, <jk>false</jk>)</code>.
-	 */
-	ClassMeta(Class<T> innerClass, BeanContext beanContext, Class<? extends T> implClass, BeanFilter beanFilter, PojoSwap<T,?> pojoSwap, PojoSwap<?,?>[] childPojoSwaps) {
-		this(innerClass, beanContext, implClass, beanFilter, pojoSwap, childPojoSwaps, false);
-	}
 
 	/**
 	 * Construct a new {@code ClassMeta} based on the specified {@link Class}.
@@ -140,9 +133,14 @@ public final class ClassMeta<T> implements Type {
 	 * 	Used for delayed initialization when the possibility of class reference loops exist.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	ClassMeta(Class<T> innerClass, BeanContext beanContext, Class<? extends T> implClass, BeanFilter beanFilter, PojoSwap<T,?> pojoSwap, PojoSwap<?,?>[] childPojoSwaps, boolean delayedInit) {
+	ClassMeta(Class<T> innerClass, BeanContext beanContext, Class<? extends T> implClass, BeanFilter beanFilter, PojoSwap<T,?> pojoSwap, PojoSwap<?,?>[] childPojoSwaps) {
 		this.innerClass = innerClass;
 		this.beanContext = beanContext;
+
+		// We always immediately add this class meta to the bean context cache so that we can resolve recursive references.
+		if (beanContext != null && beanContext.cmCache != null)
+			beanContext.cmCache.putIfAbsent(innerClass, this);
+
 		this.implClass = implClass;
 		this.childPojoSwaps = childPojoSwaps;
 		this.childSwapMap = childPojoSwaps == null ? null : new ConcurrentHashMap<Class<?>,PojoSwap<?,?>>();
@@ -170,6 +168,19 @@ public final class ClassMeta<T> implements Type {
 		Map<String,Method>
 			_publicMethods = new LinkedHashMap<String,Method>(),
 			_remoteableMethods = null;
+		ClassMeta<?>
+			_keyType = null,
+			_valueType = null,
+			_elementType = null,
+			_serializedClassMeta = null;
+		String
+			_notABeanReason = null,
+			_dictionaryName = null,
+			_resolvedDictionaryName = null;
+		Throwable _initException = null;
+		BeanMeta _beanMeta = null;
+		PojoSwap _pojoSwap = null;
+		InvocationHandler _invocationHandler = null;
 
 		if (c.isPrimitive()) {
 			if (c == Boolean.TYPE)
@@ -376,9 +387,8 @@ public final class ClassMeta<T> implements Type {
 		if (beanFilter == null)
 			beanFilter = findBeanFilter();
 
-		PojoSwap ps = null;
 		if (_swapMethod != null) {
-			ps = new PojoSwap<T,Object>(c, _swapMethod.getReturnType()) {
+			_pojoSwap = new PojoSwap<T,Object>(c, _swapMethod.getReturnType()) {
 				@Override
 				public Object swap(BeanSession session, Object o) throws SerializeException {
 					try {
@@ -399,10 +409,77 @@ public final class ClassMeta<T> implements Type {
 				}
 			};
 		}
-		if (ps == null)
-			ps = findPojoSwap();
-		if (ps == null)
-			ps = pojoSwap;
+		if (_pojoSwap == null)
+			_pojoSwap = findPojoSwap();
+		if (_pojoSwap == null)
+			_pojoSwap = pojoSwap;
+
+		try {
+
+			// If this is an array, get the element type.
+			if (_cc == ARRAY)
+				_elementType = findClassMeta(innerClass.getComponentType());
+
+			// If this is a MAP, see if it's parameterized (e.g. AddressBook extends HashMap<String,Person>)
+			else if (_cc == MAP) {
+				ClassMeta[] parameters = findParameters();
+				if (parameters != null && parameters.length == 2) {
+					_keyType = parameters[0];
+					_valueType = parameters[1];
+				} else {
+					_keyType = findClassMeta(Object.class);
+					_valueType = findClassMeta(Object.class);
+				}
+			}
+
+			// If this is a COLLECTION, see if it's parameterized (e.g. AddressBook extends LinkedList<Person>)
+			else if (_cc == COLLECTION) {
+				ClassMeta[] parameters = findParameters();
+				if (parameters != null && parameters.length == 1) {
+					_elementType = parameters[0];
+				} else {
+					_elementType = findClassMeta(Object.class);
+				}
+			}
+
+			// If the category is unknown, see if it's a bean.
+			// Note that this needs to be done after all other initialization has been done.
+			else if (_cc == OTHER) {
+
+				BeanMeta newMeta = null;
+				try {
+					newMeta = new BeanMeta(this, beanContext, beanFilter, null);
+					_notABeanReason = newMeta.notABeanReason;
+				} catch (RuntimeException e) {
+					_notABeanReason = e.getMessage();
+					throw e;
+				}
+				if (_notABeanReason == null)
+					_beanMeta = newMeta;
+			}
+
+		} catch (NoClassDefFoundError e) {
+			_initException = e;
+		} catch (RuntimeException e) {
+			_initException = e;
+			throw e;
+		}
+
+		if (_beanMeta != null)
+			_dictionaryName = _resolvedDictionaryName = _beanMeta.getDictionaryName();
+
+		if (_cc == ARRAY && _elementType != null) {
+			_resolvedDictionaryName = _elementType.getResolvedDictionaryName();
+			if (_resolvedDictionaryName != null)
+				_resolvedDictionaryName += "^";
+		}
+
+		_serializedClassMeta = (_pojoSwap == null ? this : findClassMeta(_pojoSwap.getSwapClass()));
+		if (_serializedClassMeta == null)
+			_serializedClassMeta = this;
+
+		if (_beanMeta != null && beanContext != null && beanContext.useInterfaceProxies && innerClass.isInterface())
+			_invocationHandler = new BeanProxyInvocationHandler<T>(_beanMeta);
 
 		this.cc = _cc;
 		this.isDelegate = _isDelegate;
@@ -422,11 +499,18 @@ public final class ClassMeta<T> implements Type {
 		this.publicMethods = _publicMethods;
 		this.remoteableMethods = _remoteableMethods;
 		this.beanFilter = beanFilter;
-		this.pojoSwap = ps;
+		this.pojoSwap = _pojoSwap;
 		this.extMeta = new MetadataMap();
-
-		if (! delayedInit)
-			init();
+		this.keyType = _keyType;
+		this.valueType = _valueType;
+		this.elementType = _elementType;
+		this.notABeanReason = _notABeanReason;
+		this.beanMeta = _beanMeta;
+		this.initException = _initException;
+		this.dictionaryName = _dictionaryName;
+		this.resolvedDictionaryName = _resolvedDictionaryName;
+		this.serializedClassMeta = _serializedClassMeta;
+		this.invocationHandler = _invocationHandler;
 	}
 
 	/**
@@ -472,76 +556,6 @@ public final class ClassMeta<T> implements Type {
 		this.beanFilter = mainType.beanFilter;
 		this.extMeta = mainType.extMeta;
 		this.initException = mainType.initException;
-	}
-
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	ClassMeta init() {
-
-		try {
-
-			serializedClassMeta = (pojoSwap == null ? this : findClassMeta(pojoSwap.getSwapClass()));
-			if (serializedClassMeta == null)
-				serializedClassMeta = this;
-
-			// If this is an array, get the element type.
-			if (cc == ARRAY)
-				elementType = findClassMeta(innerClass.getComponentType());
-
-			// If this is a MAP, see if it's parameterized (e.g. AddressBook extends HashMap<String,Person>)
-			else if (cc == MAP) {
-				ClassMeta[] parameters = findParameters();
-				if (parameters != null && parameters.length == 2) {
-					keyType = parameters[0];
-					valueType = parameters[1];
-				} else {
-					keyType = findClassMeta(Object.class);
-					valueType = findClassMeta(Object.class);
-				}
-			}
-
-			// If this is a COLLECTION, see if it's parameterized (e.g. AddressBook extends LinkedList<Person>)
-			else if (cc == COLLECTION) {
-				ClassMeta[] parameters = findParameters();
-				if (parameters != null && parameters.length == 1) {
-					elementType = parameters[0];
-				} else {
-					elementType = findClassMeta(Object.class);
-				}
-			}
-
-			// If the category is unknown, see if it's a bean.
-			// Note that this needs to be done after all other initialization has been done.
-			else if (cc == OTHER) {
-
-				BeanMeta newMeta = null;
-				try {
-					newMeta = new BeanMeta(this, beanContext, beanFilter, null);
-					notABeanReason = newMeta.notABeanReason;
-				} catch (RuntimeException e) {
-					notABeanReason = e.getMessage();
-					throw e;
-				}
-				if (notABeanReason == null)
-					beanMeta = newMeta;
-			}
-
-		} catch (NoClassDefFoundError e) {
-			this.initException = e;
-		} catch (RuntimeException e) {
-			this.initException = e;
-			throw e;
-		}
-
-		if (isBean())
-			dictionaryName = resolvedDictionaryName = getBeanMeta().getDictionaryName();
-
-		if (isArray()) {
-			resolvedDictionaryName = getElementType().getResolvedDictionaryName();
-			if (resolvedDictionaryName != null)
-				resolvedDictionaryName += "^";
-		}
-
-		return this;
 	}
 
 	private ClassMeta<?> findClassMeta(Class<?> c) {
@@ -726,39 +740,6 @@ public final class ClassMeta<T> implements Type {
 				return v.transform(cc);
 		}
 		return null;
-	}
-
-	/**
-	 * Set element type on non-cached <code>Collection</code> types.
-	 *
-	 * @param elementType The class type for elements in the collection class represented by this metadata.
-	 * @return This object (for method chaining).
-	 */
-	protected ClassMeta<T> setElementType(ClassMeta<?> elementType) {
-		this.elementType = elementType;
-		return this;
-	}
-
-	/**
-	 * Set key type on non-cached <code>Map</code> types.
-	 *
-	 * @param keyType The class type for keys in the map class represented by this metadata.
-	 * @return This object (for method chaining).
-	 */
-	protected ClassMeta<T> setKeyType(ClassMeta<?> keyType) {
-		this.keyType = keyType;
-		return this;
-	}
-
-	/**
-	 * Set value type on non-cached <code>Map</code> types.
-	 *
-	 * @param valueType The class type for values in the map class represented by this metadata.
-	 * @return This object (for method chaining).
-	 */
-	protected ClassMeta<T> setValueType(ClassMeta<?> valueType) {
-		this.valueType = valueType;
-		return this;
 	}
 
 	/**
@@ -1039,6 +1020,22 @@ public final class ClassMeta<T> implements Type {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if this class is abstract.
+	 * @return <jk>true</jk> if this class is abstract.
+	 */
+	public boolean isAbstract() {
+		return isAbstract;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is an inner class.
+	 * @return <jk>true</jk> if this class is an inner class.
+	 */
+	public boolean isMemberClass() {
+		return isMemberClass;
+	}
+
+	/**
 	 * All methods on this class annotated with {@link Remoteable @Remotable}, or all public methods if class is annotated.
 	 * Keys are method signatures.
 	 *
@@ -1103,8 +1100,6 @@ public final class ClassMeta<T> implements Type {
 	 * @return The interface proxy invocation handler, or <jk>null</jk> if it does not exist.
 	 */
 	public InvocationHandler getProxyInvocationHandler() {
-		if (invocationHandler == null && beanMeta != null && beanContext.useInterfaceProxies && innerClass.isInterface())
-			invocationHandler = new BeanProxyInvocationHandler<T>(beanMeta);
 		return invocationHandler;
 	}
 
@@ -1268,14 +1263,6 @@ public final class ClassMeta<T> implements Type {
 	 */
 	public synchronized String getNotABeanReason() {
 		return notABeanReason;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this class is abstract.
-	 * @return <jk>true</jk> if this class is abstract.
-	 */
-	public boolean isAbstract() {
-		return isAbstract;
 	}
 
 	/**
