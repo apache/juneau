@@ -329,7 +329,7 @@ public class RdfParser extends ReaderParser {
 				return null;
 			Map m = new ObjectMap(session);
 			parseIntoMap(session, r, m, eType.getKeyType(), eType.getValueType());
-			o = sType.newInstanceFromObjectMap(outer, (ObjectMap)m);
+			o = sType.newInstanceFromObjectMap(session, outer, (ObjectMap)m);
 		} else if (sType.canCreateNewBean(outer)) {
 			Resource r = n.asResource();
 			if (session.wasAlreadyProcessed(r))

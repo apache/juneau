@@ -109,7 +109,7 @@ public final class MsgPackParser extends InputStreamParser {
 				ObjectMap m = new ObjectMap(session);
 				for (int i = 0; i < length; i++)
 					m.put(parseAnything(session, string(), is, outer, pMeta), parseAnything(session, object(), is, m, pMeta));
-				o = sType.newInstanceFromObjectMap(outer, m);
+				o = sType.newInstanceFromObjectMap(session, outer, m);
 			} else if (sType.canCreateNewBean(outer)) {
 				if (dt == MAP) {
 					BeanMap m = session.newBeanMap(outer, sType.getInnerClass());

@@ -67,14 +67,13 @@ public final class ClassMeta<T> implements Type {
 	private final Constructor<T>
 		stringConstructor,                                   // The X(String) constructor (if it has one).
 		numberConstructor,                                   // The X(Number) constructor (if it has one).
-		swapConstructor,                                     // The X(Swappable) constructor (if it has one).
-		objectMapConstructor;                                // The X(ObjectMap) constructor (if it has one).
+		swapConstructor;                                     // The X(Swappable) constructor (if it has one).
 	private final Class<?>
 		swapMethodType,                                      // The class type of the object in the number constructor.
 		numberConstructorType;
 	private final Method
-		toObjectMapMethod,                                   // The toObjectMap() method (if it has one).
 		swapMethod,                                          // The swap() method (if it has one).
+		unswapMethod,                                        // The unswap() method (if it has one).
 		namePropertyMethod,                                  // The method to set the name on an object (if it has one).
 		parentPropertyMethod;                                // The method to set the parent on an object (if it has one).
 	private final boolean
@@ -139,7 +138,7 @@ public final class ClassMeta<T> implements Type {
 
 		// We always immediately add this class meta to the bean context cache so that we can resolve recursive references.
 		if (beanContext != null && beanContext.cmCache != null)
-			beanContext.cmCache.putIfAbsent(innerClass, this);
+			beanContext.cmCache.put(innerClass, this);
 
 		this.implClass = implClass;
 		this.childPojoSwaps = childPojoSwaps;
@@ -151,14 +150,13 @@ public final class ClassMeta<T> implements Type {
 		boolean _isDelegate = false;
 		Method
 			_fromStringMethod = null,
-			_toObjectMapMethod = null,
 			_swapMethod = null,
+			_unswapMethod = null,
 			_parentPropertyMethod = null,
 			_namePropertyMethod = null;
 		Constructor<T>
 			_noArgConstructor = null,
 			_stringConstructor = null,
-			_objectMapConstructor = null,
 			_swapConstructor = null,
 			_numberConstructor = null;
 		Class<?>
@@ -272,20 +270,31 @@ public final class ClassMeta<T> implements Type {
 				_fromStringMethod = LocaleAsString.class.getMethod("fromString", String.class);
 		} catch (NoSuchMethodException e1) {}
 
-		// Find toObjectMap() method if present.
+		// Find swap() method if present.
 		for (Method m : c.getMethods()) {
 			if (isPublic(m) && isNotDeprecated(m) && ! isStatic(m)) {
 				String mName = m.getName();
-				if (mName.equals("toObjectMap")) {
-					if (m.getParameterTypes().length == 0 && m.getReturnType() == ObjectMap.class) {
-						_toObjectMapMethod = m;
-						break;
-					}
-				} else if (mName.equals("swap")) {
-					if (m.getParameterTypes().length == 1 && m.getParameterTypes()[0] == BeanSession.class) {
+				if (mName.equals("swap")) {
+					Class<?>[] pt = m.getParameterTypes();
+					if (pt.length == 1 && pt[0] == BeanSession.class) {
 						_swapMethod = m;
 						_swapMethodType = m.getReturnType();
 						break;
+					}
+				}
+			}
+		}
+		// Find unswap() method if present.
+		if (_swapMethod != null) {
+			for (Method m : c.getMethods()) {
+				if (isPublic(m) && isNotDeprecated(m) && isStatic(m)) {
+					String mName = m.getName();
+					if (mName.equals("unswap")) {
+						Class<?>[] pt = m.getParameterTypes();
+						if (pt.length == 2 && pt[0] == BeanSession.class && pt[1] == _swapMethodType) {
+							_unswapMethod = m;
+							break;
+						}
 					}
 				}
 			}
@@ -316,8 +325,6 @@ public final class ClassMeta<T> implements Type {
 					Class<?> arg = args[(isMemberClass ? 1 : 0)];
 					if (arg == String.class)
 						_stringConstructor = cs;
-					else if (ObjectMap.class.isAssignableFrom(arg))
-						_objectMapConstructor = cs;
 					else if (_swapMethodType != null && _swapMethodType.isAssignableFrom(arg))
 						_swapConstructor = cs;
 					else if (_cc != NUMBER && (Number.class.isAssignableFrom(arg) || (arg.isPrimitive() && (arg == int.class || arg == short.class || arg == long.class || arg == float.class || arg == double.class)))) {
@@ -388,11 +395,14 @@ public final class ClassMeta<T> implements Type {
 			beanFilter = findBeanFilter();
 
 		if (_swapMethod != null) {
+			final Method fSwapMethod = _swapMethod;
+			final Method fUnswapMethod = _unswapMethod;
+			final Constructor<T> fSwapConstructor = _swapConstructor;
 			_pojoSwap = new PojoSwap<T,Object>(c, _swapMethod.getReturnType()) {
 				@Override
 				public Object swap(BeanSession session, Object o) throws SerializeException {
 					try {
-						return swapMethod.invoke(o, session);
+						return fSwapMethod.invoke(o, session);
 					} catch (Exception e) {
 						throw new SerializeException(e);
 					}
@@ -400,8 +410,10 @@ public final class ClassMeta<T> implements Type {
 				@Override
 				public T unswap(BeanSession session, Object f, ClassMeta<?> hint) throws ParseException {
 					try {
-						if (swapConstructor != null)
-							return swapConstructor.newInstance(f);
+						if (fUnswapMethod != null)
+							return (T)fUnswapMethod.invoke(null, session, f);
+						if (fSwapConstructor != null)
+							return fSwapConstructor.newInstance(f);
 						return super.unswap(session, f, hint);
 					} catch (Exception e) {
 						throw new ParseException(e);
@@ -484,14 +496,13 @@ public final class ClassMeta<T> implements Type {
 		this.cc = _cc;
 		this.isDelegate = _isDelegate;
 		this.fromStringMethod = _fromStringMethod;
-		this.toObjectMapMethod = _toObjectMapMethod;
 		this.swapMethod = _swapMethod;
+		this.unswapMethod = _unswapMethod;
 		this.swapMethodType = _swapMethodType;
 		this.parentPropertyMethod = _parentPropertyMethod;
 		this.namePropertyMethod =_namePropertyMethod;
 		this.noArgConstructor = _noArgConstructor;
 		this.stringConstructor = _stringConstructor;
-		this.objectMapConstructor =_objectMapConstructor;
 		this.swapConstructor = _swapConstructor;
 		this.numberConstructor = _numberConstructor;
 		this.numberConstructorType = _numberConstructorType;
@@ -529,11 +540,10 @@ public final class ClassMeta<T> implements Type {
 		this.stringConstructor = mainType.stringConstructor;
 		this.numberConstructor = mainType.numberConstructor;
 		this.swapConstructor = mainType.swapConstructor;
-		this.objectMapConstructor = mainType.objectMapConstructor;
 		this.swapMethodType = mainType.swapMethodType;
 		this.numberConstructorType = mainType.numberConstructorType;
-		this.toObjectMapMethod = mainType.toObjectMapMethod;
 		this.swapMethod = mainType.swapMethod;
+		this.unswapMethod = mainType.unswapMethod;
 		this.namePropertyMethod = mainType.namePropertyMethod;
 		this.parentPropertyMethod = mainType.parentPropertyMethod;
 		this.isDelegate = mainType.isDelegate;
@@ -1204,21 +1214,13 @@ public final class ClassMeta<T> implements Type {
 	 * @return <jk>true</jk> if this class has a no-arg constructor or invocation handler.
 	 */
 	public boolean canCreateNewInstanceFromObjectMap(Object outer) {
-		if (objectMapConstructor != null) {
+		// TODO - Get rid of?
+		if (swapMethodType == ObjectMap.class && (swapConstructor != null || unswapMethod != null)) {
 			if (isMemberClass)
-				return outer != null && objectMapConstructor.getParameterTypes()[0] == outer.getClass();
+				return outer != null && swapConstructor.getParameterTypes()[0] == outer.getClass();
 			return true;
 		}
 		return false;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this class has an <code>ObjectMap toObjectMap()</code> method.
-	 *
-	 * @return <jk>true</jk> if class has a <code>toObjectMap()</code> method.
-	 */
-	public boolean hasToObjectMapMethod() {
-		return toObjectMapMethod != null;
 	}
 
 	/**
@@ -1238,23 +1240,6 @@ public final class ClassMeta<T> implements Type {
 	public Method getParentProperty() {
 		return parentPropertyMethod;
  	}
-
-	/**
-	 * Converts an instance of this class to an {@link ObjectMap}.
-	 *
-	 * @param t The object to convert to a map.
-	 * @return The converted object, or <jk>null</jk> if method does not have a <code>toObjectMap()</code> method.
-	 * @throws BeanRuntimeException Thrown by <code>toObjectMap()</code> method invocation.
-	 */
-	public ObjectMap toObjectMap(Object t) throws BeanRuntimeException {
-		try {
-			if (toObjectMapMethod != null)
-				return (ObjectMap)toObjectMapMethod.invoke(t);
-			return null;
-		} catch (Exception e) {
-			throw new BeanRuntimeException(e);
-		}
-	}
 
 	/**
 	 * Returns the reason why this class is not a bean, or <jk>null</jk> if it is a bean.
@@ -1363,6 +1348,7 @@ public final class ClassMeta<T> implements Type {
 	 * 	<li><code><jk>public</jk> T(ObjectMap in);</code>
 	 * </ul>
 	 *
+	 * @param session The current bean session.
 	 * @param outer The outer class object for non-static member classes.  Can be <jk>null</jk> for non-member or static classes.
 	 * @param arg The input argument value.
 	 * @return A new instance of the object.
@@ -1372,12 +1358,16 @@ public final class ClassMeta<T> implements Type {
 	 * 	does not have one of the methods described above.
 	 * @throws InvocationTargetException If the underlying constructor throws an exception.
 	 */
-	public T newInstanceFromObjectMap(Object outer, ObjectMap arg) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, InstantiationException {
-		Constructor<T> c = objectMapConstructor;
-		if (c != null) {
+	@SuppressWarnings("unchecked")
+	public T newInstanceFromObjectMap(BeanSession session, Object outer, ObjectMap arg) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, InstantiationException {
+		// TODO - Get rid of?
+		if (swapConstructor != null) {
 			if (isMemberClass)
-				return c.newInstance(outer, arg);
-			return c.newInstance(arg);
+				return swapConstructor.newInstance(outer, arg);
+			return swapConstructor.newInstance(arg);
+		}
+		if (unswapMethod != null) {
+			return (T)unswapMethod.invoke(null, session, arg);
 		}
 		throw new InstantiationError("No map constructor method found for class '"+getInnerClass().getName()+"'");
 	}

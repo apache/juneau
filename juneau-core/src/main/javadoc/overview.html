@@ -77,6 +77,7 @@
 		<li><p><a class='doclink' href='#Core.Transforms'>Transforms</a></p>
 		<ol>
 			<li><p><a class='doclink' href='#Core.PojoSwaps'>PojoSwaps</a></p>
+			<li><p><a class='doclink' href='#Core.SwapMethods'>Swap methods</a></p>
 			<li><p><a class='doclink' href='#Core.BeanFilters'>BeanFilters and @Bean annotations</a></p>
 		</ol>
 		<li><p><a class='doclink' href='#Core.BeanDictionaries'>Bean Name and Dictionaries</a></p>
@@ -742,8 +743,131 @@
 		</div>
 	
 		<!-- ======================================================================================================== -->
+		<a id="Core.SwapMethods"></a>
+		<h4 class='topic' onclick='toggle(this)'>2.6.2 - Swap methods</h4>
+		<div class='topic'>
+			<p>
+				Various methods can be defined on a class directly to affect how it gets serialized.
+			</p>
+			<p>
+				Objects normally serialized to <code>Strings</code> can be parsed back into their original objects by implementing 
+				one of the following methods on the class:
+			</p>		
+			<ul>
+				<li><code><jk>public static</jk> T fromString(String)</code> method.<br>
+					Any of the following method names also work: 
+					<ul>
+						<li><code>valueOf(String)</code>
+						<li><code>parse(String)</code>
+						<li><code>parseString(String)</code>
+						<li><code>forName(String)</code>
+						<li><code>forString(String)</code>
+					</ul>
+				<li><code><jk>public</jk> T(String)</code> constructor.
+			</ul>
+			<p>
+				Note that these methods cover conversion from several built-in Java types, meaning these can be constructed directly by the parser from strings:
+			</p>
+			<ul>
+				<li><code>fromString(String)</code> - {@link java.util.UUID}
+				<li><code>valueOf(String)</code> - {@link java.lang.Boolean}, {@link java.lang.Byte}, {@link java.lang.Double}, {@link java.lang.Float}, 
+					{@link java.lang.Integer}, {@link java.lang.Long}, {@link java.lang.Short}, {@link java.sql.Date}, {@link java.sql.Time}, {@link java.sql.Timestamp}
+				<li><code>parse(String)</code> - {@link java.text.DateFormat}, {@link java.text.MessageFormat}, {@link java.text.NumberFormat}, {@link java.util.Date}, {@link java.util.logging.Level}
+				<li><code>parseString(String)</code> - {@link javax.xml.bind.DatatypeConverter}
+				<li><code>forName(String)</code> - {@link java.lang.Class}
+			</ul>
+			<p>
+				If you want to force a bean-like class to be serialized as a string, you can use the {@link org.apache.juneau.annotation.BeanIgnore @BeanIgnore}
+				annotation on the class to force it to be serialized to a string using the <code>toString()</code> method.
+			</p>
+			<p>
+				Serializing to other intermediate objects can be accomplished by defining a swap method directly on the class:
+			</p>			
+			<ul>
+				<li><code><jk>public</jk> X swap(BeanSession)</code> method, where <code>X</code> is any serializable object.
+			</ul>
+			<p>
+				The <code>BeanSession</code> parameter allows you access to various information about the current serialization session.
+				For example, you could provide customized results based on the media type being produced ({@link org.apache.juneau.BeanSession#getMediaType()}).
+			</p>
+			<p>
+				The following example shows how an HTML5 form template object can be created that gets serialized as a populated HTML5 {@link org.apache.juneau.dto.html5.Form} bean.
+			</p>
+			<p class='bcode'>
+	<jk>import static</jk> org.apache.juneau.dto.html5.HtmlBuilder.*;
+	
+	<jd>/**
+	 * A simple HTML form template whose serialized form is an HTML5 Form object.
+	 */</jd>
+	<jk>public class</jk> FormTemplate {
+		
+		<jk>private</jk> String <jf>action</jf>;
+		<jk>private int</jk> <jf>value1</jf>;
+		<jk>private boolean</jk> <jf>value2</jf>;
+		
+		<jk>public</jk> FormTemplate(String action, <jk>int</jk> value1, <jk>boolean</jk> value2) {
+			<jk>this</jk>.<jf>action</jf> = action;
+			<jk>this</jk>.<jf>value1</jf> = value1;
+			<jk>this</jk>.<jf>value2</jf> = value2;
+		}
+		
+		<jk>public</jk> Form swap(BeanSession session) {
+			<jk>return</jk> <jsm>form</jsm>(<jf>action</jf>,
+				<jsm>input</jsm>(<js>"text"</js>).name(<js>"v1"</js>).value(<jf>value1</jf>),
+				<jsm>input</jsm>(<js>"text"</js>).name(<js>"v2"</js>).value(<jf>value2</jf>)
+			);
+		}
+	}
+			</p>
+			<p>
+				Swapped objects can be converted back into their original form by the parsers by specifying one of the following methods:
+			</p>
+			<ul>
+				<li><code><jk>public static</jk> T unswap(BeanSession, X)</code> method where <code>X</code> is the swap class type.
+				<li><code><jk>public</jk> T(X)</code> constructor where <code>X</code> is the swap class type.
+			</ul>
+			<p>
+				The following shows how our form template class can be modified to allow the parsers to reconstruct our original object:
+			</p>
+			<p class='bcode'>
+	<jk>import static</jk> org.apache.juneau.dto.html5.HtmlBuilder.*;
+	
+	<jd>/**
+	 * A simple HTML form template whose serialized form is an HTML5 Form object.
+	 * This time with parsing support.
+	 */</jd>
+	<ja>@Bean</ja>(beanDictionary=HtmlBeanDictionary.<jk>class</jk>)
+	<jk>public class</jk> FormTemplate {
+		
+		<jk>private</jk> String <jf>action</jf>;
+		<jk>private int</jk> <jf>value1</jf>;
+		<jk>private boolean</jk> <jf>value2</jf>;
+		
+		<jc>// Our 'unswap' constructor</jc>
+		<jk>public</jk> FormTemplate(Form f) {
+			<jk>this</jk>.<jf>action</jf> = f.getAttr(<js>"action"</js>);
+			<jk>this</jk>.<jf>value1</jf> = f.getChild(Input.<jk>class</jk>, 0).getAttr(<jk>int</jk>.<jk>class</jk>, <js>"value"</js>);
+			<jk>this</jk>.<jf>value2</jf> = f.getChild(Input.<jk>class</jk>, 1).getAttr(<jk>boolean</jk>.<jk>class</jk>, <js>"value"</js>);
+		}
+		
+		<jk>public</jk> FormTemplate(String action, <jk>int</jk> value1, <jk>boolean</jk> value2) {
+			<jk>this</jk>.<jf>action</jf> = action;
+			<jk>this</jk>.<jf>value1</jf> = value1;
+			<jk>this</jk>.<jf>value2</jf> = value2;
+		}
+		
+		<jk>public</jk> Form swap(BeanSession session) {
+			<jk>return</jk> <jsm>form</jsm>(<jf>action</jf>,
+				<jsm>input</jsm>(<js>"text"</js>).name(<js>"v1"</js>).value(<jf>value1</jf>),
+				<jsm>input</jsm>(<js>"text"</js>).name(<js>"v2"</js>).value(<jf>value2</jf>)
+			);
+		}
+	}
+		</div>
+
+		<!-- ======================================================================================================== -->
 		<a id="Core.BeanFilters"></a>
-		<h4 class='topic' onclick='toggle(this)'>2.6.2 - BeanFilters and @Bean annotations</h4>
+		<h4 class='topic' onclick='toggle(this)'>2.6.3 - BeanFilters and @Bean annotations</h4>
 		<div class='topic'>
 			<p>
 				{@link org.apache.juneau.transform.BeanFilter BeanFilters} are used to control aspects of how beans are handled during serialization and parsing.
@@ -1127,10 +1251,10 @@
 			<tr class='light bb' style='background-color:lightyellow'>
 				<td style='text-align:center'>5b</td>
 				<td>
-					<b>Objects with standardized <code>static T valueOf(ObjectMap)</code>/<code>static T fromObjectMap(ObjectMap)</code> methods, or constructors with an <code>ObjectMap</code> argument, 
-					and having a <code>toObjectMap()</code> method.</b><br>
-					During serialization, objects are converted to {@link org.apache.juneau.ObjectMap ObjectMaps} using the <code>toObjectMap()</code> method.
-					During parsing, maps are converted to objects using one of these static methods or constructors.				
+					<b>Objects with standardized <code>Object swap(BeanSession)</code>/<code>static T unswap(BeanSession,Object)</code> methods, or constructors with an <code>Object</code> argument
+					where the objects are any object on this list.</b><br> 
+					During serialization, normal objects are converted to swapped objects using the <code>swap()</code> method.
+					During parsing, swapped objects are converted to normal objects using the static method or constructor.				
 				</td>
 				<td>&nbsp;</td>
 				<td style='background-color:lightgreen;text-align:center'><b>yes</b></td>
@@ -5344,6 +5468,9 @@
 				<li>{@link org.apache.juneau.transform.PojoSwap#swap(BeanSession,Object)}
 				<li>{@link org.apache.juneau.transform.PojoSwap#unswap(BeanSession,Object,ClassMeta)}
 			</ul>
+			<li>Replaced support for <code>toObjectMap()</code> and <code>fromObjectMap()/T(ObjectMap)</code> methods with
+				generalized <code>swap(BeanSession)</code>/<code>unswap(BeanSession,X)</code>/<code>T(BeanSession,X)</code> methods.<br>
+				See new section <a class='doclink' href='#Core.SwapMethods'>Swap methods</a> for information.
 			<li>Session-level media type now available through {@link org.apache.juneau.BeanSession#getMediaType()} method.
 				Allows for swaps and serializer/parser behavior to be tailored to individual media types.
 			<li>Several new {@link java.util.Calendar} and {@link java.util.Date} swaps:
@@ -6994,7 +7121,7 @@
 		<h6 class='topic'>Other changes</h6>
 		<ul class='spaced-list'>
 			<li>Various new methods added to {@link org.apache.juneau.internal.StringUtils} and {@link org.apache.juneau.internal.ClassUtils}.
-			<li>Improved support on {@link org.apache.juneau.BeanContext#getClassMetaFromString(String)}.<br>
+			<li>Improved support on <code><del>BeanContext.getClassMetaFromString(String)</del></code>.<br>
 				Now supports resolving <code>"long[]"</code>, and so forth.
 			<li>{@link org.apache.juneau.rest.labels.ResourceDescription} name parameter is now automatically URL-encoded in links.
 			<li>{@link org.apache.juneau.rest.RestRequest} now correctly handles cases involving URL-encoded characters in the 
@@ -7028,7 +7155,7 @@
 			<li>Support for URL-matching and path info containing encoded characters (e.g. <js>'/'</js>) now supported.	
 			<li>Removed some lazy-initialization of bean information in {@link org.apache.juneau.ClassMeta} that allowed the removal of
 				some synchronized blocks.
-			<li>Improved support of {@link org.apache.juneau.BeanContext#getClassMetaFromString(String)}.
+			<li>Improved support of <code><del>BeanContext.getClassMetaFromString(String)</del></code>.
 				Now supports primitive arrays such as <js>"long[]"</js> in addition to the previous support for the equivalent <js>"[J"</js>.
 			<li>Various new convenience methods added to {@link org.apache.juneau.internal.StringUtils} and {@link org.apache.juneau.internal.ClassUtils}.
 		</ul>	

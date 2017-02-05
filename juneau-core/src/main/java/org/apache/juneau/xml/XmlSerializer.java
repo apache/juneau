@@ -373,7 +373,7 @@ public class XmlSerializer extends WriterSerializer {
 			type = NUMBER;
 		} else if (sType.isBoolean()) {
 			type = BOOLEAN;
-		} else if (sType.isMapOrBean() || sType.hasToObjectMapMethod()) {
+		} else if (sType.isMapOrBean()) {
 			isCollapsed = sType.getExtendedMeta(XmlClassMeta.class).getFormat() == COLLAPSED;
 			type = OBJECT;
 		} else if (sType.isCollectionOrArray()) {
@@ -406,7 +406,7 @@ public class XmlSerializer extends WriterSerializer {
 		}
 
 		// Do we need a carriage return after the start tag?
-		boolean cr = o != null && (sType.isMapOrBean() || sType.isCollectionOrArray() || sType.hasToObjectMapMethod()) && ! isMixed;
+		boolean cr = o != null && (sType.isMapOrBean() || sType.isCollectionOrArray()) && ! isMixed;
 
 		String en = elementName;
 		if (en == null) {
@@ -443,10 +443,10 @@ public class XmlSerializer extends WriterSerializer {
 					o = sType.getPrimitiveDefault();
 			}
 
-			if (o != null && ! (sType.isMapOrBean() || sType.hasToObjectMapMethod()))
+			if (o != null && ! (sType.isMapOrBean()))
 				out.append('>');
 
-			if (cr && ! (sType.isMapOrBean() || sType.hasToObjectMapMethod()))
+			if (cr && ! (sType.isMapOrBean()))
 				out.nl();
 		}
 
@@ -468,8 +468,6 @@ public class XmlSerializer extends WriterSerializer {
 					rc = serializeBeanMap(session, out, (BeanMap)o, elementNamespace, isCollapsed, isMixed);
 				else
 					rc = serializeMap(session, out, (Map)o, sType, eType.getKeyType(), eType.getValueType(), isMixed);
-			} else if (sType.hasToObjectMapMethod()) {
-				rc = serializeMap(session, out, sType.toObjectMap(o), sType, null, null, isMixed);
 			} else if (sType.isBean()) {
 				rc = serializeBeanMap(session, out, session.toBeanMap(o), elementNamespace, isCollapsed, isMixed);
 			} else if (sType.isCollection() || (wType != null && wType.isCollection())) {

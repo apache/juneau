@@ -249,8 +249,6 @@ public class UrlEncodingSerializer extends UonSerializer {
 				serializeBeanMap(session, out, (BeanMap)o, addTypeProperty);
 			else
 				serializeMap(session, out, (Map)o, sType);
-		} else if (sType.hasToObjectMapMethod()) {
-			serializeMap(session, out, sType.toObjectMap(o), sType);
 		} else if (sType.isBean()) {
 			serializeBeanMap(session, out, session.toBeanMap(o), addTypeProperty);
 		} else if (sType.isCollection()) {

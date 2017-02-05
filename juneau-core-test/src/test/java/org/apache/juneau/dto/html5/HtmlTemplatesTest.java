@@ -48,11 +48,11 @@ public class HtmlTemplatesTest {
 		return Arrays.asList(new Object[][] {
 			{
 				"FormTemplate-1",
-				new FormTemplate("myaction", "foo", "bar"),
-				"<form action='myaction'><input type='text' name='v1' value='foo'/><input type='text' name='v2' value='bar'/></form>",
-				"<form action='myaction'><input type='text' name='v1' value='foo'/><input type='text' name='v2' value='bar'/></form>\n",
-				"<form action='myaction'><input type='text' name='v1' value='foo'/><input type='text' name='v2' value='bar'/></form>",
-				"<form action='myaction'><input type='text' name='v1' value='foo'/><input type='text' name='v2' value='bar'/></form>\n",
+				new FormTemplate("myaction", 123, true),
+				"<form action='myaction'><input type='text' name='v1' value='123'/><input type='text' name='v2' value='true'/></form>",
+				"<form action='myaction'><input type='text' name='v1' value='123'/><input type='text' name='v2' value='true'/></form>\n",
+				"<form action='myaction'><input type='text' name='v1' value='123'/><input type='text' name='v2' value='true'/></form>",
+				"<form action='myaction'><input type='text' name='v1' value='123'/><input type='text' name='v2' value='true'/></form>\n",
 			},
 		});
 	}
@@ -62,15 +62,16 @@ public class HtmlTemplatesTest {
 	public static class FormTemplate {
 		
 		private String action;
-		private String value1, value2;
+		private int value1;
+		private boolean value2;
 		
 		public FormTemplate(Form f) {
 			this.action = f.getAttr("action");
-			this.value1 = ((Input)f.getChildren().get(0)).getAttr("value");
-			this.value2 = ((Input)f.getChildren().get(1)).getAttr("value");
+			this.value1 = f.getChild(Input.class, 0).getAttr(int.class, "value");
+			this.value2 = f.getChild(Input.class, 1).getAttr(boolean.class, "value");
 		}
 		
-		public FormTemplate(String action, String value1, String value2) {
+		public FormTemplate(String action, int value1, boolean value2) {
 			this.action = action;
 			this.value1 = value1;
 			this.value2 = value2;

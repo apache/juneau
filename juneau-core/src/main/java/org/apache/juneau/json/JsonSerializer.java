@@ -200,8 +200,6 @@ public class JsonSerializer extends WriterSerializer {
 			out.append("null");
 		else if (sType.isNumber() || sType.isBoolean())
 			out.append(o);
-		else if (sType.hasToObjectMapMethod())
-			serializeMap(session, out, sType.toObjectMap(o), sType);
 		else if (sType.isBean())
 			serializeBeanMap(session, out, session.toBeanMap(o), addTypeProperty);
 		else if (sType.isUri() || (pMeta != null && pMeta.isUri()))

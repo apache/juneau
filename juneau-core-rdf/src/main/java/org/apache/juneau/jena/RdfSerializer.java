@@ -225,11 +225,6 @@ public class RdfSerializer extends WriterSerializer {
 				serializeMap(session, m2, (Resource)n, sType);
 			}
 
-		} else if (sType.hasToObjectMapMethod()) {
-			Map m2 = sType.toObjectMap(o);
-			n = m.createResource();
-			serializeMap(session, m2, (Resource)n, sType);
-
 		} else if (sType.isBean()) {
 			BeanMap bm = session.toBeanMap(o);
 			Object uri = null;

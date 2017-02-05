@@ -69,7 +69,7 @@ public class RoundTripToObjectMapsTest extends RoundTripTest {
 			this.f1 = m.getString("f1");
 			this.f2 = m.getInt("f2");
 		}
-		public ObjectMap toObjectMap() {
+		public ObjectMap swap(BeanSession session) {
 			return new ObjectMap().append("f1",f1).append("f2",f2);
 		}
 	}

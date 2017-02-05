@@ -280,8 +280,6 @@ public class UonSerializer extends WriterSerializer {
 		// '\0' characters are considered null.
 		if (o == null || (sType.isChar() && ((Character)o).charValue() == 0))
 			out.appendObject(null, false, false, isTop);
-		else if (sType.hasToObjectMapMethod())
-			serializeMap(session, out, sType.toObjectMap(o), eType);
 		else if (sType.isBean())
 			serializeBeanMap(session, out, session.toBeanMap(o), addTypeProperty);
 		else if (sType.isUri() || (pMeta != null && pMeta.isUri()))

@@ -91,8 +91,6 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 			out.appendBoolean((Boolean)o);
 		else if (sType.isNumber())
 			out.appendNumber((Number)o);
-		else if (sType.hasToObjectMapMethod())
-			serializeMap(session, out, sType.toObjectMap(o), sType);
 		else if (sType.isBean())
 			serializeBeanMap(session, out, session.toBeanMap(o), addTypeProperty);
 		else if (sType.isUri() || (pMeta != null && pMeta.isUri()))

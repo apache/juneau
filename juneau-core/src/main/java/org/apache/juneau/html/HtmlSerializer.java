@@ -261,10 +261,6 @@ public class HtmlSerializer extends XmlSerializer {
 					out.sTag("boolean").append(o).eTag("boolean");
 				cr = CR_SIMPLE;
 
-			} else if (sType.hasToObjectMapMethod()) {
-				out.nlIf(! isRoot);
-				serializeMap(session, out, sType.toObjectMap(o), sType, null, null, typeName, pMeta);
-
 			} else if (sType.isMap() || (wType != null && wType.isMap())) {
 				out.nlIf(! isRoot);
 				if (o instanceof BeanMap)

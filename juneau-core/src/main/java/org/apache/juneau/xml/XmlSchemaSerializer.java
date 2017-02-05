@@ -341,7 +341,7 @@ public class XmlSchemaSerializer extends XmlSerializer {
 
 			w.cTag().nl();
 
-			if (! (cm.isMapOrBean() || cm.hasToObjectMapMethod() || cm.isCollectionOrArray() || (cm.isAbstract() && ! cm.isNumber()) || cm.isObject())) {
+			if (! (cm.isMapOrBean() || cm.isCollectionOrArray() || (cm.isAbstract() && ! cm.isNumber()) || cm.isObject())) {
 				w.oTag(i+1, "attribute").attr("name", session.getBeanTypePropertyName()).attr("type", "string").ceTag().nl();
 
 			} else {
@@ -479,7 +479,7 @@ public class XmlSchemaSerializer extends XmlSerializer {
 					}
 
 				//----- Map -----
-				} else if (cm.isMap() || cm.hasToObjectMapMethod() || cm.isAbstract() || cm.isObject()) {
+				} else if (cm.isMap() || cm.isAbstract() || cm.isObject()) {
 					w.sTag(i+1, "sequence").nl();
 					w.oTag(i+2, "any")
 						.attr("processContents", "skip")
@@ -512,7 +512,7 @@ public class XmlSchemaSerializer extends XmlSerializer {
 					name = "number";
 				else if (cm.isCollectionOrArray())
 					name = "array";
-				else if (! (cm.isMapOrBean() || cm.hasToObjectMapMethod() || cm.isCollectionOrArray() || cm.isObject() || cm.isAbstract()))
+				else if (! (cm.isMapOrBean() || cm.isCollectionOrArray() || cm.isObject() || cm.isAbstract()))
 					name = "string";
 				else
 					name = "object";
