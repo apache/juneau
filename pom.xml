@@ -164,7 +164,7 @@
 						<use>true</use>
 						<additionalparam>-sourcetab 3 -notimestamp -Xdoclint:none</additionalparam>
 						<verbose>false</verbose>
-						<excludePackageNames>*proto*:*samples*:*test*</excludePackageNames>
+						<excludePackageNames>*proto*:*samples*:*examples*:*test*</excludePackageNames>
 						<linksource>true</linksource>
 						<links>
 							<link>http://docs.oracle.com/javase/7/docs/api/</link>
