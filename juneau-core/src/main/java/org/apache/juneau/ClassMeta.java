@@ -1565,31 +1565,4 @@ public final class ClassMeta<T> implements Type {
 	public int hashCode() {
 		return super.hashCode();
 	}
-//
-//	public abstract static class CreateSession {
-//		LinkedList<ClassMeta<?>> stack;
-//
-//		public CreateSession push(ClassMeta<?> cm) {
-//			if (stack == null)
-//				stack = new LinkedList<ClassMeta<?>>();
-//			stack.add(cm);
-//			return this;
-//		}
-//
-//		public CreateSession pop(ClassMeta<?> expected) {
-//			if (stack == null || stack.removeLast() != expected)
-//				throw new BeanRuntimeException("ClassMetaSession creation stack corruption!");
-//			return this;
-//		}
-//
-//		public <T> ClassMeta<T> getClassMeta(Class<T> c) {
-//			if (stack != null)
-//				for (ClassMeta<?> cm : stack)
-//					if (cm.innerClass == c)
-//						return (ClassMeta<T>)cm;
-//			return createClassMeta(c);
-//		}
-//
-//		public abstract <T> ClassMeta<T> createClassMeta(Class<T> c);
-//	}
 }
