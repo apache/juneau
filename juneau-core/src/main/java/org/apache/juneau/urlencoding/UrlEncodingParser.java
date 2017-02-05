@@ -33,7 +33,7 @@ import org.apache.juneau.transform.*;
  *
  * <h6 class='topic'>Description</h6>
  * <p>
- * 	Parses URL-Encoded text (e.g. <js>"foo=bar&baz=bing"</js>) into POJOs.
+ * 	Parses URL-Encoded text (e.g. <js>"foo=bar&amp;baz=bing"</js>) into POJOs.
  * <p>
  * 	Expects parameter values to be in UON notation.
  * <p>

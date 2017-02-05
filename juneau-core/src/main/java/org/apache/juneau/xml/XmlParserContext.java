@@ -43,14 +43,14 @@ import org.apache.juneau.parser.*;
  * 	<tr>
  * 		<td>{@link #XML_xsiNs}</td>
  * 		<td>XMLSchema-instance namespace URI.</td>
- * 		<td><code>String<code></td>
+ * 		<td><code>String</code></td>
  * 		<td><js>"http://www.w3.org/2001/XMLSchema-instance"</js></td>
  * 		<td><jk>true</jk></td>
  * 	</tr>
  * 	<tr>
  * 		<td>{@link #XML_validating}</td>
  * 		<td>Enable validation.</td>
- * 		<td><code>Boolean<code></td>
+ * 		<td><code>Boolean</code></td>
  * 		<td><jk>false</jk></td>
  * 		<td><jk>true</jk></td>
  * 	</tr>
@@ -78,7 +78,7 @@ import org.apache.juneau.parser.*;
  * 	<tr>
  * 		<td>{@link #XML_preserveRootElement}</td>
  * 		<td>Preserve root element during generalized parsing.</td>
- * 		<td><code>Boolean<code></td>
+ * 		<td><code>Boolean</code></td>
  * 		<td><jk>false</jk></td>
  * 		<td><jk>true</jk></td>
  * 	</tr>
@@ -188,7 +188,7 @@ public class XmlParserContext extends ParserContext {
 	 *			<td>ObjectMap.toString(), preserveRootElement==true</td>
 	 *		</tr>
 	 *		<tr>
-	 *			<td><code><xt>&lt;root&gt;&lt;a&gt;</xt>foobar<xt>&lt;/a&gt;&lt;/root&gt;</xt><code></td>
+	 *			<td><code><xt>&lt;root&gt;&lt;a&gt;</xt>foobar<xt>&lt;/a&gt;&lt;/root&gt;</xt></code></td>
 	 *			<td><code>{ a:<js>'foobar'</js> }</code></td>
 	 *			<td><code>{ root: { a:<js>'foobar'</js> }}</code></td>
 	 *		</tr>

@@ -161,7 +161,7 @@ public @interface Parameter {
 	 * 	<li><js>"ssv"</js> - space separated values <js>"foo bar"</js>.
 	 * 	<li><js>"tsv"</js> - tab separated values <js>"foo\tbar"</js>.
 	 * 	<li><js>"pipes"</js> - pipe separated values <js>"foo|bar"</js>.
-	 * 	<li><js>"multi"</js> - corresponds to multiple parameter instances instead of multiple values for a single instance <js>"foo=bar&foo=baz"</js>.
+	 * 	<li><js>"multi"</js> - corresponds to multiple parameter instances instead of multiple values for a single instance <js>"foo=bar&amp;foo=baz"</js>.
 	 * 		This is valid only for parameters <code>in</code> <js>"query"</js> or <js>"formData"</js>.
 	 * </ul>
 	 * Default value is <js>"csv"</js>.

@@ -992,9 +992,9 @@
  		</p>
  		<p class='bcode'>
  	{
-		<jsa>x</jsa>: [
-			{<jsa>_type</jsa>:<jss>'bar'</jss>},
-			{<jsa>_type</jsa>:<jss>'baz'</jss>}
+		x: [
+			{_type:<js>'bar'</js>},
+			{_type:<js>'baz'</js>}
 		]
 	}	 
  		</p>
@@ -1602,10 +1602,10 @@
 	
 	Feed feed = 
 		<jsm>feed</jsm>(<js>"tag:juneau.apache.org"</js>, <js>"Juneau ATOM specification"</js>, <js>"2016-01-02T03:04:05Z"</js>)
-		.subtitle(<jsm>text</jsm>(<js>"html"</js>).children(<js>"Describes &lt;em&gt;stuff&lt;/em&gt; about Juneau"</js>))
+		.subtitle(<jsm>text</jsm>(<js>"html"</js>).text(<js>"Describes &lt;em&gt;stuff&lt;/em&gt; about Juneau"</js>))
 		.links(
-			<jsm>link</jsm>(<js>"alternate"</js>, <js>"text/html"</js>, <js>"http://www.sample.com/"</js>).hreflang(<js>"en"</js>),
-			<jsm>link</jsm>(<js>"self"</js>, <js>"application/atom+xml"</js>, <js>"http://www.sample.com/feed.atom"</js>)
+			<jsm>link</jsm>(<js>"alternate"</js>, <js>"text/html"</js>, <js>"http://juneau.apache.org"</js>).hreflang(<js>"en"</js>),
+			<jsm>link</jsm>(<js>"self"</js>, <js>"application/atom+xml"</js>, <js>"http://juneau.apache.org/feed.atom"</js>)
 		)
 		.rights(<js>"Copyright (c) 2016, Apache Foundation"</js>)
 		.generator(
@@ -1614,15 +1614,15 @@
 		.entries(
 			<jsm>entry</jsm>(<js>"tag:juneau.sample.com,2013:1.2345"</js>, <js>"Juneau ATOM specification snapshot"</js>, <js>"2016-01-02T03:04:05Z"</js>)
 			.links(
-				<jsm>link</jsm><js>"alternate"</js>, <js>"text/html"</js>, <js>"http://www.sample.com/2012/05/08/juneau.atom"</js>),
-				<jsm>link</jsm>(<js>"enclosure"</js>, <js>"audio/mpeg"</js>, <js>"http://www.sample.com/audio/juneau_podcast.mp3"</js>).length(1337)
+				<jsm>link</jsm><js>"alternate"</js>, <js>"text/html"</js>, <js>"http://juneau.apache.org/juneau.atom"</js>),
+				<jsm>link</jsm>(<js>"enclosure"</js>, <js>"audio/mpeg"</js>, <js>"http://juneau.apache.org/audio/juneau_podcast.mp3"</js>).length(1337)
 			)
 			.published(<js>"2016-01-02T03:04:05Z"</js>)
 			.authors(
-				<jsm>person</jsm>(<js>"James Bognar"</js>).uri(<js>"http://www.sample.com/"</js>).email(<js>"jamesbognar@apache.org"</js>)
+				<jsm>person</jsm>(<js>"Jane Smith"</js>).uri(<js>"http://juneau.apache.org/"</js>).email(<js>"janesmith@apache.org"</js>)
 			)
 			.contributors(
-				<jsm>person</jsm>(<js>"Barry M. Caceres"</js>)
+				<jsm>person</jsm>(<js>"John Smith"</js>)
 			)
 			.content(
 				<jsm>content</jsm>(<js>"xhtml"</js>)
@@ -1668,12 +1668,12 @@
 		<xt>&lt;/subtitle&gt;</xt>
 		<xt>&lt;entry&gt;</xt>
 			<xt>&lt;author&gt;</xt>
-				<xt>&lt;name&gt;</xt>James Bognar<xt>&lt;/name&gt;</xt>
+				<xt>&lt;name&gt;</xt>Jane Smith<xt>&lt;/name&gt;</xt>
 				<xt>&lt;uri&gt;</xt>http://juneau.apache.org/<xt>&lt;/uri&gt;</xt>
-				<xt>&lt;email&gt;</xt>jamesbognar@apache.org<xt>&lt;/email&gt;</xt>
+				<xt>&lt;email&gt;</xt>janesmith@apache.org<xt>&lt;/email&gt;</xt>
 			<xt>&lt;/author&gt;</xt>
 			<xt>&lt;contributor&gt;</xt>
-				<xt>&lt;name&gt;</xt>Barry M. Caceres<xt>&lt;/name&gt;</xt>
+				<xt>&lt;name&gt;</xt>John Smith<xt>&lt;/name&gt;</xt>
 			<xt>&lt;/contributor&gt;</xt>
 			<xt>&lt;id&gt;</xt>
 				tag:juneau.apache.org

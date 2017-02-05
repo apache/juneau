@@ -58,7 +58,7 @@ public class UrlEncodingParserContext extends UonParserContext {
 	 * </ul>
 	 * <p>
 	 * 	If <jk>false</jk>, serializing the array <code>[1,2,3]</code> results in <code>?key=$a(1,2,3)</code>.
-	 * 	If <jk>true</jk>, serializing the same array results in <code>?key=1&key=2&key=3</code>.
+	 * 	If <jk>true</jk>, serializing the same array results in <code>?key=1&amp;key=2&amp;key=3</code>.
 	 *
 	 * <h6 class='topic'>Example:</h6>
 	 * <p class='bcode'>
@@ -70,8 +70,8 @@ public class UrlEncodingParserContext extends UonParserContext {
 	 * 	UrlEncodingSerializer s1 = <jk>new</jk> UrlEncodingParser();
 	 * 	UrlEncodingSerializer s2 = <jk>new</jk> UrlEncodingParser().setProperty(UrlEncodingContext.<jsf>URLENC_expandedParams</jsf>, <jk>true</jk>);
 	 *
-	 * 	String s1 = p1.serialize(<jk>new</jk> A()); <jc>// Produces "f1=(a,b)&f2=(c,d)"</jc>
-	 * 	String s2 = p2.serialize(<jk>new</jk> A()); <jc>// Produces "f1=a&f1=b&f2=c&f2=d"</jc>
+	 * 	String s1 = p1.serialize(<jk>new</jk> A()); <jc>// Produces "f1=(a,b)&amp;f2=(c,d)"</jc>
+	 * 	String s2 = p2.serialize(<jk>new</jk> A()); <jc>// Produces "f1=a&amp;f1=b&amp;f2=c&amp;f2=d"</jc>
 	 * </p>
 	 * <p>
 	 * 	<b>Important note:</b>  If parsing multi-part parameters, it's highly recommended to use Collections or Lists

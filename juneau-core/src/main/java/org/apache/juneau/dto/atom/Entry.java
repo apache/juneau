@@ -28,18 +28,18 @@ import static org.apache.juneau.dto.atom.Utils.*;
  * 		element atom:entry {
  * 			atomCommonAttributes,
  * 			(atomAuthor*
- * 			& atomCategory*
- * 			& atomContent?
- * 			& atomContributor*
- * 			& atomId
- * 			& atomLink*
- * 			& atomPublished?
- * 			& atomRights?
- * 			& atomSource?
- * 			& atomSummary?
- * 			& atomTitle
- * 			& atomUpdated
- * 			& extensionElement*)
+ * 			&amp; atomCategory*
+ * 			&amp; atomContent?
+ * 			&amp; atomContributor*
+ * 			&amp; atomId
+ * 			&amp; atomLink*
+ * 			&amp; atomPublished?
+ * 			&amp; atomRights?
+ * 			&amp; atomSource?
+ * 			&amp; atomSummary?
+ * 			&amp; atomTitle
+ * 			&amp; atomUpdated
+ * 			&amp; extensionElement*)
  * 		}
  * </p>
  * <p>

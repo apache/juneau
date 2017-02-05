@@ -108,11 +108,11 @@ public class LogsResource extends Resource {
 	 * @param path The log file path.
 	 * @param properties The writable properties for setting the descriptions.
 	 * @param highlight If <code>true</code>, add color highlighting based on severity.
-	 * @param start Optional start timestamp.  Don't print lines logged before the specified timestamp.  Example:  "&start=2014-01-23 11:25:47".
-	 * @param end Optional end timestamp.  Don't print lines logged after the specified timestamp.  Example:  "&end=2014-01-23 11:25:47".
-	 * @param thread Optional thread name filter.  Only show log entries with the specified thread name.  Example: "&thread=pool-33-thread-1".
-	 * @param loggers Optional logger filter.  Only show log entries if they were produced by one of the specified loggers (simple class name).  Example: "&loggers=(LinkIndexService,LinkIndexRestService)".
-	 * @param severity Optional severity filter.  Only show log entries with the specified severity.  Example: "&severity=(ERROR,WARN)".
+	 * @param start Optional start timestamp.  Don't print lines logged before the specified timestamp.  Example:  "&amp;start=2014-01-23 11:25:47".
+	 * @param end Optional end timestamp.  Don't print lines logged after the specified timestamp.  Example:  "&amp;end=2014-01-23 11:25:47".
+	 * @param thread Optional thread name filter.  Only show log entries with the specified thread name.  Example: "&amp;thread=pool-33-thread-1".
+	 * @param loggers Optional logger filter.  Only show log entries if they were produced by one of the specified loggers (simple class name).  Example: "&amp;loggers=(LinkIndexService,LinkIndexRestService)".
+	 * @param severity Optional severity filter.  Only show log entries with the specified severity.  Example: "&amp;severity=(ERROR,WARN)".
 	 * @throws Exception
 	 */
 	@RestMethod(name="VIEW", path="/*", responses={@Response(200),@Response(404)})
@@ -180,11 +180,11 @@ public class LogsResource extends Resource {
 	 *
 	 * @param req The HTTP request.
 	 * @param path The log file path.
-	 * @param start Optional start timestamp.  Don't print lines logged before the specified timestamp.  Example:  "&start=2014-01-23 11:25:47".
-	 * @param end Optional end timestamp.  Don't print lines logged after the specified timestamp.  Example:  "&end=2014-01-23 11:25:47".
-	 * @param thread Optional thread name filter.  Only show log entries with the specified thread name.  Example: "&thread=pool-33-thread-1".
-	 * @param loggers Optional logger filter.  Only show log entries if they were produced by one of the specified loggers (simple class name).  Example: "&loggers=(LinkIndexService,LinkIndexRestService)".
-	 * @param severity Optional severity filter.  Only show log entries with the specified severity.  Example: "&severity=(ERROR,WARN)".
+	 * @param start Optional start timestamp.  Don't print lines logged before the specified timestamp.  Example:  "&amp;start=2014-01-23 11:25:47".
+	 * @param end Optional end timestamp.  Don't print lines logged after the specified timestamp.  Example:  "&amp;end=2014-01-23 11:25:47".
+	 * @param thread Optional thread name filter.  Only show log entries with the specified thread name.  Example: "&amp;thread=pool-33-thread-1".
+	 * @param loggers Optional logger filter.  Only show log entries if they were produced by one of the specified loggers (simple class name).  Example: "&amp;loggers=(LinkIndexService,LinkIndexRestService)".
+	 * @param severity Optional severity filter.  Only show log entries with the specified severity.  Example: "&amp;severity=(ERROR,WARN)".
 	 * @return The parsed contents of the log file.
 	 * @throws Exception
 	 */

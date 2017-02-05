@@ -788,8 +788,8 @@ public final class StringUtils {
 	 * 	the number of generated IDs that would produce a 50% chance of collision is:
 	 * <code>sqrt(36^N)</code>.
 	 * Dividing this number by 10 gives you an approximation of the number of generated IDs
-	 * 	needed to produce a <1% chance of collision.
-	 * For example, given 5 characters, the number of generated IDs need to produce a <1% chance of
+	 * 	needed to produce a &lt;1% chance of collision.
+	 * For example, given 5 characters, the number of generated IDs need to produce a &lt;1% chance of
 	 * 	collision would be:
 	 * <code>sqrt(36^5)/10=777</code>
 	 *

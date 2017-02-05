@@ -70,7 +70,7 @@ public @interface FormData {
 	 * 	Normally, we expect single parameters to be specified in UON notation for representing
 	 * 	collections of values (e.g. <js>"key=(1,2,3)"</js>.
 	 * 	This annotation allows the use of multi-part parameters to represent collections
-	 * 	(e.g. <js>"key=1&key=2&key=3"</js>.
+	 * 	(e.g. <js>"key=1&amp;key=2&amp;key=3"</js>.
 	 * <p>
 	 *		This setting should only be applied to Java parameters of type array or Collection.
 	 */

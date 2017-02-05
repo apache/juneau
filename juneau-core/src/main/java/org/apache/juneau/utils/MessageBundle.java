@@ -155,7 +155,7 @@ public class MessageBundle extends ResourceBundle {
 	 *
 	 * @param key The resource bundle key.
 	 * @param args Optional variable replacement arguments.
-	 * @return The resolved value.  Never <jk>null</jk>.  <js>"{!!key}"</j> if the bundle is missing.  <js>"{!key}"</j> if the key is missing.
+	 * @return The resolved value.  Never <jk>null</jk>.  <js>"{!!key}"</js> if the bundle is missing.  <js>"{!key}"</js> if the key is missing.
 	 */
 	public String getString(String key, Object...args) {
 		String s = getString(key);
@@ -172,7 +172,7 @@ public class MessageBundle extends ResourceBundle {
 	 * @param locale The locale of the resource bundle to retrieve message from.
 	 * @param key The resource bundle key.
 	 * @param args Optional variable replacement arguments.
-	 * @return The resolved value.  Never <jk>null</jk>.  <js>"{!!key}"</j> if the bundle is missing.  <js>"{!key}"</j> if the key is missing.
+	 * @return The resolved value.  Never <jk>null</jk>.  <js>"{!!key}"</js> if the bundle is missing.  <js>"{!key}"</js> if the key is missing.
 	 */
 	public String getString(Locale locale, String key, Object...args) {
 		if (locale == null)
@@ -185,7 +185,7 @@ public class MessageBundle extends ResourceBundle {
 	 *
 	 * @param key The resource bundle key.
 	 * @param args Optional variable replacement arguments.
-	 * @return The resolved value.  Never <jk>null</jk>.  <js>"{!!key}"</j> if the bundle is missing.  <js>"{!key}"</j> if the key is missing.
+	 * @return The resolved value.  Never <jk>null</jk>.  <js>"{!!key}"</js> if the bundle is missing.  <js>"{!key}"</js> if the key is missing.
 	 */
 	public String getClientString(String key, Object...args) {
 		return getString(clientLocale.get(), key, args);

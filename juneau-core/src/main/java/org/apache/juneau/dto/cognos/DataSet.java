@@ -58,7 +58,7 @@ import org.apache.juneau.xml.annotation.*;
  * 		<jk>new</jk> Column(<js>"age"</js>, <js>"xs:int"</js>),
  * 		<jk>new</jk> Column(<js>"numAddresses"</js>, <js>"xs:int"</js>)
  * 			.addPojoSwap(
- * 				<jk>new</jk> PojoSwap&ltPerson,Integer&gt;() {
+ * 				<jk>new</jk> PojoSwap&lt;Person,Integer&gt;() {
  * 					<ja>@Override</ja>
  * 					<jk>public</jk> Integer swap(Person p) {
  * 						<jk>return</jk> p.<jf>addresses</jf>.size();

@@ -68,7 +68,7 @@ public final class XmlUtils {
 	/**
 	 * Encodes any invalid XML text characters to <code>_x####_</code> sequences and sends the response
 	 * 	to the specified writer.
-	 * Encodes <js>'&'</js>, <js>'&lt;'</js>, and <js>'&gt;'</js> as XML entities.<br>
+	 * Encodes <js>'&amp;'</js>, <js>'&lt;'</js>, and <js>'&gt;'</js> as XML entities.<br>
 	 * Encodes invalid XML text characters to <code>_x####_</code> sequences.
 	 *
 	 * @param w The writer to send the output to.

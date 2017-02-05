@@ -83,7 +83,7 @@ public class ParserContext extends BeanContext {
 	 * However, all reader-based parsers will
 	 * <p>
 	 * <table class='styled'>
-	 * 	<tr><th>Parser class</th><th>Strict behavior</td></tr>
+	 * 	<tr><th>Parser class</th><th>Strict behavior</th></tr>
 	 * 	<tr>
 	 * 		<td>All reader-based parsers</td>
 	 * 		<td>

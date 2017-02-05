@@ -52,23 +52,23 @@ import org.apache.juneau.rest.*;
  * 	</tr>
  * 	<tr>
  * 		<td><code>a=foo</code></td>
- * 		<td><code><jk>true</jk></td>
- * 		<td><code><js>"foo"</js></td>
+ * 		<td><jk>true</jk></td>
+ * 		<td><js>"foo"</js></td>
  * 	</tr>
  * 	<tr>
  * 		<td><code>a=</code></td>
- * 		<td><code><jk>true</jk></td>
- * 		<td><code><js>""</js></td>
+ * 		<td><jk>true</jk></td>
+ * 		<td><js>""</js></td>
  * 	</tr>
  * 	<tr>
  * 		<td><code>a</code></td>
- * 		<td><code><jk>true</jk></td>
- * 		<td><code><jk>null</jk></td>
+ * 		<td><jk>true</jk></td>
+ * 		<td><jk>null</jk></td>
  * 	</tr>
  * 	<tr>
  * 		<td><code>b=foo</code></td>
- * 		<td><code><jk>false</jk></td>
- * 		<td><code><jk>null</jk></td>
+ * 		<td><jk>false</jk></td>
+ * 		<td><jk>null</jk></td>
  * 	</tr>
  * </table>
  *

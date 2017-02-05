@@ -113,7 +113,7 @@ import org.apache.juneau.serializer.*;
  * 		<jk>public</jk> Surrogate swap(Normal n) <jk>throws</jk> SerializeException {
  * 			<jk>return new</jk> Surrogate(n);
  * 		}
- * 		<jk>public</jk> Normal unswap(Surrogate s, ClassMeta<?> hint) <jk>throws</jk> ParseException {
+ * 		<jk>public</jk> Normal unswap(Surrogate s, ClassMeta&lt;?&gt; hint) <jk>throws</jk> ParseException {
  * 			<jk>return</jk> Surrogate.<jsm>toNormal</jsm>(s);
  * 		}
  * 	}

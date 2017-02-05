@@ -222,6 +222,7 @@ public class XmlBeanMeta extends BeanMetaExtended {
 	 * 	<li>{@link XmlFormat#TEXT_PWS}
 	 * 	<li>{@link XmlFormat#XMLTEXT}
 	 * 	<li><jk>null</jk>
+	 * </ul>
 	 *
 	 * @return The format of the inner XML content of this bean.
 	 */

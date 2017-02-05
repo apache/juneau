@@ -290,7 +290,7 @@ public abstract class Parser extends CoreApi {
 	 * <p class='bcode'>
 	 * 	ReaderParser p = JsonParser.<jsf>DEFAULT</jsf>;
 	 * 	ClassMeta&lt;Map&lt;String,MyBean&gt;&gt; cm = p.getBeanContext().getMapClassMeta(LinkedList.<jk>class</jk>, String.<jk>class</jk>, MyBean.<jk>class</jk>);
-	 * 	Map&ltString,MyBean&gt; m = p.parse(json, cm, <jk>null</jk>);
+	 * 	Map&lt;String,MyBean&gt; m = p.parse(json, cm, <jk>null</jk>);
 	 * </p>
 	 *
 	 * @param <T> The class type of the object to create.

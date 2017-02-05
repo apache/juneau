@@ -1122,8 +1122,8 @@ public abstract class RestServlet extends HttpServlet {
 	 * Callback method for logging errors during HTTP requests.
 	 * <p>
 	 * 	Typically, subclasses will override this method and log errors themselves.
-	 * <p>
 	 * </p>
+	 * <p>
 	 * 	The default implementation simply logs errors to the <code>RestServlet</code> logger.
 	 * </p>
 	 * <p>
@@ -1141,7 +1141,7 @@ public abstract class RestServlet extends HttpServlet {
 	 *
 	 * 		<jc>// This is the first time we've countered this error, so log a stack trace
 	 * 		// unless ?noTrace was passed in as a URL parameter.</jc>
-	 * 		<jk>else if</jk> (c == 1 && ! noTrace)
+	 * 		<jk>else if</jk> (c == 1 &amp;&amp; ! noTrace)
 	 * 			myLogger.log(Level.<jsf>WARNING</jsf>, <jsm>format</jsm>(<js>"[%h.%s.%s] %s"</js>, e.hashCode(), e.getStatus(), c, msg), e);
 	 *
 	 * 		<jc>// This error occurred before.

@@ -69,7 +69,7 @@ public class Column {
 	 * <p class='bcode'>
 	 * 	Column c = <jk>new</jk> Column(<js>"numAddresses"</js>, <js>"xs:int"</js>)
 	 * 		.addPojoSwaps(
-	 * 			<jk>new</jk> PojoSwap<Person,Integer>() {
+	 * 			<jk>new</jk> PojoSwap&lt;Person,Integer&gt;() {
 	 * 				<ja>@Override</ja>
 	 * 				<jk>public</jk> Integer swap(Person p) {
 	 * 					<jk>return</jk> p.<jf>addresses</jf>.size();

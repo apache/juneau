@@ -82,9 +82,9 @@ public @interface Bean {
 	 * </p>
 	 * <p class='bcode'>
 	 * 	{
-	 * 	   <jsa>x</jsa>: [
-	 * 	      {<jsa>_type</jsa>:<jss>'bar'</jss>},
-	 * 	      {<jsa>_type</jsa>:<jss>'baz'</jss>}
+	 * 	   x: [
+	 * 	      {_type:<js>'bar'</js>},
+	 * 	      {_type>:<js>'baz'</js>}
 	 * 	   ]
 	 * 	}	 *
 	 * </p>

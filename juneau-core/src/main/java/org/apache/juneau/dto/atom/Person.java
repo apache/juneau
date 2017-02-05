@@ -25,9 +25,9 @@ import static org.apache.juneau.dto.atom.Utils.*;
  * 	atomPersonConstruct =
  * 		atomCommonAttributes,
  * 		(element atom:name { text }
- * 		& element atom:uri { atomUri }?
- * 		& element atom:email { atomEmailAddress }?
- * 		& extensionElement*)
+ * 		&amp; element atom:uri { atomUri }?
+ * 		&amp; element atom:email { atomEmailAddress }?
+ * 		&amp; extensionElement*)
  * </p>
  * <p>
  * Refer to {@link org.apache.juneau.dto.atom} for further information about ATOM support.

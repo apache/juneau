@@ -24,6 +24,7 @@ import org.apache.juneau.annotation.*;
  * 	<li>Beans that provide a dictionary name using the {@link Bean#typeName()} annotation.
  * 	<li>Other subclasses of {@link BeanDictionaryList}.
  * 	<li>Other subclasses of {@link BeanDictionaryMap}.
+ * </ul>
  * <p>
  * Subclasses must implement a public no-arg constructor so that it can be instantiated by the bean context code.
  */

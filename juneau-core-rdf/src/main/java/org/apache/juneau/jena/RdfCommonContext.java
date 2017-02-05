@@ -153,7 +153,7 @@ import org.apache.juneau.xml.annotation.*;
  * 	<tr>
  * 		<td>{@link #RDF_n3_subjectColumn}</td>
  * 		<td>N3/Turtle property: <code>subjectColumn</code>.</td>
- * 		<td>code>Integer</code></td>
+ * 		<td><code>Integer</code></td>
  * 		<td>indent column</td>
  * 	</tr>
  * 	<tr>
@@ -694,14 +694,13 @@ public interface RdfCommonContext {
 	 * </ul>
 	 * <p>
 	 * 	Possible values:
-	 * 	<ul class='spaced-list'>
-	 * 		<li><js>"DEFAULT"</js> - Default format.  The default is an RDF Sequence container.
-	 * 		<li><js>"SEQ"</js> - RDF Sequence container.
-	 * 		<li><js>"BAG"</js> - RDF Bag container.
-	 * 		<li><js>"LIST"</js> - RDF List container.
-	 * 		<li><js>"MULTI_VALUED"</js> - Multi-valued properties.
-	 * 	</ul>
-	 *	</p>
+	 * <ul class='spaced-list'>
+	 * 	<li><js>"DEFAULT"</js> - Default format.  The default is an RDF Sequence container.
+	 * 	<li><js>"SEQ"</js> - RDF Sequence container.
+	 * 	<li><js>"BAG"</js> - RDF Bag container.
+	 * 	<li><js>"LIST"</js> - RDF List container.
+	 * 	<li><js>"MULTI_VALUED"</js> - Multi-valued properties.
+	 * </ul>
 	 *	<p>
 	 *		Important Note:  If you use <js>"BAG"</js> or <js>"MULTI_VALUED"</js>, the order of the elements
 	 *		in the collection will get lost.

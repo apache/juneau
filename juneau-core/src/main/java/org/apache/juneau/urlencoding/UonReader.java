@@ -23,7 +23,7 @@ import org.apache.juneau.parser.*;
  * <p>
  * If decoding is enabled, the following character replacements occur so that boundaries are not lost:
  * <ul>
- * 	<li><js>'&'</js> -&gt; <js>'\u0001'</js>
+ * 	<li><js>'&amp;'</js> -&gt; <js>'\u0001'</js>
  * 	<li><js>'='</js> -&gt; <js>'\u0002'</js>
  * </ul>
  */

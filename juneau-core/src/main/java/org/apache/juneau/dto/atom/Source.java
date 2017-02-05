@@ -26,18 +26,18 @@ import org.apache.juneau.annotation.*;
  * 		element atom:source {
  * 			atomCommonAttributes,
  * 			(atomAuthor*
- * 			& atomCategory*
- * 			& atomContributor*
- * 			& atomGenerator?
- * 			& atomIcon?
- * 			& atomId?
- * 			& atomLink*
- * 			& atomLogo?
- * 			& atomRights?
- * 			& atomSubtitle?
- * 			& atomTitle?
- * 			& atomUpdated?
- * 			& extensionElement*)
+ * 			&amp; atomCategory*
+ * 			&amp; atomContributor*
+ * 			&amp; atomGenerator?
+ * 			&amp; atomIcon?
+ * 			&amp; atomId?
+ * 			&amp; atomLink*
+ * 			&amp; atomLogo?
+ * 			&amp; atomRights?
+ * 			&amp; atomSubtitle?
+ * 			&amp; atomTitle?
+ * 			&amp; atomUpdated?
+ * 			&amp; extensionElement*)
  * 		}
  * </p>
  * <p>

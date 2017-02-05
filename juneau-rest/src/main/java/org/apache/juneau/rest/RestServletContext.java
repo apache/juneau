@@ -91,7 +91,7 @@ public final class RestServletContext extends Context {
 	 * </ul>
 	 * <p>
 	 * 	When enabled, headers such as <js>"Accept"</js> and <js>"Content-Type"</js> to be passed in as URL query parameters.
-	 * 	For example:  <js>"?Accept=text/json&Content-Type=text/json"</js>
+	 * 	For example:  <js>"?Accept=text/json&amp;Content-Type=text/json"</js>
 	 * <p>
 	 * 	Parameter names are case-insensitive.
 	 * <p>

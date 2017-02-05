@@ -52,6 +52,7 @@ import org.apache.juneau.xml.*;
  * 		<td class='code'>application/json</td>
  * 		<td>{@link org.apache.juneau.json.JsonSerializer.Simple}</td>
  * 	</tr>
+ * 	<tr>
  * 		<td class='code'>application/json+schema<br>text/json+schema</td>
  * 		<td class='code'>application/json</td>
  * 		<td>{@link JsonSchemaSerializer}</td>

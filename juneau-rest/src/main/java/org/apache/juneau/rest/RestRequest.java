@@ -315,7 +315,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	Example: <js>"text/json"</js>.
 	 * <p>
 	 * 	If the content type is not specified, and the content is specified via a
-	 * 	<code>&body</code> query parameter, the content type is assumed to be
+	 * 	<code>&amp;body</code> query parameter, the content type is assumed to be
 	 * 	<js>"text/uon"</js>.  Otherwise, the content type is assumed to be <js>"text/json"</js>.
 	 *
 	 * @return The <code>Content-Type</code> media-type header value on the request.
@@ -437,7 +437,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	servlet API to load and parse the request body.
 	 *
 	 * @param name The URL parameter name.
-	 * @return The parameter value, or <jk>null</jk> if parameter not specified or has no value (e.g. <js>"&foo"</js>.
+	 * @return The parameter value, or <jk>null</jk> if parameter not specified or has no value (e.g. <js>"&amp;foo"</js>.
 	 */
 	public String getQueryParameter(String name) {
 		String s = null;
@@ -464,7 +464,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * @param name The URL parameter name.
 	 * @param def The default value.
-	 * @return The parameter value, or the default value if parameter not specified or has no value (e.g. <js>"&foo"</js>.
+	 * @return The parameter value, or the default value if parameter not specified or has no value (e.g. <js>"&amp;foo"</js>.
 	 */
 	public String getQueryParameter(String name, String def) {
 		String s = getQueryParameter(name);
@@ -526,7 +526,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Same as {@link #getQueryParameter(String, Class)} except for use on multi-part parameters
-	 * 	(e.g. <js>"&key=1&key=2&key=3"</js> instead of <js>"&key=(1,2,3)"</js>).
+	 * 	(e.g. <js>"&amp;key=1&amp;key=2&amp;key=3"</js> instead of <js>"&amp;key=(1,2,3)"</js>).
 	 * <p>
 	 * 	This method must only be called when parsing into classes of type Collection or array.
 	 *
@@ -556,7 +556,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Same as {@link #getQueryParameter(String, Type)} except for use on multi-part parameters
-	 * 	(e.g. <js>"&key=1&key=2&key=3"</js> instead of <js>"&key=(1,2,3)"</js>).
+	 * 	(e.g. <js>"&amp;key=1&amp;key=2&amp;key=3"</js> instead of <js>"&amp;key=(1,2,3)"</js>).
 	 * <p>
 	 * 	This method must only be called when parsing into classes of type Collection or array.
 	 *
@@ -593,7 +593,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Same as {@link #getQueryParameter(String, ClassMeta)} except for use on multi-part parameters
-	 * 	(e.g. <js>"&key=1&key=2&key=3"</js> instead of <js>"&key=(1,2,3)"</js>).
+	 * 	(e.g. <js>"&amp;key=1&amp;key=2&amp;key=3"</js> instead of <js>"&amp;key=(1,2,3)"</js>).
 	 * <p>
 	 * 	This method must only be called when parsing into classes of type Collection or array.
 	 *
@@ -788,7 +788,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	Unlike {@link #getFormDataParameter(String, Class, Object)}, this method can be used to parse parameters
 	 * 	of complex types involving JCF classes.
 	 * <p class='bcode'>
-	 * 	ClassMeta&ltMap&lt;String,Integer&gt;&gt; cm = request.getBeanContext().getMapClassMeta(TreeMap.<jk>class</jk>, String.<jk>class</jk>, Integer.<jk>class</jk>);
+	 * 	ClassMeta&lt;Map&lt;String,Integer&gt;&gt; cm = request.getBeanContext().getMapClassMeta(TreeMap.<jk>class</jk>, String.<jk>class</jk>, Integer.<jk>class</jk>);
 	 * 	Map&lt;String,Integer&gt; m = request.getFormDataParameter(<js>"myParameter"</js>, cm, <jk>new</jk> TreeMap&lt;String,Integer&gt;());
 	 * </p>
 	 *
@@ -825,7 +825,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Same as {@link #getFormDataParameter(String, Class)} except for use on multi-part parameters
-	 * 	(e.g. <js>"key=1&key=2&key=3"</js> instead of <js>"key=(1,2,3)"</js>)
+	 * 	(e.g. <js>"key=1&amp;key=2&amp;key=3"</js> instead of <js>"key=(1,2,3)"</js>)
 	 * <p>
 	 * 	This method must only be called when parsing into classes of type Collection or array.
 	 *
@@ -853,7 +853,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Same as {@link #getFormDataParameter(String, Class)} except for use on multi-part parameters
-	 * 	(e.g. <js>"key=1&key=2&key=3"</js> instead of <js>"key=(1,2,3)"</js>)
+	 * 	(e.g. <js>"key=1&amp;key=2&amp;key=3"</js> instead of <js>"key=(1,2,3)"</js>)
 	 * <p>
 	 * 	This method must only be called when parsing into classes of type Collection or array.
 	 *
@@ -898,7 +898,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/**
 	 * Same as {@link #getFormDataParameter(String, ClassMeta)} except for use on multi-part parameters
-	 * 	(e.g. <js>"key=1&key=2&key=3"</js> instead of <js>"key=(1,2,3)"</js>)
+	 * 	(e.g. <js>"key=1&amp;key=2&amp;key=3"</js> instead of <js>"key=(1,2,3)"</js>)
 	 * <p>
 	 * 	This method must only be called when parsing into classes of type Collection or array.
 	 *
@@ -1592,7 +1592,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * Returns the method of this request.
 	 * <p>
 	 * 	If <code>allowHeaderParams</code> init parameter is <jk>true</jk>, then first looks
-	 * 	for <code>&method=xxx</code> in the URL query string.
+	 * 	for <code>&amp;method=xxx</code> in the URL query string.
 	 */
 	@Override /* ServletRequest */
 	public String getMethod() {
@@ -1606,14 +1606,14 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if <code>&plainText=true</code> was specified as a URL parameter.
+	 * Returns <jk>true</jk> if <code>&amp;plainText=true</code> was specified as a URL parameter.
 	 * <p>
 	 * 	This indicates that the <code>Content-Type</code> of the output should always be set to <js>"text/plain"</js>
 	 * 	to make it easy to render in a browser.
 	 * <p>
 	 * 	This feature is useful for debugging.
 	 *
-	 * @return <jk>true</jk> if {@code &plainText=true} was specified as a URL parameter
+	 * @return <jk>true</jk> if {@code &amp;plainText=true} was specified as a URL parameter
 	 */
 	public boolean isPlainText() {
 		return "true".equals(getQueryParameter("plainText", "false"));

@@ -123,6 +123,7 @@ public final class MediaType {
 	 * 	<li>One or both types are <js>'*'</js> and the subtypes are the same.
 	 * 	<li>One or both subtypes are <js>'*'</js> and the types are the same.
 	 * 	<li>Either is <js>'*\/*'</js>.
+	 * </ul>
 	 *
 	 * @param o The media type to compare with.
 	 * @return <jk>true</jk> if the media types match.

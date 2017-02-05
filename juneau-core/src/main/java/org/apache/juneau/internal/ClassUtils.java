@@ -344,7 +344,7 @@ public final class ClassUtils {
 	/**
 	 * Finds the real parameter type of the specified class.
 	 *
-	 * @param c The class containing the parameters (e.g. PojoSwap<T,S>)
+	 * @param c The class containing the parameters (e.g. PojoSwap&lt;T,S&gt;)
 	 * @param index The zero-based index of the parameter to resolve.
 	 * @param oc The class we're trying to resolve the parameter type for.
 	 * @return The resolved real class.
