@@ -323,13 +323,6 @@ public class RdfParser extends ReaderParser {
 			}
 			if (sType.isArray())
 				o = session.toArray(sType, (Collection)o);
-		} else if (sType.canCreateNewInstanceFromObjectMap(outer)) {
-			Resource r = n.asResource();
-			if (session.wasAlreadyProcessed(r))
-				return null;
-			Map m = new ObjectMap(session);
-			parseIntoMap(session, r, m, eType.getKeyType(), eType.getValueType());
-			o = sType.newInstanceFromObjectMap(session, outer, (ObjectMap)m);
 		} else if (sType.canCreateNewBean(outer)) {
 			Resource r = n.asResource();
 			if (session.wasAlreadyProcessed(r))

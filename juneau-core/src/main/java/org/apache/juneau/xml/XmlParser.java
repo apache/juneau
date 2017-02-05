@@ -141,10 +141,6 @@ public class XmlParser extends ReaderParser {
 			o = parseIntoCollection(session, r, l, sType.getElementType(), pMeta);
 		} else if (sType.isNumber()) {
 			o = parseNumber(session.getElementText(r), (Class<? extends Number>)sType.getInnerClass());
-		} else if (sType.canCreateNewInstanceFromObjectMap(outer)) {
-			ObjectMap m = new ObjectMap(session);
-			parseIntoMap(session, r, m, string(), object(), pMeta);
-			o = sType.newInstanceFromObjectMap(session, outer, m);
 		} else if (sType.canCreateNewBean(outer)) {
 			if (sType.getExtendedMeta(XmlClassMeta.class).getFormat() == COLLAPSED) {
 				String fieldName = r.getLocalName();

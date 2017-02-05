@@ -154,10 +154,6 @@ public class UonParser extends ReaderParser {
 				Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance(outer) : new ObjectList(session));
 				o = parseIntoCollection(session, r, l, sType.getElementType(), isUrlParamValue, pMeta);
 			}
-		} else if (sType.canCreateNewInstanceFromObjectMap(outer)) {
-			ObjectMap m = new ObjectMap(session);
-			parseIntoMap(session, r, m, string(), object(), pMeta);
-			o = sType.newInstanceFromObjectMap(session, outer, m);
 		} else if (sType.canCreateNewBean(outer)) {
 			BeanMap m = session.newBeanMap(outer, sType.getInnerClass());
 			m = parseIntoBeanMap(session, r, m);

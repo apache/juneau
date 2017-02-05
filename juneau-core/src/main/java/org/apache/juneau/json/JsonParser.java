@@ -163,10 +163,6 @@ public final class JsonParser extends ReaderParser {
 				Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance() : new ObjectList(session));
 				o = parseIntoCollection2(session, r, l, sType.getElementType(), pMeta);
 			}
-		} else if (sType.canCreateNewInstanceFromObjectMap(outer)) {
-			ObjectMap m = new ObjectMap(session);
-			parseIntoMap2(session, r, m, string(), object(), pMeta);
-			o = sType.newInstanceFromObjectMap(session, outer, m);
 		} else if (sType.canCreateNewBean(outer)) {
 			BeanMap m = session.newBeanMap(outer, sType.getInnerClass());
 			o = parseIntoBeanMap2(session, r, m).getBean();

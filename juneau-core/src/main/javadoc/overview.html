@@ -5468,9 +5468,13 @@
 				<li>{@link org.apache.juneau.transform.PojoSwap#swap(BeanSession,Object)}
 				<li>{@link org.apache.juneau.transform.PojoSwap#unswap(BeanSession,Object,ClassMeta)}
 			</ul>
-			<li>Replaced support for <code>toObjectMap()</code> and <code>fromObjectMap()/T(ObjectMap)</code> methods with
-				generalized <code>swap(BeanSession)</code>/<code>unswap(BeanSession,X)</code>/<code>T(BeanSession,X)</code> methods.<br>
-				See new section <a class='doclink' href='#Core.SwapMethods'>Swap methods</a> for information.
+			<li>General code improvements made to {@link org.apache.juneau.ClassMeta} class.
+			<ul>
+				<li>All fields are now final which should improve overall performance.
+				<li>Replaced support for <code>toObjectMap()</code> and <code>fromObjectMap()/T(ObjectMap)</code> methods with
+					generalized <code>swap(BeanSession)</code>/<code>unswap(BeanSession,X)</code>/<code>T(BeanSession,X)</code> methods.<br>
+					See new section <a class='doclink' href='#Core.SwapMethods'>Swap methods</a> for information.
+			</ul>
 			<li>Session-level media type now available through {@link org.apache.juneau.BeanSession#getMediaType()} method.
 				Allows for swaps and serializer/parser behavior to be tailored to individual media types.
 			<li>Several new {@link java.util.Calendar} and {@link java.util.Date} swaps:

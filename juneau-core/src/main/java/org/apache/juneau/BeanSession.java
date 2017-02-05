@@ -554,9 +554,6 @@ public class BeanSession extends Session {
 			if (type.isBean() && value instanceof Map)
 				return newBeanMap(tc).load((Map<?,?>) value).getBean();
 
-			if (type.canCreateNewInstanceFromObjectMap(outer) && value instanceof ObjectMap)
-				return type.newInstanceFromObjectMap(this, outer, (ObjectMap)value);
-
 			if (type.canCreateNewInstanceFromNumber(outer) && value instanceof Number)
 				return type.newInstanceFromNumber(this, outer, (Number)value);
 

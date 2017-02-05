@@ -1208,22 +1208,6 @@ public final class ClassMeta<T> implements Type {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this class can call the {@link #newInstanceFromString(Object, String)} method.
-	 *
-	 * @param outer The outer class object for non-static member classes.  Can be <jk>null</jk> for non-member or static classes.
-	 * @return <jk>true</jk> if this class has a no-arg constructor or invocation handler.
-	 */
-	public boolean canCreateNewInstanceFromObjectMap(Object outer) {
-		// TODO - Get rid of?
-		if (swapMethodType == ObjectMap.class && (swapConstructor != null || unswapMethod != null)) {
-			if (isMemberClass)
-				return outer != null && swapConstructor.getParameterTypes()[0] == outer.getClass();
-			return true;
-		}
-		return false;
-	}
-
-	/**
 	 * Returns the method annotated with {@link NameProperty @NameProperty}.
 	 *
 	 * @return The method annotated with {@link NameProperty @NameProperty} or <jk>null</jk> if method does not exist.
@@ -1338,38 +1322,6 @@ public final class ClassMeta<T> implements Type {
 			return c.newInstance(arg2);
 		}
 		throw new InstantiationError("No string constructor or valueOf(Number) method found for class '"+getInnerClass().getName()+"'");
-	}
-
-	/**
-	 * Create a new instance of the main class of this declared type from an <code>ObjectMap</code> input.
-	 * <p>
-	 * In order to use this method, the class must have one of the following methods:
-	 * <ul>
-	 * 	<li><code><jk>public</jk> T(ObjectMap in);</code>
-	 * </ul>
-	 *
-	 * @param session The current bean session.
-	 * @param outer The outer class object for non-static member classes.  Can be <jk>null</jk> for non-member or static classes.
-	 * @param arg The input argument value.
-	 * @return A new instance of the object.
-	 * @throws IllegalAccessException If the <code>Constructor</code> object enforces Java language access control and the underlying constructor is inaccessible.
-	 * @throws IllegalArgumentException If the parameter type on the method was invalid.
-	 * @throws InstantiationException If the class that declares the underlying constructor represents an abstract class, or
-	 * 	does not have one of the methods described above.
-	 * @throws InvocationTargetException If the underlying constructor throws an exception.
-	 */
-	@SuppressWarnings("unchecked")
-	public T newInstanceFromObjectMap(BeanSession session, Object outer, ObjectMap arg) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, InstantiationException {
-		// TODO - Get rid of?
-		if (swapConstructor != null) {
-			if (isMemberClass)
-				return swapConstructor.newInstance(outer, arg);
-			return swapConstructor.newInstance(arg);
-		}
-		if (unswapMethod != null) {
-			return (T)unswapMethod.invoke(null, session, arg);
-		}
-		throw new InstantiationError("No map constructor method found for class '"+getInnerClass().getName()+"'");
 	}
 
 	/**

@@ -105,11 +105,6 @@ public final class MsgPackParser extends InputStreamParser {
 				} else {
 					throw new ParseException(session, "Invalid data type {0} encountered for parse type {1}", dt, sType);
 				}
-			} else if (sType.canCreateNewInstanceFromObjectMap(outer)) {
-				ObjectMap m = new ObjectMap(session);
-				for (int i = 0; i < length; i++)
-					m.put(parseAnything(session, string(), is, outer, pMeta), parseAnything(session, object(), is, m, pMeta));
-				o = sType.newInstanceFromObjectMap(session, outer, m);
 			} else if (sType.canCreateNewBean(outer)) {
 				if (dt == MAP) {
 					BeanMap m = session.newBeanMap(outer, sType.getInnerClass());

@@ -174,10 +174,6 @@ public final class HtmlParser extends XmlParser {
 					o = parseIntoMap(session, r, (Map)new ObjectMap(session), sType.getKeyType(), sType.getValueType(), pMeta);
 				} else if (sType.isMap()) {
 					o = parseIntoMap(session, r, (Map)(sType.canCreateNewInstance(outer) ? sType.newInstance(outer) : new ObjectMap(session)), sType.getKeyType(), sType.getValueType(), pMeta);
-				} else if (sType.canCreateNewInstanceFromObjectMap(outer)) {
-					ObjectMap m = new ObjectMap(session);
-					parseIntoMap(session, r, m, string(), object(), pMeta);
-					o = sType.newInstanceFromObjectMap(session, outer, m);
 				} else if (sType.canCreateNewBean(outer)) {
 					BeanMap m = session.newBeanMap(outer, sType.getInnerClass());
 					o = parseIntoBean(session, r, m).getBean();
