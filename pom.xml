@@ -161,7 +161,7 @@
 						<bootclasspath>${sun.boot.class.path}</bootclasspath>
 						<overview>${basedir}/juneau-core/src/main/javadoc/overview.html</overview>
 						<stylesheetfile>${basedir}/juneau-core/src/main/javadoc/javadoc.css</stylesheetfile>
-						<use>true</use>
+						<use>false</use>
 						<additionalparam>-sourcetab 3 -notimestamp -Xdoclint:none</additionalparam>
 						<verbose>false</verbose>
 						<excludePackageNames>*proto*:*samples*:*examples*:*test*</excludePackageNames>
