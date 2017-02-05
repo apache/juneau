@@ -23,11 +23,11 @@ import java.util.*;
  * 	<jk>import static</jk> org.apache.juneau.dto.atom.AtomBuilder.*;
  *
  * 	Feed feed =
- * 		feed(<js>"tag:juneau.sample.com,2013:1"</js>, <js>"Juneau ATOM specification"</js>, <js>"2013-05-08T12:29:29Z"</js>)
- * 		.subtitle(text(<js>"html"</js>).children(<js>"A &lt;em&gt;lot&lt;/em&gt; of effort went into making this effortless"</js>))
+ * 		<jsm>feed</jsm>(<js>"tag:juneau.sample.com,2013:1"</js>, <js>"Juneau ATOM specification"</js>, <js>"2013-05-08T12:29:29Z"</js>)
+ * 		.subtitle(<jsm>text</jsm>(<js>"html"</js>).children(<js>"A &lt;em&gt;lot&lt;/em&gt; of effort went into making this effortless"</js>))
  * 		.links(
- * 			link(<js>"alternate"</js>, <js>"text/html"</js>, <js>"http://www.sample.com/"</js>).hreflang(<js>"en"</js>),
- * 			link(<js>"self"</js>, <js>"application/atom+xml"</js>, <js>"http://www.sample.com/feed.atom"</js>)
+ * 			<jsm>link</jsm>(<js>"alternate"</js>, <js>"text/html"</js>, <js>"http://www.sample.com/"</js>).hreflang(<js>"en"</js>),
+ * 			<jsm>link</jsm>(<js>"self"</js>, <js>"application/atom+xml"</js>, <js>"http://www.sample.com/feed.atom"</js>)
  * 		);
  * </p>
  * <p>

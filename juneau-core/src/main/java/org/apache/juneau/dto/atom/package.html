@@ -95,40 +95,34 @@
 	<jk>import static</jk> org.apache.juneau.dto.atom.AtomBuilder.*;
 	
 	Feed feed = 
-		feed(<js>"tag:juneau.apache.org"</js>, <js>"Juneau ATOM specification"</js>, <js>"2016-01-02T03:04:05Z"</js>)
-		.subtitle(text(<js>"html"</js>).children(<js>"Describes &lt;em&gt;stuff&lt;/em&gt; about Juneau"</js>))
+		<jsm>feed</jsm>(<js>"tag:juneau.apache.org"</js>, <js>"Juneau ATOM specification"</js>, <js>"2016-01-02T03:04:05Z"</js>)
+		.subtitle(<jsm>text</jsm>(<js>"html"</js>).children(<js>"Describes &lt;em&gt;stuff&lt;/em&gt; about Juneau"</js>))
 		.links(
-			link(<js>"alternate"</js>, <js>"text/html"</js>, <js>"http://www.sample.com/"</js>).hreflang(<js>"en"</js>),
-			link(<js>"self"</js>, <js>"application/atom+xml"</js>, <js>"http://www.sample.com/feed.atom"</js>)
+			<jsm>link</jsm>(<js>"alternate"</js>, <js>"text/html"</js>, <js>"http://www.sample.com/"</js>).hreflang(<js>"en"</js>),
+			<jsm>link</jsm>(<js>"self"</js>, <js>"application/atom+xml"</js>, <js>"http://www.sample.com/feed.atom"</js>)
 		)
 		.rights(<js>"Copyright (c) 2016, Apache Foundation"</js>)
 		.generator(
-			generator(<js>"Juneau"</js>).uri(<js>"http://juneau.apache.org/"</js>).version(<js>"1.0"</js>)
+			<jsm>generator</jsm>(<js>"Juneau"</js>).uri(<js>"http://juneau.apache.org/"</js>).version(<js>"1.0"</js>)
 		)
 		.entries(
-			entry(<js>"tag:juneau.sample.com,2013:1.2345"</js>, <js>"Juneau ATOM specification snapshot"</js>, <js>"2016-01-02T03:04:05Z"</js>)
+			<jsm>entry</jsm>(<js>"tag:juneau.sample.com,2013:1.2345"</js>, <js>"Juneau ATOM specification snapshot"</js>, <js>"2016-01-02T03:04:05Z"</js>)
 			.links(
-				link<js>"alternate"</js>, <js>"text/html"</js>, <js>"http://www.sample.com/2012/05/08/juneau.atom"</js>),
-				link(<js>"enclosure"</js>, <js>"audio/mpeg"</js>, <js>"http://www.sample.com/audio/juneau_podcast.mp3"</js>).length(1337)
+				<jsm>link</jsm>(<js>"alternate"</js>, <js>"text/html"</js>, <js>"http://www.sample.com/2012/05/08/juneau.atom"</js>),
+				<jsm>link</jsm>(<js>"enclosure"</js>, <js>"audio/mpeg"</js>, <js>"http://www.sample.com/audio/juneau_podcast.mp3"</js>).length(1337)
 			)
 			.published(<js>"2016-01-02T03:04:05Z"</js>)
 			.authors(
-				person(<js>"James Bognar"</js>).uri(<js>"http://www.sample.com/"</js>).email(<js>"jamesbognar@apache.org"</js>)
+				<jsm>person</jsm>(<js>"James Bognar"</js>).uri(<js>"http://www.sample.com/"</js>).email(<js>"jamesbognar@apache.org"</js>)
 			)
 			.contributors(
-				person(<js>"Barry M. Caceres"</js>)
+				<jsm>person</jsm>(<js>"Barry M. Caceres"</js>)
 			)
 			.content(
-				content(<js>"xhtml"</js>)
+				<jsm>content</jsm>(<js>"xhtml"</js>)
 				.lang(<js>"en"</js>)
 				.base(<js>"http://www.apache.org/"</js>)
-				.children(
-					HtmlBuilder.div().child(
-						HtmlBuilder.p(
-							HtmlBuilder.i(<js>"[Update: Juneau supports ATOM.]"</js>)
-						)
-					)
-				)
+				.text(<js>"&lt;div&gt;&lt;p&gt;&lt;i&gt;[Update: Juneau supports ATOM.]&lt;/i&gt;&lt;/p&gt;&lt;/div&gt;"</js>)
 			)
 		);
 		</p>

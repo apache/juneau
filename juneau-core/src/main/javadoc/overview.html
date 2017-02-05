@@ -748,9 +748,10 @@
 		<div class='topic'>
 			<p>
 				Various methods can be defined on a class directly to affect how it gets serialized.
+				This can often be simpler than using <code>PojoSwaps</code>.
 			</p>
 			<p>
-				Objects normally serialized to <code>Strings</code> can be parsed back into their original objects by implementing 
+				Objects serialized as <code>Strings</code> can be parsed back into their original objects by implementing 
 				one of the following methods on the class:
 			</p>		
 			<ul>
@@ -766,7 +767,7 @@
 				<li><code><jk>public</jk> T(String)</code> constructor.
 			</ul>
 			<p>
-				Note that these methods cover conversion from several built-in Java types, meaning these can be constructed directly by the parser from strings:
+				Note that these methods cover conversion from several built-in Java types, meaning the parsers can automatically construct these objects from strings:
 			</p>
 			<ul>
 				<li><code>fromString(String)</code> - {@link java.util.UUID}
@@ -805,12 +806,14 @@
 		<jk>private int</jk> <jf>value1</jf>;
 		<jk>private boolean</jk> <jf>value2</jf>;
 		
+		<jc>// Some constructor that initializes our fields. </jc>
 		<jk>public</jk> FormTemplate(String action, <jk>int</jk> value1, <jk>boolean</jk> value2) {
 			<jk>this</jk>.<jf>action</jf> = action;
 			<jk>this</jk>.<jf>value1</jf> = value1;
 			<jk>this</jk>.<jf>value2</jf> = value2;
 		}
 		
+		<jc>// Special swap method that converts this template to a serializable bean,
 		<jk>public</jk> Form swap(BeanSession session) {
 			<jk>return</jk> <jsm>form</jsm>(<jf>action</jf>,
 				<jsm>input</jsm>(<js>"text"</js>).name(<js>"v1"</js>).value(<jf>value1</jf>),
@@ -1543,10 +1546,11 @@
 				<td class='code'>
 	<jk>import static</jk> org.apache.juneau.dto.html5.HtmlBuilder.*;
 	
+	
 	Object mytable = 	
-		table(
-			tr(th(<js>"c1"</js>),th(<js>"c2"</js>)),
-			tr(td(<js>"v1"</js>),td(<js>"v2"</js>))
+		<jsm>table</jsm>(
+			<jsm>tr</jsm>(<jsm>th</jsm>(<js>"c1"</js>),<jsm>th</jsm>(<js>"c2"</js>)),
+			<jsm>tr</jsm>(<jsm>td</jsm>(<js>"v1"</js>),<jsm>td</jsm>(<js>"v2"</js>))
 		);
 
 	String html = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(mytable);
@@ -1597,40 +1601,34 @@
 	<jk>import static</jk> org.apache.juneau.dto.atom.AtomBuilder.*;
 	
 	Feed feed = 
-		feed(<js>"tag:juneau.apache.org"</js>, <js>"Juneau ATOM specification"</js>, <js>"2016-01-02T03:04:05Z"</js>)
-		.subtitle(text(<js>"html"</js>).children(<js>"Describes &lt;em&gt;stuff&lt;/em&gt; about Juneau"</js>))
+		<jsm>feed</jsm>(<js>"tag:juneau.apache.org"</js>, <js>"Juneau ATOM specification"</js>, <js>"2016-01-02T03:04:05Z"</js>)
+		.subtitle(<jsm>text</jsm>(<js>"html"</js>).children(<js>"Describes &lt;em&gt;stuff&lt;/em&gt; about Juneau"</js>))
 		.links(
-			link(<js>"alternate"</js>, <js>"text/html"</js>, <js>"http://www.sample.com/"</js>).hreflang(<js>"en"</js>),
-			link(<js>"self"</js>, <js>"application/atom+xml"</js>, <js>"http://www.sample.com/feed.atom"</js>)
+			<jsm>link</jsm>(<js>"alternate"</js>, <js>"text/html"</js>, <js>"http://www.sample.com/"</js>).hreflang(<js>"en"</js>),
+			<jsm>link</jsm>(<js>"self"</js>, <js>"application/atom+xml"</js>, <js>"http://www.sample.com/feed.atom"</js>)
 		)
 		.rights(<js>"Copyright (c) 2016, Apache Foundation"</js>)
 		.generator(
-			generator(<js>"Juneau"</js>).uri(<js>"http://juneau.apache.org/"</js>).version(<js>"1.0"</js>)
+			<jsm>generator</jsm>(<js>"Juneau"</js>).uri(<js>"http://juneau.apache.org/"</js>).version(<js>"1.0"</js>)
 		)
 		.entries(
-			entry(<js>"tag:juneau.sample.com,2013:1.2345"</js>, <js>"Juneau ATOM specification snapshot"</js>, <js>"2016-01-02T03:04:05Z"</js>)
+			<jsm>entry</jsm>(<js>"tag:juneau.sample.com,2013:1.2345"</js>, <js>"Juneau ATOM specification snapshot"</js>, <js>"2016-01-02T03:04:05Z"</js>)
 			.links(
-				link<js>"alternate"</js>, <js>"text/html"</js>, <js>"http://www.sample.com/2012/05/08/juneau.atom"</js>),
-				link(<js>"enclosure"</js>, <js>"audio/mpeg"</js>, <js>"http://www.sample.com/audio/juneau_podcast.mp3"</js>).length(1337)
+				<jsm>link</jsm><js>"alternate"</js>, <js>"text/html"</js>, <js>"http://www.sample.com/2012/05/08/juneau.atom"</js>),
+				<jsm>link</jsm>(<js>"enclosure"</js>, <js>"audio/mpeg"</js>, <js>"http://www.sample.com/audio/juneau_podcast.mp3"</js>).length(1337)
 			)
 			.published(<js>"2016-01-02T03:04:05Z"</js>)
 			.authors(
-				person(<js>"James Bognar"</js>).uri(<js>"http://www.sample.com/"</js>).email(<js>"jamesbognar@apache.org"</js>)
+				<jsm>person</jsm>(<js>"James Bognar"</js>).uri(<js>"http://www.sample.com/"</js>).email(<js>"jamesbognar@apache.org"</js>)
 			)
 			.contributors(
-				person(<js>"Barry M. Caceres"</js>)
+				<jsm>person</jsm>(<js>"Barry M. Caceres"</js>)
 			)
 			.content(
-				content(<js>"xhtml"</js>)
+				<jsm>content</jsm>(<js>"xhtml"</js>)
 				.lang(<js>"en"</js>)
 				.base(<js>"http://www.apache.org/"</js>)
-				.children(
-					HtmlBuilder.div().child(
-						HtmlBuilder.p(
-							HtmlBuilder.i(<js>"[Update: Juneau supports ATOM.]"</js>)
-						)
-					)
-				)
+				.text(<js>"&lt;div&gt;&lt;p&gt;&lt;i&gt;[Update: Juneau supports ATOM.]&lt;/i&gt;&lt;/p&gt;&lt;/div&gt;"</js>)
 			)
 		);
 		</p>

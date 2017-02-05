@@ -60,6 +60,7 @@
 	<ol>
 		<li><p><a class='doclink' href='#Serialize'>Generating HTML5</a></p>
 		<li><p><a class='doclink' href='#Parse'>Parsing HTML5</a></p>
+		<li><p><a class='doclink' href='#Templates'>HTML5 Templates</a></p>
 	</ol>
 </ol>
 
@@ -100,9 +101,9 @@
 	<jk>import static</jk> org.apache.juneau.dto.html5.HtmlBuilder.*;
 	
 	Object mytable = 	
-		table(
-			tr(th(<js>"c1"</js>),th(<js>"c2"</js>)),
-			tr(td(<js>"v1"</js>),td(<js>"v2"</js>))
+		<jsm>table</jsm>(
+			<jsm>tr</jsm>(<jsm>th</jsm>(<js>"c1"</js>),<jsm>th</jsm>(<js>"c2"</js>)),
+			<jsm>tr</jsm>(<jsm>td</jsm>(<js>"v1"</js>),<jsm>td</jsm>(<js>"v2"</js>))
 		);
 
 	String html = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(mytable);
@@ -125,15 +126,15 @@
 	<jk>import static</jk> org.apache.juneau.dto.html5.HtmlBuilder.*;
 	
 	Object mytable = 	
-		table(
-			caption(<js>"mytable"</js>),
-			colgroup(
-				col()._class(<js>"foo"</js>),
-				col()._class(<js>"bar"</js>)
+		<jsm>table</jsm>(
+			<jsm>caption</jsm>(<js>"mytable"</js>),
+			<jsm>colgroup</jsm>(
+				<jsm>col</jsm>()._class(<js>"foo"</js>),
+				<jsm>col</jsm>()._class(<js>"bar"</js>)
 			),
-			thead(tr(th(<js>"c1"</js>),th(<js>"c2"</js>))),
-			tbody(tr(td(<js>"v1"</js>),td(<js>"v2"</js>))),
-			tfoot(tr(td(<js>"f1"</js>),td(<js>"f2"</js>)))
+			<jsm>thead</jsm>(<jsm>tr</jsm>(<jsm>th</jsm>(<js>"c1"</js>),<jsm>th</jsm>(<js>"c2"</js>))),
+			<jsm>tbody</jsm>(<jsm>tr</jsm>(<jsm>td</jsm>(<js>"v1"</js>),<jsm>td</jsm>(<js>"v2"</js>))),
+			<jsm>tfoot</jsm>(<jsm>tr</jsm>(<jsm>td</jsm>(<js>"f1"</js>),<jsm>td</jsm>(<js>"f2"</js>)))
 		);
 
 	String html = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(mytable);
@@ -185,6 +186,105 @@
 		</p>
 		<p>
 			HTML5 objects can also be constructed from the other media types using the appropriate parsers.
+		</p>
+	</div>
+
+	<!-- ======================================================================================================== -->
+	<a id="Templates"></a>
+	<h3 class='topic' onclick='toggle(this)'>1.3 - HTML5 templates</h3>
+	<div class='topic'>
+		<p>
+			If you're finding yourself reusing the same HTML5 DTO objects over and over that only differ slightly, 
+			you may want to consider using HTML5 templates.
+			Broadly speaking, a template is simply a bean that gets swapped out with another more complex bean during
+			serialization.
+			Juneau doesn't have a built-in concept of a "template", but rather has features that allow them to be defined using existing swap support.
+		</p>
+		<p>
+			The following example shows how an HTML5 form template object can be created that gets serialized as a populated HTML5 {@link org.apache.juneau.dto.html5.Form} bean.
+			It takes advantage of the special <code>swap(BeanSession)</code> method that serializers will use to convert the object to a serialized form before serialization.
+			The return type of this method can be any serializable type.
+			In this case, we are defining a template for a reusable HTML form with two simple fields.  
+			This gets serialized as an HTML form. 
+		</p>
+		<p class='bcode'>
+	<jk>import static</jk> org.apache.juneau.dto.html5.HtmlBuilder.*;
+	
+	<jd>/**
+	 * A simple HTML form template whose serialized form is an HTML5 Form object.
+	 */</jd>
+	<jk>public class</jk> FormTemplate {
+		
+		<jk>private</jk> String <jf>action</jf>;
+		<jk>private int</jk> <jf>value1</jf>;
+		<jk>private boolean</jk> <jf>value2</jf>;
+		
+		<jc>// Some constructor that initializes our fields. </jc>
+		<jk>public</jk> FormTemplate(String action, <jk>int</jk> value1, <jk>boolean</jk> value2) {
+			<jk>this</jk>.<jf>action</jf> = action;
+			<jk>this</jk>.<jf>value1</jf> = value1;
+			<jk>this</jk>.<jf>value2</jf> = value2;
+		}
+		
+		<jc>// Special swap method that converts this template to a serializable bean,
+		// in this case an HTML5 Form bean. </jc>
+		<jk>public</jk> Form swap(BeanSession session) {
+			<jk>return</jk> <jsm>form</jsm>(<jf>action</jf>,
+				<jsm>input</jsm>(<js>"text"</js>).name(<js>"v1"</js>).value(<jf>value1</jf>),
+				<jsm>input</jsm>(<js>"text"</js>).name(<js>"v2"</js>).value(<jf>value2</jf>)
+			);
+		}
+	}
+		</p>
+		<p>
+			When serialized using the HTML or XML serializer, it produces the following:
+		</p>	
+		<p class='bcode'><xt>
+	&lt;form <xa>action</xa>='myaction'&gt;
+		&lt;input <xa>type</xa>=<xs>'text'</xs> <xa>name</xa>=<xs>'v1'</xs> <xa>value</xa>=<xs>'123'</xs>/&gt;
+		&lt;input <xa>type</xa>=<xs>'text'</xs> <xa>name</xa>=<xs>'v2'</xs> <xa>value</xa>=<xs>'true'</xs>/&gt;
+	&lt;/form&gt;		
+		</xt></p>		
+		<p>
+			Support for parsing back into the template class can be accomplished by adding an unswap method or constructor.
+		</p>
+		<p class='bcode'>
+	<jk>import static</jk> org.apache.juneau.dto.html5.HtmlBuilder.*;
+	
+	<jd>/**
+	 * A simple HTML form template whose serialized form is an HTML5 Form object.
+	 * This time with parsing support.
+	 */</jd>
+	<ja>@Bean</ja>(beanDictionary=HtmlBeanDictionary.<jk>class</jk>)
+	<jk>public class</jk> FormTemplate {
+		
+		<jk>private</jk> String <jf>action</jf>;
+		<jk>private int</jk> <jf>value1</jf>;
+		<jk>private boolean</jk> <jf>value2</jf>;
+		
+		<jc>// Our 'unswap' constructor</jc>
+		<jk>public</jk> FormTemplate(Form f) {
+			<jk>this</jk>.<jf>action</jf> = f.getAttr(<js>"action"</js>);
+			<jk>this</jk>.<jf>value1</jf> = f.getChild(Input.<jk>class</jk>, 0).getAttr(<jk>int</jk>.<jk>class</jk>, <js>"value"</js>);
+			<jk>this</jk>.<jf>value2</jf> = f.getChild(Input.<jk>class</jk>, 1).getAttr(<jk>boolean</jk>.<jk>class</jk>, <js>"value"</js>);
+		}
+		
+		<jk>public</jk> FormTemplate(String action, <jk>int</jk> value1, <jk>boolean</jk> value2) {
+			<jk>this</jk>.<jf>action</jf> = action;
+			<jk>this</jk>.<jf>value1</jf> = value1;
+			<jk>this</jk>.<jf>value2</jf> = value2;
+		}
+		
+		<jk>public</jk> Form swap(BeanSession session) {
+			<jk>return</jk> <jsm>form</jsm>(<jf>action</jf>,
+				<jsm>input</jsm>(<js>"text"</js>).name(<js>"v1"</js>).value(<jf>value1</jf>),
+				<jsm>input</jsm>(<js>"text"</js>).name(<js>"v2"</js>).value(<jf>value2</jf>)
+			);
+		}
+	}
+		</p>
+		<p>
+			Refer to <a class='doclink' href='../../../../../overview-summary.html#Core.SwapMethods'>Swap methods</a> for information about defining swap methods on classes.
 		</p>
 	</div>
 
