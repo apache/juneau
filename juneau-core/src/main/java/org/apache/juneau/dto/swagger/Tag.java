@@ -15,7 +15,7 @@ package org.apache.juneau.dto.swagger;
 import org.apache.juneau.annotation.*;
 
 /**
- * Allows adding meta data to a single tag that is used by the <a href='http://swagger.io/specification/#operationObject'>Operation Object</a>.
+ * Allows adding meta data to a single tag that is used by the <a class="doclink" href="http://swagger.io/specification/#operationObject">Operation Object</a>.
  * <p>
  * It is not mandatory to have a Tag Object per tag used there.
  *
@@ -72,7 +72,7 @@ public class Tag {
 	 * Bean property getter:  <property>description</property>.
 	 * <p>
 	 * A short description for the tag.
-	 * <a href='https://help.github.com/articles/github-flavored-markdown'>GFM syntax</a> can be used for rich text representation.
+	 * <a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used for rich text representation.
 	 *
 	 * @return The value of the <property>description</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -84,7 +84,7 @@ public class Tag {
 	 * Bean property setter:  <property>description</property>.
 	 * <p>
 	 * A short description for the tag.
-	 * <a href='https://help.github.com/articles/github-flavored-markdown'>GFM syntax</a> can be used for rich text representation.
+	 * <a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used for rich text representation.
 	 *
 	 * @param description The new value for the <property>description</property> property on this bean.
 	 * @return This object (for method chaining).

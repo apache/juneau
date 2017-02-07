@@ -113,7 +113,7 @@ public class Swagger {
 	 * This MUST be the host only and does not include the scheme nor sub-paths.
 	 * It MAY include a port.
 	 * If the host is not included, the host serving the documentation is to be used (including the port).
-	 * The host does not support <a href='http://swagger.io/specification/#pathTemplating'>path templating</a>.
+	 * The host does not support <a class="doclink" href="http://swagger.io/specification/#pathTemplating">path templating</a>.
 	 *
 	 * @return The value of the <property>host</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -128,7 +128,7 @@ public class Swagger {
 	 * This MUST be the host only and does not include the scheme nor sub-paths.
 	 * It MAY include a port.
 	 * If the host is not included, the host serving the documentation is to be used (including the port).
-	 * The host does not support <a href='http://swagger.io/specification/#pathTemplating'>path templating</a>.
+	 * The host does not support <a class="doclink" href="http://swagger.io/specification/#pathTemplating">path templating</a>.
 	 *
 	 * @param host The new value for the <property>host</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -144,7 +144,7 @@ public class Swagger {
 	 * The base path on which the API is served, which is relative to the <code>host</code>.
 	 * If it is not included, the API is served directly under the <code>host</code>.
 	 * The value MUST start with a leading slash (/).
-	 * The <code>basePath</code> does not support <a href='http://swagger.io/specification/#pathTemplating'>path templating</a>.
+	 * The <code>basePath</code> does not support <a class="doclink" href="http://swagger.io/specification/#pathTemplating">path templating</a>.
 	 *
 	 * @return The value of the <property>basePath</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -158,7 +158,7 @@ public class Swagger {
 	 * The base path on which the API is served, which is relative to the <code>host</code>.
 	 * If it is not included, the API is served directly under the <code>host</code>.
 	 * The value MUST start with a leading slash (/).
-	 * The <code>basePath</code> does not support <a href='http://swagger.io/specification/#pathTemplating'>path templating</a>.
+	 * The <code>basePath</code> does not support <a class="doclink" href="http://swagger.io/specification/#pathTemplating">path templating</a>.
 	 *
 	 * @param basePath The new value for the <property>basePath</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -234,7 +234,7 @@ public class Swagger {
 	 * <p>
 	 * A list of MIME types the APIs can consume.
 	 * This is global to all APIs but can be overridden on specific API calls.
-	 * Value MUST be as described under <a href='http://swagger.io/specification/#mimeTypes'>Mime Types</a>.
+	 * Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
 	 *
 	 * @return The value of the <property>consumes</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -247,7 +247,7 @@ public class Swagger {
 	 * <p>
 	 * A list of MIME types the APIs can consume.
 	 * This is global to all APIs but can be overridden on specific API calls.
-	 * Value MUST be as described under <a href='http://swagger.io/specification/#mimeTypes'>Mime Types</a>.
+	 * Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
 	 *
 	 * @param consumes The new value for the <property>consumes</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -262,7 +262,7 @@ public class Swagger {
 	 * <p>
 	 * A list of MIME types the APIs can consume.
 	 * This is global to all APIs but can be overridden on specific API calls.
-	 * Value MUST be as described under <a href='http://swagger.io/specification/#mimeTypes'>Mime Types</a>.
+	 * Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
 	 *
 	 * @param consumes The values to add for the <property>consumes</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -277,7 +277,7 @@ public class Swagger {
 	 * <p>
 	 * A list of MIME types the APIs can consume.
 	 * This is global to all APIs but can be overridden on specific API calls.
-	 * Value MUST be as described under <a href='http://swagger.io/specification/#mimeTypes'>Mime Types</a>.
+	 * Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
 	 *
 	 * @param consumes The values to add for the <property>consumes</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -295,7 +295,7 @@ public class Swagger {
 	 * <p>
 	 * A list of MIME types the APIs can produce.
 	 * This is global to all APIs but can be overridden on specific API calls.
-	 * Value MUST be as described under <a href='http://swagger.io/specification/#mimeTypes'>Mime Types</a>.
+	 * Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
 	 *
 	 * @return The value of the <property>produces</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -308,7 +308,7 @@ public class Swagger {
 	 * <p>
 	 * A list of MIME types the APIs can produce.
 	 * This is global to all APIs but can be overridden on specific API calls.
-	 * Value MUST be as described under <a href='http://swagger.io/specification/#mimeTypes'>Mime Types</a>.
+	 * Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
 	 *
 	 * @param produces The new value for the <property>produces</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -323,7 +323,7 @@ public class Swagger {
 	 * <p>
 	 * A list of MIME types the APIs can produce.
 	 * This is global to all APIs but can be overridden on specific API calls.
-	 * Value MUST be as described under <a href='http://swagger.io/specification/#mimeTypes'>Mime Types</a>.
+	 * Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
 	 *
 	 * @param produces The values to add for the <property>produces</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -338,7 +338,7 @@ public class Swagger {
 	 * <p>
 	 * A list of MIME types the APIs can produce.
 	 * This is global to all APIs but can be overridden on specific API calls.
-	 * Value MUST be as described under <a href='http://swagger.io/specification/#mimeTypes'>Mime Types</a>.
+	 * Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
 	 *
 	 * @param produces The values to add for the <property>produces</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -614,7 +614,7 @@ public class Swagger {
 	 * <p>
 	 * A list of tags used by the specification with additional metadata.
 	 * The order of the tags can be used to reflect on their order by the parsing tools.
-	 * Not all tags that are used by the <a href='http://swagger.io/specification/#operationObject'>Operation Object</a> must be declared.
+	 * Not all tags that are used by the <a class="doclink" href="http://swagger.io/specification/#operationObject">Operation Object</a> must be declared.
 	 * The tags that are not declared may be organized randomly or based on the tools' logic.
 	 * Each tag name in the list MUST be unique.
 	 *
@@ -629,7 +629,7 @@ public class Swagger {
 	 * <p>
 	 * A list of tags used by the specification with additional metadata.
 	 * The order of the tags can be used to reflect on their order by the parsing tools.
-	 * Not all tags that are used by the <a href='http://swagger.io/specification/#operationObject'>Operation Object</a> must be declared.
+	 * Not all tags that are used by the <a class="doclink" href="http://swagger.io/specification/#operationObject">Operation Object</a> must be declared.
 	 * The tags that are not declared may be organized randomly or based on the tools' logic.
 	 * Each tag name in the list MUST be unique.
 	 *
@@ -646,7 +646,7 @@ public class Swagger {
 	 * <p>
 	 * A list of tags used by the specification with additional metadata.
 	 * The order of the tags can be used to reflect on their order by the parsing tools.
-	 * Not all tags that are used by the <a href='http://swagger.io/specification/#operationObject'>Operation Object</a> must be declared.
+	 * Not all tags that are used by the <a class="doclink" href="http://swagger.io/specification/#operationObject">Operation Object</a> must be declared.
 	 * The tags that are not declared may be organized randomly or based on the tools' logic.
 	 * Each tag name in the list MUST be unique.
 	 *

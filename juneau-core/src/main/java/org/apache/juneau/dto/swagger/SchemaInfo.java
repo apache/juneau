@@ -62,7 +62,7 @@ public class SchemaInfo {
 	/**
 	 * Bean property getter:  <property>format</property>.
 	 * <p>
-	 * See <a href='http://swagger.io/specification/#dataTypeFormat'>Data Type Formats</a> for further details.
+	 * See <a class="doclink" href="http://swagger.io/specification/#dataTypeFormat">Data Type Formats</a> for further details.
 	 *
 	 * @return The value of the <property>format</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -73,7 +73,7 @@ public class SchemaInfo {
 	/**
 	 * Bean property setter:  <property>format</property>.
 	 * <p>
-	 * See <a href='http://swagger.io/specification/#dataTypeFormat'>Data Type Formats</a> for further details.
+	 * See <a class="doclink" href="http://swagger.io/specification/#dataTypeFormat">Data Type Formats</a> for further details.
 	 *
 	 * @param format The new value for the <property>format</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -106,7 +106,7 @@ public class SchemaInfo {
 	/**
 	 * Bean property getter:  <property>description</property>.
 	 * <p>
-	 * <a href='https://help.github.com/articles/github-flavored-markdown'>GFM syntax</a> can be used for rich text representation.
+	 * <a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used for rich text representation.
 	 *
 	 * @return The value of the <property>description</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -117,7 +117,7 @@ public class SchemaInfo {
 	/**
 	 * Bean property setter:  <property>description</property>.
 	 * <p>
-	 * <a href='https://help.github.com/articles/github-flavored-markdown'>GFM syntax</a> can be used for rich text representation.
+	 * <a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used for rich text representation.
 	 *
 	 * @param description The new value for the <property>description</property> property on this bean.
 	 * @return This object (for method chaining).

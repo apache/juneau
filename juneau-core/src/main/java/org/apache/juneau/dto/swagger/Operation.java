@@ -190,7 +190,7 @@ public class Operation {
 	 * Bean property getter:  <property>description</property>.
 	 * <p>
 	 * A verbose explanation of the operation behavior.
-	 * <a href='https://help.github.com/articles/github-flavored-markdown'>GFM syntax</a> can be used for rich text representation.
+	 * <a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used for rich text representation.
 	 *
 	 * @return The value of the <property>description</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -202,7 +202,7 @@ public class Operation {
 	 * Bean property setter:  <property>description</property>.
 	 * <p>
 	 * A verbose explanation of the operation behavior.
-	 * <a href='https://help.github.com/articles/github-flavored-markdown'>GFM syntax</a> can be used for rich text representation.
+	 * <a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used for rich text representation.
 	 *
 	 * @param description The new value for the <property>description</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -268,7 +268,7 @@ public class Operation {
 	 * A list of MIME types the operation can consume.
 	 * This overrides the <code>consumes</code> definition at the Swagger Object.
 	 * An empty value MAY be used to clear the global definition.
-	 * Value MUST be as described under <a href='http://swagger.io/specification/#mimeTypes'>Mime Types</a>.
+	 * Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
 	 *
 	 * @return The value of the <property>consumes</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -282,7 +282,7 @@ public class Operation {
 	 * A list of MIME types the operation can consume.
 	 * This overrides the <code>consumes</code> definition at the Swagger Object.
 	 * An empty value MAY be used to clear the global definition.
-	 * Value MUST be as described under <a href='http://swagger.io/specification/#mimeTypes'>Mime Types</a>.
+	 * Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
 	 *
 	 * @param consumes The new value for the <property>consumes</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -298,7 +298,7 @@ public class Operation {
 	 * A list of MIME types the operation can consume.
 	 * This overrides the <code>consumes</code> definition at the Swagger Object.
 	 * An empty value MAY be used to clear the global definition.
-	 * Value MUST be as described under <a href='http://swagger.io/specification/#mimeTypes'>Mime Types</a>.
+	 * Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
 	 *
 	 * @param consumes The new values to add to the <property>consumes</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -314,7 +314,7 @@ public class Operation {
 	 * A list of MIME types the operation can consume.
 	 * This overrides the <code>consumes</code> definition at the Swagger Object.
 	 * An empty value MAY be used to clear the global definition.
-	 * Value MUST be as described under <a href='http://swagger.io/specification/#mimeTypes'>Mime Types</a>.
+	 * Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
 	 *
 	 * @param consumes The new values to add to the <property>consumes</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -333,7 +333,7 @@ public class Operation {
 	 * A list of MIME types the operation can produce.
 	 * This overrides the <code>produces</code> definition at the Swagger Object.
 	 * An empty value MAY be used to clear the global definition.
-	 * Value MUST be as described under <a href='http://swagger.io/specification/#mimeTypes'>Mime Types</a>.
+	 * Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
 	 *
 	 * @return The value of the <property>produces</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -347,7 +347,7 @@ public class Operation {
 	 * A list of MIME types the operation can produce.
 	 * This overrides the <code>produces</code> definition at the Swagger Object.
 	 * An empty value MAY be used to clear the global definition.
-	 * Value MUST be as described under <a href='http://swagger.io/specification/#mimeTypes'>Mime Types</a>.
+	 * Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
 	 *
 	 * @param produces The new value for the <property>produces</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -363,7 +363,7 @@ public class Operation {
 	 * A list of MIME types the operation can produce.
 	 * This overrides the <code>produces</code> definition at the Swagger Object.
 	 * An empty value MAY be used to clear the global definition.
-	 * Value MUST be as described under <a href='http://swagger.io/specification/#mimeTypes'>Mime Types</a>.
+	 * Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
 	 *
 	 * @param produces The new value for the <property>produces</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -380,10 +380,10 @@ public class Operation {
 	 * Bean property getter:  <property>parameters</property>.
 	 * <p>
 	 * A list of parameters that are applicable for this operation.
-	 * If a parameter is already defined at the <a href='http://swagger.io/specification/#pathItemParameters'>Path Item</a>, the new definition will override it, but can never remove it.
+	 * If a parameter is already defined at the <a class="doclink" href="http://swagger.io/specification/#pathItemParameters">Path Item</a>, the new definition will override it, but can never remove it.
 	 * The list MUST NOT include duplicated parameters.
 	 * A unique parameter is defined by a combination of a <code>name</code> and <code>location</code>.
-	 * The list can use the <a href='http://swagger.io/specification/#referenceObject'>Reference Object</a> to link to parameters that are defined at the <a href='http://swagger.io/specification/#swaggerParameters'>Swagger Object's parameters</a>.
+	 * The list can use the <a class="doclink" href="http://swagger.io/specification/#referenceObject">Reference Object</a> to link to parameters that are defined at the <a class="doclink" href="http://swagger.io/specification/#swaggerParameters">Swagger Object's parameters</a>.
 	 * There can be one <js>"body"</js> parameter at most.
 	 *
 	 * @return The value of the <property>parameters</property> property on this bean, or <jk>null</jk> if it is not set.
@@ -396,10 +396,10 @@ public class Operation {
 	 * Bean property setter:  <property>parameters</property>.
 	 * <p>
 	 * A list of parameters that are applicable for this operation.
-	 * If a parameter is already defined at the <a href='http://swagger.io/specification/#pathItemParameters'>Path Item</a>, the new definition will override it, but can never remove it.
+	 * If a parameter is already defined at the <a class="doclink" href="http://swagger.io/specification/#pathItemParameters">Path Item</a>, the new definition will override it, but can never remove it.
 	 * The list MUST NOT include duplicated parameters.
 	 * A unique parameter is defined by a combination of a <code>name</code> and <code>location</code>.
-	 * The list can use the <a href='http://swagger.io/specification/#referenceObject'>Reference Object</a> to link to parameters that are defined at the <a href='http://swagger.io/specification/#swaggerParameters'>Swagger Object's parameters</a>.
+	 * The list can use the <a class="doclink" href="http://swagger.io/specification/#referenceObject">Reference Object</a> to link to parameters that are defined at the <a class="doclink" href="http://swagger.io/specification/#swaggerParameters">Swagger Object's parameters</a>.
 	 * There can be one <js>"body"</js> parameter at most.
 	 *
 	 * @param parameters The new value for the <property>parameters</property> property on this bean.
@@ -414,10 +414,10 @@ public class Operation {
 	 * Bean property adder:  <property>parameters</property>.
 	 * <p>
 	 * A list of parameters that are applicable for this operation.
-	 * If a parameter is already defined at the <a href='http://swagger.io/specification/#pathItemParameters'>Path Item</a>, the new definition will override it, but can never remove it.
+	 * If a parameter is already defined at the <a class="doclink" href="http://swagger.io/specification/#pathItemParameters">Path Item</a>, the new definition will override it, but can never remove it.
 	 * The list MUST NOT include duplicated parameters.
 	 * A unique parameter is defined by a combination of a <code>name</code> and <code>location</code>.
-	 * The list can use the <a href='http://swagger.io/specification/#referenceObject'>Reference Object</a> to link to parameters that are defined at the <a href='http://swagger.io/specification/#swaggerParameters'>Swagger Object's parameters</a>.
+	 * The list can use the <a class="doclink" href="http://swagger.io/specification/#referenceObject">Reference Object</a> to link to parameters that are defined at the <a class="doclink" href="http://swagger.io/specification/#swaggerParameters">Swagger Object's parameters</a>.
 	 * There can be one <js>"body"</js> parameter at most.
 	 *
 	 * @param parameter The new value to add to the <property>parameters</property> property on this bean.

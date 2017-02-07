@@ -89,8 +89,8 @@ public class ParameterInfo {
 	 * 	Possible values are <js>"query"</js>, <js>"header"</js>, <js>"path"</js>, <js>"formData"</js> or <js>"body"</js>.
 	 * @param name Required. The name of the parameter.
 	 * 	Parameter names are case sensitive.
-	 * 	If <code>in</code> is <js>"path"</js>, the <code>name</code> field MUST correspond to the associated path segment from the <code>path</code> field in the <a href='http://swagger.io/specification/#pathsObject'>Paths Object</a>.
-	 * 	See <a href='http://swagger.io/specification/#pathTemplating'>Path Templating</a> for further information.
+	 * 	If <code>in</code> is <js>"path"</js>, the <code>name</code> field MUST correspond to the associated path segment from the <code>path</code> field in the <a class="doclink" href="http://swagger.io/specification/#pathsObject">Paths Object</a>.
+	 * 	See <a class="doclink" href="http://swagger.io/specification/#pathTemplating">Path Templating</a> for further information.
 	 * 	For all other cases, the name corresponds to the parameter name used based on the <code>in</code> property.
 	 * @return A new Parameter object.
 	 */
@@ -106,8 +106,8 @@ public class ParameterInfo {
 	 * 	Possible values are <js>"query"</js>, <js>"header"</js>, <js>"path"</js>, <js>"formData"</js> or <js>"body"</js>.
 	 * @param name Required. The name of the parameter.
 	 * 	Parameter names are case sensitive.
-	 * 	If <code>in</code> is <js>"path"</js>, the <code>name</code> field MUST correspond to the associated path segment from the <code>path</code> field in the <a href='http://swagger.io/specification/#pathsObject'>Paths Object</a>.
-	 * 	See <a href='http://swagger.io/specification/#pathTemplating'>Path Templating</a> for further information.
+	 * 	If <code>in</code> is <js>"path"</js>, the <code>name</code> field MUST correspond to the associated path segment from the <code>path</code> field in the <a class="doclink" href="http://swagger.io/specification/#pathsObject">Paths Object</a>.
+	 * 	See <a class="doclink" href="http://swagger.io/specification/#pathTemplating">Path Templating</a> for further information.
 	 * 	For all other cases, the name corresponds to the parameter name used based on the <code>in</code> property.
 	 * @return A new Parameter object.
 	 */
@@ -125,8 +125,8 @@ public class ParameterInfo {
 	 * <p>
 	 * Required. The name of the parameter.
 	 * Parameter names are case sensitive.
-	 * If <code>in</code> is <js>"path"</js>, the <code>name</code> field MUST correspond to the associated path segment from the <code>path</code> field in the <a href='http://swagger.io/specification/#pathsObject'>Paths Object</a>.
-	 * See <a href='http://swagger.io/specification/#pathTemplating'>Path Templating</a> for further information.
+	 * If <code>in</code> is <js>"path"</js>, the <code>name</code> field MUST correspond to the associated path segment from the <code>path</code> field in the <a class="doclink" href="http://swagger.io/specification/#pathsObject">Paths Object</a>.
+	 * See <a class="doclink" href="http://swagger.io/specification/#pathTemplating">Path Templating</a> for further information.
 	 * For all other cases, the name corresponds to the parameter name used based on the <code>in</code> property.
 	 *
 	 * @return The value of the <property>name</property> property on this bean, or <jk>null</jk> if it is not set.
@@ -140,8 +140,8 @@ public class ParameterInfo {
 	 * <p>
 	 * Required. The name of the parameter.
 	 * Parameter names are case sensitive.
-	 * If <code>in</code> is <js>"path"</js>, the <code>name</code> field MUST correspond to the associated path segment from the <code>path</code> field in the <a href='http://swagger.io/specification/#pathsObject'>Paths Object</a>.
-	 * See <a href='http://swagger.io/specification/#pathTemplating'>Path Templating</a> for further information.
+	 * If <code>in</code> is <js>"path"</js>, the <code>name</code> field MUST correspond to the associated path segment from the <code>path</code> field in the <a class="doclink" href="http://swagger.io/specification/#pathsObject">Paths Object</a>.
+	 * See <a class="doclink" href="http://swagger.io/specification/#pathTemplating">Path Templating</a> for further information.
 	 * For all other cases, the name corresponds to the parameter name used based on the <code>in</code> property.
 	 *
 	 * @param name The new value for the <property>name</property> property on this bean.
@@ -188,7 +188,7 @@ public class ParameterInfo {
 	 * <p>
 	 * A brief description of the parameter.
 	 * This could contain examples of use.
-	 * <a href='https://help.github.com/articles/github-flavored-markdown'>GFM syntax</a> can be used for rich text representation.
+	 * <a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used for rich text representation.
 	 *
 	 * @return The value of the <property>description</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -201,7 +201,7 @@ public class ParameterInfo {
 	 * <p>
 	 * A brief description of the parameter.
 	 * This could contain examples of use.
-	 * <a href='https://help.github.com/articles/github-flavored-markdown'>GFM syntax</a> can be used for rich text representation.
+	 * <a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used for rich text representation.
 	 *
 	 * @param description The new value for the <property>description</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -299,7 +299,7 @@ public class ParameterInfo {
 	 * Bean property getter:  <property>format</property>.
 	 * <p>
 	 * The extending format for the previously mentioned type.
-	 * See <a href='http://swagger.io/specification/#dataTypeFormat'>Data Type Formats</a> for further details.
+	 * See <a class="doclink" href="http://swagger.io/specification/#dataTypeFormat">Data Type Formats</a> for further details.
 	 *
 	 * @return The value of the <property>format</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -311,7 +311,7 @@ public class ParameterInfo {
 	 * Bean property setter:  <property>format</property>.
 	 * <p>
 	 * The extending format for the previously mentioned type.
-	 * See <a href='http://swagger.io/specification/#dataTypeFormat'>Data Type Formats</a> for further details.
+	 * See <a class="doclink" href="http://swagger.io/specification/#dataTypeFormat">Data Type Formats</a> for further details.
 	 *
 	 * @param format The new value for the <property>format</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -430,7 +430,7 @@ public class ParameterInfo {
 	 * <p>
 	 * Declares the value of the parameter that the server will use if none is provided, for example a <js>"count"</js> to control the number of results per page might default to 100 if not supplied by the client in the request.
 	 * (Note: <js>"default"</js> has no meaning for required parameters.)
-	 * See <a href='http://json-schema.org/latest/json-schema-validation.html#anchor101'>http://json-schema.org/latest/json-schema-validation.html#anchor101</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor101">http://json-schema.org/latest/json-schema-validation.html#anchor101</a>.
 	 * Unlike JSON Schema this value MUST conform to the defined <code>type</code> for this parameter.
 	 *
 	 * @return The value of the <property>default</property> property on this bean, or <jk>null</jk> if it is not set.
@@ -444,7 +444,7 @@ public class ParameterInfo {
 	 * <p>
 	 * Declares the value of the parameter that the server will use if none is provided, for example a <js>"count"</js> to control the number of results per page might default to 100 if not supplied by the client in the request.
 	 * (Note: <js>"default"</js> has no meaning for required parameters.)
-	 * See <a href='http://json-schema.org/latest/json-schema-validation.html#anchor101'>http://json-schema.org/latest/json-schema-validation.html#anchor101</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor101">http://json-schema.org/latest/json-schema-validation.html#anchor101</a>.
 	 * Unlike JSON Schema this value MUST conform to the defined <code>type</code> for this parameter.
 	 *
 	 * @param _default The new value for the <property>default</property> property on this bean.
@@ -458,7 +458,7 @@ public class ParameterInfo {
 	/**
 	 * Bean property getter:  <property>maximum</property>.
 	 * <p>
-	 * See <a href='http://json-schema.org/latest/json-schema-validation.html#anchor17'>http://json-schema.org/latest/json-schema-validation.html#anchor17</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor17">http://json-schema.org/latest/json-schema-validation.html#anchor17</a>.
 	 *
 	 * @return The value of the <property>maximum</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -469,7 +469,7 @@ public class ParameterInfo {
 	/**
 	 * Bean property setter:  <property>maximum</property>.
 	 * <p>
-	 * See <a href='http://json-schema.org/latest/json-schema-validation.html#anchor17'>http://json-schema.org/latest/json-schema-validation.html#anchor17</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor17">http://json-schema.org/latest/json-schema-validation.html#anchor17</a>.
 	 *
 	 * @param maximum The new value for the <property>maximum</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -482,7 +482,7 @@ public class ParameterInfo {
 	/**
 	 * Bean property getter:  <property>exclusiveMaximum</property>.
 	 * <p>
-	 * See <a href='http://json-schema.org/latest/json-schema-validation.html#anchor17'>http://json-schema.org/latest/json-schema-validation.html#anchor17</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor17">http://json-schema.org/latest/json-schema-validation.html#anchor17</a>.
 	 *
 	 * @return The value of the <property>exclusiveMaximum</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -493,7 +493,7 @@ public class ParameterInfo {
 	/**
 	 * Bean property setter:  <property>exclusiveMaximum</property>.
 	 * <p>
-	 * See <a href='http://json-schema.org/latest/json-schema-validation.html#anchor17'>http://json-schema.org/latest/json-schema-validation.html#anchor17</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor17">http://json-schema.org/latest/json-schema-validation.html#anchor17</a>.
 	 *
 	 * @param exclusiveMaximum The new value for the <property>exclusiveMaximum</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -506,7 +506,7 @@ public class ParameterInfo {
 	/**
 	 * Bean property getter:  <property>minimum</property>.
 	 * <p>
-	 * See <a href='http://json-schema.org/latest/json-schema-validation.html#anchor21'>http://json-schema.org/latest/json-schema-validation.html#anchor21</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor21">http://json-schema.org/latest/json-schema-validation.html#anchor21</a>.
 	 *
 	 * @return The value of the <property>minimum</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -517,7 +517,7 @@ public class ParameterInfo {
 	/**
 	 * Bean property setter:  <property>minimum</property>.
 	 * <p>
-	 * See <a href='http://json-schema.org/latest/json-schema-validation.html#anchor21'>http://json-schema.org/latest/json-schema-validation.html#anchor21</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor21">http://json-schema.org/latest/json-schema-validation.html#anchor21</a>.
 	 *
 	 * @param minimum The new value for the <property>minimum</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -530,7 +530,7 @@ public class ParameterInfo {
 	/**
 	 * Bean property getter:  <property>exclusiveMinimum</property>.
 	 * <p>
-	 * See <a href='http://json-schema.org/latest/json-schema-validation.html#anchor21'>http://json-schema.org/latest/json-schema-validation.html#anchor21</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor21">http://json-schema.org/latest/json-schema-validation.html#anchor21</a>.
 	 *
 	 * @return The value of the <property>exclusiveMinimum</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -541,7 +541,7 @@ public class ParameterInfo {
 	/**
 	 * Bean property setter:  <property>exclusiveMinimum</property>.
 	 * <p>
-	 * See <a href='http://json-schema.org/latest/json-schema-validation.html#anchor21'>http://json-schema.org/latest/json-schema-validation.html#anchor21</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor21">http://json-schema.org/latest/json-schema-validation.html#anchor21</a>.
 	 *
 	 * @param exclusiveMinimum The new value for the <property>exclusiveMinimum</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -554,7 +554,7 @@ public class ParameterInfo {
 	/**
 	 * Bean property getter:  <property>maxLength</property>.
 	 * <p>
-	 * See <a href='http://json-schema.org/latest/json-schema-validation.html#anchor26'>http://json-schema.org/latest/json-schema-validation.html#anchor26</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor26">http://json-schema.org/latest/json-schema-validation.html#anchor26</a>.
 	 *
 	 * @return The value of the <property>maxLength</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -565,7 +565,7 @@ public class ParameterInfo {
 	/**
 	 * Bean property setter:  <property>maxLength</property>.
 	 * <p>
-	 * See <a href='http://json-schema.org/latest/json-schema-validation.html#anchor26'>http://json-schema.org/latest/json-schema-validation.html#anchor26</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor26">http://json-schema.org/latest/json-schema-validation.html#anchor26</a>.
 	 *
 	 * @param maxLength The new value for the <property>maxLength</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -578,7 +578,7 @@ public class ParameterInfo {
 	/**
 	 * Bean property getter:  <property>minLength</property>.
 	 * <p>
-	 * See <a href='http://json-schema.org/latest/json-schema-validation.html#anchor29'>http://json-schema.org/latest/json-schema-validation.html#anchor29</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor29">http://json-schema.org/latest/json-schema-validation.html#anchor29</a>.
 	 *
 	 * @return The value of the <property>minLength</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -589,7 +589,7 @@ public class ParameterInfo {
 	/**
 	 * Bean property setter:  <property>minLength</property>.
 	 * <p>
-	 * See <a href='http://json-schema.org/latest/json-schema-validation.html#anchor29'>http://json-schema.org/latest/json-schema-validation.html#anchor29</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor29">http://json-schema.org/latest/json-schema-validation.html#anchor29</a>.
 	 *
 	 * @param minLength The new value for the <property>minLength</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -602,7 +602,7 @@ public class ParameterInfo {
 	/**
 	 * Bean property getter:  <property>pattern</property>.
 	 * <p>
-	 * See <a href='http://json-schema.org/latest/json-schema-validation.html#anchor33'>http://json-schema.org/latest/json-schema-validation.html#anchor33</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor33">http://json-schema.org/latest/json-schema-validation.html#anchor33</a>.
 	 *
 	 * @return The value of the <property>pattern</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -613,7 +613,7 @@ public class ParameterInfo {
 	/**
 	 * Bean property setter:  <property>pattern</property>.
 	 * <p>
-	 * See <a href='http://json-schema.org/latest/json-schema-validation.html#anchor33'>http://json-schema.org/latest/json-schema-validation.html#anchor33</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor33">http://json-schema.org/latest/json-schema-validation.html#anchor33</a>.
 	 *
 	 * @param pattern The new value for the <property>pattern</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -626,7 +626,7 @@ public class ParameterInfo {
 	/**
 	 * Bean property getter:  <property>maxItems</property>.
 	 * <p>
-	 * See <a href='http://json-schema.org/latest/json-schema-validation.html#anchor42'>http://json-schema.org/latest/json-schema-validation.html#anchor42</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor42">http://json-schema.org/latest/json-schema-validation.html#anchor42</a>.
 	 *
 	 * @return The value of the <property>maxItems</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -637,7 +637,7 @@ public class ParameterInfo {
 	/**
 	 * Bean property setter:  <property>maxItems</property>.
 	 * <p>
-	 * See <a href='http://json-schema.org/latest/json-schema-validation.html#anchor42'>http://json-schema.org/latest/json-schema-validation.html#anchor42</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor42">http://json-schema.org/latest/json-schema-validation.html#anchor42</a>.
 	 *
 	 * @param maxItems The new value for the <property>maxItems</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -650,7 +650,7 @@ public class ParameterInfo {
 	/**
 	 * Bean property getter:  <property>minItems</property>.
 	 * <p>
-	 * See <a href='http://json-schema.org/latest/json-schema-validation.html#anchor45'>http://json-schema.org/latest/json-schema-validation.html#anchor45</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor45">http://json-schema.org/latest/json-schema-validation.html#anchor45</a>.
 	 *
 	 * @return The value of the <property>minItems</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -661,7 +661,7 @@ public class ParameterInfo {
 	/**
 	 * Bean property setter:  <property>minItems</property>.
 	 * <p>
-	 * See <a href='http://json-schema.org/latest/json-schema-validation.html#anchor45'>http://json-schema.org/latest/json-schema-validation.html#anchor45</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor45">http://json-schema.org/latest/json-schema-validation.html#anchor45</a>.
 	 *
 	 * @param minItems The new value for the <property>minItems</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -674,7 +674,7 @@ public class ParameterInfo {
 	/**
 	 * Bean property getter:  <property>uniqueItems</property>.
 	 * <p>
-	 * See <a href='http://json-schema.org/latest/json-schema-validation.html#anchor49'>http://json-schema.org/latest/json-schema-validation.html#anchor49</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor49">http://json-schema.org/latest/json-schema-validation.html#anchor49</a>.
 	 *
 	 * @return The value of the <property>uniqueItems</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -685,7 +685,7 @@ public class ParameterInfo {
 	/**
 	 * Bean property setter:  <property>uniqueItems</property>.
 	 * <p>
-	 * See <a href='http://json-schema.org/latest/json-schema-validation.html#anchor49'>http://json-schema.org/latest/json-schema-validation.html#anchor49</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor49">http://json-schema.org/latest/json-schema-validation.html#anchor49</a>.
 	 *
 	 * @param uniqueItems The new value for the <property>uniqueItems</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -698,7 +698,7 @@ public class ParameterInfo {
 	/**
 	 * Bean property getter:  <property>enum</property>.
 	 * <p>
-	 * See <a href='http://json-schema.org/latest/json-schema-validation.html#anchor76'>http://json-schema.org/latest/json-schema-validation.html#anchor76</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor76">http://json-schema.org/latest/json-schema-validation.html#anchor76</a>.
 	 *
 	 * @return The value of the <property>enum</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -709,7 +709,7 @@ public class ParameterInfo {
 	/**
 	 * Bean property setter:  <property>enum</property>.
 	 * <p>
-	 * See <a href='http://json-schema.org/latest/json-schema-validation.html#anchor76'>http://json-schema.org/latest/json-schema-validation.html#anchor76</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor76">http://json-schema.org/latest/json-schema-validation.html#anchor76</a>.
 	 *
 	 * @param _enum The new value for the <property>enum</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -722,7 +722,7 @@ public class ParameterInfo {
 	/**
 	 * Bean property adder:  <property>enum</property>.
 	 * <p>
-	 * See <a href='http://json-schema.org/latest/json-schema-validation.html#anchor76'>http://json-schema.org/latest/json-schema-validation.html#anchor76</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor76">http://json-schema.org/latest/json-schema-validation.html#anchor76</a>.
 	 *
 	 * @param _enum The new values to add to the <property>enum</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -735,7 +735,7 @@ public class ParameterInfo {
 	/**
 	 * Bean property adder:  <property>enum</property>.
 	 * <p>
-	 * See <a href='http://json-schema.org/latest/json-schema-validation.html#anchor76'>http://json-schema.org/latest/json-schema-validation.html#anchor76</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor76">http://json-schema.org/latest/json-schema-validation.html#anchor76</a>.
 	 *
 	 * @param _enum The new values to add to the <property>enum</property> property on this bean.
 	 * @return This object (for method chaining).
@@ -751,7 +751,7 @@ public class ParameterInfo {
 	/**
 	 * Bean property getter:  <property>multipleOf</property>.
 	 * <p>
-	 * See <a href='http://json-schema.org/latest/json-schema-validation.html#anchor14'>http://json-schema.org/latest/json-schema-validation.html#anchor14</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor14">http://json-schema.org/latest/json-schema-validation.html#anchor14</a>.
 	 *
 	 * @return The value of the <property>multipleOf</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
@@ -762,7 +762,7 @@ public class ParameterInfo {
 	/**
 	 * Bean property setter:  <property>multipleOf</property>.
 	 * <p>
-	 * See <a href='http://json-schema.org/latest/json-schema-validation.html#anchor14'>http://json-schema.org/latest/json-schema-validation.html#anchor14</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor14">http://json-schema.org/latest/json-schema-validation.html#anchor14</a>.
 	 *
 	 * @param multipleOf The new value for the <property>multipleOf</property> property on this bean.
 	 * @return This object (for method chaining).
