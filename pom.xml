@@ -127,6 +127,7 @@
 						<exclude>**/.idea</exclude>
 						<exclude>**/*.iml</exclude>
 						<exclude>**/*.classpath</exclude>
+						<exclude>**/*.settings</exclude>
 						<exclude>**/*.log.*</exclude>
 						<exclude>**/target/**</exclude>
 						<exclude>DEPENDENCIES</exclude>
