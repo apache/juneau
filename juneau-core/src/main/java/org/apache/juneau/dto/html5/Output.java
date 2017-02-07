@@ -15,14 +15,14 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a href='https://www.w3.org/TR/html5/forms.html#the-output-element'>&lt;output&gt;</a> element.
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#the-output-element">&lt;output&gt;</a> element.
  * <p>
  */
 @Bean(typeName="output")
 public class Output extends HtmlElementMixed {
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-output-for'>for</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-output-for">for</a> attribute.
 	 * Specifies controls from which the output was calculated.
 	 * @param _for - The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -33,7 +33,7 @@ public class Output extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-fae-form'>form</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fae-form">form</a> attribute.
 	 * Associates the control with a form element.
 	 * @param form - The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -44,7 +44,7 @@ public class Output extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-fe-name'>name</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-name">name</a> attribute.
 	 * Name of form control to use for form submission and in the form.elements API.
 	 * @param name - The new value for this attribute.
 	 * @return This object (for method chaining).

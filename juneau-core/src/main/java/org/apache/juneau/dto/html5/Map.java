@@ -15,14 +15,14 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a href='https://www.w3.org/TR/html5/embedded-content-0.html#the-map-element'>&lt;map&gt;</a> element.
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#the-map-element">&lt;map&gt;</a> element.
  * <p>
  */
 @Bean(typeName="map")
 public class Map extends HtmlElementContainer {
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-map-name'>name</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-map-name">name</a> attribute.
 	 * Name of image map to reference from the usemap attribute.
 	 * @param name - The new value for this attribute.
 	 * @return This object (for method chaining).

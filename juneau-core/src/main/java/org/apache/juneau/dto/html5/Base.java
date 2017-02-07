@@ -17,14 +17,14 @@ import java.net.*;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a href='https://www.w3.org/TR/html5/document-metadata.html#the-base-element'>&lt;base&gt;</a> element.
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#the-base-element">&lt;base&gt;</a> element.
  * <p>
  */
 @Bean(typeName="base")
 public class Base extends HtmlElementEmpty {
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/document-metadata.html#attr-base-href'>href</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-base-href">href</a> attribute.
 	 * Document base URL.
 	 * @param href - The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
@@ -36,7 +36,7 @@ public class Base extends HtmlElementEmpty {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/document-metadata.html#attr-base-target'>target</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-base-target">target</a> attribute.
 	 * Default browsing context for hyperlink navigation and form submission.
 	 * @param target - The new value for this attribute.
 	 * @return This object (for method chaining).

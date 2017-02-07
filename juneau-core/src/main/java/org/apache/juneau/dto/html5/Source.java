@@ -17,14 +17,14 @@ import java.net.*;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a href='https://www.w3.org/TR/html5/embedded-content-0.html#the-source-element'>&lt;source&gt;</a> element.
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#the-source-element">&lt;source&gt;</a> element.
  * <p>
  */
 @Bean(typeName="source")
 public class Source extends HtmlElementEmpty {
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-source-src'>src</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-source-src">src</a> attribute.
 	 * Address of the resource.
 	 * @param src - The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
@@ -36,7 +36,7 @@ public class Source extends HtmlElementEmpty {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-source-type'>type</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-source-type">type</a> attribute.
 	 * Type of embedded resource.
 	 * @param type - The new value for this attribute.
 	 * @return This object (for method chaining).

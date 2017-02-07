@@ -15,14 +15,14 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a href='https://www.w3.org/TR/html5/sections.html#the-body-element'>&lt;body&gt;</a> element.
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/sections.html#the-body-element">&lt;body&gt;</a> element.
  * <p>
  */
 @Bean(typeName="body")
 public class Body extends HtmlElementMixed {
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-window-onafterprint'>onafterprint</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-window-onafterprint">onafterprint</a> attribute.
 	 * //onbeforeprint https://www.w3.org/TR/html5/webappapis.html#handler-window-onbeforeprint.
 	 * @param onafterprint - The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -33,7 +33,7 @@ public class Body extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-window-onbeforeunload'>onbeforeunload</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-window-onbeforeunload">onbeforeunload</a> attribute.
 	 * //onhashchange https://www.w3.org/TR/html5/webappapis.html#handler-window-onhashchange.
 	 * @param onbeforeunload - The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -44,7 +44,7 @@ public class Body extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-window-onmessage'>onmessage</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-window-onmessage">onmessage</a> attribute.
 	 * //onoffline https://www.w3.org/TR/html5/webappapis.html#handler-window-onoffline.
 	 * @param onmessage - The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -55,7 +55,7 @@ public class Body extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-window-ononline'>ononline</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-window-ononline">ononline</a> attribute.
 	 * //onpagehide https://www.w3.org/TR/html5/webappapis.html#handler-window-onpagehide.
 	 * @param ononline - The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -66,7 +66,7 @@ public class Body extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-window-onpageshow'>onpageshow</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-window-onpageshow">onpageshow</a> attribute.
 	 * //onpopstate https://www.w3.org/TR/html5/webappapis.html#handler-window-onpopstate.
 	 * @param onpageshow - The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -77,7 +77,7 @@ public class Body extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-window-onstorage'>onstorage</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-window-onstorage">onstorage</a> attribute.
 	 * //onunload https://www.w3.org/TR/html5/webappapis.html#handler-window-onunload.
 	 * @param onstorage - The new value for this attribute.
 	 * @return This object (for method chaining).

@@ -17,14 +17,14 @@ import java.net.*;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a href='https://www.w3.org/TR/html5/embedded-content-0.html#the-embed-element'>&lt;embed&gt;</a> element.
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#the-embed-element">&lt;embed&gt;</a> element.
  * <p>
  */
 @Bean(typeName="embed")
 public class Embed extends HtmlElementEmpty {
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-height'>height</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-height">height</a> attribute.
 	 * Vertical dimension.
 	 * @param height - The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
@@ -36,7 +36,7 @@ public class Embed extends HtmlElementEmpty {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-embed-src'>src</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-embed-src">src</a> attribute.
 	 * Address of the resource.
 	 * @param src - The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
@@ -48,7 +48,7 @@ public class Embed extends HtmlElementEmpty {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-embed-type'>type</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-embed-type">type</a> attribute.
 	 * Type of embedded resource.
 	 * @param type - The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -59,7 +59,7 @@ public class Embed extends HtmlElementEmpty {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-width'>width</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-width">width</a> attribute.
 	 * Horizontal dimension.
 	 * @param width - The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.

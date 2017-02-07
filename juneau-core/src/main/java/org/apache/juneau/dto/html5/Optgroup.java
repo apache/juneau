@@ -15,14 +15,14 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a href='https://www.w3.org/TR/html5/forms.html#the-optgroup-element'>&lt;optgroup&gt;</a> element.
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#the-optgroup-element">&lt;optgroup&gt;</a> element.
  * <p>
  */
 @Bean(typeName="optgroup")
 public class Optgroup extends HtmlElementContainer {
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-optgroup-disabled'>disabled</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-optgroup-disabled">disabled</a> attribute.
 	 * Whether the form control is disabled.
 	 * @param disabled - The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
@@ -34,7 +34,7 @@ public class Optgroup extends HtmlElementContainer {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-optgroup-label'>label</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-optgroup-label">label</a> attribute.
 	 * User-visible label.
 	 * @param label - The new value for this attribute.
 	 * @return This object (for method chaining).

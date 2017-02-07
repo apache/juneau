@@ -17,14 +17,14 @@ import java.net.*;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a href='https://www.w3.org/TR/html5/embedded-content-0.html#the-area-element'>&lt;area&gt;</a> element.
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#the-area-element">&lt;area&gt;</a> element.
  * <p>
  */
 @Bean(typeName="area")
 public class Area extends HtmlElementEmpty {
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-area-alt'>alt</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-area-alt">alt</a> attribute.
 	 * Replacement text for use when images are not available.
 	 * @param alt - The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -35,7 +35,7 @@ public class Area extends HtmlElementEmpty {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-area-coords'>coords</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-area-coords">coords</a> attribute.
 	 * Coordinates for the shape to be created in an image map.
 	 * @param coords - The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -46,7 +46,7 @@ public class Area extends HtmlElementEmpty {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/links.html#attr-hyperlink-download'>download</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-download">download</a> attribute.
 	 * Whether to download the resource instead of navigating to it, and its file name if so.
 	 * @param download - The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
@@ -58,7 +58,7 @@ public class Area extends HtmlElementEmpty {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/links.html#attr-hyperlink-href'>href</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-href">href</a> attribute.
 	 * Address of the hyperlink.
 	 * @param href - The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
@@ -70,7 +70,7 @@ public class Area extends HtmlElementEmpty {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/links.html#attr-hyperlink-hreflang'>hreflang</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-hreflang">hreflang</a> attribute.
 	 * Language of the linked resource.
 	 * @param hreflang - The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -81,7 +81,7 @@ public class Area extends HtmlElementEmpty {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/links.html#attr-hyperlink-rel'>rel</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-rel">rel</a> attribute.
 	 * Relationship between the document containing the hyperlink and the destination resource.
 	 * @param rel - The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -92,7 +92,7 @@ public class Area extends HtmlElementEmpty {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-area-shape'>shape</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-area-shape">shape</a> attribute.
 	 * The kind of shape to be created in an image map.
 	 * @param shape - The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -103,7 +103,7 @@ public class Area extends HtmlElementEmpty {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/links.html#attr-hyperlink-target'>target</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-target">target</a> attribute.
 	 * Browsing context for hyperlink navigation.
 	 * @param target - The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -114,7 +114,7 @@ public class Area extends HtmlElementEmpty {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/links.html#attr-hyperlink-type'>type</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-type">type</a> attribute.
 	 * Hint for the type of the referenced resource.
 	 * @param type - The new value for this attribute.
 	 * @return This object (for method chaining).

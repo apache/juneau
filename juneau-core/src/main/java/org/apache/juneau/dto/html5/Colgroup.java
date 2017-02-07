@@ -15,14 +15,14 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a href='https://www.w3.org/TR/html5/tabular-data.html#the-colgroup-element'>&lt;colgroup&gt;</a> element.
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#the-colgroup-element">&lt;colgroup&gt;</a> element.
  * <p>
  */
 @Bean(typeName="colgroup")
 public class Colgroup extends HtmlElementContainer {
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/tabular-data.html#attr-colgroup-span'>span</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-colgroup-span">span</a> attribute.
 	 * Number of columns spanned by the element.
 	 * @param span - The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.

@@ -15,14 +15,14 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a href='https://www.w3.org/TR/html5/forms.html#the-label-element'>&lt;label&gt;</a> element.
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#the-label-element">&lt;label&gt;</a> element.
  * <p>
  */
 @Bean(typeName="label")
 public class Label extends HtmlElementMixed {
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-label-for'>for</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-label-for">for</a> attribute.
 	 * Associate the label with form control.
 	 * @param _for - The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -33,7 +33,7 @@ public class Label extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-fae-form'>form</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fae-form">form</a> attribute.
 	 * Associates the control with a form element.
 	 * @param form - The new value for this attribute.
 	 * @return This object (for method chaining).

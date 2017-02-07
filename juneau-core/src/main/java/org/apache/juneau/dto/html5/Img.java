@@ -17,13 +17,13 @@ import java.net.*;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a href='https://www.w3.org/TR/html5/embedded-content-0.html#the-img-element'>&lt;img&gt;</a> element.
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#the-img-element">&lt;img&gt;</a> element.
  */
 @Bean(typeName="img")
 public class Img extends HtmlElementEmpty {
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-img-alt'>alt</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-img-alt">alt</a> attribute.
 	 * Replacement text for use when images are not available.
 	 * @param alt - The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -34,7 +34,7 @@ public class Img extends HtmlElementEmpty {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-img-crossorigin'>crossorigin</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-img-crossorigin">crossorigin</a> attribute.
 	 * How the element handles crossorigin requests.
 	 * @param crossorigin - The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -45,7 +45,7 @@ public class Img extends HtmlElementEmpty {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-height'>height</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-height">height</a> attribute.
 	 * Vertical dimension.
 	 * @param height - The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
@@ -57,7 +57,7 @@ public class Img extends HtmlElementEmpty {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-img-ismap'>ismap</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-img-ismap">ismap</a> attribute.
 	 * Whether the image is a server-side image map.
 	 * @param ismap - The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
@@ -69,7 +69,7 @@ public class Img extends HtmlElementEmpty {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-img-src'>src</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-img-src">src</a> attribute.
 	 * Address of the resource.
 	 * @param src - The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
@@ -81,7 +81,7 @@ public class Img extends HtmlElementEmpty {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-hyperlink-usemap'>usemap</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-hyperlink-usemap">usemap</a> attribute.
 	 * Name of image map to use.
 	 * @param usemap - The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -92,7 +92,7 @@ public class Img extends HtmlElementEmpty {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-width'>width</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-width">width</a> attribute.
 	 * Horizontal dimension.
 	 * @param width - The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.

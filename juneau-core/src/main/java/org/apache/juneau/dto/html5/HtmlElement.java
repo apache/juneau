@@ -86,7 +86,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/editing.html#the-accesskey-attribute'>accesskey</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/editing.html#the-accesskey-attribute">accesskey</a> attribute.
 	 * @param accesskey - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -96,7 +96,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/dom.html#classes'>class</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/dom.html#classes">class</a> attribute.
 	 * @param _class - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -106,7 +106,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/editing.html#attr-contenteditable'>contenteditable</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/editing.html#attr-contenteditable">contenteditable</a> attribute.
 	 * @param contenteditable - The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
@@ -117,7 +117,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/dom.html#the-dir-attribute'>dir</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/dom.html#the-dir-attribute">dir</a> attribute.
 	 * @param dir - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -127,7 +127,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/editing.html#the-hidden-attribute'>hidden</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/editing.html#the-hidden-attribute">hidden</a> attribute.
 	 * @param hidden - The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
@@ -138,7 +138,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/dom.html#the-id-attribute'>id</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/dom.html#the-id-attribute">id</a> attribute.
 	 * @param id - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -148,7 +148,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/dom.html#attr-lang'>lang</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/dom.html#attr-lang">lang</a> attribute.
 	 * @param lang - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -158,7 +158,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-onabort'>onabort</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onabort">onabort</a> attribute.
 	 * @param onabort - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -168,7 +168,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-onblur'>onblur</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onblur">onblur</a> attribute.
 	 * @param onblur - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -178,7 +178,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-oncancel'>oncancel</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-oncancel">oncancel</a> attribute.
 	 * @param oncancel - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -188,7 +188,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-oncanplay'>oncanplay</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-oncanplay">oncanplay</a> attribute.
 	 * @param oncanplay - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -198,7 +198,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-oncanplaythrough'>oncanplaythrough</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-oncanplaythrough">oncanplaythrough</a> attribute.
 	 * @param oncanplaythrough - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -208,7 +208,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-onchange'>onchange</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onchange">onchange</a> attribute.
 	 * @param onchange - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -218,7 +218,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-onclick'>onclick</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onclick">onclick</a> attribute.
 	 * @param onclick - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -228,7 +228,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-oncuechange'>oncuechange</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-oncuechange">oncuechange</a> attribute.
 	 * @param oncuechange - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -238,7 +238,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-ondblclick'>ondblclick</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-ondblclick">ondblclick</a> attribute.
 	 * @param ondblclick - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -248,7 +248,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-ondurationchange'>ondurationchange</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-ondurationchange">ondurationchange</a> attribute.
 	 * @param ondurationchange - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -258,7 +258,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-onemptied'>onemptied</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onemptied">onemptied</a> attribute.
 	 * @param onemptied - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -268,7 +268,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-onended'>onended</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onended">onended</a> attribute.
 	 * @param onended - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -278,7 +278,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-onerror'>onerror</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onerror">onerror</a> attribute.
 	 * @param onerror - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -288,7 +288,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-onfocus'>onfocus</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onfocus">onfocus</a> attribute.
 	 * @param onfocus - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -298,7 +298,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-oninput'>oninput</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-oninput">oninput</a> attribute.
 	 * @param oninput - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -308,7 +308,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-oninvalid'>oninvalid</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-oninvalid">oninvalid</a> attribute.
 	 * @param oninvalid - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -318,7 +318,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-onkeydown'>onkeydown</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onkeydown">onkeydown</a> attribute.
 	 * @param onkeydown - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -328,7 +328,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-onkeypress'>onkeypress</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onkeypress">onkeypress</a> attribute.
 	 * @param onkeypress - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -338,7 +338,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-onkeyup'>onkeyup</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onkeyup">onkeyup</a> attribute.
 	 * @param onkeyup - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -348,7 +348,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-onload'>onload</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onload">onload</a> attribute.
 	 * @param onload - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -358,7 +358,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-onloadeddata'>onloadeddata</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onloadeddata">onloadeddata</a> attribute.
 	 * @param onloadeddata - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -368,7 +368,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-onloadedmetadata'>onloadedmetadata</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onloadedmetadata">onloadedmetadata</a> attribute.
 	 * @param onloadedmetadata - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -378,7 +378,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-onloadstart'>onloadstart</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onloadstart">onloadstart</a> attribute.
 	 * @param onloadstart - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -388,7 +388,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-onmousedown'>onmousedown</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onmousedown">onmousedown</a> attribute.
 	 * @param onmousedown - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -398,7 +398,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-onmouseenter'>onmouseenter</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onmouseenter">onmouseenter</a> attribute.
 	 * @param onmouseenter - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -408,7 +408,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-onmouseleave'>onmouseleave</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onmouseleave">onmouseleave</a> attribute.
 	 * @param onmouseleave - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -418,7 +418,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-onmousemove'>onmousemove</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onmousemove">onmousemove</a> attribute.
 	 * @param onmousemove - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -428,7 +428,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-onmouseout'>onmouseout</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onmouseout">onmouseout</a> attribute.
 	 * @param onmouseout - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -438,7 +438,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-onmouseover'>onmouseover</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onmouseover">onmouseover</a> attribute.
 	 * @param onmouseover - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -448,7 +448,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-onmouseup'>onmouseup</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onmouseup">onmouseup</a> attribute.
 	 * @param onmouseup - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -458,7 +458,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-onmousewheel'>onmousewheel</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onmousewheel">onmousewheel</a> attribute.
 	 * @param onmousewheel - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -468,7 +468,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-onpause'>onpause</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onpause">onpause</a> attribute.
 	 * @param onpause - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -478,7 +478,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-onplay'>onplay</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onplay">onplay</a> attribute.
 	 * @param onplay - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -488,7 +488,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-onplaying'>onplaying</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onplaying">onplaying</a> attribute.
 	 * @param onplaying - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -498,7 +498,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-onprogress'>onprogress</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onprogress">onprogress</a> attribute.
 	 * @param onprogress - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -508,7 +508,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-onratechange'>onratechange</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onratechange">onratechange</a> attribute.
 	 * @param onratechange - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -518,7 +518,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-onreset'>onreset</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onreset">onreset</a> attribute.
 	 * @param onreset - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -528,7 +528,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-onresize'>onresize</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onresize">onresize</a> attribute.
 	 * @param onresize - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -538,7 +538,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-onscroll'>onscroll</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onscroll">onscroll</a> attribute.
 	 * @param onscroll - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -548,7 +548,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-onseeked'>onseeked</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onseeked">onseeked</a> attribute.
 	 * @param onseeked - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -558,7 +558,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-onseeking'>onseeking</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onseeking">onseeking</a> attribute.
 	 * @param onseeking - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -568,7 +568,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-onselect'>onselect</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onselect">onselect</a> attribute.
 	 * @param onselect - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -578,7 +578,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-onshow'>onshow</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onshow">onshow</a> attribute.
 	 * @param onshow - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -588,7 +588,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-onstalled'>onstalled</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onstalled">onstalled</a> attribute.
 	 * @param onstalled - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -598,7 +598,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-onsubmit'>onsubmit</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onsubmit">onsubmit</a> attribute.
 	 * @param onsubmit - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -608,7 +608,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-onsuspend'>onsuspend</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onsuspend">onsuspend</a> attribute.
 	 * @param onsuspend - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -618,7 +618,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-ontimeupdate'>ontimeupdate</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-ontimeupdate">ontimeupdate</a> attribute.
 	 * @param ontimeupdate - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -628,7 +628,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-ontoggle'>ontoggle</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-ontoggle">ontoggle</a> attribute.
 	 * @param ontoggle - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -638,7 +638,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-onvolumechange'>onvolumechange</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onvolumechange">onvolumechange</a> attribute.
 	 * @param onvolumechange - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -648,7 +648,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/webappapis.html#handler-onwaiting'>onwaiting</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-onwaiting">onwaiting</a> attribute.
 	 * @param onwaiting - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -658,7 +658,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/editing.html#attr-spellcheck'>spellcheck</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/editing.html#attr-spellcheck">spellcheck</a> attribute.
 	 * @param spellcheck - The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
@@ -669,7 +669,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/dom.html#the-style-attribute'>style</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/dom.html#the-style-attribute">style</a> attribute.
 	 * @param style - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -679,7 +679,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/editing.html#attr-tabindex'>tabindex</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/editing.html#attr-tabindex">tabindex</a> attribute.
 	 * @param tabindex - The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
@@ -690,7 +690,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/dom.html#attr-title'>title</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/dom.html#attr-title">title</a> attribute.
 	 * @param title - The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
@@ -700,7 +700,7 @@ public abstract class HtmlElement {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/dom.html#attr-translate'>translate</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/dom.html#attr-translate">translate</a> attribute.
 	 * @param translate - The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).

@@ -15,7 +15,7 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a href='https://www.w3.org/TR/html5/text-level-semantics.html#the-rtc-element'>&lt;rtc&gt;</a> element.
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#the-rtc-element">&lt;rtc&gt;</a> element.
  * <p>
  */
 @Bean(typeName="rtc")

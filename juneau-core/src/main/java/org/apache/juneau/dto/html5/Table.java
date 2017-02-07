@@ -15,14 +15,14 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a href='https://www.w3.org/TR/html5/tabular-data.html#the-table-element'>&lt;table&gt;</a> element.
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#the-table-element">&lt;table&gt;</a> element.
  * <p>
  */
 @Bean(typeName="table")
 public class Table extends HtmlElementContainer {
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/tabular-data.html#attr-table-border'>border</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-table-border">border</a> attribute.
 	 * //sortable - Enables a sorting interface for the table.
 	 * @param border - The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.

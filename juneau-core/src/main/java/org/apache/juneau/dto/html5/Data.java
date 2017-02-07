@@ -15,14 +15,14 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a href='https://www.w3.org/TR/html5/text-level-semantics.html#the-data-element'>&lt;data&gt;</a> element.
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#the-data-element">&lt;data&gt;</a> element.
  * <p>
  */
 @Bean(typeName="data")
 public class Data extends HtmlElementMixed {
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/text-level-semantics.html#attr-data-value'>value</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#attr-data-value">value</a> attribute.
 	 * Machine-readable value.
 	 * @param value - The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.

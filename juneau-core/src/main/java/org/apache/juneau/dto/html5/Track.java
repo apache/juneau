@@ -17,14 +17,14 @@ import java.net.*;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a href='https://www.w3.org/TR/html5/embedded-content-0.html#the-track-element'>&lt;track&gt;</a> element.
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#the-track-element">&lt;track&gt;</a> element.
  * <p>
  */
 @Bean(typeName="track")
 public class Track extends HtmlElementEmpty {
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-default'>default</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-default">default</a> attribute.
 	 * Enable the track if no other text track is more suitable.
 	 * @param _default - The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -35,7 +35,7 @@ public class Track extends HtmlElementEmpty {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-kind'>kind</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-kind">kind</a> attribute.
 	 * The type of text track.
 	 * @param kind - The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -46,7 +46,7 @@ public class Track extends HtmlElementEmpty {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-label'>label</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-label">label</a> attribute.
 	 * User-visible label.
 	 * @param label - The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -57,7 +57,7 @@ public class Track extends HtmlElementEmpty {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-src'>src</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-src">src</a> attribute.
 	 * Address of the resource.
 	 * @param src - The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
@@ -69,7 +69,7 @@ public class Track extends HtmlElementEmpty {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-srclang'>srclang</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-srclang">srclang</a> attribute.
 	 * Language of the text track.
 	 * @param srclang - The new value for this attribute.
 	 * @return This object (for method chaining).

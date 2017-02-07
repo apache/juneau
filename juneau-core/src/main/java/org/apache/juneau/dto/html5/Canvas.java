@@ -15,14 +15,14 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a href='https://www.w3.org/TR/html5/scripting-1.html#the-canvas-element'>&lt;canvas&gt;</a> element.
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#the-canvas-element">&lt;canvas&gt;</a> element.
  * <p>
  */
 @Bean(typeName="canvas")
 public class Canvas extends HtmlElementContainer {
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/scripting-1.html#attr-canvas-height'>height</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#attr-canvas-height">height</a> attribute.
 	 * Vertical dimension.
 	 * @param height - The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
@@ -34,7 +34,7 @@ public class Canvas extends HtmlElementContainer {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/scripting-1.html#attr-canvas-width'>width</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#attr-canvas-width">width</a> attribute.
 	 * Horizontal dimension.
 	 * @param width - The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.

@@ -15,14 +15,14 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a href='https://www.w3.org/TR/html5/grouping-content.html#the-ol-element'>&lt;ol&gt;</a> element.
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/grouping-content.html#the-ol-element">&lt;ol&gt;</a> element.
  * <p>
  */
 @Bean(typeName="ol")
 public class Ol extends HtmlElementContainer {
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/grouping-content.html#attr-ol-reversed'>reversed</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/grouping-content.html#attr-ol-reversed">reversed</a> attribute.
 	 * Number the list backwards..
 	 * @param reversed - The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
@@ -34,7 +34,7 @@ public class Ol extends HtmlElementContainer {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/grouping-content.html#attr-ol-start'>start</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/grouping-content.html#attr-ol-start">start</a> attribute.
 	 * Ordinal value of the first item.
 	 * @param start - The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
@@ -46,7 +46,7 @@ public class Ol extends HtmlElementContainer {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/grouping-content.html#attr-ol-type'>type</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/grouping-content.html#attr-ol-type">type</a> attribute.
 	 * Kind of list marker..
 	 * @param type - The new value for this attribute.
 	 * @return This object (for method chaining).

@@ -17,14 +17,14 @@ import java.net.*;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a href='https://www.w3.org/TR/html5/embedded-content-0.html#the-iframe-element'>&lt;iframe&gt;</a> element.
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#the-iframe-element">&lt;iframe&gt;</a> element.
  * <p>
  */
 @Bean(typeName="iframe")
 public class Iframe extends HtmlElementMixed {
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-height'>height</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-height">height</a> attribute.
 	 * Vertical dimension.
 	 * @param height - The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
@@ -36,7 +36,7 @@ public class Iframe extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-iframe-name'>name</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-iframe-name">name</a> attribute.
 	 * Name of nested browsing context.
 	 * @param name - The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -47,7 +47,7 @@ public class Iframe extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-iframe-sandbox'>sandbox</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-iframe-sandbox">sandbox</a> attribute.
 	 * Security rules for nested content.
 	 * @param sandbox - The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -58,7 +58,7 @@ public class Iframe extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-iframe-src'>src</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-iframe-src">src</a> attribute.
 	 * Address of the resource.
 	 * @param src - The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
@@ -70,7 +70,7 @@ public class Iframe extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-iframe-srcdoc'>srcdoc</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-iframe-srcdoc">srcdoc</a> attribute.
 	 * A document to render in the iframe.
 	 * @param srcdoc - The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -81,7 +81,7 @@ public class Iframe extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-width'>width</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-width">width</a> attribute.
 	 * Horizontal dimension.
 	 * @param width - The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.

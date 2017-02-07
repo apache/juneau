@@ -15,14 +15,14 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a href='https://www.w3.org/TR/html5/edits.html#the-del-element'>&lt;del&gt;</a> element.
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/edits.html#the-del-element">&lt;del&gt;</a> element.
  * <p>
  */
 @Bean(typeName="del")
 public class Del extends HtmlElementMixed {
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/edits.html#attr-mod-cite'>cite</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/edits.html#attr-mod-cite">cite</a> attribute.
 	 * Link to the source of the quotation or more information about the edit.
 	 * @param cite - The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -33,7 +33,7 @@ public class Del extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/edits.html#attr-mod-datetime'>datetime</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/edits.html#attr-mod-datetime">datetime</a> attribute.
 	 * Date and (optionally) time of the change.
 	 * @param datetime - The new value for this attribute.
 	 * @return This object (for method chaining).

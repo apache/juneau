@@ -15,14 +15,14 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a href='https://www.w3.org/TR/html5/embedded-content-0.html#the-object-element'>&lt;object&gt;</a> element.
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#the-object-element">&lt;object&gt;</a> element.
  * <p>
  */
 @Bean(typeName="object")
 public class Object2 extends HtmlElementMixed {
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-object-data'>data</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-object-data">data</a> attribute.
 	 * Address of the resource.
 	 * @param data - The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -33,7 +33,7 @@ public class Object2 extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/forms.html#attr-fae-form'>form</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fae-form">form</a> attribute.
 	 * Associates the control with a form element.
 	 * @param form - The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -44,7 +44,7 @@ public class Object2 extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-height'>height</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-height">height</a> attribute.
 	 * Vertical dimension.
 	 * @param height - The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
@@ -56,7 +56,7 @@ public class Object2 extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-object-name'>name</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-object-name">name</a> attribute.
 	 * Name of nested browsing context.
 	 * @param name - The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -67,7 +67,7 @@ public class Object2 extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-object-type'>type</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-object-type">type</a> attribute.
 	 * Type of embedded resource.
 	 * @param type - The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -78,7 +78,7 @@ public class Object2 extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-object-typemustmatch'>typemustmatch</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-object-typemustmatch">typemustmatch</a> attribute.
 	 * Whether the type attribute and the Content-Type value need to match for the resource to be used.
 	 * @param typemustmatch - The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
@@ -90,7 +90,7 @@ public class Object2 extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-hyperlink-usemap'>usemap</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-hyperlink-usemap">usemap</a> attribute.
 	 * Name of image map to use.
 	 * @param usemap - The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -101,7 +101,7 @@ public class Object2 extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-width'>width</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-width">width</a> attribute.
 	 * Horizontal dimension.
 	 * @param width - The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.

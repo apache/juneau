@@ -18,14 +18,14 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
- * DTO for an HTML <a href='https://www.w3.org/TR/html5/scripting-1.html#the-script-element'>&lt;script&gt;</a> element.
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#the-script-element">&lt;script&gt;</a> element.
  * <p>
  */
 @Bean(typeName="script")
 public class Script extends HtmlElementText {
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/scripting-1.html#attr-script-async'>async</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#attr-script-async">async</a> attribute.
 	 * Execute script asynchronously.
 	 * @param async - The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
@@ -37,7 +37,7 @@ public class Script extends HtmlElementText {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/scripting-1.html#attr-script-charset'>charset</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#attr-script-charset">charset</a> attribute.
 	 * Character encoding of the external script resource.
 	 * @param charset - The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -48,7 +48,7 @@ public class Script extends HtmlElementText {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/scripting-1.html#attr-script-crossorigin'>crossorigin</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#attr-script-crossorigin">crossorigin</a> attribute.
 	 * How the element handles crossorigin requests.
 	 * @param crossorigin - The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -59,7 +59,7 @@ public class Script extends HtmlElementText {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/scripting-1.html#attr-script-defer'>defer</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#attr-script-defer">defer</a> attribute.
 	 * Defer script execution.
 	 * @param defer - The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
@@ -71,7 +71,7 @@ public class Script extends HtmlElementText {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/scripting-1.html#attr-script-src'>src</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#attr-script-src">src</a> attribute.
 	 * Address of the resource.
 	 * @param src - The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
@@ -83,7 +83,7 @@ public class Script extends HtmlElementText {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/scripting-1.html#attr-script-type'>type</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#attr-script-type">type</a> attribute.
 	 * Type of embedded resource.
 	 * @param type - The new value for this attribute.
 	 * @return This object (for method chaining).

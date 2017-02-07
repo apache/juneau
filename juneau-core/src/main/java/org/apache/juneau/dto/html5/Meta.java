@@ -15,14 +15,14 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a href='https://www.w3.org/TR/html5/document-metadata.html#the-meta-element'>&lt;meta&gt;</a> element.
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#the-meta-element">&lt;meta&gt;</a> element.
  * <p>
  */
 @Bean(typeName="meta")
 public class Meta extends HtmlElementEmpty {
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/document-metadata.html#attr-meta-charset'>charset</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-meta-charset">charset</a> attribute.
 	 * Character encoding declaration.
 	 * @param charset - The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -33,7 +33,7 @@ public class Meta extends HtmlElementEmpty {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/document-metadata.html#attr-meta-content'>content</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-meta-content">content</a> attribute.
 	 * Value of the element.
 	 * @param content - The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -44,7 +44,7 @@ public class Meta extends HtmlElementEmpty {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/document-metadata.html#attr-meta-http-equiv'>http-equiv</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-meta-http-equiv">http-equiv</a> attribute.
 	 * Pragma directive.
 	 * @param httpequiv - The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -55,7 +55,7 @@ public class Meta extends HtmlElementEmpty {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/document-metadata.html#attr-meta-name'>name</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-meta-name">name</a> attribute.
 	 * Metadata name.
 	 * @param name - The new value for this attribute.
 	 * @return This object (for method chaining).

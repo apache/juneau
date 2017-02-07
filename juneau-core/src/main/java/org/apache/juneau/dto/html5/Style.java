@@ -16,14 +16,14 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
- * DTO for an HTML <a href='https://www.w3.org/TR/html5/document-metadata.html#the-style-element'>&lt;style&gt;</a> element.
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#the-style-element">&lt;style&gt;</a> element.
  * <p>
  */
 @Bean(typeName="style")
 public class Style extends HtmlElementText {
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/document-metadata.html#attr-style-media'>media</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-style-media">media</a> attribute.
 	 * Applicable media.
 	 * @param media - The new value for this attribute.
 	 * @return This object (for method chaining).
@@ -34,7 +34,7 @@ public class Style extends HtmlElementText {
 	}
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/document-metadata.html#attr-style-type'>type</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-style-type">type</a> attribute.
 	 * Type of embedded resource.
 	 * @param type - The new value for this attribute.
 	 * @return This object (for method chaining).

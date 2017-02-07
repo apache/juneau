@@ -15,14 +15,14 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a href='https://www.w3.org/TR/html5/text-level-semantics.html#the-time-element'>&lt;time&gt;</a> element.
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#the-time-element">&lt;time&gt;</a> element.
  * <p>
  */
 @Bean(typeName="time")
 public class Time extends HtmlElementMixed {
 
 	/**
-	 * <a class='doclink' href='https://www.w3.org/TR/html5/text-level-semantics.html#attr-time-datetime'>datetime</a> attribute.
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#attr-time-datetime">datetime</a> attribute.
 	 * Machine-readable value.
 	 * @param datetime - The new value for this attribute.
 	 * @return This object (for method chaining).

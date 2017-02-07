@@ -20,7 +20,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
- * DTO for an HTML <a href='https://www.w3.org/TR/html5/grouping-content.html#the-pre-element'>&lt;pre&gt;</a> element.
+ * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/grouping-content.html#the-pre-element">&lt;pre&gt;</a> element.
  * <p>
  */
 @Bean(typeName="pre")
