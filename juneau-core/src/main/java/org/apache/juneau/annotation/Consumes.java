@@ -40,7 +40,7 @@ import org.apache.juneau.parser.*;
  * </p>
  * <p>
  * 	The media types can also be <code>media-range</code> values per
- * 		<a href='http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1'>RFC2616/14.1</a>.
+ * 		<a class="doclink" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1">RFC2616/14.1</a>.
  * <p class='bcode'>
  * 	<jc>// Consumes any text</jc>
  * 	<ja>@Consumes</ja>(<js>"text\/*"</js>)
@@ -61,7 +61,7 @@ public @interface Consumes {
 	 * A comma-delimited list of media types that the parser can handle.
 	 * <p>
 	 * 	Can contain meta-characters per the <code>media-type</code> specification of
-	 * 	<a href='http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1'>RFC2616/14.1</a>
+	 * 	<a class="doclink" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1">RFC2616/14.1</a>
 	 * @return The media types that the parser can handle.
 	 */
 	String value() default "";

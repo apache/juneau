@@ -98,7 +98,7 @@ public class Link implements Comparable<Link> {
 	 * Same as {@link #setHref(String)} except allows for {@link MessageFormat} style arguments.
 	 *
 	 * @param href The new href.
-	 * @param args Optional message format arguments.
+	 * @param args Optional {@link MessageFormat}-style arguments.
 	 * @return This object (for method chaining).
 	 */
 	public Link setHref(String href, Object...args) {
