@@ -84,11 +84,11 @@ import org.apache.juneau.parser.*;
  * 	</tr>
  * </table>
  *
- * <h6 class='topic'>Configurable properties inherited from parent classes</h6>
+ * <h5 class='section'>Inherited configurable properties:</h5>
  * <ul class='javahierarchy'>
- * 	<li class='c'><a class='doclink' href='../BeanContext.html#ConfigProperties'>BeanContext</a> - Properties associated with handling beans on serializers and parsers.
+ * 	<li class='c'><a class="doclink" href="../BeanContext.html#ConfigProperties">BeanContext</a> - Properties associated with handling beans on serializers and parsers.
  * 	<ul>
- * 		<li class='c'><a class='doclink' href='../parser/ParserContext.html#ConfigProperties'>ParserContext</a> - Configurable properties common to all parsers.
+ * 		<li class='c'><a class="doclink" href="../parser/ParserContext.html#ConfigProperties">ParserContext</a> - Configurable properties common to all parsers.
  * 	</ul>
  * </ul>
  */
@@ -135,7 +135,10 @@ public class XmlParserContext extends ParserContext {
 	 * <p>
 	 * Associates an {@link XMLReporter} with this parser.
 	 * <p>
-	 * Note:  Reporters are not copied to new parsers during a clone.
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>Reporters are not copied to new parsers during a clone.
+	 * </ul>
 	 */
 	public static final String XML_reporter = "XmlParser.reporter";
 

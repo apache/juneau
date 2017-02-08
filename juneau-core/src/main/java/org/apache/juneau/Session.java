@@ -101,7 +101,7 @@ public abstract class Session {
 	 * Logs a warning message.
 	 *
 	 * @param msg The warning message.
-	 * @param args Optional printf arguments to replace in the error message.
+	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public final void addWarning(String msg, Object... args) {
 		if (warnings == null)

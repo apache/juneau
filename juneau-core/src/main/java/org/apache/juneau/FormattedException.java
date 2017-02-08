@@ -25,7 +25,7 @@ public class FormattedException extends Exception {
 	 * Constructor.
 	 *
 	 * @param message The {@link MessageFormat}-style message.
-	 * @param args The arguments in the message.
+	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public FormattedException(String message, Object...args) {
 		super(args.length == 0 ? message : MessageFormat.format(message, args));
@@ -36,7 +36,7 @@ public class FormattedException extends Exception {
 	 *
 	 * @param causedBy The cause of this exception.
 	 * @param message The {@link MessageFormat}-style message.
-	 * @param args The arguments in the message.
+	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public FormattedException(Throwable causedBy, String message, Object...args) {
 		this(message, args);

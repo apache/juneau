@@ -24,7 +24,7 @@ import org.junit.*;
  * Tests designed to serialize and parse objects to make sure we end up
  * with the same objects for all serializers and parsers.
  */
-@SuppressWarnings({"unchecked","serial","javadoc"})
+@SuppressWarnings({"serial","javadoc"})
 public class RoundTripPrimitivesBeansTest extends RoundTripTest {
 
 	public RoundTripPrimitivesBeansTest(String label, Serializer s, Parser p, int flags) throws Exception {
@@ -274,7 +274,7 @@ public class RoundTripPrimitivesBeansTest extends RoundTripTest {
 		}};
 		if (p == null)
 			return;
-		t = roundTrip(t, p.getBeanContext().createSession().getCollectionClassMeta(List.class, PrimitivesBean.class));
+		t = roundTrip(t, List.class, PrimitivesBean.class);
 
 		PrimitivesBean t2 = t.get(2);
 

@@ -18,7 +18,7 @@ import org.apache.juneau.rest.*;
 /**
  * Shortcut label for child resources.  Typically used in router resources.
  *
- * <h6 class='topic'>Example:</h6>
+ * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Instead of this...</jc>
  * 	<jk>new</jk> NameDescription(<jk>new</jk> Link(<js>"httpTool"</js>, uri + <js>"/httpTool"</js>), <js>"HTTP request test client"</js>);

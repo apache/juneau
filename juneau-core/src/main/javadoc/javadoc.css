@@ -673,3 +673,8 @@ h1.hidden {
 	font-weight: bold;
 }
 
+h5.section, h6.section {
+	color: #4e4e4e;
+	margin: 10px 0 5px 0;
+}
+

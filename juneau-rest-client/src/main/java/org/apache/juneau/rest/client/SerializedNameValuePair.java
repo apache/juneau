@@ -24,7 +24,7 @@ import org.apache.juneau.urlencoding.*;
  * Subclass of {@link NameValuePair} for serializing POJOs as URL-encoded form post entries
  * 	using the {@link UrlEncodingSerializer class}.
  *
- * <h6 class='topic'>Example:</h6>
+ * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	NameValuePairs params = <jk>new</jk> NameValuePairs()
  * 		.append(<jk>new</jk> SerializedNameValuePair(<js>"myPojo"</js>, pojo, UrlEncodingSerializer.<jsf>DEFAULT_SIMPLE</jsf>))

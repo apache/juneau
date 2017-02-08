@@ -18,7 +18,6 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.MediaType;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
@@ -27,11 +26,11 @@ import org.apache.juneau.transform.*;
 /**
  * Parses URL-encoded text into POJO models.
  *
- * <h6 class='topic'>Media types</h6>
+ * <h5 class='section'>Media types:</h5>
  * <p>
  * 	Handles <code>Content-Type</code> types: <code>application/x-www-form-urlencoded</code>
  *
- * <h6 class='topic'>Description</h6>
+ * <h5 class='section'>Description:</h5>
  * <p>
  * 	Parses URL-Encoded text (e.g. <js>"foo=bar&amp;baz=bing"</js>) into POJOs.
  * <p>
@@ -39,7 +38,7 @@ import org.apache.juneau.transform.*;
  * <p>
  * 	This parser uses a state machine, which makes it very fast and efficient.
  *
- * <h6 class='topic'>Configurable properties</h6>
+ * <h5 class='section'>Configurable properties:</h5>
  * <p>
  * 	This class has the following properties associated with it:
  * <ul>
@@ -429,17 +428,21 @@ public class UrlEncodingParser extends UonParser {
 	 * Parses a single query parameter value into the specified class type.
 	 *
 	 * @param in The input query string value.
-	 * @param type The class type of the object to create.
+	 * @param type The object type to create.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * @param args The type arguments of the class if it's a collection or map.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * 	<br>Ignored if the main type is not a map or collection.
 	 * @return A new instance of the specified type.
 	 * @throws ParseException
 	 */
-	public <T> T parseParameter(CharSequence in, ClassMeta<T> type) throws ParseException {
+	public <T> T parseParameter(CharSequence in, Type type, Type...args) throws ParseException {
 		if (in == null)
 			return null;
 		UonParserSession session = createParameterSession(in);
 		try {
 			UonReader r = session.getReader();
-			return super.parseAnything(session, type, r, null, true, null);
+			return (T)super.parseAnything(session, session.getClassMeta(type, args), r, null, true, null);
 		} catch (ParseException e) {
 			throw e;
 		} catch (Exception e) {
@@ -473,6 +476,31 @@ public class UrlEncodingParser extends UonParser {
 		}
 	}
 
+	/**
+	 * Same as {@link #parseParameter(CharSequence, Type, Type...)} except the type has already
+	 * been converted to a {@link ClassMeta} object.
+	 *
+	 * @param in The input query string value.
+	 * @param type The class type of the object to create.
+	 * @return A new instance of the specified type.
+	 * @throws ParseException
+	 */
+	public <T> T parseParameter(CharSequence in, ClassMeta<T> type) throws ParseException {
+		if (in == null)
+			return null;
+		UonParserSession session = createParameterSession(in);
+		try {
+			UonReader r = session.getReader();
+			return super.parseAnything(session, type, r, null, true, null);
+		} catch (ParseException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new ParseException(session, e);
+		} finally {
+			session.close();
+		}
+	}
+
 	//--------------------------------------------------------------------------------
 	// Overridden methods
 	//--------------------------------------------------------------------------------
@@ -485,7 +513,6 @@ public class UrlEncodingParser extends UonParser {
 	@Override /* Parser */
 	protected <T> T doParse(ParserSession session, ClassMeta<T> type) throws Exception {
 		UrlEncodingParserSession s = (UrlEncodingParserSession)session;
-		type = session.normalizeClassMeta(type);
 		UonReader r = s.getReader();
 		T o = parseAnything(s, type, r, s.getOuter());
 		return o;
@@ -505,7 +532,7 @@ public class UrlEncodingParser extends UonParser {
 		UonReader r = s.getReader();
 		if (r.peek() == '?')
 			r.read();
-		m = parseIntoMap(s, r, m, session.getClassMeta(keyType), session.getClassMeta(valueType));
+		m = parseIntoMap(s, r, m, (ClassMeta<K>)session.getClassMeta(keyType), (ClassMeta<V>)session.getClassMeta(valueType));
 		return m;
 	}
 

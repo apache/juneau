@@ -38,7 +38,7 @@ public @interface Pojo {
 	 * 	<li>Any other class.  Will get interpreted as a {@link SurrogateSwap}.
 	 * </ul>
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p>
 	 * 	In this case, a swap is being applied to a bean that will force it to be serialized as a <code>String</code>
 	 * <p class='bcode'>

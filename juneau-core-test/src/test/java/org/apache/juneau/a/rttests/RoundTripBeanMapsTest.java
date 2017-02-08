@@ -19,7 +19,6 @@ import java.util.*;
 
 import javax.xml.datatype.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.json.annotation.*;
@@ -97,21 +96,21 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		}};
 
 		l.get(0).setF1("bar");
-		l = roundTripCollection(l, List.class, IBean.class);
+		l = roundTrip(l, List.class, IBean.class);
 		assertEquals("bar", l.get(0).getF1());
-		l = roundTripCollection(l, LinkedList.class, IBean.class);
+		l = roundTrip(l, LinkedList.class, IBean.class);
 		assertEquals("bar", l.get(0).getF1());
 
 		l.get(0).setF1("baz");
-		l = roundTripCollection(l, List.class, ABean.class);
+		l = roundTrip(l, List.class, ABean.class);
 		assertEquals("baz", l.get(0).getF1());
-		l = roundTripCollection(l, LinkedList.class, ABean.class);
+		l = roundTrip(l, LinkedList.class, ABean.class);
 		assertEquals("baz", l.get(0).getF1());
 
 		l.get(0).setF1("bing");
-		l = roundTripCollection(l, List.class, CBean.class);
+		l = roundTrip(l, List.class, CBean.class);
 		assertEquals("bing", l.get(0).getF1());
-		l = roundTripCollection(l, LinkedList.class, CBean.class);
+		l = roundTrip(l, LinkedList.class, CBean.class);
 		assertEquals("bing", l.get(0).getF1());
 	}
 
@@ -125,21 +124,21 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		}};
 
 		l.get("foo").setF1("bar");
-		l = roundTripMap(l, Map.class, String.class, IBean.class);
+		l = roundTrip(l, Map.class, String.class, IBean.class);
 		assertEquals("bar", l.get("foo").getF1());
-		l = roundTripMap(l, LinkedHashMap.class, String.class, IBean.class);
+		l = roundTrip(l, LinkedHashMap.class, String.class, IBean.class);
 		assertEquals("bar", l.get("foo").getF1());
 
 		l.get("foo").setF1("baz");
-		l = roundTripMap(l, Map.class, String.class, ABean.class);
+		l = roundTrip(l, Map.class, String.class, ABean.class);
 		assertEquals("baz", l.get("foo").getF1());
-		l = roundTripMap(l, LinkedHashMap.class, String.class, ABean.class);
+		l = roundTrip(l, LinkedHashMap.class, String.class, ABean.class);
 		assertEquals("baz", l.get("foo").getF1());
 
 		l.get("foo").setF1("bing");
-		l = roundTripMap(l, Map.class, String.class, CBean.class);
+		l = roundTrip(l, Map.class, String.class, CBean.class);
 		assertEquals("bing", l.get("foo").getF1());
-		l = roundTripMap(l, LinkedHashMap.class, String.class, CBean.class);
+		l = roundTrip(l, LinkedHashMap.class, String.class, CBean.class);
 		assertEquals("bing", l.get("foo").getF1());
 	}
 
@@ -925,7 +924,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 
 		Map<String,L> m = new LinkedHashMap<String,L>();
 		m.put("bar", L.create());
-		roundTripMap(m, LinkedHashMap.class, String.class, L.class);
+		roundTrip(m, LinkedHashMap.class, String.class, L.class);
 	}
 
 	@Json(wrapperAttr="foo")
@@ -949,7 +948,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 
 		Map<String,M> m = new LinkedHashMap<String,M>();
 		m.put("bar", M.create());
-		roundTripMap(m, LinkedHashMap.class, String.class, M.class);
+		roundTrip(m, LinkedHashMap.class, String.class, M.class);
 	}
 
 	@Json(wrapperAttr="foo")
@@ -973,42 +972,4 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 			return m;
 		}
 	}
-
-	//====================================================================================================
-	// Test parsing into top-level non-static inner classes with outer context.
-	//====================================================================================================
-	@Test
-	public void testParsingIntoTopLevelNonStaticInnerClasses() throws Exception {
-		N n = new N(1);
-
-		if (returnOriginalObject)
-			return;
-
-		Serializer s = getSerializer();
-		Parser p = getParser();
-
-		Object r = s.serialize(n.n2);
-		n = new N(2);
-		ParserSession session = p.createSession(r, null, null, n, null, null, null);
-
-		N.N2 n2 = p.parse(session, BeanContext.DEFAULT.getClassMeta(N.N2.class));
-
-		// The inner N2.f1 field should be the value of the outer object passed in through the context.
-		assertEquals(2, n2.f1);
-	}
-
-	public static class N {
-		public int f1;
-		public N2 n2;
-
-		public N(int f1) {
-			this.f1 = f1;
-			n2 = new N2();
-		}
-		public class N2 {
-			private int f1 = N.this.f1;
-			public int dummy = 1;
-		}
-	}
-
 }

@@ -36,7 +36,7 @@ import org.apache.juneau.utils.*;
  * 	constructor is provided for converting a JSON object string directly into a {@link Map}.  It also contains
  * 	accessor methods for to avoid common typecasting when accessing elements in a list.
  *
- * <h6 class='topic'>Example:</h6>
+ * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Construct an empty Map</jc>
  * 	Map m = <jk>new</jk> ObjectMap();

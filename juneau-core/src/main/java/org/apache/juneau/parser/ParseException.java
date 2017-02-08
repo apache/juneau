@@ -30,7 +30,7 @@ public final class ParseException extends FormattedException {
 	 *
 	 * @param session The parser session to extract information from.
 	 * @param message The exception message containing {@link MessageFormat}-style arguments.
-	 * @param args Message arguments.
+	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public ParseException(ParserSession session, String message, Object...args) {
 		super(getMessage(session, message, args));
@@ -40,7 +40,7 @@ public final class ParseException extends FormattedException {
 	 * Constructor.
 	 *
 	 * @param message The exception message containing {@link MessageFormat}-style arguments.
-	 * @param args Message arguments.
+	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public ParseException(String message, Object...args) {
 		super(getMessage(null, message, args));

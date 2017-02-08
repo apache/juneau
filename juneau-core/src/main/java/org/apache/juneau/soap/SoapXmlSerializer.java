@@ -22,17 +22,17 @@ import org.apache.juneau.xml.*;
 /**
  * Serializes POJOs to HTTP responses as XML+SOAP.
  *
- * <h6 class='topic'>Media types</h6>
+ * <h5 class='section'>Media types:</h5>
  * <p>
  * 	Handles <code>Accept</code> types: <code>text/xml+soap</code>
  * <p>
  * 	Produces <code>Content-Type</code> types: <code>text/xml+soap</code>
  *
- * <h6 class='topic'>Description</h6>
+ * <h5 class='section'>Description:</h5>
  * <p>
  * 	Essentially the same output as {@link XmlDocSerializer}, except wrapped in a standard SOAP envelope.
  *
- * <h6 class='topic'>Configurable properties</h6>
+ * <h5 class='section'>Configurable properties:</h5>
  * <p>
  * 	This class has the following properties associated with it:
  * <ul>

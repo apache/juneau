@@ -23,7 +23,7 @@ import org.apache.juneau.utils.*;
  * This variable resolver requires that a {@link ManifestFile} object be set as a context object on the resolver or a
  * 	session object on the resolver session.
  *
- * <h6 class='topic'>Example:</h6>
+ * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Create a ManifestFile object that contains the manifest of the jar file containing this class.</jc>
  * 	ManifestFile mf = <jk>new</jk> ManifestFile(<jk>this</jk>.getClass());

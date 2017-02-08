@@ -52,7 +52,7 @@ public @interface RdfSchema {
 	 * <p>
 	 * 	Inherited by child packages.
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p>
 	 * 	Contents of <code>package-info.java</code>...
 	 * </p>

@@ -524,7 +524,6 @@ public class RdfTest {
 	}
 
 	@Test
-	@SuppressWarnings("unchecked")
 	public void testLooseCollectionsOfBeans() throws Exception {
 		WriterSerializer s = new RdfSerializer.XmlAbbrev().setProperty(RDF_looseCollections, true);
 		ReaderParser p = new RdfParser.Xml().setProperty(RDF_looseCollections, true);
@@ -548,7 +547,7 @@ public class RdfTest {
 				+ "\n</rdf:RDF>";
 		assertXmlEquals(expected, rdfXml);
 
-		l = p.parseCollection(rdfXml, LinkedList.class, D.class);
+		l = p.parse(rdfXml, LinkedList.class, D.class);
 		D[] da = l.toArray(new D[l.size()]);
 		rdfXml = s.serialize(da);
 		expected =

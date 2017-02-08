@@ -81,11 +81,11 @@ import org.apache.juneau.serializer.*;
  * 	</tr>
  * </table>
  *
- * <h6 class='topic'>Configurable properties inherited from parent classes</h6>
+ * <h5 class='section'>Inherited configurable properties:</h5>
  * <ul class='javahierarchy'>
- * 	<li class='c'><a class='doclink' href='../BeanContext.html#ConfigProperties'>BeanContext</a> - Properties associated with handling beans on serializers and parsers.
+ * 	<li class='c'><a class="doclink" href="../BeanContext.html#ConfigProperties">BeanContext</a> - Properties associated with handling beans on serializers and parsers.
  * 	<ul>
- * 		<li class='c'><a class='doclink' href='../serializer/SerializerContext.html#ConfigProperties'>SerializerContext</a> - Configurable properties common to all serializers.
+ * 		<li class='c'><a class="doclink" href="../serializer/SerializerContext.html#ConfigProperties">SerializerContext</a> - Configurable properties common to all serializers.
  * 	</ul>
  * </ul>
  */
@@ -127,10 +127,12 @@ public class XmlSerializerContext extends SerializerContext {
 	 * <p>
 	 * This setting is ignored if {@link #XML_enableNamespaces} is not enabled.
 	 * <p>
-	 * <b>IMPORTANT NOTE:</b>
-	 * Auto-detection of namespaces can be costly performance-wise.
-	 * In high-performance environments, it's recommended that namespace detection be
-	 * 	disabled, and that namespaces be manually defined through the {@link #XML_namespaces} property.
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>Auto-detection of namespaces can be costly performance-wise.
+	 * 		In high-performance environments, it's recommended that namespace detection be
+	 * 		disabled, and that namespaces be manually defined through the {@link #XML_namespaces} property.
+	 * </ul>
 	 */
 	public static final String XML_autoDetectNamespaces = "XmlSerializer.autoDetectNamespaces";
 

@@ -21,7 +21,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
 import org.junit.*;
 
-@SuppressWarnings({"rawtypes","unchecked","javadoc"})
+@SuppressWarnings({"rawtypes","javadoc"})
 public class UrlEncodingParserTest {
 
 	static UrlEncodingParser p = UrlEncodingParser.DEFAULT;
@@ -58,7 +58,7 @@ public class UrlEncodingParserTest {
 
 		// 2nd level
 		t = "?a=a";
-		assertEquals("a", p.parse(t, Map.class).get("a"));
+		assertEquals("a", ((Map)p.parse(t, Map.class)).get("a"));
 
 		// Simple map
 		// Top level
@@ -90,7 +90,7 @@ public class UrlEncodingParserTest {
 		assertNull(m.get("f"));
 
 		t = "?a=true";
-		m = p.parseMap(t, HashMap.class, String.class, Boolean.class);
+		m = p.parse(t, HashMap.class, String.class, Boolean.class);
 		assertTrue(m.get("a") instanceof Boolean);
 		assertEquals("true", m.get("a").toString());
 
@@ -137,14 +137,14 @@ public class UrlEncodingParserTest {
 
 		// 2nd level in map
 		t = "?x=$a()";
-		m = p.parseMap(t, HashMap.class, String.class, List.class);
+		m = p.parse(t, HashMap.class, String.class, List.class);
 		assertTrue(m.containsKey("x"));
 		assertTrue(((List)m.get("x")).isEmpty());
 		m = (Map)p.parse(t, Object.class);
 		assertTrue(m.containsKey("x"));
 		assertTrue(((List)m.get("x")).isEmpty());
 		t = "?x=()";
-		m = p.parseMap(t, HashMap.class, String.class, List.class);
+		m = p.parse(t, HashMap.class, String.class, List.class);
 		assertTrue(m.containsKey("x"));
 		assertTrue(((List)m.get("x")).isEmpty());
 
@@ -155,7 +155,7 @@ public class UrlEncodingParserTest {
 		l = (List)l.get(0);
 		assertTrue(l.isEmpty());
 		t = "0=()";
-		l = p.parseCollection(t, LinkedList.class, List.class);
+		l = p.parse(t, LinkedList.class, List.class);
 		assertTrue(l.size() == 1);
 		l = (List)l.get(0);
 		assertTrue(l.isEmpty());
@@ -165,7 +165,7 @@ public class UrlEncodingParserTest {
 		l = (List)l.get(0);
 		assertTrue(l.isEmpty());
 		t = "(())";
-		l = (List)p.parseParameter(t, p.getBeanContext().getClassMeta(LinkedList.class, List.class));
+		l = (List)p.parseParameter(t, LinkedList.class, List.class);
 		assertTrue(l.size() == 1);
 		l = (List)l.get(0);
 		assertTrue(l.isEmpty());
@@ -177,7 +177,7 @@ public class UrlEncodingParserTest {
 		assertTrue(l.size() == 1);
 		assertEquals("", l.get(0));
 		t = "0=()";
-		l = p.parseCollection(t, List.class, String.class);
+		l = p.parse(t, List.class, String.class);
 		assertTrue(l.size() == 1);
 		assertEquals("", l.get(0));
 		t = "$a(())";
@@ -185,7 +185,7 @@ public class UrlEncodingParserTest {
 		assertTrue(l.size() == 1);
 		assertEquals("", l.get(0));
 		t = "(())";
-		l = (List)p.parseParameter(t, p.getBeanContext().getClassMeta(List.class, String.class));
+		l = (List)p.parseParameter(t, List.class, String.class);
 		assertTrue(l.size() == 1);
 		assertEquals("", l.get(0));
 
@@ -194,7 +194,7 @@ public class UrlEncodingParserTest {
 		m = (Map)p.parse(t, Object.class);
 		assertEquals("", ((List)m.get("")).get(0));
 		t = "?()=(())";
-		m = p.parseMap(t, HashMap.class, String.class, List.class);
+		m = p.parse(t, HashMap.class, String.class, List.class);
 		assertEquals("", ((List)m.get("")).get(0));
 
 		// Array containing 3 empty strings
@@ -205,7 +205,7 @@ public class UrlEncodingParserTest {
 		assertEquals("", l.get(1));
 		assertEquals("", l.get(2));
 		t = "0=&1=&2=";
-		l = p.parseCollection(t, List.class, Object.class);
+		l = p.parse(t, List.class, Object.class);
 		assertTrue(l.size() == 3);
 		assertEquals("", l.get(0));
 		assertEquals("", l.get(1));
@@ -217,7 +217,7 @@ public class UrlEncodingParserTest {
 		assertEquals("", l.get(1));
 		assertEquals("", l.get(2));
 		t = "(,,)";
-		l = (List)p.parseParameter(t, p.getBeanContext().getClassMeta(List.class, Object.class));
+		l = (List)p.parseParameter(t, List.class, Object.class);
 		assertTrue(l.size() == 3);
 		assertEquals("", l.get(0));
 		assertEquals("", l.get(1));
@@ -241,7 +241,7 @@ public class UrlEncodingParserTest {
 		m = (Map)p.parse(t, Object.class);
 		assertTrue(m.size() == 1);
 		assertEquals("\u0000", m.get("\u0000"));
-		m = p.parseMap(t, HashMap.class, String.class, Object.class);
+		m = p.parse(t, HashMap.class, String.class, Object.class);
 		assertTrue(m.size() == 1);
 		assertEquals("\u0000", m.get("\u0000"));
 
@@ -269,7 +269,7 @@ public class UrlEncodingParserTest {
 		m = (Map)p.parse(t, Object.class);
 		assertEquals(Boolean.FALSE, m.get("x"));
 		t = "?x=false";
-		m = p.parseMap(t, HashMap.class, String.class, Boolean.class);
+		m = p.parse(t, HashMap.class, String.class, Boolean.class);
 		assertEquals(Boolean.FALSE, m.get("x"));
 
 		// Number
@@ -303,7 +303,7 @@ public class UrlEncodingParserTest {
 		t = "?x=$n(123)";
 		m = (Map)p.parse(t, Object.class);
 		assertEquals(123, ((Integer)m.get("x")).intValue());
-		m = p.parseMap(t, HashMap.class, String.class, Double.class);
+		m = p.parse(t, HashMap.class, String.class, Double.class);
 		assertEquals(123, ((Double)m.get("x")).intValue());
 
 		// Unencoded chars
@@ -317,9 +317,9 @@ public class UrlEncodingParserTest {
 		t = "?x;/?:@-_.!*'=x;/?:@-_.!*'";
 		m = (Map)p.parse(t, Object.class);
 		assertEquals("x;/?:@-_.!*'", m.get("x;/?:@-_.!*'"));
-		m = p.parseMap(t, HashMap.class, String.class, Object.class);
+		m = p.parse(t, HashMap.class, String.class, Object.class);
 		assertEquals("x;/?:@-_.!*'", m.get("x;/?:@-_.!*'"));
-		m = p.parseMap(t, HashMap.class, String.class, String.class);
+		m = p.parse(t, HashMap.class, String.class, String.class);
 		assertEquals("x;/?:@-_.!*'", m.get("x;/?:@-_.!*'"));
 
 		// Encoded chars
@@ -419,7 +419,7 @@ public class UrlEncodingParserTest {
 		m = (Map)p.parse(t, Object.class);
 		assertEquals("()", m.get("()"));
 		t = "?(~(~))=(~(~))";
-		m = p.parseMap(t, HashMap.class, String.class, Object.class);
+		m = p.parse(t, HashMap.class, String.class, Object.class);
 		assertEquals("()", m.get("()"));
 
 		// String starting with $
@@ -437,7 +437,7 @@ public class UrlEncodingParserTest {
 		t = "?(~$a)=(~$a)";
 		m = (Map)p.parse(t, Object.class);
 		assertEquals("$a", m.get("$a"));
-		m = p.parseMap(t, HashMap.class, String.class, Object.class);
+		m = p.parse(t, HashMap.class, String.class, Object.class);
 		assertEquals("$a", m.get("$a"));
 
 		// Blank string
@@ -451,7 +451,7 @@ public class UrlEncodingParserTest {
 		t = "?=";
 		m = (Map)p.parse(t, Object.class);
 		assertEquals("", m.get(""));
-		m = p.parseMap(t, HashMap.class, String.class, Object.class);
+		m = p.parse(t, HashMap.class, String.class, Object.class);
 		assertEquals("", m.get(""));
 
 		// 3rd level
@@ -459,7 +459,7 @@ public class UrlEncodingParserTest {
 		m = (Map)p.parse(t, Object.class);
 		assertEquals("", ((Map)m.get("")).get(""));
 		t = "?=(=)";
-		m = p.parseMap(t, HashMap.class, String.class, HashMap.class);
+		m = p.parse(t, HashMap.class, String.class, HashMap.class);
 		assertEquals("", ((Map)m.get("")).get(""));
 
 		// Newline character

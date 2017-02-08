@@ -30,7 +30,7 @@ public final class SerializeException extends FormattedException {
 	 *
 	 * @param session The serializer session to extract information from.
 	 * @param message The exception message containing {@link MessageFormat}-style arguments.
-	 * @param args Message arguments.
+	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public SerializeException(SerializerSession session, String message, Object...args) {
 		super(getMessage(session, message, args));
@@ -40,7 +40,7 @@ public final class SerializeException extends FormattedException {
 	 * Constructor.
 	 *
 	 * @param message The exception message containing {@link MessageFormat}-style arguments.
-	 * @param args Message arguments.
+	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public SerializeException(String message, Object...args) {
 		super(getMessage(null, message, args));

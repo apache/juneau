@@ -251,7 +251,7 @@ public class BeanPropertyMeta {
 
 		if (field != null) {
 			BeanProperty p = field.getAnnotation(BeanProperty.class);
-			rawTypeMeta = f.getClassMeta(p, field.getGenericType(), typeVarImpls);
+			rawTypeMeta = f.resolveClassMeta(p, field.getGenericType(), typeVarImpls);
 			isUri |= (rawTypeMeta.isUri() || field.isAnnotationPresent(org.apache.juneau.annotation.URI.class));
 			if (p != null) {
 				swap = getPropertyPojoSwap(p);
@@ -264,7 +264,7 @@ public class BeanPropertyMeta {
 		if (getter != null) {
 			BeanProperty p = getter.getAnnotation(BeanProperty.class);
 			if (rawTypeMeta == null)
-				rawTypeMeta = f.getClassMeta(p, getter.getGenericReturnType(), typeVarImpls);
+				rawTypeMeta = f.resolveClassMeta(p, getter.getGenericReturnType(), typeVarImpls);
 			isUri |= (rawTypeMeta.isUri() || getter.isAnnotationPresent(org.apache.juneau.annotation.URI.class));
 			if (p != null) {
 				if (swap == null)
@@ -278,7 +278,7 @@ public class BeanPropertyMeta {
 		if (setter != null) {
 			BeanProperty p = setter.getAnnotation(BeanProperty.class);
 			if (rawTypeMeta == null)
-				rawTypeMeta = f.getClassMeta(p, setter.getGenericParameterTypes()[0], typeVarImpls);
+				rawTypeMeta = f.resolveClassMeta(p, setter.getGenericParameterTypes()[0], typeVarImpls);
 			isUri |= (rawTypeMeta.isUri() || setter.isAnnotationPresent(org.apache.juneau.annotation.URI.class));
 			if (p != null) {
 			if (swap == null)

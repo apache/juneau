@@ -177,7 +177,7 @@ public @interface RestResource {
 	 * <p>
 	 * 	This annotation can only be used on {@link Encoder} classes that have no-arg constructors.
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Servlet with automated support for GZIP compression</jc>
 	 * 	<ja>@RestResource</ja>(encoders={GzipEncoder.<jk>class</jk>})
@@ -200,7 +200,7 @@ public @interface RestResource {
 	 * <p>
 	 * 	Only one header value can be specified per entry (i.e. it's not a delimited list of header entries).
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
 	 * 	<ja>@RestResource</ja>(defaultRequestHeaders={<js>"Accept: text/json"</js>})
@@ -222,7 +222,7 @@ public @interface RestResource {
 	 * <p>
 	 * 	Only one header value can be specified per entry (i.e. it's not a delimited list of header entries).
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Add a version header attribute to all responses</jc>
 	 * 	<ja>@RestResource</ja>(defaultResponseHeaders={<js>"X-Version: 1.0"</js>})
@@ -347,7 +347,7 @@ public @interface RestResource {
 	 * 	The default value pulls the description from the <code>contact</code> entry in the servlet resource bundle.
 	 * 	(e.g. <js>"contact = {name:'John Smith',email:'john.smith@foo.bar'}"</js> or <js>"MyServlet.contact = {name:'John Smith',email:'john.smith@foo.bar'}"</js>).
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(contact=<js>"{name:'John Smith',email:'john.smith@foo.bar'}"</js>)
 	 * </p>
@@ -375,7 +375,7 @@ public @interface RestResource {
 	 * 	The default value pulls the description from the <code>license</code> entry in the servlet resource bundle.
 	 * 	(e.g. <js>"license = {name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}"</js> or <js>"MyServlet.license = {name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}"</js>).
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(license=<js>"{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}"</js>)
 	 * </p>
@@ -424,7 +424,7 @@ public @interface RestResource {
 	 * 	The default value pulls the description from the <code>tags</code> entry in the servlet resource bundle.
 	 * 	(e.g. <js>"tags = [{name:'Foo',description:'Foobar'}]"</js> or <js>"MyServlet.tags = [{name:'Foo',description:'Foobar'}]"</js>).
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(tags=<js>"[{name:'Foo',description:'Foobar'}]"</js>)
 	 * </p>
@@ -452,7 +452,7 @@ public @interface RestResource {
 	 * 	The default value pulls the description from the <code>externalDocs</code> entry in the servlet resource bundle.
 	 * 	(e.g. <js>"externalDocs = {url:'http://juneau.apache.org'}"</js> or <js>"MyServlet.externalDocs = {url:'http://juneau.apache.org'}"</js>).
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(externalDocs=<js>"{url:'http://juneau.apache.org'}"</js>)
 	 * </p>
@@ -495,7 +495,7 @@ public @interface RestResource {
 	 * <p>
 	 * 	If the file cannot be located, the request to <js>"[servletpath]/style.css"</js> will return {@link HttpServletResponse#SC_NOT_FOUND}.
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jk>package</jk> com.foo.mypackage;
 	 *
@@ -525,7 +525,7 @@ public @interface RestResource {
 	 * <p>
 	 * 	If the file cannot be located, the request to <js>"[servletpath]/favicon.ico"</js> will return {@link HttpServletResponse#SC_NOT_FOUND}.
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jk>package</jk> com.foo.mypackage;
 	 *
@@ -557,7 +557,7 @@ public @interface RestResource {
 	 * <p>
 	 * 	The media type on the response is determined by the {@link RestServlet#getMimetypesFileTypeMap()} method.
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jk>package</jk> com.foo.mypackage;
 	 *

@@ -132,8 +132,6 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 			if (pm == null)
 				throw new WebApplicationException(SC_UNSUPPORTED_MEDIA_TYPE);
 			Parser p = pm.getParser();
-			BeanContext bc = p.getBeanContext();
-			ClassMeta<?> cm = bc.getClassMeta(gType);
 			ObjectMap mp = getMethodProperties(a);
 			mp.put("mediaType", mediaType.toString());
 			Locale locale = getLocale(headers);
@@ -142,11 +140,11 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 				ReaderParser p2 = (ReaderParser)p;
 				InputStreamReader r = new InputStreamReader(in, IOUtils.UTF8);
 				ParserSession session = p2.createSession(r, mp, null, null, locale, timeZone, pm.getMediaType());
-				return p2.parse(session, cm);
+				return p2.parseSession(session, p.getBeanContext().getClassMeta(gType));
 			}
 			InputStreamParser p2 = (InputStreamParser)p;
 			ParserSession session = p2.createSession(in, mp, null, null, locale, timeZone, pm.getMediaType());
-			return p2.parse(session, cm);
+			return p2.parseSession(session, p.getBeanContext().getClassMeta(gType));
 		} catch (ParseException e) {
 			throw new IOException(e);
 		}

@@ -25,7 +25,7 @@ import org.apache.juneau.rest.*;
  * <p>
  * 	Note that this can be used to detect the existence of a parameter when it's not set to a particular value.
  *
- * <h6 class='topic'>Example:</h6>
+ * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<js>"POST"</js>)
  * 	<jk>public void</jk> doPost(<ja>@HasFormData</ja>(<js>"p1"</js>) <jk>boolean</jk> p1) {

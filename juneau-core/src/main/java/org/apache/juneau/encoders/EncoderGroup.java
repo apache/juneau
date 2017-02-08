@@ -24,7 +24,7 @@ import org.apache.juneau.serializer.*;
 /**
  * Represents the group of {@link Encoder encoders} keyed by codings.
  *
- * <h6 class='topic'>Description</h6>
+ * <h5 class='section'>Description:</h5>
  * <p>
  * 	Maintains a set of encoders and the codings that they can handle.
  * <p>
@@ -42,7 +42,7 @@ import org.apache.juneau.serializer.*;
  * 	For example, calling <code>g.append(E1.<jk>class</jk>,E2.<jk>class</jk>).append(E3.<jk>class</jk>,E4.<jk>class</jk>)</code>
  * 	will result in the order <code>E3, E4, E1, E2</code>.
  *
- * <h6 class='topic'>Example:</h6>
+ * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Create an encoder group with support for gzip compression.</jc>
  * 	EncoderGroup g = <jk>new</jk> EncoderGroup().append(GzipEncoder.<jk>class</jk>);

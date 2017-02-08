@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.client;
 
 import java.io.*;
+import java.lang.reflect.*;
 import java.net.*;
 import java.util.*;
 import java.util.logging.*;
@@ -47,9 +48,9 @@ import org.apache.juneau.utils.*;
  * <p>
  * 	The actual connection and request/response transaction occurs when calling one of the <code>getResponseXXX()</code> methods.
  *
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>Additional information:</h5>
  * <ul>
- * 	<li><a class='doclink' href='package-summary.html#RestClient'>org.apache.juneau.rest.client &gt; REST client API</a> for more information and code examples.
+ * 	<li><a class="doclink" href="package-summary.html#RestClient">org.apache.juneau.rest.client &gt; REST client API</a> for more information and code examples.
  * </ul>
  */
 public final class RestCall {
@@ -339,7 +340,7 @@ public final class RestCall {
 	 * This method uses {@link #getCapturedResponse()} to read the response text and so does not affect the other output
 	 * 	methods such as {@link #getResponseAsString()}.
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Throw a RestCallException if FAILURE or ERROR is found in the output.</jc>
 	 * 	restClient.doGet(<jsf>URL</jsf>)
@@ -370,7 +371,7 @@ public final class RestCall {
 	 * This method uses {@link #getCapturedResponse()} to read the response text and so does not affect the other output
 	 * 	methods such as {@link #getResponseAsString()}.
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Throw a RestCallException if SUCCESS is not found in the output.</jc>
 	 * 	restClient.doGet(<jsf>URL</jsf>)
@@ -446,7 +447,7 @@ public final class RestCall {
 	 * The response entity is discarded unless one of the pipe methods have been specified to pipe the
 	 * 	 output to an output stream or writer.
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jk>try</jk> {
 	 * 		RestClient client = <jk>new</jk> RestClient();
@@ -745,6 +746,38 @@ public final class RestCall {
 	}
 
 	/**
+	 * Same as {@link #getResponse(Class)}, but useful for parsing into maps and collections of specific types.
+	 *
+	 * @param type The class to resolve.
+	 * 	Can be any of the following:
+	 * 	<ul>
+	 * 		<li>{@link ClassMeta}
+	 * 		<li>{@link Class}
+	 * 		<li>{@link ParameterizedType}
+	 * 		<li>{@link GenericArrayType}
+	 * 	</ul>
+	 * @param args The type arguments of the class if it's a collection or map.
+	 * 	Can be any of the following:
+	 * 	<ul>
+	 * 		<li>{@link ClassMeta}
+	 * 		<li>{@link Class}
+	 * 		<li>{@link ParameterizedType}
+	 * 		<li>{@link GenericArrayType}
+	 * 	</ul>
+	 * @param <T> The class to convert the input to.
+	 * @return The parsed output.
+	 * @throws IOException If a connection error occurred.
+	 * @throws ParseException If the input contains a syntax error or is malformed for the <code>Content-Type</code> header.
+	 */
+	@SuppressWarnings("unchecked")
+	public <T> T getResponse(Type type, Type...args) throws IOException, ParseException {
+		BeanContext bc = getParser().getBeanContext();
+		if (bc == null)
+			bc = BeanContext.DEFAULT;
+		return (T)getResponse(bc.getClassMeta(type, args));
+	}
+
+	/**
 	 * Parses the output from the connection into the specified type and then wraps that in a {@link PojoRest}.
 	 * <p>
 	 * Useful if you want to quickly retrieve a single value from inside of a larger JSON document.
@@ -769,61 +802,6 @@ public final class RestCall {
 	 */
 	public PojoRest getResponsePojoRest() throws IOException, ParseException {
 		return getResponsePojoRest(ObjectMap.class);
-	}
-
-	/**
-	 * Convenience method when you want to parse into a Map&lt;K,V&gt; object.
-	 *
-	 * <h6 class='topic'>Example:</h6>
-	 * <p class='bcode'>
-	 * 	Map&lt;String,MyBean&gt; m = client.doGet(url).getResponseMap(LinkedHashMap.<jk>class</jk>, String.<jk>class</jk>, MyBean.<jk>class</jk>);
-	 * </p>
-	 * <p>
-	 * 	A simpler approach is often to just extend the map class you want and just use the normal {@link #getResponse(Class)} method:
-	 * </p>
-	 * <p class='bcode'>
-	 * 	<jk>public static class</jk> MyMap <jk>extends</jk> LinkedHashMap&lt;String,MyBean&gt; {}
-	 *
-	 * 	Map&lt;String,MyBean&gt; m = client.doGet(url).getResponse(MyMap.<jk>class</jk>);
-	 * </p>
-	 *
-	 * @param mapClass The map class to use (e.g. <code>TreeMap</code>)
-	 * @param keyClass The class type of the keys (e.g. <code>String</code>)
-	 * @param valueClass The class type of the values (e.g. <code>MyBean</code>)
-	 * @return The response parsed as a map.
-	 * @throws ParseException
-	 * @throws IOException
-	 */
-	public final <K,V,T extends Map<K,V>> T getResponseMap(Class<T> mapClass, Class<K> keyClass, Class<V> valueClass) throws ParseException, IOException {
-		ClassMeta<T> cm = getBeanContext().getClassMeta(mapClass, keyClass, valueClass);
-		return getResponse(cm);
-	}
-
-	/**
-	 * Convenience method when you want to parse into a Collection&lt;E&gt; object.
-	 *
-	 * <h6 class='topic'>Example:</h6>
-	 * <p class='bcode'>
-	 * 	List&lt;MyBean&gt; l = client.doGet(url).getResponseCollection(LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
-	 * </p>
-	 * <p>
-	 * 	A simpler approach is often to just extend the collection class you want and just use the normal {@link #getResponse(Class)} method:
-	 * </p>
-	 * <p class='bcode'>
-	 * 	<jk>public static class</jk> MyList <jk>extends</jk> LinkedList&lt;MyBean&gt; {}
-	 *
-	 * 	List&lt;MyBean&gt; l = client.doGet(url).getResponse(MyList.<jk>class</jk>);
-	 * </p>
-	 *
-	 * @param collectionClass The collection class to use (e.g. <code>LinkedList</code>)
-	 * @param entryClass The class type of the values (e.g. <code>MyBean</code>)
-	 * @return The response parsed as a collection.
-	 * @throws ParseException
-	 * @throws IOException
-	 */
-	public final <E,T extends Collection<E>> T getResponseCollection(Class<T> collectionClass, Class<E> entryClass) throws ParseException, IOException {
-		ClassMeta<T> cm = getBeanContext().getClassMeta(collectionClass, entryClass);
-		return getResponse(cm);
 	}
 
 	<T> T getResponse(ClassMeta<T> type) throws IOException, ParseException {

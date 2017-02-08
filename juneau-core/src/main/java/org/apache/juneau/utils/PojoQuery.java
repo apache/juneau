@@ -66,7 +66,7 @@ import org.apache.juneau.internal.*;
  * 	Search patterns can be either {@code Strings} or {@code Maps}.<br>
  * 	Multiple search patterns are ANDed (i.e. all patterns must match for the row to be returned).
  *
- * <h6 class='topic'>Example:</h6>
+ * <h5 class='section'>Example:</h5>
  * <ul class='spaced-list'>
  * 	<li><tt>{fi:'123'}</tt> - Return only rows where the <tt>fi</tt> column is 123.
  * 	<li><tt>{fs:'foobar'}</tt> - Return only rows where the <tt>fs</tt> column is 'foobar'.
@@ -95,7 +95,7 @@ import org.apache.juneau.internal.*;
  * 	<li><tt>foo?</tt> - <tt>?</tt> matches exactly one character
  * </ul>
  *
- * <h6 class='topic'>Notes</h6>
+ * <h5 class='section'>Notes:</h5>
  * <ul class='spaced-list'>
  * 	<li>Whitespace is ignored around search patterns.
  * 	<li>Prepend <tt>+</tt> to tokens that must match.  (e.g. <tt>+foo* +*bar</tt>)
@@ -118,7 +118,7 @@ import org.apache.juneau.internal.*;
  * 	<li><tt>!123</tt> - Not 123
  * </ul>
  *
- * <h6 class='topic'>Notes</h6>
+ * <h5 class='section'>Notes:</h5>
  * <ul class='spaced-list'>
  * 	<li>Whitespace is ignored in search patterns.
  * 	<li>Negative numbers are supported.
@@ -149,7 +149,7 @@ import org.apache.juneau.internal.*;
  * 	<li><tt>2001 2003 2005</tt>	- Multiple date patterns are ORed.
  * </ul>
  *
- * <h6 class='topic'>Notes</h6>
+ * <h5 class='section'>Notes:</h5>
  * <ul>
  * 	<li>Whitespace is ignored in search patterns.
  * </ul>

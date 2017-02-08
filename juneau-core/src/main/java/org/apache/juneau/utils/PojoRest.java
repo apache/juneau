@@ -42,7 +42,7 @@ import org.apache.juneau.parser.*;
  * <p>
  * 	Leading slashes in URLs are ignored.  So <js>"/xxx/yyy/zzz"</js> and <js>"xxx/yyy/zzz"</js> are considered identical.
  *
- * <h6 class='topic'>Example:</h6>
+ * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Construct an unstructured POJO model</jc>
  * 	ObjectMap m = <jk>new</jk> ObjectMap(<js>""</js>
@@ -106,7 +106,7 @@ import org.apache.juneau.parser.*;
  * 	can be used in lieu of index numbers on GET requests to return a map/bean with a specified attribute value.<br>
  * 	The syntax is {@code @attr=val}, where attr is the attribute name on the child map, and val is the matching value.
  *
- * <h6 class='topic'>Example:</h6>
+ * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Get map/bean with name attribute value of 'foo' from a list of items</jc>
  * 	Map m = pojoRest.getMap(<js>"/items/@name=foo"</js>);
@@ -528,21 +528,24 @@ public final class PojoRest {
 	/**
 	 * Adds a value to a list element in a POJO model.
 	 * <p>
-	 * 	The URL is the address of the list being added to.
+	 * The URL is the address of the list being added to.
 	 * <p>
-	 * 	If the list does not already exist, it will be created.
+	 * If the list does not already exist, it will be created.
 	 * <p>
-	 * 	This method expands the POJO model as necessary to create the new element.
+	 * This method expands the POJO model as necessary to create the new element.
 	 * <p>
-	 * 	Note:  You can only post to three types of nodes:
-	 * 	<ul class='spaced-list'>
-	 * 		<li>{@link List Lists}
-	 * 		<li>{@link Map Maps} containing integers as keys (i.e sparse arrays)
-	 * 		<li>arrays
-	 * 	</ul>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>You can only post to three types of nodes:
+	 * 		<ul class='spaced-list'>
+	 * 			<li>{@link List Lists}
+	 * 			<li>{@link Map Maps} containing integers as keys (i.e sparse arrays)
+	 * 			<li>arrays
+	 * 		</ul>
+	 * </ul>
 	 *
 	 * @param url The URL of the element being added to.
-	 * 		If null or blank, the root itself (assuming it's one of the types specified above) is added to.
+	 * 		<br>If <jk>null</jk> or blank, the root itself (assuming it's one of the types specified above) is added to.
 	 * @param val The value being added.
 	 * @return The URL of the element that was added.
 	 */

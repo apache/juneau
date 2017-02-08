@@ -75,7 +75,7 @@ public final class Redirect {
 	 * Relative paths are interpreted as relative to the servlet path.
 	 *
 	 * @param url The URL to redirect to.
-	 * @param args Optional {@link MessageFormat} arguments to replace in the URL string.
+	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public Redirect(CharSequence url, Object...args) {
 		this.url = (url == null ? null : url.toString());
@@ -98,7 +98,7 @@ public final class Redirect {
 	 *
 	 * @param httpResponseCode The HTTP response code.
 	 * @param url The URL to redirect to.
-	 * @param args Optional {@link MessageFormat} arguments to replace in the URL string.
+	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public Redirect(int httpResponseCode, CharSequence url, Object...args) {
 		this.httpResponseCode = httpResponseCode;

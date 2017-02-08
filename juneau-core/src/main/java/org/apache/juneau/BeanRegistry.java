@@ -69,7 +69,14 @@ public class BeanRegistry {
 					Map<?,?> m = (Map<?,?>)c.newInstance();
 					for (Map.Entry<?,?> e : m.entrySet()) {
 						String typeName = StringUtils.toString(e.getKey());
-						ClassMeta<?> val = beanContext.getClassMeta(e.getValue());
+						Object v = e.getValue();
+						ClassMeta<?> val = null;
+						if (v instanceof Type)
+							val = beanContext.getClassMeta((Type)v);
+						else if (v.getClass().isArray())
+							val = getTypedClassMeta(v);
+						else
+							throw new BeanRuntimeException("Class ''{0}'' was passed to BeanRegistry but value of type ''{1}'' found in map is not a Type object.", c.getName(), v.getClass().getName());
 						map.put(typeName, val);
 					}
 				} else {
@@ -84,6 +91,17 @@ public class BeanRegistry {
 		} catch (Exception e) {
 			throw new BeanRuntimeException(e);
 		}
+	}
+
+	private ClassMeta<?> getTypedClassMeta(Object array) {
+		int len = Array.getLength(array);
+		if (len == 0)
+			throw new BeanRuntimeException("Map entry had an empty array value.");
+		Type type = (Type)Array.get(array, 0);
+		Type[] args = new Type[len-1];
+		for (int i = 1; i < len; i++)
+			args[i-1] = (Type)Array.get(array, i);
+		return beanContext.getClassMeta(type, args);
 	}
 
 	/**

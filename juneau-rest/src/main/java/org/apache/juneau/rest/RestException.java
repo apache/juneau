@@ -33,7 +33,7 @@ public class RestException extends RuntimeException {
 	 *
 	 * @param status The HTTP status code.
 	 * @param msg The status message.
-	 * @param args Optional string format arguments.
+	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public RestException(int status, String msg, Object...args) {
 		super(args.length == 0 ? msg : MessageFormat.format(msg, args));

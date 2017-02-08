@@ -38,7 +38,7 @@ public final class PojoRestException extends RuntimeException {
 	 *
 	 * @param status The HTTP-equivalent status code.
 	 * @param message The detailed message.
-	 * @param args Optional message arguments.
+	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public PojoRestException(int status, String message, Object...args) {
 		super(args.length == 0 ? message : MessageFormat.format(message, args));

@@ -22,7 +22,7 @@ import org.apache.juneau.*;
 /**
  * Represents a group of {@link Parser Parsers} that can be looked up by media type.
  *
- * <h6 class='topic'>Description</h6>
+ * <h5 class='section'>Description:</h5>
  * <p>
  * 	Provides the following features:
  * <ul class='spaced-list'>
@@ -42,7 +42,7 @@ import org.apache.juneau.*;
  * 	For example, calling <code>g.append(P1.<jk>class</jk>,P2.<jk>class</jk>).append(P3.<jk>class</jk>,P4.<jk>class</jk>)</code>
  * 	will result in the order <code>P3, P4, P1, P2</code>.
  *
- * <h6 class='topic'>Example:</h6>
+ * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Construct a new parser group</jc>
  * 	ParserGroup g = <jk>new</jk> ParserGroup();

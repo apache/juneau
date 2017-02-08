@@ -22,7 +22,7 @@ import org.apache.juneau.transform.*;
  * <p>
  * 	This class can be used to get and set property values on a bean, or to get metadata on a property.
  *
- * <h6 class='topic'>Example:</h6>
+ * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Construct a new bean</jc>
  * 	Person p = <jk>new</jk> Person();

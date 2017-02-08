@@ -76,7 +76,7 @@ import org.apache.juneau.transform.*;
  * <p>
  * 	Settings are specified using the {@link ContextFactory#setProperty(String, Object)} method and related convenience methods.
  *
- * <h6 class='topic'>Example:</h6>
+ * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Construct a context from scratch.</jc>
  * 	BeanContext beanContext = ContextFactory.<jsm>create</jsm>()
@@ -316,6 +316,15 @@ import org.apache.juneau.transform.*;
  * 	</tr>
  * 	<tr>
  * 		<td>
+ * 			{@link #BEAN_mediaType}
+ * 		</td>
+ * 		<td>Default media type value for serializer and parser sessions</td>
+ * 		<td>{@link MediaType}</td>
+ * 		<td><jk>null</jk></td>
+ * 		<td><jk>true</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td>
  * 			{@link #BEAN_debug}
  * 		</td>
  * 		<td>Debug mode.</td>
@@ -337,7 +346,7 @@ import org.apache.juneau.transform.*;
  * 		<li> {@link BeanSession#newBeanMap(Class) BeanSession.newBeanMap()} - Create a new bean instance wrapped in a {@code Map} wrapper.
  * 	</ol>
  *
- * <h6 class='topic'>Example:</h6>
+ * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// A sample bean class</jc>
  * 	<jk>public class</jk> Person {
@@ -366,7 +375,7 @@ import org.apache.juneau.transform.*;
  * <p>
  * 	This package contains annotations that can be applied to
  * 	class definitions to override what properties are detected on a bean.
- * <h6 class='topic'>Example:</h6>
+ * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Bean class definition where only property 'name' is detected.</jc>
  * 	<ja>&#64;Bean</ja>(properties=<js>"name"</js>)
@@ -1262,163 +1271,99 @@ public class BeanContext extends Context {
 	}
 
 	/**
-	 * Returns the class type bound to this bean context if the specified class type
-	 * 	is from another bean context.
-	 * <p>
-	 * For example, this method allows you to pass in an object from <code>BeanContext.<jsf>DEFAULT</jsf>.getMapClassMeta(...)</code>
-	 * 	to any of the <code>ReaderParser.parse(Reader, ClassMeta, ParserContext)</code> methods, and the parsers
-	 * 	will use this method to replace the class type with the one registered with the parser.
-	 * This ensures that registered transforms are applied correctly.
-	 *
-	 * @param <T> The class type.
-	 * @param cm The class type.
-	 * @return The class type bound by this bean context.
-	 */
-	protected final <T> ClassMeta<T> normalizeClassMeta(ClassMeta<T> cm) {
-		if (cm == null)
-			return (ClassMeta<T>)object();
-		if (cm.getBeanContext().equals(this))
-			return cm;
-		if (cm.isMap()) {
-			ClassMeta<Map> cm2 = (ClassMeta<Map>)cm;
-			cm2 = getClassMeta(cm2.getInnerClass(), cm2.getKeyType().getInnerClass(), cm2.getValueType().getInnerClass());
-			return (ClassMeta<T>)cm2;
-		}
-		if (cm.isCollection()) {
-			ClassMeta<Collection> cm2 = (ClassMeta<Collection>)cm;
-			cm2 = getClassMeta(cm2.getInnerClass(), cm2.getElementType().getInnerClass());
-			return (ClassMeta<T>)cm2;
-		}
-		return getClassMeta(cm.getInnerClass());
-	}
-
-	/**
-	 * Resolves the following types of objects:
-	 * <ul>
-	 * 	<li>{@link Class}
-	 * 	<li><code>Object[2]</code> containing <code>{Class&lt;? extends Collection&gt;, Object}</code>
-	 * 		where the 2nd entry is the entry type which can be anything on this list.
-	 * 	<li><code>Object[3]</code> containing <code>{Class&lt;? extends Map&gt;, Object, Object}</code>
-	 * 		where the 2nd entry is the key type and 3rd entry is the value type which can be anything on this list.
-	 * </ul>
-	 *
-	 * @param o
-	 * @return The resolved class meta.
-	 */
-	public final <T> ClassMeta<T> getClassMeta(Object o) {
-		if (o == null)
-			return null;
-		if (o instanceof Class)
-			return getClassMeta((Class)o);
-		if (o instanceof Type)
-			return getClassMeta((Type)o);
-		if (List.class.isAssignableFrom(o.getClass())) {
-			List l = (List)o;
-			o = l.toArray(new Object[l.size()]);
-			return getClassMeta((Object[])o);
-		}
-		if (o.getClass().isArray())
-			return getClassMeta((Object[])o);
-		throw new BeanRuntimeException("Invalid object type passed to getClassMeta(): ''{0}''.  Only Class or arrays containing Class is supported.", o.getClass().getName());
-	}
-
-	/**
-	 * Resolves the following types of objects:
-	 * <ul>
-	 * 	<li><code>Object[2]</code> containing <code>{Class&lt;? extends Collection&gt;, Object}</code>
-	 * 		where the 2nd entry is the entry type which can be anything on this list.
-	 * 	<li><code>Object[3]</code> containing <code>{Class&lt;? extends Map&gt;, Object, Object}</code>
-	 * 		where the 2nd entry is the key type and 3rd entry is the value type which can be anything on this list.
-	 * </ul>
-	 *
-	 * @param o
-	 * @return The resolved class meta.
-	 */
-	public final <T> ClassMeta<T> getClassMeta(Object...o) {
-		if (o == null)
-			return null;
-		int len = o.length;
-		if (len == 2) {
-			Object oc = Array.get(o, 0);
-			if (oc instanceof Class) {
-				Class c = (Class)oc;
-				if (Collection.class.isAssignableFrom(c)) {
-					ClassMeta<?> rawType = getClassMeta(c);
-					ClassMeta<?> ce = getClassMeta(Array.get(o, 1));
-					if (ce.isObject())
-						return (ClassMeta<T>)rawType;
-					return new ClassMeta(rawType, null, null, ce);
-				}
-			}
-		} else if (len == 3) {
-			Object oc = Array.get(o, 0);
-			if (oc instanceof Class) {
-				Class c = (Class)oc;
-				if (Map.class.isAssignableFrom(c)) {
-					ClassMeta<?> rawType = getClassMeta(c);
-					ClassMeta<?> ck = getClassMeta(Array.get(o, 1));
-					ClassMeta<?> cv = getClassMeta(Array.get(o, 2));
-					if (ck.isObject() && cv.isObject())
-						return (ClassMeta<T>)rawType;
-					return new ClassMeta(rawType, ck, cv, null);
-				}
-			}
-		}
-		throw new BeanRuntimeException("Invalid object type passed to getClassMeta(): ''{0}''.  Only Class or arrays containing Class is supported.", o.getClass().getName());
-	}
-
-	/**
 	 * Construct a {@code ClassMeta} wrapper around a {@link Class} object.
 	 *
 	 * @param <T> The class type being wrapped.
-	 * @param c The class being wrapped.
-	 * 	of type {@link Class} or {@link ClassMeta}.
+	 * @param type The class to resolve.
 	 * @return If the class is not an array, returns a cached {@link ClassMeta} object.
 	 * 	Otherwise, returns a new {@link ClassMeta} object every time.<br>
 	 */
-	public final <T> ClassMeta<T> getClassMeta(Class<T> c) {
+	public final <T> ClassMeta<T> getClassMeta(Class<T> type) {
 
 		// If this is an array, then we want it wrapped in an uncached ClassMeta object.
 		// Note that if it has a pojo swap, we still want to cache it so that
 		// we can cache something like byte[] with ByteArrayBase64Swap.
-		if (c.isArray() && findPojoSwap(c) == null)
-			return new ClassMeta(c, this, findImplClass(c), findBeanFilter(c), findPojoSwap(c), findChildPojoSwaps(c));
+		if (type.isArray() && findPojoSwap(type) == null)
+			return new ClassMeta(type, this, findImplClass(type), findBeanFilter(type), findPojoSwap(type), findChildPojoSwaps(type));
 
 		// This can happen if we have transforms defined against String or Object.
 		if (cmCache == null)
 			return null;
 
-		ClassMeta<T> cm = cmCache.get(c);
+		ClassMeta<T> cm = cmCache.get(type);
 		if (cm == null) {
 
 			synchronized (this) {
 				// Make sure someone didn't already set it while this thread was blocked.
-				cm = cmCache.get(c);
+				cm = cmCache.get(type);
 				if (cm == null)
-					cm = new ClassMeta<T>(c, this, findImplClass(c), findBeanFilter(c), findPojoSwap(c), findChildPojoSwaps(c));
+					cm = new ClassMeta<T>(type, this, findImplClass(type), findBeanFilter(type), findPojoSwap(type), findChildPojoSwaps(type));
 			}
 		}
 		return cm;
 	}
 
 	/**
-	 * Constructs a ClassMeta object given the specified object and parameters.
+	 * Used to resolve <code>ClassMetas</code> of type <code>Collection</code> and <code>Map</code> that have
+	 * <code>ClassMeta</code> values that themselves could be collections or maps.
+	 * <p>
+	 * <code>Collection</code> meta objects are assumed to be followed by zero or one meta objects indicating the element type.
+	 * <p>
+	 * <code>Map</code> meta objects are assumed to be followed by zero or two meta objects indicating the key and value types.
+	 * <p>
+	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
 	 *
-	 * @param o The parent class type.
-	 * 	Can be any of the following types:
-	 * 	<ul class='spaced-list'>
-	 * 		<li>{@link ClassMeta} object, which just returns the same object.
-	 * 		<li>{@link Class} object (e.g. <code>String.<jk>class</jk></code>).
-	 * 		<li>{@link Type} object (e.g. {@link ParameterizedType} or {@link GenericArrayType}.
-	 * 		<li>Anything else is interpreted as {@code getClassMeta(o.getClass(), parameters);}
-	 * 	</ul>
-	 * @return A ClassMeta object, or <jk>null</jk> if the object is null.
+	 * <h5 class='section'>Examples:</h5>
+	 * <ul>
+	 * 	<li><code>getClassMeta(String.<jk>class</jk>);</code> - A normal type.
+	 * 	<li><code>getClassMeta(List.<jk>class</jk>);</code> - A list containing objects.
+	 * 	<li><code>getClassMeta(List.<jk>class</jk>, String.<jk>class</jk>);</code> - A list containing strings.
+	 * 	<li><code>getClassMeta(LinkedList.<jk>class</jk>, String.<jk>class</jk>);</code> - A linked-list containing strings.
+	 * 	<li><code>getClassMeta(LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);</code> - A linked-list containing linked-lists of strings.
+	 * 	<li><code>getClassMeta(Map.<jk>class</jk>);</code> - A map containing object keys/values.
+	 * 	<li><code>getClassMeta(Map.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);</code> - A map containing string keys/values.
+	 * 	<li><code>getClassMeta(Map.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);</code> - A map containing string keys and values of lists containing beans.
+	 * </ul>
+	 *
+	 * @param type The class to resolve.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * @param args The type arguments of the class if it's a collection or map.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * 	<br>Ignored if the main type is not a map or collection.
+	 * @return The resolved class meta.
 	 */
-	public final ClassMeta getClassMeta(Type o) {
-		return getClassMeta(o, null);
+	public final <T> ClassMeta<T> getClassMeta(Type type, Type...args) {
+		if (type == null)
+			return null;
+		ClassMeta<T> cm = type instanceof Class ? getClassMeta((Class)type) : resolveClassMeta(type, null);
+		if (args.length == 0)
+			return cm;
+		ClassMeta<?>[] cma = new ClassMeta[args.length+1];
+		cma[0] = cm;
+		for (int i = 0; i < Array.getLength(args); i++) {
+			Type arg = (Type)Array.get(args, i);
+			cma[i+1] = arg instanceof Class ? getClassMeta((Class)arg) : resolveClassMeta(arg, null);
+		}
+		return (ClassMeta<T>) getTypedClassMeta(cma, 0);
 	}
 
-	final ClassMeta getClassMeta(Type o, Map<Class<?>,Class<?>[]> typeVarImpls) {
+	/*
+	 * Resolves the 'genericized' class meta at the specified position in the ClassMeta array.
+	 */
+	private ClassMeta<?> getTypedClassMeta(ClassMeta<?>[] c, int pos) {
+		ClassMeta<?> cm = c[pos++];
+		if (cm.isCollection()) {
+			ClassMeta<?> ce = c.length == pos ? object() : getTypedClassMeta(c, pos);
+			return (ce.isObject() ? cm : new ClassMeta(cm, null, null, ce));
+		} else if (cm.isMap()) {
+			 ClassMeta<?> ck = c.length == pos ? object() : c[pos++];
+			 ClassMeta<?> cv = c.length == pos ? object() : getTypedClassMeta(c, pos);
+			 return (ck.isObject() && cv.isObject() ? cm : new ClassMeta(cm, ck, cv, null));
+		}
+		return cm;
+	}
+
+	final ClassMeta resolveClassMeta(Type o, Map<Class<?>,Class<?>[]> typeVarImpls) {
 		if (o == null)
 			return null;
 
@@ -1530,7 +1475,7 @@ public class BeanContext extends Context {
 				for (Type pt2 : pt.getActualTypeArguments()) {
 					if (pt2 instanceof WildcardType || pt2 instanceof TypeVariable)
 						return null;
-					l.add(getClassMeta(pt2, null));
+					l.add(resolveClassMeta(pt2, null));
 				}
 				if (l.isEmpty())
 					return null;
@@ -1567,13 +1512,13 @@ public class BeanContext extends Context {
 	 * 	Can be <jk>null</jk> if the information is not known.
 	 * @return The new {@code ClassMeta} object wrapped around the {@code Type} object.
 	 */
-	protected final <T> ClassMeta<T> getClassMeta(BeanProperty p, Type t, Map<Class<?>,Class<?>[]> typeVarImpls) {
-		ClassMeta<T> cm = getClassMeta(t, typeVarImpls);
+	protected final <T> ClassMeta<T> resolveClassMeta(BeanProperty p, Type t, Map<Class<?>,Class<?>[]> typeVarImpls) {
+		ClassMeta<T> cm = resolveClassMeta(t, typeVarImpls);
 		ClassMeta<T> cm2 = cm;
 		if (p != null) {
 
 			if (p.type() != Object.class)
-				cm2 = getClassMeta(p.type(), typeVarImpls);
+				cm2 = resolveClassMeta(p.type(), typeVarImpls);
 
 			if (cm2.isMap()) {
 				Class<?>[] pParams = (p.params().length == 0 ? new Class[]{Object.class, Object.class} : p.params());
@@ -1619,7 +1564,7 @@ public class BeanContext extends Context {
 //	/**
 //	 * Converts class name strings to ClassMeta objects.
 //	 *
-//	 * <h6 class='topic'>Example:</h6>
+//	 * <h5 class='section'>Example:</h5>
 //	 * <ul>
 //	 * 	<li><js>"java.lang.String"</js>
 //	 * 	<li><js>"com.foo.sample.MyBean[]"</js>

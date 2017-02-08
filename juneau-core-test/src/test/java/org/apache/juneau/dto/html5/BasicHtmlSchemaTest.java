@@ -807,7 +807,7 @@ public class BasicHtmlSchemaTest {
 		} catch (AssertionError e) {
 			throw e;
 		} catch (Exception e) {
-			throw new AssertionError(label + " test failed", e);
+			throw new AssertionError(label + " test failed.  exception=" + e.getLocalizedMessage());
 		}
 	}
 
@@ -820,7 +820,7 @@ public class BasicHtmlSchemaTest {
 		} catch (AssertionError e) {
 			throw e;
 		} catch (Exception e) {
-			throw new AssertionError(label + " test failed", e);
+			throw new AssertionError(label + " test failed.  exception=" + e.getLocalizedMessage());
 		}
 	}
 

@@ -20,7 +20,7 @@ import org.apache.juneau.annotation.*;
 /**
  * Describes a single API operation on a path.
  *
- * <h6 class='topic'>Example:</h6>
+ * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	{
  * 		<js>"tags"</js>: [

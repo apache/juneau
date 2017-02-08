@@ -30,9 +30,9 @@ import com.hp.hpl.jena.util.iterator.*;
 /**
  * Parses RDF into POJOs.
  *
- * <h6 class='topic'>Configurable properties</h6>
+ * <h5 class='section'>Configurable properties:</h5>
  * <p>
- * 	Refer to <a class='doclink' href='package-summary.html#ParserConfigurableProperties'>Configurable Properties</a>
+ * 	Refer to <a class="doclink" href="package-summary.html#ParserConfigurableProperties">Configurable Properties</a>
  * 		for the entire list of configurable properties.
  *
  * <h6 class='topic'>Behavior-specific subclasses</h6>
@@ -45,9 +45,9 @@ import com.hp.hpl.jena.util.iterator.*;
  * 	<li>{@link RdfParser.N3} - N3.
  * </ul>
  *
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>Additional information:</h5>
  * <p>
- * 	See <a class='doclink' href='package-summary.html#TOC'>RDF Overview</a> for an overview of RDF support in Juneau.
+ * 	See <a class="doclink" href="package-summary.html#TOC">RDF Overview</a> for an overview of RDF support in Juneau.
  */
 @Consumes(value="text/xml+rdf")
 public class RdfParser extends ReaderParser {
@@ -107,8 +107,6 @@ public class RdfParser extends ReaderParser {
 	protected <T> T doParse(ParserSession session, ClassMeta<T> type) throws Exception {
 
 		RdfParserSession s = (RdfParserSession)session;
-
-		type = session.normalizeClassMeta(type);
 
 		Model model = s.getModel();
 		RDFReader r = s.getRdfReader();

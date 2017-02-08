@@ -105,7 +105,7 @@ public class HtmlTemplatesTest {
 		} catch (AssertionError e) {
 			throw e;
 		} catch (Exception e) {
-			throw new AssertionError(label + " test failed", e);
+			throw new AssertionError(label + " test failed.  exception=" + e.getLocalizedMessage());
 		}
 	}
 
@@ -118,7 +118,7 @@ public class HtmlTemplatesTest {
 		} catch (AssertionError e) {
 			throw e;
 		} catch (Exception e) {
-			throw new AssertionError(label + " test failed", e);
+			throw new AssertionError(label + " test failed.  exception=" + e.getLocalizedMessage());
 		}
 	}
 

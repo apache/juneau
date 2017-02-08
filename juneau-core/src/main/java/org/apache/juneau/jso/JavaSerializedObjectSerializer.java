@@ -20,7 +20,7 @@ import org.apache.juneau.serializer.*;
 /**
  * Serializes POJOs to HTTP responses as Java {@link ObjectOutputStream ObjectOutputStreams}.
  *
- * <h6 class='topic'>Media types</h6>
+ * <h5 class='section'>Media types:</h5>
  * <p>
  * 	Handles <code>Accept</code> types: <code>application/x-java-serialized-object</code>
  * <p>

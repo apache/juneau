@@ -19,7 +19,7 @@ import org.apache.juneau.svl.*;
  * <p>
  * The format for this var is <js>"$E{envVar}"</js> or <js>"$E{envVar,defaultValue}"</js>
  *
- * <h6 class='topic'>Example:</h6>
+ * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Create a variable resolver that resolves environment variables (e.g. "$E{PATH}")</jc>
  * 	VarResolver r = <jk>new</jk> VarResolver().addVars(EnvVariablesVar.<js>class</js>);

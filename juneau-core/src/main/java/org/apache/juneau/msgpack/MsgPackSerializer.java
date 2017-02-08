@@ -23,13 +23,13 @@ import org.apache.juneau.transform.*;
 /**
  * Serializes POJO models to MessagePack.
  *
- * <h6 class='topic'>Media types</h6>
+ * <h5 class='section'>Media types:</h5>
  * <p>
  * 	Handles <code>Accept</code> types: <code>octal/msgpack</code>
  * <p>
  * 	Produces <code>Content-Type</code> types: <code>octal/msgpack</code>
  *
- * <h6 class='topic'>Configurable properties</h6>
+ * <h5 class='section'>Configurable properties:</h5>
  * <p>
  * 	This class has the following properties associated with it:
  * <ul>

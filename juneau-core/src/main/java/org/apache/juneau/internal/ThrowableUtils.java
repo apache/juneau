@@ -24,7 +24,7 @@ public class ThrowableUtils {
 	 *
 	 * @param o The object to check.
 	 * @param msg The message of the IllegalArgumentException.
-	 * @param args {@link MessageFormat}-style arguments in the message.
+	 * @param args Optional {@link MessageFormat}-style arguments.
 	 * @throws IllegalArgumentException
 	 */
 	public static void assertNotNull(Object o, String msg, Object...args) throws IllegalArgumentException {
@@ -60,7 +60,7 @@ public class ThrowableUtils {
 	 * Shortcut for calling <code><jk>new</jk> IllegalArgumentException(MessageFormat.<jsm>format</jsm>(msg, args));</code>
 	 *
 	 * @param msg The message of the IllegalArgumentException.
-	 * @param args {@link MessageFormat}-style arguments in the message.
+	 * @param args Optional {@link MessageFormat}-style arguments.
 	 * @throws IllegalArgumentException
 	 */
 	public static void illegalArg(String msg, Object...args) throws IllegalArgumentException {
@@ -72,7 +72,7 @@ public class ThrowableUtils {
 	 *
 	 * @param threadId The ID of the thread to compare against.
 	 * @param msg The message of the IllegalStateException.
-	 * @param args {@link IllegalStateException}-style arguments in the message.
+	 * @param args Optional {@link MessageFormat}-style arguments.
 	 * @throws IllegalStateException
 	 */
 	public static void assertSameThread(long threadId, String msg, Object...args) throws IllegalStateException {

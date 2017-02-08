@@ -40,7 +40,7 @@ public @interface Json {
 	 * <p>
 	 * 	This annotation can be applied to beans as well as other objects serialized to other types (e.g. strings).
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@Json</ja>(wrapperAttr=<js>"myWrapper"</js>)
 	 * 	<jk>public class</jk> MyBean {

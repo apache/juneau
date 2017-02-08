@@ -35,17 +35,17 @@ import org.w3c.dom.ls.*;
 /**
  * Serializes POJO metadata to HTTP responses as XML.
  *
- * <h6 class='topic'>Media types</h6>
+ * <h5 class='section'>Media types:</h5>
  * <p>
  * 	Handles <code>Accept</code> types: <code>text/xml+schema</code>
  * <p>
  * 	Produces <code>Content-Type</code> types: <code>text/xml</code>
  *
- * <h6 class='topic'>Description</h6>
+ * <h5 class='section'>Description:</h5>
  * <p>
  * 	Produces the XML-schema representation of the XML produced by the {@link XmlSerializer} class with the same properties.
  *
- * <h6 class='topic'>Configurable properties</h6>
+ * <h5 class='section'>Configurable properties:</h5>
  * <p>
  * 	This class has the following properties associated with it:
  * <ul>

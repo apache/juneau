@@ -19,7 +19,7 @@ import org.apache.juneau.annotation.*;
 /**
  * Describes a single response from an API Operation.
  *
- * <h6 class='topic'>Example:</h6>
+ * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	{
  * 		<js>"description"</js>: <js>"A complex object array response"</js>,

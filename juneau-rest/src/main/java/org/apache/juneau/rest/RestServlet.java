@@ -46,7 +46,6 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.annotation.Parameter;
 import org.apache.juneau.rest.annotation.Properties;
 import org.apache.juneau.rest.response.*;
 import org.apache.juneau.rest.vars.*;
@@ -59,7 +58,7 @@ import org.apache.juneau.utils.*;
 /**
  * Servlet implementation of a REST resource.
  * <p>
- * 	Refer to <a class='doclink' href='package-summary.html#TOC'>REST Servlet API</a> for information about using this class.
+ * 	Refer to <a class="doclink" href="package-summary.html#TOC">REST Servlet API</a> for information about using this class.
  * </p>
  */
 @SuppressWarnings({"rawtypes","hiding"})
@@ -1229,7 +1228,7 @@ public abstract class RestServlet extends HttpServlet {
 	 *
 	 * @param level The log level.
 	 * @param msg The message to log.
-	 * @param args {@link MessageFormat} style arguments in the message.
+	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	protected void log(Level level, String msg, Object...args) {
 		log(level, null, msg, args);
@@ -1243,14 +1242,14 @@ public abstract class RestServlet extends HttpServlet {
 	 * 		it's safe to use this method from within debug log statements.
 	 *	</p>
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	logObjects(<jsf>DEBUG</jsf>, <js>"Pojo contents:\n{0}"</js>, myPojo);
 	 * </p>
 	 *
 	 * @param level The log level.
 	 * @param msg The message to log.
-	 * @param args {@link MessageFormat} style arguments in the message.
+	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	protected void logObjects(Level level, String msg, Object...args) {
 		for (int i = 0; i < args.length; i++)
@@ -1268,7 +1267,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * @param level The log level.
 	 * @param cause The cause.
 	 * @param msg The message to log.
-	 * @param args {@link MessageFormat} style arguments in the message.
+	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	protected void log(Level level, Throwable cause, String msg, Object...args) {
 		JuneauLogger log = getLogger();
@@ -1700,16 +1699,15 @@ public abstract class RestServlet extends HttpServlet {
 	 * @param req The current request.
 	 * @return The localized contact information of this REST resource, or <jk>null</jk> if no contact information was found.
 	 */
-	@SuppressWarnings("unchecked")
 	public List<Tag> getTags(RestRequest req) {
 		VarResolverSession vr = req.getVarResolverSession();
 		JsonParser jp = JsonParser.DEFAULT;
 		try {
 			if (tags != null)
-				return jp.parseCollection(vr.resolve(tags), ArrayList.class, Tag.class);
+				return jp.parse(vr.resolve(tags), ArrayList.class, Tag.class);
 			String tags = msgs.findFirstString(req.getLocale(), "tags");
 			if (tags != null)
-				return jp.parseCollection(vr.resolve(tags), ArrayList.class, Tag.class);
+				return jp.parse(vr.resolve(tags), ArrayList.class, Tag.class);
 			Swagger s = req.getSwaggerFromFile();
 			if (s != null)
 				return s.getTags();
@@ -1786,7 +1784,7 @@ public abstract class RestServlet extends HttpServlet {
 	 *
 	 * @param locale The client locale.
 	 * @param key The resource bundle key.
-	 * @param args Optional {@link java.text.MessageFormat} variable values to replace.
+	 * @param args Optional {@link MessageFormat}-style arguments.
 	 * @return The localized message.
 	 */
 	public String getMessage(Locale locale, String key, Object...args) {
@@ -1979,7 +1977,7 @@ public abstract class RestServlet extends HttpServlet {
 		Map<String,String> m = new LinkedHashMap<String,String>();
 		for (RestResource r : restResourceAnnotationsParentFirst.values())
 			if (! r.staticFiles().isEmpty())
-				m.putAll(JsonParser.DEFAULT.parseMap(getVarResolver().resolve(r.staticFiles()), LinkedHashMap.class, String.class, String.class));
+				m.putAll(JsonParser.DEFAULT.parse(getVarResolver().resolve(r.staticFiles()), LinkedHashMap.class));
 		return m;
 	}
 
@@ -2122,7 +2120,6 @@ public abstract class RestServlet extends HttpServlet {
 				throw new ServletException("Use of multipart flag on parameter that's not an array or Collection on method" + m);
 		}
 
-		@SuppressWarnings("unchecked")
 		private Object getValue(RestRequest req, RestResponse res) throws Exception {
 			BeanSession session = req.getBeanSession();
 			switch(paramType) {
@@ -2390,16 +2387,15 @@ public abstract class RestServlet extends HttpServlet {
 			return null;
 		}
 
-		@SuppressWarnings("unchecked")
 		private List<String> getTags(RestRequest req) {
 			VarResolverSession vr = req.getVarResolverSession();
 			JsonParser jp = JsonParser.DEFAULT;
 			try {
 				if (tags != null)
-					return jp.parseCollection(vr.resolve(tags), ArrayList.class, String.class);
+					return jp.parse(vr.resolve(tags), ArrayList.class, String.class);
 				String tags = msgs.findFirstString(req.getLocale(), method.getName() + ".tags");
 				if (tags != null)
-					return jp.parseCollection(vr.resolve(tags), ArrayList.class, String.class);
+					return jp.parse(vr.resolve(tags), ArrayList.class, String.class);
 				Operation o = getSwaggerOperationFromFile(req);
 				if (o != null)
 					return o.getTags();
@@ -2569,7 +2565,7 @@ public abstract class RestServlet extends HttpServlet {
 				ResponseInfo r2 = ResponseInfo.create(description);
 
 				if (r.headers().length > 0) {
-					for (Parameter v : r.headers()) {
+					for (org.apache.juneau.rest.annotation.Parameter v : r.headers()) {
 						HeaderInfo h = HeaderInfo.createStrict(vr.resolve(v.type()));
 						if (! v.collectionFormat().isEmpty())
 							h.setCollectionFormat(vr.resolve(v.collectionFormat()));
@@ -2632,7 +2628,7 @@ public abstract class RestServlet extends HttpServlet {
 					} else if ("schema".equals(name)) {
 						r2.setSchema(jp.parse(value, SchemaInfo.class));
 					} else if ("examples".equals(name)) {
-						r2.setExamples(jp.parseMap(value, TreeMap.class, String.class, Object.class));
+						r2.setExamples(jp.parse(value, TreeMap.class));
 					} else {
 						System.err.println("Unknown bundle key '"+key+"'");
 					}
@@ -2930,7 +2926,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * <p>
 	 * 	Subclasses can augment this list by adding their own variables.
 	 * </p>
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@Override</ja>
 	 * 	<jk>protected</jk> StringVarResolver createVarResolver() {
@@ -3032,14 +3028,17 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Returns the class-level properties associated with this servlet.
 	 * <p>
-	 * 	Created by the {@link #createGuards(ObjectMap)} method.
+	 * Created by the {@link #createGuards(ObjectMap)} method.
 	 * <p>
-	 * 	<b>Important note:</b>  The returned {@code Map} is mutable.  Therefore, subclasses are free to override
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>The returned {@code Map} is mutable.  Therefore, subclasses are free to override
 	 * 	or set additional initialization parameters in their {@code init()} method.
+	 * </ul>
 	 * <p>
-	 * 	This method can be called from {@link HttpServlet#init(ServletConfig)} or {@link HttpServlet#init()}.
+	 * This method can be called from {@link HttpServlet#init(ServletConfig)} or {@link HttpServlet#init()}.
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Old way of getting a boolean init parameter</jc>
 	 * 	String s = getInitParam(<js>"allowMethodParam"</js>);

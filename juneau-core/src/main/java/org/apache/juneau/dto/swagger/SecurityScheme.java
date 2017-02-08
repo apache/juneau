@@ -23,7 +23,7 @@ import org.apache.juneau.json.*;
  * <p>
  * Supported schemes are basic authentication, an API key (either as a header or as a query parameter) and OAuth2's common flows (implicit, password, application and access code).
  *
- * <h6 class='topic'>Example:</h6>
+ * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Basic authentication sample</jc>
  * 	{

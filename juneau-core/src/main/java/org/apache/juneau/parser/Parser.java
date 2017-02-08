@@ -20,7 +20,6 @@ import java.text.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.MediaType;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.transform.*;
@@ -37,7 +36,7 @@ import org.apache.juneau.utils.*;
  * 	However, the media types can also be specified programmatically by overriding the {@link #getMediaTypes()} method.
  *
  * <a id='ValidDataConversions'></a><h6 class='topic'>Valid data conversions</h6>
- * 	Parsers can parse any parsable POJO types, as specified in the <a class='doclink' href='../../../../overview-summary.html#Core.PojoCategories'>POJO Categories</a>.
+ * 	Parsers can parse any parsable POJO types, as specified in the <a class="doclink" href="../../../../overview-summary.html#Core.PojoCategories">POJO Categories</a>.
  * <p>
  * 	Some examples of conversions are shown below...
  * </p>
@@ -161,7 +160,6 @@ public abstract class Parser extends CoreApi {
 	 * @param type The class type of the object to create.
 	 * 	If <jk>null</jk> or <code>Object.<jk>class</jk></code>, object type is based on what's being parsed.
 	 * 	For example, when parsing JSON text, it may return a <code>String</code>, <code>Number</code>, <code>ObjectMap</code>, etc...
-	 *
 	 * @param <T> The class type of the object to create.
 	 * @return The parsed object.
 	 * @throws Exception If thrown from underlying stream, or if the input contains a syntax error or is malformed.
@@ -180,17 +178,16 @@ public abstract class Parser extends CoreApi {
 	//--------------------------------------------------------------------------------
 
 	/**
-	 * Parses the content of the reader and creates an object of the specified type.
+	 * Entry point for all parsing calls.
+	 * <p>
+	 * Calls the {@link #doParse(ParserSession, ClassMeta)} implementation class and catches/rewraps any exceptions thrown.
 	 * @param session The runtime session returned by {@link #createSession(Object, ObjectMap, Method, Object, Locale, TimeZone, MediaType)}.
 	 * @param type The class type of the object to create.
-	 * 	If <jk>null</jk> or <code>Object.<jk>class</jk></code>, object type is based on what's being parsed.
-	 * 	For example, when parsing JSON text, it may return a <code>String</code>, <code>Number</code>, <code>ObjectMap</code>, etc...
-	 *
 	 * @param <T> The class type of the object to create.
 	 * @return The parsed object.
 	 * @throws ParseException If the input contains a syntax error or is malformed, or is not valid for the specified type.
 	 */
-	public final <T> T parse(ParserSession session, ClassMeta<T> type) throws ParseException {
+	public final <T> T parseSession(ParserSession session, ClassMeta<T> type) throws ParseException {
 		try {
 			return doParse(session, type);
 		} catch (ParseException e) {
@@ -207,10 +204,41 @@ public abstract class Parser extends CoreApi {
 	}
 
 	/**
-	 * Parses the content of the reader and creates an object of the specified type.
-	 * <p>
-	 * Equivalent to calling <code>parser.parse(in, type, <jk>null</jk>);</code>
+	 * Parses input into the specified object type.
+	 * The type can be a simple type (e.g. beans, strings, numbers) or parameterized type (collections/maps).
 	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode'>
+	 * 	ReaderParser p = JsonParser.<jsf>DEFAULT</jsf>;
+	 *
+	 * 	<jc>// Parse into a linked-list of strings.</jc>
+	 * 	List l = p.parse(json, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a linked-list of beans.</jc>
+	 * 	List l = p.parse(json, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a linked-list of linked-lists of strings.</jc>
+	 * 	List l = p.parse(json, LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a map of string keys/values.</jc>
+	 * 	Map m = p.parse(json, TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a map containing string keys and values of lists containing beans.</jc>
+	 * 	Map m = p.parse(json, TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 * </p>
+	 * <p>
+	 * <code>Collection</code> classes are assumed to be followed by zero or one objects indicating the element type.
+	 * <p>
+	 * <code>Map</code> classes are assumed to be followed by zero or two meta objects indicating the key and value types.
+	 * <p>
+	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>Use the {@link #parse(Object, Class)} method instead if you don't need a parameterized map/collection.
+	 * </ul>
+	 *
+	 * @param <T> The class type of the object to create.
 	 * @param input The input.
 	 * 	<br>Character-based parsers can handle the following input class types:
 	 * 	<ul>
@@ -228,123 +256,67 @@ public abstract class Parser extends CoreApi {
 	 * 		<li><code><jk>byte</jk>[]</code>
 	 * 		<li>{@link File}
 	 * 	</ul>
-	 * @param type The class type of the object to create.
-	 * 	If <jk>null</jk> or <code>Object.<jk>class</jk></code>, object type is based on what's being parsed.
-	 * 	For example, when parsing JSON text, it may return a <code>String</code>, <code>Number</code>, <code>ObjectMap</code>, etc...
-	 * @param <T> The class type of the object to create.
+	 * @param type The object type to create.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * @param args The type arguments of the class if it's a collection or map.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * 	<br>Ignored if the main type is not a map or collection.
 	 * @return The parsed object.
 	 * @throws ParseException If the input contains a syntax error or is malformed, or is not valid for the specified type.
 	 */
-	public final <T> T parse(Object input, ClassMeta<T> type) throws ParseException {
+	@SuppressWarnings("unchecked")
+	public final <T> T parse(Object input, Type type, Type...args) throws ParseException {
 		ParserSession session = createSession(input);
-		return parse(session, type);
+		return (T)parseSession(session, session.getClassMeta(type, args));
 	}
 
 	/**
-	 * Parses input into the specified object type.
-	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * Same as {@link #parse(Object, Type, Type...)} except optimized for a non-parameterized class.
+	 * <p>
+	 * This is the preferred parse method for simple types since you don't need to cast the results.
+	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
 	 * 	ReaderParser p = JsonParser.<jsf>DEFAULT</jsf>;
+	 *
+	 * 	<jc>// Parse into a string.</jc>
+	 * 	MyBean b = p.parse(json, String.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a bean.</jc>
 	 * 	MyBean b = p.parse(json, MyBean.<jk>class</jk>);
-	 * 		</p>
-	 * 		<p>
-	 * 		This method equivalent to the following code:
-	 * 		<p class='bcode'>
-	 * 	ReaderParser p = JsonParser.<jsf>DEFAULT</jsf>;
-	 * 	ClassMeta&lt;MyBean&gt; cm = p.getBeanContext().getClassMeta(MyBean.<jk>class</jk>);
-	 * 	MyBean b = p.parse(json, cm, <jk>null</jk>);
+	 *
+	 * 	<jc>// Parse into a linked-list of objects.</jc>
+	 * 	List l = p.parse(json, LinkedList.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a map of object keys/values.</jc>
+	 * 	Map m = p.parse(json, TreeMap.<jk>class</jk>);
 	 * </p>
 	 *
-	 * @param <T> The class type of the object to create.
-	 * @param input The input.  See {@link #parse(Object, ClassMeta)} for supported input types.
-	 * @param type The class type of the object to create.
+	 * @param <T> The class type of the object being created.
+	 * @param input The input.
+	 * 	See {@link #parse(Object, Type, Type...)} for details.
+	 * @param type The object type to create.
 	 * @return The parsed object.
 	 * @throws ParseException If the input contains a syntax error or is malformed, or is not valid for the specified type.
 	 */
 	public final <T> T parse(Object input, Class<T> type) throws ParseException {
 		ParserSession session = createSession(input);
-		return parse(session, session.getClassMeta(type));
+		return parseSession(session, session.getClassMeta(type));
 	}
 
 	/**
-	 * Parses input into a map with specified key and value types.
-	 *
-	 * <h6 class='topic'>Example:</h6>
-	 * <p class='bcode'>
-	 * 	ReaderParser p = JsonParser.<jsf>DEFAULT</jsf>;
-	 * 	Map&lt;String,MyBean&gt; m = p.parseMap(json, LinkedHashMap.<jk>class</jk>, String.<jk>class</jk>, MyBean.<jk>class</jk>);
-	 * </p>
+	 * Same as {@link #parse(Object, Type, Type...)} except the type has already been converted into a {@link ClassMeta} object.
 	 * <p>
-	 * 	A simpler approach is often to just extend the map class you want and just use the normal {@link #parse(Object, Class)} method:
-	 * </p>
-	 * <p class='bcode'>
-	 * 	<jk>public static class</jk> MyMap <jk>extends</jk> LinkedHashMap&lt;String,MyBean&gt; {}
+	 * This is mostly an internal method used by the framework.
 	 *
-	 * 	ReaderParser p = JsonParser.<jsf>DEFAULT</jsf>;
-	 * 	Map&lt;String,MyBean&gt; m = p.parse(json, MyMap.<jk>class</jk>);
-	 * </p>
-	 * <p>
-	 * 	This method equivalent to the following code:
-	 * </p>
-	 * <p class='bcode'>
-	 * 	ReaderParser p = JsonParser.<jsf>DEFAULT</jsf>;
-	 * 	ClassMeta&lt;Map&lt;String,MyBean&gt;&gt; cm = p.getBeanContext().getMapClassMeta(LinkedList.<jk>class</jk>, String.<jk>class</jk>, MyBean.<jk>class</jk>);
-	 * 	Map&lt;String,MyBean&gt; m = p.parse(json, cm, <jk>null</jk>);
-	 * </p>
-	 *
-	 * @param <T> The class type of the object to create.
-	 * @param input The input.  See {@link #parse(Object, ClassMeta)} for supported input types.
-	 * @param mapClass The map class type.
-	 * @param keyClass The key class type.
-	 * @param valueClass The value class type.
+	 * @param <T> The class type of the object being created.
+	 * @param input The input.
+	 * 	See {@link #parse(Object, Type, Type...)} for details.
+	 * @param type The object type to create.
 	 * @return The parsed object.
 	 * @throws ParseException If the input contains a syntax error or is malformed, or is not valid for the specified type.
 	 */
-	public final <K,V,T extends Map<K,V>> T parseMap(Object input, Class<T> mapClass, Class<K> keyClass, Class<V> valueClass) throws ParseException {
-		ParserSession session = createSession(input);
-		ClassMeta<T> cm = session.getClassMeta(mapClass, keyClass, valueClass);
-		return parse(session, cm);
-	}
-
-	/**
-	 * Parses input into a collection with a specified element type.
-	 *
-	 * <h6 class='topic'>Example:</h6>
-	 * <p class='bcode'>
-	 * 	ReaderParser p = JsonParser.<jsf>DEFAULT</jsf>;
-	 * 	List&lt;MyBean&gt; l = p.parseCollection(json, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
-	 * </p>
-	 * <p>
-	 * 	A simpler approach is often to just extend the collection class you want and just use the normal {@link #parse(Object, Class)} method:
-	 * </p>
-	 * <p class='bcode'>
-	 * 	<jk>public static class</jk> MyBeanCollection <jk>extends</jk> LinkedList&lt;MyBean&gt; {}
-	 *
-	 * 	ReaderParser p = JsonParser.<jsf>DEFAULT</jsf>;
-	 * 	List&lt;MyBean&gt; l = p.parse(json, MyBeanCollection.<jk>class</jk>);
-	 * 		</p>
-	 * 		<p>
-	 * 			This method equivalent to the following code:
-	 * 		</p>
-	 * 		<p class='bcode'>
-	 * 	ReaderParser p = JsonParser.<jsf>DEFAULT</jsf>;
-	 * 	ClassMeta&lt;List&lt;MyBean&gt;&gt; cm = p.getBeanContext().getCollectionClassMeta(LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
-	 * 	List&lt;MyBean&gt; l = p.parse(json, cm, <jk>null</jk>);
-	 * </p>
-	 *
-	 * @param <T> The class type of the object to create.
-	 * @param input The input.  See {@link #parse(Object, ClassMeta)} for supported input types.
-	 * @param collectionClass The collection class type.
-	 * @param entryClass The class type of entries in the collection.
-	 * @return The parsed object.
-	 * @throws ParseException If the input contains a syntax error or is malformed, or is not valid for the specified type.
-	 * @throws IOException If a problem occurred trying to read from the reader.
-	 */
-	public final <E,T extends Collection<E>> T parseCollection(Object input, Class<T> collectionClass, Class<E> entryClass) throws ParseException, IOException {
-		ParserSession session = createSession(input);
-		ClassMeta<T> cm = session.getClassMeta(collectionClass, entryClass);
-		return parse(session, cm);
+	public final <T> T parse(Object input, ClassMeta<T> type) throws ParseException {
+		return parseSession(createSession(input), type);
 	}
 
 	/**

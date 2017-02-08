@@ -37,7 +37,7 @@ import org.apache.juneau.xml.*;
  * 	convenience methods, or revert to using lower level methods like any other servlet response.
  * </p>
  *
- * <h6 class='topic'>Example:</h6>
+ * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>)
  * 	<jk>public void</jk> doGet(RestRequest req, RestResponse res) {
@@ -46,7 +46,7 @@ import org.apache.juneau.xml.*;
  * 	}
  * </p>
  * <p>
- * 	Refer to <a class='doclink' href='package-summary.html#TOC'>REST Servlet API</a> for information about using this class.
+ * 	Refer to <a class="doclink" href="package-summary.html#TOC">REST Servlet API</a> for information about using this class.
  * </p>
  */
 public final class RestResponse extends HttpServletResponseWrapper {
@@ -153,7 +153,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * 	<ul>
 	 * 	  <li> {@link InputStream}
 	 * 	  <li> {@link Reader}
-	 * 	  <li> Any serializable type defined in <a href='../../../../overview-summary.html#Core.PojoCategories'>POJO Categories</a>
+	 * 	  <li> Any serializable type defined in <a class="doclink" href="../../../../overview-summary.html#Core.PojoCategories">POJO Categories</a>
 	 * 	</ul>
 	 * <p>
 	 * 	If it's an {@link InputStream} or {@link Reader}, you must also specify the <code>Content-Type</code> using the {@link #setContentType(String)} method.
@@ -199,7 +199,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	/**
 	 * Shortcut method that allows you to use varargs to simplify setting array output.
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Instead of...</jc>
 	 * 	response.setOutput(<jk>new</jk> Object[]{x,y,z});

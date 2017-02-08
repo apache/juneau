@@ -181,7 +181,10 @@ public class SerializerContext extends BeanContext {
 	 * 	the following when <jsf>SERIALIZER_ignoreRecursions</jsf> is <jk>true</jk>...
 	 * <code>{A:{B:{C:null}}}</code><br>
 	 * <p>
-	 * Note:  Checking for recursion can cause a small performance penalty.
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>Checking for recursion can cause a small performance penalty.
+	 * </ul>
 	 */
 	public static final String SERIALIZER_detectRecursions = "Serializer.detectRecursions";
 
@@ -334,7 +337,7 @@ public class SerializerContext extends BeanContext {
 	 * (i.e. URIs not containing a schema and not starting with <js>'/'</js>).
 	 * (e.g. <js>"foo/bar"</js>)
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <table class='styled'>
 	 *		<tr><th>SERIALIZER_relativeUriBase</th><th>URI</th><th>Serialized URI</th></tr>
 	 * 	<tr>
@@ -370,7 +373,7 @@ public class SerializerContext extends BeanContext {
 	 * (i.e. URIs starting with <js>'/'</js>).
 	 * (e.g. <js>"/foo/bar"</js>)
 	 *
-	 * <h6 class='topic'>Examples:</h6>
+	 * <h5 class='section'>Examples:</h5>
 	 * <table class='styled'>
 	 * 	<tr><th>SERIALIZER_absolutePathUriBase</th><th>URI</th><th>Serialized URI</th></tr>
 	 * 	<tr>

@@ -24,7 +24,7 @@ import org.apache.juneau.svl.*;
  * This variable resolver requires that a {@link ConfigFile} object be set as a context object on the resolver or a
  * 	session object on the resolver session.
  *
- * <h6 class='topic'>Example:</h6>
+ * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Create a config file object.</jc>
  * 	ConfigFile configFile = ConfigMgr.<jsf>DEFAULT</jsf>.get(<js>"MyConfig.cfg"</js>);

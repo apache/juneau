@@ -29,13 +29,13 @@ import org.apache.juneau.xml.annotation.*;
 /**
  * Serializes POJO models to HTML.
  *
- * <h6 class='topic'>Media types</h6>
+ * <h5 class='section'>Media types:</h5>
  * <p>
  * 	Handles <code>Accept</code> types: <code>text/html</code>
  * <p>
  * 	Produces <code>Content-Type</code> types: <code>text/html</code>
  *
- * <h6 class='topic'>Description</h6>
+ * <h5 class='section'>Description:</h5>
  * <p>
  * 	The conversion is as follows...
  * 	<ul class='spaced-list'>
@@ -50,7 +50,7 @@ import org.apache.juneau.xml.annotation.*;
  * <p>
  * 	The {@link HtmlLink} annotation can be used on beans to add hyperlinks to the output.
  *
- * <h6 class='topic'>Configurable properties</h6>
+ * <h5 class='section'>Configurable properties:</h5>
  * <p>
  * 	This class has the following properties associated with it:
  * <ul class='spaced-list'>
@@ -65,7 +65,7 @@ import org.apache.juneau.xml.annotation.*;
  * 	<li>{@link SqReadable} - Default serializer, single quotes, whitespace added.
  * </ul>
  *
- * <h6 class='topic'>Example:</h6>
+ * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Use one of the default serializers to serialize a POJO</jc>
  * 		String html = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(someObject);

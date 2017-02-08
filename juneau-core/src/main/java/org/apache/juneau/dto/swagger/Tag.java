@@ -19,7 +19,7 @@ import org.apache.juneau.annotation.*;
  * <p>
  * It is not mandatory to have a Tag Object per tag used there.
  *
- * <h6 class='topic'>Example:</h6>
+ * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	{
  * 		<js>"name"</js>: <js>"pet"</js>,

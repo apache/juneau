@@ -17,7 +17,7 @@ import org.apache.juneau.annotation.*;
 /**
  * License information for the exposed API.
  *
- * <h6 class='topic'>Example:</h6>
+ * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	{
  * 		<js>"name"</js>: <js>"Apache 2.0"</js>,

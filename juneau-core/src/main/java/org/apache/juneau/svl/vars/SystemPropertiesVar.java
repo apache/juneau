@@ -19,7 +19,7 @@ import org.apache.juneau.svl.*;
  * <p>
  * The format for this var is <js>"$S{systemProperty}"</js> or <js>"$S{systemProperty,defaultValue}"</js>
  *
- * <h6 class='topic'>Example:</h6>
+ * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Create a variable resolver that resolves system properties (e.g. "$S{java.home}")</jc>
  * 	VarResolver r = <jk>new</jk> VarResolver().addVars(SystemPropertiesVar.<js>class</js>);

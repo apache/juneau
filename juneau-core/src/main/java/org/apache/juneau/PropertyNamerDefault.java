@@ -17,7 +17,7 @@ import java.beans.*;
 /**
  * Default property namer.
  *
- * <h6 class='topic'>Examples:</h6>
+ * <h5 class='section'>Examples:</h5>
  * <ul>
  * 	<li><js>"fooBar"</js> -&gt; <js>"fooBar"</js>
  * 	<li><js>"fooBarURL"</js> -&gt; <js>"fooBarURL"</js>

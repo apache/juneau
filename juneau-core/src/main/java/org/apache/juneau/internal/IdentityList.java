@@ -21,8 +21,10 @@ import java.util.*;
  * 	<li>Order of insertion maintained.
  * </ul>
  * <p>
- * 	Note:  This class is NOT thread safe, and is intended for use on small lists.
- *
+ * <h5 class='section'>Notes:</h5>
+ * <ul>
+ * 	<li>This class is NOT thread safe, and is intended for use on small lists.
+ * </ul>
  * @param <T> Entry type.
  */
 public class IdentityList<T> extends LinkedList<T> {

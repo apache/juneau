@@ -26,11 +26,11 @@ import org.apache.juneau.transform.*;
 /**
  * Parses a MessagePack stream into a POJO model.
  *
- * <h6 class='topic'>Media types</h6>
+ * <h5 class='section'>Media types:</h5>
  * <p>
  * 	Handles <code>Content-Type</code> types: <code>octal/msgpack</code>
  *
- * <h6 class='topic'>Configurable properties</h6>
+ * <h5 class='section'>Configurable properties:</h5>
  * <p>
  * 	This class has the following properties associated with it:
  * <ul>
@@ -193,7 +193,6 @@ public final class MsgPackParser extends InputStreamParser {
 	@Override /* Parser */
 	protected <T> T doParse(ParserSession session, ClassMeta<T> type) throws Exception {
 		MsgPackParserSession s = (MsgPackParserSession)session;
-		type = s.normalizeClassMeta(type);
 		MsgPackInputStream is = s.getInputStream();
 		T o = parseAnything(s, type, is, s.getOuter(), null);
 		return o;

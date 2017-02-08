@@ -25,7 +25,7 @@ public class FormattedRuntimeException extends RuntimeException {
 	 * Constructor.
 	 *
 	 * @param message The {@link MessageFormat}-style message.
-	 * @param args The arguments in the message.
+	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public FormattedRuntimeException(String message, Object...args) {
 		super(args.length == 0 ? message : MessageFormat.format(message, args));
@@ -36,7 +36,7 @@ public class FormattedRuntimeException extends RuntimeException {
 	 *
 	 * @param causedBy The cause of this exception.
 	 * @param message The {@link MessageFormat}-style message.
-	 * @param args The arguments in the message.
+	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public FormattedRuntimeException(Throwable causedBy, String message, Object...args) {
 		this(message, args);

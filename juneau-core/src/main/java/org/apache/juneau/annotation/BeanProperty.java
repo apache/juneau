@@ -67,7 +67,7 @@ public @interface BeanProperty {
 	 * <p>
 	 * 	This property must denote a concrete bean class with a no-arg constructor.
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jk>public class</jk> MyBean {
 	 *
@@ -84,7 +84,7 @@ public @interface BeanProperty {
 	 * the class types of the contents of the bean property object when the generic parameter
 	 * types are interfaces or abstract classes.
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jk>public class</jk> MyBean {
 	 *
@@ -106,7 +106,7 @@ public @interface BeanProperty {
 	 * Typically used for rendering {@link Date Dates} and {@link Calendar Calendars}
 	 * 	as a particular string format.
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jk>public class</jk> MyClass {
 	 *
@@ -129,7 +129,7 @@ public @interface BeanProperty {
 	 * 	<li>Bean/Map collections - Same, but applied to each element in the collection.
 	 * </ul>
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jk>public class</jk> MyClass {
 	 *

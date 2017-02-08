@@ -21,7 +21,7 @@ import java.lang.annotation.*;
  * Annotation that can be applied to a parameter of a {@link RestMethod} annotated method
  * 	to identify it as a variable in a URL path pattern converted to a POJO.
  *
- * <h6 class='topic'>Example:</h6>
+ * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/myurl/{foo}/{bar}/{baz}/*"</js>)
  * 	<jk>public void</jk> doGet(RestRequest req, RestResponse res,

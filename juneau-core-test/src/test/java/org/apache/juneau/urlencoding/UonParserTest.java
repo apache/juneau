@@ -19,7 +19,7 @@ import java.util.*;
 import org.apache.juneau.parser.*;
 import org.junit.*;
 
-@SuppressWarnings({"rawtypes","unchecked","javadoc"})
+@SuppressWarnings({"rawtypes","javadoc"})
 public class UonParserTest {
 
 	static UonParser p = UonParser.DEFAULT;
@@ -48,12 +48,12 @@ public class UonParserTest {
 
 		// 2nd level
 		t = "$o(a=a)";
-		assertEquals("a", p.parse(t, Map.class).get("a"));
-		assertEquals("a", pe.parse(t, Map.class).get("a"));
+		assertEquals("a", ((Map)p.parse(t, Map.class)).get("a"));
+		assertEquals("a", ((Map)pe.parse(t, Map.class)).get("a"));
 
 		t = "(a=a)";
-		assertEquals("a", p.parse(t, Map.class).get("a"));
-		assertEquals("a", pe.parse(t, Map.class).get("a"));
+		assertEquals("a", ((Map)p.parse(t, Map.class)).get("a"));
+		assertEquals("a", ((Map)pe.parse(t, Map.class)).get("a"));
 
 		// Simple map
 		// Top level
@@ -70,7 +70,7 @@ public class UonParserTest {
 		assertNull(m.get("f"));
 
 		t = "(a=true)";
-		m = p.parseMap(t, HashMap.class, String.class, Boolean.class);
+		m = p.parse(t, HashMap.class, String.class, Boolean.class);
 		assertTrue(m.get("a") instanceof Boolean);
 		assertEquals("true", m.get("a").toString());
 
@@ -122,14 +122,14 @@ public class UonParserTest {
 
 		// 2nd level in map
 		t = "$o(x=$a())";
-		m = p.parseMap(t, HashMap.class, String.class, List.class);
+		m = p.parse(t, HashMap.class, String.class, List.class);
 		assertTrue(m.containsKey("x"));
 		assertTrue(((List)m.get("x")).isEmpty());
 		m = (Map)p.parse(t, Object.class);
 		assertTrue(m.containsKey("x"));
 		assertTrue(((List)m.get("x")).isEmpty());
 		t = "(x=())";
-		m = p.parseMap(t, HashMap.class, String.class, List.class);
+		m = p.parse(t, HashMap.class, String.class, List.class);
 		assertTrue(m.containsKey("x"));
 		assertTrue(((List)m.get("x")).isEmpty());
 
@@ -140,7 +140,7 @@ public class UonParserTest {
 		l = (List)l.get(0);
 		assertTrue(l.isEmpty());
 		t = "(())";
-		l = p.parseCollection(t, LinkedList.class, List.class);
+		l = p.parse(t, LinkedList.class, List.class);
 		assertTrue(l.size() == 1);
 		l = (List)l.get(0);
 		assertTrue(l.isEmpty());
@@ -152,7 +152,7 @@ public class UonParserTest {
 		assertTrue(l.size() == 1);
 		assertEquals("", l.get(0));
 		t = "(())";
-		l = p.parseCollection(t, List.class, String.class);
+		l = p.parse(t, List.class, String.class);
 		assertTrue(l.size() == 1);
 		assertEquals("", l.get(0));
 
@@ -161,7 +161,7 @@ public class UonParserTest {
 		m = (Map)p.parse(t, Object.class);
 		assertEquals("", ((List)m.get("")).get(0));
 		t = "(=(()))";
-		m = p.parseMap(t, HashMap.class, String.class, List.class);
+		m = p.parse(t, HashMap.class, String.class, List.class);
 		assertEquals("", ((List)m.get("")).get(0));
 
 		// Array containing 3 empty strings
@@ -172,7 +172,7 @@ public class UonParserTest {
 		assertEquals("", l.get(1));
 		assertEquals("", l.get(2));
 		t = "(,,)";
-		l = p.parseCollection(t, List.class, Object.class);
+		l = p.parse(t, List.class, Object.class);
 		assertTrue(l.size() == 3);
 		assertEquals("", l.get(0));
 		assertEquals("", l.get(1));
@@ -192,10 +192,10 @@ public class UonParserTest {
 		assertTrue(m.size() == 1);
 		assertEquals("\u0000", m.get("\u0000"));
 		t = "((\u0000)=(\u0000))";
-		m = p.parseMap(t, HashMap.class, String.class, String.class);
+		m = p.parse(t, HashMap.class, String.class, String.class);
 		assertTrue(m.size() == 1);
 		assertEquals("\u0000", m.get("\u0000"));
-		m = p.parseMap(t, HashMap.class, String.class, Object.class);
+		m = p.parse(t, HashMap.class, String.class, Object.class);
 		assertTrue(m.size() == 1);
 		assertEquals("\u0000", m.get("\u0000"));
 
@@ -215,10 +215,10 @@ public class UonParserTest {
 		m = (Map)p.parse(t, Object.class);
 		assertEquals(Boolean.FALSE, m.get("x"));
 		t = "(x=$b(false))";
-		m = p.parseMap(t, HashMap.class, String.class, Object.class);
+		m = p.parse(t, HashMap.class, String.class, Object.class);
 		assertEquals(Boolean.FALSE, m.get("x"));
 		t = "(x=false)";
-		m = p.parseMap(t, HashMap.class, String.class, Boolean.class);
+		m = p.parse(t, HashMap.class, String.class, Boolean.class);
 		assertEquals(Boolean.FALSE, m.get("x"));
 
 		// Number
@@ -241,9 +241,9 @@ public class UonParserTest {
 		m = (Map)p.parse(t, Object.class);
 		assertEquals(123, ((Integer)m.get("x")).intValue());
 		t = "(x=123)";
-		m = p.parseMap(t, HashMap.class, String.class, Number.class);
+		m = p.parse(t, HashMap.class, String.class, Number.class);
 		assertEquals(123, ((Integer)m.get("x")).intValue());
-		m = p.parseMap(t, HashMap.class, String.class, Double.class);
+		m = p.parse(t, HashMap.class, String.class, Double.class);
 		assertEquals(123, ((Double)m.get("x")).intValue());
 
 		// Unencoded chars
@@ -256,9 +256,9 @@ public class UonParserTest {
 		t = "$o(x;/?:@-_.!*'=x;/?:@-_.!*')";
 		m = (Map)p.parse(t, Object.class);
 		assertEquals("x;/?:@-_.!*'", m.get("x;/?:@-_.!*'"));
-		m = p.parseMap(t, HashMap.class, String.class, Object.class);
+		m = p.parse(t, HashMap.class, String.class, Object.class);
 		assertEquals("x;/?:@-_.!*'", m.get("x;/?:@-_.!*'"));
-		m = p.parseMap(t, HashMap.class, String.class, String.class);
+		m = p.parse(t, HashMap.class, String.class, String.class);
 		assertEquals("x;/?:@-_.!*'", m.get("x;/?:@-_.!*'"));
 
 		// Encoded chars
@@ -330,13 +330,13 @@ public class UonParserTest {
 		m = (Map)p.parse(t, Object.class);
 		assertEquals("x=", m.get("x="));
 		t = "(x~==x~=)";
-		m = p.parseMap(t, HashMap.class, String.class, Object.class);
+		m = p.parse(t, HashMap.class, String.class, Object.class);
 		assertEquals("x=", m.get("x="));
 		t = "((x~=)=(x~=))";
-		m = p.parseMap(t, HashMap.class, String.class, Object.class);
+		m = p.parse(t, HashMap.class, String.class, Object.class);
 		assertEquals("x=", m.get("x="));
 		t = "($s(x~=)=$s(x~=))";
-		m = p.parseMap(t, HashMap.class, String.class, Object.class);
+		m = p.parse(t, HashMap.class, String.class, Object.class);
 		assertEquals("x=", m.get("x="));
 		t = "$o(x~%3D=x~%3D)";
 		m = (Map)pe.parse(t, Object.class);
@@ -348,13 +348,13 @@ public class UonParserTest {
 		m = (Map)pe.parse(t, Object.class);
 		assertEquals("x=", m.get("x="));
 		t = "(x~%3D=x~%3D)";
-		m = pe.parseMap(t, HashMap.class, String.class, Object.class);
+		m = pe.parse(t, HashMap.class, String.class, Object.class);
 		assertEquals("x=", m.get("x="));
 		t = "((x~%3D)=(x~%3D))";
-		m = pe.parseMap(t, HashMap.class, String.class, Object.class);
+		m = pe.parse(t, HashMap.class, String.class, Object.class);
 		assertEquals("x=", m.get("x="));
 		t = "($s(x~%3D)=$s(x~%3D))";
-		m = pe.parseMap(t, HashMap.class, String.class, Object.class);
+		m = pe.parse(t, HashMap.class, String.class, Object.class);
 		assertEquals("x=", m.get("x="));
 
 		// String starting with parenthesis
@@ -375,10 +375,10 @@ public class UonParserTest {
 		m = (Map)p.parse(t, Object.class);
 		assertEquals("()", m.get("()"));
 		t = "((~(~))=(~(~)))";
-		m = p.parseMap(t, HashMap.class, String.class, Object.class);
+		m = p.parse(t, HashMap.class, String.class, Object.class);
 		assertEquals("()", m.get("()"));
 		t = "($s(~(~))=$s(~(~)))";
-		m = p.parseMap(t, HashMap.class, String.class, Object.class);
+		m = p.parse(t, HashMap.class, String.class, Object.class);
 		assertEquals("()", m.get("()"));
 
 		// String starting with $
@@ -393,7 +393,7 @@ public class UonParserTest {
 		m = (Map)p.parse(t, Object.class);
 		assertEquals("$a", m.get("$a"));
 		t = "(($a)=($a))";
-		m = p.parseMap(t, HashMap.class, String.class, Object.class);
+		m = p.parse(t, HashMap.class, String.class, Object.class);
 		assertEquals("$a", m.get("$a"));
 
 		// Blank string
@@ -407,7 +407,7 @@ public class UonParserTest {
 		m = (Map)p.parse(t, Object.class);
 		assertEquals("", m.get(""));
 		t = "(=)";
-		m = p.parseMap(t, HashMap.class, String.class, Object.class);
+		m = p.parse(t, HashMap.class, String.class, Object.class);
 		assertEquals("", m.get(""));
 
 		// 3rd level
@@ -415,7 +415,7 @@ public class UonParserTest {
 		m = (Map)p.parse(t, Object.class);
 		assertEquals("", ((Map)m.get("")).get(""));
 		t = "(=(=))";
-		m = p.parseMap(t, HashMap.class, String.class, HashMap.class);
+		m = p.parse(t, HashMap.class, String.class, HashMap.class);
 		assertEquals("", ((Map)m.get("")).get(""));
 
 		// Newline character

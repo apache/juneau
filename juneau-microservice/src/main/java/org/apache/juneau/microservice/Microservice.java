@@ -220,7 +220,7 @@ public abstract class Microservice {
 	 * <p>
 	 * Subclasses can override this method to provide their own variables.
 	 * 
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jd>/**
 	 * 	 * Augment default var resolver with a custom $B{...} variable that simply wraps strings inside square brackets.
@@ -289,7 +289,7 @@ public abstract class Microservice {
 	 * <p>
 	 * This method can be called from the class constructor.
 	 * 
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<cc>#--------------------------</cc>
 	 * 	<cc># My section</cc>
@@ -367,7 +367,7 @@ public abstract class Microservice {
 	 * <p>
 	 * This method can be called from the class constructor.
 	 * 
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Get Main-Class from manifest file.</jc>
 	 * 	String mainClass = Microservice.<jsm>getManifest</jsm>().getString(<js>"Main-Class"</js>, <js>"unknown"</js>);

@@ -17,7 +17,7 @@ import org.apache.juneau.annotation.*;
 /**
  * Allows referencing an external resource for extended documentation.
  *
- * <h6 class='topic'>Example:</h6>
+ * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	{
  * 		<js>"description"</js>: <js>"Find more info here"</js>,

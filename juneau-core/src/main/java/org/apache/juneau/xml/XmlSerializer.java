@@ -31,13 +31,13 @@ import org.apache.juneau.xml.annotation.*;
 /**
  * Serializes POJO models to XML.
  *
- * <h6 class='topic'>Media types</h6>
+ * <h5 class='section'>Media types:</h5>
  * <p>
  * 	Handles <code>Accept</code> types: <code>text/xml</code>
  * <p>
  * 	Produces <code>Content-Type</code> types: <code>text/xml</code>
  *
- * <h6 class='topic'>Description</h6>
+ * <h5 class='section'>Description:</h5>
  * <p>
  * 	See the {@link JsonSerializer} class for details on how Java models map to JSON.
  * <p>
@@ -105,7 +105,7 @@ import org.apache.juneau.xml.annotation.*;
  * <p>
  * 	If an attribute name contains any non-valid XML element characters, they will be escaped using standard {@code _x####_} notation.
  *
- * <h6 class='topic'>Configurable properties</h6>
+ * <h5 class='section'>Configurable properties:</h5>
  * <p>
  * 	This class has the following properties associated with it:
  * <ul>

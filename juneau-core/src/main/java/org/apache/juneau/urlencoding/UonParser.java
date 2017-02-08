@@ -27,15 +27,15 @@ import org.apache.juneau.transform.*;
 /**
  * Parses UON (a notation for URL-encoded query parameter values) text into POJO models.
  *
- * <h6 class='topic'>Media types</h6>
+ * <h5 class='section'>Media types:</h5>
  * <p>
  * 	Handles <code>Content-Type</code> types: <code>text/uon</code>
  *
- * <h6 class='topic'>Description</h6>
+ * <h5 class='section'>Description:</h5>
  * <p>
  * 	This parser uses a state machine, which makes it very fast and efficient.
  *
- * <h6 class='topic'>Configurable properties</h6>
+ * <h5 class='section'>Configurable properties:</h5>
  * <p>
  * 	This class has the following properties associated with it:
  * <ul>
@@ -731,7 +731,6 @@ public class UonParser extends ReaderParser {
 	@Override /* Parser */
 	protected <T> T doParse(ParserSession session, ClassMeta<T> type) throws Exception {
 		UonParserSession s = (UonParserSession)session;
-		type = session.normalizeClassMeta(type);
 		UonReader r = s.getReader();
 		T o = parseAnything(s, type, r, s.getOuter(), true, null);
 		validateEnd(s, r);
@@ -743,7 +742,7 @@ public class UonParser extends ReaderParser {
 		UonParserSession s = (UonParserSession)session;
 		UonReader r = s.getReader();
 		readFlag(s, r, 'o');
-		m = parseIntoMap(s, r, m, session.getClassMeta(keyType), session.getClassMeta(valueType), null);
+		m = parseIntoMap(s, r, m, (ClassMeta<K>)session.getClassMeta(keyType), (ClassMeta<V>)session.getClassMeta(valueType), null);
 		validateEnd(s, r);
 		return m;
 	}
@@ -753,7 +752,7 @@ public class UonParser extends ReaderParser {
 		UonParserSession s = (UonParserSession)session;
 		UonReader r = s.getReader();
 		readFlag(s, r, 'a');
-		c = parseIntoCollection(s, r, c, session.getClassMeta(elementType), false, null);
+		c = parseIntoCollection(s, r, c, (ClassMeta<E>)session.getClassMeta(elementType), false, null);
 		validateEnd(s, r);
 		return c;
 	}

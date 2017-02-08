@@ -21,7 +21,10 @@ import org.apache.juneau.internal.*;
 /**
  * Specialized input stream for parsing MessagePack streams.
  * <p>
- * 	<b>Note:  This class is not intended for external use.</b>
+ * <h5 class='section'>Notes:</h5>
+ * <ul>
+ * 	<li>This class is not intended for external use.
+ * </ul>
  */
 public final class MsgPackInputStream extends InputStream {
 

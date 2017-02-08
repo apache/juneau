@@ -24,7 +24,7 @@ import org.apache.juneau.serializer.*;
  * 	converted to some other POJO after invocation of the REST method.
  * <p>
  * 	Converters are associated with REST methods through the {@link RestMethod#converters()} annotation.
- * <h6 class='topic'>Example:</h6>
+ * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jk>public class</jk> RequestEchoResource <jk>extends</jk> RestServlet {
  *

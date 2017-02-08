@@ -22,7 +22,7 @@ import org.apache.juneau.*;
  * 	These are typically specified via <ja>@RestResource.properties()</ja> and <ja>@RestMethod.properties()</ja> annotations,
  * 		although they can also be set programmatically via the <code>RestResponse.setProperty()</code> method.
  *
- * <h6 class='topic'>Example:</h6>
+ * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<ja>@RestResource</ja>(
  * 		messages=<js>"nls/AddressBookResource"</js>,
@@ -87,13 +87,13 @@ import org.apache.juneau.*;
  * 	</tr>
  * </table>
  *
- * <h6 class='topic'>Configurable properties inherited from parent classes</h6>
+ * <h5 class='section'>Inherited configurable properties:</h5>
  * <ul class='javahierarchy'>
- * 	<li class='c'><a class='doclink' href='../BeanContext.html#ConfigProperties'>BeanContext</a> - Properties associated with handling beans on serializers and parsers.
+ * 	<li class='c'><a class="doclink" href="../BeanContext.html#ConfigProperties">BeanContext</a> - Properties associated with handling beans on serializers and parsers.
  * 	<ul>
- * 		<li class='c'><a class='doclink' href='../serializer/SerializerContext.html#ConfigProperties'>SerializerContext</a> - Configurable properties common to all serializers.
+ * 		<li class='c'><a class="doclink" href="../serializer/SerializerContext.html#ConfigProperties">SerializerContext</a> - Configurable properties common to all serializers.
  * 		<ul>
- * 			<li class='c'><a class='doclink' href='../html/HtmlSerializerContext.html#ConfigProperties'>HtmlSerializerContext</a> - Configurable properties on the HTML serializer.
+ * 			<li class='c'><a class="doclink" href="../html/HtmlSerializerContext.html#ConfigProperties">HtmlSerializerContext</a> - Configurable properties on the HTML serializer.
  * 		</ul>
  * 	</ul>
  * </ul>
@@ -111,7 +111,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * </ul>
 	 * <p>
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p>
 	 * 	The <code>AddressBookResource</code> sample class uses this property...
 	 * </p>
@@ -148,7 +148,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * </ul>
 	 * <p>
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p>
 	 * 	The <code>AddressBookResource</code> sample class uses this property...
 	 * </p>
@@ -196,7 +196,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * 	Absolute (<js>"/myOtherContext/foo"</js>) and fully-qualified (<js>"http://localhost2/foo"</js>) URLs
 	 * 		can also be used.
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p>
 	 * 	The <code>AddressBookResource</code> sample class uses this property...
 	 * </p>

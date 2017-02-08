@@ -236,8 +236,7 @@ public class CommonTest {
 
 		String r = s.serialize(l1);
 		assertEquals("<rdf:Seq><rdf:li rdf:parseType='Resource'><jp:x1><rdf:Seq><rdf:li rdf:parseType='Resource'><jp:x2>2</jp:x2></rdf:li></rdf:Seq></jp:x1><jp:x2>2</jp:x2></rdf:li></rdf:Seq>", strip(r));
-		ClassMeta<LinkedList<F>> cm = p.getBeanContext().getClassMeta(LinkedList.class, F.class);
-		l2 = p.parse(r, cm);
+		l2 = p.parse(r, LinkedList.class, F.class);
 		assertEqualObjects(l1, l2);
 	}
 

@@ -194,7 +194,6 @@ public class JsonTest {
 	// testWrapperAttrAnnotationOnBean
 	//====================================================================================================
 	@Test
-	@SuppressWarnings("unchecked")
 	public void testWrapperAttrAnnotationOnBean() throws Exception {
 		JsonSerializer s = JsonSerializer.DEFAULT_LAX;
 		JsonParser p = JsonParser.DEFAULT;
@@ -211,7 +210,7 @@ public class JsonTest {
 		r = s.serialize(m);
 		assertEquals("{bar:{foo:{f1:1}}}", r);
 
-		m = p.parseMap(r, LinkedHashMap.class, String.class, A.class);
+		m = p.parse(r, LinkedHashMap.class, String.class, A.class);
 		assertEquals(1, m.get("bar").f1);
 	}
 
@@ -230,7 +229,6 @@ public class JsonTest {
 	// testWrapperAttrAnnotationOnNonBean
 	//====================================================================================================
 	@Test
-	@SuppressWarnings("unchecked")
 	public void testWrapperAttrAnnotationOnNonBean() throws Exception {
 		JsonSerializer s = JsonSerializer.DEFAULT_LAX;
 		JsonParser p = JsonParser.DEFAULT;
@@ -247,7 +245,7 @@ public class JsonTest {
 		r = s.serialize(m);
 		assertEquals("{bar:{foo:'1'}}", r);
 
-		m = p.parseMap(r, LinkedHashMap.class, String.class, B.class);
+		m = p.parse(r, LinkedHashMap.class, String.class, B.class);
 		assertEquals(1, m.get("bar").f1);
 	}
 

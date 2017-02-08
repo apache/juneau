@@ -22,7 +22,7 @@ import org.apache.juneau.serializer.*;
 /**
  * Used to swap out non-serializable objects with serializable replacements during serialization, and vis-versa during parsing.
  *
- * <h6 class='topic'>Description</h6>
+ * <h5 class='section'>Description:</h5>
  * <p>
  * 	<code>PojoSwaps</code> are used to extend the functionality of the serializers and parsers to be able to handle POJOs
  * 	that aren't automatically handled by the serializers or parsers.  For example, JSON does not have a standard
@@ -90,7 +90,7 @@ import org.apache.juneau.serializer.*;
  * 	in which case it's not possible to reparse it back into a {@code Date}, since there is no way for the {@code Parser} to
  * 	know it's a {@code Date} from just the JSON or XML text.
  *
- * <h6 class='topic'>Additional information</h6>
+ * <h5 class='section'>Additional information:</h5>
  * 	See {@link org.apache.juneau.transform} for more information.
  *
  * @param <T> The normal form of the class.

@@ -15,7 +15,7 @@ package org.apache.juneau;
 /**
  * Common super class for all core-API serializers, parsers, and serializer/parser groups.
  *
- * <h6 class='topic'>Description</h6>
+ * <h5 class='section'>Description:</h5>
  * <p>
  * Maintains an inner {@link ContextFactory} instance that can be used by serializer and parser subclasses
  * 	to work with beans in a consistent way.

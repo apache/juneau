@@ -27,7 +27,7 @@ public class ResourceLink extends Link {
 	 *
 	 * @param req The HTTP request from the parent resource.
 	 * @param childPath The child resource path.
-	 * @param args Optional {@link MessageFormat}-style arguments in the child path.
+	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public ResourceLink(RestRequest req, String childPath, Object...args) {
 		super(getName(getPath(childPath,args)), getHref(req, getPath(childPath,args)));
@@ -39,7 +39,7 @@ public class ResourceLink extends Link {
 	 * @param label The label for the link.
 	 * @param req The HTTP request from the parent resource.
 	 * @param childPath The child resource path.
-	 * @param args Optional {@link MessageFormat}-style arguments in the child path.
+	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public ResourceLink(String label, RestRequest req, String childPath, Object...args) {
 		super(label, getHref(req, getPath(childPath,args)));

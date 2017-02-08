@@ -32,7 +32,7 @@ import org.apache.juneau.svl.vars.*;
  * <p>
  * The {@link Var} interface defines how variables are converted to values.
  * <p>
- * <h6 class='topic'>Example:</h6>
+ * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jk>public class</jk> SystemPropertiesVar <jk>extends</jk> SimpleVar {
  *
@@ -85,7 +85,7 @@ import org.apache.juneau.svl.vars.*;
  * Var resolvers can be cloned by using the {@link #clone()} method.
  * Cloning a resolver will copy it's {@link Var} class names and context objects.
  * <p>
- * <h6 class='topic'>Example:</h6>
+ * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Create a resolver that copies the default resolver and adds $C and $ARG vars.</jc>
  * 	VarResolver myVarResolver = VarResolver.<jsf>DEFAULT</jsf>.clone().addVars(ConfigVar.<jk>class</jk>, ArgsVar.<jk>class</jk>);

@@ -739,7 +739,7 @@ public final class ClassMeta<T> implements Type {
 	 * @return The constructor, or <jk>null</jk> if no no-arg constructor exists with the required visibility.
 	 */
 	@SuppressWarnings({"rawtypes","unchecked"})
-	protected static <T> Constructor<? extends T> findNoArgConstructor(Class<T> c, Visibility v) {
+	protected static <T> Constructor<? extends T> findNoArgConstructor(Class<?> c, Visibility v) {
 		int mod = c.getModifiers();
 		if (Modifier.isAbstract(mod))
 			return null;

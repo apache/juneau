@@ -23,7 +23,7 @@ import org.apache.juneau.*;
  * <p>
  * Instances of this method are created by the {@link WriterSerializer#toStringObject(Object)} method.
  *
- * <h6 class='topic'>Example:</h6>
+ * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// The POJO will not be serialized unless DEBUG is enabled.</jc>
  * 	logger.log(<jsf>DEBUG</jsf>, <js>"Object contents are: {0}"</js>, JsonSerializer.<jsf>DEFAULT</jsf>.toObjectString(myPojo));

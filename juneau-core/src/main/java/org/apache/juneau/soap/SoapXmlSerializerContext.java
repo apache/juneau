@@ -27,11 +27,11 @@ package org.apache.juneau.soap;
  * 	</tr>
  * </table>
  *
- * <h6 class='topic'>Configurable properties inherited from parent classes</h6>
+ * <h5 class='section'>Inherited configurable properties:</h5>
  * <ul class='javahierarchy'>
- * 	<li class='c'><a class='doclink' href='../BeanContext.html#ConfigProperties'>BeanContext</a> - Properties associated with handling beans on serializers and parsers.
+ * 	<li class='c'><a class="doclink" href="../BeanContext.html#ConfigProperties">BeanContext</a> - Properties associated with handling beans on serializers and parsers.
  * 	<ul>
- * 		<li class='c'><a class='doclink' href='../serializer/SerializerContext.html#ConfigProperties'>SerializerContext</a> - Configurable properties common to all serializers.
+ * 		<li class='c'><a class="doclink" href="../serializer/SerializerContext.html#ConfigProperties">SerializerContext</a> - Configurable properties common to all serializers.
  * 	</ul>
  * </ul>
  */

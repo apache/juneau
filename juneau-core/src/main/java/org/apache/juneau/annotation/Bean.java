@@ -51,7 +51,7 @@ public @interface Bean {
 	 * 	a simple name/value mapping of names to classes.
 	 * Names do not need to be universally unique.  However, they must be unique within a dictionary.
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@Bean</ja>(typeName=<js>"foo"</js>)
 	 * 	<jk>public class</jk> Foo {
@@ -98,7 +98,7 @@ public @interface Bean {
 	 * <p>
 	 * 	This annotation is an alternative to using the {@link BeanFilter} class with an implemented {@link BeanFilter#getProperties()} method.
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Address class with only street/city/state properties (in that order).</jc>
 	 * 	<jc>// All other properties are ignored.</jc>
@@ -132,7 +132,7 @@ public @interface Bean {
 	 * <p>
 	 * 	This annotation is an alternative to using the {@link BeanFilter} class with an implemented {@link BeanFilter#getExcludeProperties()} method.
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Address class with only street/city/state properties (in that order).</jc>
 	 * 	<jc>// All other properties are ignored.</jc>
@@ -152,7 +152,7 @@ public @interface Bean {
 	 * <p>
 	 * 	This annotation is an alternative to using the {@link BeanFilter} class with an implemented {@link BeanFilter#getPropertyNamer()} method.
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Define a class with dashed-lowercase property names.</jc>
 	 * 	<ja>@Bean</ja>(propertyNamer=PropertyNamerDashedLC.<jk>class</jk>)

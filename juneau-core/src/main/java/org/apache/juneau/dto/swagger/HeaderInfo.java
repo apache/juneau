@@ -21,7 +21,7 @@ import org.apache.juneau.json.*;
 /**
  * Describes a single HTTP header.
  *
- * <h6 class='topic'>Example:</h6>
+ * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	{
  * 		<js>"description"</js>: <js>"The number of allowed requests in the current period"</js>,

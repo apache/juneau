@@ -71,7 +71,7 @@ public class MethodExampleResource extends Resource {
 		UUID a3 = req.getPathParameter("a3", UUID.class);
 
 		// Optional GET parameters
-		int p1 = req.getQueryParameter("p1", int.class, 0);
+		int p1 = req.getQueryParameter("p1", 0, int.class);
 		String p2 = req.getQueryParameter("p2", String.class);
 		UUID p3 = req.getQueryParameter("p3", UUID.class);
 

@@ -20,7 +20,7 @@ import java.util.regex.*;
  * <p>
  * Response patterns are applied to REST calls through the {@link RestCall#addResponsePattern(ResponsePattern)} method.
  *
- * <h6 class='topic'>Example:</h6>
+ * <h5 class='section'>Example:</h5>
  * This example shows how to use a response pattern finder to find and capture patterns for <js>"x=number"</js> and <js>"y=string"</js>
  * 	from a response body.
  * <p>

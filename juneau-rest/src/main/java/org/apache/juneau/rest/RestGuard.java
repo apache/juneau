@@ -19,7 +19,7 @@ import org.apache.juneau.rest.annotation.*;
 /**
  * REST method guard.
  *
- * <h6 class='topic'>Description</h6>
+ * <h5 class='section'>Description:</h5>
  * <p>
  * 	Implements a guard mechanism for REST method calls that allows requests to be
  * 		rejected before invocation of the REST method.

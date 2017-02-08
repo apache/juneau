@@ -355,7 +355,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * <p>
 	 * <js>"M"</js> and <js>"K"</js> can be used to identify millions and thousands.
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li><code><js>"100K"</js> => 1024000</code>
 	 * 	<li><code><js>"100M"</js> => 104857600</code>

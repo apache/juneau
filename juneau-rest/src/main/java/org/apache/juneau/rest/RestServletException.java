@@ -27,7 +27,7 @@ public class RestServletException extends ServletException {
 	 * Constructor.
 	 *
 	 * @param message The detailed message.
-	 * @param args Optional message arguments.
+	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public RestServletException(String message, Object...args) {
 		super(args.length == 0 ? message : MessageFormat.format(message, args));

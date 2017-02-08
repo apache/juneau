@@ -25,7 +25,7 @@ import org.apache.juneau.soap.*;
 /**
  * Parent class for all Juneau serializers.
  *
- * <h6 class='topic'>Description</h6>
+ * <h5 class='section'>Description:</h5>
  * <p>
  * 	Base serializer class that serves as the parent class for all serializers.
  * <p>
@@ -38,7 +38,7 @@ import org.apache.juneau.soap.*;
  * 	However, the media types can also be specified programmatically by overriding the {@link #getMediaTypes()}
  * 		and {@link #getResponseContentType()} methods.
  *
- * <h6 class='topic'>Configurable properties</h6>
+ * <h5 class='section'>Configurable properties:</h5>
  * 	See {@link SerializerContext} for a list of configurable properties that can be set on this class
  * 	using the {@link #setProperty(String, Object)} method.
  */

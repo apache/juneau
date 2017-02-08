@@ -734,7 +734,7 @@ public class RoundTripSimpleObjectsTest extends RoundTripTest {
 		t.add(1);
 		t.add(2);
 		t.add(3);
-		t = roundTripCollection(t, Vector.class, Integer.class);
+		t = roundTrip(t, Vector.class, Integer.class);
 	}
 
 	//====================================================================================================

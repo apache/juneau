@@ -63,9 +63,9 @@ import org.apache.juneau.urlencoding.*;
  * 	<li>API for interacting with remoteable services.
  * </ul>
  *
- * <h6 class='topic'>Additional Information</h6>
+ * <h5 class='section'>Additional information:</h5>
  * <ul>
- * 	<li><a class='doclink' href='package-summary.html#RestClient'>org.apache.juneau.rest.client &gt; REST client API</a> for more information and code examples.
+ * 	<li><a class="doclink" href="package-summary.html#RestClient">org.apache.juneau.rest.client &gt; REST client API</a> for more information and code examples.
  * </ul>
  */
 public class RestClient extends CoreApi {

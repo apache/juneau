@@ -21,7 +21,7 @@ import org.apache.juneau.json.*;
 /**
  * A limited subset of JSON-Schema's items object. It is used by parameter definitions that are not located in "body".
  *
- * <h6 class='topic'>Example:</h6>
+ * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	{
  * 		<js>"type"</js>: <js>"string"</js>,

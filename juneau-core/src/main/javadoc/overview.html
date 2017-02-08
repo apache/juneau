@@ -388,12 +388,16 @@
 
 	<jc>// Parse a JSON object as a HashMap&lt;String,Person&gt;.</jc>
 	json = <js>"{a:{name:'John Smith',age:21},b:{name:'Joe Smith',age:42}}"</js>;
-	Map&lt;String,Person&gt; m4 = parser.parseMap(json, HashMap.<jk>class</jk>, String.<jk>class</jk>, Person.<jk>class</jk>)
+	Map&lt;String,Person&gt; m4 = parser.parse(json, HashMap.<jk>class</jk>, String.<jk>class</jk>, Person.<jk>class</jk>)
+
+	<jc>// Parse a JSON object as a HashMap&lt;String,LinkedList&lt;Person&gt;&gt;.</jc>
+	json = <js>"{a:[{name:'John Smith',age:21},{name:'Joe Smith',age:42}]}"</js>;
+	Map&lt;String,List&lt;Person&gt;&gt; m5 = parser.parse(json, HashMap.<jk>class</jk>, String.<jk>class</jk>, LinkedList.<jk>class</jk>, Person.<jk>class</jk>)
 
 	<jc>// Parse a JSON array of integers as a Collection of Integers or int[] array.</jc>
 	json = <js>"[1,2,3]"</js>;
-	List&lt;Integer&gt; l5 = parser.parseCollection(json, LinkedList.<jk>class</jk>, Integer.<jk>class</jk>);
-	<jk>int</jk>[] i6 = parser.parse(json, <jk>int</jk>[].<jk>class</jk>);
+	List&lt;Integer&gt; l6 = parser.parse(json, LinkedList.<jk>class</jk>, Integer.<jk>class</jk>);
+	<jk>int</jk>[] i7 = parser.parse(json, <jk>int</jk>[].<jk>class</jk>);
 		</p>
 		<p>
 			The parsers can also be used to populating existing bean and collection objects:
@@ -5330,7 +5334,7 @@
 	
 	<h5 class='toc'>What's new in each release</h5>
 	<ul class='toc'>
-		<li><p><a class='doclink' href='#6.0.2'>6.0.2 (TBD)</a></p>
+		<li><p><a class='doclink' href='#6.1.0'>6.1.0 (TBD)</a></p>
 		<li><p><a class='doclink' href='#6.0.1'>6.0.1 (Jan 3, 2017)</a></p>
 		<li><p><a class='doclink' href='#6.0.0'>6.0.0 (Oct 3, 2016)</a></p>
 		<li><p><a class='doclink' href='#5.2.0.1'>5.2.0.1 (Mar 23, 2016)</a></p>
@@ -5397,12 +5401,11 @@
 
 
 	<!-- ======================================================================================================== -->
-	<a id="6.0.2"></a>
-	<h3 class='topic' onclick='toggle(this)'>6.0.2 (TBD)</h3>
+	<a id="6.1.0"></a>
+	<h3 class='topic' onclick='toggle(this)'>6.1.0 (TBD)</h3>
 	<div class='topic'>
 		<p>
-			Juneau 6.0.2 is a moderate update that provides localized serialization and parsing.
-			For example, dates can now be serialized to and parsed from locale-targeted formats.
+			Juneau 6.1.0 is a major update.
 		</p>
 		<p>
 			In particular, this release cleans up the {@link org.apache.juneau.BeanContext} API to match
@@ -5460,6 +5463,18 @@
 				<li>{@link org.apache.juneau.BeanContext#BEAN_locale} - Specifies a default locale at the context level.
 				<li>{@link org.apache.juneau.BeanContext#BEAN_timeZone} - Specifies a default timezone at the context level.
 				<li>{@link org.apache.juneau.BeanContext#BEAN_mediaType} - Specifies a default media type at the context level.
+			</ul>
+			<li>Improvements to Parser class:  
+			<ul>
+				<li>Simplified the parse methods (e.g. <code>parseMap()</code>, <code>parseCollection()</code>)
+				by replacing them with two simple methods: 
+				<ul>
+					<li>{@link org.apache.juneau.parser.Parser#parse(Object,Class)} - Normal method.
+					<li>{@link org.apache.juneau.parser.Parser#parse(Object,Type,Type...)} - Method for parsing into parameterized maps and collections.
+				</ul>
+				<li>Arbitrarily-complex parameterized maps and collections can now be parsed without the need for creating intermediate <code>ClassMeta</code> objects.
+				<li>No need for casting anymore if you were using the old <code>parseMap()</code> and <code>parseCollection()</code> methods!
+				<li>Changes allow me to eliminate <code>BeanContext.normalizeClassMeta()</code> method.
 			</ul>
 			<li>Simplified {@link org.apache.juneau.transform.PojoSwap} class.  Now just two methods:
 			<ul>
@@ -5521,7 +5536,7 @@
 				</ul>
 			<li>New {@link org.apache.juneau.transform.MapSwap} and {@link org.apache.juneau.transform.StringSwap} classes.
 			<li>New {@link org.apache.juneau.serializer.WriterSerializer#println(Object)} method.  Useful for debugging purposes.
-			<li>New {@link org.apache.juneau.BeanContext#getClassMeta(Object[])} and {@link org.apache.juneau.BeanSession#getClassMeta(Object[])}
+			<li>New {@link org.apache.juneau.BeanContext#getClassMeta(Type,Type...)} and {@link org.apache.juneau.BeanSession#getClassMeta(Type,Type...)}
 				methods for retrieving Map and Collection class metas.  
 				Replaces the various <code>getMapClassMeta()</code>/<code>getCollectionClassMeta()</code> methods.  
 			<li>New section added to this document:	<a class='doclink' href='#DTOs'>Juneau Data Transfer Objects (org.apache.juneau.dto)</a>
@@ -5531,6 +5546,28 @@
 		<ul class='spaced-list'>
 			<li>{@link org.apache.juneau.rest.RestRequest} now passes locale and timezone to serializers/parsers/transforms.
 			<li>New {@link org.apache.juneau.rest.RestRequest#getTimeZone()} method.
+			<li>Standardized the following methods in {@link org.apache.juneau.rest.RestRequest} to remove dependency on <code>ClassMeta</code>
+				objects and eliminate the need for casts:
+			<ul>
+				<li>{@link org.apache.juneau.rest.RestRequest#getHeader(String,Class)}
+				<li>{@link org.apache.juneau.rest.RestRequest#getHeader(String,Object,Class)}
+				<li>{@link org.apache.juneau.rest.RestRequest#getHeader(String,Type,Type...)}
+				<li>{@link org.apache.juneau.rest.RestRequest#getQueryParameter(String,Class)}
+				<li>{@link org.apache.juneau.rest.RestRequest#getQueryParameter(String,Object,Class)}
+				<li>{@link org.apache.juneau.rest.RestRequest#getQueryParameter(String,Type,Type...)}
+				<li>{@link org.apache.juneau.rest.RestRequest#getQueryParameter(String,Object,Type,Type...)}
+				<li>{@link org.apache.juneau.rest.RestRequest#getQueryParameters(String,Class)}
+				<li>{@link org.apache.juneau.rest.RestRequest#getQueryParameters(String,Type,Type...)}
+				<li>{@link org.apache.juneau.rest.RestRequest#getFormDataParameter(String,Class)}
+				<li>{@link org.apache.juneau.rest.RestRequest#getFormDataParameter(String,Object,Class)}
+				<li>{@link org.apache.juneau.rest.RestRequest#getFormDataParameters(String,Class)}
+				<li>{@link org.apache.juneau.rest.RestRequest#getFormDataParameter(String,Type,Type...)}
+				<li>{@link org.apache.juneau.rest.RestRequest#getFormDataParameters(String,Type,Type...)}
+				<li>{@link org.apache.juneau.rest.RestRequest#getPathParameter(String,Class)}
+				<li>{@link org.apache.juneau.rest.RestRequest#getPathParameter(String,Type,Type...)}
+				<li>{@link org.apache.juneau.rest.RestRequest#getBody(Class)}
+				<li>{@link org.apache.juneau.rest.RestRequest#getBody(Type,Type...)}
+			</ul>
 		</ul>
 	</div>
 	
@@ -6572,10 +6609,26 @@
 		
 		<h6 class='topic'>Client</h6>
 		<ul class='spaced-list'>
-			<li>New convenience methods in {@link org.apache.juneau.rest.client.RestCall}:
+			<li>New methods in {@link org.apache.juneau.rest.client.RestCall}:
 				<ol>
-					<li>{@link org.apache.juneau.rest.client.RestCall#getResponseMap(Class,Class,Class)}
-					<li>{@link org.apache.juneau.rest.client.RestCall#getResponseCollection(Class,Class)}
+<li>{@link org.apache.juneau.rest.RestRequest#getHeader(String,Class)}
+<li>{@link org.apache.juneau.rest.RestRequest#getHeader(String,Object,Class)}
+<li>{@link org.apache.juneau.rest.RestRequest#getHeader(String,Type,Type...)}
+<li>{@link org.apache.juneau.rest.RestRequest#getQueryParameter(String,Class)}
+<li>{@link org.apache.juneau.rest.RestRequest#getQueryParameter(String,Object,Class)}
+<li>{@link org.apache.juneau.rest.RestRequest#getQueryParameter(String,Type,Type...)}
+<li>{@link org.apache.juneau.rest.RestRequest#getQueryParameter(String,Object,Type,Type...)}
+<li>{@link org.apache.juneau.rest.RestRequest#getQueryParameters(String,Class)}
+<li>{@link org.apache.juneau.rest.RestRequest#getQueryParameters(String,Type,Type...)}
+<li>{@link org.apache.juneau.rest.RestRequest#getFormDataParameter(String,Class)}
+<li>{@link org.apache.juneau.rest.RestRequest#getFormDataParameter(String,Object,Class)}
+<li>{@link org.apache.juneau.rest.RestRequest#getFormDataParameters(String,Class)}
+<li>{@link org.apache.juneau.rest.RestRequest#getFormDataParameter(String,Type,Type...)}
+<li>{@link org.apache.juneau.rest.RestRequest#getFormDataParameters(String,Type,Type...)}
+<li>{@link org.apache.juneau.rest.RestRequest#getPathParameter(String,Class)}
+<li>{@link org.apache.juneau.rest.RestRequest#getPathParameter(String,Type,Type...)}
+<li>{@link org.apache.juneau.rest.RestRequest#getBody(Class)}
+<li>{@link org.apache.juneau.rest.RestRequest#getBody(Type,Type...)}
 				</ol>
 			</li>
 		</ul>

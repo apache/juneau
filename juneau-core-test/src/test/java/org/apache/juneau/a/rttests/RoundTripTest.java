@@ -19,6 +19,7 @@ import static org.apache.juneau.urlencoding.UrlEncodingContext.*;
 import static org.apache.juneau.xml.XmlSerializerContext.*;
 import static org.apache.juneau.html.HtmlSerializerContext.*;
 
+import java.lang.reflect.Type;
 import java.util.*;
 import java.util.Map.*;
 
@@ -230,34 +231,11 @@ public abstract class RoundTripTest {
 		return null;
 	}
 
-	public <T> T roundTrip(T object, ClassMeta<? extends T> t) throws Exception {
+	public <T> T roundTrip(T object, Type c, Type...args) throws Exception {
 		Object out = serialize(object, this.s);
 		if (p == null)
 			return object;
-		T o = this.p.parse(out, t);
-		return (returnOriginalObject ? object : o);
-	}
-	public <T> T roundTrip(T object, Class<? extends T> c) throws Exception {
-		Object out = serialize(object, this.s);
-		if (p == null)
-			return object;
-		T o = this.p.parse(out, p.getBeanContext().getClassMeta(c));
-		return (returnOriginalObject ? object : o);
-	}
-	public <K,V,T extends Map<K,V>> T roundTripMap(T object, Class<? extends T> c, Class<K> k, Class<V> v) throws Exception {
-		Object out = serialize(object, this.s);
-		if (p == null)
-			return object;
-		ClassMeta<? extends T> cm = p.getBeanContext().getClassMeta(c, k, v);
-		T o = this.p.parse(out, cm);
-		return (returnOriginalObject ? object : o);
-	}
-	public <E,T extends Collection<E>> T roundTripCollection(T object, Class<? extends T> c, Class<E> e) throws Exception {
-		Object out = serialize(object, this.s);
-		if (p == null)
-			return object;
-		ClassMeta<? extends T> cm = p.getBeanContext().getClassMeta(c, e);
-		T o = this.p.parse(out, cm);
+		T o = (T)this.p.parse(out, c, args);
 		return (returnOriginalObject ? object : o);
 	}
 

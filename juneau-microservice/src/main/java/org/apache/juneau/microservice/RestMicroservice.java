@@ -85,7 +85,7 @@ public class RestMicroservice extends Microservice {
 	/**
 	 * Constructor.
 	 *
-	 * @param args The command line arguments.
+	 * @param args Command line arguments.
 	 * @throws Exception
 	 */
 	public RestMicroservice(String...args) throws Exception {

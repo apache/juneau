@@ -17,7 +17,7 @@ import org.apache.juneau.annotation.*;
 /**
  * The object provides metadata about the API. The metadata can be used by the clients if needed, and can be presented in the Swagger-UI for convenience.
  *
- * <h6 class='topic'>Example:</h6>
+ * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	{
  * 		<js>"title"</js>: <js>"Swagger Sample App"</js>,

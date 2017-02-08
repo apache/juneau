@@ -109,7 +109,7 @@ public final class MediaRange implements Comparable<MediaRange>  {
 	/**
 	 * Returns the media type enclosed by this media range.
 	 *
-	 * <h6 class='topic'>Examples:</h6>
+	 * <h5 class='section'>Examples:</h5>
 	 * <ul>
 	 * 	<li><js>"text/html"</js>
 	 * 	<li><js>"text/*"</js>

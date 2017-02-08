@@ -22,7 +22,7 @@ import org.apache.juneau.annotation.*;
 /**
  * Subclass of {@link Serializer} for character-based serializers.
  *
- * <h6 class='topic'>Description</h6>
+ * <h5 class='section'>Description:</h5>
  * <p>
  * 	This class is typically the parent class of all character-based serializers.
  * 	It has 2 abstract methods to implement...

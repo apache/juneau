@@ -20,7 +20,10 @@ import org.apache.juneau.serializer.*;
 /**
  * Specialized writer for serializing JSON.
  * <p>
- * 	<b>Note:  This class is not intended for external use.</b>
+ * <h5 class='section'>Notes:</h5>
+ * <ul>
+ * 	<li>This class is not intended for external use.
+ * </ul>
  */
 public final class JsonWriter extends SerializerWriter {
 

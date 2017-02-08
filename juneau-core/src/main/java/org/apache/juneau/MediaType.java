@@ -56,15 +56,17 @@ public final class MediaType {
 	 * The same media type strings always return the same objects so that these objects
 	 * can be compared for equality using '=='.
 	 * <p>
-	 * Note:  Spaces are replaced with <js>'+'</js> characters.
-	 * This gets around the issue where passing media type strings with <js>'+'</js> as HTTP GET parameters
-	 * 	get replaced with spaces by your browser.  Since spaces aren't supported by the spec, this
-	 * 	is doesn't break anything.
-	 * <p>
-	 * Anything including and following the <js>';'</js> character is ignored (e.g. <js>";charset=X"</js>).
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>Spaces are replaced with <js>'+'</js> characters.
+	 * 		This gets around the issue where passing media type strings with <js>'+'</js> as HTTP GET parameters
+	 * 		get replaced with spaces by your browser.  Since spaces aren't supported by the spec, this
+	 * 		is doesn't break anything.
+	 * 	<li>Anything including and following the <js>';'</js> character is ignored (e.g. <js>";charset=X"</js>).
+	 * </ul>
 	 *
 	 * @param s - The media type string.  Will be lowercased.
-	 * 	Returns <jk>null</jk> if input is null.
+	 * 	<br>Returns <jk>null</jk> if input is null.
 	 * @return A cached media type object.
 	 */
 	public static MediaType forString(String s) {

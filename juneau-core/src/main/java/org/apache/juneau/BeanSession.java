@@ -613,7 +613,7 @@ public class BeanSession extends Session {
 	 * <p>
 	 * 	If object is not a true bean, then throws a {@link BeanRuntimeException} with an explanation of why it's not a bean.
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Construct a bean map around a bean instance</jc>
 	 * 	BeanMap&lt;Person&gt; bm = BeanContext.<jsf>DEFAULT</jsf>.forBean(<jk>new</jk> Person());
@@ -655,7 +655,7 @@ public class BeanSession extends Session {
 	 * <p>
 	 * 	If object is not a true bean, throws a {@link BeanRuntimeException} with an explanation of why it's not a bean.
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Construct a bean map for new bean using only properties defined in a superclass</jc>
 	 * 	BeanMap&lt;MySubBean&gt; bm = BeanContext.<jsf>DEFAULT</jsf>.forBean(<jk>new</jk> MySubBean(), MySuperBean.<jk>class</jk>);
@@ -693,7 +693,7 @@ public class BeanSession extends Session {
 	 * <p>
 	 * 	If object is not a true bean, then throws a {@link BeanRuntimeException} with an explanation of why it's not a bean.
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Construct a new bean map wrapped around a new Person object</jc>
 	 * 	BeanMap&lt;Person&gt; bm = BeanContext.<jsf>DEFAULT</jsf>.newBeanMap(Person.<jk>class</jk>);
@@ -735,7 +735,7 @@ public class BeanSession extends Session {
 	 * Creates a new empty bean of the specified type, except used for instantiating inner member classes that must
 	 * 	be instantiated within another class instance.
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Construct a new instance of the specified bean class</jc>
 	 * 	Person p = BeanContext.<jsf>DEFAULT</jsf>.newBean(Person.<jk>class</jk>);
@@ -797,23 +797,6 @@ public class BeanSession extends Session {
 	}
 
 	/**
-	 * Returns the class type bound to this bean context if the specified class type
-	 * 	is from another bean context.
-	 * <p>
-	 * For example, this method allows you to pass in an object from <code>BeanContext.<jsf>DEFAULT</jsf>.getMapClassMeta(...)</code>
-	 * 	to any of the <code>ReaderParser.parse(Reader, ClassMeta, ParserContext)</code> methods, and the parsers
-	 * 	will use this method to replace the class type with the one registered with the parser.
-	 * This ensures that registered transforms are applied correctly.
-	 *
-	 * @param <T> The class type.
-	 * @param cm The class type.
-	 * @return The class type bound by this bean context.
-	 */
-	public final <T> ClassMeta<T> normalizeClassMeta(ClassMeta<T> cm) {
-		return ctx.normalizeClassMeta(cm);
-	}
-
-	/**
 	 * Returns a {@code ClassMeta} wrapper around a {@link Class} object.
 	 *
 	 * @param <T> The class type being wrapped.
@@ -825,83 +808,36 @@ public class BeanSession extends Session {
 	}
 
 	/**
-	 * Returns a {@code ClassMeta} wrapper around a {@link Class} or {@link Type} object.
-	 *
-	 * @param <T> The class type being wrapped.
-	 * @param c The class being wrapped.
-	 * @return The class meta object containing information about the class.
-	 */
-	public final <T> ClassMeta<T> getClassMeta(Object c) {
-		return ctx.getClassMeta(c);
-	}
-
-	/**
-	 * Returns a {@link ClassMeta} wrapper around a {@link Map} or {@link Collection} class.
+	 * Used to resolve <code>ClassMetas</code> of type <code>Collection</code> and <code>Map</code> that have
+	 * <code>ClassMeta</code> values that themselves could be collections or maps.
 	 * <p>
-	 * Handles the following object arrays:
+	 * <code>Collection</code> meta objects are assumed to be followed by zero or one meta objects indicating the element type.
+	 * <p>
+	 * <code>Map</code> meta objects are assumed to be followed by zero or two meta objects indicating the key and value types.
+	 * <p>
+	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
+	 *
+	 * <h5 class='section'>Examples:</h5>
 	 * <ul>
-	 * 	<li><code>Object[2]</code> containing <code>{Class&lt;? extends Collection&gt;, Object}</code>
-	 * 		where the 2nd entry is the entry type which can be a Class/Type or another array.
-	 * 	<li><code>Object[3]</code> containing <code>{Class&lt;? extends Map&gt;, Object, Object}</code>
-	 * 		where the 2nd entry is the key type which can be a Class/Type and 3rd entry is the value type which can be a Class/Type or another array.
+	 * 	<li><code>getClassMeta(String.<jk>class</jk>);</code> - A normal type.
+	 * 	<li><code>getClassMeta(List.<jk>class</jk>);</code> - A list containing objects.
+	 * 	<li><code>getClassMeta(List.<jk>class</jk>, String.<jk>class</jk>);</code> - A list containing strings.
+	 * 	<li><code>getClassMeta(LinkedList.<jk>class</jk>, String.<jk>class</jk>);</code> - A linked-list containing strings.
+	 * 	<li><code>getClassMeta(LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);</code> - A linked-list containing linked-lists of strings.
+	 * 	<li><code>getClassMeta(Map.<jk>class</jk>);</code> - A map containing object keys/values.
+	 * 	<li><code>getClassMeta(Map.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);</code> - A map containing string keys/values.
+	 * 	<li><code>getClassMeta(Map.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);</code> - A map containing string keys and values of lists containing beans.
 	 * </ul>
 	 *
-	 * @param c The object array being resolved.
-	 * @return The class meta object containing information about the class.
+	 * @param type The class to resolve.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * @param args The type arguments of the class if it's a collection or map.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * 	<br>Ignored if the main type is not a map or collection.
+	 * @return The class meta.
 	 */
-	public final <T> ClassMeta<T> getClassMeta(Object...c) {
-		return ctx.getClassMeta(c);
-	}
-
-	/**
-	 * Convenience method for creating a {@link Map} class meta.
-	 * <p>
-	 * Equivalent to calling <code>getClassMeta(c, keyType, valueType)</code>.
-	 *
-	 * @param <K> The map key class type.
-	 * @param <V> The map value class type.
-	 * @param <T> The map class type.
-	 * @param c The map class type.
-	 * @param keyType The map key class type.
-	 * @param valueType The map value class type.
-	 * @return If the key and value types are Object, returns a cached {@link ClassMeta} object.<br>
-	 * 	Otherwise, returns a new {@link ClassMeta} object every time.
-	 */
-	public final <K,V,T extends Map<K,V>> ClassMeta<T> getMapClassMeta(Class<T> c, Class<K> keyType, Class<V> valueType) {
-		return getClassMeta(c, keyType, valueType);
-	}
-
-	/**
-	 * Convenience method for creating a {@link Collection} class meta.
-	 * <p>
-	 * Equivalent to calling <code>getClassMeta(c, keyType, valueType)</code>.
-	 *
-	 * @param <E> The collection element class type.
-	 * @param <T> The collection class type.
-	 * @param c The collection class type.
-	 * @param elementType The collection element class type.
-	 * @return If the element type is <code>OBJECT</code>, returns a cached {@link ClassMeta} object.<br>
-	 * 	Otherwise, returns a new {@link ClassMeta} object every time.
-	 */
-	public final <E,T extends Collection<E>> ClassMeta<T> getCollectionClassMeta(Class<T> c, Class<E> elementType) {
-		return getClassMeta(c, getClassMeta(elementType));
-	}
-
-	/**
-	 * Constructs a ClassMeta object given the specified object and parameters.
-	 *
-	 * @param o The parent class type.
-	 * 	Can be any of the following types:
-	 * 	<ul class='spaced-list'>
-	 * 		<li>{@link ClassMeta} object, which just returns the same object.
-	 * 		<li>{@link Class} object (e.g. <code>String.<jk>class</jk></code>).
-	 * 		<li>{@link Type} object (e.g. {@link ParameterizedType} or {@link GenericArrayType}.
-	 * 		<li>Anything else is interpreted as {@code getClassMeta(o.getClass(), parameters);}
-	 * 	</ul>
-	 * @return A ClassMeta object, or <jk>null</jk> if the object is null.
-	 */
-	public final ClassMeta getClassMeta(Type o) {
-		return ctx.getClassMeta(o, null);
+	public final <T> ClassMeta<T> getClassMeta(Type type, Type...args) {
+		return ctx.getClassMeta(type, args);
 	}
 
 	/**

@@ -17,7 +17,7 @@ import org.apache.juneau.annotation.*;
 /**
  * Subclass of {@link Parser} for characters-based parsers.
  *
- * <h6 class='topic'>Description</h6>
+ * <h5 class='section'>Description:</h5>
  * <p>
  * 	This class is typically the parent class of all character-based parsers.
  * 	It has 1 abstract method to implement...

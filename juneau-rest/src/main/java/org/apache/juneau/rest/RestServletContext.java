@@ -118,7 +118,7 @@ public final class RestServletContext extends Context {
 	 * 	Use "*" to represent all methods.
 	 * 	For backwards compatibility, "true" also means "*".
 	 * <p>
-	 * 	Note that per the <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html">HTTP specification</a>, special care should
+	 * 	Note that per the <a class="doclink" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html">HTTP specification</a>, special care should
 	 * 	be taken when allowing non-safe (POST, PUT, DELETE) methods to be invoked through GET requests.
 	 * <p>
 	 * 	Applicable to servlet class only.

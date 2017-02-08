@@ -24,7 +24,7 @@ import org.apache.juneau.xml.annotation.*;
 /**
  * Java bean wrapper class.
  *
- * <h6 class='topic'>Description</h6>
+ * <h5 class='section'>Description:</h5>
  * <p>
  * 	A wrapper that wraps Java bean instances inside of a {@link Map} interface that allows
  * 	properties on the wrapped object can be accessed using the {@link Map#get(Object) get()} and {@link Map#put(Object,Object) put()} methods.
@@ -170,7 +170,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * 	{@link BeanProperty#swap() @BeanProperty.swap()} annotation, the value being passed in must be
 	 * 	a String containing an ISO8601 date-time string value.
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Construct a bean with a 'birthDate' Date field</jc>
 	 * 	Person p = <jk>new</jk> Person();
@@ -253,7 +253,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * 	{@link BeanProperty#swap() @BeanProperty.swap()} annotation, this method will return a String
 	 * 	containing an ISO8601 date-time string value.
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Construct a bean with a 'birthDate' Date field</jc>
 	 * 	Person p = <jk>new</jk> Person();
@@ -294,7 +294,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * 	depends on the default parser specified by the {@link BeanContext#BEAN_defaultParser} property
 	 * 	value on the config that created the context that created this map.
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	aPersonBean.load(<js>"{name:'John Smith',age:21}"</js>)
 	 * </p>

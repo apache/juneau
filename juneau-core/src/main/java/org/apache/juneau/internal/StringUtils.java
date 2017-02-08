@@ -453,7 +453,7 @@ public final class StringUtils {
 	 * Splits a character-delimited string into a string array.
 	 * Does not split on escaped-delimiters (e.g. "\,");
 	 * Resulting tokens are trimmed of whitespace.
-	 * NOTE:  This behavior is different than the Jakarta equivalent.
+	 * <b>NOTE:</b>  This behavior is different than the Jakarta equivalent.
 	 * split("a,b,c",',') -> {"a","b","c"}
 	 * split("a, b ,c ",',') -> {"a","b","c"}
 	 * split("a,,c",',') -> {"a","","c"}
@@ -783,7 +783,7 @@ public final class StringUtils {
 	/**
 	 * Generated a random UUID with the specified number of characters.
 	 * Characters are composed of lower-case ASCII letters and numbers only.
-	 * This method conforms to the restrictions for hostnames as specified in <a href='https://tools.ietf.org/html/rfc952'>RFC 952</a>
+	 * This method conforms to the restrictions for hostnames as specified in <a class="doclink" href="https://tools.ietf.org/html/rfc952">RFC 952</a>
 	 * Since each character has 36 possible values, the square approximation formula for
 	 * 	the number of generated IDs that would produce a 50% chance of collision is:
 	 * <code>sqrt(36^N)</code>.
@@ -918,7 +918,7 @@ public final class StringUtils {
 	/**
 	 * Returns <jk>true</jk> if the specified path string is prefixed with the specified prefix.
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	pathStartsWith(<js>"foo"</js>, <js>"foo"</js>);  <jc>// true</jc>
 	 * 	pathStartsWith(<js>"foo/bar"</js>, <js>"foo"</js>);  <jc>// true</jc>

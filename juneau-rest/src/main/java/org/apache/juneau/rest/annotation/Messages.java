@@ -26,7 +26,7 @@ import org.apache.juneau.utils.*;
  * <p>
  * 	Parameter type must be either {@link ResourceBundle} or {@link MessageBundle}.
  *
- * <h6 class='topic'>Example:</h6>
+ * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>)
  * 	<jk>public</jk> String doGet(<ja>@Messages</ja> ResourceBundle messages) {

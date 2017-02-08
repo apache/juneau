@@ -26,18 +26,18 @@ import org.apache.juneau.transform.*;
 /**
  * Serializes POJO models to UON (a notation for URL-encoded query parameter values).
  *
- * <h6 class='topic'>Media types</h6>
+ * <h5 class='section'>Media types:</h5>
  * <p>
  * 	Handles <code>Accept</code> types: <code>text/uon</code>
  * <p>
  * 	Produces <code>Content-Type</code> types: <code>text/uon</code>
  *
- * <h6 class='topic'>Description</h6>
+ * <h5 class='section'>Description:</h5>
  * <p>
  * 	This serializer provides several serialization options.  Typically, one of the predefined DEFAULT serializers will be sufficient.
  * 	However, custom serializers can be constructed to fine-tune behavior.
  *
- * <h6 class='topic'>Configurable properties</h6>
+ * <h5 class='section'>Configurable properties:</h5>
  * <p>
  * 	This class has the following properties associated with it:
  * <ul>
@@ -122,7 +122,7 @@ import org.apache.juneau.transform.*;
  * 	)
  * </p>
  *
- * <h6 class='topic'>Example:</h6>
+ * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Serialize a Map</jc>
  * 	Map m = <jk>new</jk> ObjectMap(<js>"{a:'b',c:1,d:false,e:['f',1,false],g:{h:'i'}}"</js>);

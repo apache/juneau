@@ -255,7 +255,7 @@ public @interface RestMethod {
 	 * <p>
 	 * 	Header values specified at the method level override header values specified at the servlet level.
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
 	 * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/*"</js>, defaultRequestHeaders={<js>"Accept: text/json"</js>})
@@ -320,7 +320,7 @@ public @interface RestMethod {
 	 * 	The default value pulls the description from the <code>(className.?)[javaMethodName].externalDocs</code> entry in the servlet resource bundle.
 	 * 	(e.g. <js>"MyClass.myMethod.externalDocs = {url:'http://juneau.apache.org'}"</js> or <js>"myMethod.externalDocs = {url:'http://juneau.apache.org'}"</js>).
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestMethod</ja>(externalDocs=<js>"{url:'http://juneau.apache.org'}"</js>)
 	 * </p>
@@ -342,7 +342,7 @@ public @interface RestMethod {
 	 * 	The default value pulls the description from the <code>(className.?)[javaMethodName].tags</code> entry in the servlet resource bundle.
 	 * 	(e.g. <js>"MyClass.myMethod.tags = foo,bar"</js> or <js>"myMethod.tags = foo,bar"</js>).
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestMethod</ja>(tags=<js>"foo,bar"</js>)
 	 * </p>
@@ -361,7 +361,7 @@ public @interface RestMethod {
 	 * 	The default value pulls the description from the <code>(className.?)[javaMethodName].deprecated</code> entry in the servlet resource bundle.
 	 * 	(e.g. <js>"MyClass.myMethod.deprecated = true"</js> or <js>"myMethod.deprecated = foo,bar"</js>).
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestMethod</ja>(deprecated=<jk>true</jk>)
 	 * </p>
@@ -378,7 +378,7 @@ public @interface RestMethod {
 	 * 	This annotation is provided for documentation purposes and is used to populate the method <js>"parameters"</js> column
 	 * 		on the Swagger page.
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestMethod</ja>(
 	 * 		name=<js>"POST"</js>, path=<js>"/{a}"</js>,
@@ -415,7 +415,7 @@ public @interface RestMethod {
 	 * 	This annotation is provided for documentation purposes and is used to populate the method <js>"responses"</js> column
 	 * 		on the Swagger page.
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestMethod</ja>(
 	 * 		name=<js>"GET"</js>, path=<js>"/"</js>,

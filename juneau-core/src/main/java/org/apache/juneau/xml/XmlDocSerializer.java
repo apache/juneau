@@ -20,13 +20,13 @@ import org.apache.juneau.serializer.*;
 /**
  * Serializes POJOs to HTTP responses as XML.
  *
- * <h6 class='topic'>Media types</h6>
+ * <h5 class='section'>Media types:</h5>
  * <p>
  * 	Handles <code>Accept</code> types: <code>text/xml</code>
  * <p>
  * 	Produces <code>Content-Type</code> types: <code>text/xml</code>
  *
- * <h6 class='topic'>Description</h6>
+ * <h5 class='section'>Description:</h5>
  * <p>
  * 	Same as {@link XmlSerializer}, except prepends <code><xt>&lt;?xml</xt> <xa>version</xa>=<xs>'1.0'</xs> <xa>encoding</xa>=<xs>'UTF-8'</xs><xt>?&gt;</xt></code> to the response
  * 	to make it a valid XML document.

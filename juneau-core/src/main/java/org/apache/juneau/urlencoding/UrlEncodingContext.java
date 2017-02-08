@@ -40,11 +40,14 @@ public final class UrlEncodingContext implements Cloneable {
 	 * 	String s2 = p2.serialize(<jk>new</jk> A()); <jc>// Produces "f1=a&amp;f1=b&amp;f2=c&amp;f2=d"</jc>
 	 * </p>
 	 * <p>
-	 * 	<b>Important note:</b>  If parsing multi-part parameters, it's highly recommended to use Collections or Lists
-	 * 	as bean property types instead of arrays since arrays have to be recreated from scratch every time a value
-	 * 	is added to it.
+	 * This option only applies to beans.
 	 * <p>
-	 * 	This option only applies to beans.
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>If parsing multi-part parameters, it's highly recommended to use <code>Collections</code> or <code>Lists</code>
+	 * 		as bean property types instead of arrays since arrays have to be recreated from scratch every time a value
+	 * 		is added to it.
+	 * </ul>
 	 */
 	public static final String URLENC_expandedParams = "UrlEncoding.expandedParams";
 

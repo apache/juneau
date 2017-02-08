@@ -23,7 +23,7 @@ import org.apache.juneau.utils.*;
  * This variable resolver requires that an {@link Args} object be set as a context object on the resolver or a
  * 	session object on the resolver session.
  *
- * <h6 class='topic'>Example:</h6>
+ * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Create an args object from the main(String[]) method.</jc>
  * 	Args args = new Args(argv);

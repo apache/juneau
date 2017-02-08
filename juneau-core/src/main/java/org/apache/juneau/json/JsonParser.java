@@ -28,11 +28,11 @@ import org.apache.juneau.transform.*;
 /**
  * Parses any valid JSON text into a POJO model.
  *
- * <h6 class='topic'>Media types</h6>
+ * <h5 class='section'>Media types:</h5>
  * <p>
  * 	Handles <code>Content-Type</code> types: <code>application/json, text/json</code>
  *
- * <h6 class='topic'>Description</h6>
+ * <h5 class='section'>Description:</h5>
  * <p>
  * 	This parser uses a state machine, which makes it very fast and efficient.  It parses JSON in about 70% of the
  * 	time that it takes the built-in Java DOM parsers to parse equivalent XML.
@@ -50,7 +50,7 @@ import org.apache.juneau.transform.*;
  * 	This parser handles the following input, and automatically returns the corresponding Java class.
  * 	<ul class='spaced-list'>
  * 		<li> JSON objects (<js>"{...}"</js>) are converted to {@link ObjectMap ObjectMaps}.  <br>
- * 				Note:  If a <code><xa>_type</xa>=<xs>'xxx'</xs></code> attribute is specified on the object, then an attempt is made to convert the object
+ * 				<b>Note:</b>  If a <code><xa>_type</xa>=<xs>'xxx'</xs></code> attribute is specified on the object, then an attempt is made to convert the object
  * 				to an instance of the specified Java bean class.  See the classProperty setting on the {@link ContextFactory} for more information
  * 				about parsing beans from JSON.
  * 		<li> JSON arrays (<js>"[...]"</js>) are converted to {@link ObjectList ObjectLists}.
@@ -77,7 +77,7 @@ import org.apache.juneau.transform.*;
  * 	TIP:  If you know you're parsing a JSON object or array, it can be easier to parse it using the {@link ObjectMap#ObjectMap(CharSequence) ObjectMap(CharSequence)}
  * 		or {@link ObjectList#ObjectList(CharSequence) ObjectList(CharSequence)} constructors instead of using this class.  The end result should be the same.
  *
- * <h6 class='topic'>Configurable properties</h6>
+ * <h5 class='section'>Configurable properties:</h5>
  * <p>
  * 	This class has the following properties associated with it:
  * <ul>
@@ -786,7 +786,6 @@ public final class JsonParser extends ReaderParser {
 	@Override /* Parser */
 	protected <T> T doParse(ParserSession session, ClassMeta<T> type) throws Exception {
 		JsonParserSession s = (JsonParserSession)session;
-		type = s.normalizeClassMeta(type);
 		ParserReader r = s.getReader();
 		if (r == null)
 			return null;
@@ -799,7 +798,7 @@ public final class JsonParser extends ReaderParser {
 	protected <K,V> Map<K,V> doParseIntoMap(ParserSession session, Map<K,V> m, Type keyType, Type valueType) throws Exception {
 		JsonParserSession s = (JsonParserSession)session;
 		ParserReader r = s.getReader();
-		m = parseIntoMap2(s, r, m, s.getClassMeta(keyType), s.getClassMeta(valueType), null);
+		m = parseIntoMap2(s, r, m, (ClassMeta<K>)s.getClassMeta(keyType), (ClassMeta<V>)s.getClassMeta(valueType), null);
 		validateEnd(s, r);
 		return m;
 	}
@@ -808,7 +807,7 @@ public final class JsonParser extends ReaderParser {
 	protected <E> Collection<E> doParseIntoCollection(ParserSession session, Collection<E> c, Type elementType) throws Exception {
 		JsonParserSession s = (JsonParserSession)session;
 		ParserReader r = s.getReader();
-		c = parseIntoCollection2(s, r, c, s.getClassMeta(elementType), null);
+		c = parseIntoCollection2(s, r, c, (ClassMeta<E>)s.getClassMeta(elementType), null);
 		validateEnd(s, r);
 		return c;
 	}

@@ -36,13 +36,13 @@ import org.apache.juneau.parser.*;
  *
  * <h6 class='topic' id='ConfigProperties'>Configurable properties on the JSON parser</h6>
  * <p>
- * 	None.
+ * None.
  *
- * <h6 class='topic'>Configurable properties inherited from parent classes</h6>
+ * <h5 class='section'>Inherited configurable properties:</h5>
  * <ul class='javahierarchy'>
- * 	<li class='c'><a class='doclink' href='../BeanContext.html#ConfigProperties'>BeanContext</a> - Properties associated with handling beans on serializers and parsers.
+ * 	<li class='c'><a class="doclink" href="../BeanContext.html#ConfigProperties">BeanContext</a> - Properties associated with handling beans on serializers and parsers.
  * 	<ul>
- * 		<li class='c'><a class='doclink' href='../parser/ParserContext.html#ConfigProperties'>ParserContext</a> - Configurable properties common to all parsers.
+ * 		<li class='c'><a class="doclink" href="../parser/ParserContext.html#ConfigProperties">ParserContext</a> - Configurable properties common to all parsers.
  * 	</ul>
  * </ul>
  */
@@ -63,6 +63,6 @@ public final class JsonParserContext extends ParserContext {
 	public ObjectMap asMap() {
 		return super.asMap()
 			.append("JsonParserContext", new ObjectMap()
-			);
+		);
 	}
 }

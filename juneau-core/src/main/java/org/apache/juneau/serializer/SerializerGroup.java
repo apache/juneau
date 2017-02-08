@@ -22,7 +22,7 @@ import org.apache.juneau.*;
 /**
  * Represents a group of {@link Serializer Serializers} that can be looked up by media type.
  *
- * <h6 class='topic'>Description</h6>
+ * <h5 class='section'>Description:</h5>
  * <p>
  * 	Provides the following features:
  * <ul class='spaced-list'>
@@ -42,7 +42,7 @@ import org.apache.juneau.*;
  * 	For example, calling <code>g.append(S1.<jk>class</jk>,S2.<jk>class</jk>).append(S3.<jk>class</jk>,S4.<jk>class</jk>)</code>
  * 	will result in the order <code>S3, S4, S1, S2</code>.
  *
- * <h6 class='topic'>Example:</h6>
+ * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Construct a new serializer group</jc>
  * 	SerializerGroup g = <jk>new</jk> SerializerGroup();

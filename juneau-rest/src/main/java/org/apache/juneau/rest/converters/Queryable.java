@@ -71,18 +71,15 @@ public final class Queryable implements RestConverter {
 
 				if (o instanceof Collection || o.getClass().isArray()) {
 					ObjectMap query = req.getQueryParameter("q", ObjectMap.class);
-					ClassMeta<List<String>> cm1 = session.getCollectionClassMeta(List.class, String.class);
-					List<String> view = req.getQueryParameter("v", cm1);
-					ClassMeta<List<Object>> cm2 = session.getCollectionClassMeta(List.class, String.class);
-					List sort = req.getQueryParameter("s", cm2);
-					boolean ignoreCase = req.getQueryParameter("i", Boolean.class, false);
-					int pos = req.getQueryParameter("p", Integer.class, 0);
-					int limit = req.getQueryParameter("l", Integer.class, 0);
+					List<String> view = req.getQueryParameter("v", List.class, String.class);
+					List sort = req.getQueryParameter("s", List.class, String.class);
+					boolean ignoreCase = req.getQueryParameter("i", false, Boolean.class);
+					int pos = req.getQueryParameter("p", 0, Integer.class);
+					int limit = req.getQueryParameter("l", 0, Integer.class);
 					o = f.filterCollection(query, view, sort, pos, limit, ignoreCase);
 
 				} else {
-					ClassMeta<List<String>> cm2 = session.getCollectionClassMeta(List.class, String.class);
-					List<String> view = req.getQueryParameter("v", cm2);
+					List<String> view = req.getQueryParameter("v", List.class, String.class);
 					o = f.filterMap(view);
 				}
 			}

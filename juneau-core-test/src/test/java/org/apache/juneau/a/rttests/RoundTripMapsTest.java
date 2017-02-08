@@ -31,7 +31,7 @@ import org.junit.*;
  * Tests designed to serialize and parse objects to make sure we end up
  * with the same objects for all serializers and parsers.
  */
-@SuppressWarnings({"unchecked","deprecation","javadoc"})
+@SuppressWarnings({"deprecation","javadoc"})
 public class RoundTripMapsTest extends RoundTripTest {
 
 	public RoundTripMapsTest(String label, Serializer s, Parser p, int flags) throws Exception {
@@ -55,7 +55,7 @@ public class RoundTripMapsTest extends RoundTripTest {
 		Map<Integer,String> t = new TreeMap<Integer,String>();
 		t.put(1, "a");
 		t.put(2, null);
-		t = roundTripMap(t, TreeMap.class, Integer.class, String.class);
+		t = roundTrip(t, TreeMap.class, Integer.class, String.class);
 		assertEquals("a", t.get(1));
 		assertNull(null, t.get(2));
 
@@ -63,7 +63,7 @@ public class RoundTripMapsTest extends RoundTripTest {
 		t.put(1, "a");
 		t.put(2, null);
 		t.put(null, "b");
-		t = roundTripMap(t, HashMap.class, Integer.class, String.class);
+		t = roundTrip(t, HashMap.class, Integer.class, String.class);
 		assertEquals("a", t.get(1));
 		assertNull(t.get(2));
 		assertEquals("b", t.get(null));
@@ -77,7 +77,7 @@ public class RoundTripMapsTest extends RoundTripTest {
 		Map<Boolean,String> t = new TreeMap<Boolean,String>();
 		t.put(true, "a");
 		t.put(false, null);
-		t = roundTripMap(t, TreeMap.class, Boolean.class, String.class);
+		t = roundTrip(t, TreeMap.class, Boolean.class, String.class);
 		assertEquals("a", t.get(true));
 		assertNull(null, t.get(false));
 
@@ -85,7 +85,7 @@ public class RoundTripMapsTest extends RoundTripTest {
 		t.put(true, "a");
 		t.put(false, null);
 		t.put(null, "b");
-		t = roundTripMap(t, HashMap.class, Boolean.class, String.class);
+		t = roundTrip(t, HashMap.class, Boolean.class, String.class);
 		assertEquals("a", t.get(true));
 		assertNull(t.get(false));
 		assertEquals("b", t.get(null));
@@ -144,7 +144,7 @@ public class RoundTripMapsTest extends RoundTripTest {
 		Map<Date,String> t = new TreeMap<Date,String>();
 		t.put(td1, "a");
 		t.put(td2, null);
-		t = roundTripMap(t, TreeMap.class, Date.class, String.class);
+		t = roundTrip(t, TreeMap.class, Date.class, String.class);
 		assertEquals("a", t.get(td1));
 		assertNull(null, t.get(td2));
 
@@ -152,7 +152,7 @@ public class RoundTripMapsTest extends RoundTripTest {
 		t.put(td1, "a");
 		t.put(td2, null);
 		t.put(null, "b");
-		t = roundTripMap(t, HashMap.class, Date.class, String.class);
+		t = roundTrip(t, HashMap.class, Date.class, String.class);
 		assertEquals("a", t.get(td1));
 		assertNull(t.get(td2));
 		assertEquals("b", t.get(null));
@@ -171,7 +171,7 @@ public class RoundTripMapsTest extends RoundTripTest {
 		Map<Calendar,String> t = new TreeMap<Calendar,String>();
 		t.put(td1, "a");
 		t.put(td2, null);
-		t = roundTripMap(t, TreeMap.class, GregorianCalendar.class, String.class);
+		t = roundTrip(t, TreeMap.class, GregorianCalendar.class, String.class);
 		assertEquals("a", t.get(td1));
 		assertNull(null, t.get(td2));
 
@@ -179,7 +179,7 @@ public class RoundTripMapsTest extends RoundTripTest {
 		t.put(td1, "a");
 		t.put(td2, null);
 		t.put(null, "b");
-		t = roundTripMap(t, HashMap.class, GregorianCalendar.class, String.class);
+		t = roundTrip(t, HashMap.class, GregorianCalendar.class, String.class);
 		assertEquals("a", t.get(td1));
 		assertNull(t.get(td2));
 		assertEquals("b", t.get(null));
@@ -194,7 +194,7 @@ public class RoundTripMapsTest extends RoundTripTest {
 		Map<TestEnum,String> t = new TreeMap<TestEnum,String>();
 		t.put(TestEnum.FOO, "a");
 		t.put(TestEnum.BAR, null);
-		t = roundTripMap(t, TreeMap.class, TestEnum.class, String.class);
+		t = roundTrip(t, TreeMap.class, TestEnum.class, String.class);
 		assertEquals("a", t.get(TestEnum.FOO));
 		assertNull(null, t.get(TestEnum.BAR));
 
@@ -202,7 +202,7 @@ public class RoundTripMapsTest extends RoundTripTest {
 		t.put(TestEnum.FOO, "a");
 		t.put(TestEnum.BAR, null);
 		t.put(null, "b");
-		t = roundTripMap(t, HashMap.class, TestEnum.class, String.class);
+		t = roundTrip(t, HashMap.class, TestEnum.class, String.class);
 		assertEquals("a", t.get(TestEnum.FOO));
 		assertNull(t.get(TestEnum.BAR));
 		assertEquals("b", t.get(null));

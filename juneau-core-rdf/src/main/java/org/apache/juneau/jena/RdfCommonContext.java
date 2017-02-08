@@ -309,7 +309,7 @@ public interface RdfCommonContext {
 	 * <ul class='spaced-list'>
 	 * 	<li><js>"lax"</js> - The rules for RDF URI references only, which does permit spaces although the use of spaces is not good practice.
 	 * 	<li><js>"strict"</js> - Sets the IRI engine with rules for valid IRIs, XLink and RDF; it does not permit spaces in IRIs.
-	 * 	<li><js>"iri"</js> - Sets the IRI engine to IRI (<a href='http://www.ietf.org/rfc/rfc3986.txt'>RFC 3986</a>, <a href='http://www.ietf.org/rfc/rfc3987.txt'>RFC 3987</a>).
+	 * 	<li><js>"iri"</js> - Sets the IRI engine to IRI (<a class="doclink" href="http://www.ietf.org/rfc/rfc3986.txt">RFC 3986</a>, <a class="doclink" href="http://www.ietf.org/rfc/rfc3987.txt">RFC 3987</a>).
 	 * </ul>
 	 */
 	public static final String RDF_arp_iriRules = "Rdf.jena.rdfXml.iri-rules";
@@ -338,10 +338,10 @@ public interface RdfCommonContext {
 	 * <p>
 	 * 	See also:
 	 * <ul class='spaced-list'>
-	 * 	<li><a href='http://jena.sourceforge.net/javadoc/com/hp/hpl/jena/rdf/arp/ARPOptions.html#setDefaultErrorMode()'>ARPOptions.setDefaultErrorMode()</a>
-	 * 	<li><a href='http://jena.sourceforge.net/javadoc/com/hp/hpl/jena/rdf/arp/ARPOptions.html#setLaxErrorMode()'>ARPOptions.setLaxErrorMode()</a>
-	 * 	<li><a href='http://jena.sourceforge.net/javadoc/com/hp/hpl/jena/rdf/arp/ARPOptions.html#setStrictErrorMode()'>ARPOptions.setStrictErrorMode()</a>
-	 * 	<li><a href='http://jena.sourceforge.net/javadoc/com/hp/hpl/jena/rdf/arp/ARPOptions.html#setStrictErrorMode(int)'>ARPOptions.setStrictErrorMode(int)</a>
+	 * 	<li><a class="doclink" href="http://jena.sourceforge.net/javadoc/com/hp/hpl/jena/rdf/arp/ARPOptions.html#setDefaultErrorMode()">ARPOptions.setDefaultErrorMode()</a>
+	 * 	<li><a class="doclink" href="http://jena.sourceforge.net/javadoc/com/hp/hpl/jena/rdf/arp/ARPOptions.html#setLaxErrorMode()">ARPOptions.setLaxErrorMode()</a>
+	 * 	<li><a class="doclink" href="http://jena.sourceforge.net/javadoc/com/hp/hpl/jena/rdf/arp/ARPOptions.html#setStrictErrorMode()">ARPOptions.setStrictErrorMode()</a>
+	 * 	<li><a class="doclink" href="http://jena.sourceforge.net/javadoc/com/hp/hpl/jena/rdf/arp/ARPOptions.html#setStrictErrorMode(int)">ARPOptions.setStrictErrorMode(int)</a>
 	 * </ul>
 	 */
 	public static final String RDF_arp_errorMode = "Rdf.jena.rdfXml.error-mode";
@@ -359,7 +359,7 @@ public interface RdfCommonContext {
 	 * <p>
 	 * 	See also:
 	 * <ul class='spaced-list'>
-	 * 	<li><a href='http://jena.sourceforge.net/javadoc/com/hp/hpl/jena/rdf/arp/ARPOptions.html#setEmbedding(boolean)'>ARPOptions.setEmbedding(boolean)</a>
+	 * 	<li><a class="doclink" href="http://jena.sourceforge.net/javadoc/com/hp/hpl/jena/rdf/arp/ARPOptions.html#setEmbedding(boolean)">ARPOptions.setEmbedding(boolean)</a>
 	 * </ul>
 	 */
 	public static final String RDF_arp_embedding = "Rdf.jena.rdfXml.embedding";
@@ -384,8 +384,8 @@ public interface RdfCommonContext {
 	 * <p>
 	 * 	See also:
 	 * <ul class='spaced-list'>
-	 * 	<li><a href='http://jena.sourceforge.net/javadoc/com/hp/hpl/jena/rdf/arp/ARPErrorNumbers.html'>ARPErrorNumbers</a>
-	 * 	<li><a href='http://jena.sourceforge.net/javadoc/com/hp/hpl/jena/rdf/arp/ARPOptions.html#setErrorMode(int,%20int)'>ARPOptions.setErrorMode(int, int)</a>
+	 * 	<li><a class="doclink" href="http://jena.sourceforge.net/javadoc/com/hp/hpl/jena/rdf/arp/ARPErrorNumbers.html">ARPErrorNumbers</a>
+	 * 	<li><a class="doclink" href="http://jena.sourceforge.net/javadoc/com/hp/hpl/jena/rdf/arp/ARPOptions.html#setErrorMode(int,%20int)">ARPOptions.setErrorMode(int, int)</a>
 	 * </ul>
 	 */
 	public static final String RDF_arp_err_ = "Rdf.jena.rdfXml.ERR_";
@@ -549,7 +549,7 @@ public interface RdfCommonContext {
 	 * 	<li><b>Default:</b> <js>""</js>
 	 * </ul>
 	 * <p>
-	 * 	A list of <code>Resource</code> or a <code>String</code> being a comma separated list of fragment IDs from <a href='http://www.w3.org/TR/rdf-syntax-grammar'>RDF Syntax Grammar</a> indicating grammar rules that will not be used.
+	 * 	A list of <code>Resource</code> or a <code>String</code> being a comma separated list of fragment IDs from <a class="doclink" href="http://www.w3.org/TR/rdf-syntax-grammar">RDF Syntax Grammar</a> indicating grammar rules that will not be used.
 	 */
 	public static final String RDF_rdfxml_blockRules = "Rdf.jena.rdfXml.blockRules";
 
@@ -701,9 +701,11 @@ public interface RdfCommonContext {
 	 * 	<li><js>"LIST"</js> - RDF List container.
 	 * 	<li><js>"MULTI_VALUED"</js> - Multi-valued properties.
 	 * </ul>
-	 *	<p>
-	 *		Important Note:  If you use <js>"BAG"</js> or <js>"MULTI_VALUED"</js>, the order of the elements
-	 *		in the collection will get lost.
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>If you use <js>"BAG"</js> or <js>"MULTI_VALUED"</js>, the order of the elements in the collection will get lost.
+	 * </ul>
 	 */
 	public static final String RDF_collectionFormat = "Rdf.collectionFormat";
 
@@ -726,7 +728,7 @@ public interface RdfCommonContext {
 	 *	This setting is typically only useful if the beans being parsed into do not have a bean property
 	 *	annotated with {@link Rdf#beanUri @Rdf(beanUri=true)}.
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	WriterSerializer s = <jk>new</jk> RdfSerializer.XmlAbbrev().setProperty(<jsf>RDF_looseCollection</jsf>, <jk>true</jk>);
 	 * 	ReaderParser p = <jk>new</jk> RdfParser.Xml().setProperty(<jsf>RDF_looseCollection</jsf>, <jk>true</jk>);
@@ -736,15 +738,15 @@ public interface RdfCommonContext {
 	 * 	<jc>// Serialize to RDF/XML as loose resources</jc>
 	 * 	String rdfXml = s.serialize(l);
 	 *
-	 *		<jc>// Parse back into a Java collection</jc>
-	 * 	l = p.parseCollection(rdfXml, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 *	<jc>// Parse back into a Java collection</jc>
+	 * 	l = p.parse(rdfXml, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 *
 	 * 	MyBean[] b = createArrayOfMyBeans();
 	 *
 	 * 	<jc>// Serialize to RDF/XML as loose resources</jc>
 	 * 	String rdfXml = s.serialize(b);
 	 *
-	 *		<jc>// Parse back into a bean array</jc>
+	 *	<jc>// Parse back into a bean array</jc>
 	 * 	b = p.parse(rdfXml, MyBean[].<jk>class</jk>);
 	 * </p>
 	 */

@@ -37,7 +37,7 @@ import org.apache.juneau.internal.*;
  * 	<li><code>java com.sample.MyClass mainArg1 -optArg1 optArg1Val1 -optArg1 optArg1Val2</code>
  * </ul>
  *
- * <h6 class='topic'>Code examples</h6>
+ * <h5 class='section'>Examples:</h5>
  * <p class='bcode'>
  *
  * 	<jc>// Main method with arguments</jc>
@@ -193,7 +193,7 @@ public final class Args extends ObjectMap {
 	 * <p>
 	 * If the optional arg has multiple values, returns only the first converted value.
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 *	<p class='bcode'>
 	 * 	<jc>// Command:  java com.sample.MyClass -verbose true -debug 5</jc>
 	 * 	<jk>boolean</jk> b = args.getArg(<jk>boolean</jk>.<jk>class</jk>, <js>"verbose"</js>);
@@ -215,7 +215,7 @@ public final class Args extends ObjectMap {
 	/**
 	 * Returns the optional argument values as a list of strings.
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Command:  java com.sample.MyClass -extraArgs foo bar baz</jc>
 	 * 	List&lt;String&gt; l1 = args.getArgs(<js>"extraArgs"</js>); <jc>// ['foo','bar','baz']</jc>

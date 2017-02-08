@@ -21,7 +21,7 @@ import java.lang.annotation.*;
  * Annotation that can be applied to a parameter of a {@link RestMethod} annotated method
  * 	to identify it as the URL parameter remainder after a path pattern match.
  *
- * <h6 class='topic'>Example:</h6>
+ * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/foo/*"</js>)
  * 	<jk>public void</jk> doGet(RestRequest req, RestResponse res, <ja>@PathRemainder</ja> String remainder) {

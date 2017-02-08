@@ -21,7 +21,7 @@ import java.lang.annotation.*;
  * Annotation used in conjunction with {@link RestMethod#parameters()} to identify content and header descriptions
  * 	on specific method requests.
  *
- * <h6 class='topic'>Example:</h6>
+ * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(
  * 		name=<js>"*"</js>,
@@ -58,8 +58,9 @@ public @interface Parameter {
 	 * The name of the parameter (e.g. <js>"Content-Range"</js>).
 	 * <p>
 	 * Parameter names are case sensitive.
-	 * If <code>in</code> is <js>"path"</js>, the name field MUST correspond to the associated path segment from the <code>path</code> field in the <a href='http://swagger.io/specification/#pathsObject'>Paths Object</a>.
-	 * See <a href='http://swagger.io/specification/#pathTemplating'>Path Templating</a> for further information.
+	 * If <code>in</code> is <js>"path"</js>, the name field MUST correspond to the associated path segment from the <code>path</code> field in
+	 * 	the <a class="doclink" href="http://swagger.io/specification/#pathsObject">Paths Object</a>.
+	 * See <a class="doclink" href="http://swagger.io/specification/#pathTemplating">Path Templating</a> for further information.
 	 * For all other cases, the name corresponds to the parameter name used based on the <code>in</code> property.
 	 */
 	String name() default "";
@@ -69,7 +70,7 @@ public @interface Parameter {
 	 * <p>
 	 * A brief description of the parameter.
 	 * This could contain examples of use.
-	 * <a href='https://help.github.com/articles/github-flavored-markdown'>GFM syntax</a> can be used for rich text representation.
+	 * <a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used for rich text representation.
 	 * <p>
 	 * The default value pulls the description from the <code>description</code> entry in the servlet resource bundle.
 	 * (e.g. <js>"myMethod.res.[code].[category].[name] = foo"</js> or <js>"MyServlet.myMethod.res.[code].[category].[name] = foo"</js>).
@@ -89,9 +90,9 @@ public @interface Parameter {
 	 * <p>
 	 * 	Only applicable for <code>in</code> of type <js>"body"</js>.
 	 * <p>
-	 * 	The schema is a JSON object specified <a href='http://swagger.io/specification/#schemaObject'>here</a>.
+	 * 	The schema is a JSON object specified <a class="doclink" href="http://swagger.io/specification/#schemaObject">here</a>.
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestMethod</ja>(
 	 * 		parameters={
@@ -117,7 +118,7 @@ public @interface Parameter {
 	/**
 	 * The extending format for the previously mentioned <code>type</code>.
 	 * <p>
-	 * See <a href='http://swagger.io/specification/#dataTypeFormat'>Data Type Formats</a> for further details.
+	 * See <a class="doclink" href="http://swagger.io/specification/#dataTypeFormat">Data Type Formats</a> for further details.
 	 */
 	String format() default "";
 
@@ -134,7 +135,7 @@ public @interface Parameter {
 	 * <p>
 	 * Describes the type of items in the array.
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestMethod</ja>(
 	 * 		parameters={
@@ -148,7 +149,7 @@ public @interface Parameter {
 	 * 	<jk>public void</jk> doAnything() {
 	 * </p>
 	 * <p>
-	 * See <a href='http://swagger.io/specification/#itemsObject'>Items Object</a> for further details.
+	 * See <a class="doclink" href="http://swagger.io/specification/#itemsObject">Items Object</a> for further details.
 	 */
 	String items() default "";
 
@@ -173,7 +174,7 @@ public @interface Parameter {
 	 * <p>
 	 * For example a "count" to control the number of results per page might default to 100 if not supplied by the client in the request.
 	 * (Note: "default" has no meaning for required parameters.)
-	 * See <a href='http://json-schema.org/latest/json-schema-validation.html#anchor101'>http://json-schema.org/latest/json-schema-validation.html#anchor101</a>.
+	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor101">http://json-schema.org/latest/json-schema-validation.html#anchor101</a>.
 	 * Unlike JSON Schema this value MUST conform to the defined <code>type</code> for this parameter.
 	 */
 	String _default() default "";

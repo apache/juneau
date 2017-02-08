@@ -40,7 +40,7 @@ public @interface Xml {
 	 * <p>
 	 * 	Applies only to collection and array bean properties.
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jk>public class</jk> MyBean {
 	 * 		<ja>@Xml</ja>(childName=<js>"child"</js>}
@@ -98,7 +98,7 @@ public @interface Xml {
 	/**
 	 * The {@link XmlFormat} to use for serializing this object type.
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<jk>public class</jk> MyBean {
 	 *

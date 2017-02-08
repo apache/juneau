@@ -26,7 +26,7 @@ import org.apache.juneau.xml.*;
 /**
  * Transforms the contents of a {@link Reader} into an {@code Object}.
  *
- * <h6 class='topic'>Description</h6>
+ * <h5 class='section'>Description:</h5>
  * <p>
  * 	The {@code Reader} must contain JSON, Juneau-generated XML (output from {@link XmlSerializer}),
  * 		or Juneau-generated HTML (output from {@link JsonSerializer}) in order to be parsed correctly.
@@ -98,7 +98,7 @@ public class ReaderSwap extends PojoSwap<Reader,Object> {
 		try {
 			if (parser == null)
 				return IOUtils.read(o);
-			return parser.parse(o, session.object());
+			return parser.parse(o, Object.class);
 		} catch (IOException e) {
 			return e.getLocalizedMessage();
 		} catch (Exception e) {

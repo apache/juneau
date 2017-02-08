@@ -26,13 +26,13 @@ import org.apache.juneau.transform.*;
 /**
  * Serializes POJO metamodels to HTML.
  *
- * <h6 class='topic'>Media types</h6>
+ * <h5 class='section'>Media types:</h5>
  * <p>
  * 	Handles <code>Accept</code> types: <code>text/html+schema</code>
  * <p>
  * 	Produces <code>Content-Type</code> types: <code>text/html</code>
  *
- * <h6 class='topic'>Description</h6>
+ * <h5 class='section'>Description:</h5>
  * <p>
  * 	Essentially the same as {@link HtmlSerializer}, except serializes the POJO metamodel
  * 		instead of the model itself.

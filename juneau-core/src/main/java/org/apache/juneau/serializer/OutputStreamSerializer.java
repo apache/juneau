@@ -19,7 +19,7 @@ import org.apache.juneau.annotation.*;
 /**
  * Subclass of {@link Serializer} for byte-based serializers.
  *
- * <h6 class='topic'>Description</h6>
+ * <h5 class='section'>Description:</h5>
  * <p>
  * 	This class is typically the parent class of all byte-based serializers.
  * 	It has 1 abstract method to implement...

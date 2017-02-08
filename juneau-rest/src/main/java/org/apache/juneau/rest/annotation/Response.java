@@ -20,7 +20,7 @@ import java.lang.annotation.*;
 /**
  * Annotation used in conjunction with {@link RestMethod#responses()} to identify possible responses by the method.
  *
- * <h6 class='topic'>Example:</h6>
+ * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(
  * 		name=<js>"*"</js>,
@@ -63,10 +63,10 @@ public @interface Response {
 	 * <p>
 	 * It can be a primitive, an array or an object.
 	 * If this field does not exist, it means no content is returned as part of the response.
-	 * As an extension to the <a href='http://swagger.io/specification/#schemaObject'>Schema Object</a>, its root type value may also be <js>"file"</js>.
+	 * As an extension to the <a class="doclink" href="http://swagger.io/specification/#schemaObject">Schema Object</a>, its root type value may also be <js>"file"</js>.
 	 * This SHOULD be accompanied by a relevant produces mime-type.
 	 *
-	 * <h6 class='topic'>Example:</h6>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
 	 * 	<ja>@RestMethod</ja>(
 	 * 		name=<js>"*"</js>,
