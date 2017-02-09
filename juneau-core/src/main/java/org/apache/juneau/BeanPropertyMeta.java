@@ -42,45 +42,211 @@ import org.apache.juneau.utils.*;
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class BeanPropertyMeta {
 
-	private Field field;
-	private Method getter, setter;
-	private boolean isConstructorArg, isUri;
+	final BeanMeta<?> beanMeta;                               // The bean that this property belongs to.
+	private final BeanContext beanContext;                    // The context that created this meta.
 
-	private final BeanMeta<?> beanMeta;
-	private final BeanContext beanContext;
+	private final String name;                                // The name of the property.
+	private final Field field;                                // The bean property field (if it has one).
+	private final Method getter, setter;                      // The bean property getter and setter.
+	private final boolean isUri;                              // True if this is a URL/URI or annotated with @URI.
 
-	private String name;
-	private ClassMeta<?>
-		rawTypeMeta,                           // The real class type of the bean property.
-		typeMeta;                              // The transformed class type of the bean property.
-	private String[] properties;
-	private PojoSwap swap;                     // PojoSwap defined only via @BeanProperty annotation.
+	private final ClassMeta<?>
+		rawTypeMeta,                                           // The real class type of the bean property.
+		typeMeta;                                              // The transformed class type of the bean property.
 
-	private MetadataMap extMeta = new MetadataMap();  // Extended metadata
-	BeanRegistry beanRegistry;
+	private final String[] properties;                        // The value of the @BeanProperty(properties) annotation.
+	private final PojoSwap swap;                              // PojoSwap defined only via @BeanProperty annotation.
+
+	private final MetadataMap extMeta = new MetadataMap();    // Extended metadata
+	private final BeanRegistry beanRegistry;
+
+	private final Object overrideValue;                       // The bean property value (if it's an overridden delegate).
+	private final BeanPropertyMeta delegateFor;               // The bean property that this meta is a delegate for.
 
 	/**
-	 * Constructor.
-	 *
-	 * @param beanMeta The metadata of the bean containing this property.
-	 * @param name This property name.
+	 * BeanPropertyMeta builder class.
 	 */
-	protected BeanPropertyMeta(BeanMeta<?> beanMeta, String name) {
-		this.beanMeta = beanMeta;
-		this.beanContext = beanMeta.ctx;
-		this.name = name;
+	public static class Builder {
+		private BeanMeta<?> beanMeta;
+		private BeanContext beanContext;
+		String name;
+		Field field;
+		Method getter, setter;
+		private boolean isConstructorArg, isUri;
+		private ClassMeta<?> rawTypeMeta, typeMeta;
+		private String[] properties;
+		private PojoSwap swap;
+		private BeanRegistry beanRegistry;
+		private Object overrideValue;
+		private BeanPropertyMeta delegateFor;
+
+		Builder(BeanMeta<?> beanMeta, String name) {
+			this.beanMeta = beanMeta;
+			this.beanContext = beanMeta.ctx;
+			this.name = name;
+		}
+
+		Builder(BeanMeta<?> beanMeta, String name, ClassMeta<?> rawTypeMeta, BeanRegistry beanRegistry) {
+			this(beanMeta, name);
+			this.rawTypeMeta = rawTypeMeta;
+			if (rawTypeMeta == null)
+				throw new RuntimeException("xxx");
+			this.typeMeta = rawTypeMeta;
+			this.beanRegistry = beanRegistry;
+		}
+
+		/**
+		 * BeanPropertyMeta builder for delegate classes.
+		 *
+		 * @param beanMeta The Bean that this property belongs to.
+		 * @param name The property name.
+		 * @param overrideValue The overridden value of this bean property.
+		 * @param delegateFor The original bean property that this one is overriding.
+		 */
+		public Builder(BeanMeta<?> beanMeta, String name, Object overrideValue, BeanPropertyMeta delegateFor) {
+			this(beanMeta, name);
+			this.delegateFor = delegateFor;
+			this.overrideValue = overrideValue;
+		}
+
+		boolean validate(BeanContext f, BeanRegistry parentBeanRegistry, Map<Class<?>,Class<?>[]> typeVarImpls) throws Exception {
+
+			List<Class<?>> bdClasses = new ArrayList<Class<?>>();
+
+			if (field == null && getter == null)
+				return false;
+
+			if (field == null && setter == null && f.beansRequireSettersForGetters && ! isConstructorArg)
+				return false;
+
+			if (field != null) {
+				BeanProperty p = field.getAnnotation(BeanProperty.class);
+				rawTypeMeta = f.resolveClassMeta(p, field.getGenericType(), typeVarImpls);
+				isUri |= (rawTypeMeta.isUri() || field.isAnnotationPresent(org.apache.juneau.annotation.URI.class));
+				if (p != null) {
+					swap = getPropertyPojoSwap(p);
+					if (! p.properties().isEmpty())
+						properties = StringUtils.split(p.properties(), ',');
+					bdClasses.addAll(Arrays.asList(p.beanDictionary()));
+				}
+			}
+
+			if (getter != null) {
+				BeanProperty p = getter.getAnnotation(BeanProperty.class);
+				if (rawTypeMeta == null)
+					rawTypeMeta = f.resolveClassMeta(p, getter.getGenericReturnType(), typeVarImpls);
+				isUri |= (rawTypeMeta.isUri() || getter.isAnnotationPresent(org.apache.juneau.annotation.URI.class));
+				if (p != null) {
+					if (swap == null)
+						swap = getPropertyPojoSwap(p);
+					if (properties != null && ! p.properties().isEmpty())
+						properties = StringUtils.split(p.properties(), ',');
+					bdClasses.addAll(Arrays.asList(p.beanDictionary()));
+				}
+			}
+
+			if (setter != null) {
+				BeanProperty p = setter.getAnnotation(BeanProperty.class);
+				if (rawTypeMeta == null)
+					rawTypeMeta = f.resolveClassMeta(p, setter.getGenericParameterTypes()[0], typeVarImpls);
+				isUri |= (rawTypeMeta.isUri() || setter.isAnnotationPresent(org.apache.juneau.annotation.URI.class));
+				if (p != null) {
+				if (swap == null)
+					swap = getPropertyPojoSwap(p);
+					if (properties != null && ! p.properties().isEmpty())
+						properties = StringUtils.split(p.properties(), ',');
+					bdClasses.addAll(Arrays.asList(p.beanDictionary()));
+				}
+			}
+
+			if (rawTypeMeta == null)
+				return false;
+
+			this.beanRegistry = new BeanRegistry(beanContext, parentBeanRegistry, bdClasses.toArray(new Class<?>[0]));
+
+			// Do some annotation validation.
+			Class<?> c = rawTypeMeta.getInnerClass();
+			if (getter != null && ! isParentClass(getter.getReturnType(), c))
+				return false;
+			if (setter != null && ! isParentClass(setter.getParameterTypes()[0], c))
+				return false;
+			if (field != null && ! isParentClass(field.getType(), c))
+				return false;
+
+			if (typeMeta == null)
+				typeMeta = (swap != null ? swap.getSwapClassMeta(beanContext) : rawTypeMeta == null ? beanContext.object() : rawTypeMeta.getSerializedClassMeta());
+			if (typeMeta == null)
+				typeMeta = rawTypeMeta;
+
+			return true;
+		}
+
+		/**
+		 * @return A new BeanPropertyMeta object using this builder.
+		 */
+		public BeanPropertyMeta build() {
+			return new BeanPropertyMeta(this);
+		}
+
+		private PojoSwap getPropertyPojoSwap(BeanProperty p) throws Exception {
+			Class<?> c = p.swap();
+			if (c == Null.class)
+				return null;
+			try {
+				if (ClassUtils.isParentClass(PojoSwap.class, c)) {
+					return (PojoSwap)c.newInstance();
+				}
+				throw new RuntimeException("TODO - Surrogate swaps not yet supported.");
+			} catch (Exception e) {
+				throw new BeanRuntimeException(this.beanMeta.c, "Could not instantiate PojoSwap ''{0}'' for bean property ''{1}''", c.getName(), this.name).initCause(e);
+			}
+		}
+
+		BeanPropertyMeta.Builder setGetter(Method getter) {
+			setAccessible(getter);
+			this.getter = getter;
+			return this;
+		}
+
+		BeanPropertyMeta.Builder setSetter(Method setter) {
+			setAccessible(setter);
+			this.setter = setter;
+			return this;
+		}
+
+		BeanPropertyMeta.Builder setField(Field field) {
+			setAccessible(field);
+			this.field = field;
+			return this;
+		}
+
+		BeanPropertyMeta.Builder setAsConstructorArg() {
+			this.isConstructorArg = true;
+			return this;
+		}
+
 	}
 
-	BeanPropertyMeta(BeanMeta<?> beanMeta, String name, ClassMeta<?> rawTypeMeta, BeanRegistry beanRegistry) {
-		this(beanMeta, name);
-		this.rawTypeMeta = rawTypeMeta;
-		this.beanRegistry = beanRegistry;
-	}
-
-	BeanPropertyMeta(BeanMeta<?> beanMeta, String name, Method getter, Method setter) {
-		this(beanMeta, name);
-		setGetter(getter);
-		setSetter(setter);
+	/**
+	 * Creates a new BeanPropertyMeta using the contents of the specified builder.
+	 *
+	 * @param b The builder to copy fields from.
+	 */
+	protected BeanPropertyMeta(BeanPropertyMeta.Builder b) {
+		this.field = b.field;
+		this.getter = b.getter;
+		this.setter = b.setter;
+		this.isUri = b.isUri;
+		this.beanMeta = b.beanMeta;
+		this.beanContext = b.beanContext;
+		this.name = b.name;
+		this.rawTypeMeta = b.rawTypeMeta;
+		this.typeMeta = b.typeMeta;
+		this.properties = b.properties;
+		this.swap = b.swap;
+		this.beanRegistry = b.beanRegistry;
+		this.overrideValue = b.overrideValue;
+		this.delegateFor = b.delegateFor;
 	}
 
 	/**
@@ -139,8 +305,6 @@ public class BeanPropertyMeta {
 	 * @return The {@link ClassMeta} of the class of this property.
 	 */
 	public ClassMeta<?> getClassMeta() {
-		if (typeMeta == null)
-			typeMeta = (swap != null ? swap.getSwapClassMeta(beanContext) : rawTypeMeta == null ? beanContext.object() : rawTypeMeta.getSerializedClassMeta());
 		return typeMeta;
 	}
 
@@ -155,52 +319,6 @@ public class BeanPropertyMeta {
 	 */
 	public BeanRegistry getBeanRegistry() {
 		return beanRegistry;
-	}
-
-	/**
-	 * Sets the getter method for this property.
-	 *
-	 * @param getter The getter method to associate with this property.
-	 * @return This object (for method chaining).
-	 */
-	BeanPropertyMeta setGetter(Method getter) {
-		setAccessible(getter);
-		this.getter = getter;
-		return this;
-	}
-
-	/**
-	 * Sets the setter method for this property.
-	 *
-	 * @param setter The setter method to associate with this property.
-	 * @return This object (for method chaining).
-	 */
-	BeanPropertyMeta setSetter(Method setter) {
-		setAccessible(setter);
-		this.setter = setter;
-		return this;
-	}
-
-	/**
-	 * Sets the field for this property.
-	 *
-	 * @param field The field to associate with this property.
-	 * @return This object (for method chaining).
-	 */
-	BeanPropertyMeta setField(Field field) {
-		setAccessible(field);
-		this.field = field;
-		return this;
-	}
-
-	/**
-	 * Marks this property as only settable through a constructor arg.
-	 *
-	 * @return This object (for method chaining).
-	 */
-	BeanPropertyMeta setAsConstructorArg() {
-		this.isConstructorArg = true;
-		return this;
 	}
 
 	/**
@@ -236,88 +354,9 @@ public class BeanPropertyMeta {
 	 * @return Extended metadata on this bean property.  Never <jk>null</jk>.
 	 */
 	public <M extends BeanPropertyMetaExtended> M getExtendedMeta(Class<M> c) {
+		if (delegateFor != null)
+			return delegateFor.getExtendedMeta(c);
 		return extMeta.get(c, this);
-	}
-
-	boolean validate(BeanContext f, BeanRegistry parentBeanRegistry, Map<Class<?>,Class<?>[]> typeVarImpls) throws Exception {
-
-		List<Class<?>> bdClasses = new ArrayList<Class<?>>();
-
-		if (field == null && getter == null)
-			return false;
-
-		if (field == null && setter == null && f.beansRequireSettersForGetters && ! isConstructorArg)
-			return false;
-
-		if (field != null) {
-			BeanProperty p = field.getAnnotation(BeanProperty.class);
-			rawTypeMeta = f.resolveClassMeta(p, field.getGenericType(), typeVarImpls);
-			isUri |= (rawTypeMeta.isUri() || field.isAnnotationPresent(org.apache.juneau.annotation.URI.class));
-			if (p != null) {
-				swap = getPropertyPojoSwap(p);
-				if (! p.properties().isEmpty())
-					properties = StringUtils.split(p.properties(), ',');
-				bdClasses.addAll(Arrays.asList(p.beanDictionary()));
-			}
-		}
-
-		if (getter != null) {
-			BeanProperty p = getter.getAnnotation(BeanProperty.class);
-			if (rawTypeMeta == null)
-				rawTypeMeta = f.resolveClassMeta(p, getter.getGenericReturnType(), typeVarImpls);
-			isUri |= (rawTypeMeta.isUri() || getter.isAnnotationPresent(org.apache.juneau.annotation.URI.class));
-			if (p != null) {
-				if (swap == null)
-					swap = getPropertyPojoSwap(p);
-				if (properties != null && ! p.properties().isEmpty())
-					properties = StringUtils.split(p.properties(), ',');
-				bdClasses.addAll(Arrays.asList(p.beanDictionary()));
-			}
-		}
-
-		if (setter != null) {
-			BeanProperty p = setter.getAnnotation(BeanProperty.class);
-			if (rawTypeMeta == null)
-				rawTypeMeta = f.resolveClassMeta(p, setter.getGenericParameterTypes()[0], typeVarImpls);
-			isUri |= (rawTypeMeta.isUri() || setter.isAnnotationPresent(org.apache.juneau.annotation.URI.class));
-			if (p != null) {
-			if (swap == null)
-				swap = getPropertyPojoSwap(p);
-				if (properties != null && ! p.properties().isEmpty())
-					properties = StringUtils.split(p.properties(), ',');
-				bdClasses.addAll(Arrays.asList(p.beanDictionary()));
-			}
-		}
-
-		if (rawTypeMeta == null)
-			return false;
-
-		this.beanRegistry = new BeanRegistry(beanContext, parentBeanRegistry, bdClasses.toArray(new Class<?>[0]));
-
-		// Do some annotation validation.
-		Class<?> c = rawTypeMeta.getInnerClass();
-		if (getter != null && ! isParentClass(getter.getReturnType(), c))
-			return false;
-		if (setter != null && ! isParentClass(setter.getParameterTypes()[0], c))
-			return false;
-		if (field != null && ! isParentClass(field.getType(), c))
-			return false;
-
-		return true;
-	}
-
-	private PojoSwap getPropertyPojoSwap(BeanProperty p) throws Exception {
-		Class<?> c = p.swap();
-		if (c == Null.class)
-			return null;
-		try {
-			if (ClassUtils.isParentClass(PojoSwap.class, c)) {
-				return (PojoSwap)c.newInstance();
-			}
-			throw new RuntimeException("TODO - Surrogate swaps not yet supported.");
-		} catch (Exception e) {
-			throw new BeanRuntimeException(this.beanMeta.c, "Could not instantiate PojoSwap ''{0}'' for bean property ''{1}''", c.getName(), this.name).initCause(e);
-		}
 	}
 
 	/**
@@ -328,6 +367,9 @@ public class BeanPropertyMeta {
 	 */
 	public Object get(BeanMap<?> m) {
 		try {
+			if (overrideValue != null)
+				return overrideValue;
+
 			// Read-only beans have their properties stored in a cache until getBean() is called.
 			Object bean = m.bean;
 			if (bean == null)

@@ -115,19 +115,8 @@ public class DelegateBeanMap<T> extends BeanMap<T> {
 		List<BeanPropertyMeta> l = new ArrayList<BeanPropertyMeta>(keys.size());
 		for (final String key : keys) {
 			BeanPropertyMeta p = this.getPropertyMeta(key);
-			if (overrideValues.containsKey(key)) {
-				final BeanPropertyMeta p2 = p;
-				p = new BeanPropertyMeta(this.meta, key) {
-					@Override /* BeanPropertyMeta */
-					public Object get(BeanMap<?> m) {
-						return overrideValues.get(key);
-					}
-					@Override /* BeanPropertyMeta */
-					public <M extends BeanPropertyMetaExtended> M getExtendedMeta(Class<M> c) {
-						return p2.getExtendedMeta(c);
-					}
-				};
-			}
+			if (overrideValues.containsKey(key))
+				p = new BeanPropertyMeta.Builder(this.meta, key, overrideValues.get(key), p).build();
 			if (p == null)
 				throw new BeanRuntimeException(super.getClassMeta().getInnerClass(), "Property ''{0}'' not found on class.", key);
 			l.add(p);
