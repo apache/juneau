@@ -18,7 +18,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.apache.juneau</groupId>
 	<artifactId>juneau</artifactId>
-	<version>6.1.0-incubating-SNAPSHOT</version>
+	<version>6.1.0-incubating</version>
 	<packaging>pom</packaging>
 	<name>Apache Juneau (incubating)</name>
 	<description>All the Apache Juneau content in one convenient package.</description>
@@ -250,7 +250,7 @@
 		<connection>scm:git:https://git-wip-us.apache.org/repos/asf/incubator-juneau.git</connection>
 		<developerConnection>scm:git:https://git-wip-us.apache.org/repos/asf/incubator-juneau.git</developerConnection>
 		<url>https://github.com/apache/incubator-juneau</url>
-		<tag>HEAD</tag>
+		<tag>juneau-6.1.0-incubating-RC1</tag>
 	</scm>
 	<issueManagement>
 		<system>Jira</system>
