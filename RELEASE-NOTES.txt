@@ -11,6 +11,24 @@
 * specific language governing permissions and limitations under the License.                                              *
 ***************************************************************************************************************************
 
+Release Notes - Juneau - Version 6.1.0
+
+** Bug
+    * [JUNEAU-25] - Minor release issues in 6.0.1 RC3
+    * [JUNEAU-28] - Separate out RDF-code into separate juneau.core.rdf project.
+
+** Improvement
+    * [JUNEAU-26] - Add support for date localization.
+    * [JUNEAU-27] - Rename projects.
+    * [JUNEAU-31] - Separate out JAX-RS support from server/rest component
+    * [JUNEAU-34] - Remove <string> tags from HTML serialization.
+    * [JUNEAU-35] - Add StringSwap and MapSwap convenience classes.
+    * [JUNEAU-36] - Examples improvements
+
+** New Feature
+    * [JUNEAU-33] - HTML5 DOM objects.
+    
+
 Release Notes - Juneau - Version 6.0.1
 
 ** Bug
