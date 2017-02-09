@@ -20,15 +20,15 @@
 	The group/artifact/version information is meant to be overwritten by developers to match their own needs.
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	xsi:schemaLocation="http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>juneau-microservice-template</groupId>
 	<artifactId>juneau-microservice-template</artifactId>
-	<version>6.0.0</version>
+	<version>6.1.0</version>
 	<name>Apache Juneau Microservice Template</name>
 	<description>A template project developers use to start with to create a microservice.</description>
 	<properties>
-		<juneau.version>6.0.1-incubating-SNAPSHOT</juneau.version>
+		<juneau.version>6.1.0-incubating-SNAPSHOT</juneau.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<encoding>UTF-8</encoding>
 	</properties>

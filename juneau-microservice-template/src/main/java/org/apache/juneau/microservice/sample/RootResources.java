@@ -17,8 +17,8 @@ import static org.apache.juneau.html.HtmlDocSerializerContext.HTMLDOC_links;
 import org.apache.juneau.microservice.ResourceGroup;
 import org.apache.juneau.microservice.resources.ConfigResource;
 import org.apache.juneau.microservice.resources.LogsResource;
-import org.apache.juneau.server.annotation.Property;
-import org.apache.juneau.server.annotation.RestResource;
+import org.apache.juneau.rest.annotation.Property;
+import org.apache.juneau.rest.annotation.RestResource;
 
 /**
  * Root microservice page.

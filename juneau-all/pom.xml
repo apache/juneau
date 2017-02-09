@@ -24,7 +24,7 @@
 	<parent>
 		<groupId>org.apache.juneau</groupId>
 		<artifactId>juneau</artifactId>
-		<version>6.0.2-incubating-SNAPSHOT</version>
+		<version>6.1.0-incubating-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
@@ -71,7 +71,9 @@
 					<artifactSet>
 						<includes>
 							<include>org.apache.juneau:juneau-core</include>
+							<include>org.apache.juneau:juneau-core-rdf</include>
 							<include>org.apache.juneau:juneau-rest</include>
+							<include>org.apache.juneau:juneau-rest-jaxrs</include>
 							<include>org.apache.juneau:juneau-rest-client</include>
 							<include>org.apache.juneau:juneau-microservice</include>
 						</includes>
