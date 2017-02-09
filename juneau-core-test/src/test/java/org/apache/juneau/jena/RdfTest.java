@@ -14,7 +14,6 @@ package org.apache.juneau.jena;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.jena.RdfCommonContext.*;
-import static org.apache.juneau.jena.RdfSerializerContext.*;
 
 import java.net.URI;
 import java.util.*;
@@ -35,8 +34,8 @@ public class RdfTest {
 
 		RdfSerializer s = new RdfSerializer.XmlAbbrev()
 		   .setProperty(RDF_rdfxml_tab, 3)
-		   .setProperty(SERIALIZER_quoteChar, '\'')
-		   .setProperty(RDF_addRootProperty, true);
+		   .setQuoteChar('\'')
+		   .setAddRootProperty(true);
 		RdfParser p = RdfParser.DEFAULT_XML.clone();
 
 		//--------------------------------------------------------------------------------
@@ -69,7 +68,7 @@ public class RdfTest {
 		//--------------------------------------------------------------------------------
 		// Explicit sequence
 		//--------------------------------------------------------------------------------
-		s.setProperty(RDF_collectionFormat, RdfCollectionFormat.SEQ);
+		s.setCollectionFormat(RdfCollectionFormat.SEQ);
 		expected =
 			"<rdf:RDF a='http://ns/' j='http://www.apache.org/juneau/' jp='http://www.apache.org/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
 			+ "\n   <rdf:Description about='http://test/a'>"
@@ -97,7 +96,7 @@ public class RdfTest {
 		//--------------------------------------------------------------------------------
 		// Bag
 		//--------------------------------------------------------------------------------
-		s.setProperty(RDF_collectionFormat, RdfCollectionFormat.BAG);
+		s.setCollectionFormat(RdfCollectionFormat.BAG);
 		expected =
 			"<rdf:RDF a='http://ns/' j='http://www.apache.org/juneau/' jp='http://www.apache.org/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
 			+ "\n   <rdf:Description about='http://test/a'>"
@@ -125,7 +124,7 @@ public class RdfTest {
 		//--------------------------------------------------------------------------------
 		// List
 		//--------------------------------------------------------------------------------
-		s.setProperty(RDF_collectionFormat, RdfCollectionFormat.LIST);
+		s.setCollectionFormat(RdfCollectionFormat.LIST);
 		expected =
 			   "<rdf:RDF a='http://ns/' j='http://www.apache.org/juneau/' jp='http://www.apache.org/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
 			 + "\n   <rdf:Description about='http://test/a'>"
@@ -155,7 +154,7 @@ public class RdfTest {
 		//--------------------------------------------------------------------------------
 		// Multi-properties
 		//--------------------------------------------------------------------------------
-		s.setProperty(RDF_collectionFormat, RdfCollectionFormat.MULTI_VALUED);
+		s.setCollectionFormat(RdfCollectionFormat.MULTI_VALUED);
 		expected =
 			"<rdf:RDF a='http://ns/' j='http://www.apache.org/juneau/' jp='http://www.apache.org/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
 			+ "\n   <rdf:Description about='http://test/a'>"
@@ -170,7 +169,7 @@ public class RdfTest {
 		assertXmlEquals(expected, rdfXml);
 
 		// Note - Must specify collection format on parser for it to be able to understand this layout.
-		p.setProperty(RDF_collectionFormat, RdfCollectionFormat.MULTI_VALUED);
+		p.setCollectionFormat(RdfCollectionFormat.MULTI_VALUED);
 		a2 = p.parse(rdfXml, A.class);
 		assertEqualObjects(a, a2);
 	}
@@ -195,8 +194,8 @@ public class RdfTest {
 		String rdfXml, expected;
 		RdfSerializer s = new RdfSerializer.XmlAbbrev()
 		   .setProperty(RDF_rdfxml_tab, 3)
-		   .setProperty(SERIALIZER_quoteChar, '\'')
-		   .setProperty(RDF_addRootProperty, true);
+		   .setQuoteChar('\'')
+		   .setAddRootProperty(true);
 		RdfParser p = RdfParser.DEFAULT_XML.clone();
 
 		//--------------------------------------------------------------------------------
@@ -272,7 +271,7 @@ public class RdfTest {
 		//--------------------------------------------------------------------------------
 		// Default is Bag - Should only affect DEFAULT properties.
 		//--------------------------------------------------------------------------------
-		s.setProperty(RDF_collectionFormat, RdfCollectionFormat.BAG);
+		s.setCollectionFormat(RdfCollectionFormat.BAG);
 		expected =
 			 "<rdf:RDF b='http://ns/' j='http://www.apache.org/juneau/' jp='http://www.apache.org/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
 			 + "\n   <rdf:Description about='http://test/b'>"
@@ -428,14 +427,14 @@ public class RdfTest {
 		String rdfXml, expected;
 		RdfSerializer s = new RdfSerializer.XmlAbbrev()
 		   .setProperty(RDF_rdfxml_tab, 3)
-		   .setProperty(SERIALIZER_quoteChar, '\'')
-		   .setProperty(RDF_addRootProperty, true);
+		   .setQuoteChar('\'')
+		   .setAddRootProperty(true);
 		RdfParser p = RdfParser.DEFAULT_XML.clone();
 
 		//--------------------------------------------------------------------------------
 		// Default on class is Bag - Should only affect DEFAULT properties.
 		//--------------------------------------------------------------------------------
-		s.setProperty(RDF_collectionFormat, RdfCollectionFormat.BAG);
+		s.setCollectionFormat(RdfCollectionFormat.BAG);
 		expected =
 			 "<rdf:RDF b='http://ns/' j='http://www.apache.org/juneau/' jp='http://www.apache.org/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
 			 + "\n   <rdf:Description about='http://test/b'>"
@@ -525,8 +524,8 @@ public class RdfTest {
 
 	@Test
 	public void testLooseCollectionsOfBeans() throws Exception {
-		WriterSerializer s = new RdfSerializer.XmlAbbrev().setProperty(RDF_looseCollections, true);
-		ReaderParser p = new RdfParser.Xml().setProperty(RDF_looseCollections, true);
+		WriterSerializer s = new RdfSerializer.XmlAbbrev().setLooseCollections(true);
+		ReaderParser p = new RdfParser.Xml().setLooseCollections(true);
 		String rdfXml, expected;
 
 		List<D> l = new LinkedList<D>();

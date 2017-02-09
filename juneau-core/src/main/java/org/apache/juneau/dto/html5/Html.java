@@ -24,13 +24,14 @@ public class Html extends HtmlElementContainer {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/semantics.html#attr-html-manifest">manifest</a> attribute.
 	 * Application cache manifest.
-	 * @param manifest - The new value for this attribute.
+	 * @param manifest The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Html manifest(String manifest) {
 		attr("manifest", manifest);
 		return this;
 	}
+
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods

@@ -425,4 +425,113 @@ public final class ClassUtils {
 			}
 		}
 	}
+
+// This code is inherently unsafe (but still potentially useful?)
+//
+//	/**
+//	 * Converts class name strings to ClassMeta objects.
+//	 *
+//	 * <h5 class='section'>Example:</h5>
+//	 * <ul>
+//	 * 	<li><js>"java.lang.String"</js>
+//	 * 	<li><js>"com.foo.sample.MyBean[]"</js>
+//	 * 	<li><js>"java.util.HashMap<java.lang.String,java.lang.Integer>"</js>
+//	 * 	<li><js>"[Ljava.lang.String;"</js> (i.e. the value of <code>String[].<jk>class</jk>.getName()</code>)
+//	 * </ul>
+//	 *
+//	 * @param s The class name.
+//	 * @return The ClassMeta corresponding to the class name string.
+//	 */
+//	protected final ClassMeta<?> getClassMetaFromString(String s) {
+//		int d = 0;
+//		if (s == null || s.isEmpty())
+//			return null;
+//
+//		// Check for Class.getName() on array class types.
+//		if (s.charAt(0) == '[') {
+//			try {
+//				return getClassMeta(findClass(s));
+//			} catch (ClassNotFoundException e) {
+//				throw new RuntimeException(e);
+//			}
+//		}
+//
+//		int i1 = 0;
+//		int i2 = 0;
+//		int dim = 0;
+//		List<ClassMeta<?>> p = null;
+//		for (int i = 0; i < s.length(); i++) {
+//			char c = s.charAt(i);
+//			if (c == '<') {
+//				if (d == 0) {
+//					i1 = i;
+//					i2 = i+1;
+//					p = new LinkedList<ClassMeta<?>>();
+//				}
+//				d++;
+//			} else if (c == '>') {
+//				d--;
+//				if (d == 0 && p != null)
+//					p.add(getClassMetaFromString(s.substring(i2, i)));
+//			} else if (c == ',' && d == 1) {
+//				if (p != null)
+//					p.add(getClassMetaFromString(s.substring(i2, i)));
+//				i2 = i+1;
+//			}
+//			if (c == '[') {
+//				if (i1 == 0)
+//					i1 = i;
+//				dim++;
+//			}
+//		}
+//		if (i1 == 0)
+//			i1 = s.length();
+//		try {
+//			String name = s.substring(0, i1).trim();
+//			char x = name.charAt(0);
+//			Class<?> c = null;
+//			if (x >= 'b' && x <= 's') {
+//				if (x == 'b' && name.equals("boolean"))
+//					c = boolean.class;
+//				else if (x == 'b' && name.equals("byte"))
+//					c = byte.class;
+//				else if (x == 'c' && name.equals("char"))
+//					c = char.class;
+//				else if (x == 'd' && name.equals("double"))
+//					c = double.class;
+//				else if (x == 'i' && name.equals("int"))
+//					c = int.class;
+//				else if (x == 'l' && name.equals("long"))
+//					c = long.class;
+//				else if (x == 's' && name.equals("short"))
+//					c = short.class;
+//				else
+//					c = findClass(name);
+//			} else {
+//				c = findClass(name);
+//			}
+//
+//			ClassMeta<?> cm = getClassMeta(c);
+//
+//			if (p != null) {
+//				if (cm.isMap())
+//					cm = new ClassMeta(c, this).setKeyType(p.get(0)).setValueType(p.get(1));
+//				if (cm.isCollection())
+//					cm = new ClassMeta(c, this).setElementType(p.get(0));
+//			}
+//
+//			while (dim > 0) {
+//				cm = new ClassMeta(Array.newInstance(cm.getInnerClass(), 0).getClass(), this);
+//				dim--;
+//			}
+//
+//			return cm;
+//		} catch (ClassNotFoundException e) {
+//			throw new RuntimeException(e);
+//		}
+//	}
+//
+//	private Class<?> findClass(String name) throws ClassNotFoundException {
+//		return classLoader == null ? Class.forName(name) : Class.forName(name, true, classLoader);
+//	}
 }

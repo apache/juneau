@@ -391,7 +391,7 @@ public class UrlEncodingSerializerTest {
 			+ "&f20=(((a=a,b=1,c=true)),((a=a,b=1,c=true)))";
 		assertEquals(e, r);
 
-		s = UrlEncodingSerializer.DEFAULT_SIMPLE.clone().setProperty(UrlEncodingContext.URLENC_expandedParams, true);
+		s = UrlEncodingSerializer.DEFAULT_SIMPLE.clone().setExpandedParams(true);
 		r = s.serialize(t);
 		e = ""
 			+ "f01=a&f01=b"
@@ -452,7 +452,7 @@ public class UrlEncodingSerializerTest {
 			+ "&f20=((a=a,b=1,c=true))&f20=((a=a,b=1,c=true))";
 		assertEquals(e, r);
 
-		s = UrlEncodingSerializer.DEFAULT_SIMPLE.clone().setProperty(UrlEncodingContext.URLENC_expandedParams, true);
+		s = UrlEncodingSerializer.DEFAULT_SIMPLE.clone().setExpandedParams(true);
 		r = s.serialize(t);
 		e = ""
 			+ "f01=a&f01=b"

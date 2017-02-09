@@ -24,7 +24,7 @@ public class Table extends HtmlElementContainer {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-table-border">border</a> attribute.
 	 * //sortable - Enables a sorting interface for the table.
-	 * @param border - The new value for this attribute.
+	 * @param border The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -32,6 +32,7 @@ public class Table extends HtmlElementContainer {
 		attr("border", border);
 		return this;
 	}
+
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods

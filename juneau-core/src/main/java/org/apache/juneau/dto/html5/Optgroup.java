@@ -24,7 +24,7 @@ public class Optgroup extends HtmlElementContainer {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-optgroup-disabled">disabled</a> attribute.
 	 * Whether the form control is disabled.
-	 * @param disabled - The new value for this attribute.
+	 * @param disabled The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -36,13 +36,14 @@ public class Optgroup extends HtmlElementContainer {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-optgroup-label">label</a> attribute.
 	 * User-visible label.
-	 * @param label - The new value for this attribute.
+	 * @param label The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Optgroup label(String label) {
 		attr("label", label);
 		return this;
 	}
+
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods

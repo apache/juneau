@@ -110,7 +110,7 @@ public class DirectoryResource extends Resource {
 	 * @param req The HTTP request.
 	 * @return Either a FileResource or list of FileResources depending on whether it's a
 	 * 	file or directory.
-	 * @throws Exception - If file could not be read or access was not granted.
+	 * @throws Exception If file could not be read or access was not granted.
 	 */
 	@RestMethod(name="GET", path="/*",
 		description="On directories, returns a directory listing.\nOn files, returns information about the file.",
@@ -148,7 +148,7 @@ public class DirectoryResource extends Resource {
 	 *
 	 * @param req The HTTP request.
 	 * @return The message <js>"File deleted"</js> if successful.
-	 * @throws Exception - If file could not be read or access was not granted.
+	 * @throws Exception If file could not be read or access was not granted.
 	 */
 	@RestMethod(name="DELETE", path="/*",
 		description="Delete a file on the file system."
@@ -170,7 +170,7 @@ public class DirectoryResource extends Resource {
 	 *
 	 * @param req The HTTP request.
 	 * @return The message <js>"File added"</js> if successful.
-	 * @throws Exception - If file could not be read or access was not granted.
+	 * @throws Exception If file could not be read or access was not granted.
 	 */
 	@RestMethod(name="PUT", path="/*",
 		description="Add or overwrite a file on the file system."
@@ -195,7 +195,7 @@ public class DirectoryResource extends Resource {
 	 * @param req The HTTP request.
 	 * @param res The HTTP response.
 	 * @return A Reader containing the contents of the file.
-	 * @throws Exception - If file could not be read or access was not granted.
+	 * @throws Exception If file could not be read or access was not granted.
 	 */
 	@RestMethod(name="VIEW", path="/*",
 		description="View the contents of a file.\nApplies to files only."
@@ -223,7 +223,7 @@ public class DirectoryResource extends Resource {
 	 * @param req The HTTP request.
 	 * @param res The HTTP response.
 	 * @return A Reader containing the contents of the file.
-	 * @throws Exception - If file could not be read or access was not granted.
+	 * @throws Exception If file could not be read or access was not granted.
 	 */
 	@RestMethod(name="DOWNLOAD", path="/*",
 		description="Download the contents of a file.\nApplies to files only."

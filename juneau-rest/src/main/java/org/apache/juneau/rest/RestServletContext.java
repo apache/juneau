@@ -31,53 +31,6 @@ import org.apache.juneau.serializer.*;
  * 	These distinctions are noted below.
  * <p>
  * 	See {@link ContextFactory} for more information about context properties.
- *
- * <h6 class='topic' id='ConfigProperties'>Configurable properties on the REST servlet</h6>
- * <table class='styled' style='border-collapse: collapse;'>
- * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th></tr>
- * 	<tr>
- * 		<td>{@link #REST_allowHeaderParams}</td>
- * 		<td>Enable header URL parameters.</td>
- * 		<td><code>Boolean</code></td>
- * 		<td><jk>true</jk></td>
- * 	</tr>
- * 	<tr>
- * 		<td>{@link #REST_allowMethodParam}</td>
- * 		<td>Enable <js>"method"</js> URL parameter for specific HTTP methods.</td>
- * 		<td><code>String</code></td>
- * 		<td><js>""</js></td>
- * 	</tr>
- * 	<tr>
- * 		<td>{@link #REST_allowBodyParam}</td>
- * 		<td>Enable <js>"body"</js> URL parameter.</td>
- * 		<td><code>Boolean</code></td>
- * 		<td><jk>true</jk></td>
- * 	</tr>
- * 	<tr>
- * 		<td>{@link #REST_renderResponseStackTraces}</td>
- * 		<td>Render stack traces in HTTP response bodies when errors occur.</td>
- * 		<td><code>Boolean</code></td>
- * 		<td><jk>false</jk></td>
- * 	</tr>
- * 	<tr>
- * 		<td>{@link #REST_useStackTraceHashes}</td>
- * 		<td>Use stack trace hashes.</td>
- * 		<td><code>Boolean</code></td>
- * 		<td><jk>false</jk></td>
- * 	</tr>
- * 	<tr>
- * 		<td>{@link #REST_defaultCharset}</td>
- * 		<td>Default character encoding.</td>
- * 		<td><code>String</code></td>
- * 		<td><js>"utf-8"</js></td>
- * 	</tr>
- * 	<tr>
- * 		<td>{@link #REST_paramFormat}</td>
- * 		<td>Expected format of request parameters.</td>
- * 		<td><code>String</code></td>
- * 		<td><js>"UON"</js></td>
- * 	</tr>
- * </table>
  */
 public final class RestServletContext extends Context {
 

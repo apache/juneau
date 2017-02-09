@@ -13,6 +13,7 @@
 package org.apache.juneau.examples.rest;
 
 import static org.junit.Assert.*;
+import static org.apache.juneau.xml.XmlSerializerContext.*;
 
 import org.apache.juneau.examples.addressbook.*;
 import org.apache.juneau.json.*;
@@ -37,7 +38,7 @@ public class SampleRemoteableServicesResourceTest {
 		for (RestClient c : clients) {
 			c.addPojoSwaps(CalendarSwap.DateMedium.class);
 			c.setRemoteableServletUri("/remoteable");
-			c.setProperty(XmlSerializerContext.XML_autoDetectNamespaces, true);
+			c.setProperty(XML_autoDetectNamespaces, true);
 		}
 	}
 

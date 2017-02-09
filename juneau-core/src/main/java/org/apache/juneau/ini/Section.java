@@ -86,6 +86,7 @@ public class Section implements Map<String,String> {
 		return this;
 	}
 
+
 	//--------------------------------------------------------------------------------
 	// Map methods
 	//--------------------------------------------------------------------------------
@@ -302,6 +303,7 @@ public class Section implements Map<String,String> {
 		return Collections.unmodifiableCollection(entries.values());
 	}
 
+
 	//--------------------------------------------------------------------------------
 	// API methods
 	//--------------------------------------------------------------------------------
@@ -453,6 +455,7 @@ public class Section implements Map<String,String> {
 		}
 	}
 
+
 	//--------------------------------------------------------------------------------
 	// Protected methods used by ConfigFile
 	//--------------------------------------------------------------------------------
@@ -511,6 +514,7 @@ public class Section implements Map<String,String> {
 			l.addFirst(lines.removeLast());
 		return l;
 	}
+
 
 	//--------------------------------------------------------------------------------
 	// Private methods

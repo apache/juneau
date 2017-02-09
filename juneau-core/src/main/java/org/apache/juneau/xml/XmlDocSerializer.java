@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
-import static org.apache.juneau.xml.XmlSerializerContext.*;
-
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.serializer.*;
 
@@ -39,12 +37,13 @@ public class XmlDocSerializer extends XmlSerializer {
 	public static class Simple extends XmlDocSerializer {
 		/** Constructor */
 		public Simple() {
-			setProperty(XML_enableNamespaces, false);
+			setEnableNamespaces(false);
 		}
 	}
 
+
 	//--------------------------------------------------------------------------------
-	// Overridden methods
+	// Entry point methods
 	//--------------------------------------------------------------------------------
 
 	@Override /* Serializer */

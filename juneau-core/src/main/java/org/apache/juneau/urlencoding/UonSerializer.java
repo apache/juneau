@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.urlencoding;
 
-import static org.apache.juneau.serializer.SerializerContext.*;
 import static org.apache.juneau.urlencoding.UonSerializerContext.*;
 
 import java.lang.reflect.*;
@@ -179,46 +178,46 @@ public class UonSerializer extends WriterSerializer {
 	public static final UonSerializer DEFAULT_SIMPLE_ENCODING = new SimpleEncoding().lock();
 
 	/**
-	 * Equivalent to <code><jk>new</jk> UonSerializer().setProperty(UonSerializerContext.<jsf>UON_simpleMode</jsf>,<jk>true</jk>);</code>.
+	 * Equivalent to <code><jk>new</jk> UonSerializer().setSimpleMode(<jk>true</jk>);</code>.
 	 */
 	@Produces(value="text/uon-simple",contentType="text/uon")
 	public static class Simple extends UonSerializer {
 		/** Constructor */
 		public Simple() {
-			setProperty(UON_simpleMode, true);
+			setSimpleMode(true);
 		}
 	}
 
 	/**
-	 * Equivalent to <code><jk>new</jk> UonSerializer().setProperty(UonSerializerContext.<jsf>UON_useWhitespace</jsf>,<jk>true</jk>);</code>.
+	 * Equivalent to <code><jk>new</jk> UonSerializer().setUseWhitespace(<jk>true</jk>).setUseIndentation(<jk>true</jk>);</code>.
 	 */
 	public static class Readable extends UonSerializer {
 		/** Constructor */
 		public Readable() {
-			setProperty(UON_useWhitespace, true);
-			setProperty(SERIALIZER_useIndentation, true);
+			setUseWhitespace(true);
+			setUseIndentation(true);
 		}
 	}
 
 	/**
-	 * Equivalent to <code><jk>new</jk> UonSerializer().setProperty(UonSerializerContext.<jsf>UON_encodeChars</jsf>,<jk>true</jk>);</code>.
+	 * Equivalent to <code><jk>new</jk> UonSerializer().setEncodeChars(<jk>true</jk>);</code>.
 	 */
 	public static class Encoding extends UonSerializer {
 		/** Constructor */
 		public Encoding() {
-			setProperty(UON_encodeChars, true);
+			setEncodeChars(true);
 		}
 	}
 
 	/**
-	 * Equivalent to <code><jk>new</jk> UonSerializer().setProperty(UonSerializerContext.<jsf>UON_simpleMode</jsf>,<jk>true</jk>).setProperty(UonSerializerContext.<jsf>UON_encodeChars</jsf>,<jk>true</jk>);</code>.
+	 * Equivalent to <code><jk>new</jk> UonSerializer().setSimpleMode(<jk>true</jk>).setEncodeChars(<jk>true</jk>);</code>.
 	 */
 	@Produces(value="text/uon-simple",contentType="text/uon")
 	public static class SimpleEncoding extends UonSerializer {
 		/** Constructor */
 		public SimpleEncoding() {
-			setProperty(UON_simpleMode, true);
-			setProperty(UON_encodeChars, true);
+			setSimpleMode(true);
+			setEncodeChars(true);
 		}
 	}
 
@@ -397,8 +396,9 @@ public class UonSerializer extends WriterSerializer {
 		return out;
 	}
 
+
 	//--------------------------------------------------------------------------------
-	// Overridden methods
+	// Entry point methods
 	//--------------------------------------------------------------------------------
 
 	@Override /* Serializer */
@@ -412,9 +412,565 @@ public class UonSerializer extends WriterSerializer {
 		serializeAnything(s, s.getWriter(), o, null, "root", null, false, true);
 	}
 
+
+	//--------------------------------------------------------------------------------
+	// Properties
+	//--------------------------------------------------------------------------------
+
+	/**
+	 * <b>Configuration property:</b>  Use simplified output.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"UonSerializer.simpleMode"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * If <jk>true</jk>, type flags will not be prepended to values in most cases.
+	 * <p>
+	 * Use this setting if the data types of the values (e.g. object/array/boolean/number/string)
+	 * 	is known on the receiving end.
+	 * <p>
+	 * It should be noted that the default behavior produces a data structure that can
+	 * 	be losslessly converted into JSON, and any JSON can be losslessly represented
+	 * 	in a URL-encoded value.  However, this strict equivalency does not exist
+	 * 	when simple mode is used.
+	 * <p>
+	 * <table class='styled'>
+	 * 	<tr>
+	 * 		<th>Input (in JSON)</th>
+	 * 		<th>Normal mode output</th>
+	 * 		<th>Simple mode output</th>
+	 * 	</tr>
+	 * 	<tr>
+	 * 		<td class='code'>{foo:'bar',baz:'bing'}</td>
+	 * 		<td class='code'>$o(foo=bar,baz=bing)</td>
+	 * 		<td class='code'>(foo=bar,baz=bing)</td>
+	 * 	</tr>
+	 * 	<tr>
+	 * 		<td class='code'>{foo:{bar:'baz'}}</td>
+	 * 		<td class='code'>$o(foo=$o(bar=baz))</td>
+	 * 		<td class='code'>(foo=(bar=baz))</td>
+	 * 	</tr>
+	 * 	<tr>
+	 * 		<td class='code'>['foo','bar']</td>
+	 * 		<td class='code'>$a(foo,bar)</td>
+	 * 		<td class='code'>(foo,bar)</td>
+	 * 	</tr>
+	 * 	<tr>
+	 * 		<td class='code'>['foo',['bar','baz']]</td>
+	 * 		<td class='code'>$a(foo,$a(bar,baz))</td>
+	 * 		<td class='code'>(foo,(bar,baz))</td>
+	 * 	</tr>
+	 * 	<tr>
+	 * 		<td class='code'>true</td>
+	 * 		<td class='code'>$b(true)</td>
+	 * 		<td class='code'>true</td>
+	 * 	</tr>
+	 * 	<tr>
+	 * 		<td class='code'>123</td>
+	 * 		<td class='code'>$n(123)</td>
+	 * 		<td class='code'>123</td>
+	 * 	</tr>
+	 * </table>
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>UON_simpleMode</jsf>, value)</code>.
+	 * 	<li>This introduces a slight performance penalty.
+	 * </ul>
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see UonSerializerContext#UON_simpleMode
+	 */
+	public UonSerializer setSimpleMode(boolean value) throws LockedException {
+		return setProperty(UON_simpleMode, value);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Use whitespace.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"UonSerializer.useWhitespace"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * If <jk>true</jk>, whitespace is added to the output to improve readability.
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>UON_useWhitespace</jsf>, value)</code>.
+	 * 	<li>This introduces a slight performance penalty.
+	 * </ul>
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see UonSerializerContext#UON_useWhitespace
+	 */
+	public UonSerializer setUseWhitespace(boolean value) throws LockedException {
+		return setProperty(UON_useWhitespace, value);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Encode non-valid URI characters.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"UonSerializer.encodeChars"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk> for {@link UonSerializer}, <jk>true</jk> for {@link UrlEncodingSerializer}
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * Encode non-valid URI characters with <js>"%xx"</js> constructs.
+	 * <p>
+	 * If <jk>true</jk>, non-valid URI characters will be converted to <js>"%xx"</js> sequences.
+	 * Set to <jk>false</jk> if parameter value is being passed to some other code that will already
+	 * 	perform URL-encoding of non-valid URI characters.
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>UON_encodeChars</jsf>, value)</code>.
+	 * 	<li>This introduces a slight performance penalty.
+	 * </ul>
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see UonSerializerContext#UON_encodeChars
+	 */
+	public UonSerializer setEncodeChars(boolean value) throws LockedException {
+		return setProperty(UON_encodeChars, value);
+	}
+
+	@Override /* Serializer */
+	public UonSerializer setMaxDepth(int value) throws LockedException {
+		super.setMaxDepth(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public UonSerializer setInitialDepth(int value) throws LockedException {
+		super.setInitialDepth(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public UonSerializer setDetectRecursions(boolean value) throws LockedException {
+		super.setDetectRecursions(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public UonSerializer setIgnoreRecursions(boolean value) throws LockedException {
+		super.setIgnoreRecursions(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public UonSerializer setUseIndentation(boolean value) throws LockedException {
+		super.setUseIndentation(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public UonSerializer setAddBeanTypeProperties(boolean value) throws LockedException {
+		super.setAddBeanTypeProperties(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public UonSerializer setQuoteChar(char value) throws LockedException {
+		super.setQuoteChar(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public UonSerializer setTrimNullProperties(boolean value) throws LockedException {
+		super.setTrimNullProperties(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public UonSerializer setTrimEmptyCollections(boolean value) throws LockedException {
+		super.setTrimEmptyCollections(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public UonSerializer setTrimEmptyMaps(boolean value) throws LockedException {
+		super.setTrimEmptyMaps(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public UonSerializer setTrimStrings(boolean value) throws LockedException {
+		super.setTrimStrings(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public UonSerializer setRelativeUriBase(String value) throws LockedException {
+		super.setRelativeUriBase(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public UonSerializer setAbsolutePathUriBase(String value) throws LockedException {
+		super.setAbsolutePathUriBase(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public UonSerializer setSortCollections(boolean value) throws LockedException {
+		super.setSortCollections(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public UonSerializer setSortMaps(boolean value) throws LockedException {
+		super.setSortMaps(value);
+		return this;
+	}
+
 	@Override /* CoreApi */
-	public UonSerializer setProperty(String property, Object value) throws LockedException {
-		super.setProperty(property, value);
+	public UonSerializer setBeansRequireDefaultConstructor(boolean value) throws LockedException {
+		super.setBeansRequireDefaultConstructor(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer setBeansRequireSerializable(boolean value) throws LockedException {
+		super.setBeansRequireSerializable(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer setBeansRequireSettersForGetters(boolean value) throws LockedException {
+		super.setBeansRequireSettersForGetters(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer setBeansRequireSomeProperties(boolean value) throws LockedException {
+		super.setBeansRequireSomeProperties(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer setBeanMapPutReturnsOldValue(boolean value) throws LockedException {
+		super.setBeanMapPutReturnsOldValue(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer setBeanConstructorVisibility(Visibility value) throws LockedException {
+		super.setBeanConstructorVisibility(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer setBeanClassVisibility(Visibility value) throws LockedException {
+		super.setBeanClassVisibility(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer setBeanFieldVisibility(Visibility value) throws LockedException {
+		super.setBeanFieldVisibility(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer setMethodVisibility(Visibility value) throws LockedException {
+		super.setMethodVisibility(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer setUseJavaBeanIntrospector(boolean value) throws LockedException {
+		super.setUseJavaBeanIntrospector(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer setUseInterfaceProxies(boolean value) throws LockedException {
+		super.setUseInterfaceProxies(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer setIgnoreUnknownBeanProperties(boolean value) throws LockedException {
+		super.setIgnoreUnknownBeanProperties(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer setIgnoreUnknownNullBeanProperties(boolean value) throws LockedException {
+		super.setIgnoreUnknownNullBeanProperties(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer setIgnorePropertiesWithoutSetters(boolean value) throws LockedException {
+		super.setIgnorePropertiesWithoutSetters(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer setIgnoreInvocationExceptionsOnGetters(boolean value) throws LockedException {
+		super.setIgnoreInvocationExceptionsOnGetters(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer setIgnoreInvocationExceptionsOnSetters(boolean value) throws LockedException {
+		super.setIgnoreInvocationExceptionsOnSetters(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer setSortProperties(boolean value) throws LockedException {
+		super.setSortProperties(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer setNotBeanPackages(String...values) throws LockedException {
+		super.setNotBeanPackages(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer setNotBeanPackages(Collection<String> values) throws LockedException {
+		super.setNotBeanPackages(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer addNotBeanPackages(String...values) throws LockedException {
+		super.addNotBeanPackages(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer addNotBeanPackages(Collection<String> values) throws LockedException {
+		super.addNotBeanPackages(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer removeNotBeanPackages(String...values) throws LockedException {
+		super.removeNotBeanPackages(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer removeNotBeanPackages(Collection<String> values) throws LockedException {
+		super.removeNotBeanPackages(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer setNotBeanClasses(Class<?>...values) throws LockedException {
+		super.setNotBeanClasses(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer setNotBeanClasses(Collection<Class<?>> values) throws LockedException {
+		super.setNotBeanClasses(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer addNotBeanClasses(Class<?>...values) throws LockedException {
+		super.addNotBeanClasses(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer addNotBeanClasses(Collection<Class<?>> values) throws LockedException {
+		super.addNotBeanClasses(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer removeNotBeanClasses(Class<?>...values) throws LockedException {
+		super.removeNotBeanClasses(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer removeNotBeanClasses(Collection<Class<?>> values) throws LockedException {
+		super.removeNotBeanClasses(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer setBeanFilters(Class<?>...values) throws LockedException {
+		super.setBeanFilters(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer setBeanFilters(Collection<Class<?>> values) throws LockedException {
+		super.setBeanFilters(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer addBeanFilters(Class<?>...values) throws LockedException {
+		super.addBeanFilters(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer addBeanFilters(Collection<Class<?>> values) throws LockedException {
+		super.addBeanFilters(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer removeBeanFilters(Class<?>...values) throws LockedException {
+		super.removeBeanFilters(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer removeBeanFilters(Collection<Class<?>> values) throws LockedException {
+		super.removeBeanFilters(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer setPojoSwaps(Class<?>...values) throws LockedException {
+		super.setPojoSwaps(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer setPojoSwaps(Collection<Class<?>> values) throws LockedException {
+		super.setPojoSwaps(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer addPojoSwaps(Class<?>...values) throws LockedException {
+		super.addPojoSwaps(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer addPojoSwaps(Collection<Class<?>> values) throws LockedException {
+		super.addPojoSwaps(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer removePojoSwaps(Class<?>...values) throws LockedException {
+		super.removePojoSwaps(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer removePojoSwaps(Collection<Class<?>> values) throws LockedException {
+		super.removePojoSwaps(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer setImplClasses(Map<Class<?>,Class<?>> values) throws LockedException {
+		super.setImplClasses(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public <T> CoreApi addImplClass(Class<T> interfaceClass, Class<? extends T> implClass) throws LockedException {
+		super.addImplClass(interfaceClass, implClass);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer setBeanDictionary(Class<?>...values) throws LockedException {
+		super.setBeanDictionary(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer setBeanDictionary(Collection<Class<?>> values) throws LockedException {
+		super.setBeanDictionary(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer addToBeanDictionary(Class<?>...values) throws LockedException {
+		super.addToBeanDictionary(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer addToBeanDictionary(Collection<Class<?>> values) throws LockedException {
+		super.addToBeanDictionary(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer removeFromBeanDictionary(Class<?>...values) throws LockedException {
+		super.removeFromBeanDictionary(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer removeFromBeanDictionary(Collection<Class<?>> values) throws LockedException {
+		super.removeFromBeanDictionary(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer setBeanTypePropertyName(String value) throws LockedException {
+		super.setBeanTypePropertyName(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer setDefaultParser(Class<?> value) throws LockedException {
+		super.setDefaultParser(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer setLocale(Locale value) throws LockedException {
+		super.setLocale(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer setTimeZone(TimeZone value) throws LockedException {
+		super.setTimeZone(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer setMediaType(MediaType value) throws LockedException {
+		super.setMediaType(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer setDebug(boolean value) throws LockedException {
+		super.setDebug(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonSerializer setProperty(String name, Object value) throws LockedException {
+		super.setProperty(name, value);
 		return this;
 	}
 
@@ -425,34 +981,33 @@ public class UonSerializer extends WriterSerializer {
 	}
 
 	@Override /* CoreApi */
-	public UonSerializer addNotBeanClasses(Class<?>...classes) throws LockedException {
-		super.addNotBeanClasses(classes);
+	public UonSerializer addToProperty(String name, Object value) throws LockedException {
+		super.addToProperty(name, value);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public UonSerializer addBeanFilters(Class<?>...classes) throws LockedException {
-		super.addBeanFilters(classes);
+	public UonSerializer putToProperty(String name, Object key, Object value) throws LockedException {
+		super.putToProperty(name, key, value);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public UonSerializer addPojoSwaps(Class<?>...classes) throws LockedException {
-		super.addPojoSwaps(classes);
+	public UonSerializer putToProperty(String name, Object value) throws LockedException {
+		super.putToProperty(name, value);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public UonSerializer addToDictionary(Class<?>...classes) throws LockedException {
-		super.addToDictionary(classes);
+	public UonSerializer removeFromProperty(String name, Object value) throws LockedException {
+		super.removeFromProperty(name, value);
 		return this;
 	}
 
-	@Override /* CoreApi */
-	public <T> UonSerializer addImplClass(Class<T> interfaceClass, Class<? extends T> implClass) throws LockedException {
-		super.addImplClass(interfaceClass, implClass);
-		return this;
-	}
+
+	//--------------------------------------------------------------------------------
+	// Overridden methods
+	//--------------------------------------------------------------------------------
 
 	@Override /* CoreApi */
 	public UonSerializer setClassLoader(ClassLoader classLoader) throws LockedException {

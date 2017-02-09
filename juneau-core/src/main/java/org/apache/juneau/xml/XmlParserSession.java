@@ -34,7 +34,6 @@ import org.apache.juneau.xml.annotation.*;
  */
 public class XmlParserSession extends ParserSession {
 
-	private final String xsiNs;
 	private final boolean
 		validating,
 		preserveRootElement;
@@ -70,29 +69,18 @@ public class XmlParserSession extends ParserSession {
 	public XmlParserSession(XmlParserContext ctx, ObjectMap op, Object input, Method javaMethod, Object outer, Locale locale, TimeZone timeZone, MediaType mediaType) {
 		super(ctx, op, input, javaMethod, outer, locale, timeZone, mediaType);
 		if (op == null || op.isEmpty()) {
-			xsiNs = ctx.xsiNs;
 			validating = ctx.validating;
 			reporter = ctx.reporter;
 			resolver = ctx.resolver;
 			eventAllocator = ctx.eventAllocator;
 			preserveRootElement = ctx.preserveRootElement;
 		} else {
-			xsiNs = op.getString(XML_xsiNs, ctx.xsiNs);
 			validating = op.getBoolean(XML_validating, ctx.validating);
 			reporter = (XMLReporter)op.get(XML_reporter, ctx.reporter);
 			resolver = (XMLResolver)op.get(XML_resolver, ctx.resolver);
 			eventAllocator = (XMLEventAllocator)op.get(XML_eventAllocator, ctx.eventAllocator);
 			preserveRootElement = op.getBoolean(XML_preserveRootElement, ctx.preserveRootElement);
 		}
-	}
-
-	/**
-	 * Returns the {@link XmlParserContext#XML_xsiNs} setting value for this session.
-	 *
-	 * @return The {@link XmlParserContext#XML_xsiNs} setting value for this session.
-	 */
-	public final String getXsiNs() {
-		return xsiNs;
 	}
 
 	/**

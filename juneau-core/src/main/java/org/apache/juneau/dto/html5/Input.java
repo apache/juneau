@@ -26,7 +26,7 @@ public class Input extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-accept">accept</a> attribute.
 	 * Hint for expected file type in file upload controls.
-	 * @param accept - The new value for this attribute.
+	 * @param accept The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Input accept(String accept) {
@@ -37,7 +37,7 @@ public class Input extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-alt">alt</a> attribute.
 	 * Replacement text for use when images are not available.
-	 * @param alt - The new value for this attribute.
+	 * @param alt The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Input alt(String alt) {
@@ -48,7 +48,7 @@ public class Input extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-autocomplete">autocomplete</a> attribute.
 	 * Hint for form autofill feature.
-	 * @param autocomplete - The new value for this attribute.
+	 * @param autocomplete The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Input autocomplete(String autocomplete) {
@@ -59,7 +59,7 @@ public class Input extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-autofocus">autofocus</a> attribute.
 	 * Automatically focus the form control when the page is loaded.
-	 * @param autofocus - The new value for this attribute.
+	 * @param autofocus The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Input autofocus(String autofocus) {
@@ -70,7 +70,7 @@ public class Input extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-checked">checked</a> attribute.
 	 * Whether the command or control is checked.
-	 * @param checked - The new value for this attribute.
+	 * @param checked The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -82,7 +82,7 @@ public class Input extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-dirname">dirname</a> attribute.
 	 * Name of form field to use for sending the element's directionality in form submission.
-	 * @param dirname - The new value for this attribute.
+	 * @param dirname The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Input dirname(String dirname) {
@@ -93,7 +93,7 @@ public class Input extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-disabled">disabled</a> attribute.
 	 * Whether the form control is disabled.
-	 * @param disabled - The new value for this attribute.
+	 * @param disabled The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -105,7 +105,7 @@ public class Input extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fae-form">form</a> attribute.
 	 * Associates the control with a form element.
-	 * @param form - The new value for this attribute.
+	 * @param form The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Input form(String form) {
@@ -116,7 +116,7 @@ public class Input extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-formaction">formaction</a> attribute.
 	 * URL to use for form submission.
-	 * @param formaction - The new value for this attribute.
+	 * @param formaction The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Input formaction(String formaction) {
@@ -127,7 +127,7 @@ public class Input extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-formenctype">formenctype</a> attribute.
 	 * Form data set encoding type to use for form submission.
-	 * @param formenctype - The new value for this attribute.
+	 * @param formenctype The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Input formenctype(String formenctype) {
@@ -138,7 +138,7 @@ public class Input extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-formmethod">formmethod</a> attribute.
 	 * HTTP method to use for form submission.
-	 * @param formmethod - The new value for this attribute.
+	 * @param formmethod The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Input formmethod(String formmethod) {
@@ -149,7 +149,7 @@ public class Input extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-formnovalidate">formnovalidate</a> attribute.
 	 * Bypass form control validation for form submission.
-	 * @param formnovalidate - The new value for this attribute.
+	 * @param formnovalidate The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Input formnovalidate(String formnovalidate) {
@@ -160,7 +160,7 @@ public class Input extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-formtarget">formtarget</a> attribute.
 	 * Browsing context for form submission.
-	 * @param formtarget - The new value for this attribute.
+	 * @param formtarget The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Input formtarget(String formtarget) {
@@ -171,7 +171,7 @@ public class Input extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-height">height</a> attribute.
 	 * Vertical dimension.
-	 * @param height - The new value for this attribute.
+	 * @param height The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -183,7 +183,7 @@ public class Input extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-input-inputmode">inputmode</a> attribute.
 	 * Hint for selecting an input modality.
-	 * @param inputmode - The new value for this attribute.
+	 * @param inputmode The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Input inputmode(String inputmode) {
@@ -194,7 +194,7 @@ public class Input extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-list">list</a> attribute.
 	 * List of autocomplete options.
-	 * @param list - The new value for this attribute.
+	 * @param list The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Input list(String list) {
@@ -205,7 +205,7 @@ public class Input extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-max">max</a> attribute.
 	 * Maximum value.
-	 * @param max - The new value for this attribute.
+	 * @param max The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -217,7 +217,7 @@ public class Input extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-maxlength">maxlength</a> attribute.
 	 * Maximum length of value.
-	 * @param maxlength - The new value for this attribute.
+	 * @param maxlength The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -229,7 +229,7 @@ public class Input extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-min">min</a> attribute.
 	 * Minimum value.
-	 * @param min - The new value for this attribute.
+	 * @param min The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -241,7 +241,7 @@ public class Input extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-minlength">minlength</a> attribute.
 	 * Minimum length of value.
-	 * @param minlength - The new value for this attribute.
+	 * @param minlength The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -253,7 +253,7 @@ public class Input extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-multiple">multiple</a> attribute.
 	 * Whether to allow multiple values.
-	 * @param multiple - The new value for this attribute.
+	 * @param multiple The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -265,7 +265,7 @@ public class Input extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-name">name</a> attribute.
 	 * Name of form control to use for form submission and in the form.elements API.
-	 * @param name - The new value for this attribute.
+	 * @param name The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Input name(String name) {
@@ -276,7 +276,7 @@ public class Input extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-pattern">pattern</a> attribute.
 	 * Pattern to be matched by the form control's value.
-	 * @param pattern - The new value for this attribute.
+	 * @param pattern The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Input pattern(String pattern) {
@@ -287,7 +287,7 @@ public class Input extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-placeholder">placeholder</a> attribute.
 	 * User-visible label to be placed within the form control.
-	 * @param placeholder - The new value for this attribute.
+	 * @param placeholder The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Input placeholder(String placeholder) {
@@ -298,7 +298,7 @@ public class Input extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-readonly">readonly</a> attribute.
 	 * Whether to allow the value to be edited by the user.
-	 * @param readonly - The new value for this attribute.
+	 * @param readonly The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -310,7 +310,7 @@ public class Input extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-readonly">required</a> attribute.
 	 * Whether the control is required for form submission.
-	 * @param required - The new value for this attribute.
+	 * @param required The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -322,7 +322,7 @@ public class Input extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-size">size</a> attribute.
 	 * Size of the control.
-	 * @param size - The new value for this attribute.
+	 * @param size The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -334,7 +334,7 @@ public class Input extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-src">src</a> attribute.
 	 * Address of the resource.
-	 * @param src - The new value for this attribute.
+	 * @param src The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -346,7 +346,7 @@ public class Input extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-step">step</a> attribute.
 	 * Granularity to be matched by the form control's value.
-	 * @param step - The new value for this attribute.
+	 * @param step The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Input step(String step) {
@@ -357,7 +357,7 @@ public class Input extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-type">type</a> attribute.
 	 * Type of form control.
-	 * @param type - The new value for this attribute.
+	 * @param type The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Input type(String type) {
@@ -368,7 +368,7 @@ public class Input extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-value">value</a> attribute.
 	 * Value of the form control.
-	 * @param value - The new value for this attribute.
+	 * @param value The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -380,7 +380,7 @@ public class Input extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-width">width</a> attribute.
 	 * Horizontal dimension.
-	 * @param width - The new value for this attribute.
+	 * @param width The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -388,6 +388,7 @@ public class Input extends HtmlElementEmpty {
 		attr("width", width);
 		return this;
 	}
+
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods

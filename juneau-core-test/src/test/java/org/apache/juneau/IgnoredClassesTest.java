@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.BeanContext.*;
 import static org.apache.juneau.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.Assume.*;
@@ -44,21 +43,21 @@ public class IgnoredClassesTest {
 		A a = new A();
 		JsonSerializer s = new JsonSerializer.Simple();
 		assertEquals("{f1:'isBean'}", s.serialize(a));
-		s.setProperty(BEAN_notBeanPackages_add, "org.apache.juneau");
+		s.addNotBeanPackages("org.apache.juneau");
 		assertEquals("'isNotBean'", s.serialize(a));
-		s.setProperty(BEAN_notBeanPackages_remove, "org.apache.juneau");
+		s.removeNotBeanPackages("org.apache.juneau");
 		assertEquals("{f1:'isBean'}", s.serialize(a));
-		s.setProperty(BEAN_notBeanPackages_add, "org.apache.juneau.*");
+		s.addNotBeanPackages("org.apache.juneau.*");
 		assertEquals("'isNotBean'", s.serialize(a));
-		s.setProperty(BEAN_notBeanPackages_remove, "org.apache.juneau.*");
+		s.removeNotBeanPackages("org.apache.juneau.*");
 		assertEquals("{f1:'isBean'}", s.serialize(a));
-		s.setProperty(BEAN_notBeanPackages_add, "org.apache.juneau.*");
+		s.addNotBeanPackages("org.apache.juneau.*");
 		assertEquals("'isNotBean'", s.serialize(a));
-		s.setProperty(BEAN_notBeanPackages_remove, "org.apache.juneau.*");
+		s.removeNotBeanPackages("org.apache.juneau.*");
 		assertEquals("{f1:'isBean'}", s.serialize(a));
-		s.setProperty(BEAN_notBeanPackages_add, "org.apache.juneau");
+		s.addNotBeanPackages("org.apache.juneau");
 		assertEquals("'isNotBean'", s.serialize(a));
-		s.setProperty(BEAN_notBeanPackages_add, "org.apache.juneau.x");
+		s.addNotBeanPackages("org.apache.juneau.x");
 		assertEquals("'isNotBean'", s.serialize(a));
 	}
 

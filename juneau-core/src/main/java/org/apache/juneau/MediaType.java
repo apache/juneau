@@ -65,7 +65,7 @@ public final class MediaType {
 	 * 	<li>Anything including and following the <js>';'</js> character is ignored (e.g. <js>";charset=X"</js>).
 	 * </ul>
 	 *
-	 * @param s - The media type string.  Will be lowercased.
+	 * @param s The media type string.  Will be lowercased.
 	 * 	<br>Returns <jk>null</jk> if input is null.
 	 * @return A cached media type object.
 	 */

@@ -192,6 +192,7 @@ public final class UonWriter extends SerializerWriter {
 		return appendObject(s, false, false, isTop);
 	}
 
+
 	//--------------------------------------------------------------------------------
 	// Overridden methods
 	//--------------------------------------------------------------------------------

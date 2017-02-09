@@ -27,7 +27,7 @@ import org.apache.juneau.serializer.*;
 public final class CsvSerializer extends WriterSerializer {
 
 	//--------------------------------------------------------------------------------
-	// Overridden methods
+	// Entry point methods
 	//--------------------------------------------------------------------------------
 
 	@Override /* Serializer */
@@ -82,6 +82,11 @@ public final class CsvSerializer extends WriterSerializer {
 				w.append(s);
 		}
 	}
+
+
+	//--------------------------------------------------------------------------------
+	// Overridden methods
+	//--------------------------------------------------------------------------------
 
 	@Override /* Serializer */
 	public CsvSerializer clone() {

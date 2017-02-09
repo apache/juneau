@@ -893,7 +893,7 @@ public class UrlEncodingParserTest {
 		UrlEncodingParser p;
 		String in;
 
-		p = UrlEncodingParser.DEFAULT.clone().setProperty(UrlEncodingContext.URLENC_expandedParams, true);
+		p = UrlEncodingParser.DEFAULT.clone().setExpandedParams(true);
 		in = ""
 			+ "f01=a&f01=b"
 			+ "&f02=c&f02=d"

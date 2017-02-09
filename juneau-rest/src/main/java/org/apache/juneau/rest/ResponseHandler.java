@@ -85,8 +85,8 @@ public interface ResponseHandler {
 	 * @param res The HTTP servlet response;
 	 * @param output The POJO returned by the REST method that now needs to be sent to the response.
 	 * @return true If this handler handled the response.
-	 * @throws IOException - If low-level exception occurred on output stream.  Results in a {@link HttpServletResponse#SC_INTERNAL_SERVER_ERROR} error.
-	 * @throws RestException - If some other exception occurred.  Can be used to provide an appropriate HTTP response code and message.
+	 * @throws IOException If low-level exception occurred on output stream.  Results in a {@link HttpServletResponse#SC_INTERNAL_SERVER_ERROR} error.
+	 * @throws RestException If some other exception occurred.  Can be used to provide an appropriate HTTP response code and message.
 	 */
 	boolean handle(RestRequest req, RestResponse res, Object output) throws IOException, RestException;
 }

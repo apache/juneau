@@ -922,14 +922,14 @@ public class RestClient extends CoreApi {
 	}
 
 	@Override /* CoreAPI */
-	public RestClient addToDictionary(Class<?>...classes) throws LockedException {
-		super.addToDictionary(classes);
+	public RestClient addToBeanDictionary(Class<?>...classes) throws LockedException {
+		super.addToBeanDictionary(classes);
 		if (serializer != null)
-			serializer.addToDictionary(classes);
+			serializer.addToBeanDictionary(classes);
 		if (parser != null)
-			parser.addToDictionary(classes);
+			parser.addToBeanDictionary(classes);
 		if (urlEncodingSerializer != null)
-			urlEncodingSerializer.addToDictionary(classes);
+			urlEncodingSerializer.addToBeanDictionary(classes);
 		return this;
 	}
 

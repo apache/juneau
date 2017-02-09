@@ -382,6 +382,7 @@ public abstract class Microservice {
 		return mf;
 	}
 
+	
 	//--------------------------------------------------------------------------------
 	// Abstract lifecycle methods.
 	//--------------------------------------------------------------------------------
@@ -551,6 +552,7 @@ public abstract class Microservice {
 		System.exit(2);
 	}
 
+	
 	//--------------------------------------------------------------------------------
 	// Lifecycle listener methods.
 	// Subclasses can override these methods to run code on certain events.

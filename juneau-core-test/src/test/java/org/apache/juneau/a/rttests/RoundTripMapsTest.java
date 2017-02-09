@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.a.rttests;
 
-import static org.apache.juneau.serializer.SerializerContext.*;
-import static org.apache.juneau.html.HtmlSerializerContext.*;
 import static org.junit.Assert.*;
 
 import java.util.*;
@@ -107,27 +105,27 @@ public class RoundTripMapsTest extends RoundTripTest {
 		t.put(new byte[]{4,5,6}, null);
 		t.put(null, "b");
 
-		s = new JsonSerializer.Simple().addPojoSwaps(getPojoSwaps()).setProperty(SERIALIZER_trimNullProperties, false);
+		s = new JsonSerializer.Simple().addPojoSwaps(getPojoSwaps()).setTrimNullProperties(false);
 		e = "{AQID:'a',BAUG:null,null:'b'}";
 		r = s.serialize(t);
 		assertEquals(e, r);
 
-		s = new XmlSerializer.NsSq().addPojoSwaps(getPojoSwaps()).setProperty(SERIALIZER_trimNullProperties, false);
+		s = new XmlSerializer.NsSq().addPojoSwaps(getPojoSwaps()).setTrimNullProperties(false);
 		e = "<object><AQID>a</AQID><BAUG _type='null'/><_x0000_>b</_x0000_></object>";
 		r = s.serialize(t);
 		assertEquals(e, r);
 
-		s = new HtmlSerializer.Sq().addPojoSwaps(getPojoSwaps()).setProperty(SERIALIZER_trimNullProperties, false).setProperty(HTML_addKeyValueTableHeaders, true);
+		s = new HtmlSerializer.Sq().addPojoSwaps(getPojoSwaps()).setTrimNullProperties(false).setAddKeyValueTableHeaders(true);
 		e = "<table><tr><th>key</th><th>value</th></tr><tr><td>AQID</td><td>a</td></tr><tr><td>BAUG</td><td><null/></td></tr><tr><td><null/></td><td>b</td></tr></table>";
 		r = s.serialize(t);
 		assertEquals(e, r);
 
-		s = new UonSerializer.Encoding().addPojoSwaps(getPojoSwaps()).setProperty(SERIALIZER_trimNullProperties, false);
+		s = new UonSerializer.Encoding().addPojoSwaps(getPojoSwaps()).setTrimNullProperties(false);
 		e = "$o(AQID=a,BAUG=%00,%00=b)";
 		r = s.serialize(t);
 		assertEquals(e, r);
 
-		s = new UrlEncodingSerializer().addPojoSwaps(getPojoSwaps()).setProperty(SERIALIZER_trimNullProperties, false);
+		s = new UrlEncodingSerializer().addPojoSwaps(getPojoSwaps()).setTrimNullProperties(false);
 		e = "AQID=a&BAUG=%00&%00=b";
 		r = s.serialize(t);
 		assertEquals(e, r);

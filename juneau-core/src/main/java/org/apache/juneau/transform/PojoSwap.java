@@ -229,6 +229,7 @@ public abstract class PojoSwap<T,S> {
 		return ClassUtils.isParentClass(swapClass, o.getClass());
 	}
 
+
 	//--------------------------------------------------------------------------------
 	// Overridden methods
 	//--------------------------------------------------------------------------------

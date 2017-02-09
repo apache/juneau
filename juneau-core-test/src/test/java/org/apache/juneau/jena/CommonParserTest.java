@@ -12,9 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jena;
 
-import static org.apache.juneau.BeanContext.*;
 import static org.apache.juneau.jena.RdfCommonContext.*;
-import static org.apache.juneau.jena.RdfSerializerContext.*;
 import static org.junit.Assert.*;
 
 import java.util.*;
@@ -44,9 +42,9 @@ public class CommonParserTest {
 
 	private RdfSerializer getBasicSerializer() {
 		return new RdfSerializer()
-			.setProperty(SERIALIZER_quoteChar, '\'')
-			.setProperty(RDF_addLiteralTypes, true)
-			.setProperty(SERIALIZER_useIndentation, false)
+			.setQuoteChar('\'')
+			.setAddLiteralTypes(true)
+			.setUseIndentation(false)
 			.setProperty(RDF_rdfxml_allowBadUris, true)
 			.setProperty(RDF_rdfxml_showDoctypeDeclaration, false)
 			.setProperty(RDF_rdfxml_showXmlDeclaration, false);
@@ -58,7 +56,7 @@ public class CommonParserTest {
 	@Test
 	public void testFromSerializer() throws Exception {
 		WriterSerializer s = getBasicSerializer();
-		ReaderParser p = new RdfParser.Xml().setProperty(RdfParserContext.RDF_trimWhitespace, true).setClassLoader(getClass().getClassLoader());
+		ReaderParser p = new RdfParser.Xml().setTrimWhitespace(true);
 		Map m = null;
 		String in;
 		Integer one = Integer.valueOf(1);
@@ -111,7 +109,7 @@ public class CommonParserTest {
 		t2.add(new A3("name1","value1"));
 		t1.list = t2;
 
-		s.setProperty(SERIALIZER_addBeanTypeProperties, true);
+		s.setAddBeanTypeProperties(true);
 		in = strip(s.serialize(t1));
 		assertEquals("<rdf:Description><j:_type>A1</j:_type><jp:list><rdf:Seq><rdf:li rdf:parseType='Resource'><jp:name>name0</jp:name><jp:value>value0</jp:value></rdf:li><rdf:li rdf:parseType='Resource'><jp:name>name1</jp:name><jp:value>value1</jp:value></rdf:li></rdf:Seq></jp:list></rdf:Description>", in);
 		in = wrap(in);
@@ -141,7 +139,7 @@ public class CommonParserTest {
 	//====================================================================================================
 	@Test
 	public void testCorrectHandlingOfUnknownProperties() throws Exception {
-		ReaderParser p = new RdfParser.Xml().setProperty(BEAN_ignoreUnknownBeanProperties, true);
+		ReaderParser p = new RdfParser.Xml().setIgnoreUnknownBeanProperties(true);
 		B t;
 
 		String in = wrap("<rdf:Description><jp:a rdf:datatype='http://www.w3.org/2001/XMLSchema#int'>1</jp:a><jp:unknownProperty>foo</jp:unknownProperty><jp:b rdf:datatype='http://www.w3.org/2001/XMLSchema#int'>2</jp:b></rdf:Description>");
@@ -189,7 +187,7 @@ public class CommonParserTest {
 	@Test
 	public void testParserListeners() throws Exception {
 		final List<String> events = new LinkedList<String>();
-		RdfParser p = new RdfParser.Xml().setProperty(BEAN_ignoreUnknownBeanProperties, true);
+		RdfParser p = new RdfParser.Xml().setIgnoreUnknownBeanProperties(true);
 		p.addListener(
 			new ParserListener() {
 				@Override /* ParserListener */

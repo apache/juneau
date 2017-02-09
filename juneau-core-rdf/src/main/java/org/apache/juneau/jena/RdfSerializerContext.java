@@ -24,51 +24,7 @@ import org.apache.juneau.xml.*;
  * Context properties are set by calling {@link ContextFactory#setProperty(String, Object)} on the context factory
  * returned {@link CoreApi#getContextFactory()}.
  * <p>
- * The following convenience methods are also provided for setting context properties:
- * <ul>
- * 	<li>{@link RdfSerializer#setProperty(String,Object)}
- * 	<li>{@link RdfSerializer#setProperties(ObjectMap)}
- * 	<li>{@link RdfSerializer#addNotBeanClasses(Class[])}
- * 	<li>{@link RdfSerializer#addBeanFilters(Class[])}
- * 	<li>{@link RdfSerializer#addPojoSwaps(Class[])}
- * 	<li>{@link RdfSerializer#addToDictionary(Class[])}
- * 	<li>{@link RdfSerializer#addImplClass(Class,Class)}
- * </ul>
- * <p>
  * See {@link ContextFactory} for more information about context properties.
- *
- * <h6 class='topic' id='ConfigProperties'>Configurable properties on the RDF serializers</h6>
- * <table class='styled' style='border-collapse: collapse;'>
- * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th><th>Session overridable</th></tr>
- * 	<tr>
- * 		<td>{@link #RDF_addLiteralTypes}</td>
- * 		<td>Add XSI data types to non-<code>String</code> literals.</td>
- * 		<td><code>Boolean</code></td>
- * 		<td><jk>false</jk></td>
- * 		<td><jk>true</jk></td>
- * 	</tr>
- * 	<tr>
- * 		<td>{@link #RDF_addRootProperty}</td>
- * 		<td>Add RDF root identifier property to root node.</td>
- * 		<td><code>Boolean</code></td>
- * 		<td><jk>false</jk></td>
- * 		<td><jk>true</jk></td>
- * 	</tr>
- * 	<tr>
- * 		<td>{@link #RDF_autoDetectNamespaces}</td>
- * 		<td>Auto-detect namespace usage.</td>
- * 		<td><code>Boolean</code></td>
- * 		<td><jk>true</jk></td>
- * 		<td><jk>true</jk></td>
- * 	</tr>
- * 	<tr>
- * 		<td>{@link #RDF_namespaces}</td>
- * 		<td>Default namespaces.</td>
- * 		<td><code>List&lt;{@link Namespace}&gt;</code></td>
- * 		<td>empty list</td>
- * 		<td><jk>true</jk></td>
- * 	</tr>
- * </table>
  *
  * <h6 class='topic' id='ConfigProperties'>Configurable properties inherited by the RDF serializers</h6>
  * <ul class='javahierarchy'>

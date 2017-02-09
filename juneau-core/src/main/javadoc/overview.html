@@ -334,12 +334,12 @@
 
 	<jc>// Create a custom serializer for lax syntax using single quote characters</jc>
 	JsonSerializer serializer = <jk>new</jk> JsonSerializer()
-		.setProperty(JsonSerializerContext.<jsf>JSON_simpleMode</jsf>, <jk>true</jk>)
-		.setProperty(SerializerContext.<jsf>SERIALIZER_quoteChar</jsf>, <js>'\''</js>);
+		.setSimpleMode(<jk>true</jk>)
+		.setQuoteChar(<js>'\''</js>);
 	
 	<jc>// Clone an existing serializer and modify it to use single-quotes</jc>
 	JsonSerializer serializer = JsonSerializer.<jsf>DEFAULT</jsf>.clone()
-		.setProperty(SerializerContext.<jsf>SERIALIZER_quoteChar</jsf>, <js>'\''</js>);
+		.setQuoteChar(<js>'\''</js>);
 	
 	<jc>// Serialize a POJO to JSON</jc>
 	String json = serializer.serialize(someObject);
@@ -448,8 +448,8 @@
 	<jc>// Construct a new serializer group with configuration parameters that get applied to all serializers.</jc>
 	SerializerGroup sg = <jk>new</jk> SerializerGroup()
 		.append(JsonSerializer.<jk>class</jk>, UrlEncodingSerializer.<jk>class</jk>);
-		.setProperty(SerializerContext.<jsf>SERIALIZER_useIndentation</jsf>, <jk>true</jk>)
-		.addTransforms(CalendarSwap.ISO8601DT.<jk>class</jk>);
+		.setUseIndentation(<jk>true</jk>)
+		.addPojoSwaps(CalendarSwap.ISO8601DT.<jk>class</jk>);
 
 	<jc>// Find the appropriate serializer by Accept type and serialize our POJO to the specified writer.</jc>
 	sg.getSerializer(<js>"text/invalid, text/json;q=0.8, text/*;q:0.6, *\/*;q=0.0"</js>)
@@ -549,10 +549,10 @@
 		</p>
 		<p class='bcode'>
 	JsonSerializer s = <jk>new</jk> JsonSerializer()
-		.setProperty(SerializerContext.<jsf>SERIALIZER_useIndentation</jsf>, <jk>true</jk>)
-		.setProperty(JsonSerializerContext.<jsf>JSON_useWhitespace</jsf>, <jk>true</jk>)
-		.setProperty(JsonSerializerContext.<jsf>JSON_simpleMode</jsf>, <jk>true</jk>)
-		.setProperty(SerializerContext.<jsf>SERIALIZER_quoteChar</jsf>, <js>'\''</js>);
+		.setUseIndentation(<jk>true</jk>)
+		.setUseWhitespace(<jk>true</jk>)
+		.setSimpleMode(<jk>true</jk>)
+		.setQuoteChar(<js>'\''</js>);
 		</p>
 		<p>
 			However, each of the serializers and parsers already contain reusable instances with common configurations.<br>
@@ -587,7 +587,7 @@
 	<jc>// Clone and customize an existing serializer.</jc>
 	JsonSerializer s = JsonSerializer.<jsf>DEFAULT_LAX</jsf>
 		.clone()
-		.setProperty(SerializerContext.<jsf>SERIALIZER_quoteChar</jsf>, <js>'"'</js>);
+		.setQuoteChar(<js>'"'</js>);
 
 	<jc>// Lock it so that the configuration cannot be changed.</jc>
 	s.lock();
@@ -1023,7 +1023,7 @@
 		</p>
 		<ul>
 			<li>On individual bean properties through the {@link org.apache.juneau.annotation.BeanProperty#beanDictionary() @BeanProperty.beanDictionary()} annotation.
-			<li>Globally for a parser using the {@link org.apache.juneau.parser.Parser#addToDictionary(Class...)} method.
+			<li>Globally for a parser using the {@link org.apache.juneau.parser.Parser#addToBeanDictionary(Class...)} method.
 		</ul>
 		<p class='info'>
 			Type names do not need to be universally unique.  
@@ -2969,8 +2969,8 @@
 		serializerGroup
 			.addBeanFilters(HttpServletRequest.<jk>class</jk>, HttpSession.<jk>class</jk>, ServletContext.<jk>class</jk>)
 			.addPojoSwaps(EnumerationSwap.<jk>class</jk>)
-			.setProperty(<jsf>SERIALIZER_maxDepth</jsf>, 10)
-			.setProperty(<jsf>SERIALIZER_detectRecursions</jsf>, <jk>true</jk>);
+			.setMaxDepth(10)
+			.setDetectRecursions(<jk>true</jk>);
 			.setProperty(<jsf>HTMLDOC_links</jsf>, <js>"{...}"</js>);
 		
 		<jc>// Return the updated group</jc>
@@ -5472,9 +5472,46 @@
 					<li>{@link org.apache.juneau.parser.Parser#parse(Object,Class)} - Normal method.
 					<li>{@link org.apache.juneau.parser.Parser#parse(Object,Type,Type...)} - Method for parsing into parameterized maps and collections.
 				</ul>
+				Using these methods, you can construct arbitrarily complex objects consisting of maps and collections.
+				You could do this before, but it required constructing a <code>ClassMeta</code> object.  
+				<br>For example:
+					<p class='bcode'>
+	<jc>// Old way:</jc>
+	ClassMeta&lt;?&gt; cm = parser.getMapClassMeta(
+		HashMap.<jk>class</jk>, 
+		String.<jk>class</jk>, 
+		parser.getCollectionClassMeta(
+			LinkedList.<jk>class</jk>, 
+			MyBean.<jk>class</jk>
+		)
+	);
+	Map&lt;String,List&lt;MyBean&gt;&gt; map = (Map&lt;String,List&lt;MyBean&gt;&gt;)parser.parse(input, cm);	
+	
+	<jc>// New way:</jc>
+	Map&lt;String,List&lt;MyBean&gt;&gt; map = parser.parse(input, HashMap.<jk>class</jk>, String.<jk>class</jk>, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
+					</p>
 				<li>Arbitrarily-complex parameterized maps and collections can now be parsed without the need for creating intermediate <code>ClassMeta</code> objects.
 				<li>No need for casting anymore if you were using the old <code>parseMap()</code> and <code>parseCollection()</code> methods!
 				<li>Changes allow me to eliminate <code>BeanContext.normalizeClassMeta()</code> method.
+				<li>Convenience methods added for setting parser properties:
+					<p class='bcode'>
+	<jc>// Old way:</jc>
+	<jk>new</jk> JsonParser().setProperty(<jsf>PARSER_strict</jsf>, <jk>true</jk>).setProperty(<jsf>BEAN_locale</jsf>, mylocale);
+	
+	<jc>// New way:</jc>
+	<jk>new</jk> JsonParser().setStrict(<jk>true</jk>).setLocale(mylocale);
+					</p>
+			</ul>
+			<li>Improvements to Serializer class:
+			<ul>
+				<li>Convenience methods added for setting serializer properties:
+					<p class='bcode'>
+	<jc>// Old way:</jc>
+	<jk>new</jk> JsonSerializer().setProperty(<jsf>JSON_simpleMode</jsf>, <jk>true</jk>).setProperty(<jsf>SERIALIZER_quoteChar</jsf>, <js>'"'</js>);
+	
+	<jc>// New way:</jc>
+	<jk>new</jk> JsonSerializer().setSimpleMode(<jk>true</jk>).setQuoteChar(<js>'"'</js>);
+					</p>
 			</ul>
 			<li>Simplified {@link org.apache.juneau.transform.PojoSwap} class.  Now just two methods:
 			<ul>

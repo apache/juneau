@@ -26,7 +26,7 @@ public class Area extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-area-alt">alt</a> attribute.
 	 * Replacement text for use when images are not available.
-	 * @param alt - The new value for this attribute.
+	 * @param alt The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Area alt(String alt) {
@@ -37,7 +37,7 @@ public class Area extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-area-coords">coords</a> attribute.
 	 * Coordinates for the shape to be created in an image map.
-	 * @param coords - The new value for this attribute.
+	 * @param coords The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Area coords(String coords) {
@@ -48,7 +48,7 @@ public class Area extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-download">download</a> attribute.
 	 * Whether to download the resource instead of navigating to it, and its file name if so.
-	 * @param download - The new value for this attribute.
+	 * @param download The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -60,7 +60,7 @@ public class Area extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-href">href</a> attribute.
 	 * Address of the hyperlink.
-	 * @param href - The new value for this attribute.
+	 * @param href The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -72,7 +72,7 @@ public class Area extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-hreflang">hreflang</a> attribute.
 	 * Language of the linked resource.
-	 * @param hreflang - The new value for this attribute.
+	 * @param hreflang The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Area hreflang(String hreflang) {
@@ -83,7 +83,7 @@ public class Area extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-rel">rel</a> attribute.
 	 * Relationship between the document containing the hyperlink and the destination resource.
-	 * @param rel - The new value for this attribute.
+	 * @param rel The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Area rel(String rel) {
@@ -94,7 +94,7 @@ public class Area extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-area-shape">shape</a> attribute.
 	 * The kind of shape to be created in an image map.
-	 * @param shape - The new value for this attribute.
+	 * @param shape The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Area shape(String shape) {
@@ -105,7 +105,7 @@ public class Area extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-target">target</a> attribute.
 	 * Browsing context for hyperlink navigation.
-	 * @param target - The new value for this attribute.
+	 * @param target The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Area target(String target) {
@@ -116,13 +116,14 @@ public class Area extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-type">type</a> attribute.
 	 * Hint for the type of the referenced resource.
-	 * @param type - The new value for this attribute.
+	 * @param type The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Area type(String type) {
 		attr("type", type);
 		return this;
 	}
+
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods

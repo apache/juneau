@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
-import static org.apache.juneau.BeanContext.*;
 import static org.junit.Assert.*;
 
 import java.util.*;
@@ -104,7 +103,7 @@ public class CommonParserTest {
 	//====================================================================================================
 	@Test
 	public void testCorrectHandlingOfUnknownProperties() throws Exception {
-		ReaderParser p = new XmlParser().setProperty(BEAN_ignoreUnknownBeanProperties, true);
+		ReaderParser p = new XmlParser().setIgnoreUnknownBeanProperties(true);
 		B t;
 
 		String in =  "<object><a>1</a><unknown>foo</unknown><b>2</b></object>";
@@ -160,7 +159,7 @@ public class CommonParserTest {
 	@Test
 	public void testParserListeners() throws Exception {
 		final List<String> events = new LinkedList<String>();
-		XmlParser p = new XmlParser().setProperty(BEAN_ignoreUnknownBeanProperties, true);
+		XmlParser p = new XmlParser().setIgnoreUnknownBeanProperties(true);
 		p.addListener(
 			new ParserListener() {
 				@Override /* ParserListener */

@@ -24,7 +24,7 @@ public class Output extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-output-for">for</a> attribute.
 	 * Specifies controls from which the output was calculated.
-	 * @param _for - The new value for this attribute.
+	 * @param _for The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Output _for(String _for) {
@@ -35,7 +35,7 @@ public class Output extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fae-form">form</a> attribute.
 	 * Associates the control with a form element.
-	 * @param form - The new value for this attribute.
+	 * @param form The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Output form(String form) {
@@ -46,13 +46,14 @@ public class Output extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-name">name</a> attribute.
 	 * Name of form control to use for form submission and in the form.elements API.
-	 * @param name - The new value for this attribute.
+	 * @param name The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Output name(String name) {
 		attr("name", name);
 		return this;
 	}
+
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods

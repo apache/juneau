@@ -26,7 +26,7 @@ public class Base extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-base-href">href</a> attribute.
 	 * Document base URL.
-	 * @param href - The new value for this attribute.
+	 * @param href The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -38,13 +38,14 @@ public class Base extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-base-target">target</a> attribute.
 	 * Default browsing context for hyperlink navigation and form submission.
-	 * @param target - The new value for this attribute.
+	 * @param target The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Base target(String target) {
 		attr("target", target);
 		return this;
 	}
+
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods

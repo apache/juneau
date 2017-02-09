@@ -24,7 +24,7 @@ public class Meta extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-meta-charset">charset</a> attribute.
 	 * Character encoding declaration.
-	 * @param charset - The new value for this attribute.
+	 * @param charset The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Meta charset(String charset) {
@@ -35,7 +35,7 @@ public class Meta extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-meta-content">content</a> attribute.
 	 * Value of the element.
-	 * @param content - The new value for this attribute.
+	 * @param content The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Meta content(String content) {
@@ -46,7 +46,7 @@ public class Meta extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-meta-http-equiv">http-equiv</a> attribute.
 	 * Pragma directive.
-	 * @param httpequiv - The new value for this attribute.
+	 * @param httpequiv The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Meta httpequiv(String httpequiv) {
@@ -57,13 +57,14 @@ public class Meta extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-meta-name">name</a> attribute.
 	 * Metadata name.
-	 * @param name - The new value for this attribute.
+	 * @param name The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Meta name(String name) {
 		attr("name", name);
 		return this;
 	}
+
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods

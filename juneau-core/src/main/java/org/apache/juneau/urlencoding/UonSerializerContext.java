@@ -21,44 +21,7 @@ import org.apache.juneau.serializer.*;
  * Context properties are set by calling {@link ContextFactory#setProperty(String, Object)} on the context factory
  * returned {@link CoreApi#getContextFactory()}.
  * <p>
- * The following convenience methods are also provided for setting context properties:
- * <ul>
- * 	<li>{@link UonSerializer#setProperty(String,Object)}
- * 	<li>{@link UonSerializer#setProperties(ObjectMap)}
- * 	<li>{@link UonSerializer#addNotBeanClasses(Class[])}
- * 	<li>{@link UonSerializer#addBeanFilters(Class[])}
- * 	<li>{@link UonSerializer#addPojoSwaps(Class[])}
- * 	<li>{@link UonSerializer#addToDictionary(Class[])}
- * 	<li>{@link UonSerializer#addImplClass(Class,Class)}
- * </ul>
- * <p>
  * See {@link ContextFactory} for more information about context properties.
- *
- * <h6 class='topic' id='ConfigProperties'>Configurable properties on the URL-Encoding and UON serializers</h6>
- * <table class='styled' style='border-collapse: collapse;'>
- * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th><th>Session overridable</th></tr>
- * 	<tr>
- * 		<td>{@link #UON_simpleMode}</td>
- * 		<td>Use simplified output.</td>
- * 		<td><code>Boolean</code></td>
- * 		<td><jk>false</jk></td>
- * 		<td><jk>true</jk></td>
- * 	</tr>
- * 	<tr>
- * 		<td>{@link #UON_useWhitespace}</td>
- * 		<td>Use whitespace.</td>
- * 		<td><code>Boolean</code></td>
- * 		<td><jk>false</jk></td>
- * 		<td><jk>true</jk></td>
- * 	</tr>
- * 	<tr>
- * 		<td>{@link #UON_encodeChars}</td>
- * 		<td>Encode non-valid URI characters.</td>
- * 		<td><code>Boolean</code></td>
- * 		<td><jk>false</jk> for {@link UonSerializer}<br><jk>true</jk> for {@link UrlEncodingSerializer}</td>
- * 		<td><jk>true</jk></td>
- * 	</tr>
- * </table>
  *
  * <h5 class='section'>Inherited configurable properties:</h5>
  * <ul class='javahierarchy'>

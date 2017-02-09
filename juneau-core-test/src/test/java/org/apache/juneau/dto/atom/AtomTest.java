@@ -12,9 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.atom;
 
-import static org.apache.juneau.BeanContext.*;
 import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.xml.XmlSerializerContext.*;
 import static org.junit.Assert.*;
 import static org.apache.juneau.dto.atom.AtomBuilder.*;
 
@@ -100,7 +98,7 @@ public class AtomTest {
 			+"	<updated>2016-12-31T01:02:03-04:00</updated>\n"
 			+"</feed>\n";
 
-		s = new XmlSerializer.SqReadable().setProperty(XML_enableNamespaces, false).setProperty(BEAN_sortProperties, true);
+		s = new XmlSerializer.SqReadable().setEnableNamespaces(false).setSortProperties(true);
 		r = s.serialize(f);
 		assertEquals(expected, r);
 		f2 = p.parse(r, Feed.class);
@@ -146,7 +144,7 @@ public class AtomTest {
 			+"	<atom:updated>2016-12-31T01:02:03-04:00</atom:updated>\n"
 			+"</atom:feed>\n";
 
-		s = new XmlSerializer.SqReadable().setProperty(XML_enableNamespaces, true).setProperty(XML_addNamespaceUrisToRoot, true).setProperty(BEAN_sortProperties, true);
+		s = new XmlSerializer.SqReadable().setEnableNamespaces(true).setAddNamespaceUrisToRoot(true).setSortProperties(true);
 		r = s.serialize(f);
 		assertEquals(expected, r);
 		f2 = p.parse(r, Feed.class);
@@ -192,7 +190,7 @@ public class AtomTest {
 			+"	<updated>2016-12-31T01:02:03-04:00</updated>\n"
 			+"</feed>\n";
 
-		s = new XmlSerializer.SqReadable().setProperty(XML_defaultNamespace, "atom").setProperty(XML_enableNamespaces, true).setProperty(XML_addNamespaceUrisToRoot, true).setProperty(BEAN_sortProperties, true);
+		s = new XmlSerializer.SqReadable().setDefaultNamespace("atom").setEnableNamespaces(true).setAddNamespaceUrisToRoot(true).setSortProperties(true);
 		r = s.serialize(f);
 		assertEquals(expected, r);
 		f2 = p.parse(r, Feed.class);

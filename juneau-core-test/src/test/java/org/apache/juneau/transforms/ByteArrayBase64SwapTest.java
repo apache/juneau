@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transforms;
 
-import static org.apache.juneau.serializer.SerializerContext.*;
 import static org.junit.Assert.*;
 
 import java.util.*;
@@ -42,7 +41,7 @@ public class ByteArrayBase64SwapTest extends RoundTripTest {
 	//====================================================================================================
 	@Test
 	public void testPrimitiveArrays() throws Exception {
-		WriterSerializer s = new JsonSerializer.Simple().addPojoSwaps(ByteArrayBase64Swap.class).setProperty(SERIALIZER_trimNullProperties, false);
+		WriterSerializer s = new JsonSerializer.Simple().addPojoSwaps(ByteArrayBase64Swap.class).setTrimNullProperties(false);
 
 		byte[] a1 = {1,2,3};
 		assertEquals("'AQID'", s.serialize(a1));

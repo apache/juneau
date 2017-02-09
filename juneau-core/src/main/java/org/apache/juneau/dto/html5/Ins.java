@@ -24,7 +24,7 @@ public class Ins extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/edits.html#attr-mod-cite">cite</a> attribute.
 	 * Link to the source of the quotation or more information about the edit.
-	 * @param cite - The new value for this attribute.
+	 * @param cite The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Ins cite(String cite) {
@@ -35,13 +35,14 @@ public class Ins extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/edits.html#attr-mod-datetime">datetime</a> attribute.
 	 * Date and (optionally) time of the change.
-	 * @param datetime - The new value for this attribute.
+	 * @param datetime The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Ins datetime(String datetime) {
 		attr("datetime", datetime);
 		return this;
 	}
+
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods

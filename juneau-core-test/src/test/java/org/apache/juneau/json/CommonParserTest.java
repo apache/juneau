@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.json;
 
-import static org.apache.juneau.BeanContext.*;
-import static org.apache.juneau.serializer.SerializerContext.*;
 import static org.junit.Assert.*;
 
 import java.util.*;
@@ -31,7 +29,7 @@ public class CommonParserTest {
 	//====================================================================================================
 	@Test
 	public void testFromSerializer() throws Exception {
-		ReaderParser p = JsonParser.DEFAULT.clone().setClassLoader(getClass().getClassLoader()).addToDictionary(A1.class);
+		ReaderParser p = JsonParser.DEFAULT.clone().addToBeanDictionary(A1.class);
 
 		Map m = null;
 		m = (Map)p.parse("{a:1}", Object.class);
@@ -85,7 +83,7 @@ public class CommonParserTest {
 		tl.add(new A3("name0","value0"));
 		tl.add(new A3("name1","value1"));
 		b.list = tl;
-		String json = new JsonSerializer().setProperty(SERIALIZER_addBeanTypeProperties, true).addToDictionary(A1.class).serialize(b);
+		String json = new JsonSerializer().setAddBeanTypeProperties(true).addToBeanDictionary(A1.class).serialize(b);
 		b = (A1)p.parse(json, Object.class);
 		assertEquals("value1", b.list.get(1).value);
 
@@ -116,7 +114,7 @@ public class CommonParserTest {
 	//====================================================================================================
 	@Test
 	public void testCorrectHandlingOfUnknownProperties() throws Exception {
-		ReaderParser p = new JsonParser().setProperty(BEAN_ignoreUnknownBeanProperties, true);
+		ReaderParser p = new JsonParser().setIgnoreUnknownBeanProperties(true);
 		B b;
 
 		String in =  "{a:1,unknown:3,b:2}";
@@ -164,7 +162,7 @@ public class CommonParserTest {
 	@Test
 	public void testParserListeners() throws Exception {
 		final List<String> events = new LinkedList<String>();
-		JsonParser p = new JsonParser().setProperty(BEAN_ignoreUnknownBeanProperties, true);
+		JsonParser p = new JsonParser().setIgnoreUnknownBeanProperties(true);
 		p.addListener(
 			new ParserListener() {
 				@Override /* ParserListener */

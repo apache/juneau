@@ -13,7 +13,6 @@
 package org.apache.juneau.json;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.json.JsonSerializerContext.*;
 import static org.junit.Assert.*;
 
 import java.util.*;
@@ -34,8 +33,8 @@ public class JsonTest {
 		Map<String,Object> m = new LinkedHashMap<String,Object>();
 		List<Object> l = new LinkedList<Object>();
 
-		WriterSerializer s1 = new JsonSerializer.Simple().setProperty(SERIALIZER_trimNullProperties, false);
-		WriterSerializer s2 = new JsonSerializer.Simple().setProperty(SERIALIZER_trimNullProperties, false).setProperty(SERIALIZER_quoteChar, '"');
+		WriterSerializer s1 = new JsonSerializer.Simple().setTrimNullProperties(false);
+		WriterSerializer s2 = new JsonSerializer.Simple().setTrimNullProperties(false).setQuoteChar('"');
 		String r;
 
 		// Null keys and values
@@ -110,7 +109,7 @@ public class JsonTest {
 	//====================================================================================================
 	@Test
 	public void testBackslashesInStrings() throws Exception {
-		JsonSerializer s = new JsonSerializer.Simple().setProperty(SERIALIZER_trimNullProperties, false).setProperty(SERIALIZER_quoteChar, '"');
+		JsonSerializer s = new JsonSerializer.Simple().setTrimNullProperties(false).setQuoteChar('"');
 		String r, r2;
 
 		// [\\]
@@ -290,13 +289,13 @@ public class JsonTest {
 	//====================================================================================================
 	@Test
 	public void testEscapeSolidus() throws Exception {
-		JsonSerializer s = new JsonSerializer().setProperty(JSON_escapeSolidus, false);
+		JsonSerializer s = new JsonSerializer().setEscapeSolidus(false);
 		String r = s.serialize("foo/bar");
 		assertEquals("\"foo/bar\"", r);
 		r = JsonParser.DEFAULT.parse(r, String.class);
 		assertEquals("foo/bar", r);
 
-		s = new JsonSerializer().setProperty(JSON_escapeSolidus, true);
+		s = new JsonSerializer().setEscapeSolidus(true);
 		r = s.serialize("foo/bar");
 		assertEquals("\"foo\\/bar\"", r);
 		r = JsonParser.DEFAULT.parse(r, String.class);

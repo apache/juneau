@@ -56,6 +56,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	/** Default serializer, all default settings. */
 	public static final HtmlDocSerializer DEFAULT = new HtmlDocSerializer().lock();
 
+
 	//--------------------------------------------------------------------------------
 	// Overridden methods
 	//--------------------------------------------------------------------------------
@@ -164,13 +165,464 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		return false;
 	}
 
+
 	//--------------------------------------------------------------------------------
-	// Overridden methods
+	// Properties
 	//--------------------------------------------------------------------------------
 
+	@Override /* HtmlSerializer */
+	public HtmlDocSerializer setUriAnchorText(String value) throws LockedException {
+		super.setUriAnchorText(value);
+		return this;
+	}
+
+	@Override /* HtmlSerializer */
+	public HtmlDocSerializer setDetectLinksInStrings(boolean value) throws LockedException {
+		super.setDetectLinksInStrings(value);
+		return this;
+	}
+
+	@Override /* HtmlSerializer */
+	public HtmlDocSerializer setLookForLabelParameters(boolean value) throws LockedException {
+		super.setLookForLabelParameters(value);
+		return this;
+	}
+
+	@Override /* HtmlSerializer */
+	public HtmlDocSerializer setLabelParameter(String value) throws LockedException {
+		super.setLabelParameter(value);
+		return this;
+	}
+
+	@Override /* HtmlSerializer */
+	public HtmlDocSerializer setAddKeyValueTableHeaders(boolean value) throws LockedException {
+		super.setAddKeyValueTableHeaders(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public HtmlDocSerializer setMaxDepth(int value) throws LockedException {
+		super.setMaxDepth(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public HtmlDocSerializer setInitialDepth(int value) throws LockedException {
+		super.setInitialDepth(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public HtmlDocSerializer setDetectRecursions(boolean value) throws LockedException {
+		super.setDetectRecursions(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public HtmlDocSerializer setIgnoreRecursions(boolean value) throws LockedException {
+		super.setIgnoreRecursions(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public HtmlDocSerializer setUseIndentation(boolean value) throws LockedException {
+		super.setUseIndentation(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public HtmlDocSerializer setAddBeanTypeProperties(boolean value) throws LockedException {
+		super.setAddBeanTypeProperties(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public HtmlDocSerializer setQuoteChar(char value) throws LockedException {
+		super.setQuoteChar(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public HtmlDocSerializer setTrimNullProperties(boolean value) throws LockedException {
+		super.setTrimNullProperties(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public HtmlDocSerializer setTrimEmptyCollections(boolean value) throws LockedException {
+		super.setTrimEmptyCollections(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public HtmlDocSerializer setTrimEmptyMaps(boolean value) throws LockedException {
+		super.setTrimEmptyMaps(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public HtmlDocSerializer setTrimStrings(boolean value) throws LockedException {
+		super.setTrimStrings(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public HtmlDocSerializer setRelativeUriBase(String value) throws LockedException {
+		super.setRelativeUriBase(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public HtmlDocSerializer setAbsolutePathUriBase(String value) throws LockedException {
+		super.setAbsolutePathUriBase(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public HtmlDocSerializer setSortCollections(boolean value) throws LockedException {
+		super.setSortCollections(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public HtmlDocSerializer setSortMaps(boolean value) throws LockedException {
+		super.setSortMaps(value);
+		return this;
+	}
+
 	@Override /* CoreApi */
-	public HtmlDocSerializer setProperty(String property, Object value) throws LockedException {
-		super.setProperty(property, value);
+	public HtmlDocSerializer setBeansRequireDefaultConstructor(boolean value) throws LockedException {
+		super.setBeansRequireDefaultConstructor(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer setBeansRequireSerializable(boolean value) throws LockedException {
+		super.setBeansRequireSerializable(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer setBeansRequireSettersForGetters(boolean value) throws LockedException {
+		super.setBeansRequireSettersForGetters(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer setBeansRequireSomeProperties(boolean value) throws LockedException {
+		super.setBeansRequireSomeProperties(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer setBeanMapPutReturnsOldValue(boolean value) throws LockedException {
+		super.setBeanMapPutReturnsOldValue(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer setBeanConstructorVisibility(Visibility value) throws LockedException {
+		super.setBeanConstructorVisibility(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer setBeanClassVisibility(Visibility value) throws LockedException {
+		super.setBeanClassVisibility(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer setBeanFieldVisibility(Visibility value) throws LockedException {
+		super.setBeanFieldVisibility(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer setMethodVisibility(Visibility value) throws LockedException {
+		super.setMethodVisibility(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer setUseJavaBeanIntrospector(boolean value) throws LockedException {
+		super.setUseJavaBeanIntrospector(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer setUseInterfaceProxies(boolean value) throws LockedException {
+		super.setUseInterfaceProxies(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer setIgnoreUnknownBeanProperties(boolean value) throws LockedException {
+		super.setIgnoreUnknownBeanProperties(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer setIgnoreUnknownNullBeanProperties(boolean value) throws LockedException {
+		super.setIgnoreUnknownNullBeanProperties(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer setIgnorePropertiesWithoutSetters(boolean value) throws LockedException {
+		super.setIgnorePropertiesWithoutSetters(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer setIgnoreInvocationExceptionsOnGetters(boolean value) throws LockedException {
+		super.setIgnoreInvocationExceptionsOnGetters(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer setIgnoreInvocationExceptionsOnSetters(boolean value) throws LockedException {
+		super.setIgnoreInvocationExceptionsOnSetters(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer setSortProperties(boolean value) throws LockedException {
+		super.setSortProperties(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer setNotBeanPackages(String...values) throws LockedException {
+		super.setNotBeanPackages(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer setNotBeanPackages(Collection<String> values) throws LockedException {
+		super.setNotBeanPackages(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer addNotBeanPackages(String...values) throws LockedException {
+		super.addNotBeanPackages(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer addNotBeanPackages(Collection<String> values) throws LockedException {
+		super.addNotBeanPackages(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer removeNotBeanPackages(String...values) throws LockedException {
+		super.removeNotBeanPackages(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer removeNotBeanPackages(Collection<String> values) throws LockedException {
+		super.removeNotBeanPackages(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer setNotBeanClasses(Class<?>...values) throws LockedException {
+		super.setNotBeanClasses(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer setNotBeanClasses(Collection<Class<?>> values) throws LockedException {
+		super.setNotBeanClasses(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer addNotBeanClasses(Class<?>...values) throws LockedException {
+		super.addNotBeanClasses(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer addNotBeanClasses(Collection<Class<?>> values) throws LockedException {
+		super.addNotBeanClasses(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer removeNotBeanClasses(Class<?>...values) throws LockedException {
+		super.removeNotBeanClasses(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer removeNotBeanClasses(Collection<Class<?>> values) throws LockedException {
+		super.removeNotBeanClasses(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer setBeanFilters(Class<?>...values) throws LockedException {
+		super.setBeanFilters(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer setBeanFilters(Collection<Class<?>> values) throws LockedException {
+		super.setBeanFilters(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer addBeanFilters(Class<?>...values) throws LockedException {
+		super.addBeanFilters(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer addBeanFilters(Collection<Class<?>> values) throws LockedException {
+		super.addBeanFilters(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer removeBeanFilters(Class<?>...values) throws LockedException {
+		super.removeBeanFilters(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer removeBeanFilters(Collection<Class<?>> values) throws LockedException {
+		super.removeBeanFilters(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer setPojoSwaps(Class<?>...values) throws LockedException {
+		super.setPojoSwaps(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer setPojoSwaps(Collection<Class<?>> values) throws LockedException {
+		super.setPojoSwaps(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer addPojoSwaps(Class<?>...values) throws LockedException {
+		super.addPojoSwaps(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer addPojoSwaps(Collection<Class<?>> values) throws LockedException {
+		super.addPojoSwaps(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer removePojoSwaps(Class<?>...values) throws LockedException {
+		super.removePojoSwaps(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer removePojoSwaps(Collection<Class<?>> values) throws LockedException {
+		super.removePojoSwaps(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer setImplClasses(Map<Class<?>,Class<?>> values) throws LockedException {
+		super.setImplClasses(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public <T> CoreApi addImplClass(Class<T> interfaceClass, Class<? extends T> implClass) throws LockedException {
+		super.addImplClass(interfaceClass, implClass);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer setBeanDictionary(Class<?>...values) throws LockedException {
+		super.setBeanDictionary(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer setBeanDictionary(Collection<Class<?>> values) throws LockedException {
+		super.setBeanDictionary(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer addToBeanDictionary(Class<?>...values) throws LockedException {
+		super.addToBeanDictionary(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer addToBeanDictionary(Collection<Class<?>> values) throws LockedException {
+		super.addToBeanDictionary(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer removeFromBeanDictionary(Class<?>...values) throws LockedException {
+		super.removeFromBeanDictionary(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer removeFromBeanDictionary(Collection<Class<?>> values) throws LockedException {
+		super.removeFromBeanDictionary(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer setBeanTypePropertyName(String value) throws LockedException {
+		super.setBeanTypePropertyName(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer setDefaultParser(Class<?> value) throws LockedException {
+		super.setDefaultParser(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer setLocale(Locale value) throws LockedException {
+		super.setLocale(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer setTimeZone(TimeZone value) throws LockedException {
+		super.setTimeZone(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer setMediaType(MediaType value) throws LockedException {
+		super.setMediaType(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer setDebug(boolean value) throws LockedException {
+		super.setDebug(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlDocSerializer setProperty(String name, Object value) throws LockedException {
+		super.setProperty(name, value);
 		return this;
 	}
 
@@ -181,34 +633,31 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	}
 
 	@Override /* CoreApi */
-	public HtmlDocSerializer addNotBeanClasses(Class<?>...classes) throws LockedException {
-		super.addNotBeanClasses(classes);
+	public HtmlDocSerializer addToProperty(String name, Object value) throws LockedException {
+		super.addToProperty(name, value);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public HtmlDocSerializer addBeanFilters(Class<?>...classes) throws LockedException {
-		super.addBeanFilters(classes);
+	public HtmlDocSerializer putToProperty(String name, Object key, Object value) throws LockedException {
+		super.putToProperty(name, key, value);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public HtmlDocSerializer addPojoSwaps(Class<?>...classes) throws LockedException {
-		super.addPojoSwaps(classes);
+	public HtmlDocSerializer putToProperty(String name, Object value) throws LockedException {
+		super.putToProperty(name, value);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public HtmlDocSerializer addToDictionary(Class<?>...classes) throws LockedException {
-		super.addToDictionary(classes);
+	public HtmlDocSerializer removeFromProperty(String name, Object value) throws LockedException {
+		super.removeFromProperty(name, value);
 		return this;
 	}
 
-	@Override /* CoreApi */
-	public <T> HtmlDocSerializer addImplClass(Class<T> interfaceClass, Class<? extends T> implClass) throws LockedException {
-		super.addImplClass(interfaceClass, implClass);
-		return this;
-	}
+	// Overridden methods
+	//--------------------------------------------------------------------------------
 
 	@Override /* CoreApi */
 	public HtmlDocSerializer setClassLoader(ClassLoader classLoader) throws LockedException {

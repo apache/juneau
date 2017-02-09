@@ -26,7 +26,7 @@ public class Video extends HtmlElementContainer {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-autoplay">autoplay</a> attribute.
 	 * Hint that the media resource can be started automatically when the page is loaded.
-	 * @param autoplay - The new value for this attribute.
+	 * @param autoplay The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -38,7 +38,7 @@ public class Video extends HtmlElementContainer {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-controls">controls</a> attribute.
 	 * Show user agent controls.
-	 * @param controls - The new value for this attribute.
+	 * @param controls The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -50,7 +50,7 @@ public class Video extends HtmlElementContainer {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-crossorigin">crossorigin</a> attribute.
 	 * How the element handles crossorigin requests.
-	 * @param crossorigin - The new value for this attribute.
+	 * @param crossorigin The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Video crossorigin(String crossorigin) {
@@ -61,7 +61,7 @@ public class Video extends HtmlElementContainer {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-height">height</a> attribute.
 	 * Vertical dimension.
-	 * @param height - The new value for this attribute.
+	 * @param height The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -73,7 +73,7 @@ public class Video extends HtmlElementContainer {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-loop">loop</a> attribute.
 	 * Whether to loop the media resource.
-	 * @param loop - The new value for this attribute.
+	 * @param loop The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -85,7 +85,7 @@ public class Video extends HtmlElementContainer {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-mediagroup">mediagroup</a> attribute.
 	 * Groups media elements together with an implicit MediaController.
-	 * @param mediagroup - The new value for this attribute.
+	 * @param mediagroup The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Video mediagroup(String mediagroup) {
@@ -96,7 +96,7 @@ public class Video extends HtmlElementContainer {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-muted">muted</a> attribute.
 	 * Whether to mute the media resource by default.
-	 * @param muted - The new value for this attribute.
+	 * @param muted The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -108,7 +108,7 @@ public class Video extends HtmlElementContainer {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-video-poster">poster</a> attribute.
 	 * Poster frame to show prior to video playback.
-	 * @param poster - The new value for this attribute.
+	 * @param poster The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Video poster(String poster) {
@@ -119,7 +119,7 @@ public class Video extends HtmlElementContainer {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-preload">preload</a> attribute.
 	 * Hints how much buffering the media resource will likely need.
-	 * @param preload - The new value for this attribute.
+	 * @param preload The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Video preload(String preload) {
@@ -130,7 +130,7 @@ public class Video extends HtmlElementContainer {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-src">src</a> attribute.
 	 * Address of the resource.
-	 * @param src - The new value for this attribute.
+	 * @param src The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -142,7 +142,7 @@ public class Video extends HtmlElementContainer {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-width">width</a> attribute.
 	 * Horizontal dimension.
-	 * @param width - The new value for this attribute.
+	 * @param width The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -150,6 +150,7 @@ public class Video extends HtmlElementContainer {
 		attr("width", width);
 		return this;
 	}
+
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods

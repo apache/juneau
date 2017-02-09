@@ -24,13 +24,14 @@ public class Time extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#attr-time-datetime">datetime</a> attribute.
 	 * Machine-readable value.
-	 * @param datetime - The new value for this attribute.
+	 * @param datetime The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Time datetime(String datetime) {
 		attr("datetime", datetime);
 		return this;
 	}
+
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods

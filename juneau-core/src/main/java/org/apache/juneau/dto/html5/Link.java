@@ -26,7 +26,7 @@ public class Link extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-link-crossorigin">crossorigin</a> attribute.
 	 * How the element handles crossorigin requests.
-	 * @param crossorigin - The new value for this attribute.
+	 * @param crossorigin The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Link crossorigin(String crossorigin) {
@@ -37,7 +37,7 @@ public class Link extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-link-href">href</a> attribute.
 	 * Address of the hyperlink.
-	 * @param href - The new value for this attribute.
+	 * @param href The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -49,7 +49,7 @@ public class Link extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-link-hreflang">hreflang</a> attribute.
 	 * Language of the linked resource.
-	 * @param hreflang - The new value for this attribute.
+	 * @param hreflang The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Link hreflang(String hreflang) {
@@ -60,7 +60,7 @@ public class Link extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-link-media">media</a> attribute.
 	 * Applicable media.
-	 * @param media - The new value for this attribute.
+	 * @param media The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Link media(String media) {
@@ -71,7 +71,7 @@ public class Link extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-link-rel">rel</a> attribute.
 	 * Relationship between the document containing the hyperlink and the destination resource.
-	 * @param rel - The new value for this attribute.
+	 * @param rel The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Link rel(String rel) {
@@ -82,7 +82,7 @@ public class Link extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-link-sizes">sizes</a> attribute.
 	 * Sizes of the icons (for rel="icon").
-	 * @param sizes - The new value for this attribute.
+	 * @param sizes The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Link sizes(String sizes) {
@@ -93,13 +93,14 @@ public class Link extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-link-type">type</a> attribute.
 	 * Hint for the type of the referenced resource.
-	 * @param type - The new value for this attribute.
+	 * @param type The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Link type(String type) {
 		attr("type", type);
 		return this;
 	}
+
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods

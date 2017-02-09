@@ -40,53 +40,6 @@ import org.apache.juneau.*;
  * 	Several built-in runtime variable types are defined, and the API can be extended to include user-defined variables.
  * </p>
  *
- * <h6 class='topic' id='ConfigProperties'>Configurable properties on the HTML document serializer</h6>
- * <table class='styled' style='border-collapse: collapse;'>
- * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th><th>Session overridable</th></tr>
- * 	<tr>
- * 		<td>{@link #HTMLDOC_title}</td>
- * 		<td>Page title.</td>
- * 		<td><code>String</code></td>
- * 		<td><jk>null</jk></td>
- * 		<td><jk>true</jk></td>
- * 	</tr>
- * 	<tr>
- * 		<td>{@link #HTMLDOC_description}</td>
- * 		<td>Page description.</td>
- * 		<td><code>String</code></td>
- * 		<td><jk>null</jk></td>
- * 		<td><jk>true</jk></td>
- * 	</tr>
- * 	<tr>
- * 		<td>{@link #HTMLDOC_links}<br>{@link #HTMLDOC_links_put}</td>
- * 		<td>Page links.</td>
- * 		<td><code>Map&lt;String,String&gt;</code></td>
- * 		<td>empty map</td>
- * 		<td><jk>true</jk></td>
- * 	</tr>
- * 	<tr>
- * 		<td>{@link #HTMLDOC_cssUrl}</td>
- * 		<td>Stylesheet URL.</td>
- * 		<td><code>String</code></td>
- * 		<td><js>"style.css"</js></td>
- * 		<td><jk>true</jk></td>
- * 	</tr>
- * 	<tr>
- * 		<td>{@link #HTMLDOC_cssImports}<br>{@link #HTMLDOC_cssImports_add}</td>
- * 		<td>CSS imports.</td>
- * 		<td><code>List&lt;String&gt;</code></td>
- * 		<td>empty list</td>
- * 		<td><jk>true</jk></td>
- * 	</tr>
- * 	<tr>
- * 		<td>{@link #HTMLDOC_nowrap}</td>
- * 		<td>Prevent word wrap on page.</td>
- * 		<td><code>Boolean</code></td>
- * 		<td><jk>false</jk></td>
- * 		<td><jk>true</jk></td>
- * 	</tr>
- * </table>
- *
  * <h5 class='section'>Inherited configurable properties:</h5>
  * <ul class='javahierarchy'>
  * 	<li class='c'><a class="doclink" href="../BeanContext.html#ConfigProperties">BeanContext</a> - Properties associated with handling beans on serializers and parsers.

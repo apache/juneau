@@ -21,22 +21,7 @@ import org.apache.juneau.serializer.*;
  * Context properties are set by calling {@link ContextFactory#setProperty(String, Object)} on the context factory
  * returned {@link CoreApi#getContextFactory()}.
  * <p>
- * The following convenience methods are also provided for setting context properties:
- * <ul>
- * 	<li>{@link MsgPackSerializer#setProperty(String,Object)}
- * 	<li>{@link MsgPackSerializer#setProperties(ObjectMap)}
- * 	<li>{@link MsgPackSerializer#addNotBeanClasses(Class[])}
- * 	<li>{@link MsgPackSerializer#addBeanFilters(Class[])}
- * 	<li>{@link MsgPackSerializer#addPojoSwaps(Class[])}
- * 	<li>{@link MsgPackSerializer#addToDictionary(Class[])}
- * 	<li>{@link MsgPackSerializer#addImplClass(Class,Class)}
- * </ul>
- * <p>
  * See {@link ContextFactory} for more information about context properties.
- *
- * <h6 class='topic' id='ConfigProperties'>Configurable properties on the MessagePack serializer</h6>
- * <p>
- * 	None.
  *
  * <h5 class='section'>Inherited configurable properties:</h5>
  * <ul class='javahierarchy'>

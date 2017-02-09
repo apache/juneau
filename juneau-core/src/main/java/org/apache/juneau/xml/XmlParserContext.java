@@ -24,65 +24,7 @@ import org.apache.juneau.parser.*;
  * Context properties are set by calling {@link ContextFactory#setProperty(String, Object)} on the context factory
  * returned {@link CoreApi#getContextFactory()}.
  * <p>
- * The following convenience methods are also provided for setting context properties:
- * <ul>
- * 	<li>{@link XmlParser#setProperty(String,Object)}
- * 	<li>{@link XmlParser#setProperties(ObjectMap)}
- * 	<li>{@link XmlParser#addNotBeanClasses(Class[])}
- * 	<li>{@link XmlParser#addBeanFilters(Class[])}
- * 	<li>{@link XmlParser#addPojoSwaps(Class[])}
- * 	<li>{@link XmlParser#addToDictionary(Class[])}
- * 	<li>{@link XmlParser#addImplClass(Class,Class)}
- * </ul>
- * <p>
  * See {@link ContextFactory} for more information about context properties.
- *
- * <h6 class='topic' id='ConfigProperties'>Configurable properties on the XML parser</h6>
- * <table class='styled' style='border-collapse: collapse;'>
- * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th><th>Session overridable</th></tr>
- * 	<tr>
- * 		<td>{@link #XML_xsiNs}</td>
- * 		<td>XMLSchema-instance namespace URI.</td>
- * 		<td><code>String</code></td>
- * 		<td><js>"http://www.w3.org/2001/XMLSchema-instance"</js></td>
- * 		<td><jk>true</jk></td>
- * 	</tr>
- * 	<tr>
- * 		<td>{@link #XML_validating}</td>
- * 		<td>Enable validation.</td>
- * 		<td><code>Boolean</code></td>
- * 		<td><jk>false</jk></td>
- * 		<td><jk>true</jk></td>
- * 	</tr>
- * 	<tr>
- * 		<td>{@link #XML_reporter}</td>
- * 		<td>XML reporter.</td>
- * 		<td>{@link XMLReporter}</td>
- * 		<td><jk>null</jk></td>
- * 		<td><jk>true</jk></td>
- * 	</tr>
- * 	<tr>
- * 		<td>{@link #XML_resolver}</td>
- * 		<td>XML resolver.</td>
- * 		<td>{@link XMLResolver}</td>
- * 		<td><jk>null</jk></td>
- * 		<td><jk>true</jk></td>
- * 	</tr>
- * 	<tr>
- * 		<td>{@link #XML_eventAllocator}</td>
- * 		<td>XML event allocator.</td>
- * 		<td>{@link XMLEventAllocator}</td>
- * 		<td><jk>null</jk></td>
- * 		<td><jk>true</jk></td>
- * 	</tr>
- * 	<tr>
- * 		<td>{@link #XML_preserveRootElement}</td>
- * 		<td>Preserve root element during generalized parsing.</td>
- * 		<td><code>Boolean</code></td>
- * 		<td><jk>false</jk></td>
- * 		<td><jk>true</jk></td>
- * 	</tr>
- * </table>
  *
  * <h5 class='section'>Inherited configurable properties:</h5>
  * <ul class='javahierarchy'>
@@ -93,20 +35,6 @@ import org.apache.juneau.parser.*;
  * </ul>
  */
 public class XmlParserContext extends ParserContext {
-
-	/**
-	 * <b>Configuration property:</b>  XMLSchema-instance namespace URI.
-	 * <p>
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"XmlParser.xsiNs"</js>
-	 * 	<li><b>Data type:</b> <code>String</code>
-	 * 	<li><b>Default:</b> <js>"http://www.w3.org/2001/XMLSchema-instance"</js>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
-	 * <p>
-	 * The XMLSchema namespace.
-	 */
-	public static final String XML_xsiNs = "XmlParser.xsiNs";
 
 	/**
 	 * <b>Configuration property:</b>  Enable validation.
@@ -199,7 +127,6 @@ public class XmlParserContext extends ParserContext {
 	 */
 	public static final String XML_preserveRootElement = "XmlParser.preserveRootElement";
 
-	final String xsiNs;
 	final boolean
 		validating,
 		preserveRootElement;
@@ -216,7 +143,6 @@ public class XmlParserContext extends ParserContext {
 	 */
 	public XmlParserContext(ContextFactory cf) {
 		super(cf);
-		xsiNs = cf.getProperty(XML_xsiNs, String.class, "http://www.w3.org/2001/XMLSchema-instance");
 		validating = cf.getProperty(XML_validating, boolean.class, false);
 		preserveRootElement = cf.getProperty(XML_preserveRootElement, boolean.class, false);
 		reporter = cf.getProperty(XML_reporter, XMLReporter.class, null);
@@ -228,7 +154,6 @@ public class XmlParserContext extends ParserContext {
 	public ObjectMap asMap() {
 		return super.asMap()
 			.append("XmlParserContext", new ObjectMap()
-				.append("xsiNs", xsiNs)
 				.append("validating", validating)
 				.append("preserveRootElement", preserveRootElement)
 				.append("reporter", reporter)

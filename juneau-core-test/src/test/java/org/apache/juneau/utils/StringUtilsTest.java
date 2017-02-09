@@ -15,7 +15,6 @@ package org.apache.juneau.utils;
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.junit.Assert.*;
-import static org.apache.juneau.BeanContext.*;
 
 import java.math.*;
 import java.util.*;
@@ -639,7 +638,7 @@ public class StringUtilsTest {
 	//====================================================================================================
 	@Test
 	public void testParseISO8601Date() throws Exception {
-		WriterSerializer s = new JsonSerializer.Simple().addPojoSwaps(DateSwap.ISO8601DTPZ.class).setProperty(BEAN_timeZone, "GMT");
+		WriterSerializer s = new JsonSerializer.Simple().addPojoSwaps(DateSwap.ISO8601DTPZ.class).setTimeZone(TimeZone.getTimeZone("GMT"));
 
 		assertNull(parseISO8601Date(null));
 		assertNull(parseISO8601Date(""));

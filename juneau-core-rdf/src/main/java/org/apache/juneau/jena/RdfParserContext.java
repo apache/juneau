@@ -24,30 +24,7 @@ import org.apache.juneau.xml.*;
  * Context properties are set by calling {@link ContextFactory#setProperty(String, Object)} on the context factory
  * returned {@link CoreApi#getContextFactory()}.
  * <p>
- * The following convenience methods are also provided for setting context properties:
- * <ul>
- * 	<li>{@link RdfParser#setProperty(String,Object)}
- * 	<li>{@link RdfParser#setProperties(ObjectMap)}
- * 	<li>{@link RdfParser#addNotBeanClasses(Class[])}
- * 	<li>{@link RdfParser#addBeanFilters(Class[])}
- * 	<li>{@link RdfParser#addPojoSwaps(Class[])}
- * 	<li>{@link RdfParser#addToDictionary(Class[])}
- * 	<li>{@link RdfParser#addImplClass(Class,Class)}
- * </ul>
- * <p>
  * See {@link ContextFactory} for more information about context properties.
- *
- * <h6 class='topic' id='ConfigProperties'>Configurable properties on the RDF parsers</h6>
- * <table class='styled' style='border-collapse: collapse;'>
- * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th><th>Session overridable</th></tr>
- * 	<tr>
- * 		<td>{@link #RDF_trimWhitespace}</td>
- * 		<td>Trim whitespace from text elements.</td>
- * 		<td><code>Boolean</code></td>
- * 		<td><jk>false</jk></td>
- * 		<td><jk>true</jk></td>
- * 	</tr>
- * </table>
  *
  * <h6 class='topic' id='ConfigProperties'>Configurable properties inherited by the RDF parsers</h6>
  * <ul class='javahierarchy'>

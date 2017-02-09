@@ -12,14 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.json;
 
-import static org.apache.juneau.json.JsonParserContext.*;
-
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.MediaType;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
@@ -92,7 +89,7 @@ public final class JsonParser extends ReaderParser {
 	public static final JsonParser DEFAULT = new JsonParser().lock();
 
 	/** Default parser, all default settings.*/
-	public static final JsonParser DEFAULT_STRICT = new JsonParser().setProperty(PARSER_strict, true).lock();
+	public static final JsonParser DEFAULT_STRICT = new JsonParser().setStrict(true).lock();
 
 	private static final AsciiSet decChars = new AsciiSet("0123456789");
 
@@ -775,7 +772,7 @@ public final class JsonParser extends ReaderParser {
 
 
 	//--------------------------------------------------------------------------------
-	// Overridden methods
+	// Entry point methods
 	//--------------------------------------------------------------------------------
 
 	@Override /* Parser */
@@ -821,9 +818,368 @@ public final class JsonParser extends ReaderParser {
 		return a;
 	}
 
+
+	//--------------------------------------------------------------------------------
+	// Properties
+	//--------------------------------------------------------------------------------
+
 	@Override /* Parser */
-	public JsonParser setProperty(String property, Object value) throws LockedException {
-		super.setProperty(property, value);
+	public JsonParser setTrimStrings(boolean value) throws LockedException {
+		super.setTrimStrings(value);
+		return this;
+	}
+
+	@Override /* Parser */
+	public JsonParser setStrict(boolean value) throws LockedException {
+		super.setStrict(value);
+		return this;
+	}
+
+	@Override /* Parser */
+	public JsonParser setInputStreamCharset(String value) throws LockedException {
+		super.setInputStreamCharset(value);
+		return this;
+	}
+
+	@Override /* Parser */
+	public JsonParser setFileCharset(String value) throws LockedException {
+		super.setFileCharset(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser setBeansRequireDefaultConstructor(boolean value) throws LockedException {
+		super.setBeansRequireDefaultConstructor(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser setBeansRequireSerializable(boolean value) throws LockedException {
+		super.setBeansRequireSerializable(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser setBeansRequireSettersForGetters(boolean value) throws LockedException {
+		super.setBeansRequireSettersForGetters(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser setBeansRequireSomeProperties(boolean value) throws LockedException {
+		super.setBeansRequireSomeProperties(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser setBeanMapPutReturnsOldValue(boolean value) throws LockedException {
+		super.setBeanMapPutReturnsOldValue(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser setBeanConstructorVisibility(Visibility value) throws LockedException {
+		super.setBeanConstructorVisibility(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser setBeanClassVisibility(Visibility value) throws LockedException {
+		super.setBeanClassVisibility(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser setBeanFieldVisibility(Visibility value) throws LockedException {
+		super.setBeanFieldVisibility(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser setMethodVisibility(Visibility value) throws LockedException {
+		super.setMethodVisibility(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser setUseJavaBeanIntrospector(boolean value) throws LockedException {
+		super.setUseJavaBeanIntrospector(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser setUseInterfaceProxies(boolean value) throws LockedException {
+		super.setUseInterfaceProxies(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser setIgnoreUnknownBeanProperties(boolean value) throws LockedException {
+		super.setIgnoreUnknownBeanProperties(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser setIgnoreUnknownNullBeanProperties(boolean value) throws LockedException {
+		super.setIgnoreUnknownNullBeanProperties(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser setIgnorePropertiesWithoutSetters(boolean value) throws LockedException {
+		super.setIgnorePropertiesWithoutSetters(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser setIgnoreInvocationExceptionsOnGetters(boolean value) throws LockedException {
+		super.setIgnoreInvocationExceptionsOnGetters(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser setIgnoreInvocationExceptionsOnSetters(boolean value) throws LockedException {
+		super.setIgnoreInvocationExceptionsOnSetters(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser setSortProperties(boolean value) throws LockedException {
+		super.setSortProperties(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser setNotBeanPackages(String...values) throws LockedException {
+		super.setNotBeanPackages(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser setNotBeanPackages(Collection<String> values) throws LockedException {
+		super.setNotBeanPackages(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser addNotBeanPackages(String...values) throws LockedException {
+		super.addNotBeanPackages(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser addNotBeanPackages(Collection<String> values) throws LockedException {
+		super.addNotBeanPackages(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser removeNotBeanPackages(String...values) throws LockedException {
+		super.removeNotBeanPackages(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser removeNotBeanPackages(Collection<String> values) throws LockedException {
+		super.removeNotBeanPackages(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser setNotBeanClasses(Class<?>...values) throws LockedException {
+		super.setNotBeanClasses(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser setNotBeanClasses(Collection<Class<?>> values) throws LockedException {
+		super.setNotBeanClasses(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser addNotBeanClasses(Class<?>...values) throws LockedException {
+		super.addNotBeanClasses(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser addNotBeanClasses(Collection<Class<?>> values) throws LockedException {
+		super.addNotBeanClasses(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser removeNotBeanClasses(Class<?>...values) throws LockedException {
+		super.removeNotBeanClasses(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser removeNotBeanClasses(Collection<Class<?>> values) throws LockedException {
+		super.removeNotBeanClasses(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser setBeanFilters(Class<?>...values) throws LockedException {
+		super.setBeanFilters(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser setBeanFilters(Collection<Class<?>> values) throws LockedException {
+		super.setBeanFilters(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser addBeanFilters(Class<?>...values) throws LockedException {
+		super.addBeanFilters(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser addBeanFilters(Collection<Class<?>> values) throws LockedException {
+		super.addBeanFilters(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser removeBeanFilters(Class<?>...values) throws LockedException {
+		super.removeBeanFilters(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser removeBeanFilters(Collection<Class<?>> values) throws LockedException {
+		super.removeBeanFilters(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser setPojoSwaps(Class<?>...values) throws LockedException {
+		super.setPojoSwaps(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser setPojoSwaps(Collection<Class<?>> values) throws LockedException {
+		super.setPojoSwaps(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser addPojoSwaps(Class<?>...values) throws LockedException {
+		super.addPojoSwaps(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser addPojoSwaps(Collection<Class<?>> values) throws LockedException {
+		super.addPojoSwaps(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser removePojoSwaps(Class<?>...values) throws LockedException {
+		super.removePojoSwaps(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser removePojoSwaps(Collection<Class<?>> values) throws LockedException {
+		super.removePojoSwaps(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser setImplClasses(Map<Class<?>,Class<?>> values) throws LockedException {
+		super.setImplClasses(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public <T> JsonParser addImplClass(Class<T> interfaceClass, Class<? extends T> implClass) throws LockedException {
+		super.addImplClass(interfaceClass, implClass);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser setBeanDictionary(Class<?>...values) throws LockedException {
+		super.setBeanDictionary(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser setBeanDictionary(Collection<Class<?>> values) throws LockedException {
+		super.setBeanDictionary(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser addToBeanDictionary(Class<?>...values) throws LockedException {
+		super.addToBeanDictionary(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser addToBeanDictionary(Collection<Class<?>> values) throws LockedException {
+		super.addToBeanDictionary(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser removeFromBeanDictionary(Class<?>...values) throws LockedException {
+		super.removeFromBeanDictionary(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser removeFromBeanDictionary(Collection<Class<?>> values) throws LockedException {
+		super.removeFromBeanDictionary(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser setBeanTypePropertyName(String value) throws LockedException {
+		super.setBeanTypePropertyName(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser setDefaultParser(Class<?> value) throws LockedException {
+		super.setDefaultParser(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser setLocale(Locale value) throws LockedException {
+		super.setLocale(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser setTimeZone(TimeZone value) throws LockedException {
+		super.setTimeZone(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser setMediaType(MediaType value) throws LockedException {
+		super.setMediaType(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser setDebug(boolean value) throws LockedException {
+		super.setDebug(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonParser setProperty(String name, Object value) throws LockedException {
+		super.setProperty(name, value);
 		return this;
 	}
 
@@ -834,34 +1190,33 @@ public final class JsonParser extends ReaderParser {
 	}
 
 	@Override /* CoreApi */
-	public JsonParser addNotBeanClasses(Class<?>...classes) throws LockedException {
-		super.addNotBeanClasses(classes);
+	public JsonParser addToProperty(String name, Object value) throws LockedException {
+		super.addToProperty(name, value);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public JsonParser addBeanFilters(Class<?>...classes) throws LockedException {
-		super.addBeanFilters(classes);
+	public JsonParser putToProperty(String name, Object key, Object value) throws LockedException {
+		super.putToProperty(name, key, value);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public JsonParser addPojoSwaps(Class<?>...classes) throws LockedException {
-		super.addPojoSwaps(classes);
+	public JsonParser putToProperty(String name, Object value) throws LockedException {
+		super.putToProperty(name, value);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public JsonParser addToDictionary(Class<?>...classes) throws LockedException {
-		super.addToDictionary(classes);
+	public JsonParser removeFromProperty(String name, Object value) throws LockedException {
+		super.removeFromProperty(name, value);
 		return this;
 	}
 
-	@Override /* CoreApi */
-	public <T> JsonParser addImplClass(Class<T> interfaceClass, Class<? extends T> implClass) throws LockedException {
-		super.addImplClass(interfaceClass, implClass);
-		return this;
-	}
+
+	//--------------------------------------------------------------------------------
+	// Overridden methods
+	//--------------------------------------------------------------------------------
 
 	@Override /* CoreApi */
 	public JsonParser setClassLoader(ClassLoader classLoader) throws LockedException {

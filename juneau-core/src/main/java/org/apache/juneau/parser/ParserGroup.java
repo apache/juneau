@@ -73,7 +73,7 @@ public final class ParserGroup extends Lockable {
 	/**
 	 * Adds the specified parser to the beginning of this group.
 	 *
-	 * @param p - The parser to add to this group.
+	 * @param p The parser to add to this group.
 	 * @return This object (for method chaining).
 	 */
 	public ParserGroup append(Parser p) {
@@ -203,103 +203,727 @@ public final class ParserGroup extends Lockable {
 		return l;
 	}
 
+
 	//--------------------------------------------------------------------------------
-	// Convenience methods for setting properties on all parsers.
+	// Properties
 	//--------------------------------------------------------------------------------
 
 	/**
-	 * Shortcut for calling {@link Parser#setProperty(String, Object)} on all parsers in this group.
+	 * Calls {@link Parser#setTrimStrings(boolean)} on all parsers in this group.
 	 *
-	 * @param property The property name.
-	 * @param value The property value.
-	 * @throws LockedException If {@link #lock()} was called on this object.
+	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see ParserContext#PARSER_trimStrings
 	 */
-	public ParserGroup setProperty(String property, Object value) throws LockedException {
+	public ParserGroup setTrimStrings(boolean value) throws LockedException {
 		checkLock();
 		for (Parser p : parsers)
-			p.setProperty(property, value);
+			p.setTrimStrings(value);
 		return this;
 	}
 
 	/**
-	 * Shortcut for calling {@link Parser#setProperties(ObjectMap)} on all parsers in this group.
+	 * Calls {@link Parser#setStrict(boolean)} on all parsers in this group.
 	 *
-	 * @param properties The properties to set.  Ignored if <jk>null</jk>.
-	 * @throws LockedException If {@link #lock()} was called on this object.
+	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see ParserContext#PARSER_strict
 	 */
-	public ParserGroup setProperties(ObjectMap properties) {
+	public ParserGroup setStrict(boolean value) throws LockedException {
 		checkLock();
 		for (Parser p : parsers)
-			p.setProperties(properties);
+			p.setStrict(value);
 		return this;
 	}
 
 	/**
-	 * Shortcut for calling {@link Parser#addNotBeanClasses(Class[])} on all parsers in this group.
+	 * Calls {@link Parser#setInputStreamCharset(String)} on all parsers in this group.
 	 *
-	 * @param classes The classes to specify as not-beans to the underlying bean context of all parsers in this group.
-	 * @throws LockedException If {@link #lock()} was called on this object.
+	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see ParserContext#PARSER_inputStreamCharset
 	 */
-	public ParserGroup addNotBeanClasses(Class<?>...classes) throws LockedException {
+	public ParserGroup setInputStreamCharset(String value) throws LockedException {
 		checkLock();
 		for (Parser p : parsers)
-			p.addNotBeanClasses(classes);
+			p.setInputStreamCharset(value);
 		return this;
 	}
 
 	/**
-	 * Shortcut for calling {@link Parser#addBeanFilters(Class[])} on all parsers in this group.
+	 * Calls {@link Parser#setFileCharset(String)} on all parsers in this group.
 	 *
-	 * @param classes The classes to add bean filters for to the underlying bean context of all parsers in this group.
-	 * @throws LockedException If {@link #lock()} was called on this object.
+	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see ParserContext#PARSER_fileCharset
 	 */
-	public ParserGroup addBeanFilters(Class<?>...classes) throws LockedException {
+	public ParserGroup setFileCharset(String value) throws LockedException {
 		checkLock();
 		for (Parser p : parsers)
-			p.addBeanFilters(classes);
+			p.setFileCharset(value);
 		return this;
 	}
 
 	/**
-	 * Shortcut for calling {@link Parser#addPojoSwaps(Class[])} on all parsers in this group.
+	 * Calls {@link Parser#setBeansRequireDefaultConstructor(boolean)} on all parsers in this group.
 	 *
-	 * @param classes The classes to add POJO swaps for to the underlying bean context of all parsers in this group.
-	 * @throws LockedException If {@link #lock()} was called on this object.
+	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_beansRequireDefaultConstructor
 	 */
-	public ParserGroup addPojoSwaps(Class<?>...classes) throws LockedException {
+	public ParserGroup setBeansRequireDefaultConstructor(boolean value) throws LockedException {
 		checkLock();
 		for (Parser p : parsers)
-			p.addPojoSwaps(classes);
+			p.setBeansRequireDefaultConstructor(value);
 		return this;
 	}
 
 	/**
-	 * Shortcut for calling {@link Parser#addToDictionary(Class[])} on all parsers in this group.
+	 * Calls {@link Parser#setBeansRequireSerializable(boolean)} on all parsers in this group.
 	 *
-	 * @param classes The classes to add to the bean dictionary on the underlying bean context of all parsers in this group.
-	 * @throws LockedException If {@link #lock()} was called on this object.
+	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_beansRequireSerializable
 	 */
-	public ParserGroup addToDictionary(Class<?>...classes) throws LockedException {
+	public ParserGroup setBeansRequireSerializable(boolean value) throws LockedException {
 		checkLock();
 		for (Parser p : parsers)
-			p.addToDictionary(classes);
+			p.setBeansRequireSerializable(value);
 		return this;
 	}
 
 	/**
-	 * Shortcut for calling {@link Parser#addImplClass(Class, Class)} on all parsers in this group.
+	 * Calls {@link Parser#setBeansRequireSettersForGetters(boolean)} on all parsers in this group.
 	 *
-	 * @param <T> The interface or abstract class type.
-	 * @param interfaceClass The interface or abstract class.
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_beansRequireSettersForGetters
+	 */
+	public ParserGroup setBeansRequireSettersForGetters(boolean value) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.setBeansRequireSettersForGetters(value);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#setBeansRequireSomeProperties(boolean)} on all parsers in this group.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_beansRequireSomeProperties
+	 */
+	public ParserGroup setBeansRequireSomeProperties(boolean value) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.setBeansRequireSomeProperties(value);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#setBeanMapPutReturnsOldValue(boolean)} on all parsers in this group.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_beanMapPutReturnsOldValue
+	 */
+	public ParserGroup setBeanMapPutReturnsOldValue(boolean value) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.setBeanMapPutReturnsOldValue(value);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#setBeanConstructorVisibility(Visibility)} on all parsers in this group.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_beanConstructorVisibility
+	 */
+	public ParserGroup setBeanConstructorVisibility(Visibility value) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.setBeanConstructorVisibility(value);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#setBeanClassVisibility(Visibility)} on all parsers in this group.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_beanClassVisibility
+	 */
+	public ParserGroup setBeanClassVisibility(Visibility value) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.setBeanClassVisibility(value);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#setBeanFieldVisibility(Visibility)} on all parsers in this group.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_beanFieldVisibility
+	 */
+	public ParserGroup setBeanFieldVisibility(Visibility value) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.setBeanFieldVisibility(value);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#setMethodVisibility(Visibility)} on all parsers in this group.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_methodVisibility
+	 */
+	public ParserGroup setMethodVisibility(Visibility value) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.setMethodVisibility(value);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#setUseJavaBeanIntrospector(boolean)} on all parsers in this group.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_useJavaBeanIntrospector
+	 */
+	public ParserGroup setUseJavaBeanIntrospector(boolean value) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.setUseJavaBeanIntrospector(value);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#setUseInterfaceProxies(boolean)} on all parsers in this group.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_useInterfaceProxies
+	 */
+	public ParserGroup setUseInterfaceProxies(boolean value) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.setUseInterfaceProxies(value);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#setIgnoreUnknownBeanProperties(boolean)} on all parsers in this group.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_ignoreUnknownBeanProperties
+	 */
+	public ParserGroup setIgnoreUnknownBeanProperties(boolean value) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.setIgnoreUnknownBeanProperties(value);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#setIgnoreUnknownNullBeanProperties(boolean)} on all parsers in this group.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_ignoreUnknownNullBeanProperties
+	 */
+	public ParserGroup setIgnoreUnknownNullBeanProperties(boolean value) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.setIgnoreUnknownNullBeanProperties(value);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#setIgnorePropertiesWithoutSetters(boolean)} on all parsers in this group.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_ignorePropertiesWithoutSetters
+	 */
+	public ParserGroup setIgnorePropertiesWithoutSetters(boolean value) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.setIgnorePropertiesWithoutSetters(value);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#setIgnoreInvocationExceptionsOnGetters(boolean)} on all parsers in this group.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_ignoreInvocationExceptionsOnGetters
+	 */
+	public ParserGroup setIgnoreInvocationExceptionsOnGetters(boolean value) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.setIgnoreInvocationExceptionsOnGetters(value);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#setIgnoreInvocationExceptionsOnSetters(boolean)} on all parsers in this group.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_ignoreInvocationExceptionsOnSetters
+	 */
+	public ParserGroup setIgnoreInvocationExceptionsOnSetters(boolean value) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.setIgnoreInvocationExceptionsOnSetters(value);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#setSortProperties(boolean)} on all parsers in this group.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_sortProperties
+	 */
+	public ParserGroup setSortProperties(boolean value) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.setSortProperties(value);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#setNotBeanPackages(String...)} on all parsers in this group.
+	 *
+	 * @param values The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_notBeanPackages
+	 */
+	public ParserGroup setNotBeanPackages(String...values) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.setNotBeanPackages(values);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#setNotBeanPackages(Collection)} on all parsers in this group.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_notBeanPackages
+	 */
+	public ParserGroup setNotBeanPackages(Collection<String> value) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.setNotBeanPackages(value);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#addNotBeanPackages(String...)} on all parsers in this group.
+	 *
+	 * @param values The values to remove from this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_notBeanPackages
+	 * @see BeanContext#BEAN_notBeanPackages_remove
+	 */
+	public ParserGroup addNotBeanPackages(String...values) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.addNotBeanPackages(values);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#addNotBeanPackages(Collection)} on all parsers in this group.
+	 *
+	 * @param values The values to remove from this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_notBeanPackages
+	 * @see BeanContext#BEAN_notBeanPackages_remove
+	 */
+	public ParserGroup addNotBeanPackages(Collection<String> values) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.addNotBeanPackages(values);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#removeNotBeanPackages(String...)} on all parsers in this group.
+	 *
+	 * @param values The values to remove from this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_notBeanPackages
+	 * @see BeanContext#BEAN_notBeanPackages_remove
+	 */
+	public ParserGroup removeNotBeanPackages(String...values) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.removeNotBeanPackages(values);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#removeNotBeanPackages(Collection)} on all parsers in this group.
+	 *
+	 * @param values The values to remove from this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_notBeanPackages
+	 * @see BeanContext#BEAN_notBeanPackages_remove
+	 */
+	public ParserGroup removeNotBeanPackages(Collection<String> values) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.removeNotBeanPackages(values);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#setNotBeanClasses(Class...)} on all parsers in this group.
+	 *
+	 * @param values The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_notBeanClasses
+	 */
+	public ParserGroup setNotBeanClasses(Class<?>...values) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.setNotBeanClasses(values);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#setNotBeanClasses(Collection)} on all parsers in this group.
+	 *
+	 * @param values The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_notBeanPackages
+	 */
+	public ParserGroup setNotBeanClasses(Collection<Class<?>> values) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.setNotBeanClasses(values);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#addNotBeanClasses(Class...)} on all parsers in this group.
+	 *
+	 * @param values The values to add to this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_notBeanClasses
+	 * @see BeanContext#BEAN_notBeanClasses_add
+	 */
+	public ParserGroup addNotBeanClasses(Class<?>...values) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.addNotBeanClasses(values);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#addNotBeanClasses(Collection)} on all parsers in this group.
+	 *
+	 * @param values The values to add to this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_notBeanClasses
+	 * @see BeanContext#BEAN_notBeanClasses_add
+	 */
+	public ParserGroup addNotBeanClasses(Collection<Class<?>> values) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.addNotBeanClasses(values);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#removeNotBeanClasses(Class...)} on all parsers in this group.
+	 *
+	 * @param values The values to remove from this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_notBeanClasses
+	 * @see BeanContext#BEAN_notBeanClasses_remove
+	 */
+	public ParserGroup removeNotBeanClasses(Class<?>...values) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.removeNotBeanClasses(values);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#removeNotBeanClasses(Collection)} on all parsers in this group.
+	 *
+	 * @param values The values to remove from this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_notBeanClasses
+	 * @see BeanContext#BEAN_notBeanClasses_remove
+	 */
+	public ParserGroup removeNotBeanClasses(Collection<Class<?>> values) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.removeNotBeanClasses(values);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#setBeanFilters(Class...)} on all parsers in this group.
+	 *
+	 * @param values The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_beanFilters
+	 */
+	public ParserGroup setBeanFilters(Class<?>...values) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.setBeanFilters(values);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#setBeanFilters(Collection)} on all parsers in this group.
+	 *
+	 * @param values The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_beanFilters
+	 */
+	public ParserGroup setBeanFilters(Collection<Class<?>> values) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.setBeanFilters(values);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#addBeanFilters(Class...)} on all parsers in this group.
+	 *
+	 * @param values The values to add to this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_beanFilters
+	 * @see BeanContext#BEAN_beanFilters_add
+	 */
+	public ParserGroup addBeanFilters(Class<?>...values) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.addBeanFilters(values);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#addBeanFilters(Collection)} on all parsers in this group.
+	 *
+	 * @param values The values to add to this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_beanFilters
+	 * @see BeanContext#BEAN_beanFilters_add
+	 */
+	public ParserGroup addBeanFilters(Collection<Class<?>> values) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.addBeanFilters(values);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#removeBeanFilters(Class...)} on all parsers in this group.
+	 *
+	 * @param values The values to remove from this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_beanFilters
+	 * @see BeanContext#BEAN_beanFilters_remove
+	 */
+	public ParserGroup removeBeanFilters(Class<?>...values) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.removeBeanFilters(values);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#removeBeanFilters(Collection)} on all parsers in this group.
+	 *
+	 * @param values The values to remove from this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_beanFilters
+	 * @see BeanContext#BEAN_beanFilters_remove
+	 */
+	public ParserGroup removeBeanFilters(Collection<Class<?>> values) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.removeBeanFilters(values);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#setPojoSwaps(Class...)} on all parsers in this group.
+	 *
+	 * @param values The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_pojoSwaps
+	 */
+	public ParserGroup setPojoSwaps(Class<?>...values) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.setPojoSwaps(values);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#setPojoSwaps(Collection)} on all parsers in this group.
+	 *
+	 * @param values The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_pojoSwaps
+	 */
+	public ParserGroup setPojoSwaps(Collection<Class<?>> values) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.setPojoSwaps(values);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#addPojoSwaps(Class...)} on all parsers in this group.
+	 *
+	 * @param values The values to add to this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_pojoSwaps
+	 * @see BeanContext#BEAN_pojoSwaps_add
+	 */
+	public ParserGroup addPojoSwaps(Class<?>...values) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.addPojoSwaps(values);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#addPojoSwaps(Collection)} on all parsers in this group.
+	 *
+	 * @param values The values to add to this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_pojoSwaps
+	 * @see BeanContext#BEAN_pojoSwaps_add
+	 */
+	public ParserGroup addPojoSwaps(Collection<Class<?>> values) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.addPojoSwaps(values);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#removePojoSwaps(Class...)} on all parsers in this group.
+	 *
+	 * @param values The values to remove from this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_pojoSwaps
+	 * @see BeanContext#BEAN_pojoSwaps_remove
+	 */
+	public ParserGroup removePojoSwaps(Class<?>...values) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.removePojoSwaps(values);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#removePojoSwaps(Collection)} on all parsers in this group.
+	 *
+	 * @param values The values to remove from this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_pojoSwaps
+	 * @see BeanContext#BEAN_pojoSwaps_remove
+	 */
+	public ParserGroup removePojoSwaps(Collection<Class<?>> values) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.removePojoSwaps(values);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#setImplClasses(Map)} on all parsers in this group.
+	 *
+	 * @param values The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_implClasses
+	 */
+	public ParserGroup setImplClasses(Map<Class<?>,Class<?>> values) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.setImplClasses(values);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#addImplClass(Class,Class)} on all parsers in this group.
+	 *
+	 * @param interfaceClass The interface class.
 	 * @param implClass The implementation class.
-	 * @throws LockedException If {@link #lock()} was called on this object.
+	 * @param <T> The class type of the interface.
 	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_implClasses
+	 * @see BeanContext#BEAN_implClasses_put
 	 */
 	public <T> ParserGroup addImplClass(Class<T> interfaceClass, Class<? extends T> implClass) throws LockedException {
 		checkLock();
@@ -308,9 +932,306 @@ public final class ParserGroup extends Lockable {
 		return this;
 	}
 
+	/**
+	 * Calls {@link Parser#setBeanDictionary(Class...)} on all parsers in this group.
+	 *
+	 * @param values The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_beanDictionary
+	 */
+	public ParserGroup setBeanDictionary(Class<?>...values) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.setBeanDictionary(values);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#setBeanDictionary(Collection)} on all parsers in this group.
+	 *
+	 * @param values The values to add to this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_beanDictionary
+	 * @see BeanContext#BEAN_beanDictionary_add
+	 */
+	public ParserGroup setBeanDictionary(Collection<Class<?>> values) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.setBeanDictionary(values);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#addToBeanDictionary(Class...)} on all parsers in this group.
+	 *
+	 * @param values The values to add to this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_beanDictionary
+	 * @see BeanContext#BEAN_beanDictionary_add
+	 */
+	public ParserGroup addToBeanDictionary(Class<?>...values) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.addToBeanDictionary(values);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#addToBeanDictionary(Collection)} on all parsers in this group.
+	 *
+	 * @param values The values to add to this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_beanDictionary
+	 * @see BeanContext#BEAN_beanDictionary_add
+	 */
+	public ParserGroup addToBeanDictionary(Collection<Class<?>> values) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.addToBeanDictionary(values);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#removeFromBeanDictionary(Class...)} on all parsers in this group.
+	 *
+	 * @param values The values to remove from this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_beanDictionary
+	 * @see BeanContext#BEAN_beanDictionary_remove
+	 */
+	public ParserGroup removeFromBeanDictionary(Class<?>...values) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.removeFromBeanDictionary(values);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#removeFromBeanDictionary(Collection)} on all parsers in this group.
+	 *
+	 * @param values The values to remove from this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_beanDictionary
+	 * @see BeanContext#BEAN_beanDictionary_remove
+	 */
+	public ParserGroup removeFromBeanDictionary(Collection<Class<?>> values) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.removeFromBeanDictionary(values);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#setBeanTypePropertyName(String)} on all parsers in this group.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_beanTypePropertyName
+	 */
+	public ParserGroup setBeanTypePropertyName(String value) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.setBeanTypePropertyName(value);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#setDefaultParser(Class)} on all parsers in this group.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_defaultParser
+	 */
+	public ParserGroup setDefaultParser(Class<?> value) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.setDefaultParser(value);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#setLocale(Locale)} on all parsers in this group.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_locale
+	 */
+	public ParserGroup setLocale(Locale value) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.setLocale(value);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#setTimeZone(TimeZone)} on all parsers in this group.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_timeZone
+	 */
+	public ParserGroup setTimeZone(TimeZone value) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.setTimeZone(value);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#setMediaType(MediaType)} on all parsers in this group.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_mediaType
+	 */
+	public ParserGroup setMediaType(MediaType value) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.setMediaType(value);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#setDebug(boolean)} on all parsers in this group.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see BeanContext#BEAN_debug
+	 */
+	public ParserGroup setDebug(boolean value) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.setDebug(value);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#setProperty(String,Object)} on all parsers in this group.
+	 *
+	 * @param name The property name.
+	 * @param value The property value.
+	 * @return This class (for method chaining).
+	 * @throws LockedException If {@link #lock()} has been called on this object or {@link ContextFactory} object.
+	 * @see ContextFactory#setProperty(String, Object)
+	 */
+	public ParserGroup setProperty(String name, Object value) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.setProperty(name, value);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#setProperties(ObjectMap)} on all parsers in this group.
+	 *
+	 * @param properties The properties to set on this class.
+	 * @return This class (for method chaining).
+	 * @throws LockedException If {@link #lock()} has been called on this object.
+	 * @see ContextFactory#setProperties(java.util.Map)
+	 */
+	public ParserGroup setProperties(ObjectMap properties) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.setProperties(properties);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#addToProperty(String,Object)} on all parsers in this group.
+	 *
+	 * @param name The property name.
+	 * @param value The new value to add to the SET property.
+	 * @return This object (for method chaining).
+	 * @throws ConfigException If property is not a SET property.
+	 * @throws LockedException If {@link #lock()} has been called on this object.
+	 */
+	public ParserGroup addToProperty(String name, Object value) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.addToProperty(name, value);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#putToProperty(String,Object,Object)} on all parsers in this group.
+	 *
+	 * @param name The property name.
+	 * @param key The property value map key.
+	 * @param value The property value map value.
+	 * @return This object (for method chaining).
+	 * @throws ConfigException If property is not a MAP property.
+	 * @throws LockedException If {@link #lock()} has been called on this object.
+	 */
+	public ParserGroup putToProperty(String name, Object key, Object value) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.putToProperty(name, key, value);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#putToProperty(String,Object)} on all parsers in this group.
+	 *
+	 * @param name The property value.
+	 * @param value The property value map value.
+	 * @return This object (for method chaining).
+	 * @throws ConfigException If property is not a MAP property.
+	 * @throws LockedException If {@link #lock()} has been called on this object.
+	 */
+	public ParserGroup putToProperty(String name, Object value) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.putToProperty(name, value);
+		return this;
+	}
+
+	/**
+	 * Calls {@link Parser#removeFromProperty(String,Object)} on all parsers in this group.
+	 *
+	 * @param name The property name.
+	 * @param value The property value in the SET property.
+	 * @return This object (for method chaining).
+	 * @throws ConfigException If property is not a SET property.
+	 * @throws LockedException If {@link #lock()} has been called on this object.
+	 */
+	public ParserGroup removeFromProperty(String name, Object value) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.removeFromProperty(name, value);
+		return this;
+	}
+
+
 	//--------------------------------------------------------------------------------
 	// Overridden methods
 	//--------------------------------------------------------------------------------
+
+	/**
+	 * Calls {@link Parser#setClassLoader(ClassLoader)} on all parsers in this group.
+	 *
+	 * @param classLoader The new classloader.
+	 * @throws LockedException If {@link ContextFactory#lock()} was called on this class or the bean context.
+	 * @return This object (for method chaining).
+	 * @see ContextFactory#setClassLoader(ClassLoader)
+	 */
+	public ParserGroup setClassLoader(ClassLoader classLoader) throws LockedException {
+		checkLock();
+		for (Parser p : parsers)
+			p.setClassLoader(classLoader);
+		return this;
+	}
 
 	/**
 	 * Locks this group and all parsers in this group.

@@ -24,13 +24,14 @@ public class Q extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#attr-q-cite">cite</a> attribute.
 	 * Link to the source of the quotation or more information about the edit.
-	 * @param cite - The new value for this attribute.
+	 * @param cite The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Q cite(String cite) {
 		attr("cite", cite);
 		return this;
 	}
+
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods

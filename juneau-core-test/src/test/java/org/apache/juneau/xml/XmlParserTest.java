@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
-import static org.apache.juneau.xml.XmlParserContext.*;
 import static org.junit.Assert.*;
 
 import org.apache.juneau.*;
@@ -83,7 +82,7 @@ public class XmlParserTest {
 	public void testPreserveRootElement() throws Exception {
 		String xml;
 		ObjectMap m;
-		ReaderParser p = new XmlParser().setProperty(XML_preserveRootElement, true);
+		ReaderParser p = new XmlParser().setPreserveRootElement(true);
 
 		xml = "<A><B><C>c</C></B></A>";
 		m = p.parse(xml, ObjectMap.class);

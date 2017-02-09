@@ -14,7 +14,6 @@ package org.apache.juneau.xml;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.serializer.SerializerContext.*;
-import static org.apache.juneau.xml.XmlSerializerContext.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 import static org.junit.Assert.*;
 
@@ -35,7 +34,7 @@ public class XmlContentTest {
 	public void testContentFormat() throws Exception {
 		A t = A.newInstance(), t2;
 		XmlSerializer s1 = XmlSerializer.DEFAULT_SQ,
-			s2 = new XmlSerializer().setProperty(SERIALIZER_quoteChar, '\'').setProperty(SERIALIZER_useIndentation, true).setProperty(XML_enableNamespaces, false);
+			s2 = new XmlSerializer().setQuoteChar('\'').setUseIndentation(true).setEnableNamespaces(false);
 		XmlParser p = XmlParser.DEFAULT;
 		XmlSerializerSession session;
 		String r;
@@ -143,7 +142,7 @@ public class XmlContentTest {
 	public void testXmlMixed() throws Exception {
 		B t = B.newInstance(), t2;
 		XmlSerializer s1 = XmlSerializer.DEFAULT_SQ,
-			s2 = new XmlSerializer().setProperty(SERIALIZER_quoteChar, '\'').setProperty(SERIALIZER_useIndentation, true).setProperty(XML_enableNamespaces, false);
+			s2 = new XmlSerializer().setQuoteChar('\'').setUseIndentation(true).setEnableNamespaces(false);
 		XmlParser p = XmlParser.DEFAULT;
 		XmlSerializerSession session;
 		String r;

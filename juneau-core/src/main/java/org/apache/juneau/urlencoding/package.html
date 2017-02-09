@@ -593,7 +593,7 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Clone an existing serializer and set property for detecting recursions.</jc>
-	UrlEncodingSerializer s = UrlEncodingSerializer.<jsf>DEFAULT_READABLE</jsf>.clone().setProperty(SerializerContext.<jsf>SERIALIZER_detectRecursions</jsf>, <jk>true</jk>);
+	UrlEncodingSerializer s = UrlEncodingSerializer.<jsf>DEFAULT_READABLE</jsf>.clone().setDetectRecursions(<jk>true</jk>);
 
 	<jc>// Create a recursive loop.</jc>
 	A a = <jk>new</jk> A();

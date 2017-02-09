@@ -257,7 +257,7 @@
 		<h6 class='figure'>Example with namespaces with ATOM as the default namespace</h6>
 		<p class='bcode'>
 	<jc>// Create a serializer with readable output with namespaces.</jc>
-	XmlSerializer s = <jk>new</jk> XmlSerializer.SqReadable().setProperty(XmlSerializerContext.<jsf>XML_defaultNamespaceUri</jsf>, <js>"atom"</js>);
+	XmlSerializer s = <jk>new</jk> XmlSerializer.SqReadable().setDefaultNamespaceUri(<js>"atom"</js>);
 
 	<jc>// Serialize to ATOM/XML</jc>
 	String atomXml = s.serialize(feed);
@@ -427,8 +427,8 @@
 			<p class='bcode'>
 	<jc>// Get RDF/XML serializer with readable output.</jc>
 	RdfSerializer s = <jk>new</jk> RdfSerializer.XmlAbbrev()
-		.setProperty(SerializerContext.<jsf>SERIALIZER_useIndentation</jsf>, <jk>true</jk>)
-		.setProperty(SerializerContext.<jsf>SERIALIZER_quoteChar</jsf>, <js>'\''</js>)
+		.setUseIndentation(<jk>true</jk>)
+		.setQuoteChar(<js>'\''</js>)
 		.setProperty(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3);
 
 	<jc>// Serialize to ATOM/RDF/XML</jc>

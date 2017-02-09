@@ -24,7 +24,7 @@ public class Object2 extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-object-data">data</a> attribute.
 	 * Address of the resource.
-	 * @param data - The new value for this attribute.
+	 * @param data The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Object2 data(String data) {
@@ -35,7 +35,7 @@ public class Object2 extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fae-form">form</a> attribute.
 	 * Associates the control with a form element.
-	 * @param form - The new value for this attribute.
+	 * @param form The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Object2 form(String form) {
@@ -46,7 +46,7 @@ public class Object2 extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-height">height</a> attribute.
 	 * Vertical dimension.
-	 * @param height - The new value for this attribute.
+	 * @param height The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -58,7 +58,7 @@ public class Object2 extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-object-name">name</a> attribute.
 	 * Name of nested browsing context.
-	 * @param name - The new value for this attribute.
+	 * @param name The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Object2 name(String name) {
@@ -69,7 +69,7 @@ public class Object2 extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-object-type">type</a> attribute.
 	 * Type of embedded resource.
-	 * @param type - The new value for this attribute.
+	 * @param type The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Object2 type(String type) {
@@ -80,7 +80,7 @@ public class Object2 extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-object-typemustmatch">typemustmatch</a> attribute.
 	 * Whether the type attribute and the Content-Type value need to match for the resource to be used.
-	 * @param typemustmatch - The new value for this attribute.
+	 * @param typemustmatch The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -92,7 +92,7 @@ public class Object2 extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-hyperlink-usemap">usemap</a> attribute.
 	 * Name of image map to use.
-	 * @param usemap - The new value for this attribute.
+	 * @param usemap The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Object2 usemap(String usemap) {
@@ -103,7 +103,7 @@ public class Object2 extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-width">width</a> attribute.
 	 * Horizontal dimension.
-	 * @param width - The new value for this attribute.
+	 * @param width The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -111,6 +111,7 @@ public class Object2 extends HtmlElementMixed {
 		attr("width", width);
 		return this;
 	}
+
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods

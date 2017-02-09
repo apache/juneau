@@ -26,7 +26,7 @@ public class Track extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-default">default</a> attribute.
 	 * Enable the track if no other text track is more suitable.
-	 * @param _default - The new value for this attribute.
+	 * @param _default The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Track _default(String _default) {
@@ -37,7 +37,7 @@ public class Track extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-kind">kind</a> attribute.
 	 * The type of text track.
-	 * @param kind - The new value for this attribute.
+	 * @param kind The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Track kind(String kind) {
@@ -48,7 +48,7 @@ public class Track extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-label">label</a> attribute.
 	 * User-visible label.
-	 * @param label - The new value for this attribute.
+	 * @param label The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Track label(String label) {
@@ -59,7 +59,7 @@ public class Track extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-src">src</a> attribute.
 	 * Address of the resource.
-	 * @param src - The new value for this attribute.
+	 * @param src The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -71,13 +71,14 @@ public class Track extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-srclang">srclang</a> attribute.
 	 * Language of the text track.
-	 * @param srclang - The new value for this attribute.
+	 * @param srclang The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Track srclang(String srclang) {
 		attr("srclang", srclang);
 		return this;
 	}
+
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods

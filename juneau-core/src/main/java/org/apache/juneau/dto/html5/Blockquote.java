@@ -24,13 +24,14 @@ public class Blockquote extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/grouping-content.html#attr-blockquote-cite">cite</a> attribute.
 	 * Link to the source of the quotation..
-	 * @param cite - The new value for this attribute.
+	 * @param cite The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Blockquote cite(String cite) {
 		attr("cite", cite);
 		return this;
 	}
+
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods

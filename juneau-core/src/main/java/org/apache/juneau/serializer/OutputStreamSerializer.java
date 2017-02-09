@@ -41,6 +41,7 @@ public abstract class OutputStreamSerializer extends Serializer {
 		return false;
 	}
 
+
 	//--------------------------------------------------------------------------------
 	// Other methods
 	//--------------------------------------------------------------------------------

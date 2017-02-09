@@ -24,7 +24,7 @@ public class Label extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-label-for">for</a> attribute.
 	 * Associate the label with form control.
-	 * @param _for - The new value for this attribute.
+	 * @param _for The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Label _for(String _for) {
@@ -35,13 +35,14 @@ public class Label extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fae-form">form</a> attribute.
 	 * Associates the control with a form element.
-	 * @param form - The new value for this attribute.
+	 * @param form The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Label form(String form) {
 		attr("form", form);
 		return this;
 	}
+
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods

@@ -13,9 +13,6 @@
 package org.apache.juneau.a.rttests;
 
 import static org.apache.juneau.a.rttests.RoundTripTest.Flags.*;
-import static org.apache.juneau.serializer.SerializerContext.*;
-import static org.apache.juneau.urlencoding.UonSerializerContext.*;
-import static org.apache.juneau.xml.XmlSerializerContext.*;
 
 import java.text.*;
 import java.util.*;
@@ -51,85 +48,85 @@ public class RoundTripLargeObjectsTest extends RoundTripTest {
 			// Full round-trip testing
 			{ /* 0 */
 				"Json DEFAULT",
-				new JsonSerializer().setProperty(SERIALIZER_trimNullProperties, false),
+				new JsonSerializer().setTrimNullProperties(false),
 				JsonParser.DEFAULT,
 				0
 			},
 			{ /* 1 */
 				"Json DEFAULT_LAX",
-				new JsonSerializer.Simple().setProperty(SERIALIZER_trimNullProperties, false),
+				new JsonSerializer.Simple().setTrimNullProperties(false),
 				JsonParser.DEFAULT,
 				0
 			},
 			{ /* 2 */
 				"Json DEFAULT_SQ",
-				new JsonSerializer.Simple().setProperty(SERIALIZER_trimNullProperties, false),
+				new JsonSerializer.Simple().setTrimNullProperties(false),
 				JsonParser.DEFAULT,
 				0
 			},
 			{ /* 3 */
 				"Xml DEFAULT w/namespaces,validation",
-				new XmlSerializer.NsSq().setProperty(SERIALIZER_trimNullProperties, false).setProperty(XML_addNamespaceUrisToRoot, true).setProperty(SERIALIZER_useIndentation, true),
+				new XmlSerializer.NsSq().setTrimNullProperties(false).setAddNamespaceUrisToRoot(true).setUseIndentation(true),
 				XmlParser.DEFAULT,
 				CHECK_XML_WHITESPACE | VALIDATE_XML
 			},
 			{ /* 4 */
 				"Xml DEFAULT wo/namespaces,validation",
-				new XmlSerializer.Sq().setProperty(SERIALIZER_trimNullProperties, false),
+				new XmlSerializer.Sq().setTrimNullProperties(false),
 				XmlParser.DEFAULT,
 				CHECK_XML_WHITESPACE
 			},
 			{ /* 5 */
 				"Html",
-				new HtmlSerializer().setProperty(SERIALIZER_trimNullProperties, false),
+				new HtmlSerializer().setTrimNullProperties(false),
 				HtmlParser.DEFAULT,
 				CHECK_XML_WHITESPACE
 			},
 			{ /* 6 */
 				"UrlEncoding",
-				new UrlEncodingSerializer().setProperty(SERIALIZER_trimNullProperties, false).setProperty(UON_simpleMode, false),
+				new UrlEncodingSerializer().setTrimNullProperties(false).setSimpleMode(false),
 				UrlEncodingParser.DEFAULT,
 				0
 			},
 			{ /* 7 */
 				"Uon",
-				new UonSerializer().setProperty(SERIALIZER_trimNullProperties, false).setProperty(UON_simpleMode, false),
+				new UonSerializer().setTrimNullProperties(false).setSimpleMode(false),
 				UonParser.DEFAULT,
 				0
 			},
 			{ /* 8 */
 				"MsgPack",
-				new MsgPackSerializer().setProperty(SERIALIZER_trimNullProperties, false).setProperty(UON_simpleMode, false),
+				new MsgPackSerializer().setTrimNullProperties(false),
 				MsgPackParser.DEFAULT,
 				0
 			},
 //			{ /* 9 */
 //				"Rdf.Xml",
-//				new RdfSerializer.Xml().setProperty(SERIALIZER_trimNullProperties, false).setProperty(RDF_addLiteralTypes, true),
+//				new RdfSerializer.Xml().setTrimNullProperties(false).setAddLiteralTypes(true),
 //				RdfParser.DEFAULT_XML,
 //				0
 //			},
 //			{ /* 10 */
 //				"Rdf.XmlAbbrev",
-//				new RdfSerializer.XmlAbbrev().setProperty(SERIALIZER_trimNullProperties, false).setProperty(RDF_addLiteralTypes, true),
+//				new RdfSerializer.XmlAbbrev().setTrimNullProperties(false).setAddLiteralTypes(true),
 //				RdfParser.DEFAULT_XML,
 //				0
 //			},
 //			{ /* 11 */
 //				"Rdf.Turtle",
-//				new RdfSerializer.Turtle().setProperty(SERIALIZER_trimNullProperties, false).setProperty(RDF_addLiteralTypes, true),
+//				new RdfSerializer.Turtle().setTrimNullProperties(false).setAddLiteralTypes(true),
 //				RdfParser.DEFAULT_TURTLE,
 //				0
 //			},
 //			{ /* 12 */
 //				"Rdf.NTriple",
-//				new RdfSerializer.NTriple().setProperty(SERIALIZER_trimNullProperties, false).setProperty(RDF_addLiteralTypes, true),
+//				new RdfSerializer.NTriple().setTrimNullProperties(false).setAddLiteralTypes(true),
 //				RdfParser.DEFAULT_NTRIPLE,
 //				0
 //			},
 //			{ /* 13 */
 //				"Rdf.N3",
-//				new RdfSerializer.N3().setProperty(SERIALIZER_trimNullProperties, false).setProperty(RDF_addLiteralTypes, true),
+//				new RdfSerializer.N3().setTrimNullProperties(false).setAddLiteralTypes(true),
 //				RdfParser.DEFAULT_N3,
 //				0
 //			},

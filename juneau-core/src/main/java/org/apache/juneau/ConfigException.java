@@ -12,9 +12,20 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-class ConfigException extends FormattedRuntimeException {
+import java.text.*;
+
+/**
+ * An exception that typically occurs when trying to perform an invalid operation on a configuration property.
+ */
+public class ConfigException extends FormattedRuntimeException {
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Constructor
+	 *
+	 * @param message The error message.
+	 * @param args Optional {@link MessageFormat}-style arguments.
+	 */
 	public ConfigException(String message, Object...args) {
 		super(message, args);
 	}

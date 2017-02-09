@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.BeanContext.*;
 import static org.apache.juneau.TestUtils.*;
 import static org.junit.Assert.*;
 
@@ -31,11 +30,10 @@ import org.junit.*;
 @SuppressWarnings({"unchecked","rawtypes","serial","javadoc"})
 public class BeanMapTest {
 
-	JsonSerializer serializer = JsonSerializer.DEFAULT_LAX.clone().setClassLoader(BeanMapTest.class.getClassLoader());
+	JsonSerializer serializer = JsonSerializer.DEFAULT_LAX.clone();
 
 	BeanContext bc = ContextFactory.create()
-			.setClassLoader(this.getClass().getClassLoader())
-			.addToDictionary(MyBeanDictionaryMap.class)
+			.addToBeanDictionary(MyBeanDictionaryMap.class)
 			.addPojoSwaps(CalendarSwap.ISO8601DTZ.class)
 			.getBeanContext();
 	BeanSession session = bc.createSession();
@@ -480,7 +478,7 @@ public class BeanMapTest {
 		m.put("b", new D2());
 		assertEquals("default", t.b.s);
 
-		JsonParser p = new JsonParser().setClassLoader(BeanMapTest.class.getClassLoader()).addToDictionary(D2.class);
+		JsonParser p = new JsonParser().addToBeanDictionary(D2.class);
 		m.put("lb1", new ObjectList("[{_type:'D2',s:'foobar'}]", p));
 		assertEquals(ObjectList.class.getName(), t.lb1.getClass().getName());
 		assertEquals(D2.class.getName(), t.lb1.get(0).getClass().getName());
@@ -666,7 +664,7 @@ public class BeanMapTest {
 		assertEquals(HEnum.THREE, t7.getEnum2());
 
 		// Create instance directly from JSON.
-		JsonParser p = new JsonParser().setClassLoader(BeanMapTest.class.getClassLoader()).addToDictionary(H.class);
+		JsonParser p = new JsonParser().addToBeanDictionary(H.class);
 		t7 = (H)p.parse("{_type:'H',enum1:'THREE',enum2:'ONE'}", Object.class);
 		assertEquals("{enum1:'THREE',enum2:'ONE'}", serializer.serialize(t7));
 		assertEquals(HEnum.THREE, t7.enum1);
@@ -958,7 +956,7 @@ public class BeanMapTest {
 
 		// JSON
 		String json = "{baz:789,foo:123,bar:456}";
-		p = new JsonParser().setProperty(BEAN_ignoreUnknownBeanProperties, true);
+		p = new JsonParser().setIgnoreUnknownBeanProperties(true);
 		t = p.parse(json, O.class);
 		assertEquals(123, t.foo);
 
@@ -972,7 +970,7 @@ public class BeanMapTest {
 
 		// XML
 		String xml = "<object><baz type='number'>789</baz><foo type='number'>123</foo><bar type='number'>456</bar></object>";
-		p = new XmlParser().setProperty(BEAN_ignoreUnknownBeanProperties, true);
+		p = new XmlParser().setIgnoreUnknownBeanProperties(true);
 		t = p.parse(xml, O.class);
 		assertEquals(123, t.foo);
 
@@ -986,7 +984,7 @@ public class BeanMapTest {
 
 		// HTML
 		String html = "<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>baz</string></td><td><number>789</number></td></tr><tr><td><string>foo</string></td><td><number>123</number></td></tr><tr><td><string>bar</string></td><td><number>456</number></td></tr></table>";
-		p = new HtmlParser().setProperty(BEAN_ignoreUnknownBeanProperties, true);
+		p = new HtmlParser().setIgnoreUnknownBeanProperties(true);
 		t = p.parse(html, O.class);
 		assertEquals(123, t.foo);
 
@@ -1000,7 +998,7 @@ public class BeanMapTest {
 
 		// UON
 		String uon = "(baz=789,foo=123,bar=456)";
-		p = new UonParser().setProperty(BEAN_ignoreUnknownBeanProperties, true);
+		p = new UonParser().setIgnoreUnknownBeanProperties(true);
 		t = p.parse(uon, O.class);
 		assertEquals(123, t.foo);
 
@@ -1014,7 +1012,7 @@ public class BeanMapTest {
 
 		// URL-Encoding
 		String urlencoding = "baz=789&foo=123&bar=456";
-		p = new UrlEncodingParser().setProperty(BEAN_ignoreUnknownBeanProperties, true);
+		p = new UrlEncodingParser().setIgnoreUnknownBeanProperties(true);
 		t = p.parse(urlencoding, O.class);
 		assertEquals(123, t.foo);
 

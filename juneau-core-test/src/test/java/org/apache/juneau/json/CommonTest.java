@@ -12,9 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.json;
 
-import static org.apache.juneau.BeanContext.*;
 import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.serializer.SerializerContext.*;
 import static org.junit.Assert.*;
 
 import java.net.*;
@@ -39,13 +37,13 @@ public class CommonTest {
 		JsonParser p = JsonParser.DEFAULT;
 		A t1 = A.create(), t2;
 
-		s.setProperty(SERIALIZER_trimNullProperties, false);
+		s.setTrimNullProperties(false);
 		String r = s.serialize(t1);
 		assertEquals("{s1:null,s2:'s2'}", r);
 		t2 = p.parse(r, A.class);
 		assertEqualObjects(t1, t2);
 
-		s.setProperty(SERIALIZER_trimNullProperties, true);
+		s.setTrimNullProperties(true);
 		r = s.serialize(t1);
 		assertEquals("{s2:'s2'}", r);
 		t2 = p.parse(r, A.class);
@@ -72,13 +70,13 @@ public class CommonTest {
 		B t1 = B.create(), t2;
 		String r;
 
-		s.setProperty(SERIALIZER_trimEmptyMaps, false);
+		s.setTrimEmptyMaps(false);
 		r = s.serialize(t1);
 		assertEquals("{f1:{},f2:{f2a:null,f2b:{s2:'s2'}}}", r);
 		t2 = p.parse(r, B.class);
 		assertEqualObjects(t1, t2);
 
-		s.setProperty(SERIALIZER_trimEmptyMaps, true);
+		s.setTrimEmptyMaps(true);
 		r = s.serialize(t1);
 		assertEquals("{f2:{f2a:null,f2b:{s2:'s2'}}}", r);
 		t2 = p.parse(r, B.class);
@@ -106,13 +104,13 @@ public class CommonTest {
 		C t1 = C.create(), t2;
 		String r;
 
-		s.setProperty(SERIALIZER_trimEmptyCollections, false);
+		s.setTrimEmptyCollections(false);
 		r = s.serialize(t1);
 		assertEquals("{f1:[],f2:[null,{s2:'s2'}]}", r);
 		t2 = p.parse(r, C.class);
 		assertEqualObjects(t1, t2);
 
-		s.setProperty(SERIALIZER_trimEmptyCollections, true);
+		s.setTrimEmptyCollections(true);
 		r = s.serialize(t1);
 		assertEquals("{f2:[null,{s2:'s2'}]}", r);
 		t2 = p.parse(r, C.class);
@@ -140,13 +138,13 @@ public class CommonTest {
 		D t1 = D.create(), t2;
 		String r;
 
-		s.setProperty(SERIALIZER_trimEmptyCollections, false);
+		s.setTrimEmptyCollections(false);
 		r = s.serialize(t1);
 		assertEquals("{f1:[],f2:[null,{s2:'s2'}]}", r);
 		t2 = p.parse(r, D.class);
 		assertEqualObjects(t1, t2);
 
-		s.setProperty(SERIALIZER_trimEmptyCollections, true);
+		s.setTrimEmptyCollections(true);
 		r = s.serialize(t1);
 		assertEquals("{f2:[null,{s2:'s2'}]}", r);
 		t2 = p.parse(r, D.class);
@@ -254,7 +252,7 @@ public class CommonTest {
 		String r;
 		String expected = "";
 
-		s.setProperty(SERIALIZER_relativeUriBase, null);
+		s.setRelativeUriBase(null);
 		r = s.serialize(t);
 		expected = "{"
 			+"f0:'f0/x0',"
@@ -275,11 +273,11 @@ public class CommonTest {
 			+"}";
 		assertEquals(expected, r);
 
-		s.setProperty(SERIALIZER_relativeUriBase, "");  // Same as null.
+		s.setRelativeUriBase("");  // Same as null.
 		r = s.serialize(t);
 		assertEquals(expected, r);
 
-		s.setProperty(SERIALIZER_relativeUriBase, "/cr");
+		s.setRelativeUriBase("/cr");
 		r = s.serialize(t);
 		expected = "{"
 			+"f0:'/cr/f0/x0',"
@@ -300,11 +298,11 @@ public class CommonTest {
 			+"}";
 		assertEquals(expected, r);
 
-		s.setProperty(SERIALIZER_relativeUriBase, "/cr/");  // Same as above
+		s.setRelativeUriBase("/cr/");  // Same as above
 		r = s.serialize(t);
 		assertEquals(expected, r);
 
-		s.setProperty(SERIALIZER_relativeUriBase, "/");
+		s.setRelativeUriBase("/");
 		r = s.serialize(t);
 		expected = "{"
 			+"f0:'/f0/x0',"
@@ -325,9 +323,9 @@ public class CommonTest {
 			+"}";
 		assertEquals(expected, r);
 
-		s.setProperty(SERIALIZER_relativeUriBase, null);
+		s.setRelativeUriBase(null);
 
-		s.setProperty(SERIALIZER_absolutePathUriBase, "http://foo");
+		s.setAbsolutePathUriBase("http://foo");
 		r = s.serialize(t);
 		expected = "{"
 			+"f0:'f0/x0',"
@@ -348,11 +346,11 @@ public class CommonTest {
 			+"}";
 		assertEquals(expected, r);
 
-		s.setProperty(SERIALIZER_absolutePathUriBase, "http://foo/");
+		s.setAbsolutePathUriBase("http://foo/");
 		r = s.serialize(t);
 		assertEquals(expected, r);
 
-		s.setProperty(SERIALIZER_absolutePathUriBase, "");  // Same as null.
+		s.setAbsolutePathUriBase("");  // Same as null.
 		r = s.serialize(t);
 		expected = "{"
 			+"f0:'f0/x0',"
@@ -381,15 +379,15 @@ public class CommonTest {
 	public void testLockedSerializer() throws Exception {
 		JsonSerializer s = new JsonSerializer().lock();
 		try {
-			s.setProperty(JsonSerializerContext.JSON_simpleMode, true);
+			s.setSimpleMode(true);
 			fail("Locked exception not thrown");
 		} catch (LockedException e) {}
 		try {
-			s.setProperty(SerializerContext.SERIALIZER_addBeanTypeProperties, true);
+			s.setAddBeanTypeProperties(true);
 			fail("Locked exception not thrown");
 		} catch (LockedException e) {}
 		try {
-			s.setProperty(BeanContext.BEAN_beanMapPutReturnsOldValue, true);
+			s.setBeanMapPutReturnsOldValue(true);
 			fail("Locked exception not thrown");
 		} catch (LockedException e) {}
 	}
@@ -418,7 +416,7 @@ public class CommonTest {
 		}
 
 		// Recursion detection, no ignore
-		s.setProperty(SERIALIZER_detectRecursions, true);
+		s.setDetectRecursions(true);
 		try {
 			s.serialize(r1);
 			fail("Exception expected!");
@@ -430,7 +428,7 @@ public class CommonTest {
 			assertTrue(msg.contains("->[3]r1:org.apache.juneau.json.CommonTest$R1"));
 		}
 
-		s.setProperty(SERIALIZER_ignoreRecursions, true);
+		s.setIgnoreRecursions(true);
 		assertEquals("{name:'foo',r2:{name:'bar',r3:{name:'baz'}}}", s.serialize(r1));
 
 		// Make sure this doesn't blow up.
@@ -455,7 +453,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testBasicBean() throws Exception {
-		JsonSerializer s = new JsonSerializer.Simple().setProperty(SERIALIZER_trimNullProperties, false).setProperty(BEAN_sortProperties, true);
+		JsonSerializer s = new JsonSerializer.Simple().setTrimNullProperties(false).setSortProperties(true);
 
 		J a = new J();
 		a.setF1("J");

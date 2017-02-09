@@ -13,8 +13,6 @@
 package org.apache.juneau.dto.cognos;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.serializer.SerializerContext.*;
-import static org.apache.juneau.xml.XmlSerializerContext.*;
 import static org.junit.Assert.*;
 
 import java.util.*;
@@ -75,11 +73,11 @@ public class CognosXmlTest {
 		};
 
 		XmlSerializer s = new XmlSerializer()
-			.setProperty(SERIALIZER_useIndentation, true)
-			.setProperty(SERIALIZER_quoteChar, '\'')
-			.setProperty(XML_defaultNamespace, "cognos")
-			.setProperty(XML_enableNamespaces, true)
-			.setProperty(XML_addNamespaceUrisToRoot, true);
+			.setUseIndentation(true)
+			.setQuoteChar('\'')
+			.setDefaultNamespace("cognos")
+			.setEnableNamespaces(true)
+			.setAddNamespaceUrisToRoot(true);
 
 		DataSet ds = new DataSet(c, rows, BeanContext.DEFAULT.createSession());
 

@@ -64,7 +64,7 @@ public final class EncoderGroup extends Lockable {
 	/**
 	 * Adds the specified encoder to the beginning of this group.
 	 *
-	 * @param e - The encoder to add to this group.
+	 * @param e The encoder to add to this group.
 	 * @return This object (for method chaining).
 	 */
 	public EncoderGroup append(Encoder e) {

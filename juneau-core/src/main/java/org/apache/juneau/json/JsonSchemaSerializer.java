@@ -13,7 +13,6 @@
 package org.apache.juneau.json;
 
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.serializer.SerializerContext.*;
 
 import java.util.*;
 
@@ -42,8 +41,8 @@ public final class JsonSchemaSerializer extends JsonSerializer {
 	 * Constructor.
 	 */
 	public JsonSchemaSerializer() {
-		setProperty(SERIALIZER_detectRecursions, true);
-		setProperty(SERIALIZER_ignoreRecursions, true);
+		setDetectRecursions(true);
+		setIgnoreRecursions(true);
 	}
 
 	/**
@@ -53,12 +52,13 @@ public final class JsonSchemaSerializer extends JsonSerializer {
 	 */
 	public JsonSchemaSerializer(ContextFactory config) {
 		getContextFactory().copyFrom(config);
-		setProperty(SERIALIZER_detectRecursions, true);
-		setProperty(SERIALIZER_ignoreRecursions, true);
+		setDetectRecursions(true);
+		setIgnoreRecursions(true);
 	}
 
+
 	//--------------------------------------------------------------------------------
-	// Overridden methods
+	// Entry point methods
 	//--------------------------------------------------------------------------------
 
 	@Override /* JsonSerializer */
@@ -143,6 +143,10 @@ public final class JsonSchemaSerializer extends JsonSerializer {
 		return l;
 	}
 
+
+	//--------------------------------------------------------------------------------
+	// Overridden methods
+	//--------------------------------------------------------------------------------
 
 	@Override /* Lockable */
 	public JsonSchemaSerializer lock() {

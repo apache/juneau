@@ -13,7 +13,6 @@
 package org.apache.juneau.xml;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.xml.XmlSerializerContext.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 import static org.junit.Assert.*;
 
@@ -62,7 +61,7 @@ public class CommonXmlTest {
 	//====================================================================================================
 	@Test
 	public void testBeanUriAnnotationOnlyUriProperty() throws Exception {
-		XmlSerializer s = new XmlSerializer.Sq().setProperty(XML_addNamespaceUrisToRoot, false);
+		XmlSerializer s = new XmlSerializer.Sq().setAddNamespaceUrisToRoot(false);
 
 		B t = new B("http://foo");
 		String xml = s.serialize(t);

@@ -24,7 +24,7 @@ public class Fieldset extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fieldset-disabled">disabled</a> attribute.
 	 * Whether the form control is disabled.
-	 * @param disabled - The new value for this attribute.
+	 * @param disabled The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -36,7 +36,7 @@ public class Fieldset extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fae-form">form</a> attribute.
 	 * Associates the control with a form element.
-	 * @param form - The new value for this attribute.
+	 * @param form The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Fieldset form(String form) {
@@ -47,13 +47,14 @@ public class Fieldset extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-name">name</a> attribute.
 	 * Name of form control to use for form submission and in the form.elements API.
-	 * @param name - The new value for this attribute.
+	 * @param name The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Fieldset name(String name) {
 		attr("name", name);
 		return this;
 	}
+
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods

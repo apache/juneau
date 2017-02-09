@@ -25,7 +25,7 @@ public class Style extends HtmlElementText {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-style-media">media</a> attribute.
 	 * Applicable media.
-	 * @param media - The new value for this attribute.
+	 * @param media The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Style media(String media) {
@@ -36,13 +36,14 @@ public class Style extends HtmlElementText {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-style-type">type</a> attribute.
 	 * Type of embedded resource.
-	 * @param type - The new value for this attribute.
+	 * @param type The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Style type(String type) {
 		attr("type", type);
 		return this;
 	}
+
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods

@@ -92,6 +92,7 @@ public class RestMicroservice extends Microservice {
 		super(args);
 	}
 
+	
 	//--------------------------------------------------------------------------------
 	// Methods implemented on Microservice API
 	//--------------------------------------------------------------------------------
@@ -138,6 +139,7 @@ public class RestMicroservice extends Microservice {
 		return this;
 	}
 
+	
 	//--------------------------------------------------------------------------------
 	// RestMicroservice API methods.
 	//--------------------------------------------------------------------------------
@@ -483,6 +485,7 @@ public class RestMicroservice extends Microservice {
 		}
 	}
 
+	
 	//--------------------------------------------------------------------------------
 	// Lifecycle listener methods.
 	//--------------------------------------------------------------------------------
@@ -522,6 +525,7 @@ public class RestMicroservice extends Microservice {
 	 */
 	protected void onPostStopServer() {}
 
+	
 	//--------------------------------------------------------------------------------
 	// Other methods.
 	//--------------------------------------------------------------------------------

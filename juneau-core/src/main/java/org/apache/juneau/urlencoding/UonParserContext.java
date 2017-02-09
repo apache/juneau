@@ -21,37 +21,7 @@ import org.apache.juneau.parser.*;
  * Context properties are set by calling {@link ContextFactory#setProperty(String, Object)} on the context factory
  * returned {@link CoreApi#getContextFactory()}.
  * <p>
- * The following convenience methods are also provided for setting context properties:
- * <ul>
- * 	<li>{@link UonParser#setProperty(String,Object)}
- * 	<li>{@link UonParser#setProperties(ObjectMap)}
- * 	<li>{@link UonParser#addNotBeanClasses(Class[])}
- * 	<li>{@link UonParser#addBeanFilters(Class[])}
- * 	<li>{@link UonParser#addPojoSwaps(Class[])}
- * 	<li>{@link UonParser#addToDictionary(Class[])}
- * 	<li>{@link UonParser#addImplClass(Class,Class)}
- * </ul>
- * <p>
  * See {@link ContextFactory} for more information about context properties.
- *
- * <h6 class='topic' id='ConfigProperties'>Configurable properties on the URL-Encoding and UON parsers</h6>
- * <table class='styled' style='border-collapse: collapse;'>
- * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th><th>Session overridable</th></tr>
- * 	<tr>
- * 		<td>{@link #UON_decodeChars}</td>
- * 		<td>Decode <js>"%xx"</js> sequences</td>
- * 		<td><code>Boolean</code></td>
- * 		<td><jk>false</jk> for {@link UonParser}<br><jk>true</jk> for {@link UrlEncodingParser}</td>
- * 		<td><jk>true</jk></td>
- * 	</tr>
- * 	<tr>
- * 		<td>{@link #UON_whitespaceAware}</td>
- * 		<td>Whitespace aware</td>
- * 		<td><code>Boolean</code></td>
- * 		<td><jk>false</jk></td>
- * 		<td><jk>true</jk></td>
- * 	</tr>
- * </table>
  *
  * <h5 class='section'>Inherited configurable properties:</h5>
  * <ul class='javahierarchy'>

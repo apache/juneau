@@ -14,7 +14,6 @@ package org.apache.juneau.jena;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.jena.RdfCommonContext.*;
-import static org.apache.juneau.serializer.SerializerContext.*;
 import static org.junit.Assert.*;
 
 import java.net.*;
@@ -27,7 +26,6 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.testbeans.*;
-import org.apache.juneau.xml.*;
 import org.junit.*;
 
 @SuppressWarnings({"serial","javadoc"})
@@ -35,8 +33,8 @@ public class CommonTest {
 
 	private RdfSerializer getBasicSerializer() {
 		return new RdfSerializer()
-			.setProperty(SERIALIZER_quoteChar, '\'')
-			.setProperty(SERIALIZER_useIndentation, false)
+			.setQuoteChar('\'')
+			.setUseIndentation(false)
 			.setProperty(RDF_rdfxml_allowBadUris, true)
 			.setProperty(RDF_rdfxml_showDoctypeDeclaration, false)
 			.setProperty(RDF_rdfxml_showXmlDeclaration, false);
@@ -55,13 +53,13 @@ public class CommonTest {
 		RdfParser p = RdfParser.DEFAULT_XML;
 		A t1 = A.create(), t2;
 
-		s.setProperty(SERIALIZER_trimNullProperties, false);
+		s.setTrimNullProperties(false);
 		String r = s.serialize(t1);
 		assertEquals("<rdf:Description><jp:s1 rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/><jp:s2>s2</jp:s2></rdf:Description>", strip(r));
 		t2 = p.parse(r, A.class);
 		assertEqualObjects(t1, t2);
 
-		s.setProperty(SERIALIZER_trimNullProperties, true);
+		s.setTrimNullProperties(true);
 		r = s.serialize(t1);
 		assertEquals("<rdf:Description><jp:s2>s2</jp:s2></rdf:Description>", strip(r));
 		t2 = p.parse(r, A.class);
@@ -88,13 +86,13 @@ public class CommonTest {
 		B t1 = B.create(), t2;
 		String r;
 
-		s.setProperty(SERIALIZER_trimEmptyMaps, false);
+		s.setTrimEmptyMaps(false);
 		r = s.serialize(t1);
 		assertEquals("<rdf:Description><jp:f1 rdf:parseType='Resource'></jp:f1><jp:f2 rdf:parseType='Resource'><jp:f2a rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/><jp:f2b rdf:parseType='Resource'><jp:s2>s2</jp:s2></jp:f2b></jp:f2></rdf:Description>", strip(r));
 		t2 = p.parse(r, B.class);
 		assertEqualObjects(t1, t2);
 
-		s.setProperty(SERIALIZER_trimEmptyMaps, true);
+		s.setTrimEmptyMaps(true);
 		r = s.serialize(t1);
 		assertEquals("<rdf:Description><jp:f2 rdf:parseType='Resource'><jp:f2a rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/><jp:f2b rdf:parseType='Resource'><jp:s2>s2</jp:s2></jp:f2b></jp:f2></rdf:Description>", strip(r));
 		t2 = p.parse(r, B.class);
@@ -122,13 +120,13 @@ public class CommonTest {
 		C t1 = C.create(), t2;
 		String r;
 
-		s.setProperty(SERIALIZER_trimEmptyCollections, false);
+		s.setTrimEmptyCollections(false);
 		r = s.serialize(t1);
 		assertEquals("<rdf:Description><jp:f1><rdf:Seq/></jp:f1><jp:f2><rdf:Seq><rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/><rdf:li rdf:parseType='Resource'><jp:s2>s2</jp:s2></rdf:li></rdf:Seq></jp:f2></rdf:Description>", strip(r));
 		t2 = p.parse(r, C.class);
 		assertEqualObjects(t1, t2);
 
-		s.setProperty(SERIALIZER_trimEmptyCollections, true);
+		s.setTrimEmptyCollections(true);
 		r = s.serialize(t1);
 		assertEquals("<rdf:Description><jp:f2><rdf:Seq><rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/><rdf:li rdf:parseType='Resource'><jp:s2>s2</jp:s2></rdf:li></rdf:Seq></jp:f2></rdf:Description>", strip(r));
 		t2 = p.parse(r, C.class);
@@ -157,13 +155,13 @@ public class CommonTest {
 		D t1 = D.create(), t2;
 		String r;
 
-		s.setProperty(SERIALIZER_trimEmptyCollections, false);
+		s.setTrimEmptyCollections(false);
 		r = s.serialize(t1);
 		assertEquals("<rdf:Description><jp:f1><rdf:Seq/></jp:f1><jp:f2><rdf:Seq><rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/><rdf:li rdf:parseType='Resource'><jp:s2>s2</jp:s2></rdf:li></rdf:Seq></jp:f2></rdf:Description>", strip(r));
 		t2 = p.parse(r, D.class);
 		assertEqualObjects(t1, t2);
 
-		s.setProperty(SERIALIZER_trimEmptyCollections, true);
+		s.setTrimEmptyCollections(true);
 		r = s.serialize(t1);
 		assertEquals("<rdf:Description><jp:f2><rdf:Seq><rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/><rdf:li rdf:parseType='Resource'><jp:s2>s2</jp:s2></rdf:li></rdf:Seq></jp:f2></rdf:Description>", strip(r));
 		t2 = p.parse(r, D.class);
@@ -288,7 +286,7 @@ public class CommonTest {
 		String r;
 		String expected = "";
 
-		s.setProperty(SERIALIZER_relativeUriBase, null);
+		s.setRelativeUriBase(null);
 		r = stripAndSort(s.serialize(t));
 		expected = ""
 			+"</rdf:Description>>"
@@ -310,11 +308,11 @@ public class CommonTest {
 		;
 		assertEquals(expected, r);
 
-		s.setProperty(SERIALIZER_relativeUriBase, "");  // Same as null.
+		s.setRelativeUriBase("");  // Same as null.
 		r = stripAndSort(s.serialize(t));
 		assertEquals(expected, r);
 
-		s.setProperty(SERIALIZER_relativeUriBase, "/cr");
+		s.setRelativeUriBase("/cr");
 		r = stripAndSort(s.serialize(t));
 		expected = ""
 			+"</rdf:Description>>"
@@ -336,11 +334,11 @@ public class CommonTest {
 		;
 		assertEquals(expected, r);
 
-		s.setProperty(SERIALIZER_relativeUriBase, "/cr/");  // Same as above
+		s.setRelativeUriBase("/cr/");  // Same as above
 		r = stripAndSort(s.serialize(t));
 		assertEquals(expected, r);
 
-		s.setProperty(SERIALIZER_relativeUriBase, "/");
+		s.setRelativeUriBase("/");
 		r = stripAndSort(s.serialize(t));
 		expected = ""
 			+"</rdf:Description>>"
@@ -362,9 +360,9 @@ public class CommonTest {
 		;
 		assertEquals(expected, r);
 
-		s.setProperty(SERIALIZER_relativeUriBase, null);
+		s.setRelativeUriBase(null);
 
-		s.setProperty(SERIALIZER_absolutePathUriBase, "http://foo");
+		s.setAbsolutePathUriBase("http://foo");
 		r = stripAndSort(s.serialize(t));
 		expected = ""
 			+"</rdf:Description>>"
@@ -386,11 +384,11 @@ public class CommonTest {
 		;
 		assertEquals(expected, r);
 
-		s.setProperty(SERIALIZER_absolutePathUriBase, "http://foo/");
+		s.setAbsolutePathUriBase("http://foo/");
 		r = stripAndSort(s.serialize(t));
 		assertEquals(expected, r);
 
-		s.setProperty(SERIALIZER_absolutePathUriBase, "");  // Same as null.
+		s.setAbsolutePathUriBase("");  // Same as null.
 		r = stripAndSort(s.serialize(t));
 		expected = ""
 			+"</rdf:Description>>"
@@ -428,15 +426,11 @@ public class CommonTest {
 	public void testLockedSerializer() throws Exception {
 		RdfSerializer s = getBasicSerializer().lock();
 		try {
-			s.setProperty(XmlSerializerContext.XML_enableNamespaces, true);
+			s.setAddBeanTypeProperties(true);
 			fail("Locked exception not thrown");
 		} catch (LockedException e) {}
 		try {
-			s.setProperty(SerializerContext.SERIALIZER_addBeanTypeProperties, true);
-			fail("Locked exception not thrown");
-		} catch (LockedException e) {}
-		try {
-			s.setProperty(BeanContext.BEAN_beanMapPutReturnsOldValue, true);
+			s.setBeanMapPutReturnsOldValue(true);
 			fail("Locked exception not thrown");
 		} catch (LockedException e) {}
 	}
@@ -446,7 +440,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testRecursion() throws Exception {
-		WriterSerializer s = new RdfSerializer.XmlAbbrev().setProperty(SERIALIZER_quoteChar, '\'');
+		WriterSerializer s = new RdfSerializer.XmlAbbrev().setQuoteChar('\'');
 
 		R1 r1 = new R1();
 		R2 r2 = new R2();
@@ -465,7 +459,7 @@ public class CommonTest {
 		}
 
 		// Recursion detection, no ignore
-		s.setProperty(SERIALIZER_detectRecursions, true);
+		s.setDetectRecursions(true);
 		try {
 			s.serialize(r1);
 			fail("Exception expected!");
@@ -477,7 +471,7 @@ public class CommonTest {
 			assertTrue(msg.contains("->[3]r1:org.apache.juneau.jena.CommonTest$R1"));
 		}
 
-		s.setProperty(SERIALIZER_ignoreRecursions, true);
+		s.setIgnoreRecursions(true);
 		String r = s.serialize(r1).replace("\r", "");
 		// Note...the order of the namespaces is not always the same depending on the JVM.
 		// The Jena libraries appear to use a hashmap for these.

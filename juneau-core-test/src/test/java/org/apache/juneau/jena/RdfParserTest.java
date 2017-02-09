@@ -14,7 +14,6 @@ package org.apache.juneau.jena;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.jena.RdfCommonContext.*;
-import static org.apache.juneau.jena.RdfSerializerContext.*;
 import static org.junit.Assert.*;
 
 import java.net.URI;
@@ -48,8 +47,8 @@ public class RdfParserTest {
 		// Create a new serializer with readable output.
 		RdfSerializer s = new RdfSerializer.XmlAbbrev()
 		   .setProperty(RDF_rdfxml_tab, 3)
-		   .setProperty(SERIALIZER_quoteChar, '\'')
-		   .setProperty(RDF_addRootProperty, true);
+		   .setQuoteChar('\'')
+		   .setAddRootProperty(true);
 
 		String expected =
 			 "<rdf:RDF a='http://ns/' a1='http://ns2/' j='http://www.apache.org/juneau/' jp='http://www.apache.org/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"

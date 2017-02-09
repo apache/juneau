@@ -24,7 +24,7 @@ public class Form extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-form-accept-charset">accept-charset</a> attribute.
 	 * Character encodings to use for form submission.
-	 * @param acceptcharset - The new value for this attribute.
+	 * @param acceptcharset The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Form acceptcharset(String acceptcharset) {
@@ -35,7 +35,7 @@ public class Form extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-action">action</a> attribute.
 	 * URL to use for form submission.
-	 * @param action - The new value for this attribute.
+	 * @param action The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Form action(String action) {
@@ -46,7 +46,7 @@ public class Form extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-form-autocomplete">autocomplete</a> attribute.
 	 * Default setting for autofill feature for controls in the form.
-	 * @param autocomplete - The new value for this attribute.
+	 * @param autocomplete The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Form autocomplete(String autocomplete) {
@@ -57,7 +57,7 @@ public class Form extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-enctype">enctype</a> attribute.
 	 * Form data set encoding type to use for form submission.
-	 * @param enctype - The new value for this attribute.
+	 * @param enctype The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Form enctype(String enctype) {
@@ -68,7 +68,7 @@ public class Form extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-method">method</a> attribute.
 	 * HTTP method to use for form submission.
-	 * @param method - The new value for this attribute.
+	 * @param method The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Form method(String method) {
@@ -79,7 +79,7 @@ public class Form extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-form-name">name</a> attribute.
 	 * Name of form to use in the document.forms API.
-	 * @param name - The new value for this attribute.
+	 * @param name The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Form name(String name) {
@@ -90,7 +90,7 @@ public class Form extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-novalidate">novalidate</a> attribute.
 	 * Bypass form control validation for form submission.
-	 * @param novalidate - The new value for this attribute.
+	 * @param novalidate The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -102,13 +102,14 @@ public class Form extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-target">target</a> attribute.
 	 * Browsing context for form submission.
-	 * @param target - The new value for this attribute.
+	 * @param target The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Form target(String target) {
 		attr("target", target);
 		return this;
 	}
+
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods

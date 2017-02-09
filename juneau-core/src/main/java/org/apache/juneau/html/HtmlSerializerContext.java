@@ -21,51 +21,7 @@ import org.apache.juneau.xml.*;
  * Context properties are set by calling {@link ContextFactory#setProperty(String, Object)} on the context factory
  * returned {@link CoreApi#getContextFactory()}.
  * <p>
- * The following convenience methods are also provided for setting context properties:
- * <ul>
- * 	<li>{@link HtmlSerializer#setProperty(String,Object)}
- * 	<li>{@link HtmlSerializer#setProperties(ObjectMap)}
- * 	<li>{@link HtmlSerializer#addNotBeanClasses(Class[])}
- * 	<li>{@link HtmlSerializer#addBeanFilters(Class[])}
- * 	<li>{@link HtmlSerializer#addPojoSwaps(Class[])}
- * 	<li>{@link HtmlSerializer#addToDictionary(Class[])}
- * 	<li>{@link HtmlSerializer#addImplClass(Class,Class)}
- * </ul>
- * <p>
  * See {@link ContextFactory} for more information about context properties.
- *
- * <h6 class='topic' id='ConfigProperties'>Configurable properties on the HTML serializer</h6>
- * <table class='styled' style='border-collapse: collapse;'>
- * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th><th>Session overridable</th></tr>
- * 	<tr>
- * 		<td>{@link #HTML_uriAnchorText}</td>
- * 		<td>Anchor text source.</td>
- * 		<td><code>String</code></td>
- * 		<td><js>"TO_STRING"</js></td>
- * 		<td><jk>true</jk></td>
- * 	</tr>
- * 	<tr>
- * 		<td>{@link #HTML_detectLinksInStrings}</td>
- * 		<td>Look for URLs in {@link String Strings}.</td>
- * 		<td><code>Boolean</code></td>
- * 		<td><jk>true</jk></td>
- * 		<td><jk>true</jk></td>
- * 	</tr>
- * 	<tr>
- * 		<td>{@link #HTML_lookForLabelParameters}</td>
- * 		<td>Look for link labels in the <js>"label"</js> parameter of the URL.</td>
- * 		<td><code>Boolean</code></td>
- * 		<td><jk>true</jk></td>
- * 		<td><jk>true</jk></td>
- * 	</tr>
- * 	<tr>
- * 		<td>{@link #HTML_labelParameter}</td>
- * 		<td>The parameter name to use when using {@link #HTML_lookForLabelParameters}.</td>
- * 		<td><code>String</code></td>
- * 		<td><js>"label"</js></td>
- * 		<td><jk>true</jk></td>
- * 	</tr>
- * </table>
  *
  * <h5 class='section'>Inherited configurable properties:</h5>
  * <ul class='javahierarchy'>

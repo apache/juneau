@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
-import static org.apache.juneau.serializer.SerializerContext.*;
 import static org.junit.Assert.*;
 
 import java.util.*;
@@ -83,7 +82,7 @@ public class PojoRestTest {
 		Address a3 = (Address)model.get("/person1/addresses/1");
 		assertEquals("city B", a3.city);
 
-		serializer = new JsonSerializer.Simple().setProperty(SERIALIZER_addBeanTypeProperties, true);
+		serializer = new JsonSerializer.Simple().setAddBeanTypeProperties(true);
 		p = new Person("some name", 123,
 			new Address("street A", "city A", "state A", 12345, true),
 			new Address("street B", "city B", "state B", 12345, false)
@@ -95,7 +94,7 @@ public class PojoRestTest {
 		assertEquals(expectedValue, s);
 
 		// Parse it back to Java objects.
-		p = (Person)JsonParser.DEFAULT.clone().setClassLoader(getClass().getClassLoader()).addToDictionary(Person.class).parse(s, Object.class);
+		p = (Person)JsonParser.DEFAULT.clone().addToBeanDictionary(Person.class).parse(s, Object.class);
 		expectedValue = "city B";
 		s = p.addresses[1].city;
 		assertEquals(expectedValue, s);

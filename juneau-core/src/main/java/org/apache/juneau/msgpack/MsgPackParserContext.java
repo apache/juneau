@@ -21,22 +21,7 @@ import org.apache.juneau.parser.*;
  * Context properties are set by calling {@link ContextFactory#setProperty(String, Object)} on the context factory
  * returned {@link CoreApi#getContextFactory()}.
  * <p>
- * The following convenience methods are also provided for setting context properties:
- * <ul>
- * 	<li>{@link MsgPackParser#setProperty(String,Object)}
- * 	<li>{@link MsgPackParser#setProperties(ObjectMap)}
- * 	<li>{@link MsgPackParser#addNotBeanClasses(Class[])}
- * 	<li>{@link MsgPackParser#addBeanFilters(Class[])}
- * 	<li>{@link MsgPackParser#addPojoSwaps(Class[])}
- * 	<li>{@link MsgPackParser#addToDictionary(Class[])}
- * 	<li>{@link MsgPackParser#addImplClass(Class,Class)}
- * </ul>
- * <p>
  * See {@link ContextFactory} for more information about context properties.
- *
- * <h6 class='topic' id='ConfigProperties'>Configurable properties on the MessagePack parser</h6>
- * <p>
- * 	None.
  *
  * <h5 class='section'>Inherited configurable properties:</h5>
  * <ul class='javahierarchy'>

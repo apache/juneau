@@ -24,13 +24,14 @@ public class Map extends HtmlElementContainer {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-map-name">name</a> attribute.
 	 * Name of image map to reference from the usemap attribute.
-	 * @param name - The new value for this attribute.
+	 * @param name The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Map name(String name) {
 		attr("name", name);
 		return this;
 	}
+
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods

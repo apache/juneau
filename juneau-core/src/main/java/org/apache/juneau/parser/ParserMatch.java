@@ -25,8 +25,8 @@ public final class ParserMatch {
 	/**
 	 * Constructor.
 	 *
-	 * @param mediaType - The media type of the match.
-	 * @param parser - The parser that matched.
+	 * @param mediaType The media type of the match.
+	 * @param parser The parser that matched.
 	 */
 	public ParserMatch(MediaType mediaType, Parser parser) {
 		this.mediaType = mediaType;

@@ -24,7 +24,7 @@ public class Option extends HtmlElementText {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-option-disabled">disabled</a> attribute.
 	 * Whether the form control is disabled.
-	 * @param disabled - The new value for this attribute.
+	 * @param disabled The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -36,7 +36,7 @@ public class Option extends HtmlElementText {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-option-label">label</a> attribute.
 	 * User-visible label.
-	 * @param label - The new value for this attribute.
+	 * @param label The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Option label(String label) {
@@ -47,7 +47,7 @@ public class Option extends HtmlElementText {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-option-selected">selected</a> attribute.
 	 * Whether the option is selected by default.
-	 * @param selected - The new value for this attribute.
+	 * @param selected The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -59,7 +59,7 @@ public class Option extends HtmlElementText {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-option-value">value</a> attribute.
 	 * Value to be used for form submission.
-	 * @param value - The new value for this attribute.
+	 * @param value The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -67,6 +67,7 @@ public class Option extends HtmlElementText {
 		attr("value", value);
 		return this;
 	}
+
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods

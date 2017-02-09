@@ -21,22 +21,7 @@ import org.apache.juneau.xml.*;
  * Context properties are set by calling {@link ContextFactory#setProperty(String, Object)} on the context factory
  * returned {@link CoreApi#getContextFactory()}.
  * <p>
- * The following convenience methods are also provided for setting context properties:
- * <ul>
- * 	<li>{@link HtmlParser#setProperty(String,Object)}
- * 	<li>{@link HtmlParser#setProperties(ObjectMap)}
- * 	<li>{@link HtmlParser#addNotBeanClasses(Class[])}
- * 	<li>{@link HtmlParser#addBeanFilters(Class[])}
- * 	<li>{@link HtmlParser#addPojoSwaps(Class[])}
- * 	<li>{@link HtmlParser#addToDictionary(Class[])}
- * 	<li>{@link HtmlParser#addImplClass(Class,Class)}
- * </ul>
- * <p>
  * See {@link ContextFactory} for more information about context properties.
- *
- * <h6 class='topic' id='ConfigProperties'>Configurable properties on the HTML parser</h6>
- * <p>
- * 	None.
  *
  * <h5 class='section'>Inherited configurable properties:</h5>
  * <ul class='javahierarchy'>

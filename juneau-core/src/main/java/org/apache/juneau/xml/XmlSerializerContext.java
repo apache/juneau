@@ -21,65 +21,7 @@ import org.apache.juneau.serializer.*;
  * Context properties are set by calling {@link ContextFactory#setProperty(String, Object)} on the context factory
  * returned {@link CoreApi#getContextFactory()}.
  * <p>
- * The following convenience methods are also provided for setting context properties:
- * <ul>
- * 	<li>{@link XmlSerializer#setProperty(String,Object)}
- * 	<li>{@link XmlSerializer#setProperties(ObjectMap)}
- * 	<li>{@link XmlSerializer#addNotBeanClasses(Class[])}
- * 	<li>{@link XmlSerializer#addBeanFilters(Class[])}
- * 	<li>{@link XmlSerializer#addPojoSwaps(Class[])}
- * 	<li>{@link XmlSerializer#addToDictionary(Class[])}
- * 	<li>{@link XmlSerializer#addImplClass(Class,Class)}
- * </ul>
- * <p>
  * See {@link ContextFactory} for more information about context properties.
- *
- * <h6 class='topic' id='ConfigProperties'>Configurable properties on the XML serializer</h6>
- * <table class='styled' style='border-collapse: collapse;'>
- * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th><th>Session overridable</th></tr>
- * 	<tr>
- * 		<td>{@link #XML_enableNamespaces}</td>
- * 		<td>Enable support for XML namespaces.</td>
- * 		<td><code>Boolean</code></td>
- * 		<td><jk>false</jk></td>
- * 		<td><jk>true</jk></td>
- * 	</tr>
- * 	<tr>
- * 		<td>{@link #XML_autoDetectNamespaces}</td>
- * 		<td>Auto-detect namespace usage.</td>
- * 		<td><code>Boolean</code></td>
- * 		<td><jk>true</jk></td>
- * 		<td><jk>true</jk></td>
- * 	</tr>
- * 	<tr>
- * 		<td>{@link #XML_addNamespaceUrisToRoot}</td>
- * 		<td>Add namespace URLs to the root element.</td>
- * 		<td><code>Boolean</code></td>
- * 		<td><jk>false</jk></td>
- * 		<td><jk>true</jk></td>
- * 	</tr>
- * 	<tr>
- * 		<td>{@link #XML_defaultNamespace}</td>
- * 		<td>Default namespace URI.</td>
- * 		<td><code>String</code></td>
- * 		<td><jk>null</jk></td>
- * 		<td><jk>true</jk></td>
- * 	</tr>
- * 	<tr>
- * 		<td>{@link #XML_xsNamespace}</td>
- * 		<td>XMLSchema namespace.</td>
- * 		<td>{@link Namespace}</td>
- * 		<td><code>{name:<js>'xs'</js>,uri:<js>'http://www.w3.org/2001/XMLSchema'</js>}</code></td>
- * 		<td><jk>true</jk></td>
- * 	</tr>
- * 	<tr>
- * 		<td>{@link #XML_namespaces}</td>
- * 		<td>Default namespaces.</td>
- * 		<td><code>Set&lt;{@link Namespace}&gt;</code></td>
- * 		<td>empty set</td>
- * 		<td><jk>true</jk></td>
- * 	</tr>
- * </table>
  *
  * <h5 class='section'>Inherited configurable properties:</h5>
  * <ul class='javahierarchy'>

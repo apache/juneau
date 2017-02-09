@@ -24,7 +24,7 @@ public class Button extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-autofocus">autofocus</a> attribute.
 	 * Automatically focus the form control when the page is loaded.
-	 * @param autofocus - The new value for this attribute.
+	 * @param autofocus The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -36,7 +36,7 @@ public class Button extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-disabled">disabled</a> attribute.
 	 * Whether the form control is disabled.
-	 * @param disabled - The new value for this attribute.
+	 * @param disabled The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -48,7 +48,7 @@ public class Button extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fae-form">form</a> attribute.
 	 * Associates the control with a form element.
-	 * @param form - The new value for this attribute.
+	 * @param form The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Button form(String form) {
@@ -59,7 +59,7 @@ public class Button extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-formaction">formaction</a> attribute.
 	 * URL to use for form submission.
-	 * @param formaction - The new value for this attribute.
+	 * @param formaction The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Button formaction(String formaction) {
@@ -70,7 +70,7 @@ public class Button extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-formenctype">formenctype</a> attribute.
 	 * Form data set encoding type to use for form submission.
-	 * @param formenctype - The new value for this attribute.
+	 * @param formenctype The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Button formenctype(String formenctype) {
@@ -81,7 +81,7 @@ public class Button extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-formmethod">formmethod</a> attribute.
 	 * HTTP method to use for form submission.
-	 * @param formmethod - The new value for this attribute.
+	 * @param formmethod The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Button formmethod(String formmethod) {
@@ -92,7 +92,7 @@ public class Button extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-formnovalidate">formnovalidate</a> attribute.
 	 * Bypass form control validation for form submission.
-	 * @param formnovalidate - The new value for this attribute.
+	 * @param formnovalidate The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Button formnovalidate(String formnovalidate) {
@@ -103,7 +103,7 @@ public class Button extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-formtarget">formtarget</a> attribute.
 	 * Browsing context for form submission.
-	 * @param formtarget - The new value for this attribute.
+	 * @param formtarget The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Button formtarget(String formtarget) {
@@ -114,7 +114,7 @@ public class Button extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-menu">menu</a> attribute.
 	 * Specifies the element's designated pop-up menu.
-	 * @param menu - The new value for this attribute.
+	 * @param menu The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Button menu(String menu) {
@@ -125,7 +125,7 @@ public class Button extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-name">name</a> attribute.
 	 * Name of form control to use for form submission and in the form.elements API.
-	 * @param name - The new value for this attribute.
+	 * @param name The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Button name(String name) {
@@ -136,7 +136,7 @@ public class Button extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-button-type">type</a> attribute.
 	 * Type of button.
-	 * @param type - The new value for this attribute.
+	 * @param type The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Button type(String type) {
@@ -147,7 +147,7 @@ public class Button extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-button-value">value</a> attribute.
 	 * Value to be used for form submission.
-	 * @param value - The new value for this attribute.
+	 * @param value The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -155,6 +155,7 @@ public class Button extends HtmlElementMixed {
 		attr("value", value);
 		return this;
 	}
+
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods

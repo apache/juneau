@@ -34,7 +34,7 @@ public final class UrlEncodingContext implements Cloneable {
 	 * 	}
 	 *
 	 * 	UrlEncodingSerializer s1 = <jk>new</jk> UrlEncodingParser();
-	 * 	UrlEncodingSerializer s2 = <jk>new</jk> UrlEncodingParser().setProperty(UrlEncodingContext.<jsf>URLENC_expandedParams</jsf>, <jk>true</jk>);
+	 * 	UrlEncodingSerializer s2 = <jk>new</jk> UrlEncodingParser().setExpandedParams(<jk>true</jk>);
 	 *
 	 * 	String s1 = p1.serialize(<jk>new</jk> A()); <jc>// Produces "f1=(a,b)&amp;f2=(c,d)"</jc>
 	 * 	String s2 = p2.serialize(<jk>new</jk> A()); <jc>// Produces "f1=a&amp;f1=b&amp;f2=c&amp;f2=d"</jc>

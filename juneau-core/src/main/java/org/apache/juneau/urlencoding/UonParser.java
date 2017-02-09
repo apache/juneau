@@ -18,7 +18,6 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.MediaType;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
@@ -55,7 +54,7 @@ public class UonParser extends ReaderParser {
 	public static final UonParser DEFAULT_DECODING = new Decoding().lock();
 
 	/** Reusable instance of {@link UonParser}, all default settings, whitespace-aware. */
-	public static final UonParser DEFAULT_WS_AWARE = new UonParser().setProperty(UON_whitespaceAware, true).lock();
+	public static final UonParser DEFAULT_WS_AWARE = new UonParser().setWhitespaceAware(true).lock();
 
 	// Characters that need to be preceeded with an escape character.
 	private static final AsciiSet escapedChars = new AsciiSet(",()~=$\u0001\u0002");
@@ -68,7 +67,7 @@ public class UonParser extends ReaderParser {
 	public static class Decoding extends UonParser {
 		/** Constructor */
 		public Decoding() {
-			setProperty(UON_decodeChars, true);
+			setDecodeChars(true);
 		}
 	}
 
@@ -719,8 +718,9 @@ public class UonParser extends ReaderParser {
 		return new UonParserSession(getContext(UonParserContext.class), input);
 	}
 
+
 	//--------------------------------------------------------------------------------
-	// Overridden methods
+	// Entry point methods
 	//--------------------------------------------------------------------------------
 
 	@Override /* Parser */
@@ -766,9 +766,421 @@ public class UonParser extends ReaderParser {
 		return a;
 	}
 
+
+	//--------------------------------------------------------------------------------
+	// Properties
+	//--------------------------------------------------------------------------------
+
+	/**
+	 * <b>Configuration property:</b> Decode <js>"%xx"</js> sequences.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"UonParser.decodeChars"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk> for {@link UonParser}, <jk>true</jk> for {@link UrlEncodingParser}
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * Specify <jk>true</jk> if URI encoded characters should be decoded, <jk>false</jk>
+	 * 	if they've already been decoded before being passed to this parser.
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>UON_decodeChars</jsf>, value)</code>.
+	 * </ul>
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see UonParserContext#UON_decodeChars
+	 */
+	public UonParser setDecodeChars(boolean value) throws LockedException {
+		return setProperty(UON_decodeChars, value);
+	}
+
+	/**
+	 * <b>Configuration property:</b> Whitespace aware.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"UonParser.whitespaceAware"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * Expect input to contain readable whitespace characters from using the {@link UonSerializerContext#UON_useWhitespace} setting.
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>UON_whitespaceAware</jsf>, value)</code>.
+	 * </ul>
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see UonParserContext#UON_whitespaceAware
+	 */
+	public UonParser setWhitespaceAware(boolean value) throws LockedException {
+		return setProperty(UON_whitespaceAware, value);
+	}
+
 	@Override /* Parser */
-	public UonParser setProperty(String property, Object value) throws LockedException {
-		super.setProperty(property, value);
+	public UonParser setTrimStrings(boolean value) throws LockedException {
+		super.setTrimStrings(value);
+		return this;
+	}
+
+	@Override /* Parser */
+	public UonParser setStrict(boolean value) throws LockedException {
+		super.setStrict(value);
+		return this;
+	}
+
+	@Override /* Parser */
+	public UonParser setInputStreamCharset(String value) throws LockedException {
+		super.setInputStreamCharset(value);
+		return this;
+	}
+
+	@Override /* Parser */
+	public UonParser setFileCharset(String value) throws LockedException {
+		super.setFileCharset(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser setBeansRequireDefaultConstructor(boolean value) throws LockedException {
+		super.setBeansRequireDefaultConstructor(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser setBeansRequireSerializable(boolean value) throws LockedException {
+		super.setBeansRequireSerializable(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser setBeansRequireSettersForGetters(boolean value) throws LockedException {
+		super.setBeansRequireSettersForGetters(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser setBeansRequireSomeProperties(boolean value) throws LockedException {
+		super.setBeansRequireSomeProperties(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser setBeanMapPutReturnsOldValue(boolean value) throws LockedException {
+		super.setBeanMapPutReturnsOldValue(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser setBeanConstructorVisibility(Visibility value) throws LockedException {
+		super.setBeanConstructorVisibility(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser setBeanClassVisibility(Visibility value) throws LockedException {
+		super.setBeanClassVisibility(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser setBeanFieldVisibility(Visibility value) throws LockedException {
+		super.setBeanFieldVisibility(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser setMethodVisibility(Visibility value) throws LockedException {
+		super.setMethodVisibility(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser setUseJavaBeanIntrospector(boolean value) throws LockedException {
+		super.setUseJavaBeanIntrospector(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser setUseInterfaceProxies(boolean value) throws LockedException {
+		super.setUseInterfaceProxies(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser setIgnoreUnknownBeanProperties(boolean value) throws LockedException {
+		super.setIgnoreUnknownBeanProperties(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser setIgnoreUnknownNullBeanProperties(boolean value) throws LockedException {
+		super.setIgnoreUnknownNullBeanProperties(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser setIgnorePropertiesWithoutSetters(boolean value) throws LockedException {
+		super.setIgnorePropertiesWithoutSetters(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser setIgnoreInvocationExceptionsOnGetters(boolean value) throws LockedException {
+		super.setIgnoreInvocationExceptionsOnGetters(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser setIgnoreInvocationExceptionsOnSetters(boolean value) throws LockedException {
+		super.setIgnoreInvocationExceptionsOnSetters(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser setSortProperties(boolean value) throws LockedException {
+		super.setSortProperties(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser setNotBeanPackages(String...values) throws LockedException {
+		super.setNotBeanPackages(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser setNotBeanPackages(Collection<String> values) throws LockedException {
+		super.setNotBeanPackages(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser addNotBeanPackages(String...values) throws LockedException {
+		super.addNotBeanPackages(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser addNotBeanPackages(Collection<String> values) throws LockedException {
+		super.addNotBeanPackages(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser removeNotBeanPackages(String...values) throws LockedException {
+		super.removeNotBeanPackages(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser removeNotBeanPackages(Collection<String> values) throws LockedException {
+		super.removeNotBeanPackages(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser setNotBeanClasses(Class<?>...values) throws LockedException {
+		super.setNotBeanClasses(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser setNotBeanClasses(Collection<Class<?>> values) throws LockedException {
+		super.setNotBeanClasses(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser addNotBeanClasses(Class<?>...values) throws LockedException {
+		super.addNotBeanClasses(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser addNotBeanClasses(Collection<Class<?>> values) throws LockedException {
+		super.addNotBeanClasses(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser removeNotBeanClasses(Class<?>...values) throws LockedException {
+		super.removeNotBeanClasses(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser removeNotBeanClasses(Collection<Class<?>> values) throws LockedException {
+		super.removeNotBeanClasses(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser setBeanFilters(Class<?>...values) throws LockedException {
+		super.setBeanFilters(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser setBeanFilters(Collection<Class<?>> values) throws LockedException {
+		super.setBeanFilters(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser addBeanFilters(Class<?>...values) throws LockedException {
+		super.addBeanFilters(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser addBeanFilters(Collection<Class<?>> values) throws LockedException {
+		super.addBeanFilters(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser removeBeanFilters(Class<?>...values) throws LockedException {
+		super.removeBeanFilters(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser removeBeanFilters(Collection<Class<?>> values) throws LockedException {
+		super.removeBeanFilters(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser setPojoSwaps(Class<?>...values) throws LockedException {
+		super.setPojoSwaps(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser setPojoSwaps(Collection<Class<?>> values) throws LockedException {
+		super.setPojoSwaps(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser addPojoSwaps(Class<?>...values) throws LockedException {
+		super.addPojoSwaps(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser addPojoSwaps(Collection<Class<?>> values) throws LockedException {
+		super.addPojoSwaps(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser removePojoSwaps(Class<?>...values) throws LockedException {
+		super.removePojoSwaps(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser removePojoSwaps(Collection<Class<?>> values) throws LockedException {
+		super.removePojoSwaps(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser setImplClasses(Map<Class<?>,Class<?>> values) throws LockedException {
+		super.setImplClasses(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public <T> CoreApi addImplClass(Class<T> interfaceClass, Class<? extends T> implClass) throws LockedException {
+		super.addImplClass(interfaceClass, implClass);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser setBeanDictionary(Class<?>...values) throws LockedException {
+		super.setBeanDictionary(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser setBeanDictionary(Collection<Class<?>> values) throws LockedException {
+		super.setBeanDictionary(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser addToBeanDictionary(Class<?>...values) throws LockedException {
+		super.addToBeanDictionary(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser addToBeanDictionary(Collection<Class<?>> values) throws LockedException {
+		super.addToBeanDictionary(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser removeFromBeanDictionary(Class<?>...values) throws LockedException {
+		super.removeFromBeanDictionary(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser removeFromBeanDictionary(Collection<Class<?>> values) throws LockedException {
+		super.removeFromBeanDictionary(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser setBeanTypePropertyName(String value) throws LockedException {
+		super.setBeanTypePropertyName(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser setDefaultParser(Class<?> value) throws LockedException {
+		super.setDefaultParser(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser setLocale(Locale value) throws LockedException {
+		super.setLocale(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser setTimeZone(TimeZone value) throws LockedException {
+		super.setTimeZone(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser setMediaType(MediaType value) throws LockedException {
+		super.setMediaType(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser setDebug(boolean value) throws LockedException {
+		super.setDebug(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public UonParser setProperty(String name, Object value) throws LockedException {
+		super.setProperty(name, value);
 		return this;
 	}
 
@@ -779,34 +1191,33 @@ public class UonParser extends ReaderParser {
 	}
 
 	@Override /* CoreApi */
-	public UonParser addNotBeanClasses(Class<?>...classes) throws LockedException {
-		super.addNotBeanClasses(classes);
+	public UonParser addToProperty(String name, Object value) throws LockedException {
+		super.addToProperty(name, value);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public UonParser addBeanFilters(Class<?>...classes) throws LockedException {
-		super.addBeanFilters(classes);
+	public UonParser putToProperty(String name, Object key, Object value) throws LockedException {
+		super.putToProperty(name, key, value);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public UonParser addPojoSwaps(Class<?>...classes) throws LockedException {
-		super.addPojoSwaps(classes);
+	public UonParser putToProperty(String name, Object value) throws LockedException {
+		super.putToProperty(name, value);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public UonParser addToDictionary(Class<?>...classes) throws LockedException {
-		super.addToDictionary(classes);
+	public UonParser removeFromProperty(String name, Object value) throws LockedException {
+		super.removeFromProperty(name, value);
 		return this;
 	}
 
-	@Override /* CoreApi */
-	public <T> UonParser addImplClass(Class<T> interfaceClass, Class<? extends T> implClass) throws LockedException {
-		super.addImplClass(interfaceClass, implClass);
-		return this;
-	}
+
+	//--------------------------------------------------------------------------------
+	// Overridden methods
+	//--------------------------------------------------------------------------------
 
 	@Override /* CoreApi */
 	public UonParser setClassLoader(ClassLoader classLoader) throws LockedException {

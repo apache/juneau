@@ -24,7 +24,7 @@ public class Textarea extends HtmlElementText {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-autocomplete">autocomplete</a> attribute.
 	 * Hint for form autofill feature.
-	 * @param autocomplete - The new value for this attribute.
+	 * @param autocomplete The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Textarea autocomplete(String autocomplete) {
@@ -35,7 +35,7 @@ public class Textarea extends HtmlElementText {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-autofocus">autofocus</a> attribute.
 	 * Automatically focus the form control when the page is loaded.
-	 * @param autofocus - The new value for this attribute.
+	 * @param autofocus The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -47,7 +47,7 @@ public class Textarea extends HtmlElementText {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-textarea-cols">cols</a> attribute.
 	 * Maximum number of characters per line.
-	 * @param cols - The new value for this attribute.
+	 * @param cols The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -59,7 +59,7 @@ public class Textarea extends HtmlElementText {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-dirname">dirname</a> attribute.
 	 * Name of form field to use for sending the element's directionality in form submission.
-	 * @param dirname - The new value for this attribute.
+	 * @param dirname The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Textarea dirname(String dirname) {
@@ -70,7 +70,7 @@ public class Textarea extends HtmlElementText {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-disabled">disabled</a> attribute.
 	 * Whether the form control is disabled.
-	 * @param disabled - The new value for this attribute.
+	 * @param disabled The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -82,7 +82,7 @@ public class Textarea extends HtmlElementText {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fae-form">form</a> attribute.
 	 * Associates the control with a form element.
-	 * @param form - The new value for this attribute.
+	 * @param form The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Textarea form(String form) {
@@ -93,7 +93,7 @@ public class Textarea extends HtmlElementText {
 	/**
 	 * <a class="doclink" href="-">inputmode</a> attribute.
 	 * Hint for selecting an input modality.
-	 * @param inputmode - The new value for this attribute.
+	 * @param inputmode The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Textarea inputmode(String inputmode) {
@@ -104,7 +104,7 @@ public class Textarea extends HtmlElementText {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-textarea-maxlength">maxlength</a> attribute.
 	 * Maximum length of value.
-	 * @param maxlength - The new value for this attribute.
+	 * @param maxlength The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -116,7 +116,7 @@ public class Textarea extends HtmlElementText {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-textarea-minlength">minlength</a> attribute.
 	 * Minimum length of value.
-	 * @param minlength - The new value for this attribute.
+	 * @param minlength The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -128,7 +128,7 @@ public class Textarea extends HtmlElementText {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-name">name</a> attribute.
 	 * Name of form control to use for form submission and in the form.elements API.
-	 * @param name - The new value for this attribute.
+	 * @param name The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Textarea name(String name) {
@@ -139,7 +139,7 @@ public class Textarea extends HtmlElementText {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-textarea-placeholder">placeholder</a> attribute.
 	 * User-visible label to be placed within the form control.
-	 * @param placeholder - The new value for this attribute.
+	 * @param placeholder The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Textarea placeholder(String placeholder) {
@@ -150,7 +150,7 @@ public class Textarea extends HtmlElementText {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-textarea-readonly">readonly</a> attribute.
 	 * Whether to allow the value to be edited by the user.
-	 * @param readonly - The new value for this attribute.
+	 * @param readonly The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -162,7 +162,7 @@ public class Textarea extends HtmlElementText {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-textarea-required">required</a> attribute.
 	 * Whether the control is required for form submission.
-	 * @param required - The new value for this attribute.
+	 * @param required The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -174,7 +174,7 @@ public class Textarea extends HtmlElementText {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-textarea-rows">rows</a> attribute.
 	 * Number of lines to show.
-	 * @param rows - The new value for this attribute.
+	 * @param rows The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -186,13 +186,14 @@ public class Textarea extends HtmlElementText {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-textarea-wrap">wrap</a> attribute.
 	 * How the value of the form control is to be wrapped for form submission.
-	 * @param wrap - The new value for this attribute.
+	 * @param wrap The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Textarea wrap(String wrap) {
 		attr("wrap", wrap);
 		return this;
 	}
+
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods

@@ -24,7 +24,7 @@ public class Keygen extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-autofocus">autofocus</a> attribute.
 	 * Automatically focus the form control when the page is loaded.
-	 * @param autofocus - The new value for this attribute.
+	 * @param autofocus The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -36,7 +36,7 @@ public class Keygen extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-keygen-challenge">challenge</a> attribute.
 	 * String to package with the generated and signed public key.
-	 * @param challenge - The new value for this attribute.
+	 * @param challenge The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Keygen challenge(String challenge) {
@@ -47,7 +47,7 @@ public class Keygen extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-disabled">disabled</a> attribute.
 	 * Whether the form control is disabled.
-	 * @param disabled - The new value for this attribute.
+	 * @param disabled The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -59,7 +59,7 @@ public class Keygen extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fae-form">form</a> attribute.
 	 * Associates the control with a form element.
-	 * @param form - The new value for this attribute.
+	 * @param form The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Keygen form(String form) {
@@ -70,7 +70,7 @@ public class Keygen extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-keygen-keytype">keytype</a> attribute.
 	 * The type of cryptographic key to generate.
-	 * @param keytype - The new value for this attribute.
+	 * @param keytype The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Keygen keytype(String keytype) {
@@ -81,13 +81,14 @@ public class Keygen extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-name">name</a> attribute.
 	 * Name of form control to use for form submission and in the form.elements API.
-	 * @param name - The new value for this attribute.
+	 * @param name The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Keygen name(String name) {
 		attr("name", name);
 		return this;
 	}
+
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods

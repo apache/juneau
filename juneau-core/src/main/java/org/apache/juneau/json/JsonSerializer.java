@@ -76,12 +76,12 @@ import org.apache.juneau.transform.*;
  *
  * 	<jc>// Create a custom serializer for lax syntax using single quote characters</jc>
  * 	JsonSerializer serializer = <jk>new</jk> JsonSerializer()
- * 		.setProperty(JsonSerializerContext.<jsf>JSON_simpleMode</jsf>, <jk>true</jk>)
- * 		.setProperty(SerializerContext.<jsf>SERIALIZER_quoteChar</jsf>, <js>'\''</js>);
+ * 		.setSimpleMode(<jk>true</jk>)
+ * 		.setQuoteChar(<js>'\''</js>);
  *
  * 	<jc>// Clone an existing serializer and modify it to use single-quotes</jc>
  * 	JsonSerializer serializer = JsonSerializer.<jsf>DEFAULT</jsf>.clone()
- * 		.setProperty(SerializerContext.<jsf>SERIALIZER_quoteChar</jsf>, <js>'\''</js>);
+ * 		.setQuoteChar(<js>'\''</js>);
  *
  * 	<jc>// Serialize a POJO to JSON</jc>
  * 	String json = serializer.serialize(someObject);
@@ -112,8 +112,8 @@ public class JsonSerializer extends WriterSerializer {
 	public static class Readable extends JsonSerializer {
 		/** Constructor */
 		public Readable() {
-			setProperty(JSON_useWhitespace, true);
-			setProperty(SERIALIZER_useIndentation, true);
+			setUseWhitespace(true);
+			setUseIndentation(true);
 		}
 	}
 
@@ -122,8 +122,8 @@ public class JsonSerializer extends WriterSerializer {
 	public static class Simple extends JsonSerializer {
 		/** Constructor */
 		public Simple() {
-			setProperty(JSON_simpleMode, true);
-			setProperty(SERIALIZER_quoteChar, '\'');
+			setSimpleMode(true);
+			setQuoteChar('\'');
 		}
 	}
 
@@ -131,8 +131,8 @@ public class JsonSerializer extends WriterSerializer {
 	public static class SimpleReadable extends Simple {
 		/** Constructor */
 		public SimpleReadable() {
-			setProperty(JSON_useWhitespace, true);
-			setProperty(SERIALIZER_useIndentation, true);
+			setUseWhitespace(true);
+			setUseIndentation(true);
 		}
 	}
 
@@ -143,7 +143,7 @@ public class JsonSerializer extends WriterSerializer {
 	public static class SimpleReadableSafe extends SimpleReadable {
 		/** Constructor */
 		public SimpleReadableSafe() {
-			setProperty(SERIALIZER_detectRecursions, true);
+			setDetectRecursions(true);
 		}
 	}
 
@@ -324,8 +324,9 @@ public class JsonSerializer extends WriterSerializer {
 		return s;
 	}
 
+
 	//--------------------------------------------------------------------------------
-	// Overridden methods
+	// Entry point methods
 	//--------------------------------------------------------------------------------
 
 	@Override /* Serializer */
@@ -339,9 +340,515 @@ public class JsonSerializer extends WriterSerializer {
 		serializeAnything(s, s.getWriter(), o, null, "root", null);
 	}
 
+
+	//--------------------------------------------------------------------------------
+	// Properties
+	//--------------------------------------------------------------------------------
+
+	/**
+	 * <b>Configuration property:</b>  Simple JSON mode.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"JsonSerializer.simpleMode"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * If <jk>true</jk>, JSON attribute names will only be quoted when necessary.
+	 * Otherwise, they are always quoted.
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>JSON_simpleMode</jsf>, value)</code>.
+	 * </ul>
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see JsonSerializerContext#JSON_simpleMode
+	 */
+	public JsonSerializer setSimpleMode(boolean value) throws LockedException {
+		return setProperty(JSON_simpleMode, value);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Use whitespace.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"JsonSerializer.useWhitespace"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * If <jk>true</jk>, whitespace is added to the output to improve readability.
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>JSON_useWhitespace</jsf>, value)</code>.
+	 * </ul>
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see JsonSerializerContext#JSON_useWhitespace
+	 */
+	public JsonSerializer setUseWhitespace(boolean value) throws LockedException {
+		return setProperty(JSON_useWhitespace, value);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Prefix solidus <js>'/'</js> characters with escapes.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"JsonSerializer.escapeSolidus"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * If <jk>true</jk>, solidus (e.g. slash) characters should be escaped.
+	 * The JSON specification allows for either format.
+	 * However, if you're embedding JSON in an HTML script tag, this setting prevents
+	 * 	confusion when trying to serialize <xt>&lt;\/script&gt;</xt>.
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>JSON_escapeSolidus</jsf>, value)</code>.
+	 * </ul>
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see JsonSerializerContext#JSON_escapeSolidus
+	 */
+	public JsonSerializer setEscapeSolidus(boolean value) throws LockedException {
+		return setProperty(JSON_escapeSolidus, value);
+	}
+
+	@Override /* Serializer */
+	public JsonSerializer setMaxDepth(int value) throws LockedException {
+		super.setMaxDepth(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public JsonSerializer setInitialDepth(int value) throws LockedException {
+		super.setInitialDepth(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public JsonSerializer setDetectRecursions(boolean value) throws LockedException {
+		super.setDetectRecursions(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public JsonSerializer setIgnoreRecursions(boolean value) throws LockedException {
+		super.setIgnoreRecursions(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public JsonSerializer setUseIndentation(boolean value) throws LockedException {
+		super.setUseIndentation(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public JsonSerializer setAddBeanTypeProperties(boolean value) throws LockedException {
+		super.setAddBeanTypeProperties(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public JsonSerializer setQuoteChar(char value) throws LockedException {
+		super.setQuoteChar(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public JsonSerializer setTrimNullProperties(boolean value) throws LockedException {
+		super.setTrimNullProperties(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public JsonSerializer setTrimEmptyCollections(boolean value) throws LockedException {
+		super.setTrimEmptyCollections(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public JsonSerializer setTrimEmptyMaps(boolean value) throws LockedException {
+		super.setTrimEmptyMaps(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public JsonSerializer setTrimStrings(boolean value) throws LockedException {
+		super.setTrimStrings(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public JsonSerializer setRelativeUriBase(String value) throws LockedException {
+		super.setRelativeUriBase(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public JsonSerializer setAbsolutePathUriBase(String value) throws LockedException {
+		super.setAbsolutePathUriBase(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public JsonSerializer setSortCollections(boolean value) throws LockedException {
+		super.setSortCollections(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public JsonSerializer setSortMaps(boolean value) throws LockedException {
+		super.setSortMaps(value);
+		return this;
+	}
 	@Override /* CoreApi */
-	public JsonSerializer setProperty(String property, Object value) throws LockedException {
-		super.setProperty(property, value);
+	public JsonSerializer setBeansRequireDefaultConstructor(boolean value) throws LockedException {
+		super.setBeansRequireDefaultConstructor(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer setBeansRequireSerializable(boolean value) throws LockedException {
+		super.setBeansRequireSerializable(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer setBeansRequireSettersForGetters(boolean value) throws LockedException {
+		super.setBeansRequireSettersForGetters(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer setBeansRequireSomeProperties(boolean value) throws LockedException {
+		super.setBeansRequireSomeProperties(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer setBeanMapPutReturnsOldValue(boolean value) throws LockedException {
+		super.setBeanMapPutReturnsOldValue(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer setBeanConstructorVisibility(Visibility value) throws LockedException {
+		super.setBeanConstructorVisibility(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer setBeanClassVisibility(Visibility value) throws LockedException {
+		super.setBeanClassVisibility(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer setBeanFieldVisibility(Visibility value) throws LockedException {
+		super.setBeanFieldVisibility(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer setMethodVisibility(Visibility value) throws LockedException {
+		super.setMethodVisibility(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer setUseJavaBeanIntrospector(boolean value) throws LockedException {
+		super.setUseJavaBeanIntrospector(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer setUseInterfaceProxies(boolean value) throws LockedException {
+		super.setUseInterfaceProxies(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer setIgnoreUnknownBeanProperties(boolean value) throws LockedException {
+		super.setIgnoreUnknownBeanProperties(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer setIgnoreUnknownNullBeanProperties(boolean value) throws LockedException {
+		super.setIgnoreUnknownNullBeanProperties(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer setIgnorePropertiesWithoutSetters(boolean value) throws LockedException {
+		super.setIgnorePropertiesWithoutSetters(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer setIgnoreInvocationExceptionsOnGetters(boolean value) throws LockedException {
+		super.setIgnoreInvocationExceptionsOnGetters(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer setIgnoreInvocationExceptionsOnSetters(boolean value) throws LockedException {
+		super.setIgnoreInvocationExceptionsOnSetters(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer setSortProperties(boolean value) throws LockedException {
+		super.setSortProperties(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer setNotBeanPackages(String...values) throws LockedException {
+		super.setNotBeanPackages(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer setNotBeanPackages(Collection<String> values) throws LockedException {
+		super.setNotBeanPackages(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer addNotBeanPackages(String...values) throws LockedException {
+		super.addNotBeanPackages(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer addNotBeanPackages(Collection<String> values) throws LockedException {
+		super.addNotBeanPackages(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer removeNotBeanPackages(String...values) throws LockedException {
+		super.removeNotBeanPackages(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer removeNotBeanPackages(Collection<String> values) throws LockedException {
+		super.removeNotBeanPackages(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer setNotBeanClasses(Class<?>...values) throws LockedException {
+		super.setNotBeanClasses(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer setNotBeanClasses(Collection<Class<?>> values) throws LockedException {
+		super.setNotBeanClasses(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer addNotBeanClasses(Class<?>...values) throws LockedException {
+		super.addNotBeanClasses(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer addNotBeanClasses(Collection<Class<?>> values) throws LockedException {
+		super.addNotBeanClasses(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer removeNotBeanClasses(Class<?>...values) throws LockedException {
+		super.removeNotBeanClasses(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer removeNotBeanClasses(Collection<Class<?>> values) throws LockedException {
+		super.removeNotBeanClasses(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer setBeanFilters(Class<?>...values) throws LockedException {
+		super.setBeanFilters(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer setBeanFilters(Collection<Class<?>> values) throws LockedException {
+		super.setBeanFilters(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer addBeanFilters(Class<?>...values) throws LockedException {
+		super.addBeanFilters(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer addBeanFilters(Collection<Class<?>> values) throws LockedException {
+		super.addBeanFilters(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer removeBeanFilters(Class<?>...values) throws LockedException {
+		super.removeBeanFilters(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer removeBeanFilters(Collection<Class<?>> values) throws LockedException {
+		super.removeBeanFilters(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer setPojoSwaps(Class<?>...values) throws LockedException {
+		super.setPojoSwaps(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer setPojoSwaps(Collection<Class<?>> values) throws LockedException {
+		super.setPojoSwaps(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer addPojoSwaps(Class<?>...values) throws LockedException {
+		super.addPojoSwaps(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer addPojoSwaps(Collection<Class<?>> values) throws LockedException {
+		super.addPojoSwaps(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer removePojoSwaps(Class<?>...values) throws LockedException {
+		super.removePojoSwaps(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer removePojoSwaps(Collection<Class<?>> values) throws LockedException {
+		super.removePojoSwaps(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer setImplClasses(Map<Class<?>,Class<?>> values) throws LockedException {
+		super.setImplClasses(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public <T> CoreApi addImplClass(Class<T> interfaceClass, Class<? extends T> implClass) throws LockedException {
+		super.addImplClass(interfaceClass, implClass);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer setBeanDictionary(Class<?>...values) throws LockedException {
+		super.setBeanDictionary(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer setBeanDictionary(Collection<Class<?>> values) throws LockedException {
+		super.setBeanDictionary(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer addToBeanDictionary(Class<?>...values) throws LockedException {
+		super.addToBeanDictionary(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer addToBeanDictionary(Collection<Class<?>> values) throws LockedException {
+		super.addToBeanDictionary(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer removeFromBeanDictionary(Class<?>...values) throws LockedException {
+		super.removeFromBeanDictionary(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer removeFromBeanDictionary(Collection<Class<?>> values) throws LockedException {
+		super.removeFromBeanDictionary(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer setBeanTypePropertyName(String value) throws LockedException {
+		super.setBeanTypePropertyName(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer setDefaultParser(Class<?> value) throws LockedException {
+		super.setDefaultParser(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer setLocale(Locale value) throws LockedException {
+		super.setLocale(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer setTimeZone(TimeZone value) throws LockedException {
+		super.setTimeZone(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer setMediaType(MediaType value) throws LockedException {
+		super.setMediaType(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer setDebug(boolean value) throws LockedException {
+		super.setDebug(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public JsonSerializer setProperty(String name, Object value) throws LockedException {
+		super.setProperty(name, value);
 		return this;
 	}
 
@@ -352,34 +859,33 @@ public class JsonSerializer extends WriterSerializer {
 	}
 
 	@Override /* CoreApi */
-	public JsonSerializer addNotBeanClasses(Class<?>...classes) throws LockedException {
-		super.addNotBeanClasses(classes);
+	public JsonSerializer addToProperty(String name, Object value) throws LockedException {
+		super.addToProperty(name, value);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public JsonSerializer addBeanFilters(Class<?>...classes) throws LockedException {
-		super.addBeanFilters(classes);
+	public JsonSerializer putToProperty(String name, Object key, Object value) throws LockedException {
+		super.putToProperty(name, key, value);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public JsonSerializer addPojoSwaps(Class<?>...classes) throws LockedException {
-		super.addPojoSwaps(classes);
+	public JsonSerializer putToProperty(String name, Object value) throws LockedException {
+		super.putToProperty(name, value);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public JsonSerializer addToDictionary(Class<?>...classes) throws LockedException {
-		super.addToDictionary(classes);
+	public JsonSerializer removeFromProperty(String name, Object value) throws LockedException {
+		super.removeFromProperty(name, value);
 		return this;
 	}
 
-	@Override /* CoreApi */
-	public <T> JsonSerializer addImplClass(Class<T> interfaceClass, Class<? extends T> implClass) throws LockedException {
-		super.addImplClass(interfaceClass, implClass);
-		return this;
-	}
+
+	//--------------------------------------------------------------------------------
+	// Overridden methods
+	//--------------------------------------------------------------------------------
 
 	@Override /* CoreApi */
 	public JsonSerializer setClassLoader(ClassLoader classLoader) throws LockedException {

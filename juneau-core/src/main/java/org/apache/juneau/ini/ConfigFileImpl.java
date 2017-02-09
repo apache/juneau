@@ -193,6 +193,7 @@ public final class ConfigFileImpl extends ConfigFile {
 		return this;
 	}
 
+
 	//--------------------------------------------------------------------------------
 	// Map methods
 	//--------------------------------------------------------------------------------
@@ -411,6 +412,7 @@ public final class ConfigFileImpl extends ConfigFile {
 			writeUnlock();
 		}
 	}
+
 
 	//--------------------------------------------------------------------------------
 	// API methods

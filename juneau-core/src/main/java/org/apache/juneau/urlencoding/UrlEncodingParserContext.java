@@ -20,30 +20,7 @@ import org.apache.juneau.*;
  * Context properties are set by calling {@link ContextFactory#setProperty(String, Object)} on the context factory
  * returned {@link CoreApi#getContextFactory()}.
  * <p>
- * The following convenience methods are also provided for setting context properties:
- * <ul>
- * 	<li>{@link UrlEncodingParser#setProperty(String,Object)}
- * 	<li>{@link UrlEncodingParser#setProperties(ObjectMap)}
- * 	<li>{@link UrlEncodingParser#addNotBeanClasses(Class[])}
- * 	<li>{@link UrlEncodingParser#addBeanFilters(Class[])}
- * 	<li>{@link UrlEncodingParser#addPojoSwaps(Class[])}
- * 	<li>{@link UrlEncodingParser#addToDictionary(Class[])}
- * 	<li>{@link UrlEncodingParser#addImplClass(Class,Class)}
- * </ul>
- * <p>
  * See {@link ContextFactory} for more information about context properties.
- *
- * <h6 class='topic' id='ConfigProperties'>Configurable properties on the URL-Encoding parser</h6>
- * <table class='styled' style='border-collapse: collapse;'>
- * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th><th>Session overridable</th></tr>
- * 	<tr>
- * 		<td>{@link #URLENC_expandedParams}</td>
- * 		<td>Serialize bean property collections/arrays as separate key/value pairs.</td>
- * 		<td><code>Boolean</code></td>
- * 		<td><jk>false</jk></td>
- * 		<td><jk>true</jk></td>
- * 	</tr>
- * </table>
  */
 public class UrlEncodingParserContext extends UonParserContext {
 
@@ -68,7 +45,7 @@ public class UrlEncodingParserContext extends UonParserContext {
 	 * 	}
 	 *
 	 * 	UrlEncodingSerializer s1 = <jk>new</jk> UrlEncodingParser();
-	 * 	UrlEncodingSerializer s2 = <jk>new</jk> UrlEncodingParser().setProperty(UrlEncodingContext.<jsf>URLENC_expandedParams</jsf>, <jk>true</jk>);
+	 * 	UrlEncodingSerializer s2 = <jk>new</jk> UrlEncodingParser().setExpandedParams(<jk>true</jk>);
 	 *
 	 * 	String s1 = p1.serialize(<jk>new</jk> A()); <jc>// Produces "f1=(a,b)&amp;f2=(c,d)"</jc>
 	 * 	String s2 = p2.serialize(<jk>new</jk> A()); <jc>// Produces "f1=a&amp;f1=b&amp;f2=c&amp;f2=d"</jc>

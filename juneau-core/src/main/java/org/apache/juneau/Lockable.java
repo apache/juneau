@@ -53,11 +53,11 @@ public abstract class Lockable implements Cloneable {
 	/**
 	 * Causes a {@link LockedException} to be thrown if this object has been locked.
 	 * <p>
-	 * 	Also calls {@link #onUnclone()} if this is the first time this method has been called since cloning.
+	 * Also calls {@link #onUnclone()} if this is the first time this method has been called since cloning.
 	 *
 	 * @throws LockedException If {@link #lock()} has been called on this object.
 	 */
-	public void checkLock() throws LockedException {
+	protected void checkLock() throws LockedException {
 		if (isLocked)
 			throw new LockedException();
 		if (isCloned)

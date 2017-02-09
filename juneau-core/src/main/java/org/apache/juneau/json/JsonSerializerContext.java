@@ -21,44 +21,7 @@ import org.apache.juneau.serializer.*;
  * Context properties are set by calling {@link ContextFactory#setProperty(String, Object)} on the context factory
  * returned {@link CoreApi#getContextFactory()}.
  * <p>
- * The following convenience methods are also provided for setting context properties:
- * <ul>
- * 	<li>{@link JsonSerializer#setProperty(String,Object)}
- * 	<li>{@link JsonSerializer#setProperties(ObjectMap)}
- * 	<li>{@link JsonSerializer#addNotBeanClasses(Class[])}
- * 	<li>{@link JsonSerializer#addBeanFilters(Class[])}
- * 	<li>{@link JsonSerializer#addPojoSwaps(Class[])}
- * 	<li>{@link JsonSerializer#addToDictionary(Class[])}
- * 	<li>{@link JsonSerializer#addImplClass(Class,Class)}
- * </ul>
- * <p>
  * See {@link ContextFactory} for more information about context properties.
- *
- * <h6 class='topic' id='ConfigProperties'>Configurable properties on the JSON serializer</h6>
- * <table class='styled' style='border-collapse: collapse;'>
- * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th><th>Session overridable</th></tr>
- * 	<tr>
- * 		<td>{@link #JSON_simpleMode}</td>
- * 		<td>Simple JSON mode.</td>
- * 		<td><code>Boolean</code></td>
- * 		<td><jk>false</jk></td>
- * 		<td><jk>true</jk></td>
- * 	</tr>
- * 	<tr>
- * 		<td>{@link #JSON_useWhitespace}</td>
- * 		<td>Use whitespace.</td>
- * 		<td><code>Boolean</code></td>
- * 		<td><jk>false</jk></td>
- * 		<td><jk>true</jk></td>
- * 	</tr>
- * 	<tr>
- * 		<td>{@link #JSON_escapeSolidus}</td>
- * 		<td>Prefix solidus <js>'/'</js> characters with escapes.</td>
- * 		<td><code>Boolean</code></td>
- * 		<td><jk>false</jk></td>
- * 		<td><jk>true</jk></td>
- * 	</tr>
- * </table>
  *
  * <h5 class='section'>Inherited configurable properties:</h5>
  * <ul class='javahierarchy'>

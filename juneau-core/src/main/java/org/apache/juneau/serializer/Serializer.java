@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.serializer;
 
+import static org.apache.juneau.serializer.SerializerContext.*;
+
 import java.io.*;
 import java.lang.reflect.*;
 import java.text.*;
@@ -283,45 +285,847 @@ public abstract class Serializer extends CoreApi {
 		return contentType;
 	}
 
+
 	//--------------------------------------------------------------------------------
-	// Overridden methods
+	// Properties
 	//--------------------------------------------------------------------------------
 
+	/**
+	 * <b>Configuration property:</b>  Max serialization depth.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Serializer.maxDepth"</js>
+	 * 	<li><b>Data type:</b> <code>Integer</code>
+	 * 	<li><b>Default:</b> <code>100</code>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * Abort serialization if specified depth is reached in the POJO tree.
+	 * If this depth is exceeded, an exception is thrown.
+	 * This prevents stack overflows from occurring when trying to serialize models with recursive references.
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>SERIALIZER_maxDepth</jsf>, value)</code>.
+	 * </ul>
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see SerializerContext#SERIALIZER_maxDepth
+	 */
+	public Serializer setMaxDepth(int value) throws LockedException {
+		return setProperty(SERIALIZER_maxDepth, value);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Initial depth.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Serializer.initialDepth"</js>
+	 * 	<li><b>Data type:</b> <code>Integer</code>
+	 * 	<li><b>Default:</b> <code>0</code>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * The initial indentation level at the root.
+	 * Useful when constructing document fragments that need to be indented at a certain level.
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>SERIALIZER_initialDepth</jsf>, value)</code>.
+	 * </ul>
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see SerializerContext#SERIALIZER_initialDepth
+	 */
+	public Serializer setInitialDepth(int value) throws LockedException {
+		return setProperty(SERIALIZER_initialDepth, value);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Automatically detect POJO recursions.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Serializer.detectRecursions"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * Specifies that recursions should be checked for during serialization.
+	 * <p>
+	 * Recursions can occur when serializing models that aren't true trees, but rather contain loops.
+	 * <p>
+	 * The behavior when recursions are detected depends on the value for {@link SerializerContext#SERIALIZER_ignoreRecursions}.
+	 * <p>
+	 * For example, if a model contains the links A-&gt;B-&gt;C-&gt;A, then the JSON generated will look like
+	 * 	the following when <jsf>SERIALIZER_ignoreRecursions</jsf> is <jk>true</jk>...
+	 * <code>{A:{B:{C:null}}}</code><br>
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>SERIALIZER_detectRecursions</jsf>, value)</code>.
+	 * 	<li>Checking for recursion can cause a small performance penalty.
+	 * </ul>
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see SerializerContext#SERIALIZER_detectRecursions
+	 */
+	public Serializer setDetectRecursions(boolean value) throws LockedException {
+		return setProperty(SERIALIZER_detectRecursions, value);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Ignore recursion errors.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Serializer.ignoreRecursions"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * Used in conjunction with {@link SerializerContext#SERIALIZER_detectRecursions}.
+	 * Setting is ignored if <jsf>SERIALIZER_detectRecursions</jsf> is <jk>false</jk>.
+	 * <p>
+	 * If <jk>true</jk>, when we encounter the same object when serializing a tree,
+	 * 	we set the value to <jk>null</jk>.
+	 * Otherwise, an exception is thrown.
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>SERIALIZER_ignoreRecursions</jsf>, value)</code>.
+	 * 	<li>Checking for recursion can cause a small performance penalty.
+	 * </ul>
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see SerializerContext#SERIALIZER_ignoreRecursions
+	 */
+	public Serializer setIgnoreRecursions(boolean value) throws LockedException {
+		return setProperty(SERIALIZER_ignoreRecursions, value);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Use indentation.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Serializer.useIndentation"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * If <jk>true</jk>, newlines and indentation is added to the output to improve readability.
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>SERIALIZER_useIndentation</jsf>, value)</code>.
+	 * 	<li>Checking for recursion can cause a small performance penalty.
+	 * </ul>
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see SerializerContext#SERIALIZER_useIndentation
+	 */
+	public Serializer setUseIndentation(boolean value) throws LockedException {
+		return setProperty(SERIALIZER_useIndentation, value);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Add <js>"_type"</js> properties when needed.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Serializer.addBeanTypeProperties"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred through reflection.
+	 * This is used to recreate the correct objects during parsing if the object types cannot be inferred.
+	 * For example, when serializing a {@code Map<String,Object>} field, where the bean class cannot be determined from the value type.
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>SERIALIZER_addBeanTypeProperties</jsf>, value)</code>.
+	 * 	<li>Checking for recursion can cause a small performance penalty.
+	 * </ul>
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see SerializerContext#SERIALIZER_addBeanTypeProperties
+	 */
+	public Serializer setAddBeanTypeProperties(boolean value) throws LockedException {
+		return setProperty(SERIALIZER_addBeanTypeProperties, value);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Quote character.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Serializer.quoteChar"</js>
+	 * 	<li><b>Data type:</b> <code>Character</code>
+	 * 	<li><b>Default:</b> <js>'"'</js>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * This is the character used for quoting attributes and values.
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>SERIALIZER_quoteChar</jsf>, value)</code>.
+	 * </ul>
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see SerializerContext#SERIALIZER_quoteChar
+	 */
+	public Serializer setQuoteChar(char value) throws LockedException {
+		return setProperty(SERIALIZER_quoteChar, value);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Trim null bean property values.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Serializer.trimNullProperties"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * If <jk>true</jk>, null bean values will not be serialized to the output.
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>SERIALIZER_trimNullProperties</jsf>, value)</code>.
+	 * 	<li>Enabling this setting has the following effects on parsing:
+	 * 	<ul>
+	 * 		<li>Map entries with <jk>null</jk> values will be lost.
+	 * 	</ul>
+	 * </ul>
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see SerializerContext#SERIALIZER_trimNullProperties
+	 */
+	public Serializer setTrimNullProperties(boolean value) throws LockedException {
+		return setProperty(SERIALIZER_trimNullProperties, value);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Trim empty lists and arrays.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Serializer.trimEmptyLists"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * If <jk>true</jk>, empty list values will not be serialized to the output.
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>SERIALIZER_trimEmptyCollections</jsf>, value)</code>.
+	 * 	<li>Enabling this setting has the following effects on parsing:
+	 * 	<ul>
+	 * 		<li>Map entries with empty list values will be lost.
+	 * 		<li>Bean properties with empty list values will not be set.
+	 * 	</ul>
+	 * </ul>
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see SerializerContext#SERIALIZER_trimEmptyCollections
+	 */
+	public Serializer setTrimEmptyCollections(boolean value) throws LockedException {
+		return setProperty(SERIALIZER_trimEmptyCollections, value);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Trim empty maps.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Serializer.trimEmptyMaps"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * If <jk>true</jk>, empty map values will not be serialized to the output.
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>SERIALIZER_trimEmptyMaps</jsf>, value)</code>.
+	 * 	<li>Enabling this setting has the following effects on parsing:
+	 *		<ul>
+	 * 		<li>Bean properties with empty map values will not be set.
+	 * 	</ul>
+	 * </ul>
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see SerializerContext#SERIALIZER_trimEmptyMaps
+	 */
+	public Serializer setTrimEmptyMaps(boolean value) throws LockedException {
+		return setProperty(SERIALIZER_trimEmptyMaps, value);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Trim strings.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Serializer.trimStrings"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>SERIALIZER_trimStrings</jsf>, value)</code>.
+	 * </ul>
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see SerializerContext#SERIALIZER_trimStrings
+	 */
+	public Serializer setTrimStrings(boolean value) throws LockedException {
+		return setProperty(SERIALIZER_trimStrings, value);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  URI base for relative URIs.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Serializer.relativeUriBase"</js>
+	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Default:</b> <js>""</js>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * Prepended to relative URIs during serialization (along with the {@link SerializerContext#SERIALIZER_absolutePathUriBase} if specified.
+	 * (i.e. URIs not containing a schema and not starting with <js>'/'</js>).
+	 * (e.g. <js>"foo/bar"</js>)
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <table class='styled'>
+	 *		<tr><th>SERIALIZER_relativeUriBase</th><th>URI</th><th>Serialized URI</th></tr>
+	 * 	<tr>
+	 * 		<td><code>http://foo:9080/bar/baz</code></td>
+	 * 		<td><code>mywebapp</code></td>
+	 * 		<td><code>http://foo:9080/bar/baz/mywebapp</code></td>
+	 * 	</tr>
+	 * 	<tr>
+	 * 		<td><code>http://foo:9080/bar/baz</code></td>
+	 * 		<td><code>/mywebapp</code></td>
+	 * 		<td><code>/mywebapp</code></td>
+	 * 	</tr>
+	 * 	<tr>
+	 * 		<td><code>http://foo:9080/bar/baz</code></td>
+	 * 		<td><code>http://mywebapp</code></td>
+	 * 		<td><code>http://mywebapp</code></td>
+	 * 	</tr>
+	 * </table>
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>SERIALIZER_relativeUriBase</jsf>, value)</code>.
+	 * </ul>
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see SerializerContext#SERIALIZER_relativeUriBase
+	 */
+	public Serializer setRelativeUriBase(String value) throws LockedException {
+		return setProperty(SERIALIZER_relativeUriBase, value);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  URI base for relative URIs with absolute paths.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Serializer.absolutePathUriBase"</js>
+	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Default:</b> <js>""</js>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * Prepended to relative absolute-path URIs during serialization.
+	 * (i.e. URIs starting with <js>'/'</js>).
+	 * (e.g. <js>"/foo/bar"</js>)
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <table class='styled'>
+	 * 	<tr><th>SERIALIZER_absolutePathUriBase</th><th>URI</th><th>Serialized URI</th></tr>
+	 * 	<tr>
+	 * 		<td><code>http://foo:9080/bar/baz</code></td>
+	 * 		<td><code>mywebapp</code></td>
+	 * 		<td><code>mywebapp</code></td>
+	 * 	</tr>
+	 * 	<tr>
+	 * 		<td><code>http://foo:9080/bar/baz</code></td>
+	 * 		<td><code>/mywebapp</code></td>
+	 * 		<td><code>http://foo:9080/bar/baz/mywebapp</code></td>
+	 * 	</tr>
+	 * 	<tr>
+	 * 		<td><code>http://foo:9080/bar/baz</code></td>
+	 * 		<td><code>http://mywebapp</code></td>
+	 * 		<td><code>http://mywebapp</code></td>
+	 * 	</tr>
+	 * </table>
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>SERIALIZER_absolutePathUriBase</jsf>, value)</code>.
+	 * </ul>
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see SerializerContext#SERIALIZER_absolutePathUriBase
+	 */
+	public Serializer setAbsolutePathUriBase(String value) throws LockedException {
+		return setProperty(SERIALIZER_absolutePathUriBase, value);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Sort arrays and collections alphabetically.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Serializer.sortCollections"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>SERIALIZER_sortCollections</jsf>, value)</code>.
+	 * 	<li>This introduces a slight performance penalty.
+	 * </ul>
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see SerializerContext#SERIALIZER_sortCollections
+	 */
+	public Serializer setSortCollections(boolean value) throws LockedException {
+		return setProperty(SERIALIZER_sortCollections, value);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Sort maps alphabetically.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Serializer.sortMaps"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>SERIALIZER_sortMaps</jsf>, value)</code>.
+	 * 	<li>This introduces a slight performance penalty.
+	 * </ul>
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see SerializerContext#SERIALIZER_sortMaps
+	 */
+	public Serializer setSortMaps(boolean value) throws LockedException {
+		return setProperty(SERIALIZER_sortMaps, value);
+	}
+
 	@Override /* CoreApi */
-	public Serializer setProperty(String property, Object value) throws LockedException {
-		super.setProperty(property, value);
+	public Serializer setBeansRequireDefaultConstructor(boolean value) throws LockedException {
+		super.setBeansRequireDefaultConstructor(value);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Serializer addNotBeanClasses(Class<?>...classes) throws LockedException {
-		super.addNotBeanClasses(classes);
+	public Serializer setBeansRequireSerializable(boolean value) throws LockedException {
+		super.setBeansRequireSerializable(value);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Serializer addBeanFilters(Class<?>...classes) throws LockedException {
-		super.addBeanFilters(classes);
+	public Serializer setBeansRequireSettersForGetters(boolean value) throws LockedException {
+		super.setBeansRequireSettersForGetters(value);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Serializer addPojoSwaps(Class<?>...classes) throws LockedException {
-		super.addPojoSwaps(classes);
+	public Serializer setBeansRequireSomeProperties(boolean value) throws LockedException {
+		super.setBeansRequireSomeProperties(value);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Serializer addToDictionary(Class<?>...classes) throws LockedException {
-		super.addToDictionary(classes);
+	public Serializer setBeanMapPutReturnsOldValue(boolean value) throws LockedException {
+		super.setBeanMapPutReturnsOldValue(value);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public <T> Serializer addImplClass(Class<T> interfaceClass, Class<? extends T> implClass) throws LockedException {
+	public Serializer setBeanConstructorVisibility(Visibility value) throws LockedException {
+		super.setBeanConstructorVisibility(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer setBeanClassVisibility(Visibility value) throws LockedException {
+		super.setBeanClassVisibility(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer setBeanFieldVisibility(Visibility value) throws LockedException {
+		super.setBeanFieldVisibility(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer setMethodVisibility(Visibility value) throws LockedException {
+		super.setMethodVisibility(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer setUseJavaBeanIntrospector(boolean value) throws LockedException {
+		super.setUseJavaBeanIntrospector(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer setUseInterfaceProxies(boolean value) throws LockedException {
+		super.setUseInterfaceProxies(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer setIgnoreUnknownBeanProperties(boolean value) throws LockedException {
+		super.setIgnoreUnknownBeanProperties(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer setIgnoreUnknownNullBeanProperties(boolean value) throws LockedException {
+		super.setIgnoreUnknownNullBeanProperties(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer setIgnorePropertiesWithoutSetters(boolean value) throws LockedException {
+		super.setIgnorePropertiesWithoutSetters(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer setIgnoreInvocationExceptionsOnGetters(boolean value) throws LockedException {
+		super.setIgnoreInvocationExceptionsOnGetters(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer setIgnoreInvocationExceptionsOnSetters(boolean value) throws LockedException {
+		super.setIgnoreInvocationExceptionsOnSetters(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer setSortProperties(boolean value) throws LockedException {
+		super.setSortProperties(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer setNotBeanPackages(String...values) throws LockedException {
+		super.setNotBeanPackages(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer setNotBeanPackages(Collection<String> values) throws LockedException {
+		super.setNotBeanPackages(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer addNotBeanPackages(String...values) throws LockedException {
+		super.addNotBeanPackages(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer addNotBeanPackages(Collection<String> values) throws LockedException {
+		super.addNotBeanPackages(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer removeNotBeanPackages(String...values) throws LockedException {
+		super.removeNotBeanPackages(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer removeNotBeanPackages(Collection<String> values) throws LockedException {
+		super.removeNotBeanPackages(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer setNotBeanClasses(Class<?>...values) throws LockedException {
+		super.setNotBeanClasses(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer setNotBeanClasses(Collection<Class<?>> values) throws LockedException {
+		super.setNotBeanClasses(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer addNotBeanClasses(Class<?>...values) throws LockedException {
+		super.addNotBeanClasses(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer addNotBeanClasses(Collection<Class<?>> values) throws LockedException {
+		super.addNotBeanClasses(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer removeNotBeanClasses(Class<?>...values) throws LockedException {
+		super.removeNotBeanClasses(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer removeNotBeanClasses(Collection<Class<?>> values) throws LockedException {
+		super.removeNotBeanClasses(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer setBeanFilters(Class<?>...values) throws LockedException {
+		super.setBeanFilters(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer setBeanFilters(Collection<Class<?>> values) throws LockedException {
+		super.setBeanFilters(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer addBeanFilters(Class<?>...values) throws LockedException {
+		super.addBeanFilters(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer addBeanFilters(Collection<Class<?>> values) throws LockedException {
+		super.addBeanFilters(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer removeBeanFilters(Class<?>...values) throws LockedException {
+		super.removeBeanFilters(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer removeBeanFilters(Collection<Class<?>> values) throws LockedException {
+		super.removeBeanFilters(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer setPojoSwaps(Class<?>...values) throws LockedException {
+		super.setPojoSwaps(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer setPojoSwaps(Collection<Class<?>> values) throws LockedException {
+		super.setPojoSwaps(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer addPojoSwaps(Class<?>...values) throws LockedException {
+		super.addPojoSwaps(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer addPojoSwaps(Collection<Class<?>> values) throws LockedException {
+		super.addPojoSwaps(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer removePojoSwaps(Class<?>...values) throws LockedException {
+		super.removePojoSwaps(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer removePojoSwaps(Collection<Class<?>> values) throws LockedException {
+		super.removePojoSwaps(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer setImplClasses(Map<Class<?>,Class<?>> values) throws LockedException {
+		super.setImplClasses(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public <T> CoreApi addImplClass(Class<T> interfaceClass, Class<? extends T> implClass) throws LockedException {
 		super.addImplClass(interfaceClass, implClass);
 		return this;
 	}
+
+	@Override /* CoreApi */
+	public Serializer setBeanDictionary(Class<?>...values) throws LockedException {
+		super.setBeanDictionary(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer setBeanDictionary(Collection<Class<?>> values) throws LockedException {
+		super.setBeanDictionary(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer addToBeanDictionary(Class<?>...values) throws LockedException {
+		super.addToBeanDictionary(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer addToBeanDictionary(Collection<Class<?>> values) throws LockedException {
+		super.addToBeanDictionary(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer removeFromBeanDictionary(Class<?>...values) throws LockedException {
+		super.removeFromBeanDictionary(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer removeFromBeanDictionary(Collection<Class<?>> values) throws LockedException {
+		super.removeFromBeanDictionary(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer setBeanTypePropertyName(String value) throws LockedException {
+		super.setBeanTypePropertyName(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer setDefaultParser(Class<?> value) throws LockedException {
+		super.setDefaultParser(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer setLocale(Locale value) throws LockedException {
+		super.setLocale(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer setTimeZone(TimeZone value) throws LockedException {
+		super.setTimeZone(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer setMediaType(MediaType value) throws LockedException {
+		super.setMediaType(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer setDebug(boolean value) throws LockedException {
+		super.setDebug(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer setProperty(String name, Object value) throws LockedException {
+		super.setProperty(name, value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer setProperties(ObjectMap properties) throws LockedException {
+		super.setProperties(properties);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer addToProperty(String name, Object value) throws LockedException {
+		super.addToProperty(name, value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer putToProperty(String name, Object key, Object value) throws LockedException {
+		super.putToProperty(name, key, value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer putToProperty(String name, Object value) throws LockedException {
+		super.putToProperty(name, value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public Serializer removeFromProperty(String name, Object value) throws LockedException {
+		super.removeFromProperty(name, value);
+		return this;
+	}
+
+
+	//--------------------------------------------------------------------------------
+	// Overridden methods
+	//--------------------------------------------------------------------------------
 
 	@Override /* CoreApi */
 	public Serializer setClassLoader(ClassLoader classLoader) throws LockedException {

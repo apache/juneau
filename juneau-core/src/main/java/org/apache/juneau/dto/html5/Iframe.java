@@ -26,7 +26,7 @@ public class Iframe extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-height">height</a> attribute.
 	 * Vertical dimension.
-	 * @param height - The new value for this attribute.
+	 * @param height The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -38,7 +38,7 @@ public class Iframe extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-iframe-name">name</a> attribute.
 	 * Name of nested browsing context.
-	 * @param name - The new value for this attribute.
+	 * @param name The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Iframe name(String name) {
@@ -49,7 +49,7 @@ public class Iframe extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-iframe-sandbox">sandbox</a> attribute.
 	 * Security rules for nested content.
-	 * @param sandbox - The new value for this attribute.
+	 * @param sandbox The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Iframe sandbox(String sandbox) {
@@ -60,7 +60,7 @@ public class Iframe extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-iframe-src">src</a> attribute.
 	 * Address of the resource.
-	 * @param src - The new value for this attribute.
+	 * @param src The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -72,7 +72,7 @@ public class Iframe extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-iframe-srcdoc">srcdoc</a> attribute.
 	 * A document to render in the iframe.
-	 * @param srcdoc - The new value for this attribute.
+	 * @param srcdoc The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Iframe srcdoc(String srcdoc) {
@@ -83,7 +83,7 @@ public class Iframe extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-width">width</a> attribute.
 	 * Horizontal dimension.
-	 * @param width - The new value for this attribute.
+	 * @param width The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -91,6 +91,7 @@ public class Iframe extends HtmlElementMixed {
 		attr("width", width);
 		return this;
 	}
+
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods

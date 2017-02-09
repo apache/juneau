@@ -24,7 +24,7 @@ public class Td extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-tdth-colspan">colspan</a> attribute.
 	 * Number of columns that the cell is to span.
-	 * @param colspan - The new value for this attribute.
+	 * @param colspan The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -36,7 +36,7 @@ public class Td extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-tdth-headers">headers</a> attribute.
 	 * The header cells for this cell.
-	 * @param headers - The new value for this attribute.
+	 * @param headers The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Td headers(String headers) {
@@ -47,7 +47,7 @@ public class Td extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-tdth-rowspan">rowspan</a> attribute.
 	 * Number of rows that the cell is to span.
-	 * @param rowspan - The new value for this attribute.
+	 * @param rowspan The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -55,6 +55,7 @@ public class Td extends HtmlElementMixed {
 		attr("rowspan", rowspan);
 		return this;
 	}
+
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods

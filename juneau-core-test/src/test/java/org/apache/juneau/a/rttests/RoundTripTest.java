@@ -13,11 +13,6 @@
 package org.apache.juneau.a.rttests;
 
 import static org.apache.juneau.a.rttests.RoundTripTest.Flags.*;
-import static org.apache.juneau.jena.RdfSerializerContext.*;
-import static org.apache.juneau.urlencoding.UonSerializerContext.*;
-import static org.apache.juneau.urlencoding.UrlEncodingContext.*;
-import static org.apache.juneau.xml.XmlSerializerContext.*;
-import static org.apache.juneau.html.HtmlSerializerContext.*;
 
 import java.lang.reflect.Type;
 import java.util.*;
@@ -53,121 +48,121 @@ public abstract class RoundTripTest {
 			// Full round-trip testing
 			{ /* 0 */
 				"Json - default",
-				new JsonSerializer().setProperty(SERIALIZER_trimNullProperties, false),
+				new JsonSerializer().setTrimNullProperties(false),
 				JsonParser.DEFAULT,
 				0
 			},
 			{ /* 1 */
 				"Json - lax",
-				new JsonSerializer.Simple().setProperty(SERIALIZER_trimNullProperties, false),
+				new JsonSerializer.Simple().setTrimNullProperties(false),
 				JsonParser.DEFAULT,
 				0
 			},
 			{ /* 2 */
 				"Json - lax, readable",
-				new JsonSerializer.SimpleReadable().setProperty(SERIALIZER_trimNullProperties, false),
+				new JsonSerializer.SimpleReadable().setTrimNullProperties(false),
 				JsonParser.DEFAULT,
 				0
 			},
 			{ /* 3 */
 				"Xml - namespaces, validation, readable",
-				new XmlSerializer.NsSq().setProperty(SERIALIZER_trimNullProperties, false).setProperty(XML_addNamespaceUrisToRoot, true).setProperty(SERIALIZER_useIndentation, true),
+				new XmlSerializer.NsSq().setTrimNullProperties(false).setAddNamespaceUrisToRoot(true).setUseIndentation(true),
 				XmlParser.DEFAULT,
 				CHECK_XML_WHITESPACE | VALIDATE_XML
 			},
 			{ /* 4 */
 				"Xml - no namespaces, validation",
-				new XmlSerializer.Sq().setProperty(SERIALIZER_trimNullProperties, false),
+				new XmlSerializer.Sq().setTrimNullProperties(false),
 				XmlParser.DEFAULT,
 				CHECK_XML_WHITESPACE
 			},
 			{ /* 5 */
 				"Html - default",
-				new HtmlSerializer().setProperty(SERIALIZER_trimNullProperties, false),
+				new HtmlSerializer().setTrimNullProperties(false),
 				HtmlParser.DEFAULT,
 				CHECK_XML_WHITESPACE
 			},
 			{ /* 6 */
 				"Html - readable",
-				new HtmlSerializer.SqReadable().setProperty(SERIALIZER_trimNullProperties, false),
+				new HtmlSerializer.SqReadable().setTrimNullProperties(false),
 				HtmlParser.DEFAULT,
 				CHECK_XML_WHITESPACE
 			},
 			{ /* 7 */
 				"Html - with key/value headers",
-				new HtmlSerializer().setProperty(HTML_addKeyValueTableHeaders, true),
+				new HtmlSerializer().setAddKeyValueTableHeaders(true),
 				HtmlParser.DEFAULT,
 				CHECK_XML_WHITESPACE
 			},
 			{ /* 8 */
 				"Uon - default",
-				new UonSerializer().setProperty(SERIALIZER_trimNullProperties, false).setProperty(UON_simpleMode, false),
+				new UonSerializer().setTrimNullProperties(false).setSimpleMode(false),
 				UonParser.DEFAULT,
 				0
 			},
 			{ /* 9 */
 				"Uon - readable",
-				new UonSerializer.Readable().setProperty(SERIALIZER_trimNullProperties, false).setProperty(UON_simpleMode, false),
+				new UonSerializer.Readable().setTrimNullProperties(false).setSimpleMode(false),
 				UonParser.DEFAULT_WS_AWARE,
 				0
 			},
 			{ /* 10 */
 				"Uon - encoded",
-				new UonSerializer.Encoding().setProperty(SERIALIZER_trimNullProperties, false).setProperty(UON_simpleMode, false),
+				new UonSerializer.Encoding().setTrimNullProperties(false).setSimpleMode(false),
 				UonParser.DEFAULT_DECODING,
 				0
 			},
 			{ /* 11 */
 				"UrlEncoding - default",
-				new UrlEncodingSerializer().setProperty(SERIALIZER_trimNullProperties, false).setProperty(UON_simpleMode, false),
+				new UrlEncodingSerializer().setTrimNullProperties(false).setSimpleMode(false),
 				UrlEncodingParser.DEFAULT,
 				0
 			},
 			{ /* 12 */
 				"UrlEncoding - readable",
-				new UrlEncodingSerializer.Readable().setProperty(SERIALIZER_trimNullProperties, false).setProperty(UON_simpleMode, false),
+				new UrlEncodingSerializer.Readable().setTrimNullProperties(false).setSimpleMode(false),
 				UrlEncodingParser.DEFAULT_WS_AWARE,
 				0
 			},
 			{ /* 13 */
 				"UrlEncoding - expanded params",
-				new UrlEncodingSerializer().setProperty(URLENC_expandedParams, true).setProperty(UON_simpleMode, false),
-				new UrlEncodingParser().setProperty(URLENC_expandedParams, true),
+				new UrlEncodingSerializer().setExpandedParams(true).setSimpleMode(false),
+				new UrlEncodingParser().setExpandedParams(true),
 				0
 			},
 			{ /* 14 */
 				"Rdf.Xml",
-				new RdfSerializer.Xml().setProperty(SERIALIZER_trimNullProperties, false).setProperty(RDF_addLiteralTypes, true),
+				new RdfSerializer.Xml().setTrimNullProperties(false).setAddLiteralTypes(true),
 				RdfParser.DEFAULT_XML,
 				0
 			},
 			{ /* 15 */
 				"Rdf.XmlAbbrev",
-				new RdfSerializer.XmlAbbrev().setProperty(SERIALIZER_trimNullProperties, false).setProperty(RDF_addLiteralTypes, true),
+				new RdfSerializer.XmlAbbrev().setTrimNullProperties(false).setAddLiteralTypes(true),
 				RdfParser.DEFAULT_XML,
 				0
 			},
 			{ /* 16 */
 				"Rdf.Turtle",
-				new RdfSerializer.Turtle().setProperty(SERIALIZER_trimNullProperties, false).setProperty(RDF_addLiteralTypes, true),
+				new RdfSerializer.Turtle().setTrimNullProperties(false).setAddLiteralTypes(true),
 				RdfParser.DEFAULT_TURTLE,
 				0
 			},
 			{ /* 17 */
 				"Rdf.NTriple",
-				new RdfSerializer.NTriple().setProperty(SERIALIZER_trimNullProperties, false).setProperty(RDF_addLiteralTypes, true),
+				new RdfSerializer.NTriple().setTrimNullProperties(false).setAddLiteralTypes(true),
 				RdfParser.DEFAULT_NTRIPLE,
 				0
 			},
 			{ /* 18 */
 				"Rdf.N3",
-				new RdfSerializer.N3().setProperty(SERIALIZER_trimNullProperties, false).setProperty(RDF_addLiteralTypes, true),
+				new RdfSerializer.N3().setTrimNullProperties(false).setAddLiteralTypes(true),
 				RdfParser.DEFAULT_N3,
 				0
 			},
 			{ /* 19 */
 				"MsgPack",
-				new MsgPackSerializer().setProperty(SERIALIZER_trimNullProperties, false).setProperty(RDF_addLiteralTypes, true),
+				new MsgPackSerializer().setTrimNullProperties(false),
 				MsgPackParser.DEFAULT,
 				0
 			},
@@ -175,13 +170,13 @@ public abstract class RoundTripTest {
 			// Validation testing only
 			{ /* 20 */
 				"Json schema",
-				new JsonSchemaSerializer().setProperty(SERIALIZER_trimNullProperties, false),
+				new JsonSchemaSerializer().setTrimNullProperties(false),
 				null,
 				RETURN_ORIGINAL_OBJECT
 			},
 			{ /* 21 */
 				"Xml schema",
-				new XmlSchemaSerializer().setProperty(SERIALIZER_trimNullProperties, false),
+				new XmlSchemaSerializer().setTrimNullProperties(false),
 				new XmlValidatorParser(),
 				RETURN_ORIGINAL_OBJECT | CHECK_XML_WHITESPACE
 			},
@@ -197,8 +192,8 @@ public abstract class RoundTripTest {
 	public boolean debug = false;
 
 	public RoundTripTest(String label, Serializer s, Parser p, int flags) throws Exception {
-		this.s = s.clone().addBeanFilters(getBeanFilters()).addPojoSwaps(getPojoSwaps()).addToDictionary(getDictionary());
-		this.p = p == null ? null : p.clone().addBeanFilters(getBeanFilters()).addPojoSwaps(getPojoSwaps()).addToDictionary(getDictionary());
+		this.s = s.clone().addBeanFilters(getBeanFilters()).addPojoSwaps(getPojoSwaps()).addToBeanDictionary(getDictionary());
+		this.p = p == null ? null : p.clone().addBeanFilters(getBeanFilters()).addPojoSwaps(getPojoSwaps()).addToBeanDictionary(getDictionary());
 		this.label = label;
 
 		Map<Class<Object>, Class<? extends Object>> m = getImplClasses();
@@ -271,10 +266,10 @@ public abstract class RoundTripTest {
 			p.addPojoSwaps(c);
 	}
 
-	protected void addToDictionary(Class<?>...c) {
-		s.addToDictionary(c);
+	protected void addToBeanDictionary(Class<?>...c) {
+		s.addToBeanDictionary(c);
 		if (p != null)
-			p.addToDictionary(c);
+			p.addToBeanDictionary(c);
 	}
 
 	public boolean isValidationOnly() {

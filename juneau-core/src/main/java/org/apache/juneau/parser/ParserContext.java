@@ -17,39 +17,6 @@ import org.apache.juneau.json.*;
 
 /**
  * Configurable properties common to all parsers.
- *
- * <h6 class='topic' id='ConfigProperties'>Configurable properties common to all parsers</h6>
- * <table class='styled' style='border-collapse: collapse;'>
- * 	<tr><th>Setting name</th><th>Description</th><th>Data type</th><th>Default value</th><th>Session overridable</th></tr>
- * 	<tr>
- * 		<td>{@link #PARSER_trimStrings}</td>
- * 		<td>Trim parsed strings.</td>
- * 		<td><code>Boolean</code></td>
- * 		<td><jk>false</jk></td>
- * 		<td><jk>true</jk></td>
- * 	</tr>
- * 	<tr>
- * 		<td>{@link #PARSER_strict}</td>
- * 		<td>Strict mode.</td>
- * 		<td><code>Boolean</code></td>
- * 		<td><jk>false</jk></td>
- * 		<td><jk>true</jk></td>
- * 	</tr>
- * 	<tr>
- * 		<td>{@link #PARSER_inputStreamCharset}</td>
- * 		<td>Input stream charset.</td>
- * 		<td><code>String</code></td>
- * 		<td><js>"UTF-8"</js></td>
- * 		<td><jk>true</jk></td>
- * 	</tr>
- * 	<tr>
- * 		<td>{@link #PARSER_fileCharset}</td>
- * 		<td>File charset.</td>
- * 		<td><code>String</code></td>
- * 		<td><js>"default"</js></td>
- * 		<td><jk>true</jk></td>
- * 	</tr>
- * </table>
  */
 public class ParserContext extends BeanContext {
 

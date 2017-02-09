@@ -13,8 +13,6 @@
 package org.apache.juneau.xml;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.serializer.SerializerContext.*;
-import static org.apache.juneau.xml.XmlSerializerContext.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 import static org.junit.Assert.*;
 
@@ -42,13 +40,13 @@ public class CommonTest {
 		XmlParser p = new XmlParser();
 		A t1 = A.create(), t2;
 
-		s.setProperty(SERIALIZER_trimNullProperties, false);
+		s.setTrimNullProperties(false);
 		String r = s.serialize(t1);
 		assertEquals("<object><s1 _type='null'/><s2>s2</s2></object>", r);
 		t2 = p.parse(r, A.class);
 		assertEqualObjects(t1, t2);
 
-		s.setProperty(SERIALIZER_trimNullProperties, true);
+		s.setTrimNullProperties(true);
 		r = s.serialize(t1);
 		assertEquals("<object><s2>s2</s2></object>", r);
 		t2 = p.parse(r, A.class);
@@ -75,13 +73,13 @@ public class CommonTest {
 		B t1 = B.create(), t2;
 		String r;
 
-		s.setProperty(SERIALIZER_trimEmptyMaps, false);
+		s.setTrimEmptyMaps(false);
 		r = s.serialize(t1);
 		assertEquals("<object><f1/><f2><f2a _type='null'/><f2b><s2>s2</s2></f2b></f2></object>", r);
 		t2 = p.parse(r, B.class);
 		assertEqualObjects(t1, t2);
 
-		s.setProperty(SERIALIZER_trimEmptyMaps, true);
+		s.setTrimEmptyMaps(true);
 		r = s.serialize(t1);
 		assertEquals("<object><f2><f2a _type='null'/><f2b><s2>s2</s2></f2b></f2></object>", r);
 		t2 = p.parse(r, B.class);
@@ -109,13 +107,13 @@ public class CommonTest {
 		C t1 = C.create(), t2;
 		String r;
 
-		s.setProperty(SERIALIZER_trimEmptyCollections, false);
+		s.setTrimEmptyCollections(false);
 		r = s.serialize(t1);
 		assertEquals("<object><f1></f1><f2><null/><object><s2>s2</s2></object></f2></object>", r);
 		t2 = p.parse(r, C.class);
 		assertEqualObjects(t1, t2);
 
-		s.setProperty(SERIALIZER_trimEmptyCollections, true);
+		s.setTrimEmptyCollections(true);
 		r = s.serialize(t1);
 		assertEquals("<object><f2><null/><object><s2>s2</s2></object></f2></object>", r);
 		t2 = p.parse(r, C.class);
@@ -143,13 +141,13 @@ public class CommonTest {
 		D t1 = D.create(), t2;
 		String r;
 
-		s.setProperty(SERIALIZER_trimEmptyCollections, false);
+		s.setTrimEmptyCollections(false);
 		r = s.serialize(t1);
 		assertEquals("<object><f1></f1><f2><null/><object><s2>s2</s2></object></f2></object>", r);
 		t2 = p.parse(r, D.class);
 		assertEqualObjects(t1, t2);
 
-		s.setProperty(SERIALIZER_trimEmptyCollections, true);
+		s.setTrimEmptyCollections(true);
 		r = s.serialize(t1);
 		assertEquals("<object><f2><null/><object><s2>s2</s2></object></f2></object>", r);
 		t2 = p.parse(r, D.class);
@@ -265,7 +263,7 @@ public class CommonTest {
 		String r;
 		String expected;
 
-		s.setProperty(SERIALIZER_relativeUriBase, null);
+		s.setRelativeUriBase(null);
 		r = s.serialize(t);
 		expected = ""
 			+"<object f0='f0/x0'>"
@@ -286,11 +284,11 @@ public class CommonTest {
 			+"</object>";
 		assertEquals(expected, r);
 
-		s.setProperty(SERIALIZER_relativeUriBase, "");  // Same as null.
+		s.setRelativeUriBase("");  // Same as null.
 		r = s.serialize(t);
 		assertEquals(expected, r);
 
-		s.setProperty(SERIALIZER_relativeUriBase, "/cr");
+		s.setRelativeUriBase("/cr");
 		r = s.serialize(t);
 		expected = ""
 			+"<object f0='/cr/f0/x0'>"
@@ -311,11 +309,11 @@ public class CommonTest {
 			+"</object>";
 		assertEquals(expected, r);
 
-		s.setProperty(SERIALIZER_relativeUriBase, "/cr/");  // Same as above
+		s.setRelativeUriBase("/cr/");  // Same as above
 		r = s.serialize(t);
 		assertEquals(expected, r);
 
-		s.setProperty(SERIALIZER_relativeUriBase, "/");
+		s.setRelativeUriBase("/");
 		r = s.serialize(t);
 		expected = ""
 			+"<object f0='/f0/x0'>"
@@ -336,9 +334,9 @@ public class CommonTest {
 			+"</object>";
 		assertEquals(expected, r);
 
-		s.setProperty(SERIALIZER_relativeUriBase, null);
+		s.setRelativeUriBase(null);
 
-		s.setProperty(SERIALIZER_absolutePathUriBase, "http://foo");
+		s.setAbsolutePathUriBase("http://foo");
 		r = s.serialize(t);
 		expected = ""
 			+"<object f0='f0/x0'>"
@@ -359,11 +357,11 @@ public class CommonTest {
 			+"</object>";
 		assertEquals(expected, r);
 
-		s.setProperty(SERIALIZER_absolutePathUriBase, "http://foo/");
+		s.setAbsolutePathUriBase("http://foo/");
 		r = s.serialize(t);
 		assertEquals(expected, r);
 
-		s.setProperty(SERIALIZER_absolutePathUriBase, "");  // Same as null.
+		s.setAbsolutePathUriBase("");  // Same as null.
 		r = s.serialize(t);
 		expected = ""
 			+"<object f0='f0/x0'>"
@@ -392,15 +390,15 @@ public class CommonTest {
 	public void testLockedSerializer() throws Exception {
 		XmlSerializer s = new XmlSerializer().lock();
 		try {
-			s.setProperty(XmlSerializerContext.XML_enableNamespaces, true);
+			s.setEnableNamespaces(true);
 			fail("Locked exception not thrown");
 		} catch (LockedException e) {}
 		try {
-			s.setProperty(SerializerContext.SERIALIZER_addBeanTypeProperties, true);
+			s.setAddBeanTypeProperties(true);
 			fail("Locked exception not thrown");
 		} catch (LockedException e) {}
 		try {
-			s.setProperty(BeanContext.BEAN_beanMapPutReturnsOldValue, true);
+			s.setBeanMapPutReturnsOldValue(true);
 			fail("Locked exception not thrown");
 		} catch (LockedException e) {}
 	}
@@ -410,7 +408,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testRecursion() throws Exception {
-		XmlSerializer s = new XmlSerializer().setProperty(XML_enableNamespaces, false);
+		XmlSerializer s = new XmlSerializer().setEnableNamespaces(false);
 
 		R1 r1 = new R1();
 		R2 r2 = new R2();
@@ -429,7 +427,7 @@ public class CommonTest {
 		}
 
 		// Recursion detection, no ignore
-		s.setProperty(SERIALIZER_detectRecursions, true);
+		s.setDetectRecursions(true);
 		try {
 			s.serialize(r1);
 			fail("Exception expected!");
@@ -441,7 +439,7 @@ public class CommonTest {
 			assertTrue(msg.contains("->[3]r1:org.apache.juneau.xml.CommonTest$R1"));
 		}
 
-		s.setProperty(SERIALIZER_ignoreRecursions, true);
+		s.setIgnoreRecursions(true);
 		assertEquals("<object><name>foo</name><r2><name>bar</name><r3><name>baz</name></r3></r2></object>", s.serialize(r1));
 
 		// Make sure this doesn't blow up.

@@ -238,9 +238,9 @@
 	<p class='bcode'>
 	<jc>// Create a new serializer with readable output, no namespaces yet.</jc>
 	XmlSerializer s = <jk>new</jk> XmlSerializer()
-		.setProperty(SerializerContext.<jsf>SERIALIZER_useIndentation</jsf>, <jk>true</jk>)
-		.setProperty(SerializerContext.<jsf>SERIALIZER_quoteChar</jsf>, <js>'\''</js>)
-		.setProperty(XmlSerializerContext.<jsf>XML_enableNamespaces</jsf>, <jk>false</jk>);
+		.setUseIndentation(<jk>true</jk>)
+		.setQuoteChar(<js>'\''</js>)
+		.setEnableNamespaces(<jk>false</jk>);
 
 	<jc>// Create our bean.</jc>
 	Person p = <jk>new</jk> Person(1, <js>"John Smith"</js>);
@@ -254,7 +254,7 @@
 	<p class='bcode'>
 	<jc>// Create a new serializer with readable output, no namespaces yet, but use cloning method.</jc>
 	XmlSerializer s = XmlSerializer.<jsf>DEFAULT_SQ_READABLE</jsf>.clone()
-		.setProperty(XmlSerializerContext.<jsf>XML_enableNamespaces</jsf>, <jk>false</jk>);
+		.setEnableNamespaces(<jk>false</jk>);
 	</p>
 	<p>
 		The code above produces the following output:
@@ -1984,9 +1984,9 @@
 	<jc>// Create a new serializer with readable output, this time with namespaces enabled.</jc>
 	<jc>// Note that this is identical to XmlSerializer.DEFAULT_NS_SQ_READABLE.</jc>
 	XmlSerializer s = <jk>new</jk> XmlSerializer()
-		.setProperty(XmlSerializerContext.<jsf>XML_enableNamespaces</jsf>, <jk>true</jk>)
-		.setProperty(SerializerContext.<jsf>SERIALIZER_useIndentation</jsf>, <jk>true</jk>)
-		.setProperty(SerializerContext.<jsf>SERIALIZER_quoteChar</jsf>, <js>'\''</js>);
+		.setEnableNamespaces(<jk>true</jk>)
+		.setUseIndentation(<jk>true</jk>)
+		.setQuoteChar(<js>'\''</js>);
 
 	<jc>// Create our bean.</jc>
 	Person p = <jk>new</jk> Person(1, <js>"John Smith"</js>);
@@ -2073,10 +2073,10 @@
 		<p class='bcode'>
 	<jc>// Create a new serializer with readable output, this time with namespaces enabled.</jc>
 	XmlSerializer s = <jk>new</jk> XmlSerializer()
-		.setProperty(SerializerContext.<jsf>SERIALIZER_useIndentation</jsf>, <jk>true</jk>)
-		.setProperty(SerializerContext.<jsf>SERIALIZER_quoteChar</jsf>, <js>'\''</js>)
-		.setProperty(XmlSerializerContext.<jsf>XML_enableNamespaces</jsf>, <jk>true</jk>)
-		.setProperty(XmlSerializerContext.<jsf>XML_defaultNamespaceUri</jsf>, <js>"http://www.apache.org/person/"</js>);
+		.setUseIndentation(<jk>true</jk>)
+		.setQuoteChar(<js>'\''</js>)
+		.setEnableNamespaces(<jk>true</jk>)
+		.setDefaultNamespaceUri(<js>"http://www.apache.org/person/"</js>);
 		</p>
 		<p>
 			This produces the following equivalent where the elements don't need prefixes since they're already in the default document namespace:
@@ -2107,10 +2107,10 @@
 			<p class='bcode'>
 	<jc>// Create a new serializer with readable output, this time with namespaces enabled.</jc>
 	XmlSerializer s = <jk>new</jk> XmlSerializer()
-		.setProperty(SerializerContext.<jsf>SERIALIZER_useIndentation</jsf>, <jk>true</jk>)
-		.setProperty(SerializerContext.<jsf>SERIALIZER_quoteChar</jsf>, <js>'\''</js>)
-		.setProperty(XmlSerializerContext.<jsf>XML_autoDetectNamespaces</jsf>, <jk>false</jk>)
-		.setProperty(XmlSerializerContext.<jsf>XML_namespaces</jsf>, <js>"{per:'http://www.apache.org/person/'}"</js>);
+		.setUseIndentation(<jk>true</jk>)
+		.setQuoteChar(<js>'\''</js>)
+		.setAutoDetectNamespaces(<jk>false</jk>)
+		.setNamespaces(<js>"{per:'http://www.apache.org/person/'}"</js>);
 			</p>
 		</div>
 		
@@ -2241,8 +2241,8 @@
 		<p class='bcode'>
 	<jc>// Create a new serializer with readable output.</jc>
 	XmlSerializer s = <jk>new</jk> XmlSerializer()
-		.setProperty(SerializerContext.<jsf>SERIALIZER_useIndentation</jsf>, <jk>true</jk>)
-		.setProperty(SerializerContext.<jsf>SERIALIZER_quoteChar</jsf>, <js>'\''</js>);
+		.setUseIndentation(<jk>true</jk>)
+		.setQuoteChar(<js>'\''</js>);
 
 	<jc>// Create our bean.</jc>
 	Person p = <jk>new</jk> Person(1, <js>"John Smith"</js>, <js>"http://sample/addressBook/person/1"</js>, <js>"http://sample/addressBook"</js>, <js>"Aug 12, 1946"</js>);
@@ -2354,10 +2354,10 @@
 		<p class='bcode'>
 	<jc>// Create a new serializer with readable output.</jc>
 	XmlSerializer s = <jk>new</jk> XmlSerializer()
-		.setProperty(SerializerContext.<jsf>SERIALIZER_useIndentation</jsf>, <jk>true</jk>)
-		.setProperty(XmlSerializerContext.<jsf>XML_enableNamespaces</jsf>, <jk>true</jk>)
-		.setProperty(XmlSerializerContext.<jsf>XML_addNamespaceUrisToRoot</jsf>, <jk>true</jk>)
-		.setProperty(SerializerContext.<jsf>SERIALIZER_quoteChar</jsf>, <js>'\''</js>);
+		.setUseIndentation(<jk>true</jk>)
+		.setEnableNamespaces(<jk>true</jk>)
+		.setAddNamespaceUrisToRoot(<jk>true</jk>)
+		.setQuoteChar(<js>'\''</js>);
 
 	<jc>// Create the equivalent schema serializer.</jc>
 	XmlSchemaSerializer ss = s.getSchemaSerializer();
@@ -2656,10 +2656,10 @@
 		<p class='bcode'>
 	<jc>// Create a new serializer with readable output.</jc>
 	XmlSerializer s = <jk>new</jk> XmlSerializer()
-		.setProperty(SerializerContext.<jsf>SERIALIZER_useIndentation</jsf>, <jk>true</jk>)
-		.setProperty(SerializerContext.<jsf>SERIALIZER_quoteChar</jsf>, <js>'\''</js>)
-		.setProperty(XmlSerializerContext.<jsf>XML_enableNamespaces</jsf>, <jk>false</jk>)
-		.setProperty(SerializerContext.<jsf>SERIALIZER_detectRecursions</jsf>, <jk>true</jk>);
+		.setUseIndentation(<jk>true</jk>)
+		.setQuoteChar(<js>'\''</js>)
+		.setEnableNamespaces(<jk>false</jk>)
+		.setDetectRecursions(<jk>true</jk>);
 
 	<jc>// Create a recursive loop.</jc>
 	A a = <jk>new</jk> A();
@@ -2736,9 +2736,9 @@
 	<p class='bcode'>
 	<jc>// Create a new serializer with readable output.</jc>
 	XmlSerializer s = <jk>new</jk> XmlSerializer()
-		.setProperty(XmlSerializerContext.<jsf>XML_enableNamespaces</jsf>, <jk>true</jk>)
-		.setProperty(SerializerContext.<jsf>SERIALIZER_useIndentation</jsf>, <jk>true</jk>)
-		.setProperty(SerializerContext.<jsf>SERIALIZER_quoteChar</jsf>, <js>'\''</js>);
+		.setEnableNamespaces(<jk>true</jk>)
+		.setUseIndentation(<jk>true</jk>)
+		.setQuoteChar(<js>'\''</js>);
 
 	<jc>// Create our bean.</jc>
 	Person p = <jk>new</jk> Person(1, <js>"John Smith"</js>, <js>"http://sample/addressBook/person/1"</js>, <js>"http://sample/addressBook"</js>, <js>"Aug 12, 1946"</js>);

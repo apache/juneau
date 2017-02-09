@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transforms;
 
-import static org.apache.juneau.html.HtmlSerializerContext.*;
-import static org.apache.juneau.jena.RdfCommonContext.*;
 import static org.junit.Assert.*;
 
 import java.net.*;
@@ -55,11 +53,11 @@ public class CalendarSwapTest {
 
 	private RdfSerializer getRdfSerializer() {
 		return new RdfSerializer()
-			.setProperty(SERIALIZER_quoteChar, '\'')
-			.setProperty(SERIALIZER_useIndentation, false)
-			.setProperty(RDF_rdfxml_allowBadUris, true)
-			.setProperty(RDF_rdfxml_showDoctypeDeclaration, false)
-			.setProperty(RDF_rdfxml_showXmlDeclaration, false);
+			.setQuoteChar('\'')
+			.setUseIndentation(false)
+			.setProperty(RdfCommonContext.RDF_rdfxml_allowBadUris, true)
+			.setProperty(RdfCommonContext.RDF_rdfxml_showDoctypeDeclaration, false)
+			.setProperty(RdfCommonContext.RDF_rdfxml_showXmlDeclaration, false);
 	}
 
 	private String stripRdf(String s) {
@@ -440,7 +438,7 @@ public class CalendarSwapTest {
 	@Test
 	public void testDefaultMapHtml() throws Exception {
 		Class<?> f = CalendarMapSwap.class;
-		WriterSerializer s = new HtmlSerializer.Sq().addPojoSwaps(f).setProperty(HTML_addKeyValueTableHeaders, true);
+		WriterSerializer s = new HtmlSerializer.Sq().addPojoSwaps(f).setAddKeyValueTableHeaders(true);
 		ReaderParser p = new HtmlParser().addPojoSwaps(f);
 		doTest(s, p, true, "<table><tr><th>key</th><th>value</th></tr><tr><td>time</td><td><number>-2172116928000</number></td></tr><tr><td>timeZone</td><td>PST</td></tr></table>");
 	}
@@ -585,7 +583,7 @@ public class CalendarSwapTest {
 	//====================================================================================================
 	@Test
 	public void testBeanProperyFilterHtml() throws Exception {
-		WriterSerializer s = HtmlSerializer.DEFAULT_SQ.clone().setProperty(HTML_addKeyValueTableHeaders, true);
+		WriterSerializer s = HtmlSerializer.DEFAULT_SQ.clone().setAddKeyValueTableHeaders(true);
 		ReaderParser p = HtmlParser.DEFAULT;
 
 		Calendar c = testDate;

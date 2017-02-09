@@ -13,7 +13,6 @@
 package org.apache.juneau.html;
 
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.serializer.SerializerContext.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -49,8 +48,8 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 	 * Constructor.
 	 */
 	public HtmlSchemaDocSerializer() {
-		setProperty(SERIALIZER_detectRecursions, true);
-		setProperty(SERIALIZER_ignoreRecursions, true);
+		setDetectRecursions(true);
+		setIgnoreRecursions(true);
 	}
 
 	/**
@@ -60,8 +59,8 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 	 */
 	public HtmlSchemaDocSerializer(ContextFactory cf) {
 		getContextFactory().copyFrom(cf);
-		setProperty(SERIALIZER_detectRecursions, true);
-		setProperty(SERIALIZER_ignoreRecursions, true);
+		setDetectRecursions(true);
+		setIgnoreRecursions(true);
 	}
 
 	@Override /* Serializer */

@@ -10,54 +10,17 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.dto.html5;
+package org.apache.juneau.annotation;
 
-import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#the-param-element">&lt;param&gt;</a> element.
- * <p>
+ * TODO
  */
-@Bean(typeName="param")
-public class Param extends HtmlElementEmpty {
+public @interface BeanParam {
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-param-name">name</a> attribute.
-	 * Name of parameter.
-	 * @param name The new value for this attribute.
-	 * @return This object (for method chaining).
+	 * TODO
 	 */
-	public final Param name(String name) {
-		attr("name", name);
-		return this;
-	}
+	String value() default "";
 
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-param-value">value</a> attribute.
-	 * Value of parameter.
-	 * @param value The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object (for method chaining).
-	 */
-	public final Param value(Object value) {
-		attr("value", value);
-		return this;
-	}
-
-
-	//--------------------------------------------------------------------------------
-	// Overridden methods
-	//--------------------------------------------------------------------------------
-
-	@Override /* HtmlElement */
-	public final Param _class(String _class) {
-		super._class(_class);
-		return this;
-	}
-
-	@Override /* HtmlElement */
-	public final Param id(String id) {
-		super.id(id);
-		return this;
-	}
 }

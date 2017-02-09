@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
-import static org.apache.juneau.serializer.SerializerContext.*;
 import static org.apache.juneau.html.HtmlSerializer.ContentResult.*;
+import static org.apache.juneau.html.HtmlSerializerContext.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -72,11 +72,11 @@ import org.apache.juneau.xml.annotation.*;
  *
  * 		<jc>// Create a custom serializer that doesn't use whitespace and newlines</jc>
  * 		HtmlSerializer serializer = <jk>new</jk> HtmlSerializer()
- * 			.setProperty(SerializerContext.<jsf>SERIALIZER_useIndentation</jsf>, <jk>false</jk>);
+ * 			.setUseIndentation(<jk>false</jk>);
  *
  * 		<jc>// Same as above, except uses cloning</jc>
  * 		HtmlSerializer serializer = HtmlSerializer.<jsf>DEFAULT</jsf>.clone()
- * 			.setProperty(SerializerContext.<jsf>SERIALIZER_useIndentation</jsf>, <jk>false</jk>);
+ * 			.setUseIndentation(<jk>false</jk>);
  *
  * 		<jc>// Serialize POJOs to HTML</jc>
  *
@@ -144,7 +144,7 @@ public class HtmlSerializer extends XmlSerializer {
 	public static class Sq extends HtmlSerializer {
 		/** Constructor */
 		public Sq() {
-			setProperty(SERIALIZER_quoteChar, '\'');
+			setQuoteChar('\'');
 		}
 	}
 
@@ -152,7 +152,7 @@ public class HtmlSerializer extends XmlSerializer {
 	public static class SqReadable extends Sq {
 		/** Constructor */
 		public SqReadable() {
-			setProperty(SERIALIZER_useIndentation, true);
+			setUseIndentation(true);
 		}
 	}
 
@@ -641,8 +641,9 @@ public class HtmlSerializer extends XmlSerializer {
 		}
 	}
 
+
 	//--------------------------------------------------------------------------------
-	// Overridden methods
+	// Entry point methods
 	//--------------------------------------------------------------------------------
 
 	@Override /* Serializer */
@@ -656,9 +657,578 @@ public class HtmlSerializer extends XmlSerializer {
 		doSerialize(s, o, s.getWriter());
 	}
 
+
+	//--------------------------------------------------------------------------------
+	// Properties
+	//--------------------------------------------------------------------------------
+
+	/**
+	 * <b>Configuration property:</b>  Anchor text source.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"HtmlSerializer.uriAnchorText"</js>
+	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Default:</b> <js>"toString"</js>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * When creating anchor tags (e.g. <code><xt>&lt;a</xt> <xa>href</xa>=<xs>'...'</xs><xt>&gt;</xt>text<xt>&lt;/a&gt;</xt></code>)
+	 * 	in HTML, this setting defines what to set the inner text to.
+	 * <p>
+	 * Possible values:
+	 * <ul class='spaced-list'>
+	 * 	<li>{@link HtmlSerializerContext#TO_STRING} / <js>"toString"</js> - Set to whatever is returned by {@link #toString()} on the object.
+	 * 	<li>{@link HtmlSerializerContext#URI} / <js>"uri"</js> - Set to the URI value.
+	 * 	<li>{@link HtmlSerializerContext#LAST_TOKEN} / <js>"lastToken"</js> - Set to the last token of the URI value.
+	 * 	<li>{@link HtmlSerializerContext#PROPERTY_NAME} / <js>"propertyName"</js> - Set to the bean property name.
+	 * 	<li>{@link HtmlSerializerContext#URI_ANCHOR} / <js>"uriAnchor"</js> - Set to the anchor of the URL.  (e.g. <js>"http://localhost:9080/foobar#anchorTextHere"</js>)
+	 * </ul>
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>HTML_uriAnchorText</jsf>, value)</code>.
+	 * 	<li>This introduces a slight performance penalty.
+	 * </ul>
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see HtmlSerializerContext#HTML_uriAnchorText
+	 */
+	public HtmlSerializer setUriAnchorText(String value) throws LockedException {
+		return setProperty(HTML_uriAnchorText, value);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Look for URLs in {@link String Strings}.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"HtmlSerializer.detectLinksInStrings"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * If a string looks like a URL (e.g. starts with <js>"http://"</js> or <js>"https://"</js>, then treat it like a URL
+	 * 	and make it into a hyperlink based on the rules specified by {@link HtmlSerializerContext#HTML_uriAnchorText}.
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>HTML_detectLinksInStrings</jsf>, value)</code>.
+	 * 	<li>This introduces a slight performance penalty.
+	 * </ul>
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see HtmlSerializerContext#HTML_detectLinksInStrings
+	 */
+	public HtmlSerializer setDetectLinksInStrings(boolean value) throws LockedException {
+		return setProperty(HTML_detectLinksInStrings, value);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Look for link labels in the <js>"label"</js> parameter of the URL.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"HtmlSerializer.lookForLabelParameters"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * If the URL has a label parameter (e.g. <js>"?label=foobar"</js>), then use that as the anchor text of the link.
+	 * <p>
+	 * The parameter name can be changed via the {@link HtmlSerializerContext#HTML_labelParameter} property.
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>HTML_lookForLabelParameters</jsf>, value)</code>.
+	 * 	<li>This introduces a slight performance penalty.
+	 * </ul>
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see HtmlSerializerContext#HTML_lookForLabelParameters
+	 */
+	public HtmlSerializer setLookForLabelParameters(boolean value) throws LockedException {
+		return setProperty(HTML_lookForLabelParameters, value);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  The parameter name to use when using {@link HtmlSerializerContext#HTML_lookForLabelParameters}.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"HtmlSerializer.labelParameter"</js>
+	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Default:</b> <js>"label"</js>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>HTML_labelParameter</jsf>, value)</code>.
+	 * 	<li>This introduces a slight performance penalty.
+	 * </ul>
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see HtmlSerializerContext#HTML_labelParameter
+	 */
+	public HtmlSerializer setLabelParameter(String value) throws LockedException {
+		return setProperty(HTML_labelParameter, value);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Add key/value headers on bean/map tables.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"HtmlSerializer.addKeyValueTableHeaders"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>HTML_addKeyValueTableHeaders</jsf>, value)</code>.
+	 * 	<li>This introduces a slight performance penalty.
+	 * </ul>
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @throws LockedException If {@link #lock()} was called on this class.
+	 * @see HtmlSerializerContext#HTML_addKeyValueTableHeaders
+	 */
+	public HtmlSerializer setAddKeyValueTableHeaders(boolean value) throws LockedException {
+		return setProperty(HTML_addKeyValueTableHeaders, value);
+	}
+
+	@Override /* Serializer */
+	public HtmlSerializer setMaxDepth(int value) throws LockedException {
+		super.setMaxDepth(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public HtmlSerializer setInitialDepth(int value) throws LockedException {
+		super.setInitialDepth(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public HtmlSerializer setDetectRecursions(boolean value) throws LockedException {
+		super.setDetectRecursions(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public HtmlSerializer setIgnoreRecursions(boolean value) throws LockedException {
+		super.setIgnoreRecursions(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public HtmlSerializer setUseIndentation(boolean value) throws LockedException {
+		super.setUseIndentation(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public HtmlSerializer setAddBeanTypeProperties(boolean value) throws LockedException {
+		super.setAddBeanTypeProperties(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public HtmlSerializer setQuoteChar(char value) throws LockedException {
+		super.setQuoteChar(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public HtmlSerializer setTrimNullProperties(boolean value) throws LockedException {
+		super.setTrimNullProperties(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public HtmlSerializer setTrimEmptyCollections(boolean value) throws LockedException {
+		super.setTrimEmptyCollections(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public HtmlSerializer setTrimEmptyMaps(boolean value) throws LockedException {
+		super.setTrimEmptyMaps(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public HtmlSerializer setTrimStrings(boolean value) throws LockedException {
+		super.setTrimStrings(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public HtmlSerializer setRelativeUriBase(String value) throws LockedException {
+		super.setRelativeUriBase(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public HtmlSerializer setAbsolutePathUriBase(String value) throws LockedException {
+		super.setAbsolutePathUriBase(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public HtmlSerializer setSortCollections(boolean value) throws LockedException {
+		super.setSortCollections(value);
+		return this;
+	}
+
+	@Override /* Serializer */
+	public HtmlSerializer setSortMaps(boolean value) throws LockedException {
+		super.setSortMaps(value);
+		return this;
+	}
+
 	@Override /* CoreApi */
-	public HtmlSerializer setProperty(String property, Object value) throws LockedException {
-		super.setProperty(property, value);
+	public HtmlSerializer setBeansRequireDefaultConstructor(boolean value) throws LockedException {
+		super.setBeansRequireDefaultConstructor(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer setBeansRequireSerializable(boolean value) throws LockedException {
+		super.setBeansRequireSerializable(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer setBeansRequireSettersForGetters(boolean value) throws LockedException {
+		super.setBeansRequireSettersForGetters(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer setBeansRequireSomeProperties(boolean value) throws LockedException {
+		super.setBeansRequireSomeProperties(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer setBeanMapPutReturnsOldValue(boolean value) throws LockedException {
+		super.setBeanMapPutReturnsOldValue(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer setBeanConstructorVisibility(Visibility value) throws LockedException {
+		super.setBeanConstructorVisibility(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer setBeanClassVisibility(Visibility value) throws LockedException {
+		super.setBeanClassVisibility(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer setBeanFieldVisibility(Visibility value) throws LockedException {
+		super.setBeanFieldVisibility(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer setMethodVisibility(Visibility value) throws LockedException {
+		super.setMethodVisibility(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer setUseJavaBeanIntrospector(boolean value) throws LockedException {
+		super.setUseJavaBeanIntrospector(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer setUseInterfaceProxies(boolean value) throws LockedException {
+		super.setUseInterfaceProxies(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer setIgnoreUnknownBeanProperties(boolean value) throws LockedException {
+		super.setIgnoreUnknownBeanProperties(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer setIgnoreUnknownNullBeanProperties(boolean value) throws LockedException {
+		super.setIgnoreUnknownNullBeanProperties(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer setIgnorePropertiesWithoutSetters(boolean value) throws LockedException {
+		super.setIgnorePropertiesWithoutSetters(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer setIgnoreInvocationExceptionsOnGetters(boolean value) throws LockedException {
+		super.setIgnoreInvocationExceptionsOnGetters(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer setIgnoreInvocationExceptionsOnSetters(boolean value) throws LockedException {
+		super.setIgnoreInvocationExceptionsOnSetters(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer setSortProperties(boolean value) throws LockedException {
+		super.setSortProperties(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer setNotBeanPackages(String...values) throws LockedException {
+		super.setNotBeanPackages(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer setNotBeanPackages(Collection<String> values) throws LockedException {
+		super.setNotBeanPackages(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer addNotBeanPackages(String...values) throws LockedException {
+		super.addNotBeanPackages(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer addNotBeanPackages(Collection<String> values) throws LockedException {
+		super.addNotBeanPackages(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer removeNotBeanPackages(String...values) throws LockedException {
+		super.removeNotBeanPackages(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer removeNotBeanPackages(Collection<String> values) throws LockedException {
+		super.removeNotBeanPackages(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer setNotBeanClasses(Class<?>...values) throws LockedException {
+		super.setNotBeanClasses(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer setNotBeanClasses(Collection<Class<?>> values) throws LockedException {
+		super.setNotBeanClasses(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer addNotBeanClasses(Class<?>...values) throws LockedException {
+		super.addNotBeanClasses(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer addNotBeanClasses(Collection<Class<?>> values) throws LockedException {
+		super.addNotBeanClasses(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer removeNotBeanClasses(Class<?>...values) throws LockedException {
+		super.removeNotBeanClasses(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer removeNotBeanClasses(Collection<Class<?>> values) throws LockedException {
+		super.removeNotBeanClasses(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer setBeanFilters(Class<?>...values) throws LockedException {
+		super.setBeanFilters(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer setBeanFilters(Collection<Class<?>> values) throws LockedException {
+		super.setBeanFilters(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer addBeanFilters(Class<?>...values) throws LockedException {
+		super.addBeanFilters(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer addBeanFilters(Collection<Class<?>> values) throws LockedException {
+		super.addBeanFilters(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer removeBeanFilters(Class<?>...values) throws LockedException {
+		super.removeBeanFilters(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer removeBeanFilters(Collection<Class<?>> values) throws LockedException {
+		super.removeBeanFilters(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer setPojoSwaps(Class<?>...values) throws LockedException {
+		super.setPojoSwaps(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer setPojoSwaps(Collection<Class<?>> values) throws LockedException {
+		super.setPojoSwaps(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer addPojoSwaps(Class<?>...values) throws LockedException {
+		super.addPojoSwaps(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer addPojoSwaps(Collection<Class<?>> values) throws LockedException {
+		super.addPojoSwaps(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer removePojoSwaps(Class<?>...values) throws LockedException {
+		super.removePojoSwaps(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer removePojoSwaps(Collection<Class<?>> values) throws LockedException {
+		super.removePojoSwaps(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer setImplClasses(Map<Class<?>,Class<?>> values) throws LockedException {
+		super.setImplClasses(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public <T> CoreApi addImplClass(Class<T> interfaceClass, Class<? extends T> implClass) throws LockedException {
+		super.addImplClass(interfaceClass, implClass);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer setBeanDictionary(Class<?>...values) throws LockedException {
+		super.setBeanDictionary(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer setBeanDictionary(Collection<Class<?>> values) throws LockedException {
+		super.setBeanDictionary(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer addToBeanDictionary(Class<?>...values) throws LockedException {
+		super.addToBeanDictionary(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer addToBeanDictionary(Collection<Class<?>> values) throws LockedException {
+		super.addToBeanDictionary(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer removeFromBeanDictionary(Class<?>...values) throws LockedException {
+		super.removeFromBeanDictionary(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer removeFromBeanDictionary(Collection<Class<?>> values) throws LockedException {
+		super.removeFromBeanDictionary(values);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer setBeanTypePropertyName(String value) throws LockedException {
+		super.setBeanTypePropertyName(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer setDefaultParser(Class<?> value) throws LockedException {
+		super.setDefaultParser(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer setLocale(Locale value) throws LockedException {
+		super.setLocale(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer setTimeZone(TimeZone value) throws LockedException {
+		super.setTimeZone(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer setMediaType(MediaType value) throws LockedException {
+		super.setMediaType(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer setDebug(boolean value) throws LockedException {
+		super.setDebug(value);
+		return this;
+	}
+
+	@Override /* CoreApi */
+	public HtmlSerializer setProperty(String name, Object value) throws LockedException {
+		super.setProperty(name, value);
 		return this;
 	}
 
@@ -669,34 +1239,33 @@ public class HtmlSerializer extends XmlSerializer {
 	}
 
 	@Override /* CoreApi */
-	public HtmlSerializer addNotBeanClasses(Class<?>...classes) throws LockedException {
-		super.addNotBeanClasses(classes);
+	public HtmlSerializer addToProperty(String name, Object value) throws LockedException {
+		super.addToProperty(name, value);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public HtmlSerializer addBeanFilters(Class<?>...classes) throws LockedException {
-		super.addBeanFilters(classes);
+	public HtmlSerializer putToProperty(String name, Object key, Object value) throws LockedException {
+		super.putToProperty(name, key, value);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public HtmlSerializer addPojoSwaps(Class<?>...classes) throws LockedException {
-		super.addPojoSwaps(classes);
+	public HtmlSerializer putToProperty(String name, Object value) throws LockedException {
+		super.putToProperty(name, value);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public HtmlSerializer addToDictionary(Class<?>...classes) throws LockedException {
-		super.addToDictionary(classes);
+	public HtmlSerializer removeFromProperty(String name, Object value) throws LockedException {
+		super.removeFromProperty(name, value);
 		return this;
 	}
 
-	@Override /* CoreApi */
-	public <T> HtmlSerializer addImplClass(Class<T> interfaceClass, Class<? extends T> implClass) throws LockedException {
-		super.addImplClass(interfaceClass, implClass);
-		return this;
-	}
+
+	//--------------------------------------------------------------------------------
+	// Overridden methods
+	//--------------------------------------------------------------------------------
 
 	@Override /* CoreApi */
 	public HtmlSerializer setClassLoader(ClassLoader classLoader) throws LockedException {

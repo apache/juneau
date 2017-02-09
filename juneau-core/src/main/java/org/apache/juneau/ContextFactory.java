@@ -622,7 +622,7 @@ public final class ContextFactory extends Lockable {
 	 * @param def The default value if the property is not set.
 	 *
 	 * @return The property value.
-	 * @throws ConfigException - If property has a value that cannot be converted to a boolean.
+	 * @throws ConfigException If property has a value that cannot be converted to a boolean.
 	 */
 	public <T> T getProperty(String name, Class<T> type, T def) {
 		rl.lock();
@@ -649,7 +649,7 @@ public final class ContextFactory extends Lockable {
 	 * @param def The default value if the property is not set.
 	 *
 	 * @return The property value.
-	 * @throws ConfigException - If property has a value that cannot be converted to a boolean.
+	 * @throws ConfigException If property has a value that cannot be converted to a boolean.
 	 */
 	public <K,V> Map<K,V> getMap(String name, Class<K> keyType, Class<V> valType, Map<K,V> def) {
 		rl.lock();
@@ -662,6 +662,7 @@ public final class ContextFactory extends Lockable {
 			rl.unlock();
 		}
 	}
+
 
 	//-------------------------------------------------------------------------------------
 	// Convenience methods.
@@ -731,7 +732,7 @@ public final class ContextFactory extends Lockable {
 	 * @see ContextFactory#addToProperty(String, Object)
 	 * @see BeanContext#BEAN_beanDictionary
 	 */
-	public ContextFactory addToDictionary(Class<?>...classes) throws LockedException {
+	public ContextFactory addToBeanDictionary(Class<?>...classes) throws LockedException {
 		checkLock();
 		addToProperty(BEAN_beanDictionary, classes);
 		return this;
@@ -766,6 +767,7 @@ public final class ContextFactory extends Lockable {
 			c.add(m);
 		return c.get();
 	}
+
 
 	//--------------------------------------------------------------------------------
 	// Utility classes and methods.

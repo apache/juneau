@@ -277,10 +277,10 @@
 	</p>
 	<p class='bcode'>
 	JsonSerializer s = <jk>new</jk> JsonSerializer()
-		.setProperty(SerializerContext.<jsf>SERIALIZER_useIndentation</jsf>, <jk>true</jk>)
-		.setProperty(JsonSerializerContext.<jsf>JSON_useWhitespace</jsf>, <jk>true</jk>)
-		.setProperty(JsonSerializerContext.<jsf>JSON_simpleMode</jsf>, <jk>true</jk>)
-		.setProperty(SerializerContext.<jsf>SERIALIZER_quoteChar</jsf>, <js>'\''</js>);
+		.setUseIndentation(<jk>true</jk>)
+		.setUseWhitespace(<jk>true</jk>)
+		.setSimpleMode(<jk>true</jk>)
+		.setQuoteChar(<js>'\''</js>);
 	</p>
 	
 	<p>
@@ -648,7 +648,7 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Clone an existing serializer and set property for detecting recursions.</jc>
-	JsonSerializer s = JsonSerializer.<jsf>DEFAULT_LAX_READABLE</jsf>.clone().setProperty(SerializerContext.<jsf>SERIALIZER_detectRecursions</jsf>, <jk>true</jk>);
+	JsonSerializer s = JsonSerializer.<jsf>DEFAULT_LAX_READABLE</jsf>.clone().setDetectRecursions(<jk>true</jk>);
 
 	<jc>// Create a recursive loop.</jc>
 	A a = <jk>new</jk> A();

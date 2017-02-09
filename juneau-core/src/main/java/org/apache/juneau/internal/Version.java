@@ -26,7 +26,7 @@ public class Version {
 	/**
 	 * Constructor
 	 *
-	 * @param versionString - A string of the form <js>"#.#..."</js> where there can be any number of parts.
+	 * @param versionString A string of the form <js>"#.#..."</js> where there can be any number of parts.
 	 * 	<br>Valid values:
 	 * 	<ul>
 	 * 		<li><js>"1.2"</js>

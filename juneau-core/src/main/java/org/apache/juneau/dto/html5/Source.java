@@ -26,7 +26,7 @@ public class Source extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-source-src">src</a> attribute.
 	 * Address of the resource.
-	 * @param src - The new value for this attribute.
+	 * @param src The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -38,13 +38,14 @@ public class Source extends HtmlElementEmpty {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-source-type">type</a> attribute.
 	 * Type of embedded resource.
-	 * @param type - The new value for this attribute.
+	 * @param type The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Source type(String type) {
 		attr("type", type);
 		return this;
 	}
+
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods

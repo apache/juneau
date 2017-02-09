@@ -27,7 +27,7 @@ public class Script extends HtmlElementText {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#attr-script-async">async</a> attribute.
 	 * Execute script asynchronously.
-	 * @param async - The new value for this attribute.
+	 * @param async The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -39,7 +39,7 @@ public class Script extends HtmlElementText {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#attr-script-charset">charset</a> attribute.
 	 * Character encoding of the external script resource.
-	 * @param charset - The new value for this attribute.
+	 * @param charset The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Script charset(String charset) {
@@ -50,7 +50,7 @@ public class Script extends HtmlElementText {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#attr-script-crossorigin">crossorigin</a> attribute.
 	 * How the element handles crossorigin requests.
-	 * @param crossorigin - The new value for this attribute.
+	 * @param crossorigin The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Script crossorigin(String crossorigin) {
@@ -61,7 +61,7 @@ public class Script extends HtmlElementText {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#attr-script-defer">defer</a> attribute.
 	 * Defer script execution.
-	 * @param defer - The new value for this attribute.
+	 * @param defer The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -73,7 +73,7 @@ public class Script extends HtmlElementText {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#attr-script-src">src</a> attribute.
 	 * Address of the resource.
-	 * @param src - The new value for this attribute.
+	 * @param src The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -85,13 +85,14 @@ public class Script extends HtmlElementText {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#attr-script-type">type</a> attribute.
 	 * Type of embedded resource.
-	 * @param type - The new value for this attribute.
+	 * @param type The new value for this attribute.
 	 * @return This object (for method chaining).
 	 */
 	public final Script type(String type) {
 		attr("type", type);
 		return this;
 	}
+
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods

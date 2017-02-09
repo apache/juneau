@@ -24,7 +24,7 @@ public class Data extends HtmlElementMixed {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#attr-data-value">value</a> attribute.
 	 * Machine-readable value.
-	 * @param value - The new value for this attribute.
+	 * @param value The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
@@ -32,6 +32,7 @@ public class Data extends HtmlElementMixed {
 		attr("value", value);
 		return this;
 	}
+
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods

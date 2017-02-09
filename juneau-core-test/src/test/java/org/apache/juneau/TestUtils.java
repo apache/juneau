@@ -12,9 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.BeanContext.*;
-import static org.apache.juneau.serializer.SerializerContext.*;
-import static org.apache.juneau.xml.XmlSerializerContext.*;
 import static org.junit.Assert.*;
 
 import java.io.*;
@@ -43,12 +40,12 @@ import org.xml.sax.*;
 public class TestUtils {
 
 	private static JsonSerializer js = new JsonSerializer.Simple()
-		.setProperty(SERIALIZER_trimNullProperties, false);
+		.setTrimNullProperties(false);
 
 	private static JsonSerializer jsSorted = new JsonSerializer.Simple()
-		.setProperty(SERIALIZER_sortCollections, true)
-		.setProperty(SERIALIZER_sortMaps, true)
-		.setProperty(SERIALIZER_trimNullProperties, false);
+		.setSortCollections(true)
+		.setSortMaps(true)
+		.setTrimNullProperties(false);
 
 
 	private static JsonSerializer js2 = new JsonSerializer.Simple()
@@ -56,7 +53,7 @@ public class TestUtils {
 
 	private static JsonSerializer js3 = new JsonSerializer.Simple()
 		.addPojoSwaps(IteratorSwap.class, EnumerationSwap.class)
-		.setProperty(BEAN_sortProperties, true);
+		.setSortProperties(true);
 
 	/**
 	 * Verifies that two objects are equivalent.
@@ -224,7 +221,7 @@ public class TestUtils {
 	 * Test whitespace and generated schema.
 	 */
 	public static void validateXml(Object o, XmlSerializer s) throws Exception {
-		s = s.clone().setProperty(SERIALIZER_useIndentation, true).setProperty(XML_enableNamespaces, true).setProperty(XML_addNamespaceUrisToRoot, true);
+		s = s.clone().setUseIndentation(true).setEnableNamespaces(true).setAddNamespaceUrisToRoot(true);
 		String xml = s.serialize(o);
 
 		String xmlSchema = null;

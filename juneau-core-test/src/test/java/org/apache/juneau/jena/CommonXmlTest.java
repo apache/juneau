@@ -14,7 +14,6 @@ package org.apache.juneau.jena;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.jena.RdfCommonContext.*;
-import static org.apache.juneau.serializer.SerializerContext.*;
 import static org.junit.Assert.*;
 
 import java.net.*;
@@ -28,8 +27,8 @@ public class CommonXmlTest {
 
 	private RdfSerializer getBasicSerializer() {
 		return new RdfSerializer()
-			.setProperty(SERIALIZER_quoteChar, '\'')
-			.setProperty(SERIALIZER_useIndentation, false)
+			.setQuoteChar('\'')
+			.setUseIndentation(false)
 			.setProperty(RDF_rdfxml_allowBadUris, true)
 			.setProperty(RDF_rdfxml_showDoctypeDeclaration, false)
 			.setProperty(RDF_rdfxml_showXmlDeclaration, false);

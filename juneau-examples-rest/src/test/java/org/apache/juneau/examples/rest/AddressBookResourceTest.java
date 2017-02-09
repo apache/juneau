@@ -14,6 +14,7 @@ package org.apache.juneau.examples.rest;
 
 import static org.apache.juneau.examples.rest.TestUtils.*;
 import static org.junit.Assert.*;
+import static org.apache.juneau.xml.XmlSerializerContext.*;
 
 import java.util.*;
 
@@ -45,7 +46,7 @@ public class AddressBookResourceTest {
 		for (RestClient c : clients) {
 			c.getSerializer().addPojoSwaps(CalendarSwap.DateMedium.class);
 			c.getParser().addPojoSwaps(CalendarSwap.DateMedium.class);
-			c.getSerializer().setProperty(XmlSerializerContext.XML_autoDetectNamespaces, true);
+			c.getSerializer().setProperty(XML_autoDetectNamespaces, true);
 		}
 	}
 

@@ -13,7 +13,6 @@
 package org.apache.juneau.urlencoding;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.serializer.SerializerContext.*;
 import static org.junit.Assert.*;
 
 import java.net.*;
@@ -22,7 +21,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.testbeans.*;
 import org.junit.*;
@@ -40,13 +38,13 @@ public class Common_UonTest {
 		UonSerializer s = new UonSerializer.Encoding();
 		A t1 = A.create(), t2;
 
-		s.setProperty(SERIALIZER_trimNullProperties, false);
+		s.setTrimNullProperties(false);
 		String r = s.serialize(t1);
 		assertEquals("$o(s1=%00,s2=s2)", r);
 		t2 = pe.parse(r, A.class);
 		assertEqualObjects(t1, t2);
 
-		s.setProperty(SERIALIZER_trimNullProperties, true);
+		s.setTrimNullProperties(true);
 		r = s.serialize(t1);
 		assertEquals("$o(s2=s2)", r);
 		t2 = p.parse(r, A.class);
@@ -72,13 +70,13 @@ public class Common_UonTest {
 		B t1 = B.create(), t2;
 		String r;
 
-		s.setProperty(SERIALIZER_trimEmptyMaps, false);
+		s.setTrimEmptyMaps(false);
 		r = s.serialize(t1);
 		assertEquals("(f1=(),f2=(f2a=%00,f2b=(s2=s2)))", r);
 		t2 = pe.parse(r, B.class);
 		assertEqualObjects(t1, t2);
 
-		s.setProperty(SERIALIZER_trimEmptyMaps, true);
+		s.setTrimEmptyMaps(true);
 		r = s.serialize(t1);
 		assertEquals("(f2=(f2a=%00,f2b=(s2=s2)))", r);
 		t2 = pe.parse(r, B.class);
@@ -105,13 +103,13 @@ public class Common_UonTest {
 		C t1 = C.create(), t2;
 		String r;
 
-		s.setProperty(SERIALIZER_trimEmptyCollections, false);
+		s.setTrimEmptyCollections(false);
 		r = s.serialize(t1);
 		assertEquals("$o(f1=$a(),f2=$a(%00,$o(s2=s2)))", r);
 		t2 = pe.parse(r, C.class);
 		assertEqualObjects(t1, t2);
 
-		s.setProperty(SERIALIZER_trimEmptyCollections, true);
+		s.setTrimEmptyCollections(true);
 		r = s.serialize(t1);
 		assertEquals("$o(f2=$a(%00,$o(s2=s2)))", r);
 		t2 = pe.parse(r, C.class);
@@ -138,13 +136,13 @@ public class Common_UonTest {
 		D t1 = D.create(), t2;
 		String r;
 
-		s.setProperty(SERIALIZER_trimEmptyCollections, false);
+		s.setTrimEmptyCollections(false);
 		r = s.serialize(t1);
 		assertEquals("$o(f1=$a(),f2=$a(%00,$o(s2=s2)))", r);
 		t2 = pe.parse(r, D.class);
 		assertEqualObjects(t1, t2);
 
-		s.setProperty(SERIALIZER_trimEmptyCollections, true);
+		s.setTrimEmptyCollections(true);
 		r = s.serialize(t1);
 		assertEquals("$o(f2=$a(%00,$o(s2=s2)))", r);
 		t2 = pe.parse(r, D.class);
@@ -250,7 +248,7 @@ public class Common_UonTest {
 		String r;
 		String expected;
 
-		s.setProperty(SERIALIZER_relativeUriBase, null);
+		s.setRelativeUriBase(null);
 		r = s.serialize(t);
 		expected = ""
 			+"$o("
@@ -272,11 +270,11 @@ public class Common_UonTest {
 			+")";
 		assertEquals(expected, r);
 
-		s.setProperty(SERIALIZER_relativeUriBase, "");  // Same as null.
+		s.setRelativeUriBase("");  // Same as null.
 		r = s.serialize(t);
 		assertEquals(expected, r);
 
-		s.setProperty(SERIALIZER_relativeUriBase, "/cr");
+		s.setRelativeUriBase("/cr");
 		r = s.serialize(t);
 		expected = ""
 			+"$o("
@@ -298,11 +296,11 @@ public class Common_UonTest {
 			+")";
 		assertEquals(expected, r);
 
-		s.setProperty(SERIALIZER_relativeUriBase, "/cr/");  // Same as above
+		s.setRelativeUriBase("/cr/");  // Same as above
 		r = s.serialize(t);
 		assertEquals(expected, r);
 
-		s.setProperty(SERIALIZER_relativeUriBase, "/");
+		s.setRelativeUriBase("/");
 		r = s.serialize(t);
 		expected = ""
 			+"$o("
@@ -324,9 +322,9 @@ public class Common_UonTest {
 			+")";
 		assertEquals(expected, r);
 
-		s.setProperty(SERIALIZER_relativeUriBase, null);
+		s.setRelativeUriBase(null);
 
-		s.setProperty(SERIALIZER_absolutePathUriBase, "http://foo");
+		s.setAbsolutePathUriBase("http://foo");
 		r = s.serialize(t);
 		expected = ""
 			+"$o("
@@ -348,11 +346,11 @@ public class Common_UonTest {
 			+")";
 		assertEquals(expected, r);
 
-		s.setProperty(SERIALIZER_absolutePathUriBase, "http://foo/");
+		s.setAbsolutePathUriBase("http://foo/");
 		r = s.serialize(t);
 		assertEquals(expected, r);
 
-		s.setProperty(SERIALIZER_absolutePathUriBase, "");  // Same as null.
+		s.setAbsolutePathUriBase("");  // Same as null.
 		r = s.serialize(t);
 		expected = ""
 			+"$o("
@@ -382,15 +380,15 @@ public class Common_UonTest {
 	public void testLockedSerializer() throws Exception {
 		UonSerializer s = new UonSerializer().lock();
 		try {
-			s.setProperty(JsonSerializerContext.JSON_simpleMode, true);
+			s.setSimpleMode(true);
 			fail("Locked exception not thrown");
 		} catch (LockedException e) {}
 		try {
-			s.setProperty(SerializerContext.SERIALIZER_addBeanTypeProperties, true);
+			s.setAddBeanTypeProperties(true);
 			fail("Locked exception not thrown");
 		} catch (LockedException e) {}
 		try {
-			s.setProperty(BeanContext.BEAN_beanMapPutReturnsOldValue, true);
+			s.setBeanMapPutReturnsOldValue(true);
 			fail("Locked exception not thrown");
 		} catch (LockedException e) {}
 	}
@@ -419,7 +417,7 @@ public class Common_UonTest {
 		}
 
 		// Recursion detection, no ignore
-		s.setProperty(SERIALIZER_detectRecursions, true);
+		s.setDetectRecursions(true);
 		try {
 			s.serialize(r1);
 			fail("Exception expected!");
@@ -431,7 +429,7 @@ public class Common_UonTest {
 			assertTrue(msg.contains("->[3]r1:org.apache.juneau.urlencoding.Common_UonTest$R1"));
 		}
 
-		s.setProperty(SERIALIZER_ignoreRecursions, true);
+		s.setIgnoreRecursions(true);
 		assertEquals("$o(name=foo,r2=$o(name=bar,r3=$o(name=baz)))", s.serialize(r1));
 	}
 
