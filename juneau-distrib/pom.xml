@@ -67,6 +67,21 @@
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/src/osgi-bundles</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-core-rdf</artifactId>
+									<version>${project.version}</version>
+									<type>jar</type>
+									<classifier>sources</classifier>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/osgi-bundles</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-core-rdf</artifactId>
+									<version>${project.version}</version>
+								</artifactItem>
+
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/src/osgi-bundles</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
 									<artifactId>juneau-rest</artifactId>
 									<version>${project.version}</version>
 									<type>jar</type>
@@ -76,6 +91,21 @@
 									<outputDirectory>${project.build.directory}/bin/osgi-bundles</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
 									<artifactId>juneau-rest</artifactId>
+									<version>${project.version}</version>
+								</artifactItem>
+								
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/src/osgi-bundles</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-rest-jaxrs</artifactId>
+									<version>${project.version}</version>
+									<type>jar</type>
+									<classifier>sources</classifier>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/osgi-bundles</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-rest-jaxrs</artifactId>
 									<version>${project.version}</version>
 								</artifactItem>
 								
