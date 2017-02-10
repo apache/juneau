@@ -89,7 +89,7 @@
 			that allow you to easily construct DTO instances in a minimal amount of code. 
 		</p>
 		<p>
-			The following examples show how to create HTML tables.
+			The following examples show how to create HTML fragments:
 		</p>
 		<table class='styled' style='width:auto'>
 			<tr>
@@ -167,8 +167,50 @@
 	&lt;/table&gt;
 				</xt></td>
 			</tr>
+			<tr>
+				<td class='code'>
+	<jk>import static</jk> org.apache.juneau.dto.html5.HtmlBuilder.*;
+		
+	Object mydiv = 	
+		<jsm>div</jsm>().align(<js>"center"</js>).onmouseover(<js>"alert(\"boo!\");"</js>)
+		.children(
+			<jsm>p</jsm>(<js>"Juneau supports "</js>, <jsm>b</jsm>(<jsm>i</jsm>(<js>"mixed"</js>)), <js>" content!"</js>)
+		);
+
+	String html = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(mydiv);
+				</td>
+				<td class='code'><xt>
+	&lt;div <xa>align</xa>=<xs>'center'</xs> <xa>onmouseover</xa>=<xs>'alert("boo!");'</xs>&gt;
+		&lt;p&gt;<xv>Juneau supports </xv>&lt;b&gt;&lt;i&gt;<xv>mixed</xv>&lt;/i&gt;&lt;/b&gt; <xv>content!</xv>&lt;/p&gt;
+	&lt;/table&gt;
+				</xt></td>
+			</tr>
+			<tr>
+				<td class='code'>
+	<jk>import static</jk> org.apache.juneau.dto.html5.HtmlBuilder.*;
+		
+	Object myform =
+		<jsm>form</jsm>().action(<js>"/submit"</js>).method(<js>"POST"</js>)
+		.children(
+			<js>"Position (1-10000): "</js>, <jsm>input</jsm>(<js>"number"</js>).name(<js>"pos"</js>).value(1), <jsm>br</jsm>(),
+			<js>"Limit (1-10000): "</js>, <jsm>input</jsm>(<js>"number"</js>).name(<js>"limit"</js>).value(100), <jsm>br</jsm>(),
+			<jsm>button</jsm>(<js>"submit"</js>, <js>"Submit"</js>),
+			<jsm>button</jsm>(<js>"reset"</js>, <js>"Reset"</js>)
+		); 	
+
+	String html = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(myform);
+				</td>
+				<td class='code'><xt>
+		&lt;form <xa>action</xa>=<xs>'/submit'</xs> <xa>method</xa>=<xs>'POST'</xs>&gt;
+			<xv>Position (1-10000):</xv> &lt;input <xa>name</xa>=<xs>'pos'</xs> <xa>type</xa>=<xs>'number'</xs> <xa>value</xa>=<xs>'1'</xs>/&gt;&lt;br/&gt;
+			<xv>Limit (1-10000):</xv> &lt;input <xa>name</xa>=<xs>'pos'</xs> <xa>type</xa>=<xs>'number'</xs> <xa>value</xa>=<xs>'100'</xs>/&gt;&lt;br/&gt;
+			&lt;button <xa>type</xa>=<xs>'submit'</xs>&gt;<xv>Submit</xv>&lt;/button&gt;
+			&lt;button <xa>type</xa>=<xs>'reset'</xs>&gt;<xv>Reset</xv>&lt;/button&gt;			 
+		&lt;/form&gt;
+				</xt></td>
+			</tr>
 		</table>
-</div>		
+	</div>		
 
 	<!-- ======================================================================================================== -->
 	<a id="Parse"></a>
