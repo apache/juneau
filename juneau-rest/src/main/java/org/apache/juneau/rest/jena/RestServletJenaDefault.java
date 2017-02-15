@@ -83,19 +83,9 @@ import org.apache.juneau.xml.*;
  * 		<td>{@link UonSerializer}</td>
  * 	</tr>
  * 	<tr>
- * 		<td class='code'>text/uon-simple</td>
- * 		<td class='code'>text/uon</td>
- * 		<td>{@link org.apache.juneau.urlencoding.UonSerializer.Simple}</td>
- * 	</tr>
- * 	<tr>
  * 		<td class='code'>application/x-www-form-urlencoded</td>
  * 		<td class='code'>application/x-www-form-urlencoded</td>
  * 		<td>{@link UrlEncodingSerializer}</td>
- * 	</tr>
- * 	<tr>
- * 		<td class='code'>application/x-www-form-urlencoded-simple</td>
- * 		<td class='code'>application/x-www-form-urlencoded</td>
- * 		<td>{@link org.apache.juneau.urlencoding.UrlEncodingSerializer.Simple}</td>
  * 	</tr>
  * 	<tr>
  * 		<td class='code'>text/xml+soap</td>
@@ -209,9 +199,7 @@ import org.apache.juneau.xml.*;
 		XmlDocSerializer.Simple.class,
 		XmlSchemaDocSerializer.class,
 		UonSerializer.class,
-		UonSerializer.Simple.class,
 		UrlEncodingSerializer.class,
-		UrlEncodingSerializer.Simple.class,
 		MsgPackSerializer.class,
 		SoapXmlSerializer.class,
 		JavaSerializedObjectSerializer.class,

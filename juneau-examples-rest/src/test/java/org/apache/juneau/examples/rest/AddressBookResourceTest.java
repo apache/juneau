@@ -29,7 +29,7 @@ import org.apache.juneau.xml.*;
 import org.junit.*;
 
 @SuppressWarnings({"serial"})
-public class AddressBookResourceTest {
+public class AddressBookResourceTest extends RestTestcase {
 
 	private static boolean debug = false;
 
@@ -166,35 +166,35 @@ public class AddressBookResourceTest {
 			assertEquals(1, people.size());
 			assertEquals("Barack Obama", people.get(0).name);
 
-			r = client.doGet("/addressBook/people?q=(name='Barack+Obama')");
+			r = client.doGet("/addressBook/people?q=(name='~'Barack+Obama~'')");
 			people = r.getResponse(PersonList.class);
 			assertEquals(1, people.size());
 			assertEquals("Barack Obama", people.get(0).name);
 
-			r = client.doGet("/addressBook/people?q=(name='Barack%20Obama')");
+			r = client.doGet("/addressBook/people?q=(name='~'Barack%20Obama~'')");
 			people = r.getResponse(PersonList.class);
 			assertEquals(1, people.size());
 			assertEquals("Barack Obama", people.get(0).name);
 
-			r = client.doGet("/addressBook/people?v=(name,birthDate)");
+			r = client.doGet("/addressBook/people?v=@(name,birthDate)");
 			people = r.getResponse(PersonList.class);
 			assertEquals("Barack Obama", people.get(0).name);
 			assertTrue(people.get(0).getAge() > 10);
 			assertEquals(0, people.get(0).addresses.size());
 
-			r = client.doGet("/addressBook/people?v=(addresses,birthDate)");
+			r = client.doGet("/addressBook/people?v=@(addresses,birthDate)");
 			people = r.getResponse(PersonList.class);
 			assertNull(people.get(0).name);
 			assertTrue(people.get(0).getAge() > 10);
 			assertEquals(2, people.get(0).addresses.size());
 
-			r = client.doGet("/addressBook/people?s=($o(age=d))");
+			r = client.doGet("/addressBook/people?s=@((age=d))");
 			people = r.getResponse(PersonList.class);
 			assertTrue(people.get(0).getAge() > 10);
-			r = client.doGet("/addressBook/people?s=(age)");
+			r = client.doGet("/addressBook/people?s=@(age)");
 			people = r.getResponse(PersonList.class);
 			assertTrue(people.get(0).getAge() > 10);
-			r = client.doGet("/addressBook/people?s=($o(age=a))");
+			r = client.doGet("/addressBook/people?s=@((age=a))");
 			people = r.getResponse(PersonList.class);
 			assertTrue(people.get(0).getAge() > 10);
 

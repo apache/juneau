@@ -66,7 +66,7 @@ public class RoundTripLargeObjectsTest extends RoundTripTest {
 			},
 			{ /* 3 */
 				"Xml DEFAULT w/namespaces,validation",
-				new XmlSerializer.NsSq().setTrimNullProperties(false).setAddNamespaceUrisToRoot(true).setUseIndentation(true),
+				new XmlSerializer.NsSq().setTrimNullProperties(false).setAddNamespaceUrisToRoot(true).setUseWhitespace(true),
 				XmlParser.DEFAULT,
 				CHECK_XML_WHITESPACE | VALIDATE_XML
 			},
@@ -84,13 +84,13 @@ public class RoundTripLargeObjectsTest extends RoundTripTest {
 			},
 			{ /* 6 */
 				"UrlEncoding",
-				new UrlEncodingSerializer().setTrimNullProperties(false).setSimpleMode(false),
+				new UrlEncodingSerializer().setTrimNullProperties(false),
 				UrlEncodingParser.DEFAULT,
 				0
 			},
 			{ /* 7 */
 				"Uon",
-				new UonSerializer().setTrimNullProperties(false).setSimpleMode(false),
+				new UonSerializer().setTrimNullProperties(false),
 				UonParser.DEFAULT,
 				0
 			},
@@ -144,22 +144,22 @@ public class RoundTripLargeObjectsTest extends RoundTripTest {
 		A a = A.create();
 		Serializer s = getSerializer();
 		Parser p = getParser();
-		System.err.println("\n---Speed test on " + label + "---");
+		System.err.println("\n---Speed test on " + label + "---"); // NOT DEBUG
 		Object r = "";
 
 		// Initialization run.
 		r = s.serialize(a);
-		System.err.println(MessageFormat.format("Serialized size: {0,number} ", (r instanceof String ? r.toString().length() : ((byte[])r).length)));
+		System.err.println(MessageFormat.format("Serialized size: {0,number} ", (r instanceof String ? r.toString().length() : ((byte[])r).length))); // NOT DEBUG
 		p.parse(r, A.class);
 
 		startTime = System.currentTimeMillis();
 		for (int i = 0; i < numRuns; i++)
 			r = s.serialize(a);
-		System.err.println(MessageFormat.format("Average serialize time: {0,number}ms", (System.currentTimeMillis()-startTime)/numRuns));
+		System.err.println(MessageFormat.format("Average serialize time: {0,number}ms", (System.currentTimeMillis()-startTime)/numRuns)); // NOT DEBUG
 		startTime = System.currentTimeMillis();
 		for (int i = 0; i < numRuns; i++)
 			a = p.parse(r, A.class);
-		System.err.println(MessageFormat.format("Average parsed time: {0,number}ms", (System.currentTimeMillis()-startTime)/numRuns));
+		System.err.println(MessageFormat.format("Average parsed time: {0,number}ms", (System.currentTimeMillis()-startTime)/numRuns)); // NOT DEBUG
 	}
 
 	public static class A {

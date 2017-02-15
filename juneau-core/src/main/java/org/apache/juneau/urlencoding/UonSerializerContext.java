@@ -34,80 +34,6 @@ import org.apache.juneau.serializer.*;
 public class UonSerializerContext extends SerializerContext {
 
 	/**
-	 * <b>Configuration property:</b>  Use simplified output.
-	 * <p>
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"UonSerializer.simpleMode"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
-	 * <p>
-	 * If <jk>true</jk>, type flags will not be prepended to values in most cases.
-	 * <p>
-	 * Use this setting if the data types of the values (e.g. object/array/boolean/number/string)
-	 * 	is known on the receiving end.
-	 * <p>
-	 * It should be noted that the default behavior produces a data structure that can
-	 * 	be losslessly converted into JSON, and any JSON can be losslessly represented
-	 * 	in a URL-encoded value.  However, this strict equivalency does not exist
-	 * 	when simple mode is used.
-	 * <p>
-	 * <table class='styled'>
-	 * 	<tr>
-	 * 		<th>Input (in JSON)</th>
-	 * 		<th>Normal mode output</th>
-	 * 		<th>Simple mode output</th>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td class='code'>{foo:'bar',baz:'bing'}</td>
-	 * 		<td class='code'>$o(foo=bar,baz=bing)</td>
-	 * 		<td class='code'>(foo=bar,baz=bing)</td>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td class='code'>{foo:{bar:'baz'}}</td>
-	 * 		<td class='code'>$o(foo=$o(bar=baz))</td>
-	 * 		<td class='code'>(foo=(bar=baz))</td>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td class='code'>['foo','bar']</td>
-	 * 		<td class='code'>$a(foo,bar)</td>
-	 * 		<td class='code'>(foo,bar)</td>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td class='code'>['foo',['bar','baz']]</td>
-	 * 		<td class='code'>$a(foo,$a(bar,baz))</td>
-	 * 		<td class='code'>(foo,(bar,baz))</td>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td class='code'>true</td>
-	 * 		<td class='code'>$b(true)</td>
-	 * 		<td class='code'>true</td>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td class='code'>123</td>
-	 * 		<td class='code'>$n(123)</td>
-	 * 		<td class='code'>123</td>
-	 * 	</tr>
-	 * </table>
-	 */
-	public static final String UON_simpleMode = "UonSerializer.simpleMode";
-
-	/**
-	 * <b>Configuration property:</b>  Use whitespace.
-	 * <p>
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"UonSerializer.useWhitespace"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
-	 * <p>
-	 * If <jk>true</jk>, whitespace is added to the output to improve readability.
-	 */
-	public static final String UON_useWhitespace = "UonSerializer.useWhitespace";
-
-	/**
 	 * <b>Configuration property:</b>  Encode non-valid URI characters.
 	 * <p>
 	 * <ul>
@@ -127,8 +53,6 @@ public class UonSerializerContext extends SerializerContext {
 
 
 	final boolean
-		simpleMode,
-		useWhitespace,
 		encodeChars;
 
 	/**
@@ -140,8 +64,6 @@ public class UonSerializerContext extends SerializerContext {
 	 */
 	public UonSerializerContext(ContextFactory cf) {
 		super(cf);
-		simpleMode = cf.getProperty(UON_simpleMode, boolean.class, false);
-		useWhitespace = cf.getProperty(UON_useWhitespace, boolean.class, false);
 		encodeChars = cf.getProperty(UON_encodeChars, boolean.class, false);
 	}
 
@@ -149,8 +71,6 @@ public class UonSerializerContext extends SerializerContext {
 	public ObjectMap asMap() {
 		return super.asMap()
 			.append("UonSerializerContext", new ObjectMap()
-				.append("simpleMode", simpleMode)
-				.append("useWhitespace", useWhitespace)
 				.append("encodeChars", encodeChars)
 			);
 	}

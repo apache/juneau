@@ -132,6 +132,6 @@ public final class HtmlDocSerializerSession extends HtmlSerializerSession {
 		Object output = getOutput();
 		if (output instanceof HtmlWriter)
 			return (HtmlWriter)output;
-		return new HtmlWriter(super.getWriter(), isUseIndentation(), isTrimStrings(), getQuoteChar(), getRelativeUriBase(), getAbsolutePathUriBase());
+		return new HtmlWriter(super.getWriter(), isUseWhitespace(), isTrimStrings(), getQuoteChar(), getRelativeUriBase(), getAbsolutePathUriBase());
 	}
 }

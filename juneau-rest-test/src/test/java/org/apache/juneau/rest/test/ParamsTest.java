@@ -27,7 +27,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.*;
 
-public class ParamsTest {
+public class ParamsTest extends RestTestcase {
 
 	private static String URL = "/testParams";
 	private static boolean debug = false;
@@ -82,12 +82,12 @@ public class ParamsTest {
 		// This should match /get1/{foo} and not /get1/{foo}/{bar}
 		// NOTE:  When testing on Tomcat, must specify the following system property:
 		// -Dorg.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true
-		String x = "x%2Fy+z";  // [x/y z]
+		String x = "x%2Fy";  // [x/y]
 		r = client.doGet(URL + "/get1/"+x);
-		assertEquals("GET /get1a x/y z", r.getResponse(String.class));
+		assertEquals("GET /get1a x/y", r.getResponse(String.class));
 
 		r = client.doGet(URL + "/get1/"+x+"/"+x);
-		assertEquals("GET /get1b x/y z,x/y z", r.getResponse(String.class));
+		assertEquals("GET /get1b x/y,x/y", r.getResponse(String.class));
 
 		r = client.doGet(URL + "/get1/foo");
 		assertEquals("GET /get1a foo", r.getResponse(String.class));
@@ -137,7 +137,7 @@ public class ParamsTest {
 		//	public void doPost(RestRequest req, RestResponse res, Person p) {
 		//		res.setOutput("POST, /person, name="+p.name+", age="+p.age+" remainder="+req.getRemainder());
 		//	}
-		r = client.doPost(URL + "/person/(name=John+Smith,birthDate=Jan+12~,+1952)", "");
+		r = client.doPost(URL + "/person/(name='John+Smith',birthDate='Jan+12,+1952')", "");
 		assertEquals("POST /person/{name=John Smith,birthDate.year=1952} remainder=null", r.getResponse(String.class));
 
 		// Fall through to top-level POST
@@ -218,11 +218,11 @@ public class ParamsTest {
 		String r;
 		String url = URL + "/testPlainParamGet";
 
-		r = client.doGet(url + "?p1=(p1)").getResponseAsString();
-		assertEquals("p1=[(p1),(p1),p1]", r);
+		r = client.doGet(url + "?p1=p1").getResponseAsString();
+		assertEquals("p1=[p1,p1,p1]", r);
 
-		r = client.doGet(url + "?p1=$s(p1)").getResponseAsString();
-		assertEquals("p1=[$s(p1),$s(p1),p1]", r);
+		r = client.doGet(url + "?p1='p1'").getResponseAsString();
+		assertEquals("p1=['p1','p1',p1]", r);
 
 		client.closeQuietly();
 	}
@@ -237,28 +237,28 @@ public class ParamsTest {
 		String url = URL + "/testParamPost";
 
 		r = client.doFormPost(url, new ObjectMap("{p1:'p1',p2:2}")).getResponseAsString();
-		assertEquals("p1=[p1,p1,p1],p2=[2,$n(2),2]", r);
+		assertEquals("p1=[p1,p1,p1],p2=[2,2,2]", r);
 
 		r = client.doFormPost(url, new ObjectMap("{p1:null,p2:0}")).getResponseAsString();
-		assertEquals("p1=[null,\u0000,null],p2=[0,$n(0),0]", r);
+		assertEquals("p1=[null,null,null],p2=[0,0,0]", r);
 
 		r = client.doFormPost(url, new ObjectMap("{}")).getResponseAsString();
 		assertEquals("p1=[null,null,null],p2=[0,null,0]", r);
 
 		r = client.doFormPost(url, new ObjectMap("{p1:null}")).getResponseAsString();
-		assertEquals("p1=[null,\u0000,null],p2=[0,null,0]", r);
+		assertEquals("p1=[null,null,null],p2=[0,null,0]", r);
 
 		r = client.doFormPost(url, new ObjectMap("{p2:0}")).getResponseAsString();
-		assertEquals("p1=[null,null,null],p2=[0,$n(0),0]", r);
+		assertEquals("p1=[null,null,null],p2=[0,0,0]", r);
 
 		r = client.doFormPost(url, new ObjectMap("{p1:'foo',p2:0}")).getResponseAsString();
-		assertEquals("p1=[foo,foo,foo],p2=[0,$n(0),0]", r);
+		assertEquals("p1=[foo,foo,foo],p2=[0,0,0]", r);
 
 		r = client.doFormPost(url, new ObjectMap("{p1:null,p2:1}")).getResponseAsString();
-		assertEquals("p1=[null,\u0000,null],p2=[1,$n(1),1]", r);
+		assertEquals("p1=[null,null,null],p2=[1,1,1]", r);
 
 		r = client.doFormPost(url, new ObjectMap("{p1:'a/b%c=d e,f/g%h=i j',p2:1}")).getResponseAsString();
-		assertEquals("p1=[a/b%c=d e,f/g%h=i j,a/b%c=d e,f/g%h=i j,a/b%c=d e,f/g%h=i j],p2=[1,$n(1),1]", r);
+		assertEquals("p1=[a/b%c=d e,f/g%h=i j,'a/b%c=d e,f/g%h=i j',a/b%c=d e,f/g%h=i j],p2=[1,1,1]", r);
 
 		client.closeQuietly();
 	}
@@ -273,18 +273,18 @@ public class ParamsTest {
 		String url = URL + "/testPlainParamPost";
 
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
-		nvps.add(new BasicNameValuePair("p1", "(p1)"));
+		nvps.add(new BasicNameValuePair("p1", "p1"));
 		HttpEntity he = new UrlEncodedFormEntity(nvps);
 
 		r = client.doPost(url, he).getResponseAsString();
-		assertEquals("p1=[(p1),(p1),p1]", r);
+		assertEquals("p1=[p1,p1,p1]", r);
 
 		nvps = new ArrayList<NameValuePair>();
-		nvps.add(new BasicNameValuePair("p1", "$s(p1)"));
+		nvps.add(new BasicNameValuePair("p1", "'p1'"));
 		he = new UrlEncodedFormEntity(nvps);
 
 		r = client.doFormPost(url, he).getResponseAsString();
-		assertEquals("p1=[$s(p1),$s(p1),p1]", r);
+		assertEquals("p1=['p1','p1',p1]", r);
 
 		client.closeQuietly();
 	}
@@ -335,11 +335,11 @@ public class ParamsTest {
 		String r;
 		String url = URL + "/testPlainQParamGet";
 
-		r = client.doGet(url + "?p1=(p1)").getResponseAsString();
-		assertEquals("p1=[(p1),(p1),p1]", r);
+		r = client.doGet(url + "?p1=p1").getResponseAsString();
+		assertEquals("p1=[p1,p1,p1]", r);
 
-		r = client.doGet(url + "?p1=$s(p1)").getResponseAsString();
-		assertEquals("p1=[$s(p1),$s(p1),p1]", r);
+		r = client.doGet(url + "?p1='p1'").getResponseAsString();
+		assertEquals("p1=['p1','p1',p1]", r);
 
 		client.closeQuietly();
 	}
@@ -652,22 +652,22 @@ public class ParamsTest {
 			+ "&f02=c&f02=d"
 			+ "&f03=1&f03=2"
 			+ "&f04=3&f04=4"
-			+ "&f05=(e,f)&f05=(g,h)"
-			+ "&f06=(i,j)&f06=(k,l)"
+			+ "&f05=@(e,f)&f05=@(g,h)"
+			+ "&f06=@(i,j)&f06=@(k,l)"
 			+ "&f07=(a=a,b=1,c=true)&f07=(a=b,b=2,c=false)"
 			+ "&f08=(a=a,b=1,c=true)&f08=(a=b,b=2,c=false)"
-			+ "&f09=((a=a,b=1,c=true))&f09=((a=b,b=2,c=false))"
-			+ "&f10=((a=a,b=1,c=true))&f10=((a=b,b=2,c=false))"
+			+ "&f09=@((a=a,b=1,c=true))&f09=@((a=b,b=2,c=false))"
+			+ "&f10=@((a=a,b=1,c=true))&f10=@((a=b,b=2,c=false))"
 			+ "&f11=a&f11=b"
 			+ "&f12=c&f12=d"
 			+ "&f13=1&f13=2"
 			+ "&f14=3&f14=4"
-			+ "&f15=(e,f)&f15=(g,h)"
-			+ "&f16=(i,j)&f16=(k,l)"
+			+ "&f15=@(e,f)&f15=@(g,h)"
+			+ "&f16=@(i,j)&f16=@(k,l)"
 			+ "&f17=(a=a,b=1,c=true)&f17=(a=b,b=2,c=false)"
 			+ "&f18=(a=a,b=1,c=true)&f18=(a=b,b=2,c=false)"
-			+ "&f19=((a=a,b=1,c=true))&f19=((a=b,b=2,c=false))"
-			+ "&f20=((a=a,b=1,c=true))&f20=((a=b,b=2,c=false))";
+			+ "&f19=@((a=a,b=1,c=true))&f19=@((a=b,b=2,c=false))"
+			+ "&f20=@((a=a,b=1,c=true))&f20=@((a=b,b=2,c=false))";
 		r = client.doPost(url, new StringEntity(in)).getResponseAsString();
 		assertEquals(in, r);
 
@@ -692,22 +692,22 @@ public class ParamsTest {
 			+ "&f02=c&f02=d"
 			+ "&f03=1&f03=2"
 			+ "&f04=3&f04=4"
-			+ "&f05=(e,f)&f05=(g,h)"
-			+ "&f06=(i,j)&f06=(k,l)"
+			+ "&f05=@(e,f)&f05=@(g,h)"
+			+ "&f06=@(i,j)&f06=@(k,l)"
 			+ "&f07=(a=a,b=1,c=true)&f07=(a=b,b=2,c=false)"
 			+ "&f08=(a=a,b=1,c=true)&f08=(a=b,b=2,c=false)"
-			+ "&f09=((a=a,b=1,c=true))&f09=((a=b,b=2,c=false))"
-			+ "&f10=((a=a,b=1,c=true))&f10=((a=b,b=2,c=false))"
+			+ "&f09=@((a=a,b=1,c=true))&f09=@((a=b,b=2,c=false))"
+			+ "&f10=@((a=a,b=1,c=true))&f10=@((a=b,b=2,c=false))"
 			+ "&f11=a&f11=b"
 			+ "&f12=c&f12=d"
 			+ "&f13=1&f13=2"
 			+ "&f14=3&f14=4"
-			+ "&f15=(e,f)&f15=(g,h)"
-			+ "&f16=(i,j)&f16=(k,l)"
+			+ "&f15=@(e,f)&f15=@(g,h)"
+			+ "&f16=@(i,j)&f16=@(k,l)"
 			+ "&f17=(a=a,b=1,c=true)&f17=(a=b,b=2,c=false)"
 			+ "&f18=(a=a,b=1,c=true)&f18=(a=b,b=2,c=false)"
-			+ "&f19=((a=a,b=1,c=true))&f19=((a=b,b=2,c=false))"
-			+ "&f20=((a=a,b=1,c=true))&f20=((a=b,b=2,c=false))";
+			+ "&f19=@((a=a,b=1,c=true))&f19=@((a=b,b=2,c=false))"
+			+ "&f20=@((a=a,b=1,c=true))&f20=@((a=b,b=2,c=false))";
 		r = client.doPost(url, new StringEntity(in)).getResponseAsString();
 		assertEquals(in, r);
 

@@ -15,6 +15,7 @@ package org.apache.juneau.serializer;
 import java.io.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Subclass of {@link Serializer} for byte-based serializers.
@@ -50,7 +51,7 @@ public abstract class OutputStreamSerializer extends Serializer {
 	 * Convenience method for serializing an object to a <code><jk>byte</jk></code>.
 	 *
 	 * @param o The object to serialize.
-	 * @return The output serialized to a string.
+	 * @return The output serialized to a byte array.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	@Override
@@ -58,5 +59,18 @@ public abstract class OutputStreamSerializer extends Serializer {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		serialize(createSession(baos), o);
 		return baos.toByteArray();
+	}
+
+	/**
+	 * Convenience method for serializing an object to a hex-encoded String.
+	 *
+	 * @param o The object to serialize.
+	 * @return The output serialized to a hex-encoded string.
+	 * @throws SerializeException If a problem occurred trying to convert the output.
+	 */
+	public final String serializeToHex(Object o) throws SerializeException {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		serialize(createSession(baos), o);
+		return StringUtils.toHex(baos.toByteArray());
 	}
 }

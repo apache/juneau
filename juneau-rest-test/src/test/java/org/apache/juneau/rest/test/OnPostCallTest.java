@@ -19,7 +19,7 @@ import java.io.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.*;
 
-public class OnPostCallTest {
+public class OnPostCallTest extends RestTestcase {
 
 	private static String URL = "/testOnPostCall";
 

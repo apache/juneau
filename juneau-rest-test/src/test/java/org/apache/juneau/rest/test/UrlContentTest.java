@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.*;
 
-public class UrlContentTest {
+public class UrlContentTest extends RestTestcase {
 
 	private static String URL = "/testUrlContent";
 	private static RestClient client;

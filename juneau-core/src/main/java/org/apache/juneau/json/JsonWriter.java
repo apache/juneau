@@ -55,8 +55,7 @@ public final class JsonWriter extends SerializerWriter {
 	/**
 	 * Constructor.
 	 * @param out The writer being wrapped.
-	 * @param useIndentation If <jk>true</jk>, tabs will be used in output.
-	 * @param useWhitespace If <jk>true</jk>, whitespace will be used in output.
+	 * @param useWhitespace If <jk>true</jk>, tabs and spaces will be used in output.
 	 * @param escapeSolidus If <jk>true</jk>, forward slashes should be escaped in the output.
 	 * @param quoteChar The quote character to use (i.e. <js>'\''</js> or <js>'"'</js>)
 	 * @param laxMode If <jk>true</jk>, JSON attributes will only be quoted when necessary.
@@ -64,8 +63,8 @@ public final class JsonWriter extends SerializerWriter {
 	 * @param relativeUriBase The base (e.g. <js>https://localhost:9443/contextPath"</js>) for relative URIs (e.g. <js>"my/path"</js>).
 	 * @param absolutePathUriBase The base (e.g. <js>https://localhost:9443"</js>) for relative URIs with absolute paths (e.g. <js>"/contextPath/my/path"</js>).
 	 */
-	protected JsonWriter(Writer out, boolean useIndentation, boolean useWhitespace, boolean escapeSolidus, char quoteChar, boolean laxMode, boolean trimStrings, String relativeUriBase, String absolutePathUriBase) {
-		super(out, useIndentation, useWhitespace, trimStrings, quoteChar, relativeUriBase, absolutePathUriBase);
+	protected JsonWriter(Writer out, boolean useWhitespace, boolean escapeSolidus, char quoteChar, boolean laxMode, boolean trimStrings, String relativeUriBase, String absolutePathUriBase) {
+		super(out, useWhitespace, trimStrings, quoteChar, relativeUriBase, absolutePathUriBase);
 		this.laxMode = laxMode;
 		this.escapeSolidus = escapeSolidus;
 		this.ec = escapeSolidus ? encodedChars2 : encodedChars;
@@ -90,8 +89,6 @@ public final class JsonWriter extends SerializerWriter {
 		  */
 		if (s == null)
 			return this;
-//		if (trimStrings)
-//			s = s.trim();
 		boolean doConvert = false;
 		for (int i = 0; i < s.length() && ! doConvert; i++) {
 			char c = s.charAt(i);

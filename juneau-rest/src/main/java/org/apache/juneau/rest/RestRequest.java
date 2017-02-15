@@ -761,9 +761,10 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	<li>This method returns the raw unparsed value, and differs from calling <code>getFormDataParameter(name, String.<jk>class</js>)</code>
 	 * 		which will convert the value from UON notation:
 	 * 		<ul>
-	 * 			<li><js>"\u0000"</js> =&gt; <jk>null</jk>
-	 * 			<li><js>"$s(foo)"</js> =&gt; <js>"foo"</js>
-	 * 			<li><js>"(foo)"</js> =&gt; <js>"foo"</js>
+	 * 			<li><js>"null"</js> =&gt; <jk>null</jk>
+	 * 			<li><js>"'null'"</js> =&gt; <js>"null"</js>
+	 * 			<li><js>"'foo bar'"</js> =&gt; <js>"foo bar"</js>
+	 * 			<li><js>"foo~~bar"</js> =&gt; <js>"foo~bar"</js>
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1643,7 +1644,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		ParserMatch pm = parserGroup.getParserMatch(mediaType);
 
 		// If no patching parser for URL-encoding, use the one defined on the servlet.
-		if (pm == null && mediaType.equals("application/x-www-form-urlencoded"))
+		if (pm == null && mediaType.equals(MediaType.URLENCODING))
 			pm = new ParserMatch(MediaType.URLENCODING, urlEncodingParser);
 
 		return pm;
@@ -1900,13 +1901,18 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	private <T> T parseParameter(String val, ClassMeta<T> c) throws ParseException {
 		if (val == null)
 			return null;
-		// Shortcut - If we're returning a string and the value doesn't start with '$' or '(', then
+
+		// Shortcut - If we're returning a string and the value doesn't start with "'" or is "null", then
 		// just return the string since it's a plain value.
+		// This allows us to bypass the creation of a UonParserSession object.
 		if (c.getInnerClass() == String.class && val.length() > 0) {
 			char x = val.charAt(0);
-			if (x != '(' && x != '$' && x != '\u0000' && val.indexOf('~') == -1)
+			if (x != '\'' && x != 'n' && val.indexOf('~') == -1)
 				return (T)val;
+			if (x == 'n' && "null".equals(val))
+				return null;
 		}
+
 		return urlEncodingParser.parseParameter(val, c);
 	}
 

@@ -32,7 +32,6 @@ import org.apache.juneau.xml.*;
  */
 public final class HtmlParserSession extends XmlParserSession {
 
-	private XMLEventReader xmlEventReader;
 	private static final Set<String> whitespaceElements = new HashSet<String>(
 		Arrays.asList(
 			new String[]{"br","bs","sp","ff"}
@@ -202,20 +201,5 @@ public final class HtmlParserSession extends XmlParserSession {
 		} else {
 			throw new XMLStreamException("Invalid tag found in parseWhitespaceElement(): " + tag);
 		}
-	}
-
-	@Override /* ParserSession */
-	public boolean close() {
-		if (super.close()) {
-			if (xmlEventReader != null) {
-				try {
-					xmlEventReader.close();
-				} catch (XMLStreamException e) {
-					throw new BeanRuntimeException(e);
-				}
-			}
-			return true;
-		}
-		return false;
 	}
 }

@@ -20,7 +20,7 @@ import org.apache.juneau.xml.*;
 import org.junit.*;
 
 @Ignore
-public class LargePojosTest {
+public class LargePojosTest extends RestTestcase {
 
 	private static String URL = "/testLargePojos";
 	boolean debug = false;

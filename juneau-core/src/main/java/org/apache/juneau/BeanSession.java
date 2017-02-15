@@ -551,8 +551,18 @@ public class BeanSession extends Session {
 			}
 
 			// It's a bean being initialized with a Map
-			if (type.isBean() && value instanceof Map)
+			if (type.isBean() && value instanceof Map) {
+				if (value instanceof ObjectMap) {
+					ObjectMap m2 = (ObjectMap)value;
+					String typeName = m2.getString(getBeanTypePropertyName());
+					if (typeName != null) {
+						ClassMeta cm = type.getBeanRegistry().getClassMeta(typeName);
+						if (cm != null && ClassUtils.isParentClass(type.innerClass, cm.innerClass))
+							return (T)m2.cast(cm);
+					}
+				}
 				return newBeanMap(tc).load((Map<?,?>) value).getBean();
+			}
 
 			if (type.canCreateNewInstanceFromNumber(outer) && value instanceof Number)
 				return type.newInstanceFromNumber(this, outer, (Number)value);
@@ -722,12 +732,8 @@ public class BeanSession extends Session {
 		if (m == null)
 			return null;
 		T bean = null;
-		if (m.constructorArgs.length == 0) {
+		if (m.constructorArgs.length == 0) 
 			bean = newBean(outer, c);
-			// Beans with subtypes won't be instantiated until the sub type property is specified.
-			if (bean == null && ! m.getClassMeta().hasSubTypes())
-				return null;
-		}
 		return new BeanMap<T>(this, bean, m);
 	}
 
@@ -768,12 +774,8 @@ public class BeanSession extends Session {
 			return null;
 		try {
 			T o = (T)m.newBean(outer);
-			if (o == null) {
-				// Beans with subtypes won't be instantiated until the sub type property is specified.
-				if (cm.hasSubTypes())
-					return null;
+			if (o == null) 
 				throw new BeanRuntimeException(c, "Class does not have a no-arg constructor.");
-			}
 			return o;
 		} catch (BeanRuntimeException e) {
 			throw e;

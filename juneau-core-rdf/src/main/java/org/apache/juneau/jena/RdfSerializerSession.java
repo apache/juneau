@@ -60,7 +60,7 @@ public final class RdfSerializerSession extends SerializerSession {
 	protected RdfSerializerSession(RdfSerializerContext ctx, ObjectMap op, Object output, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType) {
 		super(ctx, op, output, javaMethod, locale, timeZone, mediaType);
 		ObjectMap jenaSettings = new ObjectMap();
-		jenaSettings.put("rdfXml.tab", isUseIndentation() ? 2 : 0);
+		jenaSettings.put("rdfXml.tab", isUseWhitespace() ? 2 : 0);
 		jenaSettings.put("rdfXml.attributeQuoteChar", Character.toString(getQuoteChar()));
 		jenaSettings.putAll(ctx.jenaSettings);
 		if (op == null || op.isEmpty()) {

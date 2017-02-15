@@ -44,7 +44,7 @@ public class TestUtils {
 	public static void checkErrorResponse(boolean debug, RestCallException e, int status, String...contains) throws AssertionFailedError {
 		String r = e.getResponseMessage();
 		if (debug) {
-			System.err.println(r);
+			System.err.println(r); // NOT DEBUG
 			e.printStackTrace();
 		}
 		if (status != e.getResponseCode())
@@ -52,7 +52,7 @@ public class TestUtils {
 		for (String s : contains) {
 			if (r == null || ! r.contains(s)) {
 				if (! debug)
-					System.err.println(r);
+					System.err.println(r); // NOT DEBUG
 				throw new AssertionFailedError(MessageFormat.format("Response did not have the following expected text: ''{0}''", s));
 			}
 		}

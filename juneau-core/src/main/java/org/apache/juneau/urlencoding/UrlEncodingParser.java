@@ -53,9 +53,6 @@ public class UrlEncodingParser extends UonParser {
 	/** Reusable instance of {@link UrlEncodingParser}. */
 	public static final UrlEncodingParser DEFAULT = new UrlEncodingParser().lock();
 
-	/** Reusable instance of {@link UrlEncodingParser}. */
-	public static final UrlEncodingParser DEFAULT_WS_AWARE = new UrlEncodingParser().setWhitespaceAware(true).lock();
-
 	/**
 	 * Constructor.
 	 */
@@ -69,9 +66,8 @@ public class UrlEncodingParser extends UonParser {
 			eType = (ClassMeta<T>)object();
 		PojoSwap<T,Object> transform = (PojoSwap<T,Object>)eType.getPojoSwap();
 		ClassMeta<?> sType = eType.getSerializedClassMeta();
-		BeanRegistry breg = session.getBeanRegistry();
 
-		int c = r.peek();
+		int c = r.peekSkipWs();
 		if (c == '?')
 			r.read();
 
@@ -83,7 +79,7 @@ public class UrlEncodingParser extends UonParser {
 			if (m.containsKey("_value"))
 				o = m.get("_value");
 			else
-				o = breg.cast(m);
+				o = session.cast(m, null, eType);
 		} else if (sType.isMap()) {
 			Map m = (sType.canCreateNewInstance() ? (Map)sType.newInstance() : new ObjectMap(session));
 			o = parseIntoMap(session, r, m, sType.getKeyType(), sType.getValueType());
@@ -97,7 +93,7 @@ public class UrlEncodingParser extends UonParser {
 			ClassMeta<Object> valueType = object();
 			parseIntoMap(session, r, m, string(), valueType);
 			if (m.containsKey(session.getBeanTypePropertyName()))
-				o = breg.cast(m);
+				o = session.cast(m, null, eType);
 			else if (m.containsKey("_value"))
 				o = session.convertToType(m.get("_value"), sType);
 			else if (sType.isCollection()) {
@@ -132,7 +128,7 @@ public class UrlEncodingParser extends UonParser {
 		if (keyType == null)
 			keyType = (ClassMeta<K>)string();
 
-		int c = r.peek();
+		int c = r.peekSkipWs();
 		if (c == -1)
 			return m;
 
@@ -152,7 +148,7 @@ public class UrlEncodingParser extends UonParser {
 						return m;
 					r.unread();
 					Object attr = parseAttr(session, r, true);
-					currAttr = session.trim(session.convertToType(attr, keyType));
+					currAttr = attr == null ? null : convertAttrToType(session, m, session.trim(attr.toString()), keyType);
 					state = S2;
 					c = 0; // Avoid isInEscape if c was '\'
 				} else if (state == S2) {
@@ -213,7 +209,7 @@ public class UrlEncodingParser extends UonParser {
 
 	private <T> BeanMap<T> parseIntoBeanMap(UrlEncodingParserSession session, ParserReader r, BeanMap<T> m) throws Exception {
 
-		int c = r.peek();
+		int c = r.peekSkipWs();
 		if (c == -1)
 			return m;
 
@@ -254,11 +250,7 @@ public class UrlEncodingParser extends UonParser {
 						if (! currAttr.equals(session.getBeanTypePropertyName())) {
 							BeanPropertyMeta pMeta = m.getPropertyMeta(currAttr);
 							if (pMeta == null) {
-								if (m.getMeta().isSubTyped()) {
-									m.put(currAttr, "");
-								} else {
-									onUnknownProperty(session, currAttr, m, currAttrLine, currAttrCol);
-								}
+								onUnknownProperty(session, currAttr, m, currAttrLine, currAttrCol);
 							} else {
 								session.setCurrentProperty(pMeta);
 								// In cases of "&foo=", create an empty instance of the value if createable.
@@ -276,13 +268,8 @@ public class UrlEncodingParser extends UonParser {
 						if (! currAttr.equals(session.getBeanTypePropertyName())) {
 							BeanPropertyMeta pMeta = m.getPropertyMeta(currAttr);
 							if (pMeta == null) {
-								if (m.getMeta().isSubTyped()) {
-									Object value = parseAnything(session, object(), r.unread(), m.getBean(false), true, null);
-									m.put(currAttr, value);
-								} else {
-									onUnknownProperty(session, currAttr, m, currAttrLine, currAttrCol);
-									parseAnything(session, object(), r.unread(), m.getBean(false), true, null); // Read content anyway to ignore it
-								}
+								onUnknownProperty(session, currAttr, m, currAttrLine, currAttrCol);
+								parseAnything(session, object(), r.unread(), m.getBean(false), true, null); // Read content anyway to ignore it
 							} else {
 								session.setCurrentProperty(pMeta);
 								if (session.shouldUseExpandedParams(pMeta)) {
@@ -345,7 +332,7 @@ public class UrlEncodingParser extends UonParser {
 		final int S4=4; // Found valStart, looking for & or end.
 
 		try {
-			int c = r.peek();
+			int c = r.peekSkipWs();
 			if (c == '?')
 				r.read();
 
@@ -531,7 +518,7 @@ public class UrlEncodingParser extends UonParser {
 	protected <K,V> Map<K,V> doParseIntoMap(ParserSession session, Map<K,V> m, Type keyType, Type valueType) throws Exception {
 		UrlEncodingParserSession s = (UrlEncodingParserSession)session;
 		UonReader r = s.getReader();
-		if (r.peek() == '?')
+		if (r.peekSkipWs() == '?')
 			r.read();
 		m = parseIntoMap(s, r, m, (ClassMeta<K>)session.getClassMeta(keyType), (ClassMeta<V>)session.getClassMeta(valueType));
 		return m;
@@ -595,12 +582,6 @@ public class UrlEncodingParser extends UonParser {
 	@Override /* UonParser */
 	public UrlEncodingParser setDecodeChars(boolean value) throws LockedException {
 		super.setDecodeChars(value);
-		return this;
-	}
-
-	@Override /* UonParser */
-	public UrlEncodingParser setWhitespaceAware(boolean value) throws LockedException {
-		super.setWhitespaceAware(value);
 		return this;
 	}
 

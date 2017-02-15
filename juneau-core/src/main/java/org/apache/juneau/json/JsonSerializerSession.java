@@ -18,7 +18,6 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.MediaType;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -28,7 +27,7 @@ import org.apache.juneau.serializer.*;
  */
 public final class JsonSerializerSession extends SerializerSession {
 
-	private final boolean simpleMode, useWhitespace, escapeSolidus;
+	private final boolean simpleMode, escapeSolidus;
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -49,11 +48,9 @@ public final class JsonSerializerSession extends SerializerSession {
 		super(ctx, op, output, javaMethod, locale, timeZone, mediaType);
 		if (op == null || op.isEmpty()) {
 			simpleMode = ctx.simpleMode;
-			useWhitespace = ctx.useWhitespace;
 			escapeSolidus = ctx.escapeSolidus;
 		} else {
 			simpleMode = op.getBoolean(JSON_simpleMode, ctx.simpleMode);
-			useWhitespace = op.getBoolean(JSON_useWhitespace, ctx.useWhitespace);
 			escapeSolidus = op.getBoolean(JSON_escapeSolidus, ctx.escapeSolidus);
 		}
 	}
@@ -65,15 +62,6 @@ public final class JsonSerializerSession extends SerializerSession {
 	 */
 	public final boolean isSimpleMode() {
 		return simpleMode;
-	}
-
-	/**
-	 * Returns the {@link JsonSerializerContext#JSON_useWhitespace} setting value for this session.
-	 *
-	 * @return The {@link JsonSerializerContext#JSON_useWhitespace} setting value for this session.
-	 */
-	public final boolean isUseWhitespace() {
-		return useWhitespace;
 	}
 
 	/**
@@ -90,6 +78,6 @@ public final class JsonSerializerSession extends SerializerSession {
 		Object output = getOutput();
 		if (output instanceof JsonWriter)
 			return (JsonWriter)output;
-		return new JsonWriter(super.getWriter(), isUseIndentation(), isUseWhitespace(), isEscapeSolidus(), getQuoteChar(), isSimpleMode(), isTrimStrings(), getRelativeUriBase(), getAbsolutePathUriBase());
+		return new JsonWriter(super.getWriter(), isUseWhitespace(), isEscapeSolidus(), getQuoteChar(), isSimpleMode(), isTrimStrings(), getRelativeUriBase(), getAbsolutePathUriBase());
 	}
 }

@@ -71,7 +71,7 @@ public class PojoRestTest {
 		model.put("/person1", p);
 
 		// Make sure it got stored correctly.
-		JsonSerializer serializer = JsonSerializer.DEFAULT_LAX;
+		JsonSerializer serializer = JsonSerializer.DEFAULT_LAX.clone().setAddBeanTypeProperties(false);
 		assertEquals("{person1:{name:'some name',age:123,addresses:[{street:'street A',city:'city A',state:'state A',zip:12345,isCurrent:true},{street:'street B',city:'city B',state:'state B',zip:12345,isCurrent:false}]}}", serializer.serialize(model.getRootObject()));
 
 		// Get the original Person object back.
@@ -82,7 +82,7 @@ public class PojoRestTest {
 		Address a3 = (Address)model.get("/person1/addresses/1");
 		assertEquals("city B", a3.city);
 
-		serializer = new JsonSerializer.Simple().setAddBeanTypeProperties(true);
+		serializer = new JsonSerializer.Simple();
 		p = new Person("some name", 123,
 			new Address("street A", "city A", "state A", 12345, true),
 			new Address("street B", "city B", "state B", 12345, false)
@@ -115,7 +115,7 @@ public class PojoRestTest {
 		model.put("addresses/0", new Address("street D", "city D", "state D", 12345, false));
 		model.put("addresses/1", new Address("street E", "city E", "state E", 12345, false));
 		model.put("addresses/2", new Address("street F", "city F", "state F", 12345, false));
-		serializer = JsonSerializer.DEFAULT_LAX;
+		serializer = JsonSerializer.DEFAULT_LAX.clone().setAddBeanTypeProperties(false);
 		s = serializer.serialize(p);
 		expectedValue = "{name:'some name',age:123,addresses:[{street:'street D',city:'city D',state:'state D',zip:12345,isCurrent:false},{street:'street E',city:'city E',state:'state E',zip:12345,isCurrent:false},{street:'street F',city:'city F',state:'state F',zip:12345,isCurrent:false}]}";
 		assertEquals(expectedValue, s);

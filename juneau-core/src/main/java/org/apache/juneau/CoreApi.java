@@ -1364,7 +1364,7 @@ public abstract class CoreApi extends Lockable {
 	 * @see BeanContext#BEAN_beanTypePropertyName
 	 */
 	public CoreApi setBeanTypePropertyName(String value) throws LockedException {
-		return addToProperty(BEAN_beanTypePropertyName, value);
+		return setProperty(BEAN_beanTypePropertyName, value);
 	}
 
 	/**
@@ -1390,7 +1390,7 @@ public abstract class CoreApi extends Lockable {
 	 * @see BeanContext#BEAN_defaultParser
 	 */
 	public CoreApi setDefaultParser(Class<?> value) throws LockedException {
-		return addToProperty(BEAN_defaultParser, value);
+		return setProperty(BEAN_defaultParser, value);
 	}
 
 	/**
@@ -1414,7 +1414,7 @@ public abstract class CoreApi extends Lockable {
 	 * @see BeanContext#BEAN_locale
 	 */
 	public CoreApi setLocale(Locale value) throws LockedException {
-		return addToProperty(BEAN_locale, value);
+		return setProperty(BEAN_locale, value);
 	}
 
 	/**
@@ -1464,7 +1464,7 @@ public abstract class CoreApi extends Lockable {
 	 * @see BeanContext#BEAN_mediaType
 	 */
 	public CoreApi setMediaType(MediaType value) throws LockedException {
-		return addToProperty(BEAN_mediaType, value);
+		return setProperty(BEAN_mediaType, value);
 	}
 
 	/**
@@ -1501,7 +1501,7 @@ public abstract class CoreApi extends Lockable {
 	 * @see BeanContext#BEAN_debug
 	 */
 	public CoreApi setDebug(boolean value) throws LockedException {
-		return addToProperty(BEAN_debug, value);
+		return setProperty(BEAN_debug, value);
 	}
 
 	/**

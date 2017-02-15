@@ -10,65 +10,28 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.test;
+package org.apache.juneau.examples.rest;
 
+import org.apache.juneau.examples.rest.TestMicroservice;
 import org.junit.*;
-import org.junit.runner.*;
-import org.junit.runners.*;
-import org.junit.runners.Suite.*;
 
 /**
- * Runs all the testcases in this project.
- * Starts a REST service running org.apache.juneau.rest.test.Root on port 10001.
- * Stops the REST service after running the tests.
+ * Superclass of REST testcases that start up the REST test microservice before running the tests locally.
+ *
+ * @author James Bognar (james.bognar@salesforce.com)
  */
-@RunWith(Suite.class)
-@SuiteClasses({
-	AcceptCharsetTest.class,
-	BeanContextPropertiesTest.class,
-	CallbackStringsTest.class,
-	CharsetEncodingsTest.class,
-	ClientVersionTest.class,
-	ConfigTest.class,
-	ContentTest.class,
-	DefaultContentTypesTest.class,
-	ErrorConditionsTest.class,
-	GroupsTest.class,
-	GzipTest.class,
-	InheritanceTest.class,
-	JacocoDummyTest.class,
-	LargePojosTest.class,
-	MessagesTest.class,
-	NlsPropertyTest.class,
-	NlsTest.class,
-	NoParserInputTest.class,
-	OnPostCallTest.class,
-	OnPreCallTest.class,
-	OptionsWithoutNlsTest.class,
-	OverlappingMethodsTest.class,
-	ParamsTest.class,
-	ParsersTest.class,
-	PathsTest.class,
-	PathTest.class,
-	PropertiesTest.class,
-	RestClientTest.class,
-	RestUtilsTest.class,
-	SerializersTest.class,
-	StaticFilesTest.class,
-	TransformsTest.class,
-	UrisTest.class,
-	UrlContentTest.class,
-	UrlPathPatternTest.class
-})
-public class _TestSuite {
+public class RestTestcase {
+
+	private static boolean microserviceStarted;
 
 	@BeforeClass
 	public static void setUp() {
-		TestMicroservice.startMicroservice();
+		microserviceStarted = TestMicroservice.startMicroservice();
 	}
 
 	@AfterClass
 	public static void tearDown() {
-		TestMicroservice.stopMicroservice();
+		if (microserviceStarted)
+			TestMicroservice.stopMicroservice();
 	}
 }

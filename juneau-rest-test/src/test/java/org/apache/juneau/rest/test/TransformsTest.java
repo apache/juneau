@@ -18,7 +18,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.*;
 
-public class TransformsTest {
+public class TransformsTest extends RestTestcase {
 
 	private static String URL = "/testTransforms";
 

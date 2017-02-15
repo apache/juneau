@@ -113,7 +113,6 @@ public class JsonSerializer extends WriterSerializer {
 		/** Constructor */
 		public Readable() {
 			setUseWhitespace(true);
-			setUseIndentation(true);
 		}
 	}
 
@@ -132,7 +131,6 @@ public class JsonSerializer extends WriterSerializer {
 		/** Constructor */
 		public SimpleReadable() {
 			setUseWhitespace(true);
-			setUseIndentation(true);
 		}
 	}
 
@@ -162,7 +160,6 @@ public class JsonSerializer extends WriterSerializer {
 		if (eType == null)
 			eType = object();
 
-		boolean addTypeProperty;    // Add "_type" attribute to element?
 		ClassMeta<?> aType;			// The actual type
 		ClassMeta<?> sType;			// The serialized type
 
@@ -176,7 +173,7 @@ public class JsonSerializer extends WriterSerializer {
 		}
 
 		sType = aType.getSerializedClassMeta();
-		addTypeProperty = (session.isAddBeanTypeProperties() && ! eType.equals(aType));
+		String typeName = session.getBeanTypeName(eType, aType, pMeta);
 
 		// Swap if necessary
 		PojoSwap swap = aType.getPojoSwap();
@@ -201,12 +198,12 @@ public class JsonSerializer extends WriterSerializer {
 		else if (sType.isNumber() || sType.isBoolean())
 			out.append(o);
 		else if (sType.isBean())
-			serializeBeanMap(session, out, session.toBeanMap(o), addTypeProperty);
+			serializeBeanMap(session, out, session.toBeanMap(o), typeName);
 		else if (sType.isUri() || (pMeta != null && pMeta.isUri()))
 			out.q().appendUri(o).q();
 		else if (sType.isMap()) {
 			if (o instanceof BeanMap)
-				serializeBeanMap(session, out, (BeanMap)o, addTypeProperty);
+				serializeBeanMap(session, out, (BeanMap)o, typeName);
 			else
 				serializeMap(session, out, (Map)o, eType);
 		}
@@ -260,12 +257,12 @@ public class JsonSerializer extends WriterSerializer {
 		return out;
 	}
 
-	private SerializerWriter serializeBeanMap(JsonSerializerSession session, JsonWriter out, BeanMap<?> m, boolean addTypeProperty) throws Exception {
+	private SerializerWriter serializeBeanMap(JsonSerializerSession session, JsonWriter out, BeanMap<?> m, String typeName) throws Exception {
 		int depth = session.getIndent();
 		out.append('{');
 
 		boolean addComma = false;
-		for (BeanPropertyValue p : m.getValues(session.isTrimNulls(), addTypeProperty ? session.createBeanTypeNameProperty(m) : null)) {
+		for (BeanPropertyValue p : m.getValues(session.isTrimNulls(), typeName != null ? session.createBeanTypeNameProperty(m, typeName) : null)) {
 			BeanPropertyMeta pMeta = p.getMeta();
 			ClassMeta<?> cMeta = p.getClassMeta();
 			String key = p.getName();
@@ -373,32 +370,6 @@ public class JsonSerializer extends WriterSerializer {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Use whitespace.
-	 * <p>
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"JsonSerializer.useWhitespace"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
-	 * <p>
-	 * If <jk>true</jk>, whitespace is added to the output to improve readability.
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>JSON_useWhitespace</jsf>, value)</code>.
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @throws LockedException If {@link #lock()} was called on this class.
-	 * @see JsonSerializerContext#JSON_useWhitespace
-	 */
-	public JsonSerializer setUseWhitespace(boolean value) throws LockedException {
-		return setProperty(JSON_useWhitespace, value);
-	}
-
-	/**
 	 * <b>Configuration property:</b>  Prefix solidus <js>'/'</js> characters with escapes.
 	 * <p>
 	 * <ul>
@@ -452,8 +423,8 @@ public class JsonSerializer extends WriterSerializer {
 	}
 
 	@Override /* Serializer */
-	public JsonSerializer setUseIndentation(boolean value) throws LockedException {
-		super.setUseIndentation(value);
+	public JsonSerializer setUseWhitespace(boolean value) throws LockedException {
+		super.setUseWhitespace(value);
 		return this;
 	}
 

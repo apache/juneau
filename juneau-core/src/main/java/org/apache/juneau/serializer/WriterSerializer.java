@@ -99,7 +99,7 @@ public abstract class WriterSerializer extends Serializer {
 	 * @return This object (for method chaining).
 	 */
 	public final WriterSerializer println(Object o) {
-		System.out.println(toString(o));
+		System.out.println(toString(o));  // NOT DEBUG
 		return this;
 	}
 }

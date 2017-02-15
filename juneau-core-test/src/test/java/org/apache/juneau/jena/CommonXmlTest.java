@@ -28,7 +28,7 @@ public class CommonXmlTest {
 	private RdfSerializer getBasicSerializer() {
 		return new RdfSerializer()
 			.setQuoteChar('\'')
-			.setUseIndentation(false)
+			.setUseWhitespace(false)
 			.setProperty(RDF_rdfxml_allowBadUris, true)
 			.setProperty(RDF_rdfxml_showDoctypeDeclaration, false)
 			.setProperty(RDF_rdfxml_showXmlDeclaration, false);

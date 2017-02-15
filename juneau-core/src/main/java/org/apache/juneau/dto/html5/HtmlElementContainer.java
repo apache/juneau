@@ -33,7 +33,7 @@ public class HtmlElementContainer extends HtmlElement {
 	 * @return The children of this element.
 	 */
 	@Xml(format=ELEMENTS)
-	@BeanProperty(beanDictionary=HtmlBeanDictionary.class)
+	@BeanProperty(beanDictionary=HtmlBeanDictionary.class, name="c")
 	public LinkedList<Object> getChildren() {
 		return children;
 	}
@@ -43,6 +43,7 @@ public class HtmlElementContainer extends HtmlElement {
 	 * @param children The new children for this container.
 	 * @return This object (for method chaining).
 	 */
+	@BeanProperty(name="c")
 	public HtmlElementContainer setChildren(LinkedList<Object> children) {
 		this.children = children;
 		return this;

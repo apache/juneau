@@ -261,7 +261,7 @@ public class XmlSchemaSerializer extends XmlSerializer {
 			this.defaultNs = defaultNs;
 			this.targetNs = targetNs;
 			this.session = session;
-			w = new XmlWriter(sw, session.isUseIndentation(), session.isTrimStrings(), session.getQuoteChar(), null, null, true, null);
+			w = new XmlWriter(sw, session.isUseWhitespace(), session.isTrimStrings(), session.getQuoteChar(), null, null, true, null);
 			int i = session.getIndent();
 			w.oTag(i, "schema");
 			w.attr("xmlns", xs.getUri());

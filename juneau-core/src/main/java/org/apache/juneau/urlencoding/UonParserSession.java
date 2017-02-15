@@ -28,7 +28,7 @@ import org.apache.juneau.parser.*;
  */
 public class UonParserSession extends ParserSession {
 
-	private final boolean decodeChars, whitespaceAware;
+	private final boolean decodeChars;
 	private UonReader reader;
 
 	/**
@@ -58,10 +58,8 @@ public class UonParserSession extends ParserSession {
 		super(ctx, op, input, javaMethod, outer, locale, timeZone, mediaType);
 		if (op == null || op.isEmpty()) {
 			decodeChars = ctx.decodeChars;
-			whitespaceAware = ctx.whitespaceAware;
 		} else {
 			decodeChars = op.getBoolean(UON_decodeChars, ctx.decodeChars);
-			whitespaceAware = op.getBoolean(UON_whitespaceAware, ctx.whitespaceAware);
 		}
 	}
 
@@ -83,7 +81,6 @@ public class UonParserSession extends ParserSession {
 	public UonParserSession(UonParserContext ctx, Object input) {
 		super(ctx, null, input, null, null, null, null, null);
 		decodeChars = false;
-		whitespaceAware = ctx.whitespaceAware;
 	}
 
 	/**
@@ -93,15 +90,6 @@ public class UonParserSession extends ParserSession {
 	 */
 	public final boolean isDecodeChars() {
 		return decodeChars;
-	}
-
-	/**
-	 * Returns the {@link UonParserContext#UON_whitespaceAware} setting value for this session.
-	 *
-	 * @return The {@link UonParserContext#UON_whitespaceAware} setting value for this session.
-	 */
-	public final boolean isWhitespaceAware() {
-		return whitespaceAware;
 	}
 
 	@Override /* ParserSession */

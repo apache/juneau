@@ -50,6 +50,7 @@ public class Style extends HtmlElementText {
 	//--------------------------------------------------------------------------------
 
 	@Xml(format=XmlFormat.TEXT_PWS)
+	@BeanProperty(name="c")
 	@Override /* HtmlElementText */
 	public Object getText() {
 		return super.getText();

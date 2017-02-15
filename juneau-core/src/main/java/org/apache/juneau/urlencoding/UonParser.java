@@ -53,13 +53,10 @@ public class UonParser extends ReaderParser {
 	/** Reusable instance of {@link UonParser.Decoding}. */
 	public static final UonParser DEFAULT_DECODING = new Decoding().lock();
 
-	/** Reusable instance of {@link UonParser}, all default settings, whitespace-aware. */
-	public static final UonParser DEFAULT_WS_AWARE = new UonParser().setWhitespaceAware(true).lock();
-
 	// Characters that need to be preceeded with an escape character.
-	private static final AsciiSet escapedChars = new AsciiSet(",()~=$\u0001\u0002");
+	private static final AsciiSet escapedChars = new AsciiSet("~'\u0001\u0002");
 
-	private static final char NUL='\u0000', AMP='\u0001', EQ='\u0002';  // Flags set in reader to denote & and = characters.
+	private static final char AMP='\u0001', EQ='\u0002';  // Flags set in reader to denote & and = characters.
 
 	/**
 	 * Equivalent to <code><jk>new</jk> UrlEncodingParser().setProperty(UonParserContext.<jsf>UON_decodeChars</jsf>,<jk>true</jk>);</code>.
@@ -89,14 +86,10 @@ public class UonParser extends ReaderParser {
 			eType = (ClassMeta<T>)object();
 		PojoSwap<T,Object> transform = (PojoSwap<T,Object>)eType.getPojoSwap();
 		ClassMeta<?> sType = eType.getSerializedClassMeta();
-		BeanRegistry breg = (pMeta == null ? session.getBeanRegistry() : pMeta.getBeanRegistry());
 
 		Object o = null;
 
-		// Parse type flag '$x'
-		char flag = readFlag(session, r, (char)0);
-
-		int c = r.peek();
+		int c = r.peekSkipWs();
 
 		if (c == -1 || c == AMP) {
 			// If parameter is blank and it's an array or collection, return an empty list.
@@ -108,21 +101,25 @@ public class UonParser extends ReaderParser {
 				o = sType.getPrimitiveDefault();
 			// Otherwise, leave null.
 		} else if (sType.isObject()) {
-			if (flag == 0 || flag == 's') {
-				o = parseString(session, r, isUrlParamValue);
-			} else if (flag == 'b') {
-				o = parseBoolean(session, r);
-			} else if (flag == 'n') {
-				o = parseNumber(session, r, null);
-			} else if (flag == 'o') {
+			if (c == '(') {
 				ObjectMap m = new ObjectMap(session);
 				parseIntoMap(session, r, m, string(), object(), pMeta);
-				o = breg.cast(m);
-			} else if (flag == 'a') {
+				o = session.cast(m, pMeta, eType);
+			} else if (c == '@') {
 				Collection l = new ObjectList(session);
 				o = parseIntoCollection(session, r, l, sType.getElementType(), isUrlParamValue, pMeta);
 			} else {
-				throw new ParseException(session, "Unexpected flag character ''{0}''.", flag);
+				String s = parseString(session, r, isUrlParamValue);
+				if (c != '\'') {
+					if ("true".equals(s) || "false".equals(s))
+						o = Boolean.valueOf(s);
+					else if (StringUtils.isNumeric(s))
+						o = StringUtils.parseNumber(s, Number.class);
+					else
+						o = s;
+				} else {
+					o = s;
+				}
 			}
 		} else if (sType.isBoolean()) {
 			o = parseBoolean(session, r);
@@ -137,12 +134,12 @@ public class UonParser extends ReaderParser {
 			Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : new ObjectMap(session));
 			o = parseIntoMap(session, r, m, sType.getKeyType(), sType.getValueType(), pMeta);
 		} else if (sType.isCollection()) {
-			if (flag == 'o') {
+			if (c == '(') {
 				ObjectMap m = new ObjectMap(session);
 				parseIntoMap(session, r, m, string(), object(), pMeta);
 				// Handle case where it's a collection, but serialized as a map with a _type or _value key.
 				if (m.containsKey(session.getBeanTypePropertyName()))
-					o = breg.cast(m);
+					o = session.cast(m, pMeta, eType);
 				// Handle case where it's a collection, but only a single value was specified.
 				else {
 					Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance(outer) : new ObjectList(session));
@@ -164,12 +161,12 @@ public class UonParser extends ReaderParser {
 		} else if (sType.canCreateNewInstanceFromNumber(outer)) {
 			o = sType.newInstanceFromNumber(session, outer, parseNumber(session, r, sType.getNewInstanceFromNumberClass()));
 		} else if (sType.isArray()) {
-			if (flag == 'o') {
+			if (c == '(') {
 				ObjectMap m = new ObjectMap(session);
 				parseIntoMap(session, r, m, string(), object(), pMeta);
 				// Handle case where it's an array, but serialized as a map with a _type or _value key.
 				if (m.containsKey(session.getBeanTypePropertyName()))
-					o = breg.cast(m);
+					o = session.cast(m, pMeta, eType);
 				// Handle case where it's an array, but only a single value was specified.
 				else {
 					ArrayList l = new ArrayList(1);
@@ -180,12 +177,12 @@ public class UonParser extends ReaderParser {
 				ArrayList l = (ArrayList)parseIntoCollection(session, r, new ArrayList(), sType.getElementType(), isUrlParamValue, pMeta);
 				o = session.toArray(sType, l);
 			}
-		} else if (flag == 'o') {
+		} else if (c == '(') {
 			// It could be a non-bean with _type attribute.
 			ObjectMap m = new ObjectMap(session);
 			parseIntoMap(session, r, m, string(), object(), pMeta);
 			if (m.containsKey(session.getBeanTypePropertyName()))
-				o = breg.cast(m);
+				o = session.cast(m, pMeta, eType);
 			else
 				throw new ParseException(session, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.getInnerClass().getName(), sType.getNotABeanReason());
 		} else {
@@ -207,8 +204,10 @@ public class UonParser extends ReaderParser {
 			keyType = (ClassMeta<K>)string();
 
 		int c = r.read();
-		if (c == -1 || c == NUL || c == AMP)
+		if (c == -1 || c == AMP)
 			return null;
+		if (c == 'n')
+			return (Map<K,V>)parseNull(session, r);
 		if (c != '(')
 			throw new ParseException(session, "Expected '(' at beginning of object.");
 
@@ -226,12 +225,12 @@ public class UonParser extends ReaderParser {
 				if (state == S1) {
 					if (c == ')')
 						return m;
-					if ((c == '\n' || c == '\r') && session.isWhitespaceAware())
+					if (Character.isWhitespace(c))
 						skipSpace(r);
 					else {
 						r.unread();
 						Object attr = parseAttr(session, r, session.isDecodeChars());
-						currAttr = session.trim((attr == null ? null : session.convertToType(attr, keyType)));
+						currAttr = attr == null ? null : convertAttrToType(session, m, session.trim(attr.toString()), keyType);
 						state = S2;
 						c = 0; // Avoid isInEscape if c was '\'
 					}
@@ -287,18 +286,23 @@ public class UonParser extends ReaderParser {
 
 	private <E> Collection<E> parseIntoCollection(UonParserSession session, ParserReader r, Collection<E> l, ClassMeta<E> elementType, boolean isUrlParamValue, BeanPropertyMeta pMeta) throws Exception {
 
-		int c = r.read();
-		if (c == -1 || c == NUL || c == AMP)
+		int c = r.readSkipWs();
+		if (c == -1 || c == AMP)
 			return null;
+		if (c == 'n')
+			return (Collection<E>)parseNull(session, r);
 
 		// If we're parsing a top-level parameter, we're allowed to have comma-delimited lists outside parenthesis (e.g. "&foo=1,2,3&bar=a,b,c")
 		// This is not allowed at lower levels since we use comma's as end delimiters.
-		boolean isInParens = (c == '(');
-		if (! isInParens)
+		boolean isInParens = (c == '@');
+		if (! isInParens) {
 			if (isUrlParamValue)
 				r.unread();
 			else
 				throw new ParseException(session, "Could not find '(' marking beginning of collection.");
+		} else {
+			r.read();
+		}
 
 		if (isInParens) {
 			final int S1=1; // Looking for starting of first entry.
@@ -315,7 +319,7 @@ public class UonParser extends ReaderParser {
 							r.read();
 						}
 						return l;
-					} else if ((c == '\n' || c == '\r') && session.isWhitespaceAware()) {
+					} else if (Character.isWhitespace(c)) {
 						skipSpace(r);
 					} else {
 						l.add(parseAnything(session, elementType, r.unread(), l, false, pMeta));
@@ -342,7 +346,7 @@ public class UonParser extends ReaderParser {
 			while (c != -1 && c != AMP) {
 				c = r.read();
 				if (state == S1) {
-					if ((c == '\n' || c == '\r') && session.isWhitespaceAware()) {
+					if (Character.isWhitespace(c)) {
 						skipSpace(r);
 					} else {
 						l.add(parseAnything(session, elementType, r.unread(), l, false, pMeta));
@@ -351,7 +355,7 @@ public class UonParser extends ReaderParser {
 				} else if (state == S2) {
 					if (c == ',') {
 						state = S1;
-					} else if ((c == '\n' || c == '\r') && session.isWhitespaceAware()) {
+					} else if (Character.isWhitespace(c)) {
 						skipSpace(r);
 					} else if (c == AMP || c == -1) {
 						r.unread();
@@ -366,9 +370,11 @@ public class UonParser extends ReaderParser {
 
 	private <T> BeanMap<T> parseIntoBeanMap(UonParserSession session, ParserReader r, BeanMap<T> m) throws Exception {
 
-		int c = r.read();
-		if (c == -1 || c == NUL || c == AMP)
+		int c = r.readSkipWs();
+		if (c == -1 || c == AMP)
 			return null;
+		if (c == 'n')
+			return (BeanMap<T>)parseNull(session, r);
 		if (c != '(')
 			throw new ParseException(session, "Expected '(' at beginning of object.");
 
@@ -388,7 +394,7 @@ public class UonParser extends ReaderParser {
 					if (c == ')' || c == -1 || c == AMP) {
 						return m;
 					}
-					if ((c == '\n' || c == '\r') && session.isWhitespaceAware())
+					if (Character.isWhitespace(c))
 						skipSpace(r);
 					else {
 						r.unread();
@@ -413,11 +419,7 @@ public class UonParser extends ReaderParser {
 						if (! currAttr.equals(session.getBeanTypePropertyName())) {
 							BeanPropertyMeta pMeta = m.getPropertyMeta(currAttr);
 							if (pMeta == null) {
-								if (m.getMeta().isSubTyped()) {
-									m.put(currAttr, "");
-								} else {
-									onUnknownProperty(session, currAttr, m, currAttrLine, currAttrCol);
-								}
+								onUnknownProperty(session, currAttr, m, currAttrLine, currAttrCol);
 							} else {
 								Object value = session.convertToType("", pMeta.getClassMeta());
 								pMeta.set(m, value);
@@ -430,13 +432,8 @@ public class UonParser extends ReaderParser {
 						if (! currAttr.equals(session.getBeanTypePropertyName())) {
 							BeanPropertyMeta pMeta = m.getPropertyMeta(currAttr);
 							if (pMeta == null) {
-								if (m.getMeta().isSubTyped()) {
-									Object value = parseAnything(session, object(), r.unread(), m.getBean(false), false, null);
-									m.put(currAttr, value);
-								} else {
-									onUnknownProperty(session, currAttr, m, currAttrLine, currAttrCol);
-									parseAnything(session, object(), r.unread(), m.getBean(false), false, null); // Read content anyway to ignore it
-								}
+								onUnknownProperty(session, currAttr, m, currAttrLine, currAttrCol);
+								parseAnything(session, object(), r.unread(), m.getBean(false), false, null); // Read content anyway to ignore it
 							} else {
 								session.setCurrentProperty(pMeta);
 								ClassMeta<?> cm = pMeta.getClassMeta();
@@ -470,32 +467,26 @@ public class UonParser extends ReaderParser {
 		return null; // Unreachable.
 	}
 
+	Object parseNull(UonParserSession session, ParserReader r) throws Exception {
+		String s = parseString(session, r, false);
+		if ("ull".equals(s))
+			return null;
+		throw new ParseException(session, "Unexpected character sequence: ''{0}''", s);
+	}
+
 	Object parseAttr(UonParserSession session, ParserReader r, boolean encoded) throws Exception {
 		Object attr;
-		int c = r.peek();
-		if (c == '$') {
-			char f = readFlag(session, r, (char)0);
-			if (f == 'b')
-				attr = parseBoolean(session, r);
-			else if (f == 'n')
-				attr = parseNumber(session, r, null);
-			else
-				attr = parseAttrName(session, r, encoded);
-		} else {
-			attr = parseAttrName(session, r, encoded);
-		}
+		attr = parseAttrName(session, r, encoded);
 		return attr;
 	}
 
 	String parseAttrName(UonParserSession session, ParserReader r, boolean encoded) throws Exception {
 
-		// If string is of form '(xxx)', we're looking for ')' at the end.
-		// Otherwise, we're looking for '&' or '=' or -1 denoting the end of this string.
+		// If string is of form 'xxx', we're looking for ' at the end.
+		// Otherwise, we're looking for '&' or '=' or WS or -1 denoting the end of this string.
 
-		int c = r.peek();
-		if (c == '$')
-			readFlag(session, r, 's');
-		if (c == '(')
+		int c = r.peekSkipWs();
+		if (c == '\'')
 			return parsePString(session, r);
 
 		r.mark();
@@ -504,11 +495,11 @@ public class UonParser extends ReaderParser {
 			while (c != -1) {
 				c = r.read();
 				if (! isInEscape) {
-					if (c == AMP || c == EQ || c == -1) {
+					if (c == AMP || c == EQ || c == -1 || Character.isWhitespace(c)) {
 						if (c != -1)
 							r.unread();
 						String s = r.getMarked();
-						return (s.equals("\u0000") ? null : s);
+						return ("null".equals(s) ? null : s);
 					}
 				}
 				else if (c == AMP)
@@ -521,11 +512,11 @@ public class UonParser extends ReaderParser {
 			while (c != -1) {
 				c = r.read();
 				if (! isInEscape) {
-					if (c == '=' || c == -1) {
+					if (c == '=' || c == -1 || Character.isWhitespace(c)) {
 						if (c != -1)
 							r.unread();
 						String s = r.getMarked();
-						return (s.equals("\u0000") ? null : session.trim(s));
+						return ("null".equals(s) ? null : session.trim(s));
 					}
 				}
 				isInEscape = isInEscape(c, r, isInEscape);
@@ -556,11 +547,11 @@ public class UonParser extends ReaderParser {
 
 	String parseString(UonParserSession session, ParserReader r, boolean isUrlParamValue) throws Exception {
 
-		// If string is of form '(xxx)', we're looking for ')' at the end.
+		// If string is of form 'xxx', we're looking for ' at the end.
 		// Otherwise, we're looking for ',' or ')' or -1 denoting the end of this string.
 
-		int c = r.peek();
-		if (c == '(')
+		int c = r.peekSkipWs();
+		if (c == '\'')
 			return parsePString(session, r);
 
 		r.mark();
@@ -581,7 +572,7 @@ public class UonParser extends ReaderParser {
 				s = r.getMarked();
 			else if (c == EQ)
 				r.replace('=');
-			else if ((c == '\n' || c == '\r') && session.isWhitespaceAware()) {
+			else if (Character.isWhitespace(c)) {
 				s = r.getMarked(0, -1);
 				skipSpace(r);
 				c = -1;
@@ -589,19 +580,19 @@ public class UonParser extends ReaderParser {
 			isInEscape = isInEscape(c, r, isInEscape);
 		}
 
-		return (s == null || s.equals("\u0000") ? null : session.trim(s));
+		return ("null".equals(s) ? null : session.trim(s));
 	}
 
 	private static final AsciiSet endCharsParam = new AsciiSet(""+AMP), endCharsNormal = new AsciiSet(",)"+AMP);
 
 
 	/**
-	 * Parses a string of the form "(foo)"
+	 * Parses a string of the form "'foo'"
 	 * All whitespace within parenthesis are preserved.
 	 */
 	static String parsePString(UonParserSession session, ParserReader r) throws Exception {
 
-		r.read(); // Skip first parenthesis.
+		r.read(); // Skip first quote.
 		r.mark();
 		int c = 0;
 
@@ -609,7 +600,7 @@ public class UonParser extends ReaderParser {
 		while (c != -1) {
 			c = r.read();
 			if (! isInEscape) {
-				if (c == ')')
+				if (c == '\'')
 					return session.trim(r.getMarked(0, -1));
 			}
 			if (c == EQ)
@@ -620,9 +611,8 @@ public class UonParser extends ReaderParser {
 	}
 
 	private Boolean parseBoolean(UonParserSession session, ParserReader r) throws Exception {
-		readFlag(session, r, 'b');
 		String s = parseString(session, r, false);
-		if (s == null)
+		if (s == null || s.equals("null"))
 			return null;
 		if (s.equals("true"))
 			return true;
@@ -632,7 +622,6 @@ public class UonParser extends ReaderParser {
 	}
 
 	private Number parseNumber(UonParserSession session, ParserReader r, Class<? extends Number> c) throws Exception {
-		readFlag(session, r, 'n');
 		String s = parseString(session, r, false);
 		if (s == null)
 			return null;
@@ -644,29 +633,13 @@ public class UonParser extends ReaderParser {
 	 * remainder in the input, that it consists only of whitespace and comments.
 	 */
 	private void validateEnd(UonParserSession session, ParserReader r) throws Exception {
-		int c = r.read();
-		if (c != -1)
-			throw new ParseException(session, "Remainder after parse: ''{0}''.", (char)c);
-	}
-
-	/**
-	 * Reads flag character from "$x(" construct if flag is present.
-	 * Returns 0 if no flag is present.
-	 */
-	static char readFlag(UonParserSession session, ParserReader r, char expected) throws Exception {
-		char c = (char)r.peek();
-		if (c == '$') {
-			r.read();
-			char f = (char)r.read();
-			if (expected != 0 && f != expected)
-				throw new ParseException(session, "Unexpected flag character: ''{0}''.  Expected ''{1}''.", f, expected);
-			c = (char)r.peek();
-			// Type flag must be followed by '('
-			if (c != '(')
-				throw new ParseException(session, "Unexpected character following flag: ''{0}''.", c);
-			return f;
+		while (true) {
+			int c = r.read();
+			if (c == -1)
+				return;
+			if (! Character.isWhitespace(c))
+				throw new ParseException(session, "Remainder after parse: ''{0}''.", (char)c);
 		}
-		return 0;
 	}
 
 	private Object[] parseArgs(UonParserSession session, ParserReader r, ClassMeta<?>[] argTypes) throws Exception {
@@ -677,11 +650,12 @@ public class UonParser extends ReaderParser {
 		Object[] o = new Object[argTypes.length];
 		int i = 0;
 
-		int c = r.read();
+		int c = r.readSkipWs();
 		if (c == -1 || c == AMP)
 			return null;
-		if (c != '(')
-			throw new ParseException(session, "Expected '(' at beginning of args array.");
+		if (c != '@')
+			throw new ParseException(session, "Expected '@' at beginning of args array.");
+		c = r.read();
 
 		int state = S1;
 		while (c != -1 && c != AMP) {
@@ -707,7 +681,7 @@ public class UonParser extends ReaderParser {
 	private static void skipSpace(ParserReader r) throws Exception {
 		int c = 0;
 		while ((c = r.read()) != -1) {
-			if (c > ' ' || c <= 2) {
+			if (c <= 2 || ! Character.isWhitespace(c)) {
 				r.unread();
 				return;
 			}
@@ -741,7 +715,6 @@ public class UonParser extends ReaderParser {
 	protected <K,V> Map<K,V> doParseIntoMap(ParserSession session, Map<K,V> m, Type keyType, Type valueType) throws Exception {
 		UonParserSession s = (UonParserSession)session;
 		UonReader r = s.getReader();
-		readFlag(s, r, 'o');
 		m = parseIntoMap(s, r, m, (ClassMeta<K>)session.getClassMeta(keyType), (ClassMeta<V>)session.getClassMeta(valueType), null);
 		validateEnd(s, r);
 		return m;
@@ -751,7 +724,6 @@ public class UonParser extends ReaderParser {
 	protected <E> Collection<E> doParseIntoCollection(ParserSession session, Collection<E> c, Type elementType) throws Exception {
 		UonParserSession s = (UonParserSession)session;
 		UonReader r = s.getReader();
-		readFlag(s, r, 'a');
 		c = parseIntoCollection(s, r, c, (ClassMeta<E>)session.getClassMeta(elementType), false, null);
 		validateEnd(s, r);
 		return c;
@@ -761,7 +733,6 @@ public class UonParser extends ReaderParser {
 	protected Object[] doParseArgs(ParserSession session, ClassMeta<?>[] argTypes) throws Exception {
 		UonParserSession s = (UonParserSession)session;
 		UonReader r = s.getReader();
-		readFlag(s, r, 'a');
 		Object[] a = parseArgs(s, r, argTypes);
 		return a;
 	}
@@ -796,32 +767,6 @@ public class UonParser extends ReaderParser {
 	 */
 	public UonParser setDecodeChars(boolean value) throws LockedException {
 		return setProperty(UON_decodeChars, value);
-	}
-
-	/**
-	 * <b>Configuration property:</b> Whitespace aware.
-	 * <p>
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"UonParser.whitespaceAware"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
-	 * <p>
-	 * Expect input to contain readable whitespace characters from using the {@link UonSerializerContext#UON_useWhitespace} setting.
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>UON_whitespaceAware</jsf>, value)</code>.
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @throws LockedException If {@link #lock()} was called on this class.
-	 * @see UonParserContext#UON_whitespaceAware
-	 */
-	public UonParser setWhitespaceAware(boolean value) throws LockedException {
-		return setProperty(UON_whitespaceAware, value);
 	}
 
 	@Override /* Parser */

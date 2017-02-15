@@ -15,7 +15,7 @@ package org.apache.juneau.rest.test;
 import java.net.*;
 
 
-public class Constants {
+public class Constants extends RestTestcase {
 
 	private static String juneauSampleUrl = System.getProperty("JUNO_SAMPLE_URL", "http://localhost:10000");
 	private static URI juneauSampleUri = (juneauSampleUrl == null ? null : URI.create(juneauSampleUrl));

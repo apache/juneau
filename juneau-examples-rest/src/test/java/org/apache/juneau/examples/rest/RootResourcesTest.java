@@ -25,7 +25,7 @@ import org.apache.juneau.rest.labels.*;
 import org.apache.juneau.xml.*;
 import org.junit.*;
 
-public class RootResourcesTest {
+public class RootResourcesTest extends RestTestcase {
 
 	private static String path = URI.create(Constants.getSampleUrl()).getPath();              // /jazz/juneau/sample
 	private static boolean debug = false;

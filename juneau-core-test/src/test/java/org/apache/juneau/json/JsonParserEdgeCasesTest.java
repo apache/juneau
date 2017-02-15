@@ -465,7 +465,7 @@ public class JsonParserEdgeCasesTest {
 				sb.append(java.text.MessageFormat.format(pattern, i++, fc.getName().replace(".json", ""), contents, errorText));
 			}
 		}
-		System.err.println(sb);
+		System.err.println(sb); // NOT DEBUG
 	}
 
 	public static final Map<String,String> specials = new HashMap<String,String>();

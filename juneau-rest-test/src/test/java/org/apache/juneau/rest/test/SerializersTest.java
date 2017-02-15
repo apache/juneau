@@ -20,7 +20,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.*;
 
-public class SerializersTest {
+public class SerializersTest extends RestTestcase {
 
 	private static String URL = "/testSerializers";
 	private static boolean debug = false;

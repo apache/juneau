@@ -78,7 +78,7 @@ public final class ParserGroup extends Lockable {
 	 */
 	public ParserGroup append(Parser p) {
 		checkLock();
-		synchronized(parsers) {
+		synchronized(this) {
 			cache.clear();
 			parsers.add(0, p);
 		}
@@ -110,7 +110,7 @@ public final class ParserGroup extends Lockable {
 			append(p.newInstance());
 		} catch (NoClassDefFoundError e) {
 			// Ignore if dependent library not found (e.g. Jena).
-			System.err.println(e);
+			System.err.println(e); // NOT DEBUG
 		}
 		return this;
 	}

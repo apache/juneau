@@ -353,7 +353,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testUris() throws Exception {
-		HtmlSerializer s = new HtmlSerializer.Sq().setUriAnchorText(PROPERTY_NAME).setUseIndentation(false).setAddKeyValueTableHeaders(true);
+		HtmlSerializer s = new HtmlSerializer.Sq().setUriAnchorText(PROPERTY_NAME).setUseWhitespace(false).setAddKeyValueTableHeaders(true);
 		TestURI t = new TestURI();
 		String r;
 		String expected;

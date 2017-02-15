@@ -23,7 +23,7 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.urlencoding.*;
 import org.junit.*;
 
-public class ContentTest {
+public class ContentTest extends RestTestcase {
 
 	private static String URL = "/testContent";
 
@@ -41,18 +41,10 @@ public class ContentTest {
 		//	}
 		r = c.doPost(URL + "/boolean?body=true", null).getResponseAsString();
 		assertEquals("true", r);
-		r = c.doPost(URL + "/boolean?body=(true)", null).getResponseAsString();
-		assertEquals("true", r);
-		r = c.doPost(URL + "/boolean?body=$b(true)", null).getResponseAsString();
-		assertEquals("true", r);
 		r = c.doPost(URL + "/boolean?body=false", null).getResponseAsString();
 		assertEquals("false", r);
-		r = c.doPost(URL + "/boolean?body=(false)", null).getResponseAsString();
-		assertEquals("false", r);
-		r = c.doPost(URL + "/boolean?body=$b(false)", null).getResponseAsString();
-		assertEquals("false", r);
 		try {
-			r = c.doPost(URL + "/boolean?body=%00&noTrace=true", null).getResponseAsString();
+			r = c.doPost(URL + "/boolean?body=null&noTrace=true", null).getResponseAsString();
 			fail("Exception expected!");
 		} catch (RestCallException e) {
 			assertEquals(400, e.getResponseCode());
@@ -71,17 +63,9 @@ public class ContentTest {
 		//	}
 		r = c.doPost(URL + "/Boolean?body=true", null).getResponseAsString();
 		assertEquals("true", r);
-		r = c.doPost(URL + "/Boolean?body=(true)", null).getResponseAsString();
-		assertEquals("true", r);
-		r = c.doPost(URL + "/Boolean?body=$b(true)", null).getResponseAsString();
-		assertEquals("true", r);
 		r = c.doPost(URL + "/Boolean?body=false", null).getResponseAsString();
 		assertEquals("false", r);
-		r = c.doPost(URL + "/Boolean?body=(false)", null).getResponseAsString();
-		assertEquals("false", r);
-		r = c.doPost(URL + "/Boolean?body=$b(false)", null).getResponseAsString();
-		assertEquals("false", r);
-		r = c.doPost(URL + "/Boolean?body=%00", null).getResponseAsString();
+		r = c.doPost(URL + "/Boolean?body=null", null).getResponseAsString();
 		assertEquals("null", r);
 		try {
 			r = c.doPost(URL + "/Boolean?body=bad&noTrace=true", null).getResponseAsString();
@@ -96,12 +80,8 @@ public class ContentTest {
 		//	}
 		r = c.doPost(URL + "/int?body=-123", null).getResponseAsString();
 		assertEquals("-123", r);
-		r = c.doPost(URL + "/int?body=(-123)", null).getResponseAsString();
-		assertEquals("-123", r);
-		r = c.doPost(URL + "/int?body=$n(-123)", null).getResponseAsString();
-		assertEquals("-123", r);
 		try {
-			r = c.doPost(URL + "/int?body=%00&noTrace=true", null).getResponseAsString();
+			r = c.doPost(URL + "/int?body=null&noTrace=true", null).getResponseAsString();
 			fail("Exception expected!");
 		} catch (RestCallException e) {
 			assertEquals(400, e.getResponseCode());
@@ -119,11 +99,7 @@ public class ContentTest {
 		//	}
 		r = c.doPost(URL + "/Integer?body=-123", null).getResponseAsString();
 		assertEquals("-123", r);
-		r = c.doPost(URL + "/Integer?body=(-123)", null).getResponseAsString();
-		assertEquals("-123", r);
-		r = c.doPost(URL + "/Integer?body=$n(-123)", null).getResponseAsString();
-		assertEquals("-123", r);
-		r = c.doPost(URL + "/Integer?body=%00", null).getResponseAsString();
+		r = c.doPost(URL + "/Integer?body=null", null).getResponseAsString();
 		assertEquals("null", r);
 		try {
 			r = c.doPost(URL + "/Integer?body=bad&noTrace=true", null).getResponseAsString();
@@ -138,12 +114,8 @@ public class ContentTest {
 		//	}
 		r = c.doPost(URL + "/float?body=-1.23", null).getResponseAsString();
 		assertEquals("-1.23", r);
-		r = c.doPost(URL + "/float?body=(-1.23)", null).getResponseAsString();
-		assertEquals("-1.23", r);
-		r = c.doPost(URL + "/float?body=$n(-1.23)", null).getResponseAsString();
-		assertEquals("-1.23", r);
 		try {
-			r = c.doPost(URL + "/float?body=%00&noTrace=true", null).getResponseAsString();
+			r = c.doPost(URL + "/float?body=null&noTrace=true", null).getResponseAsString();
 			fail("Exception expected!");
 		} catch (RestCallException e) {
 			assertEquals(400, e.getResponseCode());
@@ -161,11 +133,7 @@ public class ContentTest {
 		//	}
 		r = c.doPost(URL + "/Float?body=-1.23", null).getResponseAsString();
 		assertEquals("-1.23", r);
-		r = c.doPost(URL + "/Float?body=(-1.23)", null).getResponseAsString();
-		assertEquals("-1.23", r);
-		r = c.doPost(URL + "/Float?body=$n(-1.23)", null).getResponseAsString();
-		assertEquals("-1.23", r);
-		r = c.doPost(URL + "/Float?body=%00", null).getResponseAsString();
+		r = c.doPost(URL + "/Float?body=null", null).getResponseAsString();
 		assertEquals("null", r);
 		try {
 			r = c.doPost(URL + "/Float?body=bad&noTrace=true", null).getResponseAsString();
@@ -180,7 +148,7 @@ public class ContentTest {
 		//	}
 		r = c.doPost(URL + "/Map?body=(a=b,c=d)", null).getResponseAsString();
 		assertEquals("{a:'b',c:'d'}", r);
-		r = c.doPost(URL + "/Map?body=%00", null).getResponseAsString();
+		r = c.doPost(URL + "/Map?body=null", null).getResponseAsString();
 		assertEquals("null", r);
 		try {
 			r = c.doPost(URL + "/Map?body=bad&noTrace=true", null).getResponseAsString();
@@ -196,8 +164,6 @@ public class ContentTest {
 		DTOs.B b = DTOs.B.create();
 		r = c.doPost(URL + "/B?body=" + UonSerializer.DEFAULT.serialize(b), null).getResponseAsString();
 		assertEquals("{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}", r);
-		r = c.doPost(URL + "/B?body=" + UonSerializer.DEFAULT_SIMPLE.serialize(b), null).getResponseAsString();
-		assertEquals("{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}", r);
 
 		//	@RestMethod(name="POST", path="/C")
 		//	public DTO2s.C testPojo2(@Body DTO2s.C c) {
@@ -205,8 +171,6 @@ public class ContentTest {
 		//	}
 		DTOs.C x = DTOs.C.create();
 		r = c.doPost(URL + "/C?body=" + UonSerializer.DEFAULT.serialize(x), null).getResponseAsString();
-		assertEquals("{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}", r);
-		r = c.doPost(URL + "/C?body=" + UonSerializer.DEFAULT_SIMPLE.serialize(x), null).getResponseAsString();
 		assertEquals("{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}", r);
 
 		c.closeQuietly();
@@ -524,18 +488,10 @@ public class ContentTest {
 		//	}
 		r = c.doPost(URL + "/boolean", "true").getResponseAsString();
 		assertEquals("true", r);
-		r = c.doPost(URL + "/boolean", "(true)").getResponseAsString();
-		assertEquals("true", r);
-		r = c.doPost(URL + "/boolean", "$b(true)").getResponseAsString();
-		assertEquals("true", r);
 		r = c.doPost(URL + "/boolean", "false").getResponseAsString();
 		assertEquals("false", r);
-		r = c.doPost(URL + "/boolean", "(false)").getResponseAsString();
-		assertEquals("false", r);
-		r = c.doPost(URL + "/boolean", "$b(false)").getResponseAsString();
-		assertEquals("false", r);
 		try {
-			r = c.doPost(URL + "/boolean?noTrace=true", "%00").getResponseAsString();
+			r = c.doPost(URL + "/boolean?noTrace=true", "null").getResponseAsString();
 			fail("Exception expected!");
 		} catch (RestCallException e) {
 			assertEquals(400, e.getResponseCode());
@@ -554,17 +510,9 @@ public class ContentTest {
 		//	}
 		r = c.doPost(URL + "/Boolean", "true").getResponseAsString();
 		assertEquals("true", r);
-		r = c.doPost(URL + "/Boolean", "(true)").getResponseAsString();
-		assertEquals("true", r);
-		r = c.doPost(URL + "/Boolean", "$b(true)").getResponseAsString();
-		assertEquals("true", r);
 		r = c.doPost(URL + "/Boolean", "false").getResponseAsString();
 		assertEquals("false", r);
-		r = c.doPost(URL + "/Boolean", "(false)").getResponseAsString();
-		assertEquals("false", r);
-		r = c.doPost(URL + "/Boolean", "$b(false)").getResponseAsString();
-		assertEquals("false", r);
-		r = c.doPost(URL + "/Boolean", "\u0000").getResponseAsString();
+		r = c.doPost(URL + "/Boolean", "null").getResponseAsString();
 		assertEquals("null", r);
 		try {
 			r = c.doPost(URL + "/Boolean?noTrace=true", "bad").getResponseAsString();
@@ -579,12 +527,8 @@ public class ContentTest {
 		//	}
 		r = c.doPost(URL + "/int", "-123").getResponseAsString();
 		assertEquals("-123", r);
-		r = c.doPost(URL + "/int", "(-123)").getResponseAsString();
-		assertEquals("-123", r);
-		r = c.doPost(URL + "/int", "$n(-123)").getResponseAsString();
-		assertEquals("-123", r);
 		try {
-			r = c.doPost(URL + "/int?noTrace=true", "%00").getResponseAsString();
+			r = c.doPost(URL + "/int?noTrace=true", "null").getResponseAsString();
 			fail("Exception expected!");
 		} catch (RestCallException e) {
 			assertEquals(400, e.getResponseCode());
@@ -602,11 +546,7 @@ public class ContentTest {
 		//	}
 		r = c.doPost(URL + "/Integer", "-123").getResponseAsString();
 		assertEquals("-123", r);
-		r = c.doPost(URL + "/Integer", "(-123)").getResponseAsString();
-		assertEquals("-123", r);
-		r = c.doPost(URL + "/Integer", "$n(-123)").getResponseAsString();
-		assertEquals("-123", r);
-		r = c.doPost(URL + "/Integer", "\u0000").getResponseAsString();
+		r = c.doPost(URL + "/Integer", "null").getResponseAsString();
 		assertEquals("null", r);
 		try {
 			r = c.doPost(URL + "/Integer?noTrace=true", "bad").getResponseAsString();
@@ -621,12 +561,8 @@ public class ContentTest {
 		//	}
 		r = c.doPost(URL + "/float", "-1.23").getResponseAsString();
 		assertEquals("-1.23", r);
-		r = c.doPost(URL + "/float", "(-1.23)").getResponseAsString();
-		assertEquals("-1.23", r);
-		r = c.doPost(URL + "/float", "$n(-1.23)").getResponseAsString();
-		assertEquals("-1.23", r);
 		try {
-			r = c.doPost(URL + "/float?noTrace=true", "\u0000").getResponseAsString();
+			r = c.doPost(URL + "/float?noTrace=true", "null").getResponseAsString();
 			fail("Exception expected!");
 		} catch (RestCallException e) {
 			assertEquals(400, e.getResponseCode());
@@ -644,11 +580,7 @@ public class ContentTest {
 		//	}
 		r = c.doPost(URL + "/Float", "-1.23").getResponseAsString();
 		assertEquals("-1.23", r);
-		r = c.doPost(URL + "/Float", "(-1.23)").getResponseAsString();
-		assertEquals("-1.23", r);
-		r = c.doPost(URL + "/Float", "$n(-1.23)").getResponseAsString();
-		assertEquals("-1.23", r);
-		r = c.doPost(URL + "/Float", "\u0000").getResponseAsString();
+		r = c.doPost(URL + "/Float", "null").getResponseAsString();
 		assertEquals("null", r);
 		try {
 			r = c.doPost(URL + "/Float?noTrace=true", "bad").getResponseAsString();
@@ -663,7 +595,7 @@ public class ContentTest {
 		//	}
 		r = c.doPost(URL + "/Map", "(a=b,c=d)").getResponseAsString();
 		assertEquals("{a:'b',c:'d'}", r);
-		r = c.doPost(URL + "/Map", "\u0000").getResponseAsString();
+		r = c.doPost(URL + "/Map", "null").getResponseAsString();
 		assertEquals("null", r);
 		try {
 			r = c.doPost(URL + "/Map?noTrace=true", "bad").getResponseAsString();
@@ -679,8 +611,6 @@ public class ContentTest {
 		DTOs.B b = DTOs.B.create();
 		r = c.doPost(URL + "/B", "" + UonSerializer.DEFAULT.serialize(b)).getResponseAsString();
 		assertEquals("{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}", r);
-		r = c.doPost(URL + "/B", "" + UonSerializer.DEFAULT_SIMPLE.serialize(b)).getResponseAsString();
-		assertEquals("{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}", r);
 
 		//	@RestMethod(name="POST", path="/C")
 		//	public DTO2s.C testPojo2(@Body DTO2s.C c) {
@@ -688,8 +618,6 @@ public class ContentTest {
 		//	}
 		DTOs.C x = DTOs.C.create();
 		r = c.doPost(URL + "/C", "" + UonSerializer.DEFAULT.serialize(x)).getResponseAsString();
-		assertEquals("{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}", r);
-		r = c.doPost(URL + "/C", "" + UonSerializer.DEFAULT_SIMPLE.serialize(x)).getResponseAsString();
 		assertEquals("{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}", r);
 
 		c.closeQuietly();

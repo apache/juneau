@@ -917,8 +917,8 @@ public class BeanContext extends Context {
 
 		if (! cmCacheCache.containsKey(hashCode)) {
 			ConcurrentHashMap<Class,ClassMeta> cm = new ConcurrentHashMap<Class,ClassMeta>();
-			cm.put(String.class, new ClassMeta(String.class, this, null, null, findPojoSwap(String.class), findChildPojoSwaps(String.class)));
-			cm.put(Object.class, new ClassMeta(Object.class, this, null, null, findPojoSwap(Object.class), findChildPojoSwaps(Object.class)));
+			cm.putIfAbsent(String.class, new ClassMeta(String.class, this, null, null, findPojoSwap(String.class), findChildPojoSwaps(String.class)));
+			cm.putIfAbsent(Object.class, new ClassMeta(Object.class, this, null, null, findPojoSwap(Object.class), findChildPojoSwaps(Object.class)));
 			cmCacheCache.putIfAbsent(hashCode, cm);
 		}
 		this.cmCache = cmCacheCache.get(hashCode);
@@ -1006,7 +1006,7 @@ public class BeanContext extends Context {
 			int ctCount = 0;
 			for (Map<Class,ClassMeta> cm : cmCacheCache.values())
 				ctCount += cm.size();
-			System.out.println(MessageFormat.format("ClassMeta cache: {0} instances in {1} caches", ctCount, cmCacheCache.size()));
+			System.out.println(MessageFormat.format("ClassMeta cache: {0} instances in {1} caches", ctCount, cmCacheCache.size())); // NOT DEBUG
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

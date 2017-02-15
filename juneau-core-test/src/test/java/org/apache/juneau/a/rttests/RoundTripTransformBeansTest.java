@@ -275,14 +275,11 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 
 		C1 c1 = C3.create();
 		String r = s.serialize(c1);
-		assertEquals("{\"type\":\"C3\",\"f1\":{\"f2\":\"f2\",\"f3\":3}}", r);
+		assertEquals("{\"_type\":\"C3\",\"f1\":{\"f2\":\"f2\",\"f3\":3}}", r);
 	}
 
 
-	@Bean(
-		subTypeProperty="type",
-		subTypes={C3.class}
-	)
+	@Bean(beanDictionary={C3.class})
 	public static interface C1<T> extends Serializable {
 		void setF1(T f1);
 		T getF1();

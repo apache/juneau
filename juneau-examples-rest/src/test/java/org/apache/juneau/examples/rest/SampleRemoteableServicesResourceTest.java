@@ -23,7 +23,7 @@ import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
 import org.junit.*;
 
-public class SampleRemoteableServicesResourceTest {
+public class SampleRemoteableServicesResourceTest extends RestTestcase {
 
 	static RestClient[] clients;
 
@@ -62,7 +62,7 @@ public class SampleRemoteableServicesResourceTest {
 					new CreateAddress("Test street", "Test city", "Test state", 12345, true))
 			);
 			assertEquals(
-				"{id:x,name:'Test Person',birthDate:'Aug 1, 1999',addresses:[{id:x,street:'Test street',city:'Test city',state:'Test state',zip:12345,isCurrent:true}],age:x}",
+				"{_type:'person',id:x,name:'Test Person',birthDate:'Aug 1, 1999',addresses:[{id:x,street:'Test street',city:'Test city',state:'Test state',zip:12345,isCurrent:true}],age:x}",
 				JsonSerializer.DEFAULT_LAX.toString(p).replaceAll("id:\\d+", "id:x").replaceAll("age:\\d+", "age:x"));
 		}
 	}

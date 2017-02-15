@@ -33,7 +33,7 @@ public class HtmlElementMixed extends HtmlElement {
 	 * @return The children of this element.
 	 */
 	@Xml(format=MIXED)
-	@BeanProperty(beanDictionary=HtmlBeanDictionary.class)
+	@BeanProperty(beanDictionary=HtmlBeanDictionary.class, name="c")
 	public LinkedList<Object> getChildren() {
 		return children;
 	}
@@ -44,6 +44,7 @@ public class HtmlElementMixed extends HtmlElement {
 	 * @param children The new children of this element.
 	 * @return This object (for method chaining).
 	 */
+	@BeanProperty(name="c")
 	public HtmlElement setChildren(LinkedList<Object> children) {
 		this.children = children;
 		return this;

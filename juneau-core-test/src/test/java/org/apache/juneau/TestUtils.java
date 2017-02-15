@@ -147,7 +147,7 @@ public class TestUtils {
 
 	private static void printLines(String[] lines) {
 		for (int i = 0; i < lines.length; i++)
-			System.err.println(String.format("%4s:" + lines[i], i+1));
+			System.err.println(String.format("%4s:" + lines[i], i+1)); // NOT DEBUG
 	}
 
 	/**
@@ -221,7 +221,7 @@ public class TestUtils {
 	 * Test whitespace and generated schema.
 	 */
 	public static void validateXml(Object o, XmlSerializer s) throws Exception {
-		s = s.clone().setUseIndentation(true).setEnableNamespaces(true).setAddNamespaceUrisToRoot(true);
+		s = s.clone().setUseWhitespace(true).setEnableNamespaces(true).setAddNamespaceUrisToRoot(true);
 		String xml = s.serialize(o);
 
 		String xmlSchema = null;
@@ -231,10 +231,10 @@ public class TestUtils {
 			TestUtils.checkXmlWhitespace(xmlSchema);
 			TestUtils.validateXml(xml, xmlSchema);
 		} catch (Exception e) {
-			System.err.println("---XML---");
-			System.err.println(xml);
-			System.err.println("---XMLSchema---");
-			System.err.println(xmlSchema);
+			System.err.println("---XML---");       // NOT DEBUG
+			System.err.println(xml);               // NOT DEBUG
+			System.err.println("---XMLSchema---"); // NOT DEBUG
+			System.err.println(xmlSchema);         // NOT DEBUG
 			throw e;
 		}
 	}
@@ -271,7 +271,7 @@ public class TestUtils {
 
 	public static void debugOut(Object o) {
 		try {
-			System.err.println(StringUtils.decodeHex(JsonSerializer.DEFAULT_LAX.serialize(o)));
+			System.err.println(StringUtils.decodeHex(JsonSerializer.DEFAULT_LAX.serialize(o))); // NOT DEBUG
 		} catch (SerializeException e) {
 			e.printStackTrace();
 		}

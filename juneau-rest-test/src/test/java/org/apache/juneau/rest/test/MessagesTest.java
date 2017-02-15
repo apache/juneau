@@ -23,7 +23,7 @@ import org.junit.*;
 /**
  * Validates that resource bundles can be defined on both parent and child classes.
  */
-public class MessagesTest {
+public class MessagesTest extends RestTestcase {
 
 	//====================================================================================================
 	// Return contents of resource bundle.

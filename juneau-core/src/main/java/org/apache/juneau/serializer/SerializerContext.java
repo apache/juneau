@@ -98,18 +98,18 @@ public class SerializerContext extends BeanContext {
 	public static final String SERIALIZER_ignoreRecursions = "Serializer.ignoreRecursions";
 
 	/**
-	 * <b>Configuration property:</b>  Use indentation.
+	 * <b>Configuration property:</b>  Use whitespace.
 	 * <p>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Serializer.useIndentation"</js>
+	 * 	<li><b>Name:</b> <js>"Serializer.useWhitespace"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
-	 * If <jk>true</jk>, newlines and indentation is added to the output to improve readability.
+	 * If <jk>true</jk>, whitespace is added to the output to improve readability.
 	 */
-	public static final String SERIALIZER_useIndentation = "Serializer.useIndentation";
+	public static final String SERIALIZER_useWhitespace = "Serializer.useWhitespace";
 
 	/**
 	 * <b>Configuration property:</b>  Add <js>"_type"</js> properties when needed.
@@ -318,7 +318,7 @@ public class SerializerContext extends BeanContext {
 	final boolean
 		detectRecursions,
 		ignoreRecursions,
-		useIndentation,
+		useWhitespace,
 		addBeanTypeProperties,
 		trimNulls,
 		trimEmptyCollections,
@@ -340,8 +340,8 @@ public class SerializerContext extends BeanContext {
 		initialDepth = cf.getProperty(SERIALIZER_initialDepth, int.class, 0);
 		detectRecursions = cf.getProperty(SERIALIZER_detectRecursions, boolean.class, false);
 		ignoreRecursions = cf.getProperty(SERIALIZER_ignoreRecursions, boolean.class, false);
-		useIndentation = cf.getProperty(SERIALIZER_useIndentation, boolean.class, false);
-		addBeanTypeProperties = cf.getProperty(SERIALIZER_addBeanTypeProperties, boolean.class, false);
+		useWhitespace = cf.getProperty(SERIALIZER_useWhitespace, boolean.class, false);
+		addBeanTypeProperties = cf.getProperty(SERIALIZER_addBeanTypeProperties, boolean.class, true);
 		trimNulls = cf.getProperty(SERIALIZER_trimNullProperties, boolean.class, true);
 		trimEmptyCollections = cf.getProperty(SERIALIZER_trimEmptyCollections, boolean.class, false);
 		trimEmptyMaps = cf.getProperty(SERIALIZER_trimEmptyMaps, boolean.class, false);
@@ -379,7 +379,7 @@ public class SerializerContext extends BeanContext {
 				.append("initialDepth", initialDepth)
 				.append("detectRecursions", detectRecursions)
 				.append("ignoreRecursions", ignoreRecursions)
-				.append("useIndentation", useIndentation)
+				.append("useWhitespace", useWhitespace)
 				.append("addBeanTypeProperties", addBeanTypeProperties)
 				.append("trimNulls", trimNulls)
 				.append("trimEmptyCollections", trimEmptyCollections)

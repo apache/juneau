@@ -101,8 +101,8 @@ jd { color: #3f5fbf; }
 jt { color: #7f9fbf; font-weight: bold; }
 jk { color: #7f0055; font-weight: bold; }
 js { color: blue; }
-jf { color: blue; }
-jsf { color: blue; font-style: italic; }
+jf { color: DarkBlue; }
+jsf { color: DarkBlue; font-style: italic; }
 jsm { font-style: italic; }
 ja { color: grey; }
 
@@ -112,6 +112,12 @@ xa { color: purple; }
 xc { color: mediumblue; }
 xs { color: blue; font-style: italic; }
 xv { color: black; }
+
+/*--- URLEncoding/UON code effects ---*/
+ua { color: black; } /* Attribute name */
+uk { color: #7f0055; font-weight: bold; } /* true/false/null */
+un { color: DarkBlue; } /* Number value */
+us { color: blue; } /* String value */
 
 /*--- Manifest-file code effects ---*/
 mk { color: DarkRed; font-weight: bold; }

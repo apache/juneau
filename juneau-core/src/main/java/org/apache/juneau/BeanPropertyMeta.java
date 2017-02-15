@@ -451,11 +451,6 @@ public class BeanPropertyMeta {
 
 			if (m.bean == null) {
 
-				// If this bean has subtypes, and we haven't set the subtype yet,
-				// store the property in a temporary cache until the bean can be instantiated.
-				if (m.meta.subTypeProperty != null && m.propertyCache == null)
-					m.propertyCache = new TreeMap<String,Object>();
-
 				// Read-only beans get their properties stored in a cache.
 				if (m.propertyCache != null)
 					return m.propertyCache.put(name, value);
@@ -612,10 +607,10 @@ public class BeanPropertyMeta {
 
 				} else {
 					if (swap != null && value != null && isParentClass(swap.getSwapClass(), value.getClass())) {
-							value = swap.unswap(session, value, rawTypeMeta);
+						value = swap.unswap(session, value, rawTypeMeta);
 					} else {
-							value = session.convertToType(value, rawTypeMeta);
-						}
+						value = session.convertToType(value, rawTypeMeta);
+					}
 					if (setter != null)
 						setter.invoke(bean, new Object[] { value });
 					else if (field != null)

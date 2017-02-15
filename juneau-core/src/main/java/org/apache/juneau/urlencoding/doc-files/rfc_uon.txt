@@ -1,7 +1,7 @@
 Network Working Group                                          J. Bognar
-Request for Comments: 9999                                     C. Chaney  
-Category: Informational                                              IBM
-                                                                Jan 2014
+Request for Comments: 9999                                                
+Category: Informational                                       Salesforce
+                                                                Feb 2017
 
                             ***DRAFT***
                URI Object Notation (UON): Generic Syntax
@@ -38,7 +38,8 @@ Abstract
    (Uniform Resource Identifiers).  Its purpose is to define a 
    generalized object notation for URI query parameter values similar in 
    concept to Javascript Object Notation (RFC4627).  The goal is a 
-   syntax such that any data structure defined in JSON can be losslessly 
+   syntax that allows for array and map structures to be
+   such that any data structure defined in JSON can be losslessly 
    defined in an equivalent URI-based grammar, yet be fully compliant 
    with the RFC2396 specification. 
 
@@ -77,31 +78,16 @@ Abstract
             ] 
          } 
 
-      Using the "strict" syntax defined in this document, the equivalent 
+      Using the syntax defined in this document, the equivalent 
       UON notation would be as follows:
-
-         x=$o(id=$n(1),name=John+Smith,uri=http://sample/
-         addressBook/person/1,addressBookUri=http://sample/
-         addressBook,birthDate=1946-08-12T00:00:00Z,otherIds=%00,
-         addresses=$a($o(uri=http://sample/addressBook/
-         address/1,personUri=http://sample/addressBook/
-         person/1,id=$n(1),street=100+Main+Street,city=
-         Anywhereville,state=NY,zip=$n(12345),isCurrent=$b(true)))) 
-
-      A secondary "lax" syntax is available when the data type of the
-      values are already known on the receiving end of the transmission:
 
          x=(id=1,name=John+Smith,uri=http://sample/
          addressBook/person/1,addressBookUri=http://sample/
          addressBook,birthDate=1946-08-12T00:00:00Z,otherIds=%00,
-         addresses=((uri=http://sample/addressBook/
+         addresses=@((uri=http://sample/addressBook/
          address/1,personUri=http://sample/addressBook/
          person/1,id=1,street=100+Main+Street,city=
          Anywhereville,state=NY,zip=12345,isCurrent=true))) 
-
-      Values represented in strict mode can be losslessly converted
-      back and forth into a JSON model without any additional
-      information.  Values represented in lax mode cannot.
 
 1. Language constraints
 
@@ -137,146 +123,97 @@ Abstract
 2.1. Objects 
 
    Objects are values consisting of one or more child name/value pairs.
-   The $o() construct is used to define an object.
+   The (...) construct is used to define an object.
 
    Example:  A simple map with two key/value pairs:
 
-      a1=$o(b1=x1,b2=x2)
+      a1=(b1=x1,b2=x2)
 
    Example:  A nested map:
    
-      a1=$o(b1=$o(c1=x1,c2=x2))
-
-   When the data type is already known to be an object on the receiving 
-   end, then the type flag can be removed from the construct to produce
-   a simplified value. 
-
-   Example:  A nested map using "lax" syntax:
-
-     a1=(b1=(c1=x1,c2=x2))
+      a1=(b1=(c1=x1,c2=x2))
 
 2.2. Arrays
 
    Arrays are values consisting of zero or more child values.
-   The $a() construct is used to define an array.
+   The @(...) construct is used to define an array.
 
    Example:  An array of two string values:
 
-      a1=$a(x1,x2)
+      a1=@(x1,x2)
 
    Example:  A 2-dimensional array:
 
-      a1=$a($a(x1,x2),$a(x3,x4))
+      a1=@(@(x1,x2),@(x3,x4))
 
    Example:  An array of objects:
 
-      a1=$a($o(b1=x1,b2=x2),$o(c1=x1,c2=x2))
-
-   When the data type is already known to be an array on the receiving 
-   end, then the type flag can be removed from the construct to produce
-   a simplified value. 
-   
-   Example:  An array of objects using "lax" syntax:
-
-      a1=((b1=x1,b2=x2),(c1=x1,c2=x2))
+      a1=@((b1=x1,b2=x2),(c1=x1,c2=x2))
 
 2.3. Booleans
 
    Booleans are values that can only take on values "true" or "false".  
-   The $b() construct is used to define a boolean.
    
    Example:  Two boolean values:
 
-      a1=$b(true)&a2=$b(false)
-   
-   When the data type is already known to be a boolean on the receiving 
-   end, then the type flag and parentheses can be removed from the 
-   construct to produce a simplified value. 
-
-   Example:  Two boolean values using "lax" syntax:
-
       a1=true&a2=false
-
+   
 2.4. Numbers
 
-   The $n() construct is used to define a number.
+   Numbers are represented without constructs.
    Both decimal and float numbers are supported.
    
    Example:  Two numerical values, one decimal and one float:
-
-      a1=$n(123)&a2=$n(1.23e1)
-
-   When the data type is already known to be a number on the receiving 
-   end, then the type flag and parentheses can be removed from the 
-   construct to produce a simplified value. 
-   
-   Example:  Two numerical values using "lax" syntax:
 
       a1=123&a2=1.23e1
 
 2.5. Strings
 
-   Anything not conforming to one of the constructs described above 
-   are treated as simple strings.  
+   Strings are encapsulated in single quote (') characters.
    
-   Example:  A simple string value:
+   Example:  Simple string values:
+
+      a1='foobar'&a2='123'&a3='true'
+         
+   The quotes are optional when the string cannot be confused
+   with one of the constructs listed above (i.e. objects/arrays/
+   booleans/numbers/null). 
+   
+   Example:  A simple string value, unquoted:
 
       a1=foobar
+    
+   Strings must be quoted for the following cases:
+      
+      - The string can be confused with a boolean or number.
+      - The string is empty.
+      - The string contains one or more whitespace characters.
+      - The string starts with one of the following characters:
+        @ (
+      - The string contains any of the following characters:
+        ) , =
+   
+   For example, the string literal "(b1=x)" should be 
+   represented as follows:
+
+      a1='(b1=x)'
    
    The tilde character (~) is used for escaping characters to prevent 
    them from being confused with syntax characters.  
 
    The following characters must be escaped in string literals:  
 
-      $ , ( ) ~ =
+      ' ~
    
-   For example, the string literal "$o(b1=x)" should be 
-   represented as follows:
+   Example:  The string "foo'bar~baz"
 
-      a1=~$o~(b1~=x~)
+      a1='foo~'bar~~baz'
    
-   In addition, strings can optionally be enclosed in parentheses
-   when needed to handle ambiguous cases.
-   
-   The following two values are equivalent:
-   
-      a1=foobar
-      a1=(foobar)
-      
-   Using parentheses, the following construct can be used to represent
-   an empty string:
-   
-      a1=()
-   
-   The purpose for this is to handle a potential ambiguity in the 
-   representation of an empty array ([]) vs. an array containing one
-   empty string ([""]).  An array containing one empty string is 
-   represented as follows:
-
-      a1=$a(())
-
-   Without this construct, there would not be a way to tell the 
-   difference between an empty array and an array containing an empty    
-   string:
-
-      a1=$a()
-
-   Note that an array consisting of two empty strings does not suffer 
-   from this ambiguity, and the use of parenthesis is optional in 
-   this case: 
-
-      a1=$a(,)
-
 2.7. Null values
 
-   Nulls are represented by ASCII '0' as an escaped hex sequence:
+   Nulls are represented by the keyword 'null':
 
-      a1=%00
-
-   Note that a string consisting of a single null character can be 
-   represented with the following construct:
-
-      a1=(%00)
+      a1=null
 
 2.8. Top-level attribute names
 
@@ -301,7 +238,7 @@ Abstract
    
    The following query strings are fully equivalent in structure:
    
-     a1=$o(b1=x1,b2=x2)
+     a1=(b1='x1',b2='x2')
      %61%31=%24%6F%28%62%31%3D%78%31%2C%62%32%3D%78%32%29
 
 
@@ -313,22 +250,12 @@ Abstract
    attrname    = (string | null)
    value       = (var | string | null)
 
-   string      = ("(" litchar* ")") | litchar*
+   string      = ("'" litchar* "'") | litchar*
    null        = "%00"
    
-   var         = ovar | avar | nvar | bvar
-   ovar        = ovar_strict | ovar_lax
-   avar        = avar_strict | avar_lax
-   nvar        = nvar_strict | nvar_lax
-   bvar        = bvar_strict | bvar_lax
-   ovar_strict = "$o(" [pairs] ")"
-   ovar_lax    =   "(" [pairs] ")"
-   avar_strict = "$a(" [values] ")"
-   avar_lax    =   "(" [values] ")"
-   nvar_strict = "$n(" number ")"
-   nvar_lax    =       number
-   bvar_strict = "$b(" boolean ")" 
-   bvar_lax    =       boolean
+   var         = ovar | avar | nvar | boolean | number
+   ovar        = "(" [pairs] ")"
+   avar        = "@(" [values] ")"
 
    pairs       = pair ["," pairs]
    pair        = key "=" value	
@@ -345,7 +272,7 @@ Abstract
    exp         = "e" [("+" | "-")] digit+
 
    litchar     = unencoded | encode_seq | escape_seq
-   escaped     = "$" | "," | "(" | ")" | "~" | "=" 
+   escaped     = "@" | "," | "(" | ")" | "~" | "=" 
    unencoded   = alpha | digit | 
                  ";" | "/" | "?" | ":" | "@" |
                  "-" | "_" | "." | "!" | "*" | "'" 

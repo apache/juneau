@@ -318,6 +318,14 @@
 	//	  &lt;tr&gt;&lt;td&gt;age&lt;/td&gt;&lt;td&gt;21&lt;/td&gt;&lt;/tr&gt;
 	//	&lt;/table&gt;</jc>
 	String html = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(p);
+	
+	<jc>// Produces:
+	//	"(name='John Smith',age=21)"</jc>
+	String uon = UonSerializer.<jsf>DEFAULT</jsf>.serialize(p);
+
+	<jc>// Produces:
+	//	"name='John+Smith'&amp;age=21"</jc>
+	String urlencoding = UrlEncodingSerializer.<jsf>DEFAULT</jsf>.serialize(p);
 
 	<jc>// Produces:
 	// 82 A4 6E 61 6D 65 AA 4A 6F 68 6E 20 53 6D 69 74 68 A3 61 67 65 15 </jc>
@@ -817,7 +825,7 @@
 			<jk>this</jk>.<jf>value2</jf> = value2;
 		}
 		
-		<jc>// Special swap method that converts this template to a serializable bean,
+		<jc>// Special swap method that converts this template to a serializable bean</jc>
 		<jk>public</jk> Form swap(BeanSession session) {
 			<jk>return</jk> <jsm>form</jsm>(<jf>action</jf>,
 				<jsm>input</jsm>(<js>"text"</js>).name(<js>"v1"</js>).value(<jf>value1</jf>),
@@ -1054,9 +1062,6 @@
 			<ul>
 				<li>You specify the list of possible subclasses through an annotation on a parent bean class.
 				<li>You do not need to register the subtype classes on the bean dictionary of the parser.
-				<li>The default helper attribute name is <js>"_subtype"</js>, not <js>"_type"</js>.
-				<li>Bean subtype virtual properties are ALWAYS serialized.
-					They are not controlled by the {@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_addBeanTypeProperties} setting.
 			</ul>
 			<p>
 				In the following example, the abstract class has two subclasses:
@@ -1064,7 +1069,7 @@
 			<p class='bcode'>
 	<jc>// Abstract superclass</jc>
 	<ja>@Bean</ja>(
-		subTypes={A1.<jk>class</jk>, A2.<jk>class</jk>}
+		beanDictionary={A1.<jk>class</jk>, A2.<jk>class</jk>}
 	)
 	<jk>public abstract class</jk> A {
 		<jk>public</jk> String <jf>f0</jf> = <js>"f0"</js>;
@@ -1083,14 +1088,14 @@
 	}
 			</p>
 			<p>
-				When serialized, the subtype is serialized as a virtual <js>"_subtype"</js> property:
+				When serialized, the subtype is serialized as a virtual <js>"_type"</js> property:
 			</p>	
 			<p class='bcode'>
 	JsonSerializer s = JsonSerializer.<jsf>DEFAULT_LAX</jsf>;
 	A1 a1 = <jk>new</jk> A1();
 	a1.<jf>f1</jf> = <js>"f1"</js>;
 	String r = s.serialize(a1);
-	<jsm>assertEquals</jsm>(<js>"{_subtype:'A1',f1:'f1',f0:'f0'}"</js>, r);
+	<jsm>assertEquals</jsm>(<js>"{_type:'A1',f1:'f1',f0:'f0'}"</js>, r);
 			</p>
 			<p>
 				The following shows what happens when parsing back into the original object.
@@ -1099,9 +1104,6 @@
 	JsonParser p = JsonParser.<jsf>DEFAULT</jsf>;
 	A a = p.parse(r, A.<jk>class</jk>);
 	<jsm>assertTrue</jsm>(a <jk>instanceof</jk> A1);
-			</p>
-			<p class='info'>
-				The <js>"_subtype"</js> property name can be overridden using the {@link org.apache.juneau.annotation.Bean#subTypeProperty() @Bean.subTypeProperty()} annotation.
 			</p>
 		</div>
 	</div>
@@ -5624,6 +5626,29 @@
 				methods for retrieving Map and Collection class metas.  
 				Replaces the various <code>getMapClassMeta()</code>/<code>getCollectionClassMeta()</code> methods.  
 			<li>New section added to this document:	<a class='doclink' href='#DTOs'>Juneau Data Transfer Objects (org.apache.juneau.dto)</a>
+			<li>Modified the UON specification to work with mixed content.
+			<ul>
+				<li>The new specification is considerably cleaner and eliminates the need for separate normal/simple modes.
+					<br>It also allows for arbitrary whitespace to be added to the output without any confusion.
+				<li>Eliminated the <code>UonParser.<jsf>DEFAULT_WS_AWARE</jsf></code> and <code>UrlEncodingParser.<jsf>DEFAULT_WS_AWARE</jsf></code> parsers.
+					<br>The normal {@link org.apache.juneau.urlencoding.UonParser#DEFAULT} and {@link org.apache.juneau.urlencoding.UrlEncodingParser#DEFAULT} parsers will now handle whitespace.
+				<li>Eliminated the <code>UonParserContext.<jsf>UON_whitespaceAware</jsf></code> configuration setting.
+				<li>Eliminated the <code>UonSerializer.<jsf>DEFAULT_SIMPLE</jsf></code>, <code>UonSerializer.<jsf>DEFAULT_SIMPLE_ENCODING</jsf></code>
+					and <code>UrlEncodingSerializer.<jsf>DEFAULT_SIMPLE</jsf></code>
+					serializers since there is no separate simple mode anymore.
+				<li>Eliminated the <code>UonParserContext.<jsf>UON_simpleMode</jsf></code> configuration setting.
+			</ul>
+			<li>Added new {@link org.apache.juneau.serializer.OutputStreamSerializer#serializeToHex(Object)} method. 
+				<br>Useful mostly for testing purposes.
+				<br>Equivalently, the {@link org.apache.juneau.parser.InputStreamParser#parse(Object,Class)} method can now 
+					read the output from this method.
+			<li>Eliminated the <code><ja>@Bean</ja>(subTypeProperty)</code> and <code><ja>@Bean</ja>(subTypes)</code> annotations
+				and replaced them with the ability to define subtypes using the existing {@link org.apache.juneau.annotation.Bean#beanDictionary() @Bean.beanDictionary()}
+				annotation on parent classes and interfaces.
+				<br>This has the added benefit of simplifying the overall code.
+			<li>The {@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_addBeanTypeProperties} setting is now enabled by default.
+			<li>Combined the <code>SERIALIZER_addIndentation</code>/<code>JSON_addWhitespace</code>/<code>UON_addWhitespace</code>
+				properties into a single {@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_addWhitespace} setting.
 		</ul>
 		
 		<h6 class='topic'>org.apache.juneau.rest</h6>
@@ -5652,6 +5677,7 @@
 				<li>{@link org.apache.juneau.rest.RestRequest#getBody(Class)}
 				<li>{@link org.apache.juneau.rest.RestRequest#getBody(Type,Type...)}
 			</ul>
+			<li>Fixed issue where whitespace was not added to UON/URL-Encoding output when <code>&amp;plainText=true</code> specified.
 		</ul>
 	</div>
 	
@@ -6077,7 +6103,7 @@
 			<li>{@link org.apache.juneau.parser.Parser} methods now check for <jk>null</jk> input.
 			<li>{@link org.apache.juneau.serializer.SerializerGroup} and {@link org.apache.juneau.parser.ParserGroup} ignores serializers and parsers if they throw <code>NoClassDefFoundErrors</code>.
 			<li>{@link org.apache.juneau.urlencoding.UrlEncodingParser} creates lists if the same attribute name is encountered more than once.  Before it would just replace the previous value with the new value.
-			<li>New {@link org.apache.juneau.urlencoding.UrlEncodingSerializer#DEFAULT_SIMPLE_EXPANDED} serializer.
+			<li>New <code><del>UrlEncodingSerializer.DEFAULT_SIMPLE_EXPANDED</del></code> serializer.
 			<li>Changes to {@link org.apache.juneau.utils.Args}:
 				<ul>
 					<li><code>getMainArg(int)</code> changed to {@link org.apache.juneau.utils.Args#getArg(int)}.  
@@ -6840,7 +6866,7 @@
 			<li>Several improvements to URL-Encoding support.
 				<ul>
 					<li>Improved whitespace handling in {@link org.apache.juneau.urlencoding.UonParser}.
-					<li>New {@link org.apache.juneau.urlencoding.UonParserContext#UON_whitespaceAware} property for controlling whether whitespace is ignored.
+					<li>New <code><del>UonParserContext.UON_whitespaceAware</del></code> property for controlling whether whitespace is ignored.
 					<li>New {@link org.apache.juneau.urlencoding.UrlEncodingContext#URLENC_expandedParams} property for controlling whether arrays/Collections 
 						should be serialized/parsed as multi-part parameters.
 					<li>New {@link org.apache.juneau.urlencoding.annotation.UrlEncoding#expandedParams() @UrlEncoding.expandedParams()}
@@ -7171,7 +7197,7 @@
 			<li>Changed the default ordering of bean properties to be in parent-to-child class order.
 			<li>New {@link org.apache.juneau.transform.BeanFilter#readProperty(Object,String,Object) readProperty()} and {@link org.apache.juneau.transform.BeanFilter#writeProperty(Object,String,Object) writeProperty()}
 				methods added to {@link org.apache.juneau.transform.BeanFilter} class to allow individualized serialization and parsing behavior on a class-by-class basis.
-			<li>Eliminated previous restriction where bean subtype attributes had to be listed first in JSON objects when using the {@link org.apache.juneau.annotation.Bean#subTypeProperty()} annotation.
+			<li>Eliminated previous restriction where bean subtype attributes had to be listed first in JSON objects when using the <code><del>Bean.subTypeProperty()</del></code> annotation.
 				The previous behavior was not strictly JSON-compliant since JSON objects are supposed to consist of unordered lists of key/value pairs.
 				While targeted for JSON, the restriction is also lifted for all other parsers.  	
 			<li>New fluent-style {@link org.apache.juneau.BeanMap#load(String) BeanMap.load()} methods for initializing bean maps.
@@ -7552,7 +7578,7 @@
 		</p>
 		<ul class='spaced-list'>
 			<li> 
-				Fixed bug involving beans using {@link org.apache.juneau.annotation.Bean#subTypes()} annotation in addition to <code>subTypes</code> property.
+				Fixed bug involving beans using <code><del>Bean.subTypes()</del></code> annotation in addition to <code>subTypes</code> property.
 			</li>
 			<li>
 				Modified the JSON parser to handle non-existent JSON values to get around an issue where Cognos was generating invalid JSON.
@@ -7572,7 +7598,7 @@
 				Revamped the API for filter support:
 				<ul>
 					<li>Updated {@link org.apache.juneau.transform.BeanFilter} class to mirror the {@link org.apache.juneau.annotation.Bean @Bean} annotation.</li>
-					<li>Introduced support for bean {@link org.apache.juneau.annotation.Bean#subTypeProperty() subtypes}. </li>
+					<li>Introduced support for bean <code><del>Bean.subTypeProperty() subtypes</del></code>. </li>
 					<li>Replaced <code><ja>@Bean</ja>(filter=xxx)</code> with new <del><code>@Transform</code></del> annotation.</li>
 				</ul>
 			</li>
@@ -8709,3 +8735,5 @@
 
 </div>
 </body>
+		
+		

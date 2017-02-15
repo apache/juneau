@@ -35,11 +35,11 @@ public class CommonParser_UonTest {
 		Map m = null;
 		String in;
 
-		in = "$o(a=$n(1))";
+		in = "(a=1)";
 		m = (Map)p.parse(in, Object.class);
 		assertEquals(1, m.get("a"));
 
-		in = "$o(a=$n(1),b=foo+bar)";
+		in = "(a=1,b='foo+bar')";
 		m = (Map)p.parse(in, Object.class);
 		assertEquals(1, m.get("a"));
 		assertEquals("foo+bar", m.get("b"));
@@ -47,19 +47,19 @@ public class CommonParser_UonTest {
 		assertEquals(1, m.get("a"));
 		assertEquals("foo bar", m.get("b"));
 
-		in = "$o(a=$n(1),b=foo+bar,c=$b(false))";
+		in = "(a=1,b='foo+bar',c=false)";
 		m = (Map)pe.parse(in, Object.class);
 		assertEquals(1, m.get("a"));
 		assertEquals("foo bar", m.get("b"));
 		assertEquals(false, m.get("c"));
 
-		in = "$o(a=$n(1),b=foo%20bar,c=$b(false))";
+		in = "(a=1,b='foo%20bar',c=false)";
 		m = (Map)pe.parse(in, Object.class);
 		assertEquals(1, m.get("a"));
 		assertEquals("foo bar", m.get("b"));
 		assertEquals(false, m.get("c"));
 
-		ObjectList jl = (ObjectList)p.parse("$a($o(attribute=value),$o(attribute='value'))", Object.class);
+		ObjectList jl = (ObjectList)p.parse("@((attribute=value),(attribute=~'value~'))", Object.class);
 		assertEquals("value", jl.getObjectMap(0).getString("attribute"));
 		assertEquals("'value'", jl.getObjectMap(1).getString("attribute"));
 
@@ -127,7 +127,7 @@ public class CommonParser_UonTest {
 
 		ReaderParser p = UonParser.DEFAULT;
 
-		String json = "(ints=(1,2,3),beans=((a=1,b=2)))";
+		String json = "(ints=@(1,2,3),beans=@((a=1,b=2)))";
 		C t = p.parse(json, C.class);
 		assertEquals(t.getInts().size(), 3);
 		assertEquals(t.getBeans().get(0).b, 2);

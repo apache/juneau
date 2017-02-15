@@ -21,7 +21,7 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.*;
 
-public class ConfigTest {
+public class ConfigTest extends RestTestcase {
 
 	private static String URL = "/testConfig";
 

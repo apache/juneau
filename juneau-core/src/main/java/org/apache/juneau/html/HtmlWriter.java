@@ -26,14 +26,14 @@ public class HtmlWriter extends XmlWriter {
 	 * Constructor.
 	 *
 	 * @param out The writer being wrapped.
-	 * @param useIndentation If <jk>true</jk>, tabs will be used in output.
+	 * @param useWhitespace If <jk>true</jk>, tabs will be used in output.
 	 * @param trimStrings If <jk>true</jk>, strings should be trimmed before they're serialized.
 	 * @param quoteChar The quote character to use (i.e. <js>'\''</js> or <js>'"'</js>)
 	 * @param uriContext The web application context path (e.g. "/contextRoot").
 	 * @param uriAuthority The web application URI authority (e.g. "http://hostname:9080")
 	 */
-	public HtmlWriter(Writer out, boolean useIndentation, boolean trimStrings, char quoteChar, String uriContext, String uriAuthority) {
-		super(out, useIndentation, trimStrings, quoteChar, uriContext, uriAuthority, false, null);
+	public HtmlWriter(Writer out, boolean useWhitespace, boolean trimStrings, char quoteChar, String uriContext, String uriAuthority) {
+		super(out, useWhitespace, trimStrings, quoteChar, uriContext, uriAuthority, false, null);
 	}
 
 	/**

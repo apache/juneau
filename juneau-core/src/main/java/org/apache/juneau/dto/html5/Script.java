@@ -99,6 +99,7 @@ public class Script extends HtmlElementText {
 	//--------------------------------------------------------------------------------
 
 	@Xml(format=XmlFormat.TEXT_PWS)
+	@BeanProperty(name="c")
 	@Override
 	public Object getText() {
 		return super.getText();

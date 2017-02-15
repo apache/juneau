@@ -34,7 +34,7 @@ public class XmlWriter extends SerializerWriter {
 	 * Constructor.
 	 *
 	 * @param out The wrapped writer.
-	 * @param useIndentation If <jk>true</jk> XML elements will be indented.
+	 * @param useWhitespace If <jk>true</jk> XML elements will be indented.
 	 * @param trimStrings If <jk>true</jk>, strings should be trimmed before they're serialized.
 	 * @param quoteChar The quote character to use for attributes.  Should be <js>'\''</js> or <js>'"'</js>.
 	 * @param relativeUriBase The base (e.g. <js>https://localhost:9443/contextPath"</js>) for relative URIs (e.g. <js>"my/path"</js>).
@@ -42,8 +42,8 @@ public class XmlWriter extends SerializerWriter {
 	 * @param enableNs Flag to indicate if XML namespaces are enabled.
 	 * @param defaultNamespace The default namespace if XML namespaces are enabled.
 	 */
-	public XmlWriter(Writer out, boolean useIndentation, boolean trimStrings, char quoteChar, String relativeUriBase, String absolutePathUriBase, boolean enableNs, Namespace defaultNamespace) {
-		super(out, useIndentation, true, trimStrings, quoteChar, relativeUriBase, absolutePathUriBase);
+	public XmlWriter(Writer out, boolean useWhitespace, boolean trimStrings, char quoteChar, String relativeUriBase, String absolutePathUriBase, boolean enableNs, Namespace defaultNamespace) {
+		super(out, useWhitespace, trimStrings, quoteChar, relativeUriBase, absolutePathUriBase);
 		this.enableNs = enableNs;
 		this.defaultNsPrefix = defaultNamespace == null ? null : defaultNamespace.name;
 	}

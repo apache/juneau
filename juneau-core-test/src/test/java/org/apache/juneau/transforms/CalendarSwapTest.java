@@ -54,7 +54,7 @@ public class CalendarSwapTest {
 	private RdfSerializer getRdfSerializer() {
 		return new RdfSerializer()
 			.setQuoteChar('\'')
-			.setUseIndentation(false)
+			.setUseWhitespace(false)
 			.setProperty(RdfCommonContext.RDF_rdfxml_allowBadUris, true)
 			.setProperty(RdfCommonContext.RDF_rdfxml_showDoctypeDeclaration, false)
 			.setProperty(RdfCommonContext.RDF_rdfxml_showXmlDeclaration, false);
@@ -186,7 +186,7 @@ public class CalendarSwapTest {
 		Class<?> f = CalendarSwap.ToString.class;
 		WriterSerializer s = new UonSerializer.Encoding().addPojoSwaps(f);
 		ReaderParser p = UonParser.DEFAULT_DECODING.clone().addPojoSwaps(f);
-		doTest(s, p, true, "Sun+Mar+03+10:11:12+PST+1901");
+		doTest(s, p, true, "'Sun+Mar+03+10:11:12+PST+1901'");
 	}
 
 	//====================================================================================================
@@ -197,7 +197,7 @@ public class CalendarSwapTest {
 		Class<?> f = CalendarSwap.ToString.class;
 		WriterSerializer s = new UrlEncodingSerializer().addPojoSwaps(f);
 		ReaderParser p = UrlEncodingParser.DEFAULT.clone().addPojoSwaps(f);
-		doTest(s, p, true, "_value=Sun+Mar+03+10:11:12+PST+1901");
+		doTest(s, p, true, "_value='Sun+Mar+03+10:11:12+PST+1901'");
 	}
 
 	//====================================================================================================
@@ -319,7 +319,7 @@ public class CalendarSwapTest {
 		Class<?> f = CalendarSwap.RFC2822DTZ.class;
 		WriterSerializer s = new UonSerializer.Encoding().addPojoSwaps(f);
 		ReaderParser p = UonParser.DEFAULT_DECODING.clone().addPojoSwaps(f);
-		doTest(s, p, true, "Sun,+03+Mar+1901+18:11:12+GMT");
+		doTest(s, p, true, "'Sun,+03+Mar+1901+18:11:12+GMT'");
 	}
 
 	//====================================================================================================
@@ -330,7 +330,7 @@ public class CalendarSwapTest {
 		Class<?> f = CalendarSwap.RFC2822DTZ.class;
 		WriterSerializer s = new UrlEncodingSerializer().addPojoSwaps(f);
 		ReaderParser p = UrlEncodingParser.DEFAULT.clone().addPojoSwaps(f);
-		doTest(s, p, true, "_value=Sun,+03+Mar+1901+18:11:12+GMT");
+		doTest(s, p, true, "_value='Sun,+03+Mar+1901+18:11:12+GMT'");
 	}
 
 	//====================================================================================================
@@ -383,7 +383,7 @@ public class CalendarSwapTest {
 	@Test
 	public void testDefaultLongUon() throws Exception {
 		Class<?> f = CalendarLongSwap.class;
-		WriterSerializer s = UonSerializer.DEFAULT_SIMPLE.clone().addPojoSwaps(f);
+		WriterSerializer s = UonSerializer.DEFAULT.clone().addPojoSwaps(f);
 		ReaderParser p = new UonParser().addPojoSwaps(f);
 		doTest(s, p, true, "-2172116928000");
 	}
@@ -394,7 +394,7 @@ public class CalendarSwapTest {
 	@Test
 	public void testDefaultLongUrlEncoding() throws Exception {
 		Class<?> f = CalendarLongSwap.class;
-		WriterSerializer s = UrlEncodingSerializer.DEFAULT_SIMPLE.clone().addPojoSwaps(f);
+		WriterSerializer s = UrlEncodingSerializer.DEFAULT.clone().addPojoSwaps(f);
 		ReaderParser p = new UrlEncodingParser().addPojoSwaps(f);
 		doTest(s, p, true, "_value=-2172116928000");
 	}
@@ -449,7 +449,7 @@ public class CalendarSwapTest {
 	@Test
 	public void testDefaultMapUon() throws Exception {
 		Class<?> f = CalendarMapSwap.class;
-		WriterSerializer s = UonSerializer.DEFAULT_SIMPLE.clone().addPojoSwaps(f);
+		WriterSerializer s = UonSerializer.DEFAULT.clone().addPojoSwaps(f);
 		ReaderParser p = new UonParser().addPojoSwaps(f);
 		doTest(s, p, true, "(time=-2172116928000,timeZone=PST)");
 	}
@@ -460,7 +460,7 @@ public class CalendarSwapTest {
 	@Test
 	public void testDefaultMapUrlEncoding() throws Exception {
 		Class<?> f = CalendarMapSwap.class;
-		WriterSerializer s = UrlEncodingSerializer.DEFAULT_SIMPLE.clone().addPojoSwaps(f);
+		WriterSerializer s = UrlEncodingSerializer.DEFAULT.clone().addPojoSwaps(f);
 		ReaderParser p = new UrlEncodingParser().addPojoSwaps(f);
 		doTest(s, p, true, "time=-2172116928000&timeZone=PST");
 	}
@@ -517,7 +517,7 @@ public class CalendarSwapTest {
 		Class<?> f = CalendarSwap.DateMedium.class;
 		WriterSerializer s = new UonSerializer.Encoding().addPojoSwaps(f);
 		ReaderParser p = UonParser.DEFAULT_DECODING.clone().addPojoSwaps(f);
-		doTest(s, p, false, "Mar+3,+1901");
+		doTest(s, p, false, "'Mar+3,+1901'");
 	}
 
 	//====================================================================================================
@@ -528,7 +528,7 @@ public class CalendarSwapTest {
 		Class<?> f = CalendarSwap.DateMedium.class;
 		WriterSerializer s = new UrlEncodingSerializer().addPojoSwaps(f);
 		ReaderParser p = UrlEncodingParser.DEFAULT.clone().addPojoSwaps(f);
-		doTest(s, p, false, "_value=Mar+3,+1901");
+		doTest(s, p, false, "_value='Mar+3,+1901'");
 	}
 
 	//====================================================================================================
@@ -601,14 +601,14 @@ public class CalendarSwapTest {
 	//====================================================================================================
 	@Test
 	public void testBeanProperyFilterUon() throws Exception {
-		WriterSerializer s = UonSerializer.DEFAULT_SIMPLE_ENCODING;
+		WriterSerializer s = UonSerializer.DEFAULT_ENCODING;
 		ReaderParser p = UonParser.DEFAULT;
 		ReaderParser pe = UonParser.DEFAULT_DECODING;
 
 		Calendar c = testDate;
 		A t = new A(c);
 		String url = s.serialize(t);
-		assertEquals("(d1=1901-03-03T18:11:12Z,d2=Sun~,+03+Mar+1901+18:11:12+GMT,d3=-2172116928000)", url);
+		assertEquals("(d1=1901-03-03T18:11:12Z,d2='Sun,+03+Mar+1901+18:11:12+GMT',d3=-2172116928000)", url);
 		t = pe.parse(url, A.class);
 		assertEquals(t.d1.getTime().getTime(), c.getTime().getTime());
 		assertEquals(t.getD2().getTime().getTime(), c.getTime().getTime());
@@ -625,13 +625,13 @@ public class CalendarSwapTest {
 	//====================================================================================================
 	@Test
 	public void testBeanProperyFilterUrlEncoding() throws Exception {
-		WriterSerializer s = UrlEncodingSerializer.DEFAULT_SIMPLE;
+		WriterSerializer s = UrlEncodingSerializer.DEFAULT;
 		ReaderParser p = UrlEncodingParser.DEFAULT;
 
 		Calendar c = testDate;
 		A t = new A(c);
 		String url = s.serialize(t);
-		assertEquals("d1=1901-03-03T18:11:12Z&d2=Sun,+03+Mar+1901+18:11:12+GMT&d3=-2172116928000", url);
+		assertEquals("d1=1901-03-03T18:11:12Z&d2='Sun,+03+Mar+1901+18:11:12+GMT'&d3=-2172116928000", url);
 		t = p.parse(url, A.class);
 		assertEquals(t.d1.getTime().getTime(), c.getTime().getTime());
 		assertEquals(t.getD2().getTime().getTime(), c.getTime().getTime());

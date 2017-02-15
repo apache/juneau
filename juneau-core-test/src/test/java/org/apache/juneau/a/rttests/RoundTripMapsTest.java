@@ -121,12 +121,12 @@ public class RoundTripMapsTest extends RoundTripTest {
 		assertEquals(e, r);
 
 		s = new UonSerializer.Encoding().addPojoSwaps(getPojoSwaps()).setTrimNullProperties(false);
-		e = "$o(AQID=a,BAUG=%00,%00=b)";
+		e = "(AQID=a,BAUG=null,null=b)";
 		r = s.serialize(t);
 		assertEquals(e, r);
 
 		s = new UrlEncodingSerializer().addPojoSwaps(getPojoSwaps()).setTrimNullProperties(false);
-		e = "AQID=a&BAUG=%00&%00=b";
+		e = "AQID=a&BAUG=null&null=b";
 		r = s.serialize(t);
 		assertEquals(e, r);
 	}

@@ -36,18 +36,19 @@ import org.apache.juneau.internal.*;
 public class BeanRegistry {
 
 	private final Map<String,ClassMeta<?>> map;
+	private final Map<Class<?>,String> reverseMap;
 	private final BeanContext beanContext;
-	private final String beanTypePropertyName;
 	private final boolean isEmpty;
 
 	BeanRegistry(BeanContext beanContext, BeanRegistry parent, Class<?>...classes) {
 		this.beanContext = beanContext;
-		this.beanTypePropertyName = beanContext.getBeanTypePropertyName();
 		this.map = new ConcurrentHashMap<String,ClassMeta<?>>();
+		this.reverseMap = new ConcurrentHashMap<Class<?>,String>();
 		for (Class<?> c : beanContext.beanDictionaryClasses)
 			addClass(c);
 		if (parent != null)
-			this.map.putAll(parent.map);
+			for (Map.Entry<String,ClassMeta<?>> e : parent.map.entrySet())
+				addToMap(e.getKey(), e.getValue());
 		for (Class<?> c : classes)
 			addClass(c);
 		isEmpty = map.isEmpty();
@@ -77,13 +78,13 @@ public class BeanRegistry {
 							val = getTypedClassMeta(v);
 						else
 							throw new BeanRuntimeException("Class ''{0}'' was passed to BeanRegistry but value of type ''{1}'' found in map is not a Type object.", c.getName(), v.getClass().getName());
-						map.put(typeName, val);
+						addToMap(typeName, val);
 					}
 				} else {
 					Bean b = c.getAnnotation(Bean.class);
 					if (b == null || b.typeName().isEmpty())
 						throw new BeanRuntimeException("Class ''{0}'' was passed to BeanRegistry but it doesn't have a @Bean.typeName() annotation defined.", c.getName());
-					map.put(b.typeName(), beanContext.getClassMeta(c));
+					addToMap(b.typeName(), beanContext.getClassMeta(c));
 				}
 			}
 		} catch (BeanRuntimeException e) {
@@ -104,34 +105,9 @@ public class BeanRegistry {
 		return beanContext.getClassMeta(type, args);
 	}
 
-	/**
-	 * Converts the specified object map into a bean if it contains a <js>"_type"</js> entry in it.
-	 *
-	 * @param m The object map to convert to a bean if possible.
-	 * @return The new bean, or the original <code>ObjectMap</code> if no <js>"_type"</js> entry was found.
-	 */
-	public Object cast(ObjectMap m) {
-		if (isEmpty)
-			return m;
-		Object o = m.get(beanTypePropertyName);
-		if (o == null)
-			return m;
-		String typeName = o.toString();
-		ClassMeta<?> cm = getClassMeta(typeName);
-		BeanMap<?> bm = m.getBeanSession().newBeanMap(cm.getInnerClass());
-
-		// Iterate through all the entries in the map and set the individual field values.
-		for (Map.Entry<String,Object> e : m.entrySet()) {
-			String k = e.getKey();
-			Object v = e.getValue();
-			if (! k.equals(beanTypePropertyName)) {
-				// Attempt to recursively cast child maps.
-				if (v instanceof ObjectMap)
-					v = cast((ObjectMap)v);
-				bm.put(k, v);
-			}
-		}
-		return bm.getBean();
+	private void addToMap(String typeName, ClassMeta<?> cm) {
+		map.put(typeName, cm);
+		reverseMap.put(cm.innerClass, typeName);
 	}
 
 	/**
@@ -151,12 +127,25 @@ public class BeanRegistry {
 			return cm;
 		if (typeName.charAt(typeName.length()-1) == '^') {
 			cm = getClassMeta(typeName.substring(0, typeName.length()-1));
-			if (cm != null)
+			if (cm != null) {
 				cm = beanContext.getClassMeta(Array.newInstance(cm.innerClass, 1).getClass());
-			map.put(typeName, cm);
+				map.put(typeName, cm);
+			}
 			return cm;
 		}
 		return null;
+	}
+
+	/**
+	 * Given the specified class, return the dictionary name for it.
+	 *
+	 * @param c The class to lookup in this registry.
+	 * @return The dictionary name for the specified class in this registry, or <jk>null</jk> if not found.
+	 */
+	public String getTypeName(ClassMeta<?> c) {
+		if (isEmpty)
+			return null;
+		return reverseMap.get(c.innerClass);
 	}
 
 	/**
@@ -167,5 +156,15 @@ public class BeanRegistry {
 	 */
 	public boolean hasName(String typeName) {
 		return getClassMeta(typeName) != null;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append('{');
+		for (Map.Entry<String,ClassMeta<?>> e : map.entrySet())
+			sb.append(e.getKey()).append(":").append(e.getValue().toString(true)).append(", ");
+		sb.append('}');
+		return sb.toString();
 	}
 }

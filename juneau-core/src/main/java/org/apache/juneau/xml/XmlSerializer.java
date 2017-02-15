@@ -154,7 +154,7 @@ public class XmlSerializer extends WriterSerializer {
 	public static class SqReadable extends Sq {
 		/** Constructor */
 		public SqReadable() {
-			setUseIndentation(true);
+			setUseWhitespace(true);
 		}
 	}
 
@@ -179,7 +179,7 @@ public class XmlSerializer extends WriterSerializer {
 	public static class NsSqReadable extends NsSq {
 		/** Constructor */
 		public NsSqReadable() {
-			setUseIndentation(true);
+			setUseWhitespace(true);
 		}
 	}
 
@@ -973,8 +973,8 @@ public class XmlSerializer extends WriterSerializer {
 	}
 
 	@Override /* Serializer */
-	public XmlSerializer setUseIndentation(boolean value) throws LockedException {
-		super.setUseIndentation(value);
+	public XmlSerializer setUseWhitespace(boolean value) throws LockedException {
+		super.setUseWhitespace(value);
 		return this;
 	}
 

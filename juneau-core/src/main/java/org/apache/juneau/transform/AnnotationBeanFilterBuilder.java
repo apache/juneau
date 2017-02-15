@@ -32,10 +32,10 @@ public final class AnnotationBeanFilterBuilder extends BeanFilterBuilder {
 	 * @param annotations The {@link Bean @Bean} annotations found on the class and all parent classes in child-to-parent order.
 	 * @throws Exception Thrown from property namer constructor.
 	 */
-	public AnnotationBeanFilterBuilder(Class<?> annotatedClass, List<Bean> annotations) throws Exception {
+	public AnnotationBeanFilterBuilder(Class<?> annotatedClass, Map<Class<?>,Bean> annotations) throws Exception {
 		super(annotatedClass);
 
-		ListIterator<Bean> li = annotations.listIterator(annotations.size());
+		ListIterator<Bean> li = new ArrayList<Bean>(annotations.values()).listIterator(annotations.size());
 		while (li.hasPrevious()) {
 			Bean b = li.previous();
 
@@ -60,19 +60,8 @@ public final class AnnotationBeanFilterBuilder extends BeanFilterBuilder {
 			if (b.stopClass() != Object.class)
 				setStopClass(b.stopClass());
 
-			if (b.subTypes().length > 0) {
-				setSubTypeProperty(b.subTypeProperty());
-
-				for (Class<?> bst : b.subTypes()) {
-					Bean b2 = bst.getAnnotation(Bean.class);
-					String name = null;
-					if (! b2.typeName().isEmpty())
-						name = b2.typeName();
-					else
-						name = bst.getSimpleName();
-					addSubType(name, bst);
-				}
-			}
+			if (b.beanDictionary().length > 0)
+				addToBeanDictionary(b.beanDictionary());
 		}
 	}
 }

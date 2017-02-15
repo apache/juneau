@@ -57,7 +57,6 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 		if (eType == null)
 			eType = object();
 
-		boolean addTypeProperty;		// Add "_type" attribute to element?
 		ClassMeta<?> aType;			// The actual type
 		ClassMeta<?> sType;			// The serialized type
 
@@ -71,7 +70,7 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 		}
 
 		sType = aType.getSerializedClassMeta();
-		addTypeProperty = (session.isAddBeanTypeProperties() && ! eType.equals(aType));
+		String typeName = session.getBeanTypeName(eType, aType, pMeta);
 
 		// Swap if necessary
 		PojoSwap swap = aType.getPojoSwap();
@@ -92,12 +91,12 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 		else if (sType.isNumber())
 			out.appendNumber((Number)o);
 		else if (sType.isBean())
-			serializeBeanMap(session, out, session.toBeanMap(o), addTypeProperty);
+			serializeBeanMap(session, out, session.toBeanMap(o), typeName);
 		else if (sType.isUri() || (pMeta != null && pMeta.isUri()))
 			out.appendString(session.resolveUri(o.toString()));
 		else if (sType.isMap()) {
 			if (o instanceof BeanMap)
-				serializeBeanMap(session, out, (BeanMap)o, addTypeProperty);
+				serializeBeanMap(session, out, (BeanMap)o, typeName);
 			else
 				serializeMap(session, out, (Map)o, eType);
 		}
@@ -138,9 +137,9 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 		}
 	}
 
-	private void serializeBeanMap(MsgPackSerializerSession session, MsgPackOutputStream out, final BeanMap<?> m, boolean addTypeProperty) throws Exception {
+	private void serializeBeanMap(MsgPackSerializerSession session, MsgPackOutputStream out, final BeanMap<?> m, String typeName) throws Exception {
 
-		List<BeanPropertyValue> values = m.getValues(session.isTrimNulls(), addTypeProperty ? session.createBeanTypeNameProperty(m) : null);
+		List<BeanPropertyValue> values = m.getValues(session.isTrimNulls(), typeName != null ? session.createBeanTypeNameProperty(m, typeName) : null);
 
 		int size = values.size();
 		for (BeanPropertyValue p : values)
@@ -234,8 +233,8 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 	}
 
 	@Override /* Serializer */
-	public MsgPackSerializer setUseIndentation(boolean value) throws LockedException {
-		super.setUseIndentation(value);
+	public MsgPackSerializer setUseWhitespace(boolean value) throws LockedException {
+		super.setUseWhitespace(value);
 		return this;
 	}
 

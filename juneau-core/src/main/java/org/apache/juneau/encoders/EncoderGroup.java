@@ -69,7 +69,7 @@ public final class EncoderGroup extends Lockable {
 	 */
 	public EncoderGroup append(Encoder e) {
 		checkLock();
-		synchronized(encoders) {
+		synchronized(this) {
 			cache.clear();
 			encoders.add(0, e);
 		}
@@ -101,7 +101,7 @@ public final class EncoderGroup extends Lockable {
 			append(e.newInstance());
 		} catch (NoClassDefFoundError x) {
 			// Ignore if dependent library not found (e.g. Jena).
-			System.err.println(e);
+			System.err.println(e); // NOT DEBUG
 		}
 		return this;
 	}

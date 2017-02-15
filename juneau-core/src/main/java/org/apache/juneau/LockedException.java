@@ -25,6 +25,6 @@ public final class LockedException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 
 	LockedException() {
-		super("Object is locked and object settings cannot be modified.");
+		super("Object is locked and object settings cannot be modified.  Try cloning the object.");
 	}
 }

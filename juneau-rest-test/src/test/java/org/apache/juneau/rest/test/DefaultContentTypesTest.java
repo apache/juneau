@@ -21,7 +21,7 @@ import org.apache.juneau.rest.client.*;
 import org.junit.*;
 
 
-public class DefaultContentTypesTest {
+public class DefaultContentTypesTest extends RestTestcase {
 
 	private static String URL = "/testDefaultContentTypes";
 	private static boolean debug = false;

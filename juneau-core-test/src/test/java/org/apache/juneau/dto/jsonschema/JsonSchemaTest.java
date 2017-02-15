@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.jsonschema;
 
-import static org.apache.juneau.TestUtils.*;
 import static org.junit.Assert.*;
 
 import java.net.*;
@@ -25,7 +24,7 @@ public class JsonSchemaTest {
 
 	@Test
 	public void testSchema1() throws Exception {
-		JsonSerializer s = JsonSerializer.DEFAULT_LAX_READABLE;
+		JsonSerializer s = JsonSerializer.DEFAULT_LAX_READABLE.clone().setAddBeanTypeProperties(false);
 		JsonParser p = JsonParser.DEFAULT;
 		String r;
 		Schema t, t2;
@@ -113,12 +112,13 @@ public class JsonSchemaTest {
 		r = s.serialize(t);
 		assertEquals(expected, r);
 		t2 = p.parse(r, Schema.class);
-		assertEqualObjects(t, t2);
+		r = s.serialize(t2);
+		assertEquals(expected, r);
 	}
 
 	@Test
 	public void testSchema2() throws Exception {
-		JsonSerializer s = JsonSerializer.DEFAULT_LAX_READABLE;
+		JsonSerializer s = JsonSerializer.DEFAULT_LAX_READABLE.clone().setAddBeanTypeProperties(false);
 		JsonParser p = JsonParser.DEFAULT;
 		String r;
 		Schema t, t2;
@@ -149,7 +149,8 @@ public class JsonSchemaTest {
 		r = s.serialize(t);
 		assertEquals(expected, r);
 		t2 = p.parse(r, Schema.class);
-		assertEqualObjects(t, t2);
+		r = s.serialize(t2);
+		assertEquals(expected, r);
 	}
 
 	/** Bean with simple values for each property */
@@ -188,7 +189,7 @@ public class JsonSchemaTest {
 			.setNot(new SchemaRef("http://not"))
 		;
 	}
-
+	
 	/** Bean with other possible property value types not covered in test1 */
 	public static Schema getTest2() {
 		return new Schema()

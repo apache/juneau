@@ -137,7 +137,68 @@
 		<p>
 			By appending <code>?Accept=application/x-www-form-urlencoded&amp;plainText=true</code> to the URL, you can view the data as a URL-encoded string:
 		</p>
-		<img class='bordered' src="doc-files/Example_UrlEncoding.png">
+		<p class='bcode'>
+	<un>0</un>=(
+		<ua>uri</ua>=<us>http://localhost:10000/addressBook/people/1</us>,
+		<ua>addressBookUri</ua>=<us>http://localhost:10000/addressBook/</us>,
+		<ua>id</ua>=<un>1</un>,
+		<ua>name</ua>=<us>'Barack+Obama'</us>,
+		<ua>birthDate</ua>=<us>'Aug+4,+1961'</us>,
+		<ua>addresses</ua>=@(
+			(
+				<ua>uri</ua>=<us>http://localhost:10000/addressBook/addresses/1</us>,
+				<ua>personUri</ua>=<us>http://localhost:10000/addressBook/people/1</us>,
+				<ua>id</ua>=<un>1</un>,
+				<ua>street</ua>=<us>'1600+Pennsylvania+Ave'</us>,
+				<ua>city</ua>=<us>Washington</us>,
+				<ua>state</ua>=<us>DC</us>,
+				<ua>zip</ua>=<un>20500</un>,
+				<ua>isCurrent</ua>=<uk>true</uk>
+			),
+			(
+				<ua>uri</ua>=<us>http://localhost:10000/addressBook/addresses/2</us>,
+				<ua>personUri</ua>=<us>http://localhost:10000/addressBook/people/1</us>,
+				<ua>id</ua>=<un>2</un>,
+				<ua>street</ua>=<us>'5046+S+Greenwood+Ave'</us>,
+				<ua>city</ua>=<us>Chicago</us>,
+				<ua>state</ua>=<us>IL</us>,
+				<ua>zip</ua>=<un>60615</un>,
+				<ua>isCurrent</ua>=<uk>false</uk>
+			)
+		),
+		<ua>age</ua>=<un>56</un>
+	)
+	&amp;<un>1</un>=(
+		<ua>uri</ua>=<us>http://localhost:10000/addressBook/people/2</us>,
+		<ua>addressBookUri</ua>=<us>http://localhost:10000/addressBook/</us>,
+		<ua>id</ua>=<un>2</un>,
+		<ua>name</ua>=<us>'George+Walker+Bush'</us>,
+		<ua>birthDate</ua>=<us>'Jul+6,+1946'</us>,
+		<ua>addresses</ua>=@(
+			(
+				<ua>uri</ua>=<us>http://localhost:10000/addressBook/addresses/3</us>,
+				<ua>personUri</ua>=<us>http://localhost:10000/addressBook/people/2</us>,
+				<ua>id</ua>=<un>3</un>,
+				<ua>street</ua>=<us>'43+Prairie+Chapel+Rd'</us>,
+				<ua>city</ua>=<us>Crawford</us>,
+				<ua>state</ua>=<us>TX</us>,
+				<ua>zip</ua>=<un>76638</un>,
+				<ua>isCurrent</ua>=<uk>true</uk>
+			),
+			(
+				<ua>uri</ua>=<us>http://localhost:10000/addressBook/addresses/4</us>,
+				<ua>personUri</ua>=<us>http://localhost:10000/addressBook/people/2</us>,
+				<ua>id</ua>=<un>4</un>,
+				<ua>street</ua>=<us>'1600+Pennsylvania+Ave'</us>,
+				<ua>city</ua>=<us>Washington</us>,
+				<ua>state</ua>=<us>DC</us>,
+				<ua>zip</ua>=<un><us>20500</un>,
+				<ua>isCurrent</ua>=<uk>false</uk>
+			)
+		),
+		<ua>age</ua>=<un>71</un>
+	)		
+		</p>
 		
 		<p>
 			Juneau supports two kinds of serialization:
@@ -150,64 +211,77 @@
 			Top-level beans and maps can serialized as key/value pairs as shown below:
 		</p>
 		<h6 class='figure'>Example:  A bean with 2 string properties, 'foo' and 'baz', serialized to a query string</h6>
-		<p class='bcode'>	http://localhost/sample?<xa>foo</xa>=<xs>bar</xs>&amp;<xa>baz</xa>=<xs>bing</xs></p>
+		<p class='bcode'>	
+	http://localhost/sample?<ua>foo</ua>=<us>bar</us>&amp;<ua>baz</ua>=<us>bing</us>
+		</p>
 		<p>
-			Lower-level beans and maps are also serialized as key/value pairs, but are surrounded with a <js>"$o(...)"</js> construct to denote an object mapping, 
+			Lower-level beans and maps are also serialized as key/value pairs, but are surrounded with a <js>"(...)"</js> construct to denote an object mapping, 
 				and uses a comma as the parameter delimiter instead of <js>"&amp;"</js>.<br>
 		</p>
 		<h6 class='figure'>Example:  A bean serialized as a query parameter value.</h6>
-		<p class='bcode'>	http://localhost/sample?<xa>a1</xa>=$o(<xa>foo</xa>=<xs>bar</xs>,<xa>baz</xa>=<xs>bing</xs>)</p>
-		<p>
-			The UON specification defines two separate modes:  
+		<p class='bcode'>	
+	http://localhost/sample?<ua>a1</ua>=(<ua>foo</ua>=<us>bar</us>,<ua>baz</ua>=<us>bing</us>)
 		</p>
-		<ul class='spaced-list'>
-			<li>Strict mode - Serialized model is fully equivalent to JSON and can be losslessly converted back and forth into a JSON model without additional information.
-			<li>Lax mode - A shortened form that excludes data type information.  Ideal if the data types of values are fixed and already known by the parser.
-		</ul>
+		
+		<h6 class='figure'>General methodology:</h6>
 		<table class='styled' style='border-collapse: collapse;'>
-			<tr><th>Java type</th><th>JSON equivalent</th><th>Strict syntax</th><th>Lax syntax</th></tr>
+			<tr><th>Java type</th><th>JSON equivalent</th><th>UON</th></tr>
 			<tr>
 				<td>Maps/beans</td>
 				<td>OBJECT</td>
-				<td class='code'><xa>a1</xa>=$o(<xa>b1</xa>=<xs>x1</xs>,<xa>b2</xa>=<xs>x2</xs>)<br><xa>a1</xa>=$o(<xa>b1</xa>=$o(<xa>c1</xa>=<xs>x1</xs>,<xa>c2</xa>=<xs>x2</xs>))</td>
-				<td class='code'><xa>a1</xa>=(<xa>b1</xa>=<xs>x1</xs>,<xa>b2</xa>=<xs>x2</xs>)<br><xa>a1</xa>=(<xa>b1</xa>=(<xa>c1</xa>=<xs>x1</xs>,<xa>c2</xa>=<xs>x2</xs>))</td>
+				<td class='code'>
+	<ua>a1</ua>=(<ua>b1</ua>=<us>x1</us>,<ua>b2</ua>=<us>x2</us>)
+	<ua>a1</ua>=(<ua>b1</ua>=(<ua>c1</ua>=<us>x1</us>,<ua>c2</ua>=<us>x2</us>))
+				</td>
 			</tr>
 			<tr>
 				<td>Collections/arrays</td>
 				<td>ARRAY</td>
-				<td class='code'><xa>a1</xa>=$a(<xs>x1</xs>,<xs>x2</xs>)<br><xa>a1</xa>=$a($a(<xs>x1</xs>,<xs>x2</xs>),$a(<xs>x3</xs>,<xs>x4</xs>))<br><xa>a1</xa>=$a($o(<xa>b1</xa>=<xs>x1</xs>,<xa>b2</xa>=<xs>x2</xs>),$o(<xa>c1</xa>=<xs>x1</xs>,<xa>c2</xa>=<xs>x2</xs>))</td>
-				<td class='code'><xa>a1</xa>=(<xs>x1</xs>,<xs>x2</xs>)<br><xa>a1</xa>=((<xs>x1</xs>,<xs>x2</xs>),(<xs>x3</xs>,<xs>x4</xs>))<br><xa>a1</xa>=((<xa>b1</xa>=<xs>x1</xs>,<xa>b2</xa>=<xs>x2</xs>),(<xa>c1</xa>=<xs>x1</xs>,<xa>c2</xa>=<xs>x2</xs>))</td>
+				<td class='code'>
+	<ua>a1</ua>=@(<us>x1</us>,<us>x2</us>)
+	<ua>a1</ua>=@(@(<us>x1</us>,<us>x2</us>),@(<us>x3</us>,<us>x4</us>))
+	<ua>a1</ua>=@((<ua>b1</ua>=<us>x1</us>,<ua>b2</ua>=<us>x2</us>),(<ua>c1</ua>=<us>x1</us>,<ua>c2</ua>=<us>x2</us>))
+				</td>
 			</tr>
 			<tr>
 				<td>Booleans</td>
 				<td>BOOLEAN</td>
-				<td class='code'><xa>a1</xa>=$b(<xs>true</xs>)&amp;<xa>a2</xa>=$b(<xs>false</xs>)</td>
-				<td class='code'><xa>a1</xa>=<xs>true</xs>&amp;<xa>a2</xa>=<xs>false</xs></td>
+				<td class='code'>
+	<ua>a1</ua>=<uk>true</uk>&amp;<ua>a2</ua>=<uk>false</uk>
+				</td>
 			</tr>
 			<tr>
 				<td>int/float/double/...</td>
 				<td>NUMBER</td>
-				<td class='code'><xa>a1</xa>=$n(<xs>123</xs>)&amp;<xa>a2</xa>=$n(<xs>1.23e1</xs>)</td>
-				<td class='code'><xa>a1</xa>=<xs>123</xs>&amp;<xa>a2</xa>=<xs>1.23e1</xs></td>
+				<td class='code'>
+	<ua>a1</ua>=<un>123</un>&amp;<ua>a2</ua>=<un>1.23e1</un>
+				</td>
 			</tr>
 			<tr>
 				<td>null</td>
 				<td>NULL</td>
-				<td class='code'><xa>a1</xa>=<xs>%00</xs></td>
-				<td class='code'><xa>a1</xa>=<xs>%00</xs></td>
+				<td class='code'>
+	<ua>a1</ua>=<uk>null</uk>
+				</td>
 			</tr>
 			<tr>
 				<td>String</td>
 				<td>STRING</td>
-				<td class='code'><xa>a1</xa>=<xs>foobar</xs></td>
-				<td class='code'><xa>a1</xa>=<xs>foobar</xs></td>
+				<td class='code'>
+	<ua>a1</ua>=<us>foobar</us>
+	<ua>a1</ua>=<us>'true'</us>
+	<ua>a1</ua>=<us>'null'</us>
+	<ua>a1</ua>=<us>'123'</us>
+	<ua>a1</ua>=<us>' string with whitespace '</us>
+	<ua>a1</ua>=<us>'string with ~'escaped~' quotes'</us>
+				</td>
 			</tr>
 		</table>
 		<p>
 			Refer to the <a href='doc-files/rfc_uon.txt'>UON specification</a> for a complete set of syntax rules.		
 		<p>
 			<code>PojoSwaps</code> can be used to convert non-serializable POJOs into serializable forms, such as converting 
-				<code>Calendar</code> object to ISO8601 strings, or <code><jk>byte</jk>[]</code> arrays to Base-64 encoded strings.<br>
+				<code>Calendar</code> object to ISO8601 strings, or <code><uk>byte</uk>[]</code> arrays to Base-64 encoded strings.<br>
 			These transforms can be associated at various levels:
 		</p>
 		<ul class='spaced-list'>
@@ -216,7 +290,9 @@
 			<li>On bean properties through the <code><ja>@BeanProperty</ja></code> annotations.
 		</ul>
 		<h6 class='figure'>Example:  A serialized Calendar object using <code>CalendarSwap.RFC2822DTZ</code> transform.</h6>
-		<p class='bcode'>	http://localhost/sample?<xa>a1=<js>Sun~,+03+Mar+1901+09:05:06+GMT</js></p>
+		<p class='bcode'>	
+	http://localhost/sample?<ua>a1=<us>'Sun,+03+Mar+1901+09:05:06+GMT'</us>
+		</p>
 		<p>
 			For more information about transforms, refer to {@link org.apache.juneau.transform}.
 		</p>
@@ -241,23 +317,15 @@
 	</p>
 	<ul class='spaced-list'>
 		<li>{@link org.apache.juneau.urlencoding.UrlEncodingSerializer#DEFAULT} - All default settings, strict mode.
-		<li>{@link org.apache.juneau.urlencoding.UrlEncodingSerializer#DEFAULT_SIMPLE} - All default settings, lax mode.
 		<li>{@link org.apache.juneau.urlencoding.UrlEncodingSerializer#DEFAULT_READABLE} - Use whitespace and indentation for readability.
 		<li>{@link org.apache.juneau.urlencoding.UonSerializer#DEFAULT} - All default settings, strict mode.
-		<li>{@link org.apache.juneau.urlencoding.UonSerializer#DEFAULT_SIMPLE} - All default settings, lax mode.
 		<li>{@link org.apache.juneau.urlencoding.UonSerializer#DEFAULT_READABLE} - Use whitespace and indentation for readability.
 		<li>{@link org.apache.juneau.urlencoding.UonSerializer#DEFAULT_ENCODING} - Same as DEFAULT, but use URL-Encoding on special characters.
-		<li>{@link org.apache.juneau.urlencoding.UonSerializer#DEFAULT_SIMPLE_ENCODING} - Same as DEFAULT_SIMPLE, but use URL-Encoding on special characters.
 	</ul>
 	<p>
 		The general guidelines on which serializer to use is:
 	</p>
 	<ul class='spaced-list'>
-		<li>Use strict mode serializers if the data types of the value are not known on the parsing side, and this
-			information needs to be preserved during transmission.
-		<li>Use lax mode serializers if the data types of the value are known on the parsing side. 
-			For example, if you're serializing/parsing beans, lax mode is usually sufficient since the data types
-			can be inferred from the bean properties.
 		<li>Use encoding serializers when you're using the results to construct a URI yourself, and therefore 
 			need invalid URI characters to be encoded.
 		<li>Use unencoding serializers when you're creating parameter values and passing them off to some other
@@ -298,7 +366,7 @@
 	UonSerializer s = UonSerializer.<jsf>DEFAULT</jsf>;
 
 	<jc>// Create our bean.</jc>
-	Person p = <jk>new</jk> Person(1, <js>"John Smith"</js>);
+	Person p = <uk>new</uk> Person(1, <js>"John Smith"</js>);
 
 	<jc>// Serialize the bean to URL-encoded parameter value.</jc>
 	String urlencoded = s.serialize(p);
@@ -307,7 +375,7 @@
 		The code above produces the following output:
 	</p>
 	<p class='bcode'>
-	$o(<xa>id</xa>=$n(<xs>1</xs>),<xa>name</xa>=<xs>John+Smith</xs>)
+	(<ua>id</ua>=<un>1</un>,<ua>name</ua>=<us>'John+Smith'</us>)
 	</p>
 	<p>
 		The {@link org.apache.juneau.urlencoding.UrlEncodingSerializer} class converts
@@ -324,15 +392,8 @@
 		The code above produces the following output:
 	</p>
 	<p class='bcode'>
-	<xa>id</xa>=$n(<xs>1</xs>)&amp;<xa>name</xa>=<xs>John+Smith</xs>
+	<ua>id</ua>=<un>1</un>&amp;<ua>name</ua>=<us>'John+Smith'</us>
 	</p>
-	<p>
-		The general method guidelines are as follows:
-	</p>
-	<ul class='spaced-list'>
-		<li>Use <code>UonSerializer</code> to create individual query parameter values.
-		<li>Use <code>UrlEncodingSerializer</code> to create complete URL-encoded query strings.
-	</ul>
 	<p>
 		By default, the <code>UrlEncodingSerializer</code> class will URL-Encode special characters, and the <code>UonSerializer</code> will NOT URL-encode special characters.  
 	</p>
@@ -370,7 +431,6 @@
 
 		<ja>@BeanProperty</ja>(swap=CalendarSwap.ISO8601DTZ.<jk>class</jk>) <jk>public</jk> Calendar <jf>birthDate</jf>;
 
-
 		<jc>// Bean constructor (needed by parser)</jc>
 		<jk>public</jk> Person() {}
 
@@ -396,13 +456,13 @@
 			Now when we rerun the sample code, we'll get the following:
 		</p>
 		<p class='bcode'>
-	$o(<xa>id</xa>=$n(<xs>1</xs>),<xa>name</xa>=<xs>John+Smith</xs>,<xa>uri</xa>=<xs>http://sample/addressBook/person/1</xs>,<xa>addressBookUri</xa>=<xs>http://sample/addressBook</xs>,<xa>birthDate</xa>=<xs>1946-08-12T00:00:00Z</xs>)
+	(<ua>id</ua>=<un>1</un>,<ua>name</ua>=<us>'John+Smith'</us>,<ua>uri</ua>=<us>http://sample/addressBook/person/1</us>,<ua>addressBookUri</ua>=<us>http://sample/addressBook</us>,<ua>birthDate</ua>=<us>1946-08-12T00:00:00Z</us>)
 		</p>
 		<p>
 			Using <code>UrlEncodingSerializer</code> instead would create the following:
 		</p>
 		<p class='bcode'>
-	<xa>id</xa>=$n(<xs>1</xs>)&amp;<xa>name</xa>=<xs>John+Smith</xs>&amp;<xa>uri</xa>=<xs>http://sample/addressBook/person/1</xs>&amp;<xa>addressBookUri</xa>=<xs>http://sample/addressBook</xs>&amp;<xa>birthDate</xa>=<xs>1946-08-12T00:00:00Z</xs>
+	<ua>id</ua>=<un>1</un>&amp;<ua>name</ua>=<us>'John+Smith'</us>&amp;<ua>uri</ua>=<us>http://sample/addressBook/person/1</us>&amp;<ua>addressBookUri</ua>=<us>http://sample/addressBook</us>&amp;<ua>birthDate</ua>=<us>1946-08-12T00:00:00Z</us>
 		</p>
 		<p>
 			Another useful feature is the {@link org.apache.juneau.annotation.Bean#propertyNamer()} annotation that allows you to plug in your own
@@ -418,7 +478,7 @@
 		</p>
 		<h6 class='figure'>Results</h6>
 		<p class='bcode'>
-	$o(<xa>id</xa>=$n(<xs>1</xs>),<xa>name</xa>=<xs>John+Smith</xs>,<xa>uri</xa>=<xs>http://sample/addressBook/person/1</xs>,<xa>address-book-uri</xa>=<xs>http://sample/addressBook</xs>,<xa>birth-date</xa>=<xs>1946-08-12T00:00:00Z</xs>)
+	(<ua>id</ua>=<un>1</us>,<ua>name</ua>=<us>'John+Smith'</us>,<ua>uri</ua>=<us>http://sample/addressBook/person/1</us>,<ua>address-book-uri</ua>=<us>http://sample/addressBook</us>,<ua>birth-date</ua>=<us>1946-08-12T00:00:00Z</us>)
 		</p>
 	</div>
 	
@@ -477,73 +537,45 @@
 			Now when we run the sample code, we get the following (in readable format):
 		</p>
 		<p class='bcode'>
-	$o(
-		<xa>id</xa>=$n(<xs>1</xs>), 
-		<xa>name</xa>=<xs>John+Smith</xs>, 
-		<xa>uri</xa>=<xs>http://sample/addressBook/person/1</xs>, 
-		<xa>addressBookUri</xa>=<xs>http://sample/addressBook</xs>,
-		<xa>birthDate</xa>=<xs>1946-08-12T00:00:00Z</xs>,
-		<xa>addresses</xa>=$a(
-			$o(
-				<xa>uri</xa>=<xs>http://sample/addressBook/address/1</xs>, 
-				<xa>personUri</xa>=<xs>http://sample/addressBook/person/1</xs>, 
-				<xa>id</xa>=$n(<xs>1</xs>), 
-				<xa>street</xa>=<xs>100+Main+Street</xs>, 
-				<xa>city</xa>=<xs>Anywhereville</xs>, 
-				<xa>state</xa>=<xs>NY</xs>, 
-				<xa>zip</xa>=$n(<xs>12345</xs>), 
-				<xa>isCurrent</xa>=$b(<xs>true</xs>)
-			)
-		)
-	)
-		</p>
-		<p>
-			If we were to use lax mode instead, we would get the following:
-		</p>
-		<p class='bcode'>
 	(
-		<xa>id</xa>=<xs>1</xs>, 
-		<xa>name</xa>=<xs>John+Smith</xs>, 
-		<xa>uri</xa>=<xs>http://sample/addressBook/person/1</xs>, 
-		<xa>addressBookUri</xa>=<xs>http://sample/addressBook</xs>,
-		<xa>birthDate</xa>=<xs>1946-08-12T00:00:00Z</xs>,
-		<xa>addresses</xa>=(
+		<ua>id</ua>=<un>1</un>, 
+		<ua>name</ua>=<us>'John+Smith'</us>, 
+		<ua>uri</ua>=<us>http://sample/addressBook/person/1</us>, 
+		<ua>addressBookUri</ua>=<us>http://sample/addressBook</us>,
+		<ua>birthDate</ua>=<us>1946-08-12T00:00:00Z</us>,
+		<ua>addresses</ua>=@(
 			(
-				<xa>uri</xa>=<xs>http://sample/addressBook/address/1</xs>, 
-				<xa>personUri</xa>=<xs>http://sample/addressBook/person/1</xs>, 
-				<xa>id</xa>=<xs>1</xs>, 
-				<xa>street</xa>=<xs>100+Main+Street</xs>, 
-				<xa>city</xa>=<xs>Anywhereville</xs>, 
-				<xa>state</xa>=<xs>NY</xs>, 
-				<xa>zip</xa>=<xs>12345</xs>, 
-				<xa>isCurrent</xa>=<xs>true</xs>
+				<ua>uri</ua>=<us>http://sample/addressBook/address/1</us>, 
+				<ua>personUri</ua>=<us>http://sample/addressBook/person/1</us>, 
+				<ua>id</ua>=<un>1</un>, 
+				<ua>street</ua>=<us>'100+Main+Street'</us>, 
+				<ua>city</ua>=<us>Anywhereville</us>, 
+				<ua>state</ua>=<us>NY</us>, 
+				<ua>zip</ua>=<un>12345</un>, 
+				<ua>isCurrent</ua>=<uk>true</uk>
 			)
 		)
 	)
-		</p>
-		<p>
-			Note how the data type information is removed, so it's not possible to distinguish between numbers/booleans/strings, and between objects/arrays.
-			However, this is fine if we're parsing back into the same beans, since we can inver the data types from the bean property metadata.
 		</p>
 		<p>
 			If we were to use <code>UrlEncodingSerializer</code> instead, we would get the following:
 		</p>
 		<p class='bcode'>
-	<xa>id</xa>=$n(<xs>1</xs>)&amp; 
-	<xa>name</xa>=<xs>John+Smith</xs>&amp; 
-	<xa>uri</xa>=<xs>http://sample/addressBook/person/1</xs>&amp; 
-	<xa>addressBookUri</xa>=<xs>http://sample/addressBook</xs>&amp;
-	<xa>birthDate</xa>=<xs>1946-08-12T00:00:00Z</xs>&amp;
-	<xa>addresses</xa>=$a(
-		$o(
-			<xa>uri</xa>=<xs>http://sample/addressBook/address/1</xs>, 
-			<xa>personUri</xa>=<xs>http://sample/addressBook/person/1</xs>, 
-			<xa>id</xa>=$n(<xs>1</xs>), 
-			<xa>street</xa>=<xs>100+Main+Street</xs>, 
-			<xa>city</xa>=<xs>Anywhereville</xs>, 
-			<xa>state</xa>=<xs>NY</xs>, 
-			<xa>zip</xa>=$n(<xs>12345</xs>), 
-			<xa>isCurrent</xa>=$b(<xs>true</xs>)
+	<ua>id</ua>=<un>1</un>&amp; 
+	<ua>name</ua>=<us>'John+Smith'</us>&amp; 
+	<ua>uri</ua>=<us>http://sample/addressBook/person/1</us>&amp; 
+	<ua>addressBookUri</ua>=<us>http://sample/addressBook</us>&amp;
+	<ua>birthDate</ua>=<us>1946-08-12T00:00:00Z</us>&amp;
+	<ua>addresses</ua>=@(
+		(
+			<ua>uri</ua>=<us>http://sample/addressBook/address/1</us>, 
+			<ua>personUri</ua>=<us>http://sample/addressBook/person/1</us>, 
+			<ua>id</ua>=<un>1</un>, 
+			<ua>street</ua>=<us>'100+Main+Street'</us>, 
+			<ua>city</ua>=<us>Anywhereville</us>, 
+			<ua>state</ua>=<us>NY</us>, 
+			<ua>zip</ua>=<un>12345</un>, 
+			<ua>isCurrent</ua>=<uk>true</uk>
 		)
 	)
 		</p>
@@ -552,8 +584,6 @@
 		Note how the top level <code>Person</code> bean is serialized using the standard <js>'&amp;'</js> delimiter, whereas the lower-level <code>Address</code>
 			bean is serialized using the <js>','</js> character to prevent the <code>addresses</code> field from being incompletely parsed.
 	</p>
-	
-
 
 
 	<!-- ======================================================================================================== -->
@@ -608,9 +638,9 @@
 			What we end up with is the following, which does not serialize the contents of the <code>c</code> field:
 		</p>
 		<p class='bcode'>
-	$o(
-		<xa>b</xa>=$o(
-			<xa>c</xa>=$o()
+	(
+		<ua>b</ua>=(
+			<ua>c</ua>=()
 		)
 	)
 		</p>
@@ -706,22 +736,22 @@
 		This code produced the following:
 	</p>
 	<p class='bcode'>
-	$o(
-		<xa>id</xa>=$n(<xs>1</xs>), 
-		<xa>name</xa>=<xs>John+Smith</xs>, 
-		<xa>uri</xa>=<xs>http://sample/addressBook/person/1</xs>, 
-		<xa>addressBookUri</xa>=<xs>http://sample/addressBook</xs>,
-		<xa>birthDate</xa>=<xs>1946-08-12T00:00:00Z</xs>,
-		<xa>addresses</xa>=$a(
-			$o(
-				<xa>uri</xa>=<xs>http://sample/addressBook/address/1</xs>, 
-				<xa>personUri</xa>=<xs>http://sample/addressBook/person/1</xs>, 
-				<xa>id</xa>=$n(<xs>1</xs>), 
-				<xa>street</xa>=<xs>100+Main+Street</xs>, 
-				<xa>city</xa>=<xs>Anywhereville</xs>, 
-				<xa>state</xa>=<xs>NY</xs>, 
-				<xa>zip</xa>=$n(<xs>12345</xs>), 
-				<xa>isCurrent</xa>=$b(<xs>true</xs>)
+	(
+		<ua>id</ua>=<un>1</un>, 
+		<ua>name</ua>=<us>'John+Smith'</us>, 
+		<ua>uri</ua>=<us>http://sample/addressBook/person/1</us>, 
+		<ua>addressBookUri</ua>=<us>http://sample/addressBook</us>,
+		<ua>birthDate</ua>=<us>1946-08-12T00:00:00Z</us>,
+		<ua>addresses</ua>=@(
+			(
+				<ua>uri</ua>=<us>http://sample/addressBook/address/1</us>, 
+				<ua>personUri</ua>=<us>http://sample/addressBook/person/1</us>, 
+				<ua>id</ua>=<un>1</un>, 
+				<ua>street</ua>=<us>'100+Main+Street'</us>, 
+				<ua>city</ua>=<us>Anywhereville</us>, 
+				<ua>state</ua>=<us>NY</us>, 
+				<ua>zip</ua>=<un>12345</un>, 
+				<ua>isCurrent</ua>=<uk>true</uk>
 			)
 		)
 	)
@@ -734,14 +764,14 @@
 	Person p = UonParser.<jsf>DEFAULT</jsf>.parse(urlencoded, Person.<jk>class</jk>);
 
 	<jc>// Render it back as JSON.</jc>
-	json = JsonSerializer.<jsf>DEFAULT_SIMPLE_READABLE</jsf>.serialize(p);
+	json = JsonSerializer.<jsf>DEFAULT_LAX_READABLE</jsf>.serialize(p);
 	</p>
 	<p>
 		We print it back out to JSON to show that all the data has been preserved:
 	</p>
 	<p class='bcode'>
 	{
-		id: <jk>1</jk>, 
+		id: <un>1</un>, 
 		name: <js>'John Smith'</js>, 
 		uri: <js>'http://sample/addressBook/person/1'</js>, 
 		addressBookUri: <js>'http://sample/addressBook'</js>, 
@@ -750,11 +780,11 @@
 			{
 				uri: <js>'http://sample/addressBook/address/1'</js>, 
 				personUri: <js>'http://sample/addressBook/person/1'</js>, 
-				id: <jk>1</jk>, 
+				id: <un>1</un>, 
 				street: <js>'100 Main Street'</js>, 
 				city: <js>'Anywhereville'</js>, 
 				state: <js>'NY'</js>, 
-				zip: <jk>12345</jk>, 
+				zip: <un>12345</un>, 
 				isCurrent: <jk>true</jk>
 			}
 		]
@@ -788,22 +818,22 @@
 			Starting back with our original URL-encoded string:
 		</p>
 		<p class='bcode'>
-	$o(
-		<xa>id</xa>=$n(<xs>1</xs>), 
-		<xa>name</xa>=<xs>John+Smith</xs>, 
-		<xa>uri</xa>=<xs>http://sample/addressBook/person/1</xs>, 
-		<xa>addressBookUri</xa>=<xs>http://sample/addressBook</xs>,
-		<xa>birthDate</xa>=<xs>1946-08-12T00:00:00Z</xs>,
-		<xa>addresses</xa>=$a(
-			$o(
-				<xa>uri</xa>=<xs>http://sample/addressBook/address/1</xs>, 
-				<xa>personUri</xa>=<xs>http://sample/addressBook/person/1</xs>, 
-				<xa>id</xa>=$n(<xs>1</xs>), 
-				<xa>street</xa>=<xs>100+Main+Street</xs>, 
-				<xa>city</xa>=<xs>Anywhereville</xs>, 
-				<xa>state</xa>=<xs>NY</xs>, 
-				<xa>zip</xa>=$n(<xs>12345</xs>), 
-				<xa>isCurrent</xa>=$b(<xs>true</xs>)
+	(
+		<ua>id</ua>=<un>1</un>, 
+		<ua>name</ua>=<us>'John+Smith'</us>, 
+		<ua>uri</ua>=<us>http://sample/addressBook/person/1</us>, 
+		<ua>addressBookUri</ua>=<us>http://sample/addressBook</us>,
+		<ua>birthDate</ua>=<us>1946-08-12T00:00:00Z</us>,
+		<ua>addresses</ua>=@(
+			(
+				<ua>uri</ua>=<us>http://sample/addressBook/address/1</us>, 
+				<ua>personUri</ua>=<us>http://sample/addressBook/person/1</us>, 
+				<ua>id</ua>=<un>1</un>, 
+				<ua>street</ua>=<us>'100+Main+Street'</us>, 
+				<ua>city</ua>=<us>Anywhereville</us>, 
+				<ua>state</ua>=<us>NY</us>, 
+				<ua>zip</ua>=<un>12345</un>, 
+				<ua>isCurrent</ua>=<uk>true</uk>
 			)
 		)
 	)
@@ -816,7 +846,7 @@
 	ObjectMap m = UonParser.<jsf>DEFAULT</jsf>.parse(urlencoded, ObjectMap.<jk>class</jk>);
 
 	<jc>// Convert it back to JSON.</jc>
-	String json = JsonSerializer.<jsf>DEFAULT_SIMPLE_READABLE</jsf>.serialize(m);
+	String json = JsonSerializer.<jsf>DEFAULT_LAX_READABLE</jsf>.serialize(m);
 		</p>
 		<p>
 			What we end up with is the exact same output.<br>
@@ -825,7 +855,7 @@
 		</p>
 		<p class='bcode'>
 	{
-		id: <jk>1</jk>, 
+		id: <un>1</un>, 
 		name: <js>'John Smith'</js>, 
 		uri: <js>'http://sample/addressBook/person/1'</js>, 
 		addressBookUri: <js>'http://sample/addressBook'</js>, 
@@ -834,11 +864,11 @@
 			{
 				uri: <js>'http://sample/addressBook/address/1'</js>, 
 				personUri: <js>'http://sample/addressBook/person/1'</js>, 
-				id: <jk>1</jk>, 
+				id: <un>1</un>, 
 				street: <js>'100 Main Street'</js>, 
 				city: <js>'Anywhereville'</js>, 
 				state: <js>'NY'</js>, 
-				zip: <jk>12345</jk>, 
+				zip: <un>12345</un>, 
 				isCurrent: <jk>true</jk>
 			}
 		]
@@ -957,7 +987,7 @@
 	<ja>@RestResource</ja>(
 		messages=<js>"nls/AddressBookResource"</js>,
 		properties={
-			<ja>@Property</ja>(name=UonSerializerContext.<jsf>UON_simpleMode</jsf>, value=<js>"true"</js>),
+			<ja>@Property</ja>(name=SerializerContext.<jsf>SERIALIZER_useWhitespace</jsf>, value=<js>"true"</js>),
 			<ja>@Property</ja>(name=HtmlDocSerializerContext.<jsf>HTMLDOC_title</jsf>, value=<js>"$L{title}"</js>),
 			<ja>@Property</ja>(name=HtmlDocSerializerContext.<jsf>HTMLDOC_description</jsf>, value=<js>"$L{description}"</js>),
 			<ja>@Property</ja>(name=HtmlDocSerializerContext.<jsf>HTMLDOC_links</jsf>, value=<js>"{options:'?method=OPTIONS',doc:'doc'}"</js>)
@@ -968,7 +998,7 @@
 			</p>
 			<p>
 				Notice how serializer and parser properties can be specified using the <code>@RestResource.properties()</code> annotation.<br>
-				In this case, we're overriding the <jsf>UON_simpleMode</jsf> property to produce lax UON notation.
+				In this case, we're overriding the <jsf>SERIALIZER_useWhitespace</jsf> property to add whitespace to the output.
 				The remaining properties are specific to the HTML serializer.
 			</p>
 			<p>
@@ -1032,7 +1062,7 @@
 		serializers={UrlEncodingSerializer.<jk>class</jk>},
 		parsers={UrlEncodingParser.<jk>class</jk>},
 		properties={
-			<ja>@Property</ja>(name=UonSerializerContext.<jsf>UON_simpleMode</jsf>, value=<js>"true"</js>)
+			<ja>@Property</ja>(name=SerializerContext.<jsf>SERIALIZER_useWhitespace</jsf>, value=<js>"true"</js>)
 		}
 	)
 	<jk>public class</jk> AddressBookResource <jk>extends</jk> RestServlet {
@@ -1046,7 +1076,7 @@
 		serializers={UrlEncodingSerializer.<jk>class</jk>},
 		parsers={UrlEncodingParser.<jk>class</jk>},
 		properties={
-			<ja>@Property</ja>(name=UonSerializerContext.<jsf>UON_simpleMode</jsf>, value=<js>"true"</js>)
+			<ja>@Property</ja>(name=SerializerContext.<jsf>SERIALIZER_useWhitespace</jsf>, value=<js>"true"</js>)
 		}
 	)
 	<jk>public</jk> Person getPerson(RestRequest req, <ja>@Path</ja> <jk>int</jk> id) throws Exception {
@@ -1130,7 +1160,7 @@
 				In Wink, this is accomplished by adding an entry to a config file.
 			</p>
 			<p class='bcode'>
-	<xt>&lt;web-app</xt> <xa>version</xa>=<xs>"2.3"</xs><xt>&gt;</xt>
+	<xt>&lt;web-app</xt> <ua>version</ua>=<us>"2.3"</us><xt>&gt;</xt>
 		<xt>&lt;servlet&gt;</xt>
 			<xt>&lt;servlet-name&gt;</xt>WinkService<xt>&lt;/servlet-name&gt;</xt>
 			<xt>&lt;servlet-class&gt;</xt>org.apache.wink.server.internal.servlet.RestServlet<xt>&lt;/servlet-class&gt;</xt>
@@ -1154,7 +1184,7 @@
 	<ja>@Produces</ja>(<js>"*/*"</js>)
 	<ja>@RestMethod</ja>( <jc>/* Override some properties */</jc>
 		properties={
-			<ja>@Property</ja>(name=UonSerializerContext.<jsf>UON_simpleMode</jsf>, value=<js>"true"</js>)
+			<ja>@Property</ja>(name=SerializerContext.<jsf>SERIALIZER_useWhitespace</jsf>, value=<js>"true"</js>)
 		}
 	)
 	<jk>public</jk> Message getMessage() {
@@ -1203,7 +1233,7 @@
 			UrlEncodingParser.<jk>class</jk>,
 		}
 		properties={
-			<ja>@Property</ja>(name=UonSerializerContext.<jsf>UON_simpleMode</jsf>, value=<js>"true"</js>)
+			<ja>@Property</ja>(name=SerializerContext.<jsf>SERIALIZER_useWhitespace</jsf>, value=<js>"true"</js>)
 		}
 	)
 	<jk>public final class</jk> MyUrlEncodingProvider <jk>extends</jk> BaseProvider {}
@@ -1226,7 +1256,7 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Create a client to handle URL-encoded requests and responses.</jc>
-	RestClient client = <jk>new</jk> RestClient(UrlEncodingSerializer.<jk>class</jk>, UrlEncodingParser.<jk>class</jk>);
+	RestClient client = <uk>new</uk> RestClient(UrlEncodingSerializer.<uk>class</uk>, UrlEncodingParser.<uk>class</uk>);
 		</p>
 		<p>
 			The client handles all content negotiation based on the registered serializers and parsers.

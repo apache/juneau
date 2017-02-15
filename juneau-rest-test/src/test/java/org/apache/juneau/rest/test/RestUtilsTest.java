@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
 
 import org.junit.*;
 
-public class RestUtilsTest {
+public class RestUtilsTest extends RestTestcase {
 
 	//====================================================================================================
 	// decode(String)

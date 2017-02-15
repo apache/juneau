@@ -69,7 +69,6 @@ public final class HtmlParser extends XmlParser {
 		PojoSwap<T,Object> transform = (PojoSwap<T,Object>)eType.getPojoSwap();
 		ClassMeta<?> sType = eType.getSerializedClassMeta();
 		session.setCurrentClass(sType);
-		BeanRegistry breg = (pMeta == null ? session.getBeanRegistry() : pMeta.getBeanRegistry());
 
 		int event = r.getEventType();
 		if (event != START_ELEMENT)
@@ -160,9 +159,10 @@ public final class HtmlParser extends XmlParser {
 		} else if (tag == TABLE) {
 
 			String typeName = getAttribute(r, session.getBeanTypePropertyName(), "object");
+			ClassMeta cm = session.getClassMeta(typeName, pMeta, eType);
 
-			if (breg.hasName(typeName)) {
-				sType = eType = (ClassMeta<T>)breg.getClassMeta(typeName);
+			if (cm != null) {
+				sType = eType = cm;
 				typeName = sType.isArray() ? "array" : "object";
 			} else if (! "array".equals(typeName)) {
 				// Type name could be a subtype name.
@@ -201,9 +201,9 @@ public final class HtmlParser extends XmlParser {
 
 		} else if (tag == UL) {
 			String typeName = getAttribute(r, session.getBeanTypePropertyName(), "array");
-
-			if (breg.hasName(typeName))
-				sType = eType = (ClassMeta<T>)breg.getClassMeta(typeName);
+			ClassMeta cm = session.getClassMeta(typeName, pMeta, eType);
+			if (cm != null)
+				sType = eType = cm;
 
 			if (sType.isObject())
 				o = parseIntoCollection(session, r, (Collection)new ObjectList(session), sType.getElementType(), pMeta);
@@ -332,7 +332,6 @@ public final class HtmlParser extends XmlParser {
 
 		if (elementType == null)
 			elementType = (ClassMeta<E>)object();
-		BeanRegistry breg = (pMeta == null ? session.getBeanRegistry() : pMeta.getBeanRegistry());
 
 		HtmlTag tag = nextTag(r, TR);
 		List<String> keys = new ArrayList<String>();
@@ -350,9 +349,9 @@ public final class HtmlParser extends XmlParser {
 				break;
 
 			String type = getAttribute(r, session.getBeanTypePropertyName(), null);
-			if (breg.hasName(type)) {
-				elementType = (ClassMeta)breg.getClassMeta(type);
-			}
+			ClassMeta elementType2 = session.getClassMeta(type, pMeta, null);
+			if (elementType2 != null) 
+				elementType = elementType2;
 
 			if (elementType.canCreateNewBean(l)) {
 				BeanMap m = session.newBeanMap(l, elementType.getInnerClass());
@@ -398,7 +397,7 @@ public final class HtmlParser extends XmlParser {
 				if (m != null && c != null) {
 					ObjectMap m2 = (m instanceof ObjectMap ? (ObjectMap)m : new ObjectMap(m).setBeanSession(session));
 					m2.put(session.getBeanTypePropertyName(), c);
-					l.add((E)breg.cast(m2));
+					l.add((E)session.cast(m2, pMeta, null));
 				} else {
 					l.add((E)m);
 				}
@@ -429,13 +428,8 @@ public final class HtmlParser extends XmlParser {
 				nextTag(r, TD);
 				BeanPropertyMeta pMeta = m.getPropertyMeta(key);
 				if (pMeta == null) {
-					if (m.getMeta().isSubTyped()) {
-						Object value = parseAnything(session, object(), r, m.getBean(false), false, null);
-						m.put(key, value);
-					} else {
-						onUnknownProperty(session, key, m, -1, -1);
-						parseAnything(session, object(), r, null, false, null);
-					}
+					onUnknownProperty(session, key, m, -1, -1);
+					parseAnything(session, object(), r, null, false, null);
 				} else {
 					ClassMeta<?> cm = pMeta.getClassMeta();
 					Object value = parseAnything(session, cm, r, m.getBean(false), false, pMeta);
@@ -447,8 +441,6 @@ public final class HtmlParser extends XmlParser {
 		}
 		return m;
 	}
-
-
 
 	/*
 	 * Reads the next tag.  Advances past anything that's not a start or end tag.  Throws an exception if

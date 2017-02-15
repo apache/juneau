@@ -20,7 +20,7 @@ import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.*;
 
-public class NoParserInputTest {
+public class NoParserInputTest extends RestTestcase {
 
 	private static String URL = "/testNoParserInput";
 	private static boolean debug = false;

@@ -53,7 +53,6 @@ public final class MsgPackParser extends InputStreamParser {
 		PojoSwap<T,Object> transform = (PojoSwap<T,Object>)eType.getPojoSwap();
 		ClassMeta<?> sType = eType.getSerializedClassMeta();
 		session.setCurrentClass(sType);
-		BeanRegistry breg = (pMeta == null ? session.getBeanRegistry() : pMeta.getBeanRegistry());
 
 		Object o = null;
 		DataType dt = is.readDataType();
@@ -83,7 +82,7 @@ public final class MsgPackParser extends InputStreamParser {
 				ObjectMap om = new ObjectMap(session);
 				for (int i = 0; i < length; i++)
 					om.put(parseAnything(session, string(), is, outer, pMeta), parseAnything(session, object(), is, om, pMeta));
-				o = breg.cast(om);
+				o = session.cast(om, pMeta, eType);
 			}
 
 			if (sType.isObject()) {
@@ -135,7 +134,7 @@ public final class MsgPackParser extends InputStreamParser {
 					ObjectMap m = new ObjectMap(session);
 					for (int i = 0; i < length; i++)
 						m.put(parseAnything(session, string(), is, outer, pMeta), parseAnything(session, object(), is, m, pMeta));
-					o = breg.cast(m);
+					o = session.cast(m, pMeta, eType);
 				} else if (dt == ARRAY) {
 					Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance() : new ObjectList(session));
 					for (int i = 0; i < length; i++)
@@ -149,7 +148,7 @@ public final class MsgPackParser extends InputStreamParser {
 					ObjectMap m = new ObjectMap(session);
 					for (int i = 0; i < length; i++)
 						m.put(parseAnything(session, string(), is, outer, pMeta), parseAnything(session, object(), is, m, pMeta));
-					o = breg.cast(m);
+					o = session.cast(m, pMeta, eType);
 				} else if (dt == ARRAY) {
 					Collection l = (sType.isCollection() && sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance() : new ObjectList(session));
 					for (int i = 0; i < length; i++)
@@ -163,7 +162,7 @@ public final class MsgPackParser extends InputStreamParser {
 				for (int i = 0; i < length; i++)
 					m.put(parseAnything(session, string(), is, outer, pMeta), parseAnything(session, object(), is, m, pMeta));
 				if (m.containsKey(session.getBeanTypePropertyName()))
-					o = breg.cast(m);
+					o = session.cast(m, pMeta, eType);
 				else
 					throw new ParseException(session, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.getInnerClass().getName(), sType.getNotABeanReason());
 			} else {
@@ -204,277 +203,277 @@ public final class MsgPackParser extends InputStreamParser {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Parser */
-	public Parser setTrimStrings(boolean value) throws LockedException {
+	public MsgPackParser setTrimStrings(boolean value) throws LockedException {
 		super.setTrimStrings(value);
 		return this;
 	}
 
 	@Override /* Parser */
-	public Parser setStrict(boolean value) throws LockedException {
+	public MsgPackParser setStrict(boolean value) throws LockedException {
 		super.setStrict(value);
 		return this;
 	}
 
 	@Override /* Parser */
-	public Parser setInputStreamCharset(String value) throws LockedException {
+	public MsgPackParser setInputStreamCharset(String value) throws LockedException {
 		super.setInputStreamCharset(value);
 		return this;
 	}
 
 	@Override /* Parser */
-	public Parser setFileCharset(String value) throws LockedException {
+	public MsgPackParser setFileCharset(String value) throws LockedException {
 		super.setFileCharset(value);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser setBeansRequireDefaultConstructor(boolean value) throws LockedException {
+	public MsgPackParser setBeansRequireDefaultConstructor(boolean value) throws LockedException {
 		super.setBeansRequireDefaultConstructor(value);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser setBeansRequireSerializable(boolean value) throws LockedException {
+	public MsgPackParser setBeansRequireSerializable(boolean value) throws LockedException {
 		super.setBeansRequireSerializable(value);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser setBeansRequireSettersForGetters(boolean value) throws LockedException {
+	public MsgPackParser setBeansRequireSettersForGetters(boolean value) throws LockedException {
 		super.setBeansRequireSettersForGetters(value);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser setBeansRequireSomeProperties(boolean value) throws LockedException {
+	public MsgPackParser setBeansRequireSomeProperties(boolean value) throws LockedException {
 		super.setBeansRequireSomeProperties(value);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser setBeanMapPutReturnsOldValue(boolean value) throws LockedException {
+	public MsgPackParser setBeanMapPutReturnsOldValue(boolean value) throws LockedException {
 		super.setBeanMapPutReturnsOldValue(value);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser setBeanConstructorVisibility(Visibility value) throws LockedException {
+	public MsgPackParser setBeanConstructorVisibility(Visibility value) throws LockedException {
 		super.setBeanConstructorVisibility(value);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser setBeanClassVisibility(Visibility value) throws LockedException {
+	public MsgPackParser setBeanClassVisibility(Visibility value) throws LockedException {
 		super.setBeanClassVisibility(value);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser setBeanFieldVisibility(Visibility value) throws LockedException {
+	public MsgPackParser setBeanFieldVisibility(Visibility value) throws LockedException {
 		super.setBeanFieldVisibility(value);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser setMethodVisibility(Visibility value) throws LockedException {
+	public MsgPackParser setMethodVisibility(Visibility value) throws LockedException {
 		super.setMethodVisibility(value);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser setUseJavaBeanIntrospector(boolean value) throws LockedException {
+	public MsgPackParser setUseJavaBeanIntrospector(boolean value) throws LockedException {
 		super.setUseJavaBeanIntrospector(value);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser setUseInterfaceProxies(boolean value) throws LockedException {
+	public MsgPackParser setUseInterfaceProxies(boolean value) throws LockedException {
 		super.setUseInterfaceProxies(value);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser setIgnoreUnknownBeanProperties(boolean value) throws LockedException {
+	public MsgPackParser setIgnoreUnknownBeanProperties(boolean value) throws LockedException {
 		super.setIgnoreUnknownBeanProperties(value);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser setIgnoreUnknownNullBeanProperties(boolean value) throws LockedException {
+	public MsgPackParser setIgnoreUnknownNullBeanProperties(boolean value) throws LockedException {
 		super.setIgnoreUnknownNullBeanProperties(value);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser setIgnorePropertiesWithoutSetters(boolean value) throws LockedException {
+	public MsgPackParser setIgnorePropertiesWithoutSetters(boolean value) throws LockedException {
 		super.setIgnorePropertiesWithoutSetters(value);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser setIgnoreInvocationExceptionsOnGetters(boolean value) throws LockedException {
+	public MsgPackParser setIgnoreInvocationExceptionsOnGetters(boolean value) throws LockedException {
 		super.setIgnoreInvocationExceptionsOnGetters(value);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser setIgnoreInvocationExceptionsOnSetters(boolean value) throws LockedException {
+	public MsgPackParser setIgnoreInvocationExceptionsOnSetters(boolean value) throws LockedException {
 		super.setIgnoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser setSortProperties(boolean value) throws LockedException {
+	public MsgPackParser setSortProperties(boolean value) throws LockedException {
 		super.setSortProperties(value);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser setNotBeanPackages(String...values) throws LockedException {
+	public MsgPackParser setNotBeanPackages(String...values) throws LockedException {
 		super.setNotBeanPackages(values);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser setNotBeanPackages(Collection<String> values) throws LockedException {
+	public MsgPackParser setNotBeanPackages(Collection<String> values) throws LockedException {
 		super.setNotBeanPackages(values);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser addNotBeanPackages(String...values) throws LockedException {
+	public MsgPackParser addNotBeanPackages(String...values) throws LockedException {
 		super.addNotBeanPackages(values);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser addNotBeanPackages(Collection<String> values) throws LockedException {
+	public MsgPackParser addNotBeanPackages(Collection<String> values) throws LockedException {
 		super.addNotBeanPackages(values);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser removeNotBeanPackages(String...values) throws LockedException {
+	public MsgPackParser removeNotBeanPackages(String...values) throws LockedException {
 		super.removeNotBeanPackages(values);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser removeNotBeanPackages(Collection<String> values) throws LockedException {
+	public MsgPackParser removeNotBeanPackages(Collection<String> values) throws LockedException {
 		super.removeNotBeanPackages(values);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser setNotBeanClasses(Class<?>...values) throws LockedException {
+	public MsgPackParser setNotBeanClasses(Class<?>...values) throws LockedException {
 		super.setNotBeanClasses(values);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser setNotBeanClasses(Collection<Class<?>> values) throws LockedException {
+	public MsgPackParser setNotBeanClasses(Collection<Class<?>> values) throws LockedException {
 		super.setNotBeanClasses(values);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser addNotBeanClasses(Class<?>...values) throws LockedException {
+	public MsgPackParser addNotBeanClasses(Class<?>...values) throws LockedException {
 		super.addNotBeanClasses(values);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser addNotBeanClasses(Collection<Class<?>> values) throws LockedException {
+	public MsgPackParser addNotBeanClasses(Collection<Class<?>> values) throws LockedException {
 		super.addNotBeanClasses(values);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser removeNotBeanClasses(Class<?>...values) throws LockedException {
+	public MsgPackParser removeNotBeanClasses(Class<?>...values) throws LockedException {
 		super.removeNotBeanClasses(values);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser removeNotBeanClasses(Collection<Class<?>> values) throws LockedException {
+	public MsgPackParser removeNotBeanClasses(Collection<Class<?>> values) throws LockedException {
 		super.removeNotBeanClasses(values);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser setBeanFilters(Class<?>...values) throws LockedException {
+	public MsgPackParser setBeanFilters(Class<?>...values) throws LockedException {
 		super.setBeanFilters(values);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser setBeanFilters(Collection<Class<?>> values) throws LockedException {
+	public MsgPackParser setBeanFilters(Collection<Class<?>> values) throws LockedException {
 		super.setBeanFilters(values);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser addBeanFilters(Class<?>...values) throws LockedException {
+	public MsgPackParser addBeanFilters(Class<?>...values) throws LockedException {
 		super.addBeanFilters(values);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser addBeanFilters(Collection<Class<?>> values) throws LockedException {
+	public MsgPackParser addBeanFilters(Collection<Class<?>> values) throws LockedException {
 		super.addBeanFilters(values);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser removeBeanFilters(Class<?>...values) throws LockedException {
+	public MsgPackParser removeBeanFilters(Class<?>...values) throws LockedException {
 		super.removeBeanFilters(values);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser removeBeanFilters(Collection<Class<?>> values) throws LockedException {
+	public MsgPackParser removeBeanFilters(Collection<Class<?>> values) throws LockedException {
 		super.removeBeanFilters(values);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser setPojoSwaps(Class<?>...values) throws LockedException {
+	public MsgPackParser setPojoSwaps(Class<?>...values) throws LockedException {
 		super.setPojoSwaps(values);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser setPojoSwaps(Collection<Class<?>> values) throws LockedException {
+	public MsgPackParser setPojoSwaps(Collection<Class<?>> values) throws LockedException {
 		super.setPojoSwaps(values);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser addPojoSwaps(Class<?>...values) throws LockedException {
+	public MsgPackParser addPojoSwaps(Class<?>...values) throws LockedException {
 		super.addPojoSwaps(values);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser addPojoSwaps(Collection<Class<?>> values) throws LockedException {
+	public MsgPackParser addPojoSwaps(Collection<Class<?>> values) throws LockedException {
 		super.addPojoSwaps(values);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser removePojoSwaps(Class<?>...values) throws LockedException {
+	public MsgPackParser removePojoSwaps(Class<?>...values) throws LockedException {
 		super.removePojoSwaps(values);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser removePojoSwaps(Collection<Class<?>> values) throws LockedException {
+	public MsgPackParser removePojoSwaps(Collection<Class<?>> values) throws LockedException {
 		super.removePojoSwaps(values);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser setImplClasses(Map<Class<?>,Class<?>> values) throws LockedException {
+	public MsgPackParser setImplClasses(Map<Class<?>,Class<?>> values) throws LockedException {
 		super.setImplClasses(values);
 		return this;
 	}
@@ -486,109 +485,109 @@ public final class MsgPackParser extends InputStreamParser {
 	}
 
 	@Override /* CoreApi */
-	public Parser setBeanDictionary(Class<?>...values) throws LockedException {
+	public MsgPackParser setBeanDictionary(Class<?>...values) throws LockedException {
 		super.setBeanDictionary(values);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser setBeanDictionary(Collection<Class<?>> values) throws LockedException {
+	public MsgPackParser setBeanDictionary(Collection<Class<?>> values) throws LockedException {
 		super.setBeanDictionary(values);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser addToBeanDictionary(Class<?>...values) throws LockedException {
+	public MsgPackParser addToBeanDictionary(Class<?>...values) throws LockedException {
 		super.addToBeanDictionary(values);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser addToBeanDictionary(Collection<Class<?>> values) throws LockedException {
+	public MsgPackParser addToBeanDictionary(Collection<Class<?>> values) throws LockedException {
 		super.addToBeanDictionary(values);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser removeFromBeanDictionary(Class<?>...values) throws LockedException {
+	public MsgPackParser removeFromBeanDictionary(Class<?>...values) throws LockedException {
 		super.removeFromBeanDictionary(values);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser removeFromBeanDictionary(Collection<Class<?>> values) throws LockedException {
+	public MsgPackParser removeFromBeanDictionary(Collection<Class<?>> values) throws LockedException {
 		super.removeFromBeanDictionary(values);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser setBeanTypePropertyName(String value) throws LockedException {
+	public MsgPackParser setBeanTypePropertyName(String value) throws LockedException {
 		super.setBeanTypePropertyName(value);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser setDefaultParser(Class<?> value) throws LockedException {
+	public MsgPackParser setDefaultParser(Class<?> value) throws LockedException {
 		super.setDefaultParser(value);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser setLocale(Locale value) throws LockedException {
+	public MsgPackParser setLocale(Locale value) throws LockedException {
 		super.setLocale(value);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser setTimeZone(TimeZone value) throws LockedException {
+	public MsgPackParser setTimeZone(TimeZone value) throws LockedException {
 		super.setTimeZone(value);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser setMediaType(MediaType value) throws LockedException {
+	public MsgPackParser setMediaType(MediaType value) throws LockedException {
 		super.setMediaType(value);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser setDebug(boolean value) throws LockedException {
+	public MsgPackParser setDebug(boolean value) throws LockedException {
 		super.setDebug(value);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser setProperty(String name, Object value) throws LockedException {
+	public MsgPackParser setProperty(String name, Object value) throws LockedException {
 		super.setProperty(name, value);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser setProperties(ObjectMap properties) throws LockedException {
+	public MsgPackParser setProperties(ObjectMap properties) throws LockedException {
 		super.setProperties(properties);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser addToProperty(String name, Object value) throws LockedException {
+	public MsgPackParser addToProperty(String name, Object value) throws LockedException {
 		super.addToProperty(name, value);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser putToProperty(String name, Object key, Object value) throws LockedException {
+	public MsgPackParser putToProperty(String name, Object key, Object value) throws LockedException {
 		super.putToProperty(name, key, value);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser putToProperty(String name, Object value) throws LockedException {
+	public MsgPackParser putToProperty(String name, Object value) throws LockedException {
 		super.putToProperty(name, value);
 		return this;
 	}
 
 	@Override /* CoreApi */
-	public Parser removeFromProperty(String name, Object value) throws LockedException {
+	public MsgPackParser removeFromProperty(String name, Object value) throws LockedException {
 		super.removeFromProperty(name, value);
 		return this;
 	}
@@ -599,7 +598,7 @@ public final class MsgPackParser extends InputStreamParser {
 	//--------------------------------------------------------------------------------
 
 	@Override /* CoreApi */
-	public Parser setClassLoader(ClassLoader classLoader) throws LockedException {
+	public MsgPackParser setClassLoader(ClassLoader classLoader) throws LockedException {
 		super.setClassLoader(classLoader);
 		return this;
 	}

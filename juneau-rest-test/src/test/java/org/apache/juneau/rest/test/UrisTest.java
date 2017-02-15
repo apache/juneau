@@ -24,7 +24,7 @@ import org.junit.*;
 /**
  * Verifies that all the RestRequest.getXXX() methods involving URIs work correctly.
  */
-public class UrisTest {
+public class UrisTest extends RestTestcase {
 
 	private static String URL2 = Constants.getServerTestUrl() + "/testuris";           // /jazz/juneau/sample/testuris
 	private static int port = getPort(Constants.getServerTestUrl());                  // 9443

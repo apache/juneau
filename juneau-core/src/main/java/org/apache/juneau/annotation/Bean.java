@@ -164,59 +164,6 @@ public @interface Bean {
 	Class<? extends PropertyNamer> propertyNamer() default PropertyNamerDefault.class;
 
 	/**
-	 * Defines a virtual property on a superclass that identifies bean subtype classes.
-	 * <p>
-	 * 	In the following example, the abstract class has two subclasses that are differentiated
-	 * 		by a property called <code>subType</code>
-	 * <p class='bcode'>
-	 * 	<jc>// Abstract superclass</jc>
-	 * 	<ja>@Bean</ja>(
-	 * 		subTypeProperty=<js>"subType"</js>,
-	 * 		subTypes={A1.class, A2.class}
-	 * 	)
-	 * 	<jk>public class</jk> A {
-	 * 		<jk>public</jk> String <jf>f0</jf> = <js>"f0"</js>;
-	 * 	}
-	 *
-	 * 	<jc>// Subclass 1</jc>
-	 * 	<ja>@Bean</ja>(typeName=<js>"A1"</js>)
-	 * 	<jk>public class</jk> A1 <jk>extends</jk> A {
-	 * 		<jk>public</jk> String <jf>f1</jf>;
-	 * 	}
-	 *
-	 * 	<jc>// Subclass 2</jc>
-	 * 	<ja>@Bean</ja>(typeName=<js>"A2"</js>)
-	 * 	<jk>public class</jk> A2 <jk>extends</jk> A {
-	 * 		<jk>public</jk> String <jf>f2</jf>;
-	 * 	}
-	 * <p>
-	 * 	The following shows what happens when serializing a subclassed object to JSON:
-	 * <p class='bcode'>
-	 * 	JsonSerializer s = JsonSerializer.<jsf>DEFAULT_LAX</jsf>;
-	 * 	A1 a1 = <jk>new</jk> A1();
-	 * 	a1.<jf>f1</jf> = <js>"f1"</js>;
-	 * 	String r = s.serialize(a1);
-	 * 	<jsm>assertEquals</jsm>(<js>"{subType:'A1',f1:'f1',f0:'f0'}"</js>, r);
-	 * </p>
-	 * <p>
-	 * 	The following shows what happens when parsing back into the original object.
-	 * <p>
-	 * <p class='bcode'>
-	 * 	JsonParser p = JsonParser.<jsf>DEFAULT</jsf>;
-	 * 	A a = p.parse(r, A.<jk>class</jk>);
-	 * 	<jsm>assertTrue</jsm>(a <jk>instanceof</jk> A1);
-	 * </p>
-	 * <p>
-	 * 	This annotation is an alternative to using the {@link BeanFilter} class with an implemented {@link BeanFilter#getSubTypeProperty()} method.
-	 */
-	String subTypeProperty() default "_subtype";
-
-	/**
-	 * Used in conjunction with {@link #subTypeProperty()} to set up bean subtypes.
-	 */
-	Class<?>[] subTypes() default {};
-
-	/**
 	 * Identifies a class to be used as the interface class for this and all subclasses.
 	 * <p>
 	 * 	When specified, only the list of properties defined on the interface class will be used during serialization.
@@ -273,7 +220,8 @@ public @interface Bean {
 
 
 	/**
-	 * The list of classes that make up the bean dictionary for all properties of this bean.
+	 * The list of classes that make up the bean dictionary for all properties of this bean
+	 * or for subclasses of this bean.
 	 * <p>
 	 * This is a shorthand for setting the {@link BeanProperty#beanDictionary()} on all properties of the bean.
 	 * <p>

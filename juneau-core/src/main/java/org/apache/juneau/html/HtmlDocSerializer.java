@@ -225,8 +225,8 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	}
 
 	@Override /* Serializer */
-	public HtmlDocSerializer setUseIndentation(boolean value) throws LockedException {
-		super.setUseIndentation(value);
+	public HtmlDocSerializer setUseWhitespace(boolean value) throws LockedException {
+		super.setUseWhitespace(value);
 		return this;
 	}
 

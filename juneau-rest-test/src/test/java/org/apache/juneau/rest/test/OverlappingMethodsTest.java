@@ -19,7 +19,7 @@ import static org.junit.Assert.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.*;
 
-public class OverlappingMethodsTest {
+public class OverlappingMethodsTest extends RestTestcase {
 
 	private static String URL = "/testOverlappingMethods";
 	private static boolean debug = false;

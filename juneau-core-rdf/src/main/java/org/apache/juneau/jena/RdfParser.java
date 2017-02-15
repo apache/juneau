@@ -182,19 +182,10 @@ public class RdfParser extends ReaderParser {
 		if (rbm.hasBeanUri() && r2.getURI() != null)
 			rbm.getBeanUriProperty().set(m, r2.getURI());
 		Property subTypeIdProperty = null;
-		BeanPropertyMeta stp = bm.getSubTypeProperty();
-		if (stp != null) {
-			subTypeIdProperty = session.getProperty(stp.getName());
-			Statement st = r2.getProperty(subTypeIdProperty);
-			if (st == null)
-				throw new ParseException(session, "Could not find subtype ID property for bean of type ''{0}''", m.getClassMeta());
-			String subTypeId = st.getLiteral().getString();
-			stp.set(m, subTypeId);
-		}
 		for (StmtIterator i = r2.listProperties(); i.hasNext();) {
 			Statement st = i.next();
 			Property p = st.getPredicate();
-			if (p.equals(subTypeIdProperty))
+			if (subTypeIdProperty != null && p.equals(subTypeIdProperty))
 				continue;
 			String key = session.decodeString(p.getLocalName());
 			BeanPropertyMeta pMeta = m.getPropertyMeta(key);
@@ -212,14 +203,8 @@ public class RdfParser extends ReaderParser {
 					setName(cm, value, key);
 					pMeta.set(m, value);
 				}
-			} else if (! (p.equals(session.getRootProperty()) || p.equals(session.getTypeProperty()) || p.equals(subTypeIdProperty))) {
-				if (bm.isSubTyped()) {
-					RDFNode o = st.getObject();
-					Object value = parseAnything(session, object(), o, m.getBean(false), pMeta);
-					m.put(key, value);
-				} else {
-					onUnknownProperty(session, key, m, -1, -1);
-				}
+			} else if (! (p.equals(session.getRootProperty()) || p.equals(session.getTypeProperty()) || (subTypeIdProperty != null && p.equals(subTypeIdProperty)))) {
+				onUnknownProperty(session, key, m, -1, -1);
 			}
 			session.setCurrentProperty(null);
 		}
@@ -240,15 +225,15 @@ public class RdfParser extends ReaderParser {
 		PojoSwap<T,Object> transform = (PojoSwap<T,Object>)eType.getPojoSwap();
 		ClassMeta<?> sType = eType.getSerializedClassMeta();
 		session.setCurrentClass(sType);
-		BeanRegistry breg = pMeta == null ? session.getBeanRegistry() : pMeta.getBeanRegistry();
 
 		if (! sType.canCreateNewInstance(outer)) {
 			if (n.isResource()) {
 				Statement st = n.asResource().getProperty(session.getTypeProperty());
 				if (st != null) {
  					String c = st.getLiteral().getString();
- 					if (breg.hasName(c))
- 						sType = eType = (ClassMeta<T>)breg.getClassMeta(c);
+ 					ClassMeta tcm = session.getClassMeta(c, pMeta, eType);
+ 					if (tcm != null)
+ 						sType = eType = tcm;
 				}
 			}
 		}
@@ -337,6 +322,14 @@ public class RdfParser extends ReaderParser {
 			o = sType.newInstanceFromString(outer, session.decodeString(getValue(session, n, outer)));
 		} else if (sType.canCreateNewInstanceFromNumber(outer)) {
 			o = sType.newInstanceFromNumber(session, outer, parseNumber(getValue(session, n, outer).toString(), sType.getNewInstanceFromNumberClass()));
+		} else if (n.isResource()) {
+			Resource r = n.asResource();
+			Map m = new ObjectMap(session);
+			parseIntoMap(session, r, m, sType.getKeyType(), sType.getValueType());
+			if (m.containsKey(session.getBeanTypePropertyName()))
+				o = session.cast((ObjectMap)m, pMeta, eType);
+			else
+				throw new ParseException(session, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.getInnerClass().getName(), sType.getNotABeanReason());
 		} else {
 			throw new ParseException("Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.getInnerClass().getName(), sType.getNotABeanReason());
 		}

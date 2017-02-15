@@ -303,10 +303,10 @@ public class ConfigMgr {
 	}
 
 	private static void printUsageAndExit() {
-		System.err.println("---Usage---");
-		System.err.println("java -cp juneau.jar org.apache.juneau.ini.ConfigFile createBatchEnvFile -configFile <configFile> -envFile <envFile> [-verbose]");
-		System.err.println("java -cp juneau.jar org.apache.juneau.ini.ConfigFile createShellEnvFile -configFile <configFile> -envFile <envFile> [-verbose]");
-		System.err.println("java -cp juneau.jar org.apache.juneau.ini.ConfigFile setVals -configFile <configFile> -vals [var1 val1 [var2 val2...]] [-verbose]");
+		System.err.println("---Usage---"); // NOT DEBUG
+		System.err.println("java -cp juneau.jar org.apache.juneau.ini.ConfigFile createBatchEnvFile -configFile <configFile> -envFile <envFile> [-verbose]"); // NOT DEBUG
+		System.err.println("java -cp juneau.jar org.apache.juneau.ini.ConfigFile createShellEnvFile -configFile <configFile> -envFile <envFile> [-verbose]"); // NOT DEBUG
+		System.err.println("java -cp juneau.jar org.apache.juneau.ini.ConfigFile setVals -configFile <configFile> -vals [var1 val1 [var2 val2...]] [-verbose]"); // NOT DEBUG
 		int rc = Integer.getInteger("exit.2", 2);
 		if (rc != 0)
 			System.exit(rc);

@@ -23,7 +23,7 @@ import org.apache.juneau.rest.client.*;
 import org.junit.*;
 
 
-public class CharsetEncodingsTest {
+public class CharsetEncodingsTest extends RestTestcase {
 
 	private static boolean debug = false;
 

@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.*;
 
-public class CallbackStringsTest {
+public class CallbackStringsTest extends RestTestcase {
 
 	//====================================================================================================
 	// Basic tests using @Body parameter

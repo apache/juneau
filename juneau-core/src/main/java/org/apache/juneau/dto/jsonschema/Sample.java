@@ -53,7 +53,7 @@ class Sample {
 			.getProperty("address",true)                         // Get "address" property, resolved to Address schema.
 			.getProperty("street")                               // Get "street" property.
 			.getTypeAsJsonType();                                // Get data type.
-		System.err.println("streetType=" + streetType);         // Prints "streetType=string"
+		System.err.println("streetType=" + streetType);         // Prints "streetType=string" // NOT DEBUG
 
 		JsonType productIdType = purchaseOrderSchema
 			.getProperty("product")                              // Get "product" property
@@ -62,6 +62,6 @@ class Sample {
 			.resolve()                                           // Resolve to Product schema.
 			.getProperty("productId")                            // Get "productId" property.
 			.getTypeAsJsonType();                                // Get data type.
-		System.err.println("productIdType=" + productIdType);   // Prints "productIdType=number"
+		System.err.println("productIdType=" + productIdType);   // Prints "productIdType=number" // NOT DEBUG
 	}
 }

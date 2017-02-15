@@ -19,7 +19,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.*;
 
-public class NlsTest {
+public class NlsTest extends RestTestcase {
 
 	private static String URL = "/testNls";
 

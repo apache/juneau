@@ -23,7 +23,7 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.utils.*;
 import org.junit.*;
 
-public class TestMultiPartFormPostsTest {
+public class TestMultiPartFormPostsTest extends RestTestcase {
 
 	private static String URL = "/tempDir";
 	boolean debug = false;

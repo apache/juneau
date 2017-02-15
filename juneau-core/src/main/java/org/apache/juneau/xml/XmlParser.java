@@ -77,7 +77,6 @@ public class XmlParser extends ReaderParser {
 		PojoSwap<T,Object> transform = (PojoSwap<T,Object>)eType.getPojoSwap();
 		ClassMeta<?> sType = eType.getSerializedClassMeta();
 		session.setCurrentClass(sType);
-		BeanRegistry breg = (pMeta == null ? session.getBeanRegistry() : pMeta.getBeanRegistry());
 
 		String wrapperAttr = (isRoot && session.isPreserveRootElement()) ? r.getName().getLocalPart() : null;
 		String typeAttr = r.getAttributeValue(null, session.getBeanTypePropertyName());
@@ -92,11 +91,11 @@ public class XmlParser extends ReaderParser {
 			}
 		}
 
-		if (breg.hasName(typeAttr)) {
-			sType = eType = (ClassMeta<T>)breg.getClassMeta(typeAttr);
-		} else if (elementName != null && breg.hasName(elementName) && ! elementName.equals(currAttr)) {
-			sType = eType = (ClassMeta<T>)breg.getClassMeta(elementName);
-		}
+		ClassMeta tcm = session.getClassMeta(typeAttr, pMeta, eType);
+		if (tcm == null && elementName != null && ! elementName.equals(currAttr))
+			tcm = session.getClassMeta(elementName, pMeta, eType);
+		if (tcm != null)
+			sType = eType = tcm;
 
 		Object o = null;
 
@@ -111,7 +110,7 @@ public class XmlParser extends ReaderParser {
 				parseIntoMap(session, r, m, string(), object(), pMeta);
 				if (wrapperAttr != null)
 					m = new ObjectMap(session).append(wrapperAttr, m);
-				o = breg.cast(m);
+				o = session.cast(m, pMeta, eType);
 			} else if (jsonType == ARRAY)
 				o = parseIntoCollection(session, r, new ObjectList(session), object(), pMeta);
 			else if (jsonType == STRING) {
@@ -280,8 +279,6 @@ public class XmlParser extends ReaderParser {
 			if (bpm == null) {
 				if (xmlMeta.getAttrsProperty() != null) {
 					xmlMeta.getAttrsProperty().add(m, key, val);
-				} else if (m.getMeta().isSubTyped()) {
-					m.put(key, val);
 				} else {
 					Location l = r.getLocation();
 					onUnknownProperty(session, key, m, l.getLineNumber(), l.getColumnNumber());
@@ -362,14 +359,9 @@ public class XmlParser extends ReaderParser {
 					currAttr = session.getElementName(r);
 					BeanPropertyMeta pMeta = xmlMeta.getPropertyMeta(currAttr);
 					if (pMeta == null) {
-						if (m.getMeta().isSubTyped()) {
-							Object value = parseAnything(session, string(), currAttr, r, m.getBean(false), false, null);
-							m.put(currAttr, value);
-						} else {
-							Location loc = r.getLocation();
-							onUnknownProperty(session, currAttr, m, loc.getLineNumber(), loc.getColumnNumber());
-							skipCurrentTag(r);
-						}
+						Location loc = r.getLocation();
+						onUnknownProperty(session, currAttr, m, loc.getLineNumber(), loc.getColumnNumber());
+						skipCurrentTag(r);
 					} else {
 						session.setCurrentProperty(pMeta);
 						XmlFormat xf = pMeta.getExtendedMeta(XmlBeanPropertyMeta.class).getXmlFormat();

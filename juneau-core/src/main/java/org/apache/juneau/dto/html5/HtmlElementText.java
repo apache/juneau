@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.html5;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
@@ -28,6 +29,7 @@ public class HtmlElementText extends HtmlElement {
 	 * @return The inner text of this element, or <jk>null</jk> if no text is set.
 	 */
 	@Xml(format=XmlFormat.TEXT)
+	@BeanProperty(name="c")
 	public Object getText() {
 		return text;
 	}
@@ -38,6 +40,7 @@ public class HtmlElementText extends HtmlElement {
 	 * @param text The inner text of this element, or <jk>null</jk> if no text is set.
 	 * @return This object (for method chaining).
 	 */
+	@BeanProperty(name="c")
 	public HtmlElement setText(Object text) {
 		this.text = text;
 		return this;

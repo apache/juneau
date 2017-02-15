@@ -20,7 +20,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.rest.*;
 import org.junit.*;
 
-public class UrlPathPatternTest {
+public class UrlPathPatternTest extends RestTestcase {
 	@Test
 	public void testComparison() throws Exception {
 		List<UrlPathPattern> l = new LinkedList<UrlPathPattern>();

@@ -28,7 +28,7 @@ import org.apache.juneau.serializer.*;
 public final class UonWriter extends SerializerWriter {
 
 	private final UonSerializerSession session;
-	private final boolean simpleMode, encodeChars;
+	private final boolean encodeChars;
 
 	// Characters that do not need to be URL-encoded in strings.
 	private static final AsciiSet unencodedChars = new AsciiSet("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789;/?:@-_.!*'$(),~=");
@@ -38,10 +38,11 @@ public final class UonWriter extends SerializerWriter {
 	private static final AsciiSet unencodedCharsAttrName = new AsciiSet("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789;/?:@-_.!*'$(),~");
 
 	// Characters that need to be preceeded with an escape character.
-	private static final AsciiSet escapedChars = new AsciiSet(",()~=");
+	private static final AsciiSet escapedChars = new AsciiSet("~'");
 
-	// AsciiSet that maps no characters.
-	private static final AsciiSet emptyCharSet = new AsciiSet("");
+	private static final AsciiSet needsQuoteChars = new AsciiSet("),=\n\t\r\b\f ");
+
+	private static final AsciiSet maybeNeedsQuotesFirstChar = new AsciiSet("),=\n\t\r\b\f tfn+-.#0123456789");
 
 	private static char[] hexArray = "0123456789ABCDEF".toCharArray();
 
@@ -50,17 +51,15 @@ public final class UonWriter extends SerializerWriter {
 	 *
 	 * @param session The session that created this writer.
 	 * @param out The writer being wrapped.
-	 * @param useIndentation If <jk>true</jk>, tabs will be used in output.
-	 * @param simpleMode If <jk>true</jk>, type flags will not be generated in output.
+	 * @param useWhitespace If <jk>true</jk>, tabs will be used in output.
 	 * @param encodeChars If <jk>true</jk>, special characters should be encoded.
 	 * @param trimStrings If <jk>true</jk>, strings should be trimmed before they're serialized.
 	 * @param relativeUriBase The base (e.g. <js>https://localhost:9443/contextPath"</js>) for relative URIs (e.g. <js>"my/path"</js>).
 	 * @param absolutePathUriBase The base (e.g. <js>https://localhost:9443"</js>) for relative URIs with absolute paths (e.g. <js>"/contextPath/my/path"</js>).
 	 */
-	protected UonWriter(UonSerializerSession session, Writer out, boolean useIndentation, boolean simpleMode, boolean encodeChars, boolean trimStrings, String relativeUriBase, String absolutePathUriBase) {
-		super(out, useIndentation, false, trimStrings, '\'', relativeUriBase, absolutePathUriBase);
+	protected UonWriter(UonSerializerSession session, Writer out, boolean useWhitespace, boolean encodeChars, boolean trimStrings, String relativeUriBase, String absolutePathUriBase) {
+		super(out, useWhitespace, trimStrings, '\'', relativeUriBase, absolutePathUriBase);
 		this.session = session;
-		this.simpleMode = simpleMode;
 		this.encodeChars = encodeChars;
 	}
 
@@ -68,46 +67,43 @@ public final class UonWriter extends SerializerWriter {
 	 * Serializes the specified simple object as a UON string value.
 	 *
 	 * @param o The object being serialized.
-	 * @param quoteEmptyStrings Special case where we're serializing an array containing an empty string.
 	 * @param isTopAttrName If this is a top-level attribute name we're serializing.
-	 * @param isTop If this is a top-level value we're serializing.
 	 * @return This object (for method chaining).
 	 * @throws IOException Should never happen.
 	 */
-	protected UonWriter appendObject(Object o, boolean quoteEmptyStrings, boolean isTopAttrName, boolean isTop) throws IOException {
+	protected UonWriter appendObject(Object o, boolean isTopAttrName) throws IOException {
 
-		char typeFlag = 0;
-
+		if (o instanceof Boolean)
+			return appendBoolean(o);
+		if (o instanceof Number)
+			return appendNumber(o);
 		if (o == null)
-			o = "\u0000";
-		else if (o.equals("\u0000"))
-			typeFlag = 's';
+			return append("null");
 
 		String s = session.toString(o);
-//		if (trimStrings)
-//			s = s.trim();
-		if (s.isEmpty()) {
-			if (quoteEmptyStrings)
-				typeFlag = 's';
-		} else if (s.charAt(0) == '(' || s.charAt(0) == '$') {
-			typeFlag = 's';
-		} else if (useIndentation && (s.indexOf('\n') != -1 || (s.charAt(0) <= ' ' && s.charAt(0) != 0))) {
-			// Strings containing newline characters must always be quoted so that they're not confused with whitespace.
-			// Also, strings starting with whitespace must be quoted so that the contents are not ignored when whitespace is ignored.
-			typeFlag = 's';
-		} else if (! simpleMode) {
-			if (o instanceof Boolean)
-				typeFlag = 'b';
-			else if (o instanceof Number)
-				typeFlag = 'n';
-		}
+		char c0 = s.isEmpty() ? 0 : s.charAt(0);
 
-		if (typeFlag != 0)
-			startFlag(typeFlag);
+		boolean needsQuotes =
+			s.isEmpty()
+			|| c0 == '@'
+			|| c0 == '('
+			|| needsQuoteChars.contains(s)
+			|| (
+				maybeNeedsQuotesFirstChar.contains(c0)
+				&& (
+					"true".equals(s)
+					|| "false".equals(s)
+					|| "null".equals(s)
+					|| StringUtils.isNumeric(s)
+				)
+			)
+		;
 
 		AsciiSet unenc = (isTopAttrName ? unencodedCharsAttrName : unencodedChars);
-		AsciiSet esc = (isTop && typeFlag == 0 ? emptyCharSet : escapedChars);
+		AsciiSet esc = escapedChars;
 
+		if (needsQuotes)
+			append('\'');
 		for (int i = 0; i < s.length(); i++) {
 			char c = s.charAt(i);
 			if (esc.contains(c))
@@ -135,24 +131,33 @@ public final class UonWriter extends SerializerWriter {
 				}
 			}
 		}
-
-		if (typeFlag != 0)
-			append(')');
+		if (needsQuotes)
+			append('\'');
 
 		return this;
 	}
 
 	/**
-	 * Prints <code>$f(</code> in normal mode, and <code>(</code> in simple mode.
+	 * Appends a boolean value to the output.
 	 *
-	 * @param f The flag character.
+	 * @param o The boolean value to append to the output.
 	 * @return This object (for method chaining).
 	 * @throws IOException
 	 */
-	protected UonWriter startFlag(char f) throws IOException {
-		if (f != 's' && ! simpleMode)
-			append('$').append(f);
-		append('(');
+	protected UonWriter appendBoolean(Object o) throws IOException {
+		append(o.toString());
+		return this;
+	}
+
+	/**
+	 * Appends a numeric value to the output.
+	 *
+	 * @param o The numeric value to append to the output.
+	 * @return This object (for method chaining).
+	 * @throws IOException
+	 */
+	protected UonWriter appendNumber(Object o) throws IOException {
+		append(o.toString());
 		return this;
 	}
 
@@ -170,11 +175,11 @@ public final class UonWriter extends SerializerWriter {
 	 * Appends a URI to the output.
 	 *
 	 * @param uri The URI to append to the output.
-	 * @param isTop If this is a top-level value we're serializing.
 	 * @return This object (for method chaining).
 	 * @throws IOException
 	 */
-	public SerializerWriter appendUri(Object uri, boolean isTop) throws IOException {
+	@Override
+	public SerializerWriter appendUri(Object uri) throws IOException {
 		String s = uri.toString();
 		if (s.indexOf("://") == -1) {
 			if (StringUtils.startsWith(s, '/')) {
@@ -185,11 +190,10 @@ public final class UonWriter extends SerializerWriter {
 					append(relativeUriBase);
 					if (! relativeUriBase.equals("/"))
 						append("/");
-
 				}
 			}
 		}
-		return appendObject(s, false, false, isTop);
+		return appendObject(s, false);
 	}
 
 

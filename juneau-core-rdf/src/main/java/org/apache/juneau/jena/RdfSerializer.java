@@ -189,6 +189,8 @@ public class RdfSerializer extends WriterSerializer {
 			sType = eType.getSerializedClassMeta();
 		}
 
+		String typeName = session.getBeanTypeName(eType, aType, bpm);
+
 		RDFNode n = null;
 
 		if (o == null || sType.isChar() && ((Character)o).charValue() == 0) {
@@ -221,7 +223,7 @@ public class RdfSerializer extends WriterSerializer {
 					uri = rbm.getBeanUriProperty().get(bm);
 				String uri2 = getUri(session, uri, null);
 				n = m.createResource(uri2);
-				serializeBeanMap(session, bm, (Resource)n);
+				serializeBeanMap(session, bm, (Resource)n, typeName);
 			} else {
 				Map m2 = (Map)o;
 				n = m.createResource();
@@ -236,7 +238,7 @@ public class RdfSerializer extends WriterSerializer {
 				uri = rbm.getBeanUriProperty().get(bm);
 			String uri2 = getUri(session, uri, null);
 			n = m.createResource(uri2);
-			serializeBeanMap(session, bm, (Resource)n);
+			serializeBeanMap(session, bm, (Resource)n, typeName);
 
 		} else if (sType.isCollectionOrArray() || (wType != null && wType.isCollection())) {
 			Collection c = session.sort(sType.isCollection() ? (Collection)o : toList(sType.getInnerClass(), o));
@@ -315,8 +317,8 @@ public class RdfSerializer extends WriterSerializer {
 		}
 	}
 
-	private void serializeBeanMap(RdfSerializerSession session, BeanMap<?> m, Resource r) throws SerializeException {
-		List<BeanPropertyValue> l = m.getValues(session.isTrimNulls());
+	private void serializeBeanMap(RdfSerializerSession session, BeanMap<?> m, Resource r, String typeName) throws SerializeException {
+		List<BeanPropertyValue> l = m.getValues(session.isTrimNulls(), typeName != null ? session.createBeanTypeNameProperty(m, typeName) : null);
 		Collections.reverse(l);
 		for (BeanPropertyValue bpv : l) {
 			BeanPropertyMeta pMeta = bpv.getMeta();
@@ -756,8 +758,8 @@ public class RdfSerializer extends WriterSerializer {
 	}
 
 	@Override /* Serializer */
-	public RdfSerializer setUseIndentation(boolean value) throws LockedException {
-		super.setUseIndentation(value);
+	public RdfSerializer setUseWhitespace(boolean value) throws LockedException {
+		super.setUseWhitespace(value);
 		return this;
 	}
 

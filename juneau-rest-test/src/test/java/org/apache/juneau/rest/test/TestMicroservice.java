@@ -12,63 +12,49 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
-import org.junit.*;
-import org.junit.runner.*;
-import org.junit.runners.*;
-import org.junit.runners.Suite.*;
+import java.util.*;
+
+import org.apache.juneau.microservice.*;
 
 /**
- * Runs all the testcases in this project.
- * Starts a REST service running org.apache.juneau.rest.test.Root on port 10001.
- * Stops the REST service after running the tests.
+ * Utility class for starting up the tests microservice.
+ * @author james.bognar
  */
-@RunWith(Suite.class)
-@SuiteClasses({
-	AcceptCharsetTest.class,
-	BeanContextPropertiesTest.class,
-	CallbackStringsTest.class,
-	CharsetEncodingsTest.class,
-	ClientVersionTest.class,
-	ConfigTest.class,
-	ContentTest.class,
-	DefaultContentTypesTest.class,
-	ErrorConditionsTest.class,
-	GroupsTest.class,
-	GzipTest.class,
-	InheritanceTest.class,
-	JacocoDummyTest.class,
-	LargePojosTest.class,
-	MessagesTest.class,
-	NlsPropertyTest.class,
-	NlsTest.class,
-	NoParserInputTest.class,
-	OnPostCallTest.class,
-	OnPreCallTest.class,
-	OptionsWithoutNlsTest.class,
-	OverlappingMethodsTest.class,
-	ParamsTest.class,
-	ParsersTest.class,
-	PathsTest.class,
-	PathTest.class,
-	PropertiesTest.class,
-	RestClientTest.class,
-	RestUtilsTest.class,
-	SerializersTest.class,
-	StaticFilesTest.class,
-	TransformsTest.class,
-	UrisTest.class,
-	UrlContentTest.class,
-	UrlPathPatternTest.class
-})
-public class _TestSuite {
+public class TestMicroservice {
+	static Microservice microservice;
 
-	@BeforeClass
-	public static void setUp() {
-		TestMicroservice.startMicroservice();
+	/**
+	 * Starts the microservice.
+	 * @return <jk>true</jk> if the service started, <jk>false</jk> if it's already started.
+	 * 	If this returns <jk>false</jk> then don't call stopMicroservice()!.
+	 */
+	public static boolean startMicroservice() {
+		if (microservice != null)
+			return false;
+		try {
+			Locale.setDefault(Locale.US);
+			microservice = new RestMicroservice()
+				.setConfig("juneau-rest-test.cfg", false)
+				.setManifestContents(
+					"Test-Entry: test-value"
+				);
+			microservice.start();
+			return true;
+		} catch (Throwable e) {
+			System.err.println(e); // NOT DEBUG
+			return false;
+		}
 	}
 
-	@AfterClass
-	public static void tearDown() {
-		TestMicroservice.stopMicroservice();
+	/**
+	 * Stops the microservice.
+	 */
+	public static void stopMicroservice() {
+		try {
+			microservice.stop();
+			microservice = null;
+		} catch (Exception e) {
+			System.err.println(e); // NOT DEBUG
+		}
 	}
 }

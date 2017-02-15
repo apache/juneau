@@ -19,6 +19,7 @@ import java.util.*;
 
 import javax.xml.datatype.*;
 
+import org.apache.juneau.BeanDictionaryMap;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.json.annotation.*;
@@ -231,24 +232,23 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		Object r = s.serialize(b1);
 		B b = p.parse(r, B.class);
 		assertTrue(b instanceof B1);
-		assertObjectEquals("{subType:'B1',f0:'f0',f1:'f1'}", b, js);
+		assertObjectEquals("{_type:'B1',f0:'f0',f1:'f1'}", b, js);
 
 		B2 b2 = B2.create();
 		r = s.serialize(b2);
 		b = p.parse(r, B.class);
 		assertTrue(b instanceof B2);
-		assertObjectEquals("{subType:'B2',f0:'f0',f2:1}", b, js);
+		assertObjectEquals("{_type:'B2',f0:'f0',f2:1}", b, js);
 
 		B3 b3 = B3.create();
 		r = s.serialize(b3);
 		b = p.parse(r, B.class);
 		assertTrue(b instanceof B3);
-		assertObjectEquals("{subType:'B3',f0:'f0',f3:'2001-01-01T12:34:56.789Z'}", b, js);
+		assertObjectEquals("{_type:'B3',f0:'f0',f3:'2001-01-01T12:34:56.789Z'}", b, js);
 }
 
 	@Bean(
-		subTypeProperty="subType",
-		subTypes={B1.class,B2.class,B3.class}
+		beanDictionary={B1.class,B2.class,B3.class}
 	)
 	public abstract static class B {
 		public String f0 = "f0";
@@ -357,13 +357,18 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	public static class CFilter extends BeanFilterBuilder {
 		public CFilter() {
 			super(C.class);
-			setSubTypeProperty("subType");
-			addSubType("C1", C1.class);
-			addSubType("C2", C2.class);
-			addSubType("C3", C3.class);
+			addToBeanDictionary(CFilterDictionaryMap.class);
 		}
 	}
 
+	public static class CFilterDictionaryMap extends BeanDictionaryMap {
+		public CFilterDictionaryMap() {
+			addClass("C1", C1.class);
+			addClass("C2", C2.class);
+			addClass("C3", C3.class);
+		}
+	}
+	
 	//====================================================================================================
 	// Test @Bean(subTypeProperty=xxx) with real bean property
 	//====================================================================================================
@@ -380,16 +385,12 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		Object r = s.serialize(ba1);
 		BA b = p.parse(r, BA.class);
 		assertTrue(b instanceof BA1);
-		assertEquals("BA1", b.subType);
-		assertObjectEquals("{subType:'BA1',f0a:'f0a',f0b:'f0b',f1:'f1'}", b);
+		assertObjectEquals("{_type:'BA1',f0a:'f0a',f0b:'f0b',f1:'f1'}", b);
 	}
 
-	@Bean(
-		subTypeProperty="subType",
-		subTypes={BA1.class,BA2.class}
-	)
+	@Bean(beanDictionary={BA1.class,BA2.class})
 	public abstract static class BA {
-		public String f0a, subType, f0b;
+		public String f0a, f0b;
 	}
 
 	@Bean(typeName="BA1")
@@ -400,7 +401,6 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 			b.f0a = "f0a";
 			b.f0b = "f0b";
 			b.f1 = "f1";
-			b.subType = "xxx";// Should be ignored.
 			return b;
 		}
 	}
@@ -427,12 +427,11 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		Object r = s.serialize(c1);
 		CA c = p.parse(r, CA.class);
 		assertTrue(c instanceof CA1);
-		assertEquals("CA1", c.subType);
-		assertObjectEquals("{f0a:'f0a',subType:'CA1',f0b:'f0b',f1:'f1'}", c);
+		assertObjectEquals("{f0a:'f0a',f0b:'f0b',f1:'f1'}", c);
 	}
 
 	public abstract static class CA {
-		public String f0a, subType, f0b;
+		public String f0a, f0b;
 	}
 
 	public static class CA1 extends CA {
@@ -442,7 +441,6 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 			c.f0a = "f0a";
 			c.f0b = "f0b";
 			c.f1 = "f1";
-			c.subType = "xxx";// Should be ignored.
 			return c;
 		}
 	}
@@ -454,12 +452,17 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	public static class CAFilter extends BeanFilterBuilder {
 		public CAFilter() {
 			super(CA.class);
-			setSubTypeProperty("subType");
-			addSubType("CA1", CA1.class);
-			addSubType("CA2", CA2.class);
+			addToBeanDictionary(CAFilterDictionaryMap.class);
 		}
 	}
 
+	public static class CAFilterDictionaryMap extends BeanDictionaryMap {
+		public CAFilterDictionaryMap() {
+			addClass("CA1", CA1.class);
+			addClass("CA2", CA2.class);
+		}
+	}
+	
 	//====================================================================================================
 	// Test @Bean(properties=xxx)
 	//====================================================================================================

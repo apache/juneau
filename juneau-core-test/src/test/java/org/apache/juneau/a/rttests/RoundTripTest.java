@@ -66,7 +66,7 @@ public abstract class RoundTripTest {
 			},
 			{ /* 3 */
 				"Xml - namespaces, validation, readable",
-				new XmlSerializer.NsSq().setTrimNullProperties(false).setAddNamespaceUrisToRoot(true).setUseIndentation(true),
+				new XmlSerializer.NsSq().setTrimNullProperties(false).setAddNamespaceUrisToRoot(true).setUseWhitespace(true),
 				XmlParser.DEFAULT,
 				CHECK_XML_WHITESPACE | VALIDATE_XML
 			},
@@ -96,37 +96,37 @@ public abstract class RoundTripTest {
 			},
 			{ /* 8 */
 				"Uon - default",
-				new UonSerializer().setTrimNullProperties(false).setSimpleMode(false),
+				new UonSerializer().setTrimNullProperties(false),
 				UonParser.DEFAULT,
 				0
 			},
 			{ /* 9 */
 				"Uon - readable",
-				new UonSerializer.Readable().setTrimNullProperties(false).setSimpleMode(false),
-				UonParser.DEFAULT_WS_AWARE,
+				new UonSerializer.Readable().setTrimNullProperties(false),
+				UonParser.DEFAULT,
 				0
 			},
 			{ /* 10 */
 				"Uon - encoded",
-				new UonSerializer.Encoding().setTrimNullProperties(false).setSimpleMode(false),
+				new UonSerializer.Encoding().setTrimNullProperties(false),
 				UonParser.DEFAULT_DECODING,
 				0
 			},
 			{ /* 11 */
 				"UrlEncoding - default",
-				new UrlEncodingSerializer().setTrimNullProperties(false).setSimpleMode(false),
+				new UrlEncodingSerializer().setTrimNullProperties(false),
 				UrlEncodingParser.DEFAULT,
 				0
 			},
 			{ /* 12 */
 				"UrlEncoding - readable",
-				new UrlEncodingSerializer.Readable().setTrimNullProperties(false).setSimpleMode(false),
-				UrlEncodingParser.DEFAULT_WS_AWARE,
+				new UrlEncodingSerializer.Readable().setTrimNullProperties(false),
+				UrlEncodingParser.DEFAULT,
 				0
 			},
 			{ /* 13 */
 				"UrlEncoding - expanded params",
-				new UrlEncodingSerializer().setExpandedParams(true).setSimpleMode(false),
+				new UrlEncodingSerializer().setExpandedParams(true),
 				new UrlEncodingParser().setExpandedParams(true),
 				0
 			},
@@ -192,8 +192,8 @@ public abstract class RoundTripTest {
 	public boolean debug = false;
 
 	public RoundTripTest(String label, Serializer s, Parser p, int flags) throws Exception {
-		this.s = s.clone().addBeanFilters(getBeanFilters()).addPojoSwaps(getPojoSwaps()).addToBeanDictionary(getDictionary());
-		this.p = p == null ? null : p.clone().addBeanFilters(getBeanFilters()).addPojoSwaps(getPojoSwaps()).addToBeanDictionary(getDictionary());
+		this.s = s.clone().addBeanFilters(getBeanFilters()).addPojoSwaps(getPojoSwaps()).addToBeanDictionary(getDictionary()).setProperties(getProperties());
+		this.p = p == null ? null : p.clone().addBeanFilters(getBeanFilters()).addPojoSwaps(getPojoSwaps()).addToBeanDictionary(getDictionary()).setProperties(getProperties());
 		this.label = label;
 
 		Map<Class<Object>, Class<? extends Object>> m = getImplClasses();
@@ -220,6 +220,10 @@ public abstract class RoundTripTest {
 
 	public Class<?>[] getDictionary() {
 		return new Class<?>[0];
+	}
+	
+	public ObjectMap getProperties() {
+		return ObjectMap.EMPTY_MAP;
 	}
 
 	public <T> Map<Class<T>,Class<? extends T>> getImplClasses() {
@@ -286,7 +290,7 @@ public abstract class RoundTripTest {
 		}
 
 		if (debug)
-			System.err.println("Serialized contents from ["+label+"]...\n---START---\n" + (out instanceof byte[] ? TestUtils.toReadableBytes((byte[])out) : out) + "\n---END---\n");
+			System.err.println("Serialized contents from ["+label+"]...\n---START---\n" + (out instanceof byte[] ? TestUtils.toReadableBytes((byte[])out) : out) + "\n---END---\n"); // NOT DEBUG
 
 		if (validateXmlWhitespace)
 			TestUtils.checkXmlWhitespace(out.toString());

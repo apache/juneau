@@ -73,7 +73,7 @@ public class CognosXmlTest {
 		};
 
 		XmlSerializer s = new XmlSerializer()
-			.setUseIndentation(true)
+			.setUseWhitespace(true)
 			.setQuoteChar('\'')
 			.setDefaultNamespace("cognos")
 			.setEnableNamespaces(true)

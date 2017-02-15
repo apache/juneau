@@ -109,6 +109,20 @@ public class ParserReader extends Reader {
 	}
 
 	/**
+	 * Same as {@link #read()} but skips over any whitespace characters.
+	 *
+	 * @return The first non-whitespace character, or -1 if the end of stream reached.
+	 * @throws IOException
+	 */
+	public final int readSkipWs() throws IOException {
+		while (true) {
+			int c = read();
+			if (c == -1 || ! Character.isWhitespace(c))
+				return c;
+		}
+	}
+
+	/**
 	 * Same as {@link #read()} but detects and combines extended unicode characters (i.e. characters
 	 * 	above 0x10000).
 	 *
@@ -205,7 +219,7 @@ public class ParserReader extends Reader {
 	/**
 	 * Peeks the next character in the stream.
 	 * <p>
-	 * 	This is equivalent to doing a {@code read()} followed by an {@code unread()}.
+	 * This is equivalent to doing a {@code read()} followed by an {@code unread()}.
 	 *
 	 * @return The peeked character, or (char)-1 if the end of the stream has been reached.
 	 * @throws IOException If a problem occurred trying to read from the reader.
@@ -215,6 +229,25 @@ public class ParserReader extends Reader {
 		if (c != -1)
 			unread();
 		return c;
+	}
+
+	/**
+	 * Same as {@link #peek()} but skips over any whitespace characters.
+	 * <p>
+	 * This is equivalent to doing a {@code read()} followed by an {@code unread()}.
+	 *
+	 * @return The peeked character, or (char)-1 if the end of the stream has been reached.
+	 * @throws IOException If a problem occurred trying to read from the reader.
+	 */
+	public final int peekSkipWs() throws IOException {
+		while(true) {
+			int c = read();
+			boolean isWs = Character.isWhitespace(c);
+			if (c != -1 && ! isWs)
+				unread();
+			if (! isWs)
+				return c;
+		}
 	}
 
 	/**

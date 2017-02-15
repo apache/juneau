@@ -16,6 +16,7 @@ import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
 import java.util.*;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.annotation.*;
@@ -35,6 +36,7 @@ public abstract class HtmlElement {
 	 * @return The attributes of this element.
 	 */
 	@Xml(format=ATTRS)
+	@BeanProperty(name="a")
 	public LinkedHashMap<String,Object> getAttrs() {
 		return attrs;
 	}
@@ -44,6 +46,7 @@ public abstract class HtmlElement {
 	 * @param attrs The new attributes for this element.
 	 * @return This object (for method chaining).
 	 */
+	@BeanProperty(name="a")
 	public HtmlElement setAttrs(LinkedHashMap<String,Object> attrs) {
 		this.attrs = attrs;
 		return this;

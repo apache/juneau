@@ -76,46 +76,22 @@ import org.apache.juneau.transform.*;
  * 		URL-encoded notation would be as follows:
  * </p>
  * <p class='bcode'>
- * 	<xa>id</xa>=$n(<xs>1</xs>)
- * 	&amp;<xa>name</xa>=<xs>John+Smith</xs>,
- * 	&amp;<xa>uri</xa>=<xs>http://sample/addressBook/person/1</xs>,
- * 	&amp;<xa>addressBookUri</xa>=<xs>http://sample/addressBook</xs>,
- * 	&amp;<xa>birthDate</xa>=<xs>1946-08-12T00:00:00Z</xs>,
- * 	&amp;<xa>otherIds</xa>=<xs>%00</xs>,
- * 	&amp;<xa>addresses</xa>=$a(
- * 		$o(
- * 			<xa>uri</xa>=<xs>http://sample/addressBook/address/1</xs>,
- * 			<xa>personUri</xa>=<xs>http://sample/addressBook/person/1</xs>,
- * 			<xa>id</xa>=$n(<xs>1</xs>),
- * 			<xa>street</xa>=<xs>100+Main+Street</xs>,
- * 			<xa>city</xa>=<xs>Anywhereville</xs>,
- * 			<xa>state</xa>=<xs>NY</xs>,
- * 			<xa>zip</xa>=$n(<xs>12345</xs>),
- * 			<xa>isCurrent</xa>=$b(<xs>true</xs>)
- * 		)
- * 	)
- * </p>
- * <p>
- * 	A secondary "lax" syntax is available when the data type of the
- * 		values are already known on the receiving end of the transmission:
- * </p>
- * <p class='bcode'>
- * 	<xa>id</xa>=<xs>1</xs>,
- * 	&amp;<xa>name</xa>=<xs>John+Smith</xs>,
- * 	&amp;<xa>uri</xa>=<xs>http://sample/addressBook/person/1</xs>,
- * 	&amp;<xa>addressBookUri</xa>=<xs>http://sample/addressBook</xs>,
- * 	&amp;<xa>birthDate</xa>=<xs>1946-08-12T00:00:00Z</xs>,
- * 	&amp;<xa>otherIds</xa>=<xs>%00</xs>,
- * 	&amp;<xa>addresses</xa>=(
+ * 	<ua>id</ua>=<un>1</un>
+ * 	&amp;<ua>name</ua>=<us>'John+Smith'</us>,
+ * 	&amp;<ua>uri</ua>=<us>http://sample/addressBook/person/1</us>,
+ * 	&amp;<ua>addressBookUri</ua>=<us>http://sample/addressBook</us>,
+ * 	&amp;<ua>birthDate</ua>=<us>1946-08-12T00:00:00Z</us>,
+ * 	&amp;<ua>otherIds</ua>=<uk>null</uk>,
+ * 	&amp;<ua>addresses</ua>=@(
  * 		(
- * 			<xa>uri</xa>=<xs>http://sample/addressBook/address/1</xs>,
- * 			<xa>personUri</xa>=<xs>http://sample/addressBook/person/1</xs>,
- * 			<xa>id</xa>=<xs>1</xs>,
- * 			<xa>street</xa>=<xs>100+Main+Street</xs>,
- * 			<xa>city</xa>=<xs>Anywhereville</xs>,
- * 			<xa>state</xa>=<xs>NY</xs>,
- * 			<xa>zip</xa>=<xs>12345</xs>,
- * 			<xa>isCurrent</xa>=<xs>true</xs>
+ * 			<ua>uri</ua>=<us>http://sample/addressBook/address/1</us>,
+ * 			<ua>personUri</ua>=<us>http://sample/addressBook/person/1</us>,
+ * 			<ua>id</ua>=<un>1</un>,
+ * 			<ua>street</ua>=<us>'100+Main+Street'</us>,
+ * 			<ua>city</ua>=<us>Anywhereville</us>,
+ * 			<ua>state</ua>=<us>NY</us>,
+ * 			<ua>zip</ua>=<un>12345</un>,
+ * 			<ua>isCurrent</ua>=<uk>true</uk>
  * 		)
  * 	)
  * </p>
@@ -126,12 +102,8 @@ import org.apache.juneau.transform.*;
  * 	Map m = <jk>new</jk> ObjectMap(<js>"{a:'b',c:1,d:false,e:['f',1,false],g:{h:'i'}}"</js>);
  *
  * 	<jc>// Serialize to value equivalent to JSON.</jc>
- * 	<jc>// Produces "a=b&amp;c=$n(1)&amp;d=$b(false)&amp;e=$a(f,$n(1),$b(false))&amp;g=$o(h=i)"</jc>
+ * 	<jc>// Produces "a=b&amp;c=1&amp;d=false&amp;e=@(f,1,false)&amp;g=(h=i)"</jc>
  * 	String s = UrlEncodingSerializer.<jsf>DEFAULT</jsf>.serialize(s);
- *
- * 	<jc>// Serialize to simplified value (for when data type is already known by receiver).</jc>
- * 	<jc>// Produces "a=b&amp;c=1&amp;d=false&amp;e=(f,1,false)&amp;g=(h=i))"</jc>
- * 	String s = UrlEncodingSerializer.<jsf>DEFAULT_SIMPLE</jsf>.serialize(s);
  *
  * 	<jc>// Serialize a bean</jc>
  * 	<jk>public class</jk> Person {
@@ -151,11 +123,8 @@ import org.apache.juneau.transform.*;
  *
  * 	Person p = <jk>new</jk> Person(<js>"John Doe"</js>, 23, <js>"123 Main St"</js>, <js>"Anywhere"</js>, <js>"NY"</js>, 12345, <jk>false</jk>);
  *
- * 	<jc>// Produces "name=John+Doe&amp;age=23&amp;address=$o(street=123+Main+St,city=Anywhere,state=NY,zip=$n(12345))&amp;deceased=$b(false)"</jc>
+ * 	<jc>// Produces "name=John+Doe&amp;age=23&amp;address=(street='123+Main+St',city=Anywhere,state=NY,zip=12345)&amp;deceased=false"</jc>
  * 	String s = UrlEncodingSerializer.<jsf>DEFAULT</jsf>.serialize(s);
- *
- * 	<jc>// Produces "name=John+Doe&amp;age=23&amp;address=(street=123+Main+St,city=Anywhere,state=NY,zip=12345)&amp;deceased=false)"</jc>
- * 	String s = UrlEncodingSerializer.<jsf>DEFAULT_SIMPLE</jsf>.serialize(s);
  * </p>
  */
 @Produces("application/x-www-form-urlencoded")
@@ -165,11 +134,8 @@ public class UrlEncodingSerializer extends UonSerializer {
 	/** Reusable instance of {@link UrlEncodingSerializer}, all default settings. */
 	public static final UrlEncodingSerializer DEFAULT = new UrlEncodingSerializer().lock();
 
-	/** Reusable instance of {@link UrlEncodingSerializer.Simple}. */
-	public static final UrlEncodingSerializer DEFAULT_SIMPLE = new Simple().lock();
-
-	/** Reusable instance of {@link UrlEncodingSerializer.SimpleExpanded}. */
-	public static final UrlEncodingSerializer DEFAULT_SIMPLE_EXPANDED = new SimpleExpanded().lock();
+	/** Reusable instance of {@link UrlEncodingSerializer.Expanded}. */
+	public static final UrlEncodingSerializer DEFAULT_EXPANDED = new Expanded().lock();
 
 	/** Reusable instance of {@link UrlEncodingSerializer.Readable}. */
 	public static final UrlEncodingSerializer DEFAULT_READABLE = new Readable().lock();
@@ -182,23 +148,12 @@ public class UrlEncodingSerializer extends UonSerializer {
 	}
 
 	/**
-	 * Equivalent to <code><jk>new</jk> UrlEncodingSerializer().setSimpleMode(<jk>true</jk>);</code>.
-	 */
-	@Produces(value="application/x-www-form-urlencoded-simple",contentType="application/x-www-form-urlencoded")
-	public static class Simple extends UrlEncodingSerializer {
-		/** Constructor */
-		public Simple() {
-			setSimpleMode(true);
-		}
-	}
-
-	/**
 	 * Equivalent to <code><jk>new</jk> UrlEncodingSerializer().setSimpleMode(<jk>true</jk>).setExpandedParams(<jk>true</jk>);</code>.
 	 */
-	@Produces(value="application/x-www-form-urlencoded-simple",contentType="application/x-www-form-urlencoded")
-	public static class SimpleExpanded extends Simple {
+	@Produces(value="application/x-www-form-urlencoded",contentType="application/x-www-form-urlencoded")
+	public static class Expanded extends UrlEncodingSerializer {
 		/** Constructor */
-		public SimpleExpanded() {
+		public Expanded() {
 			setExpandedParams(true);
 		}
 	}
@@ -220,7 +175,6 @@ public class UrlEncodingSerializer extends UonSerializer {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private SerializerWriter serializeAnything(UrlEncodingSerializerSession session, UonWriter out, Object o) throws Exception {
 
-		boolean addTypeProperty;		// Add "_type" attribute to element?
 		ClassMeta<?> aType;			// The actual type
 		ClassMeta<?> sType;			// The serialized type
 
@@ -230,7 +184,7 @@ public class UrlEncodingSerializer extends UonSerializer {
 			aType = object();
 
 		sType = aType.getSerializedClassMeta();
-		addTypeProperty = (session.isAddBeanTypeProperties());
+		String typeName = session.getBeanTypeName(session.object(), aType, null);
 
 		// Swap if necessary
 		PojoSwap swap = aType.getPojoSwap();
@@ -245,18 +199,18 @@ public class UrlEncodingSerializer extends UonSerializer {
 
 		if (sType.isMap()) {
 			if (o instanceof BeanMap)
-				serializeBeanMap(session, out, (BeanMap)o, addTypeProperty);
+				serializeBeanMap(session, out, (BeanMap)o, typeName);
 			else
 				serializeMap(session, out, (Map)o, sType);
 		} else if (sType.isBean()) {
-			serializeBeanMap(session, out, session.toBeanMap(o), addTypeProperty);
+			serializeBeanMap(session, out, session.toBeanMap(o), typeName);
 		} else if (sType.isCollection()) {
 			serializeMap(session, out, getCollectionMap((Collection)o), session.getClassMeta(Map.class, Integer.class, sType.getElementType()));
 		} else {
 			// All other types can't be serialized as key/value pairs, so we create a
 			// mock key/value pair with a "_value" key.
 			out.append("_value=");
-			super.serializeAnything(session, out, o, null, null, null, false, true);
+			super.serializeAnything(session, out, o, null, null, null);
 		}
 
 		session.pop();
@@ -294,15 +248,15 @@ public class UrlEncodingSerializer extends UonSerializer {
 				while (i.hasNext()) {
 					if (addAmp)
 						out.cr(depth).append('&');
-					out.appendObject(key, false, true, true).append('=');
-					super.serializeAnything(session, out, i.next(), null, (key == null ? null : key.toString()), null, false, true);
+					out.appendObject(key, true).append('=');
+					super.serializeAnything(session, out, i.next(), null, (key == null ? null : key.toString()), null);
 					addAmp = true;
 				}
 			} else {
 				if (addAmp)
 					out.cr(depth).append('&');
-				out.appendObject(key, false, true, true).append('=');
-				super.serializeAnything(session, out, value, valueType, (key == null ? null : key.toString()), null, false, true);
+				out.appendObject(key, true).append('=');
+				super.serializeAnything(session, out, value, valueType, (key == null ? null : key.toString()), null);
 				addAmp = true;
 			}
 		}
@@ -311,12 +265,12 @@ public class UrlEncodingSerializer extends UonSerializer {
 	}
 
 	@SuppressWarnings({ "rawtypes" })
-	private SerializerWriter serializeBeanMap(UrlEncodingSerializerSession session, UonWriter out, BeanMap<?> m, boolean addTypeProperty) throws Exception {
+	private SerializerWriter serializeBeanMap(UrlEncodingSerializerSession session, UonWriter out, BeanMap<?> m, String typeName) throws Exception {
 		int depth = session.getIndent();
 
 		boolean addAmp = false;
 
-		for (BeanPropertyValue p : m.getValues(session.isTrimNulls(), addTypeProperty ? session.createBeanTypeNameProperty(m) : null)) {
+		for (BeanPropertyValue p : m.getValues(session.isTrimNulls(), typeName != null ? session.createBeanTypeNameProperty(m, typeName) : null)) {
 			BeanPropertyMeta pMeta = p.getMeta();
 			ClassMeta<?> cMeta = p.getClassMeta();
 
@@ -337,9 +291,9 @@ public class UrlEncodingSerializer extends UonSerializer {
 					if (addAmp)
 						out.cr(depth).append('&');
 
-					out.appendObject(key, false, true, true).append('=');
+					out.appendObject(key, true).append('=');
 
-					super.serializeAnything(session, out, i.next(), cMeta.getElementType(), key, pMeta, false, true);
+					super.serializeAnything(session, out, i.next(), cMeta.getElementType(), key, pMeta);
 
 					addAmp = true;
 				}
@@ -347,9 +301,9 @@ public class UrlEncodingSerializer extends UonSerializer {
 				if (addAmp)
 					out.cr(depth).append('&');
 
-				out.appendObject(key, false, true, true).append('=');
+				out.appendObject(key, true).append('=');
 
-				super.serializeAnything(session, out, value, cMeta, key, pMeta, false, true);
+				super.serializeAnything(session, out, value, cMeta, key, pMeta);
 
 				addAmp = true;
 			}
@@ -461,18 +415,6 @@ public class UrlEncodingSerializer extends UonSerializer {
 	}
 
 	@Override /* UonSerializer */
-	public UrlEncodingSerializer setSimpleMode(boolean value) throws LockedException {
-		super.setSimpleMode(value);
-		return this;
-	}
-
-	@Override /* UonSerializer */
-	public UrlEncodingSerializer setUseWhitespace(boolean value) throws LockedException {
-		super.setUseWhitespace(value);
-		return this;
-	}
-
-	@Override /* UonSerializer */
 	public UrlEncodingSerializer setEncodeChars(boolean value) throws LockedException {
 		super.setEncodeChars(value);
 		return this;
@@ -503,8 +445,8 @@ public class UrlEncodingSerializer extends UonSerializer {
 	}
 
 	@Override /* Serializer */
-	public UrlEncodingSerializer setUseIndentation(boolean value) throws LockedException {
-		super.setUseIndentation(value);
+	public UrlEncodingSerializer setUseWhitespace(boolean value) throws LockedException {
+		super.setUseWhitespace(value);
 		return this;
 	}
 

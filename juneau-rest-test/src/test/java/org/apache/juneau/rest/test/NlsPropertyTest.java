@@ -18,7 +18,7 @@ import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.*;
 
-public class NlsPropertyTest {
+public class NlsPropertyTest extends RestTestcase {
 
 	private static String URL = "/testNlsProperty";
 

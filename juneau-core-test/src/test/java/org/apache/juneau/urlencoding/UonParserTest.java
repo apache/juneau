@@ -40,24 +40,24 @@ public class UonParserTest {
 		assertEquals("a", p.parse(t, String.class));
 		assertEquals("a", p.parse(t, Object.class));
 		assertEquals("a", pe.parse(t, String.class));
-		t = "(a)";
+		t = "'a'";
 		assertEquals("a", p.parse(t, String.class));
 		assertEquals("a", p.parse(t, Object.class));
-		t = "$s(a)";
+		t = " 'a' ";
 		assertEquals("a", p.parse(t, String.class));
 
 		// 2nd level
-		t = "$o(a=a)";
+		t = "(a=a)";
 		assertEquals("a", ((Map)p.parse(t, Map.class)).get("a"));
 		assertEquals("a", ((Map)pe.parse(t, Map.class)).get("a"));
 
-		t = "(a=a)";
+		t = "('a'='a')";
 		assertEquals("a", ((Map)p.parse(t, Map.class)).get("a"));
 		assertEquals("a", ((Map)pe.parse(t, Map.class)).get("a"));
 
 		// Simple map
 		// Top level
-		t = "$o(a=b,c=$n(123),d=$b(false),e=$b(true),f=%00)";
+		t = "(a=b,c=123,d=false,e=true,f=null)";
 		m = p.parse(t, Map.class);
 		assertEquals("b", m.get("a"));
 		assertTrue(m.get("c") instanceof Number);
@@ -76,26 +76,20 @@ public class UonParserTest {
 
 		// null
 		// Top level
-		t = "%00";
-		assertEquals("%00", p.parse(t, Object.class));
+		t = "null";
+		assertNull(p.parse(t, Object.class));
 		assertNull(pe.parse(t, Object.class));
 
 		// 2nd level
-		t = "$o(%00=%00)";
+		t = "(null=null)";
 		m = p.parse(t, Map.class);
-		assertEquals("%00", m.get("%00"));
+		assertTrue(m.containsKey(null));
+		assertNull(m.get(null));
 		m = pe.parse(t, Map.class);
 		assertTrue(m.containsKey(null));
 		assertNull(m.get(null));
 
-		t = "(%00=%00)";
-		m = p.parse(t, Map.class);
-		assertEquals("%00", m.get("%00"));
-		m = pe.parse(t, Map.class);
-		assertTrue(m.containsKey(null));
-		assertNull(m.get(null));
-
-		t = "(\u0000=\u0000)";
+		t = " ( null = null ) ";
 		m = p.parse(t, Map.class);
 		assertTrue(m.containsKey(null));
 		assertNull(m.get(null));
@@ -104,42 +98,43 @@ public class UonParserTest {
 		assertNull(m.get(null));
 
 		// 3rd level
-		t = "$o(%00=$o(%00=%00))";
+		t = "(null=(null=null))";
 		m = p.parse(t, Map.class);
-		assertEquals("%00", ((Map)m.get("%00")).get("%00"));
+		assertTrue(((Map)m.get(null)).containsKey(null));
+		assertNull(((Map)m.get(null)).get(null));
 		m = pe.parse(t, Map.class);
 		assertTrue(((Map)m.get(null)).containsKey(null));
 		assertNull(((Map)m.get(null)).get(null));
 
 		// Empty array
 		// Top level
-		t = "$a()";
+		t = "@()";
 		List l = (List)p.parse(t, Object.class);
 		assertTrue(l.isEmpty());
-		t = "()";
+		t = " @( ) ";
 		l = p.parse(t, List.class);
 		assertTrue(l.isEmpty());
 
 		// 2nd level in map
-		t = "$o(x=$a())";
+		t = "(x=@())";
 		m = p.parse(t, HashMap.class, String.class, List.class);
 		assertTrue(m.containsKey("x"));
 		assertTrue(((List)m.get("x")).isEmpty());
 		m = (Map)p.parse(t, Object.class);
 		assertTrue(m.containsKey("x"));
 		assertTrue(((List)m.get("x")).isEmpty());
-		t = "(x=())";
+		t = " ( x = @( ) )";
 		m = p.parse(t, HashMap.class, String.class, List.class);
 		assertTrue(m.containsKey("x"));
 		assertTrue(((List)m.get("x")).isEmpty());
 
 		// Empty 2 dimensional array
-		t = "$a($a())";
+		t = "@(@())";
 		l = (List)p.parse(t, Object.class);
 		assertTrue(l.size() == 1);
 		l = (List)l.get(0);
 		assertTrue(l.isEmpty());
-		t = "(())";
+		t = " @( @( ) ) ";
 		l = p.parse(t, LinkedList.class, List.class);
 		assertTrue(l.size() == 1);
 		l = (List)l.get(0);
@@ -147,31 +142,31 @@ public class UonParserTest {
 
 		// Array containing empty string
 		// Top level
-		t = "$a(())";
+		t = "@('')";
 		l = (List)p.parse(t, Object.class);
 		assertTrue(l.size() == 1);
 		assertEquals("", l.get(0));
-		t = "(())";
+		t = " @( '' ) ";
 		l = p.parse(t, List.class, String.class);
 		assertTrue(l.size() == 1);
 		assertEquals("", l.get(0));
 
 		// 2nd level
-		t = "$o(()=$a(()))";
+		t = "(''=@(''))";
 		m = (Map)p.parse(t, Object.class);
 		assertEquals("", ((List)m.get("")).get(0));
-		t = "(=(()))";
+		t = " ( '' = @( '' ) ) ";
 		m = p.parse(t, HashMap.class, String.class, List.class);
 		assertEquals("", ((List)m.get("")).get(0));
 
 		// Array containing 3 empty strings
-		t = "$a(,,)";
+		t = "@('','','')";
 		l = (List)p.parse(t, Object.class);
 		assertTrue(l.size() == 3);
 		assertEquals("", l.get(0));
 		assertEquals("", l.get(1));
 		assertEquals("", l.get(2));
-		t = "(,,)";
+		t = " @( '' , '' , '' ) ";
 		l = p.parse(t, List.class, Object.class);
 		assertTrue(l.size() == 3);
 		assertEquals("", l.get(0));
@@ -180,18 +175,18 @@ public class UonParserTest {
 
 		// String containing \u0000
 		// Top level
-		t = "$s(\u0000)";
+		t = "'\u0000'";
 		assertEquals("\u0000", p.parse(t, Object.class));
-		t = "(\u0000)";
+		t = " '\u0000' ";
 		assertEquals("\u0000", p.parse(t, String.class));
 		assertEquals("\u0000", p.parse(t, Object.class));
 
 		// 2nd level
-		t = "$o((\u0000)=(\u0000))";
+		t = "('\u0000'='\u0000')";
 		m = (Map)p.parse(t, Object.class);
 		assertTrue(m.size() == 1);
 		assertEquals("\u0000", m.get("\u0000"));
-		t = "((\u0000)=(\u0000))";
+		t = " ( '\u0000' = '\u0000' ) ";
 		m = p.parse(t, HashMap.class, String.class, String.class);
 		assertTrue(m.size() == 1);
 		assertEquals("\u0000", m.get("\u0000"));
@@ -201,29 +196,26 @@ public class UonParserTest {
 
 		// Boolean
 		// Top level
-		t = "$b(false)";
+		t = "false";
 		Boolean b = (Boolean)p.parse(t, Object.class);
 		assertEquals(Boolean.FALSE, b);
 		b = p.parse(t, Boolean.class);
 		assertEquals(Boolean.FALSE, b);
-		t = "false";
+		t = " false ";
 		b = p.parse(t, Boolean.class);
 		assertEquals(Boolean.FALSE, b);
 
 		// 2nd level
-		t = "$o(x=$b(false))";
+		t = "(x=false)";
 		m = (Map)p.parse(t, Object.class);
 		assertEquals(Boolean.FALSE, m.get("x"));
-		t = "(x=$b(false))";
+		t = " ( x = false ) ";
 		m = p.parse(t, HashMap.class, String.class, Object.class);
-		assertEquals(Boolean.FALSE, m.get("x"));
-		t = "(x=false)";
-		m = p.parse(t, HashMap.class, String.class, Boolean.class);
 		assertEquals(Boolean.FALSE, m.get("x"));
 
 		// Number
 		// Top level
-		t = "$n(123)";
+		t = "123";
 		Integer i = (Integer)p.parse(t, Object.class);
 		assertEquals(123, i.intValue());
 		i = p.parse(t, Integer.class);
@@ -232,15 +224,15 @@ public class UonParserTest {
 		assertEquals(123, d.intValue());
 		Float f = p.parse(t, Float.class);
 		assertEquals(123, f.intValue());
-		t = "123";
+		t = " 123 ";
 		i = p.parse(t, Integer.class);
 		assertEquals(123, i.intValue());
 
 		// 2nd level
-		t = "$o(x=$n(123))";
+		t = "(x=123)";
 		m = (Map)p.parse(t, Object.class);
 		assertEquals(123, ((Integer)m.get("x")).intValue());
-		t = "(x=123)";
+		t = " ( x = 123 ) ";
 		m = p.parse(t, HashMap.class, String.class, Number.class);
 		assertEquals(123, ((Integer)m.get("x")).intValue());
 		m = p.parse(t, HashMap.class, String.class, Double.class);
@@ -248,12 +240,12 @@ public class UonParserTest {
 
 		// Unencoded chars
 		// Top level
-		t = "x;/?:@-_.!*'";
+		t = "x;/?:@-_.!*~'";
 		assertEquals("x;/?:@-_.!*'", p.parse(t, Object.class));
 		assertEquals("x;/?:@-_.!*'", pe.parse(t, Object.class));
 
 		// 2nd level
-		t = "$o(x;/?:@-_.!*'=x;/?:@-_.!*')";
+		t = "(x;/?:@-_.!*~'=x;/?:@-_.!*~')";
 		m = (Map)p.parse(t, Object.class);
 		assertEquals("x;/?:@-_.!*'", m.get("x;/?:@-_.!*'"));
 		m = p.parse(t, HashMap.class, String.class, Object.class);
@@ -277,7 +269,7 @@ public class UonParserTest {
 		assertEquals("x{}|\\^[]`<>#%\"&+", pe.parse(t, String.class));
 
 		// 2nd level
-		t = "$o(x{}|\\^[]`<>#%\"&+=x{}|\\^[]`<>#%\"&+)";
+		t = "(x{}|\\^[]`<>#%\"&+=x{}|\\^[]`<>#%\"&+)";
 		m = (Map)p.parse(t, Object.class);
 		assertEquals("x{}|\\^[]`<>#%\"&+", m.get("x{}|\\^[]`<>#%\"&+"));
 		try {
@@ -286,30 +278,24 @@ public class UonParserTest {
 		} catch (ParseException e) {
 			// Good.
 		}
-		t = "$o(x%7B%7D%7C%5C%5E%5B%5D%60%3C%3E%23%25%22%26%2B=x%7B%7D%7C%5C%5E%5B%5D%60%3C%3E%23%25%22%26%2B)";
+		t = "(x%7B%7D%7C%5C%5E%5B%5D%60%3C%3E%23%25%22%26%2B=x%7B%7D%7C%5C%5E%5B%5D%60%3C%3E%23%25%22%26%2B)";
 		m = (Map)pe.parse(t, Object.class);
 		assertEquals("x{}|\\^[]`<>#%\"&+", m.get("x{}|\\^[]`<>#%\"&+"));
 
 		// Special chars
 		// Top level
-		t = "x~$~,~(~)";
-		assertEquals("x$,()", p.parse(t, Object.class));
-		t = "(x~$~,~(~))";
-		assertEquals("x$,()", p.parse(t, Object.class));
-		t = "$s(x~$~,~(~))";
-		assertEquals("x$,()", p.parse(t, Object.class));
+		t = "'x$,()~''";
+		assertEquals("x$,()'", p.parse(t, Object.class));
+		t = " 'x$,()~'' ";
+		assertEquals("x$,()'", p.parse(t, Object.class));
 
 		// 2nd level
-		// Note behavior on serializeParams() is different since 2nd-level is top level.
-		t = "$o(x~$~,~(~)=x~$~,~(~))";
+		t = "('x$,()~''='x$,()~'')";
 		m = (Map)p.parse(t, Object.class);
-		assertEquals("x$,()", m.get("x$,()"));
-		t = "$o((x~$~,~(~))=(x~$~,~(~)))";
+		assertEquals("x$,()'", m.get("x$,()'"));
+		t = " ( 'x$,()~'' = 'x$,()~'' ) ";
 		m = (Map)p.parse(t, Object.class);
-		assertEquals("x$,()", m.get("x$,()"));
-		t = "$o($s(x~$~,~(~))=$s(x~$~,~(~)))";
-		m = (Map)p.parse(t, Object.class);
-		assertEquals("x$,()", m.get("x$,()"));
+		assertEquals("x$,()'", m.get("x$,()'"));
 
 		// Equals sign
 		// Gets encoded at top level, and encoded+escaped at 2nd level.
@@ -320,79 +306,64 @@ public class UonParserTest {
 		assertEquals("x=", pe.parse(t, Object.class));
 
 		// 2nd level
-		t = "$o(x~==x~=)";
+		t = "('x='='x=')";
 		m = (Map)p.parse(t, Object.class);
 		assertEquals("x=", m.get("x="));
-		t = "$o((x~=)=(x~=))";
+		t = "('x='='x=')";
 		m = (Map)p.parse(t, Object.class);
 		assertEquals("x=", m.get("x="));
-		t = "$o($s(x~=)=$s(x~=))";
+		t = " ( 'x=' = 'x=' ) ";
 		m = (Map)p.parse(t, Object.class);
 		assertEquals("x=", m.get("x="));
-		t = "(x~==x~=)";
+		t = "('x='='x=')";
 		m = p.parse(t, HashMap.class, String.class, Object.class);
 		assertEquals("x=", m.get("x="));
-		t = "((x~=)=(x~=))";
+		t = " ( 'x=' = 'x=' ) ";
 		m = p.parse(t, HashMap.class, String.class, Object.class);
 		assertEquals("x=", m.get("x="));
-		t = "($s(x~=)=$s(x~=))";
-		m = p.parse(t, HashMap.class, String.class, Object.class);
-		assertEquals("x=", m.get("x="));
-		t = "$o(x~%3D=x~%3D)";
+		t = "('x%3D'='x%3D')";
 		m = (Map)pe.parse(t, Object.class);
 		assertEquals("x=", m.get("x="));
-		t = "$o((x~%3D)=(x~%3D))";
+		t = " ( 'x%3D' = 'x%3D' ) ";
 		m = (Map)pe.parse(t, Object.class);
-		assertEquals("x=", m.get("x="));
-		t = "$o($s(x~%3D)=$s(x~%3D))";
-		m = (Map)pe.parse(t, Object.class);
-		assertEquals("x=", m.get("x="));
-		t = "(x~%3D=x~%3D)";
-		m = pe.parse(t, HashMap.class, String.class, Object.class);
-		assertEquals("x=", m.get("x="));
-		t = "((x~%3D)=(x~%3D))";
-		m = pe.parse(t, HashMap.class, String.class, Object.class);
-		assertEquals("x=", m.get("x="));
-		t = "($s(x~%3D)=$s(x~%3D))";
-		m = pe.parse(t, HashMap.class, String.class, Object.class);
 		assertEquals("x=", m.get("x="));
 
 		// String starting with parenthesis
 		// Top level
-		t = "~(~)";
+		t = "'()'";
 		assertEquals("()", p.parse(t, Object.class));
 		assertEquals("()", p.parse(t, String.class));
 
-		t = "(~(~))";
-		assertEquals("()", p.parse(t, Object.class));
-		assertEquals("()", p.parse(t, String.class));
-		t = "$s(~(~))";
+		t = " '()' ";
 		assertEquals("()", p.parse(t, Object.class));
 		assertEquals("()", p.parse(t, String.class));
 
 		// 2nd level
-		t = "$o((~(~))=(~(~)))";
+		t = "('()'='()')";
 		m = (Map)p.parse(t, Object.class);
 		assertEquals("()", m.get("()"));
-		t = "((~(~))=(~(~)))";
-		m = p.parse(t, HashMap.class, String.class, Object.class);
-		assertEquals("()", m.get("()"));
-		t = "($s(~(~))=$s(~(~)))";
+		t = " ( '()' = '()' ) ";
 		m = p.parse(t, HashMap.class, String.class, Object.class);
 		assertEquals("()", m.get("()"));
 
 		// String starting with $
 		// Top level
-		t = "($a)";
+		t = "$a";
 		assertEquals("$a", p.parse(t, Object.class));
-		t = "($a)";
+		t = "'$a'";
 		assertEquals("$a", p.parse(t, Object.class));
 
 		// 2nd level
-		t = "$o(($a)=($a))";
+		t = "($a=$a)";
 		m = (Map)p.parse(t, Object.class);
 		assertEquals("$a", m.get("$a"));
-		t = "(($a)=($a))";
+		t = " ( $a = $a ) ";
+		m = (Map)p.parse(t, Object.class);
+		assertEquals("$a", m.get("$a"));
+		t = "('$a'='$a')";
+		m = p.parse(t, HashMap.class, String.class, Object.class);
+		assertEquals("$a", m.get("$a"));
+		t = " ( '$a' = '$a' ) ";
 		m = p.parse(t, HashMap.class, String.class, Object.class);
 		assertEquals("$a", m.get("$a"));
 
@@ -403,36 +374,36 @@ public class UonParserTest {
 		assertEquals("", pe.parse(t, Object.class));
 
 		// 2nd level
-		t = "$o(=)";
+		t = "(=)";
 		m = (Map)p.parse(t, Object.class);
 		assertEquals("", m.get(""));
-		t = "(=)";
+		t = "(''='')";
 		m = p.parse(t, HashMap.class, String.class, Object.class);
 		assertEquals("", m.get(""));
 
 		// 3rd level
-		t = "$o(=$o(=))";
+		t = "(=(=))";
 		m = (Map)p.parse(t, Object.class);
 		assertEquals("", ((Map)m.get("")).get(""));
-		t = "(=(=))";
+		t = " ( = ( = ) ) ";
 		m = p.parse(t, HashMap.class, String.class, HashMap.class);
 		assertEquals("", ((Map)m.get("")).get(""));
 
 		// Newline character
 		// Top level
-		t = "(%0A)";
+		t = "'%0A'";
 		assertEquals("\n", pe.parse(t, Object.class));
 		assertEquals("%0A", p.parse(t, Object.class));
 
 		// 2nd level
-		t = "$o((%0A)=(%0A))";
+		t = "('%0A'='%0A')";
 		m = (Map)pe.parse(t, Object.class);
 		assertEquals("\n", m.get("\n"));
 		m = (Map)p.parse(t, Object.class);
 		assertEquals("%0A", m.get("%0A"));
 
 		// 3rd level
-		t = "$o((%0A)=$o((%0A)=(%0A)))";
+		t = "('%0A'=('%0A'='%0A'))";
 		m = (Map)pe.parse(t, Object.class);
 		assertEquals("\n", ((Map)m.get("\n")).get("\n"));
 	}
@@ -455,18 +426,18 @@ public class UonParserTest {
 		assertEquals("¢", pe.parse(t, String.class));
 
 		// 2nd level
-		t = "$o(¢=¢)";
+		t = "(¢=¢)";
 		m = (Map)p.parse(t, Object.class);
 		assertEquals("¢", m.get("¢"));
-		t = "$o(%C2%A2=%C2%A2)";
+		t = "(%C2%A2=%C2%A2)";
 		m = (Map)pe.parse(t, Object.class);
 		assertEquals("¢", m.get("¢"));
 
 		// 3rd level
-		t = "$o(¢=$o(¢=¢))";
+		t = "(¢=(¢=¢))";
 		m = (Map)p.parse(t, Object.class);
 		assertEquals("¢", ((Map)m.get("¢")).get("¢"));
-		t = "$o(%C2%A2=$o(%C2%A2=%C2%A2))";
+		t = "(%C2%A2=(%C2%A2=%C2%A2))";
 		m = (Map)pe.parse(t, Object.class);
 		assertEquals("¢", ((Map)m.get("¢")).get("¢"));
 
@@ -480,18 +451,18 @@ public class UonParserTest {
 		assertEquals("€", pe.parse(t, String.class));
 
 		// 2nd level
-		t = "$o(€=€)";
+		t = "(€=€)";
 		m = (Map)p.parse(t, Object.class);
 		assertEquals("€", m.get("€"));
-		t = "$o(%E2%82%AC=%E2%82%AC)";
+		t = "(%E2%82%AC=%E2%82%AC)";
 		m = (Map)pe.parse(t, Object.class);
 		assertEquals("€", m.get("€"));
 
 		// 3rd level
-		t = "$o(€=$o(€=€))";
+		t = "(€=(€=€))";
 		m = (Map)p.parse(t, Object.class);
 		assertEquals("€", ((Map)m.get("€")).get("€"));
-		t = "$o(%E2%82%AC=$o(%E2%82%AC=%E2%82%AC))";
+		t = "(%E2%82%AC=(%E2%82%AC=%E2%82%AC))";
 		m = (Map)pe.parse(t, Object.class);
 		assertEquals("€", ((Map)m.get("€")).get("€"));
 
@@ -505,18 +476,18 @@ public class UonParserTest {
 		assertEquals("𤭢", pe.parse(t, String.class));
 
 		// 2nd level
-		t = "$o(𤭢=𤭢)";
+		t = "(𤭢=𤭢)";
 		m = (Map)p.parse(t, Object.class);
 		assertEquals("𤭢", m.get("𤭢"));
-		t = "$o(%F0%A4%AD%A2=%F0%A4%AD%A2)";
+		t = "(%F0%A4%AD%A2=%F0%A4%AD%A2)";
 		m = (Map)pe.parse(t, Object.class);
 		assertEquals("𤭢", m.get("𤭢"));
 
 		// 3rd level
-		t = "$o(𤭢=$o(𤭢=𤭢))";
+		t = "(𤭢=(𤭢=𤭢))";
 		m = (Map)p.parse(t, Object.class);
 		assertEquals("𤭢", ((Map)m.get("𤭢")).get("𤭢"));
-		t = "$o(%F0%A4%AD%A2=$o(%F0%A4%AD%A2=%F0%A4%AD%A2))";
+		t = "(%F0%A4%AD%A2=(%F0%A4%AD%A2=%F0%A4%AD%A2))";
 		m = (Map)pe.parse(t, Object.class);
 		assertEquals("𤭢", ((Map)m.get("𤭢")).get("𤭢"));
 	}

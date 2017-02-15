@@ -23,7 +23,7 @@ import org.apache.juneau.rest.client.*;
 import org.junit.*;
 
 
-public class GroupsTest {
+public class GroupsTest extends RestTestcase {
 
 	private static String URL = "/testGroups";
 	private static boolean debug = false;

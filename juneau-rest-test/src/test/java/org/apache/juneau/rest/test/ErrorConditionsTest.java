@@ -22,7 +22,7 @@ import org.apache.juneau.rest.client.*;
 import org.junit.*;
 
 
-public class ErrorConditionsTest {
+public class ErrorConditionsTest extends RestTestcase {
 
 	private static String URL = "/testErrorConditions";
 	private static boolean debug = false;

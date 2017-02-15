@@ -170,6 +170,6 @@ public class XmlSerializerSession extends SerializerSession {
 		Object output = getOutput();
 		if (output instanceof XmlWriter)
 			return (XmlWriter)output;
-		return new XmlWriter(super.getWriter(), isUseIndentation(), isTrimStrings(), getQuoteChar(), getRelativeUriBase(), getAbsolutePathUriBase(), isEnableNamespaces(), getDefaultNamespace());
+		return new XmlWriter(super.getWriter(), isUseWhitespace(), isTrimStrings(), getQuoteChar(), getRelativeUriBase(), getAbsolutePathUriBase(), isEnableNamespaces(), getDefaultNamespace());
 	}
 }

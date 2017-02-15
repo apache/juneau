@@ -54,4 +54,19 @@ public final class AsciiSet {
 			return false;
 		return store[c];
 	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified string contains at least one character in this set.
+	 *
+	 * @param s The string to test.
+	 * @return <jk>true</jk> if the string is not null and contains at least one character in this set.
+	 */
+	public boolean contains(CharSequence s) {
+		if (s == null)
+			return false;
+		for (int i = 0; i < s.length(); i++)
+			if (contains(s.charAt(i)))
+				return true;
+		return false;
+	}
 }

@@ -221,7 +221,7 @@ public class TestUtils {
 	 * Test whitespace and generated schema.
 	 */
 	public static void validateXml(Object o, XmlSerializer s) throws Exception {
-		s = s.clone().setUseIndentation(true).setEnableNamespaces(true).setAddNamespaceUrisToRoot(true);
+		s = s.clone().setUseWhitespace(true).setEnableNamespaces(true).setAddNamespaceUrisToRoot(true);
 		String xml = s.serialize(o);
 
 		String xmlSchema = null;

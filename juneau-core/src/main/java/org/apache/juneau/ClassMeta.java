@@ -104,6 +104,7 @@ public final class ClassMeta<T> implements Type {
 		resolvedDictionaryName;                              // The name if this is an array type (e.g. "X^^").
 	private final Throwable initException;                  // Any exceptions thrown in the init() method.
 	private final InvocationHandler invocationHandler;      // The invocation handler for this class (if it has one).
+	private final BeanRegistry beanRegistry;                // The bean registry of this class meta (if it has one).
 
 	private static final Boolean BOOLEAN_DEFAULT = false;
 	private static final Character CHARACTER_DEFAULT = (char)0;
@@ -179,6 +180,7 @@ public final class ClassMeta<T> implements Type {
 		BeanMeta _beanMeta = null;
 		PojoSwap _pojoSwap = null;
 		InvocationHandler _invocationHandler = null;
+		BeanRegistry _beanRegistry = null;
 
 		if (c.isPrimitive()) {
 			if (c == Boolean.TYPE)
@@ -462,6 +464,7 @@ public final class ClassMeta<T> implements Type {
 				try {
 					newMeta = new BeanMeta(this, beanContext, beanFilter, null);
 					_notABeanReason = newMeta.notABeanReason;
+					_beanRegistry = newMeta.beanRegistry;  // Always get the bean registry even if it's not a bean.
 				} catch (RuntimeException e) {
 					_notABeanReason = e.getMessage();
 					throw e;
@@ -493,6 +496,10 @@ public final class ClassMeta<T> implements Type {
 		if (_beanMeta != null && beanContext != null && beanContext.useInterfaceProxies && innerClass.isInterface())
 			_invocationHandler = new BeanProxyInvocationHandler<T>(_beanMeta);
 
+		Bean b = c.getAnnotation(Bean.class);
+		if (b != null && b.beanDictionary().length != 0)
+			_beanRegistry = new BeanRegistry(beanContext, null, b.beanDictionary());
+
 		this.cc = _cc;
 		this.isDelegate = _isDelegate;
 		this.fromStringMethod = _fromStringMethod;
@@ -522,6 +529,7 @@ public final class ClassMeta<T> implements Type {
 		this.resolvedDictionaryName = _resolvedDictionaryName;
 		this.serializedClassMeta = _serializedClassMeta;
 		this.invocationHandler = _invocationHandler;
+		this.beanRegistry = _beanRegistry;
 	}
 
 	/**
@@ -566,6 +574,7 @@ public final class ClassMeta<T> implements Type {
 		this.beanFilter = mainType.beanFilter;
 		this.extMeta = mainType.extMeta;
 		this.initException = mainType.initException;
+		this.beanRegistry = mainType.beanRegistry;
 	}
 
 	private ClassMeta<?> findClassMeta(Class<?> c) {
@@ -578,7 +587,7 @@ public final class ClassMeta<T> implements Type {
 
 	private BeanFilter findBeanFilter() {
 		try {
-			List<Bean> ba = ReflectionUtils.findAnnotations(Bean.class, innerClass);
+			Map<Class<?>,Bean> ba = ReflectionUtils.findAnnotationsMap(Bean.class, innerClass);
 			if (! ba.isEmpty())
 				return new AnnotationBeanFilterBuilder(innerClass, ba).build();
 		} catch (Exception e) {
@@ -629,6 +638,19 @@ public final class ClassMeta<T> implements Type {
 	}
 
 	/**
+	 * Returns the bean registry for this class.
+	 * <p>
+	 * This bean registry contains names specified in the {@link Bean#beanDictionary()} annotation defined
+	 * on the class, regardless of whether the class is an actual bean.
+	 * This allows interfaces to define subclasses with type names.
+	 *
+	 * @return The bean registry for this class, or <jk>null</jk> if no bean registry is associated with it.
+	 */
+	public BeanRegistry getBeanRegistry() {
+		return beanRegistry;
+	}
+
+	/**
 	 * Returns the category of this class.
 	 *
 	 * @return The category of this class.
@@ -645,15 +667,6 @@ public final class ClassMeta<T> implements Type {
 	 */
 	public boolean isAssignableFrom(Class<?> c) {
 		return isParentClass(innerClass, c);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this class as subtypes defined through {@link Bean#subTypes}.
-	 *
-	 * @return <jk>true</jk> if this class has subtypes.
-	 */
-	public boolean hasSubTypes() {
-		return beanFilter != null && beanFilter.getSubTypeProperty() != null;
 	}
 
 	/**
@@ -694,7 +707,9 @@ public final class ClassMeta<T> implements Type {
 						s = f;
 				if (s == null)
 					 s = PojoSwap.NULL;
-				childSwapMap.putIfAbsent(normalClass, s);
+				PojoSwap<?,?> s2 = childSwapMap.putIfAbsent(normalClass, s);
+				if (s2 != null)
+					s = s2;
 			}
 			if (s == PojoSwap.NULL)
 				return null;
@@ -719,7 +734,9 @@ public final class ClassMeta<T> implements Type {
 						s = f;
 				if (s == null)
 					 s = PojoSwap.NULL;
-				childUnswapMap.putIfAbsent(swapClass, s);
+				PojoSwap<?,?> s2 = childUnswapMap.putIfAbsent(swapClass, s);
+				if (s2 != null)
+					s = s2;
 			}
 			if (s == PojoSwap.NULL)
 				return null;
@@ -1155,9 +1172,6 @@ public final class ClassMeta<T> implements Type {
 	public boolean canCreateNewBean(Object outer) {
 		if (beanMeta == null)
 			return false;
-		// Beans with transforms with subtype properties are assumed to be constructable.
-		if (beanFilter != null && beanFilter.getSubTypeProperty() != null)
-			return true;
 		if (beanMeta.constructor == null)
 			return false;
 		if (isMemberClass)

@@ -23,7 +23,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.*;
 
-public class RestClientTest {
+public class RestClientTest extends RestTestcase {
 
 	private static String URL = "/testRestClient";
 

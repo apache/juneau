@@ -33,9 +33,6 @@ public class SerializerWriter extends Writer {
 	/** The underlying writer. */
 	protected final Writer out;
 
-	/** Use-indentation flag. */
-	protected final boolean useIndentation;
-
 	/** Use-whitespace flag. */
 	protected final boolean useWhitespace;
 
@@ -53,16 +50,14 @@ public class SerializerWriter extends Writer {
 
 	/**
 	 * @param out The writer being wrapped.
-	 * @param useIndentation If <jk>true</jk>, calling {@link #cr(int)} will create an indentation.
-	 * @param useWhitespace If <jk>true</jk>, calling {@link #s()} will write a space character.
+	 * @param useWhitespace If <jk>true</jk>, calling {@link #cr(int)} will create an indentation and calling {@link #s()} will write a space character.
 	 * @param trimStrings If <jk>true</jk>, strings should be trimmed before they're serialized.
 	 * @param quoteChar The character to write when {@link #q()} is called.
 	 * @param relativeUriBase The base (e.g. <js>https://localhost:9443/contextPath"</js>) for relative URIs (e.g. <js>"my/path"</js>).
 	 * @param absolutePathUriBase The base (e.g. <js>https://localhost:9443"</js>) for relative URIs with absolute paths (e.g. <js>"/contextPath/my/path"</js>).
 	 */
-	public SerializerWriter(Writer out, boolean useIndentation, boolean useWhitespace, boolean trimStrings, char quoteChar, String relativeUriBase, String absolutePathUriBase) {
+	public SerializerWriter(Writer out, boolean useWhitespace, boolean trimStrings, char quoteChar, String relativeUriBase, String absolutePathUriBase) {
 		this.out = out;
-		this.useIndentation = useIndentation;
 		this.useWhitespace = useWhitespace;
 		this.trimStrings = trimStrings;
 		this.quoteChar = quoteChar;
@@ -73,21 +68,21 @@ public class SerializerWriter extends Writer {
 	/**
 	 * Performs a carriage return.
 	 * <p>
-	 * 	Adds a newline and the specified number of tabs (if the {@code useIndentation} setting is enabled) to the output.
+	 * 	Adds a newline and the specified number of tabs (if the {@code useWhitespace} setting is enabled) to the output.
 	 *
 	 * @param depth The indentation.
 	 * @throws IOException If a problem occurred trying to write to the writer.
 	 * @return This object (for method chaining).
 	 */
 	public SerializerWriter cr(int depth) throws IOException {
-		if (useIndentation)
+		if (useWhitespace)
 			return nl().i(depth);
 		return this;
 	}
 
 	/**
-	 * Writes an indent (if the {@code useIndentation} setting is enabled), followed by text,
-	 * 	followed by a newline (if the {@code useIndentation} setting is enabled).
+	 * Writes an indent (if the {@code useWhitespace} setting is enabled), followed by text,
+	 * 	followed by a newline (if the {@code useWhitespace} setting is enabled).
 	 *
 	 * @param indent The number of tabs to indent.
 	 * @param text The text to write.
@@ -99,7 +94,7 @@ public class SerializerWriter extends Writer {
 	}
 
 	/**
-	 * Writes the specified text followed by a newline (if the {@code useIndentation} setting is enabled).
+	 * Writes the specified text followed by a newline (if the {@code useWhitespace} setting is enabled).
 	 *
 	 * @param text The text to write.
 	 * @throws IOException If a problem occurred trying to write to the writer.
@@ -110,7 +105,7 @@ public class SerializerWriter extends Writer {
 	}
 
 	/**
-	 * Writes an indent (if the {@code useIndentation} setting is enabled), followed by text.
+	 * Writes an indent (if the {@code useWhitespace} setting is enabled), followed by text.
 	 *
 	 * @param indent The number of tabs to indent.
 	 * @param text The text to write.
@@ -122,7 +117,7 @@ public class SerializerWriter extends Writer {
 	}
 
 	/**
-	 * Writes an indent (if the {@code useIndentation} setting is enabled), followed by text.
+	 * Writes an indent (if the {@code useWhitespace} setting is enabled), followed by text.
 	 *
 	 * @param indent The number of tabs to indent.
 	 * @param c The character to write.
@@ -134,8 +129,8 @@ public class SerializerWriter extends Writer {
 	}
 
 	/**
-	 * Writes an indent (if the {@code useIndentation} setting is enabled), followed by text,
-	 * 	optionally followed by a newline (if the {@code useIndentation} setting is enabled).
+	 * Writes an indent (if the {@code useWhitespace} setting is enabled), followed by text,
+	 * 	optionally followed by a newline (if the {@code useWhitespace} setting is enabled).
 	 *
 	 * @param indent The number of tabs to indent.
 	 * @param newline If <jk>true</jk>, then a newline is written.
@@ -222,40 +217,40 @@ public class SerializerWriter extends Writer {
 	}
 
 	/**
-	 * Writes an indent to the writer if the {@code useIndentation} setting is enabled.
+	 * Writes an indent to the writer if the {@code useWhitespace} setting is enabled.
 	 *
 	 * @param indent The number of tabs to indent.
 	 * @throws IOException If a problem occurred trying to write to the writer.
 	 * @return This object (for method chaining).
 	 */
 	public SerializerWriter i(int indent) throws IOException {
-		if (useIndentation)
+		if (useWhitespace)
 			for (int i = 0; i < indent; i++)
 				out.write('\t');
 		return this;
 	}
 
 	/**
-	 * Writes a newline to the writer if the {@code useIndentation} setting is enabled.
+	 * Writes a newline to the writer if the {@code useWhitespace} setting is enabled.
 	 *
 	 * @throws IOException If a problem occurred trying to write to the writer.
 	 * @return This object (for method chaining).
 	 */
 	public SerializerWriter nl() throws IOException {
-		if (useIndentation)
+		if (useWhitespace)
 			out.write('\n');
 		return this;
 	}
 
 	/**
-	 * Writes a newline to the writer if the {@code useIndentation} setting is enabled and the boolean flag is true.
+	 * Writes a newline to the writer if the {@code useWhitespace} setting is enabled and the boolean flag is true.
 	 *
 	 * @param b The boolean flag.
 	 * @return This object (for method chaining).
 	 * @throws IOException If a problem occurred trying to write to the writer.
 	 */
 	public SerializerWriter nlIf(boolean b) throws IOException {
-		if (b && useIndentation)
+		if (b && useWhitespace)
 			out.write('\n');
 		return this;
 	}

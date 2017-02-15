@@ -73,49 +73,23 @@ import org.apache.juneau.transform.*;
  * 		UON notation would be as follows:
  * </p>
  * <p class='bcode'>
- * 	$o(
- * 		<xa>id</xa>=$n(<xs>1</xs>),
- * 		<xa>name</xa>=<xs>John+Smith</xs>,
- * 		<xa>uri</xa>=<xs>http://sample/addressBook/person/1</xs>,
- * 		<xa>addressBookUri</xa>=<xs>http://sample/addressBook</xs>,
- * 		<xa>birthDate</xa>=<xs>1946-08-12T00:00:00Z</xs>,
- * 		<xa>otherIds</xa>=<xs>%00</xs>,
- * 		<xa>addresses</xa>=$a(
- * 			$o(
- * 				<xa>uri</xa>=<xs>http://sample/addressBook/address/1</xs>,
- * 				<xa>personUri</xa>=<xs>http://sample/addressBook/person/1</xs>,
- * 				<xa>id</xa>=$n(<xs>1</xs>),
- * 				<xa>street</xa>=<xs>100+Main+Street</xs>,
- * 				<xa>city</xa>=<xs>Anywhereville</xs>,
- * 				<xa>state</xa>=<xs>NY</xs>,
- * 				<xa>zip</xa>=$n(<xs>12345</xs>),
- * 				<xa>isCurrent</xa>=$b(<xs>true</xs>)
- * 			)
- * 		)
- * 	)
- * </p>
- * <p>
- * 	A secondary "lax" syntax is available when the data type of the
- * 		values are already known on the receiving end of the transmission:
- * </p>
- * <p class='bcode'>
  * 	(
- * 		<xa>id</xa>=<xs>1</xs>,
- * 		<xa>name</xa>=<xs>John+Smith</xs>,
- * 		<xa>uri</xa>=<xs>http://sample/addressBook/person/1</xs>,
- * 		<xa>addressBookUri</xa>=<xs>http://sample/addressBook</xs>,
- * 		<xa>birthDate</xa>=<xs>1946-08-12T00:00:00Z</xs>,
- * 		<xa>otherIds</xa>=<xs>%00</xs>,
- * 		<xa>addresses</xa>=(
+ * 		<ua>id</ua>=<un>1</un>,
+ * 		<ua>name</ua>=<us>'John+Smith'</us>,
+ * 		<ua>uri</ua>=<us>http://sample/addressBook/person/1</us>,
+ * 		<ua>addressBookUri</ua>=<us>http://sample/addressBook</us>,
+ * 		<ua>birthDate</ua>=<us>1946-08-12T00:00:00Z</us>,
+ * 		<ua>otherIds</ua>=<uk>null</uk>,
+ * 		<ua>addresses</ua>=@(
  * 			(
- * 				<xa>uri</xa>=<xs>http://sample/addressBook/address/1</xs>,
- * 				<xa>personUri</xa>=<xs>http://sample/addressBook/person/1</xs>,
- * 				<xa>id</xa>=<xs>1</xs>,
- * 				<xa>street</xa>=<xs>100+Main+Street</xs>,
- * 				<xa>city</xa>=<xs>Anywhereville</xs>,
- * 				<xa>state</xa>=<xs>NY</xs>,
- * 				<xa>zip</xa>=<xs>12345</xs>,
- * 				<xa>isCurrent</xa>=<xs>true</xs>
+ * 				<ua>uri</ua>=<us>http://sample/addressBook/address/1</us>,
+ * 				<ua>personUri</ua>=<us>http://sample/addressBook/person/1</us>,
+ * 				<ua>id</ua>=<un>1</un>,
+ * 				<ua>street</ua>=<us>'100+Main+Street'</us>,
+ * 				<ua>city</ua>=<us>Anywhereville</us>,
+ * 				<ua>state</ua>=<us>NY</us>,
+ * 				<ua>zip</ua>=<un>12345</un>,
+ * 				<ua>isCurrent</ua>=<uk>true</uk>
  * 			)
  * 		)
  * 	)
@@ -127,12 +101,8 @@ import org.apache.juneau.transform.*;
  * 	Map m = <jk>new</jk> ObjectMap(<js>"{a:'b',c:1,d:false,e:['f',1,false],g:{h:'i'}}"</js>);
  *
  * 	<jc>// Serialize to value equivalent to JSON.</jc>
- * 	<jc>// Produces "$o(a=b,c=$n(1),d=$b(false),e=$a(f,$n(1),$b(false)),g=$o(h=i))"</jc>
+ * 	<jc>// Produces "(a=b,c=1,d=false,e=@(f,1,false),g=(h=i))"</jc>
  * 	String s = UonSerializer.<jsf>DEFAULT</jsf>.serialize(s);
- *
- * 	<jc>// Serialize to simplified value (for when data type is already known by receiver).</jc>
- * 	<jc>// Produces "(a=b,c=1,d=false,e=(f,1,false),g=(h=i))"</jc>
- * 	String s = UonSerializer.<jsf>DEFAULT_SIMPLE</jsf>.serialize(s);
  *
  * 	<jc>// Serialize a bean</jc>
  * 	<jk>public class</jk> Person {
@@ -152,11 +122,8 @@ import org.apache.juneau.transform.*;
  *
  * 	Person p = <jk>new</jk> Person(<js>"John Doe"</js>, 23, <js>"123 Main St"</js>, <js>"Anywhere"</js>, <js>"NY"</js>, 12345, <jk>false</jk>);
  *
- * 	<jc>// Produces "$o(name=John Doe,age=23,address=$o(street=123 Main St,city=Anywhere,state=NY,zip=$n(12345)),deceased=$b(false))"</jc>
+ * 	<jc>// Produces "(name='John Doe',age=23,address=(street='123 Main St',city=Anywhere,state=NY,zip=12345),deceased=false)"</jc>
  * 	String s = UonSerializer.<jsf>DEFAULT</jsf>.serialize(s);
- *
- * 	<jc>// Produces "(name=John Doe,age=23,address=(street=123 Main St,city=Anywhere,state=NY,zip=12345),deceased=false)"</jc>
- * 	String s = UonSerializer.<jsf>DEFAULT_SIMPLE</jsf>.serialize(s);
  * </p>
  */
 @Produces("text/uon")
@@ -165,28 +132,11 @@ public class UonSerializer extends WriterSerializer {
 	/** Reusable instance of {@link UonSerializer}, all default settings. */
 	public static final UonSerializer DEFAULT = new UonSerializer().lock();
 
-	/** Reusable instance of {@link UonSerializer.Simple}. */
-	public static final UonSerializer DEFAULT_SIMPLE = new Simple().lock();
-
 	/** Reusable instance of {@link UonSerializer.Readable}. */
 	public static final UonSerializer DEFAULT_READABLE = new Readable().lock();
 
 	/** Reusable instance of {@link UonSerializer.Encoding}. */
 	public static final UonSerializer DEFAULT_ENCODING = new Encoding().lock();
-
-	/** Reusable instance of {@link UonSerializer.SimpleEncoding}. */
-	public static final UonSerializer DEFAULT_SIMPLE_ENCODING = new SimpleEncoding().lock();
-
-	/**
-	 * Equivalent to <code><jk>new</jk> UonSerializer().setSimpleMode(<jk>true</jk>);</code>.
-	 */
-	@Produces(value="text/uon-simple",contentType="text/uon")
-	public static class Simple extends UonSerializer {
-		/** Constructor */
-		public Simple() {
-			setSimpleMode(true);
-		}
-	}
 
 	/**
 	 * Equivalent to <code><jk>new</jk> UonSerializer().setUseWhitespace(<jk>true</jk>).setUseIndentation(<jk>true</jk>);</code>.
@@ -195,7 +145,6 @@ public class UonSerializer extends WriterSerializer {
 		/** Constructor */
 		public Readable() {
 			setUseWhitespace(true);
-			setUseIndentation(true);
 		}
 	}
 
@@ -210,19 +159,6 @@ public class UonSerializer extends WriterSerializer {
 	}
 
 	/**
-	 * Equivalent to <code><jk>new</jk> UonSerializer().setSimpleMode(<jk>true</jk>).setEncodeChars(<jk>true</jk>);</code>.
-	 */
-	@Produces(value="text/uon-simple",contentType="text/uon")
-	public static class SimpleEncoding extends UonSerializer {
-		/** Constructor */
-		public SimpleEncoding() {
-			setSimpleMode(true);
-			setEncodeChars(true);
-		}
-	}
-
-
-	/**
 	 * Workhorse method. Determines the type of object, and then calls the
 	 * appropriate type-specific serialization method.
 	 * @param session The context that exist for the duration of a serialize.
@@ -231,25 +167,22 @@ public class UonSerializer extends WriterSerializer {
 	 * @param eType The expected type of the object if this is a bean property.
 	 * @param attrName The bean property name if this is a bean property.  <jk>null</jk> if this isn't a bean property being serialized.
 	 * @param pMeta The bean property metadata.
-	 * @param quoteEmptyStrings <jk>true</jk> if this is the first entry in an array.
-	 * @param isTop If we haven't recursively called this method.
 	 *
 	 * @return The same writer passed in.
 	 * @throws Exception
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected SerializerWriter serializeAnything(UonSerializerSession session, UonWriter out, Object o, ClassMeta<?> eType,
-			String attrName, BeanPropertyMeta pMeta, boolean quoteEmptyStrings, boolean isTop) throws Exception {
+			String attrName, BeanPropertyMeta pMeta) throws Exception {
 
 		if (o == null) {
-			out.appendObject(null, false, false, isTop);
+			out.appendObject(null, false);
 			return out;
 		}
 
 		if (eType == null)
 			eType = object();
 
-		boolean addTypeProperty;		// Add "_type" attribute to element?
 		ClassMeta<?> aType;			// The actual type
 		ClassMeta<?> sType;			// The serialized type
 
@@ -263,7 +196,7 @@ public class UonSerializer extends WriterSerializer {
 		}
 
 		sType = aType.getSerializedClassMeta();
-		addTypeProperty = (session.isAddBeanTypeProperties() && ! eType.equals(aType));
+		String typeName = session.getBeanTypeName(eType, aType, pMeta);
 
 		// Swap if necessary
 		PojoSwap swap = aType.getPojoSwap();
@@ -278,14 +211,18 @@ public class UonSerializer extends WriterSerializer {
 
 		// '\0' characters are considered null.
 		if (o == null || (sType.isChar() && ((Character)o).charValue() == 0))
-			out.appendObject(null, false, false, isTop);
+			out.appendObject(null, false);
+		else if (sType.isBoolean())
+			out.appendBoolean(o);
+		else if (sType.isNumber())
+			out.appendNumber(o);
 		else if (sType.isBean())
-			serializeBeanMap(session, out, session.toBeanMap(o), addTypeProperty);
+			serializeBeanMap(session, out, session.toBeanMap(o), typeName);
 		else if (sType.isUri() || (pMeta != null && pMeta.isUri()))
-			out.appendUri(o, isTop);
+			out.appendUri(o);
 		else if (sType.isMap()) {
 			if (o instanceof BeanMap)
-				serializeBeanMap(session, out, (BeanMap)o, addTypeProperty);
+				serializeBeanMap(session, out, (BeanMap)o, typeName);
 			else
 				serializeMap(session, out, (Map)o, eType);
 		}
@@ -296,7 +233,7 @@ public class UonSerializer extends WriterSerializer {
 			serializeCollection(session, out, toList(sType.getInnerClass(), o), eType);
 		}
 		else {
-			out.appendObject(o, quoteEmptyStrings, false, isTop);
+			out.appendObject(o, false);
 		}
 
 		if (! isRecursion)
@@ -312,7 +249,7 @@ public class UonSerializer extends WriterSerializer {
 		ClassMeta<?> keyType = type.getKeyType(), valueType = type.getValueType();
 
 		int depth = session.getIndent();
-		out.startFlag('o');
+		out.append('(');
 
 		Iterator mapEntries = m.entrySet().iterator();
 
@@ -320,8 +257,8 @@ public class UonSerializer extends WriterSerializer {
 			Map.Entry e = (Map.Entry) mapEntries.next();
 			Object value = e.getValue();
 			Object key = session.generalize(e.getKey(), keyType);
-			out.cr(depth).appendObject(key, session.isUseWhitespace(), false, false).append('=');
-			serializeAnything(session, out, value, valueType, (key == null ? null : session.toString(key)), null, session.isUseWhitespace(), false);
+			out.cr(depth).appendObject(key, false).append('=');
+			serializeAnything(session, out, value, valueType, (key == null ? null : session.toString(key)), null);
 			if (mapEntries.hasNext())
 				out.append(',');
 		}
@@ -333,14 +270,14 @@ public class UonSerializer extends WriterSerializer {
 		return out;
 	}
 
-	private SerializerWriter serializeBeanMap(UonSerializerSession session, UonWriter out, BeanMap<?> m, boolean addTypeProperty) throws Exception {
+	private SerializerWriter serializeBeanMap(UonSerializerSession session, UonWriter out, BeanMap<?> m, String typeName) throws Exception {
 		int depth = session.getIndent();
 
-		out.startFlag('o');
+		out.append('(');
 
 		boolean addComma = false;
 
-		for (BeanPropertyValue p : m.getValues(session.isTrimNulls(), addTypeProperty ? session.createBeanTypeNameProperty(m) : null)) {
+		for (BeanPropertyValue p : m.getValues(session.isTrimNulls(), typeName != null ? session.createBeanTypeNameProperty(m, typeName) : null)) {
 			BeanPropertyMeta pMeta = p.getMeta();
 			ClassMeta<?> cMeta = p.getClassMeta();
 
@@ -356,9 +293,9 @@ public class UonSerializer extends WriterSerializer {
 			if (addComma)
 				out.append(',');
 
-			out.cr(depth).appendObject(key, false, false, false).append('=');
+			out.cr(depth).appendObject(key, false).append('=');
 
-			serializeAnything(session, out, value, cMeta, key, pMeta, false, false);
+			serializeAnything(session, out, value, cMeta, key, pMeta);
 
 			addComma = true;
 		}
@@ -377,14 +314,13 @@ public class UonSerializer extends WriterSerializer {
 
 		c = session.sort(c);
 
-		out.startFlag('a');
+		out.append('@').append('(');
 
 		int depth = session.getIndent();
-		boolean quoteEmptyString = (c.size() == 1 || session.isUseWhitespace());
 
 		for (Iterator i = c.iterator(); i.hasNext();) {
 			out.cr(depth);
-			serializeAnything(session, out, i.next(), elementType, "<iterator>", null, quoteEmptyString, false);
+			serializeAnything(session, out, i.next(), elementType, "<iterator>", null);
 			if (i.hasNext())
 				out.append(',');
 		}
@@ -409,113 +345,13 @@ public class UonSerializer extends WriterSerializer {
 	@Override /* Serializer */
 	protected void doSerialize(SerializerSession session, Object o) throws Exception {
 		UonSerializerSession s = (UonSerializerSession)session;
-		serializeAnything(s, s.getWriter(), o, null, "root", null, false, true);
+		serializeAnything(s, s.getWriter(), o, null, "root", null);
 	}
 
 
 	//--------------------------------------------------------------------------------
 	// Properties
 	//--------------------------------------------------------------------------------
-
-	/**
-	 * <b>Configuration property:</b>  Use simplified output.
-	 * <p>
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"UonSerializer.simpleMode"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
-	 * <p>
-	 * If <jk>true</jk>, type flags will not be prepended to values in most cases.
-	 * <p>
-	 * Use this setting if the data types of the values (e.g. object/array/boolean/number/string)
-	 * 	is known on the receiving end.
-	 * <p>
-	 * It should be noted that the default behavior produces a data structure that can
-	 * 	be losslessly converted into JSON, and any JSON can be losslessly represented
-	 * 	in a URL-encoded value.  However, this strict equivalency does not exist
-	 * 	when simple mode is used.
-	 * <p>
-	 * <table class='styled'>
-	 * 	<tr>
-	 * 		<th>Input (in JSON)</th>
-	 * 		<th>Normal mode output</th>
-	 * 		<th>Simple mode output</th>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td class='code'>{foo:'bar',baz:'bing'}</td>
-	 * 		<td class='code'>$o(foo=bar,baz=bing)</td>
-	 * 		<td class='code'>(foo=bar,baz=bing)</td>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td class='code'>{foo:{bar:'baz'}}</td>
-	 * 		<td class='code'>$o(foo=$o(bar=baz))</td>
-	 * 		<td class='code'>(foo=(bar=baz))</td>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td class='code'>['foo','bar']</td>
-	 * 		<td class='code'>$a(foo,bar)</td>
-	 * 		<td class='code'>(foo,bar)</td>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td class='code'>['foo',['bar','baz']]</td>
-	 * 		<td class='code'>$a(foo,$a(bar,baz))</td>
-	 * 		<td class='code'>(foo,(bar,baz))</td>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td class='code'>true</td>
-	 * 		<td class='code'>$b(true)</td>
-	 * 		<td class='code'>true</td>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td class='code'>123</td>
-	 * 		<td class='code'>$n(123)</td>
-	 * 		<td class='code'>123</td>
-	 * 	</tr>
-	 * </table>
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>UON_simpleMode</jsf>, value)</code>.
-	 * 	<li>This introduces a slight performance penalty.
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @throws LockedException If {@link #lock()} was called on this class.
-	 * @see UonSerializerContext#UON_simpleMode
-	 */
-	public UonSerializer setSimpleMode(boolean value) throws LockedException {
-		return setProperty(UON_simpleMode, value);
-	}
-
-	/**
-	 * <b>Configuration property:</b>  Use whitespace.
-	 * <p>
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"UonSerializer.useWhitespace"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
-	 * <p>
-	 * If <jk>true</jk>, whitespace is added to the output to improve readability.
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>UON_useWhitespace</jsf>, value)</code>.
-	 * 	<li>This introduces a slight performance penalty.
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @throws LockedException If {@link #lock()} was called on this class.
-	 * @see UonSerializerContext#UON_useWhitespace
-	 */
-	public UonSerializer setUseWhitespace(boolean value) throws LockedException {
-		return setProperty(UON_useWhitespace, value);
-	}
 
 	/**
 	 * <b>Configuration property:</b>  Encode non-valid URI characters.
@@ -573,8 +409,8 @@ public class UonSerializer extends WriterSerializer {
 	}
 
 	@Override /* Serializer */
-	public UonSerializer setUseIndentation(boolean value) throws LockedException {
-		super.setUseIndentation(value);
+	public UonSerializer setUseWhitespace(boolean value) throws LockedException {
+		super.setUseWhitespace(value);
 		return this;
 	}
 

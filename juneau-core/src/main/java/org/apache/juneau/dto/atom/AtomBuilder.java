@@ -129,7 +129,7 @@ public class AtomBuilder {
 	 * @return The new element.
 	 */
 	public static final Icon icon(String uri) {
-		return icon(uri);
+		return new Icon(uri);
 	}
 
 	/**
@@ -171,7 +171,7 @@ public class AtomBuilder {
 	 * @return The new element.
 	 */
 	public static final Logo logo(String uri) {
-		return logo(uri);
+		return new Logo(uri);
 	}
 
 	/**
@@ -181,7 +181,7 @@ public class AtomBuilder {
 	 * @return The new element.
 	 */
 	public static final Logo logo(URI uri) {
-		return logo(uri);
+		return new Logo(uri);
 	}
 
 	/**

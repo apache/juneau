@@ -30,7 +30,7 @@ import org.junit.*;
  * Note:  WAS does automatic gzip decompression on http request messages, so we have to invent
  * 	our own 'mycoding' compression.
  */
-public class GzipTest {
+public class GzipTest extends RestTestcase {
 
 	private static boolean debug = false;
 

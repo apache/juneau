@@ -18,7 +18,7 @@ import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.*;
 
-public class ClientVersionTest {
+public class ClientVersionTest extends RestTestcase {
 
 	private static String URL = "/testClientVersion";
 

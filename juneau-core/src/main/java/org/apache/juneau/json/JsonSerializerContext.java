@@ -49,20 +49,6 @@ public final class JsonSerializerContext extends SerializerContext {
 	public static final String JSON_simpleMode = "JsonSerializer.simpleMode";
 
 	/**
-	 * <b>Configuration property:</b>  Use whitespace.
-	 * <p>
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"JsonSerializer.useWhitespace"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
-	 * <p>
-	 * If <jk>true</jk>, whitespace is added to the output to improve readability.
-	 */
-	public static final String JSON_useWhitespace = "JsonSerializer.useWhitespace";
-
-	/**
 	 * <b>Configuration property:</b>  Prefix solidus <js>'/'</js> characters with escapes.
 	 * <p>
 	 * <ul>
@@ -82,7 +68,6 @@ public final class JsonSerializerContext extends SerializerContext {
 
 	final boolean
 		simpleMode,
-		useWhitespace,
 		escapeSolidus;
 
 	/**
@@ -95,7 +80,6 @@ public final class JsonSerializerContext extends SerializerContext {
 	public JsonSerializerContext(ContextFactory cf) {
 		super(cf);
 		simpleMode = cf.getProperty(JSON_simpleMode, boolean.class, false);
-		useWhitespace = cf.getProperty(JSON_useWhitespace, boolean.class, false);
 		escapeSolidus = cf.getProperty(JSON_escapeSolidus, boolean.class, false);
 	}
 
@@ -104,7 +88,6 @@ public final class JsonSerializerContext extends SerializerContext {
 		return super.asMap()
 			.append("JsonSerializerContext", new ObjectMap()
 				.append("simpleMode", simpleMode)
-				.append("useWhitespace", useWhitespace)
 				.append("escapeSolidus", escapeSolidus)
 			);
 	}

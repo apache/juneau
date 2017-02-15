@@ -22,7 +22,7 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.*;
 
-public class AcceptCharsetTest {
+public class AcceptCharsetTest extends RestTestcase {
 
 	boolean debug = false;
 

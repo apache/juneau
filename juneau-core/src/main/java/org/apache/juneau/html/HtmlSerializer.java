@@ -152,7 +152,7 @@ public class HtmlSerializer extends XmlSerializer {
 	public static class SqReadable extends Sq {
 		/** Constructor */
 		public SqReadable() {
-			setUseIndentation(true);
+			setUseWhitespace(true);
 		}
 	}
 
@@ -831,8 +831,8 @@ public class HtmlSerializer extends XmlSerializer {
 	}
 
 	@Override /* Serializer */
-	public HtmlSerializer setUseIndentation(boolean value) throws LockedException {
-		super.setUseIndentation(value);
+	public HtmlSerializer setUseWhitespace(boolean value) throws LockedException {
+		super.setUseWhitespace(value);
 		return this;
 	}
 

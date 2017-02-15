@@ -20,7 +20,7 @@ import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.*;
 
-public class ParsersTest {
+public class ParsersTest extends RestTestcase {
 
 	private static String URL = "/testParsers";
 	private static boolean debug = false;

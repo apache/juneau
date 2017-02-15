@@ -20,7 +20,6 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.MediaType;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.transform.*;
 
@@ -43,7 +42,7 @@ public class SerializerSession extends BeanSession {
 	private final boolean
 		detectRecursions,
 		ignoreRecursions,
-		useIndentation,
+		useWhitespace,
 		addBeanTypeProperties,
 		trimNulls,
 		trimEmptyCollections,
@@ -103,7 +102,7 @@ public class SerializerSession extends BeanSession {
 			initialDepth = ctx.initialDepth;
 			detectRecursions = ctx.detectRecursions;
 			ignoreRecursions = ctx.ignoreRecursions;
-			useIndentation = ctx.useIndentation;
+			useWhitespace = ctx.useWhitespace;
 			addBeanTypeProperties = ctx.addBeanTypeProperties;
 			trimNulls = ctx.trimNulls;
 			trimEmptyCollections = ctx.trimEmptyCollections;
@@ -119,7 +118,7 @@ public class SerializerSession extends BeanSession {
 			initialDepth = op.getInt(SERIALIZER_initialDepth, ctx.initialDepth);
 			detectRecursions = op.getBoolean(SERIALIZER_detectRecursions, ctx.detectRecursions);
 			ignoreRecursions = op.getBoolean(SERIALIZER_ignoreRecursions, ctx.ignoreRecursions);
-			useIndentation = op.getBoolean(SERIALIZER_useIndentation, ctx.useIndentation);
+			useWhitespace = op.getBoolean(SERIALIZER_useWhitespace, ctx.useWhitespace);
 			addBeanTypeProperties = op.getBoolean(SERIALIZER_addBeanTypeProperties, ctx.addBeanTypeProperties);
 			trimNulls = op.getBoolean(SERIALIZER_trimNullProperties, ctx.trimNulls);
 			trimEmptyCollections = op.getBoolean(SERIALIZER_trimEmptyCollections, ctx.trimEmptyCollections);
@@ -273,12 +272,12 @@ public class SerializerSession extends BeanSession {
 	}
 
 	/**
-	 * Returns the {@link SerializerContext#SERIALIZER_useIndentation} setting value for this session.
+	 * Returns the {@link SerializerContext#SERIALIZER_useWhitespace} setting value for this session.
 	 *
-	 * @return The {@link SerializerContext#SERIALIZER_useIndentation} setting value for this session.
+	 * @return The {@link SerializerContext#SERIALIZER_useWhitespace} setting value for this session.
 	 */
-	public final boolean isUseIndentation() {
-		return useIndentation;
+	public final boolean isUseWhitespace() {
+		return useWhitespace;
 	}
 
 	/**
@@ -682,16 +681,63 @@ public class SerializerSession extends BeanSession {
 	/**
 	 * Create a "_type" property that contains the dictionary name of the bean.
 	 *
-	 * @param m
-	 * 	The bean map to create a class property on.
-	 * @return
-	 * 	A new bean property value.
+	 * @param m The bean map to create a class property on.
+	 * @param typeName The type name of the bean.
+	 * @return A new bean property value.
 	 */
-	public BeanPropertyValue createBeanTypeNameProperty(BeanMap<?> m) {
+	public BeanPropertyValue createBeanTypeNameProperty(BeanMap<?> m, String typeName) {
 		BeanMeta<?> bm = m.getMeta();
-		String name = bm.getClassMeta().getDictionaryName();
-		if (name == null)
+		return new BeanPropertyValue(bm.getTypeProperty(), typeName, null);
+	}
+
+	/**
+	 * Resolves the dictionary name for the actual type.
+	 *
+	 * @param eType The expected type of the bean property.
+	 * @param aType The actual type of the bean property.
+	 * @param pMeta The current bean property being serialized.
+	 * @return The bean dictionary name, or <jk>null</jk> if a name could not be found.
+	 */
+	public String getBeanTypeName(ClassMeta<?> eType, ClassMeta<?> aType, BeanPropertyMeta pMeta) {
+		if (eType == aType)
 			return null;
-		return new BeanPropertyValue(bm.getTypeProperty(), name, null);
+
+		if (! addBeanTypeProperties)
+			return null;
+
+		String eTypeTn = eType.getDictionaryName();
+
+		// First see if it's defined on the actual type.
+		String tn = aType.getDictionaryName();
+		if (tn != null && ! tn.equals(eTypeTn)) {
+			return tn;
+		}
+
+		// Then see if it's defined on the expected type.
+		// The expected type might be an interface with mappings for implementation classes.
+		BeanRegistry br = eType.getBeanRegistry();
+		if (br != null) {
+			tn = br.getTypeName(aType);
+			if (tn != null && ! tn.equals(eTypeTn))
+				return tn;
+		}
+
+		// Then look on the bean property.
+		br = pMeta == null ? null : pMeta.getBeanRegistry();
+		if (br != null) {
+			tn = br.getTypeName(aType);
+			if (tn != null && ! tn.equals(eTypeTn))
+				return tn;
+		}
+
+		// Finally look in the session.
+		br = getBeanRegistry();
+		if (br != null) {
+			tn = br.getTypeName(aType);
+			if (tn != null && ! tn.equals(eTypeTn))
+				return tn;
+		}
+
+		return null;
 	}
 }

@@ -19,7 +19,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.*;
 
-public class OptionsWithoutNlsTest {
+public class OptionsWithoutNlsTest extends RestTestcase {
 
 	private static String URL = "/testOptionsWithoutNls";
 

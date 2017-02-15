@@ -40,13 +40,13 @@ public class Common_UonTest {
 
 		s.setTrimNullProperties(false);
 		String r = s.serialize(t1);
-		assertEquals("$o(s1=%00,s2=s2)", r);
+		assertEquals("(s1=null,s2=s2)", r);
 		t2 = pe.parse(r, A.class);
 		assertEqualObjects(t1, t2);
 
 		s.setTrimNullProperties(true);
 		r = s.serialize(t1);
-		assertEquals("$o(s2=s2)", r);
+		assertEquals("(s2=s2)", r);
 		t2 = p.parse(r, A.class);
 		assertEqualObjects(t1, t2);
 	}
@@ -66,19 +66,19 @@ public class Common_UonTest {
 	//====================================================================================================
 	@Test
 	public void testTrimEmptyMaps() throws Exception {
-		UonSerializer s = UonSerializer.DEFAULT_SIMPLE_ENCODING.clone();
+		UonSerializer s = UonSerializer.DEFAULT_ENCODING.clone();
 		B t1 = B.create(), t2;
 		String r;
 
 		s.setTrimEmptyMaps(false);
 		r = s.serialize(t1);
-		assertEquals("(f1=(),f2=(f2a=%00,f2b=(s2=s2)))", r);
+		assertEquals("(f1=(),f2=(f2a=null,f2b=(s2=s2)))", r);
 		t2 = pe.parse(r, B.class);
 		assertEqualObjects(t1, t2);
 
 		s.setTrimEmptyMaps(true);
 		r = s.serialize(t1);
-		assertEquals("(f2=(f2a=%00,f2b=(s2=s2)))", r);
+		assertEquals("(f2=(f2a=null,f2b=(s2=s2)))", r);
 		t2 = pe.parse(r, B.class);
 		assertNull(t2.f1);
 	}
@@ -105,13 +105,13 @@ public class Common_UonTest {
 
 		s.setTrimEmptyCollections(false);
 		r = s.serialize(t1);
-		assertEquals("$o(f1=$a(),f2=$a(%00,$o(s2=s2)))", r);
+		assertEquals("(f1=@(),f2=@(null,(s2=s2)))", r);
 		t2 = pe.parse(r, C.class);
 		assertEqualObjects(t1, t2);
 
 		s.setTrimEmptyCollections(true);
 		r = s.serialize(t1);
-		assertEquals("$o(f2=$a(%00,$o(s2=s2)))", r);
+		assertEquals("(f2=@(null,(s2=s2)))", r);
 		t2 = pe.parse(r, C.class);
 		assertNull(t2.f1);
 	}
@@ -138,13 +138,13 @@ public class Common_UonTest {
 
 		s.setTrimEmptyCollections(false);
 		r = s.serialize(t1);
-		assertEquals("$o(f1=$a(),f2=$a(%00,$o(s2=s2)))", r);
+		assertEquals("(f1=@(),f2=@(null,(s2=s2)))", r);
 		t2 = pe.parse(r, D.class);
 		assertEqualObjects(t1, t2);
 
 		s.setTrimEmptyCollections(true);
 		r = s.serialize(t1);
-		assertEquals("$o(f2=$a(%00,$o(s2=s2)))", r);
+		assertEquals("(f2=@(null,(s2=s2)))", r);
 		t2 = pe.parse(r, D.class);
 		assertNull(t2.f1);
 	}
@@ -166,11 +166,8 @@ public class Common_UonTest {
 	@Test
 	public void testBeanPropertyProperies() throws Exception {
 		UonSerializer s = UonSerializer.DEFAULT;
-		UonSerializer ss = UonSerializer.DEFAULT_SIMPLE;
-		String ue = ss.serialize(new E1());
-		assertEquals("(x1=(f1=1),x2=(f1=1),x3=((f1=1)),x4=((f1=1)),x5=((f1=1)),x6=((f1=1)))", ue);
-		ue = s.serialize(new E1());
-		assertEquals("$o(x1=$o(f1=$n(1)),x2=$o(f1=$n(1)),x3=$a($o(f1=$n(1))),x4=$a($o(f1=$n(1))),x5=$a($o(f1=$n(1))),x6=$a($o(f1=$n(1))))", ue);
+		String ue = s.serialize(new E1());
+		assertEquals("(x1=(f1=1),x2=(f1=1),x3=@((f1=1)),x4=@((f1=1)),x5=@((f1=1)),x6=@((f1=1)))", ue);
 	}
 
 	public static class E1 {
@@ -204,7 +201,7 @@ public class Common_UonTest {
 		t.x1.add(new F());
 		l.add(t);
 		String xml = s.serialize(l);
-		assertEquals("$a($o(x1=$a($o(x2=$n(2))),x2=$n(2)))", xml);
+		assertEquals("@((x1=@((x2=2)),x2=2))", xml);
 	}
 
 	public static class F {
@@ -251,7 +248,7 @@ public class Common_UonTest {
 		s.setRelativeUriBase(null);
 		r = s.serialize(t);
 		expected = ""
-			+"$o("
+			+"("
 			+"f0=f0/x0,"
 			+"f1=f1/x1,"
 			+"f2=/f2/x2,"
@@ -263,10 +260,10 @@ public class Common_UonTest {
 			+"f8=f8/x8,"
 			+"f9=f9/x9,"
 			+"fa=http://www.apache.org/fa/xa#MY_LABEL,"
-			+"fb=http://www.apache.org/fb/xb?label~=MY_LABEL&foo~=bar,"
-			+"fc=http://www.apache.org/fc/xc?foo~=bar&label~=MY_LABEL,"
-			+"fd=http://www.apache.org/fd/xd?label2~=MY_LABEL&foo~=bar,"
-			+"fe=http://www.apache.org/fe/xe?foo~=bar&label2~=MY_LABEL"
+			+"fb='http://www.apache.org/fb/xb?label=MY_LABEL&foo=bar',"
+			+"fc='http://www.apache.org/fc/xc?foo=bar&label=MY_LABEL',"
+			+"fd='http://www.apache.org/fd/xd?label2=MY_LABEL&foo=bar',"
+			+"fe='http://www.apache.org/fe/xe?foo=bar&label2=MY_LABEL'"
 			+")";
 		assertEquals(expected, r);
 
@@ -277,7 +274,7 @@ public class Common_UonTest {
 		s.setRelativeUriBase("/cr");
 		r = s.serialize(t);
 		expected = ""
-			+"$o("
+			+"("
 			+"f0=/cr/f0/x0,"
 			+"f1=/cr/f1/x1,"
 			+"f2=/f2/x2,"
@@ -289,10 +286,10 @@ public class Common_UonTest {
 			+"f8=/cr/f8/x8,"
 			+"f9=/cr/f9/x9,"
 			+"fa=http://www.apache.org/fa/xa#MY_LABEL,"
-			+"fb=http://www.apache.org/fb/xb?label~=MY_LABEL&foo~=bar,"
-			+"fc=http://www.apache.org/fc/xc?foo~=bar&label~=MY_LABEL,"
-			+"fd=http://www.apache.org/fd/xd?label2~=MY_LABEL&foo~=bar,"
-			+"fe=http://www.apache.org/fe/xe?foo~=bar&label2~=MY_LABEL"
+			+"fb='http://www.apache.org/fb/xb?label=MY_LABEL&foo=bar',"
+			+"fc='http://www.apache.org/fc/xc?foo=bar&label=MY_LABEL',"
+			+"fd='http://www.apache.org/fd/xd?label2=MY_LABEL&foo=bar',"
+			+"fe='http://www.apache.org/fe/xe?foo=bar&label2=MY_LABEL'"
 			+")";
 		assertEquals(expected, r);
 
@@ -303,7 +300,7 @@ public class Common_UonTest {
 		s.setRelativeUriBase("/");
 		r = s.serialize(t);
 		expected = ""
-			+"$o("
+			+"("
 			+"f0=/f0/x0,"
 			+"f1=/f1/x1,"
 			+"f2=/f2/x2,"
@@ -315,10 +312,10 @@ public class Common_UonTest {
 			+"f8=/f8/x8,"
 			+"f9=/f9/x9,"
 			+"fa=http://www.apache.org/fa/xa#MY_LABEL,"
-			+"fb=http://www.apache.org/fb/xb?label~=MY_LABEL&foo~=bar,"
-			+"fc=http://www.apache.org/fc/xc?foo~=bar&label~=MY_LABEL,"
-			+"fd=http://www.apache.org/fd/xd?label2~=MY_LABEL&foo~=bar,"
-			+"fe=http://www.apache.org/fe/xe?foo~=bar&label2~=MY_LABEL"
+			+"fb='http://www.apache.org/fb/xb?label=MY_LABEL&foo=bar',"
+			+"fc='http://www.apache.org/fc/xc?foo=bar&label=MY_LABEL',"
+			+"fd='http://www.apache.org/fd/xd?label2=MY_LABEL&foo=bar',"
+			+"fe='http://www.apache.org/fe/xe?foo=bar&label2=MY_LABEL'"
 			+")";
 		assertEquals(expected, r);
 
@@ -327,7 +324,7 @@ public class Common_UonTest {
 		s.setAbsolutePathUriBase("http://foo");
 		r = s.serialize(t);
 		expected = ""
-			+"$o("
+			+"("
 			+"f0=f0/x0,"
 			+"f1=f1/x1,"
 			+"f2=http://foo/f2/x2,"
@@ -339,10 +336,10 @@ public class Common_UonTest {
 			+"f8=f8/x8,"
 			+"f9=f9/x9,"
 			+"fa=http://www.apache.org/fa/xa#MY_LABEL,"
-			+"fb=http://www.apache.org/fb/xb?label~=MY_LABEL&foo~=bar,"
-			+"fc=http://www.apache.org/fc/xc?foo~=bar&label~=MY_LABEL,"
-			+"fd=http://www.apache.org/fd/xd?label2~=MY_LABEL&foo~=bar,"
-			+"fe=http://www.apache.org/fe/xe?foo~=bar&label2~=MY_LABEL"
+			+"fb='http://www.apache.org/fb/xb?label=MY_LABEL&foo=bar',"
+			+"fc='http://www.apache.org/fc/xc?foo=bar&label=MY_LABEL',"
+			+"fd='http://www.apache.org/fd/xd?label2=MY_LABEL&foo=bar',"
+			+"fe='http://www.apache.org/fe/xe?foo=bar&label2=MY_LABEL'"
 			+")";
 		assertEquals(expected, r);
 
@@ -353,7 +350,7 @@ public class Common_UonTest {
 		s.setAbsolutePathUriBase("");  // Same as null.
 		r = s.serialize(t);
 		expected = ""
-			+"$o("
+			+"("
 			+"f0=f0/x0,"
 			+"f1=f1/x1,"
 			+"f2=/f2/x2,"
@@ -365,10 +362,10 @@ public class Common_UonTest {
 			+"f8=f8/x8,"
 			+"f9=f9/x9,"
 			+"fa=http://www.apache.org/fa/xa#MY_LABEL,"
-			+"fb=http://www.apache.org/fb/xb?label~=MY_LABEL&foo~=bar,"
-			+"fc=http://www.apache.org/fc/xc?foo~=bar&label~=MY_LABEL,"
-			+"fd=http://www.apache.org/fd/xd?label2~=MY_LABEL&foo~=bar,"
-			+"fe=http://www.apache.org/fe/xe?foo~=bar&label2~=MY_LABEL"
+			+"fb='http://www.apache.org/fb/xb?label=MY_LABEL&foo=bar',"
+			+"fc='http://www.apache.org/fc/xc?foo=bar&label=MY_LABEL',"
+			+"fd='http://www.apache.org/fd/xd?label2=MY_LABEL&foo=bar',"
+			+"fe='http://www.apache.org/fe/xe?foo=bar&label2=MY_LABEL'"
 			+")";
 		assertEquals(expected, r);
 	}
@@ -380,7 +377,7 @@ public class Common_UonTest {
 	public void testLockedSerializer() throws Exception {
 		UonSerializer s = new UonSerializer().lock();
 		try {
-			s.setSimpleMode(true);
+			s.setUseWhitespace(true);
 			fail("Locked exception not thrown");
 		} catch (LockedException e) {}
 		try {
@@ -430,7 +427,7 @@ public class Common_UonTest {
 		}
 
 		s.setIgnoreRecursions(true);
-		assertEquals("$o(name=foo,r2=$o(name=bar,r3=$o(name=baz)))", s.serialize(r1));
+		assertEquals("(name=foo,r2=(name=bar,r3=(name=baz)))", s.serialize(r1));
 	}
 
 	public static class R1 {

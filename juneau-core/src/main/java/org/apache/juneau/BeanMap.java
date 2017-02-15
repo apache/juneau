@@ -203,15 +203,6 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 			if (meta.ctx.ignoreUnknownBeanProperties)
 				return null;
 
-			// If this bean has subtypes, and we haven't set the subtype yet,
-			// store the property in a temporary cache until the bean can be instantiated.
-			// This eliminates the need for requiring that the sub type attribute be provided first.
-			if (meta.subTypeProperty != null) {
-				if (propertyCache == null)
-					propertyCache = new TreeMap<String,Object>();
-				return propertyCache.put(property, value);
-			}
-
 			if (property.equals(session.getBeanTypePropertyName()))
 				return null;
 

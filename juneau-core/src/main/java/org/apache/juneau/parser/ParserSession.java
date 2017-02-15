@@ -20,6 +20,7 @@ import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link Parser}.
@@ -103,6 +104,8 @@ public class ParserSession extends BeanSession {
 			return (InputStream)input;
 		if (input instanceof byte[])
 			return new ByteArrayInputStream((byte[])input);
+		if (input instanceof String)
+			return new ByteArrayInputStream(StringUtils.fromHex((String)input));
 		if (input instanceof File)
 			try {
 				inputStream = new FileInputStream((File)input);
@@ -266,6 +269,77 @@ public class ParserSession extends BeanSession {
 		if (trimStrings && s != null)
 			return s.trim();
 		return s;
+	}
+
+	/**
+	 * Converts the specified <code>ObjectMap</code> into a bean identified by the <js>"_type"</js>
+	 * property in the map.
+	 *
+	 * @param m The map to convert to a bean.
+	 * @param pMeta The current bean property being parsed.
+	 * @param eType The current expected type being parsed.
+	 * @return The converted bean, or the same map if the <js>"_type"</js> entry wasn't found
+	 * 	or didn't resolve to a bean.
+	 */
+	public final Object cast(ObjectMap m, BeanPropertyMeta pMeta, ClassMeta<?> eType) {
+
+		String btpn = getBeanTypePropertyName();
+
+		Object o = m.get(btpn);
+		if (o == null)
+			return m;
+		String typeName = o.toString();
+
+		ClassMeta<?> cm = getClassMeta(typeName, pMeta, eType);
+
+		if (cm != null) {
+			BeanMap<?> bm = m.getBeanSession().newBeanMap(cm.getInnerClass());
+
+			// Iterate through all the entries in the map and set the individual field values.
+			for (Map.Entry<String,Object> e : m.entrySet()) {
+				String k = e.getKey();
+				Object v = e.getValue();
+				if (! k.equals(btpn)) {
+					// Attempt to recursively cast child maps.
+					if (v instanceof ObjectMap)
+						v = cast((ObjectMap)v, pMeta, eType);
+					bm.put(k, v);
+				}
+			}
+			return bm.getBean();
+		}
+
+		return m;
+	}
+
+	/**
+	 * Give the specified dictionary name, resolve it to a class.
+	 *
+	 * @param typeName The dictionary name to resolve.
+	 * @param pMeta The bean property we're currently parsing.
+	 * @param eType The expected type we're currently parsing.
+	 * @return The resolved class, or <jk>null</jk> if the type name could not be resolved.
+	 */
+	public final ClassMeta<?> getClassMeta(String typeName, BeanPropertyMeta pMeta, ClassMeta<?> eType) {
+		BeanRegistry br = null;
+
+		// Resolve via @BeanProperty(beanDictionary={})
+		if (pMeta != null) {
+			br = pMeta.getBeanRegistry();
+			if (br != null && br.hasName(typeName))
+				return br.getClassMeta(typeName);
+		}
+
+		// Resolve via @Bean(beanDictionary={}) on the expected type where the
+		// expected type is an interface with subclasses.
+		if (eType != null) {
+			br = eType.getBeanRegistry();
+			if (br != null && br.hasName(typeName))
+				return br.getClassMeta(typeName);
+		}
+
+		// Last resort, resolve using the session registry.
+		return getBeanRegistry().getClassMeta(typeName);
 	}
 
 	/**

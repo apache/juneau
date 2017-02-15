@@ -18,7 +18,7 @@ import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.*;
 
-public class StaticFilesTest {
+public class StaticFilesTest extends RestTestcase {
 
 	private static String URL = "/testStaticFiles";
 

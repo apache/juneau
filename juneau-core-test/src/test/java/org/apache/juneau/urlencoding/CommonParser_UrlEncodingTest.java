@@ -36,32 +36,32 @@ public class CommonParser_UrlEncodingTest {
 		Map m = null;
 		String in;
 
-		in = "a=$n(1)";
+		in = "a=1";
 		m = (Map)p.parse(in, Object.class);
 		assertEquals(1, m.get("a"));
 
-		in = "a=$n(1)&b=foo+bar";
-		m = (Map)p.parse(in, Object.class);
-		assertEquals(1, m.get("a"));
-		assertEquals("foo bar", m.get("b"));
-
-		in = "a=$n(1)&b=foo+bar&c=$b(false)";
+		in = "a=1&b='foo+bar'";
 		m = (Map)p.parse(in, Object.class);
 		assertEquals(1, m.get("a"));
 		assertEquals("foo bar", m.get("b"));
-		assertEquals(false, m.get("c"));
 
-		in = "a=$n(1)&b=foo%20bar&c=$b(false)";
+		in = "a=1&b='foo+bar'&c=false";
 		m = (Map)p.parse(in, Object.class);
 		assertEquals(1, m.get("a"));
 		assertEquals("foo bar", m.get("b"));
 		assertEquals(false, m.get("c"));
 
-		ObjectMap jm = (ObjectMap)p.parse("x=$a($o(attribute=value),$o(attribute='value'))", Object.class);
+		in = "a=1&b='foo%20bar'&c=false";
+		m = (Map)p.parse(in, Object.class);
+		assertEquals(1, m.get("a"));
+		assertEquals("foo bar", m.get("b"));
+		assertEquals(false, m.get("c"));
+
+		ObjectMap jm = (ObjectMap)p.parse("x=@((attribute=value),(attribute=~'value~'))", Object.class);
 		assertEquals("value", jm.getObjectList("x").getObjectMap(0).getString("attribute"));
 		assertEquals("'value'", jm.getObjectList("x").getObjectMap(1).getString("attribute"));
 
-		ObjectList jl = (ObjectList)p.parse("_value=$a($o(attribute=value),$o(attribute='value'))", Object.class);
+		ObjectList jl = (ObjectList)p.parse("_value=@((attribute=value),(attribute=~'value~'))", Object.class);
 		assertEquals("value", jl.getObjectMap(0).getString("attribute"));
 		assertEquals("'value'", jl.getObjectMap(1).getString("attribute"));
 
@@ -129,7 +129,7 @@ public class CommonParser_UrlEncodingTest {
 
 		ReaderParser p = UrlEncodingParser.DEFAULT;
 
-		String json = "ints=(1,2,3)&beans=((a=1,b=2))";
+		String json = "ints=@(1,2,3)&beans=@((a=1,b=2))";
 		C t = p.parse(json, C.class);
 		assertEquals(t.getInts().size(), 3);
 		assertEquals(t.getBeans().get(0).b, 2);
@@ -170,7 +170,7 @@ public class CommonParser_UrlEncodingTest {
 
 	@Test
 	public void testCollections() throws Exception {
-		WriterSerializer s = new UrlEncodingSerializer().setSimpleMode(true);
+		WriterSerializer s = new UrlEncodingSerializer();
 		ReaderParser p = new UrlEncodingParser();
 
 		List l = new ObjectList("foo","bar");

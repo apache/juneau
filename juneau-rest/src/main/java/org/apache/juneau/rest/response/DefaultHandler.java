@@ -55,7 +55,7 @@ public class DefaultHandler implements ResponseHandler {
 			try {
 				ObjectMap p = res.getProperties();
 				if (req.isPlainText()) {
-					p.put(SerializerContext.SERIALIZER_useIndentation, true);
+					p.put(SerializerContext.SERIALIZER_useWhitespace, true);
 					res.setContentType("text/plain");
 				}
 				p.append("mediaType", mediaType).append("characterEncoding", res.getCharacterEncoding());

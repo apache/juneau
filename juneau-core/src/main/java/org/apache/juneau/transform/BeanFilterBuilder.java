@@ -51,8 +51,7 @@ public abstract class BeanFilterBuilder {
 	Class<?> interfaceClass, stopClass;
 	boolean sortProperties;
 	PropertyNamer propertyNamer;
-	String subTypeProperty;
-	Map<Class<?>,String> subTypes;
+	List<Class<?>> beanDictionary;
 
 	/**
 	 * Constructor.
@@ -205,87 +204,16 @@ public abstract class BeanFilterBuilder {
 	}
 
 	/**
-	 * Defines a virtual property on a superclass that identifies bean subtype classes.
-	 * <p>
-	 * In the following example, the abstract class has two subclasses that are differentiated
-	 * 	by a property called <code>subType</code>
+	 * Adds a class to this bean's bean dictionary.
 	 *
-	 * <p class='bcode'>
-	 * 	<jc>// Abstract superclass</jc>
-	 * 	<jk>public abstract class</jk> A {
-	 * 		<jk>public</jk> String <jf>f0</jf> = <js>"f0"</js>;
-	 * 	}
-	 *
-	 * 	<jc>// Subclass 1</jc>
-	 * 	<jk>public class</jk> A1 <jk>extends</jk> A {
-	 * 		<jk>public</jk> String <jf>f1</jf>;
-	 * 	}
-	 *
-	 * 	<jc>// Subclass 2</jc>
-	 * 	<jk>public class</jk> A2 <jk>extends</jk> A {
-	 * 		<jk>public</jk> String <jf>f2</jf>;
-	 * 	}
-	 *
-	 * 	<jc>// Filter for defining subtypes</jc>
-	 * 	<jk>public class</jk> AFilter <jk>extends</jk> BeanFilterBuilder {
-	 * 		<jk>public</jk> AFilter() {
-	 * 			super(A.<jk>class</jk>);
-	 * 			setSubTypeProperty(<js>"subType"</js>);
-	 *				addSubType("A1", A1.<jk>class</jk>);
-	 *				addSubType("A2", A2.<jk>class</jk>);
-	 * 		}
-	 * 	}
-	 * </p>
-	 * <p>
-	 * The following shows what happens when serializing a subclassed object to JSON:
-	 * <p class='bcode'>
-	 * 	JsonSerializer s = <jk>new</jk> JsonSerializer().addBeanFilters(AFilter.<jk>class</jk>);
-	 * 	A1 a1 = <jk>new</jk> A1();
-	 * 	a1.<jf>f1</jf> = <js>"f1"</js>;
-	 * 	String r = s.serialize(a1);
-	 * 	<jsm>assertEquals</jsm>(<js>"{subType:'A1',f1:'f1',f0:'f0'}"</js>, r);
-	 *	</p>
-	 * <p>
-	 * The following shows what happens when parsing back into the original object.
-	 * <p class='bcode'>
-	 * 	JsonParser p = <jk>new</jk> JsonParser().addBeanFilters(AFilter.<jk>class</jk>);
-	 * 	A a = p.parse(r, A.<jk>class</jk>);
-	 * 	<jsm>assertTrue</jsm>(a <jk>instanceof</jk> A1);
-	 * </p>
-	 *
-	 * @param subTypeProperty The name of the subtype property for this bean.
-	 * 	Default is <js>"_subtype"</js>.
+	 * @param c The class to add to this bean dictionary.
 	 * @return This object (for method chaining).
 	 */
-	public BeanFilterBuilder setSubTypeProperty(String subTypeProperty) {
-		this.subTypeProperty = subTypeProperty;
-		return this;
-	}
-
-	/**
-	 * Specifies the subtype mappings for this bean class.
-	 * See {@link #setSubTypeProperty(String)}.
-	 *
-	 * @param subTypes The mappings of subtype classes to subtype names.
-	 * @return This object (for method chaining).
-	 */
-	public BeanFilterBuilder setSubTypes(Map<Class<?>,String> subTypes) {
-		this.subTypes = subTypes;
-		return this;
-	}
-
-	/**
-	 * Adds an entry to the subtype mappings for this bean class.
-	 * See {@link #setSubTypeProperty(String)}.
-	 *
-	 * @param name The subtype name.
-	 * @param c The subtype class.
-	 * @return This object (for method chaining).
-	 */
-	public BeanFilterBuilder addSubType(String name, Class<?> c) {
-		if (subTypes == null)
-			subTypes = new LinkedHashMap<Class<?>,String>();
-		subTypes.put(c, name);
+	public BeanFilterBuilder addToBeanDictionary(Class<?>...c) {
+		if (beanDictionary == null)
+			beanDictionary = new ArrayList<Class<?>>(Arrays.asList(c));
+		else for (Class<?> cc : c)
+			beanDictionary.add(cc);
 		return this;
 	}
 

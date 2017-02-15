@@ -36,7 +36,7 @@ public class BeanFilterTest {
 		a1.fb = new B2();
 		((B2)a1.fb).f2 = "f2";
 		String r = s.serialize(a1);
-		assertEquals("{subType:'A1',f0:'f0',fb:{subType:'B2',f0b:'f0b',f2:'f2'},f1:'f1'}", r);
+		assertEquals("{_type:'A1',f0:'f0',fb:{_type:'B2',f0b:'f0b',f2:'f2'},f1:'f1'}", r);
 
 		A a = p.parse(r, A.class);
 		assertTrue(a instanceof A1);
@@ -45,7 +45,7 @@ public class BeanFilterTest {
 		assertEquals("f2", ((B2)a.fb).f2);
 
 		// Try out-of-order creation.
-		r = "{f0:'f0',f1:'f1',subType:'A1',fb:{f0b:'f0b',f2:'f2',subType:'B2'}}";
+		r = "{f0:'f0',f1:'f1',_type:'A1',fb:{f0b:'f0b',f2:'f2',_type:'B2'}}";
 		a = p.parse(r, A.class);
 		assertTrue(a instanceof A1);
 		assertTrue(a.fb instanceof B2);
@@ -53,10 +53,7 @@ public class BeanFilterTest {
 		assertEquals("f2", ((B2)a.fb).f2);
 	}
 
-	@Bean(
-		subTypeProperty="subType",
-		subTypes={A1.class,A2.class}
-	)
+	@Bean(beanDictionary={A1.class, A2.class})
 	public static abstract class A {
 		public String f0 = "f0";
 		public B fb;
@@ -72,10 +69,7 @@ public class BeanFilterTest {
 		public String f2;
 	}
 
-	@Bean(
-		subTypeProperty="subType",
-		subTypes={B1.class,B2.class}
-	)
+	@Bean(beanDictionary={B1.class,B2.class})
 	public static abstract class B {
 		public String f0b = "f0b";
 	}

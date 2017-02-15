@@ -18,7 +18,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.*;
 
-public class InheritanceTest {
+public class InheritanceTest extends RestTestcase {
 
 	private static RestClient client;
 

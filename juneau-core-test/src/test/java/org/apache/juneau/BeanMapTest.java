@@ -652,13 +652,13 @@ public class BeanMapTest {
 		BeanMap m = session.toBeanMap(t7);
 		m.put("enum1", "ONE");
 		m.put("enum2", "TWO");
-		assertEquals("{enum1:'ONE',enum2:'TWO'}", serializer.serialize(t7));
+		assertEquals("{_type:'H',enum1:'ONE',enum2:'TWO'}", serializer.serialize(t7));
 		assertEquals(HEnum.ONE, t7.enum1);
 		assertEquals(HEnum.TWO, t7.getEnum2());
 
 		// Use BeanContext to create bean instance.
 		m = BeanContext.DEFAULT.createSession().newBeanMap(H.class).load("{enum1:'TWO',enum2:'THREE'}");
-		assertEquals("{enum1:'TWO',enum2:'THREE'}", serializer.serialize(m.getBean()));
+		assertEquals("{_type:'H',enum1:'TWO',enum2:'THREE'}", serializer.serialize(m.getBean()));
 		t7 = (H)m.getBean();
 		assertEquals(HEnum.TWO, t7.enum1);
 		assertEquals(HEnum.THREE, t7.getEnum2());
@@ -666,7 +666,7 @@ public class BeanMapTest {
 		// Create instance directly from JSON.
 		JsonParser p = new JsonParser().addToBeanDictionary(H.class);
 		t7 = (H)p.parse("{_type:'H',enum1:'THREE',enum2:'ONE'}", Object.class);
-		assertEquals("{enum1:'THREE',enum2:'ONE'}", serializer.serialize(t7));
+		assertEquals("{_type:'H',enum1:'THREE',enum2:'ONE'}", serializer.serialize(t7));
 		assertEquals(HEnum.THREE, t7.enum1);
 		assertEquals(HEnum.ONE, t7.getEnum2());
 	}

@@ -413,30 +413,29 @@ public abstract class Serializer extends CoreApi {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  Use indentation.
+	 * <b>Configuration property:</b>  Use whitespace.
 	 * <p>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Serializer.useIndentation"</js>
+	 * 	<li><b>Name:</b> <js>"Serializer.useWhitepace"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
-	 * If <jk>true</jk>, newlines and indentation is added to the output to improve readability.
+	 * If <jk>true</jk>, newlines and indentation and spaces are added to the output to improve readability.
 	 * <p>
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>SERIALIZER_useIndentation</jsf>, value)</code>.
-	 * 	<li>Checking for recursion can cause a small performance penalty.
+	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>SERIALIZER_useWhitespace</jsf>, value)</code>.
 	 * </ul>
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 * @throws LockedException If {@link #lock()} was called on this class.
-	 * @see SerializerContext#SERIALIZER_useIndentation
+	 * @see SerializerContext#SERIALIZER_useWhitespace
 	 */
-	public Serializer setUseIndentation(boolean value) throws LockedException {
-		return setProperty(SERIALIZER_useIndentation, value);
+	public Serializer setUseWhitespace(boolean value) throws LockedException {
+		return setProperty(SERIALIZER_useWhitespace, value);
 	}
 
 	/**

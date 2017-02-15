@@ -51,7 +51,7 @@ import org.apache.juneau.*;
  * 	g.append(JsonSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>);
  *
  * 	<jc>// Change settings for all serializers in the group and lock it.</jc>
- * 	g.setProperty(SerializerContext.<jsf>SERIALIZER_useIndentation</jsf>, <jk>true</jk>)
+ * 	g.setProperty(SerializerContext.<jsf>SERIALIZER_useWhitespace</jsf>, <jk>true</jk>)
  * 		.addPojoSwaps(CalendarSwap.ISO8601DT.<jk>class</jk>)
  * 		.lock();
  *
@@ -79,7 +79,7 @@ public final class SerializerGroup extends Lockable {
 	 */
 	public SerializerGroup append(Serializer s) {
 		checkLock();
-		synchronized(serializers) {
+		synchronized(this) {
 			cache.clear();
 			serializers.add(0, s);
 		}
@@ -111,7 +111,7 @@ public final class SerializerGroup extends Lockable {
 			append(s.newInstance());
 		} catch (NoClassDefFoundError e) {
 			// Ignore if dependent library not found (e.g. Jena).
-			System.err.println(e);
+			System.err.println(e); // NOT DEBUG
 		}
 		return this;
 	}
@@ -303,17 +303,17 @@ public final class SerializerGroup extends Lockable {
 	}
 
 	/**
-	 * Calls {@link Serializer#setUseIndentation(boolean)} on all serializers in this group.
+	 * Calls {@link Serializer#setUseWhitespace(boolean)} on all serializers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 * @throws LockedException If {@link #lock()} was called on this class.
-	 * @see SerializerContext#SERIALIZER_useIndentation
+	 * @see SerializerContext#SERIALIZER_useWhitespace
 	 */
-	public SerializerGroup setUseIndentation(boolean value) throws LockedException {
+	public SerializerGroup setUseWhitespace(boolean value) throws LockedException {
 		checkLock();
 		for (Serializer s : serializers)
-			s.setUseIndentation(value);
+			s.setUseWhitespace(value);
 		return this;
 	}
 

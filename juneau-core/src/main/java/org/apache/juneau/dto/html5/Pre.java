@@ -31,7 +31,7 @@ public class Pre extends HtmlElementMixed {
 	//--------------------------------------------------------------------------------
 
 	@Xml(format=MIXED_PWS)
-	@BeanProperty(beanDictionary=HtmlBeanDictionary.class)
+	@BeanProperty(beanDictionary=HtmlBeanDictionary.class, name="c")
 	@Override
 	public LinkedList<Object> getChildren() {
 		return super.getChildren();

@@ -28,7 +28,7 @@ import org.apache.juneau.serializer.*;
  */
 public class UonSerializerSession extends SerializerSession {
 
-	private final boolean simpleMode, useWhitespace, encodeChars;
+	private final boolean encodeChars;
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -48,12 +48,8 @@ public class UonSerializerSession extends SerializerSession {
 	protected UonSerializerSession(UonSerializerContext ctx, ObjectMap op, Object output, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType) {
 		super(ctx, op, output, javaMethod, locale, timeZone, mediaType);
 		if (op == null || op.isEmpty()) {
-			simpleMode = ctx.simpleMode;
-			useWhitespace = ctx.useWhitespace;
 			encodeChars = ctx.encodeChars;
 		} else {
-			simpleMode = op.getBoolean(UON_simpleMode, ctx.simpleMode);
-			useWhitespace = op.getBoolean(UON_useWhitespace, ctx.useWhitespace);
 			encodeChars = op.getBoolean(UON_encodeChars, ctx.encodeChars);
 		}
 	}
@@ -63,25 +59,7 @@ public class UonSerializerSession extends SerializerSession {
 		Object output = getOutput();
 		if (output instanceof UonWriter)
 			return (UonWriter)output;
-		return new UonWriter(this, super.getWriter(), useWhitespace, isSimpleMode(), isEncodeChars(), isTrimStrings(), getRelativeUriBase(), getAbsolutePathUriBase());
-	}
-
-	/**
-	 * Returns the {@link UonSerializerContext#UON_useWhitespace} setting value for this session.
-	 *
-	 * @return The {@link UonSerializerContext#UON_useWhitespace} setting value for this session.
-	 */
-	public final boolean isUseWhitespace() {
-		return useWhitespace;
-	}
-
-	/**
-	 * Returns the {@link UonSerializerContext#UON_simpleMode} setting value for this session.
-	 *
-	 * @return The {@link UonSerializerContext#UON_simpleMode} setting value for this session.
-	 */
-	public final boolean isSimpleMode() {
-		return simpleMode;
+		return new UonWriter(this, super.getWriter(), isUseWhitespace(), isEncodeChars(), isTrimStrings(), getRelativeUriBase(), getAbsolutePathUriBase());
 	}
 
 	/**

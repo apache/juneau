@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              *
+// * with the License.  You may obtain a copy of the License at                                                              * 
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -12,32 +12,46 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest;
 
-import org.junit.*;
-import org.junit.runner.*;
-import org.junit.runners.*;
-import org.junit.runners.Suite.*;
+import java.util.*;
+
+import org.apache.juneau.microservice.*;
 
 /**
- * Runs all the testcases in this project.
- * Starts a REST service running org.apache.juneau.examples.rest.RootResources on port 10000.
- * Stops the REST service after running the tests.
+ * Utility class for starting up the examples microservice.
+ * @author james.bognar
  */
-@RunWith(Suite.class)
-@SuiteClasses({
-	AddressBookResourceTest.class,
-	RootResourcesTest.class,
-	SampleRemoteableServicesResourceTest.class,
-	TestMultiPartFormPostsTest.class
-})
-public class _TestSuite {
+public class TestMicroservice {
+	static Microservice microservice;
 
-	@BeforeClass
-	public static void setUp() {
-		TestMicroservice.startMicroservice();
+	/**
+	 * Starts the microservice.
+	 * @return <jk>true</jk> if the service started, <jk>false</jk> if it's already started.
+	 * 	If this returns <jk>false</jk> then don't call stopMicroservice()!.
+	 */
+	public static boolean startMicroservice() {
+		if (microservice != null)
+			return false;
+		try {
+			Locale.setDefault(Locale.US);
+			microservice = new RestMicroservice().setConfig("examples.cfg", false);
+			microservice.start();
+			return true;
+		} catch (Throwable e) {
+			// Probably already started.
+			System.err.println(e); // NOT DEBUG
+			return false;
+		}
 	}
 
-	@AfterClass
-	public static void tearDown() {
-		TestMicroservice.stopMicroservice();
+	/**
+	 * Stops the microservice.
+	 */
+	public static void stopMicroservice() {
+		try {
+			microservice.stop();
+			microservice = null;
+		} catch (Exception e) {
+			System.err.println(e); // NOT DEBUG
+		}
 	}
 }

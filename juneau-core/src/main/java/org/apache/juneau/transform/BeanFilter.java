@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transform;
 
-import java.util.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
@@ -31,12 +29,11 @@ public class BeanFilter {
 
 	private final Class<?> beanClass;
 	private final String[] properties, excludeProperties;
-	private final Map<Class<?>, String> subTypes;
-	private final String subTypeAttr;
 	private final PropertyNamer propertyNamer;
 	private final Class<?> interfaceClass, stopClass;
 	private final boolean sortProperties;
 	private final String typeName;
+	private final Class<?>[] beanDictionary;
 
 	/**
 	 * Constructor.
@@ -50,8 +47,7 @@ public class BeanFilter {
 		this.stopClass = builder.stopClass;
 		this.sortProperties = builder.sortProperties;
 		this.propertyNamer = builder.propertyNamer;
-		this.subTypeAttr = builder.subTypeProperty;
-		this.subTypes = builder.subTypes == null ? null : Collections.unmodifiableMap(builder.subTypes);
+		this.beanDictionary = builder.beanDictionary == null ? null : builder.beanDictionary.toArray(new Class<?>[builder.beanDictionary.size()]);
 	}
 
 	/**
@@ -77,6 +73,15 @@ public class BeanFilter {
 	 */
 	public String[] getProperties() {
 		return properties;
+	}
+
+	/**
+	 * Returns the bean dictionary defined on this bean.
+	 *
+	 * @return The bean dictionary defined on this bean, or <jk>null</jk> if no bean dictionary is defined.
+	 */
+	public Class<?>[] getBeanDictionary() {
+		return beanDictionary;
 	}
 
 	/**
@@ -107,24 +112,6 @@ public class BeanFilter {
 	 */
 	public PropertyNamer getPropertyNamer() {
 		return propertyNamer;
-	}
-
-	/**
-	 * Returns the name of the sub type property associated with the bean class.
-	 *
-	 * @return The sub type property name, or <jk>null</jk> if bean has no subtypes defined.
-	 */
-	public String getSubTypeProperty() {
-		return subTypeAttr;
-	}
-
-	/**
-	 * Returns the subtypes associated with the bean class.
-	 *
-	 * @return The set of sub types associated with this bean class, or <jk>null</jk> if bean has no subtypes defined.
-	 */
-	public Map<Class<?>, String> getSubTypes() {
-		return subTypes;
 	}
 
 	/**

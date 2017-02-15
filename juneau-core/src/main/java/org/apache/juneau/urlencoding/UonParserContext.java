@@ -48,24 +48,8 @@ public class UonParserContext extends ParserContext {
 	 */
 	public static final String UON_decodeChars = "UonParser.decodeChars";
 
-	/**
-	 * <b>Configuration property:</b> Whitespace aware.
-	 * <p>
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"UonParser.whitespaceAware"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
-	 * <p>
-	 * Expect input to contain readable whitespace characters from using the {@link UonSerializerContext#UON_useWhitespace} setting.
-	 */
-	public static final String UON_whitespaceAware = "UonParser.whitespaceAware";
-
-
 	final boolean
-		decodeChars,
-		whitespaceAware;
+		decodeChars;
 
 	/**
 	 * Constructor.
@@ -77,7 +61,6 @@ public class UonParserContext extends ParserContext {
 	public UonParserContext(ContextFactory cf) {
 		super(cf);
 		this.decodeChars = cf.getProperty(UON_decodeChars, boolean.class, false);
-		this.whitespaceAware = cf.getProperty(UON_whitespaceAware, boolean.class, false);
 	}
 
 	@Override /* Context */
@@ -85,7 +68,6 @@ public class UonParserContext extends ParserContext {
 		return super.asMap()
 			.append("UonParserContext", new ObjectMap()
 				.append("decodeChars", decodeChars)
-				.append("whitespaceAware", whitespaceAware)
 			);
 	}
 }

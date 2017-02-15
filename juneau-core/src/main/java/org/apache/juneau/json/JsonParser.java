@@ -101,7 +101,6 @@ public final class JsonParser extends ReaderParser {
 		ClassMeta<?> sType = eType.getSerializedClassMeta();
 		session.setCurrentClass(sType);
 		String wrapperAttr = sType.getExtendedMeta(JsonClassMeta.class).getWrapperAttr();
-		BeanRegistry breg = pMeta == null ? session.getBeanRegistry() : pMeta.getBeanRegistry();
 
 		Object o = null;
 
@@ -124,7 +123,7 @@ public final class JsonParser extends ReaderParser {
 			if (c == '{') {
 				ObjectMap m2 = new ObjectMap(session);
 				parseIntoMap2(session, r, m2, string(), object(), pMeta);
-				o = breg.cast(m2);
+				o = session.cast(m2, pMeta, eType);
 			} else if (c == '[') {
 				o = parseIntoCollection2(session, r, new ObjectList(session), object(), pMeta);
 			} else if (c == '\'' || c == '"') {
@@ -155,7 +154,7 @@ public final class JsonParser extends ReaderParser {
 			if (c == '{') {
 				ObjectMap m = new ObjectMap(session);
 				parseIntoMap2(session, r, m, string(), object(), pMeta);
-				o = breg.cast(m);
+				o = session.cast(m, pMeta, eType);
 			} else {
 				Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance() : new ObjectList(session));
 				o = parseIntoCollection2(session, r, l, sType.getElementType(), pMeta);
@@ -171,7 +170,7 @@ public final class JsonParser extends ReaderParser {
 			if (c == '{') {
 				ObjectMap m = new ObjectMap(session);
 				parseIntoMap2(session, r, m, string(), object(), pMeta);
-				o = breg.cast(m);
+				o = session.cast(m, pMeta, eType);
 			} else {
 				ArrayList l = (ArrayList)parseIntoCollection2(session, r, new ArrayList(), sType.getElementType(), pMeta);
 				o = session.toArray(sType, l);
@@ -180,7 +179,7 @@ public final class JsonParser extends ReaderParser {
 			Map m = new ObjectMap(session);
 			parseIntoMap2(session, r, m, sType.getKeyType(), sType.getValueType(), pMeta);
 			if (m.containsKey(session.getBeanTypePropertyName()))
-				o = breg.cast((ObjectMap)m);
+				o = session.cast((ObjectMap)m, pMeta, eType);
 			else
 				throw new ParseException(session, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.getInnerClass().getName(), sType.getNotABeanReason());
 		} else if (sType.canCreateNewInstanceFromString(outer) && ! session.isStrict()) {
@@ -222,7 +221,7 @@ public final class JsonParser extends ReaderParser {
 			// Need to weed out octal and hexadecimal formats:  0123,-0123,0x123,-0x123.
 			// Don't weed out 0 or -0.
 			boolean isNegative = false;
-			char c = (s.length() == 0 ? 'x' : s.charAt(0));
+			char c = s.charAt(0);
 			if (c == '-') {
 				isNegative = true;
 				c = (s.length() == 1 ? 'x' : s.charAt(1));
@@ -505,13 +504,8 @@ public final class JsonParser extends ReaderParser {
 						BeanPropertyMeta pMeta = m.getPropertyMeta(currAttr);
 						session.setCurrentProperty(pMeta);
 						if (pMeta == null) {
-							if (m.getMeta().isSubTyped()) {
-								Object value = parseAnything(session, object(), r.unread(), m.getBean(false), null);
-								m.put(currAttr, value);
-							} else {
-								onUnknownProperty(session, currAttr, m, currAttrLine, currAttrCol);
-								parseAnything(session, object(), r.unread(), m.getBean(false), null); // Read content anyway to ignore it
-							}
+							onUnknownProperty(session, currAttr, m, currAttrLine, currAttrCol);
+							parseAnything(session, object(), r.unread(), m.getBean(false), null); // Read content anyway to ignore it
 						} else {
 							ClassMeta<?> cm = pMeta.getClassMeta();
 							Object value = parseAnything(session, cm, r.unread(), m.getBean(false), pMeta);
