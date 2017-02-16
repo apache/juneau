@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
+import static org.apache.juneau.msgpack.MsgPackSerializerContext.*;
 import static org.apache.juneau.xml.NamespaceFactory.*;
 import static org.apache.juneau.xml.XmlSerializerContext.*;
 
@@ -34,7 +35,8 @@ public class XmlSerializerSession extends SerializerSession {
 	private final boolean
 		autoDetectNamespaces,
 		enableNamespaces,
-		addNamespaceUrlsToRoot;
+		addNamespaceUrlsToRoot,
+		addBeanTypeProperties;
 
 	private Namespace
 		defaultNamespace;
@@ -67,6 +69,7 @@ public class XmlSerializerSession extends SerializerSession {
 			addNamespaces(ctx.namespaces);
 			defaultNamespace = findDefaultNamespace(ctx.defaultNamespace);
 			xsNamespace = ctx.xsNamespace;
+			addBeanTypeProperties = ctx.addBeanTypeProperties;
 		} else {
 			enableNamespaces = op.getBoolean(XML_enableNamespaces, ctx.enableNamespaces);
 			autoDetectNamespaces = op.getBoolean(XML_autoDetectNamespaces, ctx.autoDetectNamespaces);
@@ -74,6 +77,7 @@ public class XmlSerializerSession extends SerializerSession {
 			namespaces = (op.containsKey(XML_namespaces) ? parseNamespaces(op.get(XML_namespaces)) : ctx.namespaces);
 			defaultNamespace = findDefaultNamespace(op.containsKey(XML_defaultNamespace) ? op.getString(XML_defaultNamespace) : ctx.defaultNamespace);
 			xsNamespace = (op.containsKey(XML_xsNamespace) ? parseNamespace(op.get(XML_xsNamespace)) : ctx.xsNamespace);
+			addBeanTypeProperties = op.getBoolean(MSGPACK_addBeanTypeProperties, ctx.addBeanTypeProperties);
 		}
 	}
 
@@ -145,6 +149,16 @@ public class XmlSerializerSession extends SerializerSession {
 	 */
 	public final boolean isAddNamespaceUrlsToRoot() {
 		return addNamespaceUrlsToRoot;
+	}
+
+	/**
+	 * Returns the {@link XmlSerializerContext#XML_addBeanTypeProperties} setting value for this session.
+	 *
+	 * @return The {@link XmlSerializerContext#XML_addBeanTypeProperties} setting value for this session.
+	 */
+	@Override /* SerializerSession */
+	public boolean isAddBeanTypeProperties() {
+		return addBeanTypeProperties;
 	}
 
 	/**

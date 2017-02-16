@@ -138,11 +138,31 @@ public class XmlSerializerContext extends SerializerContext {
 	 */
 	public static final String XML_namespaces = "XmlSerializer.namespaces.list";
 
+	/**
+	 * <b>Configuration property:</b>  Add <js>"_type"</js> properties when needed.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"XmlSerializer.addBeanTypeProperties"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred through reflection.
+	 * This is used to recreate the correct objects during parsing if the object types cannot be inferred.
+	 * For example, when serializing a {@code Map<String,Object>} field, where the bean class cannot be determined from the value type.
+	 * <p>
+	 * When present, this value overrides the {@link SerializerContext#SERIALIZER_addBeanTypeProperties} setting and is
+	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
+	 */
+	public static final String XML_addBeanTypeProperties = "XmlSerializer.addBeanTypeProperties";
+
 
 	final boolean
 		autoDetectNamespaces,
 		enableNamespaces,
-		addNamespaceUrlsToRoot;
+		addNamespaceUrlsToRoot,
+		addBeanTypeProperties;
 
 	final String defaultNamespace;
 
@@ -166,6 +186,7 @@ public class XmlSerializerContext extends SerializerContext {
 		defaultNamespace = cf.getProperty(XML_defaultNamespace, String.class, "{juneau:'http://www.apache.org/2013/Juneau'}");
 		xsNamespace = cf.getProperty(XML_xsNamespace, Namespace.class, new Namespace("xs", "http://www.w3.org/2001/XMLSchema"));
 		namespaces = cf.getProperty(XML_namespaces, Namespace[].class, new Namespace[0]);
+		addBeanTypeProperties = cf.getProperty(XML_addBeanTypeProperties, boolean.class, cf.getProperty(SERIALIZER_addBeanTypeProperties, boolean.class, true));
 	}
 
 	@Override /* Context */
@@ -178,6 +199,7 @@ public class XmlSerializerContext extends SerializerContext {
 				.append("defaultNamespace", defaultNamespace)
 				.append("xsNamespace", xsNamespace)
 				.append("namespaces", namespaces)
+				.append("addBeanTypeProperties", addBeanTypeProperties)
 			);
 	}
 }

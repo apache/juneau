@@ -21,6 +21,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.msgpack.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.*;
 
@@ -35,7 +36,13 @@ public final class RdfSerializerSession extends SerializerSession {
 
 	private final String rdfLanguage;
 	private final Namespace juneauNs, juneauBpNs;
-	private final boolean addLiteralTypes, addRootProperty, useXmlNamespaces, looseCollections, autoDetectNamespaces;
+	private final boolean 
+		addLiteralTypes, 
+		addRootProperty, 
+		useXmlNamespaces, 
+		looseCollections, 
+		autoDetectNamespaces,
+		addBeanTypeProperties;
 	private final Property pRoot, pValue, pType;
 	private final Model model;
 	private final RDFWriter writer;
@@ -74,6 +81,7 @@ public final class RdfSerializerSession extends SerializerSession {
 			this.useXmlNamespaces = ctx.useXmlNamespaces;
 			this.autoDetectNamespaces = ctx.autoDetectNamespaces;
 			this.namespaces = ctx.namespaces;
+			addBeanTypeProperties = ctx.addBeanTypeProperties;
 		} else {
 			this.rdfLanguage = op.getString(RDF_language, ctx.rdfLanguage);
 			this.juneauNs = (op.containsKey(RDF_juneauNs) ? NamespaceFactory.parseNamespace(op.get(RDF_juneauNs)) : ctx.juneauNs);
@@ -90,6 +98,7 @@ public final class RdfSerializerSession extends SerializerSession {
 			this.useXmlNamespaces = op.getBoolean(RDF_useXmlNamespaces, ctx.useXmlNamespaces);
 			this.autoDetectNamespaces = op.getBoolean(RDF_autoDetectNamespaces, ctx.autoDetectNamespaces);
 			this.namespaces = op.get(Namespace[].class, RDF_namespaces, ctx.namespaces);
+			addBeanTypeProperties = op.getBoolean(RDF_addBeanTypeProperties, ctx.addBeanTypeProperties);
 		}
 		this.model = ModelFactory.createDefaultModel();
 		addModelPrefix(juneauNs);
@@ -199,6 +208,16 @@ public final class RdfSerializerSession extends SerializerSession {
 	 */
 	public final boolean isAutoDetectNamespaces() {
 		return autoDetectNamespaces;
+	}
+
+	/**
+	 * Returns the {@link MsgPackSerializerContext#MSGPACK_addBeanTypeProperties} setting value for this session.
+	 *
+	 * @return The {@link MsgPackSerializerContext#MSGPACK_addBeanTypeProperties} setting value for this session.
+	 */
+	@Override /* SerializerSession */
+	public final boolean isAddBeanTypeProperties() {
+		return addBeanTypeProperties;
 	}
 
 	/**

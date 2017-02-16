@@ -103,8 +103,33 @@ public final class RdfSerializerContext extends SerializerContext implements Rdf
 	 */
 	public static final String RDF_namespaces = "RdfSerializer.namespaces.list";
 
+	/**
+	 * <b>Configuration property:</b>  Add <js>"_type"</js> properties when needed.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"RdfSerializer.addBeanTypeProperties"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred through reflection.
+	 * This is used to recreate the correct objects during parsing if the object types cannot be inferred.
+	 * For example, when serializing a {@code Map<String,Object>} field, where the bean class cannot be determined from the value type.
+	 * <p>
+	 * When present, this value overrides the {@link SerializerContext#SERIALIZER_addBeanTypeProperties} setting and is
+	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
+	 */
+	public static final String RDF_addBeanTypeProperties = "RdfSerializer.addBeanTypeProperties";
 
-	final boolean addLiteralTypes, addRootProperty, useXmlNamespaces, looseCollections, autoDetectNamespaces;
+
+	final boolean 
+		addLiteralTypes, 
+		addRootProperty, 
+		useXmlNamespaces, 
+		looseCollections, 
+		autoDetectNamespaces,
+		addBeanTypeProperties;
 	final String rdfLanguage;
 	final Namespace juneauNs;
 	final Namespace juneauBpNs;
@@ -131,6 +156,7 @@ public final class RdfSerializerContext extends SerializerContext implements Rdf
 		juneauBpNs = cf.getProperty(RDF_juneauBpNs, Namespace.class, new Namespace("jp", "http://www.apache.org/juneaubp/"));
 		collectionFormat = cf.getProperty(RDF_collectionFormat, RdfCollectionFormat.class, RdfCollectionFormat.DEFAULT);
 		namespaces = cf.getProperty(RDF_namespaces, Namespace[].class, new Namespace[0]);
+		addBeanTypeProperties = cf.getProperty(RDF_addBeanTypeProperties, boolean.class, cf.getProperty(SERIALIZER_addBeanTypeProperties, boolean.class, true));
 	}
 
 	@Override /* Context */
@@ -147,6 +173,7 @@ public final class RdfSerializerContext extends SerializerContext implements Rdf
 				.append("juneauBpNs", juneauBpNs)
 				.append("collectionFormat", collectionFormat)
 				.append("namespaces", namespaces)
+				.append("addBeanTypeProperties", addBeanTypeProperties)
 			);
 	}
 }

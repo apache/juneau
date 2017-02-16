@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.urlencoding;
 
+import static org.apache.juneau.msgpack.MsgPackSerializerContext.*;
 import static org.apache.juneau.urlencoding.UonSerializerContext.*;
 
 import java.lang.reflect.*;
@@ -28,7 +29,9 @@ import org.apache.juneau.serializer.*;
  */
 public class UonSerializerSession extends SerializerSession {
 
-	private final boolean encodeChars;
+	private final boolean
+		encodeChars,
+		addBeanTypeProperties;
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -49,17 +52,11 @@ public class UonSerializerSession extends SerializerSession {
 		super(ctx, op, output, javaMethod, locale, timeZone, mediaType);
 		if (op == null || op.isEmpty()) {
 			encodeChars = ctx.encodeChars;
+			addBeanTypeProperties = ctx.addBeanTypeProperties;
 		} else {
 			encodeChars = op.getBoolean(UON_encodeChars, ctx.encodeChars);
+			addBeanTypeProperties = op.getBoolean(MSGPACK_addBeanTypeProperties, ctx.addBeanTypeProperties);
 		}
-	}
-
-	@Override /* SerializerSession */
-	public final UonWriter getWriter() throws Exception {
-		Object output = getOutput();
-		if (output instanceof UonWriter)
-			return (UonWriter)output;
-		return new UonWriter(this, super.getWriter(), isUseWhitespace(), isEncodeChars(), isTrimStrings(), getRelativeUriBase(), getAbsolutePathUriBase());
 	}
 
 	/**
@@ -69,5 +66,23 @@ public class UonSerializerSession extends SerializerSession {
 	 */
 	public final boolean isEncodeChars() {
 		return encodeChars;
+	}
+
+	/**
+	 * Returns the {@link UonSerializerContext#UON_addBeanTypeProperties} setting value for this session.
+	 *
+	 * @return The {@link UonSerializerContext#UON_addBeanTypeProperties} setting value for this session.
+	 */
+	@Override /* SerializerSession */
+	public final boolean isAddBeanTypeProperties() {
+		return addBeanTypeProperties;
+	}
+
+	@Override /* SerializerSession */
+	public final UonWriter getWriter() throws Exception {
+		Object output = getOutput();
+		if (output instanceof UonWriter)
+			return (UonWriter)output;
+		return new UonWriter(this, super.getWriter(), isUseWhitespace(), isEncodeChars(), isTrimStrings(), getRelativeUriBase(), getAbsolutePathUriBase());
 	}
 }

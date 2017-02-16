@@ -27,7 +27,10 @@ import org.apache.juneau.serializer.*;
  */
 public final class JsonSerializerSession extends SerializerSession {
 
-	private final boolean simpleMode, escapeSolidus;
+	private final boolean
+		simpleMode,
+		escapeSolidus,
+		addBeanTypeProperties;
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -49,9 +52,11 @@ public final class JsonSerializerSession extends SerializerSession {
 		if (op == null || op.isEmpty()) {
 			simpleMode = ctx.simpleMode;
 			escapeSolidus = ctx.escapeSolidus;
+			addBeanTypeProperties = ctx.addBeanTypeProperties;
 		} else {
 			simpleMode = op.getBoolean(JSON_simpleMode, ctx.simpleMode);
 			escapeSolidus = op.getBoolean(JSON_escapeSolidus, ctx.escapeSolidus);
+			addBeanTypeProperties = op.getBoolean(JSON_addBeanTypeProperties, ctx.addBeanTypeProperties);
 		}
 	}
 
@@ -71,6 +76,16 @@ public final class JsonSerializerSession extends SerializerSession {
 	 */
 	public final boolean isEscapeSolidus() {
 		return escapeSolidus;
+	}
+
+	/**
+	 * Returns the {@link JsonSerializerContext#JSON_addBeanTypeProperties} setting value for this session.
+	 *
+	 * @return The {@link JsonSerializerContext#JSON_addBeanTypeProperties} setting value for this session.
+	 */
+	@Override /* SerializerSession */
+	public final boolean isAddBeanTypeProperties() {
+		return addBeanTypeProperties;
 	}
 
 	@Override /* ParserSession */

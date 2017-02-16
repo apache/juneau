@@ -65,10 +65,29 @@ public final class JsonSerializerContext extends SerializerContext {
 	 */
 	public static final String JSON_escapeSolidus = "JsonSerializer.escapeSolidus";
 
+	/**
+	 * <b>Configuration property:</b>  Add <js>"_type"</js> properties when needed.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"JsonSerializer.addBeanTypeProperties"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred through reflection.
+	 * This is used to recreate the correct objects during parsing if the object types cannot be inferred.
+	 * For example, when serializing a {@code Map<String,Object>} field, where the bean class cannot be determined from the value type.
+	 * <p>
+	 * When present, this value overrides the {@link SerializerContext#SERIALIZER_addBeanTypeProperties} setting and is
+	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
+	 */
+	public static final String JSON_addBeanTypeProperties = "JsonSerializer.addBeanTypeProperties";
 
 	final boolean
 		simpleMode,
-		escapeSolidus;
+		escapeSolidus,
+		addBeanTypeProperties;
 
 	/**
 	 * Constructor.
@@ -81,6 +100,7 @@ public final class JsonSerializerContext extends SerializerContext {
 		super(cf);
 		simpleMode = cf.getProperty(JSON_simpleMode, boolean.class, false);
 		escapeSolidus = cf.getProperty(JSON_escapeSolidus, boolean.class, false);
+		addBeanTypeProperties = cf.getProperty(JSON_addBeanTypeProperties, boolean.class, cf.getProperty(SERIALIZER_addBeanTypeProperties, boolean.class, true));
 	}
 
 	@Override /* Context */
@@ -89,6 +109,7 @@ public final class JsonSerializerContext extends SerializerContext {
 			.append("JsonSerializerContext", new ObjectMap()
 				.append("simpleMode", simpleMode)
 				.append("escapeSolidus", escapeSolidus)
+				.append("addBeanTypeProperties", addBeanTypeProperties)
 			);
 	}
 }

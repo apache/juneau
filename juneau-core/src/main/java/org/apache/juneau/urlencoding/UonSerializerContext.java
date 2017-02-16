@@ -51,9 +51,29 @@ public class UonSerializerContext extends SerializerContext {
 	 */
 	public static final String UON_encodeChars = "UonSerializer.encodeChars";
 
+	/**
+	 * <b>Configuration property:</b>  Add <js>"_type"</js> properties when needed.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"UonSerializer.addBeanTypeProperties"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred through reflection.
+	 * This is used to recreate the correct objects during parsing if the object types cannot be inferred.
+	 * For example, when serializing a {@code Map<String,Object>} field, where the bean class cannot be determined from the value type.
+	 * <p>
+	 * When present, this value overrides the {@link SerializerContext#SERIALIZER_addBeanTypeProperties} setting and is
+	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
+	 */
+	public static final String UON_addBeanTypeProperties = "UonSerializer.addBeanTypeProperties";
+
 
 	final boolean
-		encodeChars;
+		encodeChars,
+		addBeanTypeProperties;
 
 	/**
 	 * Constructor.
@@ -65,6 +85,7 @@ public class UonSerializerContext extends SerializerContext {
 	public UonSerializerContext(ContextFactory cf) {
 		super(cf);
 		encodeChars = cf.getProperty(UON_encodeChars, boolean.class, false);
+		addBeanTypeProperties = cf.getProperty(UON_addBeanTypeProperties, boolean.class, cf.getProperty(SERIALIZER_addBeanTypeProperties, boolean.class, true));
 	}
 
 	@Override /* Context */
@@ -72,6 +93,7 @@ public class UonSerializerContext extends SerializerContext {
 		return super.asMap()
 			.append("UonSerializerContext", new ObjectMap()
 				.append("encodeChars", encodeChars)
+				.append("addBeanTypeProperties", addBeanTypeProperties)
 			);
 	}
 }

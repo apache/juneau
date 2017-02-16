@@ -81,12 +81,12 @@ Abstract
       Using the syntax defined in this document, the equivalent 
       UON notation would be as follows:
 
-         x=(id=1,name=John+Smith,uri=http://sample/
+         x=(id=1,name='John+Smith',uri=http://sample/
          addressBook/person/1,addressBookUri=http://sample/
-         addressBook,birthDate=1946-08-12T00:00:00Z,otherIds=%00,
+         addressBook,birthDate=1946-08-12T00:00:00Z,otherIds=null,
          addresses=@((uri=http://sample/addressBook/
          address/1,personUri=http://sample/addressBook/
-         person/1,id=1,street=100+Main+Street,city=
+         person/1,id=1,street='100+Main+Street',city=
          Anywhereville,state=NY,zip=12345,isCurrent=true))) 
 
 1. Language constraints
@@ -167,7 +167,13 @@ Abstract
 
       a1=123&a2=1.23e1
 
-2.5. Strings
+2.5. Null values
+
+   Nulls are represented by the keyword 'null':
+
+      a1=null
+
+2.6. Strings
 
    Strings are encapsulated in single quote (') characters.
    
@@ -209,13 +215,7 @@ Abstract
 
       a1='foo~'bar~~baz'
    
-2.7. Null values
-
-   Nulls are represented by the keyword 'null':
-
-      a1=null
-
-2.8. Top-level attribute names
+2.7. Top-level attribute names
 
    Top-level attribute names (e.g. "a1" in "&a1=foobar") are treated
    as strings but for one exception.  The '=' character must be
@@ -231,7 +231,7 @@ Abstract
    Note that the '=' character is encoded in the attribute name,
    but it is not necessary to have it encoded in the attribute value.
 
-2.9. URL-encoded characters
+2.8. URL-encoded characters
 
    UON notation allows for any character, even UON grammar
    characters, to be URL-encoded.
@@ -239,7 +239,7 @@ Abstract
    The following query strings are fully equivalent in structure:
    
      a1=(b1='x1',b2='x2')
-     %61%31=%24%6F%28%62%31%3D%78%31%2C%62%32%3D%78%32%29
+     %61%31=%79%6f%75%20%61%72%65%20%61%20%6e%65%72%64%21
 
 
 3. BNF
@@ -251,7 +251,7 @@ Abstract
    value       = (var | string | null)
 
    string      = ("'" litchar* "'") | litchar*
-   null        = "%00"
+   null        = "null"
    
    var         = ovar | avar | nvar | boolean | number
    ovar        = "(" [pairs] ")"

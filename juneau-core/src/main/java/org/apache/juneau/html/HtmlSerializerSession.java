@@ -13,6 +13,7 @@
 package org.apache.juneau.html;
 
 import static org.apache.juneau.html.HtmlSerializerContext.*;
+import static org.apache.juneau.msgpack.MsgPackSerializerContext.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -31,7 +32,11 @@ import org.apache.juneau.xml.*;
 public class HtmlSerializerSession extends XmlSerializerSession {
 
 	private final AnchorText anchorText;
-	private final boolean detectLinksInStrings, lookForLabelParameters, addKeyValueTableHeaders;
+	private final boolean
+		detectLinksInStrings,
+		lookForLabelParameters,
+		addKeyValueTableHeaders,
+		addBeanTypeProperties;
 	private final Pattern urlPattern = Pattern.compile("http[s]?\\:\\/\\/.*");
 	private final Pattern labelPattern;
 	private final String absolutePathUriBase, relativeUriBase;
@@ -66,12 +71,14 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			lookForLabelParameters = ctx.lookForLabelParameters;
 			labelParameter = ctx.labelParameter;
 			addKeyValueTableHeaders = ctx.addKeyValueTableHeaders;
+			addBeanTypeProperties = ctx.addBeanTypeProperties;
 		} else {
 			anchorText = Enum.valueOf(AnchorText.class, op.getString(HTML_uriAnchorText, ctx.uriAnchorText));
 			detectLinksInStrings = op.getBoolean(HTML_detectLinksInStrings, ctx.detectLinksInStrings);
 			lookForLabelParameters = op.getBoolean(HTML_lookForLabelParameters, ctx.lookForLabelParameters);
 			labelParameter = op.getString(HTML_labelParameter, ctx.labelParameter);
 			addKeyValueTableHeaders = op.getBoolean(HTML_addKeyValueTableHeaders, ctx.addKeyValueTableHeaders);
+			addBeanTypeProperties = op.getBoolean(MSGPACK_addBeanTypeProperties, ctx.addBeanTypeProperties);
 		}
 		labelPattern = Pattern.compile("[\\?\\&]" + Pattern.quote(labelParameter) + "=([^\\&]*)");
 		this.absolutePathUriBase = getAbsolutePathUriBase();
@@ -165,4 +172,13 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		return addKeyValueTableHeaders;
 	}
 
+	/**
+	 * Returns the {@link HtmlSerializerContext#HTML_addBeanTypeProperties} setting value for this session.
+	 *
+	 * @return The {@link HtmlSerializerContext#HTML_addBeanTypeProperties} setting value for this session.
+	 */
+	@Override /* SerializerSession */
+	public final boolean isAddBeanTypeProperties() {
+		return addBeanTypeProperties;
+	}
 }

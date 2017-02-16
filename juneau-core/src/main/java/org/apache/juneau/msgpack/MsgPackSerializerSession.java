@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.msgpack;
 
+import static org.apache.juneau.msgpack.MsgPackSerializerContext.*;
+
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -26,6 +28,9 @@ import org.apache.juneau.serializer.*;
  * This class is NOT thread safe.  It is meant to be discarded after one-time use.
  */
 public final class MsgPackSerializerSession extends SerializerSession {
+
+	private final boolean
+		addBeanTypeProperties;
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -44,9 +49,24 @@ public final class MsgPackSerializerSession extends SerializerSession {
 	 */
 	protected MsgPackSerializerSession(MsgPackSerializerContext ctx, ObjectMap op, Object output, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType) {
 		super(ctx, op, output, javaMethod, locale, timeZone, mediaType);
+		if (op == null || op.isEmpty()) {
+			addBeanTypeProperties = ctx.addBeanTypeProperties;
+		} else {
+			addBeanTypeProperties = op.getBoolean(MSGPACK_addBeanTypeProperties, ctx.addBeanTypeProperties);
+		}
 	}
 
-	@Override
+	/**
+	 * Returns the {@link MsgPackSerializerContext#MSGPACK_addBeanTypeProperties} setting value for this session.
+	 *
+	 * @return The {@link MsgPackSerializerContext#MSGPACK_addBeanTypeProperties} setting value for this session.
+	 */
+	@Override /* SerializerSession */
+	public final boolean isAddBeanTypeProperties() {
+		return addBeanTypeProperties;
+	}
+
+	@Override /*SerializerSession */
 	public MsgPackOutputStream getOutputStream() throws Exception {
 		Object output = getOutput();
 		if (output instanceof MsgPackOutputStream)

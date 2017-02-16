@@ -285,7 +285,7 @@ public class SerializerSession extends BeanSession {
 	 *
 	 * @return The {@link SerializerContext#SERIALIZER_addBeanTypeProperties} setting value for this session.
 	 */
-	public final boolean isAddBeanTypeProperties() {
+	public boolean isAddBeanTypeProperties() {
 		return addBeanTypeProperties;
 	}
 
@@ -702,7 +702,7 @@ public class SerializerSession extends BeanSession {
 		if (eType == aType)
 			return null;
 
-		if (! addBeanTypeProperties)
+		if (! isAddBeanTypeProperties())
 			return null;
 
 		String eTypeTn = eType.getDictionaryName();
