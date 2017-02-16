@@ -445,19 +445,9 @@
 			<td>{@link org.apache.juneau.urlencoding.UonSerializer}</td>
 		</tr>
 		<tr>
-			<td class='code'>text/uon-simple</td>
-	 		<td class='code'>text/uon</td>
-	 		<td>{@link org.apache.juneau.urlencoding.UonSerializer.Simple}</td>
-		</tr>
-		<tr>
 			<td class='code'>application/x-www-form-urlencoded</td>
 			<td class='code'>application/x-www-form-urlencoded</td>
 			<td>{@link org.apache.juneau.urlencoding.UrlEncodingSerializer}</td>
-		</tr>
-		<tr>
-	 		<td class='code'>application/x-www-form-urlencoded-simple</td>
-	 		<td class='code'>application/x-www-form-urlencoded</td>
-			<td>{@link org.apache.juneau.urlencoding.UrlEncodingSerializer.Simple}</td>
 		</tr>
 		<tr>
 			<td class='code'>text/xml+soap</td>
@@ -2856,8 +2846,7 @@
 				<td class='code'>&amp;plainText=true</td>
 				<td>
 					Response will always be <l>Content-Type: text/plain</l> and the returned text will be human-readable
-						(i.e. {@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_useIndentation} and 
-						{@link org.apache.juneau.json.JsonSerializerContext#JSON_useWhitespace} enabled).
+						({@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_useWhitespace} enabled).
 					<br>Useful for debugging.
 				</td>
 			</tr>

@@ -232,7 +232,7 @@
 		<ja>@Produces</ja>(<js>"*/*"</js>)
 		<ja>@RestMethod</ja>( <jc>/* Override some properties */</jc>
 			properties={
-				<ja>@Property</ja>(name=SerializerContext.<jsf>SERIALIZER_useIndentation</jsf>, value=<js>"true"</js>),
+				<ja>@Property</ja>(name=SerializerContext.<jsf>SERIALIZER_useWhitespace</jsf>, value=<js>"true"</js>),
 				<ja>@Property</ja>(name=JsonSerializerContext.<jsf>LAX_MODE</jsf>, value=<js>"true"</js>)
 			}
 		)
@@ -251,7 +251,7 @@
 	</p>	
 	<p>
 		When we start up the servlet, we can interact with the resource using cURL.
-		In these examples, note that the <jsf>SERIALIZER_useIndentation</jsf> and <jsf>LAX_MODE</jsf> settings
+		In these examples, note that the <jsf>SERIALIZER_useWhitespace</jsf> and <jsf>LAX_MODE</jsf> settings
 			cause the output to be readable instead of condensed.
 	</p>
 	<p class='bcode'>
