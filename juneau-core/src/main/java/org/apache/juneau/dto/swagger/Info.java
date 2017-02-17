@@ -37,7 +37,8 @@ import org.apache.juneau.annotation.*;
  * </p>
  */
 @Bean(properties="title,description,termsOfService,contact,license,version")
-public class Info {
+@SuppressWarnings("hiding")
+public class Info extends SwaggerElement {
 
 	private String title;
 	private String description;
@@ -45,17 +46,6 @@ public class Info {
 	private Contact contact;
 	private License license;
 	private String version;
-
-	/**
-	 * Convenience method for creating a new Info object.
-	 *
-	 * @param title Required.  The title of the application.
-	 * @param version Required.  Provides the version of the application API (not to be confused with the specification version).
-	 * @return A new Info object.
-	 */
-	public static Info create(String title, String version) {
-		return new Info().setTitle(title).setVersion(version);
-	}
 
 	/**
 	 * Bean property getter:  <property>title</property>.
@@ -79,6 +69,16 @@ public class Info {
 	public Info setTitle(String title) {
 		this.title = title;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setTitle(String)}.
+	 *
+	 * @param title The new value for the <property>title</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Info title(String title) {
+		return setTitle(title);
 	}
 
 	/**
@@ -106,6 +106,16 @@ public class Info {
 	}
 
 	/**
+	 * Synonym for {@link #setDescription(String)}.
+	 *
+	 * @param description The new value for the <property>description</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Info description(String description) {
+		return setDescription(description);
+	}
+
+	/**
 	 * Bean property getter:  <property>termsOfService</property>.
 	 * <p>
 	 * The Terms of Service for the API.
@@ -127,6 +137,16 @@ public class Info {
 	public Info setTermsOfService(String termsOfService) {
 		this.termsOfService = termsOfService;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setTermsOfService(String)}.
+	 *
+	 * @param termsOfService The new value for the <property>termsOfService</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Info termsOfService(String termsOfService) {
+		return setTermsOfService(termsOfService);
 	}
 
 	/**
@@ -154,6 +174,16 @@ public class Info {
 	}
 
 	/**
+	 * Synonym for {@link #setContact(Contact)}.
+	 *
+	 * @param contact The new value for the <property>contact</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Info contact(Contact contact) {
+		return setContact(contact);
+	}
+
+	/**
 	 * Bean property getter:  <property>license</property>.
 	 * <p>
 	 * The license information for the exposed API.
@@ -178,6 +208,16 @@ public class Info {
 	}
 
 	/**
+	 * Synonym for {@link #setLicense(License)}.
+	 *
+	 * @param license The new value for the <property>license</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Info license(License license) {
+		return setLicense(license);
+	}
+
+	/**
 	 * Bean property getter:  <property>version</property>.
 	 * <p>
 	 * Required.  Provides the version of the application API (not to be confused with the specification version).
@@ -199,5 +239,15 @@ public class Info {
 	public Info setVersion(String version) {
 		this.version = version;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setVersion(String)}.
+	 *
+	 * @param version The new value for the <property>version</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Info version(String version) {
+		return setVersion(version);
 	}
 }

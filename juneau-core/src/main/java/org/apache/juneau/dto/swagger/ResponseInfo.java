@@ -33,23 +33,13 @@ import org.apache.juneau.annotation.*;
  * </p>
  */
 @Bean(properties="description,schema,headers,examples")
-public class ResponseInfo {
+@SuppressWarnings("hiding")
+public class ResponseInfo extends SwaggerElement {
 
 	private String description;
 	private SchemaInfo schema;
 	private Map<String,HeaderInfo> headers;
 	private Map<String,Object> examples;
-
-	/**
-	 * Convenience method for creating a new Response object.
-	 *
-	 * @param description A short description of the response.
-	 * 	<a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used for rich text representation.
-	 * @return A new Header object.
-	 */
-	public static ResponseInfo create(String description) {
-		return new ResponseInfo().setDescription(description);
-	}
 
 	/**
 	 * Bean property getter:  <property>description</property>.
@@ -75,6 +65,16 @@ public class ResponseInfo {
 	public ResponseInfo setDescription(String description) {
 		this.description = description;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setDescription(String)}.
+	 *
+	 * @param description The new value for the <property>description</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public ResponseInfo description(String description) {
+		return setDescription(description);
 	}
 
 	/**
@@ -107,6 +107,16 @@ public class ResponseInfo {
 	public ResponseInfo setSchema(SchemaInfo schema) {
 		this.schema = schema;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setSchema(SchemaInfo)}.
+	 *
+	 * @param schema The new value for the <property>schema</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public ResponseInfo schema(SchemaInfo schema) {
+		return setSchema(schema);
 	}
 
 	/**
@@ -150,6 +160,17 @@ public class ResponseInfo {
 	}
 
 	/**
+	 * Synonym for {@link #addHeader(String,HeaderInfo)}.
+	 *
+	 * @param name The header name.
+	 * @param header The header descriptions
+	 * @return This object (for method chaining).
+	 */
+	public ResponseInfo header(String name, HeaderInfo header) {
+		return addHeader(name, header);
+	}
+
+	/**
 	 * Bean property getter:  <property>examples</property>.
 	 * <p>
 	 * An example of the response message.
@@ -189,5 +210,26 @@ public class ResponseInfo {
 			examples = new TreeMap<String,Object>();
 		examples.put(mimeType, example);
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #addExample(String,Object)}.
+	 *
+	 * @param mimeType The mimeType of the example.
+	 * @param example The example output.
+	 * @return This object (for method chaining).
+	 */
+	public ResponseInfo example(String mimeType, Object example) {
+		return addExample(mimeType, example);
+	}
+
+	/**
+	 * Synonym for {@link #setExamples(Map)}.
+	 *
+	 * @param examples The new value for the <property>examples</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public ResponseInfo examples(Map<String,Object> examples) {
+		return setExamples(examples);
 	}
 }

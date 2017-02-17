@@ -51,7 +51,8 @@ import org.apache.juneau.json.*;
  * </ul>
  */
 @Bean(properties="in,name,type,description,required,schema,format,allowEmptyValue,items,collectionFormat,default,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,enum,multipleOf")
-public class ParameterInfo {
+@SuppressWarnings("hiding")
+public class ParameterInfo extends SwaggerElement {
 
 	private static final String[] VALID_IN = {"query", "header", "path", "formData", "body"};
 	private static final String[] VALID_TYPES = {"string", "number", "integer", "boolean", "array", "file"};
@@ -80,43 +81,10 @@ public class ParameterInfo {
 	private Boolean uniqueItems;
 	private List<Object> _enum;
 	private Number multipleOf;
-	private boolean strict;
 
-	/**
-	 * Convenience method for creating a new Parameter object.
-	 *
-	 * @param in Required. The location of the parameter.
-	 * 	Possible values are <js>"query"</js>, <js>"header"</js>, <js>"path"</js>, <js>"formData"</js> or <js>"body"</js>.
-	 * @param name Required. The name of the parameter.
-	 * 	Parameter names are case sensitive.
-	 * 	If <code>in</code> is <js>"path"</js>, the <code>name</code> field MUST correspond to the associated path segment from the <code>path</code> field in the <a class="doclink" href="http://swagger.io/specification/#pathsObject">Paths Object</a>.
-	 * 	See <a class="doclink" href="http://swagger.io/specification/#pathTemplating">Path Templating</a> for further information.
-	 * 	For all other cases, the name corresponds to the parameter name used based on the <code>in</code> property.
-	 * @return A new Parameter object.
-	 */
-	public static ParameterInfo create(String in, String name) {
-		return new ParameterInfo().setIn(in).setName(name);
-	}
-
-	/**
-	 * Same as {@link #create(String, String)} except methods will throw runtime exceptions if you attempt
-	 * to pass in invalid values per the Swagger spec.
-	 *
-	 * @param in Required. The location of the parameter.
-	 * 	Possible values are <js>"query"</js>, <js>"header"</js>, <js>"path"</js>, <js>"formData"</js> or <js>"body"</js>.
-	 * @param name Required. The name of the parameter.
-	 * 	Parameter names are case sensitive.
-	 * 	If <code>in</code> is <js>"path"</js>, the <code>name</code> field MUST correspond to the associated path segment from the <code>path</code> field in the <a class="doclink" href="http://swagger.io/specification/#pathsObject">Paths Object</a>.
-	 * 	See <a class="doclink" href="http://swagger.io/specification/#pathTemplating">Path Templating</a> for further information.
-	 * 	For all other cases, the name corresponds to the parameter name used based on the <code>in</code> property.
-	 * @return A new Parameter object.
-	 */
-	public static ParameterInfo createStrict(String in, String name) {
-		return new ParameterInfo().setStrict().setIn(in).setName(name);
-	}
-
-	private ParameterInfo setStrict() {
-		this.strict = true;
+	@Override /* SwaggerElement */
+	protected ParameterInfo strict() {
+		super.strict();
 		return this;
 	}
 
@@ -154,6 +122,16 @@ public class ParameterInfo {
 	}
 
 	/**
+	 * Synonym for {@link #setName(String)}.
+	 *
+	 * @param name The new value for the <property>name</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo name(String name) {
+		return setName(name);
+	}
+
+	/**
 	 * Bean property getter:  <property>in</property>.
 	 * <p>
 	 * Required. The location of the parameter.
@@ -175,12 +153,22 @@ public class ParameterInfo {
 	 * @return This object (for method chaining).
 	 */
 	public ParameterInfo setIn(String in) {
-		if (strict && ! ArrayUtils.contains(in, VALID_IN))
+		if (isStrict() && ! ArrayUtils.contains(in, VALID_IN))
 			throw new RuntimeException("Invalid value passed in to setIn(String).  Value='"+in+"', valid values=" + JsonSerializer.DEFAULT_LAX.toString(VALID_IN));
 		this.in = in;
 		if ("path".equals(in))
 			required = true;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setIn(String)}.
+	 *
+	 * @param in The new value for the <property>in</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo in(String in) {
+		return setIn(in);
 	}
 
 	/**
@@ -212,6 +200,16 @@ public class ParameterInfo {
 	}
 
 	/**
+	 * Synonym for {@link #setDescription(String)}.
+	 *
+	 * @param description The new value for the <property>description</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo description(String description) {
+		return setDescription(description);
+	}
+
+	/**
 	 * Bean property getter:  <property>required</property>.
 	 * <p>
 	 * Determines whether this parameter is mandatory.
@@ -240,6 +238,16 @@ public class ParameterInfo {
 	}
 
 	/**
+	 * Synonym for {@link #setRequired(Boolean)}.
+	 *
+	 * @param required The new value for the <property>required</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo required(Boolean required) {
+		return setRequired(required);
+	}
+
+	/**
 	 * Bean property getter:  <property>schema</property>.
 	 * <p>
 	 * Required. The schema defining the type used for the body parameter.
@@ -261,6 +269,16 @@ public class ParameterInfo {
 	public ParameterInfo setSchema(SchemaInfo schema) {
 		this.schema = schema;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setSchema(SchemaInfo)}.
+	 *
+	 * @param schema The new value for the <property>schema</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo schema(SchemaInfo schema) {
+		return setSchema(schema);
 	}
 
 	/**
@@ -289,10 +307,20 @@ public class ParameterInfo {
 	 * @return This object (for method chaining).
 	 */
 	public ParameterInfo setType(String type) {
-		if (strict && ! ArrayUtils.contains(type, VALID_TYPES))
+		if (isStrict() && ! ArrayUtils.contains(type, VALID_TYPES))
 			throw new RuntimeException("Invalid value passed in to setType(String).  Value='"+type+"', valid values=" + JsonSerializer.DEFAULT_LAX.toString(VALID_TYPES));
 		this.type = type;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setType(String)}.
+	 *
+	 * @param type The new value for the <property>type</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo type(String type) {
+		return setType(type);
 	}
 
 	/**
@@ -319,6 +347,16 @@ public class ParameterInfo {
 	public ParameterInfo setFormat(String format) {
 		this.format = format;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setFormat(String)}.
+	 *
+	 * @param format The new value for the <property>format</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo format(String format) {
+		return setFormat(format);
 	}
 
 	/**
@@ -350,6 +388,16 @@ public class ParameterInfo {
 	}
 
 	/**
+	 * Synonym for {@link #setAllowEmptyValue(Boolean)}.
+	 *
+	 * @param allowEmptyValue The new value for the <property>allowEmptyValue</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo allowEmptyValue(Boolean allowEmptyValue) {
+		return setAllowEmptyValue(allowEmptyValue);
+	}
+
+	/**
 	 * Bean property getter:  <property>items</property>.
 	 * <p>
 	 * Required if <code>type</code> is <js>"array"</js>.
@@ -373,6 +421,16 @@ public class ParameterInfo {
 	public ParameterInfo setItems(Items items) {
 		this.items = items;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setItems(Items)}.
+	 *
+	 * @param items The new value for the <property>items</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo items(Items items) {
+		return setItems(items);
 	}
 
 	/**
@@ -419,10 +477,20 @@ public class ParameterInfo {
 	 * @return This object (for method chaining).
 	 */
 	public ParameterInfo setCollectionFormat(String collectionFormat) {
-		if (strict && ! ArrayUtils.contains(collectionFormat, VALID_COLLECTION_FORMATS))
+		if (isStrict() && ! ArrayUtils.contains(collectionFormat, VALID_COLLECTION_FORMATS))
 			throw new RuntimeException("Invalid value passed in to setCollectionFormat(String).  Value='"+collectionFormat+"', valid values=" + JsonSerializer.DEFAULT_LAX.toString(VALID_COLLECTION_FORMATS));
 		this.collectionFormat = collectionFormat;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setCollectionFormat(String)}.
+	 *
+	 * @param collectionFormat The new value for the <property>collectionFormat</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo collectionFormat(String collectionFormat) {
+		return setCollectionFormat(collectionFormat);
 	}
 
 	/**
@@ -456,6 +524,16 @@ public class ParameterInfo {
 	}
 
 	/**
+	 * Synonym for {@link #setDefault(Object)}.
+	 *
+	 * @param _default The new value for the <property>default</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo _default(Object _default) {
+		return setDefault(_default);
+	}
+
+	/**
 	 * Bean property getter:  <property>maximum</property>.
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor17">http://json-schema.org/latest/json-schema-validation.html#anchor17</a>.
@@ -477,6 +555,16 @@ public class ParameterInfo {
 	public ParameterInfo setMaximum(Number maximum) {
 		this.maximum = maximum;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setMaximum(Number)}.
+	 *
+	 * @param maximum The new value for the <property>maximum</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo maximum(Number maximum) {
+		return setMaximum(maximum);
 	}
 
 	/**
@@ -504,6 +592,16 @@ public class ParameterInfo {
 	}
 
 	/**
+	 * Synonym for {@link #setExclusiveMaximum(Boolean)}.
+	 *
+	 * @param exclusiveMaximum The new value for the <property>exclusiveMaximum</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo exclusiveMaximum(Boolean exclusiveMaximum) {
+		return setExclusiveMaximum(exclusiveMaximum);
+	}
+
+	/**
 	 * Bean property getter:  <property>minimum</property>.
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor21">http://json-schema.org/latest/json-schema-validation.html#anchor21</a>.
@@ -525,6 +623,16 @@ public class ParameterInfo {
 	public ParameterInfo setMinimum(Number minimum) {
 		this.minimum = minimum;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setMinimum(Number)}.
+	 *
+	 * @param minimum The new value for the <property>minimum</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo minimum(Number minimum) {
+		return setMinimum(minimum);
 	}
 
 	/**
@@ -552,6 +660,16 @@ public class ParameterInfo {
 	}
 
 	/**
+	 * Synonym for {@link #setExclusiveMinimum(Boolean)}.
+	 *
+	 * @param exclusiveMinimum The new value for the <property>exclusiveMinimum</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo exclusiveMinimum(Boolean exclusiveMinimum) {
+		return setExclusiveMinimum(exclusiveMinimum);
+	}
+
+	/**
 	 * Bean property getter:  <property>maxLength</property>.
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor26">http://json-schema.org/latest/json-schema-validation.html#anchor26</a>.
@@ -573,6 +691,16 @@ public class ParameterInfo {
 	public ParameterInfo setMaxLength(Integer maxLength) {
 		this.maxLength = maxLength;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setMaxLength(Integer)}.
+	 *
+	 * @param maxLength The new value for the <property>maxLength</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo maxLength(Integer maxLength) {
+		return setMaxLength(maxLength);
 	}
 
 	/**
@@ -600,6 +728,16 @@ public class ParameterInfo {
 	}
 
 	/**
+	 * Synonym for {@link #setMinLength(Integer)}.
+	 *
+	 * @param minLength The new value for the <property>minLength</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo minLength(Integer minLength) {
+		return setMinLength(minLength);
+	}
+
+	/**
 	 * Bean property getter:  <property>pattern</property>.
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor33">http://json-schema.org/latest/json-schema-validation.html#anchor33</a>.
@@ -621,6 +759,16 @@ public class ParameterInfo {
 	public ParameterInfo setPattern(String pattern) {
 		this.pattern = pattern;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setPattern(String)}.
+	 *
+	 * @param pattern The new value for the <property>pattern</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo pattern(String pattern) {
+		return setPattern(pattern);
 	}
 
 	/**
@@ -648,6 +796,16 @@ public class ParameterInfo {
 	}
 
 	/**
+	 * Synonym for {@link #setMaxItems(Integer)}.
+	 *
+	 * @param maxItems The new value for the <property>maxItems</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo maxItems(Integer maxItems) {
+		return setMaxItems(maxItems);
+	}
+
+	/**
 	 * Bean property getter:  <property>minItems</property>.
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor45">http://json-schema.org/latest/json-schema-validation.html#anchor45</a>.
@@ -672,6 +830,16 @@ public class ParameterInfo {
 	}
 
 	/**
+	 * Synonym for {@link #setMinItems(Integer)}.
+	 *
+	 * @param minItems The new value for the <property>minItems</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo minItems(Integer minItems) {
+		return setMinItems(minItems);
+	}
+
+	/**
 	 * Bean property getter:  <property>uniqueItems</property>.
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor49">http://json-schema.org/latest/json-schema-validation.html#anchor49</a>.
@@ -693,6 +861,16 @@ public class ParameterInfo {
 	public ParameterInfo setUniqueItems(Boolean uniqueItems) {
 		this.uniqueItems = uniqueItems;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setUniqueItems(Boolean)}.
+	 *
+	 * @param uniqueItems The new value for the <property>uniqueItems</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo uniqueItems(Boolean uniqueItems) {
+		return setUniqueItems(uniqueItems);
 	}
 
 	/**
@@ -725,27 +903,34 @@ public class ParameterInfo {
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor76">http://json-schema.org/latest/json-schema-validation.html#anchor76</a>.
 	 *
 	 * @param _enum The new values to add to the <property>enum</property> property on this bean.
+	 * 	These can either be individual objects or {@link Collection Collections} of objects.
 	 * @return This object (for method chaining).
 	 */
-	@SuppressWarnings("hiding")
+	@SuppressWarnings("unchecked")
 	public ParameterInfo addEnum(Object..._enum) {
-		return addEnum(Arrays.asList(_enum));
+		for (Object o  : _enum) {
+			if (o != null) {
+				if (o instanceof Collection)
+					addEnum((Collection<Object>)o);
+				else {
+					if (this._enum == null)
+						this._enum = new LinkedList<Object>();
+					this._enum.add(o);
+				}
+			}
+		}
+		return this;
 	}
 
 	/**
-	 * Bean property adder:  <property>enum</property>.
-	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor76">http://json-schema.org/latest/json-schema-validation.html#anchor76</a>.
+	 * Synonym for {@link #addEnum(Object...)}.
 	 *
 	 * @param _enum The new values to add to the <property>enum</property> property on this bean.
+	 * 	These can either be individual objects or {@link Collection Collections} of objects.
 	 * @return This object (for method chaining).
 	 */
-	@SuppressWarnings("hiding")
-	public ParameterInfo addEnum(Collection<Object> _enum) {
-		if (this._enum == null)
-			this._enum = new LinkedList<Object>();
-		this._enum.addAll(_enum);
-		return this;
+	public ParameterInfo _enum(Object..._enum) {
+		return addEnum(_enum);
 	}
 
 	/**
@@ -770,5 +955,15 @@ public class ParameterInfo {
 	public ParameterInfo setMultipleOf(Number multipleOf) {
 		this.multipleOf = multipleOf;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setMultipleOf(Number)}.
+	 *
+	 * @param multipleOf The new value for the <property>multipleOf</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public ParameterInfo multipleOf(Number multipleOf) {
+		return setMultipleOf(multipleOf);
 	}
 }

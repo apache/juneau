@@ -26,20 +26,11 @@ import org.apache.juneau.annotation.*;
  * </p>
  */
 @Bean(properties="description,url")
-public class ExternalDocumentation {
+@SuppressWarnings("hiding")
+public class ExternalDocumentation extends SwaggerElement {
 
 	private String description;
 	private String url;
-
-	/**
-	 * Convenience method for creating a new ExternalDocumentation object.
-	 *
-	 * @param url Required.  The URL for the target documentation. Value MUST be in the format of a URL.
-	 * @return A new ExternalDocumentation object.
-	 */
-	public static ExternalDocumentation create(String url) {
-		return new ExternalDocumentation().setUrl(url);
-	}
 
 	/**
 	 * Bean property getter:  <property>description</property>.
@@ -66,6 +57,16 @@ public class ExternalDocumentation {
 	}
 
 	/**
+	 * Synonym for {@link #setDescription(String)}.
+	 *
+	 * @param description The new value for the <property>description</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public ExternalDocumentation description(String description) {
+		return setDescription(description);
+	}
+
+	/**
 	 * Bean property getter:  <property>url</property>.
 	 * <p>
 	 * Required. The URL for the target documentation. Value MUST be in the format of a URL.
@@ -87,5 +88,15 @@ public class ExternalDocumentation {
 	public ExternalDocumentation setUrl(String url) {
 		this.url = url;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setUrl(String)}.
+	 *
+	 * @param url The new value for the <property>url</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public ExternalDocumentation url(String url) {
+		return setUrl(url);
 	}
 }

@@ -79,7 +79,8 @@ import org.apache.juneau.annotation.*;
  * </p>
  */
 @Bean(properties="operationId,summary,description,tags,externalDocs,consumes,produces,parameters,responses,schemes,deprecated,security")
-public class Operation {
+@SuppressWarnings("hiding")
+public class Operation extends SwaggerElement {
 
 	private List<String> tags;
 	private String summary;
@@ -89,19 +90,10 @@ public class Operation {
 	private List<MediaType> consumes;
 	private List<MediaType> produces;
 	private List<ParameterInfo> parameters;
-	private Map<String,ResponseInfo> responses;
+	private Map<Integer,ResponseInfo> responses;
 	private List<String> schemes;
 	private Boolean deprecated;
 	private List<Map<String,List<String>>> security;
-
-	/**
-	 * Convenience method for creating a new Operation object.
-	 *
-	 * @return A new Operation object.
-	 */
-	public static Operation create() {
-		return new Operation();
-	}
 
 	/**
 	 * Bean property getter:  <property>tags</property>.
@@ -138,7 +130,6 @@ public class Operation {
 	 * @param tags The values to add for the <property>tags</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	@SuppressWarnings("hiding")
 	public Operation addTags(String...tags) {
 		return addTags(Arrays.asList(tags));
 	}
@@ -150,14 +141,36 @@ public class Operation {
 	 * Tags can be used for logical grouping of operations by resources or any other qualifier.
 	 *
 	 * @param tags The values to add for the <property>tags</property> property on this bean.
+	 * 	Ignored if <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	@SuppressWarnings("hiding")
 	public Operation addTags(Collection<String> tags) {
-		if (this.tags == null)
-			this.tags = new LinkedList<String>();
-		this.tags.addAll(tags);
+		if (tags != null) {
+			if (this.tags == null)
+				this.tags = new LinkedList<String>();
+			this.tags.addAll(tags);
+		}
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #addTags(String...)}.
+	 *
+	 * @param tags The new value for the <property>tags</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Operation tags(String...tags) {
+		return addTags(tags);
+	}
+
+	/**
+	 * Synonym for {@link #addTags(Collection)}.
+	 *
+	 * @param tags The new value for the <property>tags</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Operation tags(Collection<String> tags) {
+		return addTags(tags);
 	}
 
 	/**
@@ -187,6 +200,16 @@ public class Operation {
 	}
 
 	/**
+	 * Synonym for {@link #setSummary(String)}.
+	 *
+	 * @param summary The new value for the <property>summary</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Operation summary(String summary) {
+		return setSummary(summary);
+	}
+
+	/**
 	 * Bean property getter:  <property>description</property>.
 	 * <p>
 	 * A verbose explanation of the operation behavior.
@@ -210,6 +233,16 @@ public class Operation {
 	public Operation setDescription(String description) {
 		this.description = description;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setDescription(String)}.
+	 *
+	 * @param description The new value for the <property>description</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Operation description(String description) {
+		return setDescription(description);
 	}
 
 	/**
@@ -237,6 +270,16 @@ public class Operation {
 	}
 
 	/**
+	 * Synonym for {@link #setExternalDocs(ExternalDocumentation)}.
+	 *
+	 * @param externalDocs The new value for the <property>externalDocs</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Operation externalDocs(ExternalDocumentation externalDocs) {
+		return setExternalDocs(externalDocs);
+	}
+
+	/**
 	 * Bean property getter:  <property>operationId</property>.
 	 * <p>
 	 * Unique string used to identify the operation. The id MUST be unique among all operations described in the API.
@@ -260,6 +303,16 @@ public class Operation {
 	public Operation setOperationId(String operationId) {
 		this.operationId = operationId;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setOperationId(String)}.
+	 *
+	 * @param operationId The new value for the <property>operationId</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Operation operationId(String operationId) {
+		return setOperationId(operationId);
 	}
 
 	/**
@@ -303,7 +356,6 @@ public class Operation {
 	 * @param consumes The new values to add to the <property>consumes</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	@SuppressWarnings("hiding")
 	public Operation addConsumes(MediaType...consumes) {
 		return addConsumes(Arrays.asList(consumes));
 	}
@@ -319,12 +371,33 @@ public class Operation {
 	 * @param consumes The new values to add to the <property>consumes</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	@SuppressWarnings("hiding")
 	public Operation addConsumes(Collection<MediaType> consumes) {
-		if (this.consumes == null)
-			this.consumes = new LinkedList<MediaType>();
-		this.consumes.addAll(consumes);
+		if (consumes != null) {
+			if (this.consumes == null)
+				this.consumes = new LinkedList<MediaType>();
+			this.consumes.addAll(consumes);
+		}
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #addConsumes(MediaType...)}.
+	 *
+	 * @param consumes The new values to add to the <property>consumes</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Operation consumes(MediaType...consumes) {
+		return addConsumes(consumes);
+	}
+
+	/**
+	 * Synonym for {@link #addConsumes(Collection)}.
+	 *
+	 * @param consumes The new values to add to the <property>consumes</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Operation consumes(Collection<MediaType> consumes) {
+		return addConsumes(consumes);
 	}
 
 	/**
@@ -368,12 +441,53 @@ public class Operation {
 	 * @param produces The new value for the <property>produces</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	@SuppressWarnings("hiding")
 	public Operation addProduces(MediaType...produces) {
-		if (this.produces == null)
-			this.produces = new LinkedList<MediaType>();
-		this.produces.addAll(Arrays.asList(produces));
+		if (produces != null) {
+			if (this.produces == null)
+				this.produces = new LinkedList<MediaType>();
+			this.produces.addAll(Arrays.asList(produces));
+		}
 		return this;
+	}
+
+	/**
+	 * Bean property adder:  <property>produces</property>.
+	 * <p>
+	 * A list of MIME types the operation can produces.
+	 * This overrides the <code>produces</code> definition at the Swagger Object.
+	 * An empty value MAY be used to clear the global definition.
+	 * Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
+	 *
+	 * @param produces The new values to add to the <property>produces</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Operation addProduces(Collection<MediaType> produces) {
+		if (produces != null) {
+			if (this.produces == null)
+				this.produces = new LinkedList<MediaType>();
+			this.produces.addAll(produces);
+		}
+		return this;
+	}
+
+	/**
+	 * Synonym for {@link #addProduces(MediaType...)}.
+	 *
+	 * @param produces The new value for the <property>produces</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Operation produces(MediaType...produces) {
+		return addProduces(produces);
+	}
+
+	/**
+	 * Synonym for {@link #addProduces(Collection)}.
+	 *
+	 * @param produces The new value for the <property>produces</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Operation produces(Collection<MediaType> produces) {
+		return addProduces(produces);
 	}
 
 	/**
@@ -420,14 +534,34 @@ public class Operation {
 	 * The list can use the <a class="doclink" href="http://swagger.io/specification/#referenceObject">Reference Object</a> to link to parameters that are defined at the <a class="doclink" href="http://swagger.io/specification/#swaggerParameters">Swagger Object's parameters</a>.
 	 * There can be one <js>"body"</js> parameter at most.
 	 *
-	 * @param parameter The new value to add to the <property>parameters</property> property on this bean.
+	 * @param parameters The new value to add to the <property>parameters</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Operation addParameter(ParameterInfo parameter) {
-		if (parameters == null)
-			parameters = new LinkedList<ParameterInfo>();
-		parameters.add(parameter);
+	public Operation addParameters(ParameterInfo...parameters) {
+		if (this.parameters == null)
+			this.parameters = new LinkedList<ParameterInfo>();
+		this.parameters.addAll(Arrays.asList(parameters));
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #addParameters(ParameterInfo...)}.
+	 *
+	 * @param parameters The new value to add to the <property>parameters</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Operation parameters(ParameterInfo...parameters) {
+		return addParameters(parameters);
+	}
+
+	/**
+	 * Synonym for {@link #setParameters(List)}.
+	 *
+	 * @param parameters The new value to add to the <property>parameters</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Operation parameters(List<ParameterInfo> parameters) {
+		return setParameters(parameters);
 	}
 
 	/**
@@ -437,7 +571,7 @@ public class Operation {
 	 *
 	 * @return The value of the <property>responses</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,ResponseInfo> getResponses() {
+	public Map<Integer,ResponseInfo> getResponses() {
 		return responses;
 	}
 
@@ -449,7 +583,7 @@ public class Operation {
 	 * @param responses The new value for the <property>responses</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	public Operation setResponses(Map<String,ResponseInfo> responses) {
+	public Operation setResponses(Map<Integer,ResponseInfo> responses) {
 		this.responses = responses;
 		return this;
 	}
@@ -463,11 +597,32 @@ public class Operation {
 	 * @param response The response description.
 	 * @return This object (for method chaining).
 	 */
-	public Operation addResponse(String statusCode, ResponseInfo response) {
+	public Operation addResponse(Integer statusCode, ResponseInfo response) {
 		if (responses == null)
-			responses = new TreeMap<String,ResponseInfo>();
+			responses = new TreeMap<Integer,ResponseInfo>();
 		responses.put(statusCode, response);
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #addResponse(Integer,ResponseInfo)}.
+	 *
+	 * @param statusCode The HTTP status code.
+	 * @param response The response description.
+	 * @return This object (for method chaining).
+	 */
+	public Operation response(Integer statusCode, ResponseInfo response) {
+		return addResponse(statusCode, response);
+	}
+
+	/**
+	 * Synonym for {@link #setResponses(Map)}.
+	 *
+	 * @param responses The new value for the <property>responses</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Operation responses(Map<Integer,ResponseInfo> responses) {
+		return setResponses(responses);
 	}
 
 	/**
@@ -508,7 +663,6 @@ public class Operation {
 	 * @param schemes The new values to add to the <property>schemes</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	@SuppressWarnings("hiding")
 	public Operation addSchemes(String...schemes) {
 		return addSchemes(Arrays.asList(schemes));
 	}
@@ -523,12 +677,21 @@ public class Operation {
 	 * @param schemes The new values to add to the <property>schemes</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	@SuppressWarnings("hiding")
 	public Operation addSchemes(Collection<String> schemes) {
 		if (this.schemes == null)
 			this.schemes = new LinkedList<String>();
 		this.schemes.addAll(schemes);
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #addSchemes(String...)}.
+	 *
+	 * @param schemes The new values to add to the <property>schemes</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Operation schemes(String...schemes) {
+		return addSchemes(schemes);
 	}
 
 	/**
@@ -557,6 +720,16 @@ public class Operation {
 	public Operation setDeprecated(Boolean deprecated) {
 		this.deprecated = deprecated;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setDeprecated(Boolean)}.
+	 *
+	 * @param deprecated The new value for the <property>deprecated</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Operation deprecated(Boolean deprecated) {
+		return setDeprecated(deprecated);
 	}
 
 	/**
@@ -600,11 +773,23 @@ public class Operation {
 	 * @param security The new value to add to the <property>security</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	@SuppressWarnings("hiding")
 	public Operation addSecurity(Map<String,List<String>> security) {
 		if (this.security == null)
 			this.security = new LinkedList<Map<String,List<String>>>();
 		this.security.add(security);
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #addSecurity(Map)}.
+	 *
+	 * @param scheme The security scheme that applies to this operation
+	 * @param alternatives The list of values describes alternative security schemes that can be used (that is, there is a logical OR between the security requirements).
+	 * @return This object (for method chaining).
+	 */
+	public Operation security(String scheme, String...alternatives) {
+		Map<String,List<String>> m = new LinkedHashMap<String,List<String>>();
+		m.put(scheme, Arrays.asList(alternatives));
+		return addSecurity(m);
 	}
 }

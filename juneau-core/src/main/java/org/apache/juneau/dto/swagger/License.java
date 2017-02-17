@@ -26,20 +26,11 @@ import org.apache.juneau.annotation.*;
  * </p>
  */
 @Bean(properties="name,url")
-public class License {
+@SuppressWarnings("hiding")
+public class License extends SwaggerElement {
 
 	private String name;
 	private String url;
-
-	/**
-	 * Convenience method for creating a new License object.
-	 *
-	 * @param name Required. The license name used for the API.
-	 * @return A new License object.
-	 */
-	public static License create(String name) {
-		return new License().setName(name);
-	}
 
 	/**
 	 * Bean property getter:  <property>name</property>.
@@ -66,6 +57,16 @@ public class License {
 	}
 
 	/**
+	 * Synonym for {@link #setName(String)}.
+	 *
+	 * @param name The new value for the <property>name</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public License name(String name) {
+		return setName(name);
+	}
+
+	/**
 	 * Bean property getter:  <property>url</property>.
 	 * <p>
 	 * A URL to the license used for the API. MUST be in the format of a URL.
@@ -87,5 +88,15 @@ public class License {
 	public License setUrl(String url) {
 		this.url = url;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setUrl(String)}.
+	 *
+	 * @param url The new value for the <property>url</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public License url(String url) {
+		return setUrl(url);
 	}
 }

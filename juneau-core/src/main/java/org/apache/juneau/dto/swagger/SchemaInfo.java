@@ -27,7 +27,8 @@ import org.apache.juneau.annotation.*;
  * Unless stated otherwise, the property definitions follow the JSON Schema specification as referenced here.
  */
 @Bean(properties="format,title,description,default,multipleOf,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,maxProperties,minProperties,required,enum,type,items,allOf,properties,additionalProperties,discriminator,readOnly,xml,externalDocs,example")
-public class SchemaInfo {
+@SuppressWarnings({ "hiding", "unchecked" })
+public class SchemaInfo extends SwaggerElement {
 
 	private String format;
 	private String title;
@@ -84,6 +85,16 @@ public class SchemaInfo {
 	}
 
 	/**
+	 * Synonym for {@link #setFormat(String)}.
+	 *
+	 * @param format The new value for the <property>format</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaInfo format(String format) {
+		return setFormat(format);
+	}
+
+	/**
 	 * Bean property getter:  <property>title</property>.
 	 *
 	 * @return The value of the <property>title</property> property on this bean, or <jk>null</jk> if it is not set.
@@ -101,6 +112,16 @@ public class SchemaInfo {
 	public SchemaInfo setTitle(String title) {
 		this.title = title;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setTitle(String)}.
+	 *
+	 * @param title The new value for the <property>title</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaInfo title(String title) {
+		return setTitle(title);
 	}
 
 	/**
@@ -128,6 +149,16 @@ public class SchemaInfo {
 	}
 
 	/**
+	 * Synonym for {@link #setDescription(String)}.
+	 *
+	 * @param description The new value for the <property>description</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaInfo description(String description) {
+		return setDescription(description);
+	}
+
+	/**
 	 * Bean property getter:  <property>default</property>.
 	 * <p>
 	 * Unlike JSON Schema, the value MUST conform to the defined type for the Schema Object.
@@ -152,6 +183,16 @@ public class SchemaInfo {
 	}
 
 	/**
+	 * Synonym for {@link #setDefault(Object)}.
+	 *
+	 * @param _default The new value for the <property>default</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaInfo _default(Object _default) {
+		return setDefault(_default);
+	}
+
+	/**
 	 * Bean property getter:  <property>multipleOf</property>.
 	 *
 	 * @return The value of the <property>multipleOf</property> property on this bean, or <jk>null</jk> if it is not set.
@@ -169,6 +210,16 @@ public class SchemaInfo {
 	public SchemaInfo setMultipleOf(Number multipleOf) {
 		this.multipleOf = multipleOf;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setMultipleOf(Number)}.
+	 *
+	 * @param multipleOf The new value for the <property>multipleOf</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaInfo multipleOf(Number multipleOf) {
+		return setMultipleOf(multipleOf);
 	}
 
 	/**
@@ -192,6 +243,16 @@ public class SchemaInfo {
 	}
 
 	/**
+	 * Synonym for {@link #setMaximum(Number)}.
+	 *
+	 * @param maximum The new value for the <property>maximum</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaInfo maximum(Number maximum) {
+		return setMaximum(maximum);
+	}
+
+	/**
 	 * Bean property getter:  <property>exclusiveMaximum</property>.
 	 *
 	 * @return The value of the <property>exclusiveMaximum</property> property on this bean, or <jk>null</jk> if it is not set.
@@ -209,6 +270,16 @@ public class SchemaInfo {
 	public SchemaInfo setExclusiveMaximum(Boolean exclusiveMaximum) {
 		this.exclusiveMaximum = exclusiveMaximum;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setExclusiveMaximum(Boolean)}.
+	 *
+	 * @param exclusiveMaximum The new value for the <property>exclusiveMaximum</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaInfo exclusiveMaximum(Boolean exclusiveMaximum) {
+		return setExclusiveMaximum(exclusiveMaximum);
 	}
 
 	/**
@@ -232,6 +303,16 @@ public class SchemaInfo {
 	}
 
 	/**
+	 * Synonym for {@link #setMinimum(Number)}.
+	 *
+	 * @param minimum The new value for the <property>minimum</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaInfo minimum(Number minimum) {
+		return setMinimum(minimum);
+	}
+
+	/**
 	 * Bean property getter:  <property>exclusiveMinimum</property>.
 	 *
 	 * @return The value of the <property>exclusiveMinimum</property> property on this bean, or <jk>null</jk> if it is not set.
@@ -249,6 +330,16 @@ public class SchemaInfo {
 	public SchemaInfo setExclusiveMinimum(Boolean exclusiveMinimum) {
 		this.exclusiveMinimum = exclusiveMinimum;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setExclusiveMinimum(Boolean)}.
+	 *
+	 * @param exclusiveMinimum The new value for the <property>exclusiveMinimum</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaInfo exclusiveMinimum(Boolean exclusiveMinimum) {
+		return setExclusiveMinimum(exclusiveMinimum);
 	}
 
 	/**
@@ -272,6 +363,16 @@ public class SchemaInfo {
 	}
 
 	/**
+	 * Synonym for {@link #setMaxLength(Integer)}.
+	 *
+	 * @param maxLength The new value for the <property>maxLength</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaInfo maxLength(Integer maxLength) {
+		return setMaxLength(maxLength);
+	}
+
+	/**
 	 * Bean property getter:  <property>minLength</property>.
 	 *
 	 * @return The value of the <property>minLength</property> property on this bean, or <jk>null</jk> if it is not set.
@@ -289,6 +390,16 @@ public class SchemaInfo {
 	public SchemaInfo setMinLength(Integer minLength) {
 		this.minLength = minLength;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setMinLength(Integer)}.
+	 *
+	 * @param minLength The new value for the <property>minLength</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaInfo minLength(Integer minLength) {
+		return setMinLength(minLength);
 	}
 
 	/**
@@ -312,6 +423,16 @@ public class SchemaInfo {
 	}
 
 	/**
+	 * Synonym for {@link #setPattern(String)}.
+	 *
+	 * @param pattern The new value for the <property>pattern</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaInfo pattern(String pattern) {
+		return setPattern(pattern);
+	}
+
+	/**
 	 * Bean property getter:  <property>maxItems</property>.
 	 *
 	 * @return The value of the <property>maxItems</property> property on this bean, or <jk>null</jk> if it is not set.
@@ -329,6 +450,16 @@ public class SchemaInfo {
 	public SchemaInfo setMaxItems(Integer maxItems) {
 		this.maxItems = maxItems;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setMaxItems(Integer)}.
+	 *
+	 * @param maxItems The new value for the <property>maxItems</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaInfo maxItems(Integer maxItems) {
+		return setMaxItems(maxItems);
 	}
 
 	/**
@@ -352,6 +483,16 @@ public class SchemaInfo {
 	}
 
 	/**
+	 * Synonym for {@link #setMinItems(Integer)}.
+	 *
+	 * @param minItems The new value for the <property>minItems</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaInfo minItems(Integer minItems) {
+		return setMinItems(minItems);
+	}
+
+	/**
 	 * Bean property getter:  <property>uniqueItems</property>.
 	 *
 	 * @return The value of the <property>uniqueItems</property> property on this bean, or <jk>null</jk> if it is not set.
@@ -368,6 +509,16 @@ public class SchemaInfo {
 	public SchemaInfo setUniqueItems(Boolean uniqueItems) {
 		this.uniqueItems = uniqueItems;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setUniqueItems(Boolean)}.
+	 *
+	 * @param uniqueItems The new value for the <property>uniqueItems</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaInfo uniqueItems(Boolean uniqueItems) {
+		return setUniqueItems(uniqueItems);
 	}
 
 	/**
@@ -391,6 +542,16 @@ public class SchemaInfo {
 	}
 
 	/**
+	 * Synonym for {@link #setMaxProperties(Integer)}.
+	 *
+	 * @param maxProperties The new value for the <property>maxProperties</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaInfo maxProperties(Integer maxProperties) {
+		return setMaxProperties(maxProperties);
+	}
+
+	/**
 	 * Bean property getter:  <property>minProperties</property>.
 	 *
 	 * @return The value of the <property>minProperties</property> property on this bean, or <jk>null</jk> if it is not set.
@@ -411,6 +572,16 @@ public class SchemaInfo {
 	}
 
 	/**
+	 * Synonym for {@link #setMinProperties(Integer)}.
+	 *
+	 * @param minProperties The new value for the <property>minProperties</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaInfo minProperties(Integer minProperties) {
+		return setMinProperties(minProperties);
+	}
+
+	/**
 	 * Bean property getter:  <property>required</property>.
 	 *
 	 * @return The value of the <property>required</property> property on this bean, or <jk>null</jk> if it is not set.
@@ -428,6 +599,16 @@ public class SchemaInfo {
 	public SchemaInfo setRequired(Boolean required) {
 		this.required = required;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setRequired(Boolean)}.
+	 *
+	 * @param required The new value for the <property>required</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaInfo required(Boolean required) {
+		return setRequired(required);
 	}
 
 	/**
@@ -454,25 +635,33 @@ public class SchemaInfo {
 	 * Bean property adder:  <property>enum</property>.
 	 *
 	 * @param _enum The new values to add to the <property>enum</property> property on this bean.
+	 * 	These can either be individual objects or {@link Collection Collections} of objects.
 	 * @return This object (for method chaining).
 	 */
-	@SuppressWarnings("hiding")
 	public SchemaInfo addEnum(Object..._enum) {
-		return addEnum(Arrays.asList(_enum));
+		for (Object o  : _enum) {
+			if (o != null) {
+				if (o instanceof Collection)
+					addEnum((Collection<Object>)o);
+				else {
+					if (this._enum == null)
+						this._enum = new LinkedList<Object>();
+					this._enum.add(o);
+				}
+			}
+		}
+		return this;
 	}
 
 	/**
-	 * Bean property adder:  <property>enum</property>.
+	 * Synonym for {@link #addEnum(Object...)}.
 	 *
 	 * @param _enum The new values to add to the <property>enum</property> property on this bean.
+	 * 	These can either be individual objects or {@link Collection Collections} of objects.
 	 * @return This object (for method chaining).
 	 */
-	@SuppressWarnings("hiding")
-	public SchemaInfo addEnum(Collection<Object> _enum) {
-		if (this._enum == null)
-			this._enum = new LinkedList<Object>();
-		this._enum.addAll(_enum);
-		return this;
+	public SchemaInfo _enum(Object..._enum) {
+		return addEnum(_enum);
 	}
 
 	/**
@@ -496,6 +685,16 @@ public class SchemaInfo {
 	}
 
 	/**
+	 * Synonym for {@link #setType(String)}.
+	 *
+	 * @param type The new value for the <property>type</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaInfo type(String type) {
+		return setType(type);
+	}
+
+	/**
 	 * Bean property getter:  <property>items</property>.
 	 *
 	 * @return The value of the <property>items</property> property on this bean, or <jk>null</jk> if it is not set.
@@ -513,6 +712,16 @@ public class SchemaInfo {
 	public SchemaInfo setItems(Items items) {
 		this.items = items;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setItems(Items)}.
+	 *
+	 * @param items The new value for the <property>items</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaInfo items(Items items) {
+		return setItems(items);
 	}
 
 	/**
@@ -536,28 +745,36 @@ public class SchemaInfo {
 	}
 
 	/**
-	 * Bean property adder:  <property>allOf</property>.
+	 * Bean property adder:  <property>enum</property>.
 	 *
 	 * @param allOf The new values to add to the <property>allOf</property> property on this bean.
+	 * 	These can either be individual objects or {@link Collection Collections} of objects.
 	 * @return This object (for method chaining).
 	 */
-	@SuppressWarnings("hiding")
 	public SchemaInfo addAllOf(Object...allOf) {
-		return addAllOf(Arrays.asList(allOf));
+		for (Object o  : allOf) {
+			if (o != null) {
+				if (o instanceof Collection)
+					addAllOf((Collection<Object>)o);
+				else {
+					if (this.allOf == null)
+						this.allOf = new LinkedList<Object>();
+					this.allOf.add(o);
+				}
+			}
+		}
+		return this;
 	}
 
 	/**
-	 * Bean property adder:  <property>allOf</property>.
+	 * Synonym for {@link #addAllOf(Object...)}.
 	 *
 	 * @param allOf The new values to add to the <property>allOf</property> property on this bean.
+	 * 	These can either be individual objects or {@link Collection Collections} of objects.
 	 * @return This object (for method chaining).
 	 */
-	@SuppressWarnings("hiding")
-	public SchemaInfo addAllOf(Collection<Object> allOf) {
-		if (this.allOf == null)
-			this.allOf = new LinkedList<Object>();
-		this.allOf.addAll(allOf);
-		return this;
+	public SchemaInfo allOf(Object...allOf) {
+		return addAllOf(allOf);
 	}
 
 	/**
@@ -595,6 +812,22 @@ public class SchemaInfo {
 	}
 
 	/**
+	 * Synonym for {@link #addProperty(String,Map)}.
+	 *
+	 * @param name The property name.
+	 * @param propertyProperties The properties of the property.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaInfo property(String name, Object...propertyProperties) {
+		if (propertyProperties.length % 2 != 0)
+			throw new RuntimeException("Invalid number of arguments passed to SchemaInfo.property(String,Object...)");
+		Map<String,Object> m = new LinkedHashMap<String,Object>();
+		for (int i = 0; i < propertyProperties.length; i += 2)
+			m.put(String.valueOf(propertyProperties[i]), propertyProperties[i+1]);
+		return addProperty(name, m);
+	}
+
+	/**
 	 * Bean property getter:  <property>additionalProperties</property>.
 	 *
 	 * @return The value of the <property>additionalProperties</property> property on this bean, or <jk>null</jk> if it is not set.
@@ -612,6 +845,21 @@ public class SchemaInfo {
 	public SchemaInfo setAdditionalProperties(Map<String,Object> additionalProperties) {
 		this.additionalProperties = additionalProperties;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setAdditionalProperties(Map)}.
+	 *
+	 * @param additionalProperties The new value for the <property>additionalProperties</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaInfo additionalProperties(Object...additionalProperties) {
+		if (additionalProperties.length % 2 != 0)
+			throw new RuntimeException("Invalid number of arguments passed to SchemaInfo.additionalProperties(Object...)");
+		Map<String,Object> m = new LinkedHashMap<String,Object>();
+		for (int i = 0; i < additionalProperties.length; i += 2)
+			m.put(String.valueOf(additionalProperties[i]), additionalProperties[i+1]);
+		return setAdditionalProperties(m);
 	}
 
 	/**
@@ -635,6 +883,16 @@ public class SchemaInfo {
 	}
 
 	/**
+	 * Synonym for {@link #setDiscriminator(String)}.
+	 *
+	 * @param discriminator The new value for the <property>discriminator</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaInfo discriminator(String discriminator) {
+		return setDiscriminator(discriminator);
+	}
+
+	/**
 	 * Bean property getter:  <property>readOnly</property>.
 	 *
 	 * @return The value of the <property>readOnly</property> property on this bean, or <jk>null</jk> if it is not set.
@@ -652,6 +910,16 @@ public class SchemaInfo {
 	public SchemaInfo setReadOnly(Boolean readOnly) {
 		this.readOnly = readOnly;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setReadOnly(Boolean)}.
+	 *
+	 * @param readOnly The new value for the <property>readOnly</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaInfo readOnly(Boolean readOnly) {
+		return setReadOnly(readOnly);
 	}
 
 	/**
@@ -675,6 +943,16 @@ public class SchemaInfo {
 	}
 
 	/**
+	 * Synonym for {@link #setXml(Xml)}.
+	 *
+	 * @param xml The new value for the <property>xml</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaInfo xml(Xml xml) {
+		return setXml(xml);
+	}
+
+	/**
 	 * Bean property getter:  <property>externalDocs</property>.
 	 *
 	 * @return The value of the <property>externalDocs</property> property on this bean, or <jk>null</jk> if it is not set.
@@ -695,6 +973,16 @@ public class SchemaInfo {
 	}
 
 	/**
+	 * Synonym for {@link #setExternalDocs(ExternalDocumentation)}.
+	 *
+	 * @param externalDocs The new value for the <property>externalDocs</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaInfo externalDocs(ExternalDocumentation externalDocs) {
+		return setExternalDocs(externalDocs);
+	}
+
+	/**
 	 * Bean property getter:  <property>example</property>.
 	 *
 	 * @return The value of the <property>example</property> property on this bean, or <jk>null</jk> if it is not set.
@@ -712,5 +1000,15 @@ public class SchemaInfo {
 	public SchemaInfo setExample(Object example) {
 		this.example = example;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setExample(Object)}.
+	 *
+	 * @param example The new value for the <property>example</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public SchemaInfo example(Object example) {
+		return setExample(example);
 	}
 }

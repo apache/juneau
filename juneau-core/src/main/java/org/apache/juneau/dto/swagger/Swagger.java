@@ -21,7 +21,8 @@ import org.apache.juneau.annotation.*;
  * This is the root document object for the API specification.
  */
 @Bean(properties="swagger,info,tags,externalDocs,basePath,schemes,consumes,produces,paths,definitions,parameters,responses,securityDefinitions,security")
-public class Swagger {
+@SuppressWarnings("hiding")
+public class Swagger extends SwaggerElement {
 
 	/** Represents a null swagger */
 	public static final Swagger NULL = new Swagger();
@@ -40,17 +41,6 @@ public class Swagger {
 	private List<Map<String,List<String>>> security;
 	private List<Tag> tags;
 	private ExternalDocumentation externalDocs;
-
-	/**
-	 * Convenience method for creating a new Swagger object.
-	 *
-	 * @param info Required. Provides metadata about the API.
-	 * 	The metadata can be used by the clients if needed.
-	 * @return A new Swagger object.
-	 */
-	public static Swagger create(Info info) {
-		return new Swagger().setInfo(info);
-	}
 
 	/**
 	 * Bean property getter:  <property>swagger</property>.
@@ -81,6 +71,16 @@ public class Swagger {
 	}
 
 	/**
+	 * Synonym for {@link #setSwagger(String)}.
+	 *
+	 * @param swagger The new value for the <property>swagger</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Swagger swagger(String swagger) {
+		return setSwagger(swagger);
+	}
+
+	/**
 	 * Bean property getter:  <property>info</property>.
 	 * <p>
 	 * Required. Provides metadata about the API.
@@ -104,6 +104,16 @@ public class Swagger {
 	public Swagger setInfo(Info info) {
 		this.info = info;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setInfo(Info)}.
+	 *
+	 * @param info The new value for the <property>info</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Swagger info(Info info) {
+		return setInfo(info);
 	}
 
 	/**
@@ -139,6 +149,16 @@ public class Swagger {
 	}
 
 	/**
+	 * Synonym for {@link #setHost(String)}.
+	 *
+	 * @param host The new value for the <property>host</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Swagger host(String host) {
+		return setHost(host);
+	}
+
+	/**
 	 * Bean property getter:  <property>basePath</property>.
 	 * <p>
 	 * The base path on which the API is served, which is relative to the <code>host</code>.
@@ -166,6 +186,16 @@ public class Swagger {
 	public Swagger setBasePath(String basePath) {
 		this.basePath = basePath;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setBasePath(String)}.
+	 *
+	 * @param basePath The new value for the <property>basePath</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Swagger basePath(String basePath) {
+		return setBasePath(basePath);
 	}
 
 	/**
@@ -206,7 +236,6 @@ public class Swagger {
 	 * @param schemes The values to add for the <property>schemes</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	@SuppressWarnings("hiding")
 	public Swagger addSchemes(String...schemes) {
 		return addSchemes(Arrays.asList(schemes));
 	}
@@ -221,12 +250,23 @@ public class Swagger {
 	 * @param schemes The values to add for the <property>schemes</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	@SuppressWarnings("hiding")
 	public Swagger addSchemes(Collection<String> schemes) {
-		if (this.schemes == null)
-			this.schemes = new LinkedList<String>();
-		this.schemes.addAll(schemes);
+		if (schemes != null) {
+			if (this.schemes == null)
+				this.schemes = new LinkedList<String>();
+			this.schemes.addAll(schemes);
+		}
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #addSchemes(String...)}.
+	 *
+	 * @param schemes The values to add for the <property>schemes</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Swagger schemes(String...schemes) {
+		return addSchemes(schemes);
 	}
 
 	/**
@@ -267,7 +307,6 @@ public class Swagger {
 	 * @param consumes The values to add for the <property>consumes</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	@SuppressWarnings("hiding")
 	public Swagger addConsumes(MediaType...consumes) {
 		return addConsumes(Arrays.asList(consumes));
 	}
@@ -282,12 +321,33 @@ public class Swagger {
 	 * @param consumes The values to add for the <property>consumes</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	@SuppressWarnings("hiding")
 	public Swagger addConsumes(Collection<MediaType> consumes) {
-		if (this.consumes == null)
-			this.consumes = new LinkedList<MediaType>();
-		this.consumes.addAll(consumes);
+		if (consumes != null) {
+			if (this.consumes == null)
+				this.consumes = new LinkedList<MediaType>();
+			this.consumes.addAll(consumes);
+		}
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #addConsumes(MediaType...)}.
+	 *
+	 * @param consumes The values to add for the <property>consumes</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Swagger consumes(MediaType...consumes) {
+		return addConsumes(consumes);
+	}
+
+	/**
+	 * Synonym for {@link #addConsumes(Collection)}.
+	 *
+	 * @param consumes The values to add for the <property>consumes</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Swagger consumes(Collection<MediaType> consumes) {
+		return addConsumes(consumes);
 	}
 
 	/**
@@ -328,7 +388,6 @@ public class Swagger {
 	 * @param produces The values to add for the <property>produces</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	@SuppressWarnings("hiding")
 	public Swagger addProduces(MediaType...produces) {
 		return addProduces(Arrays.asList(produces));
 	}
@@ -343,12 +402,33 @@ public class Swagger {
 	 * @param produces The values to add for the <property>produces</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	@SuppressWarnings("hiding")
 	public Swagger addProduces(Collection<MediaType> produces) {
-		if (this.produces == null)
-			this.produces = new LinkedList<MediaType>();
-		this.produces.addAll(produces);
+		if (produces != null) {
+			if (this.produces == null)
+				this.produces = new LinkedList<MediaType>();
+			this.produces.addAll(produces);
+		}
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #addProduces(MediaType...)}.
+	 *
+	 * @param produces The values to add for the <property>produces</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Swagger produces(MediaType...produces) {
+		return addProduces(produces);
+	}
+
+	/**
+	 * Synonym for {@link #addProduces(Collection)}.
+	 *
+	 * @param produces The values to add for the <property>produces</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Swagger produces(Collection<MediaType> produces) {
+		return addProduces(produces);
 	}
 
 	/**
@@ -398,6 +478,18 @@ public class Swagger {
 	}
 
 	/**
+	 * Synonym for {@link #path(String,String,Operation)}.
+	 *
+	 * @param path The path template.
+	 * @param methodName The HTTP method name.
+	 * @param operation The operation that describes the path.
+	 * @return This object (for method chaining).
+	 */
+	public Swagger path(String path, String methodName, Operation operation) {
+		return addPath(path, methodName, operation);
+	}
+
+	/**
 	 * Bean property getter:  <property>definitions</property>.
 	 * <p>
 	 * An object to hold data types produced and consumed by operations.
@@ -435,6 +527,17 @@ public class Swagger {
 			definitions = new TreeMap<String,SchemaInfo>();
 		definitions.put(name, schema);
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #addDefinition(String,SchemaInfo)}.
+	 *
+	 * @param name A definition name.
+	 * @param schema The schema that the name defines.
+	 * @return This object (for method chaining).
+	 */
+	public Swagger xxx(String name, SchemaInfo schema) {
+		return addDefinition(name, schema);
 	}
 
 	/**
@@ -481,6 +584,17 @@ public class Swagger {
 	}
 
 	/**
+	 * Synonym for {@link #addParameter(String,ParameterInfo)}.
+	 *
+	 * @param name The parameter name.
+	 * @param parameter The parameter definition.
+	 * @return This object (for method chaining).
+	 */
+	public Swagger parameter(String name, ParameterInfo parameter) {
+		return addParameter(name, parameter);
+	}
+
+	/**
 	 * Bean property getter:  <property>responses</property>.
 	 * <p>
 	 * An object to hold responses that can be used across operations.
@@ -524,6 +638,17 @@ public class Swagger {
 	}
 
 	/**
+	 * Synonym for {@link #addResponse(String,ResponseInfo)}.
+	 *
+	 * @param name The response name.
+	 * @param response The response definition.
+	 * @return This object (for method chaining).
+	 */
+	public Swagger response(String name, ResponseInfo response) {
+		return addResponse(name, response);
+	}
+
+	/**
 	 * Bean property getter:  <property>securityDefinitions</property>.
 	 * <p>
 	 * Security scheme definitions that can be used across the specification.
@@ -564,6 +689,17 @@ public class Swagger {
 	}
 
 	/**
+	 * Synonym for {@link #addSecurityDefinition(String,SecurityScheme)}.
+	 *
+	 * @param name A security name.
+	 * @param securityScheme A security schema.
+	 * @return This object (for method chaining).
+	 */
+	public Swagger securityDefinition(String name, SecurityScheme securityScheme) {
+		return addSecurityDefinition(name, securityScheme);
+	}
+
+	/**
 	 * Bean property getter:  <property>security</property>.
 	 * <p>
 	 * A declaration of which security schemes are applied for the API as a whole.
@@ -601,12 +737,24 @@ public class Swagger {
 	 * @param security The value to add for the <property>security</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	@SuppressWarnings("hiding")
 	public Swagger addSecurity(Map<String,List<String>> security) {
 		if (this.security == null)
 			this.security = new LinkedList<Map<String,List<String>>>();
 		this.security.add(security);
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #addSecurity(Map)}.
+	 *
+	 * @param scheme The security scheme that applies to this operation
+	 * @param alternatives The list of values describes alternative security schemes that can be used (that is, there is a logical OR between the security requirements).
+	 * @return This object (for method chaining).
+	 */
+	public Swagger security(String scheme, String...alternatives) {
+		Map<String,List<String>> m = new LinkedHashMap<String,List<String>>();
+		m.put(scheme, Arrays.asList(alternatives));
+		return addSecurity(m);
 	}
 
 	/**
@@ -653,12 +801,31 @@ public class Swagger {
 	 * @param tags The values to add for the <property>tags</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	@SuppressWarnings("hiding")
 	public Swagger addTags(Tag...tags) {
 		if (this.tags == null)
 			this.tags = new LinkedList<Tag>();
 		this.tags.addAll(Arrays.asList(tags));
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #addTags(Tag...)}.
+	 *
+	 * @param tags The values to add for the <property>tags</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Swagger tags(Tag...tags) {
+		return addTags(tags);
+	}
+
+	/**
+	 * Synonym for {@link #setTags(List)}.
+	 *
+	 * @param tags The values to add for the <property>tags</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Swagger tags(List<Tag> tags) {
+		return setTags(tags);
 	}
 
 	/**
@@ -683,6 +850,16 @@ public class Swagger {
 	public Swagger setExternalDocs(ExternalDocumentation externalDocs) {
 		this.externalDocs = externalDocs;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setExternalDocs(ExternalDocumentation)}.
+	 *
+	 * @param externalDocs The new value for the <property>externalDocs</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Swagger externalDocs(ExternalDocumentation externalDocs) {
+		return setExternalDocs(externalDocs);
 	}
 
 	private static class MethodSorter implements Comparator<String> {

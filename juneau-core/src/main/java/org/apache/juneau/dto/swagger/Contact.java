@@ -27,20 +27,12 @@ import org.apache.juneau.annotation.*;
  * </p>
  */
 @Bean(properties="name,url,email")
-public class Contact {
+@SuppressWarnings("hiding")
+public class Contact extends SwaggerElement {
 
 	private String name;
 	private String url;
 	private String email;
-
-	/**
-	 * Convenience method for creating a new Contact object.
-	 *
-	 * @return A new Contact object.
-	 */
-	public static Contact create() {
-		return new Contact();
-	}
 
 	/**
 	 * Bean property getter:  <property>name</property>.
@@ -64,6 +56,16 @@ public class Contact {
 	public Contact setName(String name) {
 		this.name = name;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setName(String)}.
+	 *
+	 * @param name The new value for the <property>name</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Contact name(String name) {
+		return setName(name);
 	}
 
 	/**
@@ -91,6 +93,16 @@ public class Contact {
 	}
 
 	/**
+	 * Synonym for {@link #setUrl(String)}.
+	 *
+	 * @param url The new value for the <property>url</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Contact url(String url) {
+		return setName(url);
+	}
+
+	/**
 	 * Bean property getter:  <property>email</property>.
 	 * <p>
 	 * The email address of the contact person/organization. MUST be in the format of an email address.
@@ -112,5 +124,15 @@ public class Contact {
 	public Contact setEmail(String email) {
 		this.email = email;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setEmail(String)}.
+	 *
+	 * @param email The new value for the <property>email</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Contact email(String email) {
+		return setEmail(email);
 	}
 }

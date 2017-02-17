@@ -30,7 +30,8 @@ import org.apache.juneau.json.*;
  * </p>
  */
 @Bean(properties="type,format,items,collectionFormat,default,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,enum,multipleOf")
-public class Items {
+@SuppressWarnings({ "hiding", "unchecked" })
+public class Items extends SwaggerElement {
 
 	private static final String[] VALID_TYPES = {"string", "number", "integer", "boolean", "array"};
 	private static final String[] VALID_COLLECTION_FORMATS = {"csv","ssv","tsv","pipes","multi"};
@@ -52,34 +53,10 @@ public class Items {
 	private Boolean uniqueItems;
 	private List<Object> _enum;
 	private Number multipleOf;
-	private boolean strict;
 
-	/**
-	 * Convenience method for creating a new Items object.
-	 *
-	 * @param type Required. The internal type of the array.
-	 * 	The value MUST be one of <js>"string"</js>, <js>"number"</js>, <js>"integer"</js>, <js>"boolean"</js>, or <js>"array"</js>.
-	 * 	Files and models are not allowed.
-	 * @return A new Items object.
-	 */
-	public static Items create(String type) {
-		return new Items().setType(type);
-	}
-
-	/**
-	 * Same as {@link #create(String)} except methods will throw runtime exceptions if you attempt
-	 * to pass in invalid values per the Swagger spec.
-	 *
-	 * @param type Required. The tyoe of the object.
-	 * 	The value MUST be one of <js>"string"</js>, <js>"number"</js>, <js>"integer"</js>, <js>"boolean"</js>, or <js>"array"</js>.
-	 * @return A new Header object.
-	 */
-	public static Items createStrict(String type) {
-		return new Items().setStrict().setType(type);
-	}
-
-	private Items setStrict() {
-		this.strict = true;
+	@Override /* SwaggerElement */
+	protected Items strict() {
+		super.strict();
 		return this;
 	}
 
@@ -105,10 +82,20 @@ public class Items {
 	 * @return This object (for method chaining).
 	 */
 	public Items setType(String type) {
-		if (strict && ! ArrayUtils.contains(type, VALID_TYPES))
+		if (isStrict() && ! ArrayUtils.contains(type, VALID_TYPES))
 			throw new RuntimeException("Invalid value passed in to setType(String).  Value='"+type+"', valid values=" + JsonSerializer.DEFAULT_LAX.toString(VALID_TYPES));
 		this.type = type;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setType(String)}.
+	 *
+	 * @param type The new value for the <property>type</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Items type(String type) {
+		return setType(type);
 	}
 
 	/**
@@ -136,6 +123,16 @@ public class Items {
 	}
 
 	/**
+	 * Synonym for {@link #setFormat(String)}.
+	 *
+	 * @param format The new value for the <property>format</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Items format(String format) {
+		return setFormat(format);
+	}
+
+	/**
 	 * Bean property getter:  <property>items</property>.
 	 * <p>
 	 * Required if <code>type</code> is <js>"array"</js>.
@@ -159,6 +156,16 @@ public class Items {
 	public Items setItems(Items items) {
 		this.items = items;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setItems(Items)}.
+	 *
+	 * @param items The new value for the <property>items</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Items items(Items items) {
+		return setItems(items);
 	}
 
 	/**
@@ -201,10 +208,20 @@ public class Items {
 	 * @return This object (for method chaining).
 	 */
 	public Items setCollectionFormat(String collectionFormat) {
-		if (strict && ! ArrayUtils.contains(collectionFormat, VALID_COLLECTION_FORMATS))
+		if (isStrict() && ! ArrayUtils.contains(collectionFormat, VALID_COLLECTION_FORMATS))
 			throw new RuntimeException("Invalid value passed in to setCollectionFormat(String).  Value='"+collectionFormat+"', valid values=" + JsonSerializer.DEFAULT_LAX.toString(VALID_COLLECTION_FORMATS));
 		this.collectionFormat = collectionFormat;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setCollectionFormat(String)}.
+	 *
+	 * @param collectionFormat The new value for the <property>collectionFormat</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Items collectionFormat(String collectionFormat) {
+		return setCollectionFormat(collectionFormat);
 	}
 
 	/**
@@ -238,6 +255,16 @@ public class Items {
 	}
 
 	/**
+	 * Synonym for {@link #setDefault(Object)}.
+	 *
+	 * @param _default The new value for the <property>default</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Items _default(Object _default) {
+		return setDefault(_default);
+	}
+
+	/**
 	 * Bean property getter:  <property>maximum</property>.
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor17">http://json-schema.org/latest/json-schema-validation.html#anchor17</a>.
@@ -259,6 +286,16 @@ public class Items {
 	public Items setMaximum(Number maximum) {
 		this.maximum = maximum;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setMaximum(Number)}.
+	 *
+	 * @param maximum The new value for the <property>maximum</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Items maximum(Number maximum) {
+		return setMaximum(maximum);
 	}
 
 	/**
@@ -286,6 +323,16 @@ public class Items {
 	}
 
 	/**
+	 * Synonym for {@link #setExclusiveMaximum(Boolean)}.
+	 *
+	 * @param exclusiveMaximum The new value for the <property>exclusiveMaximum</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Items exclusiveMaximum(Boolean exclusiveMaximum) {
+		return setExclusiveMaximum(exclusiveMaximum);
+	}
+
+	/**
 	 * Bean property getter:  <property>minimum</property>.
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor21">http://json-schema.org/latest/json-schema-validation.html#anchor21</a>.
@@ -307,6 +354,16 @@ public class Items {
 	public Items setMinimum(Number minimum) {
 		this.minimum = minimum;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setMinimum(Number)}.
+	 *
+	 * @param minimum The new value for the <property>minimum</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Items minimum(Number minimum) {
+		return setMinimum(minimum);
 	}
 
 	/**
@@ -334,6 +391,16 @@ public class Items {
 	}
 
 	/**
+	 * Synonym for {@link #setExclusiveMinimum(Boolean)}.
+	 *
+	 * @param exclusiveMinimum The new value for the <property>exclusiveMinimum</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Items exclusiveMinimum(Boolean exclusiveMinimum) {
+		return setExclusiveMinimum(exclusiveMinimum);
+	}
+
+	/**
 	 * Bean property getter:  <property>maxLength</property>.
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor26">http://json-schema.org/latest/json-schema-validation.html#anchor26</a>.
@@ -355,6 +422,16 @@ public class Items {
 	public Items setMaxLength(Integer maxLength) {
 		this.maxLength = maxLength;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setMaxLength(Integer)}.
+	 *
+	 * @param maxLength The new value for the <property>maxLength</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Items maxLength(Integer maxLength) {
+		return setMaxLength(maxLength);
 	}
 
 	/**
@@ -382,6 +459,16 @@ public class Items {
 	}
 
 	/**
+	 * Synonym for {@link #setMinLength(Integer)}.
+	 *
+	 * @param minLength The new value for the <property>minLength</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Items minLength(Integer minLength) {
+		return setMinLength(minLength);
+	}
+
+	/**
 	 * Bean property getter:  <property>pattern</property>.
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor33">http://json-schema.org/latest/json-schema-validation.html#anchor33</a>.
@@ -403,6 +490,16 @@ public class Items {
 	public Items setPattern(String pattern) {
 		this.pattern = pattern;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setPattern(String)}.
+	 *
+	 * @param pattern The new value for the <property>pattern</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Items pattern(String pattern) {
+		return setPattern(pattern);
 	}
 
 	/**
@@ -430,6 +527,16 @@ public class Items {
 	}
 
 	/**
+	 * Synonym for {@link #setMaxItems(Integer)}.
+	 *
+	 * @param maxItems The new value for the <property>maxItems</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Items maxItems(Integer maxItems) {
+		return setMaxItems(maxItems);
+	}
+
+	/**
 	 * Bean property getter:  <property>minItems</property>.
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor45">http://json-schema.org/latest/json-schema-validation.html#anchor45</a>.
@@ -454,6 +561,16 @@ public class Items {
 	}
 
 	/**
+	 * Synonym for {@link #setMinItems(Integer)}.
+	 *
+	 * @param minItems The new value for the <property>minItems</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Items minItems(Integer minItems) {
+		return setMinItems(minItems);
+	}
+
+	/**
 	 * Bean property getter:  <property>uniqueItems</property>.
 	 * <p>
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor49">http://json-schema.org/latest/json-schema-validation.html#anchor49</a>.
@@ -475,6 +592,16 @@ public class Items {
 	public Items setUniqueItems(Boolean uniqueItems) {
 		this.uniqueItems = uniqueItems;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setUniqueItems(Boolean)}.
+	 *
+	 * @param uniqueItems The new value for the <property>uniqueItems</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Items uniqueItems(Boolean uniqueItems) {
+		return setUniqueItems(uniqueItems);
 	}
 
 	/**
@@ -507,27 +634,33 @@ public class Items {
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor76">http://json-schema.org/latest/json-schema-validation.html#anchor76</a>.
 	 *
 	 * @param _enum The new values to add to the <property>enum</property> property on this bean.
+	 * 	These can either be individual objects or {@link Collection Collections} of objects.
 	 * @return This object (for method chaining).
 	 */
-	@SuppressWarnings("hiding")
 	public Items addEnum(Object..._enum) {
-		return addEnum(Arrays.asList(_enum));
+		for (Object o  : _enum) {
+			if (o != null) {
+				if (o instanceof Collection)
+					addEnum((Collection<Object>)o);
+				else {
+					if (this._enum == null)
+						this._enum = new LinkedList<Object>();
+					this._enum.add(o);
+				}
+			}
+		}
+		return this;
 	}
 
 	/**
-	 * Bean property adder:  <property>enum</property>.
-	 * <p>
-	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor76">http://json-schema.org/latest/json-schema-validation.html#anchor76</a>.
+	 * Synonym for {@link #addEnum(Object...)}.
 	 *
 	 * @param _enum The new values to add to the <property>enum</property> property on this bean.
+	 * 	These can either be individual objects or {@link Collection Collections} of objects.
 	 * @return This object (for method chaining).
 	 */
-	@SuppressWarnings("hiding")
-	public Items addEnum(Collection<Object> _enum) {
-		if (this._enum == null)
-			this._enum = new LinkedList<Object>();
-		this._enum.addAll(_enum);
-		return this;
+	public Items _enum(Object..._enum) {
+		return addEnum(_enum);
 	}
 
 	/**
@@ -552,5 +685,15 @@ public class Items {
 	public Items setMultipleOf(Number multipleOf) {
 		this.multipleOf = multipleOf;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setMultipleOf(Number)}.
+	 *
+	 * @param multipleOf The new value for the <property>multipleOf</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Items multipleOf(Number multipleOf) {
+		return setMultipleOf(multipleOf);
 	}
 }

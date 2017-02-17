@@ -50,7 +50,8 @@ import org.apache.juneau.json.*;
  * </p>
  */
 @Bean(properties="type,description,name,in,flow,authorizationUrl,tokenUrl,scopes")
-public class SecurityScheme {
+@SuppressWarnings("hiding")
+public class SecurityScheme extends SwaggerElement {
 
 	private static final String[] VALID_TYPES = {"basic", "apiKey", "oauth2"};
 
@@ -62,33 +63,10 @@ public class SecurityScheme {
 	private String authorizationUrl;
 	private String tokenUrl;
 	private Map<String,String> scopes;
-	private boolean strict;
 
-	/**
-	 * Convenience method for creating a new SecurityScheme object.
-	 *
-	 * @param type Required. The type of the security scheme.
-	 * 	Valid values are <js>"basic"</js>, <js>"apiKey"</js> or <js>"oauth2"</js>.
-	 * @return A new SecurityScheme object.
-	 */
-	public static SecurityScheme create(String type) {
-		return new SecurityScheme().setType(type);
-	}
-
-	/**
-	 * Same as {@link #create(String)} except methods will throw runtime exceptions if you attempt
-	 * to pass in invalid values per the Swagger spec.
-	 *
-	 * @param type Required. The type of the security scheme.
-	 * 	Valid values are <js>"basic"</js>, <js>"apiKey"</js> or <js>"oauth2"</js>.
-	 * @return A new SecurityScheme object.
-	 */
-	public static SecurityScheme createStrict(String type) {
-		return new SecurityScheme().setStrict().setType(type);
-	}
-
-	private SecurityScheme setStrict() {
-		this.strict = true;
+	@Override /* SwaggerElement */
+	protected SecurityScheme strict() {
+		super.strict();
 		return this;
 	}
 
@@ -114,10 +92,20 @@ public class SecurityScheme {
 	 * @return This object (for method chaining).
 	 */
 	public SecurityScheme setType(String type) {
-		if (strict && ! ArrayUtils.contains(type, VALID_TYPES))
+		if (isStrict() && ! ArrayUtils.contains(type, VALID_TYPES))
 			throw new RuntimeException("Invalid value passed in to setType(String).  Value='"+type+"', valid values=" + JsonSerializer.DEFAULT_LAX.toString(VALID_TYPES));
 		this.type = type;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setType(String)}.
+	 *
+	 * @param type The new value for the <property>type</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public SecurityScheme type(String type) {
+		return setType(type);
 	}
 
 	/**
@@ -145,6 +133,16 @@ public class SecurityScheme {
 	}
 
 	/**
+	 * Synonym for {@link #setDescription(String)}.
+	 *
+	 * @param description The new value for the <property>description</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public SecurityScheme description(String description) {
+		return setDescription(description);
+	}
+
+	/**
 	 * Bean property getter:  <property>name</property>.
 	 * <p>
 	 * The name of the header or query parameter to be used.
@@ -169,6 +167,16 @@ public class SecurityScheme {
 	}
 
 	/**
+	 * Synonym for {@link #setName(String)}.
+	 *
+	 * @param name The new value for the <property>name</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public SecurityScheme name(String name) {
+		return setName(name);
+	}
+
+	/**
 	 * Bean property getter:  <property>in</property>.
 	 * <p>
 	 * The location of the API key. Valid values are <js>"query"</js> or <js>"header"</js>.
@@ -190,6 +198,16 @@ public class SecurityScheme {
 	public SecurityScheme setIn(String in) {
 		this.in = in;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setIn(String)}.
+	 *
+	 * @param in The new value for the <property>in</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public SecurityScheme in(String in) {
+		return setIn(in);
 	}
 
 	/**
@@ -219,6 +237,16 @@ public class SecurityScheme {
 	}
 
 	/**
+	 * Synonym for {@link #setFlow(String)}.
+	 *
+	 * @param flow The new value for the <property>flow</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public SecurityScheme flow(String flow) {
+		return setFlow(flow);
+	}
+
+	/**
 	 * Bean property getter:  <property>authorizationUrl</property>.
 	 * <p>
 	 * The authorization URL to be used for this flow.
@@ -245,6 +273,16 @@ public class SecurityScheme {
 	}
 
 	/**
+	 * Synonym for {@link #setAuthorizationUrl(String)}.
+	 *
+	 * @param authorizationUrl The new value for the <property>authorizationUrl</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public SecurityScheme authorizationUrl(String authorizationUrl) {
+		return setAuthorizationUrl(authorizationUrl);
+	}
+
+	/**
 	 * Bean property getter:  <property>tokenUrl</property>.
 	 * <p>
 	 * The token URL to be used for this flow.
@@ -268,6 +306,16 @@ public class SecurityScheme {
 	public SecurityScheme setTokenUrl(String tokenUrl) {
 		this.tokenUrl = tokenUrl;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setTokenUrl(String)}.
+	 *
+	 * @param tokenUrl The new value for the <property>tokenUrl</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public SecurityScheme tokenUrl(String tokenUrl) {
+		return setTokenUrl(tokenUrl);
 	}
 
 	/**
@@ -303,11 +351,21 @@ public class SecurityScheme {
 	 * @param description A short description of the scope.
 	 * @return This object (for method chaining).
 	 */
-	@SuppressWarnings("hiding")
 	public SecurityScheme addScope(String name, String description) {
 		if (scopes == null)
 			scopes = new TreeMap<String,String>();
 		scopes.put(name, description);
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #addScope(String,String)}.
+	 *
+	 * @param name The name of the scope.
+	 * @param description A short description of the scope.
+	 * @return This object (for method chaining).
+	 */
+	public SecurityScheme scope(String name, String description) {
+		return addScope(name, description);
 	}
 }

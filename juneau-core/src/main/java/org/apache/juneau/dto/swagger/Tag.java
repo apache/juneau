@@ -28,21 +28,12 @@ import org.apache.juneau.annotation.*;
  * </p>
  */
 @Bean(properties="name,description,externalDocs")
-public class Tag {
+@SuppressWarnings("hiding")
+public class Tag extends SwaggerElement {
 
 	private String name;
 	private String description;
 	private ExternalDocumentation externalDocs;
-
-	/**
-	 * Convenience method for creating a new Tag object.
-	 *
-	 * @param name Required. The name of the tag.
-	 * @return A new Tag object.
-	 */
-	public static Tag create(String name) {
-		return new Tag().setName(name);
-	}
 
 	/**
 	 * Bean property getter:  <property>name</property>.
@@ -66,6 +57,16 @@ public class Tag {
 	public Tag setName(String name) {
 		this.name = name;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setName(String)}.
+	 *
+	 * @param name The new value for the <property>name</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Tag name(String name) {
+		return setName(name);
 	}
 
 	/**
@@ -95,6 +96,16 @@ public class Tag {
 	}
 
 	/**
+	 * Synonym for {@link #setDescription(String)}.
+	 *
+	 * @param description The new value for the <property>description</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Tag description(String description) {
+		return setDescription(description);
+	}
+
+	/**
 	 * Bean property getter:  <property>externalDocs</property>.
 	 * <p>
 	 * Additional external documentation for this tag.
@@ -116,5 +127,15 @@ public class Tag {
 	public Tag setExternalDocs(ExternalDocumentation externalDocs) {
 		this.externalDocs = externalDocs;
 		return this;
+	}
+
+	/**
+	 * Synonym for {@link #setExternalDocs(ExternalDocumentation)}.
+	 *
+	 * @param externalDocs The new value for the <property>externalDocs</property> property on this bean.
+	 * @return This object (for method chaining).
+	 */
+	public Tag externalDocs(ExternalDocumentation externalDocs) {
+		return setExternalDocs(externalDocs);
 	}
 }

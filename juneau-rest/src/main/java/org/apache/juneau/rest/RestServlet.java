@@ -15,6 +15,7 @@ package org.apache.juneau.rest;
 import static java.lang.String.*;
 import static java.util.logging.Level.*;
 import static javax.servlet.http.HttpServletResponse.*;
+import static org.apache.juneau.dto.swagger.SwaggerBuilder.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.rest.RestServlet.ParamType.*;
@@ -816,22 +817,22 @@ public abstract class RestServlet extends HttpServlet {
 			if (s != null)
 				return s;
 
-			Info info = Info.create(getTitle(req), getVersion(req))
-				.setContact(getContact(req))
-				.setLicense(getLicense(req))
-				.setDescription(getDescription(req))
-				.setTermsOfService(getTermsOfService(req));
-
-			s = Swagger.create(info)
-				.addConsumes(getSupportedAcceptTypes())
-				.addProduces(getSupportedContentTypes())
-				.setTags(getTags(req))
-				.setExternalDocs(getExternalDocs(req));
+			s = swagger(
+				info(getTitle(req), getVersion(req))
+					.contact(getContact(req))
+					.license(getLicense(req))
+					.description(getDescription(req))
+					.termsOfService(getTermsOfService(req))
+				)
+				.consumes(getSupportedAcceptTypes())
+				.produces(getSupportedContentTypes())
+				.tags(getTags(req))
+				.externalDocs(getExternalDocs(req));
 
 			for (MethodMeta sm : javaRestMethods.values()) {
 				if (sm.isRequestAllowed(req)) {
 					Operation o = sm.getSwaggerOperation(req);
-					s.addPath(
+					s.path(
 						sm.pathPattern.patternString,
 						sm.httpMethod.toLowerCase(),
 						o
@@ -2347,23 +2348,23 @@ public abstract class RestServlet extends HttpServlet {
 		}
 
 		private Operation getSwaggerOperation(RestRequest req) throws ParseException {
-			Operation o = Operation.create()
-				.setOperationId(method.getName())
-				.setDescription(getDescription(req))
-				.setTags(getTags(req))
-				.setSummary(getSummary(req))
-				.setExternalDocs(getExternalDocs(req))
-				.setParameters(getParameters(req))
-				.setResponses(getResponses(req));
+			Operation o = operation()
+				.operationId(method.getName())
+				.description(getDescription(req))
+				.tags(getTags(req))
+				.summary(getSummary(req))
+				.externalDocs(getExternalDocs(req))
+				.parameters(getParameters(req))
+				.responses(getResponses(req));
 
 			if (isDeprecated())
-				o.setDeprecated(true);
+				o.deprecated(true);
 
 			if (! mParsers.getSupportedMediaTypes().equals(getParsers().getSupportedMediaTypes()))
-				o.setConsumes(mParsers.getSupportedMediaTypes());
+				o.consumes(mParsers.getSupportedMediaTypes());
 
 			if (! mSerializers.getSupportedMediaTypes().equals(getSerializers().getSupportedMediaTypes()))
-				o.setProduces(mSerializers.getSupportedMediaTypes());
+				o.produces(mSerializers.getSupportedMediaTypes());
 
 			return o;
 		}
@@ -2453,28 +2454,28 @@ public abstract class RestServlet extends HttpServlet {
 			// First parse @RestMethod.parameters() annotation.
 			for (org.apache.juneau.rest.annotation.Parameter v : parameters) {
 				String in = vr.resolve(v.in());
-				ParameterInfo p = ParameterInfo.createStrict(in, vr.resolve(v.name()));
+				ParameterInfo p = parameterInfo(in, vr.resolve(v.name()));
 
 				if (! v.description().isEmpty())
-					p.setDescription(vr.resolve(v.description()));
+					p.description(vr.resolve(v.description()));
 				if (v.required())
-					p.setRequired(v.required());
+					p.required(v.required());
 
 				if ("body".equals(in)) {
 					if (! v.schema().isEmpty())
-						p.setSchema(jp.parse(vr.resolve(v.schema()), SchemaInfo.class));
+						p.schema(jp.parse(vr.resolve(v.schema()), SchemaInfo.class));
 				} else {
 					if (v.allowEmptyValue())
-						p.setAllowEmptyValue(v.allowEmptyValue());
+						p.allowEmptyValue(v.allowEmptyValue());
 					if (! v.collectionFormat().isEmpty())
-						p.setCollectionFormat(vr.resolve(v.collectionFormat()));
+						p.collectionFormat(vr.resolve(v.collectionFormat()));
 					if (! v._default().isEmpty())
-						p.setDefault(vr.resolve(v._default()));
+						p._default(vr.resolve(v._default()));
 					if (! v.format().isEmpty())
-						p.setFormat(vr.resolve(v.format()));
+						p.format(vr.resolve(v.format()));
 					if (! v.items().isEmpty())
-						p.setItems(jp.parse(vr.resolve(v.items()), Items.class));
-					p.setType(vr.resolve(v.type()));
+						p.items(jp.parse(vr.resolve(v.items()), Items.class));
+					p.type(vr.resolve(v.type()));
 				}
 				m.put(p.getIn() + '.' + p.getName(), p);
 			}
@@ -2498,31 +2499,31 @@ public abstract class RestServlet extends HttpServlet {
 						String k2 = in + '.' + name;
 						ParameterInfo p = m.get(k2);
 						if (p == null) {
-							p = ParameterInfo.createStrict(in, name);
+							p = parameterInfoStrict(in, name);
 							m.put(k2, p);
 						}
 
 						if (field.equals("description"))
-							p.setDescription(value);
+							p.description(value);
 						else if (field.equals("required"))
-							p.setRequired(Boolean.valueOf(value));
+							p.required(Boolean.valueOf(value));
 
 						if ("body".equals(in)) {
 							if (field.equals("schema"))
-								p.setSchema(jp.parse(value, SchemaInfo.class));
+								p.schema(jp.parse(value, SchemaInfo.class));
 						} else {
 							if (field.equals("allowEmptyValue"))
-								p.setAllowEmptyValue(Boolean.valueOf(value));
+								p.allowEmptyValue(Boolean.valueOf(value));
 							else if (field.equals("collectionFormat"))
-								p.setCollectionFormat(value);
+								p.collectionFormat(value);
 							else if (field.equals("default"))
-								p.setDefault(value);
+								p._default(value);
 							else if (field.equals("format"))
-								p.setFormat(value);
+								p.format(value);
 							else if (field.equals("items"))
-								p.setItems(jp.parse(value, Items.class));
+								p.items(jp.parse(value, Items.class));
 							else if (field.equals("type"))
-								p.setType(value);
+								p.type(value);
 						}
 					} else {
 						System.err.println("Unknown bundle key '"+key+"'");
@@ -2537,7 +2538,7 @@ public abstract class RestServlet extends HttpServlet {
 					String k2 = in + '.' + ("body".equals(in) ? null : mp.name);
 					ParameterInfo p = m.get(k2);
 					if (p == null) {
-						p = ParameterInfo.createStrict(in, mp.name);
+						p = parameterInfoStrict(in, mp.name);
 						m.put(k2, p);
 					}
 				}
@@ -2549,36 +2550,36 @@ public abstract class RestServlet extends HttpServlet {
 		}
 
 		@SuppressWarnings("unchecked")
-		private Map<String,ResponseInfo> getResponses(RestRequest req) throws ParseException {
+		private Map<Integer,ResponseInfo> getResponses(RestRequest req) throws ParseException {
 			Operation o = getSwaggerOperationFromFile(req);
 			if (o != null && o.getResponses() != null)
 				return o.getResponses();
 
 			VarResolverSession vr = req.getVarResolverSession();
 			JsonParser jp = JsonParser.DEFAULT;
-			Map<String,ResponseInfo> m = new TreeMap<String,ResponseInfo>();
+			Map<Integer,ResponseInfo> m = new TreeMap<Integer,ResponseInfo>();
 			Map<String,HeaderInfo> m2 = new TreeMap<String,HeaderInfo>();
 
 			// First parse @RestMethod.parameters() annotation.
 			for (Response r : responses) {
-				String httpCode = String.valueOf(r.value());
+				int httpCode = r.value();
 				String description = r.description().isEmpty() ? RestUtils.getHttpResponseText(r.value()) : vr.resolve(r.description());
-				ResponseInfo r2 = ResponseInfo.create(description);
+				ResponseInfo r2 = responseInfo(description);
 
 				if (r.headers().length > 0) {
 					for (org.apache.juneau.rest.annotation.Parameter v : r.headers()) {
-						HeaderInfo h = HeaderInfo.createStrict(vr.resolve(v.type()));
+						HeaderInfo h = headerInfoStrict(vr.resolve(v.type()));
 						if (! v.collectionFormat().isEmpty())
-							h.setCollectionFormat(vr.resolve(v.collectionFormat()));
+							h.collectionFormat(vr.resolve(v.collectionFormat()));
 						if (! v._default().isEmpty())
-							h.setDefault(vr.resolve(v._default()));
+							h._default(vr.resolve(v._default()));
 						if (! v.description().isEmpty())
-							h.setDescription(vr.resolve(v.description()));
+							h.description(vr.resolve(v.description()));
 						if (! v.format().isEmpty())
-							h.setFormat(vr.resolve(v.format()));
+							h.format(vr.resolve(v.format()));
 						if (! v.items().isEmpty())
-							h.setItems(jp.parse(vr.resolve(v.items()), Items.class));
-						r2.addHeader(v.name(), h);
+							h.items(jp.parse(vr.resolve(v.items()), Items.class));
+						r2.header(v.name(), h);
 						m2.put(httpCode + '.' + v.name(), h);
 					}
 				}
@@ -2591,10 +2592,10 @@ public abstract class RestServlet extends HttpServlet {
 				if (key.length() > prefix.length()) {
 					String value = vr.resolve(msgs.getString(key));
 					String[] parts = key.substring(prefix.length() + 1).split("\\.");
-					String httpCode = parts[0];
+					int httpCode = Integer.parseInt(parts[0]);
 					ResponseInfo r2 = m.get(httpCode);
 					if (r2 == null) {
-						r2 = ResponseInfo.create(null);
+						r2 = responseInfo(null);
 						m.put(httpCode, r2);
 					}
 
@@ -2607,29 +2608,29 @@ public abstract class RestServlet extends HttpServlet {
 						String k2 = httpCode + '.' + headerName;
 						HeaderInfo h = m2.get(k2);
 						if (h == null) {
-							h = HeaderInfo.createStrict("string");
+							h = headerInfoStrict("string");
 							m2.put(k2, h);
-							r2.addHeader(name, h);
+							r2.header(name, h);
 						}
 						if (field.equals("collectionFormat"))
-							h.setCollectionFormat(value);
+							h.collectionFormat(value);
 						else if (field.equals("default"))
-							h.setDefault(value);
+							h._default(value);
 						else if (field.equals("description"))
-							h.setDescription(value);
+							h.description(value);
 						else if (field.equals("format"))
-							h.setFormat(value);
+							h.format(value);
 						else if (field.equals("items"))
-							h.setItems(jp.parse(value, Items.class));
+							h.items(jp.parse(value, Items.class));
 						else if (field.equals("type"))
-							h.setType(value);
+							h.type(value);
 
 					} else if ("description".equals(name)) {
-						r2.setDescription(value);
+						r2.description(value);
 					} else if ("schema".equals(name)) {
-						r2.setSchema(jp.parse(value, SchemaInfo.class));
+						r2.schema(jp.parse(value, SchemaInfo.class));
 					} else if ("examples".equals(name)) {
-						r2.setExamples(jp.parse(value, TreeMap.class));
+						r2.examples(jp.parse(value, TreeMap.class));
 					} else {
 						System.err.println("Unknown bundle key '"+key+"'");
 					}
