@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.junit.Assert.*;
-
 import java.io.*;
 import java.text.*;
 import java.util.*;
@@ -372,7 +370,7 @@ public class TestUtils {
 	 * 	then a simple string comparison is performed.
 	 */
 	public static final void assertXmlEquals(String expected, String actual) throws Exception {
-		assertEquals(sortXml(expected), sortXml(actual));
+		Assert.assertEquals(sortXml(expected), sortXml(actual));
 	}
 
 	/**
@@ -468,5 +466,24 @@ public class TestUtils {
 
 	public static void unsetLocale() {
 		Locale.setDefault(systemLocale.get());
+	}
+
+	public static void assertEqualsAfterSort(String expected, String actual, String msg, Object...args) {
+		String[] e = expected.trim().split("\n"), a = actual.trim().split("\n");
+		
+		if (e.length != a.length) 
+			throw new AssertionError(MessageFormat.format(msg + "---expected---\n"+expected+"\n---actual---\n"+actual+"\n", args));
+		
+		Arrays.sort(e);
+		Arrays.sort(a);
+		
+		for (int i = 0; i < e.length; i++) 
+			if (! e[i].equals(a[i]))
+				throw new AssertionError(MessageFormat.format(msg + "---expected---\n"+expected+"\n---actual---\n"+actual+"\n", args));
+	}
+
+	public static void assertEquals(String expected, String actual, String msg, Object...args) {
+		if (! StringUtils.isEquals(expected, actual))
+			throw new AssertionError(MessageFormat.format(msg + "---expected---\n"+expected+"\n---actual---\n"+actual+"\n", args));			
 	}
 }

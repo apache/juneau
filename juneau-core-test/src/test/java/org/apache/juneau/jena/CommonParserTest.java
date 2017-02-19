@@ -111,7 +111,7 @@ public class CommonParserTest {
 
 		s.setAddBeanTypeProperties(true);
 		in = strip(s.serialize(t1));
-		assertEquals("<rdf:Description><j:_type>A1</j:_type><jp:_type>A1</jp:_type><jp:list><rdf:Seq><rdf:li rdf:parseType='Resource'><jp:name>name0</jp:name><jp:value>value0</jp:value></rdf:li><rdf:li rdf:parseType='Resource'><jp:name>name1</jp:name><jp:value>value1</jp:value></rdf:li></rdf:Seq></jp:list></rdf:Description>", in);
+		assertEquals("<rdf:Description><jp:_type>A1</jp:_type><jp:list><rdf:Seq><rdf:li rdf:parseType='Resource'><jp:name>name0</jp:name><jp:value>value0</jp:value></rdf:li><rdf:li rdf:parseType='Resource'><jp:name>name1</jp:name><jp:value>value1</jp:value></rdf:li></rdf:Seq></jp:list></rdf:Description>", in);
 		in = wrap(in);
 		t1 = p.parse(in, A1.class);
 		assertEquals("value1", t1.list.get(1).value);
