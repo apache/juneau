@@ -88,7 +88,7 @@ public class RdfParserSession extends ParserSession {
 		addModelPrefix(juneauBpNs);
 		this.pRoot = model.createProperty(juneauNs.getUri(), RDF_juneauNs_ROOT);
 		this.pValue = model.createProperty(juneauNs.getUri(), RDF_juneauNs_VALUE);
-		this.pType = model.createProperty(juneauNs.getUri(), RDF_juneauNs_TYPE);
+		this.pType = model.createProperty(juneauBpNs.getUri(), RDF_juneauNs_TYPE);
 		this.pRdfType = model.createProperty("http://www.w3.org/1999/02/22-rdf-syntax-ns#type");
 		rdfReader = model.getReader(rdfLanguage);
 

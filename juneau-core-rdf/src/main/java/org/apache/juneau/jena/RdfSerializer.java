@@ -249,20 +249,13 @@ public class RdfSerializer extends WriterSerializer {
 			if (bpm != null && bpm.getExtendedMeta(RdfBeanPropertyMeta.class).getCollectionFormat() != RdfCollectionFormat.DEFAULT)
 				f = bpm.getExtendedMeta(RdfBeanPropertyMeta.class).getCollectionFormat();
 			switch (f) {
-				case BAG: n = serializeToContainer(session, c, sType, m.createBag()); break;
-				case LIST: n = serializeToList(session, c, sType); break;
-				case MULTI_VALUED: serializeToMultiProperties(session, c, sType, bpm, attrName, parentResource); break;
-				default: n = serializeToContainer(session, c, sType, m.createSeq());
+				case BAG: n = serializeToContainer(session, c, eType, m.createBag()); break;
+				case LIST: n = serializeToList(session, c, eType); break;
+				case MULTI_VALUED: serializeToMultiProperties(session, c, eType, bpm, attrName, parentResource); break;
+				default: n = serializeToContainer(session, c, eType, m.createSeq());
 			}
 		} else {
 			n = m.createLiteral(session.encodeTextInvalidChars(session.toString(o)));
-		}
-
-		if (session.isAddBeanTypeProperties() && n != null && n.isResource()) {
-			if (o != null && aType.getDictionaryName() != null)
-				n.asResource().addProperty(session.getTypeProperty(), aType.getDictionaryName());
-			else if (o == null && eType.getDictionaryName() != null)
-				n.asResource().addProperty(session.getTypeProperty(), eType.getDictionaryName());
 		}
 
 		session.pop();
