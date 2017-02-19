@@ -249,7 +249,7 @@ public class JsonSerializer extends WriterSerializer {
 			serializeAnything(session, out, value, valueType, (key == null ? null : session.toString(key)), null);
 
 			if (mapEntries.hasNext())
-				out.append(',').s();
+				out.append(',');
 		}
 
 		out.cr(depth-1).append('}');
@@ -275,7 +275,7 @@ public class JsonSerializer extends WriterSerializer {
 				continue;
 
 			if (addComma)
-				out.append(',').s();
+				out.append(',');
 
 			out.cr(depth).attr(key).append(':').s();
 
@@ -306,7 +306,7 @@ public class JsonSerializer extends WriterSerializer {
 			serializeAnything(session, out, value, elementType, "<iterator>", null);
 
 			if (i.hasNext())
-				out.append(',').s();
+				out.append(',');
 		}
 		out.cr(depth-1).append(']');
 		return out;
