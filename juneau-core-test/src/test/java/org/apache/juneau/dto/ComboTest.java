@@ -14,6 +14,10 @@ package org.apache.juneau.dto;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.apache.juneau.TestUtils;
 import org.apache.juneau.html.HtmlParser;
 import org.apache.juneau.html.HtmlSerializer;
@@ -40,7 +44,7 @@ import org.junit.Test;
 /**
  * Superclass for tests that verify results against all supported content types. 
  */
-public abstract class ComboTestcase {
+public abstract class ComboTest {
 
 	private final String 
 		label, 
@@ -52,10 +56,61 @@ public abstract class ComboTestcase {
 		oMsgPack, oMsgPackT,
 		oRdfXml, oRdfXmlT, oRdfXmlR;
 	private final Object in;
+	
+	// These are the names of all the tests.
+	// You can comment out the names here to skip them.
+	private static final String[] runTests = {
+		"serializeJson",
+		"parseJson",
+		"serializeJsonT",
+		"parseJsonT",
+		"serializeJsonR",
+		"parseJsonR",
+		"serializeXml",
+		"parseXml",
+		"serializeXmlT",
+		"parseXmlT",
+		"serializeXmlR",
+		"parseXmlR",
+		"serializeXmlNs",
+		"parseXmlNs",
+		"serializeHtml",
+		"parseHtml",
+		"serializeHtmlT",
+		"parseHtmlT",
+		"serializeHtmlR",
+		"parseHtmlR",
+		"serializeUon",
+		"parseUon",
+		"serializeUonT",
+		"parseUonT",
+		"serializeUonR",
+		"parseUonR",
+		"serializeUrlEncoding",
+		"parseUrlEncoding",
+		"serializeUrlEncodingT",
+		"parseUrlEncodingT",
+		"serializeUrlEncodingR",
+		"parseUrlEncodingR",
+		"serializeMsgPack",
+		"parseMsgPack",
+		"parseMsgPackJsonEquivalency",
+		"serializeMsgPackT",
+		"parseMsgPackT",
+		"parseMsgPackTJsonEquivalency",
+		"serializeRdfXml",
+		"parseRdfXml",
+		"serializeRdfXmlT",
+		"parseRdfXmlT",
+		"serializeRdfXmlR",
+		"parseRdfXmlR",
+	};
 
+	private static final Set<String> runTestsSet = new HashSet<String>(Arrays.asList(runTests));
+	
 	private final boolean SKIP_RDF_TESTS = Boolean.getBoolean("skipRdfTests");
 			
-	public ComboTestcase(
+	public ComboTest(
 		String label, 
 		Object in, 
 		String oJson, String oJsonT, String oJsonR,
@@ -80,8 +135,11 @@ public abstract class ComboTestcase {
 	private void testSerialize(String testName, Serializer s, String expected) throws Exception {
 		try {
 			boolean isRdf = s instanceof RdfSerializer;
-			if (isRdf && SKIP_RDF_TESTS)
+
+			if ((isRdf && SKIP_RDF_TESTS) || expected.isEmpty() || ! runTestsSet.contains(testName) ) {
+				System.err.println(label + "/" + testName + " for "+s.getClass().getSimpleName()+" skipped.");
 				return;
+			}
 			
 			String r = s.isWriterSerializer() ? ((WriterSerializer)s).serialize(in) : ((OutputStreamSerializer)s).serializeToHex(in);
 			
@@ -95,14 +153,9 @@ public abstract class ComboTestcase {
 			// Specifying "xxx" in the expected results will spit out what we should populate the field with.
 			if (expected.equals("xxx")) {
 				System.out.println(label + "/" + testName + "=\n" + r.replaceAll("\n", "\\\\n").replaceAll("\t", "\\\\t")); // NOT DEBUG
+				System.out.println(r);
 			}
 			
-			// Tests can be skipped by specifying empty results.
-			if (expected.isEmpty()) {
-				System.err.println(label + "/" + testName + " for "+s.getClass().getSimpleName()+" skipped.");
-				return;
-			}
-
 			if (isRdf)
 				TestUtils.assertEqualsAfterSort(expected, r, "{0}/{1} parse-normal failed", label, testName);
 			else
@@ -118,8 +171,11 @@ public abstract class ComboTestcase {
 	private void testParse(String testName, Serializer s, Parser p, String expected) throws Exception {
 		try {
 			boolean isRdf = s instanceof RdfSerializer;
-			if (isRdf && SKIP_RDF_TESTS)
+
+			if ((isRdf && SKIP_RDF_TESTS) || expected.isEmpty() || ! runTestsSet.contains(testName) ) {
+				System.err.println(label + "/" + testName + " for "+s.getClass().getSimpleName()+" skipped.");
 				return;
+			}
 			
 			String r = s.isWriterSerializer() ? ((WriterSerializer)s).serialize(in) : ((OutputStreamSerializer)s).serializeToHex(in);
 			Object o = p.parse(r, in == null ? Object.class : in.getClass());
@@ -128,11 +184,6 @@ public abstract class ComboTestcase {
 			if (isRdf) 
 				r = r.replaceAll("<rdf:RDF[^>]*>", "<rdf:RDF>").replace('"', '\'');
 			
-			if (expected.isEmpty()) {
-				System.err.println(label + "/" + testName + " for "+p.getClass().getSimpleName()+" skipped.");
-				return;
-			}
-
 			if (isRdf)
 				TestUtils.assertEqualsAfterSort(expected, r, "{0}/{1} parse-normal failed", label, testName);
 			else
@@ -141,7 +192,7 @@ public abstract class ComboTestcase {
 		} catch (AssertionError e) {
 			throw e;
 		} catch (Exception e) {
-			throw new AssertionError(label + "/" + testName + " failed.  exception=" + e.getLocalizedMessage());
+			throw new Exception(label + "/" + testName + " failed.", e);
 		}
 	}
 	
@@ -154,7 +205,7 @@ public abstract class ComboTestcase {
 		} catch (AssertionError e) {
 			throw e;
 		} catch (Exception e) {
-			throw new AssertionError(label + "/" + testName + " failed.  exception=" + e.getLocalizedMessage());
+			throw new Exception(label + "/" + testName + " failed.", e);
 		}
 	}
 	

@@ -256,13 +256,13 @@ public class RdfParser extends ReaderParser {
 					o = parseAnything(session, object(), n.asResource().getProperty(session.getValueProperty()).getObject(), outer, null);
 				} else if (isSeq(session, r)) {
 					o = new ObjectList(session);
-					parseIntoCollection(session, r.as(Seq.class), (Collection)o, sType.getElementType());
+					parseIntoCollection(session, r.as(Seq.class), (Collection)o, sType.getElementType(), pMeta);
 				} else if (isBag(session, r)) {
 					o = new ObjectList(session);
-					parseIntoCollection(session, r.as(Bag.class), (Collection)o, sType.getElementType());
+					parseIntoCollection(session, r.as(Bag.class), (Collection)o, sType.getElementType(), pMeta);
 				} else if (r.canAs(RDFList.class)) {
 					o = new ObjectList(session);
-					parseIntoCollection(session, r.as(RDFList.class), (Collection)o, sType.getElementType());
+					parseIntoCollection(session, r.as(RDFList.class), (Collection)o, sType.getElementType(), pMeta);
 				} else {
 					// If it has a URI and no child properties, we interpret this as an
 					// external resource, and convert it to just a URL.
@@ -270,8 +270,9 @@ public class RdfParser extends ReaderParser {
 					if (uri != null && ! r.listProperties().hasNext()) {
 						o = r.getURI();
 					} else {
-						o = new ObjectMap(session);
-						parseIntoMap(session, r, (Map)o, null, null);
+						ObjectMap m2 = new ObjectMap(session);
+						parseIntoMap(session, r, m2, null, null, pMeta);
+						o = session.cast(m2, pMeta, eType);
 					}
 				}
 			} else {
@@ -290,7 +291,7 @@ public class RdfParser extends ReaderParser {
 			if (session.wasAlreadyProcessed(r))
 				return null;
 			Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : new ObjectMap(session));
-			o = parseIntoMap(session, r, m, eType.getKeyType(), eType.getValueType());
+			o = parseIntoMap(session, r, m, eType.getKeyType(), eType.getValueType(), pMeta);
 		} else if (sType.isCollectionOrArray()) {
 			if (sType.isArray())
 				o = new ArrayList();
@@ -300,11 +301,11 @@ public class RdfParser extends ReaderParser {
 			if (session.wasAlreadyProcessed(r))
 				return null;
 			if (isSeq(session, r)) {
-				parseIntoCollection(session, r.as(Seq.class), (Collection)o, sType.getElementType());
+				parseIntoCollection(session, r.as(Seq.class), (Collection)o, sType.getElementType(), pMeta);
 			} else if (isBag(session, r)) {
-				parseIntoCollection(session, r.as(Bag.class), (Collection)o, sType.getElementType());
+				parseIntoCollection(session, r.as(Bag.class), (Collection)o, sType.getElementType(), pMeta);
 			} else if (r.canAs(RDFList.class)) {
-				parseIntoCollection(session, r.as(RDFList.class), (Collection)o, sType.getElementType());
+				parseIntoCollection(session, r.as(RDFList.class), (Collection)o, sType.getElementType(), pMeta);
 			} else {
 				throw new ParseException("Unrecognized node type ''{0}'' for collection", n);
 			}
@@ -325,7 +326,7 @@ public class RdfParser extends ReaderParser {
 		} else if (n.isResource()) {
 			Resource r = n.asResource();
 			Map m = new ObjectMap(session);
-			parseIntoMap(session, r, m, sType.getKeyType(), sType.getValueType());
+			parseIntoMap(session, r, m, sType.getKeyType(), sType.getValueType(), pMeta);
 			if (m.containsKey(session.getBeanTypePropertyName()))
 				o = session.cast((ObjectMap)m, pMeta, eType);
 			else
@@ -376,7 +377,7 @@ public class RdfParser extends ReaderParser {
 		throw new ParseException(session, "Unknown value type for node ''{0}''", n);
 	}
 
-	private <K,V> Map<K,V> parseIntoMap(RdfParserSession session, Resource r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType) throws Exception {
+	private <K,V> Map<K,V> parseIntoMap(RdfParserSession session, Resource r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta) throws Exception {
 		// Add URI as "uri" to generic maps.
 		if (r.getURI() != null) {
 			K uri = convertAttrToType(session, m, "uri", keyType);
@@ -391,7 +392,7 @@ public class RdfParser extends ReaderParser {
 				key = session.decodeString(key);
 				RDFNode o = st.getObject();
 				K key2 = convertAttrToType(session, m, key, keyType);
-				V value = parseAnything(session, valueType, o, m, null);
+				V value = parseAnything(session, valueType, o, m, pMeta);
 				setName(valueType, value, key);
 				m.put(key2, value);
 			}
@@ -401,17 +402,17 @@ public class RdfParser extends ReaderParser {
 		return m;
 	}
 
-	private <E> Collection<E> parseIntoCollection(RdfParserSession session, Container c, Collection<E> l, ClassMeta<E> et) throws Exception {
+	private <E> Collection<E> parseIntoCollection(RdfParserSession session, Container c, Collection<E> l, ClassMeta<E> et, BeanPropertyMeta pMeta) throws Exception {
 		for (NodeIterator ni = c.iterator(); ni.hasNext();) {
-			E e = parseAnything(session, et, ni.next(), l, null);
+			E e = parseAnything(session, et, ni.next(), l, pMeta);
 			l.add(e);
 		}
 		return l;
 	}
 
-	private <E> Collection<E> parseIntoCollection(RdfParserSession session, RDFList list, Collection<E> l, ClassMeta<E> et) throws Exception {
+	private <E> Collection<E> parseIntoCollection(RdfParserSession session, RDFList list, Collection<E> l, ClassMeta<E> et, BeanPropertyMeta pMeta) throws Exception {
 		for (ExtendedIterator<RDFNode> ni = list.iterator(); ni.hasNext();) {
-			E e = parseAnything(session, et, ni.next(), l, null);
+			E e = parseAnything(session, et, ni.next(), l, pMeta);
 			l.add(e);
 		}
 		return l;

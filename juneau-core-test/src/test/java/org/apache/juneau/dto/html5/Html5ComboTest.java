@@ -16,14 +16,16 @@ import static org.apache.juneau.dto.html5.HtmlBuilder.*;
 
 import java.util.*;
 
-import org.apache.juneau.dto.ComboTestcase;
+import org.apache.juneau.dto.ComboTest;
 import org.junit.runner.*;
 import org.junit.runners.*;
 
-
+/**
+ * Exhaustive serialization tests for all the HTML5 DTOs.
+ */
 @RunWith(Parameterized.class)
 @SuppressWarnings({"javadoc"})
-public class BasicHtmlSchemaTest extends ComboTestcase {
+public class Html5ComboTest extends ComboTest {
 	
 	private static final B btag = b("bbb");
 
@@ -2034,7 +2036,7 @@ public class BasicHtmlSchemaTest extends ComboTestcase {
 		});
 	}
 
-	public BasicHtmlSchemaTest(
+	public Html5ComboTest(
 			String label, 
 			Object in, 
 			String oJson, String oJsonT, String oJsonR,
