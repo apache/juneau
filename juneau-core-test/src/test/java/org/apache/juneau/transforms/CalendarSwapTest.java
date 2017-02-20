@@ -34,7 +34,7 @@ import org.junit.*;
 @SuppressWarnings("javadoc")
 public class CalendarSwapTest {
 
-	private static Calendar testDate = new GregorianCalendar(TimeZone.getTimeZone("PST"));
+	static Calendar testDate = new GregorianCalendar(TimeZone.getTimeZone("PST"));
 	static {
 		testDate.setTimeInMillis(0);
 		testDate.set(1901, 2, 3, 10, 11, 12);
