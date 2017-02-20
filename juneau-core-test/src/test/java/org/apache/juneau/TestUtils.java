@@ -472,18 +472,21 @@ public class TestUtils {
 		String[] e = expected.trim().split("\n"), a = actual.trim().split("\n");
 		
 		if (e.length != a.length) 
-			throw new AssertionError(MessageFormat.format(msg + "---expected---\n"+expected+"\n---actual---\n"+actual+"\n", args));
+			throw new ComparisonFailure(MessageFormat.format(msg, args), expected, actual);
 		
 		Arrays.sort(e);
 		Arrays.sort(a);
 		
 		for (int i = 0; i < e.length; i++) 
 			if (! e[i].equals(a[i]))
-				throw new AssertionError(MessageFormat.format(msg + "---expected---\n"+expected+"\n---actual---\n"+actual+"\n", args));
+				throw new ComparisonFailure(MessageFormat.format(msg, args), expected, actual);
 	}
 
+	/**
+	 * Same as {@link Assert#assertEquals(String,String,String) except takes in a MessageFormat-style message.
+	 */
 	public static void assertEquals(String expected, String actual, String msg, Object...args) {
 		if (! StringUtils.isEquals(expected, actual))
-			throw new AssertionError(MessageFormat.format(msg + "---expected---\n"+expected+"\n---actual---\n"+actual+"\n", args));			
+			throw new ComparisonFailure(MessageFormat.format(msg, args), expected, actual);			
 	}
 }

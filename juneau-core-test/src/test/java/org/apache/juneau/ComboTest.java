@@ -10,15 +10,16 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.dto;
+package org.apache.juneau;
 
 import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.IdentityHashMap;
+import java.util.Map;
 import java.util.Set;
 
-import org.apache.juneau.TestUtils;
 import org.apache.juneau.html.HtmlParser;
 import org.apache.juneau.html.HtmlSerializer;
 import org.apache.juneau.jena.RdfParser;
@@ -39,13 +40,43 @@ import org.apache.juneau.urlencoding.UrlEncodingParser;
 import org.apache.juneau.urlencoding.UrlEncodingSerializer;
 import org.apache.juneau.xml.XmlParser;
 import org.apache.juneau.xml.XmlSerializer;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
 /**
  * Superclass for tests that verify results against all supported content types. 
  */
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public abstract class ComboTest {
 
+	/* Parameter template */
+//	{
+//		"MyLabel",
+//		myInput,
+//		/* Json */		"xxx",
+//		/* JsonT */		"xxx",
+//		/* JsonR */		"xxx",
+//		/* Xml */		"xxx",
+//		/* XmlT */		"xxx",
+//		/* XmlR */		"xxx",
+//		/* XmlNs */		"xxx",
+//		/* Html */		"xxx",
+//		/* HtmlT */		"xxx",
+//		/* HtmlR */		"xxx",
+//		/* Uon */		"xxx",
+//		/* UonT */		"xxx",
+//		/* UonR */		"xxx",
+//		/* UrlEnc */	"xxx",
+//		/* UrlEncT */	"xxx",
+//		/* UrlEncR */	"xxx",
+//		/* MsgPack */	"xxx",
+//		/* MsgPackT */	"xxx",
+//		/* RdfXml */	"xxx",
+//		/* RdfXmlT */	"xxx",
+//		/* RdfXmlR */	"xxx",
+//	},
+	
 	private final String 
 		label, 
 		oJson, oJsonT, oJsonR,
@@ -109,7 +140,10 @@ public abstract class ComboTest {
 	private static final Set<String> runTestsSet = new HashSet<String>(Arrays.asList(runTests));
 	
 	private final boolean SKIP_RDF_TESTS = Boolean.getBoolean("skipRdfTests");
-			
+
+	private Map<Serializer,Serializer> serializerMap = new IdentityHashMap<Serializer,Serializer>();
+	private Map<Parser,Parser> parserMap = new IdentityHashMap<Parser,Parser>();
+	
 	public ComboTest(
 		String label, 
 		Object in, 
@@ -132,8 +166,28 @@ public abstract class ComboTest {
 		this.oRdfXml = oRdfXml; this.oRdfXmlT = oRdfXmlT; this.oRdfXmlR = oRdfXmlR;
 	}
 	
+	private Serializer getSerializer(Serializer s) throws Exception {
+		Serializer s2 = serializerMap.get(s);
+		if (s2 == null) {
+			s2 = applySettings(s);
+			serializerMap.put(s, s2);
+		}
+		return s2;
+	}
+	
+	private Parser getParser(Parser p) throws Exception {
+		Parser p2 = parserMap.get(p);
+		if (p2 == null) {
+			p2 = applySettings(p);
+			parserMap.put(p, p2);
+		}
+		return p2;
+	}
+
 	private void testSerialize(String testName, Serializer s, String expected) throws Exception {
 		try {
+			s = getSerializer(s);
+			
 			boolean isRdf = s instanceof RdfSerializer;
 
 			if ((isRdf && SKIP_RDF_TESTS) || expected.isEmpty() || ! runTestsSet.contains(testName) ) {
@@ -170,6 +224,9 @@ public abstract class ComboTest {
 	
 	private void testParse(String testName, Serializer s, Parser p, String expected) throws Exception {
 		try {
+			s = getSerializer(s);
+			p = getParser(p);
+			
 			boolean isRdf = s instanceof RdfSerializer;
 
 			if ((isRdf && SKIP_RDF_TESTS) || expected.isEmpty() || ! runTestsSet.contains(testName) ) {
@@ -198,6 +255,10 @@ public abstract class ComboTest {
 	
 	private void testParseJsonEquivalency(String testName, OutputStreamSerializer s, InputStreamParser p, String expected) throws Exception {
 		try {
+			s = (OutputStreamSerializer)getSerializer(s);
+			p = (InputStreamParser)getParser(p);
+			WriterSerializer sJson = (WriterSerializer)getSerializer(this.sJson);
+
 			String r = s.serializeToHex(in);
 			Object o = p.parse(r, in == null ? Object.class : in.getClass());
 			r = sJson.serialize(o);
@@ -207,6 +268,14 @@ public abstract class ComboTest {
 		} catch (Exception e) {
 			throw new Exception(label + "/" + testName + " failed.", e);
 		}
+	}
+	
+	protected Serializer applySettings(Serializer s) throws Exception {
+		return s;
+	}
+	
+	protected Parser applySettings(Parser p) throws Exception {
+		return p;
 	}
 	
 	//--------------------------------------------------------------------------------

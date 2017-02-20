@@ -16,7 +16,7 @@ import static org.apache.juneau.dto.html5.HtmlBuilder.*;
 
 import java.util.*;
 
-import org.apache.juneau.dto.ComboTest;
+import org.apache.juneau.ComboTest;
 import org.junit.runner.*;
 import org.junit.runners.*;
 
