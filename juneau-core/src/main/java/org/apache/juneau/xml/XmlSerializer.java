@@ -495,8 +495,14 @@ public class XmlSerializer extends WriterSerializer {
 
 		// Render the end tag.
 		if (! isCollapsed) {
-			if (o == null || rc == CR_EMPTY)
+			if (rc == CR_EMPTY) {
+				if (session.isHtmlMode())
+					out.append('>').eTag(elementNs, en, encodeEn);
+				else
+					out.append('/').append('>');
+			} else if (rc == CR_VOID || o == null) {
 				out.append('/').append('>');
+			}
 			else
 				out.i(cr && rc != CR_MIXED ? indent : 0).eTag(elementNs, en, encodeEn);
 			if (! isMixed)
@@ -599,7 +605,10 @@ public class XmlSerializer extends WriterSerializer {
 			}
 		}
 
-		boolean hasContent = false, preserveWhitespace = false;
+		boolean
+			hasContent = false,
+			preserveWhitespace = false,
+			isVoidElement = xbm.getContentFormat() == VOID;
 
 		for (BeanPropertyValue p : lp) {
 			BeanPropertyMeta pMeta = p.getMeta();
@@ -639,7 +648,7 @@ public class XmlSerializer extends WriterSerializer {
 			}
 		}
 		if (! hasContent)
-			return (hasChildren ? CR_ELEMENTS : CR_EMPTY);
+			return (hasChildren ? CR_ELEMENTS : isVoidElement ? CR_VOID : CR_EMPTY);
 		out.append('>').nlIf(! isMixed);
 
 		// Serialize XML content.
@@ -737,9 +746,10 @@ public class XmlSerializer extends WriterSerializer {
 	 * Identifies what the contents were of a serialized bean.
 	 */
 	static enum ContentResult {
-		CR_EMPTY,    // No content...append "/>" to the start tag.
-		CR_MIXED,    // Mixed content...don't add whitespace.
-		CR_ELEMENTS  // Elements...use normal whitespace rules.
+		CR_VOID,      // No content...append "/>" to the start tag.
+		CR_EMPTY,     // No content...append "/>" to the start tag if XML, "/></end>" if HTML.
+		CR_MIXED,     // Mixed content...don't add whitespace.
+		CR_ELEMENTS   // Elements...use normal whitespace rules.
 	}
 
 

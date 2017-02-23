@@ -1269,8 +1269,8 @@ public class BasicHtmlTest {
 			{
 				"BeanWithWhitespaceTextFields-1",
 				new BeanWithWhitespaceTextFields().init(null),
-				"<object/>",
-				"<object/>\n",
+				"<object></object>",
+				"<object></object>\n",
 			},
 			{
 				"BeanWithWhitespaceTextFields-2",
@@ -1299,8 +1299,8 @@ public class BasicHtmlTest {
 			{
 				"BeanWithWhitespaceTextPwsFields-1",
 				new BeanWithWhitespaceTextPwsFields().init(null),
-				"<object/>",
-				"<object/>\n",
+				"<object></object>",
+				"<object></object>\n",
 			},
 			{
 				"BeanWithWhitespaceTextPwsFields-2",
@@ -1329,14 +1329,14 @@ public class BasicHtmlTest {
 			{
 				"BeanWithWhitespaceMixedFields-1",
 				new BeanWithWhitespaceMixedFields().init(null),
-				"<object/>",
-				"<object/>\n",
+				"<object></object>",
+				"<object></object>\n",
 			},
 			{
 				"BeanWithWhitespaceMixedFields-2",
 				new BeanWithWhitespaceMixedFields().init(new String[0]),
-				"<object/>",
-				"<object/>\n",
+				"<object></object>",
+				"<object></object>\n",
 			},
 			{
 				"BeanWithWhitespaceMixedFields-3",
@@ -1365,14 +1365,14 @@ public class BasicHtmlTest {
 			{
 				"BeanWithWhitespaceMixedPwsFields-1",
 				new BeanWithWhitespaceMixedPwsFields().init(null),
-				"<object/>",
-				"<object/>\n",
+				"<object></object>",
+				"<object></object>\n",
 			},
 			{
 				"BeanWithWhitespaceMixedPwsFields-2",
 				new BeanWithWhitespaceMixedPwsFields().init(new String[0]),
-				"<object/>",
-				"<object/>\n",
+				"<object></object>",
+				"<object></object>\n",
 			},
 			{
 				"BeanWithWhitespaceMixedPwsFields-3",

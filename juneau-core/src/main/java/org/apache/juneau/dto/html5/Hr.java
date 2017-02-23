@@ -19,7 +19,7 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="hr")
-public class Hr extends HtmlElementEmpty {
+public class Hr extends HtmlElementVoid {
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods

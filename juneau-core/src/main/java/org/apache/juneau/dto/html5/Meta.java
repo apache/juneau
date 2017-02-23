@@ -19,7 +19,7 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="meta")
-public class Meta extends HtmlElementEmpty {
+public class Meta extends HtmlElementVoid {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-meta-charset">charset</a> attribute.

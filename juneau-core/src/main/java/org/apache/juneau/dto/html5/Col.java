@@ -19,7 +19,7 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="col")
-public class Col extends HtmlElementEmpty {
+public class Col extends HtmlElementVoid {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-col-span">span</a> attribute.

@@ -21,7 +21,7 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="area")
-public class Area extends HtmlElementEmpty {
+public class Area extends HtmlElementVoid {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-area-alt">alt</a> attribute.

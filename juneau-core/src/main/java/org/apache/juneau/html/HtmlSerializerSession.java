@@ -181,4 +181,9 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	public final boolean isAddBeanTypeProperties() {
 		return addBeanTypeProperties;
 	}
+
+	@Override /* XmlSerializer */
+	public boolean isHtmlMode() {
+		return true;
+	}
 }

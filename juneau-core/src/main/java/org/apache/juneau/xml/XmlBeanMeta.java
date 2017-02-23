@@ -49,8 +49,12 @@ public class XmlBeanMeta extends BeanMetaExtended {
 				defaultFormat = XmlFormat.ATTR;
 			else if (xf.isOneOf(ELEMENTS, DEFAULT))
 				defaultFormat = ELEMENT;
+			else if (xf == VOID) {
+				_contentFormat = VOID;
+				defaultFormat = VOID;
+			}
 			else
-				throw new BeanRuntimeException(c, "Invalid format specified in @Xml annotation on bean: {0}.  Must be one of the following: DEFAULT,ATTRS,ELEMENTS", xml.format());
+				throw new BeanRuntimeException(c, "Invalid format specified in @Xml annotation on bean: {0}.  Must be one of the following: DEFAULT,ATTRS,ELEMENTS,VOID", xml.format());
 		}
 
 		Map<String,BeanPropertyMeta> _attrs = new LinkedHashMap<String,BeanPropertyMeta>();
@@ -106,7 +110,7 @@ public class XmlBeanMeta extends BeanMetaExtended {
 		contentFormat = _contentFormat;
 
 		// Do some validation.
-		if (contentProperty != null) {
+		if (contentProperty != null || contentFormat == XmlFormat.VOID) {
 			if (! elements.isEmpty())
 				throw new BeanRuntimeException(c, "{0} and ELEMENT properties found on the same bean.  These cannot be mixed.", contentFormat);
 			if (! collapsedProperties.isEmpty())
@@ -221,6 +225,7 @@ public class XmlBeanMeta extends BeanMetaExtended {
 	 * 	<li>{@link XmlFormat#TEXT}
 	 * 	<li>{@link XmlFormat#TEXT_PWS}
 	 * 	<li>{@link XmlFormat#XMLTEXT}
+	 * 	<li>{@link XmlFormat#VOID}
 	 * 	<li><jk>null</jk>
 	 * </ul>
 	 *

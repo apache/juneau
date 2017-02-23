@@ -21,7 +21,7 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="embed")
-public class Embed extends HtmlElementEmpty {
+public class Embed extends HtmlElementVoid {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-height">height</a> attribute.

@@ -20,7 +20,7 @@ import org.apache.juneau.annotation.*;
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#the-img-element">&lt;img&gt;</a> element.
  */
 @Bean(typeName="img")
-public class Img extends HtmlElementEmpty {
+public class Img extends HtmlElementVoid {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-img-alt">alt</a> attribute.

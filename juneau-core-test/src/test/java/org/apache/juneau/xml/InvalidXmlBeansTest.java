@@ -39,22 +39,22 @@ public class InvalidXmlBeansTest {
 			{
 				"BeanWithAttrFormat",
 				new BeanWithAttrFormat(),
-				"org.apache.juneau.xml.InvalidXmlBeansTest$BeanWithAttrFormat: Invalid format specified in @Xml annotation on bean: ATTR.  Must be one of the following: DEFAULT,ATTRS,ELEMENTS",
+				"org.apache.juneau.xml.InvalidXmlBeansTest$BeanWithAttrFormat: Invalid format specified in @Xml annotation on bean: ATTR.  Must be one of the following: DEFAULT,ATTRS,ELEMENTS,VOID",
 			},
 			{
 				"BeanWithElementFormat",
 				new BeanWithElementFormat(),
-				"org.apache.juneau.xml.InvalidXmlBeansTest$BeanWithElementFormat: Invalid format specified in @Xml annotation on bean: ELEMENT.  Must be one of the following: DEFAULT,ATTRS,ELEMENTS",
+				"org.apache.juneau.xml.InvalidXmlBeansTest$BeanWithElementFormat: Invalid format specified in @Xml annotation on bean: ELEMENT.  Must be one of the following: DEFAULT,ATTRS,ELEMENTS,VOID",
 			},
 			{
 				"BeanWithCollapsedFormat",
 				new BeanWithCollapsedFormat(),
-				"org.apache.juneau.xml.InvalidXmlBeansTest$BeanWithCollapsedFormat: Invalid format specified in @Xml annotation on bean: COLLAPSED.  Must be one of the following: DEFAULT,ATTRS,ELEMENTS",
+				"org.apache.juneau.xml.InvalidXmlBeansTest$BeanWithCollapsedFormat: Invalid format specified in @Xml annotation on bean: COLLAPSED.  Must be one of the following: DEFAULT,ATTRS,ELEMENTS,VOID",
 			},
 			{
 				"BeanWithMixedFormat",
 				new BeanWithMixedFormat(),
-				"org.apache.juneau.xml.InvalidXmlBeansTest$BeanWithMixedFormat: Invalid format specified in @Xml annotation on bean: MIXED.  Must be one of the following: DEFAULT,ATTRS,ELEMENTS",
+				"org.apache.juneau.xml.InvalidXmlBeansTest$BeanWithMixedFormat: Invalid format specified in @Xml annotation on bean: MIXED.  Must be one of the following: DEFAULT,ATTRS,ELEMENTS,VOID",
 			},
 			{
 				"BeanWithMultipleAttrs",

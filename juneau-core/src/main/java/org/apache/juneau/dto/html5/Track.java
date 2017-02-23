@@ -21,7 +21,7 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="track")
-public class Track extends HtmlElementEmpty {
+public class Track extends HtmlElementVoid {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-default">default</a> attribute.

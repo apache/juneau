@@ -21,7 +21,7 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="link")
-public class Link extends HtmlElementEmpty {
+public class Link extends HtmlElementVoid {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-link-crossorigin">crossorigin</a> attribute.

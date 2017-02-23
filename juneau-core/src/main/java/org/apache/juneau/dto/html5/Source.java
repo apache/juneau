@@ -21,7 +21,7 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="source")
-public class Source extends HtmlElementEmpty {
+public class Source extends HtmlElementVoid {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-source-src">src</a> attribute.

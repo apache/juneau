@@ -118,7 +118,21 @@ public enum XmlFormat {
 	 * <p>
 	 * Can only be applied to properties (methods/fields) of type collection or array, or collection classes.
 	 */
-	COLLAPSED;
+	COLLAPSED,
+
+	/**
+	 * Identifies a void element.
+	 * <p>
+	 * Only applicable for bean classes.
+	 * <p>
+	 * Identifies an element that never contains content.
+	 * <p>
+	 * The main difference in behavior is how non-void empty elements are handled
+	 * in the HTML serializer.  
+	 * Void elements are serialized as collapsed nodes (e.g. <js>"&lt;br/&gt;"</js>)
+	 * whereas non-void empty elements are serialized with an end tag (e.g. "&lt;p&gt;&lt;/p&gt;").
+	 */
+	VOID;
 
 	/**
 	 * Returns <jk>true</jk> if this format is one of those specified.

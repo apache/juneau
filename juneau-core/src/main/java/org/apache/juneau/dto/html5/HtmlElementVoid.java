@@ -12,8 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.html5;
 
+import org.apache.juneau.xml.annotation.*;
+import static org.apache.juneau.xml.annotation.XmlFormat.*;
+
 /**
- * A subclass of HTML elements that has no content.
+ * A subclass of HTML elements that have no content or end tags.
+ * <p>
+ * See <a href="https://www.w3.org/TR/html51/syntax.html#void-elements">void elements</a>
  */
-public class HtmlElementEmpty extends HtmlElement {
+@Xml(format=VOID)
+public class HtmlElementVoid extends HtmlElement {
 }

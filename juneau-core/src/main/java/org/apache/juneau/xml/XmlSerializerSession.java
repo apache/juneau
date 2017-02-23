@@ -179,6 +179,19 @@ public class XmlSerializerSession extends SerializerSession {
 		return xsNamespace;
 	}
 
+	/**
+	 * Returns <jk>true</jk> if we're serializing HTML.
+	 * <p>
+	 * The difference in behavior is how empty non-void elements are handled.
+	 * The XML serializer will produce a collapsed tag, whereas the HTML serializer
+	 * will produce a start and end tag.
+	 *
+	 * @return <jk>true</jk> if we're generating HTML.
+	 */
+	public boolean isHtmlMode() {
+		return false;
+	}
+
 	@Override /* SerializerSession */
 	public XmlWriter getWriter() throws Exception {
 		Object output = getOutput();
