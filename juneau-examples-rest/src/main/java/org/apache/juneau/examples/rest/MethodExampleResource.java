@@ -27,7 +27,7 @@ import org.apache.juneau.rest.annotation.*;
 	path="/methodExample",
 	messages="nls/MethodExampleResource",
 	properties={
-		@Property(name=HTMLDOC_links, value="{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$R{servletParentURI}/source?classes=(org.apache.juneau.examples.rest.MethodExampleResource)'}")
+		@Property(name=HTMLDOC_links, value="{up:'$R{servletParentURI}',options:'?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/MethodExampleResource.java'}")
 	}
 )
 public class MethodExampleResource extends Resource {

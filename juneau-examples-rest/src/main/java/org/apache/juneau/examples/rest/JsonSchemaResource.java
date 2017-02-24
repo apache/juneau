@@ -26,7 +26,7 @@ import org.apache.juneau.rest.annotation.*;
 	messages="nls/JsonSchemaResource",
 	properties={
 		@Property(name=HTMLDOC_title, value="Sample JSON-Schema document"),
-		@Property(name=HTMLDOC_links, value="{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$R{servletParentURI}/source?classes=(org.apache.juneau.examples.rest.JsonSchemaResource)'}")
+		@Property(name=HTMLDOC_links, value="{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/JsonSchemaResource.java'}")
 	}
 )
 public class JsonSchemaResource extends ResourceJena {

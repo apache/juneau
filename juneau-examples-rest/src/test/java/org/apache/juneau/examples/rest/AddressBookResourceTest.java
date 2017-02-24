@@ -21,7 +21,6 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.examples.addressbook.*;
 import org.apache.juneau.html.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.transforms.*;
@@ -62,7 +61,21 @@ public class AddressBookResourceTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testBasic() throws Exception {
-		String in = IOUtils.read(getClass().getResourceAsStream("/org/apache/juneau/server/test/AddressBookResource_test0Test.json"));
+		String in = "" 
+		+"{"
+		+"\n	name: \"Bill Clinton\", "
+		+"\n	age: 66, "
+		+"\n	birthDate: \"Aug 19, 1946\", "
+		+"\n	addresses: ["
+		+"\n		{"
+		+"\n			street: \"a3\", "
+		+"\n			city: \"b3\", "
+		+"\n			state: \"c3\", "
+		+"\n			zip: 3, "
+		+"\n			isCurrent: false"
+		+"\n		}"
+		+"\n	]"
+		+"\n}";			
 		JsonParser p = new JsonParser().addPojoSwaps(CalendarSwap.DateMedium.class);
 		Person person = p.parse(in, Person.class);
 		if (debug) System.err.println(person);

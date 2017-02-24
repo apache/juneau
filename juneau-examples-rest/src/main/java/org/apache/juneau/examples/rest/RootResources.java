@@ -26,7 +26,7 @@ import org.apache.juneau.rest.annotation.*;
 	path="/",
 	messages="nls/RootResources",
 	properties={
-		@Property(name=HTMLDOC_links, value="{options:'$R{servletURI}?method=OPTIONS',source:'$R{servletURI}/source?classes=(org.apache.juneau.examples.rest.RootResources)'}")
+		@Property(name=HTMLDOC_links, value="{options:'$R{servletURI}?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/RootResources.java'}")
 	},
 	children={
 		HelloWorldResource.class,
@@ -43,7 +43,6 @@ import org.apache.juneau.rest.annotation.*;
 		TumblrParserResource.class,
 		CodeFormatterResource.class,
 		UrlEncodedFormResource.class,
-		SourceResource.class,
 		ConfigResource.class,
 		LogsResource.class,
 		DockerRegistryResource.class,

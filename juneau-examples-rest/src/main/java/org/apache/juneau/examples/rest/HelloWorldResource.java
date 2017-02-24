@@ -24,7 +24,7 @@ import org.apache.juneau.rest.annotation.*;
 	messages="nls/HelloWorldResource",
 	path="/helloWorld",
 	properties={
-		@Property(name=HTMLDOC_links, value="{up:'$R{requestParentURI}',options:'?method=OPTIONS'}")
+		@Property(name=HTMLDOC_links, value="{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/HelloWorldResource.java'}")
 	}
 )
 public class HelloWorldResource extends Resource {

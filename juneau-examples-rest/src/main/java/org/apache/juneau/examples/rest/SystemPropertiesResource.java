@@ -18,6 +18,7 @@ import java.util.*;
 
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.encoders.*;
+import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
@@ -27,7 +28,7 @@ import org.apache.juneau.rest.annotation.*;
 	description="REST interface for performing CRUD operations on system properties.",
 	properties={
 		@Property(name=SERIALIZER_quoteChar, value="'"),
-		@Property(name=HTMLDOC_links, value="{up:'$R{requestParentURI}',options:'$R{servletURI}?method=OPTIONS'}"),
+		@Property(name=HTMLDOC_links, value="{up:'$R{requestParentURI}',options:'$R{servletURI}?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/SystemPropertiesResource.java'}"),
 	},
 	stylesheet="styles/devops.css",
 	encoders=GzipEncoder.class,
@@ -38,7 +39,7 @@ import org.apache.juneau.rest.annotation.*;
 	tags="[{name:'Java',description:'Java utility',externalDocs:{description:'Home page',url:'http://juneau.apache.org'}}]",
 	externalDocs="{description:'Home page',url:'http://juneau.apache.org'}"
 )
-public class SystemPropertiesResource extends RestServletDefault {
+public class SystemPropertiesResource extends Resource {
 	private static final long serialVersionUID = 1L;
 
 	@RestMethod(

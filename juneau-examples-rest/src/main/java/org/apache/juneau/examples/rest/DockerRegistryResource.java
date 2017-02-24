@@ -32,7 +32,7 @@ import org.apache.juneau.rest.labels.*;
 	path="/docker",
 	title="Sample Docker resource",
 	properties={
-		@Property(name=HTMLDOC_links, value="{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$R{servletParentURI}/source?classes=(org.apache.juneau.examples.rest.AtomFeedResource)'}")
+		@Property(name=HTMLDOC_links, value="{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/DockerRegistryResource.java'}")
 	}
 )
 public class DockerRegistryResource extends Resource {

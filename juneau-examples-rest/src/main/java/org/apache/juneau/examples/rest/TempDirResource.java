@@ -13,11 +13,13 @@
 package org.apache.juneau.examples.rest;
 
 import static org.apache.juneau.html.HtmlDocSerializerContext.*;
+import static org.apache.juneau.dto.html5.HtmlBuilder.*;
 
 import java.io.*;
 
 import org.apache.commons.fileupload.*;
 import org.apache.commons.fileupload.servlet.*;
+import org.apache.juneau.dto.html5.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.utils.*;
@@ -33,7 +35,7 @@ import org.apache.juneau.utils.*;
 		@Property(name="allowViews", value="true"),
 		@Property(name="allowDeletes", value="true"),
 		@Property(name="allowPuts", value="false"),
-		@Property(name=HTMLDOC_links, value="{up:'$R{requestParentURI}',options:'$R{servletURI}?method=OPTIONS',upload:'upload',source:'$R{servletParentURI}/source?classes=(org.apache.juneau.examples.rest.TempDirResource,org.apache.juneau.examples.rest.DirectoryResource)'}"),
+		@Property(name=HTMLDOC_links, value="{up:'$R{requestParentURI}',options:'$R{servletURI}?method=OPTIONS',upload:'upload',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/TempDirResource.java'}"),
 	},
 	stylesheet="styles/devops.css"
 )
@@ -44,8 +46,14 @@ public class TempDirResource extends DirectoryResource {
 	 * [GET /upload] - Display the form entry page for uploading a file to the temp directory.
 	 */
 	@RestMethod(name="GET", path="/upload")
-	public ReaderResource getUploadPage(RestRequest req) throws IOException {
-		return req.getReaderResource("TempDirUploadPage.html", true);
+	public Form getUploadForm(RestRequest req) throws IOException {
+		return 
+			form().id("form").action(req.getServletURI() + "/upload").method("POST").enctype("multipart/form-data")
+			.children(
+				input().name("contents").type("file"),
+				button("submit", "Submit")
+			)
+		;
 	}
 
 	/**

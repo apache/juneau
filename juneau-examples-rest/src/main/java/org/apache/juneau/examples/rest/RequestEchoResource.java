@@ -33,7 +33,7 @@ import org.apache.juneau.transforms.*;
 	properties={
 		@Property(name=SERIALIZER_maxDepth, value="5"),
 		@Property(name=SERIALIZER_detectRecursions, value="true"),
-		@Property(name=HTMLDOC_links, value="{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$R{servletParentURI}/source?classes=(org.apache.juneau.examples.rest.RequestEchoResource)'}")
+		@Property(name=HTMLDOC_links, value="{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/RequestEchoResource.java'}")
 	},
 	beanFilters={
 		// Interpret these as their parent classes, not subclasses

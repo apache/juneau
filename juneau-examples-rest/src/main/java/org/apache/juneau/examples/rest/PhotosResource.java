@@ -40,7 +40,7 @@ import org.apache.juneau.serializer.*;
 	properties={
 		@Property(name=HTMLDOC_title, value="Photo REST service"),
 		@Property(name=HTMLDOC_description, value="Use a tool like Poster to upload and retrieve jpeg and png images."),
-		@Property(name=HTMLDOC_links, value="{up:'$R{requestParentURI}',options:'$R{servletURI}?method=OPTIONS',source:'$R{servletParentURI}/source?classes=(org.apache.juneau.examples.rest.PhotosResource)'}"),
+		@Property(name=HTMLDOC_links, value="{up:'$R{requestParentURI}',options:'$R{servletURI}?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/PhotosResource.java'}"),
 		// Resolve all relative URIs so that they're relative to this servlet!
 		@Property(name=SERIALIZER_relativeUriBase, value="$R{servletURI}"),
 	}

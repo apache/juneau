@@ -14,17 +14,20 @@ package org.apache.juneau.examples.rest;
 
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.html.HtmlDocSerializerContext.*;
+import static org.apache.juneau.dto.html5.HtmlBuilder.*;
 
 import java.io.*;
 import java.sql.*;
 import java.util.*;
 
 import org.apache.juneau.dto.*;
+import org.apache.juneau.dto.html5.*;
 import org.apache.juneau.ini.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.annotation.Body;
 
 /**
  * Sample resource that shows how Juneau can serialize ResultSets.
@@ -35,7 +38,7 @@ import org.apache.juneau.rest.annotation.*;
 	properties={
 		@Property(name=HTMLDOC_title, value="SQL query service"),
 		@Property(name=HTMLDOC_description, value="Executes queries against the local derby '$C{SqlQueryResource/connectionUrl}' database"),
-		@Property(name=HTMLDOC_links, value="{up:'$R{requestParentURI}',options:'$R{servletURI}?method=OPTIONS',source:'$R{servletParentURI}/source?classes=(org.apache.juneau.examples.rest.SqlQueryResource)'}"),
+		@Property(name=HTMLDOC_links, value="{up:'$R{requestParentURI}',options:'$R{servletURI}?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/SqlQueryResource.java'}"),
 	}
 )
 public class SqlQueryResource extends Resource {
@@ -61,8 +64,45 @@ public class SqlQueryResource extends Resource {
 
 	/** GET request handler - Display the query entry page. */
 	@RestMethod(name="GET", path="/")
-	public ReaderResource doGet(RestRequest req) throws IOException {
-		return req.getReaderResource("SqlQueryResource.html", true);
+	public Div doGet(RestRequest req) throws IOException {
+		return div(
+			script("text/javascript",
+				 "\n	// Quick and dirty function to allow tabs in textarea."
+				+"\n	function checkTab(e) {"
+				+"\n		if (e.keyCode == 9) {"
+				+"\n			var t = e.target;"
+				+"\n			var ss = t.selectionStart, se = t.selectionEnd;"
+				+"\n			t.value = t.value.slice(0,ss).concat('\\t').concat(t.value.slice(ss,t.value.length));"
+				+"\n			e.preventDefault();"
+				+"\n		}"
+				+"\n	}"
+				+"\n	// Load results from IFrame into this document."
+				+"\n	function loadResults(b) {"
+				+"\n		var doc = b.contentDocument || b.contentWindow.document;"
+				+"\n		var data = doc.getElementById('data') || doc.getElementsByTagName('body')[0];"
+				+"\n		document.getElementById('results').innerHTML = data.innerHTML;"
+				+"\n	}"
+			),
+			form("sqlQuery").method("POST").target("buf").children(
+				table(
+					tr(
+						th("Position (1-10000):"),
+						td(input().name("pos").type("number").value(1)),
+						th("Limit (1-10000):"),
+						td(input().name("limit").type("number").value(100)),
+						td(button("submit", "Submit"), button("reset", "Reset"))
+					),
+					tr(
+						td().colspan(5).children(
+							textarea().name("sql").style("width:100%;height:200px;font-family:Courier;font-size:9pt;").onkeydown("checkTab(event)")
+						)
+					)
+				)
+			),
+			br(),
+			div().id("results"),
+			iframe().name("buf").style("display:none").onload("parent.loadResults(this)")
+		);
 	}
 
 	/** POST request handler - Execute the query. */
@@ -74,6 +114,8 @@ public class SqlQueryResource extends Resource {
 		// Don't try to submit empty input.
 		if (StringUtils.isEmpty(in.sql))
 			return results;
+		
+		System.err.println("SQL=["+in.sql+"]");
 
 		if (in.pos < 1 || in.pos > 10000)
 			throw new RestException(SC_BAD_REQUEST, "Invalid value for position.  Must be between 1-10000");

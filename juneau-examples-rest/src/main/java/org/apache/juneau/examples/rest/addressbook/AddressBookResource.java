@@ -48,7 +48,7 @@ import org.apache.juneau.utils.*;
 		@Property(name=SERIALIZER_quoteChar, value="'"),
 		@Property(name=RDF_rdfxml_tab, value="5"),
 		@Property(name=RDF_addRootProperty, value="true"),
-		@Property(name=HTMLDOC_links, value="{up:'$R{requestParentURI}',options:'$R{servletURI}?method=OPTIONS',source:'$R{servletParentURI}/source?classes=(org.apache.juneau.examples.rest.addressbook.AddressBookResource,org.apache.juneau.examples.addressbook.Address,org.apache.juneau.examples.addressbook.AddressBook,org.apache.juneau.examples.addressbook.CreateAddress,org.apache.juneau.examples.addressbook.CreatePerson,org.apache.juneau.examples.addressbook.IAddressBook,org.apache.juneau.examples.addressbook.Person)'}"),
+		@Property(name=HTMLDOC_links, value="{up:'$R{requestParentURI}',options:'$R{servletURI}?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/addressbook/AddressBookResource.java'}"),
 		// Resolve all relative URIs so that they're relative to this servlet!
 		@Property(name=SERIALIZER_relativeUriBase, value="$R{servletURI}"),
 	},

@@ -30,7 +30,7 @@ import org.apache.juneau.rest.annotation.*;
 	properties={
 		@Property(name=HTMLDOC_title, value="Code Formatter"),
 		@Property(name=HTMLDOC_description, value="Add syntax highlighting tags to source code"),
-		@Property(name=HTMLDOC_links, value="{options:'?method=OPTIONS',source:'$R{servletParentURI}/source?classes=(org.apache.juneau.examples.rest.CodeFormatterResource)'}"),
+		@Property(name=HTMLDOC_links, value="{options:'?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/CodeFormatterResource.java'}"),
 	}
 )
 @SuppressWarnings("serial")
@@ -42,9 +42,34 @@ public class CodeFormatterResource extends Resource {
 		return req.getReaderResource("CodeFormatterResource.html", true);
 	}
 
-	/** [POST /] - Execute SQL query. */
+	/** [POST /] - Add syntax highlighting to input. */
 	@RestMethod(name="POST", path="/")
 	public String executeQuery(@FormData("code") String code, @FormData("lang") String lang) throws Exception {
-		return SourceResource.highlight(code, lang);
+		return highlight(code, lang);
+	}
+
+	private String highlight(String code, String lang) throws Exception {
+		if (lang.equalsIgnoreCase("xml")) {
+			code = code.replaceAll("&", "&amp;");
+			code = code.replaceAll("<", "&lt;");
+			code = code.replaceAll(">", "&gt;");
+			code = code.replaceAll("(&lt;[^\\s&]+&gt;)", "<xt>$1</xt>");
+			code = code.replaceAll("(&lt;[^\\s&]+)(\\s)", "<xt>$1</xt>$2");
+			code = code.replaceAll("(['\"])(/?&gt;)", "$1<xt>$2</xt>");
+			code = code.replaceAll("([\\S]+)=", "<xa>$1</xa>=");
+			code = code.replaceAll("=(['\"][^'\"]+['\"])", "=<xs>$1</xs>");
+		} else if (lang.equalsIgnoreCase("java")) {
+			code = code.replaceAll("&", "&amp;");
+			code = code.replaceAll("<", "&lt;");
+			code = code.replaceAll(">", "&gt;");
+			code = code.replaceAll("(?s)(\\/\\*\\*.*?\\*\\/)", "<jd>$1</jd>"); // javadoc comments
+			code = code.replaceAll("(@\\w+)", "<ja>$1</ja>"); // annotations
+			code = code.replaceAll("(?s)(?!\\/)(\\/\\*.*?\\*\\/)", "<jc>$1</jc>"); // C style comments
+			code = code.replaceAll("(?m)(\\/\\/.*)", "<jc>$1</jc>"); // C++ style comments
+			code = code.replaceAll("(?m)('[^'\n]*'|\"[^\"\n]*\")", "<js>$1</js>"); // quotes
+			code = code.replaceAll("(?<!@)(import|package|boolean|byte|char|double|float|final|static|transient|synchronized|private|protected|public|int|long|short|abstract|class|interface|extends|implements|null|true|false|void|break|case|catch|continue|default|do|else|finally|for|goto|if|instanceof|native|new|return|super|switch|this|threadsafe|throws|throw|try|while)(?=\\W)", "<jk>$1</jk>"); // quotes
+			code = code.replaceAll("<\\/jk>(\\s+)<jk>", "$1"); // quotes
+		}
+		return code;
 	}
 }

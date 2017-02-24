@@ -12,13 +12,18 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest;
 
+import static org.apache.juneau.dto.html5.HtmlBuilder.*;
+import static org.apache.juneau.html.HtmlDocSerializerContext.*;
+
 import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.dto.html5.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.annotation.Body;
 import org.apache.juneau.transforms.*;
 
 /**
@@ -26,15 +31,53 @@ import org.apache.juneau.transforms.*;
  */
 @RestResource(
 	path="/urlEncodedForm",
-	messages="nls/UrlEncodedFormResource"
+	messages="nls/UrlEncodedFormResource",
+	properties={
+		@Property(name=HTMLDOC_links, value="{up:'$R{requestParentURI}',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/UrlEncodedFormResource.java'}"),
+		@Property(name=HTMLDOC_title, value="Tumblr parser service"),
+		@Property(name=HTMLDOC_description, value="Specify a URL to a Tumblr blog and parse the results.")
+	}
 )
 public class UrlEncodedFormResource extends Resource {
 	private static final long serialVersionUID = 1L;
 
 	/** GET request handler */
 	@RestMethod(name="GET", path="/")
-	public ReaderResource doGet(RestRequest req) throws IOException {
-		return req.getReaderResource("UrlEncodedForm.html", true);
+	public Div doGet(RestRequest req) throws IOException {
+		return div(
+			script("text/javascript",
+				"\n	// Load results from IFrame into this document."
+				+"\n	function loadResults(buff) {"
+				+"\n		var doc = buff.contentDocument || buff.contentWindow.document;"
+				+"\n		var buffBody = doc.getElementById('data');"
+				+"\n		document.getElementById('results').innerHTML = buffBody.innerHTML;"
+				+"\n	}"
+			),
+			form().id("form").action(req.getServletURI()).method("POST").target("buff").children(
+				table(
+					tr(
+						th(req.getMessage("aString")),
+						td(input().name("aString").type("text"))
+					),
+					tr(
+						th(req.getMessage("aNumber")),
+						td(input().name("aNumber").type("number"))
+					),
+					tr(
+						th(req.getMessage("aDate")),
+						td(input().name("aDate").type("datetime"), " (ISO8601, e.g. ", code("2001-07-04T15:30:45Z"), " )")
+					),
+					tr(
+						td().colspan(2).style("text-align:right").children(
+							button("submit", req.getMessage("submit"))
+						)
+					)
+				)
+			),
+			br(),
+			div().id("results"),
+			iframe().name("buff").style("display:none").onload("parent.loadResults(this)")
+		);
 	}
 
 	/** POST request handler */

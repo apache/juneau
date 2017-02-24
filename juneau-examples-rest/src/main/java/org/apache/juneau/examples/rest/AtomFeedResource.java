@@ -34,7 +34,7 @@ import org.apache.juneau.rest.annotation.*;
 		@Property(name=SERIALIZER_quoteChar, value="'"),
 		@Property(name=RDF_rdfxml_tab, value="5"),
 		@Property(name=RDF_addRootProperty, value="true"),
-		@Property(name=HTMLDOC_links, value="{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$R{servletParentURI}/source?classes=(org.apache.juneau.examples.rest.AtomFeedResource)'}")
+		@Property(name=HTMLDOC_links, value="{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/AtomFeedResource.java'}")
 	},
 	encoders=GzipEncoder.class
 )

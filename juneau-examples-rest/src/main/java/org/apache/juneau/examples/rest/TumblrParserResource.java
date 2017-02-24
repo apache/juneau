@@ -28,7 +28,7 @@ import org.apache.juneau.rest.client.*;
 	path="/tumblrParser",
 	messages="nls/TumblrParserResource",
 	properties={
-		@Property(name=HTMLDOC_links, value="{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$R{servletParentURI}/source?classes=(org.apache.juneau.examples.rest.TumblrParserResource)'}"),
+		@Property(name=HTMLDOC_links, value="{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/TumblrParserResource.java'}"),
 		@Property(name=HTMLDOC_title, value="Tumblr parser service"),
 		@Property(name=HTMLDOC_description, value="Specify a URL to a Tumblr blog and parse the results.")
 	}
