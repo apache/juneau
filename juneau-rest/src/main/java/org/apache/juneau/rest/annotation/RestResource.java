@@ -33,7 +33,7 @@ import org.apache.juneau.xml.*;
 /**
  * Optionally used to associate metadata on an instance of {@link RestServlet}.
  * <p>
- *		Refer to {@link org.apache.juneau.rest} doc for information on using this class.
+ * Refer to <a class='doclink' href='../package-summary.html#TOC'>org.apache.juneau.rest</a> doc for information on using this class.
  */
 @Documented
 @Target(TYPE)
@@ -81,7 +81,7 @@ public @interface RestResource {
 	 * <p>
 	 * 	Can be used for performing post-processing on the response object before serialization.
 	 * <p>
-	 * 	Default converter implementations are provided in the {@link org.apache.juneau.rest.converters} package.
+	 * 	Default converter implementations are provided in the <a class='doclink' href='../converters/package-summary.html#TOC'>org.apache.juneau.rest.converters</a> package.
 	 */
 	Class<? extends RestConverter>[] converters() default {};
 

@@ -25,7 +25,7 @@ import org.apache.juneau.serializer.*;
 /**
  * Identifies a REST Java method on a {@link RestServlet} implementation class.
  * <p>
- *		Refer to {@link org.apache.juneau.rest} doc for information on using this class.
+ * Refer to <a class='doclink' href='../package-summary.html#TOC'>org.apache.juneau.rest</a> doc for information on using this class.
  */
 @Documented
 @Target(METHOD)
@@ -87,7 +87,7 @@ public @interface RestMethod {
 	 * <p>
 	 * 	Can be used for performing post-processing on the response object before serialization.
 	 * <p>
-	 * 	Default converters are available in the {@link org.apache.juneau.rest.converters} package.
+	 * 	Default converters are available in the <a class='doclink' href='../converters/package-summary.html#TOC'>org.apache.juneau.rest.converters</a> package.
 	 */
 	Class<? extends RestConverter>[] converters() default {};
 

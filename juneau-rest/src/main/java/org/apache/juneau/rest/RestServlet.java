@@ -2955,7 +2955,9 @@ public abstract class RestServlet extends HttpServlet {
 			.addVars(
 				SystemPropertiesVar.class,
 				EnvVariablesVar.class,
-				ConfigFileVar.class
+				ConfigFileVar.class,
+				IfVar.class,
+				SwitchVar.class
 			);
 	}
 

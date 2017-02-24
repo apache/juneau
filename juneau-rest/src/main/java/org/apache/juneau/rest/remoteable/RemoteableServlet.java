@@ -31,7 +31,7 @@ import org.apache.juneau.rest.annotation.*;
  * To implement a remoteable service, developers must simply subclass from this class and implement the {@link #getServiceMap()} method that
  * 	maps java interfaces to POJO instances.
  *
- * See {@link org.apache.juneau.rest.remoteable} for details.
+ * See <a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.rest.remoteable</a> for details.
  */
 @SuppressWarnings("serial")
 public abstract class RemoteableServlet extends RestServletDefault {
