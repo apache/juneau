@@ -141,395 +141,44 @@ public final class ClassMeta<T> implements Type {
 		if (beanContext != null && beanContext.cmCache != null)
 			beanContext.cmCache.put(innerClass, this);
 
-		this.implClass = implClass;
-		this.childPojoSwaps = childPojoSwaps;
-		this.childSwapMap = childPojoSwaps == null ? null : new ConcurrentHashMap<Class<?>,PojoSwap<?,?>>();
-		this.childUnswapMap = childPojoSwaps == null ? null : new ConcurrentHashMap<Class<?>,PojoSwap<?,?>>();
+		ClassMetaBuilder<T> builder = new ClassMetaBuilder(innerClass, beanContext, implClass, beanFilter, pojoSwap, childPojoSwaps);
 
-		Class<T> c = innerClass;
-		ClassCategory _cc = ClassCategory.OTHER;
-		boolean _isDelegate = false;
-		Method
-			_fromStringMethod = null,
-			_swapMethod = null,
-			_unswapMethod = null,
-			_parentPropertyMethod = null,
-			_namePropertyMethod = null;
-		Constructor<T>
-			_noArgConstructor = null,
-			_stringConstructor = null,
-			_swapConstructor = null,
-			_numberConstructor = null;
-		Class<?>
-			_swapMethodType = null,
-			_numberConstructorType = null;
-		Object _primitiveDefault = null;
-		Map<String,Method>
-			_publicMethods = new LinkedHashMap<String,Method>(),
-			_remoteableMethods = null;
-		ClassMeta<?>
-			_keyType = null,
-			_valueType = null,
-			_elementType = null,
-			_serializedClassMeta = null;
-		String
-			_notABeanReason = null,
-			_dictionaryName = null,
-			_resolvedDictionaryName = null;
-		Throwable _initException = null;
-		BeanMeta _beanMeta = null;
-		PojoSwap _pojoSwap = null;
-		InvocationHandler _invocationHandler = null;
-		BeanRegistry _beanRegistry = null;
-
-		if (c.isPrimitive()) {
-			if (c == Boolean.TYPE)
-				_cc = BOOLEAN;
-			else if (c == Byte.TYPE || c == Short.TYPE || c == Integer.TYPE || c == Long.TYPE || c == Float.TYPE || c == Double.TYPE) {
-				if (c == Float.TYPE || c == Double.TYPE)
-					_cc = DECIMAL;
-				else
-					_cc = NUMBER;
-			}
-			else if (c == Character.TYPE)
-				_cc = CHAR;
-		} else {
-			if (isParentClass(Delegate.class, c))
-				_isDelegate = true;
-
-			if (c == Object.class)
-				_cc = OBJ;
-			else if (c.isEnum())
-				_cc = ENUM;
-			else if (c.equals(Class.class))
-				_cc = CLASS;
-			else if (isParentClass(CharSequence.class, c)) {
-				if (c.equals(String.class))
-					_cc = STR;
-				else
-					_cc = CHARSEQ;
-			}
-			else if (isParentClass(Number.class, c)) {
-				if (isParentClass(Float.class, c) || isParentClass(Double.class, c))
-					_cc = DECIMAL;
-				else
-					_cc = NUMBER;
-			}
-			else if (isParentClass(Collection.class, c))
-				_cc = COLLECTION;
-			else if (isParentClass(Map.class, c)) {
-				if (isParentClass(BeanMap.class, c))
-					_cc = BEANMAP;
-				else
-					_cc = MAP;
-			}
-			else if (c == Character.class)
-				_cc = CHAR;
-			else if (c == Boolean.class)
-				_cc = BOOLEAN;
-			else if (isParentClass(Date.class, c) || isParentClass(Calendar.class, c))
-				_cc = DATE;
-			else if (c.isArray())
-				_cc = ARRAY;
-			else if (isParentClass(URL.class, c) || isParentClass(URI.class, c) || c.isAnnotationPresent(org.apache.juneau.annotation.URI.class))
-				_cc = URI;
-			else if (isParentClass(Reader.class, c))
-				_cc = READER;
-			else if (isParentClass(InputStream.class, c))
-				_cc = INPUTSTREAM;
-		}
-
-		isMemberClass = c.isMemberClass() && ! isStatic(c);
-
-		// Find static fromString(String) or equivalent method.
-		// fromString() must be checked before valueOf() so that Enum classes can create their own
-		//		specialized fromString() methods to override the behavior of Enum.valueOf(String).
-		// valueOf() is used by enums.
-		// parse() is used by the java logging Level class.
-		// forName() is used by Class and Charset
-		for (String methodName : new String[]{"fromString","valueOf","parse","parseString","forName","forString"}) {
-			if (_fromStringMethod == null) {
-				for (Method m : c.getMethods()) {
-					if (isStatic(m) && isPublic(m) && isNotDeprecated(m)) {
-						String mName = m.getName();
-						if (mName.equals(methodName) && m.getReturnType() == c) {
-							Class<?>[] args = m.getParameterTypes();
-							if (args.length == 1 && args[0] == String.class) {
-								_fromStringMethod = m;
-								break;
-							}
-						}
-					}
-				}
-			}
-		}
-
-		// Special cases
-		try {
-			if (c == TimeZone.class)
-				_fromStringMethod = c.getMethod("getTimeZone", String.class);
-			else if (c == Locale.class)
-				_fromStringMethod = LocaleAsString.class.getMethod("fromString", String.class);
-		} catch (NoSuchMethodException e1) {}
-
-		// Find swap() method if present.
-		for (Method m : c.getMethods()) {
-			if (isPublic(m) && isNotDeprecated(m) && ! isStatic(m)) {
-				String mName = m.getName();
-				if (mName.equals("swap")) {
-					Class<?>[] pt = m.getParameterTypes();
-					if (pt.length == 1 && pt[0] == BeanSession.class) {
-						_swapMethod = m;
-						_swapMethodType = m.getReturnType();
-						break;
-					}
-				}
-			}
-		}
-		// Find unswap() method if present.
-		if (_swapMethod != null) {
-			for (Method m : c.getMethods()) {
-				if (isPublic(m) && isNotDeprecated(m) && isStatic(m)) {
-					String mName = m.getName();
-					if (mName.equals("unswap")) {
-						Class<?>[] pt = m.getParameterTypes();
-						if (pt.length == 2 && pt[0] == BeanSession.class && pt[1] == _swapMethodType) {
-							_unswapMethod = m;
-							break;
-						}
-					}
-				}
-			}
-		}
-
-		// Find @NameProperty and @ParentProperty methods if present.
-		for (Method m : c.getDeclaredMethods()) {
-			if (m.isAnnotationPresent(ParentProperty.class) && m.getParameterTypes().length == 1) {
-				m.setAccessible(true);
-				_parentPropertyMethod = m;
-			}
-			if (m.isAnnotationPresent(NameProperty.class) && m.getParameterTypes().length == 1) {
-				m.setAccessible(true);
-				_namePropertyMethod = m;
-			}
-		}
-
-		// Note:  Primitive types are normally abstract.
-		isAbstract = Modifier.isAbstract(c.getModifiers()) && ! c.isPrimitive();
-
-		// Find constructor(String) method if present.
-		for (Constructor cs : c.getConstructors()) {
-			if (isPublic(cs) && isNotDeprecated(cs)) {
-				Class<?>[] args = cs.getParameterTypes();
-				if (args.length == (isMemberClass ? 1 : 0) && c != Object.class && ! isAbstract) {
-					_noArgConstructor = cs;
-				} else if (args.length == (isMemberClass ? 2 : 1)) {
-					Class<?> arg = args[(isMemberClass ? 1 : 0)];
-					if (arg == String.class)
-						_stringConstructor = cs;
-					else if (_swapMethodType != null && _swapMethodType.isAssignableFrom(arg))
-						_swapConstructor = cs;
-					else if (_cc != NUMBER && (Number.class.isAssignableFrom(arg) || (arg.isPrimitive() && (arg == int.class || arg == short.class || arg == long.class || arg == float.class || arg == double.class)))) {
-						_numberConstructor = cs;
-						_numberConstructorType = ClassUtils.getWrapperIfPrimitive(arg);
-					}
-				}
-			}
-		}
-
-		if (c.isPrimitive()) {
-			if (c == Boolean.TYPE)
-				_primitiveDefault = BOOLEAN_DEFAULT;
-			else if (c == Character.TYPE)
-				_primitiveDefault = CHARACTER_DEFAULT;
-			else if (c == Short.TYPE)
-				_primitiveDefault = SHORT_DEFAULT;
-			else if (c == Integer.TYPE)
-				_primitiveDefault = INTEGER_DEFAULT;
-			else if (c == Long.TYPE)
-				_primitiveDefault = LONG_DEFAULT;
-			else if (c == Float.TYPE)
-				_primitiveDefault = FLOAT_DEFAULT;
-			else if (c == Double.TYPE)
-				_primitiveDefault = DOUBLE_DEFAULT;
-			else if (c == Byte.TYPE)
-				_primitiveDefault = BYTE_DEFAULT;
-		} else {
-			if (c == Boolean.class)
-				_primitiveDefault = BOOLEAN_DEFAULT;
-			else if (c == Character.class)
-				_primitiveDefault = CHARACTER_DEFAULT;
-			else if (c == Short.class)
-				_primitiveDefault = SHORT_DEFAULT;
-			else if (c == Integer.class)
-				_primitiveDefault = INTEGER_DEFAULT;
-			else if (c == Long.class)
-				_primitiveDefault = LONG_DEFAULT;
-			else if (c == Float.class)
-				_primitiveDefault = FLOAT_DEFAULT;
-			else if (c == Double.class)
-				_primitiveDefault = DOUBLE_DEFAULT;
-			else if (c == Byte.class)
-				_primitiveDefault = BYTE_DEFAULT;
-		}
-
-		for (Method m : c.getMethods())
-			if (isPublic(m) && isNotDeprecated(m))
-				_publicMethods.put(ClassUtils.getMethodSignature(m), m);
-
-		if (c.getAnnotation(Remoteable.class) != null) {
-			_remoteableMethods = _publicMethods;
-		} else {
-			for (Method m : c.getMethods()) {
-				if (m.getAnnotation(Remoteable.class) != null) {
-					if (_remoteableMethods == null)
-						_remoteableMethods = new LinkedHashMap<String,Method>();
-					_remoteableMethods.put(ClassUtils.getMethodSignature(m), m);
-				}
-			}
-		}
-
-		if (innerClass != Object.class) {
-			_noArgConstructor = (Constructor<T>)findNoArgConstructor(implClass == null ? innerClass : implClass, Visibility.PUBLIC);
-		}
-
-		if (beanFilter == null)
-			beanFilter = findBeanFilter();
-
-		if (_swapMethod != null) {
-			final Method fSwapMethod = _swapMethod;
-			final Method fUnswapMethod = _unswapMethod;
-			final Constructor<T> fSwapConstructor = _swapConstructor;
-			_pojoSwap = new PojoSwap<T,Object>(c, _swapMethod.getReturnType()) {
-				@Override
-				public Object swap(BeanSession session, Object o) throws SerializeException {
-					try {
-						return fSwapMethod.invoke(o, session);
-					} catch (Exception e) {
-						throw new SerializeException(e);
-					}
-				}
-				@Override
-				public T unswap(BeanSession session, Object f, ClassMeta<?> hint) throws ParseException {
-					try {
-						if (fUnswapMethod != null)
-							return (T)fUnswapMethod.invoke(null, session, f);
-						if (fSwapConstructor != null)
-							return fSwapConstructor.newInstance(f);
-						return super.unswap(session, f, hint);
-					} catch (Exception e) {
-						throw new ParseException(e);
-					}
-				}
-			};
-		}
-		if (_pojoSwap == null)
-			_pojoSwap = findPojoSwap();
-		if (_pojoSwap == null)
-			_pojoSwap = pojoSwap;
-
-		try {
-
-			// If this is an array, get the element type.
-			if (_cc == ARRAY)
-				_elementType = findClassMeta(innerClass.getComponentType());
-
-			// If this is a MAP, see if it's parameterized (e.g. AddressBook extends HashMap<String,Person>)
-			else if (_cc == MAP) {
-				ClassMeta[] parameters = findParameters();
-				if (parameters != null && parameters.length == 2) {
-					_keyType = parameters[0];
-					_valueType = parameters[1];
-				} else {
-					_keyType = findClassMeta(Object.class);
-					_valueType = findClassMeta(Object.class);
-				}
-			}
-
-			// If this is a COLLECTION, see if it's parameterized (e.g. AddressBook extends LinkedList<Person>)
-			else if (_cc == COLLECTION) {
-				ClassMeta[] parameters = findParameters();
-				if (parameters != null && parameters.length == 1) {
-					_elementType = parameters[0];
-				} else {
-					_elementType = findClassMeta(Object.class);
-				}
-			}
-
-			// If the category is unknown, see if it's a bean.
-			// Note that this needs to be done after all other initialization has been done.
-			else if (_cc == OTHER) {
-
-				BeanMeta newMeta = null;
-				try {
-					newMeta = new BeanMeta(this, beanContext, beanFilter, null);
-					_notABeanReason = newMeta.notABeanReason;
-					_beanRegistry = newMeta.beanRegistry;  // Always get the bean registry even if it's not a bean.
-				} catch (RuntimeException e) {
-					_notABeanReason = e.getMessage();
-					throw e;
-				}
-				if (_notABeanReason == null)
-					_beanMeta = newMeta;
-			}
-
-		} catch (NoClassDefFoundError e) {
-			_initException = e;
-		} catch (RuntimeException e) {
-			_initException = e;
-			throw e;
-		}
-
-		if (_beanMeta != null)
-			_dictionaryName = _resolvedDictionaryName = _beanMeta.getDictionaryName();
-
-		if (_cc == ARRAY && _elementType != null) {
-			_resolvedDictionaryName = _elementType.getResolvedDictionaryName();
-			if (_resolvedDictionaryName != null)
-				_resolvedDictionaryName += "^";
-		}
-
-		_serializedClassMeta = (_pojoSwap == null ? this : findClassMeta(_pojoSwap.getSwapClass()));
-		if (_serializedClassMeta == null)
-			_serializedClassMeta = this;
-
-		if (_beanMeta != null && beanContext != null && beanContext.useInterfaceProxies && innerClass.isInterface())
-			_invocationHandler = new BeanProxyInvocationHandler<T>(_beanMeta);
-
-		Bean b = c.getAnnotation(Bean.class);
-		if (b != null && b.beanDictionary().length != 0)
-			_beanRegistry = new BeanRegistry(beanContext, null, b.beanDictionary());
-
-		this.cc = _cc;
-		this.isDelegate = _isDelegate;
-		this.fromStringMethod = _fromStringMethod;
-		this.swapMethod = _swapMethod;
-		this.unswapMethod = _unswapMethod;
-		this.swapMethodType = _swapMethodType;
-		this.parentPropertyMethod = _parentPropertyMethod;
-		this.namePropertyMethod =_namePropertyMethod;
-		this.noArgConstructor = _noArgConstructor;
-		this.stringConstructor = _stringConstructor;
-		this.swapConstructor = _swapConstructor;
-		this.numberConstructor = _numberConstructor;
-		this.numberConstructorType = _numberConstructorType;
-		this.primitiveDefault = _primitiveDefault;
-		this.publicMethods = _publicMethods;
-		this.remoteableMethods = _remoteableMethods;
+		this.cc = builder.cc;
+		this.isDelegate = builder.isDelegate;
+		this.fromStringMethod = builder.fromStringMethod;
+		this.swapMethod = builder.swapMethod;
+		this.unswapMethod = builder.unswapMethod;
+		this.swapMethodType = builder.swapMethodType;
+		this.parentPropertyMethod = builder.parentPropertyMethod;
+		this.namePropertyMethod = builder.namePropertyMethod;
+		this.noArgConstructor = builder.noArgConstructor;
+		this.stringConstructor = builder.stringConstructor;
+		this.swapConstructor = builder.swapConstructor;
+		this.numberConstructor = builder.numberConstructor;
+		this.numberConstructorType = builder.numberConstructorType;
+		this.primitiveDefault = builder.primitiveDefault;
+		this.publicMethods = builder.publicMethods;
+		this.remoteableMethods = builder.remoteableMethods;
 		this.beanFilter = beanFilter;
-		this.pojoSwap = _pojoSwap;
+		this.pojoSwap = builder.pojoSwap;
 		this.extMeta = new MetadataMap();
-		this.keyType = _keyType;
-		this.valueType = _valueType;
-		this.elementType = _elementType;
-		this.notABeanReason = _notABeanReason;
-		this.beanMeta = _beanMeta;
-		this.initException = _initException;
-		this.dictionaryName = _dictionaryName;
-		this.resolvedDictionaryName = _resolvedDictionaryName;
-		this.serializedClassMeta = _serializedClassMeta;
-		this.invocationHandler = _invocationHandler;
-		this.beanRegistry = _beanRegistry;
+		this.keyType = builder.keyType;
+		this.valueType = builder.valueType;
+		this.elementType = builder.elementType;
+		this.notABeanReason = builder.notABeanReason;
+		this.beanMeta = builder.beanMeta;
+		this.initException = builder.initException;
+		this.dictionaryName = builder.dictionaryName;
+		this.resolvedDictionaryName = builder.resolvedDictionaryName;
+		this.serializedClassMeta = builder.serializedClassMeta;
+		this.invocationHandler = builder.invocationHandler;
+		this.beanRegistry = builder.beanRegistry;
+		this.isMemberClass = builder.isMemberClass;
+		this.isAbstract = builder.isAbstract;
+		this.implClass = builder.implClass;
+		this.childUnswapMap = builder.childUnswapMap;
+		this.childSwapMap = builder.childSwapMap;
+		this.childPojoSwaps = builder.childPojoSwaps;
 	}
 
 	/**
@@ -577,42 +226,419 @@ public final class ClassMeta<T> implements Type {
 		this.beanRegistry = mainType.beanRegistry;
 	}
 
-	private ClassMeta<?> findClassMeta(Class<?> c) {
-		return beanContext.getClassMeta(c);
-	}
+	@SuppressWarnings({"unchecked","rawtypes","hiding"})
+	private class ClassMetaBuilder<T> {
+		Class<T> innerClass;
+		Class<? extends T> implClass;
+		BeanContext beanContext;
+		ClassCategory cc = ClassCategory.OTHER;
+		boolean
+			isDelegate = false,
+			isMemberClass = false,
+			isAbstract = false;
+		Method
+			fromStringMethod = null,
+			swapMethod = null,
+			unswapMethod = null,
+			parentPropertyMethod = null,
+			namePropertyMethod = null;
+		Constructor<T>
+			noArgConstructor = null,
+			stringConstructor = null,
+			swapConstructor = null,
+			numberConstructor = null;
+		Class<?>
+			swapMethodType = null,
+			numberConstructorType = null;
+		Object primitiveDefault = null;
+		Map<String,Method>
+			publicMethods = new LinkedHashMap<String,Method>(),
+			remoteableMethods = null;
+		ClassMeta<?>
+			keyType = null,
+			valueType = null,
+			elementType = null,
+			serializedClassMeta = null;
+		String
+			notABeanReason = null,
+			dictionaryName = null,
+			resolvedDictionaryName = null;
+		Throwable initException = null;
+		BeanMeta beanMeta = null;
+		PojoSwap pojoSwap = null;
+		InvocationHandler invocationHandler = null;
+		BeanRegistry beanRegistry = null;
+		PojoSwap<?,?>[] childPojoSwaps;
+		ConcurrentHashMap<Class<?>,PojoSwap<?,?>>
+			childSwapMap,
+			childUnswapMap;
 
-	private ClassMeta<?>[] findParameters() {
-		return beanContext.findParameters(innerClass, innerClass);
-	}
+		private ClassMetaBuilder(Class<T> innerClass, BeanContext beanContext, Class<? extends T> implClass, BeanFilter beanFilter, PojoSwap<T,?> pojoSwap, PojoSwap<?,?>[] childPojoSwaps) {
+			this.innerClass = innerClass;
+			this.beanContext = beanContext;
 
-	private BeanFilter findBeanFilter() {
-		try {
-			Map<Class<?>,Bean> ba = ReflectionUtils.findAnnotationsMap(Bean.class, innerClass);
-			if (! ba.isEmpty())
-				return new AnnotationBeanFilterBuilder(innerClass, ba).build();
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-		return null;
-	}
+			this.implClass = implClass;
+			this.childPojoSwaps = childPojoSwaps;
+			this.childSwapMap = childPojoSwaps == null ? null : new ConcurrentHashMap<Class<?>,PojoSwap<?,?>>();
+			this.childUnswapMap = childPojoSwaps == null ? null : new ConcurrentHashMap<Class<?>,PojoSwap<?,?>>();
 
-	@SuppressWarnings("unchecked")
-	private PojoSwap<T,?> findPojoSwap() {
-		try {
-			Pojo p = innerClass.getAnnotation(Pojo.class);
-			if (p != null) {
-				Class<?> c = p.swap();
-				if (c != Null.class) {
-					if (ClassUtils.isParentClass(PojoSwap.class, c))
-						return (PojoSwap<T,?>)c.newInstance();
-					throw new RuntimeException("TODO - Surrogate classes not yet supported.");
+			Class<T> c = innerClass;
+			if (c.isPrimitive()) {
+				if (c == Boolean.TYPE)
+					cc = BOOLEAN;
+				else if (c == Byte.TYPE || c == Short.TYPE || c == Integer.TYPE || c == Long.TYPE || c == Float.TYPE || c == Double.TYPE) {
+					if (c == Float.TYPE || c == Double.TYPE)
+						cc = DECIMAL;
+					else
+						cc = NUMBER;
+				}
+				else if (c == Character.TYPE)
+					cc = CHAR;
+			} else {
+				if (isParentClass(Delegate.class, c))
+					isDelegate = true;
+
+				if (c == Object.class)
+					cc = OBJ;
+				else if (c.isEnum())
+					cc = ENUM;
+				else if (c.equals(Class.class))
+					cc = CLASS;
+				else if (isParentClass(CharSequence.class, c)) {
+					if (c.equals(String.class))
+						cc = STR;
+					else
+						cc = CHARSEQ;
+				}
+				else if (isParentClass(Number.class, c)) {
+					if (isParentClass(Float.class, c) || isParentClass(Double.class, c))
+						cc = DECIMAL;
+					else
+						cc = NUMBER;
+				}
+				else if (isParentClass(Collection.class, c))
+					cc = COLLECTION;
+				else if (isParentClass(Map.class, c)) {
+					if (isParentClass(BeanMap.class, c))
+						cc = BEANMAP;
+					else
+						cc = MAP;
+				}
+				else if (c == Character.class)
+					cc = CHAR;
+				else if (c == Boolean.class)
+					cc = BOOLEAN;
+				else if (isParentClass(Date.class, c) || isParentClass(Calendar.class, c))
+					cc = DATE;
+				else if (c.isArray())
+					cc = ARRAY;
+				else if (isParentClass(URL.class, c) || isParentClass(URI.class, c) || c.isAnnotationPresent(org.apache.juneau.annotation.URI.class))
+					cc = URI;
+				else if (isParentClass(Reader.class, c))
+					cc = READER;
+				else if (isParentClass(InputStream.class, c))
+					cc = INPUTSTREAM;
+			}
+
+			isMemberClass = c.isMemberClass() && ! isStatic(c);
+
+			// Find static fromString(String) or equivalent method.
+			// fromString() must be checked before valueOf() so that Enum classes can create their own
+			//		specialized fromString() methods to override the behavior of Enum.valueOf(String).
+			// valueOf() is used by enums.
+			// parse() is used by the java logging Level class.
+			// forName() is used by Class and Charset
+			for (String methodName : new String[]{"fromString","valueOf","parse","parseString","forName","forString"}) {
+				if (fromStringMethod == null) {
+					for (Method m : c.getMethods()) {
+						if (isStatic(m) && isPublic(m) && isNotDeprecated(m)) {
+							String mName = m.getName();
+							if (mName.equals(methodName) && m.getReturnType() == c) {
+								Class<?>[] args = m.getParameterTypes();
+								if (args.length == 1 && args[0] == String.class) {
+									fromStringMethod = m;
+									break;
+								}
+							}
+						}
+					}
 				}
 			}
+
+			// Special cases
+			try {
+				if (c == TimeZone.class)
+					fromStringMethod = c.getMethod("getTimeZone", String.class);
+				else if (c == Locale.class)
+					fromStringMethod = LocaleAsString.class.getMethod("fromString", String.class);
+			} catch (NoSuchMethodException e1) {}
+
+			// Find swap() method if present.
+			for (Method m : c.getMethods()) {
+				if (isPublic(m) && isNotDeprecated(m) && ! isStatic(m)) {
+					String mName = m.getName();
+					if (mName.equals("swap")) {
+						Class<?>[] pt = m.getParameterTypes();
+						if (pt.length == 1 && pt[0] == BeanSession.class) {
+							swapMethod = m;
+							swapMethodType = m.getReturnType();
+							break;
+						}
+					}
+				}
+			}
+			// Find unswap() method if present.
+			if (swapMethod != null) {
+				for (Method m : c.getMethods()) {
+					if (isPublic(m) && isNotDeprecated(m) && isStatic(m)) {
+						String mName = m.getName();
+						if (mName.equals("unswap")) {
+							Class<?>[] pt = m.getParameterTypes();
+							if (pt.length == 2 && pt[0] == BeanSession.class && pt[1] == swapMethodType) {
+								unswapMethod = m;
+								break;
+							}
+						}
+					}
+				}
+			}
+
+			// Find @NameProperty and @ParentProperty methods if present.
+			for (Method m : c.getDeclaredMethods()) {
+				if (m.isAnnotationPresent(ParentProperty.class) && m.getParameterTypes().length == 1) {
+					m.setAccessible(true);
+					parentPropertyMethod = m;
+				}
+				if (m.isAnnotationPresent(NameProperty.class) && m.getParameterTypes().length == 1) {
+					m.setAccessible(true);
+					namePropertyMethod = m;
+				}
+			}
+
+			// Note:  Primitive types are normally abstract.
+			isAbstract = Modifier.isAbstract(c.getModifiers()) && ! c.isPrimitive();
+
+			// Find constructor(String) method if present.
+			for (Constructor cs : c.getConstructors()) {
+				if (isPublic(cs) && isNotDeprecated(cs)) {
+					Class<?>[] args = cs.getParameterTypes();
+					if (args.length == (isMemberClass ? 1 : 0) && c != Object.class && ! isAbstract) {
+						noArgConstructor = cs;
+					} else if (args.length == (isMemberClass ? 2 : 1)) {
+						Class<?> arg = args[(isMemberClass ? 1 : 0)];
+						if (arg == String.class)
+							stringConstructor = cs;
+						else if (swapMethodType != null && swapMethodType.isAssignableFrom(arg))
+							swapConstructor = cs;
+						else if (cc != NUMBER && (Number.class.isAssignableFrom(arg) || (arg.isPrimitive() && (arg == int.class || arg == short.class || arg == long.class || arg == float.class || arg == double.class)))) {
+							numberConstructor = cs;
+							numberConstructorType = ClassUtils.getWrapperIfPrimitive(arg);
+						}
+					}
+				}
+			}
+
+			if (c.isPrimitive()) {
+				if (c == Boolean.TYPE)
+					primitiveDefault = BOOLEAN_DEFAULT;
+				else if (c == Character.TYPE)
+					primitiveDefault = CHARACTER_DEFAULT;
+				else if (c == Short.TYPE)
+					primitiveDefault = SHORT_DEFAULT;
+				else if (c == Integer.TYPE)
+					primitiveDefault = INTEGER_DEFAULT;
+				else if (c == Long.TYPE)
+					primitiveDefault = LONG_DEFAULT;
+				else if (c == Float.TYPE)
+					primitiveDefault = FLOAT_DEFAULT;
+				else if (c == Double.TYPE)
+					primitiveDefault = DOUBLE_DEFAULT;
+				else if (c == Byte.TYPE)
+					primitiveDefault = BYTE_DEFAULT;
+			} else {
+				if (c == Boolean.class)
+					primitiveDefault = BOOLEAN_DEFAULT;
+				else if (c == Character.class)
+					primitiveDefault = CHARACTER_DEFAULT;
+				else if (c == Short.class)
+					primitiveDefault = SHORT_DEFAULT;
+				else if (c == Integer.class)
+					primitiveDefault = INTEGER_DEFAULT;
+				else if (c == Long.class)
+					primitiveDefault = LONG_DEFAULT;
+				else if (c == Float.class)
+					primitiveDefault = FLOAT_DEFAULT;
+				else if (c == Double.class)
+					primitiveDefault = DOUBLE_DEFAULT;
+				else if (c == Byte.class)
+					primitiveDefault = BYTE_DEFAULT;
+			}
+
+			for (Method m : c.getMethods())
+				if (isPublic(m) && isNotDeprecated(m))
+					publicMethods.put(ClassUtils.getMethodSignature(m), m);
+
+			if (c.getAnnotation(Remoteable.class) != null) {
+				remoteableMethods = publicMethods;
+			} else {
+				for (Method m : c.getMethods()) {
+					if (m.getAnnotation(Remoteable.class) != null) {
+						if (remoteableMethods == null)
+							remoteableMethods = new LinkedHashMap<String,Method>();
+						remoteableMethods.put(ClassUtils.getMethodSignature(m), m);
+					}
+				}
+			}
+
+			if (innerClass != Object.class) {
+				noArgConstructor = (Constructor<T>)findNoArgConstructor(implClass == null ? innerClass : implClass, Visibility.PUBLIC);
+			}
+
+			if (beanFilter == null)
+				beanFilter = findBeanFilter();
+
+			if (swapMethod != null) {
+				final Method fSwapMethod = swapMethod;
+				final Method fUnswapMethod = unswapMethod;
+				final Constructor<T> fSwapConstructor = swapConstructor;
+				this.pojoSwap = new PojoSwap<T,Object>(c, swapMethod.getReturnType()) {
+					@Override
+					public Object swap(BeanSession session, Object o) throws SerializeException {
+						try {
+							return fSwapMethod.invoke(o, session);
+						} catch (Exception e) {
+							throw new SerializeException(e);
+						}
+					}
+					@Override
+					public T unswap(BeanSession session, Object f, ClassMeta<?> hint) throws ParseException {
+						try {
+							if (fUnswapMethod != null)
+								return (T)fUnswapMethod.invoke(null, session, f);
+							if (fSwapConstructor != null)
+								return fSwapConstructor.newInstance(f);
+							return super.unswap(session, f, hint);
+						} catch (Exception e) {
+							throw new ParseException(e);
+						}
+					}
+				};
+			}
+			if (this.pojoSwap == null)
+				this.pojoSwap = findPojoSwap();
+			if (this.pojoSwap == null)
+				this.pojoSwap = pojoSwap;
+
+			try {
+
+				// If this is an array, get the element type.
+				if (cc == ARRAY)
+					elementType = findClassMeta(innerClass.getComponentType());
+
+				// If this is a MAP, see if it's parameterized (e.g. AddressBook extends HashMap<String,Person>)
+				else if (cc == MAP) {
+					ClassMeta[] parameters = findParameters();
+					if (parameters != null && parameters.length == 2) {
+						keyType = parameters[0];
+						valueType = parameters[1];
+					} else {
+						keyType = findClassMeta(Object.class);
+						valueType = findClassMeta(Object.class);
+					}
+				}
+
+				// If this is a COLLECTION, see if it's parameterized (e.g. AddressBook extends LinkedList<Person>)
+				else if (cc == COLLECTION) {
+					ClassMeta[] parameters = findParameters();
+					if (parameters != null && parameters.length == 1) {
+						elementType = parameters[0];
+					} else {
+						elementType = findClassMeta(Object.class);
+					}
+				}
+
+				// If the category is unknown, see if it's a bean.
+				// Note that this needs to be done after all other initialization has been done.
+				else if (cc == OTHER) {
+
+					BeanMeta newMeta = null;
+					try {
+						newMeta = new BeanMeta(ClassMeta.this, beanContext, beanFilter, null);
+						notABeanReason = newMeta.notABeanReason;
+						beanRegistry = newMeta.beanRegistry;  // Always get the bean registry even if it's not a bean.
+					} catch (RuntimeException e) {
+						notABeanReason = e.getMessage();
+						throw e;
+					}
+					if (notABeanReason == null)
+						beanMeta = newMeta;
+				}
+
+			} catch (NoClassDefFoundError e) {
+				initException = e;
+			} catch (RuntimeException e) {
+				initException = e;
+				throw e;
+			}
+
+			if (beanMeta != null)
+				dictionaryName = resolvedDictionaryName = beanMeta.getDictionaryName();
+
+			if (cc == ARRAY && elementType != null) {
+				resolvedDictionaryName = elementType.getResolvedDictionaryName();
+				if (resolvedDictionaryName != null)
+					resolvedDictionaryName += "^";
+			}
+
+			serializedClassMeta = (this.pojoSwap == null ? ClassMeta.this : findClassMeta(this.pojoSwap.getSwapClass()));
+			if (serializedClassMeta == null)
+				serializedClassMeta = ClassMeta.this;
+
+			if (beanMeta != null && beanContext != null && beanContext.useInterfaceProxies && innerClass.isInterface())
+				invocationHandler = new BeanProxyInvocationHandler<T>(beanMeta);
+
+			Bean b = c.getAnnotation(Bean.class);
+			if (b != null && b.beanDictionary().length != 0)
+				beanRegistry = new BeanRegistry(beanContext, null, b.beanDictionary());
+		}
+
+		private BeanFilter findBeanFilter() {
+			try {
+				Map<Class<?>,Bean> ba = ReflectionUtils.findAnnotationsMap(Bean.class, innerClass);
+				if (! ba.isEmpty())
+					return new AnnotationBeanFilterBuilder(innerClass, ba).build();
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
 			return null;
-		} catch (Exception e) {
-			throw new RuntimeException(e);
+		}
+
+		private PojoSwap<T,?> findPojoSwap() {
+			try {
+				Pojo p = innerClass.getAnnotation(Pojo.class);
+				if (p != null) {
+					Class<?> c = p.swap();
+					if (c != Null.class) {
+						if (ClassUtils.isParentClass(PojoSwap.class, c))
+							return (PojoSwap<T,?>)c.newInstance();
+						throw new RuntimeException("TODO - Surrogate classes not yet supported.");
+					}
+				}
+				return null;
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		}
+
+		private ClassMeta<?> findClassMeta(Class<?> c) {
+			return beanContext.getClassMeta(c);
+		}
+
+		private ClassMeta<?>[] findParameters() {
+			return beanContext.findParameters(innerClass, innerClass);
 		}
 	}
+
 
 	/**
 	 * Returns the bean dictionary name associated with this class.
