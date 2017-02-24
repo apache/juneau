@@ -47,7 +47,7 @@ public class Object2 extends HtmlElementMixed {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-height">height</a> attribute.
 	 * Vertical dimension.
 	 * @param height The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
+	 * Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Object2 height(Object height) {
@@ -81,7 +81,7 @@ public class Object2 extends HtmlElementMixed {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-object-typemustmatch">typemustmatch</a> attribute.
 	 * Whether the type attribute and the Content-Type value need to match for the resource to be used.
 	 * @param typemustmatch The new value for this attribute.
-	 * 	Typically a {@link Boolean} or {@link String}.
+	 * Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Object2 typemustmatch(Object typemustmatch) {
@@ -104,7 +104,7 @@ public class Object2 extends HtmlElementMixed {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-width">width</a> attribute.
 	 * Horizontal dimension.
 	 * @param width The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
+	 * Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Object2 width(Object width) {

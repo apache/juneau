@@ -29,7 +29,7 @@ import org.apache.juneau.xml.*;
 /**
  * Subclass of {@link RestServlet} with default serializers and parsers defined.
  * <p>
- * 	Supports the following request <code>Accept</code> header values with the resulting response <code>Content-Type</code>:
+ * Supports the following request <code>Accept</code> header values with the resulting response <code>Content-Type</code>:
  * </p>
  * <table class='styled'>
  * 	<tr>
@@ -99,7 +99,7 @@ import org.apache.juneau.xml.*;
  * 	</tr>
  * </table>
  * <p>
- * 	Supports the following request <code>Content-Type</code> header values:
+ * Supports the following request <code>Content-Type</code> header values:
  * </p>
  * <table class='styled'>
  * 	<tr>
@@ -132,22 +132,18 @@ import org.apache.juneau.xml.*;
  * 	</tr>
  * </table>
  * <p>
- * 	It should be noted that we do NOT add {@link JavaSerializedObjectParser} to the list of parsers since this could
- * 		cause security issues.  Use caution when using this particular parser as it could inadvertantly cause
- * 		code execution security holes.
- *	</p>
+ * It should be noted that we do NOT add {@link JavaSerializedObjectParser} to the list of parsers since this could
+ * 	cause security issues.  Use caution when using this particular parser as it could inadvertantly cause
+ * 	code execution security holes.
  * <p>
- * 	The list of serializers and parsers can be appended to using the {@link RestResource#serializers() @RestResource.serializers()}
- * 		and {@link RestResource#parsers() @RestResource.parsers()} annotations on subclasses.
- * </p>
+ * The list of serializers and parsers can be appended to using the {@link RestResource#serializers() @RestResource.serializers()}
+ * 	and {@link RestResource#parsers() @RestResource.parsers()} annotations on subclasses.
  * <p>
- * 	This subclass also provides a default OPTIONS page by implementing a {@link #getOptions(RestRequest)} that returns a POJO consisting
- * 		of beans describing the class.
- * </p>
+ * This subclass also provides a default OPTIONS page by implementing a {@link #getOptions(RestRequest)} that returns a POJO consisting
+ * 	of beans describing the class.
  * <img class='bordered' src='doc-files/OptionsPage.png'>
  * <p>
- * 	The OPTIONS page can be modified or augmented by overriding this method and providing your own data.
- * </p>
+ * The OPTIONS page can be modified or augmented by overriding this method and providing your own data.
  *
  * <h6 class='topic'>Other Notes</h6>
  * <ul class='spaced-list'>

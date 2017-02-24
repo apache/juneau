@@ -22,11 +22,11 @@ import java.util.*;
  * An instance of a <code>Map</code> where the keys and values
  * 	are simple <code>String[]</code> and <code>Object[]</code> arrays.
  * <p>
- * 	Typically more efficient than <code>HashMaps</code> for small maps (e.g. &lt;10 entries).
+ * Typically more efficient than <code>HashMaps</code> for small maps (e.g. &lt;10 entries).
  * <p>
- * 	Does not support adding or removing entries.
+ * Does not support adding or removing entries.
  * <p>
- * 	Setting values overwrites the value on the underlying value array.
+ * Setting values overwrites the value on the underlying value array.
  */
 public final class SimpleMap extends AbstractMap<String,Object> {
 

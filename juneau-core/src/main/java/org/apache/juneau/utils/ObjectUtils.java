@@ -18,10 +18,10 @@ import org.apache.juneau.transform.*;
 /**
  * Utility class for efficiently converting objects between types.
  * <p>
- * 	If the value isn't an instance of the specified type, then converts
+ * If the value isn't an instance of the specified type, then converts
  * 	the value if possible.<br>
  * <p>
- * 	The following conversions are valid:
+ * The following conversions are valid:
  * 	<table class='styled'>
  * 		<tr><th>Convert to type</th><th>Valid input value types</th><th>Notes</th></tr>
  * 		<tr>
@@ -166,7 +166,7 @@ public class ObjectUtils {
 	 *
 	 * @param <T> The class type to convert the value to.
 	 * @param outer If class is a member class, this is the instance of the containing class.
-	 * 	Should be <jk>null</jk> if not a member class.
+	 * Should be <jk>null</jk> if not a member class.
 	 * @param value The value to convert.
 	 * @param type The class type to convert the value to.
 	 * @throws InvalidDataConversionException If the specified value cannot be converted to the specified type.

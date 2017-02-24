@@ -52,18 +52,18 @@ public final class StringUtils {
 	 *
 	 * @param r The reader to parse the string from.
 	 * @param type The number type to created. <br>
-	 * 	Can be any of the following:
-	 * 	<ul>
-	 * 		<li> Integer
-	 * 		<li> Double
-	 * 		<li> Float
-	 * 		<li> Long
-	 * 		<li> Short
-	 * 		<li> Byte
-	 * 		<li> BigInteger
-	 * 		<li> BigDecimal
-	 * 	</ul>
-	 * 	If <jk>null</jk>, uses the best guess.
+	 * Can be any of the following:
+	 * <ul>
+	 * 	<li> Integer
+	 * 	<li> Double
+	 * 	<li> Float
+	 * 	<li> Long
+	 * 	<li> Short
+	 * 	<li> Byte
+	 * 	<li> BigInteger
+	 * 	<li> BigDecimal
+	 * </ul>
+	 * If <jk>null</jk>, uses the best guess.
 	 * @throws IOException If a problem occurred trying to read from the reader.
 	 * @return The parsed number.
 	 * @throws Exception
@@ -99,18 +99,18 @@ public final class StringUtils {
 	 *
 	 * @param s The string to parse the number from.
 	 * @param type The number type to created. <br>
-	 * 	Can be any of the following:
-	 * 	<ul>
-	 * 		<li> Integer
-	 * 		<li> Double
-	 * 		<li> Float
-	 * 		<li> Long
-	 * 		<li> Short
-	 * 		<li> Byte
-	 * 		<li> BigInteger
-	 * 		<li> BigDecimal
-	 * 	</ul>
-	 * 	If <jk>null</jk>, uses the best guess.
+	 * Can be any of the following:
+	 * <ul>
+	 * 	<li> Integer
+	 * 	<li> Double
+	 * 	<li> Float
+	 * 	<li> Long
+	 * 	<li> Short
+	 * 	<li> Byte
+	 * 	<li> BigInteger
+	 * 	<li> BigDecimal
+	 * </ul>
+	 * If <jk>null</jk>, uses the best guess.
 	 * @return The parsed number.
 	 * @throws ParseException
 	 */
@@ -854,8 +854,8 @@ public final class StringUtils {
 	 * Nested variables are supported in both the input string and map values.
 	 * <p>
 	 * If the map does not contain the specified value, the variable is not replaced.
-	 *	<p>
-	 *	<jk>null</jk> values in the map are treated as blank strings.
+	 * <p>
+	 * <jk>null</jk> values in the map are treated as blank strings.
 	 *
 	 * @param s The string containing variables to replace.
 	 * @param m The map containing the variable values.

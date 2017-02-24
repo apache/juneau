@@ -47,7 +47,7 @@ public class XmlParserSession extends ParserSession {
 	 * Create a new session using properties specified in the context.
 	 *
 	 * @param ctx The context creating this session object.
-	 * 	The context contains all the configuration settings for this object.
+	 * The context contains all the configuration settings for this object.
 	 * @param input The input.  Can be any of the following types:
 	 * 	<ul>
 	 * 		<li><jk>null</jk>
@@ -57,13 +57,13 @@ public class XmlParserSession extends ParserSession {
 	 * 		<li>{@link File} containing system encoded text.
 	 * 	</ul>
 	 * @param op The override properties.
-	 * 	These override any context properties defined in the context.
+	 * These override any context properties defined in the context.
 	 * @param javaMethod The java method that called this parser, usually the method in a REST servlet.
 	 * @param outer The outer object for instantiating top-level non-static inner classes.
 	 * @param locale The session locale.
-	 * 	If <jk>null</jk>, then the locale defined on the context is used.
+	 * If <jk>null</jk>, then the locale defined on the context is used.
 	 * @param timeZone The session timezone.
-	 * 	If <jk>null</jk>, then the timezone defined on the context is used.
+	 * If <jk>null</jk>, then the timezone defined on the context is used.
 	 * @param mediaType The session media type (e.g. <js>"application/json"</js>).
 	 */
 	public XmlParserSession(XmlParserContext ctx, ObjectMap op, Object input, Method javaMethod, Object outer, Locale locale, TimeZone timeZone, MediaType mediaType) {
@@ -208,7 +208,7 @@ public class XmlParserSession extends ParserSession {
 	 *
 	 * @param r The reader to read the element text from.
 	 * @param trim If <jk>true</jk>, trim the contents of the text node BEFORE decoding escape sequences.
-	 * 	Typically <jk>true</jk> for {@link XmlFormat#MIXED_PWS} and {@link XmlFormat#TEXT_PWS}.
+	 * Typically <jk>true</jk> for {@link XmlFormat#MIXED_PWS} and {@link XmlFormat#TEXT_PWS}.
 	 * @return The decoded text.  <jk>null</jk> if the text consists of the sequence <js>'_x0000_'</js>.
 	 * @throws XMLStreamException
 	 */

@@ -43,7 +43,7 @@ import org.apache.juneau.svl.vars.*;
  *
  * 		<ja>@Override</ja>
  * 		<jk>public</jk> String resolve(VarResolverSession session, String varVal) {
- *				<jk>return</jk> System.<jsm>getProperty</jsm>(varVal);
+ * 			<jk>return</jk> System.<jsm>getProperty</jsm>(varVal);
  * 		}
  * 	}
  *
@@ -119,7 +119,7 @@ public class VarResolver extends CoreApi {
 	 * Register new variables with this resolver.
 	 *
 	 * @param vars The variable resolver classes.
-	 * 	These classes must subclass from {@link Var} and have no-arg constructors.
+	 * These classes must subclass from {@link Var} and have no-arg constructors.
 	 * @return This object (for method chaining).
 	 */
 	public VarResolver addVars(Class<?>...vars) {

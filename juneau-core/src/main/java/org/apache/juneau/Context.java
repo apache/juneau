@@ -19,12 +19,12 @@ import org.apache.juneau.serializer.*;
 /**
  * A reusable stateless thread-safe read-only configuration, typically used for creating one-time use {@link Session} objects.
  * <p>
- * 	Contexts are created through the {@link ContextFactory#getContext(Class)} method.
+ * Contexts are created through the {@link ContextFactory#getContext(Class)} method.
  * <p>
- * 	Subclasses MUST implement a constructor method that takes in a {@link ContextFactory} parameter.
- * 	Besides that restriction, a context object can do anything you desire.  However, it MUST
- * 		be thread-safe and all fields should be declared final to prevent modification.
- * 	It should NOT be used for storing temporary or state information.
+ * Subclasses MUST implement a constructor method that takes in a {@link ContextFactory} parameter.
+ * Besides that restriction, a context object can do anything you desire.  However, it MUST
+ * 	be thread-safe and all fields should be declared final to prevent modification.
+ * It should NOT be used for storing temporary or state information.
  *
  * @see ContextFactory
  */

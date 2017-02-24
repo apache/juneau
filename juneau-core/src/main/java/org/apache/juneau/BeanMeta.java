@@ -30,25 +30,25 @@ import org.apache.juneau.utils.*;
  *
  * <h5 class='section'>Description:</h5>
  * <p>
- * 	Uses introspection to find all the properties associated with this class.  If the {@link Bean @Bean} annotation
+ * Uses introspection to find all the properties associated with this class.  If the {@link Bean @Bean} annotation
  * 	is present on the class, or the class has a {@link BeanFilter} registered with it in the bean context,
  * 	then that information is used to determine the properties on the class.
- * 	Otherwise, the {@code BeanInfo} functionality in Java is used to determine the properties on the class.
+ * Otherwise, the {@code BeanInfo} functionality in Java is used to determine the properties on the class.
  *
  * <h6 class='topic'>Bean property ordering</h6>
  * <p>
- * 	The order of the properties are as follows:
- * 	<ul class='spaced-list'>
- * 		<li>If {@link Bean @Bean} annotation is specified on class, then the order is the same as the list of properties in the annotation.
- * 		<li>If {@link Bean @Bean} annotation is not specified on the class, then the order is based on the following.
- * 			<ul>
- * 				<li>Public fields (same order as {@code Class.getFields()}).
- * 				<li>Properties returned by {@code BeanInfo.getPropertyDescriptors()}.
- * 				<li>Non-standard getters/setters with {@link BeanProperty @BeanProperty} annotation defined on them.
- * 			</ul>
- * 	</ul>
- * 	<br>
- * 	The order can also be overridden through the use of an {@link BeanFilter}.
+ * The order of the properties are as follows:
+ * <ul class='spaced-list'>
+ * 	<li>If {@link Bean @Bean} annotation is specified on class, then the order is the same as the list of properties in the annotation.
+ * 	<li>If {@link Bean @Bean} annotation is not specified on the class, then the order is based on the following.
+ * 		<ul>
+ * 			<li>Public fields (same order as {@code Class.getFields()}).
+ * 			<li>Properties returned by {@code BeanInfo.getPropertyDescriptors()}.
+ * 			<li>Non-standard getters/setters with {@link BeanProperty @BeanProperty} annotation defined on them.
+ * 		</ul>
+ * </ul>
+ * <br>
+ * The order can also be overridden through the use of an {@link BeanFilter}.
  *
  * @param <T> The class type that this metadata applies to.
  */
@@ -680,7 +680,7 @@ public class BeanMeta<T> {
 	 * Recursively determines the classes represented by parameterized types in the class hierarchy of
 	 * the specified type, and puts the results in the specified map.<br>
 	 * <p>
-	 * 	For example, given the following classes...
+	 * For example, given the following classes...
 	 * <p class='bcode'>
 	 * 	public static class BeanA&lt;T> {
 	 * 		public T x;
@@ -692,13 +692,13 @@ public class BeanMeta<T> {
 	 * <p class='bcode'>
 	 * 	{BeanA.class:[Integer.class]}
 	 * <p>
-	 * 	TODO:  This code doesn't currently properly handle the following situation:
+	 * TODO:  This code doesn't currently properly handle the following situation:
 	 * <p class='bcode'>
 	 * 	public static class BeanB&ltT extends Number> extends BeanA&ltT>;
 	 * 	public static class BeanC extends BeanB&ltInteger>;
 	 * <p>
-	 * 	When called on {@code BeanC}, the variable will be detected as a {@code Number}, not an {@code Integer}.<br>
-	 * 	If anyone can figure out a better way of doing this, please do so!
+	 * When called on {@code BeanC}, the variable will be detected as a {@code Number}, not an {@code Integer}.<br>
+	 * If anyone can figure out a better way of doing this, please do so!
 	 *
 	 * @param t The type we're recursing.
 	 * @param m Where the results are loaded.

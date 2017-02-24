@@ -19,17 +19,17 @@ import org.apache.juneau.annotation.*;
  *
  * <h5 class='section'>Description:</h5>
  * <p>
- * 	This class is typically the parent class of all byte-based parsers.
- * 	It has 1 abstract method to implement...
+ * This class is typically the parent class of all byte-based parsers.
+ * It has 1 abstract method to implement...
  * <ul>
  * 	<li><code>parse(InputStream, ClassMeta, ParserContext)</code>
  * </ul>
  *
  * <h6 class='topic'>@Consumes annotation</h6>
  * <p>
- * 	The media types that this parser can handle is specified through the {@link Consumes @Consumes} annotation.
+ * The media types that this parser can handle is specified through the {@link Consumes @Consumes} annotation.
  * <p>
- * 	However, the media types can also be specified programmatically by overriding the {@link #getMediaTypes()} method.
+ * However, the media types can also be specified programmatically by overriding the {@link #getMediaTypes()} method.
  */
 public abstract class InputStreamParser extends Parser {
 

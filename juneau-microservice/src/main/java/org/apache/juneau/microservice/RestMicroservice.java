@@ -402,7 +402,7 @@ public class RestMicroservice extends Microservice {
 	 * 	<ck>resources</ck> =
 	 * </p>
 	 * <p>
-	 * 	In most cases, the rest resources will be specified in the manifest file since
+	 * In most cases, the rest resources will be specified in the manifest file since
 	 * 	it's not likely to be a configurable property:
 	 * <p>
 	 * <p class='bcode'>

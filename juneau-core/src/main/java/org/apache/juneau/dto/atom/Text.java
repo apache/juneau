@@ -81,7 +81,7 @@ public class Text extends Common {
 	/**
 	 * Sets the content type of this content.
 	 * <p>
-	 * 	Must be one of the following:
+	 * Must be one of the following:
 	 * <ul>
 	 * 	<li><js>"text"</js>
 	 * 	<li><js>"html"</js>

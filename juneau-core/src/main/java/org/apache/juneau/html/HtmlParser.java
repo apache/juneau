@@ -34,17 +34,17 @@ import org.apache.juneau.xml.*;
  *
  * <h5 class='section'>Media types:</h5>
  * <p>
- * 	Handles <code>Content-Type</code> types: <code>text/html</code>
+ * Handles <code>Content-Type</code> types: <code>text/html</code>
  *
  * <h5 class='section'>Description:</h5>
  * <p>
- * 	See the {@link HtmlSerializer} class for a description of the HTML generated.
+ * See the {@link HtmlSerializer} class for a description of the HTML generated.
  * <p>
- * 	This class is used primarily for automated testing of the {@link HtmlSerializer} class.
+ * This class is used primarily for automated testing of the {@link HtmlSerializer} class.
  *
  * <h5 class='section'>Configurable properties:</h5>
  * <p>
- * 	This class has the following properties associated with it:
+ * This class has the following properties associated with it:
  * <ul>
  * 	<li>{@link HtmlSerializerContext}
  * </ul>
@@ -59,8 +59,8 @@ public final class HtmlParser extends XmlParser {
 	/*
 	 * Reads anything starting at the current event.
 	 * <p>
-	 * 	Precondition:  Must be pointing at outer START_ELEMENT.
-	 * 	Postcondition:  Pointing at outer END_ELEMENT.
+	 * Precondition:  Must be pointing at outer START_ELEMENT.
+	 * Postcondition:  Pointing at outer END_ELEMENT.
 	 */
 	private <T> T parseAnything(HtmlParserSession session, ClassMeta<T> eType, XMLStreamReader r, Object outer, boolean isRoot, BeanPropertyMeta pMeta) throws Exception {
 

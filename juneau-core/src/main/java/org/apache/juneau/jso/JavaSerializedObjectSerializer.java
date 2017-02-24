@@ -22,9 +22,9 @@ import org.apache.juneau.serializer.*;
  *
  * <h5 class='section'>Media types:</h5>
  * <p>
- * 	Handles <code>Accept</code> types: <code>application/x-java-serialized-object</code>
+ * Handles <code>Accept</code> types: <code>application/x-java-serialized-object</code>
  * <p>
- * 	Produces <code>Content-Type</code> types: <code>application/x-java-serialized-object</code>
+ * Produces <code>Content-Type</code> types: <code>application/x-java-serialized-object</code>
  */
 @Produces("application/x-java-serialized-object")
 public final class JavaSerializedObjectSerializer extends OutputStreamSerializer {

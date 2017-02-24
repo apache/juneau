@@ -30,58 +30,58 @@ import org.apache.juneau.serializer.*;
  * 	parser, you can convert a {@code Date} object to a {@code String} during serialization, and convert that {@code String} object back into
  * 	a {@code Date} object during parsing.
  * <p>
- * 	Swaps MUST declare a public no-arg constructor so that the bean context can instantiate them.
+ * Swaps MUST declare a public no-arg constructor so that the bean context can instantiate them.
  * <p>
  * 	<code>PojoSwaps</code> are associated with instances of {@link BeanContext BeanContexts} by passing the swap class to
  * 	the {@link CoreApi#addPojoSwaps(Class...)} method.<br>
- * 	When associated with a bean context, fields of the specified type will automatically be converted when the
+ * When associated with a bean context, fields of the specified type will automatically be converted when the
  * 	{@link BeanMap#get(Object)} or {@link BeanMap#put(String, Object)} methods are called.<br>
  * <p>
- * 	<code>PojoSwaps</code> have two parameters:
- * 	<ol>
- * 		<li>{@code <T>} - The normal representation of an object.
- * 		<li>{@code <S>} - The swapped representation of an object.
- * 	</ol>
- * 	<br>
- * 	{@link Serializer Serializers} use swaps to convert objects of type T into objects of type S, and on calls to {@link BeanMap#get(Object)}.<br>
- * 	{@link Parser Parsers} use swaps to convert objects of type S into objects of type T, and on calls to {@link BeanMap#put(String,Object)}.
+ * <code>PojoSwaps</code> have two parameters:
+ * <ol>
+ * 	<li>{@code <T>} - The normal representation of an object.
+ * 	<li>{@code <S>} - The swapped representation of an object.
+ * </ol>
+ * <br>
+ * {@link Serializer Serializers} use swaps to convert objects of type T into objects of type S, and on calls to {@link BeanMap#get(Object)}.<br>
+ * {@link Parser Parsers} use swaps to convert objects of type S into objects of type T, and on calls to {@link BeanMap#put(String,Object)}.
  *
  * <h6 class='topic'>Subtypes</h6>
  * <p>
- * 	The following abstract subclasses are provided for common swap types:
- * 	<ol>
- * 		<li>{@link StringSwap} - Objects swapped with strings.
- * 		<li>{@link MapSwap} - Objects swapped with {@link ObjectMap ObjectMaps}.
- * 	</ol>
+ * The following abstract subclasses are provided for common swap types:
+ * <ol>
+ * 	<li>{@link StringSwap} - Objects swapped with strings.
+ * 	<li>{@link MapSwap} - Objects swapped with {@link ObjectMap ObjectMaps}.
+ * </ol>
  *
  * <h6 class='topic'>Localization</h6>
  * <p>
- * 	Swaps have access to the session locale and timezone through the {@link BeanSession#getLocale()} and {@link BeanSession#getTimeZone()}
+ * Swaps have access to the session locale and timezone through the {@link BeanSession#getLocale()} and {@link BeanSession#getTimeZone()}
  * 	methods.  This allows you to specify localized swap values when needed.
- * 	If using the REST server API, the locale and timezone are set based on the <code>Accept-Language</code> and <code>Time-Zone</code> headers
+ * If using the REST server API, the locale and timezone are set based on the <code>Accept-Language</code> and <code>Time-Zone</code> headers
  * 	on the request.
  *
  * <h6 class='topic'>Swap Class Type {@code <S>}</h6>
  * <p>
- * 	The swapped object representation of an object must be an object type that the serializers can
+ * The swapped object representation of an object must be an object type that the serializers can
  * 	natively convert to JSON (or language-specific equivalent).  The list of valid transformed types are as follows...
- * 	<ul class='spaced-list'>
- * 		<li>{@link String}
- * 		<li>{@link Number}
- * 		<li>{@link Boolean}
- * 		<li>{@link Collection} containing anything on this list.
- * 		<li>{@link Map} containing anything on this list.
- * 		<li>A java bean with properties of anything on this list.
- * 		<li>An array of anything on this list.
- * 	</ul>
+ * <ul class='spaced-list'>
+ * 	<li>{@link String}
+ * 	<li>{@link Number}
+ * 	<li>{@link Boolean}
+ * 	<li>{@link Collection} containing anything on this list.
+ * 	<li>{@link Map} containing anything on this list.
+ * 	<li>A java bean with properties of anything on this list.
+ * 	<li>An array of anything on this list.
+ * </ul>
  *
  * <h6 class='topic'>Normal Class Type {@code <T>}</h6>
  * <p>
- * 	The normal object representation of an object.<br>
+ * The normal object representation of an object.<br>
  *
  * <h6 class='topic'>One-way vs. Two-way Serialization</h6>
  * <p>
- * 	Note that while there is a unified interface for handling swaps during both serialization and parsing,
+ * Note that while there is a unified interface for handling swaps during both serialization and parsing,
  * 	in many cases only one of the {@link #swap(BeanSession, Object)} or {@link #unswap(BeanSession, Object, ClassMeta)} methods will be defined
  * 	because the swap is one-way.  For example, a swap may be defined to convert an {@code Iterator} to a {@code ObjectList}, but
  * 	it's not possible to unswap an {@code Iterator}.  In that case, the {@code swap(Object}} method would
@@ -131,18 +131,18 @@ public abstract class PojoSwap<T,S> {
 	/**
 	 * If this transform is to be used to serialize non-serializable POJOs, it must implement this method.
 	 * <p>
-	 * 	The object must be converted into one of the following serializable types:
-	 * 	<ul class='spaced-list'>
-	 * 		<li>{@link String}
-	 * 		<li>{@link Number}
-	 * 		<li>{@link Boolean}
-	 * 		<li>{@link Collection} containing anything on this list.
-	 * 		<li>{@link Map} containing anything on this list.
-	 * 		<li>A java bean with properties of anything on this list.
-	 * 		<li>An array of anything on this list.
-	 * 	</ul>
+	 * The object must be converted into one of the following serializable types:
+	 * <ul class='spaced-list'>
+	 * 	<li>{@link String}
+	 * 	<li>{@link Number}
+	 * 	<li>{@link Boolean}
+	 * 	<li>{@link Collection} containing anything on this list.
+	 * 	<li>{@link Map} containing anything on this list.
+	 * 	<li>A java bean with properties of anything on this list.
+	 * 	<li>An array of anything on this list.
+	 * </ul>
 	 * @param session The bean session to use to get the class meta.
-	 * 	This is always going to be the same bean context that created this swap.
+	 * This is always going to be the same bean context that created this swap.
 	 * @param o The object to be transformed.
 	 *
 	 * @return The transformed object.
@@ -155,11 +155,11 @@ public abstract class PojoSwap<T,S> {
 	/**
 	 * If this transform is to be used to reconstitute POJOs that aren't true Java beans, it must implement this method.
 	 * @param session The bean session to use to get the class meta.
-	 * 	This is always going to be the same bean context that created this swap.
+	 * This is always going to be the same bean context that created this swap.
 	 * @param f The transformed object.
 	 * @param hint If possible, the parser will try to tell you the object type being created.  For example,
 	 * 	on a serialized date, this may tell you that the object being created must be of type {@code GregorianCalendar}.<br>
-	 * 	This may be <jk>null</jk> if the parser cannot make this determination.
+	 * This may be <jk>null</jk> if the parser cannot make this determination.
 	 *
 	 * @return The narrowed object.
 	 * @throws ParseException If this method is not implemented.
@@ -180,7 +180,7 @@ public abstract class PojoSwap<T,S> {
 	/**
 	 * Returns the G class, the generialized form of the class.
 	 * <p>
-	 * 	Subclasses must override this method if the generialized class is {@code Object},
+	 * Subclasses must override this method if the generialized class is {@code Object},
 	 * 	meaning it can produce multiple generialized forms.
 	 *
 	 * @return The transformed form of this class.
@@ -194,7 +194,7 @@ public abstract class PojoSwap<T,S> {
 	 * This value is cached for quick lookup.
 	 *
 	 * @param beanContext The bean context to use to get the class meta.
-	 * 	This is always going to be the same bean context that created this swap.
+	 * This is always going to be the same bean context that created this swap.
 	 * @return The {@link ClassMeta} of the transformed class type.
 	 */
 	public ClassMeta<?> getSwapClassMeta(BeanContext beanContext) {

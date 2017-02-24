@@ -114,7 +114,7 @@ public class BeanRegistry {
 	 * Gets the class metadata for the specified bean type name.
 	 *
 	 * @param typeName The bean type name as defined by {@link Bean#typeName()}.
-	 * 	Can include multi-dimensional array type names (e.g. <js>"X^^"</js>).
+	 * Can include multi-dimensional array type names (e.g. <js>"X^^"</js>).
 	 * @return The class metadata for the bean.
 	 */
 	public ClassMeta<?> getClassMeta(String typeName) {

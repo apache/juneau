@@ -19,11 +19,11 @@ import org.apache.juneau.internal.*;
 /**
  * Parent class for all bean filters.
  * <p>
- * 	Bean filters are used to control aspects of how beans are handled during serialization and parsing.
+ * Bean filters are used to control aspects of how beans are handled during serialization and parsing.
  * <p>
- * 	This class can be considered a programmatic equivalent to using the {@link Bean @Bean} annotation on bean classes.
- * 	Thus, it can be used to perform the same function as the <code>@Bean</code> annotation when you don't have
- * 		the ability to annotate those classes (e.g. you don't have access to the source code).
+ * This class can be considered a programmatic equivalent to using the {@link Bean @Bean} annotation on bean classes.
+ * Thus, it can be used to perform the same function as the <code>@Bean</code> annotation when you don't have
+ * 	the ability to annotate those classes (e.g. you don't have access to the source code).
  */
 public class BeanFilter {
 
@@ -87,8 +87,8 @@ public class BeanFilter {
 	/**
 	 * Returns <jk>true</jk> if the properties defined on this bean class should be ordered alphabetically.
 	 * <p>
-	 * 	This method is only used when the {@link #getProperties()} method returns <jk>null</jk>.
-	 * 	Otherwise, the ordering of the properties in the returned value is used.
+	 * This method is only used when the {@link #getProperties()} method returns <jk>null</jk>.
+	 * Otherwise, the ordering of the properties in the returned value is used.
 	 *
 	 * @return <jk>true</jk> if bean properties should be sorted.
 	 */

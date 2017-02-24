@@ -20,7 +20,7 @@ import org.apache.juneau.transform.*;
 /**
  * Represents a single entry in a bean map.
  * <p>
- * 	This class can be used to get and set property values on a bean, or to get metadata on a property.
+ * This class can be used to get and set property values on a bean, or to get metadata on a property.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>

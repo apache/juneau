@@ -31,10 +31,10 @@ import org.apache.juneau.xml.*;
 /**
  * Subclass of {@link RestServlet} with default sets of serializers and parsers that include RDF support.
  * <p>
- * 	Extends the {@link org.apache.juneau.rest.RestServletDefault} class with additional RDF support.
+ * Extends the {@link org.apache.juneau.rest.RestServletDefault} class with additional RDF support.
  * <p>
  * <p>
- * 	Supports the following request <code>Accept</code> header values with the resulting response <code>Content-Type</code>:
+ * Supports the following request <code>Accept</code> header values with the resulting response <code>Content-Type</code>:
  * </p>
  * <table class='styled'>
  * 	<tr>
@@ -134,7 +134,7 @@ import org.apache.juneau.xml.*;
  * 	</tr>
  * </table>
  * <p>
- * 	Supports the following request <code>Content-Type</code> header values:
+ * Supports the following request <code>Content-Type</code> header values:
  * </p>
  * <table class='styled'>
  * 	<tr>
@@ -183,9 +183,8 @@ import org.apache.juneau.xml.*;
  * 	</tr>
  * </table>
  * <p>
- *		Note that the list of serializers and parsers can be appended to using the {@link RestResource#serializers() @RestResource.serializers()}
- *			and {@link RestResource#parsers() @RestResource.parsers()} annotations on subclasses.
- * </p>
+ * Note that the list of serializers and parsers can be appended to using the {@link RestResource#serializers() @RestResource.serializers()}
+ * 	and {@link RestResource#parsers() @RestResource.parsers()} annotations on subclasses.
  */
 @RestResource(
 	serializers={

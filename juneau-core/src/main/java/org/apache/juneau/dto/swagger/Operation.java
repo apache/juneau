@@ -143,7 +143,7 @@ public class Operation extends SwaggerElement {
 	 * Tags can be used for logical grouping of operations by resources or any other qualifier.
 	 *
 	 * @param tags The values to add for the <property>tags</property> property on this bean.
-	 * 	Ignored if <jk>null</jk>.
+	 * Ignored if <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public Operation addTags(Collection<String> tags) {

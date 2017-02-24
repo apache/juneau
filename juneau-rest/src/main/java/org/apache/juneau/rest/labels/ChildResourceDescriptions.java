@@ -42,7 +42,7 @@ public class ChildResourceDescriptions extends LinkedList<ResourceDescription> {
 	 * @param servlet The servlet that this bean describes.
 	 * @param req The HTTP servlet request.
 	 * @param sort If <jk>true</jk>, list will be ordered by name alphabetically.
-	 * 	Default is to maintain the order as specified in the annotation.
+	 * Default is to maintain the order as specified in the annotation.
 	 */
 	public ChildResourceDescriptions(RestServlet servlet, RestRequest req, boolean sort) {
 		String uri = req.getTrimmedRequestURI();

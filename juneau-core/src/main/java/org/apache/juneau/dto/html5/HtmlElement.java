@@ -111,7 +111,7 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/editing.html#attr-contenteditable">contenteditable</a> attribute.
 	 * @param contenteditable The new value for this attribute.
-	 * 	Typically a {@link Boolean} or {@link String}.
+	 * Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public HtmlElement contenteditable(Object contenteditable) {
@@ -132,7 +132,7 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/editing.html#the-hidden-attribute">hidden</a> attribute.
 	 * @param hidden The new value for this attribute.
-	 * 	Typically a {@link Boolean} or {@link String}.
+	 * Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public HtmlElement hidden(Object hidden) {
@@ -663,7 +663,7 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/editing.html#attr-spellcheck">spellcheck</a> attribute.
 	 * @param spellcheck The new value for this attribute.
-	 * 	Typically a {@link Boolean} or {@link String}.
+	 * Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public HtmlElement spellcheck(Object spellcheck) {
@@ -684,7 +684,7 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/editing.html#attr-tabindex">tabindex</a> attribute.
 	 * @param tabindex The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
+	 * Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public HtmlElement tabindex(Object tabindex) {
@@ -705,7 +705,7 @@ public abstract class HtmlElement {
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/dom.html#attr-translate">translate</a> attribute.
 	 * @param translate The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
+	 * Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public HtmlElement translate(Object translate) {

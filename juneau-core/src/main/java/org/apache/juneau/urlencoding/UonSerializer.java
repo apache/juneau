@@ -27,24 +27,24 @@ import org.apache.juneau.transform.*;
  *
  * <h5 class='section'>Media types:</h5>
  * <p>
- * 	Handles <code>Accept</code> types: <code>text/uon</code>
+ * Handles <code>Accept</code> types: <code>text/uon</code>
  * <p>
- * 	Produces <code>Content-Type</code> types: <code>text/uon</code>
+ * Produces <code>Content-Type</code> types: <code>text/uon</code>
  *
  * <h5 class='section'>Description:</h5>
  * <p>
- * 	This serializer provides several serialization options.  Typically, one of the predefined DEFAULT serializers will be sufficient.
- * 	However, custom serializers can be constructed to fine-tune behavior.
+ * This serializer provides several serialization options.  Typically, one of the predefined DEFAULT serializers will be sufficient.
+ * However, custom serializers can be constructed to fine-tune behavior.
  *
  * <h5 class='section'>Configurable properties:</h5>
  * <p>
- * 	This class has the following properties associated with it:
+ * This class has the following properties associated with it:
  * <ul>
  * 	<li>{@link UonSerializerContext}
  * 	<li>{@link BeanContext}
  * </ul>
  * <p>
- * 	The following shows a sample object defined in Javascript:
+ * The following shows a sample object defined in Javascript:
  * </p>
  * <p class='bcode'>
  * 	{
@@ -69,8 +69,8 @@ import org.apache.juneau.transform.*;
  * 	}
  * </p>
  * <p>
- * 	Using the "strict" syntax defined in this document, the equivalent
- * 		UON notation would be as follows:
+ * Using the "strict" syntax defined in this document, the equivalent
+ * 	UON notation would be as follows:
  * </p>
  * <p class='bcode'>
  * 	(

@@ -38,7 +38,7 @@ public class Link extends HtmlElementVoid {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-link-href">href</a> attribute.
 	 * Address of the hyperlink.
 	 * @param href The new value for this attribute.
-	 * 	Typically a {@link URL} or {@link String}.
+	 * Typically a {@link URL} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Link href(Object href) {

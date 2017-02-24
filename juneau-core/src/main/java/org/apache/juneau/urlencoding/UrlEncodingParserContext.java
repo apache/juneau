@@ -34,8 +34,8 @@ public class UrlEncodingParserContext extends UonParserContext {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
-	 * 	If <jk>false</jk>, serializing the array <code>[1,2,3]</code> results in <code>?key=$a(1,2,3)</code>.
-	 * 	If <jk>true</jk>, serializing the same array results in <code>?key=1&amp;key=2&amp;key=3</code>.
+	 * If <jk>false</jk>, serializing the array <code>[1,2,3]</code> results in <code>?key=$a(1,2,3)</code>.
+	 * If <jk>true</jk>, serializing the same array results in <code>?key=1&amp;key=2&amp;key=3</code>.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -51,7 +51,7 @@ public class UrlEncodingParserContext extends UonParserContext {
 	 * 	String s2 = p2.serialize(<jk>new</jk> A()); <jc>// Produces "f1=a&amp;f1=b&amp;f2=c&amp;f2=d"</jc>
 	 * </p>
 	 * <p>
-	 * 	This option only applies to beans.
+	 * This option only applies to beans.
 	 * <p>
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>

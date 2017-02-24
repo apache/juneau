@@ -17,17 +17,17 @@ import org.apache.juneau.*;
 /**
  * Class for listening for certain parse events during a document parse.
  * <p>
- * 	Listeners can be registered with parsers through the {@link Parser#addListener(ParserListener)} method.
- * </p>
- * 	It should be noted that listeners are not automatically copied over to new parsers when a parser is cloned.
+ * Listeners can be registered with parsers through the {@link Parser#addListener(ParserListener)} method.
+ * <p>
+ * It should be noted that listeners are not automatically copied over to new parsers when a parser is cloned.
  */
 public class ParserListener {
 
 	/**
 	 * Gets called when an unknown bean property is detected in a document.
 	 * <p>
-	 * 	This method only gets called if {@link BeanContext#BEAN_ignoreUnknownBeanProperties} setting is <jk>true</jk>.
-	 * 	Otherwise, the parser will throw a {@link ParseException}.
+	 * This method only gets called if {@link BeanContext#BEAN_ignoreUnknownBeanProperties} setting is <jk>true</jk>.
+	 * Otherwise, the parser will throw a {@link ParseException}.
 	 *
 	 * @param <T> The class type of the bean.
 	 * @param propertyName The property name encountered in the document.

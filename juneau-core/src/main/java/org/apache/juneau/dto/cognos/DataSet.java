@@ -21,7 +21,7 @@ import org.apache.juneau.xml.annotation.*;
 /**
  * Represents a Cognos dataset.
  * <p>
- * 	When serialized to XML, creates the following construct (example pulled from <code>AddressBookResource</code>):
+ * When serialized to XML, creates the following construct (example pulled from <code>AddressBookResource</code>):
  * <p class='bcode'>
  * 	<xt>&lt;?xml</xt> <xa>version</xa>=<xs>'1.0'</xs> <xa>encoding</xa>=<xs>'UTF-8'</xs><xt>?&gt;</xt>
  * 	<xt>&lt;c:dataset <xa>xmlns:c</xa>=<xs>'http://developer.cognos.com/schemas/xmldata/1/'</xs>&gt;</xt>
@@ -45,12 +45,12 @@ import org.apache.juneau.xml.annotation.*;
  * 	<xt>&lt;/c:dataset&gt;</xt>
  * </p>
  * <p>
- * 	Only 2-dimentional POJOs (arrays or collections of maps or beans) can be serialized to Cognos.
+ * Only 2-dimentional POJOs (arrays or collections of maps or beans) can be serialized to Cognos.
  *
  * <h5 class='section'>Example:</h5>
  * <p>
- * 	The construct shown above is a serialized <code>AddressBook</code> object which is a subclass of <code>LinkedList&lt;Person&gt;</code>.
- * 	The code for generating the XML is as follows...
+ * The construct shown above is a serialized <code>AddressBook</code> object which is a subclass of <code>LinkedList&lt;Person&gt;</code>.
+ * The code for generating the XML is as follows...
  * </p>
  * <p class='bcode'>
  * 	Column[] items = {
@@ -87,7 +87,7 @@ public class DataSet {
 	 *
 	 * @param columns The meta-data that represents the columns in the dataset.
 	 * @param o The POJO being serialized to Cognos.
-	 * 	Must be an array/collection of beans/maps.
+	 * Must be an array/collection of beans/maps.
 	 * @param session The bean session used to convert POJOs to strings.
 	 * @throws Exception An error occurred trying to serialize the POJO.
 	 */
@@ -123,7 +123,7 @@ public class DataSet {
 	/**
 	 * Represents a row of data.
 	 * <p>
-	 * 	When serialized to XML, creates the following construct (example pulled from <code>AddressBookResource</code>):
+	 * When serialized to XML, creates the following construct (example pulled from <code>AddressBookResource</code>):
 	 * <p class='bcode'>
 	 * 	<xt>&lt;row&gt;</xt>
 	 * 		<xt>&lt;value&gt;</xt>Barack Obama<xt>&lt;/value&gt;</xt>

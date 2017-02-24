@@ -25,11 +25,9 @@ import org.apache.juneau.serializer.*;
 /**
  * Context object that lives for the duration of a single serialization of {@link HtmlSerializer} and its subclasses.
  * <p>
- * 	See {@link SerializerContext} for details.
- * </p>
+ * See {@link SerializerContext} for details.
  * <p>
- * 	This class is NOT thread safe.  It is meant to be discarded after one-time use.
- * </p>
+ * This class is NOT thread safe.  It is meant to be discarded after one-time use.
  */
 public final class HtmlDocSerializerSession extends HtmlSerializerSession {
 
@@ -42,15 +40,15 @@ public final class HtmlDocSerializerSession extends HtmlSerializerSession {
 	 * Create a new session using properties specified in the context.
 	 *
 	 * @param ctx The context creating this session object.
-	 * 	The context contains all the configuration settings for this object.
+	 * The context contains all the configuration settings for this object.
 	 * @param output The output object.  See {@link JsonSerializerSession#getWriter()} for valid class types.
 	 * @param op The override properties.
-	 * 	These override any context properties defined in the context.
+	 * These override any context properties defined in the context.
 	 * @param javaMethod The java method that called this parser, usually the method in a REST servlet.
 	 * @param locale The session locale.
-	 * 	If <jk>null</jk>, then the locale defined on the context is used.
+	 * If <jk>null</jk>, then the locale defined on the context is used.
 	 * @param timeZone The session timezone.
-	 * 	If <jk>null</jk>, then the timezone defined on the context is used.
+	 * If <jk>null</jk>, then the timezone defined on the context is used.
 	 * @param mediaType The session media type (e.g. <js>"application/json"</js>).
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })

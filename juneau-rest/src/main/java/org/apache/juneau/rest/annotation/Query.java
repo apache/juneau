@@ -37,7 +37,7 @@ import org.apache.juneau.rest.*;
  * 	}
  * </p>
  * <p>
- * 	This is functionally equivalent to the following code...
+ * This is functionally equivalent to the following code...
  * </p>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>)
@@ -63,12 +63,12 @@ public @interface Query {
 	/**
 	 * Specify <jk>true</jk> if using multi-part parameters to represent collections and arrays.
 	 * <p>
-	 * 	Normally, we expect single parameters to be specified in UON notation for representing
+	 * Normally, we expect single parameters to be specified in UON notation for representing
 	 * 	collections of values (e.g. <js>"&amp;key=(1,2,3)"</js>.
-	 * 	This annotation allows the use of multi-part parameters to represent collections
+	 * This annotation allows the use of multi-part parameters to represent collections
 	 * 	(e.g. <js>"&amp;key=1&amp;key=2&amp;key=3"</js>.
 	 * <p>
-	 *		This setting should only be applied to Java parameters of type array or Collection.
+	 * This setting should only be applied to Java parameters of type array or Collection.
 	 */
 	boolean multipart() default false;
 
@@ -78,10 +78,10 @@ public @interface Query {
 	 * Possible values:
 	 * <ul class='spaced-list'>
 	 * 	<li><js>"UON"</js> - URL-Encoded Object Notation.<br>
-	 *			This notation allows for request parameters to contain arbitrarily complex POJOs.
+	 * 		This notation allows for request parameters to contain arbitrarily complex POJOs.
 	 * 	<li><js>"PLAIN"</js> - Plain text.<br>
-	 *			This treats request parameters as plain text.<br>
-	 *			Only POJOs directly convertable from <l>Strings</l> can be represented in parameters when using this mode.
+	 * 		This treats request parameters as plain text.<br>
+	 * 		Only POJOs directly convertable from <l>Strings</l> can be represented in parameters when using this mode.
 	 * 	<li><js>"INHERIT"</js> (default) - Inherit from the {@link RestServletContext#REST_paramFormat} property on the servlet method or class.
 	 * </ul>
 	 * <p>

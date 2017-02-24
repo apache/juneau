@@ -25,7 +25,7 @@ import java.beans.*;
  * 	<li><js>"URL"</js> -&gt; <js>"URL"</js>
  * </ul>
  * <p>
- * 	See {@link Introspector#decapitalize(String)} for exact rules.
+ * See {@link Introspector#decapitalize(String)} for exact rules.
  */
 public final class PropertyNamerDefault implements PropertyNamer {
 

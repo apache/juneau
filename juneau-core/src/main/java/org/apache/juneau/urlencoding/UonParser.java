@@ -28,15 +28,15 @@ import org.apache.juneau.transform.*;
  *
  * <h5 class='section'>Media types:</h5>
  * <p>
- * 	Handles <code>Content-Type</code> types: <code>text/uon</code>
+ * Handles <code>Content-Type</code> types: <code>text/uon</code>
  *
  * <h5 class='section'>Description:</h5>
  * <p>
- * 	This parser uses a state machine, which makes it very fast and efficient.
+ * This parser uses a state machine, which makes it very fast and efficient.
  *
  * <h5 class='section'>Configurable properties:</h5>
  * <p>
- * 	This class has the following properties associated with it:
+ * This class has the following properties associated with it:
  * <ul>
  * 	<li>{@link UonParserContext}
  * 	<li>{@link ParserContext}

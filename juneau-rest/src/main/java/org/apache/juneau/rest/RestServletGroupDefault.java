@@ -18,10 +18,10 @@ import org.apache.juneau.rest.labels.*;
 /**
  * Specialized subclass of {@link RestServletDefault} for showing "group" pages.
  * <p>
- * 	Group pages consist of simple lists of child resource URLs and their labels.
- * 	They're meant to be used as jumping-off points for child resources.
+ * Group pages consist of simple lists of child resource URLs and their labels.
+ * They're meant to be used as jumping-off points for child resources.
  * <p>
- * 	Child resources are specified using the {@link RestResource#children()} annotation.
+ * Child resources are specified using the {@link RestResource#children()} annotation.
  */
 @RestResource()
 public abstract class RestServletGroupDefault extends RestServletDefault {

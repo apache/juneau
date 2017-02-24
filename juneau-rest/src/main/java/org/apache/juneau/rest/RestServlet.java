@@ -59,8 +59,7 @@ import org.apache.juneau.utils.*;
 /**
  * Servlet implementation of a REST resource.
  * <p>
- * 	Refer to <a class="doclink" href="package-summary.html#TOC">REST Servlet API</a> for information about using this class.
- * </p>
+ * Refer to <a class="doclink" href="package-summary.html#TOC">REST Servlet API</a> for information about using this class.
  */
 @SuppressWarnings({"rawtypes","hiding"})
 public abstract class RestServlet extends HttpServlet {
@@ -295,16 +294,14 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Creates the child resources of this resource.
 	 * <p>
-	 * 	Default implementation calls {@link #createChildren()} and uses the {@link RestResource#path() @RestResource.path()} annotation
-	 * 		on each child to identify the subpath for the resource which become the keys in this map.
-	 * 	It then calls the {@link #setParent(RestServlet)} method on the child resource.
-	 * </p>
+	 * Default implementation calls {@link #createChildren()} and uses the {@link RestResource#path() @RestResource.path()} annotation
+	 * 	on each child to identify the subpath for the resource which become the keys in this map.
+	 * It then calls the {@link #setParent(RestServlet)} method on the child resource.
 	 * <p>
-	 * 	Subclasses can override this method to programatically create child resources
-	 * 		without using the {@link RestResource#children() @RestResource.children()} annotation.
-	 * 	When overridding this method, you are responsible for calling {@link #setParent(RestServlet)} on the
-	 * 		child resources.
-	 * </p>
+	 * Subclasses can override this method to programatically create child resources
+	 * 	without using the {@link RestResource#children() @RestResource.children()} annotation.
+	 * When overridding this method, you are responsible for calling {@link #setParent(RestServlet)} on the
+	 * 	child resources.
 	 *
 	 * @return The new mutable list of child resource instances.
 	 * @throws Exception If an error occurred during servlet instantiation.
@@ -324,13 +321,11 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Creates instances of child resources for this servlet.
 	 * <p>
-	 * 	Default implementation uses the {@link RestResource#children() @RestResource.children()} annotation to identify and
-	 * 		instantiate children.
-	 * </p>
+	 * Default implementation uses the {@link RestResource#children() @RestResource.children()} annotation to identify and
+	 * 	instantiate children.
 	 * <p>
-	 * 	Subclasses can override this method to programatically create child resources
-	 * 		without using the {@link RestResource#children() @RestResource.children()} annotation.
-	 * </p>
+	 * Subclasses can override this method to programatically create child resources
+	 * 	without using the {@link RestResource#children() @RestResource.children()} annotation.
 	 *
 	 * @return The new mutable list of child resource instances.
 	 * @throws Exception If an error occurred during servlet instantiation.
@@ -349,12 +344,10 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Programmatic equivalent to the {@link RestResource#children() @RestResource.children()} annotation.
 	 * <p>
-	 * 	Subclasses can override this method to provide customized list of child resources.
-	 * 		(e.g. different children based on values specified in the config file).
-	 * </p>
+	 * Subclasses can override this method to provide customized list of child resources.
+	 * 	(e.g. different children based on values specified in the config file).
 	 * <p>
-	 * 	Default implementation simply returns the value from the {@link RestResource#children() @RestResource.children()} annotation.
-	 * </p>
+	 * Default implementation simply returns the value from the {@link RestResource#children() @RestResource.children()} annotation.
 	 *
 	 * @return The new mutable list of child resource instances.
 	 * @throws Exception If an error occurred during servlet instantiation.
@@ -370,13 +363,12 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Creates the class-level properties associated with this servlet.
 	 * <p>
-	 * 	Subclasses can override this method to provide their own class-level properties for this servlet, typically
-	 * 		by calling <code><jk>super</jk>.createProperties()</code> and appending to the map.
-	 *	 However, in most cases, the existing set of properties can be added to by overridding {@link #getProperties()}
-	 * 		and appending to the map returned by <code><jk>super</jk>.getProperties()</code>
-	 * </p>
+	 * Subclasses can override this method to provide their own class-level properties for this servlet, typically
+	 * 	by calling <code><jk>super</jk>.createProperties()</code> and appending to the map.
+	 * However, in most cases, the existing set of properties can be added to by overridding {@link #getProperties()}
+	 * 	and appending to the map returned by <code><jk>super</jk>.getProperties()</code>
 	 * <p>
-	 * 	By default, the map returned by this method contains the following:
+	 * By default, the map returned by this method contains the following:
 	 * </p>
 	 * <ul class='spaced-list'>
 	 * 	<li>Servlet-init parameters.
@@ -877,8 +869,7 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Creates a {@link RestRequest} object based on the specified incoming {@link HttpServletRequest} object.
 	 * <p>
-	 * 	Subclasses may choose to override this method to provide a specialized request object.
-	 * </p>
+	 * Subclasses may choose to override this method to provide a specialized request object.
 	 *
 	 * @param req The request object from the {@link #service(HttpServletRequest, HttpServletResponse)} method.
 	 * @return The wrapped request object.
@@ -890,10 +881,9 @@ public abstract class RestServlet extends HttpServlet {
 
 	/**
 	 * Creates a {@link RestResponse} object based on the specified incoming {@link HttpServletResponse} object
-	 * 	 and the request returned by {@link #createRequest(HttpServletRequest)}.
+	 * 	and the request returned by {@link #createRequest(HttpServletRequest)}.
 	 * <p>
-	 * 	Subclasses may choose to override this method to provide a specialized response object.
-	 * </p>
+	 * Subclasses may choose to override this method to provide a specialized response object.
 	 *
 	 * @param req The request object returned by {@link #createRequest(HttpServletRequest)}.
 	 * @param res The response object from the {@link #service(HttpServletRequest, HttpServletResponse)} method.
@@ -907,11 +897,9 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Returns whether this resource class can provide an OPTIONS page.
 	 * <p>
-	 * 	By default, returns <jk>false</jk>.
-	 * </p>
+	 * By default, returns <jk>false</jk>.
 	 * <p>
-	 * 	Subclasses can override this method to cause the <code>options</code> link to show up in the HTML serialized output.
-	 * </p>
+	 * Subclasses can override this method to cause the <code>options</code> link to show up in the HTML serialized output.
 	 *
 	 * @return <jk>true</jk> if this resource has implemented a {@code getOptions()} method.
 	 */
@@ -922,8 +910,7 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Specify a class-level property.
 	 * <p>
-	 * 	Typically, properties in {@link RestServletContext} can be set in the {@link Servlet#init(ServletConfig)} method.
-	 * </p>
+	 * Typically, properties in {@link RestServletContext} can be set in the {@link Servlet#init(ServletConfig)} method.
 	 *
 	 * @param key The property name.
 	 * @param value The property value.
@@ -937,8 +924,7 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * The main service method.
 	 * <p>
-	 * 	Subclasses can optionally override this method if they want to tailor the behavior of requests.
-	 * </p>
+	 * Subclasses can optionally override this method if they want to tailor the behavior of requests.
 	 */
 	@Override /* Servlet */
 	public void service(HttpServletRequest r1, HttpServletResponse r2) throws ServletException, IOException {
@@ -1042,9 +1028,8 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Handle the case where a matching method was not found.
 	 * <p>
-	 * 	Subclasses can override this method to provide a 2nd-chance for specifying a response.
-	 * 	The default implementation will simply throw an exception with an appropriate message.
-	 * </p>
+	 * Subclasses can override this method to provide a 2nd-chance for specifying a response.
+	 * The default implementation will simply throw an exception with an appropriate message.
 	 *
 	 * @param rc The HTTP response code.
 	 * @param req The HTTP request.
@@ -1084,12 +1069,10 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Method for rendering response errors.
 	 * <p>
-	 * 	The default implementation renders a plain text English message, optionally with a stack trace
-	 * 		if {@link RestServletContext#REST_renderResponseStackTraces} is enabled.
-	 * </p>
+	 * The default implementation renders a plain text English message, optionally with a stack trace
+	 * 	if {@link RestServletContext#REST_renderResponseStackTraces} is enabled.
 	 * <p>
-	 * 	Subclasses can override this method to provide their own custom error response handling.
-	 * </p>
+	 * Subclasses can override this method to provide their own custom error response handling.
 	 *
 	 * @param req The servlet request.
 	 * @param res The servlet response.
@@ -1122,13 +1105,11 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Callback method for logging errors during HTTP requests.
 	 * <p>
-	 * 	Typically, subclasses will override this method and log errors themselves.
-	 * </p>
+	 * 	ypically, subclasses will override this method and log errors themselves.
 	 * <p>
-	 * 	The default implementation simply logs errors to the <code>RestServlet</code> logger.
-	 * </p>
+	 * The default implementation simply logs errors to the <code>RestServlet</code> logger.
 	 * <p>
-	 * 	Here's a typical implementation showing how stack trace hashing can be used to reduce log file sizes...
+	 * Here's a typical implementation showing how stack trace hashing can be used to reduce log file sizes...
 	 * </p>
 	 * <p class='bcode'>
 	 * 	<jk>protected void</jk> onError(HttpServletRequest req, HttpServletResponse res, RestException e, <jk>boolean</jk> noTrace) {
@@ -1174,11 +1155,9 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Returns <jk>true</jk> if the specified exception should be logged.
 	 * <p>
-	 * 	Subclasses can override this method to provide their own logic for determining when exceptions are logged.
-	 * </p>
+	 * Subclasses can override this method to provide their own logic for determining when exceptions are logged.
 	 * <p>
-	 * 	The default implementation will return <jk>false</jk> if <js>"noTrace=true"</js> is passed in the query string.
-	 * </p>
+	 * The default implementation will return <jk>false</jk> if <js>"noTrace=true"</js> is passed in the query string.
 	 *
 	 * @param req The HTTP request.
 	 * @param res The HTTP response.
@@ -1193,11 +1172,10 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Returns <jk>true</jk> if a stack trace should be logged for this exception.
 	 * <p>
-	 * 	Subclasses can override this method to provide their own logic for determining when stack traces are logged.
-	 * </p>
+	 * Subclasses can override this method to provide their own logic for determining when stack traces are logged.
 	 * <p>
-	 * 	The default implementation will only log a stack trace if {@link RestException#getOccurrence()} returns <code>1</code>
-	 * 		and the exception is not one of the following:
+	 * The default implementation will only log a stack trace if {@link RestException#getOccurrence()} returns <code>1</code>
+	 * 	and the exception is not one of the following:
 	 * </p>
 	 * <ul>
 	 * 	<li>{@link HttpServletResponse#SC_UNAUTHORIZED}
@@ -1225,8 +1203,7 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Log a message.
 	 * <p>
-	 * 	Equivalent to calling <code>log(level, <jk>null</jk>, msg, args);</code>
-	 * </p>
+	 * Equivalent to calling <code>log(level, <jk>null</jk>, msg, args);</code>
 	 *
 	 * @param level The log level.
 	 * @param msg The message to log.
@@ -1238,11 +1215,10 @@ public abstract class RestServlet extends HttpServlet {
 
 	/**
 	 * Same as {@link #log(Level, String, Object...)} excepts runs the
-	 *  arguments through {@link JsonSerializer#DEFAULT_LAX_READABLE}.
+	 * arguments through {@link JsonSerializer#DEFAULT_LAX_READABLE}.
 	 * <p>
-	 * 	Serialization of arguments do not occur if message is not logged, so
-	 * 		it's safe to use this method from within debug log statements.
-	 *	</p>
+	 * Serialization of arguments do not occur if message is not logged, so
+	 * 	it's safe to use this method from within debug log statements.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -1262,9 +1238,8 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Log a message to the logger returned by {@link #getLogger()}.
 	 * <p>
-	 * 	Subclasses can override this method if they wish to log messages using a library other than
-	 * 		Java Logging (e.g. Apache Commons Logging).
-	 * </p>
+	 * Subclasses can override this method if they wish to log messages using a library other than
+	 * 	Java Logging (e.g. Apache Commons Logging).
 	 *
 	 * @param level The log level.
 	 * @param cause The cause.
@@ -1281,11 +1256,9 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Callback method for listening for successful completion of requests.
 	 * <p>
-	 * 	Subclasses can override this method for gathering performance statistics.
-	 * </p>
+	 * Subclasses can override this method for gathering performance statistics.
 	 * <p>
-	 * 	The default implementation does nothing.
-	 * </p>
+	 * The default implementation does nothing.
 	 *
 	 * @param req The HTTP request.
 	 * @param res The HTTP response.
@@ -1296,9 +1269,8 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Callback method that gets invoked right before the REST Java method is invoked.
 	 * <p>
-	 * 	Subclasses can override this method to override request headers or set request-duration properties
-	 * 		before the Java method is invoked.
-	 * </p>
+	 * Subclasses can override this method to override request headers or set request-duration properties
+	 * 	before the Java method is invoked.
 	 *
 	 * @param req The HTTP servlet request object.
 	 * @throws RestException If any error occurs.
@@ -1309,9 +1281,8 @@ public abstract class RestServlet extends HttpServlet {
 	 * Callback method that gets invoked right after the REST Java method is invoked, but before
 	 * 	the serializer is invoked.
 	 * <p>
-	 * 	Subclasses can override this method to override request and response headers, or
-	 * 		set/override properties used by the serializer.
-	 * </p>
+	 * Subclasses can override this method to override request and response headers, or
+	 * 	set/override properties used by the serializer.
 	 *
 	 * @param req The HTTP servlet request object.
 	 * @param res The HTTP servlet response object.
@@ -1322,9 +1293,8 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * The main method for serializing POJOs passed in through the {@link RestResponse#setOutput(Object)} method.
 	 * <p>
-	 * 	Subclasses may override this method if they wish to modify the way the output is rendered, or support
+	 * Subclasses may override this method if they wish to modify the way the output is rendered, or support
 	 * 	other output formats.
-	 * </p>
 	 *
 	 * @param req The HTTP request.
 	 * @param res The HTTP response.
@@ -1355,8 +1325,7 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Resolve a static resource file.
 	 * <p>
-	 * 	Subclasses can override this method to provide their own way to resolve files.
-	 *	</p>
+	 * Subclasses can override this method to provide their own way to resolve files.
 	 *
 	 * @param pathInfo The unencoded path info.
 	 * @return The resource, or <jk>null</jk> if the resource could not be resolved.
@@ -1395,15 +1364,12 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Returns a list of valid {@code Accept} content types for this resource.
 	 * <p>
-	 * 	Typically used by subclasses during {@code OPTIONS} requests.
-	 * </p>
+	 * Typically used by subclasses during {@code OPTIONS} requests.
 	 * <p>
-	 * 	The default implementation resturns the list from {@link ParserGroup#getSupportedMediaTypes()}
-	 * 		from the parser group returned by {@link #getParsers()}.
-	 * </p>
+	 * The default implementation resturns the list from {@link ParserGroup#getSupportedMediaTypes()}
+	 * 	from the parser group returned by {@link #getParsers()}.
 	 * <p>
-	 * 	Subclasses can override or expand this list as they see fit.
-	 * </p>
+	 * Subclasses can override or expand this list as they see fit.
 	 *
 	 * @return The list of valid {@code Accept} content types for this resource.
 	 * @throws RestServletException
@@ -1415,15 +1381,12 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Returns a list of valid {@code Content-Types} for input for this resource.
 	 * <p>
-	 * 	Typically used by subclasses during {@code OPTIONS} requests.
-	 * </p>
+	 * Typically used by subclasses during {@code OPTIONS} requests.
 	 * <p>
-	 * 	The default implementation resturns the list from {@link SerializerGroup#getSupportedMediaTypes()}
-	 * 		from the parser group returned by {@link #getSerializers()}.
-	 * </p>
+	 * The default implementation resturns the list from {@link SerializerGroup#getSupportedMediaTypes()}
+	 * 	from the parser group returned by {@link #getSerializers()}.
 	 * <p>
-	 * 	Subclasses can override or expand this list as they see fit.
-	 * </p>
+	 * Subclasses can override or expand this list as they see fit.
 	 *
 	 * @return The list of valid {@code Content-Type} header values for this resource.
 	 * @throws RestServletException
@@ -1435,10 +1398,9 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Returns the localized summary of the specified java method on this servlet.
 	 * <p>
-	 * 	Subclasses can override this method to provide their own summary.
-	 * </p>
+	 * Subclasses can override this method to provide their own summary.
 	 * <p>
-	 * 	The default implementation returns the summary from the following locations (whichever matches first):
+	 * The default implementation returns the summary from the following locations (whichever matches first):
 	 * </p>
 	 * <ol>
 	 * 	<li>{@link RestMethod#summary() @RestMethod.summary()} annotation on the method.
@@ -1462,10 +1424,9 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Returns the localized description of the specified java method on this servlet.
 	 * <p>
-	 * 	Subclasses can override this method to provide their own description.
-	 * </p>
+	 * Subclasses can override this method to provide their own description.
 	 * <p>
-	 * 	The default implementation returns the description from the following locations (whichever matches first):
+	 * The default implementation returns the description from the following locations (whichever matches first):
 	 * </p>
 	 * <ol>
 	 * 	<li>{@link RestMethod#description() @RestMethod.description()} annotation on the method.
@@ -1489,9 +1450,9 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Returns the localized title of this REST resource.
 	 * <p>
-	 * 	Subclasses can override this method to provide their own title.
+	 * Subclasses can override this method to provide their own title.
 	 * <p>
-	 * 	The default implementation returns the description from the following locations (whichever matches first):
+	 * The default implementation returns the description from the following locations (whichever matches first):
 	 * <p>
 	 * <ol>
 	 * 	<li>{@link RestResource#title() @RestResourcel.title()} annotation on this class, and then any parent classes.
@@ -1521,9 +1482,9 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Returns the localized description of this REST resource.
 	 * <p>
-	 * 	Subclasses can override this method to provide their own description.
+	 * Subclasses can override this method to provide their own description.
 	 * <p>
-	 * 	The default implementation returns the description from the following locations (whichever matches first):
+	 * The default implementation returns the description from the following locations (whichever matches first):
 	 * <ol>
 	 * 	<li>{@link RestResource#description() @RestResource.description()} annotation on this class, and then any parent classes.
 	 * 	<li><ck>[ClassName].description</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
@@ -1552,9 +1513,9 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Returns the localized contact information of this REST resource.
 	 * <p>
-	 * 	Subclasses can override this method to provide their own contact information.
+	 * Subclasses can override this method to provide their own contact information.
 	 * <p>
-	 * 	The default implementation returns the contact information from the following locations (whichever matches first):
+	 * The default implementation returns the contact information from the following locations (whichever matches first):
 	 * <ol>
 	 * 	<li>{@link RestResource#contact() @RestResource.contact()} annotation on this class, and then any parent classes.
 	 * 	<li><ck>[ClassName].contact</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
@@ -1588,9 +1549,9 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Returns the localized license information of this REST resource.
 	 * <p>
-	 * 	Subclasses can override this method to provide their own license information.
+	 * Subclasses can override this method to provide their own license information.
 	 * <p>
-	 * 	The default implementation returns the license information from the following locations (whichever matches first):
+	 * The default implementation returns the license information from the following locations (whichever matches first):
 	 * <ol>
 	 * 	<li>{@link RestResource#license() @RestResource.license()} annotation on this class, and then any parent classes.
 	 * 	<li><ck>[ClassName].license</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
@@ -1624,9 +1585,9 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Returns the terms-of-service information of this REST resource.
 	 * <p>
-	 * 	Subclasses can override this method to provide their own terms-of-service information.
+	 * Subclasses can override this method to provide their own terms-of-service information.
 	 * <p>
-	 * 	The default implementation returns the terms-of-service information from the following locations (whichever matches first):
+	 * The default implementation returns the terms-of-service information from the following locations (whichever matches first):
 	 * <ol>
 	 * 	<li>{@link RestResource#termsOfService() @RestResource.termsOfService()} annotation on this class, and then any parent classes.
 	 * 	<li><ck>[ClassName].termsOfService</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
@@ -1655,9 +1616,9 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Returns the version information of this REST resource.
 	 * <p>
-	 * 	Subclasses can override this method to provide their own version information.
+	 * Subclasses can override this method to provide their own version information.
 	 * <p>
-	 * 	The default implementation returns the version information from the following locations (whichever matches first):
+	 * The default implementation returns the version information from the following locations (whichever matches first):
 	 * <ol>
 	 * 	<li>{@link RestResource#version() @RestResource.version()} annotation on this class, and then any parent classes.
 	 * 	<li><ck>[ClassName].version</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
@@ -1686,9 +1647,9 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Returns the version information of this REST resource.
 	 * <p>
-	 * 	Subclasses can override this method to provide their own version information.
+	 * Subclasses can override this method to provide their own version information.
 	 * <p>
-	 * 	The default implementation returns the version information from the following locations (whichever matches first):
+	 * The default implementation returns the version information from the following locations (whichever matches first):
 	 * <ol>
 	 * 	<li>{@link RestResource#version() @RestResource.version()} annotation on this class, and then any parent classes.
 	 * 	<li><ck>[ClassName].version</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
@@ -1722,9 +1683,9 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Returns the version information of this REST resource.
 	 * <p>
-	 * 	Subclasses can override this method to provide their own version information.
+	 * Subclasses can override this method to provide their own version information.
 	 * <p>
-	 * 	The default implementation returns the version information from the following locations (whichever matches first):
+	 * The default implementation returns the version information from the following locations (whichever matches first):
 	 * <ol>
 	 * 	<li>{@link RestResource#version() @RestResource.version()} annotation on this class, and then any parent classes.
 	 * 	<li><ck>[ClassName].version</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
@@ -1777,12 +1738,10 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Gets a localized message from the resource bundle identified by the {@link RestResource#messages() @RestResource.messages()} annotation.
 	 * <p>
-	 * 	If resource bundle location was not specified, or the resource bundle was not found,
+	 * If resource bundle location was not specified, or the resource bundle was not found,
 	 * 	returns the string <js>"{!!key}"</js>.
-	 * </p>
 	 * <p>
-	 * 	If message was not found in the resource bundle, returns the string <js>"{!key}"</js>.
-	 * </p>
+	 * If message was not found in the resource bundle, returns the string <js>"{!key}"</js>.
 	 *
 	 * @param locale The client locale.
 	 * @param key The resource bundle key.
@@ -1796,16 +1755,14 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Programmatically adds the specified resource as a child to this resource.
 	 * <p>
-	 * 	This method can be used in a resources {@link #init()} method to define child resources
+	 * This method can be used in a resources {@link #init()} method to define child resources
 	 * 	accessible through a child URL.
-	 * </p>
 	 * <p>
-	 * 	Typically, child methods are defined via {@link RestResource#children() @RestResource.children()}.  However, this
+	 * Typically, child methods are defined via {@link RestResource#children() @RestResource.children()}.  However, this
 	 * 	method is provided to handle child resources determined at runtime.
-	 * </p>
 	 *
 	 * @param name The sub-URL under which this resource is accessible.<br>
-	 * 	For example, if the parent resource URL is <js>"/foo"</js>, and this name is <js>"bar"</js>, then
+	 * For example, if the parent resource URL is <js>"/foo"</js>, and this name is <js>"bar"</js>, then
 	 * 	the child resource will be accessible via the URL <js>"/foo/bar"</js>.
 	 * @param resource The child resource.
 	 * @throws ServletException Thrown by the child init() method.
@@ -1819,7 +1776,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * Returns the child resources associated with this servlet.
 	 *
 	 * @return An unmodifiable map of child resources.
-	 * 	Keys are the {@link RestResource#path() @RestResource.path()} annotation defined on the child resource.
+	 * Keys are the {@link RestResource#path() @RestResource.path()} annotation defined on the child resource.
 	 */
 	public Map<String,RestServlet> getChildResources() {
 		return Collections.unmodifiableMap(childResources);
@@ -1829,11 +1786,9 @@ public abstract class RestServlet extends HttpServlet {
 	 * Returns the path for this servlet as defined by the {@link RestResource#path()} annotation
 	 * on this class concatenated with those on all parent classes.
 	 * <p>
-	 * 	If path is not specified, returns <js>"/"</js>.
-	 * </p>
+	 * If path is not specified, returns <js>"/"</js>.
 	 * <p>
-	 * 	Path always starts with <js>"/"</js>.
-	 * </p>
+	 * Path always starts with <js>"/"</js>.
 	 *
 	 * @return The servlet path.
 	 */
@@ -1871,12 +1826,10 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Returns the config file for this servlet.
 	 * <p>
-	 * 	Subclasses can override this method to provide their own config file.
-	 * </p>
+	 * Subclasses can override this method to provide their own config file.
 	 * <p>
-	 * 	The default implementation uses the path defined by the {@link RestResource#config() @RestResource.config()} property resolved
-	 *  		by {@link ConfigMgr#DEFAULT}.
-	 * </p>
+	 * The default implementation uses the path defined by the {@link RestResource#config() @RestResource.config()} property resolved
+	 * 	by {@link ConfigMgr#DEFAULT}.
 	 *
 	 * @return The config file for this servlet.
 	 * @throws IOException
@@ -1891,16 +1844,13 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Creates the stylesheet for this servlet.
 	 * <p>
-	 * 	The stylesheet is made available on the path <js>"/servlet-path/style.css"</js>.
-	 * </p>
+	 * The stylesheet is made available on the path <js>"/servlet-path/style.css"</js>.
 	 * <p>
-	 * 	Subclasses can override this method to provide their own stylesheet.
-	 * </p>
+	 * Subclasses can override this method to provide their own stylesheet.
 	 * <p>
-	 * 	The default implementation uses the {@link RestResource#stylesheet() @RestResource.stylesheet()} annotation
-	 * 		to determine the stylesheet name and then searches the classpath then working directory
-	 * 		for that stylesheet.
-	 * </p>
+	 * The default implementation uses the {@link RestResource#stylesheet() @RestResource.stylesheet()} annotation
+	 * 	to determine the stylesheet name and then searches the classpath then working directory
+	 * 	for that stylesheet.
 	 *
 	 * @return The stylesheet to use for this servlet, or <jk>null</jk> if the stylesheet could not be found.
 	 * @throws IOException If stylesheet could not be loaded.
@@ -1925,16 +1875,13 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Creates the favicon for this servlet.
 	 * <p>
-	 * 	The favicon is made available on the path <js>"/servlet-path/favicon.ico"</js>.
-	 * </p>
+	 * The favicon is made available on the path <js>"/servlet-path/favicon.ico"</js>.
 	 * <p>
-	 * 	Subclasses can override this method to provide their own favorites icon.
-	 * </p>
+	 * Subclasses can override this method to provide their own favorites icon.
 	 * <p>
-	 * 	The default implementation uses the {@link RestResource#favicon() @RestResource.favicon()} annotation
-	 * 		to determine the file name and then searches the classpath then working directory
-	 * 		for that file.
-	 * </p>
+	 * The default implementation uses the {@link RestResource#favicon() @RestResource.favicon()} annotation
+	 * 	to determine the file name and then searches the classpath then working directory
+	 * 	for that file.
 	 *
 	 * @return The icon file to use for this servlet.
 	 * @throws IOException If icon file could not be loaded.
@@ -1959,17 +1906,14 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Creates the static files map for this servlet.
 	 * <p>
-	 * 	This map defines static files that can be served up through subpaths on this servlet.
-	 * 	The map keys are subpaths (e.g. <js>"htdocs"</js>) and the values are locations to look in
-	 * 		the classpath and working directory for those files.
-	 * </p>
+	 * This map defines static files that can be served up through subpaths on this servlet.
+	 * The map keys are subpaths (e.g. <js>"htdocs"</js>) and the values are locations to look in
+	 * 	the classpath and working directory for those files.
 	 * <p>
-	 * 	Subclasses can override this method to provide their own mappings.
-	 * </p>
+	 * Subclasses can override this method to provide their own mappings.
 	 * <p>
-	 * 	The default implementation uses the {@link RestResource#staticFiles() @RestResource.staticFiles()} annotation
-	 * 		to determine the mappings.
-	 * </p>
+	 * The default implementation uses the {@link RestResource#staticFiles() @RestResource.staticFiles()} annotation
+	 * 	to determine the mappings.
 	 *
 	 * @return The list of static file mappings.
 	 * @throws ParseException
@@ -1986,9 +1930,8 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Returns the config manager used to create the config file in {@link #createConfigFile()}.
 	 * <p>
-	 * 	The default implementation return {@link ConfigMgr#DEFAULT}, but subclasses can override
-	 * 		this if they want to provide their own customized config manager.
-	 * </p>
+	 * The default implementation return {@link ConfigMgr#DEFAULT}, but subclasses can override
+	 * 	this if they want to provide their own customized config manager.
 	 *
 	 * @return The config file manager.
 	 */
@@ -1999,12 +1942,10 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Returns the logger associated with this servlet.
 	 * <p>
-	 * 	Subclasses can override this method to provide their own Java Logging logger.
-	 * </p>
+	 * Subclasses can override this method to provide their own Java Logging logger.
 	 * <p>
-	 * 	Subclasses that use other logging libraries such as Apache Commons Logging should
-	 * 		override the {@link #log(Level, Throwable, String, Object...)} method instead.
-	 * </p>
+	 * Subclasses that use other logging libraries such as Apache Commons Logging should
+	 * 	override the {@link #log(Level, Throwable, String, Object...)} method instead.
 	 *
 	 * @return The logger associated with this servlet.
 	 */
@@ -2845,7 +2786,7 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Returns the variable resolver for this servlet created by the {@link #createVarResolver()} method.
 	 * <p>
-	 * 	Variable resolvers are used to replace variables in property values.
+	 * Variable resolvers are used to replace variables in property values.
 	 * </p>
 	 * <h6 class='figure'>Example:</h6>
 	 * <p class='bcode'>
@@ -2863,7 +2804,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * 	<jk>public class</jk> MyRestResource <jk>extends</jk> RestServletDefault {
 	 * </p>
 	 * <p>
-	 * 	A typical usage pattern is using variables for resolving URL links when rendering HTML:
+	 * A typical usage pattern is using variables for resolving URL links when rendering HTML:
 	 * </p>
 	 * <p class='bcode'>
 	 * 	<ja>@RestMethod</ja>(
@@ -2878,8 +2819,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * 	<jk>public</jk> LoggerEntry getLogger(RestRequest req, <ja>@Path</ja> String name) <jk>throws</jk> Exception {
 	 * </p>
 	 * <p>
-	 * 	Calls to <code>req.getProperties().getString(<js>"key"</js>)</code> returns strings with variables resolved.
-	 * </p>
+	 * Calls to <code>req.getProperties().getString(<js>"key"</js>)</code> returns strings with variables resolved.
 	 *
 	 * @return The var resolver created by {@link #createVarResolver()}.
 	 */
@@ -2904,8 +2844,8 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Creates the reusable variable resolver for this servlet.
 	 * <p>
-	 * 	Subclasses can override this method to provide their own or augment the existing
-	 * 		variable provider.
+	 * Subclasses can override this method to provide their own or augment the existing
+	 * 	variable provider.
 	 * </p>
 	 * <ul class='spaced-list'>
 	 * 	<li><code>$C{...}</code> - Values from the config file returned by {@link #getConfig()}.
@@ -2914,19 +2854,15 @@ public abstract class RestServlet extends HttpServlet {
 	 * 	<li><code>$I{...}</code> - Servlet initialization parameters.
 	 * </ul>
 	 * <p>
-	 * 	All variables can provide a 2nd parameter as a default value.
-	 * </p>
+	 * All variables can provide a 2nd parameter as a default value.
 	 * <p>
-	 * 	Example: <js>$S{myBooleanProperty,true}"</js>.
-	 * </p>
+	 * Example: <js>$S{myBooleanProperty,true}"</js>.
 	 * <p>
-	 * 	Like all other variables, keys and default values can themselves be arbitrarily nested.
-	 * </p>
+	 * Like all other variables, keys and default values can themselves be arbitrarily nested.
 	 * <p>
-	 * 	Example: <js>$S{$E{BOOLEAN_PROPERTY_NAME},$E{BOOLEAN_DEFAULT}}"</js>.
-	 * </p>
+	 * Example: <js>$S{$E{BOOLEAN_PROPERTY_NAME},$E{BOOLEAN_DEFAULT}}"</js>.
 	 * <p>
-	 * 	Subclasses can augment this list by adding their own variables.
+	 * Subclasses can augment this list by adding their own variables.
 	 * </p>
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -2964,7 +2900,7 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * Creates a properties map for the specified request.
 	 * <p>
-	 * 	This map will automatically resolve any <js>"$X{...}"</js> variables using the {@link VarResolver}
+	 * This map will automatically resolve any <js>"$X{...}"</js> variables using the {@link VarResolver}
 	 * 	returned by {@link #getVarResolver()}.
 	 *
 	 * @param methodProperties The method-level properties.
@@ -3283,11 +3219,11 @@ public abstract class RestServlet extends HttpServlet {
 	 * Same as {@link Class#getResourceAsStream(String)} except if it doesn't find the resource
 	 * 	on this class, searches up the parent hierarchy chain.
 	 * <p>
-	 * 	If the resource cannot be found in the classpath, then an attempt is made to look in the
-	 * 		JVM working directory.
+	 * If the resource cannot be found in the classpath, then an attempt is made to look in the
+	 * 	JVM working directory.
 	 * <p>
-	 * 	If the <code>locale</code> is specified, then we look for resources whose name matches that locale.
-	 * 	For example, if looking for the resource <js>"MyResource.txt"</js> for the Japanese locale, we will
+	 * If the <code>locale</code> is specified, then we look for resources whose name matches that locale.
+	 * For example, if looking for the resource <js>"MyResource.txt"</js> for the Japanese locale, we will
 	 * 	look for files in the following order:
 	 * <ol>
 	 * 	<li><js>"MyResource_ja_JP.txt"</js>
@@ -3348,8 +3284,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * Reads the input stream from {@link #getResource(String, Locale)} and parses it into a POJO
 	 * 	using the parser matched by the specified media type.
 	 * <p>
-	 * 	Useful if you want to load predefined POJOs from JSON files in your classpath.
-	 * </p>
+	 * Useful if you want to load predefined POJOs from JSON files in your classpath.
 	 *
 	 * @param c The class type of the POJO to create.
 	 * @param mediaType The media type of the data in the stream (e.g. <js>"text/json"</js>)

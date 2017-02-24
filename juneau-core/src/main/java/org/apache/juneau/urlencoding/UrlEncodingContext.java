@@ -15,7 +15,7 @@ package org.apache.juneau.urlencoding;
 /**
  * Configurable properties on the {@link UrlEncodingSerializer} and {@link UrlEncodingParser} classes.
  * <p>
- * 	Use the {@link UrlEncodingSerializer#setProperty(String, Object)} and
+ * Use the {@link UrlEncodingSerializer#setProperty(String, Object)} and
  * 	{@link UrlEncodingParser#setProperty(String, Object)} methods to set property values.
  */
 public final class UrlEncodingContext implements Cloneable {
@@ -23,10 +23,10 @@ public final class UrlEncodingContext implements Cloneable {
 	/**
 	 * Serialize bean property collections/arrays as separate key/value pairs ({@link Boolean}, default=<jk>false</jk>).
 	 * <p>
-	 * 	If <jk>false</jk>, serializing the array <code>[1,2,3]</code> results in <code>?key=$a(1,2,3)</code>.
-	 * 	If <jk>true</jk>, serializing the same array results in <code>?key=1&amp;key=2&amp;key=3</code>.
+	 * If <jk>false</jk>, serializing the array <code>[1,2,3]</code> results in <code>?key=$a(1,2,3)</code>.
+	 * If <jk>true</jk>, serializing the same array results in <code>?key=1&amp;key=2&amp;key=3</code>.
 	 * <p>
-	 * 	Example:
+	 * Example:
 	 * <p class='bcode'>
 	 * 	<jk>public class</jk> A {
 	 * 		<jk>public</jk> String[] f1 = {<js>"a"</js>,<js>"b"</js>};

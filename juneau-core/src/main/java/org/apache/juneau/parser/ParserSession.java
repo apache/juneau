@@ -44,32 +44,32 @@ public class ParserSession extends BeanSession {
 	 * Create a new session using properties specified in the context.
 	 *
 	 * @param ctx The context creating this session object.
-	 * 	The context contains all the configuration settings for this object.
+	 * The context contains all the configuration settings for this object.
 	 * @param input The input.
-	 * 	<br>For character-based parsers, this can be any of the following types:
-	 * 	<ul>
-	 * 		<li><jk>null</jk>
-	 * 		<li>{@link Reader}
-	 * 		<li>{@link CharSequence}
-	 * 		<li>{@link InputStream} containing UTF-8 encoded text (or whatever the encoding specified by {@link ParserContext#PARSER_inputStreamCharset}).
-	 * 		<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or whatever the encoding specified by {@link ParserContext#PARSER_inputStreamCharset}).
-	 * 		<li>{@link File} containing system encoded text (or whatever the encoding specified by {@link ParserContext#PARSER_fileCharset}).
-	 * 	</ul>
-	 * 	<br>For byte-based parsers, this can be any of the following types:
-	 * 	<ul>
-	 * 		<li><jk>null</jk>
-	 * 		<li>{@link InputStream}
-	 * 		<li><code><jk>byte</jk>[]</code>
-	 * 		<li>{@link File}
-	 * 	</ul>
+	 * <br>For character-based parsers, this can be any of the following types:
+	 * <ul>
+	 * 	<li><jk>null</jk>
+	 * 	<li>{@link Reader}
+	 * 	<li>{@link CharSequence}
+	 * 	<li>{@link InputStream} containing UTF-8 encoded text (or whatever the encoding specified by {@link ParserContext#PARSER_inputStreamCharset}).
+	 * 	<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or whatever the encoding specified by {@link ParserContext#PARSER_inputStreamCharset}).
+	 * 	<li>{@link File} containing system encoded text (or whatever the encoding specified by {@link ParserContext#PARSER_fileCharset}).
+	 * </ul>
+	 * <br>For byte-based parsers, this can be any of the following types:
+	 * <ul>
+	 * 	<li><jk>null</jk>
+	 * 	<li>{@link InputStream}
+	 * 	<li><code><jk>byte</jk>[]</code>
+	 * 	<li>{@link File}
+	 * </ul>
 	 * @param op The override properties.
-	 * 	These override any context properties defined in the context.
+	 * These override any context properties defined in the context.
 	 * @param javaMethod The java method that called this parser, usually the method in a REST servlet.
 	 * @param outer The outer object for instantiating top-level non-static inner classes.
 	 * @param locale The session locale.
-	 * 	If <jk>null</jk>, then the locale defined on the context is used.
+	 * If <jk>null</jk>, then the locale defined on the context is used.
 	 * @param timeZone The session timezone.
-	 * 	If <jk>null</jk>, then the timezone defined on the context is used.
+	 * If <jk>null</jk>, then the timezone defined on the context is used.
 	 * @param mediaType The session media type (e.g. <js>"application/json"</js>).
 	 */
 	public ParserSession(ParserContext ctx, ObjectMap op, Object input, Method javaMethod, Object outer, Locale locale, TimeZone timeZone, MediaType mediaType) {

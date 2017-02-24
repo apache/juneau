@@ -24,8 +24,8 @@ import org.apache.juneau.annotation.*;
  *
  * <h5 class='section'>Description:</h5>
  * <p>
- * 	This class is typically the parent class of all character-based serializers.
- * 	It has 2 abstract methods to implement...
+ * This class is typically the parent class of all character-based serializers.
+ * It has 2 abstract methods to implement...
  * <ul class='spaced-list'>
  * 	<li>{@link #createSession(Object, ObjectMap, Method, Locale, TimeZone, MediaType)}
  * 	<li>{@link #doSerialize(SerializerSession, Object)}
@@ -33,10 +33,10 @@ import org.apache.juneau.annotation.*;
  *
  * <h6 class='topic'>@Produces annotation</h6>
  * <p>
- * 	The media types that this serializer can produce is specified through the {@link Produces @Produces} annotation.
+ * The media types that this serializer can produce is specified through the {@link Produces @Produces} annotation.
  * <p>
- * 	However, the media types can also be specified programmatically by overriding the {@link #getMediaTypes()}
- * 		and {@link #getResponseContentType()} methods.
+ * However, the media types can also be specified programmatically by overriding the {@link #getMediaTypes()}
+ * 	and {@link #getResponseContentType()} methods.
  */
 public abstract class WriterSerializer extends Serializer {
 

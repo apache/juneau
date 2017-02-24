@@ -75,7 +75,7 @@ public class HtmlElementMixed extends HtmlElement {
 	/**
 	 * Adds one or more child elements to this element.
 	 * @param children The children to add as child elements.
-	 * 	Can be a mixture of strings and {@link HtmlElement} objects.
+	 * Can be a mixture of strings and {@link HtmlElement} objects.
 	 * @return This object (for method chaining).
 	 */
 	@SuppressWarnings("hiding")
@@ -92,7 +92,7 @@ public class HtmlElementMixed extends HtmlElement {
 	/**
 	 * Adds a child element to this element.
 	 * @param child The child to add as a child element.
-	 * 	Can be a string or {@link HtmlElement}.
+	 * Can be a string or {@link HtmlElement}.
 	 * @return This object (for method chaining).
 	 */
 	public HtmlElement child(Object child) {

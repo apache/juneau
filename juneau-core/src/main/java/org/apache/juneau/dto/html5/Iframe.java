@@ -27,7 +27,7 @@ public class Iframe extends HtmlElementMixed {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-height">height</a> attribute.
 	 * Vertical dimension.
 	 * @param height The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
+	 * Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Iframe height(Object height) {
@@ -61,7 +61,7 @@ public class Iframe extends HtmlElementMixed {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-iframe-src">src</a> attribute.
 	 * Address of the resource.
 	 * @param src The new value for this attribute.
-	 * 	Typically a {@link URL} or {@link String}.
+	 * Typically a {@link URL} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Iframe src(Object src) {
@@ -84,7 +84,7 @@ public class Iframe extends HtmlElementMixed {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-width">width</a> attribute.
 	 * Horizontal dimension.
 	 * @param width The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
+	 * Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Iframe width(Object width) {

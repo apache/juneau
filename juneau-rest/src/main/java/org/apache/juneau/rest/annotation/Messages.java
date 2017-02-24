@@ -24,7 +24,7 @@ import org.apache.juneau.utils.*;
  * Annotation that can be applied to a parameter of a {@link RestMethod} annotated method
  * 	to identify it as the resource bundle for the request locale.
  * <p>
- * 	Parameter type must be either {@link ResourceBundle} or {@link MessageBundle}.
+ * Parameter type must be either {@link ResourceBundle} or {@link MessageBundle}.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
@@ -34,7 +34,7 @@ import org.apache.juneau.utils.*;
  * 	}
  * </p>
  * <p>
- * 	This is functionally equivalent to the following code...
+ * This is functionally equivalent to the following code...
  * </p>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>)

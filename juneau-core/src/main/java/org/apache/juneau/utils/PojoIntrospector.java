@@ -24,10 +24,10 @@ import org.apache.juneau.parser.*;
  * Used to invoke methods on {@code Objects} using arguments in serialized form.
  *
  * <h5 class='section'>Example:</h5>
- *	<p class='bcode'>
- *		String s = <js>"foobar"</js>;
- *		String s2 = (String)<jk>new</jk> PojoIntrospector(s).invoke(<js>"substring(int,int)"</js>, <js>"[3,6]"</js>);  <jc>// "bar"</jc>
- *	</p>
+ * <p class='bcode'>
+ * 	String s = <js>"foobar"</js>;
+ * 	String s2 = (String)<jk>new</jk> PojoIntrospector(s).invoke(<js>"substring(int,int)"</js>, <js>"[3,6]"</js>);  <jc>// "bar"</jc>
+ * </p>
  */
 public final class PojoIntrospector {
 
@@ -61,8 +61,8 @@ public final class PojoIntrospector {
 	 *
 	 * @param method The method being invoked.
 	 * @param args The arguments to pass as parameters to the method.<br>
-	 * 	These will automatically be converted to the appropriate object type if possible.<br>
-	 * 	Can be <jk>null</jk> if method has no arguments.
+	 * These will automatically be converted to the appropriate object type if possible.<br>
+	 * Can be <jk>null</jk> if method has no arguments.
 	 * @return The object returned by the call to the method, or <jk>null</jk> if target object is <jk>null</jk>.
 	 * @throws IllegalAccessException If the <code>Constructor</code> object enforces Java language access control and the underlying constructor is inaccessible.
 	 * @throws IllegalArgumentException If one of the following occurs:
@@ -89,8 +89,8 @@ public final class PojoIntrospector {
 	 *
 	 * @param method The method being invoked.
 	 * @param args The arguments to pass as parameters to the method.<br>
-	 * 	These will automatically be converted to the appropriate object type if possible.<br>
-	 * 	Can be <jk>null</jk> if method has no arguments.
+	 * These will automatically be converted to the appropriate object type if possible.<br>
+	 * Can be <jk>null</jk> if method has no arguments.
 	 * @return The object returned by the call to the method, or <jk>null</jk> if target object is <jk>null</jk>.
 	 * @throws NoSuchMethodException If method does not exist.
 	 * @throws IllegalAccessException If the <code>Constructor</code> object enforces Java language access control and the underlying constructor is inaccessible.

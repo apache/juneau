@@ -36,7 +36,7 @@ public class Textarea extends HtmlElementRawText {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-autofocus">autofocus</a> attribute.
 	 * Automatically focus the form control when the page is loaded.
 	 * @param autofocus The new value for this attribute.
-	 * 	Typically a {@link Boolean} or {@link String}.
+	 * Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Textarea autofocus(Boolean autofocus) {
@@ -48,7 +48,7 @@ public class Textarea extends HtmlElementRawText {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-textarea-cols">cols</a> attribute.
 	 * Maximum number of characters per line.
 	 * @param cols The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
+	 * Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Textarea cols(Object cols) {
@@ -71,7 +71,7 @@ public class Textarea extends HtmlElementRawText {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-disabled">disabled</a> attribute.
 	 * Whether the form control is disabled.
 	 * @param disabled The new value for this attribute.
-	 * 	Typically a {@link Boolean} or {@link String}.
+	 * Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Textarea disabled(Object disabled) {
@@ -105,7 +105,7 @@ public class Textarea extends HtmlElementRawText {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-textarea-maxlength">maxlength</a> attribute.
 	 * Maximum length of value.
 	 * @param maxlength The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
+	 * Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Textarea maxlength(Object maxlength) {
@@ -117,7 +117,7 @@ public class Textarea extends HtmlElementRawText {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-textarea-minlength">minlength</a> attribute.
 	 * Minimum length of value.
 	 * @param minlength The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
+	 * Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Textarea minlength(Object minlength) {
@@ -151,7 +151,7 @@ public class Textarea extends HtmlElementRawText {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-textarea-readonly">readonly</a> attribute.
 	 * Whether to allow the value to be edited by the user.
 	 * @param readonly The new value for this attribute.
-	 * 	Typically a {@link Boolean} or {@link String}.
+	 * Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Textarea readonly(Object readonly) {
@@ -163,7 +163,7 @@ public class Textarea extends HtmlElementRawText {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-textarea-required">required</a> attribute.
 	 * Whether the control is required for form submission.
 	 * @param required The new value for this attribute.
-	 * 	Typically a {@link Boolean} or {@link String}.
+	 * Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Textarea required(Object required) {
@@ -175,7 +175,7 @@ public class Textarea extends HtmlElementRawText {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-textarea-rows">rows</a> attribute.
 	 * Number of lines to show.
 	 * @param rows The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
+	 * Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Textarea rows(Number rows) {

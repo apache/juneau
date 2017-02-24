@@ -48,7 +48,7 @@ public class Img extends HtmlElementVoid {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-height">height</a> attribute.
 	 * Vertical dimension.
 	 * @param height The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
+	 * Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Img height(Object height) {
@@ -60,7 +60,7 @@ public class Img extends HtmlElementVoid {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-img-ismap">ismap</a> attribute.
 	 * Whether the image is a server-side image map.
 	 * @param ismap The new value for this attribute.
-	 * 	Typically a {@link Boolean} or {@link String}.
+	 * Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Img ismap(Object ismap) {
@@ -72,7 +72,7 @@ public class Img extends HtmlElementVoid {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-img-src">src</a> attribute.
 	 * Address of the resource.
 	 * @param src The new value for this attribute.
-	 * 	Typically a {@link URL} or {@link String}.
+	 * Typically a {@link URL} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Img src(Object src) {
@@ -95,7 +95,7 @@ public class Img extends HtmlElementVoid {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-width">width</a> attribute.
 	 * Horizontal dimension.
 	 * @param width The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
+	 * Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Img width(Object width) {

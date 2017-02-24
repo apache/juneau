@@ -23,16 +23,16 @@ import org.apache.juneau.serializer.*;
 /**
  * Used to identify a class or bean property as a URI.
  * <p>
- * 	By default, instances of {@link URL} and {@link URI} are considered URIs during serialization, and are
- * 		handled differently depending on the serializer (e.g. <code>HtmlSerializer</code> creates a hyperlink,
- * 		<code>RdfXmlSerializer</code> creates an <code>rdf:resource</code> object, etc...).
+ * By default, instances of {@link URL} and {@link URI} are considered URIs during serialization, and are
+ * 	handled differently depending on the serializer (e.g. <code>HtmlSerializer</code> creates a hyperlink,
+ * 	<code>RdfXmlSerializer</code> creates an <code>rdf:resource</code> object, etc...).
  * <p>
- * 	This annotation allows you to identify other classes that return URIs via <code>toString()</code> as URI objects.
+ * This annotation allows you to identify other classes that return URIs via <code>toString()</code> as URI objects.
  * <p>
- * 	Relative URIs are automatically prepended with {@link SerializerContext#SERIALIZER_absolutePathUriBase} and {@link SerializerContext#SERIALIZER_relativeUriBase}
- * 		during serialization just like relative <code>URIs</code>.
+ * Relative URIs are automatically prepended with {@link SerializerContext#SERIALIZER_absolutePathUriBase} and {@link SerializerContext#SERIALIZER_relativeUriBase}
+ * 	during serialization just like relative <code>URIs</code>.
  * <p>
- * 	This annotation can be applied to classes, interfaces, or bean property methods for fields.
+ * This annotation can be applied to classes, interfaces, or bean property methods for fields.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>

@@ -27,7 +27,7 @@ public class Base extends HtmlElementVoid {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-base-href">href</a> attribute.
 	 * Document base URL.
 	 * @param href The new value for this attribute.
-	 * 	Typically a {@link URL} or {@link String}.
+	 * Typically a {@link URL} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Base href(Object href) {

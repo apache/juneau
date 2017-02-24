@@ -49,7 +49,7 @@ public class Area extends HtmlElementVoid {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-download">download</a> attribute.
 	 * Whether to download the resource instead of navigating to it, and its file name if so.
 	 * @param download The new value for this attribute.
-	 * 	Typically a {@link Boolean} or {@link String}.
+	 * Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Area download(Object download) {
@@ -61,7 +61,7 @@ public class Area extends HtmlElementVoid {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-href">href</a> attribute.
 	 * Address of the hyperlink.
 	 * @param href The new value for this attribute.
-	 * 	Typically a {@link URL} or {@link String}.
+	 * Typically a {@link URL} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Area href(Object href) {

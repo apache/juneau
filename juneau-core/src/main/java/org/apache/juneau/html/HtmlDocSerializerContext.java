@@ -19,8 +19,8 @@ import org.apache.juneau.*;
 /**
  * Properties associated with the {@link HtmlDocSerializer} class.
  * <p>
- * 	These are typically specified via <ja>@RestResource.properties()</ja> and <ja>@RestMethod.properties()</ja> annotations,
- * 		although they can also be set programmatically via the <code>RestResponse.setProperty()</code> method.
+ * These are typically specified via <ja>@RestResource.properties()</ja> and <ja>@RestMethod.properties()</ja> annotations,
+ * 	although they can also be set programmatically via the <code>RestResponse.setProperty()</code> method.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
@@ -35,10 +35,9 @@ import org.apache.juneau.*;
  * 	<jk>public class</jk> AddressBookResource <jk>extends</jk> RestServletJenaDefault {
  * </p>
  * <p>
- * 	The <code>$L{...}</code> variable represent localized strings pulled from the resource bundle identified by the <code>messages</code> annotation.
- * 	These variables are replaced at runtime based on the HTTP request locale.
- * 	Several built-in runtime variable types are defined, and the API can be extended to include user-defined variables.
- * </p>
+ * The <code>$L{...}</code> variable represent localized strings pulled from the resource bundle identified by the <code>messages</code> annotation.
+ * These variables are replaced at runtime based on the HTTP request locale.
+ * Several built-in runtime variable types are defined, and the API can be extended to include user-defined variables.
  *
  * <h5 class='section'>Inherited configurable properties:</h5>
  * <ul class='javahierarchy'>
@@ -66,7 +65,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p>
-	 * 	The <code>AddressBookResource</code> sample class uses this property...
+	 * The <code>AddressBookResource</code> sample class uses this property...
 	 * </p>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
@@ -103,7 +102,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p>
-	 * 	The <code>AddressBookResource</code> sample class uses this property...
+	 * The <code>AddressBookResource</code> sample class uses this property...
 	 * </p>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
@@ -123,7 +122,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * <p>
 	 * 	...to produce this description on the HTML page...
 	 * </p>
-	 *	<img class='bordered' src='doc-files/HTML_DESCRIPTION.png'>
+	 * <img class='bordered' src='doc-files/HTML_DESCRIPTION.png'>
 	 */
 	public static final String HTMLDOC_description = "HtmlSerializer.description";
 
@@ -139,19 +138,19 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * <p>
 	 * Adds a list of hyperlinks immediately under the title and description but above the content of the page.
 	 * <p>
-	 * 	This can be used to provide convenient hyperlinks when viewing the REST interface from a browser.
+	 * This can be used to provide convenient hyperlinks when viewing the REST interface from a browser.
 	 * <p>
-	 * 	The value is a JSON object string where the keys are anchor text and the values are URLs.
+	 * The value is a JSON object string where the keys are anchor text and the values are URLs.
 	 * <p>
-	 * 	Relative URLs are considered relative to the servlet path.
-	 * 	For example, if the servlet path is <js>"http://localhost/myContext/myServlet"</js>, and the
-	 * 		URL is <js>"foo"</js>, the link becomes <js>"http://localhost/myContext/myServlet/foo"</js>.
-	 * 	Absolute (<js>"/myOtherContext/foo"</js>) and fully-qualified (<js>"http://localhost2/foo"</js>) URLs
-	 * 		can also be used.
+	 * Relative URLs are considered relative to the servlet path.
+	 * For example, if the servlet path is <js>"http://localhost/myContext/myServlet"</js>, and the
+	 * 	URL is <js>"foo"</js>, the link becomes <js>"http://localhost/myContext/myServlet/foo"</js>.
+	 * Absolute (<js>"/myOtherContext/foo"</js>) and fully-qualified (<js>"http://localhost2/foo"</js>) URLs
+	 * 	can also be used.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p>
-	 * 	The <code>AddressBookResource</code> sample class uses this property...
+	 * The <code>AddressBookResource</code> sample class uses this property...
 	 * </p>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
@@ -186,8 +185,8 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * <p>
 	 * Adds a link to the specified stylesheet URL.
 	 * <p>
-	 * 	If not specified, defaults to the built-in stylesheet located at <js>"style.css"</js>.
-	 * 	Note that this stylesheet is controlled by the <code><ja>@RestResource</ja>.stylesheet()</code> annotation.
+	 * If not specified, defaults to the built-in stylesheet located at <js>"style.css"</js>.
+	 * Note that this stylesheet is controlled by the <code><ja>@RestResource</ja>.stylesheet()</code> annotation.
 	 */
 	public static final String HTMLDOC_cssUrl = "HtmlDocSerializer.cssUrl";
 

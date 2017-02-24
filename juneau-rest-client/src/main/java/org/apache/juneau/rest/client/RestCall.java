@@ -36,9 +36,9 @@ import org.apache.juneau.utils.*;
 /**
  * Represents a connection to a remote REST resource.
  * <p>
- * 	Instances of this class are created by the various {@code doX()} methods on the {@link RestClient} class.
+ * Instances of this class are created by the various {@code doX()} methods on the {@link RestClient} class.
  * <p>
- * 	This class uses only Java standard APIs.  Requests can be built up using a fluent interface with method chaining, like so...
+ * This class uses only Java standard APIs.  Requests can be built up using a fluent interface with method chaining, like so...
  *
  * <p class='bcode'>
  * 	RestClient client = <jk>new</jk> RestClient();
@@ -46,7 +46,7 @@ import org.apache.juneau.utils.*;
  * 	MyBean b = c.getResponse(MyBean.<jk>class</jk>);
  * </p>
  * <p>
- * 	The actual connection and request/response transaction occurs when calling one of the <code>getResponseXXX()</code> methods.
+ * The actual connection and request/response transaction occurs when calling one of the <code>getResponseXXX()</code> methods.
  *
  * <h5 class='section'>Additional information:</h5>
  * <ul>
@@ -93,13 +93,13 @@ public final class RestCall {
 	 * Sets the input for this REST call.
 	 *
 	 * @param input The input to be sent to the REST resource (only valid for PUT and POST) requests. <br>
-	 * 	Can be of the following types:
-	 * 	<ul class='spaced-list'>
-	 * 		<li>{@link Reader} - Raw contents of {@code Reader} will be serialized to remote resource.
-	 * 		<li>{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
-	 * 		<li>{@link Object} - POJO to be converted to text using the {@link Serializer} registered with the {@link RestClient}.
-	 * 		<li>{@link HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
-	 * 	</ul>
+	 * Can be of the following types:
+	 * <ul class='spaced-list'>
+	 * 	<li>{@link Reader} - Raw contents of {@code Reader} will be serialized to remote resource.
+	 * 	<li>{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
+	 * 	<li>{@link Object} - POJO to be converted to text using the {@link Serializer} registered with the {@link RestClient}.
+	 * 	<li>{@link HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
+	 * </ul>
 	 * @return This object (for method chaining).
 	 * @throws RestCallException If a retry was attempted, but the entity was not repeatable.
 	 */
@@ -133,7 +133,7 @@ public final class RestCall {
 	 * @param retries The number of retries to attempt.
 	 * @param interval The time in milliseconds between attempts.
 	 * @param retryOn Optional object used for determining whether a retry should be attempted.
-	 * 	If <jk>null</jk>, uses {@link RetryOn#DEFAULT}.
+	 * If <jk>null</jk>, uses {@link RetryOn#DEFAULT}.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException If current entity is not repeatable.
 	 */
@@ -485,10 +485,10 @@ public final class RestCall {
 	/**
 	 * Connects to the REST resource.
 	 * <p>
-	 * 	If this is a <code>PUT</code> or <code>POST</code>, also sends the input to the remote resource.<br>
+	 * If this is a <code>PUT</code> or <code>POST</code>, also sends the input to the remote resource.<br>
 	 * <p>
-	 * 	Typically, you would only call this method if you're not interested in retrieving the body of the HTTP response.
-	 * 	Otherwise, you're better off just calling one of the {@link #getReader()}/{@link #getResponse(Class)}/{@link #pipeTo(Writer)}
+	 * Typically, you would only call this method if you're not interested in retrieving the body of the HTTP response.
+	 * Otherwise, you're better off just calling one of the {@link #getReader()}/{@link #getResponse(Class)}/{@link #pipeTo(Writer)}
 	 * 	methods directly which automatically call this method already.
 	 *
 	 * @return This object (for method chaining).
@@ -578,12 +578,12 @@ public final class RestCall {
 	/**
 	 * Connects to the remote resource (if <code>connect()</code> hasn't already been called) and returns the HTTP response message body as a reader.
 	 * <p>
-	 * 	If an {@link Encoder} has been registered with the {@link RestClient}, then the underlying input stream
-	 * 		will be wrapped in the encoded stream (e.g. a <code>GZIPInputStream</code>).
+	 * If an {@link Encoder} has been registered with the {@link RestClient}, then the underlying input stream
+	 * 	will be wrapped in the encoded stream (e.g. a <code>GZIPInputStream</code>).
 	 * <p>
-	 * 	If present, automatically handles the <code>charset</code> value in the <code>Content-Type</code> response header.
+	 * If present, automatically handles the <code>charset</code> value in the <code>Content-Type</code> response header.
 	 * <p>
-	 * 	<b>IMPORTANT:</b>  It is your responsibility to close this reader once you have finished with it.
+	 * <b>IMPORTANT:</b>  It is your responsibility to close this reader once you have finished with it.
 	 *
 	 * @return The HTTP response message body reader.  <jk>null</jk> if response was successful but didn't contain a body (e.g. HTTP 204).
 	 * @throws IOException If an exception occurred while streaming was already occurring.
@@ -681,10 +681,10 @@ public final class RestCall {
 	/**
 	 * Connects to the remote resource (if <code>connect()</code> hasn't already been called) and returns the HTTP response message body as an input stream.
 	 * <p>
-	 * 	If an {@link Encoder} has been registered with the {@link RestClient}, then the underlying input stream
-	 * 		will be wrapped in the encoded stream (e.g. a <code>GZIPInputStream</code>).
+	 * If an {@link Encoder} has been registered with the {@link RestClient}, then the underlying input stream
+	 * 	will be wrapped in the encoded stream (e.g. a <code>GZIPInputStream</code>).
 	 * <p>
-	 * 	<b>IMPORTANT:</b>  It is your responsibility to close this reader once you have finished with it.
+	 * <b>IMPORTANT:</b>  It is your responsibility to close this reader once you have finished with it.
 	 *
 	 * @return The HTTP response message body input stream. <jk>null</jk> if response was successful but didn't contain a body (e.g. HTTP 204).
 	 * @throws IOException If an exception occurred while streaming was already occurring.
@@ -749,21 +749,21 @@ public final class RestCall {
 	 * Same as {@link #getResponse(Class)}, but useful for parsing into maps and collections of specific types.
 	 *
 	 * @param type The class to resolve.
-	 * 	Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link ClassMeta}
-	 * 		<li>{@link Class}
-	 * 		<li>{@link ParameterizedType}
-	 * 		<li>{@link GenericArrayType}
-	 * 	</ul>
+	 * Can be any of the following:
+	 * <ul>
+	 * 	<li>{@link ClassMeta}
+	 * 	<li>{@link Class}
+	 * 	<li>{@link ParameterizedType}
+	 * 	<li>{@link GenericArrayType}
+	 * </ul>
 	 * @param args The type arguments of the class if it's a collection or map.
-	 * 	Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link ClassMeta}
-	 * 		<li>{@link Class}
-	 * 		<li>{@link ParameterizedType}
-	 * 		<li>{@link GenericArrayType}
-	 * 	</ul>
+	 * Can be any of the following:
+	 * <ul>
+	 * 	<li>{@link ClassMeta}
+	 * 	<li>{@link Class}
+	 * 	<li>{@link ParameterizedType}
+	 * 	<li>{@link GenericArrayType}
+	 * </ul>
 	 * @param <T> The class to convert the input to.
 	 * @return The parsed output.
 	 * @throws IOException If a connection error occurred.

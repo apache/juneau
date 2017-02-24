@@ -25,14 +25,14 @@ import org.apache.juneau.internal.*;
 /**
  * Log entry formatter.
  * <p>
- * 	Uses three simple parameter for configuring log entry formats:
- * 	<ul class='spaced-list'>
- * 		<li><code>dateFormat</code> - A {@link SimpleDateFormat} string describing the format for dates.
- * 		<li><code>format</code> - A string with <code>{...}</code> replacement variables representing predefined fields.
- * 		<li><code>useStackTraceHashes</code> - A setting that causes duplicate stack traces to be replaced with 8-character hash strings.
- * 	</ul>
+ * Uses three simple parameter for configuring log entry formats:
+ * <ul class='spaced-list'>
+ * 	<li><code>dateFormat</code> - A {@link SimpleDateFormat} string describing the format for dates.
+ * 	<li><code>format</code> - A string with <code>{...}</code> replacement variables representing predefined fields.
+ * 	<li><code>useStackTraceHashes</code> - A setting that causes duplicate stack traces to be replaced with 8-character hash strings.
+ * </ul>
  * <p>
- * 	This class converts the format strings into a regular expression that can be used to parse the resulting log file.
+ * This class converts the format strings into a regular expression that can be used to parse the resulting log file.
  */
 public class LogEntryFormatter extends Formatter {
 
@@ -46,17 +46,17 @@ public class LogEntryFormatter extends Formatter {
 	 * Create a new formatter.
 	 *
 	 * @param format The log entry format.  e.g. <js>"[{date} {level}] {msg}%n"</js>
-	 * 	The string can contain any of the following variables:
-	 * 		<ol>
-	 * 			<li><js>"{date}"</js> - The date, formatted per <js>"Logging/dateFormat"</js>.
-	 * 			<li><js>"{class}"</js> - The class name.
-	 * 			<li><js>"{method}"</js> - The method name.
-	 * 			<li><js>"{logger}"</js> - The logger name.
-	 * 			<li><js>"{level}"</js> - The log level name.
-	 * 			<li><js>"{msg}"</js> - The log message.
-	 * 			<li><js>"{threadid}"</js> - The thread ID.
-	 * 			<li><js>"{exception}"</js> - The localized exception message.
-	 *		</ol>
+	 * The string can contain any of the following variables:
+	 * <ol>
+	 * 	<li><js>"{date}"</js> - The date, formatted per <js>"Logging/dateFormat"</js>.
+	 * 	<li><js>"{class}"</js> - The class name.
+	 * 	<li><js>"{method}"</js> - The method name.
+	 * 	<li><js>"{logger}"</js> - The logger name.
+	 * 	<li><js>"{level}"</js> - The log level name.
+	 * 	<li><js>"{msg}"</js> - The log message.
+	 * 	<li><js>"{threadid}"</js> - The thread ID.
+	 * 	<li><js>"{exception}"</js> - The localized exception message.
+	 * </ol>
 	 * @param dateFormat The {@link SimpleDateFormat} format to use for dates.  e.g. <js>"yyyy.MM.dd hh:mm:ss"</js>.
 	 * @param useStackTraceHashes If <jk>true</jk>, only print unique stack traces once and then refer to them by a
 	 * 	simple 8 character hash identifier.
@@ -202,7 +202,7 @@ public class LogEntryFormatter extends Formatter {
 	 * 		<li><js>"msg"</js>
 	 * 		<li><js>"threadid"</js>
 	 * 		<li><js>"exception"</js>
-	 *	</ul>
+	 * 	</ul>
 	 * @param m The matcher.
 	 * @return The field value, or <jk>null</jk> if the specified field does not exist.
 	 */

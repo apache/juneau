@@ -29,19 +29,19 @@ import org.apache.juneau.soap.*;
  *
  * <h5 class='section'>Description:</h5>
  * <p>
- * 	Base serializer class that serves as the parent class for all serializers.
+ * Base serializer class that serves as the parent class for all serializers.
  * <p>
- * 	Subclasses should extend directly from {@link OutputStreamSerializer} or {@link WriterSerializer}.
+ * Subclasses should extend directly from {@link OutputStreamSerializer} or {@link WriterSerializer}.
  *
  * <h6 class='topic'>@Produces annotation</h6>
  * <p>
- * 	The media types that this serializer can produce is specified through the {@link Produces @Produces} annotation.
+ * The media types that this serializer can produce is specified through the {@link Produces @Produces} annotation.
  * <p>
- * 	However, the media types can also be specified programmatically by overriding the {@link #getMediaTypes()}
- * 		and {@link #getResponseContentType()} methods.
+ * However, the media types can also be specified programmatically by overriding the {@link #getMediaTypes()}
+ * 	and {@link #getResponseContentType()} methods.
  *
  * <h5 class='section'>Configurable properties:</h5>
- * 	See {@link SerializerContext} for a list of configurable properties that can be set on this class
+ * See {@link SerializerContext} for a list of configurable properties that can be set on this class
  * 	using the {@link #setProperty(String, Object)} method.
  */
 public abstract class Serializer extends CoreApi {
@@ -81,7 +81,7 @@ public abstract class Serializer extends CoreApi {
 	 * <p>
 	 * This method should NOT close the context object.
 	 * @param session The serializer session object return by {@link #createSession(Object, ObjectMap, Method, Locale, TimeZone, MediaType)}.<br>
-	 * 	If <jk>null</jk>, session is created using {@link #createSession(Object)}.
+	 * If <jk>null</jk>, session is created using {@link #createSession(Object)}.
 	 * @param o The object to serialize.
 	 *
 	 * @throws Exception If thrown from underlying stream, or if the input contains a syntax error or is malformed.
@@ -109,7 +109,7 @@ public abstract class Serializer extends CoreApi {
 	 * Serialize the specified object using the specified session.
 	 *
 	 * @param session The serializer session object return by {@link #createSession(Object, ObjectMap, Method, Locale, TimeZone, MediaType)}.<br>
-	 * 	If <jk>null</jk>, session is created using {@link #createSession(Object)}.
+	 * If <jk>null</jk>, session is created using {@link #createSession(Object)}.
 	 * @param o The object to serialize.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
@@ -155,7 +155,7 @@ public abstract class Serializer extends CoreApi {
 	/**
 	 * Create the session object that will be passed in to the serialize method.
 	 * <p>
-	 * 	It's up to implementers to decide what the session object looks like, although typically
+	 * It's up to implementers to decide what the session object looks like, although typically
 	 * 	it's going to be a subclass of {@link SerializerSession}.
 	 *
 	 * @param output The output object.
@@ -172,12 +172,12 @@ public abstract class Serializer extends CoreApi {
 	 * 	</ul>
 	 * @param op Optional additional properties.
 	 * @param javaMethod Java method that invoked this serializer.
-	 * 	When using the REST API, this is the Java method invoked by the REST call.
-	 * 	Can be used to access annotations defined on the method or class.
+	 * When using the REST API, this is the Java method invoked by the REST call.
+	 * Can be used to access annotations defined on the method or class.
 	 * @param locale The session locale.
-	 * 	If <jk>null</jk>, then the locale defined on the context is used.
+	 * If <jk>null</jk>, then the locale defined on the context is used.
 	 * @param timeZone The session timezone.
-	 * 	If <jk>null</jk>, then the timezone defined on the context is used.
+	 * If <jk>null</jk>, then the timezone defined on the context is used.
 	 * @param mediaType The session media type (e.g. <js>"application/json"</js>).
 	 * @return The new session.
 	 */
@@ -211,9 +211,9 @@ public abstract class Serializer extends CoreApi {
 	/**
 	 * Converts the contents of the specified object array to a list.
 	 * <p>
-	 * 	Works on both object and primitive arrays.
+	 * Works on both object and primitive arrays.
 	 * <p>
-	 * 	In the case of multi-dimensional arrays, the outgoing list will
+	 * In the case of multi-dimensional arrays, the outgoing list will
 	 * 	contain elements of type n-1 dimension.  i.e. if {@code type} is <code><jk>int</jk>[][]</code>
 	 * 	then {@code list} will have entries of type <code><jk>int</jk>[]</code>.
 	 *
@@ -256,14 +256,14 @@ public abstract class Serializer extends CoreApi {
 	/**
 	 * Optional method that specifies HTTP request headers for this serializer.
 	 * <p>
-	 * 	For example, {@link SoapXmlSerializer} needs to set a <code>SOAPAction</code> header.
+	 * For example, {@link SoapXmlSerializer} needs to set a <code>SOAPAction</code> header.
 	 * <p>
-	 * 	This method is typically meaningless if the serializer is being used standalone (i.e. outside of a REST server or client).
+	 * This method is typically meaningless if the serializer is being used standalone (i.e. outside of a REST server or client).
 	 *
 	 * @param properties Optional run-time properties (the same that are passed to {@link WriterSerializer#doSerialize(SerializerSession, Object)}.
-	 * 	Can be <jk>null</jk>.
+	 * Can be <jk>null</jk>.
 	 * @return The HTTP headers to set on HTTP requests.
-	 * 	Can be <jk>null</jk>.
+	 * Can be <jk>null</jk>.
 	 */
 	public ObjectMap getResponseHeaders(ObjectMap properties) {
 		return ObjectMap.EMPTY_MAP;
@@ -272,12 +272,12 @@ public abstract class Serializer extends CoreApi {
 	/**
 	 * Optional method that returns the response <code>Content-Type</code> for this serializer if it is different from the matched media type.
 	 * <p>
-	 * 	This method is specified to override the content type for this serializer.
-	 * 	For example, the {@link org.apache.juneau.json.JsonSerializer.Simple} class returns that it handles media type <js>"text/json+simple"</js>, but returns
+	 * This method is specified to override the content type for this serializer.
+	 * For example, the {@link org.apache.juneau.json.JsonSerializer.Simple} class returns that it handles media type <js>"text/json+simple"</js>, but returns
 	 * 	<js>"text/json"</js> as the actual content type.
-	 * 	This allows clients to request specific 'flavors' of content using specialized <code>Accept</code> header values.
+	 * This allows clients to request specific 'flavors' of content using specialized <code>Accept</code> header values.
 	 * <p>
-	 * 	This method is typically meaningless if the serializer is being used standalone (i.e. outside of a REST server or client).
+	 * This method is typically meaningless if the serializer is being used standalone (i.e. outside of a REST server or client).
 	 *
 	 * @return The response content type.  If <jk>null</jk>, then the matched media type is used.
 	 */
@@ -570,7 +570,7 @@ public abstract class Serializer extends CoreApi {
 	 * <ul>
 	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>SERIALIZER_trimEmptyMaps</jsf>, value)</code>.
 	 * 	<li>Enabling this setting has the following effects on parsing:
-	 *		<ul>
+	 * 	<ul>
 	 * 		<li>Bean properties with empty map values will not be set.
 	 * 	</ul>
 	 * </ul>
@@ -626,7 +626,7 @@ public abstract class Serializer extends CoreApi {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <table class='styled'>
-	 *		<tr><th>SERIALIZER_relativeUriBase</th><th>URI</th><th>Serialized URI</th></tr>
+	 * 	<tr><th>SERIALIZER_relativeUriBase</th><th>URI</th><th>Serialized URI</th></tr>
 	 * 	<tr>
 	 * 		<td><code>http://foo:9080/bar/baz</code></td>
 	 * 		<td><code>mywebapp</code></td>

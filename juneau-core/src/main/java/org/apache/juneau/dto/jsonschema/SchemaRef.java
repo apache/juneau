@@ -17,7 +17,7 @@ import java.net.*;
 /**
  * Convenience class for representing a schema reference such as <js>"{'$ref':'/url/to/ref'}"</js>.
  * <p>
- * 	An instance of this object is equivalent to calling...
+ * An instance of this object is equivalent to calling...
  *
  * <p class='bcode'>
  * 	Schema s = <jk>new</jk> Schema().setRef(uri);

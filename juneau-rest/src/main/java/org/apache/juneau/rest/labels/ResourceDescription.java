@@ -33,10 +33,10 @@ public final class ResourceDescription extends NameDescription implements Compar
 	 * Constructor.
 	 *
 	 * @param rootUrl The root URI of the child resource (e.g. the URI of the parent resource).
-	 * 		Must not end with <js>'/'</js>.
-	 * 		Must be URL-Encoded.
+	 * Must not end with <js>'/'</js>.
+	 * Must be URL-Encoded.
 	 * @param name The name of the child resource.
-	 * 		This will be URL-encoded and appended onto the root URL to create the hyperlink for the resource.
+	 * This will be URL-encoded and appended onto the root URL to create the hyperlink for the resource.
 	 * @param description The description of the child resource.
 	 */
 	public ResourceDescription(String rootUrl, String name, String description) {

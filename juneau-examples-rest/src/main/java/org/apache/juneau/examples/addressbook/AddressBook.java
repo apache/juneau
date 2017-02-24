@@ -19,7 +19,7 @@ import java.util.*;
 import org.apache.juneau.annotation.*;
 
 /**
- *  Address book bean
+ * Address book bean
  */
 @Bean(typeName="addressBook")
 public class AddressBook extends LinkedList<Person> implements IAddressBook {

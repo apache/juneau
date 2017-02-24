@@ -35,16 +35,16 @@ import org.apache.juneau.utils.*;
  * about that class.
  *
  * <p>
- * 	Instances of this class can be created through the {@link BeanContext#getClassMeta(Class)} method.
+ * Instances of this class can be created through the {@link BeanContext#getClassMeta(Class)} method.
  * <p>
- * 	The {@link BeanContext} class will cache and reuse instances of this class except for the following class types:
+ * The {@link BeanContext} class will cache and reuse instances of this class except for the following class types:
  * <ul>
  * 	<li>Arrays
  * 	<li>Maps with non-Object key/values.
  * 	<li>Collections with non-Object key/values.
  * </ul>
  * <p>
- * 	This class is tied to the {@link BeanContext} class because it's that class that makes the determination
+ * This class is tied to the {@link BeanContext} class because it's that class that makes the determination
  * 	of what is a bean.
  *
  * @param <T> The class type of the wrapped class.
@@ -121,16 +121,16 @@ public final class ClassMeta<T> implements Type {
 	 * @param innerClass The class being wrapped.
 	 * @param beanContext The bean context that created this object.
 	 * @param implClass For interfaces and abstract classes, this represents the "real" class to instantiate.
-	 * 	Can be <jk>null</jk>.
+	 * Can be <jk>null</jk>.
 	 * @param beanFilter The {@link BeanFilter} programmatically associated with this class.
-	 * 	Can be <jk>null</jk>.
+	 * Can be <jk>null</jk>.
 	 * @param pojoSwap The {@link PojoSwap} programmatically associated with this class.
-	 * 	Can be <jk>null</jk>.
+	 * Can be <jk>null</jk>.
 	 * @param childPojoSwap The child {@link PojoSwap PojoSwaps} programmatically associated with this class.
-	 * 	These are the <code>PojoSwaps</code> that have normal classes that are subclasses of this class.
-	 * 	Can be <jk>null</jk>.
+	 * These are the <code>PojoSwaps</code> that have normal classes that are subclasses of this class.
+	 * Can be <jk>null</jk>.
 	 * @param delayedInit Don't call init() in constructor.
-	 * 	Used for delayed initialization when the possibility of class reference loops exist.
+	 * Used for delayed initialization when the possibility of class reference loops exist.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	ClassMeta(Class<T> innerClass, BeanContext beanContext, Class<? extends T> implClass, BeanFilter beanFilter, PojoSwap<T,?> pojoSwap, PojoSwap<?,?>[] childPojoSwaps) {
@@ -629,7 +629,7 @@ public final class ClassMeta<T> implements Type {
 	 * Returns the resolved bean dictionary name associated with this class.
 	 * <p>
 	 * Unlike {@link #getDictionaryName()}, this method automatically resolves multidimensional arrays
-	 *  (e.g. <js>"X^^"</js> and returns array class metas accordingly if the base class has a type name.
+	 * (e.g. <js>"X^^"</js> and returns array class metas accordingly if the base class has a type name.
 	 *
 	 * @return The type name associated with this bean class, or <jk>null</jk> if there is no type name defined or this isn't a bean.
 	 */
@@ -1026,7 +1026,7 @@ public final class ClassMeta<T> implements Type {
 	/**
 	 * Returns <jk>true</jk> if instance of this object can be <jk>null</jk>.
 	 * <p>
-	 * 	Objects can be <jk>null</jk>, but primitives cannot, except for chars which can be represented
+	 * Objects can be <jk>null</jk>, but primitives cannot, except for chars which can be represented
 	 * 	by <code>(<jk>char</jk>)0</code>.
 	 *
 	 * @return <jk>true</jk> if instance of this class can be null.

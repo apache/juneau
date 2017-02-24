@@ -26,25 +26,25 @@ import org.apache.juneau.xml.annotation.*;
  *
  * <h5 class='section'>Description:</h5>
  * <p>
- * 	A wrapper that wraps Java bean instances inside of a {@link Map} interface that allows
+ * A wrapper that wraps Java bean instances inside of a {@link Map} interface that allows
  * 	properties on the wrapped object can be accessed using the {@link Map#get(Object) get()} and {@link Map#put(Object,Object) put()} methods.
  * <p>
- * 	Use the {@link BeanContext} class to create instances of this class.
+ * Use the {@link BeanContext} class to create instances of this class.
  *
  * <h6 class='topic'>Bean property order</h6>
  * <p>
- * 	The order of the properties returned by the {@link Map#keySet() keySet()} and {@link Map#entrySet() entrySet()} methods are as follows:
- * 	<ul class='spaced-list'>
- * 		<li>If {@link Bean @Bean} annotation is specified on class, then the order is the same as the list of properties in the annotation.
- * 		<li>If {@link Bean @Bean} annotation is not specified on the class, then the order is the same as that returned
- * 			by the {@link java.beans.BeanInfo} class (i.e. ordered by definition in the class).
- * 	</ul>
- * 	<br>
- * 	The order can also be overridden through the use of a {@link BeanFilter}.
+ * The order of the properties returned by the {@link Map#keySet() keySet()} and {@link Map#entrySet() entrySet()} methods are as follows:
+ * <ul class='spaced-list'>
+ * 	<li>If {@link Bean @Bean} annotation is specified on class, then the order is the same as the list of properties in the annotation.
+ * 	<li>If {@link Bean @Bean} annotation is not specified on the class, then the order is the same as that returned
+ * 		by the {@link java.beans.BeanInfo} class (i.e. ordered by definition in the class).
+ * </ul>
+ * <br>
+ * The order can also be overridden through the use of a {@link BeanFilter}.
  *
  * <h6 class='topic'>POJO swaps</h6>
  * <p>
- * 	If {@link PojoSwap PojoSwaps} are defined on the class types of the properties of this bean or the bean properties themselves, the
+ * If {@link PojoSwap PojoSwaps} are defined on the class types of the properties of this bean or the bean properties themselves, the
  * 	{@link #get(Object)} and {@link #put(String, Object)} methods will automatically
  * 	transform the property value to and from the serialized form.
  *
@@ -134,7 +134,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * 	defined by the {@link BeanConstructor} annotation.
 	 * <p>
 	 * This method does NOT always return the bean in it's final state.
-	 * 	Array properties temporary stored as ArrayLists are not finalized
+	 * Array properties temporary stored as ArrayLists are not finalized
 	 * 	until the {@link #getBean()} method is called.
 	 *
 	 * @param create If bean hasn't been instantiated yet, then instantiate it.
@@ -188,13 +188,13 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * @param property The name of the property to set.
 	 * @param value The value to set the property to.
 	 * @return If the bean context setting {@code beanMapPutReturnsOldValue} is <jk>true</jk>, then the old value of the property is returned.
-	 * 		Otherwise, this method always returns <jk>null</jk>.
+	 * Otherwise, this method always returns <jk>null</jk>.
 	 * @throws RuntimeException if any of the following occur.
-	 * 	<ul class='spaced-list'>
-	 * 		<li>BeanMapEntry does not exist on the underlying object.
-	 * 		<li>Security settings prevent access to the underlying object setter method.
-	 * 		<li>An exception occurred inside the setter method.
-	 * 	</ul>
+	 * <ul class='spaced-list'>
+	 * 	<li>BeanMapEntry does not exist on the underlying object.
+	 * 	<li>Security settings prevent access to the underlying object setter method.
+	 * 	<li>An exception occurred inside the setter method.
+	 * </ul>
 	 */
 	@Override /* Map */
 	public Object put(String property, Object value) {
@@ -217,7 +217,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	/**
 	 * Add a value to a collection or array property.
 	 * <p>
-	 * 	As a general rule, adding to arrays is not recommended since the array must be recreate each time
+	 * As a general rule, adding to arrays is not recommended since the array must be recreate each time
 	 * 	this method is called.
 	 *
 	 * @param property Property name or child-element name (if {@link Xml#childName()} is specified).
@@ -281,7 +281,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	/**
 	 * Convenience method for setting multiple property values by passing in JSON (or other) text.
 	 * <p>
-	 * 	Typically the input is going to be JSON, although the actual data type
+	 * Typically the input is going to be JSON, although the actual data type
 	 * 	depends on the default parser specified by the {@link BeanContext#BEAN_defaultParser} property
 	 * 	value on the config that created the context that created this map.
 	 *
@@ -330,7 +330,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	/**
 	 * Returns the names of all properties associated with the bean.
 	 * <p>
-	 * 	The returned set is unmodifiable.
+	 * The returned set is unmodifiable.
 	 */
 	@Override /* Map */
 	public Set<String> keySet() {
@@ -340,11 +340,11 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	/**
 	 * Returns the specified property on this bean map.
 	 * <p>
-	 * 	Allows you to get and set an individual property on a bean without having a
+	 * Allows you to get and set an individual property on a bean without having a
 	 * 	handle to the bean itself by using the {@link BeanMapEntry#getValue()}
 	 * 	and {@link BeanMapEntry#setValue(Object)} methods.
 	 * <p>
-	 * 	This method can also be used to get metadata on a property by
+	 * This method can also be used to get metadata on a property by
 	 * 	calling the {@link BeanMapEntry#getMeta()} method.
 	 *
 	 * @param propertyName The name of the property to look up.
@@ -383,10 +383,10 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * This allows a snapshot of all values to be grabbed from a bean in one call.
 	 *
 	 * @param ignoreNulls
-	 * 	Don't return properties whose values are null.
+	 * Don't return properties whose values are null.
 	 * @param prependVals
-	 * 	Additional bean property values to prepended to this list.
-	 * 	Any <jk>null</jk> values in this list will be ignored.
+	 * Additional bean property values to prepended to this list.
+	 * Any <jk>null</jk> values in this list will be ignored.
 	 * @return The list of all bean property values.
 	 */
 	public List<BeanPropertyValue> getValues(final boolean ignoreNulls, BeanPropertyValue...prependVals) {

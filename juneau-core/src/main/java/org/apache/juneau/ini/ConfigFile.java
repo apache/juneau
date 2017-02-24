@@ -396,8 +396,8 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Adds or replaces an entry with the specified key with a POJO serialized to a string using the registered serializer.
-	 *	<p>
-	 *	Equivalent to calling <code>put(key, value, isEncoded(key))</code>.
+	 * <p>
+	 * Equivalent to calling <code>put(key, value, isEncoded(key))</code>.
 	 *
 	 * @param key The key.  See {@link #getString(String)} for a description of the key.
 	 * @param value The new value POJO.
@@ -423,7 +423,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 *
 	 * @param key The key.  See {@link #getString(String)} for a description of the key.
 	 * @param value The new value.
-	 *	@param encoded If <jk>true</jk>, value is encoded by the registered encoder when the config file is persisted to disk.
+	 * @param encoded If <jk>true</jk>, value is encoded by the registered encoder when the config file is persisted to disk.
 	 * @return The previous value, or <jk>null</jk> if the section or key did not previously exist.
 	 * @throws SerializeException If serializer could not serialize the value or if a serializer is not registered with this config file.
 	 * @throws UnsupportedOperationException If config file is read only.
@@ -483,7 +483,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 	/**
 	 * Copies the entries in a section to the specified bean by calling the public setters on that bean.
 	 *
-	 *	@param sectionName The section name to write from.
+	 * @param sectionName The section name to write from.
 	 * @param bean The bean to set the properties on.
 	 * @param ignoreUnknownProperties If <jk>true</jk>, don't throw an {@link IllegalArgumentException} if this section
 	 * 	contains a key that doesn't correspond to a setter method.
@@ -542,7 +542,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 	/**
 	 * Converts this config file section to the specified bean instance.
 	 *
-	 *	@param sectionName The section name to write from.
+	 * @param sectionName The section name to write from.
 	 * @param c The bean class to create.
 	 * @param ignoreUnknownProperties If <jk>false</jk>, throws a {@link ParseException} if
 	 * 	the section contains an entry that isn't a bean property name.
@@ -716,9 +716,9 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Returns a wrapped instance of this config file where calls to getters have their values
-	 * 	first resolved by a default {@link VarResolver}.
+	 * first resolved by a default {@link VarResolver}.
 	 *
-	 *  The default {@link VarResolver} is registered with the following {@link Var StringVars}:
+	 * The default {@link VarResolver} is registered with the following {@link Var StringVars}:
 	 * <ul class='spaced-list'>
 	 * 	<li><code>$S{key}</code>,<code>$S{key,default}</code> - System properties.
 	 * 	<li><code>$E{key}</code>,<code>$E{key,default}</code> - Environment variables.

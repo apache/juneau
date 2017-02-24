@@ -26,7 +26,7 @@ public class TestMicroservice {
 	/**
 	 * Starts the microservice.
 	 * @return <jk>true</jk> if the service started, <jk>false</jk> if it's already started.
-	 * 	If this returns <jk>false</jk> then don't call stopMicroservice()!.
+	 * If this returns <jk>false</jk> then don't call stopMicroservice()!.
 	 */
 	public static boolean startMicroservice() {
 		if (microservice != null)

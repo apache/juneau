@@ -17,7 +17,7 @@ package org.apache.juneau;
  * <p>
  * <b>*** Internal Interface - Not intended for external use ***</b>
  * <p>
- * 	For example, {@link BeanMap} is a map representation of a bean.
+ * For example, {@link BeanMap} is a map representation of a bean.
  *
  * @param <T> The represented class type.
  */

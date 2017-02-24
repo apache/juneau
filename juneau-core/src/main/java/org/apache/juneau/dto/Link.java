@@ -21,12 +21,12 @@ import org.apache.juneau.utils.*;
 /**
  * Simple bean that implements a hyperlink for the HTML serializer.
  * <p>
- * 	The name and url properties correspond to the following parts of a hyperlink in an HTML document...
+ * The name and url properties correspond to the following parts of a hyperlink in an HTML document...
  * <p class='bcode'>
  * 	<xt>&lt;a</xt> <xa>href</xa>=<xs>'href'</xs><xt>&gt;</xt>name<xt>&lt;/a&gt;</xt>
  * <p>
- * 	When encountered by the {@link HtmlSerializer} class, this object gets converted to a hyperlink.<br>
- * 	All other serializers simply convert it to a simple bean.
+ * When encountered by the {@link HtmlSerializer} class, this object gets converted to a hyperlink.<br>
+ * All other serializers simply convert it to a simple bean.
  */
 @HtmlLink(nameProperty = "name", hrefProperty = "href")
 public class Link implements Comparable<Link> {

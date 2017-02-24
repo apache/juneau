@@ -27,7 +27,7 @@ public class Source extends HtmlElementVoid {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-source-src">src</a> attribute.
 	 * Address of the resource.
 	 * @param src The new value for this attribute.
-	 * 	Typically a {@link URL} or {@link String}.
+	 * Typically a {@link URL} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Source src(Object src) {

@@ -88,9 +88,9 @@ public @interface Parameter {
 	/**
 	 * The schema defining the type used for the body parameter.
 	 * <p>
-	 * 	Only applicable for <code>in</code> of type <js>"body"</js>.
+	 * Only applicable for <code>in</code> of type <js>"body"</js>.
 	 * <p>
-	 * 	The schema is a JSON object specified <a class="doclink" href="http://swagger.io/specification/#schemaObject">here</a>.
+	 * The schema is a JSON object specified <a class="doclink" href="http://swagger.io/specification/#schemaObject">here</a>.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>

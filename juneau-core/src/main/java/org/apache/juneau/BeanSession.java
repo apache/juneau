@@ -45,13 +45,13 @@ public class BeanSession extends Session {
 	 * Create a new session using properties specified in the context.
 	 *
 	 * @param op The override properties.
-	 * 	These override any context properties defined in the context.
+	 * These override any context properties defined in the context.
 	 * @param ctx The context creating this session object.
-	 * 	The context contains all the configuration settings for this object.
+	 * The context contains all the configuration settings for this object.
 	 * @param locale The session locale.
-	 * 	If <jk>null</jk>, then the locale defined on the context is used.
+	 * If <jk>null</jk>, then the locale defined on the context is used.
 	 * @param timeZone The session timezone.
-	 * 	If <jk>null</jk>, then the timezone defined on the context is used.
+	 * If <jk>null</jk>, then the timezone defined on the context is used.
 	 * @param mediaType The session media type (e.g. <js>"application/json"</js>).
 	 */
 	protected BeanSession(BeanContext ctx, ObjectMap op, Locale locale, TimeZone timeZone, MediaType mediaType) {
@@ -124,7 +124,7 @@ public class BeanSession extends Session {
 	/**
 	 * Converts the specified value to the specified class type.
 	 * <p>
-	 * 	See {@link #convertToType(Object, ClassMeta)} for the list of valid conversions.
+	 * See {@link #convertToType(Object, ClassMeta)} for the list of valid conversions.
 	 *
 	 * @param <T> The class type to convert the value to.
 	 * @param value The value to convert.
@@ -145,7 +145,7 @@ public class BeanSession extends Session {
 	 *
 	 * @param <T> The class type to convert the value to.
 	 * @param outer If class is a member class, this is the instance of the containing class.
-	 * 	Should be <jk>null</jk> if not a member class.
+	 * Should be <jk>null</jk> if not a member class.
 	 * @param value The value to convert.
 	 * @param type The class type to convert the value to.
 	 * @throws InvalidDataConversionException If the specified value cannot be converted to the specified type.
@@ -158,10 +158,10 @@ public class BeanSession extends Session {
 	/**
 	 * Casts the specified value into the specified type.
 	 * <p>
-	 * 	If the value isn't an instance of the specified type, then converts
+	 * If the value isn't an instance of the specified type, then converts
 	 * 	the value if possible.<br>
 	 * <p>
-	 * 	The following conversions are valid:
+	 * The following conversions are valid:
 	 * 	<table class='styled'>
 	 * 		<tr><th>Convert to type</th><th>Valid input value types</th><th>Notes</th></tr>
 	 * 		<tr>
@@ -298,7 +298,7 @@ public class BeanSession extends Session {
 	 *
 	 * @param <T> The class type to convert the value to.
 	 * @param outer If class is a member class, this is the instance of the containing class.
-	 * 	Should be <jk>null</jk> if not a member class.
+	 * Should be <jk>null</jk> if not a member class.
 	 * @param value The value to convert.
 	 * @param type The class type to convert the value to.
 	 * @throws InvalidDataConversionException If the specified value cannot be converted to the specified type.
@@ -583,9 +583,9 @@ public class BeanSession extends Session {
 	/**
 	 * Converts the contents of the specified list into an array.
 	 * <p>
-	 * 	Works on both object and primitive arrays.
+	 * Works on both object and primitive arrays.
 	 * <p>
-	 * 	In the case of multi-dimensional arrays, the incoming list must
+	 * In the case of multi-dimensional arrays, the incoming list must
 	 * 	contain elements of type n-1 dimension.  i.e. if {@code type} is <code><jk>int</jk>[][]</code>
 	 * 	then {@code list} must have entries of type <code><jk>int</jk>[]</code>.
 	 *
@@ -621,7 +621,7 @@ public class BeanSession extends Session {
 	/**
 	 * Wraps an object inside a {@link BeanMap} object (i.e. a modifiable {@link Map}).
 	 * <p>
-	 * 	If object is not a true bean, then throws a {@link BeanRuntimeException} with an explanation of why it's not a bean.
+	 * If object is not a true bean, then throws a {@link BeanRuntimeException} with an explanation of why it's not a bean.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -663,7 +663,7 @@ public class BeanSession extends Session {
 	 * Wraps an object inside a {@link BeanMap} object (i.e.: a modifiable {@link Map})
 	 * defined as a bean for one of its class, a super class, or an implemented interface.
 	 * <p>
-	 * 	If object is not a true bean, throws a {@link BeanRuntimeException} with an explanation of why it's not a bean.
+	 * If object is not a true bean, throws a {@link BeanRuntimeException} with an explanation of why it's not a bean.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -701,7 +701,7 @@ public class BeanSession extends Session {
 	/**
 	 * Creates a new {@link BeanMap} object (i.e. a modifiable {@link Map}) of the given class with uninitialized property values.
 	 * <p>
-	 * 	If object is not a true bean, then throws a {@link BeanRuntimeException} with an explanation of why it's not a bean.
+	 * If object is not a true bean, then throws a {@link BeanRuntimeException} with an explanation of why it's not a bean.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -724,7 +724,7 @@ public class BeanSession extends Session {
 	 * @param <T> The class of the object being wrapped.
 	 * @param c The name of the class to create a new instance of.
 	 * @param outer If class is a member class, this is the instance of the containing class.
-	 * 	Should be <jk>null</jk> if not a member class.
+	 * Should be <jk>null</jk> if not a member class.
 	 * @return A new instance of the class.
 	 */
 	public final <T> BeanMap<T> newBeanMap(Object outer, Class<T> c) {
@@ -763,7 +763,7 @@ public class BeanSession extends Session {
 	 * @param <T> The class type of the bean being created.
 	 * @param c The class type of the bean being created.
 	 * @param outer If class is a member class, this is the instance of the containing class.
-	 * 	Should be <jk>null</jk> if not a member class.
+	 * Should be <jk>null</jk> if not a member class.
 	 * @return A new bean object.
 	 * @throws BeanRuntimeException If the specified class is not a valid bean.
 	 */

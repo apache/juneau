@@ -27,10 +27,10 @@ import org.apache.juneau.utils.*;
 /**
  * Java implementation of a JSON object.
  * <p>
- * 	An extension of {@link LinkedHashMap}, so all methods available in that class are also available
+ * An extension of {@link LinkedHashMap}, so all methods available in that class are also available
  * 	to this class.
  * <p>
- * 	Note that the use of this class is optional.  The serializers will accept any objects that implement
+ * Note that the use of this class is optional.  The serializers will accept any objects that implement
  * 	the {@link java.util.Map} interface.  But this class provides some useful additional functionality
  * 	when working with JSON models constructed from Java Collections Framework objects.  For example, a
  * 	constructor is provided for converting a JSON object string directly into a {@link Map}.  It also contains
@@ -94,8 +94,7 @@ import org.apache.juneau.utils.*;
  * 	<jk>int</jk> a = m2.getInt(<js>"a"</js>);  <jc>// a == 1 </jc>
  * </p>
  * <p>
- * 	This class is not thread safe.
- * </p>
+ * This class is not thread safe.
  */
 public class ObjectMap extends LinkedHashMap<String,Object> {
 	private static final long serialVersionUID = 1L;
@@ -238,7 +237,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * </p>
 	 *
 	 * @param inner The inner map.
-	 * 	Can be <jk>null</jk> to remove the inner map from an existing map.
+	 * Can be <jk>null</jk> to remove the inner map from an existing map.
 	 * @return This object (for method chaining).
 	 */
 	public ObjectMap setInner(ObjectMap inner) {
@@ -296,7 +295,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	/**
 	 * Convenience method for adding multiple objects to this map.
 	 * <p>
-	 * 	Equivalent to calling {@code put(key, value)}, but returns
+	 * Equivalent to calling {@code put(key, value)}, but returns
 	 * 	this map so that the method can be chained.
 	 *
 	 * @param key The key.
@@ -311,7 +310,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	/**
 	 * Convenience method for adding a contents of another map to this map.
 	 * <p>
-	 * 	Equivalent to calling {@code putAll(m)}, but returns
+	 * Equivalent to calling {@code putAll(m)}, but returns
 	 * 	this map so that the method can be chained.
 	 *
 	 * @param m The map whose contents should be added to this map.
@@ -346,7 +345,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	/**
 	 * Same as {@link Map#get(Object) get()}, but casts or converts the value to the specified class type.
 	 * <p>
-	 * 	See {@link BeanSession#convertToType(Object, ClassMeta)} for the list of valid data conversions.
+	 * See {@link BeanSession#convertToType(Object, ClassMeta)} for the list of valid data conversions.
 	 *
 	 * @param <T> The class type.
 	 * @param type The class type.
@@ -378,7 +377,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	/**
 	 * Same as {@link Map#get(Object) get()}, but casts or converts the value to the specified class type.
 	 * <p>
-	 * 	See {@link BeanSession#convertToType(Object, ClassMeta)} for the list of valid data conversions.
+	 * See {@link BeanSession#convertToType(Object, ClassMeta)} for the list of valid data conversions.
 	 *
 	 * @param <T> The class type.
 	 * @param type The class type.
@@ -399,7 +398,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	/**
 	 * Same as {@link Map#get(Object) get()}, but casts or converts the value to the specified class type.
 	 * <p>
-	 * 	See {@link BeanSession#convertToType(Object, ClassMeta)} for the list of valid data conversions.
+	 * See {@link BeanSession#convertToType(Object, ClassMeta)} for the list of valid data conversions.
 	 *
 	 * @param <T> The class type.
 	 * @param type The class type.
@@ -413,7 +412,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	/**
 	 * Same as {@link Map#get(Object) get()}, but casts or converts the value to the specified class type.
 	 * <p>
-	 * 	See {@link BeanSession#convertToType(Object, ClassMeta)} for the list of valid data conversions.
+	 * See {@link BeanSession#convertToType(Object, ClassMeta)} for the list of valid data conversions.
 	 *
 	 * @param <T> The class type.
 	 * @param type The class type.
@@ -444,9 +443,9 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	/**
 	 * Returns the value for the first key in the list that has an entry in this map.
 	 * <p>
-	 * 	Casts or converts the value to the specified class type.
+	 * Casts or converts the value to the specified class type.
 	 * <p>
-	 * 	See {@link BeanSession#convertToType(Object, ClassMeta)} for the list of valid data conversions.
+	 * See {@link BeanSession#convertToType(Object, ClassMeta)} for the list of valid data conversions.
 	 *
 	 * @param type The class type to convert the value to.
 	 * @param <T> The class type to convert the value to.
@@ -464,7 +463,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * Same as {@link #get(Class,String) get(Class,String)}, but the key is a slash-delimited
 	 * 	path used to traverse entries in this POJO.
 	 * <p>
-	 * 	For example, the following code is equivalent:
+	 * For example, the following code is equivalent:
 	 * </p>
 	 * <p class='bcode'>
 	 * 	ObjectMap m = getObjectMap();
@@ -476,9 +475,8 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * 	<jk>long</jk> l = m.getAt(<jk>long</jk>.<jk>class</jk>, <js>"foo/bar/0/baz"</js>);
 	 * </p>
 	 * <p>
-	 * 	This method uses the {@link PojoRest} class to perform the lookup, so the map can contain
-	 * 		any of the various class types that the {@link PojoRest} class supports (e.g. beans, collections, arrays).
-	 * </p>
+	 * This method uses the {@link PojoRest} class to perform the lookup, so the map can contain
+	 * 	any of the various class types that the {@link PojoRest} class supports (e.g. beans, collections, arrays).
 	 *
 	 * @param <T> The class type.
 	 * @param type The class type.
@@ -493,7 +491,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * Same as <code>put(String,Object)</code>, but the key is a slash-delimited
 	 * 	path used to traverse entries in this POJO.
 	 * <p>
-	 * 	For example, the following code is equivalent:
+	 * For example, the following code is equivalent:
 	 * </p>
 	 * <p class='bcode'>
 	 * 	ObjectMap m = getObjectMap();
@@ -505,9 +503,8 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * 	m.putAt(<js>"foo/bar/0/baz"</js>, 123);
 	 * </p>
 	 * <p>
-	 * 	This method uses the {@link PojoRest} class to perform the lookup, so the map can contain
-	 * 		any of the various class types that the {@link PojoRest} class supports (e.g. beans, collections, arrays).
-	 * </p>
+	 * This method uses the {@link PojoRest} class to perform the lookup, so the map can contain
+	 * 	any of the various class types that the {@link PojoRest} class supports (e.g. beans, collections, arrays).
 	 *
 	 * @param path The path to the entry.
 	 * @param o The new value.
@@ -521,7 +518,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * Similar to {@link #putAt(String,Object) putAt(String,Object)}, but used to append
 	 * 	to collections and arrays.
 	 * <p>
-	 * 	For example, the following code is equivalent:
+	 * For example, the following code is equivalent:
 	 * </p>
 	 * <p class='bcode'>
 	 * 	ObjectMap m = getObjectMap();
@@ -533,9 +530,8 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * 	m.postAt(<js>"foo/bar"</js>, 123);
 	 * </p>
 	 * <p>
-	 * 	This method uses the {@link PojoRest} class to perform the lookup, so the map can contain
-	 * 		any of the various class types that the {@link PojoRest} class supports (e.g. beans, collections, arrays).
-	 * </p>
+	 * This method uses the {@link PojoRest} class to perform the lookup, so the map can contain
+	 * 	any of the various class types that the {@link PojoRest} class supports (e.g. beans, collections, arrays).
 	 *
 	 * @param path The path to the entry.
 	 * @param o The new value.
@@ -549,7 +545,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * Similar to {@link #remove(Object) remove(Object)},but the key is a slash-delimited
 	 * 	path used to traverse entries in this POJO.
 	 * <p>
-	 * 	For example, the following code is equivalent:
+	 * For example, the following code is equivalent:
 	 * </p>
 	 * <p class='bcode'>
 	 * 	ObjectMap m = getObjectMap();
@@ -561,9 +557,8 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * 	m.deleteAt(<js>"foo/bar/0/baz"</js>);
 	 * </p>
 	 * <p>
-	 * 	This method uses the {@link PojoRest} class to perform the lookup, so the map can contain
-	 * 		any of the various class types that the {@link PojoRest} class supports (e.g. beans, collections, arrays).
-	 * </p>
+	 * This method uses the {@link PojoRest} class to perform the lookup, so the map can contain
+	 * 	any of the various class types that the {@link PojoRest} class supports (e.g. beans, collections, arrays).
 	 *
 	 * @param path The path to the entry.
 	 * @return The previous value, or <jk>null</jk> if the entry doesn't exist.
@@ -575,7 +570,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	/**
 	 * Convenience method for inserting JSON directly into an attribute on this object.
 	 * <p>
-	 * 	The JSON text can be an object (i.e. <js>"{...}"</js>) or an array (i.e. <js>"[...]"</js>).
+	 * The JSON text can be an object (i.e. <js>"{...}"</js>) or an array (i.e. <js>"[...]"</js>).
 	 *
 	 * @param key The key.
 	 * @param json The JSON text that will be parsed into an Object and then inserted into this map.
@@ -588,7 +583,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	/**
 	 * Returns the specified entry value converted to a {@link String}.
 	 * <p>
-	 * 	Shortcut for <code>get(String.<jk>class</jk>, key)</code>.
+	 * Shortcut for <code>get(String.<jk>class</jk>, key)</code>.
 	 *
 	 * @param key The key.
 	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
@@ -625,7 +620,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	/**
 	 * Returns the specified entry value converted to a {@link String}.
 	 * <p>
-	 * 	Shortcut for <code>get(String.<jk>class</jk>, key, defVal)</code>.
+	 * Shortcut for <code>get(String.<jk>class</jk>, key, defVal)</code>.
 	 *
 	 * @param key The key.
 	 * @param defVal The default value if the map doesn't contain the specified mapping.
@@ -638,7 +633,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	/**
 	 * Returns the specified entry value converted to an {@link Integer}.
 	 * <p>
-	 * 	Shortcut for <code>get(Integer.<jk>class</jk>, key)</code>.
+	 * Shortcut for <code>get(Integer.<jk>class</jk>, key)</code>.
 	 *
 	 * @param key The key.
 	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
@@ -651,7 +646,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	/**
 	 * Returns the specified entry value converted to an {@link Integer}.
 	 * <p>
-	 * 	Shortcut for <code>get(Integer.<jk>class</jk>, key, defVal)</code>.
+	 * Shortcut for <code>get(Integer.<jk>class</jk>, key, defVal)</code>.
 	 *
 	 * @param key The key.
 	 * @param defVal The default value if the map doesn't contain the specified mapping.
@@ -665,7 +660,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	/**
 	 * Returns the specified entry value converted to a {@link Long}.
 	 * <p>
-	 * 	Shortcut for <code>get(Long.<jk>class</jk>, key)</code>.
+	 * Shortcut for <code>get(Long.<jk>class</jk>, key)</code>.
 	 *
 	 * @param key The key.
 	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
@@ -678,7 +673,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	/**
 	 * Returns the specified entry value converted to a {@link Long}.
 	 * <p>
-	 * 	Shortcut for <code>get(Long.<jk>class</jk>, key, defVal)</code>.
+	 * Shortcut for <code>get(Long.<jk>class</jk>, key, defVal)</code>.
 	 *
 	 * @param key The key.
 	 * @param defVal The default value if the map doesn't contain the specified mapping.
@@ -692,7 +687,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	/**
 	 * Returns the specified entry value converted to a {@link Boolean}.
 	 * <p>
-	 * 	Shortcut for <code>get(Boolean.<jk>class</jk>, key)</code>.
+	 * Shortcut for <code>get(Boolean.<jk>class</jk>, key)</code>.
 	 *
 	 * @param key The key.
 	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
@@ -705,7 +700,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	/**
 	 * Returns the specified entry value converted to a {@link Boolean}.
 	 * <p>
-	 * 	Shortcut for <code>get(Boolean.<jk>class</jk>, key, defVal)</code>.
+	 * Shortcut for <code>get(Boolean.<jk>class</jk>, key, defVal)</code>.
 	 *
 	 * @param key The key.
 	 * @param defVal The default value if the map doesn't contain the specified mapping.
@@ -719,7 +714,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	/**
 	 * Returns the specified entry value converted to a {@link Map}.
 	 * <p>
-	 * 	Shortcut for <code>get(Map.<jk>class</jk>, key)</code>.
+	 * Shortcut for <code>get(Map.<jk>class</jk>, key)</code>.
 	 *
 	 * @param key The key.
 	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
@@ -732,7 +727,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	/**
 	 * Returns the specified entry value converted to a {@link Map}.
 	 * <p>
-	 * 	Shortcut for <code>get(Map.<jk>class</jk>, key, defVal)</code>.
+	 * Shortcut for <code>get(Map.<jk>class</jk>, key, defVal)</code>.
 	 *
 	 * @param key The key.
 	 * @param defVal The default value if the map doesn't contain the specified mapping.
@@ -746,7 +741,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	/**
 	 * Returns the specified entry value converted to a {@link List}.
 	 * <p>
-	 * 	Shortcut for <code>get(List.<jk>class</jk>, key)</code>.
+	 * Shortcut for <code>get(List.<jk>class</jk>, key)</code>.
 	 *
 	 * @param key The key.
 	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
@@ -759,7 +754,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	/**
 	 * Returns the specified entry value converted to a {@link List}.
 	 * <p>
-	 * 	Shortcut for <code>get(List.<jk>class</jk>, key, defVal)</code>.
+	 * Shortcut for <code>get(List.<jk>class</jk>, key, defVal)</code>.
 	 *
 	 * @param key The key.
 	 * @param defVal The default value if the map doesn't contain the specified mapping.
@@ -773,7 +768,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	/**
 	 * Returns the specified entry value converted to a {@link Map}.
 	 * <p>
-	 * 	Shortcut for <code>get(ObjectMap.<jk>class</jk>, key)</code>.
+	 * Shortcut for <code>get(ObjectMap.<jk>class</jk>, key)</code>.
 	 *
 	 * @param key The key.
 	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
@@ -786,7 +781,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	/**
 	 * Returns the specified entry value converted to a {@link ObjectMap}.
 	 * <p>
-	 * 	Shortcut for <code>get(ObjectMap.<jk>class</jk>, key, defVal)</code>.
+	 * Shortcut for <code>get(ObjectMap.<jk>class</jk>, key, defVal)</code>.
 	 *
 	 * @param key The key.
 	 * @param defVal The default value if the map doesn't contain the specified mapping.
@@ -800,7 +795,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	/**
 	 * Returns the specified entry value converted to a {@link ObjectList}.
 	 * <p>
-	 * 	Shortcut for <code>get(ObjectList.<jk>class</jk>, key)</code>.
+	 * Shortcut for <code>get(ObjectList.<jk>class</jk>, key)</code>.
 	 *
 	 * @param key The key.
 	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
@@ -813,7 +808,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	/**
 	 * Returns the specified entry value converted to a {@link ObjectList}.
 	 * <p>
-	 * 	Shortcut for <code>get(ObjectList.<jk>class</jk>, key, defVal)</code>.
+	 * Shortcut for <code>get(ObjectList.<jk>class</jk>, key, defVal)</code>.
 	 *
 	 * @param key The key.
 	 * @param defVal The default value if the map doesn't contain the specified mapping.
@@ -827,7 +822,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	/**
 	 * Returns the first entry that exists converted to a {@link String}.
 	 * <p>
-	 * 	Shortcut for <code>find(String.<jk>class</jk>, keys)</code>.
+	 * Shortcut for <code>find(String.<jk>class</jk>, keys)</code>.
 	 *
 	 * @param keys The list of keys to look for.
 	 * @return The converted value of the first key in the list that has an entry in this map,
@@ -840,7 +835,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	/**
 	 * Returns the first entry that exists converted to an {@link Integer}.
 	 * <p>
-	 * 	Shortcut for <code>find(Integer.<jk>class</jk>, keys)</code>.
+	 * Shortcut for <code>find(Integer.<jk>class</jk>, keys)</code>.
 	 *
 	 * @param keys The list of keys to look for.
 	 * @return The converted value of the first key in the list that has an entry in this map,
@@ -854,7 +849,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	/**
 	 * Returns the first entry that exists converted to a {@link Long}.
 	 * <p>
-	 * 	Shortcut for <code>find(Long.<jk>class</jk>, keys)</code>.
+	 * Shortcut for <code>find(Long.<jk>class</jk>, keys)</code>.
 	 *
 	 * @param keys The list of keys to look for.
 	 * @return The converted value of the first key in the list that has an entry in this map,
@@ -868,7 +863,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	/**
 	 * Returns the first entry that exists converted to a {@link Boolean}.
 	 * <p>
-	 * 	Shortcut for <code>find(Boolean.<jk>class</jk>, keys)</code>.
+	 * Shortcut for <code>find(Boolean.<jk>class</jk>, keys)</code>.
 	 *
 	 * @param keys The list of keys to look for.
 	 * @return The converted value of the first key in the list that has an entry in this map,
@@ -882,7 +877,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	/**
 	 * Returns the first entry that exists converted to a {@link Map}.
 	 * <p>
-	 * 	Shortcut for <code>find(Map.<jk>class</jk>, keys)</code>.
+	 * Shortcut for <code>find(Map.<jk>class</jk>, keys)</code>.
 	 *
 	 * @param keys The list of keys to look for.
 	 * @return The converted value of the first key in the list that has an entry in this map,
@@ -896,7 +891,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	/**
 	 * Returns the first entry that exists converted to a {@link List}.
 	 * <p>
-	 * 	Shortcut for <code>find(List.<jk>class</jk>, keys)</code>.
+	 * Shortcut for <code>find(List.<jk>class</jk>, keys)</code>.
 	 *
 	 * @param keys The list of keys to look for.
 	 * @return The converted value of the first key in the list that has an entry in this map,
@@ -910,7 +905,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	/**
 	 * Returns the first entry that exists converted to a {@link ObjectMap}.
 	 * <p>
-	 * 	Shortcut for <code>find(ObjectMap.<jk>class</jk>, keys)</code>.
+	 * Shortcut for <code>find(ObjectMap.<jk>class</jk>, keys)</code>.
 	 *
 	 * @param keys The list of keys to look for.
 	 * @return The converted value of the first key in the list that has an entry in this map,
@@ -924,7 +919,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	/**
 	 * Returns the first entry that exists converted to a {@link ObjectList}.
 	 * <p>
-	 * 	Shortcut for <code>find(ObjectList.<jk>class</jk>, keys)</code>.
+	 * Shortcut for <code>find(ObjectList.<jk>class</jk>, keys)</code>.
 	 *
 	 * @param keys The list of keys to look for.
 	 * @return The converted value of the first key in the list that has an entry in this map,
@@ -1088,7 +1083,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * Same as {@link #cast()}, but first do a lookup for the name in the specified dictionary.
 	 *
 	 * @param beanRegistry
-	 * 	The class lexicon to resolve the name.  Can be <jk>null</jk>.
+	 * The class lexicon to resolve the name.  Can be <jk>null</jk>.
 	 * @return The new Java object of type specified by the <js>"_type"</js> entry value, or this
 	 * 	same object if entry does not exist.
 	 */

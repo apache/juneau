@@ -24,7 +24,7 @@ import org.apache.juneau.transform.*;
 /**
  * Used tailor how bean properties get interpreted by the framework.
  * <p>
- * 	Can be used to do the following:
+ * Can be used to do the following:
  * <ul class='spaced-list'>
  * 	<li>Override the name of a property.
  * 	<li>Identify a getter or setter with a non-standard naming convention.
@@ -37,7 +37,7 @@ import org.apache.juneau.transform.*;
  * 	<li>Identify a property as the ID for a bean.
  * </ul>
  * <p>
- * 	This annotation is applied to public fields and public getter/setter methods of beans.
+ * This annotation is applied to public fields and public getter/setter methods of beans.
  */
 @Documented
 @Target({FIELD,METHOD})
@@ -48,11 +48,11 @@ public @interface BeanProperty {
 	/**
 	 * Identifies the name of the property.
 	 * <p>
-	 * 	Normally, this is automatically inferred from the field name or getter method name
+	 * Normally, this is automatically inferred from the field name or getter method name
 	 * 	of the property.  However, this property can be used to assign a different
 	 * 	property name from the automatically inferred value.
 	 * <p>
-	 * 	If the {@link BeanContext#BEAN_beanFieldVisibility} setting on the bean context excludes this field (e.g. the visibility
+	 * If the {@link BeanContext#BEAN_beanFieldVisibility} setting on the bean context excludes this field (e.g. the visibility
 	 * 	is set to PUBLIC, but the field is PROTECTED), this annotation can be used to force the field to be identified as a property.
 	 */
 	String name() default "";
@@ -60,12 +60,12 @@ public @interface BeanProperty {
 	/**
 	 * Identifies a specialized class type for the property.
 	 * <p>
-	 * 	Normally this can be inferred through reflection of the field type or getter return type.
-	 * 	However, you'll want to specify this value if you're parsing beans where the bean property class
+	 * Normally this can be inferred through reflection of the field type or getter return type.
+	 * However, you'll want to specify this value if you're parsing beans where the bean property class
 	 * 	is an interface or abstract class to identify the bean type to instantiate.  Otherwise, you may
 	 * 	cause an {@link InstantiationException} when trying to set these fields.
 	 * <p>
-	 * 	This property must denote a concrete bean class with a no-arg constructor.
+	 * This property must denote a concrete bean class with a no-arg constructor.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>

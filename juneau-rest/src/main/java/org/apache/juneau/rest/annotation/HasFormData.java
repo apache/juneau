@@ -23,7 +23,7 @@ import org.apache.juneau.rest.*;
  * Annotation that can be applied to a parameter of a {@link RestMethod} annotated method
  * 	to identify whether or not the request has the specified multipart form POST parameter.
  * <p>
- * 	Note that this can be used to detect the existence of a parameter when it's not set to a particular value.
+ * Note that this can be used to detect the existence of a parameter when it's not set to a particular value.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
@@ -33,7 +33,7 @@ import org.apache.juneau.rest.*;
  * 	}
  * </p>
  * <p>
- * 	This is functionally equivalent to the following code...
+ * This is functionally equivalent to the following code...
  * </p>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<js>"POST"</js>)

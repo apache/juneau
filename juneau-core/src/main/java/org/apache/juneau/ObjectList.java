@@ -23,10 +23,10 @@ import org.apache.juneau.utils.*;
 /**
  * Java implementation of a JSON array.
  * <p>
- * 	An extension of {@link LinkedList}, so all methods available to in that class are also available
+ * An extension of {@link LinkedList}, so all methods available to in that class are also available
  * 	to this class.
  * <p>
- * 	Note that the use of this class is optional.  The serializers will accept any objects that implement
+ * Note that the use of this class is optional.  The serializers will accept any objects that implement
  * 	the {@link Collection} interface.  But this class provides some useful additional functionality
  * 	when working with JSON models constructed from Java Collections Framework objects.  For example, a
  * 	constructor is provided for converting a JSON array string directly into a {@link List}.  It also contains
@@ -88,8 +88,7 @@ import org.apache.juneau.utils.*;
  * 	}
  * </p>
  * <p>
- * 	This class is not thread safe.
- * </p>
+ * This class is not thread safe.
  */
 public class ObjectList extends LinkedList<Object> {
 	private static final long serialVersionUID = 1L;
@@ -236,7 +235,7 @@ public class ObjectList extends LinkedList<Object> {
 	/**
 	 * Get the entry at the specified index, converted to the specified type (if possible).
 	 * <p>
-	 * 	See {@link BeanSession#convertToType(Object, ClassMeta)} for the list of valid data conversions.
+	 * See {@link BeanSession#convertToType(Object, ClassMeta)} for the list of valid data conversions.
 	 *
 	 * @param type The type of object to convert the entry to.
 	 * @param index The index into this list.
@@ -338,7 +337,7 @@ public class ObjectList extends LinkedList<Object> {
 	 * Same as {@link #get(Class,int) get(Class,int)}, but the key is a slash-delimited
 	 * 	path used to traverse entries in this POJO.
 	 * <p>
-	 * 	For example, the following code is equivalent:
+	 * For example, the following code is equivalent:
 	 * </p>
 	 * <p class='bcode'>
 	 * 	ObjectMap m = getObjectMap();
@@ -350,9 +349,8 @@ public class ObjectList extends LinkedList<Object> {
 	 * 	<jk>long</jk> l = m.getAt(<jk>long</jk>.<jk>class</jk>, <js>"foo/bar/0/baz"</js>);
 	 * </p>
 	 * <p>
-	 * 	This method uses the {@link PojoRest} class to perform the lookup, so the map can contain
-	 * 		any of the various class types that the {@link PojoRest} class supports (e.g. beans, collections, arrays).
-	 * </p>
+	 * This method uses the {@link PojoRest} class to perform the lookup, so the map can contain
+	 * 	any of the various class types that the {@link PojoRest} class supports (e.g. beans, collections, arrays).
 	 *
 	 * @param <T> The class type.
 	 * @param type The class type.
@@ -367,7 +365,7 @@ public class ObjectList extends LinkedList<Object> {
 	 * Same as {@link #set(int,Object) set(int,Object)}, but the key is a slash-delimited
 	 * 	path used to traverse entries in this POJO.
 	 * <p>
-	 * 	For example, the following code is equivalent:
+	 * For example, the following code is equivalent:
 	 * </p>
 	 * <p class='bcode'>
 	 * 	ObjectMap m = getObjectMap();
@@ -379,9 +377,8 @@ public class ObjectList extends LinkedList<Object> {
 	 * 	m.putAt(<js>"foo/bar/0/baz"</js>, 123);
 	 * </p>
 	 * <p>
-	 * 	This method uses the {@link PojoRest} class to perform the lookup, so the map can contain
-	 * 		any of the various class types that the {@link PojoRest} class supports (e.g. beans, collections, arrays).
-	 * </p>
+	 * This method uses the {@link PojoRest} class to perform the lookup, so the map can contain
+	 * 	any of the various class types that the {@link PojoRest} class supports (e.g. beans, collections, arrays).
 	 *
 	 * @param path The path to the entry.
 	 * @param o The new value.
@@ -395,7 +392,7 @@ public class ObjectList extends LinkedList<Object> {
 	 * Similar to {@link #putAt(String,Object) putAt(String,Object)}, but used to append
 	 * 	to collections and arrays.
 	 * <p>
-	 * 	For example, the following code is equivalent:
+	 * For example, the following code is equivalent:
 	 * </p>
 	 * <p class='bcode'>
 	 * 	ObjectMap m = getObjectMap();
@@ -407,9 +404,8 @@ public class ObjectList extends LinkedList<Object> {
 	 * 	m.postAt(<js>"foo/bar"</js>, 123);
 	 * </p>
 	 * <p>
-	 * 	This method uses the {@link PojoRest} class to perform the lookup, so the map can contain
-	 * 		any of the various class types that the {@link PojoRest} class supports (e.g. beans, collections, arrays).
-	 * </p>
+	 * This method uses the {@link PojoRest} class to perform the lookup, so the map can contain
+	 * 	any of the various class types that the {@link PojoRest} class supports (e.g. beans, collections, arrays).
 	 *
 	 * @param path The path to the entry.
 	 * @param o The new value.
@@ -423,7 +419,7 @@ public class ObjectList extends LinkedList<Object> {
 	 * Similar to {@link #remove(int) remove(int)},but the key is a slash-delimited
 	 * 	path used to traverse entries in this POJO.
 	 * <p>
-	 * 	For example, the following code is equivalent:
+	 * For example, the following code is equivalent:
 	 * </p>
 	 * <p class='bcode'>
 	 * 	ObjectMap m = getObjectMap();
@@ -435,9 +431,8 @@ public class ObjectList extends LinkedList<Object> {
 	 * 	m.deleteAt(<js>"foo/bar/0/baz"</js>);
 	 * </p>
 	 * <p>
-	 * 	This method uses the {@link PojoRest} class to perform the lookup, so the map can contain
-	 * 		any of the various class types that the {@link PojoRest} class supports (e.g. beans, collections, arrays).
-	 * </p>
+	 * This method uses the {@link PojoRest} class to perform the lookup, so the map can contain
+	 * 	any of the various class types that the {@link PojoRest} class supports (e.g. beans, collections, arrays).
 	 *
 	 * @param path The path to the entry.
 	 * @return The previous value, or <jk>null</jk> if the entry doesn't exist.

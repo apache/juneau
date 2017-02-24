@@ -24,7 +24,7 @@ import org.apache.juneau.transform.*;
 /**
  * Represents a top-level schema object bean in the JSON-Schema core specification.
  * <p>
- * 	Refer to <a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.dto.jsonschema</a> for usage information.
+ * Refer to <a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.dto.jsonschema</a> for usage information.
  */
 @SuppressWarnings("hiding")
 @Bean(typeName="schema",
@@ -131,7 +131,7 @@ public class Schema {
 	 * Bean property setter:  <property>id</property>.
 	 *
 	 * @param id The new value for the <property>id</property> property on this bean.
-	 * 	The parameter must be a valid URI.  It can be <jk>null</jk>.
+	 * The parameter must be a valid URI.  It can be <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public Schema setId(String id) {
@@ -164,7 +164,7 @@ public class Schema {
 	 * Bean property setter:  <property>schemaVersion</property>.
 	 *
 	 * @param schemaVersion The new value for the <property>schemaVersion</property> property on this bean.
-	 * 	The parameter must be a valid URI.  It can be <jk>null</jk>.
+	 * The parameter must be a valid URI.  It can be <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public Schema setSchemaVersionUri(String schemaVersion) {
@@ -215,7 +215,7 @@ public class Schema {
 	 * Bean property getter:  <property>type</property>.
 	 *
 	 * @return The value of the <property>type</property> property on this bean, or <jk>null</jk> if it is not set.
-	 * 	Can be either a {@link JsonType} or {@link JsonTypeArray} depending on what value was used to set it.
+	 * Can be either a {@link JsonType} or {@link JsonTypeArray} depending on what value was used to set it.
 	 */
 	@BeanProperty(swap=JsonTypeOrJsonTypeArraySwap.class)
 	public Object getType() {
@@ -252,7 +252,7 @@ public class Schema {
 	 * Bean property setter:  <property>type</property>.
 	 *
 	 * @param type The new value for the <property>type</property> property on this bean.
-	 * 	This object must be of type {@link JsonType} or {@link JsonTypeArray}.
+	 * This object must be of type {@link JsonType} or {@link JsonTypeArray}.
 	 * @return This object (for method chaining).
 	 * @throws BeanRuntimeException If invalid object type passed in.
 	 */
@@ -510,7 +510,7 @@ public class Schema {
 	 * Bean property getter:  <property>items</property>.
 	 *
 	 * @return The value of the <property>items</property> property on this bean, or <jk>null</jk> if it is not set.
-	 * 	Can be either a {@link Schema} or {@link SchemaArray} depending on what value was used to set it.
+	 * Can be either a {@link Schema} or {@link SchemaArray} depending on what value was used to set it.
 	 */
 	@BeanProperty(swap=SchemaOrSchemaArraySwap.class)
 	public Object getItems() {
@@ -569,7 +569,7 @@ public class Schema {
 	 * Bean property setter:  <property>items</property>.
 	 *
 	 * @param items The new value for the <property>items</property> property on this bean.
-	 * 	This object must be of type {@link Schema} or {@link SchemaArray}.
+	 * This object must be of type {@link Schema} or {@link SchemaArray}.
 	 * @return This object (for method chaining).
 	 * @throws BeanRuntimeException If invalid object type passed in.
 	 */
@@ -767,7 +767,7 @@ public class Schema {
 	 * Bean property getter:  <property>additionalItems</property>.
 	 *
 	 * @return The value of the <property>additionalItems</property> property on this bean, or <jk>null</jk> if it is not set.
-	 * 	Can be either a {@link Boolean} or {@link SchemaArray} depending on what value was used to set it.
+	 * Can be either a {@link Boolean} or {@link SchemaArray} depending on what value was used to set it.
 	 */
 	@BeanProperty(swap=BooleanOrSchemaArraySwap.class)
 	public Object getAdditionalItems() {
@@ -804,7 +804,7 @@ public class Schema {
 	 * Bean property setter:  <property>additionalItems</property>.
 	 *
 	 * @param additionalItems The new value for the <property>additionalItems</property> property on this bean.
-	 * 	This object must be of type {@link Boolean} or {@link SchemaArray}.
+	 * This object must be of type {@link Boolean} or {@link SchemaArray}.
 	 * @return This object (for method chaining).
 	 * @throws BeanRuntimeException If invalid object type passed in.
 	 */
@@ -1025,7 +1025,7 @@ public class Schema {
 	 * Bean property getter:  <property>additionalProperties</property>.
 	 *
 	 * @return The value of the <property>additionalProperties</property> property on this bean, or <jk>null</jk> if it is not set.
-	 * 	Can be either a {@link Boolean} or {@link SchemaArray} depending on what value was used to set it.
+	 * Can be either a {@link Boolean} or {@link SchemaArray} depending on what value was used to set it.
 	 */
 	@BeanProperty(swap=BooleanOrSchemaSwap.class)
 	public Object getAdditionalProperties() {
@@ -1062,7 +1062,7 @@ public class Schema {
 	 * Bean property setter:  <property>additionalProperties</property>.
 	 *
 	 * @param additionalProperties The new value for the <property>additionalProperties</property> property on this bean.
-	 * 	This object must be of type {@link Boolean} or {@link Schema}.
+	 * This object must be of type {@link Boolean} or {@link Schema}.
 	 * @return This object (for method chaining).
 	 * @throws BeanRuntimeException If invalid object type passed in.
 	 */
@@ -1362,7 +1362,7 @@ public class Schema {
 	 * Bean property setter:  <property>$ref</property>.
 	 *
 	 * @param ref The new value for the <property>$ref</property> property on this bean.
-	 * 	The parameter must be a valid URI.  It can be <jk>null</jk>.
+	 * The parameter must be a valid URI.  It can be <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public Schema setRef(String ref) {

@@ -25,7 +25,7 @@ public class Colgroup extends HtmlElementContainer {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-colgroup-span">span</a> attribute.
 	 * Number of columns spanned by the element.
 	 * @param span The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
+	 * Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Colgroup span(Object span) {

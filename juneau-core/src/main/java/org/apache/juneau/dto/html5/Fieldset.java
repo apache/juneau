@@ -25,7 +25,7 @@ public class Fieldset extends HtmlElementMixed {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fieldset-disabled">disabled</a> attribute.
 	 * Whether the form control is disabled.
 	 * @param disabled The new value for this attribute.
-	 * 	Typically a {@link Boolean} or {@link String}.
+	 * Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Fieldset disabled(Boolean disabled) {

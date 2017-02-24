@@ -670,7 +670,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * See <a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor76">http://json-schema.org/latest/json-schema-validation.html#anchor76</a>.
 	 *
 	 * @param _enum The new values to add to the <property>enum</property> property on this bean.
-	 * 	These can either be individual objects or {@link Collection Collections} of objects.
+	 * These can either be individual objects or {@link Collection Collections} of objects.
 	 * @return This object (for method chaining).
 	 */
 	public HeaderInfo addEnum(Object..._enum) {

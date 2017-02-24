@@ -36,14 +36,14 @@ import org.apache.juneau.utils.*;
 /**
  * REST resource that allows access to a file system directory.
  * <p>
- * 	The root directory is specified in one of two ways:
+ * The root directory is specified in one of two ways:
  * </p>
  * <ul class='spaced-list'>
  * 	<li>Specifying the location via a <l>DirectoryResource.rootDir</l> property.
  * 	<li>Overriding the {@link #getRootDir()} method.
  * </ul>
  * <p>
- * 	Read/write access control is handled through the following properties:
+ * Read/write access control is handled through the following properties:
  * </p>
  * <ul class='spaced-list'>
  * 	<li><l>DirectoryResource.allowViews</l> - If <jk>true</jk>, allows view and download access to files.
@@ -51,8 +51,7 @@ import org.apache.juneau.utils.*;
  * 	<li><l>DirectoryResource.allowDeletes</l> - If <jk>true</jk>, allows files to be deleted.
  * </ul>
  * <p>
- * 	Access can also be controlled by overriding the {@link #checkAccess(RestRequest)} method.
- * </p>
+ * Access can also be controlled by overriding the {@link #checkAccess(RestRequest)} method.
  */
 @RestResource(
 	title="File System Explorer",
@@ -104,8 +103,8 @@ public class DirectoryResource extends Resource {
 
 	/**
 	 * [GET /*]
-	 *  On directories, returns a directory listing.
-	 *  On files, returns information about the file.
+	 * On directories, returns a directory listing.
+	 * On files, returns information about the file.
 	 *
 	 * @param req The HTTP request.
 	 * @return Either a FileResource or list of FileResources depending on whether it's a
@@ -144,7 +143,7 @@ public class DirectoryResource extends Resource {
 
 	/**
 	 * [DELETE /*]
-	 *  Delete a file on the file system.
+	 * Delete a file on the file system.
 	 *
 	 * @param req The HTTP request.
 	 * @return The message <js>"File deleted"</js> if successful.
@@ -189,8 +188,8 @@ public class DirectoryResource extends Resource {
 
 	/**
 	 * [VIEW /*]
-	 * 	View the contents of a file.
-	 * 	Applies to files only.
+	 * View the contents of a file.
+	 * Applies to files only.
 	 *
 	 * @param req The HTTP request.
 	 * @param res The HTTP response.
@@ -217,8 +216,8 @@ public class DirectoryResource extends Resource {
 
 	/**
 	 * [DOWNLOAD /*]
-	 * 	Download the contents of a file.
-	 * 	Applies to files only.
+	 * Download the contents of a file.
+	 * Applies to files only.
 	 *
 	 * @param req The HTTP request.
 	 * @param res The HTTP response.

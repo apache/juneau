@@ -17,7 +17,7 @@ import java.text.*;
 /**
  * Exception thrown to trigger an error HTTP status.
  * <p>
- * 	REST methods on subclasses of {@link RestServlet} can throw
+ * REST methods on subclasses of {@link RestServlet} can throw
  * 	this exception to trigger an HTTP status other than the automatically-generated
  * 	<code>404</code>, <code>405</code>, and <code>500</code> statuses.
  */

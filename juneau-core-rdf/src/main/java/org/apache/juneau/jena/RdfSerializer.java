@@ -35,12 +35,12 @@ import com.hp.hpl.jena.rdf.model.*;
  *
  * <h5 class='section'>Configurable properties:</h5>
  * <p>
- * 	Refer to <a class="doclink" href="package-summary.html#SerializerConfigurableProperties">Configurable Properties</a>
- * 		for the entire list of configurable properties.
+ * Refer to <a class="doclink" href="package-summary.html#SerializerConfigurableProperties">Configurable Properties</a>
+ * 	for the entire list of configurable properties.
  *
  * <h6 class='topic'>Behavior-specific subclasses</h6>
  * <p>
- * 	The following direct subclasses are provided for language-specific serializers:
+ * The following direct subclasses are provided for language-specific serializers:
  * <ul>
  * 	<li>{@link RdfSerializer.Xml} - RDF/XML.
  * 	<li>{@link RdfSerializer.XmlAbbrev} - RDF/XML-ABBREV.
@@ -51,7 +51,7 @@ import com.hp.hpl.jena.rdf.model.*;
  *
  * <h5 class='section'>Additional information:</h5>
  * <p>
- * 	See <a class="doclink" href="package-summary.html#TOC">RDF Overview</a> for an overview of RDF support in Juneau.
+ * See <a class="doclink" href="package-summary.html#TOC">RDF Overview</a> for an overview of RDF support in Juneau.
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })
 @Produces(value="text/xml+rdf+abbrev", contentType="text/xml+rdf")
@@ -409,7 +409,7 @@ public class RdfSerializer extends WriterSerializer {
 	 * 	<li><b>Default:</b> <js>"RDF/XML-ABBREV"</js>
 	 * </ul>
 	 * <p>
-	 * 	Can be any of the following:
+	 * Can be any of the following:
 	 * <ul class='spaced-list'>
 	 * 	<li><js>"RDF/XML"</js>
 	 * 	<li><js>"RDF/XML-ABBREV"</js>
@@ -499,8 +499,8 @@ public class RdfSerializer extends WriterSerializer {
 	 * 	<li><b>Default:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
-	 * 	When specified, namespaces defined using {@link XmlNs} and {@link Xml} will be inherited by the RDF serializers.
-	 * 	Otherwise, namespaces will be defined using {@link RdfNs} and {@link Rdf}.
+	 * When specified, namespaces defined using {@link XmlNs} and {@link Xml} will be inherited by the RDF serializers.
+	 * Otherwise, namespaces will be defined using {@link RdfNs} and {@link Rdf}.
 	 * <p>
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
@@ -642,7 +642,7 @@ public class RdfSerializer extends WriterSerializer {
 	 * 	<li><b>Default:</b> <js>"DEFAULT"</js>
 	 * </ul>
 	 * <p>
-	 * 	Possible values:
+	 * Possible values:
 	 * <ul class='spaced-list'>
 	 * 	<li><js>"DEFAULT"</js> - Default format.  The default is an RDF Sequence container.
 	 * 	<li><js>"SEQ"</js> - RDF Sequence container.
@@ -686,9 +686,9 @@ public class RdfSerializer extends WriterSerializer {
 	 * Note that this setting is specialized for RDF syntax, and is incompatible with the concept of
 	 * losslessly representing POJO models, since the tree structure of these POJO models are lost
 	 * when serialized as loose collections.
-	 *	<p>
-	 *	This setting is typically only useful if the beans being parsed into do not have a bean property
-	 *	annotated with {@link Rdf#beanUri @Rdf(beanUri=true)}.
+	 * <p>
+	 * This setting is typically only useful if the beans being parsed into do not have a bean property
+	 * annotated with {@link Rdf#beanUri @Rdf(beanUri=true)}.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -700,7 +700,7 @@ public class RdfSerializer extends WriterSerializer {
 	 * 	<jc>// Serialize to RDF/XML as loose resources</jc>
 	 * 	String rdfXml = s.serialize(l);
 	 *
-	 *	<jc>// Parse back into a Java collection</jc>
+	 * 	<jc>// Parse back into a Java collection</jc>
 	 * 	l = p.parse(rdfXml, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 *
 	 * 	MyBean[] b = createArrayOfMyBeans();
@@ -708,7 +708,7 @@ public class RdfSerializer extends WriterSerializer {
 	 * 	<jc>// Serialize to RDF/XML as loose resources</jc>
 	 * 	String rdfXml = s.serialize(b);
 	 *
-	 *	<jc>// Parse back into a bean array</jc>
+	 * 	<jc>// Parse back into a bean array</jc>
 	 * 	b = p.parse(rdfXml, MyBean[].<jk>class</jk>);
 	 * </p>
 	 * <p>

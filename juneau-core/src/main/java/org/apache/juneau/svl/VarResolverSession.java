@@ -68,7 +68,7 @@ public class VarResolverSession extends Session {
 	 *
 	 * @param s The string to resolve variables in.
 	 * @return The new string with all variables resolved, or the same string if no variables were found.
-	 * 	Null input results in a blank string.
+	 * Null input results in a blank string.
 	 */
 	public String resolve(String s) {
 

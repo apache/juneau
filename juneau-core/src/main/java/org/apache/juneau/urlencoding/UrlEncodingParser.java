@@ -28,19 +28,19 @@ import org.apache.juneau.transform.*;
  *
  * <h5 class='section'>Media types:</h5>
  * <p>
- * 	Handles <code>Content-Type</code> types: <code>application/x-www-form-urlencoded</code>
+ * Handles <code>Content-Type</code> types: <code>application/x-www-form-urlencoded</code>
  *
  * <h5 class='section'>Description:</h5>
  * <p>
- * 	Parses URL-Encoded text (e.g. <js>"foo=bar&amp;baz=bing"</js>) into POJOs.
+ * Parses URL-Encoded text (e.g. <js>"foo=bar&amp;baz=bing"</js>) into POJOs.
  * <p>
- * 	Expects parameter values to be in UON notation.
+ * Expects parameter values to be in UON notation.
  * <p>
- * 	This parser uses a state machine, which makes it very fast and efficient.
+ * This parser uses a state machine, which makes it very fast and efficient.
  *
  * <h5 class='section'>Configurable properties:</h5>
  * <p>
- * 	This class has the following properties associated with it:
+ * This class has the following properties associated with it:
  * <ul>
  * 	<li>{@link UonParserContext}
  * 	<li>{@link BeanContext}
@@ -539,8 +539,8 @@ public class UrlEncodingParser extends UonParser {
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
-	 * 	If <jk>false</jk>, serializing the array <code>[1,2,3]</code> results in <code>?key=$a(1,2,3)</code>.
-	 * 	If <jk>true</jk>, serializing the same array results in <code>?key=1&amp;key=2&amp;key=3</code>.
+	 * If <jk>false</jk>, serializing the array <code>[1,2,3]</code> results in <code>?key=$a(1,2,3)</code>.
+	 * If <jk>true</jk>, serializing the same array results in <code>?key=1&amp;key=2&amp;key=3</code>.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -556,7 +556,7 @@ public class UrlEncodingParser extends UonParser {
 	 * 	String s2 = p2.serialize(<jk>new</jk> A()); <jc>// Produces "f1=a&amp;f1=b&amp;f2=c&amp;f2=d"</jc>
 	 * </p>
 	 * <p>
-	 * 	This option only applies to beans.
+	 * This option only applies to beans.
 	 * <p>
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>

@@ -41,7 +41,7 @@ public abstract class Session {
 	 * Default constructor.
 	 *
 	 * @param ctx The context creating this session object.
-	 * 	The context contains all the configuration settings for the session.
+	 * The context contains all the configuration settings for the session.
 	 * @param op Properties associated with this session.
 	 */
 	protected Session(Context ctx, ObjectMap op) {
@@ -75,7 +75,7 @@ public abstract class Session {
 	 * Can be used to store objects for reuse during a session.
 	 *
 	 * @param cacheObjects The objects to add to this session's cache.
-	 * 	No-op if <jk>null</jk>.
+	 * No-op if <jk>null</jk>.
 	 */
 	public void addToCache(Map<String,Object> cacheObjects) {
 		if (cacheObjects != null) {

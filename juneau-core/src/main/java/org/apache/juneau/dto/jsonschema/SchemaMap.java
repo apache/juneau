@@ -21,7 +21,7 @@ import org.apache.juneau.json.*;
 /**
  * A container for retrieving JSON {@link Schema} objects by URI.
  * <p>
- * 	Subclasses must implement one of the following methods to load schemas from external sources:
+ * Subclasses must implement one of the following methods to load schemas from external sources:
  * <ul class='spaced-list'>
  * 	<li>{@link #getReader(URI)} - If schemas should be loaded from readers and automatically parsed.
  * 	<li>{@link #load(URI)} - If you want control over construction of {@link Schema} objects.

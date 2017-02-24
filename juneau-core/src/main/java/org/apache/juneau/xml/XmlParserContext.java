@@ -112,18 +112,18 @@ public class XmlParserContext extends ParserContext {
 	 * 	contain a single entry whose key is the root element name.
 	 *
 	 * Example:
-	 *	<table class='styled'>
-	 *		<tr>
-	 *			<td>XML</td>
-	 *			<td>ObjectMap.toString(), preserveRootElement==false</td>
-	 *			<td>ObjectMap.toString(), preserveRootElement==true</td>
-	 *		</tr>
-	 *		<tr>
-	 *			<td><code><xt>&lt;root&gt;&lt;a&gt;</xt>foobar<xt>&lt;/a&gt;&lt;/root&gt;</xt></code></td>
-	 *			<td><code>{ a:<js>'foobar'</js> }</code></td>
-	 *			<td><code>{ root: { a:<js>'foobar'</js> }}</code></td>
-	 *		</tr>
-	 *	</table>
+	 * <table class='styled'>
+	 * 	<tr>
+	 * 		<td>XML</td>
+	 * 		<td>ObjectMap.toString(), preserveRootElement==false</td>
+	 * 		<td>ObjectMap.toString(), preserveRootElement==true</td>
+	 * 	</tr>
+	 * 	<tr>
+	 * 		<td><code><xt>&lt;root&gt;&lt;a&gt;</xt>foobar<xt>&lt;/a&gt;&lt;/root&gt;</xt></code></td>
+	 * 		<td><code>{ a:<js>'foobar'</js> }</code></td>
+	 * 		<td><code>{ root: { a:<js>'foobar'</js> }}</code></td>
+	 * 	</tr>
+	 * </table>
 	 */
 	public static final String XML_preserveRootElement = "XmlParser.preserveRootElement";
 

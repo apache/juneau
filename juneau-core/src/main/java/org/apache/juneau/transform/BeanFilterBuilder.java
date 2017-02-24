@@ -20,8 +20,8 @@ import org.apache.juneau.*;
 /**
  * Builder class for {@link BeanFilter} objects.
  * <p>
- * 	Bean filter builders must have a public no-arg constructor.
- * 	Builder settings should be set in the constructor using the provided setters on this class.
+ * Bean filter builders must have a public no-arg constructor.
+ * Builder settings should be set in the constructor using the provided setters on this class.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
@@ -126,7 +126,7 @@ public abstract class BeanFilterBuilder {
 	 * 	String r = s.serialize(a1);
 	 * 	<jsm>assertEquals</jsm>(<js>"{f0:'f0'}"</js>, r);  <jc>// Note f1 is not serialized</jc>
 	 * </p>
-	 *	<p>
+	 * <p>
 	 * Note that this filter can be used on the parent class so that it filters to all child classes,
 	 * 	or can be set individually on the child classes.
 	 *

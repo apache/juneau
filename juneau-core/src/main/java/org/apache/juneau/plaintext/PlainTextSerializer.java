@@ -22,19 +22,19 @@ import org.apache.juneau.transform.*;
  *
  * <h5 class='section'>Media types:</h5>
  * <p>
- * 	Handles <code>Accept</code> types: <code>text/plain</code>
+ * Handles <code>Accept</code> types: <code>text/plain</code>
  * <p>
- * 	Produces <code>Content-Type</code> types: <code>text/plain</code>
+ * Produces <code>Content-Type</code> types: <code>text/plain</code>
  *
  * <h5 class='section'>Description:</h5>
  * <p>
- * 	Essentially converts POJOs to plain text using the <code>toString()</code> method.
+ * Essentially converts POJOs to plain text using the <code>toString()</code> method.
  * <p>
- * 	Also serializes objects using a transform if the object class has an {@link PojoSwap PojoSwap&lt;?,String&gt;} transform defined on it.
+ * Also serializes objects using a transform if the object class has an {@link PojoSwap PojoSwap&lt;?,String&gt;} transform defined on it.
  *
  * <h5 class='section'>Configurable properties:</h5>
  * <p>
- * 	This class has the following properties associated with it:
+ * This class has the following properties associated with it:
  * <ul>
  * 	<li>{@link SerializerContext}
  * 	<li>{@link BeanContext}

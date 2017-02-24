@@ -30,10 +30,10 @@ import java.lang.annotation.*;
  * 	}
  * </p>
  * <p>
- * 	The <ja>@Path</ja> annotation is optional if the parameters are specified immediately
+ * The <ja>@Path</ja> annotation is optional if the parameters are specified immediately
  * 	following the <code>RestRequest</code> and <code>RestResponse</code> parameters,
  * 	and are specified in the same order as the variables in the URL path pattern.
- * 	The following example is equivalent to the previous example.
+ * The following example is equivalent to the previous example.
  * </p>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/myurl/{foo}/{bar}/{baz}/*"</js>)
@@ -43,9 +43,9 @@ import java.lang.annotation.*;
  * 	}
  * </p>
  * <p>
- * 	If the order of parameters is not the default order shown above, the
+ * If the order of parameters is not the default order shown above, the
  * 	attribute names must be specified (since parameter names are lost during compilation).
- * 	The following example is equivalent to the previous example, except
+ * The following example is equivalent to the previous example, except
  * 	the parameter order has been switched, requiring the use of the <ja>@Path</ja>
  * 	annotations.
  * <p>

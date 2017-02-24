@@ -20,13 +20,13 @@ import org.apache.juneau.serializer.*;
  *
  * <h5 class='section'>Media types:</h5>
  * <p>
- * 	Handles <code>Accept</code> types: <code>text/xml+schema</code>
+ * Handles <code>Accept</code> types: <code>text/xml+schema</code>
  * <p>
- * 	Produces <code>Content-Type</code> types: <code>text/xml</code>
+ * Produces <code>Content-Type</code> types: <code>text/xml</code>
  *
  * <h5 class='section'>Description:</h5>
  * <p>
- * 	Same as {@link XmlSchemaSerializer}, except prepends <code><xt>&lt;?xml</xt> <xa>version</xa>=<xs>'1.0'</xs> <xa>encoding</xa>=<xs>'UTF-8'</xs><xt>?&gt;</xt></code> to the response
+ * Same as {@link XmlSchemaSerializer}, except prepends <code><xt>&lt;?xml</xt> <xa>version</xa>=<xs>'1.0'</xs> <xa>encoding</xa>=<xs>'UTF-8'</xs><xt>?&gt;</xt></code> to the response
  * 	to make it a valid XML document.
  */
 public class XmlSchemaDocSerializer extends XmlSchemaSerializer {

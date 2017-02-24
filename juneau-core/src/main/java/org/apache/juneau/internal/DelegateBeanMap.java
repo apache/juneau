@@ -20,8 +20,8 @@ import org.apache.juneau.*;
  * Represents a wrapped {@link BeanMap} where property values can be overridden, removed, or reordered
  * 	without affecting the underlying bean.
  * <p>
- * 	Provides the {@link #filterKeys(List)} method for specifying the keys to keep in the bean map
- * 		and in what order they should appear.
+ * Provides the {@link #filterKeys(List)} method for specifying the keys to keep in the bean map
+ * 	and in what order they should appear.
  *
  * @param <T> The class type of the wrapped bean.
  */

@@ -54,7 +54,7 @@ public final class ReflectionUtils {
 	/**
 	 * Returns the specified annotation only if it's been declared on the specified class.
 	 * <p>
-	 * 	More efficient than calling {@link Class#getAnnotation(Class)} since it doesn't
+	 * More efficient than calling {@link Class#getAnnotation(Class)} since it doesn't
 	 * 	recursively look for the class up the parent chain.
 	 *
 	 * @param <T> The annotation class type.

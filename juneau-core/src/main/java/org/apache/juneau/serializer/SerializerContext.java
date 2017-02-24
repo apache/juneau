@@ -153,7 +153,7 @@ public class SerializerContext extends BeanContext {
 	 * <p>
 	 * If <jk>true</jk>, null bean values will not be serialized to the output.
 	 * <p>
-	 *	Note that enabling this setting has the following effects on parsing:
+	 * Note that enabling this setting has the following effects on parsing:
 	 * <ul class='spaced-list'>
 	 * 	<li>Map entries with <jk>null</jk> values will be lost.
 	 * </ul>
@@ -193,7 +193,7 @@ public class SerializerContext extends BeanContext {
 	 * If <jk>true</jk>, empty map values will not be serialized to the output.
 	 * <p>
 	 * Note that enabling this setting has the following effects on parsing:
-	 *	<ul class='spaced-list'>
+	 * <ul class='spaced-list'>
 	 * 	<li>Bean properties with empty map values will not be set.
 	 * </ul>
 	 */
@@ -229,7 +229,7 @@ public class SerializerContext extends BeanContext {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <table class='styled'>
-	 *		<tr><th>SERIALIZER_relativeUriBase</th><th>URI</th><th>Serialized URI</th></tr>
+	 * 	<tr><th>SERIALIZER_relativeUriBase</th><th>URI</th><th>Serialized URI</th></tr>
 	 * 	<tr>
 	 * 		<td><code>http://foo:9080/bar/baz</code></td>
 	 * 		<td><code>mywebapp</code></td>

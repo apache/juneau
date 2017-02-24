@@ -32,7 +32,7 @@ import org.apache.juneau.*;
  * 	}
  * </p>
  * <p>
- * 	This is functionally equivalent to the following code...
+ * This is functionally equivalent to the following code...
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>)
  * 	<jk>public Person</jk> doGetPerson(RestResponse res) {
@@ -51,7 +51,7 @@ import org.apache.juneau.*;
  * 	}
  * </p>
  * <p>
- * 	The parameter type can be one of the following:
+ * The parameter type can be one of the following:
  * 	<ul>
  * 		<li>{@link ObjectMap}
  * 		<li><code>Map&lt;String,Object&gt;</code>

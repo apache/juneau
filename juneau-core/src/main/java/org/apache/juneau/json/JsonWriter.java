@@ -77,16 +77,6 @@ public final class JsonWriter extends SerializerWriter {
 	 * @throws IOException Should never happen.
 	 */
 	public JsonWriter stringValue(String s) throws IOException {
-		 /*
-		  * Fixes up a Java string so that it can be used as a JSON string.<br>
-		  * Does the following:<br>
-		  * <ul>
-		  *  <li> Replaces {@code \r?\n} with {@code \\n}<br>
-		  *  <li> Replaces {@code \t} with {@code \\t}<br>
-		  *  <li> Replaces {@code '} with {@code \\'}<br>
-		  *  <li> Replaces {@code "} with {@code \\"}<br>
-		  * </ul>
-		  */
 		if (s == null)
 			return this;
 		boolean doConvert = false;

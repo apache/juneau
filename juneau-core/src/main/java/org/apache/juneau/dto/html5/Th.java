@@ -36,7 +36,7 @@ public class Th extends HtmlElementMixed {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-tdth-colspan">colspan</a> attribute.
 	 * Number of columns that the cell is to span.
 	 * @param colspan The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
+	 * Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Th colspan(Object colspan) {
@@ -59,7 +59,7 @@ public class Th extends HtmlElementMixed {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-tdth-rowspan">rowspan</a> attribute.
 	 * Number of rows that the cell is to span.
 	 * @param rowspan The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
+	 * Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Th rowspan(Object rowspan) {

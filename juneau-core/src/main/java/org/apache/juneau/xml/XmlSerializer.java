@@ -32,15 +32,15 @@ import org.apache.juneau.xml.annotation.*;
  *
  * <h5 class='section'>Media types:</h5>
  * <p>
- * 	Handles <code>Accept</code> types: <code>text/xml</code>
+ * Handles <code>Accept</code> types: <code>text/xml</code>
  * <p>
- * 	Produces <code>Content-Type</code> types: <code>text/xml</code>
+ * Produces <code>Content-Type</code> types: <code>text/xml</code>
  *
  * <h5 class='section'>Description:</h5>
  * <p>
- * 	See the {@link JsonSerializer} class for details on how Java models map to JSON.
+ * See the {@link JsonSerializer} class for details on how Java models map to JSON.
  * <p>
- * 	For example, the following JSON...
+ * For example, the following JSON...
  * <p class='bcode'>
  * 	{
  * 		name:<js>'John Smith'</js>,
@@ -80,7 +80,7 @@ import org.apache.juneau.xml.annotation.*;
  * 		<xt>&lt;fico_x0020_score&gt;</xt> &amp;gt; 640<xt>&lt;/fico_x0020_score&gt;</xt>
  * 	<xt>&lt;/object&gt;</xt>
  * <p>
- * 	An additional "add-json-properties" mode is also provided to prevent loss of JSON data types...
+ * An additional "add-json-properties" mode is also provided to prevent loss of JSON data types...
  * <p class='bcode'>
  * 		<xt>&lt;name</xt> <xa>_type</xa>=<xs>'string'</xs><xt>&gt;</xt>John Smith<xt>&lt;/name&gt;</xt>
  * 		<xt>&lt;address</xt> <xa>_type</xa>=<xs>'object'</xs><xt>&gt;</xt>
@@ -99,14 +99,14 @@ import org.apache.juneau.xml.annotation.*;
  * 		<xt>&lt;fico_x0020_score</xt> <xa>_type</xa>=<xs>'string'</xs><xt>&gt;</xt> &amp;gt; 640<xt>&lt;/fico_x0020_score&gt;</xt>
  * 	<xt>&lt;/object&gt;</xt>
  * <p>
- * 	This serializer provides several serialization options.  Typically, one of the predefined <jsf>DEFAULT</jsf> serializers will be sufficient.
- * 	However, custom serializers can be constructed to fine-tune behavior.
+ * This serializer provides several serialization options.  Typically, one of the predefined <jsf>DEFAULT</jsf> serializers will be sufficient.
+ * However, custom serializers can be constructed to fine-tune behavior.
  * <p>
- * 	If an attribute name contains any non-valid XML element characters, they will be escaped using standard {@code _x####_} notation.
+ * If an attribute name contains any non-valid XML element characters, they will be escaped using standard {@code _x####_} notation.
  *
  * <h5 class='section'>Configurable properties:</h5>
  * <p>
- * 	This class has the following properties associated with it:
+ * This class has the following properties associated with it:
  * <ul>
  * 	<li>{@link XmlSerializerContext}
  * 	<li>{@link BeanContext}
@@ -114,7 +114,7 @@ import org.apache.juneau.xml.annotation.*;
  *
  * <h6 class='topic'>Behavior-specific subclasses</h6>
  * <p>
- * 	The following direct subclasses are provided for convenience:
+ * The following direct subclasses are provided for convenience:
  * <ul class='spaced-list'>
  * 	<li>{@link Sq} - Default serializer, single quotes.
  * 	<li>{@link SqReadable} - Default serializer, single quotes, whitespace added.

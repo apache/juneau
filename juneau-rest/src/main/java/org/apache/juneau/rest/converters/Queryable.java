@@ -25,10 +25,10 @@ import org.apache.juneau.utils.*;
 /**
  * Converter for enablement of {@link PojoQuery} support on response objects returned by a <code>@RestMethod</code> method.
  * <p>
- * 	When enabled, objects in a POJO tree can be filtered using the functionality described in the {@link PojoQuery}
+ * When enabled, objects in a POJO tree can be filtered using the functionality described in the {@link PojoQuery}
  * 	class.
  * <p>
- * 	The following HTTP request parameters are available for tabular data (e.g. {@code Collections} of {@code Maps}, arrays of beans, etc...):
+ * The following HTTP request parameters are available for tabular data (e.g. {@code Collections} of {@code Maps}, arrays of beans, etc...):
  * <ul class='spaced-list'>
  * 	<li><b>&amp;q=<i>JSON-object</i></b> - Query parameter.  Only return rows that match the specified search string. <br>
  * 			The JSON object keys are column names, and the values are search parameter strings.<br>
@@ -44,10 +44,10 @@ import org.apache.juneau.utils.*;
  * </ul>
  *
  * <p>
- * 	The <b>&amp;v</b> parameter can also be used on {@code Maps} and beans.
+ * The <b>&amp;v</b> parameter can also be used on {@code Maps} and beans.
  *
  * <p>
- * 	See {@link PojoQuery} for additional information on filtering POJO models.
+ * See {@link PojoQuery} for additional information on filtering POJO models.
  */
 public final class Queryable implements RestConverter {
 

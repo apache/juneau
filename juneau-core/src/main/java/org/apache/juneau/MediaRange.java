@@ -255,7 +255,7 @@ public final class MediaRange implements Comparable<MediaRange>  {
 	 *
 	 * @param value The value to parse.  If <jk>null</jk> or empty, returns a single <code>MediaRange</code> is returned that represents all types.
 	 * @return The media ranges described by the string.
-	 * 	The ranges are sorted such that the most acceptable media is available at ordinal position <js>'0'</js>, and the least acceptable at position n-1.
+	 * The ranges are sorted such that the most acceptable media is available at ordinal position <js>'0'</js>, and the least acceptable at position n-1.
 	 */
 	public static MediaRange[] parse(String value) {
 

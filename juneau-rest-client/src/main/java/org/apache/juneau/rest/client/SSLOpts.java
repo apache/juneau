@@ -42,7 +42,7 @@ public class SSLOpts {
 	 * Constructor.
 	 *
 	 * @param protocols A comma-delimited list of supported SSL protocols.
-	 * 	If <jk>null</jk>, uses the value returned by {@link #getDefaultProtocols()}.
+	 * If <jk>null</jk>, uses the value returned by {@link #getDefaultProtocols()}.
 	 * @param certValidate Certificate validation setting.
 	 * @param hostVerify Host verification setting.
 	 */

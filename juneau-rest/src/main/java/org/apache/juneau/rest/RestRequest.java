@@ -874,10 +874,10 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Parse into a linked-list of strings.</jc>
-	 * 	Listt&lt;String&gt; myparam = req.getFormDataParameter(<js>"myparam"</js>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	List&lt;String&gt; myparam = req.getFormDataParameter(<js>"myparam"</js>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a linked-list of linked-lists of strings.</jc>
-	 * 	Listt&lt;List&lt;String&gt;&gt; myparam = req.getFormDataParameter(<js>"myparam"</js>, LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	List&lt;List&lt;String&gt;&gt; myparam = req.getFormDataParameter(<js>"myparam"</js>, LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map of string keys/values.</jc>
 	 * 	Map&lt;String,String&gt; myparam = req.getFormDataParameter(<js>"myparam"</js>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
@@ -1047,10 +1047,10 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Parse into a linked-list of strings.</jc>
-	 * 	Listt&lt;String&gt; myparam = req.getPathParameter(<js>"myparam"</js>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	List&lt;String&gt; myparam = req.getPathParameter(<js>"myparam"</js>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a linked-list of linked-lists of strings.</jc>
-	 * 	Listt&lt;List&lt;String&gt;&gt; myparam = req.getPathParameter(<js>"myparam"</js>, LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	List&lt;List&lt;String&gt;&gt; myparam = req.getPathParameter(<js>"myparam"</js>, LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map of string keys/values.</jc>
 	 * 	Map&lt;String,String&gt; myparam = req.getPathParameter(<js>"myparam"</js>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
@@ -1120,8 +1120,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 		<td><code>123</code></td>
 	 * 		<td><code><xt>&lt;number&gt;</xt>123<xt>&lt;/number&gt;</xt></code><br><code><xt>&lt;x</xt> <xa>type</xa>=<xs>'number'</xs><xt>&gt;</xt>...<xt>&lt;/x&gt;</xt></code></td>
 	 * 		<td>{@link Number}</td>
-	 *		</tr>
-	 *		<tr>
+	 * 	</tr>
+	 * 	<tr>
 	 * 		<td>boolean</td>
 	 * 		<td><jk>true</jk></td>
 	 * 		<td><code><xt>&lt;boolean&gt;</xt>true<xt>&lt;/boolean&gt;</xt></code><br><code><xt>&lt;x</xt> <xa>type</xa>=<xs>'boolean'</xs><xt>&gt;</xt>...<xt>&lt;/x&gt;</xt></code></td>
@@ -1171,10 +1171,10 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode'>
 	 * 	<jc>// Parse into a linked-list of strings.</jc>
-	 * 	Listt&lt;String&gt; body = req.getBody(LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	List&lt;String&gt; body = req.getBody(LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a linked-list of linked-lists of strings.</jc>
-	 * 	Listt&lt;List&lt;String&gt;&gt; body = req.getBody(LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	List&lt;List&lt;String&gt;&gt; body = req.getBody(LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map of string keys/values.</jc>
 	 * 	Map&lt;String,String&gt; body = req.getBody(TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
@@ -1637,7 +1637,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * @return The parser matching the request <code>Content-Type</code> header, or <jk>null</jk>
 	 * 	if no matching parser was found.
-	 * 	Includes the matching media type.
+	 * Includes the matching media type.
 	 */
 	public ParserMatch getParserMatch() {
 		MediaType mediaType = getMediaType();

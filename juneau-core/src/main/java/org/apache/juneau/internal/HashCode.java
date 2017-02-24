@@ -15,7 +15,7 @@ package org.apache.juneau.internal;
 /**
  * Utility class for generating integer hash codes.
  * <p>
- * 	General usage:
+ * General usage:
  * <p class='bcode'>
  * 	int hashCode = new HashCode().add("foobar").add(myobject).add(123).get();
  * </p>

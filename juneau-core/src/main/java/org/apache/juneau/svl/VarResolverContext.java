@@ -20,8 +20,8 @@ import org.apache.juneau.internal.*;
 
 /**
  * Configurable properties on the {@link VarResolver} class.
- *	<p>
- *	Used to associate {@link Var Vars} and context objects with {@link VarResolver VarResolvers}.
+ * <p>
+ * Used to associate {@link Var Vars} and context objects with {@link VarResolver VarResolvers}.
  * <p>
  * See {@link ContextFactory} for more information about context properties.
  *

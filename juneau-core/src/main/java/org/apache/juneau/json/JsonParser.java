@@ -27,24 +27,24 @@ import org.apache.juneau.transform.*;
  *
  * <h5 class='section'>Media types:</h5>
  * <p>
- * 	Handles <code>Content-Type</code> types: <code>application/json, text/json</code>
+ * Handles <code>Content-Type</code> types: <code>application/json, text/json</code>
  *
  * <h5 class='section'>Description:</h5>
  * <p>
- * 	This parser uses a state machine, which makes it very fast and efficient.  It parses JSON in about 70% of the
+ * This parser uses a state machine, which makes it very fast and efficient.  It parses JSON in about 70% of the
  * 	time that it takes the built-in Java DOM parsers to parse equivalent XML.
  * <p>
- * 	This parser handles all valid JSON syntax.
- * 	In addition, when strict mode is disable, the parser also handles the following:
+ * This parser handles all valid JSON syntax.
+ * In addition, when strict mode is disable, the parser also handles the following:
  * 	<ul class='spaced-list'>
  * 		<li> Javascript comments (both {@code /*} and {@code //}) are ignored.
  * 		<li> Both single and double quoted strings.
  * 		<li> Automatically joins concatenated strings (e.g. <code><js>"aaa"</js> + <js>'bbb'</js></code>).
  * 		<li> Unquoted attributes.
  * 	</ul>
- * 	Also handles negative, decimal, hexadecimal, octal, and double numbers, including exponential notation.
+ * Also handles negative, decimal, hexadecimal, octal, and double numbers, including exponential notation.
  * <p>
- * 	This parser handles the following input, and automatically returns the corresponding Java class.
+ * This parser handles the following input, and automatically returns the corresponding Java class.
  * 	<ul class='spaced-list'>
  * 		<li> JSON objects (<js>"{...}"</js>) are converted to {@link ObjectMap ObjectMaps}.  <br>
  * 				<b>Note:</b>  If a <code><xa>_type</xa>=<xs>'xxx'</xs></code> attribute is specified on the object, then an attempt is made to convert the object
@@ -59,24 +59,24 @@ import org.apache.juneau.transform.*;
  * 		<li> Input consisting of only whitespace or JSON comments are converted to <jk>null</jk>.
  * 	</ul>
  * <p>
- * 	Input can be any of the following:<br>
- * 	<ul class='spaced-list'>
- * 		<li> <js>"{...}"</js> - Converted to a {@link ObjectMap} or an instance of a Java bean if a <xa>_type</xa> attribute is present.
- *  		<li> <js>"[...]"</js> - Converted to a {@link ObjectList}.
- *  		<li> <js>"123..."</js> - Converted to a {@link Number} (either {@link Integer}, {@link Long}, {@link Float}, or {@link Double}).
- *  		<li> <js>"true"</js>/<js>"false"</js> - Converted to a {@link Boolean}.
- *  		<li> <js>"null"</js> - Returns <jk>null</jk>.
- *  		<li> <js>"'xxx'"</js> - Converted to a {@link String}.
- *  		<li> <js>"\"xxx\""</js> - Converted to a {@link String}.
- *  		<li> <js>"'xxx' + \"yyy\""</js> - Converted to a concatenated {@link String}.
- * 	</ul>
-  * <p>
- * 	TIP:  If you know you're parsing a JSON object or array, it can be easier to parse it using the {@link ObjectMap#ObjectMap(CharSequence) ObjectMap(CharSequence)}
- * 		or {@link ObjectList#ObjectList(CharSequence) ObjectList(CharSequence)} constructors instead of using this class.  The end result should be the same.
+ * Input can be any of the following:<br>
+ * <ul class='spaced-list'>
+ * 	<li> <js>"{...}"</js> - Converted to a {@link ObjectMap} or an instance of a Java bean if a <xa>_type</xa> attribute is present.
+ * 	<li> <js>"[...]"</js> - Converted to a {@link ObjectList}.
+ * 	<li> <js>"123..."</js> - Converted to a {@link Number} (either {@link Integer}, {@link Long}, {@link Float}, or {@link Double}).
+ * 	<li> <js>"true"</js>/<js>"false"</js> - Converted to a {@link Boolean}.
+ * 	<li> <js>"null"</js> - Returns <jk>null</jk>.
+ * 	<li> <js>"'xxx'"</js> - Converted to a {@link String}.
+ * 	<li> <js>"\"xxx\""</js> - Converted to a {@link String}.
+ * 	<li> <js>"'xxx' + \"yyy\""</js> - Converted to a concatenated {@link String}.
+ * </ul>
+ * <p>
+ * TIP:  If you know you're parsing a JSON object or array, it can be easier to parse it using the {@link ObjectMap#ObjectMap(CharSequence) ObjectMap(CharSequence)}
+ * 	or {@link ObjectList#ObjectList(CharSequence) ObjectList(CharSequence)} constructors instead of using this class.  The end result should be the same.
  *
  * <h5 class='section'>Configurable properties:</h5>
  * <p>
- * 	This class has the following properties associated with it:
+ * This class has the following properties associated with it:
  * <ul>
  * 	<li>{@link JsonParserContext}
  * </ul>

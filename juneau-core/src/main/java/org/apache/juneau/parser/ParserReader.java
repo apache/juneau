@@ -19,12 +19,12 @@ import org.apache.juneau.internal.*;
 /**
  * Similar to a {@link java.io.PushbackReader} with a pushback buffer of 1 character.
  * <p>
- * 	Code is optimized to work with a 1 character buffer.
+ * Code is optimized to work with a 1 character buffer.
  * <p>
- * 	Additionally keeps track of current line and column number, and provides the ability to set
+ * Additionally keeps track of current line and column number, and provides the ability to set
  * 	mark points and capture characters from the previous mark point.
  * <p>
- * 	<b>Warning:</b>  Not thread safe.
+ * <b>Warning:</b>  Not thread safe.
  */
 public class ParserReader extends Reader {
 

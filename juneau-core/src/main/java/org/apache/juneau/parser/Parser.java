@@ -34,14 +34,14 @@ import org.apache.juneau.utils.*;
  *
  * <h6 class='topic'>@Consumes annotation</h6>
  * <p>
- * 	The media types that this parser can handle is specified through the {@link Consumes @Consumes} annotation.
+ * The media types that this parser can handle is specified through the {@link Consumes @Consumes} annotation.
  * <p>
- * 	However, the media types can also be specified programmatically by overriding the {@link #getMediaTypes()} method.
+ * However, the media types can also be specified programmatically by overriding the {@link #getMediaTypes()} method.
  *
  * <a id='ValidDataConversions'></a><h6 class='topic'>Valid data conversions</h6>
- * 	Parsers can parse any parsable POJO types, as specified in the <a class="doclink" href="../../../../overview-summary.html#Core.PojoCategories">POJO Categories</a>.
+ * Parsers can parse any parsable POJO types, as specified in the <a class="doclink" href="../../../../overview-summary.html#Core.PojoCategories">POJO Categories</a>.
  * <p>
- * 	Some examples of conversions are shown below...
+ * Some examples of conversions are shown below...
  * </p>
  * 	<table class='styled'>
  * 		<tr>
@@ -95,15 +95,15 @@ import org.apache.juneau.utils.*;
  * 		</tr>
  * 	</table>
  * <p>
- * 	In addition, any class types with {@link PojoSwap PojoSwaps} associated with them on the registered
- * 		{@link #getBeanContext() beanContext} can also be passed in.
+ * In addition, any class types with {@link PojoSwap PojoSwaps} associated with them on the registered
+ * 	{@link #getBeanContext() beanContext} can also be passed in.
  * <p>
- * 	For example, if the {@link CalendarSwap} transform is used to generalize {@code Calendar} objects to {@code String} objects.  When registered
+ * For example, if the {@link CalendarSwap} transform is used to generalize {@code Calendar} objects to {@code String} objects.  When registered
  * 	with this parser, you can construct {@code Calendar} objects from {@code Strings} using the following syntax...
  * <p class='bcode'>
  * 	Calendar c = parser.parse(<js>"'Sun Mar 03 04:05:06 EST 2001'"</js>, GregorianCalendar.<jk>class</jk>);
  * <p>
- * 	If <code>Object.<jk>class</jk></code> is specified as the target type, then the parser
+ * If <code>Object.<jk>class</jk></code> is specified as the target type, then the parser
  * 	automatically determines the data types and generates the following object types...
  * </p>
  * <table class='styled'>
@@ -117,8 +117,8 @@ import org.apache.juneau.utils.*;
  *
  * <a id='SupportedTypes'></a><h6 class='topic'>Supported types</h6>
  * <p>
- * 	Several of the methods below take {@link Type} parameters to identify the type of
- * 		object to create.  Any of the following types can be passed in to these methods...
+ * Several of the methods below take {@link Type} parameters to identify the type of
+ * 	object to create.  Any of the following types can be passed in to these methods...
  * </p>
  * <ul>
  * 	<li>{@link ClassMeta}
@@ -127,10 +127,10 @@ import org.apache.juneau.utils.*;
  * 	<li>{@link GenericArrayType}
  * </ul>
  * <p>
- * 	However, {@code ParameterizedTypes} and {@code GenericArrayTypes} should not contain
- * 		{@link WildcardType WildcardTypes} or {@link TypeVariable TypeVariables}.
+ * However, {@code ParameterizedTypes} and {@code GenericArrayTypes} should not contain
+ * 	{@link WildcardType WildcardTypes} or {@link TypeVariable TypeVariables}.
  * <p>
- * 	Passing in <jk>null</jk> or <code>Object.<jk>class</jk></code> typically signifies that it's up to the parser
+ * Passing in <jk>null</jk> or <code>Object.<jk>class</jk></code> typically signifies that it's up to the parser
  * 	to determine what object type is being parsed parsed based on the rules above.
  */
 public abstract class Parser extends CoreApi {
@@ -160,10 +160,10 @@ public abstract class Parser extends CoreApi {
 	/**
 	 * Workhorse method.  Subclasses are expected to implement this method.
 	 * @param session The runtime session object returned by {@link #createSession(Object, ObjectMap, Method, Object, Locale, TimeZone, MediaType)}.
-	 * 	If <jk>null</jk>, one will be created using {@link #createSession(Object)}.
+	 * If <jk>null</jk>, one will be created using {@link #createSession(Object)}.
 	 * @param type The class type of the object to create.
-	 * 	If <jk>null</jk> or <code>Object.<jk>class</jk></code>, object type is based on what's being parsed.
-	 * 	For example, when parsing JSON text, it may return a <code>String</code>, <code>Number</code>, <code>ObjectMap</code>, etc...
+	 * If <jk>null</jk> or <code>Object.<jk>class</jk></code>, object type is based on what's being parsed.
+	 * For example, when parsing JSON text, it may return a <code>String</code>, <code>Number</code>, <code>ObjectMap</code>, etc...
 	 * @param <T> The class type of the object to create.
 	 * @return The parsed object.
 	 * @throws Exception If thrown from underlying stream, or if the input contains a syntax error or is malformed.
@@ -297,7 +297,7 @@ public abstract class Parser extends CoreApi {
 	 *
 	 * @param <T> The class type of the object being created.
 	 * @param input The input.
-	 * 	See {@link #parse(Object, Type, Type...)} for details.
+	 * See {@link #parse(Object, Type, Type...)} for details.
 	 * @param type The object type to create.
 	 * @return The parsed object.
 	 * @throws ParseException If the input contains a syntax error or is malformed, or is not valid for the specified type.
@@ -314,7 +314,7 @@ public abstract class Parser extends CoreApi {
 	 *
 	 * @param <T> The class type of the object being created.
 	 * @param input The input.
-	 * 	See {@link #parse(Object, Type, Type...)} for details.
+	 * See {@link #parse(Object, Type, Type...)} for details.
 	 * @param type The object type to create.
 	 * @return The parsed object.
 	 * @throws ParseException If the input contains a syntax error or is malformed, or is not valid for the specified type.
@@ -326,19 +326,19 @@ public abstract class Parser extends CoreApi {
 	/**
 	 * Create the session object that will be passed in to the parse method.
 	 * <p>
-	 * 	It's up to implementers to decide what the session object looks like, although typically
+	 * It's up to implementers to decide what the session object looks like, although typically
 	 * 	it's going to be a subclass of {@link ParserSession}.
 	 *
 	 * @param input The input.  See {@link #parse(Object, ClassMeta)} for supported input types.
 	 * @param op Optional additional properties.
 	 * @param javaMethod Java method that invoked this serializer.
-	 * 	When using the REST API, this is the Java method invoked by the REST call.
-	 * 	Can be used to access annotations defined on the method or class.
+	 * When using the REST API, this is the Java method invoked by the REST call.
+	 * Can be used to access annotations defined on the method or class.
 	 * @param outer The outer object for instantiating top-level non-static inner classes.
 	 * @param locale The session locale.
-	 * 	If <jk>null</jk>, then the locale defined on the context is used.
+	 * If <jk>null</jk>, then the locale defined on the context is used.
 	 * @param timeZone The session timezone.
-	 * 	If <jk>null</jk>, then the timezone defined on the context is used.
+	 * If <jk>null</jk>, then the timezone defined on the context is used.
 	 * @param mediaType The session media type (e.g. <js>"application/json"</js>).
 	 * @return The new session.
 	 */
@@ -366,9 +366,9 @@ public abstract class Parser extends CoreApi {
 	/**
 	 * Parses the contents of the specified reader and loads the results into the specified map.
 	 * <p>
-	 * 	Reader must contain something that serializes to a map (such as text containing a JSON object).
+	 * Reader must contain something that serializes to a map (such as text containing a JSON object).
 	 * <p>
-	 * 	Used in the following locations:
+	 * Used in the following locations:
 	 * <ul class='spaced-list'>
 	 * 	<li>The various character-based constructors in {@link ObjectMap} (e.g. {@link ObjectMap#ObjectMap(CharSequence,Parser)}).
 	 * </ul>
@@ -400,7 +400,7 @@ public abstract class Parser extends CoreApi {
 	 * Implementation method.
 	 * Default implementation throws an {@link UnsupportedOperationException}.
 	 * @param session The runtime session object returned by {@link #createSession(Object, ObjectMap, Method, Object, Locale, TimeZone, MediaType)}.
-	 * 	If <jk>null</jk>, one will be created using {@link #createSession(Object)}.
+	 * If <jk>null</jk>, one will be created using {@link #createSession(Object)}.
 	 * @param m The map being loaded.
 	 * @param keyType The class type of the keys, or <jk>null</jk> to default to <code>String.<jk>class</jk></code>.<br>
 	 * @param valueType The class type of the values, or <jk>null</jk> to default to whatever is being parsed.<br>
@@ -415,7 +415,7 @@ public abstract class Parser extends CoreApi {
 	/**
 	 * Parses the contents of the specified reader and loads the results into the specified collection.
 	 * <p>
-	 * 	Used in the following locations:
+	 * Used in the following locations:
 	 * <ul class='spaced-list'>
 	 * 	<li>The various character-based constructors in {@link ObjectList} (e.g. {@link ObjectList#ObjectList(CharSequence,Parser)}.
 	 * </ul>
@@ -445,7 +445,7 @@ public abstract class Parser extends CoreApi {
 	 * Implementation method.
 	 * Default implementation throws an {@link UnsupportedOperationException}.
 	 * @param session The runtime session object returned by {@link #createSession(Object, ObjectMap, Method, Object, Locale, TimeZone, MediaType)}.
-	 * 	If <jk>null</jk>, one will be created using {@link #createSession(Object)}.
+	 * If <jk>null</jk>, one will be created using {@link #createSession(Object)}.
 	 * @param c The collection being loaded.
 	 * @param elementType The class type of the elements, or <jk>null</jk> to default to whatever is being parsed.
 	 *
@@ -460,10 +460,10 @@ public abstract class Parser extends CoreApi {
 	 * Parses the specified array input with each entry in the object defined by the {@code argTypes}
 	 * argument.
 	 * <p>
-	 * 	Used for converting arrays (e.g. <js>"[arg1,arg2,...]"</js>) into an {@code Object[]} that can be passed
+	 * Used for converting arrays (e.g. <js>"[arg1,arg2,...]"</js>) into an {@code Object[]} that can be passed
 	 * 	to the {@code Method.invoke(target, args)} method.
 	 * <p>
-	 * 	Used in the following locations:
+	 * Used in the following locations:
 	 * <ul class='spaced-list'>
 	 * 	<li>Used to parse argument strings in the {@link PojoIntrospector#invokeMethod(Method, Reader)} method.
 	 * </ul>
@@ -493,7 +493,7 @@ public abstract class Parser extends CoreApi {
 	 * Implementation method.
 	 * Default implementation throws an {@link UnsupportedOperationException}.
 	 * @param session The runtime session object returned by {@link #createSession(Object, ObjectMap, Method, Object, Locale, TimeZone, MediaType)}.
-	 * 	If <jk>null</jk>, one will be created using {@link #createSession(Object)}.
+	 * If <jk>null</jk>, one will be created using {@link #createSession(Object)}.
 	 * @param argTypes Specifies the type of objects to create for each entry in the array.
 	 *
 	 * @return An array of parsed objects.

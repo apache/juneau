@@ -34,7 +34,7 @@ public class Version {
 	 * 		<li><js>"0.1"</js>
 	 * 		<li><js>".1"</js>
 	 * 	</ul>
-	 * 	Any parts that are not numeric are interpreted as {@link Integer#MAX_VALUE}
+	 * Any parts that are not numeric are interpreted as {@link Integer#MAX_VALUE}
 	 */
 	public Version(String versionString) {
 		if (isEmpty(versionString))

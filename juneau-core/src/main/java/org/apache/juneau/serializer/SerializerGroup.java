@@ -24,7 +24,7 @@ import org.apache.juneau.*;
  *
  * <h5 class='section'>Description:</h5>
  * <p>
- * 	Provides the following features:
+ * Provides the following features:
  * <ul class='spaced-list'>
  * 	<li>Finds serializers based on HTTP <code>Accept</code> header values.
  * 	<li>Sets common properties on all serializers in a single method call.
@@ -34,13 +34,13 @@ import org.apache.juneau.*;
  *
  * <h6 class='topic'>Match ordering</h6>
  * <p>
- * 	Serializers are matched against <code>Accept</code> strings in the order they exist in this group.
+ * Serializers are matched against <code>Accept</code> strings in the order they exist in this group.
  * <p>
- * 	Adding new entries will cause the entries to be prepended to the group.
- *  	This allows for previous serializers to be overridden through subsequent calls.
+ * Adding new entries will cause the entries to be prepended to the group.
+ * This allows for previous serializers to be overridden through subsequent calls.
  * <p>
- * 	For example, calling <code>g.append(S1.<jk>class</jk>,S2.<jk>class</jk>).append(S3.<jk>class</jk>,S4.<jk>class</jk>)</code>
- * 	will result in the order <code>S3, S4, S1, S2</code>.
+ * For example, calling <code>g.append(S1.<jk>class</jk>,S2.<jk>class</jk>).append(S3.<jk>class</jk>,S4.<jk>class</jk>)</code>
+ * will result in the order <code>S3, S4, S1, S2</code>.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
@@ -131,7 +131,7 @@ public final class SerializerGroup extends Lockable {
 	/**
 	 * Searches the group for a serializer that can handle the specified <code>Accept</code> value.
 	 * <p>
-	 * 	The <code>accept</code> value complies with the syntax described in RFC2616, Section 14.1, as described below:
+	 * The <code>accept</code> value complies with the syntax described in RFC2616, Section 14.1, as described below:
 	 * <p class='bcode'>
 	 * 	Accept         = "Accept" ":"
 	 * 	                  #( media-range [ accept-params ] )
@@ -144,16 +144,16 @@ public final class SerializerGroup extends Lockable {
 	 * 	accept-extension = ";" token [ "=" ( token | quoted-string ) ]
 	 * </p>
 	 * <p>
-	 * 	The general idea behind having the serializer resolution be a two-step process is so that
+	 * The general idea behind having the serializer resolution be a two-step process is so that
 	 * 	the matched media type can be passed in to the {@link WriterSerializer#doSerialize(SerializerSession, Object)} method.
-	 * 	For example...
+	 * For example...
 	 * <p class='bcode'>
 	 * 	String acceptHeaderValue = request.getHeader(<js>"Accept"</js>);
 	 * 	String matchingMediaType = group.findMatch(acceptHeaderValue);
 	 * 	if (matchingMediaType == <jk>null</jk>)
 	 * 		<jk>throw new</jk> RestException(<jsf>SC_NOT_ACCEPTABLE</jsf>);
 	 * 	WriterSerializer s = (WriterSerializer)group.getSerializer(matchingMediaType);
-	 *  s.serialize(getPojo(), response.getWriter(), response.getProperties(), matchingMediaType);
+	 * 	s.serialize(getPojo(), response.getWriter(), response.getProperties(), matchingMediaType);
 	 * </p>
 	 *
 	 * @param acceptHeader The HTTP <l>Accept</l> header string.

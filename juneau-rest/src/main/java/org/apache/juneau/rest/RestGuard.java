@@ -21,23 +21,23 @@ import org.apache.juneau.rest.annotation.*;
  *
  * <h5 class='section'>Description:</h5>
  * <p>
- * 	Implements a guard mechanism for REST method calls that allows requests to be
- * 		rejected before invocation of the REST method.
- * 	For example, guards can be used to ensure that only administrators can call certain methods.
+ * Implements a guard mechanism for REST method calls that allows requests to be
+ * 	rejected before invocation of the REST method.
+ * For example, guards can be used to ensure that only administrators can call certain methods.
  * <p>
- * 	Guards are applied to REST methods declaratively through the {@link RestResource#guards()} or {@link RestMethod#guards()} annotations.
+ * Guards are applied to REST methods declaratively through the {@link RestResource#guards()} or {@link RestMethod#guards()} annotations.
  * <p>
- * 	If multiple guards are specified, ALL guards must pass in order for the request to proceed.
+ * If multiple guards are specified, ALL guards must pass in order for the request to proceed.
  *
  * <h6 class='topic'>How to implement</h6>
  * <p>
- * 	Typically, guards will be used for permissions checking on the user making the request,
- * 		but it can also be used for other purposes like pre-call validation of a request.
+ * Typically, guards will be used for permissions checking on the user making the request,
+ * 	but it can also be used for other purposes like pre-call validation of a request.
  * <p>
- * 	Implementers should simply throw a {@link RestException} from the {@link #guard(RestRequest, RestResponse)}
- * 		method to abort processing on the current request.
+ * Implementers should simply throw a {@link RestException} from the {@link #guard(RestRequest, RestResponse)}
+ * 	method to abort processing on the current request.
  * <p>
- * 	Guards must implement a no-args constructor.
+ * Guards must implement a no-args constructor.
  *
  * <h6 class='topic'>Example usage:</h6>
  * <p class='bcode'>
@@ -67,17 +67,17 @@ public abstract class RestGuard {
 	 * Checks the current HTTP request and throws a {@link RestException} if the guard
 	 * 	does not permit the request.
 	 * <p>
-	 * 	By default, throws an <jsf>SC_FORBIDDEN</jsf> exception if {@link #isRequestAllowed(RestRequest)}
+	 * By default, throws an <jsf>SC_FORBIDDEN</jsf> exception if {@link #isRequestAllowed(RestRequest)}
 	 * 	returns <jk>false</jk>.
 	 * <p>
-	 * 	Subclasses are free to override this method to tailor the behavior of how to handle unauthorized
+	 * Subclasses are free to override this method to tailor the behavior of how to handle unauthorized
 	 * 	requests.
 	 *
 	 * @param req The servlet request.
 	 * @param res The servlet response.
 	 * @throws RestException Thrown to abort processing on current request.
 	 * @return <jk>true</jk> if request can proceed.
-	 * 	Specify <jk>false</jk> if you're doing something like a redirection to a login page.
+	 * Specify <jk>false</jk> if you're doing something like a redirection to a login page.
 	 */
 	public boolean guard(RestRequest req, RestResponse res) throws RestException {
 		if (! isRequestAllowed(req))

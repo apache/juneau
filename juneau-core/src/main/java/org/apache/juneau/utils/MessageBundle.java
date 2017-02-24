@@ -76,7 +76,7 @@ public class MessageBundle extends ResourceBundle {
 	 *
 	 * @param forClass The class using this resource bundle.
 	 * @param bundlePath The path of the resource bundle to wrap.
-	 * 	This can be an absolute path (e.g. <js>"com.foo.MyMessages"</js>) or a path
+	 * This can be an absolute path (e.g. <js>"com.foo.MyMessages"</js>) or a path
 	 * 	relative to the package of the <l>forClass</l> (e.g. <js>"MyMessages"</js> if <l>forClass</l> is <js>"com.foo.MyClass"</js>).
 	 */
 	public MessageBundle(Class<?> forClass, String bundlePath) {

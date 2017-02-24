@@ -17,9 +17,8 @@ import java.io.*;
 /**
  * Interface that identifies that an object can be serialized directly to an output stream.
  * <p>
- * 	Instances must identify the media type of the content by implementing the
+ * Instances must identify the media type of the content by implementing the
  * 	{@link #getMediaType()} method.
- * </p>
  */
 public interface Streamable {
 

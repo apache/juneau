@@ -127,7 +127,7 @@ public class Link extends Common {
 	/**
 	 * Sets the content type of the target of this link.
 	 * <p>
-	 * 	Must be one of the following:
+	 * Must be one of the following:
 	 * <ul>
 	 * 	<li><js>"text"</js>
 	 * 	<li><js>"html"</js>

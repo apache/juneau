@@ -27,7 +27,7 @@ public class Audio extends HtmlElementContainer {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-autoplay">autoplay</a> attribute.
 	 * Hint that the media resource can be started automatically when the page is loaded.
 	 * @param autoplay The new value for this attribute.
-	 * 	Typically a {@link Boolean} or {@link String}.
+	 * Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Audio autoplay(Object autoplay) {
@@ -39,7 +39,7 @@ public class Audio extends HtmlElementContainer {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-controls">controls</a> attribute.
 	 * Show user agent controls.
 	 * @param controls The new value for this attribute.
-	 * 	Typically a {@link Boolean} or {@link String}.
+	 * Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Audio controls(Object controls) {
@@ -62,7 +62,7 @@ public class Audio extends HtmlElementContainer {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-loop">loop</a> attribute.
 	 * Whether to loop the media resource.
 	 * @param loop The new value for this attribute.
-	 * 	Typically a {@link Boolean} or {@link String}.
+	 * Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Audio loop(Object loop) {
@@ -85,7 +85,7 @@ public class Audio extends HtmlElementContainer {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-muted">muted</a> attribute.
 	 * Whether to mute the media resource by default.
 	 * @param muted The new value for this attribute.
-	 * 	Typically a {@link Boolean} or {@link String}.
+	 * Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Audio muted(Object muted) {
@@ -108,7 +108,7 @@ public class Audio extends HtmlElementContainer {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-src">src</a> attribute.
 	 * Address of the resource.
 	 * @param src The new value for this attribute.
-	 * 	Typically a {@link URL} or {@link String}.
+	 * Typically a {@link URL} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Audio src(Object src) {

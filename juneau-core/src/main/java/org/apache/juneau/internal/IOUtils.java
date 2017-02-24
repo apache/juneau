@@ -177,9 +177,9 @@ public final class IOUtils {
 	/**
 	 * Reads the specified input into a {@link String} until the end of the input is reached.
 	 * <p>
-	 * 	The {@code Reader} is automatically closed.
+	 * The {@code Reader} is automatically closed.
 	 * <p>
-	 * 	If the {@code Reader} is not an instance of a {@code BufferedReader}, then it gets wrapped in a {@code BufferedReader}.
+	 * If the {@code Reader} is not an instance of a {@code BufferedReader}, then it gets wrapped in a {@code BufferedReader}.
 	 *
 	 * @param in The input reader.
 	 * @param length Specify a positive number if the length of the input is known.

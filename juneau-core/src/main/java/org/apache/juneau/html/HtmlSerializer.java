@@ -31,13 +31,13 @@ import org.apache.juneau.xml.annotation.*;
  *
  * <h5 class='section'>Media types:</h5>
  * <p>
- * 	Handles <code>Accept</code> types: <code>text/html</code>
+ * Handles <code>Accept</code> types: <code>text/html</code>
  * <p>
- * 	Produces <code>Content-Type</code> types: <code>text/html</code>
+ * Produces <code>Content-Type</code> types: <code>text/html</code>
  *
  * <h5 class='section'>Description:</h5>
  * <p>
- * 	The conversion is as follows...
+ * The conversion is as follows...
  * 	<ul class='spaced-list'>
  * 		<li>{@link Map Maps} (e.g. {@link HashMap}, {@link TreeMap}) and beans are converted to HTML tables with 'key' and 'value' columns.
  * 		<li>{@link Collection Collections} (e.g. {@link HashSet}, {@link LinkedList}) and Java arrays are converted to HTML ordered lists.
@@ -45,21 +45,21 @@ import org.apache.juneau.xml.annotation.*;
  * 		<li>Everything else is converted to text.
  * 	</ul>
  * <p>
- * 	This serializer provides several serialization options.  Typically, one of the predefined <jsf>DEFAULT</jsf> serializers will be sufficient.
- * 	However, custom serializers can be constructed to fine-tune behavior.
+ * This serializer provides several serialization options.  Typically, one of the predefined <jsf>DEFAULT</jsf> serializers will be sufficient.
+ * However, custom serializers can be constructed to fine-tune behavior.
  * <p>
- * 	The {@link HtmlLink} annotation can be used on beans to add hyperlinks to the output.
+ * The {@link HtmlLink} annotation can be used on beans to add hyperlinks to the output.
  *
  * <h5 class='section'>Configurable properties:</h5>
  * <p>
- * 	This class has the following properties associated with it:
+ * This class has the following properties associated with it:
  * <ul class='spaced-list'>
  * 	<li>{@link HtmlSerializerContext}
  * </ul>
  *
  * <h6 class='topic'>Behavior-specific subclasses</h6>
  * <p>
- * 	The following direct subclasses are provided for convenience:
+ * The following direct subclasses are provided for convenience:
  * <ul class='spaced-list'>
  * 	<li>{@link Sq} - Default serializer, single quotes.
  * 	<li>{@link SqReadable} - Default serializer, single quotes, whitespace added.

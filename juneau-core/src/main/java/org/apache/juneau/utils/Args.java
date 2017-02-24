@@ -194,7 +194,7 @@ public final class Args extends ObjectMap {
 	 * If the optional arg has multiple values, returns only the first converted value.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 *	<p class='bcode'>
+	 * <p class='bcode'>
 	 * 	<jc>// Command:  java com.sample.MyClass -verbose true -debug 5</jc>
 	 * 	<jk>boolean</jk> b = args.getArg(<jk>boolean</jk>.<jk>class</jk>, <js>"verbose"</js>);
 	 * 	<jk>int</jk> i = args.getArg(<jk>int</jk>.<jk>class</jk>, <js>"debug"</js>);

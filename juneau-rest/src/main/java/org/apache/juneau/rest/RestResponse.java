@@ -31,11 +31,9 @@ import org.apache.juneau.xml.*;
  * <p>
  * Essentially an extended {@link HttpServletResponse} with some special convenience methods
  * 	that allow you to easily output POJOs as responses.
- * </p>
  * <p>
  * Since this class extends {@link HttpServletResponse}, developers are free to use these
  * 	convenience methods, or revert to using lower level methods like any other servlet response.
- * </p>
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
@@ -46,8 +44,7 @@ import org.apache.juneau.xml.*;
  * 	}
  * </p>
  * <p>
- * 	Refer to <a class="doclink" href="package-summary.html#TOC">REST Servlet API</a> for information about using this class.
- * </p>
+ * Refer to <a class="doclink" href="package-summary.html#TOC">REST Servlet API</a> for information about using this class.
  */
 public final class RestResponse extends HttpServletResponseWrapper {
 
@@ -147,16 +144,16 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	/**
 	 * Sets the HTTP output on the response.
 	 * <p>
-	 * 	Calling this method is functionally equivalent to returning the object in the REST Java method.
+	 * Calling this method is functionally equivalent to returning the object in the REST Java method.
 	 * <p>
-	 * 	Can be of any of the following types:
-	 * 	<ul>
-	 * 	  <li> {@link InputStream}
-	 * 	  <li> {@link Reader}
-	 * 	  <li> Any serializable type defined in <a class="doclink" href="../../../../overview-summary.html#Core.PojoCategories">POJO Categories</a>
-	 * 	</ul>
+	 * Can be of any of the following types:
+	 * <ul>
+	 * 	<li> {@link InputStream}
+	 * 	<li> {@link Reader}
+	 * 	<li> Any serializable type defined in <a class="doclink" href="../../../../overview-summary.html#Core.PojoCategories">POJO Categories</a>
+	 * </ul>
 	 * <p>
-	 * 	If it's an {@link InputStream} or {@link Reader}, you must also specify the <code>Content-Type</code> using the {@link #setContentType(String)} method.
+	 * If it's an {@link InputStream} or {@link Reader}, you must also specify the <code>Content-Type</code> using the {@link #setContentType(String)} method.
 	 *
 	 * @param output The output to serialize to the connection.
 	 * @return This object (for method chaining).

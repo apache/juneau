@@ -76,7 +76,7 @@ public final class XmlUtils {
 	 * @param trim Trim the text before serializing it.
 	 * @param preserveWhitespace Specifies whether we're in preserve-whitespace mode.
 	 * 	(e.g. {@link XmlFormat#MIXED_PWS} or {@link XmlFormat#TEXT_PWS}.
-	 * 	If <jk>true</jk>, leading and trailing whitespace characters will be encoded.
+	 * If <jk>true</jk>, leading and trailing whitespace characters will be encoded.
 	 * @return The same writer passed in.
 	 * @throws IOException Thrown from the writer.
 	 */

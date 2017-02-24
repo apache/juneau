@@ -27,7 +27,7 @@ import org.apache.juneau.transform.*;
  *
  * <h6 class='topic'>Behavior-specific subclasses</h6>
  * <p>
- * 	The following direct subclasses are provided for convenience to the following formats:
+ * The following direct subclasses are provided for convenience to the following formats:
  * <ul class='spaced-list'>
  * 	<li>{@link ToString} - To {@link String Strings} using the {@code Date.toString()} method.
  * 	<li>{@link ISO8601DT} - To ISO8601 date-time strings.
@@ -67,13 +67,13 @@ public class CalendarSwap extends StringSwap<Calendar> {
 	 * Only one of the <code>pattern</code> or <code>style</code> parameters should
 	 *
 	 * @param pattern The {@link SimpleDateFormat} pattern.
-	 * 	If <jk>null</jk>, <code>style</code> is used instead.
+	 * If <jk>null</jk>, <code>style</code> is used instead.
 	 * @param dateStyle The {@link DateFormat} date style (e.g. {@link DateFormat#SHORT}).
-	 * 	Ignored if <code>pattern</code> is not <jk>null</jk>.
-	 * 	Ignored if <code>-1</code>.
+	 * Ignored if <code>pattern</code> is not <jk>null</jk>.
+	 * Ignored if <code>-1</code>.
 	 * @param timeStyle The {@link DateFormat} time style (e.g. {@link DateFormat#SHORT}).
-	 * 	Ignored if <code>pattern</code> is not <jk>null</jk>.
-	 * 	Ignored if <code>-1</code>.
+	 * Ignored if <code>pattern</code> is not <jk>null</jk>.
+	 * Ignored if <code>-1</code>.
 	 * @param timeZone The timeZone to use for dates.  If <jk>null</jk> then either the
 	 * 	timezone specified on the {@link Calendar} object or the timezone returned
 	 * 	by {@link BeanSession#getTimeZone()} is used.

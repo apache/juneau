@@ -48,7 +48,7 @@ public class XmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 	/**
 	 * Returns the XML namespace associated with this bean property.
 	 * <p>
-	 * 	Namespace is determined in the following order:
+	 * Namespace is determined in the following order:
 	 * <ol>
 	 * 	<li>{@link Xml#prefix()} annotation defined on bean property field.
 	 * 	<li>{@link Xml#prefix()} annotation defined on bean getter.

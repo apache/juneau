@@ -33,10 +33,10 @@ import org.apache.juneau.utils.*;
 /**
  * Contains metadata about a bean property.
  * <p>
- * 	Contains information such as type of property (e.g. field/getter/setter), class type of property value,
+ * Contains information such as type of property (e.g. field/getter/setter), class type of property value,
  * 	and whether any transforms are associated with this property.
  * <p>
- * 	Developers will typically not need access to this class.  The information provided by it is already
+ * Developers will typically not need access to this class.  The information provided by it is already
  * 	exposed through several methods on the {@link BeanMap} API.
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -339,7 +339,7 @@ public class BeanPropertyMeta {
 
 	/**
 	 * Returns the override list of properties defined through a {@link BeanProperty#properties()} annotation
-	 *  on this property.
+	 * on this property.
 	 *
 	 * @return The list of override properties, or <jk>null</jk> if annotation not specified.
 	 */

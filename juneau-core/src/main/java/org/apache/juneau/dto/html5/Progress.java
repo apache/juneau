@@ -25,7 +25,7 @@ public class Progress extends HtmlElementMixed {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-progress-max">max</a> attribute.
 	 * Upper bound of range.
 	 * @param max The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
+	 * Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Progress max(Object max) {
@@ -37,7 +37,7 @@ public class Progress extends HtmlElementMixed {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-progress-value">value</a> attribute.
 	 * Current value of the element.
 	 * @param value The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
+	 * Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Progress value(Object value) {

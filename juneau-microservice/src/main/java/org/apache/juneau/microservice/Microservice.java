@@ -244,8 +244,8 @@ public abstract class Microservice {
 	 * 	<cc># Example config file</cc>
 	 * 	<cs>[MySection]</cs>
 	 * 	<ck>myEntry</ck> = $B{foo}
-	 * 		</p>
-	 * 		<p class='bcode'>
+	 * </p>
+	 * <p class='bcode'>
 	 * 	<jc>// Example java code</jc>
 	 * 	String myentry = getConfig().getString(<js>"MySection/myEntry"</js>); <jc>// == "[foo]"</js>
 	 * </p>
@@ -337,8 +337,8 @@ public abstract class Microservice {
 	 * 	<cc># A POJO with embedded variables</cc>
 	 * 	<ck>aBean2</ck> = {foo:'$ARG{0}',baz:$C{MySection/anInt}}
 	 *
-	 * 		</p>
-	 * 		<p class='bcode'>
+	 * </p>
+	 * <p class='bcode'>
 	 * 	<jc>// Java code for accessing config entries above.</jc>
 	 * 	ConfigFile cf = getConfig();
 	 *

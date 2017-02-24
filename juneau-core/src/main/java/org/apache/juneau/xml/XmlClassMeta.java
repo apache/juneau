@@ -78,7 +78,7 @@ public class XmlClassMeta extends ClassMetaExtended {
 	/**
 	 * Returns the XML namespace associated with this class.
 	 * <p>
-	 * 	Namespace is determined in the following order:
+	 * Namespace is determined in the following order:
 	 * <ol>
 	 * 	<li>{@link Xml#prefix()} annotation defined on class.
 	 * 	<li>{@link Xml#prefix()} annotation defined on package.

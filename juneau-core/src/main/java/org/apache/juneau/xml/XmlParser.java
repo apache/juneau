@@ -34,15 +34,15 @@ import org.apache.juneau.xml.annotation.*;
  *
  * <h5 class='section'>Media types:</h5>
  * <p>
- * 	Handles <code>Content-Type</code> types: <code>text/xml</code>
+ * Handles <code>Content-Type</code> types: <code>text/xml</code>
  *
  * <h5 class='section'>Description:</h5>
  * <p>
- * 	See the {@link XmlSerializer} class for a description of Juneau-generated XML.
+ * See the {@link XmlSerializer} class for a description of Juneau-generated XML.
  *
  * <h5 class='section'>Configurable properties:</h5>
  * <p>
- * 	This class has the following properties associated with it:
+ * This class has the following properties associated with it:
  * <ul>
  * 	<li>{@link XmlParserContext}
  * 	<li>{@link BeanContext}
@@ -663,18 +663,18 @@ public class XmlParser extends ReaderParser {
 	 * 	contain a single entry whose key is the root element name.
 	 *
 	 * Example:
-	 *	<table class='styled'>
-	 *		<tr>
-	 *			<td>XML</td>
-	 *			<td>ObjectMap.toString(), preserveRootElement==false</td>
-	 *			<td>ObjectMap.toString(), preserveRootElement==true</td>
-	 *		</tr>
-	 *		<tr>
-	 *			<td><code><xt>&lt;root&gt;&lt;a&gt;</xt>foobar<xt>&lt;/a&gt;&lt;/root&gt;</xt></code></td>
-	 *			<td><code>{ a:<js>'foobar'</js> }</code></td>
-	 *			<td><code>{ root: { a:<js>'foobar'</js> }}</code></td>
-	 *		</tr>
-	 *	</table>
+	 * <table class='styled'>
+	 * 	<tr>
+	 * 		<td>XML</td>
+	 * 		<td>ObjectMap.toString(), preserveRootElement==false</td>
+	 * 		<td>ObjectMap.toString(), preserveRootElement==true</td>
+	 * 	</tr>
+	 * 	<tr>
+	 * 		<td><code><xt>&lt;root&gt;&lt;a&gt;</xt>foobar<xt>&lt;/a&gt;&lt;/root&gt;</xt></code></td>
+	 * 		<td><code>{ a:<js>'foobar'</js> }</code></td>
+	 * 		<td><code>{ root: { a:<js>'foobar'</js> }}</code></td>
+	 * 	</tr>
+	 * </table>
 	 * <p>
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>

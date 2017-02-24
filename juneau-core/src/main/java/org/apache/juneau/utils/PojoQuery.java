@@ -24,9 +24,9 @@ import org.apache.juneau.internal.*;
 /**
  * Designed to provide query/view/sort/paging filtering on tabular in-memory POJO models.
  * <p>
- * 	It can also perform just view filtering on beans/maps.
+ * It can also perform just view filtering on beans/maps.
  * <p>
- * 	Examples of tabular POJO models:
+ * Examples of tabular POJO models:
  * 	<ul>
  * 		<li><tt>Collection{@code <Map>}</tt>
  * 		<li><tt>Collection{@code <Bean>}</tt>
@@ -34,7 +34,7 @@ import org.apache.juneau.internal.*;
  * 		<li><tt>Bean[]</tt>
  * 	</ul>
  * <p>
- * 	Tabular POJO models can be thought of as tables of data.  For example, a list of the following beans...
+ * Tabular POJO models can be thought of as tables of data.  For example, a list of the following beans...
  * <p class='bcode'>
  * 	<jk>public</jk> MyBean {
  * 		<jk>public int</jk> fi;
@@ -50,7 +50,7 @@ import org.apache.juneau.internal.*;
  * 		<tr><td colspan=3>...</td></tr>
  * 	</table>
  * <p>
- * 	From this table, you can perform the following functions:
+ * From this table, you can perform the following functions:
  * 	<ul class='spaced-list'>
  * 		<li>Query - Return only rows where a search pattern matches.
  * 		<li>View - Return only the specified subset of columns in the specified order.
@@ -60,11 +60,11 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='topic'>Query</h5>
  * <p>
- * 	The query capabilites allow you to filter based on query patterns against
+ * The query capabilites allow you to filter based on query patterns against
  * 	strings, dates, and numbers.  Queries take the form of a Map with column names
  * 	as keys, and search patterns as values.  <br>
- * 	Search patterns can be either {@code Strings} or {@code Maps}.<br>
- * 	Multiple search patterns are ANDed (i.e. all patterns must match for the row to be returned).
+ * Search patterns can be either {@code Strings} or {@code Maps}.<br>
+ * Multiple search patterns are ANDed (i.e. all patterns must match for the row to be returned).
  *
  * <h5 class='section'>Example:</h5>
  * <ul class='spaced-list'>
@@ -75,13 +75,13 @@ import org.apache.juneau.internal.*;
  * 		and the <tt>fs</tt> column starts with <tt>"foo"</tt>.
  * </ul>
  * <p>
- * 	Search patterns can also be applied to lower level fields.  For example, the search term
+ * Search patterns can also be applied to lower level fields.  For example, the search term
  * 	<tt>{f1:{f2:{f3{'foobar'}}}</tt> means only return top level rows where the <tt>f1.getF2().getF3()</tt>
  * 	property is <tt>'foobar'</tt>.
  *
  * <h5 class='topic'>String Patterns</h5>
  * <p>
- * 	Any objects can be queried against using string patterns.  If the objects being
+ * Any objects can be queried against using string patterns.  If the objects being
  * 	searched are not strings, then the patterns are matched against whatever is
  * 	return by the {@code Object#toString()} method.
  *
@@ -104,7 +104,7 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='topic'>Numeric Patterns</h5>
  * <p>
- * 	Any object of type {@link Number} (or numeric primitives) can be searched using numeric patterns.
+ * Any object of type {@link Number} (or numeric primitives) can be searched using numeric patterns.
  *
  * <h6 class='topic'>Example numeric query patterns:</h6>
  * <ul>
@@ -126,9 +126,9 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='topic'>Date Patterns</h5>
  * <p>
- * 	Any object of type {@link Date} or {@link Calendar} can be searched using date patterns.
+ * Any object of type {@link Date} or {@link Calendar} can be searched using date patterns.
  * <p>
- * 	The default valid input timestamp formats (which can be overridden via the {@link #setValidTimestampFormats(String...)} method are...
+ * The default valid input timestamp formats (which can be overridden via the {@link #setValidTimestampFormats(String...)} method are...
  *
  * <ul>
  * 	<li><tt>yyyy.MM.dd.HH.mm.ss</tt>
@@ -156,9 +156,9 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='topic'>View</h5>
  * <p>
- * 	The view capability allows you to return only the specified subset of columns in the
+ * The view capability allows you to return only the specified subset of columns in the
  * 	specified order.<br>
- * 	The view parameter is a list of either <tt>Strings</tt> or <tt>Maps</tt>.
+ * The view parameter is a list of either <tt>Strings</tt> or <tt>Maps</tt>.
  *
  * <h6 class='topic'>Example view parameters:</h6>
  * <ul>
@@ -170,8 +170,8 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='topic'>Sort</h5>
  * <p>
- * 	The sort capability allows you to sort values by the specified rows.<br>
- * 	The sort parameter is a list of either <tt>Strings</tt> or <tt>Maps</tt>.<br>
+ * The sort capability allows you to sort values by the specified rows.<br>
+ * The sort parameter is a list of either <tt>Strings</tt> or <tt>Maps</tt>.<br>
  * 	<tt>Strings</tt> represent column names to sort ascending.  If you want
  * 	to sort descending, you need to specify a <tt>Map</tt> of the form <tt>{colname:'d'}</tt>
  *
@@ -185,7 +185,7 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='topic'>Paging</h5>
  * <p>
- * 	Use the <tt>pos</tt> and <tt>limit</tt> parameters to specify a subset of rows to
+ * Use the <tt>pos</tt> and <tt>limit</tt> parameters to specify a subset of rows to
  * 	return.
  *
  * <h5 class='topic'>Other Notes</h5>

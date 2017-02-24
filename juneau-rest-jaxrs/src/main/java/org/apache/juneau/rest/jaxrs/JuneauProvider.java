@@ -31,7 +31,7 @@ import org.apache.juneau.xml.*;
  *
  * <h5 class='section'>Description:</h5>
  * <p>
- * 	Used to associate serializers, parsers, filters, and properties with instances of {@link BaseProvider}.
+ * Used to associate serializers, parsers, filters, and properties with instances of {@link BaseProvider}.
  */
 @Documented
 @Target(TYPE)
@@ -42,28 +42,28 @@ public @interface JuneauProvider {
 	/**
 	 * Provider-level bean filters.
 	 * <p>
-	 * 	These filters are applied to all serializers and parsers being used by the provider.
+	 * These filters are applied to all serializers and parsers being used by the provider.
 	 * <p>
-	 * 	If the specified class is an instance of {@link BeanFilterBuilder}, then a filter built from that builder is added.
-	 * 	Any other classes are wrapped in a {@link InterfaceBeanFilterBuilder} to indicate that subclasses should
-	 * 		be treated as the specified class type.
+	 * If the specified class is an instance of {@link BeanFilterBuilder}, then a filter built from that builder is added.
+	 * Any other classes are wrapped in a {@link InterfaceBeanFilterBuilder} to indicate that subclasses should
+	 * 	be treated as the specified class type.
 	 */
 	Class<?>[] beanFilters() default {};
 
 	/**
 	 * Provider-level POJO swaps.
 	 * <p>
-	 * 	These POJO swaps are applied to all serializers and parsers being used by the provider.
+	 * These POJO swaps are applied to all serializers and parsers being used by the provider.
 	 * <p>
-	 * 	If the specified class is an instance of {@link PojoSwap}, then that swap is added.
-	 * 	Any other classes are wrapped in a {@link SurrogateSwap}.
+	 * If the specified class is an instance of {@link PojoSwap}, then that swap is added.
+	 * Any other classes are wrapped in a {@link SurrogateSwap}.
 	 */
 	Class<?>[] pojoSwaps() default {};
 
 	/**
 	 * Provider-level properties.
 	 * <p>
-	 * 	Any of the following property names can be specified:
+	 * Any of the following property names can be specified:
 	 * <ul>
 	 * 	<li>{@link RestServletContext}
 	 * 	<li>{@link BeanContext}
@@ -74,23 +74,23 @@ public @interface JuneauProvider {
 	 * 	<li>{@link XmlParserContext}
 	 * </ul>
 	 * <p>
-	 * 	Property values will be converted to the appropriate type.
+	 * Property values will be converted to the appropriate type.
 	 * <p>
-	 * 	These properties can be augmented/overridden through the {@link RestMethod#properties()} annotation on the REST method.
+	 * These properties can be augmented/overridden through the {@link RestMethod#properties()} annotation on the REST method.
 	 */
 	Property[] properties() default {};
 
 	/**
 	 * Specifies a list of {@link Serializer} classes to add to the list of serializers available for this provider.
 	 * <p>
-	 * 	This annotation can only be used on {@link Serializer} classes that have no-arg constructors.
+	 * This annotation can only be used on {@link Serializer} classes that have no-arg constructors.
 	 */
 	Class<? extends Serializer>[] serializers() default {};
 
 	/**
 	 * Specifies a list of {@link Parser} classes to add to the list of parsers available for this provider.
 	 * <p>
-	 * 	This annotation can only be used on {@link Parser} classes that have no-arg constructors.
+	 * This annotation can only be used on {@link Parser} classes that have no-arg constructors.
 	 */
 	Class<? extends Parser>[] parsers() default {};
 }

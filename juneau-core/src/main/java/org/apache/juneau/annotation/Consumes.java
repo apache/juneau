@@ -24,23 +24,23 @@ import org.apache.juneau.parser.*;
  *
  * <h5 class='section'>Description:</h5>
  * <p>
- * 	Provides a way to define the contents of {@link Parser#getMediaTypes()} through an annotation.
+ * Provides a way to define the contents of {@link Parser#getMediaTypes()} through an annotation.
  * <p>
- * 	The {@link Parser#getMediaTypes()} default implementation gathers the media types by looking
- * 		for this annotation.
- * 	It should be noted that this annotation is optional and that the {@link Parser#getMediaTypes()} method can
- * 		be overridden by subclasses to return the media types programmatically.
+ * The {@link Parser#getMediaTypes()} default implementation gathers the media types by looking
+ * 	for this annotation.
+ * It should be noted that this annotation is optional and that the {@link Parser#getMediaTypes()} method can
+ * 	be overridden by subclasses to return the media types programmatically.
  *
  * <h5 class='section'>Example:</h5>
  * <p>
- * 	Standard example:
+ * Standard example:
  * <p class='bcode'>
  * 	<ja>@Consumes</ja>(<js>"application/json,text/json"</js>)
  * 	<jk>public class</jk> JsonParser <jk>extends</jk> ReaderParser {...}
  * </p>
  * <p>
- * 	The media types can also be <code>media-range</code> values per
- * 		<a class="doclink" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1">RFC2616/14.1</a>.
+ * The media types can also be <code>media-range</code> values per
+ * 	<a class="doclink" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1">RFC2616/14.1</a>.
  * <p class='bcode'>
  * 	<jc>// Consumes any text</jc>
  * 	<ja>@Consumes</ja>(<js>"text\/*"</js>)
@@ -60,7 +60,7 @@ public @interface Consumes {
 	/**
 	 * A comma-delimited list of media types that the parser can handle.
 	 * <p>
-	 * 	Can contain meta-characters per the <code>media-type</code> specification of
+	 * Can contain meta-characters per the <code>media-type</code> specification of
 	 * 	<a class="doclink" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1">RFC2616/14.1</a>
 	 * @return The media types that the parser can handle.
 	 */

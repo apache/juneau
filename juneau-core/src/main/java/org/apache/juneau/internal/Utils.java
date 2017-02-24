@@ -27,8 +27,8 @@ public class Utils {
      * 		<code>0</code> if Integer #1 numerically less
      * 		than Integer #2; and a value greater
      * 		than <code>0</code> if Integer #1 is numerically
-     * 		 greater than Integer #2 (signed
-     * 		 comparison).
+     * 		greater than Integer #2 (signed
+     * 		comparison).
 	 */
 	public static final int compare(int i1, int i2) {
 		return (i1<i2 ? -1 : (i1==i2 ? 0 : 1));

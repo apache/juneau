@@ -224,11 +224,9 @@ public class RestClient extends CoreApi {
 	 * Creates an instance of an {@link HttpClientBuilder} to be used to create
 	 * 	the {@link HttpClient}.
 	 * <p>
-	 * 	Subclasses can override this method to provide their own client builder.
-	 * </p>
+	 * Subclasses can override this method to provide their own client builder.
 	 * <p>
-	 * 	The predefined method returns an {@link HttpClientBuilder} with the following settings:
-	 * </p>
+	 * The predefined method returns an {@link HttpClientBuilder} with the following settings:
 	 * <ul>
 	 * 	<li>Lax redirect strategy.
 	 * 	<li>The connection manager returned by {@link #createConnectionManager()}.
@@ -245,11 +243,9 @@ public class RestClient extends CoreApi {
 	/**
 	 * Creates the {@link HttpClientConnectionManager} returned by {@link #createConnectionManager()}.
 	 * <p>
-	 * 	Subclasses can override this method to provide their own connection manager.
-	 * </p>
+	 * Subclasses can override this method to provide their own connection manager.
 	 * <p>
-	 * 	The default implementation returns an instance of a {@link PoolingHttpClientConnectionManager}.
-	 * </p>
+	 * The default implementation returns an instance of a {@link PoolingHttpClientConnectionManager}.
 	 *
 	 * @return The HTTP client builder to use to create the HTTP client.
 	 */
@@ -493,7 +489,7 @@ public class RestClient extends CoreApi {
 	/**
 	 * Sets the value for the <code>Accept</code> request header.
 	 * <p>
-	 * 	This overrides the media type specified on the parser, but is overridden by calling <code>setHeader(<js>"Accept"</js>, newvalue);</code>
+	 * This overrides the media type specified on the parser, but is overridden by calling <code>setHeader(<js>"Accept"</js>, newvalue);</code>
 	 *
 	 * @param accept The new header value.
 	 * @return This object (for method chaining).
@@ -506,7 +502,7 @@ public class RestClient extends CoreApi {
 	/**
 	 * Sets the value for the <code>Content-Type</code> request header.
 	 * <p>
-	 * 	This overrides the media type specified on the serializer, but is overridden by calling <code>setHeader(<js>"Content-Type"</js>, newvalue);</code>
+	 * This overrides the media type specified on the serializer, but is overridden by calling <code>setHeader(<js>"Content-Type"</js>, newvalue);</code>
 	 *
 	 * @param contentType The new header value.
 	 * @return This object (for method chaining).
@@ -520,7 +516,7 @@ public class RestClient extends CoreApi {
 	 * Sets the URI of the remoteable services REST servlet for invoking remoteable services.
 	 *
 	 * @param remoteableServletUri The URI of the REST resource implementing a remoteable services servlet.
-	 *		(typically an instance of <code>RemoteableServlet</code>).
+	 * 	(typically an instance of <code>RemoteableServlet</code>).
 	 * @return This object (for method chaining).
 	 */
 	public RestClient setRemoteableServletUri(String remoteableServletUri) {
@@ -549,7 +545,7 @@ public class RestClient extends CoreApi {
 	 * Enable SSL support on this client.
 	 *
 	 * @param opts The SSL configuration options.  See {@link SSLOpts} for details.
-	 * 	This method is a no-op if <code>sslConfig</code> is <jk>null</jk>.
+	 * This method is a no-op if <code>sslConfig</code> is <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 * @throws KeyStoreException
 	 * @throws NoSuchAlgorithmException
@@ -589,13 +585,13 @@ public class RestClient extends CoreApi {
 	 *
 	 * @param url The URL of the remote REST resource.  Can be any of the following:  {@link String}, {@link URI}, {@link URL}.
 	 * @param o The object to serialize and transmit to the URL as the body of the request.
-	 * 	Can be of the following types:
-	 * 	<ul class='spaced-list'>
-	 * 		<li>{@link Reader} - Raw contents of {@code Reader} will be serialized to remote resource.
-	 * 		<li>{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
-	 * 		<li>{@link Object} - POJO to be converted to text using the {@link Serializer} registered with the {@link RestClient}.
-	 * 		<li>{@link HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
-	 * 	</ul>
+	 * Can be of the following types:
+	 * <ul class='spaced-list'>
+	 * 	<li>{@link Reader} - Raw contents of {@code Reader} will be serialized to remote resource.
+	 * 	<li>{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
+	 * 	<li>{@link Object} - POJO to be converted to text using the {@link Serializer} registered with the {@link RestClient}.
+	 * 	<li>{@link HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
+	 * </ul>
 	 * @return A {@link RestCall} object that can be further tailored before executing the request
 	 * 	and getting the response as a parsed object.
 	 * @throws RestCallException If any authentication errors occurred.
@@ -609,13 +605,13 @@ public class RestClient extends CoreApi {
 	 *
 	 * @param url The URL of the remote REST resource.  Can be any of the following:  {@link String}, {@link URI}, {@link URL}.
 	 * @param o The object to serialize and transmit to the URL as the body of the request.
-	 * 	Can be of the following types:
-	 * 	<ul class='spaced-list'>
-	 * 		<li>{@link Reader} - Raw contents of {@code Reader} will be serialized to remote resource.
-	 * 		<li>{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
-	 * 		<li>{@link Object} - POJO to be converted to text using the {@link Serializer} registered with the {@link RestClient}.
-	 * 		<li>{@link HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
-	 * 	</ul>
+	 * Can be of the following types:
+	 * <ul class='spaced-list'>
+	 * 	<li>{@link Reader} - Raw contents of {@code Reader} will be serialized to remote resource.
+	 * 	<li>{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
+	 * 	<li>{@link Object} - POJO to be converted to text using the {@link Serializer} registered with the {@link RestClient}.
+	 * 	<li>{@link HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
+	 * </ul>
 	 * @return A {@link RestCall} object that can be further tailored before executing the request
 	 * 	and getting the response as a parsed object.
 	 * @throws RestCallException If any authentication errors occurred.
@@ -736,14 +732,14 @@ public class RestClient extends CoreApi {
 	 * @param method The HTTP method.
 	 * @param url The URL of the remote REST resource.  Can be any of the following:  {@link String}, {@link URI}, {@link URL}.
 	 * @param content The HTTP body content.
-	 * 	Can be of the following types:
-	 * 	<ul class='spaced-list'>
-	 * 		<li>{@link Reader} - Raw contents of {@code Reader} will be serialized to remote resource.
-	 * 		<li>{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
-	 * 		<li>{@link Object} - POJO to be converted to text using the {@link Serializer} registered with the {@link RestClient}.
-	 * 		<li>{@link HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
-	 * 	</ul>
-	 * 	This parameter is IGNORED if {@link HttpMethod#hasContent()} is <jk>false</jk>.
+	 * Can be of the following types:
+	 * <ul class='spaced-list'>
+	 * 	<li>{@link Reader} - Raw contents of {@code Reader} will be serialized to remote resource.
+	 * 	<li>{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
+	 * 	<li>{@link Object} - POJO to be converted to text using the {@link Serializer} registered with the {@link RestClient}.
+	 * 	<li>{@link HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
+	 * </ul>
+	 * This parameter is IGNORED if {@link HttpMethod#hasContent()} is <jk>false</jk>.
 	 * @return A {@link RestCall} object that can be further tailored before executing the request
 	 * 	and getting the response as a parsed object.
 	 * @throws RestCallException If any authentication errors occurred.

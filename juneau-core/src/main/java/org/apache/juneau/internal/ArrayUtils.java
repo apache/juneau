@@ -113,7 +113,7 @@ public final class ArrayUtils {
 	/**
 	 * Converts the specified array to a <code>Set</code>.
 	 * <p>
-	 * 	The order of the entries in the set are the same as the array.
+	 * The order of the entries in the set are the same as the array.
 	 *
 	 * @param <T> The entry type of the array.
 	 * @param array The array being wrapped in a <code>Set</code> interface.

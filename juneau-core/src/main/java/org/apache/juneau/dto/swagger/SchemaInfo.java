@@ -637,7 +637,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * Bean property adder:  <property>enum</property>.
 	 *
 	 * @param _enum The new values to add to the <property>enum</property> property on this bean.
-	 * 	These can either be individual objects or {@link Collection Collections} of objects.
+	 * These can either be individual objects or {@link Collection Collections} of objects.
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo addEnum(Object..._enum) {
@@ -659,7 +659,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * Synonym for {@link #addEnum(Object...)}.
 	 *
 	 * @param _enum The new values to add to the <property>enum</property> property on this bean.
-	 * 	These can either be individual objects or {@link Collection Collections} of objects.
+	 * These can either be individual objects or {@link Collection Collections} of objects.
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo _enum(Object..._enum) {
@@ -750,7 +750,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * Bean property adder:  <property>enum</property>.
 	 *
 	 * @param allOf The new values to add to the <property>allOf</property> property on this bean.
-	 * 	These can either be individual objects or {@link Collection Collections} of objects.
+	 * These can either be individual objects or {@link Collection Collections} of objects.
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo addAllOf(Object...allOf) {
@@ -772,7 +772,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * Synonym for {@link #addAllOf(Object...)}.
 	 *
 	 * @param allOf The new values to add to the <property>allOf</property> property on this bean.
-	 * 	These can either be individual objects or {@link Collection Collections} of objects.
+	 * These can either be individual objects or {@link Collection Collections} of objects.
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo allOf(Object...allOf) {

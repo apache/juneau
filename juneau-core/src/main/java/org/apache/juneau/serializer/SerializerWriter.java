@@ -68,7 +68,7 @@ public class SerializerWriter extends Writer {
 	/**
 	 * Performs a carriage return.
 	 * <p>
-	 * 	Adds a newline and the specified number of tabs (if the {@code useWhitespace} setting is enabled) to the output.
+	 * Adds a newline and the specified number of tabs (if the {@code useWhitespace} setting is enabled) to the output.
 	 *
 	 * @param depth The indentation.
 	 * @throws IOException If a problem occurred trying to write to the writer.

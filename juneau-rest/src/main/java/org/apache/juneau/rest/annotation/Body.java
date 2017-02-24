@@ -30,7 +30,7 @@ import java.lang.annotation.*;
  * 	}
  * </p>
  * <p>
- * 	This is functionally equivalent to the following code...
+ * This is functionally equivalent to the following code...
  * </p>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<js>"POST"</js>)
@@ -40,8 +40,8 @@ import java.lang.annotation.*;
  * 	}
  * </p>
  * <p>
- * 	{@link Reader Readers} and {@link InputStream InputStreams} can also be specified as content parameters.
- * 	When specified, any registered parsers are bypassed.
+ * {@link Reader Readers} and {@link InputStream InputStreams} can also be specified as content parameters.
+ * When specified, any registered parsers are bypassed.
  * </p>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<js>"POST"</js>)

@@ -18,11 +18,11 @@ import org.apache.juneau.transform.*;
 /**
  * Transforms beans into {@link String Strings} by simply calling the {@link Object#toString()} method.
  * <p>
- * 	Allows you to specify classes that should just be converted to {@code Strings} instead of potentially
+ * Allows you to specify classes that should just be converted to {@code Strings} instead of potentially
  * 	being turned into Maps by the {@link BeanContext} (or worse, throwing {@link BeanRuntimeException BeanRuntimeExceptions}).
  * <p>
- * 	This is usually a one-way transform.
- * 	Beans serialized as strings cannot be reconstituted using a parser unless it is a <a class="doclink" href="../../../../overview-summary.html#Core.PojoCategories">Type 5 POJO</a>.
+ * This is usually a one-way transform.
+ * Beans serialized as strings cannot be reconstituted using a parser unless it is a <a class="doclink" href="../../../../overview-summary.html#Core.PojoCategories">Type 5 POJO</a>.
  *
  * @param <T> The class type of the bean.
  */

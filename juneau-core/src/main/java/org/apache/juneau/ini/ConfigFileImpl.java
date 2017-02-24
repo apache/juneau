@@ -59,17 +59,17 @@ public final class ConfigFileImpl extends ConfigFile {
 	 * If file does not initially exist, this object will start off empty.
 	 *
 	 * @param file The INI file on disk.
-	 * 	If <jk>null</jk>, create an in-memory config file.
+	 * If <jk>null</jk>, create an in-memory config file.
 	 * @param readOnly Make this configuration file read-only.
-	 *		Attempting to set any values on this config file will cause {@link UnsupportedOperationException} to be thrown.
-	 *	@param encoder The encoder to use for encoding sensitive values in this configuration file.
-	 * 	If <jk>null</jk>, defaults to {@link XorEncoder#INSTANCE}.
-	 *	@param serializer The serializer to use for serializing POJOs in the {@link #put(String, Object)} method.
-	 * 	If <jk>null</jk>, defaults to {@link JsonSerializer#DEFAULT}.
-	 *	@param parser The parser to use for parsing POJOs in the {@link #getObject(Class,String)} method.
-	 * 	If <jk>null</jk>, defaults to {@link JsonParser#DEFAULT}.
+	 * Attempting to set any values on this config file will cause {@link UnsupportedOperationException} to be thrown.
+	 * @param encoder The encoder to use for encoding sensitive values in this configuration file.
+	 * If <jk>null</jk>, defaults to {@link XorEncoder#INSTANCE}.
+	 * @param serializer The serializer to use for serializing POJOs in the {@link #put(String, Object)} method.
+	 * If <jk>null</jk>, defaults to {@link JsonSerializer#DEFAULT}.
+	 * @param parser The parser to use for parsing POJOs in the {@link #getObject(Class,String)} method.
+	 * If <jk>null</jk>, defaults to {@link JsonParser#DEFAULT}.
 	 * @param charset The charset on the files.
-	 * 	If <jk>null</jk>, defaults to {@link Charset#defaultCharset()}.
+	 * If <jk>null</jk>, defaults to {@link Charset#defaultCharset()}.
 	 * @throws IOException
 	 */
 	public ConfigFileImpl(File file, boolean readOnly, Encoder encoder, WriterSerializer serializer, ReaderParser parser, Charset charset) throws IOException {

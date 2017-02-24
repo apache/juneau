@@ -25,7 +25,7 @@ public class Ol extends HtmlElementContainer {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/grouping-content.html#attr-ol-reversed">reversed</a> attribute.
 	 * Number the list backwards..
 	 * @param reversed The new value for this attribute.
-	 * 	Typically a {@link Boolean} or {@link String}.
+	 * Typically a {@link Boolean} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Ol reversed(Object reversed) {
@@ -37,7 +37,7 @@ public class Ol extends HtmlElementContainer {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/grouping-content.html#attr-ol-start">start</a> attribute.
 	 * Ordinal value of the first item.
 	 * @param start The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
+	 * Typically a {@link Number} or {@link String}.
 	 * @return This object (for method chaining).
 	 */
 	public final Ol start(Object start) {

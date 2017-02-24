@@ -27,11 +27,11 @@ import org.apache.juneau.transform.*;
  *
  * <h5 class='section'>Media types:</h5>
  * <p>
- * 	Handles <code>Content-Type</code> types: <code>octal/msgpack</code>
+ * Handles <code>Content-Type</code> types: <code>octal/msgpack</code>
  *
  * <h5 class='section'>Configurable properties:</h5>
  * <p>
- * 	This class has the following properties associated with it:
+ * This class has the following properties associated with it:
  * <ul>
  * 	<li>{@link MsgPackParserContext}
  * </ul>

@@ -22,9 +22,9 @@ import org.apache.juneau.jena.*;
 /**
  * Annotation for specifying options for RDF serializers.
  * <p>
- * 	Can be applied to Java packages, types, fields, and methods.
+ * Can be applied to Java packages, types, fields, and methods.
  * <p>
- * 	Can be used for the following:
+ * Can be used for the following:
  * <ul class='spaced-list'>
  * 	<li>Override the default behavior of how collections and arrays are serialized.
  * </ul>
@@ -38,16 +38,15 @@ public @interface Rdf {
 	/**
 	 * Sets the XML prefix of this property or class.
 	 * <p>
-	 * 	Must either be matched to a {@link #namespace()} annotation on the same object, parent object, or a {@link RdfNs} with the same name
+	 * Must either be matched to a {@link #namespace()} annotation on the same object, parent object, or a {@link RdfNs} with the same name
 	 * 	through the {@link RdfSchema#rdfNs()} annotation on the package.
-	 * </p>
 	 */
 	String prefix() default "";
 
 	/**
 	 * Sets the namespace URI of this property or class.
 	 * <p>
-	 * 	Must be matched with a {@link #prefix()} annotation on this object, a parent object, or a {@link RdfNs} with the same name
+	 * Must be matched with a {@link #prefix()} annotation on this object, a parent object, or a {@link RdfNs} with the same name
 	 * 	through the {@link RdfSchema#rdfNs()} annotation on the package.
 	 */
 	String namespace() default "";
