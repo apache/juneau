@@ -14,15 +14,18 @@ package org.apache.juneau.microservice.resources;
 
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.html.HtmlDocSerializerContext.*;
+import static org.apache.juneau.dto.html5.HtmlBuilder.*;
 
 import java.io.*;
-import java.util.*;
+import java.util.Map;
 
 import org.apache.juneau.*;
+import org.apache.juneau.dto.html5.*;
 import org.apache.juneau.ini.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.annotation.Body;
 
 /**
  * Shows contents of the microservice configuration file.
@@ -56,12 +59,20 @@ public class ConfigResource extends Resource {
 	 * @return The config file as a reader resource.
 	 * @throws Exception
 	 */
-	@RestMethod(name="GET", path="/edit", description="Show config file edit page.")
-	public ReaderResource getConfigEditPage(RestRequest req) throws Exception {
-		// Note that we don't want variables in the config file to be resolved,
-		// so we need to escape any $ characters we see.
-		req.setAttribute("contents", getConfig().toString().replaceAll("\\$", "\\\\\\$"));
-		return req.getReaderResource("ConfigEdit.html", true);
+	@RestMethod(name="GET", path="/edit", description="Edit config file.")
+	public Form getConfigEditForm(RestRequest req) throws Exception {
+		return form().id("form").action(req.getServletURI()).method("POST").enctype("application/x-www-form-urlencoded").children(
+			div()._class("data").children(
+				table(
+					tr(td().style("text-align:right").children(button("submit","Submit"),button("reset","Reset"))),
+					tr(th().child("Contents")),
+					tr(th().child(
+						textarea().name("contents").rows(40).cols(120).style("white-space:pre;word-wrap:normal;overflow-x:scroll;font-family:monospace;")
+							.text(getConfig().toString()))
+					)
+				)
+			)
+		);
 	}
 
 	/**

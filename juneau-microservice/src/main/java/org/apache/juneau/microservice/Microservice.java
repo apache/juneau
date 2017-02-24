@@ -216,6 +216,8 @@ public abstract class Microservice {
 	 * 	<li><code>$C{key}</code>, <code>$C{key,default}</code> - Config file entries.
 	 * 	<li><code>$MF{key}</code>, <code>$MF{key,default}</code> - Manifest file entries.
 	 * 	<li><code>$ARG{key}</code>, <code>$ARG{key,default}</code> - Command-line arguments.
+	 * 	<li><code>$IF{boolArg,thenValue}</code>, <code>$IF{boolArg,thenValue,elseValue}</code> - If-block logic.
+	 * 	<li><code>$SWITCH{stringArg,pattern,thenVal...}</code>, <code>$SWITCH{stringArg,pattern,thenVal,elseVal...}</code>  - Switch-block logic.
 	 * </ul>
 	 * <p>
 	 * Subclasses can override this method to provide their own variables.
@@ -252,7 +254,7 @@ public abstract class Microservice {
 	 */
 	protected VarResolver createVarResolver() {
 		return new VarResolver()
-			.addVars(SystemPropertiesVar.class, EnvVariablesVar.class, ConfigFileVar.class, ManifestFileVar.class, ArgsVar.class)
+			.addVars(SystemPropertiesVar.class, EnvVariablesVar.class, ConfigFileVar.class, ManifestFileVar.class, ArgsVar.class, SwitchVar.class, IfVar.class)
 			.setContextObject(ConfigFileVar.SESSION_config, cf)
 			.setContextObject(ManifestFileVar.SESSION_manifest, mf)
 			.setContextObject(ArgsVar.SESSION_args, args);

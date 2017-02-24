@@ -236,9 +236,9 @@
 		Juneau requires Java 6+.  The majority of the code has no other dependencies except for the following packages:
 	</p>
 	<ul class='javahierarchy'>
-		<li class='p'> {@link org.apache.juneau.jena} - RDF support.  Requires Apache Jena 2.7.1+.
-		<li class='p'> {@link org.apache.juneau.rest} - REST servlet support.  Requires JEE 1.3+.
-		<li class='p'> {@link org.apache.juneau.rest.client} - REST client support.  Requires Apache HttpClient 4.5+.
+		<li class='p'> <a class='doclink' href='org/apache/juneau/jena/package-summary.html#TOC'>org.apache.juneau.jena</a> - RDF support.  Requires Apache Jena 2.7.1+.
+		<li class='p'> <a class='doclink' href='org/apache/juneau/rest/package-summary.html#TOC'>org.apache.juneau.rest</a> - REST servlet support.  Requires JEE 1.3+.
+		<li class='p'> <a class='doclink' href='org/apache/juneau/rest/client/package-summary.html#TOC'>org.apache.juneau.rest.client</a> - REST client support.  Requires Apache HttpClient 4.5+.
 	</ul>
 	<p>
 		OSGi bundles are also provided that break down Juneau into the following components:
@@ -733,7 +733,7 @@
 				Several <code>PojoSwaps</code> are already provided for common Java objects:
 			</p>
 			<ul class='javahierarchy'>
-				<li class='p'>{@link org.apache.juneau.transforms}
+				<li class='p'><a class='doclink' href='org/apache/juneau/transforms/package-summary.html#TOC'>org.apache.juneau.transforms</a>
 				<ul>
 					<li class='c'>{@link org.apache.juneau.transforms.ByteArrayBase64Swap}
 					<li class='a'>{@link org.apache.juneau.transforms.CalendarSwap}
@@ -957,7 +957,7 @@
 			
 			<h6 class='topic'>Additional Information</h6>
 			<ul class='javahierarchy'>
-				<li class='p'>{@link org.apache.juneau.transform}
+				<li class='p'><a class='doclink' href='org/apache/juneau/transform/package-summary.html#TOC'>org.apache.juneau.transform</a>
 			</ul>
 		</div>
 
@@ -1293,7 +1293,7 @@
 	<h4 class='topic' onclick='toggle(this)'>2.9 - Simple Variable Language</h4>
 	<div class='topic'>
 		<p>
-			The {@link org.apache.juneau.svl} package defines an API for a language called "Simple Variable Language".
+			The <a class='doclink' href='org/apache/juneau/svl/package-summary.html#TOC'>org.apache.juneau.svl</a> package defines an API for a language called "Simple Variable Language".
 			In a nutshell, Simple Variable Language (or SVL) is text that contains variables of the form <js>"$varName{varKey}"</js>.
 		</p>
 		<p>
@@ -1329,7 +1329,7 @@
 	<h3 class='topic' onclick='toggle(this)'>2.10 - Configuration Files</h3>
 	<div class='topic'>
 		<p>
-			The {@link org.apache.juneau.ini} package contains a powerful API for creating and using INI-style config files.
+			The <a class='doclink' href='org/apache/juneau/ini/package-summary.html#TOC'>org.apache.juneau.ini</a> package contains a powerful API for creating and using INI-style config files.
 		</p>
 		<p>
 			An example of an INI file:
@@ -1637,7 +1637,7 @@
 		
 		<h6 class='topic'>Additional Information</h6>
 		<ul class='javahierarchy'>
-			<li class='p'><a class='doclink' href='org/apache/juneau/dto/html5/package-summary.html#TOC'>org.apache.juneau.dto.html5</a> - HTML DTOs.
+			<li class='p'><a class='doclink' href='org/apache/juneau/dto/html5/package-summary.html#TOC'>org.apache.juneau.dto.html5</a> - HTML5 beans.
 		</ul>
 	</div>
 
@@ -1755,7 +1755,7 @@
 		
 		<h6 class='topic'>Additional Information</h6>
 		<ul class='javahierarchy'>
-			<li class='p'><a class='doclink' href='org/apache/juneau/dto/html5/package-summary.html#TOC'>org.apache.juneau.dto.atom</a> - Atom DTOs.
+			<li class='p'><a class='doclink' href='org/apache/juneau/dto/atom/package-summary.html#TOC'>org.apache.juneau.dto.atom</a> - Atom DTOs.
 		</ul>
 	</div>
 
@@ -3049,6 +3049,54 @@
 				and returned back as a POJO response:
 		</p>
 		<img class='bordered' src='doc-files/Samples.UrlEncodedFormResource.2.png'>
+		<p>
+			Another option is to construct the HTML form in Java using <a class='doclink' href='org/apache/juneau/dto/html5/package-summary.html#TOC'>HTML5 beans</a>.
+			This is arguably a better approach since it's typically cleaner with less code, and the headers/links
+			are already part of the page.
+		</p>
+		<p class='bcode'>
+	<jk>import static</jk> org.apache.juneau.dto.html5.HtmlBuilder.*;
+
+	<jd>/** GET request handler */</jd>
+	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/"</js>)
+	<jk>public</jk> Div doGet(RestRequest req) {
+		<jk>return</jk> div(
+			script(<js>"text/javascript"</js>,
+				<js>"\n	// Load results from IFrame into this document."</js>
+				+<js>"\n	function loadResults(buff) {"</js>
+				+<js>"\n		var doc = buff.contentDocument || buff.contentWindow.document;"</js>
+				+<js>"\n		var buffBody = doc.getElementById('data');"</js>
+				+<js>"\n		document.getElementById('results').innerHTML = buffBody.innerHTML;"</js>
+				+<js>"\n	}"</js>
+			),
+			<jsf>form</jsf>().id(<js>"form"</js>).action(req.getServletURI()).method(<js>"POST"</js>).target(<js>"buff"</js>).children(
+				<jsf>table</jsf>(
+					<jsf>tr</jsf>(
+						<jsf>th</jsf>(req.getMessage(<js>"aString"</js>)),
+						<jsf>td</jsf>(<jsf>input</jsf>().name(<js>"aString"</js>).type(<js>"text"</js>))
+					),
+					<jsf>tr</jsf>(
+						<jsf>th</jsf>(req.getMessage(<js>"aNumber"</js>)),
+						<jsf>td</jsf>(<jsf>input</jsf>().name(<js>"aNumber"</js>).type(<js>"number"</js>))
+					),
+					<jsf>tr</jsf>(
+						<jsf>th</jsf>(req.getMessage(<js>"aDate"</js>)),
+						<jsf>td</jsf>(<jsf>input</jsf>().name(<js>"aDate"</js>).type(<js>"datetime"</js>), <js>" (ISO8601, e.g. "</js>, code(<js>"2001-07-04T15:30:45Z"</js>), <js>\" )"</js>)
+					),
+					<jsf>tr</jsf>(
+						<jsf>td</jsf>().colspan(2).style(<js>"text-align:right"</js>).children(
+							<jsf>button</jsf>(<js>"submit"</js>, req.getMessage(<js>"submit"</js>))
+						)
+					)
+				)
+			),
+			<jsf>br</jsf>(),
+			<jsf>div</jsf>().id(<js>"results"</js>),
+			<jsf>iframe</jsf>().name(<js>"buff"</js>).style(<js>"display:none"</js>).onload(<js>"parent.loadResults(this)"</js>)
+		);
+	}
+		</p>
+		
 		<h6 class='topic'>Additional Information</h6>
 		<ul class='javahierarchy'>
 			<li class='m'>{@link org.apache.juneau.rest.RestServlet#createVarResolver()} - Servlet and request variables.
@@ -5083,7 +5131,7 @@
 	<div class='topic'>
 		<p>
 			The {@link org.apache.juneau.microservice.resources.ConfigResource} class is a reusable resource
-				defined in the {@link org.apache.juneau.microservice} API.
+				defined in the <a class='doclink' href='org/apache/juneau/microservice/package-summary.html#TOC'>org.apache.juneau.microservice</a> API.
 			It provides a REST interface for reading and altering the microservice config file.
 		</p>
 		<p>
@@ -5294,7 +5342,7 @@
 	<div class='topic'>
 		<p>
 			The {@link org.apache.juneau.microservice.resources.LogsResource} class is a reusable resource
-				defined in the {@link org.apache.juneau.microservice} API.
+				defined in the <a class='doclink' href='org/apache/juneau/microservice/package-summary.html#TOC'>org.apache.juneau.microservice</a> API.
 			It provides a REST interface for the log files generated by the microservice.
 		</p>
 		<p>
@@ -5601,12 +5649,22 @@
 				<li>{@link org.apache.juneau.jena.RdfSerializerContext#RDF_addBeanTypeProperties}
 			</ul>
 			<li>New {@link org.apache.juneau.xml.annotation.XmlFormat#VOID} format to identify HTML void elements.
-			<li>More-correct handling of empty non-void elements in HTML serializer.
+			<li>Tweaks to HTML5 support.
+			<ul>
+				<li>Fixed handling of empty non-void elements in HTML serializer.
+				<li>Added <code>style()</code> override methods to all elements.
+			</ul>
 			<li>Improvements to Swagger support.
 			<ul>
 				<li>New {@link org.apache.juneau.dto.swagger.SwaggerBuilder} class.
 				<li>Fluent-style setters added to the Swagger beans.
-				<li>Added Swagger examples <a href="#DTOs.Swagger">here</a> and in the {@link org.apache.juneau.dto.swagger package javadocs}.
+				<li>Added Swagger examples <a href="#DTOs.Swagger">here</a> and in the <a class='doclink' href='org/apache/juneau/dto/swagger/package-summary.html#TOC'>org.apache.juneau.dto.swagger</a> javadocs.
+			</ul>
+			<li>Improvements to {@link org.apache.juneau.svl.VarResolver}.
+			<ul>
+				<li>New {@link org.apache.juneau.svl.vars.IfVar $IF} variable for if-else block logic.
+				<li>New {@link org.apache.juneau.svl.vars.SwitchVar $SWITCH} variable for switch block logic.
+				<li>Whitespace wasn't being ignored in some cases.
 			</ul>
 		</ul>
 	</div>
@@ -5644,7 +5702,7 @@
 						<li>New {@link org.apache.juneau.xml.annotation.XmlFormat#XMLTEXT} format that's identical to {@link org.apache.juneau.xml.annotation.XmlFormat#TEXT} except 
 							XML content is not escaped and serialized directly as the child content.  The parser will reconvert this to the original XML text during parsing.
 					</ul>
-					<li>New support methodology and other improvements to {@link org.apache.juneau.xml} documentation.
+					<li>New support methodology and other improvements to <a class='doclink' href='org/apache/juneau/xml/package-summary.html#TOC'>org.apache.juneau.xml</a> documentation.
 					<li>Eliminated unnecessary <xt>&lt;string&gt;</xt> elements.
 					<li>Eliminated <code><del>XmlContentHandler</del></code> class.
 					<li>Parser efficiency improvements through reuse of string builders.
@@ -5658,9 +5716,9 @@
 					<li>Parser converted from <code>XMLEventReader</code>-based to <code>XMLStreamReader</code>.
 					<li>Eliminated many unnecessary type tags and <xt>&lt;string&gt;</xt> elements and improved the readable layout.  
 						The new format is much leaner.
-					<li>New exhaustive support methodology section added to {@link org.apache.juneau.html} documentation.
+					<li>New exhaustive support methodology section added to <a class='doclink' href='org/apache/juneau/html/package-summary.html#TOC'>org.apache.juneau.html</a> documentation.
 				</ul>
-			<li>New HTML5 DTO support:  {@link org.apache.juneau.dto.html5}.
+			<li>New HTML5 DTO support:  <a class='doclink' href='org/apache/juneau/dto/html5/package-summary.html#TOC'>org.apache.juneau.dto.html5</a>.
 			<li>{@link org.apache.juneau.BeanContext} class split into separate {@link org.apache.juneau.BeanContext} and {@link org.apache.juneau.BeanSession} classes.
 			<ul>
 				<li>Session object meant to be single-use that can be discarded after use and contains session-level object cache and overridable Locale and TimeZone.
@@ -5781,7 +5839,7 @@
 				<ul>
 					<li>New {@link org.apache.juneau.dto.atom.AtomBuilder} class.
 					<li>New setter method names for a better fluent design.
-					<li>Updated {@link org.apache.juneau.dto.atom} documentation.
+					<li>Updated <a class='doclink' href='org/apache/juneau/dto/atom/package-summary.html#TOC'>org.apache.juneau.dto.atom</a> documentation.
 				</ul>
 			<li>New {@link org.apache.juneau.transform.MapSwap} and {@link org.apache.juneau.transform.StringSwap} classes.
 			<li>New {@link org.apache.juneau.serializer.WriterSerializer#println(Object)} method.  Useful for debugging purposes.
@@ -5899,7 +5957,7 @@
 					<li>More consistent handling of exceptions.
 					<li>More consistent method declarations.
 				</ul>
-			<li>Refactored var resolver API and added them to a new package - {@link org.apache.juneau.svl}.
+			<li>Refactored var resolver API and added them to a new package - <a class='doclink' href='org/apache/juneau/svl/package-summary.html#TOC'>org.apache.juneau.svl</a>.
 				<ul>
 					<li>Support for stream-based variables - {@link org.apache.juneau.svl.StreamedVar}.
 					<li>Added support for context and session objects.
@@ -6106,7 +6164,7 @@
 		
 		<h6 class='topic'>Core</h6>
 		<ul class='spaced-list'>
-			<li>Significant changes and enhancements to the {@link org.apache.juneau.ini} API.
+			<li>Significant changes and enhancements to the <a class='doclink' href='org/apache/juneau/ini/package-summary.html#TOC'>org.apache.juneau.ini</a> API.
 				<ul>
 					<li>More consistent handling of comma-delimited lists of objects.
 					<li>New methods in {@link org.apache.juneau.ini.ConfigFile}:
@@ -6531,7 +6589,7 @@
 		
 		<h6 class='topic'>Core</h6>
 		<ul class='spaced-list'>
-			<li>Significant API changes to {@link org.apache.juneau.ini} API.
+			<li>Significant API changes to <a class='doclink' href='org/apache/juneau/ini/package-summary.html#TOC'>org.apache.juneau.ini</a> API.
 				<ul>
 					<li>{@link org.apache.juneau.ini.ConfigFile} is now thread safe and can be shared across multiple threads.
 					<li>New {@link org.apache.juneau.ini.ConfigMgr} class for managing configuration files.
@@ -6597,7 +6655,7 @@
 				Allows encoders to be fine-tuned at the method level.
 			<li>New {@link org.apache.juneau.rest.annotation.RestResource#config() @RestResource.config()} annotation for associating external {@link org.apache.juneau.ini.ConfigFile} config files with servlets.
 			<li>Fixed bugs in {@link org.apache.juneau.rest.labels.ResourceLink}.
-			<li>New {@link org.apache.juneau.rest.matchers} package for commonly-used {@link org.apache.juneau.rest.RestMatcher RestMatchers}:
+			<li>New <a class='doclink' href='org/apache/juneau/rest/matchers/package-summary.html#TOC'>org.apache.juneau.rest.matchers</a> package for commonly-used {@link org.apache.juneau.rest.RestMatcher RestMatchers}:
 				<ul>
 					<li>{@link org.apache.juneau.rest.matchers#MultipartFormDataMatcher}
 					<li>{@link org.apache.juneau.rest.matchers#UrlEncodedFormMatcher}
@@ -6647,7 +6705,7 @@
 			<li>New <code>RestResponse.getUnbufferedWriter()</code> method.
 			<li>Fixed bug that was preventing <code>x-response-headers</code> parameter from working correctly.
 			<li>Added {@link org.apache.juneau.annotation.Bean#properties() @Bean.properties} annotations to the various 
-				classes in {@link org.apache.juneau.rest.labels} so that the order of the bean properties are consistent
+				classes in <a class='doclink' href='org/apache/juneau/rest/labels/package-summary.html#TOC'>org.apache.juneau.rest.labels</a> so that the order of the bean properties are consistent
 				on all JVMs.  On IBM JVMs this is unnecessary because the order of the properties as defined in the class
 				are stored in the bytecode.  Other JVMs such as OpenJRE do not implement this feature causing the bean
 				properties to be in random order.
@@ -7216,7 +7274,7 @@
 							from being modified after being created.  The new mechanism is much more straightforward.
 				</ul>
 			</li>
-			<li>Modifications to the {@link org.apache.juneau.rest.client} APIs to make it easier to work with custom Apache HTTP clients.
+			<li>Modifications to the <a class='doclink' href='org/apache/juneau/rest/client/package-summary.html#TOC'>org.apache.juneau.rest.client</a> APIs to make it easier to work with custom Apache HTTP clients.
 				<ul>
 					<li>Added overridable {@link org.apache.juneau.rest.client.RestClient#createHttpClient()} to allow customized subclasses to construct customized HTTP clients.
 					<li>Removed the <code>DefaultRestClient</code> class since it's now fully redundant with <code>RestClient</code>.
@@ -7426,12 +7484,12 @@
 				The new client API is simply a thin layer on top of <code>HttpClient</code> that performs 
 				serialization and parsing using Juno parsers, but leaves all the details of the HTTP connection
 				to the Apache code. <br>
-				See the {@link org.apache.juneau.rest.client} package for details.
+				See the <a class='doclink' href='org/apache/juneau/rest/client/package-summary.html#TOC'>org.apache.juneau.rest.client</a> package for details.
 			<li>New <code>org.apache.juneau.rest.client.jazz</code> package and <code>org.apache.juneau.rest.client.jazz.JazzRestClient</code> class
 				for performing REST operations against Jazz servers.<br>
 				Includes improved support for FORM authentication, and better SSL certificate validation.
 			<li>Completely redesigned URL-Encoding support.<br>
-				See {@link org.apache.juneau.urlencoding} package for details. 
+				See <a class='doclink' href='org/apache/juneau/urlencoding/package-summary.html#TOC'>org.apache.juneau.urlencoding</a> package for details. 
 			<li>Changes to Parser API.
 			<ul>
 				<li>Removal of <code>ExtendedReaderParser</code> abstract class and moved methods into 
@@ -7662,7 +7720,7 @@
 		<ul class='spaced-list'>
 			<li>
 				New support for generating and consuming fully-compliant JSON-Schema documents.<br>
-				See {@link org.apache.juneau.dto.jsonschema} for information.
+				See <a class='doclink' href='org/apache/juneau/dto/jsonschema/package-summary.html#TOC'>org.apache.juneau.dto.jsonschema</a> for information.
 			</li>
 			<li>
 				New methods added to {@link org.apache.juneau.parser.Parser}:
@@ -8172,7 +8230,7 @@
 		<ul class='spaced-list'>
 			<li>		
 				Juno-Wink integration components that have been requested my many for a long time!<br>
-				Refer to {@link org.apache.juneau.rest.jaxrs} for information.
+				Refer to <a class='doclink' href='org/apache/juneau/rest/jaxrs/package-summary.html#TOC'>org.apache.juneau.rest.jaxrs</a> for information.
 			</li>
 			<li>
 				New {@link org.apache.juneau.annotation.Produces @Produces} annotation in place of <code>ISerializer.getMediaTypes()</code> for specifying what media types a serializer produces.<br>
@@ -8202,7 +8260,7 @@
 		<h6 class='topic'>Core API changes</h6>
 		<ul class='spaced-list'>
 			<li>
-				New {@link org.apache.juneau.serializer} package.
+				New <a class='doclink' href='org/apache/juneau/serializer/package-summary.html#TOC'>org.apache.juneau.serializer</a> package.
 				<ul>
 					<li>Entirely reworked class hierarchy to make it easier to define new serializers.</li>
 					<li>New {@link org.apache.juneau.serializer.WriterSerializer} base class for defining character-based serializers.</li>
@@ -8212,7 +8270,7 @@
 				</ul>
          	</li>
          	<li>
-         		New {@link org.apache.juneau.parser} package.
+         		New <a class='doclink' href='org/apache/juneau/parser/package-summary.html#TOC'>org.apache.juneau.parser</a> package.
          		<ul>
          			<li>Entirely reworked class hierarchy to make it easier to define new parsers.</li>
 					<li>New {@link org.apache.juneau.parser.ReaderParser} base class for defining character-based parsers.</li>
@@ -8221,7 +8279,7 @@
          		</ul>
          	</li>
          	<li>
-				New {@link org.apache.juneau.transform} package.
+				New <a class='doclink' href='org/apache/juneau/transform/package-summary.html#TOC'>org.apache.juneau.transform</a> package.
 				<ul>
 					<li>Cleaner class structure.</li>
 					<li>Improved {@link org.apache.juneau.transform.BeanFilter} class for defining property filters on beans.</li>
@@ -8229,7 +8287,7 @@
          		</ul>
          	</li>
          	<li>
-				New {@link org.apache.juneau.encoders} package.
+				New <a class='doclink' href='org/apache/juneau/encoders/package-summary.html#TOC'>org.apache.juneau.encoders</a> package.
 				<ul>
 					<li>Defines API for {@link org.apache.juneau.encoders.Encoder Encoders} for enabling compression in REST servlets and clients.</li>
 					<li>Previously, gzip compression was enabled by default.  This new API allows you to plug in your own compression algorithms.</li>
@@ -8238,19 +8296,19 @@
 				</ul>
 			</li>
 			<li>
-				New {@link org.apache.juneau.plaintext} package.
+				New <a class='doclink' href='org/apache/juneau/plaintext/package-summary.html#TOC'>org.apache.juneau.plaintext</a> package.
 				<ul>
 					<li>New {@link org.apache.juneau.plaintext.PlainTextSerializer} and {@link org.apache.juneau.plaintext.PlainTextParser} classes for serializing/parsing text/plain content.</li>
 				</ul>
 			</li>
 			<li>
-				New {@link org.apache.juneau.jso} package.
+				New <a class='doclink' href='org/apache/juneau/jso/package-summary.html#TOC'>org.apache.juneau.jso</a> package.
 				<ul>
 					<li>New {@link org.apache.juneau.jso.JavaSerializedObjectSerializer} class for serializing <code>application/x-java-serialized-object</code> content.</li>
 				</ul>
 			</li>
 			<li>
-				New {@link org.apache.juneau.soap} package.
+				New <a class='doclink' href='org/apache/juneau/soap/package-summary.html#TOC'>org.apache.juneau.soap</a> package.
 				<ul>
 					<li>New {@link org.apache.juneau.soap.SoapXmlSerializer} class for serializing <code>text/xml+soap</code> content.</li>
 				</ul>
