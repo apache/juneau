@@ -60,6 +60,12 @@ public class Del extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Del style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementMixed */
 	public Del children(Object...children) {
 		super.children(children);

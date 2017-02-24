@@ -37,6 +37,12 @@ public class Template extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Template style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementMixed */
 	public Template children(Object...children) {
 		super.children(children);

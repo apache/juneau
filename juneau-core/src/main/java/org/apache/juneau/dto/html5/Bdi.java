@@ -37,6 +37,12 @@ public class Bdi extends HtmlElementText {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Bdi style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementText */
 	public Bdi text(Object text) {
 		super.text(text);

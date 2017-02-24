@@ -37,6 +37,12 @@ public class Datalist extends HtmlElementContainer {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Datalist style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementContainer */
 	public final Datalist children(Object...children) {
 		super.children(children);

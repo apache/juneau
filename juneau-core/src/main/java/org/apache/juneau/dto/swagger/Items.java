@@ -28,6 +28,8 @@ import org.apache.juneau.json.*;
  * 		<js>"minLength"</js>: 2
  * 	}
  * </p>
+ * <p>
+ * Refer to <a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.dto.swagger</a> for usage information.
  */
 @Bean(properties="type,format,items,collectionFormat,default,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,enum,multipleOf")
 @SuppressWarnings({ "hiding", "unchecked" })

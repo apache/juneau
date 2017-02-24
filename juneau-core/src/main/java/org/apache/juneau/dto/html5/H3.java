@@ -37,6 +37,12 @@ public class H3 extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final H3 style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementMixed */
 	public H3 children(Object...children) {
 		super.children(children);

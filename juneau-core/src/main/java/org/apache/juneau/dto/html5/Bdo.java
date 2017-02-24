@@ -43,6 +43,12 @@ public class Bdo extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Bdo style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementMixed */
 	public Bdo children(Object...children) {
 		super.children(children);

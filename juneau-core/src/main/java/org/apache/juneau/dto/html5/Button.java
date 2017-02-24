@@ -173,6 +173,12 @@ public class Button extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Button style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementMixed */
 	public Button children(Object...children) {
 		super.children(children);

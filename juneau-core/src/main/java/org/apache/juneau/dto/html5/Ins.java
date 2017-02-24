@@ -60,6 +60,12 @@ public class Ins extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Ins style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementMixed */
 	public Ins children(Object...children) {
 		super.children(children);

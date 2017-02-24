@@ -32,7 +32,7 @@ import org.apache.juneau.svl.*;
 /**
  * Implements the API for accessing the contents of a config file.
  * <p>
- * Refer to {@link org.apache.juneau.ini} for more information.
+ * Refer to <a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.ini</a> for usage information.
  */
 public abstract class ConfigFile implements Map<String,Section> {
 

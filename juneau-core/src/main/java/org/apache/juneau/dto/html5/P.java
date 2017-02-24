@@ -37,6 +37,12 @@ public class P extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final P style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementMixed */
 	public P children(Object...children) {
 		super.children(children);

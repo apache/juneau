@@ -17,7 +17,7 @@ import java.util.*;
 /**
  * Represents a list of {@link Schema} objects.
  * <p>
- * 	Refer to {@link org.apache.juneau.dto.jsonschema} for usage information.
+ * 	Refer to <a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.dto.jsonschema</a> for usage information.
  */
 public class SchemaArray extends LinkedList<Schema> {
 

@@ -19,7 +19,7 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="textarea")
-public class Textarea extends HtmlElementText {
+public class Textarea extends HtmlElementRawText {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-autocomplete">autocomplete</a> attribute.
@@ -208,6 +208,12 @@ public class Textarea extends HtmlElementText {
 	@Override /* HtmlElement */
 	public final Textarea id(String id) {
 		super.id(id);
+		return this;
+	}
+
+	@Override /* HtmlElement */
+	public final Textarea style(String style) {
+		super.style(style);
 		return this;
 	}
 

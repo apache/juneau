@@ -36,4 +36,10 @@ public class Br extends HtmlElementVoid {
 		super.id(id);
 		return this;
 	}
+
+	@Override /* HtmlElement */
+	public final Br style(String style) {
+		super.style(style);
+		return this;
+	}
 }

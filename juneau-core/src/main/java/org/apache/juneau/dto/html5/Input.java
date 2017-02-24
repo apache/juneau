@@ -405,4 +405,10 @@ public class Input extends HtmlElementVoid {
 		super.id(id);
 		return this;
 	}
+
+	@Override /* HtmlElement */
+	public final Input style(String style) {
+		super.style(style);
+		return this;
+	}
 }

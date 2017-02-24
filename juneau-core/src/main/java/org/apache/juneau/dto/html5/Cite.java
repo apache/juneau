@@ -37,6 +37,12 @@ public class Cite extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Cite style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementMixed */
 	public Cite children(Object...children) {
 		super.children(children);

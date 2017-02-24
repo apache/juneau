@@ -572,13 +572,16 @@ public class UonParser extends ReaderParser {
 				s = r.getMarked();
 			else if (c == EQ)
 				r.replace('=');
-			else if (Character.isWhitespace(c)) {
+			else if (Character.isWhitespace(c) && ! isUrlParamValue) {
 				s = r.getMarked(0, -1);
 				skipSpace(r);
 				c = -1;
 			}
 			isInEscape = isInEscape(c, r, isInEscape);
 		}
+
+		if (isUrlParamValue)
+			s = StringUtils.trim(s);
 
 		return ("null".equals(s) ? null : session.trim(s));
 	}

@@ -109,6 +109,12 @@ public class Iframe extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Iframe style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementMixed */
 	public Iframe children(Object...children) {
 		super.children(children);

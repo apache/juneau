@@ -36,4 +36,10 @@ public class Hr extends HtmlElementVoid {
 		super.id(id);
 		return this;
 	}
+
+	@Override /* HtmlElement */
+	public final Hr style(String style) {
+		super.style(style);
+		return this;
+	}
 }

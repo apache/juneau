@@ -37,6 +37,12 @@ public class Li extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Li style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementMixed */
 	public Li children(Object...children) {
 		super.children(children);

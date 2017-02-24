@@ -37,6 +37,12 @@ public class Ruby extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Ruby style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementMixed */
 	public Ruby children(Object...children) {
 		super.children(children);

@@ -28,6 +28,8 @@ import org.apache.juneau.json.*;
  * 		<js>"type"</js>: <js>"integer"</js>
  * 	}
  * </p>
+ * <p>
+ * Refer to <a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.dto.swagger</a> for usage information.
  */
 @Bean(properties="description,type,format,items,collectionFormat,default,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,enum,multipleOf")
 @SuppressWarnings({"hiding", "unchecked"})

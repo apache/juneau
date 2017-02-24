@@ -37,6 +37,12 @@ public class Dfn extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Dfn style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementMixed */
 	public Dfn children(Object...children) {
 		super.children(children);

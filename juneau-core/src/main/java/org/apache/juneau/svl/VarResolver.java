@@ -101,12 +101,14 @@ public class VarResolver extends CoreApi {
 	 * <ul>
 	 * 	<li><code>$S{key}</code>,<code>$S{key,default}</code> - System properties.
 	 * 	<li><code>$E{key}</code>,<code>$E{key,default}</code> - Environment variables.
+	 * 	<li><code>$IF{booleanValue,thenValue[,elseValue]}</code> - If-else patterns.
+	 * 	<li><code>$SWITCH{test,matchPattern,thenValue[,matchPattern,thenValue][,elseValue]}</code> - Switch patterns.
 	 * </ul>
 	 *
 	 * @see SystemPropertiesVar
 	 * @see EnvVariablesVar
 	 */
-	public static final VarResolver DEFAULT = new VarResolver().addVars(SystemPropertiesVar.class, EnvVariablesVar.class).lock();
+	public static final VarResolver DEFAULT = new VarResolver().addVars(SystemPropertiesVar.class, EnvVariablesVar.class, SwitchVar.class, IfVar.class).lock();
 
 	/**
 	 * Construct an empty var resolver with no vars.

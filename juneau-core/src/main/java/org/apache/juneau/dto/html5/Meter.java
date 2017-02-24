@@ -110,6 +110,12 @@ public class Meter extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Meter style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementMixed */
 	public Meter children(Object...children) {
 		super.children(children);

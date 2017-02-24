@@ -129,6 +129,12 @@ public class Object2 extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Object2 style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementMixed */
 	public Object2 children(Object...children) {
 		super.children(children);

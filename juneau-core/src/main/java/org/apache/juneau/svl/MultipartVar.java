@@ -43,7 +43,7 @@ public abstract class MultipartVar extends SimpleVar {
 
 	@Override /* Var */
 	public String resolve(VarResolverSession session, String s) {
-		String[] s2 = s.indexOf(',') == -1 ? new String[]{s} : StringUtils.split(s, ',');
+		String[] s2 = s.indexOf(',') == -1 ? new String[]{s.trim()} : StringUtils.split(s, ',');
 		return resolve(session, s2);
 	}
 }

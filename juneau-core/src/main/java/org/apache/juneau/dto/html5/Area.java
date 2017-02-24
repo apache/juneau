@@ -140,4 +140,10 @@ public class Area extends HtmlElementVoid {
 		super.id(id);
 		return this;
 	}
+
+	@Override /* HtmlElement */
+	public final Area style(String style) {
+		super.style(style);
+		return this;
+	}
 }

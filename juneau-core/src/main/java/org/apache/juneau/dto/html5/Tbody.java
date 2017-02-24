@@ -37,6 +37,12 @@ public class Tbody extends HtmlElementContainer {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Tbody style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementContainer */
 	public final Tbody children(Object...children) {
 		super.children(children);

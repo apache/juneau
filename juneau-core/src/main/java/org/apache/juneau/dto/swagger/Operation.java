@@ -77,6 +77,8 @@ import org.apache.juneau.annotation.*;
  * 		]
  * 	}
  * </p>
+ * <p>
+ * Refer to <a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.dto.swagger</a> for usage information.
  */
 @Bean(properties="operationId,summary,description,tags,externalDocs,consumes,produces,parameters,responses,schemes,deprecated,security")
 @SuppressWarnings("hiding")

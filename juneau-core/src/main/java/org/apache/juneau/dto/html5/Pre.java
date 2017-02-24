@@ -49,6 +49,12 @@ public class Pre extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Pre style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementMixed */
 	public Pre children(Object...children) {
 		super.children(children);

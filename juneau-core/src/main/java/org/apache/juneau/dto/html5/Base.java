@@ -62,4 +62,10 @@ public class Base extends HtmlElementVoid {
 		super.id(id);
 		return this;
 	}
+
+	@Override /* HtmlElement */
+	public final Base style(String style) {
+		super.style(style);
+		return this;
+	}
 }

@@ -49,6 +49,12 @@ public class Html extends HtmlElementContainer {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Html style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementContainer */
 	public final Html children(Object...children) {
 		super.children(children);

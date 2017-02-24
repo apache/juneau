@@ -19,7 +19,7 @@ import org.apache.juneau.annotation.*;
  * <p>
  */
 @Bean(typeName="title")
-public class Title extends HtmlElementText {
+public class Title extends HtmlElementRawText {
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods
@@ -34,6 +34,12 @@ public class Title extends HtmlElementText {
 	@Override /* HtmlElement */
 	public final Title id(String id) {
 		super.id(id);
+		return this;
+	}
+
+	@Override /* HtmlElement */
+	public final Title style(String style) {
+		super.style(style);
 		return this;
 	}
 

@@ -37,6 +37,12 @@ public class Nav extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Nav style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementMixed */
 	public Nav children(Object...children) {
 		super.children(children);

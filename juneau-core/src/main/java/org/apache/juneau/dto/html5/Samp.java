@@ -37,6 +37,12 @@ public class Samp extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Samp style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementMixed */
 	public Samp children(Object...children) {
 		super.children(children);

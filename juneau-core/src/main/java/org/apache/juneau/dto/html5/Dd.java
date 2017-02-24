@@ -37,6 +37,12 @@ public class Dd extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Dd style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementMixed */
 	public Dd children(Object...children) {
 		super.children(children);

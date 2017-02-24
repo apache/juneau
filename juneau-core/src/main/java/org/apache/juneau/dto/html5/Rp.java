@@ -37,6 +37,12 @@ public class Rp extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Rp style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementMixed */
 	public Rp children(Object...children) {
 		super.children(children);

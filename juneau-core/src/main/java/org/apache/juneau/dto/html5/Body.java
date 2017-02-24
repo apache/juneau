@@ -104,6 +104,12 @@ public class Body extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Body style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementMixed */
 	public Body children(Object...children) {
 		super.children(children);

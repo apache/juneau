@@ -49,6 +49,12 @@ public class Q extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Q style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementMixed */
 	public Q children(Object...children) {
 		super.children(children);

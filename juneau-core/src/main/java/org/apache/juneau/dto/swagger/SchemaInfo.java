@@ -25,6 +25,8 @@ import org.apache.juneau.annotation.*;
  * <p>
  * Further information about the properties can be found in JSON Schema Core and JSON Schema Validation.
  * Unless stated otherwise, the property definitions follow the JSON Schema specification as referenced here.
+ * <p>
+ * Refer to <a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.dto.swagger</a> for usage information.
  */
 @Bean(properties="format,title,description,default,multipleOf,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,maxProperties,minProperties,required,enum,type,items,allOf,properties,additionalProperties,discriminator,readOnly,xml,externalDocs,example")
 @SuppressWarnings({ "hiding", "unchecked" })

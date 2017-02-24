@@ -108,6 +108,12 @@ public class A extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final A style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementMixed */
 	public A children(Object...children) {
 		super.children(children);

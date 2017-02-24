@@ -24,7 +24,7 @@ import org.apache.juneau.transform.*;
 /**
  * Represents a top-level schema object bean in the JSON-Schema core specification.
  * <p>
- * 	Refer to {@link org.apache.juneau.dto.jsonschema} for usage information.
+ * 	Refer to <a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.dto.jsonschema</a> for usage information.
  */
 @SuppressWarnings("hiding")
 @Bean(typeName="schema",

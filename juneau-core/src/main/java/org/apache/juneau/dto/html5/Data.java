@@ -50,6 +50,12 @@ public class Data extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Data style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementMixed */
 	public Data children(Object...children) {
 		super.children(children);

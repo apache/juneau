@@ -82,6 +82,12 @@ public class Article extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Article style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementMixed */
 	public Article children(Object...children) {
 		super.children(children);

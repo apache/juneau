@@ -37,6 +37,12 @@ public class Rtc extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Rtc style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementMixed */
 	public Rtc children(Object...children) {
 		super.children(children);

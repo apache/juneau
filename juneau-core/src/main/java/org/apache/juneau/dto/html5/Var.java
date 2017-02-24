@@ -37,6 +37,12 @@ public class Var extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Var style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementMixed */
 	public Var children(Object...children) {
 		super.children(children);

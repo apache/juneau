@@ -73,6 +73,12 @@ public class Ol extends HtmlElementContainer {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Ol style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementContainer */
 	public final Ol children(Object...children) {
 		super.children(children);

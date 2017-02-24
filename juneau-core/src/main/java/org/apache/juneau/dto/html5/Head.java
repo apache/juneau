@@ -37,6 +37,12 @@ public class Head extends HtmlElementContainer {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Head style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementContainer */
 	public final Head children(Object...children) {
 		super.children(children);

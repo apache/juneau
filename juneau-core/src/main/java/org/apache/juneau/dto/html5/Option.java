@@ -85,6 +85,12 @@ public class Option extends HtmlElementText {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Option style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementText */
 	public Option text(Object text) {
 		super.text(text);

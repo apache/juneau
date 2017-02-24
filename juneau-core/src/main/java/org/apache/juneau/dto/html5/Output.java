@@ -71,6 +71,12 @@ public class Output extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Output style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementMixed */
 	public Output children(Object...children) {
 		super.children(children);

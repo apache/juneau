@@ -37,6 +37,12 @@ public class Div extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Div style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementMixed */
 	public Div children(Object...children) {
 		super.children(children);

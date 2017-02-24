@@ -38,6 +38,12 @@ public class Noscript extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Noscript style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementMixed */
 	public Noscript children(Object...children) {
 		super.children(children);

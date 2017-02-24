@@ -36,4 +36,10 @@ public class Wbr extends HtmlElementVoid {
 		super.id(id);
 		return this;
 	}
+
+	@Override /* HtmlElement */
+	public final Wbr style(String style) {
+		super.style(style);
+		return this;
+	}
 }

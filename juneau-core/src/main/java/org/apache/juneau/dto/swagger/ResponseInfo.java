@@ -31,6 +31,8 @@ import org.apache.juneau.annotation.*;
  * 		}
  * 	}
  * </p>
+ * <p>
+ * Refer to <a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.dto.swagger</a> for usage information.
  */
 @Bean(properties="description,schema,headers,examples")
 @SuppressWarnings("hiding")

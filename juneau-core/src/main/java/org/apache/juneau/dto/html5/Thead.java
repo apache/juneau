@@ -37,6 +37,12 @@ public class Thead extends HtmlElementContainer {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Thead style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementContainer */
 	public final Thead children(Object...children) {
 		super.children(children);

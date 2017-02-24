@@ -25,6 +25,8 @@ import org.apache.juneau.annotation.*;
  * 		<js>"email"</js>: <js>"support@swagger.io"</js>
  * 	}
  * </p>
+ * <p>
+ * Refer to <a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.dto.swagger</a> for usage information.
  */
 @Bean(properties="name,url,email")
 @SuppressWarnings("hiding")

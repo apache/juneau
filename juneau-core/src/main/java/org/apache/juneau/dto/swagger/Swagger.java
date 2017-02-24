@@ -19,6 +19,8 @@ import org.apache.juneau.annotation.*;
 
 /**
  * This is the root document object for the API specification.
+ * <p>
+ * Refer to <a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.dto.swagger</a> for usage information.
  */
 @Bean(properties="swagger,info,tags,externalDocs,basePath,schemes,consumes,produces,paths,definitions,parameters,responses,securityDefinitions,security")
 @SuppressWarnings("hiding")

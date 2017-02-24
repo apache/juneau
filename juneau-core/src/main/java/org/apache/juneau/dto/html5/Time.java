@@ -49,6 +49,12 @@ public class Time extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Time style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementMixed */
 	public Time children(Object...children) {
 		super.children(children);

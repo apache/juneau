@@ -37,6 +37,12 @@ public class Sub extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Sub style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementMixed */
 	public Sub children(Object...children) {
 		super.children(children);

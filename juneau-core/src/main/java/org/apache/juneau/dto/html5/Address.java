@@ -37,6 +37,12 @@ public class Address extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Address style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementMixed */
 	public Address children(Object...children) {
 		super.children(children);

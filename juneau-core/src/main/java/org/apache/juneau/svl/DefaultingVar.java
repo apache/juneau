@@ -39,7 +39,7 @@ public abstract class DefaultingVar extends SimpleVar {
 	public String doResolve(VarResolverSession session, String s) {
 		int i = s.indexOf(',');
 		if (i == -1)
-			return resolve(session, s);
+			return resolve(session, s.trim());
 		String[] s2 = StringUtils.split(s, ',');
 		String v = resolve(session, s2[0]);
 		if (v == null)

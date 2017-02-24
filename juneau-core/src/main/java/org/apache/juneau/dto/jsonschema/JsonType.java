@@ -26,7 +26,7 @@ package org.apache.juneau.dto.jsonschema;
  * </p>
  *
  * <p>
- * 	Refer to {@link org.apache.juneau.dto.jsonschema} for usage information.
+ * 	Refer to <a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.dto.jsonschema</a> for usage information.
  */
 public enum JsonType {
 

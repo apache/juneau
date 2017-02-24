@@ -174,7 +174,7 @@ import org.apache.juneau.transform.*;
  * 		<li>{@link PojoSwap} - Allows you to swap out non-serializable objects with serializable replacements.
  * 	</ol>
  * <p>
- * 	See {@link org.apache.juneau.transform} for more information.
+ * 	See <a class='doclink' href='transform/package-summary.html#TOC'>org.apache.juneau.transform</a> for more information.
  *
  * <h5 class='topic'>ClassMetas</h5>
  * <p>

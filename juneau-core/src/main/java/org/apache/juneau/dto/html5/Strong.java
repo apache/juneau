@@ -37,6 +37,12 @@ public class Strong extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Strong style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementMixed */
 	public Strong children(Object...children) {
 		super.children(children);

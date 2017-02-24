@@ -37,6 +37,12 @@ public class Footer extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Footer style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementMixed */
 	public Footer children(Object...children) {
 		super.children(children);

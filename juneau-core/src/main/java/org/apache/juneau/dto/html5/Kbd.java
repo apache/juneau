@@ -37,6 +37,12 @@ public class Kbd extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Kbd style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementMixed */
 	public Kbd children(Object...children) {
 		super.children(children);

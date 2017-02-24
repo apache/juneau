@@ -91,7 +91,7 @@ import org.apache.juneau.serializer.*;
  * 	know it's a {@code Date} from just the JSON or XML text.
  *
  * <h5 class='section'>Additional information:</h5>
- * 	See {@link org.apache.juneau.transform} for more information.
+ * See <a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.transform</a> for more information.
  *
  * @param <T> The normal form of the class.
  * @param <S> The swapped form of the class.

@@ -128,6 +128,12 @@ public class Form extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Form style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementMixed */
 	public Form children(Object...children) {
 		super.children(children);

@@ -49,6 +49,12 @@ public class Blockquote extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Blockquote style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementMixed */
 	public Blockquote children(Object...children) {
 		super.children(children);

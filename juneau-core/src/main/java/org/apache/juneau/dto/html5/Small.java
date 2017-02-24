@@ -37,6 +37,12 @@ public class Small extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Small style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementMixed */
 	public Small children(Object...children) {
 		super.children(children);

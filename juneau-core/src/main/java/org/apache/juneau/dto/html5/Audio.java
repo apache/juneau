@@ -133,6 +133,12 @@ public class Audio extends HtmlElementContainer {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Audio style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementContainer */
 	public final Audio children(Object...children) {
 		super.children(children);

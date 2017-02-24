@@ -15,14 +15,13 @@ package org.apache.juneau.dto.html5;
 import java.net.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.xml.annotation.*;
 
 /**
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#the-script-element">&lt;script&gt;</a> element.
  * <p>
  */
 @Bean(typeName="script")
-public class Script extends HtmlElementText {
+public class Script extends HtmlElementRawText {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#attr-script-async">async</a> attribute.
@@ -97,13 +96,6 @@ public class Script extends HtmlElementText {
 	//--------------------------------------------------------------------------------
 	// Overridden methods
 	//--------------------------------------------------------------------------------
-
-	@Xml(format=XmlFormat.TEXT_PWS)
-	@BeanProperty(name="c")
-	@Override
-	public Object getText() {
-		return super.getText();
-	}
 
 	@Override /* HtmlElement */
 	public final Script _class(String _class) {

@@ -35,6 +35,8 @@ import org.apache.juneau.annotation.*;
  * 		<js>"version"</js>: <js>"1.0.1"</js>
  * 	}
  * </p>
+ * <p>
+ * Refer to <a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.dto.swagger</a> for usage information.
  */
 @Bean(properties="title,description,termsOfService,contact,license,version")
 @SuppressWarnings("hiding")

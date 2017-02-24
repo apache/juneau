@@ -48,6 +48,8 @@ import org.apache.juneau.json.*;
  * 		}
  * 	}
  * </p>
+ * <p>
+ * Refer to <a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.dto.swagger</a> for usage information.
  */
 @Bean(properties="type,description,name,in,flow,authorizationUrl,tokenUrl,scopes")
 @SuppressWarnings("hiding")

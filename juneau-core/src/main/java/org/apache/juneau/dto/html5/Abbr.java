@@ -38,6 +38,12 @@ public class Abbr extends HtmlElementMixed {
 	}
 
 	@Override /* HtmlElement */
+	public final Abbr style(String style) {
+		super.style(style);
+		return this;
+	}
+
+	@Override /* HtmlElement */
 	public final Abbr title(String title) {
 		super.title(title);
 		return this;

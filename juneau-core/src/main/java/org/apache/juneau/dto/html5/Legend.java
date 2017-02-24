@@ -37,6 +37,12 @@ public class Legend extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Legend style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementMixed */
 	public Legend children(Object...children) {
 		super.children(children);

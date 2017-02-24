@@ -50,6 +50,12 @@ public class Colgroup extends HtmlElementContainer {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Colgroup style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementContainer */
 	public final Colgroup children(Object...children) {
 		super.children(children);

@@ -705,7 +705,7 @@ public final class ConfigFileImpl extends ConfigFile {
 
 	@Override /* ConfigFile */
 	public ConfigFile getResolving() {
-		return getResolving(VarResolver.DEFAULT.clone().addVars(ConfigFileVar.class).setContextObject(ConfigFileVar.SESSION_config, this));
+		return getResolving(VarResolver.DEFAULT.clone().addVars(ConfigFileVar.class,IfVar.class,SwitchVar.class).setContextObject(ConfigFileVar.SESSION_config, this));
 	}
 
 	/*

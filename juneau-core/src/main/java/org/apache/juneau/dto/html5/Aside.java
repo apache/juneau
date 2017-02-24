@@ -37,6 +37,12 @@ public class Aside extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Aside style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementMixed */
 	public Aside children(Object...children) {
 		super.children(children);

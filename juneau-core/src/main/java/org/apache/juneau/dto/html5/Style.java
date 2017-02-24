@@ -13,14 +13,13 @@
 package org.apache.juneau.dto.html5;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.xml.annotation.*;
 
 /**
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#the-style-element">&lt;style&gt;</a> element.
  * <p>
  */
 @Bean(typeName="style")
-public class Style extends HtmlElementText {
+public class Style extends HtmlElementRawText {
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-style-media">media</a> attribute.
@@ -49,16 +48,15 @@ public class Style extends HtmlElementText {
 	// Overridden methods
 	//--------------------------------------------------------------------------------
 
-	@Xml(format=XmlFormat.TEXT_PWS)
-	@BeanProperty(name="c")
-	@Override /* HtmlElementText */
-	public Object getText() {
-		return super.getText();
-	}
-
 	@Override /* HtmlElement */
 	public final Style _class(String _class) {
 		super._class(_class);
+		return this;
+	}
+
+	@Override /* HtmlElement */
+	public final Style style(String style) {
+		super.style(style);
 		return this;
 	}
 

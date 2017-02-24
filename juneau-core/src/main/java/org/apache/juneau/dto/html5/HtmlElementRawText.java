@@ -13,70 +13,47 @@
 package org.apache.juneau.dto.html5;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.xml.annotation.*;
 
 /**
- * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#the-progress-element">&lt;progress&gt;</a> element.
- * <p>
+ * A subclass of HTML elements that contain <a href="https://www.w3.org/TR/html51/syntax.html#raw-text">raw text</a> only.
  */
-@Bean(typeName="progress")
-public class Progress extends HtmlElementMixed {
+@SuppressWarnings("hiding")
+public class HtmlElementRawText extends HtmlElement {
+
+	private Object text;
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-progress-max">max</a> attribute.
-	 * Upper bound of range.
-	 * @param max The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
+	 * Returns the inner text of this element.
+	 *
+	 * @return The inner text of this element, or <jk>null</jk> if no text is set.
+	 */
+	@Xml(format=XmlFormat.TEXT_PWS)
+	@BeanProperty(name="c")
+	public Object getText() {
+		return text;
+	}
+
+	/**
+	 * Sets the inner text of this element.
+	 *
+	 * @param text The inner text of this element, or <jk>null</jk> if no text is set.
 	 * @return This object (for method chaining).
 	 */
-	public final Progress max(Object max) {
-		attr("max", max);
+	@BeanProperty(name="c")
+	public HtmlElement setText(Object text) {
+		this.text = text;
 		return this;
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-progress-value">value</a> attribute.
-	 * Current value of the element.
-	 * @param value The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
+	 * Sets the text node on this element.
+	 *
+	 * @param text The text node to add to this element.
 	 * @return This object (for method chaining).
 	 */
-	public final Progress value(Object value) {
-		attr("value", value);
-		return this;
-	}
-
-
-	//--------------------------------------------------------------------------------
-	// Overridden methods
-	//--------------------------------------------------------------------------------
-
-	@Override /* HtmlElement */
-	public final Progress _class(String _class) {
-		super._class(_class);
-		return this;
-	}
-
-	@Override /* HtmlElement */
-	public final Progress id(String id) {
-		super.id(id);
-		return this;
-	}
-
-	@Override /* HtmlElement */
-	public final Progress style(String style) {
-		super.style(style);
-		return this;
-	}
-
-	@Override /* HtmlElementMixed */
-	public Progress children(Object...children) {
-		super.children(children);
-		return this;
-	}
-
-	@Override /* HtmlElementMixed */
-	public Progress child(Object child) {
-		super.child(child);
+	public HtmlElement text(Object text) {
+		this.text = text;
 		return this;
 	}
 }

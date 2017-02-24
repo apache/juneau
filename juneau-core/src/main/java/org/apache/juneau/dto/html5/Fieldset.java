@@ -72,6 +72,12 @@ public class Fieldset extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Fieldset style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementMixed */
 	public Fieldset children(Object...children) {
 		super.children(children);

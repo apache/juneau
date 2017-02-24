@@ -61,6 +61,12 @@ public class Optgroup extends HtmlElementContainer {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Optgroup style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementContainer */
 	public final Optgroup children(Object...children) {
 		super.children(children);

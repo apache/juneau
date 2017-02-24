@@ -37,6 +37,12 @@ public class Tr extends HtmlElementContainer {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Tr style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementContainer */
 	public final Tr children(Object...children) {
 		super.children(children);

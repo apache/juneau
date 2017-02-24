@@ -47,7 +47,7 @@ import org.apache.juneau.xml.annotation.*;
  * 		}
  * </p>
  * <p>
- * Refer to {@link org.apache.juneau.dto.atom} for further information about ATOM support.
+ * Refer to <a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.dto.atom</a> for further information about ATOM support.
  */
 @Bean(typeName="feed")
 @SuppressWarnings("hiding")

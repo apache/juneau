@@ -15,7 +15,7 @@ package org.apache.juneau.dto.swagger;
 /**
  * Various useful static methods for creating Swagger elements.
  * <p>
- * See {@link org.apache.juneau.dto.swagger} for documentation.
+ * Refer to <a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.dto.swagger</a> for usage information.
  */
 public class SwaggerBuilder {
 

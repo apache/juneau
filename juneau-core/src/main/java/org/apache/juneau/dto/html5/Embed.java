@@ -86,4 +86,10 @@ public class Embed extends HtmlElementVoid {
 		super.id(id);
 		return this;
 	}
+
+	@Override /* HtmlElement */
+	public final Embed style(String style) {
+		super.style(style);
+		return this;
+	}
 }

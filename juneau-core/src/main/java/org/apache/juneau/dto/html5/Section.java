@@ -37,6 +37,12 @@ public class Section extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Section style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementMixed */
 	public Section children(Object...children) {
 		super.children(children);

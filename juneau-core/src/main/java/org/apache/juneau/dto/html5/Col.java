@@ -49,4 +49,10 @@ public class Col extends HtmlElementVoid {
 		super.id(id);
 		return this;
 	}
+
+	@Override /* HtmlElement */
+	public final Col style(String style) {
+		super.style(style);
+		return this;
+	}
 }

@@ -37,6 +37,12 @@ public class Figcaption extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Figcaption style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementMixed */
 	public Figcaption children(Object...children) {
 		super.children(children);

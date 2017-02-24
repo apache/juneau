@@ -37,6 +37,12 @@ public class Ul extends HtmlElementContainer {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Ul style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementContainer */
 	public final Ul children(Object...children) {
 		super.children(children);

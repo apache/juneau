@@ -62,6 +62,12 @@ public class Canvas extends HtmlElementContainer {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Canvas style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementContainer */
 	public final Canvas children(Object...children) {
 		super.children(children);

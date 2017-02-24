@@ -106,6 +106,12 @@ public class Th extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Th style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementMixed */
 	public Th children(Object...children) {
 		super.children(children);

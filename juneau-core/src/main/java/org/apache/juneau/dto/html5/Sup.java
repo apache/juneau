@@ -37,6 +37,12 @@ public class Sup extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Sup style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementMixed */
 	public Sup children(Object...children) {
 		super.children(children);

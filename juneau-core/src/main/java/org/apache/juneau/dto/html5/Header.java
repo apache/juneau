@@ -37,6 +37,12 @@ public class Header extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Header style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementMixed */
 	public Header children(Object...children) {
 		super.children(children);

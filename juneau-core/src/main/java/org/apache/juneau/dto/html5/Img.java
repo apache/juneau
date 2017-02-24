@@ -119,4 +119,10 @@ public class Img extends HtmlElementVoid {
 		super.id(id);
 		return this;
 	}
+
+	@Override /* HtmlElement */
+	public final Img style(String style) {
+		super.style(style);
+		return this;
+	}
 }

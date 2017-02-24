@@ -37,6 +37,12 @@ public class H6 extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final H6 style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementMixed */
 	public H6 children(Object...children) {
 		super.children(children);

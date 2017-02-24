@@ -24,6 +24,8 @@ import org.apache.juneau.annotation.*;
  * 		<js>"url"</js>: <js>"https://swagger.io"</js>
  * 	}
  * </p>
+ * <p>
+ * Refer to <a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.dto.swagger</a> for usage information.
  */
 @Bean(properties="description,url")
 @SuppressWarnings("hiding")

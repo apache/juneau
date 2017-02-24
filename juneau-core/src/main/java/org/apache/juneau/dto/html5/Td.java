@@ -73,6 +73,12 @@ public class Td extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Td style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementMixed */
 	public Td children(Object...children) {
 		super.children(children);

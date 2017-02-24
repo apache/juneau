@@ -37,6 +37,12 @@ public class Mark extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Mark style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementMixed */
 	public Mark children(Object...children) {
 		super.children(children);

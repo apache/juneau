@@ -37,6 +37,12 @@ public class Rt extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* HtmlElement */
+	public final Rt style(String style) {
+		super.style(style);
+		return this;
+	}
+
 	@Override /* HtmlElementMixed */
 	public Rt children(Object...children) {
 		super.children(children);
