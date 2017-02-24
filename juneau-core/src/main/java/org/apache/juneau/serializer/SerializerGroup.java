@@ -218,7 +218,9 @@ public final class SerializerGroup extends Lockable {
 	 * @return The serializer that matched the accept header, or <jk>null</jk> if no match was made.
 	 */
 	public Serializer getSerializer(MediaType mediaType) {
-		return getSerializer(mediaType == null ? null : mediaType.toString());
+		if (mediaType == null)
+			return null;
+		return getSerializer(mediaType.toString());
 	}
 
 	/**
