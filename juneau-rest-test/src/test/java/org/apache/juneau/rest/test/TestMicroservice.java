@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
+import java.net.*;
 import java.util.*;
 
 import org.apache.juneau.microservice.*;
@@ -21,7 +22,8 @@ import org.apache.juneau.microservice.*;
  * @author james.bognar
  */
 public class TestMicroservice {
-	static Microservice microservice;
+	static RestMicroservice microservice;
+	static URI microserviceURI;
 
 	/**
 	 * Starts the microservice.
@@ -38,12 +40,22 @@ public class TestMicroservice {
 				.setManifestContents(
 					"Test-Entry: test-value"
 				);
-			microservice.start();
+			microserviceURI = microservice.start().getURI();
 			return true;
 		} catch (Throwable e) {
 			System.err.println(e); // NOT DEBUG
 			return false;
 		}
+	}
+
+	/**
+	 * Returns the URI of the microservice.
+	 * @return The URI of the microservice.
+	 */
+	public static URI getURI() {
+		if (microservice == null)
+			startMicroservice();
+		return microserviceURI;
 	}
 
 	/**

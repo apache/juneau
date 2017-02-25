@@ -532,12 +532,14 @@ public class RestClient extends CoreApi {
 	 * This root URL is ignored on those methods if you pass in a {@link URL}, {@link URI}, or an absolute URL string.
 	 *
 	 * @param rootUrl The root URL to prefix to relative URL strings.  Trailing slashes are trimmed.
+	 * Usually a <code>String<code> but you can also pass in <code>URI</code> and <code>URL</code> objects as well.
 	 * @return This object (for method chaining).
 	 */
-	public RestClient setRootUrl(String rootUrl) {
-		if (rootUrl.endsWith("/"))
-			rootUrl = rootUrl.replaceAll("\\/$", "");
-		this.rootUrl = rootUrl;
+	public RestClient setRootUrl(Object rootUrl) {
+		String s = rootUrl.toString();
+		if (s.endsWith("/"))
+			s = s.replaceAll("\\/$", "");
+		this.rootUrl = s;
 		return this;
 	}
 

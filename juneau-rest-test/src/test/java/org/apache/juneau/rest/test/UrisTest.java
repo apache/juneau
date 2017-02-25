@@ -14,8 +14,6 @@ package org.apache.juneau.rest.test;
 
 import static org.junit.Assert.*;
 
-import java.util.regex.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.client.*;
@@ -26,9 +24,9 @@ import org.junit.*;
  */
 public class UrisTest extends RestTestcase {
 
-	private static String URL2 = Constants.getServerTestUrl() + "/testuris";           // /jazz/juneau/sample/testuris
-	private static int port = getPort(Constants.getServerTestUrl());                  // 9443
-	private static String path = Constants.getServerTestUri().getPath();              // /jazz/juneau/sample
+	private static String URL2 = TestMicroservice.getURI() + "/testuris";           // /jazz/juneau/sample/testuris
+	private static int port = TestMicroservice.getURI().getPort();                  // 9443
+	private static String path = TestMicroservice.getURI().getPath();              // /jazz/juneau/sample
 
 	//====================================================================================================
 	// testRoot - http://localhost:8080/sample/testuris
@@ -907,12 +905,12 @@ public class UrisTest extends RestTestcase {
 
 		client.closeQuietly();
 	}
-
-	private static int getPort(String url) {
-		Pattern p = Pattern.compile("\\:(\\d{2,5})");
-		Matcher m = p.matcher(url);
-		if (m.find())
-			return Integer.parseInt(m.group(1));
-		return -1;
-	}
+//
+//	private static int getPort(String url) {
+//		Pattern p = Pattern.compile("\\:(\\d{2,5})");
+//		Matcher m = p.matcher(url);
+//		if (m.find())
+//			return Integer.parseInt(m.group(1));
+//		return -1;
+//	}
 }

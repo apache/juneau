@@ -12,16 +12,21 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest;
 
+import java.net.*;
 import java.util.*;
 
 import org.apache.juneau.microservice.*;
 
 /**
  * Utility class for starting up the examples microservice.
+ * <p>
+ * This class is NOT thread safe.
+ * 
  * @author james.bognar
  */
 public class TestMicroservice {
-	static Microservice microservice;
+	static RestMicroservice microservice;
+	static URI microserviceURI;
 
 	/**
 	 * Starts the microservice.
@@ -34,7 +39,7 @@ public class TestMicroservice {
 		try {
 			Locale.setDefault(Locale.US);
 			microservice = new RestMicroservice().setConfig("examples.cfg", false);
-			microservice.start();
+			microserviceURI = microservice.start().getURI();
 			return true;
 		} catch (Throwable e) {
 			// Probably already started.
@@ -43,6 +48,16 @@ public class TestMicroservice {
 		}
 	}
 
+	/**
+	 * Returns the URI of the microservice.
+	 * @return The URI of the microservice.
+	 */
+	public static URI getURI() {
+		if (microservice == null)
+			startMicroservice();
+		return microserviceURI;
+	}
+	
 	/**
 	 * Stops the microservice.
 	 */

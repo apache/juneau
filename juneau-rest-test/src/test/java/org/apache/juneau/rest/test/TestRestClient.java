@@ -29,21 +29,21 @@ class TestRestClient extends RestClient {
 
 	public TestRestClient(Class<? extends Serializer> s, Class<? extends Parser> p) throws InstantiationException {
 		super(s,p);
-		setRootUrl(Constants.getServerTestUrl());
+		setRootUrl(TestMicroservice.getURI());
 	}
 
 	public TestRestClient(Serializer s, Parser p) {
 		super(s,p);
-		setRootUrl(Constants.getServerTestUrl());
+		setRootUrl(TestMicroservice.getURI());
 	}
 
 	public TestRestClient() {
-		setRootUrl(Constants.getServerTestUrl());
+		setRootUrl(TestMicroservice.getURI());
 	}
 
 	public TestRestClient(CloseableHttpClient c) {
 		super(c);
-		setRootUrl(Constants.getServerTestUrl());
+		setRootUrl(TestMicroservice.getURI());
 	}
 
 	public static SSLConnectionSocketFactory getSSLSocketFactory() throws Exception {

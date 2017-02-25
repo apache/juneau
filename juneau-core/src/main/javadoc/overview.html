@@ -5667,6 +5667,23 @@
 				<li>Whitespace wasn't being ignored in some cases.
 			</ul>
 		</ul>
+		
+		<h6 class='topic'>org.apache.juneau.rest.client</h6>
+		<ul class='spaced-list'>
+			<li>{@link org.apache.juneau.rest.client.RestClient#setRootUrl(Object)} can now take in <code>URI</code> and <code>URL</code> objects.
+		</ul>
+		
+		<h6 class='topic'>org.apache.juneau.microservice</h6>
+		<ul class='spaced-list'>
+			<li><js>"REST/port"</js> configuration setting can now be a comma-limited list of port numbers to try.
+				<br>You can also specify one or more <code>0</code>s to try a random port.
+			<li>Methods added to {@link org.apache.juneau.microservice.RestMicroservice} class:
+			<ul>
+				<li>{@link org.apache.juneau.microservice.RestMicroservice#getPort()}
+				<li>{@link org.apache.juneau.microservice.RestMicroservice#getURI()}
+				<li>Override methods added from {@link org.apache.juneau.microservice.Microservice} class for easier method chaining.
+			</ul>
+		</ul>		
 	</div>
 	
 	
@@ -6393,7 +6410,7 @@
 				<ul>
 					<li>{@link org.apache.juneau.rest.client.RestClient#setBasicAuth(String,int,String,String)}
 					<li>{@link org.apache.juneau.rest.client.RestClient#logTo(Level,Logger)}
-					<li>{@link org.apache.juneau.rest.client.RestClient#setRootUrl(String)}
+					<li><code><del>RestClient.setRootUrl(String)</del></code>
 					<li>{@link org.apache.juneau.rest.client.RestClient#enableSSL(SSLOpts)}
 					<li>{@link org.apache.juneau.rest.client.RestClient#enableLaxSSL()}
 					<li>{@link org.apache.juneau.rest.client.RestClient#doCall(HttpMethod,Object,Object)}

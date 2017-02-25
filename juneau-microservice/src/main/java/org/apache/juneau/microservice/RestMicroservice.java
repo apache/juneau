@@ -13,7 +13,9 @@
 package org.apache.juneau.microservice;
 
 import java.io.*;
+import java.net.*;
 import java.util.*;
+import java.util.jar.*;
 import java.util.logging.*;
 
 import javax.servlet.*;
@@ -69,6 +71,7 @@ public class RestMicroservice extends Microservice {
 
 	Server server;
 	int port;
+	String contextPath;
 	Logger logger;
 
 	/**
@@ -143,6 +146,32 @@ public class RestMicroservice extends Microservice {
 	//--------------------------------------------------------------------------------
 	// RestMicroservice API methods.
 	//--------------------------------------------------------------------------------
+	
+	/**
+	 * Returns the port that this microservice started up on.
+	 * @return The port that this microservice started up on.
+	 */
+	public int getPort() {
+		return port;
+	}
+
+	/**
+	 * Returns the URI where this microservice is listening on.
+	 * @return The URI where this microservice is listening on.
+	 */
+	public URI getURI() {
+		String scheme = getConfig().getBoolean("REST/useSsl") ? "https" : "http";
+		String hostname = "localhost";
+		String ctx = "/".equals(contextPath) ? null : contextPath;
+		try {
+			hostname = InetAddress.getLocalHost().getHostName();
+		} catch (UnknownHostException e) {}
+		try {
+			return new URI(scheme, null, hostname, port, ctx, null, null);
+		} catch (URISyntaxException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 	/**
 	 * Initialize the logging for this microservice.
@@ -259,12 +288,14 @@ public class RestMicroservice extends Microservice {
 	 * 	<cs>[REST]</cs>
 	 *
 	 * 	<cc># The HTTP port number to use.
-	 * 	# Default is Rest-Port setting in manifest file, or 8000.</cc>
+	 * 	# Default is Rest-Port setting in manifest file, or 8000.
+	 * 	# Can also specify a comma-delimited lists of ports to try, including 0 meaning
+	 * 	# try a random port.</cc>
 	 * 	<ck>port</ck> = 10000
 	 *
 	 * 	<cc># The context root of the Jetty server.
 	 * 	# Default is Rest-ContextPath in manifest file, or "/".</cc>
-	 * 	<ck>contextPath</ck> = 10000
+	 * 	<ck>contextPath</ck> = 
 	 *
 	 * 	<cc># Authentication:  NONE, BASIC.
 	 * 	# Default is Rest-AuthType in manifest file, or NONE.</cc>
@@ -306,9 +337,16 @@ public class RestMicroservice extends Microservice {
 
 		ConfigFile cf = getConfig();
 		ObjectMap mf = getManifest();
+		
+		int[] ports = cf.getObject(int[].class, "REST/port", mf.get(int[].class, "Rest-Port", new int[]{8000}));
 
-		port = cf.getInt("REST/port", mf.getInt("Rest-Port", 8000));
-		String contextPath = cf.getString("REST/contextPath", mf.getString("Rest-ContextPath", "/"));
+		port = findOpenPort(ports);
+		if (port == 0) {
+			System.err.println("Open port not found.  Tried " + JsonSerializer.DEFAULT_LAX.toString(ports));
+			System.exit(1);
+		}
+			
+		contextPath = cf.getString("REST/contextPath", mf.getString("Rest-ContextPath", "/"));
 
 		if (cf.getBoolean("REST/useSsl")) {
 
@@ -354,19 +392,35 @@ public class RestMicroservice extends Microservice {
 
 		return server;
 	}
+	
+	private int findOpenPort(int[] ports) {
+		for (int port : ports) {
+			try {
+				// If port is 0, try a random port between ports[0] and 32767.
+				if (port == 0) 
+					port = new Random().nextInt(32767 - ports[0] + 1) + ports[0];
+				ServerSocket ss = new ServerSocket(port);
+				ss.close();
+				return port;
+			} catch (IOException e) {}
+		}
+		return 0;
+	}
 
 	/**
 	 * Method used to start the Jetty server created by {@link #createServer()}.
 	 * <p>
 	 * Subclasses can override this method to customize server startup.
 	 * 
+	 * @return The port that this server started on.
 	 * @throws Exception
 	 */
-	protected void startServer() throws Exception {
+	protected int startServer() throws Exception {
 		onStartServer();
 		server.start();
 		logger.warning("Server started on port " + port);
 		onPostStartServer();
+		return port;
 	}
 
 	/**
@@ -525,6 +579,46 @@ public class RestMicroservice extends Microservice {
 	 */
 	protected void onPostStopServer() {}
 
+	
+	//--------------------------------------------------------------------------------
+	// Overridden methods.
+	//--------------------------------------------------------------------------------
+	
+	@Override /* Microservice */
+	public RestMicroservice setConfig(String cfPath, boolean create) throws IOException {
+		super.setConfig(cfPath, create);
+		return this;
+	}
+	
+	@Override /* Microservice */
+	public RestMicroservice setConfig(ConfigFile cf) {
+		super.setConfig(cf);
+		return this;
+	}
+
+	@Override /* Microservice */
+	public RestMicroservice setManifest(Manifest mf) {
+		super.setManifest(mf);
+		return this;
+	}
+
+	@Override /* Microservice */
+	public RestMicroservice setManifestContents(String...contents) throws IOException {
+		super.setManifestContents(contents);
+		return this;
+	}
+
+	@Override /* Microservice */
+	public RestMicroservice setManifest(File f) throws IOException {
+		super.setManifest(f);
+		return this;
+	}
+
+	@Override /* Microservice */
+	public RestMicroservice setManifest(Class<?> c) throws IOException {
+		super.setManifest(c);
+		return this;
+	}
 	
 	//--------------------------------------------------------------------------------
 	// Other methods.

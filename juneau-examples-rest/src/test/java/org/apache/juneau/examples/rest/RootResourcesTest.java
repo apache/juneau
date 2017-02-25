@@ -14,8 +14,6 @@ package org.apache.juneau.examples.rest;
 
 import static org.junit.Assert.*;
 
-import java.net.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.html.*;
@@ -27,7 +25,7 @@ import org.junit.*;
 
 public class RootResourcesTest extends RestTestcase {
 
-	private static String path = URI.create(Constants.getSampleUrl()).getPath();              // /jazz/juneau/sample
+	private static String path = TestMicroservice.getURI().getPath();              // /jazz/juneau/sample
 	private static boolean debug = false;
 
 	private static RestClient jsonClient;
