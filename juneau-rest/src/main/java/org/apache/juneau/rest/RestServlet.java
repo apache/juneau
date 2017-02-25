@@ -2764,8 +2764,6 @@ public abstract class RestServlet extends HttpServlet {
 			int maxRc = 0;
 			for (MethodMeta m : childMethods) {
 				int rc = m.invoke(methodName, pathInfo, resource, req, res);
-				//if (rc == SC_UNAUTHORIZED)
-				//	return SC_UNAUTHORIZED;
 				if (rc == SC_OK)
 					return SC_OK;
 				maxRc = Math.max(maxRc, rc);

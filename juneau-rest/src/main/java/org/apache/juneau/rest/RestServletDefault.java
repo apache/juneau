@@ -188,7 +188,7 @@ import org.apache.juneau.xml.*;
 		@Property(name=HTMLDOC_description, value="$R{servletDescription}")
 	},
 	stylesheet="styles/juneau.css",
-	favicon="juneau.ico",
+	favicon="juneau.png",
 	staticFiles="{htdocs:'htdocs'}"
 )
 public abstract class RestServletDefault extends RestServlet {
