@@ -13,14 +13,18 @@
 package org.apache.juneau.examples.rest;
 
 import static org.apache.juneau.html.HtmlDocSerializerContext.*;
+import static org.apache.juneau.dto.html5.HtmlBuilder.*;
 
 import java.util.*;
+import java.util.Map;
 
+import org.apache.juneau.dto.html5.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.annotation.Body;
 
 @RestResource(
 	path="/systemProperties",
@@ -28,7 +32,7 @@ import org.apache.juneau.rest.annotation.*;
 	description="REST interface for performing CRUD operations on system properties.",
 	properties={
 		@Property(name=SERIALIZER_quoteChar, value="'"),
-		@Property(name=HTMLDOC_links, value="{up:'$R{requestParentURI}',options:'$R{servletURI}?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/SystemPropertiesResource.java'}"),
+		@Property(name=HTMLDOC_links, value="{up:'$R{requestParentURI}',options:'$R{servletURI}?method=OPTIONS',form:'formPage',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/SystemPropertiesResource.java'}"),
 	},
 	stylesheet="styles/devops.css",
 	encoders=GzipEncoder.class,
@@ -74,7 +78,7 @@ public class SystemPropertiesResource extends Resource {
 	public String getSystemProperty(@Path String propertyName) throws Throwable {
 		return System.getProperty(propertyName);
 	}
-
+	
 	@RestMethod(
 		name="PUT", path="/{propertyName}", 
 		summary="Replace system property",
@@ -150,5 +154,30 @@ public class SystemPropertiesResource extends Resource {
 	)
 	public Swagger getOptions(RestRequest req) {
 		return req.getSwagger();
+	}
+	
+	@RestMethod(
+		name="GET", path="/formPage",
+		summary="Form entry page",
+		description="A form post page for setting a single system property value",
+		guards=AdminGuard.class
+	)
+	public Form getFormPage() {
+		return form().method("POST").action("formPagePost").children(
+			h4("Set system property"),
+			"Name: ", input("text").name("name"), br(),
+			"Value: ", input("text").name("value"), br(), br(),
+			button("submit","Click me!").style("float:right")
+		);
+	}
+
+	@RestMethod(
+		name="POST", path="/formPagePost", 
+		description="Accepts a simple form post of a system property name/value pair.",
+		guards=AdminGuard.class
+	)
+	public Redirect formPagePost(@FormData("name") String name, @FormData("value") String value) {
+		System.setProperty(name, value);
+		return new Redirect();
 	}
 }
