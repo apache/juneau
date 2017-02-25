@@ -28,8 +28,8 @@ public class XmlBeanMeta extends BeanMetaExtended {
 	private final Map<String,BeanPropertyMeta> elements;                     // Map of bean properties that are represented as XML elements.
 	private final BeanPropertyMeta attrsProperty;                            // Bean property that contain XML attribute key/value pairs for this bean.
 	private final Map<String,BeanPropertyMeta> collapsedProperties;          // Properties defined with @Xml.childName annotation.
-	private BeanPropertyMeta contentProperty;
-	private XmlFormat contentFormat;
+	private final BeanPropertyMeta contentProperty;
+	private final XmlFormat contentFormat;
 
 	/**
 	 * Constructor.
@@ -38,76 +38,16 @@ public class XmlBeanMeta extends BeanMetaExtended {
 	 */
 	public XmlBeanMeta(BeanMeta<?> beanMeta) {
 		super(beanMeta);
+
 		Class<?> c = beanMeta.getClassMeta().getInnerClass();
-		Xml xml = c.getAnnotation(Xml.class);
-		XmlFormat defaultFormat = null;
-		XmlFormat _contentFormat = DEFAULT;
+		XmlBeanMetaBuilder b = new XmlBeanMetaBuilder(beanMeta);
 
-		if (xml != null) {
-			XmlFormat xf = xml.format();
-			if (xf == ATTRS)
-				defaultFormat = XmlFormat.ATTR;
-			else if (xf.isOneOf(ELEMENTS, DEFAULT))
-				defaultFormat = ELEMENT;
-			else if (xf == VOID) {
-				_contentFormat = VOID;
-				defaultFormat = VOID;
-			}
-			else
-				throw new BeanRuntimeException(c, "Invalid format specified in @Xml annotation on bean: {0}.  Must be one of the following: DEFAULT,ATTRS,ELEMENTS,VOID", xml.format());
-		}
-
-		Map<String,BeanPropertyMeta> _attrs = new LinkedHashMap<String,BeanPropertyMeta>();
-		Map<String,BeanPropertyMeta> _elements = new LinkedHashMap<String,BeanPropertyMeta>();
-		BeanPropertyMeta _attrsProperty = null, _contentProperty = null;
-		Map<String,BeanPropertyMeta> _collapsedProperties = new LinkedHashMap<String,BeanPropertyMeta>();
-
-		for (BeanPropertyMeta p : beanMeta.getPropertyMetas()) {
-			XmlFormat xf = p.getExtendedMeta(XmlBeanPropertyMeta.class).getXmlFormat();
-			ClassMeta<?> pcm = p.getClassMeta();
-			if (xf == ATTR) {
-				_attrs.put(p.getName(), p);
-			} else if (xf == ELEMENT) {
-				_elements.put(p.getName(), p);
-			} else if (xf == COLLAPSED) {
-				_collapsedProperties.put(p.getName(), p);
-			} else if (xf == DEFAULT) {
-				if (defaultFormat == ATTR)
-					_attrs.put(p.getName(), p);
-				else
-					_elements.put(p.getName(), p);
-			} else if (xf == ATTRS) {
-				if (_attrsProperty != null)
-					throw new BeanRuntimeException(c, "Multiple instances of ATTRS properties defined on class.  Only one property can be designated as such.");
-				if (! pcm.isMapOrBean())
-					throw new BeanRuntimeException(c, "Invalid type for ATTRS property.  Only properties of type Map and bean can be used.");
-				_attrsProperty = p;
-			} else if (xf.isOneOf(ELEMENTS, MIXED, MIXED_PWS, TEXT, TEXT_PWS, XMLTEXT)) {
-				if (xf.isOneOf(ELEMENTS, MIXED, MIXED_PWS) && ! pcm.isCollectionOrArray())
-					throw new BeanRuntimeException(c, "Invalid type for {0} property.  Only properties of type Collection and array can be used.", xf);
-				if (_contentProperty != null) {
-					if (xf == _contentFormat)
-						throw new BeanRuntimeException(c, "Multiple instances of {0} properties defined on class.  Only one property can be designated as such.", xf);
-					throw new BeanRuntimeException(c, "{0} and {1} properties found on the same bean.  Only one property can be designated as such.", _contentFormat, xf);
-				}
-				_contentProperty = p;
-				_contentFormat = xf;
-			}
-			// Look for any properties that are collections with @Xml.childName specified.
-			String n = p.getExtendedMeta(XmlBeanPropertyMeta.class).getChildName();
-			if (n != null) {
-				if (_collapsedProperties.containsKey(n) && _collapsedProperties.get(n) != p)
-					throw new BeanRuntimeException(c, "Multiple properties found with the child name ''{0}''.", n);
-				_collapsedProperties.put(n, p);
-			}
-		}
-
-		attrs = Collections.unmodifiableMap(_attrs);
-		elements = Collections.unmodifiableMap(_elements);
-		attrsProperty = _attrsProperty;
-		collapsedProperties = Collections.unmodifiableMap(_collapsedProperties);
-		contentProperty = _contentProperty;
-		contentFormat = _contentFormat;
+		attrs = Collections.unmodifiableMap(b.attrs);
+		elements = Collections.unmodifiableMap(b.elements);
+		attrsProperty = b.attrsProperty;
+		collapsedProperties = Collections.unmodifiableMap(b.collapsedProperties);
+		contentProperty = b.contentProperty;
+		contentFormat = b.contentFormat;
 
 		// Do some validation.
 		if (contentProperty != null || contentFormat == XmlFormat.VOID) {
@@ -120,6 +60,77 @@ public class XmlBeanMeta extends BeanMetaExtended {
 		if (! collapsedProperties.isEmpty()) {
 			if (! Collections.disjoint(elements.keySet(), collapsedProperties.keySet()))
 				throw new BeanRuntimeException(c, "Child element name conflicts found with another property.");
+		}
+	}
+
+	private static class XmlBeanMetaBuilder {
+		Map<String,BeanPropertyMeta>
+			attrs = new LinkedHashMap<String,BeanPropertyMeta>(),
+			elements = new LinkedHashMap<String,BeanPropertyMeta>(),
+			collapsedProperties = new LinkedHashMap<String,BeanPropertyMeta>();
+		BeanPropertyMeta
+			attrsProperty,
+			contentProperty;
+		XmlFormat contentFormat = DEFAULT;
+
+		XmlBeanMetaBuilder(BeanMeta<?> beanMeta) {
+			Class<?> c = beanMeta.getClassMeta().getInnerClass();
+			Xml xml = c.getAnnotation(Xml.class);
+			XmlFormat defaultFormat = null;
+
+			if (xml != null) {
+				XmlFormat xf = xml.format();
+				if (xf == ATTRS)
+					defaultFormat = XmlFormat.ATTR;
+				else if (xf.isOneOf(ELEMENTS, DEFAULT))
+					defaultFormat = ELEMENT;
+				else if (xf == VOID) {
+					contentFormat = VOID;
+					defaultFormat = VOID;
+				}
+				else
+					throw new BeanRuntimeException(c, "Invalid format specified in @Xml annotation on bean: {0}.  Must be one of the following: DEFAULT,ATTRS,ELEMENTS,VOID", xml.format());
+			}
+
+			for (BeanPropertyMeta p : beanMeta.getPropertyMetas()) {
+				XmlFormat xf = p.getExtendedMeta(XmlBeanPropertyMeta.class).getXmlFormat();
+				ClassMeta<?> pcm = p.getClassMeta();
+				if (xf == ATTR) {
+					attrs.put(p.getName(), p);
+				} else if (xf == ELEMENT) {
+					elements.put(p.getName(), p);
+				} else if (xf == COLLAPSED) {
+					collapsedProperties.put(p.getName(), p);
+				} else if (xf == DEFAULT) {
+					if (defaultFormat == ATTR)
+						attrs.put(p.getName(), p);
+					else
+						elements.put(p.getName(), p);
+				} else if (xf == ATTRS) {
+					if (attrsProperty != null)
+						throw new BeanRuntimeException(c, "Multiple instances of ATTRS properties defined on class.  Only one property can be designated as such.");
+					if (! pcm.isMapOrBean())
+						throw new BeanRuntimeException(c, "Invalid type for ATTRS property.  Only properties of type Map and bean can be used.");
+					attrsProperty = p;
+				} else if (xf.isOneOf(ELEMENTS, MIXED, MIXED_PWS, TEXT, TEXT_PWS, XMLTEXT)) {
+					if (xf.isOneOf(ELEMENTS, MIXED, MIXED_PWS) && ! pcm.isCollectionOrArray())
+						throw new BeanRuntimeException(c, "Invalid type for {0} property.  Only properties of type Collection and array can be used.", xf);
+					if (contentProperty != null) {
+						if (xf == contentFormat)
+							throw new BeanRuntimeException(c, "Multiple instances of {0} properties defined on class.  Only one property can be designated as such.", xf);
+						throw new BeanRuntimeException(c, "{0} and {1} properties found on the same bean.  Only one property can be designated as such.", contentFormat, xf);
+					}
+					contentProperty = p;
+					contentFormat = xf;
+				}
+				// Look for any properties that are collections with @Xml.childName specified.
+				String n = p.getExtendedMeta(XmlBeanPropertyMeta.class).getChildName();
+				if (n != null) {
+					if (collapsedProperties.containsKey(n) && collapsedProperties.get(n) != p)
+						throw new BeanRuntimeException(c, "Multiple properties found with the child name ''{0}''.", n);
+					collapsedProperties.put(n, p);
+				}
+			}
 		}
 	}
 
