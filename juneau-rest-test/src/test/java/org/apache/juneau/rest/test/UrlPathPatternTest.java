@@ -35,6 +35,6 @@ public class UrlPathPatternTest extends RestTestcase {
 		l.add(new UrlPathPattern("/foo/{id}/bar/*"));
 
 		Collections.sort(l);
-		assertEquals("['/foo/bar','/foo/bar/*','/foo/{id}/bar','/foo/{id}/bar/*','/foo/{id}','/foo/{id}/*','/foo','/foo/*']", JsonSerializer.DEFAULT_LAX.serialize(l));
+		assertEquals("[{vars:[],patternString:'/foo/bar'},{vars:[],patternString:'/foo/bar/*'},{vars:['id'],patternString:'/foo/{id}/bar'},{vars:['id'],patternString:'/foo/{id}/bar/*'},{vars:['id'],patternString:'/foo/{id}'},{vars:['id'],patternString:'/foo/{id}/*'},{vars:[],patternString:'/foo'},{vars:[],patternString:'/foo/*'}]", JsonSerializer.DEFAULT_LAX.serialize(l));
 	}
 }

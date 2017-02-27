@@ -35,11 +35,14 @@ import org.apache.juneau.svl.*;
  */
 public class LocalizationVar extends MultipartVar {
 
+	/** The name of this variable. */
+	public static final String NAME = "L";
+
 	/**
 	 * Constructor.
 	 */
 	public LocalizationVar() {
-		super("L");
+		super(NAME);
 	}
 
 	@Override /* Parameter */

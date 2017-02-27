@@ -31,13 +31,12 @@ import org.apache.juneau.rest.response.*;
  */
 public class StreamResource implements Streamable {
 
+	private final MediaType mediaType;
 	private final byte[][] contents;
-	private final String mediaType;
 	private final Map<String,String> headers;
 
 	/**
 	 * Constructor.
-	 *
 	 * @param mediaType The resource media type.
 	 * @param contents The resource contents.
 	 * <br>If multiple contents are specified, the results will be concatenated.
@@ -51,13 +50,12 @@ public class StreamResource implements Streamable {
 	 *	</ul>
 	 * @throws IOException
 	 */
-	public StreamResource(String mediaType, Object...contents) throws IOException {
+	public StreamResource(MediaType mediaType, Object...contents) throws IOException {
 		this(mediaType, null, contents);
 	}
 
 	/**
 	 * Constructor.
-	 *
 	 * @param mediaType The resource media type.
 	 * @param headers The HTTP response headers for this streamed resource.
 	 * @param contents The resource contents.
@@ -72,7 +70,7 @@ public class StreamResource implements Streamable {
 	 *	</ul>
 	 * @throws IOException
 	 */
-	public StreamResource(String mediaType, Map<String,Object> headers, Object...contents) throws IOException {
+	public StreamResource(MediaType mediaType, Map<String,Object> headers, Object...contents) throws IOException {
 		this.mediaType = mediaType;
 
 		Map<String,String> m = new LinkedHashMap<String,String>();
@@ -103,12 +101,11 @@ public class StreamResource implements Streamable {
 
 	/**
 	 * Builder class for constructing {@link StreamResource} objects.
-	 * <p>
 	 */
 	@SuppressWarnings("hiding")
 	public static class Builder {
 		ArrayList<Object> contents = new ArrayList<Object>();
-		String mediaType;
+		MediaType mediaType;
 		Map<String,String> headers = new LinkedHashMap<String,String>();
 
 		/**
@@ -117,6 +114,16 @@ public class StreamResource implements Streamable {
 		 * @return This object (for method chaining).
 		 */
 		public Builder mediaType(String mediaType) {
+			this.mediaType = MediaType.forString(mediaType);
+			return this;
+		}
+
+		/**
+		 * Specifies the resource media type string.
+		 * @param mediaType The resource media type string.
+		 * @return This object (for method chaining).
+		 */
+		public Builder mediaType(MediaType mediaType) {
 			this.mediaType = mediaType;
 			return this;
 		}
@@ -178,7 +185,6 @@ public class StreamResource implements Streamable {
 		}
 	}
 
-
 	/**
 	 * Get the HTTP response headers.
 	 * @return The HTTP response headers.  An unmodifiable map.  Never <jk>null</jk>.
@@ -194,7 +200,7 @@ public class StreamResource implements Streamable {
 	}
 
 	@Override /* Streamable */
-	public String getMediaType() {
+	public MediaType getMediaType() {
 		return mediaType;
 	}
 }

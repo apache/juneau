@@ -35,10 +35,13 @@ import org.apache.juneau.svl.*;
  */
 public class SystemPropertiesVar extends MapVar {
 
+	/** The name of this variable. */
+	public static final String NAME = "S";
+
 	/**
 	 * Constructor.
 	 */
 	public SystemPropertiesVar() {
-		super("S", System.getProperties());
+		super(NAME, System.getProperties());
 	}
 }

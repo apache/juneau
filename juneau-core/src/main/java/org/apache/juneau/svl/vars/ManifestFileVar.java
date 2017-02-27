@@ -48,11 +48,14 @@ public class ManifestFileVar extends DefaultingVar {
 	 */
 	public static final String SESSION_manifest = "manifest";
 
+	/** The name of this variable. */
+	public static final String NAME = "MF";
+
 	/**
 	 * Constructor.
 	 */
 	public ManifestFileVar() {
-		super("MF");
+		super(NAME);
 	}
 
 	@Override /* Var */

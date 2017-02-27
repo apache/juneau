@@ -35,5 +35,5 @@ public interface Streamable {
 	 *
 	 * @return The media type, or <jk>null</jk> if the media type is not known.
 	 */
-	String getMediaType();
+	MediaType getMediaType();
 }

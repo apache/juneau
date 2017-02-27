@@ -34,11 +34,14 @@ import org.apache.juneau.svl.*;
  */
 public class SerializedRequestAttrVar extends StreamedVar {
 
+	/** The name of this variable. */
+	public static final String NAME = "SA";
+
 	/**
 	 * Constructor.
 	 */
 	public SerializedRequestAttrVar() {
-		super("SA");
+		super(NAME);
 	}
 
 	@Override /* Parameter */

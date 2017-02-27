@@ -51,11 +51,14 @@ public class RequestVar extends SimpleVar {
 	 */
 	public static final String SESSION_req = "req";
 
+	/** The name of this variable. */
+	public static final String NAME = "R";
+
 	/**
 	 * Constructor.
 	 */
 	public RequestVar() {
-		super("R");
+		super(NAME);
 	}
 
 	@Override /* Parameter */

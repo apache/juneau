@@ -33,9 +33,9 @@ public final class StreamableHandler implements ResponseHandler {
 		if (output instanceof Streamable) {
 			if (output instanceof StreamResource) {
 				StreamResource r = (StreamResource)output;
-				String mediaType = r.getMediaType();
+				MediaType mediaType = r.getMediaType();
 				if (mediaType != null)
-					res.setContentType(mediaType);
+					res.setContentType(mediaType.toString());
 				for (Map.Entry<String,String> h : r.getHeaders().entrySet())
 					res.setHeader(h.getKey(), h.getValue());
 			}

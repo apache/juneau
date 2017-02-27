@@ -55,7 +55,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	SerializerGroup serializerGroup;
 	UrlEncodingSerializer urlEncodingSerializer;         // The serializer used to convert arguments passed into Redirect objects.
 	private EncoderGroup encoders;
-	private RestServlet servlet;
+	private final RestServlet servlet;
 	private ServletOutputStream os;
 
 	/**

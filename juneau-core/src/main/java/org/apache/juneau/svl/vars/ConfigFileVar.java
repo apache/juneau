@@ -49,11 +49,14 @@ public class ConfigFileVar extends DefaultingVar {
 	 */
 	public static final String SESSION_config = "config";
 
+	/** The name of this variable. */
+	public static final String NAME = "C";
+
 	/**
 	 * Constructor.
 	 */
 	public ConfigFileVar() {
-		super("C");
+		super(NAME);
 	}
 
 	@Override /* Var */

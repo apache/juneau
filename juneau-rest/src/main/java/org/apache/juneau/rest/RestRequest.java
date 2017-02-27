@@ -63,8 +63,9 @@ import org.apache.juneau.utils.*;
 public final class RestRequest extends HttpServletRequestWrapper {
 
 	private final RestServlet servlet;
-	private String method, pathRemainder, body;
-	Method javaMethod;
+	private final String method;
+	private String pathRemainder, body;
+	private Method javaMethod;
 	private ObjectMap properties;
 	private SerializerGroup serializerGroup;
 	private ParserGroup parserGroup;
@@ -74,8 +75,9 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	private UrlEncodingParser urlEncodingParser;   // The parser used to parse URL attributes and parameters (beanContext also used to parse headers)
 	private BeanSession beanSession;
 	private VarResolverSession varSession;
-	private Map<String,String[]> queryParams;
-	private Map<String,String> defaultServletHeaders, defaultMethodHeaders, overriddenHeaders, overriddenQueryParams, overriddenFormDataParams, pathParameters;
+	private final Map<String,String[]> queryParams;
+	private final Map<String,String> defaultServletHeaders;
+	private Map<String,String> defaultMethodHeaders, overriddenHeaders, overriddenQueryParams, overriddenFormDataParams, pathParameters;
 	private boolean isPost;
 	private String servletURI, relativeServletURI;
 	private String charset, defaultCharset;
@@ -103,11 +105,13 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 			// Get the HTTP method.
 			// Can be overridden through a "method" GET attribute.
-			method = super.getMethod();
+			String _method = super.getMethod();
 
 			String m = getQueryParameter("method");
 			if (! StringUtils.isEmpty(m) && (servlet.context.allowMethodParams.contains(m) || servlet.context.allowMethodParams.contains("*")))
-				method = m;
+				_method = m;
+
+			method = _method;
 
 			if (servlet.context.allowBodyParam)
 				body = getQueryParameter("body");
@@ -1798,10 +1802,10 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		String s = servlet.getResourceAsString(name, getLocale());
 		if (s == null)
 			return null;
-		ReaderResource rr = new ReaderResource(s, mediaType);
+		ReaderResource.Builder b = new ReaderResource.Builder().mediaType(mediaType).contents(s);
 		if (resolveVars)
-			rr.setVarSession(getVarResolverSession());
-		return rr;
+			b.varResolver(getVarResolverSession());
+		return b.build();
 	}
 
 	/**
@@ -1968,5 +1972,9 @@ public final class RestRequest extends HttpServletRequestWrapper {
 				return h;
 		}
 		return h;
+	}
+
+	void setJavaMethod(Method method) {
+		this.javaMethod = method;
 	}
 }

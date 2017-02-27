@@ -48,11 +48,14 @@ public class ArgsVar extends DefaultingVar {
 	 */
 	public static final String SESSION_args = "args";
 
+	/** The name of this variable. */
+	public static final String NAME = "ARG";
+
 	/**
 	 * Constructor.
 	 */
 	public ArgsVar() {
-		super("ARG");
+		super(NAME);
 	}
 
 	@Override /* Var */

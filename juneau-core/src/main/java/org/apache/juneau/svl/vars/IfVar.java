@@ -45,11 +45,14 @@ import org.apache.juneau.svl.*;
 */
 public class IfVar extends MultipartVar {
 
+	/** The name of this variable. */
+	public static final String NAME = "IF";
+
 	/**
 	 * Constructor.
 	 */
 	public IfVar() {
-		super("IF");
+		super(NAME);
 	}
 
 	@Override /* MultipartVar */

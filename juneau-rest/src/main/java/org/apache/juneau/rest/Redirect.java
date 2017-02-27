@@ -66,20 +66,25 @@ import org.apache.juneau.urlencoding.*;
  */
 public final class Redirect {
 
-	private int httpResponseCode;
-	private String url;
-	private Object[] args;
+	private final int httpResponseCode;
+	private final String url;
+	private final Object[] args;
 
 	/**
 	 * Redirect to the specified URL.
 	 * Relative paths are interpreted as relative to the servlet path.
 	 *
 	 * @param url The URL to redirect to.
+	 * <br>Can be any of the following:
+	 * <ul>
+	 * 	<li><code>URL</code>
+	 * 	<li><code>URI</code>
+	 * 	<li><code>CharSequence</code>
+	 * </ul>
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	public Redirect(CharSequence url, Object...args) {
-		this.url = (url == null ? null : url.toString());
-		this.args = args;
+	public Redirect(Object url, Object...args) {
+		this(0, url, args);
 	}
 
 	/**
@@ -87,9 +92,15 @@ public final class Redirect {
 	 * Same as calling <code>toString()</code> on the object and using the other constructor.
 	 *
 	 * @param url The URL to redirect to.
+	 * <br>Can be any of the following:
+	 * <ul>
+	 * 	<li><code>URL</code>
+	 * 	<li><code>URI</code>
+	 * 	<li><code>CharSequence</code>
+	 * </ul>
 	 */
 	public Redirect(Object url) {
-		this.url = (url == null ? null : url.toString());
+		this(0, url, (Object[])null);
 	}
 
 	/**
@@ -98,9 +109,15 @@ public final class Redirect {
 	 *
 	 * @param httpResponseCode The HTTP response code.
 	 * @param url The URL to redirect to.
+	 * <br>Can be any of the following:
+	 * <ul>
+	 * 	<li><code>URL</code>
+	 * 	<li><code>URI</code>
+	 * 	<li><code>CharSequence</code>
+	 * </ul>
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	public Redirect(int httpResponseCode, CharSequence url, Object...args) {
+	public Redirect(int httpResponseCode, Object url, Object...args) {
 		this.httpResponseCode = httpResponseCode;
 		this.url = (url == null ? null : url.toString());
 		this.args = args;
@@ -110,6 +127,7 @@ public final class Redirect {
 	 * Shortcut for redirecting to the servlet root.
 	 */
 	public Redirect() {
+		this(0, null, (Object[])null);
 	}
 
 	/**
@@ -122,7 +140,7 @@ public final class Redirect {
 		if (url != null && args != null && args.length > 0) {
 			for (int i = 0; i < args.length; i++)
 				args[i] = s.serializeUrlPart(args[i]);
-			url = MessageFormat.format(url, args);
+			return MessageFormat.format(url, args);
 		}
 		return url;
 	}

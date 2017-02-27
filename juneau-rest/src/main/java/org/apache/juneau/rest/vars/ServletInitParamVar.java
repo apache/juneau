@@ -32,11 +32,14 @@ import org.apache.juneau.svl.*;
  */
 public class ServletInitParamVar extends DefaultingVar {
 
+	/** The name of this variable. */
+	public static final String NAME = "I";
+
 	/**
 	 * Constructor.
 	 */
 	public ServletInitParamVar() {
-		super("I");
+		super(NAME);
 	}
 
 	@Override /* Parameter */

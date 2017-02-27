@@ -18,6 +18,7 @@ import org.apache.juneau.rest.*;
  * Predefined matcher for matching requests with content type <js>"application/x-www-form-urlencoded"</js>.
  */
 public class UrlEncodedFormMatcher extends RestMatcher {
+
 	@Override /* RestMatcher */
 	public boolean matches(RestRequest req) {
 		String contentType = req.getContentType();

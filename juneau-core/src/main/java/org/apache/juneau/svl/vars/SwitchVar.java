@@ -46,11 +46,14 @@ import org.apache.juneau.svl.*;
  */
 public class SwitchVar extends MultipartVar {
 
+	/** The name of this variable. */
+	public static final String NAME = "SWITCH";
+
 	/**
 	 * Constructor.
 	 */
 	public SwitchVar() {
-		super("SWITCH");
+		super(NAME);
 	}
 
 	@Override /* MultipartVar */

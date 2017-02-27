@@ -35,11 +35,14 @@ import org.apache.juneau.svl.*;
  */
 public class EnvVariablesVar extends DefaultingVar {
 
+	/** The name of this variable. */
+	public static final String NAME = "E";
+
 	/**
 	 * Constructor.
 	 */
 	public EnvVariablesVar() {
-		super("E");
+		super(NAME);
 	}
 
 	@Override /* Var */

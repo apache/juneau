@@ -36,7 +36,7 @@ import org.apache.juneau.rest.annotation.*;
 @SuppressWarnings("serial")
 public abstract class RemoteableServlet extends RestServletDefault {
 
-	private Map<String,Class<?>> classNameMap = new ConcurrentHashMap<String,Class<?>>();
+	private final Map<String,Class<?>> classNameMap = new ConcurrentHashMap<String,Class<?>>();
 
 	//--------------------------------------------------------------------------------
 	// Abstract methods

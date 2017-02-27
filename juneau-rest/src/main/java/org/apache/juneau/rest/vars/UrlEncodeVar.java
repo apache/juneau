@@ -29,11 +29,14 @@ import org.apache.juneau.svl.*;
  */
 public class UrlEncodeVar extends SimpleVar {
 
+	/** The name of this variable. */
+	public static final String NAME = "UE";
+
 	/**
 	 * Constructor.
 	 */
 	public UrlEncodeVar() {
-		super("UE");
+		super(NAME);
 	}
 
 	@Override /* Parameter */

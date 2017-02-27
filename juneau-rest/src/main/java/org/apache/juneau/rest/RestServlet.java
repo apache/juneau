@@ -825,7 +825,7 @@ public abstract class RestServlet extends HttpServlet {
 				if (sm.isRequestAllowed(req)) {
 					Operation o = sm.getSwaggerOperation(req);
 					s.path(
-						sm.pathPattern.patternString,
+						sm.pathPattern.getPatternString(),
 						sm.httpMethod.toLowerCase(),
 						o
 					);
@@ -1349,7 +1349,7 @@ public abstract class RestServlet extends HttpServlet {
 								String name = (i == -1 ? p2 : p2.substring(i+1));
 								String mediaType = getMimetypesFileTypeMap().getContentType(name);
 								ObjectMap headers = new ObjectMap().append("Cache-Control", "max-age=86400, public");
-								staticFilesCache.put(pathInfo, new StreamResource(mediaType, headers, is));
+								staticFilesCache.put(pathInfo, new StreamResource(MediaType.forString(mediaType), headers, is));
 								return staticFilesCache.get(pathInfo);
 							} finally {
 								is.close();
@@ -1864,7 +1864,7 @@ public abstract class RestServlet extends HttpServlet {
 				for (String path : StringUtils.split(getVarResolver().resolve(r.stylesheet()), ','))
 					contents.add(getResource(path, null));
 
-				return new StreamResource("text/css", contents.toArray());
+				return new StreamResource(MediaType.forString("text/css"), contents.toArray());
 			}
 		return null;
 	}
@@ -1890,7 +1890,7 @@ public abstract class RestServlet extends HttpServlet {
 				InputStream is = getResource(path, null);
 				if (is != null) {
 					try {
-						return new StreamResource("image/x-icon", is);
+						return new StreamResource(MediaType.forString("image/x-icon"), is);
 					} finally {
 						is.close();
 					}
@@ -2268,9 +2268,9 @@ public abstract class RestServlet extends HttpServlet {
 				for (int i = 0; i < params.length; i++) {
 					params[i] = new MethodParam(this, pt[i], method, pa[i]);
 					if (params[i].paramType == PATH && params[i].name.isEmpty()) {
-						if (pathPattern.vars.length <= attrIdx)
+						if (pathPattern.getVars().length <= attrIdx)
 							throw new RestServletException("Number of attribute parameters in method ''{0}'' exceeds the number of URL pattern variables.", method.getName());
-						params[i].name = pathPattern.vars[attrIdx++];
+						params[i].name = pathPattern.getVars()[attrIdx++];
 					}
 				}
 
@@ -2309,8 +2309,8 @@ public abstract class RestServlet extends HttpServlet {
 
 		private Operation getSwaggerOperationFromFile(RestRequest req) {
 			Swagger s = req.getSwaggerFromFile();
-			if (s != null && s.getPaths() != null && s.getPaths().get(pathPattern.patternString) != null)
-				return s.getPaths().get(pathPattern.patternString).get(httpMethod);
+			if (s != null && s.getPaths() != null && s.getPaths().get(pathPattern.getPatternString()) != null)
+				return s.getPaths().get(pathPattern.getPatternString()).get(httpMethod);
 			return null;
 		}
 
@@ -2580,7 +2580,7 @@ public abstract class RestServlet extends HttpServlet {
 
 		private boolean isRequestAllowed(RestRequest req) {
 			for (RestGuard guard : guards) {
-				req.javaMethod = method;
+				req.setJavaMethod(method);
 				if (! guard.isRequestAllowed(req))
 					return false;
 			}
@@ -2595,10 +2595,10 @@ public abstract class RestServlet extends HttpServlet {
 				return SC_NOT_FOUND;
 
 			String remainder = null;
-			if (patternVals.length > pathPattern.vars.length)
-				remainder = patternVals[pathPattern.vars.length];
-			for (int i = 0; i < pathPattern.vars.length; i++)
-				req.setPathParameter(pathPattern.vars[i], patternVals[i]);
+			if (patternVals.length > pathPattern.getVars().length)
+				remainder = patternVals[pathPattern.getVars().length];
+			for (int i = 0; i < pathPattern.getVars().length; i++)
+				req.setPathParameter(pathPattern.getVars()[i], patternVals[i]);
 
 			req.init(method, remainder, createRequestProperties(mProperties, req), mDefaultRequestHeaders, mDefaultEncoding, mSerializers, mParsers, mUrlEncodingParser);
 			res.init(req.getProperties(), mDefaultEncoding, mSerializers, mUrlEncodingSerializer, mEncoders);
@@ -2679,7 +2679,7 @@ public abstract class RestServlet extends HttpServlet {
 
 		@Override /* Object */
 		public String toString() {
-			return "SimpleMethod: name=" + httpMethod + ", path=" + pathPattern.patternString;
+			return "SimpleMethod: name=" + httpMethod + ", path=" + pathPattern.getPatternString();
 		}
 
 		/*

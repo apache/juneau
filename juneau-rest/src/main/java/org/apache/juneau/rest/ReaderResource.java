@@ -16,6 +16,7 @@ import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.response.*;
 import org.apache.juneau.svl.*;
@@ -28,44 +29,167 @@ import org.apache.juneau.svl.*;
  */
 public class ReaderResource implements Writable {
 
-	private String contents;
-	private MediaType mediaType;
-	private VarResolverSession varSession;
-	private Map<String,String> headers = new LinkedHashMap<String,String>();
+	private final MediaType mediaType;
+	private final String[] contents;
+	private final VarResolverSession varSession;
+	private final Map<String,String> headers;
 
 	/**
 	 * Constructor.
-	 *
-	 * @param contents The contents of this resource.
 	 * @param mediaType The HTTP media type.
+	 * @param contents The contents of this resource.
+	 * <br>If multiple contents are specified, the results will be concatenated.
+	 * <br>Contents can be any of the following:
+	 * <ul>
+	 * 	<li><code>CharSequence</code>
+	 * 	<li><code>Reader</code>
+	 * 	<li><code>File</code>
+	 * </ul>
+	 * @throws IOException
 	 */
-	protected ReaderResource(String contents, MediaType mediaType) {
-		this.contents = contents;
+	protected ReaderResource(MediaType mediaType, Object...contents) throws IOException {
+		this(mediaType, null, null, contents);
+	}
+
+	/**
+	 * Constructor.
+	 * @param mediaType The resource media type.
+	 * @param headers The HTTP response headers for this streamed resource.
+	 * @param varSession Optional variable resolver for resolving variables in the string.
+	 * @param contents The resource contents.
+	 * <br>If multiple contents are specified, the results will be concatenated.
+	 * <br>Contents can be any of the following:
+	 * <ul>
+	 * 	<li><code>InputStream</code>
+	 * 	<li><code>Reader</code> - Converted to UTF-8 bytes.
+	 * 	<li><code>File</code>
+	 * 	<li><code>CharSequence</code> - Converted to UTF-8 bytes.
+	 *	</ul>
+	 * @throws IOException
+	 */
+	public ReaderResource(MediaType mediaType, Map<String,Object> headers, VarResolverSession varSession, Object...contents) throws IOException {
 		this.mediaType = mediaType;
-	}
-
-	/**
-	 * Add an HTTP response header.
-	 *
-	 * @param name The header name.
-	 * @param value The header value converted to a string using {@link Object#toString()}.
-	 * @return This object (for method chaining).
-	 */
-	public ReaderResource setHeader(String name, Object value) {
-		headers.put(name, value == null ? "" : value.toString());
-		return this;
-	}
-
-	/**
-	 * Use the specified {@link VarResolver} to resolve any {@link Parameter StringVars} in the
-	 * contents of this file when the {@link #writeTo(Writer)} or {@link #toString()} methods are called.
-	 *
-	 * @param varSession The string variable resolver to use to resolve string variables.
-	 * @return This object (for method chaining).
-	 */
-	public ReaderResource setVarSession(VarResolverSession varSession) {
 		this.varSession = varSession;
-		return this;
+
+		Map<String,String> m = new LinkedHashMap<String,String>();
+		if (headers != null)
+			for (Map.Entry<String,Object> e : headers.entrySet())
+				m.put(e.getKey(), StringUtils.toString(e.getValue()));
+		this.headers = Collections.unmodifiableMap(m);
+
+		this.contents = new String[contents.length];
+		for (int i = 0; i < contents.length; i++) {
+			Object c = contents[i];
+			if (c == null)
+				this.contents[i] = "";
+			else if (c instanceof InputStream)
+				this.contents[i] = IOUtils.read((InputStream)c);
+			else if (c instanceof File)
+				this.contents[i] = IOUtils.read((File)c);
+			else if (c instanceof Reader)
+				this.contents[i] = IOUtils.read((Reader)c);
+			else if (c instanceof CharSequence)
+				this.contents[i] = ((CharSequence)c).toString();
+			else
+				throw new IOException("Invalid class type passed to ReaderResource: " + c.getClass().getName());
+		}
+	}
+
+	/**
+	 * Builder class for constructing {@link ReaderResource} objects.
+	 */
+	@SuppressWarnings("hiding")
+	public static class Builder {
+		ArrayList<Object> contents = new ArrayList<Object>();
+		MediaType mediaType;
+		VarResolverSession varResolver;
+		Map<String,String> headers = new LinkedHashMap<String,String>();
+
+		/**
+		 * Specifies the resource media type string.
+		 * @param mediaType The resource media type string.
+		 * @return This object (for method chaining).
+		 */
+		public Builder mediaType(String mediaType) {
+			this.mediaType = MediaType.forString(mediaType);
+			return this;
+		}
+
+		/**
+		 * Specifies the resource media type string.
+		 * @param mediaType The resource media type string.
+		 * @return This object (for method chaining).
+		 */
+		public Builder mediaType(MediaType mediaType) {
+			this.mediaType = mediaType;
+			return this;
+		}
+
+		/**
+		 * Specifies the contents for this resource.
+		 * <p>
+		 * This method can be called multiple times to add more content.
+		 *
+		 * @param contents The resource contents.
+		 * <br>If multiple contents are specified, the results will be concatenated.
+		 * <br>Contents can be any of the following:
+		 * <ul>
+		 * 	<li><code>InputStream</code>
+		 * 	<li><code>Reader</code> - Converted to UTF-8 bytes.
+		 * 	<li><code>File</code>
+		 * 	<li><code>CharSequence</code> - Converted to UTF-8 bytes.
+		 *	</ul>
+		 * @return This object (for method chaining).
+		 */
+		public Builder contents(Object...contents) {
+			this.contents.addAll(Arrays.asList(contents));
+			return this;
+		}
+
+		/**
+		 * Specifies an HTTP response header value.
+		 *
+		 * @param name The HTTP header name.
+		 * @param value The HTTP header value.  Will be converted to a <code>String</code> using {@link Object#toString()}.
+		 * @return This object (for method chaining).
+		 */
+		public Builder header(String name, Object value) {
+			this.headers.put(name, StringUtils.toString(value));
+			return this;
+		}
+
+		/**
+		 * Specifies HTTP response header values.
+		 *
+		 * @param headers The HTTP headers.  Values will be converted to <code>Strings</code> using {@link Object#toString()}.
+		 * @return This object (for method chaining).
+		 */
+		public Builder headers(Map<String,Object> headers) {
+			for (Map.Entry<String,Object> e : headers.entrySet())
+				header(e.getKey(), e.getValue());
+			return this;
+		}
+
+		/**
+		 * Specifies the variable resolver to use for this resource.
+		 *
+		 * @param varResolver The variable resolver.
+		 * @return This object (for method chaining).
+		 */
+		public Builder varResolver(VarResolverSession varResolver) {
+			this.varResolver = varResolver;
+			return this;
+		}
+
+		/**
+		 * Create a new {@link ReaderResource} using values in this builder.
+		 *
+		 * @return A new immutable {@link ReaderResource} object.
+		 * @throws IOException
+		 */
+		public ReaderResource build() throws IOException {
+			return new ReaderResource(mediaType, headers, varResolver, contents.toArray());
+		}
 	}
 
 	/**
@@ -79,21 +203,29 @@ public class ReaderResource implements Writable {
 
 	@Override /* Writeable */
 	public void writeTo(Writer w) throws IOException {
-		if (varSession != null)
-			varSession.resolveTo(contents, w);
-		else
-			w.write(contents);
+		for (String s : contents) {
+			if (varSession != null)
+				varSession.resolveTo(s, w);
+			else
+				w.write(s);
+		}
 	}
 
-	@Override /* Streamable */
+	@Override /* Writeable */
 	public MediaType getMediaType() {
 		return mediaType;
 	}
 
 	@Override /* Object */
 	public String toString() {
-		if (varSession != null)
-			return varSession.resolve(contents);
-		return contents;
+		if (contents.length == 1 && varSession == null)
+			return contents[0];
+		StringWriter sw = new StringWriter();
+		for (String s : contents) {
+			if (varSession != null)
+				return varSession.resolve(s);
+			sw.write(s);
+		}
+		return sw.toString();
 	}
 }

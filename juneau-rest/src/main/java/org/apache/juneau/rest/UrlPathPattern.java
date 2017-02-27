@@ -26,10 +26,11 @@ import org.apache.juneau.rest.annotation.*;
  * Handles aspects of matching and precedence ordering.
  */
 public final class UrlPathPattern implements Comparable<UrlPathPattern> {
-	private Pattern pattern;
-	String patternString;
-	private boolean isOnlyDotAll, isDotAll;
-	String[] vars = new String[0];
+
+	private final Pattern pattern;
+	private final String patternString;
+	private final boolean isOnlyDotAll, isDotAll;
+	private final String[] vars;
 
 	/**
 	 * Constructor.
@@ -38,26 +39,39 @@ public final class UrlPathPattern implements Comparable<UrlPathPattern> {
 	 */
 	public UrlPathPattern(String patternString) {
 		this.patternString = patternString;
-		if (! StringUtils.startsWith(patternString, '/'))
-			patternString = '/' + patternString;
-		if (patternString.equals("/*")) {
-			isOnlyDotAll = true;
-			return;
+		Builder b = new Builder(patternString);
+		pattern = b.pattern;
+		isDotAll = b.isDotAll;
+		isOnlyDotAll = b.isOnlyDotAll;
+		vars = b.vars.toArray(new String[b.vars.size()]);
+	}
+
+	@SuppressWarnings("hiding")
+	class Builder {
+		boolean isDotAll, isOnlyDotAll;
+		Pattern pattern;
+		List<String> vars = new LinkedList<String>();
+
+		private Builder(String patternString) {
+			if (! StringUtils.startsWith(patternString, '/'))
+				patternString = '/' + patternString;
+			if (patternString.equals("/*")) {
+				isOnlyDotAll = true;
+				return;
+			}
+			if (patternString.endsWith("/*"))
+				isDotAll = true;
+
+			// Find all {xxx} variables.
+			Pattern p = Pattern.compile("\\{([^\\}]+)\\}");
+			Matcher m = p.matcher(patternString);
+			while (m.find())
+				vars.add(m.group(1));
+
+			patternString = patternString.replaceAll("\\{[^\\}]+\\}", "([^\\/]+)");
+			patternString = patternString.replaceAll("\\/\\*$", "((?:)|(?:\\/.*))");
+			pattern = Pattern.compile(patternString);
 		}
-		if (patternString.endsWith("/*"))
-			isDotAll = true;
-
-		// Find all {xxx} variables.
-		Pattern p = Pattern.compile("\\{([^\\}]+)\\}");
-		List<String> vl = new LinkedList<String>();
-		Matcher m = p.matcher(patternString);
-		while (m.find())
-			vl.add(m.group(1));
-		this.vars = vl.toArray(new String[vl.size()]);
-
-		patternString = patternString.replaceAll("\\{[^\\}]+\\}", "([^\\/]+)");
-		patternString = patternString.replaceAll("\\/\\*$", "((?:)|(?:\\/.*))");
-		pattern = Pattern.compile(patternString);
 	}
 
 	/**
@@ -155,5 +169,21 @@ public final class UrlPathPattern implements Comparable<UrlPathPattern> {
 	 */
 	public String toRegEx() {
 		return isOnlyDotAll ? "*" : pattern.pattern();
+	}
+
+	/**
+	 * Bean property getter:  <property>vars</property>.
+	 * @return The value of the <property>vars</property> property on this bean, or <jk>null</jk> if it is not set.
+	 */
+	public String[] getVars() {
+		return vars;
+	}
+
+	/**
+	 * Bean property getter:  <property>patternString</property>.
+	 * @return The value of the <property>patternString</property> property on this bean, or <jk>null</jk> if it is not set.
+	 */
+	public String getPatternString() {
+		return patternString;
 	}
 }
