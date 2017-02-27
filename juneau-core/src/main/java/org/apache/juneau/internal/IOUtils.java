@@ -146,10 +146,9 @@ public final class IOUtils {
 		try {
 			while ((nRead = in.read(b, 0, b.length)) != -1)
 				  buff.write(b, 0, nRead);
+			buff.flush();
 
-				buff.flush();
-
-				return buff.toByteArray();
+			return buff.toByteArray();
 		} finally {
 			in.close();
 		}

@@ -511,8 +511,12 @@ public @interface RestResource {
 	 * <ol>
 	 * 	<li><code>com.foo.mypackage.mystyles</code> package.
 	 * 	<li><code>org.apache.juneau.rest.mystyles</code> package (since <code>RestServletDefault</code> is in <code>org.apache.juneau.rest</code>).
-	 * 	<li><code>[working-dir]/mystyles</code> directory. 
+	 * 	<li><code>[working-dir]/mystyles</code> directory.
 	 * </ol>
+	 * <p>
+	 * Multiple stylesheets can be specified as a comma-delimited list.
+	 * When multiple stylesheets are specified, their contents will be concatenated and return in the order specified
+	 * in the list.
 	 */
 	String stylesheet() default "";
 

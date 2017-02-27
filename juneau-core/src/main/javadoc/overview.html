@@ -5668,6 +5668,13 @@
 			</ul>
 		</ul>
 		
+		<h6 class='topic'>org.apache.juneau.rest</h6>
+		<ul class='spaced-list'>
+			<li>{@link org.apache.juneau.rest.annotation.RestResource#stylesheet()} can now take in a comma-delimited list of stylesheet paths.
+			<li>{@link org.apache.juneau.rest.StreamResource} can now contain multiple sources from a variety of source types (e.g. <code><jk>byte</jk>[]</code> arrays, <code>InputStreams</code>, <code>Files</code>, etc...)
+				and is now immutable.  It also includes a new {@link org.apache.juneau.rest.StreamResource.Builder} class.
+		</ul>
+
 		<h6 class='topic'>org.apache.juneau.rest.client</h6>
 		<ul class='spaced-list'>
 			<li>{@link org.apache.juneau.rest.client.RestClient#setRootUrl(Object)} can now take in <code>URI</code> and <code>URL</code> objects.

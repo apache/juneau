@@ -1348,7 +1348,8 @@ public abstract class RestServlet extends HttpServlet {
 								int i = p2.lastIndexOf('/');
 								String name = (i == -1 ? p2 : p2.substring(i+1));
 								String mediaType = getMimetypesFileTypeMap().getContentType(name);
-								staticFilesCache.put(pathInfo, new StreamResource(is, mediaType).setHeader("Cache-Control", "max-age=86400, public"));
+								ObjectMap headers = new ObjectMap().append("Cache-Control", "max-age=86400, public");
+								staticFilesCache.put(pathInfo, new StreamResource(mediaType, headers, is));
 								return staticFilesCache.get(pathInfo);
 							} finally {
 								is.close();
@@ -1856,19 +1857,15 @@ public abstract class RestServlet extends HttpServlet {
 	 * @throws IOException If stylesheet could not be loaded.
 	 */
 	protected StreamResource createStyleSheet() throws IOException {
-		for (RestResource r : restResourceAnnotationsChildFirst.values()) {
+		for (RestResource r : restResourceAnnotationsChildFirst.values())
 			if (! r.stylesheet().isEmpty()) {
-				String path = getVarResolver().resolve(r.stylesheet());
-				InputStream is = getResource(path, null);
-				if (is != null) {
-					try {
-						return new StreamResource(is, "text/css");
-					} finally {
-						is.close();
-					}
-				}
+				List<InputStream> contents = new ArrayList<InputStream>();
+
+				for (String path : StringUtils.split(getVarResolver().resolve(r.stylesheet()), ','))
+					contents.add(getResource(path, null));
+
+				return new StreamResource("text/css", contents.toArray());
 			}
-		}
 		return null;
 	}
 
@@ -1893,7 +1890,7 @@ public abstract class RestServlet extends HttpServlet {
 				InputStream is = getResource(path, null);
 				if (is != null) {
 					try {
-						return new StreamResource(is, "image/x-icon");
+						return new StreamResource("image/x-icon", is);
 					} finally {
 						is.close();
 					}
