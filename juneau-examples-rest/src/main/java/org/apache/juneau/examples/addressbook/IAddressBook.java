@@ -14,8 +14,6 @@ package org.apache.juneau.examples.addressbook;
 
 import java.util.*;
 
-import org.apache.juneau.examples.rest.*;
-
 /**
  * Interface used to help illustrate proxy interfaces.
  * See {@link SampleRemoteableServlet}.

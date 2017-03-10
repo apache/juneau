@@ -33,7 +33,7 @@ import org.apache.juneau.rest.annotation.*;
 		@Property(name=HTMLDOC_links, value="{options:'?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/CodeFormatterResource.java'}"),
 	}
 )
-@SuppressWarnings("serial")
+@SuppressWarnings({"serial"})
 public class CodeFormatterResource extends Resource {
 
 	/** [GET /] - Display query entry page. */
