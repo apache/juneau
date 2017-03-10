@@ -34,7 +34,8 @@ public class CharsetEncodingsTest extends RestTestcase {
 	@Test
 	public void test() throws Exception {
 		String url = "/testCharsetEncodings";
-		RestClient client = new TestRestClient().setAccept("text/s").setContentType("text/p");
+		RestClientBuilder cb = TestMicroservice.client().accept("text/s").contentType("text/p");
+		RestClient client = cb.build();
 		InputStream is;
 		String r;
 
@@ -47,20 +48,26 @@ public class CharsetEncodingsTest extends RestTestcase {
 		if (debug) System.err.println(r);
 		assertEquals("utf-8/foo/utf-8", r);
 
-		client.setHeader("Accept-Charset", "utf-8").setContentType("text/p;charset=utf-8");
-		is = client.doPut(url, new StringReader("foo")).getInputStream();
+		client.closeQuietly();
+
+		client = cb.acceptCharset("utf-8").contentType("text/p;charset=utf-8").build();
+		is = client.doPut(url, new StringReader("foo")).acceptCharset("utf-8").contentType("text/p;charset=utf-8").getInputStream();
 		r = IOUtils.read(new InputStreamReader(is, "utf-8"));
 		if (debug) System.err.println(r);
 		assertEquals("utf-8/foo/utf-8", r);
 
-		client.setHeader("Accept-Charset", "Shift_JIS").setContentType("text/p;charset=shift_jis");
+		client.closeQuietly();
+
+		client = cb.acceptCharset("Shift_JIS").contentType("text/p;charset=shift_jis").build();
 		is = client.doPut(url, new StringReader("foo")).getInputStream();
 		r = IOUtils.read(new InputStreamReader(is, "Shift_JIS"));
 		if (debug) System.err.println(r);
 		assertEquals("shift_jis/foo/shift_jis", r);
 
+		client.closeQuietly();
+
 		try {
-			client.setHeader("Accept-Charset", "BAD").setContentType("text/p;charset=sjis");
+			client = cb.acceptCharset("BAD").contentType("text/p;charset=sjis").build();
 			is = client.doPut(url + "?noTrace=true", new StringReader("foo")).getInputStream();
 			r = IOUtils.read(new InputStreamReader(is, "sjis"));
 			if (debug) System.err.println(r);
@@ -69,20 +76,26 @@ public class CharsetEncodingsTest extends RestTestcase {
 			checkErrorResponse(debug, e, SC_NOT_ACCEPTABLE, "No supported charsets in header 'Accept-Charset': 'BAD'");
 		}
 
-		client.setAccept("text/s").setHeader("Accept-Charset", "utf-8").setContentType("text/p");
+		client.closeQuietly();
+
+		client = cb.accept("text/s").acceptCharset("utf-8").contentType("text/p").build();
 		is = client.doPut(url+"?Content-Type=text/p", new StringReader("foo")).getInputStream();
 		r = IOUtils.read(new InputStreamReader(is, "utf-8"));
 		if (debug) System.err.println(r);
 		assertEquals("utf-8/foo/utf-8", r);
 
-		client.setAccept("text/s").setContentType("text/bad").setHeader("Accept-Charset", "utf-8");
+		client.closeQuietly();
+
+		client = cb.accept("text/s").contentType("text/bad").acceptCharset("utf-8").build();
 		is = client.doPut(url+"?Content-Type=text/p;charset=utf-8", new StringReader("foo")).getInputStream();
 		r = IOUtils.read(new InputStreamReader(is, "utf-8"));
 		if (debug) System.err.println(r);
 		assertEquals("utf-8/foo/utf-8", r);
 
+		client.closeQuietly();
+
 		try {
-			client.setAccept("text/s").setContentType("text/p").setHeader("Accept-Charset", "utf-8");
+			client = cb.accept("text/s").contentType("text/p").acceptCharset("utf-8").build();
 			is = client.doPut(url+"?Content-Type=text/p;charset=BAD&noTrace=true", new StringReader("foo")).getInputStream();
 			r = IOUtils.read(new InputStreamReader(is, "utf-8"));
 			if (debug) System.err.println(r);
@@ -91,6 +104,7 @@ public class CharsetEncodingsTest extends RestTestcase {
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_UNSUPPORTED_MEDIA_TYPE, "Unsupported charset in header 'Content-Type': 'text/p;charset=BAD'");
 		}
+
 		client.closeQuietly();
 	}
 }

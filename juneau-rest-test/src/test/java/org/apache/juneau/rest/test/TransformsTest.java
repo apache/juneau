@@ -14,7 +14,6 @@ package org.apache.juneau.rest.test;
 
 import static org.junit.Assert.*;
 
-import org.apache.juneau.json.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.*;
 
@@ -28,7 +27,7 @@ public class TransformsTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testClassTransformOverridesParentClassTransform() throws Exception {
-		RestClient client = new TestRestClient(JsonSerializer.DEFAULT, JsonParser.DEFAULT);
+		RestClient client = TestMicroservice.DEFAULT_CLIENT;
 		String r;
 		String url = URL + "/testClassTransformOverridesParentClassTransform";
 
@@ -40,8 +39,6 @@ public class TransformsTest extends RestTestcase {
 
 		r = client.doPut(url + "/A2-2", "").getResponse(String.class);
 		assertEquals("A2-2", r);
-
-		client.closeQuietly();
 	}
 
 	//====================================================================================================
@@ -50,7 +47,7 @@ public class TransformsTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testMethodTransformOverridesClassTransform() throws Exception {
-		RestClient client = new TestRestClient(JsonSerializer.DEFAULT, JsonParser.DEFAULT);
+		RestClient client = TestMicroservice.DEFAULT_CLIENT;
 		String r;
 		String url = URL + "/testMethodTransformOverridesClassTransform";
 
@@ -62,7 +59,5 @@ public class TransformsTest extends RestTestcase {
 
 		r = client.doPut(url + "/A3-2", "").getResponse(String.class);
 		assertEquals("A3-2", r);
-
-		client.closeQuietly();
 	}
 }

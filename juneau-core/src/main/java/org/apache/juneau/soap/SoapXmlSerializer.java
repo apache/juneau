@@ -43,6 +43,15 @@ import org.apache.juneau.xml.*;
 @Produces(value="text/xml+soap",contentType="text/xml")
 public final class SoapXmlSerializer extends XmlSerializer {
 
+	/**
+	 * Constructor.
+	 * @param propertyStore The property store containing all the settings for this object.
+	 */
+	public SoapXmlSerializer(PropertyStore propertyStore) {
+		super(propertyStore);
+	}
+
+
 	//--------------------------------------------------------------------------------
 	// Overridden methods
 	//--------------------------------------------------------------------------------

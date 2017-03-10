@@ -29,7 +29,7 @@ public class CommonParserTest {
 	//====================================================================================================
 	@Test
 	public void testFromSerializer() throws Exception {
-		ReaderParser p = JsonParser.DEFAULT.clone().addToBeanDictionary(A1.class);
+		ReaderParser p = new JsonParserBuilder().beanDictionary(A1.class).build();
 
 		Map m = null;
 		m = (Map)p.parse("{a:1}", Object.class);
@@ -83,7 +83,7 @@ public class CommonParserTest {
 		tl.add(new A3("name0","value0"));
 		tl.add(new A3("name1","value1"));
 		b.list = tl;
-		String json = new JsonSerializer().setAddBeanTypeProperties(true).addToBeanDictionary(A1.class).serialize(b);
+		String json = new JsonSerializerBuilder().addBeanTypeProperties(true).beanDictionary(A1.class).build().serialize(b);
 		b = (A1)p.parse(json, Object.class);
 		assertEquals("value1", b.list.get(1).value);
 
@@ -114,7 +114,7 @@ public class CommonParserTest {
 	//====================================================================================================
 	@Test
 	public void testCorrectHandlingOfUnknownProperties() throws Exception {
-		ReaderParser p = new JsonParser().setIgnoreUnknownBeanProperties(true);
+		ReaderParser p = new JsonParserBuilder().ignoreUnknownBeanProperties(true).build();
 		B b;
 
 		String in =  "{a:1,unknown:3,b:2}";
@@ -123,7 +123,7 @@ public class CommonParserTest {
 		assertEquals(b.b, 2);
 
 		try {
-			p = new JsonParser();
+			p = JsonParser.DEFAULT;
 			p.parse(in, B.class);
 			fail("Exception expected");
 		} catch (ParseException e) {}
@@ -162,7 +162,7 @@ public class CommonParserTest {
 	@Test
 	public void testParserListeners() throws Exception {
 		final List<String> events = new LinkedList<String>();
-		JsonParser p = new JsonParser().setIgnoreUnknownBeanProperties(true);
+		JsonParser p = new JsonParserBuilder().ignoreUnknownBeanProperties(true).build();
 		p.addListener(
 			new ParserListener() {
 				@Override /* ParserListener */

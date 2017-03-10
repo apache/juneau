@@ -56,6 +56,11 @@ public class AcceptCharsetResource extends RestServlet {
 
 	@Consumes("text/plain")
 	public static class TestParser extends InputStreamParser {
+
+		public TestParser(PropertyStore propertyStore) {
+			super(propertyStore);
+		}
+
 		@SuppressWarnings("unchecked")
 		@Override /* Parser */
 		protected <T> T doParse(ParserSession session, ClassMeta<T> type) throws Exception {
@@ -65,6 +70,11 @@ public class AcceptCharsetResource extends RestServlet {
 
 	@Produces("text/plain")
 	public static class TestSerializer extends OutputStreamSerializer {
+
+		public TestSerializer(PropertyStore propertyStore) {
+			super(propertyStore);
+		}
+
 		@Override /* Serializer */
 		protected void doSerialize(SerializerSession session, Object o) throws Exception {
 			Writer w = new OutputStreamWriter(session.getOutputStream());

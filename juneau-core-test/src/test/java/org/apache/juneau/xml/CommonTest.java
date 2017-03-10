@@ -23,7 +23,6 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.jena.annotation.*;
-import org.apache.juneau.serializer.*;
 import org.apache.juneau.testbeans.*;
 import org.apache.juneau.xml.annotation.*;
 import org.junit.*;
@@ -36,18 +35,18 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testTrimNullsFromBeans() throws Exception {
-		XmlSerializer s = new XmlSerializer.Sq();
-		XmlParser p = new XmlParser();
+		XmlSerializerBuilder s = new XmlSerializerBuilder().sq();
+		XmlParser p = XmlParser.DEFAULT;
 		A t1 = A.create(), t2;
 
-		s.setTrimNullProperties(false);
-		String r = s.serialize(t1);
+		s.trimNullProperties(false);
+		String r = s.build().serialize(t1);
 		assertEquals("<object><s1 _type='null'/><s2>s2</s2></object>", r);
 		t2 = p.parse(r, A.class);
 		assertEqualObjects(t1, t2);
 
-		s.setTrimNullProperties(true);
-		r = s.serialize(t1);
+		s.trimNullProperties(true);
+		r = s.build().serialize(t1);
 		assertEquals("<object><s2>s2</s2></object>", r);
 		t2 = p.parse(r, A.class);
 		assertEqualObjects(t1, t2);
@@ -68,19 +67,19 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testTrimEmptyMaps() throws Exception {
-		XmlSerializer s = new XmlSerializer.Sq();
+		XmlSerializerBuilder s = new XmlSerializerBuilder().sq();
 		XmlParser p = XmlParser.DEFAULT;
 		B t1 = B.create(), t2;
 		String r;
 
-		s.setTrimEmptyMaps(false);
-		r = s.serialize(t1);
+		s.trimEmptyMaps(false);
+		r = s.build().serialize(t1);
 		assertEquals("<object><f1/><f2><f2a _type='null'/><f2b><s2>s2</s2></f2b></f2></object>", r);
 		t2 = p.parse(r, B.class);
 		assertEqualObjects(t1, t2);
 
-		s.setTrimEmptyMaps(true);
-		r = s.serialize(t1);
+		s.trimEmptyMaps(true);
+		r = s.build().serialize(t1);
 		assertEquals("<object><f2><f2a _type='null'/><f2b><s2>s2</s2></f2b></f2></object>", r);
 		t2 = p.parse(r, B.class);
 		assertNull(t2.f1);
@@ -102,19 +101,19 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testTrimEmptyLists() throws Exception {
-		XmlSerializer s = new XmlSerializer.Sq();
+		XmlSerializerBuilder s = new XmlSerializerBuilder().sq();
 		XmlParser p = XmlParser.DEFAULT;
 		C t1 = C.create(), t2;
 		String r;
 
-		s.setTrimEmptyCollections(false);
-		r = s.serialize(t1);
+		s.trimEmptyCollections(false);
+		r = s.build().serialize(t1);
 		assertEquals("<object><f1></f1><f2><null/><object><s2>s2</s2></object></f2></object>", r);
 		t2 = p.parse(r, C.class);
 		assertEqualObjects(t1, t2);
 
-		s.setTrimEmptyCollections(true);
-		r = s.serialize(t1);
+		s.trimEmptyCollections(true);
+		r = s.build().serialize(t1);
 		assertEquals("<object><f2><null/><object><s2>s2</s2></object></f2></object>", r);
 		t2 = p.parse(r, C.class);
 		assertNull(t2.f1);
@@ -136,19 +135,19 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testTrimEmptyArrays() throws Exception {
-		XmlSerializer s = new XmlSerializer.Sq();
+		XmlSerializerBuilder s = new XmlSerializerBuilder().sq();
 		XmlParser p = XmlParser.DEFAULT;
 		D t1 = D.create(), t2;
 		String r;
 
-		s.setTrimEmptyCollections(false);
-		r = s.serialize(t1);
+		s.trimEmptyCollections(false);
+		r = s.build().serialize(t1);
 		assertEquals("<object><f1></f1><f2><null/><object><s2>s2</s2></object></f2></object>", r);
 		t2 = p.parse(r, D.class);
 		assertEqualObjects(t1, t2);
 
-		s.setTrimEmptyCollections(true);
-		r = s.serialize(t1);
+		s.trimEmptyCollections(true);
+		r = s.build().serialize(t1);
 		assertEquals("<object><f2><null/><object><s2>s2</s2></object></f2></object>", r);
 		t2 = p.parse(r, D.class);
 		assertNull(t2.f1);
@@ -258,13 +257,13 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testUris() throws Exception {
-		WriterSerializer s = new XmlSerializer.Sq();
+		XmlSerializerBuilder s = new XmlSerializerBuilder().sq();
 		TestURI t = new TestURI();
 		String r;
 		String expected;
 
-		s.setRelativeUriBase(null);
-		r = s.serialize(t);
+		s.relativeUriBase(null);
+		r = s.build().serialize(t);
 		expected = ""
 			+"<object f0='f0/x0'>"
 			+"<f1>f1/x1</f1>"
@@ -284,12 +283,12 @@ public class CommonTest {
 			+"</object>";
 		assertEquals(expected, r);
 
-		s.setRelativeUriBase("");  // Same as null.
-		r = s.serialize(t);
+		s.relativeUriBase("");  // Same as null.
+		r = s.build().serialize(t);
 		assertEquals(expected, r);
 
-		s.setRelativeUriBase("/cr");
-		r = s.serialize(t);
+		s.relativeUriBase("/cr");
+		r = s.build().serialize(t);
 		expected = ""
 			+"<object f0='/cr/f0/x0'>"
 			+"<f1>/cr/f1/x1</f1>"
@@ -309,12 +308,12 @@ public class CommonTest {
 			+"</object>";
 		assertEquals(expected, r);
 
-		s.setRelativeUriBase("/cr/");  // Same as above
-		r = s.serialize(t);
+		s.relativeUriBase("/cr/");  // Same as above
+		r = s.build().serialize(t);
 		assertEquals(expected, r);
 
-		s.setRelativeUriBase("/");
-		r = s.serialize(t);
+		s.relativeUriBase("/");
+		r = s.build().serialize(t);
 		expected = ""
 			+"<object f0='/f0/x0'>"
 			+"<f1>/f1/x1</f1>"
@@ -334,10 +333,10 @@ public class CommonTest {
 			+"</object>";
 		assertEquals(expected, r);
 
-		s.setRelativeUriBase(null);
+		s.relativeUriBase(null);
 
-		s.setAbsolutePathUriBase("http://foo");
-		r = s.serialize(t);
+		s.absolutePathUriBase("http://foo");
+		r = s.build().serialize(t);
 		expected = ""
 			+"<object f0='f0/x0'>"
 			+"<f1>f1/x1</f1>"
@@ -357,12 +356,12 @@ public class CommonTest {
 			+"</object>";
 		assertEquals(expected, r);
 
-		s.setAbsolutePathUriBase("http://foo/");
-		r = s.serialize(t);
+		s.absolutePathUriBase("http://foo/");
+		r = s.build().serialize(t);
 		assertEquals(expected, r);
 
-		s.setAbsolutePathUriBase("");  // Same as null.
-		r = s.serialize(t);
+		s.absolutePathUriBase("");  // Same as null.
+		r = s.build().serialize(t);
 		expected = ""
 			+"<object f0='f0/x0'>"
 			+"<f1>f1/x1</f1>"
@@ -384,31 +383,11 @@ public class CommonTest {
 	}
 
 	//====================================================================================================
-	// Validate that you cannot update properties on locked serializer.
-	//====================================================================================================
-	@Test
-	public void testLockedSerializer() throws Exception {
-		XmlSerializer s = new XmlSerializer().lock();
-		try {
-			s.setEnableNamespaces(true);
-			fail("Locked exception not thrown");
-		} catch (LockedException e) {}
-		try {
-			s.setAddBeanTypeProperties(true);
-			fail("Locked exception not thrown");
-		} catch (LockedException e) {}
-		try {
-			s.setBeanMapPutReturnsOldValue(true);
-			fail("Locked exception not thrown");
-		} catch (LockedException e) {}
-	}
-
-	//====================================================================================================
 	// Recursion
 	//====================================================================================================
 	@Test
 	public void testRecursion() throws Exception {
-		XmlSerializer s = new XmlSerializer().setEnableNamespaces(false);
+		XmlSerializerBuilder s = new XmlSerializerBuilder().enableNamespaces(false);
 
 		R1 r1 = new R1();
 		R2 r2 = new R2();
@@ -419,7 +398,7 @@ public class CommonTest {
 
 		// No recursion detection
 		try {
-			s.serialize(r1);
+			s.build().serialize(r1);
 			fail("Exception expected!");
 		} catch (Exception e) {
 			String msg = e.getLocalizedMessage();
@@ -427,9 +406,9 @@ public class CommonTest {
 		}
 
 		// Recursion detection, no ignore
-		s.setDetectRecursions(true);
+		s.detectRecursions(true);
 		try {
-			s.serialize(r1);
+			s.build().serialize(r1);
 			fail("Exception expected!");
 		} catch (Exception e) {
 			String msg = e.getLocalizedMessage();
@@ -439,11 +418,11 @@ public class CommonTest {
 			assertTrue(msg.contains("->[3]r1:org.apache.juneau.xml.CommonTest$R1"));
 		}
 
-		s.setIgnoreRecursions(true);
-		assertEquals("<object><name>foo</name><r2><name>bar</name><r3><name>baz</name></r3></r2></object>", s.serialize(r1));
+		s.ignoreRecursions(true);
+		assertEquals("<object><name>foo</name><r2><name>bar</name><r3><name>baz</name></r3></r2></object>", s.build().serialize(r1));
 
 		// Make sure this doesn't blow up.
-		s.getSchemaSerializer().serialize(r1);
+		s.build().getSchemaSerializer().serialize(r1);
 	}
 
 	public static class R1 {

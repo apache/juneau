@@ -61,6 +61,11 @@ public class PropertiesResource extends RestServletDefault {
 
 	@Produces("application/json,text/json")
 	public static class PropertySerializer1 extends WriterSerializer {
+
+		public PropertySerializer1(PropertyStore propertyStore) {
+			super(propertyStore);
+		}
+
 		@Override /* Serializer */
 		protected void doSerialize(SerializerSession session, Object output) throws Exception {
 			ObjectMap p = session.getProperties();
@@ -80,6 +85,11 @@ public class PropertiesResource extends RestServletDefault {
 
 	@Produces("application/json,text/json")
 	public static class PropertySerializer2 extends WriterSerializer {
+
+		public PropertySerializer2(PropertyStore propertyStore) {
+			super(propertyStore);
+		}
+
 		@Override /* Serializer */
 		protected void doSerialize(SerializerSession session, Object output) throws Exception {
 			ObjectMap p = session.getProperties();

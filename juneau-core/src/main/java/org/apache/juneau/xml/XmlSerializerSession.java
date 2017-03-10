@@ -53,7 +53,7 @@ public class XmlSerializerSession extends SerializerSession {
 	 * @param output The output object.  See {@link JsonSerializerSession#getWriter()} for valid class types.
 	 * @param op The override properties.
 	 * These override any context properties defined in the context.
-	 * @param javaMethod The java method that called this parser, usually the method in a REST servlet.
+	 * @param javaMethod The java method that called this serializer, usually the method in a REST servlet.
 	 * @param locale The session locale.
 	 * If <jk>null</jk>, then the locale defined on the context is used.
 	 * @param timeZone The session timezone.

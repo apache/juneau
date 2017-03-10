@@ -16,7 +16,6 @@ import static org.apache.juneau.rest.test.TestUtils.*;
 import static org.junit.Assert.*;
 
 import org.apache.juneau.ini.*;
-import org.apache.juneau.json.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.*;
@@ -30,7 +29,7 @@ public class ConfigTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void test() throws Exception {
-		RestClient c = new TestRestClient(JsonSerializer.class, JsonParser.class).setAccept("text/json+simple");
+		RestClient c = TestMicroservice.client().accept("text/json+simple").build();
 
 		ConfigFile cf = c.doGet(URL).getResponse(ConfigFileImpl.class);
 

@@ -30,7 +30,7 @@ import org.apache.juneau.xml.*;
 public class XmlValidatorParser extends XmlParser {
 
 	public XmlValidatorParser() {
-		super();
+		super(PropertyStore.create());
 	}
 
 	@Override /* Parser */
@@ -65,10 +65,5 @@ public class XmlValidatorParser extends XmlParser {
 		XMLStreamReader parser = factory.createXMLStreamReader(in);
 		parser.nextTag();
 		return parser;
-	}
-
-	@Override /* Lockable */
-	public XmlValidatorParser clone() {
-		return (XmlValidatorParser)super.clone();
 	}
 }

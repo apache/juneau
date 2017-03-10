@@ -16,9 +16,8 @@ import static org.apache.juneau.dto.html5.HtmlBuilder.*;
 
 import java.util.*;
 
-import org.apache.juneau.BeanSession;
-import org.apache.juneau.ComboTest;
-import org.apache.juneau.annotation.Bean;
+import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.junit.runner.*;
 import org.junit.runners.*;
 

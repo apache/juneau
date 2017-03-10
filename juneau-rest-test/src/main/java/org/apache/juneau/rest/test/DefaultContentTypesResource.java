@@ -34,22 +34,22 @@ public class DefaultContentTypesResource extends RestServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Consumes("text/p1")
-	public static class P1 extends DummyParser { public P1() {super("p1");}}
+	public static class P1 extends DummyParser { public P1(PropertyStore ps) {super(ps, "p1");}}
 
 	@Consumes("text/p2")
-	public static class P2 extends DummyParser { public P2() {super("p2");}}
+	public static class P2 extends DummyParser { public P2(PropertyStore ps) {super(ps, "p2");}}
 
 	@Consumes("text/p3")
-	public static class P3 extends DummyParser { public P3() {super("p3");}}
+	public static class P3 extends DummyParser { public P3(PropertyStore ps) {super(ps, "p3");}}
 
 	@Produces("text/s1")
-	public static class S1 extends DummySerializer { public S1() {super("s1");}}
+	public static class S1 extends DummySerializer { public S1(PropertyStore ps) {super(ps, "s1");}}
 
 	@Produces("text/s2")
-	public static class S2 extends DummySerializer { public S2() {super("s2");}}
+	public static class S2 extends DummySerializer { public S2(PropertyStore ps) {super(ps, "s2");}}
 
 	@Produces("text/s3")
-	public static class S3 extends DummySerializer { public S3() {super("s3");}}
+	public static class S3 extends DummySerializer { public S3(PropertyStore ps) {super(ps, "s3");}}
 
 	/**
 	 * Test that default Accept and Content-Type headers on servlet annotation are picked up.
@@ -104,10 +104,14 @@ public class DefaultContentTypesResource extends RestServlet {
 	}
 
 	public static class DummyParser extends ReaderParser {
+
 		private String name;
-		private DummyParser(String name) {
+
+		private DummyParser(PropertyStore propertyStore, String name) {
+			super(propertyStore);
 			this.name = name;
 		}
+
 		@SuppressWarnings("unchecked")
 		@Override /* Parser */
 		protected <T> T doParse(ParserSession session, ClassMeta<T> type) throws Exception {
@@ -116,10 +120,14 @@ public class DefaultContentTypesResource extends RestServlet {
 	}
 
 	public static class DummySerializer extends WriterSerializer {
+
 		private String name;
-		private DummySerializer(String name) {
+
+		private DummySerializer(PropertyStore propertyStore, String name) {
+			super(propertyStore);
 			this.name = name;
 		}
+
 		@Override /* Serializer */
 		protected void doSerialize(SerializerSession session, Object output) throws Exception {
 			session.getWriter().write(name + "/" + output);

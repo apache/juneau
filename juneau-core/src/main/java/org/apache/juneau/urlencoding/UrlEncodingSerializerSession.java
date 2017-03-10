@@ -12,13 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.urlencoding;
 
-import static org.apache.juneau.urlencoding.UrlEncodingParserContext.*;
-
 import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.uon.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link UrlEncodingSerializer}.
@@ -37,7 +36,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	 * @param output The output object.  See {@link JsonSerializerSession#getWriter()} for valid class types.
 	 * @param op The override properties.
 	 * These override any context properties defined in the context.
-	 * @param javaMethod The java method that called this parser, usually the method in a REST servlet.
+	 * @param javaMethod The java method that called this serializer, usually the method in a REST servlet.
 	 * @param locale The session locale.
 	 * If <jk>null</jk>, then the locale defined on the context is used.
 	 * @param timeZone The session timezone.
@@ -49,7 +48,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 		if (op == null || op.isEmpty()) {
 			expandedParams = ctx.expandedParams;
 		} else {
-			expandedParams = op.getBoolean(URLENC_expandedParams, false);
+			expandedParams = op.getBoolean(UrlEncodingContext.URLENC_expandedParams, false);
 		}
 	}
 

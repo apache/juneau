@@ -19,14 +19,14 @@ import org.apache.juneau.serializer.*;
 /**
  * A reusable stateless thread-safe read-only configuration, typically used for creating one-time use {@link Session} objects.
  * <p>
- * Contexts are created through the {@link ContextFactory#getContext(Class)} method.
+ * Contexts are created through the {@link PropertyStore#getContext(Class)} method.
  * <p>
- * Subclasses MUST implement a constructor method that takes in a {@link ContextFactory} parameter.
+ * Subclasses MUST implement a constructor method that takes in a {@link PropertyStore} parameter.
  * Besides that restriction, a context object can do anything you desire.  However, it MUST
  * 	be thread-safe and all fields should be declared final to prevent modification.
  * It should NOT be used for storing temporary or state information.
  *
- * @see ContextFactory
+ * @see PropertyStore
  */
 public abstract class Context {
 
@@ -35,9 +35,9 @@ public abstract class Context {
 	 * <p>
 	 * Subclasses MUST implement the same constructor.
 	 *
-	 * @param configFactory The factory that created this config.
+	 * @param propertyStore The factory that created this config.
 	 */
-	public Context(ContextFactory configFactory) {}
+	public Context(PropertyStore propertyStore) {}
 
 	/**
 	 * Returns the properties defined on this bean context as a simple map for debugging purposes.

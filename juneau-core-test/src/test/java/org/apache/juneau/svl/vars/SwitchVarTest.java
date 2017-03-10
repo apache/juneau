@@ -14,7 +14,7 @@ package org.apache.juneau.svl.vars;
 
 import static org.junit.Assert.*;
 
-import org.apache.juneau.svl.VarResolver;
+import org.apache.juneau.svl.*;
 import org.junit.*;
 
 @SuppressWarnings("javadoc")
@@ -25,7 +25,7 @@ public class SwitchVarTest {
 	//====================================================================================================
 	@Test
 	public void test() throws Exception {
-		VarResolver vr = new VarResolver().addVars(SwitchVar.class, SystemPropertiesVar.class);
+		VarResolver vr = new VarResolverBuilder().vars(SwitchVar.class, SystemPropertiesVar.class).build();
 		
 		System.setProperty("SwitchVarTest.test", "foobar");
 		

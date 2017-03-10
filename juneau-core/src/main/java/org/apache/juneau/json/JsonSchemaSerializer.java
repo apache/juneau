@@ -13,7 +13,9 @@
 package org.apache.juneau.json;
 
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.serializer.SerializerContext.*;
 
+import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -37,29 +39,40 @@ import org.apache.juneau.transform.*;
 @Produces(value="application/json+schema,text/json+schema",contentType="application/json")
 public final class JsonSchemaSerializer extends JsonSerializer {
 
+	private final JsonSerializerContext ctx;
+
 	/**
 	 * Constructor.
+	 * @param propertyStore Initialize with the specified config property store.
 	 */
-	public JsonSchemaSerializer() {
-		setDetectRecursions(true);
-		setIgnoreRecursions(true);
+	public JsonSchemaSerializer(PropertyStore propertyStore) {
+		this(propertyStore, null);
 	}
 
 	/**
 	 * Constructor.
-	 *
-	 * @param config Initialize with the specified config property store.
+	 * @param propertyStore Initialize with the specified config property store.
+	 * @param overrideProperties
 	 */
-	public JsonSchemaSerializer(ContextFactory config) {
-		getContextFactory().copyFrom(config);
-		setDetectRecursions(true);
-		setIgnoreRecursions(true);
+	public JsonSchemaSerializer(PropertyStore propertyStore, Map<String,Object> overrideProperties) {
+		super(propertyStore);
+		this.ctx = this.propertyStore.create(overrideProperties).getContext(JsonSerializerContext.class);
+	}
+
+	@Override /* CoreObject */
+ 	protected ObjectMap getOverrideProperties() {
+		return super.getOverrideProperties().append(SERIALIZER_detectRecursions, true).append(SERIALIZER_ignoreRecursions, true);
 	}
 
 
 	//--------------------------------------------------------------------------------
 	// Entry point methods
 	//--------------------------------------------------------------------------------
+
+	@Override /* Serializer */
+	public JsonSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType) {
+		return new JsonSerializerSession(ctx, op, output, javaMethod, locale, timeZone, mediaType);
+	}
 
 	@Override /* JsonSerializer */
 	protected void doSerialize(SerializerSession session, Object o) throws Exception {
@@ -141,16 +154,5 @@ public final class JsonSchemaSerializer extends JsonSerializer {
 		for (Object e : EnumSet.allOf(c))
 			l.add(e.toString());
 		return l;
-	}
-
-
-	//--------------------------------------------------------------------------------
-	// Overridden methods
-	//--------------------------------------------------------------------------------
-
-	@Override /* Lockable */
-	public JsonSchemaSerializer lock() {
-		super.lock();
-		return this;
 	}
 }

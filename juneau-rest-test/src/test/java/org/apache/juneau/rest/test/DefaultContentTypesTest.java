@@ -16,7 +16,6 @@ import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.rest.test.TestUtils.*;
 import static org.junit.Assert.*;
 
-import org.apache.juneau.json.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.*;
 
@@ -31,42 +30,34 @@ public class DefaultContentTypesTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testDefaultHeadersOnServletAnnotation() throws Exception {
-		RestClient client = new TestRestClient(JsonSerializer.DEFAULT, JsonParser.DEFAULT);
+		RestClient client = TestMicroservice.DEFAULT_CLIENT;
 		String r;
 
 		String url = URL + "/testDefaultHeadersOnServletAnnotation";
 
-		client.setAccept("").setContentType("");
-		r = client.doPut(url, "").getResponseAsString();
+		r = client.doPut(url, "").accept("").contentType("").getResponseAsString();
 		assertEquals("s2/p2", r);
 
-		client.setAccept("text/s1").setContentType("");
-		r = client.doPut(url, "").getResponseAsString();
+		r = client.doPut(url, "").accept("text/s1").contentType("").getResponseAsString();
 		assertEquals("s1/p2", r);
 
-		client.setAccept("").setContentType("text/p1");
-		r = client.doPut(url, "").getResponseAsString();
+		r = client.doPut(url, "").accept("").contentType("text/p1").getResponseAsString();
 		assertEquals("s2/p1", r);
 
-		client.setAccept("text/s1").setContentType("text/p1");
-		r = client.doPut(url, "").getResponseAsString();
+		r = client.doPut(url, "").accept("text/s1").contentType("text/p1").getResponseAsString();
 		assertEquals("s1/p1", r);
 
-		client.setAccept("text/s2").setContentType("");
-		r = client.doPut(url, "").getResponseAsString();
+		r = client.doPut(url, "").accept("text/s2").contentType("").getResponseAsString();
 		assertEquals("s2/p2", r);
 
-		client.setAccept("").setContentType("text/p2");
-		r = client.doPut(url, "").getResponseAsString();
+		r = client.doPut(url, "").accept("").contentType("text/p2").getResponseAsString();
 		assertEquals("s2/p2", r);
 
-		client.setAccept("text/s2").setContentType("text/p2");
-		r = client.doPut(url, "").getResponseAsString();
+		r = client.doPut(url, "").accept("text/s2").contentType("text/p2").getResponseAsString();
 		assertEquals("s2/p2", r);
 
 		try {
-			client.setAccept("text/s3").setContentType("");
-			r = client.doPut(url+"?noTrace=true", "").getResponseAsString();
+			r = client.doPut(url+"?noTrace=true", "").accept("text/s3").contentType("").getResponseAsString();
 			fail("Exception expected");
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_NOT_ACCEPTABLE,
@@ -76,8 +67,7 @@ public class DefaultContentTypesTest extends RestTestcase {
 		}
 
 		try {
-			client.setAccept("").setContentType("text/p3");
-			r = client.doPut(url+"?noTrace=true", "").getResponseAsString();
+			r = client.doPut(url+"?noTrace=true", "").accept("").contentType("text/p3").getResponseAsString();
 			fail("Exception expected");
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_UNSUPPORTED_MEDIA_TYPE,
@@ -87,8 +77,7 @@ public class DefaultContentTypesTest extends RestTestcase {
 		}
 
 		try {
-			client.setAccept("text/s3").setContentType("text/p3");
-			r = client.doPut(url+"?noTrace=true", "").getResponseAsString();
+			r = client.doPut(url+"?noTrace=true", "").accept("text/s3").contentType("text/p3").getResponseAsString();
 			fail("Exception expected");
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_UNSUPPORTED_MEDIA_TYPE,
@@ -96,8 +85,6 @@ public class DefaultContentTypesTest extends RestTestcase {
 				"Supported media-types: [text/p1, text/p2]"
 			);
 		}
-
-		client.closeQuietly();
 	}
 
 	//====================================================================================================
@@ -106,14 +93,13 @@ public class DefaultContentTypesTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testRestMethodParsersSerializers() throws Exception {
-		RestClient client = new TestRestClient(JsonSerializer.DEFAULT, JsonParser.DEFAULT);
+		RestClient client = TestMicroservice.DEFAULT_CLIENT;
 		String r;
 
 		String url = URL + "/testRestMethodParsersSerializers";
 
 		try {
-			client.setAccept("").setContentType("");
-			r = client.doPut(url+"?noTrace=true", "").getResponseAsString();
+			r = client.doPut(url+"?noTrace=true", "").accept("").contentType("").getResponseAsString();
 			fail("Exception expected");
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_UNSUPPORTED_MEDIA_TYPE,
@@ -123,8 +109,7 @@ public class DefaultContentTypesTest extends RestTestcase {
 		}
 
 		try {
-			client.setAccept("text/s1").setContentType("");
-			r = client.doPut(url+"?noTrace=true", "").getResponseAsString();
+			r = client.doPut(url+"?noTrace=true", "").accept("text/s1").contentType("").getResponseAsString();
 			fail("Exception expected");
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_UNSUPPORTED_MEDIA_TYPE,
@@ -134,8 +119,7 @@ public class DefaultContentTypesTest extends RestTestcase {
 		}
 
 		try {
-			client.setAccept("").setContentType("text/p1");
-			r = client.doPut(url+"?noTrace=true", "").getResponseAsString();
+			r = client.doPut(url+"?noTrace=true", "").accept("").contentType("text/p1").getResponseAsString();
 			fail("Exception expected");
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_UNSUPPORTED_MEDIA_TYPE,
@@ -145,8 +129,7 @@ public class DefaultContentTypesTest extends RestTestcase {
 		}
 
 		try {
-			client.setAccept("text/s1").setContentType("text/p1");
-			r = client.doPut(url+"?noTrace=true", "").getResponseAsString();
+			r = client.doPut(url+"?noTrace=true", "").accept("text/s1").contentType("text/p1").getResponseAsString();
 			fail("Exception expected");
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_UNSUPPORTED_MEDIA_TYPE,
@@ -156,8 +139,7 @@ public class DefaultContentTypesTest extends RestTestcase {
 		}
 
 		try {
-			client.setAccept("text/s2").setContentType("");
-			r = client.doPut(url+"?noTrace=true", "").getResponseAsString();
+			r = client.doPut(url+"?noTrace=true", "").accept("text/s2").contentType("").getResponseAsString();
 			fail("Exception expected");
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_UNSUPPORTED_MEDIA_TYPE,
@@ -167,8 +149,7 @@ public class DefaultContentTypesTest extends RestTestcase {
 		}
 
 		try {
-			client.setAccept("").setContentType("text/p2");
-			r = client.doPut(url+"?noTrace=true", "").getResponseAsString();
+			r = client.doPut(url+"?noTrace=true", "").accept("").contentType("text/p2").getResponseAsString();
 			fail("Exception expected");
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_UNSUPPORTED_MEDIA_TYPE,
@@ -178,8 +159,7 @@ public class DefaultContentTypesTest extends RestTestcase {
 		}
 
 		try {
-			client.setAccept("text/s2").setContentType("text/p2");
-			r = client.doPut(url+"?noTrace=true", "").getResponseAsString();
+			r = client.doPut(url+"?noTrace=true", "").accept("text/s2").contentType("text/p2").getResponseAsString();
 			fail("Exception expected");
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_UNSUPPORTED_MEDIA_TYPE,
@@ -189,8 +169,7 @@ public class DefaultContentTypesTest extends RestTestcase {
 		}
 
 		try {
-			client.setAccept("text/s3").setContentType("");
-			r = client.doPut(url+"?noTrace=true", "").getResponseAsString();
+			r = client.doPut(url+"?noTrace=true", "").accept("text/s3").contentType("").getResponseAsString();
 			fail("Exception expected");
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_UNSUPPORTED_MEDIA_TYPE,
@@ -200,8 +179,7 @@ public class DefaultContentTypesTest extends RestTestcase {
 		}
 
 		try {
-			client.setAccept("").setContentType("text/p3");
-			r = client.doPut(url+"?noTrace=true", "").getResponseAsString();
+			r = client.doPut(url+"?noTrace=true", "").accept("").contentType("text/p3").getResponseAsString();
 			fail("Exception expected");
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_NOT_ACCEPTABLE,
@@ -210,11 +188,8 @@ public class DefaultContentTypesTest extends RestTestcase {
 			);
 		}
 
-		client.setAccept("text/s3").setContentType("text/p3");
-		r = client.doPut(url, "").getResponseAsString();
+		r = client.doPut(url, "").accept("text/s3").contentType("text/p3").getResponseAsString();
 		assertEquals("s3/p3", r);
-
-		client.closeQuietly();
 	}
 
 	//====================================================================================================
@@ -223,54 +198,43 @@ public class DefaultContentTypesTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testRestMethodAddParsersSerializers() throws Exception {
-		RestClient client = new TestRestClient(JsonSerializer.DEFAULT, JsonParser.DEFAULT);
+		RestClient client = TestMicroservice.DEFAULT_CLIENT;
 		String r;
 
 		String url = URL + "/testRestMethodAddParsersSerializers";
 
-		client.setAccept("").setContentType("");
-		r = client.doPut(url, "").getResponseAsString();
+		r = client.doPut(url, "").accept("").contentType("").getResponseAsString();
 		assertEquals("s2/p2", r);
 
-		client.setAccept("text/s1").setContentType("");
-		r = client.doPut(url, "").getResponseAsString();
+		r = client.doPut(url, "").accept("text/s1").contentType("").getResponseAsString();
 		assertEquals("s1/p2", r);
 
-		client.setAccept("").setContentType("text/p1");
-		r = client.doPut(url, "").getResponseAsString();
+		r = client.doPut(url, "").accept("").contentType("text/p1").getResponseAsString();
 		assertEquals("s2/p1", r);
 
-		client.setAccept("text/s1").setContentType("text/p1");
-		r = client.doPut(url, "").getResponseAsString();
+		r = client.doPut(url, "").accept("text/s1").contentType("text/p1").getResponseAsString();
 		assertEquals("s1/p1", r);
 
-		client.setAccept("text/s2").setContentType("");
-		r = client.doPut(url, "").getResponseAsString();
+		r = client.doPut(url, "").accept("text/s2").contentType("").getResponseAsString();
 		assertEquals("s2/p2", r);
 
-		client.setAccept("").setContentType("text/p2");
-		r = client.doPut(url, "").getResponseAsString();
+		r = client.doPut(url, "").accept("").contentType("text/p2").getResponseAsString();
 		assertEquals("s2/p2", r);
 
-		client.setAccept("text/s2").setContentType("text/p2");
-		r = client.doPut(url, "").getResponseAsString();
+		r = client.doPut(url, "").accept("text/s2").contentType("text/p2").getResponseAsString();
 		assertEquals("s2/p2", r);
 
-		client.setAccept("text/s3").setContentType("");
-		r = client.doPut(url, "").getResponseAsString();
+		r = client.doPut(url, "").accept("text/s3").contentType("").getResponseAsString();
 		assertEquals("s3/p2", r);
 
-		client.setAccept("").setContentType("text/p3");
-		r = client.doPut(url, "").getResponseAsString();
+		r = client.doPut(url, "").accept("").contentType("text/p3").getResponseAsString();
 		assertEquals("s2/p3", r);
 
-		client.setAccept("text/s3").setContentType("text/p3");
-		r = client.doPut(url, "").getResponseAsString();
+		r = client.doPut(url, "").accept("text/s3").contentType("text/p3").getResponseAsString();
 		assertEquals("s3/p3", r);
 
 		try {
-			client.setAccept("").setContentType("text/p4");
-			r = client.doPut(url+"?noTrace=true", "").getResponseAsString();
+			r = client.doPut(url+"?noTrace=true", "").accept("").contentType("text/p4").getResponseAsString();
 			fail("Exception expected");
 		} catch (RestCallException e) {
 			// Note that parsers defined on method are listed before parsers defined on class.
@@ -281,8 +245,7 @@ public class DefaultContentTypesTest extends RestTestcase {
 		}
 
 		try {
-			client.setAccept("text/s4").setContentType("");
-			r = client.doPut(url+"?noTrace=true", "").getResponseAsString();
+			r = client.doPut(url+"?noTrace=true", "").accept("text/s4").contentType("").getResponseAsString();
 			fail("Exception expected");
 		} catch (RestCallException e) {
 			// Note that serializers defined on method are listed before serializers defined on class.
@@ -291,8 +254,6 @@ public class DefaultContentTypesTest extends RestTestcase {
 				"Supported media-types: [text/s3, text/s1, text/s2]"
 			);
 		}
-
-		client.closeQuietly();
 	}
 
 	//====================================================================================================
@@ -300,24 +261,21 @@ public class DefaultContentTypesTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testAccept() throws Exception {
-		RestClient client = new TestRestClient(JsonSerializer.DEFAULT, JsonParser.DEFAULT).setContentType("text/p1");
+		RestClient client = TestMicroservice.client().contentType("text/p1").build();
 		String r;
 
 		String url = URL + "/testAccept";
 
 		// "*/*" should match the first serializer, not the default serializer.
-		client.setAccept("*/*");
-		r = client.doPut(url, "").getResponseAsString();
+		r = client.doPut(url, "").accept("*/*").getResponseAsString();
 		assertEquals("s1/p1", r);
 
 		// "text/*" should match the first serializer, not the default serializer.
-		client.setAccept("text/*");
-		r = client.doPut(url, "").getResponseAsString();
+		r = client.doPut(url, "").accept("text/*").getResponseAsString();
 		assertEquals("s1/p1", r);
 
 		try {
-			client.setAccept("bad/*");
-			r = client.doPut(url+"?noTrace=true", "").getResponseAsString();
+			r = client.doPut(url+"?noTrace=true", "").accept("bad/*").getResponseAsString();
 			fail("Exception expected");
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_NOT_ACCEPTABLE,
@@ -326,20 +284,16 @@ public class DefaultContentTypesTest extends RestTestcase {
 			);
 		}
 
-		client.setAccept("bad/*,text/*");
-		r = client.doPut(url, "").getResponseAsString();
+		r = client.doPut(url, "").accept("bad/*,text/*").getResponseAsString();
 		assertEquals("s1/p1", r);
 
-		client.setAccept("text/*,bad/*");
-		r = client.doPut(url, "").getResponseAsString();
+		r = client.doPut(url, "").accept("text/*,bad/*").getResponseAsString();
 		assertEquals("s1/p1", r);
 
-		client.setAccept("text/s1;q=0.5,text/s2");
-		r = client.doPut(url, "").getResponseAsString();
+		r = client.doPut(url, "").accept("text/s1;q=0.5,text/s2").getResponseAsString();
 		assertEquals("s2/p1", r);
 
-		client.setAccept("text/s1,text/s2;q=0.5");
-		r = client.doPut(url, "").getResponseAsString();
+		r = client.doPut(url, "").accept("text/s1,text/s2;q=0.5").getResponseAsString();
 		assertEquals("s1/p1", r);
 
 		client.closeQuietly();
@@ -351,18 +305,16 @@ public class DefaultContentTypesTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testRestMethodParserSerializerAnnotations() throws Exception {
-		RestClient client = new TestRestClient(JsonSerializer.DEFAULT, JsonParser.DEFAULT);
+		RestClient client = TestMicroservice.DEFAULT_CLIENT;
 		String r;
 
 		String url = URL + "/testRestMethodParserSerializerAnnotations";
 
-		client.setAccept("").setContentType("");
-		r = client.doPut(url, "").getResponseAsString();
+		r = client.doPut(url, "").accept("").contentType("").getResponseAsString();
 		assertEquals("s3/p3", r);
 
 		try {
-			client.setAccept("text/s1").setContentType("");
-			r = client.doPut(url+"?noTrace=true", "").getResponseAsString();
+			r = client.doPut(url+"?noTrace=true", "").accept("text/s1").contentType("").getResponseAsString();
 			fail("Exception expected");
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_NOT_ACCEPTABLE,
@@ -372,8 +324,7 @@ public class DefaultContentTypesTest extends RestTestcase {
 		}
 
 		try {
-			client.setAccept("").setContentType("text/p1");
-			r = client.doPut(url+"?noTrace=true", "").getResponseAsString();
+			r = client.doPut(url+"?noTrace=true", "").accept("").contentType("text/p1").getResponseAsString();
 			fail("Exception expected");
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_UNSUPPORTED_MEDIA_TYPE,
@@ -383,8 +334,7 @@ public class DefaultContentTypesTest extends RestTestcase {
 		}
 
 		try {
-			client.setAccept("text/s1").setContentType("text/p1");
-			r = client.doPut(url+"?noTrace=true", "").getResponseAsString();
+			r = client.doPut(url+"?noTrace=true", "").accept("text/s1").contentType("text/p1").getResponseAsString();
 			fail("Exception expected");
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_UNSUPPORTED_MEDIA_TYPE,
@@ -394,8 +344,7 @@ public class DefaultContentTypesTest extends RestTestcase {
 		}
 
 		try {
-			client.setAccept("text/s2").setContentType("");
-			r = client.doPut(url+"?noTrace=true", "").getResponseAsString();
+			r = client.doPut(url+"?noTrace=true", "").accept("text/s2").contentType("").getResponseAsString();
 			fail("Exception expected");
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_NOT_ACCEPTABLE,
@@ -405,8 +354,7 @@ public class DefaultContentTypesTest extends RestTestcase {
 		}
 
 		try {
-			client.setAccept("").setContentType("text/p2");
-			r = client.doPut(url+"?noTrace=true", "").getResponseAsString();
+			r = client.doPut(url+"?noTrace=true", "").accept("").contentType("text/p2").getResponseAsString();
 			fail("Exception expected");
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_UNSUPPORTED_MEDIA_TYPE,
@@ -416,8 +364,7 @@ public class DefaultContentTypesTest extends RestTestcase {
 		}
 
 		try {
-			client.setAccept("text/s2").setContentType("text/p2");
-			r = client.doPut(url+"?noTrace=true", "").getResponseAsString();
+			r = client.doPut(url+"?noTrace=true", "").accept("text/s2").contentType("text/p2").getResponseAsString();
 			fail("Exception expected");
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_UNSUPPORTED_MEDIA_TYPE,
@@ -426,19 +373,14 @@ public class DefaultContentTypesTest extends RestTestcase {
 			);
 		}
 
-		client.setAccept("text/s3").setContentType("");
-		r = client.doPut(url, "").getResponseAsString();
+		r = client.doPut(url, "").accept("text/s3").contentType("").getResponseAsString();
 		assertEquals("s3/p3", r);
 
-		client.setAccept("").setContentType("text/p3");
-		r = client.doPut(url, "").getResponseAsString();
+		r = client.doPut(url, "").accept("").contentType("text/p3").getResponseAsString();
 		assertEquals("s3/p3", r);
 
-		client.setAccept("text/s3").setContentType("text/p3");
-		r = client.doPut(url, "").getResponseAsString();
+		r = client.doPut(url, "").accept("text/s3").contentType("text/p3").getResponseAsString();
 		assertEquals("s3/p3", r);
-
-		client.closeQuietly();
 	}
 
 	//====================================================================================================
@@ -447,51 +389,39 @@ public class DefaultContentTypesTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testRestMethodAddParsersSerializersAnnotations() throws Exception {
-		RestClient client = new TestRestClient(JsonSerializer.DEFAULT, JsonParser.DEFAULT);
+		RestClient client = TestMicroservice.DEFAULT_CLIENT;
 		String r;
 
 		String url = URL + "/testRestMethodAddParsersSerializersAnnotations";
 
-		client.setAccept("").setContentType("");
-		r = client.doPut(url, "").getResponseAsString();
+		r = client.doPut(url, "").accept("").contentType("").getResponseAsString();
 		assertEquals("s3/p3", r);
 
-		client.setAccept("text/s1").setContentType("");
-		r = client.doPut(url, "").getResponseAsString();
+		r = client.doPut(url, "").accept("text/s1").contentType("").getResponseAsString();
 		assertEquals("s1/p3", r);
 
-		client.setAccept("").setContentType("text/p1");
-		r = client.doPut(url, "").getResponseAsString();
+		r = client.doPut(url, "").accept("").contentType("text/p1").getResponseAsString();
 		assertEquals("s3/p1", r);
 
-		client.setAccept("text/s1").setContentType("text/p1");
-		r = client.doPut(url, "").getResponseAsString();
+		r = client.doPut(url, "").accept("text/s1").contentType("text/p1").getResponseAsString();
 		assertEquals("s1/p1", r);
 
-		client.setAccept("text/s2").setContentType("");
-		r = client.doPut(url, "").getResponseAsString();
+		r = client.doPut(url, "").accept("text/s2").contentType("").getResponseAsString();
 		assertEquals("s2/p3", r);
 
-		client.setAccept("").setContentType("text/p2");
-		r = client.doPut(url, "").getResponseAsString();
+		r = client.doPut(url, "").accept("").contentType("text/p2").getResponseAsString();
 		assertEquals("s3/p2", r);
 
-		client.setAccept("text/s2").setContentType("text/p2");
-		r = client.doPut(url, "").getResponseAsString();
+		r = client.doPut(url, "").accept("text/s2").contentType("text/p2").getResponseAsString();
 		assertEquals("s2/p2", r);
 
-		client.setAccept("text/s3").setContentType("");
-		r = client.doPut(url, "").getResponseAsString();
+		r = client.doPut(url, "").accept("text/s3").contentType("").getResponseAsString();
 		assertEquals("s3/p3", r);
 
-		client.setAccept("").setContentType("text/p3");
-		r = client.doPut(url, "").getResponseAsString();
+		r = client.doPut(url, "").accept("").contentType("text/p3").getResponseAsString();
 		assertEquals("s3/p3", r);
 
-		client.setAccept("text/s3").setContentType("text/p3");
-		r = client.doPut(url, "").getResponseAsString();
+		r = client.doPut(url, "").accept("text/s3").contentType("text/p3").getResponseAsString();
 		assertEquals("s3/p3", r);
-
-		client.closeQuietly();
 	}
 }

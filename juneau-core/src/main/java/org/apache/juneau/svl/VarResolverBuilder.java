@@ -1,0 +1,109 @@
+// ***************************************************************************************************************************
+// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
+// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
+// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
+// * with the License.  You may obtain a copy of the License at                                                              *
+// *                                                                                                                         *
+// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
+// *                                                                                                                         *
+// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *
+// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
+// * specific language governing permissions and limitations under the License.                                              *
+// ***************************************************************************************************************************
+package org.apache.juneau.svl;
+
+import static java.text.MessageFormat.*;
+
+import java.util.*;
+
+import org.apache.juneau.svl.vars.*;
+
+/**
+ * Builder class for building instances of {@link VarResolver}.
+ */
+@SuppressWarnings("hiding")
+public class VarResolverBuilder {
+
+	private final List<Class<? extends Var>> vars = new ArrayList<Class<? extends Var>>();
+	private final Map<String,Object> contextObjects = new HashMap<String,Object>();
+
+	/**
+	 * Create a new var resolver using the settings in this builder.
+	 *
+	 * @return A new var resolver.
+	 */
+	@SuppressWarnings("unchecked")
+	public VarResolver build() {
+		return new VarResolver(vars.toArray(new Class[vars.size()]), contextObjects);
+	}
+
+	/**
+	 * Register new variables with this resolver.
+	 *
+	 * @param vars The variable resolver classes.
+	 * These classes must subclass from {@link Var} and have no-arg constructors.
+	 * @return This object (for method chaining).
+	 */
+	@SuppressWarnings("unchecked")
+	public VarResolverBuilder vars(Class<?>...vars) {
+		for (Class<?> v : vars) {
+			try {
+				v.newInstance();
+			} catch (InstantiationException e) {
+				throw new UnsupportedOperationException(format("Cannot instantiate variable class {0}.  Must have a public no-arg constructor.", v.getName()));
+			} catch (RuntimeException e) {
+				throw e;
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+			this.vars.add((Class<? extends Var>)v);
+		}
+		return this;
+	}
+
+	/**
+	 * Adds the default variables to this builder.
+	 * <p>
+	 * The default variables are:
+	 * <ul>
+	 * 	<li>{@link SystemPropertiesVar}
+	 * 	<li>{@link EnvVariablesVar}
+	 * 	<li>{@link SwitchVar}
+	 * 	<li>{@link IfVar}
+	 * </ul>
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public VarResolverBuilder defaultVars() {
+		return vars(SystemPropertiesVar.class, EnvVariablesVar.class, SwitchVar.class, IfVar.class);
+	}
+
+	/**
+	 * Associates a context object with this resolver.
+	 * <p>
+	 * A context object is essentially some environmental object that doesn't change
+	 * but is used by vars to customize output.
+	 *
+	 * @param name The name of the context object.
+	 * @param object The context object.
+	 * @return This object (for method chaining).
+	 */
+	public VarResolverBuilder contextObject(String name, Object object) {
+		contextObjects.put(name, object);
+		return this;
+	}
+
+	/**
+	 * Associates multiple context objects with this resolver.
+	 * <p>
+	 * A context object is essentially some environmental object that doesn't change
+	 * but is used by vars to customize output.
+	 *
+	 * @param map A map of context objects keyed by their name.
+	 * @return This object (for method chaining).
+	 */
+	public VarResolverBuilder contextObjects(Map<String,Object> map) {
+		contextObjects.putAll(map);
+		return this;
+	}
+}

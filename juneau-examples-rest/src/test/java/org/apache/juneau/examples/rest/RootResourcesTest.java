@@ -25,27 +25,18 @@ import org.junit.*;
 
 public class RootResourcesTest extends RestTestcase {
 
-	private static String path = TestMicroservice.getURI().getPath();              // /jazz/juneau/sample
+	private static String path = SamplesMicroservice.getURI().getPath();              // /jazz/juneau/sample
 	private static boolean debug = false;
 
-	private static RestClient jsonClient;
+	private RestClient jsonClient = SamplesMicroservice.DEFAULT_CLIENT;
 
-	@BeforeClass
-	public static void beforeClass() {
-		jsonClient = new SamplesRestClient(JsonSerializer.DEFAULT, JsonParser.DEFAULT);
-	}
-
-	@AfterClass
-	public static void afterClass() {
-		jsonClient.closeQuietly();
-	}
 
 	//====================================================================================================
 	// text/json
 	//====================================================================================================
 	@Test
 	public void testJson() throws Exception {
-		RestClient client = new SamplesRestClient(JsonSerializer.DEFAULT, JsonParser.DEFAULT);
+		RestClient client = SamplesMicroservice.DEFAULT_CLIENT;
 		RestCall r = client.doGet("");
 		ResourceDescription[] x = r.getResponse(ResourceDescription[].class);
 		assertEquals("helloWorld", x[0].getName().getName());
@@ -57,8 +48,6 @@ public class RootResourcesTest extends RestTestcase {
 		String s = x2.getObjectMap("info").getString("description");
 		if (debug) System.err.println(s);
 		assertTrue(s, s.startsWith("This is an example"));
-
-		client.closeQuietly();
 	}
 
 	//====================================================================================================
@@ -66,7 +55,7 @@ public class RootResourcesTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testXml() throws Exception {
-		RestClient client = new SamplesRestClient().setParser(XmlParser.DEFAULT);
+		RestClient client = SamplesMicroservice.client().parser(XmlParser.DEFAULT).build();
 		RestCall r = client.doGet("");
 		ResourceDescription[] x = r.getResponse(ResourceDescription[].class);
 		assertEquals("helloWorld", x[0].getName().getName());
@@ -78,7 +67,7 @@ public class RootResourcesTest extends RestTestcase {
 		String s = x2.getObjectMap("info").getString("description");
 		if (debug) System.err.println(s);
 		assertTrue(s, s.startsWith("This is an example"));
-
+		
 		client.closeQuietly();
 	}
 
@@ -87,19 +76,19 @@ public class RootResourcesTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testHtmlStripped() throws Exception {
-		RestClient client = new SamplesRestClient().setParser(HtmlParser.DEFAULT).setAccept("text/html+stripped");
+		RestClient client = SamplesMicroservice.client().parser(HtmlParser.DEFAULT).accept("text/html+stripped").build();
 		RestCall r = client.doGet("");
 		ResourceDescription[] x = r.getResponse(ResourceDescription[].class);
 		assertEquals("helloWorld", x[0].getName().getName());
 		assertTrue(x[0].getName().getHref().endsWith("/helloWorld"));
 		assertEquals("Hello World sample resource", x[0].getDescription());
 
-		r = jsonClient.doOptions("").setHeader("Accept", "text/json");
+		r = jsonClient.doOptions("").accept("text/json");
 		ObjectMap x2 = r.getResponse(ObjectMap.class);
 		String s = x2.getObjectMap("info").getString("description");
 		if (debug) System.err.println(s);
 		assertTrue(s, s.startsWith("This is an example"));
-
+		
 		client.closeQuietly();
 	}
 
@@ -108,12 +97,11 @@ public class RootResourcesTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testStyleSheet() throws Exception {
-		RestClient client = new SamplesRestClient().setAccept("text/css");
+		RestClient client = SamplesMicroservice.client().accept("text/css").build();
 		RestCall r = client.doGet("/style.css");
 		String css = r.getResponseAsString();
 		if (debug) System.err.println(css);
 		assertTrue(css, css.indexOf("table {") != -1);
-
 		client.closeQuietly();
 	}
 
@@ -122,13 +110,12 @@ public class RootResourcesTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testJsonSchema() throws Exception {
-		RestClient client = new SamplesRestClient().setParser(JsonParser.DEFAULT).setAccept("text/json+schema");
+		RestClient client = SamplesMicroservice.client().parser(JsonParser.DEFAULT).accept("text/json+schema").build();
 		RestCall r = client.doGet("");
 		ObjectMap m = r.getResponse(ObjectMap.class);
 		if (debug) System.err.println(m);
 		assertEquals("org.apache.juneau.rest.labels.ChildResourceDescriptions<org.apache.juneau.rest.labels.ResourceDescription>", m.getString("description"));
 		assertEquals("org.apache.juneau.rest.labels.ResourceDescription", m.getObjectMap("items").getString("description"));
-
 		client.closeQuietly();
 	}
 

@@ -12,7 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.urlencoding;
 
-import static org.apache.juneau.urlencoding.UrlEncodingSerializerContext.*;
+import static org.apache.juneau.serializer.SerializerContext.*;
+import static org.apache.juneau.uon.UonSerializerContext.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -24,6 +25,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
+import org.apache.juneau.uon.*;
 
 /**
  * Serializes POJO models to URL-encoded notation with UON-encoded values (a notation for URL-encoded query paramter values).
@@ -132,40 +134,73 @@ import org.apache.juneau.transform.*;
 public class UrlEncodingSerializer extends UonSerializer {
 
 	/** Reusable instance of {@link UrlEncodingSerializer}, all default settings. */
-	public static final UrlEncodingSerializer DEFAULT = new UrlEncodingSerializer().lock();
+	public static final UrlEncodingSerializer DEFAULT = new UrlEncodingSerializer(PropertyStore.create());
 
 	/** Reusable instance of {@link UrlEncodingSerializer.Expanded}. */
-	public static final UrlEncodingSerializer DEFAULT_EXPANDED = new Expanded().lock();
+	public static final UrlEncodingSerializer DEFAULT_EXPANDED = new Expanded(PropertyStore.create());
 
 	/** Reusable instance of {@link UrlEncodingSerializer.Readable}. */
-	public static final UrlEncodingSerializer DEFAULT_READABLE = new Readable().lock();
+	public static final UrlEncodingSerializer DEFAULT_READABLE = new Readable(PropertyStore.create());
 
 	/**
-	 * Constructor.
-	 */
-	public UrlEncodingSerializer() {
-		setEncodeChars(true);
-	}
-
-	/**
-	 * Equivalent to <code><jk>new</jk> UrlEncodingSerializer().setSimpleMode(<jk>true</jk>).setExpandedParams(<jk>true</jk>);</code>.
+	 * Equivalent to <code><jk>new</jk> UrlEncodingSerializerBuilder().expandedParams(<jk>true</jk>).build();</code>.
 	 */
 	@Produces(value="application/x-www-form-urlencoded",contentType="application/x-www-form-urlencoded")
 	public static class Expanded extends UrlEncodingSerializer {
-		/** Constructor */
-		public Expanded() {
-			setExpandedParams(true);
+
+		/**
+		 * Constructor.
+		 * @param propertyStore The property store containing all the settings for this object.
+		 */
+		public Expanded(PropertyStore propertyStore) {
+			super(propertyStore);
+		}
+
+		@Override /* CoreObject */
+		protected ObjectMap getOverrideProperties() {
+			return super.getOverrideProperties().append(UrlEncodingContext.URLENC_expandedParams, true);
 		}
 	}
 
 	/**
-	 * Equivalent to <code><jk>new</jk> UrlEncodingSerializer().setUseWhitespace(<jk>true</jk>);</code>.
+	 * Equivalent to <code><jk>new</jk> UrlEncodingSerializerBuilder().useWhitespace(<jk>true</jk>).build();</code>.
 	 */
 	public static class Readable extends UrlEncodingSerializer {
-		/** Constructor */
-		public Readable() {
-			setUseWhitespace(true);
+
+		/**
+		 * Constructor.
+		 * @param propertyStore The property store containing all the settings for this object.
+		 */
+		public Readable(PropertyStore propertyStore) {
+			super(propertyStore);
 		}
+
+		@Override /* CoreObject */
+		protected ObjectMap getOverrideProperties() {
+			return super.getOverrideProperties().append(SERIALIZER_useWhitespace, true);
+		}
+	}
+
+
+	private final UrlEncodingSerializerContext ctx;
+
+	/**
+	 * Constructor.
+	 * @param propertyStore The property store containing all the settings for this object.
+	 */
+	public UrlEncodingSerializer(PropertyStore propertyStore) {
+		super(propertyStore);
+		this.ctx = createContext(UrlEncodingSerializerContext.class);
+	}
+
+	@Override /* CoreObject */
+	public UrlEncodingSerializerBuilder builder() {
+		return new UrlEncodingSerializerBuilder(propertyStore);
+	}
+
+	@Override /* CoreObject */
+	protected ObjectMap getOverrideProperties() {
+		return super.getOverrideProperties().append(UON_encodeChars, true);
 	}
 
 	/**
@@ -349,553 +384,12 @@ public class UrlEncodingSerializer extends UonSerializer {
 
 	@Override /* Serializer */
 	public UrlEncodingSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType) {
-		return new UrlEncodingSerializerSession(getContext(UrlEncodingSerializerContext.class), op, output, javaMethod, locale, timeZone, mediaType);
+		return new UrlEncodingSerializerSession(ctx, op, output, javaMethod, locale, timeZone, mediaType);
 	}
 
 	@Override /* Serializer */
 	protected void doSerialize(SerializerSession session, Object o) throws Exception {
 		UrlEncodingSerializerSession s = (UrlEncodingSerializerSession)session;
 		serializeAnything(s, s.getWriter(), o);
-	}
-
-
-	//--------------------------------------------------------------------------------
-	// Properties
-	//--------------------------------------------------------------------------------
-
-	/**
-	 * <b>Configuration property:</b>  Serialize bean property collections/arrays as separate key/value pairs.
-	 * <p>
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"UrlEncoding.expandedParams"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
-	 * <p>
-	 * If <jk>false</jk>, serializing the array <code>[1,2,3]</code> results in <code>?key=$a(1,2,3)</code>.
-	 * If <jk>true</jk>, serializing the same array results in <code>?key=1&amp;key=2&amp;key=3</code>.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	<jk>public class</jk> A {
-	 * 		<jk>public</jk> String[] f1 = {<js>"a"</js>,<js>"b"</js>};
-	 * 		<jk>public</jk> List&lt;String&gt; f2 = <jk>new</jk> LinkedList&lt;String&gt;(Arrays.<jsm>asList</jsm>(<jk>new</jk> String[]{<js>"c"</js>,<js>"d"</js>}));
-	 * 	}
-	 *
-	 * 	UrlEncodingSerializer s1 = <jk>new</jk> UrlEncodingParser();
-	 * 	UrlEncodingSerializer s2 = <jk>new</jk> UrlEncodingParser().setExpandedParams(<jk>true</jk>);
-	 *
-	 * 	String s1 = p1.serialize(<jk>new</jk> A()); <jc>// Produces "f1=(a,b)&amp;f2=(c,d)"</jc>
-	 * 	String s2 = p2.serialize(<jk>new</jk> A()); <jc>// Produces "f1=a&amp;f1=b&amp;f2=c&amp;f2=d"</jc>
-	 * </p>
-	 * <p>
-	 * This option only applies to beans.
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>If parsing multi-part parameters, it's highly recommended to use Collections or Lists
-	 * 		as bean property types instead of arrays since arrays have to be recreated from scratch every time a value
-	 * 		is added to it.
-	 * </ul>
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>URLENC_expandedParams</jsf>, value)</code>.
-	 * 	<li>This introduces a slight performance penalty.
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @throws LockedException If {@link #lock()} was called on this class.
-	 * @see UrlEncodingSerializerContext#URLENC_expandedParams
-	 */
-	public UrlEncodingSerializer setExpandedParams(boolean value) throws LockedException {
-		return setProperty(URLENC_expandedParams, value);
-	}
-
-	@Override /* UonSerializer */
-	public UrlEncodingSerializer setEncodeChars(boolean value) throws LockedException {
-		super.setEncodeChars(value);
-		return this;
-	}
-
-	@Override /* Serializer */
-	public UrlEncodingSerializer setMaxDepth(int value) throws LockedException {
-		super.setMaxDepth(value);
-		return this;
-	}
-
-	@Override /* Serializer */
-	public UrlEncodingSerializer setInitialDepth(int value) throws LockedException {
-		super.setInitialDepth(value);
-		return this;
-	}
-
-	@Override /* Serializer */
-	public UrlEncodingSerializer setDetectRecursions(boolean value) throws LockedException {
-		super.setDetectRecursions(value);
-		return this;
-	}
-
-	@Override /* Serializer */
-	public UrlEncodingSerializer setIgnoreRecursions(boolean value) throws LockedException {
-		super.setIgnoreRecursions(value);
-		return this;
-	}
-
-	@Override /* Serializer */
-	public UrlEncodingSerializer setUseWhitespace(boolean value) throws LockedException {
-		super.setUseWhitespace(value);
-		return this;
-	}
-
-	@Override /* Serializer */
-	public UrlEncodingSerializer setAddBeanTypeProperties(boolean value) throws LockedException {
-		super.setAddBeanTypeProperties(value);
-		return this;
-	}
-
-	@Override /* Serializer */
-	public UrlEncodingSerializer setQuoteChar(char value) throws LockedException {
-		super.setQuoteChar(value);
-		return this;
-	}
-
-	@Override /* Serializer */
-	public UrlEncodingSerializer setTrimNullProperties(boolean value) throws LockedException {
-		super.setTrimNullProperties(value);
-		return this;
-	}
-
-	@Override /* Serializer */
-	public UrlEncodingSerializer setTrimEmptyCollections(boolean value) throws LockedException {
-		super.setTrimEmptyCollections(value);
-		return this;
-	}
-
-	@Override /* Serializer */
-	public UrlEncodingSerializer setTrimEmptyMaps(boolean value) throws LockedException {
-		super.setTrimEmptyMaps(value);
-		return this;
-	}
-
-	@Override /* Serializer */
-	public UrlEncodingSerializer setTrimStrings(boolean value) throws LockedException {
-		super.setTrimStrings(value);
-		return this;
-	}
-
-	@Override /* Serializer */
-	public UrlEncodingSerializer setRelativeUriBase(String value) throws LockedException {
-		super.setRelativeUriBase(value);
-		return this;
-	}
-
-	@Override /* Serializer */
-	public UrlEncodingSerializer setAbsolutePathUriBase(String value) throws LockedException {
-		super.setAbsolutePathUriBase(value);
-		return this;
-	}
-
-	@Override /* Serializer */
-	public UrlEncodingSerializer setSortCollections(boolean value) throws LockedException {
-		super.setSortCollections(value);
-		return this;
-	}
-
-	@Override /* Serializer */
-	public UrlEncodingSerializer setSortMaps(boolean value) throws LockedException {
-		super.setSortMaps(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer setBeansRequireDefaultConstructor(boolean value) throws LockedException {
-		super.setBeansRequireDefaultConstructor(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer setBeansRequireSerializable(boolean value) throws LockedException {
-		super.setBeansRequireSerializable(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer setBeansRequireSettersForGetters(boolean value) throws LockedException {
-		super.setBeansRequireSettersForGetters(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer setBeansRequireSomeProperties(boolean value) throws LockedException {
-		super.setBeansRequireSomeProperties(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer setBeanMapPutReturnsOldValue(boolean value) throws LockedException {
-		super.setBeanMapPutReturnsOldValue(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer setBeanConstructorVisibility(Visibility value) throws LockedException {
-		super.setBeanConstructorVisibility(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer setBeanClassVisibility(Visibility value) throws LockedException {
-		super.setBeanClassVisibility(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer setBeanFieldVisibility(Visibility value) throws LockedException {
-		super.setBeanFieldVisibility(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer setMethodVisibility(Visibility value) throws LockedException {
-		super.setMethodVisibility(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer setUseJavaBeanIntrospector(boolean value) throws LockedException {
-		super.setUseJavaBeanIntrospector(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer setUseInterfaceProxies(boolean value) throws LockedException {
-		super.setUseInterfaceProxies(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer setIgnoreUnknownBeanProperties(boolean value) throws LockedException {
-		super.setIgnoreUnknownBeanProperties(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer setIgnoreUnknownNullBeanProperties(boolean value) throws LockedException {
-		super.setIgnoreUnknownNullBeanProperties(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer setIgnorePropertiesWithoutSetters(boolean value) throws LockedException {
-		super.setIgnorePropertiesWithoutSetters(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer setIgnoreInvocationExceptionsOnGetters(boolean value) throws LockedException {
-		super.setIgnoreInvocationExceptionsOnGetters(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer setIgnoreInvocationExceptionsOnSetters(boolean value) throws LockedException {
-		super.setIgnoreInvocationExceptionsOnSetters(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer setSortProperties(boolean value) throws LockedException {
-		super.setSortProperties(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer setNotBeanPackages(String...values) throws LockedException {
-		super.setNotBeanPackages(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer setNotBeanPackages(Collection<String> values) throws LockedException {
-		super.setNotBeanPackages(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer addNotBeanPackages(String...values) throws LockedException {
-		super.addNotBeanPackages(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer addNotBeanPackages(Collection<String> values) throws LockedException {
-		super.addNotBeanPackages(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer removeNotBeanPackages(String...values) throws LockedException {
-		super.removeNotBeanPackages(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer removeNotBeanPackages(Collection<String> values) throws LockedException {
-		super.removeNotBeanPackages(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer setNotBeanClasses(Class<?>...values) throws LockedException {
-		super.setNotBeanClasses(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer setNotBeanClasses(Collection<Class<?>> values) throws LockedException {
-		super.setNotBeanClasses(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer addNotBeanClasses(Class<?>...values) throws LockedException {
-		super.addNotBeanClasses(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer addNotBeanClasses(Collection<Class<?>> values) throws LockedException {
-		super.addNotBeanClasses(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer removeNotBeanClasses(Class<?>...values) throws LockedException {
-		super.removeNotBeanClasses(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer removeNotBeanClasses(Collection<Class<?>> values) throws LockedException {
-		super.removeNotBeanClasses(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer setBeanFilters(Class<?>...values) throws LockedException {
-		super.setBeanFilters(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer setBeanFilters(Collection<Class<?>> values) throws LockedException {
-		super.setBeanFilters(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer addBeanFilters(Class<?>...values) throws LockedException {
-		super.addBeanFilters(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer addBeanFilters(Collection<Class<?>> values) throws LockedException {
-		super.addBeanFilters(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer removeBeanFilters(Class<?>...values) throws LockedException {
-		super.removeBeanFilters(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer removeBeanFilters(Collection<Class<?>> values) throws LockedException {
-		super.removeBeanFilters(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer setPojoSwaps(Class<?>...values) throws LockedException {
-		super.setPojoSwaps(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer setPojoSwaps(Collection<Class<?>> values) throws LockedException {
-		super.setPojoSwaps(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer addPojoSwaps(Class<?>...values) throws LockedException {
-		super.addPojoSwaps(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer addPojoSwaps(Collection<Class<?>> values) throws LockedException {
-		super.addPojoSwaps(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer removePojoSwaps(Class<?>...values) throws LockedException {
-		super.removePojoSwaps(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer removePojoSwaps(Collection<Class<?>> values) throws LockedException {
-		super.removePojoSwaps(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer setImplClasses(Map<Class<?>,Class<?>> values) throws LockedException {
-		super.setImplClasses(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public <T> CoreApi addImplClass(Class<T> interfaceClass, Class<? extends T> implClass) throws LockedException {
-		super.addImplClass(interfaceClass, implClass);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer setBeanDictionary(Class<?>...values) throws LockedException {
-		super.setBeanDictionary(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer setBeanDictionary(Collection<Class<?>> values) throws LockedException {
-		super.setBeanDictionary(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer addToBeanDictionary(Class<?>...values) throws LockedException {
-		super.addToBeanDictionary(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer addToBeanDictionary(Collection<Class<?>> values) throws LockedException {
-		super.addToBeanDictionary(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer removeFromBeanDictionary(Class<?>...values) throws LockedException {
-		super.removeFromBeanDictionary(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer removeFromBeanDictionary(Collection<Class<?>> values) throws LockedException {
-		super.removeFromBeanDictionary(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer setBeanTypePropertyName(String value) throws LockedException {
-		super.setBeanTypePropertyName(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer setDefaultParser(Class<?> value) throws LockedException {
-		super.setDefaultParser(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer setLocale(Locale value) throws LockedException {
-		super.setLocale(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer setTimeZone(TimeZone value) throws LockedException {
-		super.setTimeZone(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer setMediaType(MediaType value) throws LockedException {
-		super.setMediaType(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer setDebug(boolean value) throws LockedException {
-		super.setDebug(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer setProperty(String name, Object value) throws LockedException {
-		super.setProperty(name, value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer setProperties(ObjectMap properties) throws LockedException {
-		super.setProperties(properties);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer addToProperty(String name, Object value) throws LockedException {
-		super.addToProperty(name, value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer putToProperty(String name, Object key, Object value) throws LockedException {
-		super.putToProperty(name, key, value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer putToProperty(String name, Object value) throws LockedException {
-		super.putToProperty(name, value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer removeFromProperty(String name, Object value) throws LockedException {
-		super.removeFromProperty(name, value);
-		return this;
-	}
-
-
-	//--------------------------------------------------------------------------------
-	// Overridden methods
-	//--------------------------------------------------------------------------------
-
-	@Override /* CoreApi */
-	public UrlEncodingSerializer setClassLoader(ClassLoader classLoader) throws LockedException {
-		super.setClassLoader(classLoader);
-		return this;
-	}
-
-	@Override /* Lockable */
-	public UrlEncodingSerializer lock() {
-		super.lock();
-		return this;
-	}
-
-	@Override /* Lockable */
-	public UrlEncodingSerializer clone() {
-		UrlEncodingSerializer c = (UrlEncodingSerializer)super.clone();
-		return c;
 	}
 }

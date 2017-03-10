@@ -15,7 +15,6 @@ package org.apache.juneau.rest.test;
 import static org.junit.Assert.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.json.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.*;
 
@@ -33,7 +32,7 @@ public class UrisTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testRoot() throws Exception {
-		RestClient client = new TestRestClient(JsonSerializer.DEFAULT, JsonParser.DEFAULT);
+		RestClient client = TestMicroservice.DEFAULT_CLIENT;
 		ObjectMap r;
 
 		//--------------------------------------------------------------------------------
@@ -304,8 +303,6 @@ public class UrisTest extends RestTestcase {
 		// Always the same
 		assertTrue(r.getString("testURL2").endsWith(port + "/testURL"));
 		assertEquals("http://testURL", r.getString("testURL3"));
-
-		client.closeQuietly();
 	}
 
 	//====================================================================================================
@@ -313,7 +310,7 @@ public class UrisTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testChild() throws Exception {
-		RestClient client = new TestRestClient(JsonSerializer.DEFAULT, JsonParser.DEFAULT);
+		RestClient client = TestMicroservice.DEFAULT_CLIENT;
 		ObjectMap r;
 
 		//--------------------------------------------------------------------------------
@@ -603,8 +600,6 @@ public class UrisTest extends RestTestcase {
 		// Always the same
 		assertTrue(r.getString("testURL2").endsWith(port + "/testURL"));
 		assertEquals("http://testURL", r.getString("testURL3"));
-
-		client.closeQuietly();
 	}
 
 	//====================================================================================================
@@ -612,7 +607,7 @@ public class UrisTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testGrandChild() throws Exception {
-		RestClient client = new TestRestClient(JsonSerializer.DEFAULT, JsonParser.DEFAULT);
+		RestClient client = TestMicroservice.DEFAULT_CLIENT;
 		ObjectMap r;
 
 		//--------------------------------------------------------------------------------
@@ -902,15 +897,5 @@ public class UrisTest extends RestTestcase {
 		// Always the same
 		assertTrue(r.getString("testURL2").endsWith(port + "/testURL"));
 		assertEquals("http://testURL", r.getString("testURL3"));
-
-		client.closeQuietly();
 	}
-//
-//	private static int getPort(String url) {
-//		Pattern p = Pattern.compile("\\:(\\d{2,5})");
-//		Matcher m = p.matcher(url);
-//		if (m.find())
-//			return Integer.parseInt(m.group(1));
-//		return -1;
-//	}
 }

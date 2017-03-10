@@ -23,6 +23,7 @@ import org.apache.juneau.msgpack.*;
 import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.soap.*;
+import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
 
@@ -95,7 +96,7 @@ import org.apache.juneau.xml.*;
  * 	<tr>
  * 		<td class='code'>application/x-java-serialized-object</td>
  * 		<td class='code'>application/x-java-serialized-object</td>
- * 		<td>{@link JavaSerializedObjectSerializer}</td>
+ * 		<td>{@link JsoSerializer}</td>
  * 	</tr>
  * </table>
  * <p>
@@ -132,7 +133,7 @@ import org.apache.juneau.xml.*;
  * 	</tr>
  * </table>
  * <p>
- * It should be noted that we do NOT add {@link JavaSerializedObjectParser} to the list of parsers since this could
+ * It should be noted that we do NOT add {@link JsoParser} to the list of parsers since this could
  * 	cause security issues.  Use caution when using this particular parser as it could inadvertantly cause
  * 	code execution security holes.
  * <p>
@@ -168,7 +169,7 @@ import org.apache.juneau.xml.*;
 		MsgPackSerializer.class,
 		SoapXmlSerializer.class,
 		PlainTextSerializer.class,
-		JavaSerializedObjectSerializer.class
+		JsoSerializer.class
 	},
 	parsers={
 		JsonParser.class,

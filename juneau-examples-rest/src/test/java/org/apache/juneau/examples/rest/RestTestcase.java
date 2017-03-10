@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest;
 
-import org.apache.juneau.examples.rest.TestMicroservice;
 import org.junit.*;
 
 /**
@@ -26,12 +25,12 @@ public class RestTestcase {
 
 	@BeforeClass
 	public static void setUp() {
-		microserviceStarted = TestMicroservice.startMicroservice();
+		microserviceStarted = SamplesMicroservice.startMicroservice();
 	}
 
 	@AfterClass
 	public static void tearDown() {
 		if (microserviceStarted)
-			TestMicroservice.stopMicroservice();
+			SamplesMicroservice.stopMicroservice();
 	}
 }

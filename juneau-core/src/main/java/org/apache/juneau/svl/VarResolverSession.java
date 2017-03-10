@@ -18,8 +18,6 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.io.*;
 import java.util.*;
 
-import org.apache.juneau.*;
-
 /**
  * A var resolver session that combines a {@link VarResolver} with one or more session objects.
  * <p>
@@ -34,21 +32,22 @@ import org.apache.juneau.*;
  *
  * @see org.apache.juneau.svl
  */
-public class VarResolverSession extends Session {
+public class VarResolverSession {
 
 	private final VarResolverContext context;
+	private final Map<String,Object> sessionObjects;
 
 	/**
 	 * Constructor.
 	 *
 	 * @param context The {@link VarResolver} context object that contains the {@link Var Vars} and
 	 * 	context objects associated with that resolver.
-	 * @param sessionObjects
+	 * @param sessionObjects The session objects.
+	 *
 	 */
 	public VarResolverSession(VarResolverContext context, Map<String,Object> sessionObjects) {
-		super(context, null);
 		this.context = context;
-		addToCache(sessionObjects);
+		this.sessionObjects = sessionObjects != null ? sessionObjects : new HashMap<String,Object>();
 	}
 
 	/**
@@ -58,8 +57,8 @@ public class VarResolverSession extends Session {
 	 * @param o The session object.
 	 * @return This method (for method chaining).
 	 */
-	public VarResolverSession setSessionObject(String name, Object o) {
-		addToCache(name, o);
+	public VarResolverSession sessionObject(String name, Object o) {
+		sessionObjects.put(name, o);
 		return this;
 	}
 
@@ -266,16 +265,17 @@ public class VarResolverSession extends Session {
 	 * @return The session object.  Never <jk>null</jk>.
 	 * @throws RuntimeException If session object with specified name does not exist.
 	 */
+	@SuppressWarnings("unchecked")
 	public <T> T getSessionObject(Class<T> c, String name) {
 		T t = null;
 		try {
-			t = getFromCache(c, name);
+			t = (T)sessionObjects.get(name);
 			if (t == null) {
-				addToCache(name, this.context.getContextObject(name));
-				t = getFromCache(c, name);
+				sessionObjects.put(name, this.context.getContextObject(name));
+				t = (T)sessionObjects.get(name);
 			}
 		} catch (Exception e) {
-			throw new RuntimeException(format("Session object ''{0}'' or context object ''SvlContext.{0}'' could not be converted to type ''{1}''.", name, c.getName()));
+			throw new RuntimeException(format("Session object ''{0}'' or context object ''SvlContext.{0}'' could not be converted to type ''{1}''.", name, c.getName()), e);
 		}
 		if (t == null)
 			throw new RuntimeException(format("Session object ''{0}'' or context object ''SvlContext.{0}'' not found.", name));
@@ -289,6 +289,6 @@ public class VarResolverSession extends Session {
 	 * @return The {@link Var} instance, or <jk>null</jk> if no <code>Var</code> is associated with the specified name.
 	 */
 	protected Var getVar(String name) {
-		return this.context.getVars().get(name);
+		return this.context.getVarMap().get(name);
 	}
 }

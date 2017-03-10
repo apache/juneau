@@ -12,12 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.atom;
 
+import static org.apache.juneau.dto.atom.Utils.*;
+
 import java.net.URI;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.transforms.*;
-import static org.apache.juneau.dto.atom.Utils.*;
 
 /**
  * Represents an <code>atomEntry</code> construct in the RFC4287 specification.

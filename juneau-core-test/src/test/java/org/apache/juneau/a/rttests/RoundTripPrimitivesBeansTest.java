@@ -27,7 +27,7 @@ import org.junit.*;
 @SuppressWarnings({"serial","javadoc"})
 public class RoundTripPrimitivesBeansTest extends RoundTripTest {
 
-	public RoundTripPrimitivesBeansTest(String label, Serializer s, Parser p, int flags) throws Exception {
+	public RoundTripPrimitivesBeansTest(String label, SerializerBuilder s, ParserBuilder p, int flags) throws Exception {
 		super(label, s, p, flags);
 	}
 

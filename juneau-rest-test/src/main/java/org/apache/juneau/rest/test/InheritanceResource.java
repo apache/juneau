@@ -223,6 +223,11 @@ public class InheritanceResource extends RestServlet {
 	}
 
 	public static class DummyParser extends ReaderParser {
+
+		public DummyParser() {
+			super(PropertyStore.create());
+		}
+
 		@Override /* Parser */
 		protected <T> T doParse(ParserSession session, ClassMeta<T> type) throws Exception {
 			return null;
@@ -230,6 +235,11 @@ public class InheritanceResource extends RestServlet {
 	}
 
 	public static class DummySerializer extends WriterSerializer {
+
+		public DummySerializer() {
+			super(PropertyStore.create());
+		}
+
 		@Override /* Serializer */
 		protected void doSerialize(SerializerSession session, Object o) throws Exception {
 			session.getWriter().write(o.toString());
@@ -237,34 +247,34 @@ public class InheritanceResource extends RestServlet {
 	}
 
 	@Consumes("text/p1")
-	public static class P1 extends DummyParser{}
+	public static class P1 extends DummyParser{ public P1(PropertyStore ps) {super();} }
 
 	@Consumes("text/p2")
-	public static class P2 extends DummyParser{}
+	public static class P2 extends DummyParser{ public P2(PropertyStore ps) {super();} }
 
 	@Consumes("text/p3")
-	public static class P3 extends DummyParser{}
+	public static class P3 extends DummyParser{ public P3(PropertyStore ps) {super();} }
 
 	@Consumes("text/p4")
-	public static class P4 extends DummyParser{}
+	public static class P4 extends DummyParser{ public P4(PropertyStore ps) {super();} }
 
 	@Consumes("text/p5")
-	public static class P5 extends DummyParser{}
+	public static class P5 extends DummyParser{ public P5(PropertyStore ps) {super();} }
 
 	@Produces("text/s1")
-	public static class S1 extends DummySerializer{}
+	public static class S1 extends DummySerializer{ public S1(PropertyStore ps) {super();} }
 
 	@Produces("text/s2")
-	public static class S2 extends DummySerializer{}
+	public static class S2 extends DummySerializer{ public S2(PropertyStore ps) {super();} }
 
 	@Produces("text/s3")
-	public static class S3 extends DummySerializer{}
+	public static class S3 extends DummySerializer{ public S3(PropertyStore ps) {super();} }
 
 	@Produces("text/s4")
-	public static class S4 extends DummySerializer{}
+	public static class S4 extends DummySerializer{ public S4(PropertyStore ps) {super();} }
 
 	@Produces("text/s5")
-	public static class S5 extends DummySerializer{}
+	public static class S5 extends DummySerializer{ public S5(PropertyStore ps) {super();} }
 
 	public static class E1 extends IdentityEncoder {
 		@Override public String[] getCodings() {

@@ -16,7 +16,6 @@ import java.text.*;
 import java.util.*;
 
 import org.apache.juneau.examples.addressbook.*;
-import org.apache.juneau.json.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.xml.*;
 
@@ -31,8 +30,8 @@ public class ClientTest {
 			System.out.println("Running client test...");
 
 			// Create a client to handle XML requests and responses.
-			RestClient client = new RestClient(JsonSerializer.DEFAULT, JsonParser.DEFAULT);
-			RestClient xmlClient = new RestClient(XmlSerializer.DEFAULT_NS, XmlParser.DEFAULT);
+			RestClient client = new RestClientBuilder().build();
+			RestClient xmlClient = new RestClientBuilder(XmlSerializer.DEFAULT_NS, XmlParser.DEFAULT).build();
 			try {
 				String root = "http://localhost:10000/addressBook";
 

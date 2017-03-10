@@ -15,67 +15,32 @@ package org.apache.juneau.svl;
 import java.util.*;
 import java.util.concurrent.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 
 /**
  * Configurable properties on the {@link VarResolver} class.
  * <p>
  * Used to associate {@link Var Vars} and context objects with {@link VarResolver VarResolvers}.
- * <p>
- * See {@link ContextFactory} for more information about context properties.
  *
  * @see org.apache.juneau.svl
  */
-public class VarResolverContext extends Context {
+public class VarResolverContext {
 
-	/**
-	 * An explicit list of Java classes to be excluded from consideration as being beans (<code>Set&lt;Class&gt;</code>).
-	 * <p>
-	 * Not-bean classes are typically converted to <code>Strings</code> during serialization even if they
-	 * appear to be bean-like.
-	 */
-	public static final String SVL_vars = "Svl.vars.set";
-
-	/**
-	 * Add to the list of packages whose classes should not be considered beans.
-	 */
-	public static final String SVL_vars_add = "Svl.vars.set.add";
-
-	/**
-	 * Remove from the list of packages whose classes should not be considered beans.
-	 */
-	public static final String SVL_vars_remove = "Svl.vars.set.remove";
-
-	/**
-	 * Context objects associated with the resolver (<code>Map$lt;String,Object&gt;</code>).
-	 */
-	public static final String SVL_context = "Svl.context.map";
-
-	/**
-	 * Adds a new map entry to the {@link #SVL_context} property.
-	 */
-	public static final String SVL_context_put = "Svl.context.map.put";
-
-
-	// Map of Vars added through addVar() method.
-	private final Map<String,Var> stringVars;
-
+	private final Class<?>[] vars;
+	private final Map<String,Var> varMap;
 	private final Map<String,Object> contextObjects;
-
 
 	/**
 	 * Constructor.
-	 *
-	 * @param cf The context factory to copy from.
+	 * @param vars The Var classes used for resolving string variables.
+	 * @param contextObjects Read-only context objects.
 	 */
-	public VarResolverContext(ContextFactory cf) {
-		super(cf);
-		ContextFactory.PropertyMap pm = cf.getPropertyMap("Svl");
+	public VarResolverContext(Class<? extends Var>[] vars, Map<String,Object> contextObjects) {
 
-		Class<?>[] varClasses = pm.get(SVL_vars, Class[].class, new Class[0]);
+		this.vars = Arrays.copyOf(vars, vars.length);
+
 		Map<String,Var> m = new ConcurrentSkipListMap<String,Var>();
-		for (Class<?> c : varClasses) {
+		for (Class<?> c : vars) {
 			if (! ClassUtils.isParentClass(Var.class, c))
 				throw new RuntimeException("Invalid variable class.  Must extend from Var");
 			try {
@@ -85,9 +50,9 @@ public class VarResolverContext extends Context {
 				throw new RuntimeException(e);
 			}
 		}
-		this.stringVars = Collections.unmodifiableMap(m);
 
-		this.contextObjects = Collections.unmodifiableMap(pm.getMap(SVL_context, String.class, Object.class, Collections.<String,Object>emptyMap()));
+		this.varMap = Collections.unmodifiableMap(m);
+		this.contextObjects = contextObjects == null ? null : Collections.unmodifiableMap(new ConcurrentHashMap<String,Object>(contextObjects));
 	}
 
 	/**
@@ -95,8 +60,17 @@ public class VarResolverContext extends Context {
 	 *
 	 * @return A map whose keys are var names (e.g. <js>"S"</js>) and values are {@link Var} instances.
 	 */
-	protected Map<String,Var> getVars() {
-		return stringVars;
+	protected Map<String,Var> getVarMap() {
+		return varMap;
+	}
+
+	/**
+	 * Returns an array of variables define in this variable resolver context.
+	 *
+	 * @return A new array containing the variables in this context.
+	 */
+	protected Class<?>[] getVars() {
+		return Arrays.copyOf(vars, vars.length);
 	}
 
 	/**
@@ -106,6 +80,15 @@ public class VarResolverContext extends Context {
 	 * @return The context object, or <jk>null</jk> if no context object is specified with that name.
 	 */
 	protected Object getContextObject(String name) {
-		return contextObjects.get(name);
+		return contextObjects == null ? null : contextObjects.get(name);
+	}
+
+	/**
+	 * Returns the context map of this variable resolver context.
+	 *
+	 * @return An unmodifiable map of the context objects of this variable resolver context.
+	 */
+	protected Map<String,Object> getContextObjects() {
+		return contextObjects;
 	}
 }

@@ -622,7 +622,7 @@ public final class PojoQuery {
 			numberRanges = l.toArray(new NumberRange[l.size()]);
 		}
 
-		private List<String> breakUpTokens(String s) {
+		private static List<String> breakUpTokens(String s) {
 			// Get rid of whitespace in "123 - 456"
 			s = s.replaceAll("(-?\\d+)\\s*-\\s*(-?\\d+)", "$1-$2");
 			// Get rid of whitespace in ">= 123"
@@ -1042,7 +1042,7 @@ public final class PojoQuery {
 		/**
 		 * Break up search pattern into separate tokens.
 		 */
-		private List<String> breakUpTokens(String s) {
+		private static List<String> breakUpTokens(String s) {
 
 			// If the string is null or all whitespace, return an empty vector.
 			if (s == null || s.trim().length() == 0)

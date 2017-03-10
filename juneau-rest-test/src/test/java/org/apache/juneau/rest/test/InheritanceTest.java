@@ -14,23 +14,13 @@ package org.apache.juneau.rest.test;
 
 import static org.junit.Assert.*;
 
-import org.apache.juneau.json.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.*;
 
 public class InheritanceTest extends RestTestcase {
 
-	private static RestClient client;
+	private RestClient client = TestMicroservice.DEFAULT_CLIENT;
 
-	@BeforeClass
-	public static void beforeClass() {
-		client = new TestRestClient();
-	}
-
-	@AfterClass
-	public static void afterClass() {
-		client.closeQuietly();
-	}
 
 	//====================================================================================================
 	// Test serializer inheritance.
@@ -81,7 +71,7 @@ public class InheritanceTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testTransforms() throws Exception {
-		RestClient client = new TestRestClient(JsonSerializer.class, JsonParser.class).setAccept("text/json+simple");
+		RestClient client = TestMicroservice.client().accept("text/json+simple").build();
 		String r;
 		String url = "/testInheritanceTransforms";
 
@@ -108,7 +98,7 @@ public class InheritanceTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testProperties() throws Exception {
-		RestClient client = new TestRestClient(JsonSerializer.class, JsonParser.class).setAccept("text/json+simple");
+		RestClient client = TestMicroservice.client().accept("text/json+simple").build();
 		String r;
 		String url = "/testInheritanceProperties";
 

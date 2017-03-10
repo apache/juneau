@@ -16,7 +16,6 @@ import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.rest.test.TestUtils.*;
 import static org.junit.Assert.*;
 
-import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.*;
 
@@ -24,17 +23,15 @@ public class NoParserInputTest extends RestTestcase {
 
 	private static String URL = "/testNoParserInput";
 	private static boolean debug = false;
+	RestClient plainTextClient = TestMicroservice.DEFAULT_CLIENT_PLAINTEXT;
 
 	//====================================================================================================
 	// @Body annotated InputStream.
 	//====================================================================================================
 	@Test
 	public void testInputStream() throws Exception {
-		RestClient client = new TestRestClient(PlainTextSerializer.class, PlainTextParser.class);
-		String r = client.doPut(URL + "/testInputStream", "foo").getResponseAsString();
+		String r = plainTextClient.doPut(URL + "/testInputStream", "foo").getResponseAsString();
 		assertEquals("foo", r);
-
-		client.closeQuietly();
 	}
 
 	//====================================================================================================
@@ -42,11 +39,8 @@ public class NoParserInputTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testReader() throws Exception {
-		RestClient client = new TestRestClient(PlainTextSerializer.class, PlainTextParser.class);
-		String r = client.doPut(URL + "/testReader", "foo").getResponseAsString();
+		String r = plainTextClient.doPut(URL + "/testReader", "foo").getResponseAsString();
 		assertEquals("foo", r);
-
-		client.closeQuietly();
 	}
 
 	//====================================================================================================
@@ -55,16 +49,13 @@ public class NoParserInputTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testPushbackReader() throws Exception {
-		RestClient client = new TestRestClient(PlainTextSerializer.class, PlainTextParser.class);
 		try {
-			client.doPut(URL + "/testPushbackReader?noTrace=true", "foo").getResponseAsString();
+			plainTextClient.doPut(URL + "/testPushbackReader?noTrace=true", "foo").getResponseAsString();
 			fail("Exception expected");
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_BAD_REQUEST,
 				"Invalid argument type passed to the following method:",
 				"'public java.lang.String org.apache.juneau.rest.test.NoParserInputResource.testPushbackReader(java.io.PushbackReader) throws java.lang.Exception'");
 		}
-
-		client.closeQuietly();
 	}
 }

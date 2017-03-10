@@ -13,17 +13,31 @@
 package org.apache.juneau.rest.test;
 
 import java.net.*;
+import java.security.*;
 import java.util.*;
 
+import javax.net.ssl.*;
+
+import org.apache.http.conn.ssl.*;
+import org.apache.http.impl.client.*;
 import org.apache.juneau.microservice.*;
+import org.apache.juneau.parser.*;
+import org.apache.juneau.plaintext.*;
+import org.apache.juneau.rest.client.*;
+import org.apache.juneau.serializer.*;
 
 /**
  * Utility class for starting up the tests microservice.
  * @author james.bognar
  */
 public class TestMicroservice {
+
 	static RestMicroservice microservice;
 	static URI microserviceURI;
+
+	// Reusable HTTP clients that get created and shut down with the microservice.
+	public static RestClient DEFAULT_CLIENT;
+	public static RestClient DEFAULT_CLIENT_PLAINTEXT;
 
 	/**
 	 * Starts the microservice.
@@ -41,6 +55,8 @@ public class TestMicroservice {
 					"Test-Entry: test-value"
 				);
 			microserviceURI = microservice.start().getURI();
+			DEFAULT_CLIENT = client().build();
+			DEFAULT_CLIENT_PLAINTEXT = client(PlainTextSerializer.class, PlainTextParser.class).build();
 			return true;
 		} catch (Throwable e) {
 			System.err.println(e); // NOT DEBUG
@@ -65,8 +81,55 @@ public class TestMicroservice {
 		try {
 			microservice.stop();
 			microservice = null;
+			DEFAULT_CLIENT.closeQuietly();
+			DEFAULT_CLIENT_PLAINTEXT.closeQuietly();
+
 		} catch (Exception e) {
 			System.err.println(e); // NOT DEBUG
+		}
+	}
+
+	/**
+	 * Create a new HTTP client.
+	 */
+	public static RestClientBuilder client() {
+		try {
+			return new RestClientBuilder()
+				.rootUrl(microserviceURI)
+			//	.httpClient(createHttpClient(), true)
+			;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	/**
+	 * Create a new HTTP client using the specified serializer and parser.
+	 */
+	public static RestClientBuilder client(Serializer s, Parser p) {
+		return client().serializer(s).parser(p);
+	}
+
+	/**
+	 * Create a new HTTP client using the specified serializer and parser.
+	 */
+	public static RestClientBuilder client(Class<? extends Serializer> s, Class<? extends Parser> p) {
+		return client().serializer(s).parser(p);
+	}
+
+	// TODO - Why is this needed?
+	static SSLConnectionSocketFactory getSSLSocketFactory() throws Exception {
+		SSLContext sslContext = SSLContext.getInstance("SSL");
+		TrustManager tm = new SimpleX509TrustManager(true);
+		sslContext.init(null, new TrustManager[]{tm}, new SecureRandom());
+		return new SSLConnectionSocketFactory(sslContext, new NoopHostnameVerifier());
+	}
+
+	public static CloseableHttpClient createHttpClient() {
+		try {
+			return HttpClients.custom().setSSLSocketFactory(getSSLSocketFactory()).setRedirectStrategy(new LaxRedirectStrategy()).build();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
 		}
 	}
 }

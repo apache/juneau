@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
+import static javax.xml.stream.XMLStreamConstants.*;
 import static org.apache.juneau.xml.XmlParserContext.*;
-import static  javax.xml.stream.XMLStreamConstants.*;
 
 import java.io.*;
 import java.lang.reflect.*;

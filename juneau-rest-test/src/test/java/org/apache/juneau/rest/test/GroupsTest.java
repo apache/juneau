@@ -18,7 +18,6 @@ import static org.junit.Assert.*;
 
 import java.io.*;
 
-import org.apache.juneau.json.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.*;
 
@@ -33,13 +32,12 @@ public class GroupsTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testSerializerDefinedOnClass() throws Exception {
-		RestClient client = new TestRestClient(JsonSerializer.DEFAULT, JsonParser.DEFAULT);
+		RestClient client = TestMicroservice.DEFAULT_CLIENT;
 		String url = URL + "/testSerializerDefinedOnClass";
 		String r;
 
 		try {
-			client.setContentType("text/p1");
-			r = client.doGet(url+"?noTrace=true").getResponseAsString();
+			r = client.doGet(url+"?noTrace=true").contentType("text/p1").getResponseAsString();
 			fail("Exception expected");
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_NOT_ACCEPTABLE,
@@ -48,17 +46,14 @@ public class GroupsTest extends RestTestcase {
 			);
 		}
 
-		client.setAccept("text/s1").setContentType("");
-		r = client.doGet(url).getResponseAsString();
+		r = client.doGet(url).accept("text/s1").contentType("").getResponseAsString();
 		assertEquals("text/s,GET", r);
 
-		client.setAccept("text/s2").setContentType("");
-		r = client.doGet(url).getResponseAsString();
+		r = client.doGet(url).accept("text/s2").contentType("").getResponseAsString();
 		assertEquals("text/s,GET", r);
 
 		try {
-			client.setAccept("text/s3").setContentType("");
-			r = client.doGet(url+"?noTrace=true").getResponseAsString();
+			r = client.doGet(url+"?noTrace=true").accept("text/s3").contentType("").getResponseAsString();
 			assertEquals("text/s,GET", r);
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_NOT_ACCEPTABLE,
@@ -68,8 +63,7 @@ public class GroupsTest extends RestTestcase {
 		}
 
 		try {
-			client.setAccept("text/json").setContentType("text/p1");
-			r = client.doPut(url+"?noTrace=true", new StringReader("foo")).getResponseAsString();
+			r = client.doPut(url+"?noTrace=true", new StringReader("foo")).accept("text/json").contentType("text/p1").getResponseAsString();
 			fail("Exception expected");
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_NOT_ACCEPTABLE,
@@ -79,8 +73,7 @@ public class GroupsTest extends RestTestcase {
 		}
 
 		try {
-			client.setAccept("text/s1").setContentType("text/json");
-			r = client.doPut(url+"?noTrace=true", new StringReader("foo")).getResponseAsString();
+			r = client.doPut(url+"?noTrace=true", new StringReader("foo")).accept("text/s1").contentType("text/json").getResponseAsString();
 			fail("Exception expected");
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_UNSUPPORTED_MEDIA_TYPE,
@@ -89,17 +82,14 @@ public class GroupsTest extends RestTestcase {
 			);
 		}
 
-		client.setContentType("text/p1").setAccept("text/s1");
-		r = client.doPut(url, new StringReader("foo")).getResponseAsString();
+		r = client.doPut(url, new StringReader("foo")).contentType("text/p1").accept("text/s1").getResponseAsString();
 		assertEquals("text/s,foo", r);
 
-		client.setContentType("text/p2").setAccept("text/s2");
-		r = client.doPut(url, new StringReader("foo")).getResponseAsString();
+		r = client.doPut(url, new StringReader("foo")).contentType("text/p2").accept("text/s2").getResponseAsString();
 		assertEquals("text/s,foo", r);
 
 		try {
-			client.setContentType("text/p1").setAccept("text/s3");
-			r = client.doPut(url+"?noTrace=true", new StringReader("foo")).getResponseAsString();
+			r = client.doPut(url+"?noTrace=true", new StringReader("foo")).contentType("text/p1").accept("text/s3").getResponseAsString();
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_NOT_ACCEPTABLE,
 				"Unsupported media-type in request header 'Accept': 'text/s3'",
@@ -108,15 +98,12 @@ public class GroupsTest extends RestTestcase {
 		}
 
 		try {
-			client.setContentType("text/p3").setAccept("text/s1");
-			r = client.doPut(url+"?noTrace=true", new StringReader("foo")).getResponseAsString();
+			r = client.doPut(url+"?noTrace=true", new StringReader("foo")).contentType("text/p3").accept("text/s1").getResponseAsString();
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_UNSUPPORTED_MEDIA_TYPE,
 				"Unsupported media-type in request header 'Content-Type': 'text/p3'",
 				"Supported media-types: [text/p1, text/p2]"
 			);
 		}
-
-		client.closeQuietly();
 	}
 }

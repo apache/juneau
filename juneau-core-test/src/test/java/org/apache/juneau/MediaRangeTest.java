@@ -12,15 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.*;
 
-import org.apache.juneau.json.JsonSerializer;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import org.apache.juneau.json.*;
+import org.junit.*;
+import org.junit.runner.*;
+import org.junit.runners.*;
 
 /**
  * Verifies that the MediaRange and MediaType classes parse and sort Accept headers correctly.

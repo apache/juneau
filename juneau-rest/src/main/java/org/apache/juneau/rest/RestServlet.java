@@ -127,7 +127,7 @@ public abstract class RestServlet extends HttpServlet {
 	// allow the config file to be accessed during object creation.
 	// e.g. private String myConfig = getConfig().getString("myConfig");
 	{
-		varResolver = createVarResolver();
+		VarResolverBuilder vrb = createVarResolver();
 
 		// @RestResource annotations from bottom to top.
 		restResourceAnnotationsChildFirst = ReflectionUtils.findAnnotationsMap(RestResource.class, getClass());
@@ -141,11 +141,13 @@ public abstract class RestServlet extends HttpServlet {
 		}
 
 		try {
-			configFile = createConfigFile();
-			varResolver.setContextObject(ConfigFileVar.SESSION_config, configFile);
+			configFile = createConfigFile(vrb);
+			vrb.contextObject(ConfigFileVar.SESSION_config, configFile);
 		} catch (IOException e) {
 			this.initException = e;
 		}
+
+		varResolver = vrb.build();
 	}
 
 	@Override /* Servlet */
@@ -204,14 +206,14 @@ public abstract class RestServlet extends HttpServlet {
 			properties = createProperties();
 			beanFilters = createBeanFilters();
 			pojoSwaps = createPojoSwaps();
-			context = ContextFactory.create().setProperties(properties).getContext(RestServletContext.class);
+			context = PropertyStore.create().setProperties(properties).getContext(RestServletContext.class);
 			beanContext = createBeanContext(properties, beanFilters, pojoSwaps);
-			urlEncodingSerializer = createUrlEncodingSerializer(properties, beanFilters, pojoSwaps).lock();
-			urlEncodingParser = createUrlEncodingParser(properties, beanFilters, pojoSwaps).lock();
-			serializers = createSerializers(properties, beanFilters, pojoSwaps).lock();
-			parsers = createParsers(properties, beanFilters, pojoSwaps).lock();
+			urlEncodingSerializer = createUrlEncodingSerializer(properties, beanFilters, pojoSwaps).build();
+			urlEncodingParser = createUrlEncodingParser(properties, beanFilters, pojoSwaps).build();
+			serializers = createSerializers(properties, beanFilters, pojoSwaps).build();
+			parsers = createParsers(properties, beanFilters, pojoSwaps).build();
 			converters = createConverters(properties);
-			encoders = createEncoders(properties);
+			encoders = createEncoders(properties).build();
 			guards = createGuards(properties);
 			mimetypesFileTypeMap = createMimetypesFileTypeMap(properties);
 			defaultRequestHeaders = new TreeMap<String,String>(String.CASE_INSENSITIVE_ORDER);
@@ -253,13 +255,11 @@ public abstract class RestServlet extends HttpServlet {
 			for (RestServlet child : childResources.values())
 				child.init(servletConfig);
 
-			varResolver.addVars(
-				LocalizationVar.class,
-				RequestVar.class,
-				SerializedRequestAttrVar.class,
-				ServletInitParamVar.class,
-				UrlEncodeVar.class
-			);
+			varResolver = varResolver
+				.builder()
+				.vars(LocalizationVar.class, RequestVar.class, SerializedRequestAttrVar.class, ServletInitParamVar.class, UrlEncodeVar.class)
+				.build()
+			;
 
 		} catch (RestException e) {
 			// Thrown RestExceptions are simply caught and rethrown on subsequent calls to service().
@@ -460,7 +460,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * @throws Exception If bean context not be constructed for any reason.
 	 */
 	protected BeanContext createBeanContext(ObjectMap properties, Class<?>[] beanFilters, Class<?>[] pojoSwaps) throws Exception {
-		return ContextFactory.create().addBeanFilters(beanFilters).addPojoSwaps(pojoSwaps).setProperties(properties).getBeanContext();
+		return PropertyStore.create().addBeanFilters(beanFilters).addPojoSwaps(pojoSwaps).setProperties(properties).getBeanContext();
 	}
 
 	/**
@@ -474,8 +474,8 @@ public abstract class RestServlet extends HttpServlet {
 	 * @return The new URL-Encoding serializer.
 	 * @throws Exception If the serializer could not be constructed for any reason.
 	 */
-	protected UrlEncodingSerializer createUrlEncodingSerializer(ObjectMap properties, Class<?>[] beanFilters, Class<?>[] pojoSwaps) throws Exception {
-		return new UrlEncodingSerializer().setProperties(properties).addBeanFilters(beanFilters).addPojoSwaps(pojoSwaps);
+	protected UrlEncodingSerializerBuilder createUrlEncodingSerializer(ObjectMap properties, Class<?>[] beanFilters, Class<?>[] pojoSwaps) throws Exception {
+		return new UrlEncodingSerializerBuilder().properties(properties).beanFilters(beanFilters).pojoSwaps(pojoSwaps);
 	}
 
 	/**
@@ -489,8 +489,8 @@ public abstract class RestServlet extends HttpServlet {
 	 * @return The new URL-Encoding parser.
 	 * @throws Exception If the parser could not be constructed for any reason.
 	 */
-	protected UrlEncodingParser createUrlEncodingParser(ObjectMap properties, Class<?>[] beanFilters, Class<?>[] pojoSwaps) throws Exception {
-		return new UrlEncodingParser().setProperties(properties).addBeanFilters(beanFilters).addPojoSwaps(pojoSwaps);
+	protected UrlEncodingParserBuilder createUrlEncodingParser(ObjectMap properties, Class<?>[] beanFilters, Class<?>[] pojoSwaps) throws Exception {
+		return new UrlEncodingParserBuilder().properties(properties).beanFilters(beanFilters).pojoSwaps(pojoSwaps);
 	}
 
 	/**
@@ -509,21 +509,14 @@ public abstract class RestServlet extends HttpServlet {
 	 * @return The group of serializers.
 	 * @throws Exception If serializer group could not be constructed for any reason.
 	 */
-	protected SerializerGroup createSerializers(ObjectMap properties, Class<?>[] beanFilters, Class<?>[] pojoSwaps) throws Exception {
-		SerializerGroup g = new SerializerGroup();
+	protected SerializerGroupBuilder createSerializers(ObjectMap properties, Class<?>[] beanFilters, Class<?>[] pojoSwaps) throws Exception {
+		SerializerGroupBuilder g = new SerializerGroupBuilder();
 
 		// Serializers are loaded in parent-to-child order to allow overrides.
 		for (RestResource r : restResourceAnnotationsParentFirst.values())
-			for (Class<? extends Serializer> c : reverse(r.serializers()))
-				try {
-					g.append(c);
-				} catch (Exception e) {
-					throw new RestServletException("Exception occurred while trying to instantiate Serializer ''{0}''", c.getSimpleName()).initCause(e);
-				}
+			g.append(reverse(r.serializers()));
 
-		g.setProperties(properties);
-		g.addBeanFilters(beanFilters).addPojoSwaps(pojoSwaps);
-		return g;
+		return g.properties(properties).beanFilters(beanFilters).pojoSwaps(pojoSwaps);
 	}
 
 	/**
@@ -542,21 +535,14 @@ public abstract class RestServlet extends HttpServlet {
 	 * @return The group of parsers.
 	 * @throws Exception If parser group could not be constructed for any reason.
 	 */
-	protected ParserGroup createParsers(ObjectMap properties, Class<?>[] beanFilters, Class<?>[] pojoSwaps) throws Exception {
-		ParserGroup g = new ParserGroup();
+	protected ParserGroupBuilder createParsers(ObjectMap properties, Class<?>[] beanFilters, Class<?>[] pojoSwaps) throws Exception {
+		ParserGroupBuilder g = new ParserGroupBuilder();
 
 		// Parsers are loaded in parent-to-child order to allow overrides.
 		for (RestResource r : restResourceAnnotationsParentFirst.values())
-			for (Class<? extends Parser> p : reverse(r.parsers()))
-				try {
-					g.append(p);
-				} catch (Exception e) {
-					throw new RestServletException("Exception occurred while trying to instantiate Parser ''{0}''", p.getSimpleName()).initCause(e);
-				}
+			g.append(reverse(r.parsers()));
 
-		g.setProperties(properties);
-		g.addBeanFilters(beanFilters).addPojoSwaps(pojoSwaps);
-		return g;
+		return g.properties(properties).beanFilters(beanFilters).pojoSwaps(pojoSwaps);
 	}
 
 	/**
@@ -599,8 +585,8 @@ public abstract class RestServlet extends HttpServlet {
 	 * @return The new encoder group associated with this servet.
 	 * @throws RestServletException
 	 */
-	protected EncoderGroup createEncoders(ObjectMap properties) throws RestServletException {
-		EncoderGroup g = new EncoderGroup().append(IdentityEncoder.INSTANCE);
+	protected EncoderGroupBuilder createEncoders(ObjectMap properties) throws RestServletException {
+		EncoderGroupBuilder g = new EncoderGroupBuilder().append(IdentityEncoder.INSTANCE);
 
 		// Encoders are loaded in parent-to-child order to allow overrides.
 		for (RestResource r : restResourceAnnotationsParentFirst.values())
@@ -1831,12 +1817,13 @@ public abstract class RestServlet extends HttpServlet {
 	 * <p>
 	 * The default implementation uses the path defined by the {@link RestResource#config() @RestResource.config()} property resolved
 	 * 	by {@link ConfigMgr#DEFAULT}.
+	 * @param vrb
 	 *
 	 * @return The config file for this servlet.
 	 * @throws IOException
 	 */
-	protected ConfigFile createConfigFile() throws IOException {
-		String cf = varResolver.resolve(configPath);
+	protected ConfigFile createConfigFile(VarResolverBuilder vrb) throws IOException {
+		String cf = vrb.build().resolve(configPath);
 		if (cf.isEmpty())
 			return getConfigMgr().create();
 		return getConfigMgr().get(cf);
@@ -1925,7 +1912,7 @@ public abstract class RestServlet extends HttpServlet {
 	}
 
 	/**
-	 * Returns the config manager used to create the config file in {@link #createConfigFile()}.
+	 * Returns the config manager used to create the config file in {@link #createConfigFile(VarResolverBuilder)}.
 	 * <p>
 	 * The default implementation return {@link ConfigMgr#DEFAULT}, but subclasses can override
 	 * 	this if they want to provide their own customized config manager.
@@ -2147,10 +2134,20 @@ public abstract class RestServlet extends HttpServlet {
 				ArrayList<Inherit> si = new ArrayList<Inherit>(Arrays.asList(m.serializersInherit()));
 				ArrayList<Inherit> pi = new ArrayList<Inherit>(Arrays.asList(m.parsersInherit()));
 
+				SerializerGroupBuilder sgb = null;
+				ParserGroupBuilder pgb = null;
+				UrlEncodingParserBuilder uepb = null;
+
 				if (m.serializers().length > 0 || m.parsers().length > 0 || m.properties().length > 0 || m.beanFilters().length > 0 || m.pojoSwaps().length > 0) {
-					mSerializers = (si.contains(SERIALIZERS) || m.serializers().length == 0 ? mSerializers.clone() : new SerializerGroup());
-					mParsers = (pi.contains(PARSERS) || m.parsers().length == 0 ? mParsers.clone() : new ParserGroup());
-					mUrlEncodingParser = mUrlEncodingParser.clone();
+					sgb = new SerializerGroupBuilder();
+					pgb = new ParserGroupBuilder();
+					uepb = new UrlEncodingParserBuilder(mUrlEncodingParser.createPropertyStore());
+
+					if (si.contains(SERIALIZERS) || m.serializers().length == 0)
+						sgb.append(mSerializers.getSerializers());
+
+					if (pi.contains(PARSERS) || m.parsers().length == 0)
+						pgb.append(mParsers.getParsers());
 				}
 
 				httpMethod = m.name().toUpperCase(Locale.ENGLISH);
@@ -2191,47 +2188,46 @@ public abstract class RestServlet extends HttpServlet {
 				this.requiredMatchers = requiredMatchers.toArray(new RestMatcher[requiredMatchers.size()]);
 				this.optionalMatchers = optionalMatchers.toArray(new RestMatcher[optionalMatchers.size()]);
 
-				if (m.serializers().length > 0) {
-					mSerializers.append(m.serializers());
+				if (sgb != null) {
+					sgb.append(m.serializers());
 					if (si.contains(TRANSFORMS))
-						mSerializers.addBeanFilters(getBeanFilters()).addPojoSwaps(getPojoSwaps());
+						sgb.beanFilters(getBeanFilters()).pojoSwaps(getPojoSwaps());
 					if (si.contains(PROPERTIES))
-						mSerializers.setProperties(getProperties());
+						sgb.properties(getProperties());
+					for (Property p1 : m.properties())
+						sgb.property(p1.name(), p1.value());
+					sgb.beanFilters(m.beanFilters());
+					sgb.pojoSwaps(m.pojoSwaps());
 				}
 
-				if (m.parsers().length > 0) {
-					mParsers.append(m.parsers());
+				if (pgb != null) {
+					pgb.append(m.parsers());
 					if (pi.contains(TRANSFORMS))
-						mParsers.addBeanFilters(getBeanFilters()).addPojoSwaps(getPojoSwaps());
+						pgb.beanFilters(getBeanFilters()).pojoSwaps(getPojoSwaps());
 					if (pi.contains(PROPERTIES))
-						mParsers.setProperties(getProperties());
+						pgb.properties(getProperties());
+					for (Property p1 : m.properties())
+						pgb.property(p1.name(), p1.value());
+					pgb.beanFilters(m.beanFilters());
+					pgb.pojoSwaps(m.pojoSwaps());
+				}
+
+				if (uepb != null) {
+					for (Property p1 : m.properties())
+						uepb.property(p1.name(), p1.value());
+					uepb.beanFilters(m.beanFilters());
+					uepb.pojoSwaps(m.pojoSwaps());
 				}
 
 				if (m.properties().length > 0) {
 					mProperties = new ObjectMap().setInner(getProperties());
 					for (Property p1 : m.properties()) {
-						String n = p1.name(), v = p1.value();
-						mProperties.put(n, v);
-						mSerializers.setProperty(n, v);
-						mParsers.setProperty(n, v);
-						mUrlEncodingParser.setProperty(n, v);
+						mProperties.put(p1.name(), p1.value());
 					}
 				}
 
-				if (m.beanFilters().length > 0) {
-					mSerializers.addBeanFilters(m.beanFilters());
-					mParsers.addBeanFilters(m.beanFilters());
-					mUrlEncodingParser.addBeanFilters(m.beanFilters());
-				}
-
-				if (m.pojoSwaps().length > 0) {
-					mSerializers.addPojoSwaps(m.pojoSwaps());
-					mParsers.addPojoSwaps(m.pojoSwaps());
-					mUrlEncodingParser.addPojoSwaps(m.pojoSwaps());
-				}
-
 				if (m.encoders().length > 0 || ! m.inheritEncoders()) {
-					EncoderGroup g = new EncoderGroup();
+					EncoderGroupBuilder g = new EncoderGroupBuilder();
 					if (m.inheritEncoders())
 						g.append(mEncoders);
 					else
@@ -2244,7 +2240,7 @@ public abstract class RestServlet extends HttpServlet {
 							throw new RestServletException("Exception occurred while trying to instantiate Encoder ''{0}''", c.getSimpleName()).initCause(e);
 						}
 					}
-					mEncoders = g;
+					mEncoders = g.build();
 				}
 
 				mDefaultRequestHeaders = new TreeMap<String,String>(String.CASE_INSENSITIVE_ORDER);
@@ -2274,9 +2270,12 @@ public abstract class RestServlet extends HttpServlet {
 					}
 				}
 
-				mSerializers.lock();
-				mParsers.lock();
-				mUrlEncodingParser.lock();
+				if (sgb != null)
+					mSerializers = sgb.build();
+				if (pgb != null)
+					mParsers = pgb.build();
+				if (uepb != null)
+					mUrlEncodingParser = uepb.build();
 
 				// Need this to access methods in anonymous inner classes.
 				method.setAccessible(true);
@@ -2881,9 +2880,9 @@ public abstract class RestServlet extends HttpServlet {
 	 *
 	 * @return The reusable variable resolver for this servlet.
 	 */
-	protected VarResolver createVarResolver() {
-		return new VarResolver()
-			.addVars(
+	protected VarResolverBuilder createVarResolver() {
+		return new VarResolverBuilder()
+			.vars(
 				SystemPropertiesVar.class,
 				EnvVariablesVar.class,
 				ConfigFileVar.class,

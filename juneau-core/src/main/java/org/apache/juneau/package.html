@@ -148,17 +148,14 @@
 	p = beanContext.newBean(Person.<jk>class</jk>);
 		</p>
 		<p>
-			There are 3 ways to get an instance of a {@link org.apache.juneau.BeanContext}:
+			There are 2 ways to get an instance of a {@link org.apache.juneau.BeanContext}:
 		</p>
 		<p class='bcode'>
 	<jc>// Use one of the default bean contexts.</jc>
 	BeanContext beanContext = BeanContext.<jsf>DEFAULT</jsf>;
 	
-	<jc>// Create a context from scratch with your own settings.</jc>
-	beanContext = <jk>new</jk> BeanContext().addPojoSwaps(DateSwap.ISO8601DT.<jk>class</jk>);
-	
-	<jc>// Clone and modify an existing context.</jc>
-	beanContext = BeanContext.<jsf>DEFAULT</jsf>.clone().addPojoSwaps(DateSwap.ISO8601DT.<jk>class</jk>);
+	<jc>// Use the PropertyStore class.</jc>
+	beanContext = <jk>new</jk> PropertyStore().pojoSwaps(DateSwap.ISO8601DT.<jk>class</jk>).getBeanContext();
 		</p>
 		<p>
 			The {@link org.apache.juneau.BeanContext} class is a highly-customizable class.  

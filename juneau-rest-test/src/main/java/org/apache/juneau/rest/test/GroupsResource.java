@@ -31,6 +31,11 @@ public class GroupsResource extends RestServlet {
 
 	@Produces("text/s1,text/s2")
 	public static class SSerializer extends WriterSerializer {
+
+		public SSerializer(PropertyStore propertyStore) {
+			super(propertyStore);
+		}
+
 		@Override /* Serializer */
 		protected void doSerialize(SerializerSession session, Object output) throws Exception {
 			session.getWriter().write("text/s," + output);
@@ -39,6 +44,11 @@ public class GroupsResource extends RestServlet {
 
 	@Consumes("text/p1,text/p2")
 	public static class PParser extends ReaderParser {
+
+		public PParser(PropertyStore propertyStore) {
+			super(propertyStore);
+		}
+
 		@SuppressWarnings("unchecked")
 		@Override /* Parser */
 		protected <T> T doParse(ParserSession session, ClassMeta<T> type) throws Exception {
@@ -48,13 +58,13 @@ public class GroupsResource extends RestServlet {
 
 
 	@Override /* RestServlet */
-	public SerializerGroup createSerializers(ObjectMap properties, Class<?>[] beanFilters, Class<?>[] pojoSwaps) throws Exception {
-		return new SerializerGroup().append(SSerializer.class).setProperties(properties).addBeanFilters(beanFilters).addPojoSwaps(pojoSwaps);
+	public SerializerGroupBuilder createSerializers(ObjectMap properties, Class<?>[] beanFilters, Class<?>[] pojoSwaps) throws Exception {
+		return super.createSerializers(properties, beanFilters, pojoSwaps).append(SSerializer.class);
 	}
 
 	@Override /* RestServlet */
-	public ParserGroup createParsers(ObjectMap properties, Class<?>[] beanFilters, Class<?>[] pojoSwaps) throws Exception {
-		return new ParserGroup().append(PParser.class).setProperties(properties).addBeanFilters(beanFilters).addPojoSwaps(pojoSwaps);
+	public ParserGroupBuilder createParsers(ObjectMap properties, Class<?>[] beanFilters, Class<?>[] pojoSwaps) throws Exception {
+		return super.createParsers(properties, beanFilters, pojoSwaps).append(PParser.class);
 	}
 
 	//====================================================================================================

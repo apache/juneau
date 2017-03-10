@@ -14,7 +14,6 @@ package org.apache.juneau.rest.test;
 
 import static org.junit.Assert.*;
 
-import org.apache.juneau.json.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.*;
 
@@ -27,7 +26,7 @@ public class PathTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testBasic() throws Exception {
-		RestClient client = new TestRestClient(JsonSerializer.DEFAULT, JsonParser.DEFAULT);
+		RestClient client = TestMicroservice.DEFAULT_CLIENT;
 		String r = null;
 
 		r = client.doGet(URL).getResponse(String.class);
@@ -38,7 +37,5 @@ public class PathTest extends RestTestcase {
 
 		r = client.doGet(URL + "/testPath2/testPath3").getResponse(String.class);
 		assertEquals("/testPath/testPath2/testPath3", r);
-
-		client.closeQuietly();
 	}
 }

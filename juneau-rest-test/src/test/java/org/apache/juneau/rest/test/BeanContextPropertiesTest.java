@@ -14,7 +14,6 @@ package org.apache.juneau.rest.test;
 
 import static org.junit.Assert.*;
 
-import org.apache.juneau.json.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.*;
 
@@ -27,11 +26,9 @@ public class BeanContextPropertiesTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testClassTransforms() throws Exception {
-		RestClient client = new TestRestClient(JsonSerializer.class, JsonParser.class);
+		RestClient client = TestMicroservice.DEFAULT_CLIENT;
 		String r;
-		r = client.doGet("/testBeanContext/testClassTransforms/2001-07-04T15:30:45Z?d2=2001-07-05T15:30:45Z").setHeader("X-D3", "2001-07-06T15:30:45Z").getResponseAsString();
+		r = client.doGet("/testBeanContext/testClassTransforms/2001-07-04T15:30:45Z?d2=2001-07-05T15:30:45Z").header("X-D3", "2001-07-06T15:30:45Z").getResponseAsString();
 		assertEquals("d1=2001-07-04T15:30:45Z,d2=2001-07-05T15:30:45Z,d3=2001-07-06T15:30:45Z", r);
-
-		client.closeQuietly();
 	}
 }

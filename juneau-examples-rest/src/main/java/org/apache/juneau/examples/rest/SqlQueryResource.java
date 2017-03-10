@@ -13,8 +13,8 @@
 package org.apache.juneau.examples.rest;
 
 import static javax.servlet.http.HttpServletResponse.*;
-import static org.apache.juneau.html.HtmlDocSerializerContext.*;
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
+import static org.apache.juneau.html.HtmlDocSerializerContext.*;
 
 import java.io.*;
 import java.sql.*;

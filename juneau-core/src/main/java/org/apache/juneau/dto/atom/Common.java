@@ -12,13 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.atom;
 
+import static org.apache.juneau.dto.atom.Utils.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
 import java.net.URI;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.annotation.*;
-import static org.apache.juneau.dto.atom.Utils.*;
 
 /**
  * Represents an <code>atomCommonAttributes</code> construct in the RFC4287 specification.

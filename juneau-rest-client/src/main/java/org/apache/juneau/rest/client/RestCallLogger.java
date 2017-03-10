@@ -26,7 +26,7 @@ import org.apache.http.util.*;
  * Causes a log entry to be created that shows all the request and response headers and content
  * 	at the end of the request.
  * <p>
- * Use the {@link RestClient#logTo(Level, Logger)} and {@link RestCall#logTo(Level, Logger)}
+ * Use the {@link RestClientBuilder#logTo(Level, Logger)} and {@link RestCall#logTo(Level, Logger)}
  * <p>
  * methods to create instances of this class.
  */

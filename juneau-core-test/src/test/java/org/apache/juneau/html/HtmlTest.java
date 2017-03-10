@@ -49,13 +49,13 @@ public class HtmlTest {
 	//====================================================================================================
 	@Test
 	public void testAnchorTextOptions() throws Exception {
-		HtmlSerializer s = new HtmlSerializer.Sq().setAddKeyValueTableHeaders(true);
+		HtmlSerializerBuilder s = new HtmlSerializerBuilder().sq().addKeyValueTableHeaders(true);
 		TestURI t = new TestURI();
 		String r;
 		String expected = null;
 
-		s.setUriAnchorText(TO_STRING);
-		r = strip(s.serialize(t));
+		s.uriAnchorText(TO_STRING);
+		r = strip(s.build().serialize(t));
 		expected = ""
 			+"\n[f0]=<a href='f0/x0'>f0/x0</a>"
 			+"\n[f1]=<a href='f1/x1'>f1/x1</a>"
@@ -74,10 +74,10 @@ public class HtmlTest {
 			+"\n[fe]=<a href='http://www.apache.org/fe/xe?foo=bar&label2=MY_LABEL'>http://www.apache.org/fe/xe?foo=bar&label2=MY_LABEL</a>";
 		assertEquals(expected, r);
 
-		s.setAbsolutePathUriBase("http://myhost");
-		s.setRelativeUriBase("/cr");
-		s.setUriAnchorText(TO_STRING);
-		r = strip(s.serialize(t));
+		s.absolutePathUriBase("http://myhost");
+		s.relativeUriBase("/cr");
+		s.uriAnchorText(TO_STRING);
+		r = strip(s.build().serialize(t));
 		expected = ""
 			+"\n[f0]=<a href='/cr/f0/x0'>f0/x0</a>"
 			+"\n[f1]=<a href='/cr/f1/x1'>f1/x1</a>"
@@ -96,8 +96,8 @@ public class HtmlTest {
 			+"\n[fe]=<a href='http://www.apache.org/fe/xe?foo=bar&label2=MY_LABEL'>http://www.apache.org/fe/xe?foo=bar&label2=MY_LABEL</a>";
 		assertEquals(expected, r);
 
-		s.setUriAnchorText(URI);
-		r = strip(s.serialize(t));
+		s.uriAnchorText(URI);
+		r = strip(s.build().serialize(t));
 		expected = ""
 			+"\n[f0]=<a href='/cr/f0/x0'>/cr/f0/x0</a>"
 			+"\n[f1]=<a href='/cr/f1/x1'>/cr/f1/x1</a>"
@@ -116,8 +116,8 @@ public class HtmlTest {
 			+"\n[fe]=<a href='http://www.apache.org/fe/xe?foo=bar&label2=MY_LABEL'>http://www.apache.org/fe/xe?foo=bar&label2=MY_LABEL</a>";
 		assertEquals(expected, r);
 
-		s.setUriAnchorText(LAST_TOKEN);
-		r = strip(s.serialize(t));
+		s.uriAnchorText(LAST_TOKEN);
+		r = strip(s.build().serialize(t));
 		expected = ""
 			+"\n[f0]=<a href='/cr/f0/x0'>x0</a>"
 			+"\n[f1]=<a href='/cr/f1/x1'>x1</a>"
@@ -136,8 +136,8 @@ public class HtmlTest {
 			+"\n[fe]=<a href='http://www.apache.org/fe/xe?foo=bar&label2=MY_LABEL'>xe</a>";
 		assertEquals(expected, r);
 
-		s.setUriAnchorText(URI_ANCHOR);
-		r = strip(s.serialize(t));
+		s.uriAnchorText(URI_ANCHOR);
+		r = strip(s.build().serialize(t));
 		expected = ""
 			+"\n[f0]=<a href='/cr/f0/x0'>f0/x0</a>"
 			+"\n[f1]=<a href='/cr/f1/x1'>f1/x1</a>"
@@ -156,8 +156,8 @@ public class HtmlTest {
 			+"\n[fe]=<a href='http://www.apache.org/fe/xe?foo=bar&label2=MY_LABEL'>http://www.apache.org/fe/xe?foo=bar&label2=MY_LABEL</a>";
 		assertEquals(expected, r);
 
-		s.setLabelParameter("label2");
-		r = strip(s.serialize(t));
+		s.labelParameter("label2");
+		r = strip(s.build().serialize(t));
 		expected = ""
 			+"\n[f0]=<a href='/cr/f0/x0'>f0/x0</a>"
 			+"\n[f1]=<a href='/cr/f1/x1'>f1/x1</a>"
@@ -176,8 +176,8 @@ public class HtmlTest {
 			+"\n[fe]=<a href='http://www.apache.org/fe/xe?foo=bar&label2=MY_LABEL'>MY_LABEL</a>";
 		assertEquals(expected, r);
 
-		s.setDetectLinksInStrings(false);
-		r = strip(s.serialize(t));
+		s.detectLinksInStrings(false);
+		r = strip(s.build().serialize(t));
 		expected = ""
 			+"\n[f0]=<a href='/cr/f0/x0'>f0/x0</a>"
 			+"\n[f1]=<a href='/cr/f1/x1'>f1/x1</a>"
@@ -196,9 +196,9 @@ public class HtmlTest {
 			+"\n[fe]=http://www.apache.org/fe/xe?foo=bar&amp;label2=MY_LABEL";
 			assertEquals(expected, r);
 
-			s.setDetectLinksInStrings(true);
-			s.setLookForLabelParameters(false);
-			r = strip(s.serialize(t));
+			s.detectLinksInStrings(true);
+			s.lookForLabelParameters(false);
+			r = strip(s.build().serialize(t));
 			expected = ""
 				+"\n[f0]=<a href='/cr/f0/x0'>f0/x0</a>"
 				+"\n[f1]=<a href='/cr/f1/x1'>f1/x1</a>"
@@ -232,7 +232,7 @@ public class HtmlTest {
 	//====================================================================================================
 	@Test
 	public void testHtmlAnnotationAsPlainText() throws Exception {
-		HtmlSerializer s = new HtmlSerializer.Sq().setAddKeyValueTableHeaders(true);
+		HtmlSerializer s = new HtmlSerializerBuilder().sq().addKeyValueTableHeaders(true).build();
 		Object o = null;
 		String r;
 
@@ -264,7 +264,7 @@ public class HtmlTest {
 	//====================================================================================================
 	@Test
 	public void testHtmlAnnotationAsXml() throws Exception {
-		HtmlSerializer s = new HtmlSerializer.Sq().setAddKeyValueTableHeaders(true);
+		HtmlSerializer s = new HtmlSerializerBuilder().sq().addKeyValueTableHeaders(true).build();
 		Object o = null;
 		String r;
 
@@ -292,7 +292,7 @@ public class HtmlTest {
 	//====================================================================================================
 	@Test
 	public void testNoTableHeaders() throws Exception {
-		HtmlSerializer s = new HtmlSerializer.Sq();
+		HtmlSerializer s = HtmlSerializer.DEFAULT_SQ;
 		Object o = null;
 		String r;
 

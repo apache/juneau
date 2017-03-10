@@ -18,10 +18,10 @@ import org.apache.juneau.serializer.*;
 /**
  * Configurable properties on the {@link XmlSerializer} class.
  * <p>
- * Context properties are set by calling {@link ContextFactory#setProperty(String, Object)} on the context factory
- * returned {@link CoreApi#getContextFactory()}.
+ * Context properties are set by calling {@link PropertyStore#setProperty(String, Object)} on the property store
+ * passed into the constructor.
  * <p>
- * See {@link ContextFactory} for more information about context properties.
+ * See {@link PropertyStore} for more information about context properties.
  *
  * <h5 class='section'>Inherited configurable properties:</h5>
  * <ul class='javahierarchy'>
@@ -174,19 +174,19 @@ public class XmlSerializerContext extends SerializerContext {
 	/**
 	 * Constructor.
 	 * <p>
-	 * Typically only called from {@link ContextFactory#getContext(Class)}.
+	 * Typically only called from {@link PropertyStore#getContext(Class)}.
 	 *
-	 * @param cf The factory that created this context.
+	 * @param ps The property store that created this context.
 	 */
-	public XmlSerializerContext(ContextFactory cf) {
-		super(cf);
-		autoDetectNamespaces = cf.getProperty(XML_autoDetectNamespaces, boolean.class, true);
-		enableNamespaces = cf.getProperty(XML_enableNamespaces, boolean.class, false);
-		addNamespaceUrlsToRoot = cf.getProperty(XML_addNamespaceUrisToRoot, boolean.class, false);
-		defaultNamespace = cf.getProperty(XML_defaultNamespace, String.class, "{juneau:'http://www.apache.org/2013/Juneau'}");
-		xsNamespace = cf.getProperty(XML_xsNamespace, Namespace.class, new Namespace("xs", "http://www.w3.org/2001/XMLSchema"));
-		namespaces = cf.getProperty(XML_namespaces, Namespace[].class, new Namespace[0]);
-		addBeanTypeProperties = cf.getProperty(XML_addBeanTypeProperties, boolean.class, cf.getProperty(SERIALIZER_addBeanTypeProperties, boolean.class, true));
+	public XmlSerializerContext(PropertyStore ps) {
+		super(ps);
+		autoDetectNamespaces = ps.getProperty(XML_autoDetectNamespaces, boolean.class, true);
+		enableNamespaces = ps.getProperty(XML_enableNamespaces, boolean.class, false);
+		addNamespaceUrlsToRoot = ps.getProperty(XML_addNamespaceUrisToRoot, boolean.class, false);
+		defaultNamespace = ps.getProperty(XML_defaultNamespace, String.class, "{juneau:'http://www.apache.org/2013/Juneau'}");
+		xsNamespace = ps.getProperty(XML_xsNamespace, Namespace.class, new Namespace("xs", "http://www.w3.org/2001/XMLSchema"));
+		namespaces = ps.getProperty(XML_namespaces, Namespace[].class, new Namespace[0]);
+		addBeanTypeProperties = ps.getProperty(XML_addBeanTypeProperties, boolean.class, ps.getProperty(SERIALIZER_addBeanTypeProperties, boolean.class, true));
 	}
 
 	@Override /* Context */

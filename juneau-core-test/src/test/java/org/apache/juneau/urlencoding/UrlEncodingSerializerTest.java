@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.json.JsonSerializer;
+import org.apache.juneau.json.*;
 import org.junit.*;
 
 @SuppressWarnings("javadoc")
@@ -343,7 +343,7 @@ public class UrlEncodingSerializerTest {
 			+ "&f20=@(@((a=a,b=1,c=true)),@((a=a,b=1,c=true)))";
 		assertEquals(e, r);
 
-		s = UrlEncodingSerializer.DEFAULT.clone().setExpandedParams(true);
+		s = new UrlEncodingSerializerBuilder().expandedParams(true).build();
 		r = s.serialize(t);
 		e = ""
 			+ "f01=a&f01=b"
@@ -404,7 +404,7 @@ public class UrlEncodingSerializerTest {
 			+ "&f20=@((a=a,b=1,c=true))&f20=@((a=a,b=1,c=true))";
 		assertEquals(e, r);
 
-		s = UrlEncodingSerializer.DEFAULT.clone().setExpandedParams(true);
+		s = new UrlEncodingSerializerBuilder().expandedParams(true).build();
 		r = s.serialize(t);
 		e = ""
 			+ "f01=a&f01=b"

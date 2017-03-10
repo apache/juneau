@@ -29,7 +29,7 @@ public class CommonParserTest {
 	//====================================================================================================
 	@Test
 	public void testFromSerializer() throws Exception {
-		ReaderParser p = HtmlParser.DEFAULT.clone().addToBeanDictionary(A1.class);
+		ReaderParser p = new HtmlParserBuilder().beanDictionary(A1.class).build();
 		Map m = null;
 		String in;
 
@@ -63,7 +63,7 @@ public class CommonParserTest {
 		t2.add(new A3("name0","value0"));
 		t2.add(new A3("name1","value1"));
 		t1.list = t2;
-		in = new HtmlSerializer().setAddBeanTypeProperties(true).serialize(t1);
+		in = new HtmlSerializerBuilder().addBeanTypeProperties(true).build().serialize(t1);
 		t1 = (A1)p.parse(in, Object.class);
 		assertEquals("value1", t1.list.get(1).value);
 
@@ -94,7 +94,7 @@ public class CommonParserTest {
 	//====================================================================================================
 	@Test
 	public void testCorrectHandlingOfUnknownProperties() throws Exception {
-		ReaderParser p = new HtmlParser().setIgnoreUnknownBeanProperties(true);
+		ReaderParser p = new HtmlParserBuilder().ignoreUnknownBeanProperties(true).build();
 		B t;
 
 		String in = "<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>a</string></td><td><number>1</number></td></tr><tr><td><string>unknown</string></td><td><number>1</number></td></tr><tr><td><string>b</string></td><td><number>2</number></td></tr></table>";
@@ -103,7 +103,7 @@ public class CommonParserTest {
 		assertEquals(t.b, 2);
 
 		try {
-			p = new HtmlParser();
+			p = HtmlParser.DEFAULT;
 			p.parse(in, B.class);
 			fail("Exception expected");
 		} catch (ParseException e) {}
@@ -143,7 +143,7 @@ public class CommonParserTest {
 	@Test
 	public void testParserListeners() throws Exception {
 		final List<String> events = new LinkedList<String>();
-		HtmlParser p = new HtmlParser().setIgnoreUnknownBeanProperties(true);
+		HtmlParser p = new HtmlParserBuilder().ignoreUnknownBeanProperties(true).build();
 		p.addListener(
 			new ParserListener() {
 				@Override /* ParserListener */

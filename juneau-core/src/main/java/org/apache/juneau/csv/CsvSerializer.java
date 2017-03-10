@@ -26,6 +26,23 @@ import org.apache.juneau.serializer.*;
 @SuppressWarnings({"rawtypes"})
 public final class CsvSerializer extends WriterSerializer {
 
+	/** Default serializer, all default settings.*/
+	public static final CsvSerializer DEFAULT = new CsvSerializer(PropertyStore.create());
+
+
+	/**
+	 * Constructor.
+	 * @param propertyStore The property store containing all the settings for this object.
+	 */
+	public CsvSerializer(PropertyStore propertyStore) {
+		super(propertyStore);
+	}
+
+	@Override /* CoreObject */
+	public CsvSerializerBuilder builder() {
+		return new CsvSerializerBuilder(propertyStore);
+	}
+
 	//--------------------------------------------------------------------------------
 	// Entry point methods
 	//--------------------------------------------------------------------------------
@@ -65,7 +82,7 @@ public final class CsvSerializer extends WriterSerializer {
 		}
 	}
 
-	private void append(Writer w, Object o) throws IOException {
+	private static void append(Writer w, Object o) throws IOException {
 		if (o == null)
 			w.append("null");
 		else {
@@ -80,20 +97,6 @@ public final class CsvSerializer extends WriterSerializer {
 				w.append('"').append(s).append('"');
 			else
 				w.append(s);
-		}
-	}
-
-
-	//--------------------------------------------------------------------------------
-	// Overridden methods
-	//--------------------------------------------------------------------------------
-
-	@Override /* Serializer */
-	public CsvSerializer clone() {
-		try {
-			return (CsvSerializer)super.clone();
-		} catch (CloneNotSupportedException e) {
-			throw new RuntimeException(e); // Shouldn't happen.
 		}
 	}
 }

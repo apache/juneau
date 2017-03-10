@@ -18,7 +18,6 @@ import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.json.*;
-import org.apache.juneau.serializer.*;
 import org.junit.*;
 
 @SuppressWarnings("javadoc")
@@ -29,7 +28,7 @@ public class ReaderFilterTest {
 	//====================================================================================================
 	@Test
 	public void test() throws Exception {
-		WriterSerializer s = new JsonSerializer.Simple().addPojoSwaps(ReaderSwap.Json.class);
+		JsonSerializerBuilder s = new JsonSerializerBuilder().simple().pojoSwaps(ReaderSwap.Json.class);
 
 		Reader r;
 		Map<String,Object> m;
@@ -37,12 +36,12 @@ public class ReaderFilterTest {
 		r = new StringReader("{foo:'bar',baz:'quz'}");
 		m = new HashMap<String,Object>();
 		m.put("X", r);
-		assertEquals("{X:{foo:'bar',baz:'quz'}}", s.serialize(m));
+		assertEquals("{X:{foo:'bar',baz:'quz'}}", s.build().serialize(m));
 
-		s.addPojoSwaps(ReaderSwap.Xml.class);
+		s.pojoSwaps(ReaderSwap.Xml.class);
 		r = new StringReader("<object><foo _type='string'>bar</foo><baz _type='string'>quz</baz></object>");
 		m = new HashMap<String,Object>();
 		m.put("X", r);
-		assertEquals("{X:{foo:'bar',baz:'quz'}}", s.serialize(m));
+		assertEquals("{X:{foo:'bar',baz:'quz'}}", s.build().serialize(m));
 	}
 }

@@ -332,25 +332,25 @@ public class SerializerContext extends BeanContext {
 	/**
 	 * Constructor.
 	 *
-	 * @param cf The factory that created this context.
+	 * @param ps The property store that created this context.
 	 */
-	public SerializerContext(ContextFactory cf) {
-		super(cf);
-		maxDepth = cf.getProperty(SERIALIZER_maxDepth, int.class, 100);
-		initialDepth = cf.getProperty(SERIALIZER_initialDepth, int.class, 0);
-		detectRecursions = cf.getProperty(SERIALIZER_detectRecursions, boolean.class, false);
-		ignoreRecursions = cf.getProperty(SERIALIZER_ignoreRecursions, boolean.class, false);
-		useWhitespace = cf.getProperty(SERIALIZER_useWhitespace, boolean.class, false);
-		addBeanTypeProperties = cf.getProperty(SERIALIZER_addBeanTypeProperties, boolean.class, true);
-		trimNulls = cf.getProperty(SERIALIZER_trimNullProperties, boolean.class, true);
-		trimEmptyCollections = cf.getProperty(SERIALIZER_trimEmptyCollections, boolean.class, false);
-		trimEmptyMaps = cf.getProperty(SERIALIZER_trimEmptyMaps, boolean.class, false);
-		trimStrings = cf.getProperty(SERIALIZER_trimStrings, boolean.class, false);
-		sortCollections = cf.getProperty(SERIALIZER_sortCollections, boolean.class, false);
-		sortMaps = cf.getProperty(SERIALIZER_sortMaps, boolean.class, false);
-		quoteChar = cf.getProperty(SERIALIZER_quoteChar, String.class, "\"").charAt(0);
-		relativeUriBase = resolveRelativeUriBase(cf.getProperty(SERIALIZER_relativeUriBase, String.class, ""));
-		absolutePathUriBase = resolveAbsolutePathUriBase(cf.getProperty(SERIALIZER_absolutePathUriBase, String.class, ""));
+	public SerializerContext(PropertyStore ps) {
+		super(ps);
+		maxDepth = ps.getProperty(SERIALIZER_maxDepth, int.class, 100);
+		initialDepth = ps.getProperty(SERIALIZER_initialDepth, int.class, 0);
+		detectRecursions = ps.getProperty(SERIALIZER_detectRecursions, boolean.class, false);
+		ignoreRecursions = ps.getProperty(SERIALIZER_ignoreRecursions, boolean.class, false);
+		useWhitespace = ps.getProperty(SERIALIZER_useWhitespace, boolean.class, false);
+		addBeanTypeProperties = ps.getProperty(SERIALIZER_addBeanTypeProperties, boolean.class, true);
+		trimNulls = ps.getProperty(SERIALIZER_trimNullProperties, boolean.class, true);
+		trimEmptyCollections = ps.getProperty(SERIALIZER_trimEmptyCollections, boolean.class, false);
+		trimEmptyMaps = ps.getProperty(SERIALIZER_trimEmptyMaps, boolean.class, false);
+		trimStrings = ps.getProperty(SERIALIZER_trimStrings, boolean.class, false);
+		sortCollections = ps.getProperty(SERIALIZER_sortCollections, boolean.class, false);
+		sortMaps = ps.getProperty(SERIALIZER_sortMaps, boolean.class, false);
+		quoteChar = ps.getProperty(SERIALIZER_quoteChar, String.class, "\"").charAt(0);
+		relativeUriBase = resolveRelativeUriBase(ps.getProperty(SERIALIZER_relativeUriBase, String.class, ""));
+		absolutePathUriBase = resolveAbsolutePathUriBase(ps.getProperty(SERIALIZER_absolutePathUriBase, String.class, ""));
 	}
 
 	private String resolveRelativeUriBase(String s) {

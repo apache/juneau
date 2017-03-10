@@ -21,10 +21,10 @@ import org.apache.juneau.xml.*;
 /**
  * Configurable properties on the {@link RdfParser} class.
  * <p>
- * Context properties are set by calling {@link ContextFactory#setProperty(String, Object)} on the context factory
- * returned {@link CoreApi#getContextFactory()}.
+ * Context properties are set by calling {@link PropertyStore#setProperty(String, Object)} on the property store
+ * passed into the constructor.
  * <p>
- * See {@link ContextFactory} for more information about context properties.
+ * See {@link PropertyStore} for more information about context properties.
  *
  * <h6 class='topic' id='ConfigProperties'>Configurable properties inherited by the RDF parsers</h6>
  * <ul class='javahierarchy'>
@@ -62,18 +62,18 @@ public final class RdfParserContext extends ParserContext implements RdfCommonCo
 	/**
 	 * Constructor.
 	 * <p>
-	 * Typically only called from {@link ContextFactory#getContext(Class)}.
+	 * Typically only called from {@link PropertyStore#getContext(Class)}.
 	 *
-	 * @param cf The factory that created this context.
+	 * @param ps The property store that created this context.
 	 */
-	public RdfParserContext(ContextFactory cf) {
-		super(cf);
-		trimWhitespace = cf.getProperty(RDF_trimWhitespace, boolean.class, false);
-		looseCollections = cf.getProperty(RDF_looseCollections, boolean.class, false);
-		rdfLanguage = cf.getProperty(RDF_language, String.class, "RDF/XML-ABBREV");
-		juneauNs = cf.getProperty(RDF_juneauNs, Namespace.class, new Namespace("j", "http://www.apache.org/juneau/"));
-		juneauBpNs = cf.getProperty(RDF_juneauBpNs, Namespace.class, new Namespace("j", "http://www.apache.org/juneaubp/"));
-		collectionFormat = cf.getProperty(RDF_collectionFormat, RdfCollectionFormat.class, RdfCollectionFormat.DEFAULT);
+	public RdfParserContext(PropertyStore ps) {
+		super(ps);
+		trimWhitespace = ps.getProperty(RDF_trimWhitespace, boolean.class, false);
+		looseCollections = ps.getProperty(RDF_looseCollections, boolean.class, false);
+		rdfLanguage = ps.getProperty(RDF_language, String.class, "RDF/XML-ABBREV");
+		juneauNs = ps.getProperty(RDF_juneauNs, Namespace.class, new Namespace("j", "http://www.apache.org/juneau/"));
+		juneauBpNs = ps.getProperty(RDF_juneauBpNs, Namespace.class, new Namespace("j", "http://www.apache.org/juneaubp/"));
+		collectionFormat = ps.getProperty(RDF_collectionFormat, RdfCollectionFormat.class, RdfCollectionFormat.DEFAULT);
 	}
 
 	@Override /* Context */

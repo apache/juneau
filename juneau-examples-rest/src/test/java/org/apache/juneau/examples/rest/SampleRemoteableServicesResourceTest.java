@@ -12,14 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest;
 
-import static org.junit.Assert.*;
 import static org.apache.juneau.xml.XmlSerializerContext.*;
+import static org.junit.Assert.*;
 
 import org.apache.juneau.examples.addressbook.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.transforms.*;
-import org.apache.juneau.urlencoding.*;
+import org.apache.juneau.uon.*;
 import org.apache.juneau.xml.*;
 import org.junit.*;
 
@@ -30,16 +30,20 @@ public class SampleRemoteableServicesResourceTest extends RestTestcase {
 	@BeforeClass
 	public static void beforeClass() throws Exception {
 		clients = new RestClient[] {
-			new SamplesRestClient(JsonSerializer.class, JsonParser.class),
-			new SamplesRestClient(XmlSerializer.class, XmlParser.class),
-//	TODO - broken?		new TestRestClient(HtmlSerializer.class, HtmlParser.class).setAccept("text/html+stripped"),
-			new SamplesRestClient(UonSerializer.class, UonParser.class),
+			SamplesMicroservice.client()
+				.pojoSwaps(CalendarSwap.DateMedium.class)
+				.remoteableServletUri("/remoteable")
+				.build(),
+			SamplesMicroservice.client(XmlSerializer.class, XmlParser.class)
+				.pojoSwaps(CalendarSwap.DateMedium.class)
+				.remoteableServletUri("/remoteable")
+				.property(XML_autoDetectNamespaces, true)
+				.build(),
+			SamplesMicroservice.client(UonSerializer.class, UonParser.class)
+				.pojoSwaps(CalendarSwap.DateMedium.class)
+				.remoteableServletUri("/remoteable")
+				.build(),
 		};
-		for (RestClient c : clients) {
-			c.addPojoSwaps(CalendarSwap.DateMedium.class);
-			c.setRemoteableServletUri("/remoteable");
-			c.setProperty(XML_autoDetectNamespaces, true);
-		}
 	}
 
 	@AfterClass

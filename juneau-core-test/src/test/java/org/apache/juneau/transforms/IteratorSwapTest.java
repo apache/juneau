@@ -28,7 +28,7 @@ public class IteratorSwapTest {
 	//====================================================================================================
 	@Test
 	public void test() throws Exception {
-		WriterSerializer s = new JsonSerializer.Simple().addPojoSwaps(IteratorSwap.class);
+		WriterSerializer s = new JsonSerializerBuilder().simple().pojoSwaps(IteratorSwap.class).build();
 
 		// Iterators
 		List<String> l = new ArrayList<String>(Arrays.asList(new String[]{"foo","bar","baz"}));

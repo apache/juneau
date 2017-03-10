@@ -24,7 +24,7 @@ public class CallbackStringsTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void test() throws Exception {
-		RestClient c = new TestRestClient().setAccept("text/json+simple");
+		RestClient c = TestMicroservice.client().accept("text/json+simple").build();
 		String r;
 
 		r = c.doCallback("GET /testCallback").getResponseAsString();

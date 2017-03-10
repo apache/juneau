@@ -16,7 +16,6 @@ import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.rest.test.TestUtils.*;
 import static org.junit.Assert.*;
 
-import org.apache.juneau.json.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.*;
 
@@ -24,17 +23,8 @@ public class SerializersTest extends RestTestcase {
 
 	private static String URL = "/testSerializers";
 	private static boolean debug = false;
-	private static RestClient client;
+	private RestClient client = TestMicroservice.DEFAULT_CLIENT;
 
-	@BeforeClass
-	public static void beforeClass() {
-		client = new TestRestClient(JsonSerializer.DEFAULT, JsonParser.DEFAULT);
-	}
-
-	@AfterClass
-	public static void afterClass() {
-		client.closeQuietly();
-	}
 
 	//====================================================================================================
 	// Serializer defined on class.
@@ -43,13 +33,11 @@ public class SerializersTest extends RestTestcase {
 	public void testSerializerOnClass() throws Exception {
 		String url = URL + "/testSerializerOnClass";
 
-		client.setAccept("text/a");
-		String r = client.doGet(url).getResponseAsString();
+		String r = client.doGet(url).accept("text/a").getResponseAsString();
 		assertEquals("text/a - test1", r);
 
 		try {
-			client.setAccept("text/b");
-			client.doGet(url + "?noTrace=true").getResponseAsString();
+			client.doGet(url + "?noTrace=true").accept("text/b").getResponseAsString();
 			fail("Exception expected");
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_NOT_ACCEPTABLE,
@@ -57,8 +45,7 @@ public class SerializersTest extends RestTestcase {
 				"Supported media-types: [text/a, ");
 		}
 
-		client.setAccept("text/json");
-		r = client.doGet(url).getResponseAsString();
+		r = client.doGet(url).accept("text/json").getResponseAsString();
 		assertEquals("\"test1\"", r);
 	}
 
@@ -70,8 +57,7 @@ public class SerializersTest extends RestTestcase {
 		String url = URL + "/testSerializerOnMethod";
 
 		try {
-			client.setAccept("text/a");
-			client.doGet(url + "?noTrace=true").getResponseAsString();
+			client.doGet(url + "?noTrace=true").accept("text/a").getResponseAsString();
 			fail("Exception expected");
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_NOT_ACCEPTABLE,
@@ -81,8 +67,7 @@ public class SerializersTest extends RestTestcase {
 		}
 
 		try {
-			client.setAccept("text/json");
-			client.doGet(url + "?noTrace=true").getResponseAsString();
+			client.doGet(url + "?noTrace=true").accept("text/json").getResponseAsString();
 			fail("Exception expected");
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_NOT_ACCEPTABLE,
@@ -99,16 +84,13 @@ public class SerializersTest extends RestTestcase {
 	public void testSerializerOverriddenOnMethod() throws Exception {
 		String url = URL + "/testSerializerOverriddenOnMethod";
 
-		client.setAccept("text/a");
-		String r = client.doGet(url).getResponseAsString();
+		String r = client.doGet(url).accept("text/a").getResponseAsString();
 		assertEquals("text/c - test3", r);
 
-		client.setAccept("text/b");
-		r = client.doGet(url).getResponseAsString();
+		r = client.doGet(url).accept("text/b").getResponseAsString();
 		assertEquals("text/b - test3", r);
 
-		client.setAccept("text/json");
-		r = client.doGet(url).getResponseAsString();
+		r = client.doGet(url).accept("text/json").getResponseAsString();
 		assertEquals("\"test3\"", r);
 	}
 
@@ -119,16 +101,13 @@ public class SerializersTest extends RestTestcase {
 	public void testSerializerWithDifferentMediaTypes() throws Exception {
 		String url = URL + "/testSerializerWithDifferentMediaTypes";
 
-		client.setAccept("text/a");
-		String r = client.doGet(url).getResponseAsString();
+		String r = client.doGet(url).accept("text/a").getResponseAsString();
 		assertEquals("text/d - test4", r);
 
-		client.setAccept("text/d");
-		r = client.doGet(url).getResponseAsString();
+		r = client.doGet(url).accept("text/d").getResponseAsString();
 		assertEquals("text/d - test4", r);
 
-		client.setAccept("text/json");
-		r = client.doGet(url).getResponseAsString();
+		r = client.doGet(url).accept("text/json").getResponseAsString();
 		assertEquals("\"test4\"", r);
 	}
 
@@ -140,8 +119,7 @@ public class SerializersTest extends RestTestcase {
 		String url = URL + "/test406";
 
 		try {
-			client.setAccept("text/bad");
-			client.doGet(url + "?noTrace=true").getResponseAsString();
+			client.doGet(url + "?noTrace=true").accept("text/bad").getResponseAsString();
 			fail("Exception expected");
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_NOT_ACCEPTABLE,

@@ -22,6 +22,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
 import org.junit.*;
@@ -38,7 +39,7 @@ public class RoundTripLargeObjectsTest extends RoundTripTest {
 	private static final int NUM_RUNS = 10;
 	private static final int SIZE_PARAM = 20000;
 
-	public RoundTripLargeObjectsTest(String label, Serializer s, Parser p, int flags) throws Exception {
+	public RoundTripLargeObjectsTest(String label, SerializerBuilder s, ParserBuilder p, int flags) throws Exception {
 		super(label, s, p, flags);
 	}
 
@@ -48,55 +49,55 @@ public class RoundTripLargeObjectsTest extends RoundTripTest {
 			// Full round-trip testing
 			{ /* 0 */
 				"Json DEFAULT",
-				new JsonSerializer().setTrimNullProperties(false),
+				new JsonSerializerBuilder().trimNullProperties(false),
 				JsonParser.DEFAULT,
 				0
 			},
 			{ /* 1 */
 				"Json DEFAULT_LAX",
-				new JsonSerializer.Simple().setTrimNullProperties(false),
+				new JsonSerializerBuilder().simple().trimNullProperties(false),
 				JsonParser.DEFAULT,
 				0
 			},
 			{ /* 2 */
 				"Json DEFAULT_SQ",
-				new JsonSerializer.Simple().setTrimNullProperties(false),
+				new JsonSerializerBuilder().simple().trimNullProperties(false),
 				JsonParser.DEFAULT,
 				0
 			},
 			{ /* 3 */
 				"Xml DEFAULT w/namespaces,validation",
-				new XmlSerializer.NsSq().setTrimNullProperties(false).setAddNamespaceUrisToRoot(true).setUseWhitespace(true),
+				new XmlSerializerBuilder().sq().ns().trimNullProperties(false).addNamespaceUrisToRoot(true).useWhitespace(true),
 				XmlParser.DEFAULT,
 				CHECK_XML_WHITESPACE | VALIDATE_XML
 			},
 			{ /* 4 */
 				"Xml DEFAULT wo/namespaces,validation",
-				new XmlSerializer.Sq().setTrimNullProperties(false),
+				new XmlSerializerBuilder().sq().trimNullProperties(false),
 				XmlParser.DEFAULT,
 				CHECK_XML_WHITESPACE
 			},
 			{ /* 5 */
 				"Html",
-				new HtmlSerializer().setTrimNullProperties(false),
+				new HtmlSerializerBuilder().trimNullProperties(false),
 				HtmlParser.DEFAULT,
 				CHECK_XML_WHITESPACE
 			},
 			{ /* 6 */
 				"UrlEncoding",
-				new UrlEncodingSerializer().setTrimNullProperties(false),
+				new UrlEncodingSerializerBuilder().trimNullProperties(false),
 				UrlEncodingParser.DEFAULT,
 				0
 			},
 			{ /* 7 */
 				"Uon",
-				new UonSerializer().setTrimNullProperties(false),
+				new UonSerializerBuilder().trimNullProperties(false),
 				UonParser.DEFAULT,
 				0
 			},
 			{ /* 8 */
 				"MsgPack",
-				new MsgPackSerializer().setTrimNullProperties(false),
+				new MsgPackSerializerBuilder().trimNullProperties(false),
 				MsgPackParser.DEFAULT,
 				0
 			},

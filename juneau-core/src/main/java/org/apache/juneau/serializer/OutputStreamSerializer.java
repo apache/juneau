@@ -14,6 +14,7 @@ package org.apache.juneau.serializer;
 
 import java.io.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 
@@ -37,7 +38,15 @@ import org.apache.juneau.internal.*;
  */
 public abstract class OutputStreamSerializer extends Serializer {
 
-	@Override /* Serializer */
+	/**
+	 * Constructor.
+	 * @param propertyStore The property store containing all the settings for this object.
+	 */
+	protected OutputStreamSerializer(PropertyStore propertyStore) {
+		super(propertyStore);
+	}
+
+		@Override /* Serializer */
 	public boolean isWriterSerializer() {
 		return false;
 	}

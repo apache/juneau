@@ -65,7 +65,7 @@ public final class RestCall {
 	private int retries = 1;
 	private int redirectOnPostsTries = 5;
 	private long retryInterval = -1;
-	private RetryOn retryOn = RetryOn.DEFAULT;
+	private RetryOn retryOn;
 	private boolean ignoreErrors;
 	private boolean byLines = false;
 	private TeeWriter writers = new TeeWriter();
@@ -85,8 +85,11 @@ public final class RestCall {
 	protected RestCall(RestClient client, HttpRequestBase request) throws RestCallException {
 		this.client = client;
 		this.request = request;
-		for (RestCallInterceptor i : this.client.interceptors)
-			addInterceptor(i);
+		for (RestCallInterceptor i : this.client.getInterceptors())
+			interceptor(i);
+		this.retryOn = client.retryOn;
+		this.retries = client.retries;
+		this.retryInterval = client.retryInterval;
 	}
 
 	/**
@@ -103,15 +106,25 @@ public final class RestCall {
 	 * @return This object (for method chaining).
 	 * @throws RestCallException If a retry was attempted, but the entity was not repeatable.
 	 */
-	public RestCall setInput(final Object input) throws RestCallException {
+	public RestCall input(final Object input) throws RestCallException {
+
 		if (! (request instanceof HttpEntityEnclosingRequestBase))
 			throw new RestCallException(0, "Method does not support content entity.", request.getMethod(), request.getURI(), null);
-		HttpEntity entity = (input instanceof HttpEntity ? (HttpEntity)input : new RestRequestEntity(input, client.serializer));
+
+		HttpEntity entity = (input instanceof HttpEntity) ? (HttpEntity)input : new RestRequestEntity(input, client.getSerializer());
+
 		((HttpEntityEnclosingRequestBase)request).setEntity(entity);
+
 		if (retries > 1 && ! entity.isRepeatable())
 			throw new RestCallException("Rest call set to retryable, but entity is not repeatable.");
+
 		return this;
 	}
+
+
+	//--------------------------------------------------------------------------------
+	// HTTP headers
+	//--------------------------------------------------------------------------------
 
 	/**
 	 * Convenience method for setting a header value on the request.
@@ -122,9 +135,379 @@ public final class RestCall {
 	 * @param value The header value.
 	 * @return This object (for method chaining).
 	 */
-	public RestCall setHeader(String name, Object value) {
+	public RestCall header(String name, Object value) {
 		request.setHeader(name, value.toString());
 		return this;
+	}
+
+	/**
+	 * Sets the value for the <code>Accept</code> request header.
+	 * <p>
+	 * This overrides the media type specified on the parser, but is overridden by calling <code>header(<js>"Accept"</js>, value);</code>
+	 *
+	 * @param value The new header value.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall accept(Object value) {
+		return header("Accept", value);
+	}
+
+	/**
+	 * Sets the value for the <code>Accept-Charset</code> request header.
+	 * <p>
+	 * This is a shortcut for calling <code>header(<js>"Accept-Charset"</js>, value);</code>
+	 *
+	 * @param value The new header value.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall acceptCharset(Object value) {
+		return header("Accept-Charset", value);
+	}
+
+	/**
+	 * Sets the value for the <code>Accept-Encoding</code> request header.
+	 * <p>
+	 * This is a shortcut for calling <code>header(<js>"Accept-Encoding"</js>, value);</code>
+	 *
+	 * @param value The new header value.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall acceptEncoding(Object value) {
+		return header("Accept-Encoding", value);
+	}
+
+	/**
+	 * Sets the value for the <code>Accept-Language</code> request header.
+	 * <p>
+	 * This is a shortcut for calling <code>header(<js>"Accept-Language"</js>, value);</code>
+	 *
+	 * @param value The new header value.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall acceptLanguage(Object value) {
+		return header("Accept-Language", value);
+	}
+
+	/**
+	 * Sets the value for the <code>Authorization</code> request header.
+	 * <p>
+	 * This is a shortcut for calling <code>header(<js>"Authorization"</js>, value);</code>
+	 *
+	 * @param value The new header value.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall authorization(Object value) {
+		return header("Authorization", value);
+	}
+
+	/**
+	 * Sets the value for the <code>Cache-Control</code> request header.
+	 * <p>
+	 * This is a shortcut for calling <code>header(<js>"Cache-Control"</js>, value);</code>
+	 *
+	 * @param value The new header value.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall cacheControl(Object value) {
+		return header("Cache-Control", value);
+	}
+
+	/**
+	 * Sets the value for the <code>Connection</code> request header.
+	 * <p>
+	 * This is a shortcut for calling <code>header(<js>"Connection"</js>, value);</code>
+	 *
+	 * @param value The new header value.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall connection(Object value) {
+		return header("Connection", value);
+	}
+
+	/**
+	 * Sets the value for the <code>Content-Length</code> request header.
+	 * <p>
+	 * This is a shortcut for calling <code>header(<js>"Content-Length"</js>, value);</code>
+	 *
+	 * @param value The new header value.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall contentLength(Object value) {
+		return header("Content-Length", value);
+	}
+
+	/**
+	 * Sets the value for the <code>Content-Type</code> request header.
+	 * <p>
+	 * This overrides the media type specified on the serializer, but is overridden by calling <code>header(<js>"Content-Type"</js>, value);</code>
+	 *
+	 * @param value The new header value.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall contentType(Object value) {
+		return header("Content-Type", value);
+	}
+
+	/**
+	 * Sets the value for the <code>Date</code> request header.
+	 * <p>
+	 * This is a shortcut for calling <code>header(<js>"Date"</js>, value);</code>
+	 *
+	 * @param value The new header value.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall date(Object value) {
+		return header("Date", value);
+	}
+
+	/**
+	 * Sets the value for the <code>Expect</code> request header.
+	 * <p>
+	 * This is a shortcut for calling <code>header(<js>"Expect"</js>, value);</code>
+	 *
+	 * @param value The new header value.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall expect(Object value) {
+		return header("Expect", value);
+	}
+
+	/**
+	 * Sets the value for the <code>Forwarded</code> request header.
+	 * <p>
+	 * This is a shortcut for calling <code>header(<js>"Forwarded"</js>, value);</code>
+	 *
+	 * @param value The new header value.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall forwarded(Object value) {
+		return header("Forwarded", value);
+	}
+
+	/**
+	 * Sets the value for the <code>From</code> request header.
+	 * <p>
+	 * This is a shortcut for calling <code>header(<js>"From"</js>, value);</code>
+	 *
+	 * @param value The new header value.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall from(Object value) {
+		return header("From", value);
+	}
+
+	/**
+	 * Sets the value for the <code>Host</code> request header.
+	 * <p>
+	 * This is a shortcut for calling <code>header(<js>"Host"</js>, value);</code>
+	 *
+	 * @param value The new header value.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall host(Object value) {
+		return header("Host", value);
+	}
+
+	/**
+	 * Sets the value for the <code>If-Match</code> request header.
+	 * <p>
+	 * This is a shortcut for calling <code>header(<js>"If-Match"</js>, value);</code>
+	 *
+	 * @param value The new header value.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall ifMatch(Object value) {
+		return header("If-Match", value);
+	}
+
+	/**
+	 * Sets the value for the <code>If-Modified-Since</code> request header.
+	 * <p>
+	 * This is a shortcut for calling <code>header(<js>"If-Modified-Since"</js>, value);</code>
+	 *
+	 * @param value The new header value.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall ifModifiedSince(Object value) {
+		return header("If-Modified-Since", value);
+	}
+
+	/**
+	 * Sets the value for the <code>If-None-Match</code> request header.
+	 * <p>
+	 * This is a shortcut for calling <code>header(<js>"If-None-Match"</js>, value);</code>
+	 *
+	 * @param value The new header value.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall ifNoneMatch(Object value) {
+		return header("If-None-Match", value);
+	}
+
+	/**
+	 * Sets the value for the <code>If-Range</code> request header.
+	 * <p>
+	 * This is a shortcut for calling <code>header(<js>"If-Range"</js>, value);</code>
+	 *
+	 * @param value The new header value.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall ifRange(Object value) {
+		return header("If-Range", value);
+	}
+
+	/**
+	 * Sets the value for the <code>If-Unmodified-Since</code> request header.
+	 * <p>
+	 * This is a shortcut for calling <code>header(<js>"If-Unmodified-Since"</js>, value);</code>
+	 *
+	 * @param value The new header value.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall ifUnmodifiedSince(Object value) {
+		return header("If-Unmodified-Since", value);
+	}
+
+	/**
+	 * Sets the value for the <code>Max-Forwards</code> request header.
+	 * <p>
+	 * This is a shortcut for calling <code>header(<js>"Max-Forwards"</js>, value);</code>
+	 *
+	 * @param value The new header value.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall maxForwards(Object value) {
+		return header("If-Unmodified-Since", value);
+	}
+
+	/**
+	 * Sets the value for the <code>Origin</code> request header.
+	 * <p>
+	 * This is a shortcut for calling <code>header(<js>"Origin"</js>, value);</code>
+	 *
+	 * @param value The new header value.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall origin(Object value) {
+		return header("If-Unmodified-Since", value);
+	}
+
+	/**
+	 * Sets the value for the <code>Pragma</code> request header.
+	 * <p>
+	 * This is a shortcut for calling <code>header(<js>"Pragma"</js>, value);</code>
+	 *
+	 * @param value The new header value.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall pragma(Object value) {
+		return header("Pragma", value);
+	}
+
+	/**
+	 * Sets the value for the <code>Proxy-Authorization</code> request header.
+	 * <p>
+	 * This is a shortcut for calling <code>header(<js>"Proxy-Authorization"</js>, value);</code>
+	 *
+	 * @param value The new header value.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall proxyAuthorization(Object value) {
+		return header("Proxy-Authorization", value);
+	}
+
+	/**
+	 * Sets the value for the <code>Range</code> request header.
+	 * <p>
+	 * This is a shortcut for calling <code>header(<js>"Range"</js>, value);</code>
+	 *
+	 * @param value The new header value.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall range(Object value) {
+		return header("Range", value);
+	}
+
+	/**
+	 * Sets the value for the <code>Referer</code> request header.
+	 * <p>
+	 * This is a shortcut for calling <code>header(<js>"Referer"</js>, value);</code>
+	 *
+	 * @param value The new header value.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall referer(Object value) {
+		return header("Referer", value);
+	}
+
+	/**
+	 * Sets the value for the <code>TE</code> request header.
+	 * <p>
+	 * This is a shortcut for calling <code>header(<js>"TE"</js>, value);</code>
+	 *
+	 * @param value The new header value.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall te(Object value) {
+		return header("TE", value);
+	}
+
+	/**
+	 * Sets the value for the <code>User-Agent</code> request header.
+	 * <p>
+	 * This is a shortcut for calling <code>header(<js>"User-Agent"</js>, value);</code>
+	 *
+	 * @param value The new header value.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall userAgent(Object value) {
+		return header("User-Agent", value);
+	}
+
+	/**
+	 * Sets the value for the <code>Upgrade</code> request header.
+	 * <p>
+	 * This is a shortcut for calling <code>header(<js>"Upgrade"</js>, value);</code>
+	 *
+	 * @param value The new header value.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall upgrade(Object value) {
+		return header("Upgrade", value);
+	}
+
+	/**
+	 * Sets the value for the <code>Via</code> request header.
+	 * <p>
+	 * This is a shortcut for calling <code>header(<js>"Via"</js>, value);</code>
+	 *
+	 * @param value The new header value.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall via(Object value) {
+		return header("Via", value);
+	}
+
+	/**
+	 * Sets the value for the <code>Warning</code> request header.
+	 * <p>
+	 * This is a shortcut for calling <code>header(<js>"Warning"</js>, value);</code>
+	 *
+	 * @param value The new header value.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall warning(Object value) {
+		return header("Warning", value);
+	}
+
+	/**
+	 * Sets the client version by setting the value for the <js>"X-Client-Version"</js> header.
+	 *
+	 * @param version The version string (e.g. <js>"1.2.3"</js>)
+	 * @return This object (for method chaining).
+	 */
+	public RestCall clientVersion(String version) {
+		return header("X-Client-Version", version);
 	}
 
 	/**
@@ -137,7 +520,8 @@ public final class RestCall {
 	 * @return This object (for method chaining).
 	 * @throws RestCallException If current entity is not repeatable.
 	 */
-	public RestCall setRetryable(int retries, long interval, RetryOn retryOn) throws RestCallException {
+	@SuppressWarnings("hiding")
+	public RestCall retryable(int retries, long interval, RetryOn retryOn) throws RestCallException {
 		if (request instanceof HttpEntityEnclosingRequestBase) {
 		HttpEntity e = ((HttpEntityEnclosingRequestBase)request).getEntity();
 		if (e != null && ! e.isRepeatable())
@@ -174,7 +558,7 @@ public final class RestCall {
 	 * @param maxAttempts Allow a redirect to occur this number of times.
 	 * @return This object (for method chaining).
 	 */
-	public RestCall setRedirectMaxAttempts(int maxAttempts) {
+	public RestCall redirectMaxAttempts(int maxAttempts) {
 		this.redirectOnPostsTries = maxAttempts;
 		return this;
 	}
@@ -185,7 +569,7 @@ public final class RestCall {
 	 * @param interceptor The interceptor to add to this call.
 	 * @return This object (for method chaining).
 	 */
-	public RestCall addInterceptor(RestCallInterceptor interceptor) {
+	public RestCall interceptor(RestCallInterceptor interceptor) {
 		interceptors.add(interceptor);
 		interceptor.onInit(this);
 		return this;
@@ -352,7 +736,7 @@ public final class RestCall {
 	 * @return This object (for method chaining).
 	 */
 	public RestCall failurePattern(final String errorPattern) {
-		addResponsePattern(
+		responsePattern(
 			new ResponsePattern(errorPattern) {
 				@Override
 				public void onMatch(RestCall rc, Matcher m) throws RestCallException {
@@ -383,7 +767,7 @@ public final class RestCall {
 	 * @return This object (for method chaining).
 	 */
 	public RestCall successPattern(String successPattern) {
-		addResponsePattern(
+		responsePattern(
 			new ResponsePattern(successPattern) {
 				@Override
 				public void onNoMatch(RestCall rc) throws RestCallException {
@@ -405,9 +789,9 @@ public final class RestCall {
 	 * @param responsePattern The response pattern finder.
 	 * @return This object (for method chaining).
 	 */
-	public RestCall addResponsePattern(final ResponsePattern responsePattern) {
+	public RestCall responsePattern(final ResponsePattern responsePattern) {
 		captureResponse();
-		addInterceptor(
+		interceptor(
 			new RestCallInterceptor() {
 				@Override
 				public void onClose(RestCall restCall) throws RestCallException {
@@ -506,7 +890,7 @@ public final class RestCall {
 				retries--;
 				Exception ex = null;
 				try {
-			response = client.execute(request);
+					response = client.execute(request);
 					sc = (response == null || response.getStatusLine() == null) ? -1 : response.getStatusLine().getStatusCode();
 				} catch (Exception e) {
 					ex = e;
@@ -644,9 +1028,9 @@ public final class RestCall {
 	 * @throws RestCallException If no parser was defined on the client.
 	 */
 	protected Parser getParser() throws RestCallException {
-		if (client.parser == null)
+		if (client.getParser() == null)
 			throw new RestCallException(0, "No parser defined on client", request.getMethod(), request.getURI(), null);
-		return client.parser;
+		return client.getParser();
 	}
 
 	/**
@@ -656,9 +1040,9 @@ public final class RestCall {
 	 * @throws RestCallException If no serializer was defined on the client.
 	 */
 	protected Serializer getSerializer() throws RestCallException {
-		if (client.serializer == null)
+		if (client.getSerializer() == null)
 			throw new RestCallException(0, "No serializer defined on client", request.getMethod(), request.getURI(), null);
-		return client.serializer;
+		return client.getSerializer();
 	}
 
 	/**
@@ -861,7 +1245,7 @@ public final class RestCall {
 	 * @param header The header to set on the request.
 	 * @return This object (for method chaining).
 	 */
-	public RestCall setHeader(Header header) {
+	public RestCall header(Header header) {
 		request.setHeader(header);
 		return this;
 	}
@@ -897,7 +1281,7 @@ public final class RestCall {
 	 * @return This object (for method chaining).
 	 */
 	public RestCall logTo(Level level, Logger log) {
-		addInterceptor(new RestCallLogger(level, log));
+		interceptor(new RestCallLogger(level, log));
 		return this;
 	}
 }

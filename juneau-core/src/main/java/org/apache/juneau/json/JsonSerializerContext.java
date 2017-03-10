@@ -18,10 +18,10 @@ import org.apache.juneau.serializer.*;
 /**
  * Configurable properties on the {@link JsonSerializer} class.
  * <p>
- * Context properties are set by calling {@link ContextFactory#setProperty(String, Object)} on the context factory
- * returned {@link CoreApi#getContextFactory()}.
+ * Context properties are set by calling {@link PropertyStore#setProperty(String, Object)} on the property store
+ * passed into the constructor.
  * <p>
- * See {@link ContextFactory} for more information about context properties.
+ * See {@link PropertyStore} for more information about context properties.
  *
  * <h5 class='section'>Inherited configurable properties:</h5>
  * <ul class='javahierarchy'>
@@ -92,15 +92,15 @@ public final class JsonSerializerContext extends SerializerContext {
 	/**
 	 * Constructor.
 	 * <p>
-	 * Typically only called from {@link ContextFactory#getContext(Class)}.
+	 * Typically only called from {@link PropertyStore#getContext(Class)}.
 	 *
-	 * @param cf The factory that created this context.
+	 * @param ps The property store that created this context.
 	 */
-	public JsonSerializerContext(ContextFactory cf) {
-		super(cf);
-		simpleMode = cf.getProperty(JSON_simpleMode, boolean.class, false);
-		escapeSolidus = cf.getProperty(JSON_escapeSolidus, boolean.class, false);
-		addBeanTypeProperties = cf.getProperty(JSON_addBeanTypeProperties, boolean.class, cf.getProperty(SERIALIZER_addBeanTypeProperties, boolean.class, true));
+	public JsonSerializerContext(PropertyStore ps) {
+		super(ps);
+		simpleMode = ps.getProperty(JSON_simpleMode, boolean.class, false);
+		escapeSolidus = ps.getProperty(JSON_escapeSolidus, boolean.class, false);
+		addBeanTypeProperties = ps.getProperty(JSON_addBeanTypeProperties, boolean.class, ps.getProperty(SERIALIZER_addBeanTypeProperties, boolean.class, true));
 	}
 
 	@Override /* Context */

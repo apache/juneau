@@ -27,7 +27,7 @@ import java.io.*;
  * 	<li>{@link #resolve(VarResolverSession,String)} - For simple vars.
  * 	<li>{@link #resolveTo(VarResolverSession,Writer,String)} - For streamed vars.
  * </ul>
- * Subclasses MUST implement a no-arg constructor so that class names can be passed to the {@link VarResolver#addVars(Class...)} method.
+ * Subclasses MUST implement a no-arg constructor so that class names can be passed to the {@link VarResolverBuilder#vars(Class...)} method.
  * They must also be thread safe!
  * <p>
  * Two direct abstract subclasses are provided to differentiated between simple and streamed vars:

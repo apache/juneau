@@ -26,7 +26,7 @@ import org.apache.juneau.serializer.*;
  * Serializers and parsers use session objects to retrieve config properties and to use it
  * 	as a scratchpad during serialize and parse actions.
  *
- * @see ContextFactory
+ * @see PropertyStore
  */
 public abstract class Session {
 

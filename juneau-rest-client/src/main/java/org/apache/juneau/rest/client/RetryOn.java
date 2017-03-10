@@ -28,6 +28,16 @@ public interface RetryOn {
 	};
 
 	/**
+	 * Default RetryOn that returns <jk>true</jk> if the HTTP connection could not be made.
+	 */
+	public static final RetryOn CONNECTION_LOST = new RetryOn() {
+		@Override /* RetryOn */
+		public boolean onCode(int httpResponseCode) {
+			return httpResponseCode <= 0;
+		}
+	};
+
+	/**
 	 * Subclasses should override this method to determine whether the HTTP response is retryable.
 	 *
 	 * @param httpResponseCode The HTTP response code.

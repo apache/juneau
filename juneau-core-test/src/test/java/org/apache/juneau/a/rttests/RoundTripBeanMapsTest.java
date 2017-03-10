@@ -19,7 +19,7 @@ import java.util.*;
 
 import javax.xml.datatype.*;
 
-import org.apache.juneau.BeanDictionaryMap;
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.json.annotation.*;
@@ -36,7 +36,7 @@ import org.junit.*;
 @SuppressWarnings({"unchecked","serial","javadoc"})
 public class RoundTripBeanMapsTest extends RoundTripTest {
 
-	public RoundTripBeanMapsTest(String label, Serializer s, Parser p, int flags) throws Exception {
+	public RoundTripBeanMapsTest(String label, SerializerBuilder s, ParserBuilder p, int flags) throws Exception {
 		super(label, s, p, flags);
 	}
 
@@ -219,14 +219,14 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	//====================================================================================================
 	@Test
 	public void testSubTypesUsingAnnotation() throws Exception {
-		JsonSerializer js = JsonSerializer.DEFAULT_LAX.clone().addPojoSwaps(XMLGregorianCalendarSwap.class);
+		JsonSerializer js = new JsonSerializerBuilder().simple().pojoSwaps(XMLGregorianCalendarSwap.class).build();
 
 		// Skip validation-only tests
 		if (isValidationOnly())
 			return;
 
-		Serializer s = getSerializer().clone().addPojoSwaps(XMLGregorianCalendarSwap.class);
-		Parser p = getParser().clone().addPojoSwaps(XMLGregorianCalendarSwap.class);
+		Serializer s = getSerializer().builder().pojoSwaps(XMLGregorianCalendarSwap.class).build();
+		Parser p = getParser().builder().pojoSwaps(XMLGregorianCalendarSwap.class).build();
 
 		B1 b1 = B1.create();
 		Object r = s.serialize(b1);
@@ -292,14 +292,14 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	//====================================================================================================
 	@Test
 	public void testSubTypesUsingBeanFilter() throws Exception {
-		JsonSerializer js = JsonSerializer.DEFAULT_LAX.clone().addPojoSwaps(XMLGregorianCalendarSwap.class);
+		JsonSerializer js = new JsonSerializerBuilder().simple().pojoSwaps(XMLGregorianCalendarSwap.class).build();
 
 		// Skip validation-only tests
 		if (isValidationOnly())
 			return;
 
-		Serializer s = getSerializer().clone().addBeanFilters(CFilter.class).addPojoSwaps(XMLGregorianCalendarSwap.class);
-		Parser p = getParser().clone().addBeanFilters(CFilter.class).addPojoSwaps(XMLGregorianCalendarSwap.class);
+		Serializer s = getSerializer().builder().beanFilters(CFilter.class).pojoSwaps(XMLGregorianCalendarSwap.class).build();
+		Parser p = getParser().builder().beanFilters(CFilter.class).pojoSwaps(XMLGregorianCalendarSwap.class).build();
 
 		C1 c1 = C1.create();
 		Object r = s.serialize(c1);
@@ -357,7 +357,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	public static class CFilter extends BeanFilterBuilder {
 		public CFilter() {
 			super(C.class);
-			addToBeanDictionary(CFilterDictionaryMap.class);
+			beanDictionary(CFilterDictionaryMap.class);
 		}
 	}
 
@@ -420,8 +420,8 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		if (isValidationOnly())
 			return;
 
-		Serializer s = getSerializer().clone().addBeanFilters(CAFilter.class);
-		Parser p = getParser().clone().addBeanFilters(CAFilter.class);
+		Serializer s = getSerializer().builder().beanFilters(CAFilter.class).build();
+		Parser p = getParser().builder().beanFilters(CAFilter.class).build();
 
 		CA1 c1 = CA1.create();
 		Object r = s.serialize(c1);
@@ -452,7 +452,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	public static class CAFilter extends BeanFilterBuilder {
 		public CAFilter() {
 			super(CA.class);
-			addToBeanDictionary(CAFilterDictionaryMap.class);
+			beanDictionary(CAFilterDictionaryMap.class);
 		}
 	}
 
@@ -498,14 +498,14 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	//====================================================================================================
 	@Test
 	public void testPropertiesUsingBeanFilter() throws Exception {
-		JsonSerializer js = JsonSerializer.DEFAULT_LAX.clone().addBeanFilters(D2Filter.class);
+		JsonSerializer js = new JsonSerializerBuilder().simple().beanFilters(D2Filter.class).build();
 
 		// Skip validation-only tests
 		if (isValidationOnly())
 			return;
 
-		Serializer s = getSerializer().clone().addBeanFilters(D2Filter.class);
-		Parser p = getParser().clone().addBeanFilters(D2Filter.class);
+		Serializer s = getSerializer().builder().beanFilters(D2Filter.class).build();
+		Parser p = getParser().builder().beanFilters(D2Filter.class).build();
 
 		D2 d = new D2().init();
 		Object r = s.serialize(d);
@@ -526,7 +526,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	public static class D2Filter extends BeanFilterBuilder {
 		public D2Filter() {
 			super(D2.class);
-			setProperties("f3,f2");
+			properties("f3,f2");
 		}
 	}
 
@@ -568,8 +568,8 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 		if (isValidationOnly())
 			return;
 
-		Serializer s = getSerializer().clone().addBeanFilters(E2Filter.class);
-		Parser p = getParser().clone().addBeanFilters(E2Filter.class);
+		Serializer s = getSerializer().builder().beanFilters(E2Filter.class).build();
+		Parser p = getParser().builder().beanFilters(E2Filter.class).build();
 
 		E2 e = new E2().init();
 		Object r = s.serialize(e);
@@ -589,7 +589,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	public static class E2Filter extends BeanFilterBuilder {
 		public E2Filter() {
 			super(E2.class);
-			setExcludeProperties("f2");
+			excludeProperties("f2");
 		}
 	}
 
@@ -630,8 +630,8 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	//====================================================================================================
 	@Test
 	public void testInterfaceClassUsingBeanFilter() throws Exception {
-		Serializer s;
-		Parser p;
+		SerializerBuilder s = getSerializer().builder();
+		ParserBuilder p = getParser() == null ? null : getParser().builder();
 		FB2 t;
 		Object r;
 
@@ -640,30 +640,30 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 			return;
 
 		// --- BeanFilter defined on parent class ---
-		s = getSerializer().clone().addBeanFilters(FB1Filter.class);
-		p = getParser().clone().addBeanFilters(FB1Filter.class);
+		s.beanFilters(FB1Filter.class);
+		p.beanFilters(FB1Filter.class);
 
 		t = new FB2().init();
-		r = s.serialize(t);
-		t = p.parse(r, FB2.class);
+		r = s.build().serialize(t);
+		t = p.build().parse(r, FB2.class);
 		assertObjectEquals("{f1:'f1'}", t);
 
 		// --- BeanFilter defined on child class class ---
-		s = getSerializer().clone().addBeanFilters(FB2Filter.class);
-		p = getParser().clone().addBeanFilters(FB2Filter.class);
+		s.beanFilters(FB2Filter.class);
+		p.beanFilters(FB2Filter.class);
 
 		t = new FB2().init();
-		r = s.serialize(t);
-		t = p.parse(r, FB2.class);
+		r = s.build().serialize(t);
+		t = p.build().parse(r, FB2.class);
 		assertObjectEquals("{f1:'f1'}", t);
 
 		// --- BeanFilter defined as plain class ---
-		s = getSerializer().clone().addBeanFilters(FB1.class);
-		p = getParser().clone().addBeanFilters(FB1.class);
+		s.beanFilters(FB1.class);
+		p.beanFilters(FB1.class);
 
 		t = new FB2().init();
-		r = s.serialize(t);
-		t = p.parse(r, FB2.class);
+		r = s.build().serialize(t);
+		t = p.build().parse(r, FB2.class);
 		assertObjectEquals("{f1:'f1'}", t);
 	}
 

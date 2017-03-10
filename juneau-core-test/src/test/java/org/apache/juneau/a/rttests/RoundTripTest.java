@@ -14,7 +14,7 @@ package org.apache.juneau.a.rttests;
 
 import static org.apache.juneau.a.rttests.RoundTripTest.Flags.*;
 
-import java.lang.reflect.Type;
+import java.lang.reflect.*;
 import java.util.*;
 import java.util.Map.*;
 
@@ -25,6 +25,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
 import org.junit.runner.*;
@@ -48,136 +49,136 @@ public abstract class RoundTripTest {
 			// Full round-trip testing
 			{ /* 0 */
 				"Json - default",
-				new JsonSerializer().setTrimNullProperties(false),
-				JsonParser.DEFAULT,
+				new JsonSerializerBuilder().trimNullProperties(false),
+				new JsonParserBuilder(),
 				0
 			},
 			{ /* 1 */
 				"Json - lax",
-				new JsonSerializer.Simple().setTrimNullProperties(false),
-				JsonParser.DEFAULT,
+				new JsonSerializerBuilder().simple().trimNullProperties(false),
+				new JsonParserBuilder(),
 				0
 			},
 			{ /* 2 */
 				"Json - lax, readable",
-				new JsonSerializer.SimpleReadable().setTrimNullProperties(false),
-				JsonParser.DEFAULT,
+				new JsonSerializerBuilder().simple().ws().trimNullProperties(false),
+				new JsonParserBuilder(),
 				0
 			},
 			{ /* 3 */
 				"Xml - namespaces, validation, readable",
-				new XmlSerializer.NsSq().setTrimNullProperties(false).setAddNamespaceUrisToRoot(true).setUseWhitespace(true),
-				XmlParser.DEFAULT,
+				new XmlSerializerBuilder().ns().sq().trimNullProperties(false).addNamespaceUrisToRoot(true).useWhitespace(true),
+				new XmlParserBuilder(),
 				CHECK_XML_WHITESPACE | VALIDATE_XML
 			},
 			{ /* 4 */
 				"Xml - no namespaces, validation",
-				new XmlSerializer.Sq().setTrimNullProperties(false),
-				XmlParser.DEFAULT,
+				new XmlSerializerBuilder().sq().trimNullProperties(false),
+				new XmlParserBuilder(),
 				CHECK_XML_WHITESPACE
 			},
 			{ /* 5 */
 				"Html - default",
-				new HtmlSerializer().setTrimNullProperties(false),
-				HtmlParser.DEFAULT,
+				new HtmlSerializerBuilder().trimNullProperties(false),
+				new HtmlParserBuilder(),
 				CHECK_XML_WHITESPACE
 			},
 			{ /* 6 */
 				"Html - readable",
-				new HtmlSerializer.SqReadable().setTrimNullProperties(false),
-				HtmlParser.DEFAULT,
+				new HtmlSerializerBuilder().sq().ws().trimNullProperties(false),
+				new HtmlParserBuilder(),
 				CHECK_XML_WHITESPACE
 			},
 			{ /* 7 */
 				"Html - with key/value headers",
-				new HtmlSerializer().setAddKeyValueTableHeaders(true),
-				HtmlParser.DEFAULT,
+				new HtmlSerializerBuilder().addKeyValueTableHeaders(true),
+				new HtmlParserBuilder(),
 				CHECK_XML_WHITESPACE
 			},
 			{ /* 8 */
 				"Uon - default",
-				new UonSerializer().setTrimNullProperties(false),
-				UonParser.DEFAULT,
+				new UonSerializerBuilder().trimNullProperties(false),
+				new UonParserBuilder(),
 				0
 			},
 			{ /* 9 */
 				"Uon - readable",
-				new UonSerializer.Readable().setTrimNullProperties(false),
-				UonParser.DEFAULT,
+				new UonSerializerBuilder().ws().trimNullProperties(false),
+				new UonParserBuilder(),
 				0
 			},
 			{ /* 10 */
 				"Uon - encoded",
-				new UonSerializer.Encoding().setTrimNullProperties(false),
-				UonParser.DEFAULT_DECODING,
+				new UonSerializerBuilder().encoding().trimNullProperties(false),
+				new UonParserBuilder().decoding(),
 				0
 			},
 			{ /* 11 */
 				"UrlEncoding - default",
-				new UrlEncodingSerializer().setTrimNullProperties(false),
-				UrlEncodingParser.DEFAULT,
+				new UrlEncodingSerializerBuilder().trimNullProperties(false),
+				new UrlEncodingParserBuilder(),
 				0
 			},
 			{ /* 12 */
 				"UrlEncoding - readable",
-				new UrlEncodingSerializer.Readable().setTrimNullProperties(false),
-				UrlEncodingParser.DEFAULT,
+				new UrlEncodingSerializerBuilder().ws().trimNullProperties(false),
+				new UrlEncodingParserBuilder(),
 				0
 			},
 			{ /* 13 */
 				"UrlEncoding - expanded params",
-				new UrlEncodingSerializer().setExpandedParams(true),
-				new UrlEncodingParser().setExpandedParams(true),
+				new UrlEncodingSerializerBuilder().expandedParams(true),
+				new UrlEncodingParserBuilder().expandedParams(true),
 				0
 			},
 			{ /* 14 */
 				"Rdf.Xml",
-				new RdfSerializer.Xml().setTrimNullProperties(false).setAddLiteralTypes(true),
-				RdfParser.DEFAULT_XML,
+				new RdfSerializerBuilder().trimNullProperties(false).addLiteralTypes(true),
+				new RdfParserBuilder().xml(),
 				0
 			},
 			{ /* 15 */
 				"Rdf.XmlAbbrev",
-				new RdfSerializer.XmlAbbrev().setTrimNullProperties(false).setAddLiteralTypes(true),
-				RdfParser.DEFAULT_XML,
+				new RdfSerializerBuilder().xmlabbrev().trimNullProperties(false).addLiteralTypes(true),
+				new RdfParserBuilder().xml(),
 				0
 			},
 			{ /* 16 */
 				"Rdf.Turtle",
-				new RdfSerializer.Turtle().setTrimNullProperties(false).setAddLiteralTypes(true),
-				RdfParser.DEFAULT_TURTLE,
+				new RdfSerializerBuilder().turtle().trimNullProperties(false).addLiteralTypes(true),
+				new RdfParserBuilder().turtle(),
 				0
 			},
 			{ /* 17 */
 				"Rdf.NTriple",
-				new RdfSerializer.NTriple().setTrimNullProperties(false).setAddLiteralTypes(true),
-				RdfParser.DEFAULT_NTRIPLE,
+				new RdfSerializerBuilder().ntriple().trimNullProperties(false).addLiteralTypes(true),
+				new RdfParserBuilder().ntriple(),
 				0
 			},
 			{ /* 18 */
 				"Rdf.N3",
-				new RdfSerializer.N3().setTrimNullProperties(false).setAddLiteralTypes(true),
-				RdfParser.DEFAULT_N3,
+				new RdfSerializerBuilder().n3().trimNullProperties(false).addLiteralTypes(true),
+				new RdfParserBuilder().n3(),
 				0
 			},
 			{ /* 19 */
 				"MsgPack",
-				new MsgPackSerializer().setTrimNullProperties(false),
-				MsgPackParser.DEFAULT,
+				new MsgPackSerializerBuilder().trimNullProperties(false),
+				new MsgPackParserBuilder(),
 				0
 			},
 
 			// Validation testing only
 			{ /* 20 */
 				"Json schema",
-				new JsonSchemaSerializer().setTrimNullProperties(false),
+				new JsonSchemaSerializerBuilder().trimNullProperties(false),
 				null,
 				RETURN_ORIGINAL_OBJECT
 			},
 			{ /* 21 */
 				"Xml schema",
-				new XmlSchemaSerializer().setTrimNullProperties(false),
-				new XmlValidatorParser(),
+				new XmlSchemaSerializerBuilder().trimNullProperties(false),
+				new XmlValidatorParserBuilder(),
 				RETURN_ORIGINAL_OBJECT | CHECK_XML_WHITESPACE
 			},
 		});
@@ -191,19 +192,19 @@ public abstract class RoundTripTest {
 	protected String label;
 	public boolean debug = false;
 
-	public RoundTripTest(String label, Serializer s, Parser p, int flags) throws Exception {
-		this.s = s.clone().addBeanFilters(getBeanFilters()).addPojoSwaps(getPojoSwaps()).addToBeanDictionary(getDictionary()).setProperties(getProperties());
-		this.p = p == null ? null : p.clone().addBeanFilters(getBeanFilters()).addPojoSwaps(getPojoSwaps()).addToBeanDictionary(getDictionary()).setProperties(getProperties());
+	public RoundTripTest(String label, SerializerBuilder s, ParserBuilder p, int flags) throws Exception {
 		this.label = label;
 
 		Map<Class<Object>, Class<? extends Object>> m = getImplClasses();
 		if (m != null) {
 			for (Entry<Class<Object>, Class<? extends Object>> e : m.entrySet()) {
-				this.s.addImplClass(e.getKey(), e.getValue());
-				if (this.p != null)
-					this.p.addImplClass(e.getKey(), e.getValue());
+				s.implClass(e.getKey(), e.getValue());
+				if (p != null)
+					p.implClass(e.getKey(), e.getValue());
 			}
 		}
+		this.s = s.beanFilters(getBeanFilters()).pojoSwaps(getPojoSwaps()).beanDictionary(getDictionary()).properties(getProperties()).build();
+		this.p = p == null ? null : p.beanFilters(getBeanFilters()).pojoSwaps(getPojoSwaps()).beanDictionary(getDictionary()).properties(getProperties()).build();
 		this.validateXmlWhitespace = (flags & CHECK_XML_WHITESPACE) > 0;
 		this.validateXml = (flags & VALIDATE_XML) > 0;
 		this.returnOriginalObject = (flags & RETURN_ORIGINAL_OBJECT) > 0;
@@ -258,22 +259,22 @@ public abstract class RoundTripTest {
 		return p;
 	}
 
-	protected void addBeanFilters(Class<?>...c) {
-		s.addBeanFilters(c);
+	protected void beanFilters(Class<?>...c) {
+		s = s.builder().beanFilters(c).build();
 		if (p != null)
-			p.addBeanFilters(c);
+			p = p.builder().beanFilters(c).build();
 	}
 
-	protected void addPojoSwaps(Class<?>...c) {
-		s.addPojoSwaps(c);
+	protected void pojoSwaps(Class<?>...c) {
+		s = s.builder().pojoSwaps(c).build();
 		if (p != null)
-			p.addPojoSwaps(c);
+			p = p.builder().pojoSwaps(c).build();
 	}
 
-	protected void addToBeanDictionary(Class<?>...c) {
-		s.addToBeanDictionary(c);
+	protected void beanDictionary(Class<?>...c) {
+		s = s.builder().beanDictionary(c).build();
 		if (p != null)
-			p.addToBeanDictionary(c);
+			p = p.builder().beanDictionary(c).build();
 	}
 
 	public boolean isValidationOnly() {

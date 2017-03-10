@@ -59,12 +59,12 @@ import org.apache.juneau.serializer.*;
  * 		can be instantiated by the parser before being converted into the normal class by the untransform method).
  * </ul>
  * <p>
- * Surrogate classes are associated with serializers and parsers using the {@link CoreApi#addPojoSwaps(Class...)} method.
+ * Surrogate classes are associated with serializers and parsers using the {@link CoreObjectBuilder#pojoSwaps(Class...)} method.
  * <p class='bcode'>
  * 	<ja>@Test</ja>
  * 	<jk>public void</jk> test() <jk>throws</jk> Exception {
- * 		JsonSerializer s = <jk>new</jk> JsonSerializer.Simple().addPojoSwaps(Surrogate.<jk>class</jk>);
- * 		JsonParser p = <jk>new</jk> JsonParser().addPojoSwaps(Surrogate.<jk>class</jk>);
+ * 		JsonSerializer s = <jk>new</jk> JsonSerializerBuilder().simple().pojoSwaps(Surrogate.<jk>class</jk>).build();
+ * 		JsonParser p = <jk>new</jk> JsonParserBuilder().pojoSwaps(Surrogate.<jk>class</jk>).build();
  * 		String r;
  * 		Normal n = Normal.<jsm>create</jsm>();
  *

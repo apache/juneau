@@ -176,7 +176,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * 	Person p = <jk>new</jk> Person();
 	 *
 	 * 	<jc>// Create a bean context and add the ISO8601 date-time swap</jc>
-	 * 	BeanContext beanContext = <jk>new</jk> BeanContext().addPojoSwaps(DateSwap.ISO8601DT.<jk>class</jk>);
+	 * 	BeanContext beanContext = <jk>new</jk> BeanContext().pojoSwaps(DateSwap.ISO8601DT.<jk>class</jk>);
 	 *
 	 * 	<jc>// Wrap our bean in a bean map</jc>
 	 * 	BeanMap&lt;Person&gt; b = beanContext.forBean(p);
@@ -251,7 +251,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * 	p.setBirthDate(<jk>new</jk> Date(1, 2, 3, 4, 5, 6));
 	 *
 	 * 	<jc>// Create a bean context and add the ISO8601 date-time swap</jc>
-	 * 	BeanContext beanContext = <jk>new</jk> BeanContext().addPojoSwaps(DateSwap.ISO8601DT.<jk>class</jk>);
+	 * 	BeanContext beanContext = <jk>new</jk> BeanContext().pojoSwaps(DateSwap.ISO8601DT.<jk>class</jk>);
 	 *
 	 * 	<jc>// Wrap our bean in a bean map</jc>
 	 * 	BeanMap&lt;Person&gt; b = beanContext.forBean(p);

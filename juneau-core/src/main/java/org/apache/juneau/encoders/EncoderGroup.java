@@ -12,14 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.encoders;
 
-import static org.apache.juneau.internal.ArrayUtils.*;
-
 import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
-import org.apache.juneau.serializer.*;
 
 /**
  * Represents the group of {@link Encoder encoders} keyed by codings.
@@ -39,13 +35,13 @@ import org.apache.juneau.serializer.*;
  * Adding new entries will cause the entries to be prepended to the group.
  * This allows for previous encoders to be overridden through subsequent calls.
  * <p>
- * For example, calling <code>g.append(E1.<jk>class</jk>,E2.<jk>class</jk>).append(E3.<jk>class</jk>,E4.<jk>class</jk>)</code>
+ * For example, calling <code>groupBuilder.append(E1.<jk>class</jk>,E2.<jk>class</jk>).append(E3.<jk>class</jk>,E4.<jk>class</jk>)</code>
  * 	will result in the order <code>E3, E4, E1, E2</code>.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Create an encoder group with support for gzip compression.</jc>
- * 	EncoderGroup g = <jk>new</jk> EncoderGroup().append(GzipEncoder.<jk>class</jk>);
+ * 	EncoderGroup g = <jk>new</jk> EncoderGroupBuilder().append(GzipEncoder.<jk>class</jk>).build();
  *
  * 	<jc>// Should return "gzip"</jc>
  * 	String matchedCoding = g.findMatch(<js>"compress;q=1.0, gzip;q=0.8, identity;q=0.5, *;q=0"</js>);
@@ -54,69 +50,22 @@ import org.apache.juneau.serializer.*;
  * 	IEncoder encoder = g.getEncoder(matchedCoding);
  * </p>
  */
-public final class EncoderGroup extends Lockable {
+public final class EncoderGroup {
 
 	// Maps Accept-Encoding headers to matching encoders.
 	private final Map<String,EncoderMatch> cache = new ConcurrentHashMap<String,EncoderMatch>();
 
-	private final CopyOnWriteArrayList<Encoder> encoders = new CopyOnWriteArrayList<Encoder>();
+	final Encoder[] encoders;
 
 	/**
-	 * Adds the specified encoder to the beginning of this group.
+	 * Constructor
 	 *
-	 * @param e The encoder to add to this group.
-	 * @return This object (for method chaining).
+	 * @param encoders The encoders to add to this group.
 	 */
-	public EncoderGroup append(Encoder e) {
-		checkLock();
-		synchronized(this) {
-			cache.clear();
-			encoders.add(0, e);
-		}
-		return this;
+	public EncoderGroup(Encoder[] encoders) {
+		this.encoders = Arrays.copyOf(encoders, encoders.length);
 	}
 
-	/**
-	 * Registers the specified encoders with this group.
-	 *
-	 * @param e The encoders to append to this group.
-	 * @return This object (for method chaining).
-	 * @throws Exception Thrown if {@link Encoder} could not be constructed.
-	 */
-	public EncoderGroup append(Class<? extends Encoder>...e) throws Exception {
-		for (Class<? extends Encoder> ee : ArrayUtils.reverse(e))
-			append(ee);
-		return this;
-	}
-
-	/**
-	 * Same as {@link #append(Class[])}, except specify a single class to avoid unchecked compile warnings.
-	 *
-	 * @param e The encoder to append to this group.
-	 * @return This object (for method chaining).
-	 * @throws Exception Thrown if {@link Serializer} could not be constructed.
-	 */
-	public EncoderGroup append(Class<? extends Encoder> e) throws Exception {
-		try {
-			append(e.newInstance());
-		} catch (NoClassDefFoundError x) {
-			// Ignore if dependent library not found (e.g. Jena).
-			System.err.println(e); // NOT DEBUG
-		}
-		return this;
-	}
-
-	/**
-	 * Adds the encoders in the specified group to this group.
-	 *
-	 * @param g The group containing the encoders to add to this group.
-	 * @return This object (for method chaining).
-	 */
-	public EncoderGroup append(EncoderGroup g) {
-		for (Encoder e : reverse(g.encoders.toArray(new Encoder[g.encoders.size()])))
-			append(e);
-		return this;
-	}
 
 	/**
 	 * Returns the coding string for the matching encoder that can handle the specified <code>Accept-Encoding</code>
@@ -130,7 +79,7 @@ public final class EncoderGroup extends Lockable {
 	 * @return The coding value (e.g. <js>"gzip"</js>).
 	 */
 	public EncoderMatch getEncoderMatch(String acceptEncoding) {
-		if (encoders.size() == 0)
+		if (encoders.length == 0)
 			return null;
 
 		EncoderMatch em = cache.get(acceptEncoding);

@@ -238,7 +238,7 @@
 	</p>
 	<p class='bcode'>
 	<jc>// Create a new serializer with readable output.</jc>
-	RdfSerializer s = <jk>new</jk> RdfSerializer.XmlAbbrev().setProperty(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3);
+	RdfSerializer s = <jk>new</jk> RdfSerializerBuilder().xmlabbrev().property(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3).build();
 
 	<jc>// Create our bean.</jc>
 	Person p = <jk>new</jk> Person(1, <js>"John Smith"</js>);
@@ -251,7 +251,7 @@
 	</p>
 	<p class='bcode'>
 	<jc>// Create a new serializer with readable output by cloning an existing serializer.</jc>
-	RdfSerializer s = RdfSerializer.<jsf>DEFAULT_XMLABBREV</jsf>.clone().setProperty(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3);
+	RdfSerializer s = RdfSerializer.<jsf>DEFAULT_XMLABBREV</jsf>.builder().property(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3).build();
 	</p>
 	<p>
 		This code produces the following output:
@@ -344,10 +344,12 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Create a new serializer, but manually specify the namespaces.</jc>
-	RdfSerializer s = <jk>new</jk> RdfSerializer.XmlAbbrev()
-		.setProperty(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3)
-		.setProperty(XmlSerializerContext.<jsf>XML_autoDetectNamespaces</jsf>, <jk>false</jk>)
-		.setProperty(XmlSerializerContext.<jsf>XML_namespaces</jsf>, <js>"{per:'http://www.apache.org/person/'}"</js>);
+	RdfSerializer s = <jk>new</jk> RdfSerializerBuilder()
+		.xmlabbrev()
+		.property(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3)
+		.autoDetectNamespaces(<jk>false</jk>)
+		.namespaces(<js>"{per:'http://www.apache.org/person/'}"</js>)
+		.build();
 	</p>
 		<p>
 			This code change will produce the same output as before, but will perform slightly better since it doesn't have to crawl the POJO tree before serializing the result.
@@ -440,10 +442,12 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Create a new serializer with readable output.</jc>
-	RdfSerializer s = <jk>new</jk> RdfSerializer.XmlAbbrev()
-		.setProperty(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3);
-		.setProperty(SerializerContext.<jsf>SERIALIZER_relativeUriBase</jsf>, <js>"http://myhost/sample"</js>);
-		.setProperty(SerializerContext.<jsf>SERIALIZER_absolutePathUriBase</jsf>, <js>"http://myhost"</js>);
+	RdfSerializer s = <jk>new</jk> RdfSerializerBuilder()
+		.xmlabbrev()
+		.property(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3);
+		.relativeUriBase(<js>"http://myhost/sample"</js>);
+		.absolutePathUriBase(<js>"http://myhost"</js>)
+		.build();
 		
 	<jc>// Create our bean.</jc>
 	Person p = <jk>new</jk> Person(1, <js>"John Smith"</js>, <js>"person/1"</js>, <js>"/"</js>);
@@ -559,7 +563,7 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Create a new serializer (revert back to namespace autodetection).</jc>
-	RdfSerializer s = <jk>new</jk> RdfSerializer.XmlAbbrev().setProperty(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3);
+	RdfSerializer s = <jk>new</jk> RdfSerializerBuilder().xmlabbrev().property(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3).build();
 
 	<jc>// Create our bean.</jc>
 	Person p = <jk>new</jk> Person(1, <js>"John Smith"</js>, <js>"http://sample/addressBook/person/1"</js>, <js>"http://sample/addressBook"</js>, <js>"Aug 12, 1946"</js>);
@@ -635,9 +639,11 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Create a new serializer.</jc>
-	RdfSerializer s = <jk>new</jk> RdfSerializer.XmlAbbrev()
-		.setProperty(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3),
-		.setProperty(RdfSerializerContext.<jsf>RDF_addRootProperty</jsf>, <jk>true</jk>);
+	RdfSerializer s = <jk>new</jk> RdfSerializerBuilder()
+		.xmlabbrev()
+		.property(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3),
+		.addRootProperty(<jk>true</jk>)
+		.build();
 		</p>	
 		<p>
 			Now when we rerun the sample code, we'll see the added <code>root</code> attribute on the root resource.
@@ -689,9 +695,11 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Create a new serializer (revert back to namespace autodetection).</jc>
-	RdfSerializer s = <jk>new</jk> RdfSerializer.XmlAbbrev()
-		.setProperty(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3),
-		.setProperty(RdfSerializerContext.<jsf>RDF_addLiteralTypes</jsf>, <jk>true</jk>);
+	RdfSerializer s = <jk>new</jk> RdfSerializerBuilder()
+		.xmlabbrev()
+		.property(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3),
+		.addLiteralTypes(<jk>true</jk>)
+		.build();
 		</p>	
 		<p>
 			Now when we rerun the sample code, we'll see the added <code>root</code> attribute on the root resource.
@@ -809,9 +817,11 @@
 	</p>
 		<p class='bcode'>
 	<jc>// Create a new serializer with readable output.</jc>
-	RdfSerializer s = <jk>new</jk> RdfSerializer.XmlAbbrev()
-		.setProperty(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3)
-		.setProperty(RdfSerializerContext.<jsf>RDF_addRootProperty</jsf>, <jk>true</jk>);
+	RdfSerializer s = <jk>new</jk> RdfSerializerBuilder()
+		.xmlabbrev()
+		.property(RdfProperties.<jsf>RDF_rdfxml_tab</jsf>, 3)
+		.addRootProperty(<jk>true</jk>)
+		.build();
 
 	<jc>// Create our bean.</jc>
 	Person p = <jk>new</jk> Person(1, <js>"John Smith"</js>, <js>"http://sample/addressBook/person/1"</js>, <js>"http://sample/addressBook"</js>, <js>"Aug 12, 1946"</js>);
@@ -1361,7 +1371,7 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Create a client to handle RDF/XML requests and responses.</jc>
-	RestClient client = <jk>new</jk> RestClient(RdfSerializer.XmlAbbrev.<jk>class</jk>, RdfParser.Xml.<jk>class</jk>);
+	RestClient client = <jk>new</jk> RestClientBuilder(RdfSerializer.XmlAbbrev.<jk>class</jk>, RdfParser.Xml.<jk>class</jk>).build();
 		</p>
 		<p>
 			The client handles all content negotiation based on the registered serializers and parsers.

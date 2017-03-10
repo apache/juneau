@@ -24,8 +24,10 @@ import junit.framework.*;
 
 public class TestUtils {
 
-	private static JsonSerializer js2 = new JsonSerializer.Simple()
-		.addPojoSwaps(IteratorSwap.class, EnumerationSwap.class);
+	private static JsonSerializer js2 = new JsonSerializerBuilder()
+		.simple()
+		.pojoSwaps(IteratorSwap.class, EnumerationSwap.class)
+		.build();
 
 	/**
 	 * Assert that the object equals the specified string after running it through JsonSerializer.DEFAULT_LAX.toString().

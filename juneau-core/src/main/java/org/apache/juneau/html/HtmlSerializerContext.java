@@ -19,10 +19,10 @@ import org.apache.juneau.xml.*;
 /**
  * Configurable properties on the {@link HtmlSerializer} class.
  * <p>
- * Context properties are set by calling {@link ContextFactory#setProperty(String, Object)} on the context factory
- * returned {@link CoreApi#getContextFactory()}.
+ * Context properties are set by calling {@link PropertyStore#setProperty(String, Object)} on the property store
+ * passed into the constructor.
  * <p>
- * See {@link ContextFactory} for more information about context properties.
+ * See {@link PropertyStore} for more information about context properties.
  *
  * <h5 class='section'>Inherited configurable properties:</h5>
  * <ul class='javahierarchy'>
@@ -158,18 +158,18 @@ public class HtmlSerializerContext extends XmlSerializerContext {
 	/**
 	 * Constructor.
 	 * <p>
-	 * Typically only called from {@link ContextFactory#getContext(Class)}.
+	 * Typically only called from {@link PropertyStore#getContext(Class)}.
 	 *
-	 * @param cf The factory that created this context.
+	 * @param ps The property store that created this context.
 	 */
-	public HtmlSerializerContext(ContextFactory cf) {
-		super(cf);
-		uriAnchorText = cf.getProperty(HTML_uriAnchorText, String.class, TO_STRING);
-		lookForLabelParameters = cf.getProperty(HTML_lookForLabelParameters, Boolean.class, true);
-		detectLinksInStrings = cf.getProperty(HTML_detectLinksInStrings, Boolean.class, true);
-		labelParameter = cf.getProperty(HTML_labelParameter, String.class, "label");
-		addKeyValueTableHeaders = cf.getProperty(HTML_addKeyValueTableHeaders, Boolean.class, false);
-		addBeanTypeProperties = cf.getProperty(HTML_addBeanTypeProperties, boolean.class, cf.getProperty(SERIALIZER_addBeanTypeProperties, boolean.class, true));
+	public HtmlSerializerContext(PropertyStore ps) {
+		super(ps);
+		uriAnchorText = ps.getProperty(HTML_uriAnchorText, String.class, TO_STRING);
+		lookForLabelParameters = ps.getProperty(HTML_lookForLabelParameters, Boolean.class, true);
+		detectLinksInStrings = ps.getProperty(HTML_detectLinksInStrings, Boolean.class, true);
+		labelParameter = ps.getProperty(HTML_labelParameter, String.class, "label");
+		addKeyValueTableHeaders = ps.getProperty(HTML_addKeyValueTableHeaders, Boolean.class, false);
+		addBeanTypeProperties = ps.getProperty(HTML_addBeanTypeProperties, boolean.class, ps.getProperty(SERIALIZER_addBeanTypeProperties, boolean.class, true));
 	}
 
 	@Override /* Context */

@@ -19,7 +19,6 @@ import java.util.*;
 import java.util.regex.*;
 
 import org.apache.http.entity.*;
-import org.apache.juneau.json.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.*;
 
@@ -32,7 +31,7 @@ public class RestClientTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testSuccessPattern() throws Exception {
-		RestClient c = new TestRestClient(JsonSerializer.DEFAULT, JsonParser.DEFAULT);
+		RestClient c = TestMicroservice.DEFAULT_CLIENT;
 		String r;
 		int rc;
 
@@ -47,8 +46,6 @@ public class RestClientTest extends RestTestcase {
 		} catch (RestCallException e) {
 			assertEquals("Success pattern not detected.", e.getLocalizedMessage());
 		}
-
-		c.closeQuietly();
 	}
 
 	//====================================================================================================
@@ -56,7 +53,7 @@ public class RestClientTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testFailurePattern() throws Exception {
-		RestClient c = new TestRestClient(JsonSerializer.DEFAULT, JsonParser.DEFAULT);
+		RestClient c = TestMicroservice.DEFAULT_CLIENT;
 		String r;
 		int rc;
 
@@ -78,8 +75,6 @@ public class RestClientTest extends RestTestcase {
 		} catch (RestCallException e) {
 			assertEquals("Failure pattern detected.", e.getLocalizedMessage());
 		}
-
-		c.closeQuietly();
 	}
 
 	//====================================================================================================
@@ -87,7 +82,7 @@ public class RestClientTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testCaptureResponse() throws Exception {
-		RestClient c = new TestRestClient(JsonSerializer.DEFAULT, JsonParser.DEFAULT);
+		RestClient c = TestMicroservice.DEFAULT_CLIENT;
 		RestCall rc = c.doPost(URL, new StringEntity("xxx")).captureResponse();
 
 		try {
@@ -111,8 +106,6 @@ public class RestClientTest extends RestTestcase {
 		} catch (IllegalStateException e) {
 			assertEquals("Method cannot be called.  Response has already been consumed.", e.getLocalizedMessage());
 		}
-
-		c.closeQuietly();
 	}
 
 	//====================================================================================================
@@ -120,7 +113,7 @@ public class RestClientTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testAddResponsePattern() throws Exception {
-		RestClient c = new TestRestClient(JsonSerializer.DEFAULT, JsonParser.DEFAULT);
+		RestClient c = TestMicroservice.DEFAULT_CLIENT;
 		String r;
 
 		final List<String> l = new ArrayList<String>();
@@ -135,18 +128,18 @@ public class RestClientTest extends RestTestcase {
 			}
 		};
 
-		r = c.doPost(URL, new StringEntity("x=1,y=2")).addResponsePattern(p).getResponseAsString();
+		r = c.doPost(URL, new StringEntity("x=1,y=2")).responsePattern(p).getResponseAsString();
 		assertEquals("x=1,y=2", r);
 		assertObjectEquals("['1/2']", l);
 
 		l.clear();
 
-		r = c.doPost(URL, new StringEntity("x=1,y=2\nx=3,y=4")).addResponsePattern(p).getResponseAsString();
+		r = c.doPost(URL, new StringEntity("x=1,y=2\nx=3,y=4")).responsePattern(p).getResponseAsString();
 		assertEquals("x=1,y=2\nx=3,y=4", r);
 		assertObjectEquals("['1/2','3/4']", l);
 
 		try {
-			c.doPost(URL, new StringEntity("x=1")).addResponsePattern(p).run();
+			c.doPost(URL, new StringEntity("x=1")).responsePattern(p).run();
 			fail();
 		} catch (RestCallException e) {
 			assertEquals("Pattern not found!", e.getLocalizedMessage());
@@ -176,24 +169,22 @@ public class RestClientTest extends RestTestcase {
 		};
 
 		l.clear();
-		r = c.doPost(URL, new StringEntity("x=1,y=2\nx=3,y=4")).addResponsePattern(p1).addResponsePattern(p2).getResponseAsString();
+		r = c.doPost(URL, new StringEntity("x=1,y=2\nx=3,y=4")).responsePattern(p1).responsePattern(p2).getResponseAsString();
 		assertEquals("x=1,y=2\nx=3,y=4", r);
 		assertObjectEquals("['x=1','x=3','y=2','y=4']", l);
 
 		try {
-			c.doPost(URL, new StringEntity("x=1\nx=3")).addResponsePattern(p1).addResponsePattern(p2).getResponseAsString();
+			c.doPost(URL, new StringEntity("x=1\nx=3")).responsePattern(p1).responsePattern(p2).getResponseAsString();
 		} catch (RestCallException e) {
 			assertEquals("Pattern y not found!", e.getLocalizedMessage());
 			assertEquals(0, e.getResponseCode());
 		}
 
 		try {
-			c.doPost(URL, new StringEntity("y=1\ny=3")).addResponsePattern(p1).addResponsePattern(p2).getResponseAsString();
+			c.doPost(URL, new StringEntity("y=1\ny=3")).responsePattern(p1).responsePattern(p2).getResponseAsString();
 		} catch (RestCallException e) {
 			assertEquals("Pattern x not found!", e.getLocalizedMessage());
 			assertEquals(0, e.getResponseCode());
 		}
-
-		c.closeQuietly();
 	}
 }

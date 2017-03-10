@@ -16,7 +16,6 @@ import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.rest.test.TestUtils.*;
 import static org.junit.Assert.*;
 
-import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.*;
 
@@ -30,16 +29,14 @@ public class ParsersTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testParserOnClass() throws Exception {
-		RestClient client = new TestRestClient(PlainTextSerializer.class, PlainTextParser.class);
+		RestClient client = TestMicroservice.DEFAULT_CLIENT_PLAINTEXT;
 		String url = URL + "/testParserOnClass";
 
-		client.setContentType("text/a");
-		String r = client.doPut(url, "test1").getResponseAsString();
+		String r = client.doPut(url, "test1").contentType("text/a").getResponseAsString();
 		assertEquals("text/a - test1", r);
 
 		try {
-			client.setContentType("text/b");
-			client.doPut(url + "?noTrace=true", "test1").getResponseAsString();
+			client.doPut(url + "?noTrace=true", "test1").contentType("text/b").getResponseAsString();
 			fail("Exception expected");
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_UNSUPPORTED_MEDIA_TYPE,
@@ -48,11 +45,8 @@ public class ParsersTest extends RestTestcase {
 			);
 		}
 
-		client.setContentType("text/json").setAccept("text/json");
-		r = client.doPut(url, "'test1'").getResponseAsString();
+		r = client.doPut(url, "'test1'").contentType("text/json").accept("text/json").getResponseAsString();
 		assertEquals("\"test1\"", r);
-
-		client.closeQuietly();
 	}
 
 	//====================================================================================================
@@ -60,16 +54,14 @@ public class ParsersTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testParserOnMethod() throws Exception {
-		RestClient client = new TestRestClient(PlainTextSerializer.class, PlainTextParser.class);
+		RestClient client = TestMicroservice.DEFAULT_CLIENT_PLAINTEXT;
 		String url = URL + "/testParserOnMethod";
 
-		client.setContentType("text/b");
-		String r = client.doPut(url, "test2").getResponseAsString();
+		String r = client.doPut(url, "test2").contentType("text/b").getResponseAsString();
 		assertEquals("text/b - test2", r);
 
 		try {
-			client.setContentType("text/a");
-			client.doPut(url + "?noTrace=true", "test2").getResponseAsString();
+			client.doPut(url + "?noTrace=true", "test2").contentType("text/a").getResponseAsString();
 			fail("Exception expected");
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_UNSUPPORTED_MEDIA_TYPE,
@@ -79,8 +71,7 @@ public class ParsersTest extends RestTestcase {
 		}
 
 		try {
-			client.setContentType("text/json");
-			r = client.doPut(url + "?noTrace=true", "'test2'").getResponseAsString();
+			r = client.doPut(url + "?noTrace=true", "'test2'").contentType("text/json").getResponseAsString();
 			fail("Exception expected");
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_UNSUPPORTED_MEDIA_TYPE,
@@ -88,8 +79,6 @@ public class ParsersTest extends RestTestcase {
 				"Supported media-types: [text/b]"
 			);
 		}
-
-		client.closeQuietly();
 	}
 
 	//====================================================================================================
@@ -97,22 +86,17 @@ public class ParsersTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testParserOverriddenOnMethod() throws Exception {
-		RestClient client = new TestRestClient(PlainTextSerializer.class, PlainTextParser.class);
+		RestClient client = TestMicroservice.DEFAULT_CLIENT_PLAINTEXT;
 		String url = URL + "/testParserOverriddenOnMethod";
 
-		client.setContentType("text/a");
-		String r = client.doPut(url, "test3").getResponseAsString();
+		String r = client.doPut(url, "test3").contentType("text/a").getResponseAsString();
 		assertEquals("text/a - test3", r);
 
-		client.setContentType("text/b");
-		r = client.doPut(url, "test3").getResponseAsString();
+		r = client.doPut(url, "test3").contentType("text/b").getResponseAsString();
 		assertEquals("text/b - test3", r);
 
-		client.setContentType("text/json");
-		r = client.doPut(url, "'test3'").getResponseAsString();
+		r = client.doPut(url, "'test3'").contentType("text/json").getResponseAsString();
 		assertEquals("test3", r);
-
-		client.closeQuietly();
 	}
 
 	//====================================================================================================
@@ -120,22 +104,17 @@ public class ParsersTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testParserWithDifferentMediaTypes() throws Exception {
-		RestClient client = new TestRestClient(PlainTextSerializer.class, PlainTextParser.class);
+		RestClient client = TestMicroservice.DEFAULT_CLIENT_PLAINTEXT;
 		String url = URL + "/testParserWithDifferentMediaTypes";
 
-		client.setContentType("text/a");
-		String r = client.doPut(url, "test4").getResponseAsString();
+		String r = client.doPut(url, "test4").contentType("text/a").getResponseAsString();
 		assertEquals("text/d - test4", r);
 
-		client.setContentType("text/d");
-		r = client.doPut(url, "test4").getResponseAsString();
+		r = client.doPut(url, "test4").contentType("text/d").getResponseAsString();
 		assertEquals("text/d - test4", r);
 
-		client.setContentType("text/json");
-		r = client.doPut(url, "'test4'").getResponseAsString();
+		r = client.doPut(url, "'test4'").contentType("text/json").getResponseAsString();
 		assertEquals("test4", r);
-
-		client.closeQuietly();
 	}
 
 	//====================================================================================================
@@ -143,12 +122,11 @@ public class ParsersTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testValidErrorResponse() throws Exception {
-		RestClient client = new TestRestClient(PlainTextSerializer.class, PlainTextParser.class);
+		RestClient client = TestMicroservice.DEFAULT_CLIENT_PLAINTEXT;
 		String url = URL + "/testValidErrorResponse";
 
 		try {
-			client.setContentType("text/bad");
-			client.doPut(url + "?noTrace=true", "test1").getResponseAsString();
+			client.doPut(url + "?noTrace=true", "test1").contentType("text/bad").getResponseAsString();
 			fail("Exception expected");
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_UNSUPPORTED_MEDIA_TYPE,
@@ -156,7 +134,5 @@ public class ParsersTest extends RestTestcase {
 				"Supported media-types: [text/a"
 			);
 		}
-
-		client.closeQuietly();
 	}
 }

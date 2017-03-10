@@ -117,14 +117,14 @@ public class ParserContext extends BeanContext {
 	/**
 	 * Constructor.
 	 *
-	 * @param cf The factory that created this context.
+	 * @param ps The property store that created this context.
 	 */
-	public ParserContext(ContextFactory cf) {
-		super(cf);
-		this.trimStrings = cf.getProperty(PARSER_trimStrings, boolean.class, false);
-		this.strict = cf.getProperty(PARSER_strict, boolean.class, false);
-		this.inputStreamCharset = cf.getProperty(PARSER_inputStreamCharset, String.class, "UTF-8");
-		this.fileCharset = cf.getProperty(PARSER_fileCharset, String.class, "default");
+	public ParserContext(PropertyStore ps) {
+		super(ps);
+		this.trimStrings = ps.getProperty(PARSER_trimStrings, boolean.class, false);
+		this.strict = ps.getProperty(PARSER_strict, boolean.class, false);
+		this.inputStreamCharset = ps.getProperty(PARSER_inputStreamCharset, String.class, "UTF-8");
+		this.fileCharset = ps.getProperty(PARSER_fileCharset, String.class, "default");
 	}
 
 	@Override /* Context */

@@ -14,7 +14,6 @@ package org.apache.juneau.rest.test;
 
 import static org.junit.Assert.*;
 
-import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.*;
 
@@ -27,11 +26,9 @@ public class NlsPropertyTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testInheritedFromClass() throws Exception {
-		RestClient client = new TestRestClient(PlainTextSerializer.class, PlainTextParser.class);
+		RestClient client = TestMicroservice.DEFAULT_CLIENT_PLAINTEXT;
 		String r = client.doGet(URL + "/testInheritedFromClass").getResponseAsString();
 		assertEquals("value1", r);
-
-		client.closeQuietly();
 	}
 
 	//====================================================================================================
@@ -39,10 +36,8 @@ public class NlsPropertyTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testInheritedFromMethod() throws Exception {
-		RestClient client = new TestRestClient(PlainTextSerializer.class, PlainTextParser.class);
+		RestClient client = TestMicroservice.DEFAULT_CLIENT_PLAINTEXT;
 		String r = client.doGet(URL + "/testInheritedFromMethod").getResponseAsString();
 		assertEquals("value2", r);
-
-		client.closeQuietly();
 	}
 }

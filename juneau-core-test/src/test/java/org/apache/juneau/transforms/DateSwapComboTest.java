@@ -12,20 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transforms;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Locale;
+import java.util.*;
 
-import org.apache.juneau.ComboTest;
-import org.apache.juneau.ObjectMap;
-import org.apache.juneau.TestUtils;
-import org.apache.juneau.parser.Parser;
-import org.apache.juneau.serializer.Serializer;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import org.apache.juneau.*;
+import org.apache.juneau.parser.*;
+import org.apache.juneau.serializer.*;
+import org.junit.*;
+import org.junit.runner.*;
+import org.junit.runners.*;
 
 /**
  * Exhaustive serialization tests for the DateSwap class.
@@ -557,15 +551,11 @@ public class DateSwapComboTest extends ComboTest {
 	
 	@Override
 	protected Serializer applySettings(Serializer s) throws Exception {
-		if (s.isLocked())
-			 s = s.clone();
-		return s.addPojoSwaps(swapClass);
+		return s.builder().pojoSwaps(swapClass).build();
 	}
 	
 	@Override
 	protected Parser applySettings(Parser p) throws Exception {
-		if (p.isLocked())
-			p = p.clone();
-		return p.addPojoSwaps(swapClass);
+		return p.builder().pojoSwaps(swapClass).build();
 	}
 }

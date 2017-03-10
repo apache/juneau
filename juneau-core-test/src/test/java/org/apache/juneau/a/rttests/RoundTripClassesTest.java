@@ -28,7 +28,7 @@ import org.junit.*;
 @SuppressWarnings("javadoc")
 public class RoundTripClassesTest extends RoundTripTest {
 
-	public RoundTripClassesTest(String label, Serializer s, Parser p, int flags) throws Exception {
+	public RoundTripClassesTest(String label, SerializerBuilder s, ParserBuilder p, int flags) throws Exception {
 		super(label, s, p, flags);
 	}
 

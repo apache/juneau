@@ -45,10 +45,11 @@ public class RdfParserTest {
 		A a = new A().init();
 
 		// Create a new serializer with readable output.
-		RdfSerializer s = new RdfSerializer.XmlAbbrev()
-		   .setProperty(RDF_rdfxml_tab, 3)
-		   .setQuoteChar('\'')
-		   .setAddRootProperty(true);
+		RdfSerializer s = new RdfSerializerBuilder().xmlabbrev()
+		   .property(RDF_rdfxml_tab, 3)
+		   .sq()
+		   .addRootProperty(true)
+		   .build();
 
 		String expected =
 			 "<rdf:RDF a='http://ns/' a1='http://ns2/' j='http://www.apache.org/juneau/' jp='http://www.apache.org/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"

@@ -14,7 +14,6 @@ package org.apache.juneau.rest.test;
 
 import static org.junit.Assert.*;
 
-import org.apache.juneau.json.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.*;
 
@@ -27,11 +26,9 @@ public class PropertiesTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testPropertiesDefinedOnMethod() throws Exception {
-		RestClient client = new TestRestClient(JsonSerializer.DEFAULT, JsonParser.DEFAULT);
+		RestClient client = TestMicroservice.DEFAULT_CLIENT;
 		String r = client.doGet(URL + "/testPropertiesDefinedOnMethod").getResponseAsString();
 		assertTrue(r.matches("A1=a1,A2=c,B1=b1,B2=c,C=c,R1a=.*/testProperties/testPropertiesDefinedOnMethod,R1b=.*/testProperties,R2=bar,R3=baz,R4=a1,R5=c,R6=c"));
-
-		client.closeQuietly();
 	}
 
 	//====================================================================================================
@@ -39,10 +36,8 @@ public class PropertiesTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testProperties() throws Exception {
-		RestClient client = new TestRestClient(JsonSerializer.DEFAULT, JsonParser.DEFAULT);
-		String r = client.doGet(URL + "/testProperties/a1?P=p1").setHeader("H", "h1").getResponseAsString();
+		RestClient client = TestMicroservice.DEFAULT_CLIENT;
+		String r = client.doGet(URL + "/testProperties/a1?P=p1").header("H", "h1").getResponseAsString();
 		assertEquals("A=a1,P=p1,H=h1", r);
-
-		client.closeQuietly();
 	}
 }

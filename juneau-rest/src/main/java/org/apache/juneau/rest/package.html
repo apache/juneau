@@ -442,7 +442,7 @@
 		<tr>
 			<td class='code'>text/uon</td>
 			<td class='code'>text/uon</td>
-			<td>{@link org.apache.juneau.urlencoding.UonSerializer}</td>
+			<td>{@link org.apache.juneau.uon.UonSerializer}</td>
 		</tr>
 		<tr>
 			<td class='code'>application/x-www-form-urlencoded</td>
@@ -462,7 +462,7 @@
 		<tr>
 			<td class='code'>application/x-java-serialized-object</td>
 			<td class='code'>application/x-java-serialized-object</td>
-			<td>{@link org.apache.juneau.jso.JavaSerializedObjectSerializer}</td>
+			<td>{@link org.apache.juneau.jso.JsoSerializer}</td>
 		</tr>
 	</table>
 	<h6 class='figure'>Valid Content-Type headers for RestServletDefault</h6>
@@ -485,7 +485,7 @@
 		</tr>
 		<tr>
 			<td class='code'>text/uon</td>
-			<td>{@link org.apache.juneau.urlencoding.UonParser}</td>
+			<td>{@link org.apache.juneau.uon.UonParser}</td>
 		</tr>
 		<tr>
 			<td class='code'>application/x-www-form-urlencoded</td>
@@ -1321,12 +1321,10 @@
 
 	<jc>// Example #3 - Serializers defined on servlet by overriding the createSerializers(ObjectMap,Class[],Class[]) method</jc>
 	<ja>@Override</ja>
-	<jk>public</jk> SerializerGroup createSerializers(ObjectMap,Class[],Class[]) {
+	<jk>public</jk> SerializerGroupBuilder createSerializers(ObjectMap,Class[],Class[]) {
 
- 		SerializerGroup g = <jk>new</jk> SerializerGroup()
+ 		<jk>return new</jk> SerializerGroupBuilder()
  			.append(JsonSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>);
-
-		<jk>return</jk> g;
 	}
 		</p>
 		<p class='info'>
@@ -1382,12 +1380,10 @@
 	
 		<jc>// Example #3 - Parsers defined on servlet by overriding the getParserGroup method</jc>
 		<ja>@Override</ja>
-		<jk>public</jk> ParserGroup getParserGroup() {
+		<jk>public</jk> ParserGroupBuilder getParserGroup() {
 	
-	 		ParserGroup g = <jk>new</jk> ParserGroup()
+	 		<jk>return new</jk> ParserGroupBuilder()
 				.append(JsonParser.<jk>class</jk>, XmlParser.<jk>class</jk>);
-	
-	 		<jk>return</jk> g;
 	 	}
 		</p>
 		<h6 class='topic'>Additional Information</h6>

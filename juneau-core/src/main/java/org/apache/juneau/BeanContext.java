@@ -43,9 +43,9 @@ import org.apache.juneau.transform.*;
  * All serializer and parser contexts extend from this context.
  *
  * <h5 class='topic'>Bean Contexts</h5>
- * Bean contexts are created through the {@link ContextFactory#getContext(Class)} method.
+ * Bean contexts are created through the {@link PropertyStore#getContext(Class)} method.
  * These context objects are read-only, reusable, and thread-safe.
- * The {@link ContextFactory} class will typically cache copies of <code>Context</code> objects based on
+ * The {@link PropertyStore} class will typically cache copies of <code>Context</code> objects based on
  * 	the current settings on the factory.
  * <p>
  * Each bean context maintains a cache of {@link ClassMeta} objects that describe information about classes encountered.
@@ -74,20 +74,20 @@ import org.apache.juneau.transform.*;
  * <p>
  * Some settings (e.g. {@link BeanContext#BEAN_beanMapPutReturnsOldValue}) change the runtime behavior of bean maps.
  * <p>
- * Settings are specified using the {@link ContextFactory#setProperty(String, Object)} method and related convenience methods.
+ * Settings are specified using the {@link PropertyStore#setProperty(String, Object)} method and related convenience methods.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Construct a context from scratch.</jc>
- * 	BeanContext beanContext = ContextFactory.<jsm>create</jsm>()
- * 		.setProperty(BeanContext.<jsf>BEAN_beansRequireDefaultConstructor</jsf>, <jk>true</jk>)
- * 		.addNotBeanClasses(Foo.<jk>class</jk>)
+ * 	BeanContext beanContext = PropertyStore.<jsm>create</jsm>()
+ * 		.property(BeanContext.<jsf>BEAN_beansRequireDefaultConstructor</jsf>, <jk>true</jk>)
+ * 		.notBeanClasses(Foo.<jk>class</jk>)
  * 		.getBeanContext();
  *
- * 	<jc>// Clone an existing context factory.</jc>
- * 	BeanContext beanContext = ContextFactory.<jsm>create</jsm>(otherConfig)
- * 		.setProperty(BeanContext.<jsf>BEAN_beansRequireDefaultConstructor</jsf>, <jk>true</jk>)
- * 		.addNotBeanClasses(Foo.<jk>class</jk>)
+ * 	<jc>// Clone an existing property store.</jc>
+ * 	BeanContext beanContext = PropertyStore.<jsm>create</jsm>(otherConfig)
+ * 		.property(BeanContext.<jsf>BEAN_beansRequireDefaultConstructor</jsf>, <jk>true</jk>)
+ * 		.notBeanClasses(Foo.<jk>class</jk>)
  * 		.getBeanContext();
  * </p>
  *
@@ -761,7 +761,7 @@ public class BeanContext extends Context {
 	};
 
 
-	static final void loadDefaults(ContextFactory config) {
+	static final void loadDefaults(PropertyStore config) {
 		config.setProperty(BEAN_notBeanPackages, DEFAULT_NOTBEAN_PACKAGES);
 		config.setProperty(BEAN_notBeanClasses, DEFAULT_NOTBEAN_CLASSES);
 	}
@@ -775,10 +775,10 @@ public class BeanContext extends Context {
 	private static final ConcurrentHashMap<Integer,Map<Class,ClassMeta>> cmCacheCache = new ConcurrentHashMap<Integer,Map<Class,ClassMeta>>();
 
 	/** Default config.  All default settings. */
-	public static final BeanContext DEFAULT = ContextFactory.create().getContext(BeanContext.class);
+	public static final BeanContext DEFAULT = PropertyStore.create().getContext(BeanContext.class);
 
 	/** Default config.  All default settings except sort bean properties. */
-	public static final BeanContext DEFAULT_SORTED = ContextFactory.create().setProperty(BEAN_sortProperties, true).getContext(BeanContext.class);
+	public static final BeanContext DEFAULT_SORTED = PropertyStore.create().setProperty(BEAN_sortProperties, true).getContext(BeanContext.class);
 
 	final boolean
 		beansRequireDefaultConstructor,
@@ -829,17 +829,17 @@ public class BeanContext extends Context {
 	/**
 	 * Constructor.
 	 * <p>
-	 * Typically only called from {@link ContextFactory#getContext(Class)} or {@link ContextFactory#getBeanContext()}.
+	 * Typically only called from {@link PropertyStore#getContext(Class)} or {@link PropertyStore#getBeanContext()}.
 	 *
-	 * @param cf The factory that created this context.
+	 * @param ps The property store that created this context.
 	 */
-	public BeanContext(ContextFactory cf) {
-		super(cf);
+	public BeanContext(PropertyStore ps) {
+		super(ps);
 
-		ContextFactory.PropertyMap pm = cf.getPropertyMap("BeanContext");
+		PropertyStore.PropertyMap pm = ps.getPropertyMap("BeanContext");
 		hashCode = pm.hashCode();
-		classLoader = cf.classLoader;
-		defaultParser = cf.defaultParser;
+		classLoader = ps.classLoader;
+		defaultParser = ps.defaultParser;
 
 		beansRequireDefaultConstructor = pm.get(BEAN_beansRequireDefaultConstructor, boolean.class, false);
 		beansRequireSerializable = pm.get(BEAN_beansRequireSerializable, boolean.class, false);
@@ -855,7 +855,7 @@ public class BeanContext extends Context {
 		useJavaBeanIntrospector = pm.get(BEAN_useJavaBeanIntrospector, boolean.class, false);
 		sortProperties = pm.get(BEAN_sortProperties, boolean.class, false);
 		beanTypePropertyName = pm.get(BEAN_beanTypePropertyName, String.class, "_type");
-		debug = cf.getProperty(BEAN_debug, boolean.class, false);
+		debug = ps.getProperty(BEAN_debug, boolean.class, false);
 
 		beanConstructorVisibility = pm.get(BEAN_beanConstructorVisibility, Visibility.class, PUBLIC);
 		beanClassVisibility = pm.get(BEAN_beanClassVisibility, Visibility.class, PUBLIC);

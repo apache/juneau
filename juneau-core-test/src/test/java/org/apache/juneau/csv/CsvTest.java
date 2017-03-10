@@ -31,7 +31,7 @@ public class CsvTest {
 		l.add(new A("b1",1));
 		l.add(new A("b2",2));
 
-		WriterSerializer s = new CsvSerializer();
+		WriterSerializer s = CsvSerializer.DEFAULT;
 		String r;
 
 		r = s.serialize(l);

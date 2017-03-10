@@ -29,7 +29,7 @@ import org.junit.*;
 @SuppressWarnings("javadoc")
 public class RoundTripObjectsWithSpecialMethodsTest extends RoundTripTest {
 
-	public RoundTripObjectsWithSpecialMethodsTest(String label, Serializer s, Parser p, int flags) throws Exception {
+	public RoundTripObjectsWithSpecialMethodsTest(String label, SerializerBuilder s, ParserBuilder p, int flags) throws Exception {
 		super(label, s, p, flags);
 	}
 

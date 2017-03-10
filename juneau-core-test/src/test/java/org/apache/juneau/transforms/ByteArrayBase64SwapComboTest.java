@@ -12,18 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transforms;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import org.apache.juneau.ComboTest;
-import org.apache.juneau.parser.Parser;
-import org.apache.juneau.serializer.Serializer;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import org.apache.juneau.*;
+import org.apache.juneau.parser.*;
+import org.apache.juneau.serializer.*;
+import org.junit.runner.*;
+import org.junit.runners.*;
 
 /**
  * Exhaustive serialization tests for the CalendarSwap class.
@@ -348,16 +343,12 @@ public class ByteArrayBase64SwapComboTest extends ComboTest {
 	
 	@Override
 	protected Serializer applySettings(Serializer s) throws Exception {
-		if (s.isLocked())
-			 s = s.clone();
-		return s.addPojoSwaps(ByteArrayBase64Swap.class).setTrimNullProperties(false);
+		return s.builder().pojoSwaps(ByteArrayBase64Swap.class).trimNullProperties(false).build();
 	}
 	
 	@Override
 	protected Parser applySettings(Parser p) throws Exception {
-		if (p.isLocked())
-			p = p.clone();
-		return p.addPojoSwaps(ByteArrayBase64Swap.class);
+		return p.builder().pojoSwaps(ByteArrayBase64Swap.class).build();
 	}
 		
 	public static class BeanWithByteArrayField {

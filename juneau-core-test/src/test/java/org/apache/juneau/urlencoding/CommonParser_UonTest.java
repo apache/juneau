@@ -19,13 +19,14 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.uon.*;
 import org.junit.*;
 
 @SuppressWarnings({"rawtypes","serial","javadoc"})
 public class CommonParser_UonTest {
 
-	ReaderParser p = UonParser.DEFAULT.clone().addToBeanDictionary(A1.class);
-	ReaderParser pe = UonParser.DEFAULT_DECODING.clone();
+	ReaderParser p = new UonParserBuilder().beanDictionary(A1.class).build();
+	ReaderParser pe = UonParser.DEFAULT_DECODING;
 
 	//====================================================================================================
 	// testFromSerializer
@@ -69,7 +70,7 @@ public class CommonParser_UonTest {
 		tl.add(new A3("name1","value1"));
 		b.list = tl;
 
-		in = new UonSerializer().setAddBeanTypeProperties(true).serialize(b);
+		in = new UonSerializerBuilder().addBeanTypeProperties(true).build().serialize(b);
 		b = (A1)p.parse(in, Object.class);
 		assertEquals("value1", b.list.get(1).value);
 
@@ -100,7 +101,7 @@ public class CommonParser_UonTest {
 	//====================================================================================================
 	@Test
 	public void testCorrectHandlingOfUnknownProperties() throws Exception {
-		ReaderParser p = new UonParser().setIgnoreUnknownBeanProperties(true);
+		ReaderParser p = new UonParserBuilder().ignoreUnknownBeanProperties(true).build();
 		B t;
 
 		String in =  "(a=1,unknown=3,b=2)";
@@ -109,7 +110,7 @@ public class CommonParser_UonTest {
 		assertEquals(t.b, 2);
 
 		try {
-			p = new UonParser();
+			p = UonParser.DEFAULT;
 			p.parse(in, B.class);
 			fail("Exception expected");
 		} catch (ParseException e) {}
@@ -150,7 +151,7 @@ public class CommonParser_UonTest {
 	@Test
 	public void testParserListeners() throws Exception {
 		final List<String> events = new LinkedList<String>();
-		UonParser p = new UonParser().setIgnoreUnknownBeanProperties(true);
+		UonParser p = new UonParserBuilder().ignoreUnknownBeanProperties(true).build();
 		p.addListener(
 			new ParserListener() {
 				@Override /* ParserListener */

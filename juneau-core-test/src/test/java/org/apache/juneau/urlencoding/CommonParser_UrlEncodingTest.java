@@ -21,12 +21,13 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.uon.*;
 import org.junit.*;
 
 @SuppressWarnings({"rawtypes","serial","javadoc"})
 public class CommonParser_UrlEncodingTest {
 
-	ReaderParser p = UrlEncodingParser.DEFAULT.clone().addToBeanDictionary(A1.class);
+	ReaderParser p = new UrlEncodingParserBuilder().beanDictionary(A1.class).build();
 
 	//====================================================================================================
 	// testFromSerializer
@@ -71,7 +72,7 @@ public class CommonParser_UrlEncodingTest {
 		tl.add(new A3("name1","value1"));
 		b.list = tl;
 
-		in = new UrlEncodingSerializer().setAddBeanTypeProperties(true).serialize(b);
+		in = new UrlEncodingSerializerBuilder().addBeanTypeProperties(true).build().serialize(b);
 		b = (A1)p.parse(in, Object.class);
 		assertEquals("value1", b.list.get(1).value);
 
@@ -102,7 +103,7 @@ public class CommonParser_UrlEncodingTest {
 	//====================================================================================================
 	@Test
 	public void testCorrectHandlingOfUnknownProperties() throws Exception {
-		ReaderParser p = new UrlEncodingParser().setIgnoreUnknownBeanProperties(true);
+		ReaderParser p = new UrlEncodingParserBuilder().ignoreUnknownBeanProperties(true).build();
 		B t;
 
 		String in =  "a=1&unknown=3&b=2";
@@ -111,7 +112,7 @@ public class CommonParser_UrlEncodingTest {
 		assertEquals(t.b, 2);
 
 		try {
-			p = new UrlEncodingParser();
+			p = UrlEncodingParser.DEFAULT;
 			p.parse(in, B.class);
 			fail("Exception expected");
 		} catch (ParseException e) {}
@@ -152,7 +153,7 @@ public class CommonParser_UrlEncodingTest {
 	@Test
 	public void testParserListeners() throws Exception {
 		final List<String> events = new LinkedList<String>();
-		UonParser p = new UrlEncodingParser().setIgnoreUnknownBeanProperties(true);
+		UonParser p = new UrlEncodingParserBuilder().ignoreUnknownBeanProperties(true).build();
 		p.addListener(
 			new ParserListener() {
 				@Override /* ParserListener */
@@ -170,8 +171,8 @@ public class CommonParser_UrlEncodingTest {
 
 	@Test
 	public void testCollections() throws Exception {
-		WriterSerializer s = new UrlEncodingSerializer();
-		ReaderParser p = new UrlEncodingParser();
+		WriterSerializer s = UrlEncodingSerializer.DEFAULT;
+		ReaderParser p = UrlEncodingParser.DEFAULT;
 
 		List l = new ObjectList("foo","bar");
 		assertEquals("0=foo&1=bar", s.serialize(l));

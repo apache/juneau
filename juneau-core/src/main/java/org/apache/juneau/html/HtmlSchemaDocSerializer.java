@@ -13,6 +13,7 @@
 package org.apache.juneau.html;
 
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.serializer.SerializerContext.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -44,28 +45,36 @@ import org.apache.juneau.transform.*;
 @Produces(value="text/html+schema", contentType="text/html")
 public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 
+	@SuppressWarnings("hiding")
+	final HtmlDocSerializerContext ctx;
+
 	/**
 	 * Constructor.
+	 * @param propertyStore The property store to use for creating the context for this serializer.
 	 */
-	public HtmlSchemaDocSerializer() {
-		setDetectRecursions(true);
-		setIgnoreRecursions(true);
+	public HtmlSchemaDocSerializer(PropertyStore propertyStore) {
+		super(propertyStore);
+		this.ctx = createContext(HtmlDocSerializerContext.class);
 	}
 
 	/**
 	 * Constructor.
-	 *
-	 * @param cf The context factory to use for creating the context for this serializer.
+	 * @param propertyStore The property store to use for creating the context for this serializer.
+	 * @param overrideProperties
 	 */
-	public HtmlSchemaDocSerializer(ContextFactory cf) {
-		getContextFactory().copyFrom(cf);
-		setDetectRecursions(true);
-		setIgnoreRecursions(true);
+	public HtmlSchemaDocSerializer(PropertyStore propertyStore, Map<String,Object> overrideProperties) {
+		super(propertyStore);
+		this.ctx = this.propertyStore.create(overrideProperties).getContext(HtmlDocSerializerContext.class);
+	}
+
+	@Override /* CoreObject */
+	protected ObjectMap getOverrideProperties() {
+		return super.getOverrideProperties().append(SERIALIZER_detectRecursions, true).append(SERIALIZER_ignoreRecursions, true);
 	}
 
 	@Override /* Serializer */
 	public HtmlDocSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType) {
-		return new HtmlDocSerializerSession(getContext(HtmlDocSerializerContext.class), op, output, javaMethod, locale, timeZone, mediaType);
+		return new HtmlDocSerializerSession(ctx, op, output, javaMethod, locale, timeZone, mediaType);
 	}
 
 	@Override /* ISchemaSerializer */

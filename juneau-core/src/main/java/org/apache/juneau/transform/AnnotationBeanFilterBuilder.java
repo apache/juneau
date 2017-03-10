@@ -40,28 +40,28 @@ public final class AnnotationBeanFilterBuilder extends BeanFilterBuilder {
 			Bean b = li.previous();
 
 			if (! b.properties().isEmpty())
-				setProperties(StringUtils.split(b.properties(), ','));
+				properties(StringUtils.split(b.properties(), ','));
 
 			if (! b.typeName().isEmpty())
-				setTypeName(b.typeName());
+				typeName(b.typeName());
 
 			if (b.sort())
-				setSortProperties(true);
+				sortProperties(true);
 
 			if (! b.excludeProperties().isEmpty())
-				setExcludeProperties(StringUtils.split(b.excludeProperties(), ','));
+				excludeProperties(StringUtils.split(b.excludeProperties(), ','));
 
 			if (b.propertyNamer() != PropertyNamerDefault.class)
-				setPropertyNamer(b.propertyNamer());
+				propertyNamer(b.propertyNamer());
 
 			if (b.interfaceClass() != Object.class)
-				setInterfaceClass(b.interfaceClass());
+				interfaceClass(b.interfaceClass());
 
 			if (b.stopClass() != Object.class)
-				setStopClass(b.stopClass());
+				stopClass(b.stopClass());
 
 			if (b.beanDictionary().length > 0)
-				addToBeanDictionary(b.beanDictionary());
+				beanDictionary(b.beanDictionary());
 		}
 	}
 }

@@ -31,8 +31,8 @@ import org.apache.juneau.xml.*;
 	"application/json", "text/json",                 // JsonSerializer
 	"application/json+simple", "text/json+simple",   // JsonSerializer.Simple
 	"application/json+schema",                       // JsonSchemaSerializer
-	"text/xml",                                      // XmlDocSerializer
-	"text/xml+simple",                               // XmlDocSerializer.Simple
+	"text/xml",                                      // XmlDocSerializer.Ns
+	"text/xml+simple",                               // XmlDocSerializer
 	"text/xml+schema",                               // XmlSchemaDocSerializer
 	"text/html",                                     // HtmlDocSerializer
 	"application/x-www-form-urlencoded",             // UrlEncodingSerializer
@@ -51,20 +51,19 @@ import org.apache.juneau.xml.*;
 		JsonSerializer.class,
 		JsonSerializer.Simple.class,
 		JsonSchemaSerializer.class,
+		XmlDocSerializer.Ns.class,
 		XmlDocSerializer.class,
-		XmlDocSerializer.Simple.class,
 		XmlSchemaDocSerializer.class,
 		HtmlDocSerializer.class,
 		UrlEncodingSerializer.class,
 		SoapXmlSerializer.class,
-		JavaSerializedObjectSerializer.class
+		JsoSerializer.class
 	},
 	parsers={
 		JsonParser.class,
 		XmlParser.class,
 		HtmlParser.class,
 		UrlEncodingParser.class,
-		JavaSerializedObjectParser.class
 	}
 )
 public final class DefaultProvider extends BaseProvider {}

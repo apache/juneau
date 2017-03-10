@@ -539,8 +539,8 @@ public interface RdfCommonContext {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
-	 * 	WriterSerializer s = <jk>new</jk> RdfSerializer.XmlAbbrev().setLooseCollections(<jk>true</jk>);
-	 * 	ReaderParser p = <jk>new</jk> RdfParser.Xml().setLooseCollections(<jk>true</jk>);
+	 * 	WriterSerializer s = <jk>new</jk> RdfSerializerBuilder().xmlabbrev().looseCollections(<jk>true</jk>).build();
+	 * 	ReaderParser p = <jk>new</jk> RdfParserBuilder().xml().looseCollections(<jk>true</jk>).build();
 	 *
 	 * 	List&lt;MyBean&gt; l = createListOfMyBeans();
 	 *

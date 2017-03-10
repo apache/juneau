@@ -33,6 +33,11 @@ public class CharsetEncodingsResource extends RestServlet {
 
 	@Consumes("text/p")
 	public static class CtParser extends ReaderParser {
+
+		public CtParser(PropertyStore propertyStore) {
+			super(propertyStore);
+		}
+
 		@SuppressWarnings("unchecked")
 		@Override /* Parser */
 		protected <T> T doParse(ParserSession session, ClassMeta<T> type) throws Exception {
@@ -42,6 +47,11 @@ public class CharsetEncodingsResource extends RestServlet {
 
 	@Produces("text/s")
 	public static class ASerializer extends WriterSerializer {
+
+		public ASerializer(PropertyStore propertyStore) {
+			super(propertyStore);
+		}
+
 		@Override /* Serializer */
 		protected void doSerialize(SerializerSession session, Object o) throws Exception {
 			session.getWriter().write(o.toString());

@@ -15,25 +15,22 @@ package org.apache.juneau.rest.test;
 import static org.junit.Assert.*;
 
 import org.apache.juneau.dto.swagger.*;
-import org.apache.juneau.json.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.*;
 
 public class OptionsWithoutNlsTest extends RestTestcase {
 
 	private static String URL = "/testOptionsWithoutNls";
+	private RestClient client = TestMicroservice.DEFAULT_CLIENT;
 
 	//====================================================================================================
 	// Should get to the options page without errors
 	//====================================================================================================
 	@Test
 	public void testOptions() throws Exception {
-		RestClient client = new TestRestClient(JsonSerializer.DEFAULT, JsonParser.DEFAULT);
 		RestCall r = client.doOptions(URL + "/testOptions");
 		Swagger o = r.getResponse(Swagger.class);
 		assertNotNull(o.getInfo());
-
-		client.closeQuietly();
 	}
 
 	//====================================================================================================
@@ -41,11 +38,8 @@ public class OptionsWithoutNlsTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testMissingResourceBundle() throws Exception {
-		RestClient client = new TestRestClient(JsonSerializer.DEFAULT, JsonParser.DEFAULT);
 		RestCall r = client.doGet(URL + "/testMissingResourceBundle");
 		String o = r.getResponse(String.class);
 		assertEquals("{!!bad}", o);
-
-		client.closeQuietly();
 	}
 }

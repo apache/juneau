@@ -24,7 +24,7 @@ public class JsonSchemaTest {
 
 	@Test
 	public void testSchema1() throws Exception {
-		JsonSerializer s = JsonSerializer.DEFAULT_LAX_READABLE.clone().setAddBeanTypeProperties(false);
+		JsonSerializer s = new JsonSerializerBuilder().simple().ws().addBeanTypeProperties(false).build();
 		JsonParser p = JsonParser.DEFAULT;
 		String r;
 		Schema t, t2;
@@ -118,7 +118,7 @@ public class JsonSchemaTest {
 
 	@Test
 	public void testSchema2() throws Exception {
-		JsonSerializer s = JsonSerializer.DEFAULT_LAX_READABLE.clone().setAddBeanTypeProperties(false);
+		JsonSerializer s = new JsonSerializerBuilder().simple().ws().addBeanTypeProperties(false).build();
 		JsonParser p = JsonParser.DEFAULT;
 		String r;
 		Schema t, t2;

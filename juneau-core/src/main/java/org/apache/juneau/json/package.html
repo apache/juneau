@@ -276,11 +276,7 @@
 		We could have also created a new serializer with the same settings using the following code:
 	</p>
 	<p class='bcode'>
-	JsonSerializer s = <jk>new</jk> JsonSerializer()
-		.setUseIndentation(<jk>true</jk>)
-		.setUseWhitespace(<jk>true</jk>)
-		.setSimpleMode(<jk>true</jk>)
-		.setQuoteChar(<js>'\''</js>);
+	JsonSerializer s = <jk>new</jk> JsonSerializerBuilder().simple().ws().sq().build();
 	</p>
 	
 	<p>
@@ -648,7 +644,7 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Clone an existing serializer and set property for detecting recursions.</jc>
-	JsonSerializer s = JsonSerializer.<jsf>DEFAULT_LAX_READABLE</jsf>.clone().setDetectRecursions(<jk>true</jk>);
+	JsonSerializer s = JsonSerializer.<jsf>DEFAULT_LAX_READABLE</jsf>.builder().detectRecursions(<jk>true</jk>).build();
 
 	<jc>// Create a recursive loop.</jc>
 	A a = <jk>new</jk> A();
@@ -1277,7 +1273,7 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Create a client to handle JSON requests and responses.</jc>
-	RestClient client = <jk>new</jk> RestClient(JsonSerializer.<jk>class</jk>, JsonParser.<jk>class</jk>);
+	RestClient client = <jk>new</jk> RestClientBuilder().build();
 		</p>
 		<p>
 			The client handles all content negotiation based on the registered serializers and parsers.

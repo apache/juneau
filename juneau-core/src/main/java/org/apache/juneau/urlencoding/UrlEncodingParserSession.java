@@ -12,13 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.urlencoding;
 
-import static org.apache.juneau.urlencoding.UrlEncodingParserContext.*;
-
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.uon.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link UrlEncodingParser}.
@@ -57,7 +56,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 		if (op == null || op.isEmpty()) {
 			expandedParams = ctx.expandedParams;
 		} else {
-			expandedParams = op.getBoolean(URLENC_expandedParams, false);
+			expandedParams = op.getBoolean(UrlEncodingContext.URLENC_expandedParams, false);
 		}
 	}
 

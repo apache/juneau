@@ -43,6 +43,24 @@ import org.apache.juneau.transform.*;
 @Produces("text/plain")
 public final class PlainTextSerializer extends WriterSerializer {
 
+	/** Default serializer, all default settings.*/
+	public static final PlainTextSerializer DEFAULT = new PlainTextSerializer(PropertyStore.create());
+
+
+	/**
+	 * Constructor.
+	 * @param propertyStore The property store containing all the settings for this object.
+	 */
+	public PlainTextSerializer(PropertyStore propertyStore) {
+		super(propertyStore);
+	}
+
+	@Override /* CoreObject */
+	public PlainTextSerializerBuilder builder() {
+		return new PlainTextSerializerBuilder(propertyStore);
+	}
+
+
 	//--------------------------------------------------------------------------------
 	// Overridden methods
 	//--------------------------------------------------------------------------------
@@ -50,14 +68,5 @@ public final class PlainTextSerializer extends WriterSerializer {
 	@Override /* Serializer */
 	protected void doSerialize(SerializerSession session, Object o) throws Exception {
 		session.getWriter().write(o == null ? "null" : session.convertToType(o, String.class));
-	}
-
-	@Override /* Serializer */
-	public PlainTextSerializer clone() {
-		try {
-			return (PlainTextSerializer)super.clone();
-		} catch (CloneNotSupportedException e) {
-			throw new RuntimeException(e); // Shouldn't happen.
-		}
 	}
 }

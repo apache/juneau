@@ -12,8 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.html5;
 
-import org.apache.juneau.xml.annotation.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
+
+import org.apache.juneau.xml.annotation.*;
 
 /**
  * A subclass of HTML elements that have no content or end tags.

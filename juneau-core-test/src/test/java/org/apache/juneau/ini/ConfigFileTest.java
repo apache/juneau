@@ -2046,7 +2046,7 @@ public class ConfigFileTest {
 		cf.put("d", "$B{$A{X}}");
 		cf.put("e", "$D{X}");
 
-		VarResolver vr = new VarResolver().addVars(ALVar.class, BLVar.class);
+		VarResolver vr = new VarResolverBuilder().vars(ALVar.class, BLVar.class).build();
 
 		cf = cf.getResolving(vr);
 
@@ -2057,7 +2057,7 @@ public class ConfigFileTest {
 		assertEquals("$D{X}", cf.getString("e"));
 
 		// Create new resolver that addx $C and overrides $A
-		VarResolver vr2 = vr.clone().addVars(AUVar.class, DUVar.class);
+		VarResolver vr2 = vr.builder().vars(AUVar.class, DUVar.class).build();
 
 		// true == augment by adding existing as parent to the new resolver
 		cf = cf.getResolving(vr2);

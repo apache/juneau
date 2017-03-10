@@ -15,18 +15,14 @@ package org.apache.juneau.jena;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.jena.Constants.*;
 import static org.apache.juneau.jena.RdfCommonContext.*;
-import static org.apache.juneau.jena.RdfParserContext.*;
 
 import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.transform.*;
-import org.apache.juneau.xml.*;
-import org.apache.juneau.xml.annotation.*;
 
 import com.hp.hpl.jena.rdf.model.*;
 import com.hp.hpl.jena.util.iterator.*;
@@ -57,54 +53,106 @@ import com.hp.hpl.jena.util.iterator.*;
 public class RdfParser extends ReaderParser {
 
 	/** Default XML parser, all default settings.*/
-	public static final RdfParser DEFAULT_XML = new RdfParser.Xml().lock();
+	public static final RdfParser DEFAULT_XML = new RdfParser(PropertyStore.create());
 
 	/** Default Turtle parser, all default settings.*/
-	public static final RdfParser DEFAULT_TURTLE = new RdfParser.Turtle().lock();
+	public static final RdfParser DEFAULT_TURTLE = new Turtle(PropertyStore.create());
 
 	/** Default N-Triple parser, all default settings.*/
-	public static final RdfParser DEFAULT_NTRIPLE = new RdfParser.NTriple().lock();
+	public static final RdfParser DEFAULT_NTRIPLE = new NTriple(PropertyStore.create());
 
 	/** Default N3 parser, all default settings.*/
-	public static final RdfParser DEFAULT_N3 = new RdfParser.N3().lock();
-
+	public static final RdfParser DEFAULT_N3 = new N3(PropertyStore.create());
+	
 
 	/** Consumes RDF/XML input */
 	@Consumes("text/xml+rdf")
 	public static class Xml extends RdfParser {
-		/** Constructor */
-		public Xml() {
-			setLanguage(LANG_RDF_XML);
+
+		/**
+		 * Constructor.
+		 * @param propertyStore The property store containing all the settings for this object.
+		 */
+		public Xml(PropertyStore propertyStore) {
+			super(propertyStore);
+		}
+		
+		@Override
+		protected ObjectMap getOverrideProperties() {
+			return super.getOverrideProperties().append(RDF_language, LANG_RDF_XML);
 		}
 	}
 
 	/** Consumes N-Triple input */
 	@Consumes(value="text/n-triple")
 	public static class NTriple extends RdfParser {
-		/** Constructor */
-		public NTriple() {
-			setLanguage(LANG_NTRIPLE);
+		
+		/**
+		 * Constructor.
+		 * @param propertyStore The property store containing all the settings for this object.
+		 */
+		public NTriple(PropertyStore propertyStore) {
+			super(propertyStore);
+		}
+		
+		@Override
+		protected ObjectMap getOverrideProperties() {
+			return super.getOverrideProperties().append(RDF_language, LANG_NTRIPLE);
 		}
 	}
 
 	/** Consumes Turtle input */
 	@Consumes(value="text/turtle")
 	public static class Turtle extends RdfParser {
-		/** Constructor */
-		public Turtle() {
-			setLanguage(LANG_TURTLE);
+
+		/**
+		 * Constructor.
+		 * @param propertyStore The property store containing all the settings for this object.
+		 */
+		public Turtle(PropertyStore propertyStore) {
+			super(propertyStore);
+		}
+		
+		@Override
+		protected ObjectMap getOverrideProperties() {
+			return super.getOverrideProperties().append(RDF_language, LANG_TURTLE);
 		}
 	}
 
 	/** Consumes N3 input */
 	@Consumes(value="text/n3")
 	public static class N3 extends RdfParser {
-		/** Constructor */
-		public N3() {
-			setLanguage(LANG_N3);
+
+		/**
+		 * Constructor.
+		 * @param propertyStore The property store containing all the settings for this object.
+		 */
+		public N3(PropertyStore propertyStore) {
+			super(propertyStore);
+		}
+		
+		@Override
+		protected ObjectMap getOverrideProperties() {
+			return super.getOverrideProperties().append(RDF_language, LANG_N3);
 		}
 	}
 
+
+	private final RdfParserContext ctx;
+
+	/**
+	 * Constructor.
+	 * @param propertyStore The property store containing all the settings for this object.
+	 */
+	public RdfParser(PropertyStore propertyStore) {
+		super(propertyStore);
+		this.ctx = createContext(RdfParserContext.class);
+	}
+
+	@Override /* CoreObject */
+	public RdfParserBuilder builder() {
+		return new RdfParserBuilder(propertyStore);
+	}
 
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	@Override /* ReaderParser */
@@ -398,7 +446,6 @@ public class RdfParser extends ReaderParser {
 			}
 
 		}
-		// TODO Auto-generated method stub
 		return m;
 	}
 
@@ -425,660 +472,6 @@ public class RdfParser extends ReaderParser {
 
 	@Override /* Parser */
 	public RdfParserSession createSession(Object input, ObjectMap op, Method javaMethod, Object outer, Locale locale, TimeZone timeZone, MediaType mediaType) {
-		return new RdfParserSession(getContext(RdfParserContext.class), op, input, javaMethod, outer, locale, timeZone, mediaType);
-	}
-	
-
-	//--------------------------------------------------------------------------------
-	// Properties
-	//--------------------------------------------------------------------------------
-
-	/**
-	 * <b>Configuration property:</b>  Trim whitespace from text elements.
-	 * <p>
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RdfParser.trimWhitespace"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
-	 * <p>
-	 * If <jk>true</jk>, whitespace in text elements will be automatically trimmed.
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>RDF_trimWhitespace</jsf>, value)</code>.
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @throws LockedException If {@link #lock()} was called on this class.
-	 * @see RdfParserContext#RDF_trimWhitespace
-	 */
-	public RdfParser setTrimWhitespace(boolean value) throws LockedException {
-		return setProperty(RDF_trimWhitespace, value);
-	}
-
-	/**
-	 * <b>Configuration property:</b>  RDF language.
-	 * <p>
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.language"</js>
-	 * 	<li><b>Data type:</b> <code>String</code>
-	 * 	<li><b>Default:</b> <js>"RDF/XML-ABBREV"</js>
-	 * </ul>
-	 * <p>
-	 * Can be any of the following:
-	 * <ul class='spaced-list'>
-	 * 	<li><js>"RDF/XML"</js>
-	 * 	<li><js>"RDF/XML-ABBREV"</js>
-	 * 	<li><js>"N-TRIPLE"</js>
-	 * 	<li><js>"N3"</js> - General name for the N3 writer.
-	 * 		Will make a decision on exactly which writer to use (pretty writer, plain writer or simple writer) when created.
-	 * 		Default is the pretty writer but can be overridden with system property	<code>com.hp.hpl.jena.n3.N3JenaWriter.writer</code>.
-	 * 	<li><js>"N3-PP"</js> - Name of the N3 pretty writer.
-	 * 		The pretty writer uses a frame-like layout, with prefixing, clustering like properties and embedding one-referenced bNodes.
-	 * 	<li><js>"N3-PLAIN"</js> - Name of the N3 plain writer.
-	 * 		The plain writer writes records by subject.
-	 * 	<li><js>"N3-TRIPLES"</js> - Name of the N3 triples writer.
-	 * 		This writer writes one line per statement, like N-Triples, but does N3-style prefixing.
-	 * 	<li><js>"TURTLE"</js> -  Turtle writer.
-	 * 		http://www.dajobe.org/2004/01/turtle/
-	 * </ul>
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>RDF_language</jsf>, value)</code>.
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @throws LockedException If {@link #lock()} was called on this class.
-	 * @see RdfParserContext#RDF_language
-	 */
-	public RdfParser setLanguage(String value) throws LockedException {
-		return setProperty(RDF_language, value);
-	}
-
-	/**
-	 * <b>Configuration property:</b>  XML namespace for Juneau properties.
-	 * <p>
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.juneauNs"</js>
-	 * 	<li><b>Data type:</b> {@link Namespace}
-	 * 	<li><b>Default:</b> <code>{j:<js>'http://www.apache.org/juneau/'</js>}</code>
-	 * </ul>
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>RDF_juneauNs</jsf>, value)</code>.
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @throws LockedException If {@link #lock()} was called on this class.
-	 * @see RdfParserContext#RDF_juneauNs
-	 */
-	public RdfParser setJuneauNs(Namespace value) throws LockedException {
-		return setProperty(RDF_juneauNs, value);
-	}
-
-	/**
-	 * <b>Configuration property:</b>  Default XML namespace for bean properties.
-	 * <p>
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.juneauBpNs"</js>
-	 * 	<li><b>Data type:</b> {@link Namespace}
-	 * 	<li><b>Default:</b> <code>{j:<js>'http://www.apache.org/juneaubp/'</js>}</code>
-	 * </ul>
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>RDF_juneauBpNs</jsf>, value)</code>.
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @throws LockedException If {@link #lock()} was called on this class.
-	 * @see RdfParserContext#RDF_juneauBpNs
-	 */
-	public RdfParser setJuneauBpNs(Namespace value) throws LockedException {
-		return setProperty(RDF_juneauBpNs, value);
-	}
-
-	/**
-	 * <b>Configuration property:</b>  Reuse XML namespaces when RDF namespaces not specified.
-	 * <p>
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.useXmlNamespaces"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>true</jk>
-	 * </ul>
-	 * <p>
-	 * When specified, namespaces defined using {@link XmlNs} and {@link Xml} will be inherited by the RDF serializers.
-	 * Otherwise, namespaces will be defined using {@link RdfNs} and {@link Rdf}.
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>RDF_useXmlNamespaces</jsf>, value)</code>.
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @throws LockedException If {@link #lock()} was called on this class.
-	 * @see RdfParserContext#RDF_useXmlNamespaces
-	 */
-	public RdfParser setUseXmlNamespaces(boolean value) throws LockedException {
-		return setProperty(RDF_useXmlNamespaces, value);
-	}
-
-	/**
-	 * <b>Configuration property:</b>  RDF format for representing collections and arrays.
-	 * <p>
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.collectionFormat"</js>
-	 * 	<li><b>Data type:</b> <code>RdfCollectionFormat</code>
-	 * 	<li><b>Default:</b> <js>"DEFAULT"</js>
-	 * </ul>
-	 * <p>
-	 * Possible values:
-	 * <ul class='spaced-list'>
-	 * 	<li><js>"DEFAULT"</js> - Default format.  The default is an RDF Sequence container.
-	 * 	<li><js>"SEQ"</js> - RDF Sequence container.
-	 * 	<li><js>"BAG"</js> - RDF Bag container.
-	 * 	<li><js>"LIST"</js> - RDF List container.
-	 * 	<li><js>"MULTI_VALUED"</js> - Multi-valued properties.
-	 * </ul>
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>If you use <js>"BAG"</js> or <js>"MULTI_VALUED"</js>, the order of the elements in the collection will get lost.
-	 * </ul>
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>RDF_collectionFormat</jsf>, value)</code>.
-	 * 	<li>This introduces a slight performance penalty.
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @throws LockedException If {@link #lock()} was called on this class.
-	 * @see RdfCommonContext#RDF_collectionFormat
-	 */
-	public RdfParser setCollectionFormat(RdfCollectionFormat value) throws LockedException {
-		return setProperty(RDF_collectionFormat, value);
-	}
-
-	/**
-	 * <b>Configuration property:</b>  Collections should be serialized and parsed as loose collections.
-	 * <p>
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.looseCollections"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * </ul>
-	 * <p>
-	 * When specified, collections of resources are handled as loose collections of resources in RDF instead of
-	 * resources that are children of an RDF collection (e.g. Sequence, Bag).
-	 * <p>
-	 * Note that this setting is specialized for RDF syntax, and is incompatible with the concept of
-	 * losslessly representing POJO models, since the tree structure of these POJO models are lost
-	 * when serialized as loose collections.
-	 * <p>
-	 * This setting is typically only useful if the beans being parsed into do not have a bean property
-	 * annotated with {@link Rdf#beanUri @Rdf(beanUri=true)}.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	WriterSerializer s = <jk>new</jk> RdfSerializer.XmlAbbrev().setLooseCollections(<jk>true</jk>);
-	 * 	ReaderParser p = <jk>new</jk> RdfParser.Xml().setLooseCollections(<jk>true</jk>);
-	 *
-	 * 	List&lt;MyBean&gt; l = createListOfMyBeans();
-	 *
-	 * 	<jc>// Serialize to RDF/XML as loose resources</jc>
-	 * 	String rdfXml = s.serialize(l);
-	 *
-	 * <jc>// Parse back into a Java collection</jc>
-	 * 	l = p.parse(rdfXml, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
-	 *
-	 * 	MyBean[] b = createArrayOfMyBeans();
-	 *
-	 * 	<jc>// Serialize to RDF/XML as loose resources</jc>
-	 * 	String rdfXml = s.serialize(b);
-	 *
-	 * <jc>// Parse back into a bean array</jc>
-	 * 	b = p.parse(rdfXml, MyBean[].<jk>class</jk>);
-	 * </p>
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>RDF_looseCollections</jsf>, value)</code>.
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @throws LockedException If {@link #lock()} was called on this class.
-	 * @see RdfCommonContext#RDF_looseCollections
-	 */
-	public RdfParser setLooseCollections(boolean value) throws LockedException {
-		return setProperty(RDF_looseCollections, value);
-	}
-
-	@Override /* Parser */
-	public RdfParser setTrimStrings(boolean value) throws LockedException {
-		super.setTrimStrings(value);
-		return this;
-	}
-
-	@Override /* Parser */
-	public RdfParser setStrict(boolean value) throws LockedException {
-		super.setStrict(value);
-		return this;
-	}
-
-	@Override /* Parser */
-	public RdfParser setInputStreamCharset(String value) throws LockedException {
-		super.setInputStreamCharset(value);
-		return this;
-	}
-
-	@Override /* Parser */
-	public RdfParser setFileCharset(String value) throws LockedException {
-		super.setFileCharset(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser setBeansRequireDefaultConstructor(boolean value) throws LockedException {
-		super.setBeansRequireDefaultConstructor(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser setBeansRequireSerializable(boolean value) throws LockedException {
-		super.setBeansRequireSerializable(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser setBeansRequireSettersForGetters(boolean value) throws LockedException {
-		super.setBeansRequireSettersForGetters(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser setBeansRequireSomeProperties(boolean value) throws LockedException {
-		super.setBeansRequireSomeProperties(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser setBeanMapPutReturnsOldValue(boolean value) throws LockedException {
-		super.setBeanMapPutReturnsOldValue(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser setBeanConstructorVisibility(Visibility value) throws LockedException {
-		super.setBeanConstructorVisibility(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser setBeanClassVisibility(Visibility value) throws LockedException {
-		super.setBeanClassVisibility(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser setBeanFieldVisibility(Visibility value) throws LockedException {
-		super.setBeanFieldVisibility(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser setMethodVisibility(Visibility value) throws LockedException {
-		super.setMethodVisibility(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser setUseJavaBeanIntrospector(boolean value) throws LockedException {
-		super.setUseJavaBeanIntrospector(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser setUseInterfaceProxies(boolean value) throws LockedException {
-		super.setUseInterfaceProxies(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser setIgnoreUnknownBeanProperties(boolean value) throws LockedException {
-		super.setIgnoreUnknownBeanProperties(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser setIgnoreUnknownNullBeanProperties(boolean value) throws LockedException {
-		super.setIgnoreUnknownNullBeanProperties(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser setIgnorePropertiesWithoutSetters(boolean value) throws LockedException {
-		super.setIgnorePropertiesWithoutSetters(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser setIgnoreInvocationExceptionsOnGetters(boolean value) throws LockedException {
-		super.setIgnoreInvocationExceptionsOnGetters(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser setIgnoreInvocationExceptionsOnSetters(boolean value) throws LockedException {
-		super.setIgnoreInvocationExceptionsOnSetters(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser setSortProperties(boolean value) throws LockedException {
-		super.setSortProperties(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser setNotBeanPackages(String...values) throws LockedException {
-		super.setNotBeanPackages(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser setNotBeanPackages(Collection<String> values) throws LockedException {
-		super.setNotBeanPackages(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser addNotBeanPackages(String...values) throws LockedException {
-		super.addNotBeanPackages(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser addNotBeanPackages(Collection<String> values) throws LockedException {
-		super.addNotBeanPackages(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser removeNotBeanPackages(String...values) throws LockedException {
-		super.removeNotBeanPackages(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser removeNotBeanPackages(Collection<String> values) throws LockedException {
-		super.removeNotBeanPackages(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser setNotBeanClasses(Class<?>...values) throws LockedException {
-		super.setNotBeanClasses(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser setNotBeanClasses(Collection<Class<?>> values) throws LockedException {
-		super.setNotBeanClasses(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser addNotBeanClasses(Class<?>...values) throws LockedException {
-		super.addNotBeanClasses(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser addNotBeanClasses(Collection<Class<?>> values) throws LockedException {
-		super.addNotBeanClasses(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser removeNotBeanClasses(Class<?>...values) throws LockedException {
-		super.removeNotBeanClasses(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser removeNotBeanClasses(Collection<Class<?>> values) throws LockedException {
-		super.removeNotBeanClasses(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser setBeanFilters(Class<?>...values) throws LockedException {
-		super.setBeanFilters(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser setBeanFilters(Collection<Class<?>> values) throws LockedException {
-		super.setBeanFilters(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser addBeanFilters(Class<?>...values) throws LockedException {
-		super.addBeanFilters(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser addBeanFilters(Collection<Class<?>> values) throws LockedException {
-		super.addBeanFilters(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser removeBeanFilters(Class<?>...values) throws LockedException {
-		super.removeBeanFilters(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser removeBeanFilters(Collection<Class<?>> values) throws LockedException {
-		super.removeBeanFilters(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser setPojoSwaps(Class<?>...values) throws LockedException {
-		super.setPojoSwaps(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser setPojoSwaps(Collection<Class<?>> values) throws LockedException {
-		super.setPojoSwaps(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser addPojoSwaps(Class<?>...values) throws LockedException {
-		super.addPojoSwaps(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser addPojoSwaps(Collection<Class<?>> values) throws LockedException {
-		super.addPojoSwaps(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser removePojoSwaps(Class<?>...values) throws LockedException {
-		super.removePojoSwaps(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser removePojoSwaps(Collection<Class<?>> values) throws LockedException {
-		super.removePojoSwaps(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser setImplClasses(Map<Class<?>,Class<?>> values) throws LockedException {
-		super.setImplClasses(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public <T> CoreApi addImplClass(Class<T> interfaceClass, Class<? extends T> implClass) throws LockedException {
-		super.addImplClass(interfaceClass, implClass);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser setBeanDictionary(Class<?>...values) throws LockedException {
-		super.setBeanDictionary(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser setBeanDictionary(Collection<Class<?>> values) throws LockedException {
-		super.setBeanDictionary(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser addToBeanDictionary(Class<?>...values) throws LockedException {
-		super.addToBeanDictionary(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser addToBeanDictionary(Collection<Class<?>> values) throws LockedException {
-		super.addToBeanDictionary(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser removeFromBeanDictionary(Class<?>...values) throws LockedException {
-		super.removeFromBeanDictionary(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser removeFromBeanDictionary(Collection<Class<?>> values) throws LockedException {
-		super.removeFromBeanDictionary(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser setBeanTypePropertyName(String value) throws LockedException {
-		super.setBeanTypePropertyName(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser setDefaultParser(Class<?> value) throws LockedException {
-		super.setDefaultParser(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser setLocale(Locale value) throws LockedException {
-		super.setLocale(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser setTimeZone(TimeZone value) throws LockedException {
-		super.setTimeZone(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser setMediaType(MediaType value) throws LockedException {
-		super.setMediaType(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser setDebug(boolean value) throws LockedException {
-		super.setDebug(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser setProperty(String name, Object value) throws LockedException {
-		super.setProperty(name, value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser setProperties(ObjectMap properties) throws LockedException {
-		super.setProperties(properties);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser addToProperty(String name, Object value) throws LockedException {
-		super.addToProperty(name, value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser putToProperty(String name, Object key, Object value) throws LockedException {
-		super.putToProperty(name, key, value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser putToProperty(String name, Object value) throws LockedException {
-		super.putToProperty(name, value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfParser removeFromProperty(String name, Object value) throws LockedException {
-		super.removeFromProperty(name, value);
-		return this;
-	}
-
-	
-	//--------------------------------------------------------------------------------
-	// Overridden methods
-	//--------------------------------------------------------------------------------
-
-	@Override /* CoreApi */
-	public RdfParser setClassLoader(ClassLoader classLoader) throws LockedException {
-		super.setClassLoader(classLoader);
-		return this;
-	}
-
-	@Override /* Lockable */
-	public RdfParser lock() {
-		super.lock();
-		return this;
-	}
-
-	@Override /* Lockable */
-	public RdfParser clone() {
-		try {
-			RdfParser c = (RdfParser)super.clone();
-			return c;
-		} catch (CloneNotSupportedException e) {
-			throw new RuntimeException(e); // Shouldn't happen
-		}
+		return new RdfParserSession(ctx, op, input, javaMethod, outer, locale, timeZone, mediaType);
 	}
 }

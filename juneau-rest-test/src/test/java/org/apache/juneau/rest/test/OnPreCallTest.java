@@ -28,14 +28,14 @@ public class OnPreCallTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testPropertiesOverriddenByAnnotation() throws Exception {
-		RestClient client = new TestRestClient().setContentType("text/a1").setAccept("text/plain");
+		RestClient client = TestMicroservice.client().contentType("text/a1").accept("text/plain").build();
 		String url = URL + "/testPropertiesOverriddenByAnnotation";
 		String r;
 
 		r = client.doPut(url, new StringReader("")).getResponseAsString();
 		assertEquals("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5,contentType=text/a1", r);
 
-		r = client.doPut(url, new StringReader("")).setHeader("Override-Content-Type", "text/a2").getResponseAsString();
+		r = client.doPut(url, new StringReader("")).header("Override-Content-Type", "text/a2").getResponseAsString();
 		assertEquals("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5,contentType=text/a2", r);
 
 		client.closeQuietly();
@@ -46,14 +46,14 @@ public class OnPreCallTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testPropertiesOverriddenProgrammatically() throws Exception {
-		RestClient client = new TestRestClient().setContentType("text/a1").setAccept("text/plain");
+		RestClient client = TestMicroservice.client().contentType("text/a1").accept("text/plain").build();
 		String url = URL + "/testPropertiesOverriddenProgrammatically";
 		String r;
 
 		r = client.doPut(url, new StringReader("")).getResponseAsString();
 		assertEquals("p1=sp1,p2=xp2,p3=pp3,p4=pp4,p5=xp5,contentType=text/a1", r);
 
-		r = client.doPut(url, new StringReader("")).setHeader("Override-Content-Type", "text/a2").getResponseAsString();
+		r = client.doPut(url, new StringReader("")).header("Override-Content-Type", "text/a2").getResponseAsString();
 		assertEquals("p1=sp1,p2=xp2,p3=pp3,p4=pp4,p5=xp5,contentType=text/a2", r);
 
 		client.closeQuietly();

@@ -33,7 +33,7 @@ import org.apache.juneau.serializer.*;
  * Swaps MUST declare a public no-arg constructor so that the bean context can instantiate them.
  * <p>
  * 	<code>PojoSwaps</code> are associated with instances of {@link BeanContext BeanContexts} by passing the swap class to
- * 	the {@link CoreApi#addPojoSwaps(Class...)} method.<br>
+ * 	the {@link CoreObjectBuilder#pojoSwaps(Class...)} method.<br>
  * When associated with a bean context, fields of the specified type will automatically be converted when the
  * 	{@link BeanMap#get(Object)} or {@link BeanMap#put(String, Object)} methods are called.<br>
  * <p>

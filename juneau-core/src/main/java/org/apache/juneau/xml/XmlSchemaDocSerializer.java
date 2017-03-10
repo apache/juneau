@@ -37,16 +37,10 @@ public class XmlSchemaDocSerializer extends XmlSchemaSerializer {
 
 	/**
 	 * Constructor.
+	 * @param propertyStore The property store containing all the settings for this object.
 	 */
-	public XmlSchemaDocSerializer() {}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param cf The context factory to use for creating the context for this serializer.
-	 */
-	protected XmlSchemaDocSerializer(ContextFactory cf) {
-		super(cf);
+	public XmlSchemaDocSerializer(PropertyStore propertyStore) {
+		super(propertyStore, null);
 	}
 
 	@Override /* Serializer */

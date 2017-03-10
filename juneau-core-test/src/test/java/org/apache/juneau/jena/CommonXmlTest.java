@@ -25,13 +25,13 @@ import org.junit.*;
 @SuppressWarnings("javadoc")
 public class CommonXmlTest {
 
-	private RdfSerializer getBasicSerializer() {
-		return new RdfSerializer()
-			.setQuoteChar('\'')
-			.setUseWhitespace(false)
-			.setProperty(RDF_rdfxml_allowBadUris, true)
-			.setProperty(RDF_rdfxml_showDoctypeDeclaration, false)
-			.setProperty(RDF_rdfxml_showXmlDeclaration, false);
+	private RdfSerializerBuilder getBasicSerializer() {
+		return new RdfSerializerBuilder()
+			.sq()
+			.useWhitespace(false)
+			.property(RDF_rdfxml_allowBadUris, true)
+			.property(RDF_rdfxml_showDoctypeDeclaration, false)
+			.property(RDF_rdfxml_showXmlDeclaration, false);
 	}
 
 	private String strip(String s) {
@@ -43,12 +43,12 @@ public class CommonXmlTest {
 	//====================================================================================================
 	@Test
 	public void testBeanUriAnnotation() throws Exception {
-		RdfSerializer s = getBasicSerializer();
+		RdfSerializerBuilder s = getBasicSerializer();
 		RdfParser p = RdfParser.DEFAULT_XML;
 		A t1 = A.create(), t2;
 		String r;
 
-		r = s.serialize(t1);
+		r = s.build().serialize(t1);
 		assertEquals("<rdf:Description rdf:about='http://foo'><jp:name>bar</jp:name></rdf:Description>", strip(r));
 		t2 = p.parse(r, A.class);
 		assertEqualObjects(t1, t2);
@@ -71,12 +71,12 @@ public class CommonXmlTest {
 	//====================================================================================================
 	@Test
 	public void testBeanUriAnnotationOnlyUriProperty() throws Exception {
-		RdfSerializer s = getBasicSerializer();
+		RdfSerializerBuilder s = getBasicSerializer();
 		RdfParser p = RdfParser.DEFAULT_XML;
 		B t1 = B.create(), t2;
 		String r;
 
-		r = s.serialize(t1);
+		r = s.build().serialize(t1);
 		assertEquals("<rdf:Description rdf:about='http://foo'><jp:url2 rdf:resource='http://foo/2'/></rdf:Description>", strip(r));
 		t2 = p.parse(r, B.class);
 		assertEqualObjects(t1, t2);

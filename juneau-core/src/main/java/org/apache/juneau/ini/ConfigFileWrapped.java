@@ -39,9 +39,10 @@ public final class ConfigFileWrapped extends ConfigFile {
 
 	ConfigFileWrapped(ConfigFileImpl cf, VarResolver vr) {
 		this.cf = cf;
-		this.vs = vr.clone()
-			.addVars(ConfigFileVar.class)
-			.setContextObject(ConfigFileVar.SESSION_config, cf)
+		this.vs = vr.builder()
+			.vars(ConfigFileVar.class)
+			.contextObject(ConfigFileVar.SESSION_config, cf)
+			.build()
 			.createSession();
 	}
 

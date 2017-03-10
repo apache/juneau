@@ -20,7 +20,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.rest.*;
 import org.junit.*;
 
-public class UrlPathPatternTest extends RestTestcase {
+public class UrlPathPatternTest {
 	@Test
 	public void testComparison() throws Exception {
 		List<UrlPathPattern> l = new LinkedList<UrlPathPattern>();
@@ -35,6 +35,6 @@ public class UrlPathPatternTest extends RestTestcase {
 		l.add(new UrlPathPattern("/foo/{id}/bar/*"));
 
 		Collections.sort(l);
-		assertEquals("[{vars:[],patternString:'/foo/bar'},{vars:[],patternString:'/foo/bar/*'},{vars:['id'],patternString:'/foo/{id}/bar'},{vars:['id'],patternString:'/foo/{id}/bar/*'},{vars:['id'],patternString:'/foo/{id}'},{vars:['id'],patternString:'/foo/{id}/*'},{vars:[],patternString:'/foo'},{vars:[],patternString:'/foo/*'}]", JsonSerializer.DEFAULT_LAX.serialize(l));
+		assertEquals("[{patternString:'/foo/bar',vars:[]},{patternString:'/foo/bar/*',vars:[]},{patternString:'/foo/{id}/bar',vars:['id']},{patternString:'/foo/{id}/bar/*',vars:['id']},{patternString:'/foo/{id}',vars:['id']},{patternString:'/foo/{id}/*',vars:['id']},{patternString:'/foo',vars:[]},{patternString:'/foo/*',vars:[]}]", JsonSerializer.DEFAULT_LAX.builder().sortProperties(true).build().serialize(l));
 	}
 }

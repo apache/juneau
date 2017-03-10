@@ -23,7 +23,6 @@ import org.apache.http.client.entity.*;
 import org.apache.http.entity.*;
 import org.apache.http.message.*;
 import org.apache.juneau.*;
-import org.apache.juneau.json.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.*;
 
@@ -37,7 +36,7 @@ public class ParamsTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testBasic() throws Exception {
-		RestClient client = new TestRestClient(JsonSerializer.DEFAULT, JsonParser.DEFAULT);
+		RestClient client = TestMicroservice.DEFAULT_CLIENT;
 		RestCall r;
 
 		//		@Override
@@ -168,8 +167,6 @@ public class ParamsTest extends RestTestcase {
 		UUID uuid = UUID.randomUUID();
 		r = client.doPut(URL + "/uuid/"+uuid, "");
 		assertEquals("PUT /uuid/"+uuid, r.getResponse(String.class));
-
-		client.closeQuietly();
 	}
 
 	//====================================================================================================
@@ -177,7 +174,7 @@ public class ParamsTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testParamGet() throws Exception {
-		RestClient client = new TestRestClient().setHeader("Accept", "text/plain");
+		RestClient client = TestMicroservice.client().accept("text/plain").build();
 		String r;
 		String url = URL + "/testParamGet";
 
@@ -214,7 +211,7 @@ public class ParamsTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testPlainParamGet() throws Exception {
-		RestClient client = new TestRestClient().setHeader("Accept", "text/plain");
+		RestClient client = TestMicroservice.client().accept("text/plain").build();
 		String r;
 		String url = URL + "/testPlainParamGet";
 
@@ -232,7 +229,7 @@ public class ParamsTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testParamPost() throws Exception {
-		RestClient client = new TestRestClient().setHeader("Accept", "text/plain");
+		RestClient client = TestMicroservice.client().accept("text/plain").build();
 		String r;
 		String url = URL + "/testParamPost";
 
@@ -268,7 +265,7 @@ public class ParamsTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testPlainParamPost() throws Exception {
-		RestClient client = new TestRestClient().setHeader("Accept", "text/plain");
+		RestClient client = TestMicroservice.client().accept("text/plain").build();
 		String r;
 		String url = URL + "/testPlainParamPost";
 
@@ -294,7 +291,7 @@ public class ParamsTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testQParamGet() throws Exception {
-		RestClient client = new TestRestClient().setHeader("Accept", "text/plain");
+		RestClient client = TestMicroservice.client().accept("text/plain").build();
 		String r;
 		String url = URL + "/testQParamGet";
 
@@ -331,7 +328,7 @@ public class ParamsTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testPlainQParamGet() throws Exception {
-		RestClient client = new TestRestClient().setHeader("Accept", "text/plain");
+		RestClient client = TestMicroservice.client().accept("text/plain").build();
 		String r;
 		String url = URL + "/testPlainQParamGet";
 
@@ -349,7 +346,7 @@ public class ParamsTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testQParamPost() throws Exception {
-		RestClient client = new TestRestClient().setHeader("Accept", "text/plain");
+		RestClient client = TestMicroservice.client().accept("text/plain").build();
 		String r;
 		String url = URL + "/testQParamPost";
 
@@ -385,7 +382,7 @@ public class ParamsTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testHasParamGet() throws Exception {
-		RestClient client = new TestRestClient().setHeader("Accept", "text/plain");
+		RestClient client = TestMicroservice.client().accept("text/plain").build();
 		String r;
 		String url = URL + "/testHasParamGet";
 
@@ -422,7 +419,7 @@ public class ParamsTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testHasParamPost() throws Exception {
-		RestClient client = new TestRestClient().setHeader("Accept", "text/plain");
+		RestClient client = TestMicroservice.client().accept("text/plain").build();
 		String r;
 		String url = URL + "/testHasParamPost";
 
@@ -458,7 +455,7 @@ public class ParamsTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testHasQParamGet() throws Exception {
-		RestClient client = new TestRestClient().setHeader("Accept", "text/plain");
+		RestClient client = TestMicroservice.client().accept("text/plain").build();
 		String r;
 		String url = URL + "/testHasQParamGet";
 
@@ -495,7 +492,7 @@ public class ParamsTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testHasQParamPost() throws Exception {
-		RestClient client = new TestRestClient().setHeader("Accept", "text/plain");
+		RestClient client = TestMicroservice.client().accept("text/plain").build();
 		String r;
 		String url = URL + "/testHasQParamPost";
 
@@ -531,7 +528,7 @@ public class ParamsTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testFormPostAsContent() throws Exception {
-		RestClient client = new TestRestClient().setHeader("Accept", "text/plain");
+		RestClient client = TestMicroservice.client().accept("text/plain").build();
 		String r;
 		String url = URL + "/testFormPostAsContent";
 
@@ -555,7 +552,7 @@ public class ParamsTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testMultiPartParams() throws Exception {
-		RestClient client = new TestRestClient().setHeader("Accept", "text/plain");
+		RestClient client = TestMicroservice.client().accept("text/plain").build();
 		String r;
 		String url = URL + "/testMultiPartParams";
 
@@ -597,7 +594,7 @@ public class ParamsTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testMultiPartParamsSingleValues() throws Exception {
-		RestClient client = new TestRestClient().setHeader("Accept", "text/plain");
+		RestClient client = TestMicroservice.client().accept("text/plain").build();
 		String r;
 		String url = URL + "/testMultiPartParams";
 
@@ -641,9 +638,10 @@ public class ParamsTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testFormPostsWithMultiParamsUsingProperty() throws Exception {
-		RestClient client = new TestRestClient()
-			.setHeader("Content-Type", "application/x-www-form-urlencoded")
-			.setHeader("Accept", "application/x-www-form-urlencoded");
+		RestClient client = TestMicroservice.client()
+			.contentType("application/x-www-form-urlencoded")
+			.accept("application/x-www-form-urlencoded")
+			.build();
 		String r;
 		String url = URL + "/testFormPostsWithMultiParamsUsingProperty";
 
@@ -681,9 +679,10 @@ public class ParamsTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testFormPostsWithMultiParamsUsingAnnotation() throws Exception {
-		RestClient client = new TestRestClient()
-			.setHeader("Content-Type", "application/x-www-form-urlencoded")
-			.setHeader("Accept", "application/x-www-form-urlencoded");
+		RestClient client = TestMicroservice.client()
+			.contentType("application/x-www-form-urlencoded")
+			.accept("application/x-www-form-urlencoded")
+			.build();
 		String r;
 		String url = URL + "/testFormPostsWithMultiParamsUsingAnnotation";
 

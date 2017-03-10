@@ -21,7 +21,6 @@ import javax.xml.datatype.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.annotation.Pojo;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
@@ -36,7 +35,7 @@ import org.junit.*;
 @SuppressWarnings({"unchecked","rawtypes","serial","javadoc"})
 public class RoundTripTransformBeansTest extends RoundTripTest {
 
-	public RoundTripTransformBeansTest(String label, Serializer s, Parser p, int flags) throws Exception {
+	public RoundTripTransformBeansTest(String label, SerializerBuilder s, ParserBuilder p, int flags) throws Exception {
 		super(label, s, p, flags);
 	}
 
@@ -50,9 +49,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 			CalendarSwap.ISO8601DTZ.class,
 			DateSwap.ISO8601DTZ.class
 		};
-		s.addPojoSwaps(f);
-		if (p != null)
-			p.addPojoSwaps(f);
+		pojoSwaps(f);
 		A t = new A().init();
 		t = roundTrip(t, A.class);
 
@@ -170,9 +167,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 			CalendarSwap.DateMedium.class,
 			DateSwap.RFC2822DT.class,
 		};
-		s.addPojoSwaps(f);
-		if (p != null)
-			p.addPojoSwaps(f);
+		pojoSwaps(f);
 		A t = new A().init();
 		t = roundTrip(t, A.class);
 
@@ -258,8 +253,8 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 		GregorianCalendar gc = new GregorianCalendar();
 		XMLGregorianCalendar c = DatatypeFactory.newInstance().newXMLGregorianCalendar(gc);
 
-		Serializer s = getSerializer().clone().addPojoSwaps(XMLGregorianCalendarSwap.class);
-		Parser p = getParser().clone().addPojoSwaps(XMLGregorianCalendarSwap.class);
+		Serializer s = getSerializer().builder().pojoSwaps(XMLGregorianCalendarSwap.class).build();
+		Parser p = getParser().builder().pojoSwaps(XMLGregorianCalendarSwap.class).build();
 
 		Object r = s.serialize(c);
 		XMLGregorianCalendar c2 = p.parse(r, XMLGregorianCalendar.class);
@@ -333,10 +328,10 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 	//====================================================================================================
 	@Test
 	public void testSurrogates() throws Exception {
-		addPojoSwaps(D2.class);
+		pojoSwaps(D2.class);
 
-		JsonSerializer s = new JsonSerializer.Simple().addPojoSwaps(D2.class);
-		JsonParser p = new JsonParser().addPojoSwaps(D2.class);
+		JsonSerializer s = new JsonSerializerBuilder().simple().pojoSwaps(D2.class).build();
+		JsonParser p = new JsonParserBuilder().pojoSwaps(D2.class).build();
 		Object r;
 		D1 d1 = D1.create();
 

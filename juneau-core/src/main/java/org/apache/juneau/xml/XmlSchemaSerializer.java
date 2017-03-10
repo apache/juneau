@@ -56,20 +56,24 @@ import org.w3c.dom.ls.*;
 @Produces(value="text/xml+schema",contentType="text/xml")
 public class XmlSchemaSerializer extends XmlSerializer {
 
-	/**
-	 * Constructor
-	 */
-	public XmlSchemaSerializer() {
-		super();
-	}
+	private final XmlSerializerContext ctx;
 
 	/**
 	 * Constructor.
-	 *
-	 * @param config Initialize with the specified config property store.
+	 * @param propertyStore Initialize with the specified config property store.
 	 */
-	protected XmlSchemaSerializer(ContextFactory config) {
-		getContextFactory().copyFrom(config);
+	public XmlSchemaSerializer(PropertyStore propertyStore) {
+		this(propertyStore, null);
+	}
+
+	/**
+	 * Constructor
+	 * @param propertyStore The property store containing all the settings for this object.
+	 * @param overrideProperties A set of overridden settings, typically defined by the class itself.
+	 */
+	public XmlSchemaSerializer(PropertyStore propertyStore, Map<String,Object> overrideProperties) {
+		super(propertyStore);
+		this.ctx = this.propertyStore.create(overrideProperties).getContext(XmlSerializerContext.class);
 	}
 
 	@Override /* XmlSerializer */
@@ -580,6 +584,6 @@ public class XmlSchemaSerializer extends XmlSerializer {
 		if (op == null)
 			op = new ObjectMap();
 		op.put(XmlSerializerContext.XML_enableNamespaces, true);
-		return new XmlSerializerSession(getContext(XmlSerializerContext.class), op, output, javaMethod, locale, timeZone, mediaType);
+		return new XmlSerializerSession(ctx, op, output, javaMethod, locale, timeZone, mediaType);
 	}
 }

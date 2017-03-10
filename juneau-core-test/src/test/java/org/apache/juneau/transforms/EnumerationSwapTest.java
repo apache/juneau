@@ -28,7 +28,7 @@ public class EnumerationSwapTest {
 	//====================================================================================================
 	@Test
 	public void test() throws Exception {
-		WriterSerializer s = new JsonSerializer.Simple().addPojoSwaps(EnumerationSwap.class);
+		WriterSerializer s = new JsonSerializerBuilder().simple().pojoSwaps(EnumerationSwap.class).build();
 		Vector<String> v = new Vector<String>(Arrays.asList(new String[]{"foo","bar","baz"}));
 		Enumeration<String> e = v.elements();
 		assertEquals("['foo','bar','baz']", s.serialize(e));

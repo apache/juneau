@@ -36,6 +36,7 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
+import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.utils.*;
 
@@ -113,8 +114,11 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 			method = _method;
 
-			if (servlet.context.allowBodyParam)
+			if (servlet.context.allowBodyParam) {
 				body = getQueryParameter("body");
+				if (body != null)
+					setHeader("Content-Type", UonSerializer.DEFAULT.getResponseContentType());
+			}
 
 			defaultServletHeaders = servlet.getDefaultRequestHeaders();
 
@@ -192,10 +196,10 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @param name The header name.
 	 * @param value The header value.
 	 */
-	public void setHeader(String name, String value) {
+	public void setHeader(String name, Object value) {
 		if (overriddenHeaders == null)
 			overriddenHeaders = new TreeMap<String,String>(String.CASE_INSENSITIVE_ORDER);
-		overriddenHeaders.put(name, value);
+		overriddenHeaders.put(name, StringUtils.toString(value));
 	}
 
 

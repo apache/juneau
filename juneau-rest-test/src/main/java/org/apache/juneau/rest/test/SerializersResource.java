@@ -14,6 +14,7 @@ package org.apache.juneau.rest.test;
 
 import static org.apache.juneau.rest.annotation.Inherit.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -31,6 +32,11 @@ public class SerializersResource extends RestServletDefault {
 
 	@Produces("text/a")
 	public static class TestSerializerA extends WriterSerializer {
+
+		public TestSerializerA(PropertyStore propertyStore) {
+			super(propertyStore);
+		}
+
 		@Override /* Serializer */
 		protected void doSerialize(SerializerSession session, Object o) throws Exception {
 			session.getWriter().write("text/a - " + o);
@@ -39,6 +45,11 @@ public class SerializersResource extends RestServletDefault {
 
 	@Produces("text/b")
 	public static class TestSerializerB extends WriterSerializer {
+
+		public TestSerializerB(PropertyStore propertyStore) {
+			super(propertyStore);
+		}
+
 		@Override /* Serializer */
 		protected void doSerialize(SerializerSession session, Object o) throws Exception {
 			session.getWriter().write("text/b - " + o);
@@ -71,6 +82,11 @@ public class SerializersResource extends RestServletDefault {
 
 	@Produces("text/a")
 	public static class TestSerializerC extends WriterSerializer {
+
+		public TestSerializerC(PropertyStore propertyStore) {
+			super(propertyStore);
+		}
+
 		@Override /* Serializer */
 		protected void doSerialize(SerializerSession session, Object o) throws Exception {
 			session.getWriter().write("text/c - " + o);
@@ -87,6 +103,11 @@ public class SerializersResource extends RestServletDefault {
 
 	@Produces(value="text/a,text/d",contentType="text/d")
 	public static class TestSerializerD extends WriterSerializer {
+
+		public TestSerializerD(PropertyStore propertyStore) {
+			super(propertyStore);
+		}
+
 		@Override /* Serializer */
 		protected void doSerialize(SerializerSession session, Object o) throws Exception {
 			session.getWriter().write("text/d - " + o);

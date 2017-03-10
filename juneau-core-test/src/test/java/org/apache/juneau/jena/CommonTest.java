@@ -24,20 +24,19 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.jena.annotation.*;
-import org.apache.juneau.serializer.*;
 import org.apache.juneau.testbeans.*;
 import org.junit.*;
 
 @SuppressWarnings({"serial","javadoc"})
 public class CommonTest {
 
-	private RdfSerializer getBasicSerializer() {
-		return new RdfSerializer()
-			.setQuoteChar('\'')
-			.setUseWhitespace(false)
-			.setProperty(RDF_rdfxml_allowBadUris, true)
-			.setProperty(RDF_rdfxml_showDoctypeDeclaration, false)
-			.setProperty(RDF_rdfxml_showXmlDeclaration, false);
+	private RdfSerializerBuilder getBasicSerializer() {
+		return new RdfSerializerBuilder()
+			.sq()
+			.useWhitespace(false)
+			.property(RDF_rdfxml_allowBadUris, true)
+			.property(RDF_rdfxml_showDoctypeDeclaration, false)
+			.property(RDF_rdfxml_showXmlDeclaration, false);
 	}
 
 	private String strip(String s) {
@@ -49,18 +48,18 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testTrimNullsFromBeans() throws Exception {
-		RdfSerializer s = getBasicSerializer();
+		RdfSerializerBuilder s = getBasicSerializer();
 		RdfParser p = RdfParser.DEFAULT_XML;
 		A t1 = A.create(), t2;
 
-		s.setTrimNullProperties(false);
-		String r = s.serialize(t1);
+		s.trimNullProperties(false);
+		String r = s.build().serialize(t1);
 		assertEquals("<rdf:Description><jp:s1 rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/><jp:s2>s2</jp:s2></rdf:Description>", strip(r));
 		t2 = p.parse(r, A.class);
 		assertEqualObjects(t1, t2);
 
-		s.setTrimNullProperties(true);
-		r = s.serialize(t1);
+		s.trimNullProperties(true);
+		r = s.build().serialize(t1);
 		assertEquals("<rdf:Description><jp:s2>s2</jp:s2></rdf:Description>", strip(r));
 		t2 = p.parse(r, A.class);
 		assertEqualObjects(t1, t2);
@@ -81,19 +80,19 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testTrimEmptyMaps() throws Exception {
-		RdfSerializer s = getBasicSerializer();
+		RdfSerializerBuilder s = getBasicSerializer();
 		RdfParser p = RdfParser.DEFAULT_XML;
 		B t1 = B.create(), t2;
 		String r;
 
-		s.setTrimEmptyMaps(false);
-		r = s.serialize(t1);
+		s.trimEmptyMaps(false);
+		r = s.build().serialize(t1);
 		assertEquals("<rdf:Description><jp:f1 rdf:parseType='Resource'></jp:f1><jp:f2 rdf:parseType='Resource'><jp:f2a rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/><jp:f2b rdf:parseType='Resource'><jp:s2>s2</jp:s2></jp:f2b></jp:f2></rdf:Description>", strip(r));
 		t2 = p.parse(r, B.class);
 		assertEqualObjects(t1, t2);
 
-		s.setTrimEmptyMaps(true);
-		r = s.serialize(t1);
+		s.trimEmptyMaps(true);
+		r = s.build().serialize(t1);
 		assertEquals("<rdf:Description><jp:f2 rdf:parseType='Resource'><jp:f2a rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/><jp:f2b rdf:parseType='Resource'><jp:s2>s2</jp:s2></jp:f2b></jp:f2></rdf:Description>", strip(r));
 		t2 = p.parse(r, B.class);
 		assertNull(t2.f1);
@@ -115,19 +114,19 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testTrimEmptyLists() throws Exception {
-		RdfSerializer s = getBasicSerializer();
+		RdfSerializerBuilder s = getBasicSerializer();
 		RdfParser p = RdfParser.DEFAULT_XML;
 		C t1 = C.create(), t2;
 		String r;
 
-		s.setTrimEmptyCollections(false);
-		r = s.serialize(t1);
+		s.trimEmptyCollections(false);
+		r = s.build().serialize(t1);
 		assertEquals("<rdf:Description><jp:f1><rdf:Seq/></jp:f1><jp:f2><rdf:Seq><rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/><rdf:li rdf:parseType='Resource'><jp:s2>s2</jp:s2></rdf:li></rdf:Seq></jp:f2></rdf:Description>", strip(r));
 		t2 = p.parse(r, C.class);
 		assertEqualObjects(t1, t2);
 
-		s.setTrimEmptyCollections(true);
-		r = s.serialize(t1);
+		s.trimEmptyCollections(true);
+		r = s.build().serialize(t1);
 		assertEquals("<rdf:Description><jp:f2><rdf:Seq><rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/><rdf:li rdf:parseType='Resource'><jp:s2>s2</jp:s2></rdf:li></rdf:Seq></jp:f2></rdf:Description>", strip(r));
 		t2 = p.parse(r, C.class);
 		assertNull(t2.f1);
@@ -150,19 +149,19 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testTrimEmptyArrays() throws Exception {
-		RdfSerializer s = getBasicSerializer();
+		RdfSerializerBuilder s = getBasicSerializer();
 		RdfParser p = RdfParser.DEFAULT_XML;
 		D t1 = D.create(), t2;
 		String r;
 
-		s.setTrimEmptyCollections(false);
-		r = s.serialize(t1);
+		s.trimEmptyCollections(false);
+		r = s.build().serialize(t1);
 		assertEquals("<rdf:Description><jp:f1><rdf:Seq/></jp:f1><jp:f2><rdf:Seq><rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/><rdf:li rdf:parseType='Resource'><jp:s2>s2</jp:s2></rdf:li></rdf:Seq></jp:f2></rdf:Description>", strip(r));
 		t2 = p.parse(r, D.class);
 		assertEqualObjects(t1, t2);
 
-		s.setTrimEmptyCollections(true);
-		r = s.serialize(t1);
+		s.trimEmptyCollections(true);
+		r = s.build().serialize(t1);
 		assertEquals("<rdf:Description><jp:f2><rdf:Seq><rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/><rdf:li rdf:parseType='Resource'><jp:s2>s2</jp:s2></rdf:li></rdf:Seq></jp:f2></rdf:Description>", strip(r));
 		t2 = p.parse(r, D.class);
 		assertNull(t2.f1);
@@ -184,12 +183,12 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testBeanPropertyProperties() throws Exception {
-		RdfSerializer s = getBasicSerializer();
+		RdfSerializerBuilder s = getBasicSerializer();
 		RdfParser p = RdfParser.DEFAULT_XML;
 		E1 t1 = E1.create(), t2;
 		String r;
 
-		r = s.serialize(t1);
+		r = s.build().serialize(t1);
 		assertEquals("<rdf:Description><jp:x1 rdf:parseType='Resource'><jp:f1>1</jp:f1></jp:x1><jp:x2 rdf:parseType='Resource'><jp:f1>1</jp:f1></jp:x2><jp:x3><rdf:Seq><rdf:li rdf:parseType='Resource'><jp:f1>1</jp:f1></rdf:li></rdf:Seq></jp:x3><jp:x4><rdf:Seq><rdf:li rdf:parseType='Resource'><jp:f1>1</jp:f1></rdf:li></rdf:Seq></jp:x4><jp:x5><rdf:Seq><rdf:li rdf:parseType='Resource'><jp:f1>1</jp:f1></rdf:li></rdf:Seq></jp:x5><jp:x6><rdf:Seq><rdf:li rdf:parseType='Resource'><jp:f1>1</jp:f1></rdf:li></rdf:Seq></jp:x6></rdf:Description>", strip(r));
 		t2 = p.parse(r, E1.class);
 		assertEqualObjects(t1, t2);
@@ -225,14 +224,14 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testBeanPropertyProperiesOnListOfBeans() throws Exception {
-		RdfSerializer s = getBasicSerializer();
+		RdfSerializerBuilder s = getBasicSerializer();
 		RdfParser p = RdfParser.DEFAULT_XML;
 		List<F> l1 = new LinkedList<F>(), l2;
 		F t = F.create();
 		t.x1.add(F.create());
 		l1.add(t);
 
-		String r = s.serialize(l1);
+		String r = s.build().serialize(l1);
 		assertEquals("<rdf:Seq><rdf:li rdf:parseType='Resource'><jp:x1><rdf:Seq><rdf:li rdf:parseType='Resource'><jp:x2>2</jp:x2></rdf:li></rdf:Seq></jp:x1><jp:x2>2</jp:x2></rdf:li></rdf:Seq>", strip(r));
 		l2 = p.parse(r, LinkedList.class, F.class);
 		assertEqualObjects(l1, l2);
@@ -255,7 +254,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testURIAttr() throws Exception {
-		RdfSerializer s = getBasicSerializer();
+		RdfSerializerBuilder s = getBasicSerializer();
 		RdfParser p = RdfParser.DEFAULT_XML;
 
 		G t = new G();
@@ -263,7 +262,7 @@ public class CommonTest {
 		t.f1 = new URI("http://f1");
 		t.f2 = new URL("http://f2");
 
-		String xml = s.serialize(t);
+		String xml = s.build().serialize(t);
 		t = p.parse(xml, G.class);
 		assertEquals("http://uri", t.uri.toString());
 		assertEquals("http://f1", t.f1.toString());
@@ -281,13 +280,13 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testUris() throws Exception {
-		WriterSerializer s = getBasicSerializer();
+		RdfSerializerBuilder s = getBasicSerializer();
 		TestURI t = new TestURI();
 		String r;
 		String expected = "";
 
-		s.setRelativeUriBase(null);
-		r = stripAndSort(s.serialize(t));
+		s.relativeUriBase(null);
+		r = stripAndSort(s.build().serialize(t));
 		expected = ""
 			+"</rdf:Description>>"
 			+"\n<<rdf:Description rdf:about='f0/x0'>"
@@ -308,12 +307,12 @@ public class CommonTest {
 		;
 		assertEquals(expected, r);
 
-		s.setRelativeUriBase("");  // Same as null.
-		r = stripAndSort(s.serialize(t));
+		s.relativeUriBase("");  // Same as null.
+		r = stripAndSort(s.build().serialize(t));
 		assertEquals(expected, r);
 
-		s.setRelativeUriBase("/cr");
-		r = stripAndSort(s.serialize(t));
+		s.relativeUriBase("/cr");
+		r = stripAndSort(s.build().serialize(t));
 		expected = ""
 			+"</rdf:Description>>"
 			+"\n<<rdf:Description rdf:about='/cr/f0/x0'>"
@@ -334,12 +333,12 @@ public class CommonTest {
 		;
 		assertEquals(expected, r);
 
-		s.setRelativeUriBase("/cr/");  // Same as above
-		r = stripAndSort(s.serialize(t));
+		s.relativeUriBase("/cr/");  // Same as above
+		r = stripAndSort(s.build().serialize(t));
 		assertEquals(expected, r);
 
-		s.setRelativeUriBase("/");
-		r = stripAndSort(s.serialize(t));
+		s.relativeUriBase("/");
+		r = stripAndSort(s.build().serialize(t));
 		expected = ""
 			+"</rdf:Description>>"
 			+"\n<<rdf:Description rdf:about='/f0/x0'>"
@@ -360,10 +359,10 @@ public class CommonTest {
 		;
 		assertEquals(expected, r);
 
-		s.setRelativeUriBase(null);
+		s.relativeUriBase(null);
 
-		s.setAbsolutePathUriBase("http://foo");
-		r = stripAndSort(s.serialize(t));
+		s.absolutePathUriBase("http://foo");
+		r = stripAndSort(s.build().serialize(t));
 		expected = ""
 			+"</rdf:Description>>"
 			+"\n<<rdf:Description rdf:about='f0/x0'>"
@@ -384,12 +383,12 @@ public class CommonTest {
 		;
 		assertEquals(expected, r);
 
-		s.setAbsolutePathUriBase("http://foo/");
-		r = stripAndSort(s.serialize(t));
+		s.absolutePathUriBase("http://foo/");
+		r = stripAndSort(s.build().serialize(t));
 		assertEquals(expected, r);
 
-		s.setAbsolutePathUriBase("");  // Same as null.
-		r = stripAndSort(s.serialize(t));
+		s.absolutePathUriBase("");  // Same as null.
+		r = stripAndSort(s.build().serialize(t));
 		expected = ""
 			+"</rdf:Description>>"
 			+"\n<<rdf:Description rdf:about='f0/x0'>"
@@ -420,27 +419,11 @@ public class CommonTest {
 	}
 
 	//====================================================================================================
-	// Validate that you cannot update properties on locked serializer.
-	//====================================================================================================
-	@Test
-	public void testLockedSerializer() throws Exception {
-		RdfSerializer s = getBasicSerializer().lock();
-		try {
-			s.setAddBeanTypeProperties(true);
-			fail("Locked exception not thrown");
-		} catch (LockedException e) {}
-		try {
-			s.setBeanMapPutReturnsOldValue(true);
-			fail("Locked exception not thrown");
-		} catch (LockedException e) {}
-	}
-
-	//====================================================================================================
 	// Recursion
 	//====================================================================================================
 	@Test
 	public void testRecursion() throws Exception {
-		WriterSerializer s = new RdfSerializer.XmlAbbrev().setQuoteChar('\'');
+		RdfSerializerBuilder s = new RdfSerializerBuilder().xmlabbrev().sq();
 
 		R1 r1 = new R1();
 		R2 r2 = new R2();
@@ -451,7 +434,7 @@ public class CommonTest {
 
 		// No recursion detection
 		try {
-			s.serialize(r1);
+			s.build().serialize(r1);
 			fail("Exception expected!");
 		} catch (Exception e) {
 			String msg = e.getLocalizedMessage();
@@ -459,9 +442,9 @@ public class CommonTest {
 		}
 
 		// Recursion detection, no ignore
-		s.setDetectRecursions(true);
+		s.detectRecursions(true);
 		try {
-			s.serialize(r1);
+			s.build().serialize(r1);
 			fail("Exception expected!");
 		} catch (Exception e) {
 			String msg = e.getLocalizedMessage();
@@ -471,8 +454,8 @@ public class CommonTest {
 			assertTrue(msg.contains("->[3]r1:org.apache.juneau.jena.CommonTest$R1"));
 		}
 
-		s.setIgnoreRecursions(true);
-		String r = s.serialize(r1).replace("\r", "");
+		s.ignoreRecursions(true);
+		String r = s.build().serialize(r1).replace("\r", "");
 		// Note...the order of the namespaces is not always the same depending on the JVM.
 		// The Jena libraries appear to use a hashmap for these.
 		assertTrue(r.contains(

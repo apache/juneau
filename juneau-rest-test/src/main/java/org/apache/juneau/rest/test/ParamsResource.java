@@ -13,7 +13,6 @@
 package org.apache.juneau.rest.test;
 
 import static org.apache.juneau.rest.RestServletContext.*;
-import static org.apache.juneau.urlencoding.UrlEncodingContext.*;
 
 import java.util.*;
 
@@ -26,6 +25,7 @@ import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.transforms.*;
+import org.apache.juneau.urlencoding.*;
 
 /**
  * JUnit automated testcase resource.
@@ -268,7 +268,7 @@ public class ParamsResource extends RestServletDefault {
 	//====================================================================================================
 	@RestMethod(name="POST", path="/testFormPostsWithMultiParamsUsingProperty",
 		properties={
-			@Property(name=URLENC_expandedParams, value="true")
+			@Property(name=UrlEncodingContext.URLENC_expandedParams, value="true")
 		}
 	)
 	public DTO2s.B testFormPostsWithMultiParamsViaProperty(@Body DTO2s.B content) throws Exception {

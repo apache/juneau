@@ -125,7 +125,7 @@
 	
 	<jc>// Next create a var resolver that extends the existing DEFAULT resolver
 	// that supports resolving system properties.</jc>
-	VarResolver r = VarResolver.<jsf>DEFAULT</jsf>.clone().addVars(UrlEncodeVar.<jk>class</jk>);
+	VarResolver r = VarResolver.<jsf>DEFAULT</jsf>.builder().vars(UrlEncodeVar.<jk>class</jk>).build();
 	
 	<jc>// Retrieve a system property and URL-encode it if necessary.</jc>
 	String myProperty = r.resolve(<js>"$URLEncode{$S{my.property}}"</js>);
@@ -191,7 +191,7 @@
 			These object dependencies are made by setting context objects on the var resolver.
 		</p>
 		<p>
-			Context objects are set through the {@link org.apache.juneau.svl.VarResolver#setContextObject(String,Object)} method.
+			Context objects are set through the {@link org.apache.juneau.svl.VarResolverBuilder#contextObject(String,Object)} method.
 			They can be any class type.
 		</p>
 		<p>
@@ -209,19 +209,19 @@
 				of a {@link org.apache.juneau.svl.VarResolverSession} object that contains {@link org.apache.juneau.svl.VarResolverSession#resolve(String)} and {@link org.apache.juneau.svl.VarResolverSession#resolveTo(String,Writer)} methods
 				that are identical to {@link org.apache.juneau.svl.VarResolver#resolve(String)} and {@link org.apache.juneau.svl.VarResolver#resolveTo(String, Writer)} except that the <code>Var</code> objects
 				have access to the session objects through the {@link org.apache.juneau.svl.VarResolverSession#getSessionObject(Class, String)} method.
-			Session objects are specified through either the {@link org.apache.juneau.svl.VarResolver#createSession(Map)} method or the {@link org.apache.juneau.svl.VarResolverSession#setSessionObject(String, Object)} methods.
+			Session objects are specified through either the {@link org.apache.juneau.svl.VarResolver#createSession(Map)} method or the {@link org.apache.juneau.svl.VarResolverSession#sessionObject(String, Object)} methods.
 		</p>
 		<p>
 			Like Context object, Session objects are used by {@link org.apache.juneau.svl.Var Vars} by calling the {@link org.apache.juneau.svl.VarResolverSession#getSessionObject(Class, String)} method.
 		</p>
 		<p>
-			Var resolvers can be cloned and extended by using the {@link org.apache.juneau.svl.VarResolver#clone()} method.
+			Var resolvers can be cloned and extended by using the {@link org.apache.juneau.svl.VarResolver#builder()} method.
 			Cloning a resolver will copy it's {@link org.apache.juneau.svl.Var} class names and context objects.
 		</p>
 		<h6 class='topic'>Example:</h6>
 		<p class='bcode'>
 			<jc>// Create a resolver that copies the default resolver and adds $C and $ARG vars.</jc>
-			VarResolver myVarResolver = VarResolver.<jsf>DEFAULT</jsf>.clone().addVars(ConfigFileVar.<jk>class</jk>, ArgsVar.<jk>class</jk>);
+			VarResolver myVarResolver = VarResolver.<jsf>DEFAULT</jsf>.builder().vars(ConfigFileVar.<jk>class</jk>, ArgsVar.<jk>class</jk>).build();
 		</p>
 	</div>	
 	

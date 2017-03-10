@@ -36,6 +36,11 @@ public class ParsersResource extends RestServletDefault {
 
 	@Consumes("text/a")
 	public static class TestParserA extends ReaderParser {
+
+		public TestParserA(PropertyStore propertyStore) {
+			super(propertyStore);
+		}
+
 		@SuppressWarnings("unchecked")
 		@Override /* Parser */
 		protected <T> T doParse(ParserSession session, ClassMeta<T> type) throws Exception {
@@ -61,6 +66,11 @@ public class ParsersResource extends RestServletDefault {
 
 	@Consumes("text/b")
 	public static class TestParserB extends ReaderParser {
+
+		public TestParserB(PropertyStore propertyStore) {
+			super(propertyStore);
+		}
+
 		@SuppressWarnings("unchecked")
 		@Override /* Parser */
 		protected <T> T doParse(ParserSession session, ClassMeta<T> type) throws Exception {
@@ -78,6 +88,11 @@ public class ParsersResource extends RestServletDefault {
 
 	@Consumes("text/c")
 	public static class TestParserC extends ReaderParser {
+
+		public TestParserC(PropertyStore propertyStore) {
+			super(propertyStore);
+		}
+
 		@SuppressWarnings("unchecked")
 		@Override /* Parser */
 		protected <T> T doParse(ParserSession session, ClassMeta<T> type) throws Exception {
@@ -95,6 +110,11 @@ public class ParsersResource extends RestServletDefault {
 
 	@Consumes("text/a,text/d")
 	public static class TestParserD extends ReaderParser {
+
+		public TestParserD(PropertyStore propertyStore) {
+			super(propertyStore);
+		}
+
 		@SuppressWarnings("unchecked")
 		@Override /* Parser */
 		protected <T> T doParse(ParserSession session, ClassMeta<T> type) throws Exception {

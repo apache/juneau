@@ -15,6 +15,7 @@ package org.apache.juneau.html;
 import java.lang.reflect.*;
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.serializer.*;
 
@@ -34,6 +35,14 @@ import org.apache.juneau.serializer.*;
  */
 @Produces(value="text/html+stripped",contentType="text/html")
 public class HtmlStrippedDocSerializer extends HtmlSerializer {
+
+	/**
+	 * Constructor.
+	 * @param propertyStore The property store containing all the settings for this object.
+	 */
+	public HtmlStrippedDocSerializer(PropertyStore propertyStore) {
+		super(propertyStore);
+	}
 
 	//---------------------------------------------------------------------------
 	// Overridden methods

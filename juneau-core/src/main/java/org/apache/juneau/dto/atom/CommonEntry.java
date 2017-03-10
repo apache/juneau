@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.atom;
 
-import static org.apache.juneau.xml.annotation.XmlFormat.*;
 import static org.apache.juneau.dto.atom.Utils.*;
+import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
 import java.util.*;
 

@@ -28,7 +28,7 @@ import org.junit.*;
 @SuppressWarnings({"unchecked","rawtypes","javadoc"})
 public class RoundTripSimpleObjectsTest extends RoundTripTest {
 
-	public RoundTripSimpleObjectsTest(String label, Serializer s, Parser p, int flags) throws Exception {
+	public RoundTripSimpleObjectsTest(String label, SerializerBuilder s, ParserBuilder p, int flags) throws Exception {
 		super(label, s, p, flags);
 	}
 

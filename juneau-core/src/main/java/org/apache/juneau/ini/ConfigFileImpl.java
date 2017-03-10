@@ -705,7 +705,12 @@ public final class ConfigFileImpl extends ConfigFile {
 
 	@Override /* ConfigFile */
 	public ConfigFile getResolving() {
-		return getResolving(VarResolver.DEFAULT.clone().addVars(ConfigFileVar.class,IfVar.class,SwitchVar.class).setContextObject(ConfigFileVar.SESSION_config, this));
+		return getResolving(
+			new VarResolverBuilder()
+				.vars(SystemPropertiesVar.class, EnvVariablesVar.class, SwitchVar.class, IfVar.class, ConfigFileVar.class,IfVar.class,SwitchVar.class)
+				.contextObject(ConfigFileVar.SESSION_config, this)
+				.build()
+		);
 	}
 
 	/*
@@ -730,7 +735,7 @@ public final class ConfigFileImpl extends ConfigFile {
 		}
 	}
 
-	private void addChange(Set<String> changes, String section, String key, String oldVal, String newVal) {
+	private static void addChange(Set<String> changes, String section, String key, String oldVal, String newVal) {
 		if (! StringUtils.isEquals(oldVal, newVal))
 			changes.add(getFullKey(section, key));
 	}

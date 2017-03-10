@@ -26,7 +26,7 @@ public class StringVarResolverTest {
 	//====================================================================================================
 	@Test
 	public void test() throws Exception {
-		VarResolver vr = new VarResolver().addVars(XVar.class);
+		VarResolver vr = new VarResolverBuilder().vars(XVar.class).build();
 		String t;
 
 		t = null;
@@ -99,7 +99,7 @@ public class StringVarResolverTest {
 	//====================================================================================================
 	@Test
 	public void test2() throws Exception {
-		VarResolver vr = new VarResolver().addVars(BlankVar.class);
+		VarResolver vr = new VarResolverBuilder().vars(BlankVar.class).build();
 		String t;
 
 		t = "${y}";
@@ -130,7 +130,7 @@ public class StringVarResolverTest {
 	//====================================================================================================
 	@Test
 	public void testEscaped$() throws Exception {
-		VarResolver vr = new VarResolver().addVars(BlankVar.class);
+		VarResolver vr = new VarResolverBuilder().vars(BlankVar.class).build();
 		String t;
 
 		t = "${y}";
@@ -151,7 +151,7 @@ public class StringVarResolverTest {
 	//====================================================================================================
 	@Test
 	public void testEscapedSequences() throws Exception {
-		VarResolver vr = new VarResolver().addVars(XVar.class);
+		VarResolver vr = new VarResolverBuilder().vars(XVar.class).build();
 		String t;
 		char b = '\\';
 
@@ -191,15 +191,15 @@ public class StringVarResolverTest {
 	//====================================================================================================
 	@Test
 	public void testParent() throws Exception {
-		VarResolver svr = VarResolver.DEFAULT.clone().addVars(XMultipartVar.class);
+		VarResolver vr = new VarResolverBuilder().defaultVars().vars(XMultipartVar.class).build();
 		String t;
 		System.setProperty("a", "a1");
 		System.setProperty("b", "b1");
 
 		t = "$X{$S{a},$S{b}}";
-		assertEquals("a1+b1", svr.resolve(t));
+		assertEquals("a1+b1", vr.resolve(t));
 		t = "$X{$S{a}}";
-		assertEquals("a1", svr.resolve(t));
+		assertEquals("a1", vr.resolve(t));
 	}
 
 	public static class XMultipartVar extends MultipartVar {
@@ -217,72 +217,76 @@ public class StringVarResolverTest {
 	//====================================================================================================
 	@Test
 	public void testFalseTriggers() throws Exception {
-		VarResolver svr = VarResolver.DEFAULT.clone();
+		VarResolverBuilder vrb = new VarResolverBuilder().defaultVars();
 		String in = null;
 
 		// Should reject names with characters outside A-Za-z
 		for (Class<?> c : new Class[]{InvalidVar1.class, InvalidVar2.class, InvalidVar3.class, InvalidVar4.class, InvalidVar5.class}) {
 			try {
-				svr.addVars(c);
+				vrb.vars(c);
 				fail();
 			} catch (IllegalArgumentException e) {
 				assertEquals("Invalid var name.  Must consist of only uppercase and lowercase ASCII letters.", e.getLocalizedMessage());
 			}
 		}
 
+		VarResolver vr = vrb.build();
+		
 		// These should all be unchanged.
 		in = "$@{foobar}";
-		assertEquals(in, svr.resolve(in));
+		assertEquals(in, vr.resolve(in));
 		in = "$[{foobar}";
-		assertEquals(in, svr.resolve(in));
+		assertEquals(in, vr.resolve(in));
 		in = "$`{foobar}";
-		assertEquals(in, svr.resolve(in));
+		assertEquals(in, vr.resolve(in));
 		in = "$|{foobar}";
-		assertEquals(in, svr.resolve(in));
+		assertEquals(in, vr.resolve(in));
 		in = "${{foobar}";
-		assertEquals(in, svr.resolve(in));
+		assertEquals(in, vr.resolve(in));
 		in = "${$foobar}";
-		assertEquals(in, svr.resolve(in));
+		assertEquals(in, vr.resolve(in));
 
 		System.setProperty("foobar", "baz");
 
 		in = "$";
-		assertEquals(in, svr.resolve(in));
+		assertEquals(in, vr.resolve(in));
 
 		in = "$S";
-		assertEquals(in, svr.resolve(in));
+		assertEquals(in, vr.resolve(in));
 
 		in = "$S{";
-		assertEquals(in, svr.resolve(in));
+		assertEquals(in, vr.resolve(in));
 
 		in = "$S{foobar";
 
-		assertEquals(in, svr.resolve(in));
+		assertEquals(in, vr.resolve(in));
 		in = "$S{foobar}$";
-		assertEquals("baz$", svr.resolve(in));
+		assertEquals("baz$", vr.resolve(in));
 
 		in = "$S{foobar}$S";
-		assertEquals("baz$S", svr.resolve(in));
+		assertEquals("baz$S", vr.resolve(in));
 
 		in = "$S{foobar}$S{";
-		assertEquals("baz$S{", svr.resolve(in));
+		assertEquals("baz$S{", vr.resolve(in));
 
 		in = "$S{foobar}$S{foobar";
-		assertEquals("baz$S{foobar", svr.resolve(in));
+		assertEquals("baz$S{foobar", vr.resolve(in));
 
 		System.clearProperty("foobar");
 		in = "$S{foobar}";
 
 		// Test nulls returned by StringVar.
 		// Should be converted to blanks.
-		svr.addVars(AlwaysNullVar.class);
+		vrb.vars(AlwaysNullVar.class);
 
+		vr = vrb.build();
+		
 		in = "$A{xxx}";
-		assertEquals("", svr.resolve(in));
+		assertEquals("", vr.resolve(in));
 		in = "x$A{xxx}";
-		assertEquals("x", svr.resolve(in));
+		assertEquals("x", vr.resolve(in));
 		in = "$A{xxx}x";
-		assertEquals("x", svr.resolve(in));
+		assertEquals("x", vr.resolve(in));
 	}
 
 	public static class AlwaysNullVar extends SimpleVar {

@@ -457,7 +457,7 @@ public class BeanConfigTest {
 	//====================================================================================================
 	@Test
 	public void testProxyHandler() throws Exception {
-		BeanSession session = ContextFactory.create().getBeanContext().createSession();
+		BeanSession session = PropertyStore.create().getBeanContext().createSession();
 
 		A f1 = (A) Proxy.newProxyInstance(this.getClass()
 				.getClassLoader(), new Class[] { A.class },
@@ -564,153 +564,153 @@ public class BeanConfigTest {
 	//====================================================================================================
 	@Test
 	public void testClassMetaCaching() throws Exception {
-		Parser p1, p2;
+		ParserBuilder p1, p2;
 
-		p1 = new JsonParser();
-		p2 = new JsonParser();
-		assertSameCache(p1, p2);
-
-		p1.setBeansRequireDefaultConstructor(true);
-		assertDifferentCache(p1, p2);
-		p2.setBeansRequireDefaultConstructor(true);
+		p1 = new JsonParserBuilder();
+		p2 = new JsonParserBuilder();
 		assertSameCache(p1, p2);
 
-		p1.setBeansRequireSerializable(true);
+		p1.beansRequireDefaultConstructor(true);
 		assertDifferentCache(p1, p2);
-		p2.setBeansRequireSerializable(true);
+		p2.beansRequireDefaultConstructor(true);
 		assertSameCache(p1, p2);
 
-		p1.setBeansRequireSettersForGetters(true);
+		p1.beansRequireSerializable(true);
 		assertDifferentCache(p1, p2);
-		p2.setBeansRequireSettersForGetters(true);
+		p2.beansRequireSerializable(true);
 		assertSameCache(p1, p2);
 
-		p1.setBeansRequireSomeProperties(false);
+		p1.beansRequireSettersForGetters(true);
 		assertDifferentCache(p1, p2);
-		p2.setBeansRequireSomeProperties(false);
+		p2.beansRequireSettersForGetters(true);
 		assertSameCache(p1, p2);
 
-		p1.setBeanMapPutReturnsOldValue(true);
+		p1.beansRequireSomeProperties(false);
 		assertDifferentCache(p1, p2);
-		p2.setBeanMapPutReturnsOldValue(true);
+		p2.beansRequireSomeProperties(false);
 		assertSameCache(p1, p2);
 
-		p1.setBeanConstructorVisibility(Visibility.DEFAULT);
+		p1.beanMapPutReturnsOldValue(true);
 		assertDifferentCache(p1, p2);
-		p2.setBeanConstructorVisibility(Visibility.DEFAULT);
-		assertSameCache(p1, p2);
-		p1.setBeanConstructorVisibility(Visibility.NONE);
-		assertDifferentCache(p1, p2);
-		p2.setBeanConstructorVisibility(Visibility.NONE);
-		assertSameCache(p1, p2);
-		p1.setBeanConstructorVisibility(Visibility.PRIVATE);
-		assertDifferentCache(p1, p2);
-		p2.setBeanConstructorVisibility(Visibility.PRIVATE);
-		assertSameCache(p1, p2);
-		p1.setBeanConstructorVisibility(Visibility.PROTECTED);
-		assertDifferentCache(p1, p2);
-		p2.setBeanConstructorVisibility(Visibility.PROTECTED);
+		p2.beanMapPutReturnsOldValue(true);
 		assertSameCache(p1, p2);
 
-		p1.setBeanClassVisibility(Visibility.DEFAULT);
+		p1.beanConstructorVisibility(Visibility.DEFAULT);
 		assertDifferentCache(p1, p2);
-		p2.setBeanClassVisibility(Visibility.DEFAULT);
+		p2.beanConstructorVisibility(Visibility.DEFAULT);
 		assertSameCache(p1, p2);
-		p1.setBeanClassVisibility(Visibility.NONE);
+		p1.beanConstructorVisibility(Visibility.NONE);
 		assertDifferentCache(p1, p2);
-		p2.setBeanClassVisibility(Visibility.NONE);
+		p2.beanConstructorVisibility(Visibility.NONE);
 		assertSameCache(p1, p2);
-		p1.setBeanClassVisibility(Visibility.PRIVATE);
+		p1.beanConstructorVisibility(Visibility.PRIVATE);
 		assertDifferentCache(p1, p2);
-		p2.setBeanClassVisibility(Visibility.PRIVATE);
+		p2.beanConstructorVisibility(Visibility.PRIVATE);
 		assertSameCache(p1, p2);
-		p1.setBeanClassVisibility(Visibility.PROTECTED);
+		p1.beanConstructorVisibility(Visibility.PROTECTED);
 		assertDifferentCache(p1, p2);
-		p2.setBeanClassVisibility(Visibility.PROTECTED);
-		assertSameCache(p1, p2);
-
-		p1.setBeanFieldVisibility(Visibility.DEFAULT);
-		assertDifferentCache(p1, p2);
-		p2.setBeanFieldVisibility(Visibility.DEFAULT);
-		assertSameCache(p1, p2);
-		p1.setBeanFieldVisibility(Visibility.NONE);
-		assertDifferentCache(p1, p2);
-		p2.setBeanFieldVisibility(Visibility.NONE);
-		assertSameCache(p1, p2);
-		p1.setBeanFieldVisibility(Visibility.PRIVATE);
-		assertDifferentCache(p1, p2);
-		p2.setBeanFieldVisibility(Visibility.PRIVATE);
-		assertSameCache(p1, p2);
-		p1.setBeanFieldVisibility(Visibility.PROTECTED);
-		assertDifferentCache(p1, p2);
-		p2.setBeanFieldVisibility(Visibility.PROTECTED);
+		p2.beanConstructorVisibility(Visibility.PROTECTED);
 		assertSameCache(p1, p2);
 
-		p1.setMethodVisibility(Visibility.DEFAULT);
+		p1.beanClassVisibility(Visibility.DEFAULT);
 		assertDifferentCache(p1, p2);
-		p2.setMethodVisibility(Visibility.DEFAULT);
+		p2.beanClassVisibility(Visibility.DEFAULT);
 		assertSameCache(p1, p2);
-		p1.setMethodVisibility(Visibility.NONE);
+		p1.beanClassVisibility(Visibility.NONE);
 		assertDifferentCache(p1, p2);
-		p2.setMethodVisibility(Visibility.NONE);
+		p2.beanClassVisibility(Visibility.NONE);
 		assertSameCache(p1, p2);
-		p1.setMethodVisibility(Visibility.PRIVATE);
+		p1.beanClassVisibility(Visibility.PRIVATE);
 		assertDifferentCache(p1, p2);
-		p2.setMethodVisibility(Visibility.PRIVATE);
+		p2.beanClassVisibility(Visibility.PRIVATE);
 		assertSameCache(p1, p2);
-		p1.setMethodVisibility(Visibility.PROTECTED);
+		p1.beanClassVisibility(Visibility.PROTECTED);
 		assertDifferentCache(p1, p2);
-		p2.setMethodVisibility(Visibility.PROTECTED);
-		assertSameCache(p1, p2);
-
-		p1.setUseJavaBeanIntrospector(true);
-		assertDifferentCache(p1, p2);
-		p2.setUseJavaBeanIntrospector(true);
+		p2.beanClassVisibility(Visibility.PROTECTED);
 		assertSameCache(p1, p2);
 
-		p1.setUseInterfaceProxies(false);
+		p1.beanFieldVisibility(Visibility.DEFAULT);
 		assertDifferentCache(p1, p2);
-		p2.setUseInterfaceProxies(false);
+		p2.beanFieldVisibility(Visibility.DEFAULT);
+		assertSameCache(p1, p2);
+		p1.beanFieldVisibility(Visibility.NONE);
+		assertDifferentCache(p1, p2);
+		p2.beanFieldVisibility(Visibility.NONE);
+		assertSameCache(p1, p2);
+		p1.beanFieldVisibility(Visibility.PRIVATE);
+		assertDifferentCache(p1, p2);
+		p2.beanFieldVisibility(Visibility.PRIVATE);
+		assertSameCache(p1, p2);
+		p1.beanFieldVisibility(Visibility.PROTECTED);
+		assertDifferentCache(p1, p2);
+		p2.beanFieldVisibility(Visibility.PROTECTED);
 		assertSameCache(p1, p2);
 
-		p1.setIgnoreUnknownBeanProperties(true);
+		p1.methodVisibility(Visibility.DEFAULT);
 		assertDifferentCache(p1, p2);
-		p2.setIgnoreUnknownBeanProperties(true);
+		p2.methodVisibility(Visibility.DEFAULT);
+		assertSameCache(p1, p2);
+		p1.methodVisibility(Visibility.NONE);
+		assertDifferentCache(p1, p2);
+		p2.methodVisibility(Visibility.NONE);
+		assertSameCache(p1, p2);
+		p1.methodVisibility(Visibility.PRIVATE);
+		assertDifferentCache(p1, p2);
+		p2.methodVisibility(Visibility.PRIVATE);
+		assertSameCache(p1, p2);
+		p1.methodVisibility(Visibility.PROTECTED);
+		assertDifferentCache(p1, p2);
+		p2.methodVisibility(Visibility.PROTECTED);
 		assertSameCache(p1, p2);
 
-		p1.setIgnoreUnknownNullBeanProperties(false);
+		p1.useJavaBeanIntrospector(true);
 		assertDifferentCache(p1, p2);
-		p2.setIgnoreUnknownNullBeanProperties(false);
+		p2.useJavaBeanIntrospector(true);
 		assertSameCache(p1, p2);
 
-		p1.setIgnorePropertiesWithoutSetters(false);
+		p1.useInterfaceProxies(false);
 		assertDifferentCache(p1, p2);
-		p2.setIgnorePropertiesWithoutSetters(false);
+		p2.useInterfaceProxies(false);
 		assertSameCache(p1, p2);
 
-		p1.setIgnoreInvocationExceptionsOnGetters(true);
+		p1.ignoreUnknownBeanProperties(true);
 		assertDifferentCache(p1, p2);
-		p2.setIgnoreInvocationExceptionsOnGetters(true);
+		p2.ignoreUnknownBeanProperties(true);
 		assertSameCache(p1, p2);
 
-		p1.setIgnoreInvocationExceptionsOnSetters(true);
+		p1.ignoreUnknownNullBeanProperties(false);
 		assertDifferentCache(p1, p2);
-		p2.setIgnoreInvocationExceptionsOnSetters(true);
+		p2.ignoreUnknownNullBeanProperties(false);
 		assertSameCache(p1, p2);
 
-		p1.addNotBeanPackages("foo");
+		p1.ignorePropertiesWithoutSetters(false);
 		assertDifferentCache(p1, p2);
-		p2.addNotBeanPackages("foo");
+		p2.ignorePropertiesWithoutSetters(false);
 		assertSameCache(p1, p2);
-		p1.addNotBeanPackages("bar");
+
+		p1.ignoreInvocationExceptionsOnGetters(true);
 		assertDifferentCache(p1, p2);
-		p2.addNotBeanPackages("bar");
+		p2.ignoreInvocationExceptionsOnGetters(true);
 		assertSameCache(p1, p2);
-		p1.addNotBeanPackages("baz");
-		p1.addNotBeanPackages("bing");
+
+		p1.ignoreInvocationExceptionsOnSetters(true);
 		assertDifferentCache(p1, p2);
-		p2.addNotBeanPackages("bing");
-		p2.addNotBeanPackages("baz");
+		p2.ignoreInvocationExceptionsOnSetters(true);
+		assertSameCache(p1, p2);
+
+		p1.notBeanPackages("foo");
+		assertDifferentCache(p1, p2);
+		p2.notBeanPackages("foo");
+		assertSameCache(p1, p2);
+		p1.notBeanPackages("bar");
+		assertDifferentCache(p1, p2);
+		p2.notBeanPackages("bar");
+		assertSameCache(p1, p2);
+		p1.notBeanPackages("baz");
+		p1.notBeanPackages("bing");
+		assertDifferentCache(p1, p2);
+		p2.notBeanPackages("bing");
+		p2.notBeanPackages("baz");
 		assertSameCache(p1, p2);
 
 		p1.removeNotBeanPackages("bar");
@@ -718,22 +718,22 @@ public class BeanConfigTest {
 		p2.removeNotBeanPackages("bar");
 		assertSameCache(p1, p2);
 
-		p1.addPojoSwaps(DummyPojoSwapA.class);
+		p1.pojoSwaps(DummyPojoSwapA.class);
 		assertDifferentCache(p1, p2);
-		p2.addPojoSwaps(DummyPojoSwapA.class);
+		p2.pojoSwaps(DummyPojoSwapA.class);
 		assertSameCache(p1, p2);
-		p1.addPojoSwaps(DummyPojoSwapB.class,DummyPojoSwapC.class);  // Order of filters is important!
-		p2.addPojoSwaps(DummyPojoSwapC.class,DummyPojoSwapB.class);
+		p1.pojoSwaps(DummyPojoSwapB.class,DummyPojoSwapC.class);  // Order of filters is important!
+		p2.pojoSwaps(DummyPojoSwapC.class,DummyPojoSwapB.class);
 		assertDifferentCache(p1, p2);
 
-		p1 = new JsonParser();
-		p2 = new JsonParser();
-		p1.addBeanFilters(DummyBeanFilterA.class);
+		p1 = new JsonParserBuilder();
+		p2 = new JsonParserBuilder();
+		p1.beanFilters(DummyBeanFilterA.class);
 		assertDifferentCache(p1, p2);
-		p2.addBeanFilters(DummyBeanFilterA.class);
+		p2.beanFilters(DummyBeanFilterA.class);
 		assertSameCache(p1, p2);
-		p1.addBeanFilters(DummyBeanFilterB.class,DummyBeanFilterC.class);  // Order of filters is important!
-		p2.addBeanFilters(DummyBeanFilterC.class,DummyBeanFilterB.class);
+		p1.beanFilters(DummyBeanFilterB.class,DummyBeanFilterC.class);  // Order of filters is important!
+		p2.beanFilters(DummyBeanFilterC.class,DummyBeanFilterB.class);
 		assertDifferentCache(p1, p2);
 	}
 
@@ -757,12 +757,14 @@ public class BeanConfigTest {
 	}
 	public static class C {}
 
-	private void assertSameCache(Parser p1, Parser p2) {
+	private void assertSameCache(ParserBuilder p1b, ParserBuilder p2b) {
+		Parser p1 = p1b.build(), p2 = p2b.build();
 		assertTrue(p1.getBeanContext().hasSameCache(p2.getBeanContext()));
 		assertTrue(p1.getBeanContext().hashCode() == p2.getBeanContext().hashCode());
 	}
 
-	private void assertDifferentCache(Parser p1, Parser p2) {
+	private void assertDifferentCache(ParserBuilder p1b, ParserBuilder p2b) {
+		Parser p1 = p1b.build(), p2 = p2b.build();
 		assertFalse(p1.getBeanContext().hasSameCache(p2.getBeanContext()));
 		assertFalse(p1.getBeanContext().hashCode() == p2.getBeanContext().hashCode());
 	}

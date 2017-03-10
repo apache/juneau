@@ -21,10 +21,10 @@ import org.apache.juneau.parser.*;
 /**
  * Configurable properties on the {@link XmlParser} class.
  * <p>
- * Context properties are set by calling {@link ContextFactory#setProperty(String, Object)} on the context factory
- * returned {@link CoreApi#getContextFactory()}.
+ * Context properties are set by calling {@link PropertyStore#setProperty(String, Object)} on the property store
+ * passed into the constructor.
  * <p>
- * See {@link ContextFactory} for more information about context properties.
+ * See {@link PropertyStore} for more information about context properties.
  *
  * <h5 class='section'>Inherited configurable properties:</h5>
  * <ul class='javahierarchy'>
@@ -137,17 +137,17 @@ public class XmlParserContext extends ParserContext {
 	/**
 	 * Constructor.
 	 * <p>
-	 * Typically only called from {@link ContextFactory#getContext(Class)}.
+	 * Typically only called from {@link PropertyStore#getContext(Class)}.
 	 *
-	 * @param cf The factory that created this context.
+	 * @param ps The property store that created this context.
 	 */
-	public XmlParserContext(ContextFactory cf) {
-		super(cf);
-		validating = cf.getProperty(XML_validating, boolean.class, false);
-		preserveRootElement = cf.getProperty(XML_preserveRootElement, boolean.class, false);
-		reporter = cf.getProperty(XML_reporter, XMLReporter.class, null);
-		resolver = cf.getProperty(XML_resolver, XMLResolver.class, null);
-		eventAllocator = cf.getProperty(XML_eventAllocator, XMLEventAllocator.class, null);
+	public XmlParserContext(PropertyStore ps) {
+		super(ps);
+		validating = ps.getProperty(XML_validating, boolean.class, false);
+		preserveRootElement = ps.getProperty(XML_preserveRootElement, boolean.class, false);
+		reporter = ps.getProperty(XML_reporter, XMLReporter.class, null);
+		resolver = ps.getProperty(XML_resolver, XMLResolver.class, null);
+		eventAllocator = ps.getProperty(XML_eventAllocator, XMLEventAllocator.class, null);
 	}
 
 	@Override /* Context */

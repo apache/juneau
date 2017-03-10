@@ -14,7 +14,6 @@ package org.apache.juneau.rest.test;
 
 import static org.junit.Assert.*;
 
-import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.*;
 
@@ -27,7 +26,7 @@ public class StaticFilesTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testXdocs() throws Exception {
-		RestClient client = new TestRestClient(PlainTextSerializer.class, PlainTextParser.class);
+		RestClient client = TestMicroservice.DEFAULT_CLIENT_PLAINTEXT;
 		String r;
 		String url = URL + "/xdocs";
 
@@ -50,7 +49,5 @@ public class StaticFilesTest extends RestTestcase {
 		} catch (RestCallException e) {
 			assertEquals(404, e.getResponseCode());
 		}
-
-		client.closeQuietly();
 	}
 }

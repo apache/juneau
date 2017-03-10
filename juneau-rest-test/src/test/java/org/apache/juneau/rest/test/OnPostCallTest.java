@@ -28,7 +28,7 @@ public class OnPostCallTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testPropertiesOverridenByAnnotation() throws Exception {
-		RestClient client = new TestRestClient().setAccept("text/s1");
+		RestClient client = TestMicroservice.client().accept("text/s1").build();
 		String url = URL + "/testPropertiesOverridenByAnnotation";
 		String r;
 		RestCall rc;
@@ -36,10 +36,10 @@ public class OnPostCallTest extends RestTestcase {
 		r = client.doPut(url, new StringReader("")).getResponseAsString();
 		assertEquals("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5,contentType=text/s1", r);
 
-		r = client.doPut(url, new StringReader("")).setHeader("Override-Accept", "text/s2").getResponseAsString();
+		r = client.doPut(url, new StringReader("")).header("Override-Accept", "text/s2").getResponseAsString();
 		assertEquals("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5,contentType=text/s2", r);
 
-		rc = client.doPut(url, new StringReader("")).setHeader("Override-Content-Type", "text/s3").connect();
+		rc = client.doPut(url, new StringReader("")).header("Override-Content-Type", "text/s3").connect();
 		r = rc.getResponseAsString();
 		assertEquals("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5,contentType=text/s1", r);
 		assertTrue(rc.getResponse().getFirstHeader("Content-Type").getValue().startsWith("text/s3"));
@@ -52,7 +52,7 @@ public class OnPostCallTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testPropertiesOverridenByAnnotationDefaultAccept() throws Exception {
-		RestClient client = new TestRestClient().setAccept("");
+		RestClient client = TestMicroservice.client().accept("").build();
 		String url = URL + "/testPropertiesOverridenByAnnotation";
 		String r;
 		RestCall rc;
@@ -60,10 +60,10 @@ public class OnPostCallTest extends RestTestcase {
 		r = client.doPut(url, new StringReader("")).getResponseAsString();
 		assertEquals("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5,contentType=text/s2", r);
 
-		r = client.doPut(url, new StringReader("")).setHeader("Override-Accept", "text/s3").getResponseAsString();
+		r = client.doPut(url, new StringReader("")).header("Override-Accept", "text/s3").getResponseAsString();
 		assertEquals("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5,contentType=text/s3", r);
 
-		rc = client.doPut(url, new StringReader("")).setHeader("Override-Content-Type", "text/s3").connect();
+		rc = client.doPut(url, new StringReader("")).header("Override-Content-Type", "text/s3").connect();
 		r = rc.getResponseAsString();
 		assertEquals("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5,contentType=text/s2", r);
 		assertTrue(rc.getResponse().getFirstHeader("Content-Type").getValue().startsWith("text/s3"));
@@ -76,7 +76,7 @@ public class OnPostCallTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testPropertiesOverriddenProgramatically() throws Exception {
-		RestClient client = new TestRestClient().setAccept("text/s1");
+		RestClient client = TestMicroservice.client().accept("text/s1").build();
 		String url = URL + "/testPropertiesOverriddenProgramatically";
 		String r;
 		RestCall rc;
@@ -84,10 +84,10 @@ public class OnPostCallTest extends RestTestcase {
 		r = client.doPut(url, new StringReader("")).getResponseAsString();
 		assertEquals("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5,contentType=text/s1", r);
 
-		r = client.doPut(url, new StringReader("")).setHeader("Override-Accept", "text/s2").getResponseAsString();
+		r = client.doPut(url, new StringReader("")).header("Override-Accept", "text/s2").getResponseAsString();
 		assertEquals("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5,contentType=text/s2", r);
 
-		rc = client.doPut(url, new StringReader("")).setHeader("Override-Content-Type", "text/s3").connect();
+		rc = client.doPut(url, new StringReader("")).header("Override-Content-Type", "text/s3").connect();
 		r = rc.getResponseAsString();
 		assertEquals("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5,contentType=text/s1", r);
 		assertTrue(rc.getResponse().getFirstHeader("Content-Type").getValue().startsWith("text/s3"));
@@ -100,7 +100,7 @@ public class OnPostCallTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testPropertiesOverriddenProgramaticallyDefaultAccept() throws Exception {
-		RestClient client = new TestRestClient().setAccept("");
+		RestClient client = TestMicroservice.client().accept("").build();
 		String url = URL + "/testPropertiesOverriddenProgramatically";
 		String r;
 		RestCall rc;
@@ -108,10 +108,10 @@ public class OnPostCallTest extends RestTestcase {
 		r = client.doPut(url, new StringReader("")).getResponseAsString();
 		assertEquals("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5,contentType=text/s2", r);
 
-		r = client.doPut(url, new StringReader("")).setHeader("Override-Accept", "text/s3").getResponseAsString();
+		r = client.doPut(url, new StringReader("")).header("Override-Accept", "text/s3").getResponseAsString();
 		assertEquals("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5,contentType=text/s3", r);
 
-		rc = client.doPut(url, new StringReader("")).setHeader("Override-Content-Type", "text/s3").connect();
+		rc = client.doPut(url, new StringReader("")).header("Override-Content-Type", "text/s3").connect();
 		r = rc.getResponseAsString();
 		assertEquals("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5,contentType=text/s2", r);
 		assertTrue(rc.getResponse().getFirstHeader("Content-Type").getValue().startsWith("text/s3"));

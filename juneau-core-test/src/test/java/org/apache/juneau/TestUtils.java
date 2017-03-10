@@ -37,21 +37,29 @@ import org.xml.sax.*;
 @SuppressWarnings({"javadoc"})
 public class TestUtils {
 
-	private static JsonSerializer js = new JsonSerializer.Simple()
-		.setTrimNullProperties(false);
+	private static JsonSerializer js = new JsonSerializerBuilder()
+		.simple()
+		.trimNullProperties(false)
+		.build();
 
-	private static JsonSerializer jsSorted = new JsonSerializer.Simple()
-		.setSortCollections(true)
-		.setSortMaps(true)
-		.setTrimNullProperties(false);
+	private static JsonSerializer jsSorted = new JsonSerializerBuilder()
+		.simple()
+		.sortCollections(true)
+		.sortMaps(true)
+		.trimNullProperties(false)
+		.build();
 
 
-	private static JsonSerializer js2 = new JsonSerializer.Simple()
-		.addPojoSwaps(IteratorSwap.class, EnumerationSwap.class);
+	private static JsonSerializer js2 = new JsonSerializerBuilder()
+		.simple()
+		.pojoSwaps(IteratorSwap.class, EnumerationSwap.class)
+		.build();
 
-	private static JsonSerializer js3 = new JsonSerializer.Simple()
-		.addPojoSwaps(IteratorSwap.class, EnumerationSwap.class)
-		.setSortProperties(true);
+	private static JsonSerializer js3 = new JsonSerializerBuilder()
+		.simple()
+		.pojoSwaps(IteratorSwap.class, EnumerationSwap.class)
+		.sortProperties(true)
+		.build();
 
 	/**
 	 * Verifies that two objects are equivalent.
@@ -219,7 +227,7 @@ public class TestUtils {
 	 * Test whitespace and generated schema.
 	 */
 	public static void validateXml(Object o, XmlSerializer s) throws Exception {
-		s = s.clone().setUseWhitespace(true).setEnableNamespaces(true).setAddNamespaceUrisToRoot(true);
+		s = s.builder().ws().ns().addNamespaceUrisToRoot(true).build();
 		String xml = s.serialize(o);
 
 		String xmlSchema = null;

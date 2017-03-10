@@ -26,7 +26,7 @@ import org.apache.juneau.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Create our serializer with a bean filter.</jc>
- * 	WriterSerializer s = <jk>new</jk> JsonSerializer().addBeanFilters(AddressFilter.<jk>class</jk>);
+ * 	WriterSerializer s = <jk>new</jk> JsonSerializerBuilder().beanFilters(AddressFilter.<jk>class</jk>).build();
  *
  * 	Address a = <jk>new</jk> Address();
  * 	String json = s.serialize(a); <jc>// Serializes only street, city, state.</jc>
@@ -43,6 +43,7 @@ import org.apache.juneau.*;
  * <h5 class='section'>Additional information:</h5>
  * See <a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.transform</a> for more information.
  */
+@SuppressWarnings("hiding")
 public abstract class BeanFilterBuilder {
 
 	Class<?> beanClass;
@@ -68,7 +69,7 @@ public abstract class BeanFilterBuilder {
 	 * @param typeName The dictionary name associated with this bean.
 	 * @return This object (for method chaining).
 	 */
-	public BeanFilterBuilder setTypeName(String typeName) {
+	public BeanFilterBuilder typeName(String typeName) {
 		this.typeName = typeName;
 		return this;
 	}
@@ -81,7 +82,7 @@ public abstract class BeanFilterBuilder {
 	 * @param properties The properties associated with the bean class.
 	 * @return This object (for method chaining).
 	 */
-	public BeanFilterBuilder setProperties(String...properties) {
+	public BeanFilterBuilder properties(String...properties) {
 		this.properties = properties;
 		return this;
 	}
@@ -92,7 +93,7 @@ public abstract class BeanFilterBuilder {
 	 * @param excludeProperties The list of properties to ignore on a bean.
 	 * @return This object (for method chaining).
 	 */
-	public BeanFilterBuilder setExcludeProperties(String...excludeProperties) {
+	public BeanFilterBuilder excludeProperties(String...excludeProperties) {
 		this.excludeProperties = excludeProperties;
 		return this;
 	}
@@ -121,7 +122,7 @@ public abstract class BeanFilterBuilder {
 	 * 		}
 	 * 	}
 	 *
-	 * 	JsonSerializer s = new JsonSerializer().addBeanFilters(AFilter.<jk>class</jk>);
+	 * 	JsonSerializer s = new JsonSerializerBuilder().beanFilters(AFilter.<jk>class</jk>).build();
 	 * 	A1 a1 = <jk>new</jk> A1();
 	 * 	String r = s.serialize(a1);
 	 * 	<jsm>assertEquals</jsm>(<js>"{f0:'f0'}"</js>, r);  <jc>// Note f1 is not serialized</jc>
@@ -133,7 +134,7 @@ public abstract class BeanFilterBuilder {
 	 * @param interfaceClass The interface class to use for this bean class.
 	 * @return This object (for method chaining).
 	 */
-	public BeanFilterBuilder setInterfaceClass(Class<?> interfaceClass) {
+	public BeanFilterBuilder interfaceClass(Class<?> interfaceClass) {
 		this.interfaceClass = interfaceClass;
 		return this;
 	}
@@ -164,7 +165,7 @@ public abstract class BeanFilterBuilder {
 	 * @param stopClass
 	 * @return This object (for method chaining).
 	 */
-	public BeanFilterBuilder setStopClass(Class<?> stopClass) {
+	public BeanFilterBuilder stopClass(Class<?> stopClass) {
 		this.stopClass = stopClass;
 		return this;
 	}
@@ -175,7 +176,7 @@ public abstract class BeanFilterBuilder {
 	 * @param sortProperties
 	 * @return This object (for method chaining).
 	 */
-	public BeanFilterBuilder setSortProperties(boolean sortProperties) {
+	public BeanFilterBuilder sortProperties(boolean sortProperties) {
 		this.sortProperties = sortProperties;
 		return this;
 	}
@@ -186,7 +187,7 @@ public abstract class BeanFilterBuilder {
 	 * @param propertyNamer The property namer instance.
 	 * @return This object (for method chaining).
 	 */
-	public BeanFilterBuilder setPropertyNamer(PropertyNamer propertyNamer) {
+	public BeanFilterBuilder propertyNamer(PropertyNamer propertyNamer) {
 		this.propertyNamer = propertyNamer;
 		return this;
 	}
@@ -198,18 +199,29 @@ public abstract class BeanFilterBuilder {
 	 * @return This object (for method chaining).
 	 * @throws Exception Thrown from constructor method.
 	 */
-	public BeanFilterBuilder setPropertyNamer(Class<? extends PropertyNamer> c) throws Exception {
+	public BeanFilterBuilder propertyNamer(Class<? extends PropertyNamer> c) throws Exception {
 		this.propertyNamer = c.newInstance();
 		return this;
 	}
 
 	/**
-	 * Adds a class to this bean's bean dictionary.
+	 * Sets the contents of this bean's bean dictionary.
 	 *
-	 * @param c The class to add to this bean dictionary.
+	 * @param c The classes to set on this bean's bean dictionary.
 	 * @return This object (for method chaining).
 	 */
-	public BeanFilterBuilder addToBeanDictionary(Class<?>...c) {
+	public BeanFilterBuilder setBeanDictionary(Class<?>...c) {
+		beanDictionary = new ArrayList<Class<?>>(Arrays.asList(c));
+		return this;
+	}
+
+	/**
+	 * Adds classes to this bean's bean dictionary.
+	 *
+	 * @param c The classes to add to this bean's bean dictionary.
+	 * @return This object (for method chaining).
+	 */
+	public BeanFilterBuilder beanDictionary(Class<?>...c) {
 		if (beanDictionary == null)
 			beanDictionary = new ArrayList<Class<?>>(Arrays.asList(c));
 		else for (Class<?> cc : c)

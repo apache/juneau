@@ -44,6 +44,24 @@ import org.apache.juneau.transform.*;
 @Consumes("text/plain")
 public final class PlainTextParser extends ReaderParser {
 
+	/** Default parser, all default settings.*/
+	public static final PlainTextParser DEFAULT = new PlainTextParser(PropertyStore.create());
+
+
+	/**
+	 * Constructor.
+	 * @param propertyStore The property store containing all the settings for this object.
+	 */
+	public PlainTextParser(PropertyStore propertyStore) {
+		super(propertyStore);
+	}
+
+	@Override /* CoreObject */
+	public PlainTextParserBuilder builder() {
+		return new PlainTextParserBuilder(propertyStore);
+	}
+
+
 	//--------------------------------------------------------------------------------
 	// Overridden methods
 	//--------------------------------------------------------------------------------
@@ -51,14 +69,5 @@ public final class PlainTextParser extends ReaderParser {
 	@Override /* Parser */
 	protected <T> T doParse(ParserSession session, ClassMeta<T> type) throws Exception {
 		return session.convertToType(IOUtils.read(session.getReader()), type);
-	}
-
-	@Override /* Lockable */
-	public PlainTextParser clone() {
-		try {
-			return (PlainTextParser)super.clone();
-		} catch (CloneNotSupportedException e) {
-			throw new RuntimeException(e); // Shouldn't happen.
-		}
 	}
 }

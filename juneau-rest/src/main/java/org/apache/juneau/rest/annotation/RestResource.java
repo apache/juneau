@@ -593,4 +593,9 @@ public @interface RestResource {
 	 * If not specified, uses <js>"X-Client-Version"</js>.
 	 */
 	String clientVersionHeader() default "";
+
+	/**
+	 * TODO
+	 */
+	String[] links() default "";
 }

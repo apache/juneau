@@ -13,9 +13,8 @@
 package org.apache.juneau.rest.test;
 
 import org.apache.juneau.html.*;
-import org.apache.juneau.json.*;
 import org.apache.juneau.rest.client.*;
-import org.apache.juneau.urlencoding.*;
+import org.apache.juneau.uon.*;
 import org.apache.juneau.xml.*;
 import org.junit.*;
 
@@ -35,7 +34,7 @@ public class LargePojosTest extends RestTestcase {
 		RestClient c;
 
 		System.err.println("\n---Testing JSON---");
-		c = new TestRestClient(JsonSerializer.class, JsonParser.class);
+		c = TestMicroservice.DEFAULT_CLIENT;
 		for (int i = 1; i <= 3; i++) {
 			t = System.currentTimeMillis();
 			p = c.doGet(URL).getResponse(LargePojo.class);
@@ -46,7 +45,7 @@ public class LargePojosTest extends RestTestcase {
 		}
 
 		System.err.println("\n---Testing XML---");
-		c = new TestRestClient(XmlSerializer.class, XmlParser.class);
+		c = TestMicroservice.client(XmlSerializer.class, XmlParser.class).build();
 		for (int i = 1; i <= 3; i++) {
 			t = System.currentTimeMillis();
 			p = c.doGet(URL).getResponse(LargePojo.class);
@@ -57,7 +56,7 @@ public class LargePojosTest extends RestTestcase {
 		}
 
 		System.err.println("\n---Testing HTML---");
-		c = new TestRestClient(HtmlSerializer.class, HtmlParser.class).setAccept("text/html+stripped");
+		c = TestMicroservice.client(HtmlSerializer.class, HtmlParser.class).accept("text/html+stripped").build();
 		for (int i = 1; i <= 3; i++) {
 			t = System.currentTimeMillis();
 			p = c.doGet(URL).getResponse(LargePojo.class);
@@ -67,8 +66,10 @@ public class LargePojosTest extends RestTestcase {
 			System.err.println("Upload: ["+(System.currentTimeMillis() - t)+"] ms");
 		}
 
+		c.closeQuietly();
+
 		System.err.println("\n---Testing UrlEncoding---");
-		c = new TestRestClient(UonSerializer.class, UonParser.class);
+		c = TestMicroservice.client(UonSerializer.class, UonParser.class).build();
 		for (int i = 1; i <= 3; i++) {
 			t = System.currentTimeMillis();
 			p = c.doGet(URL).getResponse(LargePojo.class);

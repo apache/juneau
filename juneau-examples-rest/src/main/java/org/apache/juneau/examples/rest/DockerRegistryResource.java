@@ -18,7 +18,6 @@ import java.util.*;
 
 import javax.servlet.*;
 
-import org.apache.juneau.json.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -46,7 +45,7 @@ public class DockerRegistryResource extends Resource {
 	@Override /* Servlet */
 	public void init() throws ServletException {
 		super.init();
-		rc = new RestClient(JsonSerializer.DEFAULT, JsonParser.DEFAULT);
+		rc = new RestClientBuilder().build();
 	}
 
 	@Override /* Servlet */

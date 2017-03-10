@@ -15,6 +15,7 @@ package org.apache.juneau.urlencoding;
 import static org.junit.Assert.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.uon.*;
 import org.junit.*;
 
 @SuppressWarnings("javadoc")

@@ -29,7 +29,7 @@ public class OverlappingMethodsTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testOverlappingGuards1() throws Exception {
-		RestClient client = new TestRestClient().setHeader("Accept", "text/plain");
+		RestClient client = TestMicroservice.client().accept("text/plain").build();
 		String r;
 		String url = URL + "/testOverlappingGuards1";
 
@@ -51,7 +51,7 @@ public class OverlappingMethodsTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testOverlappingGuards2() throws Exception {
-		RestClient client = new TestRestClient().setHeader("Accept", "text/plain");
+		RestClient client = TestMicroservice.client().accept("text/plain").build();
 		String r;
 		String url = URL + "/testOverlappingGuards2";
 		try {
@@ -86,7 +86,7 @@ public class OverlappingMethodsTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testOverlappingMatchers1() throws Exception {
-		RestClient client = new TestRestClient().setHeader("Accept", "text/plain");
+		RestClient client = TestMicroservice.client().accept("text/plain").build();
 		String r;
 		String url = URL + "/testOverlappingMatchers1";
 
@@ -107,7 +107,7 @@ public class OverlappingMethodsTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testOverlappingMatchers2() throws Exception {
-		RestClient client = new TestRestClient().setHeader("Accept", "text/plain");
+		RestClient client = TestMicroservice.client().accept("text/plain").build();
 		String r;
 		String url = URL + "/testOverlappingMatchers2";
 
@@ -131,7 +131,7 @@ public class OverlappingMethodsTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testOverlappingUrlPatterns() throws Exception {
-		RestClient client = new TestRestClient().setHeader("Accept", "text/plain");
+		RestClient client = TestMicroservice.client().accept("text/plain").build();
 		String r;
 		String url = URL + "/testOverlappingUrlPatterns";
 

@@ -21,7 +21,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.serializer.*;
 import org.apache.juneau.testbeans.*;
 import org.junit.*;
 
@@ -34,17 +33,17 @@ public class Common_UrlEncodingTest {
 	//====================================================================================================
 	@Test
 	public void testTrimNullsFromBeans() throws Exception {
-		UrlEncodingSerializer s = new UrlEncodingSerializer();
+		UrlEncodingSerializerBuilder s = new UrlEncodingSerializerBuilder();
 		A t1 = A.create(), t2;
 
-		s.setTrimNullProperties(false);
-		String r = s.serialize(t1);
+		s.trimNullProperties(false);
+		String r = s.build().serialize(t1);
 		assertEquals("s1=null&s2=s2", r);
 		t2 = p.parse(r, A.class);
 		assertEqualObjects(t1, t2);
 
-		s.setTrimNullProperties(true);
-		r = s.serialize(t1);
+		s.trimNullProperties(true);
+		r = s.build().serialize(t1);
 		assertEquals("s2=s2", r);
 		t2 = p.parse(r, A.class);
 		assertEqualObjects(t1, t2);
@@ -65,18 +64,18 @@ public class Common_UrlEncodingTest {
 	//====================================================================================================
 	@Test
 	public void testTrimEmptyMaps() throws Exception {
-		UrlEncodingSerializer s = UrlEncodingSerializer.DEFAULT.clone();
+		UrlEncodingSerializerBuilder s = new UrlEncodingSerializerBuilder();
 		B t1 = B.create(), t2;
 		String r;
 
-		s.setTrimEmptyMaps(false);
-		r = s.serialize(t1);
+		s.trimEmptyMaps(false);
+		r = s.build().serialize(t1);
 		assertEquals("f1=()&f2=(f2a=null,f2b=(s2=s2))", r);
 		t2 = p.parse(r, B.class);
 		assertEqualObjects(t1, t2);
 
-		s.setTrimEmptyMaps(true);
-		r = s.serialize(t1);
+		s.trimEmptyMaps(true);
+		r = s.build().serialize(t1);
 		assertEquals("f2=(f2a=null,f2b=(s2=s2))", r);
 		t2 = p.parse(r, B.class);
 		assertNull(t2.f1);
@@ -98,18 +97,18 @@ public class Common_UrlEncodingTest {
 	//====================================================================================================
 	@Test
 	public void testTrimEmptyLists() throws Exception {
-		UrlEncodingSerializer s = new UrlEncodingSerializer();
+		UrlEncodingSerializerBuilder s = new UrlEncodingSerializerBuilder();
 		C t1 = C.create(), t2;
 		String r;
 
-		s.setTrimEmptyCollections(false);
-		r = s.serialize(t1);
+		s.trimEmptyCollections(false);
+		r = s.build().serialize(t1);
 		assertEquals("f1=@()&f2=@(null,(s2=s2))", r);
 		t2 = p.parse(r, C.class);
 		assertEqualObjects(t1, t2);
 
-		s.setTrimEmptyCollections(true);
-		r = s.serialize(t1);
+		s.trimEmptyCollections(true);
+		r = s.build().serialize(t1);
 		assertEquals("f2=@(null,(s2=s2))", r);
 		t2 = p.parse(r, C.class);
 		assertNull(t2.f1);
@@ -131,18 +130,18 @@ public class Common_UrlEncodingTest {
 	//====================================================================================================
 	@Test
 	public void testTrimEmptyArrays() throws Exception {
-		UrlEncodingSerializer s = new UrlEncodingSerializer();
+		UrlEncodingSerializerBuilder s = new UrlEncodingSerializerBuilder();
 		D t1 = D.create(), t2;
 		String r;
 
-		s.setTrimEmptyCollections(false);
-		r = s.serialize(t1);
+		s.trimEmptyCollections(false);
+		r = s.build().serialize(t1);
 		assertEquals("f1=@()&f2=@(null,(s2=s2))", r);
 		t2 = p.parse(r, D.class);
 		assertEqualObjects(t1, t2);
 
-		s.setTrimEmptyCollections(true);
-		r = s.serialize(t1);
+		s.trimEmptyCollections(true);
+		r = s.build().serialize(t1);
 		assertEquals("f2=@(null,(s2=s2))", r);
 		t2 = p.parse(r, D.class);
 		assertNull(t2.f1);
@@ -242,13 +241,13 @@ public class Common_UrlEncodingTest {
 	//====================================================================================================
 	@Test
 	public void testUris() throws Exception {
-		WriterSerializer s = new UrlEncodingSerializer();
+		UrlEncodingSerializerBuilder s = new UrlEncodingSerializerBuilder();
 		TestURI t = new TestURI();
 		String r;
 		String expected = "";
 
-		s.setRelativeUriBase(null);
-		r = s.serialize(t);
+		s.relativeUriBase(null);
+		r = s.build().serialize(t);
 		expected = ""
 			+"f0=f0/x0"
 			+"&f1=f1/x1"
@@ -267,12 +266,12 @@ public class Common_UrlEncodingTest {
 			+"&fe='http://www.apache.org/fe/xe?foo=bar%26label2=MY_LABEL'";
 		assertEquals(expected, r);
 
-		s.setRelativeUriBase("");  // Same as null.
-		r = s.serialize(t);
+		s.relativeUriBase("");  // Same as null.
+		r = s.build().serialize(t);
 		assertEquals(expected, r);
 
-		s.setRelativeUriBase("/cr");
-		r = s.serialize(t);
+		s.relativeUriBase("/cr");
+		r = s.build().serialize(t);
 		expected = ""
 			+"f0=/cr/f0/x0"
 			+"&f1=/cr/f1/x1"
@@ -291,12 +290,12 @@ public class Common_UrlEncodingTest {
 			+"&fe='http://www.apache.org/fe/xe?foo=bar%26label2=MY_LABEL'";
 		assertEquals(expected, r);
 
-		s.setRelativeUriBase("/cr/");  // Same as above
-		r = s.serialize(t);
+		s.relativeUriBase("/cr/");  // Same as above
+		r = s.build().serialize(t);
 		assertEquals(expected, r);
 
-		s.setRelativeUriBase("/");
-		r = s.serialize(t);
+		s.relativeUriBase("/");
+		r = s.build().serialize(t);
 		expected = ""
 			+"f0=/f0/x0"
 			+"&f1=/f1/x1"
@@ -315,10 +314,10 @@ public class Common_UrlEncodingTest {
 			+"&fe='http://www.apache.org/fe/xe?foo=bar%26label2=MY_LABEL'";
 		assertEquals(expected, r);
 
-		s.setRelativeUriBase(null);
+		s.relativeUriBase(null);
 
-		s.setAbsolutePathUriBase("http://foo");
-		r = s.serialize(t);
+		s.absolutePathUriBase("http://foo");
+		r = s.build().serialize(t);
 		expected = ""
 			+"f0=f0/x0"
 			+"&f1=f1/x1"
@@ -337,12 +336,12 @@ public class Common_UrlEncodingTest {
 			+"&fe='http://www.apache.org/fe/xe?foo=bar%26label2=MY_LABEL'";
 		assertEquals(expected, r);
 
-		s.setAbsolutePathUriBase("http://foo/");
-		r = s.serialize(t);
+		s.absolutePathUriBase("http://foo/");
+		r = s.build().serialize(t);
 		assertEquals(expected, r);
 
-		s.setAbsolutePathUriBase("");  // Same as null.
-		r = s.serialize(t);
+		s.absolutePathUriBase("");  // Same as null.
+		r = s.build().serialize(t);
 		expected = ""
 			+"f0=f0/x0"
 			+"&f1=f1/x1"
@@ -363,31 +362,11 @@ public class Common_UrlEncodingTest {
 	}
 
 	//====================================================================================================
-	// Validate that you cannot update properties on locked serializer.
-	//====================================================================================================
-	@Test
-	public void testLockedSerializer() throws Exception {
-		UrlEncodingSerializer s = new UrlEncodingSerializer().lock();
-		try {
-			s.setUseWhitespace(true);
-			fail("Locked exception not thrown");
-		} catch (LockedException e) {}
-		try {
-			s.setAddBeanTypeProperties(true);
-			fail("Locked exception not thrown");
-		} catch (LockedException e) {}
-		try {
-			s.setBeanMapPutReturnsOldValue(true);
-			fail("Locked exception not thrown");
-		} catch (LockedException e) {}
-	}
-
-	//====================================================================================================
 	// Recursion
 	//====================================================================================================
 	@Test
 	public void testRecursion() throws Exception {
-		WriterSerializer s = new UrlEncodingSerializer();
+		UrlEncodingSerializerBuilder s = new UrlEncodingSerializerBuilder();
 
 		R1 r1 = new R1();
 		R2 r2 = new R2();
@@ -398,7 +377,7 @@ public class Common_UrlEncodingTest {
 
 		// No recursion detection
 		try {
-			s.serialize(r1);
+			s.build().serialize(r1);
 			fail("Exception expected!");
 		} catch (Exception e) {
 			String msg = e.getLocalizedMessage();
@@ -406,9 +385,9 @@ public class Common_UrlEncodingTest {
 		}
 
 		// Recursion detection, no ignore
-		s.setDetectRecursions(true);
+		s.detectRecursions(true);
 		try {
-			s.serialize(r1);
+			s.build().serialize(r1);
 			fail("Exception expected!");
 		} catch (Exception e) {
 			String msg = e.getLocalizedMessage();
@@ -418,8 +397,8 @@ public class Common_UrlEncodingTest {
 			assertTrue(msg.contains("->[3]r1:org.apache.juneau.urlencoding.Common_UrlEncodingTest$R1"));
 		}
 
-		s.setIgnoreRecursions(true);
-		assertEquals("name=foo&r2=(name=bar,r3=(name=baz))", s.serialize(r1));
+		s.ignoreRecursions(true);
+		assertEquals("name=foo&r2=(name=bar,r3=(name=baz))", s.build().serialize(r1));
 	}
 
 	public static class R1 {

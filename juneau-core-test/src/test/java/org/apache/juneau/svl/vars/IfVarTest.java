@@ -14,7 +14,7 @@ package org.apache.juneau.svl.vars;
 
 import static org.junit.Assert.*;
 
-import org.apache.juneau.svl.VarResolver;
+import org.apache.juneau.svl.*;
 import org.junit.*;
 
 @SuppressWarnings("javadoc")
@@ -25,7 +25,7 @@ public class IfVarTest {
 	//====================================================================================================
 	@Test
 	public void test() throws Exception {
-		VarResolver vr = new VarResolver().addVars(IfVar.class, SystemPropertiesVar.class);
+		VarResolver vr = new VarResolverBuilder().vars(IfVar.class, SystemPropertiesVar.class).build();
 		
 		for (String test : new String[]{"","0","false","FALSE","f","F","foobar"}) {
 			System.setProperty("IfVarTest.test", test);

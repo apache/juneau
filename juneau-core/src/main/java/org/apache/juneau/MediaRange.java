@@ -13,7 +13,6 @@
 package org.apache.juneau;
 
 import java.util.*;
-import java.util.Map;
 import java.util.Map.*;
 
 import org.apache.juneau.annotation.*;

@@ -12,37 +12,22 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.junit.Assert.assertEquals;
+import static org.apache.juneau.jena.Constants.*;
+import static org.junit.Assert.*;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.IdentityHashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-import org.apache.juneau.html.HtmlParser;
-import org.apache.juneau.html.HtmlSerializer;
-import org.apache.juneau.jena.RdfParser;
-import org.apache.juneau.jena.RdfSerializer;
-import org.apache.juneau.json.JsonParser;
-import org.apache.juneau.json.JsonSerializer;
-import org.apache.juneau.msgpack.MsgPackParser;
-import org.apache.juneau.msgpack.MsgPackSerializer;
-import org.apache.juneau.parser.InputStreamParser;
-import org.apache.juneau.parser.Parser;
-import org.apache.juneau.parser.ReaderParser;
-import org.apache.juneau.serializer.OutputStreamSerializer;
-import org.apache.juneau.serializer.Serializer;
-import org.apache.juneau.serializer.WriterSerializer;
-import org.apache.juneau.urlencoding.UonParser;
-import org.apache.juneau.urlencoding.UonSerializer;
-import org.apache.juneau.urlencoding.UrlEncodingParser;
-import org.apache.juneau.urlencoding.UrlEncodingSerializer;
-import org.apache.juneau.xml.XmlParser;
-import org.apache.juneau.xml.XmlSerializer;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runners.MethodSorters;
+import org.apache.juneau.html.*;
+import org.apache.juneau.jena.*;
+import org.apache.juneau.json.*;
+import org.apache.juneau.msgpack.*;
+import org.apache.juneau.parser.*;
+import org.apache.juneau.serializer.*;
+import org.apache.juneau.uon.*;
+import org.apache.juneau.urlencoding.*;
+import org.apache.juneau.xml.*;
+import org.junit.*;
+import org.junit.runners.*;
 
 /**
  * Superclass for tests that verify results against all supported content types. 
@@ -297,8 +282,8 @@ public abstract class ComboTest {
 	//--------------------------------------------------------------------------------
 	// JSON - 't' property
 	//--------------------------------------------------------------------------------
-	WriterSerializer sJsonT = JsonSerializer.DEFAULT_LAX.clone().setBeanTypePropertyName("t");
-	ReaderParser pJsonT = JsonParser.DEFAULT.clone().setBeanTypePropertyName("t");
+	WriterSerializer sJsonT = new JsonSerializerBuilder().simple().beanTypePropertyName("t").build();
+	ReaderParser pJsonT = new JsonParserBuilder().beanTypePropertyName("t").build();
 	
 	@Test
 	public void serializeJsonT() throws Exception {
@@ -345,8 +330,8 @@ public abstract class ComboTest {
 	//--------------------------------------------------------------------------------
 	// XML - 't' property
 	//--------------------------------------------------------------------------------
-	WriterSerializer sXmlT = XmlSerializer.DEFAULT_SQ.clone().setBeanTypePropertyName("t");
-	ReaderParser pXmlT = XmlParser.DEFAULT.clone().setBeanTypePropertyName("t");
+	WriterSerializer sXmlT = new XmlSerializerBuilder().sq().beanTypePropertyName("t").build();
+	ReaderParser pXmlT = new XmlParserBuilder().beanTypePropertyName("t").build();
 	
 	@Test
 	public void serializeXmlT() throws Exception {
@@ -409,8 +394,8 @@ public abstract class ComboTest {
 	//--------------------------------------------------------------------------------
 	// HTML - 't' property
 	//--------------------------------------------------------------------------------
-	WriterSerializer sHtmlT = HtmlSerializer.DEFAULT_SQ.clone().setBeanTypePropertyName("t");
-	ReaderParser pHtmlT = HtmlParser.DEFAULT.clone().setBeanTypePropertyName("t");
+	WriterSerializer sHtmlT = new HtmlSerializerBuilder().sq().beanTypePropertyName("t").build();
+	ReaderParser pHtmlT =  new HtmlParserBuilder().beanTypePropertyName("t").build();
 	
 	@Test
 	public void serializeHtmlT() throws Exception {
@@ -457,8 +442,8 @@ public abstract class ComboTest {
 	//--------------------------------------------------------------------------------
 	// UON - 't' property
 	//--------------------------------------------------------------------------------
-	WriterSerializer sUonT = UonSerializer.DEFAULT.clone().setBeanTypePropertyName("t");
-	ReaderParser pUonT = UonParser.DEFAULT.clone().setBeanTypePropertyName("t");
+	WriterSerializer sUonT = new UonSerializerBuilder().beanTypePropertyName("t").build();
+	ReaderParser pUonT = new UonParserBuilder().beanTypePropertyName("t").build();
 	
 	@Test
 	public void serializeUonT() throws Exception {
@@ -505,8 +490,8 @@ public abstract class ComboTest {
 	//--------------------------------------------------------------------------------
 	// UrlEncoding - 't' property
 	//--------------------------------------------------------------------------------
-	WriterSerializer sUrlEncodingT = UrlEncodingSerializer.DEFAULT.clone().setBeanTypePropertyName("t");
-	ReaderParser pUrlEncodingT = UrlEncodingParser.DEFAULT.clone().setBeanTypePropertyName("t");
+	WriterSerializer sUrlEncodingT = new UrlEncodingSerializerBuilder().beanTypePropertyName("t").build();
+	ReaderParser pUrlEncodingT = new UrlEncodingParserBuilder().beanTypePropertyName("t").build();
 	
 	@Test
 	public void serializeUrlEncodingT() throws Exception {
@@ -558,8 +543,8 @@ public abstract class ComboTest {
 	//--------------------------------------------------------------------------------
 	// MsgPack - 't' property
 	//--------------------------------------------------------------------------------
-	OutputStreamSerializer sMsgPackT = MsgPackSerializer.DEFAULT.clone().setBeanTypePropertyName("t");
-	InputStreamParser pMsgPackT = MsgPackParser.DEFAULT.clone().setBeanTypePropertyName("t");
+	OutputStreamSerializer sMsgPackT = new MsgPackSerializerBuilder().beanTypePropertyName("t").build();
+	InputStreamParser pMsgPackT = new MsgPackParserBuilder().beanTypePropertyName("t").build();
 	
 	@Test
 	public void serializeMsgPackT() throws Exception {
@@ -595,8 +580,8 @@ public abstract class ComboTest {
 	//--------------------------------------------------------------------------------
 	// RdfXml - 't' property
 	//--------------------------------------------------------------------------------
-	WriterSerializer sRdfXmlT = RdfSerializer.DEFAULT_XMLABBREV.clone().setBeanTypePropertyName("t");
-	ReaderParser pRdfXmlT = RdfParser.DEFAULT_XML.clone().setBeanTypePropertyName("t");
+	WriterSerializer sRdfXmlT = new RdfSerializerBuilder().language(LANG_RDF_XML_ABBREV).beanTypePropertyName("t").build();
+	ReaderParser pRdfXmlT = new RdfParserBuilder().beanTypePropertyName("t").build();
 	
 	@Test
 	public void serializeRdfXmlT() throws Exception {
@@ -611,7 +596,7 @@ public abstract class ComboTest {
 	//--------------------------------------------------------------------------------
 	// RdfXml - Readable
 	//--------------------------------------------------------------------------------
-	WriterSerializer sRdfXmlR = RdfSerializer.DEFAULT_XMLABBREV.clone().setUseWhitespace(true);
+	WriterSerializer sRdfXmlR = new RdfSerializerBuilder().language(LANG_RDF_XML_ABBREV).ws().build();
 	ReaderParser pRdfXmlR = RdfParser.DEFAULT_XML;
 	
 	@Test

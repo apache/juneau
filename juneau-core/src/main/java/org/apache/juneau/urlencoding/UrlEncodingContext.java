@@ -15,8 +15,8 @@ package org.apache.juneau.urlencoding;
 /**
  * Configurable properties on the {@link UrlEncodingSerializer} and {@link UrlEncodingParser} classes.
  * <p>
- * Use the {@link UrlEncodingSerializer#setProperty(String, Object)} and
- * 	{@link UrlEncodingParser#setProperty(String, Object)} methods to set property values.
+ * Use the {@link UrlEncodingSerializerBuilder#property(String, Object)} and
+ * 	{@link UrlEncodingParserBuilder#property(String, Object)} methods to set property values.
  */
 public final class UrlEncodingContext implements Cloneable {
 
@@ -33,11 +33,11 @@ public final class UrlEncodingContext implements Cloneable {
 	 * 		<jk>public</jk> List&lt;String&gt; f2 = <jk>new</jk> LinkedList&lt;String&gt;(Arrays.<jsm>asList</jsm>(<jk>new</jk> String[]{<js>"c"</js>,<js>"d"</js>}));
 	 * 	}
 	 *
-	 * 	UrlEncodingSerializer s1 = <jk>new</jk> UrlEncodingParser();
-	 * 	UrlEncodingSerializer s2 = <jk>new</jk> UrlEncodingParser().setExpandedParams(<jk>true</jk>);
+	 * 	UrlEncodingSerializer s1 = UrlEncodingSerializer.<jsf>DEFAULT</jsf>;
+	 * 	UrlEncodingSerializer s2 = <jk>new</jk> UrlEncodingSerializerBuilder().expandedParams(<jk>true</jk>).build();
 	 *
-	 * 	String s1 = p1.serialize(<jk>new</jk> A()); <jc>// Produces "f1=(a,b)&amp;f2=(c,d)"</jc>
-	 * 	String s2 = p2.serialize(<jk>new</jk> A()); <jc>// Produces "f1=a&amp;f1=b&amp;f2=c&amp;f2=d"</jc>
+	 * 	String ss1 = s1.serialize(<jk>new</jk> A()); <jc>// Produces "f1=(a,b)&amp;f2=(c,d)"</jc>
+	 * 	String ss2 = s2.serialize(<jk>new</jk> A()); <jc>// Produces "f1=a&amp;f1=b&amp;f2=c&amp;f2=d"</jc>
 	 * </p>
 	 * <p>
 	 * This option only applies to beans.
@@ -53,17 +53,4 @@ public final class UrlEncodingContext implements Cloneable {
 
 	boolean
 		expandedParams = false;
-
-	//--------------------------------------------------------------------------------
-	// Overridden methods
-	//--------------------------------------------------------------------------------
-
-	@Override /* Cloneable */
-	public UrlEncodingContext clone() {
-		try {
-			return (UrlEncodingContext)super.clone();
-		} catch (CloneNotSupportedException e) {
-			throw new RuntimeException(e); // Shouldn't happen
-		}
-	}
 }

@@ -115,7 +115,7 @@
 	<jc>// Examples below use the Juneau Address Book resource example</jc>
 
 	<jc>// Create a reusable client with JSON support</jc>
-	RestClient client = <jk>new</jk> RestClient(JsonSerializer.<jk>class</jk>, JsonParser.<jk>class</jk>);
+	RestClient client = <jk>new</jk> RestClientBuilder().build();
 	
 	<jc>// GET request, ignoring output</jc>
 	<jk>try</jk> {
@@ -185,7 +185,7 @@
 		.getResponse(Boolean.<jk>class</jk>);
 			
 	<jc>// GET request, getting a filtered object</jc>
-	client.getParser().addPojoSwaps(CalendarSwap.<jsf>ISO8601</jsf>.<jk>class</jk>);
+	client = <jk>new</jk> RestClientBuilder().pojoSwaps(CalendarSwap.<jsf>ISO8601</jsf>.<jk>class</jk>).build();
 	Calendar birthDate = client.doGet(<js>"http://localhost:9080/sample/addressBook/0/birthDate"</js>)
 		.getResponse(GregorianCalendar.<jk>class</jk>);
 
@@ -213,7 +213,7 @@
 	<h3 class='topic' onclick='toggle(this)'>1.1 - SSL Support</h3>
 	<div class='topic'>
 		<p>
-			The simplest way to enable SSL support in the client is to use the {@link org.apache.juneau.rest.client.RestClient#enableSSL(SSLOpts)} method
+			The simplest way to enable SSL support in the client is to use the {@link org.apache.juneau.rest.client.RestClientBuilder#enableSSL(SSLOpts)} method
 			and one of the predefined {@link org.apache.juneau.rest.client.SSLOpts} instances:
 		</p>
 		<ul>
@@ -223,18 +223,18 @@
 		<h6 class='topic'>Example:</h6>
 		<p class='bcode'>
 	<jc>// Create a client that ignores self-signed or otherwise invalid certificates.</jc>
-	RestClient restClient = <jk>new</jk> RestClient() 
+	RestClientBuilder builder = <jk>new</jk> RestClientBuilder() 
 		.enableSSL(SSLOpts.<jsf>LAX</jsf>);
 		
 	<jc>// ...or...</jc>
-	RestClient restClient = <jk>new</jk> RestClient() 
+	RestClientBuilder builder = <jk>new</jk> RestClientBuilder() 
 		.enableLaxSSL();
 		</p>
 		<p>
 			This is functionally equivalent to the following:
 		</p>
 		<p class='bcode'>
-	RestClient restClient = <jk>new</jk> RestClient();
+	RestClientBuilder builder = <jk>new</jk> RestClientBuilder();
 	
 	HostnameVerifier hv = <jk>new</jk> NoopHostnameVerifier();
 	TrustManager tm = <jk>new</jk> SimpleX509TrustManager(<jk>true</jk>);
@@ -243,9 +243,9 @@
 		SSLContext ctx = SSLContext.<jsm>getInstance</jsm>(p);
 		ctx.init(<jk>null</jk>, <jk>new</jk> TrustManager[] { tm }, <jk>null</jk>);
 		SSLConnectionSocketFactory sf = <jk>new</jk> SSLConnectionSocketFactory(ctx, hv);
-		restClient.setSSLSocketFactory(sf);
+		builder.setSSLSocketFactory(sf);
 		Registry&lt;ConnectionSocketFactory&gt; r = RegistryBuilder.&lt;ConnectionSocketFactory&gt;<jsm>.create</jsm>().register(<js>"https"</js>, sf).build();
-		restClient.setConnectionManager(<jk>new</jk> PoolingHttpClientConnectionManager(r));
+		builder.setConnectionManager(<jk>new</jk> PoolingHttpClientConnectionManager(r));
 	}
 		</p>
 		<p>
@@ -289,25 +289,26 @@
 		<h4 class='topic' onclick='toggle(this)'>1.2.1 - BASIC Authentication</h4>
 		<div class='topic'>
 			<p>
-				The {@link org.apache.juneau.rest.client.RestClient#setBasicAuth(String,int,String,String)} method can be used to quickly enable
+				The {@link org.apache.juneau.rest.client.RestClientBuilder#basicAuth(String,int,String,String)} method can be used to quickly enable
 				BASIC authentication support.
 			</p>
 			<h6 class='topic'>Example:</h6>
 			<p class='bcode'>
 	<jc>// Create a client that performs BASIC authentication using the specified user/pw.</jc>
-	RestClient restClient = <jk>new</jk> RestClient() 
-		.setBasicAuth(<jsf>HOST</jsf>, <jsf>PORT</jsf>, <jsf>USER</jsf>, <jsf>PW</jsf>);
+	RestClient restClient = <jk>new</jk> RestClientBuilder() 
+		.setBasicAuth(<jsf>HOST</jsf>, <jsf>PORT</jsf>, <jsf>USER</jsf>, <jsf>PW</jsf>)
+		.build();
 		</p>
 		<p>
 			This is functionally equivalent to the following:
 		</p>
 		<p class='bcode'>
-	RestClient restClient = <jk>new</jk> RestClient();
+	RestClientBuilder builder = <jk>new</jk> RestClientBuilder();
 	AuthScope scope = <jk>new</jk> AuthScope(<jsf>HOST</jsf>, <jsf>PORT</jsf>);
 	Credentials up = <jk>new</jk> UsernamePasswordCredentials(<jsf>USER</jsf>, <jsf>PW</jsf>);
 	CredentialsProvider p = <jk>new</jk> BasicCredentialsProvider();
 	p.setCredentials(scope, up);
-	restClient.setDefaultCredentialsProvider(p);
+	builder.setDefaultCredentialsProvider(p);
 			</p>
 		</div>
 	
@@ -316,10 +317,10 @@
 		<h4 class='topic' onclick='toggle(this)'>1.2.2 - FORM-based Authentication</h4>
 		<div class='topic'>
 			<p>
-				The {@link org.apache.juneau.rest.client.RestClient} class does not itself provide FORM-based authentication since there
+				The {@link org.apache.juneau.rest.client.RestClientBuilder} class does not itself provide FORM-based authentication since there
 				is no standard way of providing such support. 
 				Typically, to perform FORM-based or other types of authentication, you'll want to create your own
-				subclass of {@link org.apache.juneau.rest.client.RestClient} and override the {@link org.apache.juneau.rest.client.RestClient#createHttpClient()}
+				subclass of {@link org.apache.juneau.rest.client.RestClientBuilder} and override the {@link org.apache.juneau.rest.client.RestClientBuilder#createHttpClient()}
 				method to provide an authenticated client.
 			</p>
 			<p>
@@ -330,14 +331,14 @@
 	<jd>/**
 	 * Constructor.
 	 */</jd>
-	<jk>public</jk> JazzRestClient(URI jazzUri, String user, String pw) <jk>throws</jk> IOException {
+	<jk>public</jk> JazzRestClientBuilder(URI jazzUri, String user, String pw) <jk>throws</jk> IOException {
 		...
 	}
 
 	<jd>/**
 	 * Override the createHttpClient() method to return an authenticated client.
 	 */</jd>
-	<ja>@Override</ja> <jc>/* RestClient */</jc>
+	<ja>@Override</ja> <jc>/* RestClientBuilder */</jc>
 	<jk>protected</jk> CloseableHttpClient createHttpClient() <jk>throws</jk> Exception {
 		CloseableHttpClient client = <jk>super</jk>.createHttpClient();
 		formBasedAuthenticate(client);
@@ -411,14 +412,14 @@
 	<jd>/**
 	 * Constructor.
 	 */</jd>
-	<jk>public</jk> JazzRestClient(URI jazzUri, String user, String pw) <jk>throws</jk> IOException {
+	<jk>public</jk> JazzRestClientBuilder(URI jazzUri, String user, String pw) <jk>throws</jk> IOException {
 		...
 	}
 
 	<jd>/**
 	 * Override the createHttpClient() method to return an authenticated client.
 	 */</jd>
-	<ja>@Override</ja> <jc>/* RestClient */</jc>
+	<ja>@Override</ja> <jc>/* RestClientBuilder */</jc>
 	<jk>protected</jk> CloseableHttpClient createHttpClient() <jk>throws</jk> Exception {
 		CloseableHttpClient client = <jk>super</jk>.createHttpClient();
 		oidcAuthenticate(client);
@@ -557,7 +558,7 @@
 		.run();
 		</p>
 		<p>
-			These convenience methods are specialized methods that use the {@link org.apache.juneau.rest.client.RestCall#addResponsePattern(ResponsePattern)}
+			These convenience methods are specialized methods that use the {@link org.apache.juneau.rest.client.RestCall#responsePattern(ResponsePattern)}
 				method which uses regular expression matching against the response body.
 			This method can be used to search for arbitrary patterns in the response body.
 		</p>
@@ -631,7 +632,7 @@
 	<h3 class='topic' onclick='toggle(this)'>1.5 - Logging</h3>
 	<div class='topic'>
 		<p>
-			Use the {@link org.apache.juneau.rest.client.RestClient#logTo(Level,Logger)} and {@link org.apache.juneau.rest.client.RestCall#logTo(Level,Logger)} methods
+			Use the {@link org.apache.juneau.rest.client.RestClientBuilder#logTo(Level,Logger)} and {@link org.apache.juneau.rest.client.RestCall#logTo(Level,Logger)} methods
 			to log HTTP calls.
 			These methods will cause the HTTP request and response headers and body to be logged to the specified logger.  
 		</p>
@@ -645,7 +646,7 @@
 		</p>
 		<p>
 			Customized logging can be handled by subclassing the {@link org.apache.juneau.rest.client.RestCallLogger} class and using the 
-			{@link org.apache.juneau.rest.client.RestCall#addInterceptor(RestCallInterceptor)} method.
+			{@link org.apache.juneau.rest.client.RestCall#interceptor(RestCallInterceptor)} method.
 		</p>
 	</div>
 	
@@ -654,7 +655,7 @@
 	<h3 class='topic' onclick='toggle(this)'>1.6 - Interceptors</h3>
 	<div class='topic'>
 		<p>
-			The {@link org.apache.juneau.rest.client.RestClient#addInterceptor(RestCallInterceptor)} and {@link org.apache.juneau.rest.client.RestCall#addInterceptor(RestCallInterceptor)} methods
+			The {@link org.apache.juneau.rest.client.RestClientBuilder#interceptor(RestCallInterceptor)} and {@link org.apache.juneau.rest.client.RestCall#interceptor(RestCallInterceptor)} methods
 			can be used to intercept responses during specific connection lifecycle events.
 		</p>
 		<p>
@@ -763,7 +764,7 @@
 		</p>
 		<p>
 			Proxy interfaces are retrieved using the {@link org.apache.juneau.rest.client.RestClient#getRemoteableProxy(Class)} method.
-			The {@link org.apache.juneau.rest.client.RestClient#setRemoteableServletUri(String)} method is used to specify the location
+			The {@link org.apache.juneau.rest.client.RestClientBuilder#remoteableServletUri(String)} method is used to specify the location
 				of the remoteable services servlet running on the server.
 			The remoteable servlet is a specialized subclass of {@link org.apache.juneau.rest.RestServlet} that provides a full-blown
 				REST interface for calling interfaces remotely. 
@@ -781,8 +782,9 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Create a RestClient using JSON for serialization, and point to the server-side remoteable servlet.</jc>
-	RestClient client = <jk>new</jk> RestClient(JsonSerializer.<jk>class</jk>, JsonParser.<jk>class</jk>)
-		.setRemoteableServletUri(<js>"https://localhost:9080/juneau/sample/remoteable"</js>);
+	RestClient client = <jk>new</jk> RestClientBuilder()
+		.remoteableServletUri(<js>"https://localhost:9080/juneau/sample/remoteable"</js>)
+		.build();
 	
 	<jc>// Create a proxy interface.</jc>
 	IAddressBook ab = client.getRemoteableProxy(IAddressBook.<jk>class</jk>);
@@ -818,28 +820,30 @@
 	<h3 class='topic' onclick='toggle(this)'>1.8 - Other Useful Methods</h3>
 	<div class='topic'>
 		<p>
-			The {@link org.apache.juneau.rest.client.RestClient#setRootUrl(Object)} method can be used to specify a root URL on 
+			The {@link org.apache.juneau.rest.client.RestClientBuilder#rootUrl(Object)} method can be used to specify a root URL on 
 				all requests so that you don't have to use absolute paths on individual calls.
 		</p>
 		<p class='bcode'>
 	<jc>// Create a rest client with a root URL</jc>
-	RestClient rc = <jk>new</jk> RestClient().setRootUrl(<js>"http://localhost:9080/foobar"</js>);
+	RestClient rc = <jk>new</jk> RestClientBuilder().rootUrl(<js>"http://localhost:9080/foobar"</js>).build();
 	String r = rc.doGet(<js>"/baz"</js>).getResponseAsString();  <jc>// Gets "http://localhost:9080/foobar/baz"</jc>
 		</p>
 		<p>
-			The {@link org.apache.juneau.rest.client.RestClient#setProperty(String,Object)} method can be used to set serializer
+			The {@link org.apache.juneau.rest.client.RestClientBuilder#property(String,Object)} method can be used to set serializer
 			and parser properties.
 			For example, if you're parsing a response into POJOs and you want to ignore fields that aren't on the
 			POJOs, you can use the {@link org.apache.juneau.BeanContext#BEAN_ignoreUnknownBeanProperties} property.
 		</p>
 		<p class='bcode'>
 	<jc>// Create a rest client that ignores unknown fields in the response</jc>
-	RestClient rc = <jk>new</jk> RestClient(JsonSerializer.<jk>class</jk>, JsonParser.<jk>class</jk>)
-		.setProperty(<jsf>BEAN_ignoreUnknownBeanProperties</jsf>, <jk>true</jk>);
+	RestClient rc = <jk>new</jk> RestClientBuilder()
+		.property(<jsf>BEAN_ignoreUnknownBeanProperties</jsf>, <jk>true</jk>)
+		<jc>// or .ignoreUnknownBeanProperties(true)</jc>
+		.build();
 	MyPojo myPojo = rc.doGet(<jsf>URL</jsf>).getResponse(MyPojo.<jk>class</jk>);
 		</p>
 		<p>
-			The {@link org.apache.juneau.rest.client.RestCall#setRetryable(int,long,RetryOn)} method can be used to automatically
+			The {@link org.apache.juneau.rest.client.RestCall#retryable(int,long,RetryOn)} method can be used to automatically
 				retry requests on failures.
 			This can be particularly useful if you're attempting to connect to a REST resource that may be in
 				the process of still initializing.
@@ -848,7 +852,7 @@
 	<jc>// Create a rest call that retries every 10 seconds for up to 30 minutes as long as a connection fails
 	// or a 400+ is received.</jc>
 	restClient.doGet(<jsf>URL</jsf>)
-		.setRetryable(180, 10000, RetryOn.<jsf>DEFAULT</jsf>)
+		.retryable(180, 10000, RetryOn.<jsf>DEFAULT</jsf>)
 		.run();
 	</p>
 	</div>

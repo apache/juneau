@@ -39,6 +39,11 @@ public class OnPreCallResource extends RestServlet {
 
 	@Consumes("text/a1,text/a2,text/a3")
 	public static class TestParserA extends ReaderParser {
+
+		public TestParserA(PropertyStore propertyStore) {
+			super(propertyStore);
+		}
+
 		@SuppressWarnings("unchecked")
 		@Override /* Parser */
 		protected <T> T doParse(ParserSession session, ClassMeta<T> type) throws Exception {

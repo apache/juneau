@@ -22,6 +22,7 @@ import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.transforms.*;
+import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.*;
@@ -30,11 +31,11 @@ import org.junit.*;
 @SuppressWarnings({"unchecked","rawtypes","serial","javadoc"})
 public class BeanMapTest {
 
-	JsonSerializer serializer = JsonSerializer.DEFAULT_LAX.clone();
+	JsonSerializer serializer = JsonSerializer.DEFAULT_LAX;
 
-	BeanContext bc = ContextFactory.create()
-			.addToBeanDictionary(MyBeanDictionaryMap.class)
-			.addPojoSwaps(CalendarSwap.ISO8601DTZ.class)
+	BeanContext bc = PropertyStore.create()
+			.setBeanDictionary(MyBeanDictionaryMap.class)
+			.setPojoSwaps(CalendarSwap.ISO8601DTZ.class)
 			.getBeanContext();
 	BeanSession session = bc.createSession();
 
@@ -478,7 +479,7 @@ public class BeanMapTest {
 		m.put("b", new D2());
 		assertEquals("default", t.b.s);
 
-		JsonParser p = new JsonParser().addToBeanDictionary(D2.class);
+		JsonParser p = new JsonParserBuilder().beanDictionary(D2.class).build();
 		m.put("lb1", new ObjectList("[{_type:'D2',s:'foobar'}]", p));
 		assertEquals(ObjectList.class.getName(), t.lb1.getClass().getName());
 		assertEquals(D2.class.getName(), t.lb1.get(0).getClass().getName());
@@ -664,7 +665,7 @@ public class BeanMapTest {
 		assertEquals(HEnum.THREE, t7.getEnum2());
 
 		// Create instance directly from JSON.
-		JsonParser p = new JsonParser().addToBeanDictionary(H.class);
+		JsonParser p = new JsonParserBuilder().beanDictionary(H.class).build();
 		t7 = (H)p.parse("{_type:'H',enum1:'THREE',enum2:'ONE'}", Object.class);
 		assertEquals("{_type:'H',enum1:'THREE',enum2:'ONE'}", serializer.serialize(t7));
 		assertEquals(HEnum.THREE, t7.enum1);
@@ -956,7 +957,7 @@ public class BeanMapTest {
 
 		// JSON
 		String json = "{baz:789,foo:123,bar:456}";
-		p = new JsonParser().setIgnoreUnknownBeanProperties(true);
+		p = new JsonParserBuilder().ignoreUnknownBeanProperties(true).build();
 		t = p.parse(json, O.class);
 		assertEquals(123, t.foo);
 
@@ -970,7 +971,7 @@ public class BeanMapTest {
 
 		// XML
 		String xml = "<object><baz type='number'>789</baz><foo type='number'>123</foo><bar type='number'>456</bar></object>";
-		p = new XmlParser().setIgnoreUnknownBeanProperties(true);
+		p = new XmlParserBuilder().ignoreUnknownBeanProperties(true).build();
 		t = p.parse(xml, O.class);
 		assertEquals(123, t.foo);
 
@@ -984,7 +985,7 @@ public class BeanMapTest {
 
 		// HTML
 		String html = "<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>baz</string></td><td><number>789</number></td></tr><tr><td><string>foo</string></td><td><number>123</number></td></tr><tr><td><string>bar</string></td><td><number>456</number></td></tr></table>";
-		p = new HtmlParser().setIgnoreUnknownBeanProperties(true);
+		p = new HtmlParserBuilder().ignoreUnknownBeanProperties(true).build();
 		t = p.parse(html, O.class);
 		assertEquals(123, t.foo);
 
@@ -998,12 +999,12 @@ public class BeanMapTest {
 
 		// UON
 		String uon = "(baz=789,foo=123,bar=456)";
-		p = new UonParser().setIgnoreUnknownBeanProperties(true);
+		p = new UonParserBuilder().ignoreUnknownBeanProperties(true).build();
 		t = p.parse(uon, O.class);
 		assertEquals(123, t.foo);
 
 		try {
-			p = new UonParser();
+			p = UonParser.DEFAULT;
 			t = p.parse(json, O.class);
 			fail("Expected exception never occurred");
 		} catch (Exception e) {
@@ -1012,12 +1013,12 @@ public class BeanMapTest {
 
 		// URL-Encoding
 		String urlencoding = "baz=789&foo=123&bar=456";
-		p = new UrlEncodingParser().setIgnoreUnknownBeanProperties(true);
+		p = new UrlEncodingParserBuilder().ignoreUnknownBeanProperties(true).build();
 		t = p.parse(urlencoding, O.class);
 		assertEquals(123, t.foo);
 
 		try {
-			p = new UrlEncodingParser();
+			p = UrlEncodingParser.DEFAULT;
 			t = p.parse(json, O.class);
 			fail("Expected exception never occurred");
 		} catch (Exception e) {

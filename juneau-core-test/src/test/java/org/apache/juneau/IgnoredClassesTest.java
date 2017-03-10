@@ -41,24 +41,24 @@ public class IgnoredClassesTest {
 	@Test
 	public void testIgnorePackages() throws Exception {
 		A a = new A();
-		JsonSerializer s = new JsonSerializer.Simple();
-		assertEquals("{f1:'isBean'}", s.serialize(a));
-		s.addNotBeanPackages("org.apache.juneau");
-		assertEquals("'isNotBean'", s.serialize(a));
+		JsonSerializerBuilder s = new JsonSerializerBuilder().simple();
+		assertEquals("{f1:'isBean'}", s.build().serialize(a));
+		s.notBeanPackages("org.apache.juneau");
+		assertEquals("'isNotBean'", s.build().serialize(a));
 		s.removeNotBeanPackages("org.apache.juneau");
-		assertEquals("{f1:'isBean'}", s.serialize(a));
-		s.addNotBeanPackages("org.apache.juneau.*");
-		assertEquals("'isNotBean'", s.serialize(a));
+		assertEquals("{f1:'isBean'}", s.build().serialize(a));
+		s.notBeanPackages("org.apache.juneau.*");
+		assertEquals("'isNotBean'", s.build().serialize(a));
 		s.removeNotBeanPackages("org.apache.juneau.*");
-		assertEquals("{f1:'isBean'}", s.serialize(a));
-		s.addNotBeanPackages("org.apache.juneau.*");
-		assertEquals("'isNotBean'", s.serialize(a));
+		assertEquals("{f1:'isBean'}", s.build().serialize(a));
+		s.notBeanPackages("org.apache.juneau.*");
+		assertEquals("'isNotBean'", s.build().serialize(a));
 		s.removeNotBeanPackages("org.apache.juneau.*");
-		assertEquals("{f1:'isBean'}", s.serialize(a));
-		s.addNotBeanPackages("org.apache.juneau");
-		assertEquals("'isNotBean'", s.serialize(a));
-		s.addNotBeanPackages("org.apache.juneau.x");
-		assertEquals("'isNotBean'", s.serialize(a));
+		assertEquals("{f1:'isBean'}", s.build().serialize(a));
+		s.notBeanPackages("org.apache.juneau");
+		assertEquals("'isNotBean'", s.build().serialize(a));
+		s.notBeanPackages("org.apache.juneau.x");
+		assertEquals("'isNotBean'", s.build().serialize(a));
 	}
 
 	public static class A {

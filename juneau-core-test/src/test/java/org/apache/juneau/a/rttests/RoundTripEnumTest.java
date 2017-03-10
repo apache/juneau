@@ -29,7 +29,7 @@ import org.junit.*;
 @SuppressWarnings({"serial","javadoc"})
 public class RoundTripEnumTest extends RoundTripTest {
 
-	public RoundTripEnumTest(String label, Serializer s, Parser p, int flags) throws Exception {
+	public RoundTripEnumTest(String label, SerializerBuilder s, ParserBuilder p, int flags) throws Exception {
 		super(label, s, p, flags);
 	}
 
@@ -46,7 +46,7 @@ public class RoundTripEnumTest extends RoundTripTest {
 
 	@Test
 	public void testEnumB() throws Exception {
-		WriterSerializer s = new JsonSerializer.Simple().addBeanFilters(getBeanFilters()).addPojoSwaps(getPojoSwaps());
+		WriterSerializer s = new JsonSerializerBuilder().simple().beanFilters(getBeanFilters()).pojoSwaps(getPojoSwaps()).build();
 		BEnum t = BEnum.FOO;
 		assertEquals("'xfoo'", s.serialize(t));
 		t = roundTrip(t, BEnum.class);

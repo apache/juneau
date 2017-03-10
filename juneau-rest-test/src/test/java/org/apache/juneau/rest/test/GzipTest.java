@@ -56,7 +56,7 @@ public class GzipTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testGzipOff() throws Exception {
-		RestClient c = new TestRestClient().setAccept("text/plain").setContentType("text/plain");
+		RestClient c = TestMicroservice.client().accept("text/plain").contentType("text/plain").build();
 		RestCall r;
 		String url = testGzipOff;
 
@@ -65,22 +65,22 @@ public class GzipTest extends RestTestcase {
 		r = c.doGet(url);
 		assertEquals("foo", r.getResponseAsString());
 
-		r = c.doGet(url).setHeader("Accept-Encoding", "");
+		r = c.doGet(url).acceptEncoding("");
 		assertEquals("foo", r.getResponseAsString());
 
-		r = c.doGet(url).setHeader("Accept-Encoding", "*");
+		r = c.doGet(url).acceptEncoding("*");
 		assertEquals("foo", r.getResponseAsString());
 
-		r = c.doGet(url).setHeader("Accept-Encoding", "identity");
+		r = c.doGet(url).acceptEncoding("identity");
 		assertEquals("foo", r.getResponseAsString());
 
 		// Should match identity.
-		r = c.doGet(url).setHeader("Accept-Encoding", "mycoding");
+		r = c.doGet(url).acceptEncoding("mycoding");
 		assertEquals("foo", r.getResponseAsString());
 
 		// Shouldn't match.
 		try {
-			r = c.doGet(url+"?noTrace=true").setHeader("Accept-Encoding", "mycoding,identity;q=0").connect();
+			r = c.doGet(url+"?noTrace=true").acceptEncoding("mycoding,identity;q=0").connect();
 			fail("Exception expected");
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_NOT_ACCEPTABLE,
@@ -91,7 +91,7 @@ public class GzipTest extends RestTestcase {
 
 		// Shouldn't match.
 		try {
-			c.doGet(url+"?noTrace=true").setHeader("Accept-Encoding", "mycoding,*;q=0").connect();
+			c.doGet(url+"?noTrace=true").acceptEncoding("mycoding,*;q=0").connect();
 			fail("Exception expected");
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_NOT_ACCEPTABLE,
@@ -101,24 +101,24 @@ public class GzipTest extends RestTestcase {
 		}
 
 		// Should match identity
-		r = c.doGet(url).setHeader("Accept-Encoding", "identity;q=0.8,mycoding;q=0.6");
+		r = c.doGet(url).acceptEncoding("identity;q=0.8,mycoding;q=0.6");
 		assertEquals("foo", r.getResponseAsString());
 
 		// Should match identity
-		r = c.doGet(url).setHeader("Accept-Encoding", "mycoding;q=0.8,identity;q=0.6");
+		r = c.doGet(url).acceptEncoding("mycoding;q=0.8,identity;q=0.6");
 		assertEquals("foo", r.getResponseAsString());
 
 		// Should match identity
-		r = c.doGet(url).setHeader("Accept-Encoding", "mycoding;q=0.8,*;q=0.6");
+		r = c.doGet(url).acceptEncoding("mycoding;q=0.8,*;q=0.6");
 		assertEquals("foo", r.getResponseAsString());
 
 		// Should match identity
-		r = c.doGet(url).setHeader("Accept-Encoding", "*;q=0.8,myencoding;q=0.6");
+		r = c.doGet(url).acceptEncoding("*;q=0.8,myencoding;q=0.6");
 		assertEquals("foo", r.getResponseAsString());
 
 		// Shouldn't match
 		try {
-			c.doGet(url+"?noTrace=true").setHeader("Accept-Encoding", "identity;q=0").connect();
+			c.doGet(url+"?noTrace=true").acceptEncoding("identity;q=0").connect();
 			fail("Exception expected");
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_NOT_ACCEPTABLE,
@@ -129,7 +129,7 @@ public class GzipTest extends RestTestcase {
 
 		// Shouldn't match
 		try {
-			c.doGet(url+"?noTrace=true").setHeader("Accept-Encoding", "identity;q=0.0").connect();
+			c.doGet(url+"?noTrace=true").acceptEncoding("identity;q=0.0").connect();
 			fail("Exception expected");
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_NOT_ACCEPTABLE,
@@ -140,7 +140,7 @@ public class GzipTest extends RestTestcase {
 
 		// Shouldn't match
 		try {
-			c.doGet(url+"?noTrace=true").setHeader("Accept-Encoding", "*;q=0").connect();
+			c.doGet(url+"?noTrace=true").acceptEncoding("*;q=0").connect();
 			fail("Exception expected");
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_NOT_ACCEPTABLE,
@@ -151,7 +151,7 @@ public class GzipTest extends RestTestcase {
 
 		// Shouldn't match
 		try {
-			c.doGet(url+"?noTrace=true").setHeader("Accept-Encoding", "*;q=0.0").connect();
+			c.doGet(url+"?noTrace=true").acceptEncoding("*;q=0.0").connect();
 			fail("Exception expected");
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_NOT_ACCEPTABLE,
@@ -166,14 +166,14 @@ public class GzipTest extends RestTestcase {
 		r = c.doPut(url, new StringReader("foo"));
 		assertEquals("foo", r.getResponseAsString());
 
-		r = c.doPut(url, new StringReader("foo")).setHeader("Content-Encoding", "");
+		r = c.doPut(url, new StringReader("foo")).header("Content-Encoding", "");
 		assertEquals("foo", r.getResponseAsString());
 
-		r = c.doPut(url, new StringReader("foo")).setHeader("Content-Encoding", "identity");
+		r = c.doPut(url, new StringReader("foo")).header("Content-Encoding", "identity");
 		assertEquals("foo", r.getResponseAsString());
 
 		try {
-			c.doPut(url+"?noTrace=true", compress("foo")).setHeader("Content-Encoding", "mycoding").connect();
+			c.doPut(url+"?noTrace=true", compress("foo")).header("Content-Encoding", "mycoding").connect();
 			fail("Exception expected");
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_UNSUPPORTED_MEDIA_TYPE,
@@ -192,9 +192,9 @@ public class GzipTest extends RestTestcase {
 	public void testGzipOn() throws Exception {
 
 		// Create a client that disables content compression support so that we can get the gzipped content directly.
-		CloseableHttpClient httpClient = HttpClients.custom().setSSLSocketFactory(TestRestClient.getSSLSocketFactory()).disableContentCompression().build();
+		CloseableHttpClient httpClient = HttpClients.custom().setSSLSocketFactory(TestMicroservice.getSSLSocketFactory()).disableContentCompression().build();
 
-		RestClient c = new TestRestClient(httpClient).setAccept("text/plain").setContentType("text/plain");
+		RestClient c = TestMicroservice.client().httpClient(httpClient, false).accept("text/plain").contentType("text/plain").build();
 		RestCall r;
 		String url = testGzipOn;
 
@@ -203,44 +203,44 @@ public class GzipTest extends RestTestcase {
 		r = c.doGet(url);
 		assertEquals("foo", r.getResponseAsString());
 
-		r = c.doGet(url).setHeader("Accept-Encoding", "");
+		r = c.doGet(url).acceptEncoding("");
 		assertEquals("foo", r.getResponseAsString());
 
-		r = c.doGet(url).setHeader("Accept-Encoding", "*");
+		r = c.doGet(url).acceptEncoding("*");
 		assertEquals("foo", decompress(r.getInputStream()));
 
-		r = c.doGet(url).setHeader("Accept-Encoding", "identity");
+		r = c.doGet(url).acceptEncoding("identity");
 		assertEquals("foo", r.getResponseAsString());
 
 		// Should match identity.
-		r = c.doGet(url).setHeader("Accept-Encoding", "mycoding");
+		r = c.doGet(url).acceptEncoding("mycoding");
 		assertEquals("foo", decompress(r.getInputStream()));
 
-		r = c.doGet(url).setHeader("Accept-Encoding", "mycoding,identity;q=0").connect();
+		r = c.doGet(url).acceptEncoding("mycoding,identity;q=0").connect();
 		assertEquals("foo", decompress(r.getInputStream()));
 
-		r = c.doGet(url).setHeader("Accept-Encoding", "mycoding,*;q=0").connect();
+		r = c.doGet(url).acceptEncoding("mycoding,*;q=0").connect();
 		assertEquals("foo", decompress(r.getInputStream()));
 
 		// Should match identity
-		r = c.doGet(url).setHeader("Accept-Encoding", "identity;q=0.8,mycoding;q=0.6");
+		r = c.doGet(url).acceptEncoding("identity;q=0.8,mycoding;q=0.6");
 		assertEquals("foo", r.getResponseAsString());
 
 		// Should match mycoding
-		r = c.doGet(url).setHeader("Accept-Encoding", "mycoding;q=0.8,identity;q=0.6");
+		r = c.doGet(url).acceptEncoding("mycoding;q=0.8,identity;q=0.6");
 		assertEquals("foo", decompress(r.getInputStream()));
 
 		// Should match mycoding
-		r = c.doGet(url).setHeader("Accept-Encoding", "mycoding;q=0.8,*;q=0.6");
+		r = c.doGet(url).acceptEncoding("mycoding;q=0.8,*;q=0.6");
 		assertEquals("foo", decompress(r.getInputStream()));
 
 		// Should match identity
-		r = c.doGet(url).setHeader("Accept-Encoding", "*;q=0.8,myencoding;q=0.6");
+		r = c.doGet(url).acceptEncoding("*;q=0.8,myencoding;q=0.6");
 		assertEquals("foo", r.getResponseAsString());
 
 		// Shouldn't match
 		try {
-			c.doGet(url+"?noTrace=true").setHeader("Accept-Encoding", "identity;q=0").connect();
+			c.doGet(url+"?noTrace=true").acceptEncoding("identity;q=0").connect();
 			fail("Exception expected");
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_NOT_ACCEPTABLE,
@@ -251,7 +251,7 @@ public class GzipTest extends RestTestcase {
 
 		// Shouldn't match
 		try {
-			c.doGet(url+"?noTrace=true").setHeader("Accept-Encoding", "identity;q=0.0").connect();
+			c.doGet(url+"?noTrace=true").acceptEncoding("identity;q=0.0").connect();
 			fail("Exception expected");
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_NOT_ACCEPTABLE,
@@ -262,7 +262,7 @@ public class GzipTest extends RestTestcase {
 
 		// Shouldn't match
 		try {
-			c.doGet(url+"?noTrace=true").setHeader("Accept-Encoding", "*;q=0").connect();
+			c.doGet(url+"?noTrace=true").acceptEncoding("*;q=0").connect();
 			fail("Exception expected");
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_NOT_ACCEPTABLE,
@@ -273,7 +273,7 @@ public class GzipTest extends RestTestcase {
 
 		// Shouldn't match
 		try {
-			c.doGet(url+"?noTrace=true").setHeader("Accept-Encoding", "*;q=0.0").connect();
+			c.doGet(url+"?noTrace=true").acceptEncoding("*;q=0.0").connect();
 			fail("Exception expected");
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_NOT_ACCEPTABLE,
@@ -288,16 +288,16 @@ public class GzipTest extends RestTestcase {
 		r = c.doPut(url, new StringReader("foo"));
 		assertEquals("foo", r.getResponseAsString());
 
-		r = c.doPut(url, new StringReader("foo")).setHeader("Content-Encoding", "");
+		r = c.doPut(url, new StringReader("foo")).header("Content-Encoding", "");
 		assertEquals("foo", r.getResponseAsString());
 
-		r = c.doPut(url, new StringReader("foo")).setHeader("Content-Encoding", "identity");
+		r = c.doPut(url, new StringReader("foo")).header("Content-Encoding", "identity");
 		assertEquals("foo", r.getResponseAsString());
 
-		r = c.doPut(url, compress("foo")).setHeader("Content-Encoding", "mycoding");
+		r = c.doPut(url, compress("foo")).header("Content-Encoding", "mycoding");
 		assertEquals("foo", r.getResponseAsString());
 
-		c.closeQuietly();
+		c.closeQuietly(); // We want to close our client because we created the HttpClient in this method.
 	}
 
 	//====================================================================================================
@@ -306,26 +306,26 @@ public class GzipTest extends RestTestcase {
 	@Test
 	public void testGzipOnDirect() throws Exception {
 		// Create a client that disables content compression support so that we can get the gzipped content directly.
-		CloseableHttpClient httpClient = HttpClientBuilder.create().setSSLSocketFactory(TestRestClient.getSSLSocketFactory()).build();
-		RestClient c = new TestRestClient(httpClient).setAccept("text/plain").setContentType("text/plain");
+		CloseableHttpClient httpClient = HttpClientBuilder.create().setSSLSocketFactory(TestMicroservice.getSSLSocketFactory()).build();
+		RestClient c = TestMicroservice.client().httpClient(httpClient, false).accept("text/plain").contentType("text/plain").build();
 		RestCall r = null;
 		String s = null;
 
 		// res.getOutputStream() called....should bypass encoding.
-		r = c.doGet(testGzipOn + "/direct").setHeader("Accept-Encoding", "mycoding");
+		r = c.doGet(testGzipOn + "/direct").acceptEncoding("mycoding");
 		s = r.getResponseAsString();
 		assertEquals("test", s);
 		assertTrue(r.getResponse().getHeaders("Content-Type")[0].getValue().contains("text/direct")); // Should get header set manually.
 		assertEquals(0, r.getResponse().getHeaders("Content-Encoding").length);                // Should not be set.
 
 		// res.getWriter() called....should bypass encoding.
-		r = c.doGet(testGzipOn + "/direct2").setHeader("Accept-Encoding", "mycoding");
+		r = c.doGet(testGzipOn + "/direct2").acceptEncoding("mycoding");
 		s = r.getResponseAsString();
 		assertEquals("test", s);
 		assertEquals(0, r.getResponse().getHeaders("Content-Encoding").length);                // Should not be set.
 
 		// res.getNegotiateWriter() called....should NOT bypass encoding.
-		r = c.doGet(testGzipOn + "/direct3").setHeader("Accept-Encoding", "mycoding");
+		r = c.doGet(testGzipOn + "/direct3").acceptEncoding("mycoding");
 		try {
 			assertEquals("mycoding", r.getResponse().getHeaders("content-encoding")[0].getValue());
 		} catch (RestCallException e) {
@@ -334,11 +334,11 @@ public class GzipTest extends RestTestcase {
 		}
 
 		// res.getNegotiateWriter() called but @RestMethod(encoders={})...should bypass encoding.
-		r = c.doGet(testGzipOn + "/direct4").setHeader("Accept-Encoding", "mycoding");
+		r = c.doGet(testGzipOn + "/direct4").acceptEncoding("mycoding");
 		s = r.getResponseAsString();
 		assertEquals("test", s);
 		assertEquals(0, r.getResponse().getHeaders("Content-Encoding").length);                // Should not be set.
 
-		c.closeQuietly();
+		c.closeQuietly(); // We want to close our client because we created the HttpClient in this method.
 	}
 }

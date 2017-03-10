@@ -27,7 +27,7 @@ import org.junit.*;
 @SuppressWarnings({"unused","javadoc"})
 public class RoundTripObjectsAsStringsTest extends RoundTripTest {
 
-	public RoundTripObjectsAsStringsTest(String label, Serializer s, Parser p, int flags) throws Exception {
+	public RoundTripObjectsAsStringsTest(String label, SerializerBuilder s, ParserBuilder p, int flags) throws Exception {
 		super(label, s, p, flags);
 	}
 

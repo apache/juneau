@@ -15,7 +15,7 @@ package org.apache.juneau.rest.client;
 import org.apache.juneau.internal.*;
 
 /**
- * SSL configuration options that get passed to {@link RestClient#enableSSL(SSLOpts)}.
+ * SSL configuration options that get passed to {@link RestClientBuilder#enableSSL(SSLOpts)}.
  */
 public class SSLOpts {
 

@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.urlencoding;
 
-import static org.apache.juneau.urlencoding.UrlEncodingParserContext.*;
+import static org.apache.juneau.uon.UonParserContext.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -22,6 +22,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.transform.*;
+import org.apache.juneau.uon.*;
 
 /**
  * Parses URL-encoded text into POJO models.
@@ -51,13 +52,28 @@ import org.apache.juneau.transform.*;
 public class UrlEncodingParser extends UonParser {
 
 	/** Reusable instance of {@link UrlEncodingParser}. */
-	public static final UrlEncodingParser DEFAULT = new UrlEncodingParser().lock();
+	public static final UrlEncodingParser DEFAULT = new UrlEncodingParser(PropertyStore.create());
+
+
+	private final UrlEncodingParserContext ctx;
 
 	/**
 	 * Constructor.
+	 * @param propertyStore The property store containing all the settings for this object.
 	 */
-	public UrlEncodingParser() {
-		setDecodeChars(true);
+	public UrlEncodingParser(PropertyStore propertyStore) {
+		super(propertyStore);
+		this.ctx = createContext(UrlEncodingParserContext.class);
+	}
+
+	@Override /* CoreObject */
+	public ObjectMap getOverrideProperties() {
+		return super.getOverrideProperties().append(UON_decodeChars, true);
+	}
+
+	@Override /* CoreObject */
+	public UrlEncodingParserBuilder builder() {
+		return new UrlEncodingParserBuilder(propertyStore);
 	}
 
 	private <T> T parseAnything(UrlEncodingParserSession session, ClassMeta<T> eType, ParserReader r, Object outer) throws Exception {
@@ -495,7 +511,7 @@ public class UrlEncodingParser extends UonParser {
 
 	@Override /* Parser */
 	public UrlEncodingParserSession createSession(Object input, ObjectMap op, Method javaMethod, Object outer, Locale locale, TimeZone timeZone, MediaType mediaType) {
-		return new UrlEncodingParserSession(getContext(UrlEncodingParserContext.class), op, input, javaMethod, outer, locale, timeZone, mediaType);
+		return new UrlEncodingParserSession(ctx, op, input, javaMethod, outer, locale, timeZone, mediaType);
 	}
 
 	@Override /* Parser */
@@ -522,479 +538,5 @@ public class UrlEncodingParser extends UonParser {
 			r.read();
 		m = parseIntoMap(s, r, m, (ClassMeta<K>)session.getClassMeta(keyType), (ClassMeta<V>)session.getClassMeta(valueType));
 		return m;
-	}
-
-
-	//--------------------------------------------------------------------------------
-	// Properties
-	//--------------------------------------------------------------------------------
-
-	/**
-	 * <b>Configuration property:</b> Serialize bean property collections/arrays as separate key/value pairs.
-	 * <p>
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"UrlEncoding.expandedParams"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
-	 * <p>
-	 * If <jk>false</jk>, serializing the array <code>[1,2,3]</code> results in <code>?key=$a(1,2,3)</code>.
-	 * If <jk>true</jk>, serializing the same array results in <code>?key=1&amp;key=2&amp;key=3</code>.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	<jk>public class</jk> A {
-	 * 		<jk>public</jk> String[] f1 = {<js>"a"</js>,<js>"b"</js>};
-	 * 		<jk>public</jk> List&lt;String&gt; f2 = <jk>new</jk> LinkedList&lt;String&gt;(Arrays.<jsm>asList</jsm>(<jk>new</jk> String[]{<js>"c"</js>,<js>"d"</js>}));
-	 * 	}
-	 *
-	 * 	UrlEncodingSerializer s1 = <jk>new</jk> UrlEncodingParser();
-	 * 	UrlEncodingSerializer s2 = <jk>new</jk> UrlEncodingParser().setExpandedParams(<jk>true</jk>);
-	 *
-	 * 	String s1 = p1.serialize(<jk>new</jk> A()); <jc>// Produces "f1=(a,b)&amp;f2=(c,d)"</jc>
-	 * 	String s2 = p2.serialize(<jk>new</jk> A()); <jc>// Produces "f1=a&amp;f1=b&amp;f2=c&amp;f2=d"</jc>
-	 * </p>
-	 * <p>
-	 * This option only applies to beans.
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>If parsing multi-part parameters, it's highly recommended to use Collections or Lists
-	 * 		as bean property types instead of arrays since arrays have to be recreated from scratch every time a value
-	 * 		is added to it.
-	 * </ul>
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>URLENC_expandedParams</jsf>, value)</code>.
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @throws LockedException If {@link #lock()} was called on this class.
-	 * @see UrlEncodingParserContext#URLENC_expandedParams
-	 */
-	public UrlEncodingParser setExpandedParams(boolean value) throws LockedException {
-		return setProperty(URLENC_expandedParams, value);
-	}
-
-	@Override /* UonParser */
-	public UrlEncodingParser setDecodeChars(boolean value) throws LockedException {
-		super.setDecodeChars(value);
-		return this;
-	}
-
-	@Override /* Parser */
-	public UrlEncodingParser setTrimStrings(boolean value) throws LockedException {
-		super.setTrimStrings(value);
-		return this;
-	}
-
-	@Override /* Parser */
-	public UrlEncodingParser setStrict(boolean value) throws LockedException {
-		super.setStrict(value);
-		return this;
-	}
-
-	@Override /* Parser */
-	public UrlEncodingParser setInputStreamCharset(String value) throws LockedException {
-		super.setInputStreamCharset(value);
-		return this;
-	}
-
-	@Override /* Parser */
-	public UrlEncodingParser setFileCharset(String value) throws LockedException {
-		super.setFileCharset(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser setBeansRequireDefaultConstructor(boolean value) throws LockedException {
-		super.setBeansRequireDefaultConstructor(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser setBeansRequireSerializable(boolean value) throws LockedException {
-		super.setBeansRequireSerializable(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser setBeansRequireSettersForGetters(boolean value) throws LockedException {
-		super.setBeansRequireSettersForGetters(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser setBeansRequireSomeProperties(boolean value) throws LockedException {
-		super.setBeansRequireSomeProperties(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser setBeanMapPutReturnsOldValue(boolean value) throws LockedException {
-		super.setBeanMapPutReturnsOldValue(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser setBeanConstructorVisibility(Visibility value) throws LockedException {
-		super.setBeanConstructorVisibility(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser setBeanClassVisibility(Visibility value) throws LockedException {
-		super.setBeanClassVisibility(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser setBeanFieldVisibility(Visibility value) throws LockedException {
-		super.setBeanFieldVisibility(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser setMethodVisibility(Visibility value) throws LockedException {
-		super.setMethodVisibility(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser setUseJavaBeanIntrospector(boolean value) throws LockedException {
-		super.setUseJavaBeanIntrospector(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser setUseInterfaceProxies(boolean value) throws LockedException {
-		super.setUseInterfaceProxies(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser setIgnoreUnknownBeanProperties(boolean value) throws LockedException {
-		super.setIgnoreUnknownBeanProperties(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser setIgnoreUnknownNullBeanProperties(boolean value) throws LockedException {
-		super.setIgnoreUnknownNullBeanProperties(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser setIgnorePropertiesWithoutSetters(boolean value) throws LockedException {
-		super.setIgnorePropertiesWithoutSetters(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser setIgnoreInvocationExceptionsOnGetters(boolean value) throws LockedException {
-		super.setIgnoreInvocationExceptionsOnGetters(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser setIgnoreInvocationExceptionsOnSetters(boolean value) throws LockedException {
-		super.setIgnoreInvocationExceptionsOnSetters(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser setSortProperties(boolean value) throws LockedException {
-		super.setSortProperties(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser setNotBeanPackages(String...values) throws LockedException {
-		super.setNotBeanPackages(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser setNotBeanPackages(Collection<String> values) throws LockedException {
-		super.setNotBeanPackages(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser addNotBeanPackages(String...values) throws LockedException {
-		super.addNotBeanPackages(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser addNotBeanPackages(Collection<String> values) throws LockedException {
-		super.addNotBeanPackages(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser removeNotBeanPackages(String...values) throws LockedException {
-		super.removeNotBeanPackages(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser removeNotBeanPackages(Collection<String> values) throws LockedException {
-		super.removeNotBeanPackages(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser setNotBeanClasses(Class<?>...values) throws LockedException {
-		super.setNotBeanClasses(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser setNotBeanClasses(Collection<Class<?>> values) throws LockedException {
-		super.setNotBeanClasses(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser addNotBeanClasses(Class<?>...values) throws LockedException {
-		super.addNotBeanClasses(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser addNotBeanClasses(Collection<Class<?>> values) throws LockedException {
-		super.addNotBeanClasses(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser removeNotBeanClasses(Class<?>...values) throws LockedException {
-		super.removeNotBeanClasses(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser removeNotBeanClasses(Collection<Class<?>> values) throws LockedException {
-		super.removeNotBeanClasses(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser setBeanFilters(Class<?>...values) throws LockedException {
-		super.setBeanFilters(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser setBeanFilters(Collection<Class<?>> values) throws LockedException {
-		super.setBeanFilters(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser addBeanFilters(Class<?>...values) throws LockedException {
-		super.addBeanFilters(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser addBeanFilters(Collection<Class<?>> values) throws LockedException {
-		super.addBeanFilters(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser removeBeanFilters(Class<?>...values) throws LockedException {
-		super.removeBeanFilters(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser removeBeanFilters(Collection<Class<?>> values) throws LockedException {
-		super.removeBeanFilters(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser setPojoSwaps(Class<?>...values) throws LockedException {
-		super.setPojoSwaps(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser setPojoSwaps(Collection<Class<?>> values) throws LockedException {
-		super.setPojoSwaps(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser addPojoSwaps(Class<?>...values) throws LockedException {
-		super.addPojoSwaps(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser addPojoSwaps(Collection<Class<?>> values) throws LockedException {
-		super.addPojoSwaps(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser removePojoSwaps(Class<?>...values) throws LockedException {
-		super.removePojoSwaps(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser removePojoSwaps(Collection<Class<?>> values) throws LockedException {
-		super.removePojoSwaps(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser setImplClasses(Map<Class<?>,Class<?>> values) throws LockedException {
-		super.setImplClasses(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public <T> CoreApi addImplClass(Class<T> interfaceClass, Class<? extends T> implClass) throws LockedException {
-		super.addImplClass(interfaceClass, implClass);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser setBeanDictionary(Class<?>...values) throws LockedException {
-		super.setBeanDictionary(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser setBeanDictionary(Collection<Class<?>> values) throws LockedException {
-		super.setBeanDictionary(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser addToBeanDictionary(Class<?>...values) throws LockedException {
-		super.addToBeanDictionary(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser addToBeanDictionary(Collection<Class<?>> values) throws LockedException {
-		super.addToBeanDictionary(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser removeFromBeanDictionary(Class<?>...values) throws LockedException {
-		super.removeFromBeanDictionary(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser removeFromBeanDictionary(Collection<Class<?>> values) throws LockedException {
-		super.removeFromBeanDictionary(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser setBeanTypePropertyName(String value) throws LockedException {
-		super.setBeanTypePropertyName(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser setDefaultParser(Class<?> value) throws LockedException {
-		super.setDefaultParser(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser setLocale(Locale value) throws LockedException {
-		super.setLocale(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser setTimeZone(TimeZone value) throws LockedException {
-		super.setTimeZone(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser setMediaType(MediaType value) throws LockedException {
-		super.setMediaType(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser setDebug(boolean value) throws LockedException {
-		super.setDebug(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser setProperty(String name, Object value) throws LockedException {
-		super.setProperty(name, value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser setProperties(ObjectMap properties) throws LockedException {
-		super.setProperties(properties);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser addToProperty(String name, Object value) throws LockedException {
-		super.addToProperty(name, value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser putToProperty(String name, Object key, Object value) throws LockedException {
-		super.putToProperty(name, key, value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser putToProperty(String name, Object value) throws LockedException {
-		super.putToProperty(name, value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public UrlEncodingParser removeFromProperty(String name, Object value) throws LockedException {
-		super.removeFromProperty(name, value);
-		return this;
-	}
-
-
-	//--------------------------------------------------------------------------------
-	// Overridden methods
-	//--------------------------------------------------------------------------------
-
-	@Override /* CoreApi */
-	public UrlEncodingParser setClassLoader(ClassLoader classLoader) throws LockedException {
-		super.setClassLoader(classLoader);
-		return this;
-	}
-
-	@Override /* Lockable */
-	public UrlEncodingParser lock() {
-		super.lock();
-		return this;
-	}
-
-	@Override /* Lockable */
-	public UrlEncodingParser clone() {
-		UrlEncodingParser c = (UrlEncodingParser)super.clone();
-		return c;
 	}
 }

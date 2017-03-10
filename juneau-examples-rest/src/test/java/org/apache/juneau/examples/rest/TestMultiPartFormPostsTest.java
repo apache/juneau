@@ -33,7 +33,7 @@ public class TestMultiPartFormPostsTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testUpload() throws Exception {
-		RestClient client = new SamplesRestClient();
+		RestClient client = SamplesMicroservice.DEFAULT_CLIENT;
 		File f = FileUtils.createTempFile("testMultiPartFormPosts.txt");
 		IOPipe.create(new StringReader("test!"), new FileWriter(f)).closeOut().run();
 		HttpEntity entity = MultipartEntityBuilder.create().addBinaryBody(f.getName(), f).build();
@@ -41,7 +41,5 @@ public class TestMultiPartFormPostsTest extends RestTestcase {
 
 		String downloaded = client.doGet(URL + '/' + f.getName() + "?method=VIEW").getResponseAsString();
 		assertEquals("test!", downloaded);
-
-		client.closeQuietly();
 	}
 }

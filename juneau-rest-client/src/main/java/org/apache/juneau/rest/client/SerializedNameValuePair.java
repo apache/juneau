@@ -12,12 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client;
 
-import static org.apache.juneau.urlencoding.UonSerializerContext.*;
+import static org.apache.juneau.uon.UonSerializerContext.*;
 
 import java.io.*;
 
 import org.apache.http.*;
 import org.apache.juneau.*;
+import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 
 /**

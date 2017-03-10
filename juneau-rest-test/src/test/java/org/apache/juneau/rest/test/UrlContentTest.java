@@ -20,17 +20,8 @@ import org.junit.*;
 public class UrlContentTest extends RestTestcase {
 
 	private static String URL = "/testUrlContent";
-	private static RestClient client;
+	private RestClient client = TestMicroservice.DEFAULT_CLIENT_PLAINTEXT;
 
-	@BeforeClass
-	public static void beforeClass() {
-		client = new TestRestClient().setHeader("Accept", "text/plain");
-	}
-
-	@AfterClass
-	public static void afterClass() {
-		client.closeQuietly();
-	}
 
 	//====================================================================================================
 	// Test URL &Body parameter containing a String

@@ -25,6 +25,7 @@ import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.soap.*;
+import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
 
@@ -105,7 +106,7 @@ import org.apache.juneau.xml.*;
  * 	<tr>
  * 		<td class='code'>application/x-java-serialized-object</td>
  * 		<td class='code'>application/x-java-serialized-object</td>
- * 		<td>{@link JavaSerializedObjectSerializer}</td>
+ * 		<td>{@link JsoSerializer}</td>
  * 	</tr>
  * 	<tr>
  * 		<td class='code'>text/xml+rdf</td>
@@ -195,13 +196,12 @@ import org.apache.juneau.xml.*;
 		JsonSerializer.Simple.class,
 		JsonSchemaSerializer.class,
 		XmlDocSerializer.class,
-		XmlDocSerializer.Simple.class,
 		XmlSchemaDocSerializer.class,
 		UonSerializer.class,
 		UrlEncodingSerializer.class,
 		MsgPackSerializer.class,
 		SoapXmlSerializer.class,
-		JavaSerializedObjectSerializer.class,
+		JsoSerializer.class,
 		PlainTextSerializer.class,
 		RdfSerializer.Xml.class,
 		RdfSerializer.XmlAbbrev.class,

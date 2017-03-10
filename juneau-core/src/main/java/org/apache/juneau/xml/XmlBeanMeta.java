@@ -13,6 +13,7 @@
 package org.apache.juneau.xml;
 
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
+
 import java.util.*;
 
 import org.apache.juneau.*;

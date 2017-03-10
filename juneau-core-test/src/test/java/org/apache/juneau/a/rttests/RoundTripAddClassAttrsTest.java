@@ -24,6 +24,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
 import org.junit.*;
@@ -41,68 +42,68 @@ public class RoundTripAddClassAttrsTest extends RoundTripTest {
 		return Arrays.asList(new Object[][] {
 			{ /* 0 */
 				"JsonSerializer.DEFAULT/JsonParser.DEFAULT",
-				new JsonSerializer().setAddBeanTypeProperties(true),
-				new JsonParser().setUseInterfaceProxies(false),
+				new JsonSerializerBuilder().addBeanTypeProperties(true),
+				new JsonParserBuilder().useInterfaceProxies(false),
 				0
 			},
 			{ /* 1 */
 				"JsonSerializer.DEFAULT_LAX/JsonParser.DEFAULT",
-				new JsonSerializer.Simple().setAddBeanTypeProperties(true),
-				new JsonParser().setUseInterfaceProxies(false),
+				new JsonSerializerBuilder().simple().addBeanTypeProperties(true),
+				new JsonParserBuilder().useInterfaceProxies(false),
 				0
 			},
 			{ /* 2 */
 				"JsonSerializer.DEFAULT_SQ/JsonParser.DEFAULT",
-				new JsonSerializer.Simple().setAddBeanTypeProperties(true),
-				new JsonParser().setUseInterfaceProxies(false),
+				new JsonSerializerBuilder().simple().addBeanTypeProperties(true),
+				new JsonParserBuilder().useInterfaceProxies(false),
 				0
 			},
 			{ /* 3 */
 				"XmlSerializer.DEFAULT/XmlParser.DEFAULT",
-				new XmlSerializer().setAddBeanTypeProperties(true),
-				new XmlParser().setUseInterfaceProxies(false),
+				new XmlSerializerBuilder().addBeanTypeProperties(true),
+				new XmlParserBuilder().useInterfaceProxies(false),
 				CHECK_XML_WHITESPACE | VALIDATE_XML
 			},
 			{ /* 4 */
 				"HtmlSerializer.DEFAULT/HtmlParser.DEFAULT",
-				new HtmlSerializer().setAddBeanTypeProperties(true),
-				new HtmlParser().setUseInterfaceProxies(false),
+				new HtmlSerializerBuilder().addBeanTypeProperties(true),
+				new HtmlParserBuilder().useInterfaceProxies(false),
 				CHECK_XML_WHITESPACE
 			},
 			{ /* 5 */
 				"UonSerializer.DEFAULT_ENCODING/UonParser.DEFAULT_DECODING",
-				new UonSerializer.Encoding().setAddBeanTypeProperties(true),
-				new UonParser.Decoding().setUseInterfaceProxies(false),
+				new UonSerializerBuilder().encoding().addBeanTypeProperties(true),
+				new UonParserBuilder().decoding().useInterfaceProxies(false),
 				0
 			},
 			{ /* 6 */
 				"UonSerializer.DEFAULT/UonParser.DEFAULT",
-				new UonSerializer().setAddBeanTypeProperties(true),
-				new UonParser().setUseInterfaceProxies(false),
+				new UonSerializerBuilder().addBeanTypeProperties(true),
+				new UonParserBuilder().useInterfaceProxies(false),
 				0
 			},
 			{ /* 7 */
 				"UrlEncodingSerializer.DEFAULT/UrlEncodingParser.DEFAULT",
-				new UrlEncodingSerializer().setAddBeanTypeProperties(true),
-				new UrlEncodingParser().setUseInterfaceProxies(false),
+				new UrlEncodingSerializerBuilder().addBeanTypeProperties(true),
+				new UrlEncodingParserBuilder().useInterfaceProxies(false),
 				0
 			},
 			{ /* 8 */
 				"RdfSerializer.Xml/RdfParser.Xml",
-				new RdfSerializer.Xml().setAddBeanTypeProperties(true),
-				new RdfParser.Xml().setUseInterfaceProxies(false),
+				new RdfSerializerBuilder().addBeanTypeProperties(true),
+				new RdfParserBuilder().useInterfaceProxies(false),
 				0
 			},
 			{ /* 9 */
 				"MsgPackSerializer.DEFAULT/MsgPackParser.DEFAULT",
-				new MsgPackSerializer().setAddBeanTypeProperties(true),
-				new MsgPackParser().setUseInterfaceProxies(false),
+				new MsgPackSerializerBuilder().addBeanTypeProperties(true),
+				new MsgPackParserBuilder().useInterfaceProxies(false),
 				0
 			}
 		});
 	}
 
-	public RoundTripAddClassAttrsTest(String label, Serializer s, Parser p, int flags) throws Exception {
+	public RoundTripAddClassAttrsTest(String label, SerializerBuilder s, ParserBuilder p, int flags) throws Exception {
 		super(label, s, p, flags);
 	}
 

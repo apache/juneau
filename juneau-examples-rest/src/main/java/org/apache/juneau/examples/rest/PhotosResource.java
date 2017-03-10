@@ -122,6 +122,15 @@ public class PhotosResource extends Resource {
 	/** Serializer for converting images to byte streams */
 	@Produces("image/png,image/jpeg")
 	public static class ImageSerializer extends OutputStreamSerializer {
+
+		/**
+		 * Constructor.
+		 * @param propertyStore The property store containing all the settings for this object.
+		 */
+		public ImageSerializer(PropertyStore propertyStore) {
+			super(propertyStore);
+		}
+
 		@Override /* Serializer */
 		protected void doSerialize(SerializerSession session, Object o) throws Exception {
 			RenderedImage image = (RenderedImage)o;
@@ -133,6 +142,15 @@ public class PhotosResource extends Resource {
 	/** Parser for converting byte streams to images */
 	@Consumes("image/png,image/jpeg")
 	public static class ImageParser extends InputStreamParser {
+
+		/**
+		 * Constructor.
+		 * @param propertyStore The property store containing all the settings for this object.
+		 */
+		public ImageParser(PropertyStore propertyStore) {
+			super(propertyStore);
+		}
+
 		@Override /* Parser */
 		@SuppressWarnings("unchecked")
 		protected <T> T doParse(ParserSession session, ClassMeta<T> type) throws Exception {

@@ -37,6 +37,11 @@ public class OnPostCallResource extends RestServlet {
 
 	@Produces("text/s1,text/s2,text/s3")
 	public static class TestSerializer extends WriterSerializer {
+
+		public TestSerializer(PropertyStore propertyStore) {
+			super(propertyStore);
+		}
+
 		@Override /* Serializer */
 		protected void doSerialize(SerializerSession session, Object o) throws Exception {
 			ObjectMap p = session.getProperties();

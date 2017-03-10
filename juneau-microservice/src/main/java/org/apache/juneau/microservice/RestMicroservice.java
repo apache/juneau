@@ -121,9 +121,10 @@ public class RestMicroservice extends Microservice {
 			@Override /* Thread */
 			public void run() {
 				try {
+					if (server.isStopping() || server.isStopped())
+						return;
 					onStopServer();
 					logger.warning("Stopping server.");
-					System.out.println();
 					server.stop();
 					logger.warning("Server stopped.");
 					onPostStopServer();

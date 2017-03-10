@@ -12,6 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
+import static org.apache.juneau.xml.XmlSerializerContext.*;
+
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.serializer.*;
 
@@ -33,14 +36,30 @@ import org.apache.juneau.serializer.*;
 public class XmlDocSerializer extends XmlSerializer {
 
 	/** Default serializer without namespaces. */
-	@Produces(value="text/xml+simple",contentType="text/xml")
-	public static class Simple extends XmlDocSerializer {
-		/** Constructor */
-		public Simple() {
-			setEnableNamespaces(false);
+	@Produces(value="text/xml",contentType="text/xml")
+	public static class Ns extends XmlDocSerializer {
+
+		/**
+		 * Constructor.
+		 * @param propertyStore The property store containing all the settings for this object.
+		 */
+		public Ns(PropertyStore propertyStore) {
+			super(propertyStore);
+		}
+
+		@Override /* CoreObject */
+		protected ObjectMap getOverrideProperties() {
+			return super.getOverrideProperties().append(XML_enableNamespaces, true);
 		}
 	}
 
+	/**
+	 * Constructor.
+	 * @param propertyStore The property store containing all the settings for this object.
+	 */
+	public XmlDocSerializer(PropertyStore propertyStore) {
+		super(propertyStore);
+	}
 
 	//--------------------------------------------------------------------------------
 	// Entry point methods

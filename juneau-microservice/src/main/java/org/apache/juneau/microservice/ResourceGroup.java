@@ -53,10 +53,10 @@ public abstract class ResourceGroup extends RestServletGroupDefault {
 	 * Adds $ARG and $MF variables to variable resolver defined on {@link RestServlet#createVarResolver()}.
 	 */
 	@Override
-	protected VarResolver createVarResolver() {
+	protected VarResolverBuilder createVarResolver() {
 		return super.createVarResolver()
-			.addVars(ArgsVar.class, ManifestFileVar.class)
-			.setContextObject(ArgsVar.SESSION_args, Microservice.getArgs())
-			.setContextObject(ManifestFileVar.SESSION_manifest, Microservice.getManifest());
+			.vars(ArgsVar.class, ManifestFileVar.class)
+			.contextObject(ArgsVar.SESSION_args, Microservice.getArgs())
+			.contextObject(ManifestFileVar.SESSION_manifest, Microservice.getManifest());
 	}
 }

@@ -17,6 +17,7 @@ import static org.junit.Assert.*;
 import java.util.*;
 
 import org.apache.juneau.parser.*;
+import org.apache.juneau.uon.*;
 import org.junit.*;
 
 @SuppressWarnings({"rawtypes","javadoc"})

@@ -596,7 +596,7 @@
 	</p>
 	<p class='bcode'>
 	<jc>// Create a new REST client with JSON support</jc>
-	RestClient c = <jk>new</jk> RestClient(JsonSerializer.<jk>class</jk>, JsonParser.<jk>class</jk>);
+	RestClient c = <jk>new</jk> RestClientBuilder().build();
 
 	<jc>// Retrieve config file through REST interface</jc>
 	ConfigFile cf = c.doGet(<js>"http://localhost:10000/sample/config"</js>).getResponse(ConfigFileImpl.<jk>class</jk>);

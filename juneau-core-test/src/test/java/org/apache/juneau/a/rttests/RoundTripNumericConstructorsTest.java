@@ -15,6 +15,7 @@ package org.apache.juneau.a.rttests;
 import static org.junit.Assert.*;
 
 import java.util.*;
+
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;
@@ -26,7 +27,7 @@ import org.junit.*;
 @SuppressWarnings({"javadoc","deprecation"})
 public class RoundTripNumericConstructorsTest extends RoundTripTest {
 
-	public RoundTripNumericConstructorsTest(String label, Serializer s, Parser p, int flags) throws Exception {
+	public RoundTripNumericConstructorsTest(String label, SerializerBuilder s, ParserBuilder p, int flags) throws Exception {
 		super(label, s, p, flags);
 	}
 

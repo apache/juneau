@@ -16,7 +16,6 @@ import static org.apache.juneau.rest.test.TestUtils.*;
 
 import java.util.*;
 
-import org.apache.juneau.json.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.*;
 
@@ -31,7 +30,7 @@ public class MessagesTest extends RestTestcase {
 	@SuppressWarnings("rawtypes")
 	@Test
 	public void test() throws Exception {
-		RestClient client = new TestRestClient(JsonSerializer.class,JsonParser.class);
+		RestClient client = TestMicroservice.DEFAULT_CLIENT;
 
 		// Parent resource should just pick up values from its bundle.
 		TreeMap r = client.doGet("/testMessages/test").getResponse(TreeMap.class);
@@ -41,7 +40,5 @@ public class MessagesTest extends RestTestcase {
 		// ordered child before parent.
 		r = client.doGet("/testMessages2/test").getResponse(TreeMap.class);
 		assertObjectEquals("{key1:'value1a',key2:'value2b',key3:'value3b'}", r);
-
-		client.closeQuietly();
 	}
 }

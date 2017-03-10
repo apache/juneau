@@ -366,11 +366,11 @@ public class JsonParserEdgeCasesTest {
 
 	@Test
 	public void testStrict() throws Exception {
-		Parser p = JsonParser.DEFAULT_STRICT;
+		JsonParser p = JsonParser.DEFAULT_STRICT;
 		if (name.contains("utf16LE"))
-			p = p.clone().setInputStreamCharset("UTF-16LE");
+			p = p.builder().inputStreamCharset("UTF-16LE").build();
 		else if (name.contains("utf16BE"))
-			p = p.clone().setInputStreamCharset("UTF-16BE");
+			p = p.builder().inputStreamCharset("UTF-16BE").build();
 
 		// 'y' tests should always succeed.
 		if (expected == 'y') {
@@ -405,11 +405,11 @@ public class JsonParserEdgeCasesTest {
 
 	@Test
 	public void testLax() throws Exception {
-		Parser p = JsonParser.DEFAULT;
+		JsonParser p = JsonParser.DEFAULT;
 		if (name.contains("utf16LE"))
-			p = p.clone().setInputStreamCharset("UTF-16LE");
+			p = p.builder().inputStreamCharset("UTF-16LE").build();
 		else if (name.contains("utf16BE"))
-			p = p.clone().setInputStreamCharset("UTF-16BE");
+			p = p.builder().inputStreamCharset("UTF-16BE").build();
 
 		// 'y' tests should always succeed.
 		if (expected == 'y') {

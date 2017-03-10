@@ -14,7 +14,6 @@ package org.apache.juneau.jena;
 
 import static org.apache.juneau.jena.Constants.*;
 import static org.apache.juneau.jena.RdfCommonContext.*;
-import static org.apache.juneau.jena.RdfSerializerContext.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -22,11 +21,9 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.xml.*;
-import org.apache.juneau.xml.annotation.*;
 
 import com.hp.hpl.jena.rdf.model.*;
 
@@ -58,66 +55,127 @@ import com.hp.hpl.jena.rdf.model.*;
 public class RdfSerializer extends WriterSerializer {
 
 	/** Default RDF/XML serializer, all default settings.*/
-	public static final RdfSerializer DEFAULT_XML = new RdfSerializer.Xml().lock();
+	public static final RdfSerializer DEFAULT_XML = new Xml(PropertyStore.create());
 
 	/** Default Abbreviated RDF/XML serializer, all default settings.*/
-	public static final RdfSerializer DEFAULT_XMLABBREV = new RdfSerializer.XmlAbbrev().lock();
+	public static final RdfSerializer DEFAULT_XMLABBREV = new XmlAbbrev(PropertyStore.create());
 
 	/** Default Turtle serializer, all default settings.*/
-	public static final RdfSerializer DEFAULT_TURTLE = new RdfSerializer.Turtle().lock();
+	public static final RdfSerializer DEFAULT_TURTLE = new Turtle(PropertyStore.create());
 
 	/** Default N-Triple serializer, all default settings.*/
-	public static final RdfSerializer DEFAULT_NTRIPLE = new RdfSerializer.NTriple().lock();
+	public static final RdfSerializer DEFAULT_NTRIPLE = new NTriple(PropertyStore.create());
 
 	/** Default N3 serializer, all default settings.*/
-	public static final RdfSerializer DEFAULT_N3 = new RdfSerializer.N3().lock();
+	public static final RdfSerializer DEFAULT_N3 = new N3(PropertyStore.create());
 
 
 	/** Produces RDF/XML output */
 	@Produces("text/xml+rdf")
 	public static class Xml extends RdfSerializer {
-		/** Constructor */
-		public Xml() {
-			setLanguage(LANG_RDF_XML);
+
+		/**
+		 * Constructor.
+		 * @param propertyStore The property store containing all the settings for this object.
+		 */
+		public Xml(PropertyStore propertyStore) {
+			super(propertyStore);
+		}
+
+		@Override /* CoreObject */
+		protected ObjectMap getOverrideProperties() {
+			return super.getOverrideProperties().append(RDF_language, LANG_RDF_XML);
 		}
 	}
 
 	/** Produces Abbreviated RDF/XML output */
 	@Produces(value="text/xml+rdf+abbrev", contentType="text/xml+rdf")
 	public static class XmlAbbrev extends RdfSerializer {
-		/** Constructor */
-		public XmlAbbrev() {
-			setLanguage(LANG_RDF_XML_ABBREV);
+
+		/**
+		 * Constructor.
+		 * @param propertyStore The property store containing all the settings for this object.
+		 */
+		public XmlAbbrev(PropertyStore propertyStore) {
+			super(propertyStore);
+		}
+
+		@Override /* CoreObject */
+		protected ObjectMap getOverrideProperties() {
+			return super.getOverrideProperties().append(RDF_language, LANG_RDF_XML_ABBREV);
 		}
 	}
 
 	/** Produces N-Triple output */
 	@Produces("text/n-triple")
 	public static class NTriple extends RdfSerializer {
-		/** Constructor */
-		public NTriple() {
-			setLanguage(LANG_NTRIPLE);
+
+		/**
+		 * Constructor.
+		 * @param propertyStore The property store containing all the settings for this object.
+		 */
+		public NTriple(PropertyStore propertyStore) {
+			super(propertyStore);
+		}
+
+		@Override /* CoreObject */
+		protected ObjectMap getOverrideProperties() {
+			return super.getOverrideProperties().append(RDF_language, LANG_NTRIPLE);
 		}
 	}
 
 	/** Produces Turtle output */
 	@Produces("text/turtle")
 	public static class Turtle extends RdfSerializer {
-		/** Constructor */
-		public Turtle() {
-			setLanguage(LANG_TURTLE);
+
+		/**
+		 * Constructor.
+		 * @param propertyStore The property store containing all the settings for this object.
+		 */
+		public Turtle(PropertyStore propertyStore) {
+			super(propertyStore);
+		}
+
+		@Override /* CoreObject */
+		protected ObjectMap getOverrideProperties() {
+			return super.getOverrideProperties().append(RDF_language, LANG_TURTLE);
 		}
 	}
 
 	/** Produces N3 output */
 	@Produces("text/n3")
 	public static class N3 extends RdfSerializer {
-		/** Constructor */
-		public N3() {
-			setLanguage(LANG_N3);
+
+		/**
+		 * Constructor.
+		 * @param propertyStore The property store containing all the settings for this object.
+		 */
+		public N3(PropertyStore propertyStore) {
+			super(propertyStore);
+		}
+
+		@Override /* CoreObject */
+		protected ObjectMap getOverrideProperties() {
+			return super.getOverrideProperties().append(RDF_language, LANG_N3);
 		}
 	}
 
+
+	private final RdfSerializerContext ctx;
+	
+	/**
+	 * Constructor.
+	 * @param propertyStore The property store containing all the settings for this object.
+	 */
+	public RdfSerializer(PropertyStore propertyStore) {
+		super(propertyStore);
+		this.ctx = createContext(RdfSerializerContext.class);
+	}
+
+	@Override /* CoreObject */
+	public RdfSerializerBuilder builder() {
+		return new RdfSerializerBuilder(propertyStore);
+	}
 
 	@Override /* Serializer */
 	protected void doSerialize(SerializerSession session, Object o) throws Exception {
@@ -392,819 +450,6 @@ public class RdfSerializer extends WriterSerializer {
 
 	@Override /* Serializer */
 	public RdfSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType) {
-		return new RdfSerializerSession(getContext(RdfSerializerContext.class), op, output, javaMethod, locale, timeZone, mediaType);
-	}
-
-	
-	//--------------------------------------------------------------------------------
-	// Properties
-	//--------------------------------------------------------------------------------
-
-	/**
-	 * <b>Configuration property:</b>  RDF language.
-	 * <p>
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.language"</js>
-	 * 	<li><b>Data type:</b> <code>String</code>
-	 * 	<li><b>Default:</b> <js>"RDF/XML-ABBREV"</js>
-	 * </ul>
-	 * <p>
-	 * Can be any of the following:
-	 * <ul class='spaced-list'>
-	 * 	<li><js>"RDF/XML"</js>
-	 * 	<li><js>"RDF/XML-ABBREV"</js>
-	 * 	<li><js>"N-TRIPLE"</js>
-	 * 	<li><js>"N3"</js> - General name for the N3 writer.
-	 * 		Will make a decision on exactly which writer to use (pretty writer, plain writer or simple writer) when created.
-	 * 		Default is the pretty writer but can be overridden with system property	<code>com.hp.hpl.jena.n3.N3JenaWriter.writer</code>.
-	 * 	<li><js>"N3-PP"</js> - Name of the N3 pretty writer.
-	 * 		The pretty writer uses a frame-like layout, with prefixing, clustering like properties and embedding one-referenced bNodes.
-	 * 	<li><js>"N3-PLAIN"</js> - Name of the N3 plain writer.
-	 * 		The plain writer writes records by subject.
-	 * 	<li><js>"N3-TRIPLES"</js> - Name of the N3 triples writer.
-	 * 		This writer writes one line per statement, like N-Triples, but does N3-style prefixing.
-	 * 	<li><js>"TURTLE"</js> -  Turtle writer.
-	 * 		http://www.dajobe.org/2004/01/turtle/
-	 * </ul>
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>RDF_language</jsf>, value)</code>.
-	 * 	<li>This introduces a slight performance penalty.
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @throws LockedException If {@link #lock()} was called on this class.
-	 * @see RdfCommonContext#RDF_language
-	 */
-	public RdfSerializer setLanguage(String value) throws LockedException {
-		return setProperty(RDF_language, value);
-	}
-
-	/**
-	 * <b>Configuration property:</b>  XML namespace for Juneau properties.
-	 * <p>
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.juneauNs"</js>
-	 * 	<li><b>Data type:</b> {@link Namespace}
-	 * 	<li><b>Default:</b> <code>{j:<js>'http://www.apache.org/juneau/'</js>}</code>
-	 * </ul>
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>RDF_juneauNs</jsf>, value)</code>.
-	 * 	<li>This introduces a slight performance penalty.
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @throws LockedException If {@link #lock()} was called on this class.
-	 * @see RdfSerializerContext#RDF_juneauNs
-	 */
-	public RdfSerializer setJuneauNs(Namespace value) throws LockedException {
-		return setProperty(RDF_juneauNs, value);
-	}
-
-	/**
-	 * <b>Configuration property:</b>  Default XML namespace for bean properties.
-	 * <p>
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.juneauBpNs"</js>
-	 * 	<li><b>Data type:</b> {@link Namespace}
-	 * 	<li><b>Default:</b> <code>{j:<js>'http://www.apache.org/juneaubp/'</js>}</code>
-	 * </ul>
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>RDF_juneauBpNs</jsf>, value)</code>.
-	 * 	<li>This introduces a slight performance penalty.
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @throws LockedException If {@link #lock()} was called on this class.
-	 * @see RdfSerializerContext#RDF_juneauBpNs
-	 */
-	public RdfSerializer setJuneauBpNs(Namespace value) throws LockedException {
-		return setProperty(RDF_juneauBpNs, value);
-	}
-
-	/**
-	 * <b>Configuration property:</b>  Reuse XML namespaces when RDF namespaces not specified.
-	 * <p>
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.useXmlNamespaces"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>true</jk>
-	 * </ul>
-	 * <p>
-	 * When specified, namespaces defined using {@link XmlNs} and {@link Xml} will be inherited by the RDF serializers.
-	 * Otherwise, namespaces will be defined using {@link RdfNs} and {@link Rdf}.
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>RDF_useXmlNamespaces</jsf>, value)</code>.
-	 * 	<li>This introduces a slight performance penalty.
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @throws LockedException If {@link #lock()} was called on this class.
-	 * @see SerializerContext#SERIALIZER_sortMaps
-	 */
-	public RdfSerializer setUseXmlNamespaces(boolean value) throws LockedException {
-		return setProperty(RDF_useXmlNamespaces, value);
-	}
-
-	/**
-	 * <b>Configuration property:</b>  Add XSI data types to non-<code>String</code> literals.
-	 * <p>
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RdfSerializer.addLiteralTypes"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>RDF_addLiteralTypes</jsf>, value)</code>.
-	 * 	<li>This introduces a slight performance penalty.
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @throws LockedException If {@link #lock()} was called on this class.
-	 * @see RdfSerializerContext#RDF_addLiteralTypes
-	 */
-	public RdfSerializer setAddLiteralTypes(boolean value) throws LockedException {
-		return setProperty(RDF_addLiteralTypes, value);
-	}
-
-	/**
-	 * <b>Configuration property:</b>  Add RDF root identifier property to root node.
-	 * <p>
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RdfSerializer.addRootProperty"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
-	 * <p>
-	 * When enabled an RDF property <code>http://www.apache.org/juneau/root</code> is added with a value of <js>"true"</js>
-	 * 	to identify the root node in the graph.
-	 * This helps locate the root node during parsing.
-	 * <p>
-	 * If disabled, the parser has to search through the model to find any resources without
-	 * 	incoming predicates to identify root notes, which can introduce a considerable performance
-	 * 	degradation.
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>RDF_addRootProperty</jsf>, value)</code>.
-	 * 	<li>This introduces a slight performance penalty.
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @throws LockedException If {@link #lock()} was called on this class.
-	 * @see RdfSerializerContext#RDF_addRootProperty
-	 */
-	public RdfSerializer setAddRootProperty(boolean value) throws LockedException {
-		return setProperty(RDF_addRootProperty, value);
-	}
-
-	/**
-	 * <b>Configuration property:</b>  Auto-detect namespace usage.
-	 * <p>
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RdfSerializer.autoDetectNamespaces"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>true</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
-	 * <p>
-	 * Detect namespace usage before serialization.
-	 * <p>
-	 * If enabled, then the data structure will first be crawled looking for
-	 * namespaces that will be encountered before the root element is
-	 * serialized.
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>RDF_autoDetectNamespaces</jsf>, value)</code>.
-	 * 	<li>This introduces a slight performance penalty.
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @throws LockedException If {@link #lock()} was called on this class.
-	 * @see RdfSerializerContext#RDF_autoDetectNamespaces
-	 */
-	public RdfSerializer setAutoDetectNamespaces(boolean value) throws LockedException {
-		return setProperty(RDF_autoDetectNamespaces, value);
-	}
-
-	/**
-	 * <b>Configuration property:</b>  Default namespaces.
-	 * <p>
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"RdfSerializer.namespaces.list"</js>
-	 * 	<li><b>Data type:</b> <code>List&lt;{@link Namespace}&gt;</code>
-	 * 	<li><b>Default:</b> empty list
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
-	 * <p>
-	 * The default list of namespaces associated with this serializer.
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>RDF_namespaces</jsf>, values)</code>.
-	 * 	<li>This introduces a slight performance penalty.
-	 * </ul>
-	 *
-	 * @param values The new value for this property.
-	 * @return This object (for method chaining).
-	 * @throws LockedException If {@link #lock()} was called on this class.
-	 * @see RdfSerializerContext#RDF_namespaces
-	 */
-	public RdfSerializer setNamespaces(Namespace...values) throws LockedException {
-		return setProperty(RDF_namespaces, values);
-	}
-
-	/**
-	 * <b>Configuration property:</b>  RDF format for representing collections and arrays.
-	 * <p>
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.collectionFormat"</js>
-	 * 	<li><b>Data type:</b> <code>RdfCollectionFormat</code>
-	 * 	<li><b>Default:</b> <js>"DEFAULT"</js>
-	 * </ul>
-	 * <p>
-	 * Possible values:
-	 * <ul class='spaced-list'>
-	 * 	<li><js>"DEFAULT"</js> - Default format.  The default is an RDF Sequence container.
-	 * 	<li><js>"SEQ"</js> - RDF Sequence container.
-	 * 	<li><js>"BAG"</js> - RDF Bag container.
-	 * 	<li><js>"LIST"</js> - RDF List container.
-	 * 	<li><js>"MULTI_VALUED"</js> - Multi-valued properties.
-	 * </ul>
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>If you use <js>"BAG"</js> or <js>"MULTI_VALUED"</js>, the order of the elements in the collection will get lost.
-	 * </ul>
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>RDF_collectionFormat</jsf>, value)</code>.
-	 * 	<li>This introduces a slight performance penalty.
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @throws LockedException If {@link #lock()} was called on this class.
-	 * @see RdfCommonContext#RDF_collectionFormat
-	 */
-	public RdfSerializer setCollectionFormat(RdfCollectionFormat value) throws LockedException {
-		return setProperty(RDF_collectionFormat, value);
-	}
-
-	/**
-	 * <b>Configuration property:</b>  Collections should be serialized and parsed as loose collections.
-	 * <p>
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Rdf.looseCollections"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * </ul>
-	 * <p>
-	 * When specified, collections of resources are handled as loose collections of resources in RDF instead of
-	 * resources that are children of an RDF collection (e.g. Sequence, Bag).
-	 * <p>
-	 * Note that this setting is specialized for RDF syntax, and is incompatible with the concept of
-	 * losslessly representing POJO models, since the tree structure of these POJO models are lost
-	 * when serialized as loose collections.
-	 * <p>
-	 * This setting is typically only useful if the beans being parsed into do not have a bean property
-	 * annotated with {@link Rdf#beanUri @Rdf(beanUri=true)}.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	WriterSerializer s = <jk>new</jk> RdfSerializer.XmlAbbrev().setLooseCollections(<jk>true</jk>);
-	 * 	ReaderParser p = <jk>new</jk> RdfParser.Xml().setLooseCollections(<jk>true</jk>);
-	 *
-	 * 	List&lt;MyBean&gt; l = createListOfMyBeans();
-	 *
-	 * 	<jc>// Serialize to RDF/XML as loose resources</jc>
-	 * 	String rdfXml = s.serialize(l);
-	 *
-	 * 	<jc>// Parse back into a Java collection</jc>
-	 * 	l = p.parse(rdfXml, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
-	 *
-	 * 	MyBean[] b = createArrayOfMyBeans();
-	 *
-	 * 	<jc>// Serialize to RDF/XML as loose resources</jc>
-	 * 	String rdfXml = s.serialize(b);
-	 *
-	 * 	<jc>// Parse back into a bean array</jc>
-	 * 	b = p.parse(rdfXml, MyBean[].<jk>class</jk>);
-	 * </p>
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>RDF_looseCollections</jsf>, value)</code>.
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @throws LockedException If {@link #lock()} was called on this class.
-	 * @see RdfCommonContext#RDF_looseCollections
-	 */
-	public RdfSerializer setLooseCollections(boolean value) throws LockedException {
-		return setProperty(RDF_looseCollections, value);
-	}
-
-	@Override /* Serializer */
-	public RdfSerializer setMaxDepth(int value) throws LockedException {
-		super.setMaxDepth(value);
-		return this;
-	}
-
-	@Override /* Serializer */
-	public RdfSerializer setInitialDepth(int value) throws LockedException {
-		super.setInitialDepth(value);
-		return this;
-	}
-
-	@Override /* Serializer */
-	public RdfSerializer setDetectRecursions(boolean value) throws LockedException {
-		super.setDetectRecursions(value);
-		return this;
-	}
-
-	@Override /* Serializer */
-	public RdfSerializer setIgnoreRecursions(boolean value) throws LockedException {
-		super.setIgnoreRecursions(value);
-		return this;
-	}
-
-	@Override /* Serializer */
-	public RdfSerializer setUseWhitespace(boolean value) throws LockedException {
-		super.setUseWhitespace(value);
-		return this;
-	}
-
-	@Override /* Serializer */
-	public RdfSerializer setAddBeanTypeProperties(boolean value) throws LockedException {
-		super.setAddBeanTypeProperties(value);
-		return this;
-	}
-
-	@Override /* Serializer */
-	public RdfSerializer setQuoteChar(char value) throws LockedException {
-		super.setQuoteChar(value);
-		return this;
-	}
-
-	@Override /* Serializer */
-	public RdfSerializer setTrimNullProperties(boolean value) throws LockedException {
-		super.setTrimNullProperties(value);
-		return this;
-	}
-
-	@Override /* Serializer */
-	public RdfSerializer setTrimEmptyCollections(boolean value) throws LockedException {
-		super.setTrimEmptyCollections(value);
-		return this;
-	}
-
-	@Override /* Serializer */
-	public RdfSerializer setTrimEmptyMaps(boolean value) throws LockedException {
-		super.setTrimEmptyMaps(value);
-		return this;
-	}
-
-	@Override /* Serializer */
-	public RdfSerializer setTrimStrings(boolean value) throws LockedException {
-		super.setTrimStrings(value);
-		return this;
-	}
-
-	@Override /* Serializer */
-	public RdfSerializer setRelativeUriBase(String value) throws LockedException {
-		super.setRelativeUriBase(value);
-		return this;
-	}
-
-	@Override /* Serializer */
-	public RdfSerializer setAbsolutePathUriBase(String value) throws LockedException {
-		super.setAbsolutePathUriBase(value);
-		return this;
-	}
-
-	@Override /* Serializer */
-	public RdfSerializer setSortCollections(boolean value) throws LockedException {
-		super.setSortCollections(value);
-		return this;
-	}
-
-	@Override /* Serializer */
-	public RdfSerializer setSortMaps(boolean value) throws LockedException {
-		super.setSortMaps(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer setBeansRequireDefaultConstructor(boolean value) throws LockedException {
-		super.setBeansRequireDefaultConstructor(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer setBeansRequireSerializable(boolean value) throws LockedException {
-		super.setBeansRequireSerializable(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer setBeansRequireSettersForGetters(boolean value) throws LockedException {
-		super.setBeansRequireSettersForGetters(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer setBeansRequireSomeProperties(boolean value) throws LockedException {
-		super.setBeansRequireSomeProperties(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer setBeanMapPutReturnsOldValue(boolean value) throws LockedException {
-		super.setBeanMapPutReturnsOldValue(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer setBeanConstructorVisibility(Visibility value) throws LockedException {
-		super.setBeanConstructorVisibility(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer setBeanClassVisibility(Visibility value) throws LockedException {
-		super.setBeanClassVisibility(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer setBeanFieldVisibility(Visibility value) throws LockedException {
-		super.setBeanFieldVisibility(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer setMethodVisibility(Visibility value) throws LockedException {
-		super.setMethodVisibility(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer setUseJavaBeanIntrospector(boolean value) throws LockedException {
-		super.setUseJavaBeanIntrospector(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer setUseInterfaceProxies(boolean value) throws LockedException {
-		super.setUseInterfaceProxies(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer setIgnoreUnknownBeanProperties(boolean value) throws LockedException {
-		super.setIgnoreUnknownBeanProperties(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer setIgnoreUnknownNullBeanProperties(boolean value) throws LockedException {
-		super.setIgnoreUnknownNullBeanProperties(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer setIgnorePropertiesWithoutSetters(boolean value) throws LockedException {
-		super.setIgnorePropertiesWithoutSetters(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer setIgnoreInvocationExceptionsOnGetters(boolean value) throws LockedException {
-		super.setIgnoreInvocationExceptionsOnGetters(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer setIgnoreInvocationExceptionsOnSetters(boolean value) throws LockedException {
-		super.setIgnoreInvocationExceptionsOnSetters(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer setSortProperties(boolean value) throws LockedException {
-		super.setSortProperties(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer setNotBeanPackages(String...values) throws LockedException {
-		super.setNotBeanPackages(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer setNotBeanPackages(Collection<String> values) throws LockedException {
-		super.setNotBeanPackages(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer addNotBeanPackages(String...values) throws LockedException {
-		super.addNotBeanPackages(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer addNotBeanPackages(Collection<String> values) throws LockedException {
-		super.addNotBeanPackages(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer removeNotBeanPackages(String...values) throws LockedException {
-		super.removeNotBeanPackages(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer removeNotBeanPackages(Collection<String> values) throws LockedException {
-		super.removeNotBeanPackages(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer setNotBeanClasses(Class<?>...values) throws LockedException {
-		super.setNotBeanClasses(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer setNotBeanClasses(Collection<Class<?>> values) throws LockedException {
-		super.setNotBeanClasses(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer addNotBeanClasses(Class<?>...values) throws LockedException {
-		super.addNotBeanClasses(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer addNotBeanClasses(Collection<Class<?>> values) throws LockedException {
-		super.addNotBeanClasses(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer removeNotBeanClasses(Class<?>...values) throws LockedException {
-		super.removeNotBeanClasses(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer removeNotBeanClasses(Collection<Class<?>> values) throws LockedException {
-		super.removeNotBeanClasses(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer setBeanFilters(Class<?>...values) throws LockedException {
-		super.setBeanFilters(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer setBeanFilters(Collection<Class<?>> values) throws LockedException {
-		super.setBeanFilters(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer addBeanFilters(Class<?>...values) throws LockedException {
-		super.addBeanFilters(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer addBeanFilters(Collection<Class<?>> values) throws LockedException {
-		super.addBeanFilters(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer removeBeanFilters(Class<?>...values) throws LockedException {
-		super.removeBeanFilters(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer removeBeanFilters(Collection<Class<?>> values) throws LockedException {
-		super.removeBeanFilters(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer setPojoSwaps(Class<?>...values) throws LockedException {
-		super.setPojoSwaps(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer setPojoSwaps(Collection<Class<?>> values) throws LockedException {
-		super.setPojoSwaps(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer addPojoSwaps(Class<?>...values) throws LockedException {
-		super.addPojoSwaps(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer addPojoSwaps(Collection<Class<?>> values) throws LockedException {
-		super.addPojoSwaps(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer removePojoSwaps(Class<?>...values) throws LockedException {
-		super.removePojoSwaps(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer removePojoSwaps(Collection<Class<?>> values) throws LockedException {
-		super.removePojoSwaps(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer setImplClasses(Map<Class<?>,Class<?>> values) throws LockedException {
-		super.setImplClasses(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public <T> CoreApi addImplClass(Class<T> interfaceClass, Class<? extends T> implClass) throws LockedException {
-		super.addImplClass(interfaceClass, implClass);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer setBeanDictionary(Class<?>...values) throws LockedException {
-		super.setBeanDictionary(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer setBeanDictionary(Collection<Class<?>> values) throws LockedException {
-		super.setBeanDictionary(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer addToBeanDictionary(Class<?>...values) throws LockedException {
-		super.addToBeanDictionary(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer addToBeanDictionary(Collection<Class<?>> values) throws LockedException {
-		super.addToBeanDictionary(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer removeFromBeanDictionary(Class<?>...values) throws LockedException {
-		super.removeFromBeanDictionary(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer removeFromBeanDictionary(Collection<Class<?>> values) throws LockedException {
-		super.removeFromBeanDictionary(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer setBeanTypePropertyName(String value) throws LockedException {
-		super.setBeanTypePropertyName(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer setDefaultParser(Class<?> value) throws LockedException {
-		super.setDefaultParser(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer setLocale(Locale value) throws LockedException {
-		super.setLocale(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer setTimeZone(TimeZone value) throws LockedException {
-		super.setTimeZone(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer setMediaType(MediaType value) throws LockedException {
-		super.setMediaType(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer setDebug(boolean value) throws LockedException {
-		super.setDebug(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer setProperty(String name, Object value) throws LockedException {
-		super.setProperty(name, value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer setProperties(ObjectMap properties) throws LockedException {
-		super.setProperties(properties);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer addToProperty(String name, Object value) throws LockedException {
-		super.addToProperty(name, value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer putToProperty(String name, Object key, Object value) throws LockedException {
-		super.putToProperty(name, key, value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer putToProperty(String name, Object value) throws LockedException {
-		super.putToProperty(name, value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public RdfSerializer removeFromProperty(String name, Object value) throws LockedException {
-		super.removeFromProperty(name, value);
-		return this;
-	}
-	
-
-	//--------------------------------------------------------------------------------
-	// Overridden methods
-	//--------------------------------------------------------------------------------
-
-	@Override /* CoreApi */
-	public RdfSerializer setClassLoader(ClassLoader classLoader) throws LockedException {
-		super.setClassLoader(classLoader);
-		return this;
-	}
-
-	@Override /* Lockable */
-	public RdfSerializer lock() {
-		super.lock();
-		return this;
-	}
-
-	@Override /* Lockable */
-	public RdfSerializer clone() {
-		try {
-			return (RdfSerializer)super.clone();
-		} catch (CloneNotSupportedException e) {
-			throw new RuntimeException(e); // Shouldn't happen
-		}
+		return new RdfSerializerSession(ctx, op, output, javaMethod, locale, timeZone, mediaType);
 	}
 }

@@ -18,10 +18,10 @@ import org.apache.juneau.xml.*;
 /**
  * Configurable properties on the {@link HtmlParser} class.
  * <p>
- * Context properties are set by calling {@link ContextFactory#setProperty(String, Object)} on the context factory
- * returned {@link CoreApi#getContextFactory()}.
+ * Context properties are set by calling {@link PropertyStore#setProperty(String, Object)} on the property store
+ * passed into the constructor.
  * <p>
- * See {@link ContextFactory} for more information about context properties.
+ * See {@link PropertyStore} for more information about context properties.
  *
  * <h5 class='section'>Inherited configurable properties:</h5>
  * <ul class='javahierarchy'>
@@ -36,12 +36,12 @@ public final class HtmlParserContext extends XmlParserContext {
 	/**
 	 * Constructor.
 	 * <p>
-	 * Typically only called from {@link ContextFactory#getContext(Class)}.
+	 * Typically only called from {@link PropertyStore#getContext(Class)}.
 	 *
-	 * @param cf The factory that created this context.
+	 * @param ps The property store that created this context.
 	 */
-	public HtmlParserContext(ContextFactory cf) {
-		super(cf);
+	public HtmlParserContext(PropertyStore ps) {
+		super(ps);
 	}
 
 	@Override /* Context */

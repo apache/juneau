@@ -27,15 +27,11 @@ public class JsonConfigurationExample {
     public static void main(String[] args) throws Exception {
         Pojo aPojo = new Pojo("a","</pojo>");
         // Json Serializers can be configured using properties defined in JsonSerializerContext
-        String withWhitespace = new JsonSerializer()
-                .setProperty(JsonSerializerContext.JSON_useWhitespace, true)
-                .serialize(aPojo);
+        String withWhitespace = new JsonSerializerBuilder().ws().build().serialize(aPojo);
         // the output will be padded with spaces after format characters
         System.out.println(withWhitespace);
 
-        String escaped = new JsonSerializer()
-                .setProperty(JsonSerializerContext.JSON_escapeSolidus, true)
-                .serialize(aPojo);
+        String escaped = new JsonSerializerBuilder().escapeSolidus(true).build().serialize(aPojo);
         // the output will have escaped /
         System.out.println(escaped);
 

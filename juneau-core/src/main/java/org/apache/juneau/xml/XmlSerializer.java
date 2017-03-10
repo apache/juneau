@@ -12,10 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
-import static org.apache.juneau.xml.XmlSerializerContext.*;
-import static org.apache.juneau.xml.annotation.XmlFormat.*;
+import static org.apache.juneau.serializer.SerializerContext.*;
 import static org.apache.juneau.xml.XmlSerializer.ContentResult.*;
 import static org.apache.juneau.xml.XmlSerializer.JsonType.*;
+import static org.apache.juneau.xml.XmlSerializerContext.*;
+import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -125,62 +126,126 @@ import org.apache.juneau.xml.annotation.*;
 public class XmlSerializer extends WriterSerializer {
 
 	/** Default serializer without namespaces. */
-	public static final XmlSerializer DEFAULT = new XmlSerializer().lock();
+	public static final XmlSerializer DEFAULT = new XmlSerializer(PropertyStore.create());
 
 	/** Default serializer without namespaces, with single quotes. */
-	public static final XmlSerializer DEFAULT_SQ = new XmlSerializer.Sq().lock();
+	public static final XmlSerializer DEFAULT_SQ = new Sq(PropertyStore.create());
 
 	/** Default serializer without namespaces, with single quotes, whitespace added. */
-	public static final XmlSerializer DEFAULT_SQ_READABLE = new XmlSerializer.SqReadable().lock();
+	public static final XmlSerializer DEFAULT_SQ_READABLE = new SqReadable(PropertyStore.create());
 
 	/** Default serializer, all default settings. */
-	public static final XmlSerializer DEFAULT_NS = new XmlSerializer.Ns().lock();
+	public static final XmlSerializer DEFAULT_NS = new Ns(PropertyStore.create());
 
 	/** Default serializer, single quotes. */
-	public static final XmlSerializer DEFAULT_NS_SQ = new XmlSerializer.NsSq().lock();
+	public static final XmlSerializer DEFAULT_NS_SQ = new NsSq(PropertyStore.create());
 
 	/** Default serializer, single quotes, whitespace added. */
-	public static final XmlSerializer DEFAULT_NS_SQ_READABLE = new XmlSerializer.NsSqReadable().lock();
+	public static final XmlSerializer DEFAULT_NS_SQ_READABLE = new NsSqReadable(PropertyStore.create());
+
 
 	/** Default serializer, single quotes. */
 	public static class Sq extends XmlSerializer {
-		/** Constructor */
-		public Sq() {
-			setQuoteChar('\'');
+
+		/**
+		 * Constructor.
+		 * @param propertyStore The property store containing all the settings for this object.
+		 */
+		public Sq(PropertyStore propertyStore) {
+			super(propertyStore);
+		}
+
+		@Override /* CoreObject */
+		protected ObjectMap getOverrideProperties() {
+			return super.getOverrideProperties().append(SERIALIZER_quoteChar, '\'');
 		}
 	}
 
 	/** Default serializer, single quotes, whitespace added. */
-	public static class SqReadable extends Sq {
-		/** Constructor */
-		public SqReadable() {
-			setUseWhitespace(true);
+	public static class SqReadable extends XmlSerializer {
+
+		/**
+		 * Constructor.
+		 * @param propertyStore The property store containing all the settings for this object.
+		 */
+		public SqReadable(PropertyStore propertyStore) {
+			super(propertyStore);
+		}
+
+		@Override /* CoreObject */
+		protected ObjectMap getOverrideProperties() {
+			return super.getOverrideProperties().append(SERIALIZER_quoteChar, '\'').append(SERIALIZER_useWhitespace, true);
 		}
 	}
 
 	/** Default serializer without namespaces. */
 	@Produces(value="text/xml+simple",contentType="text/xml")
 	public static class Ns extends XmlSerializer {
-		/** Constructor */
-		public Ns() {
-			setEnableNamespaces(true);
+
+		/**
+		 * Constructor.
+		 * @param propertyStore The property store containing all the settings for this object.
+		 */
+		public Ns(PropertyStore propertyStore) {
+			super(propertyStore);
+		}
+
+		@Override /* CoreObject */
+		protected ObjectMap getOverrideProperties() {
+			return super.getOverrideProperties().append(XML_enableNamespaces, true);
 		}
 	}
 
 	/** Default serializer without namespaces, single quotes. */
-	public static class NsSq extends Ns {
-		/** Constructor */
-		public NsSq() {
-			setQuoteChar('\'');
+	public static class NsSq extends XmlSerializer {
+
+		/**
+		 * Constructor.
+		 * @param propertyStore The property store containing all the settings for this object.
+		 */
+		public NsSq(PropertyStore propertyStore) {
+			super(propertyStore);
+		}
+
+		@Override /* CoreObject */
+		protected ObjectMap getOverrideProperties() {
+			return super.getOverrideProperties().append(XML_enableNamespaces, true).append(SERIALIZER_quoteChar, '\'');
 		}
 	}
 
 	/** Default serializer without namespaces, single quotes, with whitespace. */
-	public static class NsSqReadable extends NsSq {
-		/** Constructor */
-		public NsSqReadable() {
-			setUseWhitespace(true);
+	public static class NsSqReadable extends XmlSerializer {
+
+		/**
+		 * Constructor.
+		 * @param propertyStore The property store containing all the settings for this object.
+		 */
+		public NsSqReadable(PropertyStore propertyStore) {
+			super(propertyStore);
 		}
+
+		@Override /* CoreObject */
+		protected ObjectMap getOverrideProperties() {
+			return super.getOverrideProperties().append(XML_enableNamespaces, true).append(SERIALIZER_quoteChar, '\'').append(SERIALIZER_useWhitespace, true);
+		}
+	}
+
+
+	private final XmlSerializerContext ctx;
+	private volatile XmlSchemaSerializer schemaSerializer;
+
+	/**
+	 * Constructor.
+	 * @param propertyStore The property store containing all the settings for this object.
+	 */
+	public XmlSerializer(PropertyStore propertyStore) {
+		super(propertyStore);
+		this.ctx = createContext(XmlSerializerContext.class);
+	}
+
+	@Override /* CoreObject */
+	public XmlSerializerBuilder builder() {
+		return new XmlSerializerBuilder(propertyStore);
 	}
 
 	/**
@@ -717,8 +782,9 @@ public class XmlSerializer extends WriterSerializer {
 	 * @return The schema serializer.
 	 */
 	public XmlSerializer getSchemaSerializer() {
-		XmlSchemaSerializer s = new XmlSchemaSerializer(getContextFactory());
-		return s;
+		if (schemaSerializer == null)
+			schemaSerializer = new XmlSchemaSerializer(propertyStore, getOverrideProperties());
+		return schemaSerializer;
 	}
 
 	static enum JsonType {
@@ -767,677 +833,6 @@ public class XmlSerializer extends WriterSerializer {
 
 	@Override /* Serializer */
 	public XmlSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType) {
-		return new XmlSerializerSession(getContext(XmlSerializerContext.class), op, output, javaMethod, locale, timeZone, mediaType);
-	}
-
-
-	//--------------------------------------------------------------------------------
-	// Properties
-	//--------------------------------------------------------------------------------
-
-	/**
-	 * <b>Configuration property:</b>  Enable support for XML namespaces.
-	 * <p>
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"XmlSerializer.enableNamespaces"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
-	 * <p>
-	 * If not enabled, XML output will not contain any namespaces regardless of any other settings.
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>XML_enableNamespaces</jsf>, value)</code>.
-	 * 	<li>This introduces a slight performance penalty.
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @throws LockedException If {@link #lock()} was called on this class.
-	 * @see XmlSerializerContext#XML_enableNamespaces
-	 */
-	public XmlSerializer setEnableNamespaces(boolean value) throws LockedException {
-		return setProperty(XML_enableNamespaces, value);
-	}
-
-	/**
-	 * <b>Configuration property:</b>  Auto-detect namespace usage.
-	 * <p>
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"XmlSerializer.autoDetectNamespaces"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>true</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
-	 * <p>
-	 * Detect namespace usage before serialization.
-	 * <p>
-	 * Used in conjunction with {@link XmlSerializerContext#XML_addNamespaceUrisToRoot} to reduce
-	 * the list of namespace URLs appended to the root element to only those
-	 * that will be used in the resulting document.
-	 * <p>
-	 * If enabled, then the data structure will first be crawled looking for
-	 * namespaces that will be encountered before the root element is
-	 * serialized.
-	 * <p>
-	 * This setting is ignored if {@link XmlSerializerContext#XML_enableNamespaces} is not enabled.
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>Auto-detection of namespaces can be costly performance-wise.
-	 * 		In high-performance environments, it's recommended that namespace detection be
-	 * 		disabled, and that namespaces be manually defined through the {@link XmlSerializerContext#XML_namespaces} property.
-	 * </ul>
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>XML_autoDetectNamespaces</jsf>, value)</code>.
-	 * 	<li>This introduces a slight performance penalty.
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @throws LockedException If {@link #lock()} was called on this class.
-	 * @see XmlSerializerContext#XML_autoDetectNamespaces
-	 */
-	public XmlSerializer setAutoDetectNamespaces(boolean value) throws LockedException {
-		return setProperty(XML_autoDetectNamespaces, value);
-	}
-
-	/**
-	 * <b>Configuration property:</b>  Add namespace URLs to the root element.
-	 * <p>
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"XmlSerializer.addNamespaceUrisToRoot"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
-	 * <p>
-	 * Use this setting to add {@code xmlns:x} attributes to the root
-	 * element for the default and all mapped namespaces.
-	 * <p>
-	 * This setting is ignored if {@link XmlSerializerContext#XML_enableNamespaces} is not enabled.
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>XML_addNamespaceUrisToRoot</jsf>, value)</code>.
-	 * 	<li>This introduces a slight performance penalty.
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @throws LockedException If {@link #lock()} was called on this class.
-	 * @see XmlSerializerContext#XML_addNamespaceUrisToRoot
-	 */
-	public XmlSerializer setAddNamespaceUrisToRoot(boolean value) throws LockedException {
-		return setProperty(XML_addNamespaceUrisToRoot, value);
-	}
-
-	/**
-	 * <b>Configuration property:</b>  Default namespace.
-	 * <p>
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"XmlSerializer.defaultNamespace"</js>
-	 * 	<li><b>Data type:</b> <code>String</code>
-	 * 	<li><b>Default:</b> <js>"{juneau:'http://www.apache.org/2013/Juneau'}"</js>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
-	 * <p>
-	 * Specifies the default namespace URI for this document.
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>XML_defaultNamespace</jsf>, value)</code>.
-	 * 	<li>This introduces a slight performance penalty.
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @throws LockedException If {@link #lock()} was called on this class.
-	 * @see XmlSerializerContext#XML_defaultNamespace
-	 */
-	public XmlSerializer setDefaultNamespace(String value) throws LockedException {
-		return setProperty(XML_defaultNamespace, value);
-	}
-
-	/**
-	 * <b>Configuration property:</b>  XMLSchema namespace.
-	 * <p>
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"XmlSerializer.xsNamespace"</js>
-	 * 	<li><b>Data type:</b> {@link Namespace}
-	 * 	<li><b>Default:</b> <code>{name:<js>'xs'</js>,uri:<js>'http://www.w3.org/2001/XMLSchema'</js>}</code>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
-	 * <p>
-	 * Specifies the namespace for the <code>XMLSchema</code> namespace, used by the schema generated
-	 * by the {@link XmlSchemaSerializer} class.
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>XML_xsNamespace</jsf>, value)</code>.
-	 * 	<li>This introduces a slight performance penalty.
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @throws LockedException If {@link #lock()} was called on this class.
-	 * @see XmlSerializerContext#XML_xsNamespace
-	 */
-	public XmlSerializer setXsNamespace(Namespace value) throws LockedException {
-		return setProperty(XML_xsNamespace, value);
-	}
-
-	/**
-	 * <b>Configuration property:</b>  Default namespaces.
-	 * <p>
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"XmlSerializer.namespaces"</js>
-	 * 	<li><b>Data type:</b> <code>Set&lt;{@link Namespace}&gt;</code>
-	 * 	<li><b>Default:</b> empty set
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
-	 * <p>
-	 * The default list of namespaces associated with this serializer.
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>XML_namespaces</jsf>, values)</code>.
-	 * 	<li>This introduces a slight performance penalty.
-	 * </ul>
-	 *
-	 * @param values The new value for this property.
-	 * @return This object (for method chaining).
-	 * @throws LockedException If {@link #lock()} was called on this class.
-	 * @see XmlSerializerContext#XML_namespaces
-	 */
-	public XmlSerializer setNamespaces(Namespace...values) throws LockedException {
-		return setProperty(XML_namespaces, values);
-	}
-
-	@Override /* Serializer */
-	public XmlSerializer setMaxDepth(int value) throws LockedException {
-		super.setMaxDepth(value);
-		return this;
-	}
-
-	@Override /* Serializer */
-	public XmlSerializer setInitialDepth(int value) throws LockedException {
-		super.setInitialDepth(value);
-		return this;
-	}
-
-	@Override /* Serializer */
-	public XmlSerializer setDetectRecursions(boolean value) throws LockedException {
-		super.setDetectRecursions(value);
-		return this;
-	}
-
-	@Override /* Serializer */
-	public XmlSerializer setIgnoreRecursions(boolean value) throws LockedException {
-		super.setIgnoreRecursions(value);
-		return this;
-	}
-
-	@Override /* Serializer */
-	public XmlSerializer setUseWhitespace(boolean value) throws LockedException {
-		super.setUseWhitespace(value);
-		return this;
-	}
-
-	@Override /* Serializer */
-	public XmlSerializer setAddBeanTypeProperties(boolean value) throws LockedException {
-		super.setAddBeanTypeProperties(value);
-		return this;
-	}
-
-	@Override /* Serializer */
-	public XmlSerializer setQuoteChar(char value) throws LockedException {
-		super.setQuoteChar(value);
-		return this;
-	}
-
-	@Override /* Serializer */
-	public XmlSerializer setTrimNullProperties(boolean value) throws LockedException {
-		super.setTrimNullProperties(value);
-		return this;
-	}
-
-	@Override /* Serializer */
-	public XmlSerializer setTrimEmptyCollections(boolean value) throws LockedException {
-		super.setTrimEmptyCollections(value);
-		return this;
-	}
-
-	@Override /* Serializer */
-	public XmlSerializer setTrimEmptyMaps(boolean value) throws LockedException {
-		super.setTrimEmptyMaps(value);
-		return this;
-	}
-
-	@Override /* Serializer */
-	public XmlSerializer setTrimStrings(boolean value) throws LockedException {
-		super.setTrimStrings(value);
-		return this;
-	}
-
-	@Override /* Serializer */
-	public XmlSerializer setRelativeUriBase(String value) throws LockedException {
-		super.setRelativeUriBase(value);
-		return this;
-	}
-
-	@Override /* Serializer */
-	public XmlSerializer setAbsolutePathUriBase(String value) throws LockedException {
-		super.setAbsolutePathUriBase(value);
-		return this;
-	}
-
-	@Override /* Serializer */
-	public XmlSerializer setSortCollections(boolean value) throws LockedException {
-		super.setSortCollections(value);
-		return this;
-	}
-
-	@Override /* Serializer */
-	public XmlSerializer setSortMaps(boolean value) throws LockedException {
-		super.setSortMaps(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer setBeansRequireDefaultConstructor(boolean value) throws LockedException {
-		super.setBeansRequireDefaultConstructor(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer setBeansRequireSerializable(boolean value) throws LockedException {
-		super.setBeansRequireSerializable(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer setBeansRequireSettersForGetters(boolean value) throws LockedException {
-		super.setBeansRequireSettersForGetters(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer setBeansRequireSomeProperties(boolean value) throws LockedException {
-		super.setBeansRequireSomeProperties(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer setBeanMapPutReturnsOldValue(boolean value) throws LockedException {
-		super.setBeanMapPutReturnsOldValue(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer setBeanConstructorVisibility(Visibility value) throws LockedException {
-		super.setBeanConstructorVisibility(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer setBeanClassVisibility(Visibility value) throws LockedException {
-		super.setBeanClassVisibility(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer setBeanFieldVisibility(Visibility value) throws LockedException {
-		super.setBeanFieldVisibility(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer setMethodVisibility(Visibility value) throws LockedException {
-		super.setMethodVisibility(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer setUseJavaBeanIntrospector(boolean value) throws LockedException {
-		super.setUseJavaBeanIntrospector(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer setUseInterfaceProxies(boolean value) throws LockedException {
-		super.setUseInterfaceProxies(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer setIgnoreUnknownBeanProperties(boolean value) throws LockedException {
-		super.setIgnoreUnknownBeanProperties(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer setIgnoreUnknownNullBeanProperties(boolean value) throws LockedException {
-		super.setIgnoreUnknownNullBeanProperties(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer setIgnorePropertiesWithoutSetters(boolean value) throws LockedException {
-		super.setIgnorePropertiesWithoutSetters(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer setIgnoreInvocationExceptionsOnGetters(boolean value) throws LockedException {
-		super.setIgnoreInvocationExceptionsOnGetters(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer setIgnoreInvocationExceptionsOnSetters(boolean value) throws LockedException {
-		super.setIgnoreInvocationExceptionsOnSetters(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer setSortProperties(boolean value) throws LockedException {
-		super.setSortProperties(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer setNotBeanPackages(String...values) throws LockedException {
-		super.setNotBeanPackages(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer setNotBeanPackages(Collection<String> values) throws LockedException {
-		super.setNotBeanPackages(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer addNotBeanPackages(String...values) throws LockedException {
-		super.addNotBeanPackages(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer addNotBeanPackages(Collection<String> values) throws LockedException {
-		super.addNotBeanPackages(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer removeNotBeanPackages(String...values) throws LockedException {
-		super.removeNotBeanPackages(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer removeNotBeanPackages(Collection<String> values) throws LockedException {
-		super.removeNotBeanPackages(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer setNotBeanClasses(Class<?>...values) throws LockedException {
-		super.setNotBeanClasses(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer setNotBeanClasses(Collection<Class<?>> values) throws LockedException {
-		super.setNotBeanClasses(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer addNotBeanClasses(Class<?>...values) throws LockedException {
-		super.addNotBeanClasses(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer addNotBeanClasses(Collection<Class<?>> values) throws LockedException {
-		super.addNotBeanClasses(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer removeNotBeanClasses(Class<?>...values) throws LockedException {
-		super.removeNotBeanClasses(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer removeNotBeanClasses(Collection<Class<?>> values) throws LockedException {
-		super.removeNotBeanClasses(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer setBeanFilters(Class<?>...values) throws LockedException {
-		super.setBeanFilters(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer setBeanFilters(Collection<Class<?>> values) throws LockedException {
-		super.setBeanFilters(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer addBeanFilters(Class<?>...values) throws LockedException {
-		super.addBeanFilters(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer addBeanFilters(Collection<Class<?>> values) throws LockedException {
-		super.addBeanFilters(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer removeBeanFilters(Class<?>...values) throws LockedException {
-		super.removeBeanFilters(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer removeBeanFilters(Collection<Class<?>> values) throws LockedException {
-		super.removeBeanFilters(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer setPojoSwaps(Class<?>...values) throws LockedException {
-		super.setPojoSwaps(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer setPojoSwaps(Collection<Class<?>> values) throws LockedException {
-		super.setPojoSwaps(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer addPojoSwaps(Class<?>...values) throws LockedException {
-		super.addPojoSwaps(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer addPojoSwaps(Collection<Class<?>> values) throws LockedException {
-		super.addPojoSwaps(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer removePojoSwaps(Class<?>...values) throws LockedException {
-		super.removePojoSwaps(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer removePojoSwaps(Collection<Class<?>> values) throws LockedException {
-		super.removePojoSwaps(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer setImplClasses(Map<Class<?>,Class<?>> values) throws LockedException {
-		super.setImplClasses(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public <T> CoreApi addImplClass(Class<T> interfaceClass, Class<? extends T> implClass) throws LockedException {
-		super.addImplClass(interfaceClass, implClass);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer setBeanDictionary(Class<?>...values) throws LockedException {
-		super.setBeanDictionary(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer setBeanDictionary(Collection<Class<?>> values) throws LockedException {
-		super.setBeanDictionary(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer addToBeanDictionary(Class<?>...values) throws LockedException {
-		super.addToBeanDictionary(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer addToBeanDictionary(Collection<Class<?>> values) throws LockedException {
-		super.addToBeanDictionary(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer removeFromBeanDictionary(Class<?>...values) throws LockedException {
-		super.removeFromBeanDictionary(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer removeFromBeanDictionary(Collection<Class<?>> values) throws LockedException {
-		super.removeFromBeanDictionary(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer setBeanTypePropertyName(String value) throws LockedException {
-		super.setBeanTypePropertyName(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer setDefaultParser(Class<?> value) throws LockedException {
-		super.setDefaultParser(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer setLocale(Locale value) throws LockedException {
-		super.setLocale(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer setTimeZone(TimeZone value) throws LockedException {
-		super.setTimeZone(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer setMediaType(MediaType value) throws LockedException {
-		super.setMediaType(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer setDebug(boolean value) throws LockedException {
-		super.setDebug(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer setProperty(String name, Object value) throws LockedException {
-		super.setProperty(name, value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer setProperties(ObjectMap properties) throws LockedException {
-		super.setProperties(properties);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer addToProperty(String name, Object value) throws LockedException {
-		super.addToProperty(name, value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer putToProperty(String name, Object key, Object value) throws LockedException {
-		super.putToProperty(name, key, value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer putToProperty(String name, Object value) throws LockedException {
-		super.putToProperty(name, value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public XmlSerializer removeFromProperty(String name, Object value) throws LockedException {
-		super.removeFromProperty(name, value);
-		return this;
-	}
-
-
-	//--------------------------------------------------------------------------------
-	// Overridden methods
-	//--------------------------------------------------------------------------------
-
-	@Override /* CoreApi */
-	public XmlSerializer setClassLoader(ClassLoader classLoader) throws LockedException {
-		super.setClassLoader(classLoader);
-		return this;
-	}
-
-	@Override /* Lockable */
-	public XmlSerializer lock() {
-		super.lock();
-		return this;
-	}
-
-	@Override /* Lockable */
-	public XmlSerializer clone() {
-		try {
-			XmlSerializer c = (XmlSerializer)super.clone();
-			return c;
-		} catch (CloneNotSupportedException e) {
-			throw new RuntimeException(e); // Shouldn't happen.
-		}
+		return new XmlSerializerSession(ctx, op, output, javaMethod, locale, timeZone, mediaType);
 	}
 }

@@ -12,10 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.atom;
 
+import static org.apache.juneau.dto.atom.Utils.*;
+
 import java.net.URI;
 
 import org.apache.juneau.annotation.*;
-import static org.apache.juneau.dto.atom.Utils.*;
 
 /**
  * Represents an <code>atomPersonConstruct</code> construct in the RFC4287 specification.

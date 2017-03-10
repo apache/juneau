@@ -305,7 +305,7 @@
 <h2 class='topic' onclick='toggle(this)'>2 - UrlEncodingSerializer and UonSerializer classes</h2>
 <div class='topic'>
 	<p>
-		{@link org.apache.juneau.urlencoding.UrlEncodingSerializer} and {@link org.apache.juneau.urlencoding.UonSerializer} classes are used to convert POJOs to URL-encoded strings.<br>
+		{@link org.apache.juneau.urlencoding.UrlEncodingSerializer} and {@link org.apache.juneau.uon.UonSerializer} classes are used to convert POJOs to URL-encoded strings.<br>
 		The <code>UonSerializer</code> class converts parameter values to UON notation. 
 		The <code>UrlEncodingSerializer</code> class converts a POJO to key/value URL-Encoded pairs using <code>UonSerializer</code> to serialize the values.
 		If you're trying to construct complete URL-Encoded entities, use <code>UrlEncodingSerializer</code>. 
@@ -318,9 +318,9 @@
 	<ul class='spaced-list'>
 		<li>{@link org.apache.juneau.urlencoding.UrlEncodingSerializer#DEFAULT} - All default settings, strict mode.
 		<li>{@link org.apache.juneau.urlencoding.UrlEncodingSerializer#DEFAULT_READABLE} - Use whitespace and indentation for readability.
-		<li>{@link org.apache.juneau.urlencoding.UonSerializer#DEFAULT} - All default settings, strict mode.
-		<li>{@link org.apache.juneau.urlencoding.UonSerializer#DEFAULT_READABLE} - Use whitespace and indentation for readability.
-		<li>{@link org.apache.juneau.urlencoding.UonSerializer#DEFAULT_ENCODING} - Same as DEFAULT, but use URL-Encoding on special characters.
+		<li>{@link org.apache.juneau.uon.UonSerializer#DEFAULT} - All default settings, strict mode.
+		<li>{@link org.apache.juneau.uon.UonSerializer#DEFAULT_READABLE} - Use whitespace and indentation for readability.
+		<li>{@link org.apache.juneau.uon.UonSerializer#DEFAULT_ENCODING} - Same as DEFAULT, but use URL-Encoding on special characters.
 	</ul>
 	<p>
 		The general guidelines on which serializer to use is:
@@ -623,7 +623,7 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Clone an existing serializer and set property for detecting recursions.</jc>
-	UrlEncodingSerializer s = UrlEncodingSerializer.<jsf>DEFAULT_READABLE</jsf>.clone().setDetectRecursions(<jk>true</jk>);
+	UrlEncodingSerializer s = UrlEncodingSerializer.<jsf>DEFAULT_READABLE</jsf>.builder().detectRecursions(<jk>true</jk>).build();
 
 	<jc>// Create a recursive loop.</jc>
 	A a = <jk>new</jk> A();
@@ -663,7 +663,7 @@
 		</p>
 		<ul class='spaced-list'>
 			<li>{@link org.apache.juneau.BeanContext} - Bean context properties.
-			<li>{@link org.apache.juneau.urlencoding.UonSerializerContext} - UON serializer context properties.
+			<li>{@link org.apache.juneau.uon.UonSerializerContext} - UON serializer context properties.
 			<li>{@link org.apache.juneau.urlencoding.UrlEncodingSerializerContext} - URL-Encoding serializer context properties.
 		</ul>
 	</div>		
@@ -686,7 +686,7 @@
 <h2 class='topic' onclick='toggle(this)'>3 - UrlEncodingParser and UonParser classes</h2>
 <div class='topic'>
 	<p>
-		{@link org.apache.juneau.urlencoding.UrlEncodingParser} and {@link org.apache.juneau.urlencoding.UonParser} classes are used to convert URL-encoded strings back into POJOs.<br>
+		{@link org.apache.juneau.urlencoding.UrlEncodingParser} and {@link org.apache.juneau.uon.UonParser} classes are used to convert URL-encoded strings back into POJOs.<br>
 		The <code>UonParser</code> class converts UON-encoded parameter values to POJOs.
 		The <code>UrlEncodingParser</code> class converts entire URL-Encoded strings to POJOs using <code>UonSerializer</code> to serialize indivisual values.
 		If you're trying to parse an entire URL-Encoded string, use <code>UrlEncodingParser</code>. 
@@ -697,8 +697,8 @@
 	</p>
 	<ul class='spaced-list'>
 		<li>{@link org.apache.juneau.urlencoding.UrlEncodingParser#DEFAULT} - Default parser for entire URL-encoded strings, decode <code>%xx</code> sequences.
-		<li>{@link org.apache.juneau.urlencoding.UonParser#DEFAULT} - Default parser for URL-encoded parameter values, don't decode <code>%xx</code> sequences.
-		<li>{@link org.apache.juneau.urlencoding.UonParser#DEFAULT_DECODING} - Default parser for URL-encoded parameter values, decode <code>%xx</code> sequences.
+		<li>{@link org.apache.juneau.uon.UonParser#DEFAULT} - Default parser for URL-encoded parameter values, don't decode <code>%xx</code> sequences.
+		<li>{@link org.apache.juneau.uon.UonParser#DEFAULT_DECODING} - Default parser for URL-encoded parameter values, decode <code>%xx</code> sequences.
 	</ul>
 	<p>
 		The general guildlines on which parser to use is:
@@ -916,7 +916,7 @@
 		</p>
 		<ul class='spaced-list'>
 			<li>{@link org.apache.juneau.BeanContext} - Bean context properties.
-			<li>{@link org.apache.juneau.urlencoding.UonParserContext} - UON parser context properties.
+			<li>{@link org.apache.juneau.uon.UonParserContext} - UON parser context properties.
 			<li>{@link org.apache.juneau.urlencoding.UrlEncodingParserContext} - URL-Encoding parser context properties.
 		</ul>
 	</div>		

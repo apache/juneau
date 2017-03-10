@@ -27,6 +27,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
+import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
 import org.junit.*;
@@ -51,12 +52,13 @@ public class CalendarSwapTest {
 	}
 
 	private RdfSerializer getRdfSerializer() {
-		return new RdfSerializer()
-			.setQuoteChar('\'')
-			.setUseWhitespace(false)
-			.setProperty(RdfCommonContext.RDF_rdfxml_allowBadUris, true)
-			.setProperty(RdfCommonContext.RDF_rdfxml_showDoctypeDeclaration, false)
-			.setProperty(RdfCommonContext.RDF_rdfxml_showXmlDeclaration, false);
+		return new RdfSerializerBuilder()
+			.sq()
+			.useWhitespace(false)
+			.property(RdfCommonContext.RDF_rdfxml_allowBadUris, true)
+			.property(RdfCommonContext.RDF_rdfxml_showDoctypeDeclaration, false)
+			.property(RdfCommonContext.RDF_rdfxml_showXmlDeclaration, false)
+			.build();
 	}
 
 	private String stripRdf(String s) {
@@ -184,7 +186,7 @@ public class CalendarSwapTest {
 	//====================================================================================================
 	@Test
 	public void testBeanProperyFilterHtml() throws Exception {
-		WriterSerializer s = HtmlSerializer.DEFAULT_SQ.clone().setAddKeyValueTableHeaders(true);
+		WriterSerializer s = new HtmlSerializerBuilder().sq().addKeyValueTableHeaders(true).build();
 		ReaderParser p = HtmlParser.DEFAULT;
 
 		Calendar c = testDate;

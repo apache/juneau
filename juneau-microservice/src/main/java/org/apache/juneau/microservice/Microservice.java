@@ -252,12 +252,15 @@ public abstract class Microservice {
 	 *
 	 * @return A new {@link VarResolver}.
 	 */
-	protected VarResolver createVarResolver() {
-		return new VarResolver()
-			.addVars(SystemPropertiesVar.class, EnvVariablesVar.class, ConfigFileVar.class, ManifestFileVar.class, ArgsVar.class, SwitchVar.class, IfVar.class)
-			.setContextObject(ConfigFileVar.SESSION_config, cf)
-			.setContextObject(ManifestFileVar.SESSION_manifest, mf)
-			.setContextObject(ArgsVar.SESSION_args, args);
+	protected VarResolverBuilder createVarResolver() {
+		VarResolverBuilder b = new VarResolverBuilder()
+			.defaultVars()
+			.vars(ConfigFileVar.class, ManifestFileVar.class, ArgsVar.class, SwitchVar.class, IfVar.class)
+			.contextObject(ManifestFileVar.SESSION_manifest, mf)
+			.contextObject(ArgsVar.SESSION_args, args);
+		if (cf != null)
+			b.contextObject(ConfigFileVar.SESSION_config, cf);
+		return b;
 	}
 
 	/**
@@ -436,7 +439,7 @@ public abstract class Microservice {
 		// Resolve the config file if the path was specified.
 		// --------------------------------------------------------------------------------
 		if (cfPath != null) 
-			cf = ConfigMgr.DEFAULT.get(cfPath).getResolving(createVarResolver());
+			cf = ConfigMgr.DEFAULT.get(cfPath).getResolving(createVarResolver().build());
 		
 		// --------------------------------------------------------------------------------
 		// Find config file.
@@ -459,7 +462,7 @@ public abstract class Microservice {
 				cf = ConfigMgr.DEFAULT.create();
 			} else {
 				System.out.println("Running class ["+getClass().getSimpleName()+"] using config file ["+cfPath+"]");
-				cf = ConfigMgr.DEFAULT.get(cfPath).getResolving(createVarResolver());
+				cf = ConfigMgr.DEFAULT.get(cfPath).getResolving(createVarResolver().build());
 			}
 		}
 

@@ -33,11 +33,11 @@ public class _TestSuite {
 
 	@BeforeClass
 	public static void setUp() {
-		TestMicroservice.startMicroservice();
+		SamplesMicroservice.startMicroservice();
 	}
 
 	@AfterClass
 	public static void tearDown() {
-		TestMicroservice.stopMicroservice();
+		SamplesMicroservice.stopMicroservice();
 	}
 }

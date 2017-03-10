@@ -341,13 +341,10 @@
 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(someObject);
 
 	<jc>// Create a custom serializer for lax syntax using single quote characters</jc>
-	JsonSerializer serializer = <jk>new</jk> JsonSerializer()
-		.setSimpleMode(<jk>true</jk>)
-		.setQuoteChar(<js>'\''</js>);
+	JsonSerializer serializer = <jk>new</jk> JsonSerializerBuilder().simple().sq().build();
 	
 	<jc>// Clone an existing serializer and modify it to use single-quotes</jc>
-	JsonSerializer serializer = JsonSerializer.<jsf>DEFAULT</jsf>.clone()
-		.setQuoteChar(<js>'\''</js>);
+	JsonSerializer serializer = JsonSerializer.<jsf>DEFAULT</jsf>.builder().sq().build();
 	
 	<jc>// Serialize a POJO to JSON</jc>
 	String json = serializer.serialize(someObject);
@@ -454,19 +451,21 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Construct a new serializer group with configuration parameters that get applied to all serializers.</jc>
-	SerializerGroup sg = <jk>new</jk> SerializerGroup()
+	SerializerGroup sg = <jk>new</jk> SerializerGroupBuilder()
 		.append(JsonSerializer.<jk>class</jk>, UrlEncodingSerializer.<jk>class</jk>);
-		.setUseIndentation(<jk>true</jk>)
-		.addPojoSwaps(CalendarSwap.ISO8601DT.<jk>class</jk>);
+		.ws   <jc>// or .useWhitespace(true)</jc>
+		.pojoSwaps(CalendarSwap.ISO8601DT.<jk>class</jk>)
+		.build();
 
 	<jc>// Find the appropriate serializer by Accept type and serialize our POJO to the specified writer.</jc>
 	sg.getSerializer(<js>"text/invalid, text/json;q=0.8, text/*;q:0.6, *\/*;q=0.0"</js>)
 		.serialize(myPersonObject, myWriter);
 		
 	<jc>// Construct a new parser group with configuration parameters that get applied to all parsers.</jc>
-	ParserGroup pg = <jk>new</jk> ParserGroup()
+	ParserGroup pg = <jk>new</jk> ParserGroupBuilder()
 		.append(JsonSerializer.<jk>class</jk>, UrlEncodingSerializer.<jk>class</jk>);
- 		.addTransforms(CalendarSwap.ISO8601DT.<jk>class</jk>);
+ 		.pojoSwaps(CalendarSwap.ISO8601DT.<jk>class</jk>)
+ 		.build();
 
 	Person p = pg.getParser(<js>"text/json"</js>).parse(myReader, Person.<jk>class</jk>);
 		</p>
@@ -556,11 +555,7 @@
 			For example, the following code shows how to configure a JSON serializer:
 		</p>
 		<p class='bcode'>
-	JsonSerializer s = <jk>new</jk> JsonSerializer()
-		.setUseIndentation(<jk>true</jk>)
-		.setUseWhitespace(<jk>true</jk>)
-		.setSimpleMode(<jk>true</jk>)
-		.setQuoteChar(<js>'\''</js>);
+	JsonSerializer s = <jk>new</jk> JsonSerializerBuilder().simple().ws().sq().build();
 		</p>
 		<p>
 			However, each of the serializers and parsers already contain reusable instances with common configurations.<br>
@@ -594,8 +589,9 @@
 		<p class='bcode'>
 	<jc>// Clone and customize an existing serializer.</jc>
 	JsonSerializer s = JsonSerializer.<jsf>DEFAULT_LAX</jsf>
-		.clone()
-		.setQuoteChar(<js>'"'</js>);
+		.builder()
+		.quoteChar(<js>'"'</js>)
+		.build();
 
 	<jc>// Lock it so that the configuration cannot be changed.</jc>
 	s.lock();
@@ -721,11 +717,11 @@
 	}
 
 	<jc>// Create a new JSON serializer, associate our date swap with it, and serialize a sample bean.</jc>
-	Serializer serializer = <jk>new</jk> JsonSerializer().addPojoSwaps(MyDateSwap.<jk>class</jk>);
+	Serializer serializer = <jk>new</jk> JsonSerializerBuilder().pojoSwaps(MyDateSwap.<jk>class</jk>).build();
 	String json = serializer.serialize(<jk>new</jk> MyBean());	<jc>// == "{date:'2012-03-03T04:05:06-0500'}"</jc>
 	
 	<jc>// Create a JSON parser, associate our date swap with it, and reconstruct our bean (including the date).</jc>
-	ReaderParser parser = <jk>new</jk> JsonParser().addPojoSwaps(MyDateSwap.<jk>class</jk>);
+	ReaderParser parser = <jk>new</jk> JsonParserBuilder().pojoSwaps(MyDateSwap.<jk>class</jk>).build();
 	MyBean bean = parser.parse(json, MyBean.<jk>class</jk>);
 	<jk>int</jk> day = bean.<jf>date</jf>.getDay(); 						<jc>// == 3</jc>
 			</p>
@@ -921,12 +917,12 @@
 	}	
 			</p>		
 			<p>
-				Bean filters are added to serializers and parsers using the <code>addBeanFilters(Class...)</code> method.
+				Bean filters are added to serializers and parsers using the <code>*BeanFilters(Class...)</code> methods.
 				For example:
 			</p>
 			<p class='bcode'>			
 	<jc>// Create a new JSON serializer and associate a bean filter with it.</jc>
-	Serializer serializer = <jk>new</jk> JsonSerializer().addBeanFilters(MyAddressBeanFilter.<jk>class</jk>);
+	Serializer serializer = <jk>new</jk> JsonSerializerBuilder().beanFilters(MyAddressBeanFilter.<jk>class</jk>).build();
 			</p>
 			<p>
 				Note that if you use the annotation, you do NOT need to set anything on the serializers/parsers.
@@ -952,7 +948,7 @@
 	}
 	
 	<jc>// Create a new JSON serializer that only exposes street,city,state on Address bean.</jc>
-	Serializer serializer = <jk>new</jk> JsonSerializer().addBeanFilters(AddressInterface.<jk>class</jk>);
+	Serializer serializer = <jk>new</jk> JsonSerializerBuilder().beanFilters(AddressInterface.<jk>class</jk>).build();
 			</p>
 			
 			<h6 class='topic'>Additional Information</h6>
@@ -1031,7 +1027,7 @@
 		</p>
 		<ul>
 			<li>On individual bean properties through the {@link org.apache.juneau.annotation.BeanProperty#beanDictionary() @BeanProperty.beanDictionary()} annotation.
-			<li>Globally for a parser using the {@link org.apache.juneau.parser.Parser#addToBeanDictionary(Class...)} method.
+			<li>Globally for a parser using the {@link org.apache.juneau.parser.ParserBuilder#beanDictionary(Class...)} method.
 		</ul>
 		<p class='info'>
 			Type names do not need to be universally unique.  
@@ -1142,8 +1138,8 @@
 				<td style='text-align:center'>2a</td>
 				<td>
 					<b>With standard keys/values</b><br>
-					Map keys are group [1, 4a, 5] objects.<br>
-					Map, Collection, and array values are group [1, 2, 3a, 4a, 5] objects.	
+					Map keys are group [1, 4a, 5a] objects.<br>
+					Map, Collection, and array values are group [1, 2, 3a, 4a, 5a] objects.	
 				</td>
 				<td>
 					<ul class='normal'>
@@ -1160,8 +1156,8 @@
 				<td style='text-align:center'>2b</td>
 				<td>
 					<b>With non-standard keys/values</b><br>
-					Map keys are group [2, 3, 4b, 5, 6] objects.<br>
-					Map, Collection, and array values are group [3b, 4, 5, 6] objects.	
+					Map keys are group [2, 3, 4b, 5b, 6] objects.<br>
+					Map, Collection, and array values are group [3b, 4b, 5b, 6] objects.	
 				</td>
 				<td>
 					<ul class='normal'>
@@ -1184,7 +1180,7 @@
 				<td>
 					<b>With standard properties</b><br>
 					These are beans that have no-arg constructors and one or more properties defined by public getter and setter methods or public fields.<br>
-					Property values are group [1, 2, 3a, 4a, 5] objects.
+					Property values are group [1, 2, 3a, 4a, 5a] objects.
 				</td>
 				<td>&nbsp;</td>
 				<td style='background-color:lightgreen;text-align:center'><b>yes</b></td>
@@ -1195,7 +1191,7 @@
 				<td>
 					<b>With non-standard properties or not true beans</b><br>
 					These include true beans that have no-arg constructors and one or more properties defined by getter and setter methods or properties, 
-						but property types include group [3b, 4b, 5, 6] objects.<br>
+						but property types include group [3b, 4b, 5b, 6] objects.<br>
 					This also includes classes that look like beans but aren't true beans.  
 					For example, classes that have getters but not setters, or classes without no-arg constructors.	
 				</td>
@@ -1222,7 +1218,12 @@
 					<b>2-way swapped to group [1, 2a, 3a] objects</b><br>
 					For example, a swap that converts a {@code Date} to a {@code String}.
 				</td>
-				<td>&nbsp;</td>
+				<td>
+					<ul class='normal'>
+						<li><code>java.util.Date</code>
+						<li><code>java.util.GregorianCalendar</code>
+					</ul>
+				</td>
 				<td style='background-color:lightgreen;text-align:center'><b>yes</b></td>
 				<td style='background-color:lightgreen;text-align:center'><b>yes</b></td>
 			</tr>			
@@ -1233,14 +1234,18 @@
 					For example, a swap that converts an {@code Iterator} to a {@code List}.  
 					This would be one way, since you cannot reconstruct an {@code Iterator}.
 				</td>
-				<td>&nbsp;</td>
+				<td>
+					<ul class='normal'>
+						<li><code>java.util.Iterator</code>
+					</ul>
+				</td>
 				<td style='background-color:lightgreen;text-align:center'><b>yes</b></td>
 				<td style='background-color:salmon;text-align:center'><b>no</b></td>
 			</tr>		
 			<tr class='dark bb' style='background-color:lightyellow'>
 				<td style='text-align:center'>5</td>
 				<td>
-					<b>Objects with standardized static methods and/or constructors for converting to another POJO that's serializable.</b><br>
+					<b>Non-serializable objects with standard methods for converting to a serializable form</b><br>
 				</td>
 				<td>&nbsp;</td>
 				<td>&nbsp;</td>
@@ -1249,25 +1254,51 @@
 			<tr class='light bb' style='background-color:lightyellow'>
 				<td style='text-align:center'>5a</td>
 				<td>
-					<b>Objects with standardized <code>static T valueOf(String)</code>/<code>static T fromString(String)</code> methods, or constructors with a <code>String</code> argument.</b><br>
-					During serialization, objects are converted to strings using the <code>toString()</code> method.
-					During parsing, strings are converted to objects using one of these static methods or constructors.				
+					Classes with a method that converts it to a serializable form:
+					<ul>
+						<li><code><jk>public</jk> X swap(BeanSession);</code> where <code>X</code> is in groups [1, 2a, 3a].
+						<li><code><jk>public</jk> String toString();</code> where the string is any meaningful data.
+					</ul>
+					And a method that converts it back into the original object:
+					<ul>
+						<li><code><jk>public static</jk> T fromString(String);</code>		
+						<li><code><jk>public static</jk> T valueOf(String);</code>		
+						<li><code><jk>public static</jk> T parse(String);</code>		
+						<li><code><jk>public static</jk> T parseString(String);</code>		
+						<li><code><jk>public static</jk> T forName(String);</code>		
+						<li><code><jk>public static</jk> T forString(String);</code>		
+						<li><code><jk>public</jk> T(X);</code> where <code>X</code> is in groups [1, 2a, 3a].
+						<li><code><jk>public static</jk> T unswap(BeanSession,X);</code> where <code>X</code> is in groups [1, 2a, 3a].		
+					</ul>
 				</td>
-				<td><code>java.util.UUID</code></td>
+				<td>
+					<ul class='normal'>
+						<li><code>java.lang.Class</code>
+						<li><code>java.sql.Time</code>
+						<li><code>java.sql.Timestamp</code>
+						<li><code>java.text.MessageFormat</code>
+						<li><code>java.text.NumberFormat</code>
+						<li><code>java.util.Date</code>
+						<li><code>java.util.UUID</code>
+						<li><code>java.util.logging.Level</code>
+						<li><code>javax.xml.bind.DatatypeConverter</code>
+					</ul>
+				</td>
 				<td style='background-color:lightgreen;text-align:center'><b>yes</b></td>
 				<td style='background-color:lightgreen;text-align:center'><b>yes</b></td>
 			</tr>		
 			<tr class='light bb' style='background-color:lightyellow'>
 				<td style='text-align:center'>5b</td>
 				<td>
-					<b>Objects with standardized <code>Object swap(BeanSession)</code>/<code>static T unswap(BeanSession,Object)</code> methods, or constructors with an <code>Object</code> argument
-					where the objects are any object on this list.</b><br> 
-					During serialization, normal objects are converted to swapped objects using the <code>swap()</code> method.
-					During parsing, swapped objects are converted to normal objects using the static method or constructor.				
+					Classes that only have a method to convert to a serializable form:
+					<ul>
+						<li><code><jk>public</jk> X swap(BeanSession);</code> where <code>X</code> is in groups [1, 2, 3].
+						<li><code><jk>public</jk> String toString();</code> where the string is any meaningful data.
+					</ul>
 				</td>
 				<td>&nbsp;</td>
 				<td style='background-color:lightgreen;text-align:center'><b>yes</b></td>
-				<td style='background-color:lightgreen;text-align:center'><b>yes</b></td>
+				<td style='background-color:salmon;text-align:center'><b>no</b></td>
 			</tr>			
 			<tr class='dark' style='background-color:lightyellow'>
 				<td style='text-align:center'>6</td>
@@ -1692,7 +1723,7 @@
 		<h6 class='figure'>Example with no namespaces</h6>
 		<p class='bcode'>
 	<jc>// Create a serializer with readable output, no namespaces yet.</jc>
-	XmlSerializer s = <jk>new</jk> XmlSerializer.SqReadable();
+	XmlSerializer s = <jk>new</jk> XmlSerializerBuilder().sq().ws().build();
 
 	<jc>// Serialize to ATOM/XML</jc>
 	String atomXml = s.serialize(feed);
@@ -2180,7 +2211,7 @@
 	</p>
 	<p class='bcode'>
 	<jc>// Create a reusable JSON client.</jc>
-	RestClient client = <jk>new</jk> RestClient(JsonSerializer.<jk>class</jk>, JsonParser.<jk>class</jk>);
+	RestClient client = <jk>new</jk> RestClientBuilder().build();
 	
 	<jc>// The address of the root resource.</jc>
 	String url = <js>"http://localhost:9080/sample/addressBook"</js>;
@@ -2194,7 +2225,7 @@
 	
 	<jc>// Add a person to the address book.
 	// Use XML as the transport medium.</jc>
-	client = <jk>new</jk> RestClient(XmlSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>);
+	client = <jk>new</jk> RestClientBuilder(XmlSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>).build();
 	Person p = <jk>new</jk> Person(<js>"Joe Smith"</js>, 21);
 	<jk>int</jk> returnCode = client.doPost(url + <js>"/entries"</js>, p).run();
 	</p>
@@ -2223,7 +2254,7 @@
 	</p>
 	<ul class='spaced-list'>
 		<li>Proxy interfaces are retrieved using the {@link org.apache.juneau.rest.client.RestClient#getRemoteableProxy(Class)} method.
-		<li>The {@link org.apache.juneau.rest.client.RestClient#setRemoteableServletUri(String)} method is used to specify the location
+		<li>The {@link org.apache.juneau.rest.client.RestClientBuilder#remoteableServletUri(String)} method is used to specify the location
 			of the remoteable services servlet running on the server.
 		<li>The {@link org.apache.juneau.rest.remoteable.RemoteableServlet} class is a specialized subclass of {@link org.apache.juneau.rest.RestServlet} that provides a full-blown
 			REST interface for calling interfaces remotely. 
@@ -2241,8 +2272,9 @@
 	</p>
 	<p class='bcode'>
 	<jc>// Create a RestClient using JSON for serialization, and point to the server-side remoteable servlet.</jc>
-	RestClient client = <jk>new</jk> RestClient(JsonSerializer.<jk>class</jk>,JsonParser.<jk>class</jk>)
-		.setRemoteableServletUri(<js>"https://localhost:9080/juneau/sample/remoteable"</js>);
+	RestClient client = <jk>new</jk> RestClientBuilder()
+		.remoteableServletUri(<js>"https://localhost:9080/juneau/sample/remoteable"</js>)
+		.build();
 	
 	<jc>// Create a proxy interface.</jc>
 	IAddressBook ab = client.getRemoteableProxy(IAddressBook.<jk>class</jk>);
@@ -3182,25 +3214,25 @@
 		<p class='bcode'>
 	<jd>/** Override the default rest serializers to add some transforms */</jd>
 	<ja>@Override</ja>
-	<jk>protected</jk> SerializerGroup createSerializers(ObjectMap properties, Class[] beanFilters, Class[] pojoSwaps) {
+	<jk>protected</jk> SerializerGroupBuilder createSerializers(ObjectMap properties, Class[] beanFilters, Class[] pojoSwaps) {
 
 		<jc>// You'll just reuse the parent serializer group</jc>
-		SerializerGroup serializerGroup = <jk>super</jk>.createSerializers(properties, beanFilters, pojoSwaps);
+		SerializerGroupBuilder b = <jk>super</jk>.createSerializers(properties, beanFilters, pojoSwaps);
 		
 		<jc>// Add bean filters for the HttpServletRequest, HttpSession, and ServletContext objects
 		//		so that you don't show vendor-specific properties on subclasses.
 		// Add Enumeration POJO swap to be able to render the contents of Enumeration properties.
 		// The max depth and detect recursion options prevent any possible runaway serializations.  
 		// This shouldn't happen, but future JEE APIs may introduce deep hierarchies or loops.</jc>
-		serializerGroup
-			.addBeanFilters(HttpServletRequest.<jk>class</jk>, HttpSession.<jk>class</jk>, ServletContext.<jk>class</jk>)
-			.addPojoSwaps(EnumerationSwap.<jk>class</jk>)
-			.setMaxDepth(10)
-			.setDetectRecursions(<jk>true</jk>);
-			.setProperty(<jsf>HTMLDOC_links</jsf>, <js>"{...}"</js>);
+		b
+			.beanFilters(HttpServletRequest.<jk>class</jk>, HttpSession.<jk>class</jk>, ServletContext.<jk>class</jk>)
+			.pojoSwaps(EnumerationSwap.<jk>class</jk>)
+			.maxDepth(10)
+			.detectRecursions(<jk>true</jk>);
+			.property(<jsf>HTMLDOC_links</jsf>, <js>"{...}"</js>);
 		
 		<jc>// Return the updated group</jc>
-		<jk>return</jk> serializerGroup;
+		<jk>return</jk> b;
 	}
 		</p>
 		<p>
@@ -4101,8 +4133,8 @@
 				System.<jsf>out</jsf>.println(<js>"Running client test..."</js>); 
 				
 				<jc>// Create a client to handle XML requests and responses.</jc> 
-				RestClient client = <jk>new</jk> RestClient(JsonSerializer.<jsf>DEFAULT</jsf>, JsonParser.<jsf>DEFAULT</jsf>); 
-				RestClient xmlClient = <jk>new</jk> RestClient(XmlSerializer.<jsf>DEFAULT</jsf>, XmlParser.<jsf>DEFAULT</jsf>); 
+				RestClient client = <jk>new</jk> RestClientBuilder().build(); 
+				RestClient xmlClient = <jk>new</jk> RestClientBuilder(XmlSerializer.<jsf>DEFAULT</jsf>, XmlParser.<jsf>DEFAULT</jsf>).build(); 
 				
 				String root = <js>"http://localhost:10000/addressBook"</js>; 
 				
@@ -4287,7 +4319,7 @@
 			As good practice, you'll want to use interfaces to prevent all public methods from being exposed.
 		</p>
 		<p>
-			The {@link org.apache.juneau.rest.client.RestClient#setRemoteableServletUri(String)} method is used to specify the location
+			The {@link org.apache.juneau.rest.client.RestClientBuilder#remoteableServletUri(String)} method is used to specify the location
 				of the remoteable services servlet running on the server.
 			Proxy interfaces are then retrieved using the {@link org.apache.juneau.rest.client.RestClient#getRemoteableProxy(Class)} method.
 		</p>
@@ -4296,8 +4328,9 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Create a RestClient using JSON for serialization, and point to the server-side remoteable servlet.</jc>
-	RestClient client = <jk>new</jk> RestClient(JsonSerializer.<jk>class</jk>,JsonParser.<jk>class</jk>)
-		.setRemoteableServletUri(<js>"http://localhost:10000/remoteable"</js>);
+	RestClient client = <jk>new</jk> RestClientBuilder()
+		.remoteableServletUri(<js>"http://localhost:10000/remoteable"</js>)
+		.build();
 	
 	<jc>// Create a proxy interface.</jc>
 	IAddressBook ab = client.getRemoteableProxy(IAddressBook.<jk>class</jk>);
@@ -4314,7 +4347,7 @@
 			<li class='a'>{@link org.apache.juneau.rest.remoteable.RemoteableServlet}
 			<li class='c'>{@link org.apache.juneau.rest.client.RestClient}
 			<ul>
-				<li class='m'>{@link org.apache.juneau.rest.client.RestClient#setRemoteableServletUri(String) setRemoteableServletUri(String)}
+				<li class='m'>{@link org.apache.juneau.rest.client.RestClientBuilder#remoteableServletUri(String) remoteableServletUri(String)}
 				<li class='m'>{@link org.apache.juneau.rest.client.RestClient#getRemoteableProxy(Class) getRemoteableProxy(Class)}
 			</ul>
 		</ul>
@@ -4584,7 +4617,7 @@
 		
 		<jc>// Get registry URL from examples.cfg file.</jc>
 		<jk>private</jk> String <jf>registryUrl</jf> = getConfig().getString(<js>"DockerRegistry/url"</js>); 
-		RestClient <jf>rc</jf> = <jk>new</jk> RestClient(JsonSerializer.<jsf>DEFAULT</jsf>, JsonParser.<jsf>DEFAULT</jsf>); 
+		RestClient <jf>rc</jf> = <jk>new</jk> RestClientBuilder().build(); 
 		
 		<jd>/** [GET /] - Show child resources. */</jd> 
 		<ja>@SuppressWarnings</ja>(<js>"nls"</js>) 
@@ -4673,7 +4706,7 @@
 		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/{blogName}"</js>) 
 		<jk>public</jk> ObjectList parseBlog(<ja>@Path</ja> String blogName) <jk>throws</jk> Exception { 
 			ObjectList l = <jk>new</jk> ObjectList(); 
-			RestClient rc = <jk>new</jk> RestClient(JsonSerializer.<jk>class</jk>, JsonParser.<jk>class</jk>); 
+			RestClient rc = <jk>new</jk> RestClientBuilder().build(); 
 			String site = <js>"http:<jc>//"</js> + blogName + <js>".tumblr.com/api/read/json"</js>;</jc> 
 			ObjectMap m = rc.doGet(site).getResponse(ObjectMap.<jk>class</jk>); 
 			<jk>int</jk> postsTotal = m.getInt(<js>"posts-total"</js>); 
@@ -5429,7 +5462,7 @@
 	<ja>@Override</ja>
 	<jk>protected</jk> SerializerGroup createSerializers(ObjectMap properties, Class[] beanFilters, Class[] pojoSwaps) <jk>throws</jk> Exception {
 		SerializerGroup g = <jk>super</jk>.createSerializers(properties, beanFilters, pojoSwaps);
-		g.getSerializer(<js>"text/html"</js>).addPojoSwaps(DoubleSwap.<jk>class</jk>); 
+		g.getSerializer(<js>"text/html"</js>).pojoSwaps(DoubleSwap.<jk>class</jk>); 
 		<jk>return</jk> g;
 	}
 			</p>
@@ -5637,17 +5670,46 @@
 
 		<h6 class='topic'>org.apache.juneau</h6>
 		<ul class='spaced-list'>
+			<li>Revamped the serializer and parser classes to use builders for creation.
+				Serializers and parsers are now unmodifiable objects once they are created.
+				This is a breaking code change that will require adoption.
+				<p class='bcode'>
+	<jc>/* Creating a new serializer or parser */ </jc>
+	
+	<jc>// Old way</jc>
+	WriterSerializer s = <jk>new</jk> JsonSerializer().setUseWhitespace(<jk>true</jk>).pojoSwaps(BSwap.<jk>class</jk>).lock();
+
+	<jc>// New way</jc>
+	WriterSerializer s = <jk>new</jk> JsonSerializerBuilder().ws().pojoSwaps(BSwap.<jk>class</jk>).build();
+
+	<jc>/* Cloning an existing serializer or parser */ </jc>
+	
+	<jc>// Old way</jc>
+	WriterSerializer s = JsonSerializer.<jsf>DEFAULT_LAX</jsf>.clone().setUseWhitespace(<jk>true</jk>).pojoSwaps(BSwap.<jk>class</jk>).lock();
+
+	<jc>// New way</jc>
+	WriterSerializer s = JsonSerializer.<jsf>DEFAULT_LAX</jsf>.builder().ws().pojoSwaps(BSwap.<jk>class</jk>).build();
+				</p>	
+			<li>Also introduced the following builder classes and related architecture changes to make the built objects unmodifiable:
+			<ul>
+				<li>{@link org.apache.juneau.serializer.SerializerGroupBuilder}
+				<li>{@link org.apache.juneau.parser.ParserGroupBuilder}
+				<li>{@link org.apache.juneau.encoders.EncoderGroupBuilder}
+			</ul>
+				Also introduced 			
+			<li>Removed the <code><del>Lockable</del></code> interface.
 			<li>New <code>addBeanTypeProperties</code> setting added to serializers to override the 
-			{@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_addBeanTypeProperties} setting
-			for individual serializers in a serializer group:
+				{@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_addBeanTypeProperties} setting
+				for individual serializers in a serializer group:
 			<ul>
 				<li>{@link org.apache.juneau.html.HtmlSerializerContext#HTML_addBeanTypeProperties}
 				<li>{@link org.apache.juneau.json.JsonSerializerContext#JSON_addBeanTypeProperties}
 				<li>{@link org.apache.juneau.msgpack.MsgPackSerializerContext#MSGPACK_addBeanTypeProperties}
-				<li>{@link org.apache.juneau.urlencoding.UonSerializerContext#UON_addBeanTypeProperties}
+				<li>{@link org.apache.juneau.uon.UonSerializerContext#UON_addBeanTypeProperties}
 				<li>{@link org.apache.juneau.xml.XmlSerializerContext#XML_addBeanTypeProperties}
 				<li>{@link org.apache.juneau.jena.RdfSerializerContext#RDF_addBeanTypeProperties}
 			</ul>
+			<li>UON notation serializers and parsers moved into the new <code>org.apache.juneau.uon</code> package.
 			<li>New {@link org.apache.juneau.xml.annotation.XmlFormat#VOID} format to identify HTML void elements.
 			<li>Tweaks to HTML5 support.
 			<ul>
@@ -5677,7 +5739,7 @@
 
 		<h6 class='topic'>org.apache.juneau.rest.client</h6>
 		<ul class='spaced-list'>
-			<li>{@link org.apache.juneau.rest.client.RestClient#setRootUrl(Object)} can now take in <code>URI</code> and <code>URL</code> objects.
+			<li>Revamped the client API to use builders.
 		</ul>
 		
 		<h6 class='topic'>org.apache.juneau.microservice</h6>
@@ -5703,7 +5765,7 @@
 		</p>
 		<p>
 			In particular, this release cleans up the {@link org.apache.juneau.BeanContext} API to match
-			the {@link org.apache.juneau.ContextFactory}/{@link org.apache.juneau.Context}/{@link org.apache.juneau.Session} paradigm
+			the {@link org.apache.juneau.PropertyStore}/{@link org.apache.juneau.Context}/{@link org.apache.juneau.Session} paradigm
 			previously used in the serializer and parser APIs.
 			It also makes several improvements to the HTML and XML serialization support and introduces HTML5 DTO beans.
 		</p>
@@ -5876,7 +5938,7 @@
 				<li>The new specification is considerably cleaner and eliminates the need for separate normal/simple modes.
 					<br>It also allows for arbitrary whitespace to be added to the output without any confusion.
 				<li>Eliminated the <code>UonParser.<jsf>DEFAULT_WS_AWARE</jsf></code> and <code>UrlEncodingParser.<jsf>DEFAULT_WS_AWARE</jsf></code> parsers.
-					<br>The normal {@link org.apache.juneau.urlencoding.UonParser#DEFAULT} and {@link org.apache.juneau.urlencoding.UrlEncodingParser#DEFAULT} parsers will now handle whitespace.
+					<br>The normal {@link org.apache.juneau.uon.UonParser#DEFAULT} and {@link org.apache.juneau.urlencoding.UrlEncodingParser#DEFAULT} parsers will now handle whitespace.
 				<li>Eliminated the <code>UonParserContext.<jsf>UON_whitespaceAware</jsf></code> configuration setting.
 				<li>Eliminated the <code>UonSerializer.<jsf>DEFAULT_SIMPLE</jsf></code>, <code>UonSerializer.<jsf>DEFAULT_SIMPLE_ENCODING</jsf></code>
 					and <code>UrlEncodingSerializer.<jsf>DEFAULT_SIMPLE</jsf></code>
@@ -5969,7 +6031,7 @@
 			<li>Major changes around how serializer and parser class properties are defined to improve performance
 				and concurrency.
 				<ul>
-					<li>New {@link org.apache.juneau.ContextFactory} class - Used for creating context objects.
+					<li>New {@link org.apache.juneau.PropertyStore} class - Used for creating context objects.
 					<li>New {@link org.apache.juneau.Context} class - Read-only configurations for serializers and parsers.
 					<li>New {@link org.apache.juneau.Session} class - One-time use objects used by serializers and parsers.
 					<li>All context context properties can now also be specified via system properties.
@@ -5994,7 +6056,7 @@
 				The following features were added to enable this support:
 				<ul>
 					<li>{@link org.apache.juneau.annotation.Bean#typeName() @Bean.typeName()} - Annotation that defines an identifying name for a bean class.
-					<li>{@link org.apache.juneau.transform.BeanFilterBuilder#setTypeName(String)} - Programmatic equivalent to annotation above.
+					<li>{@link org.apache.juneau.transform.BeanFilterBuilder#typeName(String)} - Programmatic equivalent to annotation above.
 					<li>{@link org.apache.juneau.BeanContext#BEAN_beanDictionary} - List of bean classes that make up the bean dictionary for lookup
 						during parsing. 
 					<li>{@link org.apache.juneau.BeanContext#BEAN_beanTypePropertyName} - The overridable type property name.  Default is <js>"_type"</js>.
@@ -6112,7 +6174,7 @@
 		<h6 class='topic'>org.apache.juneau.rest.client</h6>
 		<ul class='spaced-list'>
 			<li>Removed the <code>JazzRestClient</code> class.
-			<li>New method {@link org.apache.juneau.rest.client.RestClient#setClientVersion(String)}.
+			<li>New method <code><del>RestClient.setClientVersion(String)</del></code>.
 		</ul>		
 	</div>
 
@@ -6387,7 +6449,7 @@
 			<li>Removed <code>org.apache.juneau.rest.client.LaxRedirectStrategy</code>.  Use HTTP Client equivalent.
 			<li>New methods on {@link org.apache.juneau.rest.client.RestCall}:
 				<ul>
-					<li>{@link org.apache.juneau.rest.client.RestCall#addInterceptor(RestCallInterceptor)}
+					<li><code><del>RestCall#addInterceptor(RestCallInterceptor)</del></code>
 					<li>{@link org.apache.juneau.rest.client.RestCall#pipeTo(Writer)}
 					<li>{@link org.apache.juneau.rest.client.RestCall#pipeTo(Writer,boolean)}
 					<li>{@link org.apache.juneau.rest.client.RestCall#pipeTo(String,Writer,boolean)}
@@ -6400,7 +6462,7 @@
 					<li>{@link org.apache.juneau.rest.client.RestCall#captureResponse()}
 					<li>{@link org.apache.juneau.rest.client.RestCall#successPattern(String)}
 					<li>{@link org.apache.juneau.rest.client.RestCall#failurePattern(String)}
-					<li>{@link org.apache.juneau.rest.client.RestCall#addResponsePattern(ResponsePattern)}
+					<li><code><del>RestCall#addResponsePattern(ResponsePattern)</del></code>
 					<li>{@link org.apache.juneau.rest.client.RestCall#run()} - Renamed from <code>execute()</code>.
 					<li>{@link org.apache.juneau.rest.client.RestCall#getCapturedResponse()}
 					<li>{@link org.apache.juneau.rest.client.RestCall#getResponsePojoRest(Class)}
@@ -6415,63 +6477,63 @@
 				</ul>
 			<li>New methods on {@link org.apache.juneau.rest.client.RestClient}:
 				<ul>
-					<li>{@link org.apache.juneau.rest.client.RestClient#setBasicAuth(String,int,String,String)}
-					<li>{@link org.apache.juneau.rest.client.RestClient#logTo(Level,Logger)}
+					<li><code><del>RestClient.setBasicAuth(String,int,String,String)</del></code>
+					<li><code><del>RestClient.logTo(Level,Logger)</del></code>
 					<li><code><del>RestClient.setRootUrl(String)</del></code>
-					<li>{@link org.apache.juneau.rest.client.RestClient#enableSSL(SSLOpts)}
-					<li>{@link org.apache.juneau.rest.client.RestClient#enableLaxSSL()}
+					<li><code><del>RestClient.enableSSL(SSLOpts)</del></code>
+					<li><code><del>RestClient.enableLaxSSL()</del></code>
 					<li>{@link org.apache.juneau.rest.client.RestClient#doCall(HttpMethod,Object,Object)}
-					<li>{@link org.apache.juneau.rest.client.RestClient#createHttpClientBuilder()}
+					<li><code><del>RestClient.createHttpClientBuilder()</del></code>
 				</ul>
 			<li>New passthrough methods on {@link org.apache.juneau.rest.client.RestClient} defined on <code>HttpClientBuilder</code>:
 				<ul>
-					<li>{@link org.apache.juneau.rest.client.RestClient#setRedirectStrategy(RedirectStrategy)}
-					<li>{@link org.apache.juneau.rest.client.RestClient#setDefaultCookieSpecRegistry(Lookup)}
-					<li>{@link org.apache.juneau.rest.client.RestClient#setRequestExecutor(HttpRequestExecutor)}
-					<li>{@link org.apache.juneau.rest.client.RestClient#setSSLHostnameVerifier(HostnameVerifier)}
-					<li>{@link org.apache.juneau.rest.client.RestClient#setPublicSuffixMatcher(PublicSuffixMatcher)}
-					<li>{@link org.apache.juneau.rest.client.RestClient#setSSLContext(SSLContext)}
-					<li>{@link org.apache.juneau.rest.client.RestClient#setSSLSocketFactory(LayeredConnectionSocketFactory)}
-					<li>{@link org.apache.juneau.rest.client.RestClient#setMaxConnTotal(int)}
-					<li>{@link org.apache.juneau.rest.client.RestClient#setMaxConnPerRoute(int)}
-					<li>{@link org.apache.juneau.rest.client.RestClient#setDefaultSocketConfig(SocketConfig)}
-					<li>{@link org.apache.juneau.rest.client.RestClient#setDefaultConnectionConfig(ConnectionConfig)}
-					<li>{@link org.apache.juneau.rest.client.RestClient#setConnectionTimeToLive(long,TimeUnit)}
-					<li>{@link org.apache.juneau.rest.client.RestClient#setConnectionManager(HttpClientConnectionManager)}
-					<li>{@link org.apache.juneau.rest.client.RestClient#setConnectionManagerShared(boolean)}
-					<li>{@link org.apache.juneau.rest.client.RestClient#setConnectionReuseStrategy(ConnectionReuseStrategy)}
-					<li>{@link org.apache.juneau.rest.client.RestClient#setKeepAliveStrategy(ConnectionKeepAliveStrategy)}
-					<li>{@link org.apache.juneau.rest.client.RestClient#setTargetAuthenticationStrategy(AuthenticationStrategy)}
-					<li>{@link org.apache.juneau.rest.client.RestClient#setProxyAuthenticationStrategy(AuthenticationStrategy)}
-					<li>{@link org.apache.juneau.rest.client.RestClient#setUserTokenHandler(UserTokenHandler)}
-					<li>{@link org.apache.juneau.rest.client.RestClient#disableConnectionState()}
-					<li>{@link org.apache.juneau.rest.client.RestClient#setSchemePortResolver(SchemePortResolver)}
-					<li>{@link org.apache.juneau.rest.client.RestClient#setUserAgent(String userAgent)}
-					<li>{@link org.apache.juneau.rest.client.RestClient#setDefaultHeaders(Collection)}
-					<li>{@link org.apache.juneau.rest.client.RestClient#addInterceptorFirst(HttpResponseInterceptor)}
-					<li>{@link org.apache.juneau.rest.client.RestClient#addInterceptorLast(HttpResponseInterceptor)}
-					<li>{@link org.apache.juneau.rest.client.RestClient#addInterceptorFirst(HttpRequestInterceptor)}
-					<li>{@link org.apache.juneau.rest.client.RestClient#addInterceptorLast(HttpRequestInterceptor)}
-					<li>{@link org.apache.juneau.rest.client.RestClient#disableCookieManagement()}
-					<li>{@link org.apache.juneau.rest.client.RestClient#disableContentCompression()}
-					<li>{@link org.apache.juneau.rest.client.RestClient#disableAuthCaching()}
-					<li>{@link org.apache.juneau.rest.client.RestClient#setHttpProcessor(HttpProcessor)}
-					<li>{@link org.apache.juneau.rest.client.RestClient#setRetryHandler(HttpRequestRetryHandler)}
-					<li>{@link org.apache.juneau.rest.client.RestClient#disableAutomaticRetries()}
-					<li>{@link org.apache.juneau.rest.client.RestClient#setProxy(HttpHost)}
-					<li>{@link org.apache.juneau.rest.client.RestClient#setRoutePlanner(HttpRoutePlanner)}
-					<li>{@link org.apache.juneau.rest.client.RestClient#disableRedirectHandling()}
-					<li>{@link org.apache.juneau.rest.client.RestClient#setConnectionBackoffStrategy(ConnectionBackoffStrategy)}
-					<li>{@link org.apache.juneau.rest.client.RestClient#setBackoffManager(BackoffManager)}
-					<li>{@link org.apache.juneau.rest.client.RestClient#setServiceUnavailableRetryStrategy(ServiceUnavailableRetryStrategy)}
-					<li>{@link org.apache.juneau.rest.client.RestClient#setDefaultCookieStore(CookieStore)}
-					<li>{@link org.apache.juneau.rest.client.RestClient#setDefaultCredentialsProvider(CredentialsProvider)}
-					<li>{@link org.apache.juneau.rest.client.RestClient#setDefaultAuthSchemeRegistry(Lookup)}
-					<li>{@link org.apache.juneau.rest.client.RestClient#setContentDecoderRegistry(Map)}
-					<li>{@link org.apache.juneau.rest.client.RestClient#setDefaultRequestConfig(RequestConfig)}
-					<li>{@link org.apache.juneau.rest.client.RestClient#useSystemProperties()}
-					<li>{@link org.apache.juneau.rest.client.RestClient#evictExpiredConnections()}
-					<li>{@link org.apache.juneau.rest.client.RestClient#evictIdleConnections(long,TimeUnit)}
+					<li><code><del>RestClient.setRedirectStrategy(RedirectStrategy)</del></code>
+					<li><code><del>RestClient.setDefaultCookieSpecRegistry(Lookup)</del></code>
+					<li><code><del>RestClient.setRequestExecutor(HttpRequestExecutor)</del></code>
+					<li><code><del>RestClient.setSSLHostnameVerifier(HostnameVerifier)</del></code>
+					<li><code><del>RestClient.setPublicSuffixMatcher(PublicSuffixMatcher)</del></code>
+					<li><code><del>RestClient.setSSLContext(SSLContext)</del></code>
+					<li><code><del>RestClient.setSSLSocketFactory(LayeredConnectionSocketFactory)</del></code>
+					<li><code><del>RestClient.setMaxConnTotal(int)</del></code>
+					<li><code><del>RestClient.setMaxConnPerRoute(int)</del></code>
+					<li><code><del>RestClient.setDefaultSocketConfig(SocketConfig)</del></code>
+					<li><code><del>RestClient.setDefaultConnectionConfig(ConnectionConfig)</del></code>
+					<li><code><del>RestClient.setConnectionTimeToLive(long,TimeUnit)</del></code>
+					<li><code><del>RestClient.setConnectionManager(HttpClientConnectionManager)</del></code>
+					<li><code><del>RestClient.setConnectionManagerShared(boolean)</del></code>
+					<li><code><del>RestClient.setConnectionReuseStrategy(ConnectionReuseStrategy)</del></code>
+					<li><code><del>RestClient.setKeepAliveStrategy(ConnectionKeepAliveStrategy)</del></code>
+					<li><code><del>RestClient.setTargetAuthenticationStrategy(AuthenticationStrategy)</del></code>
+					<li><code><del>RestClient.setProxyAuthenticationStrategy(AuthenticationStrategy)</del></code>
+					<li><code><del>RestClient.setUserTokenHandler(UserTokenHandler)</del></code>
+					<li><code><del>RestClient.disableConnectionState()</del></code>
+					<li><code><del>RestClient.setSchemePortResolver(SchemePortResolver)</del></code>
+					<li><code><del>RestClient.setUserAgent(String userAgent)</del></code>
+					<li><code><del>RestClient.setDefaultHeaders(Collection)</del></code>
+					<li><code><del>RestClient.addInterceptorFirst(HttpResponseInterceptor)</del></code>
+					<li><code><del>RestClient.addInterceptorLast(HttpResponseInterceptor)</del></code>
+					<li><code><del>RestClient.addInterceptorFirst(HttpRequestInterceptor)</del></code>
+					<li><code><del>RestClient.addInterceptorLast(HttpRequestInterceptor)</del></code>
+					<li><code><del>RestClient.disableCookieManagement()</del></code>
+					<li><code><del>RestClient.disableContentCompression()</del></code>
+					<li><code><del>RestClient.disableAuthCaching()</del></code>
+					<li><code><del>RestClient.setHttpProcessor(HttpProcessor)</del></code>
+					<li><code><del>RestClient.setRetryHandler(HttpRequestRetryHandler)</del></code>
+					<li><code><del>RestClient.disableAutomaticRetries()</del></code>
+					<li><code><del>RestClient.setProxy(HttpHost)</del></code>
+					<li><code><del>RestClient.setRoutePlanner(HttpRoutePlanner)</del></code>
+					<li><code><del>RestClient.disableRedirectHandling()</del></code>
+					<li><code><del>RestClient.setConnectionBackoffStrategy(ConnectionBackoffStrategy)</del></code>
+					<li><code><del>RestClient.setBackoffManager(BackoffManager)</del></code>
+					<li><code><del>RestClient.setServiceUnavailableRetryStrategy(ServiceUnavailableRetryStrategy)</del></code>
+					<li><code><del>RestClient.setDefaultCookieStore(CookieStore)</del></code>
+					<li><code><del>RestClient.setDefaultCredentialsProvider(CredentialsProvider)</del></code>
+					<li><code><del>RestClient.setDefaultAuthSchemeRegistry(Lookup)</del></code>
+					<li><code><del>RestClient.setContentDecoderRegistry(Map)</del></code>
+					<li><code><del>RestClient.setDefaultRequestConfig(RequestConfig)</del></code>
+					<li><code><del>RestClient.useSystemProperties()</del></code>
+					<li><code><del>RestClient.evictExpiredConnections()</del></code>
+					<li><code><del>RestClient.evictIdleConnections(long,TimeUnit)</del></code>
 				</ul>
 			<li><code>JazzRestClient</code> now supports OIDC authentication.
 			<li>These classes are now deprecated and will be removed in a future release:
@@ -6517,7 +6579,7 @@
 					<li>{@link org.apache.juneau.rest.RestServlet#createStaticFilesMap()} 
 					<li>{@link org.apache.juneau.rest.RestServlet#getConfigMgr()} 
 				</ul>
-			<li>Removed {@link org.apache.juneau.jso.JavaSerializedObjectParser}
+			<li>Removed {@link org.apache.juneau.jso.JsoParser}
 				from {@link org.apache.juneau.rest.RestServletDefault} and {@link org.apache.juneau.rest.jena.RestServletJenaDefault}.  
 				These may represent a security risk if not handled correctly, so removed
 				them as a precaution.
@@ -6626,7 +6688,7 @@
 			<li>New {@link org.apache.juneau.utils.ProcBuilder} class for calling external processes.
 			<li>New {@link org.apache.juneau.ObjectMap#remove(Class,String,Object)} method.
 			<li><js>"class='link'"</js> added to links generated by {@link org.apache.juneau.html.HtmlDocSerializer}.
-			<li>New {@link org.apache.juneau.encoders.EncoderGroup#append(EncoderGroup)} method.
+			<li>New <code><del>EncoderGroup#append(EncoderGroup)</del></code> method.
 			<li>New <code>HtmlDocSerializerContext.HTMLDOC_addLinks</code> configuration property.
 			<li>Modified the <code>Parser.createContext(ObjectMap,Method,Object)</code> method.  
 				Outer context objects can be passed in to create instances of non-static inner classes.
@@ -6648,7 +6710,7 @@
 				<ul>
 					<li>New methods for accessing external INI config files:<br>  
 						{@link org.apache.juneau.rest.RestServlet#getConfig()}<br>
-						{@link org.apache.juneau.rest.RestServlet#createConfigFile()}
+						<code><del>RestServlet.createConfigFile()</del></code>
 					<li>New <js>"$C{...}"</js> variable that resolve to INI config file values.
 					<li>New <js>"$UE{...}"</js> variable that  URL-encodes the value inside the variable.
 					<li>New convenience methods for retrieving classpath resource files:<br>  
@@ -7011,7 +7073,7 @@
 		<ul class='spaced-list'>
 			<li>New methods in {@link org.apache.juneau.rest.client.RestClient} for working with remoteable services:
 			<ul>
-				<li>{@link org.apache.juneau.rest.client.RestClient#setRemoteableServletUri(String)}
+				<li><code><del>RestClient.setRemoteableServletUri(String)</del></code>
 				<li>{@link org.apache.juneau.rest.client.RestClient#getRemoteableProxy(Class)}
 			</ul>
 		</ul>
@@ -7044,7 +7106,7 @@
 			<li>New date filters:  <code>org.apache.juneau.transforms.Datefilter.ISO8601DTZP</code> and <code>org.apache.juneau.transforms.Datefilter.SimpleP</code>.
 			<li>New {@link org.apache.juneau.html.HtmlDocSerializerContext#HTMLDOC_nowrap} setting for {@link org.apache.juneau.html.HtmlDocSerializer} class.  
 				Adds <js>"* {white-space:nowrap}"</js> to the style header to prevent word wrapping.
-			<li>Fixed bug in {@link org.apache.juneau.urlencoding.UonParser} where passing in a blank value on an array or collection type in a form post would cause a <code>ClassCastException</code>.  
+			<li>Fixed bug in {@link org.apache.juneau.uon.UonParser} where passing in a blank value on an array or collection type in a form post would cause a <code>ClassCastException</code>.  
 				New behavior creates an empty array or <code>Collection</code>.
 			<li>Improved implementation of {@link org.apache.juneau.urlencoding.UrlEncodingSerializer#serializeUrlPart(Object)} method.
 		</ul>
@@ -7060,8 +7122,8 @@
 		
 		<h6 class='topic'>Client</h6>		
 		<ul class='spaced-list'>	
-			<li>New {@link org.apache.juneau.rest.client.RestCall#setRedirectMaxAttempts(int)} method to prevent endless redirection loops.
-			<li>New {@link org.apache.juneau.rest.client.RestCall#setRetryable(int,long,RetryOn)} method to automatically retry on failed connection attempts.
+			<li>New <code><del>RestCall.setRedirectMaxAttempts(int)</del></code> method to prevent endless redirection loops.
+			<li>New <code><del>RestCall#setRetryable(int,long,RetryOn)</del></code> method to automatically retry on failed connection attempts.
 			<li>New <code>RestCallInterceptor.onRetry(RestCall,int,HttpRequest,HttpResponse)</code> method for listening in on retry attempts.		
 		</ul>
 	</div>
@@ -7077,7 +7139,7 @@
 		<h6 class='topic'>Core</h6>		
 		<ul class='spaced-list'>
 			<li>Fixed {@link org.apache.juneau.ini.ConfigFile#isEmpty()} method.
-			<li>Changed behavior on {@link org.apache.juneau.urlencoding.UonParser} to not treat <js>'~'</js> characters as escapes
+			<li>Changed behavior on {@link org.apache.juneau.uon.UonParser} to not treat <js>'~'</js> characters as escapes
 				unless followed by one of the following characters:  <code>( ) , $ = ~</code>.
 		</ul>
 
@@ -7110,7 +7172,7 @@
 			</li>
 			<li>Several improvements to URL-Encoding support.
 				<ul>
-					<li>Improved whitespace handling in {@link org.apache.juneau.urlencoding.UonParser}.
+					<li>Improved whitespace handling in {@link org.apache.juneau.uon.UonParser}.
 					<li>New <code><del>UonParserContext.UON_whitespaceAware</del></code> property for controlling whether whitespace is ignored.
 					<li>New {@link org.apache.juneau.urlencoding.UrlEncodingContext#URLENC_expandedParams} property for controlling whether arrays/Collections 
 						should be serialized/parsed as multi-part parameters.
@@ -7167,7 +7229,7 @@
 				Shows all request/response headers and bodies.
 			<li>{@link org.apache.juneau.rest.client.RestCallException} now includes <code>HttpResponse</code> object for easier debugging.
 			<li>New method <code>RestClient.addListener(RestClientListener)</code> for registering request/response listeners.
-			<li>New {@link org.apache.juneau.rest.client.RestClient#setClassLoader(ClassLoader)} method.
+			<li>New <code><del>RestClient.setClassLoader(ClassLoader)</del></code> method.
 			<li>TLS support in <code>JazzRestClient</code>.
 		</ul>
 
@@ -7191,7 +7253,7 @@
 			<li>Major changes to URL-Encoded serializer and parser.
 				<ul>
 					<li>Logic for serializing and parsing URL-Encoded key-value pairs moved to {@link org.apache.juneau.urlencoding.UrlEncodingSerializer} and {@link org.apache.juneau.urlencoding.UrlEncodingParser} classes.
-					<li>Logic for serializing and parsing URL-Encoded values moved to new {@link org.apache.juneau.urlencoding.UonSerializer} and {@link org.apache.juneau.urlencoding.UonParser} classes.
+					<li>Logic for serializing and parsing URL-Encoded values moved to new {@link org.apache.juneau.uon.UonSerializer} and {@link org.apache.juneau.uon.UonParser} classes.
 				</ul>
 			</li>
 			<li>Fix bug where <code>BeanRuntimeExceptions</code> weren't being thrown on subsequent calls to {@link org.apache.juneau.BeanContext#getClassMeta(Class)}.
@@ -7214,7 +7276,7 @@
 			<li><code>&amp;plainText</code> parameter can now specify a false value.
 			<li>Removed properties parameters from {@link org.apache.juneau.rest.RestServlet#onPreCall(RestRequest)} and {@link org.apache.juneau.rest.RestServlet#onPostCall(RestRequest,RestResponse)} methods
 				since the properties are already accessible through <code>RestRequest.getProperties()</code>.
-			<li>Added {@link org.apache.juneau.urlencoding.UonSerializer} and {@link org.apache.juneau.urlencoding.UonParser} to serializer and parser lists on 
+			<li>Added {@link org.apache.juneau.uon.UonSerializer} and {@link org.apache.juneau.uon.UonParser} to serializer and parser lists on 
 				{@link org.apache.juneau.rest.RestServletDefault} and {@link org.apache.juneau.rest.jena.RestServletJenaDefault}.
 		</ul>
 		
@@ -7225,11 +7287,11 @@
 			<li>Improved performance on URL-Encoded form posts by serializing directly to output stream instead of serialized to string first.
 			<li>New methods on {@link org.apache.juneau.rest.client.RestClient} class that makes it easier to associate serializer and parser attributes with registered serializer and parser:
 				<ul>
-					<li>{@link org.apache.juneau.rest.client.RestClient#setProperty(String,Object)}			
-					<li>{@link org.apache.juneau.rest.client.RestClient#setProperties(ObjectMap)}			
-					<li>{@link org.apache.juneau.rest.client.RestClient#addNotBeanClasses(Class[])}			
+					<li><code><del>RestClient#setProperty(String,Object)</del></code>			
+					<li><code><del>RestClient#setProperties(ObjectMap)</del></code>	
+					<li><code><del>RestClient#addNotBeanClasses(Class[])</del></code>		
 					<li><del><code>RestClient.addTransforms(Class[])</code></del>		
-					<li>{@link org.apache.juneau.rest.client.RestClient#addImplClass(Class,Class)}	
+					<li><code><del>RestClient#addImplClass(Class,Class)</del></code>	
 				</ul>
 			<li>Renamed <code>RestClient.shutdown()</code> to {@link org.apache.juneau.rest.client.RestClient#close()} to mirror change in Apache API.		
 		</ul>
@@ -7292,7 +7354,7 @@
 			</li>
 			<li>Revamped the {@link org.apache.juneau.BeanContext} API to perform better in multi-threaded environments.
 				<ul>
-					<li>Introduced a new <code>BeanContextFactory</code> class that handles creation of {@link org.apache.juneau.BeanContext} objects.
+					<li>Introduced a new <code>BeanPropertyStore</code> class that handles creation of {@link org.apache.juneau.BeanContext} objects.
 						This allows <code>BeanContext</code> objects to be considered immutable, and therefore cacheable/reusable by the framework.
 						While this was technically possible to cache these objects beforehand, it relied on a locking mechanism to prevent bean contexts
 							from being modified after being created.  The new mechanism is much more straightforward.
@@ -7300,7 +7362,7 @@
 			</li>
 			<li>Modifications to the <a class='doclink' href='org/apache/juneau/rest/client/package-summary.html#TOC'>org.apache.juneau.rest.client</a> APIs to make it easier to work with custom Apache HTTP clients.
 				<ul>
-					<li>Added overridable {@link org.apache.juneau.rest.client.RestClient#createHttpClient()} to allow customized subclasses to construct customized HTTP clients.
+					<li>Added overridable <code><del>RestClient#createHttpClient()</del></code> to allow customized subclasses to construct customized HTTP clients.
 					<li>Removed the <code>DefaultRestClient</code> class since it's now fully redundant with <code>RestClient</code>.
 					<li>Added <code>RestClient.shutdown()</code> method for cleaning up the internal HTTP client when you're done using a REST client.
 				</ul>
@@ -7375,7 +7437,7 @@
 			<li>New method {@link org.apache.juneau.rest.RestRequest#getServletURIBuilder()} for construcing servlet-based URLs more efficiently.
 			<li>New method {@link org.apache.juneau.rest.RestResponse#getNegotiatedOutputStream()} that uses encoders if a match is found, 
 				and {@link org.apache.juneau.rest.RestResponse#getOutputStream()} that just return the underlying output stream without any modifications.
-			<li>Fixed bug where some properties were not being propagated correctly when using {@link org.apache.juneau.CoreApi#setProperties(ObjectMap)}
+			<li>Fixed bug where some properties were not being propagated correctly when using <code><del>CoreObject.setProperties(ObjectMap)</del></code>
 				on serializer and parser subclasses.
 			<li>Fixed bug in {@link org.apache.juneau.html.HtmlSerializer} where URL keys in Maps were not being serialized as hyperlinks.
 			<li>Fixed bug in {@link org.apache.juneau.json.JsonSerializer} where <js>"_class"</js> and <js>"items"</js> attributes were not quoted in strict mode when using SERIALIZER_addClassAttrs feature.	
@@ -7402,7 +7464,7 @@
 			<li>Better behavior on overriding of filters in <code>BeanContext.addTransforms(Class[])</code>.
 				Previously, adding multiple conflicting filters resulted in random behavior.  
 				Now filters are overridden when multiple matching filters are applied.
-			<li>Allow {@link org.apache.juneau.html.HtmlDocSerializerContext} properties to be set via {@link org.apache.juneau.serializer.Serializer#setProperty(String,Object)}.
+			<li>Allow {@link org.apache.juneau.html.HtmlDocSerializerContext} properties to be set via <code><del>Serializer.setProperty(String,Object)</del></code>.
 				Previously, these could only be defined through override properties (e.g. through REST class and method annotations).
 			<li>Fixed memory leak in XML parser.	
 		</ul>
@@ -8211,7 +8273,7 @@
 		<h6 class='topic'>Other changes</h6>
 		<ul class='spaced-list'>
 			<li>
-				New {@link org.apache.juneau.jso.JavaSerializedObjectParser} class.  
+				New {@link org.apache.juneau.jso.JsoParser} class.  
 			</li>
 		</ul>
 	</div>
@@ -8328,7 +8390,7 @@
 			<li>
 				New <a class='doclink' href='org/apache/juneau/jso/package-summary.html#TOC'>org.apache.juneau.jso</a> package.
 				<ul>
-					<li>New {@link org.apache.juneau.jso.JavaSerializedObjectSerializer} class for serializing <code>application/x-java-serialized-object</code> content.</li>
+					<li>New {@link org.apache.juneau.jso.JsoSerializer} class for serializing <code>application/x-java-serialized-object</code> content.</li>
 				</ul>
 			</li>
 			<li>

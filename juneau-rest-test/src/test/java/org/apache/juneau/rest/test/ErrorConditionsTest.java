@@ -17,7 +17,6 @@ import static org.apache.juneau.rest.test.TestUtils.*;
 import static org.junit.Assert.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.json.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.*;
 
@@ -26,17 +25,9 @@ public class ErrorConditionsTest extends RestTestcase {
 
 	private static String URL = "/testErrorConditions";
 	private static boolean debug = false;
-	private static RestClient client;
+	private RestClient client = TestMicroservice.DEFAULT_CLIENT;
 
-	@BeforeClass
-	public static void beforeClass() {
-		 client = new TestRestClient(JsonSerializer.DEFAULT, JsonParser.DEFAULT);
-	}
 
-	@AfterClass
-	public static void afterClass() {
-		 client.closeQuietly();
-	}
 	//====================================================================================================
 	// Test non-existent properties
 	//====================================================================================================
@@ -163,7 +154,7 @@ public class ErrorConditionsTest extends RestTestcase {
 		}
 
 		try {
-			client.doPut(url + "/1?noTrace=true&p1=1", "").setHeader("h1", "foo").getResponseAsString();
+			client.doPut(url + "/1?noTrace=true&p1=1", "").header("h1", "foo").getResponseAsString();
 			fail("Exception expected");
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_BAD_REQUEST,

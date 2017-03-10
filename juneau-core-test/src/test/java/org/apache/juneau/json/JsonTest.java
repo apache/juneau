@@ -33,8 +33,8 @@ public class JsonTest {
 		Map<String,Object> m = new LinkedHashMap<String,Object>();
 		List<Object> l = new LinkedList<Object>();
 
-		WriterSerializer s1 = new JsonSerializer.Simple().setTrimNullProperties(false);
-		WriterSerializer s2 = new JsonSerializer.Simple().setTrimNullProperties(false).setQuoteChar('"');
+		WriterSerializer s1 = new JsonSerializerBuilder().simple().trimNullProperties(false).build();
+		WriterSerializer s2 = new JsonSerializerBuilder().simple().trimNullProperties(false).quoteChar('"').build();
 		String r;
 
 		// Null keys and values
@@ -109,7 +109,7 @@ public class JsonTest {
 	//====================================================================================================
 	@Test
 	public void testBackslashesInStrings() throws Exception {
-		JsonSerializer s = new JsonSerializer.Simple().setTrimNullProperties(false).setQuoteChar('"');
+		JsonSerializer s = new JsonSerializerBuilder().simple().trimNullProperties(false).quoteChar('"').build();
 		String r, r2;
 
 		// [\\]
@@ -275,7 +275,7 @@ public class JsonTest {
 	//====================================================================================================
 	@Test
 	public void testSubclassedList() throws Exception {
-		JsonSerializer s = new JsonSerializer();
+		JsonSerializer s = JsonSerializer.DEFAULT;
 		Map<String,Object> o = new HashMap<String,Object>();
 		o.put("c", new C());
 		assertEquals("{\"c\":[]}", s.serialize(o));
@@ -289,13 +289,13 @@ public class JsonTest {
 	//====================================================================================================
 	@Test
 	public void testEscapeSolidus() throws Exception {
-		JsonSerializer s = new JsonSerializer().setEscapeSolidus(false);
+		JsonSerializer s = new JsonSerializerBuilder().escapeSolidus(false).build();
 		String r = s.serialize("foo/bar");
 		assertEquals("\"foo/bar\"", r);
 		r = JsonParser.DEFAULT.parse(r, String.class);
 		assertEquals("foo/bar", r);
 
-		s = new JsonSerializer().setEscapeSolidus(true);
+		s = new JsonSerializerBuilder().escapeSolidus(true).build();
 		r = s.serialize("foo/bar");
 		assertEquals("\"foo\\/bar\"", r);
 		r = JsonParser.DEFAULT.parse(r, String.class);

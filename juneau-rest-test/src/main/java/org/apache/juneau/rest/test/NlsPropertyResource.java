@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -53,6 +54,11 @@ public class NlsPropertyResource extends RestServlet {
 
 	@Produces("text/plain")
 	public static class TestSerializer extends WriterSerializer {
+
+		public TestSerializer(PropertyStore propertyStore) {
+			super(propertyStore);
+		}
+
 		@Override /* Serializer */
 		protected void doSerialize(SerializerSession session, Object o) throws Exception {
 			session.getWriter().write(session.getProperties().getString("TestProperty"));

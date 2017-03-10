@@ -31,7 +31,7 @@ public class AcceptCharsetTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testQValues() throws Exception {
-		RestClient client = new TestRestClient().setHeader("Accept", "text/plain");
+		RestClient client = TestMicroservice.DEFAULT_CLIENT_PLAINTEXT;
 
 		check1(client, "utf-8", "utf-8");
 		check1(client, "iso-8859-1", "iso-8859-1");
@@ -46,15 +46,13 @@ public class AcceptCharsetTest extends RestTestcase {
 		check1(client, "*", "utf-8");
 		check1(client, "bad,iso-8859-1;q=0.5,*;q=0.1", "iso-8859-1");
 		check1(client, "bad,iso-8859-1;q=0.1,*;q=0.5", "utf-8");
-
-		client.closeQuietly();
 	}
 
 	private void check1(RestClient client, String requestCharset, String responseCharset) throws Exception {
 		RestCall r;
 		InputStream is;
 		String url = "/testAcceptCharset/testQValues";
-		r = client.doGet(url).setHeader("Accept-Charset", requestCharset).connect();
+		r = client.doGet(url).acceptCharset(requestCharset).connect();
 		assertTrue(r.getResponse().getFirstHeader("Content-Type").getValue().toLowerCase().contains(responseCharset));
 		is = r.getInputStream();
 		assertEquals("foo", IOUtils.read(new InputStreamReader(is, responseCharset)));
@@ -65,50 +63,50 @@ public class AcceptCharsetTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testCharsetOnResponse() throws Exception {
-		RestClient client = new TestRestClient().setAccept("text/plain").setContentType("text/plain");
+		RestClient client = TestMicroservice.DEFAULT_CLIENT_PLAINTEXT;
 		String url = "/testAcceptCharset/testCharsetOnResponse";
 		String r;
 
 		r = client.doPut(url, new StringReader("")).getResponseAsString();
 		assertEquals("utf-8/utf-8", r.toLowerCase());
 
-		r = client.doPut(url, new StringReader("")).setHeader("Accept-Charset", "Shift_JIS").getResponseAsString();
+		r = client.doPut(url, new StringReader("")).acceptCharset("Shift_JIS").getResponseAsString();
 		assertEquals("utf-8/shift_jis", r.toLowerCase());
 
 		try {
-			r = client.doPut(url+"?noTrace=true", new StringReader("")).setHeader("Accept-Charset", "BAD").getResponseAsString();
+			r = client.doPut(url+"?noTrace=true", new StringReader("")).acceptCharset("BAD").getResponseAsString();
 			fail("Exception expected");
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_NOT_ACCEPTABLE, "No supported charsets in header 'Accept-Charset': 'BAD'");
 		}
 
-		r = client.doPut(url, new StringReader("")).setHeader("Accept-Charset", "UTF-8").getResponseAsString();
+		r = client.doPut(url, new StringReader("")).acceptCharset("UTF-8").getResponseAsString();
 		assertEquals("utf-8/utf-8", r.toLowerCase());
 
-		r = client.doPut(url, new StringReader("")).setHeader("Accept-Charset", "bad,iso-8859-1").getResponseAsString();
+		r = client.doPut(url, new StringReader("")).acceptCharset("bad,iso-8859-1").getResponseAsString();
 		assertEquals("utf-8/iso-8859-1", r.toLowerCase());
 
-		r = client.doPut(url, new StringReader("")).setHeader("Accept-Charset", "bad;q=0.9,iso-8859-1;q=0.1").getResponseAsString();
+		r = client.doPut(url, new StringReader("")).acceptCharset("bad;q=0.9,iso-8859-1;q=0.1").getResponseAsString();
 		assertEquals("utf-8/iso-8859-1", r.toLowerCase());
 
-		r = client.doPut(url, new StringReader("")).setHeader("Accept-Charset", "bad;q=0.1,iso-8859-1;q=0.9").getResponseAsString();
+		r = client.doPut(url, new StringReader("")).acceptCharset("bad;q=0.1,iso-8859-1;q=0.9").getResponseAsString();
 		assertEquals("utf-8/iso-8859-1", r.toLowerCase());
 
-		client.setHeader("Accept-Charset", "utf-8");
+		client = TestMicroservice.client().accept("text/plain").contentType("text/plain").acceptCharset("utf-8").build();
 
-		r = client.doPut(url, new StringReader("")).setHeader("Content-Type", "text/plain").getResponseAsString();
+		r = client.doPut(url, new StringReader("")).contentType("text/plain").getResponseAsString();
 		assertEquals("utf-8/utf-8", r.toLowerCase());
 
-		r = client.doPut(url, new StringReader("")).setHeader("Content-Type", "text/plain;charset=utf-8").getResponseAsString();
+		r = client.doPut(url, new StringReader("")).contentType("text/plain;charset=utf-8").getResponseAsString();
 		assertEquals("utf-8/utf-8", r.toLowerCase());
 
-		r = client.doPut(url, new StringReader("")).setHeader("Content-Type", "text/plain;charset=UTF-8").getResponseAsString();
+		r = client.doPut(url, new StringReader("")).contentType("text/plain;charset=UTF-8").getResponseAsString();
 		assertEquals("utf-8/utf-8", r.toLowerCase());
 
-		r = client.doPut(url, new StringReader("")).setHeader("Content-Type", "text/plain;charset=iso-8859-1").getResponseAsString();
+		r = client.doPut(url, new StringReader("")).contentType("text/plain;charset=iso-8859-1").getResponseAsString();
 		assertEquals("iso-8859-1/utf-8", r.toLowerCase());
 
-		r = client.doPut(url, new StringReader("")).setHeader("Content-Type", "text/plain;charset=Shift_JIS").getResponseAsString();
+		r = client.doPut(url, new StringReader("")).contentType("text/plain;charset=Shift_JIS").getResponseAsString();
 		assertEquals("shift_jis/utf-8", r.toLowerCase());
 
 		try {

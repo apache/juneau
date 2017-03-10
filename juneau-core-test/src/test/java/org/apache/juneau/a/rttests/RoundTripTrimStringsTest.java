@@ -25,7 +25,7 @@ import org.junit.*;
 @SuppressWarnings("javadoc")
 public class RoundTripTrimStringsTest extends RoundTripTest {
 
-	public RoundTripTrimStringsTest(String label, Serializer s, Parser p, int flags) throws Exception {
+	public RoundTripTrimStringsTest(String label, SerializerBuilder s, ParserBuilder p, int flags) throws Exception {
 		super(label, s, p, flags);
 	}
 
@@ -40,8 +40,8 @@ public class RoundTripTrimStringsTest extends RoundTripTest {
 		Parser p = getParser();
 		Object in, a, e;
 
-		Serializer s2 = s.clone().setTrimStrings(true);
-		Parser p2 = p.clone().setTrimStrings(true);
+		Serializer s2 = s.builder().trimStrings(true).build();
+		Parser p2 = p.builder().trimStrings(true).build();
 
 		in = " foo bar ";
 		e = "foo bar";

@@ -21,6 +21,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transforms.*;
+import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
 import org.junit.*;
@@ -32,7 +33,7 @@ import org.junit.*;
 @SuppressWarnings({"deprecation","javadoc"})
 public class RoundTripMapsTest extends RoundTripTest {
 
-	public RoundTripMapsTest(String label, Serializer s, Parser p, int flags) throws Exception {
+	public RoundTripMapsTest(String label, SerializerBuilder s, ParserBuilder p, int flags) throws Exception {
 		super(label, s, p, flags);
 	}
 
@@ -105,27 +106,27 @@ public class RoundTripMapsTest extends RoundTripTest {
 		t.put(new byte[]{4,5,6}, null);
 		t.put(null, "b");
 
-		s = new JsonSerializer.Simple().addPojoSwaps(getPojoSwaps()).setTrimNullProperties(false);
+		s = new JsonSerializerBuilder().simple().pojoSwaps(getPojoSwaps()).trimNullProperties(false).build();
 		e = "{AQID:'a',BAUG:null,null:'b'}";
 		r = s.serialize(t);
 		assertEquals(e, r);
 
-		s = new XmlSerializer.NsSq().addPojoSwaps(getPojoSwaps()).setTrimNullProperties(false);
+		s = new XmlSerializerBuilder().ns().sq().pojoSwaps(getPojoSwaps()).trimNullProperties(false).build();
 		e = "<object><AQID>a</AQID><BAUG _type='null'/><_x0000_>b</_x0000_></object>";
 		r = s.serialize(t);
 		assertEquals(e, r);
 
-		s = new HtmlSerializer.Sq().addPojoSwaps(getPojoSwaps()).setTrimNullProperties(false).setAddKeyValueTableHeaders(true);
+		s = new HtmlSerializerBuilder().sq().pojoSwaps(getPojoSwaps()).trimNullProperties(false).addKeyValueTableHeaders(true).build();
 		e = "<table><tr><th>key</th><th>value</th></tr><tr><td>AQID</td><td>a</td></tr><tr><td>BAUG</td><td><null/></td></tr><tr><td><null/></td><td>b</td></tr></table>";
 		r = s.serialize(t);
 		assertEquals(e, r);
 
-		s = new UonSerializer.Encoding().addPojoSwaps(getPojoSwaps()).setTrimNullProperties(false);
+		s = new UonSerializerBuilder().encoding().pojoSwaps(getPojoSwaps()).trimNullProperties(false).build();
 		e = "(AQID=a,BAUG=null,null=b)";
 		r = s.serialize(t);
 		assertEquals(e, r);
 
-		s = new UrlEncodingSerializer().addPojoSwaps(getPojoSwaps()).setTrimNullProperties(false);
+		s = new UrlEncodingSerializerBuilder().pojoSwaps(getPojoSwaps()).trimNullProperties(false).build();
 		e = "AQID=a&BAUG=null&null=b";
 		r = s.serialize(t);
 		assertEquals(e, r);

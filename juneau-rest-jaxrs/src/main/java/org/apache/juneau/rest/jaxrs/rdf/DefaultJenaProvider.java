@@ -33,8 +33,8 @@ import org.apache.juneau.xml.*;
 	"application/json", "text/json",                 // JsonSerializer
 	"application/json+simple","text/json+simple",    // JsonSerializer.Simple
 	"application/json+schema","text/json+schema",    // JsonSchemaSerializer
-	"text/xml",                                      // XmlDocSerializer
-	"text/xml+simple",                               // XmlDocSerializer.Simple
+	"text/xml",                                      // XmlDocSerializer.Ns
+	"text/xml+simple",                               // XmlDocSerializer
 	"text/xml+schema",                               // XmlSchemaDocSerializer
 	"text/html",                                     // HtmlDocSerializer
 	"application/x-www-form-urlencoded",             // UrlEncodingSerializer
@@ -62,8 +62,7 @@ import org.apache.juneau.xml.*;
 		JsonSerializer.class,
 		JsonSerializer.Simple.class,
 		JsonSchemaSerializer.class,
-		XmlDocSerializer.class,
-		XmlDocSerializer.Simple.class,
+		XmlDocSerializer.Ns.class,
 		XmlSchemaDocSerializer.class,
 		HtmlDocSerializer.class,
 		UrlEncodingSerializer.class,
@@ -73,7 +72,7 @@ import org.apache.juneau.xml.*;
 		RdfSerializer.NTriple.class,
 		RdfSerializer.Turtle.class,
 		RdfSerializer.N3.class,
-		JavaSerializedObjectSerializer.class
+		JsoSerializer.class
 	},
 	parsers={
 		JsonParser.class,
@@ -83,8 +82,7 @@ import org.apache.juneau.xml.*;
 		RdfParser.Xml.class,
 		RdfParser.NTriple.class,
 		RdfParser.Turtle.class,
-		RdfParser.N3.class,
-		JavaSerializedObjectParser.class,
+		RdfParser.N3.class
 	}
 )
 public final class DefaultJenaProvider extends BaseProvider {}

@@ -17,9 +17,8 @@ import static org.junit.Assert.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.html.annotation.Html;
-import org.apache.juneau.xml.annotation.Xml;
-import org.apache.juneau.xml.annotation.XmlFormat;
+import org.apache.juneau.html.annotation.*;
+import org.apache.juneau.xml.annotation.*;
 import org.junit.*;
 import org.junit.runner.*;
 import org.junit.runners.*;

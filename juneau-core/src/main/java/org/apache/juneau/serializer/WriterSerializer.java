@@ -40,6 +40,14 @@ import org.apache.juneau.annotation.*;
  */
 public abstract class WriterSerializer extends Serializer {
 
+	/**
+	 * Constructor.
+	 * @param propertyStore The property store containing all the settings for this object.
+	 */
+	protected WriterSerializer(PropertyStore propertyStore) {
+		super(propertyStore);
+	}
+
 	@Override /* Serializer */
 	public boolean isWriterSerializer() {
 		return true;

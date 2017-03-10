@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.parser;
 
-import static org.apache.juneau.parser.ParserContext.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -23,8 +22,6 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.json.*;
-import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.transforms.*;
 import org.apache.juneau.utils.*;
@@ -133,14 +130,18 @@ import org.apache.juneau.utils.*;
  * Passing in <jk>null</jk> or <code>Object.<jk>class</jk></code> typically signifies that it's up to the parser
  * 	to determine what object type is being parsed parsed based on the rules above.
  */
-public abstract class Parser extends CoreApi {
+public abstract class Parser extends CoreObject {
 
-	/** General serializer properties currently set on this serializer. */
+	/** General parser properties currently set on this parser. */
 	private final List<ParserListener> listeners = new LinkedList<ParserListener>();
 	private final MediaType[] mediaTypes;
+	private final ParserContext ctx;
 
 	// Hidden constructor to force subclass from InputStreamParser or ReaderParser.
-	Parser() {
+	Parser(PropertyStore propertyStore) {
+		super(propertyStore);
+		this.ctx = createContext(ParserContext.class);
+
 		Consumes c = ReflectionUtils.getAnnotation(Consumes.class, getClass());
 		if (c == null)
 			throw new RuntimeException(MessageFormat.format("Class ''{0}'' is missing the @Consumes annotation", getClass().getName()));
@@ -152,6 +153,10 @@ public abstract class Parser extends CoreApi {
 		}
 	}
 
+	@Override /* CoreObject */
+	public ParserBuilder builder() {
+		return new ParserBuilder(propertyStore);
+	}
 
 	//--------------------------------------------------------------------------------
 	// Abstract methods
@@ -331,7 +336,7 @@ public abstract class Parser extends CoreApi {
 	 *
 	 * @param input The input.  See {@link #parse(Object, ClassMeta)} for supported input types.
 	 * @param op Optional additional properties.
-	 * @param javaMethod Java method that invoked this serializer.
+	 * @param javaMethod Java method that invoked this parser.
 	 * When using the REST API, this is the Java method invoked by the REST call.
 	 * Can be used to access annotations defined on the method or class.
 	 * @param outer The outer object for instantiating top-level non-static inner classes.
@@ -343,7 +348,7 @@ public abstract class Parser extends CoreApi {
 	 * @return The new session.
 	 */
 	public ParserSession createSession(Object input, ObjectMap op, Method javaMethod, Object outer, Locale locale, TimeZone timeZone, MediaType mediaType) {
-		return new ParserSession(getContext(ParserContext.class), op, input, javaMethod, outer, locale, timeZone, mediaType);
+		return new ParserSession(ctx, op, input, javaMethod, outer, locale, timeZone, mediaType);
 	}
 
 	/**
@@ -512,11 +517,9 @@ public abstract class Parser extends CoreApi {
 	 * Adds a {@link ParserListener} to this parser to listen for parse events.
 	 *
 	 * @param listener The listener to associate with this parser.
-	 * @throws LockedException If {@link #lock()} was called on this object.
 	 * @return This object (for method chaining).
 	 */
-	public Parser addListener(ParserListener listener) throws LockedException {
-		checkLock();
+	public Parser addListener(ParserListener listener) {
 		this.listeners.add(listener);
 		return this;
 	}
@@ -647,536 +650,5 @@ public abstract class Parser extends CoreApi {
 	 */
 	public MediaType getPrimaryMediaType() {
 		return mediaTypes == null || mediaTypes.length == 0 ? null : mediaTypes[0];
-	}
-
-
-	//--------------------------------------------------------------------------------
-	// Properties
-	//--------------------------------------------------------------------------------
-
-	/**
-	 * <b>Configuration property:</b>  Trim parsed strings.
-	 * <p>
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Parser.trimStrings"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
-	 * <p>
-	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being added to the POJO.
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>PARSER_trimStrings</jsf>, value)</code>.
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @throws LockedException If {@link #lock()} was called on this class.
-	 * @see ParserContext#PARSER_trimStrings
-	 */
-	public Parser setTrimStrings(boolean value) throws LockedException {
-		return setProperty(PARSER_trimStrings, value);
-	}
-
-	/**
-	 * <b>Configuration property:</b>  Strict mode.
-	 * <p>
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Parser.strict"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
-	 * <p>
-	 * If <jk>true</jk>, strict mode for the parser is enabled.
-	 * <p>
-	 * Strict mode can mean different things for different parsers.
-	 * <p>
-	 * <table class='styled'>
-	 * 	<tr><th>Parser class</th><th>Strict behavior</th></tr>
-	 * 	<tr>
-	 * 		<td>All reader-based parsers</td>
-	 * 		<td>
-	 * 			When enabled, throws {@link ParseException ParseExceptions} on malformed charset input.
-	 * 			Otherwise, malformed input is ignored.
-	 * 		</td>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td>{@link JsonParser}</td>
-	 * 		<td>
-	 * 			When enabled, throws exceptions on the following invalid JSON syntax:
-	 * 			<ul>
-	 * 				<li>Unquoted attributes.
-	 * 				<li>Missing attribute values.
-	 * 				<li>Concatenated strings.
-	 * 				<li>Javascript comments.
-	 * 				<li>Numbers and booleans when Strings are expected.
-	 * 				<li>Numbers valid in Java but not JSON (e.g. octal notation, etc...)
-	 * 			</ul>
-	 * 		</td>
-	 * 	</tr>
-	 * </table>
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>PARSER_strict</jsf>,value)</code>.
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @throws LockedException If {@link #lock()} was called on this class.
-	 * @see ParserContext#PARSER_strict
-	 */
-	public Parser setStrict(boolean value) throws LockedException {
-		return setProperty(PARSER_strict, value);
-	}
-
-	/**
-	 * <b>Configuration property:</b>  Input stream charset.
-	 * <p>
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Parser.inputStreamCharset"</js>
-	 * 	<li><b>Data type:</b> <code>String</code>
-	 * 	<li><b>Default:</b> <js>"UTF-8"</js>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
-	 * <p>
-	 * The character set to use for converting <code>InputStreams</code> and byte arrays to readers.
-	 * <p>
-	 * Used when passing in input streams and byte arrays to {@link Parser#parse(Object, Class)}.
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>PARSER_inputStreamCharset</jsf>, value)</code>.
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @throws LockedException If {@link #lock()} was called on this class.
-	 * @see ParserContext#PARSER_inputStreamCharset
-	 */
-	public Parser setInputStreamCharset(String value) throws LockedException {
-		return setProperty(PARSER_inputStreamCharset, value);
-	}
-
-	/**
-	 * <b>Configuration property:</b>  File charset.
-	 * <p>
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Parser.fileCharset"</js>
-	 * 	<li><b>Data type:</b> <code>String</code>
-	 * 	<li><b>Default:</b> <js>"default"</js>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
-	 * <p>
-	 * The character set to use for reading <code>Files</code> from the file system.
-	 * <p>
-	 * Used when passing in files to {@link Parser#parse(Object, Class)}.
-	 * <p>
-	 * <js>"default"</js> can be used to indicate the JVM default file system charset.
-	 * <p>
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This is equivalent to calling <code>setProperty(<jsf>PARSER_fileCharset</jsf>,value)</code>.
-	 * </ul>
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 * @throws LockedException If {@link #lock()} was called on this class.
-	 * @see ParserContext#PARSER_fileCharset
-	 */
-	public Parser setFileCharset(String value) throws LockedException {
-		return setProperty(PARSER_fileCharset, value);
-	}
-
-	@Override /* CoreApi */
-	public Parser setBeansRequireDefaultConstructor(boolean value) throws LockedException {
-		super.setBeansRequireDefaultConstructor(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser setBeansRequireSerializable(boolean value) throws LockedException {
-		super.setBeansRequireSerializable(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser setBeansRequireSettersForGetters(boolean value) throws LockedException {
-		super.setBeansRequireSettersForGetters(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser setBeansRequireSomeProperties(boolean value) throws LockedException {
-		super.setBeansRequireSomeProperties(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser setBeanMapPutReturnsOldValue(boolean value) throws LockedException {
-		super.setBeanMapPutReturnsOldValue(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser setBeanConstructorVisibility(Visibility value) throws LockedException {
-		super.setBeanConstructorVisibility(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser setBeanClassVisibility(Visibility value) throws LockedException {
-		super.setBeanClassVisibility(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser setBeanFieldVisibility(Visibility value) throws LockedException {
-		super.setBeanFieldVisibility(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser setMethodVisibility(Visibility value) throws LockedException {
-		super.setMethodVisibility(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser setUseJavaBeanIntrospector(boolean value) throws LockedException {
-		super.setUseJavaBeanIntrospector(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser setUseInterfaceProxies(boolean value) throws LockedException {
-		super.setUseInterfaceProxies(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser setIgnoreUnknownBeanProperties(boolean value) throws LockedException {
-		super.setIgnoreUnknownBeanProperties(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser setIgnoreUnknownNullBeanProperties(boolean value) throws LockedException {
-		super.setIgnoreUnknownNullBeanProperties(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser setIgnorePropertiesWithoutSetters(boolean value) throws LockedException {
-		super.setIgnorePropertiesWithoutSetters(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser setIgnoreInvocationExceptionsOnGetters(boolean value) throws LockedException {
-		super.setIgnoreInvocationExceptionsOnGetters(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser setIgnoreInvocationExceptionsOnSetters(boolean value) throws LockedException {
-		super.setIgnoreInvocationExceptionsOnSetters(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser setSortProperties(boolean value) throws LockedException {
-		super.setSortProperties(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser setNotBeanPackages(String...values) throws LockedException {
-		super.setNotBeanPackages(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser setNotBeanPackages(Collection<String> values) throws LockedException {
-		super.setNotBeanPackages(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser addNotBeanPackages(String...values) throws LockedException {
-		super.addNotBeanPackages(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser addNotBeanPackages(Collection<String> values) throws LockedException {
-		super.addNotBeanPackages(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser removeNotBeanPackages(String...values) throws LockedException {
-		super.removeNotBeanPackages(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser removeNotBeanPackages(Collection<String> values) throws LockedException {
-		super.removeNotBeanPackages(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser setNotBeanClasses(Class<?>...values) throws LockedException {
-		super.setNotBeanClasses(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser setNotBeanClasses(Collection<Class<?>> values) throws LockedException {
-		super.setNotBeanClasses(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser addNotBeanClasses(Class<?>...values) throws LockedException {
-		super.addNotBeanClasses(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser addNotBeanClasses(Collection<Class<?>> values) throws LockedException {
-		super.addNotBeanClasses(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser removeNotBeanClasses(Class<?>...values) throws LockedException {
-		super.removeNotBeanClasses(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser removeNotBeanClasses(Collection<Class<?>> values) throws LockedException {
-		super.removeNotBeanClasses(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser setBeanFilters(Class<?>...values) throws LockedException {
-		super.setBeanFilters(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser setBeanFilters(Collection<Class<?>> values) throws LockedException {
-		super.setBeanFilters(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser addBeanFilters(Class<?>...values) throws LockedException {
-		super.addBeanFilters(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser addBeanFilters(Collection<Class<?>> values) throws LockedException {
-		super.addBeanFilters(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser removeBeanFilters(Class<?>...values) throws LockedException {
-		super.removeBeanFilters(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser removeBeanFilters(Collection<Class<?>> values) throws LockedException {
-		super.removeBeanFilters(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser setPojoSwaps(Class<?>...values) throws LockedException {
-		super.setPojoSwaps(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser setPojoSwaps(Collection<Class<?>> values) throws LockedException {
-		super.setPojoSwaps(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser addPojoSwaps(Class<?>...values) throws LockedException {
-		super.addPojoSwaps(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser addPojoSwaps(Collection<Class<?>> values) throws LockedException {
-		super.addPojoSwaps(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser removePojoSwaps(Class<?>...values) throws LockedException {
-		super.removePojoSwaps(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser removePojoSwaps(Collection<Class<?>> values) throws LockedException {
-		super.removePojoSwaps(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser setImplClasses(Map<Class<?>,Class<?>> values) throws LockedException {
-		super.setImplClasses(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public <T> CoreApi addImplClass(Class<T> interfaceClass, Class<? extends T> implClass) throws LockedException {
-		super.addImplClass(interfaceClass, implClass);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser setBeanDictionary(Class<?>...values) throws LockedException {
-		super.setBeanDictionary(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser setBeanDictionary(Collection<Class<?>> values) throws LockedException {
-		super.setBeanDictionary(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser addToBeanDictionary(Class<?>...values) throws LockedException {
-		super.addToBeanDictionary(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser addToBeanDictionary(Collection<Class<?>> values) throws LockedException {
-		super.addToBeanDictionary(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser removeFromBeanDictionary(Class<?>...values) throws LockedException {
-		super.removeFromBeanDictionary(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser removeFromBeanDictionary(Collection<Class<?>> values) throws LockedException {
-		super.removeFromBeanDictionary(values);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser setBeanTypePropertyName(String value) throws LockedException {
-		super.setBeanTypePropertyName(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser setDefaultParser(Class<?> value) throws LockedException {
-		super.setDefaultParser(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser setLocale(Locale value) throws LockedException {
-		super.setLocale(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser setTimeZone(TimeZone value) throws LockedException {
-		super.setTimeZone(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser setMediaType(MediaType value) throws LockedException {
-		super.setMediaType(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser setDebug(boolean value) throws LockedException {
-		super.setDebug(value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser setProperty(String name, Object value) throws LockedException {
-		super.setProperty(name, value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser setProperties(ObjectMap properties) throws LockedException {
-		super.setProperties(properties);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser addToProperty(String name, Object value) throws LockedException {
-		super.addToProperty(name, value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser putToProperty(String name, Object key, Object value) throws LockedException {
-		super.putToProperty(name, key, value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser putToProperty(String name, Object value) throws LockedException {
-		super.putToProperty(name, value);
-		return this;
-	}
-
-	@Override /* CoreApi */
-	public Parser removeFromProperty(String name, Object value) throws LockedException {
-		super.removeFromProperty(name, value);
-		return this;
-	}
-
-
-	//--------------------------------------------------------------------------------
-	// Overridden methods
-	//--------------------------------------------------------------------------------
-
-	@Override /* CoreApi */
-	public Parser setClassLoader(ClassLoader classLoader) throws LockedException {
-		super.setClassLoader(classLoader);
-		return this;
-	}
-
-	@Override /* Lockable */
-	public Parser lock() {
-		super.lock();
-		return this;
-	}
-
-	@Override /* Lockable */
-	public Parser clone() throws CloneNotSupportedException {
-		Parser c = (Parser)super.clone();
-		return c;
 	}
 }

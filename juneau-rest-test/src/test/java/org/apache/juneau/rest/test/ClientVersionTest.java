@@ -14,7 +14,6 @@ package org.apache.juneau.rest.test;
 
 import static org.junit.Assert.*;
 
-import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.*;
 
@@ -27,32 +26,26 @@ public class ClientVersionTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testDefaultHeader() throws Exception {
-		RestClient c = new TestRestClient(PlainTextSerializer.class, PlainTextParser.class);
+		RestClient client = TestMicroservice.DEFAULT_CLIENT_PLAINTEXT;
 		String url = URL + "/defaultHeader";
 
-		assertEquals("no-version", c.doGet(url).getResponseAsString());
+		assertEquals("no-version", client.doGet(url).getResponseAsString());
 
 //		for (String s : "0, 0.0, 0.1, .1, .9, .99".split("\\s*,\\s*")) {
-//			c.setClientVersion(s);
-//			assertEquals(s, "[0.0,1.0)", c.doGet(url).getResponseAsString());
+//			assertEquals(s, "[0.0,1.0)", client.doGet(url).clientVersion(s).getResponseAsString());
 //		}
 
 		for (String s : "1, 1.0, 1.0.0, 1.0.1".split("\\s*,\\s*")) {
-			c.setClientVersion(s);
-			assertEquals(s, "[1.0,1.0]", c.doGet(url).getResponseAsString());
+			assertEquals(s, "[1.0,1.0]", client.doGet(url).clientVersion(s).getResponseAsString());
 		}
 
 		for (String s : "1.1, 1.1.1, 1.2, 1.9.9".split("\\s*,\\s*")) {
-			c.setClientVersion(s);
-			assertEquals(s, "[1.1,2)", c.doGet(url).getResponseAsString());
+			assertEquals(s, "[1.1,2)", client.doGet(url).clientVersion(s).getResponseAsString());
 		}
 
 		for (String s : "2, 2.0, 2.1, 9, 9.9".split("\\s*,\\s*")) {
-			c.setClientVersion(s);
-			assertEquals(s, "2", c.doGet(url).getResponseAsString());
+			assertEquals(s, "2", client.doGet(url).clientVersion(s).getResponseAsString());
 		}
-
-		c.closeQuietly();
 	}
 
 	//====================================================================================================
@@ -60,31 +53,25 @@ public class ClientVersionTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testCustomHeader() throws Exception {
-		RestClient c = new TestRestClient(PlainTextSerializer.class, PlainTextParser.class);
+		RestClient client = TestMicroservice.DEFAULT_CLIENT_PLAINTEXT;
 		String url = URL + "/customHeader";
 
-		assertEquals("no-version", c.doGet(url).getResponseAsString());
+		assertEquals("no-version", client.doGet(url).getResponseAsString());
 
 		for (String s : "0, 0.0, 0.1, .1, .9, .99".split("\\s*,\\s*")) {
-			c.setHeader("Custom-Client-Version", s);
-			assertEquals("[0.0,1.0)", c.doGet(url).getResponseAsString());
+			assertEquals("[0.0,1.0)", client.doGet(url).header("Custom-Client-Version", s).getResponseAsString());
 		}
 
 		for (String s : "1, 1.0, 1.0.0, 1.0.1".split("\\s*,\\s*")) {
-			c.setHeader("Custom-Client-Version", s);
-			assertEquals("[1.0,1.0]", c.doGet(url).getResponseAsString());
+			assertEquals("[1.0,1.0]", client.doGet(url).header("Custom-Client-Version", s).getResponseAsString());
 		}
 
 		for (String s : "1.1, 1.1.1, 1.2, 1.9.9".split("\\s*,\\s*")) {
-			c.setHeader("Custom-Client-Version", s);
-			assertEquals("[1.1,2)", c.doGet(url).getResponseAsString());
+			assertEquals("[1.1,2)", client.doGet(url).header("Custom-Client-Version", s).getResponseAsString());
 		}
 
 		for (String s : "2, 2.0, 2.1, 9, 9.9".split("\\s*,\\s*")) {
-			c.setHeader("Custom-Client-Version", s);
-			assertEquals("2", c.doGet(url).getResponseAsString());
+			assertEquals("2", client.doGet(url).header("Custom-Client-Version", s).getResponseAsString());
 		}
-
-		c.closeQuietly();
 	}
 }

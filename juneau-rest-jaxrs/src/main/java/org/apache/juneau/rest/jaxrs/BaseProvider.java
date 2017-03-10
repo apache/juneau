@@ -35,8 +35,8 @@ import org.apache.juneau.serializer.*;
  */
 public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWriter<Object> {
 
-	private SerializerGroup serializers = new SerializerGroup();
-	private ParserGroup parsers = new ParserGroup();
+	private SerializerGroup serializers;
+	private ParserGroup parsers;
 	private ObjectMap properties = new ObjectMap();
 
 	/**
@@ -46,14 +46,24 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 		try {
 			properties = new ObjectMap();
 			JuneauProvider jp = getClass().getAnnotation(JuneauProvider.class);
-			serializers.append(jp.serializers());
-			parsers.append(jp.parsers());
+			
 			for (Property p : jp.properties())
 				properties.put(p.name(), p.value());
-			serializers.addBeanFilters(jp.beanFilters());
-			parsers.addBeanFilters(jp.beanFilters());
-			serializers.addPojoSwaps(jp.pojoSwaps());
-			parsers.addPojoSwaps(jp.pojoSwaps());
+
+			serializers = new SerializerGroupBuilder()
+				.append(jp.serializers())
+				.beanFilters(jp.beanFilters())
+				.pojoSwaps(jp.pojoSwaps())
+				.properties(properties)
+				.build();
+
+			parsers = new ParserGroupBuilder() 
+				.append(jp.parsers())
+				.beanFilters(jp.beanFilters())
+				.pojoSwaps(jp.pojoSwaps())
+				.properties(properties)
+				.build();
+					
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

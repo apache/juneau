@@ -72,12 +72,13 @@ public class CognosXmlTest {
 			new Column("productLineCode", "xs:int")
 		};
 
-		XmlSerializer s = new XmlSerializer()
-			.setUseWhitespace(true)
-			.setQuoteChar('\'')
-			.setDefaultNamespace("cognos")
-			.setEnableNamespaces(true)
-			.setAddNamespaceUrisToRoot(true);
+		XmlSerializer s = new XmlSerializerBuilder()
+			.ws()
+			.sq()
+			.defaultNamespace("cognos")
+			.ns()
+			.addNamespaceUrisToRoot(true)
+			.build();
 
 		DataSet ds = new DataSet(c, rows, BeanContext.DEFAULT.createSession());
 

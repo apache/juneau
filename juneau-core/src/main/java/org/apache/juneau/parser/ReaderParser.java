@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.parser;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 
 /**
@@ -32,6 +33,14 @@ import org.apache.juneau.annotation.*;
  * However, the media types can also be specified programmatically by overriding the {@link #getMediaTypes()} method.
  */
 public abstract class ReaderParser extends Parser {
+
+	/**
+	 * Constructor.
+	 * @param propertyStore The property store containing all the settings for this object.
+	 */
+	protected ReaderParser(PropertyStore propertyStore) {
+		super(propertyStore);
+	}
 
 	@Override /* Parser */
 	public boolean isReaderParser() {

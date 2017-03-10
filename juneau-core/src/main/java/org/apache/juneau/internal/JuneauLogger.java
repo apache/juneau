@@ -28,13 +28,15 @@ import org.apache.juneau.transforms.*;
  */
 public class JuneauLogger extends java.util.logging.Logger {
 
-	private static final WriterSerializer serializer = JsonSerializer.DEFAULT_LAX.clone()
-		.addPojoSwaps(
+	private static final WriterSerializer serializer = new JsonSerializerBuilder()
+		.pojoSwaps(
 			CalendarSwap.ISO8601DTZ.class,
 			DateSwap.ISO8601DTZ.class,
 			EnumerationSwap.class,
 			IteratorSwap.class
-		);
+		)
+		.simple()
+		.build();
 
 	private static final ConcurrentHashMap<Class<?>,String> rbMap = new ConcurrentHashMap<Class<?>,String>();
 
@@ -120,7 +122,7 @@ public class JuneauLogger extends java.util.logging.Logger {
 
 	/**
 	 * Logs a message with the specified {@link MessageFormat}-style arguments at {@link Level#INFO} level.
-	 * 
+	 *
 	 * @param msg The message to log.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
@@ -131,7 +133,7 @@ public class JuneauLogger extends java.util.logging.Logger {
 
 	/**
 	 * Logs a message with the specified {@link MessageFormat}-style arguments at {@link Level#CONFIG} level.
-	 * 
+	 *
 	 * @param msg The message to log.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
@@ -142,7 +144,7 @@ public class JuneauLogger extends java.util.logging.Logger {
 
 	/**
 	 * Logs a message with the specified {@link MessageFormat}-style arguments at {@link Level#FINE} level.
-	 * 
+	 *
 	 * @param msg The message to log.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
@@ -153,7 +155,7 @@ public class JuneauLogger extends java.util.logging.Logger {
 
 	/**
 	 * Logs a message with the specified {@link MessageFormat}-style arguments at {@link Level#FINER} level.
-	 * 
+	 *
 	 * @param msg The message to log.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
@@ -164,7 +166,7 @@ public class JuneauLogger extends java.util.logging.Logger {
 
 	/**
 	 * Logs a message with the specified {@link MessageFormat}-style arguments at {@link Level#FINEST} level.
-	 * 
+	 *
 	 * @param msg The message to log.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */

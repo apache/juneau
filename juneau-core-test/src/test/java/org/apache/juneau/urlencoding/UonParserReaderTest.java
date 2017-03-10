@@ -17,6 +17,7 @@ import static org.junit.Assert.*;
 import java.io.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.uon.*;
 import org.junit.*;
 
 @SuppressWarnings({"javadoc","resource"})

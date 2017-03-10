@@ -12,13 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.svl;
 
-import static java.text.MessageFormat.*;
-import static org.apache.juneau.svl.VarResolverContext.*;
 
 import java.io.*;
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.ini.*;
 import org.apache.juneau.svl.vars.*;
 
@@ -28,7 +25,7 @@ import org.apache.juneau.svl.vars.*;
  * Variables are of the form <code>$X{key}</code>, where <code>X</code> can consist of zero or more ASCII characters.<br>
  * 	The variable key can contain anything, even nested variables that get recursively resolved.
  * <p>
- * Variables are defined through the {@link #addVars(Class[])} method.
+ * Variables are defined through the {@link VarResolverBuilder#vars(Class[])} method.
  * <p>
  * The {@link Var} interface defines how variables are converted to values.
  * <p>
@@ -60,7 +57,6 @@ import org.apache.juneau.svl.vars.*;
  * <p>
  * Context objects are arbitrary objects associated with this var resolver, such as
  * 	a {@link ConfigFile} object.
- * They are set through the {@link #setContextObject(String, Object)} method.
  * They can be any class type.
  * <p>
  * Context objects can be retrieved by {@link Var} classes through the {@link VarResolverSession#getSessionObject(Class, String)} method.
@@ -78,22 +74,22 @@ import org.apache.juneau.svl.vars.*;
  * 	that are identical to {@link VarResolver#resolve(String)} and {@link VarResolver#resolveTo(String, Writer)} except that the <code>Var</code> objects
  * 	have access to the session objects through the {@link VarResolverSession#getSessionObject(Class, String)} method.
  * <p>
- * Session objects are specified through either the {@link #createSession(Map)} method or the {@link VarResolverSession#setSessionObject(String, Object)} methods.
+ * Session objects are specified through either the {@link #createSession(Map)} method or the {@link VarResolverSession#sessionObject(String, Object)} methods.
  *
  * <h6 class='topic'>Cloning</h6>
  * <p>
- * Var resolvers can be cloned by using the {@link #clone()} method.
+ * Var resolvers can be cloned by using the {@link #builder()} method.
  * Cloning a resolver will copy it's {@link Var} class names and context objects.
  * <p>
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Create a resolver that copies the default resolver and adds $C and $ARG vars.</jc>
- * 	VarResolver myVarResolver = VarResolver.<jsf>DEFAULT</jsf>.clone().addVars(ConfigVar.<jk>class</jk>, ArgsVar.<jk>class</jk>);
+ * 	VarResolver myVarResolver = VarResolver.<jsf>DEFAULT</jsf>.builder().vars(ConfigVar.<jk>class</jk>, ArgsVar.<jk>class</jk>).build();
  * </p>
  *
  * @see org.apache.juneau.svl
  */
-public class VarResolver extends CoreApi {
+public class VarResolver {
 
 	/**
 	 * Default string variable resolver with support for system properties and environment variables:
@@ -108,59 +104,47 @@ public class VarResolver extends CoreApi {
 	 * @see SystemPropertiesVar
 	 * @see EnvVariablesVar
 	 */
-	public static final VarResolver DEFAULT = new VarResolver().addVars(SystemPropertiesVar.class, EnvVariablesVar.class, SwitchVar.class, IfVar.class).lock();
+	public static final VarResolver DEFAULT = new VarResolverBuilder().defaultVars().build();
+
+	final VarResolverContext ctx;
 
 	/**
-	 * Construct an empty var resolver with no vars.
+	 * Constructor.
+	 * @param vars The var classes
+	 * @param contextObjects
 	 */
-	public VarResolver() {}
-
-	/**
-	 * Register new variables with this resolver.
-	 *
-	 * @param vars The variable resolver classes.
-	 * These classes must subclass from {@link Var} and have no-arg constructors.
-	 * @return This object (for method chaining).
-	 */
-	public VarResolver addVars(Class<?>...vars) {
-		checkLock();
-		ContextFactory cf = getContextFactory();
-		for (Class<?> v : vars) {
-			try {
-				v.newInstance();
-			} catch (InstantiationException e) {
-				throw new UnsupportedOperationException(format("Cannot instantiate variable class {0}.  Must have a public no-arg constructor.", v.getName()));
-			} catch (RuntimeException e) {
-				throw e;
-			} catch (Exception e) {
-				throw new RuntimeException(e);
-			}
-			cf.addToProperty(SVL_vars, v);
-		}
-		return this;
+	public VarResolver(Class<? extends Var>[] vars, Map<String,Object> contextObjects) {
+		this.ctx = new VarResolverContext(vars, contextObjects);
 	}
 
 	/**
-	 * Associates a context object with this resolver.
+	 * Returns a new builder object using the settings in this resolver as a base.
 	 *
-	 * @param name The name of the context object.
-	 * @param object The context object.
-	 * @return This object (for method chaining).
+	 * @return A new var resolver builder.
 	 */
-	public VarResolver setContextObject(String name, Object object) {
-		getContextFactory().putToProperty(SVL_context, name, object);
-		return this;
+	public VarResolverBuilder builder() {
+		return new VarResolverBuilder()
+			.vars(ctx.getVars())
+			.contextObjects(ctx.getContextObjects());
+	}
+
+	/**
+	 * Returns the read-only properties on this variable resolver.
+	 * @return The read-only properties on this variable resolver.
+	 */
+	public VarResolverContext getContext() {
+		return ctx;
 	}
 
 	/**
 	 * Creates a new resolver session with no session objects.
 	 * <p>
-	 * Session objects can be associated with the specified session using the {@link VarResolverSession#setSessionObject(String, Object)} method.
+	 * Session objects can be associated with the specified session using the {@link VarResolverSession#sessionObject(String, Object)} method.
 	 *
 	 * @return A new resolver session.
 	 */
 	public VarResolverSession createSession() {
-		return new VarResolverSession(getContext(VarResolverContext.class), null);
+		return new VarResolverSession(ctx, null);
 	}
 
 	/**
@@ -170,7 +154,7 @@ public class VarResolver extends CoreApi {
 	 * @return A new resolver session.
 	 */
 	public VarResolverSession createSession(Map<String,Object> sessionObjects) {
-		return new VarResolverSession(getContext(VarResolverContext.class), sessionObjects);
+		return new VarResolverSession(ctx, sessionObjects);
 	}
 
 	/**
@@ -199,25 +183,4 @@ public class VarResolver extends CoreApi {
 	public void resolveTo(String s, Writer w) throws IOException {
 		createSession(null).resolveTo(s, w);
 	}
-
-
-	//--------------------------------------------------------------------------------
-	// Overridden methods
-	//--------------------------------------------------------------------------------
-
-	@Override /* Lockable */
-	public VarResolver lock() {
-		super.lock();
-		return this;
-	}
-
-	@Override /* Lockable */
-	public VarResolver clone() {
-		try {
-			return (VarResolver)super.clone();
-		} catch (CloneNotSupportedException e) {
-			throw new RuntimeException(e);
-		}
-	}
 }
-

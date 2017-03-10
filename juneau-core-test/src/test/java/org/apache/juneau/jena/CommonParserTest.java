@@ -18,7 +18,7 @@ import static org.junit.Assert.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.Bean;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;
@@ -40,14 +40,14 @@ public class CommonParserTest {
 		return s.replaceFirst("<rdf:RDF[^>]+>\\s*", "").replaceAll("</rdf:RDF>$", "").trim().replaceAll("[\\r\\n]", "");
 	}
 
-	private RdfSerializer getBasicSerializer() {
-		return new RdfSerializer()
-			.setQuoteChar('\'')
-			.setAddLiteralTypes(true)
-			.setUseWhitespace(false)
-			.setProperty(RDF_rdfxml_allowBadUris, true)
-			.setProperty(RDF_rdfxml_showDoctypeDeclaration, false)
-			.setProperty(RDF_rdfxml_showXmlDeclaration, false);
+	private RdfSerializerBuilder getBasicSerializer() {
+		return new RdfSerializerBuilder()
+			.sq()
+			.addLiteralTypes(true)
+			.useWhitespace(false)
+			.property(RDF_rdfxml_allowBadUris, true)
+			.property(RDF_rdfxml_showDoctypeDeclaration, false)
+			.property(RDF_rdfxml_showXmlDeclaration, false);
 	}
 
 	//====================================================================================================
@@ -55,8 +55,8 @@ public class CommonParserTest {
 	//====================================================================================================
 	@Test
 	public void testFromSerializer() throws Exception {
-		WriterSerializer s = getBasicSerializer();
-		ReaderParser p = new RdfParser.Xml().setTrimWhitespace(true);
+		WriterSerializer s = getBasicSerializer().build();
+		ReaderParser p = new RdfParserBuilder().xml().trimWhitespace(true).build();
 		Map m = null;
 		String in;
 		Integer one = Integer.valueOf(1);
@@ -109,7 +109,7 @@ public class CommonParserTest {
 		t2.add(new A3("name1","value1"));
 		t1.list = t2;
 
-		s.setAddBeanTypeProperties(true);
+		s = getBasicSerializer().addBeanTypeProperties(true).build();
 		in = strip(s.serialize(t1));
 		assertEquals("<rdf:Description><jp:_type>A1</jp:_type><jp:list><rdf:Seq><rdf:li rdf:parseType='Resource'><jp:name>name0</jp:name><jp:value>value0</jp:value></rdf:li><rdf:li rdf:parseType='Resource'><jp:name>name1</jp:name><jp:value>value1</jp:value></rdf:li></rdf:Seq></jp:list></rdf:Description>", in);
 		in = wrap(in);
@@ -139,7 +139,7 @@ public class CommonParserTest {
 	//====================================================================================================
 	@Test
 	public void testCorrectHandlingOfUnknownProperties() throws Exception {
-		ReaderParser p = new RdfParser.Xml().setIgnoreUnknownBeanProperties(true);
+		ReaderParser p = new RdfParserBuilder().xml().ignoreUnknownBeanProperties(true).build();
 		B t;
 
 		String in = wrap("<rdf:Description><jp:a rdf:datatype='http://www.w3.org/2001/XMLSchema#int'>1</jp:a><jp:unknownProperty>foo</jp:unknownProperty><jp:b rdf:datatype='http://www.w3.org/2001/XMLSchema#int'>2</jp:b></rdf:Description>");
@@ -148,7 +148,7 @@ public class CommonParserTest {
 		assertEquals(t.b, 2);
 
 		try {
-			p = new RdfParser.Xml();
+			p = new RdfParserBuilder().xml().build();
 			p.parse(in, B.class);
 			fail("Exception expected");
 		} catch (ParseException e) {}
@@ -163,7 +163,7 @@ public class CommonParserTest {
 	//====================================================================================================
 	@Test
 	public void testCollectionPropertiesWithNoSetters() throws Exception {
-		RdfParser p = new RdfParser.Xml();
+		RdfParser p = new RdfParserBuilder().xml().build();
 		String in = wrap("<rdf:Description><jp:ints><rdf:Seq><rdf:li>1</rdf:li><rdf:li>2</rdf:li></rdf:Seq></jp:ints><jp:beans><rdf:Seq><rdf:li rdf:parseType='Resource'><jp:a>1</jp:a><jp:b>2</jp:b></rdf:li></rdf:Seq></jp:beans></rdf:Description>");
 		C t = p.parse(in, C.class);
 		assertEquals(t.getInts().size(), 2);
@@ -187,7 +187,7 @@ public class CommonParserTest {
 	@Test
 	public void testParserListeners() throws Exception {
 		final List<String> events = new LinkedList<String>();
-		RdfParser p = new RdfParser.Xml().setIgnoreUnknownBeanProperties(true);
+		RdfParser p = new RdfParserBuilder().xml().ignoreUnknownBeanProperties(true).build();
 		p.addListener(
 			new ParserListener() {
 				@Override /* ParserListener */

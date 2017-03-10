@@ -231,18 +231,18 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	/**
 	 * Constructor.
 	 * <p>
-	 * Typically only called from {@link ContextFactory#getContext(Class)}.
+	 * Typically only called from {@link PropertyStore#getContext(Class)}.
 	 *
-	 * @param cf The factory that created this context.
+	 * @param ps The property store that created this context.
 	 */
-	public HtmlDocSerializerContext(ContextFactory cf) {
-		super(cf);
-		cssImports = cf.getProperty(HTMLDOC_cssImports, String[].class, new String[0]);
-		title = cf.getProperty(HTMLDOC_title, String.class, null);
-		description = cf.getProperty(HTMLDOC_description, String.class, null);
-		cssUrl = cf.getProperty(HTMLDOC_cssUrl, String.class, null);
-		nowrap = cf.getProperty(HTMLDOC_nowrap, boolean.class, false);
-		links = cf.getMap(HTMLDOC_links, String.class, String.class, Collections.<String,String>emptyMap());
+	public HtmlDocSerializerContext(PropertyStore ps) {
+		super(ps);
+		cssImports = ps.getProperty(HTMLDOC_cssImports, String[].class, new String[0]);
+		title = ps.getProperty(HTMLDOC_title, String.class, null);
+		description = ps.getProperty(HTMLDOC_description, String.class, null);
+		cssUrl = ps.getProperty(HTMLDOC_cssUrl, String.class, null);
+		nowrap = ps.getProperty(HTMLDOC_nowrap, boolean.class, false);
+		links = ps.getMap(HTMLDOC_links, String.class, String.class, Collections.<String,String>emptyMap());
 	}
 
 	@Override /* Context */

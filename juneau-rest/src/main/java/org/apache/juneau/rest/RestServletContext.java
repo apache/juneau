@@ -30,7 +30,7 @@ import org.apache.juneau.serializer.*;
  * Some of these properties are only applicable on the servlet class, and others can be specified on the servlet class or method.<br>
  * These distinctions are noted below.
  * <p>
- * See {@link ContextFactory} for more information about context properties.
+ * See {@link PropertyStore} for more information about context properties.
  */
 public final class RestServletContext extends Context {
 
@@ -282,21 +282,21 @@ public final class RestServletContext extends Context {
 	/**
 	 * Constructor.
 	 * <p>
-	 * Typically only called from {@link ContextFactory#getContext(Class)}.
+	 * Typically only called from {@link PropertyStore#getContext(Class)}.
 	 *
-	 * @param cf The factory that created this context.
+	 * @param ps The property store that created this context.
 	 */
-	public RestServletContext(ContextFactory cf) {
-		super(cf);
-		allowHeaderParams = cf.getProperty(REST_allowHeaderParams, boolean.class, true);
-		allowBodyParam = cf.getProperty(REST_allowBodyParam, boolean.class, true);
-		renderResponseStackTraces = cf.getProperty(REST_renderResponseStackTraces, boolean.class, false);
-		useStackTraceHashes = cf.getProperty(REST_useStackTraceHashes, boolean.class, true);
-		defaultCharset = cf.getProperty(REST_defaultCharset, String.class, "utf-8");
-		paramFormat = cf.getProperty(REST_paramFormat, String.class, "");
+	public RestServletContext(PropertyStore ps) {
+		super(ps);
+		allowHeaderParams = ps.getProperty(REST_allowHeaderParams, boolean.class, true);
+		allowBodyParam = ps.getProperty(REST_allowBodyParam, boolean.class, true);
+		renderResponseStackTraces = ps.getProperty(REST_renderResponseStackTraces, boolean.class, false);
+		useStackTraceHashes = ps.getProperty(REST_useStackTraceHashes, boolean.class, true);
+		defaultCharset = ps.getProperty(REST_defaultCharset, String.class, "utf-8");
+		paramFormat = ps.getProperty(REST_paramFormat, String.class, "");
 
 		Set<String> s = new LinkedHashSet<String>();
-		for (String m : StringUtils.split(cf.getProperty(REST_allowMethodParam, String.class, ""), ','))
+		for (String m : StringUtils.split(ps.getProperty(REST_allowMethodParam, String.class, ""), ','))
 			if (m.equals("true"))  // For backwards compatibility when this was a boolean field.
 				s.add("*");
 			else

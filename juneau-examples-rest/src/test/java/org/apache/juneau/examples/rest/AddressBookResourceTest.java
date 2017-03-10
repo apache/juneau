@@ -13,8 +13,8 @@
 package org.apache.juneau.examples.rest;
 
 import static org.apache.juneau.examples.rest.TestUtils.*;
-import static org.junit.Assert.*;
 import static org.apache.juneau.xml.XmlSerializerContext.*;
+import static org.junit.Assert.*;
 
 import java.util.*;
 
@@ -37,16 +37,31 @@ public class AddressBookResourceTest extends RestTestcase {
 	@BeforeClass
 	public static void beforeClass() throws Exception {
 		clients = new RestClient[] {
-			new SamplesRestClient(JsonSerializer.class, JsonParser.class),
-			new SamplesRestClient(XmlSerializer.class, XmlParser.class),
-			new SamplesRestClient(HtmlSerializer.class, HtmlParser.class).setAccept("text/html+stripped"),
-			new SamplesRestClient(XmlSerializer.class,  HtmlParser.class).setAccept("text/html+stripped")
+			SamplesMicroservice.client()
+				.pojoSwaps(CalendarSwap.DateMedium.class)
+				.property(XML_autoDetectNamespaces, true)
+				.build(),
+			SamplesMicroservice.client()
+				.serializer(XmlSerializer.class)
+				.parser(XmlParser.class)
+				.pojoSwaps(CalendarSwap.DateMedium.class)
+				.property(XML_autoDetectNamespaces, true)
+				.build(),
+			SamplesMicroservice.client()
+				.serializer(HtmlSerializer.class)
+				.parser(HtmlParser.class)
+				.accept("text/html+stripped")
+				.pojoSwaps(CalendarSwap.DateMedium.class)
+				.property(XML_autoDetectNamespaces, true)
+				.build(),
+			SamplesMicroservice.client()
+				.serializer(XmlSerializer.class)
+				.parser(HtmlParser.class)
+				.accept("text/html+stripped")
+				.pojoSwaps(CalendarSwap.DateMedium.class)
+				.property(XML_autoDetectNamespaces, true)
+				.build(),
 		};
-		for (RestClient c : clients) {
-			c.getSerializer().addPojoSwaps(CalendarSwap.DateMedium.class);
-			c.getParser().addPojoSwaps(CalendarSwap.DateMedium.class);
-			c.getSerializer().setProperty(XML_autoDetectNamespaces, true);
-		}
 	}
 
 	@AfterClass
@@ -56,6 +71,7 @@ public class AddressBookResourceTest extends RestTestcase {
 		}
 	}
 
+	
 	//====================================================================================================
 	// Get AddressBookResource as JSON
 	//====================================================================================================
@@ -76,7 +92,7 @@ public class AddressBookResourceTest extends RestTestcase {
 		+"\n		}"
 		+"\n	]"
 		+"\n}";			
-		JsonParser p = new JsonParser().addPojoSwaps(CalendarSwap.DateMedium.class);
+		JsonParser p = new JsonParserBuilder().pojoSwaps(CalendarSwap.DateMedium.class).build();
 		Person person = p.parse(in, Person.class);
 		if (debug) System.err.println(person);
 	}
