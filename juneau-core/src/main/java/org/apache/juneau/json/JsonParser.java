@@ -244,7 +244,7 @@ public class JsonParser extends ReaderParser {
 		return parseNumber(session, StringUtils.parseNumberString(r), type);
 	}
 
-	private Number parseNumber(JsonParserSession session, String s, Class<? extends Number> type) throws Exception {
+	private static Number parseNumber(JsonParserSession session, String s, Class<? extends Number> type) throws Exception {
 
 		// JSON has slightly different number rules from Java.
 		// Strict mode enforces these different rules, lax does not.
@@ -663,7 +663,7 @@ public class JsonParser extends ReaderParser {
 	 * Looks for the keywords true, false, or null.
 	 * Throws an exception if any of these keywords are not found at the specified position.
 	 */
-	private void parseKeyword(JsonParserSession session, String keyword, ParserReader r) throws Exception {
+	private static void parseKeyword(JsonParserSession session, String keyword, ParserReader r) throws Exception {
 		try {
 			String s = r.read(keyword.length());
 			if (s.equals(keyword))
@@ -680,7 +680,7 @@ public class JsonParser extends ReaderParser {
 	 * the comments and whitespace.  Otherwise, the cursor will be set to the last position of
 	 * the comments and whitespace.
 	 */
-	private void skipCommentsAndSpace(JsonParserSession session, ParserReader r) throws Exception {
+	private static void skipCommentsAndSpace(JsonParserSession session, ParserReader r) throws Exception {
 		int c = 0;
 		while ((c = r.read()) != -1) {
 			if (! session.isWhitespace(c)) {
@@ -750,7 +750,7 @@ public class JsonParser extends ReaderParser {
 	 * Doesn't actually parse anything, but moves the position beyond the construct "}" when
 	 * the @Json.wrapperAttr() annotation is used on a class.
 	 */
-	private void skipWrapperAttrEnd(JsonParserSession session, ParserReader r) throws ParseException, IOException {
+	private static void skipWrapperAttrEnd(JsonParserSession session, ParserReader r) throws ParseException, IOException {
 		int c = 0;
 		while ((c = r.read()) != -1) {
 			if (! session.isWhitespace(c)) {
@@ -771,7 +771,7 @@ public class JsonParser extends ReaderParser {
 	 * Doesn't actually parse anything, but when positioned at the beginning of comment,
 	 * it will move the pointer to the last character in the comment.
 	 */
-	private void skipComments(JsonParserSession session, ParserReader r) throws ParseException, IOException {
+	private static void skipComments(JsonParserSession session, ParserReader r) throws ParseException, IOException {
 		int c = r.read();
 		//  "/* */" style comments
 		if (c == '*') {
@@ -794,7 +794,7 @@ public class JsonParser extends ReaderParser {
 	 * Call this method after you've finished a parsing a string to make sure that if there's any
 	 * remainder in the input, that it consists only of whitespace and comments.
 	 */
-	private void validateEnd(JsonParserSession session, ParserReader r) throws Exception {
+	private static void validateEnd(JsonParserSession session, ParserReader r) throws Exception {
 		skipCommentsAndSpace(session, r);
 		int c = r.read();
 		if (c != -1 && c != ';')  // var x = {...}; expressions can end with a semicolon.

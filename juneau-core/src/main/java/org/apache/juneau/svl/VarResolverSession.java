@@ -107,7 +107,7 @@ public class VarResolverSession {
 	 * Checks to see if string is of the simple form "$X{...}" with no embedded variables.
 	 * This is a common case, and we can avoid using StringWriters.
 	 */
-	private boolean isSimpleVar(String s) {
+	private static boolean isSimpleVar(String s) {
 		int S1 = 1;	   // Not in variable, looking for $
 		int S2 = 2;    // Found $, Looking for {
 		int S3 = 3;    // Found {, Looking for }

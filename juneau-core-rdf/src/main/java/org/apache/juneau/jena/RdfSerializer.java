@@ -321,7 +321,7 @@ public class RdfSerializer extends WriterSerializer {
 		return n;
 	}
 
-	private String getUri(RdfSerializerSession session, Object uri, Object uri2) {
+	private static String getUri(RdfSerializerSession session, Object uri, Object uri2) {
 		String s = null;
 		if (uri != null)
 			s = uri.toString();

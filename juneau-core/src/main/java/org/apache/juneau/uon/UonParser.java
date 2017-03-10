@@ -492,7 +492,7 @@ public class UonParser extends ReaderParser {
 		return null; // Unreachable.
 	}
 
-	private Object parseNull(UonParserSession session, ParserReader r) throws Exception {
+	private static Object parseNull(UonParserSession session, ParserReader r) throws Exception {
 		String s = parseString(session, r, false);
 		if ("ull".equals(s))
 			return null;
@@ -508,7 +508,7 @@ public class UonParser extends ReaderParser {
 	 * @return The parsed object
 	 * @throws Exception
 	 */
-	protected final Object parseAttr(UonParserSession session, ParserReader r, boolean encoded) throws Exception {
+	protected static final Object parseAttr(UonParserSession session, ParserReader r, boolean encoded) throws Exception {
 		Object attr;
 		attr = parseAttrName(session, r, encoded);
 		return attr;
@@ -523,7 +523,7 @@ public class UonParser extends ReaderParser {
 	 * @return The parsed attribute name.
 	 * @throws Exception
 	 */
-	protected final String parseAttrName(UonParserSession session, ParserReader r, boolean encoded) throws Exception {
+	protected static String parseAttrName(UonParserSession session, ParserReader r, boolean encoded) throws Exception {
 
 		// If string is of form 'xxx', we're looking for ' at the end.
 		// Otherwise, we're looking for '&' or '=' or WS or -1 denoting the end of this string.
@@ -597,7 +597,7 @@ public class UonParser extends ReaderParser {
 	 * @return The parsed string.
 	 * @throws Exception
 	 */
-	protected final String parseString(UonParserSession session, ParserReader r, boolean isUrlParamValue) throws Exception {
+	protected static String parseString(UonParserSession session, ParserReader r, boolean isUrlParamValue) throws Exception {
 
 		// If string is of form 'xxx', we're looking for ' at the end.
 		// Otherwise, we're looking for ',' or ')' or -1 denoting the end of this string.
@@ -665,7 +665,7 @@ public class UonParser extends ReaderParser {
 		throw new ParseException(session, "Unmatched parenthesis");
 	}
 
-	private Boolean parseBoolean(UonParserSession session, ParserReader r) throws Exception {
+	private static Boolean parseBoolean(UonParserSession session, ParserReader r) throws Exception {
 		String s = parseString(session, r, false);
 		if (s == null || s.equals("null"))
 			return null;
@@ -676,7 +676,7 @@ public class UonParser extends ReaderParser {
 		throw new ParseException(session, "Unrecognized syntax for boolean.  ''{0}''.", s);
 	}
 
-	private Number parseNumber(UonParserSession session, ParserReader r, Class<? extends Number> c) throws Exception {
+	private static Number parseNumber(UonParserSession session, ParserReader r, Class<? extends Number> c) throws Exception {
 		String s = parseString(session, r, false);
 		if (s == null)
 			return null;
@@ -687,7 +687,7 @@ public class UonParser extends ReaderParser {
 	 * Call this method after you've finished a parsing a string to make sure that if there's any
 	 * remainder in the input, that it consists only of whitespace and comments.
 	 */
-	private void validateEnd(UonParserSession session, ParserReader r) throws Exception {
+	private static void validateEnd(UonParserSession session, ParserReader r) throws Exception {
 		while (true) {
 			int c = r.read();
 			if (c == -1)

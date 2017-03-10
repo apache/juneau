@@ -455,7 +455,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 		return put(getSectionName(key), getSectionKey(key), getSerializer().toString(value), encoded);
 	}
 
-	private final boolean isSimpleType(Class<?> c) {
+	private static boolean isSimpleType(Class<?> c) {
 		return (c == String.class || c.isPrimitive() || c.isAssignableFrom(Number.class) || c == Boolean.class);
 	}
 
@@ -745,7 +745,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 	}
 
 
-	private int parseIntWithSuffix(String s) {
+	private static int parseIntWithSuffix(String s) {
 		assertFieldNotNull(s, "s");
 		int m = 1;
 		if (s.endsWith("M")) {

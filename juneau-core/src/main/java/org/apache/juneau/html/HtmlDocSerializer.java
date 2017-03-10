@@ -167,7 +167,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		w.eTag("body").nl().eTag("html").nl();
 	}
 
-	private boolean isEmptyList(Object o) {
+	private static boolean isEmptyList(Object o) {
 		if (o == null)
 			return false;
 		if (o instanceof Collection && ((Collection<?>)o).size() == 0)

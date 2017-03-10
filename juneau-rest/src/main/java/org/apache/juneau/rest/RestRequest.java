@@ -1927,7 +1927,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	/*
 	 * Converts an Accept-Language value entry to a Locale.
 	 */
-	private Locale toLocale(String lang) {
+	private static Locale toLocale(String lang) {
       String country = "";
       int i = lang.indexOf('-');
       if (i > -1) {

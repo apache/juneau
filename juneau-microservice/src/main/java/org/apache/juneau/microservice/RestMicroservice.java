@@ -394,7 +394,7 @@ public class RestMicroservice extends Microservice {
 		return server;
 	}
 	
-	private int findOpenPort(int[] ports) {
+	private static int findOpenPort(int[] ports) {
 		for (int port : ports) {
 			try {
 				// If port is 0, try a random port between ports[0] and 32767.

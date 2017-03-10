@@ -560,7 +560,7 @@ public class HtmlSerializer extends XmlSerializer {
 	 * 2-dimensional tables are used for collections of objects that all have the same set of property names.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private String[] getTableHeaders(SerializerSession session, Collection c, HtmlBeanPropertyMeta hbpMeta) throws Exception {
+	private static String[] getTableHeaders(SerializerSession session, Collection c, HtmlBeanPropertyMeta hbpMeta) throws Exception {
 		if (c.size() == 0)
 			return null;
 		c = session.sort(c);

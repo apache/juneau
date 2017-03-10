@@ -224,7 +224,7 @@ public abstract class Serializer extends CoreObject {
 	 * @param array The array being converted.
 	 * @return The array as a list.
 	 */
-	protected final List<Object> toList(Class<?> type, Object array) {
+	protected static final List<Object> toList(Class<?> type, Object array) {
 		Class<?> componentType = type.getComponentType();
 		if (componentType.isPrimitive()) {
 			int l = Array.getLength(array);

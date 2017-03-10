@@ -95,7 +95,7 @@ public class XmlClassMeta extends ClassMetaExtended {
 		return namespace;
 	}
 
-	private Namespace findNamespace(Class<?> c) {
+	private static Namespace findNamespace(Class<?> c) {
 		if (c == null)
 			return null;
 

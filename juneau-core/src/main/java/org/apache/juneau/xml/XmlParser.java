@@ -262,7 +262,7 @@ public class XmlParser extends ReaderParser {
 		return o;
 	}
 
-	private int getJsonType(String s) {
+	private static int getJsonType(String s) {
 		if (s == null)
 			return UNKNOWN;
 		char c = s.charAt(0);
@@ -422,7 +422,7 @@ public class XmlParser extends ReaderParser {
 		return m;
 	}
 
-	private void skipCurrentTag(XMLStreamReader r) throws XMLStreamException {
+	private static void skipCurrentTag(XMLStreamReader r) throws XMLStreamException {
 		int depth = 1;
 		do {
 			int event = r.next();

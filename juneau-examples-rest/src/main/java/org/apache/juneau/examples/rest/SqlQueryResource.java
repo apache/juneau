@@ -16,7 +16,6 @@ import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
 import static org.apache.juneau.html.HtmlDocSerializerContext.*;
 
-import java.io.*;
 import java.sql.*;
 import java.util.*;
 
@@ -64,7 +63,7 @@ public class SqlQueryResource extends Resource {
 
 	/** GET request handler - Display the query entry page. */
 	@RestMethod(name="GET", path="/")
-	public Div doGet(RestRequest req) throws IOException {
+	public Div doGet(RestRequest req) {
 		return div(
 			script("text/javascript",
 				 "\n	// Quick and dirty function to allow tabs in textarea."

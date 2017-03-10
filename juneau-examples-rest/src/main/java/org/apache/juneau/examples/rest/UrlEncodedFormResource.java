@@ -15,7 +15,6 @@ package org.apache.juneau.examples.rest;
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
 import static org.apache.juneau.html.HtmlDocSerializerContext.*;
 
-import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
@@ -43,7 +42,7 @@ public class UrlEncodedFormResource extends Resource {
 
 	/** GET request handler */
 	@RestMethod(name="GET", path="/")
-	public Div doGet(RestRequest req) throws IOException {
+	public Div doGet(RestRequest req) {
 		return div(
 			script("text/javascript",
 				"\n	// Load results from IFrame into this document."

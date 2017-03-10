@@ -570,7 +570,7 @@ public final class PojoRest {
 	}
 
 	/** Handle nulls and strip off leading '/' char. */
-	private String normalizeUrl(String url) {
+	private static String normalizeUrl(String url) {
 
 		// Interpret nulls and blanks the same (i.e. as addressing the root itself)
 		if (url == null)
@@ -744,7 +744,7 @@ public final class PojoRest {
 		return a2;
 	}
 
-	private Object[] removeArrayEntry(Object o, int index) {
+	private static Object[] removeArrayEntry(Object o, int index) {
 		Object[] a = (Object[])o;
 		// Shrink the array.
 		Object[] a2 = (Object[])Array.newInstance(a.getClass().getComponentType(), a.length-1);
@@ -834,7 +834,7 @@ public final class PojoRest {
 		return in;
 	}
 
-	private int parseInt(String key) {
+	private static int parseInt(String key) {
 		try {
 			return Integer.parseInt(key);
 		} catch (NumberFormatException e) {

@@ -149,7 +149,7 @@ public final class JsonSchemaSerializer extends JsonSerializer {
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private List<String> getEnumStrings(Class<? extends Enum> c) {
+	private static List<String> getEnumStrings(Class<? extends Enum> c) {
 		List<String> l = new LinkedList<String>();
 		for (Object e : EnumSet.allOf(c))
 			l.add(e.toString());

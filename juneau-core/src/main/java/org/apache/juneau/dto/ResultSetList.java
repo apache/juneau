@@ -80,7 +80,7 @@ public final class ResultSetList extends LinkedList<Map<String,Object>> {
 	 * @param dataType The {@link Types type} of the entry.
 	 * @return The entry as an Object.
 	 */
-	protected Object readEntry(ResultSet rs, int col, int dataType) {
+	protected static Object readEntry(ResultSet rs, int col, int dataType) {
 		try {
 			switch (dataType) {
 				case Types.BLOB:

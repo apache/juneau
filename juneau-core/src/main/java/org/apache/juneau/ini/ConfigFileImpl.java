@@ -717,7 +717,7 @@ public final class ConfigFileImpl extends ConfigFile {
 	 * Finds the keys that are different between the two sections and adds it to
 	 * the specified set.
 	 */
-	private void findChanges(Set<String> s, Section a, Section b) {
+	private static void findChanges(Set<String> s, Section a, Section b) {
 		if (s == null)
 			return;
 		String sname = (a == null ? b.name : a.name);

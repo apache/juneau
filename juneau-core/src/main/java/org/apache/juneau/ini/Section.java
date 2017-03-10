@@ -550,7 +550,7 @@ public class Section implements Map<String,String> {
 		lock.writeLock().unlock();
 	}
 
-	private String trimComment(String s) {
+	private static String trimComment(String s) {
 		return s.replaceAll("^\\s*\\#\\s*", "").trim();
 	}
 

@@ -353,7 +353,7 @@ public class SerializerContext extends BeanContext {
 		absolutePathUriBase = resolveAbsolutePathUriBase(ps.getProperty(SERIALIZER_absolutePathUriBase, String.class, ""));
 	}
 
-	private String resolveRelativeUriBase(String s) {
+	private static String resolveRelativeUriBase(String s) {
 		if (StringUtils.isEmpty(s))
 			return null;
 		if (s.equals("/"))
@@ -363,7 +363,7 @@ public class SerializerContext extends BeanContext {
 		return s;
 	}
 
-	private String resolveAbsolutePathUriBase(String s) {
+	private static String resolveAbsolutePathUriBase(String s) {
 		if (StringUtils.isEmpty(s))
 			return null;
 		if (StringUtils.endsWith(s, '/'))

@@ -147,6 +147,7 @@ public class SystemPropertiesResource extends Resource {
 		return new Redirect();
 	}
 
+	@Override
 	@RestMethod(
 		name="OPTIONS", path="/*",
 		summary="Show resource options",

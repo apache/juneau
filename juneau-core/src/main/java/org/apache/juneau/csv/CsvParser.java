@@ -25,7 +25,7 @@ public class CsvParser extends ReaderParser {
 	/** Default parser, all default settings.*/
 	public static final CsvParser DEFAULT = new CsvParser(PropertyStore.create());
 
-	
+
 	/**
 	 * Constructor.
 	 * @param propertyStore The property store containing all the settings for this object.
@@ -40,7 +40,7 @@ public class CsvParser extends ReaderParser {
 	}
 
 	@SuppressWarnings("unused")
-	private <T> T parseAnything(ParserSession session, ClassMeta<T> eType, ParserReader r, Object outer, BeanPropertyMeta pMeta) throws Exception {
+	private static <T> T parseAnything(ParserSession session, ClassMeta<T> eType, ParserReader r, Object outer, BeanPropertyMeta pMeta) throws Exception {
 		throw new NoSuchMethodException("Not implemented.");
 	}
 

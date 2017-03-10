@@ -1161,7 +1161,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * If c1 is a child of c2 or the same as c2, returns c1.
 	 * Otherwise, returns c2.
 	 */
-	private ClassMeta<?> getNarrowedClassMeta(ClassMeta<?> c1, ClassMeta<?> c2) {
+	private static ClassMeta<?> getNarrowedClassMeta(ClassMeta<?> c1, ClassMeta<?> c2) {
 		if (isParentClass(c2.getInnerClass(), c1.getInnerClass()))
 			return c1;
 		return c2;

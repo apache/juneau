@@ -843,7 +843,7 @@ public abstract class RestServlet extends HttpServlet {
 		return this.parentResource;
 	}
 
-	private String[] parseHeader(String s) {
+	private static String[] parseHeader(String s) {
 		int i = s.indexOf(':');
 		if (i == -1)
 			return null;
@@ -2041,7 +2041,7 @@ public abstract class RestServlet extends HttpServlet {
 		/**
 		 * Throws an exception if the specified type isn't an array or collection.
 		 */
-		private void assertCollection(Type t, Method m) throws ServletException {
+		private static void assertCollection(Type t, Method m) throws ServletException {
 			ClassMeta<?> cm = BeanContext.DEFAULT.getClassMeta(t);
 			if (! cm.isCollectionOrArray())
 				throw new ServletException("Use of multipart flag on parameter that's not an array or Collection on method" + m);
@@ -2075,8 +2075,8 @@ public abstract class RestServlet extends HttpServlet {
 				case PATHREMAINDER: return req.getPathRemainder();
 				case PROPS:         return res.getProperties();
 				case MESSAGES:      return req.getResourceBundle();
+				default:            return null;
 			}
-			return null;
 		}
 	}
 

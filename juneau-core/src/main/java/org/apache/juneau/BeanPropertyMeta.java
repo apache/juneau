@@ -922,7 +922,7 @@ public class BeanPropertyMeta {
 		return o;
 	}
 
-	private String findClassName(Object o) {
+	private static String findClassName(Object o) {
 		if (o == null)
 			return null;
 		if (o instanceof Class)

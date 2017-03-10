@@ -183,7 +183,7 @@ public final class UonReader extends ParserReader {
 		return (h << 4) + l;
 	}
 
-	private final int fromHexChar(int c) throws IOException {
+	private static final int fromHexChar(int c) throws IOException {
 		if (c >= '0' && c <= '9')
 			return c - '0';
 		if (c >= 'a' && c <= 'f')

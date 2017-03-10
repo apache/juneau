@@ -219,7 +219,7 @@ public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.
 		}
 	}
 
-	private String toHtml(String s) {
+	private static String toHtml(String s) {
 		if (s.indexOf('<') != -1)
 			return s.replaceAll("<", "&lt;");  //$NON-NLS-1$//$NON-NLS-2$
 		return s;

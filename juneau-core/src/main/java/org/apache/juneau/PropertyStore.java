@@ -1349,7 +1349,7 @@ public final class PropertyStore {
 		}
 	}
 
-	private String prefix(String name) {
+	private static String prefix(String name) {
 		if (name == null)
 			throw new ConfigException("Invalid property name specified: 'null'");
 		if (name.indexOf('.') == -1)
@@ -1357,7 +1357,7 @@ public final class PropertyStore {
 		return name.substring(0, name.indexOf('.'));
 	}
 
-	private String className(Object o) {
+	private static String className(Object o) {
 		if (o == null)
 			return null;
 		if (o instanceof Class)

@@ -347,7 +347,7 @@ public final class PojoQuery {
 	/*
 	 * Sorts the specified list by the sort list.
 	 */
-	private void doSort(List list, List sortList) {
+	private static void doSort(List list, List sortList) {
 
 		Map sort = new LinkedHashMap();
 		for (Object s : sortList) {

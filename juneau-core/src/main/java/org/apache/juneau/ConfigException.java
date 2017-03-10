@@ -31,7 +31,7 @@ public class ConfigException extends FormattedRuntimeException {
 	}
 
 	@Override
-	public ConfigException initCause(Throwable t) {
+	public synchronized ConfigException initCause(Throwable t) {
 		super.initCause(t);
 		return this;
 	}

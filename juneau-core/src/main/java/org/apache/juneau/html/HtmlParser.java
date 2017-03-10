@@ -256,7 +256,7 @@ public class HtmlParser extends XmlParser {
 	/*
 	 * Reads an anchor tag and converts it into a bean.
 	 */
-	private <T> T parseAnchor(HtmlParserSession session, XMLStreamReader r, ClassMeta<T> beanType) throws XMLStreamException {
+	private static <T> T parseAnchor(HtmlParserSession session, XMLStreamReader r, ClassMeta<T> beanType) throws XMLStreamException {
 		String href = r.getAttributeValue(null, "href");
 		String name = session.getElementText(r);
 		Class<T> beanClass = beanType.getInnerClass();
@@ -270,7 +270,7 @@ public class HtmlParser extends XmlParser {
 		return session.convertToType(href, beanType);
 	}
 
-	private Map<String,String> getAttributes(XMLStreamReader r) {
+	private static Map<String,String> getAttributes(XMLStreamReader r) {
 		Map<String,String> m = new TreeMap<String,String>() ;
  		for (int i = 0; i < r.getAttributeCount(); i++)
  			m.put(r.getAttributeLocalName(i), r.getAttributeValue(i));
@@ -464,7 +464,7 @@ public class HtmlParser extends XmlParser {
 	 * Precondition:  Must be pointing before the event we want to parse.
 	 * Postcondition:  Pointing at the tag just parsed.
 	 */
-	private HtmlTag nextTag(XMLStreamReader r, HtmlTag...expected) throws XMLStreamException {
+	private static HtmlTag nextTag(XMLStreamReader r, HtmlTag...expected) throws XMLStreamException {
 		int et = r.next();
 
 		while (et != START_ELEMENT && et != END_ELEMENT && et != END_DOCUMENT)
@@ -492,7 +492,7 @@ public class HtmlParser extends XmlParser {
 	 * @param r The stream being read from.
 	 * @throws XMLStreamException
 	 */
-	private void skipTag(XMLStreamReader r) throws XMLStreamException {
+	private static void skipTag(XMLStreamReader r) throws XMLStreamException {
 		int et = r.getEventType();
 
 		if (et != START_ELEMENT)
@@ -517,7 +517,7 @@ public class HtmlParser extends XmlParser {
 		}
 	}
 
-	private void skipTag(XMLStreamReader r, HtmlTag...expected) throws XMLStreamException {
+	private static void skipTag(XMLStreamReader r, HtmlTag...expected) throws XMLStreamException {
 		HtmlTag tag = HtmlTag.forEvent(r);
 		if (tag.isOneOf(expected))
 			r.next();
@@ -525,7 +525,7 @@ public class HtmlParser extends XmlParser {
 			throw new XMLStreamException("Unexpected tag: " + tag + ".  Expected one of the following: " + JsonSerializer.DEFAULT.toString(expected), r.getLocation());
 	}
 
-	private int skipWs(XMLStreamReader r)  throws XMLStreamException {
+	private static int skipWs(XMLStreamReader r)  throws XMLStreamException {
 		int event = r.getEventType();
 		while (event != START_ELEMENT && event != END_ELEMENT && event != END_DOCUMENT && r.isWhiteSpace())
 			event = r.next();

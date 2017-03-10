@@ -252,7 +252,7 @@ public class UrlEncodingSerializer extends UonSerializer {
 		return out;
 	}
 
-	private Map<Integer,Object> getCollectionMap(Collection<?> c) {
+	private static Map<Integer,Object> getCollectionMap(Collection<?> c) {
 		Map<Integer,Object> m = new TreeMap<Integer,Object>();
 		int i = 0;
 		for (Object o : c)

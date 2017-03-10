@@ -81,7 +81,7 @@ public class XmlSerializerSession extends SerializerSession {
 		}
 	}
 
-	private Namespace findDefaultNamespace(String s) {
+	private static Namespace findDefaultNamespace(String s) {
 		if (s == null)
 			return null;
 		if (StringUtils.startsWith(s, '{'))

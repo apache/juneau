@@ -194,7 +194,7 @@ public class RdfParser extends ReaderParser {
 	 * Finds the roots in the model using either the "root" property to identify it,
 	 * 	or by resorting to scanning the model for all nodes with no incoming predicates.
 	 */
-	private List<Resource> getRoots(RdfParserSession session, Model m) {
+	private static List<Resource> getRoots(RdfParserSession session, Model m) {
 		List<Resource> l = new LinkedList<Resource>();
 
 		// First try to find the root using the "http://www.apache.org/juneau/root" property.
@@ -229,12 +229,9 @@ public class RdfParser extends ReaderParser {
 		RdfBeanMeta rbm = bm.getExtendedMeta(RdfBeanMeta.class);
 		if (rbm.hasBeanUri() && r2.getURI() != null)
 			rbm.getBeanUriProperty().set(m, r2.getURI());
-		Property subTypeIdProperty = null;
 		for (StmtIterator i = r2.listProperties(); i.hasNext();) {
 			Statement st = i.next();
 			Property p = st.getPredicate();
-			if (subTypeIdProperty != null && p.equals(subTypeIdProperty))
-				continue;
 			String key = session.decodeString(p.getLocalName());
 			BeanPropertyMeta pMeta = m.getPropertyMeta(key);
 			session.setCurrentProperty(pMeta);
@@ -251,7 +248,7 @@ public class RdfParser extends ReaderParser {
 					setName(cm, value, key);
 					pMeta.set(m, value);
 				}
-			} else if (! (p.equals(session.getRootProperty()) || p.equals(session.getTypeProperty()) || (subTypeIdProperty != null && p.equals(subTypeIdProperty)))) {
+			} else if (! (p.equals(session.getRootProperty()) || p.equals(session.getTypeProperty()))) {
 				onUnknownProperty(session, key, m, -1, -1);
 			}
 			session.setCurrentProperty(null);
@@ -259,7 +256,7 @@ public class RdfParser extends ReaderParser {
 		return m;
 	}
 
-	private boolean isMultiValuedCollections(RdfParserSession session, BeanPropertyMeta pMeta) {
+	private static boolean isMultiValuedCollections(RdfParserSession session, BeanPropertyMeta pMeta) {
 		if (pMeta != null && pMeta.getExtendedMeta(RdfBeanPropertyMeta.class).getCollectionFormat() != RdfCollectionFormat.DEFAULT)
 			return pMeta.getExtendedMeta(RdfBeanPropertyMeta.class).getCollectionFormat() == RdfCollectionFormat.MULTI_VALUED;
 		return session.getCollectionFormat() == RdfCollectionFormat.MULTI_VALUED;
@@ -392,7 +389,7 @@ public class RdfParser extends ReaderParser {
 		return (T)o;
 	}
 
-	private boolean isSeq(RdfParserSession session, RDFNode n) {
+	private static boolean isSeq(RdfParserSession session, RDFNode n) {
 		if (n.isResource()) {
 			Statement st = n.asResource().getProperty(session.getRdfTypeProperty());
 			if (st != null)
@@ -401,7 +398,7 @@ public class RdfParser extends ReaderParser {
 		return false;
 	}
 
-	private boolean isBag(RdfParserSession session, RDFNode n) {
+	private static boolean isBag(RdfParserSession session, RDFNode n) {
 		if (n.isResource()) {
 			Statement st = n.asResource().getProperty(session.getRdfTypeProperty());
 			if (st != null)

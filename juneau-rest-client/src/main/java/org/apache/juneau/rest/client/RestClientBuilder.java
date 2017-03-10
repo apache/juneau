@@ -202,6 +202,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 			switch (sslOpts.getHostVerify()) {
 				case LAX: hv = new NoopHostnameVerifier(); break;
 				case DEFAULT: hv = new DefaultHostnameVerifier(); break;
+				default: throw new RuntimeException("Programmer error");
 			}
 
 			for (String p : StringUtils.split(sslOpts.getProtocols(), ',')) {

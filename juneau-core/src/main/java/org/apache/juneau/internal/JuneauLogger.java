@@ -83,7 +83,7 @@ public class JuneauLogger extends java.util.logging.Logger {
 	 * 	Both <js>'.'</js> and <js>'/'</js> can be used as path delimiters.
 	 * @return A new <l>Logger</l>.
 	 */
-	public static JuneauLogger getLogger(String name, String resourceBundleName) {
+	public static synchronized JuneauLogger getLogger(String name, String resourceBundleName) {
 		return new JuneauLogger(java.util.logging.Logger.getLogger(name, resourceBundleName));
 	}
 

@@ -150,6 +150,7 @@ public class LogEntryFormatter extends Formatter {
 							fieldIndexes.put("exception", index++);
 							re.append("(.*)");
 							break;
+						default: // Fall through.
 					}
 				} else {
 					re.append("\\%").append(format.substring(i1, i));
@@ -242,7 +243,7 @@ public class LogEntryFormatter extends Formatter {
 		return s;
 	}
 
-	private String hashCode(Throwable t) {
+	private static String hashCode(Throwable t) {
 		int i = 0;
 		while (t != null) {
 			for (StackTraceElement e : t.getStackTrace())

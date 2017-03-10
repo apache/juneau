@@ -48,7 +48,7 @@ public class CodeFormatterResource extends Resource {
 		return highlight(code, lang);
 	}
 
-	private String highlight(String code, String lang) throws Exception {
+	private static String highlight(String code, String lang) throws Exception {
 		if (lang.equalsIgnoreCase("xml")) {
 			code = code.replaceAll("&", "&amp;");
 			code = code.replaceAll("<", "&lt;");

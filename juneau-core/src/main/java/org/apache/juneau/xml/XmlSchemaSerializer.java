@@ -559,7 +559,7 @@ public class XmlSchemaSerializer extends XmlSerializer {
 		}
 	}
 
-	private <T> T first(T...tt) {
+	private static <T> T first(T...tt) {
 		for (T t : tt)
 			if (t != null)
 				return t;
