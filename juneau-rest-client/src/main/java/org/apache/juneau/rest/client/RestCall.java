@@ -85,7 +85,7 @@ public final class RestCall {
 	protected RestCall(RestClient client, HttpRequestBase request) throws RestCallException {
 		this.client = client;
 		this.request = request;
-		for (RestCallInterceptor i : this.client.getInterceptors())
+		for (RestCallInterceptor i : this.client.interceptors)
 			interceptor(i);
 		this.retryOn = client.retryOn;
 		this.retries = client.retries;
@@ -111,7 +111,7 @@ public final class RestCall {
 		if (! (request instanceof HttpEntityEnclosingRequestBase))
 			throw new RestCallException(0, "Method does not support content entity.", request.getMethod(), request.getURI(), null);
 
-		HttpEntity entity = (input instanceof HttpEntity) ? (HttpEntity)input : new RestRequestEntity(input, client.getSerializer());
+		HttpEntity entity = (input instanceof HttpEntity) ? (HttpEntity)input : new RestRequestEntity(input, client.serializer);
 
 		((HttpEntityEnclosingRequestBase)request).setEntity(entity);
 
@@ -1028,9 +1028,9 @@ public final class RestCall {
 	 * @throws RestCallException If no parser was defined on the client.
 	 */
 	protected Parser getParser() throws RestCallException {
-		if (client.getParser() == null)
+		if (client.parser == null)
 			throw new RestCallException(0, "No parser defined on client", request.getMethod(), request.getURI(), null);
-		return client.getParser();
+		return client.parser;
 	}
 
 	/**
@@ -1040,9 +1040,9 @@ public final class RestCall {
 	 * @throws RestCallException If no serializer was defined on the client.
 	 */
 	protected Serializer getSerializer() throws RestCallException {
-		if (client.getSerializer() == null)
+		if (client.serializer == null)
 			throw new RestCallException(0, "No serializer defined on client", request.getMethod(), request.getURI(), null);
-		return client.getSerializer();
+		return client.serializer;
 	}
 
 	/**

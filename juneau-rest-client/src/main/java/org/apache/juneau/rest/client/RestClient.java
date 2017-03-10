@@ -55,10 +55,9 @@ public class RestClient extends CoreObject {
 	private final Map<String,String> headers;
 	private final CloseableHttpClient httpClient;
 	private final boolean keepHttpClientOpen;
-	private final Serializer serializer;
+	final Serializer serializer;
 	private final UrlEncodingSerializer urlEncodingSerializer;  // Used for form posts only.
-	private final Parser parser;
-	private final RestCallInterceptor[] interceptors;
+	final Parser parser;
 	private final String remoteableServletUri;
 	private final Map<Method,String> remoteableServiceUriMap;
 	private final String rootUrl;
@@ -68,6 +67,7 @@ public class RestClient extends CoreObject {
 	final RetryOn retryOn;
 	final int retries;
 	final long retryInterval;
+	final RestCallInterceptor[] interceptors;
 
 	/**
 	 * Create a new REST client.
@@ -150,33 +150,6 @@ public class RestClient extends CoreObject {
 		} catch (Throwable t) {}
 		if (Boolean.getBoolean("org.apache.juneau.rest.client.RestClient.trackLifecycle"))
 			closedStack = Thread.currentThread().getStackTrace();
-	}
-
-	/**
-	 * Returns the serializer currently associated with this client.
-	 *
-	 * @return The serializer currently associated with this client, or <jk>null</jk> if no serializer is currently associated.
-	 */
-	public Serializer getSerializer() {
-		return serializer;
-	}
-
-	/**
-	 * Returns the parser currently associated with this client.
-	 *
-	 * @return The parser currently associated with this client, or <jk>null</jk> if no parser is currently associated.
-	 */
-	public Parser getParser() {
-		return parser;
-	}
-
-	/**
-	 * Returns the list of interceptors on this client.
-	 *
-	 * @return The list of interceptors on this client.
-	 */
-	public RestCallInterceptor[] getInterceptors() {
-		return interceptors;
 	}
 
 	/**
