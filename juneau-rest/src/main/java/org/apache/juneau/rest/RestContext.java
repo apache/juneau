@@ -341,6 +341,7 @@ public final class RestContext extends Context {
 	@SuppressWarnings("unchecked")
 	public RestContext(Object resource, RestConfig config) throws Exception {
 		super(null);
+		RestException _initException = null;
 		try {
 			this.resource = resource;
 			this.config = config;
@@ -473,13 +474,14 @@ public final class RestContext extends Context {
 			infoProvider = config.infoProvider == null ? new RestInfoProvider(this) : resolve(RestInfoProvider.class, config.infoProvider, this);
 
 		} catch (RestException e) {
-			initException = e;
+			_initException = e;
 			throw e;
 		} catch (Exception e) {
-			initException = new RestException(SC_INTERNAL_SERVER_ERROR, e);
+			_initException = new RestException(SC_INTERNAL_SERVER_ERROR, e);
 			throw e;
+		} finally {
+			initException = _initException;
 		}
-		initException = null;
 	}
 
 	private static class Builder {
