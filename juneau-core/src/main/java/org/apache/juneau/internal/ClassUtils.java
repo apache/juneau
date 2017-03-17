@@ -426,6 +426,96 @@ public final class ClassUtils {
 		}
 	}
 
+	/**
+	 * Finds a public method with the specified parameters.
+	 *
+	 * @param c The class to look for the method.
+	 * @param name The method name.
+	 * @param returnType The return type of the method.
+	 * Can be a super type of the actual return type.
+	 * For example, if the actual return type is <code>CharSequence</code>, then <code>Object</code> will match but <code>String</code> will not.
+	 * @param parameterTypes The parameter types of the method.
+	 * Can be subtypes of the actual parameter types.
+	 * For example, if the parameter type is <code>CharSequence</code>, then <code>String</code> will match but <code>Object</code> will not.
+	 * @return The matched method, or <jk>null</jk> if no match was found.
+	 */
+	public static Method findPublicMethod(Class<?> c, String name, Class<?> returnType, Class<?>...parameterTypes) {
+		for (Method m : c.getMethods()) {
+			if (isPublic(m) && m.getName().equals(name)) {
+				Class<?> rt = m.getReturnType();
+				if (isParentClass(returnType, rt)) {
+					Class<?>[] pt = m.getParameterTypes();
+					if (pt.length == parameterTypes.length) {
+						boolean matches = true;
+						for (int i = 0; i < pt.length; i++) {
+							if (! isParentClass(pt[i], parameterTypes[i])) {
+								matches = false;
+								break;
+							}
+						}
+						if (matches)
+							return m;
+					}
+				}
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Finds a public constructor with the specified parameters without throwing an exception.
+	 *
+	 * @param c The class to search for a constructor.
+	 * @param parameterTypes The parameter types in the constructor.
+	 * Can be subtypes of the actual constructor argument types.
+	 * @return The matching constructor, or <jk>null</jk> if constructor could not be found.
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> Constructor<T> findPublicConstructor(Class<T> c, Class<?>...parameterTypes) {
+		for (Constructor<?> n : c.getConstructors()) {
+			if (isPublic(n)) {
+				Class<?>[] pt = n.getParameterTypes();
+				if (pt.length == parameterTypes.length) {
+					boolean matches = true;
+					for (int i = 0; i < pt.length; i++) {
+						if (! isParentClass(pt[i], parameterTypes[i])) {
+							matches = false;
+							break;
+						}
+					}
+					if (matches)
+						return (Constructor<T>)n;
+				}
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Finds the public constructor that can take in the specified arguments.
+	 *
+	 * @param c The class we're trying to construct.
+	 * @param args The arguments we want to pass into the constructor.
+	 * @return The constructor, or <jk>null</jk> if a public constructor could not be found that takes
+	 * in the specified arguments.
+	 */
+	public static <T> Constructor<T> findPublicConstructor(Class<T> c, Object...args) {
+		return findPublicConstructor(c, getClasses(args));
+	}
+
+	/**
+	 * Returns the class types for the specified arguments.
+	 *
+	 * @param args The objects we're getting the classes of.
+	 * @return The classes of the arguments.
+	 */
+	public static Class<?>[] getClasses(Object...args) {
+		Class<?>[] pt = new Class<?>[args.length];
+		for (int i = 0; i < args.length; i++)
+			pt[i] = args[i] == null ? null : args[i].getClass();
+		return pt;
+	}
+
 // This code is inherently unsafe (but still potentially useful?)
 //
 //	/**

@@ -245,4 +245,13 @@ public final class RestUtils {
 			throw new RuntimeException("Could not find servlet path in request URI.  URI=["+requestURI+"], servletPath=["+servletPath+"]", e);
 		}
 	}
+
+	static String[] parseHeader(String s) {
+		int i = s.indexOf(':');
+		if (i == -1)
+			return null;
+		String name = s.substring(0, i).trim().toLowerCase(Locale.ENGLISH);
+		String val = s.substring(i+1).trim();
+		return new String[]{name,val};
+	}
 }

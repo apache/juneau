@@ -127,7 +127,7 @@ public class ErrorConditionsTest extends RestTestcase {
 		} catch (RestCallException e) {
 			checkErrorResponse(debug, e, SC_BAD_REQUEST,
 				"Could not convert request body content to class type 'org.apache.juneau.rest.test.ErrorConditionsResource$Test3c' using parser 'org.apache.juneau.json.JsonParser'.",
-				"Caused by (RuntimeException): Test error");
+				"Test error");
 		}
 	}
 

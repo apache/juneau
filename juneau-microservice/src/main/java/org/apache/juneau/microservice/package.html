@@ -612,8 +612,9 @@
 					<li><l>$MF{key}, $MF{key,default}</l> - Manifest file entries.
 					<li><l>$ARG{key}, $ARG{key,default}</l> - Command-line arguments.
 				</ul>
-				Additional user-defined variables can be defined by overriding the {@link org.apache.juneau.microservice.Microservice#createVarResolver()} method.
-			<li class='m'>{@link org.apache.juneau.rest.RestServlet#getConfig()} - An instance method to access it from inside a REST servlet.<br>
+				Additional user-defined variables can be defined by overriding the {@link org.apache.juneau.microservice.Microservice#createVarResolver()} method
+				and using the {@link org.apache.juneau.rest.RestConfig#addVars(Class...)} method.
+			<li class='m'>{@link org.apache.juneau.rest.RestContext#getConfigFile()} - An instance method to access it from inside a REST servlet.<br>
 				The following variables are available in addition to the variables defined above:
 				<ul>
 					<li><l>$I{key}, $I{key,default}</l> - Servlet initialization parameters.
@@ -640,9 +641,10 @@
 	}		
 				</p>
 				<p>
-					Additional user-defined variables can be defined at this level by overriding the {@link org.apache.juneau.microservice.Resource#createVarResolver()} method.
+					Additional user-defined variables can be defined at this level by overriding the {@link org.apache.juneau.microservice.Resource#init(RestConfig)} method
+					and using the {@link org.apache.juneau.rest.RestConfig#addVars(Class...)} method.
 				</p>
-			<li class='m'>{@link org.apache.juneau.rest.RestRequest#getConfig()} - An instance method to access it from inside a REST method.<br>
+			<li class='m'>{@link org.apache.juneau.rest.RestRequest#getConfigFile()} - An instance method to access it from inside a REST method.<br>
 				The following variables are available in addition to the variables defined above:
 				<ul>
 					<li><l>$L{key}, $L{key,args}</l> - Localized variables pulled from {@link org.apache.juneau.rest.RestRequest#getMessage(String, Object...)}.
@@ -709,7 +711,7 @@
 	<ck>MyHelloResource.HelloMessage</ck> = <cv>Hello {0}!</cv> 
 				</p>
 				<p>
-					Additional user-defined variables can be defined at this level by overriding the {@link org.apache.juneau.rest.RestServlet#createVarResolver()} method.
+					Additional user-defined variables can be defined at this level by overriding the {@link org.apache.juneau.rest.RestConfig#addVars(Class...)} method.
 				</p>
 		</ul>
 		<p>

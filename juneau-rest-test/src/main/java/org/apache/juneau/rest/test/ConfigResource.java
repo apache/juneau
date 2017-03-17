@@ -28,11 +28,11 @@ public class ConfigResource extends Resource {
 
 	@RestMethod(name="GET", path="/")
 	public ConfigFile test1(RestRequest req) {
-		return req.getConfig();
+		return req.getConfigFile();
 	}
 
 	@RestMethod(name="GET", path="/{key}/{class}")
 	public Object test2(RestRequest req, @Path("key") String key, @Path("class") Class<?> c) throws Exception {
-		return req.getConfig().getObject(c, key);
+		return req.getConfigFile().getObject(c, key);
 	}
 }

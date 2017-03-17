@@ -15,14 +15,12 @@ package org.apache.juneau.examples.rest;
 import static java.util.logging.Level.*;
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.html.HtmlDocSerializerContext.*;
-import static org.apache.juneau.rest.RestServletContext.*;
+import static org.apache.juneau.rest.RestContext.*;
 
 import java.io.*;
 import java.net.*;
 import java.util.*;
 import java.util.logging.*;
-
-import javax.servlet.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.microservice.*;
@@ -58,9 +56,10 @@ public class DirectoryResource extends Resource {
 
 	private static Logger logger = Logger.getLogger(DirectoryResource.class.getName());
 
-	@Override /* Servlet */
-	public void init() throws ServletException {
-		ObjectMap p = getProperties();
+	@Override /* RestServlet */
+	public synchronized void init(RestConfig config) throws Exception {
+		super.init(config);
+		ObjectMap p = config.getProperties();
 		rootDir = new File(p.getString("rootDir"));
 		allowViews = p.getBoolean("allowViews", false);
 		allowDeletes = p.getBoolean("allowDeletes", false);

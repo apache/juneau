@@ -19,9 +19,6 @@ import org.apache.juneau.rest.*;
 
 /**
  * Response handler for {@link Redirect} objects.
- * <p>
- * This handler is registered by default on {@link RestServlet RestServlets} via the
- * 	default implementation of the {@link RestServlet#createResponseHandlers} method.
  */
 public final class RedirectHandler implements ResponseHandler {
 

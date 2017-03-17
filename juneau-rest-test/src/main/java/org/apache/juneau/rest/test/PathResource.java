@@ -33,7 +33,7 @@ public class PathResource extends RestServletDefault {
 	//====================================================================================================
 	@RestMethod(name="GET", path="/")
 	public String doGet() {
-		return getPath();
+		return getContext().getPath();
 	}
 
 	@RestResource(
@@ -47,7 +47,7 @@ public class PathResource extends RestServletDefault {
 		// Basic tests
 		@RestMethod(name="GET", path="/")
 		public String doGet() {
-			return getPath();
+			return getContext().getPath();
 		}
 	}
 
@@ -59,7 +59,7 @@ public class PathResource extends RestServletDefault {
 		// Basic tests
 		@RestMethod(name="GET", path="/")
 		public String doGet() {
-			return getPath();
+			return getContext().getPath();
 		}
 	}
 

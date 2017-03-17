@@ -66,6 +66,6 @@ public class Root extends RestServletDefault {
 
 	@RestMethod(name="GET", path="/")
 	public ChildResourceDescriptions doGet(RestRequest req) {
-		return new ChildResourceDescriptions(this, req);
+		return new ChildResourceDescriptions(getContext(), req);
 	}
 }

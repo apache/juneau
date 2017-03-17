@@ -13,6 +13,7 @@
 package org.apache.juneau.rest;
 
 import java.io.*;
+import java.nio.charset.*;
 import java.util.*;
 
 import javax.servlet.*;
@@ -55,24 +56,22 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	SerializerGroup serializerGroup;
 	UrlEncodingSerializer urlEncodingSerializer;         // The serializer used to convert arguments passed into Redirect objects.
 	private EncoderGroup encoders;
-	private final RestServlet servlet;
 	private ServletOutputStream os;
 
 	/**
 	 * Constructor.
 	 */
-	RestResponse(RestServlet servlet, RestRequest req, HttpServletResponse res) {
+	RestResponse(RestContext context, RestRequest req, HttpServletResponse res) {
 		super(res);
 		this.request = req;
-		this.servlet = servlet;
 
-		for (Map.Entry<String,Object> e : servlet.getDefaultResponseHeaders().entrySet())
+		for (Map.Entry<String,Object> e : context.getDefaultResponseHeaders().entrySet())
 			setHeader(e.getKey(), e.getValue().toString());
 
 		try {
 			String passThroughHeaders = req.getHeader("x-response-headers");
 			if (passThroughHeaders != null) {
-				ObjectMap m = servlet.getUrlEncodingParser().parseParameter(passThroughHeaders, ObjectMap.class);
+				ObjectMap m = context.getUrlEncodingParser().parseParameter(passThroughHeaders, ObjectMap.class);
 				for (Map.Entry<String,Object> e : m.entrySet())
 					setHeader(e.getKey(), e.getValue().toString());
 			}
@@ -101,7 +100,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 				MediaType mt = r.getMediaType();
 				if (mt.getType().equals("*"))
 					charset = defaultCharset;
-				else if (RestServlet.availableCharsets.containsKey(mt.getType()))
+				else if (Charset.isSupported(mt.getType()))
 					charset = mt.getType();
 				if (charset != null)
 					break;
@@ -138,7 +137,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * @throws RestServletException
 	 */
 	public List<String> getSupportedEncodings() throws RestServletException {
-		return servlet.getEncoders().getSupportedEncodings();
+		return encoders.getSupportedEncodings();
 	}
 
 	/**

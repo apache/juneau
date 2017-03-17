@@ -13,7 +13,7 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.html.HtmlDocSerializerContext.*;
-import static org.apache.juneau.rest.RestServletContext.*;
+import static org.apache.juneau.rest.RestContext.*;
 
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.html.*;
@@ -210,10 +210,5 @@ public abstract class RestServletDefault extends RestServlet {
 	)
 	public Swagger getOptions(RestRequest req) {
 		return req.getSwagger();
-	}
-
-	@Override /* RestServlet */
-	public boolean hasOptionsPage() {
-		return true;
 	}
 }

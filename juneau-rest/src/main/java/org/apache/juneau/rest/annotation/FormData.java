@@ -86,7 +86,7 @@ public @interface FormData {
 	 * 	<li><js>"PLAIN"</js> - Plain text.<br>
 	 * 		This treats request parameters as plain text.<br>
 	 * 		Only POJOs directly convertable from <l>Strings</l> can be represented in parameters when using this mode.
-	 * 	<li><js>"INHERIT"</js> (default) - Inherit from the {@link RestServletContext#REST_paramFormat} property on the servlet method or class.
+	 * 	<li><js>"INHERIT"</js> (default) - Inherit from the {@link RestContext#REST_paramFormat} property on the servlet method or class.
 	 * </ul>
 	 * <p>
 	 * Note that the parameter value <js>"(foo)"</js> is interpreted as <js>"(foo)"</js> when using plain mode, but

@@ -49,7 +49,7 @@ public class ConfigResource extends Resource {
 	 */
 	@RestMethod(name="GET", path="/", description="Show contents of config file.")
 	public ConfigFile getConfigContents() throws Exception {
-		return getConfig();
+		return getServletConfig().getConfigFile();
 	}
 
 	/**
@@ -68,7 +68,7 @@ public class ConfigResource extends Resource {
 					tr(th().child("Contents")),
 					tr(th().child(
 						textarea().name("contents").rows(40).cols(120).style("white-space:pre;word-wrap:normal;overflow-x:scroll;font-family:monospace;")
-							.text(getConfig().toString()))
+							.text(getConfigContents().toString()))
 					)
 				)
 			)
@@ -143,7 +143,7 @@ public class ConfigResource extends Resource {
 	)
 	public ConfigFile setConfigContents(@Body Reader contents) throws Exception {
 		ConfigFile cf2 = ConfigMgr.DEFAULT.create().load(contents);
-		return getConfig().merge(cf2).save();
+		return getConfigContents().merge(cf2).save();
 	}
 
 	/**
@@ -162,7 +162,7 @@ public class ConfigResource extends Resource {
 		}
 	)
 	public ObjectMap setConfigSection(@Path("section") String section, @Body Map<String,String> contents) throws Exception {
-		getConfig().setSection(section, contents);
+		getConfigContents().setSection(section, contents);
 		return getSection(section);
 	}
 
@@ -184,12 +184,12 @@ public class ConfigResource extends Resource {
 		}
 	)
 	public String setConfigSection(@Path("section") String section, @Path("key") String key, @Body String value) throws Exception {
-		getConfig().put(section, key, value, false);
+		getConfigContents().put(section, key, value, false);
 		return getSection(section).getString(key);
 	}
 
-	private ObjectMap getSection(String name) {
-		ObjectMap m = getConfig().getSectionMap(name);
+	private ObjectMap getSection(String name) throws Exception {
+		ObjectMap m = getConfigContents().getSectionMap(name);
 		if (m == null)
 			throw new RestException(SC_NOT_FOUND, "Section not found.");
 		return m;

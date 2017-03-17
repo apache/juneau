@@ -361,4 +361,36 @@ public final class IOUtils {
 				closeQuietly((Writer)o2);
 		}
 	}
+
+	/**
+	 * Converts an object to an <code>InputStream</code>.
+	 *
+	 * @param o The object to convert to an input stream.
+	 * Can be any of the following:
+	 * <ul>
+	 * 	<li>{@link InputStream}
+	 * 	<li>{@link Reader}
+	 * 	<li>{@link File}
+	 * 	<li>{@link CharSequence} - Converted to UTF-8 stream.
+	 * 	<li><code><jk>byte</jk>[]</code>
+	 * 	<li><code><jk>null</jk></code> - Returns null.
+	 * </ul>
+	 * @return The object converted to an input stream.
+	 * @throws IOException If invalid object passed in or file could not be read.
+	 */
+	public static InputStream toInputStream(Object o) throws IOException {
+		if (o == null)
+			return null;
+		if (o instanceof InputStream)
+			return (InputStream)o;
+		if (o instanceof File)
+			return new FileInputStream((File)o);
+		if (o instanceof byte[])
+			return new ByteArrayInputStream((byte[])o);
+		if (o instanceof CharSequence)
+			return new ByteArrayInputStream(((CharSequence)o).toString().getBytes(UTF8));
+		if (o instanceof Reader)
+			return new ByteArrayInputStream(IOUtils.read((Reader)o).getBytes(UTF8));
+		throw new IOException("Invalid object type passed to IOUtils.toInputStream(Object): " + o.getClass().getName());
+	}
 }

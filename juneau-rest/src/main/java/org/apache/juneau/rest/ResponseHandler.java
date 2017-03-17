@@ -30,7 +30,7 @@ import org.apache.juneau.rest.response.*;
  * Response handlers can be associated with {@link RestServlet RestServlets} through the following ways:
  * <ul class='spaced-list'>
  * 	<li>Through the {@link RestResource#responseHandlers @RestResource.responseHandlers} annotation.
- * 	<li>By overriding {@link RestServlet#createResponseHandlers(ObjectMap)} and augmenting or creating your
+ * 	<li>By calling the {@link RestConfig#addResponseHandlers(Class...)} and augmenting or creating your
  * 		own list of handlers.
  * </ul>
  * <p>
@@ -40,6 +40,8 @@ import org.apache.juneau.rest.response.*;
  * 	<li>{@link ReaderHandler} - Pipes the output of {@link Reader Readers} to the response writer ({@link RestResponse#getWriter()}).
  * 	<li>{@link InputStreamHandler} - Pipes the output of {@link InputStream InputStreams} to the response output stream ({@link RestResponse#getOutputStream()}).
  * 	<li>{@link RedirectHandler} - Handles {@link Redirect} objects.
+ * 	<li>{@link WritableHandler} - Handles {@link Writable} objects.
+ * 	<li>{@link StreamableHandler} - Handles {@link Streamable} objects.
  * </ul>
  * <p>
  * Response handlers can be used to process POJOs that cannot normally be handled through Juneau serializers, or

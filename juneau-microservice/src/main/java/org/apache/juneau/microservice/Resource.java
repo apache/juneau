@@ -16,14 +16,13 @@ import static org.apache.juneau.html.HtmlDocSerializerContext.*;
 
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.svl.*;
 import org.apache.juneau.svl.vars.*;
 
 /**
  * Superclass for all REST resources.
  * <p>
  * In additional to the functionality of the {@link RestServletDefault} group,
- * augments the {@link #createVarResolver()} method with the following additional variable types:
+ * augments the {@link RestContext#getVarResolver()} method with the following additional variable types:
  * <ul class='spaced-list'>
  * 	<li><code class='snippet'>$ARG{...}</code> - Command line arguments pulled from {@link Microservice#getArgs()}.<br>
  * 		<h6 class='figure'>Example:</h6>
@@ -48,14 +47,12 @@ import org.apache.juneau.svl.vars.*;
 )
 public abstract class Resource extends RestServletDefault {
 
-	/**
-	 * Adds $ARG and $MF variables to variable resolver defined on {@link RestServlet#createVarResolver()}.
-	 */
-	@Override
-	protected VarResolverBuilder createVarResolver() {
-		return super.createVarResolver()
-			.vars(ArgsVar.class, ManifestFileVar.class)
-			.contextObject(ArgsVar.SESSION_args, Microservice.getArgs())
-			.contextObject(ManifestFileVar.SESSION_manifest, Microservice.getManifest());
+	@Override /* RestServlet */
+	public synchronized void init(RestConfig config) throws Exception {
+		config
+			.addVars(ArgsVar.class, ManifestFileVar.class)
+			.addVarContextObject(ArgsVar.SESSION_args, Microservice.getArgs())
+			.addVarContextObject(ManifestFileVar.SESSION_manifest, Microservice.getManifest());
+		super.init(config);
 	}
 }

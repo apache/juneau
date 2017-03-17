@@ -68,7 +68,7 @@ public abstract class RemoteableServlet extends RestServletDefault {
 		List<Link> l = new LinkedList<Link>();
 		boolean useAll = ! useOnlyAnnotated();
 		for (Class<?> c : getServiceMap().keySet()) {
-			if (useAll || getBeanContext().getClassMeta(c).isRemoteable())
+			if (useAll || getContext().getBeanContext().getClassMeta(c).isRemoteable())
 				l.add(new Link(c.getName(), "{0}/{1}", req.getRequestURI(), c.getName())); //$NON-NLS-1$
 		}
 		return l;
@@ -131,7 +131,7 @@ public abstract class RemoteableServlet extends RestServletDefault {
 
 	private Map<String,java.lang.reflect.Method> getMethods(String javaInterface) throws Exception {
 		Class<?> c = getInterfaceClass(javaInterface);
-		ClassMeta<?> cm = getBeanContext().getClassMeta(c);
+		ClassMeta<?> cm = getContext().getBeanContext().getClassMeta(c);
 		return (useOnlyAnnotated() ? cm.getRemoteableMethods() : cm.getPublicMethods());
 	}
 

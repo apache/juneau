@@ -30,9 +30,6 @@ import org.apache.juneau.serializer.*;
  * <p>
  * The <code>Content-Type</code> header is set to the mime-type defined on the selected
  * 	serializer based on the {@link Produces#contentType() @Produces.contentType} annotation.
- * <p>
- * This handler is registered by default on {@link RestServlet RestServlets} via the
- * 	default implementation of the {@link RestServlet#createResponseHandlers} method.
  */
 public class DefaultHandler implements ResponseHandler {
 

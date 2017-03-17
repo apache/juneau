@@ -35,7 +35,7 @@ public abstract class RestServletGroupDefault extends RestServletDefault {
 	 */
 	@RestMethod(name="GET", path="/", description="Child resources")
 	public ChildResourceDescriptions getChildren(RestRequest req) {
-		return new ChildResourceDescriptions(this, req);
+		return new ChildResourceDescriptions(getContext(), req);
 	}
 }
 

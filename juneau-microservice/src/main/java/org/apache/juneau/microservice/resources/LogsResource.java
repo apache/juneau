@@ -14,7 +14,7 @@ package org.apache.juneau.microservice.resources;
 
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.html.HtmlDocSerializerContext.*;
-import static org.apache.juneau.rest.RestServletContext.*;
+import static org.apache.juneau.rest.RestContext.*;
 
 import java.io.*;
 import java.net.*;
@@ -53,14 +53,8 @@ import org.apache.juneau.transforms.*;
 public class LogsResource extends Resource {
 	private static final long serialVersionUID = 1L;
 
-	private ConfigFile cf = getConfig();
-
-	private File logDir = new File(cf.getString("Logging/logDir", "."));
-	private LogEntryFormatter leFormatter = new LogEntryFormatter(
-		cf.getString("Logging/format", "[{date} {level}] {msg}%n"),
-		cf.getString("Logging/dateFormat", "yyyy.MM.dd hh:mm:ss"),
-		cf.getBoolean("Logging/useStackTraceHashes")
-	);
+	private File logDir;
+	private LogEntryFormatter leFormatter;
 
 	private final FileFilter filter = new FileFilter() {
 		@Override /* FileFilter */
@@ -68,6 +62,19 @@ public class LogsResource extends Resource {
 			return f.isDirectory() || f.getName().endsWith(".log");
 		}
 	};
+	
+	@Override /* RestServlet */
+	public synchronized void init(RestConfig config) throws Exception {
+		super.init(config);
+		ConfigFile cf = config.getConfigFile();
+		
+		logDir = new File(cf.getString("Logging/logDir", "."));
+		leFormatter = new LogEntryFormatter(
+			cf.getString("Logging/format", "[{date} {level}] {msg}%n"),
+			cf.getString("Logging/dateFormat", "yyyy.MM.dd hh:mm:ss"),
+			cf.getBoolean("Logging/useStackTraceHashes")
+		);
+	}
 
 	/**
 	 * [GET /*] - Get file details or directory listing.

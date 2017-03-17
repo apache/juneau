@@ -23,9 +23,6 @@ import org.apache.juneau.utils.*;
  * Simply pipes the contents of the {@link InputStream} to {@link RestResponse#getNegotiatedOutputStream()}.
  * <p>
  * Sets the <code>Content-Type</code> response header to whatever was set via {@link RestResponse#setContentType(String)}.
- * <p>
- * This handler is registered by default on {@link RestServlet RestServlets} via the
- * 	default implementation of the {@link RestServlet#createResponseHandlers} method.
  */
 public final class InputStreamHandler implements ResponseHandler {
 

@@ -112,4 +112,40 @@ public class ClassUtilsTest {
 	public void getClassFromReadableName() throws Exception {
 		fail("Not implemented");
 	}
+	
+	//====================================================================================================
+	// findPublicMethod
+	//====================================================================================================
+	@Test
+	public void testFindPublicMethod() {
+		
+		assertNotNull(findPublicMethod(B.class, "m1", void.class));
+		assertNull(findPublicMethod(B.class, "m1", int.class));
+
+		assertNull(findPublicMethod(B.class, "m2", void.class));
+
+		assertNull(findPublicMethod(B.class, "m3", void.class));
+		assertNotNull(findPublicMethod(B.class, "m3", int.class));
+		
+		assertNotNull(findPublicMethod(B.class, "m4", CharSequence.class));
+		assertNotNull(findPublicMethod(B.class, "m4", Object.class));
+		assertNull(findPublicMethod(B.class, "m4", String.class));
+		
+		assertNotNull(findPublicMethod(B.class, "m5", void.class, int.class, CharSequence.class));
+		assertNotNull(findPublicMethod(B.class, "m5", void.class, int.class, String.class));
+		assertNull(findPublicMethod(B.class, "m5", void.class, int.class, Object.class));
+		
+		assertNull(findPublicMethod(B.class, "m5", void.class, int.class));
+		assertNull(findPublicMethod(B.class, "m5", void.class, int.class, CharSequence.class, CharSequence.class));
+	}
+	
+	public static class B {
+		
+		public void m1() {};
+		protected void m2() {};
+		public int m3() { return 0; }
+		public CharSequence m4() { return ""; }
+
+		public void m5(int f1, CharSequence f2) {}
+	}
 }

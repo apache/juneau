@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
-import static org.apache.juneau.rest.RestServletContext.*;
+import static org.apache.juneau.rest.RestContext.*;
 
 import java.io.*;
 

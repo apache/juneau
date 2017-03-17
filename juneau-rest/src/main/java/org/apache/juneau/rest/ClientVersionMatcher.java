@@ -20,7 +20,7 @@ import org.apache.juneau.rest.annotation.*;
  * <p>
  * See {@link RestResource#clientVersionHeader} and {@link RestMethod#clientVersion} for more info.
  */
-public class ClientVersionMatcher extends RestMatcherReflecting {
+public class ClientVersionMatcher extends RestMatcher {
 
 	private final String clientVersionHeader;
 	private final VersionRange range;
@@ -28,12 +28,12 @@ public class ClientVersionMatcher extends RestMatcherReflecting {
 	/**
 	 * Constructor.
 	 *
-	 * @param servlet The servlet.
+	 * @param clientVersionHeader The HTTP request header name containing the client version.
+	 * If <jk>null</jk> or an empty string, uses <js>"X-Client-Version"</js>
 	 * @param javaMethod The version string that the client version must match.
 	 */
-	protected ClientVersionMatcher(RestServlet servlet, java.lang.reflect.Method javaMethod) {
-		super(servlet, javaMethod);
-		this.clientVersionHeader = servlet.getClientVersionHeader();
+	protected ClientVersionMatcher(String clientVersionHeader, java.lang.reflect.Method javaMethod) {
+		this.clientVersionHeader = StringUtils.isEmpty(clientVersionHeader) ? "X-Client-Version" : clientVersionHeader;
 		RestMethod m = javaMethod.getAnnotation(RestMethod.class);
 		range = new VersionRange(m.clientVersion());
 	}

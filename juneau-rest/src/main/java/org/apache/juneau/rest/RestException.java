@@ -116,9 +116,9 @@ public class RestException extends RuntimeException {
 	/**
 	 * Returns the number of times this exception occurred on this servlet.
 	 * <p>
-	 * This only gets set if {@link RestServletContext#REST_useStackTraceHashes} is enabled on the servlet.
+	 * This only gets set if {@link RestContext#REST_useStackTraceHashes} is enabled on the servlet.
 	 *
-	 * @return The occurrence number if {@link RestServletContext#REST_useStackTraceHashes} is enabled, or <code>0</code> otherwise.
+	 * @return The occurrence number if {@link RestContext#REST_useStackTraceHashes} is enabled, or <code>0</code> otherwise.
 	 */
 	public int getOccurrence() {
 		return occurrence;

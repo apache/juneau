@@ -16,8 +16,7 @@ import static org.apache.juneau.html.HtmlDocSerializerContext.*;
 
 import java.util.*;
 
-import javax.servlet.*;
-
+import org.apache.juneau.ini.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -38,13 +37,15 @@ public class DockerRegistryResource extends Resource {
 	private static final long serialVersionUID = 1L;
 
 	// Get registry URL from examples.cfg file.
-	private String registryUrl = getConfig().getString("DockerRegistry/url");
+	private String registryUrl;
 
 	RestClient rc;
 
 	@Override /* Servlet */
-	public void init() throws ServletException {
-		super.init();
+	public synchronized void init(RestConfig servletConfig) throws Exception {
+		super.init(servletConfig);
+		ConfigFile cf = servletConfig.getConfigFile();
+		registryUrl = cf.getString("DockerRegistry/url");
 		rc = new RestClientBuilder().build();
 	}
 

@@ -29,6 +29,12 @@ import org.apache.juneau.serializer.*;
 public class GroupsResource extends RestServlet {
 	private static final long serialVersionUID = 1L;
 
+	@Override /* RestServlet */
+	public synchronized void init(RestConfig config) throws Exception {
+		config.addSerializers(SSerializer.class).addParsers(PParser.class);
+		super.init(config);
+	}
+
 	@Produces("text/s1,text/s2")
 	public static class SSerializer extends WriterSerializer {
 
@@ -54,17 +60,6 @@ public class GroupsResource extends RestServlet {
 		protected <T> T doParse(ParserSession session, ClassMeta<T> type) throws Exception {
 			return (T)IOUtils.read(session.getReader());
 		}
-	}
-
-
-	@Override /* RestServlet */
-	public SerializerGroupBuilder createSerializers(ObjectMap properties, Class<?>[] beanFilters, Class<?>[] pojoSwaps) throws Exception {
-		return super.createSerializers(properties, beanFilters, pojoSwaps).append(SSerializer.class);
-	}
-
-	@Override /* RestServlet */
-	public ParserGroupBuilder createParsers(ObjectMap properties, Class<?>[] beanFilters, Class<?>[] pojoSwaps) throws Exception {
-		return super.createParsers(properties, beanFilters, pojoSwaps).append(PParser.class);
 	}
 
 	//====================================================================================================

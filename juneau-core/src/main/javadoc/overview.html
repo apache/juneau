@@ -633,7 +633,7 @@
 					<li class='c'><a class='doclink' href='org/apache/juneau/xml/XmlParserContext.html#ConfigProperties'>XmlParserContext</a> - Configurable properties on the XML parser.
 				</ul>
 			</ul>
-			<li class='c'><a class='doclink' href='org/apache/juneau/server/RestServletContext.html#ConfigProperties'>RestServletContext</a> - Configurable properties on the REST servlet.
+			<li class='c'><a class='doclink' href='org/apache/juneau/server/RestContext.html#ConfigProperties'>RestContext</a> - Configurable properties on the REST servlet.
 		</ul>
 	</div>
 		
@@ -2625,7 +2625,7 @@
 		</p>
 		<p>
 			The <l>title</l> and <l>description</l> keys identify the localized values
-			return by the {@link org.apache.juneau.rest.RestServlet#getTitle(RestRequest)} and {@link org.apache.juneau.rest.RestServlet#getDescription(RestRequest)} methods.
+			return by the {@link org.apache.juneau.rest.RestRequest#getServletTitle()} and {@link org.apache.juneau.rest.RestRequest#getServletDescription()} methods.
 		</p>
 		<p>
 			The <l>children</l> annotation defines the child resources of this router resource.
@@ -2646,7 +2646,7 @@
 			It should be noted that child resources do not need to be defined this way.  
 			They could also be defined as servlets in the same way as the root resource.  
 			The <l>children</l> annotation approach simply makes it easier to define them without having to touch the <l>web.xml</l> file again.
-			Child resources can also be defined programmatically by overriding the {@link org.apache.juneau.rest.RestServlet#createChildren()} method.
+			Child resources can also be defined programmatically by using the {@link org.apache.juneau.rest.RestConfig#addChildResources(Class[])} method.
 		</p>
 		<p>
 			Note that these router pages can be arbitrarily nested deep.  
@@ -3131,8 +3131,8 @@
 		
 		<h6 class='topic'>Additional Information</h6>
 		<ul class='javahierarchy'>
-			<li class='m'>{@link org.apache.juneau.rest.RestServlet#createVarResolver()} - Servlet and request variables.
-			<li class='m'>{@link org.apache.juneau.rest.RestServlet#getSessionObjects(RestRequest)} - Var resolver session objects.
+			<li class='m'>{@link org.apache.juneau.rest.RestConfig#addVars(Class[])} - Servlet and request variables.
+			<li class='m'>{@link org.apache.juneau.rest.RestCallHandler#getSessionObjects(RestRequest)} - Var resolver session objects.
 		</ul>
 	</div>	
 	
@@ -3208,31 +3208,27 @@
 				{@link org.apache.juneau.rest.annotation.RestResource#pojoSwaps() @RestResopurce.pojoSwaps()} annotations are used 
 				to set behavior properties on the resource's underlying bean context, serializers, and parsers.  
 			You're using them here to modify the behavior of serialization for all content types.  
-			The annotations are functionally equivalent to overriding the {@link org.apache.juneau.rest.RestServlet#createSerializers(ObjectMap,Class[],Class[])} method, as follows:
+			The annotations are functionally equivalent to using the {@link org.apache.juneau.rest.RestConfig} class, as follows:
 		</p>
 		<h6 class='figure'>Hypothetical RequestEchoResource.createSerializers() method</h6>
 		<p class='bcode'>
 	<jd>/** Override the default rest serializers to add some transforms */</jd>
 	<ja>@Override</ja>
-	<jk>protected</jk> SerializerGroupBuilder createSerializers(ObjectMap properties, Class[] beanFilters, Class[] pojoSwaps) {
-
-		<jc>// You'll just reuse the parent serializer group</jc>
-		SerializerGroupBuilder b = <jk>super</jk>.createSerializers(properties, beanFilters, pojoSwaps);
-		
+	<jk>public synchronize void</jk> init(RestConfig config) throws Exception {
 		<jc>// Add bean filters for the HttpServletRequest, HttpSession, and ServletContext objects
 		//		so that you don't show vendor-specific properties on subclasses.
 		// Add Enumeration POJO swap to be able to render the contents of Enumeration properties.
 		// The max depth and detect recursion options prevent any possible runaway serializations.  
 		// This shouldn't happen, but future JEE APIs may introduce deep hierarchies or loops.</jc>
-		b
-			.beanFilters(HttpServletRequest.<jk>class</jk>, HttpSession.<jk>class</jk>, ServletContext.<jk>class</jk>)
-			.pojoSwaps(EnumerationSwap.<jk>class</jk>)
-			.maxDepth(10)
-			.detectRecursions(<jk>true</jk>);
+		config
+			.addBeanFilters(HttpServletRequest.<jk>class</jk>, HttpSession.<jk>class</jk>, ServletContext.<jk>class</jk>)
+			.addPojoSwaps(EnumerationSwap.<jk>class</jk>)
+			.setProperty(<jsf>SERIALIZER_maxDepth</jsf>, 10)
+			.setProperty(<jsf>SERIALIZER_detectRecursions</jsf>, <jk>true</jk>)
 			.property(<jsf>HTMLDOC_links</jsf>, <js>"{...}"</js>);
 		
-		<jc>// Return the updated group</jc>
-		<jk>return</jk> b;
+		<jc>// Don't forget to call this!</jc>
+		<jk>super</jk>.init(config);
 	}
 		</p>
 		<p>
@@ -4248,7 +4244,7 @@
 	http://localhost:10000/addressBook/people/3/name?method=PUT&amp;content="'Barack Hussein Obama'"	
 			</p>
 			<p>
-				The ability to overload methods is enabled through the {@link org.apache.juneau.rest.RestServletContext#REST_allowMethodParam} property.
+				The ability to overload methods is enabled through the {@link org.apache.juneau.rest.RestContext#REST_allowMethodParam} property.
 			</p>
 		</div>
 	</div>	
@@ -4590,7 +4586,7 @@
 		<ul class='spaced-list'>
 			<li>Accessing a docker registry REST API as POJOs using {@link org.apache.juneau.rest.client.RestClient}.
 			<li>Using the {@link org.apache.juneau.rest.labels.ResourceDescription} class to implement a top-level 'router' page.
-			<li>Using the {@link org.apache.juneau.rest.RestServlet#getConfig()} method to access external configuration file values.
+			<li>Using the {@link org.apache.juneau.rest.RestContext#getConfigFile()} method to access external configuration file values.
 		</ul>
 		<p>
 			Pointing a browser to the resource shows the following:
@@ -4663,7 +4659,7 @@
 		<h6 class='topic'>Additional Information</h6>
 		<ul class='javahierarchy'>
 			<li class='c'>{@link org.apache.juneau.rest.labels.ResourceDescription}
-			<li class='m'>{@link org.apache.juneau.rest.RestServlet#getConfig()}
+			<li class='m'>{@link org.apache.juneau.rest.RestContext#getConfigFile()}
 		</ul>
 	</div>	
 	
@@ -4975,7 +4971,7 @@
 		</p>
 		<ul class='spaced-list'>
 			<li>Using the {@link org.apache.juneau.dto.ResultSetList} to serialize database result sets.
-			<li>Using {@link org.apache.juneau.rest.RestServlet#getConfig()} to access config properties.
+			<li>Using {@link org.apache.juneau.rest.RestContext#getConfigFile()} to access config properties.
 			<li>Using form entry beans.
 		</ul>
 		<p>
@@ -5449,8 +5445,8 @@
 		<h3 class='topic' onclick='toggle(this)'>9.2.2 - Apply transforms to a subset of serializers or parsers</h3>
 		<div class='topic'>
 			<p>
-				The {@link org.apache.juneau.rest.RestServlet#createSerializers(ObjectMap,Class[],Class[])} and {@link org.apache.juneau.rest.RestServlet#createParsers(ObjectMap,Class[],Class[])}
-				methods are the servlet methods that get called during servlet initialization to create the serializer and
+				The {@link org.apache.juneau.rest.RestConfig#addSerializers(Class[])} and {@link org.apache.juneau.rest.RestConfig#addParsers(Class[])}
+				methods are the methods that get called during servlet initialization to create the serializer and
 				parser groups.
 				These methods can be overridden to customize individual serializers and parsers in a way that can't be done using annotations.
 			</p>
@@ -5460,10 +5456,9 @@
 			</p>
 			<p class='bcode'>
 	<ja>@Override</ja>
-	<jk>protected</jk> SerializerGroup createSerializers(ObjectMap properties, Class[] beanFilters, Class[] pojoSwaps) <jk>throws</jk> Exception {
-		SerializerGroup g = <jk>super</jk>.createSerializers(properties, beanFilters, pojoSwaps);
-		g.getSerializer(<js>"text/html"</js>).pojoSwaps(DoubleSwap.<jk>class</jk>); 
-		<jk>return</jk> g;
+	<jk>public synchronized void</jk> init(RestServletConfig config) <jk>throws</jk> Exception {
+		config.addSerializer(<jk>new</jk> HtmlSerializerBuilder().pojoSwaps(DoubleSwap.<jk>class</jk>).build());
+		super.init(config);
 	}
 			</p>
 		</div>
@@ -5593,7 +5588,7 @@
 	
 	<h5 class='toc'>What's new in each release</h5>
 	<ul class='toc'>
-		<li><p><a class='doclink' href='#6.1.1'>6.1.1 (TBD)</a></p>
+		<li><p><a class='doclink' href='#6.2.0'>6.2.0 (TBD)</a></p>
 		<li><p><a class='doclink' href='#6.1.0'>6.1.0 (Feb 25, 2017)</a></p>
 		<li><p><a class='doclink' href='#6.0.1'>6.0.1 (Jan 3, 2017)</a></p>
 		<li><p><a class='doclink' href='#6.0.0'>6.0.0 (Oct 3, 2016)</a></p>
@@ -5661,11 +5656,11 @@
 
 
 	<!-- ======================================================================================================== -->
-	<a id="6.1.1"></a>
-	<h3 class='topic' onclick='toggle(this)'>6.1.1 (TBD)</h3>
+	<a id="6.2.0"></a>
+	<h3 class='topic' onclick='toggle(this)'>6.2.0 (TBD)</h3>
 	<div class='topic'>
 		<p>
-			Juneau 6.1.1 is ...
+			Juneau 6.2.0 is a major update.
 		</p>
 
 		<h6 class='topic'>org.apache.juneau</h6>
@@ -5732,6 +5727,48 @@
 		
 		<h6 class='topic'>org.apache.juneau.rest</h6>
 		<ul class='spaced-list'>
+			<li>{@link org.apache.juneau.rest.annotation.RestResource @RestResource} annotation can now be applied to 
+				any class!  You're no longer restricted to subclassing your resources from {@link org.apache.juneau.rest.RestServlet}.
+				<br>This is a major enhancement in the API.  Anything you could do by subclassing from <code>RestServlet</code>
+				should have an equivalent for non-<code>RestServlet</code> classes.
+				<br>The only restriction is that the top-level resource must subclass from <code>RestServlet</code>.
+				Child resources do not.
+				<br><br>
+				The majority of code has been split up into two separate classes:
+				<ul>
+					<li>{@link org.apache.juneau.rest.RestConfig} - A modifiable configuration of a resource.  Subclasses from {@link javax.servlet.ServletConfig}.
+					<li>{@link org.apache.juneau.rest.RestContext} - A read-only configuration that's the result of a snapshot of the config.
+				</ul>
+				<br><br>
+				The {@link org.apache.juneau.rest.RestServlet} class now has the following initialization method that allows you to override
+				the config settings define via annotations:
+				<ul>
+					<li>{@link org.apache.juneau.rest.RestServlet#init(RestConfig)} - A modifiable configuration of a resource.
+				</ul>
+				Non-<code>RestServlet</code> classes must have one of the following to allow it to be instantiated:
+				<ul>
+					<li>A <code><jk>public</jk> T(RestConfig)</code> constructor.
+					<li>A <code><jk>public</jk> T()</code> constructor.
+					<li>The parent resource must have a customized {@link org.apache.juneau.rest.RestResourceResolver} for instantiating it.
+				</ul>
+				<br>
+				Non-<code>RestServlet</code> classes can optionally include the following init methods to gain access to the config and context:
+				<ul>
+					<li><code><jk>public</jk> init(RestConfig)</code>
+					<li><code><jk>public</jk> init(RestContext)</code>
+				</ul>
+			<li>New annotations added to {@link org.apache.juneau.rest.annotation.RestResource @RestResource} to allow non-<code>RestServlet</code>
+				resources to do the same as subclassing directly from <code>RestServlet</code>:
+			<ul>
+				<li>{@link org.apache.juneau.rest.annotation.RestResource#resourceResolver() resourceResolver()} 
+					- Specify a {@link org.apache.juneau.rest.RestResourceResolver} class for resolving child resources.
+				<li>{@link org.apache.juneau.rest.annotation.RestResource#callHandler() callHandler()} 
+					- Specify a {@link org.apache.juneau.rest.RestCallHandler} class for handling the lifecycle of a REST call.
+				<li>{@link org.apache.juneau.rest.annotation.RestResource#infoProvider() infoProvider()} 
+					- Specify a {@link org.apache.juneau.rest.RestInfoProvider} class for customizing title/description/Swagger information on a REST resource.
+				<li>{@link org.apache.juneau.rest.annotation.RestResource#logger() logger()} 
+					- Specify a {@link org.apache.juneau.rest.RestLogger} class for handling logging.
+			</ul>
 			<li>{@link org.apache.juneau.rest.annotation.RestResource#stylesheet()} can now take in a comma-delimited list of stylesheet paths.
 			<li>{@link org.apache.juneau.rest.StreamResource} can now contain multiple sources from a variety of source types (e.g. <code><jk>byte</jk>[]</code> arrays, <code>InputStreams</code>, <code>Files</code>, etc...)
 				and is now immutable.  It also includes a new {@link org.apache.juneau.rest.StreamResource.Builder} class.
@@ -6126,16 +6163,16 @@
 					<li>Eliminated <code>ResourceOptions</code> and related code.
 					<li>New annotations and related methods:
 						<ul>
-							<li>{@link org.apache.juneau.rest.annotation.RestResource#title() @RestResource.title()} / {@link org.apache.juneau.rest.RestServlet#getTitle(RestRequest)}
-							<li>{@link org.apache.juneau.rest.annotation.RestResource#description() @RestResource.description()} / {@link org.apache.juneau.rest.RestServlet#getDescription(RestRequest)}
-							<li>{@link org.apache.juneau.rest.annotation.RestResource#termsOfService() @RestResource.termsOfService()} / {@link org.apache.juneau.rest.RestServlet#getTermsOfService(RestRequest)}
-							<li>{@link org.apache.juneau.rest.annotation.RestResource#contact() @RestResource.contact()} / {@link org.apache.juneau.rest.RestServlet#getContact(RestRequest)}
-							<li>{@link org.apache.juneau.rest.annotation.RestResource#license() @RestResource.license()} / {@link org.apache.juneau.rest.RestServlet#getLicense(RestRequest)}
-							<li>{@link org.apache.juneau.rest.annotation.RestResource#version() @RestResource.version()} / {@link org.apache.juneau.rest.RestServlet#getVersion(RestRequest)}
-							<li>{@link org.apache.juneau.rest.annotation.RestResource#tags() @RestResource.tags()} / {@link org.apache.juneau.rest.RestServlet#getTags(RestRequest)}
-							<li>{@link org.apache.juneau.rest.annotation.RestResource#externalDocs() @RestResource.externalDocs()} / {@link org.apache.juneau.rest.RestServlet#getExternalDocs(RestRequest)}
-							<li>{@link org.apache.juneau.rest.annotation.RestMethod#summary() @RestMethod.summary()} / {@link org.apache.juneau.rest.RestServlet#getMethodSummary(String,RestRequest)}
-							<li>{@link org.apache.juneau.rest.annotation.RestMethod#description() @RestMethod.description()} / {@link org.apache.juneau.rest.RestServlet#getMethodDescription(String,RestRequest)}
+							<li>{@link org.apache.juneau.rest.annotation.RestResource#title() @RestResource.title()} / {@link org.apache.juneau.rest.RestInfoProvider#getTitle(RestRequest)}
+							<li>{@link org.apache.juneau.rest.annotation.RestResource#description() @RestResource.description()} / {@link org.apache.juneau.rest.RestInfoProvider#getDescription(RestRequest)}
+							<li>{@link org.apache.juneau.rest.annotation.RestResource#termsOfService() @RestResource.termsOfService()} / {@link org.apache.juneau.rest.RestInfoProvider#getTermsOfService(RestRequest)}
+							<li>{@link org.apache.juneau.rest.annotation.RestResource#contact() @RestResource.contact()} / {@link org.apache.juneau.rest.RestInfoProvider#getContact(RestRequest)}
+							<li>{@link org.apache.juneau.rest.annotation.RestResource#license() @RestResource.license()} / {@link org.apache.juneau.rest.RestInfoProvider#getLicense(RestRequest)}
+							<li>{@link org.apache.juneau.rest.annotation.RestResource#version() @RestResource.version()} / {@link org.apache.juneau.rest.RestInfoProvider#getVersion(RestRequest)}
+							<li>{@link org.apache.juneau.rest.annotation.RestResource#tags() @RestResource.tags()} / {@link org.apache.juneau.rest.RestInfoProvider#getTags(RestRequest)}
+							<li>{@link org.apache.juneau.rest.annotation.RestResource#externalDocs() @RestResource.externalDocs()} / {@link org.apache.juneau.rest.RestInfoProvider#getExternalDocs(RestRequest)}
+							<li>{@link org.apache.juneau.rest.annotation.RestMethod#summary() @RestMethod.summary()} / {@link org.apache.juneau.rest.RestInfoProvider#getMethodSummary(String,RestRequest)}
+							<li>{@link org.apache.juneau.rest.annotation.RestMethod#description() @RestMethod.description()} / {@link org.apache.juneau.rest.RestInfoProvider#getMethodDescription(String,RestRequest)}
 							<li>{@link org.apache.juneau.rest.annotation.RestMethod#externalDocs() @RestMethod.externalDocs()} 
 							<li>{@link org.apache.juneau.rest.annotation.RestMethod#tags() @RestMethod.tags()} 
 							<li>{@link org.apache.juneau.rest.annotation.RestMethod#deprecated() @RestMethod.deprecated()} 
@@ -6144,23 +6181,23 @@
 						</ul>
 					</li>					
 				</ul>
-			<li>New {@link org.apache.juneau.rest.RestServletContext#paramFormat} context property.
+			<li>New <code><del>RestServletContext.paramFormat</del></code> context property.
 			<li>New/updated methods on {@link org.apache.juneau.rest.RestServlet}:
 				<ul>
-					<li>{@link org.apache.juneau.rest.RestServlet#createProperties()}
-					<li>{@link org.apache.juneau.rest.RestServlet#createBeanContext(ObjectMap,Class[],Class[])}
-					<li>{@link org.apache.juneau.rest.RestServlet#createBeanFilters()}
-					<li>{@link org.apache.juneau.rest.RestServlet#createPojoSwaps()}
-					<li>{@link org.apache.juneau.rest.RestServlet#createParsers(ObjectMap,Class[],Class[])}
-					<li>{@link org.apache.juneau.rest.RestServlet#createUrlEncodingSerializer(ObjectMap,Class[],Class[])}
-					<li>{@link org.apache.juneau.rest.RestServlet#createUrlEncodingParser(ObjectMap,Class[],Class[])}
-					<li>{@link org.apache.juneau.rest.RestServlet#createConverters(ObjectMap)}
-					<li>{@link org.apache.juneau.rest.RestServlet#createDefaultRequestHeaders(ObjectMap)}
-					<li>{@link org.apache.juneau.rest.RestServlet#createDefaultResponseHeaders(ObjectMap)}
-					<li>{@link org.apache.juneau.rest.RestServlet#createEncoders(ObjectMap)}
-					<li>{@link org.apache.juneau.rest.RestServlet#createGuards(ObjectMap)}
-					<li>{@link org.apache.juneau.rest.RestServlet#createMimetypesFileTypeMap(ObjectMap)}
-					<li>{@link org.apache.juneau.rest.RestServlet#createResponseHandlers(ObjectMap)}
+					<li><code><del>RestServlet.createProperties()</del></code>
+					<li><code><del>RestServlet.createBeanContext(ObjectMap,Class[],Class[])</del></code>
+					<li><code><del>RestServlet.createBeanFilters()</del></code>
+					<li><code><del>RestServlet.createPojoSwaps()</del></code>
+					<li><code><del>RestServlet.createParsers(ObjectMap,Class[],Class[])</del></code>
+					<li><code><del>RestServlet.createUrlEncodingSerializer(ObjectMap,Class[],Class[])</del></code>
+					<li><code><del>RestServlet.createUrlEncodingParser(ObjectMap,Class[],Class[])</del></code>
+					<li><code><del>RestServlet.createConverters(ObjectMap)</del></code>
+					<li><code><del>RestServlet.createDefaultRequestHeaders(ObjectMap)</del></code>
+					<li><code><del>RestServlet.createDefaultResponseHeaders(ObjectMap)</del></code>
+					<li><code><del>RestServlet.createEncoders(ObjectMap)</del></code>
+					<li><code><del>RestServlet.createGuards(ObjectMap)</del></code>
+					<li><code><del>RestServlet.createMimetypesFileTypeMap(ObjectMap)</del></code>
+					<li><code><del>RestServlet.createResponseHandlers(ObjectMap)</del></code>
 				</ul>
 			</li>
 			<li>New client-version annotations:
@@ -6223,10 +6260,9 @@
 
 		<h6 class='topic'>Server</h6>
 		<ul class='spaced-list'>
-			<li>New methods on {@link org.apache.juneau.rest.RestServlet}:
+			<li>New methods on {@link org.apache.juneau.rest.RestContext}:
 				<ul>
-					<li>{@link org.apache.juneau.rest.RestServlet#getMessages()}
-					<li>{@link org.apache.juneau.rest.RestServlet#getMessages(Locale)}
+					<li>{@link org.apache.juneau.rest.RestContext#getMessages()}
 				</ul>
 		</ul>
 
@@ -6569,15 +6605,15 @@
 				</ul>
 			<li>New methods in {@link org.apache.juneau.rest.RestServlet}:
 				<ul>
-					<li>{@link org.apache.juneau.rest.RestServlet#getChildClasses()} - Programmatic equivalent to {@link org.apache.juneau.rest.annotation.RestResource#children()} annotation.
-					<li>{@link org.apache.juneau.rest.RestServlet#shouldLog(HttpServletRequest,HttpServletResponse,RestException)} 
-					<li>{@link org.apache.juneau.rest.RestServlet#shouldLogStackTrace(HttpServletRequest,HttpServletResponse,RestException)} 
-					<li>{@link org.apache.juneau.rest.RestServlet#logObjects(Level,String,Object[])} 
-					<li>{@link org.apache.juneau.rest.RestServlet#resolveStaticFile(String)} 
-					<li>{@link org.apache.juneau.rest.RestServlet#createStyleSheet()} 
-					<li>{@link org.apache.juneau.rest.RestServlet#createFavIcon()} 
-					<li>{@link org.apache.juneau.rest.RestServlet#createStaticFilesMap()} 
-					<li>{@link org.apache.juneau.rest.RestServlet#getConfigMgr()} 
+					<li><code><del>RestServlet.getChildClasses()</del></code>  - Programmatic equivalent to {@link org.apache.juneau.rest.annotation.RestResource#children()} annotation.
+					<li><code><del>RestServlet.shouldLog(HttpServletRequest,HttpServletResponse,RestException)</del></code> 
+					<li><code><del>RestServlet.shouldLogStackTrace(HttpServletRequest,HttpServletResponse,RestException)</del></code> 
+					<li><code><del>RestServlet.logObjects(Level,String,Object[])</del></code> 
+					<li><code><del>RestServlet.resolveStaticFile(String)</del></code> 
+					<li><code><del>RestServlet.createStyleSheet()</del></code> 
+					<li><code><del>RestServlet.createFavIcon()</del></code> 
+					<li><code><del>RestServlet.createStaticFilesMap()</del></code> 
+					<li><code><del>RestServlet.getConfigMgr()</del></code>
 				</ul>
 			<li>Removed {@link org.apache.juneau.jso.JsoParser}
 				from {@link org.apache.juneau.rest.RestServletDefault} and {@link org.apache.juneau.rest.jena.RestServletJenaDefault}.  
@@ -6709,7 +6745,7 @@
 			<li>Changes to {@link org.apache.juneau.rest.RestServlet}:
 				<ul>
 					<li>New methods for accessing external INI config files:<br>  
-						{@link org.apache.juneau.rest.RestServlet#getConfig()}<br>
+						<code><del>RestServlet.getConfig()</del></code><br>
 						<code><del>RestServlet.createConfigFile()</del></code>
 					<li>New <js>"$C{...}"</js> variable that resolve to INI config file values.
 					<li>New <js>"$UE{...}"</js> variable that  URL-encodes the value inside the variable.
@@ -6718,16 +6754,16 @@
 						<del><code>RestServlet.getResourceAsString(String)</code></del><br>
 						<del><code>RestServlet.getResource(Class,String,String)</code></del>.
 							Useful if you want to load predefined POJOs from JSON files in your classpath.
-					<li>New {@link org.apache.juneau.rest.RestServlet#handleNotFound(int,RestRequest,RestResponse)} method for customized handling
+					<li>New <code><del>RestServlet.handleNotFound(int,RestRequest,RestResponse)</del></code> method for customized handling
 						of when a resource or method was not found.  
 				</ul>
 			<li>{@link org.apache.juneau.rest.RestServletDefault}  now automatically processes <js>"/favicon.ico"</js> requests by 
-				overriding the new {@link org.apache.juneau.rest.RestServlet#handleNotFound(int,RestRequest,RestResponse)} method.
+				overriding the new <code><del>RestServlet.handleNotFound(int,RestRequest,RestResponse)</del></code> method.
 			<li>New {@link org.apache.juneau.rest.RestRequest} methods: 
 				<ul>
 					<li>{@link org.apache.juneau.rest.RestRequest#resolveVars(String)}
 					<li><code>RestRequest.getVarResource(String)</code>
-					<li>{@link org.apache.juneau.rest.RestRequest#getConfig()}
+					<li><code><del>RestRequest.getConfig()</del></code>
 				</ul>
 			<li>New {@link org.apache.juneau.rest.RestResponse} methods: 
 				<ul>
@@ -6816,11 +6852,11 @@
 				These replace the various <code>description</code> annotations added 2 days ago with a simpler design.
 			<li>New methods on {@link org.apache.juneau.rest.RestServlet}:
 				<ul>
-					<li>{@link org.apache.juneau.rest.RestServlet#getMethodDescription(String,RestRequest)} so that subclasses
+					<li><code><del>RestServlet.getMethodDescription(String,RestRequest)</del></code> so that subclasses
 						can override the method description in the OPTIONS page.
 					<li><del><code>RestServlet.createRequestVarResolver(RestRequest)</code></del> so that subclasses
 						can override and augment the variable resolver.
-					<li>{@link org.apache.juneau.rest.RestServlet#resolveChild(Class)} and {@link org.apache.juneau.rest.RestServlet#replaceChild(RestServlet)}
+					<li><code><del>RestServlet.resolveChild(Class)</del></code> and <code><del>RestServlet.replaceChild(RestServlet)</del></code>
 						classes that allows customized resolution of servlet instances (e.g. if services are defined in OSGi).
 				</ul> 
 			<li>Reverted the <del><code>MethodDescription</code></del> back to 5.1.0.16 since it was being used by someone.
@@ -6904,7 +6940,7 @@
 					<li><code>$R{trimmedRequestURI}</code> - Returns value from {@link org.apache.juneau.rest.RestRequest#getTrimmedRequestURI()}
 					<li><code>$E{var}</code> - Environment variables.
 				</ul>
-			<li>Added methods {@link org.apache.juneau.rest.RestServlet#getDescription(RestRequest)} and <del><code>RestServlet.getLabel(RestRequest)</code></del>.
+			<li>Added methods <code><del>RestServlet.getDescription(RestRequest)</del></code> and <del><code>RestServlet.getLabel(RestRequest)</code></del>.
 			<li>{@link org.apache.juneau.rest.RestServletDefault} and {@link org.apache.juneau.rest.jena.RestServletJenaDefault} now provide default HTML titles
 				and descriptions:
 				<p class='bcode'>
@@ -7456,7 +7492,7 @@
 		</p>
 		
 		<ul class='spaced-list'>
-			<li>New {@link org.apache.juneau.rest.RestServlet#getPath()} method.
+			<li>New <code><del>RestServlet.getPath()</del></code> method.
 			<li>New <code>SerializerContext.getJavaMethod()</code> and <code>ParserContext.getJavaMethod()</code>
 					to allow access to REST methods that invoked the serializers or parsers.
 				For example, can be used to access additional annotations on REST methods to perform special handing
@@ -7691,20 +7727,20 @@
 			<li>
 				New methods on {@link org.apache.juneau.rest.RestServlet} that allow easier customization by subclasses:
 				<ul>
-					<li><code>RestServlet.createConfigFactory()</code></li>
-					<li><code>RestServlet.createConverters()</code></li>
-					<li><code>RestServlet.createDefaultRequestHeaders()</code></li>
-					<li><code>RestServlet.createDefaultResponseHeaders()</code></li>
-					<li><code>RestServlet.createEncoders()</code></li>
-					<li><code>RestServlet.createFilters()</code></li>
-					<li><code>RestServlet.createGuards()</code></li>
-					<li><code>RestServlet.createMimetypesFileTypeMap()</code></li>
-					<li><code>RestServlet.createParsers()</code></li>
-					<li>{@link org.apache.juneau.rest.RestServlet#createProperties()}</li>
-					<li>{@link org.apache.juneau.rest.RestServlet#createRequestProperties(ObjectMap,RestRequest)}</li>
-					<li><code>RestServlet.createRequestVarResolver(RestRequest)</code></li>
-					<li><code>RestServlet.createSerializers()</code></li>
-					<li><code>RestServlet.createUrlEncodingParser()</code></li>
+					<li><code><del>RestServlet.createConfigFactory()</del></code></li>
+					<li><code><del>RestServlet.createConverters()</del></code></li>
+					<li><code><del>RestServlet.createDefaultRequestHeaders()</del></code></li>
+					<li><code><del>RestServlet.createDefaultResponseHeaders()</del></code></li>
+					<li><code><del>RestServlet.createEncoders()</del></code></li>
+					<li><code><del>RestServlet.createFilters()</del></code></li>
+					<li><code><del>RestServlet.createGuards()</del></code></li>
+					<li><code><del>RestServlet.createMimetypesFileTypeMap()</del></code></li>
+					<li><code><del>RestServlet.createParsers()</del></code></li>
+					<li><code><del>RestServlet.createProperties()</del></code></li>
+					<li><code><del>RestServlet.createRequestProperties(ObjectMap,RestRequest)</del></code></li>
+					<li><code><del>RestServlet.createRequestVarResolver(RestRequest)</del></code></li>
+					<li><code><del>RestServlet.createSerializers()</del></code></li>
+					<li><code><del>RestServlet.createUrlEncodingParser()</del></code></li>
 				</ul>
 			</li>
 			<li>
@@ -8537,7 +8573,7 @@
 				Support for <code>Accept</code> and <code>Content-Type</code> <js>"application/x-www-form-urlencoded"</js> added by default on {@link org.apache.juneau.rest.RestServletDefault}.
 			</li>
 			<li>
-				New {@link org.apache.juneau.rest.RestServlet#renderError(HttpServletRequest,HttpServletResponse,RestException)} method to allow customized handling of response errors.
+				New <code><del>RestServlet.renderError(HttpServletRequest,HttpServletResponse,RestException)</del></code> method to allow customized handling of response errors.
 			</li>
 		</ul>
 	</div>
@@ -8557,7 +8593,7 @@
 		<h6 class='topic'>REST server API changes</h6>
 		<ul class='spaced-list'>
 			<li>New <code>RestServletProperties</code> class that defines all the class-level properties that can be set on the servlet.</li>
-			<li>Properties can be set through {@link org.apache.juneau.rest.annotation.RestResource#properties() @RestResource.properties} annotation, or new {@link org.apache.juneau.rest.RestServlet#setProperty(String,Object)} method.</li>
+			<li>Properties can be set through {@link org.apache.juneau.rest.annotation.RestResource#properties() @RestResource.properties} annotation, or new <code><del>RestServlet.setProperty(String,Object)</del></code> method.</li>
 			<li>New <js>"?noTrace"</js> URL parameter to prevent stack traces from being logged (for JUnit testing of error conditions).</li>
 			<li>New <code>RestServletProperties.REST_useStackTraceHashes</code> property to prevent the same stack trace from being logged multiple times.</li>
 			<li>New <code>RestServletProperties.REST_renderResponseStackTraces</code> property for preventing stack traces in responses for security reasons.</li>
@@ -9041,6 +9077,4 @@
 	</div>
 
 </div>
-</body>
-		
-		
+</body>								

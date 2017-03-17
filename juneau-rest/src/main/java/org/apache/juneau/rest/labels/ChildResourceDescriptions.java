@@ -29,25 +29,25 @@ public class ChildResourceDescriptions extends LinkedList<ResourceDescription> {
 	/**
 	 * Constructor.
 	 *
-	 * @param servlet The servlet that this bean describes.
+	 * @param context The servlet context that this bean describes.
 	 * @param req The HTTP servlet request.
 	 */
-	public ChildResourceDescriptions(RestServlet servlet, RestRequest req) {
-		this(servlet, req, false);
+	public ChildResourceDescriptions(RestContext context, RestRequest req) {
+		this(context, req, false);
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param servlet The servlet that this bean describes.
+	 * @param context The servlet context that this bean describes.
 	 * @param req The HTTP servlet request.
 	 * @param sort If <jk>true</jk>, list will be ordered by name alphabetically.
 	 * Default is to maintain the order as specified in the annotation.
 	 */
-	public ChildResourceDescriptions(RestServlet servlet, RestRequest req, boolean sort) {
+	public ChildResourceDescriptions(RestContext context, RestRequest req, boolean sort) {
 		String uri = req.getTrimmedRequestURI();
-		for (Map.Entry<String,RestServlet> e : servlet.getChildResources().entrySet())
-			add(new ResourceDescription(uri, e.getKey(), e.getValue().getTitle(req)));
+		for (Map.Entry<String,RestContext> e : context.getChildResources().entrySet())
+			add(new ResourceDescription(uri, e.getKey(), e.getValue().getInfoProvider().getTitle(req)));
 		if (sort)
 			Collections.sort(this);
 	}

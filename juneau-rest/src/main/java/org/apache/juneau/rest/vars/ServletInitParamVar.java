@@ -44,6 +44,6 @@ public class ServletInitParamVar extends DefaultingVar {
 
 	@Override /* Parameter */
 	public String resolve(VarResolverSession session, String key) {
-		return session.getSessionObject(RestRequest.class, RequestVar.SESSION_req).getServlet().getServletConfig().getInitParameter(key);
+		return session.getSessionObject(RestRequest.class, RequestVar.SESSION_req).getContext().getServletInitParameter(key);
 	}
 }

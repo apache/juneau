@@ -15,7 +15,6 @@ package org.apache.juneau.rest;
 import java.net.*;
 import java.text.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.urlencoding.*;
 
 /**
@@ -62,7 +61,7 @@ import org.apache.juneau.urlencoding.*;
  * </p>
  * <p>
  * This class is handled by {@link org.apache.juneau.rest.response.RedirectHandler}, a built-in default
- * 	response handler created by {@link RestServlet#createResponseHandlers(ObjectMap)}.
+ * 	response handler created in {@link RestConfig}.
  */
 public final class Redirect {
 

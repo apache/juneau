@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
-import static org.apache.juneau.rest.RestServletContext.*;
+import static org.apache.juneau.rest.RestContext.*;
 
 import java.util.*;
 
@@ -35,7 +35,8 @@ import org.apache.juneau.urlencoding.*;
 	serializers=PlainTextSerializer.class,
 	properties={
 		@Property(name=REST_allowMethodParam, value="*")
-	}
+	},
+	pojoSwaps={CalendarSwap.DateMedium.class}
 )
 public class ParamsResource extends RestServletDefault {
 	private static final long serialVersionUID = 1L;
@@ -104,11 +105,6 @@ public class ParamsResource extends RestServletDefault {
 	@RestMethod(name="PUT", path="/uuid/{uuid}")
 	public void doPut1(RestResponse res, UUID uuid) {
 		res.setOutput("PUT /uuid/"+uuid);
-	}
-
-	@Override /* RestServlet */
-	public Class<?>[] createPojoSwaps() {
-		return new Class[]{CalendarSwap.DateMedium.class};
 	}
 
 	//====================================================================================================

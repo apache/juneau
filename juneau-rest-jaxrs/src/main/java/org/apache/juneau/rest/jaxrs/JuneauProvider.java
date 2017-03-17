@@ -65,7 +65,7 @@ public @interface JuneauProvider {
 	 * <p>
 	 * Any of the following property names can be specified:
 	 * <ul>
-	 * 	<li>{@link RestServletContext}
+	 * 	<li>{@link RestContext}
 	 * 	<li>{@link BeanContext}
 	 * 	<li>{@link SerializerContext}
 	 * 	<li>{@link ParserContext}

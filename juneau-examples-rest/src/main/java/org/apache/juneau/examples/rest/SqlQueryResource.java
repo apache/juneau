@@ -43,17 +43,20 @@ import org.apache.juneau.rest.annotation.Body;
 public class SqlQueryResource extends Resource {
 	private static final long serialVersionUID = 1L;
 
-	private ConfigFile cf = getConfig();
+	private String driver, connectionUrl;
+	private boolean allowUpdates, allowTempUpdates, includeRowNums;
 
-	private String driver = cf.getString("SqlQueryResource/driver");
-	private String connectionUrl = cf.getString("SqlQueryResource/connectionUrl");
-	private boolean
-		allowUpdates = cf.getBoolean("SqlQueryResource/allowUpdates", false),
-		allowTempUpdates = cf.getBoolean("SqlQueryResource/allowTempUpdates", false),
+	@Override /* RestServlet */
+	public synchronized void init(RestConfig servletConfig) throws Exception {
+		super.init(servletConfig);
+		ConfigFile cf = servletConfig.getConfigFile();
+
+		driver = cf.getString("SqlQueryResource/driver");
+		connectionUrl = cf.getString("SqlQueryResource/connectionUrl");
+		allowUpdates = cf.getBoolean("SqlQueryResource/allowUpdates", false);
+		allowTempUpdates = cf.getBoolean("SqlQueryResource/allowTempUpdates", false);
 		includeRowNums = cf.getBoolean("SqlQueryResource/includeRowNums", false);
-
-	@Override /* Servlet */
-	public void init() {
+		
 		try {
 			Class.forName(driver).newInstance();
 		} catch (Exception e) {

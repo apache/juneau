@@ -36,6 +36,6 @@ public abstract class RestServletJenaGroupDefault extends RestServletJenaDefault
 	 */
 	@RestMethod(name="GET", path="/", description="Child resources")
 	public ChildResourceDescriptions getChildren(RestRequest req) {
-		return new ChildResourceDescriptions(this, req);
+		return new ChildResourceDescriptions(getContext(), req);
 	}
 }

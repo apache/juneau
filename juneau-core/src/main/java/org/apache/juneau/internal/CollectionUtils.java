@@ -25,7 +25,7 @@ public class CollectionUtils {
 	 * @param in The map to reverse the order on.
 	 * @return A new {@link LinkedHashMap} with keys in reverse order.
 	 */
-	public static <K,V> LinkedHashMap<K,V> reverse(LinkedHashMap<K,V> in) {
+	public static <K,V> LinkedHashMap<K,V> reverse(Map<K,V> in) {
 		if (in == null)
 			return null;
 		LinkedHashMap<K,V> m = new LinkedHashMap<K,V>();

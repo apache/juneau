@@ -195,13 +195,30 @@ public final class ArrayUtils {
 	 * @param componentType The component type of the collection.
 	 * @return A new array.
 	 */
-	public static <T> Object toArray(Collection<T> c, Class<T> componentType) {
+	public static <T> Object toArray(Collection<?> c, Class<T> componentType) {
 		Object a = Array.newInstance(componentType, c.size());
-		Iterator<T> it = c.iterator();
+		Iterator<?> it = c.iterator();
 		int i = 0;
 		while (it.hasNext())
 			Array.set(a, i++, it.next());
 		return a;
+	}
+
+	/**
+	 * Shortcut for calling <code>myList.toArray(new T[myList.size()]);</code>
+	 *
+	 * @param c The collection being converted to an array.
+	 * @param componentType The component type of the array.
+	 * @return The collection converted to an array.
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> T[] toObjectArray(Collection<?> c, Class<T> componentType) {
+		Object a = Array.newInstance(componentType, c.size());
+		Iterator<?> it = c.iterator();
+		int i = 0;
+		while (it.hasNext())
+			Array.set(a, i++, it.next());
+		return (T[])a;
 	}
 
 	/**

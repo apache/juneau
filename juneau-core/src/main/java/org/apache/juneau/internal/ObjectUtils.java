@@ -10,24 +10,27 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest;
-
-import java.lang.reflect.*;
+package org.apache.juneau.internal;
 
 /**
- * Subclass of {@link RestMatcher} that gives access to the servlet/resource and Java method it's applied to.
- * <p>
- * Essentially the same as {@link RestMatcher} except has a constructor where the
- * 	Java method is passed in so that you can access annotations defined on it to tailor
- * 	the behavior of the matcher.
+ * Object-related utility methods.
  */
-public abstract class RestMatcherReflecting extends RestMatcher {
+public class ObjectUtils {
 
 	/**
-	 * Constructor.
+	 * Returns <jk>true</jk> if the specified objects are equal.
+	 * <p>
+	 * Gracefully handles <jk>null</jk>s.
 	 *
-	 * @param resource The REST servlet.
-	 * @param javaMethod The Java method that this rest matcher is defined on.
+	 * @param o1 Object #1
+	 * @param o2 Object #2
+	 * @return <jk>true</jk> if the objects are equal or both <jk>null</jk>.
 	 */
-	protected RestMatcherReflecting(Object resource, Method javaMethod) {}
+	public static boolean equals(Object o1, Object o2) {
+		if (o1 == null && o2 == null)
+			return true;
+		if (o1 == null || o2 == null)
+			return false;
+		return o1.equals(o2);
+	}
 }

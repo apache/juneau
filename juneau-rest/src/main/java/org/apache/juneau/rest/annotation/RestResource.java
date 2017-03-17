@@ -20,7 +20,8 @@ import java.lang.annotation.*;
 import javax.servlet.http.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.encoders.*;
+import org.apache.juneau.encoders.Encoder;
+import org.apache.juneau.ini.*;
 import org.apache.juneau.jena.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
@@ -31,8 +32,10 @@ import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.*;
 
 /**
- * Optionally used to associate metadata on an instance of {@link RestServlet}.
+ * Used to denote that a class is a REST resource and to associate metadata on it.
  * <p>
+ * Usually used on a subclass of {@link RestServlet}, but can be used to annotate any class that you want to expose as a REST resource.
+ *
  * Refer to <a class='doclink' href='../package-summary.html#TOC'>org.apache.juneau.rest</a> doc for information on using this class.
  */
 @Documented
@@ -46,9 +49,8 @@ public @interface RestResource {
 	 * <p>
 	 * This annotation is used to provide localized messages for the following methods:
 	 * <ul>
-	 * 	<li>{@link RestServlet#getMessage(java.util.Locale, String, Object...)}
-	 * 	<li>{@link RestServlet#getTitle(RestRequest)}
-	 * 	<li>{@link RestServlet#getDescription(RestRequest)}
+	 * 	<li>{@link RestRequest#getMessage(String, Object...)}
+	 * 	<li>{@link RestContext#getMessages()}
 	 * </ul>
 	 * <p>
 	 * Refer to the {@link MessageBundle} class for a description of the message key formats
@@ -69,7 +71,9 @@ public @interface RestResource {
 	 * <p>
 	 * Typically, guards will be used for permissions checking on the user making the request,
 	 * 	but it can also be used for other purposes like pre-call validation of a request.
-	 */
+	 * <p>
+	 * The programmatic equivalent to this annotation are the {@link RestConfig#addGuards(Class...)}/{@link RestConfig#addGuards(RestGuard...)} methods.
+ 	 */
 	Class<? extends RestGuard>[] guards() default {};
 
 	/**
@@ -82,6 +86,8 @@ public @interface RestResource {
 	 * Can be used for performing post-processing on the response object before serialization.
 	 * <p>
 	 * Default converter implementations are provided in the <a class='doclink' href='../converters/package-summary.html#TOC'>org.apache.juneau.rest.converters</a> package.
+	 * <p>
+	 * The programmatic equivalent to this annotation are the {@link RestConfig#addConverters(Class...)}/{@link RestConfig#addConverters(RestConverter...)} methods.
 	 */
 	Class<? extends RestConverter>[] converters() default {};
 
@@ -90,14 +96,16 @@ public @interface RestResource {
 	 * <p>
 	 * Shortcut to add bean filters to the bean contexts of the objects returned by the following methods:
 	 * <ul>
-	 * 	<li>{@link RestServlet#getBeanContext()}
-	 * 	<li>{@link RestServlet#getSerializers()}
-	 * 	<li>{@link RestServlet#getParsers()}
+	 * 	<li>{@link RestContext#getBeanContext()}
+	 * 	<li>{@link RestContext#getSerializers()}
+	 * 	<li>{@link RestContext#getParsers()}
 	 * </ul>
 	 * <p>
 	 * If the specified class is an instance of {@link BeanFilterBuilder}, then a filter built from that builder is added.
 	 * Any other classes are wrapped in a {@link InterfaceBeanFilterBuilder} to indicate that subclasses should
 	 * 	be treated as the specified class type.
+	 * <p>
+	 * The programmatic equivalent to this annotation is the {@link RestConfig#addBeanFilters(Class...)} method.
 	 */
 	Class<?>[] beanFilters() default {};
 
@@ -106,13 +114,15 @@ public @interface RestResource {
 	 * <p>
 	 * Shortcut to add POJO swaps to the bean contexts of the objects returned by the following methods:
 	 * <ul>
-	 * 	<li>{@link RestServlet#getBeanContext()}
-	 * 	<li>{@link RestServlet#getSerializers()}
-	 * 	<li>{@link RestServlet#getParsers()}
+	 * 	<li>{@link RestContext#getBeanContext()}
+	 * 	<li>{@link RestContext#getSerializers()}
+	 * 	<li>{@link RestContext#getParsers()}
 	 * </ul>
 	 * <p>
 	 * If the specified class is an instance of {@link PojoSwap}, then that swap is added.
 	 * Any other classes are wrapped in a {@link SurrogateSwap}.
+	 * <p>
+	 * The programmatic equivalent to this annotation is the {@link RestConfig#addPojoSwaps(Class...)} method.
 	 */
 	Class<?>[] pojoSwaps() default {};
 
@@ -121,14 +131,14 @@ public @interface RestResource {
 	 * <p>
 	 * Shortcut for specifying class-level properties on this servlet to the objects returned by the following methods:
 	 * <ul>
-	 * 	<li>{@link RestServlet#getBeanContext()}
-	 * 	<li>{@link RestServlet#getSerializers()}
-	 * 	<li>{@link RestServlet#getParsers()}
+	 * 	<li>{@link RestContext#getBeanContext()}
+	 * 	<li>{@link RestContext#getSerializers()}
+	 * 	<li>{@link RestContext#getParsers()}
 	 * </ul>
 	 * <p>
 	 * Any of the following property names can be specified:
 	 * <ul>
-	 * 	<li>{@link RestServletContext}
+	 * 	<li>{@link RestContext}
 	 * 	<li>{@link BeanContext}
 	 * 	<li>{@link SerializerContext}
 	 * 	<li>{@link ParserContext}
@@ -144,6 +154,8 @@ public @interface RestResource {
 	 * <p>
 	 * In some cases, properties can be overridden at runtime through the {@link RestResponse#setProperty(String, Object)} method
 	 * 	or through a {@link Properties @Properties} annotated method parameter.
+	 * <p>
+	 * The programmatic equivalent to this annotation are the {@link RestConfig#setProperty(String, Object)}/{@link RestConfig#setProperties(java.util.Map)} methods.
 	 */
 	Property[] properties() default {};
 
@@ -151,6 +163,8 @@ public @interface RestResource {
 	 * Specifies a list of {@link Serializer} classes to add to the list of serializers available for this servlet.
 	 * <p>
 	 * This annotation can only be used on {@link Serializer} classes that have no-arg constructors.
+	 * <p>
+	 * The programmatic equivalent to this annotation are the {@link RestConfig#addSerializers(Class...)}/{@link RestConfig#addSerializers(Serializer...)} methods.
 	 */
 	Class<? extends Serializer>[] serializers() default {};
 
@@ -158,6 +172,8 @@ public @interface RestResource {
 	 * Specifies a list of {@link Parser} classes to add to the list of parsers available for this servlet.
 	 * <p>
 	 * This annotation can only be used on {@link Parser} classes that have no-arg constructors.
+	 * <p>
+	 * The programmatic equivalent to this annotation are the {@link RestConfig#addParsers(Class...)}/{@link RestConfig#addParsers(Parser...)} methods.
 	 */
 	Class<? extends Parser>[] parsers() default {};
 
@@ -167,6 +183,8 @@ public @interface RestResource {
 	 * 	HTTP responses.
 	 * <p>
 	 * See {@link ResponseHandler} for details.
+	 * <p>
+	 * The programmatic equivalent to this annotation are the {@link RestConfig#addResponseHandlers(Class...)}/{@link RestConfig#addResponseHandlers(ResponseHandler...)} methods.
 	 */
 	Class<? extends ResponseHandler>[] responseHandlers() default {};
 
@@ -185,6 +203,8 @@ public @interface RestResource {
 	 * 		...
 	 * 	}
 	 * </p>
+	 * <p>
+	 * The programmatic equivalent to this annotation are the {@link RestConfig#addEncoders(Class...)}/{@link RestConfig#addEncoders(Encoder...)} methods.
 	 */
 	Class<? extends Encoder>[] encoders() default {};
 
@@ -208,6 +228,8 @@ public @interface RestResource {
 	 * 		...
 	 * 	}
 	 * </p>
+	 * <p>
+	 * The programmatic equivalent to this annotation are the {@link RestConfig#addDefaultRequestHeader(String, Object)}/{@link RestConfig#addDefaultRequestHeaders(String...)} methods.
 	 */
 	String[] defaultRequestHeaders() default {};
 
@@ -230,6 +252,8 @@ public @interface RestResource {
 	 * 		...
 	 * 	}
 	 * </p>
+	 * <p>
+	 * The programmatic equivalent to this annotation are the {@link RestConfig#addDefaultResponseHeader(String, Object)}/{@link RestConfig#addDefaultResponseHeaders(String...)} methods.
 	 */
 	String[] defaultResponseHeaders() default {};
 
@@ -270,6 +294,8 @@ public @interface RestResource {
 	 * 		</p>
 	 * 	</dd>
 	 * </dl>
+	 * <p>
+	 * The programmatic equivalent to this annotation are the {@link RestConfig#addChildResource(String, Object)}/{@link RestConfig#addChildResources(Class...)}/{@link RestConfig#addChildResources(Object...)} methods.
 	 */
 	Class<?>[] children() default {};
 
@@ -281,6 +307,8 @@ public @interface RestResource {
 	 * <p>
 	 * This annotation is ignored on top-level servlets (i.e. servlets defined in <code>web.xml</code> files).
 	 * Therefore, implementers can optionally specify a path value for documentation purposes.
+	 * <p>
+	 * The programmatic equivalent to this annotation is the {@link RestConfig#setPath(String)} method.
 	 */
 	String path() default "";
 
@@ -288,7 +316,7 @@ public @interface RestResource {
 	 * Optional servlet title.
 	 * <p>
 	 * It is used to populate the Swagger title field and to display on HTML pages.
-	 * This value can be retrieved programmatically through the {@link RestServlet#getTitle(RestRequest)} method.
+	 * This value can be retrieved programmatically through the {@link RestRequest#getServletTitle()} method.
 	 * <p>
 	 * The default value pulls the label from the <code>label</code> entry in the servlet resource bundle.
 	 * 	(e.g. <js>"title = foo"</js> or <js>"MyServlet.title = foo"</js>).
@@ -296,6 +324,8 @@ public @interface RestResource {
 	 * This field can contain variables (e.g. "$L{my.localized.variable}").
 	 * <p>
 	 * Corresponds to the swagger field <code>/info/title</code>.
+	 * <p>
+	 * The programmatic equivalent to this annotation is the {@link RestInfoProvider#getTitle(RestRequest)} method.
 	 */
 	String title() default "";
 
@@ -303,7 +333,7 @@ public @interface RestResource {
 	 * Optional servlet description.
 	 * <p>
 	 * It is used to populate the Swagger description field and to display on HTML pages.
-	 * This value can be retrieved programmatically through the {@link RestServlet#getDescription(RestRequest)} method.
+	 * This value can be retrieved programmatically through the {@link RestRequest#getServletDescription()} method.
 	 * <p>
 	 * The default value pulls the description from the <code>description</code> entry in the servlet resource bundle.
 	 * 	(e.g. <js>"description = foo"</js> or <js>"MyServlet.description = foo"</js>).
@@ -311,6 +341,8 @@ public @interface RestResource {
 	 * This field can contain variables (e.g. "$L{my.localized.variable}").
 	 * <p>
 	 * Corresponds to the swagger field <code>/info/description</code>.
+	 * <p>
+	 * The programmatic equivalent to this annotation is the {@link RestInfoProvider#getDescription(RestRequest)} method.
 	 */
 	String description() default "";
 
@@ -318,7 +350,6 @@ public @interface RestResource {
 	 * Optional servlet terms-of-service for this API.
 	 * <p>
 	 * It is used to populate the Swagger terms-of-service field.
-	 * This value can be retrieved programmatically through the {@link RestServlet#getTermsOfService(RestRequest)} method.
 	 * <p>
 	 * The default value pulls the description from the <code>termsOfService</code> entry in the servlet resource bundle.
 	 * 	(e.g. <js>"termsOfService = foo"</js> or <js>"MyServlet.termsOfService = foo"</js>).
@@ -326,6 +357,8 @@ public @interface RestResource {
 	 * This field can contain variables (e.g. "$L{my.localized.variable}").
 	 * <p>
 	 * Corresponds to the swagger field <code>/info/termsOfService</code>.
+	 * <p>
+	 * The programmatic equivalent to this annotation is the {@link RestInfoProvider#getTermsOfService(RestRequest)} method.
 	 */
 	String termsOfService() default "";
 
@@ -333,7 +366,6 @@ public @interface RestResource {
 	 * Optional contact information for the exposed API.
 	 * <p>
 	 * It is used to populate the Swagger contact field and to display on HTML pages.
-	 * This value can be retrieved programmatically through the {@link RestServlet#getContact(RestRequest)} method.
 	 * <p>
 	 * A simplified JSON string with the following fields:
 	 * <p class='bcode'>
@@ -355,6 +387,8 @@ public @interface RestResource {
 	 * This field can contain variables (e.g. "$L{my.localized.variable}").
 	 * <p>
 	 * Corresponds to the swagger field <code>/info/contact</code>.
+	 * <p>
+	 * The programmatic equivalent to this annotation is the {@link RestInfoProvider#getContact(RestRequest)} method.
 	 */
 	String contact() default "";
 
@@ -362,7 +396,6 @@ public @interface RestResource {
 	 * Optional license information for the exposed API.
 	 * <p>
 	 * It is used to populate the Swagger license field and to display on HTML pages.
-	 * This value can be retrieved programmatically through the {@link RestServlet#getLicense(RestRequest)} method.
 	 * <p>
 	 * A simplified JSON string with the following fields:
 	 * <p class='bcode'>
@@ -383,6 +416,8 @@ public @interface RestResource {
 	 * This field can contain variables (e.g. "$L{my.localized.variable}").
 	 * <p>
 	 * Corresponds to the swagger field <code>/info/license</code>.
+	 * <p>
+	 * The programmatic equivalent to this annotation is the {@link RestInfoProvider#getLicense(RestRequest)} method.
 	 */
 	String license() default "";
 
@@ -390,7 +425,6 @@ public @interface RestResource {
 	 * Provides the version of the application API (not to be confused with the specification version).
 	 * <p>
 	 * It is used to populate the Swagger version field and to display on HTML pages.
-	 * This value can be retrieved programmatically through the {@link RestServlet#getVersion(RestRequest)} method.
 	 * <p>
 	 * The default value pulls the description from the <code>version</code> entry in the servlet resource bundle.
 	 * 	(e.g. <js>"version = 2.0"</js> or <js>"MyServlet.version = 2.0"</js>).
@@ -398,6 +432,8 @@ public @interface RestResource {
 	 * This field can contain variables (e.g. "$L{my.localized.variable}").
 	 * <p>
 	 * Corresponds to the swagger field <code>/info/version</code>.
+	 * <p>
+	 * The programmatic equivalent to this annotation is the {@link RestInfoProvider#getVersion(RestRequest)} method.
 	 */
 	String version() default "";
 
@@ -405,7 +441,6 @@ public @interface RestResource {
 	 * Optional tagging information for the exposed API.
 	 * <p>
 	 * It is used to populate the Swagger tags field and to display on HTML pages.
-	 * This value can be retrieved programmatically through the {@link RestServlet#getTags(RestRequest)} method.
 	 * <p>
 	 * A simplified JSON string with the following fields:
 	 * <p class='bcode'>
@@ -432,6 +467,8 @@ public @interface RestResource {
 	 * This field can contain variables (e.g. "$L{my.localized.variable}").
 	 * <p>
 	 * Corresponds to the swagger field <code>/tags</code>.
+	 * <p>
+	 * The programmatic equivalent to this annotation is the {@link RestInfoProvider#getTags(RestRequest)} method.
 	 */
 	String tags() default "";
 
@@ -439,7 +476,6 @@ public @interface RestResource {
 	 * Optional external documentation information for the exposed API.
 	 * <p>
 	 * It is used to populate the Swagger external documentation field and to display on HTML pages.
-	 * This value can be retrieved programmatically through the {@link RestServlet#getExternalDocs(RestRequest)} method.
 	 * <p>
 	 * A simplified JSON string with the following fields:
 	 * <p class='bcode'>
@@ -460,6 +496,8 @@ public @interface RestResource {
 	 * This field can contain variables (e.g. "$L{my.localized.variable}").
 	 * <p>
 	 * Corresponds to the swagger field <code>/tags</code>.
+	 * <p>
+	 * The programmatic equivalent to this annotation is the {@link RestInfoProvider#getExternalDocs(RestRequest)} method.
 	 */
 	String externalDocs() default "";
 
@@ -469,6 +507,8 @@ public @interface RestResource {
 	 * The configuration file .
 	 * <p>
 	 * This field can contain variables (e.g. "$L{my.localized.variable}").
+	 * <p>
+	 * The programmatic equivalent to this annotation is the {@link RestConfig#setConfigFile(ConfigFile)} method.
 	 */
 	String config() default "";
 
@@ -517,6 +557,8 @@ public @interface RestResource {
 	 * Multiple stylesheets can be specified as a comma-delimited list.
 	 * When multiple stylesheets are specified, their contents will be concatenated and return in the order specified
 	 * in the list.
+	 * <p>
+	 * The programmatic equivalent to this annotation are the {@link RestConfig#addStyleSheet(Object...)}/{@link RestConfig#addStyleSheet(Class, String)} methods.
 	 */
 	String stylesheet() default "";
 
@@ -547,6 +589,8 @@ public @interface RestResource {
 	 * 	<li><code>org.apache.juneau.rest.mydocs</code> package (since <code>RestServletDefault</code> is in <code>org.apache.juneau.rest</code>).
 	 * 	<li><code>[working-dir]/mydocs</code> directory.
 	 * </ol>
+	 * <p>
+	 * The programmatic equivalent to this annotation are the {@link RestConfig#setFavIcon(Object)}/{@link RestConfig#setFavIcon(Class, String)} methods.
 	 */
 	String favicon() default "";
 
@@ -558,8 +602,6 @@ public @interface RestResource {
 	 * Mappings are cumulative from parent to child.  Child resources can override mappings made on parent resources.
 	 * <p>
 	 * If the file cannot be located, the request will return {@link HttpServletResponse#SC_NOT_FOUND}.
-	 * <p>
-	 * The media type on the response is determined by the {@link RestServlet#getMimetypesFileTypeMap()} method.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -581,6 +623,8 @@ public @interface RestResource {
 	 * 	<li><code>org.apache.juneau.rest.docs</code> package (since <code>RestServletDefault</code> is in <code>org.apache.juneau.rest</code>).
 	 * 	<li><code>[working-dir]/docs</code> directory.
 	 * </ol>
+	 * <p>
+	 * The programmatic equivalent to this annotation is the {@link RestConfig#addStaticFiles(Class, String)} method.
 	 */
 	String staticFiles() default "";
 
@@ -591,8 +635,64 @@ public @interface RestResource {
 	 * 	changes.  Used in conjunction with {@link RestMethod#clientVersion()} annotation.
 	 * <p>
 	 * If not specified, uses <js>"X-Client-Version"</js>.
+	 * <p>
+	 * The programmatic equivalent to this annotation is the {@link RestConfig#setClientVersionHeader(String)} method.
 	 */
 	String clientVersionHeader() default "";
+
+	/**
+	 * Specifies the resolver class to use for resolving child resources by class name.
+	 * <p>
+	 * The default implementation simply instantiates the class using one of the following constructors:
+	 * <ul>
+	 * 	<li><code><jk>public</jk> T(RestConfig)</code>
+	 * 	<li><code><jk>public</jk> T()</code>
+	 * </ul>
+	 * The former constructor can be used to get access to the {@link RestConfig} object to get access to the
+	 * config file and initialization information or make programmatic modifications to the resource before
+	 * full initialization.
+	 * <p>
+	 * Non-<code>RestServlet</code> classes can also add the following two methods to get access to the
+	 * {@link RestConfig} and {@link RestContext} objects:
+	 * <ul>
+	 * 	<li><jk>public void</jk> init(RestConfig);</code>
+	 * 	<li><jk>public void</jk> init(RestContext);</code>
+	 * </ul>
+	 * <p>
+	 * Subclasses can be used to provide customized resolution of REST resource class instances.
+	 * <p>
+	 * The programmatic equivalent to this annotation are the {@link RestConfig#setResourceResolver(Class)}/{@link RestConfig#setResourceResolver(RestResourceResolver)} methods.
+	 */
+	Class<? extends RestResourceResolver> resourceResolver() default RestResourceResolver.class;
+
+	/**
+	 * Specifies the logger class to use for logging.
+	 * <p>
+	 * The default logger performs basic error logging to the Java logger.
+	 * Subclasses can be used to customize logging behavior on the resource.
+	 * <p>
+	 * The programmatic equivalent to this annotation are the {@link RestConfig#setLogger(Class)}/{@link RestConfig#setLogger(RestLogger)} methods.
+	 */
+	Class<? extends RestLogger> logger() default RestLogger.Normal.class;
+
+	/**
+	 * Specifies the REST call handler class.
+	 * <p>
+	 * This class handles the basic lifecycle of an HTTP REST call.
+	 * Subclasses can be used to customize how these HTTP calls are handled.
+	 * <p>
+	 * The programmatic equivalent to this annotation are the {@link RestConfig#setCallHandler(Class)}/{@link RestConfig#setCallHandler(RestCallHandler)} methods.
+	 */
+	Class<? extends RestCallHandler> callHandler() default RestCallHandler.class;
+
+	/**
+	 * Specifies the class used to retrieve title/description/swagger information about a resource.
+	 * <p>
+	 * Subclasses can be used to customize the documentation on a resource.
+	 * <p>
+	 * The programmatic equivalent to this annotation are the {@link RestConfig#setInfoProvider(Class)}/{@link RestConfig#setInfoProvider(RestInfoProvider)} methods.
+	 */
+	Class<? extends RestInfoProvider> infoProvider() default RestInfoProvider.class;
 
 	/**
 	 * TODO

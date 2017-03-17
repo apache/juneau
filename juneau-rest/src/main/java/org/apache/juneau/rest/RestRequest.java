@@ -19,6 +19,7 @@ import static javax.servlet.http.HttpServletResponse.*;
 import java.io.*;
 import java.lang.reflect.*;
 import java.net.*;
+import java.nio.charset.*;
 import java.text.*;
 import java.util.*;
 import java.util.logging.*;
@@ -63,13 +64,15 @@ import org.apache.juneau.utils.*;
 @SuppressWarnings("unchecked")
 public final class RestRequest extends HttpServletRequestWrapper {
 
-	private final RestServlet servlet;
+	private final RestContext context;
+
 	private final String method;
 	private String pathRemainder, body;
 	private Method javaMethod;
 	private ObjectMap properties;
 	private SerializerGroup serializerGroup;
 	private ParserGroup parserGroup;
+	private EncoderGroup encoders;
 	private Encoder encoder;
 	private int contentLength;
 	private final boolean debug;
@@ -89,17 +92,17 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	/**
 	 * Constructor.
 	 */
-	RestRequest(RestServlet servlet, HttpServletRequest req) throws ServletException {
+	RestRequest(RestContext context, HttpServletRequest req) throws ServletException {
 		super(req);
+		this.context = context;
 
 		try {
-			this.servlet = servlet;
 			isPost = req.getMethod().equalsIgnoreCase("POST");
 
 			// If this is a POST, we want to parse the query parameters ourselves to prevent
 			// the servlet code from processing the HTTP body as URL-Encoded parameters.
 			if (isPost)
-				queryParams = servlet.getUrlEncodingParser().parseIntoSimpleMap(getQueryString());
+				queryParams = context.getUrlEncodingParser().parseIntoSimpleMap(getQueryString());
 			else {
 				queryParams = req.getParameterMap();
 			}
@@ -109,23 +112,23 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			String _method = super.getMethod();
 
 			String m = getQueryParameter("method");
-			if (! StringUtils.isEmpty(m) && (servlet.context.allowMethodParams.contains(m) || servlet.context.allowMethodParams.contains("*")))
+			if (context.allowMethodParam(m))
 				_method = m;
 
 			method = _method;
 
-			if (servlet.context.allowBodyParam) {
+			if (context.isAllowBodyParam()) {
 				body = getQueryParameter("body");
 				if (body != null)
 					setHeader("Content-Type", UonSerializer.DEFAULT.getResponseContentType());
 			}
 
-			defaultServletHeaders = servlet.getDefaultRequestHeaders();
+			defaultServletHeaders = context.getDefaultRequestHeaders();
 
 			debug = "true".equals(getQueryParameter("debug", "false"));
 
 			if (debug) {
-				servlet.log(Level.INFO, toString());
+				context.getLogger().log(Level.INFO, toString());
 			}
 
 		} catch (RestException e) {
@@ -139,7 +142,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * Called from RestServlet after a match has been made but before the guard or method invocation.
 	 */
 	@SuppressWarnings("hiding")
-	final void init(Method javaMethod, String pathRemainder, ObjectMap properties, Map<String,String> mDefaultRequestHeaders, String defaultCharset, SerializerGroup mSerializers, ParserGroup mParsers, UrlEncodingParser mUrlEncodingParser) {
+	final void init(Method javaMethod, String pathRemainder, ObjectMap properties, Map<String,String> mDefaultRequestHeaders, String defaultCharset, SerializerGroup mSerializers, ParserGroup mParsers, UrlEncodingParser mUrlEncodingParser, EncoderGroup encoders) {
 		this.javaMethod = javaMethod;
 		this.pathRemainder = pathRemainder;
 		this.properties = properties;
@@ -149,6 +152,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		this.urlEncodingParser = mUrlEncodingParser;
 		this.beanSession = urlEncodingParser.getBeanContext().createSession();
 		this.defaultCharset = defaultCharset;
+		this.encoders = encoders;
 	}
 
 	/**
@@ -403,7 +407,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			}
 			if (charset == null)
 				charset = defaultCharset;
-			if (! RestServlet.availableCharsets.containsKey(charset))
+			if (! Charset.isSupported(charset))
 				throw new RestException(SC_UNSUPPORTED_MEDIA_TYPE, "Unsupported charset in header ''Content-Type'': ''{0}''", h);
 		}
 		return charset;
@@ -1299,11 +1303,11 @@ public final class RestRequest extends HttpServletRequestWrapper {
 					properties.append("mediaType", mediaType).append("characterEncoding", getCharacterEncoding());
 					if (! p.isReaderParser()) {
 						InputStreamParser p2 = (InputStreamParser)p;
-						ParserSession session = p2.createSession(getInputStream(), properties, getJavaMethod(), getServlet(), locale, timeZone, mediaType);
+						ParserSession session = p2.createSession(getInputStream(), properties, getJavaMethod(), context.getResource(), locale, timeZone, mediaType);
 						return p2.parseSession(session, cm);
 					}
 					ReaderParser p2 = (ReaderParser)p;
-					ParserSession session = p2.createSession(getUnbufferedReader(), properties, getJavaMethod(), getServlet(), locale, timeZone, mediaType);
+					ParserSession session = p2.createSession(getUnbufferedReader(), properties, getJavaMethod(), context.getResource(), locale, timeZone, mediaType);
 					return p2.parseSession(session, cm);
 				} catch (ParseException e) {
 					throw new RestException(SC_BAD_REQUEST,
@@ -1576,45 +1580,45 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	/**
 	 * Returns the localized servlet title.
 	 * <p>
-	 * Equivalent to calling {@link RestServlet#getTitle(RestRequest)} with this object.
+	 * Equivalent to calling {@link RestInfoProvider#getTitle(RestRequest)} with this object.
 	 *
 	 * @return The localized servlet label.
 	 */
 	public String getServletTitle() {
-		return servlet.getTitle(this);
+		return context.getInfoProvider().getTitle(this);
 	}
 
 	/**
 	 * Returns the localized servlet description.
 	 * <p>
-	 * Equivalent to calling {@link RestServlet#getDescription(RestRequest)} with this object.
+	 * Equivalent to calling {@link RestInfoProvider#getDescription(RestRequest)} with this object.
 	 *
 	 * @return The localized servlet description.
 	 */
 	public String getServletDescription() {
-		return servlet.getDescription(this);
+		return context.getInfoProvider().getDescription(this);
 	}
 
 	/**
 	 * Returns the localized method summary.
 	 * <p>
-	 * Equivalent to calling {@link RestServlet#getMethodSummary(String, RestRequest)} with this object.
+	 * Equivalent to calling {@link RestInfoProvider#getMethodSummary(String, RestRequest)} with this object.
 	 *
 	 * @return The localized method description.
 	 */
 	public String getMethodSummary() {
-		return servlet.getMethodSummary(javaMethod.getName(), this);
+		return context.getInfoProvider().getMethodSummary(javaMethod.getName(), this);
 	}
 
 	/**
 	 * Returns the localized method description.
 	 * <p>
-	 * Equivalent to calling {@link RestServlet#getMethodDescription(String, RestRequest)} with this object.
+	 * Equivalent to calling {@link RestInfoProvider#getMethodDescription(String, RestRequest)} with this object.
 	 *
 	 * @return The localized method description.
 	 */
 	public String getMethodDescription() {
-		return servlet.getMethodDescription(javaMethod.getName(), this);
+		return context.getInfoProvider().getMethodDescription(javaMethod.getName(), this);
 	}
 
 
@@ -1713,14 +1717,14 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Shortcut method for calling {@link RestServlet#getMessage(Locale, String, Object...)} based on the request locale.
+	 * Shortcut method for calling {@link MessageBundle#getString(Locale, String, Object...)} based on the request locale.
 	 *
 	 * @param key The message key.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 * @return The localized message.
 	 */
 	public String getMessage(String key, Object...args) {
-		return servlet.getMessage(getLocale(), key, args);
+		return context.getMessages().getString(getLocale(), key, args);
 	}
 
 	/**
@@ -1729,7 +1733,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return The resource bundle.  Never <jk>null</jk>.
 	 */
 	public MessageBundle getResourceBundle() {
-		return servlet.getMessages(getLocale());
+		return context.getMessages().getBundle(getLocale());
 	}
 
 	/**
@@ -1740,8 +1744,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * @return The servlet handling the request.
 	 */
-	public RestServlet getServlet() {
-		return servlet;
+	public RestContext getContext() {
+		return context;
 	}
 
 	/**
@@ -1772,13 +1776,13 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Returns the variable resolver session for this request using session objects created by {@link RestServlet#getSessionObjects(RestRequest)}.
+	 * Returns the variable resolver session for this request using session objects created by {@link RestCallHandler#getSessionObjects(RestRequest)}.
 	 *
 	 * @return The variable resolver for this request.
 	 */
 	public VarResolverSession getVarResolverSession() {
 		if (varSession == null)
-			varSession = servlet.getVarResolver().createSession(servlet.getSessionObjects(this));
+			varSession = context.getVarResolver().createSession(context.getCallHandler().getSessionObjects(this));
 		return varSession;
 	}
 
@@ -1803,7 +1807,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @throws IOException
 	 */
 	public ReaderResource getReaderResource(String name, boolean resolveVars, MediaType mediaType) throws IOException {
-		String s = servlet.getResourceAsString(name, getLocale());
+		String s = context.getResourceAsString(name, getLocale());
 		if (s == null)
 			return null;
 		ReaderResource.Builder b = new ReaderResource.Builder().mediaType(mediaType).contents(s);
@@ -1813,8 +1817,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Same as {@link #getReaderResource(String, boolean, MediaType)} except uses {@link RestServlet#getMimetypesFileTypeMap()}
-	 * to determine the media type.
+	 * Same as {@link #getReaderResource(String, boolean, MediaType)} except uses the resource mime-type map
+	 * constructed using {@link RestConfig#addMimeTypes(String...)} to determine the media type.
 	 *
 	 * @param name The name of the resource (i.e. the value normally passed to {@link Class#getResourceAsStream(String)}.
 	 * @param resolveVars If <jk>true</jk>, any {@link org.apache.juneau.rest.annotation.Parameter} variables will be resolved by the variable resolver returned
@@ -1823,7 +1827,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @throws IOException
 	 */
 	public ReaderResource getReaderResource(String name, boolean resolveVars) throws IOException {
-		return getReaderResource(name, resolveVars, MediaType.forString(servlet.getMimetypesFileTypeMap().getContentType(name)));
+		return getReaderResource(name, resolveVars, MediaType.forString(context.getMediaTypeForName(name)));
 	}
 
 	/**
@@ -1834,7 +1838,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @throws IOException
 	 */
 	public ReaderResource getReaderResource(String name) throws IOException {
-		return getReaderResource(name, false, MediaType.forString(servlet.getMimetypesFileTypeMap().getContentType(name)));
+		return getReaderResource(name, false, MediaType.forString(context.getMediaTypeForName(name)));
 	}
 
 	/**
@@ -1842,9 +1846,9 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * @return The config file associated with the servlet, or <jk>null</jk> if servlet does not have a config file associated with it.
 	 */
-	public ConfigFile getConfig() {
+	public ConfigFile getConfigFile() {
 		if (cf == null)
-			cf = servlet.getConfig().getResolving(getVarResolverSession());
+			cf = context.getConfigFile().getResolving(getVarResolverSession());
 		return cf;
 	}
 
@@ -1855,7 +1859,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 */
 	public Swagger getSwagger() {
 		if (swagger == null)
-			swagger = servlet.getSwagger(this);
+			swagger = context.getInfoProvider().getSwagger(this);
 		return swagger;
 	}
 
@@ -1871,7 +1875,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 */
 	protected Swagger getSwaggerFromFile() {
 		if (fileSwagger == null)
-			fileSwagger = servlet.getSwaggerFromFile(this.getLocale());
+			fileSwagger = context.getInfoProvider().getSwaggerFromFile(this.getLocale());
 		if (fileSwagger == null)
 			fileSwagger = Swagger.NULL;
 		return fileSwagger == Swagger.NULL ? null : fileSwagger;
@@ -1895,7 +1899,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 				sb.append(getBodyAsString()).append("\n");
 			} catch (Exception e1) {
 				sb.append(e1.getLocalizedMessage());
-				servlet.log(WARNING, e1, "Error occurred while trying to read debug input.");
+				context.getLogger().log(WARNING, e1, "Error occurred while trying to read debug input.");
 			}
 		}
 		return sb.toString();
@@ -1942,11 +1946,11 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			String ce = getHeader("content-encoding");
 			if (! (ce == null || ce.isEmpty())) {
 				ce = ce.trim();
-				encoder = servlet.getEncoders().getEncoder(ce);
+				encoder = encoders.getEncoder(ce);
 				if (encoder == null)
 					throw new RestException(SC_UNSUPPORTED_MEDIA_TYPE,
 						"Unsupported encoding in request header ''Content-Encoding'': ''{0}''\n\tSupported codings: {1}",
-						getHeader("content-encoding"), servlet.getEncoders().getSupportedEncodings()
+						getHeader("content-encoding"), encoders.getSupportedEncodings()
 					);
 			}
 
@@ -1966,7 +1970,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 */
 	private String getOverriddenHeader(String name) {
 		String h = null;
-		if (servlet.context.allowHeaderParams)
+		if (context.isAllowHeaderParams())
 			h = getQueryParameter(name);
 		if (h != null)
 			return h;

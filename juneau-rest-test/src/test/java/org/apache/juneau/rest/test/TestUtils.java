@@ -49,14 +49,24 @@ public class TestUtils {
 			System.err.println(r); // NOT DEBUG
 			e.printStackTrace();
 		}
-		if (status != e.getResponseCode())
+		if (status != e.getResponseCode()) {
+			dumpResponse(r, "Response status code was not correct.  Expected: ''{0}''.  Actual: ''{1}''", status, e.getResponseCode());
 			throw new AssertionFailedError(MessageFormat.format("Response status code was not correct.  Expected: ''{0}''.  Actual: ''{1}''", status, e.getResponseCode()));
+		}
 		for (String s : contains) {
 			if (r == null || ! r.contains(s)) {
 				if (! debug)
-					System.err.println(r); // NOT DEBUG
+					dumpResponse(r, "Response did not have the following expected text: ''{0}''", s);
 				throw new AssertionFailedError(MessageFormat.format("Response did not have the following expected text: ''{0}''", s));
 			}
 		}
+	}
+
+	private static void dumpResponse(String r, String msg, Object...args) {
+		System.err.println("*** Failure ****************************************************************************************"); // NOT DEBUG
+		System.err.println(MessageFormat.format(msg, args));
+		System.err.println("*** Response-Start *********************************************************************************"); // NOT DEBUG
+		System.err.println(r); // NOT DEBUG
+		System.err.println("*** Response-End ***********************************************************************************"); // NOT DEBUG
 	}
 }

@@ -102,7 +102,7 @@ public final class ReflectionUtils {
 	}
 
 	/**
-	 * Sames as {@link #findAnnotations(Class, Class)} except returns the annotations as a map
+	 * Same as {@link #findAnnotations(Class, Class)} except returns the annotations as a map
 	 * with the keys being the class on which the annotation was found.
 	 * <p>
 	 * Results are ordered child-to-parent.
@@ -110,12 +110,24 @@ public final class ReflectionUtils {
 	 * @param <T> The annotation class type.
 	 * @param a The annotation class type.
 	 * @param c The class being searched.
-	 * @return The found matches, or an empty array if annotation was not found.
+	 * @return The found matches, or an empty map if annotation was not found.
 	 */
 	public static <T extends Annotation> LinkedHashMap<Class<?>,T> findAnnotationsMap(Class<T> a, Class<?> c) {
 		LinkedHashMap<Class<?>,T> m = new LinkedHashMap<Class<?>,T>();
 		findAnnotationsMap(a, c, m);
 		return m;
+	}
+
+	/**
+	 * Same as {@link #findAnnotationsMap(Class, Class)} except returns results in parent-to-child order.
+	 *
+	 * @param <T> The annotation class type.
+	 * @param a The annotation class type.
+	 * @param c The class being searched.
+	 * @return The found matches, or an empty map if annotation was not found.
+	 */
+	public static <T extends Annotation> LinkedHashMap<Class<?>,T> findAnnotationsMapParentFirst(Class<T> a, Class<?> c) {
+		return CollectionUtils.reverse(findAnnotationsMap(a, c));
 	}
 
 	private static <T extends Annotation> void findAnnotationsMap(Class<T> a, Class<?> c, Map<Class<?>,T> m) {
@@ -163,6 +175,8 @@ public final class ReflectionUtils {
 	 * @return An input stream on the specified resource, or <jk>null</jk> if the resource could not be found.
 	 */
 	public static InputStream getResource(Class<?> c, String name) {
+		if (name == null)
+			return null;
 		while (c != null) {
 			InputStream is = c.getResourceAsStream(name);
 			if (is != null)

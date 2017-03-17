@@ -502,4 +502,9 @@ public @interface RestMethod {
 	 * </ul>
 	 */
 	String clientVersion() default "";
+
+	/**
+	 * TODO
+	 */
+	String[] links() default "";
 }

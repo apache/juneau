@@ -17,7 +17,7 @@ import static org.apache.juneau.examples.addressbook.AddressBook.*;
 import static org.apache.juneau.html.HtmlDocSerializerContext.*;
 import static org.apache.juneau.jena.RdfCommonContext.*;
 import static org.apache.juneau.jena.RdfSerializerContext.*;
-import static org.apache.juneau.rest.RestServletContext.*;
+import static org.apache.juneau.rest.RestContext.*;
 
 import java.util.*;
 
@@ -288,7 +288,7 @@ public class AddressBookResource extends ResourceJena {
 				)
 		};
 
-		return new DataSet(items, addressBook, this.getBeanContext().createSession());
+		return new DataSet(items, addressBook, this.getContext().getBeanContext().createSession());
 	}
 
 	/**

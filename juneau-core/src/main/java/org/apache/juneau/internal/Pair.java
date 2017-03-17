@@ -10,24 +10,55 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest;
-
-import java.lang.reflect.*;
+package org.apache.juneau.internal;
 
 /**
- * Subclass of {@link RestMatcher} that gives access to the servlet/resource and Java method it's applied to.
- * <p>
- * Essentially the same as {@link RestMatcher} except has a constructor where the
- * 	Java method is passed in so that you can access annotations defined on it to tailor
- * 	the behavior of the matcher.
+ * Represents a simple object pair.
+ * @param <F> The first object type.
+ * @param <S> The second object type.
  */
-public abstract class RestMatcherReflecting extends RestMatcher {
+public class Pair<F,S> {
+	private final F first;
+	private final S second;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param resource The REST servlet.
-	 * @param javaMethod The Java method that this rest matcher is defined on.
+	 * @param first The first object in the pair.
+	 * @param second The second object in the pair.
 	 */
-	protected RestMatcherReflecting(Object resource, Method javaMethod) {}
+	public Pair(F first, S second) {
+		this.first = first;
+		this.second = second;
+	}
+
+	/**
+	 * Returns the first object in the pair.
+	 * @return The first object in the pair.
+	 */
+	public F first() {
+		return first;
+	}
+
+	/**
+	 * Returns the second object in the pair.
+	 * @return The second object in the pair.
+	 */
+	public S second() {
+		return second;
+	}
+
+	@Override /* Object */
+	public boolean equals(Object o) {
+		if (o instanceof Pair) {
+			Pair<?,?> p = (Pair<?,?>)o;
+			return ObjectUtils.equals(first, p.first) && ObjectUtils.equals(second, p.second);
+		}
+		return false;
+	}
+
+	@Override /* Object */
+	public int hashCode() {
+		return (first == null ? 0 : first.hashCode()) ^ (second == null ? 0 : second.hashCode());
+	}
 }
