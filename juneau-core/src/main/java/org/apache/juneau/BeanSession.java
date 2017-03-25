@@ -732,7 +732,7 @@ public class BeanSession extends Session {
 		if (m == null)
 			return null;
 		T bean = null;
-		if (m.constructorArgs.length == 0) 
+		if (m.constructorArgs.length == 0)
 			bean = newBean(outer, c);
 		return new BeanMap<T>(this, bean, m);
 	}
@@ -774,7 +774,7 @@ public class BeanSession extends Session {
 			return null;
 		try {
 			T o = (T)m.newBean(outer);
-			if (o == null) 
+			if (o == null)
 				throw new BeanRuntimeException(c, "Class does not have a no-arg constructor.");
 			return o;
 		} catch (BeanRuntimeException e) {
@@ -843,13 +843,13 @@ public class BeanSession extends Session {
 	}
 
 	/**
-	 * Given an array of {@link Class} objects, returns an array of corresponding {@link ClassMeta} objects.
+	 * Given an array of {@link Type} objects, returns an array of corresponding {@link ClassMeta} objects.
 	 * Constructs a new array on each call.
 	 *
 	 * @param classes The array of classes to get class metas for.
 	 * @return An array of {@link ClassMeta} objects corresponding to the classes.  Never <jk>null</jk>.
 	 */
-	public final ClassMeta<?>[] getClassMetas(Class<?>[] classes) {
+	public final ClassMeta<?>[] getClassMetas(Type[] classes) {
 		assertFieldNotNull(classes, "classes");
 		ClassMeta<?>[] cm = new ClassMeta<?>[classes.length];
 		for (int i = 0; i < classes.length; i++)

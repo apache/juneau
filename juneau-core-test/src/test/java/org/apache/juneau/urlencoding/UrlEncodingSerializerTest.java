@@ -81,8 +81,8 @@ public class UrlEncodingSerializerTest {
 		// Empty array
 		// Top level
 		t = new String[0];
-		assertEquals("_value=@()", s.serialize(t));
-		assertEquals("_value=@()", sr.serialize(t));
+		assertEquals("", s.serialize(t));
+		assertEquals("", sr.serialize(t));
 
 		// 2nd level in map
 		t = new ObjectMap("{x:[]}");
@@ -91,14 +91,14 @@ public class UrlEncodingSerializerTest {
 
 		// Empty 2 dimensional array
 		t = new String[1][0];
-		assertEquals("_value=@(@())", s.serialize(t));
-		assertEquals("_value=@(\n\t@()\n)", sr.serialize(t));
+		assertEquals("0=@()", s.serialize(t));
+		assertEquals("0=@()", sr.serialize(t));
 
 		// Array containing empty string
 		// Top level
 		t = new String[]{""};
-		assertEquals("_value=@('')", s.serialize(t));
-		assertEquals("_value=@(\n\t''\n)", sr.serialize(t));
+		assertEquals("0=''", s.serialize(t));
+		assertEquals("0=''", sr.serialize(t));
 
 		// 2nd level
 		t = new ObjectMap("{x:['']}");
@@ -107,8 +107,8 @@ public class UrlEncodingSerializerTest {
 
 		// Array containing 3 empty strings
 		t = new String[]{"","",""};
-		assertEquals("_value=@('','','')", s.serialize(t));
-		assertEquals("_value=@(\n\t'',\n\t'',\n\t''\n)", sr.serialize(t));
+		assertEquals("0=''&1=''&2=''", s.serialize(t));
+		assertEquals("0=''\n&1=''\n&2=''", sr.serialize(t));
 
 		// String containing \u0000
 		// Top level

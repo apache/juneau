@@ -239,8 +239,9 @@ public class UrlEncodingSerializer extends UonSerializer {
 				serializeMap(session, out, (Map)o, sType);
 		} else if (sType.isBean()) {
 			serializeBeanMap(session, out, session.toBeanMap(o), typeName);
-		} else if (sType.isCollection()) {
-			serializeMap(session, out, getCollectionMap((Collection)o), session.getClassMeta(Map.class, Integer.class, sType.getElementType()));
+		} else if (sType.isCollection() || sType.isArray()) {
+			Map m = sType.isCollection() ? getCollectionMap((Collection)o) : getCollectionMap(o);
+			serializeCollectionMap(session, out, m, session.getClassMeta(Map.class, Integer.class, Object.class));
 		} else {
 			// All other types can't be serialized as key/value pairs, so we create a
 			// mock key/value pair with a "_value" key.
@@ -252,11 +253,24 @@ public class UrlEncodingSerializer extends UonSerializer {
 		return out;
 	}
 
+	/**
+	 * Converts a Collection into an integer-indexed map.
+	 */
 	private static Map<Integer,Object> getCollectionMap(Collection<?> c) {
 		Map<Integer,Object> m = new TreeMap<Integer,Object>();
 		int i = 0;
 		for (Object o : c)
 			m.put(i++, o);
+		return m;
+	}
+
+	/**
+	 * Converts an array into an integer-indexed map.
+	 */
+	private static Map<Integer,Object> getCollectionMap(Object array) {
+		Map<Integer,Object> m = new TreeMap<Integer,Object>();
+		for (int i = 0; i < Array.getLength(array); i++)
+			m.put(i, Array.get(array, i));
 		return m;
 	}
 
@@ -270,13 +284,9 @@ public class UrlEncodingSerializer extends UonSerializer {
 		int depth = session.getIndent();
 		boolean addAmp = false;
 
-		Iterator mapEntries = m.entrySet().iterator();
-
-		while (mapEntries.hasNext()) {
-			Map.Entry e = (Map.Entry) mapEntries.next();
-			Object value = e.getValue();
+		for (Map.Entry e : (Set<Map.Entry>)m.entrySet()) {
 			Object key = session.generalize(e.getKey(), keyType);
-
+			Object value = e.getValue();
 
 			if (session.shouldUseExpandedParams(value)) {
 				Iterator i = value instanceof Collection ? ((Collection)value).iterator() : ArrayUtils.iterator(value);
@@ -294,6 +304,25 @@ public class UrlEncodingSerializer extends UonSerializer {
 				super.serializeAnything(session, out, value, valueType, (key == null ? null : key.toString()), null);
 				addAmp = true;
 			}
+		}
+
+		return out;
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private SerializerWriter serializeCollectionMap(UrlEncodingSerializerSession session, UonWriter out, Map m, ClassMeta<?> type) throws Exception {
+
+		ClassMeta<?> valueType = type.getValueType();
+
+		int depth = session.getIndent();
+		boolean addAmp = false;
+
+		for (Map.Entry e : (Set<Map.Entry>)m.entrySet()) {
+			if (addAmp)
+				out.cr(depth).append('&');
+			out.append(e.getKey()).append('=');
+			super.serializeAnything(session, out, e.getValue(), valueType, null, null);
+			addAmp = true;
 		}
 
 		return out;

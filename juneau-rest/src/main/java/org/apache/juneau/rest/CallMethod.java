@@ -44,7 +44,7 @@ import org.apache.juneau.urlencoding.*;
  * Represents a single Java servlet/resource method annotated with {@link RestMethod @RestMethod}.
  */
 @SuppressWarnings("hiding")
-final class CallMethod implements Comparable<CallMethod>  {
+class CallMethod implements Comparable<CallMethod>  {
 	private final java.lang.reflect.Method method;
 	private final String httpMethod;
 	private final UrlPathPattern pathPattern;
@@ -60,7 +60,7 @@ final class CallMethod implements Comparable<CallMethod>  {
 	private final UrlEncodingSerializer urlEncodingSerializer;
 	private final ObjectMap properties;
 	private final Map<String,String> defaultRequestHeaders;
-	private final String defaultEncoding;
+	private final String defaultCharset;
 	private final boolean deprecated;
 	private final String description, tags, summary, externalDocs;
 	private final Integer priority;
@@ -86,7 +86,7 @@ final class CallMethod implements Comparable<CallMethod>  {
 		this.urlEncodingSerializer = b.urlEncodingSerializer;
 		this.properties = b.properties;
 		this.defaultRequestHeaders = b.defaultRequestHeaders;
-		this.defaultEncoding = b.defaultEncoding;
+		this.defaultCharset = b.defaultCharset;
 		this.deprecated = b.deprecated;
 		this.description = b.description;
 		this.tags = b.tags;
@@ -98,7 +98,7 @@ final class CallMethod implements Comparable<CallMethod>  {
 	}
 
 	private static class Builder  {
-		private String httpMethod, defaultEncoding, description, tags, summary, externalDocs;
+		private String httpMethod, defaultCharset, description, tags, summary, externalDocs;
 		private UrlPathPattern pathPattern;
 		private CallMethod.MethodParam[] params;
 		private RestGuard[] guards;
@@ -263,7 +263,7 @@ final class CallMethod implements Comparable<CallMethod>  {
 					defaultRequestHeaders.put(h[0], h[1]);
 				}
 
-				defaultEncoding = properties.getString(REST_defaultCharset, context.getDefaultCharset());
+				defaultCharset = properties.getString(REST_defaultCharset, context.getDefaultCharset());
 				String paramFormat = properties.getString(REST_paramFormat, context.getParamFormat());
 				plainParams = paramFormat.equals("PLAIN");
 
@@ -808,8 +808,8 @@ final class CallMethod implements Comparable<CallMethod>  {
 		for (int i = 0; i < pathPattern.getVars().length; i++)
 			req.setPathParameter(pathPattern.getVars()[i], patternVals[i]);
 
-		req.init(method, remainder, createRequestProperties(properties, req), defaultRequestHeaders, defaultEncoding, serializers, parsers, urlEncodingParser, encoders);
-		res.init(req.getProperties(), defaultEncoding, serializers, urlEncodingSerializer, encoders);
+		req.init(method, remainder, createRequestProperties(properties, req), defaultRequestHeaders, defaultCharset, serializers, parsers, urlEncodingParser, encoders);
+		res.init(req.getProperties(), defaultCharset, serializers, urlEncodingSerializer, encoders);
 
 		// Class-level guards
 		for (RestGuard guard : context.getGuards())

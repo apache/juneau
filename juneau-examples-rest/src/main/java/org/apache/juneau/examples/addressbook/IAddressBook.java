@@ -19,6 +19,9 @@ import java.util.*;
  * See {@link SampleRemoteableServlet}.
  */
 public interface IAddressBook {
+	
+	/** Initialize this address book with preset entries */
+	void init() throws Exception;
 
 	/** Return all people in the address book */
 	List<Person> getPeople();

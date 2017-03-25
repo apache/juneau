@@ -125,6 +125,10 @@ public class UonParser extends ReaderParser {
 			else if (sType.isPrimitive())
 				o = sType.getPrimitiveDefault();
 			// Otherwise, leave null.
+		} else if (sType.isVoid()) {
+			String s = parseString(session, r, isUrlParamValue);
+			if (s != null)
+				throw new ParseException(session, "Expected ''null'' for void value, but was ''{0}''.", s);
 		} else if (sType.isObject()) {
 			if (c == '(') {
 				ObjectMap m = new ObjectMap(session);
@@ -138,10 +142,12 @@ public class UonParser extends ReaderParser {
 				if (c != '\'') {
 					if ("true".equals(s) || "false".equals(s))
 						o = Boolean.valueOf(s);
-					else if (StringUtils.isNumeric(s))
-						o = StringUtils.parseNumber(s, Number.class);
-					else
-						o = s;
+					else if (! "null".equals(s)) {
+						if (StringUtils.isNumeric(s))
+							o = StringUtils.parseNumber(s, Number.class);
+						else
+							o = s;
+					}
 				} else {
 					o = s;
 				}

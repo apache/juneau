@@ -36,6 +36,18 @@ public class SerializerGroupBuilder {
 	}
 
 	/**
+	 * Create an empty serializer group using the specified property store for settings.
+	 * <p>
+	 * Note:  Modifying the specified property store externally will also modify it here.
+	 *
+	 * @param propertyStore The property store containing all settings common to all serializers in this group.
+	 */
+	public SerializerGroupBuilder(PropertyStore propertyStore) {
+		this.serializers = new ArrayList<Object>();
+		this.propertyStore = propertyStore;
+	}
+
+	/**
 	 * Clone an existing serializer group builder.
 	 * @param copyFrom The serializer group that we're copying settings and serializers from.
 	 */

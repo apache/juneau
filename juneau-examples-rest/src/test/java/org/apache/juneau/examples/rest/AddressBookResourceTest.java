@@ -258,4 +258,44 @@ public class AddressBookResourceTest extends RestTestcase {
 			assertObjectEquals("['B','r','ck Obama']", tokens);
 		}
 	}
+
+	//====================================================================================================
+	// Interface proxy tests
+	//====================================================================================================
+	@Test
+	public void testProxyInterface() throws Exception {
+
+		for (RestClient client : clients) {
+
+			List<Person> people;
+
+			IAddressBook ab = client.getRemoteableProxy(IAddressBook.class, "/addressBook/proxy");
+				
+			// Reinitialize the resource
+			ab.init();
+
+			// Simple GETs
+			people = ab.getPeople();
+			assertEquals("Barack Obama", people.get(0).name);
+			assertEquals(76638, people.get(1).addresses.get(0).zip);
+
+			// POST a person
+			CreatePerson billClinton = new CreatePerson("Bill Clinton", AddressBook.toCalendar("Aug 19, 1946"),
+				new CreateAddress("a3","b3","c3",3,false)
+			);
+			ab.createPerson(billClinton);
+			people = ab.getPeople();
+			assertEquals(3, people.size());
+			Person p = people.get(2);
+			assertEquals("Bill Clinton", p.name);
+
+			// DELETE a person
+			ab.removePerson(p.id);
+			people = ab.getPeople();
+			assertEquals(2, people.size());
+
+			// Reinitialize the resource
+			ab.init();
+		}
+	}
 }

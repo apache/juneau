@@ -53,6 +53,7 @@ import org.apache.juneau.utils.*;
  * 	<li><a class="doclink" href="package-summary.html#RestClient">org.apache.juneau.rest.client &gt; REST client API</a> for more information and code examples.
  * </ul>
  */
+@SuppressWarnings("hiding")
 public final class RestCall {
 
 	private final RestClient client;                       // The client that created this call.
@@ -74,6 +75,9 @@ public final class RestCall {
 	private TeeOutputStream outputStreams = new TeeOutputStream();
 	private boolean isClosed = false;
 	private boolean isFailed = false;
+	private Object input;
+	private Serializer serializer;
+	private Parser parser;
 
 	/**
 	 * Constructs a REST call with the specified method name.
@@ -90,6 +94,8 @@ public final class RestCall {
 		this.retryOn = client.retryOn;
 		this.retries = client.retries;
 		this.retryInterval = client.retryInterval;
+		this.serializer = client.serializer;
+		this.parser = client.parser;
 	}
 
 	/**
@@ -107,17 +113,33 @@ public final class RestCall {
 	 * @throws RestCallException If a retry was attempted, but the entity was not repeatable.
 	 */
 	public RestCall input(final Object input) throws RestCallException {
+		this.input = input;
+		return this;
+	}
 
-		if (! (request instanceof HttpEntityEnclosingRequestBase))
-			throw new RestCallException(0, "Method does not support content entity.", request.getMethod(), request.getURI(), null);
+	/**
+	 * Specifies the serializer to use on this call.
+	 * <p>
+	 * Overrides the serializer specified on the {@link RestClient}.
+	 *
+	 * @param serializer The serializer used to serialize POJOs to the body of the HTTP request.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall serializer(Serializer serializer) {
+		this.serializer = serializer;
+		return this;
+	}
 
-		HttpEntity entity = (input instanceof HttpEntity) ? (HttpEntity)input : new RestRequestEntity(input, client.serializer);
-
-		((HttpEntityEnclosingRequestBase)request).setEntity(entity);
-
-		if (retries > 1 && ! entity.isRepeatable())
-			throw new RestCallException("Rest call set to retryable, but entity is not repeatable.");
-
+	/**
+	 * Specifies the parser to use on this call.
+	 * <p>
+	 * Overrides the parser specified on the {@link RestClient}.
+	 *
+	 * @param parser The parser used to parse POJOs from the body of the HTTP response.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall parser(Parser parser) {
+		this.parser = parser;
 		return this;
 	}
 
@@ -520,13 +542,14 @@ public final class RestCall {
 	 * @return This object (for method chaining).
 	 * @throws RestCallException If current entity is not repeatable.
 	 */
-	@SuppressWarnings("hiding")
 	public RestCall retryable(int retries, long interval, RetryOn retryOn) throws RestCallException {
 		if (request instanceof HttpEntityEnclosingRequestBase) {
-		HttpEntity e = ((HttpEntityEnclosingRequestBase)request).getEntity();
-		if (e != null && ! e.isRepeatable())
-			throw new RestCallException("Attempt to make call retryable, but entity is not repeatable.");
-		}
+			if (input != null && input instanceof HttpEntity) {
+				HttpEntity e = (HttpEntity)input;
+				if (e != null && ! e.isRepeatable())
+					throw new RestCallException("Attempt to make call retryable, but entity is not repeatable.");
+				}
+			}
 		this.retries = retries;
 		this.retryInterval = interval;
 		this.retryOn = (retryOn == null ? RetryOn.DEFAULT : retryOn);
@@ -885,6 +908,16 @@ public final class RestCall {
 		isConnected = true;
 
 		try {
+
+			if (input != null) {
+				if (! (request instanceof HttpEntityEnclosingRequestBase))
+					throw new RestCallException(0, "Method does not support content entity.", request.getMethod(), request.getURI(), null);
+				HttpEntity entity = (input instanceof HttpEntity) ? (HttpEntity)input : new RestRequestEntity(input, getSerializer());
+				((HttpEntityEnclosingRequestBase)request).setEntity(entity);
+				if (retries > 1 && ! entity.isRepeatable())
+					throw new RestCallException("Rest call set to retryable, but entity is not repeatable.");
+			}
+
 			int sc = 0;
 			while (retries > 0) {
 				retries--;
@@ -1028,9 +1061,9 @@ public final class RestCall {
 	 * @throws RestCallException If no parser was defined on the client.
 	 */
 	protected Parser getParser() throws RestCallException {
-		if (client.parser == null)
+		if (parser == null)
 			throw new RestCallException(0, "No parser defined on client", request.getMethod(), request.getURI(), null);
-		return client.parser;
+		return parser;
 	}
 
 	/**
@@ -1040,9 +1073,9 @@ public final class RestCall {
 	 * @throws RestCallException If no serializer was defined on the client.
 	 */
 	protected Serializer getSerializer() throws RestCallException {
-		if (client.serializer == null)
+		if (serializer == null)
 			throw new RestCallException(0, "No serializer defined on client", request.getMethod(), request.getURI(), null);
-		return client.serializer;
+		return serializer;
 	}
 
 	/**
@@ -1114,13 +1147,33 @@ public final class RestCall {
 	}
 
 	/**
-	 * Converts the output from the connection into an object of the specified class using the registered {@link Parser}.
+	 * Same as {@link #getResponse(Type, Type...)} except optimized for a non-parameterized class.
+	 * <p>
+	 * This is the preferred parse method for simple types since you don't need to cast the results.
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Parse into a string.</jc>
+	 * 	String s = restClient.doGet(url).getResponse(String.<jk>class</jk>);
 	 *
-	 * @param type The class to convert the input to.
-	 * @param <T> The class to convert the input to.
-	 * @return The parsed output.
+	 * 	<jc>// Parse into a bean.</jc>
+	 * 	MyBean b = restClient.doGet(url).getResponse(MyBean.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a bean array.</jc>
+	 * 	MyBean[] ba = restClient.doGet(url).getResponse(MyBean[].<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a linked-list of objects.</jc>
+	 * 	List l = restClient.doGet(url).getResponse(LinkedList.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a map of object keys/values.</jc>
+	 * 	Map m = restClient.doGet(url).getResponse(TreeMap.<jk>class</jk>);
+	 * </p>
+	 *
+	 * @param <T> The class type of the object being created.
+	 * See {@link #getResponse(Type, Type...)} for details.
+	 * @param type The object type to create.
+	 * @return The parsed object.
+	 * @throws ParseException If the input contains a syntax error or is malformed, or is not valid for the specified type.
 	 * @throws IOException If a connection error occurred.
-	 * @throws ParseException If the input contains a syntax error or is malformed for the <code>Content-Type</code> header.
 	 */
 	public <T> T getResponse(Class<T> type) throws IOException, ParseException {
 		BeanContext bc = getParser().getBeanContext();
@@ -1130,28 +1183,48 @@ public final class RestCall {
 	}
 
 	/**
-	 * Same as {@link #getResponse(Class)}, but useful for parsing into maps and collections of specific types.
+	 * Parses HTTP body into the specified object type.
+	 * The type can be a simple type (e.g. beans, strings, numbers) or parameterized type (collections/maps).
 	 *
-	 * @param type The class to resolve.
-	 * Can be any of the following:
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Parse into a linked-list of strings.</jc>
+	 * 	List l = restClient.doGet(url).getResponse(LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a linked-list of beans.</jc>
+	 * 	List l = restClient.doGet(url).getResponse(LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a linked-list of linked-lists of strings.</jc>
+	 * 	List l = restClient.doGet(url).getResponse(LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a map of string keys/values.</jc>
+	 * 	Map m = restClient.doGet(url).getResponse(TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a map containing string keys and values of lists containing beans.</jc>
+	 * 	Map m = restClient.doGet(url).getResponse(TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 * </p>
+	 * <p>
+	 * <code>Collection</code> classes are assumed to be followed by zero or one objects indicating the element type.
+	 * <p>
+	 * <code>Map</code> classes are assumed to be followed by zero or two meta objects indicating the key and value types.
+	 * <p>
+	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
-	 * 	<li>{@link ClassMeta}
-	 * 	<li>{@link Class}
-	 * 	<li>{@link ParameterizedType}
-	 * 	<li>{@link GenericArrayType}
+	 * 	<li>Use the {@link #getResponse(Class)} method instead if you don't need a parameterized map/collection.
 	 * </ul>
+	 *
+	 * @param <T> The class type of the object to create.
+	 * @param type The object type to create.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
 	 * @param args The type arguments of the class if it's a collection or map.
-	 * Can be any of the following:
-	 * <ul>
-	 * 	<li>{@link ClassMeta}
-	 * 	<li>{@link Class}
-	 * 	<li>{@link ParameterizedType}
-	 * 	<li>{@link GenericArrayType}
-	 * </ul>
-	 * @param <T> The class to convert the input to.
-	 * @return The parsed output.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * 	<br>Ignored if the main type is not a map or collection.
+	 * @return The parsed object.
+	 * @throws ParseException If the input contains a syntax error or is malformed, or is not valid for the specified type.
 	 * @throws IOException If a connection error occurred.
-	 * @throws ParseException If the input contains a syntax error or is malformed for the <code>Content-Type</code> header.
+	 * @see BeanSession#getClassMeta(Class) for argument syntax for maps and collections.
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> T getResponse(Type type, Type...args) throws IOException, ParseException {

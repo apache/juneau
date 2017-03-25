@@ -399,14 +399,58 @@ public final class RestContext extends Context {
 							throw new RestServletException("@RestMethod method {0}.{1} must be defined as public.", this.getClass().getName(), method.getName());
 
 						CallMethod sm = new CallMethod(resource, method, this);
-						_javaRestMethods.put(method.getName(), sm);
-
 						String httpMethod = sm.getHttpMethod();
-						if (! routers.containsKey(httpMethod))
-							routers.put(httpMethod, new CallRouter.Builder(httpMethod));
 
-						routers.get(httpMethod).add(sm);
+						// PROXY is a special case where a method returns an interface that we
+						// can perform REST calls against.
+						// We override the CallMethod.invoke() method to insert our logic.
+						if ("PROXY".equals(httpMethod)) {
 
+							final ClassMeta<?> interfaceClass = beanContext.getClassMeta(method.getGenericReturnType());
+							sm = new CallMethod(resource, method, this) {
+
+								@Override
+								int invoke(String pathInfo, RestRequest req, RestResponse res) throws RestException {
+
+									int rc = super.invoke(pathInfo, req, res);
+									if (rc != SC_OK)
+										return rc;
+
+									final Object o = res.getOutput();
+
+									if ("GET".equals(req.getMethod())) {
+										res.setOutput(ClassUtils.getMethodInfo(interfaceClass.getProxyableMethods().values()));
+										return SC_OK;
+
+									} else if ("POST".equals(req.getMethod())) {
+										if (pathInfo.indexOf('/') != -1)
+											pathInfo = pathInfo.substring(pathInfo.lastIndexOf('/')+1);
+										pathInfo = RestUtils.decode(pathInfo);
+										java.lang.reflect.Method m = interfaceClass.getProxyableMethods().get(pathInfo);
+										if (m != null) {
+											try {
+												// Parse the args and invoke the method.
+												Parser p = req.getParser();
+												Object input = p.isReaderParser() ? req.getReader() : req.getInputStream();
+												res.setOutput(m.invoke(o, p.parseArgs(input, m.getGenericParameterTypes())));
+												return SC_OK;
+											} catch (Exception e) {
+												throw new RestException(SC_INTERNAL_SERVER_ERROR, e);
+											}
+										}
+									}
+									return SC_NOT_FOUND;
+								}
+							};
+
+							_javaRestMethods.put(method.getName(), sm);
+							addToRouter(routers, "GET", sm);
+							addToRouter(routers, "POST", sm);
+
+						} else {
+							_javaRestMethods.put(method.getName(), sm);
+							addToRouter(routers, httpMethod, sm);
+						}
 					} catch (RestServletException e) {
 						throw new RestServletException("Problem occurred trying to serialize methods on class {0}, methods={1}", this.getClass().getName(), JsonSerializer.DEFAULT_LAX.serialize(methodsFound)).initCause(e);
 					}
@@ -482,6 +526,12 @@ public final class RestContext extends Context {
 		} finally {
 			initException = _initException;
 		}
+	}
+
+	private static void addToRouter(Map<String, CallRouter.Builder> routers, String httpMethodName, CallMethod cm) throws RestServletException {
+		if (! routers.containsKey(httpMethodName))
+			routers.put(httpMethodName, new CallRouter.Builder(httpMethodName));
+		routers.get(httpMethodName).add(cm);
 	}
 
 	private static class Builder {
@@ -1416,5 +1466,4 @@ public final class RestContext extends Context {
 			throw new RestServletException("Exception occurred while constructing class ''{0}''", c).initCause(e);
 		}
 	}
-
 }

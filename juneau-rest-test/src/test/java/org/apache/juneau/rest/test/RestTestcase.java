@@ -12,6 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
+import java.io.*;
+import java.util.*;
+
+import org.apache.juneau.parser.*;
+import org.apache.juneau.rest.client.*;
+import org.apache.juneau.serializer.*;
 import org.junit.*;
 
 /**
@@ -22,15 +28,33 @@ import org.junit.*;
 public class RestTestcase {
 
 	private static boolean microserviceStarted;
+	private static List<RestClient> clients = new ArrayList<RestClient>();
 
 	@BeforeClass
 	public static void setUp() {
 		microserviceStarted = TestMicroservice.startMicroservice();
 	}
 
+	/**
+	 * Creates a REST client against the test microservice using the specified serializer and parser.
+	 * Client is automatically closed on tear-down.
+	 */
+	protected RestClient getClient(Serializer serializer, Parser parser) {
+		RestClient rc = TestMicroservice.client(serializer, parser).build();
+		clients.add(rc);
+		return rc;
+	}
+
 	@AfterClass
 	public static void tearDown() {
 		if (microserviceStarted)
 			TestMicroservice.stopMicroservice();
+		for (RestClient rc : clients) {
+			try {
+				rc.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }

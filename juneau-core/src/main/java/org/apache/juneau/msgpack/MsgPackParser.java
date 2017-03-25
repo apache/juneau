@@ -196,7 +196,24 @@ public class MsgPackParser extends InputStreamParser {
 		return (T)o;
 	}
 
+	private Object[] parseArgs(MsgPackParserSession session, MsgPackInputStream is, ClassMeta<?>[] argTypes) throws Exception {
 
+		Object[] o = new Object[argTypes.length];
+		DataType dt = is.readDataType();
+		int length = (int)is.readLength();
+
+		if (dt != ARRAY)
+			throw new ParseException("Expected ARRAY but was {0}", dt);
+		if (length != argTypes.length)
+			throw new ParseException("Expected array length {0} but was {1}", argTypes.length, length);
+
+		for (int i = 0; i < length; i++)
+			o[i] = parseAnything(session, argTypes[i], is, null, null);
+
+		return o;
+	}
+
+	
 	//--------------------------------------------------------------------------------
 	// Entry point methods
 	//--------------------------------------------------------------------------------
@@ -212,5 +229,13 @@ public class MsgPackParser extends InputStreamParser {
 		MsgPackInputStream is = s.getInputStream();
 		T o = parseAnything(s, type, is, s.getOuter(), null);
 		return o;
+	}
+
+	@Override /* ReaderParser */
+	protected Object[] doParseArgs(ParserSession session, ClassMeta<?>[] argTypes) throws Exception {
+		MsgPackParserSession s = (MsgPackParserSession)session;
+		MsgPackInputStream is = s.getInputStream();
+		Object[] a = parseArgs(s, is, argTypes);
+		return a;
 	}
 }

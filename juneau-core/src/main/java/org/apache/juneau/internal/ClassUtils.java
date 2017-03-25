@@ -624,4 +624,45 @@ public final class ClassUtils {
 //	private Class<?> findClass(String name) throws ClassNotFoundException {
 //		return classLoader == null ? Class.forName(name) : Class.forName(name, true, classLoader);
 //	}
+
+	/**
+	 * Returns a {@link MethodInfo} bean that describes the specified method.
+	 * @param m The method to describe.
+	 * @return The bean with information about the method.
+	 */
+	public static MethodInfo getMethodInfo(Method m) {
+		return new MethodInfo(m);
+	}
+
+	/**
+	 * Returns {@link MethodInfo} beans that describe the specified methods.
+	 * @param m The methods to describe.
+	 * @return The beans with information about the methods.
+	 */
+	public static MethodInfo[] getMethodInfo(Collection<Method> m) {
+		MethodInfo[] mi = new MethodInfo[m.size()];
+		int i = 0;
+		for (Method mm : m)
+			mi[i++] = getMethodInfo(mm);
+		return mi;
+	}
+
+	/**
+	 * Simple bean that shows the name, parameter types, and return type of a method.
+	 */
+	@SuppressWarnings("javadoc")
+	public static class MethodInfo {
+		public final String methodName;
+		public final String[] parameterTypes;
+		public final String returnType;
+
+		MethodInfo(Method m) {
+			methodName = m.getName();
+			Type[] pt = m.getGenericParameterTypes();
+			parameterTypes = new String[pt.length];
+			for (int i  = 0; i < pt.length; i++)
+				parameterTypes[i] = BeanContext.DEFAULT.getClassMeta(pt[i]).toString();
+			returnType = BeanContext.DEFAULT.getClassMeta(m.getGenericReturnType()).toString();
+		}
+	}
 }

@@ -111,6 +111,9 @@ public class HtmlParser extends XmlParser {
 		boolean isValid = true;
 		HtmlTag tag = (event == CHARACTERS ? null : HtmlTag.forString(r.getName().getLocalPart(), false));
 
+		if (tag == HTML)
+			tag = skipToData(r);
+
 		if (isEmpty) {
 			o = "";
 		} else if (tag == null || tag.isOneOf(BR,BS,FF,SP)) {
@@ -163,6 +166,12 @@ public class HtmlParser extends XmlParser {
 			else
 				isValid = false;
 			skipTag(r, xBOOLEAN);
+
+		} else if (tag == P) {
+			String text = session.getElementText(r);
+			if (! "No Results".equals(text))
+				isValid = false;
+			skipTag(r, xP);
 
 		} else if (tag == NULL) {
 			skipTag(r, NULL);
@@ -246,6 +255,26 @@ public class HtmlParser extends XmlParser {
 		return (T)o;
 	}
 
+	/**
+	 * For parsing output from HtmlDocSerializer, this skips over the head, title, and links.
+	 */
+	private static HtmlTag skipToData(XMLStreamReader r) throws XMLStreamException {
+		while (true) {
+			int event = r.next();
+			if (event == START_ELEMENT && "div".equals(r.getLocalName()) && "data".equals(r.getAttributeValue(null, "id"))) {
+				r.nextTag();
+				event = r.getEventType();
+				boolean isEmpty = (event == END_ELEMENT);
+				// Skip until we find a start element, end document, or non-empty text.
+				if (! isEmpty)
+					event = skipWs(r);
+				if (event == END_DOCUMENT)
+					throw new XMLStreamException("Unexpected end of stream looking for data.", r.getLocation());
+				return (event == CHARACTERS ? null : HtmlTag.forString(r.getName().getLocalPart(), false));
+			}
+		}
+	}
+
 	private static String getAttribute(XMLStreamReader r, String name, String def) {
 		for (int i = 0; i < r.getAttributeCount(); i++)
 			if (r.getAttributeLocalName(i).equals(name))
@@ -327,10 +356,19 @@ public class HtmlParser extends XmlParser {
 	 * Postcondition:  Pointing at next START_ELEMENT or END_DOCUMENT event.
 	 */
 	private Object[] parseArgs(HtmlParserSession session, XMLStreamReader r, ClassMeta<?>[] argTypes) throws Exception {
+		HtmlTag tag = HtmlTag.forEvent(r);
+
+		// Special case:
+		// Serializing args containing a single bean (or multiple beans of the same type) will end up serialized as a <table _type='array'>
+		if (tag == TABLE) {
+			List<Object> l = (List<Object>)parseAnything(session, session.getClassMeta(List.class, argTypes[0]), r, session.getOuter(), true, null);
+			return l.toArray(new Object[l.size()]);
+		}
+
 		Object[] o = new Object[argTypes.length];
 		int i = 0;
 		while (true) {
-			HtmlTag tag = nextTag(r, LI, xUL);
+			tag = nextTag(r, LI, xUL);
 			if (tag == xUL)
 				break;
 			o[i] = parseAnything(session, argTypes[i], r, session.getOuter(), false, null);

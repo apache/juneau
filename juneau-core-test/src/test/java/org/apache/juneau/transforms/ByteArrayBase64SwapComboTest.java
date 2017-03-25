@@ -30,7 +30,7 @@ public class ByteArrayBase64SwapComboTest extends ComboTest {
 	@Parameterized.Parameters
 	public static Collection<Object[]> getParameters() {
 		return Arrays.asList(new Object[][] {
-			{
+			{ 	/* 0 */
 				"ByteArray1d",
 				new byte[] {1,2,3},
 				/* Json */		"'AQID'",
@@ -55,7 +55,7 @@ public class ByteArrayBase64SwapComboTest extends ComboTest {
 				/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<j:value>AQID</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
 				/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <j:value>AQID</j:value>\n  </rdf:Description>\n</rdf:RDF>\n",
 			},
-			{
+			{ 	/* 1 */
 				"ByteArray2d",
 				new byte[][]{{1,2,3},{4,5,6},null},
 				/* Json */		"['AQID','BAUG',null]",
@@ -71,16 +71,16 @@ public class ByteArrayBase64SwapComboTest extends ComboTest {
 				/* Uon */		"@(AQID,BAUG,null)",
 				/* UonT */		"@(AQID,BAUG,null)",
 				/* UonR */		"@(\n\tAQID,\n\tBAUG,\n\tnull\n)",
-				/* UrlEnc */	"_value=@(AQID,BAUG,null)",
-				/* UrlEncT */	"_value=@(AQID,BAUG,null)",
-				/* UrlEncR */	"_value=@(\n\tAQID,\n\tBAUG,\n\tnull\n)",
+				/* UrlEnc */	"0=AQID&1=BAUG&2=null",
+				/* UrlEncT */	"0=AQID&1=BAUG&2=null",
+				/* UrlEncR */	"0=AQID\n&1=BAUG\n&2=null",
 				/* MsgPack */	"93A441514944A442415547C0",
 				/* MsgPackT */	"93A441514944A442415547C0",
 				/* RdfXml */	"<rdf:RDF>\n<rdf:Seq>\n<rdf:li>AQID</rdf:li>\n<rdf:li>BAUG</rdf:li>\n<rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Seq>\n</rdf:RDF>\n",
 				/* RdfXmlT */	"<rdf:RDF>\n<rdf:Seq>\n<rdf:li>AQID</rdf:li>\n<rdf:li>BAUG</rdf:li>\n<rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Seq>\n</rdf:RDF>\n",
 				/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li>AQID</rdf:li>\n    <rdf:li>BAUG</rdf:li>\n    <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n  </rdf:Seq>\n</rdf:RDF>\n",
 			},
-			{
+			{ 	/* 2 */
 				"ListOfByteArrays",
 				new ArrayList<byte[]>(){{
 					add(new byte[]{1,2,3});
@@ -109,7 +109,7 @@ public class ByteArrayBase64SwapComboTest extends ComboTest {
 				/* RdfXmlT */	"<rdf:RDF>\n<rdf:Seq>\n<rdf:li>AQID</rdf:li>\n<rdf:li>BAUG</rdf:li>\n<rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Seq>\n</rdf:RDF>\n",
 				/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li>AQID</rdf:li>\n    <rdf:li>BAUG</rdf:li>\n    <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n  </rdf:Seq>\n</rdf:RDF>\n",
 			},
-			{
+			{ 	/* 3 */
 				"MapOfByteArrays",
 				new LinkedHashMap<String,byte[]>() {{
 					put("foo", new byte[]{1,2,3});
@@ -139,7 +139,7 @@ public class ByteArrayBase64SwapComboTest extends ComboTest {
 				/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<jp:foo>AQID</jp:foo>\n<jp:bar rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n<jp:_x0000_>BAUG</jp:_x0000_>\n<jp:null>BwgJ</jp:null>\n</rdf:Description>\n</rdf:RDF>\n",
 				/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:foo>AQID</jp:foo>\n    <jp:bar rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n    <jp:_x0000_>BAUG</jp:_x0000_>\n    <jp:null>BwgJ</jp:null>\n  </rdf:Description>\n</rdf:RDF>\n",
 			},
-			{
+			{ 	/* 4 */
 				"BeanWithByteArrayField",
 				new BeanWithByteArrayField().init(),
 				/* Json */		"{f:'AQID'}",
@@ -164,7 +164,7 @@ public class ByteArrayBase64SwapComboTest extends ComboTest {
 				/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<jp:f>AQID</jp:f>\n</rdf:Description>\n</rdf:RDF>\n",
 				/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:f>AQID</jp:f>\n  </rdf:Description>\n</rdf:RDF>\n",
 			},
-			{
+			{	/* 5 */
 				"BeanWithByteArray2dField",
 				new BeanWithByteArray2dField().init(),
 				/* Json */		"{f:['AQID','BAUG',null]}",
@@ -189,7 +189,7 @@ public class ByteArrayBase64SwapComboTest extends ComboTest {
 				/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<jp:f>\n<rdf:Seq>\n<rdf:li>AQID</rdf:li>\n<rdf:li>BAUG</rdf:li>\n<rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Seq>\n</jp:f>\n</rdf:Description>\n</rdf:RDF>\n",
 				/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:f>\n      <rdf:Seq>\n        <rdf:li>AQID</rdf:li>\n        <rdf:li>BAUG</rdf:li>\n        <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n      </rdf:Seq>\n    </jp:f>\n  </rdf:Description>\n</rdf:RDF>\n",
 			},
-			{
+			{	/* 6 */
 				"BeanWithByteArrayNullField",
 				new BeanWithByteArrayNullField().init(),
 				/* Json */		"{f:null}",
@@ -214,7 +214,7 @@ public class ByteArrayBase64SwapComboTest extends ComboTest {
 				/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<jp:f rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Description>\n</rdf:RDF>\n",
 				/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:f rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n  </rdf:Description>\n</rdf:RDF>\n",
 			},
-			{
+			{	/* 7 */
 				"BeanWithByteArrayListField",
 				new BeanWithByteArrayListField().init(),
 				/* Json */		"{f:['AQID','BAUG',null]}",
@@ -239,7 +239,7 @@ public class ByteArrayBase64SwapComboTest extends ComboTest {
 				/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<jp:f>\n<rdf:Seq>\n<rdf:li>AQID</rdf:li>\n<rdf:li>BAUG</rdf:li>\n<rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Seq>\n</jp:f>\n</rdf:Description>\n</rdf:RDF>\n",
 				/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:f>\n      <rdf:Seq>\n        <rdf:li>AQID</rdf:li>\n        <rdf:li>BAUG</rdf:li>\n        <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n      </rdf:Seq>\n    </jp:f>\n  </rdf:Description>\n</rdf:RDF>\n",
 			},
-			{
+			{	/* 8 */
 				"BeanWithByteArrayMapField",
 				new BeanWithByteArrayMapField().init(),
 				/* Json */		"{f:{foo:'AQID',bar:null,null:'BAUG'}}",
@@ -264,7 +264,7 @@ public class ByteArrayBase64SwapComboTest extends ComboTest {
 				/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<jp:f rdf:parseType='Resource'>\n<jp:foo>AQID</jp:foo>\n<jp:bar rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n<jp:_x0000_>BAUG</jp:_x0000_>\n</jp:f>\n</rdf:Description>\n</rdf:RDF>\n",
 				/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:f rdf:parseType='Resource'>\n      <jp:foo>AQID</jp:foo>\n      <jp:bar rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n      <jp:_x0000_>BAUG</jp:_x0000_>\n    </jp:f>\n  </rdf:Description>\n</rdf:RDF>\n",
 			},
-			{
+			{	/* 9 */
 				"BeanWithByteArrayBeanListField",
 				new BeanWithByteArrayBeanListField().init(),
 				/* Json */		"{f:[{f1:'AQID',f2:['AQID','BAUG',null],f3:null,f4:['AQID','BAUG',null],f5:{foo:'AQID',bar:null,null:'BAUG'}},null]}",
@@ -289,7 +289,7 @@ public class ByteArrayBase64SwapComboTest extends ComboTest {
 				/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<jp:f>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:f1>AQID</jp:f1>\n<jp:f2>\n<rdf:Seq>\n<rdf:li>AQID</rdf:li>\n<rdf:li>BAUG</rdf:li>\n<rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Seq>\n</jp:f2>\n<jp:f3 rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n<jp:f4>\n<rdf:Seq>\n<rdf:li>AQID</rdf:li>\n<rdf:li>BAUG</rdf:li>\n<rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Seq>\n</jp:f4>\n<jp:f5 rdf:parseType='Resource'>\n<jp:foo>AQID</jp:foo>\n<jp:bar rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n<jp:_x0000_>BAUG</jp:_x0000_>\n</jp:f5>\n</rdf:li>\n<rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n</rdf:Seq>\n</jp:f>\n</rdf:Description>\n</rdf:RDF>\n",
 				/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:f>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:f1>AQID</jp:f1>\n          <jp:f2>\n            <rdf:Seq>\n              <rdf:li>AQID</rdf:li>\n              <rdf:li>BAUG</rdf:li>\n              <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n            </rdf:Seq>\n          </jp:f2>\n          <jp:f3 rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n          <jp:f4>\n            <rdf:Seq>\n              <rdf:li>AQID</rdf:li>\n              <rdf:li>BAUG</rdf:li>\n              <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n            </rdf:Seq>\n          </jp:f4>\n          <jp:f5 rdf:parseType='Resource'>\n            <jp:foo>AQID</jp:foo>\n            <jp:bar rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n            <jp:_x0000_>BAUG</jp:_x0000_>\n          </jp:f5>\n        </rdf:li>\n        <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n      </rdf:Seq>\n    </jp:f>\n  </rdf:Description>\n</rdf:RDF>\n",
 			},
-			{
+			{	/* 10 */
 				"BeanWithByteArrayBeanMapField",
 				new BeanWithByteArrayBeanMapField().init(),
 				/* Json */		"{f:{foo:{f1:'AQID',f2:['AQID','BAUG',null],f3:null,f4:['AQID','BAUG',null],f5:{foo:'AQID',bar:null,null:'BAUG'}},bar:null,null:{f1:'AQID',f2:['AQID','BAUG',null],f3:null,f4:['AQID','BAUG',null],f5:{foo:'AQID',bar:null,null:'BAUG'}}}}",

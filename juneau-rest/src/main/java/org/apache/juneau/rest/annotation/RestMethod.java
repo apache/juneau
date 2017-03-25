@@ -17,6 +17,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
@@ -38,13 +39,26 @@ public @interface RestMethod {
 	 * <p>
 	 * Typically <js>"GET"</js>, <js>"PUT"</js>, <js>"POST"</js>, <js>"DELETE"</js>, or <js>"OPTIONS"</js>.
 	 * <p>
-	 * Can also be a non-HTTP-standard name that is passed in through a <code>&amp;method=methodName</code> URL parameter.
-	 * <p>
 	 * Method names are case-insensitive (always folded to upper-case).
 	 * <p>
-	 * If a method name is not specified, then the method name is determined based on the Java method name.<br>
-	 * 	For example, if the method is <code>doPost(...)</code>, then the method name is automatically detected as <js>"POST"</js>.
-
+	 * Besides the standard HTTP method names, the following can also be specified:
+	 * <ul>
+	 * 	<li><js>"*"</js> - Denotes any method.
+	 * 		<br>Use this if you want to capture any HTTP methods in a single Java method.
+	 * 		<br>The {@link Method @Method} annotation and/or {@link RestRequest#getMethod()} method can be used
+	 * 		to distinguish the actual HTTP method name.
+	 * 	<li><js>""</js> - Auto-detect.
+	 * 		<br>The method name is determined based on the Java method name.
+	 * 		<br>For example, if the method is <code>doPost(...)</code>, then the method name is automatically detected as <js>"POST"</js>.
+	 * 	<li><js>"PROXY"</js> - Remote-proxy interface.
+	 * 		<br>This denotes a Java method that returns an object (usually an interface, often annotated with the {@link Remoteable @Remoteable} annotation)
+	 * 		to be used as a remote proxy using <code>RestClient.getRemoteableProxy(Class<T> interfaceClass, String url)</code>.
+	 * 		<br>This allows you to construct client-side interface proxies using REST as a transport medium.
+	 * 		<br>Conceptually, this is simply a fancy <code>POST</code> against the url <js>"/{path}/{javaMethodName}"</js> where the arguments
+	 * 		are marshalled from the client to the server as an HTTP body containing an array of objects,
+	 * 		passed to the method as arguments, and then the resulting object is marshalled back to the client.
+	 * 	<li>Anything else - Overloaded non-HTTP-standard names that are passed in through a <code>&amp;method=methodName</code> URL parameter.
+	 * </ul>
 	 */
 	String name() default "";
 

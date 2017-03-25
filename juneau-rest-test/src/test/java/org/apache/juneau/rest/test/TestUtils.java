@@ -37,6 +37,13 @@ public class TestUtils {
 	}
 
 	/**
+	 * Assert that the object is an instance of the specified class.
+	 */
+	public static void assertClass(Class<?> c, Object o) {
+		Assert.assertEquals(c, o == null ? null : o.getClass());
+	}
+
+	/**
 	 * Assert that the object equals the specified string after running it through ws.toString().
 	 */
 	public static void assertObjectEquals(String s, Object o, WriterSerializer ws) {

@@ -36,6 +36,18 @@ public class ParserGroupBuilder {
 	}
 
 	/**
+	 * Create an empty parser group using the specified property store for settings.
+	 * <p>
+	 * Note:  Modifying the specified property store externally will also modify it here.
+	 *
+	 * @param propertyStore The property store containing all settings common to all parsers in this group.
+	 */
+	public ParserGroupBuilder(PropertyStore propertyStore) {
+		this.parsers = new ArrayList<Object>();
+		this.propertyStore = propertyStore;
+	}
+
+	/**
 	 * Clone an existing parser group builder.
 	 * @param copyFrom The parser group that we're copying settings and parsers from.
 	 */

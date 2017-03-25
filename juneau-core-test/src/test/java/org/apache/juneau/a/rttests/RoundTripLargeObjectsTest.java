@@ -50,55 +50,55 @@ public class RoundTripLargeObjectsTest extends RoundTripTest {
 			{ /* 0 */
 				"Json DEFAULT",
 				new JsonSerializerBuilder().trimNullProperties(false),
-				JsonParser.DEFAULT,
+				new JsonParserBuilder(),
 				0
 			},
 			{ /* 1 */
 				"Json DEFAULT_LAX",
 				new JsonSerializerBuilder().simple().trimNullProperties(false),
-				JsonParser.DEFAULT,
+				new JsonParserBuilder(),
 				0
 			},
 			{ /* 2 */
 				"Json DEFAULT_SQ",
 				new JsonSerializerBuilder().simple().trimNullProperties(false),
-				JsonParser.DEFAULT,
+				new JsonParserBuilder(),
 				0
 			},
 			{ /* 3 */
 				"Xml DEFAULT w/namespaces,validation",
 				new XmlSerializerBuilder().sq().ns().trimNullProperties(false).addNamespaceUrisToRoot(true).useWhitespace(true),
-				XmlParser.DEFAULT,
+				new XmlParserBuilder(),
 				CHECK_XML_WHITESPACE | VALIDATE_XML
 			},
 			{ /* 4 */
 				"Xml DEFAULT wo/namespaces,validation",
 				new XmlSerializerBuilder().sq().trimNullProperties(false),
-				XmlParser.DEFAULT,
+				new XmlParserBuilder(),
 				CHECK_XML_WHITESPACE
 			},
 			{ /* 5 */
 				"Html",
 				new HtmlSerializerBuilder().trimNullProperties(false),
-				HtmlParser.DEFAULT,
+				new HtmlParserBuilder(),
 				CHECK_XML_WHITESPACE
 			},
 			{ /* 6 */
 				"UrlEncoding",
 				new UrlEncodingSerializerBuilder().trimNullProperties(false),
-				UrlEncodingParser.DEFAULT,
+				new UrlEncodingParserBuilder(),
 				0
 			},
 			{ /* 7 */
 				"Uon",
 				new UonSerializerBuilder().trimNullProperties(false),
-				UonParser.DEFAULT,
+				new UonParserBuilder(),
 				0
 			},
 			{ /* 8 */
 				"MsgPack",
 				new MsgPackSerializerBuilder().trimNullProperties(false),
-				MsgPackParser.DEFAULT,
+				new MsgPackParserBuilder(),
 				0
 			},
 //			{ /* 9 */

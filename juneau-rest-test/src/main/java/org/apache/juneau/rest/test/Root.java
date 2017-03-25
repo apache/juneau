@@ -38,6 +38,7 @@ import org.apache.juneau.rest.labels.*;
 		InheritanceResource.TestParsers.class,
 		InheritanceResource.TestProperties.class,
 		InheritanceResource.TestSerializers.class,
+		InterfaceProxyResource.class,
 		LargePojosResource.class,
 		MessagesResource.Messages2Resource.class,
 		MessagesResource.class,

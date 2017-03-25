@@ -59,7 +59,6 @@ public class RestClient extends CoreObject {
 	private final UrlEncodingSerializer urlEncodingSerializer;  // Used for form posts only.
 	final Parser parser;
 	private final String remoteableServletUri;
-	private final Map<Method,String> remoteableServiceUriMap;
 	private final String rootUrl;
 	private volatile boolean isClosed = false;
 	private final StackTraceElement[] creationStack;
@@ -113,7 +112,6 @@ public class RestClient extends CoreObject {
 		this.headers = Collections.unmodifiableMap(h2);
 		this.interceptors = interceptors.toArray(new RestCallInterceptor[interceptors.size()]);
 		this.remoteableServletUri = remoteableServletUri;
-		this.remoteableServiceUriMap = new ConcurrentHashMap<Method,String>(remoteableServiceUriMap);
 		this.rootUrl = rootUri;
 		this.retryOn = retryOn;
 		this.retries = retries;
@@ -410,29 +408,65 @@ public class RestClient extends CoreObject {
 	 * @throws RuntimeException If the Remotable service URI has not been specified on this
 	 * 	client by calling {@link RestClientBuilder#remoteableServletUri(String)}.
 	 */
-	@SuppressWarnings("unchecked")
 	public <T> T getRemoteableProxy(final Class<T> interfaceClass) {
 		if (remoteableServletUri == null)
 			throw new RuntimeException("Remoteable service URI has not been specified.");
-		return (T)Proxy.newProxyInstance(
-			interfaceClass.getClassLoader(),
-			new Class[] { interfaceClass },
-			new InvocationHandler() {
-				@Override /* InvocationHandler */
-				public Object invoke(Object proxy, Method method, Object[] args) {
-					try {
-						String uri = remoteableServiceUriMap.get(method);
-						if (uri == null) {
-							// Constructing this string each time can be time consuming, so cache it.
-							uri = remoteableServletUri + '/' + interfaceClass.getName() + '/' + ClassUtils.getMethodSignature(method);
-							remoteableServiceUriMap.put(method, uri);
+		return getRemoteableProxy(interfaceClass, remoteableServletUri + '/' + interfaceClass.getName());
+	}
+
+	/**
+	 * Create a new proxy interface for the specified REST PROXY interface.
+	 *
+	 * @param interfaceClass The interface to create a proxy for.
+	 * @param proxyUrl The URL of the REST method annotated with <code><ja>@RestMethod</ja>(name=<js>"PROXY"</js>)</code>.
+	 * @return The new proxy interface.
+	 */
+	public <T> T getRemoteableProxy(final Class<T> interfaceClass, final Object proxyUrl) {
+		return getRemoteableProxy(interfaceClass, proxyUrl, serializer, parser);
+	}
+
+	/**
+	 * Same as {@link #getRemoteableProxy(Class, Object)} but allows you to override the serializer and parser used.
+	 *
+	 * @param interfaceClass The interface to create a proxy for.
+	 * @param proxyUrl The URL of the REST method annotated with <code><ja>@RestMethod</ja>(name=<js>"PROXY"</js>)</code>.
+	 * @param serializer The serializer used to serialize POJOs to the body of the HTTP request.
+	 * @param parser The parser used to parse POJOs from the body of the HTTP response.
+	 * @return The new proxy interface.
+	 */
+	@SuppressWarnings({ "unchecked", "hiding" })
+	public <T> T getRemoteableProxy(final Class<T> interfaceClass, final Object proxyUrl, final Serializer serializer, final Parser parser) {
+		try {
+			return (T)Proxy.newProxyInstance(
+				interfaceClass.getClassLoader(),
+				new Class[] { interfaceClass },
+				new InvocationHandler() {
+
+					final Map<Method,String> uriCache = new ConcurrentHashMap<Method,String>();
+					final String uri = toURI(proxyUrl).toString();
+
+					@Override /* InvocationHandler */
+					public Object invoke(Object proxy, Method method, Object[] args) {
+
+						// Constructing this string each time can be time consuming, so cache it.
+						String u = uriCache.get(method);
+						if (u == null) {
+							try {
+								u = uri + '/' + URLEncoder.encode(ClassUtils.getMethodSignature(method), "utf-8");
+							} catch (UnsupportedEncodingException e) {}
+							uriCache.put(method, u);
 						}
-						return doPost(uri, args).getResponse(method.getReturnType());
-					} catch (Exception e) {
-						throw new RuntimeException(e);
+
+						try {
+							return doPost(u, args).serializer(serializer).parser(parser).getResponse(method.getGenericReturnType());
+						} catch (Exception e) {
+							throw new RuntimeException(e);
+						}
 					}
-				}
-		});
+			});
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	private Pattern absUrlPattern = Pattern.compile("^\\w+\\:\\/\\/.*");

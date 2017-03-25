@@ -13,7 +13,6 @@
 package org.apache.juneau.examples.rest.addressbook;
 
 import static javax.servlet.http.HttpServletResponse.*;
-import static org.apache.juneau.examples.addressbook.AddressBook.*;
 import static org.apache.juneau.html.HtmlDocSerializerContext.*;
 import static org.apache.juneau.jena.RdfCommonContext.*;
 import static org.apache.juneau.jena.RdfSerializerContext.*;
@@ -74,23 +73,8 @@ public class AddressBookResource extends ResourceJena {
 			// Create the address book
 			addressBook = new AddressBook(java.net.URI.create(""));
 
-			// Add some people to our address book by default
-			addressBook.createPerson(
-				new CreatePerson(
-					"Barack Obama",
-					toCalendar("Aug 4, 1961"),
-					new CreateAddress("1600 Pennsylvania Ave", "Washington", "DC", 20500, true),
-					new CreateAddress("5046 S Greenwood Ave", "Chicago", "IL", 60615, false)
-				)
-			);
-			addressBook.createPerson(
-				new CreatePerson(
-					"George Walker Bush",
-					toCalendar("Jul 6, 1946"),
-					new CreateAddress("43 Prairie Chapel Rd", "Crawford", "TX", 76638, true),
-					new CreateAddress("1600 Pennsylvania Ave", "Washington", "DC", 20500, false)
-				)
-			);
+			// Initialize it with some contents.
+			addressBook.init();
 
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -289,6 +273,15 @@ public class AddressBookResource extends ResourceJena {
 		};
 
 		return new DataSet(items, addressBook, this.getContext().getBeanContext().createSession());
+	}
+
+	/**
+	 * [PROXY /*]
+	 * Return a proxy interface to IAddressBook.
+	 */
+	@RestMethod(name="PROXY", path="/proxy/*")
+	public IAddressBook getProxy() {
+		return addressBook;
 	}
 
 	/**

@@ -12,64 +12,51 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
-import org.junit.*;
-import org.junit.runner.*;
-import org.junit.runners.*;
-import org.junit.runners.Suite.*;
+import java.util.*;
 
 /**
- * Runs all the testcases in this project.
- * Starts a REST service running org.apache.juneau.rest.test.Root on port 10001.
- * Stops the REST service after running the tests.
+ * Interface proxy exposed in InterfaceProxyResource and tested in InterfaceProxyTest.
  */
-@RunWith(Suite.class)
-@SuiteClasses({
-	AcceptCharsetTest.class,
-	BeanContextPropertiesTest.class,
-	CallbackStringsTest.class,
-	CharsetEncodingsTest.class,
-	ClientVersionTest.class,
-	ConfigTest.class,
-	ContentTest.class,
-	DefaultContentTypesTest.class,
-	ErrorConditionsTest.class,
-	GroupsTest.class,
-	GzipTest.class,
-	InheritanceTest.class,
-	InterfaceProxyTest.class,
-	JacocoDummyTest.class,
-	LargePojosTest.class,
-	MessagesTest.class,
-	NlsPropertyTest.class,
-	NlsTest.class,
-	NoParserInputTest.class,
-	OnPostCallTest.class,
-	OnPreCallTest.class,
-	OptionsWithoutNlsTest.class,
-	OverlappingMethodsTest.class,
-	ParamsTest.class,
-	ParsersTest.class,
-	PathsTest.class,
-	PathTest.class,
-	PropertiesTest.class,
-	RestClientTest.class,
-	RestUtilsTest.class,
-	SerializersTest.class,
-	StaticFilesTest.class,
-	TransformsTest.class,
-	UrisTest.class,
-	UrlContentTest.class,
-	UrlPathPatternTest.class
-})
-public class _TestSuite {
+public interface InterfaceProxy {
 
-	@BeforeClass
-	public static void setUp() {
-		TestMicroservice.startMicroservice();
-	}
+	void returnVoid();
+	int returnInt();
+	Integer returnInteger();
+	float returnFloat();
+	Float returnFloatObject();
+	String returnString();
+	String returnNullString();
+	int[] returnIntArray();
+	String[] returnStringArray();
+	List<Integer> returnIntegerList();
+	List<String> returnStringList();
+	Bean returnBean();
+	Bean[] returnBeanArray();
+	List<Bean> returnBeanList();
 
-	@AfterClass
-	public static void tearDown() {
-		TestMicroservice.stopMicroservice();
+	void setNothing();
+	void setInt(int x);
+	void setInteger(Integer x);
+	void setFloat(float x);
+	void setFloatObject(Float x);
+	void setString(String x);
+	void setNullString(String x);
+	void setIntArray(int[] x);
+	void setStringArray(String[] x);
+	void setIntegerList(List<Integer> x);
+	void setStringList(List<String> x);
+	void setBean(Bean x);
+	void setBeanArray(Bean[] x);
+	void setBeanList(List<Bean> x);
+
+	public static class Bean {
+		public int a;
+		public String b;
+
+		Bean init() {
+			this.a = 1;
+			this.b = "foo";
+			return this;
+		}
 	}
 }

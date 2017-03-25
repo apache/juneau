@@ -67,7 +67,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	private final RestContext context;
 
 	private final String method;
-	private String pathRemainder, body;
+	private String pathRemainder;
+	private byte[] body;
 	private Method javaMethod;
 	private ObjectMap properties;
 	private SerializerGroup serializerGroup;
@@ -118,14 +119,16 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			method = _method;
 
 			if (context.isAllowBodyParam()) {
-				body = getQueryParameter("body");
-				if (body != null)
+				String b = getQueryParameter("body");
+				if (b != null) {
 					setHeader("Content-Type", UonSerializer.DEFAULT.getResponseContentType());
+					this.body = b.getBytes(IOUtils.UTF8);
+				}
 			}
 
 			defaultServletHeaders = context.getDefaultRequestHeaders();
 
-			debug = "true".equals(getQueryParameter("debug", "false"));
+			debug = "true".equals(getQueryParameter("debug", "false")) || "true".equals(getHeader("Debug", "false"));
 
 			if (debug) {
 				context.getLogger().log(Level.INFO, toString());
@@ -1216,10 +1219,9 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @throws IOException If a problem occurred trying to read from the reader.
 	 */
 	public String getBodyAsString() throws IOException {
-		if (body != null)
-			return body;
-		body = IOUtils.read(getReader()).toString();
-		return body;
+		if (body == null)
+			body = IOUtils.readBytes(getInputStream(), 1024);
+		return new String(body, IOUtils.UTF8);
 	}
 
 	/**
@@ -1247,7 +1249,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 */
 	protected Reader getUnbufferedReader() throws IOException {
 		if (body != null)
-			return new CharSequenceReader(body);
+			return new CharSequenceReader(new String(body, IOUtils.UTF8));
 		return new InputStreamReader(getInputStream(), getCharacterEncoding());
 	}
 
@@ -1263,21 +1265,15 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	@Override /* ServletRequest */
 	public ServletInputStream getInputStream() throws IOException {
 
+		if (body != null)
+			return new ServletInputStream2(body);
+
 		Encoder enc = getEncoder();
 
 		ServletInputStream is = super.getInputStream();
 		if (enc != null) {
 			final InputStream is2 = enc.getInputStream(is);
-			return new ServletInputStream() {
-				@Override /* InputStream */
-				public final int read() throws IOException {
-					return is2.read();
-				}
-				@Override /* InputStream */
-				public final void close() throws IOException {
-					is2.close();
-				}
-			};
+			return new ServletInputStream2(is2);
 		}
 		return is;
 	}
@@ -1893,7 +1889,9 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		for (Map.Entry<String,String> e : defaultServletHeaders.entrySet()) {
 			sb.append("\t").append(e.getKey()).append(": ").append(e.getValue()).append("\n");
 		}
-		if (method.equals("PUT") || method.equals("POST")) {
+		if (javaMethod == null) {
+			sb.append("***init() not called yet!***\n");
+		} else if (method.equals("PUT") || method.equals("POST")) {
 			sb.append("---Body---\n");
 			try {
 				sb.append(getBodyAsString()).append("\n");
@@ -1984,5 +1982,31 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	void setJavaMethod(Method method) {
 		this.javaMethod = method;
+	}
+
+	/**
+	 * ServletInputStream wrapper around a normal input stream.
+	 */
+	private static class ServletInputStream2 extends ServletInputStream {
+
+		private final InputStream is;
+
+		private ServletInputStream2(InputStream is) {
+			this.is = is;
+		}
+
+		private ServletInputStream2(byte[] b) {
+			this(new ByteArrayInputStream(b));
+		}
+
+		@Override /* InputStream */
+		public final int read() throws IOException {
+			return is.read();
+		}
+
+		@Override /* InputStream */
+		public final void close() throws IOException {
+			is.close();
+		}
 	}
 }

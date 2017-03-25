@@ -148,7 +148,8 @@ public abstract class RestLogger {
 	 * <p>
 	 * Subclasses can override this method to provide their own logic for determining when exceptions are logged.
 	 * <p>
-	 * The default implementation will return <jk>false</jk> if <js>"noTrace=true"</js> is passed in the query string.
+	 * The default implementation will return <jk>false</jk> if <js>"noTrace=true"</js> is passed in the query string
+	 * 	or <code>No-Trace: true</code> is specified in the header.
 	 *
 	 * @param req The HTTP request.
 	 * @param res The HTTP response.
@@ -156,6 +157,8 @@ public abstract class RestLogger {
 	 * @return <jk>true</jk> if exception should be logged.
 	 */
 	protected boolean shouldLog(HttpServletRequest req, HttpServletResponse res, RestException e) {
+		if ("true".equals(req.getHeader("No-Trace")))
+			return false;
 		String q = req.getQueryString();
 		return (q == null ? true : q.indexOf("noTrace=true") == -1);
 	}

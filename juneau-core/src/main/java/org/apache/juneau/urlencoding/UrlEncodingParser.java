@@ -112,9 +112,9 @@ public class UrlEncodingParser extends UonParser {
 				o = session.cast(m, null, eType);
 			else if (m.containsKey("_value"))
 				o = session.convertToType(m.get("_value"), sType);
-			else if (sType.isCollection()) {
+			else if (sType.isCollection() || sType.isArray()) {
 				// ?1=foo&2=bar...
-				Collection c2 = sType.canCreateNewInstance() ? (Collection)sType.newInstance() : new ObjectList(session);
+				Collection c2 = (sType.isArray() || ! sType.canCreateNewInstance(outer)) ? new ObjectList(session) : (Collection)sType.newInstance();
 				Map<Integer,Object> t = new TreeMap<Integer,Object>();
 				for (Map.Entry<String,Object> e : m.entrySet()) {
 					String k = e.getKey();
@@ -122,7 +122,7 @@ public class UrlEncodingParser extends UonParser {
 						t.put(Integer.valueOf(k), session.convertToType(e.getValue(), sType.getElementType()));
 				}
 				c2.addAll(t.values());
-				o = c2;
+				o = (sType.isArray() ? ArrayUtils.toArray(c2, sType.getElementType().getInnerClass()) : c2);
 			} else {
 				if (sType.getNotABeanReason() != null)
 					throw new ParseException(session, "Class ''{0}'' could not be instantiated as application/x-www-form-urlencoded.  Reason: ''{1}''", sType, sType.getNotABeanReason());
@@ -413,18 +413,76 @@ public class UrlEncodingParser extends UonParser {
 	}
 
 	private Object[] parseArgs(UrlEncodingParserSession session, ParserReader r, ClassMeta<?>[] argTypes) throws Exception {
-		// TODO - This can be made more efficient.
-		ClassMeta<TreeMap<Integer,String>> cm = session.getClassMeta(TreeMap.class, Integer.class, String.class);
-		TreeMap<Integer,String> m = parseAnything(session, cm, r, session.getOuter());
-		Object[] vals = m.values().toArray(new Object[m.size()]);
-		if (vals.length != argTypes.length)
-			throw new ParseException(session, "Argument lengths don't match.  vals={0}, argTypes={1}", vals.length, argTypes.length);
-		for (int i = 0; i < vals.length; i++) {
-			String s = String.valueOf(vals[i]);
-			vals[i] = super.parseAnything(session, argTypes[i], new UonReader(s, false), session.getOuter(), true, null);
-		}
 
-		return vals;
+		int c = r.peekSkipWs();
+		if (c == '?')
+			r.read();
+
+		Object[] vals = new Object[argTypes.length];
+
+		final int S1=1; // Looking for attrName start.
+		final int S2=2; // Found attrName end, looking for =.
+		final int S3=3; // Found =, looking for valStart.
+		final int S4=4; // Looking for & or end.
+		boolean isInEscape = false;
+
+		int state = S1;
+		Integer currIdx = 0;
+		while (c != -1) {
+			c = r.read();
+			if (! isInEscape) {
+				if (state == S1) {
+					if (c == -1)
+						return vals;
+					r.unread();
+					Object attr = parseAttr(session, r, true);
+					currIdx = Integer.parseInt(attr.toString());
+					if (currIdx >= vals.length)
+						throw new ParseException(session, "Out-of-range index encountered.  args length={0}, index={1}", vals.length, currIdx);
+					state = S2;
+					c = 0; // Avoid isInEscape if c was '\'
+				} else if (state == S2) {
+					if (c == '\u0002')
+						state = S3;
+					else if (c == -1 || c == '\u0001') {
+						vals[currIdx] = null;
+						if (c == -1)
+							return vals;
+						state = S1;
+					}
+				} else if (state == S3) {
+					if (c == -1 || c == '\u0001') {
+						vals[currIdx] = convertAttrToType(session, null, "", argTypes[currIdx]);
+						if (c == -1)
+							return vals;
+						state = S1;
+					} else  {
+						// For performance, we bypass parseAnything for string values.
+						vals[currIdx] = argTypes[currIdx].isString() ? super.parseString(session, r.unread(), true) : super.parseAnything(session, argTypes[currIdx], r.unread(), null, true, null);
+
+						state = S4;
+						c = 0; // Avoid isInEscape if c was '\'
+					}
+				} else if (state == S4) {
+					if (c == '\u0001')
+						state = S1;
+					else if (c == -1) {
+						return vals;
+					}
+				}
+			}
+			isInEscape = (c == '\\' && ! isInEscape);
+		}
+		if (state == S1)
+			throw new ParseException(session, "Could not find attribute name on object.");
+		if (state == S2)
+			throw new ParseException(session, "Could not find '=' following attribute name on object.");
+		if (state == S3)
+			throw new ParseException(session, "Dangling '=' found in object entry");
+		if (state == S4)
+			throw new ParseException(session, "Could not find end of object.");
+
+		return null; // Unreachable.
 	}
 
 	/**

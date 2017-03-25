@@ -42,7 +42,7 @@ public class CalendarSwapComboTest extends ComboTest {
 	@Parameterized.Parameters
 	public static Collection<Object[]> getParameters() {
 		return Arrays.asList(new Object[][] {
-			{
+			{	/* 0 */
 				"CalendarSwap.ToString/singleDate",
 				singleDate,
 				CalendarSwap.ToString.class,
@@ -68,7 +68,7 @@ public class CalendarSwapComboTest extends ComboTest {
 				/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<j:value>Sun Mar 03 10:11:12 PST 1901</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
 				/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <j:value>Sun Mar 03 10:11:12 PST 1901</j:value>\n  </rdf:Description>\n</rdf:RDF>\n",
 			},
-			{
+			{	/* 1 */
 				"CalendarSwap.ToString/dateArray",
 				dateArray,
 				CalendarSwap.ToString.class,
@@ -85,16 +85,16 @@ public class CalendarSwapComboTest extends ComboTest {
 				/* Uon */		"@('Sun Mar 03 10:11:12 PST 1901')",
 				/* UonT */		"@('Sun Mar 03 10:11:12 PST 1901')",
 				/* UonR */		"@(\n\t'Sun Mar 03 10:11:12 PST 1901'\n)",
-				/* UrlEnc */	"_value=@('Sun+Mar+03+10:11:12+PST+1901')",
-				/* UrlEncT */	"_value=@('Sun+Mar+03+10:11:12+PST+1901')",
-				/* UrlEncR */	"_value=@(\n\t'Sun+Mar+03+10:11:12+PST+1901'\n)",
+				/* UrlEnc */	"0='Sun+Mar+03+10:11:12+PST+1901'",
+				/* UrlEncT */	"0='Sun+Mar+03+10:11:12+PST+1901'",
+				/* UrlEncR */	"0='Sun+Mar+03+10:11:12+PST+1901'",
 				/* MsgPack */	"91BC53756E204D61722030332031303A31313A3132205053542031393031",
 				/* MsgPackT */	"91BC53756E204D61722030332031303A31313A3132205053542031393031",
 				/* RdfXml */	"<rdf:RDF>\n<rdf:Seq>\n<rdf:li>Sun Mar 03 10:11:12 PST 1901</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n",
 				/* RdfXmlT */	"<rdf:RDF>\n<rdf:Seq>\n<rdf:li>Sun Mar 03 10:11:12 PST 1901</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n",
 				/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li>Sun Mar 03 10:11:12 PST 1901</rdf:li>\n  </rdf:Seq>\n</rdf:RDF>\n",
 			},
-			{
+			{	/* 2 */
 				"CalendarSwap.ToString",
 				dateMap,
 				CalendarSwap.ToString.class,
@@ -120,7 +120,7 @@ public class CalendarSwapComboTest extends ComboTest {
 				/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<jp:foo>Sun Mar 03 10:11:12 PST 1901</jp:foo>\n</rdf:Description>\n</rdf:RDF>\n",
 				/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:foo>Sun Mar 03 10:11:12 PST 1901</jp:foo>\n  </rdf:Description>\n</rdf:RDF>\n",
 			},
-			{
+			{	/* 3 */
 				"CalendarSwap.ISO8601DT/singleDate",
 				singleDate,
 				CalendarSwap.ISO8601DT.class,
@@ -146,7 +146,7 @@ public class CalendarSwapComboTest extends ComboTest {
 				/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<j:value>1901-03-03T10:11:12-08:00</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
 				/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <j:value>1901-03-03T10:11:12-08:00</j:value>\n  </rdf:Description>\n</rdf:RDF>\n",
 			},
-			{
+			{	/* 4 */
 				"CalendarSwap.ISO8601DT/dateArray",
 				dateArray,
 				CalendarSwap.ISO8601DT.class,
@@ -163,16 +163,16 @@ public class CalendarSwapComboTest extends ComboTest {
 				/* Uon */		"@(1901-03-03T10:11:12-08:00)",
 				/* UonT */		"@(1901-03-03T10:11:12-08:00)",
 				/* UonR */		"@(\n\t1901-03-03T10:11:12-08:00\n)",
-				/* UrlEnc */	"_value=@(1901-03-03T10:11:12-08:00)",
-				/* UrlEncT */	"_value=@(1901-03-03T10:11:12-08:00)",
-				/* UrlEncR */	"_value=@(\n\t1901-03-03T10:11:12-08:00\n)",
+				/* UrlEnc */	"0=1901-03-03T10:11:12-08:00",
+				/* UrlEncT */	"0=1901-03-03T10:11:12-08:00",
+				/* UrlEncR */	"0=1901-03-03T10:11:12-08:00",
 				/* MsgPack */	"91B9313930312D30332D30335431303A31313A31322D30383A3030",
 				/* MsgPackT */	"91B9313930312D30332D30335431303A31313A31322D30383A3030",
 				/* RdfXml */	"<rdf:RDF>\n<rdf:Seq>\n<rdf:li>1901-03-03T10:11:12-08:00</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n",
 				/* RdfXmlT */	"<rdf:RDF>\n<rdf:Seq>\n<rdf:li>1901-03-03T10:11:12-08:00</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n",
 				/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li>1901-03-03T10:11:12-08:00</rdf:li>\n  </rdf:Seq>\n</rdf:RDF>\n",
 			},
-			{
+			{	/* 5 */
 				"CalendarSwap.ISO8601DT/dateMap",
 				dateMap,
 				CalendarSwap.ISO8601DT.class,
@@ -198,7 +198,7 @@ public class CalendarSwapComboTest extends ComboTest {
 				/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<jp:foo>1901-03-03T10:11:12-08:00</jp:foo>\n</rdf:Description>\n</rdf:RDF>\n",
 				/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:foo>1901-03-03T10:11:12-08:00</jp:foo>\n  </rdf:Description>\n</rdf:RDF>\n",
 			},
-			{
+			{	/* 6 */
 				"CalendarSwap.RFC2822DTZ/singleDate",
 				singleDate,
 				CalendarSwap.RFC2822DTZ.class,
@@ -224,7 +224,7 @@ public class CalendarSwapComboTest extends ComboTest {
 				/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<j:value>Sun, 03 Mar 1901 18:11:12 GMT</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
 				/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <j:value>Sun, 03 Mar 1901 18:11:12 GMT</j:value>\n  </rdf:Description>\n</rdf:RDF>\n",
 			},
-			{
+			{	/* 7 */
 				"CalendarSwap.RFC2822DTZ/dateArray",
 				dateArray,
 				CalendarSwap.RFC2822DTZ.class,
@@ -241,16 +241,16 @@ public class CalendarSwapComboTest extends ComboTest {
 				/* Uon */		"@('Sun, 03 Mar 1901 18:11:12 GMT')",
 				/* UonT */		"@('Sun, 03 Mar 1901 18:11:12 GMT')",
 				/* UonR */		"@(\n\t'Sun, 03 Mar 1901 18:11:12 GMT'\n)",
-				/* UrlEnc */	"_value=@('Sun,+03+Mar+1901+18:11:12+GMT')",
-				/* UrlEncT */	"_value=@('Sun,+03+Mar+1901+18:11:12+GMT')",
-				/* UrlEncR */	"_value=@(\n\t'Sun,+03+Mar+1901+18:11:12+GMT'\n)",
+				/* UrlEnc */	"0='Sun,+03+Mar+1901+18:11:12+GMT'",
+				/* UrlEncT */	"0='Sun,+03+Mar+1901+18:11:12+GMT'",
+				/* UrlEncR */	"0='Sun,+03+Mar+1901+18:11:12+GMT'",
 				/* MsgPack */	"91BD53756E2C203033204D617220313930312031383A31313A313220474D54",
 				/* MsgPackT */	"91BD53756E2C203033204D617220313930312031383A31313A313220474D54",
 				/* RdfXml */	"<rdf:RDF>\n<rdf:Seq>\n<rdf:li>Sun, 03 Mar 1901 18:11:12 GMT</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n",
 				/* RdfXmlT */	"<rdf:RDF>\n<rdf:Seq>\n<rdf:li>Sun, 03 Mar 1901 18:11:12 GMT</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n",
 				/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li>Sun, 03 Mar 1901 18:11:12 GMT</rdf:li>\n  </rdf:Seq>\n</rdf:RDF>\n",
 			},
-			{
+			{	/* 8 */
 				"CalendarSwap.RFC2822DTZ/dateMap",
 				dateMap,
 				CalendarSwap.RFC2822DTZ.class,
@@ -276,7 +276,7 @@ public class CalendarSwapComboTest extends ComboTest {
 				/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<jp:foo>Sun, 03 Mar 1901 18:11:12 GMT</jp:foo>\n</rdf:Description>\n</rdf:RDF>\n",
 				/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:foo>Sun, 03 Mar 1901 18:11:12 GMT</jp:foo>\n  </rdf:Description>\n</rdf:RDF>\n",
 			},
-			{
+			{	/* 9 */
 				"CalendarLongSwap",
 				singleDate,
 				CalendarLongSwap.class,
@@ -302,7 +302,7 @@ public class CalendarSwapComboTest extends ComboTest {
 				/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<j:value>-2172116928000</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
 				/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <j:value>-2172116928000</j:value>\n  </rdf:Description>\n</rdf:RDF>\n",
 			},
-			{
+			{	/* 10 */
 				"CalendarLongSwap/dateArray",
 				dateArray,
 				CalendarLongSwap.class,
@@ -319,16 +319,16 @@ public class CalendarSwapComboTest extends ComboTest {
 				/* Uon */		"@(-2172116928000)",
 				/* UonT */		"@(-2172116928000)",
 				/* UonR */		"@(\n\t-2172116928000\n)",
-				/* UrlEnc */	"_value=@(-2172116928000)",
-				/* UrlEncT */	"_value=@(-2172116928000)",
-				/* UrlEncR */	"_value=@(\n\t-2172116928000\n)",
+				/* UrlEnc */	"0=-2172116928000",
+				/* UrlEncT */	"0=-2172116928000",
+				/* UrlEncR */	"0=-2172116928000",
 				/* MsgPack */	"91D3FFFFFE0643BDFA00",
 				/* MsgPackT */	"91D3FFFFFE0643BDFA00",
 				/* RdfXml */	"<rdf:RDF>\n<rdf:Seq>\n<rdf:li>-2172116928000</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n",
 				/* RdfXmlT */	"<rdf:RDF>\n<rdf:Seq>\n<rdf:li>-2172116928000</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n",
 				/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li>-2172116928000</rdf:li>\n  </rdf:Seq>\n</rdf:RDF>\n",
 			},
-			{
+			{	/* 11 */
 				"CalendarLongSwap/dateMap",
 				dateMap,
 				CalendarLongSwap.class,
@@ -354,7 +354,7 @@ public class CalendarSwapComboTest extends ComboTest {
 				/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<jp:foo>-2172116928000</jp:foo>\n</rdf:Description>\n</rdf:RDF>\n",
 				/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:foo>-2172116928000</jp:foo>\n  </rdf:Description>\n</rdf:RDF>\n",
 			},
-			{
+			{	/* 12 */
 				"CalendarMapSwap/singleDate",
 				singleDate,
 				CalendarMapSwap.class,
@@ -380,7 +380,7 @@ public class CalendarSwapComboTest extends ComboTest {
 				/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<jp:time>-2172116928000</jp:time>\n<jp:timeZone>PST</jp:timeZone>\n</rdf:Description>\n</rdf:RDF>\n",
 				/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:time>-2172116928000</jp:time>\n    <jp:timeZone>PST</jp:timeZone>\n  </rdf:Description>\n</rdf:RDF>\n",
 			},
-			{
+			{	/* 13 */
 				"CalendarMapSwap/dateArray",
 				dateArray,
 				CalendarMapSwap.class,
@@ -397,16 +397,16 @@ public class CalendarSwapComboTest extends ComboTest {
 				/* Uon */		"@((time=-2172116928000,timeZone=PST))",
 				/* UonT */		"@((time=-2172116928000,timeZone=PST))",
 				/* UonR */		"@(\n\t(\n\t\ttime=-2172116928000,\n\t\ttimeZone=PST\n\t)\n)",
-				/* UrlEnc */	"_value=@((time=-2172116928000,timeZone=PST))",
-				/* UrlEncT */	"_value=@((time=-2172116928000,timeZone=PST))",
-				/* UrlEncR */	"_value=@(\n\t(\n\t\ttime=-2172116928000,\n\t\ttimeZone=PST\n\t)\n)",
+				/* UrlEnc */	"0=(time=-2172116928000,timeZone=PST)",
+				/* UrlEncT */	"0=(time=-2172116928000,timeZone=PST)",
+				/* UrlEncR */	"0=(\n\ttime=-2172116928000,\n\ttimeZone=PST\n)",
 				/* MsgPack */	"9182A474696D65D3FFFFFE0643BDFA00A874696D655A6F6E65A3505354",
 				/* MsgPackT */	"9182A474696D65D3FFFFFE0643BDFA00A874696D655A6F6E65A3505354",
 				/* RdfXml */	"<rdf:RDF>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:time>-2172116928000</jp:time>\n<jp:timeZone>PST</jp:timeZone>\n</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n",
 				/* RdfXmlT */	"<rdf:RDF>\n<rdf:Seq>\n<rdf:li rdf:parseType='Resource'>\n<jp:time>-2172116928000</jp:time>\n<jp:timeZone>PST</jp:timeZone>\n</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n",
 				/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li rdf:parseType='Resource'>\n      <jp:time>-2172116928000</jp:time>\n      <jp:timeZone>PST</jp:timeZone>\n    </rdf:li>\n  </rdf:Seq>\n</rdf:RDF>\n",
 			},
-			{
+			{	/* 14 */
 				"CalendarMapSwap/dateMap",
 				dateMap,
 				CalendarMapSwap.class,
@@ -432,7 +432,7 @@ public class CalendarSwapComboTest extends ComboTest {
 				/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<jp:foo rdf:parseType='Resource'>\n<jp:time>-2172116928000</jp:time>\n<jp:timeZone>PST</jp:timeZone>\n</jp:foo>\n</rdf:Description>\n</rdf:RDF>\n",
 				/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <jp:foo rdf:parseType='Resource'>\n      <jp:time>-2172116928000</jp:time>\n      <jp:timeZone>PST</jp:timeZone>\n    </jp:foo>\n  </rdf:Description>\n</rdf:RDF>\n",
 			},
-			{
+			{	/* 15 */
 				"CalendarSwap.DateMedium/singleDate",
 				singleDate,
 				CalendarSwap.DateMedium.class,
@@ -458,7 +458,7 @@ public class CalendarSwapComboTest extends ComboTest {
 				/* RdfXmlT */	"<rdf:RDF>\n<rdf:Description>\n<j:value>Mar 3, 1901</j:value>\n</rdf:Description>\n</rdf:RDF>\n",
 				/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Description>\n    <j:value>Mar 3, 1901</j:value>\n  </rdf:Description>\n</rdf:RDF>\n",
 			},
-			{
+			{	/* 16 */
 				"CalendarSwap.DateMedium/dateArray",
 				dateArray,
 				CalendarSwap.DateMedium.class,
@@ -475,16 +475,16 @@ public class CalendarSwapComboTest extends ComboTest {
 				/* Uon */		"@('Mar 3, 1901')",
 				/* UonT */		"@('Mar 3, 1901')",
 				/* UonR */		"@(\n\t'Mar 3, 1901'\n)",
-				/* UrlEnc */	"_value=@('Mar+3,+1901')",
-				/* UrlEncT */	"_value=@('Mar+3,+1901')",
-				/* UrlEncR */	"_value=@(\n\t'Mar+3,+1901'\n)",
+				/* UrlEnc */	"0='Mar+3,+1901'",
+				/* UrlEncT */	"0='Mar+3,+1901'",
+				/* UrlEncR */	"0='Mar+3,+1901'",
 				/* MsgPack */	"91AB4D617220332C2031393031",
 				/* MsgPackT */	"91AB4D617220332C2031393031",
 				/* RdfXml */	"<rdf:RDF>\n<rdf:Seq>\n<rdf:li>Mar 3, 1901</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n",
 				/* RdfXmlT */	"<rdf:RDF>\n<rdf:Seq>\n<rdf:li>Mar 3, 1901</rdf:li>\n</rdf:Seq>\n</rdf:RDF>\n",
 				/* RdfXmlR */	"<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li>Mar 3, 1901</rdf:li>\n  </rdf:Seq>\n</rdf:RDF>\n",
 			},
-			{
+			{	/* 17 */
 				"CalendarSwap.DateMedium/dateMap",
 				dateMap,
 				CalendarSwap.DateMedium.class,

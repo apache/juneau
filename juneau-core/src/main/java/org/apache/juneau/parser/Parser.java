@@ -272,6 +272,7 @@ public abstract class Parser extends CoreObject {
 	 * 	<br>Ignored if the main type is not a map or collection.
 	 * @return The parsed object.
 	 * @throws ParseException If the input contains a syntax error or is malformed, or is not valid for the specified type.
+	 * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
 	 */
 	@SuppressWarnings("unchecked")
 	public final <T> T parse(Object input, Type type, Type...args) throws ParseException {
@@ -288,10 +289,13 @@ public abstract class Parser extends CoreObject {
 	 * 	ReaderParser p = JsonParser.<jsf>DEFAULT</jsf>;
 	 *
 	 * 	<jc>// Parse into a string.</jc>
-	 * 	MyBean b = p.parse(json, String.<jk>class</jk>);
+	 * 	String s = p.parse(json, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a bean.</jc>
 	 * 	MyBean b = p.parse(json, MyBean.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a bean array.</jc>
+	 * 	MyBean[] ba = p.parse(json, MyBean[].<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a linked-list of objects.</jc>
 	 * 	List l = p.parse(json, LinkedList.<jk>class</jk>);
@@ -477,7 +481,6 @@ public abstract class Parser extends CoreObject {
 	 * @param argTypes Specifies the type of objects to create for each entry in the array.
 	 * @return An array of parsed objects.
 	 * @throws ParseException If the input contains a syntax error or is malformed, or is not valid for the specified type.
-	 * @throws UnsupportedOperationException If not implemented.
 	 */
 	public final Object[] parseArgs(Object input, ClassMeta<?>[] argTypes) throws ParseException {
 		if (argTypes == null || argTypes.length == 0)
@@ -485,6 +488,29 @@ public abstract class Parser extends CoreObject {
 		ParserSession session = createSession(input);
 		try {
 			return doParseArgs(session, argTypes);
+		} catch (ParseException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new ParseException(session, e);
+		} finally {
+			session.close();
+		}
+	}
+
+	/**
+	 * Same as {@link #parseArgs(Object, ClassMeta[])} except allows you to pass in {@link Class} objects.
+	 *
+	 * @param input The input.  Subclasses can support different input types.
+	 * @param argTypes Specifies the type of objects to create for each entry in the array.
+	 * @return An array of parsed objects.
+	 * @throws ParseException If the input contains a syntax error or is malformed, or is not valid for the specified type.
+	 */
+	public final Object[] parseArgs(Object input, Type[] argTypes) throws ParseException {
+		if (argTypes == null || argTypes.length == 0)
+			return new Object[0];
+		ParserSession session = createSession(input);
+		try {
+			return doParseArgs(session, session.getClassMetas(argTypes));
 		} catch (ParseException e) {
 			throw e;
 		} catch (Exception e) {

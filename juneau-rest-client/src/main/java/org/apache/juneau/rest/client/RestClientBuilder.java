@@ -1015,6 +1015,20 @@ public class RestClientBuilder extends CoreObjectBuilder {
 		return property(PARSER_fileCharset, value);
 	}
 
+	/**
+	 * When called, <code>No-Trace: true</code> is added to requests.
+	 * <p>
+	 * This gives the opportunity for the servlet to not log errors on invalid requests.
+	 * This is useful for testing purposes when you don't want your log file to show lots
+	 * of errors that are simply the results of testing.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder noTrace() {
+		return header("No-Trace", true);
+	}
+
+
 	@Override /* CoreObjectBuilder */
 	public RestClientBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
@@ -1342,6 +1356,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	@Override /* CoreObjectBuilder */
 	public RestClientBuilder debug(boolean value) {
 		super.debug(value);
+		header("Debug", value);
 		return this;
 	}
 

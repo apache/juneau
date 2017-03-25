@@ -40,6 +40,8 @@ enum HtmlTag {
 	FF(13,"<ff>"),		// formfeed
 	BS(14,"<bs>"),		// backspace
 	SP(17, "<sp>"),   // space
+	P(18, "<p>"),
+	HTML(19, "<html>"),
 	xTABLE(-1,"</table>"),
 	xTR(-2,"</tr>"),
 	xTH(-3,"</th>"),
@@ -54,7 +56,9 @@ enum HtmlTag {
 	xBR(-12,"</br>"),
 	xFF(-13,"</ff>"),
 	xBS(-14,"</bs>"),
-	xSP(-17, "</sp>");
+	xSP(-17, "</sp>"),
+	xP(-18, "</p>"),
+	xHTML(-19, "</html>");
 
 	private Map<Integer,HtmlTag> cache = new HashMap<Integer,HtmlTag>();
 
@@ -121,6 +125,10 @@ enum HtmlTag {
 		}
 		else if (c == 'f')
 			t = (end ? xFF : FF);
+		else if (c == 'p')
+			t = (end ? xP : P);
+		else if (c == 'h')
+			t = (end ? xHTML : HTML);
 		if (t == null)
 			throw new XMLStreamException("Unknown tag '"+tag+"' encountered");
 		return t;

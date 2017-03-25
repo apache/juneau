@@ -96,7 +96,7 @@ public class TestMicroservice {
 		try {
 			return new RestClientBuilder()
 				.rootUrl(microserviceURI)
-			//	.httpClient(createHttpClient(), true)
+				.noTrace()
 			;
 		} catch (Exception e) {
 			throw new RuntimeException(e);
