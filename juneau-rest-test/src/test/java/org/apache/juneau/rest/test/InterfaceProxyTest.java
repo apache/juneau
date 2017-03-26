@@ -31,6 +31,7 @@ import org.junit.runner.*;
 import org.junit.runners.*;
 
 @RunWith(Parameterized.class)
+@SuppressWarnings("serial")
 public class InterfaceProxyTest extends RestTestcase {
 
 	@Parameterized.Parameters
@@ -43,6 +44,7 @@ public class InterfaceProxyTest extends RestTestcase {
 			{ /* 4 */ "MessagePack", MsgPackSerializer.DEFAULT, MsgPackParser.DEFAULT },
 			{ /* 5 */ "UrlEncoding", UrlEncodingSerializer.DEFAULT, UrlEncodingParser.DEFAULT },
 			{ /* 6 */ "Uon", UonSerializer.DEFAULT, UonParser.DEFAULT },
+			//{ /* 7 */ "RdfXml", RdfSerializer.DEFAULT_XMLABBREV, RdfParser.DEFAULT_XML },
 		});
 	}
 
@@ -71,6 +73,11 @@ public class InterfaceProxyTest extends RestTestcase {
 	@Test
 	public void returnInt() {
 		assertEquals(1, getProxy().returnInt());
+	}
+
+	@Test
+	public void returnBoolean() {
+		assertEquals(true, getProxy().returnBoolean());
 	}
 
 	@Test
@@ -134,6 +141,18 @@ public class InterfaceProxyTest extends RestTestcase {
 	}
 
 	@Test
+	public void returnBeanMap() {
+		assertObjectEquals("{foo:{a:1,b:'foo'}}", getProxy().returnBeanMap());
+		assertClass(InterfaceProxy.Bean.class, getProxy().returnBeanMap().get("foo"));
+	}
+
+	@Test
+	public void returnBeanListMap() {
+		assertObjectEquals("{foo:[{a:1,b:'foo'}]}", getProxy().returnBeanListMap());
+		assertClass(InterfaceProxy.Bean.class, getProxy().returnBeanListMap().get("foo").get(0));
+	}
+
+	@Test
 	public void setNothing() {
 		getProxy().setNothing();
 	}
@@ -156,6 +175,11 @@ public class InterfaceProxyTest extends RestTestcase {
 	@Test
 	public void setInteger() {
 		getProxy().setInteger(1);
+	}
+
+	@Test
+	public void setBoolean() {
+		getProxy().setBoolean(true);
 	}
 
 	@Test
@@ -221,5 +245,15 @@ public class InterfaceProxyTest extends RestTestcase {
 	@Test
 	public void setBeanList() {
 		getProxy().setBeanList(Arrays.asList(new Bean().init()));
+	}
+
+	@Test
+	public void setBeanMap() {
+		getProxy().setBeanMap(new HashMap<String,Bean>(){{put("foo",new Bean().init());}});
+	}
+
+	@Test
+	public void setBeanListMap() {
+		getProxy().setBeanListMap(new HashMap<String,List<Bean>>(){{put("foo",Arrays.asList(new Bean().init()));}});
 	}
 }

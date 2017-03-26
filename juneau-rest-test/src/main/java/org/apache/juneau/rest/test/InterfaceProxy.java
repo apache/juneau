@@ -22,6 +22,7 @@ public interface InterfaceProxy {
 	void returnVoid();
 	int returnInt();
 	Integer returnInteger();
+	boolean returnBoolean();
 	float returnFloat();
 	Float returnFloatObject();
 	String returnString();
@@ -33,10 +34,13 @@ public interface InterfaceProxy {
 	Bean returnBean();
 	Bean[] returnBeanArray();
 	List<Bean> returnBeanList();
+	Map<String,Bean> returnBeanMap();
+	Map<String,List<Bean>> returnBeanListMap();
 
 	void setNothing();
 	void setInt(int x);
 	void setInteger(Integer x);
+	void setBoolean(boolean x);
 	void setFloat(float x);
 	void setFloatObject(Float x);
 	void setString(String x);
@@ -48,6 +52,8 @@ public interface InterfaceProxy {
 	void setBean(Bean x);
 	void setBeanArray(Bean[] x);
 	void setBeanList(List<Bean> x);
+	void setBeanMap(Map<String,Bean> x);
+	void setBeanListMap(Map<String,List<Bean>> x);
 
 	public static class Bean {
 		public int a;

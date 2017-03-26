@@ -32,6 +32,12 @@ import org.apache.http.util.*;
  */
 public class RestCallLogger extends RestCallInterceptor {
 
+	/**
+	 * Default HTTP request logger.
+	 * Logs outgoing HTTP requests to the <code>org.apache.juneau.rest.client</code> logger at <jsf>WARNING</jsf> level.
+	 */
+	public static final RestCallLogger DEFAULT = new RestCallLogger(Level.WARNING, Logger.getLogger("org.apache.juneau.rest.client"));
+
 	private Level level;
 	private Logger log;
 
@@ -76,12 +82,12 @@ public class RestCallLogger extends RestCallInterceptor {
 				HttpUriRequest req = restCall.getRequest();
 				HttpResponse res = restCall.getResponse();
 				if (req != null) {
-					sb.append("\n=== HTTP Call ==================================================================");
+					sb.append("\n=== HTTP Call (outgoing) =======================================================");
 
 					sb.append("\n=== REQUEST ===\n").append(req);
 					sb.append("\n---request headers---");
 					for (Header h : req.getAllHeaders())
-						sb.append("\n").append(h);
+						sb.append("\n\t").append(h);
 					if (req instanceof HttpEntityEnclosingRequestBase) {
 						sb.append("\n---request entity---");
 						HttpEntityEnclosingRequestBase req2 = (HttpEntityEnclosingRequestBase)req;
@@ -107,7 +113,7 @@ public class RestCallLogger extends RestCallInterceptor {
 					sb.append("\n=== RESPONSE ===\n").append(res.getStatusLine());
 					sb.append("\n---response headers---");
 					for (Header h : res.getAllHeaders())
-						sb.append("\n").append(h);
+						sb.append("\n\t").append(h);
 					sb.append("\n---response content---\n").append(output);
 					sb.append("\n=== END ========================================================================");
 				}

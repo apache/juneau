@@ -76,6 +76,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	private int retries = 1;
 	private long retryInterval = -1;
 	private RetryOn retryOn = RetryOn.DEFAULT;
+	private boolean debug;
 
 	/**
 	 * Constructor, default settings.
@@ -139,7 +140,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 
 			UrlEncodingSerializer us = new SerializerBuilder(propertyStore).build(UrlEncodingSerializer.class);
 
-			return new RestClient(propertyStore, httpClient, keepHttpClientOpen, s, p, us, headers, interceptors, remoteableServletUri, remoteableServiceUriMap, rootUrl, retryOn, retries, retryInterval);
+			return new RestClient(propertyStore, httpClient, keepHttpClientOpen, s, p, us, headers, interceptors, remoteableServletUri, remoteableServiceUriMap, rootUrl, retryOn, retries, retryInterval, debug);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -1356,6 +1357,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	@Override /* CoreObjectBuilder */
 	public RestClientBuilder debug(boolean value) {
 		super.debug(value);
+		this.debug = value;
 		header("Debug", value);
 		return this;
 	}

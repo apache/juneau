@@ -442,7 +442,7 @@ public class HtmlParser extends XmlParser {
 					}
 					String key = keys.get(i);
 					if (m != null) {
-						ClassMeta<?> et = elementType.getElementType();
+						ClassMeta<?> et = elementType.getValueType();
 						Object value = parseAnything(session, et, r, l, false, pMeta);
 						setName(et, value, key);
 						m.put(key, value);

@@ -130,10 +130,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 			debug = "true".equals(getQueryParameter("debug", "false")) || "true".equals(getHeader("Debug", "false"));
 
-			if (debug) {
-				context.getLogger().log(Level.INFO, toString());
-			}
-
 		} catch (RestException e) {
 			throw e;
 		} catch (Exception e) {
@@ -156,6 +152,14 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		this.beanSession = urlEncodingParser.getBeanContext().createSession();
 		this.defaultCharset = defaultCharset;
 		this.encoders = encoders;
+
+		if (debug) {
+			String msg = ""
+				+ "\n=== HTTP Request (incoming) ===================================================="
+				+ toString()
+				+ "\n=== END ========================================================================";
+			context.getLogger().log(Level.WARNING, msg);
+		}
 	}
 
 	/**

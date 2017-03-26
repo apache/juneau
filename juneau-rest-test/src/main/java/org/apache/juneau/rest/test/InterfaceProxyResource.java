@@ -26,6 +26,7 @@ import org.junit.*;
  */
 @RestResource(
 	path="/testInterfaceProxyResource")
+@SuppressWarnings("serial")
 public class InterfaceProxyResource extends RestServletJenaDefault {
 	private static final long serialVersionUID = 1L;
 
@@ -41,6 +42,8 @@ public class InterfaceProxyResource extends RestServletJenaDefault {
 			public Integer returnInteger() { return 1;}
 			@Override
 			public int returnInt() { return 1; }
+			@Override
+			public boolean returnBoolean() { return true; }
 			@Override
 			public float returnFloat() { return 1f; }
 			@Override
@@ -63,6 +66,10 @@ public class InterfaceProxyResource extends RestServletJenaDefault {
 			public Bean[] returnBeanArray() { return new Bean[]{new Bean().init()}; }
 			@Override
 			public List<Bean> returnBeanList() { return Arrays.asList(new Bean().init()); }
+			@Override
+			public Map<String,Bean> returnBeanMap() { return new HashMap<String,Bean>(){{put("foo",new Bean().init());}}; }
+			@Override
+			public Map<String,List<Bean>> returnBeanListMap() { return new HashMap<String,List<Bean>>(){{put("foo",Arrays.asList(new Bean().init()));}}; }
 
 			@Override
 			public void setNothing() {
@@ -74,6 +81,10 @@ public class InterfaceProxyResource extends RestServletJenaDefault {
 			@Override
 			public void setInteger(Integer x) {
 				assertEquals((Integer)1, x);
+			}
+			@Override
+			public void setBoolean(boolean x) {
+				assertTrue(x);
 			}
 			@Override
 			public void setFloat(float x) {
@@ -118,6 +129,14 @@ public class InterfaceProxyResource extends RestServletJenaDefault {
 			@Override
 			public void setBeanList(List<Bean> x) {
 				assertObjectEquals("[{a:1,b:'foo'}]", x);
+			}
+			@Override
+			public void setBeanMap(Map<String,Bean> x) {
+				assertObjectEquals("{foo:{a:1,b:'foo'}}", x);
+			}
+			@Override
+			public void setBeanListMap(Map<String,List<Bean>> x) {
+				assertObjectEquals("{foo:[{a:1,b:'foo'}]}", x);
 			}
 		};
 	}

@@ -462,6 +462,11 @@ public class RdfParser extends ReaderParser {
 		return l;
 	}
 
+	@Override /* Parser */
+	protected Object[] doParseArgs(ParserSession session, ClassMeta<?>[] argTypes) throws Exception {
+		throw new UnsupportedOperationException("Parser '"+getClass().getName()+"' does not support this method.");
+	}
+
 	
 	//--------------------------------------------------------------------------------
 	// Entry point methods

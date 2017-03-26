@@ -1263,16 +1263,16 @@ public final class RestCall {
 
 	<T> T getResponse(ClassMeta<T> type) throws IOException, ParseException {
 		try {
-		Parser p = getParser();
-		T o = null;
+			Parser p = getParser();
+			T o = null;
 			if (! p.isReaderParser()) {
-			InputStream is = getInputStream();
-			o = ((InputStreamParser)p).parse(is, type);
-		} else {
-			Reader r = getReader();
-			o = ((ReaderParser)p).parse(r, type);
+				InputStream is = getInputStream();
+				o = ((InputStreamParser)p).parse(is, type);
+			} else {
+				Reader r = getReader();
+				o = ((ReaderParser)p).parse(r, type);
 			}
-		return o;
+			return o;
 		} catch (ParseException e) {
 			isFailed = true;
 			throw e;

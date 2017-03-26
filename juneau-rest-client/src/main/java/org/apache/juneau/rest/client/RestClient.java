@@ -66,6 +66,7 @@ public class RestClient extends CoreObject {
 	final RetryOn retryOn;
 	final int retries;
 	final long retryInterval;
+	final boolean debug;
 	final RestCallInterceptor[] interceptors;
 
 	/**
@@ -84,6 +85,7 @@ public class RestClient extends CoreObject {
 	 * @param retryOn
 	 * @param retries
 	 * @param retryInterval
+	 * @param debug
 	 */
 	public RestClient(
 			PropertyStore propertyStore,
@@ -99,7 +101,8 @@ public class RestClient extends CoreObject {
 			String rootUri,
 			RetryOn retryOn,
 			int retries,
-			long retryInterval) {
+			long retryInterval,
+			boolean debug) {
 		super(propertyStore);
 		this.httpClient = httpClient;
 		this.keepHttpClientOpen = keepHttpClientOpen;
@@ -110,12 +113,18 @@ public class RestClient extends CoreObject {
 		Map<String,String> h2 = new ConcurrentHashMap<String,String>(headers);
 
 		this.headers = Collections.unmodifiableMap(h2);
-		this.interceptors = interceptors.toArray(new RestCallInterceptor[interceptors.size()]);
 		this.remoteableServletUri = remoteableServletUri;
 		this.rootUrl = rootUri;
 		this.retryOn = retryOn;
 		this.retries = retries;
 		this.retryInterval = retryInterval;
+		this.debug = debug;
+
+		List<RestCallInterceptor> l = new ArrayList<RestCallInterceptor>(interceptors);
+		if (debug)
+			l.add(RestCallLogger.DEFAULT);
+
+		this.interceptors = l.toArray(new RestCallInterceptor[l.size()]);
 
 		if (Boolean.getBoolean("org.apache.juneau.rest.client.RestClient.trackLifecycle"))
 			creationStack = Thread.currentThread().getStackTrace();
