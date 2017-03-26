@@ -442,10 +442,10 @@ public class HtmlParser extends XmlParser {
 					}
 					String key = keys.get(i);
 					if (m != null) {
-						ClassMeta<?> et = elementType.getValueType();
-						Object value = parseAnything(session, et, r, l, false, pMeta);
-						setName(et, value, key);
-						m.put(key, value);
+						ClassMeta<?> kt = elementType.getKeyType(), vt = elementType.getValueType();
+						Object value = parseAnything(session, vt, r, l, false, pMeta);
+						setName(vt, value, key);
+						m.put(session.convertToType(key, kt), value);
 					}
 				}
 				if (m != null && c != null) {

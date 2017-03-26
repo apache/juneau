@@ -36,6 +36,7 @@ public interface InterfaceProxy {
 	List<Bean> returnBeanList();
 	Map<String,Bean> returnBeanMap();
 	Map<String,List<Bean>> returnBeanListMap();
+	Map<Integer,List<Bean>> returnBeanListMapIntegerKeys();
 
 	void setNothing();
 	void setInt(int x);
@@ -54,6 +55,7 @@ public interface InterfaceProxy {
 	void setBeanList(List<Bean> x);
 	void setBeanMap(Map<String,Bean> x);
 	void setBeanListMap(Map<String,List<Bean>> x);
+	void setBeanListMapIntegerKeys(Map<Integer,List<Bean>> x);
 
 	public static class Bean {
 		public int a;

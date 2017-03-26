@@ -157,10 +157,9 @@ public abstract class RestLogger {
 	 * @return <jk>true</jk> if exception should be logged.
 	 */
 	protected boolean shouldLog(HttpServletRequest req, HttpServletResponse res, RestException e) {
-		if ("true".equals(req.getHeader("No-Trace")))
+		if (isNoTrace(req) && ! isDebug(req))
 			return false;
-		String q = req.getQueryString();
-		return (q == null ? true : q.indexOf("noTrace=true") == -1);
+		return true;
 	}
 
 	/**
@@ -192,6 +191,14 @@ public abstract class RestLogger {
 			}
 		}
 		return false;
+	}
+
+	private static boolean isNoTrace(HttpServletRequest req) {
+		return "true".equals(req.getHeader("No-Trace")) || req.getQueryString().contains("noTrace=true");
+	}
+
+	private static boolean isDebug(HttpServletRequest req) {
+		return "true".equals(req.getHeader("Debug"));
 	}
 
 	/**

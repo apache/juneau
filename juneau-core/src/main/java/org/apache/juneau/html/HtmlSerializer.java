@@ -479,13 +479,13 @@ public class HtmlSerializer extends XmlSerializer {
 		// Look at the objects to see how we're going to handle them.  Check the first object to see how we're going to handle this.
 		// If it's a map or bean, then we'll create a table.
 		// Otherwise, we'll create a list.
-		String[] th = getTableHeaders(session, c, hbpMeta);
+		Object[] th = getTableHeaders(session, c, hbpMeta);
 
 		if (th != null) {
 
 			out.oTag(i, "table").attr(btpn, type2).append('>').nl();
 			out.sTag(i+1, "tr").nl();
-			for (String key : th)
+			for (Object key : th)
 				out.sTag(i+2, "th").append(key).eTag("th").nl();
 			out.eTag(i+1, "tr").nl();
 
@@ -510,9 +510,9 @@ public class HtmlSerializer extends XmlSerializer {
 				} else if (cm.isMap() && ! (cm.isBeanMap())) {
 					Map m2 = session.sort((Map)o);
 
-					for (String k : th) {
+					for (Object k : th) {
 						out.sTag(i+2, "td");
-						ContentResult cr = serializeAnything(session, out, m2.get(k), seType, k, 2, null, false);
+						ContentResult cr = serializeAnything(session, out, m2.get(k), seType, session.toString(k), 2, null, false);
 						if (cr == CR_NORMAL)
 							out.i(i+2);
 						out.eTag("td").nl();
@@ -524,8 +524,8 @@ public class HtmlSerializer extends XmlSerializer {
 					else
 						m2 = session.toBeanMap(o);
 
-					for (String k : th) {
-						BeanMapEntry p = m2.getProperty(k);
+					for (Object k : th) {
+						BeanMapEntry p = m2.getProperty(session.toString(k));
 						BeanPropertyMeta pMeta = p.getMeta();
 						out.sTag(i+2, "td");
 						ContentResult cr = serializeAnything(session, out, p.getValue(), pMeta.getClassMeta(), p.getKey().toString(), 2, pMeta, false);
@@ -560,12 +560,12 @@ public class HtmlSerializer extends XmlSerializer {
 	 * 2-dimensional tables are used for collections of objects that all have the same set of property names.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private static String[] getTableHeaders(SerializerSession session, Collection c, HtmlBeanPropertyMeta hbpMeta) throws Exception {
+	private static Object[] getTableHeaders(SerializerSession session, Collection c, HtmlBeanPropertyMeta hbpMeta) throws Exception {
 		if (c.size() == 0)
 			return null;
 		c = session.sort(c);
-		String[] th;
-		Set<String> s = new TreeSet<String>();
+		Object[] th;
+		Set<Object> s = new TreeSet<Object>();
 		Set<ClassMeta> prevC = new HashSet<ClassMeta>();
 		Object o1 = null;
 		for (Object o : c)
@@ -589,11 +589,11 @@ public class HtmlSerializer extends XmlSerializer {
 		if (h.isNoTables() || (hbpMeta != null && hbpMeta.isNoTables()))
 			return null;
 		if (h.isNoTableHeaders() || (hbpMeta != null && hbpMeta.isNoTableHeaders()))
-			return new String[0];
+			return new Object[0];
 		if (session.canIgnoreValue(cm, null, o1))
 			return null;
 		if (cm.isMap() && ! cm.isBeanMap()) {
-			Set<String> set = new LinkedHashSet<String>();
+			Set<Object> set = new LinkedHashSet<Object>();
 			for (Object o : c) {
 				if (! session.canIgnoreValue(cm, null, o)) {
 					if (! cm.isInstance(o))
@@ -601,13 +601,13 @@ public class HtmlSerializer extends XmlSerializer {
 					Map m = session.sort((Map)o);
 					for (Map.Entry e : (Set<Map.Entry>)m.entrySet()) {
 						if (e.getValue() != null)
-							set.add(e.getKey() == null ? null : e.getKey().toString());
+							set.add(e.getKey() == null ? null : e.getKey());
 					}
 				}
 			}
-			th = set.toArray(new String[set.size()]);
+			th = set.toArray(new Object[set.size()]);
 		} else {
-			Set<String> set = new LinkedHashSet<String>();
+			Set<Object> set = new LinkedHashSet<Object>();
 			for (Object o : c) {
 				if (! session.canIgnoreValue(cm, null, o)) {
 					if (! cm.isInstance(o))
@@ -619,7 +619,7 @@ public class HtmlSerializer extends XmlSerializer {
 					}
 				}
 			}
-			th = set.toArray(new String[set.size()]);
+			th = set.toArray(new Object[set.size()]);
 		}
 		prevC.add(cm);
 		s.addAll(Arrays.asList(th));

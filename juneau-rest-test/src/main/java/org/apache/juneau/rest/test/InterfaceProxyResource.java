@@ -70,6 +70,8 @@ public class InterfaceProxyResource extends RestServletJenaDefault {
 			public Map<String,Bean> returnBeanMap() { return new HashMap<String,Bean>(){{put("foo",new Bean().init());}}; }
 			@Override
 			public Map<String,List<Bean>> returnBeanListMap() { return new HashMap<String,List<Bean>>(){{put("foo",Arrays.asList(new Bean().init()));}}; }
+			@Override
+			public Map<Integer,List<Bean>> returnBeanListMapIntegerKeys() { return new HashMap<Integer,List<Bean>>(){{put(1,Arrays.asList(new Bean().init()));}}; }
 
 			@Override
 			public void setNothing() {
@@ -137,6 +139,11 @@ public class InterfaceProxyResource extends RestServletJenaDefault {
 			@Override
 			public void setBeanListMap(Map<String,List<Bean>> x) {
 				assertObjectEquals("{foo:[{a:1,b:'foo'}]}", x);
+			}
+			@Override
+			public void setBeanListMapIntegerKeys(Map<Integer,List<Bean>> x) {
+				assertObjectEquals("{'1':[{a:1,b:'foo'}]}", x);  // Note: JsonSerializer serializes key as string.
+				assertEquals(Integer.class, x.keySet().iterator().next().getClass());
 			}
 		};
 	}

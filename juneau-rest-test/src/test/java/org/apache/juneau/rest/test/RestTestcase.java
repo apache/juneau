@@ -45,6 +45,15 @@ public class RestTestcase {
 		return rc;
 	}
 
+	/**
+	 * Same as {@link #getClient(Serializer, Parser)} but sets the debug flag on the client.
+	 */
+	protected RestClient getDebugClient(Serializer serializer, Parser parser) {
+		RestClient rc = TestMicroservice.client(serializer, parser).debug(true).build();
+		clients.add(rc);
+		return rc;
+	}
+
 	@AfterClass
 	public static void tearDown() {
 		if (microserviceStarted)

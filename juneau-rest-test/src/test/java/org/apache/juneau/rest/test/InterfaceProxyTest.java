@@ -153,6 +153,13 @@ public class InterfaceProxyTest extends RestTestcase {
 	}
 
 	@Test
+	public void returnBeanListMapIntegerKeys() {
+		// Note: JsonSerializer serializes key as string.
+		assertObjectEquals("{'1':[{a:1,b:'foo'}]}", getProxy().returnBeanListMapIntegerKeys());
+		assertClass(Integer.class, getProxy().returnBeanListMapIntegerKeys().keySet().iterator().next());
+	}
+
+	@Test
 	public void setNothing() {
 		getProxy().setNothing();
 	}
@@ -255,5 +262,10 @@ public class InterfaceProxyTest extends RestTestcase {
 	@Test
 	public void setBeanListMap() {
 		getProxy().setBeanListMap(new HashMap<String,List<Bean>>(){{put("foo",Arrays.asList(new Bean().init()));}});
+	}
+
+	@Test
+	public void setBeanListMapIntegerKeys() {
+		getProxy().setBeanListMapIntegerKeys(new HashMap<Integer,List<Bean>>(){{put(1,Arrays.asList(new Bean().init()));}});
 	}
 }
