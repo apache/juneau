@@ -37,42 +37,84 @@ public class InterfaceProxyResource extends RestServletJenaDefault {
 	public InterfaceProxy getProxy() {
 		return new InterfaceProxy() {
 			@Override
-			public void returnVoid() {}
+			public void returnVoid() {
+			}
 			@Override
-			public Integer returnInteger() { return 1;}
+			public Integer returnInteger() {
+				return 1;
+			}
 			@Override
-			public int returnInt() { return 1; }
+			public int returnInt() {
+				return 1;
+			}
 			@Override
-			public boolean returnBoolean() { return true; }
+			public boolean returnBoolean() {
+				return true;
+			}
 			@Override
-			public float returnFloat() { return 1f; }
+			public float returnFloat() {
+				return 1f;
+			}
 			@Override
-			public Float returnFloatObject() { return 1f; }
+			public Float returnFloatObject() {
+				return 1f;
+			}
 			@Override
-			public String returnString() { return "foobar"; }
+			public String returnString() {
+				return "foobar";
+			}
 			@Override
-			public String returnNullString() { return null; }
+			public String returnNullString() {
+				return null;
+			}
 			@Override
-			public int[] returnIntArray() { return new int[]{1,2}; }
+			public int[] returnIntArray() {
+				return new int[]{1,2};
+			}
 			@Override
-			public String[] returnStringArray() { return new String[]{"foo","bar",null};}
+			public String[] returnStringArray() {
+				return new String[]{"foo","bar",null};
+			}
 			@Override
-			public List<Integer> returnIntegerList() { return Arrays.asList(new Integer[]{1,2}); }
+			public List<Integer> returnIntegerList() {
+				return Arrays.asList(new Integer[]{1,2});
+			}
 			@Override
-			public List<String> returnStringList() { return Arrays.asList(new String[]{"foo","bar",null}); }
+			public List<String> returnStringList() {
+				return Arrays.asList(new String[]{"foo","bar",null});
+			}
 			@Override
-			public Bean returnBean() { return new Bean().init(); }
+			public Bean returnBean() {
+				return new Bean().init();
+			}
 			@Override
-			public Bean[] returnBeanArray() { return new Bean[]{new Bean().init()}; }
+			public Bean[] returnBeanArray() {
+				return new Bean[]{new Bean().init()};
+			}
 			@Override
-			public List<Bean> returnBeanList() { return Arrays.asList(new Bean().init()); }
+			public List<Bean> returnBeanList() {
+				return Arrays.asList(new Bean().init());
+			}
 			@Override
-			public Map<String,Bean> returnBeanMap() { return new HashMap<String,Bean>(){{put("foo",new Bean().init());}}; }
+			public Map<String,Bean> returnBeanMap() {
+				return new HashMap<String,Bean>(){{put("foo",new Bean().init());}};
+			}
 			@Override
-			public Map<String,List<Bean>> returnBeanListMap() { return new HashMap<String,List<Bean>>(){{put("foo",Arrays.asList(new Bean().init()));}}; }
+			public Map<String,List<Bean>> returnBeanListMap() {
+				return new HashMap<String,List<Bean>>(){{put("foo",Arrays.asList(new Bean().init()));}};
+			}
 			@Override
-			public Map<Integer,List<Bean>> returnBeanListMapIntegerKeys() { return new HashMap<Integer,List<Bean>>(){{put(1,Arrays.asList(new Bean().init()));}}; }
-
+			public Map<Integer,List<Bean>> returnBeanListMapIntegerKeys() {
+				return new HashMap<Integer,List<Bean>>(){{put(1,Arrays.asList(new Bean().init()));}};
+			}
+			@Override
+			public void throwException1() throws InterfaceProxy.InterfaceProxyException1 {
+				throw new InterfaceProxy.InterfaceProxyException1("foo");
+			}
+			@Override
+			public void throwException2() throws InterfaceProxy.InterfaceProxyException2 {
+				throw new InterfaceProxy.InterfaceProxyException2();
+			}
 			@Override
 			public void setNothing() {
 			}

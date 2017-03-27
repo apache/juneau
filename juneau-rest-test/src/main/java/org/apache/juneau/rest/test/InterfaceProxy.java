@@ -38,6 +38,9 @@ public interface InterfaceProxy {
 	Map<String,List<Bean>> returnBeanListMap();
 	Map<Integer,List<Bean>> returnBeanListMapIntegerKeys();
 
+	void throwException1() throws InterfaceProxyException1;
+	void throwException2() throws InterfaceProxyException2;
+
 	void setNothing();
 	void setInt(int x);
 	void setInteger(Integer x);
@@ -66,5 +69,16 @@ public interface InterfaceProxy {
 			this.b = "foo";
 			return this;
 		}
+	}
+	
+	@SuppressWarnings("serial")
+	public static class InterfaceProxyException1 extends Throwable {
+		public InterfaceProxyException1(String msg) {
+			super(msg);
+		}
+	}
+
+	@SuppressWarnings("serial")
+	public static class InterfaceProxyException2 extends Throwable {		
 	}
 }

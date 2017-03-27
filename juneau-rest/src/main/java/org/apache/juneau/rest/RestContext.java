@@ -432,7 +432,19 @@ public final class RestContext extends Context {
 												// Parse the args and invoke the method.
 												Parser p = req.getParser();
 												Object input = p.isReaderParser() ? req.getReader() : req.getInputStream();
-												res.setOutput(m.invoke(o, p.parseArgs(input, m.getGenericParameterTypes())));
+												Object output = null;
+												try {
+													output = m.invoke(o, p.parseArgs(input, m.getGenericParameterTypes()));
+												} catch (InvocationTargetException e) {
+													res.setHeader("Exception-Name", e.getCause().getClass().getName());
+													res.setHeader("Exception-Message", e.getCause().getMessage());
+													throw e;
+												} catch (Exception e) {
+													res.setHeader("Exception-Name", e.getClass().getName());
+													res.setHeader("Exception-Message", e.getCause().getMessage());
+													throw e;
+												}
+												res.setOutput(output);
 												return SC_OK;
 											} catch (Exception e) {
 												throw new RestException(SC_INTERNAL_SERVER_ERROR, e);

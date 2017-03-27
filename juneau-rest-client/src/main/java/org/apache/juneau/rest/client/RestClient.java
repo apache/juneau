@@ -455,7 +455,7 @@ public class RestClient extends CoreObject {
 					final String uri = toURI(proxyUrl).toString();
 
 					@Override /* InvocationHandler */
-					public Object invoke(Object proxy, Method method, Object[] args) {
+					public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 
 						// Constructing this string each time can be time consuming, so cache it.
 						String u = uriCache.get(method);
@@ -468,6 +468,10 @@ public class RestClient extends CoreObject {
 
 						try {
 							return doPost(u, args).serializer(serializer).parser(parser).getResponse(method.getGenericReturnType());
+						} catch (RestCallException e) {
+							// Try to throw original exception if possible.
+							e.throwServerException(interfaceClass.getClassLoader());
+							throw new RuntimeException(e);
 						} catch (Exception e) {
 							throw new RuntimeException(e);
 						}

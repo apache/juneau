@@ -2250,41 +2250,84 @@
 			use and allowing much more flexibility.
 	</p>
 	<p>
-		Remoteable Services are implemented through a combination of the Server and Client libraries.
-	</p>
-	<ul class='spaced-list'>
-		<li>Proxy interfaces are retrieved using the {@link org.apache.juneau.rest.client.RestClient#getRemoteableProxy(Class)} method.
-		<li>The {@link org.apache.juneau.rest.client.RestClientBuilder#remoteableServletUri(String)} method is used to specify the location
-			of the remoteable services servlet running on the server.
-		<li>The {@link org.apache.juneau.rest.remoteable.RemoteableServlet} class is a specialized subclass of {@link org.apache.juneau.rest.RestServlet} that provides a full-blown
-			REST interface for calling interfaces remotely. 
-	</ul>
-	<p>
-		In this example, you have the following interface defined that you want to call from the client side against
-			a POJO on the server side (i.e. a Remoteable Service):
-	<p class='bcode'>
-	<jk>public interface</jk> IAddressBook {
-		Person createPerson(CreatePerson cp) <jk>throws</jk> Exception;
-	}
-	</p>			
-	<p>
-		The client side code for invoking this method is shown below:
+		The remote proxy interface API allows you to invoke server-side POJO methods on the client side using REST as the communications protocol:
 	</p>
 	<p class='bcode'>
-	<jc>// Create a RestClient using JSON for serialization, and point to the server-side remoteable servlet.</jc>
-	RestClient client = <jk>new</jk> RestClientBuilder()
-		.remoteableServletUri(<js>"https://localhost:9080/juneau/sample/remoteable"</js>)
-		.build();
-	
-	<jc>// Create a proxy interface.</jc>
-	IAddressBook ab = client.getRemoteableProxy(IAddressBook.<jk>class</jk>);
+ 	<jc>// Get an interface proxy.</jc>
+ 	IAddressBook ab = restClient.getRemoteableProxy(IAddressBook.<jk>class</jk>);
 	
 	<jc>// Invoke a method on the server side and get the returned result.</jc>
 	Person p = ab.createPerson(
-		<jk>new</jk> CreatePerson(<js>"Test Person"</js>,
-			AddressBook.<jsm>toCalendar</jsm>(<js>"Aug 1, 1999"</js>),
-			<jk>new</jk> CreateAddress(<js>"Test street"</js>, <js>"Test city"</js>, <js>"Test state"</js>, 12345, <jk>true</jk>))
+		<jk>new</jk> Person(
+			<js>"John Smith"</js>, 
+			<js>"Aug 1, 1999"</js>,
+			<jk>new</jk> Address(<js>"My street"</js>, <js>"My city"</js>, <js>"My state"</js>, 12345, <jk>true</jk>)
+		)
 	);
+	</p>
+	<p>
+		There are two ways to expose remoteable proxies on the server side:
+	</p>
+	<ol>
+		<li>Extending from <code>RemoteableServlet</code>.
+		<li>Using a <code><ja>@RestMethod</ja>(name=<js>"PROXY"</js>)</code> annotation on a Java method.
+	</ol>
+	<p>
+		The <code>RemoteableServlet</code> class is a simple specialized servlet with an abstract <code>getServiceMap()</code>
+		method to define the server-side POJOs:
+	</p>
+	<p class='bcode'>
+	<ja>@RestResource</ja>(
+		path=<js>"/remote"</js>
+	)
+	<jk>public class</jk> SampleRemoteableServlet <jk>extends</jk> RemoteableServlet {
+	
+		<jc>// Our server-side POJO.</jc>
+		AddressBook <jf>addressBook</jf> = <jk>new</jk> AddressBook();
+	
+		<ja>@Override</ja> <jc>/* RemoteableServlet */</jc>
+		<jk>protected</jk> Map&lt;Class&lt;?&gt;,Object&gt; getServiceMap() <jk>throws</jk> Exception {
+			Map&lt;Class&lt;?&gt;,Object&gt; m = <jk>new</jk> LinkedHashMap&lt;Class&lt;?&gt;,Object&gt;();
+	
+			<jc>// In this simplified example, we expose the same POJO service under two different interfaces.
+			// One is IAddressBook which only exposes methods defined on that interface, and
+			// the other is AddressBook itself which exposes all methods defined on the class itself (dangerous!).</jc>
+			m.put(IAddressBook.<jk>class</jk>, <jf>addressBook</jf>);
+			m.put(AddressBook.<jk>class</jk>, <jf>addressBook</jf>);
+			<jk>return</jk> m;
+		}
+	}
+	</p>
+	<p>
+		The <code><ja>@RestMethod</ja>(name=<js>"PROXY"</js>)</code> approach is easier if you only have a single interface you want to expose.  
+		You simply define a Java method whose return type is an interface, and return the implementation of that interface:
+	</p>
+	<p class='bcode'>
+	<jc>// Our exposed proxy object.</jc>
+	<ja>@RestMethod</ja>(name=<js>"PROXY"</js>, path=<js>"/addressbookproxy/*"</js>)
+	<jk>public</jk> IAddressBook getProxy() {
+		<jk>return</jk> addressBook;
+	}
+	</p>
+	<p>
+		In either case, the proxy communications layer is pure REST.   
+		Parameters passed in on the client side are serialized as an HTTP POST, parsed on the
+		server side, and then passed to the invocation method.  The returned POJO is then marshalled back as an HTTP response.
+		Therefore, in cases where the interface classes are not available on the client side,
+			the same method calls can be made through pure REST calls.  
+		This can also aid significantly in debugging, since calls to the remoteable service
+			can be made directly from a browser with no coding involved.
+	</p>
+	<p>
+		The parameters and return types of the Java methods can be any of the supported serializable and parsable types in <a class='doclink' href='#Core.PojoCategories'>POJO Categories</a>.
+		This ends up being WAY more flexible than other proxy interfaces since Juneau can handle so may POJO types out-of-the-box.
+		Most of the time you don't even need to modify your existing Java implementation code.
+	</p>
+	<p>
+		The RemoteableServlet class itself shows how sophisticated REST interfaces can be built on the Juneau RestServlet
+		API using very little code.  The RemoteableServlet class itself consists of only 53 lines of code, yet is
+		a sophisticated discoverable and self-documenting REST interface.  And since the remote proxy API is built on top 
+		of REST, it can be debugged using just a browser.
 	</p>
 	<p>
 		The requirements for a method to be callable through a remoteable service are:
@@ -2292,14 +2335,10 @@
 	<ul class='spaced-list'>
 		<li>The method must be public.
 		<li>The parameter and return types must be <a href='#Core.PojoCategories'>serializable and parsable</a>.
+			Parameterized types are supported.
+		<li>Methods can throw <code>Throwables</code> with public no-arg or single-arg-string constructors which will be automatically 
+			recreated on the client side.
 	</ul>
-	<p>
-		One significant feature is that the remoteable services servlet is a full-blown REST interface.  
-		Therefore, in cases where the interface classes are not available on the client side,
-			the same method calls can be made through pure REST calls.  
-		This can also aid significantly in debugging, since calls to the remoteable service
-			can be made directly from a browser with no coding involved.
-	</p>
 	<h6 class='topic'>Additional Information</h6>
 	<ul class='javahierarchy'>
 		<li class='p'><a class='doclink' href='org/apache/juneau/server/remoteable/package-summary.html#TOC'>org.apache.juneau.rest.remoteable</a> - Juneau Remoteable API Javadocs.
@@ -5788,6 +5827,7 @@
 	IAddressBook ab = client.getRemoteableProxy(IAddressBook.<jk>class</jk>, <js>"/addressBook/myproxy"</js>);
 			</p>
 				See {@link org.apache.juneau.rest.annotation.RestMethod#name()} for more information.
+			<li>Updated doc: <a class='doclink' href='#Remoteable'>6 - Remoteable Services</a>
 			<li>{@link org.apache.juneau.rest.RestRequest#toString()} can be called at any time to view the headers and content of the request
 				without affecting functionality.  Very useful for debugging.
 		</ul>

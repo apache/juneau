@@ -160,6 +160,25 @@ public class InterfaceProxyTest extends RestTestcase {
 	}
 
 	@Test
+	public void throwException1() {
+		try {
+			getProxy().throwException1();
+			fail("Exception expected");
+		} catch (InterfaceProxy.InterfaceProxyException1 e) {
+			assertEquals("foo", e.getMessage());
+		}
+	}
+
+	@Test
+	public void throwException2() {
+		try {
+			getProxy().throwException2();
+			fail("Exception expected");
+		} catch (InterfaceProxy.InterfaceProxyException2 e) {
+		}
+	}
+
+	@Test
 	public void setNothing() {
 		getProxy().setNothing();
 	}
@@ -174,8 +193,8 @@ public class InterfaceProxyTest extends RestTestcase {
 		try {
 			getProxy().setInt(2);
 			fail("Exception expected");
-		} catch (Exception e) {
-			// Good.
+		} catch (AssertionError e) { // AssertionError thrown on server side.
+			assertEquals("expected:<1> but was:<2>", e.getMessage());
 		}
 	}
 
@@ -214,8 +233,8 @@ public class InterfaceProxyTest extends RestTestcase {
 		try {
 			getProxy().setNullString("foo");
 			fail("Exception expected");
-		} catch (Exception e) {
-			// Good.
+		} catch (AssertionError e) { // AssertionError thrown on server side.
+			assertEquals("expected null, but was:<foo>", e.getLocalizedMessage());
 		}
 	}
 

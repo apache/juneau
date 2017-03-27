@@ -15,6 +15,7 @@ package org.apache.juneau.rest.client;
 import static java.lang.String.*;
 
 import java.io.*;
+import java.lang.reflect.*;
 import java.net.*;
 import java.util.regex.*;
 
@@ -34,6 +35,9 @@ public final class RestCallException extends IOException {
 	private String response, responseStatusMessage;
 	HttpResponseException e;
 	private HttpResponse httpResponse;
+
+	@SuppressWarnings("unused")
+	private String serverExceptionName, serverExceptionMessage, serverExceptionTrace;
 
 
 	/**
@@ -89,6 +93,61 @@ public final class RestCallException extends IOException {
 		this.responseCode = responseCode;
 		this.responseStatusMessage = responseMsg;
 		this.response = response;
+	}
+
+	/**
+	 * Sets the server-side exception details.
+	 *
+	 * @param exceptionName The <code>Exception-Name:</code> header specifying the full name of the exception.
+	 * @param exceptionMessage The <code>Exception-Message:</code> header specifying the message returned by {@link Throwable#getMessage()}.
+	 * @param exceptionTrace The stack trace of the exception returned by {@link Throwable#printStackTrace()}.
+	 * @return This object (for method chaining).
+	 */
+	protected RestCallException setServerException(Header exceptionName, Header exceptionMessage, Header exceptionTrace) {
+		if (exceptionName != null)
+			serverExceptionName = exceptionName.getValue();
+		if (exceptionMessage != null)
+			serverExceptionMessage = exceptionMessage.getValue();
+		if (exceptionTrace != null)
+			serverExceptionTrace = exceptionTrace.getValue();
+		return this;
+	}
+
+	/**
+	 * Tries to reconstruct and re-throw the server-side exception.
+	 * <p>
+	 * The exception is based on the following HTTP response headers:
+	 * <ul>
+	 * 	<li><code>Exception-Name:</code> - The full class name of the exception.
+	 * 	<li><code>Exception-Message:</code> - The message returned by {@link Throwable#getMessage()}.
+	 * 	<li><code>Exception-Trace:</code> - The stack trace of the exception returned by {@link Throwable#printStackTrace()}.
+	 * </ul>
+	 * <p>
+	 * Does nothing if the server-side exception could not be reconstructed.
+	 * <p>
+	 * Currently only supports <code>Throwables</code> with either a public no-arg constructor
+	 * or a public constructor that takes in a simple string message.
+	 *
+	 * @param cl The classloader to use to resolve the throwable class name.
+	 * @throws Throwable If the throwable could be reconstructed.
+	 */
+	protected void throwServerException(ClassLoader cl) throws Throwable {
+		if (serverExceptionName != null) {
+			Throwable t = null;
+			try {
+				Class<?> exceptionClass = cl.loadClass(serverExceptionName);
+				Constructor<?> c = ClassUtils.findPublicConstructor(exceptionClass, String.class);
+				if (c != null)
+					t = (Throwable)c.newInstance(serverExceptionMessage);
+				if (t == null) {
+					c = ClassUtils.findPublicConstructor(exceptionClass);
+					if (c != null)
+						t = (Throwable)c.newInstance();
+				}
+			} catch (Exception e2) { /* Ignore */ }
+			if (t != null)
+				throw t;
+		}
 	}
 
 	/**

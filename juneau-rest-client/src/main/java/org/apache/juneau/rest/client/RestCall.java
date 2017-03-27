@@ -953,7 +953,9 @@ public final class RestCall {
 			String method = request.getMethod();
 			sc = sl.getStatusCode(); // Read it again in case it was changed by one of the interceptors.
 			if (sc >= 400 && ! ignoreErrors)
-				throw new RestCallException(sc, sl.getReasonPhrase(), method, request.getURI(), getResponseAsString()).setHttpResponse(response);
+				throw new RestCallException(sc, sl.getReasonPhrase(), method, request.getURI(), getResponseAsString())
+					.setServerException(response.getFirstHeader("Exception-Name"), response.getFirstHeader("Exception-Message"), response.getFirstHeader("Exception-Trace"))
+					.setHttpResponse(response);
 			if ((sc == 307 || sc == 302) && allowRedirectsOnPosts && method.equalsIgnoreCase("POST")) {
 				if (redirectOnPostsTries-- < 1)
 					throw new RestCallException(sc, "Maximum number of redirects occurred.  Location header: " + response.getFirstHeader("Location"), method, request.getURI(), getResponseAsString());
