@@ -15,28 +15,27 @@ package org.apache.juneau.jena;
 import java.util.*;
 
 import org.apache.juneau.jena.annotation.*;
+import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
  * Configurable properties common to both the {@link RdfSerializer} and {@link RdfParser} classes.
  */
-@SuppressWarnings("serial")
 public interface RdfCommonContext {
 
 	/**
 	 * Maps RDF writer names to property prefixes that apply to them.
 	 */
-	final static Map<String,String> LANG_PROP_MAP = new HashMap<String,String>() {{
-		put("RDF/XML","rdfXml.");
-		put("RDF/XML-ABBREV","rdfXml.");
-		put("N3","n3.");
-		put("N3-PP","n3.");
-		put("N3-PLAIN","n3.");
-		put("N3-TRIPLES","n3.");
-		put("TURTLE","n3.");
-		put("N-TRIPLE","ntriple.");
-	}};
+	final static Map<String,String> LANG_PROP_MAP = new AMap<String,String>()
+		.append("RDF/XML","rdfXml.")
+		.append("RDF/XML-ABBREV","rdfXml.")
+		.append("N3","n3.")
+		.append("N3-PP","n3.")
+		.append("N3-PLAIN","n3.")
+		.append("N3-TRIPLES","n3.")
+		.append("TURTLE","n3.")
+		.append("N-TRIPLE","ntriple.");
 
 	/**
 	 * <b>Configuration property:</b>  RDF language.

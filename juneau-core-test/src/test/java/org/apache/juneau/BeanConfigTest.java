@@ -22,9 +22,10 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.transform.*;
+import org.apache.juneau.utils.*;
 import org.junit.*;
 
-@SuppressWarnings({"unchecked","rawtypes","serial","javadoc"})
+@SuppressWarnings({"unchecked","rawtypes","javadoc"})
 public class BeanConfigTest {
 
 	//====================================================================================================
@@ -369,7 +370,7 @@ public class BeanConfigTest {
 		assertEquals(new Integer(1), session.convertToType(o, LinkedList.class).get(0));
 
 		// HashMap to TreeMap
-		o = new HashMap<Integer, String>() {{ put(1, "foo"); }};
+		o = new AMap<Integer,String>().append(1, "foo");
 		assertEquals("foo", session.convertToType(o, TreeMap.class).firstEntry().getValue());
 
 		// String to TreeMap

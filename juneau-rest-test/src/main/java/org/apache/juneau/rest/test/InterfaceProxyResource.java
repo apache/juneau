@@ -12,13 +12,17 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
+import static java.util.Arrays.*;
 import static org.junit.Assert.*;
 
+import java.lang.reflect.*;
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.jena.*;
+import org.apache.juneau.utils.*;
 import org.junit.*;
 
 /**
@@ -72,16 +76,85 @@ public class InterfaceProxyResource extends RestServletJenaDefault {
 				return new int[]{1,2};
 			}
 			@Override
+			public int[][] returnInt2dArray() {
+				return new int[][]{{1,2}};
+			}
+			@Override
+			public int[][][] returnInt3dArray() {
+				return new int[][][]{{{1,2}}};
+			}
+			@Override
+			public Integer[] returnIntegerArray() {
+				return new Integer[]{1,null};
+			}
+			@Override
+			public Integer[][] returnInteger2dArray() {
+				return new Integer[][]{{1,null}};
+			}
+			@Override
+			public Integer[][][] returnInteger3dArray() {
+				return new Integer[][][]{{{1,null}}};
+			}
+			@Override
 			public String[] returnStringArray() {
 				return new String[]{"foo","bar",null};
 			}
 			@Override
+			public String[][] returnString2dArray() {
+				return new String[][]{{"foo","bar",null}};
+			}
+			@Override
+			public String[][][] returnString3dArray() {
+				return new String[][][]{{{"foo","bar",null}}};
+			}
+			@Override
 			public List<Integer> returnIntegerList() {
-				return Arrays.asList(new Integer[]{1,2});
+				return asList(new Integer[]{1,null});
+			}
+			@Override
+			public List<List<Integer>> returnInteger2dList() {
+				return new AList<List<Integer>>()
+				.append(
+					new AList<Integer>().append(1).append(null)
+				);
+			}
+			@Override
+			public List<List<List<Integer>>> returnInteger3dList() {
+				return new AList<List<List<Integer>>>()
+				.append(
+					new AList<List<Integer>>()
+					.append(
+						new AList<Integer>().append(1).append(null)
+					)
+				);
+			}
+			@Override
+			public List<Integer[]> returnInteger1d1dList() {
+				return new AList<Integer[]>().append(new Integer[]{1,null}).append(null);
+			}
+			@Override
+			public List<Integer[][]> returnInteger1d2dList() {
+				return new AList<Integer[][]>().append(new Integer[][]{{1,null},null}).append(null);
+			}
+			@Override
+			public List<Integer[][][]> returnInteger1d3dList() {
+				return new AList<Integer[][][]>().append(new Integer[][][]{{{1,null},null},null}).append(null);
+			}
+			@Override
+			public List<int[]> returnInt1d1dList() {
+				return new AList<int[]>().append(new int[]{1,2}).append(null);
+			}
+			@Override
+			public List<int[][]> returnInt1d2dList() {
+				return new AList<int[][]>().append(new int[][]{{1,2},null}).append(null);
+			}
+			@Override
+			public List<int[][][]> returnInt1d3dList() {
+				return new AList<int[][][]>().append(new int[][][]{{{1,2},null},null}).append(null);
 			}
 			@Override
 			public List<String> returnStringList() {
-				return Arrays.asList(new String[]{"foo","bar",null});
+				return asList(new String[]{"foo","bar",null});
 			}
 			@Override
 			public Bean returnBean() {
@@ -93,19 +166,19 @@ public class InterfaceProxyResource extends RestServletJenaDefault {
 			}
 			@Override
 			public List<Bean> returnBeanList() {
-				return Arrays.asList(new Bean().init());
+				return asList(new Bean().init());
 			}
 			@Override
 			public Map<String,Bean> returnBeanMap() {
-				return new HashMap<String,Bean>(){{put("foo",new Bean().init());}};
+				return new AMap<String,Bean>().append("foo",new Bean().init());
 			}
 			@Override
 			public Map<String,List<Bean>> returnBeanListMap() {
-				return new HashMap<String,List<Bean>>(){{put("foo",Arrays.asList(new Bean().init()));}};
+				return new AMap<String,List<Bean>>().append("foo",asList(new Bean().init()));
 			}
 			@Override
 			public Map<Integer,List<Bean>> returnBeanListMapIntegerKeys() {
-				return new HashMap<Integer,List<Bean>>(){{put(1,Arrays.asList(new Bean().init()));}};
+				return new AMap<Integer,List<Bean>>().append(1,asList(new Bean().init()));
 			}
 			@Override
 			public void throwException1() throws InterfaceProxy.InterfaceProxyException1 {
@@ -151,12 +224,84 @@ public class InterfaceProxyResource extends RestServletJenaDefault {
 				assertObjectEquals("[1,2]", x);
 			}
 			@Override
+			public void setInt2dArray(int[][] x) {
+				assertObjectEquals("[[1,2]]", x);
+			}
+			@Override
+			public void setInt3dArray(int[][][] x) {
+				assertObjectEquals("[[[1,2]]]", x);
+			}
+			@Override
+			public void setIntegerArray(Integer[] x) {
+				assertObjectEquals("[1,null]", x);
+			}
+			@Override
+			public void setInteger2dArray(Integer[][] x) {
+				assertObjectEquals("[[1,null]]", x);
+			}
+			@Override
+			public void setInteger3dArray(Integer[][][] x) {
+				assertObjectEquals("[[[1,null]]]", x);
+			}
+			@Override
 			public void setStringArray(String[] x) {
 				assertObjectEquals("['foo','bar',null]", x);
 			}
 			@Override
+			public void setString2dArray(String[][] x) {
+				assertObjectEquals("[['foo','bar',null]]", x);
+			}
+			@Override
+			public void setString3dArray(String[][][] x) {
+				assertObjectEquals("[[['foo','bar',null]]]", x);
+			}
+			@Override
 			public void setIntegerList(List<Integer> x) {
-				assertObjectEquals("[1,2,null]", x);
+				assertObjectEquals("[1,null]", x);
+				assertEquals(Integer.class, x.get(0).getClass());
+			}
+			@Override
+			public void setInteger2dList(List<List<Integer>> x) {
+				assertObjectEquals("[[1,null]]", x);
+				assertEquals(Integer.class, x.get(0).get(0).getClass());
+			}
+			@Override
+			public void setInteger3dList(List<List<List<Integer>>> x) {
+				assertObjectEquals("[[[1,null]]]", x);
+				assertEquals(Integer.class, x.get(0).get(0).get(0).getClass());
+			}
+			@Override
+			public void setInteger1d1dList(List<Integer[]> x) {
+				assertObjectEquals("[[1,null],null]", x);
+				assertEquals(Integer[].class, x.get(0).getClass());
+				assertEquals(Integer.class, x.get(0)[0].getClass());
+			}
+			@Override
+			public void setInteger1d2dList(List<Integer[][]> x) {
+				assertObjectEquals("[[[1,null],null],null]", x);
+				assertEquals(Integer[][].class, x.get(0).getClass());
+				assertEquals(Integer.class, x.get(0)[0][0].getClass());
+			}
+			@Override
+			public void setInteger1d3dList(List<Integer[][][]> x) {
+				assertObjectEquals("[[[[1,null],null],null],null]", x);
+				assertEquals(Integer[][][].class, x.get(0).getClass());
+				assertEquals(Integer.class, x.get(0)[0][0][0].getClass());
+			}
+			@Override
+			public void setInt1d1dList(List<int[]> x) {
+				assertObjectEquals("[[1,2],null]", x);
+				assertEquals(int[].class, x.get(0).getClass());
+			}
+			@Override
+			public void setInt1d2dList(List<int[][]> x) {
+				assertObjectEquals("[[[1,2],null],null]", x);
+				assertEquals(int[][].class, x.get(0).getClass());
+			}
+			@Override
+			public void setInt1d3dList(List<int[][][]> x) {
+				assertObjectEquals("[[[[1,2],null],null],null]", x);
+				assertEquals(int[][][].class, x.get(0).getClass());
 			}
 			@Override
 			public void setStringList(List<String> x) {
@@ -192,5 +337,14 @@ public class InterfaceProxyResource extends RestServletJenaDefault {
 
 	private static void assertObjectEquals(String e, Object o) {
 		Assert.assertEquals(e, JsonSerializer.DEFAULT_LAX.toString(o));
+	}
+
+	public static void main(String[] args) {
+		JsonSerializer.DEFAULT_LAX_READABLE.println(BeanContext.DEFAULT.createSession().getClassMetas(new Type[]{X.class}));
+
+	}
+
+	public static class X extends LinkedList<int[][]> {
+
 	}
 }

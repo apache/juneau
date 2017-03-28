@@ -15,10 +15,9 @@ package org.apache.juneau.a.rttests;
 import static org.apache.juneau.TestUtils.*;
 import static org.junit.Assert.*;
 
-import java.util.*;
-
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.utils.*;
 import org.junit.*;
 
 /**
@@ -32,7 +31,6 @@ public class RoundTripClassesTest extends RoundTripTest {
 		super(label, s, p, flags);
 	}
 
-	@SuppressWarnings("serial")
 	@Test
 	public void classObjects() throws Exception {
 		Object o = String.class;
@@ -43,11 +41,11 @@ public class RoundTripClassesTest extends RoundTripTest {
 		o = roundTrip(o);
 		assertObjectEquals("['java.lang.String']", o);
 
-		o = new LinkedList<Class<?>>(){{add(String.class);add(Integer.class);}};
+		o = new AList<Class<?>>().append(String.class).append(Integer.class);
 		o = roundTrip(o);
 		assertObjectEquals("['java.lang.String','java.lang.Integer']", o);
 
-		o = new LinkedHashMap<Class<?>,Class<?>>(){{put(String.class,String.class);}};
+		o = new AMap<Class<?>,Class<?>>().append(String.class,String.class);
 		o = roundTrip(o);
 		assertObjectEquals("{'java.lang.String':'java.lang.String'}", o);
 	}

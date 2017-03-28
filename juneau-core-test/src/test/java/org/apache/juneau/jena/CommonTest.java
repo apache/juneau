@@ -25,6 +25,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.testbeans.*;
+import org.apache.juneau.utils.*;
 import org.junit.*;
 
 @SuppressWarnings({"serial","javadoc"})
@@ -138,8 +139,8 @@ public class CommonTest {
 
 		public static C create() {
 			C t = new C();
-			t.f1 = new LinkedList<A>();
-			t.f2 = new LinkedList<A>(){{add(null);add(A.create());}};
+			t.f1 = new AList<A>();
+			t.f2 = new AList<A>().append(null).append(A.create());
 			return t;
 		}
 	}
@@ -205,11 +206,11 @@ public class CommonTest {
 		public static E1 create() {
 			E1 t = new E1();
 			t.x1 = new E2();
-			t.x2 = new LinkedHashMap<String,Integer>() {{ put("f1",1); put("f2",2); }};
+			t.x2 = new AMap<String,Integer>().append("f1",1).append("f2",2);
 			t.x3 = new E2[] {new E2()};
-			t.x4 = new LinkedList<E2>() {{ add(new E2()); }};
+			t.x4 = new AList<E2>().append(new E2());
 			t.x5 = new ObjectMap[] {new ObjectMap().append("f1","1").append("f2","2")};
-			t.x6 = new LinkedList<ObjectMap>() {{ add(new ObjectMap().append("f1","1").append("f2","2")); }};
+			t.x6 = new AList<ObjectMap>().append(new ObjectMap().append("f1","1").append("f2","2"));
 			return t;
 		}
 	}

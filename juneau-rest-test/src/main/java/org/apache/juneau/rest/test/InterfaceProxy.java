@@ -28,8 +28,23 @@ public interface InterfaceProxy {
 	String returnString();
 	String returnNullString();
 	int[] returnIntArray();
+	int[][] returnInt2dArray();
+	int[][][] returnInt3dArray();
+	Integer[] returnIntegerArray();
+	Integer[][] returnInteger2dArray();
+	Integer[][][] returnInteger3dArray();
 	String[] returnStringArray();
+	String[][] returnString2dArray();
+	String[][][] returnString3dArray();
 	List<Integer> returnIntegerList();
+	List<List<Integer>> returnInteger2dList();
+	List<List<List<Integer>>> returnInteger3dList();
+	List<Integer[]> returnInteger1d1dList();
+	List<Integer[][]> returnInteger1d2dList();
+	List<Integer[][][]> returnInteger1d3dList();
+	List<int[]> returnInt1d1dList();
+	List<int[][]> returnInt1d2dList();
+	List<int[][][]> returnInt1d3dList();
 	List<String> returnStringList();
 	Bean returnBean();
 	Bean[] returnBeanArray();
@@ -50,8 +65,23 @@ public interface InterfaceProxy {
 	void setString(String x);
 	void setNullString(String x);
 	void setIntArray(int[] x);
+	void setInt2dArray(int[][] x);
+	void setInt3dArray(int[][][] x);
+	void setIntegerArray(Integer[] x);
+	void setInteger2dArray(Integer[][] x);
+	void setInteger3dArray(Integer[][][] x);
 	void setStringArray(String[] x);
+	void setString2dArray(String[][] x);
+	void setString3dArray(String[][][] x);
 	void setIntegerList(List<Integer> x);
+	void setInteger2dList(List<List<Integer>> x);
+	void setInteger3dList(List<List<List<Integer>>> x);
+	void setInteger1d1dList(List<Integer[]> x);
+	void setInteger1d2dList(List<Integer[][]> x);
+	void setInteger1d3dList(List<Integer[][][]> x);
+	void setInt1d1dList(List<int[]> x);
+	void setInt1d2dList(List<int[][]> x);
+	void setInt1d3dList(List<int[][][]> x);
 	void setStringList(List<String> x);
 	void setBean(Bean x);
 	void setBeanArray(Bean[] x);
@@ -70,7 +100,7 @@ public interface InterfaceProxy {
 			return this;
 		}
 	}
-	
+
 	@SuppressWarnings("serial")
 	public static class InterfaceProxyException1 extends Throwable {
 		public InterfaceProxyException1(String msg) {
@@ -79,6 +109,6 @@ public interface InterfaceProxy {
 	}
 
 	@SuppressWarnings("serial")
-	public static class InterfaceProxyException2 extends Throwable {		
+	public static class InterfaceProxyException2 extends Throwable {
 	}
 }

@@ -27,6 +27,7 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.transforms.*;
+import org.apache.juneau.utils.*;
 import org.junit.*;
 
 /**
@@ -92,9 +93,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	//====================================================================================================
 	@Test
 	public void testImplListClasses() throws Exception {
-		List<IBean> l = new LinkedList<IBean>() {{
-			add(new CBean());
-		}};
+		List<IBean> l = new AList<IBean>().append(new CBean());
 
 		l.get(0).setF1("bar");
 		l = roundTrip(l, List.class, IBean.class);
@@ -120,9 +119,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	//====================================================================================================
 	@Test
 	public void testImplMap() throws Exception {
-		Map<String,IBean> l = new LinkedHashMap<String,IBean>() {{
-			put("foo", new CBean());
-		}};
+		Map<String,IBean> l = new AMap<String,IBean>().append("foo", new CBean());
 
 		l.get("foo").setF1("bar");
 		l = roundTrip(l, Map.class, String.class, IBean.class);

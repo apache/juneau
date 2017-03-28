@@ -15,11 +15,13 @@ package org.apache.juneau.testbeans;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 
+import org.apache.juneau.utils.*;
+
 /**
  * Test bean fields of type AtomicInteger and AtomicLong.
  * Note that Jena parsers cannot handle these types, so we only test non-Jena parsers.
  */
-@SuppressWarnings({"serial","javadoc"})
+@SuppressWarnings({"javadoc"})
 public class PrimitiveAtomicObjectsBean {
 
 	// primitive objects
@@ -56,12 +58,8 @@ public class PrimitiveAtomicObjectsBean {
 		poaAtomicLong = new AtomicLong[][]{{new AtomicLong(1)}, {new AtomicLong(2)}, null};
 
 		// Anonymous list of primitives
-		poalAtomicInteger = new ArrayList<AtomicInteger[]>() {{
-			add(new AtomicInteger[]{new AtomicInteger(1)}); add(null);
-		}};
-		poalAtomicLong = new ArrayList<AtomicLong[]>() {{
-			add(new AtomicLong[]{new AtomicLong(1)}); add(null);
-		}};
+		poalAtomicInteger = new AList<AtomicInteger[]>().append(new AtomicInteger[]{new AtomicInteger(1)}).append(null);
+		poalAtomicLong = new AList<AtomicLong[]>().append(new AtomicLong[]{new AtomicLong(1)}).append(null);
 
 		// Regular list of primitives
 		polAtomicInteger = new ArrayList<AtomicInteger[]>();

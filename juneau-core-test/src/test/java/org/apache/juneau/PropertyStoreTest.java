@@ -17,6 +17,7 @@ import static org.junit.Assert.*;
 
 import java.util.*;
 
+import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.*;
 import org.junit.*;
 
@@ -163,13 +164,12 @@ public class PropertyStoreTest {
 	//====================================================================================================
 	// testMapProperties()
 	//====================================================================================================
-	@SuppressWarnings("serial")
 	@Test
 	public void testMapProperties() {
 		PropertyStore f = PropertyStore.create();
 		String key = "A.f1.map";
 
-		f.setProperty(key, new HashMap<String,String>(){{put("1","1");put("3","3");put("2","2");}});
+		f.setProperty(key, new AMap<String,String>().append("1","1").append("3","3").append("2","2"));
 		assertObjectEquals("{'1':1,'2':2,'3':3}", f.getMap(key, Integer.class, Integer.class, null));
 
 		f.setProperty(key, "{'1':1,'2':2,'3':3}");
@@ -182,7 +182,6 @@ public class PropertyStoreTest {
 	//====================================================================================================
 	// Hash code and comparison
 	//====================================================================================================
-	@SuppressWarnings({ "serial" })
 	@Test
 	public void testHashCodes() throws Exception {
 		PropertyStore f1 = PropertyStore.create();
@@ -190,10 +189,10 @@ public class PropertyStoreTest {
 		f1.setProperty("A.b", true);
 		f1.setProperty("A.c", String.class);
 		f1.setProperty("A.d.set", new Object[]{1, true, String.class});
-		f1.setProperty("A.e.map", new HashMap<Object,Object>(){{put(true,true);put(1,1);put(String.class,String.class);}});
+		f1.setProperty("A.e.map", new AMap<Object,Object>().append(true,true).append(1,1).append(String.class,String.class));
 
 		PropertyStore f2 = PropertyStore.create();
-		f2.setProperty("A.e.map", new HashMap<Object,Object>(){{put("1","1");put("true","true");put("java.lang.String","java.lang.String");}});
+		f2.setProperty("A.e.map", new AMap<Object,Object>().append("1","1").append("true","true").append("java.lang.String","java.lang.String"));
 		f2.setProperty("A.d.set", new Object[]{"true","1","java.lang.String"});
 		f2.setProperty("A.c", "java.lang.String");
 		f2.setProperty("A.b", "true");
@@ -240,7 +239,6 @@ public class PropertyStoreTest {
 	// Conversions on simple properties
 	//====================================================================================================
 	@Test
-	@SuppressWarnings({ "serial" })
 	public void testConversionsOnSimpleProperties() throws Exception {
 		String pName = "A.a";
 
@@ -447,7 +445,7 @@ public class PropertyStoreTest {
 		//--------------------------------------------------------------------------------
 		// Map<Namespace,Namespace>
 		//--------------------------------------------------------------------------------
-		new ConversionTest(pName, new LinkedHashMap<Namespace,Namespace>(){{put(n,n);}})
+		new ConversionTest(pName, new AMap<Namespace,Namespace>().append(n,n))
 			.testMap(Namespace.class, Namespace.class, "{'{name:\\'foo\\',uri:\\'bar\\'}':{name:'foo',uri:'bar'}}")
 			.testMap(String.class, String.class, "{'{name:\\'foo\\',uri:\\'bar\\'}':'{name:\\'foo\\',uri:\\'bar\\'}'}");
 	}
@@ -456,7 +454,6 @@ public class PropertyStoreTest {
 	// Conversions on set properties
 	//====================================================================================================
 	@Test
-	@SuppressWarnings({ "serial" })
 	public void testConversionsOnSetProperties() throws Exception {
 		String pName = "A.a.set";
 
@@ -663,7 +660,7 @@ public class PropertyStoreTest {
 		//--------------------------------------------------------------------------------
 		// Map<Namespace,Namespace>
 		//--------------------------------------------------------------------------------
-		new ConversionTest(pName, new LinkedHashMap<Namespace,Namespace>(){{put(n,n);}})
+		new ConversionTest(pName, new AMap<Namespace,Namespace>().append(n,n))
 			.testMap(Namespace.class, Namespace.class, "Could not retrieve property store property 'A.a.set'.  Invalid data conversion from type 'java.util.concurrent.ConcurrentSkipListSet' to type 'java.util.LinkedHashMap<org.apache.juneau.xml.Namespace,org.apache.juneau.xml.Namespace>'.  Value=[{'{name:\\'foo\\',uri:\\'bar\\'}':{name:'foo',uri:'bar'}}].")
 			.testMap(String.class, String.class, "Could not retrieve property store property 'A.a.set'.  Invalid data conversion from type 'java.util.concurrent.ConcurrentSkipListSet' to type 'java.util.LinkedHashMap<java.lang.String,java.lang.String>'.  Value=[{'{name:\\'foo\\',uri:\\'bar\\'}':{name:'foo',uri:'bar'}}].");
 	}
@@ -673,7 +670,6 @@ public class PropertyStoreTest {
 	// Conversions on map properties
 	//====================================================================================================
 	@Test
-	@SuppressWarnings({ "serial" })
 	public void testConversionsOnMapProperties() throws Exception {
 		String pName = "A.a.map";
 
@@ -787,7 +783,7 @@ public class PropertyStoreTest {
 		//--------------------------------------------------------------------------------
 		// Map<Namespace,Namespace>
 		//--------------------------------------------------------------------------------
-		new ConversionTest(pName, new LinkedHashMap<Namespace,Namespace>(){{put(n,n);}})
+		new ConversionTest(pName, new AMap<Namespace,Namespace>().append(n,n))
 			.testMap(Namespace.class, Namespace.class, "{'{name:\\'foo\\',uri:\\'bar\\'}':{name:'foo',uri:'bar'}}")
 			.testMap(String.class, String.class, "{'{name:\\'foo\\',uri:\\'bar\\'}':'{name:\\'foo\\',uri:\\'bar\\'}'}");
 	}

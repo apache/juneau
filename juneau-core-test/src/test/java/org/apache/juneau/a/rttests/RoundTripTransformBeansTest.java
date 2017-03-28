@@ -26,6 +26,7 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.transforms.*;
+import org.apache.juneau.utils.*;
 import org.junit.*;
 
 /**
@@ -115,16 +116,16 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 			fByte = new byte[]{0,1,2,3};
 			fnByte = null;
 			faByte = new byte[][]{{0,1},{2,3},{4,5}};
-			flByte = new ArrayList<byte[]>() {{
-				add(new byte[]{1,2,3});
-				add(new byte[]{4,5,6});
-				add(null);
-			}};
-			fmByte = new LinkedHashMap<String,byte[]>() {{
-				put("foo", new byte[]{1,2,3});
-				put("bar", new byte[]{4,5,6});
-				put("baz", null);
-			}};
+			flByte = new AList<byte[]>()
+				.append(new byte[]{1,2,3})
+				.append(new byte[]{4,5,6})
+				.append(null)
+			;
+			fmByte = new AMap<String,byte[]>()
+				.append("foo", new byte[]{1,2,3})
+				.append("bar", new byte[]{4,5,6})
+				.append("baz", null)
+			;
 
 			fCalendar = new GregorianCalendar() {{
 				set(2001, 01, 02, 03, 04, 05);
@@ -144,14 +145,14 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 			faDate = new Date[]{
 				new Date(1000), new Date(2000), new Date(3000)
 			};
-			flDate = new ArrayList<Date>() {{
-				add(new Date(4000));
-				add(null);
-			}};
-			fmDate = new LinkedHashMap<String,Date>() {{
-				put("foo", new Date(5000));
-				put("bar", null);
-			}};
+			flDate = new AList<Date>()
+				.append(new Date(4000))
+				.append(null)
+			;
+			fmDate = new AMap<String,Date>()
+				.append("foo", new Date(5000))
+				.append("bar", null)
+			;
 			return this;
 		}
 	}

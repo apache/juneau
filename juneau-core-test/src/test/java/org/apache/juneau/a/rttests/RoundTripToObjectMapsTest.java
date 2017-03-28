@@ -19,6 +19,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.utils.*;
 import org.junit.*;
 
 /**
@@ -35,7 +36,6 @@ public class RoundTripToObjectMapsTest extends RoundTripTest {
 	//====================================================================================================
 	// Class with X(ObjectMap) constructor and toObjectMap() method.
 	//====================================================================================================
-	@SuppressWarnings({"serial"})
 	@Test
 	public void test() throws Exception {
 		A a = new A(new ObjectMap("{f1:'a',f2:2}"));
@@ -49,13 +49,13 @@ public class RoundTripToObjectMapsTest extends RoundTripTest {
 		assertEquals("a", aa[0].f1);
 		assertEquals(2, aa[0].f2);
 
-		List<A> a2 = new ArrayList<A>(){{add(new A(new ObjectMap("{f1:'a',f2:2}")));}};
+		List<A> a2 = new AList<A>().append(new A(new ObjectMap("{f1:'a',f2:2}")));
 		a2 = roundTrip(a2, List.class, A.class);
 		assertEquals(1, a2.size());
 		assertEquals("a", a2.get(0).f1);
 		assertEquals(2, a2.get(0).f2);
 
-		Map<String,A> a3 = new LinkedHashMap<String,A>(){{put("a", new A(new ObjectMap("{f1:'a',f2:2}")));}};
+		Map<String,A> a3 = new AMap<String,A>().append("a", new A(new ObjectMap("{f1:'a',f2:2}")));
 		a3 = roundTrip(a3, Map.class, String.class, A.class);
 		assertEquals(1, a3.size());
 		assertEquals("a", a3.get("a").f1);

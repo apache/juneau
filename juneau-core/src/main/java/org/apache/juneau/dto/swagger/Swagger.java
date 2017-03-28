@@ -16,6 +16,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.utils.*;
 
 /**
  * This is the root document object for the API specification.
@@ -865,16 +866,14 @@ public class Swagger extends SwaggerElement {
 	}
 
 	private static class MethodSorter implements Comparator<String> {
-		@SuppressWarnings("serial")
-		private final Map<String,Integer> methods = new HashMap<String,Integer>(){{
-			put("get",7);
-			put("put",6);
-			put("post",5);
-			put("delete",4);
-			put("options",3);
-			put("head",2);
-			put("patch",1);
-		}};
+		private final Map<String,Integer> methods = new AMap<String,Integer>()
+			.append("get",7)
+			.append("put",6)
+			.append("post",5)
+			.append("delete",4)
+			.append("options",3)
+			.append("head",2)
+			.append("patch",1);
 
 		@Override
 		public int compare(String o1, String o2) {

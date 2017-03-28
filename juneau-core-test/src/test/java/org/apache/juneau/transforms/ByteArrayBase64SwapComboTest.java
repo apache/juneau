@@ -17,6 +17,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.utils.*;
 import org.junit.runner.*;
 import org.junit.runners.*;
 
@@ -24,7 +25,7 @@ import org.junit.runners.*;
  * Exhaustive serialization tests for the CalendarSwap class.
  */
 @RunWith(Parameterized.class)
-@SuppressWarnings({"javadoc","serial"})
+@SuppressWarnings({"javadoc"})
 public class ByteArrayBase64SwapComboTest extends ComboTest {
 
 	@Parameterized.Parameters
@@ -82,11 +83,11 @@ public class ByteArrayBase64SwapComboTest extends ComboTest {
 			},
 			{ 	/* 2 */
 				"ListOfByteArrays",
-				new ArrayList<byte[]>(){{
-					add(new byte[]{1,2,3});
-					add(new byte[]{4,5,6});
-					add(null);
-				}},
+				new AList<byte[]>()
+					.append(new byte[]{1,2,3})
+					.append(new byte[]{4,5,6})
+					.append(null)
+				,
 				/* Json */		"['AQID','BAUG',null]",
 				/* JsonT */		"['AQID','BAUG',null]",
 				/* JsonR */		"[\n\t'AQID',\n\t'BAUG',\n\tnull\n]",
@@ -111,12 +112,12 @@ public class ByteArrayBase64SwapComboTest extends ComboTest {
 			},
 			{ 	/* 3 */
 				"MapOfByteArrays",
-				new LinkedHashMap<String,byte[]>() {{
-					put("foo", new byte[]{1,2,3});
-					put("bar", null);
-					put(null, new byte[]{4,5,6});
-					put("null", new byte[]{7,8,9});
-				}},
+				new AMap<String,byte[]>()
+					.append("foo", new byte[]{1,2,3})
+					.append("bar", null)
+					.append(null, new byte[]{4,5,6})
+					.append("null", new byte[]{7,8,9})
+				,
 				/* Json */		"{foo:'AQID',bar:null,null:'BAUG','null':'BwgJ'}",
 				/* JsonT */		"{foo:'AQID',bar:null,null:'BAUG','null':'BwgJ'}",
 				/* JsonR */		"{\n\tfoo: 'AQID',\n\tbar: null,\n\tnull: 'BAUG',\n\t'null': 'BwgJ'\n}",
@@ -378,11 +379,11 @@ public class ByteArrayBase64SwapComboTest extends ComboTest {
 	public static class BeanWithByteArrayListField {
 		public List<byte[]> f;
 		public BeanWithByteArrayListField init() {
-			f = new ArrayList<byte[]>() {{
-				add(new byte[]{1,2,3});
-				add(new byte[]{4,5,6});
-				add(null);
-			}};
+			f = new AList<byte[]>()
+				.append(new byte[]{1,2,3})
+				.append(new byte[]{4,5,6})
+				.append(null)
+			;
 			return this;
 		}
 	}
@@ -390,11 +391,11 @@ public class ByteArrayBase64SwapComboTest extends ComboTest {
 	public static class BeanWithByteArrayMapField {
 		public Map<String,byte[]> f;
 		public BeanWithByteArrayMapField init() {
-			f = new LinkedHashMap<String,byte[]>() {{
-				put("foo", new byte[]{1,2,3});
-				put("bar", null);
-				put(null, new byte[]{4,5,6});
-			}};
+			f = new AMap<String,byte[]>()
+				.append("foo", new byte[]{1,2,3})
+				.append("bar", null)
+				.append(null, new byte[]{4,5,6})
+			;
 			return this;
 		}
 	}
@@ -402,10 +403,10 @@ public class ByteArrayBase64SwapComboTest extends ComboTest {
 	public static class BeanWithByteArrayBeanListField {
 		public List<B> f;
 		public BeanWithByteArrayBeanListField init() {
-			f = new ArrayList<B>() {{
-				add(new B().init());
-				add(null);
-			}};
+			f = new AList<B>()
+				.append(new B().init())
+				.append(null)
+			;
 			return this;
 		}
 	}
@@ -413,11 +414,11 @@ public class ByteArrayBase64SwapComboTest extends ComboTest {
 	public static class BeanWithByteArrayBeanMapField {
 		public Map<String,B> f;
 		public BeanWithByteArrayBeanMapField init() {
-			f = new LinkedHashMap<String,B>() {{
-				put("foo", new B().init());
-				put("bar", null);
-				put(null, new B().init());
-			}};
+			f = new AMap<String,B>()
+				.append("foo", new B().init())
+				.append("bar", null)
+				.append(null, new B().init())
+			;
 			return this;
 		}
 	}
@@ -433,16 +434,16 @@ public class ByteArrayBase64SwapComboTest extends ComboTest {
 			f1 = new byte[]{1,2,3};
 			f2 = new byte[][]{{1,2,3},{4,5,6},null};
 			f3 = null;
-			f4 = new ArrayList<byte[]>() {{
-				add(new byte[]{1,2,3});
-				add(new byte[]{4,5,6});
-				add(null);
-			}};
-			f5 = new LinkedHashMap<String,byte[]>() {{
-				put("foo", new byte[]{1,2,3});
-				put("bar", null);
-				put(null, new byte[]{4,5,6});
-			}};
+			f4 = new AList<byte[]>()
+				.append(new byte[]{1,2,3})
+				.append(new byte[]{4,5,6})
+				.append(null)
+			;
+			f5 = new AMap<String,byte[]>()
+				.append("foo", new byte[]{1,2,3})
+				.append("bar", null)
+				.append(null, new byte[]{4,5,6})
+			;
 			return this;
 		}
 	}

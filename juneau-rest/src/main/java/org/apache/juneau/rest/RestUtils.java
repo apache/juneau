@@ -19,6 +19,7 @@ import java.util.*;
 import javax.servlet.http.*;
 
 import org.apache.juneau.internal.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Various reusable utility methods.
@@ -35,45 +36,44 @@ public final class RestUtils {
 		return httpMsgs.get(rc);
 	}
 
-	@SuppressWarnings("serial")
-	private static Map<Integer,String> httpMsgs = new HashMap<Integer,String>() {{
-		put(200, "OK");
-		put(201, "Created");
-		put(202, "Accepted");
-		put(203, "Non-Authoritative Information");
-		put(204, "No Content");
-		put(205, "Reset Content");
-		put(206, "Partial Content");
-		put(300, "Multiple Choices");
-		put(301, "Moved Permanently");
-		put(302, "Temporary Redirect");
-		put(303, "See Other");
-		put(304, "Not Modified");
-		put(305, "Use Proxy");
-		put(307, "Temporary Redirect");
-		put(400, "Bad Request");
-		put(401, "Unauthorized");
-		put(402, "Payment Required");
-		put(403, "Forbidden");
-		put(404, "Not Found");
-		put(405, "Method Not Allowed");
-		put(406, "Not Acceptable");
-		put(407, "Proxy Authentication Required");
-		put(408, "Request Time-Out");
-		put(409, "Conflict");
-		put(410, "Gone");
-		put(411, "Length Required");
-		put(412, "Precondition Failed");
-		put(413, "Request Entity Too Large");
-		put(414, "Request-URI Too Large");
-		put(415, "Unsupported Media Type");
-		put(500, "Internal Server Error");
-		put(501, "Not Implemented");
-		put(502, "Bad Gateway");
-		put(503, "Service Unavailable");
-		put(504, "Gateway Timeout");
-		put(505, "HTTP Version Not Supported");
-	}};
+	private static Map<Integer,String> httpMsgs = new AMap<Integer,String>()
+		.append(200, "OK")
+		.append(201, "Created")
+		.append(202, "Accepted")
+		.append(203, "Non-Authoritative Information")
+		.append(204, "No Content")
+		.append(205, "Reset Content")
+		.append(206, "Partial Content")
+		.append(300, "Multiple Choices")
+		.append(301, "Moved Permanently")
+		.append(302, "Temporary Redirect")
+		.append(303, "See Other")
+		.append(304, "Not Modified")
+		.append(305, "Use Proxy")
+		.append(307, "Temporary Redirect")
+		.append(400, "Bad Request")
+		.append(401, "Unauthorized")
+		.append(402, "Payment Required")
+		.append(403, "Forbidden")
+		.append(404, "Not Found")
+		.append(405, "Method Not Allowed")
+		.append(406, "Not Acceptable")
+		.append(407, "Proxy Authentication Required")
+		.append(408, "Request Time-Out")
+		.append(409, "Conflict")
+		.append(410, "Gone")
+		.append(411, "Length Required")
+		.append(412, "Precondition Failed")
+		.append(413, "Request Entity Too Large")
+		.append(414, "Request-URI Too Large")
+		.append(415, "Unsupported Media Type")
+		.append(500, "Internal Server Error")
+		.append(501, "Not Implemented")
+		.append(502, "Bad Gateway")
+		.append(503, "Service Unavailable")
+		.append(504, "Gateway Timeout")
+		.append(505, "HTTP Version Not Supported")
+	;
 
 	/**
 	 * Trims <js>'/'</js> characters from both the start and end of the specified string.

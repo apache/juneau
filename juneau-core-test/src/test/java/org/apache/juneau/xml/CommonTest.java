@@ -24,6 +24,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.testbeans.*;
+import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.annotation.*;
 import org.junit.*;
 
@@ -124,8 +125,8 @@ public class CommonTest {
 
 		public static C create() {
 			C t = new C();
-			t.f1 = new LinkedList<A>();
-			t.f2 = new LinkedList<A>(){{add(null);add(A.create());}};
+			t.f1 = new AList<A>();
+			t.f2 = new AList<A>().append(null).append(A.create());
 			return t;
 		}
 	}
@@ -187,17 +188,11 @@ public class CommonTest {
 
 	public static class E1 {
 		@BeanProperty(properties="f1,f2") public E2 x1 = new E2();
-		@BeanProperty(properties="f1,f2") public Map<String,Integer> x2 = new LinkedHashMap<String,Integer>() {{
-			put("f1",1); put("f3",3);
-		}};
+		@BeanProperty(properties="f1,f2") public Map<String,Integer> x2 = new AMap<String,Integer>().append("f1",1).append("f3",3);
 		@BeanProperty(properties="f1,f2") public E2[] x3 = {new E2()};
-		@BeanProperty(properties="f1,f2") public List<E2> x4 = new LinkedList<E2>() {{
-			add(new E2());
-		}};
+		@BeanProperty(properties="f1,f2") public List<E2> x4 = new AList<E2>().append(new E2());
 		@BeanProperty(properties="f1") public ObjectMap[] x5 = {new ObjectMap().append("f1",1).append("f3",3)};
-		@BeanProperty(properties="f1") public List<ObjectMap> x6 = new LinkedList<ObjectMap>() {{
-			add(new ObjectMap().append("f1",1).append("f3",3));
-		}};
+		@BeanProperty(properties="f1") public List<ObjectMap> x6 = new AList<ObjectMap>().append(new ObjectMap().append("f1",1).append("f3",3));
 	}
 
 	public static class E2 {

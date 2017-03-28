@@ -18,13 +18,14 @@ import java.util.*;
 
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.utils.*;
 import org.junit.*;
 
 /**
  * Tests designed to serialize and parse objects to make sure we end up
  * with the same objects for all serializers and parsers.
  */
-@SuppressWarnings({"serial","javadoc"})
+@SuppressWarnings({"javadoc"})
 public class RoundTripPrimitivesBeansTest extends RoundTripTest {
 
 	public RoundTripPrimitivesBeansTest(String label, SerializerBuilder s, ParserBuilder p, int flags) throws Exception {
@@ -208,30 +209,14 @@ public class RoundTripPrimitivesBeansTest extends RoundTripTest {
 			paDouble = new double[][]{{1},{2},null};
 
 			// Regular lists of primitives
-			plBoolean = new ArrayList<boolean[]>() {{
-				add(new boolean[]{true}); add(null);
-			}};
-			plByte = new ArrayList<byte[]>() {{
-				add(new byte[]{1}); add(null);
-			}};
-			plChar = new ArrayList<char[]>() {{
-				add(new char[]{'a'}); add(null);
-			}};
-			plShort = new ArrayList<short[]>() {{
-				add(new short[]{1}); add(null);
-			}};
-			plInt = new ArrayList<int[]>() {{
-				add(new int[]{1}); add(null);
-			}};
-			plLong = new ArrayList<long[]>() {{
-				add(new long[]{1}); add(null);
-			}};
-			plFloat = new ArrayList<float[]>() {{
-				add(new float[]{1}); add(null);
-			}};
-			plDouble = new ArrayList<double[]>() {{
-				add(new double[]{1}); add(null);
-			}};
+			plBoolean = new AList<boolean[]>().append(new boolean[]{true}).append(null);
+			plByte = new AList<byte[]>().append(new byte[]{1}).append(null);
+			plChar = new AList<char[]>().append(new char[]{'a'}).append(null);
+			plShort = new AList<short[]>().append(new short[]{1}).append(null);
+			plInt = new AList<int[]>().append(new int[]{1}).append(null);
+			plLong = new AList<long[]>().append(new long[]{1}).append(null);
+			plFloat = new AList<float[]>().append(new float[]{1}).append(null);
+			plDouble = new AList<double[]>().append(new double[]{1}).append(null);
 
 			// Anonymous list of primitives
 			palBoolean = new ArrayList<boolean[]>();
@@ -267,11 +252,11 @@ public class RoundTripPrimitivesBeansTest extends RoundTripTest {
 	//====================================================================================================
 	@Test
 	public void testPrimitivesBeanList() throws Exception {
-		List<PrimitivesBean> t = new ArrayList<PrimitivesBean>() {{
-			add(new PrimitivesBean().init());
-			add(null);
-			add(new PrimitivesBean().init());
-		}};
+		List<PrimitivesBean> t = new AList<PrimitivesBean>()
+			.append(new PrimitivesBean().init())
+			.append(null)
+			.append(new PrimitivesBean().init())
+		;
 		if (p == null)
 			return;
 		t = roundTrip(t, List.class, PrimitivesBean.class);

@@ -1126,56 +1126,12 @@ public class BeanContext extends Context {
 		if (o instanceof ClassMeta)
 			return (ClassMeta)o;
 
-		Class c = null;
-		if (o instanceof Class) {
-			c = (Class)o;
-		} else if (o instanceof ParameterizedType) {
-			// A parameter (e.g. <String>.
-			c = (Class<?>)((ParameterizedType)o).getRawType();
-		} else if (o instanceof GenericArrayType) {
-			// An array parameter (e.g. <byte[]>.
-			GenericArrayType gat = (GenericArrayType)o;
-			Type gatct = gat.getGenericComponentType();
-			if (gatct instanceof Class) {
-				Class gatctc = (Class)gatct;
-				c = Array.newInstance(gatctc, 0).getClass();
-			} else if (gatct instanceof ParameterizedType) {
-				Class gatctc = (Class<?>)((ParameterizedType)gatct).getRawType();
-				c = Array.newInstance(gatctc, 0).getClass();
-			} else {
-				return null;
-			}
-		} else if (o instanceof TypeVariable) {
-			if (typeVarImpls != null) {
-				TypeVariable t = (TypeVariable) o;
-				String varName = t.getName();
-				int varIndex = -1;
-				Class gc = (Class)t.getGenericDeclaration();
-				TypeVariable[] tv = gc.getTypeParameters();
-				for (int i = 0; i < tv.length; i++) {
-					if (tv[i].getName().equals(varName)) {
-						varIndex = i;
-					}
-				}
-				if (varIndex != -1) {
+		Class c = resolve(o, typeVarImpls);
 
-					// If we couldn't find a type variable implementation, that means
-					// the type was defined at runtime (e.g. Bean b = new Bean<Foo>();)
-					// in which case the type is lost through erasure.
-					// Assume java.lang.Object as the type.
-					if (! typeVarImpls.containsKey(gc))
-						return object();
-
-					return getClassMeta(typeVarImpls.get(gc)[varIndex]);
-				}
-			}
-			// We don't know the bounded type, so just resolve to Object.
+		// This can happen when trying to resolve the "E getFirst()" method on LinkedList, whose type is a TypeVariable
+		// These should just resolve to Object.
+		if (c == null)
 			return object();
-		} else {
-			// This can happen when trying to resolve the "E getFirst()" method on LinkedList, whose type is a TypeVariable
-			// These should just resolve to Object.
-			return object();
-		}
 
 		ClassMeta rawType = getClassMeta(c);
 
@@ -1203,6 +1159,62 @@ public class BeanContext extends Context {
 		}
 
 		return rawType;
+	}
+
+	/** 
+	 * Convert a Type to a Class if possible.
+	 * Return null if not possible.
+	 */
+	final Class resolve(Type t, Map<Class<?>,Class<?>[]> typeVarImpls) {
+
+		if (t instanceof Class)
+			return (Class)t;
+
+		if (t instanceof ParameterizedType)
+			// A parameter (e.g. <String>.
+			return (Class)((ParameterizedType)t).getRawType();
+
+		if (t instanceof GenericArrayType) {
+			// An array parameter (e.g. <byte[]>).
+			Type gatct = ((GenericArrayType)t).getGenericComponentType();
+
+			if (gatct instanceof Class)
+				return Array.newInstance((Class)gatct, 0).getClass();
+
+			if (gatct instanceof ParameterizedType)
+				return Array.newInstance((Class)((ParameterizedType)gatct).getRawType(), 0).getClass();
+
+			if (gatct instanceof GenericArrayType)
+				return Array.newInstance(resolve(gatct, typeVarImpls), 0).getClass();
+
+			return null;
+
+		} else if (t instanceof TypeVariable) {
+			if (typeVarImpls != null) {
+				TypeVariable tv = (TypeVariable)t;
+				String varName = tv.getName();
+				int varIndex = -1;
+				Class gc = (Class)tv.getGenericDeclaration();
+				TypeVariable[] tvv = gc.getTypeParameters();
+				for (int i = 0; i < tvv.length; i++) {
+					if (tvv[i].getName().equals(varName)) {
+						varIndex = i;
+					}
+				}
+				if (varIndex != -1) {
+
+					// If we couldn't find a type variable implementation, that means
+					// the type was defined at runtime (e.g. Bean b = new Bean<Foo>();)
+					// in which case the type is lost through erasure.
+					// Assume java.lang.Object as the type.
+					if (! typeVarImpls.containsKey(gc))
+						return null;
+
+					return typeVarImpls.get(gc)[varIndex];
+				}
+			}
+		}
+		return null;
 	}
 
 	final ClassMeta[] findParameters(Type o, Class c) {

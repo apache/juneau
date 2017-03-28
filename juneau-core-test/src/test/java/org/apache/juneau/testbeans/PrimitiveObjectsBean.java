@@ -15,7 +15,9 @@ package org.apache.juneau.testbeans;
 import java.math.*;
 import java.util.*;
 
-@SuppressWarnings({"serial","javadoc"})
+import org.apache.juneau.utils.*;
+
+@SuppressWarnings({"javadoc"})
 public class PrimitiveObjectsBean {
 
 	// primitive objects
@@ -124,39 +126,17 @@ public class PrimitiveObjectsBean {
 		poaBigDecimal = new BigDecimal[][]{{new BigDecimal("1")}, {new BigDecimal("2")}, null};
 
 		// Anonymous list of primitives
-		poalBoolean = new ArrayList<Boolean[]>() {{
-			add(new Boolean[]{Boolean.TRUE}); add(null);
-		}};
-		poalByte = new ArrayList<Byte[]>() {{
-			add(new Byte[]{1}); add(null);
-		}};
-		poalChar = new ArrayList<Character[]>() {{
-			add(new Character[]{'a'}); add(null);
-		}};
-		poalShort = new ArrayList<Short[]>() {{
-			add(new Short[]{1}); add(null);
-		}};
-		poalInt = new ArrayList<Integer[]>() {{
-			add(new Integer[]{1}); add(null);
-		}};
-		poalLong = new ArrayList<Long[]>() {{
-			add(new Long[]{1l}); add(null);
-		}};
-		poalFloat = new ArrayList<Float[]>() {{
-			add(new Float[]{1f}); add(null);
-		}};
-		poalDouble = new ArrayList<Double[]>() {{
-			add(new Double[]{1d}); add(null);
-		}};
-		poalNumber = new ArrayList<Number[]>() {{
-			add(new Integer[]{1}); add(null);
-		}};
-		poalBigInteger = new ArrayList<BigInteger[]>() {{
-			add(new BigInteger[]{new BigInteger("1")}); add(null);
-		}};
-		poalBigDecimal = new ArrayList<BigDecimal[]>() {{
-			add(new BigDecimal[]{new BigDecimal("1")}); add(null);
-		}};
+		poalBoolean = new AList<Boolean[]>().append(new Boolean[]{Boolean.TRUE}).append(null);
+		poalByte = new AList<Byte[]>().append(new Byte[]{1}).append(null);
+		poalChar = new AList<Character[]>().append(new Character[]{'a'}).append(null);
+		poalShort = new AList<Short[]>().append(new Short[]{1}).append(null);
+		poalInt = new AList<Integer[]>().append(new Integer[]{1}).append(null);
+		poalLong = new AList<Long[]>().append(new Long[]{1l}).append(null);
+		poalFloat = new AList<Float[]>().append(new Float[]{1f}).append(null);
+		poalDouble = new AList<Double[]>().append(new Double[]{1d}).append(null);
+		poalNumber = new AList<Number[]>().append(new Integer[]{1}).append(null);
+		poalBigInteger = new AList<BigInteger[]>().append(new BigInteger[]{new BigInteger("1")}).append(null);
+		poalBigDecimal = new AList<BigDecimal[]>().append(new BigDecimal[]{new BigDecimal("1")}).append(null);
 
 		// Regular list of primitives
 		polBoolean = new ArrayList<Boolean[]>();

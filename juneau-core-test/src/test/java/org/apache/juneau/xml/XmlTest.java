@@ -23,6 +23,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.annotation.*;
 import org.apache.juneau.xml.xml1a.*;
 import org.apache.juneau.xml.xml1b.*;
@@ -293,10 +294,9 @@ public class XmlTest {
 
 	@Bean(typeName="foo")
 	public static class J1 {
-		@BeanProperty(properties="f2") public List<J2> f1 = new LinkedList<J2>() {{
-			add(new J2());
-		}};}
-
+		@BeanProperty(properties="f2") public List<J2> f1 = new AList<J2>().append(new J2());
+	}
+	
 	@Bean(typeName="bar")
 	public static class J2 {
 		public int f2 = 2;

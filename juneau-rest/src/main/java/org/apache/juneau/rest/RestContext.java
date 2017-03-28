@@ -441,7 +441,7 @@ public final class RestContext extends Context {
 													throw e;
 												} catch (Exception e) {
 													res.setHeader("Exception-Name", e.getClass().getName());
-													res.setHeader("Exception-Message", e.getCause().getMessage());
+													res.setHeader("Exception-Message", e.getMessage());
 													throw e;
 												}
 												res.setOutput(output);

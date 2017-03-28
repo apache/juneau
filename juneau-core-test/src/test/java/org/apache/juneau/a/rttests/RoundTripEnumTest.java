@@ -20,13 +20,14 @@ import java.util.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.utils.*;
 import org.junit.*;
 
 /**
  * Tests designed to serialize and parse objects to make sure we end up
  * with the same objects for all serializers and parsers.
  */
-@SuppressWarnings({"serial","javadoc"})
+@SuppressWarnings({"javadoc"})
 public class RoundTripEnumTest extends RoundTripTest {
 
 	public RoundTripEnumTest(String label, SerializerBuilder s, ParserBuilder p, int flags) throws Exception {
@@ -193,10 +194,10 @@ public class RoundTripEnumTest extends RoundTripTest {
 			f2 = AEnum.BAR;
 			f3 = new AEnum[]{AEnum.FOO,null};
 			f4 = new AEnum[][]{{AEnum.FOO,null},null};
-			f5 = new ArrayList<AEnum>(){{add(AEnum.FOO);}};
-			f6 = new ArrayList<AEnum>(){{add(AEnum.FOO);}};
-			f7 = new HashSet<AEnum>(){{add(AEnum.FOO);}};
-			f8 = new HashSet<AEnum>(){{add(AEnum.FOO);}};
+			f5 = new AList<AEnum>().append(AEnum.FOO);
+			f6 = new AList<AEnum>().append(AEnum.FOO);
+			f7 = new ASet<AEnum>().append(AEnum.FOO);
+			f8 = new ASet<AEnum>().append(AEnum.FOO);
 
 			return this;
 		}
@@ -235,10 +236,10 @@ public class RoundTripEnumTest extends RoundTripTest {
 			f2 = BEnum.BAR;
 			f3 = new BEnum[]{BEnum.FOO,null};
 			f4 = new BEnum[][]{{BEnum.FOO,null},null};
-			f5 = new ArrayList<BEnum>(){{add(BEnum.FOO);}};
-			f6 = new ArrayList<BEnum>(){{add(BEnum.FOO);}};
-			f7 = new HashSet<BEnum>(){{add(BEnum.FOO);}};
-			f8 = new HashSet<BEnum>(){{add(BEnum.FOO);}};
+			f5 = new AList<BEnum>().append(BEnum.FOO);
+			f6 = new AList<BEnum>().append(BEnum.FOO);
+			f7 = new ASet<BEnum>().append(BEnum.FOO);
+			f8 = new ASet<BEnum>().append(BEnum.FOO);
 
 			return this;
 		}

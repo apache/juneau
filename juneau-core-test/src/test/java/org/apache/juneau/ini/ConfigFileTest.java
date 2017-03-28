@@ -26,6 +26,7 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.svl.*;
+import org.apache.juneau.utils.*;
 import org.junit.*;
 
 @SuppressWarnings("javadoc")
@@ -596,7 +597,6 @@ public class ConfigFileTest {
 	//====================================================================================================
 	// testListeners
 	//====================================================================================================
-	@SuppressWarnings("serial")
 	@Test
 	public void testListeners() throws Exception {
 		ConfigFile[] cff = {
@@ -695,7 +695,7 @@ public class ConfigFileTest {
 			// setSection(name,contents)
 			changes.clear();
 			count[0] = 0;
-			cf.setSection("E", new LinkedHashMap<String,String>(){{put("e1", "1");put("e2", "2");}});
+			cf.setSection("E", new AMap<String,String>().append("e1", "1").append("e2", "2"));
 			assertObjectEquals("['E/e1=1','E/e2=2']", changes);
 			assertEquals(1, count[0]);
 			cf.removeSection("E");
@@ -841,8 +841,8 @@ public class ConfigFileTest {
 			cf.addLines(null, "a1=1", "a2=1").addLines("B", "b1=1", "b2=1");
 			changes.clear();
 			count[0] = 0;
-			cf.get("default").putAll(new HashMap<String,String>(){{put("a1","1");put("a2","2");put("a3","2");}});
-			cf.get("B").putAll(new HashMap<String,String>(){{put("b1","1");put("b2","2");put("b3","2");}});
+			cf.get("default").putAll(new AMap<String,String>().append("a1","1").append("a2","2").append("a3","2"));
+			cf.get("B").putAll(new AMap<String,String>().append("b1","1").append("b2","2").append("b3","2"));
 			assertObjectEquals("['a2=2','a3=2','B/b2=2','B/b3=2']", changes);
 			assertEquals(2, count[0]);
 

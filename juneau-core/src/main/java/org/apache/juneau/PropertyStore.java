@@ -146,7 +146,7 @@ import org.apache.juneau.parser.*;
  * 	ps.putToProperty(<js>"BeanContext.implClasses.map"</js>, MyInterface.<jk>class</jk>, MyInterfaceImpl.<jk>class</jk>);
  *
  * 	<jc>// Append to map property using set().</jc>
- * 	Map m = <jk>new</jk> HashMap(){{put(MyInterface.<jk>class</jk>,MyInterfaceImpl.<jk>class</jk>)}};
+ * 	Map m = <jk>new</jk> AMap().append(MyInterface.<jk>class</jk>,MyInterfaceImpl.<jk>class</jk>);
  * 	ps.setProperty(<js>"BeanContext.implClasses.map.put"</js>, m);
  * </p>
  * <p>

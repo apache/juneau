@@ -23,7 +23,7 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.transforms.*;
 import org.junit.*;
 
-@SuppressWarnings({"serial","rawtypes","javadoc"})
+@SuppressWarnings({"rawtypes","javadoc"})
 public class PojoQueryTest {
 
 	//====================================================================================================
@@ -40,11 +40,11 @@ public class PojoQueryTest {
 		BeanSession session = BeanContext.DEFAULT.createSession();
 		List results;
 
-		List<A> in = new LinkedList<A>() {{
-			add(new A("foo"));
-			add(new A("bar"));
-			add(new A("baz"));
-		}};
+		List<A> in = new AList<A>()
+			.append(new A("foo"))
+			.append(new A("bar"))
+			.append(new A("baz"))
+		;
 
 		PojoQuery filter = new PojoQuery(in, session);
 
@@ -279,11 +279,11 @@ public class PojoQueryTest {
 		BeanSession session = BeanContext.DEFAULT.createSession();
 		List results;
 
-		List<C> in = new LinkedList<C>() {{
-			add(new C(1));
-			add(new C(2));
-			add(new C(3));
-		}};
+		List<C> in = new AList<C>()
+			.append(new C(1))
+			.append(new C(2))
+			.append(new C(3))
+		;
 
 		PojoQuery filter = new PojoQuery(in, session);
 
@@ -336,11 +336,11 @@ public class PojoQueryTest {
 		BeanSession session = BeanContext.DEFAULT.createSession();
 		List results;
 
-		List<D1> in = new LinkedList<D1>() {{
-			add(new D1("foo"));
-			add(new D1("bar"));
-			add(new D1("baz"));
-		}};
+		List<D1> in = new AList<D1>() 
+			.append(new D1("foo"))
+			.append(new D1("bar"))
+			.append(new D1("baz"))
+		;
 
 		PojoQuery filter = new PojoQuery(in, session);
 
@@ -394,11 +394,11 @@ public class PojoQueryTest {
 		BeanSession session = BeanContext.DEFAULT.createSession();
 		List results;
 
-		List<E> in = new LinkedList<E>() {{
-			add(new E("foo", 1, true));
-			add(new E("bar", 2, false));
-			add(new E("baz", 3, true));
-		}};
+		List<E> in = new AList<E>()
+			.append(new E("foo", 1, true))
+			.append(new E("bar", 2, false))
+			.append(new E("baz", 3, true))
+		;
 
 		PojoQuery filter = new PojoQuery(in, session);
 
@@ -447,11 +447,11 @@ public class PojoQueryTest {
 		BeanSession session = BeanContext.DEFAULT.createSession();
 		List results;
 
-		List<F1> in = new LinkedList<F1>() {{
-			add(new F1("foo"));
-			add(new F1("bar"));
-			add(new F1("baz"));
-		}};
+		List<F1> in = new AList<F1>()
+			.append(new F1("foo"))
+			.append(new F1("bar"))
+			.append(new F1("baz"))
+		;
 
 		PojoQuery filter = new PojoQuery(in, session);
 
@@ -478,10 +478,10 @@ public class PojoQueryTest {
 		F1(final String f1) {
 			this.f1 = f1;
 			this.f2 = new F2("f2_"+f1);
-			this.f3 = new LinkedList<F2>() {{
-				add(new F2("f31_"+f1));
-				add(new F2("f32_"+f1));
-			}};
+			this.f3 = new AList<F2>()
+				.append(new F2("f31_"+f1))
+				.append(new F2("f32_"+f1))
+			;
 		}
 	}
 
@@ -572,10 +572,10 @@ public class PojoQueryTest {
 		H1(final String f1) {
 			this.f1 = f1;
 			this.f2 = new H2("f2_"+f1);
-			this.f3 = new LinkedList<H2>() {{
-				add(new H2("f31_"+f1));
-				add(new H2("f32_"+f1));
-			}};
+			this.f3 = new AList<H2>()
+				.append(new H2("f31_"+f1))
+				.append(new H2("f32_"+f1))
+			;
 		}
 	}
 
