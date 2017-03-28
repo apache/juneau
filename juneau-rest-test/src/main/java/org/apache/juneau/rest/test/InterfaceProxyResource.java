@@ -76,15 +76,15 @@ public class InterfaceProxyResource extends RestServletJenaDefault {
 			}
 			@Override
 			public int[][][] returnInt3dArray() {
-				return new int[][][]{{{1,2}}};
+				return new int[][][]{{{1,2},null},null};
 			}
 			@Override
 			public Integer[][][] returnInteger3dArray() {
-				return new Integer[][][]{{{1,null}}};
+				return new Integer[][][]{{{1,null},null},null};
 			}
 			@Override
 			public String[][][] returnString3dArray() {
-				return new String[][][]{{{"foo","bar",null}}};
+				return new String[][][]{{{"foo","bar",null},null},null};
 			}
 			@Override
 			public List<Integer> returnIntegerList() {
@@ -98,7 +98,9 @@ public class InterfaceProxyResource extends RestServletJenaDefault {
 					.append(
 						new AList<Integer>().append(1).append(null)
 					)
-				);
+					.append(null)
+				)
+				.append(null);
 			}
 			@Override
 			public List<Integer[][][]> returnInteger1d3dList() {
@@ -276,15 +278,15 @@ public class InterfaceProxyResource extends RestServletJenaDefault {
 			}
 			@Override
 			public void setInt3dArray(int[][][] x) {
-				assertObjectEquals("[[[1,2]]]", x);
+				assertObjectEquals("[[[1,2],null],null]", x);
 			}
 			@Override
 			public void setInteger3dArray(Integer[][][] x) {
-				assertObjectEquals("[[[1,null]]]", x);
+				assertObjectEquals("[[[1,null],null],null]", x);
 			}
 			@Override
 			public void setString3dArray(String[][][] x) {
-				assertObjectEquals("[[['foo','bar',null]]]", x);
+				assertObjectEquals("[[['foo',null],null],null]", x);
 			}
 			@Override
 			public void setIntegerList(List<Integer> x) {
@@ -292,13 +294,8 @@ public class InterfaceProxyResource extends RestServletJenaDefault {
 				assertEquals(Integer.class, x.get(0).getClass());
 			}
 			@Override
-			public void setInteger2dList(List<List<Integer>> x) {
-				assertObjectEquals("[[1,null]]", x);
-				assertEquals(Integer.class, x.get(0).get(0).getClass());
-			}
-			@Override
 			public void setInteger3dList(List<List<List<Integer>>> x) {
-				assertObjectEquals("[[[1,null]]]", x);
+				assertObjectEquals("[[[1,null],null],null]", x);
 				assertEquals(Integer.class, x.get(0).get(0).get(0).getClass());
 			}
 			@Override
@@ -446,6 +443,108 @@ public class InterfaceProxyResource extends RestServletJenaDefault {
 				Map.Entry<TestEnum,List<TestEnum[][][]>> e = x.entrySet().iterator().next();
 				assertEquals(TestEnum.class, e.getKey().getClass());
 				assertEquals(TestEnum[][][].class, e.getValue().get(0).getClass());
+			}
+
+			//--------------------------------------------------------------------------------
+			// Test multi-parameters
+			//--------------------------------------------------------------------------------
+
+			@Override
+			public void setMultiParamsInts(int x1, int[][][] x2, int[][][] x2n, List<int[][][]> x3, List<int[][][]> x3n) {
+				assertObjectEquals("1", x1);
+				assertObjectEquals("[[[1,2],null],null]", x2);
+				assertNull(x2n);
+				assertObjectEquals("[[[[1,2],null],null],null]", x3);
+				assertEquals(int[][][].class, x3.get(0).getClass());
+				assertNull(x3n);
+			}
+			@Override
+			public void setMultiParamsInteger(Integer x1, Integer x1n, Integer[][][] x2, Integer[][][] x2n, List<Integer[][][]> x3, List<Integer[][][]> x3n) {
+				assertObjectEquals("1", x1);
+				assertObjectEquals("[[[1,null],null],null]", x2);
+				assertNull(x2n);
+				assertObjectEquals("[[[[1,null],null],null],null]", x3);
+				assertEquals(Integer[][][].class, x3.get(0).getClass());
+				assertNull(x3n);
+			}
+			@Override
+			public void setMultiParamsFloat(float x1, float[][][] x2, float[][][] x2n, List<float[][][]> x3, List<float[][][]> x3n) {
+				assertObjectEquals("1.0", x1);
+				assertObjectEquals("[[[1.0,2.0],null],null]", x2);
+				assertNull(x2n);
+				assertObjectEquals("[[[[1.0,2.0],null],null],null]", x3);
+				assertEquals(float[][][].class, x3.get(0).getClass());
+				assertNull(x3n);
+			}
+			@Override
+			public void setMultiParamsFloatObject(Float x1, Float x1n, Float[][][] x2, Float[][][] x2n, List<Float[][][]> x3, List<Float[][][]> x3n) {
+				assertObjectEquals("1.0", x1);
+				assertObjectEquals("[[[1.0,null],null],null]", x2);
+				assertNull(x2n);
+				assertObjectEquals("[[[[1.0,null],null],null],null]", x3);
+				assertEquals(Float[][][].class, x3.get(0).getClass());
+				assertNull(x3n);
+			}
+			@Override
+			public void setMultiParamsString(String x1, String[][][] x2, String[][][] x2n, List<String[][][]> x3, List<String[][][]> x3n) {
+				assertObjectEquals("'foo'", x1);
+				assertObjectEquals("[[['foo',null],null],null]", x2);
+				assertNull(x2n);
+				assertObjectEquals("[[[['foo',null],null],null],null]", x3);
+				assertEquals(String[][][].class, x3.get(0).getClass());
+				assertNull(x3n);
+			}
+			@Override
+			public void setMultiParamsBean(Bean x1, Bean[][][] x2, Bean[][][] x2n, List<Bean[][][]> x3, List<Bean[][][]> x3n, Map<String,Bean> x4, Map<String,Bean> x4n, Map<String,List<Bean[][][]>> x5, Map<String,List<Bean[][][]>> x5n) {
+				assertObjectEquals("{a:1,b:'foo'}", x1);
+				assertObjectEquals("[[[{a:1,b:'foo'},null],null],null]", x2);
+				assertNull(x2n);
+				assertObjectEquals("[[[[{a:1,b:'foo'},null],null],null],null]", x3);
+				assertEquals(Bean[][][].class, x3.get(0).getClass());
+				assertNull(x3n);
+				assertObjectEquals("{foo:{a:1,b:'foo'}}", x4);
+				assertNull(x4n);
+				assertObjectEquals("{foo:[[[[{a:1,b:'foo'},null],null],null],null]}", x5);
+				assertNull(x5n);
+			}
+			@Override
+			public void setMultiParamsSwappedPojo(SwappedPojo x1, SwappedPojo[][][] x2, SwappedPojo[][][] x2n, List<SwappedPojo[][][]> x3, List<SwappedPojo[][][]> x3n, Map<SwappedPojo,SwappedPojo> x4, Map<SwappedPojo,SwappedPojo> x4n, Map<SwappedPojo,List<SwappedPojo[][][]>> x5, Map<SwappedPojo,List<SwappedPojo[][][]>> x5n) {
+				assertObjectEquals("'[{(<swapped>)}]'", x1);
+				assertObjectEquals("[[['[{(<swapped>)}]',null],null],null]", x2);
+				assertNull(x2n);
+				assertObjectEquals("[[[['[{(<swapped>)}]',null],null],null],null]", x3);
+				assertEquals(SwappedPojo[][][].class, x3.get(0).getClass());
+				assertNull(x3n);
+				assertObjectEquals("{'[{(<swapped>)}]':'[{(<swapped>)}]'}", x4);
+				assertNull(x4n);
+				assertObjectEquals("{'[{(<swapped>)}]':[[[['[{(<swapped>)}]',null],null],null],null]}", x5);
+				assertNull(x5n);
+			}
+			@Override
+			public void setMultiParamsImplicitSwappedPojo(ImplicitSwappedPojo x1, ImplicitSwappedPojo[][][] x2, ImplicitSwappedPojo[][][] x2n, List<ImplicitSwappedPojo[][][]> x3, List<ImplicitSwappedPojo[][][]> x3n, Map<ImplicitSwappedPojo,ImplicitSwappedPojo> x4, Map<ImplicitSwappedPojo,ImplicitSwappedPojo> x4n, Map<ImplicitSwappedPojo,List<ImplicitSwappedPojo[][][]>> x5, Map<ImplicitSwappedPojo,List<ImplicitSwappedPojo[][][]>> x5n) {
+				assertObjectEquals("'[{(<swapped>)}]'", x1);
+				assertObjectEquals("[[['[{(<swapped>)}]',null],null],null]", x2);
+				assertNull(x2n);
+				assertObjectEquals("[[[['[{(<swapped>)}]',null],null],null],null]", x3);
+				assertEquals(ImplicitSwappedPojo[][][].class, x3.get(0).getClass());
+				assertNull(x3n);
+				assertObjectEquals("{'[{(<swapped>)}]':'[{(<swapped>)}]'}", x4);
+				assertNull(x4n);
+				assertObjectEquals("{'[{(<swapped>)}]':[[[['[{(<swapped>)}]',null],null],null],null]}", x5);
+				assertNull(x5n);
+			}
+			@Override
+			public void setMultiParamsEnum(TestEnum x1, TestEnum[][][] x2, TestEnum[][][] x2n, List<TestEnum[][][]> x3, List<TestEnum[][][]> x3n, Map<TestEnum,TestEnum> x4, Map<TestEnum,TestEnum> x4n, Map<TestEnum,List<TestEnum[][][]>> x5, Map<TestEnum,List<TestEnum[][][]>> x5n) {
+				assertObjectEquals("'TWO'", x1);
+				assertObjectEquals("[[['TWO',null],null],null]", x2);
+				assertNull(x2n);
+				assertObjectEquals("[[[['TWO',null],null],null],null]", x3);
+				assertEquals(TestEnum[][][].class, x3.get(0).getClass());
+				assertNull(x3n);
+				assertObjectEquals("{ONE:'TWO'}", x4);
+				assertNull(x4n);
+				assertObjectEquals("{ONE:[[[['TWO',null],null],null],null]}", x5);
+				assertNull(x5n);
 			}
 		};
 	}

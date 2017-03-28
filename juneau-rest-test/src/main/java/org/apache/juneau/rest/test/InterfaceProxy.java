@@ -103,7 +103,6 @@ public interface InterfaceProxy {
 	void setInteger3dArray(Integer[][][] x);
 	void setString3dArray(String[][][] x);
 	void setIntegerList(List<Integer> x);
-	void setInteger2dList(List<List<Integer>> x);
 	void setInteger3dList(List<List<List<Integer>>> x);
 	void setInteger1d3dList(List<Integer[][][]> x);
 	void setInt1d3dList(List<int[][][]> x);
@@ -140,6 +139,20 @@ public interface InterfaceProxy {
 	void setEnumMap(Map<TestEnum,TestEnum> x);
 	void setEnum3dArrayMap(Map<TestEnum,TestEnum[][][]> x);
 	void setEnum1d3dListMap(Map<TestEnum,List<TestEnum[][][]>> x);
+
+	//--------------------------------------------------------------------------------
+	// Test multi-parameters
+	//--------------------------------------------------------------------------------
+
+	void setMultiParamsInts(int x1, int[][][] x2, int[][][] x2n, List<int[][][]> x3, List<int[][][]> x3n);
+	void setMultiParamsInteger(Integer x1, Integer x1n, Integer[][][] x2, Integer[][][] x2n, List<Integer[][][]> x3, List<Integer[][][]> x3n);
+	void setMultiParamsFloat(float x1, float[][][] x2, float[][][] x2n, List<float[][][]> x3, List<float[][][]> x3n);
+	void setMultiParamsFloatObject(Float x1, Float x1n, Float[][][] x2, Float[][][] x2n, List<Float[][][]> x3, List<Float[][][]> x3n);
+	void setMultiParamsString(String x1, String[][][] x2, String[][][] x2n, List<String[][][]> x3, List<String[][][]> x3n);
+	void setMultiParamsBean(Bean x1, Bean[][][] x2, Bean[][][] x2n, List<Bean[][][]> x3, List<Bean[][][]> x3n, Map<String,Bean> x4, Map<String,Bean> x4n, Map<String,List<Bean[][][]>> x5, Map<String,List<Bean[][][]>> x5n);
+	void setMultiParamsSwappedPojo(SwappedPojo x1, SwappedPojo[][][] x2, SwappedPojo[][][] x2n, List<SwappedPojo[][][]> x3, List<SwappedPojo[][][]> x3n, Map<SwappedPojo,SwappedPojo> x4, Map<SwappedPojo,SwappedPojo> x4n, Map<SwappedPojo,List<SwappedPojo[][][]>> x5, Map<SwappedPojo,List<SwappedPojo[][][]>> x5n);
+	void setMultiParamsImplicitSwappedPojo(ImplicitSwappedPojo x1, ImplicitSwappedPojo[][][] x2, ImplicitSwappedPojo[][][] x2n, List<ImplicitSwappedPojo[][][]> x3, List<ImplicitSwappedPojo[][][]> x3n, Map<ImplicitSwappedPojo,ImplicitSwappedPojo> x4, Map<ImplicitSwappedPojo,ImplicitSwappedPojo> x4n, Map<ImplicitSwappedPojo,List<ImplicitSwappedPojo[][][]>> x5, Map<ImplicitSwappedPojo,List<ImplicitSwappedPojo[][][]>> x5n);
+	void setMultiParamsEnum(TestEnum x1, TestEnum[][][] x2, TestEnum[][][] x2n, List<TestEnum[][][]> x3, List<TestEnum[][][]> x3n, Map<TestEnum,TestEnum> x4, Map<TestEnum,TestEnum> x4n, Map<TestEnum,List<TestEnum[][][]>> x5, Map<TestEnum,List<TestEnum[][][]>> x5n);
 
 	//--------------------------------------------------------------------------------
 	// Helper classes

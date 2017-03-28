@@ -107,17 +107,17 @@ public class InterfaceProxyTest extends RestTestcase {
 
 	@Test
 	public void returnInt3dArray() {
-		assertObjectEquals("[[[1,2]]]", getProxy().returnInt3dArray());
+		assertObjectEquals("[[[1,2],null],null]", getProxy().returnInt3dArray());
 	}
 
 	@Test
 	public void returnInteger3dArray() {
-		assertObjectEquals("[[[1,null]]]", getProxy().returnInteger3dArray());
+		assertObjectEquals("[[[1,null],null],null]", getProxy().returnInteger3dArray());
 	}
 
 	@Test
 	public void returnString3dArray() {
-		assertObjectEquals("[[['foo','bar',null]]]", getProxy().returnString3dArray());
+		assertObjectEquals("[[['foo','bar',null],null],null]", getProxy().returnString3dArray());
 	}
 
 	@Test
@@ -130,7 +130,7 @@ public class InterfaceProxyTest extends RestTestcase {
 	@Test
 	public void returnInteger3dList() {
 		List<List<List<Integer>>> x = getProxy().returnInteger3dList();
-		assertObjectEquals("[[[1,null]]]", x);
+		assertObjectEquals("[[[1,null],null],null]", x);
 		assertEquals(Integer.class, x.get(0).get(0).get(0).getClass());
 	}
 
@@ -427,30 +427,22 @@ public class InterfaceProxyTest extends RestTestcase {
 
 	@Test
 	public void setInt3dArray() {
-		getProxy().setInt3dArray(new int[][][]{{{1,2}}});
+		getProxy().setInt3dArray(new int[][][]{{{1,2},null},null});
 	}
 
 	@Test
 	public void setInteger3dArray() {
-		getProxy().setInteger3dArray(new Integer[][][]{{{1,null}}});
+		getProxy().setInteger3dArray(new Integer[][][]{{{1,null},null},null});
 	}
 
 	@Test
 	public void setString3dArray() {
-		getProxy().setString3dArray(new String[][][]{{{"foo","bar",null}}});
+		getProxy().setString3dArray(new String[][][]{{{"foo",null},null},null});
 	}
 
 	@Test
 	public void setIntegerList() {
 		getProxy().setIntegerList(new AList<Integer>().append(1).append(null));
-	}
-
-	@Test
-	public void setInteger2dList() {
-		getProxy().setInteger2dList(
-			new AList<List<Integer>>()
-			.append(new AList<Integer>().append(1).append(null))
-		);
 	}
 
 	@Test
@@ -460,7 +452,9 @@ public class InterfaceProxyTest extends RestTestcase {
 			.append(
 				new AList<List<Integer>>()
 				.append(new AList<Integer>().append(1).append(null))
+				.append(null)
 			)
+			.append(null)
 		);
 	}
 
@@ -600,5 +594,109 @@ public class InterfaceProxyTest extends RestTestcase {
 	@Test
 	public void setEnum1d3dListMap() {
 		getProxy().setEnum1d3dListMap(new AMap<TestEnum,List<TestEnum[][][]>>().append(TestEnum.ONE, new AList<TestEnum[][][]>().append(new TestEnum[][][]{{{TestEnum.TWO,null},null},null}).append(null)));
+	}
+
+	//--------------------------------------------------------------------------------
+	// Test multi-parameters
+	//--------------------------------------------------------------------------------
+
+	@Test
+	public void setMultiParamsInts() {
+		int x1 = 1;
+		int[][][] x2 = new int[][][]{{{1,2},null},null};
+		int[][][] x2n = null;
+		List<int[][][]> x3 = new AList<int[][][]>().append(x2).append(null);
+		List<int[][][]> x3n = null;
+		getProxy().setMultiParamsInts(x1, x2, x2n, x3, x3n);
+	}
+	@Test
+	public void setMultiParamsInteger() {
+		Integer x1 = 1;
+		Integer x1n = null;
+		Integer[][][] x2 = new Integer[][][]{{{1,null},null},null};
+		Integer[][][] x2n = null;
+		List<Integer[][][]> x3 = new AList<Integer[][][]>().append(x2).append(null);
+		List<Integer[][][]> x3n = null;
+		getProxy().setMultiParamsInteger(x1, x1n, x2, x2n, x3, x3n);
+	}
+	@Test
+	public void setMultiParamsFloat() {
+		float x1 = 1;
+		float[][][] x2 = new float[][][]{{{1,2},null},null};
+		float[][][] x2n = null;
+		List<float[][][]> x3 = new AList<float[][][]>().append(x2).append(null);
+		List<float[][][]> x3n = null;
+		getProxy().setMultiParamsFloat(x1, x2, x2n, x3, x3n);
+	}
+	@Test
+	public void setMultiParamsFloatObject() {
+		Float x1 = 1f;
+		Float x1n = null;
+		Float[][][] x2 = new Float[][][]{{{1f,null},null},null};
+		Float[][][] x2n = null;
+		List<Float[][][]> x3 = new AList<Float[][][]>().append(x2).append(null);
+		List<Float[][][]> x3n = null;
+		getProxy().setMultiParamsFloatObject(x1, x1n, x2, x2n, x3, x3n);
+	}
+	@Test
+	public void setMultiParamsString() {
+		String x1 = "foo";
+		String[][][] x2 = new String[][][]{{{"foo",null},null},null};
+		String[][][] x2n = null;
+		List<String[][][]> x3 = new AList<String[][][]>().append(x2).append(null);
+		List<String[][][]> x3n = null;
+		getProxy().setMultiParamsString(x1, x2, x2n, x3, x3n);
+	}
+	@Test
+	public void setMultiParamsBean() {
+		Bean x1 = new Bean().init();
+		Bean[][][] x2 = new Bean[][][]{{{new Bean().init(),null},null},null};
+		Bean[][][] x2n = null;
+		List<Bean[][][]> x3 = new AList<Bean[][][]>().append(x2).append(null);
+		List<Bean[][][]> x3n = null;
+		Map<String,Bean> x4 = new AMap<String,Bean>().append("foo",new Bean().init());
+		Map<String,Bean> x4n = null;
+		Map<String,List<Bean[][][]>> x5 = new AMap<String,List<Bean[][][]>>().append("foo", x3);
+		Map<String,List<Bean[][][]>> x5n = null;
+		getProxy().setMultiParamsBean(x1, x2, x2n, x3, x3n, x4, x4n, x5, x5n);
+	}
+	@Test
+	public void setMultiParamsSwappedPojo() {
+		SwappedPojo x1 = new SwappedPojo();
+		SwappedPojo[][][] x2 = new SwappedPojo[][][]{{{new SwappedPojo(),null},null},null};
+		SwappedPojo[][][] x2n = null;
+		List<SwappedPojo[][][]> x3 = new AList<SwappedPojo[][][]>().append(x2).append(null);
+		List<SwappedPojo[][][]> x3n = null;
+		Map<SwappedPojo,SwappedPojo> x4 = new AMap<SwappedPojo,SwappedPojo>().append(new SwappedPojo(), new SwappedPojo());
+		Map<SwappedPojo,SwappedPojo> x4n = null;
+		Map<SwappedPojo,List<SwappedPojo[][][]>> x5 = new AMap<SwappedPojo,List<SwappedPojo[][][]>>().append(new SwappedPojo(), x3);
+		Map<SwappedPojo,List<SwappedPojo[][][]>> x5n = null;
+		getProxy().setMultiParamsSwappedPojo(x1, x2, x2n, x3, x3n, x4, x4n, x5, x5n);
+	}
+	@Test
+	public void setMultiParamsImplicitSwappedPojo() {
+		ImplicitSwappedPojo x1 = new ImplicitSwappedPojo();
+		ImplicitSwappedPojo[][][] x2 = new ImplicitSwappedPojo[][][]{{{new ImplicitSwappedPojo(),null},null},null};
+		ImplicitSwappedPojo[][][] x2n = null;
+		List<ImplicitSwappedPojo[][][]> x3 = new AList<ImplicitSwappedPojo[][][]>().append(x2).append(null);
+		List<ImplicitSwappedPojo[][][]> x3n = null;
+		Map<ImplicitSwappedPojo,ImplicitSwappedPojo> x4 = new AMap<ImplicitSwappedPojo,ImplicitSwappedPojo>().append(new ImplicitSwappedPojo(), new ImplicitSwappedPojo());
+		Map<ImplicitSwappedPojo,ImplicitSwappedPojo> x4n = null;
+		Map<ImplicitSwappedPojo,List<ImplicitSwappedPojo[][][]>> x5 = new AMap<ImplicitSwappedPojo,List<ImplicitSwappedPojo[][][]>>().append(new ImplicitSwappedPojo(), x3);
+		Map<ImplicitSwappedPojo,List<ImplicitSwappedPojo[][][]>> x5n = null;
+		getProxy().setMultiParamsImplicitSwappedPojo(x1, x2, x2n, x3, x3n, x4, x4n, x5, x5n);
+	}
+	@Test
+	public void setMultiParamsEnum() {
+		TestEnum x1 = TestEnum.TWO;
+		TestEnum[][][] x2 = new TestEnum[][][]{{{TestEnum.TWO,null},null},null};
+		TestEnum[][][] x2n = null;
+		List<TestEnum[][][]> x3 = new AList<TestEnum[][][]>().append(x2).append(null);
+		List<TestEnum[][][]> x3n = null;
+		Map<TestEnum,TestEnum> x4 = new AMap<TestEnum,TestEnum>().append(TestEnum.ONE,TestEnum.TWO);
+		Map<TestEnum,TestEnum> x4n = null;
+		Map<TestEnum,List<TestEnum[][][]>> x5 = new AMap<TestEnum,List<TestEnum[][][]>>().append(TestEnum.ONE, x3);
+		Map<TestEnum,List<TestEnum[][][]>> x5n = null;
+		getProxy().setMultiParamsEnum(x1, x2, x2n, x3, x3n, x4, x4n, x5, x5n);
 	}
 }
