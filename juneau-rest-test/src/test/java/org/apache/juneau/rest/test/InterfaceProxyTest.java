@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
+import static org.apache.juneau.rest.test.InterfaceProxy.*;
 import static org.apache.juneau.rest.test.TestUtils.*;
 import static org.junit.Assert.*;
 
@@ -31,6 +32,7 @@ import org.junit.*;
 import org.junit.runner.*;
 import org.junit.runners.*;
 
+@SuppressWarnings("unused")
 @RunWith(Parameterized.class)
 public class InterfaceProxyTest extends RestTestcase {
 
@@ -215,21 +217,21 @@ public class InterfaceProxyTest extends RestTestcase {
 	@Test
 	public void returnSwappedPojo() {
 		SwappedPojo x = getProxy().returnSwappedPojo();
-		assertObjectEquals("'[{(<swapped>)}]'", x);
+		assertObjectEquals("'"+SWAP+"'", x);
 		assertTrue(x.wasUnswapped);
 	}
 
 	@Test
 	public void returnSwappedPojo3dArray() {
 		SwappedPojo[][][] x = getProxy().returnSwappedPojo3dArray();
-		assertObjectEquals("[[['[{(<swapped>)}]',null],null],null]", x);
+		assertObjectEquals("[[['"+SWAP+"',null],null],null]", x);
 		assertTrue(x[0][0][0].wasUnswapped);
 	}
 
 	@Test
 	public void returnSwappedPojoMap() {
 		Map<SwappedPojo,SwappedPojo> x = getProxy().returnSwappedPojoMap();
-		assertObjectEquals("{'[{(<swapped>)}]':'[{(<swapped>)}]'}", x);
+		assertObjectEquals("{'"+SWAP+"':'"+SWAP+"'}", x);
 		Map.Entry<SwappedPojo,SwappedPojo> e = x.entrySet().iterator().next();
 		assertTrue(e.getKey().wasUnswapped);
 		assertTrue(e.getValue().wasUnswapped);
@@ -238,7 +240,7 @@ public class InterfaceProxyTest extends RestTestcase {
 	@Test
 	public void returnSwappedPojo3dMap() {
 		Map<SwappedPojo,SwappedPojo[][][]> x = getProxy().returnSwappedPojo3dMap();
-		assertObjectEquals("{'[{(<swapped>)}]':[[['[{(<swapped>)}]',null],null],null]}", x);
+		assertObjectEquals("{'"+SWAP+"':[[['"+SWAP+"',null],null],null]}", x);
 		Map.Entry<SwappedPojo,SwappedPojo[][][]> e = x.entrySet().iterator().next();
 		assertTrue(e.getKey().wasUnswapped);
 		assertTrue(e.getValue()[0][0][0].wasUnswapped);
@@ -248,21 +250,21 @@ public class InterfaceProxyTest extends RestTestcase {
 	@Test
 	public void returnImplicitSwappedPojo() {
 		ImplicitSwappedPojo x = getProxy().returnImplicitSwappedPojo();
-		assertObjectEquals("'[{(<swapped>)}]'", x);
+		assertObjectEquals("'"+SWAP+"'", x);
 		assertTrue(x.wasUnswapped);
 	}
 
 	@Test
 	public void returnImplicitSwappedPojo3dArray() {
 		ImplicitSwappedPojo[][][] x = getProxy().returnImplicitSwappedPojo3dArray();
-		assertObjectEquals("[[['[{(<swapped>)}]',null],null],null]", x);
+		assertObjectEquals("[[['"+SWAP+"',null],null],null]", x);
 		assertTrue(x[0][0][0].wasUnswapped);
 	}
 
 	@Test
 	public void returnImplicitSwappedPojoMap() {
 		Map<ImplicitSwappedPojo,ImplicitSwappedPojo> x = getProxy().returnImplicitSwappedPojoMap();
-		assertObjectEquals("{'[{(<swapped>)}]':'[{(<swapped>)}]'}", x);
+		assertObjectEquals("{'"+SWAP+"':'"+SWAP+"'}", x);
 		Map.Entry<ImplicitSwappedPojo,ImplicitSwappedPojo> e = x.entrySet().iterator().next();
 		assertTrue(e.getKey().wasUnswapped);
 		assertTrue(e.getValue().wasUnswapped);
@@ -271,7 +273,7 @@ public class InterfaceProxyTest extends RestTestcase {
 	@Test
 	public void returnImplicitSwappedPojo3dMap() {
 		Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> x = getProxy().returnImplicitSwappedPojo3dMap();
-		assertObjectEquals("{'[{(<swapped>)}]':[[['[{(<swapped>)}]',null],null],null]}", x);
+		assertObjectEquals("{'"+SWAP+"':[[['"+SWAP+"',null],null],null]}", x);
 		Map.Entry<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> e = x.entrySet().iterator().next();
 		assertTrue(e.getKey().wasUnswapped);
 		assertTrue(e.getValue()[0][0][0].wasUnswapped);

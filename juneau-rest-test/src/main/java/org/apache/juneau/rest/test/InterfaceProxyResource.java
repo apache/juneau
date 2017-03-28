@@ -356,19 +356,19 @@ public class InterfaceProxyResource extends RestServletJenaDefault {
 			}
 			@Override
 			public void setSwappedPojo3dArray(SwappedPojo[][][] x) {
-				assertObjectEquals("[[['[{(<swapped>)}]',null],null],null]", x);
+				assertObjectEquals("[[['"+SWAP+"',null],null],null]", x);
 				assertTrue(x[0][0][0].wasUnswapped);
 			}
 			@Override
 			public void setSwappedPojoMap(Map<SwappedPojo,SwappedPojo> x) {
-				assertObjectEquals("{'[{(<swapped>)}]':'[{(<swapped>)}]'}", x);
+				assertObjectEquals("{'"+SWAP+"':'"+SWAP+"'}", x);
 				Map.Entry<SwappedPojo,SwappedPojo> e = x.entrySet().iterator().next();
 				assertTrue(e.getKey().wasUnswapped);
 				assertTrue(e.getValue().wasUnswapped);
 			}
 			@Override
 			public void setSwappedPojo3dMap(Map<SwappedPojo,SwappedPojo[][][]> x) {
-				assertObjectEquals("{'[{(<swapped>)}]':[[['[{(<swapped>)}]',null],null],null]}", x);
+				assertObjectEquals("{'"+SWAP+"':[[['"+SWAP+"',null],null],null]}", x);
 				Map.Entry<SwappedPojo,SwappedPojo[][][]> e = x.entrySet().iterator().next();
 				assertTrue(e.getKey().wasUnswapped);
 				assertTrue(e.getValue()[0][0][0].wasUnswapped);
@@ -381,19 +381,19 @@ public class InterfaceProxyResource extends RestServletJenaDefault {
 			}
 			@Override
 			public void setImplicitSwappedPojo3dArray(ImplicitSwappedPojo[][][] x) {
-				assertObjectEquals("[[['[{(<swapped>)}]',null],null],null]", x);
+				assertObjectEquals("[[['"+SWAP+"',null],null],null]", x);
 				assertTrue(x[0][0][0].wasUnswapped);
 			}
 			@Override
 			public void setImplicitSwappedPojoMap(Map<ImplicitSwappedPojo,ImplicitSwappedPojo> x) {
-				assertObjectEquals("{'[{(<swapped>)}]':'[{(<swapped>)}]'}", x);
+				assertObjectEquals("{'"+SWAP+"':'"+SWAP+"'}", x);
 				Map.Entry<ImplicitSwappedPojo,ImplicitSwappedPojo> e = x.entrySet().iterator().next();
 				assertTrue(e.getKey().wasUnswapped);
 				assertTrue(e.getValue().wasUnswapped);
 			}
 			@Override
 			public void setImplicitSwappedPojo3dMap(Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> x) {
-				assertObjectEquals("{'[{(<swapped>)}]':[[['[{(<swapped>)}]',null],null],null]}", x);
+				assertObjectEquals("{'"+SWAP+"':[[['"+SWAP+"',null],null],null]}", x);
 				Map.Entry<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> e = x.entrySet().iterator().next();
 				assertTrue(e.getKey().wasUnswapped);
 				assertTrue(e.getValue()[0][0][0].wasUnswapped);
@@ -509,28 +509,28 @@ public class InterfaceProxyResource extends RestServletJenaDefault {
 			}
 			@Override
 			public void setMultiParamsSwappedPojo(SwappedPojo x1, SwappedPojo[][][] x2, SwappedPojo[][][] x2n, List<SwappedPojo[][][]> x3, List<SwappedPojo[][][]> x3n, Map<SwappedPojo,SwappedPojo> x4, Map<SwappedPojo,SwappedPojo> x4n, Map<SwappedPojo,List<SwappedPojo[][][]>> x5, Map<SwappedPojo,List<SwappedPojo[][][]>> x5n) {
-				assertObjectEquals("'[{(<swapped>)}]'", x1);
-				assertObjectEquals("[[['[{(<swapped>)}]',null],null],null]", x2);
+				assertObjectEquals("'"+SWAP+"'", x1);
+				assertObjectEquals("[[['"+SWAP+"',null],null],null]", x2);
 				assertNull(x2n);
-				assertObjectEquals("[[[['[{(<swapped>)}]',null],null],null],null]", x3);
+				assertObjectEquals("[[[['"+SWAP+"',null],null],null],null]", x3);
 				assertEquals(SwappedPojo[][][].class, x3.get(0).getClass());
 				assertNull(x3n);
-				assertObjectEquals("{'[{(<swapped>)}]':'[{(<swapped>)}]'}", x4);
+				assertObjectEquals("{'"+SWAP+"':'"+SWAP+"'}", x4);
 				assertNull(x4n);
-				assertObjectEquals("{'[{(<swapped>)}]':[[[['[{(<swapped>)}]',null],null],null],null]}", x5);
+				assertObjectEquals("{'"+SWAP+"':[[[['"+SWAP+"',null],null],null],null]}", x5);
 				assertNull(x5n);
 			}
 			@Override
 			public void setMultiParamsImplicitSwappedPojo(ImplicitSwappedPojo x1, ImplicitSwappedPojo[][][] x2, ImplicitSwappedPojo[][][] x2n, List<ImplicitSwappedPojo[][][]> x3, List<ImplicitSwappedPojo[][][]> x3n, Map<ImplicitSwappedPojo,ImplicitSwappedPojo> x4, Map<ImplicitSwappedPojo,ImplicitSwappedPojo> x4n, Map<ImplicitSwappedPojo,List<ImplicitSwappedPojo[][][]>> x5, Map<ImplicitSwappedPojo,List<ImplicitSwappedPojo[][][]>> x5n) {
-				assertObjectEquals("'[{(<swapped>)}]'", x1);
-				assertObjectEquals("[[['[{(<swapped>)}]',null],null],null]", x2);
+				assertObjectEquals("'"+SWAP+"'", x1);
+				assertObjectEquals("[[['"+SWAP+"',null],null],null]", x2);
 				assertNull(x2n);
-				assertObjectEquals("[[[['[{(<swapped>)}]',null],null],null],null]", x3);
+				assertObjectEquals("[[[['"+SWAP+"',null],null],null],null]", x3);
 				assertEquals(ImplicitSwappedPojo[][][].class, x3.get(0).getClass());
 				assertNull(x3n);
-				assertObjectEquals("{'[{(<swapped>)}]':'[{(<swapped>)}]'}", x4);
+				assertObjectEquals("{'"+SWAP+"':'"+SWAP+"'}", x4);
 				assertNull(x4n);
-				assertObjectEquals("{'[{(<swapped>)}]':[[[['[{(<swapped>)}]',null],null],null],null]}", x5);
+				assertObjectEquals("{'"+SWAP+"':[[[['"+SWAP+"',null],null],null],null]}", x5);
 				assertNull(x5n);
 			}
 			@Override

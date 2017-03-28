@@ -25,6 +25,8 @@ import org.apache.juneau.transform.*;
  */
 public interface InterfaceProxy {
 
+	public static final String SWAP = "swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/";
+
 	//--------------------------------------------------------------------------------
 	// Test return types.
 	//--------------------------------------------------------------------------------
@@ -188,13 +190,13 @@ public interface InterfaceProxy {
 	public static class SwappedPojoSwap extends PojoSwap<SwappedPojo,String> {
 		@Override
 		public String swap(BeanSession session, SwappedPojo c) throws SerializeException {
-			return "[{(<swapped>)}]";  // Use special characters.
+			return SWAP;
 		}
 
 		@Override
 		public SwappedPojo unswap(BeanSession session, String f, ClassMeta<?> hint) throws ParseException {
 			SwappedPojo c = new SwappedPojo();
-			if (f.equals("[{(<swapped>)}]"))
+			if (f.equals(SWAP))
 				c.wasUnswapped = true;
 			return c;
 		}
@@ -205,12 +207,12 @@ public interface InterfaceProxy {
 		public boolean wasUnswapped;
 		@Override
 		public String toString() {
-			return "[{(<swapped>)}]";
+			return SWAP;
 		}
 		public ImplicitSwappedPojo() {
 		}
 		public ImplicitSwappedPojo(String fromString) {
-			if (fromString.equals("[{(<swapped>)}]"))
+			if (fromString.equals(SWAP))
 				wasUnswapped = true;
 		}
 	}
