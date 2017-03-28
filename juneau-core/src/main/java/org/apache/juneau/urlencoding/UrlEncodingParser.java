@@ -412,12 +412,13 @@ public class UrlEncodingParser extends UonParser {
 		}
 	}
 
-	private Object[] parseArgs(UrlEncodingParserSession session, ParserReader r, ClassMeta<?>[] argTypes) throws Exception {
+	private Object[] parseArgs(UrlEncodingParserSession session, ParserReader r, ClassMeta<Object[]> args) throws Exception {
 
 		int c = r.peekSkipWs();
 		if (c == '?')
 			r.read();
 
+		ClassMeta<?>[] argTypes = args.getArgs();
 		Object[] vals = new Object[argTypes.length];
 
 		final int S1=1; // Looking for attrName start.
@@ -581,10 +582,10 @@ public class UrlEncodingParser extends UonParser {
 	}
 
 	@Override /* ReaderParser */
-	protected Object[] doParseArgs(ParserSession session, ClassMeta<?>[] argTypes) throws Exception {
+	protected Object[] doParseArgs(ParserSession session, ClassMeta<Object[]> args) throws Exception {
 		UrlEncodingParserSession uctx = (UrlEncodingParserSession)session;
 		UonReader r = uctx.getReader();
-		Object[] a = parseArgs(uctx, r, argTypes);
+		Object[] a = parseArgs(uctx, r, args);
 		return a;
 	}
 

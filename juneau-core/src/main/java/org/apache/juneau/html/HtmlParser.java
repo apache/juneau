@@ -355,8 +355,9 @@ public class HtmlParser extends XmlParser {
 	 * Precondition:  Must be pointing at event following <ul> event.
 	 * Postcondition:  Pointing at next START_ELEMENT or END_DOCUMENT event.
 	 */
-	private Object[] parseArgs(HtmlParserSession session, XMLStreamReader r, ClassMeta<?>[] argTypes) throws Exception {
+	private Object[] parseArgs(HtmlParserSession session, XMLStreamReader r, ClassMeta<Object[]> args) throws Exception {
 		HtmlTag tag = HtmlTag.forEvent(r);
+		ClassMeta<?>[] argTypes = args.getArgs();
 
 		// Special case:
 		// Serializing args containing a single bean (or multiple beans of the same type) will end up serialized as a <table _type='array'>
@@ -599,8 +600,8 @@ public class HtmlParser extends XmlParser {
 	}
 
 	@Override /* ReaderParser */
-	protected Object[] doParseArgs(ParserSession session, ClassMeta<?>[] argTypes) throws Exception {
+	protected Object[] doParseArgs(ParserSession session, ClassMeta<Object[]> args) throws Exception {
 		HtmlParserSession s = (HtmlParserSession)session;
-		return parseArgs(s, s.getXmlStreamReader(), argTypes);
+		return parseArgs(s, s.getXmlStreamReader(), args);
 	}
 }

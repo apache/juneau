@@ -55,7 +55,7 @@ public class XmlValidatorParser extends XmlParser {
 	}
 
 	@Override /* ReaderParser */
-	protected Object[] doParseArgs(ParserSession session, ClassMeta<?>[] argTypes) throws Exception {
+	protected Object[] doParseArgs(ParserSession session, ClassMeta<Object[]> args) throws Exception {
 		return (Object[])validate(session.getReader());
 	}
 

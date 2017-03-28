@@ -596,7 +596,7 @@ public class BeanSession extends Session {
 	public final Object toArray(ClassMeta<?> type, Collection<?> list) {
 		if (list == null)
 			return null;
-		ClassMeta<?> componentType = type.getElementType();
+		ClassMeta<?> componentType = type.isArgs() ? object() : type.getElementType();
 		Object array = Array.newInstance(componentType.getInnerClass(), list.size());
 		int i = 0;
 		for (Object o : list) {
@@ -843,18 +843,18 @@ public class BeanSession extends Session {
 	}
 
 	/**
-	 * Given an array of {@link Type} objects, returns an array of corresponding {@link ClassMeta} objects.
-	 * Constructs a new array on each call.
+	 * Given an array of {@link Type} objects, returns a {@link ClassMeta} representing those arguments.
+	 * Constructs a new meta on each call.
 	 *
 	 * @param classes The array of classes to get class metas for.
-	 * @return An array of {@link ClassMeta} objects corresponding to the classes.  Never <jk>null</jk>.
+	 * @return The args {@link ClassMeta} object corresponding to the classes.  Never <jk>null</jk>.
 	 */
-	public final ClassMeta<?>[] getClassMetas(Type[] classes) {
+	public final ClassMeta<Object[]> getArgsClassMeta(Type[] classes) {
 		assertFieldNotNull(classes, "classes");
-		ClassMeta<?>[] cm = new ClassMeta<?>[classes.length];
+		ClassMeta[] cm = new ClassMeta<?>[classes.length];
 		for (int i = 0; i < classes.length; i++)
 			cm[i] = getClassMeta(classes[i]);
-		return cm;
+		return new ClassMeta(cm);
 	}
 
 	/**

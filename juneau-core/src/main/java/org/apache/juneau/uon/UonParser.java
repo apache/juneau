@@ -703,11 +703,12 @@ public class UonParser extends ReaderParser {
 		}
 	}
 
-	private Object[] parseArgs(UonParserSession session, ParserReader r, ClassMeta<?>[] argTypes) throws Exception {
+	private Object[] parseArgs(UonParserSession session, ParserReader r, ClassMeta<Object[]> args) throws Exception {
 
 		final int S1=1; // Looking for start of entry
 		final int S2=2; // Looking for , or )
 
+		ClassMeta<?>[] argTypes = args.getArgs();
 		Object[] o = new Object[argTypes.length];
 		int i = 0;
 
@@ -797,10 +798,10 @@ public class UonParser extends ReaderParser {
 	}
 
 	@Override /* ReaderParser */
-	protected Object[] doParseArgs(ParserSession session, ClassMeta<?>[] argTypes) throws Exception {
+	protected Object[] doParseArgs(ParserSession session, ClassMeta<Object[]> args) throws Exception {
 		UonParserSession s = (UonParserSession)session;
 		UonReader r = s.getReader();
-		Object[] a = parseArgs(s, r, argTypes);
+		Object[] a = parseArgs(s, r, args);
 		return a;
 	}
 }

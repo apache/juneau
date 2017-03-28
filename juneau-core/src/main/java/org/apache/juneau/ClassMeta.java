@@ -54,7 +54,7 @@ public final class ClassMeta<T> implements Type {
 
 	/** Class categories. */
 	enum ClassCategory {
-		MAP, COLLECTION, CLASS, NUMBER, DECIMAL, BOOLEAN, CHAR, DATE, ARRAY, ENUM, OTHER, CHARSEQ, STR, OBJ, URI, BEANMAP, READER, INPUTSTREAM, VOID
+		MAP, COLLECTION, CLASS, NUMBER, DECIMAL, BOOLEAN, CHAR, DATE, ARRAY, ENUM, OTHER, CHARSEQ, STR, OBJ, URI, BEANMAP, READER, INPUTSTREAM, VOID, ARGS
 	}
 
 	final Class<T> innerClass;                              // The class being wrapped.
@@ -106,6 +106,7 @@ public final class ClassMeta<T> implements Type {
 	private final Throwable initException;                  // Any exceptions thrown in the init() method.
 	private final InvocationHandler invocationHandler;      // The invocation handler for this class (if it has one).
 	private final BeanRegistry beanRegistry;                // The bean registry of this class meta (if it has one).
+	private final ClassMeta<?>[] args;                      // Arg types if this is an array of args.
 
 	private static final Boolean BOOLEAN_DEFAULT = false;
 	private static final Character CHARACTER_DEFAULT = (char)0;
@@ -181,6 +182,7 @@ public final class ClassMeta<T> implements Type {
 		this.childUnswapMap = builder.childUnswapMap;
 		this.childSwapMap = builder.childSwapMap;
 		this.childPojoSwaps = builder.childPojoSwaps;
+		this.args = null;
 	}
 
 	/**
@@ -227,6 +229,54 @@ public final class ClassMeta<T> implements Type {
 		this.extMeta = mainType.extMeta;
 		this.initException = mainType.initException;
 		this.beanRegistry = mainType.beanRegistry;
+		this.args = null;
+	}
+
+	/**
+	 * Constructor for args-arrays.
+	 */
+	@SuppressWarnings("unchecked")
+	ClassMeta(ClassMeta<?>[] args) {
+		this.innerClass = (Class<T>) Object[].class;
+		this.args = args;
+		this.implClass = null;
+		this.childPojoSwaps = null;
+		this.childSwapMap = null;
+		this.childUnswapMap = null;
+		this.cc = ARGS;
+		this.fromStringMethod = null;
+		this.noArgConstructor = null;
+		this.stringConstructor = null;
+		this.numberConstructor = null;
+		this.swapConstructor = null;
+		this.swapMethodType = null;
+		this.numberConstructorType = null;
+		this.swapMethod = null;
+		this.unswapMethod = null;
+		this.namePropertyMethod = null;
+		this.parentPropertyMethod = null;
+		this.isDelegate = false;
+		this.isAbstract = false;
+		this.isMemberClass = false;
+		this.primitiveDefault = null;
+		this.remoteableMethods = null;
+		this.proxyableMethods = null;
+		this.publicMethods = null;
+		this.beanContext = null;
+		this.serializedClassMeta = this;
+		this.elementType = null;
+		this.keyType = null;
+		this.valueType = null;
+		this.invocationHandler = null;
+		this.beanMeta = null;
+		this.dictionaryName = null;
+		this.resolvedDictionaryName = null;
+		this.notABeanReason = null;
+		this.pojoSwap = null;
+		this.beanFilter = null;
+		this.extMeta = new MetadataMap();
+		this.initException = null;
+		this.beanRegistry = null;
 	}
 
 	@SuppressWarnings({"unchecked","rawtypes","hiding"})
@@ -1063,6 +1113,37 @@ public final class ClassMeta<T> implements Type {
 	 */
 	public boolean isVoid() {
 		return cc == VOID;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this metadata represents an array of argument types.
+	 *
+	 * @return <jk>true</jk> if this metadata represents an array of argument types.
+	 */
+	public boolean isArgs() {
+		return cc == ARGS;
+	}
+
+	/**
+	 * Returns the argument types of this meta.
+	 *
+	 * @return The argument types of this meta, or <jk>null</jk> if this isn't an array of argument types.
+	 */
+	public ClassMeta<?>[] getArgs() {
+		return args;
+	}
+
+	/**
+	 * Returns the argument metadata at the specified index if this is an args metadata object.
+	 *
+	 * @param index The argument index.
+	 * @return The The argument metadata.  Never <jk>null</jk>.
+	 * @throws BeanRuntimeException If this metadata object is not a list of arguments, or the index is out of range.
+	 */
+	public ClassMeta<?> getArg(int index) {
+		if (args != null && index >= 0 && index < args.length)
+			return args[index];
+		throw new BeanRuntimeException("Invalid argument index specified:  {0}.  Only {1} arguments are defined.", index, args == null ? 0 : args.length);
 	}
 
 	/**

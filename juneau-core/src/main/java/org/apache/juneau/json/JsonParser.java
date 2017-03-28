@@ -194,7 +194,7 @@ public class JsonParser extends ReaderParser {
 				o = session.cast(m, pMeta, eType);
 			} else {
 				Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance() : new ObjectList(session));
-				o = parseIntoCollection2(session, r, l, sType.getElementType(), pMeta);
+				o = parseIntoCollection2(session, r, l, sType, pMeta);
 			}
 		} else if (sType.canCreateNewBean(outer)) {
 			BeanMap m = session.newBeanMap(outer, sType.getInnerClass());
@@ -203,13 +203,13 @@ public class JsonParser extends ReaderParser {
 			o = sType.newInstanceFromString(outer, parseString(session, r));
 		} else if (sType.canCreateNewInstanceFromNumber(outer) && StringUtils.isFirstNumberChar((char)c)) {
 			o = sType.newInstanceFromNumber(session, outer, parseNumber(session, r, sType.getNewInstanceFromNumberClass()));
-		} else if (sType.isArray()) {
+		} else if (sType.isArray() || sType.isArgs()) {
 			if (c == '{') {
 				ObjectMap m = new ObjectMap(session);
 				parseIntoMap2(session, r, m, string(), object(), pMeta);
 				o = session.cast(m, pMeta, eType);
 			} else {
-				ArrayList l = (ArrayList)parseIntoCollection2(session, r, new ArrayList(), sType.getElementType(), pMeta);
+				ArrayList l = (ArrayList)parseIntoCollection2(session, r, new ArrayList(), sType, pMeta);
 				o = session.toArray(sType, l);
 			}
 		} else if (c == '{') {
@@ -399,12 +399,14 @@ public class JsonParser extends ReaderParser {
 		throw new ParseException(session, "Could not find the end of the field name.");
 	}
 
-	private <E> Collection<E> parseIntoCollection2(JsonParserSession session, ParserReader r, Collection<E> l, ClassMeta<E> elementType, BeanPropertyMeta pMeta) throws Exception {
+	private <E> Collection<E> parseIntoCollection2(JsonParserSession session, ParserReader r, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta) throws Exception {
 
 		int S0=0; // Looking for outermost [
 		int S1=1; // Looking for starting [ or { or " or ' or LITERAL or ]
 		int S2=2; // Looking for , or ]
 		int S3=3; // Looking for starting [ or { or " or ' or LITERAL
+
+		int argIndex = 0;
 
 		int state = S0;
 		int c = 0;
@@ -419,7 +421,7 @@ public class JsonParser extends ReaderParser {
 				} else if (session.isCommentOrWhitespace(c)) {
 					skipCommentsAndSpace(session, r.unread());
 				} else if (c != -1) {
-					l.add(parseAnything(session, elementType, r.unread(), l, pMeta));
+					l.add((E)parseAnything(session, type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), r.unread(), l, pMeta));
 					state = S2;
 				}
 			} else if (state == S2) {
@@ -438,7 +440,7 @@ public class JsonParser extends ReaderParser {
 				} else if (c == ']') {
 					break;
 				} else if (c != -1) {
-					l.add(parseAnything(session, elementType, r.unread(), l, pMeta));
+					l.add((E)parseAnything(session, type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), r.unread(), l, pMeta));
 					state = S2;
 				}
 			}
@@ -451,52 +453,6 @@ public class JsonParser extends ReaderParser {
 			throw new ParseException(session, "Expected ',' or ']'.");
 		if (state == S3)
 			throw new ParseException(session, "Unexpected trailing comma in array.");
-
-		return null;  // Unreachable.
-	}
-
-	private Object[] parseArgs(JsonParserSession session, ParserReader r, ClassMeta<?>[] argTypes) throws Exception {
-
-		int S0=0; // Looking for outermost [
-		int S1=1; // Looking for starting [ or { or " or ' or LITERAL
-		int S2=2; // Looking for , or ]
-
-		Object[] o = new Object[argTypes.length];
-		int i = 0;
-
-		int state = S0;
-		int c = 0;
-		while (c != -1) {
-			c = r.read();
-			if (state == S0) {
-				if (c == '[')
-					state = S1;
-			} else if (state == S1) {
-				if (c == ']') {
-					return o;
-				} else if (session.isCommentOrWhitespace(c)) {
-					skipCommentsAndSpace(session, r.unread());
-				} else {
-					o[i] = parseAnything(session, argTypes[i], r.unread(), session.getOuter(), null);
-					i++;
-					state = S2;
-				}
-			} else if (state == S2) {
-				if (c == ',') {
-					state = S1;
-				} else if (session.isCommentOrWhitespace(c)) {
-					skipCommentsAndSpace(session, r.unread());
-				} else if (c == ']') {
-					return o;
-				}
-			}
-		}
-		if (state == S0)
-			throw new ParseException(session, "Expected '[' at beginning of JSON array.");
-		if (state == S1)
-			throw new ParseException(session, "Expected one of the following characters: {,[,',\",LITERAL.");
-		if (state == S2)
-			throw new ParseException(session, "Expected ',' or ']'.");
 
 		return null;  // Unreachable.
 	}
@@ -835,16 +791,16 @@ public class JsonParser extends ReaderParser {
 	protected <E> Collection<E> doParseIntoCollection(ParserSession session, Collection<E> c, Type elementType) throws Exception {
 		JsonParserSession s = (JsonParserSession)session;
 		ParserReader r = s.getReader();
-		c = parseIntoCollection2(s, r, c, (ClassMeta<E>)s.getClassMeta(elementType), null);
+		c = parseIntoCollection2(s, r, c, s.getClassMeta(elementType), null);
 		validateEnd(s, r);
 		return c;
 	}
 
 	@Override /* ReaderParser */
-	protected Object[] doParseArgs(ParserSession session, ClassMeta<?>[] argTypes) throws Exception {
+	protected Object[] doParseArgs(ParserSession session, ClassMeta<Object[]> args) throws Exception {
 		JsonParserSession s = (JsonParserSession)session;
 		ParserReader r = s.getReader();
-		Object[] a = parseArgs(s, r, argTypes);
+		Object[] a = parseAnything(s, args, r, session.getOuter(), null);
 		validateEnd(s, r);
 		return a;
 	}

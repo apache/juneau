@@ -482,35 +482,12 @@ public abstract class Parser extends CoreObject {
 	 * @return An array of parsed objects.
 	 * @throws ParseException If the input contains a syntax error or is malformed, or is not valid for the specified type.
 	 */
-	public final Object[] parseArgs(Object input, ClassMeta<?>[] argTypes) throws ParseException {
-		if (argTypes == null || argTypes.length == 0)
-			return new Object[0];
-		ParserSession session = createSession(input);
-		try {
-			return doParseArgs(session, argTypes);
-		} catch (ParseException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new ParseException(session, e);
-		} finally {
-			session.close();
-		}
-	}
-
-	/**
-	 * Same as {@link #parseArgs(Object, ClassMeta[])} except allows you to pass in {@link Class} objects.
-	 *
-	 * @param input The input.  Subclasses can support different input types.
-	 * @param argTypes Specifies the type of objects to create for each entry in the array.
-	 * @return An array of parsed objects.
-	 * @throws ParseException If the input contains a syntax error or is malformed, or is not valid for the specified type.
-	 */
 	public final Object[] parseArgs(Object input, Type[] argTypes) throws ParseException {
 		if (argTypes == null || argTypes.length == 0)
 			return new Object[0];
 		ParserSession session = createSession(input);
 		try {
-			return doParseArgs(session, session.getClassMetas(argTypes));
+			return doParseArgs(session, session.getArgsClassMeta(argTypes));
 		} catch (ParseException e) {
 			throw e;
 		} catch (Exception e) {
@@ -525,12 +502,12 @@ public abstract class Parser extends CoreObject {
 	 * Default implementation throws an {@link UnsupportedOperationException}.
 	 * @param session The runtime session object returned by {@link #createSession(Object, ObjectMap, Method, Object, Locale, TimeZone, MediaType)}.
 	 * If <jk>null</jk>, one will be created using {@link #createSession(Object)}.
-	 * @param argTypes Specifies the type of objects to create for each entry in the array.
+	 * @param args Specifies the metadata on the type of objects to create for each entry in the array.
 	 *
 	 * @return An array of parsed objects.
 	 * @throws Exception If thrown from underlying stream, or if the input contains a syntax error or is malformed.
 	 */
-	protected Object[] doParseArgs(ParserSession session, ClassMeta<?>[] argTypes) throws Exception {
+	protected Object[] doParseArgs(ParserSession session, ClassMeta<Object[]> args) throws Exception {
 		throw new UnsupportedOperationException("Parser '"+getClass().getName()+"' does not support this method.");
 	}
 

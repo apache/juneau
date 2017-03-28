@@ -244,8 +244,9 @@ public class XmlParser extends ReaderParser {
 		return l;
 	}
 
-	private Object[] doParseArgs(XmlParserSession session, XMLStreamReader r, ClassMeta<?>[] argTypes) throws Exception {
+	private Object[] doParseArgs(XmlParserSession session, XMLStreamReader r, ClassMeta<Object[]> args) throws Exception {
 		int depth = 0;
+		ClassMeta<?>[] argTypes = args.getArgs();
 		Object[] o = new Object[argTypes.length];
 		int i = 0;
 		do {
@@ -536,8 +537,8 @@ public class XmlParser extends ReaderParser {
 	}
 
 	@Override /* ReaderParser */
-	protected Object[] doParseArgs(ParserSession session, ClassMeta<?>[] argTypes) throws Exception {
+	protected Object[] doParseArgs(ParserSession session, ClassMeta<Object[]> args) throws Exception {
 		XmlParserSession s = (XmlParserSession)session;
-		return doParseArgs(s, s.getXmlStreamReader(), argTypes);
+		return doParseArgs(s, s.getXmlStreamReader(), args);
 	}
 }

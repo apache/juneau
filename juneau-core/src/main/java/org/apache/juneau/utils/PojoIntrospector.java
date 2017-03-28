@@ -15,7 +15,6 @@ package org.apache.juneau.utils;
 import java.io.*;
 import java.lang.reflect.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
@@ -79,8 +78,7 @@ public final class PojoIntrospector {
 	public Object invokeMethod(Method method, Reader args) throws InvocationTargetException, IllegalArgumentException, IllegalAccessException, ParseException, IOException {
 		if (o == null)
 			return null;
-		ClassMeta<?>[] argTypes = p.getBeanContext().createSession().getClassMetas(method.getParameterTypes());
-		Object[] params = args == null ? null : p.parseArgs(args, argTypes);
+		Object[] params = args == null ? null : p.parseArgs(args, method.getGenericParameterTypes());
 		return method.invoke(o, params);
 	}
 
