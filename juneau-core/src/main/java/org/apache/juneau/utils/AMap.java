@@ -16,11 +16,14 @@ import java.util.*;
 
 /**
  * An extension of {@link LinkedHashMap} with a convenience {@link #append(Object,Object)} method.
+ * <p>
+ * Primarily used for testing purposes for quickly creating populated maps.
+ *
  * @param <K> The key type.
  * @param <V> The value type.
  */
 @SuppressWarnings("serial")
-public class AMap<K,V> extends LinkedHashMap<K,V> {
+public final class AMap<K,V> extends LinkedHashMap<K,V> {
 
 	/**
 	 * Adds an entry to this map.

@@ -16,10 +16,13 @@ import java.util.*;
 
 /**
  * An extension of {@link LinkedList} with a convenience {@link #append(Object)} method.
+ * <p>
+ * Primarily used for testing purposes for quickly creating populated lists.
+ *
  * @param <T> The entry type.
  */
 @SuppressWarnings("serial")
-public class AList<T> extends LinkedList<T> {
+public final class AList<T> extends LinkedList<T> {
 
 	/**
 	 * Adds an entry to this list.

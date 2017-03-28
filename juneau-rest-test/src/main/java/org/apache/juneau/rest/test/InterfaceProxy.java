@@ -19,6 +19,9 @@ import java.util.*;
  */
 public interface InterfaceProxy {
 
+	//--------------------------------------------------------------------------------
+	// Test return types.
+	//--------------------------------------------------------------------------------
 	void returnVoid();
 	int returnInt();
 	Integer returnInteger();
@@ -53,9 +56,15 @@ public interface InterfaceProxy {
 	Map<String,List<Bean>> returnBeanListMap();
 	Map<Integer,List<Bean>> returnBeanListMapIntegerKeys();
 
+	//--------------------------------------------------------------------------------
+	// Test server-side exception serialization.
+	//--------------------------------------------------------------------------------
 	void throwException1() throws InterfaceProxyException1;
 	void throwException2() throws InterfaceProxyException2;
 
+	//--------------------------------------------------------------------------------
+	// Test 1-arg parameters
+	//--------------------------------------------------------------------------------
 	void setNothing();
 	void setInt(int x);
 	void setInteger(Integer x);

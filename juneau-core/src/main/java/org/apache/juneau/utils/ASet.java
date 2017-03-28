@@ -16,10 +16,13 @@ import java.util.*;
 
 /**
  * An extension of {@link LinkedHashSet} with a convenience {@link #append(Object)} method.
+ * <p>
+ * Primarily used for testing purposes for quickly creating populated sets.
+ * 
  * @param <T> The entry type.
  */
 @SuppressWarnings("serial")
-public class ASet<T> extends LinkedHashSet<T> {
+public final class ASet<T> extends LinkedHashSet<T> {
 
 	/**
 	 * Adds an entry to this set.

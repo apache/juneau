@@ -110,7 +110,6 @@ public class DTOs {
 
 	@UrlEncoding(expandedParams=true)
 	public static class C extends B {
-		@SuppressWarnings("serial")
 		static C create() {
 			C t = new C();
 			t.f01 = new String[]{"a","b"};
@@ -130,7 +129,7 @@ public class DTOs {
 			t.setF15(new String[][]{{"e","f"},{"g","h"}});
 			t.setF16(new AList<String[]>().append(new String[]{"i","j"}).append(new String[]{"k","l"}));
 			t.setF17(new A[]{A.create(),A.create()});
-			t.setF18(new AList<A>(){{add(A.create());add(A.create());}});
+			t.setF18(new AList<A>().append(A.create()).append(A.create()));
 			t.setF19(new A[][]{{A.create()},{A.create()}});
 			t.setF20(new AList<List<A>>().append(Arrays.asList(A.create())).append(Arrays.asList(A.create())));
 			return t;
