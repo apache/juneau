@@ -60,6 +60,11 @@ public class InterfaceProxyTest extends RestTestcase {
 		return getClient(serializer, parser).getRemoteableProxy(InterfaceProxy.class, "/testInterfaceProxyResource/proxy");
 	}
 
+	//--------------------------------------------------------------------------------
+	// Test return types.
+	//--------------------------------------------------------------------------------
+
+	// Various primitives
 	@Test
 	public void returnVoid() {
 		getProxy().returnVoid();
@@ -148,6 +153,7 @@ public class InterfaceProxyTest extends RestTestcase {
 		assertObjectEquals("['foo','bar',null]", getProxy().returnStringList());
 	}
 
+	// Beans
 	@Test
 	public void returnBean() {
 		Bean x = getProxy().returnBean();
@@ -205,6 +211,7 @@ public class InterfaceProxyTest extends RestTestcase {
 		assertEquals(Integer.class, x.keySet().iterator().next().getClass());
 	}
 
+	// Swapped POJOs
 	@Test
 	public void returnSwappedPojo() {
 		SwappedPojo x = getProxy().returnSwappedPojo();
@@ -237,6 +244,103 @@ public class InterfaceProxyTest extends RestTestcase {
 		assertTrue(e.getValue()[0][0][0].wasUnswapped);
 	}
 
+	// Implicit swapped POJOs
+	@Test
+	public void returnImplicitSwappedPojo() {
+		ImplicitSwappedPojo x = getProxy().returnImplicitSwappedPojo();
+		assertObjectEquals("'[{(<swapped>)}]'", x);
+		assertTrue(x.wasUnswapped);
+	}
+
+	@Test
+	public void returnImplicitSwappedPojo3dArray() {
+		ImplicitSwappedPojo[][][] x = getProxy().returnImplicitSwappedPojo3dArray();
+		assertObjectEquals("[[['[{(<swapped>)}]',null],null],null]", x);
+		assertTrue(x[0][0][0].wasUnswapped);
+	}
+
+	@Test
+	public void returnImplicitSwappedPojoMap() {
+		Map<ImplicitSwappedPojo,ImplicitSwappedPojo> x = getProxy().returnImplicitSwappedPojoMap();
+		assertObjectEquals("{'[{(<swapped>)}]':'[{(<swapped>)}]'}", x);
+		Map.Entry<ImplicitSwappedPojo,ImplicitSwappedPojo> e = x.entrySet().iterator().next();
+		assertTrue(e.getKey().wasUnswapped);
+		assertTrue(e.getValue().wasUnswapped);
+	}
+
+	@Test
+	public void returnImplicitSwappedPojo3dMap() {
+		Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> x = getProxy().returnImplicitSwappedPojo3dMap();
+		assertObjectEquals("{'[{(<swapped>)}]':[[['[{(<swapped>)}]',null],null],null]}", x);
+		Map.Entry<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> e = x.entrySet().iterator().next();
+		assertTrue(e.getKey().wasUnswapped);
+		assertTrue(e.getValue()[0][0][0].wasUnswapped);
+	}
+
+	// Enums
+	@Test
+	public void returnEnum() {
+		TestEnum x = getProxy().returnEnum();
+		assertObjectEquals("'TWO'", x);
+	}
+
+	@Test
+	public void returnEnum3d() {
+		TestEnum[][][] x = getProxy().returnEnum3d();
+		assertObjectEquals("[[['TWO',null],null],null]", x);
+		assertEquals(TestEnum.class, x[0][0][0].getClass());
+	}
+
+	@Test
+	public void returnEnumList() {
+		List<TestEnum> x = getProxy().returnEnumList();
+		assertObjectEquals("['TWO',null]", x);
+		assertEquals(TestEnum.class, x.get(0).getClass());
+	}
+
+	@Test
+	public void returnEnum3dList() {
+		List<List<List<TestEnum>>> x = getProxy().returnEnum3dList();
+		assertObjectEquals("[[['TWO',null],null,null]]", x);
+		assertEquals(TestEnum.class, x.get(0).get(0).get(0).getClass());
+	}
+
+	@Test
+	public void returnEnum1d3dList() {
+		List<TestEnum[][][]> x = getProxy().returnEnum1d3dList();
+		assertObjectEquals("[[[['TWO',null],null],null],null]", x);
+		assertEquals(TestEnum[][][].class, x.get(0).getClass());
+	}
+
+	@Test
+	public void returnEnumMap() {
+		Map<TestEnum,TestEnum> x = getProxy().returnEnumMap();
+		assertObjectEquals("{ONE:'TWO'}", x);
+		Map.Entry<TestEnum,TestEnum> e = x.entrySet().iterator().next();
+		assertEquals(TestEnum.class, e.getKey().getClass());
+		assertEquals(TestEnum.class, e.getValue().getClass());
+	}
+
+	@Test
+	public void returnEnum3dArrayMap() {
+		Map<TestEnum,TestEnum[][][]> x = getProxy().returnEnum3dArrayMap();
+		assertObjectEquals("{ONE:[[['TWO',null],null],null]}", x);
+		Map.Entry<TestEnum,TestEnum[][][]> e = x.entrySet().iterator().next();
+		assertEquals(TestEnum.class, e.getKey().getClass());
+		assertEquals(TestEnum[][][].class, e.getValue().getClass());
+	}
+
+	@Test
+	public void returnEnum1d3dListMap() {
+		Map<TestEnum,List<TestEnum[][][]>> x = getProxy().returnEnum1d3dListMap();
+		assertObjectEquals("{ONE:[[[['TWO',null],null],null],null]}", x);
+		assertEquals(TestEnum[][][].class, x.get(TestEnum.ONE).get(0).getClass());
+	}
+
+	//--------------------------------------------------------------------------------
+	// Test server-side exception serialization.
+	//--------------------------------------------------------------------------------
+
 	@Test
 	public void throwException1() {
 		try {
@@ -256,6 +360,11 @@ public class InterfaceProxyTest extends RestTestcase {
 		}
 	}
 
+	//--------------------------------------------------------------------------------
+	// Test parameters
+	//--------------------------------------------------------------------------------
+
+	// Various primitives
 	@Test
 	public void setNothing() {
 		getProxy().setNothing();
@@ -374,6 +483,7 @@ public class InterfaceProxyTest extends RestTestcase {
 		getProxy().setStringList(Arrays.asList("foo","bar",null));
 	}
 
+	// Beans
 	@Test
 	public void setBean() {
 		getProxy().setBean(new Bean().init());
@@ -399,6 +509,7 @@ public class InterfaceProxyTest extends RestTestcase {
 		getProxy().setBeanListMapIntegerKeys(new AMap<Integer,List<Bean>>().append(1,Arrays.asList(new Bean().init())));
 	}
 
+	// Swapped POJOs
 	@Test
 	public void setSwappedPojo() {
 		getProxy().setSwappedPojo(new SwappedPojo());
@@ -417,5 +528,77 @@ public class InterfaceProxyTest extends RestTestcase {
 	@Test
 	public void setSwappedPojo3dMap() {
 		getProxy().setSwappedPojo3dMap(new AMap<SwappedPojo,SwappedPojo[][][]>().append(new SwappedPojo(), new SwappedPojo[][][]{{{new SwappedPojo(),null},null},null}));
+	}
+
+	// Implicit swapped POJOs
+	@Test
+	public void setImplicitSwappedPojo() {
+		getProxy().setImplicitSwappedPojo(new ImplicitSwappedPojo());
+	}
+
+	@Test
+	public void setImplicitSwappedPojo3dArray() {
+		getProxy().setImplicitSwappedPojo3dArray(new ImplicitSwappedPojo[][][]{{{new ImplicitSwappedPojo(),null},null},null});
+	}
+
+	@Test
+	public void setImplicitSwappedPojoMap() {
+		getProxy().setImplicitSwappedPojoMap(new AMap<ImplicitSwappedPojo,ImplicitSwappedPojo>().append(new ImplicitSwappedPojo(), new ImplicitSwappedPojo()));
+	}
+
+	@Test
+	public void setImplicitSwappedPojo3dMap() {
+		getProxy().setImplicitSwappedPojo3dMap(new AMap<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]>().append(new ImplicitSwappedPojo(), new ImplicitSwappedPojo[][][]{{{new ImplicitSwappedPojo(),null},null},null}));
+	}
+
+	// Enums
+	@Test
+	public void setEnum() {
+		getProxy().setEnum(TestEnum.TWO);
+	}
+
+	@Test
+	public void setEnum3d() {
+		getProxy().setEnum3d(new TestEnum[][][]{{{TestEnum.TWO,null},null},null});
+	}
+
+	@Test
+	public void setEnumList() {
+		getProxy().setEnumList(new AList<TestEnum>().append(TestEnum.TWO).append(null));
+	}
+
+	@Test
+	public void setEnum3dList() {
+		getProxy().setEnum3dList(
+			new AList<List<List<TestEnum>>>()
+			.append(
+				new AList<List<TestEnum>>()
+				.append(
+					new AList<TestEnum>().append(TestEnum.TWO).append(null)
+				)
+				.append(null)
+			.append(null)
+			)
+		);
+	}
+
+	@Test
+	public void setEnum1d3dList() {
+		getProxy().setEnum1d3dList(new AList<TestEnum[][][]>().append(new TestEnum[][][]{{{TestEnum.TWO,null},null},null}).append(null));
+	}
+
+	@Test
+	public void setEnumMap() {
+		getProxy().setEnumMap(new AMap<TestEnum,TestEnum>().append(TestEnum.ONE,TestEnum.TWO));
+	}
+
+	@Test
+	public void setEnum3dArrayMap() {
+		getProxy().setEnum3dArrayMap(new AMap<TestEnum,TestEnum[][][]>().append(TestEnum.ONE, new TestEnum[][][]{{{TestEnum.TWO,null},null},null}));
+	}
+
+	@Test
+	public void setEnum1d3dListMap() {
+		getProxy().setEnum1d3dListMap(new AMap<TestEnum,List<TestEnum[][][]>>().append(TestEnum.ONE, new AList<TestEnum[][][]>().append(new TestEnum[][][]{{{TestEnum.TWO,null},null},null}).append(null)));
 	}
 }

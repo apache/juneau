@@ -28,6 +28,8 @@ public interface InterfaceProxy {
 	//--------------------------------------------------------------------------------
 	// Test return types.
 	//--------------------------------------------------------------------------------
+
+	// Various primitives
 	void returnVoid();
 	int returnInt();
 	Integer returnInteger();
@@ -44,6 +46,8 @@ public interface InterfaceProxy {
 	List<Integer[][][]> returnInteger1d3dList();
 	List<int[][][]> returnInt1d3dList();
 	List<String> returnStringList();
+
+	// Beans
 	Bean returnBean();
 	Bean[][][] returnBean3dArray();
 	List<Bean> returnBeanList();
@@ -52,20 +56,41 @@ public interface InterfaceProxy {
 	Map<String,List<Bean>> returnBeanListMap();
 	Map<String,List<Bean[][][]>> returnBean1d3dListMap();
 	Map<Integer,List<Bean>> returnBeanListMapIntegerKeys();
+
+	// Swapped POJOs
 	SwappedPojo returnSwappedPojo();
 	SwappedPojo[][][] returnSwappedPojo3dArray();
 	Map<SwappedPojo,SwappedPojo> returnSwappedPojoMap();
 	Map<SwappedPojo,SwappedPojo[][][]> returnSwappedPojo3dMap();
 
+	// Implicit swapped POJOs
+	ImplicitSwappedPojo returnImplicitSwappedPojo();
+	ImplicitSwappedPojo[][][] returnImplicitSwappedPojo3dArray();
+	Map<ImplicitSwappedPojo,ImplicitSwappedPojo> returnImplicitSwappedPojoMap();
+	Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> returnImplicitSwappedPojo3dMap();
+
+	// Enums
+	TestEnum returnEnum();
+	TestEnum[][][] returnEnum3d();
+	List<TestEnum> returnEnumList();
+	List<List<List<TestEnum>>> returnEnum3dList();
+	List<TestEnum[][][]> returnEnum1d3dList();
+	Map<TestEnum,TestEnum> returnEnumMap();
+	Map<TestEnum,TestEnum[][][]> returnEnum3dArrayMap();
+	Map<TestEnum,List<TestEnum[][][]>> returnEnum1d3dListMap();
+
 	//--------------------------------------------------------------------------------
 	// Test server-side exception serialization.
 	//--------------------------------------------------------------------------------
+
 	void throwException1() throws InterfaceProxyException1;
 	void throwException2() throws InterfaceProxyException2;
 
 	//--------------------------------------------------------------------------------
-	// Test 1-arg parameters
+	// Test parameters
 	//--------------------------------------------------------------------------------
+
+	// Various primitives
 	void setNothing();
 	void setInt(int x);
 	void setInteger(Integer x);
@@ -83,6 +108,8 @@ public interface InterfaceProxy {
 	void setInteger1d3dList(List<Integer[][][]> x);
 	void setInt1d3dList(List<int[][][]> x);
 	void setStringList(List<String> x);
+
+	// Beans
 	void setBean(Bean x);
 	void setBean3dArray(Bean[][][] x);
 	void setBeanList(List<Bean> x);
@@ -91,10 +118,32 @@ public interface InterfaceProxy {
 	void setBeanListMap(Map<String,List<Bean>> x);
 	void setBean1d3dListMap(Map<String,List<Bean[][][]>> x);
 	void setBeanListMapIntegerKeys(Map<Integer,List<Bean>> x);
+
+	// Swapped POJOs
 	void setSwappedPojo(SwappedPojo x);
 	void setSwappedPojo3dArray(SwappedPojo[][][] x);
 	void setSwappedPojoMap(Map<SwappedPojo,SwappedPojo> x);
 	void setSwappedPojo3dMap(Map<SwappedPojo,SwappedPojo[][][]> x);
+
+	// Implicit swapped POJOs
+	void setImplicitSwappedPojo(ImplicitSwappedPojo x);
+	void setImplicitSwappedPojo3dArray(ImplicitSwappedPojo[][][] x);
+	void setImplicitSwappedPojoMap(Map<ImplicitSwappedPojo,ImplicitSwappedPojo> x);
+	void setImplicitSwappedPojo3dMap(Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> x);
+
+	// Enums
+	void setEnum(TestEnum x);
+	void setEnum3d(TestEnum[][][] x);
+	void setEnumList(List<TestEnum> x);
+	void setEnum3dList(List<List<List<TestEnum>>> x);
+	void setEnum1d3dList(List<TestEnum[][][]> x);
+	void setEnumMap(Map<TestEnum,TestEnum> x);
+	void setEnum3dArrayMap(Map<TestEnum,TestEnum[][][]> x);
+	void setEnum1d3dListMap(Map<TestEnum,List<TestEnum[][][]>> x);
+
+	//--------------------------------------------------------------------------------
+	// Helper classes
+	//--------------------------------------------------------------------------------
 
 	public static class Bean {
 		public int a;
@@ -136,5 +185,24 @@ public interface InterfaceProxy {
 				c.wasUnswapped = true;
 			return c;
 		}
+	}
+
+	@BeanIgnore
+	public static class ImplicitSwappedPojo {
+		public boolean wasUnswapped;
+		@Override
+		public String toString() {
+			return "[{(<swapped>)}]";
+		}
+		public ImplicitSwappedPojo() {
+		}
+		public ImplicitSwappedPojo(String fromString) {
+			if (fromString.equals("[{(<swapped>)}]"))
+				wasUnswapped = true;
+		}
+	}
+
+	public static enum TestEnum {
+		ONE,TWO,THREE
 	}
 }
