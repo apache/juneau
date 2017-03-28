@@ -101,43 +101,13 @@ public class InterfaceProxyTest extends RestTestcase {
 	}
 
 	@Test
-	public void returnIntArray() {
-		assertObjectEquals("[1,2]", getProxy().returnIntArray());
-	}
-
-	@Test
-	public void returnInt2dArray() {
-		assertObjectEquals("[[1,2]]", getProxy().returnInt2dArray());
-	}
-
-	@Test
 	public void returnInt3dArray() {
 		assertObjectEquals("[[[1,2]]]", getProxy().returnInt3dArray());
 	}
 
 	@Test
-	public void returnIntegerArray() {
-		assertObjectEquals("[1,null]", getProxy().returnIntegerArray());
-	}
-
-	@Test
-	public void returnInteger2dArray() {
-		assertObjectEquals("[[1,null]]", getProxy().returnInteger2dArray());
-	}
-
-	@Test
 	public void returnInteger3dArray() {
 		assertObjectEquals("[[[1,null]]]", getProxy().returnInteger3dArray());
-	}
-
-	@Test
-	public void returnStringArray() {
-		assertObjectEquals("['foo','bar',null]", getProxy().returnStringArray());
-	}
-
-	@Test
-	public void returnString2dArray() {
-		assertObjectEquals("[['foo','bar',null]]", getProxy().returnString2dArray());
 	}
 
 	@Test
@@ -147,99 +117,106 @@ public class InterfaceProxyTest extends RestTestcase {
 
 	@Test
 	public void returnIntegerList() {
-		assertObjectEquals("[1,null]", getProxy().returnIntegerList());
-		assertEquals(Integer.class, getProxy().returnIntegerList().get(0).getClass());
-	}
-
-	@Test
-	public void returnInteger2dList() {
-		assertObjectEquals("[[1,null]]", getProxy().returnInteger2dList());
-		assertEquals(Integer.class, getProxy().returnInteger2dList().get(0).get(0).getClass());
+		List<Integer> x = getProxy().returnIntegerList();
+		assertObjectEquals("[1,null]", x);
+		assertEquals(Integer.class, x.get(0).getClass());
 	}
 
 	@Test
 	public void returnInteger3dList() {
-		assertObjectEquals("[[[1,null]]]", getProxy().returnInteger3dList());
-		assertEquals(Integer.class, getProxy().returnInteger3dList().get(0).get(0).get(0).getClass());
-	}
-
-	@Test
-	public void returnInteger1d1dList() {
-		assertObjectEquals("[[1,null],null]", getProxy().returnInteger1d1dList());
-		assertEquals(Integer.class, getProxy().returnInteger1d1dList().get(0)[0].getClass());
-	}
-
-	@Test
-	public void returnInteger1d2dList() {
-		assertObjectEquals("[[[1,null],null],null]", getProxy().returnInteger1d2dList());
-		assertEquals(Integer.class, getProxy().returnInteger1d2dList().get(0)[0][0].getClass());
+		List<List<List<Integer>>> x = getProxy().returnInteger3dList();
+		assertObjectEquals("[[[1,null]]]", x);
+		assertEquals(Integer.class, x.get(0).get(0).get(0).getClass());
 	}
 
 	@Test
 	public void returnInteger1d3dList() {
-		assertObjectEquals("[[[[1,null],null],null],null]", getProxy().returnInteger1d3dList());
-		assertEquals(Integer.class, getProxy().returnInteger1d3dList().get(0)[0][0][0].getClass());
-	}
-
-	@Test
-	public void returnInt1d1dList() {
-		assertObjectEquals("[[1,2],null]", getProxy().returnInt1d1dList());
-		assertEquals(int[].class, getProxy().returnInt1d1dList().get(0).getClass());
-	}
-
-	@Test
-	public void returnInt1d2dList() {
-		assertObjectEquals("[[[1,2],null],null]", getProxy().returnInt1d2dList());
-		assertEquals(int[][].class, getProxy().returnInt1d2dList().get(0).getClass());
+		List<Integer[][][]> x = getProxy().returnInteger1d3dList();
+		assertObjectEquals("[[[[1,null],null],null],null]", x);
+		assertEquals(Integer.class, x.get(0)[0][0][0].getClass());
 	}
 
 	@Test
 	public void returnInt1d3dList() {
-		assertObjectEquals("[[[[1,2],null],null],null]", getProxy().returnInt1d3dList());
-		assertEquals(int[][][].class, getProxy().returnInt1d3dList().get(0).getClass());
+		List<int[][][]> x = getProxy().returnInt1d3dList();
+		assertObjectEquals("[[[[1,2],null],null],null]", x);
+		assertEquals(int[][][].class, x.get(0).getClass());
 	}
 
 	@Test
 	public void returnStringList() {
 		assertObjectEquals("['foo','bar',null]", getProxy().returnStringList());
-		assertTrue(getProxy().returnStringList() instanceof List);
 	}
 
 	@Test
 	public void returnBean() {
-		assertObjectEquals("{a:1,b:'foo'}", getProxy().returnBean());
-		assertEquals(InterfaceProxy.Bean.class, getProxy().returnBean().getClass());
+		Bean x = getProxy().returnBean();
+		assertObjectEquals("{a:1,b:'foo'}", x);
+		assertEquals(InterfaceProxy.Bean.class, x.getClass());
 	}
 
 	@Test
-	public void returnBeanArray() {
-		assertObjectEquals("[{a:1,b:'foo'}]", getProxy().returnBeanArray());
-		assertEquals(InterfaceProxy.Bean.class, getProxy().returnBeanArray()[0].getClass());
+	public void returnBean3dArray() {
+		Bean[][][] x = getProxy().returnBean3dArray();
+		assertObjectEquals("[[[{a:1,b:'foo'},null],null],null]", x);
+		assertEquals(InterfaceProxy.Bean.class, x[0][0][0].getClass());
 	}
 
 	@Test
 	public void returnBeanList() {
-		assertObjectEquals("[{a:1,b:'foo'}]", getProxy().returnBeanList());
-		assertEquals(InterfaceProxy.Bean.class, getProxy().returnBeanList().get(0).getClass());
+		List<Bean> x = getProxy().returnBeanList();
+		assertObjectEquals("[{a:1,b:'foo'}]", x);
+		assertEquals(InterfaceProxy.Bean.class, x.get(0).getClass());
+	}
+
+	@Test
+	public void returnBean1d3dList() {
+		List<Bean[][][]> x = getProxy().returnBean1d3dList();
+		assertObjectEquals("[[[[{a:1,b:'foo'},null],null],null],null]", x);
+		assertEquals(InterfaceProxy.Bean.class, x.get(0)[0][0][0].getClass());
 	}
 
 	@Test
 	public void returnBeanMap() {
-		assertObjectEquals("{foo:{a:1,b:'foo'}}", getProxy().returnBeanMap());
-		assertEquals(InterfaceProxy.Bean.class, getProxy().returnBeanMap().get("foo").getClass());
+		Map<String,Bean> x = getProxy().returnBeanMap();
+		assertObjectEquals("{foo:{a:1,b:'foo'}}", x);
+		assertEquals(InterfaceProxy.Bean.class, x.get("foo").getClass());
 	}
 
 	@Test
 	public void returnBeanListMap() {
-		assertObjectEquals("{foo:[{a:1,b:'foo'}]}", getProxy().returnBeanListMap());
-		assertEquals(InterfaceProxy.Bean.class, getProxy().returnBeanListMap().get("foo").get(0).getClass());
+		Map<String,List<Bean>> x = getProxy().returnBeanListMap();
+		assertObjectEquals("{foo:[{a:1,b:'foo'}]}", x);
+		assertEquals(InterfaceProxy.Bean.class, x.get("foo").get(0).getClass());
+	}
+
+	@Test
+	public void returnBean1d3dListMap() {
+		Map<String,List<Bean[][][]>> x = getProxy().returnBean1d3dListMap();
+		assertObjectEquals("{foo:[[[[{a:1,b:'foo'},null],null],null],null]}", x);
+		assertEquals(InterfaceProxy.Bean.class, x.get("foo").get(0)[0][0][0].getClass());
 	}
 
 	@Test
 	public void returnBeanListMapIntegerKeys() {
 		// Note: JsonSerializer serializes key as string.
-		assertObjectEquals("{'1':[{a:1,b:'foo'}]}", getProxy().returnBeanListMapIntegerKeys());
-		assertEquals(Integer.class, getProxy().returnBeanListMapIntegerKeys().keySet().iterator().next().getClass());
+		Map<Integer,List<Bean>> x = getProxy().returnBeanListMapIntegerKeys();
+		assertObjectEquals("{'1':[{a:1,b:'foo'}]}", x);
+		assertEquals(Integer.class, x.keySet().iterator().next().getClass());
+	}
+
+	@Test
+	public void returnSwappedPojo() {
+		SwappedPojo x = getProxy().returnSwappedPojo();
+		assertObjectEquals("'[{(<swapped>)}]'", x);
+		assertTrue(x.wasUnswapped);
+	}
+
+	@Test
+	public void returnSwappedPojo3dArray() {
+		SwappedPojo[][][] x = getProxy().returnSwappedPojo3dArray();
+		assertObjectEquals("[[['[{(<swapped>)}]',null],null],null]", x);
+		assertTrue(x[0][0][0].wasUnswapped);
 	}
 
 	@Test
@@ -322,43 +299,13 @@ public class InterfaceProxyTest extends RestTestcase {
 	}
 
 	@Test
-	public void setIntArray() {
-		getProxy().setIntArray(new int[]{1,2});
-	}
-
-	@Test
-	public void setInt2dArray() {
-		getProxy().setInt2dArray(new int[][]{{1,2}});
-	}
-
-	@Test
 	public void setInt3dArray() {
 		getProxy().setInt3dArray(new int[][][]{{{1,2}}});
 	}
 
 	@Test
-	public void setIntegerArray() {
-		getProxy().setIntegerArray(new Integer[]{1,null});
-	}
-
-	@Test
-	public void setInteger2dArray() {
-		getProxy().setInteger2dArray(new Integer[][]{{1,null}});
-	}
-
-	@Test
 	public void setInteger3dArray() {
 		getProxy().setInteger3dArray(new Integer[][][]{{{1,null}}});
-	}
-
-	@Test
-	public void setStringArray() {
-		getProxy().setStringArray(new String[]{"foo","bar",null});
-	}
-
-	@Test
-	public void setString2dArray() {
-		getProxy().setString2dArray(new String[][]{{"foo","bar",null}});
 	}
 
 	@Test
@@ -391,37 +338,9 @@ public class InterfaceProxyTest extends RestTestcase {
 	}
 
 	@Test
-	public void setInteger1d1dList() {
-		getProxy().setInteger1d1dList(
-			new AList<Integer[]>().append(new Integer[]{1,null}).append(null)
-		);
-	}
-
-	@Test
-	public void setInteger1d2dList() {
-		getProxy().setInteger1d2dList(
-			new AList<Integer[][]>().append(new Integer[][]{{1,null},null}).append(null)
-		);
-	}
-
-	@Test
 	public void setInteger1d3dList() {
 		getProxy().setInteger1d3dList(
 			new AList<Integer[][][]>().append(new Integer[][][]{{{1,null},null},null}).append(null)
-		);
-	}
-
-	@Test
-	public void setInt1d1dList() {
-		getProxy().setInt1d1dList(
-			new AList<int[]>().append(new int[]{1,2}).append(null)
-		);
-	}
-
-	@Test
-	public void setInt1d2dList() {
-		getProxy().setInt1d2dList(
-			new AList<int[][]>().append(new int[][]{{1,2},null}).append(null)
 		);
 	}
 
@@ -443,11 +362,6 @@ public class InterfaceProxyTest extends RestTestcase {
 	}
 
 	@Test
-	public void setBeanArray() {
-		getProxy().setBeanArray(new Bean[]{new Bean().init()});
-	}
-
-	@Test
 	public void setBeanList() {
 		getProxy().setBeanList(Arrays.asList(new Bean().init()));
 	}
@@ -465,5 +379,15 @@ public class InterfaceProxyTest extends RestTestcase {
 	@Test
 	public void setBeanListMapIntegerKeys() {
 		getProxy().setBeanListMapIntegerKeys(new AMap<Integer,List<Bean>>().append(1,Arrays.asList(new Bean().init())));
+	}
+
+	@Test
+	public void setSwappedPojo() {
+		getProxy().setSwappedPojo(new SwappedPojo());
+	}
+
+	@Test
+	public void setSwappedPojo3dArray() {
+		getProxy().setSwappedPojo3dArray(new SwappedPojo[][][]{{{new SwappedPojo(),null},null},null});
 	}
 }
