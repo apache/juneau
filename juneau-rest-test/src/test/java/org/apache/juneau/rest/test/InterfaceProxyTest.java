@@ -220,6 +220,24 @@ public class InterfaceProxyTest extends RestTestcase {
 	}
 
 	@Test
+	public void returnSwappedPojoMap() {
+		Map<SwappedPojo,SwappedPojo> x = getProxy().returnSwappedPojoMap();
+		assertObjectEquals("{'[{(<swapped>)}]':'[{(<swapped>)}]'}", x);
+		Map.Entry<SwappedPojo,SwappedPojo> e = x.entrySet().iterator().next();
+		assertTrue(e.getKey().wasUnswapped);
+		assertTrue(e.getValue().wasUnswapped);
+	}
+
+	@Test
+	public void returnSwappedPojo3dMap() {
+		Map<SwappedPojo,SwappedPojo[][][]> x = getProxy().returnSwappedPojo3dMap();
+		assertObjectEquals("{'[{(<swapped>)}]':[[['[{(<swapped>)}]',null],null],null]}", x);
+		Map.Entry<SwappedPojo,SwappedPojo[][][]> e = x.entrySet().iterator().next();
+		assertTrue(e.getKey().wasUnswapped);
+		assertTrue(e.getValue()[0][0][0].wasUnswapped);
+	}
+
+	@Test
 	public void throwException1() {
 		try {
 			getProxy().throwException1();
@@ -389,5 +407,15 @@ public class InterfaceProxyTest extends RestTestcase {
 	@Test
 	public void setSwappedPojo3dArray() {
 		getProxy().setSwappedPojo3dArray(new SwappedPojo[][][]{{{new SwappedPojo(),null},null},null});
+	}
+
+	@Test
+	public void setSwappedPojoMap() {
+		getProxy().setSwappedPojoMap(new AMap<SwappedPojo,SwappedPojo>().append(new SwappedPojo(), new SwappedPojo()));
+	}
+
+	@Test
+	public void setSwappedPojo3dMap() {
+		getProxy().setSwappedPojo3dMap(new AMap<SwappedPojo,SwappedPojo[][][]>().append(new SwappedPojo(), new SwappedPojo[][][]{{{new SwappedPojo(),null},null},null}));
 	}
 }

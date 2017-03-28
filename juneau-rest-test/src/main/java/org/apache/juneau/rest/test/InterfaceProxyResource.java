@@ -147,6 +147,14 @@ public class InterfaceProxyResource extends RestServletJenaDefault {
 				return new SwappedPojo[][][]{{{new SwappedPojo(),null},null},null};
 			}
 			@Override
+			public Map<SwappedPojo,SwappedPojo> returnSwappedPojoMap() {
+				return new AMap<SwappedPojo,SwappedPojo>().append(new SwappedPojo(), new SwappedPojo());
+			}
+			@Override
+			public Map<SwappedPojo,SwappedPojo[][][]> returnSwappedPojo3dMap() {
+				return new AMap<SwappedPojo,SwappedPojo[][][]>().append(new SwappedPojo(), new SwappedPojo[][][]{{{new SwappedPojo(),null},null},null});
+			}
+			@Override
 			public void throwException1() throws InterfaceProxy.InterfaceProxyException1 {
 				throw new InterfaceProxy.InterfaceProxyException1("foo");
 			}
@@ -268,6 +276,20 @@ public class InterfaceProxyResource extends RestServletJenaDefault {
 			public void setSwappedPojo3dArray(SwappedPojo[][][] x) {
 				assertObjectEquals("[[['[{(<swapped>)}]',null],null],null]", x);
 				assertTrue(x[0][0][0].wasUnswapped);
+			}
+			@Override
+			public void setSwappedPojoMap(Map<SwappedPojo,SwappedPojo> x) {
+				assertObjectEquals("{'[{(<swapped>)}]':'[{(<swapped>)}]'}", x);
+				Map.Entry<SwappedPojo,SwappedPojo> e = x.entrySet().iterator().next();
+				assertTrue(e.getKey().wasUnswapped);
+				assertTrue(e.getValue().wasUnswapped);
+			}
+			@Override
+			public void setSwappedPojo3dMap(Map<SwappedPojo,SwappedPojo[][][]> x) {
+				assertObjectEquals("{'[{(<swapped>)}]':[[['[{(<swapped>)}]',null],null],null]}", x);
+				Map.Entry<SwappedPojo,SwappedPojo[][][]> e = x.entrySet().iterator().next();
+				assertTrue(e.getKey().wasUnswapped);
+				assertTrue(e.getValue()[0][0][0].wasUnswapped);
 			}
 		};
 	}

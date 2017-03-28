@@ -54,6 +54,8 @@ public interface InterfaceProxy {
 	Map<Integer,List<Bean>> returnBeanListMapIntegerKeys();
 	SwappedPojo returnSwappedPojo();
 	SwappedPojo[][][] returnSwappedPojo3dArray();
+	Map<SwappedPojo,SwappedPojo> returnSwappedPojoMap();
+	Map<SwappedPojo,SwappedPojo[][][]> returnSwappedPojo3dMap();
 
 	//--------------------------------------------------------------------------------
 	// Test server-side exception serialization.
@@ -91,6 +93,8 @@ public interface InterfaceProxy {
 	void setBeanListMapIntegerKeys(Map<Integer,List<Bean>> x);
 	void setSwappedPojo(SwappedPojo x);
 	void setSwappedPojo3dArray(SwappedPojo[][][] x);
+	void setSwappedPojoMap(Map<SwappedPojo,SwappedPojo> x);
+	void setSwappedPojo3dMap(Map<SwappedPojo,SwappedPojo[][][]> x);
 
 	public static class Bean {
 		public int a;
@@ -122,7 +126,7 @@ public interface InterfaceProxy {
 	public static class SwappedPojoSwap extends PojoSwap<SwappedPojo,String> {
 		@Override
 		public String swap(BeanSession session, SwappedPojo c) throws SerializeException {
-			return "[{(<swapped>)}]";
+			return "[{(<swapped>)}]";  // Use special characters.
 		}
 
 		@Override

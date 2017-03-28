@@ -390,7 +390,7 @@ public class HtmlSerializer extends XmlSerializer {
 				out.i(i+2);
 			out.eTag("td").nl();
 			out.sTag(i+2, "td");
-			cr = serializeAnything(session, out, value, valueType, (key == null ? "_x0000_" : key.toString()), 2, null, false);
+			cr = serializeAnything(session, out, value, valueType, (key == null ? "_x0000_" : session.toString(key)), 2, null, false);
 			if (cr == CR_NORMAL)
 				out.i(i+2);
 			out.eTag("td").nl();
@@ -485,8 +485,11 @@ public class HtmlSerializer extends XmlSerializer {
 
 			out.oTag(i, "table").attr(btpn, type2).append('>').nl();
 			out.sTag(i+1, "tr").nl();
-			for (Object key : th)
-				out.sTag(i+2, "th").append(key).eTag("th").nl();
+			for (Object key : th) {
+				out.sTag(i+2, "th");
+				out.text(session.convertToType(key, String.class));
+				out.eTag("th").nl();
+			}
 			out.eTag(i+1, "tr").nl();
 
 			for (Object o : c) {
@@ -565,7 +568,6 @@ public class HtmlSerializer extends XmlSerializer {
 			return null;
 		c = session.sort(c);
 		Object[] th;
-		Set<Object> s = new TreeSet<Object>();
 		Set<ClassMeta> prevC = new HashSet<ClassMeta>();
 		Object o1 = null;
 		for (Object o : c)
@@ -622,6 +624,10 @@ public class HtmlSerializer extends XmlSerializer {
 			th = set.toArray(new Object[set.size()]);
 		}
 		prevC.add(cm);
+		boolean isSortable = true;
+		for (Object o : th)
+			isSortable &= (o instanceof Comparable);
+		Set<Object> s = (isSortable ? new TreeSet<Object>() : new LinkedHashSet<Object>());
 		s.addAll(Arrays.asList(th));
 
 		for (Object o : c) {
