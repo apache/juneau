@@ -228,14 +228,15 @@ public class XmlParser extends ReaderParser {
 		return m;
 	}
 
-	private <E> Collection<E> parseIntoCollection(XmlParserSession session, XMLStreamReader r, Collection<E> l, ClassMeta<E> type, BeanPropertyMeta pMeta) throws Exception {
+	private <E> Collection<E> parseIntoCollection(XmlParserSession session, XMLStreamReader r, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta) throws Exception {
 		int depth = 0;
+		int argIndex = 0;
 		do {
-			int argIndex = 0;
 			int event = r.nextTag();
 			if (event == START_ELEMENT) {
 				depth++;
-				E value = (E)parseAnything(session, type == null ? object() : type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), null, r, l, false, pMeta);
+				ClassMeta<?> elementType = type == null ? object() : type.isArgs() ? type.getArg(argIndex++) : type.getElementType();
+				E value = (E)parseAnything(session, elementType, null, r, l, false, pMeta);
 				l.add(value);
 			} else if (event == END_ELEMENT) {
 				depth--;
@@ -243,25 +244,6 @@ public class XmlParser extends ReaderParser {
 			}
 		} while (depth > 0);
 		return l;
-	}
-
-	private Object[] doParseArgs(XmlParserSession session, XMLStreamReader r, ClassMeta<Object[]> args) throws Exception {
-		int depth = 0;
-		ClassMeta<?>[] argTypes = args.getArgs();
-		Object[] o = new Object[argTypes.length];
-		int i = 0;
-		do {
-			int event = r.nextTag();
-			if (event == START_ELEMENT) {
-				depth++;
-				o[i] = parseAnything(session, argTypes[i], null, r, null, false, null);
-				i++;
-			} else if (event == END_ELEMENT) {
-				depth--;
-				return o;
-			}
-		} while (depth > 0);
-		return o;
 	}
 
 	private static int getJsonType(String s) {
@@ -540,7 +522,6 @@ public class XmlParser extends ReaderParser {
 	@Override /* ReaderParser */
 	protected Object[] doParseArgs(ParserSession session, ClassMeta<Object[]> args) throws Exception {
 		XmlParserSession s = (XmlParserSession)session;
-		return doParseArgs(s, s.getXmlStreamReader(), args);
-		//return parseAnything(s, args, null, s.getXmlStreamReader(), session.getOuter(), true, null);
+		return parseAnything(s, args, null, s.getXmlStreamReader(), session.getOuter(), true, null);
 	}
 }
