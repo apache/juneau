@@ -169,14 +169,16 @@ public class RdfParser extends ReaderParser {
 		// Special case where we're parsing a loose collection of resources.
 		if (s.isLooseCollections() && type.isCollectionOrArray()) {
 			Collection c = null;
-			if (type.isArray())
+			if (type.isArray() || type.isArgs())
 				c = new ArrayList();
 			else
 				c = (type.canCreateNewInstance(session.getOuter()) ? (Collection<?>)type.newInstance(session.getOuter()) : new ObjectList(session));
+			
+			int argIndex = 0;
 			for (Resource resource : roots)
-				c.add(parseAnything(s, type.getElementType(), resource, session.getOuter(), null));
+				c.add(parseAnything(s, type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), resource, session.getOuter(), null));
 
-			if (type.isArray())
+			if (type.isArray() || type.isArgs())
 				return (T)session.toArray(type, c);
 			return (T)c;
 		}
@@ -301,13 +303,13 @@ public class RdfParser extends ReaderParser {
 					o = parseAnything(session, object(), n.asResource().getProperty(session.getValueProperty()).getObject(), outer, null);
 				} else if (isSeq(session, r)) {
 					o = new ObjectList(session);
-					parseIntoCollection(session, r.as(Seq.class), (Collection)o, sType.getElementType(), pMeta);
+					parseIntoCollection(session, r.as(Seq.class), (Collection)o, sType, pMeta);
 				} else if (isBag(session, r)) {
 					o = new ObjectList(session);
-					parseIntoCollection(session, r.as(Bag.class), (Collection)o, sType.getElementType(), pMeta);
+					parseIntoCollection(session, r.as(Bag.class), (Collection)o, sType, pMeta);
 				} else if (r.canAs(RDFList.class)) {
 					o = new ObjectList(session);
-					parseIntoCollection(session, r.as(RDFList.class), (Collection)o, sType.getElementType(), pMeta);
+					parseIntoCollection(session, r.as(RDFList.class), (Collection)o, sType, pMeta);
 				} else {
 					// If it has a URI and no child properties, we interpret this as an
 					// external resource, and convert it to just a URL.
@@ -337,8 +339,8 @@ public class RdfParser extends ReaderParser {
 				return null;
 			Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : new ObjectMap(session));
 			o = parseIntoMap(session, r, m, eType.getKeyType(), eType.getValueType(), pMeta);
-		} else if (sType.isCollectionOrArray()) {
-			if (sType.isArray())
+		} else if (sType.isCollectionOrArray() || sType.isArgs()) {
+			if (sType.isArray() || sType.isArgs())
 				o = new ArrayList();
 			else
 				o = (sType.canCreateNewInstance(outer) ? (Collection<?>)sType.newInstance(outer) : new ObjectList(session));
@@ -346,15 +348,15 @@ public class RdfParser extends ReaderParser {
 			if (session.wasAlreadyProcessed(r))
 				return null;
 			if (isSeq(session, r)) {
-				parseIntoCollection(session, r.as(Seq.class), (Collection)o, sType.getElementType(), pMeta);
+				parseIntoCollection(session, r.as(Seq.class), (Collection)o, sType, pMeta);
 			} else if (isBag(session, r)) {
-				parseIntoCollection(session, r.as(Bag.class), (Collection)o, sType.getElementType(), pMeta);
+				parseIntoCollection(session, r.as(Bag.class), (Collection)o, sType, pMeta);
 			} else if (r.canAs(RDFList.class)) {
-				parseIntoCollection(session, r.as(RDFList.class), (Collection)o, sType.getElementType(), pMeta);
+				parseIntoCollection(session, r.as(RDFList.class), (Collection)o, sType, pMeta);
 			} else {
 				throw new ParseException("Unrecognized node type ''{0}'' for collection", n);
 			}
-			if (sType.isArray())
+			if (sType.isArray() || sType.isArgs())
 				o = session.toArray(sType, (Collection)o);
 		} else if (sType.canCreateNewBean(outer)) {
 			Resource r = n.asResource();
@@ -446,25 +448,24 @@ public class RdfParser extends ReaderParser {
 		return m;
 	}
 
-	private <E> Collection<E> parseIntoCollection(RdfParserSession session, Container c, Collection<E> l, ClassMeta<E> et, BeanPropertyMeta pMeta) throws Exception {
+	@SuppressWarnings("unchecked")
+	private <E> Collection<E> parseIntoCollection(RdfParserSession session, Container c, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta) throws Exception {
+		int argIndex = 0;
 		for (NodeIterator ni = c.iterator(); ni.hasNext();) {
-			E e = parseAnything(session, et, ni.next(), l, pMeta);
+			E e = (E)parseAnything(session, type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), ni.next(), l, pMeta);
 			l.add(e);
 		}
 		return l;
 	}
 
-	private <E> Collection<E> parseIntoCollection(RdfParserSession session, RDFList list, Collection<E> l, ClassMeta<E> et, BeanPropertyMeta pMeta) throws Exception {
+	@SuppressWarnings("unchecked")
+	private <E> Collection<E> parseIntoCollection(RdfParserSession session, RDFList list, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta) throws Exception {
+		int argIndex = 0;
 		for (ExtendedIterator<RDFNode> ni = list.iterator(); ni.hasNext();) {
-			E e = parseAnything(session, et, ni.next(), l, pMeta);
+			E e = (E)parseAnything(session, type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), ni.next(), l, pMeta);
 			l.add(e);
 		}
 		return l;
-	}
-
-	@Override /* Parser */
-	protected Object[] doParseArgs(ParserSession session, ClassMeta<Object[]> args) throws Exception {
-		throw new UnsupportedOperationException("Parser '"+getClass().getName()+"' does not support this method.");
 	}
 
 	
@@ -476,4 +477,10 @@ public class RdfParser extends ReaderParser {
 	public RdfParserSession createSession(Object input, ObjectMap op, Method javaMethod, Object outer, Locale locale, TimeZone timeZone, MediaType mediaType) {
 		return new RdfParserSession(ctx, op, input, javaMethod, outer, locale, timeZone, mediaType);
 	}
+
+	@Override /* Parser */
+	protected Object[] doParseArgs(ParserSession session, ClassMeta<Object[]> args) throws Exception {
+		return doParse(session, args);
+	}
+
 }

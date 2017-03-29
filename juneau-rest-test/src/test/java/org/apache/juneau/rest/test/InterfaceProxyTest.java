@@ -19,6 +19,7 @@ import static org.junit.Assert.*;
 import java.util.*;
 
 import org.apache.juneau.html.*;
+import org.apache.juneau.jena.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.parser.*;
@@ -46,7 +47,7 @@ public class InterfaceProxyTest extends RestTestcase {
 			{ /* 4 */ "MessagePack", MsgPackSerializer.DEFAULT, MsgPackParser.DEFAULT },
 			{ /* 5 */ "UrlEncoding", UrlEncodingSerializer.DEFAULT, UrlEncodingParser.DEFAULT },
 			{ /* 6 */ "Uon", UonSerializer.DEFAULT, UonParser.DEFAULT },
-			//{ /* 7 */ "RdfXml", RdfSerializer.DEFAULT_XMLABBREV, RdfParser.DEFAULT_XML },
+			{ /* 7 */ "RdfXml", RdfSerializer.DEFAULT_XMLABBREV, RdfParser.DEFAULT_XML },
 		});
 	}
 
