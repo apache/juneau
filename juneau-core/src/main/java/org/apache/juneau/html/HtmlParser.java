@@ -209,11 +209,11 @@ public class HtmlParser extends XmlParser {
 
 			} else if (typeName.equals("array")) {
 				if (sType.isObject())
-					o = parseTableIntoCollection(session, r, (Collection)new ObjectList(session), sType.getElementType(), pMeta);
+					o = parseTableIntoCollection(session, r, (Collection)new ObjectList(session), sType, pMeta);
 				else if (sType.isCollection())
-					o = parseTableIntoCollection(session, r, (Collection)(sType.canCreateNewInstance(outer) ? sType.newInstance(outer) : new ObjectList(session)), sType.getElementType(), pMeta);
-				else if (sType.isArray()) {
-					ArrayList l = (ArrayList)parseTableIntoCollection(session, r, new ArrayList(), sType.getElementType(), pMeta);
+					o = parseTableIntoCollection(session, r, (Collection)(sType.canCreateNewInstance(outer) ? sType.newInstance(outer) : new ObjectList(session)), sType, pMeta);
+				else if (sType.isArray() || sType.isArgs()) {
+					ArrayList l = (ArrayList)parseTableIntoCollection(session, r, new ArrayList(), sType, pMeta);
 					o = session.toArray(sType, l);
 				}
 				else
@@ -231,11 +231,11 @@ public class HtmlParser extends XmlParser {
 				sType = eType = cm;
 
 			if (sType.isObject())
-				o = parseIntoCollection(session, r, (Collection)new ObjectList(session), sType.getElementType(), pMeta);
+				o = parseIntoCollection(session, r, new ObjectList(session), sType, pMeta);
 			else if (sType.isCollection() || sType.isObject())
-				o = parseIntoCollection(session, r, (Collection)(sType.canCreateNewInstance(outer) ? sType.newInstance(outer) : new ObjectList(session)), sType.getElementType(), pMeta);
-			else if (sType.isArray())
-				o = session.toArray(sType, parseIntoCollection(session, r, new ArrayList(), sType.getElementType(), pMeta));
+				o = parseIntoCollection(session, r, (Collection)(sType.canCreateNewInstance(outer) ? sType.newInstance(outer) : new ObjectList(session)), sType, pMeta);
+			else if (sType.isArray() || sType.isArgs())
+				o = session.toArray(sType, parseIntoCollection(session, r, new ArrayList(), sType, pMeta));
 			else
 				isValid = false;
 			skipTag(r, xUL);
@@ -340,43 +340,16 @@ public class HtmlParser extends XmlParser {
 	 * Precondition:  Must be pointing at event following <ul> event.
 	 * Postcondition:  Pointing at next START_ELEMENT or END_DOCUMENT event.
 	 */
-	private <E> Collection<E> parseIntoCollection(HtmlParserSession session, XMLStreamReader r, Collection<E> l, ClassMeta<E> elementType, BeanPropertyMeta pMeta) throws Exception {
+	private <E> Collection<E> parseIntoCollection(HtmlParserSession session, XMLStreamReader r, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta) throws Exception {
+		int argIndex = 0;
 		while (true) {
 			HtmlTag tag = nextTag(r, LI, xUL);
 			if (tag == xUL)
 				break;
-			l.add(parseAnything(session, elementType, r, l, false, pMeta));
+			ClassMeta<?> elementType = type.isArgs() ? type.getArg(argIndex++) : type.getElementType();
+			l.add((E)parseAnything(session, elementType, r, l, false, pMeta));
 		}
 		return l;
-	}
-
-	/*
-	 * Reads contents of <ul> element into an Object array.
-	 * Precondition:  Must be pointing at event following <ul> event.
-	 * Postcondition:  Pointing at next START_ELEMENT or END_DOCUMENT event.
-	 */
-	// TODO - Fold this into parseAnything().
-	private Object[] parseArgs(HtmlParserSession session, XMLStreamReader r, ClassMeta<Object[]> args) throws Exception {
-		HtmlTag tag = HtmlTag.forEvent(r);
-		ClassMeta<?>[] argTypes = args.getArgs();
-
-		// Special case:
-		// Serializing args containing a single bean (or multiple beans of the same type) will end up serialized as a <table _type='array'>
-		if (tag == TABLE) {
-			List<Object> l = (List<Object>)parseAnything(session, session.getClassMeta(List.class, argTypes[0]), r, session.getOuter(), true, null);
-			return l.toArray(new Object[l.size()]);
-		}
-
-		Object[] o = new Object[argTypes.length];
-		int i = 0;
-		while (true) {
-			tag = nextTag(r, LI, xUL);
-			if (tag == xUL)
-				break;
-			o[i] = parseAnything(session, argTypes[i], r, session.getOuter(), false, null);
-			i++;
-		}
-		return o;
 	}
 
 	/*
@@ -384,10 +357,7 @@ public class HtmlParser extends XmlParser {
 	 * Precondition:  Must be pointing at event following <ul> event.
 	 * Postcondition:  Pointing at next START_ELEMENT or END_DOCUMENT event.
 	 */
-	private <E> Collection<E> parseTableIntoCollection(HtmlParserSession session, XMLStreamReader r, Collection<E> l, ClassMeta<E> elementType, BeanPropertyMeta pMeta) throws Exception {
-
-		if (elementType == null)
-			elementType = (ClassMeta<E>)object();
+	private <E> Collection<E> parseTableIntoCollection(HtmlParserSession session, XMLStreamReader r, Collection<E> l, ClassMeta<E> type, BeanPropertyMeta pMeta) throws Exception {
 
 		HtmlTag tag = nextTag(r, TR);
 		List<String> keys = new ArrayList<String>();
@@ -398,16 +368,22 @@ public class HtmlParser extends XmlParser {
 			keys.add(session.getElementText(r));
 		}
 
+		int argIndex = 0;
+
 		while (true) {
 			r.nextTag();
 			tag = HtmlTag.forEvent(r);
 			if (tag == xTABLE)
 				break;
 
-			String type = getAttribute(r, session.getBeanTypePropertyName(), null);
-			ClassMeta elementType2 = session.getClassMeta(type, pMeta, null);
-			if (elementType2 != null)
-				elementType = elementType2;
+			ClassMeta elementType = null;
+			String beanType = getAttribute(r, session.getBeanTypePropertyName(), null);
+			if (beanType != null)
+				elementType = session.getClassMeta(beanType, pMeta, null);
+			if (elementType == null)
+				elementType = type.isArgs() ? type.getArg(argIndex++) : type.getElementType();
+			if (elementType == null)
+				elementType = session.object();
 
 			if (elementType.canCreateNewBean(l)) {
 				BeanMap m = session.newBeanMap(l, elementType.getInnerClass());
@@ -597,12 +573,12 @@ public class HtmlParser extends XmlParser {
 	@Override /* ReaderParser */
 	protected <E> Collection<E> doParseIntoCollection(ParserSession session, Collection<E> c, Type elementType) throws Exception {
 		HtmlParserSession s = (HtmlParserSession)session;
-		return parseIntoCollection(s, s.getXmlStreamReader(), c, (ClassMeta<E>)s.getClassMeta(elementType), null);
+		return parseIntoCollection(s, s.getXmlStreamReader(), c, s.getClassMeta(elementType), null);
 	}
 
 	@Override /* ReaderParser */
 	protected Object[] doParseArgs(ParserSession session, ClassMeta<Object[]> args) throws Exception {
 		HtmlParserSession s = (HtmlParserSession)session;
-		return parseArgs(s, s.getXmlStreamReader(), args);
+		return parseAnything(s, args, s.getXmlStreamReader(), s.getOuter(), true, null);
 	}
 }
