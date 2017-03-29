@@ -518,10 +518,4 @@ public class XmlParser extends ReaderParser {
 		ClassMeta cm = session.getClassMeta(c.getClass(), elementType);
 		return parseIntoCollection(s,c, cm.getElementType());
 	}
-
-	@Override /* ReaderParser */
-	protected Object[] doParseArgs(ParserSession session, ClassMeta<Object[]> args) throws Exception {
-		XmlParserSession s = (XmlParserSession)session;
-		return parseAnything(s, args, null, s.getXmlStreamReader(), session.getOuter(), true, null);
-	}
 }

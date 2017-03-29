@@ -575,10 +575,4 @@ public class HtmlParser extends XmlParser {
 		HtmlParserSession s = (HtmlParserSession)session;
 		return parseIntoCollection(s, s.getXmlStreamReader(), c, s.getClassMeta(elementType), null);
 	}
-
-	@Override /* ReaderParser */
-	protected Object[] doParseArgs(ParserSession session, ClassMeta<Object[]> args) throws Exception {
-		HtmlParserSession s = (HtmlParserSession)session;
-		return parseAnything(s, args, s.getXmlStreamReader(), s.getOuter(), true, null);
-	}
 }

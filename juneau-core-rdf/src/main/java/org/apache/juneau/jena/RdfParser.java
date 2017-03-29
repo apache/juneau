@@ -477,10 +477,4 @@ public class RdfParser extends ReaderParser {
 	public RdfParserSession createSession(Object input, ObjectMap op, Method javaMethod, Object outer, Locale locale, TimeZone timeZone, MediaType mediaType) {
 		return new RdfParserSession(ctx, op, input, javaMethod, outer, locale, timeZone, mediaType);
 	}
-
-	@Override /* Parser */
-	protected Object[] doParseArgs(ParserSession session, ClassMeta<Object[]> args) throws Exception {
-		return doParse(session, args);
-	}
-
 }

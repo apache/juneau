@@ -487,7 +487,7 @@ public abstract class Parser extends CoreObject {
 			return new Object[0];
 		ParserSession session = createSession(input);
 		try {
-			return doParseArgs(session, session.getArgsClassMeta(argTypes));
+			return doParse(session, session.getArgsClassMeta(argTypes));
 		} catch (ParseException e) {
 			throw e;
 		} catch (Exception e) {
@@ -495,20 +495,6 @@ public abstract class Parser extends CoreObject {
 		} finally {
 			session.close();
 		}
-	}
-
-	/**
-	 * Implementation method.
-	 * Default implementation throws an {@link UnsupportedOperationException}.
-	 * @param session The runtime session object returned by {@link #createSession(Object, ObjectMap, Method, Object, Locale, TimeZone, MediaType)}.
-	 * If <jk>null</jk>, one will be created using {@link #createSession(Object)}.
-	 * @param args Specifies the metadata on the type of objects to create for each entry in the array.
-	 *
-	 * @return An array of parsed objects.
-	 * @throws Exception If thrown from underlying stream, or if the input contains a syntax error or is malformed.
-	 */
-	protected Object[] doParseArgs(ParserSession session, ClassMeta<Object[]> args) throws Exception {
-		throw new UnsupportedOperationException("Parser '"+getClass().getName()+"' does not support this method.");
 	}
 
 

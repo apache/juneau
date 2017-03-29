@@ -213,12 +213,4 @@ public class MsgPackParser extends InputStreamParser {
 		T o = parseAnything(s, type, is, s.getOuter(), null);
 		return o;
 	}
-
-	@Override /* ReaderParser */
-	protected Object[] doParseArgs(ParserSession session, ClassMeta<Object[]> args) throws Exception {
-		MsgPackParserSession s = (MsgPackParserSession)session;
-		MsgPackInputStream is = s.getInputStream();
-		Object[] a = parseAnything(s, args, is, session.getOuter(), null);
-		return a;
-	}
 }

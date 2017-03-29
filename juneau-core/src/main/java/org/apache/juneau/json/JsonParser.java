@@ -795,13 +795,4 @@ public class JsonParser extends ReaderParser {
 		validateEnd(s, r);
 		return c;
 	}
-
-	@Override /* ReaderParser */
-	protected Object[] doParseArgs(ParserSession session, ClassMeta<Object[]> args) throws Exception {
-		JsonParserSession s = (JsonParserSession)session;
-		ParserReader r = s.getReader();
-		Object[] a = parseAnything(s, args, r, session.getOuter(), null);
-		validateEnd(s, r);
-		return a;
-	}
 }

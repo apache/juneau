@@ -54,11 +54,6 @@ public class XmlValidatorParser extends XmlParser {
 		return (Collection<E>)validate(session.getReader());
 	}
 
-	@Override /* ReaderParser */
-	protected Object[] doParseArgs(ParserSession session, ClassMeta<Object[]> args) throws Exception {
-		return (Object[])validate(session.getReader());
-	}
-
 	protected XMLStreamReader getStaxReader(Reader in) throws Exception {
 		XMLInputFactory factory = XMLInputFactory.newInstance();
 		factory.setProperty("javax.xml.stream.isNamespaceAware", false);

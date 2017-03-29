@@ -514,14 +514,6 @@ public class UrlEncodingParser extends UonParser {
 	}
 
 	@Override /* ReaderParser */
-	protected Object[] doParseArgs(ParserSession session, ClassMeta<Object[]> args) throws Exception {
-		UrlEncodingParserSession s = (UrlEncodingParserSession)session;
-		UonReader r = s.getReader();
-		Object[] a = parseAnything(s, args, r, session.getOuter());
-		return a;
-	}
-
-	@Override /* ReaderParser */
 	protected <K,V> Map<K,V> doParseIntoMap(ParserSession session, Map<K,V> m, Type keyType, Type valueType) throws Exception {
 		UrlEncodingParserSession s = (UrlEncodingParserSession)session;
 		UonReader r = s.getReader();

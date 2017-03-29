@@ -761,12 +761,4 @@ public class UonParser extends ReaderParser {
 		validateEnd(s, r);
 		return c;
 	}
-
-	@Override /* ReaderParser */
-	protected Object[] doParseArgs(ParserSession session, ClassMeta<Object[]> args) throws Exception {
-		UonParserSession s = (UonParserSession)session;
-		UonReader r = s.getReader();
-		Object[] a = parseAnything(s, args, r, session.getOuter(), true, null);
-		return a;
-	}
 }
