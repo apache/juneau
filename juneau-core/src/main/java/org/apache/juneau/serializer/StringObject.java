@@ -15,6 +15,7 @@ package org.apache.juneau.serializer;
 import java.io.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.json.*;
 
 /**
  * A serializer/object pair used for delayed object serialization.
@@ -43,6 +44,14 @@ public class StringObject implements CharSequence, Writable {
 	public StringObject(WriterSerializer s, Object o) {
 		this.s = s;
 		this.o = o;
+	}
+
+	/**
+	 * Constructor with default serializer {@link JsonSerializer#DEFAULT_LAX}
+	 * @param o The object to be serialized.
+	 */
+	public StringObject(Object o) {
+		this(JsonSerializer.DEFAULT_LAX, o);
 	}
 
 	@Override /* Object */
