@@ -127,7 +127,7 @@ public class XmlParser extends ReaderParser {
 					m = new ObjectMap(session).append(wrapperAttr, m);
 				o = session.cast(m, pMeta, eType);
 			} else if (jsonType == ARRAY)
-				o = parseIntoCollection(session, r, new ObjectList(session), object(), pMeta);
+				o = parseIntoCollection(session, r, new ObjectList(session), null, pMeta);
 			else if (jsonType == STRING) {
 				o = session.getElementText(r);
 				if (sType.isChar())
@@ -153,7 +153,7 @@ public class XmlParser extends ReaderParser {
 				o = new ObjectMap(session).append(wrapperAttr, m);
 		} else if (sType.isCollection()) {
 			Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance(outer) : new ObjectList(session));
-			o = parseIntoCollection(session, r, l, sType.getElementType(), pMeta);
+			o = parseIntoCollection(session, r, l, sType, pMeta);
 		} else if (sType.isNumber()) {
 			o = parseNumber(session.getElementText(r), (Class<? extends Number>)sType.getInnerClass());
 		} else if (sType.canCreateNewBean(outer)) {
@@ -170,8 +170,8 @@ public class XmlParser extends ReaderParser {
 				BeanMap m = session.newBeanMap(outer, sType.getInnerClass());
 				o = parseIntoBean(session, r, m).getBean();
 			}
-		} else if (sType.isArray()) {
-			ArrayList l = (ArrayList)parseIntoCollection(session, r, new ArrayList(), sType.getElementType(), pMeta);
+		} else if (sType.isArray() || sType.isArgs()) {
+			ArrayList l = (ArrayList)parseIntoCollection(session, r, new ArrayList(), sType, pMeta);
 			o = session.toArray(sType, l);
 		} else if (sType.canCreateNewInstanceFromString(outer)) {
 			o = sType.newInstanceFromString(outer, session.getElementText(r));
@@ -228,13 +228,14 @@ public class XmlParser extends ReaderParser {
 		return m;
 	}
 
-	private <E> Collection<E> parseIntoCollection(XmlParserSession session, XMLStreamReader r, Collection<E> l, ClassMeta<E> elementType, BeanPropertyMeta pMeta) throws Exception {
+	private <E> Collection<E> parseIntoCollection(XmlParserSession session, XMLStreamReader r, Collection<E> l, ClassMeta<E> type, BeanPropertyMeta pMeta) throws Exception {
 		int depth = 0;
 		do {
+			int argIndex = 0;
 			int event = r.nextTag();
 			if (event == START_ELEMENT) {
 				depth++;
-				E value = parseAnything(session, elementType, null, r, l, false, pMeta);
+				E value = (E)parseAnything(session, type == null ? object() : type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), null, r, l, false, pMeta);
 				l.add(value);
 			} else if (event == END_ELEMENT) {
 				depth--;
@@ -540,5 +541,6 @@ public class XmlParser extends ReaderParser {
 	protected Object[] doParseArgs(ParserSession session, ClassMeta<Object[]> args) throws Exception {
 		XmlParserSession s = (XmlParserSession)session;
 		return doParseArgs(s, s.getXmlStreamReader(), args);
+		//return parseAnything(s, args, null, s.getXmlStreamReader(), session.getOuter(), true, null);
 	}
 }

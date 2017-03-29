@@ -136,7 +136,7 @@ public class UonParser extends ReaderParser {
 				o = session.cast(m, pMeta, eType);
 			} else if (c == '@') {
 				Collection l = new ObjectList(session);
-				o = parseIntoCollection(session, r, l, sType.getElementType(), isUrlParamValue, pMeta);
+				o = parseIntoCollection(session, r, l, sType, isUrlParamValue, pMeta);
 			} else {
 				String s = parseString(session, r, isUrlParamValue);
 				if (c != '\'') {
@@ -179,7 +179,7 @@ public class UonParser extends ReaderParser {
 				}
 			} else {
 				Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance(outer) : new ObjectList(session));
-				o = parseIntoCollection(session, r, l, sType.getElementType(), isUrlParamValue, pMeta);
+				o = parseIntoCollection(session, r, l, sType, isUrlParamValue, pMeta);
 			}
 		} else if (sType.canCreateNewBean(outer)) {
 			BeanMap m = session.newBeanMap(outer, sType.getInnerClass());
@@ -191,7 +191,7 @@ public class UonParser extends ReaderParser {
 				o = sType.newInstanceFromString(outer, s);
 		} else if (sType.canCreateNewInstanceFromNumber(outer)) {
 			o = sType.newInstanceFromNumber(session, outer, parseNumber(session, r, sType.getNewInstanceFromNumberClass()));
-		} else if (sType.isArray()) {
+		} else if (sType.isArray() || sType.isArgs()) {
 			if (c == '(') {
 				ObjectMap m = new ObjectMap(session);
 				parseIntoMap(session, r, m, string(), object(), pMeta);
@@ -205,7 +205,7 @@ public class UonParser extends ReaderParser {
 					o = session.toArray(sType, l);
 				}
 			} else {
-				ArrayList l = (ArrayList)parseIntoCollection(session, r, new ArrayList(), sType.getElementType(), isUrlParamValue, pMeta);
+				ArrayList l = (ArrayList)parseIntoCollection(session, r, new ArrayList(), sType, isUrlParamValue, pMeta);
 				o = session.toArray(sType, l);
 			}
 		} else if (c == '(') {
@@ -315,13 +315,15 @@ public class UonParser extends ReaderParser {
 		return null; // Unreachable.
 	}
 
-	private <E> Collection<E> parseIntoCollection(UonParserSession session, ParserReader r, Collection<E> l, ClassMeta<E> elementType, boolean isUrlParamValue, BeanPropertyMeta pMeta) throws Exception {
+	private <E> Collection<E> parseIntoCollection(UonParserSession session, ParserReader r, Collection<E> l, ClassMeta<E> type, boolean isUrlParamValue, BeanPropertyMeta pMeta) throws Exception {
 
 		int c = r.readSkipWs();
 		if (c == -1 || c == AMP)
 			return null;
 		if (c == 'n')
 			return (Collection<E>)parseNull(session, r);
+
+		int argIndex = 0;
 
 		// If we're parsing a top-level parameter, we're allowed to have comma-delimited lists outside parenthesis (e.g. "&foo=1,2,3&bar=a,b,c")
 		// This is not allowed at lower levels since we use comma's as end delimiters.
@@ -346,14 +348,14 @@ public class UonParser extends ReaderParser {
 				if (state == S1 || state == S2) {
 					if (c == ')') {
 						if (state == S2) {
-							l.add(parseAnything(session, elementType, r.unread(), l, false, pMeta));
+							l.add((E)parseAnything(session, type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), r.unread(), l, false, pMeta));
 							r.read();
 						}
 						return l;
 					} else if (Character.isWhitespace(c)) {
 						skipSpace(r);
 					} else {
-						l.add(parseAnything(session, elementType, r.unread(), l, false, pMeta));
+						l.add((E)parseAnything(session, type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), r.unread(), l, false, pMeta));
 						state = S3;
 					}
 				} else if (state == S3) {
@@ -380,7 +382,7 @@ public class UonParser extends ReaderParser {
 					if (Character.isWhitespace(c)) {
 						skipSpace(r);
 					} else {
-						l.add(parseAnything(session, elementType, r.unread(), l, false, pMeta));
+						l.add((E)parseAnything(session, type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), r.unread(), l, false, pMeta));
 						state = S2;
 					}
 				} else if (state == S2) {
@@ -703,43 +705,6 @@ public class UonParser extends ReaderParser {
 		}
 	}
 
-	private Object[] parseArgs(UonParserSession session, ParserReader r, ClassMeta<Object[]> args) throws Exception {
-
-		final int S1=1; // Looking for start of entry
-		final int S2=2; // Looking for , or )
-
-		ClassMeta<?>[] argTypes = args.getArgs();
-		Object[] o = new Object[argTypes.length];
-		int i = 0;
-
-		int c = r.readSkipWs();
-		if (c == -1 || c == AMP)
-			return null;
-		if (c != '@')
-			throw new ParseException(session, "Expected '@' at beginning of args array.");
-		c = r.read();
-
-		int state = S1;
-		while (c != -1 && c != AMP) {
-			c = r.read();
-			if (state == S1) {
-				if (c == ')')
-					return o;
-				o[i] = parseAnything(session, argTypes[i], r.unread(), session.getOuter(), false, null);
-				i++;
-				state = S2;
-			} else if (state == S2) {
-				if (c == ',') {
-					state = S1;
-				} else if (c == ')') {
-					return o;
-				}
-			}
-		}
-
-		throw new ParseException(session, "Did not find ')' at the end of args array.");
-	}
-
 	private static void skipSpace(ParserReader r) throws Exception {
 		int c = 0;
 		while ((c = r.read()) != -1) {
@@ -801,7 +766,7 @@ public class UonParser extends ReaderParser {
 	protected Object[] doParseArgs(ParserSession session, ClassMeta<Object[]> args) throws Exception {
 		UonParserSession s = (UonParserSession)session;
 		UonReader r = s.getReader();
-		Object[] a = parseArgs(s, r, args);
+		Object[] a = parseAnything(s, args, r, session.getOuter(), true, null);
 		return a;
 	}
 }

@@ -355,6 +355,7 @@ public class HtmlParser extends XmlParser {
 	 * Precondition:  Must be pointing at event following <ul> event.
 	 * Postcondition:  Pointing at next START_ELEMENT or END_DOCUMENT event.
 	 */
+	// TODO - Fold this into parseAnything().
 	private Object[] parseArgs(HtmlParserSession session, XMLStreamReader r, ClassMeta<Object[]> args) throws Exception {
 		HtmlTag tag = HtmlTag.forEvent(r);
 		ClassMeta<?>[] argTypes = args.getArgs();
