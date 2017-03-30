@@ -32,6 +32,8 @@ import org.junit.*;
 @SuppressWarnings("javadoc")
 public class ConfigFileTest {
 
+	private ConfigFileBuilder configFileBuilder = new ConfigFileBuilder();
+	
 	private File getFreshFile() {
 		String tempDir = System.getProperty("java.io.tmpdir");
 		File f = new File(tempDir, "Test.cfg");
@@ -49,7 +51,7 @@ public class ConfigFileTest {
 
 		File f = getFreshFile();
 
-		ConfigFile cf = ConfigMgr.DEFAULT.create(f)
+		ConfigFile cf = configFileBuilder.build(f)
 			.addLines(null, "# c1", "\t# c2", " c3 ");
 		ConfigFile cfw = cf.getResolving(VarResolver.DEFAULT);
 
@@ -58,7 +60,7 @@ public class ConfigFileTest {
 		assertTextEquals(expected, cfw);
 
 		cf.save();
-		cf = ConfigMgr.DEFAULT.create(f);
+		cf = configFileBuilder.build(f);
 		expected = "# c1|\t# c2| c3 |";
 		assertTextEquals(expected, cf);
 		assertTextEquals(expected, cfw);
@@ -73,7 +75,7 @@ public class ConfigFileTest {
 
 		File f = getFreshFile();
 
-		ConfigFile cf = ConfigMgr.DEFAULT.create(f)
+		ConfigFile cf = configFileBuilder.build(f)
 			.addLines(null, "# c1", "\t# c2", " c3 ", "x1=1", "x2=true", "x3=null")
 			.addLines("s1", "#c4", "k1=1", "#c5 foo=bar", "k2 = true", "k3  = \tnull");
 		ConfigFile cfw = cf.getResolving().getResolving();
@@ -83,7 +85,7 @@ public class ConfigFileTest {
 		assertTextEquals(expected, cfw);
 
 		cf.save();
-		cf = ConfigMgr.DEFAULT.create(f);
+		cf = configFileBuilder.build(f);
 		cfw = cf.getResolving(VarResolver.DEFAULT);
 		assertEquals(1, cf.getInt("x1"));
 		assertEquals(true, cf.getBoolean("x2"));
@@ -138,7 +140,7 @@ public class ConfigFileTest {
 	@Test
 	public void testSerialization() throws Exception {
 
-		ConfigFile cf = ConfigMgr.DEFAULT.create();
+		ConfigFile cf = configFileBuilder.build();
 		cf.put("x1", 1);
 
 		String expected = "{'default':{x1:'1'}}";
@@ -153,8 +155,8 @@ public class ConfigFileTest {
 	@Test
 	public void testHeaderComments() throws Exception {
 		ConfigFile[] cff = {
-			ConfigMgr.DEFAULT.create(getFreshFile()).addLines(null, "x").addLines("s1", "#c3", "#c4").addHeaderComments("s1", "#c1", "#c2"),
-			ConfigMgr.DEFAULT.create(getFreshFile()).addLines(null, "x").addLines("s1", "#c3", "#c4").addHeaderComments("s1", "#c1", "#c2").getResolving()
+			configFileBuilder.build(getFreshFile()).addLines(null, "x").addLines("s1", "#c3", "#c4").addHeaderComments("s1", "#c1", "#c2"),
+			configFileBuilder.build(getFreshFile()).addLines(null, "x").addLines("s1", "#c3", "#c4").addHeaderComments("s1", "#c1", "#c2").getResolving()
 		};
 
 		for (ConfigFile cf : cff) {
@@ -185,7 +187,7 @@ public class ConfigFileTest {
 
 		File f = getFreshFile();
 
-		ConfigFile cf = ConfigMgr.DEFAULT.create(f)
+		ConfigFile cf = configFileBuilder.build(f)
 			.addLines(null, "x1=1")
 			.addLines("s1", "x2=2");
 		ConfigFile cfw = cf.getResolving(VarResolver.DEFAULT);
@@ -221,7 +223,7 @@ public class ConfigFileTest {
 	@Test
 	public void testPut() throws Exception {
 
-		ConfigFile cf = ConfigMgr.DEFAULT.create();
+		ConfigFile cf = configFileBuilder.build();
 		ConfigFile cfw = cf.getResolving(VarResolver.DEFAULT);
 
 		cf.addSection(null);
@@ -257,7 +259,7 @@ public class ConfigFileTest {
 	@Test
 	public void testExampleInConfigFile() throws Exception {
 
-		ConfigFile cf = ConfigMgr.DEFAULT.create()
+		ConfigFile cf = configFileBuilder.build()
 			.addLines(null, "# Default section", "key1 = 1", "key2 = true", "key3 = 1,2,3", "key4 = 'http://foo'", "")
 			.addHeaderComments("section1", "# Section 1")
 			.addLines("section1", "key1 = 2", "key2 = false", "key3 = 4,5,6", "key4 = 'http://bar'");
@@ -287,7 +289,7 @@ public class ConfigFileTest {
 		assertEquals(6, cfw.getObject(int[].class, "section1/key3")[2]);
 		assertEquals(new URL("http://bar").toString(), cfw.getObject(URL.class, "section1/key4").toString());
 
-		cf = ConfigMgr.DEFAULT.create(getFreshFile())
+		cf = configFileBuilder.build(getFreshFile())
 			.addLines(null, "# Default section")
 			.addHeaderComments("section1", "# Section 1");
 		cfw = cf.getResolving(VarResolver.DEFAULT);
@@ -362,7 +364,7 @@ public class ConfigFileTest {
 	//====================================================================================================
 	@Test
 	public void testEnum() throws Exception {
-		ConfigFile cf = ConfigMgr.DEFAULT.create(getFreshFile())
+		ConfigFile cf = configFileBuilder.build(getFreshFile())
 			.addLines(null, "key1 = 'MINUTES'");
 		ConfigFile cfw = cf.getResolving(VarResolver.DEFAULT);
 
@@ -381,7 +383,7 @@ public class ConfigFileTest {
 	//====================================================================================================
 	@Test
 	public void testBatchFileGeneration() throws Exception {
-		ConfigFile cf = ConfigMgr.DEFAULT.create()
+		ConfigFile cf = configFileBuilder.build()
 			.addLines(null, "# c1", "\t# c2", " c3 ", "", "  ", "x1=1", "x2=true", "x3=null")
 			.addHeaderComments(null, "header null", "", null)
 			.addLines("s1", "#c4", "k1=1", "#c5 foo=bar", "k2 = true", "k3  = \tnull")
@@ -404,7 +406,7 @@ public class ConfigFileTest {
 	//====================================================================================================
 	@Test
 	public void testShellScriptGeneration() throws Exception {
-		ConfigFile cf = ConfigMgr.DEFAULT.create()
+		ConfigFile cf = configFileBuilder.build()
 			.addLines(null, "# c1", "\t# c2", " c3 ", "", " ", "x1=1", "x2=true", "x3=null")
 			.addHeaderComments(null, "header null", "", null)
 			.addLines("s1", "#c4", "k1=1", "#c5 foo=bar", "k2 = true", "k3  = \tnull")
@@ -429,7 +431,7 @@ public class ConfigFileTest {
 	public void testEncodedValues() throws Exception {
 		File f = getFreshFile();
 
-		ConfigFile cf = ConfigMgr.DEFAULT.create(f)
+		ConfigFile cf = configFileBuilder.build(f)
 			.addLines("s1", "", "foo* = mypassword")
 			.getResolving(VarResolver.DEFAULT);
 		ConfigFile cfw = cf.getResolving(VarResolver.DEFAULT);
@@ -479,7 +481,7 @@ public class ConfigFileTest {
 	@Test
 	public void testVariables() throws Exception {
 
-		ConfigFile cf = ConfigMgr.DEFAULT.create()
+		ConfigFile cf = configFileBuilder.build()
 			.addLines("s1",
 				"f1 = $S{foo}",
 				"f2 = $S{foo,bar}",
@@ -550,7 +552,7 @@ public class ConfigFileTest {
 	//====================================================================================================
 	@Test
 	public void testMultiLines() throws Exception {
-		ConfigFile cf = ConfigMgr.DEFAULT.create()
+		ConfigFile cf = configFileBuilder.build()
 			.addLines("s1",
 				"f1 = x \ny \n  z"
 		);
@@ -574,7 +576,7 @@ public class ConfigFileTest {
 	//====================================================================================================
 	@Test
 	public void testNumberShortcuts() throws Exception {
-		ConfigFile cf = ConfigMgr.DEFAULT.create()
+		ConfigFile cf = configFileBuilder.build()
 			.addLines("s1",
 				"f1 = 1M",
 				"f2 = 1K",
@@ -600,8 +602,8 @@ public class ConfigFileTest {
 	@Test
 	public void testListeners() throws Exception {
 		ConfigFile[] cff = {
-			ConfigMgr.DEFAULT.create(FileUtils.createTempFile("ConfigFileTest.cfg")).addLines(null, "a1=1").addLines("B", "b1=1"),
-			ConfigMgr.DEFAULT.create(FileUtils.createTempFile("ConfigFileTest.cfg")).addLines(null, "a1=1").addLines("B", "b1=1").getResolving(VarResolver.DEFAULT)
+			configFileBuilder.build(FileUtils.createTempFile("ConfigFileTest.cfg")).addLines(null, "a1=1").addLines("B", "b1=1"),
+			configFileBuilder.build(FileUtils.createTempFile("ConfigFileTest.cfg")).addLines(null, "a1=1").addLines("B", "b1=1").getResolving(VarResolver.DEFAULT)
 		};
 
 		for (ConfigFile cf : cff) {
@@ -732,7 +734,7 @@ public class ConfigFileTest {
 			assertEquals(1, count[0]);
 
 			// putAll(map)
-			ConfigFile cf2 = ConfigMgr.DEFAULT.create();
+			ConfigFile cf2 = configFileBuilder.build();
 			cf2.addLines("D", "d1=1","d2=1").addLines("E", "e1=1","e2=2");
 			changes.clear();
 			count[0] = 0;
@@ -916,8 +918,8 @@ public class ConfigFileTest {
 	@Test
 	public void testEntryListener() throws Exception {
 		ConfigFile[] cff = {
-			ConfigMgr.DEFAULT.create().addLines(null, "a1=1").addLines("B", "b1=1"),
-			ConfigMgr.DEFAULT.create().addLines(null, "a1=1").addLines("B", "b1=1").getResolving(VarResolver.DEFAULT)
+			configFileBuilder.build().addLines(null, "a1=1").addLines("B", "b1=1"),
+			configFileBuilder.build().addLines(null, "a1=1").addLines("B", "b1=1").getResolving(VarResolver.DEFAULT)
 		};
 
 		for (ConfigFile cf : cff) {
@@ -960,8 +962,8 @@ public class ConfigFileTest {
 	@Test
 	public void testSectionListener() throws Exception {
 		ConfigFile[] cff = {
-			ConfigMgr.DEFAULT.create().addLines(null, "a1=1").addLines("B", "b1=1"),
-			ConfigMgr.DEFAULT.create().addLines(null, "a1=1").addLines("B", "b1=1").getResolving(VarResolver.DEFAULT)
+			configFileBuilder.build().addLines(null, "a1=1").addLines("B", "b1=1"),
+			configFileBuilder.build().addLines(null, "a1=1").addLines("B", "b1=1").getResolving(VarResolver.DEFAULT)
 		};
 
 		for (ConfigFile cf : cff) {
@@ -1014,11 +1016,11 @@ public class ConfigFileTest {
 	//====================================================================================================
 	@Test
 	public void testMerge() throws Exception {
-		ConfigFile cf1 = ConfigMgr.DEFAULT.create()
+		ConfigFile cf1 = configFileBuilder.build()
 			.addLines(null, "# comment a1", "a1=1")
 			.addLines("B", "# comment b1", "b1=1").addHeaderComments("B", "# comment B1")
 			.addLines("C", "# comment c1", "bc=1").addHeaderComments("C", "# comment C1");
-		ConfigFile cf2 = ConfigMgr.DEFAULT.create()
+		ConfigFile cf2 = configFileBuilder.build()
 			.addLines(null, "# comment a2", "a2=2")
 			.addLines("B", "# comment b2", "b2=2").addHeaderComments("B", "# comment B2")
 			.addLines("D", "# comment d2", "d2=2").addHeaderComments("D", "# comment D2");
@@ -1027,11 +1029,11 @@ public class ConfigFileTest {
 		String expected = "# comment a2|a2 = 2|# comment B2|[B]|# comment b2|b2 = 2|# comment D2|[D]|# comment d2|d2 = 2|";
 		assertTextEquals(expected, cf1);
 
-		cf1 = ConfigMgr.DEFAULT.create()
+		cf1 = configFileBuilder.build()
 			.addLines(null, "# comment a1", "a1=1")
 			.addLines("B", "# comment b1", "b1=1").addHeaderComments("B", "# comment B1")
 			.addLines("C", "# comment c1", "bc=1").addHeaderComments("C", "# comment C1").getResolving(VarResolver.DEFAULT);
-		cf2 = ConfigMgr.DEFAULT.create()
+		cf2 = configFileBuilder.build()
 			.addLines(null, "# comment a2", "a2=2")
 			.addLines("B", "# comment b2", "b2=2").addHeaderComments("B", "# comment B2")
 			.addLines("D", "# comment d2", "d2=2").addHeaderComments("D", "# comment D2").getResolving(VarResolver.DEFAULT);
@@ -1047,8 +1049,8 @@ public class ConfigFileTest {
 	@Test
 	public void testDefaultSection() throws Exception {
 		ConfigFile[] cff = {
-			ConfigMgr.DEFAULT.create().addLines(null, "a1=1").addLines("", "a2=2").addLines("default", "a3=3"),
-			ConfigMgr.DEFAULT.create().addLines(null, "a1=1").addLines("", "a2=2").addLines("default", "a3=3").getResolving(VarResolver.DEFAULT)
+			configFileBuilder.build().addLines(null, "a1=1").addLines("", "a2=2").addLines("default", "a3=3"),
+			configFileBuilder.build().addLines(null, "a1=1").addLines("", "a2=2").addLines("default", "a3=3").getResolving(VarResolver.DEFAULT)
 		};
 
 		for (ConfigFile cf : cff) {
@@ -1095,7 +1097,7 @@ public class ConfigFileTest {
 	//====================================================================================================
 	@Test
 	public void testContains() throws Exception {
-		ConfigFile cf = ConfigMgr.DEFAULT.create().addLines(null, "a1=1").addLines("", "a2=2").addLines("default", "a3=3").addLines("A", "a4=4");
+		ConfigFile cf = configFileBuilder.build().addLines(null, "a1=1").addLines("", "a2=2").addLines("default", "a3=3").addLines("A", "a4=4");
 		ConfigFile cfw = cf.getResolving();
 
 		assertTrue(cf.containsKey(null));
@@ -1141,7 +1143,7 @@ public class ConfigFileTest {
 	//====================================================================================================
 	@Test
 	public void testGetObjectArray() throws Exception {
-		ConfigFile cf = ConfigMgr.DEFAULT.create().addLines("A", "a1=1,2,3");
+		ConfigFile cf = configFileBuilder.build().addLines("A", "a1=1,2,3");
 		ConfigFile cfw = cf.getResolving();
 		assertObjectEquals("[1,2,3]", cf.getObject(Integer[].class, "A/a1"));
 		assertObjectEquals("[1,2,3]", cfw.getObject(Integer[].class, "A/a1"));
@@ -1152,7 +1154,7 @@ public class ConfigFileTest {
 		assertObjectEquals("[]", cf.getObject(Integer[].class, "B/a1"));
 		assertObjectEquals("[]", cfw.getObject(Integer[].class, "B/a1"));
 
-		cf = ConfigMgr.DEFAULT.create().addLines("A", "a1 = 1 ,\n\t2 ,\n\t3 ");
+		cf = configFileBuilder.build().addLines("A", "a1 = 1 ,\n\t2 ,\n\t3 ");
 		assertObjectEquals("[1,2,3]", cf.getObject(Integer[].class, "A/a1"));
 		assertObjectEquals("[1,2,3]", cfw.getObject(Integer[].class, "A/a1"));
 
@@ -1172,7 +1174,7 @@ public class ConfigFileTest {
 		assertEquals("int", cf.getObject(int[].class, "A/a2", new int[]{4}).getClass().getComponentType().getSimpleName());
 
 		System.setProperty("X", "4,5,6");
-		cf = ConfigMgr.DEFAULT.create().addLines(null, "x1=$C{A/a1}", "x2=$S{X}", "x3=$S{Y}").addLines("A", "a1=1,2,3").getResolving();
+		cf = configFileBuilder.build().addLines(null, "x1=$C{A/a1}", "x2=$S{X}", "x3=$S{Y}").addLines("A", "a1=1,2,3").getResolving();
 		assertObjectEquals("[1,2,3]", cf.getObject(int[].class, "x1", new int[]{9}));
 		assertObjectEquals("[4,5,6]", cf.getObject(int[].class, "x2", new int[]{9}));
 		assertObjectEquals("[9]", cf.getObject(int[].class, "x3", new int[]{9}));
@@ -1185,7 +1187,7 @@ public class ConfigFileTest {
 	//====================================================================================================
 	@Test
 	public void testGetStringArray() throws Exception {
-		ConfigFile cf = ConfigMgr.DEFAULT.create().addLines("A", "a1=1,2,3");
+		ConfigFile cf = configFileBuilder.build().addLines("A", "a1=1,2,3");
 		ConfigFile cfw = cf.getResolving();
 		assertObjectEquals("['1','2','3']", cf.getStringArray("A/a1"));
 		assertObjectEquals("['1','2','3']", cfw.getStringArray("A/a1"));
@@ -1196,12 +1198,12 @@ public class ConfigFileTest {
 		assertObjectEquals("[]", cf.getStringArray("B/a1"));
 		assertObjectEquals("[]", cfw.getStringArray("B/a1"));
 
-		cf = ConfigMgr.DEFAULT.create().addLines("A", "a1 = 1 ,\n\t2 ,\n\t3 ");
+		cf = configFileBuilder.build().addLines("A", "a1 = 1 ,\n\t2 ,\n\t3 ");
 		assertObjectEquals("['1','2','3']", cf.getStringArray("A/a1"));
 		assertObjectEquals("['1','2','3']", cfw.getStringArray("A/a1"));
 
 		System.setProperty("X", "4,5,6");
-		cf = ConfigMgr.DEFAULT.create().addLines(null, "x1=$C{A/a1}", "x2=$S{X}", "x3=$S{Y}", "x4=$S{Y,$S{X}}").addLines("A", "a1=1,2,3").getResolving();
+		cf = configFileBuilder.build().addLines(null, "x1=$C{A/a1}", "x2=$S{X}", "x3=$S{Y}", "x4=$S{Y,$S{X}}").addLines("A", "a1=1,2,3").getResolving();
 		assertObjectEquals("['1','2','3']", cf.getStringArray("x1", new String[]{"9"}));
 		assertObjectEquals("['4','5','6']", cf.getStringArray("x2", new String[]{"9"}));
 		assertObjectEquals("['9']", cf.getStringArray("x3", new String[]{"9"}));
@@ -1216,7 +1218,7 @@ public class ConfigFileTest {
 	//====================================================================================================
 	@Test
 	public void testGetSectionMap() throws Exception {
-		ConfigFile cf = ConfigMgr.DEFAULT.create().addLines("A", "a1=1", "").addLines("D", "d1=$C{A/a1}","d2=$S{X}");
+		ConfigFile cf = configFileBuilder.build().addLines("A", "a1=1", "").addLines("D", "d1=$C{A/a1}","d2=$S{X}");
 
 		assertObjectEquals("{a1:'1'}", cf.getSectionMap("A"));
 		assertNull(cf.getSectionMap("B"));
@@ -1242,8 +1244,8 @@ public class ConfigFileTest {
 	@Test
 	public void testLoadFromReader() throws Exception {
 		ConfigFile[] cff = {
-			ConfigMgr.DEFAULT.create().addLines(null, "a1=1"),
-			ConfigMgr.DEFAULT.create().addLines(null, "a1=1").getResolving(VarResolver.DEFAULT)
+			configFileBuilder.build().addLines(null, "a1=1"),
+			configFileBuilder.build().addLines(null, "a1=1").getResolving(VarResolver.DEFAULT)
 		};
 
 		for (ConfigFile cf : cff) {
@@ -1258,7 +1260,7 @@ public class ConfigFileTest {
 	//====================================================================================================
 	@Test
 	public void testToWritable() throws Exception {
-		ConfigFile cf = ConfigMgr.DEFAULT.create()
+		ConfigFile cf = configFileBuilder.build()
 			.addLines(null, "a=b");
 		ConfigFile cfw = cf.getResolving();
 
@@ -1279,7 +1281,7 @@ public class ConfigFileTest {
 	//====================================================================================================
 	@Test
 	public void testContainsNonEmptyKey() throws Exception {
-		ConfigFile cf = ConfigMgr.DEFAULT.create()
+		ConfigFile cf = configFileBuilder.build()
 			.addLines(null, "a=b","c=");
 		ConfigFile cfw = cf.getResolving();
 
@@ -1306,7 +1308,7 @@ public class ConfigFileTest {
 	//====================================================================================================
 	@Test
 	public void testGetSectionKeys() throws Exception {
-		ConfigFile cf = ConfigMgr.DEFAULT.create()
+		ConfigFile cf = configFileBuilder.build()
 			.addLines(null, "x1=1", "x2=")
 			.addLines("A", "a1=1", "a2=");
 
@@ -1330,7 +1332,7 @@ public class ConfigFileTest {
 	//====================================================================================================
 	@Test
 	public void testAddLines() throws Exception {
-		ConfigFile cf = ConfigMgr.DEFAULT.create()
+		ConfigFile cf = configFileBuilder.build()
 			.addLines(null, "x1=1")
 			.addLines("A", "a1=1");
 
@@ -1342,7 +1344,7 @@ public class ConfigFileTest {
 		assertObjectEquals("{'default':{x1:'2',x2:'1'},A:{a1:'2',a2:'1'},B:{b1:'2',b2:'1'},C:{}}", cf);
 		assertTextEquals("# comment1|x1 = 2|x2 = 1|foobar|[A]|# comment2|a1 = 2|a2 = 1|foobar|[B]|# comment3|b1 = 2|b2 = 1|foobar|[C]||", cf);
 
-		cf = ConfigMgr.DEFAULT.create()
+		cf = configFileBuilder.build()
 			.addLines(null, "x1=1")
 			.addLines("A", "a1=1")
 			.getResolving();
@@ -1355,7 +1357,7 @@ public class ConfigFileTest {
 		assertObjectEquals("{'default':{x1:'2',x2:'1'},A:{a1:'2',a2:'1'},B:{b1:'2',b2:'1'},C:{}}", cf);
 		assertTextEquals("# comment1|x1 = 2|x2 = 1|foobar|[A]|# comment2|a1 = 2|a2 = 1|foobar|[B]|# comment3|b1 = 2|b2 = 1|foobar|[C]||", cf);
 
-		cf = ConfigMgr.DEFAULT.create()
+		cf = configFileBuilder.build()
 			.addLines(null, "x1=$C{A/a2}")
 			.addLines("A", "a1=1")
 			.getResolving();
@@ -1376,7 +1378,7 @@ public class ConfigFileTest {
 	//====================================================================================================
 	@Test
 	public void testAddHeaderComments() throws Exception {
-		ConfigFile cf = ConfigMgr.DEFAULT.create()
+		ConfigFile cf = configFileBuilder.build()
 			.addLines(null, "x1=1")
 			.addLines("A", "a1=1");
 
@@ -1390,7 +1392,7 @@ public class ConfigFileTest {
 
 		assertTextEquals("# h1|# h2|# h3|x1 = 1|# h4|[A]|a1 = 1|# h5|[B]|#|[C]|", cf);
 
-		cf = ConfigMgr.DEFAULT.create()
+		cf = configFileBuilder.build()
 			.addLines(null, "x1=1")
 			.addLines("A", "a1=1");
 
@@ -1407,7 +1409,7 @@ public class ConfigFileTest {
 		cf.clearHeaderComments(null).clearHeaderComments("A").clearHeaderComments("B").clearHeaderComments("C");
 		assertTextEquals("x1 = 1|[A]|a1 = 1|[B]|[C]|", cf);
 
-		cf = ConfigMgr.DEFAULT.create()
+		cf = configFileBuilder.build()
 			.addLines(null, "x1=1")
 			.addLines("A", "a1=1")
 			.getResolving();
@@ -1433,7 +1435,7 @@ public class ConfigFileTest {
 	@Test
 	public void testGetString() throws Exception {
 		System.setProperty("S1", "1");
-		ConfigFile cf = ConfigMgr.DEFAULT.create()
+		ConfigFile cf = configFileBuilder.build()
 			.addLines(null, "x1=1", "x2=$C{A/a2}", "x3=$S{S1,2}", "x4=$S{S2,3}")
 			.addLines("A", "a1=1", "a2=$C{A/a1}", "a3=$S{S1,2}", "a4=$S{S2,3}");
 
@@ -1497,7 +1499,7 @@ public class ConfigFileTest {
 	//====================================================================================================
 	@Test
 	public void testPutString() throws Exception {
-		ConfigFile cf = ConfigMgr.DEFAULT.create()
+		ConfigFile cf = configFileBuilder.build()
 			.addLines(null, "x1=1")
 			.addLines("A", "a1=1");
 
@@ -1510,7 +1512,7 @@ public class ConfigFileTest {
 		assertObjectEquals("{'default':{x1:'2',x2:'3'},A:{a1:'2',a2:'3'},B:{b1:'2'}}", cf);
 		assertTextEquals("x1 = 2|x2 = 3|[A]|a1 = 2|a2 = 3|[B]|b1 = 2|", cf);
 
-		cf = ConfigMgr.DEFAULT.create()
+		cf = configFileBuilder.build()
 			.addLines(null, "x1=1")
 			.addLines("A", "a1=1")
 			.getResolving();
@@ -1545,7 +1547,7 @@ public class ConfigFileTest {
 	//====================================================================================================
 	@Test
 	public void testPutStringEncoded() throws Exception {
-		ConfigFile cf = ConfigMgr.DEFAULT.create()
+		ConfigFile cf = configFileBuilder.build()
 			.addLines(null, "x1=1")
 			.addLines("A", "a1=1");
 
@@ -1558,7 +1560,7 @@ public class ConfigFileTest {
 		assertObjectEquals("{'default':{x1:'2',x2:'3'},A:{a1:'2',a2:'3'},B:{b1:'2'}}", cf);
 		assertTextEquals("x1* = {XA==}|x2* = {XQ==}|[A]|a1* = {XA==}|a2* = {XQ==}|[B]|b1* = {XA==}|", cf);
 
-		cf = ConfigMgr.DEFAULT.create()
+		cf = configFileBuilder.build()
 			.addLines(null, "x1=1")
 			.addLines("A", "a1=1")
 			.getResolving();
@@ -1593,7 +1595,7 @@ public class ConfigFileTest {
 	//====================================================================================================
 	@Test
 	public void testRemoveString() throws Exception {
-		ConfigFile cf = ConfigMgr.DEFAULT.create()
+		ConfigFile cf = configFileBuilder.build()
 			.addLines(null, "x1=1")
 			.addLines("A", "a1=1");
 
@@ -1605,7 +1607,7 @@ public class ConfigFileTest {
 		assertObjectEquals("{'default':{},A:{}}", cf);
 		assertTextEquals("[A]|", cf);
 
-		cf = ConfigMgr.DEFAULT.create()
+		cf = configFileBuilder.build()
 			.addLines(null, "x1=1")
 			.addLines("A", "a1=1")
 			.getResolving();
@@ -1625,7 +1627,7 @@ public class ConfigFileTest {
 	//====================================================================================================
 	@Test
 	public void testGetObject() throws Exception {
-		ConfigFile cf = ConfigMgr.DEFAULT.create().addLines("A", "a1=1,2,3", "a2=1", "a3=true", "a4=1.2", "a5=1.2,3.4");
+		ConfigFile cf = configFileBuilder.build().addLines("A", "a1=1,2,3", "a2=1", "a3=true", "a4=1.2", "a5=1.2,3.4");
 		ConfigFile cfw = cf.getResolving();
 
 		assertObjectEquals("['1','2','3']", cf.getObject(String[].class, "A/a1"));
@@ -1662,7 +1664,7 @@ public class ConfigFileTest {
 	@Test
 	public void testGetInt() throws Exception {
 		System.setProperty("X", "1");
-		ConfigFile cf = ConfigMgr.DEFAULT.create().addLines(null, "x1=$C{A/a1}", "x2=$S{X}", "x3=$S{Y}", "x4=$S{Y,2}").addLines("A", "a1=1");
+		ConfigFile cf = configFileBuilder.build().addLines(null, "x1=$C{A/a1}", "x2=$S{X}", "x3=$S{Y}", "x4=$S{Y,2}").addLines("A", "a1=1");
 
 		try {
 			cf.getInt("x1");
@@ -1704,7 +1706,7 @@ public class ConfigFileTest {
 	@Test
 	public void testGetBoolean() throws Exception {
 		System.setProperty("X", "true");
-		ConfigFile cf = ConfigMgr.DEFAULT.create().addLines(null, "x1=$C{A/a1}", "x2=$S{X}", "x3=$S{Y}", "x4=$S{Y,true}").addLines("A", "a1=true");
+		ConfigFile cf = configFileBuilder.build().addLines(null, "x1=$C{A/a1}", "x2=$S{X}", "x3=$S{Y}", "x4=$S{Y,true}").addLines("A", "a1=true");
 
 		assertFalse(cf.getBoolean("x1"));
 		assertFalse(cf.getBoolean("x2"));
@@ -1732,7 +1734,7 @@ public class ConfigFileTest {
 	//====================================================================================================
 	@Test
 	public void testGetSectionAsBean() throws Exception {
-		ConfigFile cf = ConfigMgr.DEFAULT.create();
+		ConfigFile cf = configFileBuilder.build();
 		cf.put("A/a", "1");
 		cf.put("A/b", "2");
 
@@ -1769,7 +1771,7 @@ public class ConfigFileTest {
 	//====================================================================================================
 	@Test
 	public void testWriteProperties() throws Exception {
-		ConfigFile cf = ConfigMgr.DEFAULT.create();
+		ConfigFile cf = configFileBuilder.build();
 		cf.put("B/a", "1");
 
 		B b = new B();
@@ -1865,8 +1867,8 @@ public class ConfigFileTest {
 	@Test
 	public void testBadInput() throws Exception {
 		ConfigFile[] cff = {
-			ConfigMgr.DEFAULT.create().addLines("A", "a1=1", ""),
-			ConfigMgr.DEFAULT.create().addLines("A", "a1=1", "").getResolving()
+			configFileBuilder.build().addLines("A", "a1=1", ""),
+			configFileBuilder.build().addLines("A", "a1=1", "").getResolving()
 		};
 
 		for (ConfigFile cf : cff) {
@@ -2022,7 +2024,7 @@ public class ConfigFileTest {
 	//====================================================================================================
 	@Test
 	public void testSerializedAsJson() throws Exception {
-		ConfigFile cf = ConfigMgr.DEFAULT.create();
+		ConfigFile cf = configFileBuilder.build();
 		cf.put("a", "1");
 		cf.put("B/a", "2");
 
@@ -2039,7 +2041,7 @@ public class ConfigFileTest {
 	//====================================================================================================
 	@Test
 	public void testResolvingWithOverride() throws Exception {
-		ConfigFile cf = ConfigMgr.DEFAULT.create();
+		ConfigFile cf = configFileBuilder.build();
 		cf.put("a", "$A{X}");
 		cf.put("b", "$B{X}");
 		cf.put("c", "$A{$B{X}}");
@@ -2115,7 +2117,7 @@ public class ConfigFileTest {
 	public void testMultilineValues() throws Exception {
 		File f = getFreshFile();
 
-		ConfigFile cf = ConfigMgr.DEFAULT.create(f);
+		ConfigFile cf = configFileBuilder.build(f);
 		cf.put("a", "a,\nb,\nc");
 		cf.put("A/a", "a,\nb,\nc");
 
@@ -2138,7 +2140,7 @@ public class ConfigFileTest {
 	public void testSpecialCharacterEncoding() throws Exception {
 		File f = getFreshFile();
 
-		ConfigFile cf = ConfigMgr.DEFAULT.create(f);
+		ConfigFile cf = configFileBuilder.build(f);
 		cf.put("a", "a,#b,=c");
 		cf.put("A/a", "a,#b,=c");
 

@@ -438,8 +438,9 @@ public abstract class Microservice {
 		// --------------------------------------------------------------------------------
 		// Resolve the config file if the path was specified.
 		// --------------------------------------------------------------------------------
+		ConfigFileBuilder cfb = new ConfigFileBuilder();
 		if (cfPath != null) 
-			cf = ConfigMgr.DEFAULT.get(cfPath).getResolving(createVarResolver().build());
+			cf = cfb.build(cfPath).getResolving(createVarResolver().build());
 		
 		// --------------------------------------------------------------------------------
 		// Find config file.
@@ -459,10 +460,10 @@ public abstract class Microservice {
 
 			if (cfPath == null) {
 				System.err.println("Running class ["+getClass().getSimpleName()+"] without a config file.");
-				cf = ConfigMgr.DEFAULT.create();
+				cf = cfb.build();
 			} else {
 				System.out.println("Running class ["+getClass().getSimpleName()+"] using config file ["+cfPath+"]");
-				cf = ConfigMgr.DEFAULT.get(cfPath).getResolving(createVarResolver().build());
+				cf = cfb.build(cfPath).getResolving(createVarResolver().build());
 			}
 		}
 

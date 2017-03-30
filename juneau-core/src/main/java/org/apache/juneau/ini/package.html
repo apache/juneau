@@ -72,7 +72,7 @@
 <h2 class='topic' onclick='toggle(this)'>1 - Overview</h2>
 <div class='topic'>
 	<p>
-		The {@link org.apache.juneau.ini.ConfigMgr} and {@link org.apache.juneau.ini.ConfigFile} classes 
+		The {@link org.apache.juneau.ini.ConfigFileBuilder} and {@link org.apache.juneau.ini.ConfigFile} classes 
 		implement an API for working with INI-style configuration files such as the following:
 	</p>
 	<p class='bcode'>
@@ -95,7 +95,7 @@
 	</p>
 	
 	<p>
-		The {@link org.apache.juneau.ini.ConfigMgr} class is used to instantiate instances of 
+		The {@link org.apache.juneau.ini.ConfigFileBuilder} class is used to instantiate instances of 
 		{@link org.apache.juneau.ini.ConfigFile} which can then be used to retrieve config file values through either <js>"key"</js> or <js>"Section/key"</js> identifiers.
 	</p>
 
@@ -106,7 +106,7 @@
 	URL key4;
 	
 	<jc>// Get our config file using the default config manager</jc>
-	ConfigFile f = ConfigMgr.<jsf>DEFAULT</jsf>.getConfig(<js>"C:/temp/MyConfig.cfg"</js>);
+	ConfigFile f = <jk>new</jk> ConfigFileBuilder().build(<js>"C:/temp/MyConfig.cfg"</js>);
 
 	<jc>// Read values from default section</jc>
 	key1 = f.getInt(<js>"key1"</js>);
@@ -127,7 +127,7 @@
 	
 	<p class='bcode'>
 	<jc>// Construct the sample INI file programmatically</jc>
-	ConfigFile f = ConfigMgr.<jsf>DEFAULT</jsf>.getConfig(<js>"C:/temp/MyConfig.cfg"</js>, <jk>true</jk>)
+	ConfigFile f = <jk>new</jk> ConfigFileBuilder().build(<js>"C:/temp/MyConfig.cfg"</js>, <jk>true</jk>)
 		.addLines(<jk>null</jk>,                     <jc>// The default 'null' section</jc>
 			<js>"# Default section"</js>,             <jc>// A regular comment</jc>
 			<js>"key1 = 1"</js>,                      <jc>// A numeric entry</jc>
@@ -150,7 +150,7 @@
 		Note how we're setting values as POJOs which will be automatically converted to strings when persisted to disk.
 	<p class='bcode'>
 	<jc>// Construct the sample INI file programmatically</jc>
-	ConfigFile f = ConfigMgr.<jsf>DEFAULT</jsf>.getConfig(<js>"C:/temp/MyConfig.cfg"</js>, <jk>true</jk>)
+	ConfigFile f = <jk>new</jk> ConfigFileBuilder().build(<js>"C:/temp/MyConfig.cfg"</js>, <jk>true</jk>)
 		.addLines(<jk>null</jk>,
 			<js>"# Default section"</js>)
 		.addHeaderComments(<js>"Section1"</js>,
@@ -250,11 +250,6 @@
 	<ck>customMessage</ck> = <cv>Java home is $C{MyProperties/javaHome} and the environment path is $C{MyProperties/path}.</cv>
 	</p>
 	<p>
-		Resolving config files (and any config files retrieved through the same <code>ConfigMgr</code> that point to the same physical file)
-		share the same underlying config files in memory.  
-		This allows changes in one instance of the config file to be reflected in all.
-	</p>
-	<p>
 		Support for variables is extensible.  You can add support for your own variables by implementing custom 
 		{@link org.apache.juneau.svl.VarResolver VarResolvers}.<br>
 		For example, the microservice <code>Resource</code> class provides access to config files that
@@ -305,8 +300,8 @@
 	<p>
 		The default encoder is {@link org.apache.juneau.ini.XorEncoder} which is a simple XOR+Base64 encoder.<br>
 		If desired, custom encoder can be used by implementing the {@link org.apache.juneau.ini.Encoder}
-		interface and creating your own <code>ConfigMgr</code> using the {@link org.apache.juneau.ini.ConfigMgr#ConfigMgr(boolean,Encoder,WriterSerializer,ReaderParser,Charset,String[])}
-		constructor.
+		interface and creating your own <code>ConfigFileBuilder</code> using the {@link org.apache.juneau.ini.ConfigFileBuilder#encoder(Encoder)}
+		method.
 	</p>
 </div>
 
@@ -331,7 +326,7 @@
 	<h6 class="topic">Example:</h6>
 	<p class='bcode'>
 	<jc>// Get our config file using the default config manager</jc>
-	ConfigFile f = ConfigMgr.<jsf>DEFAULT</jsf>.getConfig(<js>"C:/temp/MyConfig.cfg"</js>);
+	ConfigFile f = <jk>new</jk> ConfigFileBuilder().build(<js>"C:/temp/MyConfig.cfg"</js>);
 
 	<jc>// Add a listener for an entry</jc>
 	f.addListener(
@@ -343,10 +338,6 @@
 		}
 	);
 	</p>
-	<p>
-		Note that since {@link org.apache.juneau.ini.ConfigFile} instances for the same physical files are shared in {@link org.apache.juneau.ini.ConfigMgr}, a change made
-		in once instance of a config file will trigger all listeners defined on that physical file.
-	</p>
 </div>
 
 <!-- ======================================================================================================== -->
@@ -354,12 +345,12 @@
 <h2 class='topic' onclick='toggle(this)'>5 - Command Line API</h2>
 <div class='topic'>
 	<p>
-		The {@link org.apache.juneau.ini.ConfigMgr} class contains a {@link org.apache.juneau.ini.ConfigMgr#main(String[])}
+		The {@link org.apache.juneau.ini.ConfigFileBuilder} class contains a {@link org.apache.juneau.ini.ConfigFileBuilder#main(String[])}
 			method that can be used to work with config files through a command-line prompt.<br>
 		This is invoked as a normal Java command:
 	</p>
 	<p class='bcode'>
-	java -jar juneau.jar org.apache.juneau.ini.ConfigMgr [args]
+	java -jar juneau.jar org.apache.juneau.ini.ConfigFileBuilder [args]
 	</p>
 	<p>
 		Arguments can be any of the following...
@@ -382,7 +373,7 @@
 		For example, the following command will create the file <code>'MyConfig.bat'</code> from the contents of the file <code>'MyConfig.cfg'</code>.
 	</p>
 	<p class='bcode'>
-		java org.apache.juneau.ini.ConfigMgr createBatchEnvFile -configfile C:\foo\MyConfig.cfg -batchfile C:\foo\MyConfig.bat
+		java org.apache.juneau.ini.ConfigFileBuilder createBatchEnvFile -configfile C:\foo\MyConfig.cfg -batchfile C:\foo\MyConfig.bat
 	</p>
 </div>
 
@@ -637,7 +628,7 @@
 	<jk>public</jk> ConfigFile setConfigContents(<ja>@Body</ja> Reader contents) <jk>throws</jk> Exception {
 		
 		<jc>// Create a new in-memory config file based on the contents of the HTTP request.</jc>
-		ConfigFile cf2 = ConfigMgr.<jsf>DEFAULT</jsf>.create().load(contents);
+		ConfigFile cf2 = new ConfigFileBuilder.build().load(contents);
 		
 		<jc>// Merge the in-memory config file into the existing config file and save it.
 		// Then return the modified config file to be parsed as a POJO.</jc>

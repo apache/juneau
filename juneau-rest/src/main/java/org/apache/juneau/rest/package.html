@@ -2438,7 +2438,7 @@
 			These properties are then accessible through the {@link org.apache.juneau.ini.ConfigFile} class.
 		</p>
 		<p class='bcode'>
-	ConfigFile cf = ConfigMgr.<jsf>INSTANCE</jsf>.getConfigFile(<js>"myconfig.cfg"</js>);
+	ConfigFile cf = <jk>new</jk> ConfigFileBuilder().build(<js>"myconfig.cfg"</js>);
 	String path = cf.getString(<js>"MyProperties/path"</js>);
 	File javaHome = cf.getObject(File.<jk>class</jk>, <js>"MyProperties/javaHome"</js>);
 	String customMessage = cf.getString(<js>"MyProperties/customMessage"</js>);

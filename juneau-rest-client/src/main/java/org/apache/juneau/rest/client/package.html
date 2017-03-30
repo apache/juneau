@@ -273,7 +273,7 @@
 			<h6 class='figure'>Code that reads an <code>SSLOpts</code> bean from the config file</h6>
 			<p class='bcode'>
 		<jc>// Read config file and set SSL options based on what's in that file.</jc>
-		ConfigFile cf = ConfigMgr.<jsf>DEFAULT</jsf>.get(<js>"MyConfig.cfg"</js>);
+		ConfigFile cf = <jk>new</jk> ConfigFileBuilder().build(<js>"MyConfig.cfg"</js>);
 		SSLOpts ssl = cf.getObject(SSLOpts.<jk>class</jk>, <js>"Connection/ssl"</js>);
 		RestClient rc = <jk>new</jk> RestClient().enableSSL(ssl);
 			</p>

@@ -744,7 +744,6 @@ public abstract class ConfigFile implements Map<String,Section> {
 		return null;
 	}
 
-
 	private static int parseIntWithSuffix(String s) {
 		assertFieldNotNull(s, "s");
 		int m = 1;

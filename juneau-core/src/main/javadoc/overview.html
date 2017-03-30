@@ -1389,7 +1389,7 @@
 	URL key4;
 	
 	<jc>// Load our config file</jc>
-	ConfigFile f = ConfigMgr.<jsf>DEFAULT</jsf>.get(<js>"MyIniFile.cfg"</js>);
+	ConfigFile f = <jk>new</jk> ConfigFileBuilder().build(<js>"MyIniFile.cfg"</js>);
 	
 	<jc>// Read values from default section</jc>
 	key1 = f.getInt(<js>"key1"</js>);
@@ -1408,7 +1408,7 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Construct the sample INI file programmatically</jc>
-	ConfigFile cf = ConfigMgr.<jsf>DEFAULT</jsf>.create(<js>"MyIniFile.cfg"</js>)
+	ConfigFile cf = <jk>new</jk> ConfigFileBuilder().build(<js>"MyIniFile.cfg"</js>)
 		.addLines(<jk>null</jk>,
 			<js>"# Default section"</js>,
 			<js>"key1 = 1"</js>,
@@ -1430,7 +1430,7 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Construct the sample INI file programmatically</jc>
-	ConfigFile cf = ConfigMgr.<jsf>DEFAULT</jsf>.create(<js>"MyIniFile.cfg"</js>)
+	ConfigFile cf = <jk>new</jk> ConfigFileBuilder().build(<js>"MyIniFile.cfg"</js>)
 		.addLines(<jk>null</jk>,
 			<js>"# Default section"</js>)
 		.addHeaderComments(<js>"section1"</js>,
@@ -5323,7 +5323,7 @@
 			} 
 		) 
 		<jk>public</jk> ConfigFile setConfigContents(<ja>@Body</ja> Reader contents) <jk>throws</jk> Exception { 
-			ConfigFile cf2 = ConfigMgr.<jsf>DEFAULT</jsf>.create().load(contents); 
+			ConfigFile cf2 = <jk>new</jk> ConfigFileBuilder().build().load(contents); 
 			<jk>return</jk> getConfig().merge(cf2).save(); 
 		} 
 		
@@ -5704,7 +5704,7 @@
 
 		<h6 class='topic'>org.apache.juneau</h6>
 		<ul class='spaced-list'>
-			<li>Revamped the serializer and parser classes to use builders for creation.
+			<li>Revamped the serializer, parser classes to use builders for creation.
 				Serializers and parsers are now unmodifiable objects once they are created.
 				This is a breaking code change that will require adoption.
 				<p class='bcode'>
@@ -5729,8 +5729,7 @@
 				<li>{@link org.apache.juneau.serializer.SerializerGroupBuilder}
 				<li>{@link org.apache.juneau.parser.ParserGroupBuilder}
 				<li>{@link org.apache.juneau.encoders.EncoderGroupBuilder}
-			</ul>
-				Also introduced 			
+			<li>Revamped the config file API to use a build:  {@link org.apache.juneau.ini.ConfigFileBuilder}.
 			<li>Removed the <code><del>Lockable</del></code> interface.
 			<li>New <code>addBeanTypeProperties</code> setting added to serializers to override the 
 				{@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_addBeanTypeProperties} setting
@@ -6386,10 +6385,10 @@
 							<li>{@link org.apache.juneau.ini.ConfigFile#toWritable()} - Wraps the config file in a {@link org.apache.juneau.Writable} interface so that it can be serialized by the REST interface as a plain-text INI file instead of as a serialized POJO.
 							<li>{@link org.apache.juneau.ini.ConfigFile#getInt(String)} - Now supports <js>"M"</js> and <js>"K"</js> to identify millions and thousands.
 						</ul>
-					<li>New methods in {@link org.apache.juneau.ini.ConfigMgr}:
+					<li>New methods in <code><del>ConfigMgr</del></code>:
 						<ul>
-							<li>{@link org.apache.juneau.ini.ConfigMgr#create()}, {@link org.apache.juneau.ini.ConfigMgr#create(Reader)}, {@link org.apache.juneau.ini.ConfigMgr#create(File)}
-							<li>{@link org.apache.juneau.ini.ConfigMgr#deleteAll()}	
+							<li><code><del>ConfigMgr.create()</del></code>, <code><del>ConfigMgr.create(Reader)</del></code>, <code><del>ConfigMgr.create(File)</del></code>
+							<li><code><del>ConfigMgr.deleteAll()</del></code>	
 						</ul>
 					<li>New methods in {@link org.apache.juneau.ini.Section}:
 						<ul>
@@ -6796,7 +6795,7 @@
 			<li>Significant API changes to <a class='doclink' href='org/apache/juneau/ini/package-summary.html#TOC'>org.apache.juneau.ini</a> API.
 				<ul>
 					<li>{@link org.apache.juneau.ini.ConfigFile} is now thread safe and can be shared across multiple threads.
-					<li>New {@link org.apache.juneau.ini.ConfigMgr} class for managing configuration files.
+					<li>New <code><del>ConfigMgr</del></code> class for managing configuration files.
 					<li>Serializers and parsers can be associated with config files for storing and retrieving POJOs.  
 						Default support provided for JSON.
 				</ul>

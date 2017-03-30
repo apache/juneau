@@ -119,8 +119,10 @@ public class RestConfig implements ServletConfig {
 		this.parentContext = parentContext;
 		try {
 
+			ConfigFileBuilder cfb = new ConfigFileBuilder();
+
 			properties = new ObjectMap();
-			configFile = ConfigMgr.DEFAULT.create();
+			configFile = cfb.build();
 			varResolverBuilder = new VarResolverBuilder()
 				.vars(
 					SystemPropertiesVar.class,
@@ -141,7 +143,7 @@ public class RestConfig implements ServletConfig {
 					configPath = r.config();
 			String cf = vr.resolve(configPath);
 			if (! cf.isEmpty())
-				configFile = ConfigMgr.DEFAULT.get(cf);
+				configFile = cfb.build(cf);
 			configFile = configFile.getResolving(vr);
 
 			// Add our config file to the variable resolver.

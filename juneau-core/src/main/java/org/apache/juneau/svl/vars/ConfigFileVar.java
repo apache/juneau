@@ -27,7 +27,7 @@ import org.apache.juneau.svl.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<jc>// Create a config file object.</jc>
- * 	ConfigFile configFile = ConfigMgr.<jsf>DEFAULT</jsf>.get(<js>"MyConfig.cfg"</js>);
+ * 	ConfigFile configFile = new ConfigFileBuilder().build(<js>"MyConfig.cfg"</js>);
  *
  * 	<jc>// Create a variable resolver that resolves config file entries (e.g. "$C{MySection/myKey}")</jc>
  * 	VarResolver r = <jk>new</jk> VarResolver().addVars(ConfigVar.<js>class</js>).addContextObject(<jsf>SESSION_config</jsf>, configFile);

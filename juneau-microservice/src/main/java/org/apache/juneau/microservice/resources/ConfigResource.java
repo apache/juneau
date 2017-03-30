@@ -142,7 +142,7 @@ public class ConfigResource extends Resource {
 		}
 	)
 	public ConfigFile setConfigContents(@Body Reader contents) throws Exception {
-		ConfigFile cf2 = ConfigMgr.DEFAULT.create().load(contents);
+		ConfigFile cf2 = new ConfigFileBuilder().build(contents);
 		return getConfigContents().merge(cf2).save();
 	}
 
