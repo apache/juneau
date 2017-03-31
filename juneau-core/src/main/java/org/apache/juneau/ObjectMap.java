@@ -149,7 +149,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 		this(p == null ? BeanContext.DEFAULT.createSession() : p.getBeanContext().createSession());
 		if (p == null)
 			p = JsonParser.DEFAULT;
-		if (s != null)
+		if (! StringUtils.isEmpty(s))
 			p.parseIntoMap(s, this, session.string(), session.object());
 	}
 
