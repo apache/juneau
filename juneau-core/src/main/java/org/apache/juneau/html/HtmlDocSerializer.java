@@ -112,7 +112,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		String title = s.getTitle();
 		if (title == null && isOptionsPage)
 			title = "Options";
-		String description = s.getDescription();
+		String description = s.getText();
 		if (title != null)
 			w.oTag(1, "h3").attr("class", "title").append('>').text(title).eTag("h3").nl();
 		if (description != null)

@@ -30,9 +30,9 @@ import org.apache.juneau.rest.annotation.Body;
 	path="/systemProperties",
 	title="System properties resource",
 	description="REST interface for performing CRUD operations on system properties.",
+	pageLinks="{up:'$R{requestParentURI}',options:'?method=OPTIONS',form:'formPage',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/SystemPropertiesResource.java'}",
 	properties={
-		@Property(name=SERIALIZER_quoteChar, value="'"),
-		@Property(name=HTMLDOC_links, value="{up:'$R{requestParentURI}',options:'$R{servletURI}?method=OPTIONS',form:'formPage',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/SystemPropertiesResource.java'}"),
+		@Property(name=SERIALIZER_quoteChar, value="'")
 	},
 	stylesheet="styles/devops.css",
 	encoders=GzipEncoder.class,

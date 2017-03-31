@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest;
 
-import static org.apache.juneau.html.HtmlDocSerializerContext.*;
-
 import org.apache.juneau.examples.rest.addressbook.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.microservice.resources.*;
@@ -24,10 +22,9 @@ import org.apache.juneau.rest.annotation.*;
  */
 @RestResource(
 	path="/",
-	messages="nls/RootResources",
-	properties={
-		@Property(name=HTMLDOC_links, value="{options:'$R{servletURI}?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/RootResources.java'}")
-	},
+	title="Root resources",
+	description="This is an example of a router resource that is used to access other resources.",
+	pageLinks="{options:'?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/RootResources.java'}",
 	children={
 		HelloWorldResource.class,
 		SystemPropertiesResource.class,

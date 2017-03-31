@@ -31,7 +31,7 @@ import org.apache.juneau.serializer.*;
  */
 public final class HtmlDocSerializerSession extends HtmlSerializerSession {
 
-	private final String title, description, cssUrl;
+	private final String title, text, cssUrl;
 	private final String[] cssImports;
 	private final Map<String,String> links;
 	private final boolean nowrap;
@@ -56,14 +56,14 @@ public final class HtmlDocSerializerSession extends HtmlSerializerSession {
 		super(ctx, op, output, javaMethod, locale, timeZone, mediaType);
 		if (op == null || op.isEmpty()) {
 			title = ctx.title;
-			description = ctx.description;
+			text = ctx.text;
 			links = ctx.links;
 			cssUrl = ctx.cssUrl;
 			cssImports = ctx.cssImports;
 			nowrap = ctx.nowrap;
 		} else {
 			title = op.getString(HTMLDOC_title, ctx.title);
-			description = op.getString(HTMLDOC_description, ctx.description);
+			text = op.getString(HTMLDOC_text, ctx.text);
 			links = new LinkedHashMap(op.getMap(HTMLDOC_links, ctx.links));
 			cssUrl = op.getString(HTMLDOC_cssUrl, ctx.cssUrl);
 			cssImports = StringUtils.split(op.getString(HTMLDOC_cssImports, null), ',');
@@ -81,12 +81,12 @@ public final class HtmlDocSerializerSession extends HtmlSerializerSession {
 	}
 
 	/**
-	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_description} setting value in this context.
+	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_text} setting value in this context.
 	 *
-	 * @return The {@link HtmlDocSerializerContext#HTMLDOC_description} setting value in this context.
+	 * @return The {@link HtmlDocSerializerContext#HTMLDOC_text} setting value in this context.
 	 */
-	public final String getDescription() {
-		return description;
+	public final String getText() {
+		return text;
 	}
 
 	/**

@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest;
 
-import static org.apache.juneau.html.HtmlDocSerializerContext.*;
-
 import java.util.*;
 
 import org.apache.juneau.ini.*;
@@ -29,9 +27,7 @@ import org.apache.juneau.rest.labels.*;
 @RestResource(
 	path="/docker",
 	title="Sample Docker resource",
-	properties={
-		@Property(name=HTMLDOC_links, value="{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/DockerRegistryResource.java'}")
-	}
+	pageLinks="{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/DockerRegistryResource.java'}"
 )
 public class DockerRegistryResource extends Resource {
 	private static final long serialVersionUID = 1L;

@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest;
 
-import static org.apache.juneau.html.HtmlDocSerializerContext.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.dto.Link;
 import org.apache.juneau.dto.html5.*;
@@ -24,21 +22,19 @@ import org.apache.juneau.rest.client.*;
 @RestResource(
 	path="/tumblrParser",
 	messages="nls/TumblrParserResource",
-	properties={
-		@Property(name=HTMLDOC_links, value="{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/TumblrParserResource.java'}"),
-		@Property(name=HTMLDOC_title, value="Tumblr parser service"),
-		@Property(name=HTMLDOC_description, value="Specify a URL to a Tumblr blog and parse the results.")
-	}
+	title="Tumblr parser service",
+	description="Specify a URL to a Tumblr blog and parse the results.",
+	pageLinks="{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/TumblrParserResource.java'}"
 )
 public class TumblrParserResource extends Resource {
 	private static final long serialVersionUID = 1L;
 
-	@RestMethod(name="GET", path="/")
+	@RestMethod(name="GET", path="/", summary="Get the instructions page")
 	public String getInstructions() throws Exception {
 		return "Append the Tumblr blog name to the URL above (e.g. /juneau/sample/tumblrParser/mytumblrblog)";
 	}
 
-	@RestMethod(name="GET", path="/{blogName}")
+	@RestMethod(name="GET", path="/{blogName}", summary="Parse the specified blog")
 	public ObjectList parseBlog(@Path String blogName) throws Exception {
 		ObjectList l = new ObjectList();
 		RestClient rc = new RestClientBuilder().build();

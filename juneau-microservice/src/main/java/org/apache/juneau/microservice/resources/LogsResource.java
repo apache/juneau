@@ -32,6 +32,7 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.annotation.Properties;
 import org.apache.juneau.rest.converters.*;
 import org.apache.juneau.transforms.*;
+import org.apache.juneau.utils.*;
 
 /**
  * REST resource for viewing and accessing log files.
@@ -80,13 +81,14 @@ public class LogsResource extends Resource {
 	 * [GET /*] - Get file details or directory listing.
 	 *
 	 * @param req The HTTP request
+	 * @param res The HTTP response
 	 * @param properties The writable properties for setting the descriptions.
 	 * @param path The log file path.
 	 * @return The log file.
 	 * @throws Exception
 	 */
 	@RestMethod(name="GET", path="/*", responses={@Response(200),@Response(404)})
-	public Object getFileOrDirectory(RestRequest req, @Properties ObjectMap properties, @PathRemainder String path) throws Exception {
+	public Object getFileOrDirectory(RestRequest req, RestResponse res, @Properties ObjectMap properties, @PathRemainder String path) throws Exception {
 
 		File f = getFile(path);
 
@@ -99,11 +101,12 @@ public class LogsResource extends Resource {
 					l.add(new FileResource(fc, fUrl));
 				}
 			}
-			properties.put(HTMLDOC_description, "Contents of " + f.getAbsolutePath());
+			res.setPageText(new StringMessage("Contents of {0}", f.getAbsolutePath()));
+			properties.put(HTMLDOC_text, "Contents of " + f.getAbsolutePath());
 			return l;
 		}
 
-		properties.put(HTMLDOC_description, "File details on " + f.getAbsolutePath());
+		res.setPageText(new StringMessage("File details on {0}", f.getAbsolutePath()));
 		return new FileResource(f, new URL(req.getTrimmedRequestURL().toString()));
 	}
 

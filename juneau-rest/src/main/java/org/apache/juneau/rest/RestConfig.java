@@ -100,7 +100,7 @@ public class RestConfig implements ServletConfig {
 	Object favIcon;
 	List<Object> staticFiles;
 	RestContext parentContext;
-	String path;
+	String path, pageTitle, pageText, pageLinks;
 	String clientVersionHeader = "X-Client-Version";
 
 	Object resourceResolver = RestResourceResolver.class;
@@ -193,6 +193,12 @@ public class RestConfig implements ServletConfig {
 					setPath(r.path());
 				if (! r.clientVersionHeader().isEmpty())
 					setClientVersionHeader(r.clientVersionHeader());
+				if (! r.pageTitle().isEmpty())
+					setPageTitle(r.pageTitle());
+				if (! r.pageText().isEmpty())
+					setPageText(r.pageText());
+				if (! r.pageLinks().isEmpty())
+					setPageLinks(r.pageLinks());
 				if (r.resourceResolver() != RestResourceResolver.class)
 					setResourceResolver(r.resourceResolver());
 				if (r.logger() != RestLogger.Normal.class)
@@ -965,6 +971,45 @@ public class RestConfig implements ServletConfig {
 	 */
 	public RestConfig setClientVersionHeader(String clientVersionHeader) {
 		this.clientVersionHeader = clientVersionHeader;
+		return this;
+	}
+
+	/**
+	 * Sets the page title to use on HTML views of pages.
+	 * <p>
+	 * This is the programmatic equivalent to the {@link RestResource#pageTitle() @RestResource.pageTitle()} annotation.
+	 *
+	 * @param pageTitle The page title text.
+	 * @return This object (for method chaining).
+	 */
+	public RestConfig setPageTitle(String pageTitle) {
+		this.pageTitle = pageTitle;
+		return this;
+	}
+
+	/**
+	 * Sets the page text to use on HTML views of pages.
+	 * <p>
+	 * This is the programmatic equivalent to the {@link RestResource#pageText() @RestResource.pageText()} annotation.
+	 *
+	 * @param pageText The page text.
+	 * @return This object (for method chaining).
+	 */
+	public RestConfig setPageText(String pageText) {
+		this.pageText = pageText;
+		return this;
+	}
+
+	/**
+	 * Sets the page links to use on HTML views of pages.
+	 * <p>
+	 * This is the programmatic equivalent to the {@link RestResource#pageLinks() @RestResource.pageLinks()} annotation.
+	 *
+	 * @param pageLinks The page links.
+	 * @return This object (for method chaining).
+	 */
+	public RestConfig setPageLinks(String pageLinks) {
+		this.pageLinks = pageLinks;
 		return this;
 	}
 

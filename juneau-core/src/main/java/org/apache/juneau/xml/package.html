@@ -2921,12 +2921,12 @@
 	// Consists of an in-memory address book repository.</jc>
 	<ja>@RestResource</ja>(
 		messages=<js>"nls/AddressBookResource"</js>,
+		title=<js>"$L{title}"</js>,
+		description=<js>"$L{description}"</js>,
+		pageLinks=<js>"{options:'?method=OPTIONS',doc:'doc'}"</js>,
 		properties={
 			<ja>@Property</ja>(name=SerializerContext.<jsf>SERIALIZER_quoteChar</jsf>, value=<js>"'"</js>),
-			<ja>@Property</ja>(name=HtmlSerializerContext.<jsf>HTML_uriAnchorText</jsf>, value=<jsf>TO_STRING</jsf>),
-			<ja>@Property</ja>(name=HtmlDocSerializerContext.<jsf>HTMLDOC_title</jsf>, value=<js>"$L{title}"</js>),
-			<ja>@Property</ja>(name=HtmlDocSerializerContext.<jsf>HTMLDOC_description</jsf>, value=<js>"$L{description}"</js>),
-			<ja>@Property</ja>(name=HtmlDocSerializerContext.<jsf>HTMLDOC_links</jsf>, value=<js>"{options:'?method=OPTIONS',doc:'doc'}"</js>)
+			<ja>@Property</ja>(name=HtmlSerializerContext.<jsf>HTML_uriAnchorText</jsf>, value=<jsf>TO_STRING</jsf>)
 		},
 		encoders=GzipEncoder.<jk>class</jk>
 	)
@@ -2955,8 +2955,8 @@
 			<p class='bcode'>
 	<jc>// GET person request handler</jc>
 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/people/{id}/*"</js>, rc={200,404})
-	<jk>public</jk> Person getPerson(RestRequest req, <ja>@Path</ja> <jk>int</jk> id) throws Exception {
-		properties.put(HtmlDocSerializerContext.<jsf>HTMLDOC_title</jsf>, req.getPathInfo());
+	<jk>public</jk> Person getPerson(RestRequest req, RestResponse res, <ja>@Path</ja> <jk>int</jk> id) throws Exception {
+		res.setPageTitle(req.getPathInfo());
 		<jk>return</jk> findPerson(id);
 	}
 	
@@ -3015,8 +3015,8 @@
 			<ja>@Property</ja>(name=SerializerContext.<jsf>SERIALIZER_quoteChar</jsf>, value=<js>"'"</js>)
 		}
 	)
-	<jk>public</jk> Person getPerson(RestRequest req, <ja>@Path</ja> <jk>int</jk> id) throws Exception {
-		properties.put(HtmlDocSerializerContext.<jsf>HTMLDOC_title</jsf>, req.getPathInfo());
+	<jk>public</jk> Person getPerson(RestRequest req, RestRequest res, <ja>@Path</ja> <jk>int</jk> id) throws Exception {
+		res.setPageTitle(req.getPathInfo());
 		<jk>return</jk> findPerson(id);
 	}
 			</p>

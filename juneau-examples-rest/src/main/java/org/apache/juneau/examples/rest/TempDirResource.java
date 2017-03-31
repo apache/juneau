@@ -13,7 +13,6 @@
 package org.apache.juneau.examples.rest;
 
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
-import static org.apache.juneau.html.HtmlDocSerializerContext.*;
 
 import java.io.*;
 
@@ -29,13 +28,14 @@ import org.apache.juneau.utils.*;
  */
 @RestResource(
 	path="/tempDir",
-	messages="nls/TempDirResource",
+	title="Temp Directory View Service",
+	description="View and download files in the '$S{java.io.tmpdir}' directory.",
+	pageLinks="{up:'$R{requestParentURI}',options:'?method=OPTIONS',upload:'upload',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/TempDirResource.java'}",
 	properties={
 		@Property(name="rootDir", value="$S{java.io.tmpdir}"),
 		@Property(name="allowViews", value="true"),
 		@Property(name="allowDeletes", value="true"),
-		@Property(name="allowPuts", value="false"),
-		@Property(name=HTMLDOC_links, value="{up:'$R{requestParentURI}',options:'$R{servletURI}?method=OPTIONS',upload:'upload',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/TempDirResource.java'}"),
+		@Property(name="allowPuts", value="false")
 	},
 	stylesheet="styles/devops.css"
 )

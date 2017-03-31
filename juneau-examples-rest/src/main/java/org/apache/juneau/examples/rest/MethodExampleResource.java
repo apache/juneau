@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest;
 
-import static org.apache.juneau.html.HtmlDocSerializerContext.*;
-
 import java.util.*;
 
 import org.apache.juneau.microservice.*;
@@ -26,9 +24,7 @@ import org.apache.juneau.rest.annotation.*;
 @RestResource(
 	path="/methodExample",
 	messages="nls/MethodExampleResource",
-	properties={
-		@Property(name=HTMLDOC_links, value="{up:'$R{servletParentURI}',options:'?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/MethodExampleResource.java'}")
-	}
+	pageLinks="{up:'$R{servletParentURI}',options:'?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/MethodExampleResource.java'}"
 )
 public class MethodExampleResource extends Resource {
 	private static final long serialVersionUID = 1L;

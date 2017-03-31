@@ -1957,9 +1957,9 @@
 		path=<js>"/systemProperties"</js>,
 		title=<js>"System properties resource"</js>,
 		description=<js>"REST interface for performing CRUD operations on system properties."</js>,
+		pageLinks=<js>"{up:'$R{requestParentURI}',options:'?method=OPTIONS'}"</js>,
 		properties={
-			<ja>@Property</ja>(name=<jsf>SERIALIZER_quoteChar</jsf>, value=<js>"'"</js>),
-			<ja>@Property</ja>(name=<jsf>HTMLDOC_links</jsf>, value=<js>"{up:'$R{requestParentURI}',options:'$R{servletURI}?method=OPTIONS'}"</js>),
+			<ja>@Property</ja>(name=<jsf>SERIALIZER_quoteChar</jsf>, value=<js>"'"</js>)
 		},
 		stylesheet=<js>"styles/devops.css"</js>,
 		encoders=GzipEncoder.<jk>class</jk>,
@@ -2623,9 +2623,7 @@
 	<ja>@RestResource</ja>(
 		path=<js>"/"</js>,
 		messages=<js>"nls/RootResources"</js>,
-		properties={
-			<ja>@Property</ja>(name=<jsf>HTMLDOC_links</jsf>, value=<js>"{options:'$R{servletURI}?method=OPTIONS',source:'$R{servletURI}/source?classes=(org.apache.juneau.rest.samples.RootResources)'}"</js>)
-		},
+		pageLinks=<js>"{options:'?method=OPTIONS'}"</js>,
 		children={
 			HelloWorldResource.<jk>class</jk>, 
 			MethodExampleResource.<jk>class</jk>, 
@@ -2717,9 +2715,7 @@
 	<ja>@RestResource</ja>( 
 		messages=<js>"nls/HelloWorldResource"</js>, 
 		path=<js>"/helloWorld"</js>, 
-		properties={ 
-			<ja>@Property</ja>(name=HTMLDOC_links, value=<js>"{up:'$R{requestParentURI}',options:'?method=OPTIONS'}"</js>) 
-		} 
+		pageLinks=<js>"{up:'$R{requestParentURI}',options:'?method=OPTIONS'}"</js>
 	) 
 	<jk>public class</jk> HelloWorldResource <jk>extends</jk> Resource { 
 		<jk>private static final long</jk> <jsf>serialVersionUID</jsf> = 1L; 
@@ -2794,9 +2790,7 @@
 	<ja>@RestResource</ja>( 
 		path=<js>"/methodExample"</js>, 
 		messages=<js>"nls/MethodExampleResource"</js>, 
-		properties={ 
-			<ja>@Property</ja>(name=<jsf>HTMLDOC_links</jsf>, value=<js>"{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$R{servletParentURI}/source?classes=(org.apache.juneau.rest.samples.MethodExampleResource)'}"</js>) 
-		} 
+		pageLinks=<js>"{up:'$R{requestParentURI}',options:'?method=OPTIONS'}"</js>
 	) 
 	<jk>public class</jk> MethodExampleResource <jk>extends</jk> Resource { 
 		<jk>private static final long</jk> <jsf>serialVersionUID</jsf> = 1L; 
@@ -2938,9 +2932,7 @@
 		</p>
 		<p class='bcode'>
 	<ja>@RestResource</ja>(
-		properties={
-			<ja>@Property</ja>(name=<jsf>HTMLDOC_links</jsf>, value=<js>"{options:'?method=OPTIONS'}"</js>)
-		}
+		pageLinks=<js>"{options:'?method=OPTIONS'}"</js>
 	)
 		</p>
 		<p>
@@ -3205,10 +3197,10 @@
 	<ja>@RestResource</ja>(
 		path=<js>"/echo"</js>,
 		messages=<js>"nls/RequestEchoResource"</js>,
+		pageLinks=<js>"{up:'$R{requestParentURI}',options:'?method=OPTIONS'}"</js>,
 		properties={
 			<ja>@Property</ja>(name=<jsf>SERIALIZER_maxDepth</jsf>, value=<js>"10"</js>),
-			<ja>@Property</ja>(name=<jsf>SERIALIZER_detectRecursions</jsf>, value=<js>"true"</js>),
-			<ja>@Property</ja>(name=<jsf>HTMLDOC_links</jsf>, value=<js>"{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$R{servletParentURI}/source?classes=(org.apache.juneau.rest.samples.RequestEchoResource)'}"</js>)
+			<ja>@Property</ja>(name=<jsf>SERIALIZER_detectRecursions</jsf>, value=<js>"true"</js>)
 		},
 		beanFilters={
 			<jc>// Interpret these as their parent classes, not subclasses</jc>
@@ -3223,10 +3215,9 @@
 	
 		<jd>/** GET request handler */</jd>
 		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/*"</js>, converters={Queryable.<jk>class</jk>,Traversable.<jk>class</jk>})
-		<jk>public</jk> HttpServletRequest doGet(RestRequest req, <ja>@Properties</ja> ObjectMap properties) {
+		<jk>public</jk> HttpServletRequest doGet(RestRequest req, RestResponse res, <ja>@Properties</ja> ObjectMap properties) {
 			<jc>// Set the HtmlDocSerializer title programmatically.
-			// This sets the value for this request only.</jc>
-			properties.put(<jsf>HTMLDOC_title</jsf>, <js>"Contents of HttpServletRequest object"</js>);
+			res.setPageTitle(req.getPathInfo());
 			
 			<jc>// Just echo the request back as the response.</jc>
 			<jk>return</jk> req;
@@ -3264,7 +3255,7 @@
 			.addPojoSwaps(EnumerationSwap.<jk>class</jk>)
 			.setProperty(<jsf>SERIALIZER_maxDepth</jsf>, 10)
 			.setProperty(<jsf>SERIALIZER_detectRecursions</jsf>, <jk>true</jk>)
-			.property(<jsf>HTMLDOC_links</jsf>, <js>"{...}"</js>);
+			.setPageLinks(<js>"{...}"</js>);
 		
 		<jc>// Don't forget to call this!</jc>
 		<jk>super</jk>.init(config);
@@ -3661,13 +3652,13 @@
 	<ja>@RestResource</ja>( 
 		path=<js>"/addressBook"</js>, 
 		messages=<js>"nls/AddressBookResource"</js>, 
+		pageLinks=<js>"{up:'$R{requestParentURI}',options:'?method=OPTIONS'}"</js>, 
 		properties={ 
 			<ja>@Property</ja>(name=<jsf>REST_allowMethodParam</jsf>, value=<js>"*"</js>), 
 			<ja>@Property</ja>(name=<jsf>HTML_uriAnchorText</jsf>, value=<jsf>TO_STRING</jsf>), 
 			<ja>@Property</ja>(name=<jsf>SERIALIZER_quoteChar</jsf>, value=<js>"'"</js>), 
 			<ja>@Property</ja>(name=<jsf>RDF_rdfxml_tab</jsf>, value=<js>"5"</js>), 
 			<ja>@Property</ja>(name=<jsf>RDF_addRootProperty</jsf>, value=<js>"true"</js>), 
-			<ja>@Property</ja>(name=<jsf>HTMLDOC_links</jsf>, value=<js>"{up:'$R{requestParentURI}',options:'$R{servletURI}?method=OPTIONS',source:'$R{servletParentURI}/source?classes=(org.apache.juneau.rest.samples.addressbook.AddressBookResource,org.apache.juneau.examples.addressbook.Address,org.apache.juneau.examples.addressbook.AddressBook,org.apache.juneau.examples.addressbook.CreateAddress,org.apache.juneau.examples.addressbook.CreatePerson,org.apache.juneau.examples.addressbook.IAddressBook,org.apache.juneau.examples.addressbook.Person)'}"</js>), 
 			<jc>// Resolve all relative URIs so that they're relative to this servlet!</jc> 
 			<ja>@Property</ja>(name=<jsf>SERIALIZER_relativeUriBase</jsf>, value=<js>"$R{servletURI}"</js>), 
 		}, 
@@ -4310,10 +4301,10 @@
 	<ja>@RestResource</ja>( 
 		path=<js>"/remoteable"</js>, 
 		messages=<js>"nls/SampleRemoteableServlet"</js>, 
+		title=<js>"Remoteable Service Proxy API"</js>, 
+		description=<js>"Sample class showing how to use remoteable proxies. The list below are exposed services that can be retrieved using RestClient.getProxyInterface(Class)."</js>, 
+		pageLinks=<js>"{up:'$R{requestParentURI}',options:'?method=OPTIONS'}"</js>, 
 		properties={ 
-			<ja>@Property</ja>(name=<jsf>HTMLDOC_title</jsf>, value=<js>"Remoteable Service Proxy API"</js>), 
-			<ja>@Property</ja>(name=<jsf>HTMLDOC_description</jsf>, value=<js>"Sample class showing how to use remoteable proxies. The list below are exposed services that can be retrieved using RestClient.getProxyInterface(Class)."</js>), 
-			<ja>@Property</ja>(name=<jsf>HTMLDOC_links</jsf>, value=<js>"{up:'$R{requestParentURI}',options:'$R{servletURI}?method=OPTIONS',source:'$R{servletParentURI}/source?classes=(org.apache.juneau.rest.samples.SampleRemoteableServlet)'}"</js>), 
 			<jc>// Allow us to use method=POST from a browser.</jc> 
 			<ja>@Property</ja>(name=<jsf>REST_allowMethodParam</jsf>, value=<js>"*"</js>) 
 		} 
@@ -4417,12 +4408,12 @@
 	<ja>@RestResource</ja>( 
 		path=<js>"/tempDir"</js>, 
 		messages=<js>"nls/TempDirResource"</js>, 
+		pageLinks=<js>"{up:'$R{requestParentURI}',options:'?method=OPTIONS',upload:'upload'}"</js>,
 		properties={ 
 			<ja>@Property</ja>(name=<js>"DirectoryResource.rootDir"</js>, value=<js>"$S{java.io.tmpdir}"</js>), 
 			<ja>@Property</ja>(name=<js>"DirectoryResource.allowViews"</js>, value=<js>"true"</js>), 
 			<ja>@Property</ja>(name=<js>"DirectoryResource.allowDeletes"</js>, value=<js>"true"</js>), 
-			<ja>@Property</ja>(name=<js>"DirectoryResource.allowPuts"</js>, value=<js>"false"</js>), 
-			<ja>@Property</ja>(name=HTMLDOC_links, value=<js>"{up:'$R{requestParentURI}',options:'$R{servletURI}?method=OPTIONS',upload:'upload',source:'$R{servletParentURI}/source?classes=(org.apache.juneau.rest.samples.TempDirResource,org.apache.juneau.rest.samples.DirectoryResource)'}"</js>),
+			<ja>@Property</ja>(name=<js>"DirectoryResource.allowPuts"</js>, value=<js>"false"</js>) 
 		}, 
 		stylesheet=<js>"styles/devops.css"</js> 
 	) 
@@ -4535,11 +4526,11 @@
 	<ja>@RestResource</ja>( 
 		path=<js>"/atom"</js>, 
 		messages=<js>"nls/AtomFeedResource"</js>, 
+		pageLinks=<js>"{up:'$R{requestParentURI}',options:'?method=OPTIONS'}"</js>,
 		properties={ 
 			<ja>@Property</ja>(name=<jsf>SERIALIZER_quoteChar</jsf>, value=<js>"'"</js>), 
 			<ja>@Property</ja>(name=<jsf>RDF_rdfxml_tab</jsf>, value=<js>"5"</js>), 
-			<ja>@Property</ja>(name=<jsf>RDF_addRootProperty</jsf>, value=<js>"true"</js>), 
-			<ja>@Property</ja>(name=<jsf>HTMLDOC_links</jsf>, value=<js>"{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$R{servletParentURI}/source?classes=(org.apache.juneau.rest.samples.AtomFeedResource)'}"</js>) 
+			<ja>@Property</ja>(name=<jsf>RDF_addRootProperty</jsf>, value=<js>"true"</js>)
 		}, 
 		encoders=GzipEncoder.<jk>class</jk> 
 	) 
@@ -4643,9 +4634,7 @@
 	<ja>@RestResource</ja>( 
 		path=<js>"/docker"</js>, 
 		title=<js>"Sample Docker resource"</js>, 
-		properties={ 
-			<ja>@Property</ja>(name=<jsf>HTMLDOC_links</jsf>, value=<js>"{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$R{servletParentURI}/source?classes=(org.apache.juneau.rest.samples.AtomFeedResource)'}"</js>) 
-		} 
+		pageLinks=<js>"{up:'$R{requestParentURI}',options:'?method=OPTIONS'}"</js> 
 	) 
 	<jk>public class</jk> DockerRegistryResource <jk>extends</jk> Resource { 
 		<jk>private static final long</jk> <jsf>serialVersionUID</jsf> = 1L; 
@@ -4724,11 +4713,9 @@
 	<ja>@RestResource</ja>( 
 		path=<js>"/tumblrParser"</js>, 
 		messages=<js>"nls/TumblrParserResource"</js>, 
-		properties={ 
-			<ja>@Property</ja>(name=<jsf>HTMLDOC_links</jsf>, value=<js>"{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$R{servletParentURI}/source?classes=(org.apache.juneau.rest.samples.TumblrParserResource)'}"</js>), 
-			<ja>@Property</ja>(name=<jsf>HTMLDOC_title</jsf>, value=<js>"Tumblr parser service"</js>), 
-			<ja>@Property</ja>(name=<jsf>HTMLDOC_description</jsf>, value=<js>"Specify a URL to a Tumblr blog and parse the results."</js>) 
-		} 
+		title=<js>"Tumblr parser service"</js>, 
+		description=<js>"Specify a URL to a Tumblr blog and parse the results."</js>, 
+		pageLinks=<js>"{up:'$R{requestParentURI}',options:'?method=OPTIONS'}"</js> 
 	) 
 	<jk>public class</jk> TumblrParserResource <jk>extends</jk> Resource { 
 		<jk>private static final long</jk> <jsf>serialVersionUID</jsf> = 1L; 
@@ -4808,11 +4795,9 @@
 	<ja>@RestResource</ja>(
 		path=<js>"/photos"</js>,
 		messages=<js>"nls/PhotosResource"</js>,
-		properties={
-			<ja>@Property</ja>(name=HtmlDocSerializerContext.<jsf>HTMLDOC_links</jsf>, value=<js>"{options:'?method=OPTIONS'}"</js>),
-			<ja>@Property</ja>(name=HtmlDocSerializerContext.<jsf>HTMLDOC_title</jsf>, value=<js>"Photo REST service"</js>),
-			<ja>@Property</ja>(name=HtmlDocSerializerContext.<jsf>HTMLDOC_description</jsf>, value=<js>"Use a tool like Poster to upload and retrieve jpeg and png images."</js>)
-		}
+		title=<js>"Photo REST service"</js>,
+		description=<js>"Use a tool like Poster to upload and retrieve jpeg and png images."</js>,
+		pageLinks=<js>"{options:'?method=OPTIONS'}"</js>
 	)
 	<jk>public class</jk> PhotosResource <jk>extends</jk> RestServletDefault {
 	
@@ -4854,8 +4839,8 @@
 		<jd>/** GET request handler for list of all photos */</jd>
 		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/"</js>)
 		<jk>public</jk> Collection&lt;Photo&gt; getAllPhotos(RestRequest req, RestResponse res) <jk>throws</jk> Exception {
-			res.setProperty(HtmlDocSerializerContext.<jsf>HTMLDOC_title</jsf>, <js>"Photo REST service"</js>);
-			res.setProperty(HtmlDocSerializerContext.<jsf>HTMLDOC_description</jsf>, <js>"Use a tool like Poster to upload and retrieve jpeg and png images."</js>);
+			res.setPageTitle(<js>"Photo REST service"</js>);
+			res.setPageText(<js>"Use a tool like Poster to upload and retrieve jpeg and png images."</js>);
 			<jk>return</jk> photos.values();
 		}
 		
@@ -4950,10 +4935,8 @@
 	<ja>@RestResource</ja>( 
 		path=<js>"/jsonSchema"</js>, 
 		messages=<js>"nls/JsonSchemaResource"</js>, 
-		properties={ 
-			<ja>@Property</ja>(name=<jsf>HTMLDOC_title</jsf>, value=<js>"Sample JSON-Schema document"</js>), 
-			<ja>@Property</ja>(name=<jsf>HTMLDOC_links</jsf>, value=<js>"{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$R{servletParentURI}/source?classes=(org.apache.juneau.rest.samples.JsonSchemaResource)'}"</js>) 
-		} 
+		title=<js>"Sample JSON-Schema document"</js>, 
+		pageLinks=<js>"{up:'$R{requestParentURI}',options:'?method=OPTIONS'}"</js> 
 	) 
 	<jk>public class</jk> JsonSchemaResource <jk>extends</jk> ResourceJena { 
 		<jk>private static final long</jk> <jsf>serialVersionUID</jsf> = 1L; 
@@ -5032,11 +5015,9 @@
 	<ja>@RestResource</ja>( 
 		path=<js>"/sqlQuery"</js>, 
 		messages=<js>"nls/SqlQueryResource"</js>, 
-		properties={ 
-			<ja>@Property</ja>(name=<jsf>HTMLDOC_title</jsf>, value=<js>"SQL query service"</js>), 
-			<ja>@Property</ja>(name=<jsf>HTMLDOC_description</jsf>, value=<js>"Executes queries against the local derby '$C{SqlQueryResource/connectionUrl}' database"</js>), 
-			<ja>@Property</ja>(name=<jsf>HTMLDOC_links</jsf>, value=<js>"{up:'$R{requestParentURI}',options:'$R{servletURI}?method=OPTIONS',source:'$R{servletParentURI}/source?classes=(org.apache.juneau.rest.samples.SqlQueryResource)'}"</js>), 
-		} 
+		title=<js>"SQL query service"</js>, 
+		description=<js>"Executes queries against the local derby '$C{SqlQueryResource/connectionUrl}' database"</js>, 
+		pageLinks=<js>"{up:'$R{requestParentURI}',options:'?method=OPTIONS'}"</js> 
 	) 
 	<jk>public class</jk> SqlQueryResource <jk>extends</jk> Resource { 
 		<jk>private static final long</jk> <jsf>serialVersionUID</jsf> = 1L; 
@@ -5223,9 +5204,7 @@
 		path=<js>"/config"</js>, 
 		title=<js>"Configuration"</js>, 
 		description=<js>"Contents of configuration file."</js>, 
-		properties={ 
-			<ja>@Property</ja>(name=<jsf>HTMLDOC_links</jsf>, value=<js>"{up:'$R{requestParentURI}',options:'$R{servletURI}?method=OPTIONS',edit:'$R{servletURI}/edit'}"</js>), 
-		} 
+		pageLinks=<js>"{up:'$R{requestParentURI}',options:'?method=OPTIONS',edit:'edit'}"</js>
 	) 
 	<jk>public class</jk> ConfigResource <jk>extends</jk> Resource { 
 		<jk>private static final long</jk> <jsf>serialVersionUID</jsf> = 1L; 
@@ -5729,6 +5708,7 @@
 				<li>{@link org.apache.juneau.serializer.SerializerGroupBuilder}
 				<li>{@link org.apache.juneau.parser.ParserGroupBuilder}
 				<li>{@link org.apache.juneau.encoders.EncoderGroupBuilder}
+			</ul>
 			<li>Revamped the config file API to use a build:  {@link org.apache.juneau.ini.ConfigFileBuilder}.
 			<li>Removed the <code><del>Lockable</del></code> interface.
 			<li>New <code>addBeanTypeProperties</code> setting added to serializers to override the 
@@ -5805,16 +5785,54 @@
 				</ul>
 			<li>New annotations added to {@link org.apache.juneau.rest.annotation.RestResource @RestResource} to allow non-<code>RestServlet</code>
 				resources to do the same as subclassing directly from <code>RestServlet</code>:
-			<ul>
-				<li>{@link org.apache.juneau.rest.annotation.RestResource#resourceResolver() resourceResolver()} 
-					- Specify a {@link org.apache.juneau.rest.RestResourceResolver} class for resolving child resources.
-				<li>{@link org.apache.juneau.rest.annotation.RestResource#callHandler() callHandler()} 
-					- Specify a {@link org.apache.juneau.rest.RestCallHandler} class for handling the lifecycle of a REST call.
-				<li>{@link org.apache.juneau.rest.annotation.RestResource#infoProvider() infoProvider()} 
-					- Specify a {@link org.apache.juneau.rest.RestInfoProvider} class for customizing title/description/Swagger information on a REST resource.
-				<li>{@link org.apache.juneau.rest.annotation.RestResource#logger() logger()} 
-					- Specify a {@link org.apache.juneau.rest.RestLogger} class for handling logging.
-			</ul>
+				<ul>
+					<li>{@link org.apache.juneau.rest.annotation.RestResource#resourceResolver() resourceResolver()} 
+						- Specify a {@link org.apache.juneau.rest.RestResourceResolver} class for resolving child resources.
+					<li>{@link org.apache.juneau.rest.annotation.RestResource#callHandler() callHandler()} 
+						- Specify a {@link org.apache.juneau.rest.RestCallHandler} class for handling the lifecycle of a REST call.
+					<li>{@link org.apache.juneau.rest.annotation.RestResource#infoProvider() infoProvider()} 
+						- Specify a {@link org.apache.juneau.rest.RestInfoProvider} class for customizing title/description/Swagger information on a REST resource.
+					<li>{@link org.apache.juneau.rest.annotation.RestResource#logger() logger()} 
+						- Specify a {@link org.apache.juneau.rest.RestLogger} class for handling logging.
+				</ul>
+			<li>New annotations added to {@link org.apache.juneau.rest.annotation.RestResource @RestResource} and {@link org.apache.juneau.rest.annotation.RestMethod @RestMethod}
+				to simplify defining page title, text, and links on HTML views:
+				<ul>
+					<li>{@link org.apache.juneau.rest.annotation.RestResource#pageTitle() @RestResource.pageTitle()} 
+					<li>{@link org.apache.juneau.rest.annotation.RestMethod#pageTitle() @RestMethod.pageTitle()} 
+					<li>{@link org.apache.juneau.rest.annotation.RestResource#pageText() @RestResource.pageText()} 
+					<li>{@link org.apache.juneau.rest.annotation.RestMethod#pageText() @RestMethod.pageText()} 
+					<li>{@link org.apache.juneau.rest.annotation.RestResource#pageLinks() @RestResource.pageLinks()} 
+					<li>{@link org.apache.juneau.rest.annotation.RestMethod#pageLinks() @RestMethod.pageLinks()} 
+				</ul>				
+				<p class='bcode'>
+	<jc>// Old method</jc>
+	<ja>@RestResource</ja>(
+		properties={
+			<ja>@Property</ja>(name=<jsf>HTMLDOC_title</jsf>, value=<js>"System properties resource"</js>),
+			<ja>@Property</ja>(name=<jsf>HTMLDOC_description</jsf>, value=<js>"REST interface for performing CRUD operations on system properties."</js>),
+			<ja>@Property</ja>(name=<jsf>HTMLDOC_links</jsf>, value=<js>"{up:'$R{requestParentURI}',options:'?method=OPTIONS'}"</js>)
+		}
+	)
+		
+	<jc>// New method</jc>
+	<ja>@RestResource</ja>(
+		pageTitle=<js>"System properties resource"</js>,
+		pageDescription=<js>"REST interface for performing CRUD operations on system properties."</js>,
+		pageLinks=<js>"{up:'$R{requestParentURI}',options:'?method=OPTIONS'}"</js>
+	)
+				</p>		
+				<p>
+					Typically you're going to simply want to use the <code>title</code> and <code>description</code> annotations
+					which apply to both the page title/text and the swagger doc:		
+				</p>
+				<p class='bcode'>
+	<ja>@RestResource</ja>(
+		title=<js>"System properties resource"</js>,
+		description=<js>"REST interface for performing CRUD operations on system properties."</js>,
+		pageLinks=<js>"{up:'$R{requestParentURI}',options:'?method=OPTIONS'}"</js>
+	)
+				</p>
 			<li>{@link org.apache.juneau.rest.annotation.RestResource#stylesheet()} can now take in a comma-delimited list of stylesheet paths.
 			<li>{@link org.apache.juneau.rest.StreamResource} can now contain multiple sources from a variety of source types (e.g. <code><jk>byte</jk>[]</code> arrays, <code>InputStreams</code>, <code>Files</code>, etc...)
 				and is now immutable.  It also includes a new {@link org.apache.juneau.rest.StreamResource.Builder} class.
@@ -5858,6 +5876,7 @@
 				<li>{@link org.apache.juneau.rest.client.RestClientBuilder#debug(boolean)} now adds a <code>Debug: true</code> header on all requests.
 			</ul>
 			<li>New doc: <a class='doclink' href='org/apache/juneau/rest/client/package-summary.html#Debugging'>1.5 - Debugging</a>
+			<li>{@link org.apache.juneau.rest.annotation.RestMethod#name() @RestMethod.name()} annotation is now optional.  Defaults to <js>"GET"</js>.
 		</ul>
 		
 		<h6 class='topic'>org.apache.juneau.microservice</h6>
@@ -6434,7 +6453,7 @@
 				<ul>
 					<li>{@link org.apache.juneau.Streamable} interface for identifying objects that can be serialized directly to an output stream.
 					<li>{@link org.apache.juneau.Writable} interface for identifying objects that can be serialized directly to a writer.
-					<li>{@link org.apache.juneau.serializer.StringObject} class that can be used for delayed object serialization.
+					<li><code><del>StringObject</del></code> class that can be used for delayed object serialization.
 					<li>{@link org.apache.juneau.internal.ByteArrayCache}
 					<li>{@link org.apache.juneau.internal.ByteArrayInOutStream} 
 					<li>{@link org.apache.juneau.internal.FileUtils}

@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static org.apache.juneau.html.HtmlDocSerializerContext.*;
 import static org.apache.juneau.rest.RestContext.*;
 
 import org.apache.juneau.dto.swagger.*;
@@ -183,10 +182,6 @@ import org.apache.juneau.xml.*;
 	properties={
 		// Allow &method parameter on safe HTTP methods.
 		@Property(name=REST_allowMethodParam, value="OPTIONS"),
-		// Provide a default title on HTML pages.
-		@Property(name=HTMLDOC_title, value="$R{servletTitle}"),
-		// Provide a default description on HTML pages.
-		@Property(name=HTMLDOC_description, value="$R{servletDescription}")
 	},
 	stylesheet="styles/juneau.css",
 	favicon="juneau.png",
@@ -202,11 +197,9 @@ public abstract class RestServletDefault extends RestServlet {
 	 * @return A bean containing the contents for the OPTIONS page.
 	 */
 	@RestMethod(name="OPTIONS", path="/*",
-		properties={
-			@Property(name=HTMLDOC_links, value="{back:'$R{servletURI}'}"),
-			@Property(name=HTMLDOC_description, value="Resource options")
-		},
-		description="Resource options"
+		pageLinks="{back:'$R{servletURI}'}",
+		summary="Resource options",
+		description="Description of this resource"
 	)
 	public Swagger getOptions(RestRequest req) {
 		return req.getSwagger();

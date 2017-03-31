@@ -14,7 +14,6 @@ package org.apache.juneau.microservice.resources;
 
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
-import static org.apache.juneau.html.HtmlDocSerializerContext.*;
 
 import java.io.*;
 import java.util.Map;
@@ -34,9 +33,7 @@ import org.apache.juneau.rest.annotation.Body;
 	path="/config",
 	title="Configuration",
 	description="Contents of configuration file.",
-	properties={
-		@Property(name=HTMLDOC_links, value="{up:'$R{requestParentURI}',options:'$R{servletURI}?method=OPTIONS',edit:'$R{servletURI}/edit'}"),
-	}
+	pageLinks="{up:'$R{requestParentURI}',options:'?method=OPTIONS',edit:'edit'}"
 )
 public class ConfigResource extends Resource {
 	private static final long serialVersionUID = 1L;

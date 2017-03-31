@@ -67,13 +67,13 @@ public class ReaderResource implements Writable {
 	 *	</ul>
 	 * @throws IOException
 	 */
-	public ReaderResource(MediaType mediaType, Map<String,Object> headers, VarResolverSession varSession, Object...contents) throws IOException {
+	public ReaderResource(MediaType mediaType, Map<String,String> headers, VarResolverSession varSession, Object...contents) throws IOException {
 		this.mediaType = mediaType;
 		this.varSession = varSession;
 
 		Map<String,String> m = new LinkedHashMap<String,String>();
 		if (headers != null)
-			for (Map.Entry<String,Object> e : headers.entrySet())
+			for (Map.Entry<String,String> e : headers.entrySet())
 				m.put(e.getKey(), StringUtils.toString(e.getValue()));
 		this.headers = Collections.unmodifiableMap(m);
 

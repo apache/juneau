@@ -41,13 +41,13 @@ import org.apache.juneau.utils.*;
 @RestResource(
 	path="/addressBook",
 	messages="nls/AddressBookResource",
+	pageLinks="{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/addressbook/AddressBookResource.java'}",
 	properties={
 		@Property(name=REST_allowMethodParam, value="*"),
 		@Property(name=HTML_uriAnchorText, value=TO_STRING),
 		@Property(name=SERIALIZER_quoteChar, value="'"),
 		@Property(name=RDF_rdfxml_tab, value="5"),
 		@Property(name=RDF_addRootProperty, value="true"),
-		@Property(name=HTMLDOC_links, value="{up:'$R{requestParentURI}',options:'$R{servletURI}?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/addressbook/AddressBookResource.java'}"),
 		// Resolve all relative URIs so that they're relative to this servlet!
 		@Property(name=SERIALIZER_relativeUriBase, value="$R{servletURI}"),
 	},

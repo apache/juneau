@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest;
 
-import static org.apache.juneau.html.HtmlDocSerializerContext.*;
-
 import java.io.*;
 
 import org.apache.juneau.microservice.*;
@@ -27,11 +25,9 @@ import org.apache.juneau.rest.annotation.*;
 @RestResource(
 	path="/codeFormatter",
 	messages="nls/CodeFormatterResource",
-	properties={
-		@Property(name=HTMLDOC_title, value="Code Formatter"),
-		@Property(name=HTMLDOC_description, value="Add syntax highlighting tags to source code"),
-		@Property(name=HTMLDOC_links, value="{options:'?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/CodeFormatterResource.java'}"),
-	}
+	title="Code Formatter",
+	description="Utility for generating HTML code-formatted source code",
+	pageLinks="{options:'?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/CodeFormatterResource.java'}"
 )
 @SuppressWarnings({"serial"})
 public class CodeFormatterResource extends Resource {

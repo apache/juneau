@@ -14,7 +14,6 @@ package org.apache.juneau.examples.rest;
 
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
-import static org.apache.juneau.html.HtmlDocSerializerContext.*;
 
 import java.sql.*;
 import java.util.*;
@@ -34,11 +33,9 @@ import org.apache.juneau.rest.annotation.Body;
 @RestResource(
 	path="/sqlQuery",
 	messages="nls/SqlQueryResource",
-	properties={
-		@Property(name=HTMLDOC_title, value="SQL query service"),
-		@Property(name=HTMLDOC_description, value="Executes queries against the local derby '$C{SqlQueryResource/connectionUrl}' database"),
-		@Property(name=HTMLDOC_links, value="{up:'$R{requestParentURI}',options:'$R{servletURI}?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/SqlQueryResource.java'}"),
-	}
+	title="SQL query service",
+	description="Executes queries against the local derby '$C{SqlQueryResource/connectionUrl}' database",
+	pageLinks="{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/SqlQueryResource.java'}"
 )
 public class SqlQueryResource extends Resource {
 	private static final long serialVersionUID = 1L;
@@ -65,7 +62,7 @@ public class SqlQueryResource extends Resource {
 	}
 
 	/** GET request handler - Display the query entry page. */
-	@RestMethod(name="GET", path="/")
+	@RestMethod(name="GET", path="/", summary="Display the query entry page")
 	public Div doGet(RestRequest req) {
 		return div(
 			script("text/javascript",
@@ -108,7 +105,7 @@ public class SqlQueryResource extends Resource {
 	}
 
 	/** POST request handler - Execute the query. */
-	@RestMethod(name="POST", path="/")
+	@RestMethod(name="POST", path="/", summary="Execute one or more queries")
 	public List<Object> doPost(@Body PostInput in) throws Exception {
 
 		List<Object> results = new LinkedList<Object>();

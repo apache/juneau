@@ -13,7 +13,6 @@
 package org.apache.juneau.examples.rest;
 
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
-import static org.apache.juneau.html.HtmlDocSerializerContext.*;
 
 import java.util.*;
 
@@ -31,11 +30,9 @@ import org.apache.juneau.transforms.*;
 @RestResource(
 	path="/urlEncodedForm",
 	messages="nls/UrlEncodedFormResource",
-	properties={
-		@Property(name=HTMLDOC_links, value="{up:'$R{requestParentURI}',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/UrlEncodedFormResource.java'}"),
-		@Property(name=HTMLDOC_title, value="Tumblr parser service"),
-		@Property(name=HTMLDOC_description, value="Specify a URL to a Tumblr blog and parse the results.")
-	}
+	title="Tumblr parser service",
+	description="Specify a URL to a Tumblr blog and parse the results.",
+	pageLinks="{up:'$R{requestParentURI}',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/UrlEncodedFormResource.java'}"
 )
 public class UrlEncodedFormResource extends Resource {
 	private static final long serialVersionUID = 1L;

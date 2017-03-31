@@ -37,10 +37,10 @@ import org.apache.juneau.serializer.*;
 @RestResource(
 	path="/photos",
 	messages="nls/PhotosResource",
+	title="Photo REST service",
+	description="Sample resource that allows images to be uploaded and retrieved.",
+	pageLinks="{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/PhotosResource.java'}",
 	properties={
-		@Property(name=HTMLDOC_title, value="Photo REST service"),
-		@Property(name=HTMLDOC_description, value="Use a tool like Poster to upload and retrieve jpeg and png images."),
-		@Property(name=HTMLDOC_links, value="{up:'$R{requestParentURI}',options:'$R{servletURI}?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/PhotosResource.java'}"),
 		// Resolve all relative URIs so that they're relative to this servlet!
 		@Property(name=SERIALIZER_relativeUriBase, value="$R{servletURI}"),
 	}
@@ -80,13 +80,13 @@ public class PhotosResource extends Resource {
 	}
 
 	/** GET request handler for list of all photos */
-	@RestMethod(name="GET", path="/")
+	@RestMethod(name="GET", path="/", summary="Show the list of all currently loaded photos")
 	public Collection<Photo> getAllPhotos() throws Exception {
 		return photos.values();
 	}
 
 	/** GET request handler for single photo */
-	@RestMethod(name="GET", path="/{id}", serializers=ImageSerializer.class)
+	@RestMethod(name="GET", path="/{id}", serializers=ImageSerializer.class, summary="Get a photo by ID")
 	public BufferedImage getPhoto(@Path int id) throws Exception {
 		Photo p = photos.get(id);
 		if (p == null)
@@ -95,14 +95,14 @@ public class PhotosResource extends Resource {
 	}
 
 	/** PUT request handler */
-	@RestMethod(name="PUT", path="/{id}", parsers=ImageParser.class)
+	@RestMethod(name="PUT", path="/{id}", parsers=ImageParser.class, summary="Add a photo")
 	public String addPhoto(@Path int id, @Body BufferedImage image) throws Exception {
 		photos.put(id, new Photo(id, image));
 		return "OK";
 	}
 
 	/** POST request handler */
-	@RestMethod(name="POST", path="/", parsers=ImageParser.class)
+	@RestMethod(name="POST", path="/", parsers=ImageParser.class, summary="Overwrite a photo by ID")
 	public Photo setPhoto(@Body BufferedImage image) throws Exception {
 		int id = photos.size();
 		Photo p = new Photo(id, image);
@@ -111,7 +111,7 @@ public class PhotosResource extends Resource {
 	}
 
 	/** DELETE request handler */
-	@RestMethod(name="DELETE", path="/{id}")
+	@RestMethod(name="DELETE", path="/{id}", summary="Delete a photo by ID")
 	public String deletePhoto(@Path int id) throws Exception {
 		Photo p = photos.remove(id);
 		if (p == null)

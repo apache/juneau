@@ -35,9 +35,9 @@ import org.apache.juneau.utils.*;
  */
 @RestResource(
 	messages="nls/DirectoryResource",
+	pageLinks="{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/DirectoryResource.java'}",
 	properties={
 		@Property(name=HTML_uriAnchorText, value=PROPERTY_NAME),
-		@Property(name=HTMLDOC_links, value="{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/DirectoryResource.java'}"),
 		@Property(name=REST_allowMethodParam, value="*"),
 		@Property(name="rootDir", value="$S{java.io.tmpdir}"),
 		@Property(name="allowViews", value="false"),

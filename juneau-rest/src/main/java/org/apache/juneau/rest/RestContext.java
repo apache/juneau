@@ -277,6 +277,7 @@ public final class RestContext extends Context {
 	 */
 	public static final String REST_methodDescription = "RestServlet.methodDescription";
 
+
 	private final Object resource;
 	private final RestConfig config;
 	private final boolean
@@ -288,7 +289,8 @@ public final class RestContext extends Context {
 		defaultCharset,
 		paramFormat,
 		clientVersionHeader,
-		fullPath;
+		fullPath,
+		pageTitle, pageText, pageLinks;
 	private final Set<String> allowMethodParams;
 
 	private final ObjectMap properties;
@@ -382,6 +384,9 @@ public final class RestContext extends Context {
 			this.childResources = Collections.synchronizedMap(new LinkedHashMap<String,RestContext>());  // Not unmodifiable on purpose so that children can be replaced.
 			this.logger = b.logger;
 			this.fullPath = b.fullPath;
+			this.pageTitle = b.pageTitle;
+			this.pageText = b.pageText;
+			this.pageLinks = b.pageLinks;
 
 			//----------------------------------------------------------------------------------------------------
 			// Initialize the child resources.
@@ -559,7 +564,7 @@ public final class RestContext extends Context {
 		UrlEncodingSerializer urlEncodingSerializer;
 		UrlEncodingParser urlEncodingParser;
 		EncoderGroup encoders;
-		String clientVersionHeader = "", defaultCharset, paramFormat;
+		String clientVersionHeader = "", defaultCharset, paramFormat, pageTitle, pageText, pageLinks;
 		List<MediaType> supportedContentTypes, supportedAcceptTypes;
 		Map<String,String> defaultRequestHeaders = new TreeMap<String,String>(String.CASE_INSENSITIVE_ORDER);
 		Map<String,Object> defaultResponseHeaders;
@@ -696,6 +701,10 @@ public final class RestContext extends Context {
 			logger = sc.logger == null ? new RestLogger.NoOp() : resolve(RestLogger.class, sc.logger);
 
 			fullPath = (sc.parentContext == null ? "" : (sc.parentContext.fullPath + '/')) + sc.path;
+
+			pageTitle = sc.pageTitle;
+			pageText = sc.pageText;
+			pageLinks = sc.pageLinks;
 		}
 	}
 
@@ -728,7 +737,7 @@ public final class RestContext extends Context {
 	 * 		properties={
 	 * 			<ja>@Property</ja>(
 	 * 				name=<jsf>HTMLDOC_links</jsf>,
-	 * 				value=<js>"{up:'$R{requestParentURI}', options:'?method=OPTIONS', editLevel:'$R{servletURI}/editLevel?logger=$R{attribute.name}'}"</js>
+	 * 				value=<js>"{up:'$R{requestParentURI}', options:'?method=OPTIONS', editLevel:'editLevel?logger=$R{attribute.name}'}"</js>
 	 * 			)
 	 * 		}
 	 * 	)
@@ -914,6 +923,33 @@ public final class RestContext extends Context {
 	 */
 	public String getPath() {
 		return fullPath;
+	}
+
+	/**
+	 * Returns the page title as defined by the {@link RestResource#pageTitle()} annotation or {@link RestConfig#setPageTitle(String)} method.
+	 *
+	 * @return The page title.
+	 */
+	public String getPageTitle() {
+		return pageTitle;
+	}
+
+	/**
+	 * Returns the page text as defined by the {@link RestResource#pageText()} annotation or {@link RestConfig#setPageText(String)} method.
+	 *
+	 * @return The page text.
+	 */
+	public String getPageText() {
+		return pageText;
+	}
+
+	/**
+	 * Returns the page links as defined by the {@link RestResource#pageLinks()} annotation or {@link RestConfig#setPageLinks(String)} method.
+	 *
+	 * @return The page links.
+	 */
+	public String getPageLinks() {
+		return pageLinks;
 	}
 
 	/**

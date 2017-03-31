@@ -226,9 +226,7 @@
 	 */</jd>
 	<ja>@RestResource</ja>(
 		messages=<js>"nls/HelloWorldResource"</js>, 
-		properties={
-			<ja>@Property</ja>(name=<jsf>HTMLDOC_links</jsf>, value=<js>"{up:'$R{requestParentURI}',options:'?method=OPTIONS'}"</js>)
-		}
+		pageLinks=<js>"{up:'$R{requestParentURI}',options:'?method=OPTIONS'}"</js>
 	)
 	<jk>public class</jk> HelloWorldResource <jk>extends</jk> Resource {
 	
@@ -1037,11 +1035,8 @@
 	 * <ja>@return</ja> A bean containing the contents for the OPTIONS page.
 	 */</jd>
 	<ja>@RestMethod</ja>(name=<js>"OPTIONS"</js>, path=<js>"/*"</js>,
-		properties={
-			<ja>@Property</ja>(name=<jsf>HTMLDOC_links</jsf>, value=<js>"{back:'$R{servletURI}'}"</js>),
-			<ja>@Property</ja>(name=<jsf>HTMLDOC_description</jsf>, value=<js>"Resource options"</js>)
-		},
-		description=<js>"Resource options"</js>
+		summary=<js>"Resource options"</js>,
+		pageLinks=<js>"{back:'$R{servletURI}'}"</js>
 	)
 	<jk>public</jk> Swagger getOptions(RestRequest req) {
 		<jk>return</jk> req.getSwagger();
@@ -1116,12 +1111,8 @@
 		</p>
 		<p class='bcode'>
 	<ja>@RestResource</ja>(
-		properties={
-			<jc>// Provide a default title on HTML pages.</jc>
-			<ja>@Property</ja>(name=<jsf>HTMLDOC_title</jsf>, value=<js>"$R{servletTitle}"</js>),
-			<jc>// Provide a default description on HTML pages.</jc>
-			<ja>@Property</ja>(name=<jsf>HTMLDOC_description</jsf>, value=<js>"$R{servletDescription}"</js>)
-		}
+		pageTitle=<js>"The title for this page is $R{servletTitle}"</js>,
+		pageText=<js>"The description for this page is $R{servletDescription}"</js>
 	)
 	<jk>public abstract class</jk> RestServletDefault <jk>extends</jk> RestServlet {
 	 	</p>
@@ -1430,6 +1421,7 @@
 				value=<js>"{jp06:'http://jazz.net/xmlns/prod/jazz/process/0.6/',jp:'http://jazz.net/xmlns/prod/jazz/process/1.0/'}"</js>),
 
 			<jc>// Specify a default title for the HtmlSerializer serializer</jc>
+			<jc>// This is equivalent to @RestResource(title/pageTitle)</jc>
 			<ja>@Property</ja>(name=<jsf>HTMLDOC_title</jsf>, value=<js>"My resource"</js>)
 		}
 	)
@@ -1457,6 +1449,7 @@
 				value=<js>"{jp06:'http://jazz.net/xmlns/prod/jazz/process/0.6/',jp:'http://jazz.net/xmlns/prod/jazz/process/1.0/'}"</js>),
 
 			<jc>// Specify a default title for the HtmlSerializer serializer</jc>
+			<jc>// This is equivalent to @RestMethod(pageTitle)</jc>
 			<ja>@Property</ja>(name=<jsf>HTMLDOC_title</jsf>, value=<js>"My resource"</js>)
 		}
 	<jk>public</jk> Object doGet() {
@@ -1753,10 +1746,6 @@
 	 */</jd>
 	<ja>@RestResource</ja>(
 		path=<js>"/"</js>,
-		messages=<js>"nls/RootResources"</js>,
-		properties={
-			<ja>@Property</ja>(name=HTMLDOC_links, value=<js>"{options:'$R{servletURI}?method=OPTIONS',source:'$R{servletURI}/source?classes=(org.apache.juneau.rest.samples.RootResources)'}"</js>)
-		},
 		children={
 			HelloWorldResource.<jk>class</jk>,
 			MethodExampleResource.<jk>class</jk>,
@@ -1905,9 +1894,6 @@
 		<p class='bcode'>
 	<ja>@RestResource</ja>(
 		title=<js>"$L{my.label}"</js>
- 		properties={
- 			<ja>@Property</ja>(name=<jsf>HTMLDOC_links</jsf>, value=<js>"{options:'$R{servletURI}?method=OPTIONS'"</js>)
- 		}
     )
 		</p>
 		<p>
@@ -2136,11 +2122,9 @@
 	<ja>@RestResource</ja>(
 		path=<js>"/urlEncodedForm"</js>, 
 		messages=<js>"nls/UrlEncodedFormResource"</js>, 
-		properties={
-			<ja>@Property</ja>(name=HTMLDOC_title, value=<js>"URL-encoded Form Post Resource"</js>), 
-			<ja>@Property</ja>(name=HTMLDOC_description, value=<js>"Shows how form posts are converted into beans."</js>), 
-			<ja>@Property</ja>(name=HTMLDOC_links, value=<js>"{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$R{servletParentURI}/source?classes=(org.apache.juneau.rest.samples.UrlEncodedFormResource)'}"</js>) 
-		} 
+		title=<js>"URL-encoded Form Post Resource"</js>, 
+		description=<js>"Shows how form posts are converted into beans."</js>, 
+		pageLinks=<js>"{up:'$R{requestParentURI}',options:'?method=OPTIONS'}"</js> 
 	) 
 	<jk>public class</jk> UrlEncodedFormResource <jk>extends</jk> Resource { 
 		<jk>private static final long</jk> <jsf>serialVersionUID</jsf> = 1L; 
@@ -2893,11 +2877,9 @@
 	<ja>@RestResource</ja>(
 		path=<js>"/photos"</js>,
 		messages=<js>"nls/PhotosResource"</js>,
-		properties={
-			<ja>@Property</ja>(name=HtmlDocSerializerContext.<jsf>HTMLDOC_links</jsf>, value=<js>"{options:'?method=OPTIONS'}"</js>),
-			<ja>@Property</ja>(name=HtmlDocSerializerContext.<jsf>HTMLDOC_title</jsf>, value=<js>"Photo REST service"</js>),
-			<ja>@Property</ja>(name=HtmlDocSerializerContext.<jsf>HTMLDOC_description</jsf>, value=<js>"Use a tool like Poster to upload and retrieve jpeg and png images."</js>)
-		}
+		title=<js>"Photo REST service"</js>,
+		description=<js>"Use a tool like Poster to upload and retrieve jpeg and png images."</js>,
+		pageLinks=<js>"{options:'?method=OPTIONS'}"</js>
 	)
 	<jk>public class</jk> PhotosResource <jk>extends</jk> RestServletDefault {
 	
@@ -2926,8 +2908,8 @@
 		<jd>/** GET request handler for list of all photos */</jd>
 		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/"</js>)
 		<jk>public</jk> Collection&lt;Photo&gt; getAllPhotos(RestRequest req, RestResponse res) <jk>throws</jk> Exception {
-			res.setProperty(HtmlDocSerializerContext.<jsf>HTMLDOC_title</jsf>, <js>"Photo REST service"</js>);
-			res.setProperty(HtmlDocSerializerContext.<jsf>HTMLDOC_description</jsf>, <js>"Use a tool like Poster to upload and retrieve jpeg and png images."</js>);
+			res.setPageTitle(<js>"Photo REST service"</js>);
+			res.setPageText(<js>"Use a tool like Poster to upload and retrieve jpeg and png images."</js>);
 			<jk>return</jk> photos.values();
 		}
 		
@@ -3187,13 +3169,13 @@
 	<ja>@RestResource</ja>( 
 		path=<js>"/addressBook"</js>, 
 		messages=<js>"nls/AddressBookResource"</js>, 
+		pageLinks=<js>"{up:'$R{requestParentURI}',options:'?method=OPTIONS'}"</js>, 
 		properties={ 
 			<ja>@Property</ja>(name=<jsf>REST_allowMethodParam</jsf>, value=<js>"*"</js>), 
 			<ja>@Property</ja>(name=<jsf>HTML_uriAnchorText</jsf>, value=<jsf>TO_STRING</jsf>), 
 			<ja>@Property</ja>(name=<jsf>SERIALIZER_quoteChar</jsf>, value=<js>"'"</js>), 
 			<ja>@Property</ja>(name=<jsf>RDF_rdfxml_tab</jsf>, value=<js>"5"</js>), 
 			<ja>@Property</ja>(name=<jsf>RDF_addRootProperty</jsf>, value=<js>"true"</js>), 
-			<ja>@Property</ja>(name=<jsf>HTMLDOC_links</jsf>, value=<js>"{up:'$R{requestParentURI}',options:'$R{servletURI}?method=OPTIONS',source:'$R{servletParentURI}/source?classes=(org.apache.juneau.rest.samples.addressbook.AddressBookResource,org.apache.juneau.examples.addressbook.Address,org.apache.juneau.examples.addressbook.AddressBook,org.apache.juneau.examples.addressbook.CreateAddress,org.apache.juneau.examples.addressbook.CreatePerson,org.apache.juneau.examples.addressbook.IAddressBook,org.apache.juneau.examples.addressbook.Person)'}"</js>), 
 			<jc>// Resolve all relative URIs so that they're relative to this servlet!</jc> 
 			<ja>@Property</ja>(name=<jsf>SERIALIZER_relativeUriBase</jsf>, value=<js>"$R{servletURI}"</js>), 
 		}, 

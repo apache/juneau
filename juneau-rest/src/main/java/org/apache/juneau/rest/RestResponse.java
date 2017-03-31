@@ -21,10 +21,13 @@ import javax.servlet.http.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.encoders.*;
+import org.apache.juneau.html.*;
 import org.apache.juneau.jena.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.urlencoding.*;
+import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.*;
 
 /**
@@ -40,7 +43,7 @@ import org.apache.juneau.xml.*;
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>)
  * 	<jk>public void</jk> doGet(RestRequest req, RestResponse res) {
- * 		res.setProperty(HtmlSerializerContext.<jsf>HTMLDOC_title</jsf>, <js>"My title"</js>)
+ * 		res.setPageTitle(<js>"My title"</js>)
  * 			.setOutput(<js>"Simple string response"</js>);
  * 	}
  * </p>
@@ -412,5 +415,64 @@ public final class RestResponse extends HttpServletResponseWrapper {
 			super.setContentType(value);
 		else
 			super.setHeader(name, value);
+	}
+
+	/**
+	 * Sets the page title for HTML views.
+	 * <p>
+	 * This is the programmatic equivalent to the {@link RestResource#pageTitle() @RestResource#pageTitle()}/
+	 * {@link RestMethod#pageTitle() @RestMethod#pageTitle()} annotations.
+	 * <p>
+	 * This is a shortcut for calling <code>setProperty(<jsf>HTMLDOC_title</jsf>, title);</code>
+	 * <p class='info'>
+	 * 	<b>Tip:</b>  Use {@link StringMessage} to generate a page title with delayed serialization so as not to
+	 * 	waste string concatenation cycles on non-HTML views.
+	 * </p>
+	 *
+	 * @param title The localized page title to render on the page.
+	 * Object will be converted to a string using {@link Object#toString()}.
+	 * @return This object (for method chaining).
+	 */
+	public RestResponse setPageTitle(Object title) {
+		return setProperty(HtmlDocSerializerContext.HTMLDOC_title, title);
+	}
+
+	/**
+	 * Sets the page text for HTML views.
+	 * <p>
+	 * This is the programmatic equivalent to the {@link RestResource#pageText() @RestResource#pageText()}/
+	 * {@link RestMethod#pageText() @RestMethod#pageText()} annotations.
+	 * <p>
+	 * This is a shortcut for calling <code>setProperty(<jsf>HTMLDOC_text</jsf>, text);</code>
+	 * <p class='info'>
+	 * 	<b>Tip:</b>  Use {@link StringMessage} to generate page text with delayed serialization so as not to
+	 * 	waste string concatenation cycles on non-HTML views.
+	 * </p>
+	 *
+	 * @param text The localized page text to render on the page.
+	 * @return This object (for method chaining).
+	 */
+	public RestResponse setPageText(Object text) {
+		return setProperty(HtmlDocSerializerContext.HTMLDOC_text, text);
+	}
+
+	/**
+	 * Sets the page text for HTML views.
+	 * <p>
+	 * This is the programmatic equivalent to the {@link RestResource#pageLinks() @RestResource#pageLinks()}/
+	 * {@link RestMethod#pageLinks() @RestMethod#pageLinks()} annotations.
+	 * <p>
+	 * This is a shortcut for calling <code>setProperty(<jsf>HTMLDOC_links</jsf>, links);</code>
+	 * <p class='info'>
+	 * 	<b>Tip:</b>  Use {@link StringMessage} to generate page links with delayed serialization so as not to
+	 * 	waste string concatenation cycles on non-HTML views.
+	 * </p>
+	 *
+	 * @param links The localized page links render on the page.
+	 * @return This object (for method chaining).
+	 */
+	public RestResponse setPageLinks(Object links) {
+		properties.put(HtmlDocSerializerContext.HTMLDOC_links, links);
+		return this;
 	}
 }

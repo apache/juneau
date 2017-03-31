@@ -29,11 +29,12 @@ import org.apache.juneau.transforms.*;
  */
 @RestResource(
 	path="/echo",
-	messages="nls/RequestEchoResource",
+	title="Request echo service",
+	description="Echos the current HttpServletRequest object back to the browser.",
+	pageLinks="{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/RequestEchoResource.java'}",
 	properties={
 		@Property(name=SERIALIZER_maxDepth, value="5"),
-		@Property(name=SERIALIZER_detectRecursions, value="true"),
-		@Property(name=HTMLDOC_links, value="{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/RequestEchoResource.java'}")
+		@Property(name=SERIALIZER_detectRecursions, value="true")
 	},
 	beanFilters={
 		// Interpret these as their parent classes, not subclasses
@@ -48,11 +49,10 @@ public class RequestEchoResource extends Resource {
 	private static final long serialVersionUID = 1L;
 
 	/** GET request handler */
-	@RestMethod(name="GET", path="/*", converters={Traversable.class,Queryable.class})
-	public HttpServletRequest doGet(RestRequest req, @Properties ObjectMap properties) {
+	@RestMethod(name="GET", path="/*", converters={Traversable.class,Queryable.class}, summary="Serializes the incoming HttpServletRequest object.")
+	public HttpServletRequest doGet(RestRequest req, RestResponse res, @Properties ObjectMap properties) {
 		// Set the HtmlDocSerializer title programmatically.
-		// This sets the value for this request only.
-		properties.put(HTMLDOC_title, "Contents of HttpServletRequest object");
+		res.setPageTitle("Contents of HttpServletRequest object");
 
 		// Just echo the request back as the response.
 		return req;

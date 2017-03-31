@@ -50,6 +50,7 @@ public @interface RestMethod {
 	 * 	<li><js>""</js> - Auto-detect.
 	 * 		<br>The method name is determined based on the Java method name.
 	 * 		<br>For example, if the method is <code>doPost(...)</code>, then the method name is automatically detected as <js>"POST"</js>.
+	 * 		<br>Otherwise, defaults to <js>"GET"</js>.
 	 * 	<li><js>"PROXY"</js> - Remote-proxy interface.
 	 * 		<br>This denotes a Java method that returns an object (usually an interface, often annotated with the {@link Remoteable @Remoteable} annotation)
 	 * 		to be used as a remote proxy using <code>RestClient.getRemoteableProxy(Class<T> interfaceClass, String url)</code>.
@@ -518,7 +519,17 @@ public @interface RestMethod {
 	String clientVersion() default "";
 
 	/**
-	 * TODO
+	 * Overrides the HTML page title defined on the servlet via the {@link RestResource#pageTitle() @RestResource.pageTitle()} annotation.
 	 */
-	String[] links() default "";
+	String pageTitle() default "";
+
+	/**
+	 * Overrides the HTML page text defined on the servlet via the {@link RestResource#pageText() @RestResource.pageText()} annotation.
+	 */
+	String pageText() default "";
+
+	/**
+	 * Overrides the HTML page links defined on the servlet via the {@link RestResource#pageLinks() @RestResource.pageLinks()} annotation.
+	 */
+	String pageLinks() default "";
 }

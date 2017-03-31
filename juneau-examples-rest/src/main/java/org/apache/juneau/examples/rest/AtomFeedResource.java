@@ -29,12 +29,13 @@ import org.apache.juneau.rest.annotation.*;
  */
 @RestResource(
 	path="/atom",
-	messages="nls/AtomFeedResource",
+	title="Sample ATOM feed resource",
+	description="Sample resource that shows how to render ATOM feeds",
+	pageLinks="{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/AtomFeedResource.java'}",
 	properties={
 		@Property(name=SERIALIZER_quoteChar, value="'"),
 		@Property(name=RDF_rdfxml_tab, value="5"),
-		@Property(name=RDF_addRootProperty, value="true"),
-		@Property(name=HTMLDOC_links, value="{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/AtomFeedResource.java'}")
+		@Property(name=RDF_addRootProperty, value="true")
 	},
 	encoders=GzipEncoder.class
 )
@@ -86,7 +87,7 @@ public class AtomFeedResource extends ResourceJena {
 	/**
 	 * GET request handler
 	 */
-	@RestMethod(name="GET", path="/")
+	@RestMethod(name="GET", path="/", summary="Get the sample ATOM feed")
 	public Feed getFeed() throws Exception {
 		return feed;
 	}
@@ -95,7 +96,7 @@ public class AtomFeedResource extends ResourceJena {
 	 * PUT request handler.
 	 * Replaces the feed with the specified content, and then mirrors it as the response.
 	 */
-	@RestMethod(name="PUT", path="/")
+	@RestMethod(name="PUT", path="/", summary="Overwrite the sample ATOM feed")
 	public Feed setFeed(@Body Feed feed) throws Exception {
 		this.feed = feed;
 		return feed;

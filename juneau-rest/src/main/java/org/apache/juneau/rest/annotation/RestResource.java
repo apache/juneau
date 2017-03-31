@@ -21,6 +21,7 @@ import javax.servlet.http.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.encoders.Encoder;
+import org.apache.juneau.html.*;
 import org.apache.juneau.ini.*;
 import org.apache.juneau.jena.*;
 import org.apache.juneau.json.*;
@@ -315,7 +316,7 @@ public @interface RestResource {
 	/**
 	 * Optional servlet title.
 	 * <p>
-	 * It is used to populate the Swagger title field and to display on HTML pages.
+	 * It is used to populate the Swagger title field and as a default value for the {@link #pageTitle()} value.
 	 * This value can be retrieved programmatically through the {@link RestRequest#getServletTitle()} method.
 	 * <p>
 	 * The default value pulls the label from the <code>label</code> entry in the servlet resource bundle.
@@ -332,7 +333,7 @@ public @interface RestResource {
 	/**
 	 * Optional servlet description.
 	 * <p>
-	 * It is used to populate the Swagger description field and to display on HTML pages.
+	 * It is used to populate the Swagger description field and as a default value for the {@link #pageText()} value.
 	 * This value can be retrieved programmatically through the {@link RestRequest#getServletDescription()} method.
 	 * <p>
 	 * The default value pulls the description from the <code>description</code> entry in the servlet resource bundle.
@@ -695,7 +696,103 @@ public @interface RestResource {
 	Class<? extends RestInfoProvider> infoProvider() default RestInfoProvider.class;
 
 	/**
-	 * TODO
+	 * Specifies the page title to use on the HTML view of all pages produced by this resource.
+	 * <p>
+	 * This annotation has no effect on any serializers other than {@link HtmlDocSerializer} and is a shorthand method
+	 * for setting the {@link HtmlDocSerializerContext#HTMLDOC_title} property:
+	 * <p class='bcode'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		properties={
+	 * 			<ja>@Property</ja>(name=<jsf>HTMLDOC_title</jsf>, value=<js>"My Resource Page"</js>)
+	 * 		}
+	 * 	)
+	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServletDefault {
+	 * </p>
+	 * <p>
+	 * If not specified, the page title is pulled from one of the following locations:
+	 * <ol>
+	 * 	<li><code>{servletClass}.{methodName}.pageTitle</code> resource bundle value.
+	 * 	<li><code>{servletClass}.pageTitle</code> resource bundle value.
+	 * 	<li><code><ja>@RestResource</ja>(title)</code> annotation.
+	 * 	<li><code>{servletClass}.title</code> resource bundle value.
+	 * 	<li><code>info/title</code> entry in swagger file.
+	 * <ol>
+	 * <p>
+	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * <p>
+	 * The programmatic equivalent to this annotation are the {@link RestConfig#setPageTitle(String)}/{@link RestResponse#setPageTitle(Object)} methods.
+	 * <p class='info'>
+	 * 	In most cases, you'll simply want to use the <code>@RestResource(title)</code> annotation to specify the page title.
+	 * 	However, this annotation is provided in cases where you want the page title to be different that the one
+	 * 	shown in the swagger document.
+	 * </p>
+	 * <b>Note:</b> - In most cases, you can
 	 */
-	String[] links() default "";
+	String pageTitle() default "";
+
+	/**
+	 * Specifies the page text to use on the HTML view of all pages produced by this resource.
+	 * <p>
+	 * The page text is portion of the page immediately under the title and above the links.
+	 * <p>
+	 * This annotation has no effect on any serializers other than {@link HtmlDocSerializer} and is a shorthand method
+	 * for setting the {@link HtmlDocSerializerContext#HTMLDOC_text} property:
+	 * <p class='bcode'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		properties={
+	 * 			<ja>@Property</ja>(name=<jsf>HTMLDOC_text</jsf>, value=<js>"This is my awesome resource page"</js>)
+	 * 		}
+	 * 	)
+	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServletDefault {
+	 * </p>
+	 * If not specified, the page title is pulled from one of the following locations:
+	 * <ol>
+	 * 	<li><code>{servletClass}.{methodName}.pageText</code> resource bundle value.
+	 * 	<li><code>{servletClass}.pageText</code> resource bundle value.
+	 * 	<li><code><ja>@RestMethod</ja>(summary)</code> annotation.
+	 * 	<li><code>{servletClass}.{methodName}.summary</code> resource bundle value.
+	 * 	<li><code>summary</code> entry in swagger file for method.
+	 * 	<li><code>{servletClass}.description</code> resource bundle value.
+	 * 	<li><code>info/description</code> entry in swagger file.
+	 * <ol>
+	 * <p>
+	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * <p>
+	 * The programmatic equivalent to this annotation are the {@link RestConfig#setPageText(String)}/{@link RestResponse#setPageText(Object)} methods.
+	 * <p class='info'>
+	 * 	In most cases, you'll simply want to use the <code>@RestResource(description)</code> or <code>@RestMethod(summary)</code> annotations to specify the page text.
+	 * 	However, this annotation is provided in cases where you want the text to be different that the values shown in the swagger document.
+	 * </p>
+	 */
+	String pageText() default "";
+
+	/**
+	 * Specifies the page hyperlinks to use on the HTML view of all pages produced by this resource.
+	 * <p>
+	 * The page links is positioned immediately under the title and text.
+	 * <p>
+	 * This annotation has no effect on any serializers other than {@link HtmlDocSerializer} and is a shorthand method
+	 * for setting the {@link HtmlDocSerializerContext#HTMLDOC_text} property:
+	 * <p class='bcode'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		properties={
+	 * 			<ja>@Property</ja>(name=<jsf>HTMLDOC_links</jsf>, value=<js>"{up:'$R{requestParentURI}',options:'?method=OPTIONS'}"</js>)
+	 * 		}
+	 * 	)
+	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServletDefault {
+	 * </p>
+	 * <p>
+	 * The format of this value is a lax-JSON string of key/value pairs where the keys are the link text and the values are relative (to the servlet) or
+	 * absolute URLs.
+	 * If not specified, the page title is pulled from one of the following locations:
+	 * <ol>
+	 * 	<li><code>{servletClass}.{methodName}.pageLinks</code> resource bundle value.
+	 * 	<li><code>{servletClass}.pageLinks</code> resource bundle value.
+	 * <ol>
+	 * <p>
+	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * <p>
+	 * The programmatic equivalent to this annotation are the {@link RestConfig#setPageLinks(String)}/{@link RestResponse#setPageLinks(Object)} methods.
+	 */
+	String pageLinks() default "";
 }

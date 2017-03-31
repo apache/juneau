@@ -57,9 +57,9 @@ import org.apache.juneau.utils.*;
 	title="File System Explorer",
 	description="Contents of $R{attribute.path}",
 	messages="nls/DirectoryResource",
+	pageLinks="{up:'$R{requestParentURI}',options:'?method=OPTIONS'}",
 	properties={
 		@Property(name=HTML_uriAnchorText, value=PROPERTY_NAME),
-		@Property(name=HTMLDOC_links, value="{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$R{servletParentURI}/source?classes=(org.apache.juneau.rest.samples.DirectoryResource)'}"),
 		@Property(name=REST_allowMethodParam, value="*"),
 		@Property(name="DirectoryResource.rootDir", value=""),
 		@Property(name="DirectoryResource.allowViews", value="false"),

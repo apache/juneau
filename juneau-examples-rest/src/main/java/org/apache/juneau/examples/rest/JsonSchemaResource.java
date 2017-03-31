@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest;
 
-import static org.apache.juneau.html.HtmlDocSerializerContext.*;
-
 import org.apache.juneau.dto.jsonschema.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.annotation.*;
@@ -24,10 +22,9 @@ import org.apache.juneau.rest.annotation.*;
 @RestResource(
 	path="/jsonSchema",
 	messages="nls/JsonSchemaResource",
-	properties={
-		@Property(name=HTMLDOC_title, value="Sample JSON-Schema document"),
-		@Property(name=HTMLDOC_links, value="{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/JsonSchemaResource.java'}")
-	}
+	title="Sample JSON-Schema document",
+	description="Sample resource that shows how to generate JSON-Schema documents",
+	pageLinks="{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/JsonSchemaResource.java'}"
 )
 public class JsonSchemaResource extends ResourceJena {
 	private static final long serialVersionUID = 1L;
@@ -57,7 +54,7 @@ public class JsonSchemaResource extends ResourceJena {
 	}
 
 	/** GET request handler */
-	@RestMethod(name="GET", path="/")
+	@RestMethod(name="GET", path="/", summary="Get the JSON-Schema document")
 	public Schema getSchema() throws Exception {
 		return schema;
 	}
@@ -66,7 +63,7 @@ public class JsonSchemaResource extends ResourceJena {
 	 * PUT request handler.
 	 * Replaces the schema document with the specified content, and then mirrors it as the response.
 	 */
-	@RestMethod(name="PUT", path="/")
+	@RestMethod(name="PUT", path="/", summary="Overwrite the JSON-Schema document")
 	public Schema setSchema(@Body Schema schema) throws Exception {
 		this.schema = schema;
 		return schema;

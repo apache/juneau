@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest;
 
-import static org.apache.juneau.html.HtmlDocSerializerContext.*;
-
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.annotation.*;
 
@@ -22,16 +20,16 @@ import org.apache.juneau.rest.annotation.*;
  */
 @RestResource(
 	messages="nls/HelloWorldResource",
+	title="Hello World sample resource",
+	description="Simplest possible resource",
 	path="/helloWorld",
-	properties={
-		@Property(name=HTMLDOC_links, value="{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/HelloWorldResource.java'}")
-	}
+	pageLinks="{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/HelloWorldResource.java'}"
 )
 public class HelloWorldResource extends Resource {
 	private static final long serialVersionUID = 1L;
 
 	/** GET request handler */
-	@RestMethod(name="GET", path="/*")
+	@RestMethod(name="GET", path="/*", summary="Responds with \"Hello world!\"")
 	public String sayHello() {
 		return "Hello world!";
 	}

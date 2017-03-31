@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice;
 
-import static org.apache.juneau.html.HtmlDocSerializerContext.*;
-
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.jena.*;
 
@@ -22,9 +20,7 @@ import org.apache.juneau.rest.jena.*;
  */
 @SuppressWarnings("serial")
 @RestResource(
-	properties={
-		@Property(name=HTMLDOC_links, value="{up:'$R{requestParentURI}',options:'$R{servletURI}?method=OPTIONS'}")
-	},
+	pageLinks="{up:'$R{requestParentURI}',options:'?method=OPTIONS'}",
 	config="$S{juneau.configFile}",
 	stylesheet="$C{REST/stylesheet,styles/juneau.css}"
 )

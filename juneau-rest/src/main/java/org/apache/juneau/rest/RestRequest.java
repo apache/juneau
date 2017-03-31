@@ -89,6 +89,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	private ObjectMap headers;
 	private ConfigFile cf;
 	private Swagger swagger, fileSwagger;
+	private String pageTitle, pageText, pageLinks;
 
 	/**
 	 * Constructor.
@@ -141,7 +142,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * Called from RestServlet after a match has been made but before the guard or method invocation.
 	 */
 	@SuppressWarnings("hiding")
-	final void init(Method javaMethod, String pathRemainder, ObjectMap properties, Map<String,String> mDefaultRequestHeaders, String defaultCharset, SerializerGroup mSerializers, ParserGroup mParsers, UrlEncodingParser mUrlEncodingParser, EncoderGroup encoders) {
+	final void init(Method javaMethod, String pathRemainder, ObjectMap properties, Map<String,String> mDefaultRequestHeaders, String defaultCharset, SerializerGroup mSerializers, ParserGroup mParsers, UrlEncodingParser mUrlEncodingParser, EncoderGroup encoders, String pageTitle, String pageText, String pageLinks) {
 		this.javaMethod = javaMethod;
 		this.pathRemainder = pathRemainder;
 		this.properties = properties;
@@ -152,6 +153,9 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		this.beanSession = urlEncodingParser.getBeanContext().createSession();
 		this.defaultCharset = defaultCharset;
 		this.encoders = encoders;
+		this.pageTitle = pageTitle;
+		this.pageText = pageText;
+		this.pageLinks = pageLinks;
 
 		if (debug) {
 			String msg = ""
@@ -1619,6 +1623,56 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 */
 	public String getMethodDescription() {
 		return context.getInfoProvider().getMethodDescription(javaMethod.getName(), this);
+	}
+
+	/**
+	 * Returns the localized page title for HTML views.
+	 *
+	 * @return The localized page title for HTML views.
+	 */
+	protected String getPageTitle() {
+		String s = pageTitle;
+		if (StringUtils.isEmpty(s))
+			s = context.getMessages().findFirstString(getLocale(), javaMethod.getName() + ".pageTitle");
+		if (StringUtils.isEmpty(s))
+			s = context.getMessages().findFirstString(getLocale(), "pageTitle");
+		if (! StringUtils.isEmpty(s))
+			return resolveVars(s);
+		s = getServletTitle();
+		return s;
+	}
+
+	/**
+	 * Returns the localized page text for HTML views.
+	 *
+	 * @return The localized page text for HTML views.
+	 */
+	protected String getPageText() {
+		String s = pageText;
+		if (StringUtils.isEmpty(s))
+			s = context.getMessages().findFirstString(getLocale(), javaMethod.getName() + ".pageText");
+		if (StringUtils.isEmpty(s))
+			s = context.getMessages().findFirstString(getLocale(), "pageText");
+		if (! StringUtils.isEmpty(s))
+			return resolveVars(s);
+		s = getMethodSummary();
+		if (StringUtils.isEmpty(s))
+			s = getServletDescription();
+		return s;
+	}
+
+	/**
+	 * Returns the localized page links for HTML views.
+	 *
+	 * @return The localized page links for HTML views.
+	 */
+	protected String getPageLinks() {
+		String s = pageLinks;
+		if (StringUtils.isEmpty(s))
+			s = context.getMessages().findFirstString(getLocale(), javaMethod.getName() + ".pageLinks");
+		if (StringUtils.isEmpty(s))
+			s = context.getMessages().findFirstString(getLocale(), "pageLinks");
+		return resolveVars(s);
 	}
 
 

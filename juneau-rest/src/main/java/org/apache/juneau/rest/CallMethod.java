@@ -31,6 +31,7 @@ import javax.servlet.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.encoders.*;
+import org.apache.juneau.html.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
@@ -67,6 +68,7 @@ class CallMethod implements Comparable<CallMethod>  {
 	private final org.apache.juneau.rest.annotation.Parameter[] parameters;
 	private final Response[] responses;
 	private final RestContext context;
+	private final String pageTitle, pageText, pageLinks;
 
 	CallMethod(Object servlet, java.lang.reflect.Method method, RestContext context) throws RestServletException {
 		Builder b = new Builder(servlet, method, context);
@@ -95,10 +97,13 @@ class CallMethod implements Comparable<CallMethod>  {
 		this.priority = b.priority;
 		this.parameters = b.parameters;
 		this.responses = b.responses;
+		this.pageTitle = b.pageTitle;
+		this.pageText = b.pageText;
+		this.pageLinks = b.pageLinks;
 	}
 
 	private static class Builder  {
-		private String httpMethod, defaultCharset, description, tags, summary, externalDocs;
+		private String httpMethod, defaultCharset, description, tags, summary, externalDocs, pageTitle, pageText, pageLinks;
 		private UrlPathPattern pathPattern;
 		private CallMethod.MethodParam[] params;
 		private RestGuard[] guards;
@@ -141,6 +146,10 @@ class CallMethod implements Comparable<CallMethod>  {
 				encoders = context.getEncoders();
 				properties = context.getProperties();
 
+				pageTitle = m.pageTitle().isEmpty() ? context.getPageTitle() : m.pageTitle();
+				pageText = m.pageText().isEmpty() ? context.getPageText() : m.pageText();
+				pageLinks = m.pageLinks().isEmpty() ? context.getPageLinks() : m.pageLinks();
+
 				List<Inherit> si = Arrays.asList(m.serializersInherit());
 				List<Inherit> pi = Arrays.asList(m.parsersInherit());
 
@@ -164,7 +173,7 @@ class CallMethod implements Comparable<CallMethod>  {
 				if (httpMethod.equals("") && method.getName().startsWith("do"))
 					httpMethod = method.getName().substring(2).toUpperCase(Locale.ENGLISH);
 				if (httpMethod.equals(""))
-					throw new RestServletException("@RestMethod name not specified on method ''{0}.{1}''", method.getDeclaringClass().getName(), method.getName());
+					httpMethod = "GET";
 				if (httpMethod.equals("METHOD"))
 					httpMethod = "*";
 
@@ -287,6 +296,8 @@ class CallMethod implements Comparable<CallMethod>  {
 
 				// Need this to access methods in anonymous inner classes.
 				method.setAccessible(true);
+			} catch (RestServletException e) {
+				throw e;
 			} catch (Exception e) {
 				throw new RestServletException("Exception occurred while initializing method ''{0}''", method.getName()).initCause(e);
 			}
@@ -808,8 +819,9 @@ class CallMethod implements Comparable<CallMethod>  {
 		for (int i = 0; i < pathPattern.getVars().length; i++)
 			req.setPathParameter(pathPattern.getVars()[i], patternVals[i]);
 
-		req.init(method, remainder, createRequestProperties(properties, req), defaultRequestHeaders, defaultCharset, serializers, parsers, urlEncodingParser, encoders);
-		res.init(req.getProperties(), defaultCharset, serializers, urlEncodingSerializer, encoders);
+		ObjectMap requestProperties = createRequestProperties(properties, req);
+		req.init(method, remainder, requestProperties, defaultRequestHeaders, defaultCharset, serializers, parsers, urlEncodingParser, encoders, pageTitle, pageText, pageLinks);
+		res.init(requestProperties, defaultCharset, serializers, urlEncodingSerializer, encoders);
 
 		// Class-level guards
 		for (RestGuard guard : context.getGuards())
@@ -888,7 +900,7 @@ class CallMethod implements Comparable<CallMethod>  {
 	/**
 	 * This method creates all the request-time properties.
 	 */
-	static ObjectMap createRequestProperties(final ObjectMap methodProperties, final RestRequest req) {
+	ObjectMap createRequestProperties(final ObjectMap methodProperties, final RestRequest req) {
 		@SuppressWarnings("serial")
 		ObjectMap m = new ObjectMap() {
 			@Override /* Map */
@@ -933,6 +945,12 @@ class CallMethod implements Comparable<CallMethod>  {
 						return req.getMethodSummary();
 					if (k.equals(REST_methodDescription))
 						return req.getMethodDescription();
+					if (k.equals(HtmlDocSerializerContext.HTMLDOC_title))
+						return req.getPageTitle();
+					if (k.equals(HtmlDocSerializerContext.HTMLDOC_text))
+						return req.getPageText();
+					if (k.equals(HtmlDocSerializerContext.HTMLDOC_links))
+						return req.getPageLinks();
 					o = req.getPathParameter(k);
 					if (o == null)
 						o = req.getHeader(k);

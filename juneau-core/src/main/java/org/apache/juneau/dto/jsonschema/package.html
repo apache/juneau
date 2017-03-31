@@ -406,10 +406,8 @@
 	<ja>@RestResource</ja>(
 		path=<js>"/jsonSchema"</js>,
 		messages=<js>"nls/JsonSchemaResource"</js>,
-		properties={
-			<ja>@Property</ja>(name=HtmlDocSerializerContext.<jsf>HTMLDOC_title</jsf>, value=<js>"Sample JSON-Schema document"</js>),
-			<ja>@Property</ja>(name=HtmlDocSerializerContext.<jsf>HTMLDOC_links</jsf>, value=<js>"{options:'?method=OPTIONS'}"</js>)
-		}
+		title=<js>"Sample JSON-Schema document"</js>,
+		pageLinks=<js>"{options:'?method=OPTIONS'}"</js>
 	)
 	<jk>public class</jk> JsonSchemaResource <jk>extends</jk> RestServletJenaDefault {
 	

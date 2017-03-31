@@ -35,6 +35,18 @@ import org.apache.juneau.*;
  * 	<jk>public class</jk> AddressBookResource <jk>extends</jk> RestServletJenaDefault {
  * </p>
  * <p>
+ * Note that shortcut annotations are also provided for these particular settings:
+ * <p class='bcode'>
+ * 	<ja>@RestResource</ja>(
+ * 		messages=<js>"nls/AddressBookResource"</js>,
+ * 		title=<js>"$L{title}"</js>,  <jc>// or pageTitle</jc>
+ * 		description=<js>"$L{description}"</js>,  <jc>// or pageText</jc>
+ * 		pageLinks=<js>"{options:'?method=OPTIONS',doc:'doc'}"</js>
+ * 	)
+ * 	<jk>public class</jk> AddressBookResource <jk>extends</jk> RestServletJenaDefault {
+ * </p>
+ *
+ * <p>
  * The <code>$L{...}</code> variable represent localized strings pulled from the resource bundle identified by the <code>messages</code> annotation.
  * These variables are replaced at runtime based on the HTTP request locale.
  * Several built-in runtime variable types are defined, and the API can be extended to include user-defined variables.
@@ -86,6 +98,15 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * 	...to produce this title on the HTML page...
 	 * </p>
 	 * <img class='bordered' src='doc-files/HTML_TITLE.png'>
+	 * <p>
+	 * Shortcuts on <ja>@RestResource</ja> are also provided for this setting:
+	 * <p class='bcode'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		messages=<js>"nls/AddressBookResource"</js>,
+	 * 		title=<js>"My title"</js>,  <jc>// or pageTitle</jc>
+	 * 	)
+	 * 	<jk>public class</jk> AddressBookResource <jk>extends</jk> RestServletJenaDefault {
+	 * </p>
 	 */
 	public static final String HTMLDOC_title = "HtmlSerializer.title";
 
@@ -108,7 +129,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * 	<ja>@RestResource</ja>(
 	 * 		messages=<js>"nls/AddressBookResource"</js>,
 	 * 		properties={
-	 * 			<ja>@Property</ja>(name=HtmlDocSerializerContext.<jsf>HTMLDOC_description</jsf>, value=<js>"description"</js>, type=<jsf>NLS</jsf>)
+	 * 			<ja>@Property</ja>(name=HtmlDocSerializerContext.<jsf>HTMLDOC_description</jsf>, value=<js>"My description"</js>)
 	 * 		}
 	 * 	)
 	 * 	<jk>public class</jk> AddressBookResource <jk>extends</jk> RestServletJenaDefault {
@@ -123,8 +144,17 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * 	...to produce this description on the HTML page...
 	 * </p>
 	 * <img class='bordered' src='doc-files/HTML_DESCRIPTION.png'>
+	 * <p>
+	 * Shortcuts on <ja>@RestResource</ja> are also provided for this setting:
+	 * <p class='bcode'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		messages=<js>"nls/AddressBookResource"</js>,
+	 * 		description=<js>"My description"</js>,  <jc>// or pageText</jc>
+	 * 	)
+	 * 	<jk>public class</jk> AddressBookResource <jk>extends</jk> RestServletJenaDefault {
+	 * </p>
 	 */
-	public static final String HTMLDOC_description = "HtmlSerializer.description";
+	public static final String HTMLDOC_text = "HtmlSerializer.description";
 
 	/**
 	 * <b>Configuration property:</b>  Page links.
@@ -165,6 +195,15 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * 	...to produce this list of links on the HTML page...
 	 * </p>
 	 * <img class='bordered' src='doc-files/HTML_LINKS.png'>
+	 * <p>
+	 * A shortcut on <ja>@RestResource</ja> is also provided for this setting:
+	 * <p class='bcode'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		messages=<js>"nls/AddressBookResource"</js>,
+	 * 		pageLinks=<js>"{options:'?method=OPTIONS',doc:'doc'}"</js>
+	 * 	)
+	 * 	<jk>public class</jk> AddressBookResource <jk>extends</jk> RestServletJenaDefault {
+	 * </p>
 	 */
 	public static final String HTMLDOC_links = "HtmlDocSerializer.links.map";
 
@@ -225,7 +264,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 
 	final String[] cssImports;
 	final Map<String,String> links;
-	final String title, description, cssUrl;
+	final String title, text, cssUrl;
 	final boolean nowrap;
 
 	/**
@@ -239,7 +278,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 		super(ps);
 		cssImports = ps.getProperty(HTMLDOC_cssImports, String[].class, new String[0]);
 		title = ps.getProperty(HTMLDOC_title, String.class, null);
-		description = ps.getProperty(HTMLDOC_description, String.class, null);
+		text = ps.getProperty(HTMLDOC_text, String.class, null);
 		cssUrl = ps.getProperty(HTMLDOC_cssUrl, String.class, null);
 		nowrap = ps.getProperty(HTMLDOC_nowrap, boolean.class, false);
 		links = ps.getMap(HTMLDOC_links, String.class, String.class, Collections.<String,String>emptyMap());
@@ -251,7 +290,7 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 			.append("HtmlDocSerializerContext", new ObjectMap()
 				.append("cssImports", cssImports)
 				.append("title", title)
-				.append("description", description)
+				.append("text", text)
 				.append("cssUrl", cssUrl)
 				.append("nowrap", nowrap)
 				.append("links", links)
