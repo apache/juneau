@@ -28,7 +28,7 @@ import org.apache.juneau.rest.annotation.RestResource;
 	title="Juneau Microservice Template",
 	description="Template for creating REST microservices",
 	properties={
-		@Property(name=HTMLDOC_links, value="{options:'$R{servletURI}?method=OPTIONS'}")
+		@Property(name=HTMLDOC_links, value="{options:'?method=OPTIONS'}")
 	},
 	children={
 		HelloWorldResource.class,
