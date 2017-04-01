@@ -382,9 +382,19 @@ class CallMethod implements Comparable<CallMethod>  {
 				_paramType = PATH;
 
 			if (_paramType == PATH && _name.isEmpty()) {
-				if (pathPattern.getVars().length <= attrIdx)
+				int idx = attrIdx++;
+				String[] vars = pathPattern.getVars();
+				if (vars.length <= idx)
 					throw new RestServletException("Number of attribute parameters in method ''{0}'' exceeds the number of URL pattern variables.", method.getName());
-				_name = pathPattern.getVars()[attrIdx++];
+
+				// Check for {#} variables.
+				String idxs = String.valueOf(idx);
+				for (int i = 0; i < vars.length; i++)
+					if (StringUtils.isNumeric(vars[i]) && vars[i].equals(idxs))
+						_name = vars[i];
+
+				if (_name.isEmpty())
+					_name = pathPattern.getVars()[idx];
 			}
 
 			this.paramType = _paramType;

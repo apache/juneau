@@ -69,6 +69,17 @@ public @interface RestMethod {
 	 * Appending <js>"/*"</js> to the end of the path pattern will make it match any remainder too.<br>
 	 * Not appending <js>"/*"</js> to the end of the pattern will cause a 404 (Not found) error to occur
 	 * 	if the exact pattern is not found.
+	 * <p>
+	 * The path can contain variables that get resolved to {@link Path @Path} parameters:
+	 * <p class='bcode'>
+	 * 	<jc>// Example 1</jc>
+	 * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/myurl/{foo}/{bar}/{baz}/*"</js>)
+	 *
+	 * 	<jc>// Example 2</jc>
+	 * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/myurl/{0}/{1}/{2}/*"</js>)
+	 * </p>
+	 * <p>
+	 * Refer to {@link Path @Path} on how path variables get resolved.
 	 */
 	String path() default "/*";
 

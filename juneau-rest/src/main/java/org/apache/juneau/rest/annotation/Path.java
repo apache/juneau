@@ -56,6 +56,15 @@ import java.lang.annotation.*;
  * 		...
  * 	}
  * </p>
+ * You can also use <code>{#}</code> notation to specify path parameters without specifying names.
+ * <p>
+ * <p class='bcode'>
+ * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/myurl/{0}/{1}/{2}/*"</js>)
+ * 	<jk>public void</jk> doGet(RestRequest req, RestResponse res,
+ * 			<ja>@Path</ja> String foo, <ja>@Path</ja> <jk>int</jk> bar, <ja>@Path</ja> UUID baz) {
+ * 		...
+ * 	}
+ * </p>
  */
 @Documented
 @Target(PARAMETER)
