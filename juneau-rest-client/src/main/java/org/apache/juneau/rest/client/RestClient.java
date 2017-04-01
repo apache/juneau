@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client;
 
-import static org.apache.juneau.internal.ThrowableUtils.*;
-
 import java.io.*;
 import java.lang.reflect.*;
 import java.lang.reflect.Proxy;
@@ -24,6 +22,7 @@ import java.util.regex.*;
 
 import org.apache.http.*;
 import org.apache.http.client.methods.*;
+import org.apache.http.client.utils.*;
 import org.apache.http.entity.*;
 import org.apache.http.impl.client.*;
 import org.apache.juneau.*;
@@ -378,27 +377,26 @@ public class RestClient extends CoreObject {
 		HttpRequestBase req = null;
 		RestCall restCall = null;
 		final String methodUC = method.toUpperCase(Locale.ENGLISH);
-		if (hasContent) {
-			req = new HttpEntityEnclosingRequestBase() {
-				@Override /* HttpRequest */
-				public String getMethod() {
-					return methodUC;
-				}
-			};
-			restCall = new RestCall(this, req);
-		} else {
-			req = new HttpRequestBase() {
-				@Override /* HttpRequest */
-				public String getMethod() {
-					return methodUC;
-				}
-			};
-			restCall = new RestCall(this, req);
-		}
 		try {
-			req.setURI(toURI(url));
-		} catch (URISyntaxException e) {
-			throw new RestCallException(e);
+			if (hasContent) {
+				req = new HttpEntityEnclosingRequestBase() {
+					@Override /* HttpRequest */
+					public String getMethod() {
+						return methodUC;
+					}
+				};
+				restCall = new RestCall(this, req, toURI(url));
+			} else {
+				req = new HttpRequestBase() {
+					@Override /* HttpRequest */
+					public String getMethod() {
+						return methodUC;
+					}
+				};
+				restCall = new RestCall(this, req, toURI(url));
+			}
+		} catch (URISyntaxException e1) {
+			throw new RestCallException(e1);
 		}
 		for (Map.Entry<String,? extends Object> e : headers.entrySet())
 			restCall.header(e.getKey(), e.getValue());
@@ -484,13 +482,18 @@ public class RestClient extends CoreObject {
 
 	private Pattern absUrlPattern = Pattern.compile("^\\w+\\:\\/\\/.*");
 
-	private URI toURI(Object url) throws URISyntaxException {
-		assertFieldNotNull(url, "url");
+	UrlEncodingSerializer getUrlEncodingSerializer() {
+		return urlEncodingSerializer;
+	}
+
+	URI toURI(Object url) throws URISyntaxException {
 		if (url instanceof URI)
 			return (URI)url;
 		if (url instanceof URL)
 			((URL)url).toURI();
-		String s = url.toString();
+		if (url instanceof URIBuilder)
+			return ((URIBuilder)url).build();
+		String s = url == null ? "" : url.toString();
 		if (rootUrl != null && ! absUrlPattern.matcher(s).matches()) {
 			if (s.isEmpty())
 				s = rootUrl;

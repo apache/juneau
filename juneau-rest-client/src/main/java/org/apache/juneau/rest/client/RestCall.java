@@ -23,6 +23,7 @@ import org.apache.http.*;
 import org.apache.http.client.*;
 import org.apache.http.client.config.*;
 import org.apache.http.client.methods.*;
+import org.apache.http.client.utils.*;
 import org.apache.http.impl.client.*;
 import org.apache.http.util.*;
 import org.apache.juneau.*;
@@ -78,15 +79,17 @@ public final class RestCall {
 	private Object input;
 	private Serializer serializer;
 	private Parser parser;
+	private URIBuilder uriBuilder;
 
 	/**
 	 * Constructs a REST call with the specified method name.
 	 *
 	 * @param client The client that created this request.
 	 * @param request The wrapped Apache HTTP client request object.
+	 * @param uri The URI for this call.
 	 * @throws RestCallException If an exception or non-200 response code occurred during the connection attempt.
 	 */
-	protected RestCall(RestClient client, HttpRequestBase request) throws RestCallException {
+	protected RestCall(RestClient client, HttpRequestBase request, URI uri) throws RestCallException {
 		this.client = client;
 		this.request = request;
 		for (RestCallInterceptor i : this.client.interceptors)
@@ -96,6 +99,114 @@ public final class RestCall {
 		this.retryInterval = client.retryInterval;
 		this.serializer = client.serializer;
 		this.parser = client.parser;
+		uriBuilder = new URIBuilder(uri);
+	}
+
+	/**
+	 * Sets the URI for this call.
+	 * <p>
+	 * Can be any of the following types:
+	 *	<ul>
+	 *		<li>{@link URI}
+	 *		<li>{@link URL}
+	 *		<li>{@link URIBuilder}
+	 *		<li>Anything else converted to a string using {@link Object#toString()}.
+	 *	</ul>
+	 * Relative URL strings will be interpreted as relative to the root URL defined on the client.
+	 *
+	 * @param uri The URI to use for this call.
+	 * This overrides the URI passed in from the client.
+	 * @return This object (for method chaining).
+	 * @throws RestCallException
+	 */
+	public RestCall uri(Object uri) throws RestCallException {
+		try {
+			if (uri != null)
+				uriBuilder = new URIBuilder(client.toURI(uri));
+			return this;
+		} catch (URISyntaxException e) {
+			throw new RestCallException(e);
+		}
+	}
+
+	/**
+	 * Sets the URI scheme.
+	 *
+	 * @param scheme The new URI host.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall scheme(String scheme) {
+		uriBuilder.setScheme(scheme);
+		return this;
+	}
+
+	/**
+	 * Sets the URI host.
+	 *
+	 * @param host The new URI host.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall host(String host) {
+		uriBuilder.setHost(host);
+		return this;
+	}
+
+	/**
+	 * Sets the URI port.
+	 *
+	 * @param port The new URI port.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall port(int port) {
+		uriBuilder.setPort(port);
+		return this;
+	}
+
+	/**
+	 * Adds a parameter to the URI query.
+	 *
+	 * @param name The parameter name.
+	 * @param value The parameter value converted to a string using UON notation.
+	 * @return This object (for method chaining).
+	 * @throws RestCallException
+	 */
+	public RestCall param(String name, Object value) throws RestCallException {
+		uriBuilder.addParameter(name, client.getUrlEncodingSerializer().serializeUrlPart(value));
+		return this;
+	}
+
+	/**
+	 * Sets a custom URI query.
+	 *
+	 * @param query The new URI query string.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall query(String query) {
+		uriBuilder.setCustomQuery(query);
+		return this;
+	}
+
+	/**
+	 * Sets the URI user info.
+	 *
+	 * @param userInfo The new URI user info.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall userInfo(String userInfo) {
+		uriBuilder.setUserInfo(userInfo);
+		return this;
+	}
+
+	/**
+	 * Sets the URI user info.
+	 *
+	 * @param username The new URI username.
+	 * @param password The new URI password.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall userInfo(String username, String password) {
+		uriBuilder.setUserInfo(username, password);
+		return this;
 	}
 
 	/**
@@ -908,6 +1019,8 @@ public final class RestCall {
 		isConnected = true;
 
 		try {
+
+			request.setURI(uriBuilder.build());
 
 			if (input != null) {
 				if (! (request instanceof HttpEntityEnclosingRequestBase))
