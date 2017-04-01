@@ -5853,6 +5853,16 @@
 			<li>Updated doc: <a class='doclink' href='#Remoteable'>6 - Remoteable Services</a>
 			<li>{@link org.apache.juneau.rest.RestRequest#toString()} can be called at any time to view the headers and content of the request
 				without affecting functionality.  Very useful for debugging.
+			<li>You can now use numeric values in path annotations.  
+				<br>When using numeric variable names, you don't need to specify the variable name in the <ja>@Path</ja> annoation:
+				<p class='bcode'>
+	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/myurl/{0}/{1}/{2}/*"</js>)
+	<jk>public void</jk> doGet(RestRequest req, RestResponse res,
+			<ja>@Path</ja> String foo, <ja>@Path</ja> <jk>int</jk> bar, <ja>@Path</ja> UUID baz) {
+		...
+	}
+				</p>
+			<li>{@link org.apache.juneau.rest.annotation.RestMethod#name() @RestMethod.name()} annotation is now optional.  Defaults to <js>"GET"</js>.
 		</ul>
 
 		<h6 class='topic'>org.apache.juneau.rest.client</h6>
@@ -5876,7 +5886,18 @@
 				<li>{@link org.apache.juneau.rest.client.RestClientBuilder#debug(boolean)} now adds a <code>Debug: true</code> header on all requests.
 			</ul>
 			<li>New doc: <a class='doclink' href='org/apache/juneau/rest/client/package-summary.html#Debugging'>1.5 - Debugging</a>
-			<li>{@link org.apache.juneau.rest.annotation.RestMethod#name() @RestMethod.name()} annotation is now optional.  Defaults to <js>"GET"</js>.
+			<li>The <code>RestClient</code> class <code>doX(Object url)</code> methods now handle HttpClient <code>URIBuilder</code> instances.
+			<li>New methods added to {@link org.apache.juneau.rest.client.RestCall} that allow you to manipulate URLs after you've already created the <code>RestCall</code> object:
+				<ul>
+					<li>{@link org.apache.juneau.rest.client.RestCall#uri(Object)}
+					<li>{@link org.apache.juneau.rest.client.RestCall#param(String,Object)}
+					<li>{@link org.apache.juneau.rest.client.RestCall#query(String)}
+					<li>{@link org.apache.juneau.rest.client.RestCall#host(String)}
+					<li>{@link org.apache.juneau.rest.client.RestCall#port(int)}
+					<li>{@link org.apache.juneau.rest.client.RestCall#userInfo(String,String)}
+					<li>{@link org.apache.juneau.rest.client.RestCall#userInfo(String)}
+					<li>{@link org.apache.juneau.rest.client.RestCall#scheme(String)}
+				</ul>
 		</ul>
 		
 		<h6 class='topic'>org.apache.juneau.microservice</h6>
