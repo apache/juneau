@@ -18,6 +18,10 @@ import java.util.*;
  * An extension of {@link LinkedList} with a convenience {@link #append(Object)} method.
  * <p>
  * Primarily used for testing purposes for quickly creating populated lists.
+ * <p class='bcode'>
+ * 	<jc>// Example:</jc>
+ * 	List&lt;String&gt; l = <jk>new</jk> AList&lt;String&gt;().append(<js>"foo"</js>).append(<js>"bar"</js>);
+ * </p>
  *
  * @param <T> The entry type.
  */
