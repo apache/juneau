@@ -120,12 +120,6 @@ public class UrlEncodingParserTest {
 
 		// Empty array
 		// Top level
-		t = "_value=@()";
-		l = (List)p.parse(t, Object.class);
-		assertTrue(l.isEmpty());
-		t = "_value= @( ) ";
-		l = p.parse(t, List.class);
-		assertTrue(l.isEmpty());
 		t = "@()";
 		l = (List)p.parseParameter(t, Object.class);
 		assertTrue(l.isEmpty());

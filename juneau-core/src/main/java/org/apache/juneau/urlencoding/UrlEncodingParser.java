@@ -91,43 +91,38 @@ public class UrlEncodingParser extends UonParser {
 
 		if (sType.isObject()) {
 			ObjectMap m = new ObjectMap(session);
-			parseIntoMap(session, r, m, session.getClassMeta(Map.class, String.class, Object.class));
+			parseIntoMap(session, r, m, session.getClassMeta(Map.class, String.class, Object.class), outer);
 			if (m.containsKey("_value"))
 				o = m.get("_value");
 			else
 				o = session.cast(m, null, eType);
 		} else if (sType.isMap()) {
 			Map m = (sType.canCreateNewInstance() ? (Map)sType.newInstance() : new ObjectMap(session));
-			o = parseIntoMap(session, r, m, sType);
+			o = parseIntoMap(session, r, m, sType, m);
 		} else if (sType.canCreateNewBean(outer)) {
 			BeanMap m = session.newBeanMap(outer, sType.getInnerClass());
 			m = parseIntoBeanMap(session, r, m);
 			o = m == null ? null : m.getBean();
+		} else if (sType.isCollection() || sType.isArray() || sType.isArgs()) {
+			// ?1=foo&2=bar...
+			Collection c2 = ((sType.isArray() || sType.isArgs()) || ! sType.canCreateNewInstance(outer)) ? new ObjectList(session) : (Collection)sType.newInstance();
+			Map<Integer,Object> m = new TreeMap<Integer,Object>();
+			parseIntoMap(session, r, m, sType, c2);
+			c2.addAll(m.values());
+			if (sType.isArray())
+				o = ArrayUtils.toArray(c2, sType.getElementType().getInnerClass());
+			else if (sType.isArgs())
+				o = c2.toArray(new Object[c2.size()]);
+			else
+				o = c2;
 		} else {
 			// It could be a non-bean with _type attribute.
 			ObjectMap m = new ObjectMap(session);
-			parseIntoMap(session, r, m, session.getClassMeta(Map.class, String.class, Object.class));
+			parseIntoMap(session, r, m, session.getClassMeta(Map.class, String.class, Object.class), outer);
 			if (m.containsKey(session.getBeanTypePropertyName()))
 				o = session.cast(m, null, eType);
-			else if (m.containsKey("_value"))
+			else if (m.containsKey("_value")) {
 				o = session.convertToType(m.get("_value"), sType);
-			else if (sType.isCollection() || sType.isArray() || sType.isArgs()) {
-				// ?1=foo&2=bar...
-				Collection c2 = ((sType.isArray() || sType.isArgs()) || ! sType.canCreateNewInstance(outer)) ? new ObjectList(session) : (Collection)sType.newInstance();
-				Map<Integer,Object> t = new TreeMap<Integer,Object>();
-				int argIndex = 0;
-				for (Map.Entry<String,Object> e : m.entrySet()) {
-					String k = e.getKey();
-					if (StringUtils.isNumeric(k))
-						t.put(Integer.valueOf(k), session.convertToType(e.getValue(), sType.isArgs() ? sType.getArg(argIndex++) : sType.getElementType()));
-				}
-				c2.addAll(t.values());
-				if (sType.isArray())
-					o = ArrayUtils.toArray(c2, sType.getElementType().getInnerClass());
-				else if (sType.isArgs())
-					o = c2.toArray(new Object[c2.size()]);
-				else
-					o = c2;
 			} else {
 				if (sType.getNotABeanReason() != null)
 					throw new ParseException(session, "Class ''{0}'' could not be instantiated as application/x-www-form-urlencoded.  Reason: ''{1}''", sType, sType.getNotABeanReason());
@@ -144,10 +139,9 @@ public class UrlEncodingParser extends UonParser {
 		return (T)o;
 	}
 
-	private <K,V> Map<K,V> parseIntoMap(UonParserSession session, ParserReader r, Map<K,V> m, ClassMeta<?> type) throws Exception {
+	private <K,V> Map<K,V> parseIntoMap(UonParserSession session, ParserReader r, Map<K,V> m, ClassMeta<?> type, Object outer) throws Exception {
 
-		ClassMeta<K> keyType = (ClassMeta<K>)type.getKeyType();
-		ClassMeta<V> valueType = (ClassMeta<V>)type.getValueType();
+		ClassMeta<K> keyType = (ClassMeta<K>)(type.isArgs() || type.isCollectionOrArray() ? session.getClassMeta(Integer.class) : type.getKeyType());
 
 		int c = r.peekSkipWs();
 		if (c == -1)
@@ -160,6 +154,7 @@ public class UrlEncodingParser extends UonParser {
 		boolean isInEscape = false;
 
 		int state = S1;
+		int argIndex = 0;
 		K currAttr = null;
 		while (c != -1) {
 			c = r.read();
@@ -183,6 +178,7 @@ public class UrlEncodingParser extends UonParser {
 					}
 				} else if (state == S3) {
 					if (c == -1 || c == '\u0001') {
+						ClassMeta<V> valueType = (ClassMeta<V>)(type.isArgs() ? type.getArg(argIndex++) : type.isCollectionOrArray() ? type.getElementType() : type.getValueType());
 						V value = convertAttrToType(session, m, "", valueType);
 						m.put(currAttr, value);
 						if (c == -1)
@@ -190,7 +186,8 @@ public class UrlEncodingParser extends UonParser {
 						state = S1;
 					} else  {
 						// For performance, we bypass parseAnything for string values.
-						V value = (V)(valueType.isString() ? super.parseString(session, r.unread(), true) : super.parseAnything(session, valueType, r.unread(), m, true, null));
+						ClassMeta<V> valueType = (ClassMeta<V>)(type.isArgs() ? type.getArg(argIndex++) : type.isCollectionOrArray() ? type.getElementType() : type.getValueType());
+						V value = (V)(valueType.isString() ? super.parseString(session, r.unread(), true) : super.parseAnything(session, valueType, r.unread(), outer, true, null));
 
 						// If we already encountered this parameter, turn it into a list.
 						if (m.containsKey(currAttr) && valueType.isObject()) {
@@ -518,7 +515,7 @@ public class UrlEncodingParser extends UonParser {
 		UonReader r = s.getReader();
 		if (r.peekSkipWs() == '?')
 			r.read();
-		m = parseIntoMap(s, r, m, session.getClassMeta(Map.class, keyType, valueType));
+		m = parseIntoMap(s, r, m, session.getClassMeta(Map.class, keyType, valueType), null);
 		return m;
 	}
 }

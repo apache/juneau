@@ -43,12 +43,8 @@ public class ContentTest extends RestTestcase {
 		assertEquals("true", r);
 		r = c.doPost(URL + "/boolean?body=false", null).getResponseAsString();
 		assertEquals("false", r);
-		try {
-			r = c.doPost(URL + "/boolean?body=null&noTrace=true", null).getResponseAsString();
-			fail("Exception expected!");
-		} catch (RestCallException e) {
-			assertEquals(400, e.getResponseCode());
-		}
+		r = c.doPost(URL + "/boolean?body=null", null).getResponseAsString();
+		assertEquals("false", r);
 		try {
 			r = c.doPost(URL + "/boolean?body=bad&noTrace=true", null).getResponseAsString();
 			fail("Exception expected!");
@@ -80,12 +76,8 @@ public class ContentTest extends RestTestcase {
 		//	}
 		r = c.doPost(URL + "/int?body=-123", null).getResponseAsString();
 		assertEquals("-123", r);
-		try {
-			r = c.doPost(URL + "/int?body=null&noTrace=true", null).getResponseAsString();
-			fail("Exception expected!");
-		} catch (RestCallException e) {
-			assertEquals(400, e.getResponseCode());
-		}
+		r = c.doPost(URL + "/int?body=null", null).getResponseAsString();
+		assertEquals("0", r);
 		try {
 			r = c.doPost(URL + "/int?body=bad&noTrace=true", null).getResponseAsString();
 			fail("Exception expected!");
@@ -114,12 +106,8 @@ public class ContentTest extends RestTestcase {
 		//	}
 		r = c.doPost(URL + "/float?body=-1.23", null).getResponseAsString();
 		assertEquals("-1.23", r);
-		try {
-			r = c.doPost(URL + "/float?body=null&noTrace=true", null).getResponseAsString();
-			fail("Exception expected!");
-		} catch (RestCallException e) {
-			assertEquals(400, e.getResponseCode());
-		}
+		r = c.doPost(URL + "/float?body=null", null).getResponseAsString();
+		assertEquals("0.0", r);
 		try {
 			r = c.doPost(URL + "/float?body=bad&noTrace=true", null).getResponseAsString();
 			fail("Exception expected!");
@@ -341,12 +329,8 @@ public class ContentTest extends RestTestcase {
 		assertEquals("true", r);
 		r = c.doPost(URL + "/boolean", "false").getResponseAsString();
 		assertEquals("false", r);
-		try {
-			r = c.doPost(URL + "/boolean?noTrace=true", "null").getResponseAsString();
-			fail("Exception expected!");
-		} catch (RestCallException e) {
-			assertEquals(400, e.getResponseCode());
-		}
+		r = c.doPost(URL + "/boolean", "null").getResponseAsString();
+		assertEquals("false", r);
 		try {
 			r = c.doPost(URL + "/boolean?noTrace=true", "bad").getResponseAsString();
 			fail("Exception expected!");
@@ -378,12 +362,8 @@ public class ContentTest extends RestTestcase {
 		//	}
 		r = c.doPost(URL + "/int", "-123").getResponseAsString();
 		assertEquals("-123", r);
-		try {
-			r = c.doPost(URL + "/int?noTrace=true", "null").getResponseAsString();
-			fail("Exception expected!");
-		} catch (RestCallException e) {
-			assertEquals(400, e.getResponseCode());
-		}
+		r = c.doPost(URL + "/int", "null").getResponseAsString();
+		assertEquals("0", r);
 		try {
 			r = c.doPost(URL + "/int?noTrace=true", "bad").getResponseAsString();
 			fail("Exception expected!");
@@ -412,12 +392,8 @@ public class ContentTest extends RestTestcase {
 		//	}
 		r = c.doPost(URL + "/float", "-1.23").getResponseAsString();
 		assertEquals("-1.23", r);
-		try {
-			r = c.doPost(URL + "/float?noTrace=true", "null").getResponseAsString();
-			fail("Exception expected!");
-		} catch (RestCallException e) {
-			assertEquals(400, e.getResponseCode());
-		}
+		r = c.doPost(URL + "/float", "null").getResponseAsString();
+		assertEquals("0.0", r);
 		try {
 			r = c.doPost(URL + "/float?noTrace=true", "bad").getResponseAsString();
 			fail("Exception expected!");

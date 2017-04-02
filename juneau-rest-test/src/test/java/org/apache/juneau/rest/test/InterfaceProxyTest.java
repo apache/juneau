@@ -816,19 +816,26 @@ public class InterfaceProxyTest extends RestTestcase {
 		Map<TestEnum,List<TestEnum[][][]>> x5n = null;
 		getProxy().setMultiParamsEnum(x1, x2, x2n, x3, x3n, x4, x4n, x5, x5n);
 	}
-//
+
 //
 //	public static void main(String[] args) {
-//		List<TypedBean[][][]> l = new AList<TypedBean[][][]>().append(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null}).append(null);
+//		List<TypedBean[][][]> l = new AList<TypedBean[][][]>().append(new TypedBean[][][]{{{new TypedBeanImpl().init()}}});
 //		JsonSerializer.DEFAULT_LAX.println(l);
 //		UrlEncodingSerializer.DEFAULT.println(l);
 //		try {
 //			String r = UrlEncodingSerializer.DEFAULT.serialize(l);
+//			System.err.println("***Test1***");
 //			l = UrlEncodingParser.DEFAULT.parse(r, List.class, TypedBean[][][].class);
+//			JsonSerializer.DEFAULT_LAX.println(l);
+//			System.err.println(l.get(0)[0][0][0].getClass());
 //
+//			System.err.println("***Test2***");
 //			l = (List<TypedBean[][][]>) UrlEncodingParser.DEFAULT.parse(r, InterfaceProxy.class.getMethod("returnTypedBean1d3dListMap").getGenericReturnType());
+//			JsonSerializer.DEFAULT_LAX.println(l);
+//			System.err.println(l.get(0)[0][0][0].getClass());
 //
 //			JsonSerializer.DEFAULT_LAX.println(l);
+//			System.err.println(l.get(0)[0][0][0].getClass());
 //		} catch (Exception e) {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();

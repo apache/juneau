@@ -223,6 +223,8 @@ public class UonParser extends ReaderParser {
 			throw new ParseException(session, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.getInnerClass().getName(), sType.getNotABeanReason());
 		}
 
+		if (o == null && sType.isPrimitive())
+			o = sType.getPrimitiveDefault();
 		if (transform != null && o != null)
 			o = transform.unswap(session, o, eType);
 
