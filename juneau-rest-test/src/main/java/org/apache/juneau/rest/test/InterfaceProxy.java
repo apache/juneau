@@ -59,6 +59,16 @@ public interface InterfaceProxy {
 	Map<String,List<Bean[][][]>> returnBean1d3dListMap();
 	Map<Integer,List<Bean>> returnBeanListMapIntegerKeys();
 
+	// Typed beans
+	TypedBean returnTypedBean();
+	TypedBean[][][] returnTypedBean3dArray();
+	List<TypedBean> returnTypedBeanList();
+	List<TypedBean[][][]> returnTypedBean1d3dList();
+	Map<String,TypedBean> returnTypedBeanMap();
+	Map<String,List<TypedBean>> returnTypedBeanListMap();
+	Map<String,List<TypedBean[][][]>> returnTypedBean1d3dListMap();
+	Map<Integer,List<TypedBean>> returnTypedBeanListMapIntegerKeys();
+
 	// Swapped POJOs
 	SwappedPojo returnSwappedPojo();
 	SwappedPojo[][][] returnSwappedPojo3dArray();
@@ -119,6 +129,16 @@ public interface InterfaceProxy {
 	void setBeanListMap(Map<String,List<Bean>> x);
 	void setBean1d3dListMap(Map<String,List<Bean[][][]>> x);
 	void setBeanListMapIntegerKeys(Map<Integer,List<Bean>> x);
+
+	// Typed beans
+	void setTypedBean(TypedBean x);
+	void setTypedBean3dArray(TypedBean[][][] x);
+	void setTypedBeanList(List<TypedBean> x);
+	void setTypedBean1d3dList(List<TypedBean[][][]> x);
+	void setTypedBeanMap(Map<String,TypedBean> x);
+	void setTypedBeanListMap(Map<String,List<TypedBean>> x);
+	void setTypedBean1d3dListMap(Map<String,List<TypedBean[][][]>> x);
+	void setTypedBeanListMapIntegerKeys(Map<Integer,List<TypedBean>> x);
 
 	// Swapped POJOs
 	void setSwappedPojo(SwappedPojo x);
@@ -219,5 +239,21 @@ public interface InterfaceProxy {
 
 	public static enum TestEnum {
 		ONE,TWO,THREE
+	}
+
+	@org.apache.juneau.annotation.Bean(beanDictionary={TypedBeanImpl.class})
+	public static interface TypedBean {
+	}
+
+	@org.apache.juneau.annotation.Bean(typeName="TypedBeanImpl", sort=true)
+	public static class TypedBeanImpl implements TypedBean {
+		public int a;
+		public String b;
+
+		public TypedBeanImpl init() {
+			this.a = 1;
+			this.b = "foo";
+			return this;
+		}
 	}
 }

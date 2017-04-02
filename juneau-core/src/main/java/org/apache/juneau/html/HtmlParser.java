@@ -429,7 +429,7 @@ public class HtmlParser extends XmlParser {
 				if (m != null && c != null) {
 					ObjectMap m2 = (m instanceof ObjectMap ? (ObjectMap)m : new ObjectMap(m).setBeanSession(session));
 					m2.put(session.getBeanTypePropertyName(), c);
-					l.add((E)session.cast(m2, pMeta, null));
+					l.add((E)session.cast(m2, pMeta, elementType));
 				} else {
 					l.add((E)m);
 				}

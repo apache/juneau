@@ -149,6 +149,40 @@ public class InterfaceProxyResource extends RestServletJenaDefault {
 				return new AMap<Integer,List<Bean>>().append(1,asList(new Bean().init()));
 			}
 
+			// Typed beans
+			@Override
+			public TypedBean returnTypedBean() {
+				return new TypedBeanImpl().init();
+			}
+			@Override
+			public TypedBean[][][] returnTypedBean3dArray() {
+				return new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null};
+			}
+			@Override
+			public List<TypedBean> returnTypedBeanList() {
+				return asList((TypedBean)new TypedBeanImpl().init());
+			}
+			@Override
+			public List<TypedBean[][][]> returnTypedBean1d3dList() {
+				return new AList<TypedBean[][][]>().append(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null}).append(null);
+			}
+			@Override
+			public Map<String,TypedBean> returnTypedBeanMap() {
+				return new AMap<String,TypedBean>().append("foo",new TypedBeanImpl().init());
+			}
+			@Override
+			public Map<String,List<TypedBean>> returnTypedBeanListMap() {
+				return new AMap<String,List<TypedBean>>().append("foo",asList((TypedBean)new TypedBeanImpl().init()));
+			}
+			@Override
+			public Map<String,List<TypedBean[][][]>> returnTypedBean1d3dListMap() {
+				return new AMap<String,List<TypedBean[][][]>>().append("foo", new AList<TypedBean[][][]>().append(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null}).append(null));
+			}
+			@Override
+			public Map<Integer,List<TypedBean>> returnTypedBeanListMapIntegerKeys() {
+				return new AMap<Integer,List<TypedBean>>().append(1,asList((TypedBean)new TypedBeanImpl().init()));
+			}
+
 			// Swapped POJOs
 			@Override
 			public SwappedPojo returnSwappedPojo() {
@@ -347,6 +381,48 @@ public class InterfaceProxyResource extends RestServletJenaDefault {
 			public void setBeanListMapIntegerKeys(Map<Integer,List<Bean>> x) {
 				assertObjectEquals("{'1':[{a:1,b:'foo'}]}", x);  // Note: JsonSerializer serializes key as string.
 				assertEquals(Integer.class, x.keySet().iterator().next().getClass());
+			}
+
+			// Typed beans
+			@Override
+			public void setTypedBean(TypedBean x) {
+				assertObjectEquals("{_type:'TypedBeanImpl',a:1,b:'foo'}", x);
+				assertEquals(TypedBeanImpl.class, x.getClass());
+			}
+			@Override
+			public void setTypedBean3dArray(TypedBean[][][] x) {
+				assertObjectEquals("[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null]", x);
+				assertEquals(TypedBeanImpl.class, x[0][0][0].getClass());
+			}
+			@Override
+			public void setTypedBeanList(List<TypedBean> x) {
+				assertObjectEquals("[{_type:'TypedBeanImpl',a:1,b:'foo'}]", x);
+				assertEquals(TypedBeanImpl.class, x.get(0).getClass());
+			}
+			@Override
+			public void setTypedBean1d3dList(List<TypedBean[][][]> x) {
+				assertObjectEquals("[[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null],null]", x);
+				assertEquals(TypedBeanImpl.class, x.get(0)[0][0][0].getClass());
+			}
+			@Override
+			public void setTypedBeanMap(Map<String,TypedBean> x) {
+				assertObjectEquals("{foo:{_type:'TypedBeanImpl',a:1,b:'foo'}}", x);
+				assertEquals(TypedBeanImpl.class, x.get("foo").getClass());
+			}
+			@Override
+			public void setTypedBeanListMap(Map<String,List<TypedBean>> x) {
+				assertObjectEquals("{foo:[{_type:'TypedBeanImpl',a:1,b:'foo'}]}", x);
+				assertEquals(TypedBeanImpl.class, x.get("foo").get(0).getClass());
+			}
+			@Override
+			public void setTypedBean1d3dListMap(Map<String,List<TypedBean[][][]>> x) {
+				assertObjectEquals("{foo:[[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null],null]}", x);
+				assertEquals(TypedBeanImpl.class, x.get("foo").get(0)[0][0][0].getClass());
+			}
+			@Override
+			public void setTypedBeanListMapIntegerKeys(Map<Integer,List<TypedBean>> x) {
+				assertObjectEquals("{'1':[{_type:'TypedBeanImpl',a:1,b:'foo'}]}", x);  // Note: JsonSerializer serializes key as string.
+				assertEquals(TypedBeanImpl.class, x.get(1).get(0).getClass());
 			}
 
 			// Swapped POJOs

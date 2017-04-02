@@ -214,6 +214,64 @@ public class InterfaceProxyTest extends RestTestcase {
 		assertEquals(Integer.class, x.keySet().iterator().next().getClass());
 	}
 
+	// Typed beans
+	@Test
+	public void returnTypedBean() {
+		TypedBean x = getProxy().returnTypedBean();
+		assertObjectEquals("{_type:'TypedBeanImpl',a:1,b:'foo'}", x);
+		assertEquals(TypedBeanImpl.class, x.getClass());
+	}
+
+	@Test
+	public void returnTypedBean3dArray() {
+		TypedBean[][][] x = getProxy().returnTypedBean3dArray();
+		assertObjectEquals("[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null]", x);
+		assertEquals(TypedBeanImpl.class, x[0][0][0].getClass());
+	}
+
+	@Test
+	public void returnTypedBeanList() {
+		List<TypedBean> x = getProxy().returnTypedBeanList();
+		assertObjectEquals("[{_type:'TypedBeanImpl',a:1,b:'foo'}]", x);
+		assertEquals(TypedBeanImpl.class, x.get(0).getClass());
+	}
+
+	@Test
+	public void returnTypedBean1d3dList() {
+		List<TypedBean[][][]> x = getProxy().returnTypedBean1d3dList();
+		assertObjectEquals("[[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null],null]", x);
+		assertEquals(TypedBeanImpl.class, x.get(0)[0][0][0].getClass());
+	}
+
+	@Test
+	public void returnTypedBeanMap() {
+		Map<String,TypedBean> x = getProxy().returnTypedBeanMap();
+		assertObjectEquals("{foo:{_type:'TypedBeanImpl',a:1,b:'foo'}}", x);
+		assertEquals(TypedBeanImpl.class, x.get("foo").getClass());
+	}
+
+	@Test
+	public void returnTypedBeanListMap() {
+		Map<String,List<TypedBean>> x = getProxy().returnTypedBeanListMap();
+		assertObjectEquals("{foo:[{_type:'TypedBeanImpl',a:1,b:'foo'}]}", x);
+		assertEquals(TypedBeanImpl.class, x.get("foo").get(0).getClass());
+	}
+
+	@Test
+	public void returnTypedBean1d3dListMap() {
+		Map<String,List<TypedBean[][][]>> x = getProxy().returnTypedBean1d3dListMap();
+		assertObjectEquals("{foo:[[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null],null]}", x);
+		assertEquals(TypedBeanImpl.class, x.get("foo").get(0)[0][0][0].getClass());
+	}
+
+	@Test
+	public void returnTypedBeanListMapIntegerKeys() {
+		// Note: JsonSerializer serializes key as string.
+		Map<Integer,List<TypedBean>> x = getProxy().returnTypedBeanListMapIntegerKeys();
+		assertObjectEquals("{'1':[{_type:'TypedBeanImpl',a:1,b:'foo'}]}", x);
+		assertEquals(TypedBeanImpl.class, x.get(1).get(0).getClass());
+	}
+
 	// Swapped POJOs
 	@Test
 	public void returnSwappedPojo() {
@@ -487,8 +545,18 @@ public class InterfaceProxyTest extends RestTestcase {
 	}
 
 	@Test
+	public void setBean3dArray() {
+		getProxy().setBean3dArray(new Bean[][][]{{{new Bean().init(),null},null},null});
+	}
+
+	@Test
 	public void setBeanList() {
 		getProxy().setBeanList(Arrays.asList(new Bean().init()));
+	}
+
+	@Test
+	public void setBean1d3dList() {
+		getProxy().setBean1d3dList(new AList<Bean[][][]>().append(new Bean[][][]{{{new Bean().init(),null},null},null}).append(null));
 	}
 
 	@Test
@@ -502,8 +570,54 @@ public class InterfaceProxyTest extends RestTestcase {
 	}
 
 	@Test
+	public void setBean1d3dListMap() {
+		getProxy().setBean1d3dListMap(new AMap<String,List<Bean[][][]>>().append("foo",new AList<Bean[][][]>().append(new Bean[][][]{{{new Bean().init(),null},null},null}).append(null)));
+	}
+
+	@Test
 	public void setBeanListMapIntegerKeys() {
 		getProxy().setBeanListMapIntegerKeys(new AMap<Integer,List<Bean>>().append(1,Arrays.asList(new Bean().init())));
+	}
+
+	// Typed beans
+	@Test
+	public void setTypedBean() {
+		getProxy().setTypedBean(new TypedBeanImpl().init());
+	}
+
+	@Test
+	public void setTypedBean3dArray() {
+		getProxy().setTypedBean3dArray(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null});
+	}
+
+	@Test
+	public void setTypedBeanList() {
+		getProxy().setTypedBeanList(Arrays.asList((TypedBean)new TypedBeanImpl().init()));
+	}
+
+	@Test
+	public void setTypedBean1d3dList() {
+		getProxy().setTypedBean1d3dList(new AList<TypedBean[][][]>().append(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null}).append(null));
+	}
+
+	@Test
+	public void setTypedBeanMap() {
+		getProxy().setTypedBeanMap(new AMap<String,TypedBean>().append("foo",new TypedBeanImpl().init()));
+	}
+
+	@Test
+	public void setTypedBeanListMap() {
+		getProxy().setTypedBeanListMap(new AMap<String,List<TypedBean>>().append("foo",Arrays.asList((TypedBean)new TypedBeanImpl().init())));
+	}
+
+	@Test
+	public void setTypedBean1d3dListMap() {
+		getProxy().setTypedBean1d3dListMap(new AMap<String,List<TypedBean[][][]>>().append("foo",new AList<TypedBean[][][]>().append(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null}).append(null)));
+	}
+
+	@Test
+	public void setTypedBeanListMapIntegerKeys() {
+		getProxy().setTypedBeanListMapIntegerKeys(new AMap<Integer,List<TypedBean>>().append(1,Arrays.asList((TypedBean)new TypedBeanImpl().init())));
 	}
 
 	// Swapped POJOs
@@ -702,4 +816,23 @@ public class InterfaceProxyTest extends RestTestcase {
 		Map<TestEnum,List<TestEnum[][][]>> x5n = null;
 		getProxy().setMultiParamsEnum(x1, x2, x2n, x3, x3n, x4, x4n, x5, x5n);
 	}
+//
+//
+//	public static void main(String[] args) {
+//		List<TypedBean[][][]> l = new AList<TypedBean[][][]>().append(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null}).append(null);
+//		JsonSerializer.DEFAULT_LAX.println(l);
+//		UrlEncodingSerializer.DEFAULT.println(l);
+//		try {
+//			String r = UrlEncodingSerializer.DEFAULT.serialize(l);
+//			l = UrlEncodingParser.DEFAULT.parse(r, List.class, TypedBean[][][].class);
+//
+//			l = (List<TypedBean[][][]>) UrlEncodingParser.DEFAULT.parse(r, InterfaceProxy.class.getMethod("returnTypedBean1d3dListMap").getGenericReturnType());
+//
+//			JsonSerializer.DEFAULT_LAX.println(l);
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//
+//	}
 }

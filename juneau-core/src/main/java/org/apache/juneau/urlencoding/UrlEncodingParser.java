@@ -91,14 +91,14 @@ public class UrlEncodingParser extends UonParser {
 
 		if (sType.isObject()) {
 			ObjectMap m = new ObjectMap(session);
-			parseIntoMap(session, r, m, session.string(), session.object());
+			parseIntoMap(session, r, m, session.getClassMeta(Map.class, String.class, Object.class));
 			if (m.containsKey("_value"))
 				o = m.get("_value");
 			else
 				o = session.cast(m, null, eType);
 		} else if (sType.isMap()) {
 			Map m = (sType.canCreateNewInstance() ? (Map)sType.newInstance() : new ObjectMap(session));
-			o = parseIntoMap(session, r, m, sType.getKeyType(), sType.getValueType());
+			o = parseIntoMap(session, r, m, sType);
 		} else if (sType.canCreateNewBean(outer)) {
 			BeanMap m = session.newBeanMap(outer, sType.getInnerClass());
 			m = parseIntoBeanMap(session, r, m);
@@ -106,8 +106,7 @@ public class UrlEncodingParser extends UonParser {
 		} else {
 			// It could be a non-bean with _type attribute.
 			ObjectMap m = new ObjectMap(session);
-			ClassMeta<Object> valueType = object();
-			parseIntoMap(session, r, m, string(), valueType);
+			parseIntoMap(session, r, m, session.getClassMeta(Map.class, String.class, Object.class));
 			if (m.containsKey(session.getBeanTypePropertyName()))
 				o = session.cast(m, null, eType);
 			else if (m.containsKey("_value"))
@@ -145,10 +144,10 @@ public class UrlEncodingParser extends UonParser {
 		return (T)o;
 	}
 
-	private <K,V> Map<K,V> parseIntoMap(UonParserSession session, ParserReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType) throws Exception {
+	private <K,V> Map<K,V> parseIntoMap(UonParserSession session, ParserReader r, Map<K,V> m, ClassMeta<?> type) throws Exception {
 
-		if (keyType == null)
-			keyType = (ClassMeta<K>)string();
+		ClassMeta<K> keyType = (ClassMeta<K>)type.getKeyType();
+		ClassMeta<V> valueType = (ClassMeta<V>)type.getValueType();
 
 		int c = r.peekSkipWs();
 		if (c == -1)
@@ -519,7 +518,7 @@ public class UrlEncodingParser extends UonParser {
 		UonReader r = s.getReader();
 		if (r.peekSkipWs() == '?')
 			r.read();
-		m = parseIntoMap(s, r, m, (ClassMeta<K>)session.getClassMeta(keyType), (ClassMeta<V>)session.getClassMeta(valueType));
+		m = parseIntoMap(s, r, m, session.getClassMeta(Map.class, keyType, valueType));
 		return m;
 	}
 }

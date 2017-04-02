@@ -216,6 +216,9 @@ public class UonParser extends ReaderParser {
 				o = session.cast(m, pMeta, eType);
 			else
 				throw new ParseException(session, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.getInnerClass().getName(), sType.getNotABeanReason());
+		} else if (c == 'n') {
+			r.read();
+			parseNull(session, r);
 		} else {
 			throw new ParseException(session, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.getInnerClass().getName(), sType.getNotABeanReason());
 		}
