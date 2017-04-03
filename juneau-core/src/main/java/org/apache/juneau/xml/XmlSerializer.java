@@ -408,13 +408,13 @@ public class XmlSerializer extends WriterSerializer {
 				isExpectedType = aType.isNumber();
 			else if (eType.isMap())
 				isExpectedType = aType.isMap();
-			else if (eType.isCollection())
-				isExpectedType = aType.isCollection();
+			else if (eType.isCollectionOrArray())
+				isExpectedType = aType.isCollectionOrArray();
 			else
 				isExpectedType = false;
 		}
 
-		String resolvedDictionaryName = isExpectedType ? null : aType.getResolvedDictionaryName();
+		String resolvedDictionaryName = isExpectedType ? null : aType.getDictionaryName();
 
 		// Note that the dictionary name may be specified on the actual type or the serialized type.
 		// HTML templates will have them defined on the serialized type.
@@ -543,8 +543,6 @@ public class XmlSerializer extends WriterSerializer {
 			} else if (sType.isArray()) {
 				if (isCollapsed)
 					session.indent--;
-				if (resolvedDictionaryName != null)
-					eType = aType;
 				serializeCollection(session, out, o, sType, eType, pMeta, isMixed);
 				if (isCollapsed)
 					session.indent++;

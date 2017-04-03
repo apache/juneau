@@ -102,8 +102,7 @@ public final class ClassMeta<T> implements Type {
 	private final String
 		typePropertyName,                                    // The property name of the _type property for this class and subclasses.
 		notABeanReason,                                      // If this isn't a bean, the reason why.
-		dictionaryName,                                      // The dictionary name of this class if it has one.
-		resolvedDictionaryName;                              // The name if this is an array type (e.g. "X^^").
+		dictionaryName;                                      // The dictionary name of this class if it has one.
 	private final Throwable initException;                  // Any exceptions thrown in the init() method.
 	private final InvocationHandler invocationHandler;      // The invocation handler for this class (if it has one).
 	private final BeanRegistry beanRegistry;                // The bean registry of this class meta (if it has one).
@@ -174,7 +173,6 @@ public final class ClassMeta<T> implements Type {
 		this.initException = builder.initException;
 		this.typePropertyName = builder.typePropertyName;
 		this.dictionaryName = builder.dictionaryName;
-		this.resolvedDictionaryName = builder.resolvedDictionaryName;
 		this.serializedClassMeta = builder.serializedClassMeta;
 		this.invocationHandler = builder.invocationHandler;
 		this.beanRegistry = builder.beanRegistry;
@@ -225,7 +223,6 @@ public final class ClassMeta<T> implements Type {
 		this.beanMeta = mainType.beanMeta;
 		this.typePropertyName = mainType.typePropertyName;
 		this.dictionaryName = mainType.dictionaryName;
-		this.resolvedDictionaryName = mainType.resolvedDictionaryName;
 		this.notABeanReason = mainType.notABeanReason;
 		this.pojoSwap = mainType.pojoSwap;
 		this.beanFilter = mainType.beanFilter;
@@ -274,7 +271,6 @@ public final class ClassMeta<T> implements Type {
 		this.beanMeta = null;
 		this.typePropertyName = null;
 		this.dictionaryName = null;
-		this.resolvedDictionaryName = null;
 		this.notABeanReason = null;
 		this.pojoSwap = null;
 		this.beanFilter = null;
@@ -320,8 +316,7 @@ public final class ClassMeta<T> implements Type {
 		String
 			typePropertyName = null,
 			notABeanReason = null,
-			dictionaryName = null,
-			resolvedDictionaryName = null;
+			dictionaryName = null;
 		Throwable initException = null;
 		BeanMeta beanMeta = null;
 		PojoSwap pojoSwap = null;
@@ -627,11 +622,11 @@ public final class ClassMeta<T> implements Type {
 					try {
 						newMeta = new BeanMeta(ClassMeta.this, beanContext, beanFilter, null);
 						notABeanReason = newMeta.notABeanReason;
-						
+
 						// Always get these even if it's not a bean:
-						beanRegistry = newMeta.beanRegistry;  
-						typePropertyName = newMeta.typePropertyName; 
-						
+						beanRegistry = newMeta.beanRegistry;
+						typePropertyName = newMeta.typePropertyName;
+
 					} catch (RuntimeException e) {
 						notABeanReason = e.getMessage();
 						throw e;
@@ -648,13 +643,7 @@ public final class ClassMeta<T> implements Type {
 			}
 
 			if (beanMeta != null)
-				dictionaryName = resolvedDictionaryName = beanMeta.getDictionaryName();
-
-			if (cc == ARRAY && elementType != null) {
-				resolvedDictionaryName = elementType.getResolvedDictionaryName();
-				if (resolvedDictionaryName != null)
-					resolvedDictionaryName += "^";
-			}
+				dictionaryName = beanMeta.getDictionaryName();
 
 			serializedClassMeta = (this.pojoSwap == null ? ClassMeta.this : findClassMeta(this.pojoSwap.getSwapClass()));
 			if (serializedClassMeta == null)
@@ -726,18 +715,6 @@ public final class ClassMeta<T> implements Type {
 	 */
 	public String getDictionaryName() {
 		return dictionaryName;
-	}
-
-	/**
-	 * Returns the resolved bean dictionary name associated with this class.
-	 * <p>
-	 * Unlike {@link #getDictionaryName()}, this method automatically resolves multidimensional arrays
-	 * (e.g. <js>"X^^"</js> and returns array class metas accordingly if the base class has a type name.
-	 *
-	 * @return The type name associated with this bean class, or <jk>null</jk> if there is no type name defined or this isn't a bean.
-	 */
-	public String getResolvedDictionaryName() {
-		return resolvedDictionaryName;
 	}
 
 	/**
