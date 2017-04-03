@@ -409,7 +409,7 @@ public class HtmlParser extends XmlParser {
 				}
 				l.add(m == null ? null : (E)m.getBean());
 			} else {
-				String c = getAttributes(r).get(session.getBeanTypePropertyName(type));
+				String c = getAttributes(r).get(session.getBeanTypePropertyName(type.getElementType()));
 				Map m = (Map)(elementType.isMap() && elementType.canCreateNewInstance(l) ? elementType.newInstance(l) : new ObjectMap(session));
 				for (int i = 0; i < keys.size(); i++) {
 					tag = nextTag(r, TD, NULL);
@@ -428,7 +428,7 @@ public class HtmlParser extends XmlParser {
 				}
 				if (m != null && c != null) {
 					ObjectMap m2 = (m instanceof ObjectMap ? (ObjectMap)m : new ObjectMap(m).setBeanSession(session));
-					m2.put(session.getBeanTypePropertyName(type), c);
+					m2.put(session.getBeanTypePropertyName(type.getElementType()), c);
 					l.add((E)session.cast(m2, pMeta, elementType));
 				} else {
 					l.add((E)m);

@@ -257,7 +257,7 @@ public class HtmlSerializer extends XmlSerializer {
 			sType = aType.getSerializedClassMeta();
 			String typeName = null;
 			if (session.isAddBeanTypeProperties() && ! eType.equals(aType))
-				typeName = aType.getResolvedDictionaryName();
+				typeName = aType.getDictionaryName();
 
 			// Swap if necessary
 			PojoSwap swap = aType.getPojoSwap();
@@ -467,7 +467,7 @@ public class HtmlSerializer extends XmlSerializer {
 
 		String type2 = null;
 		if (sType != eType)
-			type2 = sType.getResolvedDictionaryName();
+			type2 = sType.getDictionaryName();
 		if (type2 == null)
 			type2 = "array";
 
@@ -503,8 +503,9 @@ public class HtmlSerializer extends XmlSerializer {
 
 				out.oTag(i+1, "tr");
 				String typeName = (cm == null ? null : cm.getDictionaryName());
-				if (typeName != null && sType.getElementType() != cm)
-					out.attr(btpn, typeName);
+				String typeProperty = session.getBeanTypePropertyName(cm);
+				if (typeName != null && eType.getElementType() != cm)
+					out.attr(typeProperty, typeName);
 				out.cTag().nl();
 
 				if (cm == null) {
