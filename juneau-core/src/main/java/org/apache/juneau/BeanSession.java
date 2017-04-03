@@ -554,7 +554,7 @@ public class BeanSession extends Session {
 			if (type.isBean() && value instanceof Map) {
 				if (value instanceof ObjectMap) {
 					ObjectMap m2 = (ObjectMap)value;
-					String typeName = m2.getString(getBeanTypePropertyName());
+					String typeName = m2.getString(getBeanTypePropertyName(type));
 					if (typeName != null) {
 						ClassMeta cm = type.getBeanRegistry().getClassMeta(typeName);
 						if (cm != null && ClassUtils.isParentClass(type.innerClass, cm.innerClass))
@@ -873,10 +873,13 @@ public class BeanSession extends Session {
 	/**
 	 * Returns the type property name as defined by {@link BeanContext#BEAN_beanTypePropertyName}.
 	 *
+	 * @param cm The class meta of the type we're trying to resolve the type name for.
+	 * Can be <jk>null</jk>.
 	 * @return The type property name.  Never <jk>null</jk>.
 	 */
-	public final String getBeanTypePropertyName() {
-		return ctx.beanTypePropertyName;
+	public final String getBeanTypePropertyName(ClassMeta cm) {
+		String s = cm == null ? null : cm.getBeanTypePropertyName();
+		return s == null ? ctx.beanTypePropertyName : s;
 	}
 
 	/**

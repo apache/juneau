@@ -611,7 +611,7 @@ public abstract class Parser extends CoreObject {
 	 * @param <T> The class type of the bean map that doesn't have the expected property.
 	 */
 	protected <T> void onUnknownProperty(ParserSession session, String propertyName, BeanMap<T> beanMap, int line, int col) throws ParseException {
-		if (propertyName.equals("type") || propertyName.equals(session.getBeanTypePropertyName()))
+		if (propertyName.equals(session.getBeanTypePropertyName(beanMap.getClassMeta())))
 			return;
 		if (! session.isIgnoreUnknownBeanProperties())
 			throw new ParseException(session, "Unknown property ''{0}'' encountered while trying to parse into class ''{1}''", propertyName, beanMap.getClassMeta());

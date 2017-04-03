@@ -374,7 +374,7 @@ public class RdfParser extends ReaderParser {
 			Resource r = n.asResource();
 			Map m = new ObjectMap(session);
 			parseIntoMap(session, r, m, sType.getKeyType(), sType.getValueType(), pMeta);
-			if (m.containsKey(session.getBeanTypePropertyName()))
+			if (m.containsKey(session.getBeanTypePropertyName(eType)))
 				o = session.cast((ObjectMap)m, pMeta, eType);
 			else
 				throw new ParseException(session, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.getInnerClass().getName(), sType.getNotABeanReason());

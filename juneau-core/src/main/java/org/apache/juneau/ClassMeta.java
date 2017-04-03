@@ -100,6 +100,7 @@ public final class ClassMeta<T> implements Type {
 		valueType;                                           // If MAP, the value class type.
 	private final BeanMeta<T> beanMeta;                     // The bean meta for this bean class (if it's a bean).
 	private final String
+		typePropertyName,                                    // The property name of the _type property for this class and subclasses.
 		notABeanReason,                                      // If this isn't a bean, the reason why.
 		dictionaryName,                                      // The dictionary name of this class if it has one.
 		resolvedDictionaryName;                              // The name if this is an array type (e.g. "X^^").
@@ -171,6 +172,7 @@ public final class ClassMeta<T> implements Type {
 		this.notABeanReason = builder.notABeanReason;
 		this.beanMeta = builder.beanMeta;
 		this.initException = builder.initException;
+		this.typePropertyName = builder.typePropertyName;
 		this.dictionaryName = builder.dictionaryName;
 		this.resolvedDictionaryName = builder.resolvedDictionaryName;
 		this.serializedClassMeta = builder.serializedClassMeta;
@@ -221,6 +223,7 @@ public final class ClassMeta<T> implements Type {
 		this.valueType = valueType;
 		this.invocationHandler = mainType.invocationHandler;
 		this.beanMeta = mainType.beanMeta;
+		this.typePropertyName = mainType.typePropertyName;
 		this.dictionaryName = mainType.dictionaryName;
 		this.resolvedDictionaryName = mainType.resolvedDictionaryName;
 		this.notABeanReason = mainType.notABeanReason;
@@ -269,6 +272,7 @@ public final class ClassMeta<T> implements Type {
 		this.valueType = null;
 		this.invocationHandler = null;
 		this.beanMeta = null;
+		this.typePropertyName = null;
 		this.dictionaryName = null;
 		this.resolvedDictionaryName = null;
 		this.notABeanReason = null;
@@ -314,6 +318,7 @@ public final class ClassMeta<T> implements Type {
 			elementType = null,
 			serializedClassMeta = null;
 		String
+			typePropertyName = null,
 			notABeanReason = null,
 			dictionaryName = null,
 			resolvedDictionaryName = null;
@@ -622,7 +627,11 @@ public final class ClassMeta<T> implements Type {
 					try {
 						newMeta = new BeanMeta(ClassMeta.this, beanContext, beanFilter, null);
 						notABeanReason = newMeta.notABeanReason;
-						beanRegistry = newMeta.beanRegistry;  // Always get the bean registry even if it's not a bean.
+						
+						// Always get these even if it's not a bean:
+						beanRegistry = newMeta.beanRegistry;  
+						typePropertyName = newMeta.typePropertyName; 
+						
 					} catch (RuntimeException e) {
 						notABeanReason = e.getMessage();
 						throw e;
@@ -696,6 +705,17 @@ public final class ClassMeta<T> implements Type {
 		}
 	}
 
+
+	/**
+	 * Returns the type property name associated with this class and subclasses.
+	 * <p>
+	 * If <jk>null</jk>, <js>"_type"</js> should be assumed.
+	 *
+	 * @return The type property name associated with this bean class, or <jk>null</jk> if there is no explicit type property name defined or this isn't a bean.
+	 */
+	public String getBeanTypePropertyName() {
+		return typePropertyName;
+	}
 
 	/**
 	 * Returns the bean dictionary name associated with this class.

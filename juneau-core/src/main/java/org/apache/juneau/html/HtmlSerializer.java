@@ -362,7 +362,7 @@ public class HtmlSerializer extends XmlSerializer {
 		out.oTag(i, "table");
 
 		if (typeName != null && ppMeta != null && ppMeta.getClassMeta() != aType)
-			out.attr(session.getBeanTypePropertyName(), typeName);
+			out.attr(session.getBeanTypePropertyName(sType), typeName);
 
 		out.appendln(">");
 		if (session.isAddKeyValueTableHeaders() && ! (aType.getExtendedMeta(HtmlClassMeta.class).isNoTableHeaders() || (ppMeta != null && ppMeta.getExtendedMeta(HtmlBeanPropertyMeta.class).isNoTableHeaders()))) {
@@ -406,7 +406,7 @@ public class HtmlSerializer extends XmlSerializer {
 
 		String typeName = m.getMeta().getDictionaryName();
 		if (typeName != null && eType != m.getClassMeta())
-			out.attr(session.getBeanTypePropertyName(), typeName);
+			out.attr(session.getBeanTypePropertyName(m.getClassMeta()), typeName);
 
 		out.append('>').nl();
 		if (session.isAddKeyValueTableHeaders() && ! (m.getClassMeta().getExtendedMeta(HtmlClassMeta.class).isNoTableHeaders() || (ppMeta != null && ppMeta.getExtendedMeta(HtmlBeanPropertyMeta.class).isNoTableHeaders()))) {
@@ -474,7 +474,7 @@ public class HtmlSerializer extends XmlSerializer {
 		c = session.sort(c);
 
 		HtmlBeanPropertyMeta hbpMeta = (ppMeta == null ? null : ppMeta.getExtendedMeta(HtmlBeanPropertyMeta.class));
-		String btpn = session.getBeanTypePropertyName();
+		String btpn = session.getBeanTypePropertyName(eType);
 
 		// Look at the objects to see how we're going to handle them.  Check the first object to see how we're going to handle this.
 		// If it's a map or bean, then we'll create a table.

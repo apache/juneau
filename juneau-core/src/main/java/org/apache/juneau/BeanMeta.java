@@ -87,6 +87,7 @@ public class BeanMeta<T> {
 	private final MetadataMap extMeta;  // Extended metadata
 
 	// Other fields
+	final String typePropertyName;                                      // "_type" property actual name.
 	private final BeanPropertyMeta typeProperty;                        // "_type" mock bean property.
 	private final String dictionaryName;                                // The @Bean.typeName() annotation defined on this bean class.
 	final String notABeanReason;                                        // Readable string explaining why this class wasn't a bean.
@@ -118,7 +119,8 @@ public class BeanMeta<T> {
 		this.constructorArgs = b.constructorArgs;
 		this.extMeta = b.extMeta;
 		this.beanRegistry = b.beanRegistry;
-		this.typeProperty = new BeanPropertyMeta.Builder(this, ctx.getBeanTypePropertyName(), ctx.string(), beanRegistry).build();
+		this.typePropertyName = b.typePropertyName;
+		this.typeProperty = new BeanPropertyMeta.Builder(this, typePropertyName, ctx.string(), beanRegistry).build();
 	}
 
 	private static final class Builder<T> {
@@ -135,7 +137,7 @@ public class BeanMeta<T> {
 		MetadataMap extMeta = new MetadataMap();
 		PropertyNamer propertyNamer;
 		BeanRegistry beanRegistry;
-		String dictionaryName;
+		String dictionaryName, typePropertyName;
 
 		private Builder(ClassMeta<T> classMeta, BeanContext ctx, BeanFilter beanFilter, String[] pNames) {
 			this.classMeta = classMeta;
@@ -164,6 +166,12 @@ public class BeanMeta<T> {
 						bdClasses.add(classMeta.innerClass);
 				}
 				this.beanRegistry = new BeanRegistry(ctx, null, bdClasses.toArray(new Class<?>[bdClasses.size()]));
+
+				for (Bean b : ReflectionUtils.findAnnotationsParentFirst(Bean.class, classMeta.innerClass))
+					if (! b.typePropertyName().isEmpty())
+						typePropertyName = b.typePropertyName();
+				if (typePropertyName == null)
+					typePropertyName = ctx.getBeanTypePropertyName();
 
 				// If @Bean.interfaceClass is specified on the parent class, then we want
 				// to use the properties defined on that class, not the subclass.

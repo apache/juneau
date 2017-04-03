@@ -84,12 +84,42 @@ public @interface Bean {
 	 * 	{
 	 * 		x: [
 	 * 			{_type:<js>'bar'</js>},
-	 * 			{_type>:<js>'baz'</js>}
+	 * 			{_type:<js>'baz'</js>}
 	 * 		]
 	 * 	}
 	 * </p>
 	 */
 	String typeName() default "";
+
+
+	/**
+	 * The property name to use for representing the type name.
+	 * <p>
+	 * This can be used to override the name used for the <js>"_type"</js> property designated above.
+	 * Typically, you'll define this on an interface class so that it can apply to all subclasses.
+	 * <p class='bcode'>
+	 * 	<ja>@Bean</ja>(typePropertyName=<js>"mytype"</js>, beanDictionary={MyClass1.<jk>class</jk>,MyClass2.<jk>class</jk>})
+	 * 	<jk>public interface</jk> MyInterface {...}
+	 *
+	 * 	<ja>@Bean</ja>(typeName=<js>"C1"</js>)
+	 * 	<jk>public class</jk> MyClass1 <jk>implements</jk> MyInterface {...}
+	 *
+	 * 	<ja>@Bean</ja>(typeName=<js>"C2"</js>)
+	 * 	<jk>public class</jk> MyClass2 <jk>implements</jk> MyInterface {...}
+	 *
+	 * 	MyInterface[] x = <jk>new</jk> MyInterface[]{ <jk>new</jk> MyClass1(), <jk>new</jk> MyClass2() };
+	 *
+	 *	<jc>// Produces "[{mytype:'C1',...},{mytype:'C2',...}]"</jc>
+	 * 	String json = JsonSerializer.<jsf>DEFAULT_LAX</jsf>.serialize(x);
+	 * </p>
+	 * <p>
+	 * This is similar in concept to the {@link BeanContext#BEAN_beanTypePropertyName} setting except this annotation
+	 * applies only to the annotated class and subclasses whereas the bean context property applies globally on
+	 * serializers and parsers.
+	 * <p>
+	 * The default value if not specified is <js>"_type"</js> unless overridden by the {@link BeanContext#BEAN_beanTypePropertyName} setting.
+	 */
+	String typePropertyName() default "";
 
 	/**
 	 * The set and order of names of properties associated with a bean class.

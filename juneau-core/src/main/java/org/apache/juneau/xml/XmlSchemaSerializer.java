@@ -346,7 +346,7 @@ public class XmlSchemaSerializer extends XmlSerializer {
 			w.cTag().nl();
 
 			if (! (cm.isMapOrBean() || cm.isCollectionOrArray() || (cm.isAbstract() && ! cm.isNumber()) || cm.isObject())) {
-				w.oTag(i+1, "attribute").attr("name", session.getBeanTypePropertyName()).attr("type", "string").ceTag().nl();
+				w.oTag(i+1, "attribute").attr("name", session.getBeanTypePropertyName(cm)).attr("type", "string").ceTag().nl();
 
 			} else {
 
@@ -494,7 +494,7 @@ public class XmlSchemaSerializer extends XmlSerializer {
 				}
 
 				w.oTag(i+1, "attribute")
-					.attr("name", session.getBeanTypePropertyName())
+					.attr("name", session.getBeanTypePropertyName(null))
 					.attr("type", "string")
 					.ceTag().nl();
 			}

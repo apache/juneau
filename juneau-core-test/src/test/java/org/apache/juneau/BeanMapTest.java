@@ -1144,7 +1144,7 @@ public class BeanMapTest {
 		m.put("f1", 1);
 		m.put("f2", "2");
 
-		R2 t = (R2)m.cast();
+		R2 t = (R2)m.cast(Object.class);
 		assertEquals(1, t.f1);
 
 		t = (R2)m.cast(R1.class);
@@ -1160,7 +1160,7 @@ public class BeanMapTest {
 		m.put("f1", 1);
 		m.put("f2", "2");
 
-		m = (ObjectMap)m.cast();
+		m = (ObjectMap)m.cast(Object.class);
 		assertEquals(1, t.f1);
 		assertEquals(2, t.f2);
 
@@ -1193,7 +1193,7 @@ public class BeanMapTest {
 		m.put("_type", "S");
 		m.put("f1", new ObjectMap(session).append("_type", "R1").append("f1", 1));
 
-		S t = (S)m.cast();
+		S t = (S)m.cast(Object.class);
 		assertEquals(1, t.f1.f1);
 
 		t = m.cast(S.class);
@@ -1206,7 +1206,7 @@ public class BeanMapTest {
 		m = new ObjectMap(session);
 		m.put("f1", new ObjectMap(session).append("_type", R1.class.getName()).append("f1", 1));
 
-		m = (ObjectMap)m.cast();
+		m = (ObjectMap)m.cast(Object.class);
 		assertEquals(1, t.f1.f1);
 
 		t = m.cast(S.class);
@@ -1232,7 +1232,7 @@ public class BeanMapTest {
 		m.put("_type", "TreeMap");
 		m.put("1", "ONE");
 
-		m2 = (Map)m.cast();
+		m2 = (Map)m.cast(Object.class);
 		assertTrue(m2 instanceof TreeMap);
 		assertEquals("ONE", m2.get("1"));
 
@@ -1269,7 +1269,7 @@ public class BeanMapTest {
 		m = new ObjectMap();
 		m.put("1", "ONE");
 
-		m2 = (ObjectMap)m.cast();
+		m2 = (ObjectMap)m.cast(Object.class);
 		assertTrue(m2 instanceof ObjectMap);
 		assertEquals("ONE", m2.get("1"));
 
@@ -1311,7 +1311,7 @@ public class BeanMapTest {
 		m.put("_type", "LinkedList");
 		m.put("items", new ObjectList().append("1").append("2"));
 
-		List l = (List)m.cast();
+		List l = (List)m.cast(Object.class);
 		assertTrue(l instanceof LinkedList);
 		assertEquals("1", l.get(0));
 
@@ -1364,7 +1364,7 @@ public class BeanMapTest {
 		m.put("_type", "LinkedListOfInts");
 		m.put("items", new ObjectList().append("1").append("2"));
 
-		List l = (List)m.cast();
+		List l = (List)m.cast(Object.class);
 		assertTrue(l instanceof LinkedList);
 		assertEquals(1, l.get(0));
 
@@ -1426,7 +1426,7 @@ public class BeanMapTest {
 		m.put("_type", "LinkedListOfR1");
 		m.put("items", new ObjectList(session).append("{f1:1}"));
 
-		List l = (List)m.cast();
+		List l = (List)m.cast(Object.class);
 		assertTrue(l instanceof LinkedList);
 		assertTrue(l.get(0) instanceof R1);
 		assertEquals(1, ((R1)l.get(0)).f1);
@@ -1507,7 +1507,7 @@ public class BeanMapTest {
 		m.put("_type", "LinkedListOfCalendar");
 		m.put("items", new ObjectList().append("2001-07-04T15:30:45Z"));
 
-		List l = (List)m.cast();
+		List l = (List)m.cast(Object.class);
 		assertTrue(l instanceof LinkedList);
 		assertEquals(2001, ((Calendar)l.get(0)).get(Calendar.YEAR));
 
@@ -1569,7 +1569,7 @@ public class BeanMapTest {
 		m.put("_type", "StringArray");
 		m.put("items", new ObjectList().append("1").append("2"));
 
-		String[] l = (String[])m.cast();
+		String[] l = (String[])m.cast(Object.class);
 		assertEquals("1", l[0]);
 
 		l = m.cast(String[].class);
@@ -1615,7 +1615,7 @@ public class BeanMapTest {
 		m.put("_type", "IntArray");
 		m.put("items", new ObjectList().append("1").append("2"));
 
-		int[] l = (int[])m.cast();
+		int[] l = (int[])m.cast(Object.class);
 		assertEquals(1, l[0]);
 
 		l = m.cast(int[].class);
@@ -1660,7 +1660,7 @@ public class BeanMapTest {
 		m.put("_type", "String2dArray");
 		m.put("items", new ObjectList().append(new ObjectList().append("1")).append(new ObjectList().append("2")));
 
-		String[][] l = (String[][])m.cast();
+		String[][] l = (String[][])m.cast(Object.class);
 		assertEquals("1", l[0][0]);
 		assertEquals("2", l[1][0]);
 
@@ -1692,7 +1692,7 @@ public class BeanMapTest {
 		m.put("_type", "Int2dArray");
 		m.put("items", new ObjectList().append(new ObjectList().append("1")).append(new ObjectList().append("2")));
 
-		int[][] l = (int[][])m.cast();
+		int[][] l = (int[][])m.cast(Object.class);
 		assertEquals(1, l[0][0]);
 		assertEquals(2, l[1][0]);
 

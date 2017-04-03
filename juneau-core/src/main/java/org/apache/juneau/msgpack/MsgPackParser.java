@@ -127,7 +127,7 @@ public class MsgPackParser extends InputStreamParser {
 						String pName = parseAnything(session, string(), is, m.getBean(false), null);
 						BeanPropertyMeta bpm = m.getPropertyMeta(pName);
 						if (bpm == null) {
-							if (pName.equals(session.getBeanTypePropertyName()))
+							if (pName.equals(session.getBeanTypePropertyName(eType)))
 								parseAnything(session, session.string(), is, null, null);
 							else
 								onUnknownProperty(session, pName, m, 0, is.getPosition());
@@ -178,7 +178,7 @@ public class MsgPackParser extends InputStreamParser {
 				ObjectMap m = new ObjectMap(session);
 				for (int i = 0; i < length; i++)
 					m.put(parseAnything(session, string(), is, outer, pMeta), parseAnything(session, object(), is, m, pMeta));
-				if (m.containsKey(session.getBeanTypePropertyName()))
+				if (m.containsKey(session.getBeanTypePropertyName(eType)))
 					o = session.cast(m, pMeta, eType);
 				else
 					throw new ParseException(session, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.getInnerClass().getName(), sType.getNotABeanReason());

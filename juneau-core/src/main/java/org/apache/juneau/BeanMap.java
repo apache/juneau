@@ -65,6 +65,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	protected BeanMeta<T> meta;
 
 	private final BeanSession session;
+	private final String beanTypePropertyName;
 
 	/**
 	 * Instance of this class are instantiated through the BeanContext class.
@@ -79,6 +80,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 		this.meta = meta;
 		if (meta.constructorArgs.length > 0)
 			propertyCache = new TreeMap<String,Object>();
+		this.beanTypePropertyName = session.getBeanTypePropertyName(meta.classMeta);
 	}
 
 	/**
@@ -203,7 +205,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 			if (meta.ctx.ignoreUnknownBeanProperties)
 				return null;
 
-			if (property.equals(session.getBeanTypePropertyName()))
+			if (property.equals(beanTypePropertyName))
 				return null;
 
 			throw new BeanRuntimeException(meta.c, "Bean property ''{0}'' not found.", property);

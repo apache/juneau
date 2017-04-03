@@ -1069,38 +1069,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	}
 
 	/**
-	 * Converts this map into the class type specified by the <js>"_type"</js> entry value.
-	 * <p>
-	 * TODO - Needs better description.
-	 *
-	 * @return This object map cast as another object.
-	 */
-	public Object cast() {
-		return cast(session.getBeanRegistry());
-	}
-
-	/**
-	 * Same as {@link #cast()}, but first do a lookup for the name in the specified dictionary.
-	 *
-	 * @param beanRegistry
-	 * The class lexicon to resolve the name.  Can be <jk>null</jk>.
-	 * @return The new Java object of type specified by the <js>"_type"</js> entry value, or this
-	 * 	same object if entry does not exist.
-	 */
-	public Object cast(BeanRegistry beanRegistry) {
-		String c = (String)get(session.getBeanTypePropertyName());
-		if (c == null || beanRegistry == null)
-			return this;
-		ClassMeta<?> cm = beanRegistry.getClassMeta(c);
-		if (cm == null)
-			return this;
-		return cast2(cm);
-	}
-
-	/**
 	 * Converts this map into an object of the specified type.
-	 * <p>
-	 * The rules are the same as those specified in {@link #cast()}.
 	 * <p>
 	 * If this map contains a <js>"_type"</js> entry, it must be the same as or a subclass
 	 * 	of the <code>type</code>.
@@ -1113,9 +1082,12 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> T cast(Class<T> type) {
-		ClassMeta<?> c1 = session.getBeanRegistry().getClassMeta((String)get(session.getBeanTypePropertyName()));
 		ClassMeta<?> c2 = session.getClassMeta(type);
-		ClassMeta<?> c = narrowClassMeta(c1, c2);
+		String typePropertyName = session.getBeanTypePropertyName(c2);
+		ClassMeta<?> c1 = session.getBeanRegistry().getClassMeta((String)get(typePropertyName));
+		ClassMeta<?> c = c1 == null ? c2 : narrowClassMeta(c1, c2);
+		if (c.isObject())
+			return (T)this;
 		return (T)cast2(c);
 	}
 
@@ -1130,7 +1102,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 */
 	@SuppressWarnings({"unchecked"})
 	public <T> T cast(ClassMeta<T> cm) {
-		ClassMeta<?> c1 = session.getBeanRegistry().getClassMeta((String)get(session.getBeanTypePropertyName()));
+		ClassMeta<?> c1 = session.getBeanRegistry().getClassMeta((String)get(session.getBeanTypePropertyName(cm)));
 		ClassMeta<?> c = narrowClassMeta(c1, cm);
 		return (T)cast2(c);
 	}
@@ -1162,7 +1134,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * Otherwise, returns c2.
 	 */
 	private static ClassMeta<?> getNarrowedClassMeta(ClassMeta<?> c1, ClassMeta<?> c2) {
-		if (isParentClass(c2.getInnerClass(), c1.getInnerClass()))
+		if (c2 == null || isParentClass(c2.getInnerClass(), c1.getInnerClass()))
 			return c1;
 		return c2;
 	}
@@ -1182,11 +1154,11 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 				for (Map.Entry<String,Object> e : entrySet()) {
 					Object k = e.getKey();
 					Object v = e.getValue();
-					if (! k.equals(session.getBeanTypePropertyName())) {
+					if (! k.equals(session.getBeanTypePropertyName(cm))) {
 
 						// Attempt to recursively cast child maps.
 						if (v instanceof ObjectMap)
-							v = ((ObjectMap)v).cast(session.getBeanRegistry());
+							v = ((ObjectMap)v).cast(vType);
 
 						k = (kType.isString() ? k : session.convertToType(k, kType));
 						v = (vType.isObject() ? v : session.convertToType(v, vType));
@@ -1203,11 +1175,11 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 				for (Map.Entry<String,Object> e : entrySet()) {
 					String k = e.getKey();
 					Object v = e.getValue();
-					if (! k.equals(session.getBeanTypePropertyName())) {
+					if (! k.equals(session.getBeanTypePropertyName(cm))) {
 
 						// Attempt to recursively cast child maps.
 						if (v instanceof ObjectMap)
-							v = ((ObjectMap)v).cast(session.getBeanRegistry());
+							v = ((ObjectMap)v).cast(bm.getProperty(k).getMeta().getClassMeta());
 
 						bm.put(k, v);
 					}

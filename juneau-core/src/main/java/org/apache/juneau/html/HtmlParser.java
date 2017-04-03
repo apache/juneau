@@ -183,7 +183,7 @@ public class HtmlParser extends XmlParser {
 
 		} else if (tag == TABLE) {
 
-			String typeName = getAttribute(r, session.getBeanTypePropertyName(), "object");
+			String typeName = getAttribute(r, session.getBeanTypePropertyName(eType), "object");
 			ClassMeta cm = session.getClassMeta(typeName, pMeta, eType);
 
 			if (cm != null) {
@@ -225,7 +225,7 @@ public class HtmlParser extends XmlParser {
 			}
 
 		} else if (tag == UL) {
-			String typeName = getAttribute(r, session.getBeanTypePropertyName(), "array");
+			String typeName = getAttribute(r, session.getBeanTypePropertyName(eType), "array");
 			ClassMeta cm = session.getClassMeta(typeName, pMeta, eType);
 			if (cm != null)
 				sType = eType = cm;
@@ -377,7 +377,7 @@ public class HtmlParser extends XmlParser {
 				break;
 
 			ClassMeta elementType = null;
-			String beanType = getAttribute(r, session.getBeanTypePropertyName(), null);
+			String beanType = getAttribute(r, session.getBeanTypePropertyName(type), null);
 			if (beanType != null)
 				elementType = session.getClassMeta(beanType, pMeta, null);
 			if (elementType == null)
@@ -409,7 +409,7 @@ public class HtmlParser extends XmlParser {
 				}
 				l.add(m == null ? null : (E)m.getBean());
 			} else {
-				String c = getAttributes(r).get(session.getBeanTypePropertyName());
+				String c = getAttributes(r).get(session.getBeanTypePropertyName(type));
 				Map m = (Map)(elementType.isMap() && elementType.canCreateNewInstance(l) ? elementType.newInstance(l) : new ObjectMap(session));
 				for (int i = 0; i < keys.size(); i++) {
 					tag = nextTag(r, TD, NULL);
@@ -428,7 +428,7 @@ public class HtmlParser extends XmlParser {
 				}
 				if (m != null && c != null) {
 					ObjectMap m2 = (m instanceof ObjectMap ? (ObjectMap)m : new ObjectMap(m).setBeanSession(session));
-					m2.put(session.getBeanTypePropertyName(), c);
+					m2.put(session.getBeanTypePropertyName(type), c);
 					l.add((E)session.cast(m2, pMeta, elementType));
 				} else {
 					l.add((E)m);

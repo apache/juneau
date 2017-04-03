@@ -119,7 +119,7 @@ public class UrlEncodingParser extends UonParser {
 			// It could be a non-bean with _type attribute.
 			ObjectMap m = new ObjectMap(session);
 			parseIntoMap(session, r, m, session.getClassMeta(Map.class, String.class, Object.class), outer);
-			if (m.containsKey(session.getBeanTypePropertyName()))
+			if (m.containsKey(session.getBeanTypePropertyName(eType)))
 				o = session.cast(m, null, eType);
 			else if (m.containsKey("_value")) {
 				o = session.convertToType(m.get("_value"), sType);
@@ -265,7 +265,7 @@ public class UrlEncodingParser extends UonParser {
 					}
 				} else if (state == S3) {
 					if (c == -1 || c == '\u0001') {
-						if (! currAttr.equals(session.getBeanTypePropertyName())) {
+						if (! currAttr.equals(session.getBeanTypePropertyName(m.getClassMeta()))) {
 							BeanPropertyMeta pMeta = m.getPropertyMeta(currAttr);
 							if (pMeta == null) {
 								onUnknownProperty(session, currAttr, m, currAttrLine, currAttrCol);
@@ -283,7 +283,7 @@ public class UrlEncodingParser extends UonParser {
 							return m;
 						state = S1;
 					} else {
-						if (! currAttr.equals(session.getBeanTypePropertyName())) {
+						if (! currAttr.equals(session.getBeanTypePropertyName(m.getClassMeta()))) {
 							BeanPropertyMeta pMeta = m.getPropertyMeta(currAttr);
 							if (pMeta == null) {
 								onUnknownProperty(session, currAttr, m, currAttrLine, currAttrCol);

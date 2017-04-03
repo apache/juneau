@@ -94,7 +94,7 @@ public class XmlParser extends ReaderParser {
 		session.setCurrentClass(sType);
 
 		String wrapperAttr = (isRoot && session.isPreserveRootElement()) ? r.getName().getLocalPart() : null;
-		String typeAttr = r.getAttributeValue(null, session.getBeanTypePropertyName());
+		String typeAttr = r.getAttributeValue(null, session.getBeanTypePropertyName(eType));
 		int jsonType = getJsonType(typeAttr);
 		String elementName = session.getElementName(r);
 		if (jsonType == 0) {
@@ -195,7 +195,7 @@ public class XmlParser extends ReaderParser {
 		for (int i = 0; i < r.getAttributeCount(); i++) {
 			String a = r.getAttributeLocalName(i);
 			// TODO - Need better handling of namespaces here.
-			if (! (a.equals(session.getBeanTypePropertyName()))) {
+			if (! (a.equals(session.getBeanTypePropertyName(null)))) {
 				K key = session.trim(convertAttrToType(session, m, a, keyType));
 				V value = session.trim(convertAttrToType(session, m, r.getAttributeValue(i), valueType));
 				setName(valueType, value, key);
@@ -429,7 +429,7 @@ public class XmlParser extends ReaderParser {
 			for (int i = 0; i < r.getAttributeCount(); i++) {
 				String key = session.getAttributeName(r, i);
 				String val = r.getAttributeValue(i);
-				if (! key.equals(session.getBeanTypePropertyName()))
+				if (! key.equals(session.getBeanTypePropertyName(null)))
 					m.put(key, val);
 			}
 		}

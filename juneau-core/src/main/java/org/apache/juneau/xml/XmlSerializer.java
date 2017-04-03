@@ -498,9 +498,9 @@ public class XmlSerializer extends WriterSerializer {
 			}
 			if (! isExpectedType) {
 				if (resolvedDictionaryName != null)
-					out.attr(dns, session.getBeanTypePropertyName(), resolvedDictionaryName);
+					out.attr(dns, session.getBeanTypePropertyName(eType), resolvedDictionaryName);
 				else if (type != null && type != STRING)
-					out.attr(dns, session.getBeanTypePropertyName(), type);
+					out.attr(dns, session.getBeanTypePropertyName(eType), type);
 			}
 			if (o == null) {
 				if ((sType.isBoolean() || sType.isNumber()) && ! sType.isNullable())

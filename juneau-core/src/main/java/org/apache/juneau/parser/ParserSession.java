@@ -283,7 +283,7 @@ public class ParserSession extends BeanSession {
 	 */
 	public final Object cast(ObjectMap m, BeanPropertyMeta pMeta, ClassMeta<?> eType) {
 
-		String btpn = getBeanTypePropertyName();
+		String btpn = getBeanTypePropertyName(eType);
 
 		Object o = m.get(btpn);
 		if (o == null)
