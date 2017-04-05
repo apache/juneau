@@ -176,6 +176,83 @@ public final class RestCall {
 	}
 
 	/**
+	 * Adds parameters to the URI query.
+	 *
+	 * @param params The parameters.  Values are converted to a string using UON notation.
+	 * @return This object (for method chaining).
+	 * @throws RestCallException
+	 */
+	public RestCall params(Map<String,Object> params) throws RestCallException {
+		for (Map.Entry<String,Object> p : params.entrySet())
+			uriBuilder.addParameter(p.getKey(), client.getUrlEncodingSerializer().serializeUrlPart(p.getValue()));
+		return this;
+	}
+
+	/**
+	 * Adds a parameter to the URI query if the parameter value is not <jk>null</jk>.
+	 *
+	 * @param name The parameter name.
+	 * @param value The parameter value converted to a string using UON notation.
+	 * @return This object (for method chaining).
+	 * @throws RestCallException
+	 */
+	public RestCall paramIfNN(String name, Object value) throws RestCallException {
+		if (value != null)
+			uriBuilder.addParameter(name, client.getUrlEncodingSerializer().serializeUrlPart(value));
+		return this;
+	}
+
+	/**
+	 * Same as {@link #params(Map)} but ignores values that are <jk>null</jk>.
+	 *
+	 * @param params The parameters.  Values are converted to a string using UON notation.
+	 * @return This object (for method chaining).
+	 * @throws RestCallException
+	 */
+	public RestCall paramsIfNN(Map<String,Object> params) throws RestCallException {
+		if (params != null) {
+			for (Map.Entry<String,Object> e : params.entrySet()) {
+				Object value = e.getValue();
+				if (value != null)
+					uriBuilder.addParameter(e.getKey(), client.getUrlEncodingSerializer().serializeUrlPart(value));
+			}
+		}
+		return this;
+	}
+
+	/**
+	 * Adds a parameter to the URI query if the parameter value is not <jk>null</jk> or an empty string.
+	 *
+	 * @param name The parameter name.
+	 * @param value The parameter value converted to a string using UON notation.
+	 * @return This object (for method chaining).
+	 * @throws RestCallException
+	 */
+	public RestCall paramIfNE(String name, Object value) throws RestCallException {
+		if (! StringUtils.isEmpty(value))
+			uriBuilder.addParameter(name, client.getUrlEncodingSerializer().serializeUrlPart(value));
+		return this;
+	}
+
+	/**
+	 * Same as {@link #params(Map)} but ignores values that are <jk>null</jk> or empty strings.
+	 *
+	 * @param params The parameters.  Values are converted to a string using UON notation.
+	 * @return This object (for method chaining).
+	 * @throws RestCallException
+	 */
+	public RestCall paramIfNE(Map<String,Object> params) throws RestCallException {
+		if (params != null) {
+			for (Map.Entry<String,Object> e : params.entrySet()) {
+				Object value = e.getValue();
+				if (! StringUtils.isEmpty(value))
+					uriBuilder.addParameter(e.getKey(), client.getUrlEncodingSerializer().serializeUrlPart(value));
+			}
+		}
+		return this;
+	}
+
+	/**
 	 * Sets a custom URI query.
 	 *
 	 * @param query The new URI query string.
