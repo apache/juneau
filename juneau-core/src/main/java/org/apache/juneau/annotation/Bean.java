@@ -116,6 +116,10 @@ public @interface Bean {
 	 * This is similar in concept to the {@link BeanContext#BEAN_beanTypePropertyName} setting except this annotation
 	 * applies only to the annotated class and subclasses whereas the bean context property applies globally on
 	 * serializers and parsers.
+	 * <p class='warning'>
+	 * 	Be careful what value you specify for this.  It should not interfere with bean property names or
+	 * 	common HTML attribute names.
+	 * </p
 	 * <p>
 	 * The default value if not specified is <js>"_type"</js> unless overridden by the {@link BeanContext#BEAN_beanTypePropertyName} setting.
 	 */
