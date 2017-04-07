@@ -296,7 +296,7 @@ public class RestMicroservice extends Microservice {
 	 *
 	 * 	<cc># The context root of the Jetty server.
 	 * 	# Default is Rest-ContextPath in manifest file, or "/".</cc>
-	 * 	<ck>contextPath</ck> = 
+	 * 	<ck>contextPath</ck> =
 	 *
 	 * 	<cc># Authentication:  NONE, BASIC.
 	 * 	# Default is Rest-AuthType in manifest file, or NONE.</cc>
@@ -398,7 +398,7 @@ public class RestMicroservice extends Microservice {
 		for (int port : ports) {
 			try {
 				// If port is 0, try a random port between ports[0] and 32767.
-				if (port == 0) 
+				if (port == 0)
 					port = new Random().nextInt(32767 - ports[0] + 1) + ports[0];
 				ServerSocket ss = new ServerSocket(port);
 				ss.close();

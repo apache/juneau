@@ -82,7 +82,7 @@ public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.
 					if (e.matches())
 						next = e;
 					prev = null;
- 				} else {
+				} else {
 					if (prev != null)
 						prev.addText(e.line);
 				}

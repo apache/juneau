@@ -139,7 +139,7 @@ public abstract class Microservice {
 	 * Specifies the config file for this microservice.
 	 * <p>
 	 * Note that if you use this method instead of {@link #setConfig(String,boolean)}, the config file will not use
-	 * the variable resolver constructed from {@link #createVarResolver()}.  
+	 * the variable resolver constructed from {@link #createVarResolver()}.
 	 *
 	 * @param cf The config file for this application, or <jk>null</jk> if no config file is needed.
 	 * @return This object (for method chaining).
@@ -439,7 +439,7 @@ public abstract class Microservice {
 		// Resolve the config file if the path was specified.
 		// --------------------------------------------------------------------------------
 		ConfigFileBuilder cfb = new ConfigFileBuilder();
-		if (cfPath != null) 
+		if (cfPath != null)
 			cf = cfb.build(cfPath).getResolving(createVarResolver().build());
 		
 		// --------------------------------------------------------------------------------
