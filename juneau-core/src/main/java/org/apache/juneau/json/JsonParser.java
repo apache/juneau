@@ -270,9 +270,9 @@ public class JsonParser extends ReaderParser {
 
 			// '01' is not a valid number, but '0.1', '0e1', '0e+1' are valid.
 			if (c == '0' && s.length() > (isNegative ? 2 : 1)) {
-				 char c2 = s.charAt((isNegative ? 2 : 1));
-				 if (c2 != '.' && c2 != 'e' && c2 != 'E')
-						throw new ParseException(session, "Invalid JSON number: '"+s+"'");
+				char c2 = s.charAt((isNegative ? 2 : 1));
+				if (c2 != '.' && c2 != 'e' && c2 != 'E')
+					throw new ParseException(session, "Invalid JSON number: '"+s+"'");
 			}
 
 			// JSON doesn't allow '1.' or '0.e1'.
