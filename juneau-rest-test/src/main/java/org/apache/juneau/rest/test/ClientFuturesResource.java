@@ -12,64 +12,24 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
-import org.apache.juneau.microservice.resources.*;
+import org.apache.juneau.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.labels.*;
 
+/**
+ * JUnit automated testcase resource.
+ */
 @RestResource(
-	path="/",
-	children={
-		AcceptCharsetResource.class,
-		BeanContextPropertiesResource.class,
-		CallbackStringsResource.class,
-		CharsetEncodingsResource.class,
-		ClientFuturesResource.class,
-		ClientVersionResource.class,
-		ConfigResource.class,
-		ContentResource.class,
-		DefaultContentTypesResource.class,
-		ErrorConditionsResource.class,
-		TransformsResource.class,
-		GroupsResource.class,
-		GzipResource.TestGzipOff.class,
-		GzipResource.TestGzipOn.class,
-		HtmlPropertiesResource.class,
-		InheritanceResource.TestEncoders.class,
-		InheritanceResource.TestTransforms.class,
-		InheritanceResource.TestParsers.class,
-		InheritanceResource.TestProperties.class,
-		InheritanceResource.TestSerializers.class,
-		InterfaceProxyResource.class,
-		LargePojosResource.class,
-		MessagesResource.Messages2Resource.class,
-		MessagesResource.class,
-		NlsResource.class,
-		NlsPropertyResource.class,
-		NoParserInputResource.class,
-		OnPostCallResource.class,
-		OnPreCallResource.class,
-		OptionsWithoutNlsResource.class,
-		OverlappingMethodsResource.class,
-		ParamsResource.class,
-		ParsersResource.class,
-		PathResource.class,
-		PathsResource.class,
-		PathVariablesResource.class,
-		PropertiesResource.class,
-		RestClient2Resource.class,
-		SerializersResource.class,
-		StaticFilesResource.class,
-		UrisResource.class,
-		UrlContentResource.class,
-		ShutdownResource.class
-	}
+	path="/testClientFutures"
 )
-public class Root extends RestServletDefault {
+public class ClientFuturesResource extends RestServletDefault {
 	private static final long serialVersionUID = 1L;
 
+	//====================================================================================================
+	// Test GET
+	//====================================================================================================
 	@RestMethod(name="GET", path="/")
-	public ChildResourceDescriptions doGet(RestRequest req) {
-		return new ChildResourceDescriptions(getContext(), req);
+	public ObjectMap test1(RestRequest req) throws Exception {
+		return new ObjectMap().append("foo","bar");
 	}
 }

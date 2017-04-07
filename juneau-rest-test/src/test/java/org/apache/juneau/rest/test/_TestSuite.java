@@ -28,6 +28,7 @@ import org.junit.runners.Suite.*;
 	BeanContextPropertiesTest.class,
 	CallbackStringsTest.class,
 	CharsetEncodingsTest.class,
+	ClientFuturesTest.class,
 	ClientVersionTest.class,
 	ConfigTest.class,
 	ContentTest.class,

@@ -67,6 +67,8 @@ public class RestClient extends CoreObject {
 	final long retryInterval;
 	final boolean debug;
 	final RestCallInterceptor[] interceptors;
+	final ExecutorService executorService;
+	final boolean executorServiceShutdownOnClose;
 
 	/**
 	 * Create a new REST client.
@@ -85,6 +87,8 @@ public class RestClient extends CoreObject {
 	 * @param retries
 	 * @param retryInterval
 	 * @param debug
+	 * @param executorService
+	 * @param executorServiceShutdownOnClose
 	 */
 	public RestClient(
 			PropertyStore propertyStore,
@@ -101,7 +105,9 @@ public class RestClient extends CoreObject {
 			RetryOn retryOn,
 			int retries,
 			long retryInterval,
-			boolean debug) {
+			boolean debug,
+			ExecutorService executorService,
+			boolean executorServiceShutdownOnClose) {
 		super(propertyStore);
 		this.httpClient = httpClient;
 		this.keepHttpClientOpen = keepHttpClientOpen;
@@ -129,6 +135,9 @@ public class RestClient extends CoreObject {
 			creationStack = Thread.currentThread().getStackTrace();
 		else
 			creationStack = null;
+
+		this.executorService = executorService;
+		this.executorServiceShutdownOnClose = executorServiceShutdownOnClose;
 	}
 
 	/**
@@ -141,6 +150,8 @@ public class RestClient extends CoreObject {
 		isClosed = true;
 		if (httpClient != null && ! keepHttpClientOpen)
 			httpClient.close();
+		if (executorService != null && executorServiceShutdownOnClose)
+			executorService.shutdown();
 		if (Boolean.getBoolean("org.apache.juneau.rest.client.RestClient.trackLifecycle"))
 			closedStack = Thread.currentThread().getStackTrace();
 	}
@@ -153,6 +164,8 @@ public class RestClient extends CoreObject {
 		try {
 			if (httpClient != null && ! keepHttpClientOpen)
 				httpClient.close();
+			if (executorService != null && executorServiceShutdownOnClose)
+				executorService.shutdown();
 		} catch (Throwable t) {}
 		if (Boolean.getBoolean("org.apache.juneau.rest.client.RestClient.trackLifecycle"))
 			closedStack = Thread.currentThread().getStackTrace();

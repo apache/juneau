@@ -16,6 +16,7 @@ import java.io.*;
 import java.lang.reflect.*;
 import java.net.*;
 import java.util.*;
+import java.util.concurrent.*;
 import java.util.logging.*;
 import java.util.regex.*;
 
@@ -80,6 +81,7 @@ public final class RestCall {
 	private Serializer serializer;
 	private Parser parser;
 	private URIBuilder uriBuilder;
+	private final ExecutorService executorService;
 
 	/**
 	 * Constructs a REST call with the specified method name.
@@ -99,6 +101,7 @@ public final class RestCall {
 		this.retryInterval = client.retryInterval;
 		this.serializer = client.serializer;
 		this.parser = client.parser;
+		this.executorService = client.executorService;
 		uriBuilder = new URIBuilder(uri);
 	}
 
@@ -1017,7 +1020,7 @@ public final class RestCall {
 	 * 	}
 	 * </p>
 	 *
-	 * @return This object (for method chaining).
+	 * @return The HTTP status code.
 	 * @throws RestCallException If an exception or non-200 response code occurred during the connection attempt.
 	 */
 	public int run() throws RestCallException {
@@ -1039,6 +1042,25 @@ public final class RestCall {
 		} finally {
 			close();
 		}
+	}
+
+	/**
+	 * Same as {@link #run()} but allows you to run the call asynchronously.
+	 * <p>
+	 * This method cannot be used unless the executor service was defined on the client using {@link RestClientBuilder#executorService(ExecutorService,boolean)}.
+	 *
+	 * @return The HTTP status code.
+	 * @throws RestCallException If the executor service was not defined.
+	 */
+	public Future<Integer> runFuture() throws RestCallException {
+		return getExecutorService().submit(
+			new Callable<Integer>() {
+				@Override /* Callable */
+				public Integer call() throws Exception {
+					return run();
+				}
+			}
+		);
 	}
 
 	/**
@@ -1303,6 +1325,25 @@ public final class RestCall {
 	}
 
 	/**
+	 * Same as {@link #getResponse(Class)} but allows you to run the call asynchronously.
+	 * <p>
+	 * This method cannot be used unless the executor service was defined on the client using {@link RestClientBuilder#executorService(ExecutorService,boolean)}.
+	 *
+	 * @return The response as a string.
+	 * @throws RestCallException If the executor service was not defined.
+	 */
+	public Future<String> getResponseAsStringFuture() throws RestCallException {
+		return getExecutorService().submit(
+			new Callable<String>() {
+				@Override /* Callable */
+				public String call() throws Exception {
+					return getResponseAsString();
+				}
+			}
+		);
+	}
+
+	/**
 	 * Same as {@link #getResponse(Type, Type...)} except optimized for a non-parameterized class.
 	 * <p>
 	 * This is the preferred parse method for simple types since you don't need to cast the results.
@@ -1336,6 +1377,28 @@ public final class RestCall {
 		if (bc == null)
 			bc = BeanContext.DEFAULT;
 		return getResponse(bc.getClassMeta(type));
+	}
+
+	/**
+	 * Same as {@link #getResponse(Class)} but allows you to run the call asynchronously.
+	 * <p>
+	 * This method cannot be used unless the executor service was defined on the client using {@link RestClientBuilder#executorService(ExecutorService,boolean)}.
+	 *
+	 * @param <T> The class type of the object being created.
+	 * See {@link #getResponse(Type, Type...)} for details.
+	 * @param type The object type to create.
+	 * @return The parsed object.
+	 * @throws RestCallException If the executor service was not defined.
+	 */
+	public <T> Future<T> getResponseFuture(final Class<T> type) throws RestCallException {
+		return getExecutorService().submit(
+			new Callable<T>() {
+				@Override /* Callable */
+				public T call() throws Exception {
+					return getResponse(type);
+				}
+			}
+		);
 	}
 
 	/**
@@ -1388,6 +1451,32 @@ public final class RestCall {
 		if (bc == null)
 			bc = BeanContext.DEFAULT;
 		return (T)getResponse(bc.getClassMeta(type, args));
+	}
+
+	/**
+	 * Same as {@link #getResponse(Class)} but allows you to run the call asynchronously.
+	 * <p>
+	 * This method cannot be used unless the executor service was defined on the client using {@link RestClientBuilder#executorService(ExecutorService,boolean)}.
+	 *
+	 * @param <T> The class type of the object being created.
+	 * See {@link #getResponse(Type, Type...)} for details.
+	 * @param type The object type to create.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * @param args The type arguments of the class if it's a collection or map.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * 	<br>Ignored if the main type is not a map or collection.
+	 * @return The parsed object.
+	 * @throws RestCallException If the executor service was not defined.
+	 */
+	public <T> Future<T> getResponseFuture(final Type type, final Type...args) throws RestCallException {
+		return getExecutorService().submit(
+			new Callable<T>() {
+				@Override /* Callable */
+				public T call() throws Exception {
+					return getResponse(type, args);
+				}
+			}
+		);
 	}
 
 	/**
@@ -1500,6 +1589,12 @@ public final class RestCall {
 			for (RestCallInterceptor r : interceptors)
 				r.onClose(this);
 		return this;
+	}
+
+	private ExecutorService getExecutorService() throws RestCallException {
+		if (executorService == null)
+			throw new RestCallException("Future method cannot be called.  Executor service was not defined via the RestClientBuilder.executorService() method.");
+		return executorService;
 	}
 
 	/**

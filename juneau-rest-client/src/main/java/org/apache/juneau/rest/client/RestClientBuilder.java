@@ -76,7 +76,8 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	private int retries = 1;
 	private long retryInterval = -1;
 	private RetryOn retryOn = RetryOn.DEFAULT;
-	private boolean debug;
+	private boolean debug, executorServiceShutdownOnClose;
+	private ExecutorService executorService;
 
 	/**
 	 * Constructor, default settings.
@@ -140,7 +141,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 
 			UrlEncodingSerializer us = new SerializerBuilder(propertyStore).build(UrlEncodingSerializer.class);
 
-			return new RestClient(propertyStore, httpClient, keepHttpClientOpen, s, p, us, headers, interceptors, remoteableServletUri, remoteableServiceUriMap, rootUrl, retryOn, retries, retryInterval, debug);
+			return new RestClient(propertyStore, httpClient, keepHttpClientOpen, s, p, us, headers, interceptors, remoteableServletUri, remoteableServiceUriMap, rootUrl, retryOn, retries, retryInterval, debug, executorService, executorServiceShutdownOnClose);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -422,6 +423,27 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	public RestClientBuilder httpClient(CloseableHttpClient httpClient, boolean keepHttpClientOpen) {
 		this.httpClient = httpClient;
 		this.keepHttpClientOpen = keepHttpClientOpen;
+		return this;
+	}
+
+	/**
+	 * Defines the executor service to use when calling future methods on the {@link RestCall} class.
+	 * <p>
+	 * You must specify the executor service if you want to use any of the following methods:
+	 * <ul>
+	 * 	<li>{@link RestCall#runFuture()}
+	 * 	<li>{@link RestCall#getResponseFuture(Class)}
+	 * 	<li>{@link RestCall#getResponseFuture(Type,Type...)}
+	 * 	<li>{@link RestCall#getResponseAsString()}
+	 * </ul>
+	 *
+	 * @param executorService The executor service.
+	 * @param shutdownOnClose Call {@link ExecutorService#shutdown()} when {@link RestClient#close()} is called.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder executorService(ExecutorService executorService, boolean shutdownOnClose) {
+		this.executorService = executorService;
+		this.executorServiceShutdownOnClose = shutdownOnClose;
 		return this;
 	}
 

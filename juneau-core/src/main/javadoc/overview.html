@@ -5906,6 +5906,14 @@
 					<li>{@link org.apache.juneau.rest.client.RestCall#userInfo(String)}
 					<li>{@link org.apache.juneau.rest.client.RestCall#scheme(String)}
 				</ul>
+			<li>New methods added to allow for asynchronous HTTP calls:
+				<ul>
+					<li>{@link org.apache.juneau.rest.client.RestClientBuilder#executorService(ExecutorService,boolean)}
+					<li>{@link org.apache.juneau.rest.client.RestCall#runFuture()}
+					<li>{@link org.apache.juneau.rest.client.RestCall#getResponseFuture(Class)}
+					<li>{@link org.apache.juneau.rest.client.RestCall#getResponseFuture(Type,Type...)}
+					<li>{@link org.apache.juneau.rest.client.RestCall#getResponseAsStringFuture()}
+				</ul>
 		</ul>
 		
 		<h6 class='topic'>org.apache.juneau.microservice</h6>
