@@ -277,10 +277,10 @@ public class RdfParser extends ReaderParser {
 			if (n.isResource()) {
 				Statement st = n.asResource().getProperty(session.getTypeProperty());
 				if (st != null) {
- 					String c = st.getLiteral().getString();
- 					ClassMeta tcm = session.getClassMeta(c, pMeta, eType);
- 					if (tcm != null)
- 						sType = eType = tcm;
+					String c = st.getLiteral().getString();
+					ClassMeta tcm = session.getClassMeta(c, pMeta, eType);
+					if (tcm != null)
+						sType = eType = tcm;
 				}
 			}
 		}
