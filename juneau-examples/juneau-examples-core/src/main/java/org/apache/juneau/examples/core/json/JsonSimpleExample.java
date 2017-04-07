@@ -24,26 +24,26 @@ import org.apache.juneau.json.JsonParser;
 import org.apache.juneau.json.JsonSerializer;
 
 public class JsonSimpleExample {
-    public static void main(String[] args) throws Exception{
-        // Juneau provides static constants with the most commonly used configurations
-        // Get a reference to a serializer - converting POJO to flat format
-        JsonSerializer jsonSerializer = JsonSerializer.DEFAULT;
-        // Get a reference to a parser - converts that flat format back into the POJO
-        JsonParser jsonParser = JsonParser.DEFAULT;
+	public static void main(String[] args) throws Exception{
+		// Juneau provides static constants with the most commonly used configurations
+		// Get a reference to a serializer - converting POJO to flat format
+		JsonSerializer jsonSerializer = JsonSerializer.DEFAULT;
+		// Get a reference to a parser - converts that flat format back into the POJO
+		JsonParser jsonParser = JsonParser.DEFAULT;
 
-        Pojo pojo = new Pojo("id","name");
+		Pojo pojo = new Pojo("id","name");
 
-        String flat = jsonSerializer.serialize(pojo);
+		String flat = jsonSerializer.serialize(pojo);
 
-        // Print out the created POJO in JSON format.
-        System.out.println(flat);
+		// Print out the created POJO in JSON format.
+		System.out.println(flat);
 
-        Pojo parse = jsonParser.parse(flat, Pojo.class);
+		Pojo parse = jsonParser.parse(flat, Pojo.class);
 
-        assert parse.getId().equals(pojo.getId());
-        assert parse.getName().equals(pojo.getName());
+		assert parse.getId().equals(pojo.getId());
+		assert parse.getName().equals(pojo.getName());
 
-        // The object above can be parsed thanks to the @BeanConstructor(properties = id,name) annotation on Pojo
-        // Using this approach, you can keep your POJOs immutable, and still serialize and deserialize them.
-    }
+		// The object above can be parsed thanks to the @BeanConstructor(properties = id,name) annotation on Pojo
+		// Using this approach, you can keep your POJOs immutable, and still serialize and deserialize them.
+	}
 }

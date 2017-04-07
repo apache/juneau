@@ -22,20 +22,20 @@ package org.apache.juneau.examples.core.pojo;
 import org.apache.juneau.annotation.BeanConstructor;
 
 public class Pojo {
-    private final String id;
-    private final String name;
+	private final String id;
+	private final String name;
 
-    @BeanConstructor(properties = "id,name")
-    public Pojo(String id, String name) {
-        this.id = id;
-        this.name = name;
-    }
+	@BeanConstructor(properties = "id,name")
+	public Pojo(String id, String name) {
+		this.id = id;
+		this.name = name;
+	}
 
-    public String getId() {
-        return id;
-    }
+	public String getId() {
+		return id;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 }

@@ -23,11 +23,11 @@ import org.apache.juneau.examples.core.pojo.Pojo;
 import org.apache.juneau.jena.RdfSerializer;
 
 public class RdfExample {
-    public static void main(String[] args) throws Exception {
-        Pojo pojo = new Pojo("rdf","This is RDF format.");
-        // this creates an RDF serializer with the default XML structure
-        RdfSerializer rdfSerializer = RdfSerializer.DEFAULT_XML;
-        // This will show the final output from the bean
-        System.out.println(rdfSerializer.serialize(pojo));
-    }
+	public static void main(String[] args) throws Exception {
+		Pojo pojo = new Pojo("rdf","This is RDF format.");
+		// this creates an RDF serializer with the default XML structure
+		RdfSerializer rdfSerializer = RdfSerializer.DEFAULT_XML;
+		// This will show the final output from the bean
+		System.out.println(rdfSerializer.serialize(pojo));
+	}
 }
