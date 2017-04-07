@@ -24,7 +24,7 @@ public final class XorEncoder implements Encoder {
 	/** Reusable XOR-Encoder instance. */
 	public static final XorEncoder INSTANCE = new XorEncoder();
 
-   private static final String key = System.getProperty("org.apache.juneau.ini.XorEncoder.key", "nuy7og796Vh6G9O6bG230SHK0cc8QYkH");	// The super-duper-secret key
+	private static final String key = System.getProperty("org.apache.juneau.ini.XorEncoder.key", "nuy7og796Vh6G9O6bG230SHK0cc8QYkH");	// The super-duper-secret key
 
 	@Override /* Encoder */
 	public String encode(String fieldName, String in) {
