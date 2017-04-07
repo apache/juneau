@@ -786,7 +786,7 @@ public final class ClassMeta<T> implements Type {
 					if (s == null && isParentClass(f.getNormalClass(), normalClass))
 						s = f;
 				if (s == null)
-					 s = PojoSwap.NULL;
+					s = PojoSwap.NULL;
 				PojoSwap<?,?> s2 = childSwapMap.putIfAbsent(normalClass, s);
 				if (s2 != null)
 					s = s2;
@@ -813,7 +813,7 @@ public final class ClassMeta<T> implements Type {
 					if (s == null && isParentClass(f.getSwapClass(), swapClass))
 						s = f;
 				if (s == null)
-					 s = PojoSwap.NULL;
+					s = PojoSwap.NULL;
 				PojoSwap<?,?> s2 = childUnswapMap.putIfAbsent(swapClass, s);
 				if (s2 != null)
 					s = s2;
@@ -1359,7 +1359,7 @@ public final class ClassMeta<T> implements Type {
 	 */
 	public Method getNameProperty() {
 		return namePropertyMethod;
- 	}
+	}
 
 	/**
 	 * Returns the method annotated with {@link ParentProperty @ParentProperty}.
@@ -1368,7 +1368,7 @@ public final class ClassMeta<T> implements Type {
 	 */
 	public Method getParentProperty() {
 		return parentPropertyMethod;
- 	}
+	}
 
 	/**
 	 * Returns the reason why this class is not a bean, or <jk>null</jk> if it is a bean.
