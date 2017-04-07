@@ -17,6 +17,7 @@ import static org.apache.juneau.serializer.SerializerContext.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 
 /**
  * Builder class for building instances of serializers.
@@ -514,6 +515,31 @@ public class SerializerBuilder extends CoreObjectBuilder {
 	 */
 	public SerializerBuilder sortMaps(boolean value) {
 		return property(SERIALIZER_sortMaps, value);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  Abridged output.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Serializer.parserKnowsRootTypes"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * When enabled, it is assumed that the parser knows the exact Java POJO type being parsed,
+	 * and therefore top-level type information that might normally be included to determine
+	 * the data type will not be serialized.
+	 * <p>
+	 * For example, when serializing a POJO with a {@link Bean#typeName()} value, a <js>"_type"</js>
+	 * will be added when this setting is disabled, but not added when it is enabled.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see SerializerContext#SERIALIZER_sortMaps
+	 */
+	public SerializerBuilder abridged(boolean value) {
+		return property(SERIALIZER_abridged, value);
 	}
 
 	@Override /* CoreObjectBuilder */

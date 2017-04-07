@@ -46,35 +46,35 @@ public class RdfParserTest {
 
 		// Create a new serializer with readable output.
 		RdfSerializer s = new RdfSerializerBuilder().xmlabbrev()
-		   .property(RDF_rdfxml_tab, 3)
-		   .sq()
-		   .addRootProperty(true)
-		   .build();
+			.property(RDF_rdfxml_tab, 3)
+			.sq()
+			.addRootProperty(true)
+			.build();
 
 		String expected =
-			 "<rdf:RDF a='http://ns/' a1='http://ns2/' j='http://www.apache.org/juneau/' jp='http://www.apache.org/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
-			 + "\n   <rdf:Description about='http://test/a'>"
-			 + "\n      <a:f1>1</a:f1>"
-			 + "\n      <a:f2>f2</a:f2>"
-			 + "\n      <a:f4a rdf:resource='http://test/a'/>"
-			 + "\n      <a:f4b rdf:resource='http://test/external'/>"
-			 + "\n      <a:f5>1999-01-01T00:00:00Z</a:f5>"
-			 + "\n      <a:f6>"
-			 + "\n         <rdf:Seq>"
-			 + "\n            <rdf:li>"
-			 + "\n               <rdf:Description about='http://test/a/a1'>"
-			 + "\n                  <a1:f1>1</a1:f1>"
-			 + "\n                  <a1:f2>f2</a1:f2>"
-			 + "\n                  <a1:f4a rdf:resource='http://test/a'/>"
-			 + "\n                  <a1:f4b rdf:resource='http://test/external'/>"
-			 + "\n                  <a1:f5>1999-01-01T00:00:00Z</a1:f5>"
-			 + "\n               </rdf:Description>"
-			 + "\n            </rdf:li>"
-			 + "\n         </rdf:Seq>"
-			 + "\n      </a:f6>"
-			 + "\n      <j:root>true</j:root>"
-			 + "\n   </rdf:Description>"
-			 + "\n</rdf:RDF>";
+			"<rdf:RDF a='http://ns/' a1='http://ns2/' j='http://www.apache.org/juneau/' jp='http://www.apache.org/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
+			+ "\n   <rdf:Description about='http://test/a'>"
+			+ "\n      <a:f1>1</a:f1>"
+			+ "\n      <a:f2>f2</a:f2>"
+			+ "\n      <a:f4a rdf:resource='http://test/a'/>"
+			+ "\n      <a:f4b rdf:resource='http://test/external'/>"
+			+ "\n      <a:f5>1999-01-01T00:00:00Z</a:f5>"
+			+ "\n      <a:f6>"
+			+ "\n         <rdf:Seq>"
+			+ "\n            <rdf:li>"
+			+ "\n               <rdf:Description about='http://test/a/a1'>"
+			+ "\n                  <a1:f1>1</a1:f1>"
+			+ "\n                  <a1:f2>f2</a1:f2>"
+			+ "\n                  <a1:f4a rdf:resource='http://test/a'/>"
+			+ "\n                  <a1:f4b rdf:resource='http://test/external'/>"
+			+ "\n                  <a1:f5>1999-01-01T00:00:00Z</a1:f5>"
+			+ "\n               </rdf:Description>"
+			+ "\n            </rdf:li>"
+			+ "\n         </rdf:Seq>"
+			+ "\n      </a:f6>"
+			+ "\n      <j:root>true</j:root>"
+			+ "\n   </rdf:Description>"
+			+ "\n</rdf:RDF>";
 
 		String rdfXml = s.serialize(a);
 		assertXmlEquals(expected, rdfXml);

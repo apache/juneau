@@ -148,6 +148,13 @@ public class CsvSerializerBuilder extends SerializerBuilder {
 		super.sortMaps(value);
 		return this;
 	}
+
+	@Override /* SerializerBuilder */
+	public CsvSerializerBuilder abridged(boolean value) {
+		super.abridged(value);
+		return this;
+	}
+
 	@Override /* CoreObjectBuilder */
 	public CsvSerializerBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);

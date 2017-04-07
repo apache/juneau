@@ -321,6 +321,12 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
+	public HtmlSerializerBuilder abridged(boolean value) {
+		super.abridged(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
 	public HtmlSerializerBuilder sortMaps(boolean value) {
 		super.sortMaps(value);
 		return this;

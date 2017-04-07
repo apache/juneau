@@ -25,8 +25,8 @@ import org.apache.http.impl.client.*;
  */
 public class AllowAllRedirects extends DefaultRedirectStrategy {
 
-   @Override /* DefaultRedirectStrategy */
-   protected boolean isRedirectable(final String method) {
-   	return true;
-   }
+	@Override /* DefaultRedirectStrategy */
+	protected boolean isRedirectable(final String method) {
+		return true;
+	}
 }

@@ -48,7 +48,7 @@ public class AtomFeedResource extends ResourceJena {
 	public void init() {
 
 		try {
-			feed = 
+			feed =
 				feed("tag:juneau.sample.com,2013:1", "Juneau ATOM specification", "2013-05-08T12:29:29Z")
 				.subtitle(text("html").text("A <em>lot</em> of effort went into making this effortless"))
 				.links(

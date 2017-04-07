@@ -30,9 +30,10 @@ import org.junit.*;
 import org.junit.runners.*;
 
 /**
- * Superclass for tests that verify results against all supported content types. 
+ * Superclass for tests that verify results against all supported content types.
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@SuppressWarnings({"unchecked","rawtypes"})
 public abstract class ComboTest {
 
 	/* Parameter template */
@@ -62,16 +63,7 @@ public abstract class ComboTest {
 //		/* RdfXmlR */	"xxx",
 //	},
 	
-	private final String 
-		label, 
-		oJson, oJsonT, oJsonR,
-		oXml, oXmlT, oXmlR, oXmlNs,
-		oHtml, oHtmlT, oHtmlR,
-		oUon, oUonT, oUonR,
-		oUrlEncoding, oUrlEncodingT, oUrlEncodingR,
-		oMsgPack, oMsgPackT,
-		oRdfXml, oRdfXmlT, oRdfXmlR;
-	private final Object in;
+	private final ComboInput comboInput;
 	
 	// These are the names of all the tests.
 	// You can comment out the names here to skip them.
@@ -129,26 +121,8 @@ public abstract class ComboTest {
 	private Map<Serializer,Serializer> serializerMap = new IdentityHashMap<Serializer,Serializer>();
 	private Map<Parser,Parser> parserMap = new IdentityHashMap<Parser,Parser>();
 	
-	public ComboTest(
-		String label, 
-		Object in, 
-		String oJson, String oJsonT, String oJsonR,
-		String oXml, String oXmlT, String oXmlR, String oXmlNs,
-		String oHtml, String oHtmlT, String oHtmlR,
-		String oUon, String oUonT, String oUonR,
-		String oUrlEncoding, String oUrlEncodingT, String oUrlEncodingR,
-		String oMsgPack, String oMsgPackT,
-		String oRdfXml, String oRdfXmlT, String oRdfXmlR
-	) {
-		this.label = label;
-		this.in = in;
-		this.oJson = oJson; this.oJsonT = oJsonT; this.oJsonR = oJsonR;
-		this.oXml = oXml; this.oXmlT = oXmlT; this.oXmlR = oXmlR; this.oXmlNs = oXmlNs;
-		this.oHtml = oHtml; this.oHtmlT = oHtmlT; this.oHtmlR = oHtmlR;
-		this.oUon = oUon; this.oUonT = oUonT; this.oUonR = oUonR;
-		this.oUrlEncoding = oUrlEncoding; this.oUrlEncodingT = oUrlEncodingT; this.oUrlEncodingR = oUrlEncodingR;
-		this.oMsgPack = oMsgPack; this.oMsgPackT = oMsgPackT; 
-		this.oRdfXml = oRdfXml; this.oRdfXmlT = oRdfXmlT; this.oRdfXmlR = oRdfXmlR;
+	public ComboTest(ComboInput<?> comboInput) {
+		this.comboInput = comboInput;
 	}
 	
 	private Serializer getSerializer(Serializer s) throws Exception {
@@ -176,34 +150,34 @@ public abstract class ComboTest {
 			boolean isRdf = s instanceof RdfSerializer;
 
 			if ((isRdf && SKIP_RDF_TESTS) || expected.isEmpty() || ! runTestsSet.contains(testName) ) {
-				System.err.println(label + "/" + testName + " for "+s.getClass().getSimpleName()+" skipped.");
+				System.err.println(comboInput.label + "/" + testName + " for "+s.getClass().getSimpleName()+" skipped.");
 				return;
 			}
 			
-			String r = s.isWriterSerializer() ? ((WriterSerializer)s).serialize(in) : ((OutputStreamSerializer)s).serializeToHex(in);
+			String r = s.isWriterSerializer() ? ((WriterSerializer)s).serialize(comboInput.in) : ((OutputStreamSerializer)s).serializeToHex(comboInput.in);
 			
 			// Can't control RdfSerializer output well, so manually remove namespace declarations
 			// double-quotes with single-quotes, and spaces with tabs.
 			// Also because RDF sucks really bad and can't be expected to produce consistent testable results,
 			// we must also do an expensive sort-then-compare operation to verify the results.
-			if (isRdf) 
+			if (isRdf)
 				r = r.replaceAll("<rdf:RDF[^>]*>", "<rdf:RDF>").replace('"', '\'');
 		
 			// Specifying "xxx" in the expected results will spit out what we should populate the field with.
 			if (expected.equals("xxx")) {
-				System.out.println(label + "/" + testName + "=\n" + r.replaceAll("\n", "\\\\n").replaceAll("\t", "\\\\t")); // NOT DEBUG
+				System.out.println(comboInput.label + "/" + testName + "=\n" + r.replaceAll("\n", "\\\\n").replaceAll("\t", "\\\\t")); // NOT DEBUG
 				System.out.println(r);
 			}
 			
 			if (isRdf)
-				TestUtils.assertEqualsAfterSort(expected, r, "{0}/{1} parse-normal failed", label, testName);
+				TestUtils.assertEqualsAfterSort(expected, r, "{0}/{1} parse-normal failed", comboInput.label, testName);
 			else
-				TestUtils.assertEquals(expected, r, "{0}/{1} parse-normal failed", label, testName);
+				TestUtils.assertEquals(expected, r, "{0}/{1} parse-normal failed", comboInput.label, testName);
 			
 		} catch (AssertionError e) {
 			throw e;
 		} catch (Exception e) {
-			throw new AssertionError(label + "/" + testName + " failed.  exception=" + e.getLocalizedMessage());
+			throw new AssertionError(comboInput.label + "/" + testName + " failed.  exception=" + e.getLocalizedMessage());
 		}
 	}
 	
@@ -215,28 +189,45 @@ public abstract class ComboTest {
 			boolean isRdf = s instanceof RdfSerializer;
 
 			if ((isRdf && SKIP_RDF_TESTS) || expected.isEmpty() || ! runTestsSet.contains(testName) ) {
-				System.err.println(label + "/" + testName + " for "+s.getClass().getSimpleName()+" skipped.");
+				System.err.println(comboInput.label + "/" + testName + " for "+s.getClass().getSimpleName()+" skipped.");
 				return;
 			}
 			
-			String r = s.isWriterSerializer() ? ((WriterSerializer)s).serialize(in) : ((OutputStreamSerializer)s).serializeToHex(in);
-			Object o = p.parse(r, in == null ? Object.class : in.getClass());
+			String r = s.isWriterSerializer() ? ((WriterSerializer)s).serialize(comboInput.in) : ((OutputStreamSerializer)s).serializeToHex(comboInput.in);
+			Object o = p.parse(r, comboInput.type);
 			r = s.isWriterSerializer() ? ((WriterSerializer)s).serialize(o) : ((OutputStreamSerializer)s).serializeToHex(o);
 			
-			if (isRdf) 
+			if (isRdf)
 				r = r.replaceAll("<rdf:RDF[^>]*>", "<rdf:RDF>").replace('"', '\'');
 			
 			if (isRdf)
-				TestUtils.assertEqualsAfterSort(expected, r, "{0}/{1} parse-normal failed", label, testName);
+				TestUtils.assertEqualsAfterSort(expected, r, "{0}/{1} parse-normal failed", comboInput.label, testName);
 			else
-				TestUtils.assertEquals(expected, r, "{0}/{1} parse-normal failed", label, testName);
+				TestUtils.assertEquals(expected, r, "{0}/{1} parse-normal failed", comboInput.label, testName);
 
 		} catch (AssertionError e) {
 			throw e;
 		} catch (Exception e) {
-			throw new Exception(label + "/" + testName + " failed.", e);
+			throw new Exception(comboInput.label + "/" + testName + " failed.", e);
 		}
 	}
+	
+	private void testParseVerify(String testName, Serializer s, Parser p) throws Exception {
+		try {
+			s = getSerializer(s);
+			p = getParser(p);
+			
+			String r = s.isWriterSerializer() ? ((WriterSerializer)s).serialize(comboInput.in) : ((OutputStreamSerializer)s).serializeToHex(comboInput.in);
+			Object o = p.parse(r, comboInput.type);
+			
+			comboInput.verify(o);
+		} catch (AssertionError e) {
+			throw e;
+		} catch (Exception e) {
+			throw new Exception(comboInput.label + "/" + testName + " failed.", e);
+		}
+	}
+	
 	
 	private void testParseJsonEquivalency(String testName, OutputStreamSerializer s, InputStreamParser p, String expected) throws Exception {
 		try {
@@ -244,14 +235,14 @@ public abstract class ComboTest {
 			p = (InputStreamParser)getParser(p);
 			WriterSerializer sJson = (WriterSerializer)getSerializer(this.sJson);
 
-			String r = s.serializeToHex(in);
-			Object o = p.parse(r, in == null ? Object.class : in.getClass());
+			String r = s.serializeToHex(comboInput.in);
+			Object o = p.parse(r, comboInput.type);
 			r = sJson.serialize(o);
-			assertEquals(label + "/" + testName + " parse-normal failed on JSON equivalency", expected, r);
+			assertEquals(comboInput.label + "/" + testName + " parse-normal failed on JSON equivalency", expected, r);
 		} catch (AssertionError e) {
 			throw e;
 		} catch (Exception e) {
-			throw new Exception(label + "/" + testName + " failed.", e);
+			throw new Exception(comboInput.label + "/" + testName + " failed.", e);
 		}
 	}
 	
@@ -270,15 +261,20 @@ public abstract class ComboTest {
 	ReaderParser pJson = JsonParser.DEFAULT;
 	
 	@Test
-	public void serializeJson() throws Exception {
-		testSerialize("serializeJson", sJson, oJson);
+	public void a11_serializeJson() throws Exception {
+		testSerialize("serializeJson", sJson, comboInput.json);
 	}
 	
 	@Test
-	public void parseJson() throws Exception {
-		testParse("parseJson", sJson, pJson, oJson);
+	public void a12_parseJson() throws Exception {
+		testParse("parseJson", sJson, pJson, comboInput.json);
 	}
 	
+	@Test
+	public void a13_verifyJson() throws Exception {
+		testParseVerify("verifyJson", sJson, pJson);
+	}
+
 	//--------------------------------------------------------------------------------
 	// JSON - 't' property
 	//--------------------------------------------------------------------------------
@@ -286,15 +282,20 @@ public abstract class ComboTest {
 	ReaderParser pJsonT = new JsonParserBuilder().beanTypePropertyName("t").build();
 	
 	@Test
-	public void serializeJsonT() throws Exception {
-		testSerialize("serializeJsonT", sJsonT, oJsonT);
+	public void a21_serializeJsonT() throws Exception {
+		testSerialize("serializeJsonT", sJsonT, comboInput.jsonT);
 	}
 	
 	@Test
-	public void parseJsonT() throws Exception {
-		testParse("parseJsonT", sJsonT, pJsonT, oJsonT);
+	public void a22_parseJsonT() throws Exception {
+		testParse("parseJsonT", sJsonT, pJsonT, comboInput.jsonT);
 	}
 	
+	@Test
+	public void a23_verifyJsonT() throws Exception {
+		testParseVerify("verifyJsonT", sJsonT, pJsonT);
+	}
+
 	//--------------------------------------------------------------------------------
 	// JSON - Readable
 	//--------------------------------------------------------------------------------
@@ -302,15 +303,20 @@ public abstract class ComboTest {
 	ReaderParser pJsonR = JsonParser.DEFAULT;
 	
 	@Test
-	public void serializeJsonR() throws Exception {
-		testSerialize("serializeJsonR", sJsonR, oJsonR);
+	public void a31_serializeJsonR() throws Exception {
+		testSerialize("serializeJsonR", sJsonR, comboInput.jsonR);
 	}
 	
 	@Test
-	public void parseJsonR() throws Exception {
-		testParse("parseJsonR", sJsonR, pJsonR, oJsonR);
+	public void a32_parseJsonR() throws Exception {
+		testParse("parseJsonR", sJsonR, pJsonR, comboInput.jsonR);
 	}
 	
+	@Test
+	public void a33_verifyJsonR() throws Exception {
+		testParseVerify("verifyJsonR", sJsonR, pJsonR);
+	}
+
 	//--------------------------------------------------------------------------------
 	// XML
 	//--------------------------------------------------------------------------------
@@ -318,15 +324,20 @@ public abstract class ComboTest {
 	ReaderParser pXml = XmlParser.DEFAULT;
 	
 	@Test
-	public void serializeXml() throws Exception {
-		testSerialize("serializeXml", sXml, oXml);
+	public void b11_serializeXml() throws Exception {
+		testSerialize("serializeXml", sXml, comboInput.xml);
 	}
 	
 	@Test
-	public void parseXml() throws Exception {
-		testParse("parseXml", sXml, pXml, oXml);
+	public void b12_parseXml() throws Exception {
+		testParse("parseXml", sXml, pXml, comboInput.xml);
 	}
 	
+	@Test
+	public void b13_verifyXml() throws Exception {
+		testParseVerify("verifyXml", sXml, pXml);
+	}
+
 	//--------------------------------------------------------------------------------
 	// XML - 't' property
 	//--------------------------------------------------------------------------------
@@ -334,13 +345,18 @@ public abstract class ComboTest {
 	ReaderParser pXmlT = new XmlParserBuilder().beanTypePropertyName("t").build();
 	
 	@Test
-	public void serializeXmlT() throws Exception {
-		testSerialize("serializeXmlT", sXmlT, oXmlT);
+	public void b21_serializeXmlT() throws Exception {
+		testSerialize("serializeXmlT", sXmlT, comboInput.xmlT);
 	}
 	
 	@Test
-	public void parseXmlT() throws Exception {
-		testParse("parseXmlT", sXmlT, pXmlT, oXmlT);
+	public void b22_parseXmlT() throws Exception {
+		testParse("parseXmlT", sXmlT, pXmlT, comboInput.xmlT);
+	}
+	
+	@Test
+	public void b23_verifyXmlT() throws Exception {
+		testParseVerify("parseXmlTVerify", sXmlT, pXmlT);
 	}
 	
 	//--------------------------------------------------------------------------------
@@ -350,15 +366,20 @@ public abstract class ComboTest {
 	ReaderParser pXmlR = XmlParser.DEFAULT;
 	
 	@Test
-	public void serializeXmlR() throws Exception {
-		testSerialize("serializeXmlR", sXmlR, oXmlR);
+	public void b31_serializeXmlR() throws Exception {
+		testSerialize("serializeXmlR", sXmlR, comboInput.xmlR);
 	}
 	
 	@Test
-	public void parseXmlR() throws Exception {
-		testParse("parseXmlR", sXmlR, pXmlR, oXmlR);
+	public void b32_parseXmlR() throws Exception {
+		testParse("parseXmlR", sXmlR, pXmlR, comboInput.xmlR);
 	}
 	
+	@Test
+	public void b33_verifyXmlR() throws Exception {
+		testParseVerify("parseXmlRVerify", sXmlR, pXmlR);
+	}
+
 	//--------------------------------------------------------------------------------
 	// XML - Namespaces
 	//--------------------------------------------------------------------------------
@@ -366,15 +387,20 @@ public abstract class ComboTest {
 	ReaderParser pXmlNs = XmlParser.DEFAULT;
 
 	@Test
-	public void serializeXmlNs() throws Exception {
-		testSerialize("serializeXmlNs", sXmlNs, oXmlNs);
+	public void b41_serializeXmlNs() throws Exception {
+		testSerialize("serializeXmlNs", sXmlNs, comboInput.xmlNs);
 	}
 	
 	@Test
-	public void parseXmlNs() throws Exception {
-		testParse("parseXmlNs", sXmlNs, pXmlNs, oXmlNs);
+	public void b42_parseXmlNs() throws Exception {
+		testParse("parseXmlNs", sXmlNs, pXmlNs, comboInput.xmlNs);
 	}
 	
+	@Test
+	public void b43_verifyXmlNs() throws Exception {
+		testParseVerify("verifyXmlNs", sXmlNs, pXmlNs);
+	}
+
 	//--------------------------------------------------------------------------------
 	// HTML
 	//--------------------------------------------------------------------------------
@@ -382,13 +408,18 @@ public abstract class ComboTest {
 	ReaderParser pHtml = HtmlParser.DEFAULT;
 	
 	@Test
-	public void serializeHtml() throws Exception {
-		testSerialize("serializeHtml", sHtml, oHtml);
+	public void c11_serializeHtml() throws Exception {
+		testSerialize("serializeHtml", sHtml, comboInput.html);
 	}
 	
 	@Test
-	public void parseHtml() throws Exception {
-		testParse("parseHtml", sHtml, pHtml, oHtml);
+	public void c12_parseHtml() throws Exception {
+		testParse("parseHtml", sHtml, pHtml, comboInput.html);
+	}
+	
+	@Test
+	public void c13_verifyHtml() throws Exception {
+		testParseVerify("verifyHtml", sHtml, pHtml);
 	}
 	
 	//--------------------------------------------------------------------------------
@@ -398,13 +429,18 @@ public abstract class ComboTest {
 	ReaderParser pHtmlT =  new HtmlParserBuilder().beanTypePropertyName("t").build();
 	
 	@Test
-	public void serializeHtmlT() throws Exception {
-		testSerialize("serializeHtmlT", sHtmlT, oHtmlT);
+	public void c21_serializeHtmlT() throws Exception {
+		testSerialize("serializeHtmlT", sHtmlT, comboInput.htmlT);
 	}
 	
 	@Test
-	public void parseHtmlT() throws Exception {
-		testParse("parseHtmlT", sHtmlT, pHtmlT, oHtmlT);
+	public void c22_parseHtmlT() throws Exception {
+		testParse("parseHtmlT", sHtmlT, pHtmlT, comboInput.htmlT);
+	}
+	
+	@Test
+	public void c23_verifyHtmlT() throws Exception {
+		testParseVerify("verifyHtmlT", sHtmlT, pHtmlT);
 	}
 	
 	//--------------------------------------------------------------------------------
@@ -414,13 +450,18 @@ public abstract class ComboTest {
 	ReaderParser pHtmlR = HtmlParser.DEFAULT;
 	
 	@Test
-	public void serializeHtmlR() throws Exception {
-		testSerialize("serializeHtmlR", sHtmlR, oHtmlR);
+	public void c31_serializeHtmlR() throws Exception {
+		testSerialize("serializeHtmlR", sHtmlR, comboInput.htmlR);
 	}
 	
 	@Test
-	public void parseHtmlR() throws Exception {
-		testParse("parseHtmlR", sHtmlR, pHtmlR, oHtmlR);
+	public void c32_parseHtmlR() throws Exception {
+		testParse("parseHtmlR", sHtmlR, pHtmlR, comboInput.htmlR);
+	}
+	
+	@Test
+	public void c33_verifyHtmlR() throws Exception {
+		testParseVerify("verifyHtmlR", sHtmlR, pHtmlR);
 	}
 	
 	//--------------------------------------------------------------------------------
@@ -430,13 +471,18 @@ public abstract class ComboTest {
 	ReaderParser pUon = UonParser.DEFAULT;
 	
 	@Test
-	public void serializeUon() throws Exception {
-		testSerialize("serializeUon", sUon, oUon);
+	public void d11_serializeUon() throws Exception {
+		testSerialize("serializeUon", sUon, comboInput.uon);
 	}
 	
 	@Test
-	public void parseUon() throws Exception {
-		testParse("parseUon", sUon, pUon, oUon);
+	public void d12_parseUon() throws Exception {
+		testParse("parseUon", sUon, pUon, comboInput.uon);
+	}
+	
+	@Test
+	public void d13_verifyUon() throws Exception {
+		testParseVerify("verifyUon", sUon, pUon);
 	}
 	
 	//--------------------------------------------------------------------------------
@@ -446,13 +492,18 @@ public abstract class ComboTest {
 	ReaderParser pUonT = new UonParserBuilder().beanTypePropertyName("t").build();
 	
 	@Test
-	public void serializeUonT() throws Exception {
-		testSerialize("serializeUonT", sUonT, oUonT);
+	public void d21_serializeUonT() throws Exception {
+		testSerialize("serializeUonT", sUonT, comboInput.uonT);
 	}
 	
 	@Test
-	public void parseUonT() throws Exception {
-		testParse("parseUonT", sUonT, pUonT, oUonT);
+	public void d22_parseUonT() throws Exception {
+		testParse("parseUonT", sUonT, pUonT, comboInput.uonT);
+	}
+	
+	@Test
+	public void d23_verifyUonT() throws Exception {
+		testParseVerify("verifyUonT", sUonT, pUonT);
 	}
 	
 	//--------------------------------------------------------------------------------
@@ -462,13 +513,18 @@ public abstract class ComboTest {
 	ReaderParser pUonR = UonParser.DEFAULT;
 	
 	@Test
-	public void serializeUonR() throws Exception {
-		testSerialize("serializeUonR", sUonR, oUonR);
+	public void d31_serializeUonR() throws Exception {
+		testSerialize("serializeUonR", sUonR, comboInput.uonR);
 	}
 	
 	@Test
-	public void parseUonR() throws Exception {
-		testParse("parseUonR", sUonR, pUonR, oUonR);
+	public void d32_parseUonR() throws Exception {
+		testParse("parseUonR", sUonR, pUonR, comboInput.uonR);
+	}
+	
+	@Test
+	public void d33_verifyUonR() throws Exception {
+		testParseVerify("verifyUonR", sUonR, pUonR);
 	}
 	
 	//--------------------------------------------------------------------------------
@@ -478,13 +534,18 @@ public abstract class ComboTest {
 	ReaderParser pUrlEncoding = UrlEncodingParser.DEFAULT;
 	
 	@Test
-	public void serializeUrlEncoding() throws Exception {
-		testSerialize("serializeUrlEncoding", sUrlEncoding, oUrlEncoding);
+	public void e11_serializeUrlEncoding() throws Exception {
+		testSerialize("serializeUrlEncoding", sUrlEncoding, comboInput.urlEncoding);
 	}
 	
 	@Test
-	public void parseUrlEncoding() throws Exception {
-		testParse("parseUrlEncoding", sUrlEncoding, pUrlEncoding, oUrlEncoding);
+	public void e12_parseUrlEncoding() throws Exception {
+		testParse("parseUrlEncoding", sUrlEncoding, pUrlEncoding, comboInput.urlEncoding);
+	}
+	
+	@Test
+	public void e13_verifyUrlEncoding() throws Exception {
+		testParseVerify("verifyUrlEncoding", sUrlEncoding, pUrlEncoding);
 	}
 	
 	//--------------------------------------------------------------------------------
@@ -494,13 +555,18 @@ public abstract class ComboTest {
 	ReaderParser pUrlEncodingT = new UrlEncodingParserBuilder().beanTypePropertyName("t").build();
 	
 	@Test
-	public void serializeUrlEncodingT() throws Exception {
-		testSerialize("serializeUrlEncodingT", sUrlEncodingT, oUrlEncodingT);
+	public void e21_serializeUrlEncodingT() throws Exception {
+		testSerialize("serializeUrlEncodingT", sUrlEncodingT, comboInput.urlEncodingT);
 	}
 	
 	@Test
-	public void parseUrlEncodingT() throws Exception {
-		testParse("parseUrlEncodingT", sUrlEncodingT, pUrlEncodingT, oUrlEncodingT);
+	public void e22_parseUrlEncodingT() throws Exception {
+		testParse("parseUrlEncodingT", sUrlEncodingT, pUrlEncodingT, comboInput.urlEncodingT);
+	}
+	
+	@Test
+	public void e23_verifyUrlEncodingT() throws Exception {
+		testParseVerify("verifyUrlEncodingT", sUrlEncodingT, pUrlEncodingT);
 	}
 	
 	//--------------------------------------------------------------------------------
@@ -510,13 +576,18 @@ public abstract class ComboTest {
 	ReaderParser pUrlEncodingR = UrlEncodingParser.DEFAULT;
 	
 	@Test
-	public void serializeUrlEncodingR() throws Exception {
-		testSerialize("serializeUrlEncodingR", sUrlEncodingR, oUrlEncodingR);
+	public void e31_serializeUrlEncodingR() throws Exception {
+		testSerialize("serializeUrlEncodingR", sUrlEncodingR, comboInput.urlEncodingR);
 	}
 	
 	@Test
-	public void parseUrlEncodingR() throws Exception {
-		testParse("parseUrlEncodingR", sUrlEncodingR, pUrlEncodingR, oUrlEncodingR);
+	public void e32_parseUrlEncodingR() throws Exception {
+		testParse("parseUrlEncodingR", sUrlEncodingR, pUrlEncodingR, comboInput.urlEncodingR);
+	}
+	
+	@Test
+	public void e33_verifyUrlEncodingR() throws Exception {
+		testParseVerify("verifyUrlEncodingR", sUrlEncodingR, pUrlEncodingR);
 	}
 	
 	//--------------------------------------------------------------------------------
@@ -526,18 +597,23 @@ public abstract class ComboTest {
 	InputStreamParser pMsgPack = MsgPackParser.DEFAULT;
 	
 	@Test
-	public void serializeMsgPack() throws Exception {
-		testSerialize("serializeMsgPack", sMsgPack, oMsgPack);
+	public void f11_serializeMsgPack() throws Exception {
+		testSerialize("serializeMsgPack", sMsgPack, comboInput.msgPack);
 	}
 	
 	@Test
-	public void parseMsgPack() throws Exception {
-		testParse("parseMsgPack", sMsgPack, pMsgPack, oMsgPack);
+	public void f12_parseMsgPack() throws Exception {
+		testParse("parseMsgPack", sMsgPack, pMsgPack, comboInput.msgPack);
 	}
 	
 	@Test
-	public void parseMsgPackJsonEquivalency() throws Exception {
-		testParseJsonEquivalency("parseMsgPackJsonEquivalency", sMsgPack, pMsgPack, oJson);
+	public void f13_parseMsgPackJsonEquivalency() throws Exception {
+		testParseJsonEquivalency("parseMsgPackJsonEquivalency", sMsgPack, pMsgPack, comboInput.json);
+	}
+	
+	@Test
+	public void f14_verifyMsgPack() throws Exception {
+		testParseVerify("verifyMsgPack", sMsgPack, pMsgPack);
 	}
 	
 	//--------------------------------------------------------------------------------
@@ -547,18 +623,23 @@ public abstract class ComboTest {
 	InputStreamParser pMsgPackT = new MsgPackParserBuilder().beanTypePropertyName("t").build();
 	
 	@Test
-	public void serializeMsgPackT() throws Exception {
-		testSerialize("serializeMsgPackT", sMsgPackT, oMsgPackT);
+	public void f21_serializeMsgPackT() throws Exception {
+		testSerialize("serializeMsgPackT", sMsgPackT, comboInput.msgPackT);
 	}
 	
 	@Test
-	public void parseMsgPackT() throws Exception {
-		testParse("parseMsgPackT", sMsgPackT, pMsgPackT, oMsgPackT);
+	public void f22_parseMsgPackT() throws Exception {
+		testParse("parseMsgPackT", sMsgPackT, pMsgPackT, comboInput.msgPackT);
 	}
 	
 	@Test
-	public void parseMsgPackTJsonEquivalency() throws Exception {
-		testParseJsonEquivalency("parseMsgPackTJsonEquivalency", sMsgPackT, pMsgPackT, oJson);
+	public void f23_parseMsgPackTJsonEquivalency() throws Exception {
+		testParseJsonEquivalency("parseMsgPackTJsonEquivalency", sMsgPackT, pMsgPackT, comboInput.json);
+	}
+	
+	@Test
+	public void f24_verifyMsgPackT() throws Exception {
+		testParseVerify("verifyMsgPackT", sMsgPackT, pMsgPackT);
 	}
 	
 	//--------------------------------------------------------------------------------
@@ -568,13 +649,18 @@ public abstract class ComboTest {
 	ReaderParser pRdfXml = RdfParser.DEFAULT_XML;
 	
 	@Test
-	public void serializeRdfXml() throws Exception {
-		testSerialize("serializeRdfXml", sRdfXml, oRdfXml);
+	public void g11_serializeRdfXml() throws Exception {
+		testSerialize("serializeRdfXml", sRdfXml, comboInput.rdfXml);
 	}
 	
 	@Test
-	public void parseRdfXml() throws Exception {
-		testParse("parseRdfXml", sRdfXml, pRdfXml, oRdfXml);
+	public void g12_parseRdfXml() throws Exception {
+		testParse("parseRdfXml", sRdfXml, pRdfXml, comboInput.rdfXml);
+	}
+	
+	@Test
+	public void g13_verifyRdfXml() throws Exception {
+		testParseVerify("verifyRdfXml", sRdfXml, pRdfXml);
 	}
 	
 	//--------------------------------------------------------------------------------
@@ -584,13 +670,18 @@ public abstract class ComboTest {
 	ReaderParser pRdfXmlT = new RdfParserBuilder().beanTypePropertyName("t").build();
 	
 	@Test
-	public void serializeRdfXmlT() throws Exception {
-		testSerialize("serializeRdfXmlT", sRdfXmlT, oRdfXmlT);
+	public void g21_serializeRdfXmlT() throws Exception {
+		testSerialize("serializeRdfXmlT", sRdfXmlT, comboInput.rdfXmlT);
 	}
 	
 	@Test
-	public void parseRdfXmlT() throws Exception {
-		testParse("parseRdfXmlT", sRdfXmlT, pRdfXmlT, oRdfXmlT);
+	public void g22_parseRdfXmlT() throws Exception {
+		testParse("parseRdfXmlT", sRdfXmlT, pRdfXmlT, comboInput.rdfXmlT);
+	}
+	
+	@Test
+	public void g23_verifyRdfXmlT() throws Exception {
+		testParseVerify("parseRdfXmlTVerify", sRdfXmlT, pRdfXmlT);
 	}
 	
 	//--------------------------------------------------------------------------------
@@ -600,12 +691,17 @@ public abstract class ComboTest {
 	ReaderParser pRdfXmlR = RdfParser.DEFAULT_XML;
 	
 	@Test
-	public void serializeRdfXmlR() throws Exception {
-		testSerialize("serializeRdfXmlR", sRdfXmlR, oRdfXmlR);
+	public void g31_serializeRdfXmlR() throws Exception {
+		testSerialize("serializeRdfXmlR", sRdfXmlR, comboInput.rdfXmlR);
 	}
 	
 	@Test
-	public void parseRdfXmlR() throws Exception {
-		testParse("parseRdfXmlR", sRdfXmlR, pRdfXmlR, oRdfXmlR);
+	public void g32_parseRdfXmlR() throws Exception {
+		testParse("parseRdfXmlR", sRdfXmlR, pRdfXmlR, comboInput.rdfXmlR);
+	}
+	
+	@Test
+	public void g33_verifyRdfXmlR() throws Exception {
+		testParseVerify("Verify", sRdfXmlR, pRdfXmlR);
 	}
 }

@@ -387,6 +387,6 @@ public class JsonSerializer extends WriterSerializer {
 	@Override /* Serializer */
 	protected void doSerialize(SerializerSession session, Object o) throws Exception {
 		JsonSerializerSession s = (JsonSerializerSession)session;
-		serializeAnything(s, s.getWriter(), o, null, "root", null);
+		serializeAnything(s, s.getWriter(), o, s.getExpectedRootType(o), "root", null);
 	}
 }

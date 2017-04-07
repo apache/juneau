@@ -12,8 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
+import static org.apache.juneau.TestUtils.*;
+
 import static org.junit.Assert.*;
 
+import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
@@ -24,584 +27,996 @@ import org.junit.runner.*;
 import org.junit.runners.*;
 
 @RunWith(Parameterized.class)
-@SuppressWarnings({"javadoc","serial"})
+@SuppressWarnings({"javadoc","serial","rawtypes","unchecked"})
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class BasicHtmlTest {
 
 	private static final HtmlSerializer
 		s1 = HtmlSerializer.DEFAULT_SQ,
-		s2 = HtmlSerializer.DEFAULT_SQ_READABLE;
+		s2 = HtmlSerializer.DEFAULT_SQ_READABLE,
+		s3 = HtmlSerializer.DEFAULT_SQ.builder().abridged(true).build();
 	private static final HtmlParser parser = HtmlParser.DEFAULT;
 
 	@Parameterized.Parameters
 	public static Collection<Object[]> getParameters() {
 		return Arrays.asList(new Object[][] {
 
-			{
-				"SimpleTypes-1",
-				"foo",
-				"<string>foo</string>",
-				"<string>foo</string>",
+			{	/* 0 */
+				new Input<String>(
+					"SimpleTypes-1",
+					String.class,
+					"foo",
+					"<string>foo</string>",
+					"<string>foo</string>",
+					"<string>foo</string>"
+				)
+				{
+					public void verify(String o) {
+						assertType(String.class, o);
+					}
+				}
 			},
-			{
-				"SimpleTypes-2",
-				true,
-				"<boolean>true</boolean>",
-				"<boolean>true</boolean>",
+			{	/* 1 */
+				new Input<Boolean>(
+					"SimpleTypes-2",
+					boolean.class,
+					true,
+					"<boolean>true</boolean>",
+					"<boolean>true</boolean>",
+					"<boolean>true</boolean>"
+				)
+				{
+					public void verify(Boolean o) {
+						assertType(Boolean.class, o);
+					}
+				}
 			},
-			{
-				"SimpleTypes-3",
-				123,
-				"<number>123</number>",
-				"<number>123</number>",
+			{	/* 2 */
+				new Input<Integer>(
+					"SimpleTypes-3",
+					int.class,
+					123,
+					"<number>123</number>",
+					"<number>123</number>",
+					"<number>123</number>"
+				)
+				{
+					public void verify(Integer o) {
+						assertType(Integer.class, o);
+					}
+				}
 			},
-			{
-				"SimpleTypes-4",
-				1.23f,
-				"<number>1.23</number>",
-				"<number>1.23</number>",
+			{	/* 3 */
+				new Input<Float>(
+					"SimpleTypes-4",
+					float.class,
+					1.23f,
+					"<number>1.23</number>",
+					"<number>1.23</number>",
+					"<number>1.23</number>"
+				)
+				{
+					public void verify(Float o) {
+						assertType(Float.class, o);
+					}
+				}
 			},
-			{
-				"SimpleTypes-5",
-				null,
-				"<null/>",
-				"<null/>",
+			{	/* 4 */
+				new Input<String>(
+					"SimpleTypes-5",
+					String.class,
+					null,
+					"<null/>",
+					"<null/>",
+					"<null/>"
+				)
 			},
-			{
-				"Arrays-1",
-				new String[]{"foo"},
-				"<ul><li>foo</li></ul>",
-				"<ul>\n\t<li>foo</li>\n</ul>\n",
+			{	/* 5 */
+				new Input<String[]>(
+					"Arrays-1",
+					String[].class,
+					new String[]{"foo"},
+					"<ul><li>foo</li></ul>",
+					"<ul>\n\t<li>foo</li>\n</ul>\n",
+					"<ul><li>foo</li></ul>"
+				)
+				{
+					public void verify(String[] o) {
+						assertType(String.class, o[0]);
+					}
+				}
 			},
-			{
-				"Arrays-2",
-				new String[]{null},
-				"<ul><li><null/></li></ul>",
-				"<ul>\n\t<li><null/></li>\n</ul>\n",
+			{	/* 6 */
+				new Input<String[]>(
+					"Arrays-2",
+					String[].class,
+					new String[]{null},
+					"<ul><li><null/></li></ul>",
+					"<ul>\n\t<li><null/></li>\n</ul>\n",
+					"<ul><li><null/></li></ul>"
+				)
 			},
-			{
-				"Arrays-3",
-				new Object[]{"foo",123,true},
-				"<ul><li>foo</li><li><number>123</number></li><li><boolean>true</boolean></li></ul>",
-				"<ul>\n\t<li>foo</li>\n\t<li><number>123</number></li>\n\t<li><boolean>true</boolean></li>\n</ul>\n",
+			{	/* 7 */
+				new Input<Object[]>(
+					"Arrays-3",
+					Object[].class,
+					new Object[]{"foo",123,true},
+					"<ul><li>foo</li><li><number>123</number></li><li><boolean>true</boolean></li></ul>",
+					"<ul>\n\t<li>foo</li>\n\t<li><number>123</number></li>\n\t<li><boolean>true</boolean></li>\n</ul>\n",
+					"<ul><li>foo</li><li><number>123</number></li><li><boolean>true</boolean></li></ul>"
+				)
+				{
+					public void verify(Object[] o) {
+						assertType(String.class, o[0]);
+						assertType(Integer.class, o[1]);
+						assertType(Boolean.class, o[2]);
+					}
+				}
 			},
-			{
-				"Arrays-4",
-				new int[]{123},
-				"<ul><li>123</li></ul>",
-				"<ul>\n\t<li>123</li>\n</ul>\n",
+			{	/* 8 */
+				new Input<int[]>(
+					"Arrays-4",
+					int[].class,
+					new int[]{123},
+					"<ul><li><number>123</number></li></ul>",
+					"<ul>\n\t<li><number>123</number></li>\n</ul>\n",
+					"<ul><li>123</li></ul>"
+				)
+				{
+					public void verify(int[] o) {
+						assertType(int[].class, o);
+					}
+				}
 			},
-			{
-				"Arrays-5",
-				new boolean[]{true},
-				"<ul><li>true</li></ul>",
-				"<ul>\n\t<li>true</li>\n</ul>\n",
+			{	/* 9 */
+				new Input<boolean[]>(
+					"Arrays-5",
+					boolean[].class,
+					new boolean[]{true},
+					"<ul><li><boolean>true</boolean></li></ul>",
+					"<ul>\n\t<li><boolean>true</boolean></li>\n</ul>\n",
+					"<ul><li>true</li></ul>"
+				)
+				{
+					public void verify(boolean[] o) {
+						assertType(boolean[].class, o);
+					}
+				}
 			},
-			{
-				"Arrays-6",
-				new String[][]{{"foo"}},
-				"<ul><li><ul><li>foo</li></ul></li></ul>",
-				"<ul>\n\t<li>\n\t\t<ul>\n\t\t\t<li>foo</li>\n\t\t</ul>\n\t</li>\n</ul>\n",
+			{	/* 10 */
+				new Input<String[][]>(
+					"Arrays-6",
+					String[][].class,
+					new String[][]{{"foo"}},
+					"<ul><li><ul><li>foo</li></ul></li></ul>",
+					"<ul>\n\t<li>\n\t\t<ul>\n\t\t\t<li>foo</li>\n\t\t</ul>\n\t</li>\n</ul>\n",
+					"<ul><li><ul><li>foo</li></ul></li></ul>"
+				)
+				{
+					public void verify(String[][] o) {
+						assertType(String[][].class, o);
+					}
+				}
 			},
-			{
-				"MapWithStrings",
-				new MapWithStrings().append("k1", "v1").append("k2", null),
-				"<table>"
-					+"<tr>"
-						+"<td>k1</td>"
-						+"<td>v1</td>"
-					+"</tr>"
-					+"<tr>"
-						+"<td>k2</td>"
-						+"<td><null/></td>"
-					+"</tr>"
-				+"</table>",
-				"<table>\n"
-					+"\t<tr>\n"
-						+"\t\t<td>k1</td>\n"
-						+"\t\t<td>v1</td>\n"
-					+"\t</tr>\n"
-					+"\t<tr>\n"
-						+"\t\t<td>k2</td>\n"
-						+"\t\t<td><null/></td>\n"
-					+"\t</tr>\n"
-				+"</table>\n",
+			{	/* 11 */
+				new Input<Map<String,String>>(
+					"MapWithStrings",
+					MapWithStrings.class,
+					new MapWithStrings().append("k1", "v1").append("k2", null),
+					"<table>"
+						+"<tr>"
+							+"<td>k1</td>"
+							+"<td>v1</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>k2</td>"
+							+"<td><null/></td>"
+						+"</tr>"
+					+"</table>",
+					
+					"<table>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>k1</td>\n"
+							+"\t\t<td>v1</td>\n"
+						+"\t</tr>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>k2</td>\n"
+							+"\t\t<td><null/></td>\n"
+						+"\t</tr>\n"
+					+"</table>\n",
+					
+					"<table>"
+						+"<tr>"
+							+"<td>k1</td>"
+							+"<td>v1</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>k2</td>"
+							+"<td><null/></td>"
+						+"</tr>"
+					+"</table>"
+				)
+				{
+					public void verify(Map<String,String> o) {
+						assertType(String.class, o.get("k1"));
+					}
+				}
 			},
-			{
-				"MapsWithNumbers",
-				new MapWithNumbers().append("k1", 123).append("k2", 1.23).append("k3", null),
-				"<table>"
-					+"<tr>"
-						+"<td>k1</td>"
-						+"<td>123</td>"
-					+"</tr>"
-					+"<tr>"
-						+"<td>k2</td>"
-						+"<td>1.23</td>"
-					+"</tr>"
-					+"<tr>"
-						+"<td>k3</td>"
-						+"<td><null/></td>"
-					+"</tr>"
-				+"</table>",
-				"<table>\n"
-					+"\t<tr>\n"
-						+"\t\t<td>k1</td>\n"
-						+"\t\t<td>123</td>\n"
-					+"\t</tr>\n"
-					+"\t<tr>\n"
-						+"\t\t<td>k2</td>\n"
-						+"\t\t<td>1.23</td>\n"
-					+"\t</tr>\n"
-					+"\t<tr>\n"
-						+"\t\t<td>k3</td>\n"
-						+"\t\t<td><null/></td>\n"
-					+"\t</tr>\n"
-				+"</table>\n",
+			{	/* 12 */
+				new Input<Map<String,Number>>(
+					"MapsWithNumbers",
+					MapWithNumbers.class,
+					new MapWithNumbers().append("k1", 123).append("k2", 1.23).append("k3", null),
+					"<table>"
+						+"<tr>"
+							+"<td>k1</td>"
+							+"<td><number>123</number></td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>k2</td>"
+							+"<td><number>1.23</number></td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>k3</td>"
+							+"<td><null/></td>"
+						+"</tr>"
+					+"</table>",
+					
+					"<table>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>k1</td>\n"
+							+"\t\t<td><number>123</number></td>\n"
+						+"\t</tr>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>k2</td>\n"
+							+"\t\t<td><number>1.23</number></td>\n"
+						+"\t</tr>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>k3</td>\n"
+							+"\t\t<td><null/></td>\n"
+						+"\t</tr>\n"
+					+"</table>\n",
+					
+					"<table>"
+						+"<tr>"
+							+"<td>k1</td>"
+							+"<td>123</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>k2</td>"
+							+"<td>1.23</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>k3</td>"
+							+"<td><null/></td>"
+						+"</tr>"
+					+"</table>"
+				)
+				{
+					public void verify(Map<String,Number> o) {
+						assertType(Number.class, o.get("k1"));
+					}
+				}
 			},
-			{
-				"MapWithObjects",
-				new MapWithObjects().append("k1", "v1").append("k2", 123).append("k3", 1.23).append("k4", true).append("k5", null),
-				"<table>"
-					+"<tr>"
-						+"<td>k1</td>"
-						+"<td>v1</td>"
-					+"</tr>"
-					+"<tr>"
-						+"<td>k2</td>"
-						+"<td><number>123</number></td>"
-					+"</tr>"
-					+"<tr>"
-						+"<td>k3</td>"
-						+"<td><number>1.23</number></td>"
-					+"</tr>"
-					+"<tr>"
-						+"<td>k4</td>"
-						+"<td><boolean>true</boolean></td>"
-					+"</tr>"
-					+"<tr>"
-						+"<td>k5</td>"
-						+"<td><null/></td>"
-					+"</tr>"
-				+"</table>",
-				"<table>\n"
-					+"\t<tr>\n"
-						+"\t\t<td>k1</td>\n"
-						+"\t\t<td>v1</td>\n"
-					+"\t</tr>\n"
-					+"\t<tr>\n"
-						+"\t\t<td>k2</td>\n"
-						+"\t\t<td><number>123</number></td>\n"
-					+"\t</tr>\n"
-					+"\t<tr>\n"
-						+"\t\t<td>k3</td>\n"
-						+"\t\t<td><number>1.23</number></td>\n"
-					+"\t</tr>\n"
-					+"\t<tr>\n"
-						+"\t\t<td>k4</td>\n"
-						+"\t\t<td><boolean>true</boolean></td>\n"
-					+"\t</tr>\n"
-					+"\t<tr>\n"
-						+"\t\t<td>k5</td>\n"
-						+"\t\t<td><null/></td>\n"
-					+"\t</tr>\n"
-				+"</table>\n",
+			{	/* 13 */
+				new Input<Map<String,Object>>(
+					"MapWithObjects",
+					getType(Map.class,String.class,Object.class),
+					new MapWithObjects().append("k1", "v1").append("k2", 123).append("k3", 1.23).append("k4", true).append("k5", null),
+					"<table>"
+						+"<tr>"
+							+"<td>k1</td>"
+							+"<td>v1</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>k2</td>"
+							+"<td><number>123</number></td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>k3</td>"
+							+"<td><number>1.23</number></td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>k4</td>"
+							+"<td><boolean>true</boolean></td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>k5</td>"
+							+"<td><null/></td>"
+						+"</tr>"
+					+"</table>",
+					
+					"<table>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>k1</td>\n"
+							+"\t\t<td>v1</td>\n"
+						+"\t</tr>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>k2</td>\n"
+							+"\t\t<td><number>123</number></td>\n"
+						+"\t</tr>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>k3</td>\n"
+							+"\t\t<td><number>1.23</number></td>\n"
+						+"\t</tr>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>k4</td>\n"
+							+"\t\t<td><boolean>true</boolean></td>\n"
+						+"\t</tr>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>k5</td>\n"
+							+"\t\t<td><null/></td>\n"
+						+"\t</tr>\n"
+					+"</table>\n",
+					
+					"<table>"
+						+"<tr>"
+							+"<td>k1</td>"
+							+"<td>v1</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>k2</td>"
+							+"<td><number>123</number></td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>k3</td>"
+							+"<td><number>1.23</number></td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>k4</td>"
+							+"<td><boolean>true</boolean></td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>k5</td>"
+							+"<td><null/></td>"
+						+"</tr>"
+					+"</table>"
+				)
+				{
+					public void verify(Map<String,Object> o) {
+						assertType(String.class, o.get("k1"));
+						assertType(Integer.class, o.get("k2"));
+						assertType(Float.class, o.get("k3"));
+						assertType(Boolean.class, o.get("k4"));
+					}
+				}
 			},
-			{
-				"ListWithStrings",
-				new ListWithStrings().append("foo").append(null),
-				"<ul><li>foo</li><li><null/></li></ul>",
-				"<ul>\n\t<li>foo</li>\n\t<li><null/></li>\n</ul>\n",
+			{	/* 14 */
+				new Input<List<String>>(
+					"ListWithStrings",
+					getType(List.class,String.class),
+					new ListWithStrings().append("foo").append(null),
+					"<ul><li>foo</li><li><null/></li></ul>",
+					"<ul>\n\t<li>foo</li>\n\t<li><null/></li>\n</ul>\n",
+					"<ul><li>foo</li><li><null/></li></ul>"
+				)
+				{
+					public void verify(List<String> o) {
+						assertType(String.class, o.get(0));
+					}
+				}
 			},
-			{
-				"ListWithNumbers",
-				new ListWithNumbers().append(123).append(1.23).append(null),
-				"<ul><li>123</li><li>1.23</li><li><null/></li></ul>",
-				"<ul>\n\t<li>123</li>\n\t<li>1.23</li>\n\t<li><null/></li>\n</ul>\n",
+			{	/* 15 */
+				new Input<List<Number>>(
+					"ListWithNumbers",
+					ListWithNumbers.class,
+					new ListWithNumbers().append(123).append(1.23).append(null),
+					"<ul><li><number>123</number></li><li><number>1.23</number></li><li><null/></li></ul>",
+					"<ul>\n\t<li><number>123</number></li>\n\t<li><number>1.23</number></li>\n\t<li><null/></li>\n</ul>\n",
+					"<ul><li>123</li><li>1.23</li><li><null/></li></ul>"
+				)
+				{
+					public void verify(List<Number> o) {
+						assertType(Integer.class, o.get(0));
+						assertType(Float.class, o.get(1));
+					}
+				}
 			},
-			{
-				"ListWithObjects",
-				new ListWithObjects().append("foo").append(123).append(1.23).append(true).append(null),
-				"<ul><li>foo</li><li><number>123</number></li><li><number>1.23</number></li><li><boolean>true</boolean></li><li><null/></li></ul>",
-				"<ul>\n\t<li>foo</li>\n\t<li><number>123</number></li>\n\t<li><number>1.23</number></li>\n\t<li><boolean>true</boolean></li>\n\t<li><null/></li>\n</ul>\n",
+			{	/* 16 */
+				new Input<List<Object>>(
+					"ListWithObjects",
+					getType(List.class,Object.class),
+					new ListWithObjects().append("foo").append(123).append(1.23).append(true).append(null),
+					"<ul><li>foo</li><li><number>123</number></li><li><number>1.23</number></li><li><boolean>true</boolean></li><li><null/></li></ul>",
+					"<ul>\n\t<li>foo</li>\n\t<li><number>123</number></li>\n\t<li><number>1.23</number></li>\n\t<li><boolean>true</boolean></li>\n\t<li><null/></li>\n</ul>\n",
+					"<ul><li>foo</li><li><number>123</number></li><li><number>1.23</number></li><li><boolean>true</boolean></li><li><null/></li></ul>"
+				)
+				{
+					public void verify(List<Object> o) {
+						assertType(String.class, o.get(0));
+						assertType(Integer.class, o.get(1));
+						assertType(Float.class, o.get(2));
+						assertType(Boolean.class, o.get(3));
+					}
+				}
 			},
-			{
-				"BeanWithNormalProperties",
-				new BeanWithNormalProperties().init(),
-				"<table>"
-					+"<tr>"
-						+"<td>a</td>"
-						+"<td>foo</td>"
-					+"</tr>"
-					+"<tr>"
-						+"<td>b</td>"
-						+"<td>123</td>"
-					+"</tr>"
-					+"<tr>"
-						+"<td>c</td>"
-						+"<td>bar</td>"
-					+"</tr>"
-					+"<tr>"
-						+"<td>d</td>"
-						+"<td><number>456</number></td>"
-					+"</tr>"
-					+"<tr>"
-						+"<td>e</td>"
-						+"<td>"
-							+"<table>"
-								+"<tr>"
-									+"<td>h</td>"
-									+"<td>qux</td>"
-								+"</tr>"
-							+"</table>"
-						+"</td>"
-					+"</tr>"
-					+"<tr>"
-						+"<td>f</td>"
-						+"<td>"
-							+"<ul>"
-								+"<li>baz</li>"
-							+"</ul>"
-						+"</td>"
-					+"</tr>"
-					+"<tr>"
-						+"<td>g</td>"
-						+"<td>"
-							+"<ul>"
-								+"<li>789</li>"
-							+"</ul>"
-						+"</td>"
-					+"</tr>"
-				+"</table>",
-				"<table>\n"
-					+"\t<tr>\n"
-						+"\t\t<td>a</td>\n"
-						+"\t\t<td>foo</td>\n"
-					+"\t</tr>\n"
-					+"\t<tr>\n"
-						+"\t\t<td>b</td>\n"
-						+"\t\t<td>123</td>\n"
-					+"\t</tr>\n"
-					+"\t<tr>\n"
-						+"\t\t<td>c</td>\n"
-						+"\t\t<td>bar</td>\n"
-					+"\t</tr>\n"
-					+"\t<tr>\n"
-						+"\t\t<td>d</td>\n"
-						+"\t\t<td><number>456</number></td>\n"
-					+"\t</tr>\n"
-					+"\t<tr>\n"
-						+"\t\t<td>e</td>\n"
-						+"\t\t<td>\n"
-							+"\t\t\t<table>\n"
-								+"\t\t\t\t<tr>\n"
-									+"\t\t\t\t\t<td>h</td>\n"
-									+"\t\t\t\t\t<td>qux</td>\n"
-								+"\t\t\t\t</tr>\n"
-							+"\t\t\t</table>\n"
-						+"\t\t</td>\n"
-					+"\t</tr>\n"
-					+"\t<tr>\n"
-						+"\t\t<td>f</td>\n"
-						+"\t\t<td>\n"
-							+"\t\t\t<ul>\n"
-								+"\t\t\t\t<li>baz</li>\n"
-							+"\t\t\t</ul>\n"
-						+"\t\t</td>\n"
-					+"\t</tr>\n"
-					+"\t<tr>\n"
-						+"\t\t<td>g</td>\n"
-						+"\t\t<td>\n"
-							+"\t\t\t<ul>\n"
-								+"\t\t\t\t<li>789</li>\n"
-							+"\t\t\t</ul>\n"
-						+"\t\t</td>\n"
-					+"\t</tr>\n"
-				+"</table>\n",
+			{	/* 17 */
+				new Input<BeanWithNormalProperties>(
+					"BeanWithNormalProperties",
+					BeanWithNormalProperties.class,
+					new BeanWithNormalProperties().init(),
+					"<table>"
+						+"<tr>"
+							+"<td>a</td>"
+							+"<td>foo</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>b</td>"
+							+"<td>123</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>c</td>"
+							+"<td>bar</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>d</td>"
+							+"<td><number>456</number></td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>e</td>"
+							+"<td>"
+								+"<table>"
+									+"<tr>"
+										+"<td>h</td>"
+										+"<td>qux</td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>f</td>"
+							+"<td>"
+								+"<ul>"
+									+"<li>baz</li>"
+								+"</ul>"
+							+"</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>g</td>"
+							+"<td>"
+								+"<ul>"
+									+"<li>789</li>"
+								+"</ul>"
+							+"</td>"
+						+"</tr>"
+					+"</table>",
+					
+					"<table>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>a</td>\n"
+							+"\t\t<td>foo</td>\n"
+						+"\t</tr>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>b</td>\n"
+							+"\t\t<td>123</td>\n"
+						+"\t</tr>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>c</td>\n"
+							+"\t\t<td>bar</td>\n"
+						+"\t</tr>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>d</td>\n"
+							+"\t\t<td><number>456</number></td>\n"
+						+"\t</tr>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>e</td>\n"
+							+"\t\t<td>\n"
+								+"\t\t\t<table>\n"
+									+"\t\t\t\t<tr>\n"
+										+"\t\t\t\t\t<td>h</td>\n"
+										+"\t\t\t\t\t<td>qux</td>\n"
+									+"\t\t\t\t</tr>\n"
+								+"\t\t\t</table>\n"
+							+"\t\t</td>\n"
+						+"\t</tr>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>f</td>\n"
+							+"\t\t<td>\n"
+								+"\t\t\t<ul>\n"
+									+"\t\t\t\t<li>baz</li>\n"
+								+"\t\t\t</ul>\n"
+							+"\t\t</td>\n"
+						+"\t</tr>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>g</td>\n"
+							+"\t\t<td>\n"
+								+"\t\t\t<ul>\n"
+									+"\t\t\t\t<li>789</li>\n"
+								+"\t\t\t</ul>\n"
+							+"\t\t</td>\n"
+						+"\t</tr>\n"
+					+"</table>\n",
+					
+					"<table>"
+						+"<tr>"
+							+"<td>a</td>"
+							+"<td>foo</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>b</td>"
+							+"<td>123</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>c</td>"
+							+"<td>bar</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>d</td>"
+							+"<td><number>456</number></td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>e</td>"
+							+"<td>"
+								+"<table>"
+									+"<tr>"
+										+"<td>h</td>"
+										+"<td>qux</td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>f</td>"
+							+"<td>"
+								+"<ul>"
+									+"<li>baz</li>"
+								+"</ul>"
+							+"</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>g</td>"
+							+"<td>"
+								+"<ul>"
+									+"<li>789</li>"
+								+"</ul>"
+							+"</td>"
+						+"</tr>"
+					+"</table>"
+				)
+				{
+					public void verify(BeanWithNormalProperties o) {
+						assertType(String.class, o.c);
+						assertType(Integer.class, o.d);
+						assertType(Bean1a.class, o.e);
+					}
+				}
 			},
-			{
-				"BeanWithMapProperties",
-				new BeanWithMapProperties().init(),
-				"<table>"
-					+"<tr>"
-						+"<td>a</td>"
-						+"<td>"
-							+"<table>"
-								+"<tr>"
-									+"<td>k1</td>"
-									+"<td>foo</td>"
-								+"</tr>"
-							+"</table>"
-						+"</td>"
-					+"</tr>"
-					+"<tr>"
-						+"<td>b</td>"
-						+"<td>"
-							+"<table>"
-								+"<tr>"
-									+"<td>k2</td>"
-									+"<td>123</td>"
-								+"</tr>"
-							+"</table>"
-						+"</td>"
-					+"</tr>"
-					+"<tr>"
-						+"<td>c</td>"
-						+"<td>"
-							+"<table>"
-								+"<tr>"
-									+"<td>k3</td>"
-									+"<td>bar</td>"
-								+"</tr>"
-								+"<tr>"
-									+"<td>k4</td>"
-									+"<td><number>456</number></td>"
-								+"</tr>"
-								+"<tr>"
-									+"<td>k5</td>"
-									+"<td><boolean>true</boolean></td>"
-								+"</tr>"
-								+"<tr>"
-									+"<td>k6</td>"
-									+"<td><null/></td>"
-								+"</tr>"
-							+"</table>"
-						+"</td>"
-					+"</tr>"
-				+"</table>",
-				"<table>\n"
-					+"\t<tr>\n"
-						+"\t\t<td>a</td>\n"
-						+"\t\t<td>\n"
-							+"\t\t\t<table>\n"
-								+"\t\t\t\t<tr>\n"
-									+"\t\t\t\t\t<td>k1</td>\n"
-									+"\t\t\t\t\t<td>foo</td>\n"
-								+"\t\t\t\t</tr>\n"
-							+"\t\t\t</table>\n"
-						+"\t\t</td>\n"
-					+"\t</tr>\n"
-					+"\t<tr>\n"
-						+"\t\t<td>b</td>\n"
-						+"\t\t<td>\n"
-							+"\t\t\t<table>\n"
-								+"\t\t\t\t<tr>\n"
-									+"\t\t\t\t\t<td>k2</td>\n"
-									+"\t\t\t\t\t<td>123</td>\n"
-								+"\t\t\t\t</tr>\n"
-							+"\t\t\t</table>\n"
-						+"\t\t</td>\n"
-					+"\t</tr>\n"
-					+"\t<tr>\n"
-						+"\t\t<td>c</td>\n"
-						+"\t\t<td>\n"
-							+"\t\t\t<table>\n"
-								+"\t\t\t\t<tr>\n"
-									+"\t\t\t\t\t<td>k3</td>\n"
-									+"\t\t\t\t\t<td>bar</td>\n"
-								+"\t\t\t\t</tr>\n"
-								+"\t\t\t\t<tr>\n"
-									+"\t\t\t\t\t<td>k4</td>\n"
-									+"\t\t\t\t\t<td><number>456</number></td>\n"
-								+"\t\t\t\t</tr>\n"
-								+"\t\t\t\t<tr>\n"
-									+"\t\t\t\t\t<td>k5</td>\n"
-									+"\t\t\t\t\t<td><boolean>true</boolean></td>\n"
-								+"\t\t\t\t</tr>\n"
-								+"\t\t\t\t<tr>\n"
-									+"\t\t\t\t\t<td>k6</td>\n"
-									+"\t\t\t\t\t<td><null/></td>\n"
-								+"\t\t\t\t</tr>\n"
-							+"\t\t\t</table>\n"
-						+"\t\t</td>\n"
-					+"\t</tr>\n"
-				+"</table>\n"
-		   },
-			{
-				"BeanWithTypeName",
-				new BeanWithTypeName().init(),
-				"<table _type='X'>"
-					+"<tr>"
-						+"<td>a</td>"
-						+"<td>123</td>"
-					+"</tr>"
-					+"<tr>"
-						+"<td>b</td>"
-						+"<td>foo</td>"
-					+"</tr>"
-				+"</table>",
-				"<table _type='X'>\n"
-					+"\t<tr>\n"
-						+"\t\t<td>a</td>\n"
-						+"\t\t<td>123</td>\n"
-					+"\t</tr>\n"
-					+"\t<tr>\n"
-						+"\t\t<td>b</td>\n"
-						+"\t\t<td>foo</td>\n"
-					+"\t</tr>\n"
-				+"</table>\n",
+			{	/* 18 */
+				new Input<BeanWithMapProperties>(
+					"BeanWithMapProperties",
+					BeanWithMapProperties.class,
+					new BeanWithMapProperties().init(),
+					"<table>"
+						+"<tr>"
+							+"<td>a</td>"
+							+"<td>"
+								+"<table>"
+									+"<tr>"
+										+"<td>k1</td>"
+										+"<td>foo</td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>b</td>"
+							+"<td>"
+								+"<table>"
+									+"<tr>"
+										+"<td>k2</td>"
+										+"<td>123</td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>c</td>"
+							+"<td>"
+								+"<table>"
+									+"<tr>"
+										+"<td>k3</td>"
+										+"<td>bar</td>"
+									+"</tr>"
+									+"<tr>"
+										+"<td>k4</td>"
+										+"<td><number>456</number></td>"
+									+"</tr>"
+									+"<tr>"
+										+"<td>k5</td>"
+										+"<td><boolean>true</boolean></td>"
+									+"</tr>"
+									+"<tr>"
+										+"<td>k6</td>"
+										+"<td><null/></td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+					+"</table>",
+					
+					"<table>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>a</td>\n"
+							+"\t\t<td>\n"
+								+"\t\t\t<table>\n"
+									+"\t\t\t\t<tr>\n"
+										+"\t\t\t\t\t<td>k1</td>\n"
+										+"\t\t\t\t\t<td>foo</td>\n"
+									+"\t\t\t\t</tr>\n"
+								+"\t\t\t</table>\n"
+							+"\t\t</td>\n"
+						+"\t</tr>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>b</td>\n"
+							+"\t\t<td>\n"
+								+"\t\t\t<table>\n"
+									+"\t\t\t\t<tr>\n"
+										+"\t\t\t\t\t<td>k2</td>\n"
+										+"\t\t\t\t\t<td>123</td>\n"
+									+"\t\t\t\t</tr>\n"
+								+"\t\t\t</table>\n"
+							+"\t\t</td>\n"
+						+"\t</tr>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>c</td>\n"
+							+"\t\t<td>\n"
+								+"\t\t\t<table>\n"
+									+"\t\t\t\t<tr>\n"
+										+"\t\t\t\t\t<td>k3</td>\n"
+										+"\t\t\t\t\t<td>bar</td>\n"
+									+"\t\t\t\t</tr>\n"
+									+"\t\t\t\t<tr>\n"
+										+"\t\t\t\t\t<td>k4</td>\n"
+										+"\t\t\t\t\t<td><number>456</number></td>\n"
+									+"\t\t\t\t</tr>\n"
+									+"\t\t\t\t<tr>\n"
+										+"\t\t\t\t\t<td>k5</td>\n"
+										+"\t\t\t\t\t<td><boolean>true</boolean></td>\n"
+									+"\t\t\t\t</tr>\n"
+									+"\t\t\t\t<tr>\n"
+										+"\t\t\t\t\t<td>k6</td>\n"
+										+"\t\t\t\t\t<td><null/></td>\n"
+									+"\t\t\t\t</tr>\n"
+								+"\t\t\t</table>\n"
+							+"\t\t</td>\n"
+						+"\t</tr>\n"
+					+"</table>\n",
+					
+					"<table>"
+						+"<tr>"
+							+"<td>a</td>"
+							+"<td>"
+								+"<table>"
+									+"<tr>"
+										+"<td>k1</td>"
+										+"<td>foo</td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>b</td>"
+							+"<td>"
+								+"<table>"
+									+"<tr>"
+										+"<td>k2</td>"
+										+"<td>123</td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>c</td>"
+							+"<td>"
+								+"<table>"
+									+"<tr>"
+										+"<td>k3</td>"
+										+"<td>bar</td>"
+									+"</tr>"
+									+"<tr>"
+										+"<td>k4</td>"
+										+"<td><number>456</number></td>"
+									+"</tr>"
+									+"<tr>"
+										+"<td>k5</td>"
+										+"<td><boolean>true</boolean></td>"
+									+"</tr>"
+									+"<tr>"
+										+"<td>k6</td>"
+										+"<td><null/></td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+					+"</table>"
+				)
+				{
+					public void verify(BeanWithMapProperties o) {
+						assertType(String.class, o.a.get("k1"));
+						assertType(Integer.class, o.b.get("k2"));
+						assertType(String.class, o.c.get("k3"));
+						assertType(Integer.class, o.c.get("k4"));
+						assertType(Boolean.class, o.c.get("k5"));
+					}
+				}
 			},
-			{
-				"BeanWithPropertiesWithTypeNames",
-				new BeanWithPropertiesWithTypeNames().init(),
-				"<table>"
-					+"<tr>"
-						+"<td>b1</td>"
-						+"<td>"
-							+"<table>"
-								+"<tr>"
-									+"<td>b</td>"
-									+"<td>foo</td>"
-								+"</tr>"
-							+"</table>"
-						+"</td>"
-					+"</tr>"
-					+"<tr>"
-						+"<td>b2</td>"
-						+"<td>"
-							+"<table _type='B'>"
-								+"<tr>"
-									+"<td>b</td>"
-									+"<td>foo</td>"
-								+"</tr>"
-							+"</table>"
-						+"</td>"
-					+"</tr>"
-				+"</table>",
-				"<table>\n"
-					+"\t<tr>\n"
-						+"\t\t<td>b1</td>\n"
-						+"\t\t<td>\n"
-							+"\t\t\t<table>\n"
-								+"\t\t\t\t<tr>\n"
-									+"\t\t\t\t\t<td>b</td>\n"
-									+"\t\t\t\t\t<td>foo</td>\n"
-								+"\t\t\t\t</tr>\n"
-							+"\t\t\t</table>\n"
-						+"\t\t</td>\n"
-					+"\t</tr>\n"
-					+"\t<tr>\n"
-						+"\t\t<td>b2</td>\n"
-						+"\t\t<td>\n"
-							+"\t\t\t<table _type='B'>\n"
-								+"\t\t\t\t<tr>\n"
-									+"\t\t\t\t\t<td>b</td>\n"
-									+"\t\t\t\t\t<td>foo</td>\n"
-								+"\t\t\t\t</tr>\n"
-							+"\t\t\t</table>\n"
-						+"\t\t</td>\n"
-					+"\t</tr>\n"
-				+"</table>\n"
+			{	/* 19 */
+				new Input<BeanWithTypeName>(
+					"BeanWithTypeName",
+					BeanWithTypeName.class,
+					new BeanWithTypeName().init(),
+					"<table _type='X'>"
+						+"<tr>"
+							+"<td>a</td>"
+							+"<td>123</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>b</td>"
+							+"<td>foo</td>"
+						+"</tr>"
+					+"</table>",
+					
+					"<table _type='X'>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>a</td>\n"
+							+"\t\t<td>123</td>\n"
+						+"\t</tr>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>b</td>\n"
+							+"\t\t<td>foo</td>\n"
+						+"\t</tr>\n"
+					+"</table>\n",
+					
+					"<table>"
+						+"<tr>"
+							+"<td>a</td>"
+							+"<td>123</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>b</td>"
+							+"<td>foo</td>"
+						+"</tr>"
+					+"</table>"
+				)
+				{
+					public void verify(BeanWithTypeName o) {
+						assertType(BeanWithTypeName.class, o);
+					}
+				}
 			},
-			{
-				"BeanWithPropertiesWithArrayTypeNames",
-				new BeanWithPropertiesWithArrayTypeNames().init(),
-				"<table>"
-					+"<tr>"
-						+"<td>b1</td>"
-						+"<td>"
-							+"<table _type='array'>"
-								+"<tr>"
-									+"<th>b</th>"
-								+"</tr>"
-								+"<tr>"
-									+"<td>foo</td>"
-								+"</tr>"
-							+"</table>"
-						+"</td>"
-					+"</tr>"
-					+"<tr>"
-						+"<td>b2</td>"
-						+"<td>"
-							+"<table _type='array'>"
-								+"<tr>"
-									+"<th>b</th>"
-								+"</tr>"
-								+"<tr _type='B'>"
-									+"<td>foo</td>"
-								+"</tr>"
-							+"</table>"
-						+"</td>"
-					+"</tr>"
-					+"<tr>"
-						+"<td>b3</td>"
-						+"<td>"
-							+"<table _type='array'>"
-								+"<tr>"
-									+"<th>b</th>"
-								+"</tr>"
-								+"<tr _type='B'>"
-									+"<td>foo</td>"
-								+"</tr>"
-							+"</table>"
-						+"</td>"
-					+"</tr>"
-				+"</table>",
-				"<table>\n"
-					+"\t<tr>\n"
-						+"\t\t<td>b1</td>\n"
-						+"\t\t<td>\n"
-							+"\t\t\t<table _type='array'>\n"
-								+"\t\t\t\t<tr>\n"
-									+"\t\t\t\t\t<th>b</th>\n"
-								+"\t\t\t\t</tr>\n"
-								+"\t\t\t\t<tr>\n"
-									+"\t\t\t\t\t<td>foo</td>\n"
-								+"\t\t\t\t</tr>\n"
-							+"\t\t\t</table>\n"
-						+"\t\t</td>\n"
-					+"\t</tr>\n"
-					+"\t<tr>\n"
-						+"\t\t<td>b2</td>\n"
-						+"\t\t<td>\n"
-							+"\t\t\t<table _type='array'>\n"
-								+"\t\t\t\t<tr>\n"
-									+"\t\t\t\t\t<th>b</th>\n"
-								+"\t\t\t\t</tr>\n"
-								+"\t\t\t\t<tr _type='B'>\n"
-									+"\t\t\t\t\t<td>foo</td>\n"
-								+"\t\t\t\t</tr>\n"
-							+"\t\t\t</table>\n"
-						+"\t\t</td>\n"
-					+"\t</tr>\n"
-					+"\t<tr>\n"
-						+"\t\t<td>b3</td>\n"
-						+"\t\t<td>\n"
-							+"\t\t\t<table _type='array'>\n"
-								+"\t\t\t\t<tr>\n"
-									+"\t\t\t\t\t<th>b</th>\n"
-								+"\t\t\t\t</tr>\n"
-								+"\t\t\t\t<tr _type='B'>\n"
-									+"\t\t\t\t\t<td>foo</td>\n"
-								+"\t\t\t\t</tr>\n"
-							+"\t\t\t</table>\n"
-						+"\t\t</td>\n"
-					+"\t</tr>\n"
-				+"</table>\n",
+			{	/* 20 */
+				new Input<BeanWithPropertiesWithTypeNames>(
+					"BeanWithPropertiesWithTypeNames",
+					BeanWithPropertiesWithTypeNames.class,
+					new BeanWithPropertiesWithTypeNames().init(),
+					"<table>"
+						+"<tr>"
+							+"<td>b1</td>"
+							+"<td>"
+								+"<table>"
+									+"<tr>"
+										+"<td>b</td>"
+										+"<td>foo</td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>b2</td>"
+							+"<td>"
+								+"<table _type='B'>"
+									+"<tr>"
+										+"<td>b</td>"
+										+"<td>foo</td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+					+"</table>",
+					
+					"<table>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>b1</td>\n"
+							+"\t\t<td>\n"
+								+"\t\t\t<table>\n"
+									+"\t\t\t\t<tr>\n"
+										+"\t\t\t\t\t<td>b</td>\n"
+										+"\t\t\t\t\t<td>foo</td>\n"
+									+"\t\t\t\t</tr>\n"
+								+"\t\t\t</table>\n"
+							+"\t\t</td>\n"
+						+"\t</tr>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>b2</td>\n"
+							+"\t\t<td>\n"
+								+"\t\t\t<table _type='B'>\n"
+									+"\t\t\t\t<tr>\n"
+										+"\t\t\t\t\t<td>b</td>\n"
+										+"\t\t\t\t\t<td>foo</td>\n"
+									+"\t\t\t\t</tr>\n"
+								+"\t\t\t</table>\n"
+							+"\t\t</td>\n"
+						+"\t</tr>\n"
+					+"</table>\n",
+					
+					"<table>"
+						+"<tr>"
+							+"<td>b1</td>"
+							+"<td>"
+								+"<table>"
+									+"<tr>"
+										+"<td>b</td>"
+										+"<td>foo</td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>b2</td>"
+							+"<td>"
+								+"<table _type='B'>"
+									+"<tr>"
+										+"<td>b</td>"
+										+"<td>foo</td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+					+"</table>"
+				)
+				{
+					public void verify(BeanWithPropertiesWithTypeNames o) {
+						assertType(B.class, o.b2);
+					}
+				}
 			},
-			{
-				"BeanWithPropertiesWith2dArrayTypeNames",
-				new BeanWithPropertiesWith2dArrayTypeNames().init(),
-				"<table>"
-					+"<tr>"
-						+"<td>b1</td>"
-						+"<td>"
-							+"<ul>"
-								+"<li>"
-									+"<table _type='array'>"
-										+"<tr>"
-											+"<th>b</th>"
-										+"</tr>"
-										+"<tr>"
-											+"<td>foo</td>"
-										+"</tr>"
-									+"</table>"
-								+"</li>"
-							+"</ul>"
-						+"</td>"
-					+"</tr>"
-					+"<tr>"
-						+"<td>b2</td>"
-						+"<td>"
+			{	/* 21 */
+				new Input<BeanWithPropertiesWithArrayTypeNames>(
+					"BeanWithPropertiesWithArrayTypeNames",
+					BeanWithPropertiesWithArrayTypeNames.class,
+					new BeanWithPropertiesWithArrayTypeNames().init(),
+					"<table>"
+						+"<tr>"
+							+"<td>b1</td>"
+							+"<td>"
+								+"<table _type='array'>"
+									+"<tr>"
+										+"<th>b</th>"
+									+"</tr>"
+									+"<tr>"
+										+"<td>foo</td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>b2</td>"
+							+"<td>"
+								+"<table _type='array'>"
+									+"<tr>"
+										+"<th>b</th>"
+									+"</tr>"
+									+"<tr _type='B'>"
+										+"<td>foo</td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>b3</td>"
+							+"<td>"
+								+"<table _type='array'>"
+									+"<tr>"
+										+"<th>b</th>"
+									+"</tr>"
+									+"<tr _type='B'>"
+										+"<td>foo</td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+					+"</table>",
+					
+					"<table>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>b1</td>\n"
+							+"\t\t<td>\n"
+								+"\t\t\t<table _type='array'>\n"
+									+"\t\t\t\t<tr>\n"
+										+"\t\t\t\t\t<th>b</th>\n"
+									+"\t\t\t\t</tr>\n"
+									+"\t\t\t\t<tr>\n"
+										+"\t\t\t\t\t<td>foo</td>\n"
+									+"\t\t\t\t</tr>\n"
+								+"\t\t\t</table>\n"
+							+"\t\t</td>\n"
+						+"\t</tr>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>b2</td>\n"
+							+"\t\t<td>\n"
+								+"\t\t\t<table _type='array'>\n"
+									+"\t\t\t\t<tr>\n"
+										+"\t\t\t\t\t<th>b</th>\n"
+									+"\t\t\t\t</tr>\n"
+									+"\t\t\t\t<tr _type='B'>\n"
+										+"\t\t\t\t\t<td>foo</td>\n"
+									+"\t\t\t\t</tr>\n"
+								+"\t\t\t</table>\n"
+							+"\t\t</td>\n"
+						+"\t</tr>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>b3</td>\n"
+							+"\t\t<td>\n"
+								+"\t\t\t<table _type='array'>\n"
+									+"\t\t\t\t<tr>\n"
+										+"\t\t\t\t\t<th>b</th>\n"
+									+"\t\t\t\t</tr>\n"
+									+"\t\t\t\t<tr _type='B'>\n"
+										+"\t\t\t\t\t<td>foo</td>\n"
+									+"\t\t\t\t</tr>\n"
+								+"\t\t\t</table>\n"
+							+"\t\t</td>\n"
+						+"\t</tr>\n"
+					+"</table>\n",
+					
+					"<table>"
+						+"<tr>"
+							+"<td>b1</td>"
+							+"<td>"
+								+"<table _type='array'>"
+									+"<tr>"
+										+"<th>b</th>"
+									+"</tr>"
+									+"<tr>"
+										+"<td>foo</td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>b2</td>"
+							+"<td>"
+								+"<table _type='array'>"
+									+"<tr>"
+										+"<th>b</th>"
+									+"</tr>"
+									+"<tr _type='B'>"
+										+"<td>foo</td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>b3</td>"
+							+"<td>"
+								+"<table _type='array'>"
+									+"<tr>"
+										+"<th>b</th>"
+									+"</tr>"
+									+"<tr _type='B'>"
+										+"<td>foo</td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+					+"</table>"
+				)
+				{
+					public void verify(BeanWithPropertiesWithArrayTypeNames o) {
+						assertType(B.class, o.b2[0]);
+						assertType(B.class, o.b3[0]);
+					}
+				}
+			},
+			{	/* 22 */
+				new Input<BeanWithPropertiesWith2dArrayTypeNames>(
+					"BeanWithPropertiesWith2dArrayTypeNames",
+					BeanWithPropertiesWith2dArrayTypeNames.class,
+					new BeanWithPropertiesWith2dArrayTypeNames().init(),
+					"<table>"
+						+"<tr>"
+							+"<td>b1</td>"
+							+"<td>"
 								+"<ul>"
 									+"<li>"
 										+"<table _type='array'>"
@@ -615,855 +1030,1585 @@ public class BasicHtmlTest {
 									+"</li>"
 								+"</ul>"
 							+"</td>"
-					+"</tr>"
-					+"<tr>"
-						+"<td>b3</td>"
-						+"<td>"
-							+"<ul>"
-								+"<li>"
-									+"<table _type='array'>"
-										+"<tr>"
-											+"<th>b</th>"
-										+"</tr>"
-										+"<tr _type='B'>"
-											+"<td>foo</td>"
-										+"</tr>"
-									+"</table>"
-								+"</li>"
-							+"</ul>"
-						+"</td>"
-					+"</tr>"
-				+"</table>",
-				"<table>\n"
-					+"\t<tr>\n"
-						+"\t\t<td>b1</td>\n"
-						+"\t\t<td>\n"
-							+"\t\t\t<ul>\n"
-								+"\t\t\t\t<li>\n"
-									+"\t\t\t\t\t<table _type='array'>\n"
-										+"\t\t\t\t\t\t<tr>\n"
-											+"\t\t\t\t\t\t\t<th>b</th>\n"
-										+"\t\t\t\t\t\t</tr>\n"
-										+"\t\t\t\t\t\t<tr>\n"
-											+"\t\t\t\t\t\t\t<td>foo</td>\n"
-										+"\t\t\t\t\t\t</tr>\n"
-									+"\t\t\t\t\t</table>\n"
-								+"\t\t\t\t</li>\n"
-							+"\t\t\t</ul>\n"
-						+"\t\t</td>\n"
-					+"\t</tr>\n"
-					+"\t<tr>\n"
-						+"\t\t<td>b2</td>\n"
-						+"\t\t<td>\n"
-							+"\t\t\t<ul>\n"
-								+"\t\t\t\t<li>\n"
-									+"\t\t\t\t\t<table _type='array'>\n"
-										+"\t\t\t\t\t\t<tr>\n"
-											+"\t\t\t\t\t\t\t<th>b</th>\n"
-										+"\t\t\t\t\t\t</tr>\n"
-										+"\t\t\t\t\t\t<tr>\n"
-											+"\t\t\t\t\t\t\t<td>foo</td>\n"
-										+"\t\t\t\t\t\t</tr>\n"
-									+"\t\t\t\t\t</table>\n"
-								+"\t\t\t\t</li>\n"
-							+"\t\t\t</ul>\n"
-						+"\t\t</td>\n"
-					+"\t</tr>\n"
-					+"\t<tr>\n"
-						+"\t\t<td>b3</td>\n"
-						+"\t\t<td>\n"
-							+"\t\t\t<ul>\n"
-								+"\t\t\t\t<li>\n"
-									+"\t\t\t\t\t<table _type='array'>\n"
-										+"\t\t\t\t\t\t<tr>\n"
-											+"\t\t\t\t\t\t\t<th>b</th>\n"
-										+"\t\t\t\t\t\t</tr>\n"
-										+"\t\t\t\t\t\t<tr _type='B'>\n"
-											+"\t\t\t\t\t\t\t<td>foo</td>\n"
-										+"\t\t\t\t\t\t</tr>\n"
-									+"\t\t\t\t\t</table>\n"
-								+"\t\t\t\t</li>\n"
-							+"\t\t\t</ul>\n"
-						+"\t\t</td>\n"
-					+"\t</tr>\n"
-				+"</table>\n"
-			},
-			{
-				"BeanWithPropertiesWithMapTypeNames",
-				new BeanWithPropertiesWithMapTypeNames().init(),
-				"<table>"
-					+"<tr>"
-						+"<td>b1</td>"
-						+"<td>"
-							+"<table>"
-								+"<tr>"
-									+"<td>k1</td>"
-									+"<td>"
-										+"<table>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>b2</td>"
+							+"<td>"
+								+"<ul>"
+									+"<li>"
+										+"<table _type='array'>"
 											+"<tr>"
-												+"<td>b</td>"
+												+"<th>b</th>"
+											+"</tr>"
+											+"<tr _type='B'>"
 												+"<td>foo</td>"
 											+"</tr>"
 										+"</table>"
-									+"</td>"
-								+"</tr>"
-							+"</table>"
-						+"</td>"
-					+"</tr>"
-					+"<tr>"
-						+"<td>b2</td>"
-						+"<td>"
-							+"<table>"
-								+"<tr>"
-									+"<td>k2</td>"
-									+"<td>"
-										+"<table _type='B'>"
-											+"<tr>"
-												+"<td>b</td>"
-												+"<td>foo</td>"
-											+"</tr>"
-										+"</table>"
-									+"</td>"
-								+"</tr>"
-							+"</table>"
-						+"</td>"
-					+"</tr>"
-				+"</table>",
-				"<table>\n"
-					+"\t<tr>\n"
-						+"\t\t<td>b1</td>\n"
-						+"\t\t<td>\n"
-							+"\t\t\t<table>\n"
-								+"\t\t\t\t<tr>\n"
-									+"\t\t\t\t\t<td>k1</td>\n"
-									+"\t\t\t\t\t<td>\n"
-										+"\t\t\t\t\t\t<table>\n"
-											+"\t\t\t\t\t\t\t<tr>\n"
-												+"\t\t\t\t\t\t\t\t<td>b</td>\n"
-												+"\t\t\t\t\t\t\t\t<td>foo</td>\n"
-											+"\t\t\t\t\t\t\t</tr>\n"
-										+"\t\t\t\t\t\t</table>\n"
-									+"\t\t\t\t\t</td>\n"
-								+"\t\t\t\t</tr>\n"
-							+"\t\t\t</table>\n"
-						+"\t\t</td>\n"
-					+"\t</tr>\n"
-					+"\t<tr>\n"
-						+"\t\t<td>b2</td>\n"
-						+"\t\t<td>\n"
-							+"\t\t\t<table>\n"
-								+"\t\t\t\t<tr>\n"
-									+"\t\t\t\t\t<td>k2</td>\n"
-									+"\t\t\t\t\t<td>\n"
-										+"\t\t\t\t\t\t<table _type='B'>\n"
-											+"\t\t\t\t\t\t\t<tr>\n"
-												+"\t\t\t\t\t\t\t\t<td>b</td>\n"
-												+"\t\t\t\t\t\t\t\t<td>foo</td>\n"
-											+"\t\t\t\t\t\t\t</tr>\n"
-										+"\t\t\t\t\t\t</table>\n"
-									+"\t\t\t\t\t</td>\n"
-								+"\t\t\t\t</tr>\n"
-							+"\t\t\t</table>\n"
-						+"\t\t</td>\n"
-					+"\t</tr>\n"
-				+"</table>\n",
-			},
-			{
-				"LinkBean-1",
-				new LinkBean().init(),
-				"<a href='http://apache.org'>foo</a>",
-				"<a href='http://apache.org'>foo</a>"
-			},
-			{
-				"LinkBean-2",
-				new LinkBean[]{new LinkBean().init(),new LinkBean().init()},
-				"<ul><li><a href='http://apache.org'>foo</a></li><li><a href='http://apache.org'>foo</a></li></ul>",
-				"<ul>\n\t<li><a href='http://apache.org'>foo</a></li>\n\t<li><a href='http://apache.org'>foo</a></li>\n</ul>\n"
-			},
-			{
-				"ListWithLinkBeans",
-				new ListWithLinkBeans().append(new LinkBean().init()).append(new LinkBean().init()),
-				"<ul><li><a href='http://apache.org'>foo</a></li><li><a href='http://apache.org'>foo</a></li></ul>",
-				"<ul>\n\t<li><a href='http://apache.org'>foo</a></li>\n\t<li><a href='http://apache.org'>foo</a></li>\n</ul>\n"
-			},
-			{
-				"BeanWithLinkBeanProperties",
-				new BeanWithLinkBeanProperties().init(),
-				"<table>"
-					+"<tr>"
-						+"<td>a</td>"
-						+"<td><a href='http://apache.org'>foo</a></td>"
-					+"</tr>"
-					+"<tr>"
-						+"<td>b</td>"
-						+"<td>"
-							+"<ul>"
-								+"<li><a href='http://apache.org'>foo</a></li>"
-							+"</ul>"
-						+"</td>"
-					+"</tr>"
-					+"<tr>"
-						+"<td>c</td>"
-						+"<td>"
-							+"<table>"
-								+"<tr>"
-									+"<td>c1</td>"
-									+"<td><a href='http://apache.org'>foo</a></td>"
-								+"</tr>"
-							+"</table>"
-						+"</td>"
-					+"</tr>"
-				+"</table>",
-				"<table>\n"
-					+"\t<tr>\n"
-						+"\t\t<td>a</td>\n"
-						+"\t\t<td><a href='http://apache.org'>foo</a></td>\n"
-					+"\t</tr>\n"
-					+"\t<tr>\n"
-						+"\t\t<td>b</td>\n"
-						+"\t\t<td>\n"
-							+"\t\t\t<ul>\n"
-								+"\t\t\t\t<li><a href='http://apache.org'>foo</a></li>\n"
-							+"\t\t\t</ul>\n"
-						+"\t\t</td>\n"
-					+"\t</tr>\n"
-					+"\t<tr>\n"
-						+"\t\t<td>c</td>\n"
-						+"\t\t<td>\n"
-							+"\t\t\t<table>\n"
-								+"\t\t\t\t<tr>\n"
-									+"\t\t\t\t\t<td>c1</td>\n"
-									+"\t\t\t\t\t<td><a href='http://apache.org'>foo</a></td>\n"
-								+"\t\t\t\t</tr>\n"
-							+"\t\t\t</table>\n"
-						+"\t\t</td>\n"
-					+"\t</tr>\n"
-				+"</table>\n"
-			},
-			{
-				"BeanWithSpecialCharacters",
-				new BeanWithSpecialCharacters().init(),
-				"<table><tr><td>a</td><td><sp> </sp> <bs/><ff/><br/><sp>&#x2003;</sp>&#13; <sp> </sp></td></tr></table>",
-				"<table>\n\t<tr>\n\t\t<td>a</td>\n\t\t<td><sp> </sp> <bs/><ff/><br/><sp>&#x2003;</sp>&#13; <sp> </sp></td>\n\t</tr>\n</table>\n"
-			},
-			{
-				"BeanWithSpecialCharacters2",
-				new BeanWithSpecialCharacters().init(),
-				"<table><tr><td>a</td><td><sp> </sp> <bs/><ff/><br/><sp>&#x2003;</sp>&#13; <sp> </sp></td></tr></table>",
-				"<table>\n"
-				+"	<tr>\n"
-				+"		<td>a</td>\n"
-				+"		<td><sp> </sp> <bs/><ff/><br/><sp>&#x2003;</sp>&#13; <sp> </sp></td>\n"
-				+"	</tr>\n"
-				+"</table>\n"
-			},
-			{
-				"BeanWithNullProperties",
-				new BeanWithNullProperties(),
-				"<table></table>",
-				"<table>\n</table>\n"
-			},
-			{
-				"BeanWithAbstractFields",
-				new BeanWithAbstractFields().init(),
-				"<table>"
-					+"<tr>"
-						+"<td>a</td>"
-						+"<td>"
-							+"<table>"
-								+"<tr>"
-									+"<td>a</td>"
-									+"<td>foo</td>"
-								+"</tr>"
-							+"</table>"
-						+"</td>"
-					+"</tr>"
-					+"<tr>"
-						+"<td>ia</td>"
-						+"<td>"
-							+"<table _type='A'>"
-								+"<tr>"
-									+"<td>a</td>"
-									+"<td>foo</td>"
-								+"</tr>"
-							+"</table>"
-						+"</td>"
-					+"</tr>"
-					+"<tr>"
-						+"<td>aa</td>"
-						+"<td>"
-							+"<table _type='A'>"
-								+"<tr>"
-									+"<td>a</td>"
-									+"<td>foo</td>"
-								+"</tr>"
-							+"</table>"
-						+"</td>"
-					+"</tr>"
-					+"<tr>"
-						+"<td>o</td>"
-						+"<td>"
-							+"<table _type='A'>"
-								+"<tr>"
-									+"<td>a</td>"
-									+"<td>foo</td>"
-								+"</tr>"
-							+"</table>"
-						+"</td>"
-					+"</tr>"
-				+"</table>",
-				"<table>\n"
-					+"\t<tr>\n"
-						+"\t\t<td>a</td>\n"
-						+"\t\t<td>\n"
-							+"\t\t\t<table>\n"
-								+"\t\t\t\t<tr>\n"
-									+"\t\t\t\t\t<td>a</td>\n"
-									+"\t\t\t\t\t<td>foo</td>\n"
-								+"\t\t\t\t</tr>\n"
-							+"\t\t\t</table>\n"
-						+"\t\t</td>\n"
-					+"\t</tr>\n"
-					+"\t<tr>\n"
-						+"\t\t<td>ia</td>\n"
-						+"\t\t<td>\n"
-							+"\t\t\t<table _type='A'>\n"
-								+"\t\t\t\t<tr>\n"
-									+"\t\t\t\t\t<td>a</td>\n"
-									+"\t\t\t\t\t<td>foo</td>\n"
-								+"\t\t\t\t</tr>\n"
-							+"\t\t\t</table>\n"
-						+"\t\t</td>\n"
-					+"\t</tr>\n"
-					+"\t<tr>\n"
-						+"\t\t<td>aa</td>\n"
-						+"\t\t<td>\n"
-							+"\t\t\t<table _type='A'>\n"
-								+"\t\t\t\t<tr>\n"
-									+"\t\t\t\t\t<td>a</td>\n"
-									+"\t\t\t\t\t<td>foo</td>\n"
-								+"\t\t\t\t</tr>\n"
-							+"\t\t\t</table>\n"
-						+"\t\t</td>\n"
-					+"\t</tr>\n"
-					+"\t<tr>\n"
-						+"\t\t<td>o</td>\n"
-						+"\t\t<td>\n"
-							+"\t\t\t<table _type='A'>\n"
-								+"\t\t\t\t<tr>\n"
-									+"\t\t\t\t\t<td>a</td>\n"
-									+"\t\t\t\t\t<td>foo</td>\n"
-								+"\t\t\t\t</tr>\n"
-							+"\t\t\t</table>\n"
-						+"\t\t</td>\n"
-					+"\t</tr>\n"
-				+"</table>\n"
-			},
-			{
-				"BeanWithAbstractArrayFields",
-				new BeanWithAbstractArrayFields().init(),
-				"<table>"
-					+"<tr>"
-						+"<td>a</td>"
-						+"<td>"
-							+"<table _type='array'>"
-								+"<tr>"
-									+"<th>a</th>"
-								+"</tr>"
-								+"<tr>"
-									+"<td>foo</td>"
-								+"</tr>"
-							+"</table>"
-						+"</td>"
-					+"</tr>"
-					+"<tr>"
-						+"<td>ia1</td>"
-						+"<td>"
-							+"<table _type='array'>"
-								+"<tr>"
-									+"<th>a</th>"
-								+"</tr>"
-								+"<tr _type='A'>"
-									+"<td>foo</td>"
-								+"</tr>"
-							+"</table>"
-						+"</td>"
-					+"</tr>"
-					+"<tr>"
-						+"<td>ia2</td>"
-						+"<td>"
-							+"<table _type='array'>"
-								+"<tr>"
-									+"<th>a</th>"
-								+"</tr>"
-								+"<tr _type='A'>"
-									+"<td>foo</td>"
-								+"</tr>"
-							+"</table>"
+									+"</li>"
+								+"</ul>"
 							+"</td>"
-					+"</tr>"
-					+"<tr>"
-						+"<td>aa1</td>"
-						+"<td>"
-							+"<table _type='array'>"
-								+"<tr>"
-									+"<th>a</th>"
-								+"</tr>"
-								+"<tr _type='A'>"
-									+"<td>foo</td>"
-								+"</tr>"
-							+"</table>"
-						+"</td>"
-					+"</tr>"
-					+"<tr>"
-						+"<td>aa2</td>"
-						+"<td>"
-							+"<table _type='array'>"
-								+"<tr>"
-									+"<th>a</th>"
-								+"</tr>"
-								+"<tr _type='A'>"
-									+"<td>foo</td>"
-								+"</tr>"
-							+"</table>"
-						+"</td>"
-					+"</tr>"
-					+"<tr>"
-						+"<td>o1</td>"
-						+"<td>"
-							+"<table _type='array'>"
-								+"<tr>"
-									+"<th>a</th>"
-								+"</tr>"
-								+"<tr _type='A'>"
-									+"<td>foo</td>"
-								+"</tr>"
-							+"</table>"
-						+"</td>"
-					+"</tr>"
-					+"<tr>"
-						+"<td>o2</td>"
-						+"<td>"
-							+"<table _type='array'>"
-								+"<tr>"
-									+"<th>a</th>"
-								+"</tr>"
-								+"<tr _type='A'>"
-									+"<td>foo</td>"
-								+"</tr>"
-							+"</table>"
-						+"</td>"
-					+"</tr>"
-				+"</table>",
-				"<table>\n"
-					+"\t<tr>\n"
-						+"\t\t<td>a</td>\n"
-						+"\t\t<td>\n"
-							+"\t\t\t<table _type='array'>\n"
-								+"\t\t\t\t<tr>\n"
-									+"\t\t\t\t\t<th>a</th>\n"
-								+"\t\t\t\t</tr>\n"
-								+"\t\t\t\t<tr>\n"
-									+"\t\t\t\t\t<td>foo</td>\n"
-								+"\t\t\t\t</tr>\n"
-							+"\t\t\t</table>\n"
-						+"\t\t</td>\n"
-					+"\t</tr>\n"
-					+"\t<tr>\n"
-						+"\t\t<td>ia1</td>\n"
-						+"\t\t<td>\n"
-							+"\t\t\t<table _type='array'>\n"
-								+"\t\t\t\t<tr>\n"
-									+"\t\t\t\t\t<th>a</th>\n"
-								+"\t\t\t\t</tr>\n"
-								+"\t\t\t\t<tr _type='A'>\n"
-									+"\t\t\t\t\t<td>foo</td>\n"
-								+"\t\t\t\t</tr>\n"
-							+"\t\t\t</table>\n"
-						+"\t\t</td>\n"
-					+"\t</tr>\n"
-					+"\t<tr>\n"
-						+"\t\t<td>ia2</td>\n"
-						+"\t\t<td>\n"
-							+"\t\t\t<table _type='array'>\n"
-								+"\t\t\t\t<tr>\n"
-									+"\t\t\t\t\t<th>a</th>\n"
-								+"\t\t\t\t</tr>\n"
-								+"\t\t\t\t<tr _type='A'>\n"
-									+"\t\t\t\t\t<td>foo</td>\n"
-								+"\t\t\t\t</tr>\n"
-							+"\t\t\t</table>\n"
-						+"\t\t</td>\n"
-					+"\t</tr>\n"
-					+"\t<tr>\n"
-						+"\t\t<td>aa1</td>\n"
-						+"\t\t<td>\n"
-							+"\t\t\t<table _type='array'>\n"
-								+"\t\t\t\t<tr>\n"
-									+"\t\t\t\t\t<th>a</th>\n"
-								+"\t\t\t\t</tr>\n"
-								+"\t\t\t\t<tr _type='A'>\n"
-									+"\t\t\t\t\t<td>foo</td>\n"
-								+"\t\t\t\t</tr>\n"
-							+"\t\t\t</table>\n"
-						+"\t\t</td>\n"
-					+"\t</tr>\n"
-					+"\t<tr>\n"
-						+"\t\t<td>aa2</td>\n"
-						+"\t\t<td>\n"
-							+"\t\t\t<table _type='array'>\n"
-								+"\t\t\t\t<tr>\n"
-									+"\t\t\t\t\t<th>a</th>\n"
-								+"\t\t\t\t</tr>\n"
-								+"\t\t\t\t<tr _type='A'>\n"
-									+"\t\t\t\t\t<td>foo</td>\n"
-								+"\t\t\t\t</tr>\n"
-							+"\t\t\t</table>\n"
-						+"\t\t</td>\n"
-					+"\t</tr>\n"
-					+"\t<tr>\n"
-						+"\t\t<td>o1</td>\n"
-						+"\t\t<td>\n"
-							+"\t\t\t<table _type='array'>\n"
-								+"\t\t\t\t<tr>\n"
-									+"\t\t\t\t\t<th>a</th>\n"
-								+"\t\t\t\t</tr>\n"
-								+"\t\t\t\t<tr _type='A'>\n"
-									+"\t\t\t\t\t<td>foo</td>\n"
-								+"\t\t\t\t</tr>\n"
-							+"\t\t\t</table>\n"
-						+"\t\t</td>\n"
-					+"\t</tr>\n"
-					+"\t<tr>\n"
-						+"\t\t<td>o2</td>\n"
-						+"\t\t<td>\n"
-							+"\t\t\t<table _type='array'>\n"
-								+"\t\t\t\t<tr>\n"
-									+"\t\t\t\t\t<th>a</th>\n"
-								+"\t\t\t\t</tr>\n"
-								+"\t\t\t\t<tr _type='A'>\n"
-									+"\t\t\t\t\t<td>foo</td>\n"
-								+"\t\t\t\t</tr>\n"
-							+"\t\t\t</table>\n"
-						+"\t\t</td>\n"
-					+"\t</tr>\n"
-				+"</table>\n",
-			},
-			{
-				"BeanWithAbstractMapFields",
-				new BeanWithAbstractMapFields().init(),
-				"<table>"
-					+"<tr>"
-						+"<td>a</td>"
-						+"<td>"
-							+"<table>"
-								+"<tr>"
-									+"<td>k1</td>"
-									+"<td>"
-										+"<table>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>b3</td>"
+							+"<td>"
+								+"<ul>"
+									+"<li>"
+										+"<table _type='array'>"
 											+"<tr>"
-												+"<td>a</td>"
+												+"<th>b</th>"
+											+"</tr>"
+											+"<tr _type='B'>"
 												+"<td>foo</td>"
 											+"</tr>"
 										+"</table>"
-									+"</td>"
-								+"</tr>"
-							+"</table>"
-						+"</td>"
-					+"</tr>"
-					+"<tr>"
-						+"<td>b</td>"
-						+"<td>"
-							+"<table>"
-								+"<tr>"
-									+"<td>k2</td>"
-									+"<td>"
-										+"<table _type='A'>"
+									+"</li>"
+								+"</ul>"
+							+"</td>"
+						+"</tr>"
+					+"</table>",
+
+					"<table>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>b1</td>\n"
+							+"\t\t<td>\n"
+								+"\t\t\t<ul>\n"
+									+"\t\t\t\t<li>\n"
+										+"\t\t\t\t\t<table _type='array'>\n"
+											+"\t\t\t\t\t\t<tr>\n"
+												+"\t\t\t\t\t\t\t<th>b</th>\n"
+											+"\t\t\t\t\t\t</tr>\n"
+											+"\t\t\t\t\t\t<tr>\n"
+												+"\t\t\t\t\t\t\t<td>foo</td>\n"
+											+"\t\t\t\t\t\t</tr>\n"
+										+"\t\t\t\t\t</table>\n"
+									+"\t\t\t\t</li>\n"
+								+"\t\t\t</ul>\n"
+							+"\t\t</td>\n"
+						+"\t</tr>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>b2</td>\n"
+							+"\t\t<td>\n"
+								+"\t\t\t<ul>\n"
+									+"\t\t\t\t<li>\n"
+										+"\t\t\t\t\t<table _type='array'>\n"
+											+"\t\t\t\t\t\t<tr>\n"
+												+"\t\t\t\t\t\t\t<th>b</th>\n"
+											+"\t\t\t\t\t\t</tr>\n"
+											+"\t\t\t\t\t\t<tr _type='B'>\n"
+												+"\t\t\t\t\t\t\t<td>foo</td>\n"
+											+"\t\t\t\t\t\t</tr>\n"
+										+"\t\t\t\t\t</table>\n"
+									+"\t\t\t\t</li>\n"
+								+"\t\t\t</ul>\n"
+							+"\t\t</td>\n"
+						+"\t</tr>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>b3</td>\n"
+							+"\t\t<td>\n"
+								+"\t\t\t<ul>\n"
+									+"\t\t\t\t<li>\n"
+										+"\t\t\t\t\t<table _type='array'>\n"
+											+"\t\t\t\t\t\t<tr>\n"
+												+"\t\t\t\t\t\t\t<th>b</th>\n"
+											+"\t\t\t\t\t\t</tr>\n"
+											+"\t\t\t\t\t\t<tr _type='B'>\n"
+												+"\t\t\t\t\t\t\t<td>foo</td>\n"
+											+"\t\t\t\t\t\t</tr>\n"
+										+"\t\t\t\t\t</table>\n"
+									+"\t\t\t\t</li>\n"
+								+"\t\t\t</ul>\n"
+							+"\t\t</td>\n"
+						+"\t</tr>\n"
+					+"</table>\n",
+
+					"<table>"
+						+"<tr>"
+							+"<td>b1</td>"
+							+"<td>"
+								+"<ul>"
+									+"<li>"
+										+"<table _type='array'>"
 											+"<tr>"
-												+"<td>a</td>"
+												+"<th>b</th>"
+											+"</tr>"
+											+"<tr>"
 												+"<td>foo</td>"
 											+"</tr>"
 										+"</table>"
-									+"</td>"
-								+"</tr>"
-							+"</table>"
-						+"</td>"
-					+"</tr>"
-					+"<tr>"
-						+"<td>c</td>"
-						+"<td>"
-							+"<table>"
-								+"<tr>"
-									+"<td>k3</td>"
-									+"<td>"
-										+"<table _type='A'>"
+									+"</li>"
+								+"</ul>"
+							+"</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>b2</td>"
+							+"<td>"
+								+"<ul>"
+									+"<li>"
+										+"<table _type='array'>"
 											+"<tr>"
-												+"<td>a</td>"
+												+"<th>b</th>"
+											+"</tr>"
+											+"<tr _type='B'>"
 												+"<td>foo</td>"
 											+"</tr>"
 										+"</table>"
-									+"</td>"
-								+"</tr>"
-							+"</table>"
-						+"</td>"
-					+"</tr>"
-				+"</table>",
-				"<table>\n"
-					+"\t<tr>\n"
-						+"\t\t<td>a</td>\n"
-						+"\t\t<td>\n"
-							+"\t\t\t<table>\n"
-								+"\t\t\t\t<tr>\n"
-									+"\t\t\t\t\t<td>k1</td>\n"
-									+"\t\t\t\t\t<td>\n"
-										+"\t\t\t\t\t\t<table>\n"
-											+"\t\t\t\t\t\t\t<tr>\n"
-												+"\t\t\t\t\t\t\t\t<td>a</td>\n"
-												+"\t\t\t\t\t\t\t\t<td>foo</td>\n"
-											+"\t\t\t\t\t\t\t</tr>\n"
-										+"\t\t\t\t\t\t</table>\n"
-									+"\t\t\t\t\t</td>\n"
-								+"\t\t\t\t</tr>\n"
-							+"\t\t\t</table>\n"
-						+"\t\t</td>\n"
-					+"\t</tr>\n"
-					+"\t<tr>\n"
-						+"\t\t<td>b</td>\n"
-						+"\t\t<td>\n"
-							+"\t\t\t<table>\n"
-								+"\t\t\t\t<tr>\n"
-									+"\t\t\t\t\t<td>k2</td>\n"
-									+"\t\t\t\t\t<td>\n"
-										+"\t\t\t\t\t\t<table _type='A'>\n"
-											+"\t\t\t\t\t\t\t<tr>\n"
-												+"\t\t\t\t\t\t\t\t<td>a</td>\n"
-												+"\t\t\t\t\t\t\t\t<td>foo</td>\n"
-											+"\t\t\t\t\t\t\t</tr>\n"
-										+"\t\t\t\t\t\t</table>\n"
-									+"\t\t\t\t\t</td>\n"
-								+"\t\t\t\t</tr>\n"
-							+"\t\t\t</table>\n"
-						+"\t\t</td>\n"
-					+"\t</tr>\n"
-					+"\t<tr>\n"
-						+"\t\t<td>c</td>\n"
-						+"\t\t<td>\n"
-							+"\t\t\t<table>\n"
-								+"\t\t\t\t<tr>\n"
-									+"\t\t\t\t\t<td>k3</td>\n"
-									+"\t\t\t\t\t<td>\n"
-										+"\t\t\t\t\t\t<table _type='A'>\n"
-											+"\t\t\t\t\t\t\t<tr>\n"
-												+"\t\t\t\t\t\t\t\t<td>a</td>\n"
-												+"\t\t\t\t\t\t\t\t<td>foo</td>\n"
-											+"\t\t\t\t\t\t\t</tr>\n"
-										+"\t\t\t\t\t\t</table>\n"
-									+"\t\t\t\t\t</td>\n"
-								+"\t\t\t\t</tr>\n"
-							+"\t\t\t</table>\n"
-						+"\t\t</td>\n"
-					+"\t</tr>\n"
-				+"</table>\n"
+									+"</li>"
+								+"</ul>"
+							+"</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>b3</td>"
+							+"<td>"
+								+"<ul>"
+									+"<li>"
+										+"<table _type='array'>"
+											+"<tr>"
+												+"<th>b</th>"
+											+"</tr>"
+											+"<tr _type='B'>"
+												+"<td>foo</td>"
+											+"</tr>"
+										+"</table>"
+									+"</li>"
+								+"</ul>"
+							+"</td>"
+						+"</tr>"
+					+"</table>"
+				)
+				{
+					public void verify(BeanWithPropertiesWith2dArrayTypeNames o) {
+						assertType(B.class, o.b2[0][0]);
+						assertType(B.class, o.b3[0][0]);
+					}
+				}
 			},
-			{
-				"BeanWithWhitespaceTextFields-1",
-				new BeanWithWhitespaceTextFields().init(null),
-				"<object></object>",
-				"<object></object>\n",
+			{	/* 23 */
+				new Input<BeanWithPropertiesWithMapTypeNames>(
+					"BeanWithPropertiesWithMapTypeNames",
+					BeanWithPropertiesWithMapTypeNames.class,
+					new BeanWithPropertiesWithMapTypeNames().init(),
+					"<table>"
+						+"<tr>"
+							+"<td>b1</td>"
+							+"<td>"
+								+"<table>"
+									+"<tr>"
+										+"<td>k1</td>"
+										+"<td>"
+											+"<table>"
+												+"<tr>"
+													+"<td>b</td>"
+													+"<td>foo</td>"
+												+"</tr>"
+											+"</table>"
+										+"</td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>b2</td>"
+							+"<td>"
+								+"<table>"
+									+"<tr>"
+										+"<td>k2</td>"
+										+"<td>"
+											+"<table _type='B'>"
+												+"<tr>"
+													+"<td>b</td>"
+													+"<td>foo</td>"
+												+"</tr>"
+											+"</table>"
+										+"</td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+					+"</table>",
+
+					"<table>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>b1</td>\n"
+							+"\t\t<td>\n"
+								+"\t\t\t<table>\n"
+									+"\t\t\t\t<tr>\n"
+										+"\t\t\t\t\t<td>k1</td>\n"
+										+"\t\t\t\t\t<td>\n"
+											+"\t\t\t\t\t\t<table>\n"
+												+"\t\t\t\t\t\t\t<tr>\n"
+													+"\t\t\t\t\t\t\t\t<td>b</td>\n"
+													+"\t\t\t\t\t\t\t\t<td>foo</td>\n"
+												+"\t\t\t\t\t\t\t</tr>\n"
+											+"\t\t\t\t\t\t</table>\n"
+										+"\t\t\t\t\t</td>\n"
+									+"\t\t\t\t</tr>\n"
+								+"\t\t\t</table>\n"
+							+"\t\t</td>\n"
+						+"\t</tr>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>b2</td>\n"
+							+"\t\t<td>\n"
+								+"\t\t\t<table>\n"
+									+"\t\t\t\t<tr>\n"
+										+"\t\t\t\t\t<td>k2</td>\n"
+										+"\t\t\t\t\t<td>\n"
+											+"\t\t\t\t\t\t<table _type='B'>\n"
+												+"\t\t\t\t\t\t\t<tr>\n"
+													+"\t\t\t\t\t\t\t\t<td>b</td>\n"
+													+"\t\t\t\t\t\t\t\t<td>foo</td>\n"
+												+"\t\t\t\t\t\t\t</tr>\n"
+											+"\t\t\t\t\t\t</table>\n"
+										+"\t\t\t\t\t</td>\n"
+									+"\t\t\t\t</tr>\n"
+								+"\t\t\t</table>\n"
+							+"\t\t</td>\n"
+						+"\t</tr>\n"
+					+"</table>\n",
+					
+					"<table>"
+						+"<tr>"
+							+"<td>b1</td>"
+							+"<td>"
+								+"<table>"
+									+"<tr>"
+										+"<td>k1</td>"
+										+"<td>"
+											+"<table>"
+												+"<tr>"
+													+"<td>b</td>"
+													+"<td>foo</td>"
+												+"</tr>"
+											+"</table>"
+										+"</td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>b2</td>"
+							+"<td>"
+								+"<table>"
+									+"<tr>"
+										+"<td>k2</td>"
+										+"<td>"
+											+"<table _type='B'>"
+												+"<tr>"
+													+"<td>b</td>"
+													+"<td>foo</td>"
+												+"</tr>"
+											+"</table>"
+										+"</td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+					+"</table>"
+				)
+				{
+					public void verify(BeanWithPropertiesWithMapTypeNames o) {
+						assertType(B.class, o.b1.get("k1"));
+						assertType(B.class, o.b2.get("k2"));
+					}
+				}
 			},
-			{
-				"BeanWithWhitespaceTextFields-2",
-				new BeanWithWhitespaceTextFields().init(""),
-				"<object><sp/></object>",
-				"<object><sp/></object>\n",
+			{	/* 24 */
+				new Input<LinkBean>(
+					"LinkBean-1",
+					LinkBean.class,
+					new LinkBean().init(),
+					"<a href='http://apache.org'>foo</a>",
+					"<a href='http://apache.org'>foo</a>",
+					"<a href='http://apache.org'>foo</a>"
+				)
+				{
+					public void verify(LinkBean o) {
+						assertType(LinkBean.class, o);
+					}
+				}
 			},
-			{
-				"BeanWithWhitespaceTextFields-3",
-				new BeanWithWhitespaceTextFields().init(" "),
-				"<object><sp> </sp></object>",
-				"<object><sp> </sp></object>\n",
+			{	/* 25 */
+				new Input<LinkBean[]>(
+					"LinkBean-2",
+					LinkBean[].class,
+					new LinkBean[]{new LinkBean().init(),new LinkBean().init()},
+					"<ul><li><a href='http://apache.org'>foo</a></li><li><a href='http://apache.org'>foo</a></li></ul>",
+					"<ul>\n\t<li><a href='http://apache.org'>foo</a></li>\n\t<li><a href='http://apache.org'>foo</a></li>\n</ul>\n",
+					"<ul><li><a href='http://apache.org'>foo</a></li><li><a href='http://apache.org'>foo</a></li></ul>"
+				)
+				{
+					public void verify(LinkBean[] o) {
+						assertType(LinkBean.class, o[0]);
+					}
+				}
 			},
-			{
-				"BeanWithWhitespaceTextFields-4",
-				new BeanWithWhitespaceTextFields().init("  "),
-				"<object><sp> </sp><sp> </sp></object>",
-				"<object><sp> </sp><sp> </sp></object>\n",
+			{	/* 26 */
+				new Input<List<LinkBean>>(
+					"ListWithLinkBeans",
+					ListWithLinkBeans.class,
+					new ListWithLinkBeans().append(new LinkBean().init()).append(new LinkBean().init()),
+					"<ul><li><a href='http://apache.org'>foo</a></li><li><a href='http://apache.org'>foo</a></li></ul>",
+					"<ul>\n\t<li><a href='http://apache.org'>foo</a></li>\n\t<li><a href='http://apache.org'>foo</a></li>\n</ul>\n",
+					"<ul><li><a href='http://apache.org'>foo</a></li><li><a href='http://apache.org'>foo</a></li></ul>"
+				)
+				{
+					public void verify(List<LinkBean> o) {
+						assertType(LinkBean.class, o.get(0));
+					}
+				}
 			},
-			{
-				"BeanWithWhitespaceTextFields-5",
-				new BeanWithWhitespaceTextFields().init("  foobar  "),
-				"<object><sp> </sp> foobar <sp> </sp></object>",
-				"<object><sp> </sp> foobar <sp> </sp></object>\n",
+			{	/* 27 */
+				new Input<BeanWithLinkBeanProperties>(
+					"BeanWithLinkBeanProperties",
+					BeanWithLinkBeanProperties.class,
+					new BeanWithLinkBeanProperties().init(),
+					"<table>"
+						+"<tr>"
+							+"<td>a</td>"
+							+"<td><a href='http://apache.org'>foo</a></td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>b</td>"
+							+"<td>"
+								+"<ul>"
+									+"<li><a href='http://apache.org'>foo</a></li>"
+								+"</ul>"
+							+"</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>c</td>"
+							+"<td>"
+								+"<table>"
+									+"<tr>"
+										+"<td>c1</td>"
+										+"<td><a href='http://apache.org'>foo</a></td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+					+"</table>",
+
+					"<table>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>a</td>\n"
+							+"\t\t<td><a href='http://apache.org'>foo</a></td>\n"
+						+"\t</tr>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>b</td>\n"
+							+"\t\t<td>\n"
+								+"\t\t\t<ul>\n"
+									+"\t\t\t\t<li><a href='http://apache.org'>foo</a></li>\n"
+								+"\t\t\t</ul>\n"
+							+"\t\t</td>\n"
+						+"\t</tr>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>c</td>\n"
+							+"\t\t<td>\n"
+								+"\t\t\t<table>\n"
+									+"\t\t\t\t<tr>\n"
+										+"\t\t\t\t\t<td>c1</td>\n"
+										+"\t\t\t\t\t<td><a href='http://apache.org'>foo</a></td>\n"
+									+"\t\t\t\t</tr>\n"
+								+"\t\t\t</table>\n"
+							+"\t\t</td>\n"
+						+"\t</tr>\n"
+					+"</table>\n",
+						
+					"<table>"
+						+"<tr>"
+							+"<td>a</td>"
+							+"<td><a href='http://apache.org'>foo</a></td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>b</td>"
+							+"<td>"
+								+"<ul>"
+									+"<li><a href='http://apache.org'>foo</a></li>"
+								+"</ul>"
+							+"</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>c</td>"
+							+"<td>"
+								+"<table>"
+									+"<tr>"
+										+"<td>c1</td>"
+										+"<td><a href='http://apache.org'>foo</a></td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+					+"</table>"
+				)
+				{
+					public void verify(BeanWithLinkBeanProperties o) {
+						assertType(LinkBean.class, o.a);
+						assertType(LinkBean.class, o.b.get(0));
+						assertType(LinkBean.class, o.c.get("c1"));
+					}
+				}
 			},
-			{
-				"BeanWithWhitespaceTextPwsFields-1",
-				new BeanWithWhitespaceTextPwsFields().init(null),
-				"<object></object>",
-				"<object></object>\n",
+			{	/* 28 */
+				new Input<BeanWithSpecialCharacters>(
+					"BeanWithSpecialCharacters",
+					BeanWithSpecialCharacters.class,
+					new BeanWithSpecialCharacters().init(),
+					"<table><tr><td>a</td><td><sp> </sp> <bs/><ff/><br/><sp>&#x2003;</sp>&#13; <sp> </sp></td></tr></table>",
+					"<table>\n\t<tr>\n\t\t<td>a</td>\n\t\t<td><sp> </sp> <bs/><ff/><br/><sp>&#x2003;</sp>&#13; <sp> </sp></td>\n\t</tr>\n</table>\n",
+					"<table><tr><td>a</td><td><sp> </sp> <bs/><ff/><br/><sp>&#x2003;</sp>&#13; <sp> </sp></td></tr></table>"
+				)
+				{
+					public void verify(BeanWithSpecialCharacters o) {
+						assertType(BeanWithSpecialCharacters.class, o);
+					}
+				}
 			},
-			{
-				"BeanWithWhitespaceTextPwsFields-2",
-				new BeanWithWhitespaceTextPwsFields().init(""),
-				"<object><sp/></object>",
-				"<object><sp/></object>\n",
+			{	/* 29 */
+				new Input<BeanWithSpecialCharacters>(
+					"BeanWithSpecialCharacters-2",
+					BeanWithSpecialCharacters.class,
+					new BeanWithSpecialCharacters().init(),
+					"<table><tr><td>a</td><td><sp> </sp> <bs/><ff/><br/><sp>&#x2003;</sp>&#13; <sp> </sp></td></tr></table>",
+
+					"<table>\n"
+					+"	<tr>\n"
+					+"		<td>a</td>\n"
+					+"		<td><sp> </sp> <bs/><ff/><br/><sp>&#x2003;</sp>&#13; <sp> </sp></td>\n"
+					+"	</tr>\n"
+					+"</table>\n",
+				
+					"<table><tr><td>a</td><td><sp> </sp> <bs/><ff/><br/><sp>&#x2003;</sp>&#13; <sp> </sp></td></tr></table>"
+				)
+				{
+					public void verify(BeanWithSpecialCharacters o) {
+						assertType(BeanWithSpecialCharacters.class, o);
+					}
+				}
 			},
-			{
-				"BeanWithWhitespaceTextPwsFields-3",
-				new BeanWithWhitespaceTextPwsFields().init(" "),
-				"<object> </object>",
-				"<object> </object>\n",
+			{	/* 30 */
+				new Input<BeanWithNullProperties>(
+					"BeanWithNullProperties",
+					BeanWithNullProperties.class,
+					new BeanWithNullProperties(),
+					"<table></table>",
+					"<table>\n</table>\n",
+					"<table></table>"
+				)
+				{
+					public void verify(BeanWithNullProperties o) {
+						assertType(BeanWithNullProperties.class, o);
+					}
+				}
 			},
-			{
-				"BeanWithWhitespaceTextPwsFields-4",
-				new BeanWithWhitespaceTextPwsFields().init("  "),
-				"<object>  </object>",
-				"<object>  </object>\n",
+			{	/* 31 */
+				new Input<BeanWithAbstractFields>(
+					"BeanWithAbstractFields",
+					BeanWithAbstractFields.class,
+					new BeanWithAbstractFields().init(),
+					"<table>"
+						+"<tr>"
+							+"<td>a</td>"
+							+"<td>"
+								+"<table>"
+									+"<tr>"
+										+"<td>a</td>"
+										+"<td>foo</td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>ia</td>"
+							+"<td>"
+								+"<table _type='A'>"
+									+"<tr>"
+										+"<td>a</td>"
+										+"<td>foo</td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>aa</td>"
+							+"<td>"
+								+"<table _type='A'>"
+									+"<tr>"
+										+"<td>a</td>"
+										+"<td>foo</td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>o</td>"
+							+"<td>"
+								+"<table _type='A'>"
+									+"<tr>"
+										+"<td>a</td>"
+										+"<td>foo</td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+					+"</table>",
+
+					"<table>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>a</td>\n"
+							+"\t\t<td>\n"
+								+"\t\t\t<table>\n"
+									+"\t\t\t\t<tr>\n"
+										+"\t\t\t\t\t<td>a</td>\n"
+										+"\t\t\t\t\t<td>foo</td>\n"
+									+"\t\t\t\t</tr>\n"
+								+"\t\t\t</table>\n"
+							+"\t\t</td>\n"
+						+"\t</tr>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>ia</td>\n"
+							+"\t\t<td>\n"
+								+"\t\t\t<table _type='A'>\n"
+									+"\t\t\t\t<tr>\n"
+										+"\t\t\t\t\t<td>a</td>\n"
+										+"\t\t\t\t\t<td>foo</td>\n"
+									+"\t\t\t\t</tr>\n"
+								+"\t\t\t</table>\n"
+							+"\t\t</td>\n"
+						+"\t</tr>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>aa</td>\n"
+							+"\t\t<td>\n"
+								+"\t\t\t<table _type='A'>\n"
+									+"\t\t\t\t<tr>\n"
+										+"\t\t\t\t\t<td>a</td>\n"
+										+"\t\t\t\t\t<td>foo</td>\n"
+									+"\t\t\t\t</tr>\n"
+								+"\t\t\t</table>\n"
+							+"\t\t</td>\n"
+						+"\t</tr>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>o</td>\n"
+							+"\t\t<td>\n"
+								+"\t\t\t<table _type='A'>\n"
+									+"\t\t\t\t<tr>\n"
+										+"\t\t\t\t\t<td>a</td>\n"
+										+"\t\t\t\t\t<td>foo</td>\n"
+									+"\t\t\t\t</tr>\n"
+								+"\t\t\t</table>\n"
+							+"\t\t</td>\n"
+						+"\t</tr>\n"
+					+"</table>\n",
+					
+					"<table>"
+						+"<tr>"
+							+"<td>a</td>"
+							+"<td>"
+								+"<table>"
+									+"<tr>"
+										+"<td>a</td>"
+										+"<td>foo</td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>ia</td>"
+							+"<td>"
+								+"<table _type='A'>"
+									+"<tr>"
+										+"<td>a</td>"
+										+"<td>foo</td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>aa</td>"
+							+"<td>"
+								+"<table _type='A'>"
+									+"<tr>"
+										+"<td>a</td>"
+										+"<td>foo</td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>o</td>"
+							+"<td>"
+								+"<table _type='A'>"
+									+"<tr>"
+										+"<td>a</td>"
+										+"<td>foo</td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+					+"</table>"
+				)
+				{
+					public void verify(BeanWithAbstractFields o) {
+						assertType(A.class, o.a);
+						assertType(A.class, o.ia);
+						assertType(A.class, o.aa);
+						assertType(A.class, o.o);
+					}
+				}
 			},
-			{
-				"BeanWithWhitespaceTextPwsFields-5",
-				new BeanWithWhitespaceTextPwsFields().init("  foobar  "),
-				"<object>  foobar  </object>",
-				"<object>  foobar  </object>\n",
+			{	/* 32 */
+				new Input<BeanWithAbstractArrayFields>(
+					"BeanWithAbstractArrayFields",
+					BeanWithAbstractArrayFields.class,
+					new BeanWithAbstractArrayFields().init(),
+					"<table>"
+						+"<tr>"
+							+"<td>a</td>"
+							+"<td>"
+								+"<table _type='array'>"
+									+"<tr>"
+										+"<th>a</th>"
+									+"</tr>"
+									+"<tr>"
+										+"<td>foo</td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>ia1</td>"
+							+"<td>"
+								+"<table _type='array'>"
+									+"<tr>"
+										+"<th>a</th>"
+									+"</tr>"
+									+"<tr _type='A'>"
+										+"<td>foo</td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>ia2</td>"
+							+"<td>"
+								+"<table _type='array'>"
+									+"<tr>"
+										+"<th>a</th>"
+									+"</tr>"
+									+"<tr _type='A'>"
+										+"<td>foo</td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>aa1</td>"
+							+"<td>"
+								+"<table _type='array'>"
+									+"<tr>"
+										+"<th>a</th>"
+									+"</tr>"
+									+"<tr _type='A'>"
+										+"<td>foo</td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>aa2</td>"
+							+"<td>"
+								+"<table _type='array'>"
+									+"<tr>"
+										+"<th>a</th>"
+									+"</tr>"
+									+"<tr _type='A'>"
+										+"<td>foo</td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>o1</td>"
+							+"<td>"
+								+"<table _type='array'>"
+									+"<tr>"
+										+"<th>a</th>"
+									+"</tr>"
+									+"<tr _type='A'>"
+										+"<td>foo</td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>o2</td>"
+							+"<td>"
+								+"<table _type='array'>"
+									+"<tr>"
+										+"<th>a</th>"
+									+"</tr>"
+									+"<tr _type='A'>"
+										+"<td>foo</td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+					+"</table>",
+
+					"<table>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>a</td>\n"
+							+"\t\t<td>\n"
+								+"\t\t\t<table _type='array'>\n"
+									+"\t\t\t\t<tr>\n"
+										+"\t\t\t\t\t<th>a</th>\n"
+									+"\t\t\t\t</tr>\n"
+									+"\t\t\t\t<tr>\n"
+										+"\t\t\t\t\t<td>foo</td>\n"
+									+"\t\t\t\t</tr>\n"
+								+"\t\t\t</table>\n"
+							+"\t\t</td>\n"
+						+"\t</tr>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>ia1</td>\n"
+							+"\t\t<td>\n"
+								+"\t\t\t<table _type='array'>\n"
+									+"\t\t\t\t<tr>\n"
+										+"\t\t\t\t\t<th>a</th>\n"
+									+"\t\t\t\t</tr>\n"
+									+"\t\t\t\t<tr _type='A'>\n"
+										+"\t\t\t\t\t<td>foo</td>\n"
+									+"\t\t\t\t</tr>\n"
+								+"\t\t\t</table>\n"
+							+"\t\t</td>\n"
+						+"\t</tr>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>ia2</td>\n"
+							+"\t\t<td>\n"
+								+"\t\t\t<table _type='array'>\n"
+									+"\t\t\t\t<tr>\n"
+										+"\t\t\t\t\t<th>a</th>\n"
+									+"\t\t\t\t</tr>\n"
+									+"\t\t\t\t<tr _type='A'>\n"
+										+"\t\t\t\t\t<td>foo</td>\n"
+									+"\t\t\t\t</tr>\n"
+								+"\t\t\t</table>\n"
+							+"\t\t</td>\n"
+						+"\t</tr>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>aa1</td>\n"
+							+"\t\t<td>\n"
+								+"\t\t\t<table _type='array'>\n"
+									+"\t\t\t\t<tr>\n"
+										+"\t\t\t\t\t<th>a</th>\n"
+									+"\t\t\t\t</tr>\n"
+									+"\t\t\t\t<tr _type='A'>\n"
+										+"\t\t\t\t\t<td>foo</td>\n"
+									+"\t\t\t\t</tr>\n"
+								+"\t\t\t</table>\n"
+							+"\t\t</td>\n"
+						+"\t</tr>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>aa2</td>\n"
+							+"\t\t<td>\n"
+								+"\t\t\t<table _type='array'>\n"
+									+"\t\t\t\t<tr>\n"
+										+"\t\t\t\t\t<th>a</th>\n"
+									+"\t\t\t\t</tr>\n"
+									+"\t\t\t\t<tr _type='A'>\n"
+										+"\t\t\t\t\t<td>foo</td>\n"
+									+"\t\t\t\t</tr>\n"
+								+"\t\t\t</table>\n"
+							+"\t\t</td>\n"
+						+"\t</tr>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>o1</td>\n"
+							+"\t\t<td>\n"
+								+"\t\t\t<table _type='array'>\n"
+									+"\t\t\t\t<tr>\n"
+										+"\t\t\t\t\t<th>a</th>\n"
+									+"\t\t\t\t</tr>\n"
+									+"\t\t\t\t<tr _type='A'>\n"
+										+"\t\t\t\t\t<td>foo</td>\n"
+									+"\t\t\t\t</tr>\n"
+								+"\t\t\t</table>\n"
+							+"\t\t</td>\n"
+						+"\t</tr>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>o2</td>\n"
+							+"\t\t<td>\n"
+								+"\t\t\t<table _type='array'>\n"
+									+"\t\t\t\t<tr>\n"
+										+"\t\t\t\t\t<th>a</th>\n"
+									+"\t\t\t\t</tr>\n"
+									+"\t\t\t\t<tr _type='A'>\n"
+										+"\t\t\t\t\t<td>foo</td>\n"
+									+"\t\t\t\t</tr>\n"
+								+"\t\t\t</table>\n"
+							+"\t\t</td>\n"
+						+"\t</tr>\n"
+					+"</table>\n",
+
+					"<table>"
+						+"<tr>"
+							+"<td>a</td>"
+							+"<td>"
+								+"<table _type='array'>"
+									+"<tr>"
+										+"<th>a</th>"
+									+"</tr>"
+									+"<tr>"
+										+"<td>foo</td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>ia1</td>"
+							+"<td>"
+								+"<table _type='array'>"
+									+"<tr>"
+										+"<th>a</th>"
+									+"</tr>"
+									+"<tr _type='A'>"
+										+"<td>foo</td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>ia2</td>"
+							+"<td>"
+								+"<table _type='array'>"
+									+"<tr>"
+										+"<th>a</th>"
+									+"</tr>"
+									+"<tr _type='A'>"
+										+"<td>foo</td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>aa1</td>"
+							+"<td>"
+								+"<table _type='array'>"
+									+"<tr>"
+										+"<th>a</th>"
+									+"</tr>"
+									+"<tr _type='A'>"
+										+"<td>foo</td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>aa2</td>"
+							+"<td>"
+								+"<table _type='array'>"
+									+"<tr>"
+										+"<th>a</th>"
+									+"</tr>"
+									+"<tr _type='A'>"
+										+"<td>foo</td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>o1</td>"
+							+"<td>"
+								+"<table _type='array'>"
+									+"<tr>"
+										+"<th>a</th>"
+									+"</tr>"
+									+"<tr _type='A'>"
+										+"<td>foo</td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>o2</td>"
+							+"<td>"
+								+"<table _type='array'>"
+									+"<tr>"
+										+"<th>a</th>"
+									+"</tr>"
+									+"<tr _type='A'>"
+										+"<td>foo</td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+					+"</table>"
+				)
+				{
+					public void verify(BeanWithAbstractArrayFields o) {
+						assertType(A.class, o.a[0]);
+						assertType(A.class, o.ia1[0]);
+						assertType(A.class, o.ia2[0]);
+						assertType(A.class, o.aa1[0]);
+						assertType(A.class, o.aa2[0]);
+						assertType(A.class, o.o1[0]);
+						assertType(A.class, o.o2[0]);
+					}
+				}
 			},
-			{
-				"BeanWithWhitespaceMixedFields-1",
-				new BeanWithWhitespaceMixedFields().init(null),
-				"<object></object>",
-				"<object></object>\n",
+			{	/* 33 */
+				new Input<BeanWithAbstractMapFields>(
+					"BeanWithAbstractMapFields",
+					BeanWithAbstractMapFields.class,
+					new BeanWithAbstractMapFields().init(),
+					"<table>"
+						+"<tr>"
+							+"<td>a</td>"
+							+"<td>"
+								+"<table>"
+									+"<tr>"
+										+"<td>k1</td>"
+										+"<td>"
+											+"<table>"
+												+"<tr>"
+													+"<td>a</td>"
+													+"<td>foo</td>"
+												+"</tr>"
+											+"</table>"
+										+"</td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>b</td>"
+							+"<td>"
+								+"<table>"
+									+"<tr>"
+										+"<td>k2</td>"
+										+"<td>"
+											+"<table _type='A'>"
+												+"<tr>"
+													+"<td>a</td>"
+													+"<td>foo</td>"
+												+"</tr>"
+											+"</table>"
+										+"</td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>c</td>"
+							+"<td>"
+								+"<table>"
+									+"<tr>"
+										+"<td>k3</td>"
+										+"<td>"
+											+"<table _type='A'>"
+												+"<tr>"
+													+"<td>a</td>"
+													+"<td>foo</td>"
+												+"</tr>"
+											+"</table>"
+										+"</td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+					+"</table>",
+
+					"<table>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>a</td>\n"
+							+"\t\t<td>\n"
+								+"\t\t\t<table>\n"
+									+"\t\t\t\t<tr>\n"
+										+"\t\t\t\t\t<td>k1</td>\n"
+										+"\t\t\t\t\t<td>\n"
+											+"\t\t\t\t\t\t<table>\n"
+												+"\t\t\t\t\t\t\t<tr>\n"
+													+"\t\t\t\t\t\t\t\t<td>a</td>\n"
+													+"\t\t\t\t\t\t\t\t<td>foo</td>\n"
+												+"\t\t\t\t\t\t\t</tr>\n"
+											+"\t\t\t\t\t\t</table>\n"
+										+"\t\t\t\t\t</td>\n"
+									+"\t\t\t\t</tr>\n"
+								+"\t\t\t</table>\n"
+							+"\t\t</td>\n"
+						+"\t</tr>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>b</td>\n"
+							+"\t\t<td>\n"
+								+"\t\t\t<table>\n"
+									+"\t\t\t\t<tr>\n"
+										+"\t\t\t\t\t<td>k2</td>\n"
+										+"\t\t\t\t\t<td>\n"
+											+"\t\t\t\t\t\t<table _type='A'>\n"
+												+"\t\t\t\t\t\t\t<tr>\n"
+													+"\t\t\t\t\t\t\t\t<td>a</td>\n"
+													+"\t\t\t\t\t\t\t\t<td>foo</td>\n"
+												+"\t\t\t\t\t\t\t</tr>\n"
+											+"\t\t\t\t\t\t</table>\n"
+										+"\t\t\t\t\t</td>\n"
+									+"\t\t\t\t</tr>\n"
+								+"\t\t\t</table>\n"
+							+"\t\t</td>\n"
+						+"\t</tr>\n"
+						+"\t<tr>\n"
+							+"\t\t<td>c</td>\n"
+							+"\t\t<td>\n"
+								+"\t\t\t<table>\n"
+									+"\t\t\t\t<tr>\n"
+										+"\t\t\t\t\t<td>k3</td>\n"
+										+"\t\t\t\t\t<td>\n"
+											+"\t\t\t\t\t\t<table _type='A'>\n"
+												+"\t\t\t\t\t\t\t<tr>\n"
+													+"\t\t\t\t\t\t\t\t<td>a</td>\n"
+													+"\t\t\t\t\t\t\t\t<td>foo</td>\n"
+												+"\t\t\t\t\t\t\t</tr>\n"
+											+"\t\t\t\t\t\t</table>\n"
+										+"\t\t\t\t\t</td>\n"
+									+"\t\t\t\t</tr>\n"
+								+"\t\t\t</table>\n"
+							+"\t\t</td>\n"
+						+"\t</tr>\n"
+					+"</table>\n",
+					
+					"<table>"
+						+"<tr>"
+							+"<td>a</td>"
+							+"<td>"
+								+"<table>"
+									+"<tr>"
+										+"<td>k1</td>"
+										+"<td>"
+											+"<table>"
+												+"<tr>"
+													+"<td>a</td>"
+													+"<td>foo</td>"
+												+"</tr>"
+											+"</table>"
+										+"</td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>b</td>"
+							+"<td>"
+								+"<table>"
+									+"<tr>"
+										+"<td>k2</td>"
+										+"<td>"
+											+"<table _type='A'>"
+												+"<tr>"
+													+"<td>a</td>"
+													+"<td>foo</td>"
+												+"</tr>"
+											+"</table>"
+										+"</td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+						+"<tr>"
+							+"<td>c</td>"
+							+"<td>"
+								+"<table>"
+									+"<tr>"
+										+"<td>k3</td>"
+										+"<td>"
+											+"<table _type='A'>"
+												+"<tr>"
+													+"<td>a</td>"
+													+"<td>foo</td>"
+												+"</tr>"
+											+"</table>"
+										+"</td>"
+									+"</tr>"
+								+"</table>"
+							+"</td>"
+						+"</tr>"
+					+"</table>"
+				)
+				{
+					public void verify(BeanWithAbstractMapFields o) {
+						assertType(A.class, o.a.get("k1"));
+						assertType(A.class, o.b.get("k2"));
+						assertType(A.class, o.c.get("k3"));
+					}
+				}
 			},
-			{
-				"BeanWithWhitespaceMixedFields-2",
-				new BeanWithWhitespaceMixedFields().init(new String[0]),
-				"<object></object>",
-				"<object></object>\n",
+			{	/* 34 */
+				new Input<BeanWithWhitespaceTextFields>(
+					"BeanWithWhitespaceTextFields-1",
+					BeanWithWhitespaceTextFields.class,
+					new BeanWithWhitespaceTextFields().init(null),
+					"<object></object>",
+					"<object></object>\n",
+					"<object></object>"
+				)
+				{
+					public void verify(BeanWithWhitespaceTextFields o) {
+						assertType(BeanWithWhitespaceTextFields.class, o);
+					}
+				}
 			},
-			{
-				"BeanWithWhitespaceMixedFields-3",
-				new BeanWithWhitespaceMixedFields().init(new String[]{""}),
-				"<object><sp/></object>",
-				"<object><sp/></object>\n",
+			{	/* 35 */
+				new Input<BeanWithWhitespaceTextFields>(
+					"BeanWithWhitespaceTextFields-2",
+					BeanWithWhitespaceTextFields.class,
+					new BeanWithWhitespaceTextFields().init(""),
+					"<object><sp/></object>",
+					"<object><sp/></object>\n",
+					"<object><sp/></object>"
+				)
+				{
+					public void verify(BeanWithWhitespaceTextFields o) {
+						assertType(BeanWithWhitespaceTextFields.class, o);
+					}
+				}
 			},
-			{
-				"BeanWithWhitespaceMixedFields-4",
-				new BeanWithWhitespaceMixedFields().init(new String[]{" "}),
-				"<object><sp> </sp></object>",
-				"<object><sp> </sp></object>\n",
+			{	/* 36 */
+				new Input<BeanWithWhitespaceTextFields>(
+					"BeanWithWhitespaceTextFields-3",
+					BeanWithWhitespaceTextFields.class,
+					new BeanWithWhitespaceTextFields().init(" "),
+					"<object><sp> </sp></object>",
+					"<object><sp> </sp></object>\n",
+					"<object><sp> </sp></object>"
+				)
+				{
+					public void verify(BeanWithWhitespaceTextFields o) {
+						assertType(BeanWithWhitespaceTextFields.class, o);
+					}
+				}
 			},
-			{
-				"BeanWithWhitespaceMixedFields-5",
-				new BeanWithWhitespaceMixedFields().init(new String[]{"  "}),
-				"<object><sp> </sp><sp> </sp></object>",
-				"<object><sp> </sp><sp> </sp></object>\n",
+			{	/* 37 */
+				new Input<BeanWithWhitespaceTextFields>(
+					"BeanWithWhitespaceTextFields-4",
+					BeanWithWhitespaceTextFields.class,
+					new BeanWithWhitespaceTextFields().init("  "),
+					"<object><sp> </sp><sp> </sp></object>",
+					"<object><sp> </sp><sp> </sp></object>\n",
+					"<object><sp> </sp><sp> </sp></object>"
+				)
+				{
+					public void verify(BeanWithWhitespaceTextFields o) {
+						assertType(BeanWithWhitespaceTextFields.class, o);
+					}
+				}
 			},
-			{
-				"BeanWithWhitespaceMixedFields-6",
-				new BeanWithWhitespaceMixedFields().init(new String[]{"  foobar  "}),
-				"<object><sp> </sp> foobar <sp> </sp></object>",
-				"<object><sp> </sp> foobar <sp> </sp></object>\n",
+			{	/* 38 */
+				new Input<BeanWithWhitespaceTextFields>(
+					"BeanWithWhitespaceTextFields-5",
+					BeanWithWhitespaceTextFields.class,
+					new BeanWithWhitespaceTextFields().init("  foobar  "),
+					"<object><sp> </sp> foobar <sp> </sp></object>",
+					"<object><sp> </sp> foobar <sp> </sp></object>\n",
+					"<object><sp> </sp> foobar <sp> </sp></object>"
+				)
+				{
+					public void verify(BeanWithWhitespaceTextFields o) {
+						assertType(BeanWithWhitespaceTextFields.class, o);
+					}
+				}
 			},
-			{
-				"BeanWithWhitespaceMixedPwsFields-1",
-				new BeanWithWhitespaceMixedPwsFields().init(null),
-				"<object></object>",
-				"<object></object>\n",
+			{	/* 39 */
+				new Input<BeanWithWhitespaceTextPwsFields>(
+					"BeanWithWhitespaceTextPwsFields-1",
+					BeanWithWhitespaceTextPwsFields.class,
+					new BeanWithWhitespaceTextPwsFields().init(null),
+					"<object></object>",
+					"<object></object>\n",
+					"<object></object>"
+				)
+				{
+					public void verify(BeanWithWhitespaceTextPwsFields o) {
+						assertType(BeanWithWhitespaceTextPwsFields.class, o);
+					}
+				}
 			},
-			{
-				"BeanWithWhitespaceMixedPwsFields-2",
-				new BeanWithWhitespaceMixedPwsFields().init(new String[0]),
-				"<object></object>",
-				"<object></object>\n",
+			{	/* 40 */
+				new Input<BeanWithWhitespaceTextPwsFields>(
+					"BeanWithWhitespaceTextPwsFields-2",
+					BeanWithWhitespaceTextPwsFields.class,
+					new BeanWithWhitespaceTextPwsFields().init(""),
+					"<object><sp/></object>",
+					"<object><sp/></object>\n",
+					"<object><sp/></object>"
+				)
+				{
+					public void verify(BeanWithWhitespaceTextPwsFields o) {
+						assertType(BeanWithWhitespaceTextPwsFields.class, o);
+					}
+				}
 			},
-			{
-				"BeanWithWhitespaceMixedPwsFields-3",
-				new BeanWithWhitespaceMixedPwsFields().init(new String[]{""}),
-				"<object><sp/></object>",
-				"<object><sp/></object>\n",
+			{	/* 41 */
+				new Input<BeanWithWhitespaceTextPwsFields>(
+					"BeanWithWhitespaceTextPwsFields-3",
+					BeanWithWhitespaceTextPwsFields.class,
+					new BeanWithWhitespaceTextPwsFields().init(" "),
+					"<object> </object>",
+					"<object> </object>\n",
+					"<object> </object>"
+				)
+				{
+					public void verify(BeanWithWhitespaceTextPwsFields o) {
+						assertType(BeanWithWhitespaceTextPwsFields.class, o);
+					}
+				}
 			},
-			{
-				"BeanWithWhitespaceMixedPwsFields-4",
-				new BeanWithWhitespaceMixedPwsFields().init(new String[]{" "}),
-				"<object> </object>",
-				"<object> </object>\n",
+			{	/* 42 */
+				new Input<BeanWithWhitespaceTextPwsFields>(
+					"BeanWithWhitespaceTextPwsFields-4",
+					BeanWithWhitespaceTextPwsFields.class,
+					new BeanWithWhitespaceTextPwsFields().init("  "),
+					"<object>  </object>",
+					"<object>  </object>\n",
+					"<object>  </object>"
+				)
+				{
+					public void verify(BeanWithWhitespaceTextPwsFields o) {
+						assertType(BeanWithWhitespaceTextPwsFields.class, o);
+					}
+				}
 			},
-			{
-				"BeanWithWhitespaceMixedPwsFields-5",
-				new BeanWithWhitespaceMixedPwsFields().init(new String[]{"  "}),
-				"<object>  </object>",
-				"<object>  </object>\n",
+			{	/* 43 */
+				new Input<BeanWithWhitespaceTextPwsFields>(
+					"BeanWithWhitespaceTextPwsFields-5",
+					BeanWithWhitespaceTextPwsFields.class,
+					new BeanWithWhitespaceTextPwsFields().init("  foobar  "),
+					"<object>  foobar  </object>",
+					"<object>  foobar  </object>\n",
+					"<object>  foobar  </object>"
+				)
+				{
+					public void verify(BeanWithWhitespaceTextPwsFields o) {
+						assertType(BeanWithWhitespaceTextPwsFields.class, o);
+					}
+				}
 			},
-			{
-				"BeanWithWhitespaceMixedPwsFields-6",
-				new BeanWithWhitespaceMixedPwsFields().init(new String[]{"  foobar  "}),
-				"<object>  foobar  </object>",
-				"<object>  foobar  </object>\n",
+			{	/* 44 */
+				new Input<BeanWithWhitespaceMixedFields>(
+					"BeanWithWhitespaceMixedFields-1",
+					BeanWithWhitespaceMixedFields.class,
+					new BeanWithWhitespaceMixedFields().init(null),
+					"<object></object>",
+					"<object></object>\n",
+					"<object></object>"
+				)
+				{
+					public void verify(BeanWithWhitespaceMixedFields o) {
+						assertType(BeanWithWhitespaceMixedFields.class, o);
+					}
+				}
+			},
+			{	/* 45 */
+				new Input<BeanWithWhitespaceMixedFields>(
+					"BeanWithWhitespaceMixedFields-2",
+					BeanWithWhitespaceMixedFields.class,
+					new BeanWithWhitespaceMixedFields().init(new String[0]),
+					"<object></object>",
+					"<object></object>\n",
+					"<object></object>"
+				)
+				{
+					public void verify(BeanWithWhitespaceMixedFields o) {
+						assertType(BeanWithWhitespaceMixedFields.class, o);
+					}
+				}
+			},
+			{	/* 46 */
+				new Input<BeanWithWhitespaceMixedFields>(
+					"BeanWithWhitespaceMixedFields-3",
+					BeanWithWhitespaceMixedFields.class,
+					new BeanWithWhitespaceMixedFields().init(new String[]{""}),
+					"<object><sp/></object>",
+					"<object><sp/></object>\n",
+					"<object><sp/></object>"
+				)
+				{
+					public void verify(BeanWithWhitespaceMixedFields o) {
+						assertType(BeanWithWhitespaceMixedFields.class, o);
+					}
+				}
+			},
+			{	/* 47 */
+				new Input<BeanWithWhitespaceMixedFields>(
+					"BeanWithWhitespaceMixedFields-4",
+					BeanWithWhitespaceMixedFields.class,
+					new BeanWithWhitespaceMixedFields().init(new String[]{" "}),
+					"<object><sp> </sp></object>",
+					"<object><sp> </sp></object>\n",
+					"<object><sp> </sp></object>"
+				)
+				{
+					public void verify(BeanWithWhitespaceMixedFields o) {
+						assertType(BeanWithWhitespaceMixedFields.class, o);
+					}
+				}
+			},
+			{	/* 48 */
+				new Input<BeanWithWhitespaceMixedFields>(
+					"BeanWithWhitespaceMixedFields-5",
+					BeanWithWhitespaceMixedFields.class,
+					new BeanWithWhitespaceMixedFields().init(new String[]{"  "}),
+					"<object><sp> </sp><sp> </sp></object>",
+					"<object><sp> </sp><sp> </sp></object>\n",
+					"<object><sp> </sp><sp> </sp></object>"
+				)
+				{
+					public void verify(BeanWithWhitespaceMixedFields o) {
+						assertType(BeanWithWhitespaceMixedFields.class, o);
+					}
+				}
+			},
+			{	/* 49 */
+				new Input<BeanWithWhitespaceMixedFields>(
+					"BeanWithWhitespaceMixedFields-6",
+					BeanWithWhitespaceMixedFields.class,
+					new BeanWithWhitespaceMixedFields().init(new String[]{"  foobar  "}),
+					"<object><sp> </sp> foobar <sp> </sp></object>",
+					"<object><sp> </sp> foobar <sp> </sp></object>\n",
+					"<object><sp> </sp> foobar <sp> </sp></object>"
+				)
+				{
+					public void verify(BeanWithWhitespaceMixedFields o) {
+						assertType(BeanWithWhitespaceMixedFields.class, o);
+					}
+				}
+			},
+			{	/* 50 */
+				new Input<BeanWithWhitespaceMixedPwsFields>(
+					"BeanWithWhitespaceMixedPwsFields-1",
+					BeanWithWhitespaceMixedPwsFields.class,
+					new BeanWithWhitespaceMixedPwsFields().init(null),
+					"<object></object>",
+					"<object></object>\n",
+					"<object></object>"
+				)
+				{
+					public void verify(BeanWithWhitespaceMixedPwsFields o) {
+						assertType(BeanWithWhitespaceMixedPwsFields.class, o);
+					}
+				}
+			},
+			{	/* 51 */
+				new Input<BeanWithWhitespaceMixedPwsFields>(
+					"BeanWithWhitespaceMixedPwsFields-2",
+					BeanWithWhitespaceMixedPwsFields.class,
+					new BeanWithWhitespaceMixedPwsFields().init(new String[0]),
+					"<object></object>",
+					"<object></object>\n",
+					"<object></object>"
+				)
+				{
+					public void verify(BeanWithWhitespaceMixedPwsFields o) {
+						assertType(BeanWithWhitespaceMixedPwsFields.class, o);
+					}
+				}
+			},
+			{	/* 52 */
+				new Input<BeanWithWhitespaceMixedPwsFields>(
+					"BeanWithWhitespaceMixedPwsFields-3",
+					BeanWithWhitespaceMixedPwsFields.class,
+					new BeanWithWhitespaceMixedPwsFields().init(new String[]{""}),
+					"<object><sp/></object>",
+					"<object><sp/></object>\n",
+					"<object><sp/></object>"
+				)
+				{
+					public void verify(BeanWithWhitespaceMixedPwsFields o) {
+						assertType(BeanWithWhitespaceMixedPwsFields.class, o);
+					}
+				}
+			},
+			{	/* 53 */
+				new Input<BeanWithWhitespaceMixedPwsFields>(
+					"BeanWithWhitespaceMixedPwsFields-4",
+					BeanWithWhitespaceMixedPwsFields.class,
+					new BeanWithWhitespaceMixedPwsFields().init(new String[]{" "}),
+					"<object> </object>",
+					"<object> </object>\n",
+					"<object> </object>"
+				)
+				{
+					public void verify(BeanWithWhitespaceMixedPwsFields o) {
+						assertType(BeanWithWhitespaceMixedPwsFields.class, o);
+					}
+				}
+			},
+			{	/* 54 */
+				new Input<BeanWithWhitespaceMixedPwsFields>(
+					"BeanWithWhitespaceMixedPwsFields-5",
+					BeanWithWhitespaceMixedPwsFields.class,
+					new BeanWithWhitespaceMixedPwsFields().init(new String[]{"  "}),
+					"<object>  </object>",
+					"<object>  </object>\n",
+					"<object>  </object>"
+				)
+				{
+					public void verify(BeanWithWhitespaceMixedPwsFields o) {
+						assertType(BeanWithWhitespaceMixedPwsFields.class, o);
+					}
+				}
+			},
+			{	/* 55 */
+				new Input<BeanWithWhitespaceMixedPwsFields>(
+					"BeanWithWhitespaceMixedPwsFields-6",
+					BeanWithWhitespaceMixedPwsFields.class,
+					new BeanWithWhitespaceMixedPwsFields().init(new String[]{"  foobar  "}),
+					"<object>  foobar  </object>",
+					"<object>  foobar  </object>\n",
+					"<object>  foobar  </object>"
+				)
+				{
+					public void verify(BeanWithWhitespaceMixedPwsFields o) {
+						assertType(BeanWithWhitespaceMixedPwsFields.class, o);
+					}
+				}
 			},
 		});
 	}
 
-	private String label, e1, e2;
-	private Object in;
+	private Input input;
 
-	public BasicHtmlTest(String label, Object in, String e1, String e2) throws Exception {
-		this.label = label;
-		this.in = in;
-		this.e1 = e1;
-		this.e2 = e2;
+	public BasicHtmlTest(Input input) throws Exception {
+		this.input = input;
+	}
+	
+	public static class Input<T> {
+		private final String label, e1, e2, e3;
+		private final Type type;
+		private final Object in;
+		
+		public Input(String label, Type type, T in, String e1, String e2, String e3) {
+			this.label = label;
+			this.type = type;
+			this.in = in;
+			this.e1 = e1;
+			this.e2 = e2;
+			this.e3 = e3;
+		}
+		
+		public void verify(T o) {}
 	}
 
 	@Test
-	public void serializeNormal() {
+	public void a1_serializeNormal() {
 		try {
-			String r = s1.serialize(in);
-			assertEquals(label + " serialize-normal failed", e1, r);
+			String r = s1.serialize(input.in);
+			assertEquals(input.label + " serialize-normal failed", input.e1, r);
 		} catch (AssertionError e) {
 			throw e;
 		} catch (Throwable e) {
-			throw new RuntimeException(label + " test failed", e);
+			throw new RuntimeException(input.label + " test failed", e);
 		}
 	}
 
 	@Test
-	public void parseNormal() {
+	public void a2_parseNormal() {
 		try {
-			String r = s1.serialize(in);
-			Class<?> c = in == null ? Object.class : in.getClass();
-			Object o = parser.parse(r, c);
+			String r = s1.serialize(input.in);
+			Object o = parser.parse(r, input.type);
 			r = s1.serialize(o);
-			assertEquals(label + " parse-normal failed", e1, r);
+			assertEquals(input.label + " parse-normal failed", input.e1, r);
 		} catch (AssertionError e) {
 			throw e;
 		} catch (Throwable e) {
-			throw new RuntimeException(label + " test failed", e);
+			throw new RuntimeException(input.label + " test failed", e);
 		}
 	}
 
 	@Test
-	public void serializeReadable() {
+	public void a3_verifyNormal() {
 		try {
-			String r = s2.serialize(in);
-			assertEquals(label + " serialize-readable failed", e2, r);
+			String r = s1.serialize(input.in);
+			Object o = parser.parse(r, input.type);
+			input.verify(o);
 		} catch (AssertionError e) {
 			throw e;
 		} catch (Throwable e) {
-			throw new RuntimeException(label + " test failed", e);
+			throw new RuntimeException(input.label + " test failed", e);
 		}
 	}
 
 	@Test
-	public void parseReadable() {
+	public void b1_serializeReadable() {
 		try {
-			String r = s2.serialize(in);
-			Class<?> c = in == null ? Object.class : in.getClass();
-			Object o = parser.parse(r, c);
+			String r = s2.serialize(input.in);
+			assertEquals(input.label + " serialize-readable failed", input.e2, r);
+		} catch (AssertionError e) {
+			throw e;
+		} catch (Throwable e) {
+			throw new RuntimeException(input.label + " test failed", e);
+		}
+	}
+
+	@Test
+	public void b2_parseReadable() {
+		try {
+			String r = s2.serialize(input.in);
+			Object o = parser.parse(r, input.type);
 			r = s2.serialize(o);
-			assertEquals(label + " parse-readable failed", e2, r);
+			assertEquals(input.label + " parse-readable failed", input.e2, r);
 		} catch (AssertionError e) {
 			throw e;
 		} catch (Throwable e) {
-			throw new RuntimeException(label + " test failed", e);
+			throw new RuntimeException(input.label + " test failed", e);
 		}
 	}
 
+	@Test
+	public void b3_verifyReadable() {
+		try {
+			String r = s2.serialize(input.in);
+			Object o = parser.parse(r, input.type);
+			input.verify(o);
+		} catch (AssertionError e) {
+			throw e;
+		} catch (Throwable e) {
+			throw new RuntimeException(input.label + " test failed", e);
+		}
+	}
+
+	@Test
+	public void c1_serializeAbridged() {
+		try {
+			String r = s3.serialize(input.in);
+			assertEquals(input.label + " serialize-abridged failed", input.e3, r);
+		} catch (AssertionError e) {
+			throw e;
+		} catch (Throwable e) {
+			throw new RuntimeException(input.label + " test failed", e);
+		}
+	}
+
+	@Test
+	public void c2_parseAbridged() {
+		try {
+			String r = s3.serialize(input.in);
+			Object o = parser.parse(r, input.type);
+			r = s3.serialize(o);
+			assertEquals(input.label + " parse-abridged failed", input.e3, r);
+		} catch (AssertionError e) {
+			throw e;
+		} catch (Throwable e) {
+			throw new RuntimeException(input.label + " test failed", e);
+		}
+	}
+
+	@Test
+	public void c3_verifyAbridged() {
+		try {
+			String r = s3.serialize(input.in);
+			Object o = parser.parse(r, input.type);
+			input.verify(o);
+		} catch (AssertionError e) {
+			throw e;
+		} catch (Throwable e) {
+			throw new RuntimeException(input.label + " test failed", e);
+		}
+	}
 
 	//--------------------------------------------------------------------------------
 	// Test beans

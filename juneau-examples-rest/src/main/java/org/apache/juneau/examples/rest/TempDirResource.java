@@ -47,7 +47,7 @@ public class TempDirResource extends DirectoryResource {
 	 */
 	@RestMethod(name="GET", path="/upload")
 	public Form getUploadForm(RestRequest req) {
-		return 
+		return
 			form().id("form").action(req.getServletURI() + "/upload").method("POST").enctype("multipart/form-data")
 			.children(
 				input().name("contents").type("file"),

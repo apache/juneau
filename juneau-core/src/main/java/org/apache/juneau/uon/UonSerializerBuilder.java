@@ -190,6 +190,13 @@ public class UonSerializerBuilder extends SerializerBuilder {
 		super.sortMaps(value);
 		return this;
 	}
+
+	@Override /* SerializerBuilder */
+	public UonSerializerBuilder abridged(boolean value) {
+		super.abridged(value);
+		return this;
+	}
+
 	@Override /* CoreObjectBuilder */
 	public UonSerializerBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);

@@ -202,7 +202,7 @@ public class HtmlSerializer extends XmlSerializer {
 	 * @throws IOException If a problem occurred trying to send output to the writer.
 	 */
 	private HtmlWriter doSerialize(HtmlSerializerSession session, Object o, HtmlWriter w) throws Exception {
-		serializeAnything(session, w, o, null, null, session.getInitialDepth()-1, null, true);
+		serializeAnything(session, w, o, session.getExpectedRootType(o), null, session.getInitialDepth()-1, null, true);
 		return w;
 	}
 
@@ -284,14 +284,14 @@ public class HtmlSerializer extends XmlSerializer {
 				cr = CR_SIMPLE;
 
 			} else if (sType.isNumber()) {
-				if (eType.isNumber())
+				if (eType.isNumber() && ! isRoot)
 					out.append(o);
 				else
 					out.sTag("number").append(o).eTag("number");
 				cr = CR_SIMPLE;
 
 			} else if (sType.isBoolean()) {
-				if (eType.isBoolean())
+				if (eType.isBoolean() && ! isRoot)
 					out.append(o);
 				else
 					out.sTag("boolean").append(o).eTag("boolean");
@@ -353,8 +353,8 @@ public class HtmlSerializer extends XmlSerializer {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void serializeMap(HtmlSerializerSession session, HtmlWriter out, Map m, ClassMeta<?> sType, ClassMeta<?> eKeyType, ClassMeta<?> eValueType, String typeName, BeanPropertyMeta ppMeta) throws Exception {
 
-		ClassMeta<?> keyType = eKeyType == null ? sType.getKeyType() : eKeyType;
-		ClassMeta<?> valueType = eValueType == null ? sType.getValueType() : eValueType;
+		ClassMeta<?> keyType = eKeyType == null ? session.string() : eKeyType;
+		ClassMeta<?> valueType = eValueType == null ? session.object() : eValueType;
 		ClassMeta<?> aType = session.getClassMetaForObject(m);       // The actual type
 
 		int i = session.getIndent();
@@ -504,6 +504,7 @@ public class HtmlSerializer extends XmlSerializer {
 				out.oTag(i+1, "tr");
 				String typeName = (cm == null ? null : cm.getDictionaryName());
 				String typeProperty = session.getBeanTypePropertyName(cm);
+
 				if (typeName != null && eType.getElementType() != cm)
 					out.attr(typeProperty, typeName);
 				out.cTag().nl();
@@ -516,7 +517,7 @@ public class HtmlSerializer extends XmlSerializer {
 
 					for (Object k : th) {
 						out.sTag(i+2, "td");
-						ContentResult cr = serializeAnything(session, out, m2.get(k), seType, session.toString(k), 2, null, false);
+						ContentResult cr = serializeAnything(session, out, m2.get(k), eType.getElementType(), session.toString(k), 2, null, false);
 						if (cr == CR_NORMAL)
 							out.i(i+2);
 						out.eTag("td").nl();
@@ -549,7 +550,7 @@ public class HtmlSerializer extends XmlSerializer {
 			out.append('>').nl();
 			for (Object o : c) {
 				out.sTag(i+1, "li");
-				ContentResult cr = serializeAnything(session, out, o, seType, name, 1, null, false);
+				ContentResult cr = serializeAnything(session, out, o, eType.getElementType(), name, 1, null, false);
 				if (cr == CR_NORMAL)
 					out.i(i+1);
 				out.eTag("li").nl();

@@ -148,6 +148,13 @@ public class PlainTextSerializerBuilder extends SerializerBuilder {
 		super.sortMaps(value);
 		return this;
 	}
+
+	@Override /* SerializerBuilder */
+	public PlainTextSerializerBuilder abridged(boolean value) {
+		super.abridged(value);
+		return this;
+	}
+
 	@Override /* CoreObjectBuilder */
 	public PlainTextSerializerBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);

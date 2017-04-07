@@ -826,7 +826,7 @@ public class XmlSerializer extends WriterSerializer {
 		XmlSerializerSession s = (XmlSerializerSession)session;
 		if (s.isEnableNamespaces() && s.isAutoDetectNamespaces())
 			findNsfMappings(s, o);
-		serializeAnything(s, s.getWriter(), o, null, null, null, s.isEnableNamespaces() && s.isAddNamespaceUrlsToRoot(), XmlFormat.DEFAULT, false, false, null);
+		serializeAnything(s, s.getWriter(), o, s.getExpectedRootType(o), null, null, s.isEnableNamespaces() && s.isAddNamespaceUrlsToRoot(), XmlFormat.DEFAULT, false, false, null);
 	}
 
 	@Override /* Serializer */

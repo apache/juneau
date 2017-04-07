@@ -217,6 +217,6 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 	@Override /* Serializer */
 	protected void doSerialize(SerializerSession session, Object o) throws Exception {
 		MsgPackSerializerSession s = (MsgPackSerializerSession)session;
-		serializeAnything(s, s.getOutputStream(), o, null, "root", null);
+		serializeAnything(s, s.getOutputStream(), o, s.getExpectedRootType(o), "root", null);
 	}
 }

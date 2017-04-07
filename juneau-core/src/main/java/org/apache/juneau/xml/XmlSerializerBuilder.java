@@ -337,6 +337,12 @@ public class XmlSerializerBuilder extends SerializerBuilder {
 		return this;
 	}
 
+	@Override /* SerializerBuilder */
+	public XmlSerializerBuilder abridged(boolean value) {
+		super.abridged(value);
+		return this;
+	}
+
 	@Override /* CoreObjectBuilder */
 	public XmlSerializerBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);

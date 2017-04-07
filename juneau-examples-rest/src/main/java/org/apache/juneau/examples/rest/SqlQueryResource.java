@@ -66,7 +66,7 @@ public class SqlQueryResource extends Resource {
 	public Div doGet(RestRequest req) {
 		return div(
 			script("text/javascript",
-				 "\n	// Quick and dirty function to allow tabs in textarea."
+				"\n	// Quick and dirty function to allow tabs in textarea."
 				+"\n	function checkTab(e) {"
 				+"\n		if (e.keyCode == 9) {"
 				+"\n			var t = e.target;"

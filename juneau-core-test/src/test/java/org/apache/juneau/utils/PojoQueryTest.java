@@ -336,7 +336,7 @@ public class PojoQueryTest {
 		BeanSession session = BeanContext.DEFAULT.createSession();
 		List results;
 
-		List<D1> in = new AList<D1>() 
+		List<D1> in = new AList<D1>()
 			.append(new D1("foo"))
 			.append(new D1("bar"))
 			.append(new D1("baz"))

@@ -60,6 +60,33 @@ public class HtmlElementContainer extends HtmlElement {
 	}
 
 	/**
+	 * Returns the child node at the specified address.
+	 * <p>
+	 * Indexes are zero-indexed.
+	 * <p>
+	 * For example, calling <code>getChild(1,2,3);</code> will return the 4th child of the 3rd child of the 2nd child.
+	 *
+	 * @param index The child indexes.
+	 * @return The child node, or <jk>null</jk> if it doesn't point to a valid child.
+	 */
+	public Object getChild(int...index) {
+		if (index.length == 0)
+			return null;
+		if (index.length == 1)
+			return getChild(index[0]);
+		Object c = this;
+		for (int i = 0; i < index.length; i++) {
+			if (c instanceof HtmlElementMixed)
+				c = ((HtmlElementMixed)c).getChild(index[i]);
+			else if (c instanceof HtmlElementContainer)
+				c = ((HtmlElementContainer)c).getChild(index[i]);
+			else
+				return null;
+		}
+		return c;
+	}
+
+	/**
 	 * Returns the child node at the specified index.
 	 *
 	 * @param type The class type of the node.

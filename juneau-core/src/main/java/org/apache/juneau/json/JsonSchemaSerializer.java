@@ -60,7 +60,7 @@ public final class JsonSchemaSerializer extends JsonSerializer {
 	}
 
 	@Override /* CoreObject */
- 	protected ObjectMap getOverrideProperties() {
+	protected ObjectMap getOverrideProperties() {
 		return super.getOverrideProperties().append(SERIALIZER_detectRecursions, true).append(SERIALIZER_ignoreRecursions, true);
 	}
 
@@ -78,7 +78,7 @@ public final class JsonSchemaSerializer extends JsonSerializer {
 	protected void doSerialize(SerializerSession session, Object o) throws Exception {
 		JsonSerializerSession s = (JsonSerializerSession)session;
 		ObjectMap schema = getSchema(s, session.getClassMetaForObject(o), "root", null);
-		serializeAnything(s, s.getWriter(), schema, null, "root", null);
+		serializeAnything(s, s.getWriter(), schema, s.getExpectedRootType(o), "root", null);
 	}
 
 	/*

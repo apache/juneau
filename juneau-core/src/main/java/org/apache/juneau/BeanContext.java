@@ -876,7 +876,7 @@ public class BeanContext extends Context {
 		notBeanPackagePrefixes = l2.toArray(new String[l2.size()]);
 
 		LinkedList<BeanFilter> lbf = new LinkedList<BeanFilter>();
- 		try {
+		try {
 			for (Class<?> c : pm.get(BEAN_beanFilters, Class[].class, new Class[0])) {
 				if (isParentClass(BeanFilter.class, c))
 					lbf.add((BeanFilter)c.newInstance());
@@ -888,10 +888,10 @@ public class BeanContext extends Context {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
- 		beanFilters = lbf.toArray(new BeanFilter[0]);
+		beanFilters = lbf.toArray(new BeanFilter[0]);
 
 		LinkedList<PojoSwap<?,?>> lpf = new LinkedList<PojoSwap<?,?>>();
- 		try {
+		try {
 			for (Class<?> c : pm.get(BEAN_pojoSwaps, Class[].class, new Class[0])) {
 				if (isParentClass(PojoSwap.class, c))
 					lpf.add((PojoSwap<?,?>)c.newInstance());
@@ -901,13 +901,13 @@ public class BeanContext extends Context {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
- 		pojoSwaps = lpf.toArray(new PojoSwap[0]);
+		pojoSwaps = lpf.toArray(new PojoSwap[0]);
 
- 		implClasses = new TreeMap<Class<?>,Class<?>>(new ClassComparator());
- 		Map<Class,Class> m = pm.getMap(BEAN_implClasses, Class.class, Class.class, null);
- 		if (m != null)
-	 		for (Map.Entry<Class,Class> e : m.entrySet())
-	 			implClasses.put(e.getKey(), e.getValue());
+		implClasses = new TreeMap<Class<?>,Class<?>>(new ClassComparator());
+		Map<Class,Class> m = pm.getMap(BEAN_implClasses, Class.class, Class.class, null);
+		if (m != null)
+			for (Map.Entry<Class,Class> e : m.entrySet())
+				implClasses.put(e.getKey(), e.getValue());
 		implKeyClasses = implClasses.keySet().toArray(new Class[0]);
 		implValueClasses = implClasses.values().toArray(new Class[0]);
 
@@ -1112,9 +1112,9 @@ public class BeanContext extends Context {
 			ClassMeta<?> ce = c.length == pos ? object() : getTypedClassMeta(c, pos);
 			return (ce.isObject() ? cm : new ClassMeta(cm, null, null, ce));
 		} else if (cm.isMap()) {
-			 ClassMeta<?> ck = c.length == pos ? object() : c[pos++];
-			 ClassMeta<?> cv = c.length == pos ? object() : getTypedClassMeta(c, pos);
-			 return (ck.isObject() && cv.isObject() ? cm : new ClassMeta(cm, ck, cv, null));
+			ClassMeta<?> ck = c.length == pos ? object() : c[pos++];
+			ClassMeta<?> cv = c.length == pos ? object() : getTypedClassMeta(c, pos);
+			return (ck.isObject() && cv.isObject() ? cm : new ClassMeta(cm, ck, cv, null));
 		}
 		return cm;
 	}
@@ -1123,8 +1123,19 @@ public class BeanContext extends Context {
 		if (o == null)
 			return null;
 
-		if (o instanceof ClassMeta)
-			return (ClassMeta)o;
+		if (o instanceof ClassMeta) {
+			ClassMeta<?> cm = (ClassMeta)o;
+
+			// This classmeta could have been created by a different context.
+			// Need to re-resolve it to pick up PojoSwaps and stuff on this context.
+			if (cm.getBeanContext() == this)
+				return cm;
+			if (cm.isMap())
+				return getClassMeta(cm.innerClass, cm.getKeyType(), cm.getValueType());
+			if (cm.isCollection())
+				return getClassMeta(cm.innerClass, cm.getElementType());
+			return getClassMeta(cm.innerClass);
+		}
 
 		Class c = resolve(o, typeVarImpls);
 
@@ -1161,7 +1172,7 @@ public class BeanContext extends Context {
 		return rawType;
 	}
 
-	/** 
+	/**
 	 * Convert a Type to a Class if possible.
 	 * Return null if not possible.
 	 */

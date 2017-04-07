@@ -210,6 +210,13 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 		super.sortMaps(value);
 		return this;
 	}
+
+	@Override /* SerializerBuilder */
+	public UrlEncodingSerializerBuilder abridged(boolean value) {
+		super.abridged(value);
+		return this;
+	}
+
 	@Override /* CoreObjectBuilder */
 	public UrlEncodingSerializerBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);

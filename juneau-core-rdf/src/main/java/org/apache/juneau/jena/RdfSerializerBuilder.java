@@ -510,6 +510,13 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 		super.sortMaps(value);
 		return this;
 	}
+
+	@Override /* SerializerBuilder */
+	public RdfSerializerBuilder abridged(boolean value) {
+		super.abridged(value);
+		return this;
+	}
+	
 	@Override /* CoreObjectBuilder */
 	public RdfSerializerBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);

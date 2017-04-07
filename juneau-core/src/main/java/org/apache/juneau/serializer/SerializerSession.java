@@ -49,7 +49,8 @@ public class SerializerSession extends BeanSession {
 		trimEmptyMaps,
 		trimStrings,
 		sortCollections,
-		sortMaps;
+		sortMaps,
+		abridged;
 	private final char quoteChar;
 	private final String relativeUriBase, absolutePathUriBase;
 
@@ -113,6 +114,7 @@ public class SerializerSession extends BeanSession {
 			absolutePathUriBase = ctx.absolutePathUriBase;
 			sortCollections = ctx.sortCollections;
 			sortMaps = ctx.sortMaps;
+			abridged = ctx.abridged;
 		} else {
 			maxDepth = op.getInt(SERIALIZER_maxDepth, ctx.maxDepth);
 			initialDepth = op.getInt(SERIALIZER_initialDepth, ctx.initialDepth);
@@ -129,6 +131,7 @@ public class SerializerSession extends BeanSession {
 			absolutePathUriBase = op.getString(SERIALIZER_absolutePathUriBase, ctx.absolutePathUriBase);
 			sortCollections = op.getBoolean(SERIALIZER_sortCollections, ctx.sortMaps);
 			sortMaps = op.getBoolean(SERIALIZER_sortMaps, ctx.sortMaps);
+			abridged = op.getBoolean(SERIALIZER_abridged, ctx.abridged);
 		}
 
 		this.indent = initialDepth;
@@ -739,5 +742,19 @@ public class SerializerSession extends BeanSession {
 		}
 
 		return null;
+	}
+
+	/**
+	 * Returns the parser-side expected type for the object.
+	 * <p>
+	 * The return value depends on the {@link SerializerContext#SERIALIZER_abridged} setting.
+	 * When enabled, the parser already knows the Java POJO type being parsed, so there is
+	 * no reason to add <js>"_type"</js> attributes to the root-level object.
+	 *
+	 * @param o The object to get the expected type on.
+	 * @return The expected type.
+	 */
+	public ClassMeta<?> getExpectedRootType(Object o) {
+		return abridged ? getClassMetaForObject(o) : object();
 	}
 }

@@ -29,11 +29,11 @@ public class CommonParserTest {
 	private String wrap(String in) {
 		return ""
 			+ "<rdf:RDF"
-		    + " xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'"
-		    + " xmlns:j='http://www.apache.org/juneau/'"
-		    + " xmlns:jp='http://www.apache.org/juneaubp/'>"
-		    + in
-		    + "</rdf:RDF>";
+			+ " xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'"
+			+ " xmlns:j='http://www.apache.org/juneau/'"
+			+ " xmlns:jp='http://www.apache.org/juneaubp/'>"
+			+ in
+			+ "</rdf:RDF>";
 	}
 
 	private String strip(String s) {

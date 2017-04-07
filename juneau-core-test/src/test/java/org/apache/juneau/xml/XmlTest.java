@@ -149,7 +149,7 @@ public class XmlTest {
 	@Test
 	public void testBeanNameAnnotation() throws Exception {
 		String e =
-			  "<Person1>\n"
+			"<Person1>\n"
 			+ "	<name>John Smith</name>\n"
 			+ "	<age>123</age>\n"
 			+ "</Person1>\n";
@@ -180,7 +180,7 @@ public class XmlTest {
 	@Test
 	public void testTrimNulls() throws Exception {
 		String e =
-			  "<Person1>\n"
+			"<Person1>\n"
 			+ "	<age>123</age>\n"
 			+ "</Person1>\n";
 		String r = XmlSerializer.DEFAULT_SQ_READABLE.serialize(new Person1(null, 123));

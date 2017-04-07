@@ -13,6 +13,7 @@
 package org.apache.juneau.serializer;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -117,7 +118,7 @@ public class SerializerContext extends BeanContext {
 	 * <ul>
 	 * 	<li><b>Name:</b> <js>"Serializer.addBeanTypeProperties"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Default:</b> <jk>true</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
@@ -313,6 +314,25 @@ public class SerializerContext extends BeanContext {
 	 */
 	public static final String SERIALIZER_sortMaps = "Serializer.sortMaps";
 
+	/**
+	 * <b>Configuration property:</b>  Abridged output.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Serializer.parserKnowsRootType"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * When enabled, it is assumed that the parser knows the exact Java POJO type being parsed,
+	 * and therefore top-level type information that might normally be included to determine
+	 * the data type will not be serialized.
+	 * <p>
+	 * For example, when serializing a POJO with a {@link Bean#typeName()} value, a <js>"_type"</js>
+	 * will be added when this setting is disabled, but not added when it is enabled.
+	 */
+	public static final String SERIALIZER_abridged = "Serializer.abridged";
+
 
 	final int maxDepth, initialDepth;
 	final boolean
@@ -325,7 +345,8 @@ public class SerializerContext extends BeanContext {
 		trimEmptyMaps,
 		trimStrings,
 		sortCollections,
-		sortMaps;
+		sortMaps,
+		abridged;
 	final char quoteChar;
 	final String relativeUriBase, absolutePathUriBase;
 
@@ -348,6 +369,7 @@ public class SerializerContext extends BeanContext {
 		trimStrings = ps.getProperty(SERIALIZER_trimStrings, boolean.class, false);
 		sortCollections = ps.getProperty(SERIALIZER_sortCollections, boolean.class, false);
 		sortMaps = ps.getProperty(SERIALIZER_sortMaps, boolean.class, false);
+		abridged = ps.getProperty(SERIALIZER_abridged, boolean.class, false);
 		quoteChar = ps.getProperty(SERIALIZER_quoteChar, String.class, "\"").charAt(0);
 		relativeUriBase = resolveRelativeUriBase(ps.getProperty(SERIALIZER_relativeUriBase, String.class, ""));
 		absolutePathUriBase = resolveAbsolutePathUriBase(ps.getProperty(SERIALIZER_absolutePathUriBase, String.class, ""));
@@ -387,6 +409,7 @@ public class SerializerContext extends BeanContext {
 				.append("trimStrings", trimStrings)
 				.append("sortCollections", sortCollections)
 				.append("sortMaps", sortMaps)
+				.append("parserKnowsRootTypes", abridged)
 				.append("quoteChar", quoteChar)
 				.append("relativeUriBase", relativeUriBase)
 				.append("absolutePathUriBase", absolutePathUriBase)

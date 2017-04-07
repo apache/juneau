@@ -190,6 +190,12 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
+	@Override /* SerializerBuilder */
+	public XmlSchemaSerializerBuilder abridged(boolean value) {
+		super.abridged(value);
+		return this;
+	}
+
 	@Override /* CoreObjectBuilder */
 	public XmlSchemaSerializerBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);

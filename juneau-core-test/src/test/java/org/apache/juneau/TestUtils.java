@@ -13,6 +13,7 @@
 package org.apache.juneau;
 
 import java.io.*;
+import java.lang.reflect.*;
 import java.text.*;
 import java.util.*;
 import java.util.regex.*;
@@ -27,6 +28,7 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transforms.*;
+import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.*;
 import org.junit.*;
 import org.w3c.dom.*;
@@ -60,6 +62,8 @@ public class TestUtils {
 		.pojoSwaps(IteratorSwap.class, EnumerationSwap.class)
 		.sortProperties(true)
 		.build();
+
+	private static final BeanSession beanSession = BeanContext.DEFAULT.createSession();
 
 	/**
 	 * Verifies that two objects are equivalent.
@@ -268,11 +272,11 @@ public class TestUtils {
 
 	final protected static char[] hexArray = "0123456789ABCDEF".toCharArray();
 	public static String toHex(byte b) {
-	    char[] c = new char[2];
-	    int v = b & 0xFF;
-	    c[0] = hexArray[v >>> 4];
-	    c[1] = hexArray[v & 0x0F];
-	    return new String(c);
+		char[] c = new char[2];
+		int v = b & 0xFF;
+		c[0] = hexArray[v >>> 4];
+		c[1] = hexArray[v & 0x0F];
+		return new String(c);
 	}
 
 	public static void debugOut(Object o) {
@@ -479,13 +483,13 @@ public class TestUtils {
 	public static void assertEqualsAfterSort(String expected, String actual, String msg, Object...args) {
 		String[] e = expected.trim().split("\n"), a = actual.trim().split("\n");
 		
-		if (e.length != a.length) 
+		if (e.length != a.length)
 			throw new ComparisonFailure(MessageFormat.format(msg, args), expected, actual);
 		
 		Arrays.sort(e);
 		Arrays.sort(a);
 		
-		for (int i = 0; i < e.length; i++) 
+		for (int i = 0; i < e.length; i++)
 			if (! e[i].equals(a[i]))
 				throw new ComparisonFailure(MessageFormat.format(msg, args), expected, actual);
 	}
@@ -497,4 +501,21 @@ public class TestUtils {
 		if (! StringUtils.isEquals(expected, actual))
 			throw new ComparisonFailure(MessageFormat.format(msg, args), expected, actual);			
 	}
+	
+	/**
+	 * Creates a ClassMeta for the given types.
+	 */
+	public static Type getType(Type type, Type...args) {
+		return beanSession.getClassMeta(type, args);
+	}
+	
+	/**
+	 * Throws an AssertionError if the object isn't of the specified type.
+	 */
+	public static void assertType(Class<?> type, Object o) {
+		if (type.isInstance(o))
+			return;
+		throw new AssertionError(new StringMessage("Expected type {0} but was {1}", type, (o == null ? null : o.getClass())));
+	}
+	
 }

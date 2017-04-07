@@ -210,6 +210,12 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 		return this;
 	}
 
+	@Override /* SerializerBuilder */
+	public SoapXmlSerializerBuilder abridged(boolean value) {
+		super.abridged(value);
+		return this;
+	}
+
 	@Override /* CoreObjectBuilder */
 	public SoapXmlSerializerBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);

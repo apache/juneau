@@ -33,9 +33,9 @@ public class RdfTest {
 		String expected;
 
 		RdfSerializerBuilder s = new RdfSerializerBuilder().xmlabbrev()
-		   .property(RDF_rdfxml_tab, 3)
-		   .sq()
-		   .addRootProperty(true);
+			.property(RDF_rdfxml_tab, 3)
+			.sq()
+			.addRootProperty(true);
 		RdfParser p = new RdfParserBuilder().xml().build();
 
 		//--------------------------------------------------------------------------------
@@ -126,25 +126,25 @@ public class RdfTest {
 		//--------------------------------------------------------------------------------
 		s.collectionFormat(RdfCollectionFormat.LIST);
 		expected =
-			   "<rdf:RDF a='http://ns/' j='http://www.apache.org/juneau/' jp='http://www.apache.org/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
-			 + "\n   <rdf:Description about='http://test/a'>"
-			 + "\n      <a:f2 parseType='Resource'>"
-			 + "\n         <rdf:first>f2a</rdf:first>"
-			 + "\n         <rdf:rest parseType='Resource'>"
-			 + "\n            <rdf:first>f2b</rdf:first>"
-			 + "\n            <rdf:rest resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>"
-			 + "\n         </rdf:rest>"
-			 + "\n      </a:f2>"
-			 + "\n      <a:f3 parseType='Resource'>"
-			 + "\n         <rdf:first>1</rdf:first>"
-			 + "\n         <rdf:rest parseType='Resource'>"
-			 + "\n            <rdf:first>2</rdf:first>"
-			 + "\n            <rdf:rest resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>"
-			 + "\n         </rdf:rest>"
-			 + "\n      </a:f3>"
-			 + "\n      <j:root>true</j:root>"
-			 + "\n   </rdf:Description>"
-			 + "\n</rdf:RDF>";
+			"<rdf:RDF a='http://ns/' j='http://www.apache.org/juneau/' jp='http://www.apache.org/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
+			+ "\n   <rdf:Description about='http://test/a'>"
+			+ "\n      <a:f2 parseType='Resource'>"
+			+ "\n         <rdf:first>f2a</rdf:first>"
+			+ "\n         <rdf:rest parseType='Resource'>"
+			+ "\n            <rdf:first>f2b</rdf:first>"
+			+ "\n            <rdf:rest resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>"
+			+ "\n         </rdf:rest>"
+			+ "\n      </a:f2>"
+			+ "\n      <a:f3 parseType='Resource'>"
+			+ "\n         <rdf:first>1</rdf:first>"
+			+ "\n         <rdf:rest parseType='Resource'>"
+			+ "\n            <rdf:first>2</rdf:first>"
+			+ "\n            <rdf:rest resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>"
+			+ "\n         </rdf:rest>"
+			+ "\n      </a:f3>"
+			+ "\n      <j:root>true</j:root>"
+			+ "\n   </rdf:Description>"
+			+ "\n</rdf:RDF>";
 		rdfXml = s.build().serialize(a);
 		assertXmlEquals(expected, rdfXml);
 
@@ -158,12 +158,12 @@ public class RdfTest {
 		expected =
 			"<rdf:RDF a='http://ns/' j='http://www.apache.org/juneau/' jp='http://www.apache.org/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
 			+ "\n   <rdf:Description about='http://test/a'>"
-			 + "\n      <a:f2>f2a</a:f2>"
-			 + "\n      <a:f2>f2b</a:f2>"
-			 + "\n      <a:f3>1</a:f3>"
-			 + "\n      <a:f3>2</a:f3>"
-			 + "\n      <j:root>true</j:root>"
-			 + "\n   </rdf:Description>"
+			+ "\n      <a:f2>f2a</a:f2>"
+			+ "\n      <a:f2>f2b</a:f2>"
+			+ "\n      <a:f3>1</a:f3>"
+			+ "\n      <a:f3>2</a:f3>"
+			+ "\n      <j:root>true</j:root>"
+			+ "\n   </rdf:Description>"
 			+ "\n</rdf:RDF>";
 		rdfXml = s.build().serialize(a);
 		assertXmlEquals(expected, rdfXml);
@@ -177,25 +177,25 @@ public class RdfTest {
 	@Rdf(prefix="a", namespace="http://ns/")
 	public static class A {
 		@Rdf(beanUri=true) public URI f1;
-      public String[] f2;
-      public List<Integer> f3;
+		public String[] f2;
+		public List<Integer> f3;
 
-      public A init() throws Exception {
-    	  f1 = new URI("http://test/a");
-    	  f2 = new String[]{"f2a","f2b"};
-    	  f3 = Arrays.asList(new Integer[]{1,2});
-    	  return this;
-      }
-   }
+		public A init() throws Exception {
+			f1 = new URI("http://test/a");
+			f2 = new String[]{"f2a","f2b"};
+			f3 = Arrays.asList(new Integer[]{1,2});
+			return this;
+		}
+	}
 
 	@Test
 	public void testCollectionFormatAnnotations() throws Exception {
 		B b = new B().init(), b2;
 		String rdfXml, expected;
 		RdfSerializerBuilder s = new RdfSerializerBuilder().xmlabbrev()
-		   .property(RDF_rdfxml_tab, 3)
-		   .sq()
-		   .addRootProperty(true);
+			.property(RDF_rdfxml_tab, 3)
+			.sq()
+			.addRootProperty(true);
 		RdfParser p = RdfParser.DEFAULT_XML;
 
 		//--------------------------------------------------------------------------------
@@ -203,65 +203,65 @@ public class RdfTest {
 		//--------------------------------------------------------------------------------
 
 		expected =
-			 "<rdf:RDF b='http://ns/' j='http://www.apache.org/juneau/' jp='http://www.apache.org/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
-			 + "\n   <rdf:Description about='http://test/b'>"
-			 + "\n      <b:f2>"
-			 + "\n         <rdf:Seq>"
-			 + "\n            <rdf:li>f2a</rdf:li>"
-			 + "\n            <rdf:li>f2b</rdf:li>"
-			 + "\n         </rdf:Seq>"
-			 + "\n      </b:f2>"
-			 + "\n      <b:f3>"
-			 + "\n         <rdf:Bag>"
-			 + "\n            <rdf:li>f3a</rdf:li>"
-			 + "\n            <rdf:li>f3b</rdf:li>"
-			 + "\n         </rdf:Bag>"
-			 + "\n      </b:f3>"
-			 + "\n      <b:f4 parseType='Resource'>"
-			 + "\n         <rdf:first>f4a</rdf:first>"
-			 + "\n         <rdf:rest parseType='Resource'>"
-			 + "\n            <rdf:first>f4b</rdf:first>"
-			 + "\n            <rdf:rest resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>"
-			 + "\n         </rdf:rest>"
-			 + "\n      </b:f4>"
-			 + "\n      <b:f5>f5a</b:f5>"
-			 + "\n      <b:f5>f5b</b:f5>"
-			 + "\n      <b:f6>"
-			 + "\n         <rdf:Seq>"
-			 + "\n            <rdf:li>f6a</rdf:li>"
-			 + "\n            <rdf:li>f6b</rdf:li>"
-			 + "\n         </rdf:Seq>"
-			 + "\n      </b:f6>"
-			 + "\n      <b:f7>"
-			 + "\n         <rdf:Seq>"
-			 + "\n            <rdf:li>f7a</rdf:li>"
-			 + "\n            <rdf:li>f7b</rdf:li>"
-			 + "\n         </rdf:Seq>"
-			 + "\n      </b:f7>"
-			 + "\n      <b:f8>"
-			 + "\n         <rdf:Bag>"
-			 + "\n            <rdf:li>f8a</rdf:li>"
-			 + "\n            <rdf:li>f8b</rdf:li>"
-			 + "\n         </rdf:Bag>"
-			 + "\n      </b:f8>"
-			 + "\n      <b:f9 parseType='Resource'>"
-			 + "\n         <rdf:first>f9a</rdf:first>"
-			 + "\n         <rdf:rest parseType='Resource'>"
-			 + "\n            <rdf:first>f9b</rdf:first>"
-			 + "\n            <rdf:rest resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>"
-			 + "\n         </rdf:rest>"
-			 + "\n      </b:f9>"
-			 + "\n      <b:fa>faa</b:fa>"
-			 + "\n      <b:fa>fab</b:fa>"
-			 + "\n      <b:fb>"
-			 + "\n         <rdf:Seq>"
-			 + "\n            <rdf:li>fba</rdf:li>"
-			 + "\n            <rdf:li>fbb</rdf:li>"
-			 + "\n         </rdf:Seq>"
-			 + "\n      </b:fb>"
-			 + "\n      <j:root>true</j:root>"
-			 + "\n   </rdf:Description>"
-			 + "\n</rdf:RDF>";
+			"<rdf:RDF b='http://ns/' j='http://www.apache.org/juneau/' jp='http://www.apache.org/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
+			+ "\n   <rdf:Description about='http://test/b'>"
+			+ "\n      <b:f2>"
+			+ "\n         <rdf:Seq>"
+			+ "\n            <rdf:li>f2a</rdf:li>"
+			+ "\n            <rdf:li>f2b</rdf:li>"
+			+ "\n         </rdf:Seq>"
+			+ "\n      </b:f2>"
+			+ "\n      <b:f3>"
+			+ "\n         <rdf:Bag>"
+			+ "\n            <rdf:li>f3a</rdf:li>"
+			+ "\n            <rdf:li>f3b</rdf:li>"
+			+ "\n         </rdf:Bag>"
+			+ "\n      </b:f3>"
+			+ "\n      <b:f4 parseType='Resource'>"
+			+ "\n         <rdf:first>f4a</rdf:first>"
+			+ "\n         <rdf:rest parseType='Resource'>"
+			+ "\n            <rdf:first>f4b</rdf:first>"
+			+ "\n            <rdf:rest resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>"
+			+ "\n         </rdf:rest>"
+			+ "\n      </b:f4>"
+			+ "\n      <b:f5>f5a</b:f5>"
+			+ "\n      <b:f5>f5b</b:f5>"
+			+ "\n      <b:f6>"
+			+ "\n         <rdf:Seq>"
+			+ "\n            <rdf:li>f6a</rdf:li>"
+			+ "\n            <rdf:li>f6b</rdf:li>"
+			+ "\n         </rdf:Seq>"
+			+ "\n      </b:f6>"
+			+ "\n      <b:f7>"
+			+ "\n         <rdf:Seq>"
+			+ "\n            <rdf:li>f7a</rdf:li>"
+			+ "\n            <rdf:li>f7b</rdf:li>"
+			+ "\n         </rdf:Seq>"
+			+ "\n      </b:f7>"
+			+ "\n      <b:f8>"
+			+ "\n         <rdf:Bag>"
+			+ "\n            <rdf:li>f8a</rdf:li>"
+			+ "\n            <rdf:li>f8b</rdf:li>"
+			+ "\n         </rdf:Bag>"
+			+ "\n      </b:f8>"
+			+ "\n      <b:f9 parseType='Resource'>"
+			+ "\n         <rdf:first>f9a</rdf:first>"
+			+ "\n         <rdf:rest parseType='Resource'>"
+			+ "\n            <rdf:first>f9b</rdf:first>"
+			+ "\n            <rdf:rest resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>"
+			+ "\n         </rdf:rest>"
+			+ "\n      </b:f9>"
+			+ "\n      <b:fa>faa</b:fa>"
+			+ "\n      <b:fa>fab</b:fa>"
+			+ "\n      <b:fb>"
+			+ "\n         <rdf:Seq>"
+			+ "\n            <rdf:li>fba</rdf:li>"
+			+ "\n            <rdf:li>fbb</rdf:li>"
+			+ "\n         </rdf:Seq>"
+			+ "\n      </b:fb>"
+			+ "\n      <j:root>true</j:root>"
+			+ "\n   </rdf:Description>"
+			+ "\n</rdf:RDF>";
 		rdfXml = s.build().serialize(b);
 		assertXmlEquals(expected, rdfXml);
 
@@ -273,65 +273,65 @@ public class RdfTest {
 		//--------------------------------------------------------------------------------
 		s.collectionFormat(RdfCollectionFormat.BAG);
 		expected =
-			 "<rdf:RDF b='http://ns/' j='http://www.apache.org/juneau/' jp='http://www.apache.org/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
-			 + "\n   <rdf:Description about='http://test/b'>"
-			 + "\n      <b:f2>"
-			 + "\n         <rdf:Seq>"
-			 + "\n            <rdf:li>f2a</rdf:li>"
-			 + "\n            <rdf:li>f2b</rdf:li>"
-			 + "\n         </rdf:Seq>"
-			 + "\n      </b:f2>"
-			 + "\n      <b:f3>"
-			 + "\n         <rdf:Bag>"
-			 + "\n            <rdf:li>f3a</rdf:li>"
-			 + "\n            <rdf:li>f3b</rdf:li>"
-			 + "\n         </rdf:Bag>"
-			 + "\n      </b:f3>"
-			 + "\n      <b:f4 parseType='Resource'>"
-			 + "\n         <rdf:first>f4a</rdf:first>"
-			 + "\n         <rdf:rest parseType='Resource'>"
-			 + "\n            <rdf:first>f4b</rdf:first>"
-			 + "\n            <rdf:rest resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>"
-			 + "\n         </rdf:rest>"
-			 + "\n      </b:f4>"
-			 + "\n      <b:f5>f5a</b:f5>"
-			 + "\n      <b:f5>f5b</b:f5>"
-			 + "\n      <b:f6>"
-			 + "\n         <rdf:Bag>"
-			 + "\n            <rdf:li>f6a</rdf:li>"
-			 + "\n            <rdf:li>f6b</rdf:li>"
-			 + "\n         </rdf:Bag>"
-			 + "\n      </b:f6>"
-			 + "\n      <b:f7>"
-			 + "\n         <rdf:Seq>"
-			 + "\n            <rdf:li>f7a</rdf:li>"
-			 + "\n            <rdf:li>f7b</rdf:li>"
-			 + "\n         </rdf:Seq>"
-			 + "\n      </b:f7>"
-			 + "\n      <b:f8>"
-			 + "\n         <rdf:Bag>"
-			 + "\n            <rdf:li>f8a</rdf:li>"
-			 + "\n            <rdf:li>f8b</rdf:li>"
-			 + "\n         </rdf:Bag>"
-			 + "\n      </b:f8>"
-			 + "\n      <b:f9 parseType='Resource'>"
-			 + "\n         <rdf:first>f9a</rdf:first>"
-			 + "\n         <rdf:rest parseType='Resource'>"
-			 + "\n            <rdf:first>f9b</rdf:first>"
-			 + "\n            <rdf:rest resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>"
-			 + "\n         </rdf:rest>"
-			 + "\n      </b:f9>"
-			 + "\n      <b:fa>faa</b:fa>"
-			 + "\n      <b:fa>fab</b:fa>"
-			 + "\n      <b:fb>"
-			 + "\n         <rdf:Bag>"
-			 + "\n            <rdf:li>fba</rdf:li>"
-			 + "\n            <rdf:li>fbb</rdf:li>"
-			 + "\n         </rdf:Bag>"
-			 + "\n      </b:fb>"
-			 + "\n      <j:root>true</j:root>"
-			 + "\n   </rdf:Description>"
-			 + "\n</rdf:RDF>";
+			"<rdf:RDF b='http://ns/' j='http://www.apache.org/juneau/' jp='http://www.apache.org/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
+			+ "\n   <rdf:Description about='http://test/b'>"
+			+ "\n      <b:f2>"
+			+ "\n         <rdf:Seq>"
+			+ "\n            <rdf:li>f2a</rdf:li>"
+			+ "\n            <rdf:li>f2b</rdf:li>"
+			+ "\n         </rdf:Seq>"
+			+ "\n      </b:f2>"
+			+ "\n      <b:f3>"
+			+ "\n         <rdf:Bag>"
+			+ "\n            <rdf:li>f3a</rdf:li>"
+			+ "\n            <rdf:li>f3b</rdf:li>"
+			+ "\n         </rdf:Bag>"
+			+ "\n      </b:f3>"
+			+ "\n      <b:f4 parseType='Resource'>"
+			+ "\n         <rdf:first>f4a</rdf:first>"
+			+ "\n         <rdf:rest parseType='Resource'>"
+			+ "\n            <rdf:first>f4b</rdf:first>"
+			+ "\n            <rdf:rest resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>"
+			+ "\n         </rdf:rest>"
+			+ "\n      </b:f4>"
+			+ "\n      <b:f5>f5a</b:f5>"
+			+ "\n      <b:f5>f5b</b:f5>"
+			+ "\n      <b:f6>"
+			+ "\n         <rdf:Bag>"
+			+ "\n            <rdf:li>f6a</rdf:li>"
+			+ "\n            <rdf:li>f6b</rdf:li>"
+			+ "\n         </rdf:Bag>"
+			+ "\n      </b:f6>"
+			+ "\n      <b:f7>"
+			+ "\n         <rdf:Seq>"
+			+ "\n            <rdf:li>f7a</rdf:li>"
+			+ "\n            <rdf:li>f7b</rdf:li>"
+			+ "\n         </rdf:Seq>"
+			+ "\n      </b:f7>"
+			+ "\n      <b:f8>"
+			+ "\n         <rdf:Bag>"
+			+ "\n            <rdf:li>f8a</rdf:li>"
+			+ "\n            <rdf:li>f8b</rdf:li>"
+			+ "\n         </rdf:Bag>"
+			+ "\n      </b:f8>"
+			+ "\n      <b:f9 parseType='Resource'>"
+			+ "\n         <rdf:first>f9a</rdf:first>"
+			+ "\n         <rdf:rest parseType='Resource'>"
+			+ "\n            <rdf:first>f9b</rdf:first>"
+			+ "\n            <rdf:rest resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>"
+			+ "\n         </rdf:rest>"
+			+ "\n      </b:f9>"
+			+ "\n      <b:fa>faa</b:fa>"
+			+ "\n      <b:fa>fab</b:fa>"
+			+ "\n      <b:fb>"
+			+ "\n         <rdf:Bag>"
+			+ "\n            <rdf:li>fba</rdf:li>"
+			+ "\n            <rdf:li>fbb</rdf:li>"
+			+ "\n         </rdf:Bag>"
+			+ "\n      </b:fb>"
+			+ "\n      <j:root>true</j:root>"
+			+ "\n   </rdf:Description>"
+			+ "\n</rdf:RDF>";
 
 		rdfXml = s.build().serialize(b);
 		assertXmlEquals(expected, rdfXml);
@@ -366,20 +366,20 @@ public class RdfTest {
 		public BE fb;
 
 		public B init() throws Exception {
-    	  f1 = new URI("http://test/b");
-    	  f2 = new String[]{"f2a","f2b"};
-    	  f3 = new String[]{"f3a","f3b"};
-    	  f4 = new String[]{"f4a","f4b"};
-    	  f5 = new String[]{"f5a","f5b"};
-    	  f6 = new String[]{"f6a","f6b"};
-    	  f7 = new BA().append("f7a","f7b");
-    	  f8 = new BB().append("f8a","f8b");
-    	  f9 = new BC().append("f9a","f9b");
-    	  fa = new BD().append("faa","fab");
-    	  fb = new BE().append("fba","fbb");
-    	  return this;
-      }
-   }
+			f1 = new URI("http://test/b");
+			f2 = new String[]{"f2a","f2b"};
+			f3 = new String[]{"f3a","f3b"};
+			f4 = new String[]{"f4a","f4b"};
+			f5 = new String[]{"f5a","f5b"};
+			f6 = new String[]{"f6a","f6b"};
+			f7 = new BA().append("f7a","f7b");
+			f8 = new BB().append("f8a","f8b");
+			f9 = new BC().append("f9a","f9b");
+			fa = new BD().append("faa","fab");
+			fb = new BE().append("fba","fbb");
+			return this;
+		}
+	}
 
 	@Rdf(prefix="ba", namespace="http://ns/", collectionFormat=RdfCollectionFormat.SEQ)
 	public static class BA extends ArrayList<String> {
@@ -426,9 +426,9 @@ public class RdfTest {
 		C c = new C().init(), c2;
 		String rdfXml, expected;
 		RdfSerializerBuilder s = new RdfSerializerBuilder().xmlabbrev()
-		   .property(RDF_rdfxml_tab, 3)
-		   .sq()
-		   .addRootProperty(true);
+			.property(RDF_rdfxml_tab, 3)
+			.sq()
+			.addRootProperty(true);
 		RdfParser p = RdfParser.DEFAULT_XML;
 
 		//--------------------------------------------------------------------------------
@@ -436,65 +436,65 @@ public class RdfTest {
 		//--------------------------------------------------------------------------------
 		s.collectionFormat(RdfCollectionFormat.BAG);
 		expected =
-			 "<rdf:RDF b='http://ns/' j='http://www.apache.org/juneau/' jp='http://www.apache.org/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
-			 + "\n   <rdf:Description about='http://test/b'>"
-			 + "\n      <b:f2>"
-			 + "\n         <rdf:Seq>"
-			 + "\n            <rdf:li>f2a</rdf:li>"
-			 + "\n            <rdf:li>f2b</rdf:li>"
-			 + "\n         </rdf:Seq>"
-			 + "\n      </b:f2>"
-			 + "\n      <b:f3>"
-			 + "\n         <rdf:Bag>"
-			 + "\n            <rdf:li>f3a</rdf:li>"
-			 + "\n            <rdf:li>f3b</rdf:li>"
-			 + "\n         </rdf:Bag>"
-			 + "\n      </b:f3>"
-			 + "\n      <b:f4 parseType='Resource'>"
-			 + "\n         <rdf:first>f4a</rdf:first>"
-			 + "\n         <rdf:rest parseType='Resource'>"
-			 + "\n            <rdf:first>f4b</rdf:first>"
-			 + "\n            <rdf:rest resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>"
-			 + "\n         </rdf:rest>"
-			 + "\n      </b:f4>"
-			 + "\n      <b:f5>f5a</b:f5>"
-			 + "\n      <b:f5>f5b</b:f5>"
-			 + "\n      <b:f6>"
-			 + "\n         <rdf:Bag>"
-			 + "\n            <rdf:li>f6a</rdf:li>"
-			 + "\n            <rdf:li>f6b</rdf:li>"
-			 + "\n         </rdf:Bag>"
-			 + "\n      </b:f6>"
-			 + "\n      <b:f7>"
-			 + "\n         <rdf:Seq>"
-			 + "\n            <rdf:li>f7a</rdf:li>"
-			 + "\n            <rdf:li>f7b</rdf:li>"
-			 + "\n         </rdf:Seq>"
-			 + "\n      </b:f7>"
-			 + "\n      <b:f8>"
-			 + "\n         <rdf:Bag>"
-			 + "\n            <rdf:li>f8a</rdf:li>"
-			 + "\n            <rdf:li>f8b</rdf:li>"
-			 + "\n         </rdf:Bag>"
-			 + "\n      </b:f8>"
-			 + "\n      <b:f9 parseType='Resource'>"
-			 + "\n         <rdf:first>f9a</rdf:first>"
-			 + "\n         <rdf:rest parseType='Resource'>"
-			 + "\n            <rdf:first>f9b</rdf:first>"
-			 + "\n            <rdf:rest resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>"
-			 + "\n         </rdf:rest>"
-			 + "\n      </b:f9>"
-			 + "\n      <b:fa>faa</b:fa>"
-			 + "\n      <b:fa>fab</b:fa>"
-			 + "\n      <b:fb>"
-			 + "\n         <rdf:Bag>"
-			 + "\n            <rdf:li>fba</rdf:li>"
-			 + "\n            <rdf:li>fbb</rdf:li>"
-			 + "\n         </rdf:Bag>"
-			 + "\n      </b:fb>"
-			 + "\n      <j:root>true</j:root>"
-			 + "\n   </rdf:Description>"
-			 + "\n</rdf:RDF>";
+			"<rdf:RDF b='http://ns/' j='http://www.apache.org/juneau/' jp='http://www.apache.org/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
+			+ "\n   <rdf:Description about='http://test/b'>"
+			+ "\n      <b:f2>"
+			+ "\n         <rdf:Seq>"
+			+ "\n            <rdf:li>f2a</rdf:li>"
+			+ "\n            <rdf:li>f2b</rdf:li>"
+			+ "\n         </rdf:Seq>"
+			+ "\n      </b:f2>"
+			+ "\n      <b:f3>"
+			+ "\n         <rdf:Bag>"
+			+ "\n            <rdf:li>f3a</rdf:li>"
+			+ "\n            <rdf:li>f3b</rdf:li>"
+			+ "\n         </rdf:Bag>"
+			+ "\n      </b:f3>"
+			+ "\n      <b:f4 parseType='Resource'>"
+			+ "\n         <rdf:first>f4a</rdf:first>"
+			+ "\n         <rdf:rest parseType='Resource'>"
+			+ "\n            <rdf:first>f4b</rdf:first>"
+			+ "\n            <rdf:rest resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>"
+			+ "\n         </rdf:rest>"
+			+ "\n      </b:f4>"
+			+ "\n      <b:f5>f5a</b:f5>"
+			+ "\n      <b:f5>f5b</b:f5>"
+			+ "\n      <b:f6>"
+			+ "\n         <rdf:Bag>"
+			+ "\n            <rdf:li>f6a</rdf:li>"
+			+ "\n            <rdf:li>f6b</rdf:li>"
+			+ "\n         </rdf:Bag>"
+			+ "\n      </b:f6>"
+			+ "\n      <b:f7>"
+			+ "\n         <rdf:Seq>"
+			+ "\n            <rdf:li>f7a</rdf:li>"
+			+ "\n            <rdf:li>f7b</rdf:li>"
+			+ "\n         </rdf:Seq>"
+			+ "\n      </b:f7>"
+			+ "\n      <b:f8>"
+			+ "\n         <rdf:Bag>"
+			+ "\n            <rdf:li>f8a</rdf:li>"
+			+ "\n            <rdf:li>f8b</rdf:li>"
+			+ "\n         </rdf:Bag>"
+			+ "\n      </b:f8>"
+			+ "\n      <b:f9 parseType='Resource'>"
+			+ "\n         <rdf:first>f9a</rdf:first>"
+			+ "\n         <rdf:rest parseType='Resource'>"
+			+ "\n            <rdf:first>f9b</rdf:first>"
+			+ "\n            <rdf:rest resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>"
+			+ "\n         </rdf:rest>"
+			+ "\n      </b:f9>"
+			+ "\n      <b:fa>faa</b:fa>"
+			+ "\n      <b:fa>fab</b:fa>"
+			+ "\n      <b:fb>"
+			+ "\n         <rdf:Bag>"
+			+ "\n            <rdf:li>fba</rdf:li>"
+			+ "\n            <rdf:li>fbb</rdf:li>"
+			+ "\n         </rdf:Bag>"
+			+ "\n      </b:fb>"
+			+ "\n      <j:root>true</j:root>"
+			+ "\n   </rdf:Description>"
+			+ "\n</rdf:RDF>";
 
 		rdfXml = s.build().serialize(c);
 		assertXmlEquals(expected, rdfXml);
@@ -507,19 +507,19 @@ public class RdfTest {
 	public static class C extends B {
 		@Override /* B */
 		public C init() throws Exception {
-    	  f1 = new URI("http://test/b");
-    	  f2 = new String[]{"f2a","f2b"};
-    	  f3 = new String[]{"f3a","f3b"};
-    	  f4 = new String[]{"f4a","f4b"};
-    	  f5 = new String[]{"f5a","f5b"};
-    	  f6 = new String[]{"f6a","f6b"};
-    	  f7 = new BA().append("f7a","f7b");
-    	  f8 = new BB().append("f8a","f8b");
-    	  f9 = new BC().append("f9a","f9b");
-    	  fa = new BD().append("faa","fab");
-    	  fb = new BE().append("fba","fbb");
-    	  return this;
-      }
+			f1 = new URI("http://test/b");
+			f2 = new String[]{"f2a","f2b"};
+			f3 = new String[]{"f3a","f3b"};
+			f4 = new String[]{"f4a","f4b"};
+			f5 = new String[]{"f5a","f5b"};
+			f6 = new String[]{"f6a","f6b"};
+			f7 = new BA().append("f7a","f7b");
+			f8 = new BB().append("f8a","f8b");
+			f9 = new BC().append("f9a","f9b");
+			fa = new BD().append("faa","fab");
+			fb = new BE().append("fba","fbb");
+			return this;
+		}
 	}
 
 	@Test
@@ -535,15 +535,15 @@ public class RdfTest {
 		rdfXml = s.serialize(l);
 		expected =
 			"<rdf:RDF j='http://www.apache.org/juneau/' jp='http://www.apache.org/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
-				+ "\n   <rdf:Description about='http://localhost/f1/2'>"
-				+ "\n      <jp:f2>f2</jp:f2>"
-				+ "\n      <jp:f3 resource='http://localhost/f3/2'/>"
-				+ "\n   </rdf:Description>"
-				+ "\n   <rdf:Description about='http://localhost/f1/1'>"
-				+ "\n      <jp:f2>f2</jp:f2>"
-	 			+ "\n      <jp:f3 resource='http://localhost/f3/1'/>"
-	 			+ "\n   </rdf:Description>"
-				+ "\n</rdf:RDF>";
+			+ "\n   <rdf:Description about='http://localhost/f1/2'>"
+			+ "\n      <jp:f2>f2</jp:f2>"
+			+ "\n      <jp:f3 resource='http://localhost/f3/2'/>"
+			+ "\n   </rdf:Description>"
+			+ "\n   <rdf:Description about='http://localhost/f1/1'>"
+			+ "\n      <jp:f2>f2</jp:f2>"
+			+ "\n      <jp:f3 resource='http://localhost/f3/1'/>"
+			+ "\n   </rdf:Description>"
+			+ "\n</rdf:RDF>";
 		assertXmlEquals(expected, rdfXml);
 
 		l = p.parse(rdfXml, LinkedList.class, D.class);
@@ -551,30 +551,30 @@ public class RdfTest {
 		rdfXml = s.serialize(da);
 		expected =
 			"<rdf:RDF j='http://www.apache.org/juneau/' jp='http://www.apache.org/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
-				+ "\n   <rdf:Description about='http://localhost/f1/2'>"
-				+ "\n      <jp:f2>f2</jp:f2>"
-				+ "\n      <jp:f3 resource='http://localhost/f3/2'/>"
-				+ "\n   </rdf:Description>"
-				+ "\n   <rdf:Description about='http://localhost/f1/1'>"
-				+ "\n      <jp:f2>f2</jp:f2>"
-	 			+ "\n      <jp:f3 resource='http://localhost/f3/1'/>"
-	 			+ "\n   </rdf:Description>"
-				+ "\n</rdf:RDF>";
+			+ "\n   <rdf:Description about='http://localhost/f1/2'>"
+			+ "\n      <jp:f2>f2</jp:f2>"
+			+ "\n      <jp:f3 resource='http://localhost/f3/2'/>"
+			+ "\n   </rdf:Description>"
+			+ "\n   <rdf:Description about='http://localhost/f1/1'>"
+			+ "\n      <jp:f2>f2</jp:f2>"
+			+ "\n      <jp:f3 resource='http://localhost/f3/1'/>"
+			+ "\n   </rdf:Description>"
+			+ "\n</rdf:RDF>";
 		assertXmlEquals(expected, rdfXml);
 
 		da = p.parse(rdfXml, D[].class);
 		rdfXml = s.serialize(da);
 		expected =
 			"<rdf:RDF j='http://www.apache.org/juneau/' jp='http://www.apache.org/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
-				+ "\n   <rdf:Description about='http://localhost/f1/2'>"
-				+ "\n      <jp:f2>f2</jp:f2>"
-				+ "\n      <jp:f3 resource='http://localhost/f3/2'/>"
-				+ "\n   </rdf:Description>"
-				+ "\n   <rdf:Description about='http://localhost/f1/1'>"
-				+ "\n      <jp:f2>f2</jp:f2>"
-	 			+ "\n      <jp:f3 resource='http://localhost/f3/1'/>"
-	 			+ "\n   </rdf:Description>"
-				+ "\n</rdf:RDF>";
+			+ "\n   <rdf:Description about='http://localhost/f1/2'>"
+			+ "\n      <jp:f2>f2</jp:f2>"
+			+ "\n      <jp:f3 resource='http://localhost/f3/2'/>"
+			+ "\n   </rdf:Description>"
+			+ "\n   <rdf:Description about='http://localhost/f1/1'>"
+			+ "\n      <jp:f2>f2</jp:f2>"
+			+ "\n      <jp:f3 resource='http://localhost/f3/1'/>"
+			+ "\n   </rdf:Description>"
+			+ "\n</rdf:RDF>";
 		assertXmlEquals(expected, rdfXml);
 	}
 

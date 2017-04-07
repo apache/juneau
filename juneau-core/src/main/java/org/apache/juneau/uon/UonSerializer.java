@@ -381,6 +381,6 @@ public class UonSerializer extends WriterSerializer {
 	@Override /* Serializer */
 	protected void doSerialize(SerializerSession session, Object o) throws Exception {
 		UonSerializerSession s = (UonSerializerSession)session;
-		serializeAnything(s, s.getWriter(), o, null, "root", null);
+		serializeAnything(s, s.getWriter(), o, s.getExpectedRootType(o), "root", null);
 	}
 }

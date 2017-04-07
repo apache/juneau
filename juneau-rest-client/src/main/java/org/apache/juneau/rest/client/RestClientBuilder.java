@@ -973,6 +973,17 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	}
 
 	/**
+	 * Sets the {@link SerializerContext#SERIALIZER_abridged} property on all serializers in this group.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see SerializerContext#SERIALIZER_abridged
+	 */
+	public RestClientBuilder abridged(boolean value) {
+		return property(SERIALIZER_abridged, value);
+	}
+
+	/**
 	 * Sets the {@link ParserContext#PARSER_trimStrings} property on all parsers in this group.
 	 *
 	 * @param value The new value for this property.

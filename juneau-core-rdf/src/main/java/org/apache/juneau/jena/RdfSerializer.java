@@ -191,7 +191,7 @@ public class RdfSerializer extends WriterSerializer {
 			for (Object o2 : c)
 				serializeAnything(s, o2, false, object(), "root", null, null);
 		} else {
-			RDFNode n = serializeAnything(s, o, false, object(), "root", null, null);
+			RDFNode n = serializeAnything(s, o, false, s.getExpectedRootType(o), "root", null, null);
 			if (n.isLiteral()) {
 				r = model.createResource();
 				r.addProperty(s.getValueProperty(), n);

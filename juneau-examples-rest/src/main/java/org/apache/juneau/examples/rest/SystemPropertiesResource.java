@@ -80,7 +80,7 @@ public class SystemPropertiesResource extends Resource {
 	}
 	
 	@RestMethod(
-		name="PUT", path="/{propertyName}", 
+		name="PUT", path="/{propertyName}",
 		summary="Replace system property",
 		description="Sets a new value for the specified system property.",
 		guards=AdminGuard.class,
@@ -89,12 +89,12 @@ public class SystemPropertiesResource extends Resource {
 			@Parameter(in="body", description="The new system property value."),
 		},
 		responses={
-			@Response(value=302, 
+			@Response(value=302,
 				headers={
 					@Parameter(name="Location", description="The root URL of this resource.")
 				}
 			),	
-			@Response(value=403, description="User is not an admin.") 
+			@Response(value=403, description="User is not an admin.")
 		}
 	)
 	public Redirect setSystemProperty(@Path String propertyName, @Body String value) {
@@ -103,7 +103,7 @@ public class SystemPropertiesResource extends Resource {
 	}
 
 	@RestMethod(
-		name="POST", path="/", 
+		name="POST", path="/",
 		summary="Add an entire set of system properties",
 		description="Takes in a map of key/value pairs and creates a set of new system properties.",
 		guards=AdminGuard.class,
@@ -112,12 +112,12 @@ public class SystemPropertiesResource extends Resource {
 			@Parameter(in="body", description="The new system property values.", schema="{example:{key1:'val1',key2:123}}"),
 		},
 		responses={
-			@Response(value=302, 
+			@Response(value=302,
 				headers={
 					@Parameter(name="Location", description="The root URL of this resource.")
 				}
 			),	
-			@Response(value=403, description="Unauthorized:  User is not an admin.") 
+			@Response(value=403, description="Unauthorized:  User is not an admin.")
 		}
 	)
 	public Redirect setSystemProperties(@Body java.util.Properties newProperties) {
@@ -126,7 +126,7 @@ public class SystemPropertiesResource extends Resource {
 	}
 
 	@RestMethod(
-		name="DELETE", path="/{propertyName}", 
+		name="DELETE", path="/{propertyName}",
 		summary="Delete system property",
 		description="Deletes the specified system property.",
 		guards=AdminGuard.class,
@@ -134,12 +134,12 @@ public class SystemPropertiesResource extends Resource {
 			@Parameter(in="path", name="propertyName", description="The system property name."),
 		},
 		responses={
-			@Response(value=302, 
+			@Response(value=302,
 				headers={
 					@Parameter(name="Location", description="The root URL of this resource.")
 				}
 			),	
-			@Response(value=403, description="Unauthorized:  User is not an admin") 
+			@Response(value=403, description="Unauthorized:  User is not an admin")
 		}
 	)
 	public Redirect deleteSystemProperty(@Path String propertyName) {
@@ -173,7 +173,7 @@ public class SystemPropertiesResource extends Resource {
 	}
 
 	@RestMethod(
-		name="POST", path="/formPagePost", 
+		name="POST", path="/formPagePost",
 		description="Accepts a simple form post of a system property name/value pair.",
 		guards=AdminGuard.class
 	)

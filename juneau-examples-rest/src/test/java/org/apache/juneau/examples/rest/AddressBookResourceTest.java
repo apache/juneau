@@ -77,21 +77,21 @@ public class AddressBookResourceTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testBasic() throws Exception {
-		String in = "" 
-		+"{"
-		+"\n	name: \"Bill Clinton\", "
-		+"\n	age: 66, "
-		+"\n	birthDate: \"Aug 19, 1946\", "
-		+"\n	addresses: ["
-		+"\n		{"
-		+"\n			street: \"a3\", "
-		+"\n			city: \"b3\", "
-		+"\n			state: \"c3\", "
-		+"\n			zip: 3, "
-		+"\n			isCurrent: false"
-		+"\n		}"
-		+"\n	]"
-		+"\n}";			
+		String in = ""
+			+"{"
+			+"\n	name: \"Bill Clinton\", "
+			+"\n	age: 66, "
+			+"\n	birthDate: \"Aug 19, 1946\", "
+			+"\n	addresses: ["
+			+"\n		{"
+			+"\n			street: \"a3\", "
+			+"\n			city: \"b3\", "
+			+"\n			state: \"c3\", "
+			+"\n			zip: 3, "
+			+"\n			isCurrent: false"
+			+"\n		}"
+			+"\n	]"
+			+"\n}";			
 		JsonParser p = new JsonParserBuilder().pojoSwaps(CalendarSwap.DateMedium.class).build();
 		Person person = p.parse(in, Person.class);
 		if (debug) System.err.println(person);

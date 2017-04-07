@@ -259,11 +259,11 @@ public class TestUtils {
 
 	final protected static char[] hexArray = "0123456789ABCDEF".toCharArray();
 	public static String toHex(byte b) {
-	    char[] c = new char[2];
-	    int v = b & 0xFF;
-	    c[0] = hexArray[v >>> 4];
-	    c[1] = hexArray[v & 0x0F];
-	    return new String(c);
+		char[] c = new char[2];
+		int v = b & 0xFF;
+		c[0] = hexArray[v >>> 4];
+		c[1] = hexArray[v & 0x0F];
+		return new String(c);
 	}
 
 	public static void debugOut(Object o) {

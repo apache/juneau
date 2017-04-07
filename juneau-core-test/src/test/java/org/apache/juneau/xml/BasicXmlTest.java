@@ -250,7 +250,7 @@ public class BasicXmlTest {
 						+"<k6 _type='null'/>"
 					+"</c>"
 				+"</object>",
-		   },
+			},
 			{
 				"BeanWithTypeName",
 				new BeanWithTypeName().init(),
@@ -501,16 +501,16 @@ public class BasicXmlTest {
 			{
 				"BeanWithXmlFormatAttrProperty",
 				new BeanWithXmlFormatAttrProperty().init(),
-         	"<object a='foo' b='123'/>",
-         	"<object a='foo' b='123'/>\n",
-         	"<object a='foo' b='123'/>",
+				"<object a='foo' b='123'/>",
+				"<object a='foo' b='123'/>\n",
+				"<object a='foo' b='123'/>",
 			},
 			{
 				"BeanWithXmlFormatAttrs",
 				new BeanWithXmlFormatAttrs().init(),
-         	"<object a='foo' b='123'/>",
-         	"<object a='foo' b='123'/>\n",
-         	"<object a='foo' b='123'/>",
+				"<object a='foo' b='123'/>",
+				"<object a='foo' b='123'/>\n",
+				"<object a='foo' b='123'/>",
 			},
 			{
 				"BeanWithXmlFormatElementProperty",
