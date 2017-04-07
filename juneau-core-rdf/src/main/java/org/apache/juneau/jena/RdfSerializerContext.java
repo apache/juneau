@@ -123,11 +123,11 @@ public final class RdfSerializerContext extends SerializerContext implements Rdf
 	public static final String RDF_addBeanTypeProperties = "RdfSerializer.addBeanTypeProperties";
 
 
-	final boolean 
-		addLiteralTypes, 
-		addRootProperty, 
-		useXmlNamespaces, 
-		looseCollections, 
+	final boolean
+		addLiteralTypes,
+		addRootProperty,
+		useXmlNamespaces,
+		looseCollections,
 		autoDetectNamespaces,
 		addBeanTypeProperties;
 	final String rdfLanguage;

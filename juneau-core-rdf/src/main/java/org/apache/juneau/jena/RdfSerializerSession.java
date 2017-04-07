@@ -36,11 +36,11 @@ public final class RdfSerializerSession extends SerializerSession {
 
 	private final String rdfLanguage;
 	private final Namespace juneauNs, juneauBpNs;
-	private final boolean 
-		addLiteralTypes, 
-		addRootProperty, 
-		useXmlNamespaces, 
-		looseCollections, 
+	private final boolean
+		addLiteralTypes,
+		addRootProperty,
+		useXmlNamespaces,
+		looseCollections,
 		autoDetectNamespaces,
 		addBeanTypeProperties;
 	private final Property pRoot, pValue, pType;
