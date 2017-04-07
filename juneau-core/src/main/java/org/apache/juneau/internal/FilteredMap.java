@@ -32,8 +32,8 @@ public final class FilteredMap<K,V> extends AbstractMap<K,V> implements Delegate
 
 	/**
 	 * Constructor.
-	 * 
-	 * @param classMeta The class type of the map being wrapped. 
+	 *
+	 * @param classMeta The class type of the map being wrapped.
 	 * @param innerMap The map being wrapped.  Must not be <jk>null</jk>.
 	 * @param keys The keys in the new map.  Must not be <jk>null</jk>.
 	 */

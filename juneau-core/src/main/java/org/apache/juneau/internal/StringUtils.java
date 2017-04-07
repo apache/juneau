@@ -190,9 +190,9 @@ public final class StringUtils {
 		}
 	}
 
-   private final static Pattern fpRegex = Pattern.compile(
-      "[+-]?(NaN|Infinity|((((\\p{Digit}+)(\\.)?((\\p{Digit}+)?)([eE][+-]?(\\p{Digit}+))?)|(\\.((\\p{Digit}+))([eE][+-]?(\\p{Digit}+))?)|(((0[xX](\\p{XDigit}+)(\\.)?)|(0[xX](\\p{XDigit}+)?(\\.)(\\p{XDigit}+)))[pP][+-]?(\\p{Digit}+)))[fFdD]?))[\\x00-\\x20]*"
-   );
+	private final static Pattern fpRegex = Pattern.compile(
+		"[+-]?(NaN|Infinity|((((\\p{Digit}+)(\\.)?((\\p{Digit}+)?)([eE][+-]?(\\p{Digit}+))?)|(\\.((\\p{Digit}+))([eE][+-]?(\\p{Digit}+))?)|(((0[xX](\\p{XDigit}+)(\\.)?)|(0[xX](\\p{XDigit}+)?(\\.)(\\p{XDigit}+)))[pP][+-]?(\\p{Digit}+)))[fFdD]?))[\\x00-\\x20]*"
+	);
 
 	/**
 	 * Returns <jk>true</jk> if this string can be parsed by {@link #parseNumber(String, Class)}.
@@ -1038,7 +1038,7 @@ public final class StringUtils {
 	public static String fromHexToUTF8(String hex) {
 		ByteBuffer buff = ByteBuffer.allocate(hex.length()/2);
 		for (int i = 0; i < hex.length(); i+=2)
-		    buff.put((byte)Integer.parseInt(hex.substring(i, i+2), 16));
+			buff.put((byte)Integer.parseInt(hex.substring(i, i+2), 16));
 		buff.rewind();
 		Charset cs = Charset.forName("UTF-8");
 		return cs.decode(buff).toString();
@@ -1054,11 +1054,11 @@ public final class StringUtils {
 	 */
 	public static String toHex(byte[] bytes) {
 		StringBuilder sb = new StringBuilder(bytes.length * 2);
-	    for ( int j = 0; j < bytes.length; j++ ) {
-	        int v = bytes[j] & 0xFF;
-	        sb.append(HEX[v >>> 4]).append(HEX[v & 0x0F]);
-	    }
-	    return sb.toString();
+		for ( int j = 0; j < bytes.length; j++ ) {
+			int v = bytes[j] & 0xFF;
+			sb.append(HEX[v >>> 4]).append(HEX[v & 0x0F]);
+		}
+		return sb.toString();
 	}
 
 	/**
@@ -1070,7 +1070,7 @@ public final class StringUtils {
 	public static byte[] fromHex(String hex) {
 		ByteBuffer buff = ByteBuffer.allocate(hex.length()/2);
 		for (int i = 0; i < hex.length(); i+=2)
-		    buff.put((byte)Integer.parseInt(hex.substring(i, i+2), 16));
+			buff.put((byte)Integer.parseInt(hex.substring(i, i+2), 16));
 		buff.rewind();
 		return buff.array();
 	}

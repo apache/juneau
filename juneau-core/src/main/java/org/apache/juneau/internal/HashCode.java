@@ -54,7 +54,7 @@ public class HashCode {
 	 * @return This object (for method chaining).
 	 */
 	public HashCode add(int i) {
-      hashCode = 31*hashCode + i;
+		hashCode = 31*hashCode + i;
 		return this;
 	}
 
@@ -64,7 +64,7 @@ public class HashCode {
 	 * @return The calculated hashcode.
 	 */
 	public int get() {
-      return hashCode;
+		return hashCode;
 	}
 
 	/**

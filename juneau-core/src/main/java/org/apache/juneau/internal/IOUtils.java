@@ -145,7 +145,7 @@ public final class IOUtils {
 
 		try {
 			while ((nRead = in.read(b, 0, b.length)) != -1)
-				  buff.write(b, 0, nRead);
+				buff.write(b, 0, nRead);
 			buff.flush();
 
 			return buff.toByteArray();
@@ -210,11 +210,11 @@ public final class IOUtils {
 	 * @param out The writer to pipe to.
 	 * @throws IOException
 	 */
-   public static void pipe(Reader in, Writer out) throws IOException {
+	public static void pipe(Reader in, Writer out) throws IOException {
 		assertFieldNotNull(out, "out");
 		assertFieldNotNull(in, "in");
-      IOPipe.create(in, out).run();
-   }
+		IOPipe.create(in, out).run();
+	}
 
 	/**
 	 * Wraps the specified reader in a buffered reader.
