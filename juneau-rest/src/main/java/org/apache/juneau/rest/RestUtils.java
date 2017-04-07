@@ -119,12 +119,12 @@ public final class RestUtils {
 		return s;
 	}
 
-   /**
-    * Decodes a <code>application/x-www-form-urlencoded</code> string using <code>UTF-8</code> encoding scheme.
-    *
+	/**
+	 * Decodes a <code>application/x-www-form-urlencoded</code> string using <code>UTF-8</code> encoding scheme.
+	 *
 	 * @param s The string to decode.
 	 * @return The decoded string, or <jk>null</jk> if input is <jk>null</jk>.
-    */
+	 */
 	public static String decode(String s) {
 		if (s == null)
 			return s;
@@ -144,12 +144,12 @@ public final class RestUtils {
 	// Characters that do not need to be URL-encoded
 	private static final AsciiSet unencodedChars = new AsciiSet("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_.!~*'()\\");
 
-   /**
-    * Encodes a <code>application/x-www-form-urlencoded</code> string using <code>UTF-8</code> encoding scheme.
-    *
-    * @param s The string to encode.
-    * @return The encoded string, or <jk>null</jk> if input is <jk>null</jk>.
-    */
+	/**
+	 * Encodes a <code>application/x-www-form-urlencoded</code> string using <code>UTF-8</code> encoding scheme.
+	 *
+	 * @param s The string to encode.
+	 * @return The encoded string, or <jk>null</jk> if input is <jk>null</jk>.
+	 */
 	public static String encode(String s) {
 		if (s == null)
 			return null;
@@ -163,12 +163,12 @@ public final class RestUtils {
 		return s;
 	}
 
-   /**
-    * Identical to {@link HttpServletRequest#getPathInfo()} but doesn't decode encoded characters.
-    *
-    * @param req The HTTP request
-    * @return The undecoded path info.
-    */
+	/**
+	 * Identical to {@link HttpServletRequest#getPathInfo()} but doesn't decode encoded characters.
+	 *
+	 * @param req The HTTP request
+	 * @return The undecoded path info.
+	 */
 	public static String getPathInfoUndecoded(HttpServletRequest req) {
 		String requestURI = req.getRequestURI();
 		String contextPath = req.getContextPath();

@@ -74,7 +74,7 @@ public @interface RestResource {
 	 * 	but it can also be used for other purposes like pre-call validation of a request.
 	 * <p>
 	 * The programmatic equivalent to this annotation are the {@link RestConfig#addGuards(Class...)}/{@link RestConfig#addGuards(RestGuard...)} methods.
- 	 */
+	 */
 	Class<? extends RestGuard>[] guards() default {};
 
 	/**
