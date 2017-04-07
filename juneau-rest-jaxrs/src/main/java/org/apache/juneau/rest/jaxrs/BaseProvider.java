@@ -57,7 +57,7 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 				.properties(properties)
 				.build();
 
-			parsers = new ParserGroupBuilder() 
+			parsers = new ParserGroupBuilder()
 				.append(jp.parsers())
 				.beanFilters(jp.beanFilters())
 				.pojoSwaps(jp.pojoSwaps())
@@ -177,13 +177,13 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 	 * Converts an Accept-Language value entry to a Locale.
 	 */
 	private static Locale toLocale(String lang) {
-      String country = "";
-      int i = lang.indexOf('-');
-      if (i > -1) {
-          country = lang.substring(i+1).trim();
-          lang = lang.substring(0,i).trim();
-      }
-      return new Locale(lang, country);
+		String country = "";
+		int i = lang.indexOf('-');
+		if (i > -1) {
+			country = lang.substring(i+1).trim();
+			lang = lang.substring(0,i).trim();
+		}
+		return new Locale(lang, country);
 	}
 
 	@SuppressWarnings("rawtypes")
