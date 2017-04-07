@@ -111,10 +111,10 @@ public class Entry extends CommonEntry {
 	 *
 	 * @return The publish timestamp of this entry.
 	 */
- 	@BeanProperty(swap=CalendarSwap.ISO8601DT.class)
+	@BeanProperty(swap=CalendarSwap.ISO8601DT.class)
 	public Calendar getPublished() {
- 		return published;
- 	}
+		return published;
+	}
 
 	/**
 	 * Sets the publish timestamp of this entry.
@@ -123,10 +123,10 @@ public class Entry extends CommonEntry {
 	 * @return This object (for method chaining).
 	 */
 	@BeanProperty(name="published")
- 	public Entry published(Calendar published) {
- 		this.published = published;
- 		return this;
- 	}
+	public Entry published(Calendar published) {
+		this.published = published;
+		return this;
+	}
 
 	/**
 	 * Sets the publish timestamp of this entry.
@@ -135,10 +135,10 @@ public class Entry extends CommonEntry {
 	 * @return This object (for method chaining).
 	 */
 	@BeanProperty(name="published")
- 	public Entry published(String published) {
- 		this.published = parseDateTime(published);
- 		return this;
- 	}
+	public Entry published(String published) {
+		this.published = parseDateTime(published);
+		return this;
+	}
 
 	/**
 	 * Returns the source of this entry.
