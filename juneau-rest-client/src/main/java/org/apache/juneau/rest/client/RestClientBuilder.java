@@ -48,7 +48,7 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.urlencoding.*;
 
 /**
- * Builder class for {@link RestClient} class.
+ * Builder class for the {@link RestClient} class.
  */
 @SuppressWarnings("hiding")
 public class RestClientBuilder extends CoreObjectBuilder {
@@ -68,7 +68,6 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	private List<RestCallInterceptor> interceptors = new ArrayList<RestCallInterceptor>();
 
 	private String remoteableServletUri;
-	private Map<Method,String> remoteableServiceUriMap = new ConcurrentHashMap<Method,String>();
 	private String rootUrl;
 	private SSLOpts sslOpts;
 	private boolean pooled;
@@ -141,7 +140,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 
 			UrlEncodingSerializer us = new SerializerBuilder(propertyStore).build(UrlEncodingSerializer.class);
 
-			return new RestClient(propertyStore, httpClient, keepHttpClientOpen, s, p, us, headers, interceptors, remoteableServletUri, remoteableServiceUriMap, rootUrl, retryOn, retries, retryInterval, debug, executorService, executorServiceShutdownOnClose);
+			return new RestClient(propertyStore, httpClient, keepHttpClientOpen, s, p, us, headers, interceptors, remoteableServletUri, rootUrl, retryOn, retries, retryInterval, debug, executorService, executorServiceShutdownOnClose);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

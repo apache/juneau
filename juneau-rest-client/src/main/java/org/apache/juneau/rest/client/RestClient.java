@@ -54,43 +54,28 @@ public class RestClient extends CoreObject {
 	private final Map<String,String> headers;
 	private final CloseableHttpClient httpClient;
 	private final boolean keepHttpClientOpen;
-	final Serializer serializer;
 	private final UrlEncodingSerializer urlEncodingSerializer;  // Used for form posts only.
-	final Parser parser;
 	private final String remoteableServletUri;
 	private final String rootUrl;
 	private volatile boolean isClosed = false;
 	private final StackTraceElement[] creationStack;
 	private StackTraceElement[] closedStack;
+
+	// These are read directly by RestCall.
+	final Serializer serializer;
+	final Parser parser;
 	final RetryOn retryOn;
 	final int retries;
 	final long retryInterval;
 	final boolean debug;
 	final RestCallInterceptor[] interceptors;
+
+	// This is lazy-created.
 	private volatile ExecutorService executorService;
 	boolean executorServiceShutdownOnClose = true;
 
-	/**
-	 * Create a new REST client.
-	 * @param propertyStore
-	 * @param httpClient
-	 * @param keepHttpClientOpen
-	 * @param serializer
-	 * @param parser
-	 * @param urlEncodingSerializer
-	 * @param headers
-	 * @param interceptors
-	 * @param remoteableServletUri
-	 * @param remoteableServiceUriMap
-	 * @param rootUri
-	 * @param retryOn
-	 * @param retries
-	 * @param retryInterval
-	 * @param debug
-	 * @param executorService
-	 * @param executorServiceShutdownOnClose
-	 */
-	public RestClient(
+
+	RestClient(
 			PropertyStore propertyStore,
 			CloseableHttpClient httpClient,
 			boolean keepHttpClientOpen,
@@ -100,7 +85,6 @@ public class RestClient extends CoreObject {
 			Map<String,String> headers,
 			List<RestCallInterceptor> interceptors,
 			String remoteableServletUri,
-			Map<Method,String> remoteableServiceUriMap,
 			String rootUri,
 			RetryOn retryOn,
 			int retries,

@@ -120,7 +120,7 @@
 	
 	<jc>// GET request, ignoring output</jc>
 	<jk>try</jk> {
-		<jk>int</jk> rc = client.doGet(<js>"http://localhost:9080/sample/addressBook"</js>).execute();
+		<jk>int</jk> rc = client.doGet(<js>"http://localhost:9080/sample/addressBook"</js>).run();
 		<jc>// Succeeded!</jc>
 	} <jk>catch</jk> (RestCallException e) {
 		<jc>// Failed!</jc>
@@ -132,7 +132,7 @@
 	<jc>// Remaining examples ignore thrown exceptions.</jc>		
 			
 	<jc>// GET request, secure, ignoring output</jc>
-	client.doGet(<js>"https://localhost:9443/sample/addressBook"</js>).execute();
+	client.doGet(<js>"https://localhost:9443/sample/addressBook"</js>).run();
 			
 	<jc>// GET request, getting output as a String.  No POJO parsing is performed.
 	// Note that when calling one of the getX() methods, you don't need to call connect() or disconnect(), since
@@ -144,12 +144,12 @@
 	Reader r = client.doGet(<js>"http://localhost:9080/sample/addressBook"</js>)
 		.getReader();
 			
-	<jc>// GET request, getting output as an ObjectMap</jc>
+	<jc>// GET request, getting output as an untyped map</jc>
 	<jc>// Input must be an object (e.g. "{...}")</jc>
 	ObjectMap m = client.doGet(<js>"http://localhost:9080/sample/addressBook/0"</js>)
 		.getResponse(ObjectMap.<jk>class</jk>);
 			
-	<jc>// GET request, getting output as a ObjectList</jc>
+	<jc>// GET request, getting output as an untyped list</jc>
 	<jc>// Input must be an array (e.g. "[...]")</jc>
 	ObjectList l = client.doGet(<js>"http://localhost:9080/sample/addressBook"</js>)
 		.getResponse(ObjectList.<jk>class</jk>);
@@ -166,9 +166,8 @@
 		.getResponse(Person[].<jk>class</jk>);
 			
 	<jc>// Same as above, except as a List&lt;Person&gt;</jc>
-	ClassMeta cm = BeanContext.<jsf>DEFAULT</jsf>.getCollectionClassMeta(LinkedList.<jk>class</jk>, Person.<jk>class</jk>);
 	List&lt;Person&gt; pl = client.doGet(<js>"http://localhost:9080/sample/addressBook"</js>)
-		.getResponse(cm);
+		.getResponse(List.<jk>class</jk>, Person.<jk>class</jk>);
 			
 	<jc>// GET request, getting output as a parsed string</jc>
 	<jc>// Input must be a string (e.g. "&lt;string&gt;foo&lt;/string&gt;" or "'foo'")</jc>
@@ -192,15 +191,15 @@
 
 	<jc>// PUT request on regular field</jc>
 	String newName = <js>"John Smith"</js>;
-	<jk>int</jk> rc = client.doPut(<js>"http://localhost:9080/addressBook/0/name"</js>, newName).execute();
+	<jk>int</jk> rc = client.doPut(<js>"http://localhost:9080/addressBook/0/name"</js>, newName).run();
 	
 	<jc>// PUT request on filtered field</jc>
 	Calendar newBirthDate = <jk>new</jk> GregorianCalendar(1, 2, 3, 4, 5, 6);
-	rc = client.doPut(<js>"http://localhost:9080/sample/addressBook/0/birthDate"</js>, newBirthDate).execute();
+	rc = client.doPut(<js>"http://localhost:9080/sample/addressBook/0/birthDate"</js>, newBirthDate).run();
 	
 	<jc>// POST of a new entry to a list</jc>
 	Address newAddress = <jk>new</jk> Address(<js>"101 Main St"</js>, <js>"Anywhere"</js>, <js>"NY"</js>, 12121, <jk>false</jk>);
-	rc = client.doPost(<js>"http://localhost:9080/addressBook/0/addresses"</js>, newAddress).execute();	
+	rc = client.doPost(<js>"http://localhost:9080/addressBook/0/addresses"</js>, newAddress).run();	
 	</p>
 	
 	<h6 class='notes'>Notes:</h6>
