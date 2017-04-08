@@ -806,8 +806,6 @@
 			</p>
 			<p>
 				The following examples show how type names are used under various circumstances.  
-				Note that array dimensions are represented with the caret <js>'^'</js> character.
-				For example, <js>"X^"</js> is a 1-dimensional array, and <js>"X^^"</js> is a 2-dimensional array.
 			</p>
 			<p>
 				Pay special attention to when <xa>_type</xa> attributes are and are not used.
@@ -840,7 +838,7 @@
 				&lt;fx&gt;<xv>foo</xv>&lt;/fx&gt;
 			&lt;/X&gt;
 		&lt;/b1&gt;
-		&lt;b2 <xa>_type</xa>=<xs>'X^'</xs>&gt;
+		&lt;b2&gt;
 			&lt;X&gt;
 				&lt;fx&gt;<xv>foo</xv>&lt;/fx&gt;
 			&lt;/X&gt;
@@ -877,7 +875,7 @@
 				&lt;/X&gt;
 			&lt;/array&gt;
 		&lt;/b1&gt;
-		&lt;b2 <xa>_type</xa>=<xs>'X^^'</xs>&gt;
+		&lt;b2&gt;
 			&lt;array&gt;
 				&lt;X&gt;
 					&lt;fx&gt;<xv>foo</xv>&lt;/fx&gt;
@@ -987,7 +985,7 @@
 				&lt;fa&gt;<xv>foo</xv>&lt;/fa&gt;
 			&lt;/A&gt;
 		&lt;/a&gt;
-		&lt;ia1 <xa>_type</xa>=<xs>'A^'</xs>&gt;
+		&lt;ia1&gt;
 			&lt;A&gt;
 				&lt;fa&gt;<xv>foo</xv>&lt;/fa&gt;
 			&lt;/A&gt;
@@ -997,7 +995,7 @@
 				&lt;fa&gt;<xv>foo</xv>&lt;/fa&gt;
 			&lt;/A&gt;
 		&lt;/ia2&gt;
-		&lt;aa1 <xa>_type</xa>=<xs>'A^'</xs>&gt;
+		&lt;aa1&gt;
 			&lt;A&gt;
 				&lt;fa&gt;<xv>foo</xv>&lt;/fa&gt;
 			&lt;/A&gt;
@@ -1007,7 +1005,7 @@
 				&lt;fa&gt;<xv>foo</xv>&lt;/fa&gt;
 			&lt;/A&gt;
 		&lt;/aa2&gt;
-		&lt;o1 <xa>_type</xa>=<xs>'A^'</xs>&gt;
+		&lt;o1&gt;
 			&lt;A&gt;
 				&lt;fa&gt;<xv>foo</xv>&lt;/fa&gt;
 			&lt;/A&gt;
@@ -1086,7 +1084,7 @@
 			&lt;/a1&gt;
 		&lt;/a&gt;
 		&lt;ia&gt;
-			&lt;ia1 <xa>_type</xa>=<xs>'A^'</xs>&gt;
+			&lt;ia1&gt;
 				&lt;A&gt;
 					&lt;fa&gt;<xv>foo</xv>&lt;/fa&gt;
 				&lt;/A&gt;
@@ -1098,7 +1096,7 @@
 			&lt;/ia2&gt;
 		&lt;/ia&gt;
 		&lt;aa&gt;
-			&lt;aa1 <xa>_type</xa>=<xs>'A^'</xs>&gt;
+			&lt;aa1&gt;
 				&lt;A&gt;
 					&lt;fa&gt;<xv>foo</xv>&lt;/fa&gt;
 				&lt;/A&gt;
@@ -1110,7 +1108,7 @@
 			&lt;/aa2&gt;
 		&lt;/aa&gt;
 		&lt;o&gt;
-			&lt;o1 <xa>_type</xa>=<xs>'A^'</xs>&gt;
+			&lt;o1&gt;
 				&lt;A&gt;
 					&lt;fa&gt;<xv>foo</xv>&lt;/fa&gt;
 				&lt;/A&gt;
