@@ -30,21 +30,15 @@ public class ClientFuturesTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void test() throws Exception {
-		RestClient client = null;
-		try {
-			ExecutorService es = new ThreadPoolExecutor(1, 1, 5, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(1));
-			client = TestMicroservice.client().executorService(es, true).build();
+		RestClient client = TestMicroservice.DEFAULT_CLIENT;
 
-			Future<Integer> f = client.doGet(URL).runFuture();
-			assertEquals(200, f.get().intValue());
+		Future<Integer> f = client.doGet(URL).runFuture();
+		assertEquals(200, f.get().intValue());
 
-			Future<ObjectMap> f2 = client.doGet(URL).getResponseFuture(ObjectMap.class);
-			assertObjectEquals("{foo:'bar'}", f2.get());
+		Future<ObjectMap> f2 = client.doGet(URL).getResponseFuture(ObjectMap.class);
+		assertObjectEquals("{foo:'bar'}", f2.get());
 
-			Future<String> f3 = client.doGet(URL).getResponseAsStringFuture();
-			assertObjectEquals("'{\"foo\":\"bar\"}'", f3.get());
-		} finally {
-			client.closeQuietly();
-		}
+		Future<String> f3 = client.doGet(URL).getResponseAsStringFuture();
+		assertObjectEquals("'{\"foo\":\"bar\"}'", f3.get());
 	}
 }

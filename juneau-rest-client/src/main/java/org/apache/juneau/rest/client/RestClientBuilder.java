@@ -429,13 +429,16 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	/**
 	 * Defines the executor service to use when calling future methods on the {@link RestCall} class.
 	 * <p>
-	 * You must specify the executor service if you want to use any of the following methods:
+	 * This executor service is used to create {@link Future} objects on the following methods:
 	 * <ul>
 	 * 	<li>{@link RestCall#runFuture()}
 	 * 	<li>{@link RestCall#getResponseFuture(Class)}
 	 * 	<li>{@link RestCall#getResponseFuture(Type,Type...)}
 	 * 	<li>{@link RestCall#getResponseAsString()}
 	 * </ul>
+	 * <p>
+	 * The default executor service is a single-threaded {@link ThreadPoolExecutor} with a 30 second timeout
+	 * and a queue size of 10.
 	 *
 	 * @param executorService The executor service.
 	 * @param shutdownOnClose Call {@link ExecutorService#shutdown()} when {@link RestClient#close()} is called.

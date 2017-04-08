@@ -67,8 +67,8 @@ public class RestClient extends CoreObject {
 	final long retryInterval;
 	final boolean debug;
 	final RestCallInterceptor[] interceptors;
-	final ExecutorService executorService;
-	final boolean executorServiceShutdownOnClose;
+	private volatile ExecutorService executorService;
+	boolean executorServiceShutdownOnClose = true;
 
 	/**
 	 * Create a new REST client.
@@ -519,6 +519,16 @@ public class RestClient extends CoreObject {
 			}
 		}
 		return new URI(s);
+	}
+
+	ExecutorService getExecutorService(boolean create) {
+		if (executorService != null || ! create)
+			return executorService;
+		synchronized(this) {
+			if (executorService == null)
+				executorService = new ThreadPoolExecutor(1, 1, 30, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(10));
+			return executorService;
+		}
 	}
 
 	@Override

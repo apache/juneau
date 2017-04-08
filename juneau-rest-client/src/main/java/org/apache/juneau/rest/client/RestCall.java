@@ -81,7 +81,6 @@ public final class RestCall {
 	private Serializer serializer;
 	private Parser parser;
 	private URIBuilder uriBuilder;
-	private final ExecutorService executorService;
 
 	/**
 	 * Constructs a REST call with the specified method name.
@@ -101,7 +100,6 @@ public final class RestCall {
 		this.retryInterval = client.retryInterval;
 		this.serializer = client.serializer;
 		this.parser = client.parser;
-		this.executorService = client.executorService;
 		uriBuilder = new URIBuilder(uri);
 	}
 
@@ -1046,14 +1044,13 @@ public final class RestCall {
 
 	/**
 	 * Same as {@link #run()} but allows you to run the call asynchronously.
-	 * <p>
-	 * This method cannot be used unless the executor service was defined on the client using {@link RestClientBuilder#executorService(ExecutorService,boolean)}.
 	 *
 	 * @return The HTTP status code.
 	 * @throws RestCallException If the executor service was not defined.
+	 * @see RestClientBuilder#executorService(ExecutorService, boolean) for defining the executor service for creating {@link Future Futures}.
 	 */
 	public Future<Integer> runFuture() throws RestCallException {
-		return getExecutorService().submit(
+		return client.getExecutorService(true).submit(
 			new Callable<Integer>() {
 				@Override /* Callable */
 				public Integer call() throws Exception {
@@ -1326,14 +1323,13 @@ public final class RestCall {
 
 	/**
 	 * Same as {@link #getResponse(Class)} but allows you to run the call asynchronously.
-	 * <p>
-	 * This method cannot be used unless the executor service was defined on the client using {@link RestClientBuilder#executorService(ExecutorService,boolean)}.
 	 *
 	 * @return The response as a string.
 	 * @throws RestCallException If the executor service was not defined.
+	 * @see RestClientBuilder#executorService(ExecutorService, boolean) for defining the executor service for creating {@link Future Futures}.
 	 */
 	public Future<String> getResponseAsStringFuture() throws RestCallException {
-		return getExecutorService().submit(
+		return client.getExecutorService(true).submit(
 			new Callable<String>() {
 				@Override /* Callable */
 				public String call() throws Exception {
@@ -1381,17 +1377,16 @@ public final class RestCall {
 
 	/**
 	 * Same as {@link #getResponse(Class)} but allows you to run the call asynchronously.
-	 * <p>
-	 * This method cannot be used unless the executor service was defined on the client using {@link RestClientBuilder#executorService(ExecutorService,boolean)}.
 	 *
 	 * @param <T> The class type of the object being created.
 	 * See {@link #getResponse(Type, Type...)} for details.
 	 * @param type The object type to create.
 	 * @return The parsed object.
 	 * @throws RestCallException If the executor service was not defined.
+	 * @see RestClientBuilder#executorService(ExecutorService, boolean) for defining the executor service for creating {@link Future Futures}.
 	 */
 	public <T> Future<T> getResponseFuture(final Class<T> type) throws RestCallException {
-		return getExecutorService().submit(
+		return client.getExecutorService(true).submit(
 			new Callable<T>() {
 				@Override /* Callable */
 				public T call() throws Exception {
@@ -1455,8 +1450,6 @@ public final class RestCall {
 
 	/**
 	 * Same as {@link #getResponse(Class)} but allows you to run the call asynchronously.
-	 * <p>
-	 * This method cannot be used unless the executor service was defined on the client using {@link RestClientBuilder#executorService(ExecutorService,boolean)}.
 	 *
 	 * @param <T> The class type of the object being created.
 	 * See {@link #getResponse(Type, Type...)} for details.
@@ -1467,9 +1460,10 @@ public final class RestCall {
 	 * 	<br>Ignored if the main type is not a map or collection.
 	 * @return The parsed object.
 	 * @throws RestCallException If the executor service was not defined.
+	 * @see RestClientBuilder#executorService(ExecutorService, boolean) for defining the executor service for creating {@link Future Futures}.
 	 */
 	public <T> Future<T> getResponseFuture(final Type type, final Type...args) throws RestCallException {
-		return getExecutorService().submit(
+		return client.getExecutorService(true).submit(
 			new Callable<T>() {
 				@Override /* Callable */
 				public T call() throws Exception {
@@ -1589,12 +1583,6 @@ public final class RestCall {
 			for (RestCallInterceptor r : interceptors)
 				r.onClose(this);
 		return this;
-	}
-
-	private ExecutorService getExecutorService() throws RestCallException {
-		if (executorService == null)
-			throw new RestCallException("Future method cannot be called.  Executor service was not defined via the RestClientBuilder.executorService() method.");
-		return executorService;
 	}
 
 	/**
