@@ -24,7 +24,6 @@
 		<groupId>org.apache.juneau</groupId>
 		<artifactId>juneau</artifactId>
 		<version>6.1.1-incubating-SNAPSHOT</version>
-		<relativePath>../pom.xml</relativePath>
 	</parent>
 	
 	<properties>
