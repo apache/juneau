@@ -17,7 +17,10 @@ import static org.junit.Assert.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.serializer.*;
+import org.apache.juneau.utils.*;
 import org.junit.*;
 
 @SuppressWarnings("javadoc")
@@ -449,8 +452,50 @@ public class UrlEncodingSerializerTest {
 	public void testParseParameterObjectMap() throws Exception {
 		String in = "(name='foo bar')";
 		
-		ObjectMap r =  UrlEncodingParser.DEFAULT.parseParameter(in, ObjectMap.class);
+		ObjectMap r =  UrlEncodingParser.DEFAULT.parsePart(in, ObjectMap.class);
 	
 		assertEquals("{name:'foo bar'}", JsonSerializer.DEFAULT_LAX.toString(r));
+	}
+	
+	//====================================================================================================
+	// Test URLENC_paramFormat == PLAINTEXT.
+	//====================================================================================================
+	@Test
+	public void testPlainTextParams() throws Exception {
+		WriterSerializer s = UrlEncodingSerializer.DEFAULT.builder().plainTextParams().build();
+		
+		assertEquals("_value=foo", s.serialize("foo"));
+		assertEquals("_value='foo'", s.serialize("'foo'"));
+		assertEquals("_value=(foo)", s.serialize("(foo)"));
+		assertEquals("_value=@(foo)", s.serialize("@(foo)"));
+		
+		Map<String,Object> m = new AMap<String,Object>()
+			.append("foo", "foo")
+			.append("'foo'", "'foo'")
+			.append("(foo)", "(foo)")
+			.append("@(foo)", "@(foo)");
+		assertEquals("foo=foo&'foo'='foo'&(foo)=(foo)&@(foo)=@(foo)", s.serialize(m));
+		
+		List<String> l = new AList<String>().appendAll("foo", "'foo'", "(foo)", "@(foo)");
+		assertEquals("0=foo&1='foo'&2=(foo)&3=@(foo)", s.serialize(l));
+		
+		A a = new A();
+		assertEquals("'foo'='foo'&(foo)=(foo)&@(foo)=@(foo)&foo=foo", s.serialize(a));
+	}
+	
+	@Bean(sort=true)
+	public static class A {
+		
+		@BeanProperty(name="foo")
+		public String f1 = "foo";
+		
+		@BeanProperty(name="'foo'")
+		public String f2 = "'foo'";
+
+		@BeanProperty(name="(foo)")
+		public String f3 = "(foo)";
+
+		@BeanProperty(name="@(foo)")
+		public String f4 = "@(foo)";
 	}
 }

@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import java.lang.reflect.*;
 import java.text.*;
 
 /**
@@ -64,6 +65,24 @@ public class RestException extends RuntimeException {
 		return this;
 	}
 
+	/**
+	 * Returns the root cause of this exception.
+	 * The root cause is the first exception in the init-cause parent chain that's not one of the following:
+	 * <ul>
+	 * 	<li>{@link RestException}
+	 * 	<li>{@link InvocationTargetException}
+	 * </ul>
+	 * @return The root cause of this exception, or <jk>null</jk> if no root cause was found.
+	 */
+	public Throwable getRootCause() {
+		Throwable t = this;
+		while(t != null) {
+			t = t.getCause();
+			if (! (t instanceof RestException || t instanceof InvocationTargetException))
+				return t;
+		}
+		return null;
+	}
 
 	/**
 	 * Returns all error messages from all errors in this stack.

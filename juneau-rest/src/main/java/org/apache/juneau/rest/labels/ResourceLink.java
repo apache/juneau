@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.labels;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.text.*;
 
 import org.apache.juneau.dto.*;
@@ -51,7 +53,7 @@ public class ResourceLink extends Link {
 			s = childPath;
 		else
 			s = childPath.substring(childPath.lastIndexOf('/')+1);
-		return RestUtils.decode(s);
+		return urlDecode(s);
 	}
 
 	private static String getHref(RestRequest req, String childPath) {

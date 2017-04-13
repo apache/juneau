@@ -14,9 +14,7 @@ package org.apache.juneau.rest.test;
 
 import static org.junit.Assert.*;
 
-import java.io.*;
-import java.net.*;
-
+import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.client.*;
@@ -452,10 +450,6 @@ public class ContentTest extends RestTestcase {
 
 
 	private String encode(String s) {
-		try {
-			return URLEncoder.encode(s, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			throw new RuntimeException(e);
-		}
+		return StringUtils.urlEncode(s);
 	}
 }

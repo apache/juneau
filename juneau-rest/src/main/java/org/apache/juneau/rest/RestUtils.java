@@ -12,13 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import java.io.*;
-import java.net.*;
 import java.util.*;
 
 import javax.servlet.http.*;
 
-import org.apache.juneau.internal.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -74,94 +71,6 @@ public final class RestUtils {
 		.append(504, "Gateway Timeout")
 		.append(505, "HTTP Version Not Supported")
 	;
-
-	/**
-	 * Trims <js>'/'</js> characters from both the start and end of the specified string.
-	 *
-	 * @param s The string to trim.
-	 * @return A new trimmed string, or the same string if no trimming was necessary.
-	 */
-	public static String trimSlashes(String s) {
-		if (s == null)
-			return null;
-		while (StringUtils.endsWith(s, '/'))
-			s = s.substring(0, s.length()-1);
-		while (s.length() > 0 && s.charAt(0) == '/')
-			s = s.substring(1);
-		return s;
-	}
-
-	/**
-	 * Trims <js>'/'</js> characters from the end of the specified string.
-	 *
-	 * @param s The string to trim.
-	 * @return A new trimmed string, or the same string if no trimming was necessary.
-	 */
-	public static String trimTrailingSlashes(String s) {
-		if (s == null)
-			return null;
-		while (StringUtils.endsWith(s, '/'))
-			s = s.substring(0, s.length()-1);
-		return s;
-	}
-
-	/**
-	 * Trims <js>'/'</js> characters from the end of the specified string.
-	 *
-	 * @param s The string to trim.
-	 * @return The same string buffer.
-	 */
-	public static StringBuffer trimTrailingSlashes(StringBuffer s) {
-		if (s == null)
-			return null;
-		while (s.length() > 0 && s.charAt(s.length()-1) == '/')
-			s.setLength(s.length()-1);
-		return s;
-	}
-
-	/**
-	 * Decodes a <code>application/x-www-form-urlencoded</code> string using <code>UTF-8</code> encoding scheme.
-	 *
-	 * @param s The string to decode.
-	 * @return The decoded string, or <jk>null</jk> if input is <jk>null</jk>.
-	 */
-	public static String decode(String s) {
-		if (s == null)
-			return s;
-		boolean needsDecode = false;
-		for (int i = 0; i < s.length() && ! needsDecode; i++) {
-			char c = s.charAt(i);
-			if (c == '+' || c == '%')
-				needsDecode = true;
-		}
-		if (needsDecode)
-		try {
-				return URLDecoder.decode(s, "UTF-8");
-			} catch (UnsupportedEncodingException e) {/* Won't happen */}
-		return s;
-	}
-
-	// Characters that do not need to be URL-encoded
-	private static final AsciiSet unencodedChars = new AsciiSet("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_.!~*'()\\");
-
-	/**
-	 * Encodes a <code>application/x-www-form-urlencoded</code> string using <code>UTF-8</code> encoding scheme.
-	 *
-	 * @param s The string to encode.
-	 * @return The encoded string, or <jk>null</jk> if input is <jk>null</jk>.
-	 */
-	public static String encode(String s) {
-		if (s == null)
-			return null;
-		boolean needsEncode = false;
-		for (int i = 0; i < s.length() && ! needsEncode; i++)
-			needsEncode |= (! unencodedChars.contains(s.charAt(i)));
-		if (needsEncode)
-		try {
-				return URLEncoder.encode(s, "UTF-8");
-			} catch (UnsupportedEncodingException e) {/* Won't happen */}
-		return s;
-	}
 
 	/**
 	 * Identical to {@link HttpServletRequest#getPathInfo()} but doesn't decode encoded characters.

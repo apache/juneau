@@ -132,13 +132,13 @@ public final class Redirect {
 	/**
 	 * Calculates the URL to redirect to.
 	 *
-	 * @param s Use this serializer to encode arguments using the {@link UrlEncodingSerializer#serializeUrlPart(Object)} method.
+	 * @param s Use this serializer to encode arguments using the {@link UrlEncodingSerializer#serializePart(Object,Boolean,Boolean)} method.
 	 * @return The URL to redirect to.
 	 */
 	public String toUrl(UrlEncodingSerializer s) {
 		if (url != null && args != null && args.length > 0) {
 			for (int i = 0; i < args.length; i++)
-				args[i] = s.serializeUrlPart(args[i]);
+				args[i] = s.serializePart(args[i], null, true);
 			return MessageFormat.format(url, args);
 		}
 		return url;

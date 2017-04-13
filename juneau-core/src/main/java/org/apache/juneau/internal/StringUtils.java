@@ -16,6 +16,7 @@ import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.io.*;
 import java.math.*;
+import java.net.*;
 import java.nio.*;
 import java.nio.charset.*;
 import java.util.*;
@@ -39,6 +40,9 @@ public final class StringUtils {
 
 	// Maps 6-bit nibbles to BASE64 characters.
 	private static final char[] base64m1 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".toCharArray();
+
+	// Characters that do not need to be URL-encoded
+	private static final AsciiSet unencodedChars = new AsciiSet("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_.!~*'()\\");
 
 	// Maps BASE64 characters to 6-bit nibbles.
 	private static final byte[] base64m2 = new byte[128];
@@ -1113,5 +1117,124 @@ public final class StringUtils {
 			while (s.length() > 0 && Character.isWhitespace(s.charAt(s.length()-1)))
 				s = s.substring(0, s.length()-1);
 		return s;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified string is one of the specified values.
+	 *
+	 * @param s The string to test.
+	 * Can be <jk>null</jk>.
+	 * @param values The values to test.
+	 * Can contain <jk>null</jk>.
+	 * @return <jk>true</jk> if the specified string is one of the specified values.
+	 */
+	public static boolean isOneOf(String s, String...values) {
+		for (int i = 0; i < values.length; i++)
+			if (StringUtils.isEquals(s, values[i]))
+				return true;
+		return false;
+	}
+
+	/**
+	 * Trims <js>'/'</js> characters from both the start and end of the specified string.
+	 *
+	 * @param s The string to trim.
+	 * @return A new trimmed string, or the same string if no trimming was necessary.
+	 */
+	public static String trimSlashes(String s) {
+		if (s == null)
+			return null;
+		while (endsWith(s, '/'))
+			s = s.substring(0, s.length()-1);
+		while (s.length() > 0 && s.charAt(0) == '/')
+			s = s.substring(1);
+		return s;
+	}
+
+	/**
+	 * Trims <js>'/'</js> characters from the end of the specified string.
+	 *
+	 * @param s The string to trim.
+	 * @return A new trimmed string, or the same string if no trimming was necessary.
+	 */
+	public static String trimTrailingSlashes(String s) {
+		if (s == null)
+			return null;
+		while (endsWith(s, '/'))
+			s = s.substring(0, s.length()-1);
+		return s;
+	}
+
+	/**
+	 * Trims <js>'/'</js> characters from the end of the specified string.
+	 *
+	 * @param s The string to trim.
+	 * @return The same string buffer.
+	 */
+	public static StringBuffer trimTrailingSlashes(StringBuffer s) {
+		if (s == null)
+			return null;
+		while (s.length() > 0 && s.charAt(s.length()-1) == '/')
+			s.setLength(s.length()-1);
+		return s;
+	}
+
+	/**
+	 * Decodes a <code>application/x-www-form-urlencoded</code> string using <code>UTF-8</code> encoding scheme.
+	 *
+	 * @param s The string to decode.
+	 * @return The decoded string, or <jk>null</jk> if input is <jk>null</jk>.
+	 */
+	public static String urlDecode(String s) {
+		if (s == null)
+			return s;
+		boolean needsDecode = false;
+		for (int i = 0; i < s.length() && ! needsDecode; i++) {
+			char c = s.charAt(i);
+			if (c == '+' || c == '%')
+				needsDecode = true;
+		}
+		if (needsDecode)
+		try {
+				return URLDecoder.decode(s, "UTF-8");
+			} catch (UnsupportedEncodingException e) {/* Won't happen */}
+		return s;
+	}
+
+	/**
+	 * Encodes a <code>application/x-www-form-urlencoded</code> string using <code>UTF-8</code> encoding scheme.
+	 *
+	 * @param s The string to encode.
+	 * @return The encoded string, or <jk>null</jk> if input is <jk>null</jk>.
+	 */
+	public static String urlEncode(String s) {
+		if (s == null)
+			return null;
+		boolean needsEncode = false;
+		for (int i = 0; i < s.length() && ! needsEncode; i++)
+			needsEncode |= (! unencodedChars.contains(s.charAt(i)));
+		if (needsEncode) {
+			try {
+				return URLEncoder.encode(s, "UTF-8");
+			} catch (UnsupportedEncodingException e) {/* Won't happen */}
+		}
+		return s;
+	}
+
+	/**
+	 * Returns the first non-whitespace character in the string.
+	 *
+	 * @param s The string to check.
+	 * @return The first non-whitespace character, or <code>0</code> if the string is <jk>null</jk>, empty, or composed of only whitespace.
+	 */
+	public static char firstNonWhitespaceChar(String s) {
+		if (s != null) {
+			for (int i = 0; i < s.length(); i++) {
+				char c = s.charAt(i);
+				if (! Character.isWhitespace(c))
+					return c;
+			}
+		}
+		return 0;
 	}
 }

@@ -54,11 +54,13 @@ public final class RestRequestEntity extends BasicHttpEntity {
 				} else if (! serializer.isWriterSerializer()) {
 					OutputStreamSerializer s2 = (OutputStreamSerializer)serializer;
 					s2.serialize(output, os);
+					os.flush();
 					os.close();
 				} else {
 					Writer w = new OutputStreamWriter(os, IOUtils.UTF8);
 					WriterSerializer s2 = (WriterSerializer)serializer;
 					s2.serialize(output, w);
+					w.flush();
 					w.close();
 				}
 			} catch (SerializeException e) {

@@ -67,7 +67,6 @@ public class RestClientBuilder extends CoreObjectBuilder {
 
 	private List<RestCallInterceptor> interceptors = new ArrayList<RestCallInterceptor>();
 
-	private String remoteableServletUri;
 	private String rootUrl;
 	private SSLOpts sslOpts;
 	private boolean pooled;
@@ -140,7 +139,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 
 			UrlEncodingSerializer us = new SerializerBuilder(propertyStore).build(UrlEncodingSerializer.class);
 
-			return new RestClient(propertyStore, httpClient, keepHttpClientOpen, s, p, us, headers, interceptors, remoteableServletUri, rootUrl, retryOn, retries, retryInterval, debug, executorService, executorServiceShutdownOnClose);
+			return new RestClient(propertyStore, httpClient, keepHttpClientOpen, s, p, us, headers, interceptors, rootUrl, retryOn, retries, retryInterval, debug, executorService, executorServiceShutdownOnClose);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -228,18 +227,6 @@ public class RestClientBuilder extends CoreObjectBuilder {
 
 			// Using pooling connection so that this client is threadsafe.
 		return (pooled ? new PoolingHttpClientConnectionManager() : new BasicHttpClientConnectionManager());
-	}
-
-	/**
-	 * Sets the URI of the remoteable services REST servlet for invoking remoteable services.
-	 *
-	 * @param remoteableServletUri The URI of the REST resource implementing a remoteable services servlet.
-	 * 	(typically an instance of <code>RemoteableServlet</code>).
-	 * @return This object (for method chaining).
-	 */
-	public RestClientBuilder remoteableServletUri(String remoteableServletUri) {
-		this.remoteableServletUri = remoteableServletUri;
-		return this;
 	}
 
 	/**
@@ -1064,6 +1051,31 @@ public class RestClientBuilder extends CoreObjectBuilder {
 		return header("No-Trace", true);
 	}
 
+	/**
+	 * Sets the {@link UrlEncodingSerializerContext#URLENC_paramFormat} property on the URL-encoding serializers in this group.
+	 * <p>
+	 * This overrides the behavior of the URL-encoding serializer to quote and escape characters
+	 * in query names and values that may be confused for UON notation (e.g. <js>"'(foo=123)'"</js>, <js>"'@(1,2,3)'"</js>).
+	 * <p>
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see UrlEncodingSerializerContext#URLENC_paramFormat
+	 */
+	public RestClientBuilder paramFormat(String value) {
+		super.property(UrlEncodingSerializerContext.URLENC_paramFormat, value);
+		return this;
+	}
+
+	/**
+	 * Shortcut for calling <code>paramFormat(<js>"PLAINTEXT"</js>)</code>.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder plainTextParams() {
+		super.property(UrlEncodingSerializerContext.URLENC_paramFormat, "PLAINTEXT");
+		return this;
+	}
 
 	@Override /* CoreObjectBuilder */
 	public RestClientBuilder beansRequireDefaultConstructor(boolean value) {

@@ -40,9 +40,7 @@ public final class UonWriter extends SerializerWriter {
 	// Characters that need to be preceeded with an escape character.
 	private static final AsciiSet escapedChars = new AsciiSet("~'");
 
-	private static final AsciiSet needsQuoteChars = new AsciiSet("),=\n\t\r\b\f ");
-
-	private static final AsciiSet maybeNeedsQuotesFirstChar = new AsciiSet("),=\n\t\r\b\f tfn+-.#0123456789");
+	private static final AsciiSet noChars = new AsciiSet("");
 
 	private static char[] hexArray = "0123456789ABCDEF".toCharArray();
 
@@ -68,10 +66,11 @@ public final class UonWriter extends SerializerWriter {
 	 *
 	 * @param o The object being serialized.
 	 * @param isTopAttrName If this is a top-level attribute name we're serializing.
+	 * @param plainTextParams This is a top-level name or parameter we're serializing and the parameter format is PLAINTEXT.
 	 * @return This object (for method chaining).
 	 * @throws IOException Should never happen.
 	 */
-	public final UonWriter appendObject(Object o, boolean isTopAttrName) throws IOException {
+	public final UonWriter appendObject(Object o, boolean isTopAttrName, boolean plainTextParams) throws IOException {
 
 		if (o instanceof Boolean)
 			return appendBoolean(o);
@@ -81,26 +80,11 @@ public final class UonWriter extends SerializerWriter {
 			return append("null");
 
 		String s = session.toString(o);
-		char c0 = s.isEmpty() ? 0 : s.charAt(0);
 
-		boolean needsQuotes =
-			s.isEmpty()
-			|| c0 == '@'
-			|| c0 == '('
-			|| needsQuoteChars.contains(s)
-			|| (
-				maybeNeedsQuotesFirstChar.contains(c0)
-				&& (
-					"true".equals(s)
-					|| "false".equals(s)
-					|| "null".equals(s)
-					|| StringUtils.isNumeric(s)
-				)
-			)
-		;
+		boolean needsQuotes = (! plainTextParams) && UonUtils.needsQuotes(s);
 
 		AsciiSet unenc = (isTopAttrName ? unencodedCharsAttrName : unencodedChars);
-		AsciiSet esc = escapedChars;
+		AsciiSet esc = plainTextParams ? noChars : escapedChars;
 
 		if (needsQuotes)
 			append('\'');
@@ -193,7 +177,7 @@ public final class UonWriter extends SerializerWriter {
 				}
 			}
 		}
-		return appendObject(s, false);
+		return appendObject(s, false, false);
 	}
 
 

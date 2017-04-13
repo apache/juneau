@@ -26,6 +26,7 @@ import java.util.concurrent.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.remoteable.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.utils.*;
@@ -82,8 +83,7 @@ public final class ClassMeta<T> implements Type {
 		isMemberClass;                                       // True if this is a non-static member class.
 	private final Object primitiveDefault;                  // Default value for primitive type classes.
 	private final Map<String,Method>
-		remoteableMethods,                                   // Methods annotated with @Remoteable.  Contains all public methods if class is annotated with @Remotable.
-		proxyableMethods,                                    // Remoteable methods only if at least one method is marked @Remoteable, otherwise all public methods.
+		remoteableMethods,                                   // Methods annotated with @RemoteMethod.
 		publicMethods;                                       // All public methods, including static methods.
 	private final PojoSwap<?,?>[] childPojoSwaps;           // Any PojoSwaps where the normal type is a subclass of this class.
 	private final ConcurrentHashMap<Class<?>,PojoSwap<?,?>>
@@ -161,7 +161,6 @@ public final class ClassMeta<T> implements Type {
 		this.primitiveDefault = builder.primitiveDefault;
 		this.publicMethods = builder.publicMethods;
 		this.remoteableMethods = builder.remoteableMethods;
-		this.proxyableMethods = builder.proxyableMethods;
 		this.beanFilter = beanFilter;
 		this.pojoSwap = builder.pojoSwap;
 		this.extMeta = new MetadataMap();
@@ -212,7 +211,6 @@ public final class ClassMeta<T> implements Type {
 		this.isMemberClass = mainType.isMemberClass;
 		this.primitiveDefault = mainType.primitiveDefault;
 		this.remoteableMethods = mainType.remoteableMethods;
-		this.proxyableMethods = mainType.proxyableMethods;
 		this.publicMethods = mainType.publicMethods;
 		this.beanContext = mainType.beanContext;
 		this.serializedClassMeta = this;
@@ -260,7 +258,6 @@ public final class ClassMeta<T> implements Type {
 		this.isMemberClass = false;
 		this.primitiveDefault = null;
 		this.remoteableMethods = null;
-		this.proxyableMethods = null;
 		this.publicMethods = null;
 		this.beanContext = null;
 		this.serializedClassMeta = this;
@@ -306,8 +303,7 @@ public final class ClassMeta<T> implements Type {
 		Object primitiveDefault = null;
 		Map<String,Method>
 			publicMethods = new LinkedHashMap<String,Method>(),
-			remoteableMethods = null,
-			proxyableMethods = null;
+			remoteableMethods = new LinkedHashMap<String,Method>();
 		ClassMeta<?>
 			keyType = null,
 			valueType = null,
@@ -534,17 +530,22 @@ public final class ClassMeta<T> implements Type {
 				if (isPublic(m) && isNotDeprecated(m))
 					publicMethods.put(ClassUtils.getMethodSignature(m), m);
 
-			if (c.getAnnotation(Remoteable.class) != null) {
-				remoteableMethods = proxyableMethods = publicMethods;
-			} else {
-				for (Method m : c.getMethods()) {
-					if (m.getAnnotation(Remoteable.class) != null) {
-						if (remoteableMethods == null)
-							remoteableMethods = new LinkedHashMap<String,Method>();
-						remoteableMethods.put(ClassUtils.getMethodSignature(m), m);
+			Map<Class<?>,Remoteable> remoteableMap = ReflectionUtils.findAnnotationsMap(Remoteable.class, c);
+			if (! remoteableMap.isEmpty()) {
+				Map.Entry<Class<?>,Remoteable> e = remoteableMap.entrySet().iterator().next();  // Grab the first one.
+				Class<?> ic = e.getKey();
+				Remoteable r = e.getValue();
+				String methodPaths = r.methodPaths();
+				String expose = r.expose();
+				for (Method m : "DECLARED".equals(expose) ? ic.getDeclaredMethods() : ic.getMethods()) {
+					if (isPublic(m)) {
+						RemoteMethod rm = m.getAnnotation(RemoteMethod.class);
+						if (rm != null || ! "ANNOTATED".equals(expose)) {
+							String path = "NAME".equals(methodPaths) ? m.getName() : ClassUtils.getMethodSignature(m);
+							remoteableMethods.put(path, m);
+						}
 					}
 				}
-				proxyableMethods = (remoteableMethods != null ? remoteableMethods : publicMethods);
 			}
 
 			if (innerClass != Object.class) {
@@ -1190,17 +1191,6 @@ public final class ClassMeta<T> implements Type {
 	 */
 	public Map<String,Method> getRemoteableMethods() {
 		return remoteableMethods;
-	}
-
-	/**
-	 * All methods on this class that can be exposed as a proxy method.
-	 * <p>
-	 * Same as {@link #getRemoteableMethods()} except returns all public methods if class is not annotated with {@link Remoteable @Remotable}.
-	 *
-	 * @return All proxyable methods on this class.
-	 */
-	public Map<String,Method> getProxyableMethods() {
-		return proxyableMethods;
 	}
 
 	/**

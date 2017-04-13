@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.labels;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import org.apache.juneau.dto.*;
 import org.apache.juneau.rest.*;
 
@@ -40,7 +42,7 @@ public final class ResourceDescription extends NameDescription implements Compar
 	 * @param description The description of the child resource.
 	 */
 	public ResourceDescription(String rootUrl, String name, String description) {
-		super(new Link(name, (rootUrl.equals("/") || rootUrl.isEmpty() ? "/" : rootUrl + "/") + RestUtils.encode(name)), description);
+		super(new Link(name, (rootUrl.equals("/") || rootUrl.isEmpty() ? "/" : rootUrl + "/") + urlEncode(name)), description);
 	}
 
 	/**
@@ -55,7 +57,7 @@ public final class ResourceDescription extends NameDescription implements Compar
 	}
 
 	private static String calcName(String childPath) {
-		return RestUtils.decode(childPath.indexOf('/') == -1 ? childPath : childPath.substring(childPath.lastIndexOf('/')+1));
+		return urlDecode(childPath.indexOf('/') == -1 ? childPath : childPath.substring(childPath.lastIndexOf('/')+1));
 	}
 
 	private static String calcHref(RestRequest req, String childPath) {

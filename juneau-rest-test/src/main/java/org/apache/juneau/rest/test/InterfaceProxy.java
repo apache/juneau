@@ -14,15 +14,13 @@ package org.apache.juneau.rest.test;
 
 import java.util.*;
 
-import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
-import org.apache.juneau.parser.*;
-import org.apache.juneau.serializer.*;
-import org.apache.juneau.transform.*;
+import org.apache.juneau.remoteable.*;
+import org.apache.juneau.rest.test.pojos.*;
 
 /**
  * Interface proxy exposed in InterfaceProxyResource and tested in InterfaceProxyTest.
  */
+@Remoteable
 public interface InterfaceProxy {
 
 	public static final String SWAP = "swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/";
@@ -50,14 +48,14 @@ public interface InterfaceProxy {
 	List<String> returnStringList();
 
 	// Beans
-	Bean returnBean();
-	Bean[][][] returnBean3dArray();
-	List<Bean> returnBeanList();
-	List<Bean[][][]> returnBean1d3dList();
-	Map<String,Bean> returnBeanMap();
-	Map<String,List<Bean>> returnBeanListMap();
-	Map<String,List<Bean[][][]>> returnBean1d3dListMap();
-	Map<Integer,List<Bean>> returnBeanListMapIntegerKeys();
+	ABean returnBean();
+	ABean[][][] returnBean3dArray();
+	List<ABean> returnBeanList();
+	List<ABean[][][]> returnBean1d3dList();
+	Map<String,ABean> returnBeanMap();
+	Map<String,List<ABean>> returnBeanListMap();
+	Map<String,List<ABean[][][]>> returnBean1d3dListMap();
+	Map<Integer,List<ABean>> returnBeanListMapIntegerKeys();
 
 	// Typed beans
 	TypedBean returnTypedBean();
@@ -121,14 +119,14 @@ public interface InterfaceProxy {
 	void setStringList(List<String> x);
 
 	// Beans
-	void setBean(Bean x);
-	void setBean3dArray(Bean[][][] x);
-	void setBeanList(List<Bean> x);
-	void setBean1d3dList(List<Bean[][][]> x);
-	void setBeanMap(Map<String,Bean> x);
-	void setBeanListMap(Map<String,List<Bean>> x);
-	void setBean1d3dListMap(Map<String,List<Bean[][][]>> x);
-	void setBeanListMapIntegerKeys(Map<Integer,List<Bean>> x);
+	void setBean(ABean x);
+	void setBean3dArray(ABean[][][] x);
+	void setBeanList(List<ABean> x);
+	void setBean1d3dList(List<ABean[][][]> x);
+	void setBeanMap(Map<String,ABean> x);
+	void setBeanListMap(Map<String,List<ABean>> x);
+	void setBean1d3dListMap(Map<String,List<ABean[][][]>> x);
+	void setBeanListMapIntegerKeys(Map<Integer,List<ABean>> x);
 
 	// Typed beans
 	void setTypedBean(TypedBean x);
@@ -171,7 +169,7 @@ public interface InterfaceProxy {
 	void setMultiParamsFloat(float x1, float[][][] x2, float[][][] x2n, List<float[][][]> x3, List<float[][][]> x3n);
 	void setMultiParamsFloatObject(Float x1, Float x1n, Float[][][] x2, Float[][][] x2n, List<Float[][][]> x3, List<Float[][][]> x3n);
 	void setMultiParamsString(String x1, String[][][] x2, String[][][] x2n, List<String[][][]> x3, List<String[][][]> x3n);
-	void setMultiParamsBean(Bean x1, Bean[][][] x2, Bean[][][] x2n, List<Bean[][][]> x3, List<Bean[][][]> x3n, Map<String,Bean> x4, Map<String,Bean> x4n, Map<String,List<Bean[][][]>> x5, Map<String,List<Bean[][][]>> x5n);
+	void setMultiParamsBean(ABean x1, ABean[][][] x2, ABean[][][] x2n, List<ABean[][][]> x3, List<ABean[][][]> x3n, Map<String,ABean> x4, Map<String,ABean> x4n, Map<String,List<ABean[][][]>> x5, Map<String,List<ABean[][][]>> x5n);
 	void setMultiParamsSwappedPojo(SwappedPojo x1, SwappedPojo[][][] x2, SwappedPojo[][][] x2n, List<SwappedPojo[][][]> x3, List<SwappedPojo[][][]> x3n, Map<SwappedPojo,SwappedPojo> x4, Map<SwappedPojo,SwappedPojo> x4n, Map<SwappedPojo,List<SwappedPojo[][][]>> x5, Map<SwappedPojo,List<SwappedPojo[][][]>> x5n);
 	void setMultiParamsImplicitSwappedPojo(ImplicitSwappedPojo x1, ImplicitSwappedPojo[][][] x2, ImplicitSwappedPojo[][][] x2n, List<ImplicitSwappedPojo[][][]> x3, List<ImplicitSwappedPojo[][][]> x3n, Map<ImplicitSwappedPojo,ImplicitSwappedPojo> x4, Map<ImplicitSwappedPojo,ImplicitSwappedPojo> x4n, Map<ImplicitSwappedPojo,List<ImplicitSwappedPojo[][][]>> x5, Map<ImplicitSwappedPojo,List<ImplicitSwappedPojo[][][]>> x5n);
 	void setMultiParamsEnum(TestEnum x1, TestEnum[][][] x2, TestEnum[][][] x2n, List<TestEnum[][][]> x3, List<TestEnum[][][]> x3n, Map<TestEnum,TestEnum> x4, Map<TestEnum,TestEnum> x4n, Map<TestEnum,List<TestEnum[][][]>> x5, Map<TestEnum,List<TestEnum[][][]>> x5n);
@@ -179,17 +177,6 @@ public interface InterfaceProxy {
 	//--------------------------------------------------------------------------------
 	// Helper classes
 	//--------------------------------------------------------------------------------
-
-	public static class Bean {
-		public int a;
-		public String b;
-
-		Bean init() {
-			this.a = 1;
-			this.b = "foo";
-			return this;
-		}
-	}
 
 	@SuppressWarnings("serial")
 	public static class InterfaceProxyException1 extends Throwable {
@@ -200,60 +187,5 @@ public interface InterfaceProxy {
 
 	@SuppressWarnings("serial")
 	public static class InterfaceProxyException2 extends Throwable {
-	}
-
-	@Pojo(swap=SwappedPojoSwap.class)
-	public static class SwappedPojo {
-		public boolean wasUnswapped;
-	}
-
-	public static class SwappedPojoSwap extends PojoSwap<SwappedPojo,String> {
-		@Override
-		public String swap(BeanSession session, SwappedPojo c) throws SerializeException {
-			return SWAP;
-		}
-
-		@Override
-		public SwappedPojo unswap(BeanSession session, String f, ClassMeta<?> hint) throws ParseException {
-			SwappedPojo c = new SwappedPojo();
-			if (f.equals(SWAP))
-				c.wasUnswapped = true;
-			return c;
-		}
-	}
-
-	@BeanIgnore
-	public static class ImplicitSwappedPojo {
-		public boolean wasUnswapped;
-		@Override
-		public String toString() {
-			return SWAP;
-		}
-		public ImplicitSwappedPojo() {
-		}
-		public ImplicitSwappedPojo(String fromString) {
-			if (fromString.equals(SWAP))
-				wasUnswapped = true;
-		}
-	}
-
-	public static enum TestEnum {
-		ONE,TWO,THREE
-	}
-
-	@org.apache.juneau.annotation.Bean(beanDictionary={TypedBeanImpl.class})
-	public static interface TypedBean {
-	}
-
-	@org.apache.juneau.annotation.Bean(typeName="TypedBeanImpl", sort=true)
-	public static class TypedBeanImpl implements TypedBean {
-		public int a;
-		public String b;
-
-		public TypedBeanImpl init() {
-			this.a = 1;
-			this.b = "foo";
-			return this;
-		}
 	}
 }

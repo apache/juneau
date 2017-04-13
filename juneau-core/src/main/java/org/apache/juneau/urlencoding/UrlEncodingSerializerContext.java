@@ -25,8 +25,36 @@ import org.apache.juneau.uon.*;
  */
 public class UrlEncodingSerializerContext extends UonSerializerContext {
 
+	/**
+	 * <b>Configuration property:</b>  Format to use for top-level query names and simple parameters.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"UrlEncodingSerializer.paramFormat"</js>
+	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Default:</b> <js>"UON"</js>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * Specifies the format to use for URL GET parameter keys and values.
+	 * <p>
+	 * The possible values are:
+	 * <ul>
+	 * 	<li><js>"UON"</js> (default) - Use UON notation for values.
+	 * 		<br>String values such as <js>"(foo='bar')"</js> will end up being quoted and escaped to <js>"'(foo=bar~'baz~')'"</js>.
+	 * 		<br>Similarly, boolean and numeric values will also end up quoted.
+	 * 	<li><js>"PLAINTEXT"</js> (default) - Serialize as plain text.
+	 * 		<br>Strings will never be quoted or escaped.
+	 * 		<br>Note that this can cause errors during parsing if you're using the URL-encoding parser to parse
+	 * 		the results since UON constructs won't be differentiatable.
+	 * 		<br>However, this is not an issue if you're simply creating queries or form posts against 3rd-party interfaces.
+	 * </ul>
+	 */
+	public static final String URLENC_paramFormat = "UrlEncodingSerializer.paramFormat";
+
+
 	final boolean
-		expandedParams;
+		expandedParams,
+		plainTextParams;
 
 	/**
 	 * Constructor.
@@ -38,6 +66,7 @@ public class UrlEncodingSerializerContext extends UonSerializerContext {
 	public UrlEncodingSerializerContext(PropertyStore ps) {
 		super(ps);
 		this.expandedParams = ps.getProperty(UrlEncodingContext.URLENC_expandedParams, boolean.class, false);
+		this.plainTextParams = ps.getProperty(UrlEncodingSerializerContext.URLENC_paramFormat, String.class, "UON").equals("PLAINTEXT");
 	}
 
 	@Override /* Context */
@@ -45,6 +74,7 @@ public class UrlEncodingSerializerContext extends UonSerializerContext {
 		return super.asMap()
 			.append("UrlEncodingSerializerContext", new ObjectMap()
 				.append("expandedParams", expandedParams)
+				.append("plainTextParams", plainTextParams)
 			);
 	}
 }

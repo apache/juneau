@@ -16,17 +16,23 @@ import java.util.*;
 
 import org.apache.http.*;
 import org.apache.http.client.entity.*;
+import org.apache.http.message.*;
+import org.apache.juneau.internal.*;
+import org.apache.juneau.urlencoding.*;
 
 /**
  * Convenience class for constructing instances of <code>List&lt;NameValuePair&gt;</code>
  * 	for the {@link UrlEncodedFormEntity} class.
+ * <p>
+ * Instances of this method can be passed directly to the {@link RestClient#doPost(Object, Object)} method or
+ * {@link RestCall#input(Object)} methods to perform URL-encoded form posts.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	NameValuePairs params = <jk>new</jk> NameValuePairs()
- * 		.append(<jk>new</jk> BasicNameValuePair(<js>"j_username"</js>, user))
- * 		.append(<jk>new</jk> BasicNameValuePair(<js>"j_password"</js>, pw));
- * 	request.setEntity(<jk>new</jk> UrlEncodedFormEntity(params));
+ * 		.append(<js>"j_username"</js>, user)
+ * 		.append(<js>"j_password"</js>, pw);
+ * 	restClient.doPost(url, params).run();
  * </p>
  */
 public final class NameValuePairs extends LinkedList<NameValuePair> {
@@ -41,6 +47,36 @@ public final class NameValuePairs extends LinkedList<NameValuePair> {
 	 */
 	public NameValuePairs append(NameValuePair pair) {
 		super.add(pair);
+		return this;
+	}
+
+	/**
+	 * Appends the specified name/value pair to the end of this list.
+	 * <p>
+	 * The value is simply converted to a string using <code>toString()</code>, or <js>"null"</js> if <jk>null</jk>.
+	 *
+	 * @param name The pair name.
+	 * @param value The pair value.
+	 * @return This object (for method chaining).
+	 */
+	public NameValuePairs append(String name, Object value) {
+		super.add(new BasicNameValuePair(name, StringUtils.toString(value)));
+		return this;
+	}
+
+	/**
+	 * Appends the specified name/value pair to the end of this list.
+	 * <p>
+	 * The value is converted to UON notation using the {@link UrlEncodingSerializer#serializePart(Object, Boolean, Boolean)} method
+	 * of the specified serializer.
+	 *
+	 * @param name The pair name.
+	 * @param value The pair value.
+	 * @param serializer The serializer to use to convert the value to a string.
+	 * @return This object (for method chaining).
+	 */
+	public NameValuePairs append(String name, Object value, UrlEncodingSerializer serializer) {
+		super.add(new SerializedNameValuePair(name, value, serializer));
 		return this;
 	}
 }

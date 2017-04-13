@@ -104,7 +104,7 @@ public class Link implements Comparable<Link> {
 	 */
 	public Link setHref(String href, Object...args) {
 		for (int i = 0; i < args.length; i++)
-			args[i] = UrlEncodingSerializer.DEFAULT.serializeUrlPart(args[i]);
+			args[i] = UrlEncodingSerializer.DEFAULT.serializePart(args[i], null, null);
 		this.href = (args.length > 0 ? MessageFormat.format(href, args) : href);
 		return this;
 	}

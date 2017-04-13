@@ -28,7 +28,12 @@ import org.junit.*;
 public class RestTestcase {
 
 	private static boolean microserviceStarted;
-	private static List<RestClient> clients = new ArrayList<RestClient>();
+
+	// Reusable RestClients keyed by label that live for the duration of a testcase class.
+	private static Map<String,RestClient> clients = new LinkedHashMap<String,RestClient>();
+
+	// Reusable object cache that lives for the duration of a testcase class.
+	private static Map<String,Object> cache = new LinkedHashMap<String,Object>();
 
 	@BeforeClass
 	public static void setUp() {
@@ -39,31 +44,42 @@ public class RestTestcase {
 	 * Creates a REST client against the test microservice using the specified serializer and parser.
 	 * Client is automatically closed on tear-down.
 	 */
-	protected RestClient getClient(Serializer serializer, Parser parser) {
-		RestClient rc = TestMicroservice.client(serializer, parser).build();
-		clients.add(rc);
-		return rc;
+	protected RestClient getClient(String label, Serializer serializer, Parser parser) {
+		if (! clients.containsKey(label))
+			clients.put(label, TestMicroservice.client(serializer, parser).build());
+		return clients.get(label);
 	}
 
 	/**
-	 * Same as {@link #getClient(Serializer, Parser)} but sets the debug flag on the client.
+	 * Same as {@link #getClient(String, Serializer, Parser)} but sets the debug flag on the client.
 	 */
-	protected RestClient getDebugClient(Serializer serializer, Parser parser) {
-		RestClient rc = TestMicroservice.client(serializer, parser).debug(true).build();
-		clients.add(rc);
-		return rc;
+	protected RestClient getDebugClient(String label, Serializer serializer, Parser parser) {
+		if (! clients.containsKey(label))
+			clients.put(label, TestMicroservice.client(serializer, parser).debug(true).build());
+		return clients.get(label);
+	}
+
+	@SuppressWarnings("unchecked")
+	protected <T> T getCached(String label, Class<T> c) {
+		return (T)cache.get(label);
+	}
+
+	protected void cache(String label, Object o) {
+		cache.put(label, o);
 	}
 
 	@AfterClass
 	public static void tearDown() {
 		if (microserviceStarted)
 			TestMicroservice.stopMicroservice();
-		for (RestClient rc : clients) {
+		for (RestClient rc : clients.values()) {
 			try {
 				rc.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
+		clients.clear();
+		cache.clear();
 	}
 }

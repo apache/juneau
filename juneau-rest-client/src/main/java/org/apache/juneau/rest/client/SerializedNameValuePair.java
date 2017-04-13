@@ -12,13 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client;
 
-import static org.apache.juneau.uon.UonSerializerContext.*;
-
-import java.io.*;
-
 import org.apache.http.*;
-import org.apache.juneau.*;
-import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 
 /**
@@ -38,9 +32,6 @@ public final class SerializedNameValuePair implements NameValuePair {
 	private Object value;
 	private UrlEncodingSerializer serializer;
 
-	// We must be sure to disable character encoding since it's done in the http client layer.
-	private static final ObjectMap op = new ObjectMap().append(UON_encodeChars, false);
-
 	/**
 	 * Constructor.
 	 *
@@ -56,29 +47,11 @@ public final class SerializedNameValuePair implements NameValuePair {
 
 	@Override /* NameValuePair */
 	public String getName() {
-		if (name != null && name.length() > 0) {
-			char c = name.charAt(0);
-			if (c == '$' || c == '(') {
-				try {
-					UonSerializerSession s = serializer.createSession(new StringWriter(), op, null, null, null, MediaType.UON);
-					serializer.serialize(s, name);
-					return s.getWriter().toString();
-				} catch (Exception e) {
-					throw new RuntimeException(e);
-				}
-			}
-		}
-		return name;
+		return serializer.serializePart(name, false, null);
 	}
 
 	@Override /* NameValuePair */
 	public String getValue() {
-		try {
-			UonSerializerSession s = serializer.createSession(new StringWriter(), op, null, null, null, MediaType.UON);
-			serializer.serialize(s, value);
-			return s.getWriter().toString();
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+		return serializer.serializePart(value, false, null);
 	}
 }

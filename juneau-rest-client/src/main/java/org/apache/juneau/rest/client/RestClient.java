@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.io.*;
 import java.lang.reflect.*;
 import java.lang.reflect.Proxy;
@@ -29,6 +31,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.remoteable.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.urlencoding.*;
 
@@ -55,7 +58,6 @@ public class RestClient extends CoreObject {
 	private final CloseableHttpClient httpClient;
 	private final boolean keepHttpClientOpen;
 	private final UrlEncodingSerializer urlEncodingSerializer;  // Used for form posts only.
-	private final String remoteableServletUri;
 	private final String rootUrl;
 	private volatile boolean isClosed = false;
 	private final StackTraceElement[] creationStack;
@@ -84,7 +86,6 @@ public class RestClient extends CoreObject {
 			UrlEncodingSerializer urlEncodingSerializer,
 			Map<String,String> headers,
 			List<RestCallInterceptor> interceptors,
-			String remoteableServletUri,
 			String rootUri,
 			RetryOn retryOn,
 			int retries,
@@ -102,7 +103,6 @@ public class RestClient extends CoreObject {
 		Map<String,String> h2 = new ConcurrentHashMap<String,String>(headers);
 
 		this.headers = Collections.unmodifiableMap(h2);
-		this.remoteableServletUri = remoteableServletUri;
 		this.rootUrl = rootUri;
 		this.retryOn = retryOn;
 		this.retries = retries;
@@ -217,6 +217,21 @@ public class RestClient extends CoreObject {
 	 */
 	public RestCall doPost(Object url, Object o) throws RestCallException {
 		return doCall("POST", url, true).input(o);
+	}
+
+	/**
+	 * Same as {@link #doPost(Object, Object)} but don't specify the input yet.
+	 * <p>
+	 * You must call either {@link RestCall#input(Object)} or {@link RestCall#formData(String, Object)}
+	 * to set the contents on the result object.
+	 *
+	 * @param url The URL of the remote REST resource.  Can be any of the following:  {@link String}, {@link URI}, {@link URL}.
+	 * @return A {@link RestCall} object that can be further tailored before executing the request
+	 * 	and getting the response as a parsed object.
+	 * @throws RestCallException
+	 */
+	public RestCall doPost(Object url) throws RestCallException {
+		return doCall("POST", url, true);
 	}
 
 	/**
@@ -337,6 +352,7 @@ public class RestClient extends CoreObject {
 	 * 	<li>{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
 	 * 	<li>{@link Object} - POJO to be converted to text using the {@link Serializer} registered with the {@link RestClient}.
 	 * 	<li>{@link HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
+	 * 	<li>{@link NameValuePairs} - Converted to a URL-encoded FORM post.
 	 * </ul>
 	 * This parameter is IGNORED if {@link HttpMethod#hasContent()} is <jk>false</jk>.
 	 * @return A {@link RestCall} object that can be further tailored before executing the request
@@ -405,64 +421,144 @@ public class RestClient extends CoreObject {
 	}
 
 	/**
-	 * Create a new proxy interface for the specified remoteable service interface.
+	 * Create a new proxy interface against a REST interface.
+	 * <p>
+	 * The URL to the REST interface is based on the following values:
+	 * <ul>
+	 * 	<li>The {@link Remoteable#path() @Remoteable.path()} annotation on the interface (<code>remoteable-path</code>).
+	 * 	<li>The {@link RestClientBuilder#rootUrl(Object) rootUrl} on the client (<code>root-url</code>).
+	 * 	<li>The fully-qualified class name of the interface (<code>class-name</code>).
+	 * </ul>
+	 * <p>
+	 * The URL calculation is as follows:
+	 * <ul>
+	 * 	<li><code>remoteable-path</code> - If remoteable path is absolute.
+	 * 	<li><code>root-url/remoteable-path</code> - If remoteable path is relative and root-url has been specified.
+	 * 	<li><code>root-url/class-name</code> - If remoteable path is not specified.
+	 * </ul>
+	 * <p>
+	 * If the information is not available to resolve to an absolute URL, a {@link RemoteableMetadataException} is thrown.
+	 * <p>
+	 * Examples:
+	 * <p class='bcode'>
+	 * 	<jk>package</jk> org.apache.foo;
+	 *
+	 * 	<ja>@Remoteable</ja>(path=<js>"http://hostname/resturl/myinterface1"</js>)
+	 * 	<jk>public interface</jk> MyInterface1 { ... }
+	 *
+	 * 	<ja>@Remoteable</ja>(path=<js>"/myinterface2"</js>)
+	 * 	<jk>public interface</jk> MyInterface2 { ... }
+	 *
+	 * 	<jk>public interface</jk> MyInterface3 { ... }
+	 *
+	 * 	<jc>// Resolves to "http://localhost/resturl/myinterface1"</jc>
+	 * 	MyInterface1 i1 = <jk>new</jk> RestClientBuilder()
+	 * 		.build()
+	 * 		.getRemoteableProxy(MyInterface1.<jk>class</jk>);
+	 *
+	 * 	<jc>// Resolves to "http://hostname/resturl/myinterface2"</jc>
+	 * 	MyInterface2 i2 = <jk>new</jk> RestClientBuilder()
+	 * 		.rootUrl(<js>"http://hostname/resturl"</js>)
+	 * 		.build()
+	 * 		.getRemoteableProxy(MyInterface2.<jk>class</jk>);
+	 *
+	 * 	<jc>// Resolves to "http://hostname/resturl/org.apache.foo.MyInterface3"</jc>
+	 * 	MyInterface3 i3 = <jk>new</jk> RestClientBuilder()
+	 * 		.rootUrl(<js>"http://hostname/resturl"</js>)
+	 * 		.build()
+	 * 		.getRemoteableProxy(MyInterface3.<jk>class</jk>);
+	 * </p>
 	 *
 	 * @param interfaceClass The interface to create a proxy for.
 	 * @return The new proxy interface.
-	 * @throws RuntimeException If the Remotable service URI has not been specified on this
-	 * 	client by calling {@link RestClientBuilder#remoteableServletUri(String)}.
+	 * @throws RemoteableMetadataException If the REST URI cannot be determined based on the information given.
 	 */
 	public <T> T getRemoteableProxy(final Class<T> interfaceClass) {
-		if (remoteableServletUri == null)
-			throw new RuntimeException("Remoteable service URI has not been specified.");
-		return getRemoteableProxy(interfaceClass, remoteableServletUri + '/' + interfaceClass.getName());
+		return getRemoteableProxy(interfaceClass, null);
 	}
 
 	/**
-	 * Create a new proxy interface for the specified REST PROXY interface.
+	 * Same as {@link #getRemoteableProxy(Class)} except explicitly specifies the URL of the REST interface.
 	 *
 	 * @param interfaceClass The interface to create a proxy for.
-	 * @param proxyUrl The URL of the REST method annotated with <code><ja>@RestMethod</ja>(name=<js>"PROXY"</js>)</code>.
+	 * @param restUrl The URL of the REST interface.
 	 * @return The new proxy interface.
 	 */
-	public <T> T getRemoteableProxy(final Class<T> interfaceClass, final Object proxyUrl) {
-		return getRemoteableProxy(interfaceClass, proxyUrl, serializer, parser);
+	public <T> T getRemoteableProxy(final Class<T> interfaceClass, final Object restUrl) {
+		return getRemoteableProxy(interfaceClass, restUrl, serializer, parser);
 	}
 
 	/**
 	 * Same as {@link #getRemoteableProxy(Class, Object)} but allows you to override the serializer and parser used.
 	 *
 	 * @param interfaceClass The interface to create a proxy for.
-	 * @param proxyUrl The URL of the REST method annotated with <code><ja>@RestMethod</ja>(name=<js>"PROXY"</js>)</code>.
+	 * @param restUrl The URL of the REST interface.
 	 * @param serializer The serializer used to serialize POJOs to the body of the HTTP request.
 	 * @param parser The parser used to parse POJOs from the body of the HTTP response.
 	 * @return The new proxy interface.
 	 */
 	@SuppressWarnings({ "unchecked", "hiding" })
-	public <T> T getRemoteableProxy(final Class<T> interfaceClass, final Object proxyUrl, final Serializer serializer, final Parser parser) {
+	public <T> T getRemoteableProxy(final Class<T> interfaceClass, Object restUrl, final Serializer serializer, final Parser parser) {
+
+		if (restUrl == null) {
+			Remoteable r = ReflectionUtils.getAnnotation(Remoteable.class, interfaceClass);
+
+			String path = r == null ? "" : trimSlashes(r.path());
+			if (path.indexOf("://") == -1) {
+				if (path.isEmpty())
+					path = interfaceClass.getName();
+				if (rootUrl == null)
+					throw new RemoteableMetadataException(interfaceClass, "Root URI has not been specified.  Cannot construct absolute path to remoteable proxy.");
+				path = trimSlashes(rootUrl) + '/' + path;
+			}
+			restUrl = path;
+		}
+
+		final String restUrl2 = restUrl.toString();
+
 		try {
 			return (T)Proxy.newProxyInstance(
 				interfaceClass.getClassLoader(),
 				new Class[] { interfaceClass },
 				new InvocationHandler() {
 
-					final Map<Method,String> uriCache = new ConcurrentHashMap<Method,String>();
-					final String uri = toURI(proxyUrl).toString();
+					final RemoteableMeta rm = new RemoteableMeta(interfaceClass, restUrl2);
 
 					@Override /* InvocationHandler */
 					public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+						RemoteableMethodMeta rmm = rm.getMethodMeta(method);
 
-						// Constructing this string each time can be time consuming, so cache it.
-						String u = uriCache.get(method);
-						if (u == null) {
-							try {
-								u = uri + '/' + URLEncoder.encode(ClassUtils.getMethodSignature(method), "utf-8");
-							} catch (UnsupportedEncodingException e) {}
-							uriCache.put(method, u);
-						}
+						if (rmm == null)
+							throw new RuntimeException("Method is not exposed as a remoteable method.");
 
 						try {
-							return doPost(u, args).serializer(serializer).parser(parser).getResponse(method.getGenericReturnType());
+							String url = rmm.getUrl();
+							String httpMethod = rmm.getHttpMethod();
+							RestCall rc = (httpMethod.equals("POST") ? doPost(url) : doGet(url));
+							rc.serializer(serializer).parser(parser);
+
+							for (RemoteMethodArg a : rmm.getQueryArgs())
+								rc.query(a.name, args[a.index], a.skipIfNE);
+
+							for (RemoteMethodArg a : rmm.getFormDataArgs())
+								rc.formData(a.name, args[a.index], a.skipIfNE);
+
+							for (RemoteMethodArg a : rmm.getHeaderArgs())
+								rc.header(a.name, args[a.index], a.skipIfNE);
+
+							if (rmm.getBodyArg() != null)
+								rc.input(args[rmm.getBodyArg()]);
+
+							if (rmm.getOtherArgs().length > 0) {
+								Object[] otherArgs = new Object[rmm.getOtherArgs().length];
+								int i = 0;
+								for (Integer otherArg : rmm.getOtherArgs())
+									otherArgs[i++] = args[otherArg];
+								rc.input(otherArgs);
+							}
+
+							return rc.getResponse(method.getGenericReturnType());
+
 						} catch (RestCallException e) {
 							// Try to throw original exception if possible.
 							e.throwServerException(interfaceClass.getClassLoader());

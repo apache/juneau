@@ -99,6 +99,9 @@
 	<li><p><a class='doclink' href='#Server'>Juneau Server (org.apache.juneau.rest)</a></p>
 	<li><p><a class='doclink' href='#Client'>Juneau Client (org.apache.juneau.rest.client)</a></p>
 	<li><p><a class='doclink' href='#Remoteable'>Remoteable services (org.apache.juneau.rest.remoteable)</a></p>
+	<ol>
+	<li><p><a class='doclink' href='#Remoteable.3rdParty'>Interface proxies against 3rd-party REST interfaces</a></p>
+	</ol>
 	<li><p><a class='doclink' href='#Microservices'>Juneau Microservices (org.apache.juneau.microservice)</a></p>
 	<li><p><a class='doclink' href='#Samples'>Samples</a></p>
 	<ol>
@@ -2247,14 +2250,18 @@
 	<p>
 		Juneau provides the capability of calling methods on POJOs on a server through client-side proxy interfaces.
 		It offers a number of advantages over other similar remote proxy interfaces, such as being much simpler to 
-			use and allowing much more flexibility.
+			define and use, and allowing much more flexibility in the types of objects serialized.
 	</p>
 	<p>
 		The remote proxy interface API allows you to invoke server-side POJO methods on the client side using REST as the communications protocol:
 	</p>
 	<p class='bcode'>
+	
+	<jc>// Create a client with basic JSON support.</jc>
+	RestClient client = <jk>new</jk> RestClientBuilder().rootUrl(<js>"http://localhost/remoteable"</js>).build();
+	
  	<jc>// Get an interface proxy.</jc>
- 	IAddressBook ab = restClient.getRemoteableProxy(IAddressBook.<jk>class</jk>);
+ 	IAddressBook ab = client.getRemoteableProxy(IAddressBook.<jk>class</jk>);
 	
 	<jc>// Invoke a method on the server side and get the returned result.</jc>
 	Person p = ab.createPerson(
@@ -2266,9 +2273,53 @@
 	);
 	</p>
 	<p>
+		Under the covers, this method call gets converted to a REST POST.
+	</p>
+	<p class='bcode'>
+	HTTP POST http://localhost/remoteable/org.apache.juneau.examples.rest.IAddressBook/createPerson
+	Accept: application/json
+	Content-Type: application/json
+	
+	[
+		{
+			"name":"John Smith",
+			"birthDate":"Aug 1, 1999",
+			"addresses":[
+				{
+					"street":"My street",
+					"city":"My city",
+					"state":"My state",
+					"zip":12345,
+					"isCurrent":true
+				}
+			]
+		}
+	]
+	</p>
+	<p>
+		Note that the body of the request is an array.  This array contains the serialized arguments of the method.
+		The object returned by the method is then serialized as the body of the response.
+	</p>
+	<p>
+		To define a remoteable interface, simply add the {@link org.apache.juneau.remoteable.Remoteable @Remoteable} annotation
+		to your interface class.  
+	</p>
+	<p class='bcode'>
+	<ja>@Remoteable</ja>
+	<jk>public interface</jk> IAddressBook {...}
+	</p>
+	<p>
+		This annotation tells the framework that all methods defined on this interface can be executed remotely.
+		It can be applied to super-interfaces, super-classes, etc..., and exposes the methods at whatever level it is defined.  
+	</p>
+	<p>
+		The {@link org.apache.juneau.remoteable.RemoteMethod @RemoteMethod} annotation can also be used on individual methods
+		to tailor which methods are exposed or their paths.
+	</p>
+	<p>
 		There are two ways to expose remoteable proxies on the server side:
 	</p>
-	<ol>
+	<ol class='spaced-list'>
 		<li>Extending from <code>RemoteableServlet</code>.
 		<li>Using a <code><ja>@RestMethod</ja>(name=<js>"PROXY"</js>)</code> annotation on a Java method.
 	</ol>
@@ -2310,24 +2361,21 @@
 	}
 	</p>
 	<p>
-		In either case, the proxy communications layer is pure REST.   
-		Parameters passed in on the client side are serialized as an HTTP POST, parsed on the
-		server side, and then passed to the invocation method.  The returned POJO is then marshalled back as an HTTP response.
-		Therefore, in cases where the interface classes are not available on the client side,
+		In either case, the proxy communications layer is pure REST.
+		<br>Therefore, in cases where the interface classes are not available on the client side,
 			the same method calls can be made through pure REST calls.  
-		This can also aid significantly in debugging, since calls to the remoteable service
+		<br>This can also aid significantly in debugging, since calls to the remoteable service
 			can be made directly from a browser with no coding involved.
 	</p>
 	<p>
 		The parameters and return types of the Java methods can be any of the supported serializable and parsable types in <a class='doclink' href='#Core.PojoCategories'>POJO Categories</a>.
-		This ends up being WAY more flexible than other proxy interfaces since Juneau can handle so may POJO types out-of-the-box.
-		Most of the time you don't even need to modify your existing Java implementation code.
+		<br>This ends up being WAY more flexible than other proxy interfaces since Juneau can handle so may POJO types out-of-the-box.
+		<br>Most of the time you don't even need to modify your existing Java implementation code.
 	</p>
 	<p>
-		The RemoteableServlet class itself shows how sophisticated REST interfaces can be built on the Juneau RestServlet
-		API using very little code.  The RemoteableServlet class itself consists of only 53 lines of code, yet is
-		a sophisticated discoverable and self-documenting REST interface.  And since the remote proxy API is built on top 
-		of REST, it can be debugged using just a browser.
+		The RemoteableServlet class itself shows how sophisticated REST interfaces can be built on the Juneau RestServlet API using very little code.  
+		<br>The RemoteableServlet class itself consists of only 53 lines of code, yet is a sophisticated discoverable and self-documenting REST interface.  
+		<br>And since the remote proxy API is built on top of REST, it can be debugged using just a browser.
 	</p>
 	<p>
 		The requirements for a method to be callable through a remoteable service are:
@@ -2343,6 +2391,90 @@
 	<ul class='javahierarchy'>
 		<li class='p'><a class='doclink' href='org/apache/juneau/server/remoteable/package-summary.html#TOC'>org.apache.juneau.rest.remoteable</a> - Juneau Remoteable API Javadocs.
 	</ul>
+	
+	<!-- ======================================================================================================== -->
+	<a id="Remoteable.3rdParty"></a>
+	<h3 class='topic' onclick='toggle(this)'>6.1 - Interface proxies against 3rd-party REST interfaces</h3>
+	<div class='topic'>
+		<p>
+			Remoteable proxies can also be used to define interface proxies against 3rd-party REST interfaces.
+			This is an extremely powerful feature that allows you to quickly define easy-to-use interfaces against virtually any REST interface.
+		</p>
+		<p>
+			Similar in concept to remoteable services defined above, but in this case we simply define our interface with
+			special annotations that tell us how to convert input and output to HTTP headers, query paramters, form post parameters, or request/response bodies.
+		</p>
+		<p class='bcode'>	
+	<ja>@Remoteable</ja>
+	<jk>public interface</jk> MyProxyInterface {
+		
+		<ja>@RemoteMethod</ja>(httpMethod=<js>"POST"</js>, path=<js>"/method"</js>)
+		String doMethod(<ja>@Header</ja>(<js>"E-Tag"</js>) UUID etag, <ja>@Query</ja>("debug") <jk>boolean</jk> debug, <ja>@Body</ja> MyPojo pojo);
+	}
+	
+	RestClient client = <jk>new</jk> RestClientBuilder().build();
+	MyProxyInterface p = client.getRemoteableProxy(MyProxyInterface.<jk>class</jk>, <js>"http://hostname/some/rest/interface"</js>);
+	String response = p.doMethod(UUID.<jsm>generate</jsm>(), <jk>true</jk>, <jk>new</jk> MyPojo());
+		</p>
+		<p>
+			The Java method arguements can be annotated with any of the following:
+		</p>
+		<ul class='spaced-list'>
+			<li>{@link org.apache.juneau.remoteable.Query @Query} - A URL query parameter.
+				<br>The argument can be any of the following types:
+				<ul>
+					<li>Any serializable POJO - Converted to text using {@link org.apache.juneau.urlencoding.UrlEncodingSerializer#serializePart(Object, Boolean, Boolean)}.
+					<li><code>Map&lt;String,Object&gt;</code> - Individual name-value pairs.
+						<br>Values are converted to text using {@link org.apache.juneau.urlencoding.UrlEncodingSerializer#serializePart(Object, Boolean, Boolean)}.
+					<li><code>String</code> - Treated as a query string.
+				</ul>
+			<li>{@link org.apache.juneau.remoteable.QueryIfNE @QueryIfNE} - Same as <ja>@Query</ja> except skips the value if it's null/empty.
+			<li>{@link org.apache.juneau.remoteable.FormData @FormData} - A form-data parameter.
+				<br>Note that this is only available if the HTTP method is <code>POST</code>.
+				<br>The argument can be any of the following types:
+				<ul>
+					<li>Any serializable POJO - Converted to text using {@link org.apache.juneau.urlencoding.UrlEncodingSerializer#serializePart(Object, Boolean, Boolean)}.
+					<li>{@link org.apache.juneau.rest.client.NameValuePairs} - Individual name-value pairs.
+					<li><code>Map&lt;String,Object&gt;</code> - Individual name-value pairs.
+						<br>Values are converted to text using {@link org.apache.juneau.urlencoding.UrlEncodingSerializer#serializePart(Object, Boolean, Boolean)}.
+				</ul>
+			<li>{@link org.apache.juneau.remoteable.FormDataIfNE @FormDataIfNE} - Same as <ja>@FormData</ja> except skips the value if it's null/empty.
+			<li>{@link org.apache.juneau.remoteable.Header @Header} - A request header.
+				<br>The argument can be any of the following types:
+				<ul>
+					<li>Any serializable POJO - Converted to text using {@link org.apache.juneau.urlencoding.UrlEncodingSerializer#serializePart(Object, Boolean, Boolean)}.
+					<li><code>Map&lt;String,Object&gt;</code> - Individual name-value pairs.
+						<br>Values are converted to text using {@link org.apache.juneau.urlencoding.UrlEncodingSerializer#serializePart(Object, Boolean, Boolean)}.
+				</ul>
+			<li>{@link org.apache.juneau.remoteable.HeaderIfNE @HeaderIfNE} - Same as <ja>@Header</ja> except skips the value if it's null/empty.
+			<li>{@link org.apache.juneau.remoteable.Body @Body} - The HTTP request body.
+				<br>The argument can be any of the following types:
+				<ul>
+					<li>Any serializable POJO - Converted to text/bytes using the {@link org.apache.juneau.serializer.Serializer} registered with the <code>RestClient</code>.
+					<li>{@link java.io.Reader} - Raw contents of reader will be serialized to remote resource.
+					<li>{@link java.io.InputStream} - Raw contents of input stream will be serialized to remote resource.
+					<li>{@link org.apache.http.HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
+					<li>{@link org.apache.juneau.rest.client.NameValuePairs} - Converted to a URL-encoded FORM post.
+				</ul>
+		</ul>
+		<p>
+			The return type of the Java method can be any of the following:
+		</p>
+		<ul class='spaced-list'>
+			<li><jk>void</jk> - Don't parse any response.  
+				<br>Note that the method will still throw a runtime exception if an error HTTP status is returned.
+			<li>Any parsable POJO - The body of the response will be converted to the POJO using the parser defined on the <code>RestClient</code>.
+			<li><code>HttpResponse</code> - Returns the raw <code>HttpResponse</code> returned by the inner <code>HttpClient</code>.
+			<li>{@link java.io.Reader} - Returns access to the raw reader of the response.
+				<br>Note that if you don't want your response parsed as a POJO, you'll want to get the response reader directly.
+			<li>{@link java.io.InputStream} - Returns access to the raw input stream of the response.
+		</ul>
+
+		<h6 class='topic'>Additional Information</h6>
+		<ul class='javahierarchy'>
+			<li class='p'><a class='doclink' href='org/apache/juneau/remoteable/package-summary.html#TOC'>org.apache.juneau.remoteable</a> - Juneau Remoteable API Javadocs.
+		</ul>
+	</div>
 </div>
 	
 <!-- ======================================================================================================== -->
@@ -4345,8 +4477,6 @@
 			As good practice, you'll want to use interfaces to prevent all public methods from being exposed.
 		</p>
 		<p>
-			The {@link org.apache.juneau.rest.client.RestClientBuilder#remoteableServletUri(String)} method is used to specify the location
-				of the remoteable services servlet running on the server.
 			Proxy interfaces are then retrieved using the {@link org.apache.juneau.rest.client.RestClient#getRemoteableProxy(Class)} method.
 		</p>
 		<p>
@@ -4355,7 +4485,7 @@
 		<p class='bcode'>
 	<jc>// Create a RestClient using JSON for serialization, and point to the server-side remoteable servlet.</jc>
 	RestClient client = <jk>new</jk> RestClientBuilder()
-		.remoteableServletUri(<js>"http://localhost:10000/remoteable"</js>)
+		.rootUrl(<js>"http://localhost:10000/remoteable"</js>)
 		.build();
 	
 	<jc>// Create a proxy interface.</jc>
@@ -4373,8 +4503,8 @@
 			<li class='a'>{@link org.apache.juneau.rest.remoteable.RemoteableServlet}
 			<li class='c'>{@link org.apache.juneau.rest.client.RestClient}
 			<ul>
-				<li class='m'>{@link org.apache.juneau.rest.client.RestClientBuilder#remoteableServletUri(String) remoteableServletUri(String)}
 				<li class='m'>{@link org.apache.juneau.rest.client.RestClient#getRemoteableProxy(Class) getRemoteableProxy(Class)}
+				<li class='m'>{@link org.apache.juneau.rest.client.RestClient#getRemoteableProxy(Class,Object) getRemoteableProxy(Class,Object)}
 			</ul>
 		</ul>
 	</div>	
@@ -5757,6 +5887,17 @@
 					<li>{@link org.apache.juneau.dto.html5.HtmlElementMixed#getChild(int...)}
 				</ul>
 			<li>New common serializer setting: {@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_abridged}.
+			<li>Support for defining interface proxies against 3rd-party REST interfaces.
+				<br>New package {@link org.apache.juneau.remoteable} for all remoteable proxy interface annotations.
+				<br><ja>@Remoteable</ja> annotation has been moved to this package.
+			<li>Updated doc: <a class='doclink' href='#Remoteable'>6 - Remoteable Services</a>
+			<li>New doc: <a class='doclink' href='#Remoteable.3rdParty'>6.1 -  Interface proxies against 3rd-party REST interfaces</a>
+			<li>New URL-encoding serializer setting: {@link org.apache.juneau.urlencoding.UrlEncodingSerializerContext#URLENC_paramFormat}
+			<li>New methods on {@link org.apache.juneau.urlencoding.UrlEncodingSerializerBuilder}:
+			<ul>
+				<li>{@link org.apache.juneau.urlencoding.UrlEncodingSerializerBuilder#paramFormat(String) paramFormat(String)}	
+				<li>{@link org.apache.juneau.urlencoding.UrlEncodingSerializerBuilder#plainTextParams() plainTextParams()}	
+			</ul> 		
 		</ul>
 		
 		<h6 class='topic'>org.apache.juneau.rest</h6>
@@ -5858,7 +5999,6 @@
 	IAddressBook ab = client.getRemoteableProxy(IAddressBook.<jk>class</jk>, <js>"/addressBook/myproxy"</js>);
 			</p>
 				See {@link org.apache.juneau.rest.annotation.RestMethod#name()} for more information.
-			<li>Updated doc: <a class='doclink' href='#Remoteable'>6 - Remoteable Services</a>
 			<li>{@link org.apache.juneau.rest.RestRequest#toString()} can be called at any time to view the headers and content of the request
 				without affecting functionality.  Very useful for debugging.
 			<li>You can now use numeric values in path annotations.  
@@ -5876,47 +6016,76 @@
 		<h6 class='topic'>org.apache.juneau.rest.client</h6>
 		<ul class='spaced-list'>
 			<li>Revamped the client API to use builders.
-			<li>New methods added to {@link org.apache.juneau.rest.client.RestCall}:
-			<ul>
-				<li>{@link org.apache.juneau.rest.client.RestCall#serializer(Serializer)} - Override the serializer defined on the client for a single call.
-				<li>{@link org.apache.juneau.rest.client.RestCall#parser(Parser)} - Override the parser defined on the client for a single call.
-			</ul>
-			<li>New methods added to {@link org.apache.juneau.rest.client.RestClient}:
-			<ul>
-				<li>{@link org.apache.juneau.rest.client.RestClient#getRemoteableProxy(Class,Object)} - For interface proxies defined using <code><ja>@RestMethod</ja>(name=<js>"PROXY"</js>)</code>.
-				<li>{@link org.apache.juneau.rest.client.RestClient#getRemoteableProxy(Class,Object,Serializer,Parser)} - Same as above, but overrides the serializer and parser defined on the client.
-			</ul>
-			<li>New methods added to {@link org.apache.juneau.rest.client.RestClientBuilder}:
-			<ul>
-				<li>{@link org.apache.juneau.rest.client.RestClientBuilder#noTrace()} - Adds a <code>No-Trace: true</code> header on all requests to prevent
-					the servlet from logging errors.
-					Useful for testing scenarios when you don't want the console to end up showing errors done on purpose.
-				<li>{@link org.apache.juneau.rest.client.RestClientBuilder#debug(boolean)} now adds a <code>Debug: true</code> header on all requests.
-			</ul>
 			<li>New doc: <a class='doclink' href='org/apache/juneau/rest/client/package-summary.html#Debugging'>1.5 - Debugging</a>
 			<li>The <code>RestClient</code> class <code>doX(Object url)</code> methods now handle HttpClient <code>URIBuilder</code> instances.
-			<li>New methods added to {@link org.apache.juneau.rest.client.RestCall} that allow you to manipulate URLs after you've already created the <code>RestCall</code> object:
+			<li>New methods added/updated to {@link org.apache.juneau.rest.client.RestClient}:
+			<ul>
+				<li>{@link org.apache.juneau.rest.client.RestClient#getRemoteableProxy(Class,Object) getRemoteableProxy(Class,Object)} - For interface proxies defined using <code><ja>@RestMethod</ja>(name=<js>"PROXY"</js>)</code>.
+				<li>{@link org.apache.juneau.rest.client.RestClient#getRemoteableProxy(Class,Object,Serializer,Parser) getRemoteableProxy(Class,Object,Serializer,Parser)} - Same as above, but overrides the serializer and parser defined on the client.
+				<li>{@link org.apache.juneau.rest.client.RestClient#doPost(Object) doPost(Object)} 
+				<li>{@link org.apache.juneau.rest.client.RestClient#doCall(HttpMethod,Object,Object) doCall(HttpMethod,Object,Object)} - Can now pass in instances of {@link org.apache.juneau.rest.client.NameValuePairs} for easy form posts.
+					<br>This extends to all methods that take in the input.
+			</ul>
+			<li>New methods on {@link org.apache.juneau.rest.client.RestCall}:
 				<ul>
-					<li>{@link org.apache.juneau.rest.client.RestCall#uri(Object)}
-					<li>{@link org.apache.juneau.rest.client.RestCall#param(String,Object)}
-					<li>{@link org.apache.juneau.rest.client.RestCall#paramIfNE(String,Object)}
-					<li>{@link org.apache.juneau.rest.client.RestCall#paramIfNN(String,Object)}
-					<li>{@link org.apache.juneau.rest.client.RestCall#params(Map)}
-					<li>{@link org.apache.juneau.rest.client.RestCall#query(String)}
-					<li>{@link org.apache.juneau.rest.client.RestCall#host(String)}
-					<li>{@link org.apache.juneau.rest.client.RestCall#port(int)}
-					<li>{@link org.apache.juneau.rest.client.RestCall#userInfo(String,String)}
-					<li>{@link org.apache.juneau.rest.client.RestCall#userInfo(String)}
-					<li>{@link org.apache.juneau.rest.client.RestCall#scheme(String)}
+					<li>{@link org.apache.juneau.rest.client.RestCall#uri(Object) uri(Object)}
+					<li>{@link org.apache.juneau.rest.client.RestCall#query(String,Object,boolean) query(String,Object,boolean)}
+					<li>{@link org.apache.juneau.rest.client.RestCall#query(String,Object) query(String,Object)}
+					<li>{@link org.apache.juneau.rest.client.RestCall#queryIfNE(String,Object) queryIfNE(String,Object)}
+					<li>{@link org.apache.juneau.rest.client.RestCall#query(Map) query(Map)}
+					<li>{@link org.apache.juneau.rest.client.RestCall#queryIfNE(Map) queryIfNE(Map)}
+					<li>{@link org.apache.juneau.rest.client.RestCall#query(String) query(String)}
+					<li>{@link org.apache.juneau.rest.client.RestCall#formData(String,Object,boolean) formData(String,Object,boolean)}
+					<li>{@link org.apache.juneau.rest.client.RestCall#formData(String,Object) formData(String,Object)}
+					<li>{@link org.apache.juneau.rest.client.RestCall#formDataIfNE(String,Object) formDataIfNE(String,Object)}
+					<li>{@link org.apache.juneau.rest.client.RestCall#formData(Map) formData(Map)}
+					<li>{@link org.apache.juneau.rest.client.RestCall#formDataIfNE(Map) formDataIfNE(Map)}
+					<li>{@link org.apache.juneau.rest.client.RestCall#header(String,Object,boolean) header(String,Object,boolean)}
+					<li>{@link org.apache.juneau.rest.client.RestCall#header(String,Object) header(String,Object)}
+					<li>{@link org.apache.juneau.rest.client.RestCall#headerIfNE(String,Object) headerIfNE(String,Object)}
+					<li>{@link org.apache.juneau.rest.client.RestCall#headers(Map) headers(Map)}
+					<li>{@link org.apache.juneau.rest.client.RestCall#headersIfNE(Map) headersIfNE(Map)}
+					<li>{@link org.apache.juneau.rest.client.RestCall#host(String) host(String)}
+					<li>{@link org.apache.juneau.rest.client.RestCall#port(int) port(int)}
+					<li>{@link org.apache.juneau.rest.client.RestCall#userInfo(String,String) userInfo(String,String)}
+					<li>{@link org.apache.juneau.rest.client.RestCall#userInfo(String) userInfo(String)}
+					<li>{@link org.apache.juneau.rest.client.RestCall#scheme(String) scheme(String)}
 				</ul>
-			<li>New methods added to allow for asynchronous HTTP calls:
+			<li>New methods added to {@link org.apache.juneau.rest.client.RestClientBuilder}:
 				<ul>
-					<li>{@link org.apache.juneau.rest.client.RestClientBuilder#executorService(ExecutorService,boolean)}
-					<li>{@link org.apache.juneau.rest.client.RestCall#runFuture()}
-					<li>{@link org.apache.juneau.rest.client.RestCall#getResponseFuture(Class)}
-					<li>{@link org.apache.juneau.rest.client.RestCall#getResponseFuture(Type,Type...)}
-					<li>{@link org.apache.juneau.rest.client.RestCall#getResponseAsStringFuture()}
+					<li>{@link org.apache.juneau.rest.client.RestClientBuilder#executorService(ExecutorService,boolean) executorService(ExecutorService,boolean)}
+					<li>{@link org.apache.juneau.rest.client.RestClientBuilder#paramFormat(String) paramFormat(ExecutorService,boolean)}
+					<li>{@link org.apache.juneau.rest.client.RestClientBuilder#plainTextParams() plainTextParams()}
+					<li>{@link org.apache.juneau.rest.client.RestClientBuilder#noTrace() noTrace()} - Adds a <code>No-Trace: true</code> header on all requests to prevent
+						the servlet from logging errors.
+						<br>Useful for testing scenarios when you don't want the console to end up showing errors done on purpose.
+					<li>{@link org.apache.juneau.rest.client.RestClientBuilder#debug(boolean) debug(boolean)} now adds a <code>Debug: true</code> header on all requests.
 				</ul>
+			<li>New methods added/updated to {@link org.apache.juneau.rest.client.RestCall}:
+				<ul>
+					<li>{@link org.apache.juneau.rest.client.RestCall#runFuture() runFuture()}
+					<li>{@link org.apache.juneau.rest.client.RestCall#getResponseFuture(Class) getResponseFuture(Class)}
+					<li>{@link org.apache.juneau.rest.client.RestCall#getResponseFuture(Type,Type...) getResponseFuture(Type,Type...)}
+					<li>{@link org.apache.juneau.rest.client.RestCall#getResponseAsStringFuture() getResponseAsStringFuture()}
+					<li>{@link org.apache.juneau.rest.client.RestCall#serializer(Serializer) serializer(Serializer)} - Override the serializer defined on the client for a single call.
+					<li>{@link org.apache.juneau.rest.client.RestCall#parser(Parser) parser(Parser)} - Override the parser defined on the client for a single call.
+					<li>{@link org.apache.juneau.rest.client.RestCall#input(Object) input(Object)} - Now accepts instances of {@link org.apache.juneau.rest.client.NameValuePairs}.
+					<li>{@link org.apache.juneau.rest.client.RestCall#getResponse(Class) getResponse(Class)} - Can now pass in any of the following:
+						<ul>
+							<li>{@link org.apache.http.HttpResponse} - Returns the raw <code>HttpResponse</code> returned by the inner <code>HttpClient</code>.
+							<li>{@link java.io.Reader} - Returns access to the raw reader of the response.
+							<li>{@link java.io.InputStream} - Returns access to the raw input stream of the response.
+						</ul>
+				</ul>
+			<li>New methods added to {@link org.apache.juneau.rest.client.NameValuePairs}:
+				<ul>
+					<li>{@link org.apache.juneau.rest.client.NameValuePairs#append(String,Object) append(String,Object)}
+					<li>{@link org.apache.juneau.rest.client.NameValuePairs#append(String,Object,UrlEncodingSerializer) append(String,Object,UrlEncodingSerializer)}
+				</ul>
+			<li>{@link org.apache.juneau.rest.client.RetryOn} is now an abstract class with an additional method:
+				<ul>
+					<li>{@link org.apache.juneau.rest.client.RetryOn#onResponse(HttpResponse) onResponse(HttpResponse)}
+				</ul>			
 		</ul>
 		
 		<h6 class='topic'>org.apache.juneau.microservice</h6>
@@ -5931,7 +6100,6 @@
 			</ul>
 		</ul>		
 	</div>
-	
 	
 	<!-- ======================================================================================================== -->
 	<a id="6.1.0"></a>
@@ -6141,26 +6309,27 @@
 			<li>New {@link org.apache.juneau.rest.RestRequest#getTimeZone()} method.
 			<li>Standardized the following methods in {@link org.apache.juneau.rest.RestRequest} to remove dependency on <code>ClassMeta</code>
 				objects and eliminate the need for casts:
-			<ul>
-				<li>{@link org.apache.juneau.rest.RestRequest#getHeader(String,Class)}
-				<li>{@link org.apache.juneau.rest.RestRequest#getHeader(String,Object,Class)}
-				<li>{@link org.apache.juneau.rest.RestRequest#getHeader(String,Type,Type...)}
-				<li>{@link org.apache.juneau.rest.RestRequest#getQueryParameter(String,Class)}
-				<li>{@link org.apache.juneau.rest.RestRequest#getQueryParameter(String,Object,Class)}
-				<li>{@link org.apache.juneau.rest.RestRequest#getQueryParameter(String,Type,Type...)}
-				<li>{@link org.apache.juneau.rest.RestRequest#getQueryParameter(String,Object,Type,Type...)}
-				<li>{@link org.apache.juneau.rest.RestRequest#getQueryParameters(String,Class)}
-				<li>{@link org.apache.juneau.rest.RestRequest#getQueryParameters(String,Type,Type...)}
-				<li>{@link org.apache.juneau.rest.RestRequest#getFormDataParameter(String,Class)}
-				<li>{@link org.apache.juneau.rest.RestRequest#getFormDataParameter(String,Object,Class)}
-				<li>{@link org.apache.juneau.rest.RestRequest#getFormDataParameters(String,Class)}
-				<li>{@link org.apache.juneau.rest.RestRequest#getFormDataParameter(String,Type,Type...)}
-				<li>{@link org.apache.juneau.rest.RestRequest#getFormDataParameters(String,Type,Type...)}
-				<li>{@link org.apache.juneau.rest.RestRequest#getPathParameter(String,Class)}
-				<li>{@link org.apache.juneau.rest.RestRequest#getPathParameter(String,Type,Type...)}
-				<li>{@link org.apache.juneau.rest.RestRequest#getBody(Class)}
-				<li>{@link org.apache.juneau.rest.RestRequest#getBody(Type,Type...)}
-			</ul>
+				<ul>
+					<li>{@link org.apache.juneau.rest.RestRequest#getHeader(String,Class) getHeader(String,Class)}
+					<li>{@link org.apache.juneau.rest.RestRequest#getHeader(String,Object,Class) getHeader(String)}
+					<li>{@link org.apache.juneau.rest.RestRequest#getHeader(String,Type,Type...)}
+					<li>{@link org.apache.juneau.rest.RestRequest#getQueryParameter(String,Class)}
+					<li>{@link org.apache.juneau.rest.RestRequest#getQueryParameter(String,Object,Class)}
+					<li>{@link org.apache.juneau.rest.RestRequest#getQueryParameter(String,Type,Type...)}
+					<li>{@link org.apache.juneau.rest.RestRequest#getQueryParameter(String,Object,Type,Type...)}
+					<li>{@link org.apache.juneau.rest.RestRequest#getQueryParameters(String,Class)}
+					<li>{@link org.apache.juneau.rest.RestRequest#getQueryParameters(String,Type,Type...)}
+					<li>{@link org.apache.juneau.rest.RestRequest#getFormDataParameter(String,Class)}
+					<li>{@link org.apache.juneau.rest.RestRequest#getFormDataParameter(String,Object,Class)}
+					<li>{@link org.apache.juneau.rest.RestRequest#getFormDataParameters(String,Class)}
+					<li>{@link org.apache.juneau.rest.RestRequest#getFormDataParameter(String,Type,Type...)}
+					<li>{@link org.apache.juneau.rest.RestRequest#getFormDataParameters(String,Type,Type...)}
+					<li>{@link org.apache.juneau.rest.RestRequest#getPathParameter(String,Class)}
+					<li>{@link org.apache.juneau.rest.RestRequest#getPathParameter(String,Type,Type...)}
+					<li>{@link org.apache.juneau.rest.RestRequest#getBody(Class)}
+					<li>{@link org.apache.juneau.rest.RestRequest#getBody(Type,Type...)}
+				</ul>
+			<li>New methods on {@link org.apache.juneau.rest.client.NameValuePairs}
 			<li>Fixed issue where whitespace was not added to UON/URL-Encoding output when <code>&amp;plainText=true</code> specified.
 		</ul>
 	</div>
@@ -7284,7 +7453,7 @@
 				Adds <js>"* {white-space:nowrap}"</js> to the style header to prevent word wrapping.
 			<li>Fixed bug in {@link org.apache.juneau.uon.UonParser} where passing in a blank value on an array or collection type in a form post would cause a <code>ClassCastException</code>.  
 				New behavior creates an empty array or <code>Collection</code>.
-			<li>Improved implementation of {@link org.apache.juneau.urlencoding.UrlEncodingSerializer#serializeUrlPart(Object)} method.
+			<li>Improved implementation of <del><code>UrlEncodingSerializer.serializeUrlPart(Object)</code></del> method.
 		</ul>
 
 		<h6 class='topic'>Server</h6>		
@@ -7609,7 +7778,7 @@
 			<li>New {@link org.apache.juneau.rest.Redirect} class that simplifies performing redirections in REST methods.
 			<li>New pluggable {@link org.apache.juneau.rest.ResponseHandler} class and {@link org.apache.juneau.rest.annotation.RestResource#responseHandlers()} annotation
 				for defining customer response handlers for special kinds of POJOs.
-			<li>New method {@link org.apache.juneau.urlencoding.UrlEncodingSerializer#serializeUrlPart(Object)} method.
+			<li>New method <del><code>UrlEncodingSerializer.serializeUrlPart(Object)</code></del> method.
 			<li>New method {@link org.apache.juneau.rest.RestRequest#getServletURIBuilder()} for construcing servlet-based URLs more efficiently.
 			<li>New method {@link org.apache.juneau.rest.RestResponse#getNegotiatedOutputStream()} that uses encoders if a match is found, 
 				and {@link org.apache.juneau.rest.RestResponse#getOutputStream()} that just return the underlying output stream without any modifications.

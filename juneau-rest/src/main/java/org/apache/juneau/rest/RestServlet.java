@@ -147,9 +147,9 @@ public abstract class RestServlet extends HttpServlet {
 			context.getCallHandler().service(r1, r2);
 
 		} catch (RestException e) {
-			context.getCallHandler().handleError(r1, r2, e);
+			r2.sendError(SC_INTERNAL_SERVER_ERROR, e.getLocalizedMessage());
 		} catch (Throwable e) {
-			context.getCallHandler().handleError(r1, r2, new RestException(SC_INTERNAL_SERVER_ERROR, e));
+			r2.sendError(SC_INTERNAL_SERVER_ERROR, e.getLocalizedMessage());
 		}
 	}
 
@@ -249,7 +249,8 @@ public abstract class RestServlet extends HttpServlet {
 
 	@Override /* GenericServlet */
 	public void destroy() {
-		context.destroy();
+		if (context != null)
+			context.destroy();
 		super.destroy();
 	}
 

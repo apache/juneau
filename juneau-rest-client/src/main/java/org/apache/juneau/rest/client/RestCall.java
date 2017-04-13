@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.io.*;
 import java.lang.reflect.*;
 import java.net.*;
@@ -23,6 +25,7 @@ import java.util.regex.*;
 import org.apache.http.*;
 import org.apache.http.client.*;
 import org.apache.http.client.config.*;
+import org.apache.http.client.entity.*;
 import org.apache.http.client.methods.*;
 import org.apache.http.client.utils.*;
 import org.apache.http.impl.client.*;
@@ -78,9 +81,11 @@ public final class RestCall {
 	private boolean isClosed = false;
 	private boolean isFailed = false;
 	private Object input;
+	private boolean hasInput;  // input() was called, even if it's setting 'null'.
 	private Serializer serializer;
 	private Parser parser;
 	private URIBuilder uriBuilder;
+	private NameValuePairs formData;
 
 	/**
 	 * Constructs a REST call with the specified method name.
@@ -164,57 +169,84 @@ public final class RestCall {
 	}
 
 	/**
-	 * Adds a parameter to the URI query.
+	 * Adds a query parameter to the URI query.
+	 *
+	 * @param name The parameter name.
+	 * Can be null/blank if the value is a {@link Map} or {@link String}.
+	 * @param value The parameter value converted to a string using UON notation.
+	 * Can also be a {@link Map} or {@link String} if the name is null/blank.
+	 * If a {@link String} and the name is null/blank, then calls {@link URIBuilder#setCustomQuery(String)}.
+	 * @param skipIfEmpty Don't add the pair if the value is empty.
+	 * @return This object (for method chaining).
+	 */
+	@SuppressWarnings("unchecked")
+	public RestCall query(String name, Object value, boolean skipIfEmpty) {
+		if (! isEmpty(name)) {
+			if (! (isEmpty(value) && skipIfEmpty))
+				uriBuilder.addParameter(name, client.getUrlEncodingSerializer().serializePart(value, false, null));
+		} else {
+			if (value instanceof String) {
+				String s = value.toString();
+				if (! isEmpty(s))
+					uriBuilder.setCustomQuery(s);
+			} else if (value instanceof Map) {
+				for (Map.Entry<String,Object> p : ((Map<String,Object>) value).entrySet())
+					query(p.getKey(), p.getValue(), skipIfEmpty);
+			} else {
+				throw new RuntimeException("Invalid name passed to query(name,value,skipIfEmpty).");
+			}
+		}
+		return this;
+	}
+
+	/**
+	 * Adds a query parameter to the URI query.
 	 *
 	 * @param name The parameter name.
 	 * @param value The parameter value converted to a string using UON notation.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
 	 */
-	public RestCall param(String name, Object value) throws RestCallException {
-		uriBuilder.addParameter(name, client.getUrlEncodingSerializer().serializeUrlPart(value));
-		return this;
+	public RestCall query(String name, Object value) throws RestCallException {
+		return query(name, value, false);
 	}
 
 	/**
-	 * Adds parameters to the URI query.
+	 * Adds query parameters to the URI query.
 	 *
 	 * @param params The parameters.  Values are converted to a string using UON notation.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
 	 */
-	public RestCall params(Map<String,Object> params) throws RestCallException {
-		for (Map.Entry<String,Object> p : params.entrySet())
-			uriBuilder.addParameter(p.getKey(), client.getUrlEncodingSerializer().serializeUrlPart(p.getValue()));
-		return this;
+	public RestCall query(Map<String,Object> params) throws RestCallException {
+		return query(null, params);
 	}
 
 	/**
-	 * Adds a parameter to the URI query if the parameter value is not <jk>null</jk>.
+	 * Adds a query parameter to the URI query if the parameter value is not <jk>null</jk> or an empty string.
+	 * <p>
+	 * NE = "not empty"
 	 *
 	 * @param name The parameter name.
 	 * @param value The parameter value converted to a string using UON notation.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
 	 */
-	public RestCall paramIfNN(String name, Object value) throws RestCallException {
-		if (value != null)
-			uriBuilder.addParameter(name, client.getUrlEncodingSerializer().serializeUrlPart(value));
-		return this;
+	public RestCall queryIfNE(String name, Object value) throws RestCallException {
+		return query(name, value, true);
 	}
 
 	/**
-	 * Adds a parameter to the URI query if the parameter value is not <jk>null</jk> or an empty string.
+	 * Adds query parameters to the URI for any parameters that aren't null/empty.
+	 * <p>
+	 * NE = "not empty"
 	 *
-	 * @param name The parameter name.
-	 * @param value The parameter value converted to a string using UON notation.
+	 * @param params The parameters.  Values are converted to a string using UON notation.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
 	 */
-	public RestCall paramIfNE(String name, Object value) throws RestCallException {
-		if (! StringUtils.isEmpty(value))
-			uriBuilder.addParameter(name, client.getUrlEncodingSerializer().serializeUrlPart(value));
-		return this;
+	public RestCall queryIfNE(Map<String,Object> params) throws RestCallException {
+		return query(null, params, true);
 	}
 
 	/**
@@ -226,6 +258,99 @@ public final class RestCall {
 	public RestCall query(String query) {
 		uriBuilder.setCustomQuery(query);
 		return this;
+	}
+
+	/**
+	 * Adds a form data pair to this request to perform a URL-encoded form post.
+	 *
+	 * @param name The parameter name.
+	 * Can be null/blank if the value is a {@link Map} or {@link NameValuePairs}.
+	 * @param value The parameter value converted to a string using UON notation.
+	 * Can also be a {@link Map} or {@link NameValuePairs}.
+	 * @param skipIfEmpty Don't add the pair if the value is empty.
+	 * @return This object (for method chaining).
+	 */
+	@SuppressWarnings("unchecked")
+	public RestCall formData(String name, Object value, boolean skipIfEmpty) {
+		if (formData == null)
+			formData = new NameValuePairs();
+		if (! isEmpty(name)) {
+			if (! (isEmpty(value) && skipIfEmpty))
+				formData.add(new SerializedNameValuePair(name, value, client.getUrlEncodingSerializer()));
+		} else {
+			if (value instanceof NameValuePairs) {
+				formData.addAll((NameValuePairs)value);
+			} else if (value instanceof Map) {
+				for (Map.Entry<String,Object> p : ((Map<String,Object>) value).entrySet())
+					formData(p.getKey(), p.getValue(), skipIfEmpty);
+			} else {
+				throw new RuntimeException("Invalid name passed to formData(name,value,skipIfEmpty).");
+			}
+		}
+		return this;
+	}
+
+	/**
+	 * Adds a form data pair to this request to perform a URL-encoded form post.
+	 *
+	 * @param name The parameter name.
+	 * Can be null/blank if the value is a {@link Map} or {@link NameValuePairs}.
+	 * @param value The parameter value converted to a string using UON notation.
+	 * Can also be a {@link Map} or {@link NameValuePairs}.
+	 * @return This object (for method chaining).
+	 * @throws RestCallException If name was null/blank and value wasn't a {@link Map} or {@link NameValuePairs}.
+	 */
+	public RestCall formData(String name, Object value) throws RestCallException {
+		return formData(name, value, false);
+	}
+
+	/**
+	 * Adds form data pairs to this request to perform a URL-encoded form post.
+	 *
+	 * @param nameValuePairs The name-value pairs of the request.
+	 * @return This object (for method chaining).
+	 * @throws RestCallException
+	 */
+	public RestCall formData(NameValuePairs nameValuePairs) throws RestCallException {
+		return formData(null, nameValuePairs);
+	}
+
+	/**
+	 * Adds form data pairs to this request to perform a URL-encoded form post.
+	 *
+	 * @param params The parameters.  Values are converted to a string using UON notation.
+	 * @return This object (for method chaining).
+	 * @throws RestCallException If name was null/blank and value wasn't a {@link Map} or {@link NameValuePairs}.
+	 */
+	public RestCall formData(Map<String,Object> params) throws RestCallException {
+		return formData(null, params);
+	}
+
+	/**
+	 * Adds a form data pair to the request if the parameter value is not <jk>null</jk> or an empty string.
+	 * <p>
+	 * NE = "not empty"
+	 *
+	 * @param name The parameter name.
+	 * @param value The parameter value converted to a string using UON notation.
+	 * @return This object (for method chaining).
+	 * @throws RestCallException
+	 */
+	public RestCall formDataIfNE(String name, Object value) throws RestCallException {
+		return formData(name, value, true);
+	}
+
+	/**
+	 * Adds form data parameters to the request for any parameters that aren't null/empty.
+	 * <p>
+	 * NE = "not empty"
+	 *
+	 * @param params The parameters.  Values are converted to a string using UON notation.
+	 * @return This object (for method chaining).
+	 * @throws RestCallException
+	 */
+	public RestCall formDataIfNE(Map<String,Object> params) throws RestCallException {
+		return formData(null, params, true);
 	}
 
 	/**
@@ -261,12 +386,14 @@ public final class RestCall {
 	 * 	<li>{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
 	 * 	<li>{@link Object} - POJO to be converted to text using the {@link Serializer} registered with the {@link RestClient}.
 	 * 	<li>{@link HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
+	 * 	<li>{@link NameValuePairs} - Converted to a URL-encoded FORM post.
 	 * </ul>
 	 * @return This object (for method chaining).
 	 * @throws RestCallException If a retry was attempted, but the entity was not repeatable.
 	 */
 	public RestCall input(final Object input) throws RestCallException {
 		this.input = input;
+		this.hasInput = true;
 		return this;
 	}
 
@@ -302,17 +429,77 @@ public final class RestCall {
 	//--------------------------------------------------------------------------------
 
 	/**
-	 * Convenience method for setting a header value on the request.
-	 * <p>
-	 * Equivalent to calling <code>restCall.getRequest().setHeader(name, value.toString())</code>.
+	 * Sets a header on the request.
 	 *
 	 * @param name The header name.
+	 * The name can be null/empty if the value is a {@link Map}.
+	 * @param value The header value.
+	 * @param skipIfEmpty Don't add the header if the name is null/empty.
+	 * @return This object (for method chaining).
+	 */
+	@SuppressWarnings("unchecked")
+	public RestCall header(String name, Object value, boolean skipIfEmpty) {
+		if (! isEmpty(name)) {
+			if (! (isEmpty(value) && skipIfEmpty))
+				request.setHeader(name, client.getUrlEncodingSerializer().serializePart(value, false, true));
+		} else {
+			if (value instanceof Map) {
+				for (Map.Entry<String,Object> p : ((Map<String,Object>) value).entrySet())
+					header(p.getKey(), p.getValue(), skipIfEmpty);
+			} else {
+				throw new RuntimeException("Invalid name passed to formData(name,value,skipIfEmpty).");
+			}
+		}
+		return this;
+	}
+
+
+	/**
+	 * Sets a header on the request.
+	 *
+	 * @param name The header name.
+	 * The name can be null/empty if the value is a {@link Map}.
 	 * @param value The header value.
 	 * @return This object (for method chaining).
 	 */
 	public RestCall header(String name, Object value) {
-		request.setHeader(name, value.toString());
-		return this;
+		return header(name, value, false);
+	}
+
+	/**
+	 * Sets headers on the request.
+	 *
+	 * @param values The header values.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall headers(Map<String,Object> values) {
+		return header(null, values, false);
+	}
+
+	/**
+	 * Sets a header on the request if the value is not null/empty.
+	 * <p>
+	 * NE = "not empty"
+	 *
+	 * @param name The header name.
+	 * The name can be null/empty if the value is a {@link Map}.
+	 * @param value The header value.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall headerIfNE(String name, Object value) {
+		return header(name, value, true);
+	}
+
+	/**
+	 * Sets headers on the request if the values are not null/empty.
+	 * <p>
+	 * NE = "not empty"
+	 *
+	 * @param values The header values.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall headersIfNE(Map<String,Object> values) {
+		return header(null, values, true);
 	}
 
 	/**
@@ -1082,13 +1269,28 @@ public final class RestCall {
 
 			request.setURI(uriBuilder.build());
 
-			if (input != null) {
+			if (hasInput || formData != null) {
+
+				if (hasInput && formData != null)
+					throw new RestCallException("Both input and form data found on same request.");
+
 				if (! (request instanceof HttpEntityEnclosingRequestBase))
 					throw new RestCallException(0, "Method does not support content entity.", request.getMethod(), request.getURI(), null);
-				HttpEntity entity = (input instanceof HttpEntity) ? (HttpEntity)input : new RestRequestEntity(input, getSerializer());
-				((HttpEntityEnclosingRequestBase)request).setEntity(entity);
+
+				HttpEntity entity = null;
+				if (formData != null)
+					entity = new UrlEncodedFormEntity(formData);
+				else if (input instanceof NameValuePairs)
+					entity = new UrlEncodedFormEntity((NameValuePairs)input);
+				else if (input instanceof HttpEntity)
+					entity = (HttpEntity)input;
+				else
+					entity = new RestRequestEntity(input, getSerializer());
+
 				if (retries > 1 && ! entity.isRepeatable())
 					throw new RestCallException("Rest call set to retryable, but entity is not repeatable.");
+
+				((HttpEntityEnclosingRequestBase)request).setEntity(entity);
 			}
 
 			int sc = 0;
@@ -1104,7 +1306,7 @@ public final class RestCall {
 					if (response != null)
 						EntityUtils.consumeQuietly(response.getEntity());
 				}
-				if (! retryOn.onCode(sc))
+				if (! retryOn.onResponse(response))
 					retries = 0;
 				if (retries > 0) {
 					for (RestCallInterceptor rci : interceptors)
@@ -1360,6 +1562,16 @@ public final class RestCall {
 	 * 	<jc>// Parse into a map of object keys/values.</jc>
 	 * 	Map m = restClient.doGet(url).getResponse(TreeMap.<jk>class</jk>);
 	 * </p>
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>You can also specify any of the following types:
+	 * 		<ul>
+	 * 			<li>{@link HttpResponse} - Returns the raw <code>HttpResponse</code> returned by the inner <code>HttpClient</code>.
+	 * 			<li>{@link Reader} - Returns access to the raw reader of the response.
+	 * 			<li>{@link InputStream} - Returns access to the raw input stream of the response.
+	 * 		</ul>
+	 * </ul>
 	 *
 	 * @param <T> The class type of the object being created.
 	 * See {@link #getResponse(Type, Type...)} for details.
@@ -1427,6 +1639,12 @@ public final class RestCall {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
 	 * 	<li>Use the {@link #getResponse(Class)} method instead if you don't need a parameterized map/collection.
+	 * 	<li>You can also specify any of the following types:
+	 * 		<ul>
+	 * 			<li>{@link HttpResponse} - Returns the raw <code>HttpResponse</code> returned by the inner <code>HttpClient</code>.
+	 * 			<li>{@link Reader} - Returns access to the raw reader of the response.
+	 * 			<li>{@link InputStream} - Returns access to the raw input stream of the response.
+	 * 		</ul>
 	 * </ul>
 	 *
 	 * @param <T> The class type of the object to create.
@@ -1500,8 +1718,15 @@ public final class RestCall {
 		return getResponsePojoRest(ObjectMap.class);
 	}
 
+	@SuppressWarnings("unchecked")
 	<T> T getResponse(ClassMeta<T> type) throws IOException, ParseException {
 		try {
+			if (type.getInnerClass().equals(HttpResponse.class))
+				return (T)response;
+			if (type.getInnerClass().equals(Reader.class))
+				return (T)getReader();
+			if (type.getInnerClass().equals(InputStream.class))
+				return (T)getInputStream();
 			Parser p = getParser();
 			T o = null;
 			if (! p.isReaderParser()) {

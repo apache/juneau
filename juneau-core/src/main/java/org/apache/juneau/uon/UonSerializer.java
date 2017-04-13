@@ -203,16 +203,17 @@ public class UonSerializer extends WriterSerializer {
 	 * @param eType The expected type of the object if this is a bean property.
 	 * @param attrName The bean property name if this is a bean property.  <jk>null</jk> if this isn't a bean property being serialized.
 	 * @param pMeta The bean property metadata.
+	 * @param plainTextParams <jk>true</jk> if this is a top level parameter key or value and paramFormat is PLAINTEXT.
 	 *
 	 * @return The same writer passed in.
 	 * @throws Exception
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected SerializerWriter serializeAnything(UonSerializerSession session, UonWriter out, Object o, ClassMeta<?> eType,
-			String attrName, BeanPropertyMeta pMeta) throws Exception {
+			String attrName, BeanPropertyMeta pMeta, boolean plainTextParams) throws Exception {
 
 		if (o == null) {
-			out.appendObject(null, false);
+			out.appendObject(null, false, plainTextParams);
 			return out;
 		}
 
@@ -247,7 +248,7 @@ public class UonSerializer extends WriterSerializer {
 
 		// '\0' characters are considered null.
 		if (o == null || (sType.isChar() && ((Character)o).charValue() == 0))
-			out.appendObject(null, false);
+			out.appendObject(null, false, plainTextParams);
 		else if (sType.isBoolean())
 			out.appendBoolean(o);
 		else if (sType.isNumber())
@@ -269,7 +270,7 @@ public class UonSerializer extends WriterSerializer {
 			serializeCollection(session, out, toList(sType.getInnerClass(), o), eType);
 		}
 		else {
-			out.appendObject(o, false);
+			out.appendObject(o, false, plainTextParams);
 		}
 
 		if (! isRecursion)
@@ -293,8 +294,8 @@ public class UonSerializer extends WriterSerializer {
 			Map.Entry e = (Map.Entry) mapEntries.next();
 			Object value = e.getValue();
 			Object key = session.generalize(e.getKey(), keyType);
-			out.cr(depth).appendObject(key, false).append('=');
-			serializeAnything(session, out, value, valueType, (key == null ? null : session.toString(key)), null);
+			out.cr(depth).appendObject(key, false, false).append('=');
+			serializeAnything(session, out, value, valueType, (key == null ? null : session.toString(key)), null, false);
 			if (mapEntries.hasNext())
 				out.append(',');
 		}
@@ -329,9 +330,9 @@ public class UonSerializer extends WriterSerializer {
 			if (addComma)
 				out.append(',');
 
-			out.cr(depth).appendObject(key, false).append('=');
+			out.cr(depth).appendObject(key, false, false).append('=');
 
-			serializeAnything(session, out, value, cMeta, key, pMeta);
+			serializeAnything(session, out, value, cMeta, key, pMeta, false);
 
 			addComma = true;
 		}
@@ -356,7 +357,7 @@ public class UonSerializer extends WriterSerializer {
 
 		for (Iterator i = c.iterator(); i.hasNext();) {
 			out.cr(depth);
-			serializeAnything(session, out, i.next(), elementType, "<iterator>", null);
+			serializeAnything(session, out, i.next(), elementType, "<iterator>", null, false);
 			if (i.hasNext())
 				out.append(',');
 		}
@@ -375,12 +376,12 @@ public class UonSerializer extends WriterSerializer {
 
 	@Override /* Serializer */
 	public UonSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType) {
-		return new UonSerializerSession(ctx, op, output, javaMethod, locale, timeZone, mediaType);
+		return new UonSerializerSession(ctx, null, op, output, javaMethod, locale, timeZone, mediaType);
 	}
 
 	@Override /* Serializer */
 	protected void doSerialize(SerializerSession session, Object o) throws Exception {
 		UonSerializerSession s = (UonSerializerSession)session;
-		serializeAnything(s, s.getWriter(), o, s.getExpectedRootType(o), "root", null);
+		serializeAnything(s, s.getWriter(), o, s.getExpectedRootType(o), "root", null, false);
 	}
 }

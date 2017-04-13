@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.remoteable;
 
-import org.apache.juneau.annotation.*;
+import org.apache.juneau.remoteable.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 

@@ -78,8 +78,6 @@
 	</p>
 	<p>
 		Proxy interfaces are retrieved using the {@link org.apache.juneau.rest.client.RestClient#getRemoteableProxy(Class)} method.
-		The {@link org.apache.juneau.rest.client.RestClientBuilder#remoteableServletUri(String)} method is used to specify the location
-			of the remoteable services servlet running on the server.
 		The remoteable servlet is a specialized subclass of {@link org.apache.juneau.rest.RestServlet} that provides a full-blown
 			REST interface for calling remoteable services (e.g. POJOs) remotely. 
 	</p>
@@ -100,7 +98,7 @@
 	<p class='bcode'>
 	<jc>// Create a RestClient using JSON for serialization, and point to the server-side remoteable servlet.</jc>
 	RestClient client = <jk>new</jk> RestClientBuilder()
-		.remoteableServletUri(<js>"https://localhost:9080/juneau/sample/remoteable"</js>)
+		.rootUrl(<js>"https://localhost:9080/juneau/sample/remoteable"</js>)
 		.build();
 	
 	<jc>// Create a proxy interface.</jc>
@@ -313,7 +311,7 @@
 <div class='topic'>
 	<p>
 		What if you want fine-tuned control over which methods are exposed in an interface instead of just all public methods?
-		For this, the {@link org.apache.juneau.annotation.Remoteable @Remoteable} annotation is provided.
+		For this, the {@link org.apache.juneau.remoteable.Remoteable @Remoteable} annotation is provided.
 		It can be applied to individual interface methods to only expose those methods through the remoteable servlet.
 	</p>
 	<p>

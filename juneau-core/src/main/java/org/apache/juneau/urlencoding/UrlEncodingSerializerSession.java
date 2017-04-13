@@ -26,13 +26,14 @@ import org.apache.juneau.uon.*;
  */
 public class UrlEncodingSerializerSession extends UonSerializerSession {
 
-	private final boolean expandedParams;
+	private final boolean expandedParams, plainTextParams;
 
 	/**
 	 * Create a new session using properties specified in the context.
 	 *
 	 * @param ctx The context creating this session object.
 	 * The context contains all the configuration settings for this object.
+	 * @param encode Overrides the {@link UonSerializerContext#UON_encodeChars} setting.
 	 * @param output The output object.  See {@link JsonSerializerSession#getWriter()} for valid class types.
 	 * @param op The override properties.
 	 * These override any context properties defined in the context.
@@ -43,12 +44,14 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	 * If <jk>null</jk>, then the timezone defined on the context is used.
 	 * @param mediaType The session media type (e.g. <js>"application/json"</js>).
 	 */
-	public UrlEncodingSerializerSession(UrlEncodingSerializerContext ctx, ObjectMap op, Object output, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType) {
-		super(ctx, op, output, javaMethod, locale, timeZone, mediaType);
+	public UrlEncodingSerializerSession(UrlEncodingSerializerContext ctx, Boolean encode, ObjectMap op, Object output, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType) {
+		super(ctx, encode, op, output, javaMethod, locale, timeZone, mediaType);
 		if (op == null || op.isEmpty()) {
 			expandedParams = ctx.expandedParams;
+			plainTextParams = ctx.plainTextParams;
 		} else {
 			expandedParams = op.getBoolean(UrlEncodingContext.URLENC_expandedParams, false);
+			plainTextParams = op.getString(UrlEncodingSerializerContext.URLENC_paramFormat, "UON").equals("PLAINTEXT");
 		}
 	}
 
@@ -84,5 +87,13 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 				return true;
 		}
 		return false;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the {@link UrlEncodingSerializerContext#URLENC_paramFormat} is <js>"PLAINTEXT"</js>.
+	 * @return <jk>true</jk> if the {@link UrlEncodingSerializerContext#URLENC_paramFormat} is <js>"PLAINTEXT"</js>.
+	 */
+	protected boolean plainTextParams() {
+		return plainTextParams;
 	}
 }

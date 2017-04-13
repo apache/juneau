@@ -14,6 +14,7 @@ package org.apache.juneau.rest;
 
 import static java.util.logging.Level.*;
 import static javax.servlet.http.HttpServletResponse.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
 import java.util.*;
@@ -114,7 +115,7 @@ public class RestCallHandler {
 					final HttpServletRequest childRequest = new HttpServletRequestWrapper(r1) {
 						@Override /* ServletRequest */
 						public String getPathInfo() {
-							return RestUtils.decode(pathInfoRemainder);
+							return urlDecode(pathInfoRemainder);
 						}
 						@Override /* ServletRequest */
 						public String getServletPath() {
@@ -269,6 +270,13 @@ public class RestCallHandler {
 		res.setStatus(status);
 		res.setContentType("text/plain");
 		res.setHeader("Content-Encoding", "identity");
+
+		Throwable t = e.getRootCause();
+		if (t != null) {
+			res.setHeader("Exception-Name", t.getClass().getName());
+			res.setHeader("Exception-Message", t.getMessage());
+		}
+
 		PrintWriter w = null;
 		try {
 			w = res.getWriter();

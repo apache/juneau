@@ -97,6 +97,48 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 		return property(UrlEncodingContext.URLENC_expandedParams, value);
 	}
 
+	/**
+	 * <b>Configuration property:</b>  Format to use for top-level query names and simple parameters.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"UrlEncodingSerializer.paramFormat"</js>
+	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Default:</b> <js>"UON"</js>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * Specifies the format to use for URL GET parameter keys and values.
+	 * <p>
+	 * The possible values are:
+	 * <ul>
+	 * 	<li><js>"UON"</js> (default) - Use UON notation for values.
+	 * 		<br>String values such as <js>"(foo='bar')"</js> will end up being quoted and escaped to <js>"'(foo=bar~'baz~')'"</js>.
+	 * 		<br>Similarly, boolean and numeric values will also end up quoted.
+	 * 	<li><js>"PLAINTEXT"</js> (default) - Serialize as plain text.
+	 * 		<br>Strings will never be quoted or escaped.
+	 * 		<br>Note that this can cause errors during parsing if you're using the URL-encoding parser to parse
+	 * 		the results since UON constructs won't be differentiatable.
+	 * 		<br>However, this is not an issue if you're simply creating queries or form posts against 3rd-party interfaces.
+	 * </ul>
+	 *
+	 * @param paramFormat The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see UrlEncodingSerializerContext#URLENC_paramFormat
+	 */
+	public UrlEncodingSerializerBuilder paramFormat(String paramFormat) {
+		return property(UrlEncodingSerializerContext.URLENC_paramFormat, paramFormat);
+	}
+
+	/**
+	 * Shortcut for calling <code>paramFormat(<js>"PLAINTEXT"</js>)</code>.
+	 *
+	 * @return This object (for method chaining).
+	 * @see UrlEncodingSerializerContext#URLENC_paramFormat
+	 */
+	public UrlEncodingSerializerBuilder plainTextParams() {
+		return paramFormat("PLAINTEXT");
+	}
+
 	@Override /* UonSerializerBuilder */
 	public UrlEncodingSerializerBuilder encodeChars(boolean value) {
 		super.encodeChars(value);

@@ -31,6 +31,7 @@ import org.apache.juneau.rest.labels.*;
 		DefaultContentTypesResource.class,
 		ErrorConditionsResource.class,
 		TransformsResource.class,
+		FormDataResource.class,
 		GroupsResource.class,
 		GzipResource.TestGzipOff.class,
 		GzipResource.TestGzipOn.class,
@@ -60,6 +61,7 @@ import org.apache.juneau.rest.labels.*;
 		RestClient2Resource.class,
 		SerializersResource.class,
 		StaticFilesResource.class,
+		ThirdPartyProxyResource.class,
 		UrisResource.class,
 		UrlContentResource.class,
 		ShutdownResource.class

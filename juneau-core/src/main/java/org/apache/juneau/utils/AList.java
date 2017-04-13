@@ -38,4 +38,15 @@ public final class AList<T> extends LinkedList<T> {
 		add(t);
 		return this;
 	}
+
+	/**
+	 * Adds multiple entries to this list.
+	 *
+	 * @param t The entries to add to this list.
+	 * @return This object (for method chaining).
+	 */
+	public AList<T> appendAll(T...t) {
+		addAll(Arrays.asList(t));
+		return this;
+	}
 }

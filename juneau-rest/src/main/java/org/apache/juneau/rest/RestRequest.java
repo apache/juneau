@@ -15,6 +15,7 @@ package org.apache.juneau.rest;
 import static java.util.Collections.*;
 import static java.util.logging.Level.*;
 import static javax.servlet.http.HttpServletResponse.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -81,6 +82,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	private BeanSession beanSession;
 	private VarResolverSession varSession;
 	private final Map<String,String[]> queryParams;
+	private Map<String,String> formData;
 	private final Map<String,String> defaultServletHeaders;
 	private Map<String,String> defaultMethodHeaders, overriddenHeaders, overriddenQueryParams, overriddenFormDataParams, pathParameters;
 	private boolean isPost;
@@ -316,10 +318,11 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	<br>Ignored if the main type is not a map or collection.
 	 * @param <T> The class type to convert the header value to.
 	 * @return The parameter value converted to the specified class type.
+	 * @throws ParseException If the header could not be converted to the specified type.
 	 */
-	public <T> T getHeader(String name, Type type, Type...args) {
+	public <T> T getHeader(String name, Type type, Type...args) throws ParseException {
 		String h = getHeader(name);
-		return (T)beanSession.convertToType(null, h, beanSession.getClassMeta(type, args));
+		return urlEncodingParser.parsePart(h, type, args);
 	}
 
 	/**
@@ -801,7 +804,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		if (s != null)
 			return s;
 
-		return super.getParameter(name);
+		return getFormParameterInner(name);
 	}
 
 	/**
@@ -812,7 +815,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return The parameter value, or the default value if <jk>null</jk> or empty.
 	 */
 	public String getFormDataParameter(String name, String def) {
-		String val = getParameter(name);
+		String val = getFormParameterInner(name);
 		if (val == null || val.isEmpty())
 			return def;
 		return val;
@@ -953,9 +956,22 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		return getParameterMap().containsKey(name);
 	}
 
+	/**
+	 * Retrieves the URL-encoded from data from the request if the body has already been cached locally.
+	 */
+	private Map<String,String> getFormData() {
+		try {
+			if (formData == null)
+				formData = urlEncodingParser.parse(body, Map.class, String.class, String.class);
+			return formData;
+		} catch (ParseException e) {
+			throw new RestException(SC_INTERNAL_SERVER_ERROR, e);
+		}
+	}
+
 	/* Workhorse method */
 	<T> T getFormDataParameter(String name, T def, ClassMeta<T> cm) throws ParseException {
-		String val = getParameter(name);
+		String val = getFormParameterInner(name);
 		if (val == null)
 			return def;
 		return parseParameter(val, cm);
@@ -963,10 +979,14 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	/* Workhorse method */
 	<T> T getFormDataParameter(String name, ClassMeta<T> cm) throws ParseException {
-		String val = getParameter(name);
+		String val = getFormParameterInner(name);
 		if (cm.isPrimitive() && (val == null || val.isEmpty()))
 			return cm.getPrimitiveDefault();
 		return parseParameter(val, cm);
+	}
+
+	private String getFormParameterInner(String name) {
+		return (body == null ? super.getParameter(name) : getFormData().get(name));
 	}
 
 	/* Workhorse method */
@@ -1101,7 +1121,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		Object attr = getPathParameter(name);
 		T t = null;
 		if (attr != null)
-			t = urlEncodingParser.parseParameter(attr.toString(), cm);
+			t = urlEncodingParser.parsePart(attr.toString(), cm);
 		if (t == null && cm.isPrimitive())
 			return cm.getPrimitiveDefault();
 		return t;
@@ -1392,9 +1412,9 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	public URL getURL(String path) throws MalformedURLException {
 		if (path.startsWith("http://") || path.startsWith("https://"))
 			return new URL(path);
-		if (StringUtils.startsWith(path, '/'))
+		if (startsWith(path, '/'))
 			return new URL(getScheme(), getLocalName(), getLocalPort(), path);
-		return new URL(getScheme(), getLocalName(), getLocalPort(), getContextPath() + getServletPath() + (StringUtils.isEmpty(path) ? "" : ('/' + path)));
+		return new URL(getScheme(), getLocalName(), getLocalPort(), getContextPath() + getServletPath() + (isEmpty(path) ? "" : ('/' + path)));
 	}
 
 	/**
@@ -1462,7 +1482,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return The path remainder string.
 	 */
 	public String getPathRemainder() {
-		return RestUtils.decode(pathRemainder);
+		return urlDecode(pathRemainder);
 	}
 
 	/**
@@ -1515,7 +1535,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 */
 	public String getRequestParentURI() {
 		String uri = getRequestURI();
-		while (StringUtils.endsWith(uri, '/'))
+		while (endsWith(uri, '/'))
 			uri = uri.substring(0, uri.length()-1);
 		int i = uri.lastIndexOf('/');
 		if (i <= 0)
@@ -1529,7 +1549,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return The trimmed request URI.
 	 */
 	public String getTrimmedRequestURI() {
-		return RestUtils.trimTrailingSlashes(getRequestURI());
+		return trimTrailingSlashes(getRequestURI());
 	}
 
 	/**
@@ -1538,7 +1558,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return The trimmed request URL.
 	 */
 	public StringBuffer getTrimmedRequestURL() {
-		return RestUtils.trimTrailingSlashes(getRequestURL());
+		return trimTrailingSlashes(getRequestURL());
 	}
 
 	/**
@@ -1632,11 +1652,11 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 */
 	protected String getPageTitle() {
 		String s = pageTitle;
-		if (StringUtils.isEmpty(s))
+		if (isEmpty(s))
 			s = context.getMessages().findFirstString(getLocale(), javaMethod.getName() + ".pageTitle");
-		if (StringUtils.isEmpty(s))
+		if (isEmpty(s))
 			s = context.getMessages().findFirstString(getLocale(), "pageTitle");
-		if (! StringUtils.isEmpty(s))
+		if (! isEmpty(s))
 			return resolveVars(s);
 		s = getServletTitle();
 		return s;
@@ -1649,14 +1669,14 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 */
 	protected String getPageText() {
 		String s = pageText;
-		if (StringUtils.isEmpty(s))
+		if (isEmpty(s))
 			s = context.getMessages().findFirstString(getLocale(), javaMethod.getName() + ".pageText");
-		if (StringUtils.isEmpty(s))
+		if (isEmpty(s))
 			s = context.getMessages().findFirstString(getLocale(), "pageText");
-		if (! StringUtils.isEmpty(s))
+		if (! isEmpty(s))
 			return resolveVars(s);
 		s = getMethodSummary();
-		if (StringUtils.isEmpty(s))
+		if (isEmpty(s))
 			s = getServletDescription();
 		return s;
 	}
@@ -1668,9 +1688,9 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 */
 	protected String getPageLinks() {
 		String s = pageLinks;
-		if (StringUtils.isEmpty(s))
+		if (isEmpty(s))
 			s = context.getMessages().findFirstString(getLocale(), javaMethod.getName() + ".pageLinks");
-		if (StringUtils.isEmpty(s))
+		if (isEmpty(s))
 			s = context.getMessages().findFirstString(getLocale(), "pageLinks");
 		return resolveVars(s);
 	}
@@ -1950,9 +1970,12 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		if (javaMethod == null) {
 			sb.append("***init() not called yet!***\n");
 		} else if (method.equals("PUT") || method.equals("POST")) {
-			sb.append("---Body---\n");
 			try {
-				sb.append(getBodyAsString()).append("\n");
+				body = IOUtils.readBytes(getInputStream(), 1024);
+				sb.append("---Body UTF-8---\n");
+				sb.append(new String(body, "UTF-8")).append("\n");
+				sb.append("---Body Hex---\n");
+				sb.append(StringUtils.toHex(body)).append("\n");
 			} catch (Exception e1) {
 				sb.append(e1.getLocalizedMessage());
 				context.getLogger().log(WARNING, e1, "Error occurred while trying to read debug input.");
@@ -1967,21 +1990,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	//--------------------------------------------------------------------------------
 
 	private <T> T parseParameter(String val, ClassMeta<T> c) throws ParseException {
-		if (val == null)
-			return null;
-
-		// Shortcut - If we're returning a string and the value doesn't start with "'" or is "null", then
-		// just return the string since it's a plain value.
-		// This allows us to bypass the creation of a UonParserSession object.
-		if (c.getInnerClass() == String.class && val.length() > 0) {
-			char x = val.charAt(0);
-			if (x != '\'' && x != 'n' && val.indexOf('~') == -1)
-				return (T)val;
-			if (x == 'n' && "null".equals(val))
-				return null;
-		}
-
-		return urlEncodingParser.parseParameter(val, c);
+		return urlEncodingParser.parsePart(val, c);
 	}
 
 	/*

@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
-import static org.apache.juneau.rest.test.InterfaceProxy.*;
 import static org.apache.juneau.rest.test.TestUtils.*;
+import static org.apache.juneau.rest.test.pojos.Constants.*;
 import static org.junit.Assert.*;
 
 import java.util.*;
@@ -23,7 +23,7 @@ import org.apache.juneau.jena.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.rest.test.InterfaceProxy.*;
+import org.apache.juneau.rest.test.pojos.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
@@ -33,7 +33,7 @@ import org.junit.*;
 import org.junit.runner.*;
 import org.junit.runners.*;
 
-@SuppressWarnings("unused")
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(Parameterized.class)
 public class InterfaceProxyTest extends RestTestcase {
 
@@ -51,16 +51,14 @@ public class InterfaceProxyTest extends RestTestcase {
 		});
 	}
 
-	private Serializer serializer;
-	private Parser parser;
+	private InterfaceProxy proxy;
 
 	public InterfaceProxyTest(String label, Serializer serializer, Parser parser) {
-		this.serializer = serializer;
-		this.parser = parser;
-	}
-
-	private InterfaceProxy getProxy() {
-		return getClient(serializer, parser).getRemoteableProxy(InterfaceProxy.class, "/testInterfaceProxyResource/proxy");
+		proxy = getCached(label, InterfaceProxy.class);
+		if (proxy == null) {
+			proxy = getClient(label, serializer, parser).getRemoteableProxy(InterfaceProxy.class, "/testInterfaceProxyResource/proxy");
+			cache(label, proxy);
+		}
 	}
 
 	//--------------------------------------------------------------------------------
@@ -69,227 +67,230 @@ public class InterfaceProxyTest extends RestTestcase {
 
 	// Various primitives
 	@Test
-	public void returnVoid() {
-		getProxy().returnVoid();
+	public void a01_returnVoid() {
+		proxy.returnVoid();
 	}
 
 	@Test
-	public void returnInteger() {
-		assertEquals((Integer)1, getProxy().returnInteger());
+	public void a02_returnInteger() {
+		assertEquals((Integer)1, proxy.returnInteger());
 	}
 
 	@Test
-	public void returnInt() {
-		assertEquals(1, getProxy().returnInt());
+	public void a03_returnInt() {
+		assertEquals(1, proxy.returnInt());
 	}
 
 	@Test
-	public void returnBoolean() {
-		assertEquals(true, getProxy().returnBoolean());
+	public void a04_returnBoolean() {
+		assertEquals(true, proxy.returnBoolean());
 	}
 
 	@Test
-	public void returnFloat() {
-		assertTrue(1f == getProxy().returnFloat());
+	public void a05_returnFloat() {
+		assertTrue(1f == proxy.returnFloat());
 	}
 
 	@Test
-	public void returnFloatObject() {
-		assertTrue(1f == getProxy().returnFloatObject());
+	public void a06_returnFloatObject() {
+		assertTrue(1f == proxy.returnFloatObject());
 	}
 
 	@Test
-	public void returnString() {
-		assertEquals("foobar", getProxy().returnString());
+	public void a07_returnString() {
+		assertEquals("foobar", proxy.returnString());
 	}
 
 	@Test
-	public void returnNullString() {
-		assertNull(getProxy().returnNullString());
+	public void a08_returnNullString() {
+		assertNull(proxy.returnNullString());
 	}
 
 	@Test
-	public void returnInt3dArray() {
-		assertObjectEquals("[[[1,2],null],null]", getProxy().returnInt3dArray());
+	public void a09_returnInt3dArray() {
+		assertObjectEquals("[[[1,2],null],null]", proxy.returnInt3dArray());
 	}
 
 	@Test
-	public void returnInteger3dArray() {
-		assertObjectEquals("[[[1,null],null],null]", getProxy().returnInteger3dArray());
+	public void a10_returnInteger3dArray() {
+		assertObjectEquals("[[[1,null],null],null]", proxy.returnInteger3dArray());
 	}
 
 	@Test
-	public void returnString3dArray() {
-		assertObjectEquals("[[['foo','bar',null],null],null]", getProxy().returnString3dArray());
+	public void a11_returnString3dArray() {
+		assertObjectEquals("[[['foo','bar',null],null],null]", proxy.returnString3dArray());
 	}
 
 	@Test
-	public void returnIntegerList() {
-		List<Integer> x = getProxy().returnIntegerList();
+	public void a12_returnIntegerList() {
+		List<Integer> x = proxy.returnIntegerList();
 		assertObjectEquals("[1,null]", x);
-		assertEquals(Integer.class, x.get(0).getClass());
+		assertClass(Integer.class, x.get(0));
 	}
 
 	@Test
-	public void returnInteger3dList() {
-		List<List<List<Integer>>> x = getProxy().returnInteger3dList();
+	public void a13_returnInteger3dList() {
+		List<List<List<Integer>>> x = proxy.returnInteger3dList();
 		assertObjectEquals("[[[1,null],null],null]", x);
-		assertEquals(Integer.class, x.get(0).get(0).get(0).getClass());
+		assertClass(Integer.class, x.get(0).get(0).get(0));
 	}
 
 	@Test
-	public void returnInteger1d3dList() {
-		List<Integer[][][]> x = getProxy().returnInteger1d3dList();
+	public void a14_returnInteger1d3dList() {
+		List<Integer[][][]> x = proxy.returnInteger1d3dList();
 		assertObjectEquals("[[[[1,null],null],null],null]", x);
-		assertEquals(Integer.class, x.get(0)[0][0][0].getClass());
+		assertClass(Integer.class, x.get(0)[0][0][0]);
 	}
 
 	@Test
-	public void returnInt1d3dList() {
-		List<int[][][]> x = getProxy().returnInt1d3dList();
+	public void a15_returnInt1d3dList() {
+		List<int[][][]> x = proxy.returnInt1d3dList();
 		assertObjectEquals("[[[[1,2],null],null],null]", x);
-		assertEquals(int[][][].class, x.get(0).getClass());
+		assertClass(int[][][].class, x.get(0));
 	}
 
 	@Test
-	public void returnStringList() {
-		assertObjectEquals("['foo','bar',null]", getProxy().returnStringList());
+	public void a16_returnStringList() {
+		assertObjectEquals("['foo','bar',null]", proxy.returnStringList());
 	}
 
 	// Beans
+
 	@Test
-	public void returnBean() {
-		Bean x = getProxy().returnBean();
+	public void b01_returnBean() {
+		ABean x = proxy.returnBean();
 		assertObjectEquals("{a:1,b:'foo'}", x);
-		assertEquals(InterfaceProxy.Bean.class, x.getClass());
+		assertClass(ABean.class, x);
 	}
 
 	@Test
-	public void returnBean3dArray() {
-		Bean[][][] x = getProxy().returnBean3dArray();
+	public void b02_returnBean3dArray() {
+		ABean[][][] x = proxy.returnBean3dArray();
 		assertObjectEquals("[[[{a:1,b:'foo'},null],null],null]", x);
-		assertEquals(InterfaceProxy.Bean.class, x[0][0][0].getClass());
+		assertClass(ABean.class, x[0][0][0]);
 	}
 
 	@Test
-	public void returnBeanList() {
-		List<Bean> x = getProxy().returnBeanList();
+	public void b03_returnBeanList() {
+		List<ABean> x = proxy.returnBeanList();
 		assertObjectEquals("[{a:1,b:'foo'}]", x);
-		assertEquals(InterfaceProxy.Bean.class, x.get(0).getClass());
+		assertClass(ABean.class, x.get(0));
 	}
 
 	@Test
-	public void returnBean1d3dList() {
-		List<Bean[][][]> x = getProxy().returnBean1d3dList();
+	public void b04_returnBean1d3dList() {
+		List<ABean[][][]> x = proxy.returnBean1d3dList();
 		assertObjectEquals("[[[[{a:1,b:'foo'},null],null],null],null]", x);
-		assertEquals(InterfaceProxy.Bean.class, x.get(0)[0][0][0].getClass());
+		assertClass(ABean.class, x.get(0)[0][0][0]);
 	}
 
 	@Test
-	public void returnBeanMap() {
-		Map<String,Bean> x = getProxy().returnBeanMap();
+	public void b05_returnBeanMap() {
+		Map<String,ABean> x = proxy.returnBeanMap();
 		assertObjectEquals("{foo:{a:1,b:'foo'}}", x);
-		assertEquals(InterfaceProxy.Bean.class, x.get("foo").getClass());
+		assertClass(ABean.class, x.get("foo"));
 	}
 
 	@Test
-	public void returnBeanListMap() {
-		Map<String,List<Bean>> x = getProxy().returnBeanListMap();
+	public void b06_returnBeanListMap() {
+		Map<String,List<ABean>> x = proxy.returnBeanListMap();
 		assertObjectEquals("{foo:[{a:1,b:'foo'}]}", x);
-		assertEquals(InterfaceProxy.Bean.class, x.get("foo").get(0).getClass());
+		assertClass(ABean.class, x.get("foo").get(0));
 	}
 
 	@Test
-	public void returnBean1d3dListMap() {
-		Map<String,List<Bean[][][]>> x = getProxy().returnBean1d3dListMap();
+	public void b07_returnBean1d3dListMap() {
+		Map<String,List<ABean[][][]>> x = proxy.returnBean1d3dListMap();
 		assertObjectEquals("{foo:[[[[{a:1,b:'foo'},null],null],null],null]}", x);
-		assertEquals(InterfaceProxy.Bean.class, x.get("foo").get(0)[0][0][0].getClass());
+		assertClass(ABean.class, x.get("foo").get(0)[0][0][0]);
 	}
 
 	@Test
-	public void returnBeanListMapIntegerKeys() {
+	public void b08_returnBeanListMapIntegerKeys() {
 		// Note: JsonSerializer serializes key as string.
-		Map<Integer,List<Bean>> x = getProxy().returnBeanListMapIntegerKeys();
+		Map<Integer,List<ABean>> x = proxy.returnBeanListMapIntegerKeys();
 		assertObjectEquals("{'1':[{a:1,b:'foo'}]}", x);
-		assertEquals(Integer.class, x.keySet().iterator().next().getClass());
+		assertClass(Integer.class, x.keySet().iterator().next());
 	}
 
 	// Typed beans
+
 	@Test
-	public void returnTypedBean() {
-		TypedBean x = getProxy().returnTypedBean();
+	public void c01_returnTypedBean() {
+		TypedBean x = proxy.returnTypedBean();
 		assertObjectEquals("{_type:'TypedBeanImpl',a:1,b:'foo'}", x);
-		assertEquals(TypedBeanImpl.class, x.getClass());
+		assertClass(TypedBeanImpl.class, x);
 	}
 
 	@Test
-	public void returnTypedBean3dArray() {
-		TypedBean[][][] x = getProxy().returnTypedBean3dArray();
+	public void c02_returnTypedBean3dArray() {
+		TypedBean[][][] x = proxy.returnTypedBean3dArray();
 		assertObjectEquals("[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null]", x);
-		assertEquals(TypedBeanImpl.class, x[0][0][0].getClass());
+		assertClass(TypedBeanImpl.class, x[0][0][0]);
 	}
 
 	@Test
-	public void returnTypedBeanList() {
-		List<TypedBean> x = getProxy().returnTypedBeanList();
+	public void c03_returnTypedBeanList() {
+		List<TypedBean> x = proxy.returnTypedBeanList();
 		assertObjectEquals("[{_type:'TypedBeanImpl',a:1,b:'foo'}]", x);
-		assertEquals(TypedBeanImpl.class, x.get(0).getClass());
+		assertClass(TypedBeanImpl.class, x.get(0));
 	}
 
 	@Test
-	public void returnTypedBean1d3dList() {
-		List<TypedBean[][][]> x = getProxy().returnTypedBean1d3dList();
+	public void c04_returnTypedBean1d3dList() {
+		List<TypedBean[][][]> x = proxy.returnTypedBean1d3dList();
 		assertObjectEquals("[[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null],null]", x);
-		assertEquals(TypedBeanImpl.class, x.get(0)[0][0][0].getClass());
+		assertClass(TypedBeanImpl.class, x.get(0)[0][0][0]);
 	}
 
 	@Test
-	public void returnTypedBeanMap() {
-		Map<String,TypedBean> x = getProxy().returnTypedBeanMap();
+	public void c05_returnTypedBeanMap() {
+		Map<String,TypedBean> x = proxy.returnTypedBeanMap();
 		assertObjectEquals("{foo:{_type:'TypedBeanImpl',a:1,b:'foo'}}", x);
-		assertEquals(TypedBeanImpl.class, x.get("foo").getClass());
+		assertClass(TypedBeanImpl.class, x.get("foo"));
 	}
 
 	@Test
-	public void returnTypedBeanListMap() {
-		Map<String,List<TypedBean>> x = getProxy().returnTypedBeanListMap();
+	public void c06_returnTypedBeanListMap() {
+		Map<String,List<TypedBean>> x = proxy.returnTypedBeanListMap();
 		assertObjectEquals("{foo:[{_type:'TypedBeanImpl',a:1,b:'foo'}]}", x);
-		assertEquals(TypedBeanImpl.class, x.get("foo").get(0).getClass());
+		assertClass(TypedBeanImpl.class, x.get("foo").get(0));
 	}
 
 	@Test
-	public void returnTypedBean1d3dListMap() {
-		Map<String,List<TypedBean[][][]>> x = getProxy().returnTypedBean1d3dListMap();
+	public void c07_returnTypedBean1d3dListMap() {
+		Map<String,List<TypedBean[][][]>> x = proxy.returnTypedBean1d3dListMap();
 		assertObjectEquals("{foo:[[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null],null]}", x);
-		assertEquals(TypedBeanImpl.class, x.get("foo").get(0)[0][0][0].getClass());
+		assertClass(TypedBeanImpl.class, x.get("foo").get(0)[0][0][0]);
 	}
 
 	@Test
-	public void returnTypedBeanListMapIntegerKeys() {
+	public void c08_returnTypedBeanListMapIntegerKeys() {
 		// Note: JsonSerializer serializes key as string.
-		Map<Integer,List<TypedBean>> x = getProxy().returnTypedBeanListMapIntegerKeys();
+		Map<Integer,List<TypedBean>> x = proxy.returnTypedBeanListMapIntegerKeys();
 		assertObjectEquals("{'1':[{_type:'TypedBeanImpl',a:1,b:'foo'}]}", x);
-		assertEquals(TypedBeanImpl.class, x.get(1).get(0).getClass());
+		assertClass(TypedBeanImpl.class, x.get(1).get(0));
 	}
 
 	// Swapped POJOs
+
 	@Test
-	public void returnSwappedPojo() {
-		SwappedPojo x = getProxy().returnSwappedPojo();
+	public void d01_returnSwappedPojo() {
+		SwappedPojo x = proxy.returnSwappedPojo();
 		assertObjectEquals("'"+SWAP+"'", x);
 		assertTrue(x.wasUnswapped);
 	}
 
 	@Test
-	public void returnSwappedPojo3dArray() {
-		SwappedPojo[][][] x = getProxy().returnSwappedPojo3dArray();
+	public void d02_returnSwappedPojo3dArray() {
+		SwappedPojo[][][] x = proxy.returnSwappedPojo3dArray();
 		assertObjectEquals("[[['"+SWAP+"',null],null],null]", x);
 		assertTrue(x[0][0][0].wasUnswapped);
 	}
 
 	@Test
-	public void returnSwappedPojoMap() {
-		Map<SwappedPojo,SwappedPojo> x = getProxy().returnSwappedPojoMap();
+	public void d03_returnSwappedPojoMap() {
+		Map<SwappedPojo,SwappedPojo> x = proxy.returnSwappedPojoMap();
 		assertObjectEquals("{'"+SWAP+"':'"+SWAP+"'}", x);
 		Map.Entry<SwappedPojo,SwappedPojo> e = x.entrySet().iterator().next();
 		assertTrue(e.getKey().wasUnswapped);
@@ -297,8 +298,8 @@ public class InterfaceProxyTest extends RestTestcase {
 	}
 
 	@Test
-	public void returnSwappedPojo3dMap() {
-		Map<SwappedPojo,SwappedPojo[][][]> x = getProxy().returnSwappedPojo3dMap();
+	public void d04_returnSwappedPojo3dMap() {
+		Map<SwappedPojo,SwappedPojo[][][]> x = proxy.returnSwappedPojo3dMap();
 		assertObjectEquals("{'"+SWAP+"':[[['"+SWAP+"',null],null],null]}", x);
 		Map.Entry<SwappedPojo,SwappedPojo[][][]> e = x.entrySet().iterator().next();
 		assertTrue(e.getKey().wasUnswapped);
@@ -306,23 +307,24 @@ public class InterfaceProxyTest extends RestTestcase {
 	}
 
 	// Implicit swapped POJOs
+
 	@Test
-	public void returnImplicitSwappedPojo() {
-		ImplicitSwappedPojo x = getProxy().returnImplicitSwappedPojo();
+	public void e01_returnImplicitSwappedPojo() {
+		ImplicitSwappedPojo x = proxy.returnImplicitSwappedPojo();
 		assertObjectEquals("'"+SWAP+"'", x);
 		assertTrue(x.wasUnswapped);
 	}
 
 	@Test
-	public void returnImplicitSwappedPojo3dArray() {
-		ImplicitSwappedPojo[][][] x = getProxy().returnImplicitSwappedPojo3dArray();
+	public void e02_returnImplicitSwappedPojo3dArray() {
+		ImplicitSwappedPojo[][][] x = proxy.returnImplicitSwappedPojo3dArray();
 		assertObjectEquals("[[['"+SWAP+"',null],null],null]", x);
 		assertTrue(x[0][0][0].wasUnswapped);
 	}
 
 	@Test
-	public void returnImplicitSwappedPojoMap() {
-		Map<ImplicitSwappedPojo,ImplicitSwappedPojo> x = getProxy().returnImplicitSwappedPojoMap();
+	public void e03_returnImplicitSwappedPojoMap() {
+		Map<ImplicitSwappedPojo,ImplicitSwappedPojo> x = proxy.returnImplicitSwappedPojoMap();
 		assertObjectEquals("{'"+SWAP+"':'"+SWAP+"'}", x);
 		Map.Entry<ImplicitSwappedPojo,ImplicitSwappedPojo> e = x.entrySet().iterator().next();
 		assertTrue(e.getKey().wasUnswapped);
@@ -330,8 +332,8 @@ public class InterfaceProxyTest extends RestTestcase {
 	}
 
 	@Test
-	public void returnImplicitSwappedPojo3dMap() {
-		Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> x = getProxy().returnImplicitSwappedPojo3dMap();
+	public void e04_returnImplicitSwappedPojo3dMap() {
+		Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> x = proxy.returnImplicitSwappedPojo3dMap();
 		assertObjectEquals("{'"+SWAP+"':[[['"+SWAP+"',null],null],null]}", x);
 		Map.Entry<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> e = x.entrySet().iterator().next();
 		assertTrue(e.getKey().wasUnswapped);
@@ -339,63 +341,64 @@ public class InterfaceProxyTest extends RestTestcase {
 	}
 
 	// Enums
+
 	@Test
-	public void returnEnum() {
-		TestEnum x = getProxy().returnEnum();
+	public void f01_returnEnum() {
+		TestEnum x = proxy.returnEnum();
 		assertObjectEquals("'TWO'", x);
 	}
 
 	@Test
-	public void returnEnum3d() {
-		TestEnum[][][] x = getProxy().returnEnum3d();
+	public void f02_returnEnum3d() {
+		TestEnum[][][] x = proxy.returnEnum3d();
 		assertObjectEquals("[[['TWO',null],null],null]", x);
-		assertEquals(TestEnum.class, x[0][0][0].getClass());
+		assertClass(TestEnum.class, x[0][0][0]);
 	}
 
 	@Test
-	public void returnEnumList() {
-		List<TestEnum> x = getProxy().returnEnumList();
+	public void f03_returnEnumList() {
+		List<TestEnum> x = proxy.returnEnumList();
 		assertObjectEquals("['TWO',null]", x);
-		assertEquals(TestEnum.class, x.get(0).getClass());
+		assertClass(TestEnum.class, x.get(0));
 	}
 
 	@Test
-	public void returnEnum3dList() {
-		List<List<List<TestEnum>>> x = getProxy().returnEnum3dList();
+	public void f04_returnEnum3dList() {
+		List<List<List<TestEnum>>> x = proxy.returnEnum3dList();
 		assertObjectEquals("[[['TWO',null],null,null]]", x);
-		assertEquals(TestEnum.class, x.get(0).get(0).get(0).getClass());
+		assertClass(TestEnum.class, x.get(0).get(0).get(0));
 	}
 
 	@Test
-	public void returnEnum1d3dList() {
-		List<TestEnum[][][]> x = getProxy().returnEnum1d3dList();
+	public void f05_returnEnum1d3dList() {
+		List<TestEnum[][][]> x = proxy.returnEnum1d3dList();
 		assertObjectEquals("[[[['TWO',null],null],null],null]", x);
-		assertEquals(TestEnum[][][].class, x.get(0).getClass());
+		assertClass(TestEnum[][][].class, x.get(0));
 	}
 
 	@Test
-	public void returnEnumMap() {
-		Map<TestEnum,TestEnum> x = getProxy().returnEnumMap();
+	public void f06_returnEnumMap() {
+		Map<TestEnum,TestEnum> x = proxy.returnEnumMap();
 		assertObjectEquals("{ONE:'TWO'}", x);
 		Map.Entry<TestEnum,TestEnum> e = x.entrySet().iterator().next();
-		assertEquals(TestEnum.class, e.getKey().getClass());
-		assertEquals(TestEnum.class, e.getValue().getClass());
+		assertClass(TestEnum.class, e.getKey());
+		assertClass(TestEnum.class, e.getValue());
 	}
 
 	@Test
-	public void returnEnum3dArrayMap() {
-		Map<TestEnum,TestEnum[][][]> x = getProxy().returnEnum3dArrayMap();
+	public void f07_returnEnum3dArrayMap() {
+		Map<TestEnum,TestEnum[][][]> x = proxy.returnEnum3dArrayMap();
 		assertObjectEquals("{ONE:[[['TWO',null],null],null]}", x);
 		Map.Entry<TestEnum,TestEnum[][][]> e = x.entrySet().iterator().next();
-		assertEquals(TestEnum.class, e.getKey().getClass());
-		assertEquals(TestEnum[][][].class, e.getValue().getClass());
+		assertClass(TestEnum.class, e.getKey());
+		assertClass(TestEnum[][][].class, e.getValue());
 	}
 
 	@Test
-	public void returnEnum1d3dListMap() {
-		Map<TestEnum,List<TestEnum[][][]>> x = getProxy().returnEnum1d3dListMap();
+	public void f08_returnEnum1d3dListMap() {
+		Map<TestEnum,List<TestEnum[][][]>> x = proxy.returnEnum1d3dListMap();
 		assertObjectEquals("{ONE:[[[['TWO',null],null],null],null]}", x);
-		assertEquals(TestEnum[][][].class, x.get(TestEnum.ONE).get(0).getClass());
+		assertClass(TestEnum[][][].class, x.get(TestEnum.ONE).get(0));
 	}
 
 	//--------------------------------------------------------------------------------
@@ -403,9 +406,9 @@ public class InterfaceProxyTest extends RestTestcase {
 	//--------------------------------------------------------------------------------
 
 	@Test
-	public void throwException1() {
+	public void g01_throwException1() {
 		try {
-			getProxy().throwException1();
+			proxy.throwException1();
 			fail("Exception expected");
 		} catch (InterfaceProxy.InterfaceProxyException1 e) {
 			assertEquals("foo", e.getMessage());
@@ -413,9 +416,9 @@ public class InterfaceProxyTest extends RestTestcase {
 	}
 
 	@Test
-	public void throwException2() {
+	public void g02_throwException2() {
 		try {
-			getProxy().throwException2();
+			proxy.throwException2();
 			fail("Exception expected");
 		} catch (InterfaceProxy.InterfaceProxyException2 e) {
 		}
@@ -427,19 +430,19 @@ public class InterfaceProxyTest extends RestTestcase {
 
 	// Various primitives
 	@Test
-	public void setNothing() {
-		getProxy().setNothing();
+	public void h01_setNothing() {
+		proxy.setNothing();
 	}
 
 	@Test
-	public void setInt() {
-		getProxy().setInt(1);
+	public void h02_setInt() {
+		proxy.setInt(1);
 	}
 
 	@Test
-	public void setWrongInt() {
+	public void h03_setWrongInt() {
 		try {
-			getProxy().setInt(2);
+			proxy.setInt(2);
 			fail("Exception expected");
 		} catch (AssertionError e) { // AssertionError thrown on server side.
 			assertEquals("expected:<1> but was:<2>", e.getMessage());
@@ -447,39 +450,39 @@ public class InterfaceProxyTest extends RestTestcase {
 	}
 
 	@Test
-	public void setInteger() {
-		getProxy().setInteger(1);
+	public void h04_setInteger() {
+		proxy.setInteger(1);
 	}
 
 	@Test
-	public void setBoolean() {
-		getProxy().setBoolean(true);
+	public void h05_setBoolean() {
+		proxy.setBoolean(true);
 	}
 
 	@Test
-	public void setFloat() {
-		getProxy().setFloat(1f);
+	public void h06_setFloat() {
+		proxy.setFloat(1f);
 	}
 
 	@Test
-	public void setFloatObject() {
-		getProxy().setFloatObject(1f);
+	public void h07_setFloatObject() {
+		proxy.setFloatObject(1f);
 	}
 
 	@Test
-	public void setString() {
-		getProxy().setString("foo");
+	public void h08_setString() {
+		proxy.setString("foo");
 	}
 
 	@Test
-	public void setNullString() {
-		getProxy().setNullString(null);
+	public void h09_setNullString() {
+		proxy.setNullString(null);
 	}
 
 	@Test
-	public void setNullStringBad() {
+	public void h10_setNullStringBad() {
 		try {
-			getProxy().setNullString("foo");
+			proxy.setNullString("foo");
 			fail("Exception expected");
 		} catch (AssertionError e) { // AssertionError thrown on server side.
 			assertEquals("expected null, but was:<foo>", e.getLocalizedMessage());
@@ -487,28 +490,28 @@ public class InterfaceProxyTest extends RestTestcase {
 	}
 
 	@Test
-	public void setInt3dArray() {
-		getProxy().setInt3dArray(new int[][][]{{{1,2},null},null});
+	public void h11_setInt3dArray() {
+		proxy.setInt3dArray(new int[][][]{{{1,2},null},null});
 	}
 
 	@Test
-	public void setInteger3dArray() {
-		getProxy().setInteger3dArray(new Integer[][][]{{{1,null},null},null});
+	public void h12_setInteger3dArray() {
+		proxy.setInteger3dArray(new Integer[][][]{{{1,null},null},null});
 	}
 
 	@Test
-	public void setString3dArray() {
-		getProxy().setString3dArray(new String[][][]{{{"foo",null},null},null});
+	public void h13_setString3dArray() {
+		proxy.setString3dArray(new String[][][]{{{"foo",null},null},null});
 	}
 
 	@Test
-	public void setIntegerList() {
-		getProxy().setIntegerList(new AList<Integer>().append(1).append(null));
+	public void h14_setIntegerList() {
+		proxy.setIntegerList(new AList<Integer>().append(1).append(null));
 	}
 
 	@Test
-	public void setInteger3dList() {
-		getProxy().setInteger3dList(
+	public void h15_setInteger3dList() {
+		proxy.setInteger3dList(
 			new AList<List<List<Integer>>>()
 			.append(
 				new AList<List<Integer>>()
@@ -520,167 +523,170 @@ public class InterfaceProxyTest extends RestTestcase {
 	}
 
 	@Test
-	public void setInteger1d3dList() {
-		getProxy().setInteger1d3dList(
+	public void h16_setInteger1d3dList() {
+		proxy.setInteger1d3dList(
 			new AList<Integer[][][]>().append(new Integer[][][]{{{1,null},null},null}).append(null)
 		);
 	}
 
 	@Test
-	public void setInt1d3dList() {
-		getProxy().setInt1d3dList(
+	public void h17_setInt1d3dList() {
+		proxy.setInt1d3dList(
 			new AList<int[][][]>().append(new int[][][]{{{1,2},null},null}).append(null)
 		);
 	}
 
 	@Test
-	public void setStringList() {
-		getProxy().setStringList(Arrays.asList("foo","bar",null));
+	public void h18_setStringList() {
+		proxy.setStringList(Arrays.asList("foo","bar",null));
 	}
 
 	// Beans
 	@Test
-	public void setBean() {
-		getProxy().setBean(new Bean().init());
+	public void h19_setBean() {
+		proxy.setBean(new ABean().init());
 	}
 
 	@Test
-	public void setBean3dArray() {
-		getProxy().setBean3dArray(new Bean[][][]{{{new Bean().init(),null},null},null});
+	public void h20_setBean3dArray() {
+		proxy.setBean3dArray(new ABean[][][]{{{new ABean().init(),null},null},null});
 	}
 
 	@Test
-	public void setBeanList() {
-		getProxy().setBeanList(Arrays.asList(new Bean().init()));
+	public void h21_setBeanList() {
+		proxy.setBeanList(Arrays.asList(new ABean().init()));
 	}
 
 	@Test
-	public void setBean1d3dList() {
-		getProxy().setBean1d3dList(new AList<Bean[][][]>().append(new Bean[][][]{{{new Bean().init(),null},null},null}).append(null));
+	public void h22_setBean1d3dList() {
+		proxy.setBean1d3dList(new AList<ABean[][][]>().append(new ABean[][][]{{{new ABean().init(),null},null},null}).append(null));
 	}
 
 	@Test
-	public void setBeanMap() {
-		getProxy().setBeanMap(new AMap<String,Bean>().append("foo",new Bean().init()));
+	public void h23_setBeanMap() {
+		proxy.setBeanMap(new AMap<String,ABean>().append("foo",new ABean().init()));
 	}
 
 	@Test
-	public void setBeanListMap() {
-		getProxy().setBeanListMap(new AMap<String,List<Bean>>().append("foo",Arrays.asList(new Bean().init())));
+	public void h24_setBeanListMap() {
+		proxy.setBeanListMap(new AMap<String,List<ABean>>().append("foo",Arrays.asList(new ABean().init())));
 	}
 
 	@Test
-	public void setBean1d3dListMap() {
-		getProxy().setBean1d3dListMap(new AMap<String,List<Bean[][][]>>().append("foo",new AList<Bean[][][]>().append(new Bean[][][]{{{new Bean().init(),null},null},null}).append(null)));
+	public void h25_setBean1d3dListMap() {
+		proxy.setBean1d3dListMap(new AMap<String,List<ABean[][][]>>().append("foo",new AList<ABean[][][]>().append(new ABean[][][]{{{new ABean().init(),null},null},null}).append(null)));
 	}
 
 	@Test
-	public void setBeanListMapIntegerKeys() {
-		getProxy().setBeanListMapIntegerKeys(new AMap<Integer,List<Bean>>().append(1,Arrays.asList(new Bean().init())));
+	public void h26_setBeanListMapIntegerKeys() {
+		proxy.setBeanListMapIntegerKeys(new AMap<Integer,List<ABean>>().append(1,Arrays.asList(new ABean().init())));
 	}
 
 	// Typed beans
+
 	@Test
-	public void setTypedBean() {
-		getProxy().setTypedBean(new TypedBeanImpl().init());
+	public void i01_setTypedBean() {
+		proxy.setTypedBean(new TypedBeanImpl().init());
 	}
 
 	@Test
-	public void setTypedBean3dArray() {
-		getProxy().setTypedBean3dArray(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null});
+	public void i02_setTypedBean3dArray() {
+		proxy.setTypedBean3dArray(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null});
 	}
 
 	@Test
-	public void setTypedBeanList() {
-		getProxy().setTypedBeanList(Arrays.asList((TypedBean)new TypedBeanImpl().init()));
+	public void i03_setTypedBeanList() {
+		proxy.setTypedBeanList(Arrays.asList((TypedBean)new TypedBeanImpl().init()));
 	}
 
 	@Test
-	public void setTypedBean1d3dList() {
-		getProxy().setTypedBean1d3dList(new AList<TypedBean[][][]>().append(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null}).append(null));
+	public void i04_setTypedBean1d3dList() {
+		proxy.setTypedBean1d3dList(new AList<TypedBean[][][]>().append(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null}).append(null));
 	}
 
 	@Test
-	public void setTypedBeanMap() {
-		getProxy().setTypedBeanMap(new AMap<String,TypedBean>().append("foo",new TypedBeanImpl().init()));
+	public void i05_setTypedBeanMap() {
+		proxy.setTypedBeanMap(new AMap<String,TypedBean>().append("foo",new TypedBeanImpl().init()));
 	}
 
 	@Test
-	public void setTypedBeanListMap() {
-		getProxy().setTypedBeanListMap(new AMap<String,List<TypedBean>>().append("foo",Arrays.asList((TypedBean)new TypedBeanImpl().init())));
+	public void i06_setTypedBeanListMap() {
+		proxy.setTypedBeanListMap(new AMap<String,List<TypedBean>>().append("foo",Arrays.asList((TypedBean)new TypedBeanImpl().init())));
 	}
 
 	@Test
-	public void setTypedBean1d3dListMap() {
-		getProxy().setTypedBean1d3dListMap(new AMap<String,List<TypedBean[][][]>>().append("foo",new AList<TypedBean[][][]>().append(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null}).append(null)));
+	public void i07_setTypedBean1d3dListMap() {
+		proxy.setTypedBean1d3dListMap(new AMap<String,List<TypedBean[][][]>>().append("foo",new AList<TypedBean[][][]>().append(new TypedBean[][][]{{{new TypedBeanImpl().init(),null},null},null}).append(null)));
 	}
 
 	@Test
-	public void setTypedBeanListMapIntegerKeys() {
-		getProxy().setTypedBeanListMapIntegerKeys(new AMap<Integer,List<TypedBean>>().append(1,Arrays.asList((TypedBean)new TypedBeanImpl().init())));
+	public void i08_setTypedBeanListMapIntegerKeys() {
+		proxy.setTypedBeanListMapIntegerKeys(new AMap<Integer,List<TypedBean>>().append(1,Arrays.asList((TypedBean)new TypedBeanImpl().init())));
 	}
 
 	// Swapped POJOs
+
 	@Test
-	public void setSwappedPojo() {
-		getProxy().setSwappedPojo(new SwappedPojo());
+	public void j01_setSwappedPojo() {
+		proxy.setSwappedPojo(new SwappedPojo());
 	}
 
 	@Test
-	public void setSwappedPojo3dArray() {
-		getProxy().setSwappedPojo3dArray(new SwappedPojo[][][]{{{new SwappedPojo(),null},null},null});
+	public void j02_setSwappedPojo3dArray() {
+		proxy.setSwappedPojo3dArray(new SwappedPojo[][][]{{{new SwappedPojo(),null},null},null});
 	}
 
 	@Test
-	public void setSwappedPojoMap() {
-		getProxy().setSwappedPojoMap(new AMap<SwappedPojo,SwappedPojo>().append(new SwappedPojo(), new SwappedPojo()));
+	public void j03_setSwappedPojoMap() {
+		proxy.setSwappedPojoMap(new AMap<SwappedPojo,SwappedPojo>().append(new SwappedPojo(), new SwappedPojo()));
 	}
 
 	@Test
-	public void setSwappedPojo3dMap() {
-		getProxy().setSwappedPojo3dMap(new AMap<SwappedPojo,SwappedPojo[][][]>().append(new SwappedPojo(), new SwappedPojo[][][]{{{new SwappedPojo(),null},null},null}));
+	public void j04_setSwappedPojo3dMap() {
+		proxy.setSwappedPojo3dMap(new AMap<SwappedPojo,SwappedPojo[][][]>().append(new SwappedPojo(), new SwappedPojo[][][]{{{new SwappedPojo(),null},null},null}));
 	}
 
 	// Implicit swapped POJOs
 	@Test
-	public void setImplicitSwappedPojo() {
-		getProxy().setImplicitSwappedPojo(new ImplicitSwappedPojo());
+	public void k01_setImplicitSwappedPojo() {
+		proxy.setImplicitSwappedPojo(new ImplicitSwappedPojo());
 	}
 
 	@Test
-	public void setImplicitSwappedPojo3dArray() {
-		getProxy().setImplicitSwappedPojo3dArray(new ImplicitSwappedPojo[][][]{{{new ImplicitSwappedPojo(),null},null},null});
+	public void k02_setImplicitSwappedPojo3dArray() {
+		proxy.setImplicitSwappedPojo3dArray(new ImplicitSwappedPojo[][][]{{{new ImplicitSwappedPojo(),null},null},null});
 	}
 
 	@Test
-	public void setImplicitSwappedPojoMap() {
-		getProxy().setImplicitSwappedPojoMap(new AMap<ImplicitSwappedPojo,ImplicitSwappedPojo>().append(new ImplicitSwappedPojo(), new ImplicitSwappedPojo()));
+	public void k03_setImplicitSwappedPojoMap() {
+		proxy.setImplicitSwappedPojoMap(new AMap<ImplicitSwappedPojo,ImplicitSwappedPojo>().append(new ImplicitSwappedPojo(), new ImplicitSwappedPojo()));
 	}
 
 	@Test
-	public void setImplicitSwappedPojo3dMap() {
-		getProxy().setImplicitSwappedPojo3dMap(new AMap<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]>().append(new ImplicitSwappedPojo(), new ImplicitSwappedPojo[][][]{{{new ImplicitSwappedPojo(),null},null},null}));
+	public void k04_setImplicitSwappedPojo3dMap() {
+		proxy.setImplicitSwappedPojo3dMap(new AMap<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]>().append(new ImplicitSwappedPojo(), new ImplicitSwappedPojo[][][]{{{new ImplicitSwappedPojo(),null},null},null}));
 	}
 
 	// Enums
+
 	@Test
-	public void setEnum() {
-		getProxy().setEnum(TestEnum.TWO);
+	public void l01_setEnum() {
+		proxy.setEnum(TestEnum.TWO);
 	}
 
 	@Test
-	public void setEnum3d() {
-		getProxy().setEnum3d(new TestEnum[][][]{{{TestEnum.TWO,null},null},null});
+	public void l02_setEnum3d() {
+		proxy.setEnum3d(new TestEnum[][][]{{{TestEnum.TWO,null},null},null});
 	}
 
 	@Test
-	public void setEnumList() {
-		getProxy().setEnumList(new AList<TestEnum>().append(TestEnum.TWO).append(null));
+	public void l03_setEnumList() {
+		proxy.setEnumList(new AList<TestEnum>().append(TestEnum.TWO).append(null));
 	}
 
 	@Test
-	public void setEnum3dList() {
-		getProxy().setEnum3dList(
+	public void l04_setEnum3dList() {
+		proxy.setEnum3dList(
 			new AList<List<List<TestEnum>>>()
 			.append(
 				new AList<List<TestEnum>>()
@@ -694,23 +700,23 @@ public class InterfaceProxyTest extends RestTestcase {
 	}
 
 	@Test
-	public void setEnum1d3dList() {
-		getProxy().setEnum1d3dList(new AList<TestEnum[][][]>().append(new TestEnum[][][]{{{TestEnum.TWO,null},null},null}).append(null));
+	public void l05_setEnum1d3dList() {
+		proxy.setEnum1d3dList(new AList<TestEnum[][][]>().append(new TestEnum[][][]{{{TestEnum.TWO,null},null},null}).append(null));
 	}
 
 	@Test
-	public void setEnumMap() {
-		getProxy().setEnumMap(new AMap<TestEnum,TestEnum>().append(TestEnum.ONE,TestEnum.TWO));
+	public void l06_setEnumMap() {
+		proxy.setEnumMap(new AMap<TestEnum,TestEnum>().append(TestEnum.ONE,TestEnum.TWO));
 	}
 
 	@Test
-	public void setEnum3dArrayMap() {
-		getProxy().setEnum3dArrayMap(new AMap<TestEnum,TestEnum[][][]>().append(TestEnum.ONE, new TestEnum[][][]{{{TestEnum.TWO,null},null},null}));
+	public void l07_setEnum3dArrayMap() {
+		proxy.setEnum3dArrayMap(new AMap<TestEnum,TestEnum[][][]>().append(TestEnum.ONE, new TestEnum[][][]{{{TestEnum.TWO,null},null},null}));
 	}
 
 	@Test
-	public void setEnum1d3dListMap() {
-		getProxy().setEnum1d3dListMap(new AMap<TestEnum,List<TestEnum[][][]>>().append(TestEnum.ONE, new AList<TestEnum[][][]>().append(new TestEnum[][][]{{{TestEnum.TWO,null},null},null}).append(null)));
+	public void l08_setEnum1d3dListMap() {
+		proxy.setEnum1d3dListMap(new AMap<TestEnum,List<TestEnum[][][]>>().append(TestEnum.ONE, new AList<TestEnum[][][]>().append(new TestEnum[][][]{{{TestEnum.TWO,null},null},null}).append(null)));
 	}
 
 	//--------------------------------------------------------------------------------
@@ -718,67 +724,73 @@ public class InterfaceProxyTest extends RestTestcase {
 	//--------------------------------------------------------------------------------
 
 	@Test
-	public void setMultiParamsInts() {
+	public void m01_setMultiParamsInts() {
 		int x1 = 1;
 		int[][][] x2 = new int[][][]{{{1,2},null},null};
 		int[][][] x2n = null;
 		List<int[][][]> x3 = new AList<int[][][]>().append(x2).append(null);
 		List<int[][][]> x3n = null;
-		getProxy().setMultiParamsInts(x1, x2, x2n, x3, x3n);
+		proxy.setMultiParamsInts(x1, x2, x2n, x3, x3n);
 	}
+
 	@Test
-	public void setMultiParamsInteger() {
+	public void m02_setMultiParamsInteger() {
 		Integer x1 = 1;
 		Integer x1n = null;
 		Integer[][][] x2 = new Integer[][][]{{{1,null},null},null};
 		Integer[][][] x2n = null;
 		List<Integer[][][]> x3 = new AList<Integer[][][]>().append(x2).append(null);
 		List<Integer[][][]> x3n = null;
-		getProxy().setMultiParamsInteger(x1, x1n, x2, x2n, x3, x3n);
+		proxy.setMultiParamsInteger(x1, x1n, x2, x2n, x3, x3n);
 	}
+
 	@Test
-	public void setMultiParamsFloat() {
+	public void m03_setMultiParamsFloat() {
 		float x1 = 1;
 		float[][][] x2 = new float[][][]{{{1,2},null},null};
 		float[][][] x2n = null;
 		List<float[][][]> x3 = new AList<float[][][]>().append(x2).append(null);
 		List<float[][][]> x3n = null;
-		getProxy().setMultiParamsFloat(x1, x2, x2n, x3, x3n);
+		proxy.setMultiParamsFloat(x1, x2, x2n, x3, x3n);
 	}
+
 	@Test
-	public void setMultiParamsFloatObject() {
+	public void m04_setMultiParamsFloatObject() {
 		Float x1 = 1f;
 		Float x1n = null;
 		Float[][][] x2 = new Float[][][]{{{1f,null},null},null};
 		Float[][][] x2n = null;
 		List<Float[][][]> x3 = new AList<Float[][][]>().append(x2).append(null);
 		List<Float[][][]> x3n = null;
-		getProxy().setMultiParamsFloatObject(x1, x1n, x2, x2n, x3, x3n);
+		proxy.setMultiParamsFloatObject(x1, x1n, x2, x2n, x3, x3n);
 	}
+
 	@Test
-	public void setMultiParamsString() {
+	public void m05_setMultiParamsString() {
 		String x1 = "foo";
 		String[][][] x2 = new String[][][]{{{"foo",null},null},null};
 		String[][][] x2n = null;
 		List<String[][][]> x3 = new AList<String[][][]>().append(x2).append(null);
 		List<String[][][]> x3n = null;
-		getProxy().setMultiParamsString(x1, x2, x2n, x3, x3n);
+		proxy.setMultiParamsString(x1, x2, x2n, x3, x3n);
 	}
+
 	@Test
-	public void setMultiParamsBean() {
-		Bean x1 = new Bean().init();
-		Bean[][][] x2 = new Bean[][][]{{{new Bean().init(),null},null},null};
-		Bean[][][] x2n = null;
-		List<Bean[][][]> x3 = new AList<Bean[][][]>().append(x2).append(null);
-		List<Bean[][][]> x3n = null;
-		Map<String,Bean> x4 = new AMap<String,Bean>().append("foo",new Bean().init());
-		Map<String,Bean> x4n = null;
-		Map<String,List<Bean[][][]>> x5 = new AMap<String,List<Bean[][][]>>().append("foo", x3);
-		Map<String,List<Bean[][][]>> x5n = null;
-		getProxy().setMultiParamsBean(x1, x2, x2n, x3, x3n, x4, x4n, x5, x5n);
+	public void m06_setMultiParamsBean() {
+		ABean x1 = new ABean().init();
+		ABean[][][] x2 = new ABean[][][]{{{new ABean().init(),null},null},null};
+		ABean[][][] x2n = null;
+		List<ABean[][][]> x3 = new AList<ABean[][][]>().append(x2).append(null);
+		List<ABean[][][]> x3n = null;
+		Map<String,ABean> x4 = new AMap<String,ABean>().append("foo",new ABean().init());
+		Map<String,ABean> x4n = null;
+		Map<String,List<ABean[][][]>> x5 = new AMap<String,List<ABean[][][]>>().append("foo", x3);
+		Map<String,List<ABean[][][]>> x5n = null;
+		proxy.setMultiParamsBean(x1, x2, x2n, x3, x3n, x4, x4n, x5, x5n);
 	}
+
 	@Test
-	public void setMultiParamsSwappedPojo() {
+	public void m07_setMultiParamsSwappedPojo() {
 		SwappedPojo x1 = new SwappedPojo();
 		SwappedPojo[][][] x2 = new SwappedPojo[][][]{{{new SwappedPojo(),null},null},null};
 		SwappedPojo[][][] x2n = null;
@@ -788,10 +800,11 @@ public class InterfaceProxyTest extends RestTestcase {
 		Map<SwappedPojo,SwappedPojo> x4n = null;
 		Map<SwappedPojo,List<SwappedPojo[][][]>> x5 = new AMap<SwappedPojo,List<SwappedPojo[][][]>>().append(new SwappedPojo(), x3);
 		Map<SwappedPojo,List<SwappedPojo[][][]>> x5n = null;
-		getProxy().setMultiParamsSwappedPojo(x1, x2, x2n, x3, x3n, x4, x4n, x5, x5n);
+		proxy.setMultiParamsSwappedPojo(x1, x2, x2n, x3, x3n, x4, x4n, x5, x5n);
 	}
+
 	@Test
-	public void setMultiParamsImplicitSwappedPojo() {
+	public void m08_setMultiParamsImplicitSwappedPojo() {
 		ImplicitSwappedPojo x1 = new ImplicitSwappedPojo();
 		ImplicitSwappedPojo[][][] x2 = new ImplicitSwappedPojo[][][]{{{new ImplicitSwappedPojo(),null},null},null};
 		ImplicitSwappedPojo[][][] x2n = null;
@@ -801,10 +814,11 @@ public class InterfaceProxyTest extends RestTestcase {
 		Map<ImplicitSwappedPojo,ImplicitSwappedPojo> x4n = null;
 		Map<ImplicitSwappedPojo,List<ImplicitSwappedPojo[][][]>> x5 = new AMap<ImplicitSwappedPojo,List<ImplicitSwappedPojo[][][]>>().append(new ImplicitSwappedPojo(), x3);
 		Map<ImplicitSwappedPojo,List<ImplicitSwappedPojo[][][]>> x5n = null;
-		getProxy().setMultiParamsImplicitSwappedPojo(x1, x2, x2n, x3, x3n, x4, x4n, x5, x5n);
+		proxy.setMultiParamsImplicitSwappedPojo(x1, x2, x2n, x3, x3n, x4, x4n, x5, x5n);
 	}
+
 	@Test
-	public void setMultiParamsEnum() {
+	public void m09_setMultiParamsEnum() {
 		TestEnum x1 = TestEnum.TWO;
 		TestEnum[][][] x2 = new TestEnum[][][]{{{TestEnum.TWO,null},null},null};
 		TestEnum[][][] x2n = null;
@@ -814,6 +828,6 @@ public class InterfaceProxyTest extends RestTestcase {
 		Map<TestEnum,TestEnum> x4n = null;
 		Map<TestEnum,List<TestEnum[][][]>> x5 = new AMap<TestEnum,List<TestEnum[][][]>>().append(TestEnum.ONE, x3);
 		Map<TestEnum,List<TestEnum[][][]>> x5n = null;
-		getProxy().setMultiParamsEnum(x1, x2, x2n, x3, x3n, x4, x4n, x5, x5n);
+		proxy.setMultiParamsEnum(x1, x2, x2n, x3, x3n, x4, x4n, x5, x5n);
 	}
 }

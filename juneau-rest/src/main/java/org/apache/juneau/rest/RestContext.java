@@ -13,9 +13,11 @@
 package org.apache.juneau.rest;
 
 import static javax.servlet.http.HttpServletResponse.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
@@ -412,6 +414,10 @@ public final class RestContext extends Context {
 						if ("PROXY".equals(httpMethod)) {
 
 							final ClassMeta<?> interfaceClass = beanContext.getClassMeta(method.getGenericReturnType());
+							final Map<String,Method> remoteableMethods = interfaceClass.getRemoteableMethods();
+							if (remoteableMethods.isEmpty())
+								throw new RestException(SC_INTERNAL_SERVER_ERROR, "Method {0} returns an interface {1} that doesn't define any remoteable methods.", ClassUtils.getMethodSignature(method), interfaceClass.getReadableName());
+
 							sm = new CallMethod(resource, method, this) {
 
 								@Override
@@ -424,31 +430,20 @@ public final class RestContext extends Context {
 									final Object o = res.getOutput();
 
 									if ("GET".equals(req.getMethod())) {
-										res.setOutput(ClassUtils.getMethodInfo(interfaceClass.getProxyableMethods().values()));
+										res.setOutput(ClassUtils.getMethodInfo(remoteableMethods.values()));
 										return SC_OK;
 
 									} else if ("POST".equals(req.getMethod())) {
 										if (pathInfo.indexOf('/') != -1)
 											pathInfo = pathInfo.substring(pathInfo.lastIndexOf('/')+1);
-										pathInfo = RestUtils.decode(pathInfo);
-										java.lang.reflect.Method m = interfaceClass.getProxyableMethods().get(pathInfo);
+										pathInfo = urlDecode(pathInfo);
+										java.lang.reflect.Method m = remoteableMethods.get(pathInfo);
 										if (m != null) {
 											try {
 												// Parse the args and invoke the method.
 												Parser p = req.getParser();
 												Object input = p.isReaderParser() ? req.getReader() : req.getInputStream();
-												Object output = null;
-												try {
-													output = m.invoke(o, p.parseArgs(input, m.getGenericParameterTypes()));
-												} catch (InvocationTargetException e) {
-													res.setHeader("Exception-Name", e.getCause().getClass().getName());
-													res.setHeader("Exception-Message", e.getCause().getMessage());
-													throw e;
-												} catch (Exception e) {
-													res.setHeader("Exception-Name", e.getClass().getName());
-													res.setHeader("Exception-Message", e.getMessage());
-													throw e;
-												}
+												Object output = m.invoke(o, p.parseArgs(input, m.getGenericParameterTypes()));
 												res.setOutput(output);
 												return SC_OK;
 											} catch (Exception e) {
@@ -595,7 +590,7 @@ public final class RestContext extends Context {
 			defaultCharset = ps.getProperty(REST_defaultCharset, String.class, "utf-8");
 			paramFormat = ps.getProperty(REST_paramFormat, String.class, "");
 
-			for (String m : StringUtils.split(ps.getProperty(REST_allowMethodParam, String.class, ""), ','))
+			for (String m : split(ps.getProperty(REST_allowMethodParam, String.class, ""), ','))
 				if (m.equals("true"))  // For backwards compatibility when this was a boolean field.
 					allowMethodParams.add("*");
 				else
@@ -659,7 +654,7 @@ public final class RestContext extends Context {
 				for (Object o : sc.styleSheets) {
 					if (o instanceof Pair) {
 						Pair<Class<?>,String> p = (Pair<Class<?>,String>)o;
-						for (String path : StringUtils.split(vr.resolve(StringUtils.toString(p.second())), ','))
+						for (String path : split(vr.resolve(StringUtils.toString(p.second())), ','))
 							if (path.startsWith("file://"))
 								contents.add(new FileInputStream(path));
 							else
@@ -782,15 +777,15 @@ public final class RestContext extends Context {
 	 */
 	public StreamResource resolveStaticFile(String pathInfo) throws IOException {
 		if (! staticFilesCache.containsKey(pathInfo)) {
-			String p = RestUtils.decode(RestUtils.trimSlashes(pathInfo));
+			String p = urlDecode(trimSlashes(pathInfo));
 			if (p.indexOf("..") != -1)
 				throw new RestException(SC_NOT_FOUND, "Invalid path");
 			for (Map.Entry<String,String> e : staticFilesMap.entrySet()) {
-				String key = RestUtils.trimSlashes(e.getKey());
+				String key = trimSlashes(e.getKey());
 				if (p.startsWith(key)) {
 					String remainder = (p.equals(key) ? "" : p.substring(key.length()));
 					if (remainder.isEmpty() || remainder.startsWith("/")) {
-						String p2 = RestUtils.trimSlashes(e.getValue()) + remainder;
+						String p2 = trimSlashes(e.getValue()) + remainder;
 						InputStream is = getResource(p2, null);
 						if (is != null) {
 							try {
@@ -1211,7 +1206,7 @@ public final class RestContext extends Context {
 	 * @return <jk>true</jk> if this resource allows the specified method to be overridden.
 	 */
 	protected boolean allowMethodParam(String m) {
-		return (! StringUtils.isEmpty(m) && (allowMethodParams.contains(m) || allowMethodParams.contains("*")));
+		return (! isEmpty(m) && (allowMethodParams.contains(m) || allowMethodParams.contains("*")));
 	}
 
 	/**
@@ -1448,7 +1443,7 @@ public final class RestContext extends Context {
 	 * @return <jk>true</jk> if the specified path refers to a static file.
 	 */
 	protected boolean isStaticFile(String p) {
-		return StringUtils.pathStartsWith(p, staticFilesPrefixes);
+		return pathStartsWith(p, staticFilesPrefixes);
 	}
 
 	/**

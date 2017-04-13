@@ -38,4 +38,15 @@ public final class ASet<T> extends LinkedHashSet<T> {
 		add(t);
 		return this;
 	}
+
+	/**
+	 * Adds multiple entries to this set.
+	 *
+	 * @param t The entries to add to this set.
+	 * @return This object (for method chaining).
+	 */
+	public ASet<T> appendAll(T...t) {
+		addAll(Arrays.asList(t));
+		return this;
+	}
 }

@@ -246,7 +246,7 @@ public class UrlEncodingSerializer extends UonSerializer {
 			// All other types can't be serialized as key/value pairs, so we create a
 			// mock key/value pair with a "_value" key.
 			out.append("_value=");
-			super.serializeAnything(session, out, o, null, null, null);
+			super.serializeAnything(session, out, o, null, null, null, session.plainTextParams());
 		}
 
 		session.pop();
@@ -277,6 +277,7 @@ public class UrlEncodingSerializer extends UonSerializer {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private SerializerWriter serializeMap(UrlEncodingSerializerSession session, UonWriter out, Map m, ClassMeta<?> type) throws Exception {
 
+		boolean plainTextParams = session.plainTextParams();
 		m = session.sort(m);
 
 		ClassMeta<?> keyType = type.getKeyType(), valueType = type.getValueType();
@@ -293,15 +294,15 @@ public class UrlEncodingSerializer extends UonSerializer {
 				while (i.hasNext()) {
 					if (addAmp)
 						out.cr(depth).append('&');
-					out.appendObject(key, true).append('=');
-					super.serializeAnything(session, out, i.next(), null, (key == null ? null : key.toString()), null);
+					out.appendObject(key, true, plainTextParams).append('=');
+					super.serializeAnything(session, out, i.next(), null, (key == null ? null : key.toString()), null, plainTextParams);
 					addAmp = true;
 				}
 			} else {
 				if (addAmp)
 					out.cr(depth).append('&');
-				out.appendObject(key, true).append('=');
-				super.serializeAnything(session, out, value, valueType, (key == null ? null : key.toString()), null);
+				out.appendObject(key, true, plainTextParams).append('=');
+				super.serializeAnything(session, out, value, valueType, (key == null ? null : key.toString()), null, plainTextParams);
 				addAmp = true;
 			}
 		}
@@ -321,7 +322,7 @@ public class UrlEncodingSerializer extends UonSerializer {
 			if (addAmp)
 				out.cr(depth).append('&');
 			out.append(e.getKey()).append('=');
-			super.serializeAnything(session, out, e.getValue(), valueType, null, null);
+			super.serializeAnything(session, out, e.getValue(), valueType, null, null, session.plainTextParams());
 			addAmp = true;
 		}
 
@@ -331,6 +332,7 @@ public class UrlEncodingSerializer extends UonSerializer {
 	@SuppressWarnings({ "rawtypes" })
 	private SerializerWriter serializeBeanMap(UrlEncodingSerializerSession session, UonWriter out, BeanMap<?> m, String typeName) throws Exception {
 		int depth = session.getIndent();
+		boolean plainTextParams = session.plainTextParams();
 
 		boolean addAmp = false;
 
@@ -355,9 +357,9 @@ public class UrlEncodingSerializer extends UonSerializer {
 					if (addAmp)
 						out.cr(depth).append('&');
 
-					out.appendObject(key, true).append('=');
+					out.appendObject(key, true, plainTextParams).append('=');
 
-					super.serializeAnything(session, out, i.next(), cMeta.getElementType(), key, pMeta);
+					super.serializeAnything(session, out, i.next(), cMeta.getElementType(), key, pMeta, plainTextParams);
 
 					addAmp = true;
 				}
@@ -365,9 +367,9 @@ public class UrlEncodingSerializer extends UonSerializer {
 				if (addAmp)
 					out.cr(depth).append('&');
 
-				out.appendObject(key, true).append('=');
+				out.appendObject(key, true, plainTextParams).append('=');
 
-				super.serializeAnything(session, out, value, cMeta, key, pMeta);
+				super.serializeAnything(session, out, value, cMeta, key, pMeta, plainTextParams);
 
 				addAmp = true;
 			}
@@ -387,18 +389,29 @@ public class UrlEncodingSerializer extends UonSerializer {
 	 * Useful for constructing URL parts.
 	 *
 	 * @param o The object to serialize.
+	 * @param urlEncode URL-encode the string if necessary.
+	 * If <jk>null</jk>, then uses the value of the {@link UonSerializerContext#UON_encodeChars} setting.
+	 * @param plainTextParams Whether we're using plain-text params.
+	 * If <jk>null</jk>, then uses the value from the {@link UrlEncodingSerializerContext#URLENC_paramFormat} setting.
 	 * @return The serialized object.
 	 */
-	public String serializeUrlPart(Object o) {
+	public String serializePart(Object o, Boolean urlEncode, Boolean plainTextParams) {
 		try {
 			// Shortcut for simple types.
 			ClassMeta<?> cm = getBeanContext().getClassMetaForObject(o);
-			if (cm != null)
-				if (cm.isCharSequence() || cm.isNumber() || cm.isBoolean())
+			if (cm != null) {
+				if (cm.isNumber() || cm.isBoolean())
 					return o.toString();
+				if (cm.isCharSequence()) {
+					String s = o.toString();
+					boolean ptt = (plainTextParams != null ? plainTextParams : ctx.plainTextParams);
+					if (ptt || ! UonUtils.needsQuotes(s))
+						return (urlEncode ? StringUtils.urlEncode(s) : s);
+				}
+			}
 
 			StringWriter w = new StringWriter();
-			UonSerializerSession s = createSession(w, null, null, null, null, MediaType.UON);
+			UonSerializerSession s = new UrlEncodingSerializerSession(ctx, urlEncode, null, w, null, null, null, MediaType.UON);
 			super.doSerialize(s, o);
 			return w.toString();
 		} catch (Exception e) {
@@ -413,7 +426,7 @@ public class UrlEncodingSerializer extends UonSerializer {
 
 	@Override /* Serializer */
 	public UrlEncodingSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType) {
-		return new UrlEncodingSerializerSession(ctx, op, output, javaMethod, locale, timeZone, mediaType);
+		return new UrlEncodingSerializerSession(ctx, null, op, output, javaMethod, locale, timeZone, mediaType);
 	}
 
 	@Override /* Serializer */

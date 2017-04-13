@@ -415,7 +415,7 @@ public class UrlEncodingParser extends UonParser {
 	}
 
 	/**
-	 * Parses a single query parameter value into the specified class type.
+	 * Parses a single query parameter or header value into the specified class type.
 	 *
 	 * @param in The input query string value.
 	 * @param type The object type to create.
@@ -426,48 +426,28 @@ public class UrlEncodingParser extends UonParser {
 	 * @return A new instance of the specified type.
 	 * @throws ParseException
 	 */
-	public <T> T parseParameter(CharSequence in, Type type, Type...args) throws ParseException {
+	public <T> T parsePart(String in, Type type, Type...args) throws ParseException {
 		if (in == null)
 			return null;
-		UonParserSession session = createParameterSession(in);
-		try {
-			UonReader r = session.getReader();
-			return (T)super.parseAnything(session, session.getClassMeta(type, args), r, null, true, null);
-		} catch (ParseException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new ParseException(session, e);
-		} finally {
-			session.close();
-		}
+		return (T)parsePart(in, getBeanContext().getClassMeta(type, args));
 	}
 
 	/**
-	 * Parses a single query parameter value into the specified class type.
+	 * Parses a single query parameter or header value into the specified class type.
 	 *
 	 * @param in The input query string value.
 	 * @param type The class type of the object to create.
 	 * @return A new instance of the specified type.
 	 * @throws ParseException
 	 */
-	public <T> T parseParameter(CharSequence in, Class<T> type) throws ParseException {
+	public <T> T parsePart(String in, Class<T> type) throws ParseException {
 		if (in == null)
 			return null;
-		UonParserSession session = createParameterSession(in);
-		try {
-			UonReader r = session.getReader();
-			return super.parseAnything(session, session.getClassMeta(type), r, null, true, null);
-		} catch (ParseException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new ParseException(session, e);
-		} finally {
-			session.close();
-		}
+		return parsePart(in, getBeanContext().getClassMeta(type));
 	}
 
 	/**
-	 * Same as {@link #parseParameter(CharSequence, Type, Type...)} except the type has already
+	 * Same as {@link #parsePart(String, Type, Type...)} except the type has already
 	 * been converted to a {@link ClassMeta} object.
 	 *
 	 * @param in The input query string value.
@@ -475,9 +455,19 @@ public class UrlEncodingParser extends UonParser {
 	 * @return A new instance of the specified type.
 	 * @throws ParseException
 	 */
-	public <T> T parseParameter(CharSequence in, ClassMeta<T> type) throws ParseException {
+	public <T> T parsePart(String in, ClassMeta<T> type) throws ParseException {
 		if (in == null)
 			return null;
+		if (type.isString() && in.length() > 0) {
+			// Shortcut - If we're returning a string and the value doesn't start with "'" or is "null", then
+			// just return the string since it's a plain value.
+			// This allows us to bypass the creation of a UonParserSession object.
+			char x = StringUtils.firstNonWhitespaceChar(in);
+			if (x != '\'' && x != 'n' && in.indexOf('~') == -1)
+				return (T)in;
+			if (x == 'n' && "null".equals(in))
+				return null;
+		}
 		UonParserSession session = createParameterSession(in);
 		try {
 			UonReader r = session.getReader();

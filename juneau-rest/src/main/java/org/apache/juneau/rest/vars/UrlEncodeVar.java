@@ -12,7 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.vars;
 
-import org.apache.juneau.rest.*;
+import static org.apache.juneau.internal.StringUtils.*;
+
+import org.apache.juneau.internal.*;
 import org.apache.juneau.svl.*;
 
 /**
@@ -20,7 +22,7 @@ import org.apache.juneau.svl.*;
  * <p>
  * The format for this var is <js>"$UE{innerValue}"</js>.
  * <p>
- * This variable takes the contents inside the variable and replaces it with a value returned by calling {@link RestUtils#encode(String)}).
+ * This variable takes the contents inside the variable and replaces it with a value returned by calling {@link StringUtils#urlEncode(String)}).
  * <p>
  * Since this is a {@link SimpleVar}, any variables contained in the result will be recursively resolved.
  * Likewise, if the arguments contain any variables, those will be resolved before they are passed to this var.
@@ -41,6 +43,6 @@ public class UrlEncodeVar extends SimpleVar {
 
 	@Override /* Parameter */
 	public String resolve(VarResolverSession session, String key) {
-		return RestUtils.encode(key);
+		return urlEncode(key);
 	}
 }

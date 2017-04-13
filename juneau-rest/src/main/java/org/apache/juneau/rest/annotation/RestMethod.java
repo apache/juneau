@@ -17,9 +17,9 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.remoteable.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.serializer.*;
 

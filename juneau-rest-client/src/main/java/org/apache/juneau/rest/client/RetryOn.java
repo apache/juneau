@@ -12,10 +12,16 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client;
 
+import org.apache.http.*;
+
 /**
  * Used to determine whether a request should be retried based on the HTTP response code.
+ * <p>
+ * Subclasses should override either the {@link #onCode(int)} method (if you only care about
+ * the HTTP status code) or {@link #onResponse(HttpResponse)} (if you want full access to
+ * the HTTP response object.
  */
-public interface RetryOn {
+public abstract class RetryOn {
 
 	/**
 	 * Default RetryOn that returns <jk>true</jk> of any HTTP response &gt;= 400 is received.
@@ -40,8 +46,20 @@ public interface RetryOn {
 	/**
 	 * Subclasses should override this method to determine whether the HTTP response is retryable.
 	 *
-	 * @param httpResponseCode The HTTP response code.
+	 * @param response The HTTP response object.  May be <jk>null</jk> if a connection could not be made.
 	 * @return <jk>true</jk> if the specified response code is retryable.
 	 */
-	boolean onCode(int httpResponseCode);
+	protected boolean onResponse(HttpResponse response) {
+		return onCode(response == null || response.getStatusLine() == null ? -1 : response.getStatusLine().getStatusCode());
+	}
+
+	/**
+	 * Subclasses should override this method to determine whether the HTTP response is retryable.
+	 *
+	 * @param httpResponseCode The HTTP response code.  <code>-1</code> if a connection could not be made.
+	 * @return <jk>true</jk> if the specified response code is retryable.
+	 */
+	protected boolean onCode(int httpResponseCode) {
+		return false;
+	}
 }

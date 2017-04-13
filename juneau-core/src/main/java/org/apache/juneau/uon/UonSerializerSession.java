@@ -38,6 +38,7 @@ public class UonSerializerSession extends SerializerSession {
 	 *
 	 * @param ctx The context creating this session object.
 	 * The context contains all the configuration settings for this object.
+	 * @param encode Override the {@link UonSerializerContext#UON_encodeChars} setting.
 	 * @param output The output object.  See {@link JsonSerializerSession#getWriter()} for valid class types.
 	 * @param op The override properties.
 	 * These override any context properties defined in the context.
@@ -48,13 +49,13 @@ public class UonSerializerSession extends SerializerSession {
 	 * If <jk>null</jk>, then the timezone defined on the context is used.
 	 * @param mediaType The session media type (e.g. <js>"application/json"</js>).
 	 */
-	protected UonSerializerSession(UonSerializerContext ctx, ObjectMap op, Object output, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType) {
+	protected UonSerializerSession(UonSerializerContext ctx, Boolean encode, ObjectMap op, Object output, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType) {
 		super(ctx, op, output, javaMethod, locale, timeZone, mediaType);
 		if (op == null || op.isEmpty()) {
-			encodeChars = ctx.encodeChars;
+			encodeChars = encode == null ? ctx.encodeChars : encode;
 			addBeanTypeProperties = ctx.addBeanTypeProperties;
 		} else {
-			encodeChars = op.getBoolean(UON_encodeChars, ctx.encodeChars);
+			encodeChars = encode == null ? op.getBoolean(UON_encodeChars, ctx.encodeChars) : encode;
 			addBeanTypeProperties = op.getBoolean(MSGPACK_addBeanTypeProperties, ctx.addBeanTypeProperties);
 		}
 	}

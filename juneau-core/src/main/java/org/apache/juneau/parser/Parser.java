@@ -198,6 +198,8 @@ public abstract class Parser extends CoreObject {
 	 */
 	public final <T> T parseSession(ParserSession session, ClassMeta<T> type) throws ParseException {
 		try {
+			if (type.isVoid())
+				return null;
 			return doParse(session, type);
 		} catch (ParseException e) {
 			throw e;

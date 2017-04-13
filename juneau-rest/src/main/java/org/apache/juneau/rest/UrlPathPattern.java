@@ -12,12 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static org.apache.juneau.rest.RestUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
 import java.util.regex.*;
 
-import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
@@ -53,7 +52,7 @@ public final class UrlPathPattern implements Comparable<UrlPathPattern> {
 		List<String> vars = new LinkedList<String>();
 
 		private Builder(String patternString) {
-			if (! StringUtils.startsWith(patternString, '/'))
+			if (! startsWith(patternString, '/'))
 				patternString = '/' + patternString;
 			if (patternString.equals("/*")) {
 				isOnlyDotAll = true;
@@ -105,7 +104,7 @@ public final class UrlPathPattern implements Comparable<UrlPathPattern> {
 			if (isDotAll && i == len-1)
 				v[i] = m.group(i+1).isEmpty() ? null : m.group(i+1).substring(1);
 			else
-			v[i] = decode(m.group(i+1));
+			v[i] = urlDecode(m.group(i+1));
 		}
 
 		return v;
