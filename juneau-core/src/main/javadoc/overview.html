@@ -2409,7 +2409,7 @@
 	<jk>public interface</jk> MyProxyInterface {
 		
 		<ja>@RemoteMethod</ja>(httpMethod=<js>"POST"</js>, path=<js>"/method"</js>)
-		String doMethod(<ja>@Header</ja>(<js>"E-Tag"</js>) UUID etag, <ja>@Query</ja>("debug") <jk>boolean</jk> debug, <ja>@Body</ja> MyPojo pojo);
+		String doMethod(<ja>@Header</ja>(<js>"E-Tag"</js>) UUID etag, <ja>@Query</ja>(<js>"debug"</js>) <jk>boolean</jk> debug, <ja>@Body</ja> MyPojo pojo);
 	}
 	
 	RestClient client = <jk>new</jk> RestClientBuilder().build();
