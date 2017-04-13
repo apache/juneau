@@ -23,10 +23,6 @@
 	<name>Apache Juneau (incubating)</name>
 	<description>All the Apache Juneau content in one convenient package.</description>
 	
-	<prerequisites>
-		<maven>3.2.0</maven>
-	</prerequisites>
-
 	<parent>
 		<groupId>org.apache</groupId>
 		<artifactId>apache</artifactId>
@@ -114,6 +110,26 @@
 
 	<build>
 		<plugins>
+			<plugin>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>enforce-maven</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<requireMavenVersion>
+									<!-- ! Maven minimum 3.2.0 to build. -->
+									<version>3.2.0</version>
+								</requireMavenVersion>
+							</rules>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			
 			<!-- 
 				Runs Apache Rat against all source code to make sure all files have licenses. 
 			-->
