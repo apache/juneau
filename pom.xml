@@ -31,7 +31,6 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<encoding>UTF-8</encoding>
 	</properties>
 
 	<dependencyManagement>
