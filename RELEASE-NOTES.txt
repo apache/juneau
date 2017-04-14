@@ -11,6 +11,20 @@
 * specific language governing permissions and limitations under the License.                                              *
 ***************************************************************************************************************************
 
+Release Notes - Juneau - Version 6.2.0
+
+** Bug
+    * [JUNEAU-37] - REST Testcases can fail with ports 10000. 10001 in use.
+    * [JUNEAU-39] - Add "Incubator" to NOTICE file.
+
+** Improvement
+    * [JUNEAU-32] - Improvements to BeanMeta class
+    * [JUNEAU-41] - Prerequisites usage is deprecated for non maven-plugin projects
+    * [JUNEAU-42] - More powerful RetryOn interface
+    * [JUNEAU-43] - Removed superfluous property encoding
+    * [JUNEAU-44] - Simplify the configuration for apache-rat-plugin
+
+
 Release Notes - Juneau - Version 6.1.0
 
 ** Bug
