@@ -327,6 +327,7 @@ public final class RestContext extends Context {
 	private final RestCallHandler callHandler;
 	private final RestInfoProvider infoProvider;
 	private final RestException initException;
+	private final RestContext parentContext;
 
 	// In-memory cache of images and stylesheets in the org.apache.juneau.rest.htdocs package.
 	private final Map<String,StreamResource> staticFilesCache = new ConcurrentHashMap<String,StreamResource>();
@@ -349,6 +350,7 @@ public final class RestContext extends Context {
 		try {
 			this.resource = resource;
 			this.config = config;
+			this.parentContext = config.parentContext;
 
 			Builder b = new Builder(resource, config);
 			this.allowHeaderParams = b.allowHeaderParams;
@@ -1023,7 +1025,7 @@ public final class RestContext extends Context {
 	 *
 	 * @return The resource object.  Never <jk>null</jk>.
 	 */
-	protected Object getResource() {
+	public Object getResource() {
 		return resource;
 	}
 
@@ -1033,7 +1035,7 @@ public final class RestContext extends Context {
 	 * @return The resource object cast to {@link RestServlet}, or
 	 * <jk>null</jk> if the resource doesn't subclass from {@link RestServlet}
 	 */
-	protected RestServlet getRestServlet() {
+	public RestServlet getRestServlet() {
 		return resource instanceof RestServlet ? (RestServlet)resource : null;
 	}
 
@@ -1045,6 +1047,17 @@ public final class RestContext extends Context {
 	protected void checkForInitException() throws RestException {
 		if (initException != null)
 			throw initException;
+	}
+
+	/**
+	 * Returns the parent resource context (if this resource was initialized from a parent).
+	 * <p>
+	 * From this object, you can get access to the parent resource class itself using {@link #getResource()} or {@link #getRestServlet()}
+	 *
+	 * @return The parent resource context, or <jk>null</jk> if there is no parent context.
+	 */
+	public RestContext getParentContext() {
+		return parentContext;
 	}
 
 	/**
