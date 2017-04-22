@@ -142,8 +142,9 @@
 				<configuration>
 					<excludes>
 						<exclude>**/target/**</exclude>
-						<consoleOutput>true</consoleOutput>
 					</excludes>
+					<consoleOutput>true</consoleOutput>
+					<useEclipseDefaultExcludes>true</useEclipseDefaultExcludes>
 				</configuration>
 				<executions>
 					<execution>
