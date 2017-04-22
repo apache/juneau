@@ -1,6 +1,3 @@
-/logs/
-/.DS_Store
-/derby.log
 /target/
 /.settings/
-/.classpath
+/.DS_Store

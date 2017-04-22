@@ -141,9 +141,7 @@
 				<version>0.12</version>
 				<configuration>
 					<excludes>
-						<exclude>**/*.classpath</exclude>
 						<exclude>**/target/**</exclude>
-						<exclude>**/*.log*</exclude>
 						<consoleOutput>true</consoleOutput>
 					</excludes>
 				</configuration>
