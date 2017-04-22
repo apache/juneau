@@ -144,7 +144,7 @@
 						<exclude>**/target/**</exclude>
 					</excludes>
 					<consoleOutput>true</consoleOutput>
-					<useEclipseDefaultExcludes>true</useEclipseDefaultExcludes>
+					<!-- Note:  useEclipseDefaultExcludes does not work for subprojects.  See RAT-107 -->
 				</configuration>
 				<executions>
 					<execution>
