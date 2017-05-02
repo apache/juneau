@@ -41,7 +41,7 @@ import org.apache.juneau.transform.*;
  * </ul>
  */
 @Produces("text/plain")
-public final class PlainTextSerializer extends WriterSerializer {
+public class PlainTextSerializer extends WriterSerializer {
 
 	/** Default serializer, all default settings.*/
 	public static final PlainTextSerializer DEFAULT = new PlainTextSerializer(PropertyStore.create());

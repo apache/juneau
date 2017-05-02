@@ -14,10 +14,12 @@ package org.apache.juneau.serializer;
 
 import static org.apache.juneau.BeanContext.*;
 import static org.apache.juneau.serializer.SerializerContext.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.http.*;
 
 /**
  * Builder class for creating instances of {@link SerializerGroup}.
@@ -52,7 +54,8 @@ public class SerializerGroupBuilder {
 	 * @param copyFrom The serializer group that we're copying settings and serializers from.
 	 */
 	public SerializerGroupBuilder(SerializerGroup copyFrom) {
-		this.serializers = new ArrayList<Object>(Arrays.asList(copyFrom.serializers));
+		this.serializers = new ArrayList<Object>();
+		addReverse(serializers, copyFrom.getSerializers());
 		this.propertyStore = copyFrom.createPropertyStore();
 	}
 
@@ -63,7 +66,7 @@ public class SerializerGroupBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public SerializerGroupBuilder append(Class<?>...s) {
-		serializers.addAll(Arrays.asList(s));
+		addReverse(serializers, s);
 		return this;
 	}
 
@@ -74,7 +77,7 @@ public class SerializerGroupBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public SerializerGroupBuilder append(Serializer...s) {
-		serializers.addAll(Arrays.asList(s));
+		addReverse(serializers, s);
 		return this;
 	}
 
@@ -85,7 +88,7 @@ public class SerializerGroupBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public SerializerGroupBuilder append(List<Serializer> s) {
-		serializers.addAll(s);
+		addReverse(serializers, s);
 		return this;
 	}
 
@@ -117,6 +120,7 @@ public class SerializerGroupBuilder {
 				throw new RuntimeException("Could not instantiate serializer " + c.getName(), e);
 			}
 		}
+		Collections.reverse(l);
 		return new SerializerGroup(propertyStore, l.toArray(new Serializer[l.size()]));
 	}
 

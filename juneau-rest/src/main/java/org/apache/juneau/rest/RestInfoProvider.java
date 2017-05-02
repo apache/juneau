@@ -18,8 +18,8 @@ import static org.apache.juneau.dto.swagger.SwaggerBuilder.*;
 import java.util.*;
 import java.util.concurrent.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.dto.swagger.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;

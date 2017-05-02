@@ -25,6 +25,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
@@ -165,7 +166,7 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 		if (headers.containsKey("Accept-Language") && headers.get("Accept-Language") != null) {
 			String h = String.valueOf(headers.get("Accept-Language"));
 			if (h != null) {
-				MediaRange[] mr = MediaRange.parse(h);
+				MediaTypeRange[] mr = MediaTypeRange.parse(h);
 				if (mr.length > 0)
 					return toLocale(mr[0].getMediaType().getType());
 			}

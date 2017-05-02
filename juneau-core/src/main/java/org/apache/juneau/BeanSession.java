@@ -20,6 +20,7 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 
+import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;

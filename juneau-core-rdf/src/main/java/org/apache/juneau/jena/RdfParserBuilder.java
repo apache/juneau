@@ -18,6 +18,7 @@ import static org.apache.juneau.jena.RdfParserContext.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.xml.*;

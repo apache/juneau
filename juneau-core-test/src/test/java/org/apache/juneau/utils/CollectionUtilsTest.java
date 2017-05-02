@@ -16,6 +16,8 @@ import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
 
+import java.util.*;
+
 import org.apache.juneau.*;
 import org.junit.*;
 
@@ -27,7 +29,7 @@ public class CollectionUtilsTest {
 	//====================================================================================================
 	@Test
 	public void testReverse() throws Exception {
-		assertNull(reverse(null));
+		assertNull(reverse((Map<?,?>)null));
 
 		assertObjectEquals("{b:2,a:1}", reverse(new ObjectMap("{a:1,b:2}")));
 		assertObjectEquals("{}", reverse(new ObjectMap("{}")));

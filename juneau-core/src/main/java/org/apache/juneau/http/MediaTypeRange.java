@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau;
+package org.apache.juneau.http;
 
 import java.util.*;
 import java.util.Map.*;
@@ -23,19 +23,24 @@ import org.apache.juneau.internal.*;
  * Section 14.1 and 14.7 of RFC2616 (the HTTP/1.1 specification).
  */
 @BeanIgnore
-public final class MediaRange implements Comparable<MediaRange>  {
+public final class MediaTypeRange implements Comparable<MediaTypeRange>  {
 
-	private static final MediaRange[] DEFAULT = new MediaRange[]{new MediaRange("*/*")};
+	private static final MediaTypeRange[] DEFAULT = new MediaTypeRange[]{new MediaTypeRange("*/*")};
 
 	private final MediaType mediaType;
 	private final Float qValue;
-	private final Map<String,Set<String>> parameters, extensions;
+	private final Map<String,Set<String>> extensions;
 
 	/**
-	 * Parses a media range fragement of an <code>Accept</code> header value into a single media range object..
+	 * Parses an <code>Accept</code> header value into an array of media ranges.
+	 * <p>
+	 * The returned media ranges are sorted such that the most acceptable media is available at ordinal position <js>'0'</js>, and the least acceptable at position n-1.
 	 * <p>
 	 * The syntax expected to be found in the referenced <code>value</code> complies with the syntax described in RFC2616, Section 14.1, as described below:
 	 * <p class='bcode'>
+	 * 	Accept         = "Accept" ":"
+	 * 	                  #( media-range [ accept-params ] )
+	 *
 	 * 	media-range    = ( "*\/*"
 	 * 	                  | ( type "/" "*" )
 	 * 	                  | ( type "/" subtype )
@@ -43,66 +48,82 @@ public final class MediaRange implements Comparable<MediaRange>  {
 	 * 	accept-params  = ";" "q" "=" qvalue *( accept-extension )
 	 * 	accept-extension = ";" token [ "=" ( token | quoted-string ) ]
 	 * </p>
-	 * @param mediaRangeFragment The media range fragement string.
+	 *
+	 * @param value The value to parse.  If <jk>null</jk> or empty, returns a single <code>MediaTypeRange</code> is returned that represents all types.
+	 * @return The media ranges described by the string.
+	 * The ranges are sorted such that the most acceptable media is available at ordinal position <js>'0'</js>, and the least acceptable at position n-1.
 	 */
-	private MediaRange(String mediaRangeFragment) {
+	public static MediaTypeRange[] parse(String value) {
 
-		String r = mediaRangeFragment;
-		Float _qValue = 1f;
-		MediaType _mediaType = null;
-		Map<String,Set<String>> _parameters = null;
-		Map<String,Set<String>> _extensions = null;
+		if (value == null || value.length() == 0)
+			return DEFAULT;
 
-		r = r.trim();
+		if (value.indexOf(',') == -1)
+			return new MediaTypeRange[]{new MediaTypeRange(value)};
 
-		int i = r.indexOf(';');
+		Set<MediaTypeRange> ranges = new TreeSet<MediaTypeRange>();
 
-		if (i == -1) {
-			_mediaType = MediaType.forString(r);
+		for (String r : StringUtils.split(value, ',')) {
+			r = r.trim();
 
-		} else {
+			if (r.isEmpty())
+				continue;
 
-			_mediaType = MediaType.forString(r.substring(0, i));
+			ranges.add(new MediaTypeRange(r));
+		}
 
-			String[] tokens = r.substring(i+1).split(";");
+		return ranges.toArray(new MediaTypeRange[ranges.size()]);
+	}
+
+	@SuppressWarnings("unchecked")
+	private MediaTypeRange(String token) {
+		Builder b = new Builder(token);
+		this.mediaType = b.mediaType;
+		this.qValue = b.qValue;
+		this.extensions = (b.extensions == null ? Collections.EMPTY_MAP : Collections.unmodifiableMap(b.extensions));
+	}
+
+	private static class Builder {
+		private MediaType mediaType;
+		private Float qValue = 1f;
+		private Map<String,Set<String>> extensions;
+
+		private Builder(String token) {
+
+			token = token.trim();
+
+			int i = token.indexOf(";q=");
+
+			if (i == -1) {
+				mediaType = MediaType.forString(token);
+				return;
+			}
+
+			mediaType = MediaType.forString(token.substring(0, i));
+
+			String[] tokens = token.substring(i+1).split(";");
 
 			// Only the type of the range is specified
 			if (tokens.length > 0) {
-
 				boolean isInExtensions = false;
 				for (int j = 0; j < tokens.length; j++) {
 					String[] parm = tokens[j].split("=");
 					if (parm.length == 2) {
 						String k = parm[0], v = parm[1];
 						if (isInExtensions) {
-							if (_extensions == null)
-								_extensions = new TreeMap<String,Set<String>>();
-							if (! _extensions.containsKey(parm[0]))
-								_extensions.put(parm[0], new TreeSet<String>());
-							_extensions.get(parm[0]).add(parm[1]);
+							if (extensions == null)
+								extensions = new TreeMap<String,Set<String>>();
+							if (! extensions.containsKey(k))
+								extensions.put(k, new TreeSet<String>());
+							extensions.get(k).add(v);
 						} else if (k.equals("q")) {
-							_qValue = new Float(v);
+							qValue = new Float(v);
 							isInExtensions = true;
-						} else /*(! isInExtensions)*/ {
-							if (_parameters == null)
-								_parameters = new TreeMap<String,Set<String>>();
-							if (! _parameters.containsKey(parm[0]))
-								_parameters.put(parm[0], new TreeSet<String>());
-							_parameters.get(parm[0]).add(parm[1]);
 						}
 					}
 				}
 			}
 		}
-		if (_parameters == null)
-			_parameters = Collections.emptyMap();
-		if (_extensions == null)
-			_extensions = Collections.emptyMap();
-
-		this.mediaType = _mediaType;
-		this.parameters = _parameters;
-		this.qValue = _qValue;
-		this.extensions = _extensions;
 	}
 
 	/**
@@ -136,20 +157,6 @@ public final class MediaRange implements Comparable<MediaRange>  {
 	}
 
 	/**
-	 * Returns the optional set of parameters associated to the type as returned by {@link #getMediaType()}.
-	 * <p>
-	 * The parameters are those values as described in standardized MIME syntax.
-	 * An example of such a parameter in string form might be <js>"level=1"</js>.
-	 * <p>
-	 * Values are lowercase and never <jk>null</jk>.
-	 *
-	 * @return The optional list of parameters, never <jk>null</jk>.
-	 */
-	public Map<String,Set<String>> getParameters() {
-		return parameters;
-	}
-
-	/**
 	 * Returns the optional set of custom extensions defined for this type.
 	 * <p>
 	 * Values are lowercase and never <jk>null</jk>.
@@ -170,12 +177,6 @@ public final class MediaRange implements Comparable<MediaRange>  {
 	@Override /* Object */
 	public String toString() {
 		StringBuffer sb = new StringBuffer().append(mediaType);
-
-		for (Entry<String,Set<String>> e : parameters.entrySet()) {
-			String k = e.getKey();
-			for (String v : e.getValue())
-				sb.append(';').append(k).append('=').append(v);
-		}
 
 		// '1' is equivalent to specifying no qValue. If there's no extensions, then we won't include a qValue.
 		if (qValue.floatValue() == 1.0) {
@@ -206,16 +207,15 @@ public final class MediaRange implements Comparable<MediaRange>  {
 	@Override /* Object */
 	public boolean equals(Object o) {
 
-		if (o == null || !(o instanceof MediaRange))
+		if (o == null || !(o instanceof MediaTypeRange))
 			return false;
 
 		if (this == o)
 			return true;
 
-		MediaRange o2 = (MediaRange) o;
+		MediaTypeRange o2 = (MediaTypeRange) o;
 		return qValue.equals(o2.qValue)
 			&& mediaType.equals(o2.mediaType)
-			&& parameters.equals(o2.parameters)
 			&& extensions.equals(o2.extensions);
 	}
 
@@ -227,57 +227,6 @@ public final class MediaRange implements Comparable<MediaRange>  {
 	@Override /* Object */
 	public int hashCode() {
 		return mediaType.hashCode();
-	}
-
-	/**
-	 * Parses an <code>Accept</code> header value into an array of media ranges.
-	 * <p>
-	 * The returned media ranges are sorted such that the most acceptable media is available at ordinal position <js>'0'</js>, and the least acceptable at position n-1.
-	 * <p>
-	 * The syntax expected to be found in the referenced <code>value</code> complies with the syntax described in RFC2616, Section 14.1, as described below:
-	 * <p class='bcode'>
-	 * 	Accept         = "Accept" ":"
-	 * 	                  #( media-range [ accept-params ] )
-	 *
-	 * 	media-range    = ( "*\/*"
-	 * 	                  | ( type "/" "*" )
-	 * 	                  | ( type "/" subtype )
-	 * 	                  ) *( ";" parameter )
-	 * 	accept-params  = ";" "q" "=" qvalue *( accept-extension )
-	 * 	accept-extension = ";" token [ "=" ( token | quoted-string ) ]
-	 * </p>
-	 * This method can also be used on other headers such as <code>Accept-Charset</code> and <code>Accept-Encoding</code>...
-	 * <p class='bcode'>
-	 * 	Accept-Charset = "Accept-Charset" ":"
-	 * 	1#( ( charset | "*" )[ ";" "q" "=" qvalue ] )
-	 * </p>
-	 *
-	 * @param value The value to parse.  If <jk>null</jk> or empty, returns a single <code>MediaRange</code> is returned that represents all types.
-	 * @return The media ranges described by the string.
-	 * The ranges are sorted such that the most acceptable media is available at ordinal position <js>'0'</js>, and the least acceptable at position n-1.
-	 */
-	public static MediaRange[] parse(String value) {
-
-		if (value == null || value.length() == 0)
-			return DEFAULT;
-
-		value = value.toLowerCase(Locale.ENGLISH);
-
-		if (value.indexOf(',') == -1)
-			return new MediaRange[]{new MediaRange(value)};
-
-		Set<MediaRange> ranges = new TreeSet<MediaRange>();
-
-		for (String r : StringUtils.split(value, ',')) {
-			r = r.trim();
-
-			if (r.isEmpty())
-				continue;
-
-			ranges.add(new MediaRange(r));
-		}
-
-		return ranges.toArray(new MediaRange[ranges.size()]);
 	}
 
 	/**
@@ -293,7 +242,7 @@ public final class MediaRange implements Comparable<MediaRange>  {
 	 * @param o The range to compare to.  Never <jk>null</jk>.
 	 */
 	@Override /* Comparable */
-	public int compareTo(MediaRange o) {
+	public int compareTo(MediaTypeRange o) {
 
 		// Compare q-values.
 		int qCompare = Float.compare(o.qValue, qValue);

@@ -5736,7 +5736,8 @@
 	
 	<h5 class='toc'>What's new in each release</h5>
 	<ul class='toc'>
-		<li><p><a class='doclink' href='#6.2.0'>6.2.0 (TBD)</a></p>
+		<li><p><a class='doclink' href='#6.2.0'>6.2.1 (TBD)</a></p>
+		<li><p><a class='doclink' href='#6.2.0'>6.2.0 (Apr 28, 2017)</a></p>
 		<li><p><a class='doclink' href='#6.1.0'>6.1.0 (Feb 25, 2017)</a></p>
 		<li><p><a class='doclink' href='#6.0.1'>6.0.1 (Jan 3, 2017)</a></p>
 		<li><p><a class='doclink' href='#6.0.0'>6.0.0 (Oct 3, 2016)</a></p>
@@ -5804,8 +5805,50 @@
 
 
 	<!-- ======================================================================================================== -->
+	<a id="6.2.1"></a>
+	<h3 class='topic' onclick='toggle(this)'>6.2.1 (TBD)</h3>
+	<div class='topic'>
+		<p>
+		</p>
+
+		<h6 class='topic'>org.apache.juneau</h6>
+		<ul class='spaced-list'>
+			<li>New package:  {@link org.apache.juneau.http}.
+			<ul>
+				<li>{@link org.apache.juneau.http.Accept}
+				<li>{@link org.apache.juneau.http.AcceptEncoding}
+				<li>{@link org.apache.juneau.http.ContentType}
+			</ul>
+		</ul>
+
+		<h6 class='topic'>org.apache.juneau.rest</h6>
+		<ul class='spaced-list'>
+			<li>The following object types can now be specified as unannotated arguments on REST Java methods:
+			<ul>
+				<li>{@link org.apache.juneau.http.Accept}
+				<li>{@link org.apache.juneau.http.AcceptEncoding}
+				<li>{@link org.apache.juneau.http.ContentType}
+			</ul>
+			<li>New methods on {@link org.apache.juneau.rest.RestRequest}:
+			<ul>
+				<li>{@link org.apache.juneau.rest.RestRequest#getAcceptHeader() getAcceptHeader()}
+				<li>{@link org.apache.juneau.rest.RestRequest#getAcceptEncodingHeader() getAcceptEncodingHeader()}
+				<li>{@link org.apache.juneau.rest.RestRequest#getContentTypeHeader() getContentTypeHeader()}
+			</ul>
+		</ul>
+
+		<h6 class='topic'>org.apache.juneau.rest.client</h6>
+		<ul class='spaced-list'>
+		</ul>
+
+		<h6 class='topic'>org.apache.juneau.microservice</h6>
+		<ul class='spaced-list'>
+		</ul>
+	</div>
+
+	<!-- ======================================================================================================== -->
 	<a id="6.2.0"></a>
-	<h3 class='topic' onclick='toggle(this)'>6.2.0 (TBD)</h3>
+	<h3 class='topic' onclick='toggle(this)'>6.2.0 (Apr 28, 2017)</h3>
 	<div class='topic'>
 		<p>
 			Juneau 6.2.0 is a major update.

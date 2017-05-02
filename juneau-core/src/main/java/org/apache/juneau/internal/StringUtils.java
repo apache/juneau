@@ -480,6 +480,8 @@ public final class StringUtils {
 			return null;
 		if (isEmpty(s))
 			return new String[0];
+		if (s.indexOf(c) == -1)
+			return new String[]{s};
 
 		List<String> l = new LinkedList<String>();
 		char[] sArray = s.toCharArray();
@@ -519,6 +521,83 @@ public final class StringUtils {
 				l.addAll(Arrays.asList(split(ss, c)));
 		}
 		return l.toArray(new String[l.size()]);
+	}
+
+	/**
+	 * Splits a list of key-value pairs into an ordered map.
+	 * <p>
+	 * Example:
+	 * <p class='bcode'>
+	 * 	String in = <js>"foo=1;bar=2"</js>;
+	 * 	Map m = StringUtils.<jsm>splitMap</jsm>(in, <js>';'</js>, <js>'='</js>, <jk>true</jk>);
+	 * </p>
+	 *
+	 * @param s The string to split.
+	 * @param delim The delimiter between the key-value pairs.
+	 * @param eq The delimiter between the key and value.
+	 * @param trim Trim strings after parsing.
+	 * @return The parsed map.  Never <jk>null</jk>.
+	 */
+	@SuppressWarnings("unchecked")
+	public static Map<String,String> splitMap(String s, char delim, char eq, boolean trim) {
+
+		char[] unEscapeChars = new char[]{'\\', delim, eq};
+
+		if (s == null)
+			return null;
+		if (isEmpty(s))
+			return Collections.EMPTY_MAP;
+
+		Map<String,String> m = new LinkedHashMap<String,String>();
+
+		int
+			S1 = 1,  // Found start of key, looking for equals.
+			S2 = 2;  // Found equals, looking for delimiter (or end).
+
+		int state = S1;
+
+		char[] sArray = s.toCharArray();
+		int x1 = 0, escapeCount = 0;
+		String key = null;
+		for (int i = 0; i < sArray.length + 1; i++) {
+			char c = i == sArray.length ? delim : sArray[i];
+			if (c == '\\')
+				escapeCount++;
+			if (escapeCount % 2 == 0) {
+				if (state == S1) {
+					if (c == eq) {
+						key = s.substring(x1, i);
+						if (trim)
+							key = trim(key);
+						key = unEscapeChars(key, unEscapeChars);
+						state = S2;
+						x1 = i+1;
+					} else if (c == delim) {
+						key = s.substring(x1, i);
+						if (trim)
+							key = trim(key);
+						key = unEscapeChars(key, unEscapeChars);
+						m.put(key, "");
+						state = S1;
+						x1 = i+1;
+					}
+				} else if (state == S2) {
+					if (c == delim) {
+						String val = s.substring(x1, i);
+						if (trim)
+							val = trim(val);
+						val = unEscapeChars(val, unEscapeChars);
+						m.put(key, val);
+						key = null;
+						x1 = i+1;
+						state = S1;
+					}
+				}
+			}
+			if (c != '\\') escapeCount = 0;
+		}
+
+		return m;
 	}
 
 	/**

@@ -14,6 +14,8 @@ package org.apache.juneau;
 
 import java.io.*;
 
+import org.apache.juneau.http.*;
+
 /**
  * Interface that identifies that an object can be serialized directly to a writer.
  * <p>

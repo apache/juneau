@@ -700,4 +700,21 @@ public class StringUtilsTest {
 		in = null;
 		assertEquals("", getField(0, in, ','));
 	}
+
+	//====================================================================================================
+	// parseMap(String,char,char,boolean)
+	//====================================================================================================
+	@Test
+	public void testSplitMap() {
+		assertObjectEquals("{a:'1'}", splitMap("a=1", ',', '=', true));
+		assertObjectEquals("{a:'1',b:'2'}", splitMap("a=1,b=2", ',', '=', true));
+		assertObjectEquals("{a:'1',b:'2'}", splitMap(" a = 1 , b = 2 ", ',', '=', true));
+		assertObjectEquals("{' a ':' 1 ',' b ':' 2 '}", splitMap(" a = 1 , b = 2 ", ',', '=', false));
+		assertObjectEquals("{a:''}", splitMap("a", ',', '=', true));
+		assertObjectEquals("{a:'',b:''}", splitMap("a,b", ',', '=', true));
+		assertObjectEquals("{a:'1',b:''}", splitMap("a=1,b", ',', '=', true));
+		assertObjectEquals("{a:'',b:'1'}", splitMap("a,b=1", ',', '=', true));
+		assertObjectEquals("{'a=':'1'}", splitMap("a\\==1", ',', '=', true));
+		assertObjectEquals("{'a\\\\':'1'}", splitMap("a\\\\=1", ',', '=', true));
+	}
 }

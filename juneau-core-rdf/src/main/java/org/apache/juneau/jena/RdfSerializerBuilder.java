@@ -18,6 +18,7 @@ import static org.apache.juneau.jena.RdfSerializerContext.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.*;

@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.encoders;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import java.util.*;
 
 /**
@@ -33,7 +34,8 @@ public class EncoderGroupBuilder {
 	 * @param copyFrom The encoder group that we're copying settings and encoders from.
 	 */
 	public EncoderGroupBuilder(EncoderGroup copyFrom) {
-		this.encoders = new ArrayList<Encoder>(Arrays.asList(copyFrom.encoders));
+		this.encoders = new ArrayList<Encoder>();
+		addReverse(encoders, copyFrom.getEncoders());
 	}
 
 	/**
@@ -43,9 +45,9 @@ public class EncoderGroupBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public EncoderGroupBuilder append(Class<?>...e) {
-		for (Class<?> ee : e) {
+		for (int i = e.length-1; i >= 0; i--) {
 			try {
-				encoders.add((Encoder)((Class<?>)ee).newInstance());
+				encoders.add((Encoder)((Class<?>)e[i]).newInstance());
 			} catch (Exception x) {
 				throw new RuntimeException(x);
 			}
@@ -60,7 +62,7 @@ public class EncoderGroupBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public EncoderGroupBuilder append(Encoder...e) {
-		encoders.addAll(Arrays.asList(e));
+		addReverse(encoders, e);
 		return this;
 	}
 
@@ -70,8 +72,8 @@ public class EncoderGroupBuilder {
 	 * @param e The encoders to append to this group.
 	 * @return This object (for method chaining).
 	 */
-	public EncoderGroupBuilder append(Collection<Encoder> e) {
-		encoders.addAll(e);
+	public EncoderGroupBuilder append(List<Encoder> e) {
+		addReverse(encoders, e);
 		return this;
 	}
 
@@ -82,7 +84,7 @@ public class EncoderGroupBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public EncoderGroupBuilder append(EncoderGroup eg) {
-		append(eg.encoders);
+		append(eg.getEncoders());
 		return this;
 	}
 

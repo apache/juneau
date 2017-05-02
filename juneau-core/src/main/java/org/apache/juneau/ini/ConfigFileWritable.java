@@ -15,6 +15,7 @@ package org.apache.juneau.ini;
 import java.io.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.http.*;
 
 /**
  * Wraps a {@link ConfigFile} in a {@link Writable} to be rendered as plain text.

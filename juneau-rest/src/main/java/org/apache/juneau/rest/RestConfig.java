@@ -25,6 +25,7 @@ import javax.servlet.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.encoders.Encoder;
+import org.apache.juneau.http.*;
 import org.apache.juneau.ini.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
@@ -172,9 +173,9 @@ public class RestConfig implements ServletConfig {
 				RestResource r = e.getValue();
 				for (Property p : r.properties())
 					properties.append(vr.resolve(p.name()), vr.resolve(p.value()));
-				addSerializers(reverse(r.serializers()));  // TODO - why reverse?
-				addParsers(reverse(r.parsers()));  // TODO - why reverse?
-				addEncoders(reverse(r.encoders()));  // TODO - why reverse?
+				addSerializers(r.serializers());
+				addParsers(r.parsers());
+				addEncoders(r.encoders());
 				addDefaultRequestHeaders(r.defaultRequestHeaders());
 				addDefaultResponseHeaders(r.defaultResponseHeaders());
 				addResponseHandlers(r.responseHandlers());

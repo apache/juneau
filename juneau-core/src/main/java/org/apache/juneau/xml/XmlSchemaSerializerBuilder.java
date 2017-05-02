@@ -15,6 +15,7 @@ package org.apache.juneau.xml;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.http.*;
 
 /**
  * Builder class for building instances of XML Schema serializers.

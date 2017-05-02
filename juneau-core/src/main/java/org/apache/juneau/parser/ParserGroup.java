@@ -16,7 +16,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
+import org.apache.juneau.http.*;
 
 /**
  * Represents a group of {@link Parser Parsers} that can be looked up by media type.
@@ -66,9 +66,12 @@ import org.apache.juneau.internal.*;
 public final class ParserGroup {
 
 	// Maps Content-Type headers to matches.
-	private final Map<String,ParserMatch> cache = new ConcurrentHashMap<String,ParserMatch>();
+	private final ConcurrentHashMap<String,ParserMatch> cache = new ConcurrentHashMap<String,ParserMatch>();
 
-	final Parser[] parsers;
+	private final MediaType[] mediaTypes;            // List of media types
+	private final List<MediaType> mediaTypesList;
+	private final Parser[] mediaTypeParsers;
+	private final List<Parser> parsers;
 	private final PropertyStore propertyStore;
 
 	/**
@@ -82,7 +85,20 @@ public final class ParserGroup {
 	 */
 	public ParserGroup(PropertyStore propertyStore, Parser[] parsers) {
 		this.propertyStore = PropertyStore.create(propertyStore);
-		this.parsers = ArrayUtils.reverse(parsers);
+		this.parsers = Collections.unmodifiableList(new ArrayList<Parser>(Arrays.asList(parsers)));
+
+		List<MediaType> lmt = new ArrayList<MediaType>();
+		List<Parser> l = new ArrayList<Parser>();
+		for (Parser p : parsers) {
+			for (MediaType m: p.getMediaTypes()) {
+				lmt.add(m);
+				l.add(p);
+			}
+		}
+
+		this.mediaTypes = lmt.toArray(new MediaType[lmt.size()]);
+		this.mediaTypesList = Collections.unmodifiableList(lmt);
+		this.mediaTypeParsers = l.toArray(new Parser[l.size()]);
 	}
 
 	/**
@@ -96,8 +112,15 @@ public final class ParserGroup {
 		if (pm != null)
 			return pm;
 
-		MediaType mt = MediaType.forString(contentTypeHeader);
-		return getParserMatch(mt);
+		ContentType ct = ContentType.forString(contentTypeHeader);
+		int match = ct.findMatch(mediaTypes);
+
+		if (match >= 0) {
+			pm = new ParserMatch(mediaTypes[match], mediaTypeParsers[match]);
+			cache.putIfAbsent(contentTypeHeader, pm);
+		}
+
+		return cache.get(contentTypeHeader);
 	}
 
 	/**
@@ -107,20 +130,7 @@ public final class ParserGroup {
 	 * @return The parser and media type that matched the media type, or <jk>null</jk> if no match was made.
 	 */
 	public ParserMatch getParserMatch(MediaType mediaType) {
-		ParserMatch pm = cache.get(mediaType.toString());
-		if (pm != null)
-			return pm;
-
-		for (Parser p : parsers) {
-			for (MediaType a2 : p.getMediaTypes()) {
-				if (mediaType.matches(a2)) {
-					pm = new ParserMatch(a2, p);
-					cache.put(mediaType.toString(), pm);
-					return pm;
-				}
-			}
-		}
-		return null;
+		return getParserMatch(mediaType.toString());
 	}
 
 	/**
@@ -150,15 +160,10 @@ public final class ParserGroup {
 	 * <p>
 	 * Entries are ordered in the same order as the parsers in the group.
 	 *
-	 * @return The list of media types.
+	 * @return An unmodifiable list of media types.
 	 */
 	public List<MediaType> getSupportedMediaTypes() {
-		List<MediaType> l = new ArrayList<MediaType>();
-		for (Parser p : parsers)
-			for (MediaType mt : p.getMediaTypes())
-				if (! l.contains(mt))
-					l.add(mt);
-		return l;
+		return mediaTypesList;
 	}
 
 	/**
@@ -172,12 +177,11 @@ public final class ParserGroup {
 	}
 
 	/**
-	 * Returns a copy of the parsers in this group.
-	 * This method returns a new array each time so is somewhat expensive.
+	 * Returns the parsers in this group.
 	 *
-	 * @return A new array containing the parsers in this group.
+	 * @return An unmodifiable list of parsers in this group.
 	 */
-	public Parser[] getParsers() {
-		return ArrayUtils.reverse(parsers);
+	public List<Parser> getParsers() {
+		return parsers;
 	}
 }

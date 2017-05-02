@@ -101,7 +101,7 @@ public abstract class RemoteableServlet extends RestServletDefault {
 		// Find the parser.
 		ReaderParser p = req.getReaderParser();
 		if (p == null)
-			throw new RestException(SC_UNSUPPORTED_MEDIA_TYPE, "Could not find parser for media type ''{0}''", req.getMediaType()); //$NON-NLS-1$
+			throw new RestException(SC_UNSUPPORTED_MEDIA_TYPE, "Could not find parser for media type ''{0}''", req.getContentTypeHeader()); //$NON-NLS-1$
 		Class<?> c = getInterfaceClass(javaInterface);
 
 		// Find the service.

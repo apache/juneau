@@ -22,6 +22,7 @@ import javax.servlet.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.html.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.jena.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.annotation.*;
@@ -99,7 +100,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 		String charset = null;
 		if (h == null)
 			charset = defaultCharset;
-		else for (MediaRange r : MediaRange.parse(h)) {
+		else for (MediaTypeRange r : MediaTypeRange.parse(h)) {
 			if (r.getQValue() > 0) {
 				MediaType mt = r.getMediaType();
 				if (mt.getType().equals("*"))

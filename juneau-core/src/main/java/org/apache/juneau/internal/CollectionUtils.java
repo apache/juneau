@@ -52,4 +52,36 @@ public class CollectionUtils {
 			l.add(o);
 		return l;
 	}
+
+	/**
+	 * Adds the contents of one list to the other in reverse order.
+	 * <p>
+	 * i.e. add values from 2nd list from end-to-start order to the end of the 1st list.
+	 *
+	 * @param list The list to append to.
+	 * @param append Contains the values to append to the list.
+	 * @return The same list.
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static List<?> addReverse(List list, List append) {
+		for (ListIterator i = append.listIterator(append.size()); i.hasPrevious();)
+			list.add(i.previous());
+		return list;
+	}
+
+	/**
+	 * Adds the contents of the array to the list in reverse order.
+	 * <p>
+	 * i.e. add values from the array from end-to-start order to the end of the list.
+	 *
+	 * @param list The list to append to.
+	 * @param append Contains the values to append to the list.
+	 * @return The same list.
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static List<?> addReverse(List list, Object[] append) {
+		for (int i = append.length - 1; i >= 0; i--)
+			list.add(append[i]);
+		return list;
+	}
 }

@@ -10,12 +10,13 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau;
+package org.apache.juneau.https;
 
 import static org.junit.Assert.*;
 
 import java.util.*;
 
+import org.apache.juneau.http.*;
 import org.apache.juneau.json.*;
 import org.junit.*;
 import org.junit.runner.*;
@@ -35,13 +36,13 @@ public class MediaRangeTest {
 			{ "3", "text/*,text/*", "['text/*']" },
 			{ "4", "*/text,text/*", "['text/*','*/text']" },
 			{ "5", "text/*,*/text", "['text/*','*/text']" },
-			{ "6", "A;q=0.9,B;q=0.1", "['a;q=0.9','b;q=0.1']" },
-			{ "7", "B;q=0.9,A;q=0.1", "['b;q=0.9','a;q=0.1']" },
-			{ "8", "A,B;q=0.9,C;q=0.1,D;q=0", "['a','b;q=0.9','c;q=0.1','d;q=0.0']" },
-			{ "9", "D;q=0,C;q=0.1,B;q=0.9,A", "['a','b;q=0.9','c;q=0.1','d;q=0.0']" },
-			{ "10", "A;q=1,B;q=0.9,C;q=0.1,D;q=0", "['a','b;q=0.9','c;q=0.1','d;q=0.0']" },
-			{ "11", "D;q=0,C;q=0.1,B;q=0.9,A;q=1", "['a','b;q=0.9','c;q=0.1','d;q=0.0']" },
-			{ "12", "A;q=0,B;q=0.1,C;q=0.9,D;q=1", "['d','c;q=0.9','b;q=0.1','a;q=0.0']" },
+			{ "6", "a;q=0.9,b;q=0.1", "['a;q=0.9','b;q=0.1']" },
+			{ "7", "b;q=0.9,a;q=0.1", "['b;q=0.9','a;q=0.1']" },
+			{ "8", "a,b;q=0.9,c;q=0.1,d;q=0", "['a','b;q=0.9','c;q=0.1','d;q=0.0']" },
+			{ "9", "d;q=0,c;q=0.1,b;q=0.9,a", "['a','b;q=0.9','c;q=0.1','d;q=0.0']" },
+			{ "10", "a;q=1,b;q=0.9,c;q=0.1,d;q=0", "['a','b;q=0.9','c;q=0.1','d;q=0.0']" },
+			{ "11", "d;q=0,c;q=0.1,b;q=0.9,a;q=1", "['a','b;q=0.9','c;q=0.1','d;q=0.0']" },
+			{ "12", "a;q=0,b;q=0.1,c;q=0.9,d;q=1", "['d','c;q=0.9','b;q=0.1','a;q=0.0']" },
 			{ "13", "*", "['*']" },
 			{ "14", "", "['*/*']" },
 			{ "15", null, "['*/*']" },
@@ -59,7 +60,7 @@ public class MediaRangeTest {
 	
 	@Test
 	public void test() {
-		MediaRange[] r = MediaRange.parse(mediaRange);
+		MediaTypeRange[] r = MediaTypeRange.parse(mediaRange);
 		assertEquals(label + " failed", expected, JsonSerializer.DEFAULT_LAX.toString(r));
 	}
 }

@@ -15,7 +15,7 @@ package org.apache.juneau.encoders;
 import java.util.*;
 import java.util.concurrent.*;
 
-import org.apache.juneau.*;
+import org.apache.juneau.http.*;
 
 /**
  * Represents the group of {@link Encoder encoders} keyed by codings.
@@ -53,9 +53,12 @@ import org.apache.juneau.*;
 public final class EncoderGroup {
 
 	// Maps Accept-Encoding headers to matching encoders.
-	private final Map<String,EncoderMatch> cache = new ConcurrentHashMap<String,EncoderMatch>();
+	private final ConcurrentHashMap<String,EncoderMatch> cache = new ConcurrentHashMap<String,EncoderMatch>();
 
-	final Encoder[] encoders;
+	private final String[] encodings;
+	private final List<String> encodingsList;
+	private final Encoder[] encodingsEncoders;
+	private final List<Encoder> encoders;
 
 	/**
 	 * Constructor
@@ -63,9 +66,21 @@ public final class EncoderGroup {
 	 * @param encoders The encoders to add to this group.
 	 */
 	public EncoderGroup(Encoder[] encoders) {
-		this.encoders = Arrays.copyOf(encoders, encoders.length);
-	}
+		this.encoders = Collections.unmodifiableList(new ArrayList<Encoder>(Arrays.asList(encoders)));
 
+		List<String> lc = new ArrayList<String>();
+		List<Encoder> l = new ArrayList<Encoder>();
+		for (Encoder e : encoders) {
+			for (String c: e.getCodings()) {
+				lc.add(c);
+				l.add(e);
+			}
+		}
+
+		this.encodings = lc.toArray(new String[lc.size()]);
+		this.encodingsList = Collections.unmodifiableList(lc);
+		this.encodingsEncoders = l.toArray(new Encoder[l.size()]);
+	}
 
 	/**
 	 * Returns the coding string for the matching encoder that can handle the specified <code>Accept-Encoding</code>
@@ -79,62 +94,47 @@ public final class EncoderGroup {
 	 * @return The coding value (e.g. <js>"gzip"</js>).
 	 */
 	public EncoderMatch getEncoderMatch(String acceptEncoding) {
-		if (encoders.length == 0)
-			return null;
-
 		EncoderMatch em = cache.get(acceptEncoding);
 		if (em != null)
 			return em;
 
-		MediaRange[] ae = MediaRange.parse(acceptEncoding);
+		AcceptEncoding ae = AcceptEncoding.forString(acceptEncoding);
+		int match = ae.findMatch(encodings);
 
-		if (ae.length == 0)
-			ae = MediaRange.parse("*/*");
-
-		Map<Float,EncoderMatch> m = null;
-
-		for (MediaRange a : ae) {
-			for (Encoder e : encoders) {
-				for (String c : e.getCodings()) {
-					MediaType mt = MediaType.forString(c);
-					float q = a.matches(mt);
-					if (q == 1) {
-						em = new EncoderMatch(mt, e);
-						cache.put(acceptEncoding, em);
-						return em;
-					} else if (q > 0) {
-						if (m == null)
-							m = new TreeMap<Float,EncoderMatch>(Collections.reverseOrder());
-						m.put(q, new EncoderMatch(mt, e));
-					}
-				}
-			}
+		if (match >= 0) {
+			em = new EncoderMatch(encodings[match], encodingsEncoders[match]);
+			cache.putIfAbsent(acceptEncoding, em);
 		}
-		return (m == null ? null : m.values().iterator().next());
+
+		return cache.get(acceptEncoding);
 	}
 
 	/**
 	 * Returns the encoder registered with the specified coding (e.g. <js>"gzip"</js>).
 	 *
-	 * @param coding The coding string.
+	 * @param encoding The coding string.
 	 * @return The encoder, or <jk>null</jk> if encoder isn't registered with that coding.
 	 */
-	public Encoder getEncoder(String coding) {
-		EncoderMatch em = getEncoderMatch(coding);
+	public Encoder getEncoder(String encoding) {
+		EncoderMatch em = getEncoderMatch(encoding);
 		return (em == null ? null : em.getEncoder());
 	}
 
 	/**
 	 * Returns the set of codings supported by all encoders in this group.
 	 *
-	 * @return The set of codings supported by all encoders in this group.  Never <jk>null</jk>.
+	 * @return An unmodifiable list of codings supported by all encoders in this group.  Never <jk>null</jk>.
 	 */
 	public List<String> getSupportedEncodings() {
-		List<String> l = new ArrayList<String>();
-		for (Encoder e : encoders)
-			for (String enc : e.getCodings())
-				if (! l.contains(enc))
-					l.add(enc);
-		return l;
+		return encodingsList;
+	}
+
+	/**
+	 * Returns the encoders in this group.
+	 *
+	 * @return An unmodifiable list of encoders in this group.
+	 */
+	public List<Encoder> getEncoders() {
+		return encoders;
 	}
 }

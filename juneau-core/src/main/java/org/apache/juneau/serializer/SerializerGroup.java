@@ -16,7 +16,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
+import org.apache.juneau.http.*;
 
 /**
  * Represents a group of {@link Serializer Serializers} that can be looked up by media type.
@@ -61,9 +61,12 @@ import org.apache.juneau.internal.*;
 public final class SerializerGroup {
 
 	// Maps Accept headers to matching serializers.
-	private final Map<String,SerializerMatch> cache = new ConcurrentHashMap<String,SerializerMatch>();
+	private final ConcurrentHashMap<String,SerializerMatch> cache = new ConcurrentHashMap<String,SerializerMatch>();
 
-	final Serializer[] serializers;
+	private final MediaType[] mediaTypes;
+	private final List<MediaType> mediaTypesList;
+	private final Serializer[] mediaTypeSerializers;
+	private final List<Serializer> serializers;
 	private final PropertyStore propertyStore;
 
 	/**
@@ -77,7 +80,20 @@ public final class SerializerGroup {
 	 */
 	public SerializerGroup(PropertyStore propertyStore, Serializer[] serializers) {
 		this.propertyStore = PropertyStore.create(propertyStore);
-		this.serializers = ArrayUtils.reverse(serializers);
+		this.serializers = Collections.unmodifiableList(new ArrayList<Serializer>(Arrays.asList(serializers)));
+
+		List<MediaType> lmt = new ArrayList<MediaType>();
+		List<Serializer> l = new ArrayList<Serializer>();
+		for (Serializer s : serializers) {
+			for (MediaType m: s.getMediaTypes()) {
+				lmt.add(m);
+				l.add(s);
+			}
+		}
+
+		this.mediaTypes = lmt.toArray(new MediaType[lmt.size()]);
+		this.mediaTypesList = Collections.unmodifiableList(lmt);
+		this.mediaTypeSerializers = l.toArray(new Serializer[l.size()]);
 	}
 
 	/**
@@ -116,30 +132,14 @@ public final class SerializerGroup {
 		if (sm != null)
 			return sm;
 
-		MediaRange[] mr = MediaRange.parse(acceptHeader);
-		if (mr.length == 0)
-			mr = MediaRange.parse("*/*");
-
-		Map<Float,SerializerMatch> m = null;
-
-		for (MediaRange a : mr) {
-			for (Serializer s : serializers) {
-				for (MediaType a2 : s.getMediaTypes()) {
-					float q = a.matches(a2);
-					if (q == 1) {
-						sm = new SerializerMatch(a2, s);
-						cache.put(acceptHeader, sm);
-						return sm;
-					} else if (q > 0) {
-						if (m == null)
-							m = new TreeMap<Float,SerializerMatch>(Collections.reverseOrder());
-						m.put(q, new SerializerMatch(a2, s));
-					}
-				}
-			}
+		Accept a = Accept.forString(acceptHeader);
+		int match = a.findMatch(mediaTypes);
+		if (match >= 0) {
+			sm = new SerializerMatch(mediaTypes[match], mediaTypeSerializers[match]);
+			cache.putIfAbsent(acceptHeader, sm);
 		}
 
-		return (m == null ? null : m.values().iterator().next());
+		return cache.get(acceptHeader);
 	}
 
 	/**
@@ -180,15 +180,10 @@ public final class SerializerGroup {
 	 * <p>
 	 * Entries are ordered in the same order as the serializers in the group.
 	 *
-	 * @return The list of media types.
+	 * @return An unmodifiable list of media types.
 	 */
 	public List<MediaType> getSupportedMediaTypes() {
-		List<MediaType> l = new ArrayList<MediaType>();
-		for (Serializer s : serializers)
-			for (MediaType mt : s.getMediaTypes())
-				if (! l.contains(mt))
-					l.add(mt);
-		return l;
+		return mediaTypesList;
 	}
 
 	/**
@@ -203,11 +198,10 @@ public final class SerializerGroup {
 
 	/**
 	 * Returns a copy of the serializers in this group.
-	 * This method returns a new array each time so is somewhat expensive.
 	 *
-	 * @return A new array containing the serializers in this group.
+	 * @return An unmodifiable list of serializers in this group.
 	 */
-	public Serializer[] getSerializers() {
-		return ArrayUtils.reverse(serializers);
+	public List<Serializer> getSerializers() {
+		return serializers;
 	}
 }

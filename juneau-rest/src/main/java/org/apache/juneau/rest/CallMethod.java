@@ -32,6 +32,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.html.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
@@ -327,6 +328,12 @@ class CallMethod implements Comparable<CallMethod>  {
 				_paramType = REQ;
 			else if (isClass && isParentClass(HttpServletResponse.class, (Class<?>)type))
 				_paramType = RES;
+			else if (isClass && isParentClass(Accept.class, (Class<?>)type))
+				_paramType = ACCEPT;
+			else if (isClass && isParentClass(AcceptEncoding.class, (Class<?>)type))
+				_paramType = ACCEPTENCODING;
+			else if (isClass && isParentClass(ContentType.class, (Class<?>)type))
+				_paramType = CONTENTTYPE;
 			else for (Annotation a : annotations) {
 				if (a instanceof Path) {
 					Path a2 = (Path)a;
@@ -441,18 +448,24 @@ class CallMethod implements Comparable<CallMethod>  {
 				case PATHREMAINDER: return req.getPathRemainder();
 				case PROPS:         return res.getProperties();
 				case MESSAGES:      return req.getResourceBundle();
+				case ACCEPT:        return req.getAcceptHeader();
+				case ACCEPTENCODING:return req.getAcceptEncodingHeader();
+				case CONTENTTYPE:   return req.getContentTypeHeader();
 				default:            return null;
 			}
 		}
 	}
 
 	static enum ParamType {
-		REQ, RES, PATH, BODY, HEADER, METHOD, FORMDATA, QUERY, HASFORMDATA, HASQUERY, PATHREMAINDER, PROPS, MESSAGES;
+		REQ, RES, PATH, BODY, HEADER, METHOD, FORMDATA, QUERY, HASFORMDATA, HASQUERY, PATHREMAINDER, PROPS, MESSAGES, ACCEPT, ACCEPTENCODING, CONTENTTYPE;
 
 		private String getSwaggerParameterType() {
 			switch(this) {
 				case PATH: return "path";
-				case HEADER: return "header";
+				case HEADER:
+				case ACCEPT:
+				case ACCEPTENCODING:
+				case CONTENTTYPE: return "header";
 				case FORMDATA: return "formData";
 				case QUERY: return "query";
 				case BODY: return "body";

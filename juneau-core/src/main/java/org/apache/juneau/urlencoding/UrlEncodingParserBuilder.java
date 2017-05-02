@@ -17,6 +17,7 @@ import static org.apache.juneau.uon.UonParserContext.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.uon.*;
 
 /**

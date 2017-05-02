@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.parser;
 
-import org.apache.juneau.*;
+import org.apache.juneau.http.*;
 
 /**
  * Represents a parser and media type that matches an HTTP <code>Content-Type</code> header value.

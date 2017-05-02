@@ -16,6 +16,7 @@ import java.io.*;
 import java.text.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.http.*;
 
 /**
  * An encapsulated MessageFormat-style string and arguments.

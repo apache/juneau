@@ -437,14 +437,13 @@ public class TestUtils {
 	 * If it's a byte[], convert it to a UTF-8 encoded String.
 	 */
 	public static String toString(Object o) {
+		if (o == null)
+			return null;
 		if (o instanceof String)
 			return (String)o;
-		try {
-			return new String((byte[])o, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-		return null;
+		if (o instanceof byte[])
+			return new String((byte[])o, IOUtils.UTF8);
+		return o.toString();
 	}
 
 	private static ThreadLocal<TimeZone> systemTimeZone = new ThreadLocal<TimeZone>();
@@ -497,9 +496,9 @@ public class TestUtils {
 	/**
 	 * Same as {@link Assert#assertEquals(String,String,String) except takes in a MessageFormat-style message.
 	 */
-	public static void assertEquals(String expected, String actual, String msg, Object...args) {
-		if (! StringUtils.isEquals(expected, actual))
-			throw new ComparisonFailure(MessageFormat.format(msg, args), expected, actual);			
+	public static void assertEquals(Object expected, Object actual, String msg, Object...args) {
+		if (! isEquals(expected, actual))
+			throw new ComparisonFailure(MessageFormat.format(msg, args), toString(expected), toString(actual));			
 	}
 	
 	/**
@@ -518,4 +517,11 @@ public class TestUtils {
 		throw new AssertionError(new StringMessage("Expected type {0} but was {1}", type, (o == null ? null : o.getClass())));
 	}
 	
+	private static boolean isEquals(Object o1, Object o2) {
+		if (o1 == null)
+			return o2 == null;
+		if (o2 == null)
+			return false;
+		return o1.equals(o2);
+	}
 }

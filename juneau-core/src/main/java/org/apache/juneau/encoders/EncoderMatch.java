@@ -12,18 +12,16 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.encoders;
 
-import org.apache.juneau.*;
-
 /**
  * Represents a encoder and encoding that matches an HTTP <code>Accept-Encoding</code> header value.
  */
 public final class EncoderMatch {
 
-	private final MediaType mediaType;
+	private final String encoding;
 	private final Encoder encoder;
 
-	EncoderMatch(MediaType mediaType, Encoder encoder) {
-		this.mediaType = mediaType;
+	EncoderMatch(String encoding, Encoder encoder) {
+		this.encoding = encoding;
 		this.encoder = encoder;
 	}
 
@@ -33,7 +31,7 @@ public final class EncoderMatch {
 	 * @return The encoding of the match.
 	 */
 	public String getEncoding() {
-		return mediaType.getType();
+		return encoding;
 	}
 
 	/**

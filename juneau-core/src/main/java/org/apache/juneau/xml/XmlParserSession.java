@@ -23,6 +23,7 @@ import javax.xml.stream.*;
 import javax.xml.stream.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.xml.annotation.*;

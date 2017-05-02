@@ -14,8 +14,8 @@ package org.apache.juneau.dto.swagger;
 
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.http.*;
 
 /**
  * Describes a single API operation on a path.

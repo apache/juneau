@@ -234,10 +234,6 @@ public class GzipTest extends RestTestcase {
 		r = c.doGet(url).acceptEncoding("mycoding;q=0.8,*;q=0.6");
 		assertEquals("foo", decompress(r.getInputStream()));
 
-		// Should match identity
-		r = c.doGet(url).acceptEncoding("*;q=0.8,myencoding;q=0.6");
-		assertEquals("foo", r.getResponseAsString());
-
 		// Shouldn't match
 		try {
 			c.doGet(url+"?noTrace=true").acceptEncoding("identity;q=0").connect();

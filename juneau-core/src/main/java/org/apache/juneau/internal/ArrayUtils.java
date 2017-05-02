@@ -271,6 +271,39 @@ public final class ArrayUtils {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if the specified array contains the specified element
+	 * 	using the {@link String#equals(Object)} method.
+	 *
+	 * @param element The element to check for.
+	 * @param array The array to check.
+	 * @return <jk>true</jk> if the specified array contains the specified element,
+	 * 	<jk>false</jk> if the array or element is <jk>null</jk>.
+	 */
+	public static boolean contains(String element, String[] array) {
+		return indexOf(element, array) != -1;
+	}
+
+	/**
+	 * Returns the index position of the element in the specified array
+	 * 	using the {@link String#equals(Object)} method.
+	 *
+	 * @param element The element to check for.
+	 * @param array The array to check.
+	 * @return The index position of the element in the specified array, or
+	 * 	<code>-1</code> if the array doesn't contain the element, or the array or element is <jk>null</jk>.
+	 */
+	public static int indexOf(String element, String[] array) {
+		if (element == null)
+			return -1;
+		if (array == null)
+			return -1;
+		for (int i = 0; i < array.length; i++)
+			if (element.equals(array[i]))
+				return i;
+		return -1;
+	}
+
+	/**
 	 * Converts a primitive wrapper array (e.g. <code>Integer[]</code>) to a primitive array (e.g. <code><jk>int</jk>[]</code>).
 	 *
 	 * @param o The array to convert.  Must be a primitive wrapper array.

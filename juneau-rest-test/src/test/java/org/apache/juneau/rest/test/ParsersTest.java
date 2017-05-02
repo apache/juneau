@@ -108,7 +108,7 @@ public class ParsersTest extends RestTestcase {
 		String url = URL + "/testParserWithDifferentMediaTypes";
 
 		String r = client.doPut(url, "test4").contentType("text/a").getResponseAsString();
-		assertEquals("text/d - test4", r);
+		assertEquals("text/a - test4", r);
 
 		r = client.doPut(url, "test4").contentType("text/d").getResponseAsString();
 		assertEquals("text/d - test4", r);

@@ -42,7 +42,7 @@ import org.apache.juneau.transform.*;
  * </ul>
  */
 @Consumes("text/plain")
-public final class PlainTextParser extends ReaderParser {
+public class PlainTextParser extends ReaderParser {
 
 	/** Default parser, all default settings.*/
 	public static final PlainTextParser DEFAULT = new PlainTextParser(PropertyStore.create());

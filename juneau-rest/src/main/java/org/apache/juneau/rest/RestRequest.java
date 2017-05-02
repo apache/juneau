@@ -32,6 +32,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.encoders.Encoder;
+import org.apache.juneau.http.*;
 import org.apache.juneau.ini.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
@@ -352,25 +353,30 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Returns the <code>Content-Type</code> header value on the request, stripped
-	 * 	of any parameters such as <js>";charset=X"</js>.
-	 * <p>
-	 * Example: <js>"text/json"</js>.
-	 * <p>
-	 * If the content type is not specified, and the content is specified via a
-	 * 	<code>&amp;body</code> query parameter, the content type is assumed to be
-	 * 	<js>"text/uon"</js>.  Otherwise, the content type is assumed to be <js>"text/json"</js>.
+	 * Returns the <code>Accept</code> header on the request.
 	 *
-	 * @return The <code>Content-Type</code> media-type header value on the request.
+	 * @return The parsed <code>Accept</code> header on the request, or <jk>null</jk> if not found.
 	 */
-	public MediaType getMediaType() {
-		String cm = getHeader("Content-Type");
-		if (cm == null) {
-			if (body != null)
-				return MediaType.UON;
-			return MediaType.JSON;
-		}
-		return MediaType.forString(cm);
+	public Accept getAcceptHeader() {
+		return getHeader("Accept", Accept.class);
+	}
+
+	/**
+	 * Returns the <code>Content-Type</code> header on the request.
+	 *
+	 * @return The parsed <code>Content-Type</code> header on the request, or <jk>null</jk> if not found.
+	 */
+	public ContentType getContentTypeHeader() {
+		return getHeader("Content-Type", ContentType.class);
+	}
+
+	/**
+	 * Returns the <code>Accept-Encoding</code> header on the request.
+	 *
+	 * @return The parsed <code>Accept-Encoding</code> header on the request, or <jk>null</jk> if not found.
+	 */
+	public AcceptEncoding getAcceptEncodingHeader() {
+		return getHeader("Accept-Encoding", AcceptEncoding.class);
 	}
 
 	/**
@@ -431,7 +437,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	public Locale getLocale() {
 		String h = getOverriddenHeader("Accept-Language");
 		if (h != null) {
-			MediaRange[] mr = MediaRange.parse(h);
+			MediaTypeRange[] mr = MediaTypeRange.parse(h);
 			if (mr.length > 0)
 				return toLocale(mr[0].getMediaType().getType());
 		}
@@ -442,10 +448,10 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	public Enumeration<Locale> getLocales() {
 		String h = getOverriddenHeader("Accept-Language");
 		if (h != null) {
-			MediaRange[] mr = MediaRange.parse(h);
+			MediaTypeRange[] mr = MediaTypeRange.parse(h);
 			if (mr.length > 0) {
 				List<Locale> l = new ArrayList<Locale>(mr.length);
-				for (MediaRange r : mr)
+				for (MediaTypeRange r : mr)
 					l.add(toLocale(r.getMediaType().getType()));
 				return enumeration(l);
 			}
@@ -1726,7 +1732,13 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * Includes the matching media type.
 	 */
 	public ParserMatch getParserMatch() {
-		MediaType mediaType = getMediaType();
+		MediaType mediaType = getContentTypeHeader();
+		if (mediaType == null) {
+			if (body != null)
+				mediaType = MediaType.UON;
+			else
+				mediaType = MediaType.JSON;
+		}
 		ParserMatch pm = parserGroup.getParserMatch(mediaType);
 
 		// If no patching parser for URL-encoding, use the one defined on the servlet.

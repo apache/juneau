@@ -577,34 +577,30 @@
 			The method can contain any of the following parameters in any order:
 		</p>
 		<ul class='spaced-list'>
-			<li>Parameter of type {@link org.apache.juneau.rest.RestRequest}
-			<li>Parameter of type {@link javax.servlet.http.HttpServletRequest}
-			<li>Parameter of type {@link org.apache.juneau.rest.RestResponse}
-			<li>Parameter of type {@link javax.servlet.http.HttpServletResponse}
-			<li>Parameters annotated with {@link org.apache.juneau.rest.annotation.Path @Path}
-				<br>These match variables in matched URL path patterns.
-			<li>Parameters annotated with with {@link org.apache.juneau.rest.annotation.FormData @FormData}
-				<br>These denote multipart form post parameter values.
-			<li>Parameters annotated with {@link org.apache.juneau.rest.annotation.HasFormData @HasFormData}
-				<br>Similar to <ja>@FormData</ja>, but resolves to a simple boolean <jk>true/false</jk> denoting whether the form data parameter exists.
-			<li>Parameters annotated with {@link org.apache.juneau.rest.annotation.Query @Query} 
-				<br>These denote query parameters.
-				<br>Using this prevents the HTTP body from being processed as a URL-Encoded form post.
-			<li>Parameters annotated with {@link org.apache.juneau.rest.annotation.HasQuery @HasQuery}
-				<br>Similar to <ja>@Query</ja>, but resolves to a simple boolean <jk>true/false</jk> denoting whether the query parameter exists.
-			<li>Parameters annotated with {@link org.apache.juneau.rest.annotation.Header @Header}
-				<br>These denote header values.
-			<li>Parameter annotated with {@link org.apache.juneau.rest.annotation.Method @Method} 
-				<br>This denotes the HTTP method name.
-			<li>Parameter annotated with {@link org.apache.juneau.rest.annotation.PathRemainder @PathRemainder}
-				<br>This denotes the path remainder value after path pattern match.
-			<li>Parameter annotated with {@link org.apache.juneau.rest.annotation.Body @Body} 
-				<br>This denotes the HTTP content parsed as a POJO.
-				<br>The type can be any parsable POJO type as defined in <a class='doclink' href='../../../../overview-summary.html#Core.PojoCategories'>POJO Categories</a>
-			<li>Parameter annotated with {@link org.apache.juneau.rest.annotation.Messages @Messages} 
-				<br>This gives you access to the resource bundle for the servlet localized to the language on the request.
-			<li>Parameter annotated with {@link org.apache.juneau.rest.annotation.Properties @Properties} 
-				<br>This gives you access to the serializer/parser/servlet properties so they can be read or altered on the request.
+			<li>Parameters of the following class types:
+				<ul>
+					<li>{@link org.apache.juneau.rest.RestRequest} - The request object.
+					<li>{@link javax.servlet.http.HttpServletRequest} - The superclass of <code>RestRequest</code>.
+					<li>{@link org.apache.juneau.rest.RestResponse} - The response object.
+					<li>{@link javax.servlet.http.HttpServletResponse} - The superclass of <code>RestResponse</code>.
+					<li>{@link org.apache.juneau.http.Accept} - The parsed <code>Accept</code> header.
+					<li>{@link org.apache.juneau.http.AcceptEncoding} - The parsed <code>Accept-Encoding</code> header.
+					<li>{@link org.apache.juneau.http.ContentType} - The parsed <code>Content-Type</code> header.
+				</ul>
+			<li>Annotated parameters:
+				<ul>
+					<li>{@link org.apache.juneau.rest.annotation.Path @Path} - Variables in matched URL path patterns.
+					<li>{@link org.apache.juneau.rest.annotation.FormData @FormData} - Multipart form post parameter values.
+					<li>{@link org.apache.juneau.rest.annotation.HasFormData @HasFormData} - Denotes whether the form data parameter exists.
+					<li>{@link org.apache.juneau.rest.annotation.Query @Query} - Query parameters.  Using this prevents the HTTP body from being processed as a URL-Encoded form post.
+					<li>{@link org.apache.juneau.rest.annotation.HasQuery @HasQuery} - Denotes whether the query parameter exists.
+					<li>{@link org.apache.juneau.rest.annotation.Header @Header} - A header value.
+					<li>{@link org.apache.juneau.rest.annotation.Method @Method} - The HTTP method name. 
+					<li>{@link org.apache.juneau.rest.annotation.PathRemainder @PathRemainder} - The remainder value after path pattern match.
+					<li>{@link org.apache.juneau.rest.annotation.Body @Body} - The HTTP content parsed as a POJO.
+					<li>{@link org.apache.juneau.rest.annotation.Messages @Messages} - The resource bundle for the servlet localized to the language on the request.
+					<li>{@link org.apache.juneau.rest.annotation.Properties @Properties} - The serializer/parser/servlet properties so they can be read or altered on the request.
+				</ul>
 		</ul>
 		<p class='bcode'>
 	<jc>// Example GET request using annotated attributes</jc>

@@ -13,11 +13,13 @@
 package org.apache.juneau.parser;
 
 import static org.apache.juneau.BeanContext.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.parser.ParserContext.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.http.*;
 
 /**
  * Builder class for creating instances of {@link ParserGroup}.
@@ -52,7 +54,8 @@ public class ParserGroupBuilder {
 	 * @param copyFrom The parser group that we're copying settings and parsers from.
 	 */
 	public ParserGroupBuilder(ParserGroup copyFrom) {
-		this.parsers = new ArrayList<Object>(Arrays.asList(copyFrom.parsers));
+		this.parsers = new ArrayList<Object>();
+		addReverse(parsers, copyFrom.getParsers());
 		this.propertyStore = copyFrom.createPropertyStore();
 	}
 
@@ -63,7 +66,7 @@ public class ParserGroupBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public ParserGroupBuilder append(Class<?>...p) {
-		parsers.addAll(Arrays.asList(p));
+		addReverse(parsers, p);
 		return this;
 	}
 
@@ -74,7 +77,7 @@ public class ParserGroupBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public ParserGroupBuilder append(Parser...p) {
-		parsers.addAll(Arrays.asList(p));
+		addReverse(parsers, p);
 		return this;
 	}
 
@@ -85,7 +88,7 @@ public class ParserGroupBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public ParserGroupBuilder append(List<Parser> p) {
-		parsers.addAll(p);
+		addReverse(parsers, p);
 		return this;
 	}
 
@@ -117,6 +120,7 @@ public class ParserGroupBuilder {
 				throw new RuntimeException("Could not instantiate parser " + c.getName(), e);
 			}
 		}
+		Collections.reverse(l);
 		return new ParserGroup(propertyStore, l.toArray(new Parser[l.size()]));
 	}
 
