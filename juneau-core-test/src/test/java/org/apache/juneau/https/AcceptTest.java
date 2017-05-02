@@ -42,7 +42,6 @@ public class AcceptTest {
 			{ "SimpleNoMatch-2", "text/jso", "['text/json']", -1 },
 			{ "SimpleNoMatch-3", "text/json", "['application/json']", -1 },
 			{ "SimpleNoMatch-4", "text/json", "[]", -1 },
-			{ "SimpleNoMatch-5", null, "['text/json']", -1 },
 			
 			// Meta-character matches
 			{ "MetaMatch-1", "text/*", "['text/a','text/b+c','text/b+d+e']", 2 },

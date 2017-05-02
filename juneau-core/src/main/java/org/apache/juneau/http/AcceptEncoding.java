@@ -80,7 +80,7 @@ import org.apache.juneau.internal.*;
  */
 public final class AcceptEncoding {
 
-	private static final boolean nocache = Boolean.getBoolean("juneau.nocache");
+	private static final boolean nocache = Boolean.getBoolean("juneau.http.AcceptEncoding.nocache");
 	private static final ConcurrentHashMap<String,AcceptEncoding> cache = new ConcurrentHashMap<String,AcceptEncoding>();
 
 	private final TypeRange[] typeRanges;
@@ -90,19 +90,25 @@ public final class AcceptEncoding {
 	 * Returns a parsed <code>Accept-Encoding</code> header.
 	 *
 	 * @param s The <code>Accept-Encoding</code> header string.
-	 * @return The parsed <code>Accept-Encoding</code> header.
+	 * @return The parsed <code>Accept-Encoding</code> header, or <jk>null</jk> if the string was null.
 	 */
 	public static AcceptEncoding forString(String s) {
 		if (s == null)
-			s = "null";
-		AcceptEncoding a = cache.get(s);
-		if (a == null) {
+			return null;
+
+		// Prevent OOM in case of DDOS
+		if (cache.size() > 1000)
+			cache.clear();
+
+		while (true) {
+			AcceptEncoding a = cache.get(s);
+			if (a != null)
+				return a;
 			a = new AcceptEncoding(s);
 			if (nocache)
 				return a;
 			cache.putIfAbsent(s, a);
 		}
-		return cache.get(s);
 	}
 
 	private AcceptEncoding(String raw) {

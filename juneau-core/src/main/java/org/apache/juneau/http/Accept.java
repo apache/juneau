@@ -122,7 +122,7 @@ import org.apache.juneau.internal.*;
  */
 public final class Accept {
 
-	private static final boolean nocache = Boolean.getBoolean("juneau.nocache");
+	private static final boolean nocache = Boolean.getBoolean("juneau.http.Accept.nocache");
 	private static final ConcurrentHashMap<String,Accept> cache = new ConcurrentHashMap<String,Accept>();
 
 	private final MediaTypeRange[] mediaRanges;
@@ -132,19 +132,25 @@ public final class Accept {
 	 * Returns a parsed <code>Accept</code> header.
 	 *
 	 * @param s The <code>Accept</code> header string.
-	 * @return The parsed <code>Accept</code> header.
+	 * @return The parsed <code>Accept</code> header, or <jk>null</jk> if the string was null.
 	 */
 	public static Accept forString(String s) {
 		if (s == null)
-			s = "null";
-		Accept a = cache.get(s);
-		if (a == null) {
+			return null;
+
+		// Prevent OOM in case of DDOS
+		if (cache.size() > 1000)
+			cache.clear();
+
+		while (true) {
+			Accept a = cache.get(s);
+			if (a != null)
+				return a;
 			a = new Accept(s);
 			if (nocache)
 				return a;
 			cache.putIfAbsent(s, a);
 		}
-		return cache.get(s);
 	}
 
 	private Accept(String raw) {

@@ -34,26 +34,32 @@ import java.util.concurrent.*;
  */
 public class ContentType extends MediaType {
 
-	private static final boolean nocache = Boolean.getBoolean("juneau.nocache");
+	private static final boolean nocache = Boolean.getBoolean("juneau.http.ContentType.nocache");
 	private static final ConcurrentHashMap<String,ContentType> cache = new ConcurrentHashMap<String,ContentType>();
 
 	/**
 	 * Returns a parsed <code>Content-Type</code> header.
 	 *
 	 * @param s The <code>Content-Type</code> header string.
-	 * @return The parsed <code>Content-Type</code> header.
+	 * @return The parsed <code>Content-Type</code> header, or <jk>null</jk> if the string was null.
 	 */
 	public static ContentType forString(String s) {
 		if (s == null)
 			return null;
-		ContentType mt = cache.get(s);
-		if (mt == null) {
+
+		// Prevent OOM in case of DDOS
+		if (cache.size() > 1000)
+			cache.clear();
+
+		while (true) {
+			ContentType mt = cache.get(s);
+			if (mt != null)
+				return mt;
 			mt = new ContentType(s);
 			if (nocache)
 				return mt;
 			cache.putIfAbsent(s, mt);
 		}
-		return cache.get(s);
 	}
 
 	private ContentType(String s) {
