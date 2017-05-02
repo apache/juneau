@@ -49,6 +49,7 @@ public class BeanPropertyMeta {
 	private final Field field;                                // The bean property field (if it has one).
 	private final Method getter, setter;                      // The bean property getter and setter.
 	private final boolean isUri;                              // True if this is a URL/URI or annotated with @URI.
+	private final boolean isPropertyMap;
 
 	private final ClassMeta<?>
 		rawTypeMeta,                                           // The real class type of the bean property.
@@ -57,7 +58,7 @@ public class BeanPropertyMeta {
 	private final String[] properties;                        // The value of the @BeanProperty(properties) annotation.
 	private final PojoSwap swap;                              // PojoSwap defined only via @BeanProperty annotation.
 
-	private final MetadataMap extMeta = new MetadataMap();    // Extended metadata
+	private final MetadataMap extMeta;                        // Extended metadata
 	private final BeanRegistry beanRegistry;
 
 	private final Object overrideValue;                       // The bean property value (if it's an overridden delegate).
@@ -79,6 +80,7 @@ public class BeanPropertyMeta {
 		private BeanRegistry beanRegistry;
 		private Object overrideValue;
 		private BeanPropertyMeta delegateFor;
+		private MetadataMap extMeta = new MetadataMap();
 
 		Builder(BeanMeta<?> beanMeta, String name) {
 			this.beanMeta = beanMeta;
@@ -89,8 +91,6 @@ public class BeanPropertyMeta {
 		Builder(BeanMeta<?> beanMeta, String name, ClassMeta<?> rawTypeMeta, BeanRegistry beanRegistry) {
 			this(beanMeta, name);
 			this.rawTypeMeta = rawTypeMeta;
-			if (rawTypeMeta == null)
-				throw new RuntimeException("xxx");
 			this.typeMeta = rawTypeMeta;
 			this.beanRegistry = beanRegistry;
 		}
@@ -151,8 +151,8 @@ public class BeanPropertyMeta {
 					rawTypeMeta = f.resolveClassMeta(p, setter.getGenericParameterTypes()[0], typeVarImpls);
 				isUri |= (rawTypeMeta.isUri() || setter.isAnnotationPresent(org.apache.juneau.annotation.URI.class));
 				if (p != null) {
-				if (swap == null)
-					swap = getPropertyPojoSwap(p);
+					if (swap == null)
+						swap = getPropertyPojoSwap(p);
 					if (properties != null && ! p.properties().isEmpty())
 						properties = StringUtils.split(p.properties(), ',');
 					bdClasses.addAll(Arrays.asList(p.beanDictionary()));
@@ -164,14 +164,44 @@ public class BeanPropertyMeta {
 
 			this.beanRegistry = new BeanRegistry(beanContext, parentBeanRegistry, bdClasses.toArray(new Class<?>[0]));
 
+			boolean isAnyProperty = "*".equals(name);
+
 			// Do some annotation validation.
 			Class<?> c = rawTypeMeta.getInnerClass();
-			if (getter != null && ! isParentClass(getter.getReturnType(), c))
-				return false;
-			if (setter != null && ! isParentClass(setter.getParameterTypes()[0], c))
-				return false;
-			if (field != null && ! isParentClass(field.getType(), c))
-				return false;
+			if (getter != null) {
+				if (! isParentClass(getter.getReturnType(), c))
+					return false;
+				Class<?>[] pt = getter.getParameterTypes();
+				if (isAnyProperty) {
+					if (pt.length != 1)
+						return false;
+					if (! pt[0].equals(String.class))
+						return false;
+				}
+			}
+			if (setter != null) {
+				Class<?>[] pt = setter.getParameterTypes();
+				if (pt.length != (isAnyProperty ? 2 : 1))
+					return false;
+				if (isAnyProperty) {
+					if (pt[0].equals(String.class))
+						return false;
+					if (! isParentClass(pt[1], c))
+						return false;
+				} else {
+					if (! isParentClass(pt[0], c))
+						return false;
+				}
+			}
+			if (field != null) {
+				if (isAnyProperty) {
+					if (! isParentClass(field.getType(), Map.class))
+						return false;
+				} else {
+					if (! isParentClass(field.getType(), c))
+						return false;
+				}
+			}
 
 			if (typeMeta == null)
 				typeMeta = (swap != null ? swap.getSwapClassMeta(beanContext) : rawTypeMeta == null ? beanContext.object() : rawTypeMeta.getSerializedClassMeta());
@@ -247,6 +277,35 @@ public class BeanPropertyMeta {
 		this.beanRegistry = b.beanRegistry;
 		this.overrideValue = b.overrideValue;
 		this.delegateFor = b.delegateFor;
+		this.extMeta = b.extMeta;
+		this.isPropertyMap = false;
+	}
+
+	/**
+	 * Creates a BeanPropertyMeta for an "extras" property.
+	 * <p>
+	 * An extras property is one defined with <code><ja>@BeanProperty</ja>(name=<js>"*"</js>)</code>
+	 *
+	 * @param name The bean property name (e.g. the key if this is a Map field, or the value passed to the getter/setter as the property name).
+	 * @param b The real bean property.
+	 */
+	protected BeanPropertyMeta(String name, BeanPropertyMeta b) {
+		this.field = b.field;
+		this.getter = b.getter;
+		this.setter = b.setter;
+		this.isUri = false;
+		this.beanMeta = b.beanMeta;
+		this.beanContext = b.beanContext;
+		this.name = name;
+		this.rawTypeMeta = b.rawTypeMeta;
+		this.typeMeta = b.typeMeta;
+		this.properties = b.properties;
+		this.swap = b.swap;
+		this.beanRegistry = b.beanRegistry;
+		this.overrideValue = b.overrideValue;
+		this.delegateFor = b.delegateFor;
+		this.extMeta = b.extMeta;
+		this.isPropertyMap = true;
 	}
 
 	/**
@@ -381,10 +440,9 @@ public class BeanPropertyMeta {
 				throw new BeanRuntimeException(beanMeta.c, "Getter or public field not defined on property ''{0}''", name);
 
 			if (getter != null)
-				o = getter.invoke(bean, (Object[])null);
-
+				o = invokeGetter(bean);
 			else if (field != null)
-				o = field.get(bean);
+				o = invokeGetField(bean);
 
 			return toSerializedForm(m.getBeanSession(), o);
 
@@ -458,8 +516,8 @@ public class BeanPropertyMeta {
 				throw new BeanRuntimeException("Non-existent bean instance on bean.");
 			}
 
-				boolean isMap = rawTypeMeta.isMap();
-				boolean isCollection = rawTypeMeta.isCollection();
+			boolean isMap = rawTypeMeta.isMap();
+			boolean isCollection = rawTypeMeta.isCollection();
 
 			if (field == null && setter == null && ! (isMap || isCollection)) {
 				if ((value == null && beanContext.ignoreUnknownNullBeanProperties) || beanContext.ignorePropertiesWithoutSetters)
@@ -472,14 +530,14 @@ public class BeanPropertyMeta {
 			try {
 
 				Object r = beanContext.beanMapPutReturnsOldValue || isMap || isCollection ? get(m) : null;
-					Class<?> propertyClass = rawTypeMeta.getInnerClass();
+				Class<?> propertyClass = rawTypeMeta.getInnerClass();
 
 				if (value == null && (isMap || isCollection)) {
 					if (setter != null) {
-						setter.invoke(bean, new Object[] { null });
+						invokeSetter(bean, null);
 						return r;
 					} else if (field != null) {
-						field.set(bean, null);
+						invokeSetField(bean, null);
 						return r;
 					}
 					throw new BeanRuntimeException(beanMeta.c, "Cannot set property ''{0}'' to null because no setter or public field is defined", name);
@@ -500,7 +558,7 @@ public class BeanPropertyMeta {
 
 					// If the property type is abstract, then we either need to reuse the existing
 					// map (if it's not null), or try to assign the value directly.
-						if (! rawTypeMeta.canCreateNewInstance()) {
+					if (! rawTypeMeta.canCreateNewInstance()) {
 						if (propMap == null) {
 							if (setter == null && field == null)
 								throw new BeanRuntimeException(beanMeta.c, "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter or public field is defined, and the current value is null", name, propertyClass.getName(), findClassName(value));
@@ -514,9 +572,9 @@ public class BeanPropertyMeta {
 									}
 								}
 								if (setter != null)
-									setter.invoke(bean, valueMap);
+									invokeSetter(bean, valueMap);
 								else
-									field.set(bean, valueMap);
+									invokeSetField(bean, valueMap);
 								return r;
 							}
 							throw new BeanRuntimeException(beanMeta.c, "Cannot set property ''{0}'' of type ''{2}'' to object of type ''{2}'' because the assigned map cannot be converted to the specified type because the property type is abstract, and the property value is currently null", name, propertyClass.getName(), findClassName(value));
@@ -525,9 +583,9 @@ public class BeanPropertyMeta {
 						if (propMap == null) {
 							propMap = (Map)propertyClass.newInstance();
 							if (setter != null)
-								setter.invoke(bean, propMap);
+								invokeSetter(bean, propMap);
 							else if (field != null)
-								field.set(bean, propMap);
+								invokeSetField(bean, propMap);
 							else
 								throw new BeanRuntimeException(beanMeta.c, "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter or public field is defined on this property, and the existing property value is null", name, propertyClass.getName(), findClassName(value));
 						} else {
@@ -559,7 +617,7 @@ public class BeanPropertyMeta {
 
 					// If the property type is abstract, then we either need to reuse the existing
 					// collection (if it's not null), or try to assign the value directly.
-						if (! rawTypeMeta.canCreateNewInstance()) {
+					if (! rawTypeMeta.canCreateNewInstance()) {
 						if (propList == null) {
 							if (setter == null && field == null)
 								throw new BeanRuntimeException(beanMeta.c, "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter or public field is defined, and the current value is null", name, propertyClass.getName(), findClassName(value));
@@ -576,9 +634,9 @@ public class BeanPropertyMeta {
 										valueList = l;
 									}
 								if (setter != null)
-									setter.invoke(bean, valueList);
+									invokeSetter(bean, valueList);
 								else
-									field.set(bean, valueList);
+									invokeSetField(bean, valueList);
 								return r;
 							}
 							throw new BeanRuntimeException(beanMeta.c, "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because the assigned map cannot be converted to the specified type because the property type is abstract, and the property value is currently null", name, propertyClass.getName(), findClassName(value));
@@ -588,9 +646,9 @@ public class BeanPropertyMeta {
 						if (propList == null) {
 							propList = (Collection)propertyClass.newInstance();
 							if (setter != null)
-								setter.invoke(bean, propList);
+								invokeSetter(bean, propList);
 							else if (field != null)
-								field.set(bean, propList);
+								invokeSetField(bean, propList);
 							else
 								throw new BeanRuntimeException(beanMeta.c, "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter is defined on this property, and the existing property value is null", name, propertyClass.getName(), findClassName(value));
 						} else {
@@ -612,9 +670,9 @@ public class BeanPropertyMeta {
 						value = session.convertToType(value, rawTypeMeta);
 					}
 					if (setter != null)
-						setter.invoke(bean, new Object[] { value });
+						invokeSetter(bean, value);
 					else if (field != null)
-						field.set(bean, value);
+						invokeSetField(bean, value);
 				}
 
 				return r;
@@ -635,6 +693,38 @@ public class BeanPropertyMeta {
 		}
 	}
 
+	private Object invokeGetter(Object bean) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+		if (isPropertyMap)
+			return getter.invoke(bean, name);
+		return getter.invoke(bean);
+	}
+
+	private Object invokeSetter(Object bean, Object val) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+		if (isPropertyMap)
+			return setter.invoke(bean, name, val);
+		return setter.invoke(bean, val);
+	}
+
+	private Object invokeGetField(Object bean) throws IllegalArgumentException, IllegalAccessException {
+		if (isPropertyMap) {
+			Map m = (Map)field.get(bean);
+			if (m != null)
+				return m.get(name);
+			return null;
+		}
+		return field.get(bean);
+	}
+
+	private void invokeSetField(Object bean, Object val) throws IllegalArgumentException, IllegalAccessException {
+		if (isPropertyMap) {
+			Map m = (Map)field.get(bean);
+			if (m != null)
+				m.put(name, val);
+		} else {
+			field.set(bean, val);
+		}
+	}
+
 	/**
 	 * Sets an array field on this bean.
 	 * Works on both <code>Object</code> and primitive arrays.
@@ -648,9 +738,9 @@ public class BeanPropertyMeta {
 	protected void setArray(Object bean, List l) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
 		Object array = ArrayUtils.toArray(l, this.rawTypeMeta.getElementType().getInnerClass());
 		if (setter != null)
-			setter.invoke(bean, array);
+			invokeSetter(bean, array);
 		else if (field != null)
-			field.set(bean, array);
+			invokeSetField(bean, array);
 		else
 			throw new BeanRuntimeException(beanMeta.c, "Attempt to initialize array property ''{0}'', but no setter or field defined.", name);
 	}
@@ -692,9 +782,9 @@ public class BeanPropertyMeta {
 			if (isCollection) {
 				Collection c = null;
 				if (getter != null) {
-					c = (Collection)getter.invoke(bean, (Object[])null);
+					c = (Collection)invokeGetter(bean);
 				} else if (field != null) {
-					c = (Collection)field.get(bean);
+					c = (Collection)invokeGetField(bean);
 				} else {
 					throw new BeanRuntimeException(beanMeta.c, "Attempt to append to collection property ''{0}'', but no getter or field defined.", name);
 				}
@@ -712,9 +802,9 @@ public class BeanPropertyMeta {
 				c.add(v);
 
 				if (setter != null)
-					setter.invoke(bean, c);
+					invokeSetter(bean, c);
 				else if (field != null)
-					field.set(bean, c);
+					invokeSetField(bean, c);
 				else
 					throw new BeanRuntimeException(beanMeta.c, "Attempt to initialize collection property ''{0}'', but no setter or field defined.", name);
 
@@ -731,9 +821,9 @@ public class BeanPropertyMeta {
 					// Copy any existing array values into the temporary list.
 					Object oldArray;
 				if (getter != null)
-					oldArray = getter.invoke(bean, (Object[])null);
+					oldArray = invokeGetter(bean);
 				else if (field != null)
-					oldArray = field.get(bean);
+					oldArray = invokeGetField(bean);
 				else
 					throw new BeanRuntimeException(beanMeta.c, "Attempt to append to array property ''{0}'', but no getter or field defined.", name);
 					ArrayUtils.copyToList(oldArray, l);
@@ -786,9 +876,9 @@ public class BeanPropertyMeta {
 			if (isMap) {
 				Map map = null;
 				if (getter != null) {
-					map = (Map)getter.invoke(bean, (Object[])null);
+					map = (Map)invokeGetter(bean);
 				} else if (field != null) {
-					map = (Map)field.get(bean);
+					map = (Map)invokeGetField(bean);
 				} else {
 					throw new BeanRuntimeException(beanMeta.c, "Attempt to append to map property ''{0}'', but no getter or field defined.", name);
 				}
@@ -806,9 +896,9 @@ public class BeanPropertyMeta {
 				map.put(key, v);
 
 				if (setter != null)
-					setter.invoke(bean, map);
+					invokeSetter(bean, map);
 				else if (field != null)
-					field.set(bean, map);
+					invokeSetField(bean, map);
 				else
 					throw new BeanRuntimeException(beanMeta.c, "Attempt to initialize map property ''{0}'', but no setter or field defined.", name);
 
@@ -816,9 +906,9 @@ public class BeanPropertyMeta {
 
 				Object b = null;
 				if (getter != null) {
-					b = getter.invoke(bean, (Object[])null);
+					b = invokeGetter(bean);
 				} else if (field != null) {
-					b = field.get(bean);
+					b = invokeGetField(bean);
 				} else {
 					throw new BeanRuntimeException(beanMeta.c, "Attempt to append to bean property ''{0}'', but no getter or field defined.", name);
 				}
@@ -836,9 +926,9 @@ public class BeanPropertyMeta {
 				}
 
 				if (setter != null)
-					setter.invoke(bean, b);
+					invokeSetter(bean, b);
 				else if (field != null)
-					field.set(bean, b);
+					invokeSetField(bean, b);
 				else
 					throw new BeanRuntimeException(beanMeta.c, "Attempt to initialize bean property ''{0}'', but no setter or field defined.", name);
 			}

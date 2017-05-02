@@ -89,6 +89,7 @@ public class BeanMeta<T> {
 	// Other fields
 	final String typePropertyName;                                      // "_type" property actual name.
 	private final BeanPropertyMeta typeProperty;                        // "_type" mock bean property.
+	final BeanPropertyMeta extrasProperty;                              // "extras" property.
 	private final String dictionaryName;                                // The @Bean.typeName() annotation defined on this bean class.
 	final String notABeanReason;                                        // Readable string explaining why this class wasn't a bean.
 	final BeanRegistry beanRegistry;
@@ -114,6 +115,7 @@ public class BeanMeta<T> {
 		this.properties = b.properties == null ? null : Collections.unmodifiableMap(b.properties);
 		this.getterProps = Collections.unmodifiableMap(b.getterProps);
 		this.setterProps = Collections.unmodifiableMap(b.setterProps);
+		this.extrasProperty = b.extrasProperty;
 		this.typeVarImpls = b.typeVarImpls == null ? null : Collections.unmodifiableMap(b.typeVarImpls);
 		this.constructor = b.constructor;
 		this.constructorArgs = b.constructorArgs;
@@ -131,6 +133,8 @@ public class BeanMeta<T> {
 		Map<String,BeanPropertyMeta> properties;
 		Map<Method,String> getterProps = new HashMap<Method,String>();
 		Map<Method,String> setterProps = new HashMap<Method,String>();
+		BeanPropertyMeta extrasProperty;
+
 		Map<Class<?>,Class<?>[]> typeVarImpls;
 		Constructor<T> constructor;
 		String[] constructorArgs = new String[0];
@@ -346,8 +350,12 @@ public class BeanMeta<T> {
 				if (dictionaryName == null)
 					dictionaryName = findDictionaryName(this.classMeta);
 
-				for (Map.Entry<String,BeanPropertyMeta.Builder> e : normalProps.entrySet())
-					properties.put(e.getKey(), e.getValue().build());
+				for (Map.Entry<String,BeanPropertyMeta.Builder> e : normalProps.entrySet()) {
+					if ("*".equals(e.getValue().name))
+						extrasProperty = e.getValue().build();
+					else
+						properties.put(e.getKey(), e.getValue().build());
+				}
 
 				// If a beanFilter is defined, look for inclusion and exclusion lists.
 				if (beanFilter != null) {
