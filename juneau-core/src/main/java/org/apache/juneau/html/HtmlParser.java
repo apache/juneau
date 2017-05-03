@@ -405,7 +405,7 @@ public class HtmlParser extends XmlParser {
 						ClassMeta<?> cm = bpm.getClassMeta();
 						Object value = parseAnything(session, cm, r, m.getBean(false), false, bpm);
 						setName(cm, value, key);
-						bpm.set(m, value);
+						bpm.set(m, key, value);
 					}
 				}
 				l.add(m == null ? null : (E)m.getBean());
@@ -467,7 +467,7 @@ public class HtmlParser extends XmlParser {
 					ClassMeta<?> cm = pMeta.getClassMeta();
 					Object value = parseAnything(session, cm, r, m.getBean(false), false, pMeta);
 					setName(cm, value, key);
-					pMeta.set(m, value);
+					pMeta.set(m, key, value);
 				}
 			}
 			nextTag(r, xTR);

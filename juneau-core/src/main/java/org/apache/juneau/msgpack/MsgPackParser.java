@@ -136,7 +136,7 @@ public class MsgPackParser extends InputStreamParser {
 							ClassMeta<?> cm = bpm.getClassMeta();
 							Object value = parseAnything(session, cm, is, m.getBean(false), bpm);
 							setName(cm, value, pName);
-							bpm.set(m, value);
+							bpm.set(m, pName, value);
 						}
 					}
 					o = m.getBean();

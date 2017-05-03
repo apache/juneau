@@ -276,7 +276,7 @@ public class UrlEncodingParser extends UonParser {
 								// Otherwise, leave it null.
 								ClassMeta<?> cm = pMeta.getClassMeta();
 								if (cm.canCreateNewInstance())
-									pMeta.set(m, cm.newInstance());
+									pMeta.set(m, currAttr, cm.newInstance());
 								session.setCurrentProperty(null);
 							}
 						}
@@ -300,7 +300,7 @@ public class UrlEncodingParser extends UonParser {
 									ClassMeta<?> cm = pMeta.getClassMeta();
 									Object value = parseAnything(session, cm, r.unread(), m.getBean(false), true, pMeta);
 									setName(cm, value, currAttr);
-									pMeta.set(m, value);
+									pMeta.set(m, currAttr, value);
 								}
 								session.setCurrentProperty(null);
 							}

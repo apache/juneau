@@ -691,7 +691,7 @@ public class SerializerSession extends BeanSession {
 	 */
 	public BeanPropertyValue createBeanTypeNameProperty(BeanMap<?> m, String typeName) {
 		BeanMeta<?> bm = m.getMeta();
-		return new BeanPropertyValue(bm.getTypeProperty(), typeName, null);
+		return new BeanPropertyValue(bm.getTypeProperty(), bm.getTypeProperty().getName(), typeName, null);
 	}
 
 	/**

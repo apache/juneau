@@ -504,7 +504,7 @@ public class JsonParser extends ReaderParser {
 							ClassMeta<?> cm = pMeta.getClassMeta();
 							Object value = parseAnything(session, cm, r.unread(), m.getBean(false), pMeta);
 							setName(cm, value, currAttr);
-							pMeta.set(m, value);
+							pMeta.set(m, currAttr, value);
 						}
 						session.setCurrentProperty(null);
 					}

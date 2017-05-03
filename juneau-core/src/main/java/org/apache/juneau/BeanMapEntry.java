@@ -43,16 +43,19 @@ import org.apache.juneau.transform.*;
 public class BeanMapEntry implements Map.Entry<String,Object> {
 	private final BeanMap<?> beanMap;
 	private final BeanPropertyMeta meta;
+	private final String pName;
 
 	/**
 	 * Constructor.
 	 *
 	 * @param beanMap The bean map that this entry belongs to.
 	 * @param property The bean property.
+	 * @param pName The bean property name.
 	 */
-	protected BeanMapEntry(BeanMap<?> beanMap, BeanPropertyMeta property) {
+	protected BeanMapEntry(BeanMap<?> beanMap, BeanPropertyMeta property, String pName) {
 		this.beanMap = beanMap;
 		this.meta = property;
+		this.pName = pName;
 	}
 
 	@Override /* Map.Entry */
@@ -72,7 +75,7 @@ public class BeanMapEntry implements Map.Entry<String,Object> {
 	 */
 	@Override /* Map.Entry */
 	public Object getValue() {
-		return meta.get(this.beanMap);
+		return meta.get(this.beanMap, pName);
 	}
 
 	/**
@@ -93,7 +96,7 @@ public class BeanMapEntry implements Map.Entry<String,Object> {
 	 */
 	@Override /* Map.Entry */
 	public Object setValue(Object value) {
-		return meta.set(this.beanMap, value);
+		return meta.set(this.beanMap, pName, value);
 	}
 
 	/**

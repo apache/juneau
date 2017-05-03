@@ -128,7 +128,7 @@ public class DelegateBeanMap<T> extends BeanMap<T> {
 		Object value;
 
 		private BeanMapEntryOverride(BeanMap<?> bm, BeanPropertyMeta bpm, Object value) {
-			super(bm, bpm);
+			super(bm, bpm, bpm.getName());
 			this.value = value;
 		}
 

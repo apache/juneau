@@ -231,7 +231,7 @@ public class RdfParser extends ReaderParser {
 		BeanMeta<T> bm = m.getMeta();
 		RdfBeanMeta rbm = bm.getExtendedMeta(RdfBeanMeta.class);
 		if (rbm.hasBeanUri() && r2.getURI() != null)
-			rbm.getBeanUriProperty().set(m, r2.getURI());
+			rbm.getBeanUriProperty().set(m, null, r2.getURI());
 		for (StmtIterator i = r2.listProperties(); i.hasNext();) {
 			Statement st = i.next();
 			Property p = st.getPredicate();
@@ -249,7 +249,7 @@ public class RdfParser extends ReaderParser {
 				} else {
 					Object value = parseAnything(session, cm, o, m.getBean(false), pMeta);
 					setName(cm, value, key);
-					pMeta.set(m, value);
+					pMeta.set(m, key, value);
 				}
 			} else if (! (p.equals(session.getRootProperty()) || p.equals(session.getTypeProperty()))) {
 				onUnknownProperty(session, key, m, -1, -1);

@@ -89,7 +89,7 @@ public class BeanMeta<T> {
 	// Other fields
 	final String typePropertyName;                                      // "_type" property actual name.
 	private final BeanPropertyMeta typeProperty;                        // "_type" mock bean property.
-	final BeanPropertyMeta extrasProperty;                              // "extras" property.
+	final BeanPropertyMeta dynaProperty;                                // "extras" property.
 	private final String dictionaryName;                                // The @Bean.typeName() annotation defined on this bean class.
 	final String notABeanReason;                                        // Readable string explaining why this class wasn't a bean.
 	final BeanRegistry beanRegistry;
@@ -115,7 +115,7 @@ public class BeanMeta<T> {
 		this.properties = b.properties == null ? null : Collections.unmodifiableMap(b.properties);
 		this.getterProps = Collections.unmodifiableMap(b.getterProps);
 		this.setterProps = Collections.unmodifiableMap(b.setterProps);
-		this.extrasProperty = b.extrasProperty;
+		this.dynaProperty = b.dynaProperty;
 		this.typeVarImpls = b.typeVarImpls == null ? null : Collections.unmodifiableMap(b.typeVarImpls);
 		this.constructor = b.constructor;
 		this.constructorArgs = b.constructorArgs;
@@ -133,7 +133,7 @@ public class BeanMeta<T> {
 		Map<String,BeanPropertyMeta> properties;
 		Map<Method,String> getterProps = new HashMap<Method,String>();
 		Map<Method,String> setterProps = new HashMap<Method,String>();
-		BeanPropertyMeta extrasProperty;
+		BeanPropertyMeta dynaProperty;
 
 		Map<Class<?>,Class<?>[]> typeVarImpls;
 		Constructor<T> constructor;
@@ -351,10 +351,10 @@ public class BeanMeta<T> {
 					dictionaryName = findDictionaryName(this.classMeta);
 
 				for (Map.Entry<String,BeanPropertyMeta.Builder> e : normalProps.entrySet()) {
-					if ("*".equals(e.getValue().name))
-						extrasProperty = e.getValue().build();
-					else
-						properties.put(e.getKey(), e.getValue().build());
+					BeanPropertyMeta pMeta = e.getValue().build();
+					if (pMeta.isDyna())
+						dynaProperty = pMeta;
+					properties.put(e.getKey(), pMeta);
 				}
 
 				// If a beanFilter is defined, look for inclusion and exclusion lists.

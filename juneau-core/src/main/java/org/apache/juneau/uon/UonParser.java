@@ -461,7 +461,7 @@ public class UonParser extends ReaderParser {
 								onUnknownProperty(session, currAttr, m, currAttrLine, currAttrCol);
 							} else {
 								Object value = session.convertToType("", pMeta.getClassMeta());
-								pMeta.set(m, value);
+								pMeta.set(m, currAttr, value);
 							}
 						}
 						if (c == -1 || c == ')' || c == AMP)
@@ -478,7 +478,7 @@ public class UonParser extends ReaderParser {
 								ClassMeta<?> cm = pMeta.getClassMeta();
 								Object value = parseAnything(session, cm, r.unread(), m.getBean(false), false, pMeta);
 								setName(cm, value, currAttr);
-								pMeta.set(m, value);
+								pMeta.set(m, currAttr, value);
 								session.setCurrentProperty(null);
 							}
 						}

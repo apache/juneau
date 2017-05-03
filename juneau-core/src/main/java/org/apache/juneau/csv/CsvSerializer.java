@@ -57,6 +57,7 @@ public final class CsvSerializer extends WriterSerializer {
 		} else {
 			l = (Collection)o;
 		}
+		// TODO - Doesn't support DynaBeans.
 		if (l.size() > 0) {
 			ClassMeta entryType = session.getClassMetaForObject(l.iterator().next());
 			if (entryType.isBean()) {
@@ -74,7 +75,7 @@ public final class CsvSerializer extends WriterSerializer {
 					for (BeanPropertyMeta pm : bm.getPropertyMetas()) {
 						if (i++ > 0)
 							out.append(',');
-						append(out, pm.get(bean));
+						append(out, pm.get(bean, pm.getName()));
 					}
 					out.append('\n');
 				}

@@ -17,6 +17,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.xml.annotation.*;
@@ -213,7 +214,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 		if (meta.beanFilter != null)
 			if (meta.beanFilter.writeProperty(this.bean, property, value))
 				return null;
-		return p.set(this, value);
+		return p.set(this, property, value);
 	}
 
 	/**
@@ -272,12 +273,13 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 */
 	@Override /* Map */
 	public Object get(Object property) {
-		BeanPropertyMeta p = meta.properties.get(property);
+		String pName = StringUtils.toString(property);
+		BeanPropertyMeta p = getPropertyMeta(pName);
 		if (p == null)
 			return null;
-		if (meta.beanFilter != null && property != null)
-			return meta.beanFilter.readProperty(this.bean, property.toString(), p.get(this));
-		return p.get(this);
+		if (meta.beanFilter != null)
+			return meta.beanFilter.readProperty(this.bean, pName, p.get(this, pName));
+		return p.get(this, pName);
 	}
 
 	/**
@@ -336,6 +338,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 */
 	@Override /* Map */
 	public Set<String> keySet() {
+		// TODO - DynaBean
 		return meta.properties.keySet();
 	}
 
@@ -353,10 +356,10 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * @return The bean property, or null if the bean has no such property.
 	 */
 	public BeanMapEntry getProperty(String propertyName) {
-		BeanPropertyMeta p = meta.properties.get(propertyName);
+		BeanPropertyMeta p = getPropertyMeta(propertyName);
 		if (p == null)
 			return null;
-		return new BeanMapEntry(this, p);
+		return new BeanMapEntry(this, p, propertyName);
 	}
 
 	/**
@@ -366,7 +369,10 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * @return Metadata on the specified property, or <jk>null</jk> if that property does not exist.
 	 */
 	public BeanPropertyMeta getPropertyMeta(String propertyName) {
-		return meta.properties.get(propertyName);
+		BeanPropertyMeta bpMeta = meta.properties.get(propertyName);
+		if (bpMeta == null)
+			bpMeta = meta.dynaProperty;
+		return bpMeta;
 	}
 
 	/**
@@ -400,14 +406,19 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 				l.add(v);
 		for (BeanPropertyMeta bpm : properties) {
 			try {
-				Object val = bpm.get(this);
-				if (val != null || ! ignoreNulls)
-					l.add(new BeanPropertyValue(bpm, val, null));
+				if (bpm.isDyna()) {
+					for (Map.Entry<String,Object> e : bpm.getDynaMap(this).entrySet())
+						l.add(new BeanPropertyValue(bpm, e.getKey(), e.getValue(), null));
+				} else {
+					Object val = bpm.get(this, null);
+					if (val != null || ! ignoreNulls)
+						l.add(new BeanPropertyValue(bpm, bpm.getName(), val, null));
+				}
 			} catch (Error e) {
 				// Errors should always be uncaught.
 				throw e;
 			} catch (Throwable t) {
-				l.add(new BeanPropertyValue(bpm, null, t));
+				l.add(new BeanPropertyValue(bpm, bpm.getName(), null, t));
 			}
 		}
 		return l;
@@ -454,7 +465,8 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 
 					@Override /* Iterator */
 					public Map.Entry<String, Object> next() {
-						return new BeanMapEntry(BeanMap.this, pIterator.next());
+						// TODO - DynaBean
+						return new BeanMapEntry(BeanMap.this, pIterator.next(), null);
 					}
 
 					@Override /* Iterator */

@@ -279,7 +279,7 @@ public class RdfSerializer extends WriterSerializer {
 				Object uri = null;
 				RdfBeanMeta rbm = (RdfBeanMeta)bm.getMeta().getExtendedMeta(RdfBeanMeta.class);
 				if (rbm.hasBeanUri())
-					uri = rbm.getBeanUriProperty().get(bm);
+					uri = rbm.getBeanUriProperty().get(bm, null);
 				String uri2 = getUri(session, uri, null);
 				n = m.createResource(uri2);
 				serializeBeanMap(session, bm, (Resource)n, typeName);
@@ -294,7 +294,7 @@ public class RdfSerializer extends WriterSerializer {
 			Object uri = null;
 			RdfBeanMeta rbm = (RdfBeanMeta)bm.getMeta().getExtendedMeta(RdfBeanMeta.class);
 			if (rbm.hasBeanUri())
-				uri = rbm.getBeanUriProperty().get(bm);
+				uri = rbm.getBeanUriProperty().get(bm, null);
 			String uri2 = getUri(session, uri, null);
 			n = m.createResource(uri2);
 			serializeBeanMap(session, bm, (Resource)n, typeName);

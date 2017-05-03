@@ -19,6 +19,7 @@ package org.apache.juneau;
 public class BeanPropertyValue {
 
 	private final BeanPropertyMeta pMeta;
+	private final String name;
 	private final Object value;
 	private final Throwable thrown;
 
@@ -26,11 +27,13 @@ public class BeanPropertyValue {
 	 * Constructor.
 	 *
 	 * @param pMeta The bean property metadata.
+	 * @param name The bean property name.
 	 * @param value The bean property value.
 	 * @param thrown The exception thrown by calling the property getter.
 	 */
-	public BeanPropertyValue(BeanPropertyMeta pMeta, Object value, Throwable thrown) {
+	public BeanPropertyValue(BeanPropertyMeta pMeta, String name, Object value, Throwable thrown) {
 		this.pMeta = pMeta;
+		this.name = name;
 		this.value = value;
 		this.thrown = thrown;
 	}
@@ -56,7 +59,7 @@ public class BeanPropertyValue {
 	 * @return The bean property name.
 	 */
 	public final String getName() {
-		return pMeta.getName();
+		return name;
 	}
 
 	/**
