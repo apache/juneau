@@ -245,7 +245,7 @@ public class RdfParser extends ReaderParser {
 					ClassMeta<?> et = cm.getElementType();
 					Object value = parseAnything(session, et, o, m.getBean(false), pMeta);
 					setName(et, value, key);
-					pMeta.add(m, value);
+					pMeta.add(m, key, value);
 				} else {
 					Object value = parseAnything(session, cm, o, m.getBean(false), pMeta);
 					setName(cm, value, key);

@@ -736,12 +736,11 @@ public class BeanPropertyMeta {
 	 * @throws InvocationTargetException Thrown by method invocation.
 	 */
 	protected void setArray(Object bean, List l) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-		String pName = name;  // TODO DynaBean
 		Object array = ArrayUtils.toArray(l, this.rawTypeMeta.getElementType().getInnerClass());
 		if (setter != null)
-			invokeSetter(bean, pName, array);
+			invokeSetter(bean, name, array);
 		else if (field != null)
-			invokeSetField(bean, pName, array);
+			invokeSetField(bean, name, array);
 		else
 			throw new BeanRuntimeException(beanMeta.c, "Attempt to initialize array property ''{0}'', but no setter or field defined.", name);
 	}
@@ -752,12 +751,11 @@ public class BeanPropertyMeta {
 	 * arrays since it must copy the array into a larger array on each operation.
 	 *
 	 * @param m The bean of the field being set.
+	 * @param pName The property name.
 	 * @param value The value to add to the field.
 	 * @throws BeanRuntimeException If field is not a collection or array.
 	 */
-	public void add(BeanMap<?> m, Object value) throws BeanRuntimeException {
-
-		String pName = name;  // TODO DynaBean
+	public void add(BeanMap<?> m, String pName, Object value) throws BeanRuntimeException {
 
 		// Read-only beans get their properties stored in a cache.
 		if (m.bean == null) {
@@ -847,15 +845,14 @@ public class BeanPropertyMeta {
 	 * Adds a value to a {@link Map} or bean property.
 	 *
 	 * @param m The bean of the field being set.
+	 * @param pName The property name.
 	 * @param key The key to add to the field.
 	 * @param value The value to add to the field.
 	 * @throws BeanRuntimeException If field is not a map or array.
 	 */
-	public void add(BeanMap<?> m, String key, Object value) throws BeanRuntimeException {
+	public void add(BeanMap<?> m, String pName, String key, Object value) throws BeanRuntimeException {
 
-		String pName = name; // TODO DynaBean
-
-		// Read-only beans get their properties stored in a cache.
+ 		// Read-only beans get their properties stored in a cache.
 		if (m.bean == null) {
 			if (! m.propertyCache.containsKey(name))
 				m.propertyCache.put(name, new ObjectMap(m.getBeanSession()));

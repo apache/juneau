@@ -278,7 +278,7 @@ public class XmlParser extends ReaderParser {
 			BeanPropertyMeta bpm = xmlMeta.getPropertyMeta(key);
 			if (bpm == null) {
 				if (xmlMeta.getAttrsProperty() != null) {
-					xmlMeta.getAttrsProperty().add(m, key, val);
+					xmlMeta.getAttrsProperty().add(m, key, key, val);
 				} else {
 					Location l = r.getLocation();
 					onUnknownProperty(session, key, m, l.getLineNumber(), l.getColumnNumber());
@@ -354,7 +354,7 @@ public class XmlParser extends ReaderParser {
 						}
 					}
 				} else if (cp != null && cpf == ELEMENTS) {
-					cp.add(m, parseAnything(session, cpcm.getElementType(), cp.getName(), r, m.getBean(false), false, cp));
+					cp.add(m, null, parseAnything(session, cpcm.getElementType(), cp.getName(), r, m.getBean(false), false, cp));
 				} else {
 					currAttr = session.getElementName(r);
 					BeanPropertyMeta pMeta = xmlMeta.getPropertyMeta(currAttr);
@@ -369,7 +369,7 @@ public class XmlParser extends ReaderParser {
 							ClassMeta<?> et = pMeta.getClassMeta().getElementType();
 							Object value = parseAnything(session, et, currAttr, r, m.getBean(false), false, pMeta);
 							setName(et, value, currAttr);
-							pMeta.add(m, value);
+							pMeta.add(m, currAttr, value);
 						} else if (xf == ATTR)  {
 							pMeta.set(m, currAttr, session.getAttributeValue(r, 0));
 							r.nextTag();

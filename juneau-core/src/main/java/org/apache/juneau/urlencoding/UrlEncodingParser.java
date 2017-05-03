@@ -295,7 +295,7 @@ public class UrlEncodingParser extends UonParser {
 									ClassMeta et = pMeta.getClassMeta().getElementType();
 									Object value = parseAnything(session, et, r.unread(), m.getBean(false), true, pMeta);
 									setName(et, value, currAttr);
-									pMeta.add(m, value);
+									pMeta.add(m, currAttr, value);
 								} else {
 									ClassMeta<?> cm = pMeta.getClassMeta();
 									Object value = parseAnything(session, cm, r.unread(), m.getBean(false), true, pMeta);

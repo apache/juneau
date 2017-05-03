@@ -233,7 +233,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 				return;
 			throw new BeanRuntimeException(meta.c, "Bean property ''{0}'' not found.", property);
 		}
-		p.add(this, value);
+		p.add(this, property, value);
 	}
 
 
@@ -338,8 +338,18 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 */
 	@Override /* Map */
 	public Set<String> keySet() {
-		// TODO - DynaBean
-		return meta.properties.keySet();
+		if (meta.dynaProperty == null)
+			return meta.properties.keySet();
+		Set<String> l = new LinkedHashSet<String>();
+		for (String p : meta.properties.keySet())
+			if (! "*".equals(p))
+				l.add(p);
+		try {
+			l.addAll(meta.dynaProperty.getDynaMap(bean).keySet());
+		} catch (Exception e) {
+			throw new BeanRuntimeException(e);
+		}
+		return l;
 	}
 
 	/**
@@ -439,6 +449,25 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	@Override
 	public Set<Entry<String,Object>> entrySet() {
 
+		// If this bean has a dyna-property, then we need to construct the entire set before returning.
+		// Otherwise, we can create an iterator without a new data structure.
+		if (meta.dynaProperty != null) {
+			Set<Entry<String,Object>> s = new LinkedHashSet<Entry<String,Object>>();
+			for (BeanPropertyMeta pMeta : getProperties()) {
+				if (pMeta.isDyna()) {
+					try {
+						for (Map.Entry<String,Object> e : pMeta.getDynaMap(bean).entrySet())
+							s.add(new BeanMapEntry(this, pMeta, e.getKey()));
+					} catch (Exception e) {
+						throw new BeanRuntimeException(e);
+					}
+				} else {
+					s.add(new BeanMapEntry(this, pMeta, pMeta.getName()));
+				}
+			}
+			return s;
+		}
+
 		// Construct our own anonymous set to implement this function.
 		Set<Entry<String,Object>> s = new AbstractSet<Entry<String,Object>>() {
 
@@ -465,7 +494,6 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 
 					@Override /* Iterator */
 					public Map.Entry<String, Object> next() {
-						// TODO - DynaBean
 						return new BeanMapEntry(BeanMap.this, pIterator.next(), null);
 					}
 
