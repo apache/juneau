@@ -88,6 +88,7 @@
 		<li><p><a class='doclink' href='#Core.SimpleVarLanguage'>Simple Variable Language</a></p>
 		<li><p><a class='doclink' href='#Core.ConfigFile'>Configuration Files</a></p>
 		<li><p><a class='doclink' href='#Core.SupportedLanguages'>Supported Languages</a></p>
+		<li><p><a class='doclink' href='#Core.JacksonComparison'>Comparison with Jackson</a></p>
 	</ol>
 	<li><p><a class='doclink' href='#DTOs'>Juneau Data Transfer Objects (org.apache.juneau.dto)</a></p>
 	<ol>
@@ -1549,6 +1550,102 @@
 			<li class='p'><a class='doclink' href='org/apache/juneau/dto/atom/package-summary.html#TOC'>org.apache.juneau.dto.atom</a> - ATOM support.
 			<li class='p'><a class='doclink' href='org/apache/juneau/dto/cognos/package-summary.html#TOC'>org.apache.juneau.dto.cognos</a> - Cognos support.
 		</ul>
+	</div>
+	
+	<!-- ======================================================================================================== -->
+	<a id="Core.JacksonComparison"></a>
+	<h3 class='topic' onclick='toggle(this)'>2.12 - Comparison with Jackson</h3>
+	<div class='topic'>
+		<p>
+			Juneau was developed independently from Jackson, but shares many of the same features and capabilities.
+			Whereas Jackson was created to work primariliy with JSON, Juneau was created to work for multiple languages.
+			Therefore, the terminology and annotations in Juneau are similar, but language-agnostic.   
+		</p>
+		<p>
+			The following charts describe equivalent features between the two libraries:
+		</p>
+		<h6 class='topic'>Annotations</h6>
+		<table class='styled'>
+			<tr><th>Jackson</th><th>Juneau</th></tr>
+			<tr>
+				<td><ja>@JsonGetter</ja><br><ja>@JsonSetter</ja></td>
+				<td>
+					{@link org.apache.juneau.annotation.BeanProperty @BeanProperty}
+				</td>
+			</tr>
+			<tr>
+				<td><ja>@JsonAnyGetter</ja><br><ja>@JsonAnySetter</ja></td>
+				<td>
+					{@link org.apache.juneau.annotation.BeanProperty#name() @BeanProperty(name="*")}
+				</td>
+			</tr>
+			<tr>
+				<td><ja>@JsonIgnore</ja><br><ja>@JsonIgnoreType</ja></td>
+				<td>
+					{@link org.apache.juneau.annotation.BeanIgnore @BeanIgnore}
+				</td>
+			</tr>
+			<tr>
+				<td><code><ja>@JsonIgnoreProperties</ja>({...})</code></td>
+				<td>
+					{@link org.apache.juneau.annotation.Bean#excludeProperties @Bean(excludeProperties="...")}
+				</td>
+			</tr>
+			<tr>
+				<td><code><ja>@JsonAutoDetect</ja>(fieldVisibility=...)</code></td>
+				<td>
+					No equivalent annotation, but can be controlled via: <br>
+					{@link org.apache.juneau.BeanContext#BEAN_beanFieldVisibility}<br>
+					{@link org.apache.juneau.BeanContext#BEAN_methodVisibility}<br>
+					Future annotation support planned.
+				</td>
+			</tr>
+			<tr>
+				<td><ja>@JsonCreator</ja><br><ja>@JsonProperty</ja></td>
+				<td>
+					{@link org.apache.juneau.annotation.BeanConstructor @BeanConstructor}
+				</td>
+			</tr>
+			<tr>
+				<td><ja>@JacksonInject</ja></td>
+				<td>
+					No equivalent.<br>
+					Future support planned.
+				</td>
+					
+			</tr>
+			<tr>
+				<td><ja>@JsonSerialize</ja><br><ja>@JsonDeserialize</ja></td>
+				<td>
+					Juneau uses swaps to convert non-serializable object to serializable forms:<br>
+					{@link org.apache.juneau.annotation.BeanProperty#swap() @BeanProperty(swap=...)}<br>
+					{@link org.apache.juneau.annotation.Pojo#swap() @Pojo(swap=...)}
+				</td>
+			</tr>
+			<tr>
+				<td><ja>@JsonInclude</ja></td>
+				<td>
+					No equivalent annotation, but can be controlled via various settings:<br>
+					{@link org.apache.juneau.BeanContext}<br>
+					{@link org.apache.juneau.serializer.SerializerContext}<br>
+					Future annotation support planned.
+				</td>
+			</tr>
+			<tr>
+				<td><ja>@JsonPropertyOrder</ja></td>
+				<td>
+					{@link org.apache.juneau.annotation.Bean#properties @Bean(properties="...")}<br>
+					{@link org.apache.juneau.annotation.Bean#sort @Bean(sort=x)}<br>
+				</td>
+			</tr>
+			<tr>
+				<td><ja>@JsonValue</ja><br><ja>@JsonRawValue</ja></td>
+				<td>
+					No equivalents.<br>
+					Future support unlikely since these are JSON-centric.
+				</td>
+			</tr>
+		</table>
 	</div>
 </div>
 
@@ -5820,6 +5917,7 @@
 				<li>{@link org.apache.juneau.http.ContentType}
 			</ul>
 			<li>Support for dynamic beans.  See {@link org.apache.juneau.annotation.BeanProperty#name() @BeanProperty.name()}.
+			<li>New doc: <a class='doclink' href='#Core.JacksonComparison'>2.12 - Comparison with Jackson</a>
 		</ul>
 
 		<h6 class='topic'>org.apache.juneau.rest</h6>
