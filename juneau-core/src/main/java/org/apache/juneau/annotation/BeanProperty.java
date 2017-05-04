@@ -54,6 +54,75 @@ public @interface BeanProperty {
 	 * <p>
 	 * If the {@link BeanContext#BEAN_beanFieldVisibility} setting on the bean context excludes this field (e.g. the visibility
 	 * 	is set to PUBLIC, but the field is PROTECTED), this annotation can be used to force the field to be identified as a property.
+	 * <p>
+	 * <h6 class='topic'>Dynamic beans</h6>
+	 * The bean property named <js>"*"</js> is the designated "dynamic property" which allows for "extra" bean properties not otherwise defined.
+	 * This is similar in concept to the Jackson <ja>@JsonGetterAll</ja> and <ja>@JsonSetterAll</ja> annotations.
+	 * The primary purpose is for backwards compatibility in parsing newer streams with addition information into older beans.
+	 * <p>
+	 *	The following examples show how to define dynamic bean properties.
+	 * <p class='bcode'>
+	 * 	<jc>// Option #1 - A simple public Map field.
+	 * 	// The field name can be anything.</jc>
+	 * 	<jk>public class</jk> BeanWithDynaField {
+	 *
+	 * 		<ja>@BeanProperty</ja>(name=<js>"*"</js>)
+	 * 		<jk>public</jk> Map&lt;String,Object&gt; extraStuff = <jk>new</jk> LinkedHashMap&lt;String,Object&gt;();
+	 * 	}
+	 *
+	 * 	<jc>// Option #2 - Getters and setters.
+	 * 	// Method names can be anything.
+	 * 	// Getter must return a Map with String keys.
+	 * 	// Setter must take in two arguments.</jc>
+	 * 	<jk>public class</jk> BeanWithDynaMethods {
+	 *
+	 * 		<ja>@BeanProperty</ja>(name=<js>"*"</js>)
+	 * 		<jk>public</jk> Map&lt;String,Object&gt; getMyExtraStuff() {
+	 * 			...
+	 * 		}
+	 *
+	 * 		<ja>@BeanProperty</ja>(name=<js>"*"</js>)
+	 * 		<jk>public void</jk> setAnExtraField(String name, Object value) {
+	 * 			...
+	 * 		}
+	 * 	}
+	 *
+	 * 	<jc>// Option #3 - Getter only.
+	 * 	// Properties will be added through the getter.</jc>
+	 * 	<jk>public class</jk> BeanWithDynaGetterOnly {
+	 *
+	 * 		<ja>@BeanProperty</ja>(name=<js>"*"</js>)
+	 * 		<jk>public</jk> Map&lt;String,Object&gt; getMyExtraStuff() {
+	 * 			...
+	 * 		}
+	 * 	}
+	 * </p>
+	 *	<p>
+	 *	Similar rules apply for value types and swaps.  The property values optionally can be any serializable type
+	 *	or use swaps.
+	 * <p class='bcode'>
+	 * 	<jc>// A serializable type other than Object.</jc>
+	 * 	<jk>public class</jk> BeanWithDynaFieldWithListValues {
+	 *
+	 * 		<ja>@BeanProperty</ja>(name=<js>"*"</js>)
+	 * 		<jk>public</jk> Map&lt;String,List&lt;String&gt;&gt; getMyExtraStuff() {
+	 * 			...
+	 * 		}
+	 * 	}
+	 *
+	 * 	<jc>// A swapped value.</jc>
+	 * 	<jk>public class</jk> BeanWithDynaFieldWithSwappedValues {
+	 *
+	 * 		<ja>@BeanProperty</ja>(name=<js>"*"</js>, swap=CalendarSwap.<jsf>ISO8601DTZ</jsf>.<jk>class</jk>)
+	 * 		<jk>public</jk> Map&lt;String,Calendar&gt; getMyExtraStuff() {
+	 * 			...
+	 * 		}
+	 * 	}
+	 * </p>
+	 * <p class='info'>
+	 * Note that if you're not interested in these additional properties, you can also use the {@link BeanContext#BEAN_ignoreUnknownBeanProperties} setting
+	 * to ignore values that don't fit into existing properties.
+	 * </p>
 	 */
 	String name() default "";
 

@@ -93,6 +93,7 @@ public class BeanMeta<T> {
 	private final String dictionaryName;                                // The @Bean.typeName() annotation defined on this bean class.
 	final String notABeanReason;                                        // Readable string explaining why this class wasn't a bean.
 	final BeanRegistry beanRegistry;
+	final boolean sortProperties;
 
 	/**
 	 * Constructor.
@@ -123,6 +124,7 @@ public class BeanMeta<T> {
 		this.beanRegistry = b.beanRegistry;
 		this.typePropertyName = b.typePropertyName;
 		this.typeProperty = new BeanPropertyMeta.Builder(this, typePropertyName, ctx.string(), beanRegistry).build();
+		this.sortProperties = b.sortProperties;
 	}
 
 	private static final class Builder<T> {
@@ -142,6 +144,7 @@ public class BeanMeta<T> {
 		PropertyNamer propertyNamer;
 		BeanRegistry beanRegistry;
 		String dictionaryName, typePropertyName;
+		boolean sortProperties;
 
 		private Builder(ClassMeta<T> classMeta, BeanContext ctx, BeanFilter beanFilter, String[] pNames) {
 			this.classMeta = classMeta;
@@ -341,7 +344,7 @@ public class BeanMeta<T> {
 				if (beanFilter == null && ctx.beansRequireSomeProperties && normalProps.size() == 0)
 					return "No properties detected on bean class";
 
-				boolean sortProperties = (ctx.sortProperties || (beanFilter != null && beanFilter.isSortProperties())) && fixedBeanProps.isEmpty();
+				sortProperties = (ctx.sortProperties || (beanFilter != null && beanFilter.isSortProperties())) && fixedBeanProps.isEmpty();
 
 				properties = sortProperties ? new TreeMap<String,BeanPropertyMeta>() : new LinkedHashMap<String,BeanPropertyMeta>();
 
@@ -493,6 +496,10 @@ public class BeanMeta<T> {
 			if (b == null)
 				return false;
 
+			// Don't do further validation if this is the "*" bean property.
+			if ("*".equals(b.name))
+				return true;
+
 			// Get the bean property type from the getter/field.
 			Class<?> pt = null;
 			if (b.getter != null)
@@ -551,6 +558,7 @@ public class BeanMeta<T> {
 				Class<?> rt = m.getReturnType();
 				boolean isGetter = false, isSetter = false;
 				BeanProperty bp = m.getAnnotation(BeanProperty.class);
+				String bpName = bp == null ? "" : bp.name();
 				if (pt.length == 0) {
 					if (n.startsWith("get") && (! rt.equals(Void.TYPE))) {
 						isGetter = true;
@@ -558,23 +566,28 @@ public class BeanMeta<T> {
 					} else if (n.startsWith("is") && (rt.equals(Boolean.TYPE) || rt.equals(Boolean.class))) {
 						isGetter = true;
 						n = n.substring(2);
-					} else if (bp != null && ! bp.name().isEmpty()) {
+					} else if (! bpName.isEmpty()) {
 						isGetter = true;
-						n = bp.name();
+						n = bpName;
 					}
 				} else if (pt.length == 1) {
 					if (n.startsWith("set") && (isParentClass(rt, c) || rt.equals(Void.TYPE))) {
 						isSetter = true;
 						n = n.substring(3);
-					} else if (bp != null && ! bp.name().isEmpty()) {
+					} else if (! bpName.isEmpty()) {
 						isSetter = true;
-						n = bp.name();
+						n = bpName;
+					}
+				} else if (pt.length == 2) {
+					if ("*".equals(bpName)) {
+						isSetter = true;
+						n = bpName;
 					}
 				}
 				n = pn.getPropertyName(n);
 				if (isGetter || isSetter) {
-					if (bp != null && ! bp.name().equals("")) {
-						n = bp.name();
+					if (! bpName.isEmpty()) {
+						n = bpName;
 						if (! fixedBeanProps.isEmpty())
 							if (! fixedBeanProps.contains(n))
 								throw new BeanRuntimeException(c, "Method property ''{0}'' identified in @BeanProperty, but missing from @Bean", n);

@@ -16,7 +16,7 @@ package org.apache.juneau;
  * Represents a simple bean property value and the meta-data associated with it.
  * <p>
  */
-public class BeanPropertyValue {
+public class BeanPropertyValue implements Comparable<BeanPropertyValue> {
 
 	private final BeanPropertyMeta pMeta;
 	private final String name;
@@ -76,5 +76,10 @@ public class BeanPropertyValue {
 	 */
 	public final Throwable getThrown() {
 		return thrown;
+	}
+
+	@Override /* Comparable */
+	public int compareTo(BeanPropertyValue o) {
+		return name.compareTo(o.name);
 	}
 }

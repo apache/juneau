@@ -417,10 +417,10 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 		for (BeanPropertyMeta bpm : properties) {
 			try {
 				if (bpm.isDyna()) {
-					for (Map.Entry<String,Object> e : bpm.getDynaMap(bean).entrySet()) {
-						Object val = e.getValue();
+					for (String pName : bpm.getDynaMap(bean).keySet()) {
+						Object val = bpm.get(this, pName);
 						if (val != null || ! ignoreNulls)
-							l.add(new BeanPropertyValue(bpm, e.getKey(), val, null));
+							l.add(new BeanPropertyValue(bpm, pName, val, null));
 					}
 				} else {
 					Object val = bpm.get(this, null);
@@ -434,6 +434,8 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 				l.add(new BeanPropertyValue(bpm, bpm.getName(), null, t));
 			}
 		}
+		if (meta.sortProperties && meta.dynaProperty != null)
+			Collections.sort(l);
 		return l;
 	}
 

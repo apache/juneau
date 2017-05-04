@@ -5819,6 +5819,7 @@
 				<li>{@link org.apache.juneau.http.AcceptEncoding}
 				<li>{@link org.apache.juneau.http.ContentType}
 			</ul>
+			<li>Support for dynamic beans.  See {@link org.apache.juneau.annotation.BeanProperty#name() @BeanProperty.name()}.
 		</ul>
 
 		<h6 class='topic'>org.apache.juneau.rest</h6>
@@ -7573,7 +7574,7 @@
 			<li>New {@link org.apache.juneau.ClassMeta#isInstance(Object)} method.
 			<li>Performance improvements when using the {@link org.apache.juneau.BeanMap#add(String,Object)} method.  
 				Array properties are stored in a temporary list cache until {@link org.apache.juneau.BeanMap#getBean()} is called.
-			<li>New {@link org.apache.juneau.BeanPropertyMeta#add(BeanMap,Object)} method for adding values to Collection and array properties.
+			<li>New <code><del>BeanPropertyMeta.add(BeanMap,Object)</del></code> method for adding values to Collection and array properties.
 			<li>Config INI files now support keys with name <js>"*"</js>.
 		</ul>
 

@@ -166,11 +166,6 @@ public class BeanPropertyMeta {
 
 			isDyna = "*".equals(name);
 
-			if (isDyna)
-				rawTypeMeta = rawTypeMeta.getValueType();
-			if (rawTypeMeta == null)
-				return false;
-
 			// Do some annotation validation.
 			Class<?> c = rawTypeMeta.getInnerClass();
 			if (getter != null) {
@@ -187,9 +182,7 @@ public class BeanPropertyMeta {
 				if (pt.length != (isDyna ? 2 : 1))
 					return false;
 				if (isDyna) {
-					if (pt[0].equals(String.class))
-						return false;
-					if (! isParentClass(pt[1], c))
+					if (! pt[0].equals(String.class))
 						return false;
 				} else {
 					if (! isParentClass(pt[0], c))
@@ -205,6 +198,11 @@ public class BeanPropertyMeta {
 						return false;
 				}
 			}
+
+			if (isDyna)
+				rawTypeMeta = rawTypeMeta.getValueType();
+			if (rawTypeMeta == null)
+				return false;
 
 			if (typeMeta == null)
 				typeMeta = (swap != null ? swap.getSwapClassMeta(beanContext) : rawTypeMeta == null ? beanContext.object() : rawTypeMeta.getSerializedClassMeta());
@@ -497,7 +495,7 @@ public class BeanPropertyMeta {
 			boolean isMap = rawTypeMeta.isMap();
 			boolean isCollection = rawTypeMeta.isCollection();
 
-			if (field == null && setter == null && ! (isMap || isCollection)) {
+			if ((! isDyna) && field == null && setter == null && ! (isMap || isCollection)) {
 				if ((value == null && beanContext.ignoreUnknownNullBeanProperties) || beanContext.ignorePropertiesWithoutSetters)
 					return null;
 				throw new BeanRuntimeException(beanMeta.c, "Setter or public field not defined on property ''{0}''", name);
@@ -671,6 +669,8 @@ public class BeanPropertyMeta {
 			Map m = null;
 			if (field != null)
 				m = (Map<String,Object>)field.get(bean);
+			else if (getter != null)
+				m = (Map<String,Object>)getter.invoke(bean);
 			else
 				throw new BeanRuntimeException(beanMeta.c, "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter is defined on this property, and the existing property value is null", name, this.getClassMeta().getInnerClass().getName(), findClassName(val));
 			return (m == null ? null : m.put(pName, val));
