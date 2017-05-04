@@ -629,7 +629,7 @@ public class XmlSerializer extends WriterSerializer {
 		ClassMeta<?> contentType = null;
 		for (BeanPropertyValue p : lp) {
 			String n = p.getName();
-			if (attrs.contains(n) || n.equals(attrsProperty)) {
+			if (attrs.contains(n) || attrs.contains("*") || n.equals(attrsProperty)) {
 				BeanPropertyMeta pMeta = p.getMeta();
 				ClassMeta<?> cMeta = p.getClassMeta();
 
@@ -692,7 +692,7 @@ public class XmlSerializer extends WriterSerializer {
 					hasContent = false;
 				else if (contentType.isArray() && Array.getLength(content) == 0)
 					hasContent = false;
-			} else if (elements.contains(n) || collapsedElements.contains(n)) {
+			} else if (elements.contains(n) || collapsedElements.contains(n) || elements.contains("*") || collapsedElements.contains("*") ) {
 				String key = p.getName();
 				Object value = p.getValue();
 				Throwable t = p.getThrown();

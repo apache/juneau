@@ -660,7 +660,10 @@ public class BeanMeta<T> {
 	 * 	on this bean.
 	 */
 	public BeanPropertyMeta getPropertyMeta(String name) {
-		return this.properties.get(name);
+		BeanPropertyMeta bpm = properties.get(name);
+		if (bpm == null)
+			bpm = dynaProperty;
+		return bpm;
 	}
 
 	/**

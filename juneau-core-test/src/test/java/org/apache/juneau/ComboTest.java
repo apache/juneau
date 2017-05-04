@@ -177,6 +177,7 @@ public abstract class ComboTest {
 		} catch (AssertionError e) {
 			throw e;
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new AssertionError(comboInput.label + "/" + testName + " failed.  exception=" + e.getLocalizedMessage());
 		}
 	}

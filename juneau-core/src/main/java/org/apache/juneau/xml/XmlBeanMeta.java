@@ -258,6 +258,8 @@ public class XmlBeanMeta extends BeanMetaExtended {
 	protected BeanPropertyMeta getPropertyMeta(String fieldName) {
 		if (collapsedProperties != null) {
 			BeanPropertyMeta bpm = collapsedProperties.get(fieldName);
+			if (bpm == null)
+				bpm = collapsedProperties.get("*");
 			if (bpm != null)
 				return bpm;
 		}

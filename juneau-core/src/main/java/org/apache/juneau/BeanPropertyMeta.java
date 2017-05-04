@@ -166,6 +166,11 @@ public class BeanPropertyMeta {
 
 			isDyna = "*".equals(name);
 
+			if (isDyna)
+				rawTypeMeta = rawTypeMeta.getValueType();
+			if (rawTypeMeta == null)
+				return false;
+
 			// Do some annotation validation.
 			Class<?> c = rawTypeMeta.getInnerClass();
 			if (getter != null) {
@@ -668,7 +673,7 @@ public class BeanPropertyMeta {
 				m = (Map<String,Object>)field.get(bean);
 			else
 				throw new BeanRuntimeException(beanMeta.c, "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter is defined on this property, and the existing property value is null", name, this.getClassMeta().getInnerClass().getName(), findClassName(val));
-			return (m == null ? null : m.get(pName));
+			return (m == null ? null : m.put(pName, val));
 		}
 		if (setter != null)
 			return setter.invoke(bean, val);
@@ -692,8 +697,11 @@ public class BeanPropertyMeta {
 	 */
 	public Map<String,Object> getDynaMap(Object bean) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
 		if (isDyna) {
-			Map<String,Object> m = (Map<String,Object>)getter.invoke(bean);
-			return m == null ? Collections.EMPTY_MAP : m;
+			if (getter != null)
+				return (Map)getter.invoke(bean);
+			if (field != null)
+				return (Map)field.get(bean);
+			throw new BeanRuntimeException(beanMeta.c, "Getter or public field not defined on property ''{0}''", name);
 		}
 		return Collections.EMPTY_MAP;
 	}
