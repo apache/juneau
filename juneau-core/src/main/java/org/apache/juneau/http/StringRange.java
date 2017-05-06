@@ -28,9 +28,9 @@ import org.apache.juneau.internal.*;
  * An example of a type range is a value in an <code>Accept-Encoding</code> header.
  */
 @BeanIgnore
-public final class TypeRange implements Comparable<TypeRange>  {
+public final class StringRange implements Comparable<StringRange>  {
 
-	private static final TypeRange[] DEFAULT = new TypeRange[]{new TypeRange("*")};
+	private static final StringRange[] DEFAULT = new StringRange[]{new StringRange("*")};
 
 	private final String type;
 	private final Float qValue;
@@ -59,15 +59,15 @@ public final class TypeRange implements Comparable<TypeRange>  {
 	 * @return The type ranges described by the string.
 	 * <br>The ranges are sorted such that the most acceptable type is available at ordinal position <js>'0'</js>, and the least acceptable at position n-1.
 	 */
-	public static TypeRange[] parse(String value) {
+	public static StringRange[] parse(String value) {
 
 		if (value == null || value.length() == 0)
 			return DEFAULT;
 
 		if (value.indexOf(',') == -1)
-			return new TypeRange[]{new TypeRange(value)};
+			return new StringRange[]{new StringRange(value)};
 
-		Set<TypeRange> ranges = new TreeSet<TypeRange>();
+		Set<StringRange> ranges = new TreeSet<StringRange>();
 
 		for (String r : StringUtils.split(value, ',')) {
 			r = r.trim();
@@ -75,14 +75,14 @@ public final class TypeRange implements Comparable<TypeRange>  {
 			if (r.isEmpty())
 				continue;
 
-			ranges.add(new TypeRange(r));
+			ranges.add(new StringRange(r));
 		}
 
-		return ranges.toArray(new TypeRange[ranges.size()]);
+		return ranges.toArray(new StringRange[ranges.size()]);
 	}
 
 	@SuppressWarnings("unchecked")
-	private TypeRange(String token) {
+	private StringRange(String token) {
 		Builder b = new Builder(token);
 		this.type = b.type;
 		this.qValue = b.qValue;
@@ -213,13 +213,13 @@ public final class TypeRange implements Comparable<TypeRange>  {
 	@Override /* Object */
 	public boolean equals(Object o) {
 
-		if (o == null || !(o instanceof TypeRange))
+		if (o == null || !(o instanceof StringRange))
 			return false;
 
 		if (this == o)
 			return true;
 
-		TypeRange o2 = (TypeRange) o;
+		StringRange o2 = (StringRange) o;
 		return qValue.equals(o2.qValue)
 			&& type.equals(o2.type)
 			&& extensions.equals(o2.extensions);
@@ -246,7 +246,7 @@ public final class TypeRange implements Comparable<TypeRange>  {
 	 * @param o The range to compare to.  Never <jk>null</jk>.
 	 */
 	@Override /* Comparable */
-	public int compareTo(TypeRange o) {
+	public int compareTo(StringRange o) {
 
 		// Compare q-values.
 		int qCompare = Float.compare(o.qValue, qValue);

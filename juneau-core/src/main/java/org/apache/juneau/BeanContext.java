@@ -942,7 +942,7 @@ public class BeanContext extends Context {
 	 * If <jk>null</jk>, the system default locale is assumed.
 	 * @param timeZone The bean session timezone.
 	 * Typically used by time-sensitive {@link PojoSwap PojoSwaps} to provide timezone-specific output.
-	 * If <jk>null</jk> the system default timezone is assumed on {@link Date} objects, or the
+	 * If <jk>null</jk> the system default timezone is assumed on {@link java.util.Date} objects, or the
 	 * 	locale specified on {@link Calendar} objects are used.
 	 * @param mediaType The session media type (e.g. <js>"application/json"</js>).
 	 * @return A new session object.

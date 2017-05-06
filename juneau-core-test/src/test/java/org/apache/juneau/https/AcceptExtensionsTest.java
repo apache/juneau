@@ -32,7 +32,7 @@ public class AcceptExtensionsTest {
 		MediaTypeRange mr;
 		
 		accept = Accept.forString("text/json");
-		mr = accept.getMediaRanges().get(0);
+		mr = accept.asRanges().get(0);
 		assertTextEquals("text/json", mr);
 		assertTextEquals("text/json", mr.getMediaType());
 		assertObjectEquals("{}", mr.getMediaType().getParameters());
@@ -40,7 +40,7 @@ public class AcceptExtensionsTest {
 		assertObjectEquals("{}", mr.getExtensions());
 
 		accept = Accept.forString("foo,bar");
-		mr = accept.getMediaRanges().get(0);
+		mr = accept.asRanges().get(0);
 		assertTextEquals("foo", mr);
 		assertTextEquals("foo", mr.getMediaType());
 		assertObjectEquals("{}", mr.getMediaType().getParameters());
@@ -48,7 +48,7 @@ public class AcceptExtensionsTest {
 		assertObjectEquals("{}", mr.getExtensions());
 
 		accept = Accept.forString(" foo , bar ");
-		mr = accept.getMediaRanges().get(0);
+		mr = accept.asRanges().get(0);
 		assertTextEquals("foo", mr);
 		assertTextEquals("foo", mr.getMediaType());
 		assertObjectEquals("{}", mr.getMediaType().getParameters());
@@ -56,7 +56,7 @@ public class AcceptExtensionsTest {
 		assertObjectEquals("{}", mr.getExtensions());
 
 		accept = Accept.forString("text/json;a=1;q=0.9;b=2");
-		mr = accept.getMediaRanges().get(0);
+		mr = accept.asRanges().get(0);
 		assertTextEquals("text/json;a=1;q=0.9;b=2", mr);
 		assertTextEquals("text/json;a=1", mr.getMediaType());
 		assertObjectEquals("{a:['1']}", mr.getMediaType().getParameters());
@@ -64,7 +64,7 @@ public class AcceptExtensionsTest {
 		assertObjectEquals("{b:['2']}", mr.getExtensions());
 		
 		accept = Accept.forString("text/json;a=1;a=2;q=0.9;b=3;b=4");
-		mr = accept.getMediaRanges().get(0);
+		mr = accept.asRanges().get(0);
 		assertTextEquals("text/json;a=1;a=2;q=0.9;b=3;b=4", mr);
 		assertTextEquals("text/json;a=1;a=2", mr.getMediaType());
 		assertObjectEquals("{a:['1','2']}", mr.getMediaType().getParameters());
@@ -72,7 +72,7 @@ public class AcceptExtensionsTest {
 		assertObjectEquals("{b:['3','4']}", mr.getExtensions());
 
 		accept = Accept.forString("text/json;a=1");
-		mr = accept.getMediaRanges().get(0);
+		mr = accept.asRanges().get(0);
 		assertTextEquals("text/json;a=1", mr);
 		assertTextEquals("text/json;a=1", mr.getMediaType());
 		assertObjectEquals("{a:['1']}", mr.getMediaType().getParameters());
@@ -80,7 +80,7 @@ public class AcceptExtensionsTest {
 		assertObjectEquals("{}", mr.getExtensions());
 
 		accept = Accept.forString("text/json;a=1;");
-		mr = accept.getMediaRanges().get(0);
+		mr = accept.asRanges().get(0);
 		assertTextEquals("text/json;a=1", mr);
 		assertTextEquals("text/json;a=1", mr.getMediaType());
 		assertObjectEquals("{a:['1']}", mr.getMediaType().getParameters());
@@ -88,7 +88,7 @@ public class AcceptExtensionsTest {
 		assertObjectEquals("{}", mr.getExtensions());
 		
 		accept = Accept.forString("text/json;q=0.9");
-		mr = accept.getMediaRanges().get(0);
+		mr = accept.asRanges().get(0);
 		assertTextEquals("text/json;q=0.9", mr);
 		assertTextEquals("text/json", mr.getMediaType());
 		assertObjectEquals("{}", mr.getMediaType().getParameters());
@@ -96,7 +96,7 @@ public class AcceptExtensionsTest {
 		assertObjectEquals("{}", mr.getExtensions());
 
 		accept = Accept.forString("text/json;q=0.9;");
-		mr = accept.getMediaRanges().get(0);
+		mr = accept.asRanges().get(0);
 		assertTextEquals("text/json;q=0.9", mr);
 		assertTextEquals("text/json", mr.getMediaType());
 		assertObjectEquals("{}", mr.getMediaType().getParameters());

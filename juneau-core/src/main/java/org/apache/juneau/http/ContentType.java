@@ -12,55 +12,53 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
-import java.util.concurrent.*;
+import static org.apache.juneau.http.Constants.*;
+
+import org.apache.juneau.internal.*;
 
 /**
- * Represents a parsed <code>Content-Type:</code> HTTP header.
+ * Represents a parsed <l>Content-Type</l> HTTP request/response header.
  * <p>
- * The formal RFC2616 header field definition is as follows:
+ * The MIME type of this content.
+ *
+ * <h6 class='figure'>Example</h6>
  * <p class='bcode'>
- * 	14.17 Content-Type
+ * 	Content-Type: text/html; charset=utf-8
+ * </p>
  *
- * 	The Content-Type entity-header field indicates the media type of the
- * 	entity-body sent to the recipient or, in the case of the HEAD method,
- * 	the media type that would have been sent had the request been a GET.
+ * <h6 class='topic'>RFC2616 Specification</h6>
  *
- * 		Content-Type   = "Content-Type" ":" media-type
- *
- * 	Media types are defined in section 3.7. An example of the field is
- *
+ * The Content-Type entity-header field indicates the media type of the entity-body sent to the recipient or, in the
+ * case of the HEAD method, the media type that would have been sent had the request been a GET.
+ * <p class='bcode'>
+ * 	Content-Type   = "Content-Type" ":" media-type
+ * </p>
+ * <p>
+ * Media types are defined in section 3.7.
+ * An example of the field is...
+ * <p class='bcode'>
  * 	Content-Type: text/html; charset=ISO-8859-4
  * </p>
  */
 public class ContentType extends MediaType {
 
-	private static final boolean nocache = Boolean.getBoolean("juneau.http.ContentType.nocache");
-	private static final ConcurrentHashMap<String,ContentType> cache = new ConcurrentHashMap<String,ContentType>();
+	private static Cache<String,ContentType> cache = new Cache<String,ContentType>(NOCACHE, CACHE_MAX_SIZE);
 
 	/**
 	 * Returns a parsed <code>Content-Type</code> header.
 	 *
-	 * @param s The <code>Content-Type</code> header string.
+	 * @param value The <code>Content-Type</code> header string.
 	 * @return The parsed <code>Content-Type</code> header, or <jk>null</jk> if the string was null.
 	 */
-	public static ContentType forString(String s) {
-		if (s == null)
+	public static ContentType forString(String value) {
+		if (value == null)
 			return null;
-
-		// Prevent OOM in case of DDOS
-		if (cache.size() > 1000)
-			cache.clear();
-
-		while (true) {
-			ContentType mt = cache.get(s);
-			if (mt != null)
-				return mt;
-			mt = new ContentType(s);
-			if (nocache)
-				return mt;
-			cache.putIfAbsent(s, mt);
-		}
+		ContentType ct = cache.get(value);
+		if (ct == null)
+			ct = cache.put(value, new ContentType(value));
+		return ct;
 	}
+
 
 	private ContentType(String s) {
 		super(s);

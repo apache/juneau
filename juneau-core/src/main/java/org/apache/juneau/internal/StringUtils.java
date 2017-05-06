@@ -1316,4 +1316,20 @@ public final class StringUtils {
 		}
 		return 0;
 	}
+
+	/**
+	 * Returns the character at the specified index in the string without throwing exceptions.
+	 *
+	 * @param s The string.
+	 * @param i The index position.
+	 * @return The character at the specified index, or <code>0</code> if the index is out-of-range or the string
+	 * 	is <jk>null</jk>.
+	 */
+	public static char charAt(String s, int i) {
+		if (s == null)
+			return 0;
+		if (i < 0 || i >= s.length())
+			return 0;
+		return s.charAt(i);
+	}
 }

@@ -20,6 +20,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import javax.xml.stream.*;
+import javax.xml.stream.Location;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
