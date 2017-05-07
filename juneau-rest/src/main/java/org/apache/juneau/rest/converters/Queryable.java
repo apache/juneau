@@ -58,10 +58,11 @@ public final class Queryable implements RestConverter {
 			return null;
 
 		try {
+			RequestQuery q = req.getQuery();
 
 			// If no actual filtering parameters have been passed in, and there is no map augmenter specified,
 			// then just pass the original object back.
-			if (req.hasAnyQueryParameters("q","v","s","g","i","p","l")) {
+			if (q.containsAnyKeys("q","v","s","g","i","p","l")) {
 				BeanSession session = req.getBeanSession();
 
 				if (cm.getPojoSwap() != null)
@@ -70,16 +71,16 @@ public final class Queryable implements RestConverter {
 				PojoQuery f = new PojoQuery(o, session);
 
 				if (o instanceof Collection || o.getClass().isArray()) {
-					ObjectMap query = req.getQueryParameter("q", ObjectMap.class);
-					List<String> view = req.getQueryParameter("v", List.class, String.class);
-					List sort = req.getQueryParameter("s", List.class, String.class);
-					boolean ignoreCase = req.getQueryParameter("i", false, Boolean.class);
-					int pos = req.getQueryParameter("p", 0, Integer.class);
-					int limit = req.getQueryParameter("l", 0, Integer.class);
+					ObjectMap query = q.get("q", ObjectMap.class);
+					List<String> view = q.get("v", List.class, String.class);
+					List sort = q.get("s", List.class, String.class);
+					boolean ignoreCase = q.get("i", false, Boolean.class);
+					int pos = q.get("p", 0, Integer.class);
+					int limit = q.get("l", 0, Integer.class);
 					o = f.filterCollection(query, view, sort, pos, limit, ignoreCase);
 
 				} else {
-					List<String> view = req.getQueryParameter("v", List.class, String.class);
+					List<String> view = q.get("v", List.class, String.class);
 					o = f.filterMap(view);
 				}
 			}

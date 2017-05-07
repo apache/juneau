@@ -112,7 +112,8 @@ public class ParamsResource extends RestServletDefault {
 	//====================================================================================================
 	@RestMethod(name="GET", path="/testParamGet/*")
 	public String testParamGet(RestRequest req, @Query("p1") String p1, @Query("p2") int p2) throws Exception {
-		return "p1=["+p1+","+req.getQueryParameter("p1")+","+req.getQueryParameter("p1", String.class)+"],p2=["+p2+","+req.getQueryParameter("p2")+","+req.getQueryParameter("p2", int.class)+"]";
+		RequestQuery q = req.getQuery();
+		return "p1=["+p1+","+req.getQuery("p1")+","+q.get("p1", String.class)+"],p2=["+p2+","+q.getFirst("p2")+","+q.get("p2", int.class)+"]";
 	}
 
 	//====================================================================================================
@@ -120,7 +121,8 @@ public class ParamsResource extends RestServletDefault {
 	//====================================================================================================
 	@RestMethod(name="POST", path="/testParamPost/*")
 	public String testParamPost(RestRequest req, @FormData("p1") String p1, @FormData("p2") int p2) throws Exception {
-		return "p1=["+p1+","+req.getFormDataParameter("p1")+","+req.getFormDataParameter("p1", String.class)+"],p2=["+p2+","+req.getFormDataParameter("p2")+","+req.getFormDataParameter("p2", int.class)+"]";
+		RequestFormData f = req.getFormData();
+		return "p1=["+p1+","+req.getFormData("p1")+","+f.get("p1", String.class)+"],p2=["+p2+","+req.getFormData("p2")+","+f.get("p2", int.class)+"]";
 	}
 
 	//====================================================================================================
@@ -128,7 +130,8 @@ public class ParamsResource extends RestServletDefault {
 	//====================================================================================================
 	@RestMethod(name="GET", path="/testQParamGet/*")
 	public String testQParamGet(RestRequest req, @Query("p1") String p1, @Query("p2") int p2) throws Exception {
-		return "p1=["+p1+","+req.getQueryParameter("p1")+","+req.getQueryParameter("p1", String.class)+"],p2=["+p2+","+req.getQueryParameter("p2")+","+req.getQueryParameter("p2", int.class)+"]";
+		RequestQuery q = req.getQuery();
+		return "p1=["+p1+","+req.getQuery("p1")+","+q.get("p1", String.class)+"],p2=["+p2+","+q.getFirst("p2")+","+q.get("p2", int.class)+"]";
 	}
 
 	//====================================================================================================
@@ -136,7 +139,8 @@ public class ParamsResource extends RestServletDefault {
 	//====================================================================================================
 	@RestMethod(name="POST", path="/testQParamPost/*")
 	public String testQParamPost(RestRequest req, @Query("p1") String p1, @Query("p2") int p2) throws Exception {
-		return "p1=["+p1+","+req.getQueryParameter("p1")+","+req.getQueryParameter("p1", String.class)+"],p2=["+p2+","+req.getQueryParameter("p2")+","+req.getQueryParameter("p2", int.class)+"]";
+		RequestQuery q = req.getQuery();
+		return "p1=["+p1+","+req.getQuery("p1")+","+q.get("p1", String.class)+"],p2=["+p2+","+q.getFirst("p2")+","+q.get("p2", int.class)+"]";
 	}
 
 	//====================================================================================================
@@ -144,7 +148,8 @@ public class ParamsResource extends RestServletDefault {
 	//====================================================================================================
 	@RestMethod(name="GET", path="/testPlainParamGet/*")
 	public String testPlainParamGet(RestRequest req, @Query(value="p1",format="PLAIN") String p1) throws Exception {
-		return "p1=["+p1+","+req.getQueryParameter("p1")+","+req.getQueryParameter("p1", String.class)+"]";
+		RequestQuery q = req.getQuery();
+		return "p1=["+p1+","+req.getQuery("p1")+","+q.get("p1", String.class)+"]";
 	}
 
 	//====================================================================================================
@@ -152,7 +157,8 @@ public class ParamsResource extends RestServletDefault {
 	//====================================================================================================
 	@RestMethod(name="POST", path="/testPlainParamPost/*")
 	public String testPlainParamPost(RestRequest req, @FormData(value="p1",format="PLAIN") String p1) throws Exception {
-		return "p1=["+p1+","+req.getFormDataParameter("p1")+","+req.getFormDataParameter("p1", String.class)+"]";
+		RequestFormData f = req.getFormData();
+		return "p1=["+p1+","+req.getFormData("p1")+","+f.get("p1", String.class)+"]";
 	}
 
 	//====================================================================================================
@@ -160,7 +166,8 @@ public class ParamsResource extends RestServletDefault {
 	//====================================================================================================
 	@RestMethod(name="GET", path="/testPlainQParamGet/*")
 	public String testPlainQParamGet(RestRequest req, @Query(value="p1",format="PLAIN") String p1) throws Exception {
-		return "p1=["+p1+","+req.getQueryParameter("p1")+","+req.getQueryParameter("p1", String.class)+"]";
+		RequestQuery q = req.getQuery();
+		return "p1=["+p1+","+req.getQuery("p1")+","+q.get("p1", String.class)+"]";
 	}
 
 	//====================================================================================================
@@ -168,7 +175,8 @@ public class ParamsResource extends RestServletDefault {
 	//====================================================================================================
 	@RestMethod(name="POST", path="/testPlainQParamPost/*")
 	public String testPlainQParamPost(RestRequest req, @Query(value="p1",format="PLAIN") String p1) throws Exception {
-		return "p1=["+p1+","+req.getQueryParameter("p1")+","+req.getQueryParameter("p1", String.class)+"]";
+		RequestQuery q = req.getQuery();
+		return "p1=["+p1+","+req.getQuery("p1")+","+q.get("p1", String.class)+"]";
 	}
 
 	//====================================================================================================
@@ -176,7 +184,8 @@ public class ParamsResource extends RestServletDefault {
 	//====================================================================================================
 	@RestMethod(name="GET", path="/testHasParamGet/*")
 	public String testHasParamGet(RestRequest req, @HasQuery("p1") boolean p1, @HasQuery("p2") Boolean p2) throws Exception {
-		return "p1=["+p1+","+req.hasQueryParameter("p1")+"],p2=["+p2+","+req.hasQueryParameter("p2")+"]";
+		RequestQuery q = req.getQuery();
+		return "p1=["+p1+","+q.containsKey("p1")+"],p2=["+p2+","+q.containsKey("p2")+"]";
 	}
 
 	//====================================================================================================
@@ -184,7 +193,8 @@ public class ParamsResource extends RestServletDefault {
 	//====================================================================================================
 	@RestMethod(name="POST", path="/testHasParamPost/*")
 	public String testHasParamPost(RestRequest req, @HasFormData("p1") boolean p1, @HasFormData("p2") Boolean p2) throws Exception {
-		return "p1=["+p1+","+req.hasFormDataParameter("p1")+"],p2=["+p2+","+req.hasFormDataParameter("p2")+"]";
+		RequestFormData f = req.getFormData();
+		return "p1=["+p1+","+f.containsKey("p1")+"],p2=["+p2+","+f.containsKey("p2")+"]";
 	}
 
 	//====================================================================================================
@@ -192,7 +202,8 @@ public class ParamsResource extends RestServletDefault {
 	//====================================================================================================
 	@RestMethod(name="GET", path="/testHasQParamGet/*")
 	public String testHasQParamGet(RestRequest req, @HasQuery("p1") boolean p1, @HasQuery("p2") Boolean p2) throws Exception {
-		return "p1=["+p1+","+req.hasQueryParameter("p1")+"],p2=["+p2+","+req.hasQueryParameter("p2")+"]";
+		RequestQuery q = req.getQuery();
+		return "p1=["+p1+","+q.containsKey("p1")+"],p2=["+p2+","+q.containsKey("p2")+"]";
 	}
 
 	//====================================================================================================
@@ -200,7 +211,8 @@ public class ParamsResource extends RestServletDefault {
 	//====================================================================================================
 	@RestMethod(name="POST", path="/testHasQParamPost/*")
 	public String testHasQParamPost_post(RestRequest req, @HasQuery("p1") boolean p1, @HasQuery("p2") Boolean p2) throws Exception {
-		return "p1=["+p1+","+req.hasQueryParameter("p1")+"],p2=["+p2+","+req.hasQueryParameter("p2")+"]";
+		RequestQuery q = req.getQuery();
+		return "p1=["+p1+","+q.containsKey("p1")+"],p2=["+p2+","+q.containsKey("p2")+"]";
 	}
 
 	//====================================================================================================

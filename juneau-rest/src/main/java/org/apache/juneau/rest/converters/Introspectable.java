@@ -40,8 +40,8 @@ public final class Introspectable implements RestConverter {
 	@Override /* RestConverter */
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	public Object convert(RestRequest req, Object o, ClassMeta cm) throws RestException {
-		String method = req.getQueryParameter("invokeMethod");
-		String args = req.getQueryParameter("invokeArgs");
+		String method = req.getQuery("invokeMethod");
+		String args = req.getQuery("invokeArgs");
 		if (method == null)
 			return o;
 		try {

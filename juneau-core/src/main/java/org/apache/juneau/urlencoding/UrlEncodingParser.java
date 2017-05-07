@@ -333,12 +333,13 @@ public class UrlEncodingParser extends UonParser {
 	 * Parse a URL query string into a simple map of key/value pairs.
 	 *
 	 * @param qs The query string to parse.
+	 * @param map The map to parse into.  If <jk>null</jk>, then a new {@link TreeMap} will be used.
 	 * @return A sorted {@link TreeMap} of query string entries.
 	 * @throws Exception
 	 */
-	public Map<String,String[]> parseIntoSimpleMap(String qs) throws Exception {
+	public Map<String,String[]> parseIntoSimpleMap(String qs, Map<String,String[]> map) throws Exception {
 
-		Map<String,String[]> m = new TreeMap<String,String[]>();
+		Map<String,String[]> m = map == null ? new TreeMap<String,String[]>() : map;
 
 		if (StringUtils.isEmpty(qs))
 			return m;

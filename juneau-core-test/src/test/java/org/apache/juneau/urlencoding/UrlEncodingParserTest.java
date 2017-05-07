@@ -606,7 +606,7 @@ public class UrlEncodingParserTest {
 		Map<String,String[]> m;
 
 		String s = "?f1=,()=&f2a=$b(true)&f2b=true&f3a=$n(123)&f3b=123&f4=$s(foo)";
-		m = p.parseIntoSimpleMap(s);
+		m = p.parseIntoSimpleMap(s, null);
 		assertEquals(",()=", m.get("f1")[0]);
 		assertEquals("$b(true)", m.get("f2a")[0]);
 		assertEquals("true", m.get("f2b")[0]);
@@ -615,12 +615,12 @@ public class UrlEncodingParserTest {
 		assertEquals("$s(foo)", m.get("f4")[0]);
 
 		s = "f1=v1&=";
-		m = p.parseIntoSimpleMap(s);
+		m = p.parseIntoSimpleMap(s, null);
 		assertEquals("v1", m.get("f1")[0]);
 		assertEquals("", m.get("")[0]);
 
 		s = "f1=v1&f2&f3";
-		m = p.parseIntoSimpleMap(s);
+		m = p.parseIntoSimpleMap(s, null);
 		assertEquals("v1", m.get("f1")[0]);
 		assertTrue(m.containsKey("f2"));
 		assertTrue(m.containsKey("f3"));
@@ -637,7 +637,7 @@ public class UrlEncodingParserTest {
 		Map<String,String[]> m;
 
 		String s = "?f1&f1&f2&f2=abc&f2=def&f2";
-		m = p.parseIntoSimpleMap(s);
+		m = p.parseIntoSimpleMap(s, null);
 		assertObjectEquals("{f1:null,f2:['abc','def']}", m);
 	}
 

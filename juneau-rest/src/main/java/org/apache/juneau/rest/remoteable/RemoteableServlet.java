@@ -99,9 +99,9 @@ public abstract class RemoteableServlet extends RestServletDefault {
 	public Object invoke(RestRequest req, @Path String javaInterface, @Path String javaMethod) throws Exception {
 
 		// Find the parser.
-		ReaderParser p = req.getReaderParser();
+		ReaderParser p = req.getBody().getReaderParser();
 		if (p == null)
-			throw new RestException(SC_UNSUPPORTED_MEDIA_TYPE, "Could not find parser for media type ''{0}''", req.getContentTypeHeader()); //$NON-NLS-1$
+			throw new RestException(SC_UNSUPPORTED_MEDIA_TYPE, "Could not find parser for media type ''{0}''", req.getHeaders().getContentType()); //$NON-NLS-1$
 		Class<?> c = getInterfaceClass(javaInterface);
 
 		// Find the service.

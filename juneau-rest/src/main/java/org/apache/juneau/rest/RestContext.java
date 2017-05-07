@@ -444,7 +444,7 @@ public final class RestContext extends Context {
 										if (m != null) {
 											try {
 												// Parse the args and invoke the method.
-												Parser p = req.getParser();
+												Parser p = req.getBody().getParser();
 												Object input = p.isReaderParser() ? req.getReader() : req.getInputStream();
 												Object output = m.invoke(o, p.parseArgs(input, m.getGenericParameterTypes()));
 												res.setOutput(output);

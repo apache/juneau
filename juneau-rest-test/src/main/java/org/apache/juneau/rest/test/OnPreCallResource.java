@@ -85,6 +85,6 @@ public class OnPreCallResource extends RestServlet {
 	public String testPropertiesOverriddenProgrammatically(RestRequest req, @Properties ObjectMap properties) throws Exception {
 		properties.put("p3", "pp3");
 		properties.put("p4", "pp4");
-		return req.getBody(String.class);
+		return req.getBody().asType(String.class);
 	}
 }

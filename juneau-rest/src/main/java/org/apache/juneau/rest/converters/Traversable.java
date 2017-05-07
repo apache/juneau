@@ -53,7 +53,7 @@ public final class Traversable implements RestConverter {
 			try {
 				if (cm.getPojoSwap() != null)
 					o = cm.getPojoSwap().swap(req.getBeanSession(), o);
-				PojoRest p = new PojoRest(o, req.getReaderParser());
+				PojoRest p = new PojoRest(o, req.getBody().getReaderParser());
 				o = p.get(req.getPathRemainder());
 			} catch (SerializeException e) {
 				throw new RestException(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e);

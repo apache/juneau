@@ -1,0 +1,271 @@
+// ***************************************************************************************************************************
+// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
+// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
+// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
+// * with the License.  You may obtain a copy of the License at                                                              *
+// *                                                                                                                         *
+// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
+// *                                                                                                                         *
+// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *
+// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
+// * specific language governing permissions and limitations under the License.                                              *
+// ***************************************************************************************************************************
+package org.apache.juneau.rest;
+
+import java.lang.reflect.*;
+import java.util.*;
+
+import org.apache.juneau.*;
+import org.apache.juneau.internal.*;
+import org.apache.juneau.parser.*;
+import org.apache.juneau.urlencoding.*;
+
+/**
+ * Represents the parsed form data parameters in an HTTP request.
+ */
+@SuppressWarnings("unchecked")
+public class RequestFormData extends LinkedHashMap<String,String[]> {
+	private static final long serialVersionUID = 1L;
+
+	private UrlEncodingParser parser;
+	private BeanSession beanSession;
+
+	RequestFormData setParser(UrlEncodingParser parser) {
+		this.parser = parser;
+		return this;
+	}
+
+	RequestFormData setBeanSession(BeanSession beanSession) {
+		this.beanSession = beanSession;
+		return this;
+	}
+
+	/**
+	 * Sets a request form data parameter value.
+	 *
+	 * @param name The parameter name.
+	 * @param value The parameter value.
+	 */
+	public void put(String name, Object value) {
+		super.put(name, new String[]{StringUtils.toString(value)});
+	}
+
+	/**
+	 * Returns a form data parameter value.
+	 * <p>
+	 * Parameter lookup is case-insensitive (consistent with WAS, but differs from Tomcat).
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>Calling this method on URL-Encoded FORM posts causes the body content to be loaded and parsed by the underlying servlet API.
+	 * 	<li>This method returns the raw unparsed value, and differs from calling <code>getFormDataParameter(name, String.<jk>class</js>)</code>
+	 * 		which will convert the value from UON notation:
+	 * 		<ul>
+	 * 			<li><js>"null"</js> =&gt; <jk>null</jk>
+	 * 			<li><js>"'null'"</js> =&gt; <js>"null"</js>
+	 * 			<li><js>"'foo bar'"</js> =&gt; <js>"foo bar"</js>
+	 * 			<li><js>"foo~~bar"</js> =&gt; <js>"foo~bar"</js>
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * @param name The form data parameter name.
+	 * @return The parameter value, or <jk>null</jk> if parameter does not exist.
+	 */
+	public String getFirst(String name) {
+		String[] v = get(name);
+		if (v == null || v.length == 0)
+			return null;
+		if (v.length == 1 && v[0] != null && v[0].isEmpty()) {
+			// Fix for behavior difference between Tomcat and WAS.
+			// getParameter("foo") on "&foo" in Tomcat returns "".
+			// getParameter("foo") on "&foo" in WAS returns null.
+			if (containsKey(name))
+				return null;
+		}
+		return v[0];
+	}
+
+	/**
+	 * Same as {@link #getFirst(String)} except returns a default value if <jk>null</jk> or empty.
+	 *
+	 * @param name The form data parameter name.
+	 * @param def The default value.
+	 * @return The parameter value, or the default value if <jk>null</jk> or empty.
+	 */
+	public String getFirst(String name, String def) {
+		String val = getFirst(name);
+		if (val == null || val.isEmpty())
+			return def;
+		return val;
+	}
+
+	/**
+	 * Returns the specified form data parameter value converted to a POJO using the
+	 * 	{@link UrlEncodingParser} registered with this servlet.
+	 * <p>
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Parse into an integer.</jc>
+	 * 	<jk>int</jk> myparam = req.getFormDataParameter(<js>"myparam"</js>, <jk>int</jk>.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into an int array.</jc>
+	 * 	<jk>int</jk>[] myparam = req.getFormDataParameter(<js>"myparam"</js>, <jk>int</jk>[].<jk>class</jk>);
+
+	 * 	<jc>// Parse into a bean.</jc>
+	 * 	MyBean myparam = req.getFormDataParameter(<js>"myparam"</js>, MyBean.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a linked-list of objects.</jc>
+	 * 	List myparam = req.getFormDataParameter(<js>"myparam"</js>, LinkedList.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a map of object keys/values.</jc>
+	 * 	Map myparam = req.getFormDataParameter(<js>"myparam"</js>, TreeMap.<jk>class</jk>);
+	 * </p>
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>Calling this method on URL-Encoded FORM posts causes the body content to be loaded and parsed by the underlying servlet API.
+	 * </ul>
+	 *
+	 * @param name The parameter name.
+	 * @param type The class type to convert the parameter value to.
+	 * @param <T> The class type to convert the parameter value to.
+	 * @return The parameter value converted to the specified class type.
+	 * @throws ParseException
+	 */
+	public <T> T get(String name, Class<T> type) throws ParseException {
+		return parse(name, beanSession.getClassMeta(type));
+	}
+
+	/**
+	 * Same as {@link #get(String, Class)} except returns a default value if not specified.
+	 *
+	 * @param name The parameter name.
+	 * @param def The default value if the parameter was not specified or is <jk>null</jk>.
+	 * @param type The class type to convert the parameter value to.
+	 * @param <T> The class type to convert the parameter value to.
+	 * @return The parameter value converted to the specified class type.
+	 * @throws ParseException
+	 */
+	public <T> T get(String name, T def, Class<T> type) throws ParseException {
+		return parse(name, def, beanSession.getClassMeta(type));
+	}
+
+	/**
+	 * Same as {@link #get(String, Class)} except for use on multi-part parameters
+	 * 	(e.g. <js>"key=1&amp;key=2&amp;key=3"</js> instead of <js>"key=(1,2,3)"</js>)
+	 * <p>
+	 * This method must only be called when parsing into classes of type Collection or array.
+	 *
+	 * @param name The parameter name.
+	 * @param type The class type to convert the parameter value to.
+	 * @return The parameter value converted to the specified class type.
+	 * @throws ParseException
+	 */
+	public <T> T getAll(String name, Class<T> type) throws ParseException {
+		return parseAll(name, beanSession.getClassMeta(type));
+	}
+
+	/**
+	 * Returns the specified form data parameter value converted to a POJO using the
+	 * 	{@link UrlEncodingParser} registered with this servlet.
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>Calling this method on URL-Encoded FORM posts causes the body content to be loaded and parsed by the underlying servlet API.
+	 * 	<li>Use this method if you want to parse into a parameterized <code>Map</code>/<code>Collection</code> object.
+	 * </ul>
+	 * <p>
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// Parse into a linked-list of strings.</jc>
+	 * 	List&lt;String&gt; myparam = req.getFormDataParameter(<js>"myparam"</js>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a linked-list of linked-lists of strings.</jc>
+	 * 	List&lt;List&lt;String&gt;&gt; myparam = req.getFormDataParameter(<js>"myparam"</js>, LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a map of string keys/values.</jc>
+	 * 	Map&lt;String,String&gt; myparam = req.getFormDataParameter(<js>"myparam"</js>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a map containing string keys and values of lists containing beans.</jc>
+	 * 	Map&lt;String,List&lt;MyBean&gt;&gt; myparam = req.getFormDataParameter(<js>"myparam"</js>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 * </p>
+	 *
+	 * @param name The parameter name.
+	 * @param type The type of object to create.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * @param args The type arguments of the class if it's a collection or map.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * 	<br>Ignored if the main type is not a map or collection.
+	 * @return The parameter value converted to the specified class type.
+	 * @throws ParseException
+	 */
+	public <T> T get(String name, Type type, Type...args) throws ParseException {
+		return (T)parse(name, beanSession.getClassMeta(type, args));
+	}
+
+	/**
+	 * Same as {@link #get(String, Type, Type...)} except for use on multi-part parameters
+	 * 	(e.g. <js>"key=1&amp;key=2&amp;key=3"</js> instead of <js>"key=(1,2,3)"</js>)
+	 * <p>
+	 * This method must only be called when parsing into classes of type Collection or array.
+	 *
+	 * @param name The parameter name.
+	 * @param type The type of object to create.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * @param args The type arguments of the class if it's a collection or map.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * 	<br>Ignored if the main type is not a map or collection.
+	 * @return The parameter value converted to the specified class type.
+	 * @throws ParseException
+	 */
+	public <T> T getAll(String name, Type type, Type...args) throws ParseException {
+		return (T)parseAll(name, beanSession.getClassMeta(type, args));
+	}
+
+	/* Workhorse method */
+	<T> T parse(String name, T def, ClassMeta<T> cm) throws ParseException {
+		String val = getFirst(name);
+		if (val == null)
+			return def;
+		return parseValue(val, cm);
+	}
+
+	/* Workhorse method */
+	<T> T parse(String name, ClassMeta<T> cm) throws ParseException {
+		String val = getFirst(name);
+		if (cm.isPrimitive() && (val == null || val.isEmpty()))
+			return cm.getPrimitiveDefault();
+		return parseValue(val, cm);
+	}
+
+	/* Workhorse method */
+	@SuppressWarnings("rawtypes")
+	<T> T parseAll(String name, ClassMeta<T> cm) throws ParseException {
+		String[] p = get(name);
+		if (p == null)
+			return null;
+		if (cm.isArray()) {
+			List c = new ArrayList();
+			for (int i = 0; i < p.length; i++)
+				c.add(parseValue(p[i], cm.getElementType()));
+			return (T)ArrayUtils.toArray(c, cm.getElementType().getInnerClass());
+		} else if (cm.isCollection()) {
+			try {
+				Collection c = (Collection)(cm.canCreateNewInstance() ? cm.newInstance() : new ObjectList());
+				for (int i = 0; i < p.length; i++)
+					c.add(parseValue(p[i], cm.getElementType()));
+				return (T)c;
+			} catch (ParseException e) {
+				throw e;
+			} catch (Exception e) {
+				// Typically an instantiation exception.
+				throw new ParseException(e);
+			}
+		}
+		throw new ParseException("Invalid call to getParameters(String, ClassMeta).  Class type must be a Collection or array.");
+	}
+
+	private <T> T parseValue(String val, ClassMeta<T> c) throws ParseException {
+		return parser.parsePart(val, c);
+	}
+}

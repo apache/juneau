@@ -209,7 +209,7 @@ public class AddressBookResource extends ResourceJena {
 			String pathRemainder = req.getPathRemainder();
 			PojoRest r = new PojoRest(p);
 			ClassMeta<?> cm = r.getClassMeta(pathRemainder);
-			Object in = req.getBody(cm);
+			Object in = req.getBody().asType(cm);
 			r.put(pathRemainder, in);
 			return "PUT successful";
 		} catch (Exception e) {
@@ -230,7 +230,7 @@ public class AddressBookResource extends ResourceJena {
 			String pathInfo = req.getPathInfo();
 			PojoRest r = new PojoRest(a);
 			ClassMeta<?> cm = r.getClassMeta(pathInfo);
-			Object in = req.getBody(cm);
+			Object in = req.getBody().asType(cm);
 			r.put(pathInfo, in);
 			return "PUT successful";
 		} catch (Exception e) {

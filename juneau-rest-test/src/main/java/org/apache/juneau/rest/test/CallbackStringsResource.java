@@ -32,7 +32,7 @@ public class CallbackStringsResource extends RestServletDefault {
 	//====================================================================================================
 	@RestMethod(name="GET", path="/")
 	public ObjectMap test1(RestRequest req) throws Exception {
-		return new ObjectMap().append("method","GET").append("headers", getFooHeaders(req)).append("content", req.getBodyAsString());
+		return new ObjectMap().append("method","GET").append("headers", getFooHeaders(req)).append("content", req.getBody().asString());
 	}
 
 	//====================================================================================================
@@ -40,14 +40,14 @@ public class CallbackStringsResource extends RestServletDefault {
 	//====================================================================================================
 	@RestMethod(name="PUT", path="/")
 	public ObjectMap testCharsetOnResponse(RestRequest req) throws Exception {
-		return new ObjectMap().append("method","PUT").append("headers", getFooHeaders(req)).append("content", req.getBodyAsString());
+		return new ObjectMap().append("method","PUT").append("headers", getFooHeaders(req)).append("content", req.getBody().asString());
 	}
 
 	private Map<String,Object> getFooHeaders(RestRequest req) {
 		Map<String,Object> m = new TreeMap<String,Object>();
-		for (Map.Entry<String,Object> e : req.getHeaders().entrySet())
+		for (Map.Entry<String,String[]> e : req.getHeaders().entrySet())
 			if (e.getKey().startsWith("Foo-"))
-				m.put(e.getKey(), e.getValue());
+				m.put(e.getKey(), e.getValue()[0]);
 		return m;
 	}
 }

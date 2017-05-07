@@ -425,32 +425,32 @@ class CallMethod implements Comparable<CallMethod>  {
 			switch(paramType) {
 				case REQ:        return req;
 				case RES:        return res;
-				case PATH:       return req.getPathParameter(name, type);
-				case BODY:       return req.getBody(type);
-				case HEADER:     return req.getHeader(name, type);
+				case PATH:       return req.getPathParams().get(name, type);
+				case BODY:       return req.getBody().asType(type);
+				case HEADER:     return req.getHeaders().get(name, type);
 				case METHOD:     return req.getMethod();
 				case FORMDATA: {
 					if (multiPart)
-						return req.getFormDataParameters(name, type);
+						return req.getFormData().getAll(name, type);
 					if (plainParams)
-						return session.convertToType(req.getFormDataParameter(name), session.getClassMeta(type));
-					return req.getFormDataParameter(name, type);
+						return session.convertToType(req.getFormData(name), session.getClassMeta(type));
+					return req.getFormData().get(name, type);
 				}
 				case QUERY: {
 					if (multiPart)
-						return req.getQueryParameters(name, type);
+						return req.getQuery().getAll(name, type);
 					if (plainParams)
-						return session.convertToType(req.getQueryParameter(name), session.getClassMeta(type));
-					return req.getQueryParameter(name, type);
+						return session.convertToType(req.getQuery(name), session.getClassMeta(type));
+					return req.getQuery().get(name, type);
 				}
-				case HASFORMDATA:   return session.convertToType(req.hasFormDataParameter(name), session.getClassMeta(type));
-				case HASQUERY:      return session.convertToType(req.hasQueryParameter(name), session.getClassMeta(type));
+				case HASFORMDATA:   return session.convertToType(req.getFormData().containsKey(name), session.getClassMeta(type));
+				case HASQUERY:      return session.convertToType(req.getQuery().containsKey(name), session.getClassMeta(type));
 				case PATHREMAINDER: return req.getPathRemainder();
 				case PROPS:         return res.getProperties();
 				case MESSAGES:      return req.getResourceBundle();
-				case ACCEPT:        return req.getAcceptHeader();
-				case ACCEPTENCODING:return req.getAcceptEncodingHeader();
-				case CONTENTTYPE:   return req.getContentTypeHeader();
+				case ACCEPT:        return req.getHeaders().getAccept();
+				case ACCEPTENCODING:return req.getHeaders().getAcceptEncoding();
+				case CONTENTTYPE:   return req.getHeaders().getContentType();
 				default:            return null;
 			}
 		}
@@ -937,9 +937,9 @@ class CallMethod implements Comparable<CallMethod>  {
 						if ("path".equals(prefix))
 							return req.getPathParameter(remainder);
 						if ("query".equals(prefix))
-							return req.getQueryParameter(remainder);
+							return req.getQuery(remainder);
 						if ("formData".equals(prefix))
-							return req.getFormDataParameter(remainder);
+							return req.getFormData(remainder);
 						if ("header".equals(prefix))
 							return req.getHeader(remainder);
 					}

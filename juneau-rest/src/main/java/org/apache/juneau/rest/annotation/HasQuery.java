@@ -26,7 +26,7 @@ import org.apache.juneau.rest.*;
  * Unlike {@link HasFormData @HasFormData}, using this annotation does not result in the servlet reading the contents
  * 	of URL-encoded form posts.
  * Therefore, this annotation can be used in conjunction with the {@link Body @Body} annotation
- * 	or {@link RestRequest#getBody(Class)} method for <code>application/x-www-form-urlencoded POST</code> calls.
+ * 	or {@link RestRequest#getBody()} method for <code>application/x-www-form-urlencoded POST</code> calls.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>

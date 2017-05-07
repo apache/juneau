@@ -31,6 +31,6 @@ public class RestClient2Resource extends RestServletDefault {
 	//====================================================================================================
 	@RestMethod(name="POST", path="/")
 	public Reader test1(RestRequest req) throws Exception {
-		return new StringReader(req.getBodyAsString());
+		return new StringReader(req.getBody().asString());
 	}
 }

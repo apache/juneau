@@ -5911,29 +5911,29 @@
 		<h6 class='topic'>org.apache.juneau</h6>
 		<ul class='spaced-list'>
 			<li>New package:  {@link org.apache.juneau.http}.
-			<ul>
-				<li>{@link org.apache.juneau.http.Accept}
-				<li>{@link org.apache.juneau.http.AcceptEncoding}
-				<li>{@link org.apache.juneau.http.ContentType}
-			</ul>
 			<li>Support for dynamic beans.  See {@link org.apache.juneau.annotation.BeanProperty#name() @BeanProperty.name()}.
 			<li>New doc: <a class='doclink' href='#Core.JacksonComparison'>2.12 - Comparison with Jackson</a>
 		</ul>
 
 		<h6 class='topic'>org.apache.juneau.rest</h6>
 		<ul class='spaced-list'>
-			<li>The following object types can now be specified as unannotated arguments on REST Java methods:
-			<ul>
-				<li>{@link org.apache.juneau.http.Accept}
-				<li>{@link org.apache.juneau.http.AcceptEncoding}
-				<li>{@link org.apache.juneau.http.ContentType}
-			</ul>
-			<li>New methods on {@link org.apache.juneau.rest.RestRequest}:
-			<ul>
-				<li>{@link org.apache.juneau.rest.RestRequest#getAcceptHeader() getAcceptHeader()}
-				<li>{@link org.apache.juneau.rest.RestRequest#getAcceptEncodingHeader() getAcceptEncodingHeader()}
-				<li>{@link org.apache.juneau.rest.RestRequest#getContentTypeHeader() getContentTypeHeader()}
-			</ul>
+			<li>The {@link org.apache.juneau.rest.RestRequest} class functionality has been broken up into the following
+				functional pieces to reduce its complexity:
+				<ul>
+					<li>{@link org.apache.juneau.rest.RestRequest#getBody()} - The request body.
+					<li>{@link org.apache.juneau.rest.RestRequest#getHeaders()} - The request headers.
+					<li>{@link org.apache.juneau.rest.RestRequest#getQuery()} - The request query parameters.
+					<li>{@link org.apache.juneau.rest.RestRequest#getFormData()} - The request form data parameters.
+					<li>{@link org.apache.juneau.rest.RestRequest#getPathParams()} - The path variables.
+				</ul>	
+				The following classes have been introduced:
+				<ul>
+					<li>{@link org.apache.juneau.rest.RequestBody}
+					<li>{@link org.apache.juneau.rest.RequestHeaders}
+					<li>{@link org.apache.juneau.rest.RequestQuery}
+					<li>{@link org.apache.juneau.rest.RequestFormData}
+					<li>{@link org.apache.juneau.rest.RequestPathParams}
+				</ul>						
 		</ul>
 
 		<h6 class='topic'>org.apache.juneau.rest.client</h6>

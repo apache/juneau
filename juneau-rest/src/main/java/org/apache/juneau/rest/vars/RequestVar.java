@@ -72,9 +72,9 @@ public class RequestVar extends SimpleVar {
 					if ("path".equals(prefix))
 						return req.getPathParameter(remainder);
 					if ("query".equals(prefix))
-						return req.getQueryParameter(remainder);
+						return req.getQuery(remainder);
 					if ("formData".equals(prefix))
-						return req.getFormDataParameter(remainder);
+						return req.getFormData(remainder);
 					if ("header".equals(prefix))
 						return req.getHeader(remainder);
 					if ("attribute".equals(prefix))
