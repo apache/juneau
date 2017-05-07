@@ -174,6 +174,14 @@ public abstract class RestParam {
 		return name;
 	}
 
+	/**
+	 * Returns the parameter class type.
+	 * @return the parameter class type.
+	 */
+	public Type getType() {
+		return type;
+	}
+
 	//-------------------------------------------------------------------------------------------------------------------
 	// Request / Response retrievers
 	//-------------------------------------------------------------------------------------------------------------------
@@ -233,7 +241,7 @@ public abstract class RestParam {
 	static final class AcceptHeader extends RestParam {
 
 		protected AcceptHeader() {
-			super(HEADER, "Accept-Header", AcceptHeader.class);
+			super(HEADER, "Accept-Header", Accept.class);
 		}
 
 		@Override /* RestParam */
@@ -620,8 +628,10 @@ public abstract class RestParam {
 
 	static final class MethodObject extends RestParam {
 
-		protected MethodObject() {
+		protected MethodObject(Type type) throws ServletException {
 			super(OTHER, null, null);
+			if (type != String.class)
+				throw new ServletException("@Method parameters must be of type String");
 		}
 
 		@Override /* RestParam */
@@ -698,8 +708,10 @@ public abstract class RestParam {
 
 	static final class PathRemainderObject extends RestParam {
 
-		protected PathRemainderObject() {
+		protected PathRemainderObject(Type type) throws ServletException {
 			super(OTHER, null, null);
+			if (type != String.class)
+				throw new ServletException("@PathRemainder parameters must be of type String");
 		}
 
 		@Override /* RestParam */
@@ -710,8 +722,10 @@ public abstract class RestParam {
 
 	static final class PropsObject extends RestParam {
 
-		protected PropsObject() {
+		protected PropsObject(Type type) throws ServletException {
 			super(OTHER, null, null);
+			if (! ClassUtils.isParentClass(LinkedHashMap.class, type))
+				throw new ServletException("@PathRemainder parameters must be of type String");
 		}
 
 		@Override /* RestParam */

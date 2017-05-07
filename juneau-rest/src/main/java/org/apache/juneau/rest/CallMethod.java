@@ -14,8 +14,6 @@ package org.apache.juneau.rest;
 
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.dto.swagger.SwaggerBuilder.*;
-import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.rest.CallMethod.ParamType.*;
 import static org.apache.juneau.rest.RestContext.*;
 import static org.apache.juneau.rest.annotation.Inherit.*;
 import static org.apache.juneau.serializer.SerializerContext.*;
@@ -32,7 +30,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.html.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
@@ -310,104 +307,76 @@ class CallMethod implements Comparable<CallMethod>  {
 	 */
 	private static class MethodParam {
 
-		private final ParamType paramType;
-		private final Type type;
-		private final String name;
-		private final boolean multiPart, plainParams;
 		private final int attrIdx;
+		private final RestParam param;
 
 		private MethodParam(Type type, Method method, Annotation[] annotations, boolean methodPlainParams, UrlPathPattern pathPattern, int attrIdx) throws ServletException {
-			this.type = type;
 
-			ParamType _paramType = null;
+			RestParam _param = null;
 			String _name = "";
-			boolean _multiPart = false, _plainParams = false;
 
 			boolean isClass = type instanceof Class;
-			if (isClass && isParentClass(HttpServletRequest.class, (Class<?>)type))
-				_paramType = REQ;
-			else if (isClass && isParentClass(HttpServletResponse.class, (Class<?>)type))
-				_paramType = RES;
-			else if (isClass && isParentClass(Accept.class, (Class<?>)type))
-				_paramType = ACCEPT;
-			else if (isClass && isParentClass(AcceptEncoding.class, (Class<?>)type))
-				_paramType = ACCEPTENCODING;
-			else if (isClass && isParentClass(ContentType.class, (Class<?>)type))
-				_paramType = CONTENTTYPE;
-			else for (Annotation a : annotations) {
-				if (a instanceof Path) {
-					Path a2 = (Path)a;
-					_paramType = PATH;
-					_name = a2.value();
-				} else if (a instanceof Header) {
-					Header h = (Header)a;
-					_paramType = HEADER;
-					_name = h.value();
-				} else if (a instanceof FormData) {
-					FormData p = (FormData)a;
-					if (p.multipart())
-						assertCollection(type, method);
-					_paramType = FORMDATA;
-					_multiPart = p.multipart();
-					_plainParams = p.format().equals("INHERIT") ? methodPlainParams : p.format().equals("PLAIN");
-					_name = p.value();
-				} else if (a instanceof Query) {
-					Query p = (Query)a;
-					if (p.multipart())
-						assertCollection(type, method);
-					_paramType = QUERY;
-					_multiPart = p.multipart();
-					_plainParams = p.format().equals("INHERIT") ? methodPlainParams : p.format().equals("PLAIN");
-					_name = p.value();
-				} else if (a instanceof HasFormData) {
-					HasFormData p = (HasFormData)a;
-					_paramType = HASFORMDATA;
-					_name = p.value();
-				} else if (a instanceof HasQuery) {
-					HasQuery p = (HasQuery)a;
-					_paramType = HASQUERY;
-					_name = p.value();
-				} else if (a instanceof Body) {
-					_paramType = BODY;
-				} else if (a instanceof org.apache.juneau.rest.annotation.Method) {
-					_paramType = METHOD;
-					if (type != String.class)
-						throw new ServletException("@Method parameters must be of type String");
-				} else if (a instanceof PathRemainder) {
-					_paramType = PATHREMAINDER;
-					if (type != String.class)
-						throw new ServletException("@PathRemainder parameters must be of type String");
-				} else if (a instanceof Properties) {
-					_paramType = PROPS;
-					_name = "PROPERTIES";
-				} else if (a instanceof Messages) {
-					_paramType = MESSAGES;
-					_name = "MESSAGES";
+			if (isClass)
+				_param = RestParam.STANDARD_RESOLVERS.get(type);
+
+			if (_param == null) {
+				for (Annotation a : annotations) {
+					if (a instanceof Path) {
+						Path a2 = (Path)a;
+						_name = a2.value();
+					} else if (a instanceof Header) {
+						_param = new RestParam.HeaderObject(((Header)a).value(), type);
+					} else if (a instanceof FormData) {
+						FormData p = (FormData)a;
+						if (p.multipart())
+							assertCollection(type, method);
+						boolean plainParams = p.format().equals("INHERIT") ? methodPlainParams : p.format().equals("PLAIN");
+						_param = new RestParam.FormDataObject(p.value(), type, p.multipart(), plainParams);
+					} else if (a instanceof Query) {
+						Query p = (Query)a;
+						if (p.multipart())
+							assertCollection(type, method);
+						boolean plainParams = p.format().equals("INHERIT") ? methodPlainParams : p.format().equals("PLAIN");
+						_param = new RestParam.QueryObject(p.value(), type, p.multipart(), plainParams);
+					} else if (a instanceof HasFormData) {
+						_param = new RestParam.HasFormDataObject(((HasFormData)a).value(), type);
+					} else if (a instanceof HasQuery) {
+						_param = new RestParam.HasQueryObject(((HasQuery)a).value(), type);
+					} else if (a instanceof Body) {
+						_param = new RestParam.BodyObject(type);
+					} else if (a instanceof org.apache.juneau.rest.annotation.Method) {
+						_param = new RestParam.MethodObject(type);
+					} else if (a instanceof PathRemainder) {
+						_param = new RestParam.PathRemainderObject(type);
+					} else if (a instanceof Properties) {
+						_param = new RestParam.PropsObject(type);
+					} else if (a instanceof Messages) {
+						_param = new RestParam.MessageBundleObject();
+					}
 				}
 			}
-			if (_paramType == null)
-				_paramType = PATH;
 
-			if (_paramType == PATH && _name.isEmpty()) {
-				int idx = attrIdx++;
-				String[] vars = pathPattern.getVars();
-				if (vars.length <= idx)
-					throw new RestServletException("Number of attribute parameters in method ''{0}'' exceeds the number of URL pattern variables.", method.getName());
+			if (_param == null) {
 
-				// Check for {#} variables.
-				String idxs = String.valueOf(idx);
-				for (int i = 0; i < vars.length; i++)
-					if (StringUtils.isNumeric(vars[i]) && vars[i].equals(idxs))
-						_name = vars[i];
+				if (_name.isEmpty()) {
+					int idx = attrIdx++;
+					String[] vars = pathPattern.getVars();
+					if (vars.length <= idx)
+						throw new RestServletException("Number of attribute parameters in method ''{0}'' exceeds the number of URL pattern variables.", method.getName());
 
-				if (_name.isEmpty())
-					_name = pathPattern.getVars()[idx];
+					// Check for {#} variables.
+					String idxs = String.valueOf(idx);
+					for (int i = 0; i < vars.length; i++)
+						if (StringUtils.isNumeric(vars[i]) && vars[i].equals(idxs))
+							_name = vars[i];
+
+					if (_name.isEmpty())
+						_name = pathPattern.getVars()[idx];
+				}
+				_param = new RestParam.PathParameterObject(_name, type);
 			}
 
-			this.paramType = _paramType;
-			this.name = _name;
-			this.multiPart = _multiPart;
-			this.plainParams = _plainParams;
+			this.param = _param;
 			this.attrIdx = attrIdx;
 		}
 
@@ -421,56 +390,19 @@ class CallMethod implements Comparable<CallMethod>  {
 		}
 
 		private Object getValue(RestRequest req, RestResponse res) throws Exception {
-			BeanSession session = req.getBeanSession();
-			switch(paramType) {
-				case REQ:        return req;
-				case RES:        return res;
-				case PATH:       return req.getPathParams().get(name, type);
-				case BODY:       return req.getBody().asType(type);
-				case HEADER:     return req.getHeaders().get(name, type);
-				case METHOD:     return req.getMethod();
-				case FORMDATA: {
-					if (multiPart)
-						return req.getFormData().getAll(name, type);
-					if (plainParams)
-						return session.convertToType(req.getFormData(name), session.getClassMeta(type));
-					return req.getFormData().get(name, type);
-				}
-				case QUERY: {
-					if (multiPart)
-						return req.getQuery().getAll(name, type);
-					if (plainParams)
-						return session.convertToType(req.getQuery(name), session.getClassMeta(type));
-					return req.getQuery().get(name, type);
-				}
-				case HASFORMDATA:   return session.convertToType(req.getFormData().containsKey(name), session.getClassMeta(type));
-				case HASQUERY:      return session.convertToType(req.getQuery().containsKey(name), session.getClassMeta(type));
-				case PATHREMAINDER: return req.getPathRemainder();
-				case PROPS:         return res.getProperties();
-				case MESSAGES:      return req.getResourceBundle();
-				case ACCEPT:        return req.getHeaders().getAccept();
-				case ACCEPTENCODING:return req.getHeaders().getAcceptEncoding();
-				case CONTENTTYPE:   return req.getHeaders().getContentType();
-				default:            return null;
-			}
+			return param.resolve(req, res);
 		}
-	}
 
-	static enum ParamType {
-		REQ, RES, PATH, BODY, HEADER, METHOD, FORMDATA, QUERY, HASFORMDATA, HASQUERY, PATHREMAINDER, PROPS, MESSAGES, ACCEPT, ACCEPTENCODING, CONTENTTYPE;
+		private RestParamType getParamType() {
+			return param.getParamType();
+		}
 
-		private String getSwaggerParameterType() {
-			switch(this) {
-				case PATH: return "path";
-				case HEADER:
-				case ACCEPT:
-				case ACCEPTENCODING:
-				case CONTENTTYPE: return "header";
-				case FORMDATA: return "formData";
-				case QUERY: return "query";
-				case BODY: return "body";
-				default: return null;
-			}
+		private String getName() {
+			return param.getName();
+		}
+
+		private Type getType() {
+			return param.getType();
 		}
 	}
 
@@ -702,12 +634,12 @@ class CallMethod implements Comparable<CallMethod>  {
 
 		// Finally, look for parameters defined on method.
 		for (CallMethod.MethodParam mp : this.params) {
-			String in = mp.paramType.getSwaggerParameterType();
-			if (in != null) {
-				String k2 = in + '.' + ("body".equals(in) ? null : mp.name);
+			RestParamType in = mp.getParamType();
+			if (in != RestParamType.OTHER) {
+				String k2 = in.toString() + '.' + (in == RestParamType.BODY ? null : mp.getName());
 				ParameterInfo p = m.get(k2);
 				if (p == null) {
-					p = parameterInfoStrict(in, mp.name);
+					p = parameterInfoStrict(in.toString(), mp.getName());
 					m.put(k2, p);
 				}
 			}
@@ -874,7 +806,7 @@ class CallMethod implements Comparable<CallMethod>  {
 			} catch (Exception e) {
 				throw new RestException(SC_BAD_REQUEST,
 					"Invalid data conversion.  Could not convert {0} ''{1}'' to type ''{2}'' on method ''{3}.{4}''.",
-					params[i].paramType.name(), params[i].name, params[i].type, method.getDeclaringClass().getName(), method.getName()
+					params[i].getParamType().name(), params[i].getName(), params[i].getType(), method.getDeclaringClass().getName(), method.getName()
 				).initCause(e);
 			}
 		}

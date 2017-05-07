@@ -145,6 +145,19 @@ public final class ClassUtils {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if <code>parent</code> is a parent class or the same as <code>child</code>.
+	 *
+	 * @param parent The parent class.
+	 * @param child The child class.
+	 * @return <jk>true</jk> if <code>parent</code> is a parent class or the same as <code>child</code>.
+	 */
+	public static boolean isParentClass(Class<?> parent, Type child) {
+		if (child instanceof Class)
+			return isParentClass(parent, (Class<?>)child);
+		return false;
+	}
+
+	/**
 	 * Comparator for use with {@link TreeMap TreeMaps} with {@link Class} keys.
 	 */
 	public final static class ClassComparator implements Comparator<Class<?>>, Serializable {
