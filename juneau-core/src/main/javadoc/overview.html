@@ -3101,9 +3101,10 @@
 			<li class='m'><l>doGetExample2()</l>
 				<br>Identical to <l>doGetExample1()</l> but shows how to use the {@link org.apache.juneau.rest.RestRequest} and {@link org.apache.juneau.rest.RestResponse} objects:
 				<ul>
-					<li class='m'>{@link org.apache.juneau.rest.RestRequest#getPathParameter(String,Class)}
-					<li class='m'>{@link org.apache.juneau.rest.RestRequest#getQueryParameter(String,Class)}
-					<li class='m'>{@link org.apache.juneau.rest.RestRequest#getHeader(String,Class)}
+					<li class='m'>{@link org.apache.juneau.rest.RestRequest#getPathParams()}
+					<li class='m'>{@link org.apache.juneau.rest.RestRequest#getQuery()}
+					<li class='m'>{@link org.apache.juneau.rest.RestRequest#getFormData()}
+					<li class='m'>{@link org.apache.juneau.rest.RestRequest#getHeaders()}
 					<li class='m'>{@link org.apache.juneau.rest.RestRequest#getMethod()}
 					<li class='m'>{@link org.apache.juneau.rest.RestRequest#getPathRemainder()}
 				</ul>
@@ -5934,6 +5935,69 @@
 					<li>{@link org.apache.juneau.rest.RequestFormData}
 					<li>{@link org.apache.juneau.rest.RequestPathParams}
 				</ul>						
+			<li>The unannotated parameter types that can be passed in through REST Java methods has been significantly expanded.
+				<br>For reference, the previous supported types were:
+				<ul>
+					<li>{@link org.apache.juneau.rest.RestRequest} - The request object.
+					<li>{@link javax.servlet.http.HttpServletRequest} - The superclass of <code>RestRequest</code>.
+					<li>{@link org.apache.juneau.rest.RestResponse} - The response object.
+					<li>{@link javax.servlet.http.HttpServletResponse} - The superclass of <code>RestResponse</code>.
+				</ul>
+				The new supported types are:
+				<ul>
+					<li>{@link org.apache.juneau.http.Accept}
+					<li>{@link org.apache.juneau.http.AcceptCharset}
+					<li>{@link org.apache.juneau.http.AcceptEncoding}
+					<li>{@link org.apache.juneau.http.AcceptLanguage}
+					<li>{@link org.apache.juneau.http.Authorization}
+					<li>{@link org.apache.juneau.http.CacheControl}
+					<li>{@link org.apache.juneau.http.Connection}
+					<li>{@link org.apache.juneau.http.ContentLength}
+					<li>{@link org.apache.juneau.http.ContentType}
+					<li>{@link org.apache.juneau.http.Date}
+					<li>{@link org.apache.juneau.http.Expect}
+					<li>{@link org.apache.juneau.http.From}
+					<li>{@link org.apache.juneau.http.Host}
+					<li>{@link org.apache.juneau.http.IfMatch}
+					<li>{@link org.apache.juneau.http.IfModifiedSince}
+					<li>{@link org.apache.juneau.http.IfNoneMatch}
+					<li>{@link org.apache.juneau.http.IfRange}
+					<li>{@link org.apache.juneau.http.IfUnmodifiedSince}
+					<li>{@link org.apache.juneau.http.MaxForwards}
+					<li>{@link org.apache.juneau.http.Pragma}
+					<li>{@link org.apache.juneau.http.ProxyAuthorization}
+					<li>{@link org.apache.juneau.http.Range}
+					<li>{@link org.apache.juneau.http.Referer}
+					<li>{@link org.apache.juneau.http.TE}
+					<li>{@link org.apache.juneau.http.UserAgent}
+					<li>{@link org.apache.juneau.http.Upgrade}
+					<li>{@link org.apache.juneau.http.Via}
+					<li>{@link org.apache.juneau.http.Warning}
+					<li>{@link java.util.TimeZone}
+					<li>{@link java.io.InputStream}
+					<li>{@link javax.servlet.ServletInputStream}
+					<li>{@link java.io.Reader}
+					<li>{@link java.io.OutputStream}
+					<li>{@link javax.servlet.ServletOutputStream}
+					<li>{@link java.io.Writer}
+					<li>{@link java.util.ResourceBundle} - Client-localized resource bundle.
+					<li>{@link org.apache.juneau.utils.MessageBundle} - A resource bundle with additional features.
+					<li>{@link java.util.Locale} - Client locale.
+					<li>{@link org.apache.juneau.rest.RequestHeaders} - API for accessing request headers.
+					<li>{@link org.apache.juneau.rest.RequestQuery} - API for accessing request query parameters.
+					<li>{@link org.apache.juneau.rest.RequestFormData} - API for accessing request form data.
+					<li>{@link org.apache.juneau.rest.RequestPathParams} - API for accessing path variables.
+					<li>{@link org.apache.juneau.rest.RequestBody} - API for accessing request body.
+					<li>{@link org.apache.juneau.http.HttpMethod} - The method name matched (when using <code><ja>@RestMethod</ja>(name=<js>"*"</js>)</code>)
+					<li>{@link java.util.logging.Logger} - The logger to use for logging.
+					<li>{@link org.apache.juneau.internal.JuneauLogger} - Logger with additional features.
+					<li>{@link org.apache.juneau.rest.RestContext} - The resource read-only context.
+					<li>{@link org.apache.juneau.parser.Parser} - The parser matching the request content type.
+					<li>{@link org.apache.juneau.dto.swagger.Swagger} - The auto-generated Swagger doc.
+					<li>{@link org.apache.juneau.ini.ConfigFile} - The external config file for the resource.
+				</ul>
+			<li>A new annotation {@link org.apache.juneau.rest.annotation.RestResource#paramResolvers() @RestResource.paramResolvers()}
+				that allows you to define your own custom Java method parameter resolvers.
 		</ul>
 
 		<h6 class='topic'>org.apache.juneau.rest.client</h6>
@@ -6448,28 +6512,28 @@
 		<h6 class='topic'>org.apache.juneau.rest</h6>
 		<ul class='spaced-list'>
 			<li>{@link org.apache.juneau.rest.RestRequest} now passes locale and timezone to serializers/parsers/transforms.
-			<li>New {@link org.apache.juneau.rest.RestRequest#getTimeZone()} method.
+			<li><code><del>RestRequest.getTimeZone()</del></code> method.
 			<li>Standardized the following methods in {@link org.apache.juneau.rest.RestRequest} to remove dependency on <code>ClassMeta</code>
 				objects and eliminate the need for casts:
 				<ul>
-					<li>{@link org.apache.juneau.rest.RestRequest#getHeader(String,Class) getHeader(String,Class)}
-					<li>{@link org.apache.juneau.rest.RestRequest#getHeader(String,Object,Class) getHeader(String)}
-					<li>{@link org.apache.juneau.rest.RestRequest#getHeader(String,Type,Type...)}
-					<li>{@link org.apache.juneau.rest.RestRequest#getQueryParameter(String,Class)}
-					<li>{@link org.apache.juneau.rest.RestRequest#getQueryParameter(String,Object,Class)}
-					<li>{@link org.apache.juneau.rest.RestRequest#getQueryParameter(String,Type,Type...)}
-					<li>{@link org.apache.juneau.rest.RestRequest#getQueryParameter(String,Object,Type,Type...)}
-					<li>{@link org.apache.juneau.rest.RestRequest#getQueryParameters(String,Class)}
-					<li>{@link org.apache.juneau.rest.RestRequest#getQueryParameters(String,Type,Type...)}
-					<li>{@link org.apache.juneau.rest.RestRequest#getFormDataParameter(String,Class)}
-					<li>{@link org.apache.juneau.rest.RestRequest#getFormDataParameter(String,Object,Class)}
-					<li>{@link org.apache.juneau.rest.RestRequest#getFormDataParameters(String,Class)}
-					<li>{@link org.apache.juneau.rest.RestRequest#getFormDataParameter(String,Type,Type...)}
-					<li>{@link org.apache.juneau.rest.RestRequest#getFormDataParameters(String,Type,Type...)}
-					<li>{@link org.apache.juneau.rest.RestRequest#getPathParameter(String,Class)}
-					<li>{@link org.apache.juneau.rest.RestRequest#getPathParameter(String,Type,Type...)}
-					<li>{@link org.apache.juneau.rest.RestRequest#getBody(Class)}
-					<li>{@link org.apache.juneau.rest.RestRequest#getBody(Type,Type...)}
+					<li><code><del>RestRequest.getHeader(String,Class)</del></code>
+					<li><code><del>RestRequest.getHeader(String,Object,Class)</del></code>
+					<li><code><del>RestRequest.getHeader(String,Type,Type...)</del></code>
+					<li><code><del>RestRequest.getQueryParameter(String,Class)</del></code>
+					<li><code><del>RestRequest.getQueryParameter(String,Object,Class)</del></code>
+					<li><code><del>RestRequest.getQueryParameter(String,Type,Type...)</del></code>
+					<li><code><del>RestRequest.getQueryParameter(String,Object,Type,Type...)</del></code>
+					<li><code><del>RestRequest.getQueryParameters(String,Class)</del></code>
+					<li><code><del>RestRequest.getQueryParameters(String,Type,Type...)</del></code>
+					<li><code><del>RestRequest.getFormDataParameter(String,Class)</del></code>
+					<li><code><del>RestRequest.getFormDataParameter(String,Object,Class)</del></code>
+					<li><code><del>RestRequest.getFormDataParameters(String,Class)</del></code>
+					<li><code><del>RestRequest.getFormDataParameter(String,Type,Type...)</del></code>
+					<li><code><del>RestRequest.getFormDataParameters(String,Type,Type...)</del></code>
+					<li><code><del>RestRequest.getPathParameter(String,Class)</del></code>
+					<li><code><del>RestRequest.getPathParameter(String,Type,Type...)</del></code>
+					<li><code><del>RestRequest.getBody(Class)</del></code>
+					<li><code><del>RestRequest.getBody(Type,Type...)</del></code>
 				</ul>
 			<li>New methods on {@link org.apache.juneau.rest.client.NameValuePairs}
 			<li>Fixed issue where whitespace was not added to UON/URL-Encoding output when <code>&amp;plainText=true</code> specified.
@@ -7365,8 +7429,8 @@
 				<ul>
 					<li>Added new methods:
 						<ul>
-							<li>{@link org.apache.juneau.rest.RestRequest#getQueryParameterMap()}
-							<li>{@link org.apache.juneau.rest.RestRequest#getQueryParameterNames()}
+							<li><code><del>RestRequest.getQueryParameterMap()</del></code>
+							<li><code><del>RestRequest.getQueryParameterNames()</del></code>
 							<li>{@link org.apache.juneau.rest.RestRequest#getPathInfoUndecoded()}
 							<li>{@link org.apache.juneau.rest.RestRequest#getPathRemainderUndecoded()}
 							<li>{@link org.apache.juneau.rest.RestRequest#getTrimmedRequestURI()}
@@ -7515,24 +7579,24 @@
 		<ul class='spaced-list'>
 			<li>New methods in {@link org.apache.juneau.rest.client.RestCall}:
 				<ol>
-<li>{@link org.apache.juneau.rest.RestRequest#getHeader(String,Class)}
-<li>{@link org.apache.juneau.rest.RestRequest#getHeader(String,Object,Class)}
-<li>{@link org.apache.juneau.rest.RestRequest#getHeader(String,Type,Type...)}
-<li>{@link org.apache.juneau.rest.RestRequest#getQueryParameter(String,Class)}
-<li>{@link org.apache.juneau.rest.RestRequest#getQueryParameter(String,Object,Class)}
-<li>{@link org.apache.juneau.rest.RestRequest#getQueryParameter(String,Type,Type...)}
-<li>{@link org.apache.juneau.rest.RestRequest#getQueryParameter(String,Object,Type,Type...)}
-<li>{@link org.apache.juneau.rest.RestRequest#getQueryParameters(String,Class)}
-<li>{@link org.apache.juneau.rest.RestRequest#getQueryParameters(String,Type,Type...)}
-<li>{@link org.apache.juneau.rest.RestRequest#getFormDataParameter(String,Class)}
-<li>{@link org.apache.juneau.rest.RestRequest#getFormDataParameter(String,Object,Class)}
-<li>{@link org.apache.juneau.rest.RestRequest#getFormDataParameters(String,Class)}
-<li>{@link org.apache.juneau.rest.RestRequest#getFormDataParameter(String,Type,Type...)}
-<li>{@link org.apache.juneau.rest.RestRequest#getFormDataParameters(String,Type,Type...)}
-<li>{@link org.apache.juneau.rest.RestRequest#getPathParameter(String,Class)}
-<li>{@link org.apache.juneau.rest.RestRequest#getPathParameter(String,Type,Type...)}
-<li>{@link org.apache.juneau.rest.RestRequest#getBody(Class)}
-<li>{@link org.apache.juneau.rest.RestRequest#getBody(Type,Type...)}
+					<li><code><del>RestRequest.getHeader(String,Class)</del></code>
+					<li><code><del>RestRequest.getHeader(String,Object,Class)</del></code>
+					<li><code><del>RestRequest.getHeader(String,Type,Type...)</del></code>
+					<li><code><del>RestRequest.getQueryParameter(String,Class)</del></code>
+					<li><code><del>RestRequest.getQueryParameter(String,Object,Class)</del></code>
+					<li><code><del>RestRequest.getQueryParameter(String,Type,Type...)</del></code>
+					<li><code><del>RestRequest.getQueryParameter(String,Object,Type,Type...)</del></code>
+					<li><code><del>RestRequest.getQueryParameters(String,Class)</del></code>
+					<li><code><del>RestRequest.getQueryParameters(String,Type,Type...)</del></code>
+					<li><code><del>RestRequest.getFormDataParameter(String,Class)</del></code>
+					<li><code><del>RestRequest.getFormDataParameter(String,Object,Class)</del></code>
+					<li><code><del>RestRequest.getFormDataParameters(String,Class)</del></code>
+					<li><code><del>RestRequest.getFormDataParameter(String,Type,Type...)</del></code>
+					<li><code><del>RestRequest.getFormDataParameters(String,Type,Type...)</del></code>
+					<li><code><del>RestRequest.getPathParameter(String,Class)</del></code>
+					<li><code><del>RestRequest.getPathParameter(String,Type,Type...)</del></code>
+					<li><code><del>RestRequest.getBody(Class)</del></code>
+					<li><code><del>RestRequest.getBody(Type,Type...)</del></code>
 				</ol>
 			</li>
 		</ul>
@@ -7572,8 +7636,8 @@
 				explicitely specify which HTTP methods can be used in the <code>&amp;method</code> parameter.
 			<li>New methods added to {@link org.apache.juneau.rest.RestRequest}:
 			<ul>
-				<li>{@link org.apache.juneau.rest.RestRequest#getParser()}
-				<li>{@link org.apache.juneau.rest.RestRequest#getReaderParser()}
+				<li><code><del>RestRequest.getParser()</del></code>
+				<li><code><del>RestRequest.getReaderParser()</del></code>
 			</ul>
 		</ul>
 	</div>
@@ -7697,7 +7761,7 @@
 			<li>New methods on {@link org.apache.juneau.rest.RestRequest} for handling multi-part parameters:
 				<ul>
 					<li><del><code>RestRequest.getParameters(String,Class)</code></del>
-					<li>{@link org.apache.juneau.rest.RestRequest#getQueryParameters(String,Class)}
+					<li><code><del>RestRequest#getQueryParameters(String,Class)</del></code>
 				</ul>
 			</li>
 			<li>Fixed Jetty issue in {@link org.apache.juneau.rest.RestResponse#setHeader(String,String)} where setting 
@@ -7757,7 +7821,7 @@
 			<li>Fixed major issue that prevented parsing URL-Encoded form posts into POJOs.
 				Calling <del><code>HttpServlet.getParameter(String)</code></del> was forcing the underlying servlet code to process the HTTP body itself, preventing the <code>UrlEncodingSerializer</code>
 				class from being able to parse the content.  Updated code no longer inadvertantly calls this method.
-			<li>New {@link org.apache.juneau.rest.RestRequest#getQueryParameter(String)}, {@link org.apache.juneau.rest.RestRequest#hasQueryParameter(String)}, and {@link org.apache.juneau.rest.RestRequest#hasAnyQueryParameters(String[])}
+			<li>New <code><del>RestRequest.getQueryParameter(String)</del></code>, <code><del>RestRequest.hasQueryParameter(String)</del></code>, and <code><del>RestRequest.hasAnyQueryParameters(String[])</del></code>
 				methods that only look for parameters in the URL query string to prevent loading and parsing of URL-Encoded form posts.
 			<li>New <del><code>@QParam</code></del> and <del><code>@HasQParam</code></del> annotations for accessing query parameters from the URL query string.
 			<li><code>&amp;plainText</code> parameter can now specify a false value.

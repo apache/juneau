@@ -128,6 +128,38 @@ public @interface RestResource {
 	Class<?>[] pojoSwaps() default {};
 
 	/**
+	 * Class-level Java method parameter resolvers.
+	 * <p>
+	 * By default, the Juneau framework will automatically Java method parameters of various types (e.g.
+	 * <code>RestRequest</code>, <code>Accept</code>, <code>Reader</code>).
+	 * This annotation allows you to provide your own resolvers for your own class types that you want resolved.
+	 * <p>
+	 * For example, if you want to pass in instances of <code>MySpecialObject</code> to your Java method, define
+	 * the following resolver:
+	 * <p class='bcode'>
+	 * 	<jk>public class</jk> MyRestParam <jk>extends</jk> RestParam {
+	 *
+	 * 		<jc>// Must have no-arg constructor!</jc>
+	 * 		<jk>public</jk> MyRestParam() {
+	 * 			<jc>// First two parameters help with Swagger doc generation.</jc>
+	 * 			<jk>super</jk>(<jsf>QUERY</jsf>, <js>"myparam"</js>, MySpecialObject.<jk>class</jk>);
+	 * 		}
+	 *
+	 * 		<jc>// The method that creates our object.
+	 * 		// In this case, we're taking in a query parameter and converting it to our object.</jc>
+	 * 		<jk>public</jk> Object resolve(RestRequest req, RestResponse res) <jk>throws</jk> Exception {
+	 * 			<jk>return new</jk> MySpecialObject(req.getQuery().get(<js>"myparam"</js>));
+	 * 		}
+	 * 	}
+	 * </p>
+	 * <p>
+	 * <b>Note:</b>{@link RestParam} classes must have no-arg constructors.
+	 * <p>
+	 * The programmatic equivalent to this annotation is the {@link RestConfig#addParamResolvers(Class...)} method.
+	 */
+	Class<? extends RestParam>[] paramResolvers() default {};
+
+	/**
 	 * Class-level properties.
 	 * <p>
 	 * Shortcut for specifying class-level properties on this servlet to the objects returned by the following methods:

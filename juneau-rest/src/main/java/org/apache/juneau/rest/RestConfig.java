@@ -85,7 +85,8 @@ public class RestConfig implements ServletConfig {
 
 	List<Class<?>>
 		beanFilters = new ArrayList<Class<?>>(),
-		pojoSwaps = new ArrayList<Class<?>>();
+		pojoSwaps = new ArrayList<Class<?>>(),
+		paramResolvers = new ArrayList<Class<?>>();
 	SerializerGroupBuilder serializers = new SerializerGroupBuilder();
 	ParserGroupBuilder parsers = new ParserGroupBuilder();
 	EncoderGroupBuilder encoders = new EncoderGroupBuilder().append(IdentityEncoder.INSTANCE);
@@ -184,6 +185,7 @@ public class RestConfig implements ServletConfig {
 				addChildResources(r.children());
 				addBeanFilters(r.beanFilters());
 				addPojoSwaps(r.pojoSwaps());
+				addParamResolvers(r.paramResolvers());
 				if (! r.stylesheet().isEmpty())
 					setStyleSheet(c, r.stylesheet());
 				if (! r.favicon().isEmpty())
@@ -358,6 +360,19 @@ public class RestConfig implements ServletConfig {
 	 */
 	public RestConfig addPojoSwaps(Class<?>...pojoSwaps) {
 		this.pojoSwaps.addAll(Arrays.asList(pojoSwaps));
+		return this;
+	}
+
+	/**
+	 * Adds class-level parameter resolvers to this resource.
+	 * <p>
+	 * This is the programmatic equivalent to the {@link RestResource#paramResolvers() @RestResource.paramResolvers()} annotation.
+	 *
+	 * @param paramResolvers The parameter resolvers to add to this config.
+	 * @return This object (for method chaining).
+	 */
+	public RestConfig addParamResolvers(Class<? extends RestParam>...paramResolvers) {
+		this.paramResolvers.addAll(Arrays.asList(paramResolvers));
 		return this;
 	}
 

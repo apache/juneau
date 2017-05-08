@@ -16,6 +16,7 @@ import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
+import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -33,6 +34,7 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.annotation.Properties;
 import org.apache.juneau.rest.vars.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
@@ -300,6 +302,7 @@ public final class RestContext extends Context {
 	private final Class<?>[]
 		beanFilters,
 		pojoSwaps;
+	private final Map<Class<?>,RestParam> paramResolvers;
 	private final SerializerGroup serializers;
 	private final ParserGroup parsers;
 	private final UrlEncodingSerializer urlEncodingSerializer;
@@ -366,6 +369,7 @@ public final class RestContext extends Context {
 			this.properties = b.properties;
 			this.beanFilters = b.beanFilters;
 			this.pojoSwaps = b.pojoSwaps;
+			this.paramResolvers = Collections.unmodifiableMap(b.paramResolvers);
 			this.serializers = b.serializers;
 			this.parsers = b.parsers;
 			this.urlEncodingSerializer = b.urlEncodingSerializer;
@@ -557,6 +561,7 @@ public final class RestContext extends Context {
 		ObjectMap properties;
 		Class<?>[] beanFilters;
 		Class<?>[] pojoSwaps;
+		Map<Class<?>,RestParam> paramResolvers = new HashMap<Class<?>,RestParam>();
 		SerializerGroup serializers;
 		ParserGroup parsers;
 		UrlEncodingSerializer urlEncodingSerializer;
@@ -609,6 +614,12 @@ public final class RestContext extends Context {
 			Collections.reverse(sc.pojoSwaps);
 			beanFilters = ArrayUtils.toObjectArray(sc.beanFilters, Class.class);
 			pojoSwaps = ArrayUtils.toObjectArray(sc.pojoSwaps, Class.class);
+
+			for (Class<?> c : sc.paramResolvers) {
+				RestParam rp = (RestParam)c.newInstance();
+				paramResolvers.put(rp.forClass(), rp);
+			}
+
 			clientVersionHeader = sc.clientVersionHeader;
 
 			// Find resource resource bundle location.
@@ -1251,6 +1262,87 @@ public final class RestContext extends Context {
 	 */
 	protected Class<?>[] getPojoSwaps() {
 		return pojoSwaps;
+	}
+
+	/**
+	 * Finds the {@link RestParam} instances to handle resolving objects on the calls to the specified Java method.
+	 *
+	 * @param method The Java method being called.
+	 * @param methodPlainParams Whether plain-params setting is specified.
+	 * @param pathPattern The parsed URL path pattern.
+	 * @return The array of resolvers.
+	 * @throws ServletException If an annotation usage error was detected.
+	 */
+	protected RestParam[] findParams(Method method, boolean methodPlainParams, UrlPathPattern pathPattern) throws ServletException {
+
+		Type[] pt = method.getGenericParameterTypes();
+		Annotation[][] pa = method.getParameterAnnotations();
+		RestParam[] rp = new RestParam[pt.length];
+		int attrIndex = 0;
+
+		for (int i = 0; i < pt.length; i++) {
+
+			Type t = pt[i];
+			if (t instanceof Class) {
+				Class<?> c = (Class<?>)t;
+				rp[i] = paramResolvers.get(c);
+				if (rp[i] == null)
+					rp[i] = RestParamDefaults.STANDARD_RESOLVERS.get(c);
+			}
+
+			if (rp[i] == null) {
+				for (Annotation a : pa[i]) {
+					if (a instanceof Header)
+						rp[i] = new RestParamDefaults.HeaderObject((Header)a, t);
+					else if (a instanceof FormData)
+						rp[i] = new RestParamDefaults.FormDataObject(method, (FormData)a, t, methodPlainParams);
+					else if (a instanceof Query)
+						rp[i] = new RestParamDefaults.QueryObject(method, (Query)a, t, methodPlainParams);
+					else if (a instanceof HasFormData)
+						rp[i] = new RestParamDefaults.HasFormDataObject(method, (HasFormData)a, t);
+					else if (a instanceof HasQuery)
+						rp[i] = new RestParamDefaults.HasQueryObject(method, (HasQuery)a, t);
+					else if (a instanceof Body)
+						rp[i] = new RestParamDefaults.BodyObject(t);
+					else if (a instanceof org.apache.juneau.rest.annotation.Method)
+						rp[i] = new RestParamDefaults.MethodObject(method, t);
+					else if (a instanceof PathRemainder)
+						rp[i] = new RestParamDefaults.PathRemainderObject(method, t);
+					else if (a instanceof Properties)
+						rp[i] = new RestParamDefaults.PropsObject(method, t);
+					else if (a instanceof Messages)
+						rp[i] = new RestParamDefaults.MessageBundleObject();
+				}
+			}
+
+			if (rp[i] == null) {
+				Path p = null;
+				for (Annotation a : pa[i])
+					if (a instanceof Path)
+						p = (Path)a;
+
+				String name = (p == null ? "" : p.value());
+
+				if (name.isEmpty()) {
+					int idx = attrIndex++;
+					String[] vars = pathPattern.getVars();
+					if (vars.length <= idx)
+						throw new RestServletException("Number of attribute parameters in method ''{0}'' exceeds the number of URL pattern variables.", method.getName());
+
+					// Check for {#} variables.
+					String idxs = String.valueOf(idx);
+					for (int j = 0; j < vars.length; j++)
+						if (StringUtils.isNumeric(vars[j]) && vars[j].equals(idxs))
+							name = vars[j];
+
+					if (name.isEmpty())
+						name = pathPattern.getVars()[idx];
+				}
+				rp[i] = new RestParamDefaults.PathParameterObject(name, t);
+			}
+		}
+
+		return rp;
 	}
 
 	/**

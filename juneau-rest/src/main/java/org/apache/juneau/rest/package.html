@@ -579,13 +579,78 @@
 		<ul class='spaced-list'>
 			<li>Parameters of the following class types:
 				<ul>
-					<li>{@link org.apache.juneau.rest.RestRequest} - The request object.
-					<li>{@link javax.servlet.http.HttpServletRequest} - The superclass of <code>RestRequest</code>.
-					<li>{@link org.apache.juneau.rest.RestResponse} - The response object.
-					<li>{@link javax.servlet.http.HttpServletResponse} - The superclass of <code>RestResponse</code>.
-					<li>{@link org.apache.juneau.http.Accept} - The parsed <code>Accept</code> header.
-					<li>{@link org.apache.juneau.http.AcceptEncoding} - The parsed <code>Accept-Encoding</code> header.
-					<li>{@link org.apache.juneau.http.ContentType} - The parsed <code>Content-Type</code> header.
+					<li>Request/response objects:
+						<ul>
+							<li>{@link org.apache.juneau.rest.RestRequest} - The request object.
+							<li>{@link javax.servlet.http.HttpServletRequest} - The superclass of <code>RestRequest</code>.
+							<li>{@link org.apache.juneau.rest.RestResponse} - The response object.
+							<li>{@link javax.servlet.http.HttpServletResponse} - The superclass of <code>RestResponse</code>.
+						</ul>
+					<li>Parsed request header values:
+						<ul>
+							<li>{@link org.apache.juneau.http.Accept}
+							<li>{@link org.apache.juneau.http.AcceptCharset}
+							<li>{@link org.apache.juneau.http.AcceptEncoding}
+							<li>{@link org.apache.juneau.http.AcceptLanguage}
+							<li>{@link org.apache.juneau.http.Authorization}
+							<li>{@link org.apache.juneau.http.CacheControl}
+							<li>{@link org.apache.juneau.http.Connection}
+							<li>{@link org.apache.juneau.http.ContentLength}
+							<li>{@link org.apache.juneau.http.ContentType}
+							<li>{@link org.apache.juneau.http.Date}
+							<li>{@link org.apache.juneau.http.Expect}
+							<li>{@link org.apache.juneau.http.From}
+							<li>{@link org.apache.juneau.http.Host}
+							<li>{@link org.apache.juneau.http.IfMatch}
+							<li>{@link org.apache.juneau.http.IfModifiedSince}
+							<li>{@link org.apache.juneau.http.IfNoneMatch}
+							<li>{@link org.apache.juneau.http.IfRange}
+							<li>{@link org.apache.juneau.http.IfUnmodifiedSince}
+							<li>{@link org.apache.juneau.http.MaxForwards}
+							<li>{@link org.apache.juneau.http.Pragma}
+							<li>{@link org.apache.juneau.http.ProxyAuthorization}
+							<li>{@link org.apache.juneau.http.Range}
+							<li>{@link org.apache.juneau.http.Referer}
+							<li>{@link org.apache.juneau.http.TE}
+							<li>{@link org.apache.juneau.http.UserAgent}
+							<li>{@link org.apache.juneau.http.Upgrade}
+							<li>{@link org.apache.juneau.http.Via}
+							<li>{@link org.apache.juneau.http.Warning}
+							<li>{@link java.util.TimeZone}
+						</ul>
+					<li>Direct streams on request/response:
+						<ul>
+							<li>{@link java.io.InputStream}
+							<li>{@link javax.servlet.ServletInputStream}
+							<li>{@link java.io.Reader}
+							<li>{@link java.io.OutputStream}
+							<li>{@link javax.servlet.ServletOutputStream}
+							<li>{@link java.io.Writer}
+						</ul>
+					<li>Localization:
+						<ul>
+							<li>{@link java.util.ResourceBundle} - Client-localized resource bundle.
+							<li>{@link org.apache.juneau.utils.MessageBundle} - A resource bundle with additional features.
+							<li>{@link java.util.Locale} - Client locale.
+						</ul>
+					<li>Request APIs:
+						<ul>
+							<li>{@link org.apache.juneau.rest.RequestHeaders} - API for accessing request headers.
+							<li>{@link org.apache.juneau.rest.RequestQuery} - API for accessing request query parameters.
+							<li>{@link org.apache.juneau.rest.RequestFormData} - API for accessing request form data.
+							<li>{@link org.apache.juneau.rest.RequestPathParams} - API for accessing path variables.
+							<li>{@link org.apache.juneau.rest.RequestBody} - API for accessing request body.
+						</ul>
+					<li>Other:
+						<ul>
+							<li>{@link org.apache.juneau.http.HttpMethod} - The method name matched (when using <code><ja>@RestMethod</ja>(name=<js>"*"</js>)</code>)
+							<li>{@link java.util.logging.Logger} - The logger to use for logging.
+							<li>{@link org.apache.juneau.internal.JuneauLogger} - Logger with additional features.
+							<li>{@link org.apache.juneau.rest.RestContext} - The resource read-only context.
+							<li>{@link org.apache.juneau.parser.Parser} - The parser matching the request content type.
+							<li>{@link org.apache.juneau.dto.swagger.Swagger} - The auto-generated Swagger doc.
+							<li>{@link org.apache.juneau.ini.ConfigFile} - The external config file for the resource.
+						</ul>
 				</ul>
 			<li>Annotated parameters:
 				<ul>
@@ -641,21 +706,8 @@
 	}
 		</p>
 		<p>
-			All annotations have programmatic equivalents on the {@link org.apache.juneau.rest.RestRequest} class:
+			All annotations have programmatic equivalents on the {@link org.apache.juneau.rest.RestRequest} class.
 		</p>
-		<ul class='javahierarchy'>
-			<li class='m'>{@link org.apache.juneau.rest.RestRequest#getPathParameter(String,Class)}
-			<li class='m'>{@link org.apache.juneau.rest.RestRequest#getFormDataParameter(String,Class)}
-			<li class='m'>{@link org.apache.juneau.rest.RestRequest#hasFormDataParameter(String)}
-			<li class='m'>{@link org.apache.juneau.rest.RestRequest#getQueryParameter(String,Class)}
-			<li class='m'>{@link org.apache.juneau.rest.RestRequest#hasQueryParameter(String)}
-			<li class='m'>{@link org.apache.juneau.rest.RestRequest#getBody(Class)}
-			<li class='m'>{@link org.apache.juneau.rest.RestRequest#getHeader(String,Class)}
-			<li class='m'>{@link org.apache.juneau.rest.RestRequest#getMethod()}
-			<li class='m'>{@link org.apache.juneau.rest.RestRequest#getPathRemainder()}
-			<li class='m'>{@link org.apache.juneau.rest.RestRequest#getMessage(String,Object[])}
-			<li class='m'>{@link org.apache.juneau.rest.RestRequest#getProperties()}
-		</ul>
 		
 		<!-- ======================================================================================================== -->
 		<a id="RestResources.MethodSignature.Path"></a>
@@ -820,7 +872,7 @@
 		</p>
 		<p>
 			The HTTP body of a request can be retrieved as a parsed POJO using either the 
-				{@link org.apache.juneau.rest.RestRequest#getBody(Class)} method, or a parameter 
+				{@link org.apache.juneau.rest.RestRequest#getBody()} method, or a parameter 
 				annotated with {@link org.apache.juneau.rest.annotation.Body @Body}.
 		</p>
 		<p class='bcode'>
@@ -833,7 +885,7 @@
 	<jc>// Equivalent method 2</jc>
 	<ja>@RestMethod</ja>(name=<js>"POST"</js>, path=<js>"/example2"</js>)
 	<jk>public void</jk> doPost2(RestRequest req) {
-		Person p = req.getBody(Person.<jk>class</jk>);
+		Person p = req.getBody).asType(Person.<jk>class</jk>);
 		<jc>// Do something with p.</jc>
 	}
 		</p>
@@ -896,7 +948,7 @@
 					cause the underlying JEE servlet to parse the HTTP body as a form post.
 				Your input bean will end up being null since there won't be any content left
 					after the servlet has parsed the body of the request.
-				This applies to WHENEVER you use <l>@Body</l> or {@link org.apache.juneau.rest.RestRequest#getBody(Class)}.
+				This applies to WHENEVER you use <l>@Body</l> or {@link org.apache.juneau.rest.RestRequest#getBody()}.
 		</p>	
 		</div>
 
@@ -2036,14 +2088,14 @@
 					<ul>
 						<li><ck>$R{attribute.X}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getAttribute(String)} converted to a string.
 						<li><ck>$R{contextPath}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getContextPath()}.
-						<li><ck>$R{formData.X}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getFormDataParameter(String)}.
+						<li><ck>$R{formData.X}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getFormData(String)}.
 						<li><ck>$R{header.X}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getHeader(String)}.
 						<li><ck>$R{method}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getMethod()}.
 						<li><ck>$R{methodSummary}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getMethodSummary()}.
 						<li><ck>$R{methodDescription}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getMethodDescription()}.
 						<li><ck>$R{path.X}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getPathParameter(String)}.
 						<li><ck>$R{pathInfo}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getPathInfo()}.
-						<li><ck>$R{query.X}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getQueryParameter(String)}.
+						<li><ck>$R{query.X}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getQuery(String)}.
 						<li><ck>$R{requestParentURI}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getRequestParentURI()}.
 						<li><ck>$R{requestURI}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getRequestURI()}.
 						<li><ck>$R{servletDescription}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getServletDescription()}.
@@ -3114,7 +3166,7 @@
 <div class='topic'>
 		<p>
 		Certain methods in the REST server API allow you to specify class types that can be convertable
-			from <l>Strings</l> (e.g. {@link org.apache.juneau.rest.RestRequest#getPathParameter(String,Class)}).
+			from <l>Strings</l> (e.g. {@link org.apache.juneau.rest.RestRequest#getPathParameter(String)}).
 		</p>
 		<p>
 		POJOs convertable from <l>Strings</l> have one of the following:

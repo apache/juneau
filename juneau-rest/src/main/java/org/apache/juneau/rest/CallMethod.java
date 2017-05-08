@@ -18,12 +18,10 @@ import static org.apache.juneau.rest.RestContext.*;
 import static org.apache.juneau.rest.annotation.Inherit.*;
 import static org.apache.juneau.serializer.SerializerContext.*;
 
-import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.lang.reflect.Method;
 import java.util.*;
 
-import javax.servlet.*;
 import javax.servlet.http.*;
 
 import org.apache.juneau.*;
@@ -34,7 +32,6 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.annotation.Properties;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.urlencoding.*;
@@ -47,7 +44,7 @@ class CallMethod implements Comparable<CallMethod>  {
 	private final java.lang.reflect.Method method;
 	private final String httpMethod;
 	private final UrlPathPattern pathPattern;
-	private final CallMethod.MethodParam[] params;
+	private final RestParam[] params;
 	private final RestGuard[] guards;
 	private final RestMatcher[] optionalMatchers;
 	private final RestMatcher[] requiredMatchers;
@@ -103,7 +100,7 @@ class CallMethod implements Comparable<CallMethod>  {
 	private static class Builder  {
 		private String httpMethod, defaultCharset, description, tags, summary, externalDocs, pageTitle, pageText, pageLinks;
 		private UrlPathPattern pathPattern;
-		private CallMethod.MethodParam[] params;
+		private RestParam[] params;
 		private RestGuard[] guards;
 		private RestMatcher[] optionalMatchers, requiredMatchers;
 		private RestConverter[] converters;
@@ -276,14 +273,7 @@ class CallMethod implements Comparable<CallMethod>  {
 
 				pathPattern = new UrlPathPattern(p);
 
-				int attrIdx = 0;
-				Type[] pt = method.getGenericParameterTypes();
-				Annotation[][] pa = method.getParameterAnnotations();
-				params = new CallMethod.MethodParam[pt.length];
-				for (int i = 0; i < params.length; i++) {
-					params[i] = new CallMethod.MethodParam(pt[i], method, pa[i], plainParams, pathPattern, attrIdx);
-					attrIdx = params[i].attrIdx;
-				}
+				params = context.findParams(method, plainParams, pathPattern);
 
 				if (sgb != null)
 					serializers = sgb.build();
@@ -299,110 +289,6 @@ class CallMethod implements Comparable<CallMethod>  {
 			} catch (Exception e) {
 				throw new RestServletException("Exception occurred while initializing method ''{0}''", method.getName()).initCause(e);
 			}
-		}
-	}
-
-	/**
-	 * Represents a single parameter in the Java method.
-	 */
-	private static class MethodParam {
-
-		private final int attrIdx;
-		private final RestParam param;
-
-		private MethodParam(Type type, Method method, Annotation[] annotations, boolean methodPlainParams, UrlPathPattern pathPattern, int attrIdx) throws ServletException {
-
-			RestParam _param = null;
-			String _name = "";
-
-			boolean isClass = type instanceof Class;
-			if (isClass)
-				_param = RestParam.STANDARD_RESOLVERS.get(type);
-
-			if (_param == null) {
-				for (Annotation a : annotations) {
-					if (a instanceof Path) {
-						Path a2 = (Path)a;
-						_name = a2.value();
-					} else if (a instanceof Header) {
-						_param = new RestParam.HeaderObject(((Header)a).value(), type);
-					} else if (a instanceof FormData) {
-						FormData p = (FormData)a;
-						if (p.multipart())
-							assertCollection(type, method);
-						boolean plainParams = p.format().equals("INHERIT") ? methodPlainParams : p.format().equals("PLAIN");
-						_param = new RestParam.FormDataObject(p.value(), type, p.multipart(), plainParams);
-					} else if (a instanceof Query) {
-						Query p = (Query)a;
-						if (p.multipart())
-							assertCollection(type, method);
-						boolean plainParams = p.format().equals("INHERIT") ? methodPlainParams : p.format().equals("PLAIN");
-						_param = new RestParam.QueryObject(p.value(), type, p.multipart(), plainParams);
-					} else if (a instanceof HasFormData) {
-						_param = new RestParam.HasFormDataObject(((HasFormData)a).value(), type);
-					} else if (a instanceof HasQuery) {
-						_param = new RestParam.HasQueryObject(((HasQuery)a).value(), type);
-					} else if (a instanceof Body) {
-						_param = new RestParam.BodyObject(type);
-					} else if (a instanceof org.apache.juneau.rest.annotation.Method) {
-						_param = new RestParam.MethodObject(type);
-					} else if (a instanceof PathRemainder) {
-						_param = new RestParam.PathRemainderObject(type);
-					} else if (a instanceof Properties) {
-						_param = new RestParam.PropsObject(type);
-					} else if (a instanceof Messages) {
-						_param = new RestParam.MessageBundleObject();
-					}
-				}
-			}
-
-			if (_param == null) {
-
-				if (_name.isEmpty()) {
-					int idx = attrIdx++;
-					String[] vars = pathPattern.getVars();
-					if (vars.length <= idx)
-						throw new RestServletException("Number of attribute parameters in method ''{0}'' exceeds the number of URL pattern variables.", method.getName());
-
-					// Check for {#} variables.
-					String idxs = String.valueOf(idx);
-					for (int i = 0; i < vars.length; i++)
-						if (StringUtils.isNumeric(vars[i]) && vars[i].equals(idxs))
-							_name = vars[i];
-
-					if (_name.isEmpty())
-						_name = pathPattern.getVars()[idx];
-				}
-				_param = new RestParam.PathParameterObject(_name, type);
-			}
-
-			this.param = _param;
-			this.attrIdx = attrIdx;
-		}
-
-		/**
-		 * Throws an exception if the specified type isn't an array or collection.
-		 */
-		private static void assertCollection(Type t, Method m) throws ServletException {
-			ClassMeta<?> cm = BeanContext.DEFAULT.getClassMeta(t);
-			if (! cm.isCollectionOrArray())
-				throw new ServletException("Use of multipart flag on parameter that's not an array or Collection on method" + m);
-		}
-
-		private Object getValue(RestRequest req, RestResponse res) throws Exception {
-			return param.resolve(req, res);
-		}
-
-		private RestParamType getParamType() {
-			return param.getParamType();
-		}
-
-		private String getName() {
-			return param.getName();
-		}
-
-		private Type getType() {
-			return param.getType();
 		}
 	}
 
@@ -633,7 +519,7 @@ class CallMethod implements Comparable<CallMethod>  {
 		}
 
 		// Finally, look for parameters defined on method.
-		for (CallMethod.MethodParam mp : this.params) {
+		for (RestParam mp : this.params) {
 			RestParamType in = mp.getParamType();
 			if (in != RestParamType.OTHER) {
 				String k2 = in.toString() + '.' + (in == RestParamType.BODY ? null : mp.getName());
@@ -800,7 +686,7 @@ class CallMethod implements Comparable<CallMethod>  {
 		Object[] args = new Object[params.length];
 		for (int i = 0; i < params.length; i++) {
 			try {
-				args[i] = params[i].getValue(req, res);
+				args[i] = params[i].resolve(req, res);
 			} catch (RestException e) {
 				throw e;
 			} catch (Exception e) {
