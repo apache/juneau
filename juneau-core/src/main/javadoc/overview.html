@@ -3057,14 +3057,16 @@
 			String method = req.getMethod(); 
 			
 			<jc>// Attributes (from URL pattern variables)</jc> 
-			String a1 = req.getPathParameter(<js>"a1"</js>, String.<jk>class</jk>); 
-			<jk>int</jk> a2 = req.getPathParameter(<js>"a2"</js>, <jk>int</jk>.<jk>class</jk>); 
-			UUID a3 = req.getPathParameter(<js>"a3"</js>, UUID.<jk>class</jk>); 
+			RequestPathParams path = req.getPathParams();
+			String a1 = path.get(<js>"a1"</js>, String.<jk>class</jk>); 
+			<jk>int</jk> a2 = path.get(<js>"a2"</js>, <jk>int</jk>.<jk>class</jk>); 
+			UUID a3 = path.get(<js>"a3"</js>, UUID.<jk>class</jk>); 
 			
 			<jc>// Optional GET parameters</jc> 
-			<jk>int</jk> p1 = req.getQueryParameter(<js>"p1"</js>, <jk>int</jk>.<jk>class</jk>, 0); 
-			String p2 = req.getQueryParameter(<js>"p2"</js>, String.<jk>class</jk>); 
-			UUID p3 = req.getQueryParameter(<js>"p3"</js>, UUID.<jk>class</jk>); 
+			RequestQuery query = req.getQuery();
+			<jk>int</jk> p1 = query.get(<js>"p1"</js>, <jk>int</jk>.<jk>class</jk>, 0); 
+			String p2 = query.get(<js>"p2"</js>, String.<jk>class</jk>); 
+			UUID p3 = query.get(<js>"p3"</js>, UUID.<jk>class</jk>); 
 			
 			<jc>// URL pattern post-match</jc> 
 			String remainder = req.getPathRemainder(); 
@@ -3079,10 +3081,45 @@
 				method, a1, a2, a3, remainder, p1, p2, p3, lang, doNotTrack); 
 			res.setOutput(output); 
 		} 
+
+		<jd>/** Example GET request using resolved parameter objects */</jd> 
+		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/example3/{a1}/{a2}/{a3}/*"</js>, rc={200}) 
+		<jk>public void</jk> doGetExample3(
+				HttpMethod httpMethod, 
+				RequestPathParams path, 
+				RequestQuery query,
+				<ja>@PathRemainder</ja> String remainder,
+				AcceptLanguage acceptLanguage,
+				Accept accept,
+				DNT dnt
+			) <jk>throws</jk> Exception { 
+			
+			String method = httpMethod.toString(); 
+			
+			<jc>// Attributes (from URL pattern variables)</jc> 
+			String a1 = path.get(<js>"a1"</js>, String.<jk>class</jk>); 
+			<jk>int</jk> a2 = path.get(<js>"a2"</js>, <jk>int</jk>.<jk>class</jk>); 
+			UUID a3 = path.get(<js>"a3"</js>, UUID.<jk>class</jk>); 
+			
+			<jc>// Optional GET parameters</jc> 
+			<jk>int</jk> p1 = query.get(<js>"p1"</js>, <jk>int</jk>.<jk>class</jk>, 0); 
+			String p2 = query.get(<js>"p2"</js>, String.<jk>class</jk>); 
+			UUID p3 = query.get(<js>"p3"</js>, UUID.<jk>class</jk>); 
+			
+			<jc>// Headers</jc> 
+			String lang = acceptLanguage.toString(); 
+			<jk>int</jk> doNotTrack = dnt.asType(<jk>int</jk>.<jk>class</jk>); 
+			
+			<jc>// Send back a simple String response</jc> 
+			String output = String.format( 
+				<js>"method=%s, a1=%s, a2=%d, a3=%s, remainder=%s, p1=%d, p2=%s, p3=%s, lang=%s, dnt=%d"</js>, 
+				method, a1, a2, a3, remainder, p1, p2, p3, lang, doNotTrack); 
+			res.setOutput(output); 
+		} 
 	} 
 		</p>
 		<p>
-			The class consists of 3 methods:
+			The class consists of 4 methods:
 		</p>	
 		<ul class='javahierarchy'>
 			<li class='m'><l>doGetExample()</l>
@@ -3109,6 +3146,13 @@
 					<li class='m'>{@link org.apache.juneau.rest.RestRequest#getPathRemainder()}
 				</ul>
 				Method sets the POJO to be serialized using the {@link org.apache.juneau.rest.RestResponse#setOutput(Object)} method.
+			<li class='m'><l>doGetExample2()</l>
+				<br>Identical to <l>doGetExample1()</l> but uses automatically resolved parameters based on class type.
+				<br>Juneau automatically recognizes specific class types such as common header types and automatically
+					resolves them to objects for you.  
+				<br>See <a class='doclink' href='org/apache/juneau/rest/package-summary.html#RestResources.MethodSignature'>Rest Resources / Method Signature</a>
+					for the list of all automatically support parameter types, and {@link org.apache.juneau.rest.annotation.RestResource#paramResolvers() @RestResource.paramResolvers()}
+					for defining your own custom parameter type resolvers. 
 		</ul>
 		
 		<p>
@@ -5996,6 +6040,32 @@
 					<li>{@link org.apache.juneau.dto.swagger.Swagger} - The auto-generated Swagger doc.
 					<li>{@link org.apache.juneau.ini.ConfigFile} - The external config file for the resource.
 				</ul>
+				So, for example...
+				<p class='bcode'>
+	<jd>/** Old way */</jd> 
+	<ja>@RestMethod</ja>(name=<js>"*"</js>, path=<js>"/example1/{a1}/{a2}/{a3}/*"</js>) 
+	<jk>public</jk> String example1( 
+		<ja>@Method</ja> String method, 
+		<ja>@Path</ja> String a1, 
+		<ja>@Path</ja> <jk>int</jk> a2, 
+		<ja>@Path</ja> UUID a3, 
+		<ja>@Query</ja>(<js>"p1"</js>) <jk>int</jk> p1, 
+		<ja>@Query</ja>(<js>"p2"</js>) String p2, 
+		<ja>@Query</ja>(<js>"p3"</js>) UUID p3, 
+		<ja>@Header</ja>(<js>"Accept-Language"</js>) String lang, 
+		<ja>@Header</ja>(<js>"Accept"</js>) String accept 
+	) 
+
+	<jd>/** New way */</jd> 
+	<ja>@RestMethod</ja>(name=<js>"*"</js>, path=<js>"/example2/{a1}/{a2}/{a3}/*"</js>) 
+	<jk>public</jk> String example2(
+		HttpMethod httpMethod,
+		RequestPathParams pathParams,
+		RequestQuery query,
+		AcceptLanguage acceptLanguage,
+		Accept accept
+	)
+				</p>
 			<li>A new annotation {@link org.apache.juneau.rest.annotation.RestResource#paramResolvers() @RestResource.paramResolvers()}
 				that allows you to define your own custom Java method parameter resolvers.
 		</ul>
