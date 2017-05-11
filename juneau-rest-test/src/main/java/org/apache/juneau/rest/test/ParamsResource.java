@@ -68,25 +68,25 @@ public class ParamsResource extends RestServletDefault {
 	public void doGet3(HttpServletRequest reqx, HttpServletResponse resx, String foo, int bar) {
 		RestRequest req = (RestRequest)reqx;
 		RestResponse res = (RestResponse)resx;
-		res.setOutput("GET /get3/"+foo+"/"+bar+" remainder="+req.getPathRemainder());
+		res.setOutput("GET /get3/"+foo+"/"+bar+" remainder="+req.getPathMatch().getRemainder());
 	}
 
 	// Test method name with overlapping name, remainder allowed.
 	@RestMethod(name="GET2")
 	public void get2(RestRequest req, RestResponse res) {
-		res.setOutput("GET2 remainder="+req.getPathRemainder());
+		res.setOutput("GET2 remainder="+req.getPathMatch().getRemainder());
 	}
 
 	// Default POST
 	@RestMethod(name="POST")
 	public void doPost(RestRequest req, RestResponse res) {
-		res.setOutput("POST remainder="+req.getPathRemainder());
+		res.setOutput("POST remainder="+req.getPathMatch().getRemainder());
 	}
 
 	// Bean parameter
 	@RestMethod(name="POST", path="/person/{person}")
 	public void doPost(RestRequest req, RestResponse res, Person p) {
-		res.setOutput("POST /person/{name="+p.name+",birthDate.year="+p.birthDate.get(Calendar.YEAR)+"} remainder="+req.getPathRemainder());
+		res.setOutput("POST /person/{name="+p.name+",birthDate.year="+p.birthDate.get(Calendar.YEAR)+"} remainder="+req.getPathMatch().getRemainder());
 	}
 
 	// Various primitive types
@@ -113,7 +113,7 @@ public class ParamsResource extends RestServletDefault {
 	@RestMethod(name="GET", path="/testParamGet/*")
 	public String testParamGet(RestRequest req, @Query("p1") String p1, @Query("p2") int p2) throws Exception {
 		RequestQuery q = req.getQuery();
-		return "p1=["+p1+","+req.getQuery("p1")+","+q.get("p1", String.class)+"],p2=["+p2+","+q.getFirst("p2")+","+q.get("p2", int.class)+"]";
+		return "p1=["+p1+","+req.getQuery().getFirst("p1")+","+q.get("p1", String.class)+"],p2=["+p2+","+q.getFirst("p2")+","+q.get("p2", int.class)+"]";
 	}
 
 	//====================================================================================================
@@ -122,7 +122,7 @@ public class ParamsResource extends RestServletDefault {
 	@RestMethod(name="POST", path="/testParamPost/*")
 	public String testParamPost(RestRequest req, @FormData("p1") String p1, @FormData("p2") int p2) throws Exception {
 		RequestFormData f = req.getFormData();
-		return "p1=["+p1+","+req.getFormData("p1")+","+f.get("p1", String.class)+"],p2=["+p2+","+req.getFormData("p2")+","+f.get("p2", int.class)+"]";
+		return "p1=["+p1+","+req.getFormData().getFirst("p1")+","+f.get("p1", String.class)+"],p2=["+p2+","+req.getFormData().getFirst("p2")+","+f.get("p2", int.class)+"]";
 	}
 
 	//====================================================================================================
@@ -131,7 +131,7 @@ public class ParamsResource extends RestServletDefault {
 	@RestMethod(name="GET", path="/testQParamGet/*")
 	public String testQParamGet(RestRequest req, @Query("p1") String p1, @Query("p2") int p2) throws Exception {
 		RequestQuery q = req.getQuery();
-		return "p1=["+p1+","+req.getQuery("p1")+","+q.get("p1", String.class)+"],p2=["+p2+","+q.getFirst("p2")+","+q.get("p2", int.class)+"]";
+		return "p1=["+p1+","+req.getQuery().getFirst("p1")+","+q.get("p1", String.class)+"],p2=["+p2+","+q.getFirst("p2")+","+q.get("p2", int.class)+"]";
 	}
 
 	//====================================================================================================
@@ -140,7 +140,7 @@ public class ParamsResource extends RestServletDefault {
 	@RestMethod(name="POST", path="/testQParamPost/*")
 	public String testQParamPost(RestRequest req, @Query("p1") String p1, @Query("p2") int p2) throws Exception {
 		RequestQuery q = req.getQuery();
-		return "p1=["+p1+","+req.getQuery("p1")+","+q.get("p1", String.class)+"],p2=["+p2+","+q.getFirst("p2")+","+q.get("p2", int.class)+"]";
+		return "p1=["+p1+","+req.getQuery().getFirst("p1")+","+q.get("p1", String.class)+"],p2=["+p2+","+q.getFirst("p2")+","+q.get("p2", int.class)+"]";
 	}
 
 	//====================================================================================================
@@ -149,7 +149,7 @@ public class ParamsResource extends RestServletDefault {
 	@RestMethod(name="GET", path="/testPlainParamGet/*")
 	public String testPlainParamGet(RestRequest req, @Query(value="p1",format="PLAIN") String p1) throws Exception {
 		RequestQuery q = req.getQuery();
-		return "p1=["+p1+","+req.getQuery("p1")+","+q.get("p1", String.class)+"]";
+		return "p1=["+p1+","+req.getQuery().getFirst("p1")+","+q.get("p1", String.class)+"]";
 	}
 
 	//====================================================================================================
@@ -158,7 +158,7 @@ public class ParamsResource extends RestServletDefault {
 	@RestMethod(name="POST", path="/testPlainParamPost/*")
 	public String testPlainParamPost(RestRequest req, @FormData(value="p1",format="PLAIN") String p1) throws Exception {
 		RequestFormData f = req.getFormData();
-		return "p1=["+p1+","+req.getFormData("p1")+","+f.get("p1", String.class)+"]";
+		return "p1=["+p1+","+req.getFormData().getFirst("p1")+","+f.get("p1", String.class)+"]";
 	}
 
 	//====================================================================================================
@@ -167,7 +167,7 @@ public class ParamsResource extends RestServletDefault {
 	@RestMethod(name="GET", path="/testPlainQParamGet/*")
 	public String testPlainQParamGet(RestRequest req, @Query(value="p1",format="PLAIN") String p1) throws Exception {
 		RequestQuery q = req.getQuery();
-		return "p1=["+p1+","+req.getQuery("p1")+","+q.get("p1", String.class)+"]";
+		return "p1=["+p1+","+req.getQuery().getFirst("p1")+","+q.get("p1", String.class)+"]";
 	}
 
 	//====================================================================================================
@@ -176,7 +176,7 @@ public class ParamsResource extends RestServletDefault {
 	@RestMethod(name="POST", path="/testPlainQParamPost/*")
 	public String testPlainQParamPost(RestRequest req, @Query(value="p1",format="PLAIN") String p1) throws Exception {
 		RequestQuery q = req.getQuery();
-		return "p1=["+p1+","+req.getQuery("p1")+","+q.get("p1", String.class)+"]";
+		return "p1=["+p1+","+req.getQuery().getFirst("p1")+","+q.get("p1", String.class)+"]";
 	}
 
 	//====================================================================================================

@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -20,26 +22,34 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.urlencoding.*;
 
 /**
- * Represents the path parameters on an HTTP request.
+ * Contains information about the matched path on the HTTP request.
+ * <p>
+ * Provides access to the matched path variables and path match remainder.
  */
 @SuppressWarnings("unchecked")
-public class RequestPathParams extends TreeMap<String,String> {
+public class RequestPathMatch extends TreeMap<String,String> {
 	private static final long serialVersionUID = 1L;
 
 	private UrlEncodingParser parser;
 	private BeanSession beanSession;
+	private String remainder;
 
-	RequestPathParams() {
+	RequestPathMatch() {
 		super(String.CASE_INSENSITIVE_ORDER);
 	}
 
-	RequestPathParams setParser(UrlEncodingParser parser) {
+	RequestPathMatch setParser(UrlEncodingParser parser) {
 		this.parser = parser;
 		return this;
 	}
 
-	RequestPathParams setBeanSession(BeanSession beanSession) {
+	RequestPathMatch setBeanSession(BeanSession beanSession) {
 		this.beanSession = beanSession;
+		return this;
+	}
+
+	RequestPathMatch setRemainder(String remainder) {
+		this.remainder = remainder;
 		return this;
 	}
 
@@ -56,7 +66,7 @@ public class RequestPathParams extends TreeMap<String,String> {
 	/**
 	 * Returns the specified path parameter converted to a POJO.
 	 * <p>
-	 * The type can be any POJO type convertable from a <code>String</code> (See <a class="doclink" 
+	 * The type can be any POJO type convertable from a <code>String</code> (See <a class="doclink"
 	 * href="package-summary.html#PojosConvertableFromString">POJOs Convertable From Strings</a>).
 	 * <p>
 	 * <h5 class='section'>Examples:</h5>
@@ -134,4 +144,70 @@ public class RequestPathParams extends TreeMap<String,String> {
 		return t;
 	}
 
+	/**
+	 * Returns the decoded remainder of the URL following any path pattern matches.
+	 * <p>
+	 * The behavior of path remainder is shown below given the path pattern "/foo/*":
+	 * <p>
+	 * <table class='styled'>
+	 * 	<tr>
+	 * 		<th>URL</th>
+	 * 		<th>Path Remainder</th>
+	 * 	</tr>
+	 * 	<tr>
+	 * 		<td><code>/foo</code></td>
+	 * 		<td><jk>null</jk></td>
+	 * 	</tr>
+	 * 	<tr>
+	 * 		<td><code>/foo/</code></td>
+	 * 		<td><js>""</js></td>
+	 * 	</tr>
+	 * 	<tr>
+	 * 		<td><code>/foo//</code></td>
+	 * 		<td><js>"/"</js></td>
+	 * 	</tr>
+	 * 	<tr>
+	 * 		<td><code>/foo///</code></td>
+	 * 		<td><js>"//"</js></td>
+	 * 	</tr>
+	 * 	<tr>
+	 * 		<td><code>/foo/a/b</code></td>
+	 * 		<td><js>"a/b"</js></td>
+	 * 	</tr>
+	 * 	<tr>
+	 * 		<td><code>/foo//a/b/</code></td>
+	 * 		<td><js>"/a/b/"</js></td>
+	 * 	</tr>
+	 * 	<tr>
+	 * 		<td><code>/foo/a%2Fb</code></td>
+	 * 		<td><js>"a/b"</js></td>
+	 * 	</tr>
+	 * </table>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// REST method</jc>
+	 * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>,path=<js>"/foo/{bar}/*"</js>)
+	 * 	<jk>public</jk> String doGetById(RequestPathParams pathParams, <jk>int</jk> bar) {
+	 * 		<jk>return</jk> pathParams.getRemainder();
+	 * 	}
+	 *
+	 * 	<jc>// Prints "path/remainder"</jc>
+	 * 	<jk>new</jk> RestCall(servletPath + <js>"/foo/123/path/remainder"</js>).connect();
+	 * </p>
+	 *
+	 * @return The path remainder string.
+	 */
+	public String getRemainder() {
+		return urlDecode(remainder);
+	}
+
+	/**
+	 * Same as {@link #getRemainder()} but doesn't decode characters.
+	 *
+	 * @return The undecoded path remainder.
+	 */
+	public String getRemainderUndecoded() {
+		return remainder;
+	}
 }

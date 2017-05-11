@@ -67,7 +67,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	private final RestContext context;
 
 	private final String method;
-	private String pathRemainder;
 	private RequestBody body;
 	private Method javaMethod;
 	private ObjectMap properties;
@@ -79,7 +78,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	private VarResolverSession varSession;
 	private final RequestQuery queryParams;
 	private RequestFormData formData;
-	private RequestPathParams pathParams;
+	private RequestPathMatch pathParams;
 	private boolean isPost;
 	private String servletURI, relativeServletURI;
 	private String charset, defaultCharset;
@@ -111,7 +110,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			// Can be overridden through a "method" GET attribute.
 			String _method = super.getMethod();
 
-			String m = getQuery("method");
+			String m = getQuery().getFirst("method");
 			if (context.allowMethodParam(m))
 				_method = m;
 
@@ -126,7 +125,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			body = new RequestBody(this);
 
 			if (context.isAllowBodyParam()) {
-				String b = getQuery("body");
+				String b = getQuery().getFirst("body");
 				if (b != null) {
 					headers.put("Content-Type", UonSerializer.DEFAULT.getResponseContentType());
 					body.load(b.getBytes(IOUtils.UTF8));
@@ -136,9 +135,9 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			if (context.isAllowHeaderParams())
 				headers.setQueryParams(queryParams);
 
-			debug = "true".equals(getQuery("debug", "false")) || "true".equals(getHeader("Debug", "false"));
+			debug = "true".equals(getQuery().getFirst("debug", "false")) || "true".equals(getHeaders().getFirst("Debug", "false"));
 
-			this.pathParams = new RequestPathParams();
+			this.pathParams = new RequestPathMatch();
 
 		} catch (RestException e) {
 			throw e;
@@ -151,9 +150,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * Called from RestServlet after a match has been made but before the guard or method invocation.
 	 */
 	@SuppressWarnings("hiding")
-	final void init(Method javaMethod, String pathRemainder, ObjectMap properties, Map<String,String> mDefaultRequestHeaders, String defaultCharset, SerializerGroup mSerializers, ParserGroup mParsers, UrlEncodingParser mUrlEncodingParser, EncoderGroup encoders, String pageTitle, String pageText, String pageLinks) {
+	final void init(Method javaMethod, ObjectMap properties, Map<String,String> mDefaultRequestHeaders, String defaultCharset, SerializerGroup mSerializers, ParserGroup mParsers, UrlEncodingParser mUrlEncodingParser, EncoderGroup encoders, String pageTitle, String pageText, String pageLinks) {
 		this.javaMethod = javaMethod;
-		this.pathRemainder = pathRemainder;
 		this.properties = properties;
 		this.urlEncodingParser = mUrlEncodingParser;
 		this.beanSession = urlEncodingParser.getBeanContext().createSession();
@@ -238,33 +236,9 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		return headers;
 	}
 
-	/**
-	 * Convenience method for calling <code>getHeaders().put(name, value);</code>
-	 *
-	 * @param name The header name.
-	 * @param value The header value.
-	 */
-	public void setHeader(String name, Object value) {
-		getHeaders().put(name, value);
-	}
-
-	/**
-	 * Convenience method for calling <code>getHeaders().getFirst(name);</code>
-	 */
 	@Override /* ServletRequest */
 	public String getHeader(String name) {
 		return getHeaders().getFirst(name);
-	}
-
-	/**
-	 * Convenience method for calling <code>getHeaders().getFirst(name, def);</code>
-	 *
-	 * @param name The HTTP header name.
-	 * @param def The default value to return if the header value isn't found.
-	 * @return The header value, or the default value if the header isn't present.
-	 */
-	public String getHeader(String name, String def) {
-		return getHeaders().getFirst(name, def);
 	}
 
 	@Override /* ServletRequest */
@@ -360,34 +334,12 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Convenience method for calling <code>getQueryParams().put(name, value);</code>.
-	 *
-	 * @param name The parameter name.
-	 * @param value The parameter value.
-	 */
-	public void setQuery(String name, Object value) {
-		queryParams.put(name, value);
-	}
-
-	/**
-	 * Convenience method for calling <code>getQueryParams().getFirst(name);</code>
-	 *
-	 * @param name The URL parameter name.
-	 * @return The parameter value, or <jk>null</jk> if parameter not specified or has no value (e.g. <js>"&amp;foo"</js>.
+	 * Shortcut for calling <code>getQuery().getFirst(name)</code>.
+	 * @param name The query parameter name.
+	 * @return The query parameter value, or <jk>null<jk> if not found.
 	 */
 	public String getQuery(String name) {
 		return getQuery().getFirst(name);
-	}
-
-	/**
-	 * Convenience method for calling <code>getQueryParams().getFirst(name, def);</code>
-	 *
-	 * @param name The URL parameter name.
-	 * @param def The default value.
-	 * @return The parameter value, or the default value if parameter not specified or has no value (e.g. <js>"&amp;foo"</js>.
-	 */
-	public String getQuery(String name, String def) {
-		return getQuery().getFirst(name, def);
 	}
 
 
@@ -421,37 +373,15 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * Convenience method for calling <code>getFormData().put(name, value);</code>.
-	 *
-	 * @param name The parameter name.
-	 * @param value The parameter value.
-	 */
-	public void setFormData(String name, Object value) {
-		getFormData().put(name, value);
-	}
-
-	/**
-	 * Convenience method for calling <code>getFormData().getFirst(name);</code>.
-	 *
+	 * Shortcut for calling <code>getFormData().getFirst(name)</code>.
 	 * @param name The form data parameter name.
-	 * @return The parameter value, or <jk>null</jk> if parameter does not exist.
+	 * @return The form data parameter value, or <jk>null<jk> if not found.
 	 */
 	public String getFormData(String name) {
 		return getFormData().getFirst(name);
 	}
 
-	/**
-	 * Convenience method for calling <code>getFormData().getFirst(name, def);</code>.
-	 *
-	 * @param name The form data parameter name.
-	 * @param def The default value.
-	 * @return The parameter value, or the default value if <jk>null</jk> or empty.
-	 */
-	public String getFormData(String name, String def) {
-		return getFormData().getFirst(name, def);
-	}
-
-
+	
 	//--------------------------------------------------------------------------------
 	// Path parameters
 	//--------------------------------------------------------------------------------
@@ -461,28 +391,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * @return The URL-encoded form data from the request.
 	 */
-	public RequestPathParams getPathParams() {
+	public RequestPathMatch getPathMatch() {
 		return pathParams;
-	}
-
-	/**
-	 * Convenience method for calling <code>getPathParams().put(name, value);</code>.
-	 *
-	 * @param name The parameter name.
-	 * @param value The parameter value.
-	 */
-	public void setPathParameter(String name, String value) {
-		pathParams.put(name, StringUtils.toString(value));
-	}
-
-	/**
-	 * Convenience method for calling <code>getPathParams().get(name);</code>.
-	 *
-	 * @param name The parameter name.
-	 * @return The parameter value, or <jk>null</jk> if path parameter not specified.
-	 */
-	public String getPathParameter(String name) {
-		return pathParams.get(name);
 	}
 
 
@@ -600,73 +510,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	public String getServletParentURI() {
 		String s = getServletURI();
 		return s.substring(0, s.lastIndexOf('/'));
-	}
-
-	/**
-	 * Returns the decoded remainder of the URL following any path pattern matches.
-	 * <p>
-	 * The behavior of path remainder is shown below given the path pattern "/foo/*":
-	 * <p>
-	 * <table class='styled'>
-	 * 	<tr>
-	 * 		<th>URL</th>
-	 * 		<th>Path Remainder</th>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td><code>/foo</code></td>
-	 * 		<td><jk>null</jk></td>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td><code>/foo/</code></td>
-	 * 		<td><js>""</js></td>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td><code>/foo//</code></td>
-	 * 		<td><js>"/"</js></td>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td><code>/foo///</code></td>
-	 * 		<td><js>"//"</js></td>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td><code>/foo/a/b</code></td>
-	 * 		<td><js>"a/b"</js></td>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td><code>/foo//a/b/</code></td>
-	 * 		<td><js>"/a/b/"</js></td>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td><code>/foo/a%2Fb</code></td>
-	 * 		<td><js>"a/b"</js></td>
-	 * 	</tr>
-	 * </table>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	<jc>// REST method</jc>
-	 * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>,path=<js>"/foo/{bar}/*"</js>)
-	 * 	<jk>public</jk> doGetById(RestServlet res, RestResponse res, <jk>int</jk> bar) {
-	 * 		System.<jsm>err</jsm>.println(res.getRemainder());
-	 * 	}
-	 *
-	 * 	<jc>// Prints "path/remainder"</jc>
-	 * 	<jk>new</jk> RestCall(servletPath + <js>"/foo/123/path/remainder"</js>).connect();
-	 * </p>
-	 *
-	 * @return The path remainder string.
-	 */
-	public String getPathRemainder() {
-		return urlDecode(pathRemainder);
-	}
-
-	/**
-	 * Same as {@link #getPathRemainder()} but doesn't decode characters.
-	 *
-	 * @return The undecoded path remainder.
-	 */
-	public String getPathRemainderUndecoded() {
-		return pathRemainder;
 	}
 
 	/**
@@ -935,7 +778,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return <jk>true</jk> if {@code &amp;plainText=true} was specified as a URL parameter
 	 */
 	public boolean isPlainText() {
-		return "true".equals(getQuery("plainText", "false"));
+		return "true".equals(getQuery().getFirst("plainText", "false"));
 	}
 
 	/**

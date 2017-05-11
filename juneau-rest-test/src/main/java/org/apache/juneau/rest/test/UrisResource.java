@@ -106,7 +106,7 @@ public class UrisResource extends RestServletDefault {
 		ObjectMap m = new ObjectMap();
 		m.put("contextPath", req.getContextPath());
 		m.put("pathInfo", req.getPathInfo());
-		m.put("pathRemainder", req.getPathRemainder());
+		m.put("pathRemainder", req.getPathMatch().getRemainder());
 		m.put("pathTranslated", req.getPathTranslated());
 		m.put("requestParentURI", req.getRequestParentURI());
 		m.put("requestURI", req.getRequestURI());

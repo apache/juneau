@@ -14,12 +14,14 @@ package org.apache.juneau.examples.rest;
 
 import java.util.*;
 
+import org.apache.juneau.http.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.annotation.Method;
 
 /**
- * Sample REST resource that shows how to define REST methods and OPTIONS pages
+ * Sample REST resource that shows how to define REST methods.
  */
 @RestResource(
 	path="/methodExample",
@@ -31,59 +33,111 @@ public class MethodExampleResource extends Resource {
 
 	/** Example GET request that redirects to our example method */
 	@RestMethod(name="GET", path="/")
-	public Redirect doGetExample() throws Exception {
-		return new Redirect("example1/xxx/123/{0}/xRemainder?p1=123&p2=yyy", UUID.randomUUID());
+	public Redirect doExample() throws Exception {
+		return new Redirect("example1/xxx/123/{0}/xRemainder?q1=123&q2=yyy", UUID.randomUUID());
 	}
 
-	/** Example GET request using annotated attributes */
-	@RestMethod(name="GET", path="/example1/{a1}/{a2}/{a3}/*", responses={@Response(200)})
-	public String doGetExample1(
-			@Method String method,
-			@Path String a1,
-			@Path int a2,
-			@Path UUID a3,
-			@Query("p1") int p1,
-			@Query("p2") String p2,
-			@Query("p3") UUID p3,
-			@PathRemainder String remainder,
-			@Header("Accept-Language") String lang,
+	/** 
+	 * Methodology #1 - GET request using annotated attributes.
+	 * This approach uses annotated parameters for retrieving input.
+	 */
+	@RestMethod(name="GET", path="/example1/{p1}/{p2}/{p3}/*")
+	public String example1(
+			@Method String method,                  // HTTP method.
+			@Path String p1,                        // Path variables.
+			@Path int p2,
+			@Path UUID p3,
+			@Query("q1") int q1,                    // Query parameters.
+			@Query("q2") String q2,
+			@Query("q3") UUID q3,
+			@PathRemainder String remainder,        // Path remainder after pattern match.
+			@Header("Accept-Language") String lang, // Headers.
 			@Header("Accept") String accept,
 			@Header("DNT") int doNotTrack
 		) {
+
+		// Send back a simple String response
 		String output = String.format(
-				"method=%s, a1=%s, a2=%d, a3=%s, remainder=%s, p1=%d, p2=%s, p3=%s, lang=%s, accept=%s, dnt=%d",
-				method, a1, a2, a3, remainder, p1, p2, p3, lang, accept, doNotTrack);
+				"method=%s, p1=%s, p2=%d, p3=%s, remainder=%s, q1=%d, q2=%s, q3=%s, lang=%s, accept=%s, dnt=%d",
+				method, p1, p2, p3, remainder, q1, q2, q3, lang, accept, doNotTrack);
 		return output;
 	}
 
-	/** Example GET request using methods on RestRequest and RestResponse */
-	@RestMethod(name="GET", path="/example2/{a1}/{a2}/{a3}/*", responses={@Response(200)})
-	public void doGetExample2(RestRequest req, RestResponse res) throws Exception {
+	/** 
+	 * Methodology #2 - GET request using methods on RestRequest and RestResponse.
+	 * This approach uses low-level request/response objects to perform the same as above.
+	 */
+	@RestMethod(name="GET", path="/example2/{p1}/{p2}/{p3}/*")
+	public void example2(
+			RestRequest req,          // A direct subclass of HttpServletRequest.
+			RestResponse res          // A direct subclass of HttpServletResponse.
+		) throws Exception {
+		
+		// HTTP method.
 		String method = req.getMethod();
 
-		// Attributes (from URL pattern variables)
-		RequestPathParams path = req.getPathParams();
-		String a1 = path.get("a1", String.class);
-		int a2 = path.get("a2", int.class);
-		UUID a3 = path.get("a3", UUID.class);
+		// Path variables.
+		RequestPathMatch path = req.getPathMatch();
+		String p1 = path.get("p1", String.class);
+		int p2 = path.get("p2", int.class);
+		UUID p3 = path.get("p3", UUID.class);
 
-		// Optional GET parameters
+		// Query parameters.
 		RequestQuery query = req.getQuery();
-		int p1 = query.get("p1", 0, int.class);
-		String p2 = query.get("p2", String.class);
-		UUID p3 = query.get("p3", UUID.class);
+		int q1 = query.get("q1", 0, int.class);
+		String q2 = query.get("q2", String.class);
+		UUID q3 = query.get("q3", UUID.class);
 
-		// URL pattern post-match
-		String remainder = req.getPathRemainder();
+		// Path remainder after pattern match.
+		String remainder = req.getPathMatch().getRemainder();
 
-		// Headers
+		// Headers.
 		String lang = req.getHeader("Accept-Language");
+		String accept = req.getHeader("Accept");
 		int doNotTrack = req.getHeaders().get("DNT", int.class);
 
 		// Send back a simple String response
 		String output = String.format(
-				"method=%s, a1=%s, a2=%d, a3=%s, remainder=%s, p1=%d, p2=%s, p3=%s, lang=%s, dnt=%d",
-				method, a1, a2, a3, remainder, p1, p2, p3, lang, doNotTrack);
+				"method=%s, p1=%s, p2=%d, p3=%s, remainder=%s, q1=%d, q2=%s, q3=%s, lang=%s, accept=%s, dnt=%d",
+				method, p1, p2, p3, remainder, q1, q2, q3, lang, accept, doNotTrack);
 		res.setOutput(output);
 	}
+
+	/** 
+	 * Methodology #3 - GET request using special objects.
+	 * This approach uses intermediate-level APIs.
+	 * The framework recognizes the parameter types and knows how to resolve them.
+	 */
+	@RestMethod(name="GET", path="/example3/{p1}/{p2}/{p3}/*")
+	public String example3(
+		HttpMethod method,           // HTTP method.
+		RequestPathMatch path,       // Path variables.
+		RequestQuery query,          // Query parameters.
+		RequestHeaders headers,      // Headers.
+		AcceptLanguage lang,         // Specific header classes.
+		Accept accept
+	) throws Exception {
+
+		// Path variables.
+		String p1 = path.get("p1", String.class);
+		int p2 = path.get("p2", int.class);
+		UUID p3 = path.get("p3", UUID.class);
+
+		// Query parameters.
+		int q1 = query.get("q1", 0, int.class);
+		String q2 = query.get("q2", String.class);
+		UUID q3 = query.get("q3", UUID.class);
+
+		// Path remainder after pattern match.
+		String remainder = path.getRemainder();
+
+		// Headers.
+		int doNotTrack = headers.get("DNT", int.class);
+
+		// Send back a simple String response
+		String output = String.format(
+				"method=%s, p1=%s, p2=%d, p3=%s, remainder=%s, q1=%d, q2=%s, q3=%s, lang=%s, accept=%s, dnt=%d",
+				method, p1, p2, p3, remainder, q1, q2, q3, lang, accept, doNotTrack);
+		return output;
+	}	
 }

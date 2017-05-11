@@ -343,6 +343,7 @@ l {
 p.severe, p.warn, p.info {
 	background-repeat: no-repeat;
 	background-position: left center;
+	background-size: 16px;
 	padding-left: 30px;
     min-height: 24px;
 }

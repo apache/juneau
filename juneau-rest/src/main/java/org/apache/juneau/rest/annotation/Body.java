@@ -35,7 +35,7 @@ import java.lang.annotation.*;
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(name=<js>"POST"</js>)
  * 	<jk>public void</jk> doPostPerson(RestRequest req, RestResponse res) {
- * 		Person person = req.getBody(Person.<jk>class</jk>);
+ * 		Person person = req.getBody().asType(Person.<jk>class</jk>);
  * 		...
  * 	}
  * </p>

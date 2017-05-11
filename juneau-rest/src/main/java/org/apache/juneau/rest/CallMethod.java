@@ -658,10 +658,11 @@ class CallMethod implements Comparable<CallMethod>  {
 		if (patternVals.length > pathPattern.getVars().length)
 			remainder = patternVals[pathPattern.getVars().length];
 		for (int i = 0; i < pathPattern.getVars().length; i++)
-			req.setPathParameter(pathPattern.getVars()[i], patternVals[i]);
-
+			req.getPathMatch().put(pathPattern.getVars()[i], patternVals[i]);
+		req.getPathMatch().setRemainder(remainder);
+		
 		ObjectMap requestProperties = createRequestProperties(properties, req);
-		req.init(method, remainder, requestProperties, defaultRequestHeaders, defaultCharset, serializers, parsers, urlEncodingParser, encoders, pageTitle, pageText, pageLinks);
+		req.init(method, requestProperties, defaultRequestHeaders, defaultCharset, serializers, parsers, urlEncodingParser, encoders, pageTitle, pageText, pageLinks);
 		res.init(requestProperties, defaultCharset, serializers, urlEncodingSerializer, encoders);
 
 		// Class-level guards
@@ -753,11 +754,11 @@ class CallMethod implements Comparable<CallMethod>  {
 						String prefix = k.substring(0, k.indexOf('.'));
 						String remainder = k.substring(k.indexOf('.')+1);
 						if ("path".equals(prefix))
-							return req.getPathParameter(remainder);
+							return req.getPathMatch().get(remainder);
 						if ("query".equals(prefix))
-							return req.getQuery(remainder);
+							return req.getQuery().get(remainder);
 						if ("formData".equals(prefix))
-							return req.getFormData(remainder);
+							return req.getFormData().get(remainder);
 						if ("header".equals(prefix))
 							return req.getHeader(remainder);
 					}
@@ -792,7 +793,7 @@ class CallMethod implements Comparable<CallMethod>  {
 						return req.getPageText();
 					if (k.equals(HtmlDocSerializerContext.HTMLDOC_links))
 						return req.getPageLinks();
-					o = req.getPathParameter(k);
+					o = req.getPathMatch().get(k);
 					if (o == null)
 						o = req.getHeader(k);
 				}

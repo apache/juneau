@@ -61,7 +61,7 @@ public class OnPreCallResource extends RestServlet {
 		properties.put("p5", "xp5"); // New property
 		String overrideContentType = req.getHeader("Override-Content-Type");
 		if (overrideContentType != null)
-			req.setHeader("Content-Type", overrideContentType);
+			req.getHeaders().put("Content-Type", overrideContentType);
 	}
 
 

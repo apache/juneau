@@ -3026,106 +3026,123 @@
 		
 		<jd>/** Example GET request that redirects to our example method */</jd> 
 		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/"</js>) 
-		<jk>public</jk> Redirect doGetExample() <jk>throws</jk> Exception { 
-			<jk>return new</jk> Redirect(<js>"example1/xxx/123/{0}/xRemainder?p1=123&amp;p2=yyy"</js>, UUID.<jsm>randomUUID</jsm>()); 
+		<jk>public</jk> Redirect doExample() <jk>throws</jk> Exception { 
+			<jk>return new</jk> Redirect(<js>"example1/xxx/123/{0}/xRemainder?q1=123&amp;q2=yyy"</js>, UUID.<jsm>randomUUID</jsm>()); 
 		} 
 		
-		<jd>/** Example GET request using annotated attributes */</jd> 
-		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/example1/{a1}/{a2}/{a3}/*"</js>, rc={200}) 
-		<jk>public</jk> String doGetExample1( 
-			<ja>@Method</ja> String method, 
-			<ja>@Path</ja> String a1, 
-			<ja>@Path</ja> <jk>int</jk> a2, 
-			<ja>@Path</ja> UUID a3, 
-			<ja>@Query</ja>(<js>"p1"</js>) <jk>int</jk> p1, 
-			<ja>@Query</ja>(<js>"p2"</js>) String p2, 
-			<ja>@Query</ja>(<js>"p3"</js>) UUID p3, 
-			<ja>@PathRemainder</ja> String remainder, 
-			<ja>@Header</ja>(<js>"Accept-Language"</js>) String lang, 
-			<ja>@Header</ja>(<js>"Accept"</js>) String accept, 
-			<ja>@Header</ja>(<js>"DNT"</js>) <jk>int</jk> doNotTrack 
-		) { 
-			String output = String.format( 
-				<js>"method=%s, a1=%s, a2=%d, a3=%s, remainder=%s, p1=%d, p2=%s, p3=%s, lang=%s, accept=%s, dnt=%d"</js>, 
-				method, a1, a2, a3, remainder, p1, p2, p3, lang, accept, doNotTrack); 
-			<jk>return</jk> output; 
-		} 
-		
-		<jd>/** Example GET request using methods on RestRequest and RestResponse */</jd> 
-		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/example2/{a1}/{a2}/{a3}/*"</js>, rc={200}) 
-		<jk>public void</jk> doGetExample2(RestRequest req, RestResponse res) <jk>throws</jk> Exception { 
-			String method = req.getMethod(); 
-			
-			<jc>// Attributes (from URL pattern variables)</jc> 
-			RequestPathParams path = req.getPathParams();
-			String a1 = path.get(<js>"a1"</js>, String.<jk>class</jk>); 
-			<jk>int</jk> a2 = path.get(<js>"a2"</js>, <jk>int</jk>.<jk>class</jk>); 
-			UUID a3 = path.get(<js>"a3"</js>, UUID.<jk>class</jk>); 
-			
-			<jc>// Optional GET parameters</jc> 
-			RequestQuery query = req.getQuery();
-			<jk>int</jk> p1 = query.get(<js>"p1"</js>, <jk>int</jk>.<jk>class</jk>, 0); 
-			String p2 = query.get(<js>"p2"</js>, String.<jk>class</jk>); 
-			UUID p3 = query.get(<js>"p3"</js>, UUID.<jk>class</jk>); 
-			
-			<jc>// URL pattern post-match</jc> 
-			String remainder = req.getPathRemainder(); 
-			
-			<jc>// Headers</jc> 
-			String lang = req.getHeader(<js>"Accept-Language"</js>); 
-			<jk>int</jk> doNotTrack = req.getHeader(<js>"DNT"</js>, <jk>int</jk>.<jk>class</jk>); 
-			
-			<jc>// Send back a simple String response</jc> 
-			String output = String.format( 
-				<js>"method=%s, a1=%s, a2=%d, a3=%s, remainder=%s, p1=%d, p2=%s, p3=%s, lang=%s, dnt=%d"</js>, 
-				method, a1, a2, a3, remainder, p1, p2, p3, lang, doNotTrack); 
-			res.setOutput(output); 
-		} 
+		<jd>/** 
+		 * Methodology #1 - GET request using annotated attributes.
+		 * This approach uses annotated parameters for retrieving input.
+		 */</jd>
+		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/example1/{p1}/{p2}/{p3}/*"</js>)
+		<jk>public</jk> String example1(
+				<ja>@Method</ja> String method,                  <jc>// HTTP method.</jc>
+				<ja>@Path</ja> String p1,                        <jc>// Path variables.</jc>
+				<ja>@Path</ja> <jk>int</jk> p2,
+				<ja>@Path</ja> UUID p3,
+				<ja>@Query</ja>(<js>"q1"</js>) <jk>int</jk> q1,                    <jc>// Query parameters.</jc>
+				<ja>@Query</ja>(<js>"q2"</js>) String q2,
+				<ja>@Query</ja>(<js>"q3"</js>) UUID q3,
+				<ja>@PathRemainder</ja> String remainder,        <jc>// Path remainder after pattern match.</jc>
+				<ja>@Header</ja>(<js>"Accept-Language"</js>) String lang, <jc>// Headers.</jc>
+				<ja>@Header</ja>(<js>"Accept"</js>) String accept,
+				<ja>@Header</ja>(<js>"DNT"</js>) <jk>int</jk> doNotTrack
+			) {
+	
+			<jc>// Send back a simple String response</jc>
+			String output = String.<jsm>format</jsm>(
+					<js>"method=%s, p1=%s, p2=%d, p3=%s, remainder=%s, q1=%d, q2=%s, q3=%s, lang=%s, accept=%s, dnt=%d"</js>,
+					method, p1, p2, p3, remainder, q1, q2, q3, lang, accept, doNotTrack);
+			<jk>return</jk> output;
+		}
 
-		<jd>/** Example GET request using resolved parameter objects */</jd> 
-		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/example3/{a1}/{a2}/{a3}/*"</js>, rc={200}) 
-		<jk>public void</jk> doGetExample3(
-				HttpMethod httpMethod, 
-				RequestPathParams path, 
-				RequestQuery query,
-				<ja>@PathRemainder</ja> String remainder,
-				AcceptLanguage acceptLanguage,
-				Accept accept,
-				DNT dnt
-			) <jk>throws</jk> Exception { 
+		<jd>/** 
+		 * Methodology #2 - GET request using methods on RestRequest and RestResponse.
+		 * This approach uses low-level request/response objects to perform the same as above.
+		 */</jd>
+		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/example2/{p1}/{p2}/{p3}/*"</js>)
+		<jk>public</jk> String example2(
+				RestRequest req,          <jc>// A direct subclass of HttpServletRequest.</jc>
+				RestResponse res          <jc>// A direct subclass of HttpServletResponse.</jc>
+			) {
 			
-			String method = httpMethod.toString(); 
+			<jc>// HTTP method.</jc>
+			String method = req.getMethod();
+	
+			<jc>// Path variables.</jc>
+			RequestPathMatch path = req.getPathMatch();
+			String p1 = path.get(<js>"p1"</js>, String.<jk>class</jk>);
+			<jk>int</jk> p2 = path.get(<js>"p2"</js>, <jk>int</jk>.<jk>class</jk>);
+			UUID p3 = path.get(<js>"p3"</js>, UUID.<jk>class</jk>);
+	
+			<jc>// Query parameters.</jc>
+			RequestQuery query = req.getQuery();
+			<jk>int</jk> q1 = query.get(<js>"q1"</js>, 0, <jk>int</jk>.<jk>class</jk>);
+			String q2 = query.get(<js>"q2"</js>, String.<jk>class</jk>);
+			UUID q3 = query.get(<js>"q3"</js>, UUID.<jk>class</jk>);
+	
+			<jc>// Path remainder after pattern match.</jc>
+			String remainder = req.getPathMatch().getRemainder();
+	
+			<jc>// Headers.</jc>
+			String lang = req.getHeader(<js>"Accept-Language"</js>);
+			String accept = req.getHeader(<js>"Accept"</js>);
+			<jk>int</jk> doNotTrack = req.getHeaders().get(<js>"DNT"</js>, <jk>int</jk>.<jk>class</jk>);
+	
+			<jc>// Send back a simple String response</jc>
+			String output = String.format(
+					<js>"method=%s, p1=%s, p2=%d, p3=%s, remainder=%s, q1=%d, q2=%s, q3=%s, lang=%s, accept=%s, dnt=%d"</js>,
+					method, p1, p2, p3, remainder, q1, q2, q3, lang, accept, doNotTrack);
+			res.setOutput(output);  <jc>// Or use getWriter().</jc>
+		}
+
+		<jd>/** 
+		 * Methodology #3 - GET request using special objects.
+		 * This approach uses intermediate-level APIs.
+		 * The framework recognizes the parameter types and knows how to resolve them.
+		 */</jd>
+		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/example3/{p1}/{p2}/{p3}/*"</js>)
+		<jk>public</jk> String example3(
+				HttpMethod method,           <jc>// HTTP method.</jc>
+				RequestPathMatch path,       <jc>// Path variables.</jc>
+				RequestQuery query,          <jc>// Query parameters.</jc>
+				RequestHeaders headers,      <jc>// Headers.</jc>
+				AcceptLanguage lang,         <jc>// Specific header classes.</jc>
+				Accept accept
+			) {
 			
-			<jc>// Attributes (from URL pattern variables)</jc> 
-			String a1 = path.get(<js>"a1"</js>, String.<jk>class</jk>); 
-			<jk>int</jk> a2 = path.get(<js>"a2"</js>, <jk>int</jk>.<jk>class</jk>); 
-			UUID a3 = path.get(<js>"a3"</js>, UUID.<jk>class</jk>); 
-			
-			<jc>// Optional GET parameters</jc> 
-			<jk>int</jk> p1 = query.get(<js>"p1"</js>, <jk>int</jk>.<jk>class</jk>, 0); 
-			String p2 = query.get(<js>"p2"</js>, String.<jk>class</jk>); 
-			UUID p3 = query.get(<js>"p3"</js>, UUID.<jk>class</jk>); 
-			
-			<jc>// Headers</jc> 
-			String lang = acceptLanguage.toString(); 
-			<jk>int</jk> doNotTrack = dnt.asType(<jk>int</jk>.<jk>class</jk>); 
-			
-			<jc>// Send back a simple String response</jc> 
-			String output = String.format( 
-				<js>"method=%s, a1=%s, a2=%d, a3=%s, remainder=%s, p1=%d, p2=%s, p3=%s, lang=%s, dnt=%d"</js>, 
-				method, a1, a2, a3, remainder, p1, p2, p3, lang, doNotTrack); 
-			res.setOutput(output); 
-		} 
-	} 
+			<jc>// Path variables.</jc>
+			String p1 = path.get(<js>"p1"</js>, String.<jk>class</jk>);
+			<jk>int</jk> p2 = path.get(<js>"p2"</js>, <jk>int</jk>.<jk>class</jk>);
+			UUID p3 = path.get(<js>"p3"</js>, UUID.<jk>class</jk>);
+	
+			<jc>// Query parameters.</jc>
+			<jk>int</jk> q1 = query.get(<js>"q1"</js>, 0, <jk>int</jk>.<jk>class</jk>);
+			String q2 = query.get(<js>"q2"</js>, String.<jk>class</jk>);
+			UUID q3 = query.get(<js>"q3"</js>, UUID.<jk>class</jk>);
+	
+			<jc>// Path remainder after pattern match.</jc>
+			String remainder = path.getRemainder();
+	
+			<jc>// Headers.</jc>
+			int doNotTrack = headers.get(<js>"DNT"</js>, <jk>int</jk>.<jk>class</jk>);
+	
+			<jc>// Send back a simple String response</jc>
+			String output = String.format(
+					<js>"method=%s, p1=%s, p2=%d, p3=%s, remainder=%s, q1=%d, q2=%s, q3=%s, lang=%s, accept=%s, dnt=%d"</js>,
+					method, p1, p2, p3, remainder, q1, q2, q3, lang, accept, doNotTrack);
+			res.setOutput(output);
+		}
+	}
 		</p>
 		<p>
 			The class consists of 4 methods:
 		</p>	
 		<ul class='javahierarchy'>
-			<li class='m'><l>doGetExample()</l>
+			<li class='m'><l>doExample()</l>
 				<br>The root page. 
 				<br>Performs a simple redirection to the <l>doGetExample1()</l> method using a {@link org.apache.juneau.rest.Redirect} object.
-			<li class='m'><l>doGetExample1()</l>
+			<li class='m'><l>example1()</l>
 				<br>Shows how to use the following annotations:
 				<ul>
 					<li class='n'>{@link org.apache.juneau.rest.annotation.Path @Path}
@@ -3135,18 +3152,18 @@
 					<li class='n'>{@link org.apache.juneau.rest.annotation.PathRemainder @PathRemainder}
 				</ul>
 				Method returns a POJO to be serialized as the output.
-			<li class='m'><l>doGetExample2()</l>
+			<li class='m'><l>example2()</l>
 				<br>Identical to <l>doGetExample1()</l> but shows how to use the {@link org.apache.juneau.rest.RestRequest} and {@link org.apache.juneau.rest.RestResponse} objects:
 				<ul>
-					<li class='m'>{@link org.apache.juneau.rest.RestRequest#getPathParams()}
+					<li class='m'>{@link org.apache.juneau.rest.RestRequest#getPathMatch()}
 					<li class='m'>{@link org.apache.juneau.rest.RestRequest#getQuery()}
 					<li class='m'>{@link org.apache.juneau.rest.RestRequest#getFormData()}
 					<li class='m'>{@link org.apache.juneau.rest.RestRequest#getHeaders()}
 					<li class='m'>{@link org.apache.juneau.rest.RestRequest#getMethod()}
-					<li class='m'>{@link org.apache.juneau.rest.RestRequest#getPathRemainder()}
+					<li class='m'>{@link org.apache.juneau.rest.RequestPathMatch#getRemainder()}
 				</ul>
 				Method sets the POJO to be serialized using the {@link org.apache.juneau.rest.RestResponse#setOutput(Object)} method.
-			<li class='m'><l>doGetExample2()</l>
+			<li class='m'><l>example3()</l>
 				<br>Identical to <l>doGetExample1()</l> but uses automatically resolved parameters based on class type.
 				<br>Juneau automatically recognizes specific class types such as common header types and automatically
 					resolves them to objects for you.  
@@ -4103,14 +4120,13 @@
 		<ja>@RestMethod</ja>(name=<js>"PUT"</js>, path=<js>"/people/{id}/*"</js>, 
 			guards=AdminGuard.<jk>class</jk> 
 		) 
-		<jk>public</jk> String updatePerson(RestRequest req, <ja>@Path</ja> <jk>int</jk> id) <jk>throws</jk> Exception { 
+		<jk>public</jk> String updatePerson(RestRequest req, <ja>@Path</ja> <jk>int</jk> id, <ja>@PathRemainder</ja> String remainder) <jk>throws</jk> Exception { 
 			<jk>try</jk> { 
 				Person p = findPerson(id); 
-				String pathRemainder = req.getPathRemainder(); 
 				PojoRest r = <jk>new</jk> PojoRest(p); 
-				ClassMeta&lt;?&gt; cm = r.getClassMeta(pathRemainder); 
-				Object in = req.getBody(cm); 
-				r.put(pathRemainder, in); 
+				ClassMeta&lt;?&gt; cm = r.getClassMeta(remainder); 
+				Object in = req.getBody().asType(cm); 
+				r.put(remainder, in); 
 				<jk>return</jk> <js>"PUT successful"</js>; 
 			} <jk>catch</jk> (Exception e) { 
 				<jk>throw new</jk> RestException(<jsf>SC_BAD_REQUEST</jsf>, <js>"PUT unsuccessful"</js>).initCause(e); 
@@ -4124,14 +4140,13 @@
 		<ja>@RestMethod</ja>(name=<js>"PUT"</js>, path=<js>"/addresses/{id}/*"</js>, 
 			guards=AdminGuard.<jk>class</jk> 
 		) 
-		<jk>public</jk> String updateAddress(RestRequest req, <ja>@Path</ja> <jk>int</jk> id) <jk>throws</jk> Exception { 
+		<jk>public</jk> String updateAddress(RestRequest req, <ja>@Path</ja> <jk>int</jk> id, <ja>@PathRemainder</ja> String remainder) <jk>throws</jk> Exception { 
 			<jk>try</jk> { 
 				Address a = findAddress(id); 
-				String pathInfo = req.getPathInfo(); 
 				PojoRest r = <jk>new</jk> PojoRest(a); 
-				ClassMeta&lt;?&gt; cm = r.getClassMeta(pathInfo); 
-				Object in = req.getBody(cm); 
-				r.put(pathInfo, in); 
+				ClassMeta&lt;?&gt; cm = r.getClassMeta(remainder); 
+				Object in = req.getBody().asType(cm); 
+				r.put(remainder, in); 
 				<jk>return</jk> <js>"PUT successful"</js>; 
 			} <jk>catch</jk> (Exception e) { 
 				<jk>throw new</jk> RestException(<jsf>SC_BAD_REQUEST</jsf>, <js>"PUT unsuccessful"</js>).initCause(e); 
@@ -5969,7 +5984,7 @@
 					<li>{@link org.apache.juneau.rest.RestRequest#getHeaders()} - The request headers.
 					<li>{@link org.apache.juneau.rest.RestRequest#getQuery()} - The request query parameters.
 					<li>{@link org.apache.juneau.rest.RestRequest#getFormData()} - The request form data parameters.
-					<li>{@link org.apache.juneau.rest.RestRequest#getPathParams()} - The path variables.
+					<li>{@link org.apache.juneau.rest.RestRequest#getPathMatch()} - The path variables and remainder.
 				</ul>	
 				The following classes have been introduced:
 				<ul>
@@ -5977,7 +5992,7 @@
 					<li>{@link org.apache.juneau.rest.RequestHeaders}
 					<li>{@link org.apache.juneau.rest.RequestQuery}
 					<li>{@link org.apache.juneau.rest.RequestFormData}
-					<li>{@link org.apache.juneau.rest.RequestPathParams}
+					<li>{@link org.apache.juneau.rest.RequestPathMatch}
 				</ul>						
 			<li>The unannotated parameter types that can be passed in through REST Java methods has been significantly expanded.
 				<br>For reference, the previous supported types were:
@@ -6030,7 +6045,7 @@
 					<li>{@link org.apache.juneau.rest.RequestHeaders} - API for accessing request headers.
 					<li>{@link org.apache.juneau.rest.RequestQuery} - API for accessing request query parameters.
 					<li>{@link org.apache.juneau.rest.RequestFormData} - API for accessing request form data.
-					<li>{@link org.apache.juneau.rest.RequestPathParams} - API for accessing path variables.
+					<li>{@link org.apache.juneau.rest.RequestPathMatch} - API for accessing path variables.
 					<li>{@link org.apache.juneau.rest.RequestBody} - API for accessing request body.
 					<li>{@link org.apache.juneau.http.HttpMethod} - The method name matched (when using <code><ja>@RestMethod</ja>(name=<js>"*"</js>)</code>)
 					<li>{@link java.util.logging.Logger} - The logger to use for logging.
@@ -7502,7 +7517,7 @@
 							<li><code><del>RestRequest.getQueryParameterMap()</del></code>
 							<li><code><del>RestRequest.getQueryParameterNames()</del></code>
 							<li>{@link org.apache.juneau.rest.RestRequest#getPathInfoUndecoded()}
-							<li>{@link org.apache.juneau.rest.RestRequest#getPathRemainderUndecoded()}
+							<li><code><del>RestRequest.getPathRemainderUndecoded()</del></code>
 							<li>{@link org.apache.juneau.rest.RestRequest#getTrimmedRequestURI()}
 							<li>{@link org.apache.juneau.rest.RestRequest#getTrimmedRequestURL()}
 							<li>{@link org.apache.juneau.rest.RestRequest#getServletTitle()}
@@ -7511,8 +7526,8 @@
 						</ul>
 					<li>Behavior changes to {@link org.apache.juneau.rest.RestRequest#getPathInfo()} to follow Servlet specs.
 						Returns <jk>null</jk> instead of blank for no path info.
-					<li>{@link org.apache.juneau.rest.RestRequest#getPathRemainder()} now automatically decodes the path remainder. 
-						Use {@link org.apache.juneau.rest.RestRequest#getPathRemainderUndecoded()} to get the unencoded path remainder.
+					<li><code><del>RestRequest.getPathRemainder()</del></code> now automatically decodes the path remainder. 
+						Use <code><del>RestRequest.getPathRemainderUndecoded()</del></code> to get the unencoded path remainder.
 					<li>Bug fixes in {@link org.apache.juneau.rest.RestRequest#getRequestParentURI()} when servlet is mapped to <js>"/*"</js>.
 					<li>Bug fixes in {@link org.apache.juneau.rest.RestRequest#getServletURI()} when servlet is mapped to <js>"/*"</js>.
 				</ul>

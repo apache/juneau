@@ -203,14 +203,13 @@ public class AddressBookResource extends ResourceJena {
 	@RestMethod(name="PUT", path="/people/{id}/*",
 		guards=AdminGuard.class
 	)
-	public String updatePerson(RestRequest req, @Path int id) throws Exception {
+	public String updatePerson(RequestBody body, @Path int id, @PathRemainder String remainder) throws Exception {
 		try {
 			Person p = findPerson(id);
-			String pathRemainder = req.getPathRemainder();
 			PojoRest r = new PojoRest(p);
-			ClassMeta<?> cm = r.getClassMeta(pathRemainder);
-			Object in = req.getBody().asType(cm);
-			r.put(pathRemainder, in);
+			ClassMeta<?> cm = r.getClassMeta(remainder);
+			Object in = body.asType(cm);
+			r.put(remainder, in);
 			return "PUT successful";
 		} catch (Exception e) {
 			throw new RestException(SC_BAD_REQUEST, "PUT unsuccessful").initCause(e);
@@ -224,14 +223,13 @@ public class AddressBookResource extends ResourceJena {
 	@RestMethod(name="PUT", path="/addresses/{id}/*",
 		guards=AdminGuard.class
 	)
-	public String updateAddress(RestRequest req, @Path int id) throws Exception {
+	public String updateAddress(RestRequest req, @Path int id, @PathRemainder String remainder) throws Exception {
 		try {
 			Address a = findAddress(id);
-			String pathInfo = req.getPathInfo();
 			PojoRest r = new PojoRest(a);
-			ClassMeta<?> cm = r.getClassMeta(pathInfo);
+			ClassMeta<?> cm = r.getClassMeta(remainder);
 			Object in = req.getBody().asType(cm);
-			r.put(pathInfo, in);
+			r.put(remainder, in);
 			return "PUT successful";
 		} catch (Exception e) {
 			throw new RestException(SC_BAD_REQUEST, "PUT unsuccessful").initCause(e);

@@ -70,11 +70,11 @@ public class RequestVar extends SimpleVar {
 					String prefix = k.substring(0, k.indexOf('.'));
 					String remainder = k.substring(k.indexOf('.')+1);
 					if ("path".equals(prefix))
-						return req.getPathParameter(remainder);
+						return req.getPathMatch().get(remainder);
 					if ("query".equals(prefix))
-						return req.getQuery(remainder);
+						return req.getQuery().getFirst(remainder);
 					if ("formData".equals(prefix))
-						return req.getFormData(remainder);
+						return req.getFormData().getFirst(remainder);
 					if ("header".equals(prefix))
 						return req.getHeader(remainder);
 					if ("attribute".equals(prefix))
@@ -119,7 +119,7 @@ public class RequestVar extends SimpleVar {
 				Object o = req.getProperties().get(key);
 				if (o != null)
 					return o.toString();
-				return req.getPathParameter(key);
+				return req.getPathMatch().get(key);
 			}
 		return null;
 	}

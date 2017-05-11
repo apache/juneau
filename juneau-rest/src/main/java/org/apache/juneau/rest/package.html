@@ -638,7 +638,7 @@
 							<li>{@link org.apache.juneau.rest.RequestHeaders} - API for accessing request headers.
 							<li>{@link org.apache.juneau.rest.RequestQuery} - API for accessing request query parameters.
 							<li>{@link org.apache.juneau.rest.RequestFormData} - API for accessing request form data.
-							<li>{@link org.apache.juneau.rest.RequestPathParams} - API for accessing path variables.
+							<li>{@link org.apache.juneau.rest.RequestPathMatch} - API for accessing path variables.
 							<li>{@link org.apache.juneau.rest.RequestBody} - API for accessing request body.
 						</ul>
 					<li>Other:
@@ -778,7 +778,7 @@
 		</p>
 		<p>
 				Paths that end with <js>"/*"</js> will do a prefix match on the incoming URL.  
-				Any remainder after the match can be accessed through {@link org.apache.juneau.rest.RestRequest#getPathRemainder()} 
+				Any remainder after the match can be accessed through {@link org.apache.juneau.rest.RequestPathMatch#getRemainder()} 
 					or parameters with the {@link org.apache.juneau.rest.annotation.PathRemainder @PathRemainder} annotation.
 				On the other hand, paths that don't end with <js>"/*"</js> (e.g. <js>"/"</js> or <js>"/foo"</js>) will require
 					an exact URL match, and if any remainder exists, a 404 (not found) error will be thrown.
@@ -2088,14 +2088,14 @@
 					<ul>
 						<li><ck>$R{attribute.X}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getAttribute(String)} converted to a string.
 						<li><ck>$R{contextPath}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getContextPath()}.
-						<li><ck>$R{formData.X}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getFormData(String)}.
-						<li><ck>$R{header.X}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getHeader(String)}.
+						<li><ck>$R{formData.X}</ck> - Value returned by {@link org.apache.juneau.rest.RequestFormData#getFirst(String)}.
+						<li><ck>$R{header.X}</ck> - Value returned by {@link org.apache.juneau.rest.RequestHeaders#getFirst(String)}.
 						<li><ck>$R{method}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getMethod()}.
 						<li><ck>$R{methodSummary}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getMethodSummary()}.
 						<li><ck>$R{methodDescription}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getMethodDescription()}.
-						<li><ck>$R{path.X}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getPathParameter(String)}.
+						<li><ck>$R{path.X}</ck> - Value returned by {@link org.apache.juneau.rest.RequestPathMatch#get(Object)}.
 						<li><ck>$R{pathInfo}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getPathInfo()}.
-						<li><ck>$R{query.X}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getQuery(String)}.
+						<li><ck>$R{query.X}</ck> - Value returned by {@link org.apache.juneau.rest.RequestQuery#getFirst(String)}.
 						<li><ck>$R{requestParentURI}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getRequestParentURI()}.
 						<li><ck>$R{requestURI}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getRequestURI()}.
 						<li><ck>$R{servletDescription}</ck> - Value returned by {@link org.apache.juneau.rest.RestRequest#getServletDescription()}.
@@ -3166,7 +3166,7 @@
 <div class='topic'>
 		<p>
 		Certain methods in the REST server API allow you to specify class types that can be convertable
-			from <l>Strings</l> (e.g. {@link org.apache.juneau.rest.RestRequest#getPathParameter(String)}).
+			from <l>Strings</l> (e.g. {@link org.apache.juneau.rest.RequestPathMatch#get(Object)}).
 		</p>
 		<p>
 		POJOs convertable from <l>Strings</l> have one of the following:
@@ -3387,13 +3387,12 @@
 		<ja>@RestMethod</ja>(name=<js>"PUT"</js>, path=<js>"/people/{id}/*"</js>, 
 			guards=AdminGuard.<jk>class</jk> 
 		) 
-		<jk>public</jk> String updatePerson(RestRequest req, <ja>@Path</ja> <jk>int</jk> id) <jk>throws</jk> Exception { 
+		<jk>public</jk> String updatePerson(RestRequest req, <ja>@Path</ja> <jk>int</jk> id, <ja>@PathRemainder</ja> String pathRemainder) <jk>throws</jk> Exception { 
 			<jk>try</jk> { 
 				Person p = findPerson(id); 
-				String pathRemainder = req.getPathRemainder(); 
 				PojoRest r = <jk>new</jk> PojoRest(p); 
 				ClassMeta&lt;?&gt; cm = r.getClassMeta(pathRemainder); 
-				Object in = req.getBody(cm); 
+				Object in = req.getBody().asType(cm); 
 				r.put(pathRemainder, in); 
 				<jk>return</jk> <js>"PUT successful"</js>; 
 			} <jk>catch</jk> (Exception e) { 
@@ -3408,13 +3407,12 @@
 		<ja>@RestMethod</ja>(name=<js>"PUT"</js>, path=<js>"/addresses/{id}/*"</js>, 
 			guards=AdminGuard.<jk>class</jk> 
 		) 
-		<jk>public</jk> String updateAddress(RestRequest req, <ja>@Path</ja> <jk>int</jk> id) <jk>throws</jk> Exception { 
+		<jk>public</jk> String updateAddress(RestRequest req, <ja>@Path</ja> <jk>int</jk> id, <ja>@PathRemainder</ja> String pathRemainder) <jk>throws</jk> Exception { 
 			<jk>try</jk> { 
 				Address a = findAddress(id); 
-				String pathInfo = req.getPathInfo(); 
 				PojoRest r = <jk>new</jk> PojoRest(a); 
-				ClassMeta&lt;?&gt; cm = r.getClassMeta(pathInfo); 
-				Object in = req.getBody(cm); 
+				ClassMeta&lt;?&gt; cm = r.getClassMeta(pathRemainder); 
+				Object in = req.getBody().asType(pathRemainder); 
 				r.put(pathInfo, in); 
 				<jk>return</jk> <js>"PUT successful"</js>; 
 			} <jk>catch</jk> (Exception e) { 

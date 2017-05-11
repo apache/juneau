@@ -63,7 +63,7 @@ public class OnPostCallResource extends RestServlet {
 		properties.put("p5", "xp5"); // New property
 		String overrideAccept = req.getHeader("Override-Accept");
 		if (overrideAccept != null)
-			req.setHeader("Accept", overrideAccept);
+			req.getHeaders().put("Accept", overrideAccept);
 		String overrideContentType = req.getHeader("Override-Content-Type");
 		if (overrideContentType != null)
 			properties.put("Override-Content-Type", overrideContentType);
@@ -93,7 +93,7 @@ public class OnPostCallResource extends RestServlet {
 		properties.put("p4", "pp4");
 		String accept = req.getHeader("Accept");
 		if (accept == null || accept.isEmpty())
-			req.setHeader("Accept", "text/s2");
+			req.getHeaders().put("Accept", "text/s2");
 		return "";
 	}
 }
