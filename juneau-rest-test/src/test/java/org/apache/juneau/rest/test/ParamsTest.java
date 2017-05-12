@@ -16,6 +16,7 @@ import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.rest.test.TestUtils.*;
 import static org.junit.Assert.*;
 
+import java.io.*;
 import java.util.*;
 
 import org.apache.http.*;
@@ -30,6 +31,8 @@ public class ParamsTest extends RestTestcase {
 
 	private static String URL = "/testParams";
 	private static boolean debug = false;
+
+	private static RestClient CLIENT = TestMicroservice.DEFAULT_CLIENT;
 
 	//====================================================================================================
 	// Basic tests
@@ -711,5 +714,142 @@ public class ParamsTest extends RestTestcase {
 		assertEquals(in, r);
 
 		client.closeQuietly();
+	}
+
+
+	//====================================================================================================
+	// Test other available object types as parameters.
+	//====================================================================================================
+
+	@Test
+	public void testOtherResourceBundle() throws Exception {
+		String r = CLIENT.doGet(URL + "/otherObjects/ResourceBundle").acceptLanguage("en-US").getResponseAsString();
+		assertEquals("\"bar\"", r);
+		r = CLIENT.doGet(URL + "/otherObjects/ResourceBundle").acceptLanguage("ja-JP").getResponseAsString();
+		assertEquals("\"baz\"", r);
+	}
+
+	@Test
+	public void testOtherMessages() throws Exception {
+		String r = CLIENT.doGet(URL + "/otherObjects/MessageBundle").acceptLanguage("en-US").getResponseAsString();
+		assertEquals("\"bar\"", r);
+		r = CLIENT.doGet(URL + "/otherObjects/MessageBundle").acceptLanguage("ja-JP").getResponseAsString();
+		assertEquals("\"baz\"", r);
+	}
+
+	@Test
+	public void testOtherInputStream() throws IOException {
+		String r = CLIENT.doPost(URL + "/otherObjects/InputStream").input(new StringReader("foo")).getResponseAsString();
+		assertEquals("\"foo\"", r);
+	}
+
+	@Test
+	public void testOtherServletInputStream() throws Exception {
+		String r = CLIENT.doPost(URL + "/otherObjects/ServletInputStream").input(new StringReader("foo")).getResponseAsString();
+		assertEquals("\"foo\"", r);
+	}
+
+	@Test
+	public void testOtherReader() throws Exception {
+		String r = CLIENT.doPost(URL + "/otherObjects/Reader").input(new StringReader("foo")).getResponseAsString();
+		assertEquals("\"foo\"", r);
+	}
+
+	@Test
+	public void testOtherOutputStream() throws Exception {
+		String r = CLIENT.doGet(URL + "/otherObjects/OutputStream").getResponseAsString();
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void testOtherServletOutputStream() throws Exception {
+		String r = CLIENT.doGet(URL + "/otherObjects/ServletOutputStream").getResponseAsString();
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void testOtherWriter() throws Exception {
+		String r = CLIENT.doGet(URL + "/otherObjects/Writer").getResponseAsString();
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void testOtherRequestHeaders() throws Exception {
+		String r = CLIENT.doGet(URL + "/otherObjects/RequestHeaders").getResponseAsString();
+		assertEquals("true", r);
+	}
+
+	@Test
+	public void testOtherRequestQuery() throws Exception {
+		String r = CLIENT.doGet(URL + "/otherObjects/RequestQuery").getResponseAsString();
+		assertEquals("true", r);
+	}
+
+	@Test
+	public void testOtherRequestFormData() throws Exception {
+		String r = CLIENT.doGet(URL + "/otherObjects/RequestFormData").getResponseAsString();
+		assertEquals("true", r);
+	}
+
+	@Test
+	public void testOtherHttpMethod() throws Exception {
+		String r = CLIENT.doGet(URL + "/otherObjects/HttpMethod").getResponseAsString();
+		assertEquals("\"GET\"", r);
+	}
+
+	@Test
+	public void testOtherLogger() throws Exception {
+		String r = CLIENT.doGet(URL + "/otherObjects/Logger").getResponseAsString();
+		assertEquals("true", r);
+	}
+
+	@Test
+	public void testOtherJuneauLogger() throws Exception {
+		String r = CLIENT.doGet(URL + "/otherObjects/JuneauLogger").getResponseAsString();
+		assertEquals("true", r);
+	}
+
+	@Test
+	public void testOtherRestContext() throws Exception {
+		String r = CLIENT.doGet(URL + "/otherObjects/RestContext").getResponseAsString();
+		assertEquals("true", r);
+	}
+
+	@Test
+	public void testOtherParser() throws Exception {
+		String r = CLIENT.doGet(URL + "/otherObjects/Parser").getResponseAsString();
+		assertEquals("\"org.apache.juneau.json.JsonParser\"", r);
+	}
+
+	@Test
+	public void testOtherLocale() throws Exception {
+		String r = CLIENT.doGet(URL + "/otherObjects/Locale").acceptLanguage("en-US").getResponseAsString();
+		assertEquals("\"en_US\"", r);
+		r = CLIENT.doGet(URL + "/otherObjects/Locale").acceptLanguage("ja-JP").getResponseAsString();
+		assertEquals("\"ja_JP\"", r);
+	}
+
+	@Test
+	public void testOtherSwagger() throws Exception {
+		String r = CLIENT.doGet(URL + "/otherObjects/Swagger").getResponseAsString();
+		assertEquals("true", r);
+	}
+
+	@Test
+	public void testOtherRequestPathMatch() throws Exception {
+		String r = CLIENT.doGet(URL + "/otherObjects/RequestPathMatch").getResponseAsString();
+		assertEquals("true", r);
+	}
+
+	@Test
+	public void testOtherRequestBody() throws Exception {
+		String r = CLIENT.doGet(URL + "/otherObjects/RequestBody").getResponseAsString();
+		assertEquals("true", r);
+	}
+
+	@Test
+	public void testOtherConfigFile() throws Exception {
+		String r = CLIENT.doGet(URL + "/otherObjects/ConfigFile").getResponseAsString();
+		assertEquals("true", r);
 	}
 }

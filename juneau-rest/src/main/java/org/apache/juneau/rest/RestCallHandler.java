@@ -176,6 +176,9 @@ public class RestCallHandler {
 
 			onSuccess(req, res, System.currentTimeMillis() - startTime);
 
+			// Make sure our writer in RestResponse gets written.
+			res.flushBuffer();
+
 		} catch (RestException e) {
 			handleError(r1, r2, e);
 		} catch (Throwable e) {

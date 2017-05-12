@@ -739,7 +739,7 @@ public final class RestCall {
 	 * @return This object (for method chaining).
 	 */
 	public RestCall maxForwards(Object value) {
-		return header("If-Unmodified-Since", value);
+		return header("Max-Forwards", value);
 	}
 
 	/**
@@ -751,7 +751,7 @@ public final class RestCall {
 	 * @return This object (for method chaining).
 	 */
 	public RestCall origin(Object value) {
-		return header("If-Unmodified-Since", value);
+		return header("Origin", value);
 	}
 
 	/**
@@ -1819,6 +1819,17 @@ public final class RestCall {
 	 */
 	public RestCall logTo(Level level, Logger log) {
 		interceptor(new RestCallLogger(level, log));
+		return this;
+	}
+
+	/**
+	 * Sets <code>Debug: value</code> header on this request.
+	 *
+	 * @param value The debug value.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall debug(boolean value) {
+		header("Debug", value);
 		return this;
 	}
 }

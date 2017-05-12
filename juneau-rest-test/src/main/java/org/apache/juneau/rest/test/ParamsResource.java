@@ -14,18 +14,27 @@ package org.apache.juneau.rest.test;
 
 import static org.apache.juneau.rest.RestContext.*;
 
+import java.io.*;
 import java.util.*;
+import java.util.logging.*;
 
+import javax.servlet.*;
 import javax.servlet.http.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.examples.addressbook.*;
+import org.apache.juneau.http.*;
+import org.apache.juneau.ini.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.parser.*;
 import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.transforms.*;
 import org.apache.juneau.urlencoding.*;
+import org.apache.juneau.utils.*;
 
 /**
  * JUnit automated testcase resource.
@@ -36,7 +45,8 @@ import org.apache.juneau.urlencoding.*;
 	properties={
 		@Property(name=REST_allowMethodParam, value="*")
 	},
-	pojoSwaps={CalendarSwap.DateMedium.class}
+	pojoSwaps={CalendarSwap.DateMedium.class},
+	messages="ParamsResource"
 )
 public class ParamsResource extends RestServletDefault {
 	private static final long serialVersionUID = 1L;
@@ -291,5 +301,118 @@ public class ParamsResource extends RestServletDefault {
 	@RestMethod(name="POST", path="/testFormPostsWithMultiParamsUsingAnnotation")
 	public DTO2s.C testFormPostsWithMultiParamsUsingAnnotation(@Body DTO2s.C content) throws Exception {
 		return content;
+	}
+
+	//====================================================================================================
+	// Test other available object types as parameters.
+	//====================================================================================================
+
+	@RestMethod(name="GET", path="/otherObjects/ResourceBundle")
+	public String testOtherResourceBundle(ResourceBundle t) {
+		if (t != null)
+			return t.getString("foo");
+		return null;
+	}
+
+	@RestMethod(name="GET", path="/otherObjects/MessageBundle")
+	public String testOtherMessages(MessageBundle t) {
+		if (t != null)
+			return t.getString("foo");
+		return null;
+	}
+
+	@RestMethod(name="POST", path="/otherObjects/InputStream")
+	public String testOtherInputStream(InputStream t) throws IOException {
+		return IOUtils.read(t);
+	}
+
+	@RestMethod(name="POST", path="/otherObjects/ServletInputStream")
+	public String testOtherServletInputStream(ServletInputStream t) throws IOException {
+		return IOUtils.read(t);
+	}
+
+	@RestMethod(name="POST", path="/otherObjects/Reader")
+	public String testOtherReader(Reader t) throws IOException {
+		return IOUtils.read(t);
+	}
+
+	@RestMethod(name="GET", path="/otherObjects/OutputStream")
+	public void testOtherOutputStream(OutputStream t) throws IOException {
+		t.write("OK".getBytes());
+	}
+
+	@RestMethod(name="GET", path="/otherObjects/ServletOutputStream")
+	public void testOtherServletOutputStream(ServletOutputStream t) throws IOException {
+		t.write("OK".getBytes());
+	}
+
+	@RestMethod(name="GET", path="/otherObjects/Writer")
+	public void testOtherWriter(Writer t) throws IOException {
+		t.write("OK");
+	}
+
+	@RestMethod(name="GET", path="/otherObjects/RequestHeaders")
+	public boolean testOtherRequestHeaders(RequestHeaders t) {
+		return t != null;
+	}
+
+	@RestMethod(name="GET", path="/otherObjects/RequestQuery")
+	public boolean testOtherRequestQueryParams(RequestQuery t) {
+		return t != null;
+	}
+
+	@RestMethod(name="GET", path="/otherObjects/RequestFormData")
+	public boolean testOtherRequestFormData(RequestFormData t) {
+		return t != null;
+	}
+
+	@RestMethod(name="GET", path="/otherObjects/HttpMethod")
+	public String testOtherHttpMethod(HttpMethod t) {
+		return t.toString();
+	}
+
+	@RestMethod(name="GET", path="/otherObjects/Logger")
+	public boolean testOtherLogger(Logger t) {
+		return t != null;
+	}
+
+	@RestMethod(name="GET", path="/otherObjects/JuneauLogger")
+	public boolean testOtherJuneauLogger(JuneauLogger t) {
+		return t != null;
+	}
+
+	@RestMethod(name="GET", path="/otherObjects/RestContext")
+	public boolean testOtherRestContext(RestContext t) {
+		return t != null;
+	}
+
+	@RestMethod(name="GET", path="/otherObjects/Parser")
+	public String testOtherParser(Parser t) {
+		return t.getClass().getName();
+	}
+
+	@RestMethod(name="GET", path="/otherObjects/Locale")
+	public String testOtherLocale(Locale t) {
+		return t.toString();
+	}
+
+	@RestMethod(name="GET", path="/otherObjects/Swagger")
+	public boolean testOtherSwagger(Swagger t) {
+		return t != null;
+	}
+
+	@RestMethod(name="GET", path="/otherObjects/RequestPathMatch")
+	public boolean testOtherRequestPathMatch(RequestPathMatch t) {
+		return t != null;
+	}
+
+	@RestMethod(name="GET", path="/otherObjects/RequestBody")
+	public boolean testOtherRequestBody(RequestBody t) {
+		return t != null;
+	}
+
+	@RestMethod(name="GET", path="/otherObjects/ConfigFile")
+	public boolean testOtherConfigFile(ConfigFile t) {
+		return t != null;
 	}
 }

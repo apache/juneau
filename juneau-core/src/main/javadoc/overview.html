@@ -6083,6 +6083,8 @@
 				</p>
 			<li>A new annotation {@link org.apache.juneau.rest.annotation.RestResource#paramResolvers() @RestResource.paramResolvers()}
 				that allows you to define your own custom Java method parameter resolvers.
+			<li>Fixed bug where Writer returned by {@link org.apache.juneau.rest.RestResponse#getWriter()} was not being flushed automatically
+				at the end of the HTTP call.
 		</ul>
 
 		<h6 class='topic'>org.apache.juneau.rest.client</h6>

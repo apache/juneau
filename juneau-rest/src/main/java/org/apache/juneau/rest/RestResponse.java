@@ -61,6 +61,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	UrlEncodingSerializer urlEncodingSerializer;         // The serializer used to convert arguments passed into Redirect objects.
 	private EncoderGroup encoders;
 	private ServletOutputStream os;
+	private PrintWriter w;
 
 	/**
 	 * Constructor.
@@ -361,14 +362,17 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	}
 
 	private PrintWriter getWriter(boolean raw) throws IOException {
+		if (w != null)
+			return w;
+
 		// If plain text requested, override it now.
-		if (request.isPlainText()) {
+		if (request.isPlainText()) 
 			setHeader("Content-Type", "text/plain");
-		}
 
 		try {
 			OutputStream out = (raw ? getOutputStream() : getNegotiatedOutputStream());
-			return new PrintWriter(new OutputStreamWriter(out, getCharacterEncoding()));
+			w = new PrintWriter(new OutputStreamWriter(out, getCharacterEncoding()));
+			return w;
 		} catch (UnsupportedEncodingException e) {
 			String ce = getCharacterEncoding();
 			setCharacterEncoding("UTF-8");
@@ -476,5 +480,14 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	public RestResponse setPageLinks(Object links) {
 		properties.put(HtmlDocSerializerContext.HTMLDOC_links, links);
 		return this;
+	}
+
+	@Override /* ServletResponse */
+	public void flushBuffer() throws IOException {
+		if (w != null)
+			w.flush();
+		if (os != null)
+			os.flush();
+		super.flushBuffer();
 	}
 }

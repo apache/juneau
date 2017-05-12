@@ -96,7 +96,7 @@ class RestParamDefaults {
 			ServletOutputStreamObject.class,
 			WriterObject.class,
 			RequestHeadersObject.class,
-			RequestQueryParamsObject.class,
+			RequestQueryObject.class,
 			RequestFormDataObject.class,
 			HttpMethodObject.class,
 			LoggerObject.class,
@@ -105,7 +105,7 @@ class RestParamDefaults {
 			ParserObject.class,
 			LocaleObject.class,
 			SwaggerObject.class,
-			RequestPathParamsObject.class,
+			RequestPathMatchObject.class,
 			RequestBodyObject.class,
 			ConfigFileObject.class,
 		};
@@ -794,9 +794,9 @@ class RestParamDefaults {
 		}
 	}
 
-	static final class RequestQueryParamsObject extends RestParam {
+	static final class RequestQueryObject extends RestParam {
 
-		protected RequestQueryParamsObject() {
+		protected RequestQueryObject() {
 			super(OTHER, null, RequestQuery.class);
 		}
 
@@ -902,9 +902,9 @@ class RestParamDefaults {
 		}
 	}
 
-	static final class RequestPathParamsObject extends RestParam {
+	static final class RequestPathMatchObject extends RestParam {
 
-		protected RequestPathParamsObject() {
+		protected RequestPathMatchObject() {
 			super(OTHER, null, RequestPathMatch.class);
 		}
 

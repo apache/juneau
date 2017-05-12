@@ -27,9 +27,10 @@ import org.apache.juneau.rest.annotation.*;
 	path="/testHeaders",
 	serializers=HeadersResource.PlainTextAnythingSerializer.class,
 	parsers=HeadersResource.PlainTextAnythingParser.class,
-	encoders=HeadersResource.IdentityAnythingEncoder.class
+	encoders=HeadersResource.IdentityAnythingEncoder.class,
+	paramResolvers=HeadersResource.CustomHeaderParam.class
 )
-public class HeadersResource extends RestServletDefault {
+public class HeadersResource extends RestServlet {
 	private static final long serialVersionUID = 1L;
 
 	//====================================================================================================
@@ -39,16 +40,134 @@ public class HeadersResource extends RestServletDefault {
 	public String accept(Accept accept) {
 		return accept.toString();
 	}
-
+	@RestMethod(name="GET", path="/acceptCharset")
+	public String acceptCharset(AcceptCharset acceptCharset) {
+		return acceptCharset.toString();
+	}
 	@RestMethod(name="GET", path="/acceptEncoding")
 	public String acceptEncoding(AcceptEncoding acceptEncoding) {
-		System.err.println(acceptEncoding);
 		return acceptEncoding.toString();
 	}
-
+	@RestMethod(name="GET", path="/acceptLanguage")
+	public String acceptLanguage(AcceptLanguage acceptLanguage) {
+		return acceptLanguage.toString();
+	}
+	@RestMethod(name="GET", path="/authorization")
+	public String authorization(Authorization authorization) {
+		return authorization.toString();
+	}
+	@RestMethod(name="GET", path="/cacheControl")
+	public String cacheControl(CacheControl cacheControl) {
+		return cacheControl.toString();
+	}
+	@RestMethod(name="GET", path="/connection")
+	public String connection(Connection connection) {
+		return connection.toString();
+	}
+	@RestMethod(name="GET", path="/contentLength")
+	public String contentLength(ContentLength contentLength) {
+		return contentLength.toString();
+	}
 	@RestMethod(name="GET", path="/contentType")
 	public String contentType(ContentType contentType) {
 		return contentType.toString();
+	}
+	@RestMethod(name="GET", path="/date")
+	public String date(org.apache.juneau.http.Date date) {
+		return date.toString();
+	}
+	@RestMethod(name="GET", path="/expect")
+	public String expect(Expect expect) {
+		return expect.toString();
+	}
+	@RestMethod(name="GET", path="/from")
+	public String from(From from) {
+		return from.toString();
+	}
+	@RestMethod(name="GET", path="/host")
+	public String host(Host host) {
+		return host.toString();
+	}
+	@RestMethod(name="GET", path="/ifMatch")
+	public String IfMatch(IfMatch ifMatch) {
+		return ifMatch.toString();
+	}
+	@RestMethod(name="GET", path="/ifModifiedSince")
+	public String ifModifiedSince(IfModifiedSince ifModifiedSince) {
+		return ifModifiedSince.toString();
+	}
+	@RestMethod(name="GET", path="/ifNoneMatch")
+	public String ifNoneMatch(IfNoneMatch ifNoneMatch) {
+		return ifNoneMatch.toString();
+	}
+	@RestMethod(name="GET", path="/ifRange")
+	public String ifRange(IfRange ifRange) {
+		return ifRange.toString();
+	}
+	@RestMethod(name="GET", path="/ifUnmodifiedSince")
+	public String ifUnmodifiedSince(IfUnmodifiedSince ifUnmodifiedSince) {
+		return ifUnmodifiedSince.toString();
+	}
+	@RestMethod(name="GET", path="/maxForwards")
+	public String maxForwards(MaxForwards maxForwards) {
+		return maxForwards.toString();
+	}
+	@RestMethod(name="GET", path="/pragma")
+	public String pragma(Pragma pragma) {
+		return pragma.toString();
+	}
+	@RestMethod(name="GET", path="/proxyAuthorization")
+	public String proxyAuthorization(ProxyAuthorization proxyAuthorization) {
+		return proxyAuthorization.toString();
+	}
+	@RestMethod(name="GET", path="/range")
+	public String range(Range range) {
+		return range.toString();
+	}
+	@RestMethod(name="GET", path="/referer")
+	public String referer(Referer referer) {
+		return referer.toString();
+	}
+	@RestMethod(name="GET", path="/te")
+	public String te(TE te) {
+		return te.toString();
+	}
+	@RestMethod(name="GET", path="/upgrade")
+	public String upgrade(Upgrade upgrade) {
+		return upgrade.toString();
+	}
+	@RestMethod(name="GET", path="/userAgent")
+	public String userAgent(UserAgent userAgent) {
+		return userAgent.toString();
+	}
+	@RestMethod(name="GET", path="/warning")
+	public String warning(Warning warning) {
+		return warning.toString();
+	}
+	@RestMethod(name="GET", path="/customHeader")
+	public String customHeader(CustomHeader customHeader) {
+		return customHeader.toString();
+	}
+
+	public static class CustomHeaderParam extends RestParam {
+		public CustomHeaderParam() {
+			super(RestParamType.HEADER, "Custom", CustomHeader.class);
+		}
+		@Override
+		public Object resolve(RestRequest req, RestResponse res) throws Exception {
+			return new CustomHeader(req.getHeader("Custom"));
+		}
+	}
+
+	public static class CustomHeader {
+		public String value;
+		public CustomHeader(String value) {
+			this.value = value;
+		}
+		@Override
+		public String toString() {
+			return value;
+		}
 	}
 
 	@Produces("*/*")
