@@ -6085,6 +6085,17 @@
 				that allows you to define your own custom Java method parameter resolvers.
 			<li>Fixed bug where Writer returned by {@link org.apache.juneau.rest.RestResponse#getWriter()} was not being flushed automatically
 				at the end of the HTTP call.
+			<li>New anntotations added to {@link org.apache.juneau.rest.annotation.RestMethod @RestMethod}:
+				<ul>
+					<li>{@link org.apache.juneau.rest.annotation.RestMethod#defaultQuery defaultQuery()}
+					<li>{@link org.apache.juneau.rest.annotation.RestMethod#defaultFormData defaultFormData()}
+				</ul>
+			<li>Default values on header, query, and form-data annotations:
+				<ul>
+					<li>{@link org.apache.juneau.rest.annotation.Header#def @Header.def()} - Default header value.
+					<li>{@link org.apache.juneau.rest.annotation.Query#def @Query.def()} - Default query parameter value.
+					<li>{@link org.apache.juneau.rest.annotation.FormData#def @FormData.def()} - Default form data parameter value.
+				</ul>	
 		</ul>
 
 		<h6 class='topic'>org.apache.juneau.rest.client</h6>

@@ -59,6 +59,7 @@ import org.apache.juneau.rest.labels.*;
 		PathsResource.class,
 		PathVariablesResource.class,
 		PropertiesResource.class,
+		QueryResource.class,
 		RestClient2Resource.class,
 		SerializersResource.class,
 		StaticFilesResource.class,

@@ -89,4 +89,9 @@ public @interface Query {
 	 * 	<js>"foo"</js> when using UON mode.
 	 */
 	String format() default "INHERIT";
+
+	/**
+	 * The default value for this query parameter if it's not present in the request.
+	 */
+	String def() default "";
 }

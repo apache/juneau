@@ -78,6 +78,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	private VarResolverSession varSession;
 	private final RequestQuery queryParams;
 	private RequestFormData formData;
+	private Map<String,String> defFormData;
 	private RequestPathMatch pathParams;
 	private boolean isPost;
 	private String servletURI, relativeServletURI;
@@ -150,7 +151,10 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * Called from RestServlet after a match has been made but before the guard or method invocation.
 	 */
 	@SuppressWarnings("hiding")
-	final void init(Method javaMethod, ObjectMap properties, Map<String,String> mDefaultRequestHeaders, String defaultCharset, SerializerGroup mSerializers, ParserGroup mParsers, UrlEncodingParser mUrlEncodingParser, EncoderGroup encoders, String pageTitle, String pageText, String pageLinks) {
+	final void init(Method javaMethod, ObjectMap properties, Map<String,String> defHeader,
+			Map<String,String> defQuery, Map<String,String> defFormData, String defaultCharset,
+			SerializerGroup mSerializers, ParserGroup mParsers, UrlEncodingParser mUrlEncodingParser,
+			EncoderGroup encoders, String pageTitle, String pageText, String pageLinks) {
 		this.javaMethod = javaMethod;
 		this.properties = properties;
 		this.urlEncodingParser = mUrlEncodingParser;
@@ -159,10 +163,11 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			.setParser(urlEncodingParser)
 			.setBeanSession(beanSession);
 		this.queryParams
+			.addDefault(defQuery)
 			.setParser(urlEncodingParser)
 			.setBeanSession(beanSession);
 		this.headers
-			.addDefault(mDefaultRequestHeaders)
+			.addDefault(defHeader)
 			.addDefault(context.getDefaultRequestHeaders())
 			.setParser(urlEncodingParser)
 			.setBeanSession(beanSession);
@@ -178,6 +183,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		this.pageTitle = pageTitle;
 		this.pageText = pageText;
 		this.pageLinks = pageLinks;
+		this.defFormData = defFormData;
 
 		if (debug) {
 			String msg = ""
@@ -366,6 +372,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 					}
 				}
 			}
+			formData.addDefault(defFormData);
 			return formData;
 		} catch (Exception e) {
 			throw new RestException(SC_INTERNAL_SERVER_ERROR, e);
@@ -381,7 +388,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		return getFormData().getFirst(name);
 	}
 
-	
+
 	//--------------------------------------------------------------------------------
 	// Path parameters
 	//--------------------------------------------------------------------------------

@@ -12,10 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
-import java.io.*;
-
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
@@ -23,49 +20,41 @@ import org.apache.juneau.rest.annotation.*;
  * JUnit automated testcase resource.
  */
 @RestResource(
-	path="/testFormData"
+	path="/testQuery"
 )
-public class FormDataResource extends RestServletDefault {
+public class QueryResource extends RestServletDefault {
 	private static final long serialVersionUID = 1L;
-
-	//====================================================================================================
-	// Basic tests
-	//====================================================================================================
-	@RestMethod(name="POST", path="/*")
-	public Reader test(RestRequest req) throws IOException {
-		return new StringReader("Content-Type=["+req.getContentType()+"], contents=["+IOUtils.read(req.getReader())+"]");
-	}
 
 	//====================================================================================================
 	// Default values.
 	//====================================================================================================
 
-	@RestMethod(name="POST", path="/defaultFormData", defaultFormData={"f1:1","f2=2"," f3 : 3 "})
-	public ObjectMap defaultFormData(RequestFormData formData) {
+	@RestMethod(name="GET", path="/defaultQuery", defaultQuery={"f1:1","f2=2"," f3 : 3 "})
+	public ObjectMap defaultQuery(RequestQuery query) {
 		return new ObjectMap()
-			.append("f1", formData.getFirst("f1"))
-			.append("f2", formData.getFirst("f2"))
-			.append("f3", formData.getFirst("f3"));
+			.append("f1", query.getFirst("f1"))
+			.append("f2", query.getFirst("f2"))
+			.append("f3", query.getFirst("f3"));
 	}
 
-	@RestMethod(name="POST", path="/annotatedFormData")
-	public ObjectMap annotatedFormData(@FormData("f1") String f1, @FormData("f2") String f2, @FormData("f3") String f3) {
-		return new ObjectMap()
-			.append("f1", f1)
-			.append("f2", f2)
-			.append("f3", f3);
-	}
-
-	@RestMethod(name="POST", path="/annotatedFormDataDefault")
-	public ObjectMap annotatedFormDataDefault(@FormData(value="f1",def="1") String f1, @FormData(value="f2",def="2") String f2, @FormData(value="f3",def="3") String f3) {
+	@RestMethod(name="GET", path="/annotatedQuery")
+	public ObjectMap annotatedQuery(@Query("f1") String f1, @Query("f2") String f2, @Query("f3") String f3) {
 		return new ObjectMap()
 			.append("f1", f1)
 			.append("f2", f2)
 			.append("f3", f3);
 	}
 
-	@RestMethod(name="POST", path="/annotatedAndDefaultFormData", defaultFormData={"f1:1","f2=2"," f3 : 3 "})
-	public ObjectMap annotatedAndDefaultFormData(@FormData(value="f1",def="4") String f1, @FormData(value="f2",def="5") String f2, @FormData(value="f3",def="6") String f3) {
+	@RestMethod(name="GET", path="/annotatedQueryDefault")
+	public ObjectMap annotatedQueryDefault(@Query(value="f1",def="1") String f1, @Query(value="f2",def="2") String f2, @Query(value="f3",def="3") String f3) {
+		return new ObjectMap()
+			.append("f1", f1)
+			.append("f2", f2)
+			.append("f3", f3);
+	}
+
+	@RestMethod(name="GET", path="/annotatedAndDefaultQuery", defaultQuery={"f1:1","f2=2"," f3 : 3 "})
+	public ObjectMap annotatedAndDefaultQuery(@Query(value="f1",def="4") String f1, @Query(value="f2",def="5") String f2, @Query(value="f3",def="6") String f3) {
 		return new ObjectMap()
 			.append("f1", f1)
 			.append("f2", f2)

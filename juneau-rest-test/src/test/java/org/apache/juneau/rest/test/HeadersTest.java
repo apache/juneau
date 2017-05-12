@@ -12,8 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
+import static org.apache.juneau.rest.test.TestUtils.*;
 import static org.junit.Assert.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.*;
 
@@ -209,5 +211,51 @@ public class HeadersTest extends RestTestcase {
 	public void customHeader() throws Exception {
 		assertEquals("foo", client.doGet(URL + "/customHeader").header("Custom", "foo").getResponseAsString());
 		assertEquals("foo", client.doGet(URL + "/customHeader").query("Custom", "foo").getResponseAsString());
+	}
+
+	//====================================================================================================
+	// Default values.
+	//====================================================================================================
+
+	@Test
+	public void defaultRequestHeaders() throws Exception {
+		assertObjectEquals("{h1:'1',h2:'2',h3:'3'}", client.doGet(URL + "/defaultRequestHeaders").getResponse(ObjectMap.class));
+		assertObjectEquals("{h1:'4',h2:'5',h3:'6'}", client.doGet(URL + "/defaultRequestHeaders").header("H1",4).header("H2",5).header("H3",6).getResponse(ObjectMap.class));
+		assertObjectEquals("{h1:'4',h2:'5',h3:'6'}", client.doGet(URL + "/defaultRequestHeaders").header("h1",4).header("h2",5).header("h3",6).getResponse(ObjectMap.class));
+	}
+
+	@Test
+	public void defaultRequestHeadersCaseInsensitive() throws Exception {
+		assertObjectEquals("{h1:'1',h2:'2',h3:'3'}", client.doGet(URL + "/defaultRequestHeadersCaseInsensitive").getResponse(ObjectMap.class));
+		assertObjectEquals("{h1:'4',h2:'5',h3:'6'}", client.doGet(URL + "/defaultRequestHeadersCaseInsensitive").header("H1",4).header("H2",5).header("H3",6).getResponse(ObjectMap.class));
+		assertObjectEquals("{h1:'4',h2:'5',h3:'6'}", client.doGet(URL + "/defaultRequestHeadersCaseInsensitive").header("h1",4).header("h2",5).header("h3",6).getResponse(ObjectMap.class));
+	}
+
+	@Test
+	public void annotatedHeaders() throws Exception {
+		assertObjectEquals("{h1:null,h2:null,h3:null}", client.doGet(URL + "/annotatedHeaders").getResponse(ObjectMap.class));
+		assertObjectEquals("{h1:'4',h2:'5',h3:'6'}", client.doGet(URL + "/annotatedHeaders").header("H1",4).header("H2",5).header("H3",6).getResponse(ObjectMap.class));
+		assertObjectEquals("{h1:'4',h2:'5',h3:'6'}", client.doGet(URL + "/annotatedHeaders").header("h1",4).header("h2",5).header("h3",6).getResponse(ObjectMap.class));
+	}
+
+	@Test
+	public void annotatedHeadersCaseInsensitive() throws Exception {
+		assertObjectEquals("{h1:null,h2:null,h3:null}", client.doGet(URL + "/annotatedHeadersCaseInsensitive").getResponse(ObjectMap.class));
+		assertObjectEquals("{h1:'4',h2:'5',h3:'6'}", client.doGet(URL + "/annotatedHeadersCaseInsensitive").header("H1",4).header("H2",5).header("H3",6).getResponse(ObjectMap.class));
+		assertObjectEquals("{h1:'4',h2:'5',h3:'6'}", client.doGet(URL + "/annotatedHeadersCaseInsensitive").header("h1",4).header("h2",5).header("h3",6).getResponse(ObjectMap.class));
+	}
+
+	@Test
+	public void annotatedHeadersDefault() throws Exception {
+		assertObjectEquals("{h1:'1',h2:'2',h3:'3'}", client.doGet(URL + "/annotatedHeadersDefault").getResponse(ObjectMap.class));
+		assertObjectEquals("{h1:'4',h2:'5',h3:'6'}", client.doGet(URL + "/annotatedHeadersDefault").header("H1",4).header("H2",5).header("H3",6).getResponse(ObjectMap.class));
+		assertObjectEquals("{h1:'4',h2:'5',h3:'6'}", client.doGet(URL + "/annotatedHeadersDefault").header("h1",4).header("h2",5).header("h3",6).getResponse(ObjectMap.class));
+	}
+
+	@Test
+	public void annotatedAndDefaultHeaders() throws Exception {
+		assertObjectEquals("{h1:'4',h2:'5',h3:'6'}", client.doGet(URL + "/annotatedAndDefaultHeaders").getResponse(ObjectMap.class));
+		assertObjectEquals("{h1:'7',h2:'8',h3:'9'}", client.doGet(URL + "/annotatedAndDefaultHeaders").header("H1",7).header("H2",8).header("H3",9).getResponse(ObjectMap.class));
+		assertObjectEquals("{h1:'7',h2:'8',h3:'9'}", client.doGet(URL + "/annotatedAndDefaultHeaders").header("h1",7).header("h2",8).header("h3",9).getResponse(ObjectMap.class));
 	}
 }

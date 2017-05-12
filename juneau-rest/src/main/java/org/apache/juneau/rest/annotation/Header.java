@@ -49,4 +49,9 @@ public @interface Header {
 	 * HTTP header name.
 	 */
 	String value();
+
+	/**
+	 * The default value for this header if it's not present in the request.
+	 */
+	String def() default "";
 }

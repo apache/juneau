@@ -43,6 +43,26 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	}
 
 	/**
+	 * Adds default entries to these query parameters.
+	 * <p>
+	 * This includes the default queries defined on the servlet and method levels.
+	 *
+	 * @param defaultEntries The default entries.  Can be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public RequestQuery addDefault(Map<String,String> defaultEntries) {
+		if (defaultEntries != null) {
+			for (Map.Entry<String,String> e : defaultEntries.entrySet()) {
+				String key = e.getKey(), value = e.getValue();
+				String[] v = get(key);
+				if (v == null)
+					put(key, new String[]{value});
+			}
+		}
+		return this;
+	}
+
+	/**
 	 * Sets a request query parameter value.
 	 *
 	 * @param name The parameter name.

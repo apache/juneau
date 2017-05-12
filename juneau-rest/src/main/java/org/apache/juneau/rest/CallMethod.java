@@ -18,6 +18,7 @@ import static org.apache.juneau.rest.RestContext.*;
 import static org.apache.juneau.rest.annotation.Inherit.*;
 import static org.apache.juneau.serializer.SerializerContext.*;
 
+import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -55,7 +56,7 @@ class CallMethod implements Comparable<CallMethod>  {
 	private final UrlEncodingParser urlEncodingParser;
 	private final UrlEncodingSerializer urlEncodingSerializer;
 	private final ObjectMap properties;
-	private final Map<String,String> defaultRequestHeaders;
+	private final Map<String,String> defaultRequestHeaders, defaultQuery, defaultFormData;
 	private final String defaultCharset;
 	private final boolean deprecated;
 	private final String description, tags, summary, externalDocs;
@@ -83,6 +84,8 @@ class CallMethod implements Comparable<CallMethod>  {
 		this.urlEncodingSerializer = b.urlEncodingSerializer;
 		this.properties = b.properties;
 		this.defaultRequestHeaders = b.defaultRequestHeaders;
+		this.defaultQuery = b.defaultQuery;
+		this.defaultFormData = b.defaultFormData;
 		this.defaultCharset = b.defaultCharset;
 		this.deprecated = b.deprecated;
 		this.description = b.description;
@@ -110,7 +113,7 @@ class CallMethod implements Comparable<CallMethod>  {
 		private UrlEncodingParser urlEncodingParser;
 		private UrlEncodingSerializer urlEncodingSerializer;
 		private ObjectMap properties;
-		private Map<String,String> defaultRequestHeaders;
+		private Map<String,String> defaultRequestHeaders, defaultQuery, defaultFormData;
 		private boolean plainParams, deprecated;
 		private Integer priority;
 		private org.apache.juneau.rest.annotation.Parameter[] parameters;
@@ -261,10 +264,46 @@ class CallMethod implements Comparable<CallMethod>  {
 
 				defaultRequestHeaders = new TreeMap<String,String>(String.CASE_INSENSITIVE_ORDER);
 				for (String s : m.defaultRequestHeaders()) {
-					String[] h = RestUtils.parseHeader(s);
+					String[] h = RestUtils.parseKeyValuePair(s);
 					if (h == null)
-						throw new RestServletException("Invalid default request header specified: ''{0}''.  Must be in the format: ''Header-Name: header-value''", s);
+						throw new RestServletException("Invalid default request header specified: ''{0}''.  Must be in the format: ''name[:=]value''", s);
 					defaultRequestHeaders.put(h[0], h[1]);
+				}
+
+				defaultQuery = new LinkedHashMap<String,String>();
+				for (String s : m.defaultQuery()) {
+					String[] h = RestUtils.parseKeyValuePair(s);
+					if (h == null)
+						throw new RestServletException("Invalid default query parameter specified: ''{0}''.  Must be in the format: ''name[:=]value''", s);
+					defaultQuery.put(h[0], h[1]);
+				}
+
+				defaultFormData = new LinkedHashMap<String,String>();
+				for (String s : m.defaultFormData()) {
+					String[] h = RestUtils.parseKeyValuePair(s);
+					if (h == null)
+						throw new RestServletException("Invalid default form data parameter specified: ''{0}''.  Must be in the format: ''name[:=]value''", s);
+					defaultFormData.put(h[0], h[1]);
+				}
+
+				Type[] pt = method.getGenericParameterTypes();
+				Annotation[][] pa = method.getParameterAnnotations();
+				for (int i = 0; i < pt.length; i++) {
+					for (Annotation a : pa[i]) {
+						if (a instanceof Header) {
+							Header h = (Header)a;
+							if (! h.def().isEmpty())
+								defaultRequestHeaders.put(h.value(), h.def());
+						} else if (a instanceof Query) {
+							Query q = (Query)a;
+							if (! q.def().isEmpty())
+								defaultQuery.put(q.value(), q.def());
+						} else if (a instanceof FormData) {
+							FormData f = (FormData)a;
+							if (! f.def().isEmpty())
+								defaultFormData.put(f.value(), f.def());
+						}
+					}
 				}
 
 				defaultCharset = properties.getString(REST_defaultCharset, context.getDefaultCharset());
@@ -660,9 +699,9 @@ class CallMethod implements Comparable<CallMethod>  {
 		for (int i = 0; i < pathPattern.getVars().length; i++)
 			req.getPathMatch().put(pathPattern.getVars()[i], patternVals[i]);
 		req.getPathMatch().setRemainder(remainder);
-		
+
 		ObjectMap requestProperties = createRequestProperties(properties, req);
-		req.init(method, requestProperties, defaultRequestHeaders, defaultCharset, serializers, parsers, urlEncodingParser, encoders, pageTitle, pageText, pageLinks);
+		req.init(method, requestProperties, defaultRequestHeaders, defaultQuery, defaultFormData, defaultCharset, serializers, parsers, urlEncodingParser, encoders, pageTitle, pageText, pageLinks);
 		res.init(requestProperties, defaultCharset, serializers, urlEncodingSerializer, encoders);
 
 		// Class-level guards

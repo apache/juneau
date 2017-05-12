@@ -34,8 +34,9 @@ public class HeadersResource extends RestServlet {
 	private static final long serialVersionUID = 1L;
 
 	//====================================================================================================
-	// Basic tests
+	// HTTP 1.1 headers
 	//====================================================================================================
+
 	@RestMethod(name="GET", path="/accept")
 	public String accept(Accept accept) {
 		return accept.toString();
@@ -189,5 +190,57 @@ public class HeadersResource extends RestServlet {
 		public String[] getCodings() {
 			return new String[]{"*"};
 		}
+	}
+
+	//====================================================================================================
+	// Default values.
+	//====================================================================================================
+
+	@RestMethod(name="GET", path="/defaultRequestHeaders", defaultRequestHeaders={"H1:1","H2=2"," H3 : 3 "})
+	public ObjectMap defaultRequestHeaders(RequestHeaders headers) {
+		return new ObjectMap()
+			.append("h1", headers.getFirst("H1"))
+			.append("h2", headers.getFirst("H2"))
+			.append("h3", headers.getFirst("H3"));
+	}
+
+	@RestMethod(name="GET", path="/defaultRequestHeadersCaseInsensitive", defaultRequestHeaders={"H1:1","H2=2"," H3 : 3 "})
+	public ObjectMap defaultRequestHeadersCaseInsensitive(RequestHeaders headers) {
+		return new ObjectMap()
+			.append("h1", headers.getFirst("h1"))
+			.append("h2", headers.getFirst("h2"))
+			.append("h3", headers.getFirst("h3"));
+	}
+
+	@RestMethod(name="GET", path="/annotatedHeaders")
+	public ObjectMap annotatedHeaders(@Header("H1") String h1, @Header("H2") String h2, @Header("H3") String h3) {
+		return new ObjectMap()
+			.append("h1", h1)
+			.append("h2", h2)
+			.append("h3", h3);
+	}
+
+	@RestMethod(name="GET", path="/annotatedHeadersCaseInsensitive")
+	public ObjectMap annotatedHeadersCaseInsensitive(@Header("h1") String h1, @Header("h2") String h2, @Header("h3") String h3) {
+		return new ObjectMap()
+			.append("h1", h1)
+			.append("h2", h2)
+			.append("h3", h3);
+	}
+
+	@RestMethod(name="GET", path="/annotatedHeadersDefault")
+	public ObjectMap annotatedHeadersDefault(@Header(value="h1",def="1") String h1, @Header(value="h2",def="2") String h2, @Header(value="h3",def="3") String h3) {
+		return new ObjectMap()
+			.append("h1", h1)
+			.append("h2", h2)
+			.append("h3", h3);
+	}
+
+	@RestMethod(name="GET", path="/annotatedAndDefaultHeaders", defaultRequestHeaders={"H1:1","H2=2"," H3 : 3 "})
+	public ObjectMap annotatedAndDefaultHeaders(@Header(value="h1",def="4") String h1, @Header(value="h2",def="5") String h2, @Header(value="h3",def="6") String h3) {
+		return new ObjectMap()
+			.append("h1", h1)
+			.append("h2", h2)
+			.append("h3", h3);
 	}
 }

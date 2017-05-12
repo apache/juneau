@@ -163,4 +163,21 @@ public final class RestUtils {
 		String val = s.substring(i+1).trim();
 		return new String[]{name,val};
 	}
+
+	/**
+	 * Parses key/value pairs separated by either : or =
+	 */
+	static String[] parseKeyValuePair(String s) {
+		int i = -1;
+		for (int j = 0; j < s.length() && i < 0; j++) { s.indexOf(':');
+			char c = s.charAt(j);
+			if (c == '=' || c == ':')
+				i = j;
+		}
+		if (i == -1)
+			return null;
+		String name = s.substring(0, i).trim();
+		String val = s.substring(i+1).trim();
+		return new String[]{name,val};
+	}
 }

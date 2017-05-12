@@ -55,6 +55,7 @@ import org.junit.runners.Suite.*;
 	PathsTest.class,
 	PathTest.class,
 	PropertiesTest.class,
+	QueryTest.class,
 	RestClientTest.class,
 	RestUtilsTest.class,
 	SerializersTest.class,

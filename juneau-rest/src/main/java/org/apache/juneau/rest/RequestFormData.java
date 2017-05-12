@@ -41,6 +41,26 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	}
 
 	/**
+	 * Adds default entries to these form-data parameters.
+	 * <p>
+	 * This includes the default form-data parameters defined on the servlet and method levels.
+	 *
+	 * @param defaultEntries The default entries.  Can be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public RequestFormData addDefault(Map<String,String> defaultEntries) {
+		if (defaultEntries != null) {
+			for (Map.Entry<String,String> e : defaultEntries.entrySet()) {
+				String key = e.getKey(), value = e.getValue();
+				String[] v = get(key);
+				if (v == null)
+					put(key, new String[]{value});
+			}
+		}
+		return this;
+	}
+
+	/**
 	 * Sets a request form data parameter value.
 	 *
 	 * @param name The parameter name.

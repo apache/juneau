@@ -289,8 +289,51 @@ public @interface RestMethod {
 	 * 		...
 	 * 	}
 	 * </p>
+	 * <p>
+	 * You can use either <js>':'</js> or <js>'='</js> as the key/value delimiter.
+	 * Key and value is trimmed of whitespace.
 	 */
 	String[] defaultRequestHeaders() default {};
+
+	/**
+	 * Specifies default values for query parameters.
+	 * <p>
+	 * Strings are of the format <js>"name=value"</js>.
+	 * <p>
+	 * Affects values returned by {@link RestRequest#getQuery(String)} when the parameter is not present on the request.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/*"</js>, defaultQuery={<js>"foo=bar"</js>})
+	 * 	<jk>public</jk> String doGet(<ja>@Query</ja>(<js>"foo"</js>) String foo) {
+	 * 		...
+	 * 	}
+	 * </p>
+	 * <p>
+	 * You can use either <js>':'</js> or <js>'='</js> as the key/value delimiter.
+	 * Key and value is trimmed of whitespace.
+	 */
+	String[] defaultQuery() default {};
+
+	/**
+	 * Specifies default values for form-data parameters.
+	 * <p>
+	 * Strings are of the format <js>"name=value"</js>.
+	 * <p>
+	 * Affects values returned by {@link RestRequest#getFormData(String)} when the parameter is not present on the request.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<ja>@RestMethod</ja>(name=<js>"POST"</js>, path=<js>"/*"</js>, defaultFormData={<js>"foo=bar"</js>})
+	 * 	<jk>public</jk> String doGet(<ja>@FormData</ja>(<js>"foo"</js>) String foo) {
+	 * 		...
+	 * 	}
+	 * </p>
+	 * <p>
+	 * You can use either <js>':'</js> or <js>'='</js> as the key/value delimiter.
+	 * Key and value is trimmed of whitespace.
+	 */
+	String[] defaultFormData() default {};
 
 	/**
 	 * Optional summary for the exposed API.
