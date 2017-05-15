@@ -590,7 +590,7 @@ public class JsonParser extends ReaderParser {
 						break;
 					}
 				} else {
-					if (c == ',' || c == '}' || session.isWhitespace(c)) {
+					if (c == ',' || c == '}' || c == ']' || session.isWhitespace(c)) {
 						s = r.getMarked(0, -1);
 						r.unread();
 						break;

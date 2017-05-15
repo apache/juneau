@@ -57,9 +57,24 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * @param value The new value.
 	 * @param encoded
 	 * @return The previous value, or <jk>null</jk> if the section or key did not previously exist.
+	 * @throws SerializeException If the object value could not be converted to a JSON string for some reason.
 	 * @throws UnsupportedOperationException If config file is read only.
 	 */
-	public abstract String put(String sectionName, String sectionKey, Object value, boolean encoded);
+	public abstract String put(String sectionName, String sectionKey, Object value, boolean encoded) throws SerializeException;
+
+	/**
+	 * Identical to {@link #put(String, String, Object, boolean)} except used when the value is a simple string
+	 * to avoid having to catch a {@link SerializeException}.
+	 *
+	 * @param sectionName The section name.  Must not be <jk>null</jk>.
+	 * @param sectionKey The section key.  Must not be <jk>null</jk>.
+	 * @param value The new value.
+	 * @param encoded
+	 * @return The previous value, or <jk>null</jk> if the section or key did not previously exist.
+	 * @throws UnsupportedOperationException If config file is read only.
+	 */
+	public abstract String put(String sectionName, String sectionKey, String value, boolean encoded);
+
 
 	/**
 	 * Removes an antry from this config file.
@@ -158,20 +173,38 @@ public abstract class ConfigFile implements Map<String,Section> {
 	public abstract ConfigFile clearHeaderComments(String section);
 
 	/**
-	 * Returns the serializer in use for this config file.
+	 * Returns the reusable bean session associated with this config file.
+	 * <p>
+	 * Used for performing simple datatype conversions.
 	 *
-	 * @return This object (for method chaining).
-	 * @throws SerializeException If no serializer is defined on this config file.
+	 * @return The reusable bean session associated with this config file.
 	 */
-	protected abstract WriterSerializer getSerializer() throws SerializeException;
+	protected abstract BeanSession getBeanSession();
 
 	/**
-	 * Returns the parser in use for this config file.
+	 * Converts the specified object to a string.
+	 * <p>
+	 * The serialized output is identical to LAX JSON (JSON with unquoted attributes) except for the following exceptions:
+	 * <ul>
+	 * 	<li>Top level strings are not quoted.
+	 * </ul>
 	 *
-	 * @return This object (for method chaining).
-	 * @throws ParseException If no parser is defined on this config file.
+	 * @param o The object to serialize.
+	 * @return The serialized object.
+	 * @throws SerializeException
 	 */
-	protected abstract ReaderParser getParser() throws ParseException;
+	protected abstract String serialize(Object o) throws SerializeException;
+
+	/**
+	 * Converts the specified string to an object of the specified type.
+	 *
+	 * @param s The string to parse.
+	 * @param type The data type to create.
+	 * @param args The generic type arguments if the type is a {@link Collection} or {@link Map}
+	 * @return The parsed object.
+	 * @throws ParseException
+	 */
+	protected abstract <T> T parse(String s, Type type, Type...args) throws ParseException;
 
 	/**
 	 * Places a read lock on this config file.
@@ -222,81 +255,173 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 * 	<li><js>"section/key"</js> - A value from the specified section.
 	 * </ul>
 	 * <p>
-	 * If the class type is an array, the value is split on commas and converted individually.
-	 * <p>
-	 * If you specify a primitive element type using this method (e.g. <code><jk>int</jk>.<jk>class</jk></code>,
-	 * 	you will get an array of wrapped objects (e.g. <code>Integer[].<jk>class</jk></code>.
+	 * The type can be a simple type (e.g. beans, strings, numbers) or parameterized type (collections/maps).
 	 *
-	 * @param c The class to convert the value to.
-	 * @param key The key.  See {@link #getString(String)} for a description of the key.
-	 * @throws ParseException If parser could not parse the value or if a parser is not registered with this config file.
-	 * @return The value, or <jk>null</jk> if the section or key does not exist.
-	 */
-	@SuppressWarnings("unchecked")
-	public final <T> T getObject(Class<T> c, String key) throws ParseException {
-		assertFieldNotNull(c, "c");
-		return getObject(c, key, c.isArray() ? (T)Array.newInstance(c.getComponentType(), 0) : null);
-	}
-
-	/**
-	 * Gets the entry with the specified key and converts it to the specified value..
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode'>
+	 * 	ConfigFile cf = <jk>new</jk> ConfigFileBuilder().build(<js>"MyConfig.cfg"</js>);
+	 *
+	 * 	<jc>// Parse into a linked-list of strings.</jc>
+	 * 	List l = cf.getObject(<js>"MySection/myListOfStrings"</js>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a linked-list of beans.</jc>
+	 * 	List l = cf.getObject(<js>"MySection/myListOfBeans"</js>, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a linked-list of linked-lists of strings.</jc>
+	 * 	List l = cf.getObject(<js>"MySection/my2dListOfStrings"</js>, LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a map of string keys/values.</jc>
+	 * 	Map m = cf.getObject(<js>"MySection/myMap"</js>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a map containing string keys and values of lists containing beans.</jc>
+	 * 	Map m = cf.getObject(<js>"MySection/myMapOfListsOfBeans"</js>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 * </p>
 	 * <p>
-	 * The key can be in one of the following formats...
-	 * <ul class='spaced-list'>
-	 * 	<li><js>"key"</js> - A value in the default section (i.e. defined above any <code>[section]</code> header).
-	 * 	<li><js>"section/key"</js> - A value from the specified section.
+	 * <code>Collection</code> classes are assumed to be followed by zero or one objects indicating the element type.
+	 * <p>
+	 * <code>Map</code> classes are assumed to be followed by zero or two meta objects indicating the key and value types.
+	 * <p>
+	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>Use the {@link #getObject(String, Class)} method instead if you don't need a parameterized map/collection.
 	 * </ul>
 	 *
-	 * @param c The class to convert the value to.
 	 * @param key The key.  See {@link #getString(String)} for a description of the key.
-	 * @param def The default value if section or key does not exist.
+	 * @param type The object type to create.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * @param args The type arguments of the class if it's a collection or map.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * 	<br>Ignored if the main type is not a map or collection.
+	 *
 	 * @throws ParseException If parser could not parse the value or if a parser is not registered with this config file.
 	 * @return The value, or <jk>null</jk> if the section or key does not exist.
 	 */
-	public final <T> T getObject(Class<T> c, String key, T def) throws ParseException {
-		assertFieldNotNull(c, "c");
+	public final <T> T getObject(String key, Type type, Type...args) throws ParseException {
 		assertFieldNotNull(key, "key");
-		return getObject(c, getSectionName(key), getSectionKey(key), def);
+		assertFieldNotNull(type, "type");
+		return parse(getString(key), type, args);
 	}
 
 	/**
-	 * Same as {@link #getObject(Class, String, Object)}, but value is referenced through section name and key instead of full key.
+	 * Same as {@link #getObject(String, Type, Type...)} except optimized for a non-parameterized class.
+	 * <p>
+	 * This is the preferred parse method for simple types since you don't need to cast the results.
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode'>
+	 * 	ConfigFile cf = <jk>new</jk> ConfigFileBuilder().build(<js>"MyConfig.cfg"</js>);
 	 *
-	 * @param c The class to convert the value to.
+	 * 	<jc>// Parse into a string.</jc>
+	 * 	String s = cf.getObject(<js>"MySection/mySimpleString"</js>, String.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a bean.</jc>
+	 * 	MyBean b = cf.getObject(<js>"MySection/myBean"</js>, MyBean.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a bean array.</jc>
+	 * 	MyBean[] ba = cf.getObject(<js>"MySection/myBeanArray"</js>, MyBean[].<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a linked-list of objects.</jc>
+	 * 	List l = cf.getObject(<js>"MySection/myList"</js>, LinkedList.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a map of object keys/values.</jc>
+	 * 	Map m = cf.getObject(<js>"MySection/myMap"</js>, TreeMap.<jk>class</jk>);
+	 * </p>
+	 *
+	 * @param <T> The class type of the object being created.
+	 * @param key The key.  See {@link #getString(String)} for a description of the key.
+	 * @param type The object type to create.
+	 * @return The parsed object.
+	 * @throws ParseException If the input contains a syntax error or is malformed, or is not valid for the specified type.
+	 * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
+	 */
+	public final <T> T getObject(String key, Class<T> type) throws ParseException {
+		assertFieldNotNull(key, "key");
+		assertFieldNotNull(type, "c");
+		return parse(getString(key), type);
+	}
+
+
+	/**
+	 * Gets the entry with the specified key and converts it to the specified value.
+	 * <p>
+	 * Same as {@link #getObject(String, Class)}, but with a default value.
+	 *
+	 * @param key The key.  See {@link #getString(String)} for a description of the key.
+	 * @param def The default value if section or key does not exist.
+	 * @param type The class to convert the value to.
+	 *
+	 * @throws ParseException If parser could not parse the value or if a parser is not registered with this config file.
+	 * @return The value, or <jk>null</jk> if the section or key does not exist.
+	 */
+	public final <T> T getObjectWithDefault(String key, T def, Class<T> type) throws ParseException {
+		assertFieldNotNull(key, "key");
+		assertFieldNotNull(type, "c");
+		T t = parse(getString(key), type);
+		return (t == null ? def : t);
+	}
+
+	/**
+	 * Gets the entry with the specified key and converts it to the specified value.
+	 * <p>
+	 * Same as {@link #getObject(String, Type, Type...)}, but with a default value.
+	 *
+	 * @param key The key.  See {@link #getString(String)} for a description of the key.
+	 * @param def The default value if section or key does not exist.
+	 * @param type The object type to create.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * @param args The type arguments of the class if it's a collection or map.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * 	<br>Ignored if the main type is not a map or collection.
+	 *
+	 * @throws ParseException If parser could not parse the value or if a parser is not registered with this config file.
+	 * @return The value, or <jk>null</jk> if the section or key does not exist.
+	 */
+	public final <T> T getObjectWithDefault(String key, T def, Type type, Type...args) throws ParseException {
+		assertFieldNotNull(key, "key");
+		assertFieldNotNull(type, "type");
+		T t = parse(getString(key), type, args);
+		return (t == null ? def : t);
+	}
+
+	/**
+	 * Gets the entry with the specified key and converts it to the specified value.
+	 * <p>
+	 * Same as {@link #getObject(String, Class)}, but used when key is already broken into section/key.
+	 *
 	 * @param sectionName The section name.  Must not be <jk>null</jk>.
 	 * @param sectionKey The section key.  Must not be <jk>null</jk>.
-	 * @param def The default value if section or key does not exist.
+	 * @param c The class to convert the value to.
+	 *
 	 * @throws ParseException If parser could not parse the value or if a parser is not registered with this config file.
 	 * @return The value, or the default value if the section or value doesn't exist.
 	 */
-	@SuppressWarnings("unchecked")
-	public <T> T getObject(Class<T> c, String sectionName, String sectionKey, T def) throws ParseException {
-		String s = get(sectionName, sectionKey);
-		if (s == null)
-			return def;
-		if (c == String.class)
-			return (T)s;
-		if (c == Integer.class || c == int.class)
-			return (T)(StringUtils.isEmpty(s) ? def : Integer.valueOf(parseIntWithSuffix(s)));
-		if (c == Boolean.class || c == boolean.class)
-			return (T)(StringUtils.isEmpty(s) ? def : Boolean.valueOf(Boolean.parseBoolean(s)));
-		if (c == String[].class) {
-			String[] r = StringUtils.isEmpty(s) ? new String[0] : StringUtils.split(s, ',');
-			return (T)(r.length == 0 ? def : r);
-		}
-		if (c.isArray()) {
-			Class<?> ce = c.getComponentType();
-			if (StringUtils.isEmpty(s))
-				return def;
-			String[] r = StringUtils.split(s, ',');
-			Object o = Array.newInstance(ce, r.length);
-			for (int i = 0; i < r.length; i++)
-				Array.set(o, i, getParser().parse(r[i], ce));
-			return (T)o;
-		}
-		if (StringUtils.isEmpty(s))
-			return def;
-		return getParser().parse(s, c);
+	public final <T> T getObject(String sectionName, String sectionKey, Class<T> c) throws ParseException {
+		assertFieldNotNull(sectionName, "sectionName");
+		assertFieldNotNull(sectionKey, "sectionKey");
+		return parse(get(sectionName, sectionKey), c);
+	}
+
+	/**
+	 * Gets the entry with the specified key and converts it to the specified value.
+	 * <p>
+	 * Same as {@link #getObject(String, Type, Type...)}, but used when key is already broken into section/key.
+	 *
+	 * @param sectionName The section name.  Must not be <jk>null</jk>.
+	 * @param sectionKey The section key.  Must not be <jk>null</jk>.
+	 * @param type The object type to create.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * @param args The type arguments of the class if it's a collection or map.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * 	<br>Ignored if the main type is not a map or collection.
+	 *
+	 * @throws ParseException If parser could not parse the value or if a parser is not registered with this config file.
+	 * @return The value, or <jk>null</jk> if the section or key does not exist.
+	 */
+	public final <T> T getObject(String sectionName, String sectionKey, Type type, Type...args) throws ParseException {
+		assertFieldNotNull(sectionName, "sectionName");
+		assertFieldNotNull(sectionKey, "sectionKey");
+		return parse(get(sectionName, sectionKey), type, args);
 	}
 
 	/**
@@ -430,33 +555,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 	 */
 	public final String put(String key, Object value, boolean encoded) throws SerializeException {
 		assertFieldNotNull(key, "key");
-		if (value == null)
-			value = "";
-		Class<?> c = value.getClass();
-		if (isSimpleType(c))
-			return put(getSectionName(key), getSectionKey(key), value.toString(), encoded);
-		if (c.isAssignableFrom(Collection.class)) {
-			Collection<?> c2 = (Collection<?>)value;
-			String[] r = new String[c2.size()];
-			int i = 0;
-			for (Object o2 : c2) {
-				boolean isSimpleType = o2 == null ? true : isSimpleType(o2.getClass());
-				r[i++] = (isSimpleType ? Array.get(value, i).toString() : getSerializer().toString(Array.get(value, i)));
-			}
-			return put(getSectionName(key), getSectionKey(key), StringUtils.join(r, ','), encoded);
-		} else if (c.isArray()) {
-			boolean isSimpleType = isSimpleType(c.getComponentType());
-			String[] r = new String[Array.getLength(value)];
-			for (int i = 0; i < r.length; i++) {
-				r[i] = (isSimpleType ? Array.get(value, i).toString() : getSerializer().toString(Array.get(value, i)));
-			}
-			return put(getSectionName(key), getSectionKey(key), StringUtils.join(r, ','), encoded);
-		}
-		return put(getSectionName(key), getSectionKey(key), getSerializer().toString(value), encoded);
-	}
-
-	private static boolean isSimpleType(Class<?> c) {
-		return (c == String.class || c.isPrimitive() || c.isAssignableFrom(Number.class) || c == Boolean.class);
+		return put(getSectionName(key), getSectionKey(key), serialize(value), encoded);
 	}
 
 	/**
@@ -510,7 +609,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 					Class<?> pt = m.getParameterTypes()[0];
 					if (permittedPropertyTypes == null || permittedPropertyTypes.length == 0 || ArrayUtils.contains(pt, permittedPropertyTypes)) {
 						String propName = Introspector.decapitalize(m.getName().substring(3));
-						Object value = getObject(pt, sectionName, propName, null);
+						Object value = getObject(sectionName, propName, pt);
 						if (value != null) {
 							m.invoke(bean, value);
 							om.put(propName, value);
@@ -528,7 +627,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 	}
 
 	/**
-	 * Shortcut for calling <code>asBean(sectionName, c, <jk>false</jk>)</code>.
+	 * Shortcut for calling <code>getSectionAsBean(sectionName, c, <jk>false</jk>)</code>.
 	 *
 	 * @param sectionName The section name to write from.
 	 * @param c The bean class to create.
@@ -541,6 +640,33 @@ public abstract class ConfigFile implements Map<String,Section> {
 
 	/**
 	 * Converts this config file section to the specified bean instance.
+	 * <p>
+	 * Key/value pairs in the config file section get copied as bean property values to the specified bean class.
+	 * <p>
+	 * <h6 class='figure'>Example config file</h6>
+	 * <p class='bcode'>
+	 * 	<cs>[MyAddress]</cs>
+	 * 	<ck>name</ck> = <cv>John Smith</cv>
+	 * 	<ck>street</ck> = <cv>123 Main Street</cv>
+	 * 	<ck>city</ck> = <cv>Anywhere</cv>
+	 * 	<ck>state</ck> = <cv>NY</cv>
+	 * 	<ck>zip</ck> = <cv>12345</cv>
+	 * </p>
+	 *
+	 * <h6 class='figure'>Example bean</h6>
+	 * <p class='bcode'>
+	 * 	<jk>public class</jk> Address {
+	 * 		public String name, street, city;
+	 * 		public StateEnum state;
+	 * 		public int zip;
+	 * 	}
+	 * </p>
+	 *
+	 * <h6 class='figure'>Example usage</h6>
+	 * <p class='bcode'>
+	 * 	ConfigFile cf = <jk>new</jk> ConfigFileBuilder().build(<js>"MyConfig.cfg"</js>);
+	 * 	Address myAddress = cf.getSectionAsBean(<js>"MySection"</js>, Address.<jk>class</jk>);
+	 * </p>
 	 *
 	 * @param sectionName The section name to write from.
 	 * @param c The bean class to create.
@@ -553,20 +679,102 @@ public abstract class ConfigFile implements Map<String,Section> {
 		assertFieldNotNull(c, "c");
 		readLock();
 		try {
-			BeanMap<T> bm = getParser().getBeanContext().createSession().newBeanMap(c);
+			BeanMap<T> bm = getBeanSession().newBeanMap(c);
 			for (String k : getSectionKeys(sectionName)) {
 				BeanPropertyMeta bpm = bm.getPropertyMeta(k);
 				if (bpm == null) {
 					if (! ignoreUnknownProperties)
 						throw new ParseException("Unknown property {0} encountered", k);
 				} else {
-					bm.put(k, getObject(bpm.getClassMeta().getInnerClass(), sectionName + '/' + k));
+					bm.put(k, getObject(sectionName + '/' + k, bpm.getClassMeta().getInnerClass()));
 				}
 			}
 			return bm.getBean();
 		} finally {
 			readUnlock();
 		}
+	}
+
+	/**
+	 * Wraps a config file section inside a Java interface so that values in the section can be read and
+	 * write using getters and setters.
+	 * <p>
+	 * <h6 class='figure'>Example config file</h6>
+	 * <p class='bcode'>
+	 * 	<cs>[MySection]</cs>
+	 * 	<ck>string</ck> = <cv>foo</cv>
+	 * 	<ck>int</ck> = <cv>123</cv>
+	 * 	<ck>enum</ck> = <cv>ONE</cv>
+	 * 	<ck>bean</ck> = <cv>{foo:'bar',baz:123}</cv>
+	 * 	<ck>int3dArray</ck> = <cv>[[[123,null],null],null]</cv>
+	 * 	<ck>bean1d3dListMap</ck> = <cv>{key:[[[[{foo:'bar',baz:123}]]]]}</cv>
+	 * </p>
+	 *
+	 * <h6 class='figure'>Example interface</h6>
+	 * <p class='bcode'>
+	 * 	<jk>public interface</jk> MyConfigInterface {
+	 *
+	 * 		String getString();
+	 * 		<jk>void</jk> setString(String x);
+	 *
+	 * 		<jk>int</jk> getInt();
+	 * 		<jk>void</jk> setInt(<jk>int</jk> x);
+	 *
+	 * 		MyEnum getEnum();
+	 * 		<jk>void</jk> setEnum(MyEnum x);
+	 *
+	 * 		MyBean getBean();
+	 * 		<jk>void</jk> setBean(MyBean x);
+	 *
+	 * 		<jk>int</jk>[][][] getInt3dArray();
+	 * 		<jk>void</jk> setInt3dArray(<jk>int</jk>[][][] x);
+	 *
+	 * 		Map&lt;String,List&lt;MyBean[][][]&gt;&gt; getBean1d3dListMap();
+	 * 		<jk>void</jk> setBean1d3dListMap(Map&lt;String,List&lt;MyBean[][][]&gt;&gt; x);
+	 * 	}
+	 * </p>
+	 *
+	 * <h6 class='figure'>Example usage</h6>
+	 * <p class='bcode'>
+	 * 	ConfigFile cf = <jk>new</jk> ConfigFileBuilder().build(<js>"MyConfig.cfg"</js>);
+	 *
+	 * 	MyConfigInterface ci = cf.getSectionAsInterface(<js>"MySection"</js>, MyConfigInterface.<jk>class</jk>);
+	 *
+	 * 	<jk>int</jk> myInt = ci.getInt();
+	 *
+	 * 	ci.setBean(<jk>new</jk> MyBean());
+	 *
+	 * 	cf.save();
+	 * </p>
+	 *
+	 * @param sectionName The section name to retrieve as an interface proxy.
+	 * @param c The proxy interface class.
+	 * @return The proxy interface.
+	 */
+	@SuppressWarnings("unchecked")
+	public final <T> T getSectionAsInterface(final String sectionName, final Class<T> c) {
+		assertFieldNotNull(c, "c");
+
+		if (! c.isInterface())
+			throw new UnsupportedOperationException("Class passed to getSectionAsInterface is not an interface.");
+
+		InvocationHandler h = new InvocationHandler() {
+
+			@Override
+			public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+				BeanInfo bi = Introspector.getBeanInfo(c, null);
+				for (PropertyDescriptor pd : bi.getPropertyDescriptors()) {
+					Method rm = pd.getReadMethod(), wm = pd.getWriteMethod();
+					if (method.equals(rm))
+						return ConfigFile.this.getObject(sectionName, pd.getName(), rm.getGenericReturnType());
+					if (method.equals(wm))
+						return ConfigFile.this.put(sectionName, pd.getName(), args[0], false);
+				}
+				throw new UnsupportedOperationException("Unsupported interface method.  method=[ " + method + " ]");
+			}
+		};
+
+		return (T)Proxy.newProxyInstance(c.getClassLoader(), new Class[] { c }, h);
 	}
 
 	/**

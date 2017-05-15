@@ -139,13 +139,13 @@ public class ConfigFileBuilderTest {
 		try { cf.addListener(new ConfigFileListener(){}); fail(); } catch (UnsupportedOperationException e) {}
 
 		// All these should succeed.
-		cf.getObject(String.class, "A");
-		cf.getObject(String.class, "A", "a");
+		cf.getObject("A", String.class);
+		cf.getObject("A", "a", String.class);
 		cf.getString("A");
 		cf.getString("A","a");
-		cf.getObject(String.class, "A");
-		cf.getObject(String.class, "A", "a");
-		cf.getObject(String[].class, "A");
+		cf.getObject("A", String.class);
+		cf.getObject("A", "a", String.class);
+		cf.getObject("A", String[].class);
 		cf.getStringArray("A");
 		cf.getStringArray("A", null);
 		cf.getInt("A");

@@ -33,17 +33,16 @@ public class ConfigTest extends RestTestcase {
 
 		ConfigFile cf = c.doGet(URL).getResponse(ConfigFileImpl.class);
 
-		assertObjectEquals("{int1:'1',int2:'1,2,3',int3:'$C{Test/int1, -1}',int4:'$C{Test/int3, -1}',int5:'$C{XXX, -1}',boolean1:'true',boolean2:'true,true',path:'$E{PATH}',testManifestEntry:'$MF{Test-Entry}'}", cf.get("Test"));
+		assertObjectEquals("{int1:'1',int2:'[1,2,3]',int3:'$C{Test/int1, -1}',int4:'$C{Test/int3, -1}',int5:'$C{XXX, -1}',boolean1:'true',boolean2:'[true,true]',path:'$E{PATH}',testManifestEntry:'$MF{Test-Entry}'}", cf.get("Test"));
 
 		assertEquals("'1'", c.doGet(URL + "/Test%2Fint1/" + getName(String.class)).getResponseAsString());
-		assertEquals("['1']", c.doGet(URL + "/Test%2Fint1/" + getName(String[].class)).getResponseAsString());
-		assertEquals("'1,2,3'", c.doGet(URL + "/Test%2Fint2/" + getName(String.class)).getResponseAsString());
+		assertEquals("'[1,2,3]'", c.doGet(URL + "/Test%2Fint2/" + getName(String.class)).getResponseAsString());
 		assertEquals("['1','2','3']", c.doGet(URL + "/Test%2Fint2/" + getName(String[].class)).getResponseAsString());
 		assertEquals("[1,2,3]", c.doGet(URL + "/Test%2Fint2/" + getName(int[].class)).getResponseAsString());
 		assertEquals("[1,2,3]", c.doGet(URL + "/Test%2Fint2/" + getName(Integer[].class)).getResponseAsString());
-		assertEquals("[1]", c.doGet(URL + "/Test%2Fint3/" + getName(int[].class)).getResponseAsString());
-		assertEquals("[1]", c.doGet(URL + "/Test%2Fint4/" + getName(int[].class)).getResponseAsString());
-		assertEquals("[-1]", c.doGet(URL + "/Test%2Fint5/" + getName(int[].class)).getResponseAsString());
+		assertEquals("1", c.doGet(URL + "/Test%2Fint3/" + getName(Integer.class)).getResponseAsString());
+		assertEquals("1", c.doGet(URL + "/Test%2Fint4/" + getName(Integer.class)).getResponseAsString());
+		assertEquals("-1", c.doGet(URL + "/Test%2Fint5/" + getName(Integer.class)).getResponseAsString());
 		assertEquals("true", c.doGet(URL + "/Test%2Fboolean1/" + getName(Boolean.class)).getResponseAsString());
 		assertEquals("[true,true]", c.doGet(URL + "/Test%2Fboolean2/" + getName(Boolean[].class)).getResponseAsString());
 		assertTrue(c.doGet(URL + "/Test%2Fpath/" + getName(String.class)).getResponseAsString().length() > 10);

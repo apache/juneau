@@ -69,7 +69,7 @@ public class ConfigFileBuilder {
 	}
 
 	/**
-	 * Specify the parser to use for parsing POJOs when using {@link ConfigFile#getObject(Class,String)}.
+	 * Specify the parser to use for parsing POJOs when using {@link ConfigFile#getObject(String,Class)}.
 	 * <p>
 	 * The default value for this setting is {@link JsonParser#DEFAULT}
 	 *

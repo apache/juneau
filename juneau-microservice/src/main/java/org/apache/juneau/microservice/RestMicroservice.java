@@ -269,7 +269,7 @@ public class RestMicroservice extends Microservice {
 			ch.setFormatter(new LogEntryFormatter(format, dateFormat, false));
 			logger.addHandler(ch);
 		}
-		ObjectMap loggerLevels = cf.getObject(ObjectMap.class, "Logging/levels");
+		ObjectMap loggerLevels = cf.getObject("Logging/levels", ObjectMap.class);
 		if (loggerLevels != null)
 		for (String l : loggerLevels.keySet())
 			Logger.getLogger(l).setLevel(loggerLevels.get(Level.class, l));
@@ -339,7 +339,7 @@ public class RestMicroservice extends Microservice {
 		ConfigFile cf = getConfig();
 		ObjectMap mf = getManifest();
 		
-		int[] ports = cf.getObject(int[].class, "REST/port", mf.get(int[].class, "Rest-Port", new int[]{8000}));
+		int[] ports = cf.getObjectWithDefault("REST/port", mf.get(int[].class, "Rest-Port", new int[]{8000}), int[].class);
 
 		port = findOpenPort(ports);
 		if (port == 0) {
@@ -474,7 +474,7 @@ public class RestMicroservice extends Microservice {
 		ObjectMap mf = getManifest();
 		Map<String,Class<? extends Servlet>> rm = new LinkedHashMap<String,Class<? extends Servlet>>();
 
-		ObjectMap resourceMap = cf.getObject(ObjectMap.class, "REST/resourceMap");
+		ObjectMap resourceMap = cf.getObject("REST/resourceMap", ObjectMap.class);
 		String[] resources = cf.getStringArray("REST/resources", mf.getStringArray("Rest-Resources"));
 
 		if (resourceMap != null && ! resourceMap.isEmpty()) {

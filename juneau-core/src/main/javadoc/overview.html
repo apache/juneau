@@ -1373,14 +1373,14 @@
 	<cc># Default section</cc>
 	<ck>key1</ck> = <cv>1</cv>
 	<ck>key2</ck> = <cv>true</cv>
-	<ck>key3</ck> = <cv>1,2,3</cv>
+	<ck>key3</ck> = <cv>[1,2,3]</cv>
 	<ck>key4</ck> = <cv>http://foo</cv>
 	
 	<cc># Section 1</cc>
 	<cs>[Section1]</cs>
 	<ck>key1</ck> = <cv>2</cv>
 	<ck>key2</ck> = <cv>false</cv>
-	<ck>key3</ck> = <cv>4,5,6</cv>
+	<ck>key3</ck> = <cv>[4,5,6]</cv>
 	<ck>key4</ck> = <cv>http://bar</cv>
 		</p>
 		<p>
@@ -1393,7 +1393,7 @@
 	URL key4;
 	
 	<jc>// Load our config file</jc>
-	ConfigFile f = <jk>new</jk> ConfigFileBuilder().build(<js>"MyIniFile.cfg"</js>);
+	ConfigFile f = <jk>new</jk> ConfigFileBuilder().build(<js>"MyConfig.cfg"</js>);
 	
 	<jc>// Read values from default section</jc>
 	key1 = f.getInt(<js>"key1"</js>);
@@ -1412,12 +1412,12 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Construct the sample INI file programmatically</jc>
-	ConfigFile cf = <jk>new</jk> ConfigFileBuilder().build(<js>"MyIniFile.cfg"</js>)
+	ConfigFile cf = <jk>new</jk> ConfigFileBuilder().build(<js>"MyConfig.cfg"</js>)
 		.addLines(<jk>null</jk>,
 			<js>"# Default section"</js>,
 			<js>"key1 = 1"</js>,
 			<js>"key2 = true"</js>,
-			<js>"key3 = 1,2,3"</js>,
+			<js>"key3 = [1,2,3]"</js>,
 			<js>"key4 = http://foo"</js>,
 			<js>""</js>)
 		.addHeaderComments(<js>"Section1"</js>,
@@ -1425,7 +1425,7 @@
 		.addLines(<js>"Section1"</js>,
 			<js>"key1 = 2"</js>,
 			<js>"key2 = false"</js>,
-			<js>"key3 = 4,5,6"</js>,
+			<js>"key3 = [4,5,6]"</js>,
 			<js>"key4 = http://bar"</js>)
 		.save();
 		</p>
@@ -1434,7 +1434,7 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Construct the sample INI file programmatically</jc>
-	ConfigFile cf = <jk>new</jk> ConfigFileBuilder().build(<js>"MyIniFile.cfg"</js>)
+	ConfigFile cf = <jk>new</jk> ConfigFileBuilder().build(<js>"MyConfig.cfg"</js>)
 		.addLines(<jk>null</jk>,
 			<js>"# Default section"</js>)
 		.addHeaderComments(<js>"section1"</js>,
@@ -1450,11 +1450,14 @@
 	cf.save();
 		</p>
 		<p>
+			Values are LAX JSON (i.e. unquoted attributes, single quotes) except for top-level strings which are left unquoted.  
+			Any parsable object types are supported as values (e.g. arrays, collections, beans, swappable objects, enums, etc...).
+		</p>
+		<p>
 			The config file looks deceptively simple, the config file API is a very powerful feature with many capabilities, including:
 		</p>
 		<ul class='spaced-list'>
 			<li>The ability to use variables to reference environment variables, system properties, other config file entries, and a host of other types.
-			<li>The ability to store and retrieve POJOs as JSON.
 			<li>APIs for updating, modifying, and saving configuration files without losing comments or formatting.
 			<li>Extensive listener APIs.
 		</ul>
@@ -1472,7 +1475,7 @@
 	<ck>aBoolean</ck> = <cv>true</cv>
 	
 	<cc># An int array</cc>
-	<ck>anIntArray</ck> = <cv>1,2,3</cv>
+	<ck>anIntArray</ck> = <cv>[1,2,3]</cv>
 	
 	<cc># A POJO that can be converted from a String</cc>
 	<ck>aURL</ck> = <cv>http://foo </cv>
@@ -1521,6 +1524,75 @@
 	String myArg = cf.getString(<js>"MySection/myArg"</js>); 
 	String firstArg = cf.getString(<js>"MySection/firstArg"</js>); 
 		</p>
+		<p>
+			Config files can also be used to directly populate beans using the {@link org.apache.juneau.ini.ConfigFile#getSectionAsBean(String,Class,boolean)}:
+		</p>
+		<p class='bcode'>
+	<jc>// Example config file</jc>
+	<cs>[MyAddress]</cs>
+	<ck>name</ck> = <cv>John Smith</cv>
+	<ck>street</ck> = <cv>123 Main Street</cv>
+	<ck>city</ck> = <cv>Anywhere</cv>
+	<ck>state</ck> = <cv>NY</cv>
+	<ck>zip</ck> = <cv>12345</cv>
+
+	<jc>// Example bean</jc>
+	<jk>public class</jk> Address {
+		public String name, street, city;
+		public StateEnum state;
+		public int zip;
+	}
+
+	<jc>// Example usage</jc>
+	ConfigFile cf = <jk>new</jk> ConfigFileBuilder().build(<js>"MyConfig.cfg"</js>);
+	Address myAddress = cf.getSectionAsBean(<js>"MySection"</js>, Address.<jk>class</jk>);
+		</p>
+		<p>
+			Config file sections can also be accessed via interface proxies using {@link org.apache.juneau.ini.ConfigFile#getSectionAsInterface(String,Class)}:
+		</p>
+		<p class='bcode'>
+	<jc>// Example config file</jc>
+	<cs>[MySection]</cs>
+	<ck>string</ck> = <cv>foo</cv>
+	<ck>int</ck> = <cv>123</cv>
+	<ck>enum</ck> = <cv>ONE</cv>
+	<ck>bean</ck> = <cv>{foo:'bar',baz:123}</cv>
+	<ck>int3dArray</ck> = <cv>[[[123,null],null],null]</cv>
+	<ck>bean1d3dListMap</ck> = <cv>{key:[[[[{foo:'bar',baz:123}]]]]}</cv>
+
+	<jc>// Example interface</jc>
+	<jk>public interface</jk> MyConfigInterface {
+
+		String getString();
+		<jk>void</jk> setString(String x);
+
+		<jk>int</jk> getInt();
+		<jk>void</jk> setInt(<jk>int</jk> x);
+
+		MyEnum getEnum();
+		<jk>void</jk> setEnum(MyEnum x);
+
+		MyBean getBean();
+		<jk>void</jk> setBean(MyBean x);
+
+		<jk>int</jk>[][][] getInt3dArray();
+		<jk>void</jk> setInt3dArray(<jk>int</jk>[][][] x);
+		
+		Map&lt;String,List&lt;MyBean[][][]&gt;&gt; getBean1d3dListMap();
+		<jk>void</jk> setBean1d3dListMap(Map&lt;String,List&lt;MyBean[][][]&gt;&gt; x);
+	}
+	
+	<jc>// Example usage</jc>
+	ConfigFile cf = <jk>new</jk> ConfigFileBuilder().build(<js>"MyConfig.cfg"</js>);
+	MyConfigInterface ci = cf.getSectionAsInterface(<js>"MySection"</js>, MyConfigInterface.<jk>class</jk>);
+	<jk>int</jk> myInt = ci.getInt();
+	ci.setBean(<jk>new</jk> MyBean());
+	cf.save();
+		</p>
+			
+		
+		
+		
 		
 		<h6 class='topic'>Additional Information</h6>
 		<ul class='javahierarchy'>
@@ -5973,6 +6045,23 @@
 			<li>New package:  {@link org.apache.juneau.http}.
 			<li>Support for dynamic beans.  See {@link org.apache.juneau.annotation.BeanProperty#name() @BeanProperty.name()}.
 			<li>New doc: <a class='doclink' href='#Core.JacksonComparison'>2.12 - Comparison with Jackson</a>
+			<li>All parsers now allow for numeric types with <js>'K'</js>/<js>'M'</js>/<js>'G'</js> suffixes to represent
+				kilobytes, megabytes, and gigabytes.
+				<p class='bcode'>
+	<jc>// Example</jc>
+	<jk>int</jk> i = JsonParser.<jsf>DEFAULT</jsf>.parse(<js>"123M"</js>);  <jc>// 123MB</jc>
+				</p>
+			<li>New/modified methods on {@link org.apache.juneau.ini.ConfigFile}:
+				<ul>
+					<li>{@link org.apache.juneau.ini.ConfigFile#put(String,String,Object,boolean) put(String,String,Object,boolean)} 
+					<li>{@link org.apache.juneau.ini.ConfigFile#getObject(String,Type,Type...) getObject(String,Type,Type...)} 
+					<li>{@link org.apache.juneau.ini.ConfigFile#getObject(String,Class) getObject(String,Class)} 
+					<li>{@link org.apache.juneau.ini.ConfigFile#getObject(String,String,Type,Type...) getObject(String,String,Type,Type...)} 
+					<li>{@link org.apache.juneau.ini.ConfigFile#getObject(String,String,Class) getObject(String,String,Class)} 
+					<li>{@link org.apache.juneau.ini.ConfigFile#getObjectWithDefault(String,Object,Type,Type...) getObjectWithDefault(String,Object,Type,Type)} 
+					<li>{@link org.apache.juneau.ini.ConfigFile#getObjectWithDefault(String,Object,Class) getObjectWithDefault(String,Object,Class)} 
+				</ul>
+			<li>New ability to interact with config file sections with proxy interfaces with new method {@link org.apache.juneau.ini.ConfigFile#getSectionAsInterface(String,Class)}.
 		</ul>
 
 		<h6 class='topic'>org.apache.juneau.rest</h6>

@@ -15,6 +15,7 @@ package org.apache.juneau.ini;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.io.*;
+import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -233,13 +234,8 @@ public final class ConfigFileWrapped extends ConfigFile {
 	}
 
 	@Override /* ConfigFile */
-	protected WriterSerializer getSerializer() throws SerializeException {
-		return cf.getSerializer();
-	}
-
-	@Override /* ConfigFile */
-	protected ReaderParser getParser() throws ParseException {
-		return cf.getParser();
+	protected BeanSession getBeanSession() {
+		return cf.getBeanSession();
 	}
 
 	@Override /* ConfigFile */
@@ -251,7 +247,12 @@ public final class ConfigFileWrapped extends ConfigFile {
 	}
 
 	@Override /* ConfigFile */
-	public String put(String sectionName, String sectionKey, Object value, boolean encoded) {
+	public String put(String sectionName, String sectionKey, String value, boolean encoded) {
+		return cf.put(sectionName, sectionKey, value, encoded);
+	}
+
+	@Override /* ConfigFile */
+	public String put(String sectionName, String sectionKey, Object value, boolean encoded) throws SerializeException {
 		return cf.put(sectionName, sectionKey, value, encoded);
 	}
 
@@ -273,5 +274,15 @@ public final class ConfigFileWrapped extends ConfigFile {
 	@Override /* ConfigFile */
 	protected void readUnlock() {
 		cf.readUnlock();
+	}
+
+	@Override /* ConfigFile */
+	protected String serialize(Object o) throws SerializeException {
+		return cf.serialize(o);
+	}
+
+	@Override /* ConfigFile */
+	protected <T> T parse(String s, Type type, Type... args) throws ParseException {
+		return cf.parse(s, type, args);
 	}
 }

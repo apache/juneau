@@ -260,34 +260,34 @@ public class ConfigFileTest {
 	public void testExampleInConfigFile() throws Exception {
 
 		ConfigFile cf = configFileBuilder.build()
-			.addLines(null, "# Default section", "key1 = 1", "key2 = true", "key3 = 1,2,3", "key4 = 'http://foo'", "")
+			.addLines(null, "# Default section", "key1 = 1", "key2 = true", "key3 = [1,2,3]", "key4 = http://foo", "")
 			.addHeaderComments("section1", "# Section 1")
-			.addLines("section1", "key1 = 2", "key2 = false", "key3 = 4,5,6", "key4 = 'http://bar'");
+			.addLines("section1", "key1 = 2", "key2 = false", "key3 = [4,5,6]", "key4 = http://bar");
 		ConfigFile cfw = cf.getResolving(VarResolver.DEFAULT);
 
 		assertEquals(1, cf.getInt("key1"));
 		assertEquals(true, cf.getBoolean("key2"));
-		assertEquals(3, cf.getObject(int[].class, "key3")[2]);
-		assertEquals(6, cf.getObject(int[].class, "xkey3", new int[]{4,5,6})[2]);
-		assertEquals(6, cf.getObject(int[].class, "X/key3", new int[]{4,5,6})[2]);
-		assertEquals(new URL("http://foo").toString(), cf.getObject(URL.class, "key4").toString());
+		assertEquals(3, cf.getObject("key3", int[].class)[2]);
+		assertEquals(6, cf.getObjectWithDefault("xkey3", new int[]{4,5,6}, int[].class)[2]);
+		assertEquals(6, cf.getObjectWithDefault("X/key3", new int[]{4,5,6}, int[].class)[2]);
+		assertEquals(new URL("http://foo").toString(), cf.getObject("key4", URL.class).toString());
 
 		assertEquals(1, cfw.getInt("key1"));
 		assertEquals(true, cfw.getBoolean("key2"));
-		assertEquals(3, cfw.getObject(int[].class, "key3")[2]);
-		assertEquals(6, cfw.getObject(int[].class, "xkey3", new int[]{4,5,6})[2]);
-		assertEquals(6, cfw.getObject(int[].class, "X/key3", new int[]{4,5,6})[2]);
-		assertEquals(new URL("http://foo").toString(), cfw.getObject(URL.class, "key4").toString());
+		assertEquals(3, cfw.getObject("key3", int[].class)[2]);
+		assertEquals(6, cfw.getObjectWithDefault("xkey3", new int[]{4,5,6}, int[].class)[2]);
+		assertEquals(6, cfw.getObjectWithDefault("X/key3", new int[]{4,5,6}, int[].class)[2]);
+		assertEquals(new URL("http://foo").toString(), cfw.getObject("key4", URL.class).toString());
 
 		assertEquals(2, cf.getInt("section1/key1"));
 		assertEquals(false, cf.getBoolean("section1/key2"));
-		assertEquals(6, cf.getObject(int[].class, "section1/key3")[2]);
-		assertEquals(new URL("http://bar").toString(), cf.getObject(URL.class, "section1/key4").toString());
+		assertEquals(6, cf.getObject("section1/key3", int[].class)[2]);
+		assertEquals(new URL("http://bar").toString(), cf.getObject("section1/key4", URL.class).toString());
 
 		assertEquals(2, cfw.getInt("section1/key1"));
 		assertEquals(false, cfw.getBoolean("section1/key2"));
-		assertEquals(6, cfw.getObject(int[].class, "section1/key3")[2]);
-		assertEquals(new URL("http://bar").toString(), cfw.getObject(URL.class, "section1/key4").toString());
+		assertEquals(6, cfw.getObject("section1/key3", int[].class)[2]);
+		assertEquals(new URL("http://bar").toString(), cfw.getObject("section1/key4", URL.class).toString());
 
 		cf = configFileBuilder.build(getFreshFile())
 			.addLines(null, "# Default section")
@@ -308,23 +308,23 @@ public class ConfigFileTest {
 
 		assertEquals(1, cf.getInt("key1"));
 		assertEquals(true, cf.getBoolean("key2"));
-		assertEquals(3, cf.getObject(int[].class, "key3")[2]);
-		assertEquals(new URL("http://foo").toString(), cf.getObject(URL.class, "key4").toString());
+		assertEquals(3, cf.getObject("key3", int[].class)[2]);
+		assertEquals(new URL("http://foo").toString(), cf.getObject("key4", URL.class).toString());
 
 		assertEquals(1, cfw.getInt("key1"));
 		assertEquals(true, cfw.getBoolean("key2"));
-		assertEquals(3, cfw.getObject(int[].class, "key3")[2]);
-		assertEquals(new URL("http://foo").toString(), cfw.getObject(URL.class, "key4").toString());
+		assertEquals(3, cfw.getObject("key3", int[].class)[2]);
+		assertEquals(new URL("http://foo").toString(), cfw.getObject("key4", URL.class).toString());
 
 		assertEquals(2, cf.getInt("section1/key1"));
 		assertEquals(false, cf.getBoolean("section1/key2"));
-		assertEquals(6, cf.getObject(int[].class, "section1/key3")[2]);
-		assertEquals(new URL("http://bar").toString(), cf.getObject(URL.class, "section1/key4").toString());
+		assertEquals(6, cf.getObject("section1/key3", int[].class)[2]);
+		assertEquals(new URL("http://bar").toString(), cf.getObject("section1/key4", URL.class).toString());
 
 		assertEquals(2, cfw.getInt("section1/key1"));
 		assertEquals(false, cfw.getBoolean("section1/key2"));
-		assertEquals(6, cfw.getObject(int[].class, "section1/key3")[2]);
-		assertEquals(new URL("http://bar").toString(), cfw.getObject(URL.class, "section1/key4").toString());
+		assertEquals(6, cfw.getObject("section1/key3", int[].class)[2]);
+		assertEquals(new URL("http://bar").toString(), cfw.getObject("section1/key4", URL.class).toString());
 
 		cfw.put("key1", 2);
 		cfw.put("key2", false);
@@ -340,23 +340,23 @@ public class ConfigFileTest {
 
 		assertEquals(2, cf.getInt("key1"));
 		assertEquals(false, cf.getBoolean("key2"));
-		assertEquals(6, cf.getObject(int[].class, "key3")[2]);
-		assertEquals(new URL("http://bar").toString(), cf.getObject(URL.class, "key4").toString());
+		assertEquals(6, cf.getObject("key3", int[].class)[2]);
+		assertEquals(new URL("http://bar").toString(), cf.getObject("key4", URL.class).toString());
 
 		assertEquals(2, cfw.getInt("key1"));
 		assertEquals(false, cfw.getBoolean("key2"));
-		assertEquals(6, cfw.getObject(int[].class, "key3")[2]);
-		assertEquals(new URL("http://bar").toString(), cfw.getObject(URL.class, "key4").toString());
+		assertEquals(6, cfw.getObject("key3", int[].class)[2]);
+		assertEquals(new URL("http://bar").toString(), cfw.getObject("key4", URL.class).toString());
 
 		assertEquals(3, cf.getInt("section1/key1"));
 		assertEquals(true, cf.getBoolean("section1/key2"));
-		assertEquals(9, cf.getObject(int[].class, "section1/key3")[2]);
-		assertEquals(new URL("http://baz").toString(), cf.getObject(URL.class, "section1/key4").toString());
+		assertEquals(9, cf.getObject("section1/key3", int[].class)[2]);
+		assertEquals(new URL("http://baz").toString(), cf.getObject("section1/key4", URL.class).toString());
 
 		assertEquals(3, cfw.getInt("section1/key1"));
 		assertEquals(true, cfw.getBoolean("section1/key2"));
-		assertEquals(9, cfw.getObject(int[].class, "section1/key3")[2]);
-		assertEquals(new URL("http://baz").toString(), cfw.getObject(URL.class, "section1/key4").toString());
+		assertEquals(9, cfw.getObject("section1/key3", int[].class)[2]);
+		assertEquals(new URL("http://baz").toString(), cfw.getObject("section1/key4", URL.class).toString());
 	}
 
 	//====================================================================================================
@@ -365,17 +365,17 @@ public class ConfigFileTest {
 	@Test
 	public void testEnum() throws Exception {
 		ConfigFile cf = configFileBuilder.build(getFreshFile())
-			.addLines(null, "key1 = 'MINUTES'");
+			.addLines(null, "key1 = MINUTES");
 		ConfigFile cfw = cf.getResolving(VarResolver.DEFAULT);
 
-		assertEquals(TimeUnit.MINUTES, cf.getObject(TimeUnit.class, "key1"));
-		assertEquals(TimeUnit.MINUTES, cfw.getObject(TimeUnit.class, "key1"));
+		assertEquals(TimeUnit.MINUTES, cf.getObject("key1", TimeUnit.class));
+		assertEquals(TimeUnit.MINUTES, cfw.getObject("key1", TimeUnit.class));
 
 		cf.save();
 		cf.load();
 
-		assertEquals(TimeUnit.MINUTES, cf.getObject(TimeUnit.class, "key1"));
-		assertEquals(TimeUnit.MINUTES, cfw.getObject(TimeUnit.class, "key1"));
+		assertEquals(TimeUnit.MINUTES, cf.getObject("key1", TimeUnit.class));
+		assertEquals(TimeUnit.MINUTES, cfw.getObject("key1", TimeUnit.class));
 	}
 
 	//====================================================================================================
@@ -1143,41 +1143,41 @@ public class ConfigFileTest {
 	//====================================================================================================
 	@Test
 	public void testGetObjectArray() throws Exception {
-		ConfigFile cf = configFileBuilder.build().addLines("A", "a1=1,2,3");
+		ConfigFile cf = configFileBuilder.build().addLines("A", "a1=[1,2,3]");
 		ConfigFile cfw = cf.getResolving();
-		assertObjectEquals("[1,2,3]", cf.getObject(Integer[].class, "A/a1"));
-		assertObjectEquals("[1,2,3]", cfw.getObject(Integer[].class, "A/a1"));
-		assertObjectEquals("[4,5,6]", cf.getObject(Integer[].class, "A/a2", new Integer[]{4,5,6}));
-		assertObjectEquals("[4,5,6]", cfw.getObject(Integer[].class, "A/a2", new Integer[]{4,5,6}));
-		assertObjectEquals("[7,8,9]", cf.getObject(Integer[].class, "B/a1", new Integer[]{7,8,9}));
-		assertObjectEquals("[7,8,9]", cfw.getObject(Integer[].class, "B/a1", new Integer[]{7,8,9}));
-		assertObjectEquals("[]", cf.getObject(Integer[].class, "B/a1"));
-		assertObjectEquals("[]", cfw.getObject(Integer[].class, "B/a1"));
+		assertObjectEquals("[1,2,3]", cf.getObject("A/a1", Integer[].class));
+		assertObjectEquals("[1,2,3]", cfw.getObject("A/a1", Integer[].class));
+		assertObjectEquals("[4,5,6]", cf.getObjectWithDefault("A/a2", new Integer[]{4,5,6}, Integer[].class));
+		assertObjectEquals("[4,5,6]", cfw.getObjectWithDefault("A/a2", new Integer[]{4,5,6}, Integer[].class));
+		assertObjectEquals("[7,8,9]", cf.getObjectWithDefault("B/a1", new Integer[]{7,8,9}, Integer[].class));
+		assertObjectEquals("[7,8,9]", cfw.getObjectWithDefault("B/a1", new Integer[]{7,8,9}, Integer[].class));
+		assertNull(cf.getObject("B/a1", Integer[].class));
+		assertNull(cfw.getObject("B/a1", Integer[].class));
 
-		cf = configFileBuilder.build().addLines("A", "a1 = 1 ,\n\t2 ,\n\t3 ");
-		assertObjectEquals("[1,2,3]", cf.getObject(Integer[].class, "A/a1"));
-		assertObjectEquals("[1,2,3]", cfw.getObject(Integer[].class, "A/a1"));
+		cf = configFileBuilder.build().addLines("A", "a1 = [1 ,\n\t2 ,\n\t3] ");
+		assertObjectEquals("[1,2,3]", cf.getObject("A/a1", Integer[].class));
+		assertObjectEquals("[1,2,3]", cfw.getObject("A/a1", Integer[].class));
 
 		// We cannot cast primitive arrays to Object[], so the following throws exceptions.
-		assertObjectEquals("[1,2,3]", cf.getObject(int[].class, "A/a1"));
-		assertEquals("int", cf.getObject(int[].class, "A/a1").getClass().getComponentType().getSimpleName());
-		assertObjectEquals("[]", cf.getObject(int[].class, "B/a1"));
-		assertEquals("int", cf.getObject(int[].class, "B/a1").getClass().getComponentType().getSimpleName());
-		assertObjectEquals("[]", cf.getObject(int[].class, "A/a2"));
-		assertEquals("int", cf.getObject(int[].class, "A/a2").getClass().getComponentType().getSimpleName());
+		assertObjectEquals("[1,2,3]", cf.getObject("A/a1", int[].class));
+		assertEquals("int", cf.getObject("A/a1", int[].class).getClass().getComponentType().getSimpleName());
+		assertNull(cf.getObject("B/a1", int[].class));
+		assertEquals("int", cf.getObjectWithDefault("B/a1", new int[0], int[].class).getClass().getComponentType().getSimpleName());
+		assertNull(cf.getObject("A/a2", int[].class));
+		assertEquals("int", cf.getObjectWithDefault("A/a2", new int[0], int[].class).getClass().getComponentType().getSimpleName());
 
-		assertObjectEquals("[1,2,3]", cf.getObject(int[].class, "A/a1", new int[]{4}));
-		assertEquals("int", cf.getObject(int[].class, "A/a1", new int[]{4}).getClass().getComponentType().getSimpleName());
-		assertObjectEquals("[4]", cf.getObject(int[].class, "B/a1", new int[]{4}));
-		assertEquals("int", cf.getObject(int[].class, "B/a1", new int[]{4}).getClass().getComponentType().getSimpleName());
-		assertObjectEquals("[4]", cf.getObject(int[].class, "A/a2", new int[]{4}));
-		assertEquals("int", cf.getObject(int[].class, "A/a2", new int[]{4}).getClass().getComponentType().getSimpleName());
+		assertObjectEquals("[1,2,3]", cf.getObjectWithDefault("A/a1", new int[]{4}, int[].class));
+		assertEquals("int", cf.getObjectWithDefault("A/a1", new int[]{4}, int[].class).getClass().getComponentType().getSimpleName());
+		assertObjectEquals("[4]", cf.getObjectWithDefault("B/a1", new int[]{4}, int[].class));
+		assertEquals("int", cf.getObjectWithDefault("B/a1", new int[]{4}, int[].class).getClass().getComponentType().getSimpleName());
+		assertObjectEquals("[4]", cf.getObjectWithDefault("A/a2", new int[]{4}, int[].class));
+		assertEquals("int", cf.getObjectWithDefault("A/a2", new int[]{4}, int[].class).getClass().getComponentType().getSimpleName());
 
-		System.setProperty("X", "4,5,6");
-		cf = configFileBuilder.build().addLines(null, "x1=$C{A/a1}", "x2=$S{X}", "x3=$S{Y}").addLines("A", "a1=1,2,3").getResolving();
-		assertObjectEquals("[1,2,3]", cf.getObject(int[].class, "x1", new int[]{9}));
-		assertObjectEquals("[4,5,6]", cf.getObject(int[].class, "x2", new int[]{9}));
-		assertObjectEquals("[9]", cf.getObject(int[].class, "x3", new int[]{9}));
+		System.setProperty("X", "[4,5,6]");
+		cf = configFileBuilder.build().addLines(null, "x1=$C{A/a1}", "x2=$S{X}", "x3=$S{Y}").addLines("A", "a1=[1,2,3]").getResolving();
+		assertObjectEquals("[1,2,3]", cf.getObjectWithDefault("x1", new int[]{9}, int[].class));
+		assertObjectEquals("[4,5,6]", cf.getObjectWithDefault("x2", new int[]{9}, int[].class));
+		assertObjectEquals("[9]", cf.getObjectWithDefault("x3", new int[]{9}, int[].class));
 		System.clearProperty("X");
 	}
 
@@ -1627,34 +1627,34 @@ public class ConfigFileTest {
 	//====================================================================================================
 	@Test
 	public void testGetObject() throws Exception {
-		ConfigFile cf = configFileBuilder.build().addLines("A", "a1=1,2,3", "a2=1", "a3=true", "a4=1.2", "a5=1.2,3.4");
+		ConfigFile cf = configFileBuilder.build().addLines("A", "a1=[1,2,3]", "a2=1", "a3=true", "a4=1.2", "a5=[1.2,3.4]");
 		ConfigFile cfw = cf.getResolving();
 
-		assertObjectEquals("['1','2','3']", cf.getObject(String[].class, "A/a1"));
-		assertObjectEquals("'1,2,3'", cf.getObject(String.class, "A/a1"));
-		assertObjectEquals("'foobar'", cf.getObject(String.class, "X/a1", "foobar"));
-		assertObjectEquals("1", cf.getObject(int.class, "A/a2"));
-		assertObjectEquals("1", cf.getObject(Integer.class, "A/a2"));
-		assertObjectEquals("true", cf.getObject(boolean.class, "A/a3"));
-		assertObjectEquals("true", cf.getObject(Boolean.class, "A/a3"));
-		assertObjectEquals("1.2", cf.getObject(Float.class, "A/a4"));
-		assertObjectEquals("[1.2,3.4]", cf.getObject(Float[].class, "A/a5"));
-		assertObjectEquals("1.2", cf.getObject(float.class, "A/a4"));
-		assertObjectEquals("[1.2,3.4]", cf.getObject(float[].class, "A/a5"));
-		assertNull(cf.getObject(String.class, "B/a4"));
+		assertObjectEquals("['1','2','3']", cf.getObject("A/a1", String[].class));
+		assertObjectEquals("'[1,2,3]'", cf.getObject("A/a1", String.class));
+		assertObjectEquals("'foobar'", cf.getObjectWithDefault("X/a1", "foobar", String.class));
+		assertObjectEquals("1", cf.getObject("A/a2", int.class));
+		assertObjectEquals("1", cf.getObject("A/a2", Integer.class));
+		assertObjectEquals("true", cf.getObject("A/a3", boolean.class));
+		assertObjectEquals("true", cf.getObject("A/a3", Boolean.class));
+		assertObjectEquals("1.2", cf.getObject("A/a4", Float.class));
+		assertObjectEquals("[1.2,3.4]", cf.getObject("A/a5", Float[].class));
+		assertObjectEquals("1.2", cf.getObject("A/a4", float.class));
+		assertObjectEquals("[1.2,3.4]", cf.getObject("A/a5", float[].class));
+		assertNull(cf.getObject("B/a4", String.class));
 
-		assertObjectEquals("['1','2','3']", cfw.getObject(String[].class, "A/a1"));
-		assertObjectEquals("'1,2,3'", cfw.getObject(String.class, "A/a1"));
-		assertObjectEquals("'foobar'", cfw.getObject(String.class, "X/a1", "foobar"));
-		assertObjectEquals("1", cfw.getObject(int.class, "A/a2"));
-		assertObjectEquals("1", cfw.getObject(Integer.class, "A/a2"));
-		assertObjectEquals("true", cfw.getObject(boolean.class, "A/a3"));
-		assertObjectEquals("true", cfw.getObject(Boolean.class, "A/a3"));
-		assertObjectEquals("1.2", cfw.getObject(Float.class, "A/a4"));
-		assertObjectEquals("[1.2,3.4]", cfw.getObject(Float[].class, "A/a5"));
-		assertObjectEquals("1.2", cfw.getObject(float.class, "A/a4"));
-		assertObjectEquals("[1.2,3.4]", cfw.getObject(float[].class, "A/a5"));
-		assertNull(cfw.getObject(String.class, "B/a4"));
+		assertObjectEquals("['1','2','3']", cfw.getObject("A/a1", String[].class));
+		assertObjectEquals("'[1,2,3]'", cfw.getObject("A/a1", String.class));
+		assertObjectEquals("'foobar'", cfw.getObjectWithDefault("X/a1", "foobar", String.class));
+		assertObjectEquals("1", cfw.getObject("A/a2", int.class));
+		assertObjectEquals("1", cfw.getObject("A/a2", Integer.class));
+		assertObjectEquals("true", cfw.getObject("A/a3", boolean.class));
+		assertObjectEquals("true", cfw.getObject("A/a3", Boolean.class));
+		assertObjectEquals("1.2", cfw.getObject("A/a4", Float.class));
+		assertObjectEquals("[1.2,3.4]", cfw.getObject("A/a5", Float[].class));
+		assertObjectEquals("1.2", cfw.getObject("A/a4", float.class));
+		assertObjectEquals("[1.2,3.4]", cfw.getObject("A/a5", float[].class));
+		assertNull(cfw.getObject("B/a4", String.class));
 	}
 
 	//====================================================================================================
@@ -1909,13 +1909,13 @@ public class ConfigFileTest {
 				assertEquals("Field 'key' cannot be null.", e.getLocalizedMessage());
 			}
 			try {
-				cf.getObject(Object.class, null);
+				cf.getObject(null, Object.class);
 				fail();
 			} catch (IllegalArgumentException e) {
 				assertEquals("Field 'key' cannot be null.", e.getLocalizedMessage());
 			}
 			try {
-				cf.getObject(null, "");
+				cf.getObject("", null);
 				fail();
 			} catch (IllegalArgumentException e) {
 				assertEquals("Field 'c' cannot be null.", e.getLocalizedMessage());

@@ -372,18 +372,31 @@ public class BeanSession extends Session {
 							n = ((Boolean)value).booleanValue() ? "1" : "0";
 						else
 							n = value.toString();
-						if (tc == Integer.TYPE)
-							return (T)Integer.valueOf(n);
-						if (tc == Short.TYPE)
-							return (T)Short.valueOf(n);
-						if (tc == Long.TYPE)
-							return (T)Long.valueOf(n);
-						if (tc == Float.TYPE)
-							return (T)new Float(n);
-						if (tc == Double.TYPE)
-							return (T)new Double(n);
-						if (tc == Byte.TYPE)
-							return (T)Byte.valueOf(n);
+
+						int multiplier = (tc == Integer.TYPE || tc == Short.TYPE || tc == Long.TYPE) ? getMultiplier(n) : 1;
+						if (multiplier != 1) {
+							n = n.substring(0, n.length()-1).trim();
+							Long l = Long.valueOf(n) * multiplier;
+							if (tc == Integer.TYPE)
+								return (T)Integer.valueOf(l.intValue());
+							if (tc == Short.TYPE)
+								return (T)Short.valueOf(l.shortValue());
+							if (tc == Long.TYPE)
+								return (T)Long.valueOf(l.longValue());
+						} else {
+							if (tc == Integer.TYPE)
+								return (T)Integer.valueOf(n);
+							if (tc == Short.TYPE)
+								return (T)Short.valueOf(n);
+							if (tc == Long.TYPE)
+								return (T)Long.valueOf(n);
+							if (tc == Float.TYPE)
+								return (T)new Float(n);
+							if (tc == Double.TYPE)
+								return (T)new Double(n);
+							if (tc == Byte.TYPE)
+								return (T)Byte.valueOf(n);
+						}
 					}
 				} else if (type.isChar()) {
 					String s = value.toString();
@@ -426,22 +439,35 @@ public class BeanSession extends Session {
 						n = ((Boolean)value).booleanValue() ? "1" : "0";
 					else
 						n = value.toString();
-					if (tc == Integer.class)
-						return (T)Integer.valueOf(n);
-					if (tc == Short.class)
-						return (T)Short.valueOf(n);
-					if (tc == Long.class)
-						return (T)Long.valueOf(n);
-					if (tc == Float.class)
-						return (T)new Float(n);
-					if (tc == Double.class)
-						return (T)new Double(n);
-					if (tc == Byte.class)
-						return (T)Byte.valueOf(n);
-					if (tc == AtomicInteger.class)
-						return (T)new AtomicInteger(Integer.valueOf(n));
-					if (tc == AtomicLong.class)
-						return (T)new AtomicLong(Long.valueOf(n));
+
+					int multiplier = (tc == Integer.class || tc == Short.class || tc == Long.class) ? getMultiplier(n) : 1;
+					if (multiplier != 1) {
+						n = n.substring(0, n.length()-1).trim();
+						Long l = Long.valueOf(n) * multiplier;
+						if (tc == Integer.TYPE)
+							return (T)Integer.valueOf(l.intValue());
+						if (tc == Short.TYPE)
+							return (T)Short.valueOf(l.shortValue());
+						if (tc == Long.TYPE)
+							return (T)Long.valueOf(l.longValue());
+					} else {
+						if (tc == Integer.class)
+							return (T)Integer.valueOf(n);
+						if (tc == Short.class)
+							return (T)Short.valueOf(n);
+						if (tc == Long.class)
+							return (T)Long.valueOf(n);
+						if (tc == Float.class)
+							return (T)new Float(n);
+						if (tc == Double.class)
+							return (T)new Double(n);
+						if (tc == Byte.class)
+							return (T)Byte.valueOf(n);
+						if (tc == AtomicInteger.class)
+							return (T)new AtomicInteger(Integer.valueOf(n));
+						if (tc == AtomicLong.class)
+							return (T)new AtomicLong(Long.valueOf(n));
+					}
 				}
 			}
 
@@ -579,6 +605,16 @@ public class BeanSession extends Session {
 		}
 
 		throw new InvalidDataConversionException(value, type, null);
+	}
+
+	private static int getMultiplier(String s) {
+		if (s.endsWith("G"))
+			return 1024*1024*1024;
+		if (s.endsWith("M"))
+			return 1024*1024;
+		if (s.endsWith("K"))
+			return 1024;
+		return 1;
 	}
 
 	/**

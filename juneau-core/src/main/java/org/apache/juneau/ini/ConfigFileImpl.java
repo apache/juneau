@@ -16,6 +16,7 @@ import static org.apache.juneau.ini.ConfigUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.io.*;
+import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.util.*;
 import java.util.concurrent.locks.*;
@@ -37,6 +38,7 @@ public final class ConfigFileImpl extends ConfigFile {
 	private final Encoder encoder;
 	private final WriterSerializer serializer;
 	private final ReaderParser parser;
+	private final BeanSession pBeanSession;
 	private final Charset charset;
 	final List<ConfigFileListener> listeners = Collections.synchronizedList(new ArrayList<ConfigFileListener>());
 
@@ -66,7 +68,7 @@ public final class ConfigFileImpl extends ConfigFile {
 	 * If <jk>null</jk>, defaults to {@link XorEncoder#INSTANCE}.
 	 * @param serializer The serializer to use for serializing POJOs in the {@link #put(String, Object)} method.
 	 * If <jk>null</jk>, defaults to {@link JsonSerializer#DEFAULT}.
-	 * @param parser The parser to use for parsing POJOs in the {@link #getObject(Class,String)} method.
+	 * @param parser The parser to use for parsing POJOs in the {@link #getObject(String,Class)} method.
 	 * If <jk>null</jk>, defaults to {@link JsonParser#DEFAULT}.
 	 * @param charset The charset on the files.
 	 * If <jk>null</jk>, defaults to {@link Charset#defaultCharset()}.
@@ -85,6 +87,7 @@ public final class ConfigFileImpl extends ConfigFile {
 			for (Section s : sections.values())
 				s.setReadOnly();
 		}
+		this.pBeanSession = this.parser.getBeanContext().createSession();
 	}
 
 	/**
@@ -191,6 +194,43 @@ public final class ConfigFileImpl extends ConfigFile {
 		for (ConfigFileListener l : listeners)
 			l.onLoad(this);
 		return this;
+	}
+
+	@Override /* ConfigFile */
+	protected String serialize(Object value) throws SerializeException {
+		if (value == null)
+			return "";
+		Class<?> c = value.getClass();
+		if (isSimpleType(c))
+			return value.toString();
+		String s = serializer.toString(value);
+		if (s.startsWith("'"))
+			return s.substring(1, s.length()-1);
+		return s;
+	}
+
+	@Override /* ConfigFile */
+	@SuppressWarnings({ "unchecked" })
+	protected <T> T parse(String s, Type type, Type...args) throws ParseException {
+
+		if (StringUtils.isEmpty(s))
+			return null;
+
+		if (isSimpleType(type))
+			return (T)pBeanSession.convertToType(s, (Class<?>)type);
+
+		char s1 = StringUtils.charAt(s, 0);
+		if (s1 != '[' && s1 != '{' && ! "null".equals(s))
+			s = '\'' + s + '\'';
+
+		return parser.parse(s, type, args);
+	}
+
+	private static boolean isSimpleType(Type t) {
+		if (! (t instanceof Class))
+			return false;
+		Class<?> c = (Class<?>)t;
+		return (c == String.class || c.isPrimitive() || c.isAssignableFrom(Number.class) || c == Boolean.class || c.isEnum());
 	}
 
 
@@ -429,10 +469,17 @@ public final class ConfigFileImpl extends ConfigFile {
 	}
 
 	@Override /* ConfigFile */
-	public String put(String sectionName, String sectionKey, Object value, boolean encoded) {
+	public String put(String sectionName, String sectionKey, Object value, boolean encoded) throws SerializeException {
 		assertFieldNotNull(sectionKey, "sectionKey");
 		Section s = getSection(sectionName, true);
-		return s.put(sectionKey, value.toString(), encoded);
+		return s.put(sectionKey, serialize(value), encoded);
+	}
+
+	@Override /* ConfigFile */
+	public String put(String sectionName, String sectionKey, String value, boolean encoded) {
+		assertFieldNotNull(sectionKey, "sectionKey");
+		Section s = getSection(sectionName, true);
+		return s.put(sectionKey, value, encoded);
 	}
 
 	@Override /* ConfigFile */
@@ -657,17 +704,8 @@ public final class ConfigFileImpl extends ConfigFile {
 	}
 
 	@Override /* ConfigFile */
-	protected WriterSerializer getSerializer() throws SerializeException {
-		if (serializer == null)
-			throw new SerializeException("Serializer not defined on config file.");
-		return serializer;
-	}
-
-	@Override /* ConfigFile */
-	protected ReaderParser getParser() throws ParseException {
-		if (parser == null)
-			throw new ParseException("Parser not defined on config file.");
-		return parser;
+	protected BeanSession getBeanSession() {
+		return pBeanSession;
 	}
 
 	@Override /* ConfigFile */
