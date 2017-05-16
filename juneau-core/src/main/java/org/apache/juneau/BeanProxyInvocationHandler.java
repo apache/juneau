@@ -15,6 +15,8 @@ package org.apache.juneau;
 import java.lang.reflect.*;
 import java.util.*;
 
+import org.apache.juneau.json.*;
+
 /**
  * Provides an {@link InvocationHandler} for creating beans from bean interfaces.
  * <p>
@@ -64,7 +66,7 @@ public class BeanProxyInvocationHandler<T> implements InvocationHandler {
 			return Integer.valueOf(this.beanProps.hashCode());
 
 		if (method.getName().equals("toString") && (paramTypes.length == 0))
-			return this.beanProps.toString();
+			return JsonSerializer.DEFAULT_LAX.toString(this.beanProps);
 
 		String prop = this.meta.getterProps.get(method);
 		if (prop != null)
