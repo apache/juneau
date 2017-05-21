@@ -172,29 +172,33 @@ public final class RestCall {
 	 * Adds a query parameter to the URI query.
 	 *
 	 * @param name The parameter name.
-	 * Can be null/blank if the value is a {@link Map} or {@link String}.
+	 * 	Can be null/blank/* if the value is a {@link Map}, {@link String}, {@link NameValuePairs}, or bean.
 	 * @param value The parameter value converted to a string using UON notation.
-	 * Can also be a {@link Map} or {@link String} if the name is null/blank.
-	 * If a {@link String} and the name is null/blank, then calls {@link URIBuilder#setCustomQuery(String)}.
+	 * 	Can also be {@link Map}, {@link String}, {@link NameValuePairs}, or bean if the name is null/blank/*.
+	 * 	If a {@link String} and the name is null/blank/*, then calls {@link URIBuilder#setCustomQuery(String)}.
 	 * @param skipIfEmpty Don't add the pair if the value is empty.
 	 * @return This object (for method chaining).
+	 * @throws RestCallException
 	 */
 	@SuppressWarnings("unchecked")
-	public RestCall query(String name, Object value, boolean skipIfEmpty) {
-		if (! isEmpty(name)) {
+	public RestCall query(String name, Object value, boolean skipIfEmpty) throws RestCallException {
+		if (! ("*".equals(name) || isEmpty(name))) {
 			if (! (isEmpty(value) && skipIfEmpty))
 				uriBuilder.addParameter(name, client.getUrlEncodingSerializer().serializePart(value, false, null));
+		} else if (value instanceof NameValuePairs) {
+			for (NameValuePair p : (NameValuePairs)value)
+				query(p.getName(), p.getValue(), skipIfEmpty);
+		} else if (value instanceof String) {
+			String s = value.toString();
+			if (! isEmpty(s))
+				uriBuilder.setCustomQuery(s);
+		} else if (value instanceof Map) {
+			for (Map.Entry<String,Object> p : ((Map<String,Object>) value).entrySet())
+				query(p.getKey(), p.getValue(), skipIfEmpty);
+		} else if (isBean(value)){
+			return query(name, toBeanMap(value));
 		} else {
-			if (value instanceof String) {
-				String s = value.toString();
-				if (! isEmpty(s))
-					uriBuilder.setCustomQuery(s);
-			} else if (value instanceof Map) {
-				for (Map.Entry<String,Object> p : ((Map<String,Object>) value).entrySet())
-					query(p.getKey(), p.getValue(), skipIfEmpty);
-			} else {
-				throw new RuntimeException("Invalid name passed to query(name,value,skipIfEmpty).");
-			}
+			throw new RuntimeException("Invalid name passed to query(name,value,skipIfEmpty).");
 		}
 		return this;
 	}
@@ -264,28 +268,29 @@ public final class RestCall {
 	 * Adds a form data pair to this request to perform a URL-encoded form post.
 	 *
 	 * @param name The parameter name.
-	 * Can be null/blank if the value is a {@link Map} or {@link NameValuePairs}.
+	 * 	Can be null/blank/* if the value is a {@link Map}, {@link NameValuePairs}, or bean.
 	 * @param value The parameter value converted to a string using UON notation.
-	 * Can also be a {@link Map} or {@link NameValuePairs}.
+	 * 	Can also be {@link Map}, {@link NameValuePairs}, or bean if the name is null/blank/*.
 	 * @param skipIfEmpty Don't add the pair if the value is empty.
 	 * @return This object (for method chaining).
+	 * @throws RestCallException
 	 */
 	@SuppressWarnings("unchecked")
-	public RestCall formData(String name, Object value, boolean skipIfEmpty) {
+	public RestCall formData(String name, Object value, boolean skipIfEmpty) throws RestCallException {
 		if (formData == null)
 			formData = new NameValuePairs();
-		if (! isEmpty(name)) {
+		if (! ("*".equals(name) || isEmpty(name))) {
 			if (! (isEmpty(value) && skipIfEmpty))
 				formData.add(new SerializedNameValuePair(name, value, client.getUrlEncodingSerializer()));
+		} else if (value instanceof NameValuePairs) {
+			formData.addAll((NameValuePairs)value);
+		} else if (value instanceof Map) {
+			for (Map.Entry<String,Object> p : ((Map<String,Object>) value).entrySet())
+				formData(p.getKey(), p.getValue(), skipIfEmpty);
+		} else if (isBean(value)) {
+			return formData(name, toBeanMap(value));
 		} else {
-			if (value instanceof NameValuePairs) {
-				formData.addAll((NameValuePairs)value);
-			} else if (value instanceof Map) {
-				for (Map.Entry<String,Object> p : ((Map<String,Object>) value).entrySet())
-					formData(p.getKey(), p.getValue(), skipIfEmpty);
-			} else {
-				throw new RuntimeException("Invalid name passed to formData(name,value,skipIfEmpty).");
-			}
+			throw new RuntimeException("Invalid name passed to formData(name,value,skipIfEmpty).");
 		}
 		return this;
 	}
@@ -351,6 +356,37 @@ public final class RestCall {
 	 */
 	public RestCall formDataIfNE(Map<String,Object> params) throws RestCallException {
 		return formData(null, params, true);
+	}
+
+	/**
+	 * Replaces a variable of the form <js>"{name}"</js> in the URL path with the specified value.
+	 * @param name The path variable name.
+	 * @param value The replacement value.
+	 *
+	 * @return This object (for method chaining).
+	 * @throws RestCallException If variable could not be found in path.
+	 */
+	@SuppressWarnings("unchecked")
+	public RestCall path(String name, Object value) throws RestCallException {
+		String path = uriBuilder.getPath();
+		if (! ("*".equals(name) || isEmpty(name))) {
+			String var = "{" + name + "}";
+			if (path.indexOf(var) == -1)
+				throw new RestCallException("Path variable {"+name+"} was not found in path.");
+			String newPath = path.replace(var, client.getUrlEncodingSerializer().serializePart(value, false, null));
+			uriBuilder.setPath(newPath);
+		} else if (value instanceof NameValuePairs) {
+			for (NameValuePair p : (NameValuePairs)value)
+				path(p.getName(), p.getValue());
+		} else if (value instanceof Map) {
+			for (Map.Entry<String,Object> p : ((Map<String,Object>) value).entrySet())
+				path(p.getKey(), p.getValue());
+		} else if (isBean(value)) {
+			return path(name, toBeanMap(value));
+		} else {
+			throw new RuntimeException("Invalid name passed to path(name,value).");
+		}
+		return this;
 	}
 
 	/**
@@ -436,19 +472,23 @@ public final class RestCall {
 	 * @param value The header value.
 	 * @param skipIfEmpty Don't add the header if the name is null/empty.
 	 * @return This object (for method chaining).
+	 * @throws RestCallException
 	 */
 	@SuppressWarnings("unchecked")
-	public RestCall header(String name, Object value, boolean skipIfEmpty) {
-		if (! isEmpty(name)) {
+	public RestCall header(String name, Object value, boolean skipIfEmpty) throws RestCallException {
+		if (! ("*".equals(name) || isEmpty(name))) {
 			if (! (isEmpty(value) && skipIfEmpty))
 				request.setHeader(name, client.getUrlEncodingSerializer().serializePart(value, false, true));
+		} else if (value instanceof NameValuePairs) {
+			for (NameValuePair p : (NameValuePairs)value)
+				header(p.getName(), p.getValue(), skipIfEmpty);
+		} else if (value instanceof Map) {
+			for (Map.Entry<String,Object> p : ((Map<String,Object>) value).entrySet())
+				header(p.getKey(), p.getValue(), skipIfEmpty);
+		} else if (isBean(value)) {
+			return header(name, toBeanMap(value), skipIfEmpty);
 		} else {
-			if (value instanceof Map) {
-				for (Map.Entry<String,Object> p : ((Map<String,Object>) value).entrySet())
-					header(p.getKey(), p.getValue(), skipIfEmpty);
-			} else {
-				throw new RuntimeException("Invalid name passed to formData(name,value,skipIfEmpty).");
-			}
+			throw new RuntimeException("Invalid name passed to header(name,value,skipIfEmpty).");
 		}
 		return this;
 	}
@@ -461,8 +501,9 @@ public final class RestCall {
 	 * The name can be null/empty if the value is a {@link Map}.
 	 * @param value The header value.
 	 * @return This object (for method chaining).
+	 * @throws RestCallException
 	 */
-	public RestCall header(String name, Object value) {
+	public RestCall header(String name, Object value) throws RestCallException {
 		return header(name, value, false);
 	}
 
@@ -471,8 +512,9 @@ public final class RestCall {
 	 *
 	 * @param values The header values.
 	 * @return This object (for method chaining).
+	 * @throws RestCallException
 	 */
-	public RestCall headers(Map<String,Object> values) {
+	public RestCall headers(Map<String,Object> values) throws RestCallException {
 		return header(null, values, false);
 	}
 
@@ -485,8 +527,9 @@ public final class RestCall {
 	 * The name can be null/empty if the value is a {@link Map}.
 	 * @param value The header value.
 	 * @return This object (for method chaining).
+	 * @throws RestCallException
 	 */
-	public RestCall headerIfNE(String name, Object value) {
+	public RestCall headerIfNE(String name, Object value) throws RestCallException {
 		return header(name, value, true);
 	}
 
@@ -497,8 +540,9 @@ public final class RestCall {
 	 *
 	 * @param values The header values.
 	 * @return This object (for method chaining).
+	 * @throws RestCallException
 	 */
-	public RestCall headersIfNE(Map<String,Object> values) {
+	public RestCall headersIfNE(Map<String,Object> values) throws RestCallException {
 		return header(null, values, true);
 	}
 
@@ -509,8 +553,9 @@ public final class RestCall {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
+	 * @throws RestCallException
 	 */
-	public RestCall accept(Object value) {
+	public RestCall accept(Object value) throws RestCallException {
 		return header("Accept", value);
 	}
 
@@ -521,8 +566,9 @@ public final class RestCall {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
+	 * @throws RestCallException
 	 */
-	public RestCall acceptCharset(Object value) {
+	public RestCall acceptCharset(Object value) throws RestCallException {
 		return header("Accept-Charset", value);
 	}
 
@@ -533,8 +579,9 @@ public final class RestCall {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
+	 * @throws RestCallException
 	 */
-	public RestCall acceptEncoding(Object value) {
+	public RestCall acceptEncoding(Object value) throws RestCallException {
 		return header("Accept-Encoding", value);
 	}
 
@@ -545,8 +592,9 @@ public final class RestCall {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
+	 * @throws RestCallException
 	 */
-	public RestCall acceptLanguage(Object value) {
+	public RestCall acceptLanguage(Object value) throws RestCallException {
 		return header("Accept-Language", value);
 	}
 
@@ -557,8 +605,9 @@ public final class RestCall {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
+	 * @throws RestCallException
 	 */
-	public RestCall authorization(Object value) {
+	public RestCall authorization(Object value) throws RestCallException {
 		return header("Authorization", value);
 	}
 
@@ -569,8 +618,9 @@ public final class RestCall {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
+	 * @throws RestCallException
 	 */
-	public RestCall cacheControl(Object value) {
+	public RestCall cacheControl(Object value) throws RestCallException {
 		return header("Cache-Control", value);
 	}
 
@@ -581,8 +631,9 @@ public final class RestCall {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
+	 * @throws RestCallException
 	 */
-	public RestCall connection(Object value) {
+	public RestCall connection(Object value) throws RestCallException {
 		return header("Connection", value);
 	}
 
@@ -593,8 +644,9 @@ public final class RestCall {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
+	 * @throws RestCallException
 	 */
-	public RestCall contentLength(Object value) {
+	public RestCall contentLength(Object value) throws RestCallException {
 		return header("Content-Length", value);
 	}
 
@@ -605,8 +657,9 @@ public final class RestCall {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
+	 * @throws RestCallException
 	 */
-	public RestCall contentType(Object value) {
+	public RestCall contentType(Object value) throws RestCallException {
 		return header("Content-Type", value);
 	}
 
@@ -617,8 +670,9 @@ public final class RestCall {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
+	 * @throws RestCallException
 	 */
-	public RestCall date(Object value) {
+	public RestCall date(Object value) throws RestCallException {
 		return header("Date", value);
 	}
 
@@ -629,8 +683,9 @@ public final class RestCall {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
+	 * @throws RestCallException
 	 */
-	public RestCall expect(Object value) {
+	public RestCall expect(Object value) throws RestCallException {
 		return header("Expect", value);
 	}
 
@@ -641,8 +696,9 @@ public final class RestCall {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
+	 * @throws RestCallException
 	 */
-	public RestCall forwarded(Object value) {
+	public RestCall forwarded(Object value) throws RestCallException {
 		return header("Forwarded", value);
 	}
 
@@ -653,8 +709,9 @@ public final class RestCall {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
+	 * @throws RestCallException
 	 */
-	public RestCall from(Object value) {
+	public RestCall from(Object value) throws RestCallException {
 		return header("From", value);
 	}
 
@@ -665,8 +722,9 @@ public final class RestCall {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
+	 * @throws RestCallException
 	 */
-	public RestCall host(Object value) {
+	public RestCall host(Object value) throws RestCallException {
 		return header("Host", value);
 	}
 
@@ -677,8 +735,9 @@ public final class RestCall {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
+	 * @throws RestCallException
 	 */
-	public RestCall ifMatch(Object value) {
+	public RestCall ifMatch(Object value) throws RestCallException {
 		return header("If-Match", value);
 	}
 
@@ -689,8 +748,9 @@ public final class RestCall {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
+	 * @throws RestCallException
 	 */
-	public RestCall ifModifiedSince(Object value) {
+	public RestCall ifModifiedSince(Object value) throws RestCallException {
 		return header("If-Modified-Since", value);
 	}
 
@@ -701,8 +761,9 @@ public final class RestCall {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
+	 * @throws RestCallException
 	 */
-	public RestCall ifNoneMatch(Object value) {
+	public RestCall ifNoneMatch(Object value) throws RestCallException {
 		return header("If-None-Match", value);
 	}
 
@@ -713,8 +774,9 @@ public final class RestCall {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
+	 * @throws RestCallException
 	 */
-	public RestCall ifRange(Object value) {
+	public RestCall ifRange(Object value) throws RestCallException {
 		return header("If-Range", value);
 	}
 
@@ -725,8 +787,9 @@ public final class RestCall {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
+	 * @throws RestCallException
 	 */
-	public RestCall ifUnmodifiedSince(Object value) {
+	public RestCall ifUnmodifiedSince(Object value) throws RestCallException {
 		return header("If-Unmodified-Since", value);
 	}
 
@@ -737,8 +800,9 @@ public final class RestCall {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
+	 * @throws RestCallException
 	 */
-	public RestCall maxForwards(Object value) {
+	public RestCall maxForwards(Object value) throws RestCallException {
 		return header("Max-Forwards", value);
 	}
 
@@ -749,8 +813,9 @@ public final class RestCall {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
+	 * @throws RestCallException
 	 */
-	public RestCall origin(Object value) {
+	public RestCall origin(Object value) throws RestCallException {
 		return header("Origin", value);
 	}
 
@@ -761,8 +826,9 @@ public final class RestCall {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
+	 * @throws RestCallException
 	 */
-	public RestCall pragma(Object value) {
+	public RestCall pragma(Object value) throws RestCallException {
 		return header("Pragma", value);
 	}
 
@@ -773,8 +839,9 @@ public final class RestCall {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
+	 * @throws RestCallException
 	 */
-	public RestCall proxyAuthorization(Object value) {
+	public RestCall proxyAuthorization(Object value) throws RestCallException {
 		return header("Proxy-Authorization", value);
 	}
 
@@ -785,8 +852,9 @@ public final class RestCall {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
+	 * @throws RestCallException
 	 */
-	public RestCall range(Object value) {
+	public RestCall range(Object value) throws RestCallException {
 		return header("Range", value);
 	}
 
@@ -797,8 +865,9 @@ public final class RestCall {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
+	 * @throws RestCallException
 	 */
-	public RestCall referer(Object value) {
+	public RestCall referer(Object value) throws RestCallException {
 		return header("Referer", value);
 	}
 
@@ -809,8 +878,9 @@ public final class RestCall {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
+	 * @throws RestCallException
 	 */
-	public RestCall te(Object value) {
+	public RestCall te(Object value) throws RestCallException {
 		return header("TE", value);
 	}
 
@@ -821,8 +891,9 @@ public final class RestCall {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
+	 * @throws RestCallException
 	 */
-	public RestCall userAgent(Object value) {
+	public RestCall userAgent(Object value) throws RestCallException {
 		return header("User-Agent", value);
 	}
 
@@ -833,8 +904,9 @@ public final class RestCall {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
+	 * @throws RestCallException
 	 */
-	public RestCall upgrade(Object value) {
+	public RestCall upgrade(Object value) throws RestCallException {
 		return header("Upgrade", value);
 	}
 
@@ -845,8 +917,9 @@ public final class RestCall {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
+	 * @throws RestCallException
 	 */
-	public RestCall via(Object value) {
+	public RestCall via(Object value) throws RestCallException {
 		return header("Via", value);
 	}
 
@@ -857,8 +930,9 @@ public final class RestCall {
 	 *
 	 * @param value The new header value.
 	 * @return This object (for method chaining).
+	 * @throws RestCallException
 	 */
-	public RestCall warning(Object value) {
+	public RestCall warning(Object value) throws RestCallException {
 		return header("Warning", value);
 	}
 
@@ -867,8 +941,9 @@ public final class RestCall {
 	 *
 	 * @param version The version string (e.g. <js>"1.2.3"</js>)
 	 * @return This object (for method chaining).
+	 * @throws RestCallException
 	 */
-	public RestCall clientVersion(String version) {
+	public RestCall clientVersion(String version) throws RestCallException {
 		return header("X-Client-Version", version);
 	}
 
@@ -1827,9 +1902,18 @@ public final class RestCall {
 	 *
 	 * @param value The debug value.
 	 * @return This object (for method chaining).
+	 * @throws RestCallException
 	 */
-	public RestCall debug(boolean value) {
+	public RestCall debug(boolean value) throws RestCallException {
 		header("Debug", value);
 		return this;
+	}
+
+	private boolean isBean(Object o) throws RestCallException {
+		return getBeanContext().isBean(o);
+	}
+
+	private BeanMap<?> toBeanMap(Object o) throws RestCallException {
+		return getBeanContext().createSession().toBeanMap(o);
 	}
 }

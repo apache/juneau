@@ -37,8 +37,11 @@ import org.apache.juneau.urlencoding.*;
  * <p>
  * The argument can be any of the following types:
  * <ul class='spaced-list'>
+ * 	<li><code>NameValuePairs</code> - Individual name-value pairs.
  * 	<li>Any serializable POJO - Converted to text using {@link UrlEncodingSerializer#serializePart(Object, Boolean, Boolean)}.
  * 	<li><code>Map&lt;String,Object&gt;</code> - Individual name-value pairs.
+ * 		Values are converted to text using {@link UrlEncodingSerializer#serializePart(Object, Boolean, Boolean)}.
+ * 	<li>A bean - Individual name-value pairs.
  * 		Values are converted to text using {@link UrlEncodingSerializer#serializePart(Object, Boolean, Boolean)}.
  * </ul>
  */
@@ -50,7 +53,14 @@ public @interface Header {
 
 	/**
 	 * The HTTP header name.
-	 * Can be blank if the value is an instance of <code>Map&lt;String,Object&gt;</code>.
+	 * <p>
+	 * A value of <js>"*"</js> indicates the value should be serialized as name/value pairs and is applicable
+	 * for the following data types:
+	 * <ul>
+	 * 	<li><code>NameValuePairs</code>
+	 * 	<li><code>Map&lt;String,Object&gt;</code>
+	 * 	<li>A bean
+	 * </ul>
 	 */
-	String value() default "";
+	String value() default "*";
 }

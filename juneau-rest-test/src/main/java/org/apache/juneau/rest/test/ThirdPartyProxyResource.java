@@ -447,6 +447,55 @@ public class ThirdPartyProxyResource extends ResourceJena {
 		return "OK";
 	}
 
+	@RestMethod(name="GET", path="/stringQuery1")
+	public String stringQuery1(
+			@Query("a") int a,
+			@Query("b") String b
+		) throws Exception {
+
+		assertEquals(1, a);
+		assertEquals("foo", b);
+
+		return "OK";
+	}
+
+	@RestMethod(name="GET", path="/stringQuery2")
+	public String stringQuery2(
+			@Query("a") int a,
+			@Query("b") String b
+		) throws Exception {
+
+		assertEquals(1, a);
+		assertEquals("foo", b);
+
+		return "OK";
+	}
+
+	@RestMethod(name="GET", path="/mapQuery")
+	public String mapQuery(
+			@Query("a") int a,
+			@Query("b") String b
+		) throws Exception {
+
+		assertEquals(1, a);
+		assertEquals("foo", b);
+
+		return "OK";
+	}
+
+	@RestMethod(name="GET", path="/beanQuery")
+	public String beanQuery(
+			@Query("a") int a,
+			@Query("b") String b
+		) throws Exception {
+
+		assertEquals(1, a);
+		assertEquals("foo", b);
+
+		return "OK";
+	}
+
+
 	//--------------------------------------------------------------------------------
 	// FormData tests
 	//--------------------------------------------------------------------------------
@@ -653,6 +702,49 @@ public class ThirdPartyProxyResource extends ResourceJena {
 
 		return "OK";
 	}
+
+
+	//--------------------------------------------------------------------------------
+	// Path tests
+	//--------------------------------------------------------------------------------
+
+	@RestMethod(name="POST", path="/pathVars1/{a}/{b}")
+	public String pathVars1(
+		@Path("a") int a,
+		@Path("b") String b
+		) throws Exception {
+
+		assertEquals(1, a);
+		assertEquals("foo", b);
+
+		return "OK";
+	}
+
+
+	@RestMethod(name="POST", path="/pathVars2/{a}/{b}")
+	public String pathVars2(
+		@Path("a") int a,
+		@Path("b") String b
+		) throws Exception {
+
+		assertEquals(1, a);
+		assertEquals("foo", b);
+
+		return "OK";
+	}
+
+	@RestMethod(name="POST", path="/pathVars3/{a}/{b}")
+	public String pathVars3(
+		@Path("a") int a,
+		@Path("b") String b
+		) throws Exception {
+
+		assertEquals(1, a);
+		assertEquals("foo", b);
+
+		return "OK";
+	}
+
 
 	//--------------------------------------------------------------------------------
 	// Test return types.

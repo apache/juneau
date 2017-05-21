@@ -537,6 +537,9 @@ public class RestClient extends CoreObject {
 							RestCall rc = (httpMethod.equals("POST") ? doPost(url) : doGet(url));
 							rc.serializer(serializer).parser(parser);
 
+							for (RemoteMethodArg a : rmm.getPathArgs())
+								rc.path(a.name, args[a.index]);
+
 							for (RemoteMethodArg a : rmm.getQueryArgs())
 								rc.query(a.name, args[a.index], a.skipIfNE);
 
@@ -598,6 +601,8 @@ public class RestClient extends CoreObject {
 				s = sb.toString();
 			}
 		}
+		if (s.indexOf('{') != -1)
+			s = s.replace("{", "%7B").replace("}", "%7D");
 		return new URI(s);
 	}
 

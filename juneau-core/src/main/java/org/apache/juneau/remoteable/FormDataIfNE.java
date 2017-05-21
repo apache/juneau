@@ -28,7 +28,14 @@ public @interface FormDataIfNE {
 
 	/**
 	 * The form post parameter name.
-	 * Can be blank if the value is an instance of <code>NameValuePairs</code> or <code>Map&lt;String,Object&gt;</code>.
+	 * <p>
+	 * A value of <js>"*"</js> indicates the value should be serialized as name/value pairs and is applicable
+	 * for the following data types:
+	 * <ul>
+	 * 	<li><code>NameValuePairs</code>
+	 * 	<li><code>Map&lt;String,Object&gt;</code>
+	 * 	<li>A bean
+	 * </ul>
 	 */
-	String value() default "";
+	String value() default "*";
 }

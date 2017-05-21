@@ -300,6 +300,34 @@ public class ThirdPartyProxyTest extends RestTestcase {
 		assertEquals("OK", r);
 	}
 
+	@Test
+	public void b08_stringQuery1() throws Exception {
+		String r = proxy.stringQuery1("a=1&b=foo");
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void b09_stringQuery2() throws Exception {
+		String r = proxy.stringQuery2("a=1&b=foo");
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void b10_mapQuery() throws Exception {
+		String r = proxy.mapQuery(
+			new AMap<String,Object>().append("a", 1).append("b", "foo")
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void b11_beanQuery() throws Exception {
+		String r = proxy.beanQuery(
+			new ABean().init()
+		);
+		assertEquals("OK", r);
+	}
+
 	//--------------------------------------------------------------------------------
 	// FormData tests
 	//--------------------------------------------------------------------------------
@@ -1050,6 +1078,30 @@ public class ThirdPartyProxyTest extends RestTestcase {
 		proxy.setEnum1d3dListMap(new AMap<TestEnum,List<TestEnum[][][]>>().append(TestEnum.ONE, new AList<TestEnum[][][]>().append(new TestEnum[][][]{{{TestEnum.TWO,null},null},null}).append(null)));
 	}
 
+	// Path variables
+
+	@Test
+	public void f01_pathVars1() {
+		String r = proxy.pathVars1(1, "foo");
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void f02_pathVars2() {
+		String r = proxy.pathVars2(
+			new AMap<String,Object>().append("a", 1).append("b", "foo")
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void f03_pathVars3() {
+		String r = proxy.pathVars3(
+			new ABean().init()
+		);
+		assertEquals("OK", r);
+	}
+
 
 	//--------------------------------------------------------------------------------
 	// Proxy class
@@ -1224,6 +1276,27 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			@Query("h8") Map<TestEnum,List<TestEnum[][][]>> h8
 		);
 
+		@RemoteMethod(httpMethod="GET", path="/stringQuery1")
+		String stringQuery1(
+			@Query() String q
+		);
+
+		@RemoteMethod(httpMethod="GET", path="/stringQuery2")
+		String stringQuery2(
+			@Query("*") String q
+		);
+
+		@RemoteMethod(httpMethod="GET", path="/mapQuery")
+		String mapQuery(
+			@Query("*") Map<String,Object> q
+		);
+
+		@RemoteMethod(httpMethod="GET", path="/beanQuery")
+		String beanQuery(
+			@Query("*") ABean q
+		);
+
+
 		//--------------------------------------------------------------------------------
 		// FormData tests
 		//--------------------------------------------------------------------------------
@@ -1305,6 +1378,26 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			@FormData("h6") Map<TestEnum,TestEnum> h6,
 			@FormData("h7") Map<TestEnum,TestEnum[][][]> h7,
 			@FormData("h8") Map<TestEnum,List<TestEnum[][][]>> h8
+		);
+
+		//--------------------------------------------------------------------------------
+		// Path tests
+		//--------------------------------------------------------------------------------
+
+		@RemoteMethod(httpMethod="POST", path="/pathVars1/{a}/{b}")
+		String pathVars1(
+			@Path("a") int a,
+			@Path("b") String b
+		);
+
+		@RemoteMethod(httpMethod="POST", path="/pathVars2/{a}/{b}")
+		String pathVars2(
+			@Path Map<String,Object> p
+		);
+
+		@RemoteMethod(httpMethod="POST", path="/pathVars3/{a}/{b}")
+		String pathVars3(
+			@Path ABean p
 		);
 
 		//--------------------------------------------------------------------------------

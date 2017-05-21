@@ -1000,6 +1000,18 @@ public class BeanContext extends Context {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if the specified object is a bean.
+	 *
+	 * @param o The object to test.
+	 * @return <jk>true</jk> if the specified object is a bean.  <jk>false</jk> if the bean is <jk>null</jk>.
+	 */
+	public boolean isBean(Object o) {
+		if (o == null)
+			return false;
+		return getClassMetaForObject(o).isBean();
+	}
+
+	/**
 	 * Prints meta cache statistics to <code>System.out</code>.
 	 */
 	protected static void dumpCacheStats() {

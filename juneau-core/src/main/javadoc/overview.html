@@ -6253,6 +6253,12 @@
 
 		<h6 class='topic'>org.apache.juneau.rest.client</h6>
 		<ul class='spaced-list'>
+			<li>New {@link org.apache.juneau.remoteable.Path @Path} annotation for specifying path variables on remoteable interfaces.
+			<li>The following annotations (and related methods on RestCall) can now take <code>NameValuePairs</code> and beans as input 
+				when using <js>"*"</js> as the name.
+				<br>{@link org.apache.juneau.remoteable.FormData @FormData},{@link org.apache.juneau.remoteable.FormDataIfNE @FormDataIfNE},
+				{@link org.apache.juneau.remoteable.Query @Query},{@link org.apache.juneau.remoteable.QueryIfNE @QueryIfNE},
+				{@link org.apache.juneau.remoteable.Header @Header},{@link org.apache.juneau.remoteable.HeaderIfNE @HeaderIfNE}, 
 		</ul>
 
 		<h6 class='topic'>org.apache.juneau.microservice</h6>

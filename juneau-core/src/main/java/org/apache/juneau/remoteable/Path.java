@@ -17,17 +17,39 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.urlencoding.*;
+
 /**
- * Identical to {@link Header @Header} except skips values if they're null/blank.
- */
+ * Annotation applied to Java method arguments of interface proxies to denote that they are path variables on the request.
+ * <p>
+ * <h5 class='section'>Example:</h5>
+ * <p class='bcode'>
+ * 	<ja>@Remoteable</ja>(path=<js>"/myproxy"</js>)
+ * 	<jk>public interface</jk> MyProxy {
+ *
+ * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod1/{foo}"</js>)
+ * 		String myProxyMethod1(<ja>@Path</ja>(<js>"foo"</js>)</ja> String foo);
+ * 	}
+ * </p>
+ * <p>
+ * The argument can be any of the following types:
+ * <ul class='spaced-list'>
+ * 	<li><code>NameValuePairs</code> - Individual name-value pairs.
+ * 	<li>Any serializable POJO - Converted to text using {@link UrlEncodingSerializer#serializePart(Object, Boolean, Boolean)}.
+ * 	<li><code>Map&lt;String,Object&gt;</code> - Individual name-value pairs.
+ * 		Values are converted to text using {@link UrlEncodingSerializer#serializePart(Object, Boolean, Boolean)}.
+ * 	<li>A bean - Individual name-value pairs.
+ * 		Values are converted to text using {@link UrlEncodingSerializer#serializePart(Object, Boolean, Boolean)}.
+ * </ul>
+*/
 @Documented
 @Target(PARAMETER)
 @Retention(RUNTIME)
 @Inherited
-public @interface HeaderIfNE {
+public @interface Path {
 
 	/**
-	 * The HTTP header name.
+	 * The path parameter name.
 	 * <p>
 	 * A value of <js>"*"</js> indicates the value should be serialized as name/value pairs and is applicable
 	 * for the following data types:

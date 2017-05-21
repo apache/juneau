@@ -28,7 +28,15 @@ public @interface QueryIfNE {
 
 	/**
 	 * The query parameter name.
-	 * Can be blank if the value is an instance of <code>Map&lt;String,Object&gt;</code> or <code>String</code>.
+	 * <p>
+	 * A value of <js>"*"</js> indicates the value should be serialized as name/value pairs and is applicable
+	 * for the following data types:
+	 * <ul>
+	 * 	<li><code>String</code> - A complete query string.
+	 * 	<li><code>NameValuePairs</code>
+	 * 	<li><code>Map&lt;String,Object&gt;</code>
+	 * 	<li>A bean
+	 * </ul>
 	 */
-	String value();
+	String value() default "*";
 }

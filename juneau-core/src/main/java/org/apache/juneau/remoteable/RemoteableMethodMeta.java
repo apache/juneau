@@ -29,7 +29,7 @@ public class RemoteableMethodMeta {
 
 	private final String httpMethod;
 	private final String url;
-	private final RemoteMethodArg[] queryArgs, headerArgs, formDataArgs;
+	private final RemoteMethodArg[] pathArgs, queryArgs, headerArgs, formDataArgs;
 	private final Integer[] otherArgs;
 	private final Integer bodyArg;
 
@@ -43,6 +43,7 @@ public class RemoteableMethodMeta {
 		Builder b = new Builder(restUrl, m);
 		this.httpMethod = b.httpMethod;
 		this.url = b.url;
+		this.pathArgs = b.pathArgs.toArray(new RemoteMethodArg[b.pathArgs.size()]);
 		this.queryArgs = b.queryArgs.toArray(new RemoteMethodArg[b.queryArgs.size()]);
 		this.formDataArgs = b.formDataArgs.toArray(new RemoteMethodArg[b.formDataArgs.size()]);
 		this.headerArgs = b.headerArgs.toArray(new RemoteMethodArg[b.headerArgs.size()]);
@@ -53,6 +54,7 @@ public class RemoteableMethodMeta {
 	private static class Builder {
 		private String httpMethod, url;
 		private List<RemoteMethodArg>
+			pathArgs = new LinkedList<RemoteMethodArg>(),
 			queryArgs = new LinkedList<RemoteMethodArg>(),
 			headerArgs = new LinkedList<RemoteMethodArg>(),
 			formDataArgs = new LinkedList<RemoteMethodArg>();
@@ -83,7 +85,10 @@ public class RemoteableMethodMeta {
 				boolean annotated = false;
 				for (Annotation a : aa) {
 					Class<?> ca = a.annotationType();
-					if (ca == Query.class) {
+					if (ca == Path.class) {
+						Path p = (Path)a;
+						annotated = pathArgs.add(new RemoteMethodArg(p.value(), index, false));
+					} else if (ca == Query.class) {
 						Query q = (Query)a;
 						annotated = queryArgs.add(new RemoteMethodArg(q.value(), index, false));
 					} else if (ca == QueryIfNE.class) {
@@ -133,6 +138,14 @@ public class RemoteableMethodMeta {
 	 */
 	public String getUrl() {
 		return url;
+	}
+
+	/**
+	 * Returns the {@link Path @Path} annotated arguments on this Java method.
+	 * @return A map of {@link Path#value() @Path.value()} names to zero-indexed argument indices.
+	 */
+	public RemoteMethodArg[] getPathArgs() {
+		return pathArgs;
 	}
 
 	/**
