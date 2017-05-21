@@ -263,6 +263,15 @@ public class SerializerGroupBuilder {
 	}
 
 	/**
+	 * Shortcut for calling <code>useWhitespace(<jk>true</jk>)</code>.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public SerializerGroupBuilder ws() {
+		return useWhitespace(true);
+	}
+
+	/**
 	 * Sets the {@link SerializerContext#SERIALIZER_addBeanTypeProperties} property on all serializers in this group.
 	 *
 	 * @param value The new value for this property.
@@ -282,6 +291,15 @@ public class SerializerGroupBuilder {
 	 */
 	public SerializerGroupBuilder quoteChar(char value) {
 		return property(SERIALIZER_quoteChar, value);
+	}
+
+	/**
+	 * Shortcut for calling <code>quoteChar(<js>'\''</js>)</code>.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public SerializerGroupBuilder sq() {
+		return quoteChar('\'');
 	}
 
 	/**
