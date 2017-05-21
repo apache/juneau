@@ -18,36 +18,58 @@ import org.apache.juneau.html.annotation.*;
 /**
  * Metadata on bean properties specific to the HTML serializers and parsers pulled from the {@link Html @Html} annotation on the bean property.
  */
-public class HtmlBeanPropertyMeta extends BeanPropertyMetaExtended {
+@SuppressWarnings("rawtypes")
+public final class HtmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 
-	private boolean asXml, noTables, noTableHeaders, asPlainText;
+	private final boolean asXml, noTables, noTableHeaders, asPlainText;
+	private final HtmlRender render;
+	private final String link;
 
 	/**
 	 * Constructor.
 	 *
 	 * @param bpm The metadata of the bean property of this additional metadata.
+	 * @throws Exception If render class could not be instantiated.
 	 */
-	public HtmlBeanPropertyMeta(BeanPropertyMeta bpm) {
+	public HtmlBeanPropertyMeta(BeanPropertyMeta bpm) throws Exception {
 		super(bpm);
+		Builder b = new Builder();
 		if (bpm.getField() != null)
-			findHtmlInfo(bpm.getField().getAnnotation(Html.class));
+			b.findHtmlInfo(bpm.getField().getAnnotation(Html.class));
 		if (bpm.getGetter() != null)
-			findHtmlInfo(bpm.getGetter().getAnnotation(Html.class));
+			b.findHtmlInfo(bpm.getGetter().getAnnotation(Html.class));
 		if (bpm.getSetter() != null)
-			findHtmlInfo(bpm.getSetter().getAnnotation(Html.class));
+			b.findHtmlInfo(bpm.getSetter().getAnnotation(Html.class));
+
+		this.asXml = b.asXml;
+		this.noTables = b.noTables;
+		this.noTableHeaders = b.noTableHeaders;
+		this.asPlainText = b.asPlainText;
+		this.render = b.render.newInstance();
+		this.link = b.link;
 	}
 
-	private void findHtmlInfo(Html html) {
-		if (html == null)
-			return;
-		if (html.asXml())
-			asXml = html.asXml();
-		if (html.noTables())
-			noTables = html.noTables();
-		if (html.noTableHeaders())
-			noTableHeaders = html.noTableHeaders();
-		if (html.asPlainText())
-			asPlainText = html.asPlainText();
+	private static class Builder {
+		boolean asXml, noTables, noTableHeaders, asPlainText;
+		Class<? extends HtmlRender> render = HtmlRender.class;
+		String link;
+
+		void findHtmlInfo(Html html) {
+			if (html == null)
+				return;
+			if (html.asXml())
+				asXml = html.asXml();
+			if (html.noTables())
+				noTables = html.noTables();
+			if (html.noTableHeaders())
+				noTableHeaders = html.noTableHeaders();
+			if (html.asPlainText())
+				asPlainText = html.asPlainText();
+			if (html.render() != HtmlRender.class)
+				render = html.render();
+			if (! html.link().isEmpty())
+				link = html.link();
+		}
 	}
 
 	/**
@@ -84,5 +106,27 @@ public class HtmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 	 */
 	public boolean isNoTableHeaders() {
 		return noTableHeaders;
+	}
+
+	/**
+	 * Returns the render class for rendering the style and contents of this property value in HTML.
+	 * <p>
+	 * This value is specified via the {@link Html#render()} annotation.
+	 *
+	 * @return The render class, never <jk>null</jk>.
+	 */
+	public HtmlRender getRender() {
+		return render;
+	}
+
+	/**
+	 * Adds a hyperlink to this value in HTML.
+	 * <p>
+	 * This value is specified via the {@link Html#link()} annotation.
+	 *
+	 * @return The link string, or <jk>null</jk> if not specified.
+	 */
+	public String getLink() {
+		return link;
 	}
 }

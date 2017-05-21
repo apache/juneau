@@ -114,13 +114,13 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 			if (s.isWriterSerializer()) {
 				WriterSerializer s2 = (WriterSerializer)s;
 				OutputStreamWriter w = new OutputStreamWriter(out, IOUtils.UTF8);
-				SerializerSession session = s.createSession(w, mp, null, locale, timeZone, sm.getMediaType());
+				SerializerSession session = s.createSession(w, mp, null, locale, timeZone, sm.getMediaType(), null);
 				s2.serialize(session, o);
 				w.flush();
 				w.close();
 			} else {
 				OutputStreamSerializer s2 = (OutputStreamSerializer)s;
-				SerializerSession session = s.createSession(s2, mp, null, locale, timeZone, sm.getMediaType());
+				SerializerSession session = s.createSession(s2, mp, null, locale, timeZone, sm.getMediaType(), null);
 				s2.serialize(session, o);
 				out.flush();
 				out.close();

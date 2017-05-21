@@ -831,7 +831,7 @@ public class XmlSerializer extends WriterSerializer {
 	}
 
 	@Override /* Serializer */
-	public XmlSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType) {
-		return new XmlSerializerSession(ctx, op, output, javaMethod, locale, timeZone, mediaType);
+	public XmlSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
+		return new XmlSerializerSession(ctx, op, output, javaMethod, locale, timeZone, mediaType, uriContext);
 	}
 }

@@ -101,7 +101,6 @@ public class HtmlPropertiesTest extends RestTestcase {
 	public void testNormalInitTest3() throws Exception {
 		RestClient client = TestMicroservice.DEFAULT_CLIENT;
 		String s = client.doGet("/testHtmlProperties/NormalInit/test3").accept("text/html").getResponseAsString();
-		System.err.println(s);
 		assertTrue(s.contains("NormalInit.test3-title"));
 		assertTrue(s.contains("NormalInit.test3-text"));
 		assertTrue(s.contains("NormalInit.test3-links"));

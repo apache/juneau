@@ -54,6 +54,7 @@ public class SerializerSession extends BeanSession {
 		abridged;
 	private final char quoteChar;
 	private final String relativeUriBase, absolutePathUriBase;
+	private final UriContext uriContext;
 
 	/** The current indentation depth into the model. */
 	public int indent;
@@ -73,32 +74,35 @@ public class SerializerSession extends BeanSession {
 	 * Create a new session using properties specified in the context.
 	 *
 	 * @param ctx The context creating this session object.
-	 * The context contains all the configuration settings for this object.
+	 * 	The context contains all the configuration settings for this object.
 	 * @param output The output object.
-	 * <br>Character-based serializers can handle the following output class types:
-	 * <ul>
-	 * 	<li>{@link Writer}
-	 * 	<li>{@link OutputStream} - Output will be written as UTF-8 encoded stream.
-	 * 	<li>{@link File} - Output will be written as system-default encoded stream.
-	 * </ul>
-	 * <br>Stream-based serializers can handle the following output class types:
-	 * <ul>
-	 * 	<li>{@link OutputStream}
-	 * 	<li>{@link File}
-	 * </ul>
+	 * 	<br>Character-based serializers can handle the following output class types:
+	 * 	<ul>
+	 * 		<li>{@link Writer}
+	 * 		<li>{@link OutputStream} - Output will be written as UTF-8 encoded stream.
+	 * 		<li>{@link File} - Output will be written as system-default encoded stream.
+	 * 	</ul>
+	 * 	<br>Stream-based serializers can handle the following output class types:
+	 * 	<ul>
+	 * 		<li>{@link OutputStream}
+	 * 		<li>{@link File}
+	 * 	</ul>
 	 * @param op The override properties.
-	 * These override any context properties defined in the context.
+	 * 	These override any context properties defined in the context.
 	 * @param javaMethod The java method that called this serializer, usually the method in a REST servlet.
 	 * @param locale The session locale.
-	 * If <jk>null</jk>, then the locale defined on the context is used.
+	 * 	If <jk>null</jk>, then the locale defined on the context is used.
 	 * @param timeZone The session timezone.
-	 * If <jk>null</jk>, then the timezone defined on the context is used.
+	 * 	If <jk>null</jk>, then the timezone defined on the context is used.
 	 * @param mediaType The session media type (e.g. <js>"application/json"</js>).
+	 * @param uriContext The URI context.
+	 * 	Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
 	 */
-	public SerializerSession(SerializerContext ctx, ObjectMap op, Object output, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType) {
+	public SerializerSession(SerializerContext ctx, ObjectMap op, Object output, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
 		super(ctx, op, locale, timeZone, mediaType);
 		this.javaMethod = javaMethod;
 		this.output = output;
+		this.uriContext = uriContext != null ? uriContext : new UriContext(null, null, null, null);
 		if (op == null || op.isEmpty()) {
 			maxDepth = ctx.maxDepth;
 			initialDepth = ctx.initialDepth;
@@ -237,6 +241,15 @@ public class SerializerSession extends BeanSession {
 	*/
 	public final Method getJavaMethod() {
 		return javaMethod;
+	}
+
+	/**
+	 * Returns the URI context passed in to this constructor.
+	 *
+	 * @return The URI context passed in to this constructor.
+	 */
+	public final UriContext getUriContext() {
+		return uriContext;
 	}
 
 	/**

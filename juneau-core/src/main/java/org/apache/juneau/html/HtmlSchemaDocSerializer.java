@@ -74,8 +74,8 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 	}
 
 	@Override /* Serializer */
-	public HtmlDocSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType) {
-		return new HtmlDocSerializerSession(ctx, op, output, javaMethod, locale, timeZone, mediaType);
+	public HtmlDocSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
+		return new HtmlDocSerializerSession(ctx, op, output, javaMethod, locale, timeZone, mediaType, uriContext);
 	}
 
 	@Override /* ISchemaSerializer */

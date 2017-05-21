@@ -717,4 +717,32 @@ public class StringUtilsTest {
 		assertObjectEquals("{'a=':'1'}", splitMap("a\\==1", ',', '=', true));
 		assertObjectEquals("{'a\\\\':'1'}", splitMap("a\\\\=1", ',', '=', true));
 	}
+	
+	//====================================================================================================
+	// isAbsoluteUri(String)
+	//====================================================================================================
+	@Test
+	public void testIsAbsoluteUri() {
+		assertFalse(isAbsoluteUri(null));
+		assertFalse(isAbsoluteUri(""));
+		assertTrue(isAbsoluteUri("http://foo"));
+		assertTrue(isAbsoluteUri("x://x"));
+		assertFalse(isAbsoluteUri("xX://x"));
+		assertFalse(isAbsoluteUri("x ://x"));
+		assertFalse(isAbsoluteUri("x: //x"));
+		assertFalse(isAbsoluteUri("x:/ /x"));
+		assertFalse(isAbsoluteUri("x:x//x"));
+		assertFalse(isAbsoluteUri("x:/x/x"));
+	}
+
+	//====================================================================================================
+	// getAuthorityUri(String)
+	//====================================================================================================
+	@Test
+	public void testGetAuthorityUri() {
+		assertEquals("http://foo", getAuthorityUri("http://foo"));
+		assertEquals("http://foo:123", getAuthorityUri("http://foo:123"));
+		assertEquals("http://foo:123", getAuthorityUri("http://foo:123/"));
+		assertEquals("http://foo:123", getAuthorityUri("http://foo:123/bar"));
+	}
 }

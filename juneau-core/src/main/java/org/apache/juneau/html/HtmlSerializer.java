@@ -400,6 +400,7 @@ public class HtmlSerializer extends XmlSerializer {
 		out.eTag(i, "table").nl();
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void serializeBeanMap(HtmlSerializerSession session, HtmlWriter out, BeanMap<?> m, ClassMeta<?> eType, BeanPropertyMeta ppMeta) throws Exception {
 		int i = session.getIndent();
 
@@ -420,6 +421,9 @@ public class HtmlSerializer extends XmlSerializer {
 		for (BeanPropertyValue p : m.getValues(session.isTrimNulls())) {
 			BeanPropertyMeta pMeta = p.getMeta();
 			ClassMeta<?> cMeta = p.getClassMeta();
+			HtmlBeanPropertyMeta hbpMeta = pMeta.getExtendedMeta(HtmlBeanPropertyMeta.class);
+			String link = hbpMeta.getLink();
+			HtmlRender render = hbpMeta.getRender();
 
 			String key = p.getName();
 			Object value = p.getValue();
@@ -432,11 +436,20 @@ public class HtmlSerializer extends XmlSerializer {
 
 			out.sTag(i+1, "tr").nl();
 			out.sTag(i+2, "td").text(key).eTag("td").nl();
-			out.sTag(i+2, "td");
+			out.oTag(i+2, "td");
+			String style = render.getStyle(session, value);
+			if (style != null)
+				out.attr("style", style);
+			out.cTag();
+
 			try {
-				ContentResult cr = serializeAnything(session, out, value, cMeta, key, 2, pMeta, false);
+				if (link != null) 
+					out.oTag(i+3, "a").attrUri("href", m.resolveVars(link)).cTag();
+				ContentResult cr = serializeAnything(session, out, render.getContent(session, value), cMeta, key, 2, pMeta, false);
 				if (cr == CR_NORMAL)
 					out.i(i+2);
+				if (link != null) 
+					out.eTag("a");
 			} catch (SerializeException e) {
 				throw e;
 			} catch (Error e) {
@@ -533,10 +546,23 @@ public class HtmlSerializer extends XmlSerializer {
 					for (Object k : th) {
 						BeanMapEntry p = m2.getProperty(session.toString(k));
 						BeanPropertyMeta pMeta = p.getMeta();
-						out.sTag(i+2, "td");
-						ContentResult cr = serializeAnything(session, out, p.getValue(), pMeta.getClassMeta(), p.getKey().toString(), 2, pMeta, false);
+						HtmlBeanPropertyMeta hpMeta = pMeta.getExtendedMeta(HtmlBeanPropertyMeta.class);
+						String link = hpMeta.getLink();
+						HtmlRender render = hpMeta.getRender();
+
+						Object value = p.getValue();
+						out.oTag(i+2, "td");
+						String style = render.getStyle(session, value);
+						if (style != null)
+							out.attr("style", style);
+						out.cTag();
+						if (link != null) 
+							out.oTag(i+3, "a").attrUri("href", m2.resolveVars(link)).cTag();
+						ContentResult cr = serializeAnything(session, out, render.getContent(session, value), pMeta.getClassMeta(), p.getKey().toString(), 2, pMeta, false);
 						if (cr == CR_NORMAL)
 							out.i(i+2);
+						if (link != null) 
+							out.eTag("a");
 						out.eTag("td").nl();
 					}
 				}
@@ -689,8 +715,8 @@ public class HtmlSerializer extends XmlSerializer {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Serializer */
-	public HtmlSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType) {
-		return new HtmlSerializerSession(ctx, op, output, javaMethod, locale, timeZone, mediaType);
+	public HtmlSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
+		return new HtmlSerializerSession(ctx, op, output, javaMethod, locale, timeZone, mediaType, uriContext);
 	}
 
 	@Override /* Serializer */

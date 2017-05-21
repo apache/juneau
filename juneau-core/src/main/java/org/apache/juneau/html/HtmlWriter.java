@@ -14,6 +14,7 @@ package org.apache.juneau.html;
 
 import java.io.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.xml.*;
 
@@ -31,9 +32,11 @@ public class HtmlWriter extends XmlWriter {
 	 * @param quoteChar The quote character to use (i.e. <js>'\''</js> or <js>'"'</js>)
 	 * @param uriContext The web application context path (e.g. "/contextRoot").
 	 * @param uriAuthority The web application URI authority (e.g. "http://hostname:9080")
+	 * @param uriContext2 The URI context.
+	 * 	Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
 	 */
-	public HtmlWriter(Writer out, boolean useWhitespace, boolean trimStrings, char quoteChar, String uriContext, String uriAuthority) {
-		super(out, useWhitespace, trimStrings, quoteChar, uriContext, uriAuthority, false, null);
+	public HtmlWriter(Writer out, boolean useWhitespace, boolean trimStrings, char quoteChar, String uriContext, String uriAuthority, UriContext uriContext2) {
+		super(out, useWhitespace, trimStrings, quoteChar, uriContext, uriAuthority, uriContext2, false, null);
 	}
 
 	/**

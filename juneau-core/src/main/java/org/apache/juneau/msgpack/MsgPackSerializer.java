@@ -211,8 +211,8 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Serializer */
-	public MsgPackSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType) {
-		return new MsgPackSerializerSession(ctx, op, output, javaMethod, locale, timeZone, mediaType);
+	public MsgPackSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
+		return new MsgPackSerializerSession(ctx, op, output, javaMethod, locale, timeZone, mediaType, uriContext);
 	}
 
 	@Override /* Serializer */

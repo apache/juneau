@@ -14,6 +14,7 @@ package org.apache.juneau.xml;
 
 import java.io.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.annotation.*;
 
@@ -39,11 +40,13 @@ public class XmlWriter extends SerializerWriter {
 	 * @param quoteChar The quote character to use for attributes.  Should be <js>'\''</js> or <js>'"'</js>.
 	 * @param relativeUriBase The base (e.g. <js>https://localhost:9443/contextPath"</js>) for relative URIs (e.g. <js>"my/path"</js>).
 	 * @param absolutePathUriBase The base (e.g. <js>https://localhost:9443"</js>) for relative URIs with absolute paths (e.g. <js>"/contextPath/my/path"</js>).
+	 * @param uriContext The URI context.
+	 * 	Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
 	 * @param enableNs Flag to indicate if XML namespaces are enabled.
 	 * @param defaultNamespace The default namespace if XML namespaces are enabled.
 	 */
-	public XmlWriter(Writer out, boolean useWhitespace, boolean trimStrings, char quoteChar, String relativeUriBase, String absolutePathUriBase, boolean enableNs, Namespace defaultNamespace) {
-		super(out, useWhitespace, trimStrings, quoteChar, relativeUriBase, absolutePathUriBase);
+	public XmlWriter(Writer out, boolean useWhitespace, boolean trimStrings, char quoteChar, String relativeUriBase, String absolutePathUriBase, UriContext uriContext, boolean enableNs, Namespace defaultNamespace) {
+		super(out, useWhitespace, trimStrings, quoteChar, relativeUriBase, absolutePathUriBase, uriContext);
 		this.enableNs = enableNs;
 		this.defaultNsPrefix = defaultNamespace == null ? null : defaultNamespace.name;
 	}

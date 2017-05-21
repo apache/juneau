@@ -50,19 +50,21 @@ public class XmlSerializerSession extends SerializerSession {
 	 * Create a new session using properties specified in the context.
 	 *
 	 * @param ctx The context creating this session object.
-	 * The context contains all the configuration settings for this object.
+	 * 	The context contains all the configuration settings for this object.
 	 * @param output The output object.  See {@link JsonSerializerSession#getWriter()} for valid class types.
 	 * @param op The override properties.
-	 * These override any context properties defined in the context.
+	 * 	These override any context properties defined in the context.
 	 * @param javaMethod The java method that called this serializer, usually the method in a REST servlet.
 	 * @param locale The session locale.
-	 * If <jk>null</jk>, then the locale defined on the context is used.
+	 * 	If <jk>null</jk>, then the locale defined on the context is used.
 	 * @param timeZone The session timezone.
-	 * If <jk>null</jk>, then the timezone defined on the context is used.
+	 * 	If <jk>null</jk>, then the timezone defined on the context is used.
 	 * @param mediaType The session media type (e.g. <js>"application/json"</js>).
+	 * @param uriContext The URI context.
+	 * 	Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
 	 */
-	public XmlSerializerSession(XmlSerializerContext ctx, ObjectMap op, Object output, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType) {
-		super(ctx, op, output, javaMethod, locale, timeZone, mediaType);
+	public XmlSerializerSession(XmlSerializerContext ctx, ObjectMap op, Object output, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
+		super(ctx, op, output, javaMethod, locale, timeZone, mediaType, uriContext);
 		if (op == null || op.isEmpty()) {
 			enableNamespaces = ctx.enableNamespaces;
 			autoDetectNamespaces = ctx.autoDetectNamespaces;
@@ -198,6 +200,6 @@ public class XmlSerializerSession extends SerializerSession {
 		Object output = getOutput();
 		if (output instanceof XmlWriter)
 			return (XmlWriter)output;
-		return new XmlWriter(super.getWriter(), isUseWhitespace(), isTrimStrings(), getQuoteChar(), getRelativeUriBase(), getAbsolutePathUriBase(), isEnableNamespaces(), getDefaultNamespace());
+		return new XmlWriter(super.getWriter(), isUseWhitespace(), isTrimStrings(), getQuoteChar(), getRelativeUriBase(), getAbsolutePathUriBase(), getUriContext(), isEnableNamespaces(), getDefaultNamespace());
 	}
 }

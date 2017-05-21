@@ -81,6 +81,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	private Map<String,String> defFormData;
 	private RequestPathMatch pathParams;
 	private boolean isPost;
+	private UriContext uriContext;
 	private String servletURI, relativeServletURI;
 	private String charset, defaultCharset;
 	private RequestHeaders headers;
@@ -450,6 +451,22 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	//--------------------------------------------------------------------------------
 	// URI-related methods
 	//--------------------------------------------------------------------------------
+
+	/**
+	 * Returns the URI context of the request.
+	 * <p>
+	 * The URI context contains all the information about the URI of the request, such
+	 * as the servlet URI, context path, etc...
+	 * 
+	 * @return The URI context of the request.
+	 */
+	public UriContext getUriContext() {
+		if (uriContext == null) {
+			String authority = StringUtils.getAuthorityUri(super.getRequestURL().toString());
+			uriContext = new UriContext(authority, super.getContextPath(), super.getServletPath(), super.getPathInfo());
+		}
+		return uriContext;
+	}
 
 	/**
 	 * Same as {@link HttpServletRequest#getPathInfo()} except returns the path undecoded.

@@ -936,7 +936,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	 * @return This object (for method chaining).
 	 * @see SerializerContext#SERIALIZER_trimStrings
 	 */
-	public RestClientBuilder trimStringsS(boolean value) {
+	public RestClientBuilder trimStrings(boolean value) {
 		return property(SERIALIZER_trimStrings, value);
 	}
 

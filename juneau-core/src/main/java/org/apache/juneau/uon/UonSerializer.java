@@ -376,8 +376,8 @@ public class UonSerializer extends WriterSerializer {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Serializer */
-	public UonSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType) {
-		return new UonSerializerSession(ctx, null, op, output, javaMethod, locale, timeZone, mediaType);
+	public UonSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
+		return new UonSerializerSession(ctx, null, op, output, javaMethod, locale, timeZone, mediaType, uriContext);
 	}
 
 	@Override /* Serializer */

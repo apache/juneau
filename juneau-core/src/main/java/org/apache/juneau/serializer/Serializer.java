@@ -84,7 +84,7 @@ public abstract class Serializer extends CoreObject {
 	 * Serializes a POJO to the specified output stream or writer.
 	 * <p>
 	 * This method should NOT close the context object.
-	 * @param session The serializer session object return by {@link #createSession(Object, ObjectMap, Method, Locale, TimeZone, MediaType)}.<br>
+	 * @param session The serializer session object return by {@link #createSession(Object, ObjectMap, Method, Locale, TimeZone, MediaType, UriContext)}.<br>
 	 * If <jk>null</jk>, session is created using {@link #createSession(Object)}.
 	 * @param o The object to serialize.
 	 *
@@ -112,7 +112,7 @@ public abstract class Serializer extends CoreObject {
 	/**
 	 * Serialize the specified object using the specified session.
 	 *
-	 * @param session The serializer session object return by {@link #createSession(Object, ObjectMap, Method, Locale, TimeZone, MediaType)}.<br>
+	 * @param session The serializer session object return by {@link #createSession(Object, ObjectMap, Method, Locale, TimeZone, MediaType, UriContext)}.<br>
 	 * If <jk>null</jk>, session is created using {@link #createSession(Object)}.
 	 * @param o The object to serialize.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
@@ -183,10 +183,12 @@ public abstract class Serializer extends CoreObject {
 	 * @param timeZone The session timezone.
 	 * If <jk>null</jk>, then the timezone defined on the context is used.
 	 * @param mediaType The session media type (e.g. <js>"application/json"</js>).
+	 * @param uriContext The URI context.
+	 * 	Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
 	 * @return The new session.
 	 */
-	public SerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType) {
-		return new SerializerSession(ctx, op, output, javaMethod, locale, timeZone, mediaType);
+	public SerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
+		return new SerializerSession(ctx, op, output, javaMethod, locale, timeZone, mediaType, uriContext);
 	}
 
 	/**
@@ -209,7 +211,7 @@ public abstract class Serializer extends CoreObject {
 	 * @return The new session.
 	 */
 	protected SerializerSession createSession(Object output) {
-		return createSession(output, null, null, null, null, getPrimaryMediaType());
+		return createSession(output, null, null, null, null, getPrimaryMediaType(), null);
 	}
 
 	/**

@@ -43,6 +43,7 @@ import org.apache.juneau.rest.annotation.*;
 		ConfigResource.class,
 		LogsResource.class,
 		DockerRegistryResource.class,
+		FileSpaceResource.class,
 		ShutdownResource.class
 	}
 )

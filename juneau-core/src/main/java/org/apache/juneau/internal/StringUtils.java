@@ -1332,4 +1332,106 @@ public final class StringUtils {
 			return 0;
 		return s.charAt(i);
 	}
+
+	/**
+	 * Efficiently determines whether a URL is of the pattern "xxx://xxx"
+	 *
+	 * @param s The string to test.
+	 * @return <jk>true</jk> if it's an absolute path.
+	 */
+	public static boolean isAbsoluteUri(String s) {
+
+		if (isEmpty(s))
+			return false;
+
+		// Use a state machine for maximum performance.
+		
+		int S1 = 1;  // Looking for http
+		int S2 = 2;  // Found http, looking for :
+		int S3 = 3;  // Found :, looking for /
+		int S4 = 4;  // Found /, looking for /
+		int S5 = 5;  // Found /, looking for x
+
+		int state = S1;
+		for (int i = 0; i < s.length(); i++) {
+			char c = s.charAt(i);
+			if (state == S1) {
+				if (c >= 'a' && c <= 'z')
+					state = S2;
+				else
+					return false;
+			} else if (state == S2) {
+				if (c == ':')
+					state = S3;
+				else if (c < 'a' || c > 'z')
+					return false;
+			} else if (state == S3) {
+				if (c == '/')
+					state = S4;
+				else
+					return false;
+			} else if (state == S4) {
+				if (c == '/')
+					state = S5;
+				else
+					return false;
+			} else if (state == S5) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Given an absolute URI, returns just the authority portion (e.g. <js>"http://hostname:port"</js>)
+	 *
+	 * @param s The URI string.
+	 * @return Just the authority portion of the URI.
+	 */
+	public static String getAuthorityUri(String s) {
+
+		// Use a state machine for maximum performance.
+
+		int S1 = 1;  // Looking for http
+		int S2 = 2;  // Found http, looking for :
+		int S3 = 3;  // Found :, looking for /
+		int S4 = 4;  // Found /, looking for /
+		int S5 = 5;  // Found /, looking for x
+		int S6 = 6;  // Found x, looking for /
+
+		int state = S1;
+		for (int i = 0; i < s.length(); i++) {
+			char c = s.charAt(i);
+			if (state == S1) {
+				if (c >= 'a' && c <= 'z')
+					state = S2;
+				else
+					return s;
+			} else if (state == S2) {
+				if (c == ':')
+					state = S3;
+				else if (c < 'a' || c > 'z')
+					return s;
+			} else if (state == S3) {
+				if (c == '/')
+					state = S4;
+				else
+					return s;
+			} else if (state == S4) {
+				if (c == '/')
+					state = S5;
+				else
+					return s;
+			} else if (state == S5) {
+				if (c != '/')
+					state = S6;
+				else
+					return s;
+			} else if (state == S6) {
+				if (c == '/')
+					return s.substring(0, i);
+			}
+		}
+		return s;
+	}
 }

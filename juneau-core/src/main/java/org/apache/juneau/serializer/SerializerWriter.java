@@ -15,6 +15,7 @@ package org.apache.juneau.serializer;
 import java.io.*;
 import java.net.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -48,21 +49,28 @@ public class SerializerWriter extends Writer {
 	/** The base (e.g. <js>https://localhost:9443"</js>) for relative URIs with absolute paths (e.g. <js>"/contextPath/my/path"</js>). */
 	protected final String absolutePathUriBase;
 
+	/** The URI context of the request. (i.e. the REST request URL broken down into authority/context/servlet/pathInfo parts. */
+	protected final UriContext uriContext;
+
 	/**
 	 * @param out The writer being wrapped.
-	 * @param useWhitespace If <jk>true</jk>, calling {@link #cr(int)} will create an indentation and calling {@link #s()} will write a space character.
+	 * @param useWhitespace If <jk>true</jk>, calling {@link #cr(int)} will create an indentation and calling
+	 * 	{@link #s()} will write a space character.
 	 * @param trimStrings If <jk>true</jk>, strings should be trimmed before they're serialized.
 	 * @param quoteChar The character to write when {@link #q()} is called.
 	 * @param relativeUriBase The base (e.g. <js>https://localhost:9443/contextPath"</js>) for relative URIs (e.g. <js>"my/path"</js>).
 	 * @param absolutePathUriBase The base (e.g. <js>https://localhost:9443"</js>) for relative URIs with absolute paths (e.g. <js>"/contextPath/my/path"</js>).
+	 * @param uriContext The URI context.
+	 * 	Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
 	 */
-	public SerializerWriter(Writer out, boolean useWhitespace, boolean trimStrings, char quoteChar, String relativeUriBase, String absolutePathUriBase) {
+	public SerializerWriter(Writer out, boolean useWhitespace, boolean trimStrings, char quoteChar, String relativeUriBase, String absolutePathUriBase, UriContext uriContext) {
 		this.out = out;
 		this.useWhitespace = useWhitespace;
 		this.trimStrings = trimStrings;
 		this.quoteChar = quoteChar;
 		this.relativeUriBase = relativeUriBase;
 		this.absolutePathUriBase = absolutePathUriBase;
+		this.uriContext = uriContext != null ? uriContext : new UriContext(null, null, null, null);
 	}
 
 	/**

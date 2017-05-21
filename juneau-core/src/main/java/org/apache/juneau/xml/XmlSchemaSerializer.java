@@ -95,7 +95,7 @@ public class XmlSchemaSerializer extends XmlSerializer {
 	/**
 	 * Returns an XML-Schema validator based on the output returned by {@link #doSerialize(SerializerSession, Object)};
 	 *
-	 * @param session The serializer session object return by {@link #createSession(Object, ObjectMap, Method, Locale, TimeZone, MediaType)}.<br>
+	 * @param session The serializer session object return by {@link #createSession(Object, ObjectMap, Method, Locale, TimeZone, MediaType, UriContext)}.<br>
 	 * Can be <jk>null</jk>.
 	 * @param o The object to serialize.
 	 * @return The new validator.
@@ -266,7 +266,7 @@ public class XmlSchemaSerializer extends XmlSerializer {
 			this.defaultNs = defaultNs;
 			this.targetNs = targetNs;
 			this.session = session;
-			w = new XmlWriter(sw, session.isUseWhitespace(), session.isTrimStrings(), session.getQuoteChar(), null, null, true, null);
+			w = new XmlWriter(sw, session.isUseWhitespace(), session.isTrimStrings(), session.getQuoteChar(), null, null, null, true, null);
 			int i = session.getIndent();
 			w.oTag(i, "schema");
 			w.attr("xmlns", xs.getUri());
@@ -580,11 +580,11 @@ public class XmlSchemaSerializer extends XmlSerializer {
 	}
 
 	@Override /* Serializer */
-	public XmlSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType) {
+	public XmlSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
 		// This serializer must always have namespaces enabled.
 		if (op == null)
 			op = new ObjectMap();
 		op.put(XmlSerializerContext.XML_enableNamespaces, true);
-		return new XmlSerializerSession(ctx, op, output, javaMethod, locale, timeZone, mediaType);
+		return new XmlSerializerSession(ctx, op, output, javaMethod, locale, timeZone, mediaType, uriContext);
 	}
 }

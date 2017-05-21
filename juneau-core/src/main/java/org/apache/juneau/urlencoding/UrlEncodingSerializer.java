@@ -412,7 +412,7 @@ public class UrlEncodingSerializer extends UonSerializer {
 			}
 
 			StringWriter w = new StringWriter();
-			UonSerializerSession s = new UrlEncodingSerializerSession(ctx, urlEncode, null, w, null, null, null, MediaType.UON);
+			UonSerializerSession s = new UrlEncodingSerializerSession(ctx, urlEncode, null, w, null, null, null, MediaType.UON, null);
 			super.doSerialize(s, o);
 			return w.toString();
 		} catch (Exception e) {
@@ -426,8 +426,8 @@ public class UrlEncodingSerializer extends UonSerializer {
 	//--------------------------------------------------------------------------------
 
 	@Override /* Serializer */
-	public UrlEncodingSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType) {
-		return new UrlEncodingSerializerSession(ctx, null, op, output, javaMethod, locale, timeZone, mediaType);
+	public UrlEncodingSerializerSession createSession(Object output, ObjectMap op, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
+		return new UrlEncodingSerializerSession(ctx, null, op, output, javaMethod, locale, timeZone, mediaType, uriContext);
 	}
 
 	@Override /* Serializer */

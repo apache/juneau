@@ -440,6 +440,17 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	}
 
 	/**
+	 * Given a string containing variables of the form <code>"{property}"</code>, replaces those variables with
+	 * property values in this bean.
+	 *
+	 * @param s The string containing variables.
+	 * @return A new string with variables replaced, or the same string if no variables were found.
+	 */
+	public String resolveVars(String s) {
+		return StringUtils.replaceVars(s, this);
+	}
+
+	/**
 	 * Returns a simple collection of properties for this bean map.
 	 * @return A simple collection of properties for this bean map.
 	 */

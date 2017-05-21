@@ -14,6 +14,7 @@ package org.apache.juneau.json;
 
 import java.io.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 
@@ -62,9 +63,11 @@ public final class JsonWriter extends SerializerWriter {
 	 * @param trimStrings If <jk>true</jk>, strings will be trimmed before being serialized.
 	 * @param relativeUriBase The base (e.g. <js>https://localhost:9443/contextPath"</js>) for relative URIs (e.g. <js>"my/path"</js>).
 	 * @param absolutePathUriBase The base (e.g. <js>https://localhost:9443"</js>) for relative URIs with absolute paths (e.g. <js>"/contextPath/my/path"</js>).
+	 * @param uriContext The URI context.
+	 * 	Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
 	 */
-	protected JsonWriter(Writer out, boolean useWhitespace, boolean escapeSolidus, char quoteChar, boolean laxMode, boolean trimStrings, String relativeUriBase, String absolutePathUriBase) {
-		super(out, useWhitespace, trimStrings, quoteChar, relativeUriBase, absolutePathUriBase);
+	protected JsonWriter(Writer out, boolean useWhitespace, boolean escapeSolidus, char quoteChar, boolean laxMode, boolean trimStrings, String relativeUriBase, String absolutePathUriBase, UriContext uriContext) {
+		super(out, useWhitespace, trimStrings, quoteChar, relativeUriBase, absolutePathUriBase, uriContext);
 		this.laxMode = laxMode;
 		this.escapeSolidus = escapeSolidus;
 		this.ec = escapeSolidus ? encodedChars2 : encodedChars;
