@@ -102,7 +102,8 @@ public class SerializerSession extends BeanSession {
 		super(ctx, op, locale, timeZone, mediaType);
 		this.javaMethod = javaMethod;
 		this.output = output;
-		this.uriContext = uriContext != null ? uriContext : new UriContext(null, null, null, null);
+		UriResolution uriResolution = null;
+		UriRelativity uriRelativity = null;
 		if (op == null || op.isEmpty()) {
 			maxDepth = ctx.maxDepth;
 			initialDepth = ctx.initialDepth;
@@ -120,6 +121,8 @@ public class SerializerSession extends BeanSession {
 			sortCollections = ctx.sortCollections;
 			sortMaps = ctx.sortMaps;
 			abridged = ctx.abridged;
+			uriResolution =  ctx.uriResolution;
+			uriRelativity = ctx.uriRelativity;
 		} else {
 			maxDepth = op.getInt(SERIALIZER_maxDepth, ctx.maxDepth);
 			initialDepth = op.getInt(SERIALIZER_initialDepth, ctx.initialDepth);
@@ -137,7 +140,10 @@ public class SerializerSession extends BeanSession {
 			sortCollections = op.getBoolean(SERIALIZER_sortCollections, ctx.sortMaps);
 			sortMaps = op.getBoolean(SERIALIZER_sortMaps, ctx.sortMaps);
 			abridged = op.getBoolean(SERIALIZER_abridged, ctx.abridged);
+			uriResolution = op.get(UriResolution.class, SERIALIZER_uriResolution, ctx.uriResolution);
+			uriRelativity = op.get(UriRelativity.class, SERIALIZER_uriRelativity, ctx.uriRelativity);
 		}
+		this.uriContext = uriContext != null ? uriContext : new UriContext(uriResolution, uriRelativity, null, null, null, null);
 
 		this.indent = initialDepth;
 		if (detectRecursions || isDebug()) {

@@ -55,7 +55,7 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 			for (Map.Entry<String,String> e : defaultEntries.entrySet()) {
 				String key = e.getKey(), value = e.getValue();
 				String[] v = get(key);
-				if (v == null)
+				if (v == null || v.length == 0 || StringUtils.isEmpty(v[0]))
 					put(key, new String[]{value});
 			}
 		}
@@ -86,13 +86,13 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 		String[] v = get(name);
 		if (v == null || v.length == 0)
 			return null;
-		if (v.length == 1 && v[0] != null && v[0].isEmpty()) {
-			// Fix for behavior difference between Tomcat and WAS.
-			// getParameter("foo") on "&foo" in Tomcat returns "".
-			// getParameter("foo") on "&foo" in WAS returns null.
-			if (containsKey(name))
-				return null;
-		}
+
+		// Fix for behavior difference between Tomcat and WAS.
+		// getParameter("foo") on "&foo" in Tomcat returns "".
+		// getParameter("foo") on "&foo" in WAS returns null.
+		if (v.length == 1 && v[0] == null) 
+			return "";
+
 		return v[0];
 	}
 
@@ -105,7 +105,7 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 */
 	public String getFirst(String name, String def) {
 		String s = getFirst(name);
-		return s == null ? def : s;
+		return StringUtils.isEmpty(s) ? def : s;
 	}
 
 	/**

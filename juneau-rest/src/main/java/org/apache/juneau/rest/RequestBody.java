@@ -13,6 +13,7 @@
 package org.apache.juneau.rest;
 
 import static javax.servlet.http.HttpServletResponse.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -285,7 +286,7 @@ public class RequestBody {
 	 */
 	public ParserMatch getParserMatch() {
 		MediaType mediaType = headers.getContentType();
-		if (mediaType == null) {
+		if (isEmpty(mediaType)) {
 			if (body != null)
 				mediaType = MediaType.UON;
 			else
@@ -375,7 +376,7 @@ public class RequestBody {
 	private Encoder getEncoder() {
 		if (encoder == null) {
 			String ce = req.getHeader("content-encoding");
-			if (! (ce == null || ce.isEmpty())) {
+			if (! isEmpty(ce)) {
 				ce = ce.trim();
 				encoder = encoders.getEncoder(ce);
 				if (encoder == null)

@@ -92,19 +92,19 @@ public class RemoteableMethodMeta {
 						Query q = (Query)a;
 						annotated = queryArgs.add(new RemoteMethodArg(q.value(), index, false));
 					} else if (ca == QueryIfNE.class) {
-						Query q = (Query)a;
+						QueryIfNE q = (QueryIfNE)a;
 						annotated = queryArgs.add(new RemoteMethodArg(q.value(), index, true));
 					} else if (ca == FormData.class) {
 						FormData f = (FormData)a;
 						annotated = formDataArgs.add(new RemoteMethodArg(f.value(), index, false));
 					} else if (ca == FormDataIfNE.class) {
-						FormData f = (FormData)a;
+						FormDataIfNE f = (FormDataIfNE)a;
 						annotated = formDataArgs.add(new RemoteMethodArg(f.value(), index, true));
 					} else if (ca == Header.class) {
 						Header h = (Header)a;
 						annotated = headerArgs.add(new RemoteMethodArg(h.value(), index, false));
 					} else if (ca == HeaderIfNE.class) {
-						Header h = (Header)a;
+						HeaderIfNE h = (HeaderIfNE)a;
 						annotated = headerArgs.add(new RemoteMethodArg(h.value(), index, true));
 					} else if (ca == Body.class) {
 						annotated = true;

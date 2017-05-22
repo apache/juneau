@@ -70,7 +70,7 @@ public class SerializerWriter extends Writer {
 		this.quoteChar = quoteChar;
 		this.relativeUriBase = relativeUriBase;
 		this.absolutePathUriBase = absolutePathUriBase;
-		this.uriContext = uriContext != null ? uriContext : new UriContext(null, null, null, null);
+		this.uriContext = uriContext != null ? uriContext : new UriContext();
 	}
 
 	/**

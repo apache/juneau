@@ -183,7 +183,7 @@ public final class RestCall {
 	@SuppressWarnings("unchecked")
 	public RestCall query(String name, Object value, boolean skipIfEmpty) throws RestCallException {
 		if (! ("*".equals(name) || isEmpty(name))) {
-			if (! (isEmpty(value) && skipIfEmpty))
+			if (value != null && ! (isEmpty(value) && skipIfEmpty))
 				uriBuilder.addParameter(name, client.getUrlEncodingSerializer().serializePart(value, false, null));
 		} else if (value instanceof NameValuePairs) {
 			for (NameValuePair p : (NameValuePairs)value)
@@ -196,7 +196,7 @@ public final class RestCall {
 			for (Map.Entry<String,Object> p : ((Map<String,Object>) value).entrySet())
 				query(p.getKey(), p.getValue(), skipIfEmpty);
 		} else if (isBean(value)){
-			return query(name, toBeanMap(value));
+			return query(name, toBeanMap(value), skipIfEmpty);
 		} else {
 			throw new RuntimeException("Invalid name passed to query(name,value,skipIfEmpty).");
 		}
@@ -280,15 +280,17 @@ public final class RestCall {
 		if (formData == null)
 			formData = new NameValuePairs();
 		if (! ("*".equals(name) || isEmpty(name))) {
-			if (! (isEmpty(value) && skipIfEmpty))
+			if (value != null && ! (isEmpty(value) && skipIfEmpty))
 				formData.add(new SerializedNameValuePair(name, value, client.getUrlEncodingSerializer()));
 		} else if (value instanceof NameValuePairs) {
-			formData.addAll((NameValuePairs)value);
+			for (NameValuePair p : (NameValuePairs)value)
+				if (! (isEmpty(p.getValue()) && skipIfEmpty))
+					formData.add(p);
 		} else if (value instanceof Map) {
 			for (Map.Entry<String,Object> p : ((Map<String,Object>) value).entrySet())
 				formData(p.getKey(), p.getValue(), skipIfEmpty);
 		} else if (isBean(value)) {
-			return formData(name, toBeanMap(value));
+			return formData(name, toBeanMap(value), skipIfEmpty);
 		} else {
 			throw new RuntimeException("Invalid name passed to formData(name,value,skipIfEmpty).");
 		}
@@ -477,7 +479,7 @@ public final class RestCall {
 	@SuppressWarnings("unchecked")
 	public RestCall header(String name, Object value, boolean skipIfEmpty) throws RestCallException {
 		if (! ("*".equals(name) || isEmpty(name))) {
-			if (! (isEmpty(value) && skipIfEmpty))
+			if (value != null && ! (isEmpty(value) && skipIfEmpty))
 				request.setHeader(name, client.getUrlEncodingSerializer().serializePart(value, false, true));
 		} else if (value instanceof NameValuePairs) {
 			for (NameValuePair p : (NameValuePairs)value)

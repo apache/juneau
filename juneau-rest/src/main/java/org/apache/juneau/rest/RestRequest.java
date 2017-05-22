@@ -457,13 +457,13 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * <p>
 	 * The URI context contains all the information about the URI of the request, such
 	 * as the servlet URI, context path, etc...
-	 * 
+	 *
 	 * @return The URI context of the request.
 	 */
 	public UriContext getUriContext() {
 		if (uriContext == null) {
 			String authority = StringUtils.getAuthorityUri(super.getRequestURL().toString());
-			uriContext = new UriContext(authority, super.getContextPath(), super.getServletPath(), super.getPathInfo());
+			uriContext = new UriContext(UriResolution.ROOT_RELATIVE, UriRelativity.RESOURCE, authority, super.getContextPath(), super.getServletPath(), super.getPathInfo());
 		}
 		return uriContext;
 	}

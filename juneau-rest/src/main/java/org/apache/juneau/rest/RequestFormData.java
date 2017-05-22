@@ -53,7 +53,7 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 			for (Map.Entry<String,String> e : defaultEntries.entrySet()) {
 				String key = e.getKey(), value = e.getValue();
 				String[] v = get(key);
-				if (v == null)
+				if (v == null || v.length == 0 || StringUtils.isEmpty(v[0]))
 					put(key, new String[]{value});
 			}
 		}
@@ -95,13 +95,13 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 		String[] v = get(name);
 		if (v == null || v.length == 0)
 			return null;
-		if (v.length == 1 && v[0] != null && v[0].isEmpty()) {
-			// Fix for behavior difference between Tomcat and WAS.
-			// getParameter("foo") on "&foo" in Tomcat returns "".
-			// getParameter("foo") on "&foo" in WAS returns null.
-			if (containsKey(name))
-				return null;
-		}
+
+		// Fix for behavior difference between Tomcat and WAS.
+		// getParameter("foo") on "&foo" in Tomcat returns "".
+		// getParameter("foo") on "&foo" in WAS returns null.
+		if (v.length == 1 && v[0] == null) 
+			return "";
+
 		return v[0];
 	}
 
@@ -113,10 +113,8 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	 * @return The parameter value, or the default value if <jk>null</jk> or empty.
 	 */
 	public String getFirst(String name, String def) {
-		String val = getFirst(name);
-		if (val == null || val.isEmpty())
-			return def;
-		return val;
+		String s = getFirst(name);
+		return StringUtils.isEmpty(s) ? def : s;
 	}
 
 	/**

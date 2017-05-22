@@ -39,206 +39,311 @@ public class ThirdPartyProxyResource extends ResourceJena {
 
 	@RestMethod(name="GET", path="/primitiveHeaders")
 	public String primitiveHeaders(
-			@Header("h1") String h1,
-			@Header("h1n") String h1n,
-			@Header("h2") int h2,
-			@Header("h3") Integer h3,
-			@Header("h3n") Integer h3n,
-			@Header("h4") Boolean h4,
-			@Header("h5") float h5,
-			@Header("h6") Float h6
+			@Header("a") String a,
+			@Header("an") String an,
+			@Header("b") int b,
+			@Header("c") Integer c,
+			@Header("cn") Integer cn,
+			@Header("d") Boolean d,
+			@Header("e") float e,
+			@Header("f") Float f
 		) throws Exception {
 
-		assertEquals(h1, "foo");
-		assertNull(h1n);
-		assertEquals(123, h2);
-		assertEquals(123, (int)h3);
-		assertNull(h3n);
-		assertTrue(h4);
-		assertTrue(1f == h5);
-		assertTrue(1f == h6);
+		assertEquals(a, "foo");
+		assertNull(an);
+		assertEquals(123, b);
+		assertEquals(123, (int)c);
+		assertNull(cn);
+		assertTrue(d);
+		assertTrue(1f == e);
+		assertTrue(1f == f);
 		return "OK";
 	}
 
 	@RestMethod(name="GET", path="/primitiveCollectionHeaders")
 	public String primitiveCollectionHeaders(
-			@Header("h1") int[][][] h1,
-			@Header("h2") Integer[][][] h2,
-			@Header("h3") String[][][] h3,
-			@Header("h4") List<Integer> h4,
-			@Header("h5") List<List<List<Integer>>> h5,
-			@Header("h6") List<Integer[][][]> h6,
-			@Header("h7") List<int[][][]> h7,
-			@Header("h8") List<String> h8
+			@Header("a") int[][][] a,
+			@Header("b") Integer[][][] b,
+			@Header("c") String[][][] c,
+			@Header("d") List<Integer> d,
+			@Header("e") List<List<List<Integer>>> e,
+			@Header("f") List<Integer[][][]> f,
+			@Header("g") List<int[][][]> g,
+			@Header("h") List<String> h
 		) throws Exception {
 
-		assertObjectEquals("[[[1,2],null],null]", h1);
-		assertObjectEquals("[[[1,null],null],null]", h2);
-		assertObjectEquals("[[['foo',null],null],null]", h3);
-		assertObjectEquals("[1,null]", h4);
-		assertObjectEquals("[[[1,null],null],null]", h5);
-		assertObjectEquals("[[[[1,null],null],null],null]", h6);
-		assertObjectEquals("[[[[1,2],null],null],null]", h7);
-		assertObjectEquals("['foo','bar',null]", h8);
+		assertObjectEquals("[[[1,2],null],null]", a);
+		assertObjectEquals("[[[1,null],null],null]", b);
+		assertObjectEquals("[[['foo',null],null],null]", c);
+		assertObjectEquals("[1,null]", d);
+		assertObjectEquals("[[[1,null],null],null]", e);
+		assertObjectEquals("[[[[1,null],null],null],null]", f);
+		assertObjectEquals("[[[[1,2],null],null],null]", g);
+		assertObjectEquals("['foo','bar',null]", h);
 
-		assertClass(Integer.class, h4.get(0));
-		assertClass(Integer.class, h5.get(0).get(0).get(0));
-		assertClass(Integer[][][].class, h6.get(0));
-		assertClass(int[][][].class, h7.get(0));
+		assertClass(Integer.class, d.get(0));
+		assertClass(Integer.class, e.get(0).get(0).get(0));
+		assertClass(Integer[][][].class, f.get(0));
+		assertClass(int[][][].class, g.get(0));
 
 		return "OK";
 	}
 
 	@RestMethod(name="GET", path="/beanHeaders")
 	public String beanHeaders(
-			@Header("h1") ABean h1,
-			@Header("h1n") ABean h1n,
-			@Header("h2") ABean[][][] h2,
-			@Header("h3") List<ABean> h3,
-			@Header("h4") List<ABean[][][]> h4,
-			@Header("h5") Map<String,ABean> h5,
-			@Header("h6") Map<String,List<ABean>> h6,
-			@Header("h7") Map<String,List<ABean[][][]>> h7,
-			@Header("h8") Map<Integer,List<ABean>> h8
+			@Header("a") ABean a,
+			@Header("an") ABean an,
+			@Header("b") ABean[][][] b,
+			@Header("c") List<ABean> c,
+			@Header("d") List<ABean[][][]> d,
+			@Header("e") Map<String,ABean> e,
+			@Header("f") Map<String,List<ABean>> f,
+			@Header("g") Map<String,List<ABean[][][]>> g,
+			@Header("h") Map<Integer,List<ABean>> h
 		) throws Exception {
 
-		assertObjectEquals("{a:1,b:'foo'}", h1);
-		assertNull(h1n);
-		assertObjectEquals("[[[{a:1,b:'foo'},null],null],null]", h2);
-		assertObjectEquals("[{a:1,b:'foo'},null]", h3);
-		assertObjectEquals("[[[[{a:1,b:'foo'},null],null],null],null]", h4);
-		assertObjectEquals("{foo:{a:1,b:'foo'}}", h5);
-		assertObjectEquals("{foo:[{a:1,b:'foo'}]}", h6);
-		assertObjectEquals("{foo:[[[[{a:1,b:'foo'},null],null],null],null]}", h7);
-		assertObjectEquals("{'1':[{a:1,b:'foo'}]}", h8);
+		assertObjectEquals("{a:1,b:'foo'}", a);
+		assertNull(an);
+		assertObjectEquals("[[[{a:1,b:'foo'},null],null],null]", b);
+		assertObjectEquals("[{a:1,b:'foo'},null]", c);
+		assertObjectEquals("[[[[{a:1,b:'foo'},null],null],null],null]", d);
+		assertObjectEquals("{foo:{a:1,b:'foo'}}", e);
+		assertObjectEquals("{foo:[{a:1,b:'foo'}]}", f);
+		assertObjectEquals("{foo:[[[[{a:1,b:'foo'},null],null],null],null]}", g);
+		assertObjectEquals("{'1':[{a:1,b:'foo'}]}", h);
 
-		assertClass(ABean.class, h3.get(0));
-		assertClass(ABean[][][].class, h4.get(0));
-		assertClass(ABean.class, h5.get("foo"));
-		assertClass(ABean.class, h6.get("foo").get(0));
-		assertClass(ABean[][][].class, h7.get("foo").get(0));
-		assertClass(Integer.class, h8.keySet().iterator().next());
-		assertClass(ABean.class, h8.values().iterator().next().get(0));
+		assertClass(ABean.class, c.get(0));
+		assertClass(ABean[][][].class, d.get(0));
+		assertClass(ABean.class, e.get("foo"));
+		assertClass(ABean.class, f.get("foo").get(0));
+		assertClass(ABean[][][].class, g.get("foo").get(0));
+		assertClass(Integer.class, h.keySet().iterator().next());
+		assertClass(ABean.class, h.values().iterator().next().get(0));
 		return "OK";
 	}
 
 	@RestMethod(name="GET", path="/typedBeanHeaders")
 	public String typedBeanHeaders(
-			@Header("h1") TypedBean h1,
-			@Header("h1n") TypedBean h1n,
-			@Header("h2") TypedBean[][][] h2,
-			@Header("h3") List<TypedBean> h3,
-			@Header("h4") List<TypedBean[][][]> h4,
-			@Header("h5") Map<String,TypedBean> h5,
-			@Header("h6") Map<String,List<TypedBean>> h6,
-			@Header("h7") Map<String,List<TypedBean[][][]>> h7,
-			@Header("h8") Map<Integer,List<TypedBean>> h8
+			@Header("a") TypedBean a,
+			@Header("an") TypedBean an,
+			@Header("b") TypedBean[][][] b,
+			@Header("c") List<TypedBean> c,
+			@Header("d") List<TypedBean[][][]> d,
+			@Header("e") Map<String,TypedBean> e,
+			@Header("f") Map<String,List<TypedBean>> f,
+			@Header("g") Map<String,List<TypedBean[][][]>> g,
+			@Header("h") Map<Integer,List<TypedBean>> h
 		) throws Exception {
 
-		assertObjectEquals("{_type:'TypedBeanImpl',a:1,b:'foo'}", h1);
-		assertNull(h1n);
-		assertObjectEquals("[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null]", h2);
-		assertObjectEquals("[{_type:'TypedBeanImpl',a:1,b:'foo'},null]", h3);
-		assertObjectEquals("[[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null],null]", h4);
-		assertObjectEquals("{foo:{_type:'TypedBeanImpl',a:1,b:'foo'}}", h5);
-		assertObjectEquals("{foo:[{_type:'TypedBeanImpl',a:1,b:'foo'}]}", h6);
-		assertObjectEquals("{foo:[[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null],null]}", h7);
-		assertObjectEquals("{'1':[{_type:'TypedBeanImpl',a:1,b:'foo'}]}", h8);
+		assertObjectEquals("{_type:'TypedBeanImpl',a:1,b:'foo'}", a);
+		assertNull(an);
+		assertObjectEquals("[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null]", b);
+		assertObjectEquals("[{_type:'TypedBeanImpl',a:1,b:'foo'},null]", c);
+		assertObjectEquals("[[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null],null]", d);
+		assertObjectEquals("{foo:{_type:'TypedBeanImpl',a:1,b:'foo'}}", e);
+		assertObjectEquals("{foo:[{_type:'TypedBeanImpl',a:1,b:'foo'}]}", f);
+		assertObjectEquals("{foo:[[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null],null]}", g);
+		assertObjectEquals("{'1':[{_type:'TypedBeanImpl',a:1,b:'foo'}]}", h);
 
-		assertClass(TypedBeanImpl.class, h1);
-		assertClass(TypedBeanImpl.class, h2[0][0][0]);
-		assertClass(TypedBeanImpl.class, h3.get(0));
-		assertClass(TypedBeanImpl.class, h4.get(0)[0][0][0]);
-		assertClass(TypedBeanImpl.class, h5.get("foo"));
-		assertClass(TypedBeanImpl.class, h6.get("foo").get(0));
-		assertClass(TypedBeanImpl.class, h7.get("foo").get(0)[0][0][0]);
-		assertClass(Integer.class, h8.keySet().iterator().next());
-		assertClass(TypedBeanImpl.class, h8.get(1).get(0));
+		assertClass(TypedBeanImpl.class, a);
+		assertClass(TypedBeanImpl.class, b[0][0][0]);
+		assertClass(TypedBeanImpl.class, c.get(0));
+		assertClass(TypedBeanImpl.class, d.get(0)[0][0][0]);
+		assertClass(TypedBeanImpl.class, e.get("foo"));
+		assertClass(TypedBeanImpl.class, f.get("foo").get(0));
+		assertClass(TypedBeanImpl.class, g.get("foo").get(0)[0][0][0]);
+		assertClass(Integer.class, h.keySet().iterator().next());
+		assertClass(TypedBeanImpl.class, h.get(1).get(0));
 
 		return "OK";
 	}
 
 	@RestMethod(name="GET", path="/swappedPojoHeaders")
 	public String swappedPojoHeaders(
-			@Header("h1") SwappedPojo h1,
-			@Header("h2") SwappedPojo[][][] h2,
-			@Header("h3") Map<SwappedPojo,SwappedPojo> h3,
-			@Header("h4") Map<SwappedPojo,SwappedPojo[][][]> h4
+			@Header("a") SwappedPojo a,
+			@Header("b") SwappedPojo[][][] b,
+			@Header("c") Map<SwappedPojo,SwappedPojo> c,
+			@Header("d") Map<SwappedPojo,SwappedPojo[][][]> d
 		) throws Exception {
 
-		assertObjectEquals("'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'", h1);
-		assertObjectEquals("[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]", h2);
-		assertObjectEquals("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'}", h3);
-		assertObjectEquals("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]}", h4);
+		assertObjectEquals("'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'", a);
+		assertObjectEquals("[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]", b);
+		assertObjectEquals("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'}", c);
+		assertObjectEquals("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]}", d);
 
-		assertClass(SwappedPojo.class, h1);
-		assertClass(SwappedPojo.class, h2[0][0][0]);
-		assertClass(SwappedPojo.class, h3.keySet().iterator().next());
-		assertClass(SwappedPojo.class, h3.values().iterator().next());
-		assertClass(SwappedPojo.class, h4.keySet().iterator().next());
-		assertClass(SwappedPojo.class, h4.values().iterator().next()[0][0][0]);
+		assertClass(SwappedPojo.class, a);
+		assertClass(SwappedPojo.class, b[0][0][0]);
+		assertClass(SwappedPojo.class, c.keySet().iterator().next());
+		assertClass(SwappedPojo.class, c.values().iterator().next());
+		assertClass(SwappedPojo.class, d.keySet().iterator().next());
+		assertClass(SwappedPojo.class, d.values().iterator().next()[0][0][0]);
 
 		return "OK";
 	}
 
 	@RestMethod(name="GET", path="/implicitSwappedPojoHeaders")
 	public String implicitSwappedPojoHeaders(
-			@Header("h1") ImplicitSwappedPojo h1,
-			@Header("h2") ImplicitSwappedPojo[][][] h2,
-			@Header("h3") Map<ImplicitSwappedPojo,ImplicitSwappedPojo> h3,
-			@Header("h4") Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> h4
+			@Header("a") ImplicitSwappedPojo a,
+			@Header("b") ImplicitSwappedPojo[][][] b,
+			@Header("c") Map<ImplicitSwappedPojo,ImplicitSwappedPojo> c,
+			@Header("d") Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> d
 		) throws Exception {
 
-		assertObjectEquals("'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'", h1);
-		assertObjectEquals("[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]", h2);
-		assertObjectEquals("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'}", h3);
-		assertObjectEquals("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]}", h4);
+		assertObjectEquals("'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'", a);
+		assertObjectEquals("[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]", b);
+		assertObjectEquals("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'}", c);
+		assertObjectEquals("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]}", d);
 
-		assertClass(ImplicitSwappedPojo.class, h1);
-		assertClass(ImplicitSwappedPojo.class, h2[0][0][0]);
-		assertClass(ImplicitSwappedPojo.class, h3.keySet().iterator().next());
-		assertClass(ImplicitSwappedPojo.class, h3.values().iterator().next());
-		assertClass(ImplicitSwappedPojo.class, h4.keySet().iterator().next());
-		assertClass(ImplicitSwappedPojo.class, h4.values().iterator().next()[0][0][0]);
+		assertClass(ImplicitSwappedPojo.class, a);
+		assertClass(ImplicitSwappedPojo.class, b[0][0][0]);
+		assertClass(ImplicitSwappedPojo.class, c.keySet().iterator().next());
+		assertClass(ImplicitSwappedPojo.class, c.values().iterator().next());
+		assertClass(ImplicitSwappedPojo.class, d.keySet().iterator().next());
+		assertClass(ImplicitSwappedPojo.class, d.values().iterator().next()[0][0][0]);
 
 		return "OK";
 	}
 
 	@RestMethod(name="GET", path="/enumHeaders")
 	public String enumHeaders(
-			@Header("h1") TestEnum h1,
-			@Header("h1n") TestEnum h1n,
-			@Header("h2") TestEnum[][][] h2,
-			@Header("h3") List<TestEnum> h3,
-			@Header("h4") List<List<List<TestEnum>>> h4,
-			@Header("h5") List<TestEnum[][][]> h5,
-			@Header("h6") Map<TestEnum,TestEnum> h6,
-			@Header("h7") Map<TestEnum,TestEnum[][][]> h7,
-			@Header("h8") Map<TestEnum,List<TestEnum[][][]>> h8
+			@Header("a") TestEnum a,
+			@Header("an") TestEnum an,
+			@Header("b") TestEnum[][][] b,
+			@Header("c") List<TestEnum> c,
+			@Header("d") List<List<List<TestEnum>>> d,
+			@Header("e") List<TestEnum[][][]> e,
+			@Header("f") Map<TestEnum,TestEnum> f,
+			@Header("g") Map<TestEnum,TestEnum[][][]> g,
+			@Header("h") Map<TestEnum,List<TestEnum[][][]>> h
 		) throws Exception {
 
-		assertEquals(TestEnum.TWO, h1);
-		assertNull(h1n);
-		assertObjectEquals("[[['TWO',null],null],null]", h2);
-		assertObjectEquals("['TWO',null]", h3);
-		assertObjectEquals("[[['TWO',null],null],null]", h4);
-		assertObjectEquals("[[[['TWO',null],null],null],null]", h5);
-		assertObjectEquals("{ONE:'TWO'}", h6);
-		assertObjectEquals("{ONE:[[['TWO',null],null],null]}", h7);
-		assertObjectEquals("{ONE:[[[['TWO',null],null],null],null]}", h8);
+		assertEquals(TestEnum.TWO, a);
+		assertNull(an);
+		assertObjectEquals("[[['TWO',null],null],null]", b);
+		assertObjectEquals("['TWO',null]", c);
+		assertObjectEquals("[[['TWO',null],null],null]", d);
+		assertObjectEquals("[[[['TWO',null],null],null],null]", e);
+		assertObjectEquals("{ONE:'TWO'}", f);
+		assertObjectEquals("{ONE:[[['TWO',null],null],null]}", g);
+		assertObjectEquals("{ONE:[[[['TWO',null],null],null],null]}", h);
 
-		assertClass(TestEnum.class, h3.get(0));
-		assertClass(TestEnum.class, h4.get(0).get(0).get(0));
-		assertClass(TestEnum[][][].class, h5.get(0));
-		assertClass(TestEnum.class, h6.keySet().iterator().next());
-		assertClass(TestEnum.class, h6.values().iterator().next());
-		assertClass(TestEnum.class, h7.keySet().iterator().next());
-		assertClass(TestEnum[][][].class, h7.values().iterator().next());
-		assertClass(TestEnum.class, h8.keySet().iterator().next());
-		assertClass(TestEnum[][][].class, h8.values().iterator().next().get(0));
+		assertClass(TestEnum.class, c.get(0));
+		assertClass(TestEnum.class, d.get(0).get(0).get(0));
+		assertClass(TestEnum[][][].class, e.get(0));
+		assertClass(TestEnum.class, f.keySet().iterator().next());
+		assertClass(TestEnum.class, f.values().iterator().next());
+		assertClass(TestEnum.class, g.keySet().iterator().next());
+		assertClass(TestEnum[][][].class, g.values().iterator().next());
+		assertClass(TestEnum.class, h.keySet().iterator().next());
+		assertClass(TestEnum[][][].class, h.values().iterator().next().get(0));
 
 		return "OK";
 	}
+
+	@RestMethod(name="GET", path="/mapHeader")
+	public String mapHeader(
+		@Header("a") String a,
+		@Header("b") String b,
+		@Header("c") String c
+	) throws Exception {
+
+		assertEquals("foo", a);
+		assertEquals("", b);
+		assertEquals(null, c);
+
+		return "OK";
+	}
+
+	@RestMethod(name="GET", path="/beanHeader")
+	public String beanHeader(
+		@Header("a") String a,
+		@Header("b") String b,
+		@Header("c") String c
+	) throws Exception {
+
+		assertEquals("foo", a);
+		assertEquals("", b);
+		assertEquals(null, c);
+
+		return "OK";
+	}
+
+	@RestMethod(name="GET", path="/nameValuePairsHeader")
+	public String nameValuePairsHeader(
+		@Header("a") String a,
+		@Header("b") String b,
+		@Header("c") String c
+	) throws Exception {
+
+		assertEquals("foo", a);
+		assertEquals("", b);
+		assertEquals(null, c);
+
+		return "OK";
+	}
+
+	@RestMethod(name="GET", path="/headerIfNE1")
+	public String headerIfNE1(
+		@Header("a") String a
+	) throws Exception {
+
+		assertEquals("foo", a);
+
+		return "OK";
+	}
+
+	@RestMethod(name="GET", path="/headerIfNE2")
+	public String headerIfNE2(
+		@Header("a") String a
+	) throws Exception {
+
+		assertEquals(null, a);
+
+		return "OK";
+	}
+
+	@RestMethod(name="GET", path="/headerIfNEMap")
+	public String headerIfNEMap(
+		@Header("a") String a,
+		@Header("b") String b,
+		@Header("c") String c
+	) throws Exception {
+
+		assertEquals("foo", a);
+		assertEquals(null, b);
+		assertEquals(null, c);
+
+		return "OK";
+	}
+
+	@RestMethod(name="GET", path="/headerIfNEBean")
+	public String headerIfNEBean(
+		@Header("a") String a,
+		@Header("b") String b,
+		@Header("c") String c
+	) throws Exception {
+
+		assertEquals("foo", a);
+		assertEquals(null, b);
+		assertEquals(null, c);
+
+		return "OK";
+	}
+
+	@RestMethod(name="GET", path="/headerIfNEnameValuePairs")
+	public String headerIfNEnameValuePairs(
+		@Header("a") String a,
+		@Header("b") String b,
+		@Header("c") String c
+	) throws Exception {
+
+		assertEquals("foo", a);
+		assertEquals(null, b);
+		assertEquals(null, c);
+
+		return "OK";
+	}
+
 
 	//--------------------------------------------------------------------------------
 	// Query tests
@@ -246,203 +351,203 @@ public class ThirdPartyProxyResource extends ResourceJena {
 
 	@RestMethod(name="GET", path="/primitiveQueries")
 	public String primitiveQueries(
-			@Query("h1") String h1,
-			@Query("h1n") String h1n,
-			@Query("h2") int h2,
-			@Query("h3") Integer h3,
-			@Query("h3n") Integer h3n,
-			@Query("h4") Boolean h4,
-			@Query("h5") float h5,
-			@Query("h6") Float h6
+			@Query("a") String a,
+			@Query("an") String an,
+			@Query("b") int b,
+			@Query("c") Integer c,
+			@Query("cn") Integer cn,
+			@Query("d") Boolean d,
+			@Query("e") float e,
+			@Query("f") Float f
 		) throws Exception {
 
-		assertEquals(h1, "foo");
-		assertNull(h1n);
-		assertEquals(123, h2);
-		assertEquals(123, (int)h3);
-		assertNull(h3n);
-		assertTrue(h4);
-		assertTrue(1f == h5);
-		assertTrue(1f == h6);
+		assertEquals(a, "foo");
+		assertNull(an);
+		assertEquals(123, b);
+		assertEquals(123, (int)c);
+		assertNull(cn);
+		assertTrue(d);
+		assertTrue(1f == e);
+		assertTrue(1f == f);
 		return "OK";
 	}
 
 	@RestMethod(name="GET", path="/primitiveCollectionQueries")
 	public String primitiveCollectionQueries(
-			@Query("h1") int[][][] h1,
-			@Query("h2") Integer[][][] h2,
-			@Query("h3") String[][][] h3,
-			@Query("h4") List<Integer> h4,
-			@Query("h5") List<List<List<Integer>>> h5,
-			@Query("h6") List<Integer[][][]> h6,
-			@Query("h7") List<int[][][]> h7,
-			@Query("h8") List<String> h8
+			@Query("a") int[][][] a,
+			@Query("b") Integer[][][] b,
+			@Query("c") String[][][] c,
+			@Query("d") List<Integer> d,
+			@Query("e") List<List<List<Integer>>> e,
+			@Query("f") List<Integer[][][]> f,
+			@Query("g") List<int[][][]> g,
+			@Query("h") List<String> h
 		) throws Exception {
 
-		assertObjectEquals("[[[1,2],null],null]", h1);
-		assertObjectEquals("[[[1,null],null],null]", h2);
-		assertObjectEquals("[[['foo',null],null],null]", h3);
-		assertObjectEquals("[1,null]", h4);
-		assertObjectEquals("[[[1,null],null],null]", h5);
-		assertObjectEquals("[[[[1,null],null],null],null]", h6);
-		assertObjectEquals("[[[[1,2],null],null],null]", h7);
-		assertObjectEquals("['foo','bar',null]", h8);
+		assertObjectEquals("[[[1,2],null],null]", a);
+		assertObjectEquals("[[[1,null],null],null]", b);
+		assertObjectEquals("[[['foo',null],null],null]", c);
+		assertObjectEquals("[1,null]", d);
+		assertObjectEquals("[[[1,null],null],null]", e);
+		assertObjectEquals("[[[[1,null],null],null],null]", f);
+		assertObjectEquals("[[[[1,2],null],null],null]", g);
+		assertObjectEquals("['foo','bar',null]", h);
 
-		assertClass(Integer.class, h4.get(0));
-		assertClass(Integer.class, h5.get(0).get(0).get(0));
-		assertClass(Integer[][][].class, h6.get(0));
-		assertClass(int[][][].class, h7.get(0));
+		assertClass(Integer.class, d.get(0));
+		assertClass(Integer.class, e.get(0).get(0).get(0));
+		assertClass(Integer[][][].class, f.get(0));
+		assertClass(int[][][].class, g.get(0));
 
 		return "OK";
 	}
 
 	@RestMethod(name="GET", path="/beanQueries")
 	public String beanQueries(
-			@Query("h1") ABean h1,
-			@Query("h1n") ABean h1n,
-			@Query("h2") ABean[][][] h2,
-			@Query("h3") List<ABean> h3,
-			@Query("h4") List<ABean[][][]> h4,
-			@Query("h5") Map<String,ABean> h5,
-			@Query("h6") Map<String,List<ABean>> h6,
-			@Query("h7") Map<String,List<ABean[][][]>> h7,
-			@Query("h8") Map<Integer,List<ABean>> h8
+			@Query("a") ABean a,
+			@Query("an") ABean an,
+			@Query("b") ABean[][][] b,
+			@Query("c") List<ABean> c,
+			@Query("d") List<ABean[][][]> d,
+			@Query("e") Map<String,ABean> e,
+			@Query("f") Map<String,List<ABean>> f,
+			@Query("g") Map<String,List<ABean[][][]>> g,
+			@Query("h") Map<Integer,List<ABean>> h
 		) throws Exception {
 
-		assertObjectEquals("{a:1,b:'foo'}", h1);
-		assertNull(h1n);
-		assertObjectEquals("[[[{a:1,b:'foo'},null],null],null]", h2);
-		assertObjectEquals("[{a:1,b:'foo'},null]", h3);
-		assertObjectEquals("[[[[{a:1,b:'foo'},null],null],null],null]", h4);
-		assertObjectEquals("{foo:{a:1,b:'foo'}}", h5);
-		assertObjectEquals("{foo:[{a:1,b:'foo'}]}", h6);
-		assertObjectEquals("{foo:[[[[{a:1,b:'foo'},null],null],null],null]}", h7);
-		assertObjectEquals("{'1':[{a:1,b:'foo'}]}", h8);
+		assertObjectEquals("{a:1,b:'foo'}", a);
+		assertNull(an);
+		assertObjectEquals("[[[{a:1,b:'foo'},null],null],null]", b);
+		assertObjectEquals("[{a:1,b:'foo'},null]", c);
+		assertObjectEquals("[[[[{a:1,b:'foo'},null],null],null],null]", d);
+		assertObjectEquals("{foo:{a:1,b:'foo'}}", e);
+		assertObjectEquals("{foo:[{a:1,b:'foo'}]}", f);
+		assertObjectEquals("{foo:[[[[{a:1,b:'foo'},null],null],null],null]}", g);
+		assertObjectEquals("{'1':[{a:1,b:'foo'}]}", h);
 
-		assertClass(ABean.class, h3.get(0));
-		assertClass(ABean[][][].class, h4.get(0));
-		assertClass(ABean.class, h5.get("foo"));
-		assertClass(ABean.class, h6.get("foo").get(0));
-		assertClass(ABean[][][].class, h7.get("foo").get(0));
-		assertClass(Integer.class, h8.keySet().iterator().next());
-		assertClass(ABean.class, h8.values().iterator().next().get(0));
+		assertClass(ABean.class, c.get(0));
+		assertClass(ABean[][][].class, d.get(0));
+		assertClass(ABean.class, e.get("foo"));
+		assertClass(ABean.class, f.get("foo").get(0));
+		assertClass(ABean[][][].class, g.get("foo").get(0));
+		assertClass(Integer.class, h.keySet().iterator().next());
+		assertClass(ABean.class, h.values().iterator().next().get(0));
 		return "OK";
 	}
 
 	@RestMethod(name="GET", path="/typedBeanQueries")
 	public String typedBeanQueries(
-			@Query("h1") TypedBean h1,
-			@Query("h1n") TypedBean h1n,
-			@Query("h2") TypedBean[][][] h2,
-			@Query("h3") List<TypedBean> h3,
-			@Query("h4") List<TypedBean[][][]> h4,
-			@Query("h5") Map<String,TypedBean> h5,
-			@Query("h6") Map<String,List<TypedBean>> h6,
-			@Query("h7") Map<String,List<TypedBean[][][]>> h7,
-			@Query("h8") Map<Integer,List<TypedBean>> h8
+			@Query("a") TypedBean a,
+			@Query("an") TypedBean an,
+			@Query("b") TypedBean[][][] b,
+			@Query("c") List<TypedBean> c,
+			@Query("d") List<TypedBean[][][]> d,
+			@Query("e") Map<String,TypedBean> e,
+			@Query("f") Map<String,List<TypedBean>> f,
+			@Query("g") Map<String,List<TypedBean[][][]>> g,
+			@Query("h") Map<Integer,List<TypedBean>> h
 		) throws Exception {
 
-		assertObjectEquals("{_type:'TypedBeanImpl',a:1,b:'foo'}", h1);
-		assertNull(h1n);
-		assertObjectEquals("[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null]", h2);
-		assertObjectEquals("[{_type:'TypedBeanImpl',a:1,b:'foo'},null]", h3);
-		assertObjectEquals("[[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null],null]", h4);
-		assertObjectEquals("{foo:{_type:'TypedBeanImpl',a:1,b:'foo'}}", h5);
-		assertObjectEquals("{foo:[{_type:'TypedBeanImpl',a:1,b:'foo'}]}", h6);
-		assertObjectEquals("{foo:[[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null],null]}", h7);
-		assertObjectEquals("{'1':[{_type:'TypedBeanImpl',a:1,b:'foo'}]}", h8);
+		assertObjectEquals("{_type:'TypedBeanImpl',a:1,b:'foo'}", a);
+		assertNull(an);
+		assertObjectEquals("[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null]", b);
+		assertObjectEquals("[{_type:'TypedBeanImpl',a:1,b:'foo'},null]", c);
+		assertObjectEquals("[[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null],null]", d);
+		assertObjectEquals("{foo:{_type:'TypedBeanImpl',a:1,b:'foo'}}", e);
+		assertObjectEquals("{foo:[{_type:'TypedBeanImpl',a:1,b:'foo'}]}", f);
+		assertObjectEquals("{foo:[[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null],null]}", g);
+		assertObjectEquals("{'1':[{_type:'TypedBeanImpl',a:1,b:'foo'}]}", h);
 
-		assertClass(TypedBeanImpl.class, h1);
-		assertClass(TypedBeanImpl.class, h2[0][0][0]);
-		assertClass(TypedBeanImpl.class, h3.get(0));
-		assertClass(TypedBeanImpl.class, h4.get(0)[0][0][0]);
-		assertClass(TypedBeanImpl.class, h5.get("foo"));
-		assertClass(TypedBeanImpl.class, h6.get("foo").get(0));
-		assertClass(TypedBeanImpl.class, h7.get("foo").get(0)[0][0][0]);
-		assertClass(Integer.class, h8.keySet().iterator().next());
-		assertClass(TypedBeanImpl.class, h8.get(1).get(0));
+		assertClass(TypedBeanImpl.class, a);
+		assertClass(TypedBeanImpl.class, b[0][0][0]);
+		assertClass(TypedBeanImpl.class, c.get(0));
+		assertClass(TypedBeanImpl.class, d.get(0)[0][0][0]);
+		assertClass(TypedBeanImpl.class, e.get("foo"));
+		assertClass(TypedBeanImpl.class, f.get("foo").get(0));
+		assertClass(TypedBeanImpl.class, g.get("foo").get(0)[0][0][0]);
+		assertClass(Integer.class, h.keySet().iterator().next());
+		assertClass(TypedBeanImpl.class, h.get(1).get(0));
 
 		return "OK";
 	}
 
 	@RestMethod(name="GET", path="/swappedPojoQueries")
 	public String swappedPojoQueries(
-			@Query("h1") SwappedPojo h1,
-			@Query("h2") SwappedPojo[][][] h2,
-			@Query("h3") Map<SwappedPojo,SwappedPojo> h3,
-			@Query("h4") Map<SwappedPojo,SwappedPojo[][][]> h4
+			@Query("a") SwappedPojo a,
+			@Query("b") SwappedPojo[][][] b,
+			@Query("c") Map<SwappedPojo,SwappedPojo> c,
+			@Query("d") Map<SwappedPojo,SwappedPojo[][][]> d
 		) throws Exception {
 
-		assertObjectEquals("'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'", h1);
-		assertObjectEquals("[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]", h2);
-		assertObjectEquals("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'}", h3);
-		assertObjectEquals("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]}", h4);
+		assertObjectEquals("'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'", a);
+		assertObjectEquals("[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]", b);
+		assertObjectEquals("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'}", c);
+		assertObjectEquals("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]}", d);
 
-		assertClass(SwappedPojo.class, h1);
-		assertClass(SwappedPojo.class, h2[0][0][0]);
-		assertClass(SwappedPojo.class, h3.keySet().iterator().next());
-		assertClass(SwappedPojo.class, h3.values().iterator().next());
-		assertClass(SwappedPojo.class, h4.keySet().iterator().next());
-		assertClass(SwappedPojo.class, h4.values().iterator().next()[0][0][0]);
+		assertClass(SwappedPojo.class, a);
+		assertClass(SwappedPojo.class, b[0][0][0]);
+		assertClass(SwappedPojo.class, c.keySet().iterator().next());
+		assertClass(SwappedPojo.class, c.values().iterator().next());
+		assertClass(SwappedPojo.class, d.keySet().iterator().next());
+		assertClass(SwappedPojo.class, d.values().iterator().next()[0][0][0]);
 
 		return "OK";
 	}
 
 	@RestMethod(name="GET", path="/implicitSwappedPojoQueries")
 	public String implicitSwappedPojoQueries(
-			@Query("h1") ImplicitSwappedPojo h1,
-			@Query("h2") ImplicitSwappedPojo[][][] h2,
-			@Query("h3") Map<ImplicitSwappedPojo,ImplicitSwappedPojo> h3,
-			@Query("h4") Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> h4
+			@Query("a") ImplicitSwappedPojo a,
+			@Query("b") ImplicitSwappedPojo[][][] b,
+			@Query("c") Map<ImplicitSwappedPojo,ImplicitSwappedPojo> c,
+			@Query("d") Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> d
 		) throws Exception {
 
-		assertObjectEquals("'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'", h1);
-		assertObjectEquals("[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]", h2);
-		assertObjectEquals("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'}", h3);
-		assertObjectEquals("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]}", h4);
+		assertObjectEquals("'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'", a);
+		assertObjectEquals("[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]", b);
+		assertObjectEquals("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'}", c);
+		assertObjectEquals("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]}", d);
 
-		assertClass(ImplicitSwappedPojo.class, h1);
-		assertClass(ImplicitSwappedPojo.class, h2[0][0][0]);
-		assertClass(ImplicitSwappedPojo.class, h3.keySet().iterator().next());
-		assertClass(ImplicitSwappedPojo.class, h3.values().iterator().next());
-		assertClass(ImplicitSwappedPojo.class, h4.keySet().iterator().next());
-		assertClass(ImplicitSwappedPojo.class, h4.values().iterator().next()[0][0][0]);
+		assertClass(ImplicitSwappedPojo.class, a);
+		assertClass(ImplicitSwappedPojo.class, b[0][0][0]);
+		assertClass(ImplicitSwappedPojo.class, c.keySet().iterator().next());
+		assertClass(ImplicitSwappedPojo.class, c.values().iterator().next());
+		assertClass(ImplicitSwappedPojo.class, d.keySet().iterator().next());
+		assertClass(ImplicitSwappedPojo.class, d.values().iterator().next()[0][0][0]);
 
 		return "OK";
 	}
 
 	@RestMethod(name="GET", path="/enumQueries")
 	public String enumQueries(
-			@Query("h1") TestEnum h1,
-			@Query("h1n") TestEnum h1n,
-			@Query("h2") TestEnum[][][] h2,
-			@Query("h3") List<TestEnum> h3,
-			@Query("h4") List<List<List<TestEnum>>> h4,
-			@Query("h5") List<TestEnum[][][]> h5,
-			@Query("h6") Map<TestEnum,TestEnum> h6,
-			@Query("h7") Map<TestEnum,TestEnum[][][]> h7,
-			@Query("h8") Map<TestEnum,List<TestEnum[][][]>> h8
+			@Query("a") TestEnum a,
+			@Query("an") TestEnum an,
+			@Query("b") TestEnum[][][] b,
+			@Query("c") List<TestEnum> c,
+			@Query("d") List<List<List<TestEnum>>> d,
+			@Query("e") List<TestEnum[][][]> e,
+			@Query("f") Map<TestEnum,TestEnum> f,
+			@Query("g") Map<TestEnum,TestEnum[][][]> g,
+			@Query("h") Map<TestEnum,List<TestEnum[][][]>> h
 		) throws Exception {
 
-		assertEquals(TestEnum.TWO, h1);
-		assertNull(h1n);
-		assertObjectEquals("[[['TWO',null],null],null]", h2);
-		assertObjectEquals("['TWO',null]", h3);
-		assertObjectEquals("[[['TWO',null],null],null]", h4);
-		assertObjectEquals("[[[['TWO',null],null],null],null]", h5);
-		assertObjectEquals("{ONE:'TWO'}", h6);
-		assertObjectEquals("{ONE:[[['TWO',null],null],null]}", h7);
-		assertObjectEquals("{ONE:[[[['TWO',null],null],null],null]}", h8);
+		assertEquals(TestEnum.TWO, a);
+		assertNull(an);
+		assertObjectEquals("[[['TWO',null],null],null]", b);
+		assertObjectEquals("['TWO',null]", c);
+		assertObjectEquals("[[['TWO',null],null],null]", d);
+		assertObjectEquals("[[[['TWO',null],null],null],null]", e);
+		assertObjectEquals("{ONE:'TWO'}", f);
+		assertObjectEquals("{ONE:[[['TWO',null],null],null]}", g);
+		assertObjectEquals("{ONE:[[[['TWO',null],null],null],null]}", h);
 
-		assertClass(TestEnum.class, h3.get(0));
-		assertClass(TestEnum.class, h4.get(0).get(0).get(0));
-		assertClass(TestEnum[][][].class, h5.get(0));
-		assertClass(TestEnum.class, h6.keySet().iterator().next());
-		assertClass(TestEnum.class, h6.values().iterator().next());
-		assertClass(TestEnum.class, h7.keySet().iterator().next());
-		assertClass(TestEnum[][][].class, h7.values().iterator().next());
-		assertClass(TestEnum.class, h8.keySet().iterator().next());
-		assertClass(TestEnum[][][].class, h8.values().iterator().next().get(0));
+		assertClass(TestEnum.class, c.get(0));
+		assertClass(TestEnum.class, d.get(0).get(0).get(0));
+		assertClass(TestEnum[][][].class, e.get(0));
+		assertClass(TestEnum.class, f.keySet().iterator().next());
+		assertClass(TestEnum.class, f.values().iterator().next());
+		assertClass(TestEnum.class, g.keySet().iterator().next());
+		assertClass(TestEnum[][][].class, g.values().iterator().next());
+		assertClass(TestEnum.class, h.keySet().iterator().next());
+		assertClass(TestEnum[][][].class, h.values().iterator().next().get(0));
 
 		return "OK";
 	}
@@ -485,12 +590,90 @@ public class ThirdPartyProxyResource extends ResourceJena {
 
 	@RestMethod(name="GET", path="/beanQuery")
 	public String beanQuery(
-			@Query("a") int a,
-			@Query("b") String b
+			@Query("a") String a,
+			@Query("b") String b,
+			@Query("c") String c
 		) throws Exception {
 
-		assertEquals(1, a);
-		assertEquals("foo", b);
+		assertEquals("foo", a);
+		assertEquals("", b);
+		assertEquals(null, c);
+
+		return "OK";
+	}
+
+	@RestMethod(name="GET", path="/nameValuePairsQuery")
+	public String nameValuePairsQuery(
+		@Query("a") String a,
+		@Query("b") String b,
+		@Query("c") String c
+	) throws Exception {
+
+		assertEquals("foo", a);
+		assertEquals("", b);
+		assertEquals(null, c);
+
+		return "OK";
+	}
+
+	@RestMethod(name="GET", path="/queryIfNE1")
+	public String queryIfNE1(
+		@Query("a") String a
+	) throws Exception {
+
+		assertEquals("foo", a);
+
+		return "OK";
+	}
+
+	@RestMethod(name="GET", path="/queryIfNE2")
+	public String queryIfNE2(
+		@Query("q") String a
+	) throws Exception {
+
+		assertEquals(null, a);
+
+		return "OK";
+	}
+
+	@RestMethod(name="GET", path="/queryIfNEMap")
+	public String queryIfNEMap(
+		@Query("a") String a,
+		@Query("b") String b,
+		@Query("c") String c
+	) throws Exception {
+
+		assertEquals("foo", a);
+		assertEquals(null, b);
+		assertEquals(null, c);
+
+		return "OK";
+	}
+
+	@RestMethod(name="GET", path="/queryIfNEBean")
+	public String queryIfNEBean(
+		@Query("a") String a,
+		@Query("b") String b,
+		@Query("c") String c
+	) throws Exception {
+
+		assertEquals("foo", a);
+		assertEquals(null, b);
+		assertEquals(null, c);
+
+		return "OK";
+	}
+
+	@RestMethod(name="GET", path="/queryIfNEnameValuePairs")
+	public String queryIfNEnameValuePairs(
+		@Query("a") String a,
+		@Query("b") String b,
+		@Query("c") String c
+	) throws Exception {
+
+		assertEquals("foo", a);
+		assertEquals(null, b);
+		assertEquals(null, c);
 
 		return "OK";
 	}
@@ -502,203 +685,307 @@ public class ThirdPartyProxyResource extends ResourceJena {
 
 	@RestMethod(name="POST", path="/primitiveFormData")
 	public String primitiveFormData(
-			@FormData("h1") String h1,
-			@FormData("h1n") String h1n,
-			@FormData("h2") int h2,
-			@FormData("h3") Integer h3,
-			@FormData("h3n") Integer h3n,
-			@FormData("h4") Boolean h4,
-			@FormData("h5") float h5,
-			@FormData("h6") Float h6
+			@FormData("a") String a,
+			@FormData("an") String an,
+			@FormData("b") int b,
+			@FormData("c") Integer c,
+			@FormData("cn") Integer cn,
+			@FormData("d") Boolean d,
+			@FormData("e") float e,
+			@FormData("f") Float f
 		) throws Exception {
 
-		assertEquals("foo", h1);
-		assertNull(h1n);
-		assertEquals(123, h2);
-		assertEquals(123, (int)h3);
-		assertNull(h3n);
-		assertTrue(h4);
-		assertTrue(1f == h5);
-		assertTrue(1f == h6);
+		assertEquals("foo", a);
+		assertNull(an);
+		assertEquals(123, b);
+		assertEquals(123, (int)c);
+		assertNull(cn);
+		assertTrue(d);
+		assertTrue(1f == e);
+		assertTrue(1f == f);
 		return "OK";
 	}
 
 	@RestMethod(name="POST", path="/primitiveCollectionFormData")
 	public String primitiveCollectionFormData(
-			@FormData("h1") int[][][] h1,
-			@FormData("h2") Integer[][][] h2,
-			@FormData("h3") String[][][] h3,
-			@FormData("h4") List<Integer> h4,
-			@FormData("h5") List<List<List<Integer>>> h5,
-			@FormData("h6") List<Integer[][][]> h6,
-			@FormData("h7") List<int[][][]> h7,
-			@FormData("h8") List<String> h8
+			@FormData("a") int[][][] a,
+			@FormData("b") Integer[][][] b,
+			@FormData("c") String[][][] c,
+			@FormData("d") List<Integer> d,
+			@FormData("e") List<List<List<Integer>>> e,
+			@FormData("f") List<Integer[][][]> f,
+			@FormData("g") List<int[][][]> g,
+			@FormData("h") List<String> h
 		) throws Exception {
 
-		assertObjectEquals("[[[1,2],null],null]", h1);
-		assertObjectEquals("[[[1,null],null],null]", h2);
-		assertObjectEquals("[[['foo',null],null],null]", h3);
-		assertObjectEquals("[1,null]", h4);
-		assertObjectEquals("[[[1,null],null],null]", h5);
-		assertObjectEquals("[[[[1,null],null],null],null]", h6);
-		assertObjectEquals("[[[[1,2],null],null],null]", h7);
-		assertObjectEquals("['foo','bar',null]", h8);
+		assertObjectEquals("[[[1,2],null],null]", a);
+		assertObjectEquals("[[[1,null],null],null]", b);
+		assertObjectEquals("[[['foo',null],null],null]", c);
+		assertObjectEquals("[1,null]", d);
+		assertObjectEquals("[[[1,null],null],null]", e);
+		assertObjectEquals("[[[[1,null],null],null],null]", f);
+		assertObjectEquals("[[[[1,2],null],null],null]", g);
+		assertObjectEquals("['foo','bar',null]", h);
 
-		assertClass(Integer.class, h4.get(0));
-		assertClass(Integer.class, h5.get(0).get(0).get(0));
-		assertClass(Integer[][][].class, h6.get(0));
-		assertClass(int[][][].class, h7.get(0));
+		assertClass(Integer.class, d.get(0));
+		assertClass(Integer.class, e.get(0).get(0).get(0));
+		assertClass(Integer[][][].class, f.get(0));
+		assertClass(int[][][].class, g.get(0));
 
 		return "OK";
 	}
 
 	@RestMethod(name="POST", path="/beanFormData")
 	public String beanFormData(
-			@FormData("h1") ABean h1,
-			@FormData("h1n") ABean h1n,
-			@FormData("h2") ABean[][][] h2,
-			@FormData("h3") List<ABean> h3,
-			@FormData("h4") List<ABean[][][]> h4,
-			@FormData("h5") Map<String,ABean> h5,
-			@FormData("h6") Map<String,List<ABean>> h6,
-			@FormData("h7") Map<String,List<ABean[][][]>> h7,
-			@FormData("h8") Map<Integer,List<ABean>> h8
+			@FormData("a") ABean a,
+			@FormData("an") ABean an,
+			@FormData("b") ABean[][][] b,
+			@FormData("c") List<ABean> c,
+			@FormData("d") List<ABean[][][]> d,
+			@FormData("e") Map<String,ABean> e,
+			@FormData("f") Map<String,List<ABean>> f,
+			@FormData("g") Map<String,List<ABean[][][]>> g,
+			@FormData("h") Map<Integer,List<ABean>> h
 		) throws Exception {
 
-		assertObjectEquals("{a:1,b:'foo'}", h1);
-		assertNull(h1n);
-		assertObjectEquals("[[[{a:1,b:'foo'},null],null],null]", h2);
-		assertObjectEquals("[{a:1,b:'foo'},null]", h3);
-		assertObjectEquals("[[[[{a:1,b:'foo'},null],null],null],null]", h4);
-		assertObjectEquals("{foo:{a:1,b:'foo'}}", h5);
-		assertObjectEquals("{foo:[{a:1,b:'foo'}]}", h6);
-		assertObjectEquals("{foo:[[[[{a:1,b:'foo'},null],null],null],null]}", h7);
-		assertObjectEquals("{'1':[{a:1,b:'foo'}]}", h8);
+		assertObjectEquals("{a:1,b:'foo'}", a);
+		assertNull(an);
+		assertObjectEquals("[[[{a:1,b:'foo'},null],null],null]", b);
+		assertObjectEquals("[{a:1,b:'foo'},null]", c);
+		assertObjectEquals("[[[[{a:1,b:'foo'},null],null],null],null]", d);
+		assertObjectEquals("{foo:{a:1,b:'foo'}}", e);
+		assertObjectEquals("{foo:[{a:1,b:'foo'}]}", f);
+		assertObjectEquals("{foo:[[[[{a:1,b:'foo'},null],null],null],null]}", g);
+		assertObjectEquals("{'1':[{a:1,b:'foo'}]}", h);
 
-		assertClass(ABean.class, h3.get(0));
-		assertClass(ABean[][][].class, h4.get(0));
-		assertClass(ABean.class, h5.get("foo"));
-		assertClass(ABean.class, h6.get("foo").get(0));
-		assertClass(ABean[][][].class, h7.get("foo").get(0));
-		assertClass(Integer.class, h8.keySet().iterator().next());
-		assertClass(ABean.class, h8.values().iterator().next().get(0));
+		assertClass(ABean.class, c.get(0));
+		assertClass(ABean[][][].class, d.get(0));
+		assertClass(ABean.class, e.get("foo"));
+		assertClass(ABean.class, f.get("foo").get(0));
+		assertClass(ABean[][][].class, g.get("foo").get(0));
+		assertClass(Integer.class, h.keySet().iterator().next());
+		assertClass(ABean.class, h.values().iterator().next().get(0));
 		return "OK";
 	}
 
 	@RestMethod(name="POST", path="/typedBeanFormData")
 	public String typedBeanFormData(
-			@FormData("h1") TypedBean h1,
-			@FormData("h1n") TypedBean h1n,
-			@FormData("h2") TypedBean[][][] h2,
-			@FormData("h3") List<TypedBean> h3,
-			@FormData("h4") List<TypedBean[][][]> h4,
-			@FormData("h5") Map<String,TypedBean> h5,
-			@FormData("h6") Map<String,List<TypedBean>> h6,
-			@FormData("h7") Map<String,List<TypedBean[][][]>> h7,
-			@FormData("h8") Map<Integer,List<TypedBean>> h8
+			@FormData("a") TypedBean a,
+			@FormData("an") TypedBean an,
+			@FormData("b") TypedBean[][][] b,
+			@FormData("c") List<TypedBean> c,
+			@FormData("d") List<TypedBean[][][]> d,
+			@FormData("e") Map<String,TypedBean> e,
+			@FormData("f") Map<String,List<TypedBean>> f,
+			@FormData("g") Map<String,List<TypedBean[][][]>> g,
+			@FormData("h") Map<Integer,List<TypedBean>> h
 		) throws Exception {
 
-		assertObjectEquals("{_type:'TypedBeanImpl',a:1,b:'foo'}", h1);
-		assertNull(h1n);
-		assertObjectEquals("[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null]", h2);
-		assertObjectEquals("[{_type:'TypedBeanImpl',a:1,b:'foo'},null]", h3);
-		assertObjectEquals("[[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null],null]", h4);
-		assertObjectEquals("{foo:{_type:'TypedBeanImpl',a:1,b:'foo'}}", h5);
-		assertObjectEquals("{foo:[{_type:'TypedBeanImpl',a:1,b:'foo'}]}", h6);
-		assertObjectEquals("{foo:[[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null],null]}", h7);
-		assertObjectEquals("{'1':[{_type:'TypedBeanImpl',a:1,b:'foo'}]}", h8);
+		assertObjectEquals("{_type:'TypedBeanImpl',a:1,b:'foo'}", a);
+		assertNull(an);
+		assertObjectEquals("[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null]", b);
+		assertObjectEquals("[{_type:'TypedBeanImpl',a:1,b:'foo'},null]", c);
+		assertObjectEquals("[[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null],null]", d);
+		assertObjectEquals("{foo:{_type:'TypedBeanImpl',a:1,b:'foo'}}", e);
+		assertObjectEquals("{foo:[{_type:'TypedBeanImpl',a:1,b:'foo'}]}", f);
+		assertObjectEquals("{foo:[[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null],null]}", g);
+		assertObjectEquals("{'1':[{_type:'TypedBeanImpl',a:1,b:'foo'}]}", h);
 
-		assertClass(TypedBeanImpl.class, h1);
-		assertClass(TypedBeanImpl.class, h2[0][0][0]);
-		assertClass(TypedBeanImpl.class, h3.get(0));
-		assertClass(TypedBeanImpl.class, h4.get(0)[0][0][0]);
-		assertClass(TypedBeanImpl.class, h5.get("foo"));
-		assertClass(TypedBeanImpl.class, h6.get("foo").get(0));
-		assertClass(TypedBeanImpl.class, h7.get("foo").get(0)[0][0][0]);
-		assertClass(Integer.class, h8.keySet().iterator().next());
-		assertClass(TypedBeanImpl.class, h8.get(1).get(0));
+		assertClass(TypedBeanImpl.class, a);
+		assertClass(TypedBeanImpl.class, b[0][0][0]);
+		assertClass(TypedBeanImpl.class, c.get(0));
+		assertClass(TypedBeanImpl.class, d.get(0)[0][0][0]);
+		assertClass(TypedBeanImpl.class, e.get("foo"));
+		assertClass(TypedBeanImpl.class, f.get("foo").get(0));
+		assertClass(TypedBeanImpl.class, g.get("foo").get(0)[0][0][0]);
+		assertClass(Integer.class, h.keySet().iterator().next());
+		assertClass(TypedBeanImpl.class, h.get(1).get(0));
 
 		return "OK";
 	}
 
 	@RestMethod(name="POST", path="/swappedPojoFormData")
 	public String swappedPojoFormData(
-			@FormData("h1") SwappedPojo h1,
-			@FormData("h2") SwappedPojo[][][] h2,
-			@FormData("h3") Map<SwappedPojo,SwappedPojo> h3,
-			@FormData("h4") Map<SwappedPojo,SwappedPojo[][][]> h4
+			@FormData("a") SwappedPojo a,
+			@FormData("b") SwappedPojo[][][] b,
+			@FormData("c") Map<SwappedPojo,SwappedPojo> c,
+			@FormData("d") Map<SwappedPojo,SwappedPojo[][][]> d
 		) throws Exception {
 
-		assertObjectEquals("'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'", h1);
-		assertObjectEquals("[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]", h2);
-		assertObjectEquals("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'}", h3);
-		assertObjectEquals("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]}", h4);
+		assertObjectEquals("'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'", a);
+		assertObjectEquals("[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]", b);
+		assertObjectEquals("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'}", c);
+		assertObjectEquals("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]}", d);
 
-		assertClass(SwappedPojo.class, h1);
-		assertClass(SwappedPojo.class, h2[0][0][0]);
-		assertClass(SwappedPojo.class, h3.keySet().iterator().next());
-		assertClass(SwappedPojo.class, h3.values().iterator().next());
-		assertClass(SwappedPojo.class, h4.keySet().iterator().next());
-		assertClass(SwappedPojo.class, h4.values().iterator().next()[0][0][0]);
+		assertClass(SwappedPojo.class, a);
+		assertClass(SwappedPojo.class, b[0][0][0]);
+		assertClass(SwappedPojo.class, c.keySet().iterator().next());
+		assertClass(SwappedPojo.class, c.values().iterator().next());
+		assertClass(SwappedPojo.class, d.keySet().iterator().next());
+		assertClass(SwappedPojo.class, d.values().iterator().next()[0][0][0]);
 
 		return "OK";
 	}
 
 	@RestMethod(name="POST", path="/implicitSwappedPojoFormData")
 	public String implicitSwappedPojoFormData(
-			@FormData("h1") ImplicitSwappedPojo h1,
-			@FormData("h2") ImplicitSwappedPojo[][][] h2,
-			@FormData("h3") Map<ImplicitSwappedPojo,ImplicitSwappedPojo> h3,
-			@FormData("h4") Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> h4
+			@FormData("a") ImplicitSwappedPojo a,
+			@FormData("b") ImplicitSwappedPojo[][][] b,
+			@FormData("c") Map<ImplicitSwappedPojo,ImplicitSwappedPojo> c,
+			@FormData("d") Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> d
 		) throws Exception {
 
-		assertObjectEquals("'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'", h1);
-		assertObjectEquals("[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]", h2);
-		assertObjectEquals("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'}", h3);
-		assertObjectEquals("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]}", h4);
+		assertObjectEquals("'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'", a);
+		assertObjectEquals("[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]", b);
+		assertObjectEquals("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/'}", c);
+		assertObjectEquals("{'swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/':[[['swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/',null],null],null]}", d);
 
-		assertClass(ImplicitSwappedPojo.class, h1);
-		assertClass(ImplicitSwappedPojo.class, h2[0][0][0]);
-		assertClass(ImplicitSwappedPojo.class, h3.keySet().iterator().next());
-		assertClass(ImplicitSwappedPojo.class, h3.values().iterator().next());
-		assertClass(ImplicitSwappedPojo.class, h4.keySet().iterator().next());
-		assertClass(ImplicitSwappedPojo.class, h4.values().iterator().next()[0][0][0]);
+		assertClass(ImplicitSwappedPojo.class, a);
+		assertClass(ImplicitSwappedPojo.class, b[0][0][0]);
+		assertClass(ImplicitSwappedPojo.class, c.keySet().iterator().next());
+		assertClass(ImplicitSwappedPojo.class, c.values().iterator().next());
+		assertClass(ImplicitSwappedPojo.class, d.keySet().iterator().next());
+		assertClass(ImplicitSwappedPojo.class, d.values().iterator().next()[0][0][0]);
 
 		return "OK";
 	}
 
 	@RestMethod(name="POST", path="/enumFormData")
 	public String enumFormData(
-			@FormData("h1") TestEnum h1,
-			@FormData("h1n") TestEnum h1n,
-			@FormData("h2") TestEnum[][][] h2,
-			@FormData("h3") List<TestEnum> h3,
-			@FormData("h4") List<List<List<TestEnum>>> h4,
-			@FormData("h5") List<TestEnum[][][]> h5,
-			@FormData("h6") Map<TestEnum,TestEnum> h6,
-			@FormData("h7") Map<TestEnum,TestEnum[][][]> h7,
-			@FormData("h8") Map<TestEnum,List<TestEnum[][][]>> h8
+			@FormData("a") TestEnum a,
+			@FormData("an") TestEnum an,
+			@FormData("b") TestEnum[][][] b,
+			@FormData("c") List<TestEnum> c,
+			@FormData("d") List<List<List<TestEnum>>> d,
+			@FormData("e") List<TestEnum[][][]> e,
+			@FormData("f") Map<TestEnum,TestEnum> f,
+			@FormData("g") Map<TestEnum,TestEnum[][][]> g,
+			@FormData("h") Map<TestEnum,List<TestEnum[][][]>> h
 		) throws Exception {
 
-		assertEquals(TestEnum.TWO, h1);
-		assertNull(h1n);
-		assertObjectEquals("[[['TWO',null],null],null]", h2);
-		assertObjectEquals("['TWO',null]", h3);
-		assertObjectEquals("[[['TWO',null],null],null]", h4);
-		assertObjectEquals("[[[['TWO',null],null],null],null]", h5);
-		assertObjectEquals("{ONE:'TWO'}", h6);
-		assertObjectEquals("{ONE:[[['TWO',null],null],null]}", h7);
-		assertObjectEquals("{ONE:[[[['TWO',null],null],null],null]}", h8);
+		assertEquals(TestEnum.TWO, a);
+		assertNull(an);
+		assertObjectEquals("[[['TWO',null],null],null]", b);
+		assertObjectEquals("['TWO',null]", c);
+		assertObjectEquals("[[['TWO',null],null],null]", d);
+		assertObjectEquals("[[[['TWO',null],null],null],null]", e);
+		assertObjectEquals("{ONE:'TWO'}", f);
+		assertObjectEquals("{ONE:[[['TWO',null],null],null]}", g);
+		assertObjectEquals("{ONE:[[[['TWO',null],null],null],null]}", h);
 
-		assertClass(TestEnum.class, h3.get(0));
-		assertClass(TestEnum.class, h4.get(0).get(0).get(0));
-		assertClass(TestEnum[][][].class, h5.get(0));
-		assertClass(TestEnum.class, h6.keySet().iterator().next());
-		assertClass(TestEnum.class, h6.values().iterator().next());
-		assertClass(TestEnum.class, h7.keySet().iterator().next());
-		assertClass(TestEnum[][][].class, h7.values().iterator().next());
-		assertClass(TestEnum.class, h8.keySet().iterator().next());
-		assertClass(TestEnum[][][].class, h8.values().iterator().next().get(0));
+		assertClass(TestEnum.class, c.get(0));
+		assertClass(TestEnum.class, d.get(0).get(0).get(0));
+		assertClass(TestEnum[][][].class, e.get(0));
+		assertClass(TestEnum.class, f.keySet().iterator().next());
+		assertClass(TestEnum.class, f.values().iterator().next());
+		assertClass(TestEnum.class, g.keySet().iterator().next());
+		assertClass(TestEnum[][][].class, g.values().iterator().next());
+		assertClass(TestEnum.class, h.keySet().iterator().next());
+		assertClass(TestEnum[][][].class, h.values().iterator().next().get(0));
+
+		return "OK";
+	}
+
+	@RestMethod(name="POST", path="/mapFormData")
+	public String mapFormData(
+		@FormData("a") String a,
+		@FormData("b") String b,
+		@FormData("c") String c
+	) throws Exception {
+
+		assertEquals("foo", a);
+		assertEquals("", b);
+		assertEquals(null, c);
+
+		return "OK";
+	}
+
+	@RestMethod(name="POST", path="/beanFormData2")
+	public String beanFormData(
+		@FormData("a") String a,
+		@FormData("b") String b,
+		@FormData("c") String c
+	) throws Exception {
+
+		assertEquals("foo", a);
+		assertEquals("", b);
+		assertEquals(null, c);
+
+		return "OK";
+	}
+
+	@RestMethod(name="POST", path="/nameValuePairsFormData")
+	public String nameValuePairsFormData(
+		@FormData("a") String a,
+		@FormData("b") String b,
+		@FormData("c") String c
+	) throws Exception {
+
+		assertEquals("foo", a);
+		assertEquals("", b);
+		//assertEquals(null, c);  // This is impossible to represent.
+
+		return "OK";
+	}
+
+	@RestMethod(name="POST", path="/formDataIfNE1")
+	public String formDataIfNE1(
+		@FormData("a") String a
+	) throws Exception {
+
+		assertEquals("foo", a);
+
+		return "OK";
+	}
+
+	@RestMethod(name="POST", path="/formDataIfNE2")
+	public String formDataIfNE2(
+		@FormData("a") String a
+	) throws Exception {
+
+		assertEquals(null, a);
+
+		return "OK";
+	}
+
+	@RestMethod(name="POST", path="/formDataIfNEMap")
+	public String formDataIfNEMap(
+		@FormData("a") String a,
+		@FormData("b") String b,
+		@FormData("c") String c
+	) throws Exception {
+
+		assertEquals("foo", a);
+		assertEquals(null, b);
+		assertEquals(null, c);
+
+		return "OK";
+	}
+
+	@RestMethod(name="POST", path="/formDataIfNEBean")
+	public String formDataIfNEBean(
+		@FormData("a") String a,
+		@FormData("b") String b,
+		@FormData("c") String c
+	) throws Exception {
+
+		assertEquals("foo", a);
+		assertEquals(null, b);
+		assertEquals(null, c);
+
+		return "OK";
+	}
+
+	@RestMethod(name="POST", path="/formDataIfNENameValuePairs")
+	public String formDataIfNENameValuePairs(
+		@FormData("a") String a,
+		@FormData("b") String b,
+		@FormData("c") String c
+	) throws Exception {
+
+		assertEquals("foo", a);
+		assertEquals(null, b);
+		assertEquals(null, c);
 
 		return "OK";
 	}

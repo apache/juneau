@@ -185,22 +185,22 @@ public class ParamsTest extends RestTestcase {
 		assertEquals("p1=[p1,p1,p1],p2=[2,2,2]", r);
 
 		r = client.doGet(url + "?p1&p2").getResponseAsString();
-		assertEquals("p1=[null,null,null],p2=[0,null,0]", r);
+		assertEquals("p1=[,,],p2=[0,,0]", r);
 
 		r = client.doGet(url).getResponseAsString();
 		assertEquals("p1=[null,null,null],p2=[0,null,0]", r);
 
 		r = client.doGet(url + "?p1").getResponseAsString();
-		assertEquals("p1=[null,null,null],p2=[0,null,0]", r);
+		assertEquals("p1=[,,],p2=[0,null,0]", r);
 
 		r = client.doGet(url + "?p2").getResponseAsString();
-		assertEquals("p1=[null,null,null],p2=[0,null,0]", r);
+		assertEquals("p1=[null,null,null],p2=[0,,0]", r);
 
 		r = client.doGet(url + "?p1=foo&p2").getResponseAsString();
-		assertEquals("p1=[foo,foo,foo],p2=[0,null,0]", r);
+		assertEquals("p1=[foo,foo,foo],p2=[0,,0]", r);
 
 		r = client.doGet(url + "?p1&p2=1").getResponseAsString();
-		assertEquals("p1=[null,null,null],p2=[1,1,1]", r);
+		assertEquals("p1=[,,],p2=[1,1,1]", r);
 
 		String x = "a%2Fb%25c%3Dd+e"; // [x/y%z=a+b]
 		r = client.doGet(url + "?p1="+x+"&p2=1").getResponseAsString();
@@ -302,22 +302,22 @@ public class ParamsTest extends RestTestcase {
 		assertEquals("p1=[p1,p1,p1],p2=[2,2,2]", r);
 
 		r = client.doGet(url + "?p1&p2").getResponseAsString();
-		assertEquals("p1=[null,null,null],p2=[0,null,0]", r);
+		assertEquals("p1=[,,],p2=[0,,0]", r);
 
 		r = client.doGet(url).getResponseAsString();
 		assertEquals("p1=[null,null,null],p2=[0,null,0]", r);
 
 		r = client.doGet(url + "?p1").getResponseAsString();
-		assertEquals("p1=[null,null,null],p2=[0,null,0]", r);
+		assertEquals("p1=[,,],p2=[0,null,0]", r);
 
 		r = client.doGet(url + "?p2").getResponseAsString();
-		assertEquals("p1=[null,null,null],p2=[0,null,0]", r);
+		assertEquals("p1=[null,null,null],p2=[0,,0]", r);
 
 		r = client.doGet(url + "?p1=foo&p2").getResponseAsString();
-		assertEquals("p1=[foo,foo,foo],p2=[0,null,0]", r);
+		assertEquals("p1=[foo,foo,foo],p2=[0,,0]", r);
 
 		r = client.doGet(url + "?p1&p2=1").getResponseAsString();
-		assertEquals("p1=[null,null,null],p2=[1,1,1]", r);
+		assertEquals("p1=[,,],p2=[1,1,1]", r);
 
 		String x = "a%2Fb%25c%3Dd+e"; // [x/y%z=a+b]
 		r = client.doGet(url + "?p1="+x+"&p2=1").getResponseAsString();

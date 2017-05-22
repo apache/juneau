@@ -286,6 +286,10 @@ public class SerializerContext extends BeanContext {
 	 */
 	public static final String SERIALIZER_absolutePathUriBase = "Serializer.absolutePathUriBase";
 
+	public static final String SERIALIZER_uriResolution = "Serializer.uriResolution";
+
+	public static final String SERIALIZER_uriRelativity = "Serializer.uriRelativity";
+
 	/**
 	 * <b>Configuration property:</b>  Sort arrays and collections alphabetically.
 	 * <p>
@@ -349,6 +353,8 @@ public class SerializerContext extends BeanContext {
 		abridged;
 	final char quoteChar;
 	final String relativeUriBase, absolutePathUriBase;
+	final UriResolution uriResolution;
+	final UriRelativity uriRelativity;
 
 	/**
 	 * Constructor.
@@ -373,6 +379,8 @@ public class SerializerContext extends BeanContext {
 		quoteChar = ps.getProperty(SERIALIZER_quoteChar, String.class, "\"").charAt(0);
 		relativeUriBase = resolveRelativeUriBase(ps.getProperty(SERIALIZER_relativeUriBase, String.class, ""));
 		absolutePathUriBase = resolveAbsolutePathUriBase(ps.getProperty(SERIALIZER_absolutePathUriBase, String.class, ""));
+		uriResolution = ps.getProperty(SERIALIZER_uriResolution, UriResolution.class, UriResolution.ROOT_RELATIVE);
+		uriRelativity = ps.getProperty(SERIALIZER_uriRelativity, UriRelativity.class, UriRelativity.RESOURCE);
 	}
 
 	private static String resolveRelativeUriBase(String s) {
@@ -413,6 +421,8 @@ public class SerializerContext extends BeanContext {
 				.append("quoteChar", quoteChar)
 				.append("relativeUriBase", relativeUriBase)
 				.append("absolutePathUriBase", absolutePathUriBase)
+				.append("uriResolution", uriResolution)
+				.append("uriRelativity", uriRelativity)
 			);
 	}
 }

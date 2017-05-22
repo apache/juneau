@@ -13,6 +13,8 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.UriResolution.*;
+import static org.apache.juneau.UriRelativity.*;
 
 import java.io.*;
 
@@ -51,6 +53,9 @@ public class UriContext {
 
 	private final String authority, contextRoot, servletPath, pathInfo, parentPath;
 
+	private final UriResolution resolution;
+	private final UriRelativity relativity;
+
 	// Lazy-initialized fields.
 	private String aContextRoot, rContextRoot, aServletPath, rResource, aPathInfo, rPath;
 
@@ -62,17 +67,28 @@ public class UriContext {
 	 * <p>
 	 * Any parameter can be <jk>null</jk>.  Blanks and nulls are equivalent.
 	 *
+	 * @param resolution
+	 * @param relativity
 	 * @param authority - The authority portion of URL (e.g. <js>"http://hostname:port"</js>)
 	 * @param contextRoot - The context root of the application (e.g. <js>"/context-root"</js>, or <js>"context-root"</js>)
 	 * @param servletPath - The servlet path (e.g. <js>"/servlet-path"</js>, or <js>"servlet-path"</js>)
 	 * @param pathInfo - The path info (e.g. <js>"/path-info"</js>, or <js>"path-info"</js>)
 	 */
-	public UriContext(String authority, String contextRoot, String servletPath, String pathInfo) {
+	public UriContext(UriResolution resolution, UriRelativity relativity, String authority, String contextRoot, String servletPath, String pathInfo) {
+		this.resolution = resolution;
+		this.relativity = relativity;
 		this.authority = nullIfEmpty(trimSlashes(authority));
 		this.contextRoot = nullIfEmpty(trimSlashes(contextRoot));
 		this.servletPath = nullIfEmpty(trimSlashes(servletPath));
 		this.pathInfo = nullIfEmpty(trimSlashes(pathInfo));
 		this.parentPath = this.pathInfo == null || this.pathInfo.indexOf('/') == -1 ? null : this.pathInfo.substring(0, this.pathInfo.lastIndexOf('/'));
+	}
+
+	/**
+	 * Default constructor.
+	 */
+	public UriContext() {
+		this(ROOT_RELATIVE, RESOURCE, null, null, null, null);
 	}
 
 	/**
@@ -257,40 +273,34 @@ public class UriContext {
 	 * @param uri The URI to convert to absolute form.
 	 * @return The converted URI.
 	 */
-	public String resolveAbsolute(String uri) {
+	public String resolve(String uri) {
 		if (isAbsoluteUri(uri))
 			return uri;
-		return appendAbsolute(new StringBuilder(), uri).toString();
+		if (resolution == ROOT_RELATIVE && startsWith(uri, '/'))
+			return uri;
+		if (resolution == NONE)
+			return uri;
+		return append(new StringBuilder(), uri).toString();
 	}
 
 	/**
-	 * Converts the specified URI to root-relative form based on values in this context.
-	 *
-	 * @param uri The URI to convert to root-relative form.
-	 * @return The converted URI.
-	 */
-	public String resolveRootRelative(String uri) {
-		if (isAbsoluteUri(uri))
-			return uri;
-		if (startsWith(uri, '/'))
-			return uri;
-		return appendRootRelative(new StringBuilder(), uri).toString();
-	}
-
-	/**
-	 * Same as {@link #resolveAbsolute(String)} except appends result to the specified appendable.
+	 * Same as {@link #resolve(String)} except appends result to the specified appendable.
 	 *
 	 * @param a The appendable to append the URL to.
 	 * @param uri The URI to convert to absolute form.
 	 * @return The same appendable passed in.
 	 */
-	public Appendable appendAbsolute(Appendable a, String uri) {
+	public Appendable append(Appendable a, String uri) {
 
 		try {
 			uri = nullIfEmpty(uri);
 
 			// Absolute paths are not changed.
 			if (isAbsoluteUri(uri))
+				return a.append(uri);
+			if (resolution == NONE)
+				return a.append(uri);
+			if (resolution == ROOT_RELATIVE && startsWith(uri, '/'))
 				return a.append(uri);
 
 			// Root-relative path
@@ -301,101 +311,46 @@ public class UriContext {
 						return a;
 				}
 				return a.append(uri);
-
-			// Context-relative path
-			} else if (uri != null && uri.startsWith("context:/")) {
-				if (authority != null)
-					a.append(authority);
-				if (contextRoot != null)
-					a.append('/').append(contextRoot);
-				if (uri.length() > 9)
-					a.append('/').append(uri.substring(9));
-				else if (contextRoot == null && authority == null)
-					a.append('/');
-
-			// Resource-relative path
-			} else if (uri != null && uri.startsWith("servlet:/")) {
-				if (authority != null)
-					a.append(authority);
-				if (contextRoot != null)
-					a.append('/').append(contextRoot);
-				if (servletPath != null)
-					a.append('/').append(servletPath);
-				if (uri.length() > 9)
-					a.append('/').append(uri.substring(9));
-				else if (servletPath == null && contextRoot == null && authority == null)
-					a.append('/');
-
-			// Relative path
-			} else {
-				if (authority != null)
-					a.append(authority);
-				if (contextRoot != null)
-					a.append('/').append(contextRoot);
-				if (servletPath != null)
-					a.append('/').append(servletPath);
-				if (uri == null) {
-					if (pathInfo != null)
-						a.append('/').append(pathInfo);
-				} else {
-					if (parentPath != null)
-						a.append('/').append(parentPath);
-					a.append('/').append(uri);
-				}
 			}
 
-			return a;
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	/**
-	 * Same as {@link #resolveRootRelative(String)} except appends result to the specified appendable.
-	 *
-	 * @param a The appendable to append the URL to.
-	 * @param uri The URI to convert to root-relative form.
-	 * @return The same appendable passed in.
-	 */
-	public Appendable appendRootRelative(Appendable a, String uri) {
-
-		try {
-			uri = nullIfEmpty(uri);
-
-			// Absolute paths are not changed.
-			if (isAbsoluteUri(uri))
-				return a.append(uri);
-
-			// Root-relative path
-			if (startsWith(uri, '/')) {
-				return a.append(uri);
-
 			// Context-relative path
-			} else if (uri != null && uri.startsWith("context:/")) {
+			if (uri != null && uri.startsWith("context:/")) {
+				if (resolution == ABSOLUTE && authority != null)
+					a.append(authority);
 				if (contextRoot != null)
 					a.append('/').append(contextRoot);
 				if (uri.length() > 9)
 					a.append('/').append(uri.substring(9));
-				else if (contextRoot == null)
+				else if (contextRoot == null && (authority == null || resolution == ROOT_RELATIVE))
 					a.append('/');
+				return a;
+			}
 
 			// Resource-relative path
-			} else if (uri != null && uri.startsWith("servlet:/")) {
+			if (uri != null && uri.startsWith("servlet:/")) {
+				if (resolution == ABSOLUTE && authority != null)
+					a.append(authority);
 				if (contextRoot != null)
 					a.append('/').append(contextRoot);
 				if (servletPath != null)
 					a.append('/').append(servletPath);
 				if (uri.length() > 9)
 					a.append('/').append(uri.substring(9));
-				else if (servletPath == null && contextRoot == null)
+				else if (servletPath == null && contextRoot == null && (authority == null || resolution == ROOT_RELATIVE))
 					a.append('/');
+				return a;
+			}
 
 			// Relative path
-			} else {
-				if (contextRoot != null)
-					a.append('/').append(contextRoot);
-				if (servletPath != null)
-					a.append('/').append(servletPath);
+			if (resolution == ABSOLUTE && authority != null)
+				a.append(authority);
+			if (contextRoot != null)
+				a.append('/').append(contextRoot);
+			if (servletPath != null)
+				a.append('/').append(servletPath);
+			if (relativity == RESOURCE && uri != null)
+				a.append('/').append(uri);
+			else if (relativity == PATH_INFO) {
 				if (uri == null) {
 					if (pathInfo != null)
 						a.append('/').append(pathInfo);

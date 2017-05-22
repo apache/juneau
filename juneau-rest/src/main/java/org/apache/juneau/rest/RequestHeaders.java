@@ -66,7 +66,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 			for (Map.Entry<String,String> e : defaultEntries.entrySet()) {
 				String key = e.getKey(), value = e.getValue();
 				String[] v = get(key);
-				if (v == null)
+				if (v == null || v.length == 0 || StringUtils.isEmpty(v[0]))
 					put(key, new String[]{value});
 			}
 		}
@@ -84,12 +84,10 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 		// Optimized for enumerations of one entry, the most-common case.
 		if (values.hasMoreElements()) {
 			String v = values.nextElement();
-			if (! v.isEmpty()) {
-				String[] s = new String[]{v};
-				while (values.hasMoreElements())
-					s = ArrayUtils.append(s, values.nextElement());
-				put(name, s);
-			}
+			String[] s = new String[]{v};
+			while (values.hasMoreElements())
+				s = ArrayUtils.append(s, values.nextElement());
+			put(name, s);
 		}
 		return this;
 	}
@@ -103,7 +101,14 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @return The header value, or <jk>null</jk> if it doesn't exist.
 	 */
 	public String getFirst(String name) {
-		return getFirst(name, null);
+		String[] v = null;
+		if (queryParams != null)
+			v = queryParams.get(name);
+		if (v == null || v.length == 0)
+			v = get(name);
+		if (v == null || v.length == 0)
+			return null;
+		return v[0];
 	}
 
 	/**
@@ -116,14 +121,8 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @return The header value, or the default value if the header isn't present.
 	 */
 	public String getFirst(String name, String def) {
-		String[] v = null;
-		if (queryParams != null)
-			v = queryParams.get(name);
-		if (v == null || v.length == 0)
-			v = get(name);
-		if (v == null || v.length == 0)
-			return def;
-		return v[0];
+		String s = getFirst(name);
+		return StringUtils.isEmpty(s) ? def : s;
 	}
 
 	/**

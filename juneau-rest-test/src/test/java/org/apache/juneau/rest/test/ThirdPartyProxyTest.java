@@ -24,6 +24,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.remoteable.*;
+import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.test.pojos.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
@@ -181,6 +182,71 @@ public class ThirdPartyProxyTest extends RestTestcase {
 		assertEquals("OK", r);
 	}
 
+	@Test
+	public void a08_mapHeader() throws Exception {
+		String r = proxy.mapHeader(
+			new AMap<String,Object>().append("a", "foo").append("b", "").append("c", null)
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void a09_beanHeader() throws Exception {
+		String r = proxy.beanHeader(
+			new NeBean().init()
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void a10_nameValuePairsHeader() throws Exception {
+		String r = proxy.nameValuePairsHeader(
+			new NameValuePairs().append("a", "foo").append("b", "").append("c", null)
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void a11_headerIfNE1() throws Exception {
+		String r = proxy.headerIfNE1(
+			"foo"
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void a12_headerIfNE2() throws Exception {
+		String r = proxy.headerIfNE2(
+			null
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void a13_headerIfNEMap() throws Exception {
+		String r = proxy.headerIfNEMap(
+			new AMap<String,Object>().append("a", "foo").append("b", "").append("c", null)
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void a14_headerIfNEBean() throws Exception {
+		String r = proxy.headerIfNEBean(
+			new NeBean().init()
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void a15_headerIfNEnameValuePairs() throws Exception {
+		String r = proxy.headerIfNEnameValuePairs(
+			new NameValuePairs().append("a", "foo").append("b", "").append("c", null)
+		);
+		assertEquals("OK", r);
+	}
+
+
 	//--------------------------------------------------------------------------------
 	// Query tests
 	//--------------------------------------------------------------------------------
@@ -323,7 +389,55 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	@Test
 	public void b11_beanQuery() throws Exception {
 		String r = proxy.beanQuery(
-			new ABean().init()
+			new NeBean().init()
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void b12_nameValuePairsQuery() throws Exception {
+		String r = proxy.nameValuePairsQuery(
+			new NameValuePairs().append("a", "foo").append("b", "").append("c", null)
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void b13_queryIfNE1() throws Exception {
+		String r = proxy.queryIfNE1(
+			"foo"
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void b14_queryIfNE2() throws Exception {
+		String r = proxy.queryIfNE2(
+			null
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void b15_queryIfNEMap() throws Exception {
+		String r = proxy.queryIfNEMap(
+			new AMap<String,Object>().append("a", "foo").append("b", "").append("c", null)
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void b16_queryIfNEBean() throws Exception {
+		String r = proxy.queryIfNEBean(
+			new NeBean().init()
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void b17_queryIfNEnameValuePairs() throws Exception {
+		String r = proxy.queryIfNEnameValuePairs(
+			new NameValuePairs().append("a", "foo").append("b", "").append("c", null)
 		);
 		assertEquals("OK", r);
 	}
@@ -443,6 +557,70 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			new AMap<TestEnum,TestEnum>().append(TestEnum.ONE,TestEnum.TWO),
 			new AMap<TestEnum,TestEnum[][][]>().append(TestEnum.ONE, new TestEnum[][][]{{{TestEnum.TWO,null},null},null}),
 			new AMap<TestEnum,List<TestEnum[][][]>>().append(TestEnum.ONE, new AList<TestEnum[][][]>().append(new TestEnum[][][]{{{TestEnum.TWO,null},null},null}).append(null))
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void c08_mapFormData() throws Exception {
+		String r = proxy.mapFormData(
+			new AMap<String,Object>().append("a", "foo").append("b", "").append("c", null)
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void c09_beanFormData() throws Exception {
+		String r = proxy.beanFormData(
+			new NeBean().init()
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void c10_nameValuePairsFormData() throws Exception {
+		String r = proxy.nameValuePairsFormData(
+			new NameValuePairs().append("a", "foo").append("b", "").append("c", null)
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void c11_formDataIfNE1() throws Exception {
+		String r = proxy.formDataIfNE1(
+			"foo"
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void c12_formDataIfNE2() throws Exception {
+		String r = proxy.formDataIfNE2(
+			null
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void c13_formDataIfNEMap() throws Exception {
+		String r = proxy.formDataIfNEMap(
+			new AMap<String,Object>().append("a", "foo").append("b", "").append("c", null)
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void c14_formDataIfNEBean() throws Exception {
+		String r = proxy.formDataIfNEBean(
+			new NeBean().init()
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void c15_formDataIfNENameValuePairs() throws Exception {
+		String r = proxy.formDataIfNENameValuePairs(
+			new NameValuePairs().append("a", "foo").append("b", "").append("c", null)
 		);
 		assertEquals("OK", r);
 	}
@@ -1116,82 +1294,123 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 		@RemoteMethod(httpMethod="GET", path="/primitiveHeaders")
 		String primitiveHeaders(
-			@Header("h1") String h1,
-			@Header("h1n") String h1n,
-			@Header("h2") int h2,
-			@Header("h3") Integer h3,
-			@Header("h3n") Integer h3n,
-			@Header("h4") Boolean h4,
-			@Header("h5") float h5,
-			@Header("h6") Float h6
+			@Header("a") String a,
+			@Header("an") String an,
+			@Header("b") int b,
+			@Header("c") Integer c,
+			@Header("cn") Integer cn,
+			@Header("d") Boolean d,
+			@Header("e") float e,
+			@Header("f") Float f
 		);
 
 		@RemoteMethod(httpMethod="GET", path="/primitiveCollectionHeaders")
 		String primitiveCollectionHeaders(
-			@Header("h1") int[][][] h1,
-			@Header("h2") Integer[][][] h2,
-			@Header("h3") String[][][] h3,
-			@Header("h4") List<Integer> h4,
-			@Header("h5") List<List<List<Integer>>> h5,
-			@Header("h6") List<Integer[][][]> h6,
-			@Header("h7") List<int[][][]> h7,
-			@Header("h8") List<String> h8
+			@Header("a") int[][][] a,
+			@Header("b") Integer[][][] b,
+			@Header("c") String[][][] c,
+			@Header("d") List<Integer> d,
+			@Header("e") List<List<List<Integer>>> e,
+			@Header("f") List<Integer[][][]> f,
+			@Header("g") List<int[][][]> g,
+			@Header("h") List<String> h
 		);
 
 		@RemoteMethod(httpMethod="GET", path="/beanHeaders")
 		String beanHeaders(
-			@Header("h1") ABean h1,
-			@Header("h1n") ABean h1n,
-			@Header("h2") ABean[][][] h2,
-			@Header("h3") List<ABean> h3,
-			@Header("h4") List<ABean[][][]> h4,
-			@Header("h5") Map<String,ABean> h5,
-			@Header("h6") Map<String,List<ABean>> h6,
-			@Header("h7") Map<String,List<ABean[][][]>> h7,
-			@Header("h8") Map<Integer,List<ABean>> h8
+			@Header("a") ABean a,
+			@Header("an") ABean an,
+			@Header("b") ABean[][][] b,
+			@Header("c") List<ABean> c,
+			@Header("d") List<ABean[][][]> d,
+			@Header("e") Map<String,ABean> e,
+			@Header("f") Map<String,List<ABean>> f,
+			@Header("g") Map<String,List<ABean[][][]>> g,
+			@Header("h") Map<Integer,List<ABean>> h
 		);
 
 		@RemoteMethod(httpMethod="GET", path="/typedBeanHeaders")
 		String typedBeanHeaders(
-			@Header("h1") TypedBean h1,
-			@Header("h1n") TypedBean h1n,
-			@Header("h2") TypedBean[][][] h2,
-			@Header("h3") List<TypedBean> h3,
-			@Header("h4") List<TypedBean[][][]> h4,
-			@Header("h5") Map<String,TypedBean> h5,
-			@Header("h6") Map<String,List<TypedBean>> h6,
-			@Header("h7") Map<String,List<TypedBean[][][]>> h7,
-			@Header("h8") Map<Integer,List<TypedBean>> h8
+			@Header("a") TypedBean a,
+			@Header("an") TypedBean an,
+			@Header("b") TypedBean[][][] b,
+			@Header("c") List<TypedBean> c,
+			@Header("d") List<TypedBean[][][]> d,
+			@Header("e") Map<String,TypedBean> e,
+			@Header("f") Map<String,List<TypedBean>> f,
+			@Header("g") Map<String,List<TypedBean[][][]>> g,
+			@Header("h") Map<Integer,List<TypedBean>> h
 		);
 
 		@RemoteMethod(httpMethod="GET", path="/swappedPojoHeaders")
 		String swappedPojoHeaders(
-			@Header("h1") SwappedPojo h1,
-			@Header("h2") SwappedPojo[][][] h2,
-			@Header("h3") Map<SwappedPojo,SwappedPojo> h3,
-			@Header("h4") Map<SwappedPojo,SwappedPojo[][][]> h4
+			@Header("a") SwappedPojo a,
+			@Header("b") SwappedPojo[][][] b,
+			@Header("c") Map<SwappedPojo,SwappedPojo> c,
+			@Header("d") Map<SwappedPojo,SwappedPojo[][][]> d
 		);
 
 		@RemoteMethod(httpMethod="GET", path="/implicitSwappedPojoHeaders")
 		String implicitSwappedPojoHeaders(
-			@Header("h1") ImplicitSwappedPojo h1,
-			@Header("h2") ImplicitSwappedPojo[][][] h2,
-			@Header("h3") Map<ImplicitSwappedPojo,ImplicitSwappedPojo> h3,
-			@Header("h4") Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> h4
+			@Header("a") ImplicitSwappedPojo a,
+			@Header("b") ImplicitSwappedPojo[][][] b,
+			@Header("c") Map<ImplicitSwappedPojo,ImplicitSwappedPojo> c,
+			@Header("d") Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> d
 		);
 
 		@RemoteMethod(httpMethod="GET", path="/enumHeaders")
 		String enumHeaders(
-			@Header("h1") TestEnum h1,
-			@Header("h1n") TestEnum h1n,
-			@Header("h2") TestEnum[][][] h2,
-			@Header("h3") List<TestEnum> h3,
-			@Header("h4") List<List<List<TestEnum>>> h4,
-			@Header("h5") List<TestEnum[][][]> h5,
-			@Header("h6") Map<TestEnum,TestEnum> h6,
-			@Header("h7") Map<TestEnum,TestEnum[][][]> h7,
-			@Header("h8") Map<TestEnum,List<TestEnum[][][]>> h8
+			@Header("a") TestEnum a,
+			@Header("an") TestEnum an,
+			@Header("b") TestEnum[][][] b,
+			@Header("c") List<TestEnum> c,
+			@Header("d") List<List<List<TestEnum>>> d,
+			@Header("e") List<TestEnum[][][]> e,
+			@Header("f") Map<TestEnum,TestEnum> f,
+			@Header("g") Map<TestEnum,TestEnum[][][]> g,
+			@Header("h") Map<TestEnum,List<TestEnum[][][]>> h
 		);
+
+		@RemoteMethod(httpMethod="GET", path="/mapHeader")
+		String mapHeader(
+			@Header("*") Map<String,Object> a
+		);
+
+		@RemoteMethod(httpMethod="GET", path="/beanHeader")
+		String beanHeader(
+			@Header("*") NeBean a
+		);
+
+		@RemoteMethod(httpMethod="GET", path="/nameValuePairsHeader")
+		String nameValuePairsHeader(
+			@Header("*") NameValuePairs a
+		);
+
+		@RemoteMethod(httpMethod="GET", path="/headerIfNE1")
+		String headerIfNE1(
+			@HeaderIfNE("a") String a
+		);
+
+		@RemoteMethod(httpMethod="GET", path="/headerIfNE2")
+		String headerIfNE2(
+			@HeaderIfNE("a") String a
+		);
+
+		@RemoteMethod(httpMethod="GET", path="/headerIfNEMap")
+		String headerIfNEMap(
+			@HeaderIfNE("*") Map<String,Object> a
+		);
+
+		@RemoteMethod(httpMethod="GET", path="/headerIfNEBean")
+		String headerIfNEBean(
+			@HeaderIfNE("*") NeBean a
+		);
+
+		@RemoteMethod(httpMethod="GET", path="/headerIfNEnameValuePairs")
+		String headerIfNEnameValuePairs(
+			@HeaderIfNE("*") NameValuePairs a
+		);
+
 
 		//--------------------------------------------------------------------------------
 		// Query tests
@@ -1199,101 +1418,131 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 		@RemoteMethod(httpMethod="GET", path="/primitiveQueries")
 		String primitiveQueries(
-			@Query("h1") String h1,
-			@Query("h1n") String h1n,
-			@Query("h2") int h2,
-			@Query("h3") Integer h3,
-			@Query("h3n") Integer h3n,
-			@Query("h4") Boolean h4,
-			@Query("h5") float h5,
-			@Query("h6") Float h6
+			@Query("a") String a,
+			@Query("an") String an,
+			@Query("b") int b,
+			@Query("c") Integer c,
+			@Query("cn") Integer cn,
+			@Query("d") Boolean d,
+			@Query("e") float e,
+			@Query("f") Float f
 		);
 
 		@RemoteMethod(httpMethod="GET", path="/primitiveCollectionQueries")
 		String primitiveCollectionQueries(
-			@Query("h1") int[][][] h1,
-			@Query("h2") Integer[][][] h2,
-			@Query("h3") String[][][] h3,
-			@Query("h4") List<Integer> h4,
-			@Query("h5") List<List<List<Integer>>> h5,
-			@Query("h6") List<Integer[][][]> h6,
-			@Query("h7") List<int[][][]> h7,
-			@Query("h8") List<String> h8
+			@Query("a") int[][][] a,
+			@Query("b") Integer[][][] b,
+			@Query("c") String[][][] c,
+			@Query("d") List<Integer> d,
+			@Query("e") List<List<List<Integer>>> e,
+			@Query("f") List<Integer[][][]> f,
+			@Query("g") List<int[][][]> g,
+			@Query("h") List<String> h
 		);
 
 		@RemoteMethod(httpMethod="GET", path="/beanQueries")
 		String beanQueries(
-			@Query("h1") ABean h1,
-			@Query("h1n") ABean h1n,
-			@Query("h2") ABean[][][] h2,
-			@Query("h3") List<ABean> h3,
-			@Query("h4") List<ABean[][][]> h4,
-			@Query("h5") Map<String,ABean> h5,
-			@Query("h6") Map<String,List<ABean>> h6,
-			@Query("h7") Map<String,List<ABean[][][]>> h7,
-			@Query("h8") Map<Integer,List<ABean>> h8
+			@Query("a") ABean a,
+			@Query("an") ABean an,
+			@Query("b") ABean[][][] b,
+			@Query("c") List<ABean> c,
+			@Query("d") List<ABean[][][]> d,
+			@Query("e") Map<String,ABean> e,
+			@Query("f") Map<String,List<ABean>> f,
+			@Query("g") Map<String,List<ABean[][][]>> g,
+			@Query("h") Map<Integer,List<ABean>> h
 		);
 
 		@RemoteMethod(httpMethod="GET", path="/typedBeanQueries")
 		String typedBeanQueries(
-			@Query("h1") TypedBean h1,
-			@Query("h1n") TypedBean h1n,
-			@Query("h2") TypedBean[][][] h2,
-			@Query("h3") List<TypedBean> h3,
-			@Query("h4") List<TypedBean[][][]> h4,
-			@Query("h5") Map<String,TypedBean> h5,
-			@Query("h6") Map<String,List<TypedBean>> h6,
-			@Query("h7") Map<String,List<TypedBean[][][]>> h7,
-			@Query("h8") Map<Integer,List<TypedBean>> h8
+			@Query("a") TypedBean a,
+			@Query("an") TypedBean an,
+			@Query("b") TypedBean[][][] b,
+			@Query("c") List<TypedBean> c,
+			@Query("d") List<TypedBean[][][]> d,
+			@Query("e") Map<String,TypedBean> e,
+			@Query("f") Map<String,List<TypedBean>> f,
+			@Query("g") Map<String,List<TypedBean[][][]>> g,
+			@Query("h") Map<Integer,List<TypedBean>> h
 		);
 
 		@RemoteMethod(httpMethod="GET", path="/swappedPojoQueries")
 		String swappedPojoQueries(
-			@Query("h1") SwappedPojo h1,
-			@Query("h2") SwappedPojo[][][] h2,
-			@Query("h3") Map<SwappedPojo,SwappedPojo> h3,
-			@Query("h4") Map<SwappedPojo,SwappedPojo[][][]> h4
+			@Query("a") SwappedPojo a,
+			@Query("b") SwappedPojo[][][] b,
+			@Query("c") Map<SwappedPojo,SwappedPojo> c,
+			@Query("d") Map<SwappedPojo,SwappedPojo[][][]> d
 		);
 
 		@RemoteMethod(httpMethod="GET", path="/implicitSwappedPojoQueries")
 		String implicitSwappedPojoQueries(
-			@Query("h1") ImplicitSwappedPojo h1,
-			@Query("h2") ImplicitSwappedPojo[][][] h2,
-			@Query("h3") Map<ImplicitSwappedPojo,ImplicitSwappedPojo> h3,
-			@Query("h4") Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> h4
+			@Query("a") ImplicitSwappedPojo a,
+			@Query("b") ImplicitSwappedPojo[][][] b,
+			@Query("c") Map<ImplicitSwappedPojo,ImplicitSwappedPojo> c,
+			@Query("d") Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> d
 		);
 
 		@RemoteMethod(httpMethod="GET", path="/enumQueries")
 		String enumQueries(
-			@Query("h1") TestEnum h1,
-			@Query("h1n") TestEnum h1n,
-			@Query("h2") TestEnum[][][] h2,
-			@Query("h3") List<TestEnum> h3,
-			@Query("h4") List<List<List<TestEnum>>> h4,
-			@Query("h5") List<TestEnum[][][]> h5,
-			@Query("h6") Map<TestEnum,TestEnum> h6,
-			@Query("h7") Map<TestEnum,TestEnum[][][]> h7,
-			@Query("h8") Map<TestEnum,List<TestEnum[][][]>> h8
+			@Query("a") TestEnum a,
+			@Query("an") TestEnum an,
+			@Query("b") TestEnum[][][] b,
+			@Query("c") List<TestEnum> c,
+			@Query("d") List<List<List<TestEnum>>> d,
+			@Query("e") List<TestEnum[][][]> e,
+			@Query("f") Map<TestEnum,TestEnum> f,
+			@Query("g") Map<TestEnum,TestEnum[][][]> g,
+			@Query("h") Map<TestEnum,List<TestEnum[][][]>> h
 		);
 
 		@RemoteMethod(httpMethod="GET", path="/stringQuery1")
 		String stringQuery1(
-			@Query() String q
+			@Query String a
 		);
 
 		@RemoteMethod(httpMethod="GET", path="/stringQuery2")
 		String stringQuery2(
-			@Query("*") String q
+			@Query("*") String a
 		);
 
 		@RemoteMethod(httpMethod="GET", path="/mapQuery")
 		String mapQuery(
-			@Query("*") Map<String,Object> q
+			@Query("*") Map<String,Object> a
 		);
 
 		@RemoteMethod(httpMethod="GET", path="/beanQuery")
 		String beanQuery(
-			@Query("*") ABean q
+			@Query("*") NeBean a
+		);
+
+		@RemoteMethod(httpMethod="GET", path="/nameValuePairsQuery")
+		String nameValuePairsQuery(
+			@Query("*") NameValuePairs a
+		);
+
+		@RemoteMethod(httpMethod="GET", path="/queryIfNE1")
+		String queryIfNE1(
+			@QueryIfNE("a") String a
+		);
+
+		@RemoteMethod(httpMethod="GET", path="/queryIfNE2")
+		String queryIfNE2(
+			@QueryIfNE("a") String a
+		);
+
+		@RemoteMethod(httpMethod="GET", path="/queryIfNEMap")
+		String queryIfNEMap(
+			@QueryIfNE("*") Map<String,Object> a
+		);
+
+		@RemoteMethod(httpMethod="GET", path="/queryIfNEBean")
+		String queryIfNEBean(
+			@QueryIfNE("*") NeBean a
+		);
+
+		@RemoteMethod(httpMethod="GET", path="/queryIfNEnameValuePairs")
+		String queryIfNEnameValuePairs(
+			@QueryIfNE("*") NameValuePairs a
 		);
 
 
@@ -1303,81 +1552,121 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 		@RemoteMethod(httpMethod="POST", path="/primitiveFormData")
 		String primitiveFormData(
-			@FormData("h1") String h1,
-			@FormData("h1n") String h1n,
-			@FormData("h2") int h2,
-			@FormData("h3") Integer h3,
-			@FormData("h3n") Integer h3n,
-			@FormData("h4") Boolean h4,
-			@FormData("h5") float h5,
-			@FormData("h6") Float h6
+			@FormData("a") String a,
+			@FormData("an") String an,
+			@FormData("b") int b,
+			@FormData("c") Integer c,
+			@FormData("cn") Integer cn,
+			@FormData("d") Boolean d,
+			@FormData("e") float e,
+			@FormData("f") Float f
 		);
 
 		@RemoteMethod(httpMethod="POST", path="/primitiveCollectionFormData")
 		String primitiveCollectionFormData(
-			@FormData("h1") int[][][] h1,
-			@FormData("h2") Integer[][][] h2,
-			@FormData("h3") String[][][] h3,
-			@FormData("h4") List<Integer> h4,
-			@FormData("h5") List<List<List<Integer>>> h5,
-			@FormData("h6") List<Integer[][][]> h6,
-			@FormData("h7") List<int[][][]> h7,
-			@FormData("h8") List<String> h8
+			@FormData("a") int[][][] a,
+			@FormData("b") Integer[][][] b,
+			@FormData("c") String[][][] c,
+			@FormData("d") List<Integer> d,
+			@FormData("e") List<List<List<Integer>>> e,
+			@FormData("f") List<Integer[][][]> f,
+			@FormData("g") List<int[][][]> g,
+			@FormData("h") List<String> h
 		);
 
 		@RemoteMethod(httpMethod="POST", path="/beanFormData")
 		String beanFormData(
-			@FormData("h1") ABean h1,
-			@FormData("h1n") ABean h1n,
-			@FormData("h2") ABean[][][] h2,
-			@FormData("h3") List<ABean> h3,
-			@FormData("h4") List<ABean[][][]> h4,
-			@FormData("h5") Map<String,ABean> h5,
-			@FormData("h6") Map<String,List<ABean>> h6,
-			@FormData("h7") Map<String,List<ABean[][][]>> h7,
-			@FormData("h8") Map<Integer,List<ABean>> h8
+			@FormData("a") ABean a,
+			@FormData("an") ABean an,
+			@FormData("b") ABean[][][] b,
+			@FormData("c") List<ABean> c,
+			@FormData("d") List<ABean[][][]> d,
+			@FormData("e") Map<String,ABean> e,
+			@FormData("f") Map<String,List<ABean>> f,
+			@FormData("g") Map<String,List<ABean[][][]>> g,
+			@FormData("h") Map<Integer,List<ABean>> h
 		);
 
 		@RemoteMethod(httpMethod="POST", path="/typedBeanFormData")
 		String typedBeanFormData(
-			@FormData("h1") TypedBean h1,
-			@FormData("h1n") TypedBean h1n,
-			@FormData("h2") TypedBean[][][] h2,
-			@FormData("h3") List<TypedBean> h3,
-			@FormData("h4") List<TypedBean[][][]> h4,
-			@FormData("h5") Map<String,TypedBean> h5,
-			@FormData("h6") Map<String,List<TypedBean>> h6,
-			@FormData("h7") Map<String,List<TypedBean[][][]>> h7,
-			@FormData("h8") Map<Integer,List<TypedBean>> h8
+			@FormData("a") TypedBean a,
+			@FormData("an") TypedBean an,
+			@FormData("b") TypedBean[][][] b,
+			@FormData("c") List<TypedBean> c,
+			@FormData("d") List<TypedBean[][][]> d,
+			@FormData("e") Map<String,TypedBean> e,
+			@FormData("f") Map<String,List<TypedBean>> f,
+			@FormData("g") Map<String,List<TypedBean[][][]>> g,
+			@FormData("h") Map<Integer,List<TypedBean>> h
 		);
 
 		@RemoteMethod(httpMethod="POST", path="/swappedPojoFormData")
 		String swappedPojoFormData(
-			@FormData("h1") SwappedPojo h1,
-			@FormData("h2") SwappedPojo[][][] h2,
-			@FormData("h3") Map<SwappedPojo,SwappedPojo> h3,
-			@FormData("h4") Map<SwappedPojo,SwappedPojo[][][]> h4
+			@FormData("a") SwappedPojo a,
+			@FormData("b") SwappedPojo[][][] b,
+			@FormData("c") Map<SwappedPojo,SwappedPojo> c,
+			@FormData("d") Map<SwappedPojo,SwappedPojo[][][]> d
 		);
 
 		@RemoteMethod(httpMethod="POST", path="/implicitSwappedPojoFormData")
 		String implicitSwappedPojoFormData(
-			@FormData("h1") ImplicitSwappedPojo h1,
-			@FormData("h2") ImplicitSwappedPojo[][][] h2,
-			@FormData("h3") Map<ImplicitSwappedPojo,ImplicitSwappedPojo> h3,
-			@FormData("h4") Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> h4
+			@FormData("a") ImplicitSwappedPojo a,
+			@FormData("b") ImplicitSwappedPojo[][][] b,
+			@FormData("c") Map<ImplicitSwappedPojo,ImplicitSwappedPojo> c,
+			@FormData("d") Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> d
 		);
 
 		@RemoteMethod(httpMethod="POST", path="/enumFormData")
 		String enumFormData(
-			@FormData("h1") TestEnum h1,
-			@FormData("h1n") TestEnum h1n,
-			@FormData("h2") TestEnum[][][] h2,
-			@FormData("h3") List<TestEnum> h3,
-			@FormData("h4") List<List<List<TestEnum>>> h4,
-			@FormData("h5") List<TestEnum[][][]> h5,
-			@FormData("h6") Map<TestEnum,TestEnum> h6,
-			@FormData("h7") Map<TestEnum,TestEnum[][][]> h7,
-			@FormData("h8") Map<TestEnum,List<TestEnum[][][]>> h8
+			@FormData("a") TestEnum a,
+			@FormData("an") TestEnum an,
+			@FormData("b") TestEnum[][][] b,
+			@FormData("c") List<TestEnum> c,
+			@FormData("d") List<List<List<TestEnum>>> d,
+			@FormData("e") List<TestEnum[][][]> e,
+			@FormData("f") Map<TestEnum,TestEnum> f,
+			@FormData("g") Map<TestEnum,TestEnum[][][]> g,
+			@FormData("h") Map<TestEnum,List<TestEnum[][][]>> h
+		);
+
+		@RemoteMethod(httpMethod="POST", path="/mapFormData")
+		String mapFormData(
+			@FormData("*") Map<String,Object> a
+		);
+
+		@RemoteMethod(httpMethod="POST", path="/beanFormData2")
+		String beanFormData(
+			@FormData("*") NeBean a
+		);
+
+		@RemoteMethod(httpMethod="POST", path="/nameValuePairsFormData")
+		String nameValuePairsFormData(
+			@FormData("*") NameValuePairs a
+		);
+
+		@RemoteMethod(httpMethod="POST", path="/formDataIfNE1")
+		String formDataIfNE1(
+			@FormDataIfNE("a") String a
+		);
+
+		@RemoteMethod(httpMethod="POST", path="/formDataIfNE2")
+		String formDataIfNE2(
+			@FormDataIfNE("a") String a
+		);
+
+		@RemoteMethod(httpMethod="POST", path="/formDataIfNEMap")
+		String formDataIfNEMap(
+			@FormDataIfNE("*") Map<String,Object> a
+		);
+
+		@RemoteMethod(httpMethod="POST", path="/formDataIfNEBean")
+		String formDataIfNEBean(
+			@FormDataIfNE("*") NeBean a
+		);
+
+		@RemoteMethod(httpMethod="POST", path="/formDataIfNENameValuePairs")
+		String formDataIfNENameValuePairs(
+			@FormDataIfNE("*") NameValuePairs a
 		);
 
 		//--------------------------------------------------------------------------------
@@ -1392,12 +1681,12 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 		@RemoteMethod(httpMethod="POST", path="/pathVars2/{a}/{b}")
 		String pathVars2(
-			@Path Map<String,Object> p
+			@Path Map<String,Object> a
 		);
 
 		@RemoteMethod(httpMethod="POST", path="/pathVars3/{a}/{b}")
 		String pathVars3(
-			@Path ABean p
+			@Path ABean a
 		);
 
 		//--------------------------------------------------------------------------------
@@ -1716,5 +2005,17 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 		@RemoteMethod(httpMethod="POST", path="/setEnum1d3dListMap")
 		void setEnum1d3dListMap(@Body Map<TestEnum,List<TestEnum[][][]>> x);
+	}
+
+	// Bean for testing NE annotations.
+	public static class NeBean {
+		public String a, b, c;
+
+		public NeBean init() {
+			this.a = "foo";
+			this.b = "";
+			this.c = null;
+			return this;
+		}
 	}
 }
