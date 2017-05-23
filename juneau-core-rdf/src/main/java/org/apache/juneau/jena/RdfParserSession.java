@@ -206,7 +206,7 @@ public class RdfParserSession extends ParserSession {
 	 * @param name The property name.
 	 * @return The new property object.
 	 */
-	public final Property getProperty(String name) {
+	public final Property getRdfProperty(String name) {
 		return model.createProperty(juneauBpNs.getUri(), name);
 	}
 

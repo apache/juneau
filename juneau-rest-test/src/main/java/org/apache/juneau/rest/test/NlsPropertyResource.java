@@ -61,7 +61,7 @@ public class NlsPropertyResource extends RestServlet {
 
 		@Override /* Serializer */
 		protected void doSerialize(SerializerSession session, Object o) throws Exception {
-			session.getWriter().write(session.getProperties().getString("TestProperty"));
+			session.getWriter().write(session.getProperty("TestProperty"));
 		}
 	}
 }

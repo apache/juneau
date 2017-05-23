@@ -49,7 +49,7 @@ public class RequestEchoResource extends Resource {
 	private static final long serialVersionUID = 1L;
 
 	/** GET request handler */
-	@RestMethod(name="GET", path="/*", converters={Traversable.class,Queryable.class}, summary="Serializes the incoming HttpServletRequest object.")
+	@RestMethod(name="*", path="/*", converters={Traversable.class,Queryable.class}, summary="Serializes the incoming HttpServletRequest object.")
 	public HttpServletRequest doGet(RestRequest req, RestResponse res, @Properties ObjectMap properties) {
 		// Set the HtmlDocSerializer title programmatically.
 		res.setPageTitle("Contents of HttpServletRequest object");

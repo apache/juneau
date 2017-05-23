@@ -47,9 +47,8 @@ public class OnPreCallResource extends RestServlet {
 		@SuppressWarnings("unchecked")
 		@Override /* Parser */
 		protected <T> T doParse(ParserSession session, ClassMeta<T> type) throws Exception {
-			ObjectMap p = session.getProperties();
-			String matchingContentType = session.getProperties().getString("mediaType");
-			return (T)("p1="+p.get("p1")+",p2="+p.get("p2")+",p3="+p.get("p3")+",p4="+p.get("p4")+",p5="+p.get("p5")+",contentType="+matchingContentType);
+			String matchingContentType = session.getProperty("mediaType");
+			return (T)("p1="+session.getProperty("p1")+",p2="+session.getProperty("p2")+",p3="+session.getProperty("p3")+",p4="+session.getProperty("p4")+",p5="+session.getProperty("p5")+",contentType="+matchingContentType);
 		}
 	}
 

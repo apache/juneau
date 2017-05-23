@@ -44,8 +44,7 @@ public class OnPostCallResource extends RestServlet {
 
 		@Override /* Serializer */
 		protected void doSerialize(SerializerSession session, Object o) throws Exception {
-			ObjectMap p = session.getProperties();
-			session.getWriter().write("p1="+p.get("p1")+",p2="+p.get("p2")+",p3="+p.get("p3")+",p4="+p.get("p4")+",p5="+p.get("p5")+",contentType="+session.getProperties().getString("mediaType"));
+			session.getWriter().write("p1="+session.getProperty("p1")+",p2="+session.getProperty("p2")+",p3="+session.getProperty("p3")+",p4="+session.getProperty("p4")+",p5="+session.getProperty("p5")+",contentType="+session.getProperty("mediaType"));
 		}
 		@Override /* Serializer */
 		public ObjectMap getResponseHeaders(ObjectMap properties) {

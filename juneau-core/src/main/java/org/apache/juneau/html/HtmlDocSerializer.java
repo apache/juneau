@@ -85,9 +85,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		HtmlDocSerializerSession s = (HtmlDocSerializerSession)session;
 		HtmlWriter w = s.getWriter();
 
-		ObjectMap op = s.getProperties();
-
-		boolean isOptionsPage = op.containsKey(REST_method) && op.getString(REST_method).equalsIgnoreCase("OPTIONS");
+		boolean isOptionsPage = session.getProperty(REST_method, "").equalsIgnoreCase("OPTIONS");
 
 		// Render the header.
 		w.sTag("html").nl();
@@ -95,7 +93,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 
 		String cssUrl = s.getCssUrl();
 		if (cssUrl == null)
-			cssUrl = op.getString(REST_relativeServletURI) + "/style.css";
+			cssUrl = session.getProperty(REST_relativeServletURI, "") + "/style.css";
 
 		w.oTag(1, "style")
 			.attr("type", "text/css")
@@ -129,7 +127,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 				for (Map.Entry<String,String> e : htmlLinks.entrySet()) {
 					String uri = e.getValue();
 					if (uri.indexOf("://") == -1 && ! StringUtils.startsWith(uri, '/')) {
-						StringBuilder sb = new StringBuilder(op.getString(REST_relativeServletURI));
+						StringBuilder sb = new StringBuilder(session.getProperty(REST_relativeServletURI, ""));
 						if (! (uri.isEmpty() || uri.charAt(0) == '?' || uri.charAt(0) == '/'))
 							sb.append('/');
 						sb.append(uri);

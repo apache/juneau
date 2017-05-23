@@ -33,6 +33,7 @@ public abstract class Session {
 	private JuneauLogger logger;
 
 	private final ObjectMap properties;
+	private final Context ctx;
 	private Map<String,Object> cache;
 	private boolean closed;
 	private List<String> warnings;                 // Any warnings encountered.
@@ -44,17 +45,68 @@ public abstract class Session {
 	 * The context contains all the configuration settings for the session.
 	 * @param op Properties associated with this session.
 	 */
-	protected Session(Context ctx, ObjectMap op) {
+	protected Session(final Context ctx, ObjectMap op) {
+		this.ctx = ctx;
 		this.properties = op != null ? op : ObjectMap.EMPTY_MAP;
 	}
 
 	/**
-	 * Returns the properties associated with this session.
-	 *
-	 * @return The properties associated with this session.
+	 * Returns the session property with the specified key.
+	 * <p>
+	 * The order of lookup for the property is as follows:
+	 * <ul>
+	 * 	<li>Override property passed in through the constructor.
+	 * 	<li>Property defined on the context object.
+	 * 	<li>System.property.
+	 * </ul>
+	 * 
+	 * @param key The property key.
+	 * @return The property value, or <jk>null</jk> if it doesn't exist.
 	 */
-	public ObjectMap getProperties() {
-		return properties;
+	public String getProperty(String key) {
+		return getProperty(key, null);
+	}
+
+	/**
+	 * Same as {@link #getProperty(String)} but with a default value.
+	 * 
+	 * @param key The property key.
+	 * @param def The default value if the property doesn't exist or is <jk>null</jk>.
+	 * @return The property value.
+	 */
+	public String getProperty(String key, String def) {
+		Object v = properties.get(key);
+		if (v == null)
+			v = ctx.getPropertyStore().getProperty(key, String.class, null);
+		if (v == null)
+			v = def;
+		return StringUtils.toString(v);
+	}
+
+	/**
+	 * Same as {@link #getProperty(String)} but transforms the value to the specified type.
+	 * 
+	 * @param type The class type of the value.
+	 * @param key The property key.
+	 * @return The property value.
+	 */
+	public <T> T getProperty(Class<T> type, String key) {
+		return getProperty(type, key, null);
+	}
+
+	/**
+	 * Same as {@link #getProperty(Class,String)} but with a default value.
+	 * 
+	 * @param type The class type of the value.
+	 * @param key The property key.
+	 * @param def The default value if the property doesn't exist or is <jk>null</jk>.
+	 * @return The property value.
+	 */
+	public <T> T getProperty(Class<T> type, String key, T def) {
+		T t = properties.get(type, key);
+		if (t == null)
+			t = ctx.getPropertyStore().getProperty(key, type, def);
+		return t;
 	}
 
 	/**

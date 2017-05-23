@@ -65,7 +65,7 @@ public final class SoapXmlSerializer extends XmlSerializer {
 			.attr("encoding", "UTF-8")
 			.appendln("?>");
 		w.oTag("soap", "Envelope")
-			.attr("xmlns", "soap", s.getProperties().getString(SOAPXML_SOAPAction, "http://www.w3.org/2003/05/soap-envelope"))
+			.attr("xmlns", "soap", s.getProperty(SOAPXML_SOAPAction, "http://www.w3.org/2003/05/soap-envelope"))
 			.appendln(">");
 		w.sTag(1, "soap", "Body").nl();
 		super.serialize(s, o);

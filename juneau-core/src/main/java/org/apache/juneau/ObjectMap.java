@@ -100,7 +100,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	private static final long serialVersionUID = 1L;
 
 	private transient BeanSession session;
-	private ObjectMap inner;
+	private Map<String,Object> inner;
 	private transient PojoRest pojoRest;
 
 	/**
@@ -240,7 +240,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * Can be <jk>null</jk> to remove the inner map from an existing map.
 	 * @return This object (for method chaining).
 	 */
-	public ObjectMap setInner(ObjectMap inner) {
+	public ObjectMap setInner(Map<String,Object> inner) {
 		this.inner = inner;
 		return this;
 	}
@@ -256,16 +256,6 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 			if (key.equalsIgnoreCase(k))
 				return k;
 		return null;
-	}
-
-
-	/**
-	 * Returns the inner map if one was set through {@link #setInner(ObjectMap)}.
-	 *
-	 * @return The inner map if one was set through {@link #setInner(ObjectMap)}, or <jk>null</jk> if no inner map is present.
-	 */
-	public ObjectMap getInner() {
-		return inner;
 	}
 
 	/**

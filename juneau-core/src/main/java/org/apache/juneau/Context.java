@@ -30,6 +30,8 @@ import org.apache.juneau.serializer.*;
  */
 public abstract class Context {
 
+	private final PropertyStore propertyStore;
+
 	/**
 	 * Constructor for this class.
 	 * <p>
@@ -37,7 +39,18 @@ public abstract class Context {
 	 *
 	 * @param propertyStore The factory that created this config.
 	 */
-	public Context(PropertyStore propertyStore) {}
+	public Context(PropertyStore propertyStore) {
+		this.propertyStore = PropertyStore.create(propertyStore);
+	}
+
+	/**
+	 * Returns the property store associated with this context.
+	 * 
+	 * @return The property store associated with this context.
+	 */
+	protected PropertyStore getPropertyStore() {
+		return propertyStore;
+	}
 
 	/**
 	 * Returns the properties defined on this bean context as a simple map for debugging purposes.

@@ -290,11 +290,13 @@ public final class PropertyStore {
 	 * @return This object (for method chaining).
 	 */
 	public PropertyStore copyFrom(PropertyStore ps) {
-		// TODO - Needs more testing.
-		for (Map.Entry<String,PropertyMap> e : ps.properties.entrySet())
-			this.properties.put(e.getKey(), new PropertyMap(this.properties.get(e.getKey()), e.getValue()));
-		this.classLoader = ps.classLoader;
-		this.defaultParser = ps.defaultParser;
+		if (ps != null) {
+			// TODO - Needs more testing.
+			for (Map.Entry<String,PropertyMap> e : ps.properties.entrySet())
+				this.properties.put(e.getKey(), new PropertyMap(this.properties.get(e.getKey()), e.getValue()));
+			this.classLoader = ps.classLoader;
+			this.defaultParser = ps.defaultParser;
+		}
 		return this;
 	}
 
