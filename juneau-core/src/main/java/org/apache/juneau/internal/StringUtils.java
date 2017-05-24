@@ -633,6 +633,18 @@ public final class StringUtils {
 	}
 
 	/**
+	 * Returns an empty string if the specified string is <jk>null</jk>.
+	 *
+	 * @param s The string to check.
+	 * @return An empty string if the specified string is <jk>null</jk>, or the same string otherwise.
+	 */
+	public static String emptyIfNull(String s) {
+		if (s == null)
+			return "";
+		return s;
+	}
+
+	/**
 	 * Removes escape characters (\) from the specified characters.
 	 *
 	 * @param s The string to remove escape characters from.
@@ -1345,7 +1357,7 @@ public final class StringUtils {
 			return false;
 
 		// Use a state machine for maximum performance.
-		
+
 		int S1 = 1;  // Looking for http
 		int S2 = 2;  // Found http, looking for :
 		int S3 = 3;  // Found :, looking for /

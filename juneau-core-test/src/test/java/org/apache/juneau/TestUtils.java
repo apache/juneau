@@ -497,6 +497,8 @@ public class TestUtils {
 	 * Same as {@link Assert#assertEquals(String,String,String) except takes in a MessageFormat-style message.
 	 */
 	public static void assertEquals(Object expected, Object actual, String msg, Object...args) {
+		if ("xxx".equals(expected))
+			System.err.println("actual=["+actual+"]");
 		if (! isEquals(expected, actual))
 			throw new ComparisonFailure(MessageFormat.format(msg, args), toString(expected), toString(actual));			
 	}

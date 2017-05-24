@@ -278,7 +278,7 @@ public class UriContext {
 			return uri;
 		if (resolution == ROOT_RELATIVE && startsWith(uri, '/'))
 			return uri;
-		if (resolution == NONE)
+		if (resolution == NONE && ! isSpecialUri(uri))
 			return uri;
 		return append(new StringBuilder(), uri).toString();
 	}
@@ -298,8 +298,8 @@ public class UriContext {
 			// Absolute paths are not changed.
 			if (isAbsoluteUri(uri))
 				return a.append(uri);
-			if (resolution == NONE)
-				return a.append(uri);
+			if (resolution == NONE && ! isSpecialUri(uri))
+				return a.append(emptyIfNull(uri));
 			if (resolution == ROOT_RELATIVE && startsWith(uri, '/'))
 				return a.append(uri);
 
@@ -321,7 +321,7 @@ public class UriContext {
 					a.append('/').append(contextRoot);
 				if (uri.length() > 9)
 					a.append('/').append(uri.substring(9));
-				else if (contextRoot == null && (authority == null || resolution == ROOT_RELATIVE))
+				else if (contextRoot == null && (authority == null || resolution != ABSOLUTE))
 					a.append('/');
 				return a;
 			}
@@ -336,7 +336,7 @@ public class UriContext {
 					a.append('/').append(servletPath);
 				if (uri.length() > 9)
 					a.append('/').append(uri.substring(9));
-				else if (servletPath == null && contextRoot == null && (authority == null || resolution == ROOT_RELATIVE))
+				else if (servletPath == null && contextRoot == null && (authority == null || resolution != ABSOLUTE))
 					a.append('/');
 				return a;
 			}
@@ -360,6 +360,8 @@ public class UriContext {
 					a.append('/').append(uri);
 				}
 			}
+			else if (uri == null && contextRoot == null && servletPath == null && (authority == null || resolution != ABSOLUTE))
+				a.append('/');
 
 			return a;
 		} catch (IOException e) {
@@ -372,5 +374,14 @@ public class UriContext {
 		if (i <= 1)
 			return "/";
 		return uri.substring(0, i);
+	}
+
+	private static boolean isSpecialUri(String s) {
+		if (s == null || s.length() == 0)
+			return false;
+		char c = s.charAt(0);
+		if (c != 's' && c != 'c')
+			return false;
+		return s.startsWith("servlet:/") || s.startsWith("context:/");
 	}
 }
