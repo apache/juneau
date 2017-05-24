@@ -552,6 +552,46 @@ public class RestClient extends CoreObject {
 							if (rmm.getBodyArg() != null)
 								rc.input(args[rmm.getBodyArg()]);
 
+							if (rmm.getRequestBeanArgs().length > 0) {
+								BeanSession bs = getBeanContext().createSession();
+
+								for (Integer i : rmm.getRequestBeanArgs()) {
+									BeanMap<?> bm = bs.toBeanMap(args[i]);
+									for (BeanPropertyValue bpv : bm.getValues(true)) {
+										BeanPropertyMeta pMeta = bpv.getMeta();
+										Object val = bpv.getValue();
+
+										Path p = pMeta.getAnnotation(Path.class);
+										if (p != null)
+											rc.path(getName(p.value(), pMeta), val);
+
+										Query q1 = pMeta.getAnnotation(Query.class);
+										if (q1 != null)
+											rc.query(getName(q1.value(), pMeta), val, false);
+
+										QueryIfNE q2 = pMeta.getAnnotation(QueryIfNE.class);
+										if (q2 != null)
+											rc.query(getName(q2.value(), pMeta), val, true);
+
+										FormData f1 = pMeta.getAnnotation(FormData.class);
+										if (f1 != null)
+											rc.formData(getName(f1.value(), pMeta), val, false);
+
+										FormDataIfNE f2 = pMeta.getAnnotation(FormDataIfNE.class);
+										if (f2 != null)
+											rc.formData(getName(f2.value(), pMeta), val, true);
+
+										org.apache.juneau.remoteable.Header h1 = pMeta.getAnnotation(org.apache.juneau.remoteable.Header.class);
+										if (h1 != null)
+											rc.header(getName(h1.value(), pMeta), val, false);
+
+										HeaderIfNE h2 = pMeta.getAnnotation(HeaderIfNE.class);
+										if (h2 != null)
+											rc.header(getName(h2.value(), pMeta), val, true);
+									}
+								}
+							}
+
 							if (rmm.getOtherArgs().length > 0) {
 								Object[] otherArgs = new Object[rmm.getOtherArgs().length];
 								int i = 0;
@@ -574,6 +614,12 @@ public class RestClient extends CoreObject {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	private static String getName(String name, BeanPropertyMeta pMeta) {
+		if ("*".equals(name) && ! pMeta.getClassMeta().isMapOrBean())
+			name = pMeta.getName();
+		return name;
 	}
 
 	private Pattern absUrlPattern = Pattern.compile("^\\w+\\:\\/\\/.*");

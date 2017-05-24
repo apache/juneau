@@ -17,6 +17,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.urlencoding.*;
 
 /**
@@ -41,9 +42,32 @@ import org.apache.juneau.urlencoding.*;
  * 	<li>A bean - Individual name-value pairs.
  * 		Values are converted to text using {@link UrlEncodingSerializer#serializePart(Object, Boolean, Boolean)}.
  * </ul>
-*/
+ * <p>
+ * The annotation can also be applied to a bean property field or getter when the argument is annotated with
+ *  {@link RequestBean @RequestBean}:
+ * <p>
+ * <h5 class='section'>Example:</h5>
+ * <p class='bcode'>
+ * 	<ja>@Remoteable</ja>(path=<js>"/myproxy"</js>)
+ * 	<jk>public interface</jk> MyProxy {
+ *
+ * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod1/{foo}"</js>)
+ * 		String myProxyMethod(<ja>@RequestBean</ja> MyRequestBean bean);
+ * 	}
+ *
+ * 	<jk>public interface</jk> MyRequestBean {
+ * 		<ja>@Path</ja>
+ * 		String getFoo();
+ * 	}
+ * </p>
+ * <p>
+ * When used in a request bean, the {@link #value()} can be used to override the path variable name.
+ * It can also be overridden via the {@link BeanProperty#name @BeanProperty.name()} annotation.
+ * A name of <js>"*"</js> where the bean property value is a map or bean will cause the individual entries in the
+ * map or bean to be expanded to path variables.
+ */
 @Documented
-@Target(PARAMETER)
+@Target({PARAMETER,FIELD,METHOD})
 @Retention(RUNTIME)
 @Inherited
 public @interface Path {

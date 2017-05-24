@@ -21,7 +21,7 @@ import java.lang.annotation.*;
  * Identical to {@link FormData @FormData} except skips values if they're null/blank.
  */
 @Documented
-@Target(PARAMETER)
+@Target({PARAMETER,FIELD,METHOD})
 @Retention(RUNTIME)
 @Inherited
 public @interface FormDataIfNE {

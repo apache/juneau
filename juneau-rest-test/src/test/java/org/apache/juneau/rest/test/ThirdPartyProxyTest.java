@@ -18,6 +18,7 @@ import static org.junit.Assert.*;
 
 import java.util.*;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.jena.*;
 import org.apache.juneau.json.*;
@@ -25,6 +26,7 @@ import org.apache.juneau.msgpack.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.remoteable.*;
 import org.apache.juneau.rest.client.*;
+import org.apache.juneau.rest.test.ThirdPartyProxyTest.ThirdPartyProxy.*;
 import org.apache.juneau.rest.test.pojos.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
@@ -1256,7 +1258,9 @@ public class ThirdPartyProxyTest extends RestTestcase {
 		proxy.setEnum1d3dListMap(new AMap<TestEnum,List<TestEnum[][][]>>().append(TestEnum.ONE, new AList<TestEnum[][][]>().append(new TestEnum[][][]{{{TestEnum.TWO,null},null},null}).append(null)));
 	}
 
+	//--------------------------------------------------------------------------------
 	// Path variables
+	//--------------------------------------------------------------------------------
 
 	@Test
 	public void f01_pathVars1() {
@@ -1276,6 +1280,859 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	public void f03_pathVars3() {
 		String r = proxy.pathVars3(
 			new ABean().init()
+		);
+		assertEquals("OK", r);
+	}
+
+	//--------------------------------------------------------------------------------
+	// RequestBean tests - Path
+	//--------------------------------------------------------------------------------
+
+	@Test
+	public void ga01_reqBeanPath1() throws Exception {
+		String r = proxy.reqBeanPath1(
+			new ReqBeanPath1() {
+				@Override
+				public int getA() {
+					return 1;
+				}
+				@Override
+				public String getB() {
+					return "foo";
+				}
+			}
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void ga01_reqBeanPath1a() throws Exception {
+		String r = proxy.reqBeanPath1(
+			new ReqBeanPath1Impl()
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void ga02_reqBeanPath2() throws Exception {
+		String r = proxy.reqBeanPath2(
+			new ReqBeanPath2()
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void ga03_reqBeanPath3() throws Exception {
+		String r = proxy.reqBeanPath3(
+			new ReqBeanPath3() {
+				@Override
+				public int getX() {
+					return 1;
+				}
+				@Override
+				public String getY() {
+					return "foo";
+				}
+			}
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void ga04_reqBeanPath4() throws Exception {
+		String r = proxy.reqBeanPath4(
+			new ReqBeanPath4() {
+				@Override
+				public int getX() {
+					return 1;
+				}
+				@Override
+				public String getY() {
+					return "foo";
+				}
+			}
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void ga05_reqBeanPath5() throws Exception {
+		String r = proxy.reqBeanPath5(
+			new ReqBeanPath5() {
+				@Override
+				public int getX() {
+					return 1;
+				}
+				@Override
+				public String getY() {
+					return "foo";
+				}
+			}
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void ga06_reqBeanPath6() throws Exception {
+		String r = proxy.reqBeanPath6(
+			new ReqBeanPath6() {
+				@Override
+				public Map<String,Object> getX() {
+					return new AMap<String,Object>().append("a",1).append("b","foo");
+				}
+
+			}
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void ga07_reqBeanPath7() throws Exception {
+		String r = proxy.reqBeanPath7(
+			new ReqBeanPath7() {
+				@Override
+				public ABean getX() {
+					return new ABean().init();
+				}
+			}
+		);
+		assertEquals("OK", r);
+	}
+
+	//--------------------------------------------------------------------------------
+	// RequestBean tests - Query
+	//--------------------------------------------------------------------------------
+
+	@Test
+	public void gb01_reqBeanQuery1() throws Exception {
+		String r = proxy.reqBeanQuery1(
+			new ReqBeanQuery1() {
+				@Override
+				public int getA() {
+					return 1;
+				}
+				@Override
+				public String getB() {
+					return "foo";
+				}
+			}
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void gb01_reqBeanQuery1a() throws Exception {
+		String r = proxy.reqBeanQuery1(
+			new ReqBeanQuery1Impl()
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void gb02_reqBeanQuery2() throws Exception {
+		String r = proxy.reqBeanQuery2(
+			new ReqBeanQuery2()
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void gb03_reqBeanQuery3() throws Exception {
+		String r = proxy.reqBeanQuery3(
+			new ReqBeanQuery3() {
+				@Override
+				public int getX() {
+					return 1;
+				}
+				@Override
+				public String getY() {
+					return "foo";
+				}
+			}
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void gb04_reqBeanQuery4() throws Exception {
+		String r = proxy.reqBeanQuery4(
+			new ReqBeanQuery4() {
+				@Override
+				public int getX() {
+					return 1;
+				}
+				@Override
+				public String getY() {
+					return "foo";
+				}
+			}
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void gb05_reqBeanQuery5() throws Exception {
+		String r = proxy.reqBeanQuery5(
+			new ReqBeanQuery5() {
+				@Override
+				public int getX() {
+					return 1;
+				}
+				@Override
+				public String getY() {
+					return "foo";
+				}
+			}
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void gb06_reqBeanQuery6() throws Exception {
+		String r = proxy.reqBeanQuery6(
+			new ReqBeanQuery6() {
+				@Override
+				public Map<String,Object> getX() {
+					return new AMap<String,Object>().append("a",1).append("b","foo");
+				}
+
+			}
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void gb07_reqBeanQuery7() throws Exception {
+		String r = proxy.reqBeanQuery7(
+			new ReqBeanQuery7() {
+				@Override
+				public ABean getX() {
+					return new ABean().init();
+				}
+			}
+		);
+		assertEquals("OK", r);
+	}
+
+	//--------------------------------------------------------------------------------
+	// RequestBean tests - QueryIfNE
+	//--------------------------------------------------------------------------------
+
+	@Test
+	public void gc01_reqBeanQueryIfNE1() throws Exception {
+		String r = proxy.reqBeanQueryIfNE1(
+			new ReqBeanQueryIfNE1() {
+				@Override
+				public String getA() {
+					return "foo";
+				}
+				@Override
+				public String getB() {
+					return "";
+				}
+				@Override
+				public String getC() {
+					return null;
+				}
+			}
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void gc01_reqBeanQueryIfNE1a() throws Exception {
+		String r = proxy.reqBeanQueryIfNE1(
+			new ReqBeanQueryIfNE1Impl()
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void gc02_reqBeanQueryIfNE2() throws Exception {
+		String r = proxy.reqBeanQueryIfNE2(
+			new ReqBeanQueryIfNE2()
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void gc03_reqBeanQueryIfNE3() throws Exception {
+		String r = proxy.reqBeanQueryIfNE3(
+			new ReqBeanQueryIfNE3() {
+				@Override
+				public String getX() {
+					return "foo";
+				}
+				@Override
+				public String getY() {
+					return "";
+				}
+				@Override
+				public String getZ() {
+					return null;
+				}
+			}
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void gc04_reqBeanQueryIfNE4() throws Exception {
+		String r = proxy.reqBeanQueryIfNE4(
+			new ReqBeanQueryIfNE4() {
+				@Override
+				public String getX() {
+					return "foo";
+				}
+				@Override
+				public String getY() {
+					return "";
+				}
+				@Override
+				public String getZ() {
+					return null;
+				}
+			}
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void gc05_reqBeanQueryIfNE5() throws Exception {
+		String r = proxy.reqBeanQueryIfNE5(
+			new ReqBeanQueryIfNE5() {
+				@Override
+				public String getX() {
+					return "foo";
+				}
+				@Override
+				public String getY() {
+					return "";
+				}
+				@Override
+				public String getZ() {
+					return null;
+				}
+			}
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void gc06_reqBeanQueryIfNE6() throws Exception {
+		String r = proxy.reqBeanQueryIfNE6(
+			new ReqBeanQueryIfNE6() {
+				@Override
+				public Map<String,Object> getX() {
+					return new AMap<String,Object>().append("a","foo").append("b","").append("c", null);
+				}
+
+			}
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void gc07_reqBeanQueryIfNE7() throws Exception {
+		String r = proxy.reqBeanQueryIfNE7(
+			new ReqBeanQueryIfNE7() {
+				@Override
+				public NeBean getX() {
+					return new NeBean().init();
+				}
+			}
+		);
+		assertEquals("OK", r);
+	}
+
+	//--------------------------------------------------------------------------------
+	// RequestBean tests - FormData
+	//--------------------------------------------------------------------------------
+
+	@Test
+	public void gd01_reqBeanFormData1() throws Exception {
+		String r = proxy.reqBeanFormData1(
+			new ReqBeanFormData1() {
+				@Override
+				public int getA() {
+					return 1;
+				}
+				@Override
+				public String getB() {
+					return "foo";
+				}
+			}
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void gd01_reqBeanFormData1a() throws Exception {
+		String r = proxy.reqBeanFormData1(
+			new ReqBeanFormData1Impl()
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void gd02_reqBeanFormData2() throws Exception {
+		String r = proxy.reqBeanFormData2(
+			new ReqBeanFormData2()
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void gd03_reqBeanFormData3() throws Exception {
+		String r = proxy.reqBeanFormData3(
+			new ReqBeanFormData3() {
+				@Override
+				public int getX() {
+					return 1;
+				}
+				@Override
+				public String getY() {
+					return "foo";
+				}
+			}
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void gd04_reqBeanFormData4() throws Exception {
+		String r = proxy.reqBeanFormData4(
+			new ReqBeanFormData4() {
+				@Override
+				public int getX() {
+					return 1;
+				}
+				@Override
+				public String getY() {
+					return "foo";
+				}
+			}
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void gd05_reqBeanFormData5() throws Exception {
+		String r = proxy.reqBeanFormData5(
+			new ReqBeanFormData5() {
+				@Override
+				public int getX() {
+					return 1;
+				}
+				@Override
+				public String getY() {
+					return "foo";
+				}
+			}
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void gd06_reqBeanFormData6() throws Exception {
+		String r = proxy.reqBeanFormData6(
+			new ReqBeanFormData6() {
+				@Override
+				public Map<String,Object> getX() {
+					return new AMap<String,Object>().append("a",1).append("b","foo");
+				}
+
+			}
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void gd07_reqBeanFormData7() throws Exception {
+		String r = proxy.reqBeanFormData7(
+			new ReqBeanFormData7() {
+				@Override
+				public ABean getX() {
+					return new ABean().init();
+				}
+			}
+		);
+		assertEquals("OK", r);
+	}
+
+	//--------------------------------------------------------------------------------
+	// RequestBean tests - FormDataIfNE
+	//--------------------------------------------------------------------------------
+
+	@Test
+	public void ge01_reqBeanFormDataIfNE1() throws Exception {
+		String r = proxy.reqBeanFormDataIfNE1(
+			new ReqBeanFormDataIfNE1() {
+				@Override
+				public String getA() {
+					return "foo";
+				}
+				@Override
+				public String getB() {
+					return "";
+				}
+				@Override
+				public String getC() {
+					return null;
+				}
+			}
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void ge01_reqBeanFormDataIfNE1a() throws Exception {
+		String r = proxy.reqBeanFormDataIfNE1(
+			new ReqBeanFormDataIfNE1Impl()
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void ge02_reqBeanFormDataIfNE2() throws Exception {
+		String r = proxy.reqBeanFormDataIfNE2(
+			new ReqBeanFormDataIfNE2()
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void ge03_reqBeanFormDataIfNE3() throws Exception {
+		String r = proxy.reqBeanFormDataIfNE3(
+			new ReqBeanFormDataIfNE3() {
+				@Override
+				public String getX() {
+					return "foo";
+				}
+				@Override
+				public String getY() {
+					return "";
+				}
+				@Override
+				public String getZ() {
+					return null;
+				}
+			}
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void ge04_reqBeanFormDataIfNE4() throws Exception {
+		String r = proxy.reqBeanFormDataIfNE4(
+			new ReqBeanFormDataIfNE4() {
+				@Override
+				public String getX() {
+					return "foo";
+				}
+				@Override
+				public String getY() {
+					return "";
+				}
+				@Override
+				public String getZ() {
+					return null;
+				}
+			}
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void ge05_reqBeanFormDataIfNE5() throws Exception {
+		String r = proxy.reqBeanFormDataIfNE5(
+			new ReqBeanFormDataIfNE5() {
+				@Override
+				public String getX() {
+					return "foo";
+				}
+				@Override
+				public String getY() {
+					return "";
+				}
+				@Override
+				public String getZ() {
+					return null;
+				}
+			}
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void ge06_reqBeanFormDataIfNE6() throws Exception {
+		String r = proxy.reqBeanFormDataIfNE6(
+			new ReqBeanFormDataIfNE6() {
+				@Override
+				public Map<String,Object> getX() {
+					return new AMap<String,Object>().append("a","foo").append("b","").append("c", null);
+				}
+
+			}
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void ge07_reqBeanFormDataIfNE7() throws Exception {
+		String r = proxy.reqBeanFormDataIfNE7(
+			new ReqBeanFormDataIfNE7() {
+				@Override
+				public NeBean getX() {
+					return new NeBean().init();
+				}
+			}
+		);
+		assertEquals("OK", r);
+	}
+
+	//--------------------------------------------------------------------------------
+	// RequestBean tests - Header
+	//--------------------------------------------------------------------------------
+
+	@Test
+	public void gf01_reqBeanHeader1() throws Exception {
+		String r = proxy.reqBeanHeader1(
+			new ReqBeanHeader1() {
+				@Override
+				public int getA() {
+					return 1;
+				}
+				@Override
+				public String getB() {
+					return "foo";
+				}
+			}
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void gf01_reqBeanHeader1a() throws Exception {
+		String r = proxy.reqBeanHeader1(
+			new ReqBeanHeader1Impl()
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void gf02_reqBeanHeader2() throws Exception {
+		String r = proxy.reqBeanHeader2(
+			new ReqBeanHeader2()
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void gf03_reqBeanHeader3() throws Exception {
+		String r = proxy.reqBeanHeader3(
+			new ReqBeanHeader3() {
+				@Override
+				public int getX() {
+					return 1;
+				}
+				@Override
+				public String getY() {
+					return "foo";
+				}
+			}
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void gf04_reqBeanHeader4() throws Exception {
+		String r = proxy.reqBeanHeader4(
+			new ReqBeanHeader4() {
+				@Override
+				public int getX() {
+					return 1;
+				}
+				@Override
+				public String getY() {
+					return "foo";
+				}
+			}
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void gf05_reqBeanHeader5() throws Exception {
+		String r = proxy.reqBeanHeader5(
+			new ReqBeanHeader5() {
+				@Override
+				public int getX() {
+					return 1;
+				}
+				@Override
+				public String getY() {
+					return "foo";
+				}
+			}
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void gf06_reqBeanHeader6() throws Exception {
+		String r = proxy.reqBeanHeader6(
+			new ReqBeanHeader6() {
+				@Override
+				public Map<String,Object> getX() {
+					return new AMap<String,Object>().append("a",1).append("b","foo");
+				}
+
+			}
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void gf07_reqBeanHeader7() throws Exception {
+		String r = proxy.reqBeanHeader7(
+			new ReqBeanHeader7() {
+				@Override
+				public ABean getX() {
+					return new ABean().init();
+				}
+			}
+		);
+		assertEquals("OK", r);
+	}
+
+	//--------------------------------------------------------------------------------
+	// RequestBean tests - HeaderIfNE
+	//--------------------------------------------------------------------------------
+
+	@Test
+	public void gg01_reqBeanHeaderIfNE1() throws Exception {
+		String r = proxy.reqBeanHeaderIfNE1(
+			new ReqBeanHeaderIfNE1() {
+				@Override
+				public String getA() {
+					return "foo";
+				}
+				@Override
+				public String getB() {
+					return "";
+				}
+				@Override
+				public String getC() {
+					return null;
+				}
+			}
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void gg01_reqBeanHeaderIfNE1a() throws Exception {
+		String r = proxy.reqBeanHeaderIfNE1(
+			new ReqBeanHeaderIfNE1Impl()
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void gg02_reqBeanHeaderIfNE2() throws Exception {
+		String r = proxy.reqBeanHeaderIfNE2(
+			new ReqBeanHeaderIfNE2()
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void gg03_reqBeanHeaderIfNE3() throws Exception {
+		String r = proxy.reqBeanHeaderIfNE3(
+			new ReqBeanHeaderIfNE3() {
+				@Override
+				public String getX() {
+					return "foo";
+				}
+				@Override
+				public String getY() {
+					return "";
+				}
+				@Override
+				public String getZ() {
+					return null;
+				}
+			}
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void gg04_reqBeanHeaderIfNE4() throws Exception {
+		String r = proxy.reqBeanHeaderIfNE4(
+			new ReqBeanHeaderIfNE4() {
+				@Override
+				public String getX() {
+					return "foo";
+				}
+				@Override
+				public String getY() {
+					return "";
+				}
+				@Override
+				public String getZ() {
+					return null;
+				}
+			}
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void gg05_reqBeanHeaderIfNE5() throws Exception {
+		String r = proxy.reqBeanHeaderIfNE5(
+			new ReqBeanHeaderIfNE5() {
+				@Override
+				public String getX() {
+					return "foo";
+				}
+				@Override
+				public String getY() {
+					return "";
+				}
+				@Override
+				public String getZ() {
+					return null;
+				}
+			}
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void gg06_reqBeanHeaderIfNE6() throws Exception {
+		String r = proxy.reqBeanHeaderIfNE6(
+			new ReqBeanHeaderIfNE6() {
+				@Override
+				public Map<String,Object> getX() {
+					return new AMap<String,Object>().append("a","foo").append("b","").append("c", null);
+				}
+
+			}
+		);
+		assertEquals("OK", r);
+	}
+
+	@Test
+	public void gg07_reqBeanHeaderIfNE7() throws Exception {
+		String r = proxy.reqBeanHeaderIfNE7(
+			new ReqBeanHeaderIfNE7() {
+				@Override
+				public NeBean getX() {
+					return new NeBean().init();
+				}
+			}
 		);
 		assertEquals("OK", r);
 	}
@@ -1688,6 +2545,832 @@ public class ThirdPartyProxyTest extends RestTestcase {
 		String pathVars3(
 			@Path ABean a
 		);
+
+		//--------------------------------------------------------------------------------
+		// RequestBean tests - Path
+		//--------------------------------------------------------------------------------
+
+		@RemoteMethod(httpMethod="POST", path="/reqBeanPath/{a}/{b}")
+		String reqBeanPath1(
+			@RequestBean ReqBeanPath1 rb
+		);
+
+		public static interface ReqBeanPath1 {
+			@Path
+			int getA();
+
+			@Path
+			String getB();
+		}
+
+		public static class ReqBeanPath1Impl implements ReqBeanPath1 {
+			@Override
+			public int getA() {
+				return 1;
+			}
+			@Override
+			public String getB() {
+				return "foo";
+			}
+		}
+
+
+		@RemoteMethod(httpMethod="POST", path="/reqBeanPath/{a}/{b}")
+		String reqBeanPath2(
+			@RequestBean ReqBeanPath2 rb
+		);
+
+		public static class ReqBeanPath2 {
+			@Path
+			public int getA() {
+				return 1;
+			};
+
+			@Path
+			public String getB() {
+				return "foo";
+			}
+		}
+
+		@RemoteMethod(httpMethod="POST", path="/reqBeanPath/{a}/{b}")
+		String reqBeanPath3(
+			@RequestBean ReqBeanPath3 rb
+		);
+
+		public static interface ReqBeanPath3 {
+			@Path("a")
+			int getX();
+
+			@Path("b")
+			String getY();
+		}
+
+		@RemoteMethod(httpMethod="POST", path="/reqBeanPath/{a}/{b}")
+		String reqBeanPath4(
+			@RequestBean ReqBeanPath4 rb
+		);
+
+		public static interface ReqBeanPath4 {
+			@Path
+			@BeanProperty(name="a")
+			int getX();
+
+			@Path
+			@BeanProperty(name="b")
+			String getY();
+		}
+
+		@RemoteMethod(httpMethod="POST", path="/reqBeanPath/{a}/{b}")
+		String reqBeanPath5(
+			@RequestBean ReqBeanPath5 rb
+		);
+
+		public static interface ReqBeanPath5 {
+			@Path
+			@BeanProperty(name="a")
+			int getX();
+
+			@Path
+			@BeanProperty(name="b")
+			String getY();
+		}
+
+		@RemoteMethod(httpMethod="POST", path="/reqBeanPath/{a}/{b}")
+		String reqBeanPath6(
+			@RequestBean ReqBeanPath6 rb
+		);
+
+		public static interface ReqBeanPath6 {
+			@Path
+			Map<String,Object> getX();
+		}
+
+		@RemoteMethod(httpMethod="POST", path="/reqBeanPath/{a}/{b}")
+		String reqBeanPath7(
+			@RequestBean ReqBeanPath7 rb
+		);
+
+		public static interface ReqBeanPath7 {
+			@Path
+			ABean getX();
+		}
+
+		//--------------------------------------------------------------------------------
+		// RequestBean tests - Query
+		//--------------------------------------------------------------------------------
+
+		@RemoteMethod(httpMethod="POST", path="/reqBeanQuery")
+		String reqBeanQuery1(
+			@RequestBean ReqBeanQuery1 rb
+		);
+
+		public static interface ReqBeanQuery1 {
+			@Query
+			int getA();
+
+			@Query
+			String getB();
+		}
+
+		public static class ReqBeanQuery1Impl implements ReqBeanQuery1 {
+			@Override
+			public int getA() {
+				return 1;
+			}
+			@Override
+			public String getB() {
+				return "foo";
+			}
+		}
+
+
+		@RemoteMethod(httpMethod="POST", path="/reqBeanQuery")
+		String reqBeanQuery2(
+			@RequestBean ReqBeanQuery2 rb
+		);
+
+		public static class ReqBeanQuery2 {
+			@Query
+			public int getA() {
+				return 1;
+			};
+
+			@Query
+			public String getB() {
+				return "foo";
+			}
+		}
+
+		@RemoteMethod(httpMethod="POST", path="/reqBeanQuery")
+		String reqBeanQuery3(
+			@RequestBean ReqBeanQuery3 rb
+		);
+
+		public static interface ReqBeanQuery3 {
+			@Query("a")
+			int getX();
+
+			@Query("b")
+			String getY();
+		}
+
+		@RemoteMethod(httpMethod="POST", path="/reqBeanQuery")
+		String reqBeanQuery4(
+			@RequestBean ReqBeanQuery4 rb
+		);
+
+		public static interface ReqBeanQuery4 {
+			@Query
+			@BeanProperty(name="a")
+			int getX();
+
+			@Query
+			@BeanProperty(name="b")
+			String getY();
+		}
+
+		@RemoteMethod(httpMethod="POST", path="/reqBeanQuery")
+		String reqBeanQuery5(
+			@RequestBean ReqBeanQuery5 rb
+		);
+
+		public static interface ReqBeanQuery5 {
+			@Query
+			@BeanProperty(name="a")
+			int getX();
+
+			@Query
+			@BeanProperty(name="b")
+			String getY();
+		}
+
+		@RemoteMethod(httpMethod="POST", path="/reqBeanQuery")
+		String reqBeanQuery6(
+			@RequestBean ReqBeanQuery6 rb
+		);
+
+		public static interface ReqBeanQuery6 {
+			@Query
+			Map<String,Object> getX();
+		}
+
+		@RemoteMethod(httpMethod="POST", path="/reqBeanQuery")
+		String reqBeanQuery7(
+			@RequestBean ReqBeanQuery7 rb
+		);
+
+		public static interface ReqBeanQuery7 {
+			@Query
+			ABean getX();
+		}
+
+		//--------------------------------------------------------------------------------
+		// RequestBean tests - QueryIfNE
+		//--------------------------------------------------------------------------------
+
+		@RemoteMethod(httpMethod="POST", path="/reqBeanQueryIfNE")
+		String reqBeanQueryIfNE1(
+			@RequestBean ReqBeanQueryIfNE1 rb
+		);
+
+		public static interface ReqBeanQueryIfNE1 {
+			@QueryIfNE
+			String getA();
+
+			@QueryIfNE
+			String getB();
+
+			@QueryIfNE
+			String getC();
+		}
+
+		public static class ReqBeanQueryIfNE1Impl implements ReqBeanQueryIfNE1 {
+			@Override
+			public String getA() {
+				return "foo";
+			}
+			@Override
+			public String getB() {
+				return "";
+			}
+			@Override
+			public String getC() {
+				return null;
+			}
+		}
+
+
+		@RemoteMethod(httpMethod="POST", path="/reqBeanQueryIfNE")
+		String reqBeanQueryIfNE2(
+			@RequestBean ReqBeanQueryIfNE2 rb
+		);
+
+		public static class ReqBeanQueryIfNE2 {
+			@QueryIfNE
+			public String getA() {
+				return "foo";
+			};
+			@QueryIfNE
+			public String getB() {
+				return "";
+			}
+			@QueryIfNE
+			public String getC() {
+				return null;
+			}
+		}
+
+		@RemoteMethod(httpMethod="POST", path="/reqBeanQueryIfNE")
+		String reqBeanQueryIfNE3(
+			@RequestBean ReqBeanQueryIfNE3 rb
+		);
+
+		public static interface ReqBeanQueryIfNE3 {
+			@QueryIfNE("a")
+			String getX();
+
+			@QueryIfNE("b")
+			String getY();
+
+			@QueryIfNE("c")
+			String getZ();
+		}
+
+		@RemoteMethod(httpMethod="POST", path="/reqBeanQueryIfNE")
+		String reqBeanQueryIfNE4(
+			@RequestBean ReqBeanQueryIfNE4 rb
+		);
+
+		public static interface ReqBeanQueryIfNE4 {
+			@QueryIfNE
+			@BeanProperty(name="a")
+			String getX();
+
+			@QueryIfNE
+			@BeanProperty(name="b")
+			String getY();
+
+			@QueryIfNE
+			@BeanProperty(name="c")
+			String getZ();
+		}
+
+		@RemoteMethod(httpMethod="POST", path="/reqBeanQueryIfNE")
+		String reqBeanQueryIfNE5(
+			@RequestBean ReqBeanQueryIfNE5 rb
+		);
+
+		public static interface ReqBeanQueryIfNE5 {
+			@QueryIfNE
+			@BeanProperty(name="a")
+			String getX();
+
+			@QueryIfNE
+			@BeanProperty(name="b")
+			String getY();
+
+			@QueryIfNE
+			@BeanProperty(name="c")
+			String getZ();
+		}
+
+		@RemoteMethod(httpMethod="POST", path="/reqBeanQueryIfNE")
+		String reqBeanQueryIfNE6(
+			@RequestBean ReqBeanQueryIfNE6 rb
+		);
+
+		public static interface ReqBeanQueryIfNE6 {
+			@QueryIfNE
+			Map<String,Object> getX();
+		}
+
+		@RemoteMethod(httpMethod="POST", path="/reqBeanQueryIfNE")
+		String reqBeanQueryIfNE7(
+			@RequestBean ReqBeanQueryIfNE7 rb
+		);
+
+		public static interface ReqBeanQueryIfNE7 {
+			@QueryIfNE
+			NeBean getX();
+		}
+
+		//--------------------------------------------------------------------------------
+		// RequestBean tests - FormData
+		//--------------------------------------------------------------------------------
+
+		@RemoteMethod(httpMethod="POST", path="/reqBeanFormData")
+		String reqBeanFormData1(
+			@RequestBean ReqBeanFormData1 rb
+		);
+
+		public static interface ReqBeanFormData1 {
+			@FormData
+			int getA();
+
+			@FormData
+			String getB();
+		}
+
+		public static class ReqBeanFormData1Impl implements ReqBeanFormData1 {
+			@Override
+			public int getA() {
+				return 1;
+			}
+			@Override
+			public String getB() {
+				return "foo";
+			}
+		}
+
+
+		@RemoteMethod(httpMethod="POST", path="/reqBeanFormData")
+		String reqBeanFormData2(
+			@RequestBean ReqBeanFormData2 rb
+		);
+
+		public static class ReqBeanFormData2 {
+			@FormData
+			public int getA() {
+				return 1;
+			};
+
+			@FormData
+			public String getB() {
+				return "foo";
+			}
+		}
+
+		@RemoteMethod(httpMethod="POST", path="/reqBeanFormData")
+		String reqBeanFormData3(
+			@RequestBean ReqBeanFormData3 rb
+		);
+
+		public static interface ReqBeanFormData3 {
+			@FormData("a")
+			int getX();
+
+			@FormData("b")
+			String getY();
+		}
+
+		@RemoteMethod(httpMethod="POST", path="/reqBeanFormData")
+		String reqBeanFormData4(
+			@RequestBean ReqBeanFormData4 rb
+		);
+
+		public static interface ReqBeanFormData4 {
+			@FormData
+			@BeanProperty(name="a")
+			int getX();
+
+			@FormData
+			@BeanProperty(name="b")
+			String getY();
+		}
+
+		@RemoteMethod(httpMethod="POST", path="/reqBeanFormData")
+		String reqBeanFormData5(
+			@RequestBean ReqBeanFormData5 rb
+		);
+
+		public static interface ReqBeanFormData5 {
+			@FormData
+			@BeanProperty(name="a")
+			int getX();
+
+			@FormData
+			@BeanProperty(name="b")
+			String getY();
+		}
+
+		@RemoteMethod(httpMethod="POST", path="/reqBeanFormData")
+		String reqBeanFormData6(
+			@RequestBean ReqBeanFormData6 rb
+		);
+
+		public static interface ReqBeanFormData6 {
+			@FormData
+			Map<String,Object> getX();
+		}
+
+		@RemoteMethod(httpMethod="POST", path="/reqBeanFormData")
+		String reqBeanFormData7(
+			@RequestBean ReqBeanFormData7 rb
+		);
+
+		public static interface ReqBeanFormData7 {
+			@FormData
+			ABean getX();
+		}
+
+		//--------------------------------------------------------------------------------
+		// RequestBean tests - FormDataIfNE
+		//--------------------------------------------------------------------------------
+
+		@RemoteMethod(httpMethod="POST", path="/reqBeanFormDataIfNE")
+		String reqBeanFormDataIfNE1(
+			@RequestBean ReqBeanFormDataIfNE1 rb
+		);
+
+		public static interface ReqBeanFormDataIfNE1 {
+			@FormDataIfNE
+			String getA();
+
+			@FormDataIfNE
+			String getB();
+
+			@FormDataIfNE
+			String getC();
+		}
+
+		public static class ReqBeanFormDataIfNE1Impl implements ReqBeanFormDataIfNE1 {
+			@Override
+			public String getA() {
+				return "foo";
+			}
+			@Override
+			public String getB() {
+				return "";
+			}
+			@Override
+			public String getC() {
+				return null;
+			}
+		}
+
+
+		@RemoteMethod(httpMethod="POST", path="/reqBeanFormDataIfNE")
+		String reqBeanFormDataIfNE2(
+			@RequestBean ReqBeanFormDataIfNE2 rb
+		);
+
+		public static class ReqBeanFormDataIfNE2 {
+			@FormDataIfNE
+			public String getA() {
+				return "foo";
+			};
+			@FormDataIfNE
+			public String getB() {
+				return "";
+			}
+			@FormDataIfNE
+			public String getC() {
+				return null;
+			}
+		}
+
+		@RemoteMethod(httpMethod="POST", path="/reqBeanFormDataIfNE")
+		String reqBeanFormDataIfNE3(
+			@RequestBean ReqBeanFormDataIfNE3 rb
+		);
+
+		public static interface ReqBeanFormDataIfNE3 {
+			@FormDataIfNE("a")
+			String getX();
+
+			@FormDataIfNE("b")
+			String getY();
+
+			@FormDataIfNE("c")
+			String getZ();
+		}
+
+		@RemoteMethod(httpMethod="POST", path="/reqBeanFormDataIfNE")
+		String reqBeanFormDataIfNE4(
+			@RequestBean ReqBeanFormDataIfNE4 rb
+		);
+
+		public static interface ReqBeanFormDataIfNE4 {
+			@FormDataIfNE
+			@BeanProperty(name="a")
+			String getX();
+
+			@FormDataIfNE
+			@BeanProperty(name="b")
+			String getY();
+
+			@FormDataIfNE
+			@BeanProperty(name="c")
+			String getZ();
+		}
+
+		@RemoteMethod(httpMethod="POST", path="/reqBeanFormDataIfNE")
+		String reqBeanFormDataIfNE5(
+			@RequestBean ReqBeanFormDataIfNE5 rb
+		);
+
+		public static interface ReqBeanFormDataIfNE5 {
+			@FormDataIfNE
+			@BeanProperty(name="a")
+			String getX();
+
+			@FormDataIfNE
+			@BeanProperty(name="b")
+			String getY();
+
+			@FormDataIfNE
+			@BeanProperty(name="c")
+			String getZ();
+		}
+
+		@RemoteMethod(httpMethod="POST", path="/reqBeanFormDataIfNE")
+		String reqBeanFormDataIfNE6(
+			@RequestBean ReqBeanFormDataIfNE6 rb
+		);
+
+		public static interface ReqBeanFormDataIfNE6 {
+			@FormDataIfNE
+			Map<String,Object> getX();
+		}
+
+		@RemoteMethod(httpMethod="POST", path="/reqBeanFormDataIfNE")
+		String reqBeanFormDataIfNE7(
+			@RequestBean ReqBeanFormDataIfNE7 rb
+		);
+
+		public static interface ReqBeanFormDataIfNE7 {
+			@FormDataIfNE
+			NeBean getX();
+		}
+
+		//--------------------------------------------------------------------------------
+		// RequestBean tests - Header
+		//--------------------------------------------------------------------------------
+
+		@RemoteMethod(httpMethod="POST", path="/reqBeanHeader")
+		String reqBeanHeader1(
+			@RequestBean ReqBeanHeader1 rb
+		);
+
+		public static interface ReqBeanHeader1 {
+			@Header
+			int getA();
+
+			@Header
+			String getB();
+		}
+
+		public static class ReqBeanHeader1Impl implements ReqBeanHeader1 {
+			@Override
+			public int getA() {
+				return 1;
+			}
+			@Override
+			public String getB() {
+				return "foo";
+			}
+		}
+
+
+		@RemoteMethod(httpMethod="POST", path="/reqBeanHeader")
+		String reqBeanHeader2(
+			@RequestBean ReqBeanHeader2 rb
+		);
+
+		public static class ReqBeanHeader2 {
+			@Header
+			public int getA() {
+				return 1;
+			};
+
+			@Header
+			public String getB() {
+				return "foo";
+			}
+		}
+
+		@RemoteMethod(httpMethod="POST", path="/reqBeanHeader")
+		String reqBeanHeader3(
+			@RequestBean ReqBeanHeader3 rb
+		);
+
+		public static interface ReqBeanHeader3 {
+			@Header("a")
+			int getX();
+
+			@Header("b")
+			String getY();
+		}
+
+		@RemoteMethod(httpMethod="POST", path="/reqBeanHeader")
+		String reqBeanHeader4(
+			@RequestBean ReqBeanHeader4 rb
+		);
+
+		public static interface ReqBeanHeader4 {
+			@Header
+			@BeanProperty(name="a")
+			int getX();
+
+			@Header
+			@BeanProperty(name="b")
+			String getY();
+		}
+
+		@RemoteMethod(httpMethod="POST", path="/reqBeanHeader")
+		String reqBeanHeader5(
+			@RequestBean ReqBeanHeader5 rb
+		);
+
+		public static interface ReqBeanHeader5 {
+			@Header
+			@BeanProperty(name="a")
+			int getX();
+
+			@Header
+			@BeanProperty(name="b")
+			String getY();
+		}
+
+		@RemoteMethod(httpMethod="POST", path="/reqBeanHeader")
+		String reqBeanHeader6(
+			@RequestBean ReqBeanHeader6 rb
+		);
+
+		public static interface ReqBeanHeader6 {
+			@Header
+			Map<String,Object> getX();
+		}
+
+		@RemoteMethod(httpMethod="POST", path="/reqBeanHeader")
+		String reqBeanHeader7(
+			@RequestBean ReqBeanHeader7 rb
+		);
+
+		public static interface ReqBeanHeader7 {
+			@Header
+			ABean getX();
+		}
+
+		//--------------------------------------------------------------------------------
+		// RequestBean tests - HeaderIfNE
+		//--------------------------------------------------------------------------------
+
+		@RemoteMethod(httpMethod="POST", path="/reqBeanHeaderIfNE")
+		String reqBeanHeaderIfNE1(
+			@RequestBean ReqBeanHeaderIfNE1 rb
+		);
+
+		public static interface ReqBeanHeaderIfNE1 {
+			@HeaderIfNE
+			String getA();
+
+			@HeaderIfNE
+			String getB();
+
+			@HeaderIfNE
+			String getC();
+		}
+
+		public static class ReqBeanHeaderIfNE1Impl implements ReqBeanHeaderIfNE1 {
+			@Override
+			public String getA() {
+				return "foo";
+			}
+			@Override
+			public String getB() {
+				return "";
+			}
+			@Override
+			public String getC() {
+				return null;
+			}
+		}
+
+
+		@RemoteMethod(httpMethod="POST", path="/reqBeanHeaderIfNE")
+		String reqBeanHeaderIfNE2(
+			@RequestBean ReqBeanHeaderIfNE2 rb
+		);
+
+		public static class ReqBeanHeaderIfNE2 {
+			@HeaderIfNE
+			public String getA() {
+				return "foo";
+			};
+			@HeaderIfNE
+			public String getB() {
+				return "";
+			}
+			@HeaderIfNE
+			public String getC() {
+				return null;
+			}
+		}
+
+		@RemoteMethod(httpMethod="POST", path="/reqBeanHeaderIfNE")
+		String reqBeanHeaderIfNE3(
+			@RequestBean ReqBeanHeaderIfNE3 rb
+		);
+
+		public static interface ReqBeanHeaderIfNE3 {
+			@HeaderIfNE("a")
+			String getX();
+
+			@HeaderIfNE("b")
+			String getY();
+
+			@HeaderIfNE("c")
+			String getZ();
+		}
+
+		@RemoteMethod(httpMethod="POST", path="/reqBeanHeaderIfNE")
+		String reqBeanHeaderIfNE4(
+			@RequestBean ReqBeanHeaderIfNE4 rb
+		);
+
+		public static interface ReqBeanHeaderIfNE4 {
+			@HeaderIfNE
+			@BeanProperty(name="a")
+			String getX();
+
+			@HeaderIfNE
+			@BeanProperty(name="b")
+			String getY();
+
+			@HeaderIfNE
+			@BeanProperty(name="c")
+			String getZ();
+		}
+
+		@RemoteMethod(httpMethod="POST", path="/reqBeanHeaderIfNE")
+		String reqBeanHeaderIfNE5(
+			@RequestBean ReqBeanHeaderIfNE5 rb
+		);
+
+		public static interface ReqBeanHeaderIfNE5 {
+			@HeaderIfNE
+			@BeanProperty(name="a")
+			String getX();
+
+			@HeaderIfNE
+			@BeanProperty(name="b")
+			String getY();
+
+			@HeaderIfNE
+			@BeanProperty(name="c")
+			String getZ();
+		}
+
+		@RemoteMethod(httpMethod="POST", path="/reqBeanHeaderIfNE")
+		String reqBeanHeaderIfNE6(
+			@RequestBean ReqBeanHeaderIfNE6 rb
+		);
+
+		public static interface ReqBeanHeaderIfNE6 {
+			@HeaderIfNE
+			Map<String,Object> getX();
+		}
+
+		@RemoteMethod(httpMethod="POST", path="/reqBeanHeaderIfNE")
+		String reqBeanHeaderIfNE7(
+			@RequestBean ReqBeanHeaderIfNE7 rb
+		);
+
+		public static interface ReqBeanHeaderIfNE7 {
+			@HeaderIfNE
+			NeBean getX();
+		}
 
 		//--------------------------------------------------------------------------------
 		// Test return types.

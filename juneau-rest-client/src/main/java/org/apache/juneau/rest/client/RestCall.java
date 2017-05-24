@@ -198,7 +198,7 @@ public final class RestCall {
 		} else if (isBean(value)){
 			return query(name, toBeanMap(value), skipIfEmpty);
 		} else {
-			throw new RuntimeException("Invalid name passed to query(name,value,skipIfEmpty).");
+			throw new RuntimeException("Invalid name passed to query(name,value,skipIfEmpty): ("+name+","+value+","+skipIfEmpty+")");
 		}
 		return this;
 	}

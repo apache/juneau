@@ -6126,6 +6126,16 @@
 			<li>New {@link org.apache.juneau.html.annotation.Html#render() @Html.render()} annotation and {@link org.apache.juneau.html.HtmlRender} class that allows you
 				to customize the HTML output and CSS style on bean properties:<br>
 				<img class='bordered' src='doc-files/HtmlRender_1.png'>
+			<li>{@link org.apache.juneau.annotation.BeanProperty @BeanProperty} annotation can now be applied to getters
+				and setters defined on interfaces.
+			<li>New methods on {@link org.apache.juneau.serializer.SerializerSession} and {@link org.apache.juneau.parser.ParserSession}
+				for retrieving context and runtime-override properties:
+				<ul>
+					<li>{@link org.apache.juneau.Session#getProperty(String)}
+					<li>{@link org.apache.juneau.Session#getProperty(String,String)}
+					<li>{@link org.apache.juneau.Session#getProperty(Class,String)}
+					<li>{@link org.apache.juneau.Session#getProperty(Class,String,Object)}
+				</ul>	
 		</ul>
 
 		<h6 class='topic'>org.apache.juneau.rest</h6>
@@ -6254,6 +6264,8 @@
 		<h6 class='topic'>org.apache.juneau.rest.client</h6>
 		<ul class='spaced-list'>
 			<li>New {@link org.apache.juneau.remoteable.Path @Path} annotation for specifying path variables on remoteable interfaces.
+			<li>New {@link org.apache.juneau.remoteable.RequestBean @RequestBean} annotation for specifying beans with remoteable annotations
+				defined on properties.
 			<li>The following annotations (and related methods on RestCall) can now take <code>NameValuePairs</code> and beans as input 
 				when using <js>"*"</js> as the name.
 				<br>{@link org.apache.juneau.remoteable.FormData @FormData},{@link org.apache.juneau.remoteable.FormDataIfNE @FormDataIfNE},

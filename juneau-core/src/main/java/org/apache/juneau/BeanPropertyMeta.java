@@ -132,7 +132,7 @@ public class BeanPropertyMeta {
 			}
 
 			if (getter != null) {
-				BeanProperty p = getter.getAnnotation(BeanProperty.class);
+				BeanProperty p = getMethodAnnotation(BeanProperty.class, getter);
 				if (rawTypeMeta == null)
 					rawTypeMeta = f.resolveClassMeta(p, getter.getGenericReturnType(), typeVarImpls);
 				isUri |= (rawTypeMeta.isUri() || getter.isAnnotationPresent(org.apache.juneau.annotation.URI.class));
@@ -146,7 +146,7 @@ public class BeanPropertyMeta {
 			}
 
 			if (setter != null) {
-				BeanProperty p = setter.getAnnotation(BeanProperty.class);
+				BeanProperty p = getMethodAnnotation(BeanProperty.class, setter);
 				if (rawTypeMeta == null)
 					rawTypeMeta = f.resolveClassMeta(p, setter.getGenericParameterTypes()[0], typeVarImpls);
 				isUri |= (rawTypeMeta.isUri() || setter.isAnnotationPresent(org.apache.juneau.annotation.URI.class));
@@ -224,7 +224,7 @@ public class BeanPropertyMeta {
 			if (c == Null.class)
 				return null;
 			try {
-				if (ClassUtils.isParentClass(PojoSwap.class, c)) {
+				if (isParentClass(PojoSwap.class, c)) {
 					return (PojoSwap)c.newInstance();
 				}
 				throw new RuntimeException("TODO - Surrogate swaps not yet supported.");
@@ -892,15 +892,36 @@ public class BeanPropertyMeta {
 			appendAnnotations(a, field.getType(), l);
 		}
 		if (getter != null) {
-			addIfNotNull(l, getter.getAnnotation(a));
+			addIfNotNull(l, getMethodAnnotation(a, getter));
 			appendAnnotations(a, getter.getReturnType(), l);
 		}
 		if (setter != null) {
-			addIfNotNull(l, setter.getAnnotation(a));
+			addIfNotNull(l, getMethodAnnotation(a, setter));
 			appendAnnotations(a, setter.getReturnType(), l);
 		}
+
 		appendAnnotations(a, this.getBeanMeta().getClassMeta().getInnerClass(), l);
 		return l;
+	}
+
+	/**
+	 * Returns the specified annotation on the field or methods that define this property.
+	 * <p>
+	 * This method will search up the parent class/interface hierarchy chain to search for the annotation on
+	 * overridden getters and setters.
+	 *
+	 * @param a The annotation to search for.
+	 * @return The annotation, or <jk>null</jk> if it wasn't found.
+	 */
+	public <A extends Annotation> A getAnnotation(Class<A> a) {
+		A t = null;
+		if (field != null)
+			t = field.getAnnotation(a);
+		if (t == null && getter != null)
+			t = getMethodAnnotation(a, getter);
+		if (t == null && setter != null)
+			t = getMethodAnnotation(a, setter);
+		return t;
 	}
 
 	private Object transform(BeanSession session, Object o) throws SerializeException {

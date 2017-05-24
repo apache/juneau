@@ -194,7 +194,7 @@ public class BeanMeta<T> {
 				if (ctx.isNotABean(c))
 					return "Class matches exclude-class list";
 
-				if (! cVis.isVisible(c.getModifiers()))
+				if (! (cVis.isVisible(c.getModifiers()) || c.isAnonymousClass()))
 					return "Class is not public";
 
 				if (c.isAnnotationPresent(BeanIgnore.class))
@@ -557,7 +557,7 @@ public class BeanMeta<T> {
 				Class<?>[] pt = m.getParameterTypes();
 				Class<?> rt = m.getReturnType();
 				boolean isGetter = false, isSetter = false;
-				BeanProperty bp = m.getAnnotation(BeanProperty.class);
+				BeanProperty bp = getMethodAnnotation(BeanProperty.class, m);
 				String bpName = bp == null ? "" : bp.name();
 				if (pt.length == 0) {
 					if (n.startsWith("get") && (! rt.equals(Void.TYPE))) {

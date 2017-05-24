@@ -13,6 +13,7 @@
 package org.apache.juneau.internal;
 
 import java.io.*;
+import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -329,6 +330,49 @@ public final class ClassUtils {
 		return Modifier.isPublic(c.getModifiers());
 	}
 
+	/**
+	 * Returns the specified annotation on the specified method.
+	 * <p>
+	 * Similar to {@link Method#getAnnotation(Class)}, but searches up the parent hierarchy for the annotation
+	 * defined on parent classes and interfaces.
+	 * <p>
+	 * Normally, annotations defined on methods of parent classes and interfaces are not inherited by the child
+	 * methods.
+	 * This utility method gets around that limitation by searching the class hierarchy for the "same" method.
+	 *
+	 * @param a The annotation to search for.
+	 * @param m The method to search.
+	 * @return The annotation, or <jk>null</jk> if it wasn't found.
+	 */
+	public static <T extends Annotation> T getMethodAnnotation(Class<T> a, Method m) {
+		T t = m.getAnnotation(a);
+		if (t != null)
+			return t;
+		Class<?> pc = m.getDeclaringClass().getSuperclass();
+		if (pc != null) {
+			for (Method m2 : pc.getDeclaredMethods()) {
+				if (isSameMethod(m, m2)) {
+					t = getMethodAnnotation(a, m2);
+					if (t != null)
+						return t;
+				}
+			}
+		}
+		for (Class<?> ic : m.getDeclaringClass().getInterfaces()) {
+			for (Method m2 : ic.getDeclaredMethods()) {
+				if (isSameMethod(m, m2)) {
+					t = getMethodAnnotation(a, m2);
+					if (t != null)
+						return t;
+				}
+			}
+		}
+		return null;
+	}
+
+	private static boolean isSameMethod(Method m1, Method m2) {
+		return m1.getName().equals(m2.getName()) && Arrays.equals(m1.getParameterTypes(), m2.getParameterTypes());
+	}
 
 	/**
 	 * Locates the no-arg constructor for the specified class.

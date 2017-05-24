@@ -199,7 +199,7 @@ public final class RestContext extends Context {
 	/**
 	 * The request servlet path.
 	 * <p>
-	 * Automatically added to properties returned by {@link SerializerSession#getProperties()} and {@link ParserSession#getProperties()}.
+	 * Automatically added to properties returned by {@link SerializerSession#getProperty(String)} and {@link ParserSession#getProperty(String)}.
 	 * <p>
 	 * Equivalent to the value returned by {@link RestRequest#getServletPath()}
 	 */
@@ -222,7 +222,7 @@ public final class RestContext extends Context {
 	/**
 	 * The request URI path info.
 	 * <p>
-	 * Automatically added to properties returned by {@link SerializerSession#getProperties()} and {@link ParserSession#getProperties()}.
+	 * Automatically added to properties returned by {@link SerializerSession#getProperty(String)} and {@link ParserSession#getProperty(String)}.
 	 * <p>
 	 * Equivalent to the value returned by {@link RestRequest#getPathInfo()}
 	 */
@@ -231,7 +231,7 @@ public final class RestContext extends Context {
 	/**
 	 * The request URI.
 	 * <p>
-	 * Automatically added to properties returned by {@link SerializerSession#getProperties()} and {@link ParserSession#getProperties()}.
+	 * Automatically added to properties returned by {@link SerializerSession#getProperty(String)} and {@link ParserSession#getProperty(String)}.
 	 * <p>
 	 * Equivalent to the value returned by {@link RestRequest#getRequestURI()}
 	 */
@@ -240,7 +240,7 @@ public final class RestContext extends Context {
 	/**
 	 * The request method.
 	 * <p>
-	 * Automatically added to properties returned by {@link SerializerSession#getProperties()} and {@link ParserSession#getProperties()}.
+	 * Automatically added to properties returned by {@link SerializerSession#getProperty(String)} and {@link ParserSession#getProperty(String)}.
 	 * <p>
 	 * Equivalent to the value returned by {@link RestRequest#getMethod()}
 	 */
@@ -249,7 +249,7 @@ public final class RestContext extends Context {
 	/**
 	 * The localized servlet title.
 	 * <p>
-	 * Automatically added to properties returned by {@link SerializerSession#getProperties()} and {@link ParserSession#getProperties()}.
+	 * Automatically added to properties returned by {@link SerializerSession#getProperty(String)} and {@link ParserSession#getProperty(String)}.
 	 * <p>
 	 * Equivalent to the value returned by {@link RestRequest#getServletTitle()}
 	 */
@@ -258,7 +258,7 @@ public final class RestContext extends Context {
 	/**
 	 * The localized servlet description.
 	 * <p>
-	 * Automatically added to properties returned by {@link SerializerSession#getProperties()} and {@link ParserSession#getProperties()}.
+	 * Automatically added to properties returned by {@link SerializerSession#getProperty(String)} and {@link ParserSession#getProperty(String)}.
 	 * <p>
 	 * Equivalent to the value returned by {@link RestRequest#getServletDescription()}
 	 */
@@ -267,7 +267,7 @@ public final class RestContext extends Context {
 	/**
 	 * The localized method summary.
 	 * <p>
-	 * Automatically added to properties returned by {@link SerializerSession#getProperties()} and {@link ParserSession#getProperties()}.
+	 * Automatically added to properties returned by {@link SerializerSession#getProperty(String)} and {@link ParserSession#getProperty(String)}.
 	 * <p>
 	 * Equivalent to the value returned by {@link RestRequest#getMethodSummary()}
 	 */
@@ -276,7 +276,7 @@ public final class RestContext extends Context {
 	/**
 	 * The localized method description.
 	 * <p>
-	 * Automatically added to properties returned by {@link SerializerSession#getProperties()} and {@link ParserSession#getProperties()}.
+	 * Automatically added to properties returned by {@link SerializerSession#getProperty(String)} and {@link ParserSession#getProperty(String)}.
 	 * <p>
 	 * Equivalent to the value returned by {@link RestRequest#getMethodDescription()}
 	 */

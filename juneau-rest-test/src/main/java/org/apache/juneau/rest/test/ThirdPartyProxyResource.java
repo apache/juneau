@@ -1032,7 +1032,99 @@ public class ThirdPartyProxyResource extends ResourceJena {
 		return "OK";
 	}
 
+	//--------------------------------------------------------------------------------
+	// RequestBean tests
+	//--------------------------------------------------------------------------------
 
+	@RestMethod(name="POST", path="/reqBeanPath/{a}/{b}")
+	public String reqBeanPath(
+		@Path("a") int a,
+		@Path("b") String b
+		) throws Exception {
+
+		assertEquals(1, a);
+		assertEquals("foo", b);
+
+		return "OK";
+	}
+
+	@RestMethod(name="POST", path="/reqBeanQuery")
+	public String reqBeanQuery(
+		@Query("a") int a,
+		@Query("b") String b
+		) throws Exception {
+
+		assertEquals(1, a);
+		assertEquals("foo", b);
+
+		return "OK";
+	}
+
+	@RestMethod(name="POST", path="/reqBeanQueryIfNE")
+	public String reqBeanQueryIfNE(
+		@Query("a") String a,
+		@Query("b") String b,
+		@Query("c") String c
+		) throws Exception {
+
+		assertEquals("foo", a);
+		assertNull(b);
+		assertNull(c);
+
+		return "OK";
+	}
+
+	@RestMethod(name="POST", path="/reqBeanFormData")
+	public String reqBeanFormData(
+		@FormData("a") int a,
+		@FormData("b") String b
+		) throws Exception {
+
+		assertEquals(1, a);
+		assertEquals("foo", b);
+
+		return "OK";
+	}
+
+	@RestMethod(name="POST", path="/reqBeanFormDataIfNE")
+	public String reqBeanFormDataIfNE(
+		@FormData("a") String a,
+		@FormData("b") String b,
+		@FormData("c") String c
+		) throws Exception {
+
+		assertEquals("foo", a);
+		assertNull(b);
+		assertNull(c);
+
+		return "OK";
+	}
+
+	@RestMethod(name="POST", path="/reqBeanHeader")
+	public String reqBeanHeader(
+		@Header("a") int a,
+		@Header("b") String b
+		) throws Exception {
+
+		assertEquals(1, a);
+		assertEquals("foo", b);
+
+		return "OK";
+	}
+
+	@RestMethod(name="POST", path="/reqBeanHeaderIfNE")
+	public String reqBeanHeaderIfNE(
+		@Header("a") String a,
+		@Header("b") String b,
+		@Header("c") String c
+		) throws Exception {
+
+		assertEquals("foo", a);
+		assertNull(b);
+		assertNull(c);
+
+		return "OK";
+	}
 	//--------------------------------------------------------------------------------
 	// Test return types.
 	//--------------------------------------------------------------------------------

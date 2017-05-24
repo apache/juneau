@@ -30,7 +30,7 @@ public class RemoteableMethodMeta {
 	private final String httpMethod;
 	private final String url;
 	private final RemoteMethodArg[] pathArgs, queryArgs, headerArgs, formDataArgs;
-	private final Integer[] otherArgs;
+	private final Integer[] requestBeanArgs, otherArgs;
 	private final Integer bodyArg;
 
 	/**
@@ -47,6 +47,7 @@ public class RemoteableMethodMeta {
 		this.queryArgs = b.queryArgs.toArray(new RemoteMethodArg[b.queryArgs.size()]);
 		this.formDataArgs = b.formDataArgs.toArray(new RemoteMethodArg[b.formDataArgs.size()]);
 		this.headerArgs = b.headerArgs.toArray(new RemoteMethodArg[b.headerArgs.size()]);
+		this.requestBeanArgs = b.requestBeanArgs.toArray(new Integer[b.requestBeanArgs.size()]);
 		this.otherArgs = b.otherArgs.toArray(new Integer[b.otherArgs.size()]);
 		this.bodyArg = b.bodyArg;
 	}
@@ -58,7 +59,9 @@ public class RemoteableMethodMeta {
 			queryArgs = new LinkedList<RemoteMethodArg>(),
 			headerArgs = new LinkedList<RemoteMethodArg>(),
 			formDataArgs = new LinkedList<RemoteMethodArg>();
-		private List<Integer> otherArgs = new LinkedList<Integer>();
+		private List<Integer>
+			requestBeanArgs = new LinkedList<Integer>(),
+			otherArgs = new LinkedList<Integer>();
 		private Integer bodyArg;
 
 		private Builder(String restUrl, Method m) {
@@ -106,6 +109,9 @@ public class RemoteableMethodMeta {
 					} else if (ca == HeaderIfNE.class) {
 						HeaderIfNE h = (HeaderIfNE)a;
 						annotated = headerArgs.add(new RemoteMethodArg(h.value(), index, true));
+					} else if (ca == RequestBean.class) {
+						annotated = true;
+						requestBeanArgs.add(index);
 					} else if (ca == Body.class) {
 						annotated = true;
 						if (bodyArg == null)
@@ -170,6 +176,14 @@ public class RemoteableMethodMeta {
 	 */
 	public RemoteMethodArg[] getHeaderArgs() {
 		return headerArgs;
+	}
+
+	/**
+	 * Returns the {@link RequestBean @RequestBean} annotated arguments on this Java method.
+	 * @return A list of zero-indexed argument indices.
+	 */
+	public Integer[] getRequestBeanArgs() {
+		return requestBeanArgs;
 	}
 
 	/**

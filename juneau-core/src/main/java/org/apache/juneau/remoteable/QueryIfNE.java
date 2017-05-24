@@ -21,7 +21,7 @@ import java.lang.annotation.*;
  * Identical to {@link Query @Query} except skips values if they're null/blank.
  */
 @Documented
-@Target(PARAMETER)
+@Target({PARAMETER,FIELD,METHOD})
 @Retention(RUNTIME)
 @Inherited
 public @interface QueryIfNE {

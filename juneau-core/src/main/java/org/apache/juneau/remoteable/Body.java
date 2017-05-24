@@ -41,9 +41,27 @@ import org.apache.juneau.serializer.*;
  * 	<li><code>HttpEntity</code> - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
  * 	<li><code>NameValuePairs</code> - Converted to a URL-encoded FORM post.
  * </ul>
+ * <p>
+ * The annotation can also be applied to a bean property field or getter when the argument is annotated with
+ *  {@link RequestBean @RequestBean}:
+ * <p>
+ * <h5 class='section'>Example:</h5>
+ * <p class='bcode'>
+ * 	<ja>@Remoteable</ja>(path=<js>"/myproxy"</js>)
+ * 	<jk>public interface</jk> MyProxy {
+ *
+ * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod"</js>)
+ * 		String myProxyMethod(<ja>@RequestBean</ja> MyRequestBean bean);
+ * 	}
+ *
+ * 	<jk>public interface</jk> MyRequestBean {
+ * 		<ja>@Body</ja>
+ * 		MyPojo getMyPojo();
+ * 	}
+ * </p>
  */
 @Documented
-@Target(PARAMETER)
+@Target({PARAMETER,FIELD,METHOD})
 @Retention(RUNTIME)
 @Inherited
 public @interface Body {}

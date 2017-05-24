@@ -18,24 +18,68 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 
 /**
- * Identical to {@link Header @Header} except skips values if they're null/blank.
+ * Annotation applied to Java method arguments of interface proxies to denote a bean with remoteable annotations.
+ * <p>
+ * <h5 class='section'>Example:</h5>
+ * <p class='bcode'>
+ * 	<ja>@Remoteable</ja>(path=<js>"/myproxy"</js>)
+ * 	<jk>public interface</jk> MyProxy {
+ *
+ * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod/{p1}/{p2}"</js>)
+ * 		String myProxyMethod(<ja>@RequestBean</ja> MyRequestBean bean);
+ * 	}
+ *
+ * 	<jk>public interface</jk> MyRequestBean {
+ *
+ * 		<ja>@Path</ja>
+ * 		String getP1();
+ *
+ * 		<ja>@Path</ja>(<js>"p2"</js>)
+ * 		String getX();
+ *
+ * 		<ja>@Query</ja>
+ * 		String getQ1();
+ *
+ * 		<ja>@Query</ja>
+ * 		<ja>@BeanProperty</ja>(name=<js>"q2"</js>)
+ * 		String getQuery2();
+ *
+ * 		<ja>@QueryIfNE</ja>(<js>"q3"</js>)
+ * 		String getQuery3();
+ *
+ * 		<ja>@QueryIfNE</ja>
+ * 		Map&lt;String,Object&gt; getExtraQueries();
+ *
+ * 		<ja>@FormData</ja>
+ * 		String getF1();
+ *
+ * 		<ja>@FormData</ja>
+ * 		<ja>@BeanProperty</ja>(name=<js>"f2"</js>)
+ * 		String getFormData2();
+ *
+ * 		<ja>@FormDataIfNE</ja>(<js>"f3"</js>)
+ * 		String getFormData3();
+ *
+ * 		<ja>@FormDataIfNE</ja>
+ * 		Map&lt;String,Object&gt; getExtraFormData();
+ *
+ * 		<ja>@Header</ja>
+ * 		String getH1();
+ *
+ * 		<ja>@Header</ja>
+ * 		<ja>@BeanProperty</ja>(name=<js>"H2"</js>)
+ * 		String getHeader2();
+ *
+ * 		<ja>@HeaderIfNE</ja>(<js>"H3"</js>)
+ * 		String getHeader3();
+ *
+ * 		<ja>@HeaderIfNE</ja>
+ * 		Map&lt;String,Object&gt; getExtraHeaders();
+ * 	}
+ * </p>
  */
 @Documented
-@Target({PARAMETER,FIELD,METHOD})
+@Target(PARAMETER)
 @Retention(RUNTIME)
 @Inherited
-public @interface HeaderIfNE {
-
-	/**
-	 * The HTTP header name.
-	 * <p>
-	 * A value of <js>"*"</js> indicates the value should be serialized as name/value pairs and is applicable
-	 * for the following data types:
-	 * <ul>
-	 * 	<li><code>NameValuePairs</code>
-	 * 	<li><code>Map&lt;String,Object&gt;</code>
-	 * 	<li>A bean
-	 * </ul>
-	 */
-	String value() default "*";
-}
+public @interface RequestBean {}
