@@ -15,6 +15,7 @@ package org.apache.juneau.rest;
 import java.net.*;
 import java.text.*;
 
+import org.apache.juneau.serializer.*;
 import org.apache.juneau.urlencoding.*;
 
 /**
@@ -132,13 +133,13 @@ public final class Redirect {
 	/**
 	 * Calculates the URL to redirect to.
 	 *
-	 * @param s Use this serializer to encode arguments using the {@link UrlEncodingSerializer#serializePart(Object,Boolean,Boolean)} method.
+	 * @param s Use this serializer to encode arguments using the {@link UrlEncodingSerializer#serialize(PartType,Object)} method.
 	 * @return The URL to redirect to.
 	 */
 	public String toUrl(UrlEncodingSerializer s) {
 		if (url != null && args != null && args.length > 0) {
 			for (int i = 0; i < args.length; i++)
-				args[i] = s.serializePart(args[i], null, true);
+				args[i] = s.serialize(PartType.PATH, args[i]);
 			return MessageFormat.format(url, args);
 		}
 		return url;

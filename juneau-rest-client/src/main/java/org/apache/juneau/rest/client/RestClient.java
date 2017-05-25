@@ -52,12 +52,16 @@ import org.apache.juneau.urlencoding.*;
  * 	<li><a class="doclink" href="package-summary.html#RestClient">org.apache.juneau.rest.client &gt; REST client API</a> for more information and code examples.
  * </ul>
  */
+@SuppressWarnings("rawtypes")
 public class RestClient extends CoreObject {
+
+	private static final ConcurrentHashMap<Class,PartSerializer> partSerializerCache = new ConcurrentHashMap<Class,PartSerializer>();
 
 	private final Map<String,String> headers;
 	private final CloseableHttpClient httpClient;
 	private final boolean keepHttpClientOpen;
 	private final UrlEncodingSerializer urlEncodingSerializer;  // Used for form posts only.
+	private final PartSerializer partSerializer;
 	private final String rootUrl;
 	private volatile boolean isClosed = false;
 	private final StackTraceElement[] creationStack;
@@ -84,6 +88,7 @@ public class RestClient extends CoreObject {
 			Serializer serializer,
 			Parser parser,
 			UrlEncodingSerializer urlEncodingSerializer,
+			PartSerializer partSerializer,
 			Map<String,String> headers,
 			List<RestCallInterceptor> interceptors,
 			String rootUri,
@@ -99,6 +104,7 @@ public class RestClient extends CoreObject {
 		this.serializer = serializer;
 		this.parser = parser;
 		this.urlEncodingSerializer = urlEncodingSerializer;
+		this.partSerializer = partSerializer;
 
 		Map<String,String> h2 = new ConcurrentHashMap<String,String>(headers);
 
@@ -538,16 +544,16 @@ public class RestClient extends CoreObject {
 							rc.serializer(serializer).parser(parser);
 
 							for (RemoteMethodArg a : rmm.getPathArgs())
-								rc.path(a.name, args[a.index]);
+								rc.path(a.name, args[a.index], a.serializer);
 
 							for (RemoteMethodArg a : rmm.getQueryArgs())
-								rc.query(a.name, args[a.index], a.skipIfNE);
+								rc.query(a.name, args[a.index], a.skipIfNE, a.serializer);
 
 							for (RemoteMethodArg a : rmm.getFormDataArgs())
-								rc.formData(a.name, args[a.index], a.skipIfNE);
+								rc.formData(a.name, args[a.index], a.skipIfNE, a.serializer);
 
 							for (RemoteMethodArg a : rmm.getHeaderArgs())
-								rc.header(a.name, args[a.index], a.skipIfNE);
+								rc.header(a.name, args[a.index], a.skipIfNE, a.serializer);
 
 							if (rmm.getBodyArg() != null)
 								rc.input(args[rmm.getBodyArg()]);
@@ -563,31 +569,31 @@ public class RestClient extends CoreObject {
 
 										Path p = pMeta.getAnnotation(Path.class);
 										if (p != null)
-											rc.path(getName(p.value(), pMeta), val);
+											rc.path(getName(p.value(), pMeta), val, getPartSerializer(p.serializer()));
 
 										Query q1 = pMeta.getAnnotation(Query.class);
 										if (q1 != null)
-											rc.query(getName(q1.value(), pMeta), val, false);
+											rc.query(getName(q1.value(), pMeta), val, false, getPartSerializer(q1.serializer()));
 
 										QueryIfNE q2 = pMeta.getAnnotation(QueryIfNE.class);
 										if (q2 != null)
-											rc.query(getName(q2.value(), pMeta), val, true);
+											rc.query(getName(q2.value(), pMeta), val, true, getPartSerializer(q2.serializer()));
 
 										FormData f1 = pMeta.getAnnotation(FormData.class);
 										if (f1 != null)
-											rc.formData(getName(f1.value(), pMeta), val, false);
+											rc.formData(getName(f1.value(), pMeta), val, false, getPartSerializer(f1.serializer()));
 
 										FormDataIfNE f2 = pMeta.getAnnotation(FormDataIfNE.class);
 										if (f2 != null)
-											rc.formData(getName(f2.value(), pMeta), val, true);
+											rc.formData(getName(f2.value(), pMeta), val, true, getPartSerializer(f2.serializer()));
 
 										org.apache.juneau.remoteable.Header h1 = pMeta.getAnnotation(org.apache.juneau.remoteable.Header.class);
 										if (h1 != null)
-											rc.header(getName(h1.value(), pMeta), val, false);
+											rc.header(getName(h1.value(), pMeta), val, false, getPartSerializer(h1.serializer()));
 
 										HeaderIfNE h2 = pMeta.getAnnotation(HeaderIfNE.class);
 										if (h2 != null)
-											rc.header(getName(h2.value(), pMeta), val, true);
+											rc.header(getName(h2.value(), pMeta), val, true, getPartSerializer(h2.serializer()));
 									}
 								}
 							}
@@ -622,10 +628,25 @@ public class RestClient extends CoreObject {
 		return name;
 	}
 
+	private static PartSerializer getPartSerializer(Class c) {
+		if (c == UrlEncodingSerializer.class)
+			return null;
+		PartSerializer pf = partSerializerCache.get(c);
+		if (pf == null) {
+			try {
+				partSerializerCache.putIfAbsent(c, (PartSerializer)c.newInstance());
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+			pf = partSerializerCache.get(c);
+		}
+		return pf;
+	}
+
 	private Pattern absUrlPattern = Pattern.compile("^\\w+\\:\\/\\/.*");
 
-	UrlEncodingSerializer getUrlEncodingSerializer() {
-		return urlEncodingSerializer;
+	PartSerializer getPartSerializer() {
+		return partSerializer;
 	}
 
 	URI toURI(Object url) throws URISyntaxException {

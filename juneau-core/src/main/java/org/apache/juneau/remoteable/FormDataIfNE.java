@@ -17,6 +17,9 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.serializer.*;
+import org.apache.juneau.urlencoding.*;
+
 /**
  * Identical to {@link FormData @FormData} except skips values if they're null/blank.
  */
@@ -38,4 +41,13 @@ public @interface FormDataIfNE {
 	 * </ul>
 	 */
 	String value() default "*";
+
+	/**
+	 * Specifies the {@link PartSerializer} class used for serializing values to strings.
+	 * <p>
+	 * The default serializer converters values to UON notation.
+	 * <p>
+	 * This annotation is provided to allow values to be custom serialized.
+	 */
+	Class<? extends PartSerializer> serializer() default UrlEncodingSerializer.class;
 }

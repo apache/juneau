@@ -10,46 +10,43 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.remoteable;
+package org.apache.juneau.serializer;
 
-import org.apache.juneau.serializer.*;
+import org.apache.juneau.remoteable.*;
 import org.apache.juneau.urlencoding.*;
 
 /**
- * Represents the metadata about an annotated argument of a method on a remote proxy interface.
+ * Interface used to convert POJOs to simple strings in HTTP headers, query parameters, form-data parameters, and URI
+ * path variables.
+ * <p>
+ * By default, the {@link UrlEncodingSerializer} class implements this interface so that it can be used to serialize
+ * these HTTP parts.
+ * However, the interface is provided to allow custom serialization of these objects by providing your own implementation
+ * class and using it in any of the following locations:
+ * <ul>
+ * 	<li>{@link FormData#serializer()}
+ * 	<li>{@link FormDataIfNE#serializer()}
+ * 	<li>{@link Query#serializer()}
+ * 	<li>{@link QueryIfNE#serializer()}
+ * 	<li>{@link Header#serializer()}
+ * 	<li>{@link HeaderIfNE#serializer()}
+ * 	<li>{@link Path#serializer()}
+ * 	<li><code>RestClientBuilder.partSerializer(Class)</code>
+ * </ul>
+ * <p>
+ * Implementations must include a no-arg constructor.
  */
-public class RemoteMethodArg {
-
-	/** The argument name.  Can be blank. */
-	public final String name;
-
-	/** The zero-based index of the argument on the Java method. */
-	public final int index;
-
-	/** The value is skipped if it's null/empty. */
-	public final boolean skipIfNE;
-
-	/** The serializer used for converting objects to strings. */
-	public final PartSerializer serializer;
+public interface PartSerializer {
 
 	/**
-	 * Constructor.
+	 * Converts the specified value to a string that can be used as an HTTP header value, query parameter value,
+	 * form-data parameter, or URI path variable.
+	 * <p>
+	 * Returned values should NOT be URL-encoded.  This will happen automatically.
 	 *
-	 * @param name The argument name.  Can be blank.
-	 * @param index The zero-based index of the argument on the Java method.
-	 * @param skipIfNE The value is skipped if it's null/empty.
-	 * @param serializer The class to use for serializing headers, query paramters, form-data parameters, and
-	 * 	path variables.
-	 * 	If {@link UrlEncodingSerializer}, then the url-encoding serializer defined on the client will be used.
+	 * @param type The category of value being serialized.
+	 * @param value The value being serialized.
+	 * @return The serialized value.
 	 */
-	protected RemoteMethodArg(String name, int index, boolean skipIfNE, Class<? extends PartSerializer> serializer) {
-		this.name = name;
-		this.index = index;
-		this.skipIfNE = skipIfNE;
-		try {
-			this.serializer = (serializer == UrlEncodingSerializer.class ? null : serializer.newInstance());
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
+	public String serialize(PartType type, Object value);
 }

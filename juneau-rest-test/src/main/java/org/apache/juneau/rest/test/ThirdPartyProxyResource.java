@@ -1686,4 +1686,38 @@ public class ThirdPartyProxyResource extends ResourceJena {
 		assertClass(TestEnum.class, e.getKey());
 		assertClass(TestEnum[][][].class, e.getValue().get(0));
 	}
+
+	//--------------------------------------------------------------------------------
+	// PartFormatter tests
+	//--------------------------------------------------------------------------------
+
+	@RestMethod(name="POST", path="/partFormatters/{p1}")
+	public String partFormatter(
+		@Path("p1") String p1,
+		@Header("h1") String h1,
+		@Header("h2") String h2,
+		@Header("h3") String h3,
+		@Query("q1") String q1,
+		@Query("q2") String q2,
+		@Query("q3") String q3,
+		@FormData("f1") String f1,
+		@FormData("f2") String f2,
+		@FormData("f3") String f3
+	) throws Exception {
+
+		assertEquals("dummy-1", p1);
+
+		assertEquals("dummy-2", h1);
+		assertEquals("dummy-3", h2);
+		assertNull(h3);
+		assertEquals("dummy-4", q1);
+		assertEquals("dummy-5", q2);
+		assertNull(q3);
+		assertEquals("dummy-6", f1);
+		assertEquals("dummy-7", f2);
+		assertNull(f3);
+
+		return "OK";
+	}
+
 }

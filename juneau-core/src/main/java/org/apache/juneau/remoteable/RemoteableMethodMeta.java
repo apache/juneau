@@ -90,25 +90,25 @@ public class RemoteableMethodMeta {
 					Class<?> ca = a.annotationType();
 					if (ca == Path.class) {
 						Path p = (Path)a;
-						annotated = pathArgs.add(new RemoteMethodArg(p.value(), index, false));
+						annotated = pathArgs.add(new RemoteMethodArg(p.value(), index, false, p.serializer()));
 					} else if (ca == Query.class) {
 						Query q = (Query)a;
-						annotated = queryArgs.add(new RemoteMethodArg(q.value(), index, false));
+						annotated = queryArgs.add(new RemoteMethodArg(q.value(), index, false, q.serializer()));
 					} else if (ca == QueryIfNE.class) {
 						QueryIfNE q = (QueryIfNE)a;
-						annotated = queryArgs.add(new RemoteMethodArg(q.value(), index, true));
+						annotated = queryArgs.add(new RemoteMethodArg(q.value(), index, true, q.serializer()));
 					} else if (ca == FormData.class) {
 						FormData f = (FormData)a;
-						annotated = formDataArgs.add(new RemoteMethodArg(f.value(), index, false));
+						annotated = formDataArgs.add(new RemoteMethodArg(f.value(), index, false, f.serializer()));
 					} else if (ca == FormDataIfNE.class) {
 						FormDataIfNE f = (FormDataIfNE)a;
-						annotated = formDataArgs.add(new RemoteMethodArg(f.value(), index, true));
+						annotated = formDataArgs.add(new RemoteMethodArg(f.value(), index, true, f.serializer()));
 					} else if (ca == Header.class) {
 						Header h = (Header)a;
-						annotated = headerArgs.add(new RemoteMethodArg(h.value(), index, false));
+						annotated = headerArgs.add(new RemoteMethodArg(h.value(), index, false, h.serializer()));
 					} else if (ca == HeaderIfNE.class) {
 						HeaderIfNE h = (HeaderIfNE)a;
-						annotated = headerArgs.add(new RemoteMethodArg(h.value(), index, true));
+						annotated = headerArgs.add(new RemoteMethodArg(h.value(), index, true, h.serializer()));
 					} else if (ca == RequestBean.class) {
 						annotated = true;
 						requestBeanArgs.add(index);

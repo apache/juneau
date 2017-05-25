@@ -26,6 +26,7 @@ import java.util.regex.*;
 import javax.xml.bind.*;
 
 import org.apache.juneau.parser.*;
+import org.apache.juneau.parser.ParseException;
 
 /**
  * Reusable string utility methods.

@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.client;
 
 import org.apache.http.*;
+import org.apache.juneau.serializer.*;
 import org.apache.juneau.urlencoding.*;
 
 /**
@@ -30,7 +31,7 @@ import org.apache.juneau.urlencoding.*;
 public final class SerializedNameValuePair implements NameValuePair {
 	private String name;
 	private Object value;
-	private UrlEncodingSerializer serializer;
+	private PartSerializer serializer;
 
 	/**
 	 * Constructor.
@@ -39,7 +40,7 @@ public final class SerializedNameValuePair implements NameValuePair {
 	 * @param value The POJO to serialize to the parameter value.
 	 * @param serializer The serializer to use to convert the value to a string.
 	 */
-	public SerializedNameValuePair(String name, Object value, UrlEncodingSerializer serializer) {
+	public SerializedNameValuePair(String name, Object value, PartSerializer serializer) {
 		this.name = name;
 		this.value = value;
 		this.serializer = serializer;
@@ -47,11 +48,11 @@ public final class SerializedNameValuePair implements NameValuePair {
 
 	@Override /* NameValuePair */
 	public String getName() {
-		return serializer.serializePart(name, false, null);
+		return name;
 	}
 
 	@Override /* NameValuePair */
 	public String getValue() {
-		return serializer.serializePart(value, false, null);
+		return serializer.serialize(PartType.FORM_DATA, value);
 	}
 }

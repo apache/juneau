@@ -58,7 +58,7 @@ import org.apache.juneau.utils.*;
  * 	<li><a class="doclink" href="package-summary.html#RestClient">org.apache.juneau.rest.client &gt; REST client API</a> for more information and code examples.
  * </ul>
  */
-@SuppressWarnings("hiding")
+@SuppressWarnings({ "hiding", "unchecked" })
 public final class RestCall {
 
 	private final RestClient client;                       // The client that created this call.
@@ -177,28 +177,31 @@ public final class RestCall {
 	 * 	Can also be {@link Map}, {@link String}, {@link NameValuePairs}, or bean if the name is null/blank/*.
 	 * 	If a {@link String} and the name is null/blank/*, then calls {@link URIBuilder#setCustomQuery(String)}.
 	 * @param skipIfEmpty Don't add the pair if the value is empty.
+	 * @param partSerializer The part serializer to use to convert the value to a string.
+	 * 	If <jk>null</jk>, then the URL-encoding serializer defined on the client is used.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
 	 */
-	@SuppressWarnings("unchecked")
-	public RestCall query(String name, Object value, boolean skipIfEmpty) throws RestCallException {
+	public RestCall query(String name, Object value, boolean skipIfEmpty, PartSerializer partSerializer) throws RestCallException {
+		if (partSerializer == null)
+			partSerializer = client.getPartSerializer();
 		if (! ("*".equals(name) || isEmpty(name))) {
 			if (value != null && ! (isEmpty(value) && skipIfEmpty))
-				uriBuilder.addParameter(name, client.getUrlEncodingSerializer().serializePart(value, false, null));
+				uriBuilder.addParameter(name, partSerializer.serialize(PartType.QUERY, value));
 		} else if (value instanceof NameValuePairs) {
 			for (NameValuePair p : (NameValuePairs)value)
-				query(p.getName(), p.getValue(), skipIfEmpty);
+				query(p.getName(), p.getValue(), skipIfEmpty, partSerializer);
 		} else if (value instanceof String) {
 			String s = value.toString();
 			if (! isEmpty(s))
 				uriBuilder.setCustomQuery(s);
 		} else if (value instanceof Map) {
 			for (Map.Entry<String,Object> p : ((Map<String,Object>) value).entrySet())
-				query(p.getKey(), p.getValue(), skipIfEmpty);
+				query(p.getKey(), p.getValue(), skipIfEmpty, partSerializer);
 		} else if (isBean(value)){
-			return query(name, toBeanMap(value), skipIfEmpty);
+			return query(name, toBeanMap(value), skipIfEmpty, partSerializer);
 		} else {
-			throw new RuntimeException("Invalid name passed to query(name,value,skipIfEmpty): ("+name+","+value+","+skipIfEmpty+")");
+			throw new FormattedRuntimeException("Invalid name ''{0}'' passed to query(name,value,skipIfEmpty) for data type ''{1}''", name, ClassUtils.getReadableClassNameForObject(value));
 		}
 		return this;
 	}
@@ -212,7 +215,7 @@ public final class RestCall {
 	 * @throws RestCallException
 	 */
 	public RestCall query(String name, Object value) throws RestCallException {
-		return query(name, value, false);
+		return query(name, value, false, null);
 	}
 
 	/**
@@ -237,7 +240,7 @@ public final class RestCall {
 	 * @throws RestCallException
 	 */
 	public RestCall queryIfNE(String name, Object value) throws RestCallException {
-		return query(name, value, true);
+		return query(name, value, true, null);
 	}
 
 	/**
@@ -250,7 +253,7 @@ public final class RestCall {
 	 * @throws RestCallException
 	 */
 	public RestCall queryIfNE(Map<String,Object> params) throws RestCallException {
-		return query(null, params, true);
+		return query(null, params, true, null);
 	}
 
 	/**
@@ -272,27 +275,30 @@ public final class RestCall {
 	 * @param value The parameter value converted to a string using UON notation.
 	 * 	Can also be {@link Map}, {@link NameValuePairs}, or bean if the name is null/blank/*.
 	 * @param skipIfEmpty Don't add the pair if the value is empty.
+	 * @param partSerializer The part serializer to use to convert the value to a string.
+	 * 	If <jk>null</jk>, then the URL-encoding serializer defined on the client is used.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
 	 */
-	@SuppressWarnings("unchecked")
-	public RestCall formData(String name, Object value, boolean skipIfEmpty) throws RestCallException {
+	public RestCall formData(String name, Object value, boolean skipIfEmpty, PartSerializer partSerializer) throws RestCallException {
 		if (formData == null)
 			formData = new NameValuePairs();
+		if (partSerializer == null)
+			partSerializer = client.getPartSerializer();
 		if (! ("*".equals(name) || isEmpty(name))) {
 			if (value != null && ! (isEmpty(value) && skipIfEmpty))
-				formData.add(new SerializedNameValuePair(name, value, client.getUrlEncodingSerializer()));
+				formData.add(new SerializedNameValuePair(name, value, partSerializer));
 		} else if (value instanceof NameValuePairs) {
 			for (NameValuePair p : (NameValuePairs)value)
 				if (! (isEmpty(p.getValue()) && skipIfEmpty))
 					formData.add(p);
 		} else if (value instanceof Map) {
 			for (Map.Entry<String,Object> p : ((Map<String,Object>) value).entrySet())
-				formData(p.getKey(), p.getValue(), skipIfEmpty);
+				formData(p.getKey(), p.getValue(), skipIfEmpty, partSerializer);
 		} else if (isBean(value)) {
-			return formData(name, toBeanMap(value), skipIfEmpty);
+			return formData(name, toBeanMap(value), skipIfEmpty, partSerializer);
 		} else {
-			throw new RuntimeException("Invalid name passed to formData(name,value,skipIfEmpty).");
+			throw new FormattedRuntimeException("Invalid name ''{0}'' passed to formData(name,value,skipIfEmpty) for data type ''{1}''", name, ClassUtils.getReadableClassNameForObject(value));
 		}
 		return this;
 	}
@@ -308,7 +314,7 @@ public final class RestCall {
 	 * @throws RestCallException If name was null/blank and value wasn't a {@link Map} or {@link NameValuePairs}.
 	 */
 	public RestCall formData(String name, Object value) throws RestCallException {
-		return formData(name, value, false);
+		return formData(name, value, false, null);
 	}
 
 	/**
@@ -344,7 +350,7 @@ public final class RestCall {
 	 * @throws RestCallException
 	 */
 	public RestCall formDataIfNE(String name, Object value) throws RestCallException {
-		return formData(name, value, true);
+		return formData(name, value, true, null);
 	}
 
 	/**
@@ -357,25 +363,28 @@ public final class RestCall {
 	 * @throws RestCallException
 	 */
 	public RestCall formDataIfNE(Map<String,Object> params) throws RestCallException {
-		return formData(null, params, true);
+		return formData(null, params, true, null);
 	}
 
 	/**
 	 * Replaces a variable of the form <js>"{name}"</js> in the URL path with the specified value.
+	 *
 	 * @param name The path variable name.
 	 * @param value The replacement value.
-	 *
+	 * @param partSerializer The part serializer to use to convert the value to a string.
+	 * 	If <jk>null</jk>, then the URL-encoding serializer defined on the client is used.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException If variable could not be found in path.
 	 */
-	@SuppressWarnings("unchecked")
-	public RestCall path(String name, Object value) throws RestCallException {
+	public RestCall path(String name, Object value, PartSerializer partSerializer) throws RestCallException {
 		String path = uriBuilder.getPath();
+		if (partSerializer == null)
+			partSerializer = client.getPartSerializer();
 		if (! ("*".equals(name) || isEmpty(name))) {
 			String var = "{" + name + "}";
 			if (path.indexOf(var) == -1)
 				throw new RestCallException("Path variable {"+name+"} was not found in path.");
-			String newPath = path.replace(var, client.getUrlEncodingSerializer().serializePart(value, false, null));
+			String newPath = path.replace(var, partSerializer.serialize(PartType.PATH, value));
 			uriBuilder.setPath(newPath);
 		} else if (value instanceof NameValuePairs) {
 			for (NameValuePair p : (NameValuePairs)value)
@@ -386,9 +395,21 @@ public final class RestCall {
 		} else if (isBean(value)) {
 			return path(name, toBeanMap(value));
 		} else {
-			throw new RuntimeException("Invalid name passed to path(name,value).");
+			throw new FormattedRuntimeException("Invalid name ''{0}'' passed to path(name,value) for data type ''{1}''", name, ClassUtils.getReadableClassNameForObject(value));
 		}
 		return this;
+	}
+
+	/**
+	 * Replaces a variable of the form <js>"{name}"</js> in the URL path with the specified value.
+	 *
+	 * @param name The path variable name.
+	 * @param value The replacement value.
+	 * @return This object (for method chaining).
+	 * @throws RestCallException If variable could not be found in path.
+	 */
+	public RestCall path(String name, Object value) throws RestCallException {
+		return path(name, value, null);
 	}
 
 	/**
@@ -473,24 +494,27 @@ public final class RestCall {
 	 * The name can be null/empty if the value is a {@link Map}.
 	 * @param value The header value.
 	 * @param skipIfEmpty Don't add the header if the name is null/empty.
+	 * @param partSerializer The part serializer to use to convert the value to a string.
+	 * 	If <jk>null</jk>, then the URL-encoding serializer defined on the client is used.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
 	 */
-	@SuppressWarnings("unchecked")
-	public RestCall header(String name, Object value, boolean skipIfEmpty) throws RestCallException {
+	public RestCall header(String name, Object value, boolean skipIfEmpty, PartSerializer partSerializer) throws RestCallException {
+		if (partSerializer == null)
+			partSerializer = client.getPartSerializer();
 		if (! ("*".equals(name) || isEmpty(name))) {
 			if (value != null && ! (isEmpty(value) && skipIfEmpty))
-				request.setHeader(name, client.getUrlEncodingSerializer().serializePart(value, false, true));
+				request.setHeader(name, partSerializer.serialize(PartType.HEADER, value));
 		} else if (value instanceof NameValuePairs) {
 			for (NameValuePair p : (NameValuePairs)value)
-				header(p.getName(), p.getValue(), skipIfEmpty);
+				header(p.getName(), p.getValue(), skipIfEmpty, partSerializer);
 		} else if (value instanceof Map) {
 			for (Map.Entry<String,Object> p : ((Map<String,Object>) value).entrySet())
-				header(p.getKey(), p.getValue(), skipIfEmpty);
+				header(p.getKey(), p.getValue(), skipIfEmpty, partSerializer);
 		} else if (isBean(value)) {
-			return header(name, toBeanMap(value), skipIfEmpty);
+			return header(name, toBeanMap(value), skipIfEmpty, partSerializer);
 		} else {
-			throw new RuntimeException("Invalid name passed to header(name,value,skipIfEmpty).");
+			throw new FormattedRuntimeException("Invalid name ''{0}'' passed to header(name,value,skipIfEmpty) for data type ''{1}''", name, ClassUtils.getReadableClassNameForObject(value));
 		}
 		return this;
 	}
@@ -506,7 +530,7 @@ public final class RestCall {
 	 * @throws RestCallException
 	 */
 	public RestCall header(String name, Object value) throws RestCallException {
-		return header(name, value, false);
+		return header(name, value, false, null);
 	}
 
 	/**
@@ -517,7 +541,7 @@ public final class RestCall {
 	 * @throws RestCallException
 	 */
 	public RestCall headers(Map<String,Object> values) throws RestCallException {
-		return header(null, values, false);
+		return header(null, values, false, null);
 	}
 
 	/**
@@ -532,7 +556,7 @@ public final class RestCall {
 	 * @throws RestCallException
 	 */
 	public RestCall headerIfNE(String name, Object value) throws RestCallException {
-		return header(name, value, true);
+		return header(name, value, true, null);
 	}
 
 	/**
@@ -545,7 +569,7 @@ public final class RestCall {
 	 * @throws RestCallException
 	 */
 	public RestCall headersIfNE(Map<String,Object> values) throws RestCallException {
-		return header(null, values, true);
+		return header(null, values, true, null);
 	}
 
 	/**
@@ -1735,7 +1759,6 @@ public final class RestCall {
 	 * @throws IOException If a connection error occurred.
 	 * @see BeanSession#getClassMeta(Class) for argument syntax for maps and collections.
 	 */
-	@SuppressWarnings("unchecked")
 	public <T> T getResponse(Type type, Type...args) throws IOException, ParseException {
 		BeanContext bc = getParser().getBeanContext();
 		if (bc == null)
@@ -1795,7 +1818,6 @@ public final class RestCall {
 		return getResponsePojoRest(ObjectMap.class);
 	}
 
-	@SuppressWarnings("unchecked")
 	<T> T getResponse(ClassMeta<T> type) throws IOException, ParseException {
 		try {
 			if (type.getInnerClass().equals(HttpResponse.class))

@@ -2137,6 +2137,15 @@ public class ThirdPartyProxyTest extends RestTestcase {
 		assertEquals("OK", r);
 	}
 
+	//--------------------------------------------------------------------------------
+	// PartFormatters
+	//--------------------------------------------------------------------------------
+	@Test
+	public void h01() throws Exception {
+		String r = proxy.partFormatters("1", "2", "3", "", "4", "5", "", "6", "7", "");
+		assertEquals("OK", r);
+	}
+
 
 	//--------------------------------------------------------------------------------
 	// Proxy class
@@ -3373,6 +3382,24 @@ public class ThirdPartyProxyTest extends RestTestcase {
 		}
 
 		//--------------------------------------------------------------------------------
+		// PartFormatters
+		//--------------------------------------------------------------------------------
+
+		@RemoteMethod(httpMethod="POST", path="/partFormatters/{p1}")
+		String partFormatters(
+			@Path(value="p1", serializer=DummyPartSerializer.class) String p1,
+			@Header(value="h1", serializer=DummyPartSerializer.class) String h1,
+			@HeaderIfNE(value="h2", serializer=DummyPartSerializer.class) String h2,
+			@HeaderIfNE(value="h3", serializer=DummyPartSerializer.class) String h3,
+			@Query(value="q1", serializer=DummyPartSerializer.class) String q1,
+			@QueryIfNE(value="q2", serializer=DummyPartSerializer.class) String q2,
+			@QueryIfNE(value="q3", serializer=DummyPartSerializer.class) String q3,
+			@FormData(value="f1", serializer=DummyPartSerializer.class) String f1,
+			@FormDataIfNE(value="f2", serializer=DummyPartSerializer.class) String f2,
+			@FormDataIfNE(value="f3", serializer=DummyPartSerializer.class) String f3
+		);
+
+		//--------------------------------------------------------------------------------
 		// Test return types.
 		//--------------------------------------------------------------------------------
 
@@ -3699,6 +3726,13 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			this.b = "";
 			this.c = null;
 			return this;
+		}
+	}
+
+	public static class DummyPartSerializer implements PartSerializer {
+		@Override
+		public String serialize(PartType type, Object value) {
+			return "dummy-"+value;
 		}
 	}
 }

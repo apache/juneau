@@ -132,7 +132,7 @@ import org.apache.juneau.uon.*;
  */
 @Produces("application/x-www-form-urlencoded")
 @SuppressWarnings("hiding")
-public class UrlEncodingSerializer extends UonSerializer {
+public class UrlEncodingSerializer extends UonSerializer implements PartSerializer {
 
 	/** Reusable instance of {@link UrlEncodingSerializer}, all default settings. */
 	public static final UrlEncodingSerializer DEFAULT = new UrlEncodingSerializer(PropertyStore.create());
@@ -396,7 +396,7 @@ public class UrlEncodingSerializer extends UonSerializer {
 	 * If <jk>null</jk>, then uses the value from the {@link UrlEncodingSerializerContext#URLENC_paramFormat} setting.
 	 * @return The serialized object.
 	 */
-	public String serializePart(Object o, Boolean urlEncode, Boolean plainTextParams) {
+	private String serializePart(Object o, Boolean urlEncode, Boolean plainTextParams) {
 		try {
 			// Shortcut for simple types.
 			ClassMeta<?> cm = getBeanContext().getClassMetaForObject(o);
@@ -434,5 +434,16 @@ public class UrlEncodingSerializer extends UonSerializer {
 	protected void doSerialize(SerializerSession session, Object o) throws Exception {
 		UrlEncodingSerializerSession s = (UrlEncodingSerializerSession)session;
 		serializeAnything(s, s.getWriter(), o);
+	}
+
+	@Override /* PartSerializer */
+	public String serialize(PartType type, Object value) {
+		switch(type) {
+			case HEADER: return serializePart(value, false, true);
+			case FORM_DATA: return serializePart(value, false, null);
+			case PATH: return serializePart(value, false, null);
+			case QUERY: return serializePart(value, false, null);
+			default: return StringUtils.toString(value);
+		}
 	}
 }

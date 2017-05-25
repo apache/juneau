@@ -18,6 +18,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.serializer.*;
 import org.apache.juneau.urlencoding.*;
 
 /**
@@ -41,12 +42,12 @@ import org.apache.juneau.urlencoding.*;
  * <p>
  * The argument can be any of the following types:
  * <ul class='spaced-list'>
- * 	<li>Any serializable POJO - Converted to text using {@link UrlEncodingSerializer#serializePart(Object, Boolean, Boolean)}.
+ * 	<li>Any serializable POJO - Converted to text using {@link UrlEncodingSerializer#serialize(PartType,Object)}.
  * 	<li><code>NameValuePairs</code> - Individual name-value pairs.
  * 	<li><code>Map&lt;String,Object&gt;</code> - Individual name-value pairs.
- * 		Values are converted to text using {@link UrlEncodingSerializer#serializePart(Object, Boolean, Boolean)}.
+ * 		Values are converted to text using {@link UrlEncodingSerializer#serialize(PartType,Object)}.
  * 	<li>A bean - Individual name-value pairs.
- * 		Values are converted to text using {@link UrlEncodingSerializer#serializePart(Object, Boolean, Boolean)}.
+ * 		Values are converted to text using {@link UrlEncodingSerializer#serialize(PartType,Object)}.
  * </ul>
  * <p>
  * The annotation can also be applied to a bean property field or getter when the argument is annotated with
@@ -93,4 +94,13 @@ public @interface FormData {
 	 * </ul>
 	 */
 	String value() default "*";
+
+	/**
+	 * Specifies the {@link PartSerializer} class used for serializing values to strings.
+	 * <p>
+	 * The default serializer converters values to UON notation.
+	 * <p>
+	 * This annotation is provided to allow values to be custom serialized.
+	 */
+	Class<? extends PartSerializer> serializer() default UrlEncodingSerializer.class;
 }

@@ -51,7 +51,7 @@ import org.apache.juneau.urlencoding.*;
 /**
  * Builder class for the {@link RestClient} class.
  */
-@SuppressWarnings("hiding")
+@SuppressWarnings({"hiding"})
 public class RestClientBuilder extends CoreObjectBuilder {
 
 	private HttpClientConnectionManager httpClientConnectionManager;
@@ -61,8 +61,10 @@ public class RestClientBuilder extends CoreObjectBuilder {
 
 	private Class<? extends Serializer> serializerClass = JsonSerializer.class;
 	private Class<? extends Parser> parserClass = JsonParser.class;
+	private Class<? extends PartSerializer> partSerializerClass = UrlEncodingSerializer.class;
 	private Serializer serializer;
 	private Parser parser;
+	private PartSerializer partSerializer;
 
 	private Map<String,String> headers = new TreeMap<String,String>(String.CASE_INSENSITIVE_ORDER);
 
@@ -140,7 +142,17 @@ public class RestClientBuilder extends CoreObjectBuilder {
 
 			UrlEncodingSerializer us = new SerializerBuilder(propertyStore).build(UrlEncodingSerializer.class);
 
-			return new RestClient(propertyStore, httpClient, keepHttpClientOpen, s, p, us, headers, interceptors, rootUrl, retryOn, retries, retryInterval, debug, executorService, executorServiceShutdownOnClose);
+			PartSerializer pf = null;
+			if (partSerializer != null)
+				pf = partSerializer;
+			else if (partSerializerClass != null) {
+				if (partSerializerClass == UrlEncodingSerializer.class)
+					pf = us;
+				else
+					pf = partSerializerClass.newInstance();
+			}
+
+			return new RestClient(propertyStore, httpClient, keepHttpClientOpen, s, p, us, pf, headers, interceptors, rootUrl, retryOn, retries, retryInterval, debug, executorService, executorServiceShutdownOnClose);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -379,6 +391,31 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	 */
 	public RestClientBuilder parser(Class<? extends Parser> parserClass) {
 		this.parserClass = parserClass;
+		return this;
+	}
+
+	/**
+	 * Sets the part serializer to use for converting POJOs to headers, query parameters, form-data parameters, and
+	 * path variables.
+	 *
+	 * @param partSerializer The part serializer instance.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder partSerializer(PartSerializer partSerializer) {
+		this.partSerializer = partSerializer;
+		return this;
+	}
+
+	/**
+	 * Sets the part formatter to use for converting POJOs to headers, query parameters, form-data parameters, and
+	 * path variables.
+	 *
+	 * @param partSerializerClass The part serializer class.
+	 * 	The class must have a no-arg constructor.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder partSerializer(Class<? extends PartSerializer> partSerializerClass) {
+		this.partSerializerClass = partSerializerClass;
 		return this;
 	}
 

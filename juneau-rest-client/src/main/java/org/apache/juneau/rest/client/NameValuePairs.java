@@ -18,6 +18,7 @@ import org.apache.http.*;
 import org.apache.http.client.entity.*;
 import org.apache.http.message.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.serializer.*;
 import org.apache.juneau.urlencoding.*;
 
 /**
@@ -67,16 +68,15 @@ public final class NameValuePairs extends LinkedList<NameValuePair> {
 	/**
 	 * Appends the specified name/value pair to the end of this list.
 	 * <p>
-	 * The value is converted to UON notation using the {@link UrlEncodingSerializer#serializePart(Object, Boolean, Boolean)} method
-	 * of the specified serializer.
+	 * The value is converted to UON notation using the {@link UrlEncodingSerializer} defined on the client.
 	 *
 	 * @param name The pair name.
 	 * @param value The pair value.
-	 * @param serializer The serializer to use to convert the value to a string.
+	 * @param partSerializer The serializer to use for converting values to simple strings.
 	 * @return This object (for method chaining).
 	 */
-	public NameValuePairs append(String name, Object value, UrlEncodingSerializer serializer) {
-		super.add(new SerializedNameValuePair(name, value, serializer));
+	public NameValuePairs append(String name, Object value, PartSerializer partSerializer) {
+		super.add(new SerializedNameValuePair(name, value, partSerializer));
 		return this;
 	}
 }

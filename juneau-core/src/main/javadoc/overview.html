@@ -6136,6 +6136,20 @@
 					<li>{@link org.apache.juneau.Session#getProperty(Class,String)}
 					<li>{@link org.apache.juneau.Session#getProperty(Class,String,Object)}
 				</ul>	
+			<li>New {@link org.apache.juneau.serializer.PartSerializer} interface particularly tailored to HTTP
+				headers, query parameters, form-data parameters, and path variables.  
+				<br>Allows easy user-defined serialization of these objects.
+				<br>The interface can be used in the following locations:
+				<ul>
+					<li>{@link org.apache.juneau.rest.client.RestClientBuilder#partSerializer(Class)}
+					<li>{@link org.apache.juneau.remoteable.Path#serializer} 
+					<li>{@link org.apache.juneau.remoteable.Query#serializer} 
+					<li>{@link org.apache.juneau.remoteable.QueryIfNE#serializer} 
+					<li>{@link org.apache.juneau.remoteable.FormData#serializer} 
+					<li>{@link org.apache.juneau.remoteable.FormDataIfNE#serializer} 
+					<li>{@link org.apache.juneau.remoteable.Header#serializer} 
+					<li>{@link org.apache.juneau.remoteable.HeaderIfNE#serializer} 
+				</ul>
 		</ul>
 
 		<h6 class='topic'>org.apache.juneau.rest</h6>
@@ -6504,18 +6518,18 @@
 			<li>New methods on {@link org.apache.juneau.rest.client.RestCall}:
 				<ul>
 					<li>{@link org.apache.juneau.rest.client.RestCall#uri(Object) uri(Object)}
-					<li>{@link org.apache.juneau.rest.client.RestCall#query(String,Object,boolean) query(String,Object,boolean)}
+					<li>{@link org.apache.juneau.rest.client.RestCall#query(String,Object,boolean,PartSerializer) query(String,Object,boolean,PartSerializer)}
 					<li>{@link org.apache.juneau.rest.client.RestCall#query(String,Object) query(String,Object)}
 					<li>{@link org.apache.juneau.rest.client.RestCall#queryIfNE(String,Object) queryIfNE(String,Object)}
 					<li>{@link org.apache.juneau.rest.client.RestCall#query(Map) query(Map)}
 					<li>{@link org.apache.juneau.rest.client.RestCall#queryIfNE(Map) queryIfNE(Map)}
 					<li>{@link org.apache.juneau.rest.client.RestCall#query(String) query(String)}
-					<li>{@link org.apache.juneau.rest.client.RestCall#formData(String,Object,boolean) formData(String,Object,boolean)}
+					<li>{@link org.apache.juneau.rest.client.RestCall#formData(String,Object,boolean,PartSerializer) formData(String,Object,boolean,PartSerializer)}
 					<li>{@link org.apache.juneau.rest.client.RestCall#formData(String,Object) formData(String,Object)}
 					<li>{@link org.apache.juneau.rest.client.RestCall#formDataIfNE(String,Object) formDataIfNE(String,Object)}
 					<li>{@link org.apache.juneau.rest.client.RestCall#formData(Map) formData(Map)}
 					<li>{@link org.apache.juneau.rest.client.RestCall#formDataIfNE(Map) formDataIfNE(Map)}
-					<li>{@link org.apache.juneau.rest.client.RestCall#header(String,Object,boolean) header(String,Object,boolean)}
+					<li>{@link org.apache.juneau.rest.client.RestCall#header(String,Object,boolean,PartSerializer) header(String,Object,boolean,PartSerializer)}
 					<li>{@link org.apache.juneau.rest.client.RestCall#header(String,Object) header(String,Object)}
 					<li>{@link org.apache.juneau.rest.client.RestCall#headerIfNE(String,Object) headerIfNE(String,Object)}
 					<li>{@link org.apache.juneau.rest.client.RestCall#headers(Map) headers(Map)}
@@ -6555,7 +6569,7 @@
 			<li>New methods added to {@link org.apache.juneau.rest.client.NameValuePairs}:
 				<ul>
 					<li>{@link org.apache.juneau.rest.client.NameValuePairs#append(String,Object) append(String,Object)}
-					<li>{@link org.apache.juneau.rest.client.NameValuePairs#append(String,Object,UrlEncodingSerializer) append(String,Object,UrlEncodingSerializer)}
+					<li>{@link org.apache.juneau.rest.client.NameValuePairs#append(String,Object,PartSerializer) append(String,Object,PartSerializer)}
 				</ul>
 			<li>{@link org.apache.juneau.rest.client.RetryOn} is now an abstract class with an additional method:
 				<ul>
