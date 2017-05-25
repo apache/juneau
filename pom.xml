@@ -138,10 +138,11 @@
 				<!--
 					! Can be removed if updated to asf parent version 19.
 				-->
-				<version>0.12</version>
 				<configuration>
 					<excludes>
 						<exclude>**/target/**</exclude>
+						<exclude>**/.settings/**</exclude>
+						<exclude>**/.project</exclude>
 					</excludes>
 					<consoleOutput>true</consoleOutput>
 					<!-- Note:  useEclipseDefaultExcludes does not work for subprojects.  See RAT-107 -->
