@@ -18,6 +18,8 @@ import static org.apache.juneau.UriRelativity.*;
 
 import java.io.*;
 
+import org.apache.juneau.annotation.*;
+
 /**
  * Represents a URL broken into authority/context-root/servlet-path/path-info parts.
  * <p>
@@ -49,7 +51,15 @@ import java.io.*;
  *
  * The following class shows how
  */
+@Bean
 public class UriContext {
+
+	/**
+	 * Default URI context.
+	 * No URI resolution occurs.
+	 * No information about authority, servlet-root, context-root, or path-info is known.
+	 */
+	public static final UriContext DEFAULT = new UriContext(UriResolution.NONE, UriRelativity.PATH_INFO, null, null, null, null);
 
 	private final String authority, contextRoot, servletPath, pathInfo, parentPath;
 
@@ -74,6 +84,7 @@ public class UriContext {
 	 * @param servletPath - The servlet path (e.g. <js>"/servlet-path"</js>, or <js>"servlet-path"</js>)
 	 * @param pathInfo - The path info (e.g. <js>"/path-info"</js>, or <js>"path-info"</js>)
 	 */
+	@BeanConstructor(properties="resolution,relativity,authority,contextRoot,servletPath,pathInfo")
 	public UriContext(UriResolution resolution, UriRelativity relativity, String authority, String contextRoot, String servletPath, String pathInfo) {
 		this.resolution = resolution;
 		this.relativity = relativity;

@@ -286,9 +286,25 @@ public class SerializerContext extends BeanContext {
 	 */
 	public static final String SERIALIZER_absolutePathUriBase = "Serializer.absolutePathUriBase";
 
-	public static final String SERIALIZER_uriResolution = "Serializer.uriResolution";
-
-	public static final String SERIALIZER_uriRelativity = "Serializer.uriRelativity";
+	/**
+	 * <b>Configuration property:</b>  URI context bean.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Serializer.uriContext"</js>
+	 * 	<li><b>Data type:</b> {@link UriContext}
+	 * 	<li><b>Default:</b> {@link UriContext#DEFAULT}
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * Bean used for resolution of URIs to absolute or root-relative form.
+	 * <p>
+	 * For example, to define a URI context that causes relative URIs to be converted to root-relative form and
+	 * assumes relative URIs are relative to the servlet path:
+	 * <p class='bcode'>
+	 * 	<js>"{resolution:'ROOT_RELATIVE',relativity:'RESOURCE',contextRoot:'/myContext',servletPath:'/myServlet'}"</js>
+	 * </p>
+	 */
+	public static final String SERIALIZER_uriContext = "Serializer.uriContext";
 
 	/**
 	 * <b>Configuration property:</b>  Sort arrays and collections alphabetically.
@@ -353,8 +369,7 @@ public class SerializerContext extends BeanContext {
 		abridged;
 	final char quoteChar;
 	final String relativeUriBase, absolutePathUriBase;
-	final UriResolution uriResolution;
-	final UriRelativity uriRelativity;
+	final UriContext uriContext;
 
 	/**
 	 * Constructor.
@@ -379,8 +394,7 @@ public class SerializerContext extends BeanContext {
 		quoteChar = ps.getProperty(SERIALIZER_quoteChar, String.class, "\"").charAt(0);
 		relativeUriBase = resolveRelativeUriBase(ps.getProperty(SERIALIZER_relativeUriBase, String.class, ""));
 		absolutePathUriBase = resolveAbsolutePathUriBase(ps.getProperty(SERIALIZER_absolutePathUriBase, String.class, ""));
-		uriResolution = ps.getProperty(SERIALIZER_uriResolution, UriResolution.class, UriResolution.ROOT_RELATIVE);
-		uriRelativity = ps.getProperty(SERIALIZER_uriRelativity, UriRelativity.class, UriRelativity.RESOURCE);
+		uriContext = ps.getProperty(SERIALIZER_uriContext, UriContext.class, UriContext.DEFAULT);
 	}
 
 	private static String resolveRelativeUriBase(String s) {
@@ -421,8 +435,7 @@ public class SerializerContext extends BeanContext {
 				.append("quoteChar", quoteChar)
 				.append("relativeUriBase", relativeUriBase)
 				.append("absolutePathUriBase", absolutePathUriBase)
-				.append("uriResolution", uriResolution)
-				.append("uriRelativity", uriRelativity)
+				.append("uriContext", uriContext)
 			);
 	}
 }
