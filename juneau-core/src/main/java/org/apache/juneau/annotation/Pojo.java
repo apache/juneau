@@ -50,10 +50,10 @@ public @interface Pojo {
 	 *
 	 * 	<jc>// Our POJO swap to force the bean to be serialized as a String</jc>
 	 * 	<jk>public class</jk> BSwap <jk>extends</jk> PojoSwap&lt;B,String&gt; {
-	 * 		<jk>public</jk> String swap(B o) <jk>throws</jk> SerializeException {
+	 * 		<jk>public</jk> String swap(BeanSession s, B o) <jk>throws</jk> SerializeException {
 	 * 			<jk>return</jk> o.f1;
 	 * 		}
-	 * 		<jk>public</jk> B unswap(String f) <jk>throws</jk> ParseException {
+	 * 		<jk>public</jk> B unswap(BeanSession s, String f) <jk>throws</jk> ParseException { {
 	 * 			B b1 = <jk>new</jk> B();
 	 * 			b1.<jf>f1</jf> = f;
 	 * 			<jk>return</jk> b1;
@@ -65,11 +65,11 @@ public @interface Pojo {
 	 * 		B b = <jk>new</jk> B();
 	 * 		b.<jf>f1</jf> = <js>"bar"</js>;
 	 * 		String json = s.serialize(b);
-	 * 		<jsm>assertEquals</jsm>(<js>"'bar'"</js>, json);
+	 * 		<jsm>assertEquals</jsm>(<js>"\"bar\""</js>, json);
 	 *
 	 * 		ReaderParser p = JsonParser.<jsf>DEFAULT</jsf>;
 	 * 		b = p.parse(json, B.<jk>class</jk>);
-	 * 		<jsm>assertEquals</jsm>(<js>"bar"</js>, t.<jf>f1</jf>);
+	 * 		<jsm>assertEquals</jsm>(<js>"bar"</js>, b.<jf>f1</jf>);
 	 * 	}
 	 * </p>
 	 * <p>
