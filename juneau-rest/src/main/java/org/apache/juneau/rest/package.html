@@ -226,7 +226,7 @@
 	 */</jd>
 	<ja>@RestResource</ja>(
 		messages=<js>"nls/HelloWorldResource"</js>, 
-		pageLinks=<js>"{up:'$R{requestParentURI}',options:'?method=OPTIONS'}"</js>
+		pageLinks=<js>"{up:'request:/..',options:'servlet:/?method=OPTIONS'}"</js>
 	)
 	<jk>public class</jk> HelloWorldResource <jk>extends</jk> Resource {
 	
@@ -2172,7 +2172,7 @@
 		messages=<js>"nls/UrlEncodedFormResource"</js>, 
 		title=<js>"URL-encoded Form Post Resource"</js>, 
 		description=<js>"Shows how form posts are converted into beans."</js>, 
-		pageLinks=<js>"{up:'$R{requestParentURI}',options:'?method=OPTIONS'}"</js> 
+		pageLinks=<js>"{up:'request:/..',options:'servlet:/?method=OPTIONS'}"</js> 
 	) 
 	<jk>public class</jk> UrlEncodedFormResource <jk>extends</jk> Resource { 
 		<jk>private static final long</jk> <jsf>serialVersionUID</jsf> = 1L; 
@@ -3076,15 +3076,6 @@
 			<li>Subclasses can use either {@link javax.servlet.http.HttpServlet#init(ServletConfig)} 
 					or {@link javax.servlet.http.HttpServlet#init()} for initialization
 					just like any other servlet.
-			<li>The {@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_relativeUriBase} property is automatically 
-					set to the context root (e.g. <l>"/mycontextroot"</l>) of the web application during servlet initialization.
-				This value can be overridden through the {@link org.apache.juneau.rest.annotation.RestResource#properties() @RestResource.properties()} 
-					or {@link org.apache.juneau.rest.annotation.RestMethod#properties() @RestMethod.properties()} annotations, or through 
-					{@link org.apache.juneau.rest.RestResponse#setProperty(String, Object)}.
-			<li>The {@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_absolutePathUriBase} property is automatically 
-					set to the HTTP authority (e.g. <l>"https://myhost:9443"</l>) during each request.
-				This value can be overridden through the {@link org.apache.juneau.rest.annotation.RestMethod#properties() @RestMethod.properties()} annotations, 
-					or through {@link org.apache.juneau.rest.RestResponse#setProperty(String, Object)}.
 			<li>The <l>X-Response-Headers</l> header can be used to pass through header values into the response.
 				The value should be a URL-encoded map of key-value pairs.
 				For example, to add a <l>"Refresh: 1"</l> header to the response to auto-refresh a page, the following parameter
@@ -3217,17 +3208,48 @@
 	<ja>@RestResource</ja>( 
 		path=<js>"/addressBook"</js>, 
 		messages=<js>"nls/AddressBookResource"</js>, 
-		pageLinks=<js>"{up:'$R{requestParentURI}',options:'?method=OPTIONS'}"</js>, 
-		properties={ 
-			<ja>@Property</ja>(name=<jsf>REST_allowMethodParam</jsf>, value=<js>"*"</js>), 
-			<ja>@Property</ja>(name=<jsf>HTML_uriAnchorText</jsf>, value=<jsf>TO_STRING</jsf>), 
-			<ja>@Property</ja>(name=<jsf>SERIALIZER_quoteChar</jsf>, value=<js>"'"</js>), 
-			<ja>@Property</ja>(name=<jsf>RDF_rdfxml_tab</jsf>, value=<js>"5"</js>), 
-			<ja>@Property</ja>(name=<jsf>RDF_addRootProperty</jsf>, value=<js>"true"</js>), 
-			<jc>// Resolve all relative URIs so that they're relative to this servlet!</jc> 
-			<ja>@Property</ja>(name=<jsf>SERIALIZER_relativeUriBase</jsf>, value=<js>"$R{servletURI}"</js>), 
-		}, 
-		encoders=GzipEncoder.<jk>class</jk> 
+
+		<jc>// Links on the HTML rendition page.
+		// "request:/..." URIs are relative to the request URI.
+		// "servlet:/..." URIs are relative to the servlet URI.
+		// "$C{...}" variables are pulled from the config file.</jc>
+		pageLinks=<js>"{up:'request:/..', options:'servlet:/?method=OPTIONS', source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/addressbook/AddressBookResource.java'}"</js>,
+
+		<jc>// Properties that get applied to all serializers and parsers.</jc>
+		properties={
+			
+			<jc>// Allow INIT as a method parameter.</jc>
+			<ja>@Property</ja>(name=<jsf>REST_allowMethodParam</jsf>, value=<js>"*"</js>),
+	
+			<jc>// Use single quotes.</jc>
+			<ja>@Property</ja>(name=<jsf>SERIALIZER_quoteChar</jsf>, value=<js>"'"</js>),
+			
+			<jc>// Make RDF/XML readable.</jc>
+			<ja>@Property</ja>(name=<jsf>RDF_rdfxml_tab</jsf>, value=<js>"5"</js>),
+			
+			<jc>// Make RDF parsable by adding a root node.</jc>
+			<ja>@Property</ja>(name=<jsf>RDF_addRootProperty</jsf>, value=<js>"true"</js>),
+			
+			<jc>// Make URIs absolute so that we can easily reference them on the client side.</jc>
+			<ja>@Property</ja>(name=<jsf>SERIALIZER_uriResolution</jsf>, value=<js>"ABSOLUTE"</js>)
+		
+			<jc>// Make the anchor text on URLs be just the path relative to the servlet.</jc>
+			<ja>@Property</ja>(name=<jsf>HTML_uriAnchorText</jsf>, value=<js>"SERVLET_RELATIVE"</js>)
+		},
+		
+		<jc>// Our stylesheet for the HTML rendition.</jc>
+		stylesheet=<js>"styles/devops.css"</js>,
+		
+		<jc>// Support GZIP encoding on Accept-Encoding header.</jc>
+		encoders=GzipEncoder.<jk>class</jk>,
+		
+		<jc>// Swagger info.</jc>
+		contact=<js>"{name:'John Smith',email:'john@smith.com'}"</js>,
+		license=<js>"{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}"</js>,
+		version=<js>"2.0"</js>,
+		termsOfService=<js>"You're on your own."</js>,
+		tags=<js>"[{name:'Java',description:'Java utility',externalDocs:{description:'Home page',url:'http://juneau.apache.org'}}]"</js>,
+		externalDocs=<js>"{description:'Home page',url:'http://juneau.apache.org'}"</js>
 	) 
 	<jk>public class</jk> AddressBookResource <jk>extends</jk> ResourceJena { 
 		<jk>private static final long</jk> <jsf>serialVersionUID</jsf> = 1L; 
@@ -3240,7 +3262,7 @@
 		
 			<jk>try</jk> { 
 				<jc>// Create the address book</jc> 
-				<jf>addressBook</jf> = <jk>new</jk> AddressBook(java.net.URI.create(<js>""</js>)); 
+				<jf>addressBook</jf> = <jk>new</jk> AddressBook(java.net.URI.create(<js>"servlet:/"</js>)); 
 				
 				<jc>// Add some people to our address book by default</jc> 
 				<jf>addressBook</jf>.createPerson( 

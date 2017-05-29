@@ -808,7 +808,7 @@ public @interface RestResource {
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		properties={
-	 * 			<ja>@Property</ja>(name=<jsf>HTMLDOC_links</jsf>, value=<js>"{up:'$R{requestParentURI}',options:'?method=OPTIONS'}"</js>)
+	 * 			<ja>@Property</ja>(name=<jsf>HTMLDOC_links</jsf>, value=<js>"{up:'request:/..',options:'servlet:/?method=OPTIONS'}"</js>)
 	 * 		}
 	 * 	)
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServletDefault {
@@ -823,6 +823,8 @@ public @interface RestResource {
 	 * <ol>
 	 * <p>
 	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * <p>
+	 * This field can also use URIs of any support type in {@link UriResolver}.
 	 * <p>
 	 * The programmatic equivalent to this annotation are the {@link RestConfig#setPageLinks(String)}/{@link RestResponse#setPageLinks(Object)} methods.
 	 */

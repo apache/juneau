@@ -16,7 +16,6 @@ import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.dto.swagger.SwaggerBuilder.*;
 import static org.apache.juneau.rest.RestContext.*;
 import static org.apache.juneau.rest.annotation.Inherit.*;
-import static org.apache.juneau.serializer.SerializerContext.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -800,11 +799,6 @@ class CallMethod implements Comparable<CallMethod>  {
 							return req.getFormData().get(remainder);
 						if ("header".equals(prefix))
 							return req.getHeader(remainder);
-					}
-					if (k.equals(SERIALIZER_absolutePathUriBase)) {
-						int serverPort = req.getServerPort();
-						String serverName = req.getServerName();
-						return req.getScheme() + "://" + serverName + (serverPort == 80 || serverPort == 443 ? "" : ":" + serverPort);
 					}
 					if (k.equals(REST_servletPath))
 						return req.getServletPath();

@@ -13,7 +13,6 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.internal.ArrayUtils.*;
-import static org.apache.juneau.serializer.SerializerContext.*;
 
 import java.io.*;
 import java.util.*;
@@ -68,7 +67,7 @@ import org.apache.juneau.svl.vars.*;
  * that contains a snapshot of these settings.  If you call <code><jk>super</jk>.init(RestServletConfig)<code> before
  * you modify this config object, you won't see the changes!
  */
-@SuppressWarnings("hiding")
+@SuppressWarnings({"hiding"})
 public class RestConfig implements ServletConfig {
 
 	final ServletConfig inner;
@@ -151,14 +150,6 @@ public class RestConfig implements ServletConfig {
 			// Add our config file to the variable resolver.
 			varResolverBuilder.contextObject(ConfigFileVar.SESSION_config, configFile);
 			vr = varResolverBuilder.build();
-
-			// Add our servlet URI to our properties.
-			ServletContext ctx = config.getServletContext();
-			String ctxPath = ctx.getContextPath();
-			// Workaround for bug in Jetty that causes context path to always end in "null".
-			if (ctxPath.endsWith("null"))
-				ctxPath = ctxPath.substring(0, ctxPath.length()-4);
-			properties.put(SERIALIZER_relativeUriBase, ctxPath);
 
 			// Add the servlet init parameters to our properties.
 			for (Enumeration<String> ep = config.getInitParameterNames(); ep.hasMoreElements();) {

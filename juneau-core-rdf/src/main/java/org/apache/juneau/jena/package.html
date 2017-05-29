@@ -431,8 +431,10 @@
 		<ja>@URI</ja> <jk>public</jk> String <jf>addressBookUri</jf>;
 		</p>
 		<p>
-			Also take note of the {@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_relativeUriBase} and {@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_absolutePathUriBase}
-				settings that can be specified on the serializer to resolve relative and context-root-relative URIs to fully-qualfied URIs.
+			Also take note of the {@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_uriResolution},
+			{@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_uriRelativity}, and 
+			and {@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_uriContext}
+			settings that can be specified on the serializer to resolve relative and context-root-relative URIs to fully-qualified URIs.
 		</p>
 		<p>
 			This can be useful if you want to keep the URI authority and context root information out of the bean logic layer.

@@ -30,13 +30,10 @@ public class HtmlWriter extends XmlWriter {
 	 * @param useWhitespace If <jk>true</jk>, tabs will be used in output.
 	 * @param trimStrings If <jk>true</jk>, strings should be trimmed before they're serialized.
 	 * @param quoteChar The quote character to use (i.e. <js>'\''</js> or <js>'"'</js>)
-	 * @param uriContext The web application context path (e.g. "/contextRoot").
-	 * @param uriAuthority The web application URI authority (e.g. "http://hostname:9080")
-	 * @param uriContext2 The URI context.
-	 * 	Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
+	 * @param uriResolver The URI resolver for resolving URIs to absolute or root-relative form.
 	 */
-	public HtmlWriter(Writer out, boolean useWhitespace, boolean trimStrings, char quoteChar, String uriContext, String uriAuthority, UriContext uriContext2) {
-		super(out, useWhitespace, trimStrings, quoteChar, uriContext, uriAuthority, uriContext2, false, null);
+	public HtmlWriter(Writer out, boolean useWhitespace, boolean trimStrings, char quoteChar, UriResolver uriResolver) {
+		super(out, useWhitespace, trimStrings, quoteChar, uriResolver, false, null);
 	}
 
 	/**
@@ -260,14 +257,14 @@ public class HtmlWriter extends XmlWriter {
 	}
 
 	@Override /* XmlSerializerWriter */
-	public HtmlWriter attr(String ns, String name, Object value, boolean needsEncoding) throws IOException {
-		super.attr(ns, name, value, needsEncoding);
+	public HtmlWriter attr(String ns, String name, Object value, boolean valNeedsEncoding) throws IOException {
+		super.attr(ns, name, value, valNeedsEncoding);
 		return this;
 	}
 
 	@Override /* XmlSerializerWriter */
-	public HtmlWriter attr(String name, Object value, boolean needsEncoding) throws IOException {
-		super.attr(null, name, value, needsEncoding);
+	public HtmlWriter attr(String name, Object value, boolean valNeedsEncoding) throws IOException {
+		super.attr(null, name, value, valNeedsEncoding);
 		return this;
 	}
 

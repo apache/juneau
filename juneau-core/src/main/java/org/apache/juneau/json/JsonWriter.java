@@ -61,13 +61,10 @@ public final class JsonWriter extends SerializerWriter {
 	 * @param quoteChar The quote character to use (i.e. <js>'\''</js> or <js>'"'</js>)
 	 * @param laxMode If <jk>true</jk>, JSON attributes will only be quoted when necessary.
 	 * @param trimStrings If <jk>true</jk>, strings will be trimmed before being serialized.
-	 * @param relativeUriBase The base (e.g. <js>https://localhost:9443/contextPath"</js>) for relative URIs (e.g. <js>"my/path"</js>).
-	 * @param absolutePathUriBase The base (e.g. <js>https://localhost:9443"</js>) for relative URIs with absolute paths (e.g. <js>"/contextPath/my/path"</js>).
-	 * @param uriContext The URI context.
-	 * 	Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
+	 * @param uriResolver The URI resolver for resolving URIs to absolute or root-relative form.
 	 */
-	protected JsonWriter(Writer out, boolean useWhitespace, boolean escapeSolidus, char quoteChar, boolean laxMode, boolean trimStrings, String relativeUriBase, String absolutePathUriBase, UriContext uriContext) {
-		super(out, useWhitespace, trimStrings, quoteChar, relativeUriBase, absolutePathUriBase, uriContext);
+	protected JsonWriter(Writer out, boolean useWhitespace, boolean escapeSolidus, char quoteChar, boolean laxMode, boolean trimStrings, UriResolver uriResolver) {
+		super(out, useWhitespace, trimStrings, quoteChar, uriResolver);
 		this.laxMode = laxMode;
 		this.escapeSolidus = escapeSolidus;
 		this.ec = escapeSolidus ? encodedChars2 : encodedChars;
@@ -166,6 +163,16 @@ public final class JsonWriter extends SerializerWriter {
 		return this;
 	}
 
+	/**
+	 * Appends a URI to the output.
+	 *
+	 * @param uri The URI to append to the output.
+	 * @return This object (for method chaining).
+	 * @throws IOException
+	 */
+	public SerializerWriter uriValue(Object uri) throws IOException {
+		return stringValue(uriResolver.resolve(uri));
+	}
 
 	//--------------------------------------------------------------------------------
 	// Overridden methods

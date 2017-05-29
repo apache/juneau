@@ -31,7 +31,7 @@ import org.apache.juneau.rest.annotation.*;
 	path="/atom",
 	title="Sample ATOM feed resource",
 	description="Sample resource that shows how to render ATOM feeds",
-	pageLinks="{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/AtomFeedResource.java'}",
+	pageLinks="{up:'request:/..',options:'servlet:/?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/AtomFeedResource.java'}",
 	properties={
 		@Property(name=SERIALIZER_quoteChar, value="'"),
 		@Property(name=RDF_rdfxml_tab, value="5"),

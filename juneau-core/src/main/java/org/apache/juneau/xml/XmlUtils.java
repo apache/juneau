@@ -13,6 +13,7 @@
 package org.apache.juneau.xml;
 
 import java.io.*;
+import java.net.*;
 import java.util.*;
 
 import javax.xml.stream.*;
@@ -27,246 +28,7 @@ import org.apache.juneau.xml.annotation.*;
 public final class XmlUtils {
 
 	//--------------------------------------------------------------------------------
-	// Encode URI part
-	//--------------------------------------------------------------------------------
-
-	/**
-	 * Encodes invalid XML text characters to <code>_x####_</code> sequences.
-	 *
-	 * @param o The object being encoded.
-	 * @return The encoded string.
-	 */
-	public static final String encodeInvalidCharsForText(Object o) {
-
-		if (o == null)
-			return "_x0000_";
-
-		String s = o.toString();
-
-		try {
-			if (! needsTextEncoding(s))
-				return s;
-			final int len = s.length();
-			StringWriter sw = new StringWriter(s.length()*2);
-			for (int i = 0; i < len; i++) {
-				char c = s.charAt(i);
-				if ((i == 0 || i == len-1) && Character.isWhitespace(c))
-					appendPaddedHexChar(sw, c);
-				else if (c == '_' && isEscapeSequence(s,i))
-					appendPaddedHexChar(sw, c);
-				else if (isValidXmlCharacter(c))
-					sw.append(c);
-				else
-					appendPaddedHexChar(sw, c);
-			}
-			return sw.toString();
-		} catch (IOException e) {
-			throw new RuntimeException(e); // Never happens
-		}
-	}
-
-	/**
-	 * Encodes any invalid XML text characters to <code>_x####_</code> sequences and sends the response
-	 * 	to the specified writer.
-	 * Encodes <js>'&amp;'</js>, <js>'&lt;'</js>, and <js>'&gt;'</js> as XML entities.<br>
-	 * Encodes invalid XML text characters to <code>_x####_</code> sequences.
-	 *
-	 * @param w The writer to send the output to.
-	 * @param o The object being encoded.
-	 * @param trim Trim the text before serializing it.
-	 * @param preserveWhitespace Specifies whether we're in preserve-whitespace mode.
-	 * 	(e.g. {@link XmlFormat#MIXED_PWS} or {@link XmlFormat#TEXT_PWS}.
-	 * If <jk>true</jk>, leading and trailing whitespace characters will be encoded.
-	 * @return The same writer passed in.
-	 * @throws IOException Thrown from the writer.
-	 */
-	public static final Writer encodeText(Writer w, Object o, boolean trim, boolean preserveWhitespace) throws IOException {
-
-		if (o == null)
-			return w.append("_x0000_");
-
-		String s = o.toString();
-		if (s.isEmpty())
-			return w.append("_xE000_");
-		if (trim)
-			s = s.trim();
-
-		if (needsTextEncoding(s)) {
-			final int len = s.length();
-			for (int i = 0; i < len; i++) {
-				char c = s.charAt(i);
-				if ((i == 0 || i == len-1) && Character.isWhitespace(c) && ! preserveWhitespace)
-					appendPaddedHexChar(w, c);
-				else if (c == '&')
-					w.append("&amp;");
-				else if (c == '<')
-					w.append("&lt;");
-				else if (c == '>')
-					w.append("&gt;");
-				else if (c == '_' && isEscapeSequence(s,i))
-					appendPaddedHexChar(w, c);
-				else if (isValidXmlCharacter(c))
-					w.append(c);
-				else if (c == 0x09 || c == 0x0A || c == 0x0D)
-					w.append("&#x000").append(Integer.toHexString(c)).append(";");
-				else
-					appendPaddedHexChar(w, c);
-			}
-		} else {
-			w.append(s);
-		}
-
-		return w;
-	}
-
-
-	private static final boolean needsTextEncoding(String s) {
-		// See if we need to convert the string.
-		// Conversion is somewhat expensive, so make sure we need to do so before hand.
-		final int len = s.length();
-		for (int i = 0; i < len; i++) {
-			char c = s.charAt(i);
-			if ((i == 0 || i == len-1) && Character.isWhitespace(c))
-				return true;
-			if (c == '&' || c == '<' || c == '>' || c == '\n' || ! isValidXmlCharacter(c) || (c == '_' && isEscapeSequence(s,i)))
-				return true;
-		}
-		return false;
-	}
-
-
-	//--------------------------------------------------------------------------------
-	// Decode XML text
-	//--------------------------------------------------------------------------------
-
-	/**
-	 * Translates any _x####_ sequences (introduced by the various encode methods) back into their original characters.
-	 *
-	 * @param s The string being decoded.
-	 * @param sb The string builder to use as a scratch pad.
-	 * @return The decoded string.
-	 */
-	public static final String decode(String s, StringBuilder sb) {
-		if (s == null) return null;
-		if (s.length() == 0)
-			return s;
-		if (s.indexOf('_') == -1)
-			return s;
-
-		if (sb == null)
-			sb = new StringBuilder(s.length());
-		for (int i = 0; i < s.length(); i++) {
-			char c = s.charAt(i);
-			if (c == '_' && isEscapeSequence(s,i)) {
-
-				int x = Integer.parseInt(s.substring(i+2, i+6), 16);
-
-				// If we find _x0000_, then that means a null.
-				// If we find _xE000_, then that means an empty string.
-				if (x == 0)
-					return null;
-				else if (x != 0xE000)
-					sb.append((char)x);
-
-				i+=6;
-			} else {
-				sb.append(c);
-			}
-		}
-		return sb.toString();
-	}
-
-
-	/**
-	 * Given a list of Strings and other Objects, combines Strings that are next to each other in the list.
-	 *
-	 * @param l The list of text nodes to collapse.
-	 * @return The same list.
-	 */
-	public static LinkedList<Object> collapseTextNodes(LinkedList<Object> l) {
-
-		String prev = null;
-		for (ListIterator<Object> i = l.listIterator(); i.hasNext();) {
-			Object o = i.next();
-			if (o instanceof String) {
-				if (prev == null)
-					prev = o.toString();
-				else {
-					prev += o;
-					i.remove();
-					i.previous();
-					i.remove();
-					i.add(prev);
-				}
-			} else {
-				prev = null;
-			}
-		}
-		return l;
-	}
-
-
-	//--------------------------------------------------------------------------------
-	// Encode XML attributes
-	//--------------------------------------------------------------------------------
-
-	/**
-	 * Serializes and encodes the specified object as valid XML attribute name.
-	 *
-	 * @param w The writer to send the output to.
-	 * @param o The object being serialized.
-	 * @return This object (for method chaining).
-	 * @throws IOException If a problem occurred.
-	 */
-	public static final Writer encodeAttr(Writer w, Object o) throws IOException {
-
-		if (o == null)
-			return w.append("_x0000_");
-
-		String s = o.toString();
-
-		if (needsAttributeEncoding(s)) {
-			for (int i = 0; i < s.length(); i++) {
-				char c = s.charAt(i);
-				if (c == '&')
-					w.append("&amp;");
-				else if (c == '<')
-					w.append("&lt;");
-				else if (c == '>')
-					w.append("&gt;");
-				else if (c == '\'')
-					w.append("&apos;");
-				else if (c == '"')
-					w.append("&quot;");
-				else if (c == '_' && isEscapeSequence(s,i))
-					appendPaddedHexChar(w, c);
-				else if (isValidXmlCharacter(c))
-					w.append(c);
-				else
-					appendPaddedHexChar(w, c);
-			}
-		} else {
-			w.append(s);
-		}
-
-		return w;
-	}
-
-
-	private static boolean needsAttributeEncoding(String s) {
-		// See if we need to convert the string.
-		// Conversion is somewhat expensive, so make sure we need to do so before hand.
-		for (int i = 0; i < s.length(); i++) {
-			char c = s.charAt(i);
-			if (c == '&' || c == '<' || c == '>' || c == '\n' || c == '\'' || c == '"' || ! isValidXmlCharacter(c))
-				return true;
-		}
-		return false;
-	}
-
-
-	//--------------------------------------------------------------------------------
-	// Encode XML element names
+	// XML element names
 	//--------------------------------------------------------------------------------
 
 	/**
@@ -359,6 +121,320 @@ public final class XmlUtils {
 		return false;
 	}
 
+	//--------------------------------------------------------------------------------
+	// XML element text
+	//--------------------------------------------------------------------------------
+
+	/**
+	 * Escapes invalid XML text characters to <code>_x####_</code> sequences.
+	 *
+	 * @param o The object being encoded.
+	 * @return The encoded string.
+	 */
+	public static final String escapeText(Object o) {
+
+		if (o == null)
+			return "_x0000_";
+
+		String s = o.toString();
+
+		try {
+			if (! needsTextEncoding(s))
+				return s;
+			final int len = s.length();
+			StringWriter sw = new StringWriter(s.length()*2);
+			for (int i = 0; i < len; i++) {
+				char c = s.charAt(i);
+				if ((i == 0 || i == len-1) && Character.isWhitespace(c))
+					appendPaddedHexChar(sw, c);
+				else if (c == '_' && isEscapeSequence(s,i))
+					appendPaddedHexChar(sw, c);
+				else if (isValidXmlCharacter(c))
+					sw.append(c);
+				else
+					appendPaddedHexChar(sw, c);
+			}
+			return sw.toString();
+		} catch (IOException e) {
+			throw new RuntimeException(e); // Never happens
+		}
+	}
+
+	/**
+	 * Encodes the specified element text and sends the results to the specified writer.
+	 * <p>
+	 * Encodes any invalid XML text characters to <code>_x####_</code> sequences and sends the response
+	 * 	to the specified writer.
+	 * <br>Encodes <js>'&amp;'</js>, <js>'&lt;'</js>, and <js>'&gt;'</js> as XML entities.<br>
+	 * <br>Encodes invalid XML text characters to <code>_x####_</code> sequences.
+	 *
+	 * @param w The writer to send the output to.
+	 * @param o The object being encoded.
+	 * @param trim Trim the text before serializing it.
+	 * @param preserveWhitespace Specifies whether we're in preserve-whitespace mode.
+	 * 	(e.g. {@link XmlFormat#MIXED_PWS} or {@link XmlFormat#TEXT_PWS}.
+	 * If <jk>true</jk>, leading and trailing whitespace characters will be encoded.
+	 * @return The same writer passed in.
+	 * @throws IOException Thrown from the writer.
+	 */
+	public static final Writer encodeText(Writer w, Object o, boolean trim, boolean preserveWhitespace) throws IOException {
+
+		if (o == null)
+			return w.append("_x0000_");
+
+		String s = o.toString();
+		if (s.isEmpty())
+			return w.append("_xE000_");
+		if (trim)
+			s = s.trim();
+
+		if (needsTextEncoding(s)) {
+			final int len = s.length();
+			for (int i = 0; i < len; i++) {
+				char c = s.charAt(i);
+				if ((i == 0 || i == len-1) && Character.isWhitespace(c) && ! preserveWhitespace)
+					appendPaddedHexChar(w, c);
+				else if (REPLACE_TEXT.contains(c))
+					w.append(REPLACE_TEXT.get(c));
+				else if (c == '_' && isEscapeSequence(s,i))
+					appendPaddedHexChar(w, c);
+				else if (isValidXmlCharacter(c))
+					w.append(c);
+				else
+					appendPaddedHexChar(w, c);
+			}
+		} else {
+			w.append(s);
+		}
+
+		return w;
+	}
+
+	private static final boolean needsTextEncoding(String s) {
+		// See if we need to convert the string.
+		// Conversion is somewhat expensive, so make sure we need to do so before hand.
+		final int len = s.length();
+		for (int i = 0; i < len; i++) {
+			char c = s.charAt(i);
+			if ((i == 0 || i == len-1) && Character.isWhitespace(c))
+				return true;
+			if (REPLACE_TEXT.contains(c) || ! isValidXmlCharacter(c) || (c == '_' && isEscapeSequence(s,i)))
+				return true;
+		}
+		return false;
+	}
+
+	private static AsciiMap REPLACE_TEXT = new AsciiMap()
+		.append('&', "&amp;")
+		.append('<', "&lt;")
+		.append('>', "&gt;")
+		.append((char)0x09, "&#x0009;")
+		.append((char)0x0A, "&#x000a;")
+		.append((char)0x0D, "&#x000d;");
+
+
+	//--------------------------------------------------------------------------------
+	// XML attribute names
+	//--------------------------------------------------------------------------------
+
+	/**
+	 * Serializes and encodes the specified object as valid XML attribute name.
+	 *
+	 * @param w The writer to send the output to.
+	 * @param o The object being serialized.
+	 * @return This object (for method chaining).
+	 * @throws IOException If a problem occurred.
+	 */
+	public static final Writer encodeAttrName(Writer w, Object o) throws IOException {
+
+		if (o == null)
+			return w.append("_x0000_");
+
+		String s = o.toString();
+
+		if (needsAttrNameEncoding(s)) {
+			for (int i = 0; i < s.length(); i++) {
+				char c = s.charAt(i);
+				if (i == 0) {
+					if (c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c == ':')
+						w.append(c);
+					else if (c == '_' && ! isEscapeSequence(s,i))
+						w.append(c);
+					else
+						appendPaddedHexChar(w, c);
+				} else {
+					if ((c >= '0' && c <= '9' || c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c == ':'))
+						w.append(c);
+					else if (c == '_' && ! isEscapeSequence(s,i))
+						w.append(c);
+					else
+						appendPaddedHexChar(w, c);
+				}
+			}
+		} else {
+			w.append(s);
+		}
+
+		return w;
+	}
+
+	private static final boolean needsAttrNameEncoding(String s) {
+		// Note that this doesn't need to be perfect, just fast.
+		for (int i = 0; i < s.length(); i++) {
+			char c = s.charAt(i);
+			if (! (c >= '0' && c <= '9' || c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z'))
+				return true;
+			if (i == 0 && ! (c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z'))
+				return true;
+		}
+		return false;
+	}
+
+	//--------------------------------------------------------------------------------
+	// XML attribute values
+	//--------------------------------------------------------------------------------
+
+	/**
+	 * Encodes the specified attribute value and sends the results to the specified writer.
+	 * <p>
+	 * Encodes any invalid XML text characters to <code>_x####_</code> sequences and sends the response
+	 * 	to the specified writer.
+	 * <br>Encodes <js>'&amp;'</js>, <js>'&lt;'</js>, <js>'&gt;'</js>, <js>'"'</js>, and <js>'\''</js> as XML entities.<br>
+	 * <br?Encodes invalid XML text characters to <code>_x####_</code> sequences.
+	 *
+	 * @param w The writer to send the output to.
+	 * @param o The object being encoded.
+	 * @param trim Trim the text before serializing it.
+	 * If <jk>true</jk>, leading and trailing whitespace characters will be encoded.
+	 * @return The same writer passed in.
+	 * @throws IOException Thrown from the writer.
+	 */
+	public static final Writer encodeAttrValue(Writer w, Object o, boolean trim) throws IOException {
+		if (o == null)
+			return w.append("_x0000_");
+
+		String s = o.toString();
+		if (s.isEmpty())
+			return w;
+		if (trim)
+			s = s.trim();
+
+		if (needsAttrValueEncoding(s)) {
+			final int len = s.length();
+			for (int i = 0; i < len; i++) {
+				char c = s.charAt(i);
+				if ((i == 0 || i == len-1) && Character.isWhitespace(c))
+					appendPaddedHexChar(w, c);
+				else if (REPLACE_ATTR_VAL.contains(c))
+					w.append(REPLACE_ATTR_VAL.get(c));
+				else if (c == '_' && isEscapeSequence(s,i))
+					appendPaddedHexChar(w, c);
+				else if (isValidXmlCharacter(c))
+					w.append(c);
+				else
+					appendPaddedHexChar(w, c);
+			}
+		} else {
+			w.append(s);
+		}
+
+		return w;
+	}
+
+	private static final boolean needsAttrValueEncoding(String s) {
+		// See if we need to convert the string.
+		// Conversion is somewhat expensive, so make sure we need to do so before hand.
+		final int len = s.length();
+		for (int i = 0; i < len; i++) {
+			char c = s.charAt(i);
+			if ((i == 0 || i == len-1) && Character.isWhitespace(c))
+				return true;
+			if (REPLACE_ATTR_VAL.contains(c) || ! isValidXmlCharacter(c) || (c == '_' && isEscapeSequence(s,i)))
+				return true;
+		}
+		return false;
+	}
+
+	private static AsciiMap REPLACE_ATTR_VAL = new AsciiMap()
+		.append('&', "&amp;")
+		.append('<', "&lt;")
+		.append('>', "&gt;")
+		.append('"', "&quot;")
+		.append('\'', "&apos;")
+		.append((char)0x09, "&#x0009;")
+		.append((char)0x0A, "&#x000a;")
+		.append((char)0x0D, "&#x000d;");
+
+
+	//--------------------------------------------------------------------------------
+	// Decode XML text
+	//--------------------------------------------------------------------------------
+
+	/**
+	 * Translates any _x####_ sequences (introduced by the various encode methods) back into their original characters.
+	 *
+	 * @param s The string being decoded.
+	 * @param sb The string builder to use as a scratch pad.
+	 * @return The decoded string.
+	 */
+	public static final String decode(String s, StringBuilder sb) {
+		if (s == null) return null;
+		if (s.length() == 0)
+			return s;
+		if (s.indexOf('_') == -1)
+			return s;
+
+		if (sb == null)
+			sb = new StringBuilder(s.length());
+		for (int i = 0; i < s.length(); i++) {
+			char c = s.charAt(i);
+			if (c == '_' && isEscapeSequence(s,i)) {
+
+				int x = Integer.parseInt(s.substring(i+2, i+6), 16);
+
+				// If we find _x0000_, then that means a null.
+				// If we find _xE000_, then that means an empty string.
+				if (x == 0)
+					return null;
+				else if (x != 0xE000)
+					sb.append((char)x);
+
+				i+=6;
+			} else {
+				sb.append(c);
+			}
+		}
+		return sb.toString();
+	}
+
+
+	/**
+	 * Given a list of Strings and other Objects, combines Strings that are next to each other in the list.
+	 *
+	 * @param l The list of text nodes to collapse.
+	 * @return The same list.
+	 */
+	public static LinkedList<Object> collapseTextNodes(LinkedList<Object> l) {
+
+		String prev = null;
+		for (ListIterator<Object> i = l.listIterator(); i.hasNext();) {
+			Object o = i.next();
+			if (o instanceof String) {
+				if (prev == null)
+					prev = o.toString();
+				else {
+					prev += o;
+					i.remove();
+					i.previous();
+					i.remove();
+					i.add(prev);
+				}
+			} else {
+				prev = null;
+			}
+		}
+		return l;
+	}
 
 	//--------------------------------------------------------------------------------
 	// Other methods
@@ -500,5 +576,33 @@ public final class XmlUtils {
 		if (t == 15)
 			return "ENTITY_DECLARATION";
 		return "UNKNOWN";
+	}
+
+	/**
+	 * Shortcut for calling <code>URLEncoder.<jsm>encode</jsm>(o.toString(), <js>"UTF-8"</js>)</code>.
+	 *
+	 * @param o The object to encode.
+	 * @return The URL encoded string, or <jk>null</jk> if the object was null.
+	 */
+	public static String urlEncode(Object o) {
+		try {
+			if (o != null)
+				return URLEncoder.encode(o.toString(), "UTF-8");
+		} catch (UnsupportedEncodingException e) {}
+		return null;
+	}
+
+	/**
+	 * Shortcut for calling <code>URLEncoder.<jsm>decode</jsm>(o.toString(), <js>"UTF-8"</js>)</code>.
+	 *
+	 * @param s The string to decode.
+	 * @return The decoded string, or <jk>null</jk> if the string was null.
+	 */
+	public static String urlDecode(String s) {
+		try {
+			if (s != null)
+				return URLDecoder.decode(s, "UTF-8");
+		} catch (UnsupportedEncodingException e) {}
+		return null;
 	}
 }

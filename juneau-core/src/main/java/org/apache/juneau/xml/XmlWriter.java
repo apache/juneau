@@ -38,15 +38,12 @@ public class XmlWriter extends SerializerWriter {
 	 * @param useWhitespace If <jk>true</jk> XML elements will be indented.
 	 * @param trimStrings If <jk>true</jk>, strings should be trimmed before they're serialized.
 	 * @param quoteChar The quote character to use for attributes.  Should be <js>'\''</js> or <js>'"'</js>.
-	 * @param relativeUriBase The base (e.g. <js>https://localhost:9443/contextPath"</js>) for relative URIs (e.g. <js>"my/path"</js>).
-	 * @param absolutePathUriBase The base (e.g. <js>https://localhost:9443"</js>) for relative URIs with absolute paths (e.g. <js>"/contextPath/my/path"</js>).
-	 * @param uriContext The URI context.
-	 * 	Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
+	 * @param uriResolver The URI resolver for resolving URIs to absolute or root-relative form.
 	 * @param enableNs Flag to indicate if XML namespaces are enabled.
 	 * @param defaultNamespace The default namespace if XML namespaces are enabled.
 	 */
-	public XmlWriter(Writer out, boolean useWhitespace, boolean trimStrings, char quoteChar, String relativeUriBase, String absolutePathUriBase, UriContext uriContext, boolean enableNs, Namespace defaultNamespace) {
-		super(out, useWhitespace, trimStrings, quoteChar, relativeUriBase, absolutePathUriBase, uriContext);
+	public XmlWriter(Writer out, boolean useWhitespace, boolean trimStrings, char quoteChar, UriResolver uriResolver, boolean enableNs, Namespace defaultNamespace) {
+		super(out, useWhitespace, trimStrings, quoteChar, uriResolver);
 		this.enableNs = enableNs;
 		this.defaultNsPrefix = defaultNamespace == null ? null : defaultNamespace.name;
 	}
@@ -404,17 +401,12 @@ public class XmlWriter extends SerializerWriter {
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The attribute name.
 	 * @param value The attribute value.
-	 * @param needsEncoding If <jk>true</jk>, attribute name will be encoded.
+	 * @param valNeedsEncoding If <jk>true</jk>, attribute name will be encoded.
 	 * @return This object (for method chaining).
 	 * @throws IOException If a problem occurred.
 	 */
-	public XmlWriter attr(String ns, String name, Object value, boolean needsEncoding) throws IOException {
-		oAttr(ns, name).q();
-		if (needsEncoding)
-			encodeAttr(value);
-		else
-			append(value);
-		return q();
+	public XmlWriter attr(String ns, String name, Object value, boolean valNeedsEncoding) throws IOException {
+		return oAttr(ns, name).q().attrValue(value, valNeedsEncoding).q();
 	}
 
 	/**
@@ -422,12 +414,12 @@ public class XmlWriter extends SerializerWriter {
 	 *
 	 * @param name The attribute name.
 	 * @param value The attribute value.
-	 * @param needsEncoding If <jk>true</jk>, attribute name will be encoded.
+	 * @param valNeedsEncoding If <jk>true</jk>, attribute name will be encoded.
 	 * @return This object (for method chaining).
 	 * @throws IOException If a problem occurred.
 	 */
-	public XmlWriter attr(String name, Object value, boolean needsEncoding) throws IOException {
-		return attr(null, name, value, needsEncoding);
+	public XmlWriter attr(String name, Object value, boolean valNeedsEncoding) throws IOException {
+		return attr(null, name, value, valNeedsEncoding);
 	}
 
 	/**
@@ -440,11 +432,11 @@ public class XmlWriter extends SerializerWriter {
 	 * @throws IOException If a problem occurred.
 	 */
 	public XmlWriter attr(String ns, String name, Object value) throws IOException {
-		return oAttr(ns, name).q().append(value).q();
+		return oAttr(ns, name).q().attrValue(value, false).q();
 	}
 
 	/**
-	 * Same as {@link #attr(String, Object, boolean)}, except pass in a {@link Namespace} object for the namespace.
+	 * Same as {@link #attr(String, String, Object)}, except pass in a {@link Namespace} object for the namespace.
 	 *
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The attribute name.
@@ -453,7 +445,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @throws IOException If a problem occurred.
 	 */
 	public XmlWriter attr(Namespace ns, String name, Object value) throws IOException {
-		return oAttr(ns == null ? null : ns.name, name).q().append(value).q();
+		return oAttr(ns == null ? null : ns.name, name).q().attrValue(value, false).q();
 	}
 
 	/**
@@ -507,8 +499,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @throws IOException If a problem occurred.
 	 */
 	public XmlWriter attrUri(Namespace ns, String name, Object value) throws IOException {
-		oAttr(ns, name).q().appendUri(value).q();
-		return this;
+		return attr(ns, name, uriResolver.resolve(value));
 	}
 
 	/**
@@ -521,8 +512,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @throws IOException If a problem occurred.
 	 */
 	public XmlWriter attrUri(String ns, String name, Object value) throws IOException {
-		oAttr(ns, name).q().appendUri(value).q();
-		return this;
+		return attr(ns, name, uriResolver.resolve(value), true);
 	}
 
 	/**
@@ -551,14 +541,22 @@ public class XmlWriter extends SerializerWriter {
 	}
 
 	/**
-	 * Serializes and encodes the specified object as valid XML attribute name.
+	 * Same as {@link #text(Object)} but treats the value as a URL to resolved then serialized.
 	 *
 	 * @param o The object being serialized.
 	 * @return This object (for method chaining).
-	 * @throws IOException If a problem occurred.
+	 * @throws IOException
 	 */
-	public XmlWriter encodeAttr(Object o) throws IOException {
-		XmlUtils.encodeAttr(out, o);
+	public XmlWriter textUri(Object o) throws IOException {
+		text(uriResolver.resolve(o), false);
+		return this;
+	}
+
+	private XmlWriter attrValue(Object o, boolean needsEncoding) throws IOException {
+		if (needsEncoding)
+			XmlUtils.encodeAttrValue(out, o, this.trimStrings);
+		else
+			append(o.toString());
 		return this;
 	}
 

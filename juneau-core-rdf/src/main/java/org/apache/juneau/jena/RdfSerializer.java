@@ -21,7 +21,6 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.xml.*;
@@ -330,21 +329,7 @@ public class RdfSerializer extends WriterSerializer {
 			s = uri2.toString();
 		if (s == null)
 			return null;
-		if (s.indexOf("://") == -1) {
-			String aUri = session.getAbsolutePathUriBase();
-			String rUri = session.getRelativeUriBase();
-			if (StringUtils.startsWith(s, '/')) {
-				if (aUri != null)
-					return aUri + s;
-			} else {
-				if (rUri != null) {
-					if (rUri.equals("/"))
-						return '/' + s;
-					return rUri + '/' + s;
-				}
-			}
-		}
-		return s;
+		return session.getUriResolver().resolve(s);
 	}
 
 	private void serializeMap(RdfSerializerSession session, Map m, Resource r, ClassMeta<?> type) throws SerializeException {

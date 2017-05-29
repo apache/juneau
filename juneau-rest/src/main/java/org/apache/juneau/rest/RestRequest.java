@@ -463,9 +463,20 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	public UriContext getUriContext() {
 		if (uriContext == null) {
 			String authority = StringUtils.getAuthorityUri(super.getRequestURL().toString());
-			uriContext = new UriContext(UriResolution.ROOT_RELATIVE, UriRelativity.RESOURCE, authority, super.getContextPath(), super.getServletPath(), super.getPathInfo());
+			uriContext = new UriContext(authority, super.getContextPath(), super.getServletPath(), super.getPathInfo());
 		}
 		return uriContext;
+	}
+
+	/**
+	 * Returns a URI resolver that can be used to convert URIs to absolute or root-relative form..
+	 *
+	 * @param resolution The URI resolution rule.
+	 * @param relativity The relative URI relativity rule.
+	 * @return The URI resolver for this request.
+	 */
+	public UriResolver getUriResolver(UriResolution resolution, UriRelativity relativity) {
+		return new UriResolver(resolution, relativity, getUriContext());
 	}
 
 	/**

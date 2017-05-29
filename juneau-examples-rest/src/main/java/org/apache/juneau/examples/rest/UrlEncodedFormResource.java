@@ -32,7 +32,7 @@ import org.apache.juneau.transforms.*;
 	messages="nls/UrlEncodedFormResource",
 	title="Tumblr parser service",
 	description="Specify a URL to a Tumblr blog and parse the results.",
-	pageLinks="{up:'$R{requestParentURI}',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/UrlEncodedFormResource.java'}"
+	pageLinks="{up:'request:/..',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/UrlEncodedFormResource.java'}"
 )
 public class UrlEncodedFormResource extends Resource {
 	private static final long serialVersionUID = 1L;

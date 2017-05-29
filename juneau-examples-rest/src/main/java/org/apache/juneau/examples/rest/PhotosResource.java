@@ -13,7 +13,6 @@
 package org.apache.juneau.examples.rest;
 
 import static javax.servlet.http.HttpServletResponse.*;
-import static org.apache.juneau.html.HtmlDocSerializerContext.*;
 
 import java.awt.image.*;
 import java.io.*;
@@ -39,11 +38,7 @@ import org.apache.juneau.serializer.*;
 	messages="nls/PhotosResource",
 	title="Photo REST service",
 	description="Sample resource that allows images to be uploaded and retrieved.",
-	pageLinks="{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/PhotosResource.java'}",
-	properties={
-		// Resolve all relative URIs so that they're relative to this servlet!
-		@Property(name=SERIALIZER_relativeUriBase, value="$R{servletURI}"),
-	}
+	pageLinks="{up:'request:/..',options:'servlet:/?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/PhotosResource.java'}"
 )
 public class PhotosResource extends Resource {
 	private static final long serialVersionUID = 1L;

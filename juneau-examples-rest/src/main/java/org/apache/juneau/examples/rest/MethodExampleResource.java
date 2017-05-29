@@ -26,7 +26,7 @@ import org.apache.juneau.rest.annotation.Method;
 @RestResource(
 	path="/methodExample",
 	messages="nls/MethodExampleResource",
-	pageLinks="{up:'$R{servletParentURI}',options:'?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/MethodExampleResource.java'}"
+	pageLinks="{up:'servlet:/..',options:'servlet:/?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/MethodExampleResource.java'}"
 )
 public class MethodExampleResource extends Resource {
 	private static final long serialVersionUID = 1L;
@@ -53,7 +53,7 @@ public class MethodExampleResource extends Resource {
 			@PathRemainder String remainder,        // Path remainder after pattern match.
 			@Header("Accept-Language") String lang, // Headers.
 			@Header("Accept") String accept,
-			@Header("DNT") int doNotTrack
+			@Header("DNT") Integer doNotTrack
 		) {
 
 		// Send back a simple String response

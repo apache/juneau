@@ -23,7 +23,7 @@ import org.apache.juneau.rest.annotation.*;
 	title="Hello World sample resource",
 	description="Simplest possible resource",
 	path="/helloWorld",
-	pageLinks="{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/HelloWorldResource.java'}"
+	pageLinks="{up:'request:/..',options:'servlet:/?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/HelloWorldResource.java'}"
 )
 public class HelloWorldResource extends Resource {
 	private static final long serialVersionUID = 1L;

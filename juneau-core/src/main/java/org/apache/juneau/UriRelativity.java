@@ -13,7 +13,7 @@
 package org.apache.juneau;
 
 /**
- * Identifies how relative URIs should resolve against.
+ * Identifies what relative URIs are relative to.
  */
 public enum UriRelativity {
 
@@ -25,5 +25,5 @@ public enum UriRelativity {
 	/**
 	 * Relative URIs should be considered relative to the request URI.
 	 */
-	PATH_INFO;
+	PATH_INFO
 }

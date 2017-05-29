@@ -31,7 +31,7 @@ import org.apache.juneau.transforms.*;
 	path="/echo",
 	title="Request echo service",
 	description="Echos the current HttpServletRequest object back to the browser.",
-	pageLinks="{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/RequestEchoResource.java'}",
+	pageLinks="{up:'request:/..',options:'servlet:/?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/RequestEchoResource.java'}",
 	properties={
 		@Property(name=SERIALIZER_maxDepth, value="5"),
 		@Property(name=SERIALIZER_detectRecursions, value="true")

@@ -14,6 +14,7 @@ package org.apache.juneau.html;
 
 import static org.apache.juneau.html.HtmlSerializerContext.*;
 import static org.apache.juneau.msgpack.MsgPackSerializerContext.*;
+import static org.apache.juneau.xml.XmlUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -21,7 +22,6 @@ import java.util.regex.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.xml.*;
 
@@ -40,12 +40,11 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		addBeanTypeProperties;
 	private final Pattern urlPattern = Pattern.compile("http[s]?\\:\\/\\/.*");
 	private final Pattern labelPattern;
-	private final String absolutePathUriBase, relativeUriBase;
 
 
 	@SuppressWarnings("hiding")
 	enum AnchorText {
-		PROPERTY_NAME, TO_STRING, URI, LAST_TOKEN, URI_ANCHOR
+		PROPERTY_NAME, TO_STRING, URI, LAST_TOKEN, URI_ANCHOR, CONTEXT_RELATIVE, SERVLET_RELATIVE, PATH_RELATIVE
 	}
 
 	/**
@@ -84,8 +83,6 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			addBeanTypeProperties = op.getBoolean(MSGPACK_addBeanTypeProperties, ctx.addBeanTypeProperties);
 		}
 		labelPattern = Pattern.compile("[\\?\\&]" + Pattern.quote(labelParameter) + "=([^\\&]*)");
-		this.absolutePathUriBase = getAbsolutePathUriBase();
-		this.relativeUriBase = getRelativeUriBase();
 	}
 
 	@Override /* XmlSerializerSession */
@@ -93,7 +90,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		Object output = getOutput();
 		if (output instanceof HtmlWriter)
 			return (HtmlWriter)output;
-		return new HtmlWriter(super.getWriter(), isUseWhitespace(), isTrimStrings(), getQuoteChar(), getRelativeUriBase(), getAbsolutePathUriBase(), getUriContext());
+		return new HtmlWriter(super.getWriter(), isUseWhitespace(), isTrimStrings(), getQuoteChar(), getUriResolver());
 	}
 
 	/**
@@ -122,47 +119,40 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * @return The anchor text to use for the specified URL object.
 	 */
 	public String getAnchorText(BeanPropertyMeta pMeta, Object o) {
-		String s;
+		String s = o.toString();
 		if (lookForLabelParameters) {
-			s = o.toString();
 			Matcher m = labelPattern.matcher(s);
 			if (m.find())
-				return m.group(1);
+				return urlDecode(m.group(1));
 		}
 		switch (anchorText) {
 			case LAST_TOKEN:
-				s = o.toString();
+				s = resolveUri(s);
 				if (s.indexOf('/') != -1)
 					s = s.substring(s.lastIndexOf('/')+1);
 				if (s.indexOf('?') != -1)
 					s = s.substring(0, s.indexOf('?'));
 				if (s.indexOf('#') != -1)
 					s = s.substring(0, s.indexOf('#'));
-				return s;
+				if (s.isEmpty())
+					s = "/";
+				return urlDecode(s);
 			case URI_ANCHOR:
-				s = o.toString();
 				if (s.indexOf('#') != -1)
 					s = s.substring(s.lastIndexOf('#')+1);
-				return s;
+				return urlDecode(s);
 			case PROPERTY_NAME:
-				return pMeta == null ? o.toString() : pMeta.getName();
+				return pMeta == null ? s : pMeta.getName();
 			case URI:
-				s = o.toString();
-				if (s.indexOf("://") == -1) {
-					if (StringUtils.startsWith(s, '/')) {
-						s = absolutePathUriBase + s;
-					} else {
-						if (relativeUriBase != null) {
-							if (! relativeUriBase.equals("/"))
-								s = relativeUriBase + "/" + s;
-							else
-								s = "/" + s;
-						}
-					}
-				}
+				return resolveUri(s);
+			case CONTEXT_RELATIVE:
+				return relativizeUri("context:/", s);
+			case SERVLET_RELATIVE:
+				return relativizeUri("servlet:/", s);
+			case PATH_RELATIVE:
+				return relativizeUri("request:/", s);
+			default /* TO_STRING */:
 				return s;
-			default:
-				return o.toString();
 		}
 	}
 

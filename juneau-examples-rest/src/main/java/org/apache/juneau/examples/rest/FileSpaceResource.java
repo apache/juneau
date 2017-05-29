@@ -16,6 +16,7 @@ import static org.apache.juneau.dto.html5.HtmlBuilder.*;
 
 import javax.servlet.http.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.html.annotation.*;
@@ -31,7 +32,7 @@ import org.apache.juneau.serializer.*;
 	path="/fileSpace",
 	title="Available file space resource",
 	description="Shows how to use HtmlRender class to customize HTML output.",
-	pageLinks="{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/EnhancedHtmlResource.java'}"
+	pageLinks="{up:'request:/..',options:'servlet:/?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/EnhancedHtmlResource.java'}"
 )
 public class FileSpaceResource extends Resource {
 	private static final long serialVersionUID = 1L;
@@ -59,7 +60,7 @@ public class FileSpaceResource extends Resource {
 			this.available = available;
 		}
 
-		@Html(link="drive/{drive}")
+		@Html(link="servlet:/{drive}")
 		public String getDrive() {
 			return drive;
 		}
@@ -123,11 +124,11 @@ public class FileSpaceResource extends Resource {
 
 		@Override
 		public Object getContent(SerializerSession session, FileSpaceStatus value) {
-			String resourceUri = session.getUriContext().getRootRelativeServletPath();
+			UriResolver r = session.getUriResolver();
 			switch (value) {
-				case OK:  return img().src(resourceUri + "/htdocs/ok.png");
-				case WARNING:  return img().src(resourceUri + "/htdocs/warning.png");
-				default: return img().src(resourceUri + "/htdocs/severe.png");
+				case OK:  return img().src(r.resolve("servlet:/htdocs/ok.png"));
+				case WARNING:  return img().src(r.resolve("servlet:/htdocs/warning.png"));
+				default: return img().src(r.resolve("servlet:/htdocs/severe.png"));
 			}
 		}
 	}
@@ -138,7 +139,7 @@ public class FileSpaceResource extends Resource {
 		return fileSpaces;
 	}
 
-	@RestMethod(name="GET", path="drive/{drive}")
+	@RestMethod(name="GET", path="{drive}")
 	public FileSpace getFileSpaceMetric(String drive) throws RestException {
 		for (FileSpace fc : fileSpaces)
 			if (fc.drive.equals(drive))

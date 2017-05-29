@@ -347,25 +347,36 @@ public class SerializerGroupBuilder {
 	}
 
 	/**
-	 * Sets the {@link SerializerContext#SERIALIZER_relativeUriBase} property on all serializers in this group.
+	 * Sets the {@link SerializerContext#SERIALIZER_uriContext} property on all serializers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_relativeUriBase
+	 * @see SerializerContext#SERIALIZER_uriContext
 	 */
-	public SerializerGroupBuilder relativeUriBase(String value) {
-		return property(SERIALIZER_relativeUriBase, value);
+	public SerializerGroupBuilder uriContext(UriContext value) {
+		return property(SERIALIZER_uriContext, value);
 	}
 
 	/**
-	 * Sets the {@link SerializerContext#SERIALIZER_absolutePathUriBase} property on all serializers in this group.
+	 * Sets the {@link SerializerContext#SERIALIZER_uriResolution} property on all serializers in this group.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_absolutePathUriBase
+	 * @see SerializerContext#SERIALIZER_uriResolution
 	 */
-	public SerializerGroupBuilder absolutePathUriBase(String value) {
-		return property(SERIALIZER_absolutePathUriBase, value);
+	public SerializerGroupBuilder uriResolution(UriResolution value) {
+		return property(SERIALIZER_uriResolution, value);
+	}
+
+	/**
+	 * Sets the {@link SerializerContext#SERIALIZER_uriRelativity} property on all serializers in this group.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see SerializerContext#SERIALIZER_uriRelativity
+	 */
+	public SerializerGroupBuilder uriRelativity(UriRelativity value) {
+		return property(SERIALIZER_uriRelativity, value);
 	}
 
 	/**

@@ -16,7 +16,6 @@ import java.io.*;
 import java.net.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Simple wrapper around a standard {@link Writer} with additional methods.
@@ -43,14 +42,8 @@ public class SerializerWriter extends Writer {
 	/** The quote character being used by this writer. */
 	protected final char quoteChar;
 
-	/** The base (e.g. <js>https://localhost:9443/contextPath"</js>) for relative URIs (e.g. <js>"my/path"</js>). */
-	protected final String relativeUriBase;
-
-	/** The base (e.g. <js>https://localhost:9443"</js>) for relative URIs with absolute paths (e.g. <js>"/contextPath/my/path"</js>). */
-	protected final String absolutePathUriBase;
-
-	/** The URI context of the request. (i.e. the REST request URL broken down into authority/context/servlet/pathInfo parts. */
-	protected final UriContext uriContext;
+	/** The URI resolver of the request. */
+	protected final UriResolver uriResolver;
 
 	/**
 	 * @param out The writer being wrapped.
@@ -58,19 +51,14 @@ public class SerializerWriter extends Writer {
 	 * 	{@link #s()} will write a space character.
 	 * @param trimStrings If <jk>true</jk>, strings should be trimmed before they're serialized.
 	 * @param quoteChar The character to write when {@link #q()} is called.
-	 * @param relativeUriBase The base (e.g. <js>https://localhost:9443/contextPath"</js>) for relative URIs (e.g. <js>"my/path"</js>).
-	 * @param absolutePathUriBase The base (e.g. <js>https://localhost:9443"</js>) for relative URIs with absolute paths (e.g. <js>"/contextPath/my/path"</js>).
-	 * @param uriContext The URI context.
-	 * 	Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
+	 * @param uriResolver The URI resolver for resolving URIs to absolute or root-relative form.
 	 */
-	public SerializerWriter(Writer out, boolean useWhitespace, boolean trimStrings, char quoteChar, String relativeUriBase, String absolutePathUriBase, UriContext uriContext) {
+	public SerializerWriter(Writer out, boolean useWhitespace, boolean trimStrings, char quoteChar, UriResolver uriResolver) {
 		this.out = out;
 		this.useWhitespace = useWhitespace;
 		this.trimStrings = trimStrings;
 		this.quoteChar = quoteChar;
-		this.relativeUriBase = relativeUriBase;
-		this.absolutePathUriBase = absolutePathUriBase;
-		this.uriContext = uriContext != null ? uriContext : new UriContext();
+		this.uriResolver = uriResolver;
 	}
 
 	/**
@@ -160,32 +148,17 @@ public class SerializerWriter extends Writer {
 	 * Object is converted to a <code>String</code> using <code>toString()</code>, so this will work on {@link URL} or {@link URI} objects,
 	 * or any other type that returns a URI via it's <code>toString()</code> method.
 	 * <p>
-	 * If the URI is relative (i.e. without a schema and not prepended with <js>'/'</js>) the URI
-	 * will be prepended with {@link #absolutePathUriBase} and {@link #relativeUriBase}.
-	 * <p>
-	 * If the URI is context-absolute (i.e. without a schema, but prepended with <js>'/'</js>)
-	 * the URI will be prepended with {@link #absolutePathUriBase}.
-	 *
+	 * The URI is resolved based on the {@link SerializerContext#SERIALIZER_uriRelativity} and
+	 * {@link SerializerContext#SERIALIZER_uriResolution} settings and the {@link UriContext} that's part of the 
+	 * session.
+	 * 
 	 * @param uri The URI to serialize.
 	 * @return This object (for method chaining).
 	 * @throws IOException If a problem occurred trying to write to the writer.
 	 */
 	public SerializerWriter appendUri(Object uri) throws IOException {
-		String s = uri.toString();
-		if (s.indexOf("://") == -1) {
-			if (StringUtils.startsWith(s, '/')) {
-				if (absolutePathUriBase != null)
-					append(absolutePathUriBase);
-			} else {
-				if (relativeUriBase != null) {
-					append(relativeUriBase);
-					if (! relativeUriBase.equals("/"))
-						append("/");
-
-				}
-			}
-		}
-		return append(s);
+		uriResolver.append(this, uri);
+		return this;
 	}
 
 	/**

@@ -746,7 +746,7 @@ public final class RestContext extends Context {
 	 * 		properties={
 	 * 			<ja>@Property</ja>(
 	 * 				name=<jsf>HTMLDOC_links</jsf>,
-	 * 				value=<js>"{up:'$R{requestParentURI}', options:'?method=OPTIONS', editLevel:'editLevel?logger=$R{attribute.name}'}"</js>
+	 * 				value=<js>"{up:'$R{requestParentURI}', options:'servlet:/?method=OPTIONS', editLevel:'servlet:/editLevel?logger=$R{attribute.name}'}"</js>
 	 * 			)
 	 * 		}
 	 * 	)

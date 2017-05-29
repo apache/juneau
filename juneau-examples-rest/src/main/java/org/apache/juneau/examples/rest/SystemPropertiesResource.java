@@ -28,14 +28,30 @@ import org.apache.juneau.rest.annotation.Body;
 
 @RestResource(
 	path="/systemProperties",
+	
+	// Title and description that show up on HTML rendition page.
+	// Also used in Swagger doc.
 	title="System properties resource",
 	description="REST interface for performing CRUD operations on system properties.",
-	pageLinks="{up:'$R{requestParentURI}',options:'?method=OPTIONS',form:'formPage',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/SystemPropertiesResource.java'}",
+	
+	// Links on the HTML rendition page.
+	// "request:/..." URIs are relative to the request URI.
+	// "servlet:/..." URIs are relative to the servlet URI.
+	// "$C{...}" variables are pulled from the config file.
+	pageLinks="{up:'request:/..',options:'servlet:/?method=OPTIONS',form:'servlet:/formPage',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/SystemPropertiesResource.java'}",
+	
+	// Properties that get applied to all serializers and parsers.
 	properties={
+		// Use single quotes.
 		@Property(name=SERIALIZER_quoteChar, value="'")
 	},
+	
+	// Our stylesheet for the HTML rendition.
 	stylesheet="styles/devops.css",
+	
+	// Support GZIP encoding on Accept-Encoding header.
 	encoders=GzipEncoder.class,
+	
 	contact="{name:'John Smith',email:'john@smith.com'}",
 	license="{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}",
 	version="2.0",

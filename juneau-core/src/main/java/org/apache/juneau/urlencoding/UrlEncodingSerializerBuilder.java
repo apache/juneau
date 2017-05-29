@@ -231,14 +231,20 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public UrlEncodingSerializerBuilder relativeUriBase(String value) {
-		super.relativeUriBase(value);
+	public UrlEncodingSerializerBuilder uriContext(UriContext value) {
+		super.uriContext(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public UrlEncodingSerializerBuilder absolutePathUriBase(String value) {
-		super.absolutePathUriBase(value);
+	public UrlEncodingSerializerBuilder uriResolution(UriResolution value) {
+		super.uriResolution(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public UrlEncodingSerializerBuilder uriRelativity(UriRelativity value) {
+		super.uriRelativity(value);
 		return this;
 	}
 

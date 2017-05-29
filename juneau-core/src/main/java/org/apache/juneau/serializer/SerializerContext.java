@@ -14,7 +14,6 @@ package org.apache.juneau.serializer;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Configurable properties common to all serializers.
@@ -215,78 +214,6 @@ public class SerializerContext extends BeanContext {
 	public static final String SERIALIZER_trimStrings = "Serializer.trimStrings";
 
 	/**
-	 * <b>Configuration property:</b>  URI base for relative URIs.
-	 * <p>
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Serializer.relativeUriBase"</js>
-	 * 	<li><b>Data type:</b> <code>String</code>
-	 * 	<li><b>Default:</b> <js>""</js>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
-	 * <p>
-	 * Prepended to relative URIs during serialization (along with the {@link #SERIALIZER_absolutePathUriBase} if specified.
-	 * (i.e. URIs not containing a schema and not starting with <js>'/'</js>).
-	 * (e.g. <js>"foo/bar"</js>)
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <table class='styled'>
-	 * 	<tr><th>SERIALIZER_relativeUriBase</th><th>URI</th><th>Serialized URI</th></tr>
-	 * 	<tr>
-	 * 		<td><code>http://foo:9080/bar/baz</code></td>
-	 * 		<td><code>mywebapp</code></td>
-	 * 		<td><code>http://foo:9080/bar/baz/mywebapp</code></td>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td><code>http://foo:9080/bar/baz</code></td>
-	 * 		<td><code>/mywebapp</code></td>
-	 * 		<td><code>/mywebapp</code></td>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td><code>http://foo:9080/bar/baz</code></td>
-	 * 		<td><code>http://mywebapp</code></td>
-	 * 		<td><code>http://mywebapp</code></td>
-	 * 	</tr>
-	 * </table>
-	 */
-	public static final String SERIALIZER_relativeUriBase = "Serializer.relativeUriBase";
-
-	/**
-	 * <b>Configuration property:</b>  URI base for relative URIs with absolute paths.
-	 * <p>
-	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Serializer.absolutePathUriBase"</js>
-	 * 	<li><b>Data type:</b> <code>String</code>
-	 * 	<li><b>Default:</b> <js>""</js>
-	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
-	 * </ul>
-	 * <p>
-	 * Prepended to relative absolute-path URIs during serialization.
-	 * (i.e. URIs starting with <js>'/'</js>).
-	 * (e.g. <js>"/foo/bar"</js>)
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <table class='styled'>
-	 * 	<tr><th>SERIALIZER_absolutePathUriBase</th><th>URI</th><th>Serialized URI</th></tr>
-	 * 	<tr>
-	 * 		<td><code>http://foo:9080/bar/baz</code></td>
-	 * 		<td><code>mywebapp</code></td>
-	 * 		<td><code>mywebapp</code></td>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td><code>http://foo:9080/bar/baz</code></td>
-	 * 		<td><code>/mywebapp</code></td>
-	 * 		<td><code>http://foo:9080/bar/baz/mywebapp</code></td>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td><code>http://foo:9080/bar/baz</code></td>
-	 * 		<td><code>http://mywebapp</code></td>
-	 * 		<td><code>http://mywebapp</code></td>
-	 * 	</tr>
-	 * </table>
-	 */
-	public static final String SERIALIZER_absolutePathUriBase = "Serializer.absolutePathUriBase";
-
-	/**
 	 * <b>Configuration property:</b>  URI context bean.
 	 * <p>
 	 * <ul>
@@ -298,13 +225,68 @@ public class SerializerContext extends BeanContext {
 	 * <p>
 	 * Bean used for resolution of URIs to absolute or root-relative form.
 	 * <p>
-	 * For example, to define a URI context that causes relative URIs to be converted to root-relative form and
-	 * assumes relative URIs are relative to the servlet path:
+	 * <h6 class='figure'>Example:</h6>
 	 * <p class='bcode'>
-	 * 	<js>"{resolution:'ROOT_RELATIVE',relativity:'RESOURCE',contextRoot:'/myContext',servletPath:'/myServlet'}"</js>
+	 * 	<js>"{authority:'http://localhost:10000',contextRoot:'/myContext',servletPath:'/myServlet',pathInfo:'/foo'}"</js>
 	 * </p>
 	 */
 	public static final String SERIALIZER_uriContext = "Serializer.uriContext";
+
+	/**
+	 * <b>Configuration property:</b>  URI resolution.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Serializer.uriResolution"</js>
+	 * 	<li><b>Data type:</b> {@link UriResolution}
+	 * 	<li><b>Default:</b> {@link UriResolution#ROOT_RELATIVE}
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * Defines the resolution level for URIs when serializing any of the following:
+	 * <ul>
+	 * 	<li>{@link java.net.URI}
+	 * 	<li>{@link java.net.URL}
+	 * 	<li>Properties annotated with {@link org.apache.juneau.annotation.URI @URI}
+	 * </ul>
+	 * <p>
+	 * Possible values are:
+	 * <ul>
+	 * 	<li>{@link UriResolution#ABSOLUTE}
+	 * 		- Resolve to an absolute URL (e.g. <js>"http://host:port/context-root/servlet-path/path-info"</js>).
+	 * 	<li>{@link UriResolution#ROOT_RELATIVE}
+	 * 		- Resolve to a root-relative URL (e.g. <js>"/context-root/servlet-path/path-info"</js>).
+	 * 	<li>{@link UriResolution#NONE}
+	 * 		- Don't do any URL resolution.
+	 * </ul>
+	 */
+	public static final String SERIALIZER_uriResolution = "Serializer.uriResolution";
+
+	/**
+	 * <b>Configuration property:</b>  URI relativity.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Serializer.uriRelativity"</js>
+	 * 	<li><b>Data type:</b> {@link UriRelativity}
+	 * 	<li><b>Default:</b> {@link UriRelativity#RESOURCE}
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * Defines what relative URIs are relative to when serializing any of the following:
+	 * <ul>
+	 * 	<li>{@link java.net.URI}
+	 * 	<li>{@link java.net.URL}
+	 * 	<li>Properties annotated with {@link org.apache.juneau.annotation.URI @URI}
+	 * </ul>
+	 * <p>
+	 * Possible values are:
+	 * <ul>
+	 * 	<li>{@link UriRelativity#RESOURCE}
+	 * 		- Relative URIs should be considered relative to the servlet URI.
+	 * 	<li>{@link UriRelativity#PATH_INFO}
+	 * 		- Relative URIs should be considered relative to the request URI.
+	 * </ul>
+	 */
+	public static final String SERIALIZER_uriRelativity = "Serializer.uriRelativity";
 
 	/**
 	 * <b>Configuration property:</b>  Sort arrays and collections alphabetically.
@@ -368,8 +350,9 @@ public class SerializerContext extends BeanContext {
 		sortMaps,
 		abridged;
 	final char quoteChar;
-	final String relativeUriBase, absolutePathUriBase;
 	final UriContext uriContext;
+	final UriResolution uriResolution;
+	final UriRelativity uriRelativity;
 
 	/**
 	 * Constructor.
@@ -392,27 +375,9 @@ public class SerializerContext extends BeanContext {
 		sortMaps = ps.getProperty(SERIALIZER_sortMaps, boolean.class, false);
 		abridged = ps.getProperty(SERIALIZER_abridged, boolean.class, false);
 		quoteChar = ps.getProperty(SERIALIZER_quoteChar, String.class, "\"").charAt(0);
-		relativeUriBase = resolveRelativeUriBase(ps.getProperty(SERIALIZER_relativeUriBase, String.class, ""));
-		absolutePathUriBase = resolveAbsolutePathUriBase(ps.getProperty(SERIALIZER_absolutePathUriBase, String.class, ""));
 		uriContext = ps.getProperty(SERIALIZER_uriContext, UriContext.class, UriContext.DEFAULT);
-	}
-
-	private static String resolveRelativeUriBase(String s) {
-		if (StringUtils.isEmpty(s))
-			return null;
-		if (s.equals("/"))
-			return s;
-		else if (StringUtils.endsWith(s, '/'))
-			s = s.substring(0, s.length()-1);
-		return s;
-	}
-
-	private static String resolveAbsolutePathUriBase(String s) {
-		if (StringUtils.isEmpty(s))
-			return null;
-		if (StringUtils.endsWith(s, '/'))
-			s = s.substring(0, s.length()-1);
-		return s;
+		uriResolution = ps.getProperty(SERIALIZER_uriResolution, UriResolution.class, UriResolution.ROOT_RELATIVE);
+		uriRelativity = ps.getProperty(SERIALIZER_uriRelativity, UriRelativity.class, UriRelativity.RESOURCE);
 	}
 
 	@Override /* Context */
@@ -433,9 +398,9 @@ public class SerializerContext extends BeanContext {
 				.append("sortMaps", sortMaps)
 				.append("parserKnowsRootTypes", abridged)
 				.append("quoteChar", quoteChar)
-				.append("relativeUriBase", relativeUriBase)
-				.append("absolutePathUriBase", absolutePathUriBase)
 				.append("uriContext", uriContext)
+				.append("uriResolution", uriResolution)
+				.append("uriRelativity", uriRelativity)
 			);
 	}
 }

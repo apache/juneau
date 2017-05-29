@@ -13,10 +13,6 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.UriResolution.*;
-import static org.apache.juneau.UriRelativity.*;
-
-import java.io.*;
 
 import org.apache.juneau.annotation.*;
 
@@ -32,43 +28,20 @@ import org.apache.juneau.annotation.*;
  * <p>
  * This class allows you to convert URL strings to absolute (e.g. <js>"http://host:port/foo/bar"</js>) or root-relative
  * 	(e.g. <js>"/foo/bar"</js>) URLs.
- * <p>
- * Two special protocols are used to represent context-root-relative and servlet-relative URIs:
- * 	<js>"context:/"</js> and <js>"servlet:/"</js>.
- *
- * The following list shows the types of URLs that can be resolved with this class:
- * <ul>
- * 	<li><js>"foo://foo"</js> - Absolute URI.
- * 	<li><js>"/foo"</js> - Root-relative URI.
- * 	<li><js>"/"</js> - Root URI.
- * 	<li><js>"context:/foo"</js> - Context-root-relative URI.
- * 	<li><js>"context:/"</js> - Context-root URI.
- * 	<li><js>"servlet:/foo"</js> - Servlet-path-relative URI.
- * 	<li><js>"servlet:/"</js> - Servlet-path URI.
- * 	<li><js>"foo"</js> - Path-info-relative URI.
- * 	<li><js>""</js> - Path-info URI.
- * </ul>
- *
- * The following class shows how
  */
 @Bean
 public class UriContext {
 
 	/**
 	 * Default URI context.
-	 * No URI resolution occurs.
 	 * No information about authority, servlet-root, context-root, or path-info is known.
 	 */
-	public static final UriContext DEFAULT = new UriContext(UriResolution.NONE, UriRelativity.PATH_INFO, null, null, null, null);
+	public static final UriContext DEFAULT = new UriContext();
 
-	private final String authority, contextRoot, servletPath, pathInfo, parentPath;
-
-	private final UriResolution resolution;
-	private final UriRelativity relativity;
+	final String authority, contextRoot, servletPath, pathInfo, parentPath;
 
 	// Lazy-initialized fields.
 	private String aContextRoot, rContextRoot, aServletPath, rResource, aPathInfo, rPath;
-
 
 	/**
 	 * Constructor.
@@ -77,17 +50,13 @@ public class UriContext {
 	 * <p>
 	 * Any parameter can be <jk>null</jk>.  Blanks and nulls are equivalent.
 	 *
-	 * @param resolution
-	 * @param relativity
 	 * @param authority - The authority portion of URL (e.g. <js>"http://hostname:port"</js>)
 	 * @param contextRoot - The context root of the application (e.g. <js>"/context-root"</js>, or <js>"context-root"</js>)
 	 * @param servletPath - The servlet path (e.g. <js>"/servlet-path"</js>, or <js>"servlet-path"</js>)
 	 * @param pathInfo - The path info (e.g. <js>"/path-info"</js>, or <js>"path-info"</js>)
 	 */
-	@BeanConstructor(properties="resolution,relativity,authority,contextRoot,servletPath,pathInfo")
-	public UriContext(UriResolution resolution, UriRelativity relativity, String authority, String contextRoot, String servletPath, String pathInfo) {
-		this.resolution = resolution;
-		this.relativity = relativity;
+	@BeanConstructor(properties="authority,contextRoot,servletPath,pathInfo")
+	public UriContext(String authority, String contextRoot, String servletPath, String pathInfo) {
 		this.authority = nullIfEmpty(trimSlashes(authority));
 		this.contextRoot = nullIfEmpty(trimSlashes(contextRoot));
 		this.servletPath = nullIfEmpty(trimSlashes(servletPath));
@@ -97,11 +66,12 @@ public class UriContext {
 
 	/**
 	 * Default constructor.
+	 * All <jk>null</jk> values.
 	 */
 	public UriContext() {
-		this(ROOT_RELATIVE, RESOURCE, null, null, null, null);
+		this(null, null, null, null);
 	}
-
+	
 	/**
 	 * Returns the absolute URI of just the authority portion of this URI context.
 	 * <p>
@@ -278,121 +248,10 @@ public class UriContext {
 		return getParent(getRootRelativePathInfo());
 	}
 
-	/**
-	 * Converts the specified URI to absolute form based on values in this context.
-	 *
-	 * @param uri The URI to convert to absolute form.
-	 * @return The converted URI.
-	 */
-	public String resolve(String uri) {
-		if (isAbsoluteUri(uri))
-			return uri;
-		if (resolution == ROOT_RELATIVE && startsWith(uri, '/'))
-			return uri;
-		if (resolution == NONE && ! isSpecialUri(uri))
-			return uri;
-		return append(new StringBuilder(), uri).toString();
-	}
-
-	/**
-	 * Same as {@link #resolve(String)} except appends result to the specified appendable.
-	 *
-	 * @param a The appendable to append the URL to.
-	 * @param uri The URI to convert to absolute form.
-	 * @return The same appendable passed in.
-	 */
-	public Appendable append(Appendable a, String uri) {
-
-		try {
-			uri = nullIfEmpty(uri);
-
-			// Absolute paths are not changed.
-			if (isAbsoluteUri(uri))
-				return a.append(uri);
-			if (resolution == NONE && ! isSpecialUri(uri))
-				return a.append(emptyIfNull(uri));
-			if (resolution == ROOT_RELATIVE && startsWith(uri, '/'))
-				return a.append(uri);
-
-			// Root-relative path
-			if (startsWith(uri, '/')) {
-				if (authority != null){
-					a.append(authority);
-					if (uri.length() == 1)
-						return a;
-				}
-				return a.append(uri);
-			}
-
-			// Context-relative path
-			if (uri != null && uri.startsWith("context:/")) {
-				if (resolution == ABSOLUTE && authority != null)
-					a.append(authority);
-				if (contextRoot != null)
-					a.append('/').append(contextRoot);
-				if (uri.length() > 9)
-					a.append('/').append(uri.substring(9));
-				else if (contextRoot == null && (authority == null || resolution != ABSOLUTE))
-					a.append('/');
-				return a;
-			}
-
-			// Resource-relative path
-			if (uri != null && uri.startsWith("servlet:/")) {
-				if (resolution == ABSOLUTE && authority != null)
-					a.append(authority);
-				if (contextRoot != null)
-					a.append('/').append(contextRoot);
-				if (servletPath != null)
-					a.append('/').append(servletPath);
-				if (uri.length() > 9)
-					a.append('/').append(uri.substring(9));
-				else if (servletPath == null && contextRoot == null && (authority == null || resolution != ABSOLUTE))
-					a.append('/');
-				return a;
-			}
-
-			// Relative path
-			if (resolution == ABSOLUTE && authority != null)
-				a.append(authority);
-			if (contextRoot != null)
-				a.append('/').append(contextRoot);
-			if (servletPath != null)
-				a.append('/').append(servletPath);
-			if (relativity == RESOURCE && uri != null)
-				a.append('/').append(uri);
-			else if (relativity == PATH_INFO) {
-				if (uri == null) {
-					if (pathInfo != null)
-						a.append('/').append(pathInfo);
-				} else {
-					if (parentPath != null)
-						a.append('/').append(parentPath);
-					a.append('/').append(uri);
-				}
-			}
-			else if (uri == null && contextRoot == null && servletPath == null && (authority == null || resolution != ABSOLUTE))
-				a.append('/');
-
-			return a;
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
 	private static String getParent(String uri) {
 		int i = uri.lastIndexOf('/');
 		if (i <= 1)
 			return "/";
 		return uri.substring(0, i);
-	}
-
-	private static boolean isSpecialUri(String s) {
-		if (s == null || s.length() == 0)
-			return false;
-		char c = s.charAt(0);
-		if (c != 's' && c != 'c')
-			return false;
-		return s.startsWith("servlet:/") || s.startsWith("context:/");
 	}
 }

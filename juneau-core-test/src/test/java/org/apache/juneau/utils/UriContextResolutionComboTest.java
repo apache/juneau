@@ -35,7 +35,7 @@ public class UriContextResolutionComboTest {
 		return Arrays.asList(new Object[][] {
 
 			// Happy cases - All URL parts known.
-			{
+			{	/* 0 */
 				"Happy-1a",
 				input(
 					"http://host:port","/context","/resource","/path",
@@ -50,7 +50,7 @@ public class UriContextResolutionComboTest {
 					"http://foo.com:123/foobar"
 				)
 			},
-			{
+			{	/* 1 */
 				"Happy-2",
 				input(
 					"http://host:port","/context","/resource","/path",
@@ -65,7 +65,7 @@ public class UriContextResolutionComboTest {
 					"http://foo.com:123"
 				)
 			},
-			{
+			{	/* 2 */
 				"Happy-3",
 				input(
 					"http://host:port","/context","/resource","/path",
@@ -80,7 +80,7 @@ public class UriContextResolutionComboTest {
 					"/foobar"
 				)
 			},
-			{
+			{	/* 3 */
 				"Happy-4",
 				input(
 					"http://host:port","/context","/resource","/path", 
@@ -95,7 +95,7 @@ public class UriContextResolutionComboTest {
 					"/"
 				)
 			},
-			{
+			{	/* 4 */
 				"Happy-5",
 				input(
 					"http://host:port","/context","/resource","/path", 
@@ -110,7 +110,7 @@ public class UriContextResolutionComboTest {
 					"foobar"
 				)
 			},
-			{
+			{	/* 5 */
 				"Happy-6",
 				input(
 					"http://host:port","/context","/resource","/path", 
@@ -125,7 +125,7 @@ public class UriContextResolutionComboTest {
 					""
 				)
 			},
-			{
+			{	/* 6 */
 				"Happy-7",
 				input(
 					"http://host:port","/context","/resource","/path", 
@@ -140,7 +140,7 @@ public class UriContextResolutionComboTest {
 					"/context/foo"
 				)
 			},
-			{
+			{	/* 7 */
 				"Happy-8",
 				input(
 					"http://host:port","/context","/resource","/path", 
@@ -155,7 +155,7 @@ public class UriContextResolutionComboTest {
 					"/context"
 				)
 			},
-			{
+			{	/* 8 */
 				"Happy-9",
 				input(
 					"http://host:port","/context","/resource","/path", 
@@ -170,7 +170,7 @@ public class UriContextResolutionComboTest {
 					"/context/resource/foo"
 				)
 			},
-			{
+			{	/* 9 */
 				"Happy-10",
 				input(
 					"http://host:port","/context","/resource","/path", 
@@ -187,7 +187,7 @@ public class UriContextResolutionComboTest {
 			},
 			
 			// Multiple context and resource parts
-			{
+			{	/* 10 */
 				"MultiContextResource-1",
 				input(
 					"http://host:port","/c1/c2","/r1/r2","/p1/p2",
@@ -202,7 +202,7 @@ public class UriContextResolutionComboTest {
 					"http://foo.com:123/foobar"
 				)
 			},
-			{
+			{	/* 11 */
 				"MultiContextResource-2",
 				input(
 					"http://host:port","/c1/c2","/r1/r2","/p1/p2",
@@ -217,7 +217,7 @@ public class UriContextResolutionComboTest {
 					"http://foo.com:123"
 				)
 			},
-			{
+			{	/* 12 */
 				"MultiContextResource-3",
 				input(
 					"http://host:port","/c1/c2","/r1/r2","/p1/p2",
@@ -232,7 +232,7 @@ public class UriContextResolutionComboTest {
 					"/foobar"
 				)
 			},
-			{
+			{	/* 13 */
 				"MultiContextResource-4",
 				input(
 					"http://host:port","/c1/c2","/r1/r2","/p1/p2",
@@ -247,7 +247,7 @@ public class UriContextResolutionComboTest {
 					"/"
 				)
 			},
-			{
+			{	/* 14 */
 				"MultiContextResource-5",
 				input(
 					"http://host:port","/c1/c2","/r1/r2","/p1/p2",
@@ -262,7 +262,7 @@ public class UriContextResolutionComboTest {
 					"foobar"
 				)
 			},
-			{
+			{	/* 15 */
 				"MultiContextResource-6",
 				input(
 					"http://host:port","/c1/c2","/r1/r2","/p1/p2",
@@ -277,7 +277,7 @@ public class UriContextResolutionComboTest {
 					""
 				)
 			},
-			{
+			{	/* 16 */
 				"MultiContextResource-7",
 				input(
 					"http://host:port","/c1/c2","/r1/r2","/p1/p2",
@@ -292,7 +292,7 @@ public class UriContextResolutionComboTest {
 					"/c1/c2/foo"
 				)
 			},
-			{
+			{	/* 17 */
 				"MultiContextResource-8",
 				input(
 					"http://host:port","/c1/c2","/r1/r2","/p1/p2",
@@ -307,7 +307,7 @@ public class UriContextResolutionComboTest {
 					"/c1/c2"
 				)
 			},
-			{
+			{	/* 18 */
 				"MultiContextResource-9",
 				input(
 					"http://host:port","/c1/c2","/r1/r2","/p1/p2",
@@ -322,7 +322,7 @@ public class UriContextResolutionComboTest {
 					"/c1/c2/r1/r2/foo"
 				)
 			},
-			{
+			{	/* 19 */
 				"MultiContextResource-10",
 				input(
 					"http://host:port","/c1/c2","/r1/r2","/p1/p2",
@@ -339,7 +339,7 @@ public class UriContextResolutionComboTest {
 			},
 			
 			// No authority given
-			{
+			{	/* 20 */
 				"NoAuthority-1",
 				input(
 					"","/context","/resource","/path",
@@ -354,7 +354,7 @@ public class UriContextResolutionComboTest {
 					"http://foo.com:123/foobar"
 				)
 			},
-			{
+			{	/* 21 */
 				"NoAuthority-2",
 				input(
 					"","/context","/resource","/path",
@@ -369,7 +369,7 @@ public class UriContextResolutionComboTest {
 					"http://foo.com:123"
 				)
 			},
-			{
+			{	/* 22 */
 				"NoAuthority-3",
 				input(
 					"","/context","/resource","/path",
@@ -384,7 +384,7 @@ public class UriContextResolutionComboTest {
 					"/foobar"
 				)
 			},
-			{
+			{	/* 23 */
 				"NoAuthority-4",
 				input(
 					"","/context","/resource","/path",
@@ -399,7 +399,7 @@ public class UriContextResolutionComboTest {
 					"/"
 				)
 			},
-			{
+			{	/* 24 */
 				"NoAuthority-5",
 				input(
 					"","/context","/resource","/path",
@@ -414,7 +414,7 @@ public class UriContextResolutionComboTest {
 					"foobar"
 				)
 			},
-			{
+			{	/* 25 */
 				"NoAuthority-6",
 				input(
 					"","/context","/resource","/path",
@@ -429,7 +429,7 @@ public class UriContextResolutionComboTest {
 					""
 				)
 			},
-			{
+			{	/* 26 */
 				"NoAuthority-7",
 				input(
 					"","/context","/resource","/path",
@@ -444,7 +444,7 @@ public class UriContextResolutionComboTest {
 					"/context/foo"
 				)
 			},
-			{
+			{	/* 27 */
 				"NoAuthority-8",
 				input(
 					"","/context","/resource","/path",
@@ -459,7 +459,7 @@ public class UriContextResolutionComboTest {
 					"/context"
 				)
 			},
-			{
+			{	/* 28 */
 				"NoAuthority-9",
 				input(
 					"","/context","/resource","/path",
@@ -474,7 +474,7 @@ public class UriContextResolutionComboTest {
 					"/context/resource/foo"
 				)
 			},
-			{
+			{	/* 29 */
 				"NoAuthority-10",
 				input(
 					"","/context","/resource","/path",
@@ -491,7 +491,7 @@ public class UriContextResolutionComboTest {
 			},
 			
 			// No authority or context given
-			{
+			{	/* 30 */
 				"NoAuthorityOrContext-1",
 				input(
 					"","","/resource","/path",
@@ -506,7 +506,7 @@ public class UriContextResolutionComboTest {
 					"http://foo.com:123/foobar"
 				)
 			},
-			{
+			{	/* 31 */
 				"NoAuthorityOrContext-2",
 				input(
 					"","","/resource","/path",
@@ -521,7 +521,7 @@ public class UriContextResolutionComboTest {
 					"http://foo.com:123"
 				)
 			},
-			{
+			{	/* 32 */
 				"NoAuthorityOrContext-3",
 				input(
 					"","","/resource","/path",
@@ -536,7 +536,7 @@ public class UriContextResolutionComboTest {
 					"/foobar"
 				)
 			},
-			{
+			{	/* 33 */
 				"NoAuthorityOrContext-4",
 				input(
 					"","","/resource","/path",
@@ -551,7 +551,7 @@ public class UriContextResolutionComboTest {
 					"/"
 				)
 			},
-			{
+			{	/* 34 */
 				"NoAuthorityOrContext-5",
 				input(
 					"","","/resource","/path",
@@ -566,7 +566,7 @@ public class UriContextResolutionComboTest {
 					"foobar"
 				)
 			},
-			{
+			{	/* 35 */
 				"NoAuthorityOrContext-6",
 				input(
 					"","","/resource","/path",
@@ -581,7 +581,7 @@ public class UriContextResolutionComboTest {
 					""
 				)
 			},
-			{
+			{	/* 36 */
 				"NoAuthorityOrContext-7",
 				input(
 					"","","/resource","/path",
@@ -596,7 +596,7 @@ public class UriContextResolutionComboTest {
 					"/foo"
 				)
 			},
-			{
+			{	/* 37 */
 				"NoAuthorityOrContext-8",
 				input(
 					"","","/resource","/path",
@@ -611,7 +611,7 @@ public class UriContextResolutionComboTest {
 					"/"
 				)
 			},
-			{
+			{	/* 38 */
 				"NoAuthorityOrContext-9",
 				input(
 					"","","/resource","/path",
@@ -626,7 +626,7 @@ public class UriContextResolutionComboTest {
 					"/resource/foo"
 				)
 			},
-			{
+			{	/* 39 */
 				"NoAuthorityOrContext-10",
 				input(
 					"","","/resource","/path",
@@ -643,7 +643,7 @@ public class UriContextResolutionComboTest {
 			},
 
 			// No authority or context or resource given
-			{
+			{	/* 40 */
 				"NoAuthorityOrContextOrResource-1",
 				input(
 					"","","","/path",
@@ -658,7 +658,7 @@ public class UriContextResolutionComboTest {
 					"http://foo.com:123/foobar"
 				)
 			},
-			{
+			{	/* 41 */
 				"NoAuthorityOrContextOrResource-2",
 				input(
 					"","","","/path",
@@ -673,7 +673,7 @@ public class UriContextResolutionComboTest {
 					"http://foo.com:123"
 				)
 			},
-			{
+			{	/* 42 */
 				"NoAuthorityOrContextOrResource-3",
 				input(
 					"","","","/path",
@@ -688,7 +688,7 @@ public class UriContextResolutionComboTest {
 					"/foobar"
 				)
 			},
-			{
+			{	/* 43 */
 				"NoAuthorityOrContextOrResource-4",
 				input(
 					"","","","/path",
@@ -703,7 +703,7 @@ public class UriContextResolutionComboTest {
 					"/"
 				)
 			},
-			{
+			{	/* 44 */
 				"NoAuthorityOrContextOrResource-5",
 				input(
 					"","","","/path",
@@ -718,8 +718,7 @@ public class UriContextResolutionComboTest {
 					"foobar"
 				)
 			},
-//			return new Results(eAbsResource, eAbsPathInfo, eRrResource, eRrPathInfo, eNoneResource, eNonePathInfo);
-			{
+			{	/* 45 */
 				"NoAuthorityOrContextOrResource-6",
 				input(
 					"","","","/path",
@@ -734,7 +733,7 @@ public class UriContextResolutionComboTest {
 					""
 				)
 			},
-			{
+			{	/* 46 */
 				"NoAuthorityOrContextOrResource-7",
 				input(
 					"","","","/path",
@@ -749,7 +748,7 @@ public class UriContextResolutionComboTest {
 					"/foo"
 				)
 			},
-			{
+			{	/* 47 */
 				"NoAuthorityOrContextOrResource-8",
 				input(
 					"","","","/path",
@@ -764,7 +763,7 @@ public class UriContextResolutionComboTest {
 					"/"
 				)
 			},
-			{
+			{	/* 48 */
 				"NoAuthorityOrContextOrResource-9",
 				input(
 					"","","","/path",
@@ -779,7 +778,7 @@ public class UriContextResolutionComboTest {
 					"/foo"
 				)
 			},
-			{
+			{	/* 49 */
 				"NoAuthorityOrContextOrResource-10",
 				input(
 					"","","","/path",
@@ -796,7 +795,7 @@ public class UriContextResolutionComboTest {
 			},
 			
 			// No context or resource given.
-			{
+			{	/* 50 */
 				"NoContextOrResource-1",
 				input(
 					"http://host:port","","","/path",
@@ -811,7 +810,7 @@ public class UriContextResolutionComboTest {
 					"http://foo.com:123/foobar"
 				)
 			},
-			{
+			{	/* 51 */
 				"NoContextOrResource-2",
 				input(
 					"http://host:port","","","/path",
@@ -826,7 +825,7 @@ public class UriContextResolutionComboTest {
 					"http://foo.com:123"
 				)
 			},
-			{
+			{	/* 52 */
 				"NoContextOrResource-3",
 				input(
 					"http://host:port","","","/path",
@@ -841,7 +840,7 @@ public class UriContextResolutionComboTest {
 					"/foobar"
 				)
 			},
-			{
+			{	/* 53 */
 				"NoContextOrResource-4",
 				input(
 					"http://host:port","","","/path",
@@ -856,7 +855,7 @@ public class UriContextResolutionComboTest {
 					"/"
 				)
 			},
-			{
+			{	/* 54 */
 				"NoContextOrResource-5",
 				input(
 					"http://host:port","","","/path",
@@ -871,7 +870,7 @@ public class UriContextResolutionComboTest {
 					"foobar"
 				)
 			},
-			{
+			{	/* 55 */
 				"NoContextOrResource-6",
 				input(
 					"http://host:port","","","/path",
@@ -886,7 +885,7 @@ public class UriContextResolutionComboTest {
 					""
 				)
 			},
-			{
+			{	/* 56 */
 				"NoContextOrResource-7",
 				input(
 					"http://host:port","","","/path",
@@ -901,7 +900,7 @@ public class UriContextResolutionComboTest {
 					"/foo"
 				)
 			},
-			{
+			{	/* 57 */
 				"NoContextOrResource-8",
 				input(
 					"http://host:port","","","/path",
@@ -916,7 +915,7 @@ public class UriContextResolutionComboTest {
 					"/"
 				)
 			},
-			{
+			{	/* 58 */
 				"NoContextOrResource-9",
 				input(
 					"http://host:port","","","/path",
@@ -931,7 +930,7 @@ public class UriContextResolutionComboTest {
 					"/foo"
 				)
 			},
-			{
+			{	/* 59 */
 				"NoContextOrResource-10",
 				input(
 					"http://host:port","","","/path",
@@ -995,61 +994,61 @@ public class UriContextResolutionComboTest {
 	
 	@Test
 	public void a01_testAbsoluteResource() {
-		assertEquals(r.aResource, new UriContext(ABSOLUTE, RESOURCE, in.authority, in.context, in.resource, in.path).resolve(in.uri), "{0}: testAbsolute() failed", label);
+		assertEquals(r.aResource, new UriResolver(ABSOLUTE, RESOURCE, new UriContext(in.authority, in.context, in.resource, in.path)).resolve(in.uri), "{0}: testAbsolute() failed", label);
 	}	
 		
 	@Test
 	public void a02_testAppendAbsoluteResource() {
-		assertEquals(r.aResource, new UriContext(ABSOLUTE, RESOURCE, in.authority, in.context, in.resource, in.path).append(new StringBuilder(), in.uri).toString(), "{0}: testAbsolute() failed", label);
+		assertEquals(r.aResource, new UriResolver(ABSOLUTE, RESOURCE, new UriContext(in.authority, in.context, in.resource, in.path)).append(new StringBuilder(), in.uri).toString(), "{0}: testAbsolute() failed", label);
 	}
 	
 	@Test
 	public void a03_testAbsolutePathInfo() {
-		assertEquals(r.aPathInfo, new UriContext(ABSOLUTE, PATH_INFO, in.authority, in.context, in.resource, in.path).resolve(in.uri), "{0}: testAbsolute() failed", label);
+		assertEquals(r.aPathInfo, new UriResolver(ABSOLUTE, PATH_INFO, new UriContext(in.authority, in.context, in.resource, in.path)).resolve(in.uri), "{0}: testAbsolute() failed", label);
 	}	
 		
 	@Test
 	public void a04_testAppendAbsolutePathInfo() {
-		assertEquals(r.aPathInfo, new UriContext(ABSOLUTE, PATH_INFO, in.authority, in.context, in.resource, in.path).append(new StringBuilder(), in.uri).toString(), "{0}: testAbsolute() failed", label);
+		assertEquals(r.aPathInfo, new UriResolver(ABSOLUTE, PATH_INFO, new UriContext(in.authority, in.context, in.resource, in.path)).append(new StringBuilder(), in.uri).toString(), "{0}: testAbsolute() failed", label);
 	}
 
 	@Test
 	public void a05_testRootRelativeResource() {
-		assertEquals(r.rrResource, new UriContext(ROOT_RELATIVE, RESOURCE, in.authority, in.context, in.resource, in.path).resolve(in.uri), "{0}: testAbsolute() failed", label);
+		assertEquals(r.rrResource, new UriResolver(ROOT_RELATIVE, RESOURCE, new UriContext(in.authority, in.context, in.resource, in.path)).resolve(in.uri), "{0}: testAbsolute() failed", label);
 	}	
 		
 	@Test
 	public void a06_testAppendRootRelativeResource() {
-		assertEquals(r.rrResource, new UriContext(ROOT_RELATIVE, RESOURCE, in.authority, in.context, in.resource, in.path).append(new StringBuilder(), in.uri).toString(), "{0}: testAbsolute() failed", label);
+		assertEquals(r.rrResource, new UriResolver(ROOT_RELATIVE, RESOURCE, new UriContext(in.authority, in.context, in.resource, in.path)).append(new StringBuilder(), in.uri).toString(), "{0}: testAbsolute() failed", label);
 	}
 
 	@Test
 	public void a07_testRootRelativePathInfo() {
-		assertEquals(r.rrPathInfo, new UriContext(ROOT_RELATIVE, PATH_INFO, in.authority, in.context, in.resource, in.path).resolve(in.uri), "{0}: testAbsolute() failed", label);
+		assertEquals(r.rrPathInfo, new UriResolver(ROOT_RELATIVE, PATH_INFO, new UriContext(in.authority, in.context, in.resource, in.path)).resolve(in.uri), "{0}: testAbsolute() failed", label);
 	}	
 		
 	@Test
 	public void a08_testAppendRootRelativePathInfo() {
-		assertEquals(r.rrPathInfo, new UriContext(ROOT_RELATIVE, PATH_INFO, in.authority, in.context, in.resource, in.path).append(new StringBuilder(), in.uri).toString(), "{0}: testAbsolute() failed", label);
+		assertEquals(r.rrPathInfo, new UriResolver(ROOT_RELATIVE, PATH_INFO, new UriContext(in.authority, in.context, in.resource, in.path)).append(new StringBuilder(), in.uri).toString(), "{0}: testAbsolute() failed", label);
 	}
 
 	@Test
 	public void a09_testNoneResource() {
-		assertEquals(r.nResource, new UriContext(NONE, RESOURCE, in.authority, in.context, in.resource, in.path).resolve(in.uri), "{0}: testAbsolute() failed", label);
+		assertEquals(r.nResource, new UriResolver(NONE, RESOURCE, new UriContext(in.authority, in.context, in.resource, in.path)).resolve(in.uri), "{0}: testAbsolute() failed", label);
 	}	
 		
 	@Test
 	public void a10_testAppendNoneResource() {
-		assertEquals(r.nResource, new UriContext(NONE, RESOURCE, in.authority, in.context, in.resource, in.path).append(new StringBuilder(), in.uri).toString(), "{0}: testAbsolute() failed", label);
+		assertEquals(r.nResource, new UriResolver(NONE, RESOURCE, new UriContext(in.authority, in.context, in.resource, in.path)).append(new StringBuilder(), in.uri).toString(), "{0}: testAbsolute() failed", label);
 	}
 
 	@Test
 	public void a11_testNonePathInfo() {
-		assertEquals(r.nPathInfo, new UriContext(NONE, PATH_INFO, in.authority, in.context, in.resource, in.path).resolve(in.uri), "{0}: testAbsolute() failed", label);
+		assertEquals(r.nPathInfo, new UriResolver(NONE, PATH_INFO, new UriContext(in.authority, in.context, in.resource, in.path)).resolve(in.uri), "{0}: testAbsolute() failed", label);
 	}	
 		
 	@Test
 	public void a12_testAppendNonePathInfo() {
-		assertEquals(r.nPathInfo, new UriContext(NONE, PATH_INFO, in.authority, in.context, in.resource, in.path).append(new StringBuilder(), in.uri).toString(), "{0}: testAbsolute() failed", label);
+		assertEquals(r.nPathInfo, new UriResolver(NONE, PATH_INFO, new UriContext(in.authority, in.context, in.resource, in.path)).append(new StringBuilder(), in.uri).toString(), "{0}: testAbsolute() failed", label);
 	}
 }

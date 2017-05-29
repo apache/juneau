@@ -127,14 +127,20 @@ public class JsoSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public JsoSerializerBuilder relativeUriBase(String value) {
-		super.relativeUriBase(value);
+	public JsoSerializerBuilder uriContext(UriContext value) {
+		super.uriContext(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public JsoSerializerBuilder absolutePathUriBase(String value) {
-		super.absolutePathUriBase(value);
+	public JsoSerializerBuilder uriResolution(UriResolution value) {
+		super.uriResolution(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public JsoSerializerBuilder uriRelativity(UriRelativity value) {
+		super.uriRelativity(value);
 		return this;
 	}
 

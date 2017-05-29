@@ -24,7 +24,7 @@ import org.apache.juneau.rest.annotation.*;
 	messages="nls/JsonSchemaResource",
 	title="Sample JSON-Schema document",
 	description="Sample resource that shows how to generate JSON-Schema documents",
-	pageLinks="{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/JsonSchemaResource.java'}"
+	pageLinks="{up:'request:/..',options:'servlet:/?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/JsonSchemaResource.java'}"
 )
 public class JsonSchemaResource extends ResourceJena {
 	private static final long serialVersionUID = 1L;

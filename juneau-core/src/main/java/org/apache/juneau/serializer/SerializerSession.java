@@ -53,8 +53,7 @@ public class SerializerSession extends BeanSession {
 		sortMaps,
 		abridged;
 	private final char quoteChar;
-	private final String relativeUriBase, absolutePathUriBase;
-	private final UriContext uriContext;
+	private final UriResolver uriResolver;
 
 	/** The current indentation depth into the model. */
 	public int indent;
@@ -102,7 +101,8 @@ public class SerializerSession extends BeanSession {
 		super(ctx, op, locale, timeZone, mediaType);
 		this.javaMethod = javaMethod;
 		this.output = output;
-		this.uriContext = (uriContext != null ? uriContext : ctx.uriContext);
+		UriResolution uriResolution;
+		UriRelativity uriRelativity;
 		if (op == null || op.isEmpty()) {
 			maxDepth = ctx.maxDepth;
 			initialDepth = ctx.initialDepth;
@@ -115,11 +115,11 @@ public class SerializerSession extends BeanSession {
 			trimEmptyMaps = ctx.trimEmptyMaps;
 			trimStrings = ctx.trimStrings;
 			quoteChar = ctx.quoteChar;
-			relativeUriBase = ctx.relativeUriBase;
-			absolutePathUriBase = ctx.absolutePathUriBase;
 			sortCollections = ctx.sortCollections;
 			sortMaps = ctx.sortMaps;
 			abridged = ctx.abridged;
+			uriResolution = ctx.uriResolution;
+			uriRelativity = ctx.uriRelativity;
 		} else {
 			maxDepth = op.getInt(SERIALIZER_maxDepth, ctx.maxDepth);
 			initialDepth = op.getInt(SERIALIZER_initialDepth, ctx.initialDepth);
@@ -132,12 +132,14 @@ public class SerializerSession extends BeanSession {
 			trimEmptyMaps = op.getBoolean(SERIALIZER_trimEmptyMaps, ctx.trimEmptyMaps);
 			trimStrings = op.getBoolean(SERIALIZER_trimStrings, ctx.trimStrings);
 			quoteChar = op.getString(SERIALIZER_quoteChar, ""+ctx.quoteChar).charAt(0);
-			relativeUriBase = op.getString(SERIALIZER_relativeUriBase, ctx.relativeUriBase);
-			absolutePathUriBase = op.getString(SERIALIZER_absolutePathUriBase, ctx.absolutePathUriBase);
 			sortCollections = op.getBoolean(SERIALIZER_sortCollections, ctx.sortMaps);
 			sortMaps = op.getBoolean(SERIALIZER_sortMaps, ctx.sortMaps);
 			abridged = op.getBoolean(SERIALIZER_abridged, ctx.abridged);
+			uriResolution = op.get(UriResolution.class, SERIALIZER_uriResolution, UriResolution.ROOT_RELATIVE);
+			uriRelativity = op.get(UriRelativity.class, SERIALIZER_uriRelativity, UriRelativity.RESOURCE);
 		}
+
+		uriResolver = new UriResolver(uriResolution, uriRelativity, uriContext == null ? ctx.uriContext : uriContext);
 
 		this.indent = initialDepth;
 		if (detectRecursions || isDebug()) {
@@ -244,12 +246,12 @@ public class SerializerSession extends BeanSession {
 	}
 
 	/**
-	 * Returns the URI context passed in to this constructor.
+	 * Returns the URI resolver.
 	 *
-	 * @return The URI context passed in to this constructor.
+	 * @return The URI resolver.
 	 */
-	public final UriContext getUriContext() {
-		return uriContext;
+	public final UriResolver getUriResolver() {
+		return uriResolver;
 	}
 
 	/**
@@ -367,24 +369,6 @@ public class SerializerSession extends BeanSession {
 	 */
 	public final boolean isSortMaps() {
 		return sortMaps;
-	}
-
-	/**
-	 * Returns the {@link SerializerContext#SERIALIZER_relativeUriBase} setting value for this session.
-	 *
-	 * @return The {@link SerializerContext#SERIALIZER_relativeUriBase} setting value for this session.
-	 */
-	public final String getRelativeUriBase() {
-		return relativeUriBase;
-	}
-
-	/**
-	 * Returns the {@link SerializerContext#SERIALIZER_absolutePathUriBase} setting value for this session.
-	 *
-	 * @return The {@link SerializerContext#SERIALIZER_absolutePathUriBase} setting value for this session.
-	 */
-	public final String getAbsolutePathUriBase() {
-		return absolutePathUriBase;
 	}
 
 	/**
@@ -578,30 +562,67 @@ public class SerializerSession extends BeanSession {
 	}
 
 	/**
-	 * Converts a String to an absolute URI based on the {@link SerializerContext#SERIALIZER_absolutePathUriBase} and
-	 * 	{@link SerializerContext#SERIALIZER_relativeUriBase} settings on this context.
+	 * Converts a String to an absolute URI based on the {@link UriContext} on this session.
 	 *
 	 * @param uri The input URI.
+	 * 	Can be any of the following:
+	 * 	<ul>
+	 * 		<li>{@link java.net.URI}
+	 * 		<li>{@link java.net.URL}
+	 * 		<li>{@link CharSequence}
+	 * 	</ul>
+	 * 	URI can be any of the following forms:
+	 * 	<ul>
+	 * 		<li><js>"foo://foo"</js> - Absolute URI.
+	 * 		<li><js>"/foo"</js> - Root-relative URI.
+	 * 		<li><js>"/"</js> - Root URI.
+	 * 		<li><js>"context:/foo"</js> - Context-root-relative URI.
+	 * 		<li><js>"context:/"</js> - Context-root URI.
+	 * 		<li><js>"servlet:/foo"</js> - Servlet-path-relative URI.
+	 * 		<li><js>"servlet:/"</js> - Servlet-path URI.
+	 * 		<li><js>"request:/foo"</js> - Request-path-relative URI.
+	 * 		<li><js>"request:/"</js> - Request-path URI.
+	 * 		<li><js>"foo"</js> - Path-info-relative URI.
+	 * 		<li><js>""</js> - Path-info URI.
+	 * 	</ul>
 	 * @return The resolved URI.
 	 */
-	public String resolveUri(String uri) {
-		if (uri.indexOf("://") != -1 || (absolutePathUriBase == null && relativeUriBase == null))
-			return uri;
-		StringBuilder sb = getStringBuilder();
-		if (StringUtils.startsWith(uri, '/')) {
-			if (absolutePathUriBase != null)
-				sb.append(absolutePathUriBase);
-		} else {
-			if (relativeUriBase != null) {
-				sb.append(relativeUriBase);
-				if (! uri.equals("/"))
-					sb.append("/");
-			}
-		}
-		sb.append(uri);
-		String s = sb.toString();
-		returnStringBuilder(sb);
-		return s;
+	public String resolveUri(Object uri) {
+		return uriResolver.resolve(uri);
+	}
+
+	/**
+	 * Opposite of {@link #resolveUri(Object)}.
+	 * <p>
+	 * Converts the URI to a value relative to the specified <code>relativeTo</code> parameter.
+	 * <p>
+	 * Both parameters can be any of the following:
+	 * <ul>
+	 * 	<li>{@link java.net.URI}
+	 * 	<li>{@link java.net.URL}
+	 * 	<li>{@link CharSequence}
+	 * </ul>
+	 * Both URIs can be any of the following forms:
+	 * <ul>
+	 * 	<li><js>"foo://foo"</js> - Absolute URI.
+	 * 	<li><js>"/foo"</js> - Root-relative URI.
+	 * 	<li><js>"/"</js> - Root URI.
+	 * 	<li><js>"context:/foo"</js> - Context-root-relative URI.
+	 * 	<li><js>"context:/"</js> - Context-root URI.
+	 * 	<li><js>"servlet:/foo"</js> - Servlet-path-relative URI.
+	 * 	<li><js>"servlet:/"</js> - Servlet-path URI.
+	 * 	<li><js>"request:/foo"</js> - Request-path-relative URI.
+	 * 	<li><js>"request:/"</js> - Request-path URI.
+	 * 	<li><js>"foo"</js> - Path-info-relative URI.
+	 * 	<li><js>""</js> - Path-info URI.
+	 * </ul>
+	 *
+	 * @param relativeTo The URI to relativize against.
+	 * @param uri The URI to relativize.
+	 * @return The relativized URI.
+	 */
+	public String relativizeUri(Object relativeTo, Object uri) {
+		return uriResolver.relativize(relativeTo, uri);
 	}
 
 	/**

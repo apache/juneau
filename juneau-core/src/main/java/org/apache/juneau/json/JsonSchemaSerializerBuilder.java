@@ -144,14 +144,20 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder relativeUriBase(String value) {
-		super.relativeUriBase(value);
+	public JsonSchemaSerializerBuilder uriContext(UriContext value) {
+		super.uriContext(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public JsonSchemaSerializerBuilder absolutePathUriBase(String value) {
-		super.absolutePathUriBase(value);
+	public JsonSchemaSerializerBuilder uriResolution(UriResolution value) {
+		super.uriResolution(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public JsonSchemaSerializerBuilder uriRelativity(UriRelativity value) {
+		super.uriRelativity(value);
 		return this;
 	}
 

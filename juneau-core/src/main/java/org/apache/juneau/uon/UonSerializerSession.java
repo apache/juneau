@@ -87,6 +87,6 @@ public class UonSerializerSession extends SerializerSession {
 		Object output = getOutput();
 		if (output instanceof UonWriter)
 			return (UonWriter)output;
-		return new UonWriter(this, super.getWriter(), isUseWhitespace(), isEncodeChars(), isTrimStrings(), getRelativeUriBase(), getAbsolutePathUriBase(), getUriContext());
+		return new UonWriter(this, super.getWriter(), isUseWhitespace(), isEncodeChars(), isTrimStrings(), getUriResolver());
 	}
 }

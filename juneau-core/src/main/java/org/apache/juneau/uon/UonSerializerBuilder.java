@@ -169,14 +169,20 @@ public class UonSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public UonSerializerBuilder relativeUriBase(String value) {
-		super.relativeUriBase(value);
+	public UonSerializerBuilder uriContext(UriContext value) {
+		super.uriContext(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public UonSerializerBuilder absolutePathUriBase(String value) {
-		super.absolutePathUriBase(value);
+	public UonSerializerBuilder uriResolution(UriResolution value) {
+		super.uriResolution(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public UonSerializerBuilder uriRelativity(UriRelativity value) {
+		super.uriRelativity(value);
 		return this;
 	}
 

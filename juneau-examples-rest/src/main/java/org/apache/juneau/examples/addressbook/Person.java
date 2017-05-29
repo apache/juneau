@@ -32,7 +32,7 @@ public class Person {
 
 	// Bean properties
 	@Rdf(beanUri=true) public URI uri;
-	public URI addressBookUri;
+	private URI addressBookUri;
 	public int id;
 	public String name;
 	@BeanProperty(swap=CalendarSwap.DateMedium.class) public Calendar birthDate;

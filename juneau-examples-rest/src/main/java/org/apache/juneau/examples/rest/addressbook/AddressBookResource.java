@@ -36,23 +36,48 @@ import org.apache.juneau.utils.*;
 
 /**
  * Proof-of-concept resource that shows off the capabilities of working with POJO resources.
- * Consists of an in-memory address book repository.
+ * <p>
+ * Consists of an in-memory address book repository wrapped in a REST API.
  */
 @RestResource(
 	path="/addressBook",
 	messages="nls/AddressBookResource",
-	pageLinks="{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/addressbook/AddressBookResource.java'}",
+	
+	// Links on the HTML rendition page.
+	// "request:/..." URIs are relative to the request URI.
+	// "servlet:/..." URIs are relative to the servlet URI.
+	// "$C{...}" variables are pulled from the config file.
+	pageLinks="{up:'request:/..',options:'servlet:/?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/addressbook/AddressBookResource.java'}",
+	
+	// Properties that get applied to all serializers and parsers.
 	properties={
+		
+		// Allow INIT as a method parameter.
 		@Property(name=REST_allowMethodParam, value="*"),
-		@Property(name=HTML_uriAnchorText, value=TO_STRING),
+
+		// Use single quotes.
 		@Property(name=SERIALIZER_quoteChar, value="'"),
+		
+		// Make RDF/XML readable.
 		@Property(name=RDF_rdfxml_tab, value="5"),
+		
+		// Make RDF parsable by adding a root node.
 		@Property(name=RDF_addRootProperty, value="true"),
-		// Resolve all relative URIs so that they're relative to this servlet!
-		@Property(name=SERIALIZER_relativeUriBase, value="$R{servletURI}"),
+		
+		// Make URIs absolute so that we can easily reference them on the client side.
+		@Property(name=SERIALIZER_uriResolution, value="ABSOLUTE"),
+		
+		// Make the anchor text on URLs be just the path relative to the servlet.
+		@Property(name=HTML_uriAnchorText, value="SERVLET_RELATIVE")
 	},
+	
+	// Our stylesheet for the HTML rendition.
 	stylesheet="styles/devops.css",
+	
+	// Support GZIP encoding on Accept-Encoding header.
 	encoders=GzipEncoder.class,
+	
+	// Swagger info.
 	contact="{name:'John Smith',email:'john@smith.com'}",
 	license="{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}",
 	version="2.0",
@@ -71,7 +96,7 @@ public class AddressBookResource extends ResourceJena {
 
 		try {
 			// Create the address book
-			addressBook = new AddressBook(java.net.URI.create(""));
+			addressBook = new AddressBook(java.net.URI.create("servlet:/"));
 
 			// Initialize it with some contents.
 			addressBook.init();

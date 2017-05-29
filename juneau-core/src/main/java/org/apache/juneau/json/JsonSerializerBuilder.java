@@ -192,14 +192,20 @@ public class JsonSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public JsonSerializerBuilder relativeUriBase(String value) {
-		super.relativeUriBase(value);
+	public JsonSerializerBuilder uriContext(UriContext value) {
+		super.uriContext(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public JsonSerializerBuilder absolutePathUriBase(String value) {
-		super.absolutePathUriBase(value);
+	public JsonSerializerBuilder uriResolution(UriResolution value) {
+		super.uriResolution(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public JsonSerializerBuilder uriRelativity(UriRelativity value) {
+		super.uriRelativity(value);
 		return this;
 	}
 

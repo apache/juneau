@@ -378,97 +378,111 @@ public class SerializerBuilder extends CoreObjectBuilder {
 	}
 
 	/**
-	 * <b>Configuration property:</b>  URI base for relative URIs.
+	 * <b>Configuration property:</b>  URI context bean.
 	 * <p>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Serializer.relativeUriBase"</js>
-	 * 	<li><b>Data type:</b> <code>String</code>
-	 * 	<li><b>Default:</b> <js>""</js>
+	 * 	<li><b>Name:</b> <js>"Serializer.uriContext"</js>
+	 * 	<li><b>Data type:</b> {@link UriContext}
+	 * 	<li><b>Default:</b> {@link UriContext#DEFAULT}
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
-	 * Prepended to relative URIs during serialization (along with the {@link SerializerContext#SERIALIZER_absolutePathUriBase} if specified.
-	 * (i.e. URIs not containing a schema and not starting with <js>'/'</js>).
-	 * (e.g. <js>"foo/bar"</js>)
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <table class='styled'>
-	 * 	<tr><th>SERIALIZER_relativeUriBase</th><th>URI</th><th>Serialized URI</th></tr>
-	 * 	<tr>
-	 * 		<td><code>http://foo:9080/bar/baz</code></td>
-	 * 		<td><code>mywebapp</code></td>
-	 * 		<td><code>http://foo:9080/bar/baz/mywebapp</code></td>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td><code>http://foo:9080/bar/baz</code></td>
-	 * 		<td><code>/mywebapp</code></td>
-	 * 		<td><code>/mywebapp</code></td>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td><code>http://foo:9080/bar/baz</code></td>
-	 * 		<td><code>http://mywebapp</code></td>
-	 * 		<td><code>http://mywebapp</code></td>
-	 * 	</tr>
-	 * </table>
+	 * Bean used for resolution of URIs to absolute or root-relative form.
+	 * <p>
+	 * <h6 class='figure'>Example:</h6>
+	 * <p class='bcode'>
+	 * 	<js>"{authority:'http://localhost:10000',contextRoot:'/myContext',servletPath:'/myServlet',pathInfo:'/foo'}"</js>
+	 * </p>
 	 * <p>
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_relativeUriBase</jsf>, value)</code>.
+	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_uriContext</jsf>, value)</code>.
 	 * </ul>
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_relativeUriBase
+	 * @see SerializerContext#SERIALIZER_uriContext
 	 */
-	public SerializerBuilder relativeUriBase(String value) {
-		return property(SERIALIZER_relativeUriBase, value);
+	public SerializerBuilder uriContext(UriContext value) {
+		return property(SERIALIZER_uriContext, value);
 	}
 
 	/**
-	 * <b>Configuration property:</b>  URI base for relative URIs with absolute paths.
+	 * <b>Configuration property:</b>  URI resolution.
 	 * <p>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Serializer.absolutePathUriBase"</js>
-	 * 	<li><b>Data type:</b> <code>String</code>
-	 * 	<li><b>Default:</b> <js>""</js>
+	 * 	<li><b>Name:</b> <js>"Serializer.uriResolution"</js>
+	 * 	<li><b>Data type:</b> {@link UriResolution}
+	 * 	<li><b>Default:</b> {@link UriResolution#ROOT_RELATIVE}
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
-	 * Prepended to relative absolute-path URIs during serialization.
-	 * (i.e. URIs starting with <js>'/'</js>).
-	 * (e.g. <js>"/foo/bar"</js>)
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <table class='styled'>
-	 * 	<tr><th>SERIALIZER_absolutePathUriBase</th><th>URI</th><th>Serialized URI</th></tr>
-	 * 	<tr>
-	 * 		<td><code>http://foo:9080/bar/baz</code></td>
-	 * 		<td><code>mywebapp</code></td>
-	 * 		<td><code>mywebapp</code></td>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td><code>http://foo:9080/bar/baz</code></td>
-	 * 		<td><code>/mywebapp</code></td>
-	 * 		<td><code>http://foo:9080/bar/baz/mywebapp</code></td>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td><code>http://foo:9080/bar/baz</code></td>
-	 * 		<td><code>http://mywebapp</code></td>
-	 * 		<td><code>http://mywebapp</code></td>
-	 * 	</tr>
-	 * </table>
+	 * Defines the resolution level for URIs when serializing any of the following:
+	 * <ul>
+	 * 	<li>{@link java.net.URI}
+	 * 	<li>{@link java.net.URL}
+	 * 	<li>Properties annotated with {@link org.apache.juneau.annotation.URI @URI}
+	 * </ul>
+	 * <p>
+	 * Possible values are:
+	 * <ul>
+	 * 	<li>{@link UriResolution#ABSOLUTE}
+	 * 		- Resolve to an absolute URL (e.g. <js>"http://host:port/context-root/servlet-path/path-info"</js>).
+	 * 	<li>{@link UriResolution#ROOT_RELATIVE}
+	 * 		- Resolve to a root-relative URL (e.g. <js>"/context-root/servlet-path/path-info"</js>).
+	 * 	<li>{@link UriResolution#NONE}
+	 * 		- Don't do any URL resolution.
+	 * </ul>
 	 * <p>
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul>
-	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_absolutePathUriBase</jsf>, value)</code>.
+	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_uriResolution</jsf>, value)</code>.
 	 * </ul>
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see SerializerContext#SERIALIZER_absolutePathUriBase
+	 * @see SerializerContext#SERIALIZER_uriResolution
 	 */
-	public SerializerBuilder absolutePathUriBase(String value) {
-		return property(SERIALIZER_absolutePathUriBase, value);
+	public SerializerBuilder uriResolution(UriResolution value) {
+		return property(SERIALIZER_uriResolution, value);
+	}
+
+	/**
+	 * <b>Configuration property:</b>  URI relativity.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Serializer.uriRelativity"</js>
+	 * 	<li><b>Data type:</b> {@link UriRelativity}
+	 * 	<li><b>Default:</b> {@link UriRelativity#RESOURCE}
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * Defines what relative URIs are relative to when serializing any of the following:
+	 * <ul>
+	 * 	<li>{@link java.net.URI}
+	 * 	<li>{@link java.net.URL}
+	 * 	<li>Properties annotated with {@link org.apache.juneau.annotation.URI @URI}
+	 * </ul>
+	 * <p>
+	 * Possible values are:
+	 * <ul>
+	 * 	<li>{@link UriRelativity#RESOURCE}
+	 * 		- Relative URIs should be considered relative to the servlet URI.
+	 * 	<li>{@link UriRelativity#PATH_INFO}
+	 * 		- Relative URIs should be considered relative to the request URI.
+	 * </ul>
+	 * <p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>This is equivalent to calling <code>property(<jsf>SERIALIZER_uriRelativity</jsf>, value)</code>.
+	 * </ul>
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see SerializerContext#SERIALIZER_uriRelativity
+	 */
+	public SerializerBuilder uriRelativity(UriRelativity value) {
+		return property(SERIALIZER_uriRelativity, value);
 	}
 
 	/**

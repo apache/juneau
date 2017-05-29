@@ -304,14 +304,20 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public HtmlSerializerBuilder relativeUriBase(String value) {
-		super.relativeUriBase(value);
+	public HtmlSerializerBuilder uriContext(UriContext value) {
+		super.uriContext(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public HtmlSerializerBuilder absolutePathUriBase(String value) {
-		super.absolutePathUriBase(value);
+	public HtmlSerializerBuilder uriResolution(UriResolution value) {
+		super.uriResolution(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public HtmlSerializerBuilder uriRelativity(UriRelativity value) {
+		super.uriRelativity(value);
 		return this;
 	}
 

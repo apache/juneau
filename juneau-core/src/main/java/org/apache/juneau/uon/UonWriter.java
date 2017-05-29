@@ -53,13 +53,10 @@ public final class UonWriter extends SerializerWriter {
 	 * @param useWhitespace If <jk>true</jk>, tabs will be used in output.
 	 * @param encodeChars If <jk>true</jk>, special characters should be encoded.
 	 * @param trimStrings If <jk>true</jk>, strings should be trimmed before they're serialized.
-	 * @param relativeUriBase The base (e.g. <js>https://localhost:9443/contextPath"</js>) for relative URIs (e.g. <js>"my/path"</js>).
-	 * @param absolutePathUriBase The base (e.g. <js>https://localhost:9443"</js>) for relative URIs with absolute paths (e.g. <js>"/contextPath/my/path"</js>).
-	 * @param uriContext The URI context.
-	 * 	Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
+	 * @param uriResolver The URI resolver for resolving URIs to absolute or root-relative form.
 	 */
-	protected UonWriter(UonSerializerSession session, Writer out, boolean useWhitespace, boolean encodeChars, boolean trimStrings, String relativeUriBase, String absolutePathUriBase, UriContext uriContext) {
-		super(out, useWhitespace, trimStrings, '\'', relativeUriBase, absolutePathUriBase, uriContext);
+	protected UonWriter(UonSerializerSession session, Writer out, boolean useWhitespace, boolean encodeChars, boolean trimStrings, UriResolver uriResolver) {
+		super(out, useWhitespace, trimStrings, '\'', uriResolver);
 		this.session = session;
 		this.encodeChars = encodeChars;
 	}
@@ -167,20 +164,7 @@ public final class UonWriter extends SerializerWriter {
 	 */
 	@Override
 	public SerializerWriter appendUri(Object uri) throws IOException {
-		String s = uri.toString();
-		if (s.indexOf("://") == -1) {
-			if (StringUtils.startsWith(s, '/')) {
-				if (absolutePathUriBase != null)
-					append(absolutePathUriBase);
-			} else {
-				if (relativeUriBase != null) {
-					append(relativeUriBase);
-					if (! relativeUriBase.equals("/"))
-						append("/");
-				}
-			}
-		}
-		return appendObject(s, false, false);
+		return appendObject(uriResolver.resolve(uri), false, false);
 	}
 
 

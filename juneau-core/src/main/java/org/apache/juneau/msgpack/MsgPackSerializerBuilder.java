@@ -127,14 +127,20 @@ public class MsgPackSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public MsgPackSerializerBuilder relativeUriBase(String value) {
-		super.relativeUriBase(value);
+	public MsgPackSerializerBuilder uriContext(UriContext value) {
+		super.uriContext(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public MsgPackSerializerBuilder absolutePathUriBase(String value) {
-		super.absolutePathUriBase(value);
+	public MsgPackSerializerBuilder uriResolution(UriResolution value) {
+		super.uriResolution(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public MsgPackSerializerBuilder uriRelativity(UriRelativity value) {
+		super.uriRelativity(value);
 		return this;
 	}
 

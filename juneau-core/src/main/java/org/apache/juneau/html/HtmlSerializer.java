@@ -326,7 +326,7 @@ public class HtmlSerializer extends XmlSerializer {
 			} else if (session.isUri(sType, pMeta, o)) {
 				String label = session.getAnchorText(pMeta, o);
 				out.oTag("a").attrUri("href", o).append('>');
-				out.append(label);
+				out.text(label);
 				out.eTag("a");
 				cr = CR_SIMPLE;
 
@@ -443,12 +443,12 @@ public class HtmlSerializer extends XmlSerializer {
 			out.cTag();
 
 			try {
-				if (link != null) 
+				if (link != null)
 					out.oTag(i+3, "a").attrUri("href", m.resolveVars(link)).cTag();
 				ContentResult cr = serializeAnything(session, out, render.getContent(session, value), cMeta, key, 2, pMeta, false);
 				if (cr == CR_NORMAL)
 					out.i(i+2);
-				if (link != null) 
+				if (link != null)
 					out.eTag("a");
 			} catch (SerializeException e) {
 				throw e;
@@ -556,12 +556,12 @@ public class HtmlSerializer extends XmlSerializer {
 						if (style != null)
 							out.attr("style", style);
 						out.cTag();
-						if (link != null) 
+						if (link != null)
 							out.oTag(i+3, "a").attrUri("href", m2.resolveVars(link)).cTag();
 						ContentResult cr = serializeAnything(session, out, render.getContent(session, value), pMeta.getClassMeta(), p.getKey().toString(), 2, pMeta, false);
 						if (cr == CR_NORMAL)
 							out.i(i+2);
-						if (link != null) 
+						if (link != null)
 							out.eTag("a");
 						out.eTag("td").nl();
 					}

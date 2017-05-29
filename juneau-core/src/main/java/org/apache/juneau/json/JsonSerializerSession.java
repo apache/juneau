@@ -96,6 +96,6 @@ public final class JsonSerializerSession extends SerializerSession {
 		Object output = getOutput();
 		if (output instanceof JsonWriter)
 			return (JsonWriter)output;
-		return new JsonWriter(super.getWriter(), isUseWhitespace(), isEscapeSolidus(), getQuoteChar(), isSimpleMode(), isTrimStrings(), getRelativeUriBase(), getAbsolutePathUriBase(), getUriContext());
+		return new JsonWriter(super.getWriter(), isUseWhitespace(), isEscapeSolidus(), getQuoteChar(), isSimpleMode(), isTrimStrings(), getUriResolver());
 	}
 }

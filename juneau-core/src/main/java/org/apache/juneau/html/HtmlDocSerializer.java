@@ -19,7 +19,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.dto.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -50,9 +49,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 
 	// Properties defined in RestServletProperties
 	private static final String
-		REST_method = "RestServlet.method",
-		REST_relativeServletURI = "RestServlet.relativeServletURI";
-
+		REST_method = "RestServlet.method";
 
 	/** Default serializer, all default settings. */
 	public static final HtmlDocSerializer DEFAULT = new HtmlDocSerializer(PropertyStore.create());
@@ -84,6 +81,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 
 		HtmlDocSerializerSession s = (HtmlDocSerializerSession)session;
 		HtmlWriter w = s.getWriter();
+		UriResolver uriResolver = s.getUriResolver();
 
 		boolean isOptionsPage = session.getProperty(REST_method, "").equalsIgnoreCase("OPTIONS");
 
@@ -93,7 +91,8 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 
 		String cssUrl = s.getCssUrl();
 		if (cssUrl == null)
-			cssUrl = session.getProperty(REST_relativeServletURI, "") + "/style.css";
+			cssUrl = "servlet:/style.css";
+		cssUrl = uriResolver.resolve(cssUrl);
 
 		w.oTag(1, "style")
 			.attr("type", "text/css")
@@ -125,15 +124,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 			Map<String,String> htmlLinks = s.getLinks();
 			if (htmlLinks != null) {
 				for (Map.Entry<String,String> e : htmlLinks.entrySet()) {
-					String uri = e.getValue();
-					if (uri.indexOf("://") == -1 && ! StringUtils.startsWith(uri, '/')) {
-						StringBuilder sb = new StringBuilder(session.getProperty(REST_relativeServletURI, ""));
-						if (! (uri.isEmpty() || uri.charAt(0) == '?' || uri.charAt(0) == '/'))
-							sb.append('/');
-						sb.append(uri);
-						uri = sb.toString();
-					}
-
+					String uri = uriResolver.resolve(e.getValue());
 					actions.add(new Link(e.getKey(), uri));
 				}
 			}

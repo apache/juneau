@@ -266,7 +266,7 @@ public class XmlSchemaSerializer extends XmlSerializer {
 			this.defaultNs = defaultNs;
 			this.targetNs = targetNs;
 			this.session = session;
-			w = new XmlWriter(sw, session.isUseWhitespace(), session.isTrimStrings(), session.getQuoteChar(), null, null, null, true, null);
+			w = new XmlWriter(sw, session.isUseWhitespace(), session.isTrimStrings(), session.getQuoteChar(), null, true, null);
 			int i = session.getIndent();
 			w.oTag(i, "schema");
 			w.attr("xmlns", xs.getUri());
@@ -418,7 +418,7 @@ public class XmlSchemaSerializer extends XmlSerializer {
 									Namespace cNs = first(xmlMeta.getNamespace(), ct2.getExtendedMeta(XmlClassMeta.class).getNamespace(), cm.getExtendedMeta(XmlClassMeta.class).getNamespace(), defaultNs);
 									if (xmlMeta.getNamespace() == null) {
 										w.oTag(i+2, "element")
-											.attr("name", XmlUtils.encodeElementName(childName), true)
+											.attr("name", XmlUtils.encodeElementName(childName), false)
 											.attr("type", getXmlType(cNs, ct2))
 											.attr("minOccurs", 0);
 

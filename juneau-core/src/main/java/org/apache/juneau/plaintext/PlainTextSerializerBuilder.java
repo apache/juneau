@@ -127,14 +127,20 @@ public class PlainTextSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public PlainTextSerializerBuilder relativeUriBase(String value) {
-		super.relativeUriBase(value);
+	public PlainTextSerializerBuilder uriContext(UriContext value) {
+		super.uriContext(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public PlainTextSerializerBuilder absolutePathUriBase(String value) {
-		super.absolutePathUriBase(value);
+	public PlainTextSerializerBuilder uriResolution(UriResolution value) {
+		super.uriResolution(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public PlainTextSerializerBuilder uriRelativity(UriRelativity value) {
+		super.uriRelativity(value);
 		return this;
 	}
 

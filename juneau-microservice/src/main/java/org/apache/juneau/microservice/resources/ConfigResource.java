@@ -33,7 +33,7 @@ import org.apache.juneau.rest.annotation.Body;
 	path="/config",
 	title="Configuration",
 	description="Contents of configuration file.",
-	pageLinks="{up:'$R{requestParentURI}',options:'?method=OPTIONS',edit:'edit'}"
+	pageLinks="{up:'request:/..',options:'servlet:/?method=OPTIONS',edit:'servlet:/edit'}"
 )
 public class ConfigResource extends Resource {
 	private static final long serialVersionUID = 1L;

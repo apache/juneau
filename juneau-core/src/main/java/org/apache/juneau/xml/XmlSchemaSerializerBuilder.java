@@ -168,14 +168,20 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public XmlSchemaSerializerBuilder relativeUriBase(String value) {
-		super.relativeUriBase(value);
+	public XmlSchemaSerializerBuilder uriContext(UriContext value) {
+		super.uriContext(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public XmlSchemaSerializerBuilder absolutePathUriBase(String value) {
-		super.absolutePathUriBase(value);
+	public XmlSchemaSerializerBuilder uriResolution(UriResolution value) {
+		super.uriResolution(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public XmlSchemaSerializerBuilder uriRelativity(UriRelativity value) {
+		super.uriRelativity(value);
 		return this;
 	}
 

@@ -188,14 +188,20 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public SoapXmlSerializerBuilder relativeUriBase(String value) {
-		super.relativeUriBase(value);
+	public SoapXmlSerializerBuilder uriContext(UriContext value) {
+		super.uriContext(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public SoapXmlSerializerBuilder absolutePathUriBase(String value) {
-		super.absolutePathUriBase(value);
+	public SoapXmlSerializerBuilder uriResolution(UriResolution value) {
+		super.uriResolution(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public SoapXmlSerializerBuilder uriRelativity(UriRelativity value) {
+		super.uriRelativity(value);
 		return this;
 	}
 

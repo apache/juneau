@@ -127,14 +127,20 @@ public class CsvSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public CsvSerializerBuilder relativeUriBase(String value) {
-		super.relativeUriBase(value);
+	public CsvSerializerBuilder uriContext(UriContext value) {
+		super.uriContext(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public CsvSerializerBuilder absolutePathUriBase(String value) {
-		super.absolutePathUriBase(value);
+	public CsvSerializerBuilder uriResolution(UriResolution value) {
+		super.uriResolution(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public CsvSerializerBuilder uriRelativity(UriRelativity value) {
+		super.uriRelativity(value);
 		return this;
 	}
 

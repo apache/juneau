@@ -24,7 +24,7 @@ import org.apache.juneau.rest.client.*;
 	messages="nls/TumblrParserResource",
 	title="Tumblr parser service",
 	description="Specify a URL to a Tumblr blog and parse the results.",
-	pageLinks="{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/TumblrParserResource.java'}"
+	pageLinks="{up:'request:/..',options:'servlet:/?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/TumblrParserResource.java'}"
 )
 public class TumblrParserResource extends Resource {
 	private static final long serialVersionUID = 1L;

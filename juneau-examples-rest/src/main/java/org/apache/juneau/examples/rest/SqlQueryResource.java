@@ -35,7 +35,7 @@ import org.apache.juneau.rest.annotation.Body;
 	messages="nls/SqlQueryResource",
 	title="SQL query service",
 	description="Executes queries against the local derby '$C{SqlQueryResource/connectionUrl}' database",
-	pageLinks="{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/SqlQueryResource.java'}"
+	pageLinks="{up:'request:/..',options:'servlet:/..',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/SqlQueryResource.java'}"
 )
 public class SqlQueryResource extends Resource {
 	private static final long serialVersionUID = 1L;

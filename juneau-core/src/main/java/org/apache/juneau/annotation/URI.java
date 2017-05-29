@@ -18,6 +18,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 import java.net.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -29,8 +30,13 @@ import org.apache.juneau.serializer.*;
  * <p>
  * This annotation allows you to identify other classes that return URIs via <code>toString()</code> as URI objects.
  * <p>
- * Relative URIs are automatically prepended with {@link SerializerContext#SERIALIZER_absolutePathUriBase} and {@link SerializerContext#SERIALIZER_relativeUriBase}
- * 	during serialization just like relative <code>URIs</code>.
+ * URIs are automatically resolved to absolute or root-relative form based on the serializer
+ * 	{@link SerializerContext#SERIALIZER_uriResolution} and {@link SerializerContext#SERIALIZER_uriRelativity}
+ * 	configuration settings, and the URI context defined by the {@link UriContext} that's part of the serializer
+ * 	session.
+ * <p>
+ * Refer to the {@link UriResolver} class for information about the types of URIs that can be resolved during
+ * 	serialization.
  * <p>
  * This annotation can be applied to classes, interfaces, or bean property methods for fields.
  *

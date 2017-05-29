@@ -489,14 +489,20 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* SerializerBuilder */
-	public RdfSerializerBuilder relativeUriBase(String value) {
-		super.relativeUriBase(value);
+	public RdfSerializerBuilder uriContext(UriContext value) {
+		super.uriContext(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public RdfSerializerBuilder absolutePathUriBase(String value) {
-		super.absolutePathUriBase(value);
+	public RdfSerializerBuilder uriResolution(UriResolution value) {
+		super.uriResolution(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public RdfSerializerBuilder uriRelativity(UriRelativity value) {
+		super.uriRelativity(value);
 		return this;
 	}
 

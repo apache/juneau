@@ -30,7 +30,7 @@ import org.apache.juneau.utils.*;
 	path="/tempDir",
 	title="Temp Directory View Service",
 	description="View and download files in the '$S{java.io.tmpdir}' directory.",
-	pageLinks="{up:'$R{requestParentURI}',options:'?method=OPTIONS',upload:'upload',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/TempDirResource.java'}",
+	pageLinks="{up:'request:/..',options:'servlet:/?method=OPTIONS',upload:'servlet:/upload',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/TempDirResource.java'}",
 	properties={
 		@Property(name="rootDir", value="$S{java.io.tmpdir}"),
 		@Property(name="allowViews", value="true"),

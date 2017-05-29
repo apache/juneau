@@ -520,7 +520,7 @@ public class XmlSerializer extends WriterSerializer {
 		// Render the tag contents.
 		if (o != null) {
 			if (sType.isUri() || (pMeta != null && pMeta.isUri())) {
-				out.appendUri(o);
+				out.textUri(o);
 			} else if (sType.isCharSequence() || sType.isChar()) {
 				if (format == XMLTEXT)
 					out.append(o);

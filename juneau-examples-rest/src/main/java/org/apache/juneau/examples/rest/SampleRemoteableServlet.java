@@ -29,7 +29,7 @@ import org.apache.juneau.rest.remoteable.*;
 	messages="nls/SampleRemoteableServlet",
 	title="Remoteable Service Proxy API",
 	description="Sample class showing how to use remoteable proxies.  The list below are exposed services that can be retrieved using RestClient.getProxyInterface(Class).",
-	pageLinks="{up:'$R{requestParentURI}',options:'?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/SampleRemoteableServlet.java'}",
+	pageLinks="{up:'request:/..',options:'servlet:/?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/SampleRemoteableServlet.java'}",
 	properties={
 		// Allow us to use method=POST from a browser.
 		@Property(name=REST_allowMethodParam, value="*")
