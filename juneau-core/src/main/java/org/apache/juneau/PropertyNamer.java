@@ -17,7 +17,7 @@ import org.apache.juneau.annotation.*;
 /**
  * Defines an API for converting conventional bean property names to some other form.
  * <p>
- * For example, given the bean property <js>"fooBarURL"</js>, the {@link PropertyNamerDashedLC}
+ * For example, given the bean property <js>"fooBarURL"</js>, the {@link PropertyNamerDLC}
  * 	property namer will convert this to <js>"foo-bar-url"</js>.
  * <p>
  * Property namers are associated with beans through the {@link Bean#propertyNamer} annotation.

@@ -17,14 +17,14 @@ import static org.junit.Assert.*;
 import org.junit.*;
 
 @SuppressWarnings("javadoc")
-public class PropertyNamerDashedLcTest {
+public class PropertyNamerTest {
 
 	//====================================================================================================
-	// test
+	// test dashed-lower-case
 	//====================================================================================================
 	@Test
-	public void test() throws Exception {
-		PropertyNamer n = new PropertyNamerDashedLC();
+	public void testDLC() throws Exception {
+		PropertyNamer n = new PropertyNamerDLC();
 
 		assertEquals("abc", n.getPropertyName("ABC"));
 		assertEquals("abc", n.getPropertyName("abc"));
@@ -35,6 +35,23 @@ public class PropertyNamerDashedLcTest {
 		assertNull(n.getPropertyName(null));
 		assertEquals("a", n.getPropertyName("A"));
 		assertEquals("a", n.getPropertyName("A"));
+	}
+	
+	//====================================================================================================
+	// test underscore-lower-case
+	//====================================================================================================
+	@Test
+	public void testULC() throws Exception {
+		PropertyNamer n = new PropertyNamerULC();
 
+		assertEquals("abc", n.getPropertyName("ABC"));
+		assertEquals("abc", n.getPropertyName("abc"));
+		assertEquals("foo_bar_baz", n.getPropertyName("FooBarBaz"));
+		assertEquals("foo_bar_baz", n.getPropertyName("FooBarBAZ"));
+		assertEquals("foo_bar_baz", n.getPropertyName("fooBarBAZ"));
+		assertEquals("", n.getPropertyName(""));
+		assertNull(n.getPropertyName(null));
+		assertEquals("a", n.getPropertyName("A"));
+		assertEquals("a", n.getPropertyName("A"));
 	}
 }

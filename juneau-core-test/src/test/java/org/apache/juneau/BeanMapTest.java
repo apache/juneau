@@ -1052,7 +1052,7 @@ public class BeanMapTest {
 		assertEquals(6, b.bingBooURL);
 	}
 
-	@Bean(propertyNamer=PropertyNamerDashedLC.class)
+	@Bean(propertyNamer=PropertyNamerDLC.class)
 	public static class P1 {
 		public int foo, barBaz, bingBooURL;
 	}
@@ -1075,7 +1075,7 @@ public class BeanMapTest {
 		assertEquals(4, b.getBazBING());
 	}
 
-	@Bean(propertyNamer=PropertyNamerDashedLC.class)
+	@Bean(propertyNamer=PropertyNamerDLC.class)
 	public static class P2 {
 		private int fooBar, bazBING;
 		public int getFooBar() {

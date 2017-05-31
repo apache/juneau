@@ -22,7 +22,7 @@ package org.apache.juneau;
  * 	<li><js>"FooBarURL"</js> -&gt; <js>"foo-bar-url"</js>
  * </ul>
  */
-public final class PropertyNamerDashedLC implements PropertyNamer {
+public final class PropertyNamerDLC implements PropertyNamer {
 
 	@Override /* PropertyNamer */
 	public String getPropertyName(String name) {

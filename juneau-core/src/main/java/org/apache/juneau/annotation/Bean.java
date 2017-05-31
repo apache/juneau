@@ -181,7 +181,7 @@ public @interface Bean {
 	 * Associates a {@link PropertyNamer} with this bean to tailor the names of the bean properties.
 	 * <p>
 	 * Property namers are used to transform bean property names from standard form to some other form.
-	 * For example, the {@link PropertyNamerDashedLC} will convert property names to dashed-lowercase, and
+	 * For example, the {@link PropertyNamerDLC} will convert property names to dashed-lowercase, and
 	 * 	these will be used as attribute names in JSON, and element names in XML.
 	 * <p>
 	 * This annotation is an alternative to using the {@link BeanFilter} class with an implemented {@link BeanFilter#getPropertyNamer()} method.
