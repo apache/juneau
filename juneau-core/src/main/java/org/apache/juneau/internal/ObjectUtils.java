@@ -12,6 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
+import java.lang.reflect.*;
+import java.util.*;
+
 /**
  * Object-related utility methods.
  */
@@ -32,5 +35,31 @@ public class ObjectUtils {
 		if (o1 == null || o2 == null)
 			return false;
 		return o1.equals(o2);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified object is empty.
+	 * <p>
+	 * Return <jk>true</jk> if the value is any of the following:
+	 * <ul>
+	 * 	<li><jk>null</jk>
+	 * 	<li>An empty Collection
+	 * 	<li>An empty array
+	 * 	<li>An empty CharSequence
+	 * 	<li>An empty String when serialized to a string using {@link Object#toString()}.
+	 * </ul>
+	 *
+	 * @param o The object to test.
+	 * @return <jk>true</jk> if the specified object is empty.
+	 */
+	@SuppressWarnings("rawtypes")
+	public static boolean isEmpty(Object o) {
+		if (o == null)
+			return true;
+		if (o instanceof Collection)
+			return ((Collection)o).isEmpty();
+		if (o.getClass().isArray())
+			return (Array.getLength(o) == 0);
+		return o.toString().isEmpty();
 	}
 }

@@ -33,6 +33,7 @@ import org.apache.http.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.internal.ObjectUtils;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.serializer.*;
@@ -186,7 +187,7 @@ public final class RestCall {
 		if (partSerializer == null)
 			partSerializer = client.getPartSerializer();
 		if (! ("*".equals(name) || isEmpty(name))) {
-			if (value != null && ! (isEmpty(value) && skipIfEmpty))
+			if (value != null && ! (ObjectUtils.isEmpty(value) && skipIfEmpty))
 				uriBuilder.addParameter(name, partSerializer.serialize(PartType.QUERY, value));
 		} else if (value instanceof NameValuePairs) {
 			for (NameValuePair p : (NameValuePairs)value)
@@ -286,7 +287,7 @@ public final class RestCall {
 		if (partSerializer == null)
 			partSerializer = client.getPartSerializer();
 		if (! ("*".equals(name) || isEmpty(name))) {
-			if (value != null && ! (isEmpty(value) && skipIfEmpty))
+			if (value != null && ! (ObjectUtils.isEmpty(value) && skipIfEmpty))
 				formData.add(new SerializedNameValuePair(name, value, partSerializer));
 		} else if (value instanceof NameValuePairs) {
 			for (NameValuePair p : (NameValuePairs)value)
@@ -503,7 +504,7 @@ public final class RestCall {
 		if (partSerializer == null)
 			partSerializer = client.getPartSerializer();
 		if (! ("*".equals(name) || isEmpty(name))) {
-			if (value != null && ! (isEmpty(value) && skipIfEmpty))
+			if (value != null && ! (ObjectUtils.isEmpty(value) && skipIfEmpty))
 				request.setHeader(name, partSerializer.serialize(PartType.HEADER, value));
 		} else if (value instanceof NameValuePairs) {
 			for (NameValuePair p : (NameValuePairs)value)
