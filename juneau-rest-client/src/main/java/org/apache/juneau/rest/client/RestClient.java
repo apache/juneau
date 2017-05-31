@@ -474,6 +474,12 @@ public class RestClient extends CoreObject {
 	 * 		.build()
 	 * 		.getRemoteableProxy(MyInterface3.<jk>class</jk>);
 	 * </p>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>If you plan on using your proxy in a multi-threaded environment, you'll want to use an underlying
+	 * 		pooling client connection manager.  The easiest way to do this is to use the {@link RestClientBuilder#pooled()}
+	 * 		method.  If you don't do this, you may end up seeing "Connection still allocated" exceptions.
+	 * </ul>
 	 *
 	 * @param interfaceClass The interface to create a proxy for.
 	 * @return The new proxy interface.
