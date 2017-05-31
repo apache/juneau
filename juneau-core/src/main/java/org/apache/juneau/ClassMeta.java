@@ -22,6 +22,7 @@ import java.net.*;
 import java.net.URI;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.locks.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
@@ -117,6 +118,9 @@ public final class ClassMeta<T> implements Type {
 	private static final Double DOUBLE_DEFAULT = 0d;
 	private static final Byte BYTE_DEFAULT = (byte)0;
 
+	private ReadWriteLock lock = new ReentrantReadWriteLock(false);
+	private Lock rLock = lock.readLock(), wLock = lock.writeLock();
+
 	/**
 	 * Construct a new {@code ClassMeta} based on the specified {@link Class}.
 	 *
@@ -139,49 +143,62 @@ public final class ClassMeta<T> implements Type {
 		this.innerClass = innerClass;
 		this.beanContext = beanContext;
 
-		// We always immediately add this class meta to the bean context cache so that we can resolve recursive references.
-		if (beanContext != null && beanContext.cmCache != null)
-			beanContext.cmCache.put(innerClass, this);
+		wLock.lock();
+		try {
+			// We always immediately add this class meta to the bean context cache so that we can resolve recursive references.
+			if (beanContext != null && beanContext.cmCache != null)
+				beanContext.cmCache.put(innerClass, this);
 
-		ClassMetaBuilder<T> builder = new ClassMetaBuilder(innerClass, beanContext, implClass, beanFilter, pojoSwap, childPojoSwaps);
+			ClassMetaBuilder<T> builder = new ClassMetaBuilder(innerClass, beanContext, implClass, beanFilter, pojoSwap, childPojoSwaps);
 
-		this.cc = builder.cc;
-		this.isDelegate = builder.isDelegate;
-		this.fromStringMethod = builder.fromStringMethod;
-		this.swapMethod = builder.swapMethod;
-		this.unswapMethod = builder.unswapMethod;
-		this.swapMethodType = builder.swapMethodType;
-		this.parentPropertyMethod = builder.parentPropertyMethod;
-		this.namePropertyMethod = builder.namePropertyMethod;
-		this.noArgConstructor = builder.noArgConstructor;
-		this.stringConstructor = builder.stringConstructor;
-		this.swapConstructor = builder.swapConstructor;
-		this.numberConstructor = builder.numberConstructor;
-		this.numberConstructorType = builder.numberConstructorType;
-		this.primitiveDefault = builder.primitiveDefault;
-		this.publicMethods = builder.publicMethods;
-		this.remoteableMethods = builder.remoteableMethods;
-		this.beanFilter = beanFilter;
-		this.pojoSwap = builder.pojoSwap;
-		this.extMeta = new MetadataMap();
-		this.keyType = builder.keyType;
-		this.valueType = builder.valueType;
-		this.elementType = builder.elementType;
-		this.notABeanReason = builder.notABeanReason;
-		this.beanMeta = builder.beanMeta;
-		this.initException = builder.initException;
-		this.typePropertyName = builder.typePropertyName;
-		this.dictionaryName = builder.dictionaryName;
-		this.serializedClassMeta = builder.serializedClassMeta;
-		this.invocationHandler = builder.invocationHandler;
-		this.beanRegistry = builder.beanRegistry;
-		this.isMemberClass = builder.isMemberClass;
-		this.isAbstract = builder.isAbstract;
-		this.implClass = builder.implClass;
-		this.childUnswapMap = builder.childUnswapMap;
-		this.childSwapMap = builder.childSwapMap;
-		this.childPojoSwaps = builder.childPojoSwaps;
-		this.args = null;
+			this.cc = builder.cc;
+			this.isDelegate = builder.isDelegate;
+			this.fromStringMethod = builder.fromStringMethod;
+			this.swapMethod = builder.swapMethod;
+			this.unswapMethod = builder.unswapMethod;
+			this.swapMethodType = builder.swapMethodType;
+			this.parentPropertyMethod = builder.parentPropertyMethod;
+			this.namePropertyMethod = builder.namePropertyMethod;
+			this.noArgConstructor = builder.noArgConstructor;
+			this.stringConstructor = builder.stringConstructor;
+			this.swapConstructor = builder.swapConstructor;
+			this.numberConstructor = builder.numberConstructor;
+			this.numberConstructorType = builder.numberConstructorType;
+			this.primitiveDefault = builder.primitiveDefault;
+			this.publicMethods = builder.publicMethods;
+			this.remoteableMethods = builder.remoteableMethods;
+			this.beanFilter = beanFilter;
+			this.pojoSwap = builder.pojoSwap;
+			this.extMeta = new MetadataMap();
+			this.keyType = builder.keyType;
+			this.valueType = builder.valueType;
+			this.elementType = builder.elementType;
+			this.notABeanReason = builder.notABeanReason;
+			this.beanMeta = builder.beanMeta;
+			this.initException = builder.initException;
+			this.typePropertyName = builder.typePropertyName;
+			this.dictionaryName = builder.dictionaryName;
+			this.serializedClassMeta = builder.serializedClassMeta;
+			this.invocationHandler = builder.invocationHandler;
+			this.beanRegistry = builder.beanRegistry;
+			this.isMemberClass = builder.isMemberClass;
+			this.isAbstract = builder.isAbstract;
+			this.implClass = builder.implClass;
+			this.childUnswapMap = builder.childUnswapMap;
+			this.childSwapMap = builder.childSwapMap;
+			this.childPojoSwaps = builder.childPojoSwaps;
+			this.args = null;
+		} finally {
+			wLock.unlock();
+		}
+	}
+
+	/**
+	 * Causes thread to wait until constructor has exited.
+	 */
+	final void waitForInit() {
+		rLock.lock();
+		rLock.unlock();
 	}
 
 	/**
@@ -687,7 +704,7 @@ public final class ClassMeta<T> implements Type {
 		}
 
 		private ClassMeta<?> findClassMeta(Class<?> c) {
-			return beanContext.getClassMeta(c);
+			return beanContext.getClassMeta(c, false);
 		}
 
 		private ClassMeta<?>[] findParameters() {

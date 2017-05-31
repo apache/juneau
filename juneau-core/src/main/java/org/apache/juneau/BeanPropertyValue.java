@@ -82,4 +82,13 @@ public class BeanPropertyValue implements Comparable<BeanPropertyValue> {
 	public int compareTo(BeanPropertyValue o) {
 		return name.compareTo(o.name);
 	}
+
+	@Override /* Object */
+	public String toString() {
+		return new ObjectMap()
+			.append("name", name)
+			.append("value", value)
+			.append("type", pMeta.getClassMeta().getInnerClass().getSimpleName())
+			.toString();
+	}
 }

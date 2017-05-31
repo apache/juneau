@@ -1048,6 +1048,19 @@ public class BeanContext extends Context {
 	 * Otherwise, returns a new {@link ClassMeta} object every time.<br>
 	 */
 	public final <T> ClassMeta<T> getClassMeta(Class<T> type) {
+		return getClassMeta(type, true);
+	}
+
+	/**
+	 * Construct a {@code ClassMeta} wrapper around a {@link Class} object.
+	 *
+	 * @param <T> The class type being wrapped.
+	 * @param type The class to resolve.
+	 * @param waitForInit If <jk>true</jk>, wait for the ClassMeta constructor to finish before returning.
+	 * @return If the class is not an array, returns a cached {@link ClassMeta} object.
+	 * Otherwise, returns a new {@link ClassMeta} object every time.<br>
+	 */
+	final <T> ClassMeta<T> getClassMeta(Class<T> type, boolean waitForInit) {
 
 		// If this is an array, then we want it wrapped in an uncached ClassMeta object.
 		// Note that if it has a pojo swap, we still want to cache it so that
@@ -1069,6 +1082,8 @@ public class BeanContext extends Context {
 					cm = new ClassMeta<T>(type, this, findImplClass(type), findBeanFilter(type), findPojoSwap(type), findChildPojoSwaps(type));
 			}
 		}
+		if (waitForInit)
+			cm.waitForInit();
 		return cm;
 	}
 
