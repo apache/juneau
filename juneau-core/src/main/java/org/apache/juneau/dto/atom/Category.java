@@ -74,7 +74,7 @@ public class Category extends Common {
 	 * @param term The category term.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty(name="term")
+	@BeanProperty("term")
 	public Category term(String term) {
 		this.term = term;
 		return this;
@@ -96,7 +96,7 @@ public class Category extends Common {
 	 * @param scheme The category scheme.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty(name="scheme")
+	@BeanProperty("scheme")
 	public Category scheme(URI scheme) {
 		this.scheme = scheme;
 		return this;
@@ -118,7 +118,7 @@ public class Category extends Common {
 	 * @param label The category label.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty(name="label")
+	@BeanProperty("label")
 	public Category label(String label) {
 		this.label = label;
 		return this;

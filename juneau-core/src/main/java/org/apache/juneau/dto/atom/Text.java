@@ -92,7 +92,7 @@ public class Text extends Common {
 	 * @param type The content type of this content.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty(name="type")
+	@BeanProperty("type")
 	public Text type(String type) {
 		this.type = type;
 		return this;
@@ -114,7 +114,7 @@ public class Text extends Common {
 	 * @param text The content of this content.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty(name="text")
+	@BeanProperty("text")
 	public Text text(String text) {
 		this.text = text;
 		return this;

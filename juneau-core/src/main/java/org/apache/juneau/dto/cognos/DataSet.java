@@ -161,7 +161,7 @@ public class DataSet {
 	 *
 	 * @return The value of the <property>metadata</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	@BeanProperty(name="metadata")
+	@BeanProperty("metadata")
 	public Column[] getMetaData() {
 		return metaData;
 	}
@@ -172,7 +172,7 @@ public class DataSet {
 	 * @param metaData The new value for the <property>metadata</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty(name="metadata")
+	@BeanProperty("metadata")
 	public DataSet setMetaData(Column[] metaData) {
 		this.metaData = metaData;
 		return this;
@@ -183,7 +183,7 @@ public class DataSet {
 	 *
 	 * @return The value of the <property>data</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	@BeanProperty(name="data")
+	@BeanProperty("data")
 	public List<Row> getData() {
 		return data;
 	}
@@ -194,7 +194,7 @@ public class DataSet {
 	 * @param data The new value for the <property>data</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty(name="data")
+	@BeanProperty("data")
 	public DataSet setData(List<Row> data) {
 		this.data = data;
 		return this;

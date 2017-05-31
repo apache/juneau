@@ -77,7 +77,7 @@ public class Generator extends Common {
 	 * @param uri The URI of this generator statement.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty(name="uri")
+	@BeanProperty("uri")
 	public Generator uri(URI uri) {
 		this.uri = uri;
 		return this;
@@ -89,7 +89,7 @@ public class Generator extends Common {
 	 * @param uri The URI of this generator statement.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty(name="uri")
+	@BeanProperty("uri")
 	public Generator uri(String uri) {
 		this.uri = toURI(uri);
 		return this;
@@ -111,7 +111,7 @@ public class Generator extends Common {
 	 * @param version The version of this generator statement.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty(name="version")
+	@BeanProperty("version")
 	public Generator version(String version) {
 		this.version = version;
 		return this;
@@ -133,7 +133,7 @@ public class Generator extends Common {
 	 * @param text The content of this generator statement.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty(name="text")
+	@BeanProperty("text")
 	public Generator text(String text) {
 		this.text = text;
 		return this;

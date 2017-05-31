@@ -127,6 +127,26 @@ public @interface BeanProperty {
 	String name() default "";
 
 	/**
+	 * A synonym for {@link #name()}
+	 * <p>
+	 * If you're only using the <code>BeanProperty</code> annotation to override the property name, this allows you
+	 * to define it using shortened notation:
+	 * <p class='bcode'>
+	 * 		<ja>@BeanProperty</ja>(<js>"foo"</js>)
+	 * 		<jk>public</jk> String getX();
+	 * 	}
+	 * </p>
+	 * <p>
+	 * This is equivalent to the following notation:
+	 * <p class='bcode'>
+	 * 		<ja>@BeanProperty</ja>(name=<js>"foo"</js>)
+	 * 		<jk>public</jk> String getX();
+	 * 	}
+	 * </p>
+	 */
+	String value() default "";
+
+	/**
 	 * Identifies a specialized class type for the property.
 	 * <p>
 	 * Normally this can be inferred through reflection of the field type or getter return type.

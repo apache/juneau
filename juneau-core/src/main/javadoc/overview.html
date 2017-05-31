@@ -6223,6 +6223,15 @@
 						<li>{@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_uriRelativity}
 						<li>{@link org.apache.juneau.serializer.SerializerContext#SERIALIZER_uriResolution}
 				</ul>
+			<li>New annotation property: {@link org.apache.juneau.annotation.BeanProperty#value()}.
+				<br>The following two annotations are considered equivalent:
+				<p class='bcode'>
+	<ja>@BeanProperty</ja>(name=<js>"foo"</js>)
+	
+	<ja>@BeanProperty</ja>(<js>"foo"</js>)
+				</p>
+			<li>Fixed a race condition in ClassMeta.
+			
 		</ul>
 
 		<h6 class='topic'>org.apache.juneau.rest</h6>
@@ -9949,3 +9958,4 @@
 
 </div>
 </body>								
+	

@@ -36,7 +36,7 @@ public abstract class HtmlElement {
 	 * @return The attributes of this element.
 	 */
 	@Xml(format=ATTRS)
-	@BeanProperty(name="a")
+	@BeanProperty("a")
 	public LinkedHashMap<String,Object> getAttrs() {
 		return attrs;
 	}
@@ -46,7 +46,7 @@ public abstract class HtmlElement {
 	 * @param attrs The new attributes for this element.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty(name="a")
+	@BeanProperty("a")
 	public HtmlElement setAttrs(LinkedHashMap<String,Object> attrs) {
 		this.attrs = attrs;
 		return this;

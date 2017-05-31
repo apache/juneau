@@ -43,7 +43,7 @@ public class HtmlElementContainer extends HtmlElement {
 	 * @param children The new children for this container.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty(name="c")
+	@BeanProperty("c")
 	public HtmlElementContainer setChildren(LinkedList<Object> children) {
 		this.children = children;
 		return this;

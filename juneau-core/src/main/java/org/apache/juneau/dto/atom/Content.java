@@ -105,7 +105,7 @@ public class Content extends Text {
 	 * @param src The source URI.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty(name="src")
+	@BeanProperty("src")
 	public Content src(URI src) {
 		this.src = src;
 		return this;

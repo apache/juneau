@@ -427,13 +427,13 @@ public class BeanMeta<T> {
 		 */
 		private String findPropertyName(Field f, Set<String> fixedBeanProps) {
 			BeanProperty bp = f.getAnnotation(BeanProperty.class);
-			if (bp != null && ! bp.name().equals("")) {
-				String name = bp.name();
+			String name = bpName(bp);
+			if (! name.isEmpty()) {
 				if (fixedBeanProps.isEmpty() || fixedBeanProps.contains(name))
 					return name;
 				throw new BeanRuntimeException(classMeta.getInnerClass(), "Method property ''{0}'' identified in @BeanProperty, but missing from @Bean", name);
 			}
-			String name = propertyNamer.getPropertyName(f.getName());
+			name = propertyNamer.getPropertyName(f.getName());
 			if (fixedBeanProps.isEmpty() || fixedBeanProps.contains(name))
 				return name;
 			return null;
@@ -558,7 +558,7 @@ public class BeanMeta<T> {
 				Class<?> rt = m.getReturnType();
 				boolean isGetter = false, isSetter = false;
 				BeanProperty bp = getMethodAnnotation(BeanProperty.class, m);
-				String bpName = bp == null ? "" : bp.name();
+				String bpName = bpName(bp);
 				if (pt.length == 0) {
 					if (n.startsWith("get") && (! rt.equals(Void.TYPE))) {
 						isGetter = true;
@@ -762,6 +762,14 @@ public class BeanMeta<T> {
 				findTypeVarImpls(pt.getRawType(), m);
 			}
 		}
+	}
+
+	private static String bpName(BeanProperty bp) {
+		if (bp == null)
+			return "";
+		if (! bp.name().isEmpty())
+			return bp.name();
+		return bp.value();
 	}
 
 	@Override /* Object */

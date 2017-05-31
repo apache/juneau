@@ -82,7 +82,7 @@ public class Icon extends Common {
 	 * @param uri The URI of this icon.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty(name="uri")
+	@BeanProperty("uri")
 	public Icon uri(URI uri) {
 		this.uri = uri;
 		return this;
@@ -94,7 +94,7 @@ public class Icon extends Common {
 	 * @param uri The URI of this icon.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty(name="uri")
+	@BeanProperty("uri")
 	public Icon uri(String uri) {
 		this.uri = toURI(uri);
 		return this;

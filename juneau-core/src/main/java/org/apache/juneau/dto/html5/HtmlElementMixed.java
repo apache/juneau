@@ -44,7 +44,7 @@ public class HtmlElementMixed extends HtmlElement {
 	 * @param children The new children of this element.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty(name="c")
+	@BeanProperty("c")
 	public HtmlElement setChildren(LinkedList<Object> children) {
 		this.children = children;
 		return this;

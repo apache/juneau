@@ -143,7 +143,7 @@ public class Schema {
 	 *
 	 * @return The value of the <property>$schema</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	@BeanProperty(name="$schema")
+	@BeanProperty("$schema")
 	public URI getSchemaVersionUri() {
 		return schemaVersion;
 	}
@@ -154,7 +154,7 @@ public class Schema {
 	 * @param schemaVersion The new value for the <property>schemaVersion</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty(name="$schema")
+	@BeanProperty("$schema")
 	public Schema setSchemaVersionUri(URI schemaVersion) {
 		this.schemaVersion = schemaVersion;
 		return this;
@@ -1272,7 +1272,7 @@ public class Schema {
 	 *
 	 * @return The value of the <property>$ref</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	@BeanProperty(name="$ref")
+	@BeanProperty("$ref")
 	public URI getRef() {
 		return ref;
 	}
@@ -1283,7 +1283,7 @@ public class Schema {
 	 * @param ref The new value for the <property>$ref</property> property on this bean.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty(name="$ref")
+	@BeanProperty("$ref")
 	public Schema setRef(URI ref) {
 		this.ref = ref;
 		return this;
