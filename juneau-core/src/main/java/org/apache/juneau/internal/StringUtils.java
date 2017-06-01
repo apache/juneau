@@ -618,7 +618,9 @@ public final class StringUtils {
 	 * @return <jk>true</jk> if specified string is <jk>null</jk> or it's {@link #toString()} method returns an empty string.
 	 */
 	public static boolean isEmpty(Object s) {
-		return s == null || s.toString().isEmpty();
+		if( s == null ) return true;
+		if( s instanceof List ) return ((List) s).size() == 0;
+		return s.toString().isEmpty();
 	}
 
 	/**
