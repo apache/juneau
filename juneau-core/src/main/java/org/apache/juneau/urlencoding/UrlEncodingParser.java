@@ -269,7 +269,7 @@ public class UrlEncodingParser extends UonParser {
 						if (! currAttr.equals(session.getBeanTypePropertyName(m.getClassMeta()))) {
 							BeanPropertyMeta pMeta = m.getPropertyMeta(currAttr);
 							if (pMeta == null) {
-								onUnknownProperty(session, currAttr, m, currAttrLine, currAttrCol);
+								session.onUnknownProperty(currAttr, m, currAttrLine, currAttrCol);
 							} else {
 								session.setCurrentProperty(pMeta);
 								// In cases of "&foo=", create an empty instance of the value if createable.
@@ -287,7 +287,7 @@ public class UrlEncodingParser extends UonParser {
 						if (! currAttr.equals(session.getBeanTypePropertyName(m.getClassMeta()))) {
 							BeanPropertyMeta pMeta = m.getPropertyMeta(currAttr);
 							if (pMeta == null) {
-								onUnknownProperty(session, currAttr, m, currAttrLine, currAttrCol);
+								session.onUnknownProperty(currAttr, m, currAttrLine, currAttrCol);
 								parseAnything(session, object(), r.unread(), m.getBean(false), true, null); // Read content anyway to ignore it
 							} else {
 								session.setCurrentProperty(pMeta);

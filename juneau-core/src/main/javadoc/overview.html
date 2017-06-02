@@ -6237,6 +6237,21 @@
 			<li><jsf>URLENC_paramFormat</jsf> has been moved to {@link org.apache.juneau.uon.UonSerializerContext#UON_paramFormat}, 
 				and the UON/URL-Encoding serializers will now always serialize all values as plain text.
 				<br>This means that arrays and maps are converted to simple comma-delimited lists.
+			<li>Listener APIs added to serializers and parsers:
+				<ul>
+					<li>{@link org.apache.juneau.serializer.SerializerListener}
+					<li>{@link org.apache.juneau.serializer.SerializerBuilder#listener(Class)}
+					<li>{@link org.apache.juneau.rest.annotation.RestResource#serializerListener()}
+					<li>{@link org.apache.juneau.rest.RestConfig#serializerListener(Class)}
+					<li>{@link org.apache.juneau.parser.ParserListener}
+					<li>{@link org.apache.juneau.parser.ParserBuilder#listener(Class)}
+					<li>{@link org.apache.juneau.rest.annotation.RestResource#parserListener()}
+					<li>{@link org.apache.juneau.rest.RestConfig#parserListener(Class)}
+					<li>{@link org.apache.juneau.rest.client.RestClientBuilder#listeners(Class,Class)}
+				</ul>
+			<li>The {@link org.apache.juneau.BeanContext#BEAN_debug} flag will now capture parser input and make it
+				available through the {@link org.apache.juneau.parser.ParserSession#getInputAsString()} method so that it can be used
+				in the listeners.
 		</ul>
 
 		<h6 class='topic'>org.apache.juneau.rest</h6>

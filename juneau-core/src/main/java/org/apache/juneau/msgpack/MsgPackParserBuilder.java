@@ -78,6 +78,12 @@ public class MsgPackParserBuilder extends ParserBuilder {
 		return this;
 	}
 
+	@Override /* ParserBuilder */
+	public MsgPackParserBuilder listener(Class<? extends ParserListener> value) {
+		super.listener(value);
+		return this;
+	}
+
 	@Override /* CoreObjectBuilder */
 	public MsgPackParserBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);

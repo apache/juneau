@@ -78,6 +78,12 @@ public class JsonParserBuilder extends ParserBuilder {
 		return this;
 	}
 
+	@Override /* ParserBuilder */
+	public JsonParserBuilder listener(Class<? extends ParserListener> value) {
+		super.listener(value);
+		return this;
+	}
+
 	@Override /* CoreObjectBuilder */
 	public JsonParserBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);

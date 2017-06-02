@@ -204,6 +204,12 @@ public class UonSerializerBuilder extends SerializerBuilder {
 		return this;
 	}
 
+	@Override /* SerializerBuilder */
+	public UonSerializerBuilder listener(Class<? extends SerializerListener> value) {
+		super.listener(value);
+		return this;
+	}
+
 	@Override /* CoreObjectBuilder */
 	public UonSerializerBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);

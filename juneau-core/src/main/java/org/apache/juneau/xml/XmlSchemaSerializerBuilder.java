@@ -16,6 +16,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.serializer.*;
 
 /**
  * Builder class for building instances of XML Schema serializers.
@@ -200,6 +201,12 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 	@Override /* SerializerBuilder */
 	public XmlSchemaSerializerBuilder abridged(boolean value) {
 		super.abridged(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public XmlSchemaSerializerBuilder listener(Class<? extends SerializerListener> value) {
+		super.listener(value);
 		return this;
 	}
 

@@ -458,7 +458,7 @@ public class UonParser extends ReaderParser {
 						if (! currAttr.equals(session.getBeanTypePropertyName(m.getClassMeta()))) {
 							BeanPropertyMeta pMeta = m.getPropertyMeta(currAttr);
 							if (pMeta == null) {
-								onUnknownProperty(session, currAttr, m, currAttrLine, currAttrCol);
+								session.onUnknownProperty(currAttr, m, currAttrLine, currAttrCol);
 							} else {
 								Object value = session.convertToType("", pMeta.getClassMeta());
 								pMeta.set(m, currAttr, value);
@@ -471,7 +471,7 @@ public class UonParser extends ReaderParser {
 						if (! currAttr.equals(session.getBeanTypePropertyName(m.getClassMeta()))) {
 							BeanPropertyMeta pMeta = m.getPropertyMeta(currAttr);
 							if (pMeta == null) {
-								onUnknownProperty(session, currAttr, m, currAttrLine, currAttrCol);
+								session.onUnknownProperty(currAttr, m, currAttrLine, currAttrCol);
 								parseAnything(session, object(), r.unread(), m.getBean(false), false, null); // Read content anyway to ignore it
 							} else {
 								session.setCurrentProperty(pMeta);

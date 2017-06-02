@@ -192,6 +192,26 @@ public class ParserBuilder extends CoreObjectBuilder {
 		return property(PARSER_fileCharset, value);
 	}
 
+	/**
+	 * <b>Configuration property:</b>  Parser listener.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Parser.listener"</js>
+	 * 	<li><b>Data type:</b> <code>Class&lt;? extends ParserListener&gt;</code>
+	 * 	<li><b>Default:</b> <jk>null</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * Class used to listen for errors and warnings that occur during parsing.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see ParserContext#PARSER_listener
+	 */
+	public ParserBuilder listener(Class<? extends ParserListener> value) {
+		return property(PARSER_listener, value);
+	}
+
 	@Override /* CoreObjectBuilder */
 	public ParserBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);

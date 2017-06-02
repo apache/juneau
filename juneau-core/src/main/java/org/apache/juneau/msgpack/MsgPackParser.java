@@ -131,7 +131,7 @@ public class MsgPackParser extends InputStreamParser {
 							if (pName.equals(session.getBeanTypePropertyName(eType)))
 								parseAnything(session, session.string(), is, null, null);
 							else
-								onUnknownProperty(session, pName, m, 0, is.getPosition());
+								session.onUnknownProperty(pName, m, 0, is.getPosition());
 						} else {
 							ClassMeta<?> cm = bpm.getClassMeta();
 							Object value = parseAnything(session, cm, is, m.getBean(false), bpm);

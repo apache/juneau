@@ -116,6 +116,12 @@ public class UonParserBuilder extends ParserBuilder {
 		return this;
 	}
 
+	@Override /* ParserBuilder */
+	public UonParserBuilder listener(Class<? extends ParserListener> value) {
+		super.listener(value);
+		return this;
+	}
+
 	@Override /* CoreObjectBuilder */
 	public UonParserBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);

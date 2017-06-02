@@ -16,6 +16,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
 
 /**
@@ -263,6 +264,12 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	@Override /* SerializerBuilder */
 	public UrlEncodingSerializerBuilder abridged(boolean value) {
 		super.abridged(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public UrlEncodingSerializerBuilder listener(Class<? extends SerializerListener> value) {
+		super.listener(value);
 		return this;
 	}
 

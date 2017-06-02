@@ -77,6 +77,12 @@ public class CsvParserBuilder extends ParserBuilder {
 		return this;
 	}
 
+	@Override /* ParserBuilder */
+	public CsvParserBuilder listener(Class<? extends ParserListener> value) {
+		super.listener(value);
+		return this;
+	}
+
 	@Override /* CoreObjectBuilder */
 	public CsvParserBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);

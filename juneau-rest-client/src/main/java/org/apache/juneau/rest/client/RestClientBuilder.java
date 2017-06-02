@@ -1045,6 +1045,21 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	}
 
 	/**
+	 * Sets the {@link SerializerContext#SERIALIZER_listener} and {@link ParserContext#PARSER_listener} property on all
+	 * 	serializers and parsers in this group.
+	 *
+	 * @param sl The new serializer listener.
+	 * @param pl The new parser listener.
+	 * @return This object (for method chaining).
+	 * @see SerializerContext#SERIALIZER_abridged
+	 */
+	public RestClientBuilder listeners(Class<? extends SerializerListener> sl, Class<? extends ParserListener> pl) {
+		property(SERIALIZER_listener, sl);
+		property(PARSER_listener, pl);
+		return this;
+	}
+
+	/**
 	 * Sets the {@link ParserContext#PARSER_trimStrings} property on all parsers in this group.
 	 *
 	 * @param value The new value for this property.

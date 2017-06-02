@@ -10,47 +10,37 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.parser;
+package org.apache.juneau.serializer;
 
 import java.text.*;
 
 import org.apache.juneau.*;
 
 /**
- * Class for listening for certain parse events during a document parse.
+ * Class for listening for serialize events during a serialization.
  */
-public class ParserListener {
+public class SerializerListener {
 
 	/**
-	 * Gets called when an unknown bean property is detected in a document.
-	 * <p>
-	 * This method only gets called if {@link BeanContext#BEAN_ignoreUnknownBeanProperties} setting is <jk>true</jk>.
-	 * Otherwise, the parser will throw a {@link ParseException}.
+	 * Called when an exception is thrown when trying to call a bean getter method.
 	 *
-	 * @param <T> The class type of the bean.
-	 * @param session The parser session.
-	 * 	Note that if {@link BeanContext#BEAN_debug} is enabled on the parser, you can get the input as a string through
-	 * 	{@link ParserSession#getInputAsString()}.
-	 * @param propertyName The property name encountered in the document.
-	 * @param beanClass The bean class.
-	 * @param bean The bean.
-	 * @param line The line number where the unknown property was found (-1 if parser doesn't support line/column indicators).
-	 * @param col The column number where the unknown property was found (-1 if parser doesn't support line/column indicators).
+	 * @param session The serializer session.
+	 * 	Note that if
+	 * @param t The throwable that was thrown by the getter method.
+	 * @param p The bean property we had an issue on.
 	 */
-	public <T> void onUnknownBeanProperty(ParserSession session, String propertyName, Class<T> beanClass, T bean, int line, int col) {
-		onError(session, null, MessageFormat.format("Unknown property ''{0}'' encountered while trying to parse into class ''{1}'' at line {2} column {3}", propertyName, beanClass, line, col));
+	public void onBeanGetterException(SerializerSession session, Throwable t, BeanPropertyMeta p) {
+		onError(session, t, MessageFormat.format("Could not call getValue() on property ''{1}'' of class ''{2}'', exception = {3}", p.getName(), p.getBeanMeta().getClassMeta(), t.getLocalizedMessage()));
 	}
 
 	/**
-	 * Called when an error occurs during parsing but is ignored.
+	 * Called when an error occurs during serialization but is ignored.
 	 *
-	 * @param session The parsers session.
-	 * 	Note that if {@link BeanContext#BEAN_debug} is enabled on the parser, you can get the input as a string through
-	 * 	{@link ParserSession#getInputAsString()}.
+	 * @param session The serializer session.
 	 * @param t The throwable that was thrown by the getter method.
 	 * @param msg The error message.
 	 */
-	public void onError(ParserSession session, Throwable t, String msg) {
+	public void onError(SerializerSession session, Throwable t, String msg) {
 		// Do something with this information.
 	}
 }

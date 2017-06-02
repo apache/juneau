@@ -739,4 +739,24 @@ public final class ClassUtils {
 			returnType = BeanContext.DEFAULT.getClassMeta(m.getGenericReturnType()).toString();
 		}
 	}
+
+	/**
+	 * Creates an instance of the specified class without throwing exceptions.
+	 *
+	 * @param c The class to instantiate.
+	 * @param args The arguments to pass to the constructor.
+	 * @return The new class instance, or <jk>null</jk> if the class was <jk>null</jk>.
+	 * @throws RuntimeException if constructor could not be found or called.
+	 */
+	public static <T> T newInstance(Class<T> c, Object...args) {
+		if (c == null)
+			return null;
+		try {
+			if (args.length == 0)
+				return c.newInstance();
+			return c.getConstructor(getClasses(args)).newInstance(args);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
 }

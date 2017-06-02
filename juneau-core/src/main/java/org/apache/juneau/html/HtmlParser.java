@@ -461,7 +461,7 @@ public class HtmlParser extends XmlParser {
 				nextTag(r, TD);
 				BeanPropertyMeta pMeta = m.getPropertyMeta(key);
 				if (pMeta == null) {
-					onUnknownProperty(session, key, m, -1, -1);
+					session.onUnknownProperty(key, m, -1, -1);
 					parseAnything(session, object(), r, null, false, null);
 				} else {
 					ClassMeta<?> cm = pMeta.getClassMeta();

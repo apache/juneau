@@ -16,6 +16,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.serializer.*;
 
 /**
  * Builder class for building instances of JSON Schema serializers.
@@ -176,6 +177,12 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	@Override /* SerializerBuilder */
 	public JsonSchemaSerializerBuilder abridged(boolean value) {
 		super.abridged(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public JsonSchemaSerializerBuilder listener(Class<? extends SerializerListener> value) {
+		super.listener(value);
 		return this;
 	}
 

@@ -161,20 +161,20 @@ public class CommonParserTest {
 	//====================================================================================================
 	@Test
 	public void testParserListeners() throws Exception {
-		final List<String> events = new LinkedList<String>();
-		JsonParser p = new JsonParserBuilder().ignoreUnknownBeanProperties(true).build();
-		p.addListener(
-			new ParserListener() {
-				@Override /* ParserListener */
-				public <T> void onUnknownProperty(String propertyName, Class<T> beanClass, T bean, int line, int col) {
-					events.add(propertyName + "," + line + "," + col);
-				}
-			}
-		);
+		JsonParser p = new JsonParserBuilder().ignoreUnknownBeanProperties(true).listener(MyParserListener.class).build();
 
 		String json = "{a:1,unknownProperty:\"/foo\",b:2}";
 		p.parse(json, B.class);
-		assertEquals(1, events.size());
-		assertEquals("unknownProperty,1,5", events.get(0));
+		assertEquals(1, MyParserListener.events.size());
+		assertEquals("unknownProperty,1,5", MyParserListener.events.get(0));
+	}
+	
+	public static class MyParserListener extends ParserListener {
+		final static List<String> events = new LinkedList<String>();
+
+		@Override /* ParserListener */
+		public <T> void onUnknownBeanProperty(ParserSession session, String propertyName, Class<T> beanClass, T bean, int line, int col) {
+			events.add(propertyName + "," + line + "," + col);
+		}
 	}
 }

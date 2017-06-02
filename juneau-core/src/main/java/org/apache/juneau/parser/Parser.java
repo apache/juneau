@@ -134,7 +134,6 @@ import org.apache.juneau.utils.*;
 public abstract class Parser extends CoreObject {
 
 	/** General parser properties currently set on this parser. */
-	private final List<ParserListener> listeners = new LinkedList<ParserListener>();
 	private final MediaType[] mediaTypes;
 	private final ParserContext ctx;
 
@@ -506,26 +505,6 @@ public abstract class Parser extends CoreObject {
 	//--------------------------------------------------------------------------------
 
 	/**
-	 * Adds a {@link ParserListener} to this parser to listen for parse events.
-	 *
-	 * @param listener The listener to associate with this parser.
-	 * @return This object (for method chaining).
-	 */
-	public Parser addListener(ParserListener listener) {
-		this.listeners.add(listener);
-		return this;
-	}
-
-	/**
-	 * Returns the current parser listeners associated with this parser.
-	 *
-	 * @return The current list of parser listeners.
-	 */
-	public List<ParserListener> getListeners() {
-		return listeners;
-	}
-
-	/**
 	 * Converts the specified string to the specified type.
 	 *
 	 * @param session The session object.
@@ -600,29 +579,6 @@ public abstract class Parser extends CoreObject {
 				m.invoke(o, name);
 		}
 	}
-
-	/**
-	 * Method that gets called when an unknown bean property name is encountered.
-	 *
-	 * @param session The parser session.
-	 * @param propertyName The unknown bean property name.
-	 * @param beanMap The bean that doesn't have the expected property.
-	 * @param line The line number where the property was found.  <code>-1</code> if line numbers are not available.
-	 * @param col The column number where the property was found.  <code>-1</code> if column numbers are not available.
-	 * @throws ParseException Automatically thrown if {@link BeanContext#BEAN_ignoreUnknownBeanProperties} setting
-	 * 	on this parser is <jk>false</jk>
-	 * @param <T> The class type of the bean map that doesn't have the expected property.
-	 */
-	protected <T> void onUnknownProperty(ParserSession session, String propertyName, BeanMap<T> beanMap, int line, int col) throws ParseException {
-		if (propertyName.equals(session.getBeanTypePropertyName(beanMap.getClassMeta())))
-			return;
-		if (! session.isIgnoreUnknownBeanProperties())
-			throw new ParseException(session, "Unknown property ''{0}'' encountered while trying to parse into class ''{1}''", propertyName, beanMap.getClassMeta());
-		if (listeners.size() > 0)
-			for (ParserListener listener : listeners)
-				listener.onUnknownProperty(propertyName, beanMap.getClassMeta().getInnerClass(), beanMap.getBean(), line, col);
-	}
-
 
 	/**
 	 * Returns the media types handled based on the value of the {@link Consumes} annotation on the parser class.

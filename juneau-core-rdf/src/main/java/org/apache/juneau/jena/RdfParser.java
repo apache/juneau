@@ -252,7 +252,7 @@ public class RdfParser extends ReaderParser {
 					pMeta.set(m, key, value);
 				}
 			} else if (! (p.equals(session.getRootProperty()) || p.equals(session.getTypeProperty()))) {
-				onUnknownProperty(session, key, m, -1, -1);
+				session.onUnknownProperty(key, m, -1, -1);
 			}
 			session.setCurrentProperty(null);
 		}

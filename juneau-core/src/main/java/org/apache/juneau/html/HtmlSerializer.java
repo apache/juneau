@@ -381,7 +381,7 @@ public class HtmlSerializer extends XmlSerializer {
 			} catch (StackOverflowError t) {
 				throw t;
 			} catch (Throwable t) {
-				session.addWarning("Could not call getValue() on property ''{0}'', {1}", e.getKey(), t.getLocalizedMessage());
+				session.onError(t, "Could not call getValue() on property ''{0}'', {1}", e.getKey(), t.getLocalizedMessage());
 			}
 
 			out.sTag(i+1, "tr").nl();
@@ -429,7 +429,7 @@ public class HtmlSerializer extends XmlSerializer {
 			Object value = p.getValue();
 			Throwable t = p.getThrown();
 			if (t != null)
-				session.addBeanGetterWarning(pMeta, t);
+				session.onBeanGetterException(pMeta, t);
 
 			if (session.canIgnoreValue(cMeta, key, value))
 				continue;
@@ -456,7 +456,7 @@ public class HtmlSerializer extends XmlSerializer {
 				throw e;
 			} catch (Throwable e) {
 				e.printStackTrace();
-				session.addBeanGetterWarning(pMeta, e);
+				session.onBeanGetterException(pMeta, e);
 			}
 			out.eTag("td").nl();
 			out.eTag(i+1, "tr").nl();

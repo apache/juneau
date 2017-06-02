@@ -162,6 +162,12 @@ public class CsvSerializerBuilder extends SerializerBuilder {
 		return this;
 	}
 
+	@Override /* SerializerBuilder */
+	public CsvSerializerBuilder listener(Class<? extends SerializerListener> value) {
+		super.listener(value);
+		return this;
+	}
+
 	@Override /* CoreObjectBuilder */
 	public CsvSerializerBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);

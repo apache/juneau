@@ -322,7 +322,7 @@ public class JsonSerializer extends WriterSerializer {
 			Object value = p.getValue();
 			Throwable t = p.getThrown();
 			if (t != null)
-				session.addBeanGetterWarning(pMeta, t);
+				session.onBeanGetterException(pMeta, t);
 
 			if (session.canIgnoreValue(cMeta, key, value))
 				continue;

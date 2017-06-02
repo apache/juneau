@@ -639,8 +639,8 @@ public final class RestContext extends Context {
 
 			ps.addBeanFilters(beanFilters).addPojoSwaps(pojoSwaps).setProperties(properties);
 
-			serializers = sc.serializers.beanFilters(beanFilters).pojoSwaps(pojoSwaps).properties(properties).build();
-			parsers = sc.parsers.beanFilters(beanFilters).pojoSwaps(pojoSwaps).properties(properties).build();
+			serializers = sc.serializers.beanFilters(beanFilters).pojoSwaps(pojoSwaps).properties(properties).listener(sc.serializerListener).build();
+			parsers = sc.parsers.beanFilters(beanFilters).pojoSwaps(pojoSwaps).properties(properties).listener(sc.parserListener).build();
 			urlEncodingSerializer = new UrlEncodingSerializer(ps);
 			urlEncodingParser = new UrlEncodingParser(ps);
 			encoders = sc.encoders.build();

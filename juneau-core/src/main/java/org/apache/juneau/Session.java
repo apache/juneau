@@ -59,7 +59,7 @@ public abstract class Session {
 	 * 	<li>Property defined on the context object.
 	 * 	<li>System.property.
 	 * </ul>
-	 * 
+	 *
 	 * @param key The property key.
 	 * @return The property value, or <jk>null</jk> if it doesn't exist.
 	 */
@@ -69,7 +69,7 @@ public abstract class Session {
 
 	/**
 	 * Same as {@link #getProperty(String)} but with a default value.
-	 * 
+	 *
 	 * @param key The property key.
 	 * @param def The default value if the property doesn't exist or is <jk>null</jk>.
 	 * @return The property value.
@@ -85,7 +85,7 @@ public abstract class Session {
 
 	/**
 	 * Same as {@link #getProperty(String)} but transforms the value to the specified type.
-	 * 
+	 *
 	 * @param type The class type of the value.
 	 * @param key The property key.
 	 * @return The property value.
@@ -96,7 +96,7 @@ public abstract class Session {
 
 	/**
 	 * Same as {@link #getProperty(Class,String)} but with a default value.
-	 * 
+	 *
 	 * @param type The class type of the value.
 	 * @param key The property key.
 	 * @param def The default value if the property doesn't exist or is <jk>null</jk>.

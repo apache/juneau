@@ -142,21 +142,20 @@ public class CommonParserTest {
 	//====================================================================================================
 	@Test
 	public void testParserListeners() throws Exception {
-		final List<String> events = new LinkedList<String>();
-		HtmlParser p = new HtmlParserBuilder().ignoreUnknownBeanProperties(true).build();
-		p.addListener(
-			new ParserListener() {
-				@Override /* ParserListener */
-				public <T> void onUnknownProperty(String propertyName, Class<T> beanClass, T bean, int line, int col) {
-					events.add(propertyName + "," + line + "," + col);
-				}
-			}
-		);
+		HtmlParser p = new HtmlParserBuilder().ignoreUnknownBeanProperties(true).listener(MyParserListener.class).build();
 
 		String in = "<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>a</string></td><td><number>1</number></td></tr><tr><td><string>unknown</string></td><td><string>/foo</string></td></tr><tr><td><string>b</string></td><td><number>2</number></td></tr></table>";
 		p.parse(in, B.class);
-		assertEquals(1, events.size());
-		assertEquals("unknown,-1,-1", events.get(0));
+		assertEquals(1, MyParserListener.events.size());
+		assertEquals("unknown,-1,-1", MyParserListener.events.get(0));
 	}
+	
+	public static class MyParserListener extends ParserListener {
+		final static List<String> events = new LinkedList<String>();
 
+		@Override /* ParserListener */
+		public <T> void onUnknownBeanProperty(ParserSession session, String propertyName, Class<T> beanClass, T bean, int line, int col) {
+			events.add(propertyName + "," + line + "," + col);
+		}
+	}
 }

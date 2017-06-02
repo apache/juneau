@@ -86,6 +86,8 @@ public class RestConfig implements ServletConfig {
 		beanFilters = new ArrayList<Class<?>>(),
 		pojoSwaps = new ArrayList<Class<?>>(),
 		paramResolvers = new ArrayList<Class<?>>();
+	Class<? extends SerializerListener> serializerListener;
+	Class<? extends ParserListener> parserListener;
 	SerializerGroupBuilder serializers = new SerializerGroupBuilder();
 	ParserGroupBuilder parsers = new ParserGroupBuilder();
 	EncoderGroupBuilder encoders = new EncoderGroupBuilder().append(IdentityEncoder.INSTANCE);
@@ -177,6 +179,8 @@ public class RestConfig implements ServletConfig {
 				addBeanFilters(r.beanFilters());
 				addPojoSwaps(r.pojoSwaps());
 				addParamResolvers(r.paramResolvers());
+				serializerListener(r.serializerListener());
+				parserListener(r.parserListener());
 				if (! r.stylesheet().isEmpty())
 					setStyleSheet(c, r.stylesheet());
 				if (! r.favicon().isEmpty())
@@ -351,6 +355,34 @@ public class RestConfig implements ServletConfig {
 	 */
 	public RestConfig addPojoSwaps(Class<?>...pojoSwaps) {
 		this.pojoSwaps.addAll(Arrays.asList(pojoSwaps));
+		return this;
+	}
+
+	/**
+	 * Specifies the serializer listener class to use for listening to non-fatal serialization errors.
+	 * <p>
+	 * This is the programmatic equivalent to the {@link RestResource#serializerListener() @RestResource.serializerListener()} annotation.
+	 *
+	 * @param listener The listener to add to this config.
+	 * @return This object (for method chaining).
+	 */
+	public RestConfig serializerListener(Class<? extends SerializerListener> listener) {
+		if (listener != SerializerListener.class)
+			this.serializerListener = listener;
+		return this;
+	}
+
+	/**
+	 * Specifies the parser listener class to use for listening to non-fatal parse errors.
+	 * <p>
+	 * This is the programmatic equivalent to the {@link RestResource#parserListener() @RestResource.parserListener()} annotation.
+	 *
+	 * @param listener The listener to add to this config.
+	 * @return This object (for method chaining).
+	 */
+	public RestConfig parserListener(Class<? extends ParserListener> listener) {
+		if (listener != ParserListener.class)
+			this.parserListener = listener;
 		return this;
 	}
 

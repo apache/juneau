@@ -13,8 +13,8 @@
 package org.apache.juneau.serializer;
 
 import static org.apache.juneau.BeanContext.*;
-import static org.apache.juneau.serializer.SerializerContext.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.serializer.SerializerContext.*;
 
 import java.util.*;
 
@@ -408,8 +408,19 @@ public class SerializerGroupBuilder {
 	 * @return This object (for method chaining).
 	 * @see SerializerContext#SERIALIZER_abridged
 	 */
-	public SerializerGroupBuilder parserKnowsRootType(boolean value) {
+	public SerializerGroupBuilder abridged(boolean value) {
 		return property(SERIALIZER_abridged, value);
+	}
+
+	/**
+	 * Sets the {@link SerializerContext#SERIALIZER_listener} property on all serializers in this group.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see SerializerContext#SERIALIZER_listener
+	 */
+	public SerializerGroupBuilder listener(Class<? extends SerializerListener> value) {
+		return property(SERIALIZER_listener, value);
 	}
 
 	/**

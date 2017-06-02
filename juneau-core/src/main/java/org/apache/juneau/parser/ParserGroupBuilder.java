@@ -252,6 +252,17 @@ public class ParserGroupBuilder {
 	}
 
 	/**
+	 * Sets the {@link ParserContext#PARSER_listener} property on all parsers in this group.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see ParserContext#PARSER_listener
+	 */
+	public ParserGroupBuilder listener(Class<? extends ParserListener> value) {
+		return property(PARSER_listener, value);
+	}
+
+	/**
 	 * Sets the {@link BeanContext#BEAN_beansRequireDefaultConstructor} property on all parsers in this group.
 	 *
 	 * @param value The new value for this property.

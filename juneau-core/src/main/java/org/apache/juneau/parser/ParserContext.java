@@ -110,21 +110,37 @@ public class ParserContext extends BeanContext {
 	 */
 	public static final String PARSER_fileCharset = "Parser.fileCharset";
 
+	/**
+	 * <b>Configuration property:</b>  Parser listener.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Parser.listener"</js>
+	 * 	<li><b>Data type:</b> <code>Class&lt;? extends ParserListener&gt;</code>
+	 * 	<li><b>Default:</b> <jk>null</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * Class used to listen for errors and warnings that occur during parsing.
+	 */
+	public static final String PARSER_listener = "PARSER.listener";
 
 	final boolean trimStrings, strict;
 	final String inputStreamCharset, fileCharset;
+	final Class<? extends ParserListener> listener;
 
 	/**
 	 * Constructor.
 	 *
 	 * @param ps The property store that created this context.
 	 */
+	@SuppressWarnings("unchecked")
 	public ParserContext(PropertyStore ps) {
 		super(ps);
 		this.trimStrings = ps.getProperty(PARSER_trimStrings, boolean.class, false);
 		this.strict = ps.getProperty(PARSER_strict, boolean.class, false);
 		this.inputStreamCharset = ps.getProperty(PARSER_inputStreamCharset, String.class, "UTF-8");
 		this.fileCharset = ps.getProperty(PARSER_fileCharset, String.class, "default");
+		this.listener = ps.getProperty(PARSER_listener, Class.class, null);
 	}
 
 	@Override /* Context */
@@ -135,6 +151,7 @@ public class ParserContext extends BeanContext {
 				.append("strict", strict)
 				.append("inputStreamCharset", inputStreamCharset)
 				.append("fileCharset", fileCharset)
+				.append("listener", listener)
 			);
 	}
 }

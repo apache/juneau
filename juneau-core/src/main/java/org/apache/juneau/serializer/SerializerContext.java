@@ -320,7 +320,7 @@ public class SerializerContext extends BeanContext {
 	 * <b>Configuration property:</b>  Abridged output.
 	 * <p>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"Serializer.parserKnowsRootType"</js>
+	 * 	<li><b>Name:</b> <js>"Serializer.abridged"</js>
 	 * 	<li><b>Data type:</b> <code>Boolean</code>
 	 * 	<li><b>Default:</b> <jk>false</jk>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
@@ -334,6 +334,20 @@ public class SerializerContext extends BeanContext {
 	 * will be added when this setting is disabled, but not added when it is enabled.
 	 */
 	public static final String SERIALIZER_abridged = "Serializer.abridged";
+
+	/**
+	 * <b>Configuration property:</b>  Serializer listener.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Serializer.listener"</js>
+	 * 	<li><b>Data type:</b> <code>Class&lt;? extends SerializerListener&gt;</code>
+	 * 	<li><b>Default:</b> <jk>null</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * Class used to listen for errors and warnings that occur during serialization.
+	 */
+	public static final String SERIALIZER_listener = "Serializer.listener";
 
 
 	final int maxDepth, initialDepth;
@@ -353,12 +367,14 @@ public class SerializerContext extends BeanContext {
 	final UriContext uriContext;
 	final UriResolution uriResolution;
 	final UriRelativity uriRelativity;
+	final Class<? extends SerializerListener> listener;
 
 	/**
 	 * Constructor.
 	 *
 	 * @param ps The property store that created this context.
 	 */
+	@SuppressWarnings("unchecked")
 	public SerializerContext(PropertyStore ps) {
 		super(ps);
 		maxDepth = ps.getProperty(SERIALIZER_maxDepth, int.class, 100);
@@ -378,6 +394,7 @@ public class SerializerContext extends BeanContext {
 		uriContext = ps.getProperty(SERIALIZER_uriContext, UriContext.class, UriContext.DEFAULT);
 		uriResolution = ps.getProperty(SERIALIZER_uriResolution, UriResolution.class, UriResolution.ROOT_RELATIVE);
 		uriRelativity = ps.getProperty(SERIALIZER_uriRelativity, UriRelativity.class, UriRelativity.RESOURCE);
+		listener = ps.getProperty(SERIALIZER_listener, Class.class, null);
 	}
 
 	@Override /* Context */
@@ -401,6 +418,7 @@ public class SerializerContext extends BeanContext {
 				.append("uriContext", uriContext)
 				.append("uriResolution", uriResolution)
 				.append("uriRelativity", uriRelativity)
+				.append("listener", listener)
 			);
 	}
 }

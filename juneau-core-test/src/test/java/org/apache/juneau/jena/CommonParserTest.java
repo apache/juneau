@@ -186,20 +186,20 @@ public class CommonParserTest {
 	//====================================================================================================
 	@Test
 	public void testParserListeners() throws Exception {
-		final List<String> events = new LinkedList<String>();
-		RdfParser p = new RdfParserBuilder().xml().ignoreUnknownBeanProperties(true).build();
-		p.addListener(
-			new ParserListener() {
-				@Override /* ParserListener */
-				public <T> void onUnknownProperty(String propertyName, Class<T> beanClass, T bean, int line, int col) {
-					events.add(propertyName + "," + line + "," + col);
-				}
-			}
-		);
+		RdfParser p = new RdfParserBuilder().xml().ignoreUnknownBeanProperties(true).listener(MyParserListener.class).build();
 
 		String in = wrap("<rdf:Description><jp:a rdf:datatype='http://www.w3.org/2001/XMLSchema#int'>1</jp:a><jp:unknownProperty>foo</jp:unknownProperty><jp:b rdf:datatype='http://www.w3.org/2001/XMLSchema#int'>2</jp:b></rdf:Description>");
 		p.parse(in, B.class);
-		assertEquals(1, events.size());
-		assertEquals("unknownProperty,-1,-1", events.get(0));
+		assertEquals(1, MyParserListener.events.size());
+		assertEquals("unknownProperty,-1,-1", MyParserListener.events.get(0));
+	}
+	
+	public static class MyParserListener extends ParserListener {
+		final static List<String> events = new LinkedList<String>();
+
+		@Override /* ParserListener */
+		public <T> void onUnknownBeanProperty(ParserSession session, String propertyName, Class<T> beanClass, T bean, int line, int col) {
+			events.add(propertyName + "," + line + "," + col);
+		}
 	}
 }

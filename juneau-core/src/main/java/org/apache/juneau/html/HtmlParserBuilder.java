@@ -19,6 +19,7 @@ import javax.xml.stream.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.parser.*;
 import org.apache.juneau.xml.*;
 
 /**
@@ -102,6 +103,12 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	@Override /* ParserBuilder */
 	public HtmlParserBuilder fileCharset(String value) {
 		super.fileCharset(value);
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public HtmlParserBuilder listener(Class<? extends ParserListener> value) {
+		super.listener(value);
 		return this;
 	}
 

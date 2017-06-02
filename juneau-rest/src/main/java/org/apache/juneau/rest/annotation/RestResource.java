@@ -830,4 +830,14 @@ public @interface RestResource {
 	 * The programmatic equivalent to this annotation are the {@link RestConfig#setPageLinks(String)}/{@link RestResponse#setPageLinks(Object)} methods.
 	 */
 	String pageLinks() default "";
+
+	/**
+	 * Specifies the serializer listener class to use for listening for non-fatal errors.
+	 */
+	Class<? extends SerializerListener> serializerListener() default SerializerListener.class;
+
+	/**
+	 * Specifies the parser listener class to use for listening for non-fatal errors.
+	 */
+	Class<? extends ParserListener> parserListener() default ParserListener.class;
 }

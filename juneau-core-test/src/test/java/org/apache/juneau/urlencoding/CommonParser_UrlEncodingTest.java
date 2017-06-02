@@ -152,21 +152,21 @@ public class CommonParser_UrlEncodingTest {
 	//====================================================================================================
 	@Test
 	public void testParserListeners() throws Exception {
-		final List<String> events = new LinkedList<String>();
-		UonParser p = new UrlEncodingParserBuilder().ignoreUnknownBeanProperties(true).build();
-		p.addListener(
-			new ParserListener() {
-				@Override /* ParserListener */
-				public <T> void onUnknownProperty(String propertyName, Class<T> beanClass, T bean, int line, int col) {
-					events.add(propertyName + "," + line + "," + col);
-				}
-			}
-		);
+		UonParser p = new UrlEncodingParserBuilder().ignoreUnknownBeanProperties(true).listener(MyParserListener.class).build();
 
 		String in = "a=1&unknownProperty=foo&b=2";
 		p.parse(in, B.class);
-		assertEquals(1, events.size());
-		assertEquals("unknownProperty,1,4", events.get(0));
+		assertEquals(1, MyParserListener.events.size());
+		assertEquals("unknownProperty,1,4", MyParserListener.events.get(0));
+	}
+
+	public static class MyParserListener extends ParserListener {
+		final static List<String> events = new LinkedList<String>();
+
+		@Override /* ParserListener */
+		public <T> void onUnknownBeanProperty(ParserSession session, String propertyName, Class<T> beanClass, T bean, int line, int col) {
+			events.add(propertyName + "," + line + "," + col);
+		}
 	}
 
 	@Test

@@ -13,6 +13,7 @@
 package org.apache.juneau.encoders;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
+
 import java.util.*;
 
 /**

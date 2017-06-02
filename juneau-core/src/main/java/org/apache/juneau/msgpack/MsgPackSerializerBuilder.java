@@ -162,6 +162,12 @@ public class MsgPackSerializerBuilder extends SerializerBuilder {
 		return this;
 	}
 
+	@Override /* SerializerBuilder */
+	public MsgPackSerializerBuilder listener(Class<? extends SerializerListener> value) {
+		super.listener(value);
+		return this;
+	}
+
 	@Override /* CoreObjectBuilder */
 	public MsgPackSerializerBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);

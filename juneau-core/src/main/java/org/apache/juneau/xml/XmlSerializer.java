@@ -637,7 +637,7 @@ public class XmlSerializer extends WriterSerializer {
 				Object value = p.getValue();
 				Throwable t = p.getThrown();
 				if (t != null)
-					session.addBeanGetterWarning(pMeta, t);
+					session.onBeanGetterException(pMeta, t);
 
 				if (session.canIgnoreValue(cMeta, key, value))
 					continue;
@@ -654,7 +654,7 @@ public class XmlSerializer extends WriterSerializer {
 							Object value2 = p2.getValue();
 							Throwable t2 = p2.getThrown();
 							if (t2 != null)
-								session.addBeanGetterWarning(pMeta, t);
+								session.onBeanGetterException(pMeta, t);
 							out.attr(ns, key2, value2);
 						}
 					} else /* Map */ {
@@ -697,7 +697,7 @@ public class XmlSerializer extends WriterSerializer {
 				Object value = p.getValue();
 				Throwable t = p.getThrown();
 				if (t != null)
-					session.addBeanGetterWarning(pMeta, t);
+					session.onBeanGetterException(pMeta, t);
 
 				if (session.canIgnoreValue(cMeta, key, value))
 					continue;

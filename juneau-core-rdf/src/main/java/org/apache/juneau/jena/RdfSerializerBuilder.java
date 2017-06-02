@@ -524,6 +524,12 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 		return this;
 	}
 	
+	@Override /* SerializerBuilder */
+	public RdfSerializerBuilder listener(Class<? extends SerializerListener> value) {
+		super.listener(value);
+		return this;
+	}
+
 	@Override /* CoreObjectBuilder */
 	public RdfSerializerBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);

@@ -18,6 +18,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.parser.*;
 import org.apache.juneau.uon.*;
 
 /**
@@ -131,6 +132,12 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	@Override /* ParserBuilder */
 	public UrlEncodingParserBuilder fileCharset(String value) {
 		super.fileCharset(value);
+		return this;
+	}
+
+	@Override /* ParserBuilder */
+	public UrlEncodingParserBuilder listener(Class<? extends ParserListener> value) {
+		super.listener(value);
 		return this;
 	}
 

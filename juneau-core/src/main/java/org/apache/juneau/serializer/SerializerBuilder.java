@@ -557,6 +557,26 @@ public class SerializerBuilder extends CoreObjectBuilder {
 		return property(SERIALIZER_abridged, value);
 	}
 
+	/**
+	 * <b>Configuration property:</b>  Serializer listener.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"Serializer.listener"</js>
+	 * 	<li><b>Data type:</b> <code>Class&lt;? extends SerializerListener&gt;</code>
+	 * 	<li><b>Default:</b> <jk>null</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * Class used to listen for errors and warnings that occur during serialization.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 * @see SerializerContext#SERIALIZER_listener
+	 */
+	public SerializerBuilder listener(Class<? extends SerializerListener> value) {
+		return property(SERIALIZER_listener, value);
+	}
+
 	@Override /* CoreObjectBuilder */
 	public SerializerBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);

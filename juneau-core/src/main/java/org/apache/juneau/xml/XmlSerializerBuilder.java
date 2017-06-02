@@ -350,6 +350,12 @@ public class XmlSerializerBuilder extends SerializerBuilder {
 		return this;
 	}
 
+	@Override /* SerializerBuilder */
+	public XmlSerializerBuilder listener(Class<? extends SerializerListener> value) {
+		super.listener(value);
+		return this;
+	}
+
 	@Override /* CoreObjectBuilder */
 	public XmlSerializerBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);

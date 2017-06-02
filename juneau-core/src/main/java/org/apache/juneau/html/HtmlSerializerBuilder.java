@@ -18,6 +18,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.*;
 
 /**
@@ -330,6 +331,12 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	@Override /* SerializerBuilder */
 	public HtmlSerializerBuilder abridged(boolean value) {
 		super.abridged(value);
+		return this;
+	}
+
+	@Override /* SerializerBuilder */
+	public HtmlSerializerBuilder listener(Class<? extends SerializerListener> value) {
+		super.listener(value);
 		return this;
 	}
 

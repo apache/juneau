@@ -368,7 +368,7 @@ public class RdfSerializer extends WriterSerializer {
 			Object value = bpv.getValue();
 			Throwable t = bpv.getThrown();
 			if (t != null)
-				session.addBeanGetterWarning(pMeta, t);
+				session.onBeanGetterException(pMeta, t);
 
 			if (session.canIgnoreValue(cMeta, key, value))
 				continue;

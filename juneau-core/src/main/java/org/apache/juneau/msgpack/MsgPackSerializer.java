@@ -172,7 +172,7 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 			Object value = p.getValue();
 			Throwable t = p.getThrown();
 			if (t != null)
-				session.addBeanGetterWarning(pMeta, t);
+				session.onBeanGetterException(pMeta, t);
 			else {
 				serializeAnything(session, out, key, null, null, null);
 				serializeAnything(session, out, value, cMeta, key, pMeta);

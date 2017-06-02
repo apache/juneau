@@ -162,6 +162,12 @@ public class PlainTextSerializerBuilder extends SerializerBuilder {
 		return this;
 	}
 
+	@Override /* SerializerBuilder */
+	public PlainTextSerializerBuilder listener(Class<? extends SerializerListener> value) {
+		super.listener(value);
+		return this;
+	}
+
 	@Override /* CoreObjectBuilder */
 	public PlainTextSerializerBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);

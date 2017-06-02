@@ -158,21 +158,21 @@ public class CommonParserTest {
 	//====================================================================================================
 	@Test
 	public void testParserListeners() throws Exception {
-		final List<String> events = new LinkedList<String>();
-		XmlParser p = new XmlParserBuilder().ignoreUnknownBeanProperties(true).build();
-		p.addListener(
-			new ParserListener() {
-				@Override /* ParserListener */
-				public <T> void onUnknownProperty(String propertyName, Class<T> beanClass, T bean, int line, int col) {
-					events.add(propertyName + "," + line + "," + col);
-				}
-			}
-		);
+		XmlParser p = new XmlParserBuilder().ignoreUnknownBeanProperties(true).listener(MyParserListener.class).build();
 
 		String in = "<object><a _type='number'>1</a><unknownProperty _type='string'>foo</unknownProperty><b _type='number'>2</b></object>";
 		p.parse(in, B.class);
-		assertEquals(1, events.size());
+		assertEquals(1, MyParserListener.events.size());
 		// XML parser may or may not support line numbers.
-		assertTrue(events.get(0).startsWith("unknownProperty,"));
+		assertTrue(MyParserListener.events.get(0).startsWith("unknownProperty,"));
+	}
+	
+	public static class MyParserListener extends ParserListener {
+		final static List<String> events = new LinkedList<String>();
+
+		@Override /* ParserListener */
+		public <T> void onUnknownBeanProperty(ParserSession session, String propertyName, Class<T> beanClass, T bean, int line, int col) {
+			events.add(propertyName + "," + line + "," + col);
+		}
 	}
 }

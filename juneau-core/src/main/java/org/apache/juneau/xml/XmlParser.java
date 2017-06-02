@@ -282,7 +282,7 @@ public class XmlParser extends ReaderParser {
 					xmlMeta.getAttrsProperty().add(m, key, key, val);
 				} else {
 					Location l = r.getLocation();
-					onUnknownProperty(session, key, m, l.getLineNumber(), l.getColumnNumber());
+					session.onUnknownProperty(key, m, l.getLineNumber(), l.getColumnNumber());
 				}
 			} else {
 				bpm.set(m, key, val);
@@ -361,7 +361,7 @@ public class XmlParser extends ReaderParser {
 					BeanPropertyMeta pMeta = xmlMeta.getPropertyMeta(currAttr);
 					if (pMeta == null) {
 						Location loc = r.getLocation();
-						onUnknownProperty(session, currAttr, m, loc.getLineNumber(), loc.getColumnNumber());
+						session.onUnknownProperty(currAttr, m, loc.getLineNumber(), loc.getColumnNumber());
 						skipCurrentTag(r);
 					} else {
 						session.setCurrentProperty(pMeta);

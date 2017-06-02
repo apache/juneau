@@ -17,6 +17,7 @@ import static org.apache.juneau.serializer.SerializerContext.*;
 
 import java.io.*;
 import java.lang.reflect.*;
+import java.text.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -67,6 +68,7 @@ public class SerializerSession extends BeanSession {
 	private Writer writer, flushOnlyWriter;
 	private BeanPropertyMeta currentProperty;
 	private ClassMeta<?> currentClass;
+	private final SerializerListener listener;
 
 
 	/**
@@ -97,12 +99,14 @@ public class SerializerSession extends BeanSession {
 	 * @param uriContext The URI context.
 	 * 	Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
 	 */
+	@SuppressWarnings("unchecked")
 	public SerializerSession(SerializerContext ctx, ObjectMap op, Object output, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
 		super(ctx, op, locale, timeZone, mediaType);
 		this.javaMethod = javaMethod;
 		this.output = output;
 		UriResolution uriResolution;
 		UriRelativity uriRelativity;
+		Class<? extends SerializerListener> listenerClass;
 		if (op == null || op.isEmpty()) {
 			maxDepth = ctx.maxDepth;
 			initialDepth = ctx.initialDepth;
@@ -120,6 +124,7 @@ public class SerializerSession extends BeanSession {
 			abridged = ctx.abridged;
 			uriResolution = ctx.uriResolution;
 			uriRelativity = ctx.uriRelativity;
+			listenerClass = ctx.listener;
 		} else {
 			maxDepth = op.getInt(SERIALIZER_maxDepth, ctx.maxDepth);
 			initialDepth = op.getInt(SERIALIZER_initialDepth, ctx.initialDepth);
@@ -137,9 +142,12 @@ public class SerializerSession extends BeanSession {
 			abridged = op.getBoolean(SERIALIZER_abridged, ctx.abridged);
 			uriResolution = op.get(UriResolution.class, SERIALIZER_uriResolution, UriResolution.ROOT_RELATIVE);
 			uriRelativity = op.get(UriRelativity.class, SERIALIZER_uriRelativity, UriRelativity.RESOURCE);
+			listenerClass = op.get(Class.class, SERIALIZER_listener, ctx.listener);
 		}
 
 		uriResolver = new UriResolver(uriResolution, uriRelativity, uriContext == null ? ctx.uriContext : uriContext);
+
+		listener = ClassUtils.newInstance(listenerClass);
 
 		this.indent = initialDepth;
 		if (detectRecursions || isDebug()) {
@@ -435,7 +443,7 @@ public class SerializerSession extends BeanSession {
 			Object o = stack.removeLast().o;
 			Object o2 = set.remove(o);
 			if (o2 == null)
-				addWarning("Couldn't remove object of type ''{0}'' on attribute ''{1}'' from object stack.", o.getClass().getName(), stack);
+				onError(null, "Couldn't remove object of type ''{0}'' on attribute ''{1}'' from object stack.", o.getClass().getName(), stack);
 		}
 		isBottom = false;
 	}
@@ -455,9 +463,24 @@ public class SerializerSession extends BeanSession {
 	 * @param p The bean map entry representing the bean property.
 	 * @param t The throwable that the bean getter threw.
 	 */
-	public void addBeanGetterWarning(BeanPropertyMeta p, Throwable t) {
+	public void onBeanGetterException(BeanPropertyMeta p, Throwable t) {
+		if (listener != null)
+			listener.onBeanGetterException(this, t, p);
 		String prefix = (isDebug() ? getStack(false) + ": " : "");
 		addWarning("{0}Could not call getValue() on property ''{1}'' of class ''{2}'', exception = {3}", prefix, p.getName(), p.getBeanMeta().getClassMeta(), t.getLocalizedMessage());
+	}
+
+	/**
+	 * Logs a warning message.
+	 *
+	 * @param t The throwable that was thrown (if there was one).
+	 * @param msg The warning message.
+	 * @param args Optional {@link MessageFormat}-style arguments.
+	 */
+	public final void onError(Throwable t, String msg, Object... args) {
+		if (listener != null)
+			listener.onError(this, t, MessageFormat.format(msg, args));
+		super.addWarning(msg, args);
 	}
 
 	/**

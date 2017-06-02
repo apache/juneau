@@ -36,10 +36,12 @@ public class ParserSession extends BeanSession {
 	private final Method javaMethod;
 	private final Object outer;
 	private final Object input;
+	private String inputString;
 	private InputStream inputStream;
 	private Reader reader, noCloseReader;
 	private BeanPropertyMeta currentProperty;
 	private ClassMeta<?> currentClass;
+	private final ParserListener listener;
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -73,22 +75,31 @@ public class ParserSession extends BeanSession {
 	 * If <jk>null</jk>, then the timezone defined on the context is used.
 	 * @param mediaType The session media type (e.g. <js>"application/json"</js>).
 	 */
+	@SuppressWarnings("unchecked")
 	public ParserSession(ParserContext ctx, ObjectMap op, Object input, Method javaMethod, Object outer, Locale locale, TimeZone timeZone, MediaType mediaType) {
 		super(ctx, op, locale, timeZone, mediaType);
+		Class<? extends ParserListener> listenerClass;
 		if (op == null || op.isEmpty()) {
 			trimStrings = ctx.trimStrings;
 			strict = ctx.strict;
 			inputStreamCharset = ctx.inputStreamCharset;
 			fileCharset = ctx.fileCharset;
+			listenerClass = ctx.listener;
 		} else {
 			trimStrings = op.getBoolean(PARSER_trimStrings, ctx.trimStrings);
 			strict = op.getBoolean(PARSER_strict, ctx.strict);
 			inputStreamCharset = op.getString(PARSER_inputStreamCharset, ctx.inputStreamCharset);
 			fileCharset = op.getString(PARSER_fileCharset, ctx.fileCharset);
+			listenerClass = op.get(Class.class, PARSER_listener, ctx.listener);
 		}
 		this.input = input;
 		this.javaMethod = javaMethod;
 		this.outer = outer;
+		try {
+			this.listener = listenerClass == null ? null : listenerClass.newInstance();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	/**
@@ -99,21 +110,38 @@ public class ParserSession extends BeanSession {
 	 * @throws ParseException If object could not be converted to an input stream.
 	 */
 	public InputStream getInputStream() throws ParseException {
-		if (input == null)
-			return null;
-		if (input instanceof InputStream)
-			return (InputStream)input;
-		if (input instanceof byte[])
-			return new ByteArrayInputStream((byte[])input);
-		if (input instanceof String)
-			return new ByteArrayInputStream(StringUtils.fromHex((String)input));
-		if (input instanceof File)
-			try {
+		try {
+			if (input == null)
+				return null;
+			if (input instanceof InputStream) {
+				if (isDebug()) {
+					byte[] b = IOUtils.readBytes((InputStream)input, 1024);
+					inputString = StringUtils.toHex(b);
+					return new ByteArrayInputStream(b);
+				}
+				return (InputStream)input;
+			}
+			if (input instanceof byte[]) {
+				if (isDebug())
+					inputString = StringUtils.toHex((byte[])input);
+				return new ByteArrayInputStream((byte[])input);
+			}
+			if (input instanceof String) {
+				inputString = (String)input;
+				return new ByteArrayInputStream(StringUtils.fromHex((String)input));
+			}
+			if (input instanceof File) {
+				if (isDebug()) {
+					byte[] b = IOUtils.readBytes((File)input);
+					inputString = StringUtils.toHex(b);
+					return new ByteArrayInputStream(b);
+				}
 				inputStream = new FileInputStream((File)input);
 				return inputStream;
-			} catch (FileNotFoundException e) {
-				throw new ParseException(e);
 			}
+		} catch (IOException e) {
+			throw new ParseException(e);
+		}
 		throw new ParseException("Cannot convert object of type {0} to an InputStream.", input.getClass().getName());
 	}
 
@@ -128,9 +156,15 @@ public class ParserSession extends BeanSession {
 	public Reader getReader() throws Exception {
 		if (input == null)
 			return null;
-		if (input instanceof Reader)
+		if (input instanceof Reader) {
+			if (isDebug()) {
+				inputString = IOUtils.read((Reader)input);
+				return new StringReader(inputString);
+			}
 			return (Reader)input;
+		}
 		if (input instanceof CharSequence) {
+			inputString = input.toString();
 			if (reader == null)
 				reader = new ParserReader((CharSequence)input);
 			return reader;
@@ -148,6 +182,10 @@ public class ParserSession extends BeanSession {
 				}
 				noCloseReader = new InputStreamReader(is, cd);
 			}
+			if (isDebug()) {
+				inputString = IOUtils.read(noCloseReader);
+				return new StringReader(inputString);
+			}
 			return noCloseReader;
 		}
 		if (input instanceof File) {
@@ -161,6 +199,10 @@ public class ParserSession extends BeanSession {
 					cd.onUnmappableCharacter(CodingErrorAction.REPLACE);
 				}
 				reader = new InputStreamReader(new FileInputStream((File)input), cd);
+			}
+			if (isDebug()) {
+				inputString = IOUtils.read(reader);
+				return new StringReader(inputString);
 			}
 			return reader;
 		}
@@ -341,6 +383,37 @@ public class ParserSession extends BeanSession {
 
 		// Last resort, resolve using the session registry.
 		return getBeanRegistry().getClassMeta(typeName);
+	}
+
+	/**
+	 * Method that gets called when an unknown bean property name is encountered.
+	 *
+	 * @param propertyName The unknown bean property name.
+	 * @param beanMap The bean that doesn't have the expected property.
+	 * @param line The line number where the property was found.  <code>-1</code> if line numbers are not available.
+	 * @param col The column number where the property was found.  <code>-1</code> if column numbers are not available.
+	 * @throws ParseException Automatically thrown if {@link BeanContext#BEAN_ignoreUnknownBeanProperties} setting
+	 * 	on this parser is <jk>false</jk>
+	 * @param <T> The class type of the bean map that doesn't have the expected property.
+	 */
+	public <T> void onUnknownProperty(String propertyName, BeanMap<T> beanMap, int line, int col) throws ParseException {
+		if (propertyName.equals(getBeanTypePropertyName(beanMap.getClassMeta())))
+			return;
+		if (! isIgnoreUnknownBeanProperties())
+			throw new ParseException(this, "Unknown property ''{0}'' encountered while trying to parse into class ''{1}''", propertyName, beanMap.getClassMeta());
+		if (listener != null)
+			listener.onUnknownBeanProperty(this, propertyName, beanMap.getClassMeta().getInnerClass(), beanMap.getBean(), line, col);
+	}
+
+	/**
+	 * Returns the input to this parser as a plain string.
+	 * <p>
+	 * This method only returns a value if {@link BeanContext#BEAN_debug} is enabled.
+	 *
+	 * @return The input as a string, or <jk>null</jk> if debug mode not enabled.
+	 */
+	public String getInputAsString() {
+		return inputString;
 	}
 
 	/**
