@@ -35,19 +35,20 @@ public class RemoteMethodArg {
 	/**
 	 * Constructor.
 	 *
-	 * @param name The argument name.  Can be blank.
+	 * @param name The argument name pulled from name().
+	 * @param name2 The argument name pulled from value().
 	 * @param index The zero-based index of the argument on the Java method.
 	 * @param skipIfNE The value is skipped if it's null/empty.
 	 * @param serializer The class to use for serializing headers, query paramters, form-data parameters, and
 	 * 	path variables.
 	 * 	If {@link UrlEncodingSerializer}, then the url-encoding serializer defined on the client will be used.
 	 */
-	protected RemoteMethodArg(String name, int index, boolean skipIfNE, Class<? extends PartSerializer> serializer) {
-		this.name = name;
+	protected RemoteMethodArg(String name, String name2, int index, boolean skipIfNE, Class<? extends PartSerializer> serializer) {
+		this.name = name.isEmpty() ? name2 : name;
 		this.index = index;
 		this.skipIfNE = skipIfNE;
 		try {
-			this.serializer = (serializer == UrlEncodingSerializer.class ? null : serializer.newInstance());
+			this.serializer = (serializer == PartSerializer.class ? null : serializer.newInstance());
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

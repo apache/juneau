@@ -58,6 +58,7 @@ import org.junit.runners.Suite.*;
 	PathVariableTest.class,
 	PropertiesTest.class,
 	QueryTest.class,
+	RequestBeanProxyTest.class,
 	RestClientTest.class,
 	RestUtilsTest.class,
 	SerializersTest.class,

@@ -205,6 +205,31 @@ public final class ArrayUtils {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if the specified object is an array.
+	 * @param array The array to test.
+	 * @return <jk>true</jk> if the specified object is an array.
+	 */
+	public static boolean isArray(Object array) {
+		return array != null && array.getClass().isArray();
+	}
+
+	/**
+	 * Converts the specified array to an <code>ArrayList</code>
+	 * 
+	 * @param array The array to convert.
+	 * @param componentType The type of objects in the array.
+	 * 	It must match the actual component type in the array.
+	 * @return A new {@link ArrayList}
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> List<T> toList(Object array, Class<T> componentType) {
+		List<T> l = new ArrayList<T>(Array.getLength(array));
+		for (int i = 0; i < Array.getLength(array); i++)
+			l.add((T)Array.get(array, i));
+		return l;
+	}
+
+	/**
 	 * Shortcut for calling <code>myList.toArray(new T[myList.size()]);</code>
 	 *
 	 * @param c The collection being converted to an array.
@@ -227,14 +252,16 @@ public final class ArrayUtils {
 	 *
 	 * @param array The array to copy into a list.
 	 * @param list The list to copy the values into.
+	 * @return The same list passed in.
 	 */
 	@SuppressWarnings({"unchecked","rawtypes"})
-	public static void copyToList(Object array, List list) {
+	public static List copyToList(Object array, List list) {
 		if (array != null) {
 			int length = Array.getLength(array);
 			for (int i = 0; i < length; i++)
 				list.add(Array.get(array, i));
 		}
+		return list;
 	}
 
 	/**

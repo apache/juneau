@@ -6231,7 +6231,9 @@
 	<ja>@BeanProperty</ja>(<js>"foo"</js>)
 				</p>
 			<li>Fixed a race condition in ClassMeta.
-			
+			<li><jsf>URLENC_paramFormat</jsf> has been moved to {@link org.apache.juneau.uon.UonSerializerContext#UON_paramFormat}, 
+				and the UON/URL-Encoding serializers will now always serialize all values as plain text.
+				<br>This means that arrays and maps are converted to simple comma-delimited lists.
 		</ul>
 
 		<h6 class='topic'>org.apache.juneau.rest</h6>
@@ -6463,11 +6465,11 @@
 				<br><ja>@Remoteable</ja> annotation has been moved to this package.
 			<li>Updated doc: <a class='doclink' href='#Remoteable'>6 - Remoteable Services</a>
 			<li>New doc: <a class='doclink' href='#Remoteable.3rdParty'>6.1 -  Interface proxies against 3rd-party REST interfaces</a>
-			<li>New URL-encoding serializer setting: {@link org.apache.juneau.urlencoding.UrlEncodingSerializerContext#URLENC_paramFormat}
+			<li>New URL-encoding serializer setting: <code><del>UrlEncodingSerializerContext.URLENC_paramFormat</del></code>.
 			<li>New methods on {@link org.apache.juneau.urlencoding.UrlEncodingSerializerBuilder}:
 			<ul>
 				<li>{@link org.apache.juneau.urlencoding.UrlEncodingSerializerBuilder#paramFormat(String) paramFormat(String)}	
-				<li>{@link org.apache.juneau.urlencoding.UrlEncodingSerializerBuilder#plainTextParams() plainTextParams()}	
+				<li><code><del>UrlEncodingSerializerBuilder.plainTextParams()</del></code>	
 			</ul> 		
 		</ul>
 		
@@ -6626,7 +6628,7 @@
 				<ul>
 					<li>{@link org.apache.juneau.rest.client.RestClientBuilder#executorService(ExecutorService,boolean) executorService(ExecutorService,boolean)}
 					<li>{@link org.apache.juneau.rest.client.RestClientBuilder#paramFormat(String) paramFormat(ExecutorService,boolean)}
-					<li>{@link org.apache.juneau.rest.client.RestClientBuilder#plainTextParams() plainTextParams()}
+					<li><code><del>RestClientBuilder.plainTextParams()</del></code>
 					<li>{@link org.apache.juneau.rest.client.RestClientBuilder#noTrace() noTrace()} - Adds a <code>No-Trace: true</code> header on all requests to prevent
 						the servlet from logging errors.
 						<br>Useful for testing scenarios when you don't want the console to end up showing errors done on purpose.

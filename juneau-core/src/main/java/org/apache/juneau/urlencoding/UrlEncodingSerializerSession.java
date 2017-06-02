@@ -27,7 +27,7 @@ import org.apache.juneau.uon.*;
  */
 public class UrlEncodingSerializerSession extends UonSerializerSession {
 
-	private final boolean expandedParams, plainTextParams;
+	private final boolean expandedParams;
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -51,10 +51,8 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 		super(ctx, encode, op, output, javaMethod, locale, timeZone, mediaType, uriContext);
 		if (op == null || op.isEmpty()) {
 			expandedParams = ctx.expandedParams;
-			plainTextParams = ctx.plainTextParams;
 		} else {
 			expandedParams = op.getBoolean(UrlEncodingContext.URLENC_expandedParams, false);
-			plainTextParams = op.getString(UrlEncodingSerializerContext.URLENC_paramFormat, "UON").equals("PLAINTEXT");
 		}
 	}
 
@@ -90,13 +88,5 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 				return true;
 		}
 		return false;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the {@link UrlEncodingSerializerContext#URLENC_paramFormat} is <js>"PLAINTEXT"</js>.
-	 * @return <jk>true</jk> if the {@link UrlEncodingSerializerContext#URLENC_paramFormat} is <js>"PLAINTEXT"</js>.
-	 */
-	protected boolean plainTextParams() {
-		return plainTextParams;
 	}
 }

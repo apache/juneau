@@ -29,8 +29,8 @@ public class RemoteableMethodMeta {
 
 	private final String httpMethod;
 	private final String url;
-	private final RemoteMethodArg[] pathArgs, queryArgs, headerArgs, formDataArgs;
-	private final Integer[] requestBeanArgs, otherArgs;
+	private final RemoteMethodArg[] pathArgs, queryArgs, headerArgs, formDataArgs, requestBeanArgs;
+	private final Integer[] otherArgs;
 	private final Integer bodyArg;
 
 	/**
@@ -47,7 +47,7 @@ public class RemoteableMethodMeta {
 		this.queryArgs = b.queryArgs.toArray(new RemoteMethodArg[b.queryArgs.size()]);
 		this.formDataArgs = b.formDataArgs.toArray(new RemoteMethodArg[b.formDataArgs.size()]);
 		this.headerArgs = b.headerArgs.toArray(new RemoteMethodArg[b.headerArgs.size()]);
-		this.requestBeanArgs = b.requestBeanArgs.toArray(new Integer[b.requestBeanArgs.size()]);
+		this.requestBeanArgs = b.requestBeanArgs.toArray(new RemoteMethodArg[b.requestBeanArgs.size()]);
 		this.otherArgs = b.otherArgs.toArray(new Integer[b.otherArgs.size()]);
 		this.bodyArg = b.bodyArg;
 	}
@@ -58,9 +58,9 @@ public class RemoteableMethodMeta {
 			pathArgs = new LinkedList<RemoteMethodArg>(),
 			queryArgs = new LinkedList<RemoteMethodArg>(),
 			headerArgs = new LinkedList<RemoteMethodArg>(),
-			formDataArgs = new LinkedList<RemoteMethodArg>();
+			formDataArgs = new LinkedList<RemoteMethodArg>(),
+			requestBeanArgs = new LinkedList<RemoteMethodArg>();
 		private List<Integer>
-			requestBeanArgs = new LinkedList<Integer>(),
 			otherArgs = new LinkedList<Integer>();
 		private Integer bodyArg;
 
@@ -90,28 +90,28 @@ public class RemoteableMethodMeta {
 					Class<?> ca = a.annotationType();
 					if (ca == Path.class) {
 						Path p = (Path)a;
-						annotated = pathArgs.add(new RemoteMethodArg(p.value(), index, false, p.serializer()));
+						annotated = pathArgs.add(new RemoteMethodArg(p.name(), p.value(), index, false, p.serializer()));
 					} else if (ca == Query.class) {
 						Query q = (Query)a;
-						annotated = queryArgs.add(new RemoteMethodArg(q.value(), index, false, q.serializer()));
+						annotated = queryArgs.add(new RemoteMethodArg(q.name(), q.value(), index, q.skipIfEmpty(), q.serializer()));
 					} else if (ca == QueryIfNE.class) {
 						QueryIfNE q = (QueryIfNE)a;
-						annotated = queryArgs.add(new RemoteMethodArg(q.value(), index, true, q.serializer()));
+						annotated = queryArgs.add(new RemoteMethodArg(q.name(), q.value(), index, true, q.serializer()));
 					} else if (ca == FormData.class) {
 						FormData f = (FormData)a;
-						annotated = formDataArgs.add(new RemoteMethodArg(f.value(), index, false, f.serializer()));
+						annotated = formDataArgs.add(new RemoteMethodArg(f.name(), f.value(), index, f.skipIfEmpty(), f.serializer()));
 					} else if (ca == FormDataIfNE.class) {
 						FormDataIfNE f = (FormDataIfNE)a;
-						annotated = formDataArgs.add(new RemoteMethodArg(f.value(), index, true, f.serializer()));
+						annotated = formDataArgs.add(new RemoteMethodArg(f.name(), f.value(), index, true, f.serializer()));
 					} else if (ca == Header.class) {
 						Header h = (Header)a;
-						annotated = headerArgs.add(new RemoteMethodArg(h.value(), index, false, h.serializer()));
+						annotated = headerArgs.add(new RemoteMethodArg(h.name(), h.value(), index, h.skipIfEmpty(), h.serializer()));
 					} else if (ca == HeaderIfNE.class) {
 						HeaderIfNE h = (HeaderIfNE)a;
-						annotated = headerArgs.add(new RemoteMethodArg(h.value(), index, true, h.serializer()));
+						annotated = headerArgs.add(new RemoteMethodArg(h.name(), h.value(), index, true, h.serializer()));
 					} else if (ca == RequestBean.class) {
-						annotated = true;
-						requestBeanArgs.add(index);
+						RequestBean rb = (RequestBean)a;
+						annotated = requestBeanArgs.add(new RemoteMethodArg("", "", index, false, rb.serializer()));
 					} else if (ca == Body.class) {
 						annotated = true;
 						if (bodyArg == null)
@@ -182,7 +182,7 @@ public class RemoteableMethodMeta {
 	 * Returns the {@link RequestBean @RequestBean} annotated arguments on this Java method.
 	 * @return A list of zero-indexed argument indices.
 	 */
-	public Integer[] getRequestBeanArgs() {
+	public RemoteMethodArg[] getRequestBeanArgs() {
 		return requestBeanArgs;
 	}
 

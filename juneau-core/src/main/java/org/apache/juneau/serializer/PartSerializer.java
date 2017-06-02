@@ -31,6 +31,7 @@ import org.apache.juneau.urlencoding.*;
  * 	<li>{@link Header#serializer()}
  * 	<li>{@link HeaderIfNE#serializer()}
  * 	<li>{@link Path#serializer()}
+ * 	<li>{@link RequestBean#serializer()}
  * 	<li><code>RestClientBuilder.partSerializer(Class)</code>
  * </ul>
  * <p>

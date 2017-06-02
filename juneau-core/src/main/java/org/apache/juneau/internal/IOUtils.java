@@ -53,6 +53,36 @@ public final class IOUtils {
 	}
 
 	/**
+	 * Reads the specified object to a <code>String</code>.
+	 * <p>
+	 * Can be any of the following object types:
+	 * <ul>
+	 * 	<li>{@link CharSequence}
+	 * 	<li>{@link File}
+	 * 	<li>{@link Reader}
+	 * 	<li>{@link InputStream}
+	 * 	<li><code><jk>byte</jk>[]</code>
+	 * </ul>
+	 *
+	 * @param o The object to read.
+	 * @return The object serialized to a string, or <jk>null</jk> if it wasn't a supported type.
+	 * @throws IOException
+	 */
+	public static String read(Object o) throws IOException {
+		if (o instanceof CharSequence)
+			return o.toString();
+		if (o instanceof File)
+			return read((File)o);
+		if (o instanceof Reader)
+			return read((Reader)o);
+		if (o instanceof InputStream)
+			return read((InputStream)o);
+		if (o instanceof byte[])
+			return read(new ByteArrayInputStream((byte[])o));
+		return null;
+	}
+
+	/**
 	 * Writes the contents of the specified <code>Reader</code> to the specified file.
 	 *
 	 * @param out The file to write the output to.

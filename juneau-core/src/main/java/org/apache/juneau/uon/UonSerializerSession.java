@@ -32,7 +32,8 @@ public class UonSerializerSession extends SerializerSession {
 
 	private final boolean
 		encodeChars,
-		addBeanTypeProperties;
+		addBeanTypeProperties,
+		plainTextParams;
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -57,9 +58,11 @@ public class UonSerializerSession extends SerializerSession {
 		if (op == null || op.isEmpty()) {
 			encodeChars = encode == null ? ctx.encodeChars : encode;
 			addBeanTypeProperties = ctx.addBeanTypeProperties;
+			plainTextParams = ctx.plainTextParams;
 		} else {
 			encodeChars = encode == null ? op.getBoolean(UON_encodeChars, ctx.encodeChars) : encode;
 			addBeanTypeProperties = op.getBoolean(MSGPACK_addBeanTypeProperties, ctx.addBeanTypeProperties);
+			plainTextParams = op.getString(UonSerializerContext.UON_paramFormat, "UON").equals("PLAINTEXT");
 		}
 	}
 
@@ -82,11 +85,19 @@ public class UonSerializerSession extends SerializerSession {
 		return addBeanTypeProperties;
 	}
 
+	/**
+	 * Returns <jk>true</jk> if the {@link UonSerializerContext#UON_paramFormat} is <js>"PLAINTEXT"</js>.
+	 * @return <jk>true</jk> if the {@link UonSerializerContext#UON_paramFormat} is <js>"PLAINTEXT"</js>.
+	 */
+	public boolean isPlainTextParams() {
+		return plainTextParams;
+	}
+
 	@Override /* SerializerSession */
 	public final UonWriter getWriter() throws Exception {
 		Object output = getOutput();
 		if (output instanceof UonWriter)
 			return (UonWriter)output;
-		return new UonWriter(this, super.getWriter(), isUseWhitespace(), isEncodeChars(), isTrimStrings(), getUriResolver());
+		return new UonWriter(this, super.getWriter(), isUseWhitespace(), isEncodeChars(), isTrimStrings(), isPlainTextParams(), getUriResolver());
 	}
 }

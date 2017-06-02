@@ -28,6 +28,7 @@ import org.apache.http.client.config.*;
 import org.apache.http.client.entity.*;
 import org.apache.http.client.methods.*;
 import org.apache.http.client.utils.*;
+import org.apache.http.entity.*;
 import org.apache.http.impl.client.*;
 import org.apache.http.util.*;
 import org.apache.juneau.*;
@@ -37,6 +38,7 @@ import org.apache.juneau.internal.ObjectUtils;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -191,16 +193,22 @@ public final class RestCall {
 				uriBuilder.addParameter(name, partSerializer.serialize(PartType.QUERY, value));
 		} else if (value instanceof NameValuePairs) {
 			for (NameValuePair p : (NameValuePairs)value)
-				query(p.getName(), p.getValue(), skipIfEmpty, partSerializer);
-		} else if (value instanceof String) {
-			String s = value.toString();
-			if (! isEmpty(s))
-				uriBuilder.setCustomQuery(s);
+				query(p.getName(), p.getValue(), skipIfEmpty, UrlEncodingSerializer.DEFAULT_PLAINTEXT);
 		} else if (value instanceof Map) {
 			for (Map.Entry<String,Object> p : ((Map<String,Object>) value).entrySet())
 				query(p.getKey(), p.getValue(), skipIfEmpty, partSerializer);
-		} else if (isBean(value)){
+		} else if (isBean(value)) {
 			return query(name, toBeanMap(value), skipIfEmpty, partSerializer);
+		} else if (value instanceof Reader) {
+			try {
+				uriBuilder.setCustomQuery(IOUtils.read(value));
+			} catch (IOException e) {
+				throw new RestCallException(e);
+			}
+		} else if (value instanceof CharSequence) {
+			String s = value.toString();
+			if (! isEmpty(s))
+				uriBuilder.setCustomQuery(s);
 		} else {
 			throw new FormattedRuntimeException("Invalid name ''{0}'' passed to query(name,value,skipIfEmpty) for data type ''{1}''", name, ClassUtils.getReadableClassNameForObject(value));
 		}
@@ -291,13 +299,21 @@ public final class RestCall {
 				formData.add(new SerializedNameValuePair(name, value, partSerializer));
 		} else if (value instanceof NameValuePairs) {
 			for (NameValuePair p : (NameValuePairs)value)
-				if (! (isEmpty(p.getValue()) && skipIfEmpty))
+				if (p.getValue() != null && ! (isEmpty(p.getValue()) && skipIfEmpty))
 					formData.add(p);
 		} else if (value instanceof Map) {
 			for (Map.Entry<String,Object> p : ((Map<String,Object>) value).entrySet())
 				formData(p.getKey(), p.getValue(), skipIfEmpty, partSerializer);
 		} else if (isBean(value)) {
 			return formData(name, toBeanMap(value), skipIfEmpty, partSerializer);
+		} else if (value instanceof Reader) {
+			contentType("application/x-www-form-urlencoded");
+			input(value);
+		} else if (value instanceof CharSequence) {
+			try {
+				contentType("application/x-www-form-urlencoded");
+				input(new StringEntity(value.toString()));
+			} catch (UnsupportedEncodingException e) {}
 		} else {
 			throw new FormattedRuntimeException("Invalid name ''{0}'' passed to formData(name,value,skipIfEmpty) for data type ''{1}''", name, ClassUtils.getReadableClassNameForObject(value));
 		}
@@ -389,13 +405,13 @@ public final class RestCall {
 			uriBuilder.setPath(newPath);
 		} else if (value instanceof NameValuePairs) {
 			for (NameValuePair p : (NameValuePairs)value)
-				path(p.getName(), p.getValue());
+				path(p.getName(), p.getValue(), partSerializer);
 		} else if (value instanceof Map) {
 			for (Map.Entry<String,Object> p : ((Map<String,Object>) value).entrySet())
-				path(p.getKey(), p.getValue());
+				path(p.getKey(), p.getValue(), partSerializer);
 		} else if (isBean(value)) {
-			return path(name, toBeanMap(value));
-		} else {
+			return path(name, toBeanMap(value), partSerializer);
+		} else if (value != null) {
 			throw new FormattedRuntimeException("Invalid name ''{0}'' passed to path(name,value) for data type ''{1}''", name, ClassUtils.getReadableClassNameForObject(value));
 		}
 		return this;
@@ -454,6 +470,7 @@ public final class RestCall {
 	public RestCall input(final Object input) throws RestCallException {
 		this.input = input;
 		this.hasInput = true;
+		this.formData = null;
 		return this;
 	}
 
@@ -508,7 +525,7 @@ public final class RestCall {
 				request.setHeader(name, partSerializer.serialize(PartType.HEADER, value));
 		} else if (value instanceof NameValuePairs) {
 			for (NameValuePair p : (NameValuePairs)value)
-				header(p.getName(), p.getValue(), skipIfEmpty, partSerializer);
+				header(p.getName(), p.getValue(), skipIfEmpty, UrlEncodingSerializer.DEFAULT_PLAINTEXT);
 		} else if (value instanceof Map) {
 			for (Map.Entry<String,Object> p : ((Map<String,Object>) value).entrySet())
 				header(p.getKey(), p.getValue(), skipIfEmpty, partSerializer);

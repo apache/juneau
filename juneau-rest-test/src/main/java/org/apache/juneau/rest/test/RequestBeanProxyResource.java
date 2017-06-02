@@ -10,44 +10,41 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.remoteable;
+package org.apache.juneau.rest.test;
 
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.*;
 
-import java.lang.annotation.*;
+import java.io.*;
 
-import org.apache.juneau.serializer.*;
-import org.apache.juneau.urlencoding.*;
+import org.apache.juneau.microservice.*;
+import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.annotation.*;
 
 /**
- * Identical to {@link FormData @FormData} except skips values if they're null/blank.
+ * Validates the functionality of <ja>@RequestBeans</ja>.
  */
-@Documented
-@Target({PARAMETER,FIELD,METHOD})
-@Retention(RUNTIME)
-@Inherited
-public @interface FormDataIfNE {
+@RestResource(
+	path="/testRequestBeanProxy"
+)
+@SuppressWarnings("serial")
+public class RequestBeanProxyResource extends ResourceJena {
 
-	/**
-	 * The form post parameter name.
-	 * @see FormData#name()
-	 */
-	String name() default "";
+	@RestMethod(name="GET", path="/echoQuery")
+	public Reader echoQuery(RestRequest req) throws Exception {
+		return new StringReader(req.getQuery().toString(true));
+	}
 
-	/**
-	 * A synonym for {@link #name()}.
-	 * @see FormData#value()
-	 */
-	String value() default "";
+	@RestMethod(name="POST", path="/echoFormData")
+	public Reader echoFormData(RestRequest req) throws Exception {
+		return new StringReader(req.getFormData().toString(true));
+	}
 
-	/**
-	 * Specifies the {@link PartSerializer} class used for serializing values to strings.
-	 * <p>
-	 * The default value defaults to the using the part serializer defined on the {@link RequestBean} annotation,
-	 * 	then on the client which by default is {@link UrlEncodingSerializer}.
-	 * <p>
-	 * This annotation is provided to allow values to be custom serialized.
-	 */
-	Class<? extends PartSerializer> serializer() default PartSerializer.class;
+	@RestMethod(name="GET", path="/echoHeaders")
+	public Reader echoHeaders(RestRequest req) throws Exception {
+		return new StringReader(req.getHeaders().subset("a,b,c,d,e,f,g,h,i,a1,a2,a3,a4,b1,b2,b3,b4,c1,c2,c3,c4").toString(true));
+	}
+
+	@RestMethod(name="GET", path="/echoPath/*")
+	public Reader echoPath(RestRequest req) throws Exception {
+		return new StringReader(req.getPathMatch().getRemainder());
+	}
 }

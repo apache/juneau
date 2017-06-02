@@ -31,24 +31,23 @@ public @interface QueryIfNE {
 
 	/**
 	 * The query parameter name.
-	 * <p>
-	 * A value of <js>"*"</js> indicates the value should be serialized as name/value pairs and is applicable
-	 * for the following data types:
-	 * <ul>
-	 * 	<li><code>String</code> - A complete query string.
-	 * 	<li><code>NameValuePairs</code>
-	 * 	<li><code>Map&lt;String,Object&gt;</code>
-	 * 	<li>A bean
-	 * </ul>
+	 * @see Query#name()
 	 */
-	String value() default "*";
+	String name() default "";
+
+	/**
+	 * A synonym for {@link #name()}.
+	 * @see Query#value()
+	 */
+	String value() default "";
 
 	/**
 	 * Specifies the {@link PartSerializer} class used for serializing values to strings.
 	 * <p>
-	 * The default serializer converters values to UON notation.
+	 * The default value defaults to the using the part serializer defined on the {@link RequestBean} annotation,
+	 * 	then on the client which by default is {@link UrlEncodingSerializer}.
 	 * <p>
 	 * This annotation is provided to allow values to be custom serialized.
 	 */
-	Class<? extends PartSerializer> serializer() default UrlEncodingSerializer.class;
+	Class<? extends PartSerializer> serializer() default PartSerializer.class;
 }

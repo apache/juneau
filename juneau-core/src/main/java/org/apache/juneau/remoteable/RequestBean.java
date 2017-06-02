@@ -17,6 +17,9 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.serializer.*;
+import org.apache.juneau.urlencoding.*;
+
 /**
  * Annotation applied to Java method arguments of interface proxies to denote a bean with remoteable annotations.
  * <p>
@@ -82,4 +85,15 @@ import java.lang.annotation.*;
 @Target(PARAMETER)
 @Retention(RUNTIME)
 @Inherited
-public @interface RequestBean {}
+public @interface RequestBean {
+
+	/**
+	 * Specifies the {@link PartSerializer} class used for serializing values to strings.
+	 * <p>
+	 * The default value defaults to the using the part serializer defined on the client which by default is
+	 * 	{@link UrlEncodingSerializer}.
+	 * <p>
+	 * This annotation is provided to allow values to be custom serialized.
+	 */
+	Class<? extends PartSerializer> serializer() default PartSerializer.class;
+}

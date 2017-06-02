@@ -467,12 +467,12 @@
 		<p>
 			Another useful feature is the {@link org.apache.juneau.annotation.Bean#propertyNamer()} annotation that allows you to plug in your own
 				logic for determining bean property names.<br>
-			The {@link org.apache.juneau.PropertyNamerDashedLC} is an example of an alternate property namer.
+			The {@link org.apache.juneau.PropertyNamerDLC} is an example of an alternate property namer.
 			It converts bean property names to lowercase-dashed format.
 		</p>
 		<h6 class='figure'>Example:</h6>
 		<p class='bcode'>	
-	<ja>@Bean</ja>(propertyNamer=PropertyNamerDashedLC.<jk>class</jk>)
+	<ja>@Bean</ja>(propertyNamer=PropertyNamerDLC.<jk>class</jk>)
 	<jk>public class</jk> Person {
 		...
 		</p>

@@ -19,6 +19,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.Date;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.urlencoding.*;
 
@@ -201,6 +202,28 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	public <T> T get(String name, Type type, Type...args) throws ParseException {
 		String h = getFirst(name);
 		return parser.parsePart(h, type, args);
+	}
+
+	/**
+	 * Returns a copy of this object, but only with the specified header names copied.
+	 * @param headers The headers to include in the copy.
+	 * @return A new headers object.
+	 */
+	public RequestHeaders subset(String...headers) {
+		RequestHeaders rh2 = new RequestHeaders().setParser(parser).setBeanSession(beanSession).setQueryParams(queryParams);
+		for (String h : headers)
+			if (containsKey(h))
+				rh2.put(h, get(h));
+		return rh2;
+	}
+
+	/**
+	 * Same as {@link #subset(String...)}, but allows you to specify header names as a comma-delimited list.
+	 * @param headers The headers to include in the copy.
+	 * @return A new headers object.
+	 */
+	public RequestHeaders subset(String headers) {
+		return subset(StringUtils.split(headers, ','));
 	}
 
 	/**
@@ -670,5 +693,25 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 */
 	public Warning getWarning() {
 		return Warning.forString(getFirst("Warning"));
+	}
+
+	/**
+	 * Converts the headers to a readable string.
+	 *
+	 * @param sorted Sort the headers by name.
+	 * @return A JSON string containing the contents of the headers.
+	 */
+	public String toString(boolean sorted) {
+		Map<String,Object> m = (sorted ? new TreeMap<String,Object>() : new LinkedHashMap<String,Object>());
+		for (Map.Entry<String,String[]> e : this.entrySet()) {
+			String[] v = e.getValue();
+			m.put(e.getKey(), v.length == 1 ? v[0] : v);
+		}
+		return JsonSerializer.DEFAULT_LAX.toString(m);
+	}
+
+	@Override /* Object */
+	public String toString() {
+		return toString(false);
 	}
 }

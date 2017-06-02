@@ -29,7 +29,7 @@ import org.apache.juneau.serializer.*;
 public final class UonWriter extends SerializerWriter {
 
 	private final UonSerializerSession session;
-	private final boolean encodeChars;
+	private final boolean encodeChars, plainTextParams;
 
 	// Characters that do not need to be URL-encoded in strings.
 	private static final AsciiSet unencodedChars = new AsciiSet("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789;/?:@-_.!*'$(),~=");
@@ -53,12 +53,14 @@ public final class UonWriter extends SerializerWriter {
 	 * @param useWhitespace If <jk>true</jk>, tabs will be used in output.
 	 * @param encodeChars If <jk>true</jk>, special characters should be encoded.
 	 * @param trimStrings If <jk>true</jk>, strings should be trimmed before they're serialized.
+	 * @param plainTextParams If <jk>true</jk>, don't use UON notation for values.
 	 * @param uriResolver The URI resolver for resolving URIs to absolute or root-relative form.
 	 */
-	protected UonWriter(UonSerializerSession session, Writer out, boolean useWhitespace, boolean encodeChars, boolean trimStrings, UriResolver uriResolver) {
+	protected UonWriter(UonSerializerSession session, Writer out, boolean useWhitespace, boolean encodeChars, boolean trimStrings, boolean plainTextParams, UriResolver uriResolver) {
 		super(out, useWhitespace, trimStrings, '\'', uriResolver);
 		this.session = session;
 		this.encodeChars = encodeChars;
+		this.plainTextParams = plainTextParams;
 	}
 
 	/**
@@ -66,11 +68,10 @@ public final class UonWriter extends SerializerWriter {
 	 *
 	 * @param o The object being serialized.
 	 * @param isTopAttrName If this is a top-level attribute name we're serializing.
-	 * @param plainTextParams This is a top-level name or parameter we're serializing and the parameter format is PLAINTEXT.
 	 * @return This object (for method chaining).
 	 * @throws IOException Should never happen.
 	 */
-	public final UonWriter appendObject(Object o, boolean isTopAttrName, boolean plainTextParams) throws IOException {
+	public final UonWriter appendObject(Object o, boolean isTopAttrName) throws IOException {
 
 		if (o instanceof Boolean)
 			return appendBoolean(o);
@@ -164,7 +165,7 @@ public final class UonWriter extends SerializerWriter {
 	 */
 	@Override
 	public SerializerWriter appendUri(Object uri) throws IOException {
-		return appendObject(uriResolver.resolve(uri), false, false);
+		return appendObject(uriResolver.resolve(uri), false);
 	}
 
 

@@ -46,7 +46,7 @@ public class RestTestcase {
 	 */
 	protected RestClient getClient(String label, Serializer serializer, Parser parser) {
 		if (! clients.containsKey(label))
-			clients.put(label, TestMicroservice.client(serializer, parser).build());
+			clients.put(label, TestMicroservice.client(serializer, parser).pooled().build());
 		return clients.get(label);
 	}
 
@@ -57,6 +57,10 @@ public class RestTestcase {
 		if (! clients.containsKey(label))
 			clients.put(label, TestMicroservice.client(serializer, parser).debug(true).build());
 		return clients.get(label);
+	}
+
+	protected void addClientToLifecycle(RestClient c) {
+		clients.put(UUID.randomUUID().toString(), c);
 	}
 
 	@SuppressWarnings("unchecked")

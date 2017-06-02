@@ -567,39 +567,42 @@ public class RestClient extends CoreObject {
 							if (rmm.getRequestBeanArgs().length > 0) {
 								BeanSession bs = getBeanContext().createSession();
 
-								for (Integer i : rmm.getRequestBeanArgs()) {
-									BeanMap<?> bm = bs.toBeanMap(args[i]);
-									for (BeanPropertyValue bpv : bm.getValues(true)) {
+								for (RemoteMethodArg rma : rmm.getRequestBeanArgs()) {
+									BeanMap<?> bm = bs.toBeanMap(args[rma.index]);
+
+									for (BeanPropertyValue bpv : bm.getValues(false)) {
 										BeanPropertyMeta pMeta = bpv.getMeta();
 										Object val = bpv.getValue();
 
 										Path p = pMeta.getAnnotation(Path.class);
 										if (p != null)
-											rc.path(getName(p.value(), pMeta), val, getPartSerializer(p.serializer()));
+											rc.path(getName(p.name(), p.value(), pMeta), val, getPartSerializer(p.serializer(), rma.serializer));
 
-										Query q1 = pMeta.getAnnotation(Query.class);
-										if (q1 != null)
-											rc.query(getName(q1.value(), pMeta), val, false, getPartSerializer(q1.serializer()));
+										if (val != null) {
+											Query q1 = pMeta.getAnnotation(Query.class);
+											if (q1 != null)
+												rc.query(getName(q1.name(), q1.value(), pMeta), val, q1.skipIfEmpty(), getPartSerializer(q1.serializer(), rma.serializer));
 
-										QueryIfNE q2 = pMeta.getAnnotation(QueryIfNE.class);
-										if (q2 != null)
-											rc.query(getName(q2.value(), pMeta), val, true, getPartSerializer(q2.serializer()));
+											QueryIfNE q2 = pMeta.getAnnotation(QueryIfNE.class);
+											if (q2 != null)
+												rc.query(getName(q2.name(), q2.value(), pMeta), val, true, getPartSerializer(q2.serializer(), rma.serializer));
 
-										FormData f1 = pMeta.getAnnotation(FormData.class);
-										if (f1 != null)
-											rc.formData(getName(f1.value(), pMeta), val, false, getPartSerializer(f1.serializer()));
+											FormData f1 = pMeta.getAnnotation(FormData.class);
+											if (f1 != null)
+												rc.formData(getName(f1.name(), f1.value(), pMeta), val, f1.skipIfEmpty(), getPartSerializer(f1.serializer(), rma.serializer));
 
-										FormDataIfNE f2 = pMeta.getAnnotation(FormDataIfNE.class);
-										if (f2 != null)
-											rc.formData(getName(f2.value(), pMeta), val, true, getPartSerializer(f2.serializer()));
+											FormDataIfNE f2 = pMeta.getAnnotation(FormDataIfNE.class);
+											if (f2 != null)
+												rc.formData(getName(f2.name(), f2.value(), pMeta), val, true, getPartSerializer(f2.serializer(), rma.serializer));
 
-										org.apache.juneau.remoteable.Header h1 = pMeta.getAnnotation(org.apache.juneau.remoteable.Header.class);
-										if (h1 != null)
-											rc.header(getName(h1.value(), pMeta), val, false, getPartSerializer(h1.serializer()));
+											org.apache.juneau.remoteable.Header h1 = pMeta.getAnnotation(org.apache.juneau.remoteable.Header.class);
+											if (h1 != null)
+												rc.header(getName(h1.name(), h1.value(), pMeta), val, h1.skipIfEmpty(), getPartSerializer(h1.serializer(), rma.serializer));
 
-										HeaderIfNE h2 = pMeta.getAnnotation(HeaderIfNE.class);
-										if (h2 != null)
-											rc.header(getName(h2.value(), pMeta), val, true, getPartSerializer(h2.serializer()));
+											HeaderIfNE h2 = pMeta.getAnnotation(HeaderIfNE.class);
+											if (h2 != null)
+												rc.header(getName(h2.name(), h2.value(), pMeta), val, true, getPartSerializer(h2.serializer(), rma.serializer));
+										}
 									}
 								}
 							}
@@ -628,14 +631,20 @@ public class RestClient extends CoreObject {
 		}
 	}
 
-	private static String getName(String name, BeanPropertyMeta pMeta) {
-		if ("*".equals(name) && ! pMeta.getClassMeta().isMapOrBean())
-			name = pMeta.getName();
-		return name;
+	private static String getName(String name1, String name2, BeanPropertyMeta pMeta) {
+		String n = name1.isEmpty() ? name2 : name1;
+		ClassMeta<?> cm = pMeta.getClassMeta();
+		if (n.isEmpty() && (cm.isMapOrBean() || cm.isReader() || cm.isInstanceOf(NameValuePairs.class)))
+			n = "*";
+		if (n.isEmpty())
+			n = pMeta.getName();
+		return n;
 	}
 
-	private static PartSerializer getPartSerializer(Class c) {
-		if (c == UrlEncodingSerializer.class)
+	private static PartSerializer getPartSerializer(Class c, PartSerializer c2) {
+		if (c2 != null)
+			return c2;
+		if (c == PartSerializer.class)
 			return null;
 		PartSerializer pf = partSerializerCache.get(c);
 		if (pf == null) {

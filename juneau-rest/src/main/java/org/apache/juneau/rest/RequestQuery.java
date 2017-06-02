@@ -19,6 +19,7 @@ import javax.servlet.http.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.urlencoding.*;
 
@@ -90,7 +91,7 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 		// Fix for behavior difference between Tomcat and WAS.
 		// getParameter("foo") on "&foo" in Tomcat returns "".
 		// getParameter("foo") on "&foo" in WAS returns null.
-		if (v.length == 1 && v[0] == null) 
+		if (v.length == 1 && v[0] == null)
 			return "";
 
 		return v[0];
@@ -303,5 +304,25 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 
 	private <T> T parseValue(String val, ClassMeta<T> c) throws ParseException {
 		return parser.parsePart(val, c);
+	}
+
+	/**
+	 * Converts the query parameters to a readable string.
+	 *
+	 * @param sorted Sort the query parameters by name.
+	 * @return A JSON string containing the contents of the query parameters.
+	 */
+	public String toString(boolean sorted) {
+		Map<String,Object> m = (sorted ? new TreeMap<String,Object>() : new LinkedHashMap<String,Object>());
+		for (Map.Entry<String,String[]> e : this.entrySet()) {
+			String[] v = e.getValue();
+			m.put(e.getKey(), v.length == 1 ? v[0] : v);
+		}
+		return JsonSerializer.DEFAULT_LAX.toString(m);
+	}
+
+	@Override /* Object */
+	public String toString() {
+		return toString(false);
 	}
 }

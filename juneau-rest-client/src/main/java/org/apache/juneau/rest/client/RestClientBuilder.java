@@ -46,6 +46,7 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 
 /**
@@ -1101,7 +1102,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	}
 
 	/**
-	 * Sets the {@link UrlEncodingSerializerContext#URLENC_paramFormat} property on the URL-encoding serializers in this group.
+	 * Sets the {@link UonSerializerContext#UON_paramFormat} property on the URL-encoding serializers in this group.
 	 * <p>
 	 * This overrides the behavior of the URL-encoding serializer to quote and escape characters
 	 * in query names and values that may be confused for UON notation (e.g. <js>"'(foo=123)'"</js>, <js>"'@(1,2,3)'"</js>).
@@ -1109,20 +1110,34 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	 *
 	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
-	 * @see UrlEncodingSerializerContext#URLENC_paramFormat
+	 * @see UonSerializerContext#UON_paramFormat
 	 */
 	public RestClientBuilder paramFormat(String value) {
-		super.property(UrlEncodingSerializerContext.URLENC_paramFormat, value);
+		super.property(UonSerializerContext.UON_paramFormat, value);
 		return this;
 	}
 
 	/**
 	 * Shortcut for calling <code>paramFormat(<js>"PLAINTEXT"</js>)</code>.
+	 * <p>
+	 * The default behavior is to serialize part values (query parameters, form data, headers, path variables) in UON notation.
+	 * Calling this method forces plain-text to be used instead.
+	 * <p>
+	 * Specifially, UON notation has the following effects:
+	 * <ul>
+	 * 	<li>Boolean strings (<js>"true"</js>/<js>"false"</js>) and numeric values (<js>"123"</js>) will be
+	 * 			quoted (<js>"'true'"</js>, <js>"'false'"</js>, <js>"'123'"</js>.
+	 * 		<br>This allows them to be differentiated from actual boolean and numeric values.
+	 * 	<li>String such as <js>"(foo='bar')"</js> that mimic UON structures will be quoted and escaped to
+	 * 		<js>"'(foo=bar~'baz~')'"</js>.
+	 * </ul>
+	 * <p>
+	 * The downside to using plain text part serialization is that you cannot serialize arbitrary POJOs.
 	 *
 	 * @return This object (for method chaining).
 	 */
-	public RestClientBuilder plainTextParams() {
-		super.property(UrlEncodingSerializerContext.URLENC_paramFormat, "PLAINTEXT");
+	public RestClientBuilder plainTextParts() {
+		super.property(UonSerializerContext.UON_paramFormat, "PLAINTEXT");
 		return this;
 	}
 

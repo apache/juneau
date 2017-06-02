@@ -204,17 +204,16 @@ public class UonSerializer extends WriterSerializer {
 	 * @param eType The expected type of the object if this is a bean property.
 	 * @param attrName The bean property name if this is a bean property.  <jk>null</jk> if this isn't a bean property being serialized.
 	 * @param pMeta The bean property metadata.
-	 * @param plainTextParams <jk>true</jk> if this is a top level parameter key or value and paramFormat is PLAINTEXT.
 	 *
 	 * @return The same writer passed in.
 	 * @throws Exception
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected SerializerWriter serializeAnything(UonSerializerSession session, UonWriter out, Object o, ClassMeta<?> eType,
-			String attrName, BeanPropertyMeta pMeta, boolean plainTextParams) throws Exception {
+			String attrName, BeanPropertyMeta pMeta) throws Exception {
 
 		if (o == null) {
-			out.appendObject(null, false, plainTextParams);
+			out.appendObject(null, false);
 			return out;
 		}
 
@@ -249,7 +248,7 @@ public class UonSerializer extends WriterSerializer {
 
 		// '\0' characters are considered null.
 		if (o == null || (sType.isChar() && ((Character)o).charValue() == 0))
-			out.appendObject(null, false, plainTextParams);
+			out.appendObject(null, false);
 		else if (sType.isBoolean())
 			out.appendBoolean(o);
 		else if (sType.isNumber())
@@ -271,7 +270,7 @@ public class UonSerializer extends WriterSerializer {
 			serializeCollection(session, out, toList(sType.getInnerClass(), o), eType);
 		}
 		else {
-			out.appendObject(o, false, plainTextParams);
+			out.appendObject(o, false);
 		}
 
 		if (! isRecursion)
@@ -287,7 +286,9 @@ public class UonSerializer extends WriterSerializer {
 		ClassMeta<?> keyType = type.getKeyType(), valueType = type.getValueType();
 
 		int depth = session.getIndent();
-		out.append('(');
+
+		if (! session.isPlainTextParams())
+			out.append('(');
 
 		Iterator mapEntries = m.entrySet().iterator();
 
@@ -295,15 +296,17 @@ public class UonSerializer extends WriterSerializer {
 			Map.Entry e = (Map.Entry) mapEntries.next();
 			Object value = e.getValue();
 			Object key = session.generalize(e.getKey(), keyType);
-			out.cr(depth).appendObject(key, false, false).append('=');
-			serializeAnything(session, out, value, valueType, (key == null ? null : session.toString(key)), null, false);
+			out.cr(depth).appendObject(key, false).append('=');
+			serializeAnything(session, out, value, valueType, (key == null ? null : session.toString(key)), null);
 			if (mapEntries.hasNext())
 				out.append(',');
 		}
 
 		if (m.size() > 0)
 			out.cr(depth-1);
-		out.append(')');
+
+		if (! session.isPlainTextParams())
+			out.append(')');
 
 		return out;
 	}
@@ -311,7 +314,8 @@ public class UonSerializer extends WriterSerializer {
 	private SerializerWriter serializeBeanMap(UonSerializerSession session, UonWriter out, BeanMap<?> m, String typeName) throws Exception {
 		int depth = session.getIndent();
 
-		out.append('(');
+		if (! session.isPlainTextParams())
+			out.append('(');
 
 		boolean addComma = false;
 
@@ -331,16 +335,17 @@ public class UonSerializer extends WriterSerializer {
 			if (addComma)
 				out.append(',');
 
-			out.cr(depth).appendObject(key, false, false).append('=');
+			out.cr(depth).appendObject(key, false).append('=');
 
-			serializeAnything(session, out, value, cMeta, key, pMeta, false);
+			serializeAnything(session, out, value, cMeta, key, pMeta);
 
 			addComma = true;
 		}
 
 		if (m.size() > 0)
 			out.cr(depth-1);
-		out.append(')');
+		if (! session.isPlainTextParams())
+			out.append(')');
 
 		return out;
 	}
@@ -352,20 +357,22 @@ public class UonSerializer extends WriterSerializer {
 
 		c = session.sort(c);
 
-		out.append('@').append('(');
+		if (! session.isPlainTextParams())
+			out.append('@').append('(');
 
 		int depth = session.getIndent();
 
 		for (Iterator i = c.iterator(); i.hasNext();) {
 			out.cr(depth);
-			serializeAnything(session, out, i.next(), elementType, "<iterator>", null, false);
+			serializeAnything(session, out, i.next(), elementType, "<iterator>", null);
 			if (i.hasNext())
 				out.append(',');
 		}
 
 		if (c.size() > 0)
 			out.cr(depth-1);
-		out.append(')');
+		if (! session.isPlainTextParams())
+			out.append(')');
 
 		return out;
 	}
@@ -383,6 +390,6 @@ public class UonSerializer extends WriterSerializer {
 	@Override /* Serializer */
 	protected void doSerialize(SerializerSession session, Object o) throws Exception {
 		UonSerializerSession s = (UonSerializerSession)session;
-		serializeAnything(s, s.getWriter(), o, s.getExpectedRootType(o), "root", null, false);
+		serializeAnything(s, s.getWriter(), o, s.getExpectedRootType(o), "root", null);
 	}
 }
