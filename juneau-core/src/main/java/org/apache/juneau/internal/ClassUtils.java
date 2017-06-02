@@ -336,36 +336,53 @@ public final class ClassUtils {
 	 * Similar to {@link Method#getAnnotation(Class)}, but searches up the parent hierarchy for the annotation
 	 * defined on parent classes and interfaces.
 	 * <p>
-	 * Normally, annotations defined on methods of parent classes and interfaces are not inherited by the child
-	 * methods.
-	 * This utility method gets around that limitation by searching the class hierarchy for the "same" method.
+	 * Normally, annotations defined on methods of parent classes and interfaces are not inherited by the child methods.
+	 * This utility method gets around that limitation by searching the class hierarchy for the "same" method
+	 * 	(i.e. the same name and arguments).
 	 *
 	 * @param a The annotation to search for.
 	 * @param m The method to search.
 	 * @return The annotation, or <jk>null</jk> if it wasn't found.
 	 */
 	public static <T extends Annotation> T getMethodAnnotation(Class<T> a, Method m) {
-		T t = m.getAnnotation(a);
-		if (t != null)
-			return t;
-		Class<?> pc = m.getDeclaringClass().getSuperclass();
-		if (pc != null) {
-			for (Method m2 : pc.getDeclaredMethods()) {
-				if (isSameMethod(m, m2)) {
-					t = getMethodAnnotation(a, m2);
-					if (t != null)
-						return t;
-				}
+		return getMethodAnnotation(a, m.getDeclaringClass(), m);
+	}
+
+	/**
+	 * Returns the specified annotation on the specified method.
+	 * <p>
+	 * Similar to {@link Method#getAnnotation(Class)}, but searches up the parent hierarchy for the annotation defined
+	 * 	on parent classes and interfaces.
+	 * <p>
+	 * Normally, annotations defined on methods of parent classes and interfaces are not inherited by the child methods.
+	 * This utility method gets around that limitation by searching the class hierarchy for the "same" method
+	 * 	(i.e. the same name and arguments).
+	 *
+	 * @param a The annotation to search for.
+	 * @param c The child class to start searching from.
+	 * 	Note that it can be a descendant class of the actual declaring class of the method passed in.
+	 * 	This allows you to find annotations on methods overridden by the method passed in.
+	 * @param method The method to search.
+	 * @return The annotation, or <jk>null</jk> if it wasn't found.
+	 */
+	public static <T extends Annotation> T getMethodAnnotation(Class<T> a, Class<?> c, Method method) {
+		for (Method m : c.getDeclaredMethods()) {
+			if (isSameMethod(method, m)) {
+				T t = m.getAnnotation(a);
+				if (t != null)
+					return t;
 			}
 		}
-		for (Class<?> ic : m.getDeclaringClass().getInterfaces()) {
-			for (Method m2 : ic.getDeclaredMethods()) {
-				if (isSameMethod(m, m2)) {
-					t = getMethodAnnotation(a, m2);
-					if (t != null)
-						return t;
-				}
-			}
+		Class<?> pc = c.getSuperclass();
+		if (pc != null) {
+			T t = getMethodAnnotation(a, pc, method);
+			if (t != null)
+				return t;
+		}
+		for (Class<?> ic : c.getInterfaces()) {
+			T t = getMethodAnnotation(a, ic, method);
+			if (t != null)
+				return t;
 		}
 		return null;
 	}

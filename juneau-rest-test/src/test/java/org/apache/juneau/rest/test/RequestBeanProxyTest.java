@@ -176,45 +176,72 @@ public class RequestBeanProxyTest extends RestTestcase {
 		String queryCollectionsX(@RequestBean(serializer=XSerializer.class) RequestBean_QueryCollections rb);
 	}
 
-	public static class RequestBean_QuerySimpleVals {
+	public static interface RequestBean_QuerySimpleVals_Interface {
 
 		@Query
+		String getA();
+
+		@Query("b")
+		String getX1();
+
+		@Query(name="c")
+		String getX2();
+
+		@Query
+		@BeanProperty("d")
+		String getX3();
+
+		@Query("e")
+		String getX4();
+
+		@Query("f")
+		String getX5();
+
+		@Query("g")
+		String getX6();
+
+		@Query("h")
+		String getX7();
+	}
+
+	public static class RequestBean_QuerySimpleVals implements RequestBean_QuerySimpleVals_Interface {
+
+		@Override
 		public String getA() {
 			return "a1";
 		}
 
-		@Query("b")
+		@Override
 		public String getX1() {
 			return "b1";
 		}
 
-		@Query(name="c")
+		@Override
 		public String getX2() {
 			return "c1";
 		}
 
-		@Query
-		@BeanProperty("d")
+		@Override
 		public String getX3() {
 			return "d1";
 		}
 
-		@Query("e")
+		@Override
 		public String getX4() {
 			return "";
 		}
 
-		@Query("f")
+		@Override
 		public String getX5() {
 			return null;
 		}
 
-		@Query("g")
+		@Override
 		public String getX6() {
 			return "true";
 		}
 
-		@Query("h")
+		@Override
 		public String getX7() {
 			return "123";
 		}

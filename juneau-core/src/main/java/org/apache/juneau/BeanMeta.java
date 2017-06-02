@@ -547,17 +547,21 @@ public class BeanMeta<T> {
 				int mod = m.getModifiers();
 				if (Modifier.isStatic(mod))
 					continue;
-				if (m.isAnnotationPresent(BeanIgnore.class))
-					continue;
 				if (m.isBridge())   // This eliminates methods with covariant return types from parent classes on child classes.
 					continue;
-				if (! (v.isVisible(m) || m.isAnnotationPresent(BeanProperty.class)))
+
+				BeanIgnore bi = getMethodAnnotation(BeanIgnore.class, c, m);
+				if (bi != null)
 					continue;
+
+				BeanProperty bp = getMethodAnnotation(BeanProperty.class, c, m);
+				if (! (v.isVisible(m) || bp != null))
+					continue;
+
 				String n = m.getName();
 				Class<?>[] pt = m.getParameterTypes();
 				Class<?> rt = m.getReturnType();
 				boolean isGetter = false, isSetter = false;
-				BeanProperty bp = getMethodAnnotation(BeanProperty.class, m);
 				String bpName = bpName(bp);
 				if (pt.length == 0) {
 					if (n.startsWith("get") && (! rt.equals(Void.TYPE))) {

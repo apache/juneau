@@ -12,9 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.junit.Assert.*;
 
+import java.lang.annotation.*;
+
+import org.apache.juneau.internal.*;
 import org.junit.*;
 
 @SuppressWarnings("javadoc")
@@ -147,5 +152,50 @@ public class ClassUtilsTest {
 		public CharSequence m4() { return ""; }
 
 		public void m5(int f1, CharSequence f2) {}
+	}
+	
+	
+	//====================================================================================================
+	// getMethodAnnotation
+	//====================================================================================================
+	@Test
+	public void getMethodAnnotation() throws Exception {
+		assertEquals("a1", ClassUtils.getMethodAnnotation(TestAnnotation.class, CI3.class.getMethod("a1")).value());
+		assertEquals("a2b", ClassUtils.getMethodAnnotation(TestAnnotation.class, CI3.class.getMethod("a2")).value());
+		assertEquals("a3", ClassUtils.getMethodAnnotation(TestAnnotation.class, CI3.class.getMethod("a3", CharSequence.class)).value());
+		assertEquals("a4", ClassUtils.getMethodAnnotation(TestAnnotation.class, CI3.class.getMethod("a4")).value());
+	}
+	
+	public static interface CI1 {
+		@TestAnnotation("a1")
+		void a1();
+		@TestAnnotation("a2a")
+		void a2();
+		@TestAnnotation("a3")
+		void a3(CharSequence foo);
+		
+		void a4();
+	}
+	
+	public static class CI2 implements CI1 {
+		public void a1() {}
+		@TestAnnotation("a2b")
+		public void a2() {}
+		public void a3(CharSequence s) {}
+		public void a4() {}
+	}
+
+	public static class CI3 extends CI2 {
+		@Override
+		public void a1() {}
+		@Override public void a2() {}
+		@TestAnnotation("a4")
+		public void a4() {}
+	}
+	
+	@Target(METHOD)
+	@Retention(RUNTIME)
+	public @interface TestAnnotation {
+		String value() default "";
 	}
 }
