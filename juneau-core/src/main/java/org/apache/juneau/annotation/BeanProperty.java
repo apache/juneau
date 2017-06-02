@@ -119,10 +119,12 @@ public @interface BeanProperty {
 	 * 		}
 	 * 	}
 	 * </p>
-	 * <p class='info'>
-	 * Note that if you're not interested in these additional properties, you can also use the {@link BeanContext#BEAN_ignoreUnknownBeanProperties} setting
-	 * to ignore values that don't fit into existing properties.
-	 * </p>
+	 * <p>
+	 * <ul class='doctree'>
+	 * 	<li class='info'>
+	 * 		Note that if you're not interested in these additional properties, you can also use the {@link BeanContext#BEAN_ignoreUnknownBeanProperties} setting
+	 * 		to ignore values that don't fit into existing properties.
+	 * </ul>
 	 */
 	String name() default "";
 

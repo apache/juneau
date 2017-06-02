@@ -24,6 +24,12 @@ import org.apache.juneau.internal.*;
  * Contains the meta-data about a Java method on a remoteable interface.
  * <p>
  * Captures the information in {@link RemoteMethod @RemoteMethod} annotations for caching and reuse.
+ *
+ * <h6 class='topic'>Additional Information</h6>
+ * <ul class='doctree'>
+ * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#Remoteable.3rdParty'>Interface proxies against 3rd-party REST interfaces</a>
+ * 	<li class='jp'><a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.remoteable</a>
+ * </ul>
  */
 public class RemoteableMethodMeta {
 

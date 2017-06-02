@@ -22,6 +22,15 @@ import java.net.*;
  * <p class='bcode'>
  * 	Schema s = <jk>new</jk> Schema().setRef(uri);
  * </p>
+ *
+ * <h6 class='topic'>Additional Information</h6>
+ * <ul class='doctree'>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects (org.apache.juneau.dto)</a>
+ * 	<ul>
+ * 		<li class='sublink'><a class='doclink' href='../../../../../overview-summary.html#DTOs.JsonSchema'>JSON-Schema</a>
+ * 	</ul>
+ * 	<li class='jp'><a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.dto.jsonschema</a>
+ * </ul>
  */
 public class SchemaRef extends Schema {
 

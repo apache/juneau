@@ -46,6 +46,12 @@ package org.apache.juneau.http;
  * an optional field used within the "message/external-body" content-type.
  * In HTTP, it SHOULD be sent whenever the message's length can be determined prior to being transferred, unless this is
  * prohibited by the rules in section 4.4.
+ *
+ * <h6 class='topic'>Additional Information</h6>
+ * <ul class='doctree'>
+ * 	<li class='jp'><a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>
+ * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>Hypertext Transfer Protocol -- HTTP/1.1</a>
+ * </ul>
  */
 public final class ContentLength extends HeaderInteger {
 

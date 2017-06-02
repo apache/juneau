@@ -753,12 +753,12 @@ public @interface RestResource {
 	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * <p>
 	 * The programmatic equivalent to this annotation are the {@link RestConfig#setPageTitle(String)}/{@link RestResponse#setPageTitle(Object)} methods.
-	 * <p class='info'>
-	 * 	In most cases, you'll simply want to use the <code>@RestResource(title)</code> annotation to specify the page title.
-	 * 	However, this annotation is provided in cases where you want the page title to be different that the one
-	 * 	shown in the swagger document.
-	 * </p>
-	 * <b>Note:</b> - In most cases, you can
+	 * <ul class='doctree'>
+	 * 	<li class='info'>
+	 * 		In most cases, you'll simply want to use the <code>@RestResource(title)</code> annotation to specify the page title.
+	 * 		However, this annotation is provided in cases where you want the page title to be different that the one
+	 * 		shown in the swagger document.
+	 * </ul>
 	 */
 	String pageTitle() default "";
 
@@ -791,10 +791,11 @@ public @interface RestResource {
 	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * <p>
 	 * The programmatic equivalent to this annotation are the {@link RestConfig#setPageText(String)}/{@link RestResponse#setPageText(Object)} methods.
-	 * <p class='info'>
-	 * 	In most cases, you'll simply want to use the <code>@RestResource(description)</code> or <code>@RestMethod(summary)</code> annotations to specify the page text.
-	 * 	However, this annotation is provided in cases where you want the text to be different that the values shown in the swagger document.
-	 * </p>
+	 * <ul class='doctree'>
+	 * 	<li class='info'>
+	 * 		In most cases, you'll simply want to use the <code>@RestResource(description)</code> or <code>@RestMethod(summary)</code> annotations to specify the page text.
+	 * 		However, this annotation is provided in cases where you want the text to be different that the values shown in the swagger document.
+	 * </ul>
 	 */
 	String pageText() default "";
 

@@ -509,10 +509,11 @@
 	<cc># Jetty logging level</cc>
 	<ck>org.eclipse.jetty.LEVEL</ck> = <cv>WARN</cv>		
 	</p>
-	<p class='info'>
-		The predefined config file includes all settings for instructional purposes. 
-		In your microservice, you can remove all lines from your config file that have default values.
-	</p>
+	<ul class='doctree'>
+		<li class='info'>
+			The predefined config file includes all settings for instructional purposes. 
+			In your microservice, you can remove all lines from your config file that have default values.
+	</ul>
 	<p>
 		Although the config file looks deceptively simple, the config file API is a very powerful feature with many capabilities, including:
 	</p>
@@ -590,8 +591,8 @@
 	String firstArg = cf.getString(<js>"MySection/firstArg"</js>); 
 	</p>
 	<h6 class='topic'>Additional Information</h6>
-	<ul class='javahierarchy'>
-		<li class='p'><a href='../core/ini/package-summary.html#TOC'><l>org.apache.juneau.ini</l></a> - Juneau Configuration API Javadocs.
+	<ul class='doctree'>
+		<li class='jp'><a href='../core/ini/package-summary.html#TOC'><l>org.apache.juneau.ini</l></a> - Juneau Configuration API Javadocs.
 	</ul>
 	
 	<!-- ======================================================================================================== -->
@@ -601,8 +602,8 @@
 		<p>
 			There are 3 primary ways of getting access to the config file.
 		</p>
-		<ul class='javahierarchy'>
-			<li class='m'>{@link org.apache.juneau.microservice.Microservice#getConfig()} - A static method that can be used to access
+		<ul class='doctree'>
+			<li class='jm'>{@link org.apache.juneau.microservice.Microservice#getConfig()} - A static method that can be used to access
 				the config file from anywhere in your application.<br>
 				When using this method, any of the following variables can be resolved:
 				<ul>
@@ -614,7 +615,7 @@
 				</ul>
 				Additional user-defined variables can be defined by overriding the {@link org.apache.juneau.microservice.Microservice#createVarResolver()} method
 				and using the {@link org.apache.juneau.rest.RestConfig#addVars(Class...)} method.
-			<li class='m'>{@link org.apache.juneau.rest.RestContext#getConfigFile()} - An instance method to access it from inside a REST servlet.<br>
+			<li class='jm'>{@link org.apache.juneau.rest.RestContext#getConfigFile()} - An instance method to access it from inside a REST servlet.<br>
 				The following variables are available in addition to the variables defined above:
 				<ul>
 					<li><l>$I{key}, $I{key,default}</l> - Servlet initialization parameters.
@@ -644,7 +645,7 @@
 					Additional user-defined variables can be defined at this level by overriding the {@link org.apache.juneau.microservice.Resource#init(RestConfig)} method
 					and using the {@link org.apache.juneau.rest.RestConfig#addVars(Class...)} method.
 				</p>
-			<li class='m'>{@link org.apache.juneau.rest.RestRequest#getConfigFile()} - An instance method to access it from inside a REST method.<br>
+			<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getConfigFile()} - An instance method to access it from inside a REST method.<br>
 				The following variables are available in addition to the variables defined above:
 				<ul>
 					<li><l>$L{key}, $L{key,args}</l> - Localized variables pulled from {@link org.apache.juneau.rest.RestRequest#getMessage(String, Object...)}.
@@ -808,8 +809,8 @@
 		are powerful servlets designed specifically for creating REST APIs using nothing more than serialized and parsed POJOs.
 	</p>
 	<h6 class='topic'>Additional Information</h6>
-	<ul class='javahierarchy'>
-		<li class='p'><a href='../server/package-summary.html#TOC'><l>org.apache.juneau.rest</l></a> - Juneau Server API Javadocs.
+	<ul class='doctree'>
+		<li class='jp'><a href='../server/package-summary.html#TOC'><l>org.apache.juneau.rest</l></a> - Juneau Server API Javadocs.
 	</ul>
 </div>
 
@@ -824,10 +825,10 @@
 	<p>
 		The class hierarchy is:
 	</p>
-	<ul class='javahierarchy'>
-		<li class='a'>{@link org.apache.juneau.microservice.Microservice} - Abstract class that defines simple start/stop methods and access to the manifest file, config file, and arguments.
+	<ul class='doctree'>
+		<li class='jac'>{@link org.apache.juneau.microservice.Microservice} - Abstract class that defines simple start/stop methods and access to the manifest file, config file, and arguments.
 			<ul>
-				<li class='c'>{@link org.apache.juneau.microservice.RestMicroservice} - Specialized microservice for starting up REST interfaces using Jetty and specifying REST servlets
+				<li class='jc'>{@link org.apache.juneau.microservice.RestMicroservice} - Specialized microservice for starting up REST interfaces using Jetty and specifying REST servlets
 					through the manifest file or config file.
 			</ul>
 	</ul>

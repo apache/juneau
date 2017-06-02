@@ -51,6 +51,12 @@ package org.apache.juneau.http;
  * A proxy MUST NOT modify the Allow header field even if it does not understand all the methods specified, since the
  * user agent might
  * have other means of communicating with the origin server.
+ *
+ * <h6 class='topic'>Additional Information</h6>
+ * <ul class='doctree'>
+ * 	<li class='jp'><a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>
+ * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>Hypertext Transfer Protocol -- HTTP/1.1</a>
+ * </ul>
  */
 public final class Allow extends HeaderStringArray {
 

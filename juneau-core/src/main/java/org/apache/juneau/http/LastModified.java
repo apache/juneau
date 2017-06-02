@@ -53,6 +53,12 @@ package org.apache.juneau.http;
  * changes near the time that the response is generated.
  * <p>
  * HTTP/1.1 servers SHOULD send Last-Modified whenever feasible.
+ *
+ * <h6 class='topic'>Additional Information</h6>
+ * <ul class='doctree'>
+ * 	<li class='jp'><a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>
+ * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>Hypertext Transfer Protocol -- HTTP/1.1</a>
+ * </ul>
  */
 public final class LastModified extends HeaderDate {
 

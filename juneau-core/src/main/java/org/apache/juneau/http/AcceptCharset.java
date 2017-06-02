@@ -56,6 +56,12 @@ import org.apache.juneau.internal.*;
  * If an Accept-Charset header is present, and if the server cannot send a response which is acceptable according to
  * the Accept-Charset header, then the server SHOULD send an error response with the 406 (not acceptable) status code,
  * though the sending of an unacceptable response is also allowed.
+ *
+ * <h6 class='topic'>Additional Information</h6>
+ * <ul class='doctree'>
+ * 	<li class='jp'><a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>
+ * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>Hypertext Transfer Protocol -- HTTP/1.1</a>
+ * </ul>
  */
 public final class AcceptCharset extends HeaderRangeArray {
 

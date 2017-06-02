@@ -134,37 +134,37 @@
 			The following shows the class hierarchy of the {@link org.apache.juneau.svl.Var} class and all current
 				predefined implementations.
 		</p>  
-		<ul class='javahierarchy'>
-			<li class='a'>{@link org.apache.juneau.svl.Var} - Superclass of all vars.
+		<ul class='doctree'>
+			<li class='jac'>{@link org.apache.juneau.svl.Var} - Superclass of all vars.
 				<ul>
-					<li class='a'>{@link org.apache.juneau.svl.SimpleVar} - Superclass of all vars that return strings.
+					<li class='jac'>{@link org.apache.juneau.svl.SimpleVar} - Superclass of all vars that return strings.
 						<ul>
-							<li class='a'>{@link org.apache.juneau.svl.DefaultingVar} - Variables that define a default value if the resolve method returns null.
+							<li class='jac'>{@link org.apache.juneau.svl.DefaultingVar} - Variables that define a default value if the resolve method returns null.
 								<ul>
-									<li class='a'>{@link org.apache.juneau.svl.MapVar} - Variables that pull values from maps.
+									<li class='jac'>{@link org.apache.juneau.svl.MapVar} - Variables that pull values from maps.
 										<ul>
-											<li class='c'>{@link org.apache.juneau.svl.vars.SystemPropertiesVar} - Resolves system properties.
+											<li class='jc'>{@link org.apache.juneau.svl.vars.SystemPropertiesVar} - Resolves system properties.
 										</ul>
 									</li>
-									<li class='c'>{@link org.apache.juneau.svl.vars.ArgsVar} - Resolves variables from an {@link org.apache.juneau.utils.Args} object.
-									<li class='c'>{@link org.apache.juneau.svl.vars.ConfigFileVar} - Resolves variables from a {@link org.apache.juneau.ini.ConfigFile} object.
-									<li class='c'>{@link org.apache.juneau.svl.vars.EnvVariablesVar} - Resolves environment variables.
-									<li class='c'>{@link org.apache.juneau.svl.vars.ManifestFileVar} - Resolves variables from a {@link org.apache.juneau.utils.ManifestFile} object.
-									<li class='c'>{@link org.apache.juneau.rest.vars.ServletInitParamVar} - Resolves servlet initialization parameters.
+									<li class='jc'>{@link org.apache.juneau.svl.vars.ArgsVar} - Resolves variables from an {@link org.apache.juneau.utils.Args} object.
+									<li class='jc'>{@link org.apache.juneau.svl.vars.ConfigFileVar} - Resolves variables from a {@link org.apache.juneau.ini.ConfigFile} object.
+									<li class='jc'>{@link org.apache.juneau.svl.vars.EnvVariablesVar} - Resolves environment variables.
+									<li class='jc'>{@link org.apache.juneau.svl.vars.ManifestFileVar} - Resolves variables from a {@link org.apache.juneau.utils.ManifestFile} object.
+									<li class='jc'>{@link org.apache.juneau.rest.vars.ServletInitParamVar} - Resolves servlet initialization parameters.
 								</ul>
 							</li>
-							<li class='a'>{@link org.apache.juneau.svl.MultipartVar} - Variables that consist of 2 or more comma-delimited arguments.
+							<li class='jac'>{@link org.apache.juneau.svl.MultipartVar} - Variables that consist of 2 or more comma-delimited arguments.
 								<ul>
-									<li class='c'>{@link org.apache.juneau.rest.vars.LocalizationVar} - Resolves localized strings for an HTTP request.
+									<li class='jc'>{@link org.apache.juneau.rest.vars.LocalizationVar} - Resolves localized strings for an HTTP request.
 								</ul>
 							</li>
-							<li class='c'>{@link org.apache.juneau.rest.vars.RequestVar} - Resolves specialized HTTP request values.
-							<li class='c'>{@link org.apache.juneau.rest.vars.UrlEncodeVar} - URL-encodes the value inside the variable.
+							<li class='jc'>{@link org.apache.juneau.rest.vars.RequestVar} - Resolves specialized HTTP request values.
+							<li class='jc'>{@link org.apache.juneau.rest.vars.UrlEncodeVar} - URL-encodes the value inside the variable.
 						</ul>
 					</li>
-					<li class='a'>{@link org.apache.juneau.svl.StreamedVar} - Superclass of all vars that stream their value to writers.
+					<li class='jac'>{@link org.apache.juneau.svl.StreamedVar} - Superclass of all vars that stream their value to writers.
 						<ul>
-							<li class='c'>{@link org.apache.juneau.rest.vars.SerializedRequestAttrVar} - Resolves HTTP request attribute values passed through a {@link org.apache.juneau.serializer.Serializer}.
+							<li class='jc'>{@link org.apache.juneau.rest.vars.SerializedRequestAttrVar} - Resolves HTTP request attribute values passed through a {@link org.apache.juneau.serializer.Serializer}.
 						</ul>
 					</li>
 				</ul>
@@ -180,9 +180,9 @@
 			The main class for performing variable resolution is {@link org.apache.juneau.svl.VarResolver}.
 			Two methods are provided for resolving variables:
 		</p>
-		<ul class='javahierarchy'>
-			<li class='m'>{@link org.apache.juneau.svl.VarResolver#resolve(String)} - Resolves variables and returns the results as a simple string.
-			<li class='m'>{@link org.apache.juneau.svl.VarResolver#resolveTo(String,Writer)} - Resolves variables and sends results to a writer.
+		<ul class='doctree'>
+			<li class='jm'>{@link org.apache.juneau.svl.VarResolver#resolve(String)} - Resolves variables and returns the results as a simple string.
+			<li class='jm'>{@link org.apache.juneau.svl.VarResolver#resolveTo(String,Writer)} - Resolves variables and sends results to a writer.
 		</ul>
 		<p>
 			Var resolvers can have zero or more context objects associated with them.

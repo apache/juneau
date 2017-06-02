@@ -27,12 +27,12 @@ import org.apache.juneau.xml.*;
  * See {@link PropertyStore} for more information about context properties.
  *
  * <h6 class='topic' id='ConfigProperties'>Configurable properties inherited by the RDF parsers</h6>
- * <ul class='javahierarchy'>
- * 	<li class='c'><a class="doclink" href="../BeanContext.html#ConfigProperties">BeanContext</a> - Properties associated with handling beans on serializers and parsers.
+ * <ul class='doctree'>
+ * 	<li class='jc'><a class="doclink" href="../BeanContext.html#ConfigProperties">BeanContext</a> - Properties associated with handling beans on serializers and parsers.
  * 	<ul>
- * 		<li class='c'><a class="doclink" href="../parser/ParserContext.html#ConfigProperties">ParserContext</a> - Configurable properties common to all parsers.
+ * 		<li class='jc'><a class="doclink" href="../parser/ParserContext.html#ConfigProperties">ParserContext</a> - Configurable properties common to all parsers.
  * 		<ul>
- * 			<li class='i'><a class="doclink" href="RdfCommonContext.html#ConfigProperties">RdfCommonContext</a> - Configurable properties common to the RDF serializers and parsers.
+ * 			<li class='jic'><a class="doclink" href="RdfCommonContext.html#ConfigProperties">RdfCommonContext</a> - Configurable properties common to the RDF serializers and parsers.
  * 		</ul>
  * 	</ul>
  * </ul>

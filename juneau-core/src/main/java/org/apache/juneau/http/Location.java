@@ -42,6 +42,12 @@ package org.apache.juneau.http;
  * the original location of the entity enclosed in the request.
  * It is therefore possible for a response to contain header fields for both Location and Content-Location.
  * Also see section 13.10 for cache requirements of some methods.
+ *
+ * <h6 class='topic'>Additional Information</h6>
+ * <ul class='doctree'>
+ * 	<li class='jp'><a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>
+ * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>Hypertext Transfer Protocol -- HTTP/1.1</a>
+ * </ul>
  */
 public final class Location extends HeaderUri {
 

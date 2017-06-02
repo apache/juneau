@@ -20,6 +20,14 @@ import org.apache.juneau.xml.annotation.*;
  * A subclass of HTML elements that have no content or end tags.
  * <p>
  * See <a href="https://www.w3.org/TR/html51/syntax.html#void-elements">void elements</a>
+ *
+ * <h6 class='topic'>Additional Information</h6>
+ * <ul class='doctree'>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects (org.apache.juneau.dto)</a>
+ * 	<ul>
+ * 		<li class='sublink'><a class='doclink' href='../../../../../overview-summary.html#DTOs.HTML5'>HTML5</a>
+ * 	</ul>
+ * </ul>
  */
 @Xml(format=VOID)
 public class HtmlElementVoid extends HtmlElement {

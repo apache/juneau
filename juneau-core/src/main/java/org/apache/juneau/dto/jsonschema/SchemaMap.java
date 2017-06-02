@@ -26,6 +26,15 @@ import org.apache.juneau.json.*;
  * 	<li>{@link #getReader(URI)} - If schemas should be loaded from readers and automatically parsed.
  * 	<li>{@link #load(URI)} - If you want control over construction of {@link Schema} objects.
  * </ul>
+ *
+ * <h6 class='topic'>Additional Information</h6>
+ * <ul class='doctree'>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#DTOs'>Juneau Data Transfer Objects (org.apache.juneau.dto)</a>
+ * 	<ul>
+ * 		<li class='sublink'><a class='doclink' href='../../../../../overview-summary.html#DTOs.JsonSchema'>JSON-Schema</a>
+ * 	</ul>
+ * 	<li class='jp'><a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.dto.jsonschema</a>
+ * </ul>
  */
 public abstract class SchemaMap extends ConcurrentHashMap<URI,Schema> {
 

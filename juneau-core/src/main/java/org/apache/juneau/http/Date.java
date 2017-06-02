@@ -62,6 +62,12 @@ package org.apache.juneau.http;
  * In theory, the date ought to represent the moment just before the entity is generated.
  * In practice, the date can be generated at any time during the message origination without affecting its semantic
  * value.
+ *
+ * <h6 class='topic'>Additional Information</h6>
+ * <ul class='doctree'>
+ * 	<li class='jp'><a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>
+ * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>Hypertext Transfer Protocol -- HTTP/1.1</a>
+ * </ul>
  */
 public final class Date extends HeaderDate {
 

@@ -104,6 +104,12 @@ import org.apache.juneau.urlencoding.*;
  *
  * 	<ja>@Header</ja>(<js>"Foo"</js>)
  * </p>
+ *
+ * <h6 class='topic'>Additional Information</h6>
+ * <ul class='doctree'>
+ * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#Remoteable.3rdParty'>Interface proxies against 3rd-party REST interfaces</a>
+ * 	<li class='jp'><a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.remoteable</a>
+ * </ul>
  */
 @Documented
 @Target({PARAMETER,FIELD,METHOD})

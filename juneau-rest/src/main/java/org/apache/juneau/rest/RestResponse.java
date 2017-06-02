@@ -366,7 +366,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 			return w;
 
 		// If plain text requested, override it now.
-		if (request.isPlainText()) 
+		if (request.isPlainText())
 			setHeader("Content-Type", "text/plain");
 
 		try {
@@ -430,10 +430,11 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * {@link RestMethod#pageTitle() @RestMethod#pageTitle()} annotations.
 	 * <p>
 	 * This is a shortcut for calling <code>setProperty(<jsf>HTMLDOC_title</jsf>, title);</code>
-	 * <p class='info'>
-	 * 	<b>Tip:</b>  Use {@link StringMessage} to generate a page title with delayed serialization so as not to
-	 * 	waste string concatenation cycles on non-HTML views.
-	 * </p>
+	 * <ul class='doctree'>
+	 * 	<li class='info'>
+	 * 		<b>Tip:</b>  Use {@link StringMessage} to generate a page title with delayed serialization so as not to
+	 * 		waste string concatenation cycles on non-HTML views.
+	 * </ul>
 	 *
 	 * @param title The localized page title to render on the page.
 	 * Object will be converted to a string using {@link Object#toString()}.
@@ -450,10 +451,11 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * {@link RestMethod#pageText() @RestMethod#pageText()} annotations.
 	 * <p>
 	 * This is a shortcut for calling <code>setProperty(<jsf>HTMLDOC_text</jsf>, text);</code>
-	 * <p class='info'>
-	 * 	<b>Tip:</b>  Use {@link StringMessage} to generate page text with delayed serialization so as not to
-	 * 	waste string concatenation cycles on non-HTML views.
-	 * </p>
+	 * <ul class='doctree'>
+	 * 	<li class='info'>
+	 * 		<b>Tip:</b>  Use {@link StringMessage} to generate page text with delayed serialization so as not to
+	 * 		waste string concatenation cycles on non-HTML views.
+	 * </ul>
 	 *
 	 * @param text The localized page text to render on the page.
 	 * @return This object (for method chaining).
@@ -469,10 +471,12 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * {@link RestMethod#pageLinks() @RestMethod#pageLinks()} annotations.
 	 * <p>
 	 * This is a shortcut for calling <code>setProperty(<jsf>HTMLDOC_links</jsf>, links);</code>
-	 * <p class='info'>
-	 * 	<b>Tip:</b>  Use {@link StringMessage} to generate page links with delayed serialization so as not to
-	 * 	waste string concatenation cycles on non-HTML views.
-	 * </p>
+	 *
+	 * <ul class='doctree'>
+	 * 	<li class='info'>
+	 * 		<b>Tip:</b>  Use {@link StringMessage} to generate page links with delayed serialization so as not to
+	 * 		waste string concatenation cycles on non-HTML views.
+	 * </ul>
 	 *
 	 * @param links The localized page links render on the page.
 	 * @return This object (for method chaining).

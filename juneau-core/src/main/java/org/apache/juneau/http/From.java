@@ -51,6 +51,12 @@ package org.apache.juneau.http;
  * privacy interests or their site's security policy.
  * It is strongly recommended that the user be able to disable, enable, and modify the value of this field at any time
  * prior to a request.
+ *
+ * <h6 class='topic'>Additional Information</h6>
+ * <ul class='doctree'>
+ * 	<li class='jp'><a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>
+ * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>Hypertext Transfer Protocol -- HTTP/1.1</a>
+ * </ul>
  */
 public final class From extends HeaderString {
 

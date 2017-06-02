@@ -123,6 +123,12 @@ import org.apache.juneau.internal.*;
  * Note: A user agent might be provided with a default set of quality values for certain media ranges.
  * However, unless the user agent is a closed system which cannot interact with other rendering agents, this default
  * set ought to be configurable by the user.
+ *
+ * <h6 class='topic'>Additional Information</h6>
+ * <ul class='doctree'>
+ * 	<li class='jp'><a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.http</a>
+ * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>Hypertext Transfer Protocol -- HTTP/1.1</a>
+ * </ul>
  */
 public final class Accept {
 

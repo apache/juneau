@@ -51,13 +51,13 @@ import org.apache.juneau.*;
  * These variables are replaced at runtime based on the HTTP request locale.
  * Several built-in runtime variable types are defined, and the API can be extended to include user-defined variables.
  *
- * <h5 class='section'>Inherited configurable properties:</h5>
- * <ul class='javahierarchy'>
- * 	<li class='c'><a class="doclink" href="../BeanContext.html#ConfigProperties">BeanContext</a> - Properties associated with handling beans on serializers and parsers.
+ * <h6 class='topic'>Inherited configurable properties</h6>
+ * <ul class='doctree'>
+ * 	<li class='jc'><a class="doclink" href="../BeanContext.html#ConfigProperties">BeanContext</a> - Properties associated with handling beans on serializers and parsers.
  * 	<ul>
- * 		<li class='c'><a class="doclink" href="../serializer/SerializerContext.html#ConfigProperties">SerializerContext</a> - Configurable properties common to all serializers.
+ * 		<li class='jc'><a class="doclink" href="../serializer/SerializerContext.html#ConfigProperties">SerializerContext</a> - Configurable properties common to all serializers.
  * 		<ul>
- * 			<li class='c'><a class="doclink" href="../html/HtmlSerializerContext.html#ConfigProperties">HtmlSerializerContext</a> - Configurable properties on the HTML serializer.
+ * 			<li class='jc'><a class="doclink" href="../html/HtmlSerializerContext.html#ConfigProperties">HtmlSerializerContext</a> - Configurable properties on the HTML serializer.
  * 		</ul>
  * 	</ul>
  * </ul>
