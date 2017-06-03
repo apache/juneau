@@ -12,6 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice;
 
+import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.FileUtils.*;
+import static org.apache.juneau.internal.ArrayUtils.*;
+import static org.apache.juneau.internal.ClassUtils.*;
+
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -22,7 +27,6 @@ import javax.servlet.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.ini.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.microservice.resources.*;
 import org.apache.juneau.parser.*;
@@ -249,10 +253,10 @@ public class RestMicroservice extends Microservice {
 		ConfigFile cf = getConfig();
 		logger = Logger.getLogger("");
 		String logFile = cf.getString("Logging/logFile");
-		if (! StringUtils.isEmpty(logFile)) {
+		if (! isEmpty(logFile)) {
 			LogManager.getLogManager().reset();
 			String logDir = cf.getString("Logging/logDir", ".");
-			FileUtils.mkdirs(new File(logDir), false);
+			mkdirs(new File(logDir), false);
 			boolean append = cf.getBoolean("Logging/append");
 			int limit = cf.getInt("Logging/limit", 1024*1024);
 			int count = cf.getInt("Logging/count", 1);
@@ -361,8 +365,8 @@ public class RestMicroservice extends Microservice {
 
 			// We're using Jetty 8 that doesn't allow regular expression matching in SslContextFactory.setExcludeCipherSuites(),
 			// so to prevent having the config file list all old cipher suites, exclude the known bad ones.
-			String[] excludeCipherSuites = ArrayUtils.combine(
-				StringUtils.split("SSL_RSA_WITH_DES_CBC_SHA,SSL_DHE_RSA_WITH_DES_CBC_SHA,SSL_DHE_DSS_WITH_DES_CBC_SHA,SSL_RSA_EXPORT_WITH_RC4_40_MD5,SSL_RSA_EXPORT_WITH_DES40_CBC_SHA,SSL_DHE_RSA_EXPORT_WITH_DES40_CBC_SHA,SSL_DHE_RSA_WITH_3DES_EDE_CBC_SHA,SSL_DHE_DSS_WITH_3DES_EDE_CBC_SHA,TLS_DHE_RSA_WITH_AES_256_CBC_SHA256,TLS_DHE_DSS_WITH_AES_256_CBC_SHA256,TLS_DHE_RSA_WITH_AES_256_CBC_SHA,TLS_DHE_DSS_WITH_AES_256_CBC_SHA,TLS_DHE_RSA_WITH_AES_128_CBC_SHA256,TLS_DHE_DSS_WITH_AES_128_CBC_SHA256,TLS_DHE_RSA_WITH_AES_128_CBC_SHA,TLS_DHE_DSS_WITH_AES_128_CBC_SHA", ','),
+			String[] excludeCipherSuites = combine(
+				split("SSL_RSA_WITH_DES_CBC_SHA,SSL_DHE_RSA_WITH_DES_CBC_SHA,SSL_DHE_DSS_WITH_DES_CBC_SHA,SSL_RSA_EXPORT_WITH_RC4_40_MD5,SSL_RSA_EXPORT_WITH_DES40_CBC_SHA,SSL_DHE_RSA_EXPORT_WITH_DES40_CBC_SHA,SSL_DHE_RSA_WITH_3DES_EDE_CBC_SHA,SSL_DHE_DSS_WITH_3DES_EDE_CBC_SHA,TLS_DHE_RSA_WITH_AES_256_CBC_SHA256,TLS_DHE_DSS_WITH_AES_256_CBC_SHA256,TLS_DHE_RSA_WITH_AES_256_CBC_SHA,TLS_DHE_DSS_WITH_AES_256_CBC_SHA,TLS_DHE_RSA_WITH_AES_128_CBC_SHA256,TLS_DHE_DSS_WITH_AES_128_CBC_SHA256,TLS_DHE_RSA_WITH_AES_128_CBC_SHA,TLS_DHE_DSS_WITH_AES_128_CBC_SHA", ','),
 				sslContextFactory.getExcludeCipherSuites()
 			);
 			sslContextFactory.setExcludeCipherSuites(excludeCipherSuites);
@@ -480,14 +484,14 @@ public class RestMicroservice extends Microservice {
 		if (resourceMap != null && ! resourceMap.isEmpty()) {
 			for (Map.Entry<String,Object> e : resourceMap.entrySet()) {
 				Class<?> c = Class.forName(e.getValue().toString());
-				if (! ClassUtils.isParentClass(Servlet.class, c))
+				if (! isParentClass(Servlet.class, c))
 					throw new ClassNotFoundException("Invalid class specified as resource.  Must be a Servlet.  Class='"+c.getName()+"'");
 				rm.put(e.getKey(), (Class<? extends Servlet>)c);
 			}
 		} else if (resources.length > 0) {
 			for (String resource : resources) {
 				Class<?> c = Class.forName(resource);
-				if (! ClassUtils.isParentClass(Servlet.class, c))
+				if (! isParentClass(Servlet.class, c))
 					throw new ClassNotFoundException("Invalid class specified as resource.  Must be a Servlet.  Class='"+c.getName()+"'");
 				RestResource rr = c.getAnnotation(RestResource.class);
 				String path = rr == null ? "/*" : rr.path();

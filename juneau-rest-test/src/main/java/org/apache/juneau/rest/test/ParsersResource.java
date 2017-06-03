@@ -12,11 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
+import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.rest.annotation.Inherit.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.*;
@@ -44,7 +44,7 @@ public class ParsersResource extends RestServletDefault {
 		@SuppressWarnings("unchecked")
 		@Override /* Parser */
 		protected <T> T doParse(ParserSession session, ClassMeta<T> type) throws Exception {
-			return (T)("text/a - " + IOUtils.read(session.getReader()).trim());
+			return (T)("text/a - " + read(session.getReader()).trim());
 		}
 	}
 
@@ -74,7 +74,7 @@ public class ParsersResource extends RestServletDefault {
 		@SuppressWarnings("unchecked")
 		@Override /* Parser */
 		protected <T> T doParse(ParserSession session, ClassMeta<T> type) throws Exception {
-			return (T)("text/b - " + IOUtils.read(session.getReader()).trim());
+			return (T)("text/b - " + read(session.getReader()).trim());
 		}
 	}
 
@@ -96,7 +96,7 @@ public class ParsersResource extends RestServletDefault {
 		@SuppressWarnings("unchecked")
 		@Override /* Parser */
 		protected <T> T doParse(ParserSession session, ClassMeta<T> type) throws Exception {
-			return (T)("text/c - " + IOUtils.read(session.getReader()).trim());
+			return (T)("text/c - " + read(session.getReader()).trim());
 		}
 	}
 
@@ -118,7 +118,7 @@ public class ParsersResource extends RestServletDefault {
 		@SuppressWarnings("unchecked")
 		@Override /* Parser */
 		protected <T> T doParse(ParserSession session, ClassMeta<T> type) throws Exception {
-			return (T)("text/d - " + IOUtils.read(session.getReader()).trim());
+			return (T)("text/d - " + read(session.getReader()).trim());
 		}
 	}
 

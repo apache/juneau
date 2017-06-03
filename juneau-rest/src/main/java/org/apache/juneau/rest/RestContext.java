@@ -13,6 +13,11 @@
 package org.apache.juneau.rest;
 
 import static javax.servlet.http.HttpServletResponse.*;
+import static org.apache.juneau.internal.ArrayUtils.*;
+import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.FileUtils.*;
+import static org.apache.juneau.internal.IOUtils.*;
+import static org.apache.juneau.internal.ReflectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -375,15 +380,15 @@ public final class RestContext extends Context {
 			this.urlEncodingSerializer = b.urlEncodingSerializer;
 			this.urlEncodingParser = b.urlEncodingParser;
 			this.encoders = b.encoders;
-			this.supportedContentTypes = ArrayUtils.toObjectArray(b.supportedContentTypes, MediaType.class);
-			this.supportedAcceptTypes = ArrayUtils.toObjectArray(b.supportedAcceptTypes, MediaType.class);
+			this.supportedContentTypes = toObjectArray(b.supportedContentTypes, MediaType.class);
+			this.supportedAcceptTypes = toObjectArray(b.supportedAcceptTypes, MediaType.class);
 			this.clientVersionHeader = b.clientVersionHeader;
 			this.defaultRequestHeaders = Collections.unmodifiableMap(b.defaultRequestHeaders);
 			this.defaultResponseHeaders = Collections.unmodifiableMap(b.defaultResponseHeaders);
 			this.beanContext = b.beanContext;
 			this.converters = b.converters.toArray(new RestConverter[b.converters.size()]);
 			this.guards = b.guards.toArray(new RestGuard[b.guards.size()]);
-			this.responseHandlers = ArrayUtils.toObjectArray(b.responseHandlers, ResponseHandler.class);
+			this.responseHandlers = toObjectArray(b.responseHandlers, ResponseHandler.class);
 			this.mimetypesFileTypeMap = b.mimetypesFileTypeMap;
 			this.styleSheet = b.styleSheet;
 			this.favIcon = b.favIcon;
@@ -423,7 +428,7 @@ public final class RestContext extends Context {
 							final ClassMeta<?> interfaceClass = beanContext.getClassMeta(method.getGenericReturnType());
 							final Map<String,Method> remoteableMethods = interfaceClass.getRemoteableMethods();
 							if (remoteableMethods.isEmpty())
-								throw new RestException(SC_INTERNAL_SERVER_ERROR, "Method {0} returns an interface {1} that doesn't define any remoteable methods.", ClassUtils.getMethodSignature(method), interfaceClass.getReadableName());
+								throw new RestException(SC_INTERNAL_SERVER_ERROR, "Method {0} returns an interface {1} that doesn't define any remoteable methods.", getMethodSignature(method), interfaceClass.getReadableName());
 
 							sm = new CallMethod(resource, method, this) {
 
@@ -437,7 +442,7 @@ public final class RestContext extends Context {
 									final Object o = res.getOutput();
 
 									if ("GET".equals(req.getMethod())) {
-										res.setOutput(ClassUtils.getMethodInfo(remoteableMethods.values()));
+										res.setOutput(getMethodInfo(remoteableMethods.values()));
 										return SC_OK;
 
 									} else if ("POST".equals(req.getMethod())) {
@@ -517,14 +522,14 @@ public final class RestContext extends Context {
 				} else {
 
 					// Call the init(RestConfig) method.
-					java.lang.reflect.Method m2 = ClassUtils.findPublicMethod(r.getClass(), "init", Void.class, RestConfig.class);
+					java.lang.reflect.Method m2 = findPublicMethod(r.getClass(), "init", Void.class, RestConfig.class);
 					if (m2 != null)
 						m2.invoke(r, childConfig);
 
 					RestContext rc2 = new RestContext(r, childConfig);
 
 					// Call the init(RestContext) method.
-					m2 = ClassUtils.findPublicMethod(r.getClass(), "init", Void.class, RestContext.class);
+					m2 = findPublicMethod(r.getClass(), "init", Void.class, RestContext.class);
 					if (m2 != null)
 						m2.invoke(r, rc2);
 
@@ -589,7 +594,7 @@ public final class RestContext extends Context {
 
 			PropertyStore ps = sc.createPropertyStore();
 
-			LinkedHashMap<Class<?>,RestResource> restResourceAnnotationsChildFirst = ReflectionUtils.findAnnotationsMap(RestResource.class, resource.getClass());
+			LinkedHashMap<Class<?>,RestResource> restResourceAnnotationsChildFirst = findAnnotationsMap(RestResource.class, resource.getClass());
 
 			allowHeaderParams = ps.getProperty(REST_allowHeaderParams, boolean.class, true);
 			allowBodyParam = ps.getProperty(REST_allowBodyParam, boolean.class, true);
@@ -612,11 +617,11 @@ public final class RestContext extends Context {
 			properties = sc.properties;
 			Collections.reverse(sc.beanFilters);
 			Collections.reverse(sc.pojoSwaps);
-			beanFilters = ArrayUtils.toObjectArray(sc.beanFilters, Class.class);
-			pojoSwaps = ArrayUtils.toObjectArray(sc.pojoSwaps, Class.class);
+			beanFilters = toObjectArray(sc.beanFilters, Class.class);
+			pojoSwaps = toObjectArray(sc.pojoSwaps, Class.class);
 
 			for (Class<?> c : sc.paramResolvers) {
-				RestParam rp = (RestParam)c.newInstance();
+				RestParam rp = newInstance(RestParam.class, c);
 				paramResolvers.put(rp.forClass(), rp);
 			}
 
@@ -674,7 +679,7 @@ public final class RestContext extends Context {
 							else
 								contents.add(ReflectionUtils.getResource(p.first(), path));
 					} else {
-						contents.add(IOUtils.toInputStream(o));
+						contents.add(toInputStream(o));
 					}
 				}
 				styleSheet = new StreamResource(MediaType.forString("text/css"), contents.toArray());
@@ -687,7 +692,7 @@ public final class RestContext extends Context {
 					Pair<Class<?>,String> p = (Pair<Class<?>,String>)o;
 					is = ReflectionUtils.getResource(p.first(), vr.resolve(p.second()));
 				} else {
-					is = IOUtils.toInputStream(o);
+					is = toInputStream(o);
 				}
 				if (is != null)
 					favIcon = new StreamResource(MediaType.forString("image/x-icon"), is);
@@ -844,9 +849,9 @@ public final class RestContext extends Context {
 	protected InputStream getResource(String name, Locale locale) throws IOException {
 		String n = (locale == null || locale.toString().isEmpty() ? name : name + '|' + locale);
 		if (! resourceStreams.containsKey(n)) {
-			InputStream is = ReflectionUtils.getLocalizedResource(resource.getClass(), name, locale);
+			InputStream is = getLocalizedResource(resource.getClass(), name, locale);
 			if (is == null && name.indexOf("..") == -1) {
-				for (String n2 : FileUtils.getCandidateFileNames(name, locale)) {
+				for (String n2 : getCandidateFileNames(name, locale)) {
 					File f = new File(n2);
 					if (f.exists() && f.canRead()) {
 						is = new FileInputStream(f);
@@ -877,7 +882,7 @@ public final class RestContext extends Context {
 	public String getResourceAsString(String name, Locale locale) throws IOException {
 		String n = (locale == null || locale.toString().isEmpty() ? name : name + '|' + locale);
 		if (! resourceStrings.containsKey(n)) {
-			String s = IOUtils.read(getResource(name, locale));
+			String s = read(getResource(name, locale));
 			if (s == null)
 				throw new IOException("Resource '"+name+"' not found.");
 			resourceStrings.put(n, s);
@@ -908,7 +913,7 @@ public final class RestContext extends Context {
 			if (p != null) {
 				try {
 					if (p.isReaderParser())
-						return p.parse(new InputStreamReader(is, IOUtils.UTF8), c);
+						return p.parse(new InputStreamReader(is, UTF8), c);
 					return p.parse(is, c);
 				} catch (ParseException e) {
 					throw new ServletException("Could not parse resource '' as media type '"+mediaType+"'.");
@@ -1332,7 +1337,7 @@ public final class RestContext extends Context {
 					// Check for {#} variables.
 					String idxs = String.valueOf(idx);
 					for (int j = 0; j < vars.length; j++)
-						if (StringUtils.isNumeric(vars[j]) && vars[j].equals(idxs))
+						if (isNumeric(vars[j]) && vars[j].equals(idxs))
 							name = vars[j];
 
 					if (name.isEmpty())
@@ -1606,9 +1611,9 @@ public final class RestContext extends Context {
 			return (T)o;
 		if (! (o instanceof Class))
 			throw new RestServletException("Invalid object type passed to resolve:  ''{0}''.  Must be an object of type T or a Class<? extend T>.", o.getClass());
-		Constructor<T> n = ClassUtils.findPublicConstructor((Class<T>)o, cArgs);
+		Constructor<T> n = findPublicConstructor((Class<T>)o, cArgs);
 		if (n == null)
-			throw new RestServletException("Could not find public constructor for class ''{0}'' that takes in args {1}", c, JsonSerializer.DEFAULT_LAX.toString(ClassUtils.getClasses(cArgs)));
+			throw new RestServletException("Could not find public constructor for class ''{0}'' that takes in args {1}", c, JsonSerializer.DEFAULT_LAX.toString(getClasses(cArgs)));
 		try {
 			return n.newInstance(cArgs);
 		} catch (Exception e) {

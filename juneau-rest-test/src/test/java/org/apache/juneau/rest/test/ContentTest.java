@@ -12,9 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
+import static org.apache.juneau.internal.StringUtils.*;
 import static org.junit.Assert.*;
 
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.client.*;
@@ -281,7 +281,7 @@ public class ContentTest extends RestTestcase {
 		//	public TreeMap<String,String> testMap(@Body TreeMap<String,String> m) {
 		//		return m;
 		//	}
-		r = c.doPost(URL + "/Map?body=" + encode("{a:'b',c:'d'}") + "&Content-Type=text/json", null).getResponseAsString();
+		r = c.doPost(URL + "/Map?body=" + urlEncode("{a:'b',c:'d'}") + "&Content-Type=text/json", null).getResponseAsString();
 		assertEquals("{a:'b',c:'d'}", r);
 		r = c.doPost(URL + "/Map?body=null&Content-Type=text/json", null).getResponseAsString();
 		assertEquals("null", r);
@@ -297,7 +297,7 @@ public class ContentTest extends RestTestcase {
 		//		return b;
 		//	}
 		DTOs.B b = DTOs.B.create();
-		r = c.doPost(URL + "/B?body=" + encode(JsonSerializer.DEFAULT_LAX.serialize(b)) + "&Content-Type=text/json", null).getResponseAsString();
+		r = c.doPost(URL + "/B?body=" + urlEncode(JsonSerializer.DEFAULT_LAX.serialize(b)) + "&Content-Type=text/json", null).getResponseAsString();
 		assertEquals("{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}", r);
 
 		//	@RestMethod(name="POST", path="/C")
@@ -305,7 +305,7 @@ public class ContentTest extends RestTestcase {
 		//		return c;
 		//	}
 		DTOs.C x = DTOs.C.create();
-		r = c.doPost(URL + "/C?body=" + encode(JsonSerializer.DEFAULT_LAX.serialize(x)) + "&Content-Type=text/json", null).getResponseAsString();
+		r = c.doPost(URL + "/C?body=" + urlEncode(JsonSerializer.DEFAULT_LAX.serialize(x)) + "&Content-Type=text/json", null).getResponseAsString();
 		assertEquals("{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}", r);
 
 		c.closeQuietly();
@@ -446,10 +446,5 @@ public class ContentTest extends RestTestcase {
 		assertEquals("{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}", r);
 
 		c.closeQuietly();
-	}
-
-
-	private String encode(String s) {
-		return StringUtils.urlEncode(s);
 	}
 }

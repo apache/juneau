@@ -12,10 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.svl;
 
+import static org.apache.juneau.internal.ClassUtils.*;
+
 import java.util.*;
 import java.util.concurrent.*;
-
-import org.apache.juneau.internal.*;
 
 /**
  * Configurable properties on the {@link VarResolver} class.
@@ -41,14 +41,10 @@ public class VarResolverContext {
 
 		Map<String,Var> m = new ConcurrentSkipListMap<String,Var>();
 		for (Class<?> c : vars) {
-			if (! ClassUtils.isParentClass(Var.class, c))
+			if (! isParentClass(Var.class, c))
 				throw new RuntimeException("Invalid variable class.  Must extend from Var");
-			try {
-				Var v = (Var)c.newInstance();
-				m.put(v.getName(), v);
-			} catch (Exception e) {
-				throw new RuntimeException(e);
-			}
+			Var v = newInstance(Var.class, c);
+			m.put(v.getName(), v);
 		}
 
 		this.varMap = Collections.unmodifiableMap(m);

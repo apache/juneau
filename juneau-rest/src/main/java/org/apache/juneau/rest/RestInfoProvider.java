@@ -14,13 +14,13 @@ package org.apache.juneau.rest;
 
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.dto.swagger.SwaggerBuilder.*;
+import static org.apache.juneau.internal.ReflectionUtils.*;
 
 import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
@@ -84,7 +84,7 @@ public class RestInfoProvider {
 
 		Builder(RestContext context) {
 
-			LinkedHashMap<Class<?>,RestResource> restResourceAnnotationsParentFirst = ReflectionUtils.findAnnotationsMapParentFirst(RestResource.class, context.getResource().getClass());
+			LinkedHashMap<Class<?>,RestResource> restResourceAnnotationsParentFirst = findAnnotationsMapParentFirst(RestResource.class, context.getResource().getClass());
 
 			for (RestResource r : restResourceAnnotationsParentFirst.values()) {
 				if (! r.title().isEmpty())

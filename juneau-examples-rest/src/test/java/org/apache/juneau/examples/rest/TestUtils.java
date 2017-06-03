@@ -13,6 +13,8 @@
 package org.apache.juneau.examples.rest;
 
 import static org.junit.Assert.*;
+import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
 import java.text.*;
@@ -26,7 +28,6 @@ import javax.xml.transform.dom.*;
 import javax.xml.transform.stream.*;
 import javax.xml.validation.*;
 
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transforms.*;
@@ -252,7 +253,7 @@ public class TestUtils {
 		if (is == null) {
 			is = new FileInputStream(p);
 		}
-		String e = IOUtils.read(is);
+		String e = read(is);
 		e = e.replaceAll("\r", "");
 		return e;
 	}
@@ -268,7 +269,7 @@ public class TestUtils {
 
 	public static void debugOut(Object o) {
 		try {
-			System.err.println(StringUtils.decodeHex(JsonSerializer.DEFAULT_LAX.serialize(o)));
+			System.err.println(decodeHex(JsonSerializer.DEFAULT_LAX.serialize(o)));
 		} catch (SerializeException e) {
 			e.printStackTrace();
 		}

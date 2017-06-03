@@ -16,6 +16,7 @@ import static org.apache.juneau.http.Constants.*;
 
 import org.apache.juneau.internal.*;
 
+
 /**
  * Represents a parsed <l>Accept-Charset</l> HTTP request header.
  * <p>

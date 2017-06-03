@@ -12,9 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
+import static org.apache.juneau.internal.IOUtils.*;
+
 import java.io.*;
 
-import org.apache.juneau.internal.*;
 import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -34,7 +35,7 @@ public class NoParserInputResource extends RestServlet {
 	//====================================================================================================
 	@RestMethod(name="PUT", path="/testInputStream")
 	public String testInputStream(@Body InputStream in) throws Exception {
-		return IOUtils.read(in);
+		return read(in);
 	}
 
 	//====================================================================================================
@@ -42,7 +43,7 @@ public class NoParserInputResource extends RestServlet {
 	//====================================================================================================
 	@RestMethod(name="PUT", path="/testReader")
 	public String testReader(@Body Reader in) throws Exception {
-		return IOUtils.read(in);
+		return read(in);
 	}
 
 	//====================================================================================================
@@ -51,6 +52,6 @@ public class NoParserInputResource extends RestServlet {
 	//====================================================================================================
 	@RestMethod(name="PUT", path="/testPushbackReader")
 	public String testPushbackReader(@Body PushbackReader in) throws Exception {
-		return IOUtils.read(in);
+		return read(in);
 	}
 }

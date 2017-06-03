@@ -13,6 +13,8 @@
 package org.apache.juneau.utils;
 
 import static org.apache.juneau.internal.ThrowableUtils.*;
+import static org.apache.juneau.internal.IOUtils.*;
+
 
 import java.io.*;
 import java.util.*;
@@ -161,18 +163,18 @@ public class IOPipe {
 		int c = 0;
 
 		try {
-		if (input instanceof InputStream && output instanceof OutputStream && lineProcessor == null) {
-			InputStream in = (InputStream)input;
-			OutputStream out = (OutputStream)output;
-			byte[] b = new byte[buffSize];
-			int i;
+			if (input instanceof InputStream && output instanceof OutputStream && lineProcessor == null) {
+				InputStream in = (InputStream)input;
+				OutputStream out = (OutputStream)output;
+				byte[] b = new byte[buffSize];
+				int i;
 				while ((i = in.read(b)) > 0) {
 					c += i;
 					out.write(b, 0, i);
 				}
-		} else {
-				Reader in = (input instanceof Reader ? (Reader)input : new InputStreamReader((InputStream)input, IOUtils.UTF8));
-				Writer out = (output instanceof Writer ? (Writer)output : new OutputStreamWriter((OutputStream)output, IOUtils.UTF8));
+			} else {
+				Reader in = (input instanceof Reader ? (Reader)input : new InputStreamReader((InputStream)input, UTF8));
+				Writer out = (output instanceof Writer ? (Writer)output : new OutputStreamWriter((OutputStream)output, UTF8));
 				output = out;
 				input = in;
 				if (byLines || lineProcessor != null) {
@@ -201,16 +203,16 @@ public class IOPipe {
 					}
 				}
 			}
-			} finally {
+		} finally {
 			closeQuietly(input, output);
 		}
 		return c;
 	}
 
 	private void closeQuietly(Object input, Object output) {
-					if (closeIn)
+		if (closeIn)
 			IOUtils.closeQuietly(input);
-					if (closeOut)
+		if (closeOut)
 			IOUtils.closeQuietly(output);
 	}
 }

@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
+import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.rest.RestContext.*;
 
 import java.io.*;
@@ -323,17 +324,17 @@ public class ParamsResource extends RestServletDefault {
 
 	@RestMethod(name="POST", path="/otherObjects/InputStream")
 	public String testOtherInputStream(InputStream t) throws IOException {
-		return IOUtils.read(t);
+		return read(t);
 	}
 
 	@RestMethod(name="POST", path="/otherObjects/ServletInputStream")
 	public String testOtherServletInputStream(ServletInputStream t) throws IOException {
-		return IOUtils.read(t);
+		return read(t);
 	}
 
 	@RestMethod(name="POST", path="/otherObjects/Reader")
 	public String testOtherReader(Reader t) throws IOException {
-		return IOUtils.read(t);
+		return read(t);
 	}
 
 	@RestMethod(name="GET", path="/otherObjects/OutputStream")

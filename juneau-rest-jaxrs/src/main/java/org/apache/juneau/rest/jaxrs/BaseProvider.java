@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.jaxrs;
 
 import static javax.servlet.http.HttpServletResponse.*;
+import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
 import java.lang.annotation.*;
@@ -26,7 +27,6 @@ import javax.ws.rs.ext.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.serializer.*;
@@ -113,7 +113,7 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 			TimeZone timeZone = getTimeZone(headers);
 			if (s.isWriterSerializer()) {
 				WriterSerializer s2 = (WriterSerializer)s;
-				OutputStreamWriter w = new OutputStreamWriter(out, IOUtils.UTF8);
+				OutputStreamWriter w = new OutputStreamWriter(out, UTF8);
 				SerializerSession session = s.createSession(w, mp, null, locale, timeZone, sm.getMediaType(), null);
 				s2.serialize(session, o);
 				w.flush();
@@ -149,7 +149,7 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 			TimeZone timeZone = getTimeZone(headers);
 			if (p.isReaderParser()) {
 				ReaderParser p2 = (ReaderParser)p;
-				InputStreamReader r = new InputStreamReader(in, IOUtils.UTF8);
+				InputStreamReader r = new InputStreamReader(in, UTF8);
 				ParserSession session = p2.createSession(r, mp, null, null, locale, timeZone, pm.getMediaType());
 				return p2.parseSession(session, p.getBeanContext().getClassMeta(gType));
 			}

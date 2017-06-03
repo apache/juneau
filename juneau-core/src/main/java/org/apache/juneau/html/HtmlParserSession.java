@@ -14,6 +14,7 @@ package org.apache.juneau.html;
 
 import static javax.xml.stream.XMLStreamConstants.*;
 import static org.apache.juneau.html.HtmlTag.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -23,7 +24,6 @@ import javax.xml.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.xml.*;
 
 /**
@@ -93,7 +93,7 @@ public final class HtmlParserSession extends XmlParserSession {
 			if (et == START_ELEMENT) {
 				if (characters != null) {
 					if (sb.length() == 0)
-						characters = StringUtils.trimStart(characters);
+						characters = trimStart(characters);
 					sb.append(characters);
 					characters = null;
 				}
@@ -135,9 +135,9 @@ public final class HtmlParserSession extends XmlParserSession {
 			} else if (et == END_ELEMENT) {
 				if (characters != null) {
 					if (sb.length() == 0)
-						characters = StringUtils.trimStart(characters);
+						characters = trimStart(characters);
 					if (depth == 0)
-						characters = StringUtils.trimEnd(characters);
+						characters = trimEnd(characters);
 					sb.append(characters);
 					characters = null;
 				}

@@ -14,6 +14,7 @@ package org.apache.juneau.serializer;
 
 import static org.apache.juneau.BeanContext.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.serializer.SerializerContext.*;
 
 import java.util.*;
@@ -99,14 +100,13 @@ public class SerializerGroupBuilder {
 	 *
 	 * @return A new {@link SerializerGroup} object.
 	 */
-	@SuppressWarnings("unchecked")
 	public SerializerGroup build() {
 		List<Serializer> l = new ArrayList<Serializer>();
 		for (Object s : serializers) {
-			Class<? extends Serializer> c = null;
+			Class<?> c = null;
 			PropertyStore ps = propertyStore;
 			if (s instanceof Class) {
-				c = ((Class<? extends Serializer>)s);
+				c = (Class<?>)s;
 			} else {
 				// Note that if we added a serializer instance, we want a new instance with this builder's properties
 				// on top of the previous serializer's properties.
@@ -114,11 +114,7 @@ public class SerializerGroupBuilder {
 				ps = s2.createPropertyStore().copyFrom(propertyStore);
 				c = s2.getClass();
 			}
-			try {
-				l.add(c.getConstructor(PropertyStore.class).newInstance(ps));
-			} catch (Exception e) {
-				throw new RuntimeException("Could not instantiate serializer " + c.getName(), e);
-			}
+			l.add(newInstance(Serializer.class, c, ps));
 		}
 		Collections.reverse(l);
 		return new SerializerGroup(propertyStore, l.toArray(new Serializer[l.size()]));

@@ -14,12 +14,13 @@ package org.apache.juneau.rest;
 
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.dto.swagger.SwaggerBuilder.*;
+import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.Utils.*;
 import static org.apache.juneau.rest.RestContext.*;
 import static org.apache.juneau.rest.annotation.Inherit.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
-import java.lang.reflect.Method;
 import java.util.*;
 
 import javax.servlet.http.*;
@@ -28,7 +29,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.html.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
@@ -179,20 +179,20 @@ class CallMethod implements Comparable<CallMethod>  {
 				String p = m.path();
 				converters = new RestConverter[m.converters().length];
 				for (int i = 0; i < converters.length; i++)
-					converters[i] = m.converters()[i].newInstance();
+					converters[i] = newInstance(RestConverter.class, m.converters()[i]);
 
 				guards = new RestGuard[m.guards().length];
 				for (int i = 0; i < guards.length; i++)
-					guards[i] = m.guards()[i].newInstance();
+					guards[i] = newInstance(RestGuard.class, m.guards()[i]);
 
 				List<RestMatcher> optionalMatchers = new LinkedList<RestMatcher>(), requiredMatchers = new LinkedList<RestMatcher>();
 				for (int i = 0; i < m.matchers().length; i++) {
 					Class<? extends RestMatcher> c = m.matchers()[i];
 					RestMatcher matcher = null;
-					if (ClassUtils.isParentClass(RestMatcherReflecting.class, c))
-						matcher = c.getConstructor(Object.class, Method.class).newInstance(servlet, method);
+					if (isParentClass(RestMatcherReflecting.class, c))
+						matcher = newInstance(RestMatcherReflecting.class, c, servlet, method);
 					else
-						matcher = c.newInstance();
+						matcher = newInstance(RestMatcher.class, c);
 					if (matcher.mustMatch())
 						requiredMatchers.add(matcher);
 					else
@@ -758,7 +758,7 @@ class CallMethod implements Comparable<CallMethod>  {
 		} catch (IllegalArgumentException e) {
 			throw new RestException(SC_BAD_REQUEST,
 				"Invalid argument type passed to the following method: ''{0}''.\n\tArgument types: {1}",
-				method.toString(), ClassUtils.getReadableClassNames(args)
+				method.toString(), getReadableClassNames(args)
 			);
 		} catch (InvocationTargetException e) {
 			Throwable e2 = e.getTargetException();		// Get the throwable thrown from the doX() method.
@@ -860,15 +860,15 @@ class CallMethod implements Comparable<CallMethod>  {
 		if (c != 0)
 			return c;
 
-		c = Utils.compare(o.requiredMatchers.length, requiredMatchers.length);
+		c = compare(o.requiredMatchers.length, requiredMatchers.length);
 		if (c != 0)
 			return c;
 
-		c = Utils.compare(o.optionalMatchers.length, optionalMatchers.length);
+		c = compare(o.optionalMatchers.length, optionalMatchers.length);
 		if (c != 0)
 			return c;
 
-		c = Utils.compare(o.guards.length, guards.length);
+		c = compare(o.guards.length, guards.length);
 		if (c != 0)
 			return c;
 

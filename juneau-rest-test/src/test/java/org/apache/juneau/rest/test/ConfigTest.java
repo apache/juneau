@@ -12,11 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
+import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.test.TestUtils.*;
 import static org.junit.Assert.*;
 
 import org.apache.juneau.ini.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.*;
 
@@ -52,6 +52,6 @@ public class ConfigTest extends RestTestcase {
 	}
 
 	private String getName(Class<?> c) {
-		return StringUtils.urlEncode(c.getName());
+		return urlEncode(c.getName());
 	}
 }

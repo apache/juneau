@@ -12,10 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
+import static org.apache.juneau.internal.ArrayUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 
 /**
@@ -101,7 +102,7 @@ public class SecurityScheme extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public SecurityScheme setType(String type) {
-		if (isStrict() && ! ArrayUtils.contains(type, VALID_TYPES))
+		if (isStrict() && ! contains(type, VALID_TYPES))
 			throw new RuntimeException("Invalid value passed in to setType(String).  Value='"+type+"', valid values=" + JsonSerializer.DEFAULT_LAX.toString(VALID_TYPES));
 		this.type = type;
 		return this;

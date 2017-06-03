@@ -13,6 +13,7 @@
 package org.apache.juneau.uon;
 
 import static org.apache.juneau.uon.UonParserContext.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -144,7 +145,7 @@ public class UonParser extends ReaderParser {
 					if ("true".equals(s) || "false".equals(s))
 						o = Boolean.valueOf(s);
 					else if (! "null".equals(s)) {
-						if (StringUtils.isNumeric(s))
+						if (isNumeric(s))
 							o = StringUtils.parseNumber(s, Number.class);
 						else
 							o = s;
@@ -647,7 +648,7 @@ public class UonParser extends ReaderParser {
 		}
 
 		if (isUrlParamValue)
-			s = StringUtils.trim(s);
+			s = trim(s);
 
 		return ("null".equals(s) ? null : session.trim(s));
 	}

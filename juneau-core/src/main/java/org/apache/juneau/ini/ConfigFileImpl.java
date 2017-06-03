@@ -14,6 +14,7 @@ package org.apache.juneau.ini;
 
 import static org.apache.juneau.ini.ConfigUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -161,7 +162,7 @@ public final class ConfigFileImpl extends ConfigFile {
 							section.addLines(null, lines.toArray(new String[lines.size()]));
 							lines.clear();
 							canAppend = false;
-							String sn = StringUtils.replaceUnicodeSequences(line.substring(line.indexOf('[')+1, line.indexOf(']')).trim());
+							String sn = replaceUnicodeSequences(line.substring(line.indexOf('[')+1, line.indexOf(']')).trim());
 							section = getSection(sn, true).addHeaderComments(section.removeTrailingComments());
 						} else {
 							char c = line.isEmpty() ? 0 : line.charAt(0);
@@ -219,7 +220,7 @@ public final class ConfigFileImpl extends ConfigFile {
 		if (isSimpleType(type))
 			return (T)pBeanSession.convertToType(s, (Class<?>)type);
 
-		char s1 = StringUtils.charAt(s, 0);
+		char s1 = charAt(s, 0);
 		if (s1 != '[' && s1 != '{' && ! "null".equals(s))
 			s = '\'' + s + '\'';
 
@@ -774,7 +775,7 @@ public final class ConfigFileImpl extends ConfigFile {
 	}
 
 	private static void addChange(Set<String> changes, String section, String key, String oldVal, String newVal) {
-		if (! StringUtils.isEquals(oldVal, newVal))
+		if (! isEquals(oldVal, newVal))
 			changes.add(getFullKey(section, key));
 	}
 

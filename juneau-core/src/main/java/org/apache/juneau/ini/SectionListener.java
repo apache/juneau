@@ -12,9 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.ini;
 
-import java.util.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
-import org.apache.juneau.internal.*;
+import java.util.*;
 
 /**
  * Listener that can be used to listen for change events for a specific section in a config file.
@@ -32,7 +32,7 @@ public class SectionListener extends ConfigFileListener {
 	 * @param section The name of the section in the config file to listen to.
 	 */
 	public SectionListener(String section) {
-		isDefault = StringUtils.isEmpty(section);
+		isDefault = isEmpty(section);
 		prefix = isDefault ? null : (section + '/');
 	}
 

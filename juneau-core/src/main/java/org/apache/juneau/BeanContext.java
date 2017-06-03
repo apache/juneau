@@ -877,30 +877,22 @@ public class BeanContext extends Context {
 		notBeanPackagePrefixes = l2.toArray(new String[l2.size()]);
 
 		LinkedList<BeanFilter> lbf = new LinkedList<BeanFilter>();
-		try {
-			for (Class<?> c : pm.get(BEAN_beanFilters, Class[].class, new Class[0])) {
-				if (isParentClass(BeanFilter.class, c))
-					lbf.add((BeanFilter)c.newInstance());
-				else if (isParentClass(BeanFilterBuilder.class, c))
-					lbf.add(((BeanFilterBuilder)c.newInstance()).build());
-				else
-					lbf.add(new InterfaceBeanFilterBuilder(c).build());
-			}
-		} catch (Exception e) {
-			throw new RuntimeException(e);
+		for (Class<?> c : pm.get(BEAN_beanFilters, Class[].class, new Class[0])) {
+			if (isParentClass(BeanFilter.class, c))
+				lbf.add(newInstance(BeanFilter.class, c));
+			else if (isParentClass(BeanFilterBuilder.class, c))
+				lbf.add(newInstance(BeanFilterBuilder.class, c).build());
+			else
+				lbf.add(new InterfaceBeanFilterBuilder(c).build());
 		}
 		beanFilters = lbf.toArray(new BeanFilter[0]);
 
 		LinkedList<PojoSwap<?,?>> lpf = new LinkedList<PojoSwap<?,?>>();
-		try {
-			for (Class<?> c : pm.get(BEAN_pojoSwaps, Class[].class, new Class[0])) {
-				if (isParentClass(PojoSwap.class, c))
-					lpf.add((PojoSwap<?,?>)c.newInstance());
-				else
-					lpf.addAll(SurrogateSwap.findPojoSwaps(c));
-			}
-		} catch (Exception e) {
-			throw new RuntimeException(e);
+		for (Class<?> c : pm.get(BEAN_pojoSwaps, Class[].class, new Class[0])) {
+			if (isParentClass(PojoSwap.class, c))
+				lpf.add(newInstance(PojoSwap.class, c));
+			else
+				lpf.addAll(SurrogateSwap.findPojoSwaps(c));
 		}
 		pojoSwaps = lpf.toArray(new PojoSwap[0]);
 

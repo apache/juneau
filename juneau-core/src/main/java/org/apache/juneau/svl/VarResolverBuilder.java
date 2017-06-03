@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.svl;
 
-import static java.text.MessageFormat.*;
+import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.util.*;
 
@@ -47,15 +47,7 @@ public class VarResolverBuilder {
 	@SuppressWarnings("unchecked")
 	public VarResolverBuilder vars(Class<?>...vars) {
 		for (Class<?> v : vars) {
-			try {
-				v.newInstance();
-			} catch (InstantiationException e) {
-				throw new UnsupportedOperationException(format("Cannot instantiate variable class {0}.  Must have a public no-arg constructor.", v.getName()));
-			} catch (RuntimeException e) {
-				throw e;
-			} catch (Exception e) {
-				throw new RuntimeException(e);
-			}
+			newInstance(Var.class, v);
 			this.vars.add((Class<? extends Var>)v);
 		}
 		return this;

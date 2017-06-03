@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.svl;
 
-import org.apache.juneau.internal.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 /**
  * Interface for the resolution of vars with a default value if the <code>resolve()</code> method returns <jk>null</jk>.
@@ -40,7 +40,7 @@ public abstract class DefaultingVar extends SimpleVar {
 		int i = s.indexOf(',');
 		if (i == -1)
 			return resolve(session, s.trim());
-		String[] s2 = StringUtils.split(s, ',');
+		String[] s2 = split(s, ',');
 		String v = resolve(session, s2[0]);
 		if (v == null)
 			v = s2[1];

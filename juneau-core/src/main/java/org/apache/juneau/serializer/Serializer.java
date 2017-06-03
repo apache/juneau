@@ -12,6 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.serializer;
 
+import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ReflectionUtils.*;
+
 import java.io.*;
 import java.lang.reflect.*;
 import java.text.*;
@@ -20,7 +23,6 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.soap.*;
 
 /**
@@ -50,11 +52,11 @@ public abstract class Serializer extends CoreObject {
 		super(propertyStore);
 		this.ctx = createContext(SerializerContext.class);
 
-		Produces p = ReflectionUtils.getAnnotation(Produces.class, getClass());
+		Produces p = getAnnotation(Produces.class, getClass());
 		if (p == null)
 			throw new RuntimeException(MessageFormat.format("Class ''{0}'' is missing the @Produces annotation", getClass().getName()));
 
-		String[] mt = StringUtils.split(p.value(), ',');
+		String[] mt = split(p.value(), ',');
 		this.mediaTypes = new MediaType[mt.length];
 		for (int i = 0; i < mt.length; i++) {
 			mediaTypes[i] = MediaType.forString(mt[i]);

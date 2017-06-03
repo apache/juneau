@@ -12,9 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.internal.ClassUtils.*;
+
 import java.text.*;
 
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 
 /**
@@ -32,7 +33,7 @@ public final class InvalidDataConversionException extends RuntimeException {
 	 * @param value The value being converted.
 	 */
 	public InvalidDataConversionException(Object value, Class<?> toType, Exception cause) {
-		super(MessageFormat.format("Invalid data conversion from type ''{0}'' to type ''{1}''.  Value={2}.", ClassUtils.getReadableClassNameForObject(value), ClassUtils.getReadableClassName(toType), getValue(value)), cause);
+		super(MessageFormat.format("Invalid data conversion from type ''{0}'' to type ''{1}''.  Value={2}.", getReadableClassNameForObject(value), getReadableClassName(toType), getValue(value)), cause);
 	}
 
 	/**
@@ -41,12 +42,12 @@ public final class InvalidDataConversionException extends RuntimeException {
 	 * @param value The value being converted.
 	 */
 	public InvalidDataConversionException(Object value, ClassMeta<?> toType, Exception cause) {
-		super(MessageFormat.format("Invalid data conversion from type ''{0}'' to type ''{1}''.  Value={2}.", ClassUtils.getReadableClassNameForObject(value), toType.toString(), getValue(value)), cause);
+		super(MessageFormat.format("Invalid data conversion from type ''{0}'' to type ''{1}''.  Value={2}.", getReadableClassNameForObject(value), toType.toString(), getValue(value)), cause);
 	}
 
 	private static String getValue(Object o) {
 		if (o instanceof Class)
-			return "'" + ClassUtils.getReadableClassName((Class<?>)o) + "'";
+			return "'" + getReadableClassName((Class<?>)o) + "'";
 		return JsonSerializer.DEFAULT_LAX == null ? "'" + o.toString() + "'" : JsonSerializer.DEFAULT_LAX.toString(o);
 	}
 }

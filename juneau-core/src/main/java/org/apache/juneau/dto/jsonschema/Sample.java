@@ -12,10 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.jsonschema;
 
+import static org.apache.juneau.internal.IOUtils.*;
+
 import java.io.*;
 import java.net.*;
 
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 
 @SuppressWarnings("serial")
@@ -30,7 +31,7 @@ class Sample {
 			public Schema load(URI uri) {
 				Reader r = null;
 				try {
-					r = new InputStreamReader(uri.toURL().openStream(), IOUtils.UTF8);
+					r = new InputStreamReader(uri.toURL().openStream(), UTF8);
 					Schema s = JsonParser.DEFAULT.parse(r, Schema.class);
 					return s;
 				} catch (Exception e) {

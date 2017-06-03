@@ -12,6 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
+import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.IOUtils.*;
+
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
@@ -282,13 +285,13 @@ public class ProcBuilder {
 			throw new IOException("No command specified in ProcBuilder.");
 		try {
 			logWriters.append(divider).append('\n').flush();
-			logWriters.append(StringUtils.join(pb.command(), " ")).append('\n').flush();
+			logWriters.append(join(pb.command(), " ")).append('\n').flush();
 			p = pb.start();
 			IOPipe.create(p.getInputStream(), outWriters).lineProcessor(lp).byLines(byLines).run();
 			int rc = p.waitFor();
 			logWriters.append("Exit: ").append(String.valueOf(p.exitValue())).append('\n').flush();
 			if (rc > maxExitStatus)
-				throw new IOException("Return code "+rc+" from command " + StringUtils.join(pb.command(), " "));
+				throw new IOException("Return code "+rc+" from command " + join(pb.command(), " "));
 			return rc;
 		} finally {
 			close();
@@ -327,7 +330,7 @@ public class ProcBuilder {
 	 * This method is only needed if the {@link #getScanner()} method was used.
 	 */
 	private void close() {
-		IOUtils.closeQuietly(logWriters, outWriters);
+		closeQuietly(logWriters, outWriters);
 		if (p != null)
 			p.destroy();
 	}

@@ -13,12 +13,12 @@
 package org.apache.juneau.rest.test;
 
 import static javax.servlet.http.HttpServletResponse.*;
+import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.rest.test.TestUtils.*;
 import static org.junit.Assert.*;
 
 import java.io.*;
 
-import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.*;
 
@@ -55,7 +55,7 @@ public class AcceptCharsetTest extends RestTestcase {
 		r = client.doGet(url).acceptCharset(requestCharset).connect();
 		assertTrue(r.getResponse().getFirstHeader("Content-Type").getValue().toLowerCase().contains(responseCharset));
 		is = r.getInputStream();
-		assertEquals("foo", IOUtils.read(new InputStreamReader(is, responseCharset)));
+		assertEquals("foo", read(new InputStreamReader(is, responseCharset)));
 	}
 
 	//====================================================================================================

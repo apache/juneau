@@ -12,6 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import static org.apache.juneau.internal.ArrayUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -87,7 +90,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 			String v = values.nextElement();
 			String[] s = new String[]{v};
 			while (values.hasMoreElements())
-				s = ArrayUtils.append(s, values.nextElement());
+				s = append(s, values.nextElement());
 			put(name, s);
 		}
 		return this;
@@ -223,7 +226,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @return A new headers object.
 	 */
 	public RequestHeaders subset(String headers) {
-		return subset(StringUtils.split(headers, ','));
+		return subset(split(headers, ','));
 	}
 
 	/**

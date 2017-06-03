@@ -13,6 +13,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
 import java.util.*;
@@ -591,7 +592,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 */
 	public String[] getStringArray(String key) {
 		String s = get(String.class, key);
-		return (s == null ? new String[0] : StringUtils.split(s, ','));
+		return (s == null ? new String[0] : split(s, ','));
 	}
 
 	/**
@@ -603,7 +604,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 */
 	public String[] getStringArray(String key, String[] def) {
 		String s = get(String.class, key);
-		String[] r = (s == null ? new String[0] : StringUtils.split(s, ','));
+		String[] r = (s == null ? new String[0] : split(s, ','));
 		return (r.length == 0 ? def : r);
 	}
 

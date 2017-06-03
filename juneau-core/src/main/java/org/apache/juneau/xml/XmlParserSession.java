@@ -14,6 +14,7 @@ package org.apache.juneau.xml;
 
 import static javax.xml.stream.XMLStreamConstants.*;
 import static org.apache.juneau.xml.XmlParserContext.*;
+import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -24,7 +25,6 @@ import javax.xml.stream.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.xml.annotation.*;
 
@@ -101,7 +101,7 @@ public class XmlParserSession extends ParserSession {
 	 */
 	public final XMLStreamReader getXmlStreamReader() throws Exception {
 		try {
-			Reader r = IOUtils.getBufferedReader(getReader());
+			Reader r = getBufferedReader(getReader());
 			XMLInputFactory factory = XMLInputFactory.newInstance();
 			factory.setProperty(XMLInputFactory.IS_VALIDATING, validating);
 			factory.setProperty(XMLInputFactory.IS_COALESCING, true);

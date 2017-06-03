@@ -12,11 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transform;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Bean filter builder initialized from the contents of a {@link Bean @Bean} annotation found on a class.
@@ -40,7 +41,7 @@ public final class AnnotationBeanFilterBuilder extends BeanFilterBuilder {
 			Bean b = li.previous();
 
 			if (! b.properties().isEmpty())
-				properties(StringUtils.split(b.properties(), ','));
+				properties(split(b.properties(), ','));
 
 			if (! b.typeName().isEmpty())
 				typeName(b.typeName());
@@ -49,7 +50,7 @@ public final class AnnotationBeanFilterBuilder extends BeanFilterBuilder {
 				sortProperties(true);
 
 			if (! b.excludeProperties().isEmpty())
-				excludeProperties(StringUtils.split(b.excludeProperties(), ','));
+				excludeProperties(split(b.excludeProperties(), ','));
 
 			if (b.propertyNamer() != PropertyNamerDefault.class)
 				propertyNamer(b.propertyNamer());

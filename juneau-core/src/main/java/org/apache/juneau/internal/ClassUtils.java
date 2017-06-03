@@ -743,20 +743,22 @@ public final class ClassUtils {
 	/**
 	 * Creates an instance of the specified class without throwing exceptions.
 	 *
-	 * @param c The class to instantiate.
+	 * @param c The class to cast to.
+	 * @param c2 The class to instantiate.
 	 * @param args The arguments to pass to the constructor.
 	 * @return The new class instance, or <jk>null</jk> if the class was <jk>null</jk>.
 	 * @throws RuntimeException if constructor could not be found or called.
 	 */
-	public static <T> T newInstance(Class<T> c, Object...args) {
-		if (c == null)
+	@SuppressWarnings("unchecked")
+	public static <T> T newInstance(Class<T> c, Class<?> c2, Object...args) {
+		if (c2 == null)
 			return null;
 		try {
 			if (args.length == 0)
-				return c.newInstance();
-			return c.getConstructor(getClasses(args)).newInstance(args);
+				return (T)c2.newInstance();
+			return (T)c2.getConstructor(getClasses(args)).newInstance(args);
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			throw new RuntimeException("Could not instantiate class " + c.getName(), e);
 		}
 	}
 }

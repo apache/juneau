@@ -12,10 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
+import static org.apache.juneau.internal.ArrayUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 
 /**
@@ -126,7 +127,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public HeaderInfo setType(String type) {
-		if (isStrict() && ! ArrayUtils.contains(type, VALID_TYPES))
+		if (isStrict() && ! contains(type, VALID_TYPES))
 			throw new RuntimeException("Invalid value passed in to setType(String).  Value='"+type+"', valid values=" + JsonSerializer.DEFAULT_LAX.toString(VALID_TYPES));
 		this.type = type;
 		return this;
@@ -252,7 +253,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public HeaderInfo setCollectionFormat(String collectionFormat) {
-		if (isStrict() && ! ArrayUtils.contains(collectionFormat, VALID_COLLECTION_FORMATS))
+		if (isStrict() && ! contains(collectionFormat, VALID_COLLECTION_FORMATS))
 			throw new RuntimeException("Invalid value passed in to setCollectionFormat(String).  Value='"+collectionFormat+"', valid values=" + JsonSerializer.DEFAULT_LAX.toString(VALID_COLLECTION_FORMATS));
 		this.collectionFormat = collectionFormat;
 		return this;

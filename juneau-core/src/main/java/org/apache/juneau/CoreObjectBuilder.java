@@ -13,6 +13,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.BeanContext.*;
+import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.beans.*;
 import java.io.*;
@@ -74,12 +75,9 @@ public abstract class CoreObjectBuilder {
 	 * @param c The subclass of {@link CoreObject} to instantiate.
 	 * @return A new object using the settings defined in this builder.
 	 */
+	@SuppressWarnings("unchecked")
 	public <T extends CoreObject> T build(Class<T> c) {
-		try {
-			return c.getConstructor(PropertyStore.class).newInstance(propertyStore);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+		return (T)newInstance(CoreObject.class, c, propertyStore);
 	}
 
 	//--------------------------------------------------------------------------------

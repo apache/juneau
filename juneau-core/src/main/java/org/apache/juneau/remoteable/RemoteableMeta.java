@@ -14,11 +14,10 @@ package org.apache.juneau.remoteable;
 
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ReflectionUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
-
-import org.apache.juneau.internal.*;
 
 /**
  * Contains the meta-data about a remoteable interface.
@@ -43,7 +42,7 @@ public class RemoteableMeta {
 	 * @param restUrl The absolute URL of the remote REST interface that implements this proxy interface.
 	 */
 	public RemoteableMeta(Class<?> c, String restUrl) {
-		Remoteable r = ReflectionUtils.getAnnotation(Remoteable.class, c);
+		Remoteable r = getAnnotation(Remoteable.class, c);
 
 		String expose = r == null ? "DECLARED" : r.expose();
 		if (! isOneOf(expose, "ALL", "DECLARED", "ANNOTATED"))

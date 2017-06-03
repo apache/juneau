@@ -12,13 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
+import static org.apache.juneau.internal.ArrayUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 import static org.junit.Assert.*;
 
 import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.plaintext.*;
 import org.apache.juneau.remoteable.*;
 import org.apache.juneau.rest.client.*;
@@ -1993,9 +1994,9 @@ public class RequestBeanProxyTest extends RestTestcase {
 			if (value == null)
 				return "NULL";
 			if (value instanceof Collection)
-				return StringUtils.join((Collection<?>)value, "X");
-			if (ArrayUtils.isArray(value))
-				return StringUtils.join(ArrayUtils.toList(value, Object.class), "X");
+				return join((Collection<?>)value, "X");
+			if (isArray(value))
+				return join(toList(value, Object.class), "X");
 			return "x" + value + "x";
 		}
 	}
@@ -2006,9 +2007,9 @@ public class RequestBeanProxyTest extends RestTestcase {
 			if (value == null)
 				return "NULL";
 			if (value instanceof Collection)
-				return StringUtils.join((Collection<?>)value, '|');
-			if (ArrayUtils.isArray(value))
-				return StringUtils.join(ArrayUtils.toList(value, Object.class), "|");
+				return join((Collection<?>)value, '|');
+			if (isArray(value))
+				return join(toList(value, Object.class), "|");
 			return "?" + value + "?";
 		}
 	}

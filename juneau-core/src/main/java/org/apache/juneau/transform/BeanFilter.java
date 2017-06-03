@@ -12,9 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transform;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Parent class for all bean filters.
@@ -41,8 +42,8 @@ public class BeanFilter {
 	BeanFilter(BeanFilterBuilder builder) {
 		this.beanClass = builder.beanClass;
 		this.typeName = builder.typeName;
-		this.properties = StringUtils.split(builder.properties, ',');
-		this.excludeProperties = StringUtils.split(builder.excludeProperties, ',');
+		this.properties = split(builder.properties, ',');
+		this.excludeProperties = split(builder.excludeProperties, ',');
 		this.interfaceClass = builder.interfaceClass;
 		this.stopClass = builder.stopClass;
 		this.sortProperties = builder.sortProperties;

@@ -13,6 +13,9 @@
 package org.apache.juneau.parser;
 
 import static org.apache.juneau.parser.ParserContext.*;
+import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.IOUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -21,7 +24,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link Parser}.
@@ -75,10 +77,9 @@ public class ParserSession extends BeanSession {
 	 * If <jk>null</jk>, then the timezone defined on the context is used.
 	 * @param mediaType The session media type (e.g. <js>"application/json"</js>).
 	 */
-	@SuppressWarnings("unchecked")
 	public ParserSession(ParserContext ctx, ObjectMap op, Object input, Method javaMethod, Object outer, Locale locale, TimeZone timeZone, MediaType mediaType) {
 		super(ctx, op, locale, timeZone, mediaType);
-		Class<? extends ParserListener> listenerClass;
+		Class<?> listenerClass;
 		if (op == null || op.isEmpty()) {
 			trimStrings = ctx.trimStrings;
 			strict = ctx.strict;
@@ -95,11 +96,7 @@ public class ParserSession extends BeanSession {
 		this.input = input;
 		this.javaMethod = javaMethod;
 		this.outer = outer;
-		try {
-			this.listener = listenerClass == null ? null : listenerClass.newInstance();
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+		this.listener = newInstance(ParserListener.class, listenerClass);
 	}
 
 	/**
@@ -115,25 +112,25 @@ public class ParserSession extends BeanSession {
 				return null;
 			if (input instanceof InputStream) {
 				if (isDebug()) {
-					byte[] b = IOUtils.readBytes((InputStream)input, 1024);
-					inputString = StringUtils.toHex(b);
+					byte[] b = readBytes((InputStream)input, 1024);
+					inputString = toHex(b);
 					return new ByteArrayInputStream(b);
 				}
 				return (InputStream)input;
 			}
 			if (input instanceof byte[]) {
 				if (isDebug())
-					inputString = StringUtils.toHex((byte[])input);
+					inputString = toHex((byte[])input);
 				return new ByteArrayInputStream((byte[])input);
 			}
 			if (input instanceof String) {
 				inputString = (String)input;
-				return new ByteArrayInputStream(StringUtils.fromHex((String)input));
+				return new ByteArrayInputStream(fromHex((String)input));
 			}
 			if (input instanceof File) {
 				if (isDebug()) {
-					byte[] b = IOUtils.readBytes((File)input);
-					inputString = StringUtils.toHex(b);
+					byte[] b = readBytes((File)input);
+					inputString = toHex(b);
 					return new ByteArrayInputStream(b);
 				}
 				inputStream = new FileInputStream((File)input);
@@ -158,7 +155,7 @@ public class ParserSession extends BeanSession {
 			return null;
 		if (input instanceof Reader) {
 			if (isDebug()) {
-				inputString = IOUtils.read((Reader)input);
+				inputString = read((Reader)input);
 				return new StringReader(inputString);
 			}
 			return (Reader)input;
@@ -183,7 +180,7 @@ public class ParserSession extends BeanSession {
 				noCloseReader = new InputStreamReader(is, cd);
 			}
 			if (isDebug()) {
-				inputString = IOUtils.read(noCloseReader);
+				inputString = read(noCloseReader);
 				return new StringReader(inputString);
 			}
 			return noCloseReader;
@@ -201,7 +198,7 @@ public class ParserSession extends BeanSession {
 				reader = new InputStreamReader(new FileInputStream((File)input), cd);
 			}
 			if (isDebug()) {
-				inputString = IOUtils.read(reader);
+				inputString = read(reader);
 				return new StringReader(inputString);
 			}
 			return reader;

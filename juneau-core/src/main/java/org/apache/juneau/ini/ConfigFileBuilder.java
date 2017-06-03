@@ -13,12 +13,12 @@
 package org.apache.juneau.ini;
 
 import static org.apache.juneau.ini.ConfigFileFormat.*;
+import static org.apache.juneau.internal.FileUtils.*;
 
 import java.io.*;
 import java.nio.charset.*;
 import java.util.*;
 
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
@@ -188,7 +188,7 @@ public class ConfigFileBuilder {
 		File f = new File(path);
 		if (f.isAbsolute()) {
 			if (createIfNotExists)
-				FileUtils.create(f);
+				create(f);
 			if (f.exists())
 				return f;
 			throw new FileNotFoundException("Could not find config file '"+path+"'");
@@ -206,7 +206,7 @@ public class ConfigFileBuilder {
 
 		if (createIfNotExists) {
 			f = new File(searchPaths.get(0).getAbsolutePath() + "/" + path);
-			FileUtils.create(f);
+			create(f);
 			return f;
 		}
 

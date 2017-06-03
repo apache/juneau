@@ -13,13 +13,13 @@
 package org.apache.juneau.html;
 
 import static org.apache.juneau.html.HtmlDocSerializerContext.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 
@@ -69,7 +69,7 @@ public final class HtmlDocSerializerSession extends HtmlSerializerSession {
 			text = op.getString(HTMLDOC_text, ctx.text);
 			links = new LinkedHashMap(op.getMap(HTMLDOC_links, ctx.links));
 			cssUrl = op.getString(HTMLDOC_cssUrl, ctx.cssUrl);
-			cssImports = StringUtils.split(op.getString(HTMLDOC_cssImports, null), ',');
+			cssImports = split(op.getString(HTMLDOC_cssImports, null), ',');
 			nowrap = op.getBoolean(HTMLDOC_cssUrl, ctx.nowrap);
 		}
 	}

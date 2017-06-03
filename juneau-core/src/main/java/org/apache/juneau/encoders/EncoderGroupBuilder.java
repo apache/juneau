@@ -13,6 +13,7 @@
 package org.apache.juneau.encoders;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.util.*;
 
@@ -46,13 +47,8 @@ public class EncoderGroupBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public EncoderGroupBuilder append(Class<?>...e) {
-		for (int i = e.length-1; i >= 0; i--) {
-			try {
-				encoders.add((Encoder)((Class<?>)e[i]).newInstance());
-			} catch (Exception x) {
-				throw new RuntimeException(x);
-			}
-		}
+		for (int i = e.length-1; i >= 0; i--)
+			encoders.add(newInstance(Encoder.class, e[i]));
 		return this;
 	}
 
@@ -96,17 +92,11 @@ public class EncoderGroupBuilder {
 	 *
 	 * @return A new {@link EncoderGroup} object.
 	 */
-	@SuppressWarnings("unchecked")
 	public EncoderGroup build() {
-		try {
-			List<Encoder> l = new ArrayList<Encoder>();
-			for (Object e : encoders) {
-				l.add(e instanceof Class ? ((Class<? extends Encoder>)e).getConstructor().newInstance() : (Encoder)e);
-			}
-			Collections.reverse(l);
-			return new EncoderGroup(l.toArray(new Encoder[l.size()]));
-		} catch (Exception x) {
-			throw new RuntimeException("Could not instantiate encoder.", x);
-		}
+		List<Encoder> l = new ArrayList<Encoder>();
+		for (Object e : encoders)
+			l.add(e instanceof Class ? newInstance(Encoder.class, (Class<?>)e) : (Encoder)e);
+		Collections.reverse(l);
+		return new EncoderGroup(l.toArray(new Encoder[l.size()]));
 	}
 }

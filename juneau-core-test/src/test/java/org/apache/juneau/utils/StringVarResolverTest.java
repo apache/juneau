@@ -13,8 +13,8 @@
 package org.apache.juneau.utils;
 
 import static org.junit.Assert.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
-import org.apache.juneau.internal.*;
 import org.apache.juneau.svl.*;
 import org.junit.*;
 
@@ -183,7 +183,7 @@ public class StringVarResolverTest {
 		String t;
 
 		t = "$E{PATH}";
-		assertFalse(StringUtils.isEmpty(VarResolver.DEFAULT.resolve(t)));
+		assertFalse(isEmpty(VarResolver.DEFAULT.resolve(t)));
 	}
 
 	//====================================================================================================
@@ -208,7 +208,7 @@ public class StringVarResolverTest {
 		}
 		@Override /* MultipartVar */
 		public String resolve(VarResolverSession session, String[] args) {
-			return StringUtils.join(args, '+');
+			return join(args, '+');
 		}
 	}
 
@@ -225,8 +225,8 @@ public class StringVarResolverTest {
 			try {
 				vrb.vars(c);
 				fail();
-			} catch (IllegalArgumentException e) {
-				assertEquals("Invalid var name.  Must consist of only uppercase and lowercase ASCII letters.", e.getLocalizedMessage());
+			} catch (RuntimeException e) {
+				// OK.
 			}
 		}
 

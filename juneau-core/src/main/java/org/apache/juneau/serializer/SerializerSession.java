@@ -13,6 +13,8 @@
 package org.apache.juneau.serializer;
 
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.IOUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.serializer.SerializerContext.*;
 
 import java.io.*;
@@ -22,7 +24,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.transform.*;
 
 /**
@@ -99,14 +100,13 @@ public class SerializerSession extends BeanSession {
 	 * @param uriContext The URI context.
 	 * 	Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
 	 */
-	@SuppressWarnings("unchecked")
 	public SerializerSession(SerializerContext ctx, ObjectMap op, Object output, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
 		super(ctx, op, locale, timeZone, mediaType);
 		this.javaMethod = javaMethod;
 		this.output = output;
 		UriResolution uriResolution;
 		UriRelativity uriRelativity;
-		Class<? extends SerializerListener> listenerClass;
+		Class<?> listenerClass;
 		if (op == null || op.isEmpty()) {
 			maxDepth = ctx.maxDepth;
 			initialDepth = ctx.initialDepth;
@@ -147,7 +147,7 @@ public class SerializerSession extends BeanSession {
 
 		uriResolver = new UriResolver(uriResolution, uriRelativity, uriContext == null ? ctx.uriContext : uriContext);
 
-		listener = ClassUtils.newInstance(listenerClass);
+		listener = newInstance(SerializerListener.class, listenerClass);
 
 		this.indent = initialDepth;
 		if (detectRecursions || isDebug()) {
@@ -205,7 +205,7 @@ public class SerializerSession extends BeanSession {
 			return (Writer)output;
 		if (output instanceof OutputStream) {
 			if (flushOnlyWriter == null)
-				flushOnlyWriter = new OutputStreamWriter((OutputStream)output, IOUtils.UTF8);
+				flushOnlyWriter = new OutputStreamWriter((OutputStream)output, UTF8);
 			return flushOnlyWriter;
 		}
 		if (output instanceof File) {
@@ -658,7 +658,7 @@ public class SerializerSession extends BeanSession {
 		if (o == null)
 			return null;
 		if (o.getClass() == Class.class)
-			return ClassUtils.getReadableClassName((Class<?>)o);
+			return getReadableClassName((Class<?>)o);
 		String s = o.toString();
 		if (trimStrings)
 			s = s.trim();
@@ -698,7 +698,7 @@ public class SerializerSession extends BeanSession {
 
 		private String toString(boolean simple) {
 			StringBuilder sb = new StringBuilder().append('[').append(depth).append(']');
-			sb.append(StringUtils.isEmpty(name) ? "<noname>" : name).append(':');
+			sb.append(isEmpty(name) ? "<noname>" : name).append(':');
 			sb.append(aType.toString(simple));
 			if (aType != aType.getSerializedClassMeta())
 				sb.append('/').append(aType.getSerializedClassMeta().toString(simple));

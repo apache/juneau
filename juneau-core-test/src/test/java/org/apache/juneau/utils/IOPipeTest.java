@@ -13,10 +13,10 @@
 package org.apache.juneau.utils;
 
 import static org.junit.Assert.*;
+import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
 
-import org.apache.juneau.internal.*;
 import org.apache.juneau.utils.IOPipe.*;
 import org.junit.*;
 
@@ -186,7 +186,7 @@ public class IOPipeTest {
 
 		@Override /* Object */
 		public String toString() {
-			return new String(this.toByteArray(), IOUtils.UTF8);
+			return new String(this.toByteArray(), UTF8);
 		}
 	}
 

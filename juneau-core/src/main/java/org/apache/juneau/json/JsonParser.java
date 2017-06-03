@@ -13,6 +13,7 @@
 package org.apache.juneau.json;
 
 import static org.apache.juneau.parser.ParserContext.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -202,7 +203,7 @@ public class JsonParser extends ReaderParser {
 			o = parseIntoBeanMap2(session, r, m).getBean();
 		} else if (sType.canCreateNewInstanceFromString(outer) && (c == '\'' || c == '"')) {
 			o = sType.newInstanceFromString(outer, parseString(session, r));
-		} else if (sType.canCreateNewInstanceFromNumber(outer) && StringUtils.isFirstNumberChar((char)c)) {
+		} else if (sType.canCreateNewInstanceFromNumber(outer) && isFirstNumberChar((char)c)) {
 			o = sType.newInstanceFromNumber(session, outer, parseNumber(session, r, sType.getNewInstanceFromNumberClass()));
 		} else if (sType.isArray() || sType.isArgs()) {
 			if (c == '{') {
@@ -242,7 +243,7 @@ public class JsonParser extends ReaderParser {
 		int c = r.peek();
 		if (c == '\'' || c == '"')
 			return parseNumber(session, parseString(session, r), type);
-		return parseNumber(session, StringUtils.parseNumberString(r), type);
+		return parseNumber(session, parseNumberString(r), type);
 	}
 
 	private static Number parseNumber(JsonParserSession session, String s, Class<? extends Number> type) throws Exception {

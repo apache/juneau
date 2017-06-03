@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.remoteable;
 
+import static org.apache.juneau.internal.ClassUtils.*;
+
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.urlencoding.*;
 
@@ -53,10 +55,6 @@ public class RemoteMethodArg {
 		this.name = name.isEmpty() ? name2 : name;
 		this.index = index;
 		this.skipIfNE = skipIfNE;
-		try {
-			this.serializer = (serializer == PartSerializer.class ? null : serializer.newInstance());
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+		this.serializer = (serializer == PartSerializer.class ? null : newInstance(PartSerializer.class, serializer));
 	}
 }

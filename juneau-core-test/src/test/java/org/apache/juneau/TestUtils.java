@@ -12,6 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.IOUtils.*;
+
 import java.io.*;
 import java.lang.reflect.*;
 import java.text.*;
@@ -24,7 +27,6 @@ import javax.xml.transform.dom.*;
 import javax.xml.transform.stream.*;
 import javax.xml.validation.*;
 
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transforms.*;
@@ -259,7 +261,7 @@ public class TestUtils {
 		if (is == null) {
 			is = new FileInputStream(path);
 		}
-		String e = IOUtils.read(is);
+		String e = read(is);
 		e = e.replaceAll("\r", "");
 		if (path.endsWith(".xml")) {
 			e = e.replaceAll("(?s)\\<\\!\\-\\-(.*)\\-\\-\\>\\s*", "");
@@ -281,7 +283,7 @@ public class TestUtils {
 
 	public static void debugOut(Object o) {
 		try {
-			System.err.println(StringUtils.decodeHex(JsonSerializer.DEFAULT_LAX.serialize(o))); // NOT DEBUG
+			System.err.println(decodeHex(JsonSerializer.DEFAULT_LAX.serialize(o))); // NOT DEBUG
 		} catch (SerializeException e) {
 			e.printStackTrace();
 		}
@@ -442,7 +444,7 @@ public class TestUtils {
 		if (o instanceof String)
 			return (String)o;
 		if (o instanceof byte[])
-			return new String((byte[])o, IOUtils.UTF8);
+			return new String((byte[])o, UTF8);
 		return o.toString();
 	}
 

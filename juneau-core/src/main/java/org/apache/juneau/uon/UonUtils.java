@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.uon;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import org.apache.juneau.internal.*;
 
 /**
@@ -44,7 +46,7 @@ public final class UonUtils {
 					"true".equals(s)
 					|| "false".equals(s)
 					|| "null".equals(s)
-					|| StringUtils.isNumeric(s)
+					|| isNumeric(s)
 				)
 			)
 		);

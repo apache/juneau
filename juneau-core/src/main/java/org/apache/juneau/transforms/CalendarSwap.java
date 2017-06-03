@@ -12,13 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transforms;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.text.*;
 import java.util.*;
 
 import javax.xml.bind.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.transform.*;
 
@@ -130,7 +131,7 @@ public class CalendarSwap extends StringSwap<Calendar> {
 		@Override /* PojoSwap */
 		public Calendar unswap(BeanSession session, String o, ClassMeta<?> hint) throws ParseException {
 			try {
-				if (StringUtils.isEmpty(o))
+				if (isEmpty(o))
 					return null;
 				return convert(DatatypeConverter.parseDateTime(o), hint);
 			} catch (Exception e) {
@@ -161,7 +162,7 @@ public class CalendarSwap extends StringSwap<Calendar> {
 		@Override /* PojoSwap */
 		public Calendar unswap(BeanSession session, String o, ClassMeta<?> hint) throws ParseException {
 			try {
-				if (StringUtils.isEmpty(o))
+				if (isEmpty(o))
 					return null;
 				return convert(DatatypeConverter.parseDateTime(o), hint);
 			} catch (Exception e) {
@@ -559,7 +560,7 @@ public class CalendarSwap extends StringSwap<Calendar> {
 	@Override /* PojoSwap */
 	public Calendar unswap(BeanSession session, String o, ClassMeta<?> hint) throws ParseException {
 		try {
-			if (StringUtils.isEmpty(o))
+			if (isEmpty(o))
 				return null;
 			return convert(getDateFormat(session, null).parse(o), hint, session);
 		} catch (Exception e) {

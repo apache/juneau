@@ -14,10 +14,12 @@ package org.apache.juneau.ini;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.junit.Assert.*;
+import static org.apache.juneau.internal.FileUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
 
-import org.apache.juneau.internal.*;
 import org.apache.juneau.svl.*;
 import org.junit.*;
 
@@ -29,14 +31,14 @@ public class ConfigFileBuilderTest {
 
 	@BeforeClass
 	public static void setup() {
-		tempDir = new File(System.getProperty("java.io.tmpdir"), StringUtils.generateUUID(12));
-		FileUtils.mkdirs(tempDir, true);
+		tempDir = new File(System.getProperty("java.io.tmpdir"), generateUUID(12));
+		mkdirs(tempDir, true);
 		TEMP_DIR = new String[]{tempDir.getAbsolutePath()};
 	}
 
 	@AfterClass
 	public static void teardown() {
-		FileUtils.delete(tempDir);
+		delete(tempDir);
 	}
 
 	/**
@@ -55,7 +57,7 @@ public class ConfigFileBuilderTest {
 		assertTrue(f.exists());
 
 		cf.save();
-		assertTextEquals("[Test]|A = a|", IOUtils.read(f));
+		assertTextEquals("[Test]|A = a|", read(f));
 
 		cf = b1.build("TestGet.cfg");
 		assertObjectEquals("{'default':{},Test:{A:'a'}}", cf);
@@ -64,7 +66,7 @@ public class ConfigFileBuilderTest {
 		cf = b1.build(new StringReader(("[Test]"+NL+"A = a"+NL)));
 		assertObjectEquals("{'default':{},Test:{A:'a'}}", cf);
 
-		b1.charset(IOUtils.UTF8);
+		b1.charset(UTF8);
 		cf = b1.build("TestGet.cfg");
 		assertObjectEquals("{'default':{},Test:{A:'a'}}", cf);
 	}
@@ -95,8 +97,8 @@ public class ConfigFileBuilderTest {
 
 		f = new File(tempDir, "TestGet.cfg");
 		String NL = System.getProperty("line.separator");
-		IOUtils.write(f, new StringReader("[Test]"+NL+"A = b"+NL));
-		FileUtils.modifyTimestamp(f);
+		write(f, new StringReader("[Test]"+NL+"A = b"+NL));
+		modifyTimestamp(f);
 
 		cf.loadIfModified();
 		assertEquals("b", cf.getString("Test/A"));
@@ -178,16 +180,16 @@ public class ConfigFileBuilderTest {
 
 		ConfigFileBuilder.main(new String[]{"createBatchEnvFile", "-configFile", configFile.getAbsolutePath(), "-envFile", envFile.getAbsolutePath()});
 		String expected = "rem c1|rem c2|rem c3||set x1 = 1|set x2 = true|set x3 = null|rem c4|set s1_k1 = 1|rem c5 foo=bar|set s1_k2 = true|set s1_k3 = null|";
-		String actual = IOUtils.read(envFile);
+		String actual = read(envFile);
 		assertTextEquals(expected, actual);
 
 		ConfigFileBuilder.main(new String[]{"createShellEnvFile", "-configFile", configFile.getAbsolutePath(), "-envFile", envFile.getAbsolutePath()});
 		expected = "# c1|# c2|# c3||export x1=\"1\"|export x2=\"true\"|export x3=\"null\"|# c4|export s1_k1=\"1\"|# c5 foo=bar|export s1_k2=\"true\"|export s1_k3=\"null\"|";
-		actual = IOUtils.read(envFile);
+		actual = read(envFile);
 		assertTextEquals(expected, actual);
 
 		ConfigFileBuilder.main(new String[]{"setVals", "-configFile", configFile.getAbsolutePath(), "-vals", "x1=2", "s1/k1=2", "s2/k1=3"});
-		FileUtils.modifyTimestamp(configFile);
+		modifyTimestamp(configFile);
 		cf.loadIfModified();
 		assertObjectEquals("{'default':{x1:'2',x2:'true',x3:'null'},s1:{k1:'2',k2:'true',k3:'null'},s2:{k1:'3'}}", cf);
 

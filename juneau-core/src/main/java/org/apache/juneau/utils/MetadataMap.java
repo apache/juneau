@@ -12,10 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
+import static org.apache.juneau.internal.ClassUtils.*;
+
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Utility class for quick lookup of class metadata instances.
@@ -56,7 +57,7 @@ public class MetadataMap {
 			try {
 				for (Constructor<?> con : c.getConstructors()) {
 					Class<?>[] params = con.getParameterTypes();
-					if (params.length == 1 && ClassUtils.isParentClass(params[0], constructorArg.getClass())) {
+					if (params.length == 1 && isParentClass(params[0], constructorArg.getClass())) {
 						o = con.newInstance(constructorArg);
 						break;
 					}

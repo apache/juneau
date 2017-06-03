@@ -19,7 +19,6 @@ import static org.junit.Assert.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.internal.*;
 import org.junit.*;
 
 @SuppressWarnings("javadoc")
@@ -159,11 +158,11 @@ public class ClassUtilsTest {
 	// getMethodAnnotation
 	//====================================================================================================
 	@Test
-	public void getMethodAnnotation() throws Exception {
-		assertEquals("a1", ClassUtils.getMethodAnnotation(TestAnnotation.class, CI3.class.getMethod("a1")).value());
-		assertEquals("a2b", ClassUtils.getMethodAnnotation(TestAnnotation.class, CI3.class.getMethod("a2")).value());
-		assertEquals("a3", ClassUtils.getMethodAnnotation(TestAnnotation.class, CI3.class.getMethod("a3", CharSequence.class)).value());
-		assertEquals("a4", ClassUtils.getMethodAnnotation(TestAnnotation.class, CI3.class.getMethod("a4")).value());
+	public void getMethodAnnotations() throws Exception {
+		assertEquals("a1", getMethodAnnotation(TestAnnotation.class, CI3.class.getMethod("a1")).value());
+		assertEquals("a2b", getMethodAnnotation(TestAnnotation.class, CI3.class.getMethod("a2")).value());
+		assertEquals("a3", getMethodAnnotation(TestAnnotation.class, CI3.class.getMethod("a3", CharSequence.class)).value());
+		assertEquals("a4", getMethodAnnotation(TestAnnotation.class, CI3.class.getMethod("a4")).value());
 	}
 	
 	public static interface CI1 {

@@ -12,10 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Utility class to make it easier to work with command-line arguments pass in through a <code>main(String[] args)</code> method.
@@ -109,7 +110,7 @@ public final class Args extends ObjectMap {
 		Integer i = 0;
 		while (! argList.isEmpty()) {
 			String s = argList.get(0);
-			if (StringUtils.startsWith(s,'-'))
+			if (startsWith(s,'-'))
 				break;
 			put(i.toString(), argList.remove(0));
 			i++;
@@ -119,7 +120,7 @@ public final class Args extends ObjectMap {
 		String key = null;
 		while (! argList.isEmpty()) {
 			String s = argList.remove(0);
-			if (StringUtils.startsWith(s, '-')) {
+			if (startsWith(s, '-')) {
 				key = s.substring(1);
 				if (key.matches("\\d*"))
 					throw new RuntimeException("Invalid optional key name '"+key+"'");

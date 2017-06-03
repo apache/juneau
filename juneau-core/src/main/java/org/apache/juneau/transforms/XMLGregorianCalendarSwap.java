@@ -12,10 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transforms;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import javax.xml.datatype.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
@@ -55,7 +56,7 @@ public class XMLGregorianCalendarSwap extends StringSwap<XMLGregorianCalendar> {
 	 */
 	@Override /* PojoSwap */
 	public XMLGregorianCalendar unswap(BeanSession session, String s, ClassMeta<?> hint) throws ParseException {
-		if (StringUtils.isEmpty(s))
+		if (isEmpty(s))
 			return null;
 		return dtf.newXMLGregorianCalendar(s);
 	}

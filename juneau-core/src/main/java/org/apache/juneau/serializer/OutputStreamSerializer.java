@@ -12,11 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.serializer;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.io.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Subclass of {@link Serializer} for byte-based serializers.
@@ -80,6 +81,6 @@ public abstract class OutputStreamSerializer extends Serializer {
 	public final String serializeToHex(Object o) throws SerializeException {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		serialize(createSession(baos), o);
-		return StringUtils.toHex(baos.toByteArray());
+		return toHex(baos.toByteArray());
 	}
 }

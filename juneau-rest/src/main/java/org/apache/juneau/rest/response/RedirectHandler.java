@@ -12,9 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.response;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.io.*;
 
-import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.*;
 
 /**
@@ -27,7 +28,7 @@ public final class RedirectHandler implements ResponseHandler {
 		if (output instanceof Redirect) {
 			Redirect r = (Redirect)output;
 			String uri = r.toUrl(res.getUrlEncodingSerializer());
-			if (StringUtils.isEmpty(uri))
+			if (isEmpty(uri))
 				uri = req.getServletURI();
 			else {
 				char c = (uri.length() > 0 ? uri.charAt(0) : 0);

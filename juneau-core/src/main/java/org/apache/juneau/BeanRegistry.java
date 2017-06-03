@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.internal.ClassUtils.*;
+
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.*;
@@ -57,17 +59,17 @@ public class BeanRegistry {
 	private void addClass(Class<?> c) {
 		try {
 			if (c != null) {
-				if (ClassUtils.isParentClass(Collection.class, c)) {
+				if (isParentClass(Collection.class, c)) {
 					@SuppressWarnings("rawtypes")
-					Collection cc = (Collection)c.newInstance();
+					Collection cc = newInstance(Collection.class, c);
 					for (Object o : cc) {
 						if (o instanceof Class)
 							addClass((Class<?>)o);
 						else
 							throw new BeanRuntimeException("Collection class ''{0}'' passed to BeanRegistry does not contain Class objects.", c.getName());
 					}
-				} else if (ClassUtils.isParentClass(Map.class, c)) {
-					Map<?,?> m = (Map<?,?>)c.newInstance();
+				} else if (isParentClass(Map.class, c)) {
+					Map<?,?> m = newInstance(Map.class, c);
 					for (Map.Entry<?,?> e : m.entrySet()) {
 						String typeName = StringUtils.toString(e.getKey());
 						Object v = e.getValue();

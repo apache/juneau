@@ -13,6 +13,8 @@
 package org.apache.juneau.rest.client;
 
 import static java.lang.String.*;
+import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -22,7 +24,6 @@ import java.util.regex.*;
 import org.apache.http.*;
 import org.apache.http.client.*;
 import org.apache.http.util.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Exception representing a <code>400+</code> HTTP response code against a remote resource.
@@ -76,7 +77,7 @@ public final class RestCallException extends IOException {
 	 * @throws IOException
 	 */
 	public RestCallException(String msg, HttpResponse response) throws ParseException, IOException {
-		super(format("%s%nstatus='%s'%nResponse: %n%s%n", msg, response.getStatusLine().getStatusCode(), EntityUtils.toString(response.getEntity(), IOUtils.UTF8)));
+		super(format("%s%nstatus='%s'%nResponse: %n%s%n", msg, response.getStatusLine().getStatusCode(), EntityUtils.toString(response.getEntity(), UTF8)));
 	}
 
 	/**
@@ -136,11 +137,11 @@ public final class RestCallException extends IOException {
 			Throwable t = null;
 			try {
 				Class<?> exceptionClass = cl.loadClass(serverExceptionName);
-				Constructor<?> c = ClassUtils.findPublicConstructor(exceptionClass, String.class);
+				Constructor<?> c = findPublicConstructor(exceptionClass, String.class);
 				if (c != null)
 					t = (Throwable)c.newInstance(serverExceptionMessage);
 				if (t == null) {
-					c = ClassUtils.findPublicConstructor(exceptionClass);
+					c = findPublicConstructor(exceptionClass);
 					if (c != null)
 						t = (Throwable)c.newInstance();
 				}

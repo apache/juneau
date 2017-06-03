@@ -16,6 +16,8 @@ import static org.apache.juneau.Visibility.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ReflectionUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ArrayUtils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -126,7 +128,7 @@ public class BeanPropertyMeta {
 				if (p != null) {
 					swap = getPropertyPojoSwap(p);
 					if (! p.properties().isEmpty())
-						properties = StringUtils.split(p.properties(), ',');
+						properties = split(p.properties(), ',');
 					bdClasses.addAll(Arrays.asList(p.beanDictionary()));
 				}
 			}
@@ -140,7 +142,7 @@ public class BeanPropertyMeta {
 					if (swap == null)
 						swap = getPropertyPojoSwap(p);
 					if (properties != null && ! p.properties().isEmpty())
-						properties = StringUtils.split(p.properties(), ',');
+						properties = split(p.properties(), ',');
 					bdClasses.addAll(Arrays.asList(p.beanDictionary()));
 				}
 			}
@@ -154,7 +156,7 @@ public class BeanPropertyMeta {
 					if (swap == null)
 						swap = getPropertyPojoSwap(p);
 					if (properties != null && ! p.properties().isEmpty())
-						properties = StringUtils.split(p.properties(), ',');
+						properties = split(p.properties(), ',');
 					bdClasses.addAll(Arrays.asList(p.beanDictionary()));
 				}
 			}
@@ -219,18 +221,13 @@ public class BeanPropertyMeta {
 			return new BeanPropertyMeta(this);
 		}
 
-		private PojoSwap getPropertyPojoSwap(BeanProperty p) throws Exception {
+		private static PojoSwap getPropertyPojoSwap(BeanProperty p) throws Exception {
 			Class<?> c = p.swap();
 			if (c == Null.class)
 				return null;
-			try {
-				if (isParentClass(PojoSwap.class, c)) {
-					return (PojoSwap)c.newInstance();
-				}
-				throw new RuntimeException("TODO - Surrogate swaps not yet supported.");
-			} catch (Exception e) {
-				throw new BeanRuntimeException(this.beanMeta.c, "Could not instantiate PojoSwap ''{0}'' for bean property ''{1}''", c.getName(), this.name).initCause(e);
-			}
+			if (isParentClass(PojoSwap.class, c))
+				return newInstance(PojoSwap.class, c);
+			throw new RuntimeException("TODO - Surrogate swaps not yet supported.");
 		}
 
 		BeanPropertyMeta.Builder setGetter(Method getter) {
@@ -548,7 +545,7 @@ public class BeanPropertyMeta {
 						}
 					} else {
 						if (propMap == null) {
-							propMap = (Map)propertyClass.newInstance();
+							propMap = newInstance(Map.class, propertyClass);
 							invokeSetter(bean, pName, propMap);
 						} else {
 							propMap.clear();
@@ -603,7 +600,7 @@ public class BeanPropertyMeta {
 						propList.clear();
 					} else {
 						if (propList == null) {
-							propList = (Collection)propertyClass.newInstance();
+							propList = newInstance(Collection.class, propertyClass);
 							invokeSetter(bean, pName, propList);
 						} else {
 							propList.clear();
@@ -717,7 +714,7 @@ public class BeanPropertyMeta {
 	 * @throws InvocationTargetException Thrown by method invocation.
 	 */
 	protected void setArray(Object bean, List l) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-		Object array = ArrayUtils.toArray(l, this.rawTypeMeta.getElementType().getInnerClass());
+		Object array = toArray(l, this.rawTypeMeta.getElementType().getInnerClass());
 		invokeSetter(bean, name, array);
 	}
 
@@ -785,7 +782,7 @@ public class BeanPropertyMeta {
 
 					// Copy any existing array values into the temporary list.
 					Object oldArray = invokeGetter(bean, pName);
-					ArrayUtils.copyToList(oldArray, l);
+					copyToList(oldArray, l);
 				}
 
 				// Add new entry to our array.

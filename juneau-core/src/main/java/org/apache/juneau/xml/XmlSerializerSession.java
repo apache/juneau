@@ -15,13 +15,14 @@ package org.apache.juneau.xml;
 import static org.apache.juneau.msgpack.MsgPackSerializerContext.*;
 import static org.apache.juneau.xml.NamespaceFactory.*;
 import static org.apache.juneau.xml.XmlSerializerContext.*;
+import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ArrayUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 
@@ -87,7 +88,7 @@ public class XmlSerializerSession extends SerializerSession {
 	private static Namespace findDefaultNamespace(String s) {
 		if (s == null)
 			return null;
-		if (StringUtils.startsWith(s, '{'))
+		if (startsWith(s, '{'))
 			return parseNamespace(s);
 		if (! s.startsWith("http://"))
 			return get(s, "http://unknown");
@@ -115,7 +116,7 @@ public class XmlSerializerSession extends SerializerSession {
 		if (defaultNamespace != null && (ns.uri.equals(defaultNamespace.uri) || ns.name.equals(defaultNamespace.name)))
 			defaultNamespace = ns;
 		else
-			namespaces = ArrayUtils.append(namespaces, ns);
+			namespaces = append(namespaces, ns);
 	}
 
 	/**

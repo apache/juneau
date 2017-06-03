@@ -13,6 +13,8 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.internal.ArrayUtils.*;
+import static org.apache.juneau.internal.ReflectionUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
 import java.util.*;
@@ -137,7 +139,7 @@ public class RestConfig implements ServletConfig {
 
 			VarResolver vr = varResolverBuilder.build();
 
-			Map<Class<?>,RestResource> restResourceAnnotationsParentFirst = ReflectionUtils.findAnnotationsMapParentFirst(RestResource.class, resourceClass);
+			Map<Class<?>,RestResource> restResourceAnnotationsParentFirst = findAnnotationsMapParentFirst(RestResource.class, resourceClass);
 
 			// Find our config file.  It's the last non-empty @RestResource.config().
 			String configPath = "";
@@ -994,7 +996,7 @@ public class RestConfig implements ServletConfig {
 	 * @return This object (for method chaining).
 	 */
 	public RestConfig setPath(String path) {
-		if (StringUtils.startsWith(path, '/'))
+		if (startsWith(path, '/'))
 			path = path.substring(1);
 		this.path = path;
 		return this;

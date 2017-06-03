@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client;
 
+import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -201,7 +203,7 @@ public final class RestCall {
 			return query(name, toBeanMap(value), skipIfEmpty, partSerializer);
 		} else if (value instanceof Reader) {
 			try {
-				uriBuilder.setCustomQuery(IOUtils.read(value));
+				uriBuilder.setCustomQuery(read(value));
 			} catch (IOException e) {
 				throw new RestCallException(e);
 			}
@@ -210,7 +212,7 @@ public final class RestCall {
 			if (! isEmpty(s))
 				uriBuilder.setCustomQuery(s);
 		} else {
-			throw new FormattedRuntimeException("Invalid name ''{0}'' passed to query(name,value,skipIfEmpty) for data type ''{1}''", name, ClassUtils.getReadableClassNameForObject(value));
+			throw new FormattedRuntimeException("Invalid name ''{0}'' passed to query(name,value,skipIfEmpty) for data type ''{1}''", name, getReadableClassNameForObject(value));
 		}
 		return this;
 	}
@@ -315,7 +317,7 @@ public final class RestCall {
 				input(new StringEntity(value.toString()));
 			} catch (UnsupportedEncodingException e) {}
 		} else {
-			throw new FormattedRuntimeException("Invalid name ''{0}'' passed to formData(name,value,skipIfEmpty) for data type ''{1}''", name, ClassUtils.getReadableClassNameForObject(value));
+			throw new FormattedRuntimeException("Invalid name ''{0}'' passed to formData(name,value,skipIfEmpty) for data type ''{1}''", name, getReadableClassNameForObject(value));
 		}
 		return this;
 	}
@@ -412,7 +414,7 @@ public final class RestCall {
 		} else if (isBean(value)) {
 			return path(name, toBeanMap(value), partSerializer);
 		} else if (value != null) {
-			throw new FormattedRuntimeException("Invalid name ''{0}'' passed to path(name,value) for data type ''{1}''", name, ClassUtils.getReadableClassNameForObject(value));
+			throw new FormattedRuntimeException("Invalid name ''{0}'' passed to path(name,value) for data type ''{1}''", name, getReadableClassNameForObject(value));
 		}
 		return this;
 	}
@@ -532,7 +534,7 @@ public final class RestCall {
 		} else if (isBean(value)) {
 			return header(name, toBeanMap(value), skipIfEmpty, partSerializer);
 		} else {
-			throw new FormattedRuntimeException("Invalid name ''{0}'' passed to header(name,value,skipIfEmpty) for data type ''{1}''", name, ClassUtils.getReadableClassNameForObject(value));
+			throw new FormattedRuntimeException("Invalid name ''{0}'' passed to header(name,value,skipIfEmpty) for data type ''{1}''", name, getReadableClassNameForObject(value));
 		}
 		return this;
 	}
@@ -1632,7 +1634,7 @@ public final class RestCall {
 	public String getResponseAsString() throws IOException {
 		try {
 			Reader r = getReader();
-			String s = IOUtils.read(r).toString();
+			String s = read(r).toString();
 			return s;
 		} catch (IOException e) {
 			isFailed = true;

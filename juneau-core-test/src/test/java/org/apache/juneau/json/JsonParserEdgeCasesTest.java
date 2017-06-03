@@ -12,12 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.json;
 
+import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.IOUtils.*;
+
 import static org.junit.Assert.*;
 
 import java.io.*;
 import java.util.*;
 
-import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.junit.*;
 import org.junit.runner.*;
@@ -30,7 +32,7 @@ public class JsonParserEdgeCasesTest {
 	@Parameterized.Parameters
 	public static Collection<Object[]> getPairs() {
 		return Arrays.asList(new Object[][] {
-			{ 0, "is_structure_500_nested_arrays", StringUtils.repeat(500, "[") + StringUtils.repeat(500, "]"), null },
+			{ 0, "is_structure_500_nested_arrays", repeat(500, "[") + repeat(500, "]"), null },
 			{ 1, "ix_object_key_lone_2nd_surrogate", "7B225C7544464141223A307D"/*{"buDFAA":0}*/, null },
 			{ 2, "ix_string_1st_surrogate_but_2nd_missing", "5B225C7544414441225D"/*["buDADA"]*/, null },
 			{ 3, "ix_string_1st_valid_surrogate_2nd_invalid", "5B225C75443838385C7531323334225D"/*["buD888bu1234"]*/, null },
@@ -187,8 +189,8 @@ public class JsonParserEdgeCasesTest {
 			{ 154, "n_structure_unclosed_array_unfinished_false", "[ true, fals", "Unrecognized syntax" },
 			{ 155, "n_structure_unclosed_array_unfinished_true", "[ false, tru", "Unrecognized syntax" },
 			{ 156, "n_structure_unclosed_object", "{\"asd\":\"asd\"", "Could not find '}'" },
-			{ 157, "ns_structure_100000_opening_arrays", StringUtils.repeat(100000, "["), "Depth too deep" },
-			{ 158, "ns_structure_open_array_object", StringUtils.repeat(50000, "[{\"\":"), "Depth too deep" },
+			{ 157, "ns_structure_100000_opening_arrays", repeat(100000, "["), "Depth too deep" },
+			{ 158, "ns_structure_open_array_object", repeat(50000, "[{\"\":"), "Depth too deep" },
 			{ 159, "nx_array_a_invalid_utf8", "5B61E55D"/*[a[fffd]]*/, null },
 			{ 160, "nx_array_invalid_utf8", "5BFF5D"/*[[fffd]]*/, null },
 			{ 161, "nx_array_newlines_unclosed", "5B2261222C0A340A2C312C"/*["a",[a]4[a],1,*/, null },
@@ -358,8 +360,8 @@ public class JsonParserEdgeCasesTest {
 
 	public JsonParserEdgeCasesTest(Integer testNum, String name, String json, String errorText) throws Exception {
 		this.name = name;
-		this.json = name.charAt(1) == 'x' ? StringUtils.fromHex(json) : json;
-		this.jsonReadable = name.charAt(1) == 'x' ? StringUtils.fromHexToUTF8(json) : json;
+		this.json = name.charAt(1) == 'x' ? fromHex(json) : json;
+		this.jsonReadable = name.charAt(1) == 'x' ? fromHexToUTF8(json) : json;
 		this.expected = name.charAt(0);
 		this.errorText = errorText;
 	}
@@ -455,9 +457,9 @@ public class JsonParserEdgeCasesTest {
 				String contents = specials.get(n);
 				if (contents == null) {
 					if (n.charAt(1) == 'x')
-						contents = '"' + StringUtils.toHex(IOUtils.readBytes(fc)) + '"' + "/*" + StringUtils.decodeHex(IOUtils.read(fc)).replaceAll("\\\\u", "bu") + "*/";
+						contents = '"' + toHex(readBytes(fc)) + '"' + "/*" + decodeHex(read(fc)).replaceAll("\\\\u", "bu") + "*/";
 					else
-						contents = '"' + IOUtils.read(fc).replaceAll("\"", "\\\\\"").trim() + '"';
+						contents = '"' + read(fc).replaceAll("\"", "\\\\\"").trim() + '"';
 				}
 				String errorText = errors.get(n);
 				if (errorText != null)

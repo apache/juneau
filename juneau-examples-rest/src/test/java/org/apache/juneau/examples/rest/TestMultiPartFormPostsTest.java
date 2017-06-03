@@ -13,12 +13,12 @@
 package org.apache.juneau.examples.rest;
 
 import static org.junit.Assert.*;
+import static org.apache.juneau.internal.FileUtils.*;
 
 import java.io.*;
 
 import org.apache.http.*;
 import org.apache.http.entity.mime.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.utils.*;
 import org.junit.*;
@@ -34,7 +34,7 @@ public class TestMultiPartFormPostsTest extends RestTestcase {
 	@Test
 	public void testUpload() throws Exception {
 		RestClient client = SamplesMicroservice.DEFAULT_CLIENT;
-		File f = FileUtils.createTempFile("testMultiPartFormPosts.txt");
+		File f = createTempFile("testMultiPartFormPosts.txt");
 		IOPipe.create(new StringReader("test!"), new FileWriter(f)).closeOut().run();
 		HttpEntity entity = MultipartEntityBuilder.create().addBinaryBody(f.getName(), f).build();
 		client.doPost(URL + "/upload", entity);

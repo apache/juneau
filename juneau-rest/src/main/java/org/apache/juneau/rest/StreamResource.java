@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import static org.apache.juneau.internal.IOUtils.*;
+
 import java.io.*;
 import java.util.*;
 
@@ -88,13 +90,13 @@ public class StreamResource implements Streamable {
 			else if (c instanceof byte[])
 				this.contents[i] = (byte[])c;
 			else if (c instanceof InputStream)
-				this.contents[i] = IOUtils.readBytes((InputStream)c, 1024);
+				this.contents[i] = readBytes((InputStream)c, 1024);
 			else if (c instanceof File)
-				this.contents[i] = IOUtils.readBytes((File)c);
+				this.contents[i] = readBytes((File)c);
 			else if (c instanceof Reader)
-				this.contents[i] = IOUtils.read((Reader)c).getBytes(IOUtils.UTF8);
+				this.contents[i] = read((Reader)c).getBytes(UTF8);
 			else if (c instanceof CharSequence)
-				this.contents[i] = ((CharSequence)c).toString().getBytes(IOUtils.UTF8);
+				this.contents[i] = ((CharSequence)c).toString().getBytes(UTF8);
 			else
 				throw new IOException("Invalid class type passed to StreamResource: " + c.getClass().getName());
 		}

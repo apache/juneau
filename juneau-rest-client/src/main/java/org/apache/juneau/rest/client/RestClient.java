@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client;
 
+import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.ReflectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -28,7 +30,6 @@ import org.apache.http.client.utils.*;
 import org.apache.http.entity.*;
 import org.apache.http.impl.client.*;
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.remoteable.*;
@@ -513,7 +514,7 @@ public class RestClient extends CoreObject {
 	public <T> T getRemoteableProxy(final Class<T> interfaceClass, Object restUrl, final Serializer serializer, final Parser parser) {
 
 		if (restUrl == null) {
-			Remoteable r = ReflectionUtils.getAnnotation(Remoteable.class, interfaceClass);
+			Remoteable r = getAnnotation(Remoteable.class, interfaceClass);
 
 			String path = r == null ? "" : trimSlashes(r.path());
 			if (path.indexOf("://") == -1) {
@@ -648,11 +649,7 @@ public class RestClient extends CoreObject {
 			return null;
 		PartSerializer pf = partSerializerCache.get(c);
 		if (pf == null) {
-			try {
-				partSerializerCache.putIfAbsent(c, (PartSerializer)c.newInstance());
-			} catch (Exception e) {
-				throw new RuntimeException(e);
-			}
+			partSerializerCache.putIfAbsent(c, newInstance(PartSerializer.class, c));
 			pf = partSerializerCache.get(c);
 		}
 		return pf;

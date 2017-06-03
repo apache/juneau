@@ -12,9 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.vars;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.io.*;
 
-import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
@@ -50,7 +51,7 @@ public class SerializedRequestAttrVar extends StreamedVar {
 			int i = key.indexOf(',');
 			if (i == -1)
 				throw new RuntimeException("Invalid format for $SA var.  Must be of the format $SA{contentType,key[,defaultValue]}");
-			String[] s2 = StringUtils.split(key, ',');
+			String[] s2 = split(key, ',');
 			RestRequest req = session.getSessionObject(RestRequest.class, RequestVar.SESSION_req);
 			if (req != null) {
 				Object o = req.getAttribute(key);

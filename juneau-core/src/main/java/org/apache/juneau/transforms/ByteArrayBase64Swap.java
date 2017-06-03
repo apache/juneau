@@ -12,8 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transforms;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
@@ -29,7 +30,7 @@ public class ByteArrayBase64Swap extends StringSwap<byte[]> {
 	@Override /* PojoSwap */
 	public String swap(BeanSession session, byte[] b) throws SerializeException {
 		try {
-			return StringUtils.base64Encode(b);
+			return base64Encode(b);
 		} catch (Exception e) {
 			throw new SerializeException(e);
 		}
@@ -41,7 +42,7 @@ public class ByteArrayBase64Swap extends StringSwap<byte[]> {
 	@Override /* PojoSwap */
 	public byte[] unswap(BeanSession session, String s, ClassMeta<?> hint) throws ParseException {
 		try {
-			return StringUtils.base64Decode(s);
+			return base64Decode(s);
 		} catch (Exception e) {
 			throw new ParseException(e);
 		}

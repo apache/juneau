@@ -12,10 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
+import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.RestUtils.*;
 import static org.junit.Assert.*;
 
-import org.apache.juneau.internal.*;
 import org.junit.*;
 
 public class RestUtilsTest extends RestTestcase {
@@ -25,8 +25,8 @@ public class RestUtilsTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testDecode() throws Exception {
-		assertNull(StringUtils.urlDecode(null));
-		assertEquals("foo/bar baz  bing", StringUtils.urlDecode("foo%2Fbar+baz++bing"));
+		assertNull(urlDecode(null));
+		assertEquals("foo/bar baz  bing", urlDecode("foo%2Fbar+baz++bing"));
 	}
 
 	//====================================================================================================
@@ -34,11 +34,11 @@ public class RestUtilsTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testEncode() throws Exception {
-		assertNull(StringUtils.urlEncode(null));
-		assertEquals("foo%2Fbar+baz++bing", StringUtils.urlEncode("foo/bar baz  bing"));
-		assertEquals("foobar", StringUtils.urlEncode("foobar"));
-		assertEquals("+", StringUtils.urlEncode(" "));
-		assertEquals("%2F", StringUtils.urlEncode("/"));
+		assertNull(urlEncode(null));
+		assertEquals("foo%2Fbar+baz++bing", urlEncode("foo/bar baz  bing"));
+		assertEquals("foobar", urlEncode("foobar"));
+		assertEquals("+", urlEncode(" "));
+		assertEquals("%2F", urlEncode("/"));
 	}
 
 	//====================================================================================================
@@ -147,14 +147,14 @@ public class RestUtilsTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testTrimSlashes() throws Exception {
-		assertNull(StringUtils.trimSlashes(null));
-		assertEquals("", StringUtils.trimSlashes(""));
-		assertEquals("", StringUtils.trimSlashes("/"));
-		assertEquals("", StringUtils.trimSlashes("//"));
-		assertEquals("foo/bar", StringUtils.trimSlashes("foo/bar"));
-		assertEquals("foo/bar", StringUtils.trimSlashes("foo/bar//"));
-		assertEquals("foo/bar", StringUtils.trimSlashes("/foo/bar//"));
-		assertEquals("foo/bar", StringUtils.trimSlashes("//foo/bar//"));
+		assertNull(trimSlashes(null));
+		assertEquals("", trimSlashes(""));
+		assertEquals("", trimSlashes("/"));
+		assertEquals("", trimSlashes("//"));
+		assertEquals("foo/bar", trimSlashes("foo/bar"));
+		assertEquals("foo/bar", trimSlashes("foo/bar//"));
+		assertEquals("foo/bar", trimSlashes("/foo/bar//"));
+		assertEquals("foo/bar", trimSlashes("//foo/bar//"));
 	}
 
 	//====================================================================================================
@@ -162,14 +162,14 @@ public class RestUtilsTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testTrimTrailingSlashes() throws Exception {
-		assertNull(StringUtils.trimTrailingSlashes((String)null));
-		assertEquals("", StringUtils.trimTrailingSlashes(""));
-		assertEquals("", StringUtils.trimTrailingSlashes("/"));
-		assertEquals("", StringUtils.trimTrailingSlashes("//"));
-		assertEquals("foo/bar", StringUtils.trimTrailingSlashes("foo/bar"));
-		assertEquals("foo/bar", StringUtils.trimTrailingSlashes("foo/bar//"));
-		assertEquals("/foo/bar", StringUtils.trimTrailingSlashes("/foo/bar//"));
-		assertEquals("//foo/bar", StringUtils.trimTrailingSlashes("//foo/bar//"));
+		assertNull(trimTrailingSlashes((String)null));
+		assertEquals("", trimTrailingSlashes(""));
+		assertEquals("", trimTrailingSlashes("/"));
+		assertEquals("", trimTrailingSlashes("//"));
+		assertEquals("foo/bar", trimTrailingSlashes("foo/bar"));
+		assertEquals("foo/bar", trimTrailingSlashes("foo/bar//"));
+		assertEquals("/foo/bar", trimTrailingSlashes("/foo/bar//"));
+		assertEquals("//foo/bar", trimTrailingSlashes("//foo/bar//"));
 	}
 
 	//====================================================================================================
@@ -177,13 +177,13 @@ public class RestUtilsTest extends RestTestcase {
 	//====================================================================================================
 	@Test
 	public void testTrimTrailingSlashes2() throws Exception {
-		assertNull(StringUtils.trimTrailingSlashes((StringBuffer)null));
-		assertEquals("", StringUtils.trimTrailingSlashes(new StringBuffer("")).toString());
-		assertEquals("", StringUtils.trimTrailingSlashes(new StringBuffer("/")).toString());
-		assertEquals("", StringUtils.trimTrailingSlashes(new StringBuffer("//")).toString());
-		assertEquals("foo/bar", StringUtils.trimTrailingSlashes(new StringBuffer("foo/bar")).toString());
-		assertEquals("foo/bar", StringUtils.trimTrailingSlashes(new StringBuffer("foo/bar//")).toString());
-		assertEquals("/foo/bar", StringUtils.trimTrailingSlashes(new StringBuffer("/foo/bar//")).toString());
-		assertEquals("//foo/bar", StringUtils.trimTrailingSlashes(new StringBuffer("//foo/bar//")).toString());
+		assertNull(trimTrailingSlashes((StringBuffer)null));
+		assertEquals("", trimTrailingSlashes(new StringBuffer("")).toString());
+		assertEquals("", trimTrailingSlashes(new StringBuffer("/")).toString());
+		assertEquals("", trimTrailingSlashes(new StringBuffer("//")).toString());
+		assertEquals("foo/bar", trimTrailingSlashes(new StringBuffer("foo/bar")).toString());
+		assertEquals("foo/bar", trimTrailingSlashes(new StringBuffer("foo/bar//")).toString());
+		assertEquals("/foo/bar", trimTrailingSlashes(new StringBuffer("/foo/bar//")).toString());
+		assertEquals("//foo/bar", trimTrailingSlashes(new StringBuffer("//foo/bar//")).toString());
 	}
 }

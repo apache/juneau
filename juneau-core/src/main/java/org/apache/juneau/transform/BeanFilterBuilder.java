@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transform;
 
+import static org.apache.juneau.internal.ClassUtils.*;
+
 import java.beans.*;
 import java.util.*;
 
@@ -200,7 +202,7 @@ public abstract class BeanFilterBuilder {
 	 * @throws Exception Thrown from constructor method.
 	 */
 	public BeanFilterBuilder propertyNamer(Class<? extends PropertyNamer> c) throws Exception {
-		this.propertyNamer = c.newInstance();
+		this.propertyNamer = newInstance(PropertyNamer.class, c);
 		return this;
 	}
 

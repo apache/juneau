@@ -14,6 +14,7 @@ package org.apache.juneau.rest;
 
 import static java.util.logging.Level.*;
 import static javax.servlet.http.HttpServletResponse.*;
+import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -22,7 +23,6 @@ import java.util.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
-import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.vars.*;
 
@@ -284,7 +284,7 @@ public class RestCallHandler {
 		try {
 			w = res.getWriter();
 		} catch (IllegalStateException e2) {
-			w = new PrintWriter(new OutputStreamWriter(res.getOutputStream(), IOUtils.UTF8));
+			w = new PrintWriter(new OutputStreamWriter(res.getOutputStream(), UTF8));
 		}
 		String httpMessage = RestUtils.getHttpResponseText(status);
 		if (httpMessage != null)

@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import static org.apache.juneau.internal.IOUtils.*;
+
 import java.io.*;
 import java.util.*;
 
@@ -84,11 +86,11 @@ public class ReaderResource implements Writable {
 			if (c == null)
 				this.contents[i] = "";
 			else if (c instanceof InputStream)
-				this.contents[i] = IOUtils.read((InputStream)c);
+				this.contents[i] = read((InputStream)c);
 			else if (c instanceof File)
-				this.contents[i] = IOUtils.read((File)c);
+				this.contents[i] = read((File)c);
 			else if (c instanceof Reader)
-				this.contents[i] = IOUtils.read((Reader)c);
+				this.contents[i] = read((Reader)c);
 			else if (c instanceof CharSequence)
 				this.contents[i] = ((CharSequence)c).toString();
 			else

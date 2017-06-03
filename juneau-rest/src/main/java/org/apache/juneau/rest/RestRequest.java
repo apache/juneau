@@ -15,6 +15,7 @@ package org.apache.juneau.rest;
 import static java.util.Collections.*;
 import static java.util.logging.Level.*;
 import static javax.servlet.http.HttpServletResponse.*;
+import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -33,7 +34,6 @@ import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.ini.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
@@ -130,7 +130,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 				String b = getQuery().getFirst("body");
 				if (b != null) {
 					headers.put("Content-Type", UonSerializer.DEFAULT.getResponseContentType());
-					body.load(b.getBytes(IOUtils.UTF8));
+					body.load(b.getBytes(UTF8));
 				}
 			}
 
@@ -462,7 +462,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 */
 	public UriContext getUriContext() {
 		if (uriContext == null) {
-			String authority = StringUtils.getAuthorityUri(super.getRequestURL().toString());
+			String authority = getAuthorityUri(super.getRequestURL().toString());
 			uriContext = new UriContext(authority, super.getContextPath(), super.getServletPath(), super.getPathInfo());
 		}
 		return uriContext;

@@ -12,13 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
+import static org.apache.juneau.internal.IOUtils.*;
+
 import java.io.*;
 import java.net.*;
 import java.util.*;
 import java.util.jar.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Utility class for working with Jar manifest files.
@@ -43,9 +44,9 @@ public class ManifestFile extends ObjectMap {
 			mf.read(fis);
 			load(mf);
 		} catch (IOException e) {
-			throw new IOException("Problem detected in MANIFEST.MF.  Contents below:\n" + IOUtils.read(f), e);
+			throw new IOException("Problem detected in MANIFEST.MF.  Contents below:\n" + read(f), e);
 		} finally {
-			IOUtils.closeQuietly(fis);
+			closeQuietly(fis);
 		}
 	}
 

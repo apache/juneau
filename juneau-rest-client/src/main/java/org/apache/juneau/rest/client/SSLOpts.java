@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client;
 
-import org.apache.juneau.internal.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 /**
  * SSL configuration options that get passed to {@link RestClientBuilder#enableSSL(SSLOpts)}.
@@ -69,7 +69,7 @@ public class SSLOpts {
 	 */
 	protected String getDefaultProtocols() {
 		String sp = System.getProperty("transport.client.protocol");
-		if (StringUtils.isEmpty(sp))
+		if (isEmpty(sp))
 			sp = "SSL_TLS,TLS,SSL";
 		return sp;
 	}

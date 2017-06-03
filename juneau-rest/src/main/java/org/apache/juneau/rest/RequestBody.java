@@ -13,6 +13,7 @@
 package org.apache.juneau.rest;
 
 import static javax.servlet.http.HttpServletResponse.*;
+import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -206,8 +207,8 @@ public class RequestBody {
 	 */
 	public String asString() throws IOException {
 		if (body == null)
-			body = IOUtils.readBytes(getInputStream(), 1024);
-		return new String(body, IOUtils.UTF8);
+			body = readBytes(getInputStream(), 1024);
+		return new String(body, UTF8);
 	}
 
 	/**
@@ -218,8 +219,8 @@ public class RequestBody {
 	 */
 	public String asHex() throws IOException {
 		if (body == null)
-			body = IOUtils.readBytes(getInputStream(), 1024);
-		return StringUtils.toHex(body);
+			body = readBytes(getInputStream(), 1024);
+		return toHex(body);
 	}
 
 	/**
@@ -249,7 +250,7 @@ public class RequestBody {
 	 */
 	protected Reader getUnbufferedReader() throws IOException {
 		if (body != null)
-			return new CharSequenceReader(new String(body, IOUtils.UTF8));
+			return new CharSequenceReader(new String(body, UTF8));
 		return new InputStreamReader(getInputStream(), req.getCharacterEncoding());
 	}
 

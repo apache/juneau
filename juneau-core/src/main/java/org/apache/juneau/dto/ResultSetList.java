@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto;
 
+import static org.apache.juneau.internal.IOUtils.*;
+
 import java.sql.*;
 import java.util.*;
 
@@ -90,11 +92,11 @@ public final class ResultSetList extends LinkedList<Map<String,Object>> {
 					Clob c = rs.getClob(col);
 					return "clob["+c.length()+"]";
 				case Types.LONGVARBINARY:
-					return "longvarbinary["+IOUtils.count(rs.getBinaryStream(col))+"]";
+					return "longvarbinary["+count(rs.getBinaryStream(col))+"]";
 				case Types.LONGVARCHAR:
-					return "longvarchar["+IOUtils.count(rs.getAsciiStream(col))+"]";
+					return "longvarchar["+count(rs.getAsciiStream(col))+"]";
 				case Types.LONGNVARCHAR:
-					return "longnvarchar["+IOUtils.count(rs.getCharacterStream(col))+"]";
+					return "longnvarchar["+count(rs.getCharacterStream(col))+"]";
 				case Types.TIMESTAMP:
 					return rs.getTimestamp(col);  // Oracle returns com.oracle.TIMESTAMP objects from getObject() which isn't a Timestamp.
 				default:

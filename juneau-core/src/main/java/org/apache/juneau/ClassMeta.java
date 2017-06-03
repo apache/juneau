@@ -14,6 +14,7 @@ package org.apache.juneau;
 
 import static org.apache.juneau.ClassMeta.ClassCategory.*;
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.ReflectionUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -501,7 +502,7 @@ public final class ClassMeta<T> implements Type {
 							swapConstructor = cs;
 						else if (cc != NUMBER && (Number.class.isAssignableFrom(arg) || (arg.isPrimitive() && (arg == int.class || arg == short.class || arg == long.class || arg == float.class || arg == double.class)))) {
 							numberConstructor = cs;
-							numberConstructorType = ClassUtils.getWrapperIfPrimitive(arg);
+							numberConstructorType = getWrapperIfPrimitive(arg);
 						}
 					}
 				}
@@ -545,9 +546,9 @@ public final class ClassMeta<T> implements Type {
 
 			for (Method m : c.getMethods())
 				if (isPublic(m) && isNotDeprecated(m))
-					publicMethods.put(ClassUtils.getMethodSignature(m), m);
+					publicMethods.put(getMethodSignature(m), m);
 
-			Map<Class<?>,Remoteable> remoteableMap = ReflectionUtils.findAnnotationsMap(Remoteable.class, c);
+			Map<Class<?>,Remoteable> remoteableMap = findAnnotationsMap(Remoteable.class, c);
 			if (! remoteableMap.isEmpty()) {
 				Map.Entry<Class<?>,Remoteable> e = remoteableMap.entrySet().iterator().next();  // Grab the first one.
 				Class<?> ic = e.getKey();
@@ -558,7 +559,7 @@ public final class ClassMeta<T> implements Type {
 					if (isPublic(m)) {
 						RemoteMethod rm = m.getAnnotation(RemoteMethod.class);
 						if (rm != null || ! "ANNOTATED".equals(expose)) {
-							String path = "NAME".equals(methodPaths) ? m.getName() : ClassUtils.getMethodSignature(m);
+							String path = "NAME".equals(methodPaths) ? m.getName() : getMethodSignature(m);
 							remoteableMethods.put(path, m);
 						}
 					}
@@ -677,7 +678,7 @@ public final class ClassMeta<T> implements Type {
 
 		private BeanFilter findBeanFilter() {
 			try {
-				Map<Class<?>,Bean> ba = ReflectionUtils.findAnnotationsMap(Bean.class, innerClass);
+				Map<Class<?>,Bean> ba = findAnnotationsMap(Bean.class, innerClass);
 				if (! ba.isEmpty())
 					return new AnnotationBeanFilterBuilder(innerClass, ba).build();
 			} catch (Exception e) {
@@ -687,20 +688,16 @@ public final class ClassMeta<T> implements Type {
 		}
 
 		private PojoSwap<T,?> findPojoSwap() {
-			try {
-				Pojo p = innerClass.getAnnotation(Pojo.class);
-				if (p != null) {
-					Class<?> c = p.swap();
-					if (c != Null.class) {
-						if (ClassUtils.isParentClass(PojoSwap.class, c))
-							return (PojoSwap<T,?>)c.newInstance();
-						throw new RuntimeException("TODO - Surrogate classes not yet supported.");
-					}
+			Pojo p = innerClass.getAnnotation(Pojo.class);
+			if (p != null) {
+				Class<?> c = p.swap();
+				if (c != Null.class) {
+					if (isParentClass(PojoSwap.class, c))
+						return ClassUtils.newInstance(PojoSwap.class, c);
+					throw new RuntimeException("TODO - Surrogate classes not yet supported.");
 				}
-				return null;
-			} catch (Exception e) {
-				throw new RuntimeException(e);
 			}
+			return null;
 		}
 
 		private ClassMeta<?> findClassMeta(Class<?> c) {
@@ -1612,7 +1609,7 @@ public final class ClassMeta<T> implements Type {
 	 */
 	public boolean isInstance(Object o) {
 		if (o != null)
-			return ClassUtils.isParentClass(this.innerClass, o.getClass());
+			return isParentClass(this.innerClass, o.getClass());
 		return false;
 	}
 
@@ -1622,7 +1619,7 @@ public final class ClassMeta<T> implements Type {
 	 * @return The readable name for this class.
 	 */
 	public String getReadableName() {
-		return ClassUtils.getReadableClassName(this.innerClass);
+		return getReadableClassName(this.innerClass);
 	}
 
 	private static class LocaleAsString {

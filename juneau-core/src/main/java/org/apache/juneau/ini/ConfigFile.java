@@ -16,6 +16,8 @@ import static java.lang.reflect.Modifier.*;
 import static org.apache.juneau.ini.ConfigFileFormat.*;
 import static org.apache.juneau.ini.ConfigUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ArrayUtils.*;
 
 import java.beans.*;
 import java.io.*;
@@ -461,7 +463,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 		String s = getString(key);
 		if (s == null)
 			return def;
-		String[] r = StringUtils.isEmpty(s) ? new String[0] : StringUtils.split(s, ',');
+		String[] r = StringUtils.isEmpty(s) ? new String[0] : split(s, ',');
 		return r.length == 0 ? def : r;
 	}
 
@@ -607,7 +609,7 @@ public abstract class ConfigFile implements Map<String,Section> {
 				int mod = m.getModifiers();
 				if (isPublic(mod) && (!isStatic(mod)) && m.getName().startsWith("set") && m.getParameterTypes().length == 1) {
 					Class<?> pt = m.getParameterTypes()[0];
-					if (permittedPropertyTypes == null || permittedPropertyTypes.length == 0 || ArrayUtils.contains(pt, permittedPropertyTypes)) {
+					if (permittedPropertyTypes == null || permittedPropertyTypes.length == 0 || contains(pt, permittedPropertyTypes)) {
 						String propName = Introspector.decapitalize(m.getName().substring(3));
 						Object value = getObject(sectionName, propName, pt);
 						if (value != null) {

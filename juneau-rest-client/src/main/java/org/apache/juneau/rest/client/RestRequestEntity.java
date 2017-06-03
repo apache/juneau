@@ -12,11 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client;
 
+import static org.apache.juneau.internal.IOUtils.*;
+
 import java.io.*;
 
 import org.apache.http.entity.*;
 import org.apache.http.message.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.utils.*;
 
@@ -45,7 +46,7 @@ public final class RestRequestEntity extends BasicHttpEntity {
 		if (output instanceof InputStream) {
 			IOPipe.create(output, os).closeOut().run();
 		} else if (output instanceof Reader) {
-			IOPipe.create(output, new OutputStreamWriter(os, IOUtils.UTF8)).closeOut().run();
+			IOPipe.create(output, new OutputStreamWriter(os, UTF8)).closeOut().run();
 		} else {
 			try {
 				if (serializer == null) {
@@ -57,7 +58,7 @@ public final class RestRequestEntity extends BasicHttpEntity {
 					os.flush();
 					os.close();
 				} else {
-					Writer w = new OutputStreamWriter(os, IOUtils.UTF8);
+					Writer w = new OutputStreamWriter(os, UTF8);
 					WriterSerializer s2 = (WriterSerializer)serializer;
 					s2.serialize(output, w);
 					w.flush();

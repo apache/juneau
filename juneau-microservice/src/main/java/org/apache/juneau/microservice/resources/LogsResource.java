@@ -15,6 +15,7 @@ package org.apache.juneau.microservice.resources;
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.html.HtmlDocSerializerContext.*;
 import static org.apache.juneau.rest.RestContext.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
 import java.net.*;
@@ -25,7 +26,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.dto.*;
 import org.apache.juneau.ini.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -133,7 +133,7 @@ public class LogsResource extends Resource {
 		if (f.isDirectory())
 			throw new RestException(SC_METHOD_NOT_ALLOWED, "View not available on directories");
 
-		Date startDate = StringUtils.parseISO8601Date(start), endDate = StringUtils.parseISO8601Date(end);
+		Date startDate = parseISO8601Date(start), endDate = parseISO8601Date(end);
 
 		if (! highlight) {
 			Object o = getReader(f, startDate, endDate, thread, loggers, severity);
@@ -202,7 +202,7 @@ public class LogsResource extends Resource {
 	public LogParser viewParsedEntries(RestRequest req, @PathRemainder String path, @Query("start") String start, @Query("end") String end, @Query("thread") String thread, @Query("loggers") String[] loggers, @Query("severity") String[] severity) throws Exception {
 
 		File f = getFile(path);
-		Date startDate = StringUtils.parseISO8601Date(start), endDate = StringUtils.parseISO8601Date(end);
+		Date startDate = parseISO8601Date(start), endDate = parseISO8601Date(end);
 
 		if (f.isDirectory())
 			throw new RestException(SC_METHOD_NOT_ALLOWED, "View not available on directories");

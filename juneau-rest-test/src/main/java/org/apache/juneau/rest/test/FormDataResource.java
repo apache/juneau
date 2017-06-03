@@ -12,10 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
+import static org.apache.juneau.internal.IOUtils.*;
+
 import java.io.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
@@ -33,7 +34,7 @@ public class FormDataResource extends RestServletDefault {
 	//====================================================================================================
 	@RestMethod(name="POST", path="/*")
 	public Reader test(RestRequest req) throws IOException {
-		return new StringReader("Content-Type=["+req.getContentType()+"], contents=["+IOUtils.read(req.getReader())+"]");
+		return new StringReader("Content-Type=["+req.getContentType()+"], contents=["+read(req.getReader())+"]");
 	}
 
 	//====================================================================================================

@@ -12,7 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.ini;
 
-import org.apache.juneau.internal.*;
+import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.IOUtils.*;
 
 /**
  * Simply XOR+Base64 encoder for obscuring passwords and other sensitive data in INI config files.
@@ -28,21 +29,21 @@ public final class XorEncoder implements Encoder {
 
 	@Override /* Encoder */
 	public String encode(String fieldName, String in) {
-		byte[] b = in.getBytes(IOUtils.UTF8);
+		byte[] b = in.getBytes(UTF8);
 		for (int i = 0; i < b.length; i++) {
 				int j = i % key.length();
 			b[i] = (byte)(b[i] ^ key.charAt(j));
 		}
-		return StringUtils.base64Encode(b);
+		return base64Encode(b);
 	}
 
 	@Override /* Encoder */
 	public String decode(String fieldName, String in) {
-		byte[] b = StringUtils.base64Decode(in);
+		byte[] b = base64Decode(in);
 		for (int i = 0; i < b.length; i++) {
 			int j = i % key.length();
 			b[i] = (byte)(b[i] ^ key.charAt(j));
 	}
-		return new String(b, IOUtils.UTF8);
+		return new String(b, UTF8);
 	}
 }

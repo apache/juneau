@@ -12,10 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.io.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.xml.*;
 
 /**
@@ -89,7 +90,7 @@ public class HtmlWriter extends XmlWriter {
 				else if (test == ' ')
 					append("<sp> </sp>");
 				else
-					append("<sp>&#x").append(StringUtils.toHex(test)).append(";</sp>");
+					append("<sp>&#x").append(toHex(test)).append(";</sp>");
 			}
 			else if (Character.isISOControl(test))
 				append("&#" + (int) test + ";");

@@ -12,10 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transform;
 
+import static org.apache.juneau.internal.ClassUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 
@@ -113,8 +114,8 @@ public abstract class PojoSwap<T,S> {
 	 */
 	@SuppressWarnings("unchecked")
 	protected PojoSwap() {
-		normalClass = (Class<T>)ClassUtils.resolveParameterType(PojoSwap.class, 0, this.getClass());
-		swapClass = ClassUtils.resolveParameterType(PojoSwap.class, 1, this.getClass());
+		normalClass = (Class<T>)resolveParameterType(PojoSwap.class, 0, this.getClass());
+		swapClass = resolveParameterType(PojoSwap.class, 1, this.getClass());
 	}
 
 	/**
@@ -213,7 +214,7 @@ public abstract class PojoSwap<T,S> {
 	public boolean isNormalObject(Object o) {
 		if (o == null)
 			return false;
-		return ClassUtils.isParentClass(normalClass, o.getClass());
+		return isParentClass(normalClass, o.getClass());
 	}
 
 	/**
@@ -226,7 +227,7 @@ public abstract class PojoSwap<T,S> {
 	public boolean isSwappedObject(Object o) {
 		if (o == null)
 			return false;
-		return ClassUtils.isParentClass(swapClass, o.getClass());
+		return isParentClass(swapClass, o.getClass());
 	}
 
 

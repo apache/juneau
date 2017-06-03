@@ -13,6 +13,7 @@
 package org.apache.juneau.parser;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ReflectionUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -22,7 +23,6 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.transforms.*;
 import org.apache.juneau.utils.*;
@@ -142,11 +142,11 @@ public abstract class Parser extends CoreObject {
 		super(propertyStore);
 		this.ctx = createContext(ParserContext.class);
 
-		Consumes c = ReflectionUtils.getAnnotation(Consumes.class, getClass());
+		Consumes c = getAnnotation(Consumes.class, getClass());
 		if (c == null)
 			throw new RuntimeException(MessageFormat.format("Class ''{0}'' is missing the @Consumes annotation", getClass().getName()));
 
-		String[] mt = StringUtils.split(c.value(), ',');
+		String[] mt = split(c.value(), ',');
 		this.mediaTypes = new MediaType[mt.length];
 		for (int i = 0; i < mt.length; i++) {
 			mediaTypes[i] = MediaType.forString(mt[i]);

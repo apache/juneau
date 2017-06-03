@@ -14,6 +14,8 @@ package org.apache.juneau.urlencoding;
 
 import static org.apache.juneau.serializer.SerializerContext.*;
 import static org.apache.juneau.uon.UonSerializerContext.*;
+import static org.apache.juneau.internal.ArrayUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -23,7 +25,6 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.uon.*;
@@ -311,7 +312,7 @@ public class UrlEncodingSerializer extends UonSerializer implements PartSerializ
 			Object value = e.getValue();
 
 			if (session.shouldUseExpandedParams(value)) {
-				Iterator i = value instanceof Collection ? ((Collection)value).iterator() : ArrayUtils.iterator(value);
+				Iterator i = value instanceof Collection ? ((Collection)value).iterator() : iterator(value);
 				while (i.hasNext()) {
 					if (addAmp)
 						out.cr(depth).append('&');
@@ -372,7 +373,7 @@ public class UrlEncodingSerializer extends UonSerializer implements PartSerializ
 			if (value != null && session.shouldUseExpandedParams(pMeta)) {
 				// Transformed object array bean properties may be transformed resulting in ArrayLists,
 				// so we need to check type if we think it's an array.
-				Iterator i = (cMeta.isCollection() || value instanceof Collection) ? ((Collection)value).iterator() : ArrayUtils.iterator(value);
+				Iterator i = (cMeta.isCollection() || value instanceof Collection) ? ((Collection)value).iterator() : iterator(value);
 				while (i.hasNext()) {
 					if (addAmp)
 						out.cr(depth).append('&');
@@ -426,7 +427,7 @@ public class UrlEncodingSerializer extends UonSerializer implements PartSerializ
 					String s = o.toString();
 					boolean ptt = (plainTextParams != null ? plainTextParams : ctx.plainTextParams());
 					if (ptt || s.isEmpty() || ! UonUtils.needsQuotes(s))
-						return (urlEncode ? StringUtils.urlEncode(s) : s);
+						return (urlEncode ? urlEncode(s) : s);
 				}
 			}
 
@@ -462,7 +463,7 @@ public class UrlEncodingSerializer extends UonSerializer implements PartSerializ
 			case FORM_DATA: return serializePart(value, false, null);
 			case PATH: return serializePart(value, false, null);
 			case QUERY: return serializePart(value, false, null);
-			default: return StringUtils.toString(value);
+			default: return toString(value);
 		}
 	}
 }

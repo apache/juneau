@@ -13,10 +13,9 @@
 package org.apache.juneau.msgpack;
 
 import static org.apache.juneau.msgpack.DataType.*;
+import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
-
-import org.apache.juneau.internal.*;
 
 /**
  * Specialized input stream for parsing MessagePack streams.
@@ -395,7 +394,7 @@ public final class MsgPackInputStream extends InputStream {
 	 * Read a string from the stream.
 	 */
 	String readString() throws IOException {
-		return new String(readBinary(), IOUtils.UTF8);
+		return new String(readBinary(), UTF8);
 	}
 
 	/**

@@ -13,12 +13,11 @@
 package org.apache.juneau.remoteable;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
-
-import org.apache.juneau.internal.*;
 
 /**
  * Contains the meta-data about a Java method on a remoteable interface.
@@ -87,7 +86,7 @@ public class RemoteableMethodMeta {
 			url =
 				trimSlashes(restUrl)
 				+ '/'
-				+ (path != null ? trimSlashes(path) : urlEncode("NAME".equals(methodPaths) ? m.getName() : ClassUtils.getMethodSignature(m)));
+				+ (path != null ? trimSlashes(path) : urlEncode("NAME".equals(methodPaths) ? m.getName() : getMethodSignature(m)));
 
 			int index = 0;
 			for (Annotation[] aa : m.getParameterAnnotations()) {

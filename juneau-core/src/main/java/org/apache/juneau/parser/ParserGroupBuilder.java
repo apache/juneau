@@ -14,6 +14,7 @@ package org.apache.juneau.parser;
 
 import static org.apache.juneau.BeanContext.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.parser.ParserContext.*;
 
 import java.util.*;
@@ -99,14 +100,13 @@ public class ParserGroupBuilder {
 	 *
 	 * @return A new {@link ParserGroup} object.
 	 */
-	@SuppressWarnings("unchecked")
 	public ParserGroup build() {
 		List<Parser> l = new ArrayList<Parser>();
 		for (Object p : parsers) {
-			Class<? extends Parser> c = null;
+			Class<?> c = null;
 			PropertyStore ps = propertyStore;
 			if (p instanceof Class) {
-				c = (Class<? extends Parser>)p;
+				c = (Class<?>)p;
 			} else {
 				// Note that if we added a serializer instance, we want a new instance with this builder's properties
 				// on top of the previous serializer's properties.
@@ -114,11 +114,7 @@ public class ParserGroupBuilder {
 				ps = p2.createPropertyStore().copyFrom(propertyStore);
 				c = p2.getClass();
 			}
-			try {
-				l.add(c.getConstructor(PropertyStore.class).newInstance(ps));
-			} catch (Exception e) {
-				throw new RuntimeException("Could not instantiate parser " + c.getName(), e);
-			}
+			l.add(newInstance(Parser.class, c, ps));
 		}
 		Collections.reverse(l);
 		return new ParserGroup(propertyStore, l.toArray(new Parser[l.size()]));

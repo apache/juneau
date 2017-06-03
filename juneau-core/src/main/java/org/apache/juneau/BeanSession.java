@@ -15,13 +15,13 @@ package org.apache.juneau;
 import static org.apache.juneau.BeanContext.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.http.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
@@ -482,7 +482,7 @@ public class BeanSession extends Session {
 					return (T)toArray(type, (Collection)value);
 				else if (vt.isArray())
 					return (T)toArray(type, Arrays.asList((Object[])value));
-				else if (StringUtils.startsWith(value.toString(), '['))
+				else if (startsWith(value.toString(), '['))
 					return (T)toArray(type, new ObjectList(value.toString()).setBeanSession(this));
 			}
 
@@ -550,7 +550,7 @@ public class BeanSession extends Session {
 					if (JsonSerializer.DEFAULT_LAX != null)
 						return (T)JsonSerializer.DEFAULT_LAX.serialize(value);
 				} else if (vt.isClass()) {
-					return (T)ClassUtils.getReadableClassName((Class<?>)value);
+					return (T)getReadableClassName((Class<?>)value);
 				}
 				return (T)value.toString();
 			}
@@ -584,7 +584,7 @@ public class BeanSession extends Session {
 					String typeName = m2.getString(getBeanTypePropertyName(type));
 					if (typeName != null) {
 						ClassMeta cm = type.getBeanRegistry().getClassMeta(typeName);
-						if (cm != null && ClassUtils.isParentClass(type.innerClass, cm.innerClass))
+						if (cm != null && isParentClass(type.innerClass, cm.innerClass))
 							return (T)m2.cast(cm);
 					}
 				}
@@ -1030,7 +1030,7 @@ public class BeanSession extends Session {
 	public boolean close() throws BeanRuntimeException {
 		if (super.close()) {
 			if (debug && hasWarnings())
-				throw new BeanRuntimeException("Warnings occurred in session: \n" + StringUtils.join(getWarnings(), "\n"));
+				throw new BeanRuntimeException("Warnings occurred in session: \n" + join(getWarnings(), "\n"));
 			return true;
 		}
 		return false;

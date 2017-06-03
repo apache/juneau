@@ -12,9 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.plaintext;
 
+import static org.apache.juneau.internal.IOUtils.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.transform.*;
 
@@ -68,6 +69,6 @@ public class PlainTextParser extends ReaderParser {
 
 	@Override /* Parser */
 	protected <T> T doParse(ParserSession session, ClassMeta<T> type) throws Exception {
-		return session.convertToType(IOUtils.read(session.getReader()), type);
+		return session.convertToType(read(session.getReader()), type);
 	}
 }

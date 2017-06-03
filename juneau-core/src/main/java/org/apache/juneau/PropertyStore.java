@@ -13,6 +13,8 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.BeanContext.*;
+import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -556,7 +558,7 @@ public final class PropertyStore {
 					ConcurrentHashMap<Class<? extends Context>, Context> cacheForThisConfig = globalContextCache.get(key);
 
 					if (! cacheForThisConfig.containsKey(c))
-						cacheForThisConfig.putIfAbsent(c, c.getConstructor(PropertyStore.class).newInstance(this));
+						cacheForThisConfig.putIfAbsent(c, newInstance(c, c, this));
 
 					contexts.put(c, cacheForThisConfig.get(c));
 				}
@@ -634,7 +636,7 @@ public final class PropertyStore {
 			if (pm != null)
 				return pm.get(name, type, def);
 			String s = System.getProperty(name);
-			if ((! StringUtils.isEmpty(s)) && isBeanSessionAvailable())
+			if ((! isEmpty(s)) && isBeanSessionAvailable())
 				return getBeanSession().convertToType(s, type);
 			return def;
 		} finally {
@@ -1074,19 +1076,19 @@ public final class PropertyStore {
 		}
 
 		void add(Object val) {
-			throw new ConfigException("Cannot add value {0} ({1}) to property ''{2}'' ({3}).", JsonSerializer.DEFAULT_LAX.toString(val), ClassUtils.getReadableClassNameForObject(val), name, type);
+			throw new ConfigException("Cannot add value {0} ({1}) to property ''{2}'' ({3}).", JsonSerializer.DEFAULT_LAX.toString(val), getReadableClassNameForObject(val), name, type);
 		}
 
 		void remove(Object val) {
-			throw new ConfigException("Cannot remove value {0} ({1}) from property ''{2}'' ({3}).", JsonSerializer.DEFAULT_LAX.toString(val), ClassUtils.getReadableClassNameForObject(val), name, type);
+			throw new ConfigException("Cannot remove value {0} ({1}) from property ''{2}'' ({3}).", JsonSerializer.DEFAULT_LAX.toString(val), getReadableClassNameForObject(val), name, type);
 		}
 
 		void put(Object val) {
-			throw new ConfigException("Cannot put value {0} ({1}) to property ''{2}'' ({3}).", JsonSerializer.DEFAULT_LAX.toString(val), ClassUtils.getReadableClassNameForObject(val), name, type);
+			throw new ConfigException("Cannot put value {0} ({1}) to property ''{2}'' ({3}).", JsonSerializer.DEFAULT_LAX.toString(val), getReadableClassNameForObject(val), name, type);
 		}
 
 		void put(Object key, Object val) {
-			throw new ConfigException("Cannot put value {0}({1})->{2}({3}) to property ''{4}'' ({5}).", JsonSerializer.DEFAULT_LAX.toString(key), ClassUtils.getReadableClassNameForObject(key), JsonSerializer.DEFAULT_LAX.toString(val), ClassUtils.getReadableClassNameForObject(val), name, type);
+			throw new ConfigException("Cannot put value {0}({1})->{2}({3}) to property ''{4}'' ({5}).", JsonSerializer.DEFAULT_LAX.toString(key), getReadableClassNameForObject(key), JsonSerializer.DEFAULT_LAX.toString(val), getReadableClassNameForObject(val), name, type);
 		}
 
 		protected Object value() {
@@ -1363,8 +1365,8 @@ public final class PropertyStore {
 		if (o == null)
 			return null;
 		if (o instanceof Class)
-			return ClassUtils.getReadableClassName((Class<?>)o);
-		return ClassUtils.getReadableClassName(o.getClass());
+			return getReadableClassName((Class<?>)o);
+		return getReadableClassName(o.getClass());
 	}
 
 	@Override /* Object */

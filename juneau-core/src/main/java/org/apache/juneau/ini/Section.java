@@ -14,13 +14,13 @@ package org.apache.juneau.ini;
 
 import static org.apache.juneau.ini.ConfigFileFormat.*;
 import static org.apache.juneau.ini.ConfigUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.locks.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Defines a section in a config file.
@@ -476,8 +476,8 @@ public class Section implements Map<String,String> {
 					this.lines.add(line);
 				else if (isAssignment(line)) {
 					// Key/value pairs are stored as either ">key" or "*key";
-					String key = StringUtils.replaceUnicodeSequences(line.substring(0, line.indexOf('=')).trim());
-					String val = StringUtils.replaceUnicodeSequences(line.substring(line.indexOf('=')+1).trim());
+					String key = replaceUnicodeSequences(line.substring(0, line.indexOf('=')).trim());
+					String val = replaceUnicodeSequences(line.substring(line.indexOf('=')+1).trim());
 					boolean encoded = key.length() > 1 && key.endsWith("*");
 					if (encoded) {
 						key = key.substring(0, key.lastIndexOf('*'));
@@ -566,7 +566,7 @@ public class Section implements Map<String,String> {
 
 	private void addChange(Set<String> changes, String key, String oldVal, String newVal) {
 		if (changes != null)
-			if (! StringUtils.isEquals(oldVal, newVal))
+			if (! isEquals(oldVal, newVal))
 				changes.add(getFullKey(name, key));
 	}
 }

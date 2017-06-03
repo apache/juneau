@@ -13,6 +13,8 @@
 package org.apache.juneau.xml;
 
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
+import static org.apache.juneau.internal.ArrayUtils.*;
+
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -27,7 +29,6 @@ import javax.xml.validation.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.annotation.*;
 import org.w3c.dom.bootstrap.*;
@@ -85,7 +86,7 @@ public class XmlSchemaSerializer extends XmlSerializer {
 			findNsfMappings(s, o);
 
 		Namespace xs = s.getXsNamespace();
-		Namespace[] allNs = ArrayUtils.append(new Namespace[]{s.getDefaultNamespace()}, s.getNamespaces());
+		Namespace[] allNs = append(new Namespace[]{s.getDefaultNamespace()}, s.getNamespaces());
 
 		Schemas schemas = new Schemas(s, xs, s.getDefaultNamespace(), allNs);
 		schemas.process(s, o);

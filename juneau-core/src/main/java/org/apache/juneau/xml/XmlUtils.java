@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -466,7 +468,7 @@ public final class XmlUtils {
 	// Converts an integer to a hexadecimal string padded to 4 places.
 	private static final Writer appendPaddedHexChar(Writer out, int num) throws IOException {
 		out.append("_x");
-		for (char c : StringUtils.toHex(num))
+		for (char c : toHex(num))
 			out.append(c);
 		return out.append('_');
 	}

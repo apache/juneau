@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.test;
 
 import static javax.servlet.http.HttpServletResponse.*;
+import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.rest.test.TestUtils.*;
 import static org.junit.Assert.*;
 
@@ -20,7 +21,6 @@ import java.io.*;
 import java.util.zip.*;
 
 import org.apache.http.impl.client.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.*;
 
@@ -48,7 +48,7 @@ public class GzipTest extends RestTestcase {
 	}
 
 	private static String decompress(InputStream is) throws Exception {
-		return IOUtils.read(new GZIPInputStream(is));
+		return read(new GZIPInputStream(is));
 	}
 
 	//====================================================================================================

@@ -13,12 +13,12 @@
 package org.apache.juneau.rest.test;
 
 import static javax.servlet.http.HttpServletResponse.*;
+import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.rest.test.TestUtils.*;
 import static org.junit.Assert.*;
 
 import java.io.*;
 
-import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.*;
 
@@ -44,7 +44,7 @@ public class CharsetEncodingsTest extends RestTestcase {
 		assertEquals("utf-8/foo/utf-8", r);
 
 		is = client.doPut(url, new StringReader("foo")).getInputStream();
-		r = IOUtils.read(new InputStreamReader(is, "utf-8"));
+		r = read(new InputStreamReader(is, "utf-8"));
 		if (debug) System.err.println(r);
 		assertEquals("utf-8/foo/utf-8", r);
 
@@ -52,7 +52,7 @@ public class CharsetEncodingsTest extends RestTestcase {
 
 		client = cb.acceptCharset("utf-8").contentType("text/p;charset=utf-8").build();
 		is = client.doPut(url, new StringReader("foo")).acceptCharset("utf-8").contentType("text/p;charset=utf-8").getInputStream();
-		r = IOUtils.read(new InputStreamReader(is, "utf-8"));
+		r = read(new InputStreamReader(is, "utf-8"));
 		if (debug) System.err.println(r);
 		assertEquals("utf-8/foo/utf-8", r);
 
@@ -60,7 +60,7 @@ public class CharsetEncodingsTest extends RestTestcase {
 
 		client = cb.acceptCharset("Shift_JIS").contentType("text/p;charset=shift_jis").build();
 		is = client.doPut(url, new StringReader("foo")).getInputStream();
-		r = IOUtils.read(new InputStreamReader(is, "Shift_JIS"));
+		r = read(new InputStreamReader(is, "Shift_JIS"));
 		if (debug) System.err.println(r);
 		assertEquals("shift_jis/foo/shift_jis", r);
 
@@ -69,7 +69,7 @@ public class CharsetEncodingsTest extends RestTestcase {
 		try {
 			client = cb.acceptCharset("BAD").contentType("text/p;charset=sjis").build();
 			is = client.doPut(url + "?noTrace=true", new StringReader("foo")).getInputStream();
-			r = IOUtils.read(new InputStreamReader(is, "sjis"));
+			r = read(new InputStreamReader(is, "sjis"));
 			if (debug) System.err.println(r);
 			fail("Exception expected");
 		} catch (RestCallException e) {
@@ -80,7 +80,7 @@ public class CharsetEncodingsTest extends RestTestcase {
 
 		client = cb.accept("text/s").acceptCharset("utf-8").contentType("text/p").build();
 		is = client.doPut(url+"?Content-Type=text/p", new StringReader("foo")).getInputStream();
-		r = IOUtils.read(new InputStreamReader(is, "utf-8"));
+		r = read(new InputStreamReader(is, "utf-8"));
 		if (debug) System.err.println(r);
 		assertEquals("utf-8/foo/utf-8", r);
 
@@ -88,7 +88,7 @@ public class CharsetEncodingsTest extends RestTestcase {
 
 		client = cb.accept("text/s").contentType("text/bad").acceptCharset("utf-8").build();
 		is = client.doPut(url+"?Content-Type=text/p;charset=utf-8", new StringReader("foo")).getInputStream();
-		r = IOUtils.read(new InputStreamReader(is, "utf-8"));
+		r = read(new InputStreamReader(is, "utf-8"));
 		if (debug) System.err.println(r);
 		assertEquals("utf-8/foo/utf-8", r);
 
@@ -97,7 +97,7 @@ public class CharsetEncodingsTest extends RestTestcase {
 		try {
 			client = cb.accept("text/s").contentType("text/p").acceptCharset("utf-8").build();
 			is = client.doPut(url+"?Content-Type=text/p;charset=BAD&noTrace=true", new StringReader("foo")).getInputStream();
-			r = IOUtils.read(new InputStreamReader(is, "utf-8"));
+			r = read(new InputStreamReader(is, "utf-8"));
 			if (debug) System.err.println(r);
 			assertEquals("utf-8/foo/utf-8", r);
 			fail("Exception expected");

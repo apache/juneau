@@ -12,13 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
+import static org.apache.juneau.internal.ThrowableUtils.*;
+
 import java.text.*;
 import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Wraps a {@link ResourceBundle} to provide some useful additional functionality.
@@ -136,7 +137,7 @@ public class MessageBundle extends ResourceBundle {
 	 */
 	@SuppressWarnings("hiding")
 	public MessageBundle addSearchPath(Class<?> forClass, String bundlePath) {
-		ThrowableUtils.assertSameThread(creationThreadId, "This method can only be called from the same thread that created the object.");
+		assertSameThread(creationThreadId, "This method can only be called from the same thread that created the object.");
 		MessageBundle srb = new MessageBundle(forClass, bundlePath);
 		if (srb.rb != null) {
 			allKeys.addAll(srb.keySet());

@@ -12,9 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import static org.apache.juneau.internal.ClassUtils.*;
+
 import java.lang.reflect.*;
 
-import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
@@ -66,10 +67,10 @@ public class RestResourceResolver {
 	 */
 	public Object resolve(Class<?> c, RestConfig config) throws RestServletException {
 		try {
-			Constructor<?> c1 = ClassUtils.findPublicConstructor(c, RestConfig.class);
+			Constructor<?> c1 = findPublicConstructor(c, RestConfig.class);
 			if (c1 != null)
 				return c1.newInstance(config);
-			c1 = ClassUtils.findPublicConstructor(c);
+			c1 = findPublicConstructor(c);
 			if (c1 != null)
 				return c1.newInstance();
 		} catch (Exception e) {

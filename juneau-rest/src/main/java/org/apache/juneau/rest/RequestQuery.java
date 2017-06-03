@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import static org.apache.juneau.internal.ArrayUtils.*;
+
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -285,7 +287,7 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 			List c = new ArrayList();
 			for (int i = 0; i < p.length; i++)
 				c.add(parseValue(p[i], cm.getElementType()));
-			return (T)ArrayUtils.toArray(c, cm.getElementType().getInnerClass());
+			return (T)toArray(c, cm.getElementType().getInnerClass());
 		} else if (cm.isCollection()) {
 			try {
 				Collection c = (Collection)(cm.canCreateNewInstance() ? cm.newInstance() : new ObjectList());

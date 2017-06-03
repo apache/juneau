@@ -14,6 +14,8 @@ package org.apache.juneau.ini;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.junit.Assert.*;
+import static org.apache.juneau.internal.IOUtils.*;
+import static org.apache.juneau.internal.FileUtils.*;
 
 import java.io.*;
 import java.net.*;
@@ -22,7 +24,6 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.svl.*;
@@ -442,14 +443,14 @@ public class ConfigFileTest {
 		assertTrue(cfw.isEncoded("s1/foo"));
 		cf.save();
 		String expected = "[s1]||foo* = {AwwJVhwUQFZEMg==}|";
-		String actual = IOUtils.read(new FileReader(f));
+		String actual = read(new FileReader(f));
 		assertTextEquals(expected, actual);
 		cf.load();
 		assertEquals("mypassword", cf.getString("s1/foo"));
 		assertEquals("mypassword", cfw.getString("s1/foo"));
 
-		IOUtils.write(f, new StringReader("[s1]\nfoo* = mypassword2\n"));
-		FileUtils.modifyTimestamp(f);
+		write(f, new StringReader("[s1]\nfoo* = mypassword2\n"));
+		modifyTimestamp(f);
 		cf.loadIfModified();
 		assertTrue(cf.isEncoded("s1/foo"));
 		assertEquals("mypassword2", cf.getString("s1/foo"));
@@ -602,8 +603,8 @@ public class ConfigFileTest {
 	@Test
 	public void testListeners() throws Exception {
 		ConfigFile[] cff = {
-			configFileBuilder.build(FileUtils.createTempFile("ConfigFileTest.cfg")).addLines(null, "a1=1").addLines("B", "b1=1"),
-			configFileBuilder.build(FileUtils.createTempFile("ConfigFileTest.cfg")).addLines(null, "a1=1").addLines("B", "b1=1").getResolving(VarResolver.DEFAULT)
+			configFileBuilder.build(createTempFile("ConfigFileTest.cfg")).addLines(null, "a1=1").addLines("B", "b1=1"),
+			configFileBuilder.build(createTempFile("ConfigFileTest.cfg")).addLines(null, "a1=1").addLines("B", "b1=1").getResolving(VarResolver.DEFAULT)
 		};
 
 		for (ConfigFile cf : cff) {
@@ -2123,7 +2124,7 @@ public class ConfigFileTest {
 
 		assertTextEquals("a = a,|\tb,|\tc|[A]|a = a,|\tb,|\tc|", cf);
 		cf.save();
-		assertTextEquals("a = a,|\tb,|\tc|[A]|a = a,|\tb,|\tc|", IOUtils.read(f));
+		assertTextEquals("a = a,|\tb,|\tc|[A]|a = a,|\tb,|\tc|", read(f));
 
 		cf.load();
 		assertEquals("a,\nb,\nc", cf.getString("a"));
@@ -2146,7 +2147,7 @@ public class ConfigFileTest {
 
 		assertTextEquals("a = a,\\u0023b,\\u003Dc|[A]|a = a,\\u0023b,\\u003Dc|", cf);
 		cf.save();
-		assertTextEquals("a = a,\\u0023b,\\u003Dc|[A]|a = a,\\u0023b,\\u003Dc|", IOUtils.read(f));
+		assertTextEquals("a = a,\\u0023b,\\u003Dc|[A]|a = a,\\u0023b,\\u003Dc|", read(f));
 
 		cf.load();
 		assertEquals("a,#b,=c", cf.getString("a"));

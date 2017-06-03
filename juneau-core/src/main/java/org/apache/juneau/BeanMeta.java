@@ -14,6 +14,8 @@ package org.apache.juneau;
 
 import static org.apache.juneau.Visibility.*;
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.ReflectionUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.beans.*;
 import java.io.*;
@@ -21,7 +23,6 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.utils.*;
 
@@ -174,7 +175,7 @@ public class BeanMeta<T> {
 				}
 				this.beanRegistry = new BeanRegistry(ctx, null, bdClasses.toArray(new Class<?>[bdClasses.size()]));
 
-				for (Bean b : ReflectionUtils.findAnnotationsParentFirst(Bean.class, classMeta.innerClass))
+				for (Bean b : findAnnotationsParentFirst(Bean.class, classMeta.innerClass))
 					if (! b.typePropertyName().isEmpty())
 						typePropertyName = b.typePropertyName();
 				if (typePropertyName == null)
@@ -210,7 +211,7 @@ public class BeanMeta<T> {
 						if (constructor != null)
 							throw new BeanRuntimeException(c, "Multiple instances of '@BeanConstructor' found.");
 						constructor = (Constructor<T>)x;
-						constructorArgs = StringUtils.split(x.getAnnotation(BeanConstructor.class).properties(), ',');
+						constructorArgs = split(x.getAnnotation(BeanConstructor.class).properties(), ',');
 						if (constructorArgs.length != x.getParameterTypes().length)
 							throw new BeanRuntimeException(c, "Number of properties defined in '@BeanConstructor' annotation does not match number of parameters in constructor.");
 						if (! setAccessible(constructor))
@@ -394,7 +395,7 @@ public class BeanMeta<T> {
 			} catch (BeanRuntimeException e) {
 				throw e;
 			} catch (Exception e) {
-				return "Exception:  " + StringUtils.getStackTrace(e);
+				return "Exception:  " + getStackTrace(e);
 			}
 
 			return null;

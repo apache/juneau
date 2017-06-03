@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice;
 
+import static org.apache.juneau.internal.IOUtils.*;
+
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -416,7 +418,7 @@ public abstract class Microservice {
 				try {
 					m.read(new FileInputStream(f));
 				} catch (IOException e) {
-					System.err.println("Problem detected in MANIFEST.MF.  Contents below:\n" + IOUtils.read(f));
+					System.err.println("Problem detected in MANIFEST.MF.  Contents below:\n" + read(f));
 					throw e;
 				}
 			} else {
@@ -427,7 +429,7 @@ public abstract class Microservice {
 					try {
 						m.read(url.openStream());
 					} catch (IOException e) {
-						System.err.println("Problem detected in MANIFEST.MF.  Contents below:\n" + IOUtils.read(url.openStream()));
+						System.err.println("Problem detected in MANIFEST.MF.  Contents below:\n" + read(url.openStream()));
 						throw e;
 					}
 				}

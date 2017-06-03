@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client;
 
+import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.parser.ParserContext.*;
 import static org.apache.juneau.serializer.SerializerContext.*;
 
@@ -42,7 +43,6 @@ import org.apache.http.impl.conn.*;
 import org.apache.http.protocol.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
@@ -219,7 +219,7 @@ public class RestClientBuilder extends CoreObjectBuilder {
 				default: throw new RuntimeException("Programmer error");
 			}
 
-			for (String p : StringUtils.split(sslOpts.getProtocols(), ',')) {
+			for (String p : split(sslOpts.getProtocols(), ',')) {
 				try {
 					TrustManager tm = new SimpleX509TrustManager(sslOpts.getCertValidate() == SSLOpts.CertValidate.LAX);
 

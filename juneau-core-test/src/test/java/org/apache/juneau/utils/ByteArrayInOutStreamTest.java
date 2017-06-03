@@ -13,6 +13,7 @@
 package org.apache.juneau.utils;
 
 import static org.junit.Assert.*;
+import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
 
@@ -27,9 +28,9 @@ public class ByteArrayInOutStreamTest {
 	//====================================================================================================
 	@Test
 	public void testBasic() throws Exception {
-		InputStream is = new ByteArrayInputStream("foobar".getBytes(IOUtils.UTF8));
+		InputStream is = new ByteArrayInputStream("foobar".getBytes(UTF8));
 		ByteArrayInOutStream baios = new ByteArrayInOutStream();
 		IOPipe.create(is, baios).run();
-		assertEquals("foobar", IOUtils.read(baios.getInputStream()));
+		assertEquals("foobar", read(baios.getInputStream()));
 	}
 }

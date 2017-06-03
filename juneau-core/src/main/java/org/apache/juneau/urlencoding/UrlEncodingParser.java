@@ -13,6 +13,8 @@
 package org.apache.juneau.urlencoding;
 
 import static org.apache.juneau.uon.UonParserContext.*;
+import static org.apache.juneau.internal.ArrayUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -20,7 +22,6 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.uon.*;
@@ -111,7 +112,7 @@ public class UrlEncodingParser extends UonParser {
 			parseIntoMap(session, r, m, sType, c2);
 			c2.addAll(m.values());
 			if (sType.isArray())
-				o = ArrayUtils.toArray(c2, sType.getElementType().getInnerClass());
+				o = toArray(c2, sType.getElementType().getInnerClass());
 			else if (sType.isArgs())
 				o = c2.toArray(new Object[c2.size()]);
 			else
@@ -341,7 +342,7 @@ public class UrlEncodingParser extends UonParser {
 
 		Map<String,String[]> m = map == null ? new TreeMap<String,String[]>() : map;
 
-		if (StringUtils.isEmpty(qs))
+		if (isEmpty(qs))
 			return m;
 
 		UonReader r = new UonReader(qs, true);
@@ -410,7 +411,7 @@ public class UrlEncodingParser extends UonParser {
 			if (! b)
 				m.put(key, null);
 		} else if (b && m.get(key) != null) {
-			m.put(key, ArrayUtils.append(m.get(key), val));
+			m.put(key, append(m.get(key), val));
 		} else {
 			m.put(key, new String[]{val});
 		}
@@ -464,7 +465,7 @@ public class UrlEncodingParser extends UonParser {
 			// Shortcut - If we're returning a string and the value doesn't start with "'" or is "null", then
 			// just return the string since it's a plain value.
 			// This allows us to bypass the creation of a UonParserSession object.
-			char x = StringUtils.firstNonWhitespaceChar(in);
+			char x = firstNonWhitespaceChar(in);
 			if (x != '\'' && x != 'n' && in.indexOf('~') == -1)
 				return (T)in;
 			if (x == 'n' && "null".equals(in))

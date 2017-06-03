@@ -13,6 +13,7 @@
 package org.apache.juneau.utils;
 
 import static java.util.Calendar.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.text.*;
 import java.util.*;
@@ -364,7 +365,7 @@ public final class PojoQuery {
 		List<String> columns = new ArrayList<String>(sort.keySet());
 		Collections.reverse(columns);
 		for (final String c : columns) {
-			final boolean isDesc = StringUtils.startsWith(sort.get(c).toString(), 'd');
+			final boolean isDesc = startsWith(sort.get(c).toString(), 'd');
 			Comparator comp = new Comparator<Map>() {
 				@Override /* Comparator */
 				public int compare(Map m1, Map m2) {
@@ -638,7 +639,7 @@ public final class PojoQuery {
 
 			// Make all tokens 'ORed'.  There is no way to AND numeric tokens.
 			for (int i = 0; i < s2.length; i++)
-				if (! StringUtils.startsWith(s2[i], '!'))
+				if (! startsWith(s2[i], '!'))
 					s2[i] = "^"+s2[i];
 
 			List<String> l = new LinkedList<String>();

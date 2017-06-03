@@ -13,6 +13,7 @@
 package org.apache.juneau.http;
 
 import static org.apache.juneau.http.Constants.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
 
@@ -232,6 +233,6 @@ public final class Accept {
 
 	@Override /* Object */
 	public String toString() {
-		return StringUtils.join(mediaRanges, ',');
+		return join(mediaRanges, ',');
 	}
 }
