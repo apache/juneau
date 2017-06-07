@@ -860,12 +860,11 @@ public class ParserGroupBuilder {
 	/**
 	 * Sets the {@link BeanContext#BEAN_debug} property on all parsers in this group.
 	 *
-	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_debug
 	 */
-	public ParserGroupBuilder debug(boolean value) {
-		return property(BEAN_debug, value);
+	public ParserGroupBuilder debug() {
+		return property(BEAN_debug, true);
 	}
 
 	/**

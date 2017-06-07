@@ -91,18 +91,19 @@ public class RestInfoProvider {
 					title = r.title();
 				if (! r.description().isEmpty())
 					description = r.description();
-				if (! r.termsOfService().isEmpty())
-					termsOfService = r.termsOfService();
-				if (! r.contact().isEmpty())
-					contact = r.contact();
-				if (! r.license().isEmpty())
-					license = r.license();
-				if (! r.version().isEmpty())
-					version = r.version();
-				if (! r.tags().isEmpty())
-					tags = r.tags();
-				if (! r.externalDocs().isEmpty())
-					externalDocs = r.externalDocs();
+				ResourceSwagger sr = r.swagger();
+				if (! sr.termsOfService().isEmpty())
+					termsOfService = sr.termsOfService();
+				if (! sr.contact().isEmpty())
+					contact = sr.contact();
+				if (! sr.license().isEmpty())
+					license = sr.license();
+				if (! sr.version().isEmpty())
+					version = sr.version();
+				if (! sr.tags().isEmpty())
+					tags = sr.tags();
+				if (! sr.externalDocs().isEmpty())
+					externalDocs = sr.externalDocs();
 			}
 		}
 	}
@@ -298,7 +299,7 @@ public class RestInfoProvider {
 	 * <p>
 	 * The default implementation returns the contact information from the following locations (whichever matches first):
 	 * <ol>
-	 * 	<li>{@link RestResource#contact() @RestResource.contact()} annotation on this class, and then any parent classes.
+	 * 	<li>{@link ResourceSwagger#contact() @ResourceSwagger.contact()} annotation on this class, and then any parent classes.
 	 * 	<li><ck>[ClassName].contact</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
 	 * 		annotation for this class, then any parent classes.
 	 * 	<li><ck>contact</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
@@ -334,7 +335,7 @@ public class RestInfoProvider {
 	 * <p>
 	 * The default implementation returns the license information from the following locations (whichever matches first):
 	 * <ol>
-	 * 	<li>{@link RestResource#license() @RestResource.license()} annotation on this class, and then any parent classes.
+	 * 	<li>{@link ResourceSwagger#license() @ResourceSwagger.license()} annotation on this class, and then any parent classes.
 	 * 	<li><ck>[ClassName].license</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
 	 * 		annotation for this class, then any parent classes.
 	 * 	<li><ck>license</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
@@ -370,7 +371,7 @@ public class RestInfoProvider {
 	 * <p>
 	 * The default implementation returns the terms-of-service information from the following locations (whichever matches first):
 	 * <ol>
-	 * 	<li>{@link RestResource#termsOfService() @RestResource.termsOfService()} annotation on this class, and then any parent classes.
+	 * 	<li>{@link ResourceSwagger#termsOfService() @ResourceSwagger.termsOfService()} annotation on this class, and then any parent classes.
 	 * 	<li><ck>[ClassName].termsOfService</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
 	 * 		annotation for this class, then any parent classes.
 	 * 	<li><ck>termsOfService</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
@@ -401,7 +402,7 @@ public class RestInfoProvider {
 	 * <p>
 	 * The default implementation returns the version information from the following locations (whichever matches first):
 	 * <ol>
-	 * 	<li>{@link RestResource#version() @RestResource.version()} annotation on this class, and then any parent classes.
+	 * 	<li>{@link ResourceSwagger#version() @ResourceSwagger.version()} annotation on this class, and then any parent classes.
 	 * 	<li><ck>[ClassName].version</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
 	 * 		annotation for this class, then any parent classes.
 	 * 	<li><ck>version</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
@@ -432,7 +433,7 @@ public class RestInfoProvider {
 	 * <p>
 	 * The default implementation returns the version information from the following locations (whichever matches first):
 	 * <ol>
-	 * 	<li>{@link RestResource#version() @RestResource.version()} annotation on this class, and then any parent classes.
+	 * 	<li>{@link ResourceSwagger#version() @ResourceSwagger.version()} annotation on this class, and then any parent classes.
 	 * 	<li><ck>[ClassName].version</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
 	 * 		annotation for this class, then any parent classes.
 	 * 	<li><ck>version</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
@@ -468,7 +469,7 @@ public class RestInfoProvider {
 	 * <p>
 	 * The default implementation returns the version information from the following locations (whichever matches first):
 	 * <ol>
-	 * 	<li>{@link RestResource#version() @RestResource.version()} annotation on this class, and then any parent classes.
+	 * 	<li>{@link ResourceSwagger#version() @ResourceSwagger.version()} annotation on this class, and then any parent classes.
 	 * 	<li><ck>[ClassName].version</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
 	 * 		annotation for this class, then any parent classes.
 	 * 	<li><ck>version</ck> property in resource bundle identified by {@link RestResource#messages() @RestResource.messages()}

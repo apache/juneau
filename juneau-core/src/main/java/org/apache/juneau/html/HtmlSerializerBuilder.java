@@ -671,8 +671,8 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* CoreObjectBuilder */
-	public HtmlSerializerBuilder debug(boolean value) {
-		super.debug(value);
+	public HtmlSerializerBuilder debug() {
+		super.debug();
 		return this;
 	}
 

@@ -23,7 +23,6 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.dto.*;
 import org.apache.juneau.dto.cognos.*;
-import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.examples.addressbook.*;
 import org.apache.juneau.examples.rest.*;
@@ -31,6 +30,7 @@ import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.converters.*;
+import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.utils.*;
 
@@ -47,7 +47,28 @@ import org.apache.juneau.utils.*;
 	// "request:/..." URIs are relative to the request URI.
 	// "servlet:/..." URIs are relative to the servlet URI.
 	// "$C{...}" variables are pulled from the config file.
-	pageLinks="{up:'request:/..',options:'servlet:/?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/addressbook/AddressBookResource.java'}",
+	htmldoc=@HtmlDoc(
+		links="{up:'request:/..',options:'servlet:/?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/addressbook/AddressBookResource.java'}",
+			aside=""
+				+ "<div style='max-width:400px;min-width:200px'>"
+				+ "	<p>Proof-of-concept resource that shows off the capabilities of working with POJO resources.</p>"
+				+ "	<p>Provides examples of: </p>"
+				+ "		<ul>"
+				+ "			<li>XML and RDF namespaces"
+				+ "			<li>Swagger documentation"
+				+ "			<li>Widgets"
+				+ "		</ul>"
+				+ "	<p style='text-weight:bold;text-decoration:underline;'>Available Content Types</p>"
+				+ "	$W{contentTypeLinks}"
+				+ "</div>",
+		footer="$W{poweredByJuneau}"
+	),
+	
+	// Widgets for $W variables above.
+	widgets={
+		PoweredByJuneauWidget.class,
+		ContentTypeLinksWidget.class
+	},
 	
 	// Properties that get applied to all serializers and parsers.
 	properties={
@@ -78,12 +99,14 @@ import org.apache.juneau.utils.*;
 	encoders=GzipEncoder.class,
 	
 	// Swagger info.
-	contact="{name:'John Smith',email:'john@smith.com'}",
-	license="{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}",
-	version="2.0",
-	termsOfService="You're on your own.",
-	tags="[{name:'Java',description:'Java utility',externalDocs:{description:'Home page',url:'http://juneau.apache.org'}}]",
-	externalDocs="{description:'Home page',url:'http://juneau.apache.org'}"
+	swagger=@ResourceSwagger(
+		contact="{name:'John Smith',email:'john@smith.com'}",
+		license="{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}",
+		version="2.0",
+		termsOfService="You're on your own.",
+		tags="[{name:'Java',description:'Java utility',externalDocs:{description:'Home page',url:'http://juneau.apache.org'}}]",
+		externalDocs="{description:'Home page',url:'http://juneau.apache.org'}"
+	)
 )
 public class AddressBookResource extends ResourceJena {
 	private static final long serialVersionUID = 1L;
@@ -305,16 +328,6 @@ public class AddressBookResource extends ResourceJena {
 	@RestMethod(name="PROXY", path="/proxy/*")
 	public IAddressBook getProxy() {
 		return addressBook;
-	}
-
-	/**
-	 * [OPTIONS /*]
-	 * View resource options
-	 */
-	@Override /* RestServletJenaDefault */
-	@RestMethod(name="OPTIONS", path="/*")
-	public Swagger getOptions(RestRequest req) {
-		return req.getSwagger();
 	}
 
 	/** Convenience method - Find a person by ID */

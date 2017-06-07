@@ -15,6 +15,7 @@ package org.apache.juneau.examples.rest;
 import org.apache.juneau.dto.jsonschema.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.widget.*;
 
 /**
  * Sample resource that shows how to serialize JSON-Schema documents.
@@ -24,7 +25,17 @@ import org.apache.juneau.rest.annotation.*;
 	messages="nls/JsonSchemaResource",
 	title="Sample JSON-Schema document",
 	description="Sample resource that shows how to generate JSON-Schema documents",
-	pageLinks="{up:'request:/..',options:'servlet:/?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/JsonSchemaResource.java'}"
+	htmldoc=@HtmlDoc(
+		links="{up:'request:/..',options:'servlet:/?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/JsonSchemaResource.java'}",
+		aside=""
+			+ "<div style='min-width:200px' class='text'>"
+			+ "	<p>Shows how to produce JSON-Schema documents in a variety of languages using the JSON-Schema DTOs.</p>"
+			+ "	<p>$W{contentTypeLinks}</p>"
+			+ "</div>"
+	),
+	widgets={
+		ContentTypeLinksWidget.class
+	}
 )
 public class JsonSchemaResource extends ResourceJena {
 	private static final long serialVersionUID = 1L;

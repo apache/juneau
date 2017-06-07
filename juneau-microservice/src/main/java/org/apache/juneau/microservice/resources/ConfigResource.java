@@ -33,7 +33,9 @@ import org.apache.juneau.rest.annotation.Body;
 	path="/config",
 	title="Configuration",
 	description="Contents of configuration file.",
-	pageLinks="{up:'request:/..',options:'servlet:/?method=OPTIONS',edit:'servlet:/edit'}"
+	htmldoc=@HtmlDoc(
+		links="{up:'request:/..',options:'servlet:/?method=OPTIONS',edit:'servlet:/edit'}"
+	)
 )
 public class ConfigResource extends Resource {
 	private static final long serialVersionUID = 1L;
@@ -81,9 +83,11 @@ public class ConfigResource extends Resource {
 	 */
 	@RestMethod(name="GET", path="/{section}",
 		description="Show config file section.",
-		parameters={
-			@Parameter(in="path", name="section", description="Section name.")
-		}
+		swagger=@MethodSwagger(
+			parameters={
+				@Parameter(in="path", name="section", description="Section name.")
+			}
+		)
 	)
 	public ObjectMap getConfigSection(@Path("section") String section) throws Exception {
 		return getSection(section);
@@ -99,10 +103,12 @@ public class ConfigResource extends Resource {
 	 */
 	@RestMethod(name="GET", path="/{section}/{key}",
 		description="Show config file entry.",
-		parameters={
-			@Parameter(in="path", name="section", description="Section name."),
-			@Parameter(in="path", name="key", description="Entry name.")
-		}
+		swagger=@MethodSwagger(
+			parameters={
+				@Parameter(in="path", name="section", description="Section name."),
+				@Parameter(in="path", name="key", description="Entry name.")
+			}
+		)
 	)
 	public String getConfigEntry(@Path("section") String section, @Path("key") String key) throws Exception {
 		return getSection(section).getString(key);
@@ -117,9 +123,11 @@ public class ConfigResource extends Resource {
 	 */
 	@RestMethod(name="POST", path="/",
 		description="Sets contents of config file from a FORM post.",
-		parameters={
-			@Parameter(in="formData", name="contents", description="New contents in INI file format.")
-		}
+		swagger=@MethodSwagger(
+			parameters={
+				@Parameter(in="formData", name="contents", description="New contents in INI file format.")
+			}
+		)
 	)
 	public ConfigFile setConfigContentsFormPost(@FormData("contents") String contents) throws Exception {
 		return setConfigContents(new StringReader(contents));
@@ -134,9 +142,11 @@ public class ConfigResource extends Resource {
 	 */
 	@RestMethod(name="PUT", path="/",
 		description="Sets contents of config file.",
-		parameters={
-			@Parameter(in="body", description="New contents in INI file format.")
-		}
+		swagger=@MethodSwagger(
+			parameters={
+				@Parameter(in="body", description="New contents in INI file format.")
+			}
+		)
 	)
 	public ConfigFile setConfigContents(@Body Reader contents) throws Exception {
 		ConfigFile cf2 = new ConfigFileBuilder().build(contents);
@@ -153,10 +163,12 @@ public class ConfigResource extends Resource {
 	 */
 	@RestMethod(name="PUT", path="/{section}",
 		description="Add or overwrite a config file section.",
-		parameters={
-			@Parameter(in="path", name="section", description="Section name."),
-			@Parameter(in="body", description="New contents for section as a simple map with string keys and values.")
-		}
+		swagger=@MethodSwagger(
+			parameters={
+				@Parameter(in="path", name="section", description="Section name."),
+				@Parameter(in="body", description="New contents for section as a simple map with string keys and values.")
+			}
+		)
 	)
 	public ObjectMap setConfigSection(@Path("section") String section, @Body Map<String,String> contents) throws Exception {
 		getConfigContents().setSection(section, contents);
@@ -174,11 +186,13 @@ public class ConfigResource extends Resource {
 	 */
 	@RestMethod(name="PUT", path="/{section}/{key}",
 		description="Add or overwrite a config file entry.",
-		parameters={
-			@Parameter(in="path", name="section", description="Section name."),
-			@Parameter(in="path", name="key", description="Entry name."),
-			@Parameter(in="body", description="New value as a string.")
-		}
+		swagger=@MethodSwagger(
+			parameters={
+				@Parameter(in="path", name="section", description="Section name."),
+				@Parameter(in="path", name="key", description="Entry name."),
+				@Parameter(in="body", description="New value as a string.")
+			}
+		)
 	)
 	public String setConfigSection(@Path("section") String section, @Path("key") String key, @Body String value) throws Exception {
 		getConfigContents().put(section, key, value, false);

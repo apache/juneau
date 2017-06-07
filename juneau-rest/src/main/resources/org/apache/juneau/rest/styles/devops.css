@@ -11,83 +11,84 @@
  * specific language governing permissions and limitations under the License.                                              *
  ***************************************************************************************************************************/
  
+/**********************************************************************************************************************/
+/**  Sections                                                                                                        **/
+/**********************************************************************************************************************/
 html {
-	height: 100%;
 }
-
 body {
-	background-color: rgb(59,75,84);
+	background-color: #3B4B54;
 	margin: 0px;
-	font-family: sans-serif;
-	font-size: 12px;
-	color: #26343F;
-	height: 100%;
+	font-size: 11pt;
+	font-family: HelveticaNeue-Light,"Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
+	color: #B3B3B3;
+	height: 100%;	
+}
+header * {
+    font-size:11pt;
+	color: #B3B3B3;
+	background-color: #26343F;
+}
+nav {
+	margin: 10px 20px 10px 20px;
+	color: #94A3AB;
+}
+section {
+	display: table;
+	width: 100%;
+}
+article {
+	display: table-cell;
+}
+aside {
+	display: table-cell;
+	vertical-align: top;
+	padding: 20px 20px;
+}
+footer { 
+	padding: 10px;
+	width: 100%;
+	bottom: 0;
+	position: fixed;
+	background-color: #26343F;
 }
 
-/************************************************************************************/
-/**  Title/description section                                                     **/
-/************************************************************************************/
+/**********************************************************************************************************************/
+/**  Page elements                                                                                                   **/
+/**********************************************************************************************************************/
+
+/* Hyperlinks */
+.link {
+	font-size:10pt;
+	color: #94A3AB;
+	text-decoration: none;
+	margin: 0px 15px;
+	text-transform: uppercase;
+}
+.link:active, .link:hover {
+	color: white;
+	text-decoration: underline;
+}
+
+/* Title */
 h3.title {
-    font-size:12pt;
 	color: white;
 	margin: 0px;
 	padding: 10px 20px;
 	text-decoration: none;
 	font-weight: normal;
-	background-color: rgb(38,52,63);
 	border-bottom: 2px solid #34534B;
-	font-family: HelveticaNeue-Light,"Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
 }
 
+/* Description */
 h5.description {
-    font-size:11pt;
 	color: #B3B3B3;
 	margin: 0;
 	padding: 10px 20px;
 	text-decoration: none;
 	font-weight: normal;
-	background-color: rgb(38,52,63);
 	border-bottom: 2px solid #34534B;
-	font-family: HelveticaNeue-Light,"Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
 }
-
-
-
-/************************************************************************************/
-/**  Links section                                                                 **/
-/************************************************************************************/
-p.links {
-	margin-left: 20px;
-	margin-bottom: 0;
-	text-align: left;
-	color: #94A3AB;
-	text-transform: uppercase;
-}
-
-p.links a {
-	font-size:12px;
-	color: #94A3AB;
-	text-decoration: none;
-	margin-left: 15px;
-	margin-right: 15px;
-}
-
-p.links a:active, p.links a:hover {
-	font-size:12px;
-	color: white;
-	text-decoration: underline;
-}
-
-/* Use this to place links in description section aligned on the left.
-p.links {
-	margin-right: 20px;
-	margin-top: -30px;
-	text-align: right;
-	color: #94A3AB;
-	text-transform: uppercase;
-}
-*/
-
 
 /************************************************************************************/
 /**  Data section                                                                  **/
@@ -105,15 +106,18 @@ div.data {
 	display: inline-block;
 	overflow-x: auto;
 	box-shadow: 2px 3px 3px 0px rgba(0, 0, 0, 0.5);
+	font-family: sans-serif;
+	color:#26343F;
 }
-
+div.data * {
+	font-size: 9pt;
+	color: #26343F;
+}
 div.data td {
 	vertical-align: top;
 	border-bottom:1px solid #d9dcde;
 	border-right:1px solid #d9dcde;
 	padding:0.2em 0.5em;
-	color:#26343F;
-	font-size:12px;
 }
 
 
@@ -125,38 +129,29 @@ table {
 	border: none;
 }
 
-p {
-	font-family: sans-serif;
-	font-size: 12px;
-}
-
-a {
+div.data a {
 	color: #116998;
 	text-decoration: none;
 }
 
-a:hover {
-	color: #26343F;
+div.data a:hover {
 	text-decoration: underline;
 }
 
-th, .header {
-	border-top:1px solid #d9dcde;
+div.data th, .header {
+	border-top:1px solid #D9DCDE;
 	padding: 4px 8px;
 	font-weight: bold;
 	text-align:center;
-	background-color: rgb(244,246,249);
-	font-family: sans-serif;
-	font-size: 12px;
-	color: #26343f;
+	background-color: #F4F6F9;
 }
 
 button {
 	border-left:1px solid #A1AFAC;
 	border-top:1px solid #A1AFAC;
 	color: white;
-	font-size: 12px;
-	background: #00b299;
+	font-size: 9pt;
+	background: #00B299;
     font-weight: bold;
     padding: 5px 20px;	
 	border-radius: 5px;
@@ -169,12 +164,12 @@ button:hover {
 	background-color: #66D1C2;
 }
 
-ul {
+div.data ul {
 	margin:0px;
 	padding-left:20px;
 }
 
-textarea, pre { 
+div.data textarea, pre { 
 	-moz-tab-size:3; 
 	-o-tab-size:3; 
 	-webkit-tab-size:3; 
@@ -196,7 +191,3 @@ iframe.output {
     width:100%;
 	min-height:400px;
 }
-
-input {
-}
-

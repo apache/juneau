@@ -17,7 +17,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.dto.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.serializer.*;
 
@@ -46,10 +45,6 @@ import org.apache.juneau.serializer.*;
 @Produces("text/html")
 @SuppressWarnings("hiding")
 public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
-
-	// Properties defined in RestServletProperties
-	private static final String
-		REST_method = "RestServlet.method";
 
 	/** Default serializer, all default settings. */
 	public static final HtmlDocSerializer DEFAULT = new HtmlDocSerializer(PropertyStore.create());
@@ -81,89 +76,25 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 
 		HtmlDocSerializerSession s = (HtmlDocSerializerSession)session;
 		HtmlWriter w = s.getWriter();
-		UriResolver uriResolver = s.getUriResolver();
+		HtmlDocTemplate t = s.getTemplate();
 
-		boolean isOptionsPage = session.getProperty(REST_method, "").equalsIgnoreCase("OPTIONS");
-
-		// Render the header.
 		w.sTag("html").nl();
-		w.sTag("head").nl();
-
-		String cssUrl = s.getCssUrl();
-		if (cssUrl == null)
-			cssUrl = "servlet:/style.css";
-		cssUrl = uriResolver.resolve(cssUrl);
-
-		w.oTag(1, "style")
-			.attr("type", "text/css")
-			.appendln(">")
-			.append(2, "@import ").q().append(cssUrl).q().appendln(";");
-		if (s.isNoWrap())
-			w.appendln("\n* {white-space:nowrap;}");
-		if (s.getCssImports() != null)
-			for (String cssImport : s.getCssImports())
-				w.append(2, "@import ").q().append(cssImport).q().appendln(";");
-		w.eTag(1, "style").nl();
-		w.eTag("head").nl();
-		w.sTag("body").nl();
-		// Write the title of the page.
-		String title = s.getTitle();
-		if (title == null && isOptionsPage)
-			title = "Options";
-		String description = s.getText();
-		if (title != null)
-			w.oTag(1, "h3").attr("class", "title").append('>').text(title).eTag("h3").nl();
-		if (description != null)
-			w.oTag(1, "h5").attr("class", "description").append('>').text(description).eTag("h5").nl();
-
-		// Write the action links that render above the results.
-		List<Link> actions = new LinkedList<Link>();
-
-		// If this is an OPTIONS request, provide a 'back' link to return to the GET request page.
-		if (! isOptionsPage) {
-			Map<String,String> htmlLinks = s.getLinks();
-			if (htmlLinks != null) {
-				for (Map.Entry<String,String> e : htmlLinks.entrySet()) {
-					String uri = uriResolver.resolve(e.getValue());
-					actions.add(new Link(e.getKey(), uri));
-				}
-			}
-		}
-
-		if (actions.size() > 0) {
-			w.oTag(1, "p").attr("class", "links").append('>').nl();
-			for (Iterator<Link> i = actions.iterator(); i.hasNext();) {
-				Link h = i.next();
-				w.oTag(2, "a").attr("class", "link").attr("href", h.getHref(), true).append('>').append(h.getName()).eTag("a").nl();
-				if (i.hasNext())
-					w.append(3, " - ").nl();
-			}
-			w.eTag(1, "p").nl();
-		}
-
-		s.indent = 3;
-
-		// To allow for page formatting using CSS, we encapsulate the data inside two div tags:
-		// <div class='outerdata'><div class='data' id='data'>...</div></div>
-		w.oTag(1, "div").attr("class","outerdata").append('>').nl();
-		w.oTag(2, "div").attr("class","data").attr("id", "data").append('>').nl();
-		if (isEmptyList(o))
-			w.oTag(3, "p").append('>').append("no results").eTag("p");
-		else
-			super.doSerialize(s, o);
-		w.eTag(2, "div").nl();
-		w.eTag(1, "div").nl();
-
-		w.eTag("body").nl().eTag("html").nl();
+		w.sTag(1, "head").nl();
+		t.head(s, w, this, o);
+		w.eTag(1, "head").nl();
+		w.sTag(1, "body").nl();
+		t.body(s, w, this, o);
+		w.eTag(1, "body").nl();
+		w.eTag("html").nl();
 	}
 
-	private static boolean isEmptyList(Object o) {
-		if (o == null)
-			return false;
-		if (o instanceof Collection && ((Collection<?>)o).size() == 0)
-			return true;
-		if (o.getClass().isArray() && Array.getLength(o) == 0)
-			return true;
-		return false;
+	/**
+	 * Calls the parent {@link #doSerialize(SerializerSession, Object)} method which invokes just the HTML serializer.
+	 * @param session The serializer session.
+	 * @param o The object being serialized.
+	 * @throws Exception
+	 */
+	public void parentSerialize(SerializerSession session, Object o) throws Exception {
+		super.doSerialize(session, o);
 	}
 }

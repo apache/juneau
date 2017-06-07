@@ -20,6 +20,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 
@@ -32,10 +33,11 @@ import org.apache.juneau.serializer.*;
  */
 public final class HtmlDocSerializerSession extends HtmlSerializerSession {
 
-	private final String title, text, cssUrl;
-	private final String[] cssImports;
+	private final String title, description, header, nav, aside, footer, cssUrl, noResultsMessage;
+	private final String[] css;
 	private final Map<String,String> links;
 	private final boolean nowrap;
+	private final HtmlDocTemplate template;
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -59,73 +61,139 @@ public final class HtmlDocSerializerSession extends HtmlSerializerSession {
 		super(ctx, op, output, javaMethod, locale, timeZone, mediaType, uriContext);
 		if (op == null || op.isEmpty()) {
 			title = ctx.title;
-			text = ctx.text;
+			description = ctx.description;
+			header = ctx.header;
+			nav = ctx.nav;
+			aside = ctx.aside;
+			footer = ctx.footer;
 			links = ctx.links;
 			cssUrl = ctx.cssUrl;
-			cssImports = ctx.cssImports;
+			css = ctx.css;
 			nowrap = ctx.nowrap;
+			noResultsMessage = ctx.noResultsMessage;
+			template = ClassUtils.newInstance(HtmlDocTemplate.class, ctx.template);
 		} else {
 			title = op.getString(HTMLDOC_title, ctx.title);
-			text = op.getString(HTMLDOC_text, ctx.text);
-			links = new LinkedHashMap(op.getMap(HTMLDOC_links, ctx.links));
+			description = op.getString(HTMLDOC_description, ctx.description);
+			header = op.getString(HTMLDOC_header, ctx.nav);
+			nav = op.getString(HTMLDOC_nav, ctx.nav);
+			aside = op.getString(HTMLDOC_aside, ctx.aside);
+			footer = op.getString(HTMLDOC_footer, ctx.footer);
+			Map m = op.getMap(HTMLDOC_links, ctx.links);
+			links = ObjectUtils.isEmpty(m) ? null : new LinkedHashMap(m);
 			cssUrl = op.getString(HTMLDOC_cssUrl, ctx.cssUrl);
-			cssImports = split(op.getString(HTMLDOC_cssImports, null), ',');
+			css = split(op.getString(HTMLDOC_css, null), ',');
 			nowrap = op.getBoolean(HTMLDOC_cssUrl, ctx.nowrap);
+			noResultsMessage = op.getString(HTMLDOC_noResultsMessage, ctx.noResultsMessage);
+			template = ClassUtils.newInstance(HtmlDocTemplate.class, op.get(HTMLDOC_template, ctx.template));
 		}
 	}
 
 	/**
-	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_title} setting value in this context.
-	 *
-	 * @return The {@link HtmlDocSerializerContext#HTMLDOC_title} setting value in this context.
-	 */
-	public final String getTitle() {
-		return title;
-	}
-
-	/**
-	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_text} setting value in this context.
-	 *
-	 * @return The {@link HtmlDocSerializerContext#HTMLDOC_text} setting value in this context.
-	 */
-	public final String getText() {
-		return text;
-	}
-
-	/**
-	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_links} setting value in this context.
-	 *
-	 * @return The {@link HtmlDocSerializerContext#HTMLDOC_links} setting value in this context.
-	 */
-	public final Map<String,String> getLinks() {
-		return links;
-	}
-
-	/**
 	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_cssUrl} setting value in this context.
-	 *
 	 * @return The {@link HtmlDocSerializerContext#HTMLDOC_cssUrl} setting value in this context.
+	 * 	<jk>null</jk> if not specified.  Never an empty string.
 	 */
 	public final String getCssUrl() {
 		return cssUrl;
 	}
 
 	/**
-	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_cssImports} setting value in this context.
-	 *
-	 * @return The {@link HtmlDocSerializerContext#HTMLDOC_cssImports} setting value in this context.
+	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_css} setting value in this context.
+	 * @return The {@link HtmlDocSerializerContext#HTMLDOC_css} setting value in this context.
+	 * 	<jk>null</jk> if not specified.  Never an empty array.
 	 */
-	public final String[] getCssImports() {
-		return cssImports;
+	public final String[] getCss() {
+		return css;
 	}
 
 	/**
 	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_nowrap} setting value in this context.
-	 *
 	 * @return The {@link HtmlDocSerializerContext#HTMLDOC_nowrap} setting value in this context.
 	 */
 	public final boolean isNoWrap() {
 		return nowrap;
+	}
+
+	/**
+	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_title} setting value in this context.
+	 * @return The {@link HtmlDocSerializerContext#HTMLDOC_title} setting value in this context.
+	 * 	<jk>null</jk> if not specified.  Never an empty string.
+	 */
+	public final String getTitle() {
+		return title;
+	}
+
+	/**
+	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_description} setting value in this context.
+	 * @return The {@link HtmlDocSerializerContext#HTMLDOC_description} setting value in this context.
+	 * 	<jk>null</jk> if not specified.  Never an empty string.
+	 */
+	public final String getDescription() {
+		return description;
+	}
+
+	/**
+	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_header} setting value in this context.
+	 * @return The {@link HtmlDocSerializerContext#HTMLDOC_header} setting value in this context.
+	 * 	<jk>null</jk> if not specified.  Never an empty string.
+	 */
+	public final String getHeader() {
+		return header;
+	}
+
+	/**
+	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_links} setting value in this context.
+	 * @return The {@link HtmlDocSerializerContext#HTMLDOC_links} setting value in this context.
+	 * 	<jk>null</jk> if not specified.  Never an empty map.
+	 */
+	public final Map<String,String> getLinks() {
+		return links;
+	}
+
+	/**
+	 * Returns the template to use for generating the HTML page.
+	 * @return The HTML page generator.
+	 * 	Never <jk>null</jk>.
+	 */
+	public final HtmlDocTemplate getTemplate() {
+		return template;
+	}
+
+	/**
+	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_nav} setting value in this context.
+	 * @return The {@link HtmlDocSerializerContext#HTMLDOC_nav} setting value in this context.
+	 * 	<jk>null</jk> if not specified.  Never an empty string.
+	 */
+	public final String getNav() {
+		return nav;
+	}
+
+	/**
+	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_aside} setting value in this context.
+	 * @return The {@link HtmlDocSerializerContext#HTMLDOC_aside} setting value in this context.
+	 * 	<jk>null</jk> if not specified.  Never an empty string.
+	 */
+	public final String getAside() {
+		return aside;
+	}
+
+	/**
+	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_footer} setting value in this context.
+	 * @return The {@link HtmlDocSerializerContext#HTMLDOC_footer} setting value in this context.
+	 * 	<jk>null</jk> if not specified.  Never an empty string.
+	 */
+	public final String getFooter() {
+		return footer;
+	}
+
+	/**
+	 * Returns the {@link HtmlDocSerializerContext#HTMLDOC_noResultsMessage} setting value in this context.
+	 * @return The {@link HtmlDocSerializerContext#HTMLDOC_noResultsMessage} setting value in this context.
+	 * 	<jk>null</jk> if not specified.  Never an empty string.
+	 */
+	public final String getNoResultsMessage() {
+		return noResultsMessage;
 	}
 
 	@Override /* XmlSerializerSession */

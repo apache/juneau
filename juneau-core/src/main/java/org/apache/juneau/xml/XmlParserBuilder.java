@@ -568,8 +568,8 @@ public class XmlParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* CoreObjectBuilder */
-	public XmlParserBuilder debug(boolean value) {
-		super.debug(value);
+	public XmlParserBuilder debug() {
+		super.debug();
 		return this;
 	}
 

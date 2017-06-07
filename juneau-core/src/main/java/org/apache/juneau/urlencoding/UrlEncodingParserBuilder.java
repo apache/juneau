@@ -466,8 +466,8 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* CoreObjectBuilder */
-	public UrlEncodingParserBuilder debug(boolean value) {
-		super.debug(value);
+	public UrlEncodingParserBuilder debug() {
+		super.debug();
 		return this;
 	}
 

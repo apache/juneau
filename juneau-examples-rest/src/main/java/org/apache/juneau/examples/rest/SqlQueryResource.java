@@ -35,7 +35,14 @@ import org.apache.juneau.rest.annotation.Body;
 	messages="nls/SqlQueryResource",
 	title="SQL query service",
 	description="Executes queries against the local derby '$C{SqlQueryResource/connectionUrl}' database",
-	pageLinks="{up:'request:/..',options:'servlet:/..',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/SqlQueryResource.java'}"
+	htmldoc=@HtmlDoc(
+		links="{up:'request:/..',options:'servlet:/..',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/SqlQueryResource.java'}",
+		aside=""
+			+ "<div style='min-width:200px' class='text'>"
+			+ "	<p>An example of a REST interface over a relational database.</p>"
+			+ "	<p><a class='link' href='?sql=select+*+from sys.systables'>try me</a></p>"
+			+ "</div>"
+	)
 )
 public class SqlQueryResource extends Resource {
 	private static final long serialVersionUID = 1L;
@@ -63,7 +70,7 @@ public class SqlQueryResource extends Resource {
 
 	/** GET request handler - Display the query entry page. */
 	@RestMethod(name="GET", path="/", summary="Display the query entry page")
-	public Div doGet(RestRequest req) {
+	public Div doGet(RestRequest req, @Query("sql") String sql) {
 		return div(
 			script("text/javascript",
 				"\n	// Quick and dirty function to allow tabs in textarea."
@@ -93,7 +100,7 @@ public class SqlQueryResource extends Resource {
 					),
 					tr(
 						td().colspan(5).children(
-							textarea().name("sql").style("width:100%;height:200px;font-family:Courier;font-size:9pt;").onkeydown("checkTab(event)")
+							textarea().name("sql").text(sql == null ? " " : sql).style("width:100%;height:200px;font-family:Courier;font-size:9pt;").onkeydown("checkTab(event)")
 						)
 					)
 				)
@@ -114,8 +121,6 @@ public class SqlQueryResource extends Resource {
 		if (isEmpty(in.sql))
 			return results;
 		
-		System.err.println("SQL=["+in.sql+"]");
-
 		if (in.pos < 1 || in.pos > 10000)
 			throw new RestException(SC_BAD_REQUEST, "Invalid value for position.  Must be between 1-10000");
 		if (in.limit < 1 || in.limit > 10000)

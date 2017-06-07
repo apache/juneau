@@ -19,6 +19,7 @@ import java.io.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.serializer.*;
 
@@ -58,11 +59,21 @@ public class DefaultHandler implements ResponseHandler {
 				}
 				p.append("mediaType", mediaType).append("characterEncoding", res.getCharacterEncoding());
 				if (! s.isWriterSerializer()) {
-					OutputStreamSerializer s2 = (OutputStreamSerializer)s;
-					OutputStream os = res.getNegotiatedOutputStream();
-					SerializerSession session = s.createSession(os, p, req.getJavaMethod(), req.getLocale(), req.getHeaders().getTimeZone(), mediaType, req.getUriContext());
-					s2.serialize(session, output);
-					os.close();
+					if (req.isPlainText()) {
+						OutputStreamSerializer s2 = (OutputStreamSerializer)s;
+						Writer w = res.getNegotiatedWriter();
+						ByteArrayOutputStream baos = new ByteArrayOutputStream();
+						SerializerSession session = s.createSession(baos, p, req.getJavaMethod(), req.getLocale(), req.getHeaders().getTimeZone(), mediaType, req.getUriContext());
+						s2.serialize(session, output);
+						w.write(StringUtils.toHex(baos.toByteArray()));
+						w.close();
+					} else {
+						OutputStreamSerializer s2 = (OutputStreamSerializer)s;
+						OutputStream os = res.getNegotiatedOutputStream();
+						SerializerSession session = s.createSession(os, p, req.getJavaMethod(), req.getLocale(), req.getHeaders().getTimeZone(), mediaType, req.getUriContext());
+						s2.serialize(session, output);
+						os.close();
+					}
 				} else {
 					WriterSerializer s2 = (WriterSerializer)s;
 					Writer w = res.getNegotiatedWriter();

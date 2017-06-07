@@ -424,65 +424,358 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	}
 
 	/**
-	 * Sets the page title for HTML views.
+	 * Sets the HTML page title.
 	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#pageTitle() @RestResource#pageTitle()}/
-	 * {@link RestMethod#pageTitle() @RestMethod#pageTitle()} annotations.
+	 * The format of this value is plain text.
 	 * <p>
-	 * This is a shortcut for calling <code>setProperty(<jsf>HTMLDOC_title</jsf>, title);</code>
+	 * It gets wrapped in a <code><xt>&lt;h3&gt; <xa>class</xa>=<xs>'title'</xs>&gt;</xt></code> element and then added
+	 * 	to the <code><xt>&lt;header&gt;</code> section on the page.
+	 * <p>
+	 * If not specified, the page title is pulled from one of the following locations:
+	 * <ol>
+	 * 	<li><code>{servletClass}.{methodName}.pageTitle</code> resource bundle value.
+	 * 	<li><code>{servletClass}.pageTitle</code> resource bundle value.
+	 * 	<li><code><ja>@RestResource</ja>(title)</code> annotation.
+	 * 	<li><code>{servletClass}.title</code> resource bundle value.
+	 * 	<li><code>info/title</code> entry in swagger file.
+	 * <ol>
+	 * <p>
+	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * <p>
+	 * A value of <js>"NONE"</js> can be used to force no value.
+	 * <p>
 	 * <ul class='doctree'>
 	 * 	<li class='info'>
-	 * 		<b>Tip:</b>  Use {@link StringMessage} to generate a page title with delayed serialization so as not to
-	 * 		waste string concatenation cycles on non-HTML views.
+	 * 		In most cases, you'll simply want to use the <code>@RestResource(title)</code> annotation to specify the
+	 * 		page title.
+	 * 		However, this annotation is provided in cases where you want the page title to be different that the one
+	 * 		shown in the swagger document.
 	 * </ul>
+	 * <p>
+	 * This is the programmatic equivalent to the {@link HtmlDoc#title() @HtmlDoc.title()} annotation.
 	 *
-	 * @param title The localized page title to render on the page.
-	 * Object will be converted to a string using {@link Object#toString()}.
+	 * @param value The HTML page title.
+	 * 	Object will be converted to a string using {@link Object#toString()}.
+	 * 	<p>
+	 * 	<ul class='doctree'>
+	 * 		<li class='info'>
+	 * 			<b>Tip:</b>  Use {@link StringMessage} to generate value with delayed serialization so as not to
+	 * 				waste string concatenation cycles on non-HTML views.
+	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
-	public RestResponse setPageTitle(Object title) {
-		return setProperty(HtmlDocSerializerContext.HTMLDOC_title, title);
+	public RestResponse setHtmlTitle(Object value) {
+		return setProperty(HtmlDocSerializerContext.HTMLDOC_title, value);
 	}
 
 	/**
-	 * Sets the page text for HTML views.
+	 * Sets the HTML page description.
 	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#pageText() @RestResource#pageText()}/
-	 * {@link RestMethod#pageText() @RestMethod#pageText()} annotations.
+	 * The format of this value is plain text.
 	 * <p>
-	 * This is a shortcut for calling <code>setProperty(<jsf>HTMLDOC_text</jsf>, text);</code>
+	 * It gets wrapped in a <code><xt>&lt;h5&gt; <xa>class</xa>=<xs>'description'</xs>&gt;</xt></code> element and then
+	 * 	added to the <code><xt>&lt;header&gt;</code> section on the page.
+	 * <p>
+	 * If not specified, the page title is pulled from one of the following locations:
+	 * <ol>
+	 * 	<li><code>{servletClass}.{methodName}.pageText</code> resource bundle value.
+	 * 	<li><code>{servletClass}.pageText</code> resource bundle value.
+	 * 	<li><code><ja>@RestMethod</ja>(summary)</code> annotation.
+	 * 	<li><code>{servletClass}.{methodName}.summary</code> resource bundle value.
+	 * 	<li><code>summary</code> entry in swagger file for method.
+	 * 	<li><code>{servletClass}.description</code> resource bundle value.
+	 * 	<li><code>info/description</code> entry in swagger file.
+	 * <ol>
+	 * <p>
+	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * <p>
+	 * A value of <js>"NONE"</js> can be used to force no value.
+	 * <p>
 	 * <ul class='doctree'>
 	 * 	<li class='info'>
-	 * 		<b>Tip:</b>  Use {@link StringMessage} to generate page text with delayed serialization so as not to
-	 * 		waste string concatenation cycles on non-HTML views.
+	 * 		In most cases, you'll simply want to use the <code>@RestResource(description)</code> or
+	 * 		<code>@RestMethod(summary)</code> annotations to specify the page text.
+	 * 		However, this annotation is provided in cases where you want the text to be different that the values shown
+	 * 		in the swagger document.
 	 * </ul>
+	 * <p>
+	 * This is the programmatic equivalent to the {@link HtmlDoc#description() @HtmlDoc.description()} annotation.
 	 *
-	 * @param text The localized page text to render on the page.
+	 * @param value The HTML page description.
+	 * 	Object will be converted to a string using {@link Object#toString()}.
+	 * 	<p>
+	 * 	<ul class='doctree'>
+	 * 		<li class='info'>
+	 * 			<b>Tip:</b>  Use {@link StringMessage} to generate value with delayed serialization so as not to
+	 * 				waste string concatenation cycles on non-HTML views.
+	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
-	public RestResponse setPageText(Object text) {
-		return setProperty(HtmlDocSerializerContext.HTMLDOC_text, text);
+	public RestResponse setHtmlDescription(Object value) {
+		return setProperty(HtmlDocSerializerContext.HTMLDOC_description, value);
 	}
 
 	/**
-	 * Sets the page text for HTML views.
+	 * Sets the HTML header section contents.
 	 * <p>
-	 * This is the programmatic equivalent to the {@link RestResource#pageLinks() @RestResource#pageLinks()}/
-	 * {@link RestMethod#pageLinks() @RestMethod#pageLinks()} annotations.
+	 * The format of this value is HTML.
 	 * <p>
-	 * This is a shortcut for calling <code>setProperty(<jsf>HTMLDOC_links</jsf>, links);</code>
+	 * The page header normally contains the title and description, but this value can be used to override the contents
+	 * 	to be whatever you want.
+	 * <p>
+	 * When a value is specified, the {@link #setHtmlTitle(Object)} and {@link #setHtmlDescription(Object)} values will be ignored.
+	 * <p>
+	 * A value of <js>"NONE"</js> can be used to force no header.
+	 * <p>
+	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * <p>
+	 * This is the programmatic equivalent to the {@link HtmlDoc#header() @HtmlDoc.header()} annotation.
 	 *
-	 * <ul class='doctree'>
-	 * 	<li class='info'>
-	 * 		<b>Tip:</b>  Use {@link StringMessage} to generate page links with delayed serialization so as not to
-	 * 		waste string concatenation cycles on non-HTML views.
-	 * </ul>
-	 *
-	 * @param links The localized page links render on the page.
+	 * @param value The HTML header section contents.
+	 * 	Object will be converted to a string using {@link Object#toString()}.
+	 * 	<p>
+	 * 	<ul class='doctree'>
+	 * 		<li class='info'>
+	 * 			<b>Tip:</b>  Use {@link StringMessage} to generate value with delayed serialization so as not to
+	 * 				waste string concatenation cycles on non-HTML views.
+	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
-	public RestResponse setPageLinks(Object links) {
-		properties.put(HtmlDocSerializerContext.HTMLDOC_links, links);
+	public RestResponse setHtmlHeader(Object value) {
+		return setProperty(HtmlDocSerializerContext.HTMLDOC_title, value);
+	}
+
+	/**
+	 * Sets the links in the HTML nav section.
+	 * <p>
+	 * The format of this value is a lax-JSON map of key/value pairs where the keys are the link text and the values are
+	 * 	relative (to the servlet) or absolute URLs.
+	 * <p>
+	 * The page links are positioned immediately under the title and text.
+	 * <p>
+	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * <p>
+	 * A value of <js>"NONE"</js> can be used to force no value.
+	 * <p>
+	 * This field can also use URIs of any support type in {@link UriResolver}.
+	 * <p>
+	 * This is the programmatic equivalent to the {@link HtmlDoc#links() @HtmlDoc.links()} annotation.
+	 *
+	 * @param value The HTML nav section links links.
+	 * 	Object will be converted to a string using {@link Object#toString()}.
+	 * 	<p>
+	 * 	<ul class='doctree'>
+	 * 		<li class='info'>
+	 * 			<b>Tip:</b>  Use {@link StringMessage} to generate value with delayed serialization so as not to
+	 * 				waste string concatenation cycles on non-HTML views.
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 */
+	public RestResponse setHtmlLinks(Object value) {
+		properties.put(HtmlDocSerializerContext.HTMLDOC_links, value);
+		return this;
+	}
+
+	/**
+	 * Sets the HTML nav section contents.
+	 * <p>
+	 * The format of this value is HTML.
+	 * <p>
+	 * The nav section of the page contains the links.
+	 * <p>
+	 * The format of this value is HTML.
+	 * <p>
+	 * When a value is specified, the {@link #setHtmlLinks(Object)} value will be ignored.
+	 * <p>
+	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * <p>
+	 * A value of <js>"NONE"</js> can be used to force no value.
+	 * <p>
+	 * This is the programmatic equivalent to the {@link HtmlDoc#nav() @HtmlDoc.nav()} annotation.
+	 *
+	 * @param value The HTML nav section contents.
+	 * 	Object will be converted to a string using {@link Object#toString()}.
+	 * 	<p>
+	 * 	<ul class='doctree'>
+	 * 		<li class='info'>
+	 * 			<b>Tip:</b>  Use {@link StringMessage} to generate value with delayed serialization so as not to
+	 * 				waste string concatenation cycles on non-HTML views.
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 */
+	public RestResponse setHtmlNav(Object value) {
+		properties.put(HtmlDocSerializerContext.HTMLDOC_nav, value);
+		return this;
+	}
+
+	/**
+	 * Sets the HTML aside section contents.
+	 * <p>
+	 * The format of this value is HTML.
+	 * <p>
+	 * The aside section typically floats on the right side of the page.
+	 * <p>
+	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * <p>
+	 * A value of <js>"NONE"</js> can be used to force no value.
+	 * <p>
+	 * This is the programmatic equivalent to the {@link HtmlDoc#aside() @HtmlDoc.aside()} annotation.
+	 *
+	 * @param value The HTML aside section contents.
+	 * 	Object will be converted to a string using {@link Object#toString()}.
+	 * 	<p>
+	 * 	<ul class='doctree'>
+	 * 		<li class='info'>
+	 * 			<b>Tip:</b>  Use {@link StringMessage} to generate value with delayed serialization so as not to
+	 * 				waste string concatenation cycles on non-HTML views.
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 */
+	public RestResponse setHtmlAside(Object value) {
+		properties.put(HtmlDocSerializerContext.HTMLDOC_aside, value);
+		return this;
+	}
+
+	/**
+	 * Sets the HTML footer section contents.
+	 * <p>
+	 * The format of this value is HTML.
+	 * <p>
+	 * The footer section typically floats on the bottom of the page.
+	 * <p>
+	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * <p>
+	 * A value of <js>"NONE"</js> can be used to force no value.
+	 * <p>
+	 * This is the programmatic equivalent to the {@link HtmlDoc#footer() @HtmlDoc.footer()} annotation.
+	 *
+	 * @param value The HTML footer section contents.
+	 * 	Object will be converted to a string using {@link Object#toString()}.
+	 * 	<p>
+	 * 	<ul class='doctree'>
+	 * 		<li class='info'>
+	 * 			<b>Tip:</b>  Use {@link StringMessage} to generate value with delayed serialization so as not to
+	 * 				waste string concatenation cycles on non-HTML views.
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 */
+	public RestResponse setHtmlFooter(Object value) {
+		properties.put(HtmlDocSerializerContext.HTMLDOC_footer, value);
+		return this;
+	}
+
+	/**
+	 * Sets the HTML CSS style section contents.
+	 * <p>
+	 * The format of this value is CSS.
+	 * <p>
+	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * <p>
+	 * A value of <js>"NONE"</js> can be used to force no value.
+	 * <p>
+	 * This is the programmatic equivalent to the {@link HtmlDoc#css() @HtmlDoc.css()} annotation.
+	 *
+	 * @param value The HTML CSS style section contents.
+	 * 	Object will be converted to a string using {@link Object#toString()}.
+	 * 	<p>
+	 * 	<ul class='doctree'>
+	 * 		<li class='info'>
+	 * 			<b>Tip:</b>  Use {@link StringMessage} to generate value with delayed serialization so as not to
+	 * 				waste string concatenation cycles on non-HTML views.
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 */
+	public RestResponse setHtmlCss(Object value) {
+		properties.put(HtmlDocSerializerContext.HTMLDOC_css, value);
+		return this;
+	}
+
+	/**
+	 * Sets the CSS URL in the HTML CSS style section.
+	 * <p>
+	 * The format of this value is a URL.
+	 * <p>
+	 * Specifies the URL to the stylesheet to add as a link in the style tag in the header.
+	 * <p>
+	 * The format of this value is CSS.
+	 * <p>
+	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>) and can use URL protocols defined
+	 * 	by {@link UriResolver}.
+	 * <p>
+	 * This is the programmatic equivalent to the {@link HtmlDoc#cssUrl() @HtmlDoc.cssUrl()} annotation.
+	 *
+	 * @param value The CSS URL in the HTML CSS style section.
+	 * 	Object will be converted to a string using {@link Object#toString()}.
+	 * 	<p>
+	 * 	<ul class='doctree'>
+	 * 		<li class='info'>
+	 * 			<b>Tip:</b>  Use {@link StringMessage} to generate value with delayed serialization so as not to
+	 * 				waste string concatenation cycles on non-HTML views.
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 */
+	public RestResponse setHtmlCssUrl(Object value) {
+		properties.put(HtmlDocSerializerContext.HTMLDOC_cssUrl, value);
+		return this;
+	}
+
+	/**
+	 * Shorthand method for forcing the rendered HTML content to be no-wrap.
+	 * <p>
+	 * This is the programmatic equivalent to the {@link HtmlDoc#nowrap() @HtmlDoc.nowrap()} annotation.
+	 *
+	 * @param value The new nowrap setting.
+	 * @return This object (for method chaining).
+	 */
+	public RestResponse setHtmlNoWrap(boolean value) {
+		properties.put(HtmlDocSerializerContext.HTMLDOC_nowrap, value);
+		return this;
+	}
+
+	/**
+	 * Specifies the text to display when serializing an empty array or collection.
+	 * <p>
+	 * This is the programmatic equivalent to the {@link HtmlDoc#noResultsMessage() @HtmlDoc.noResultsMessage()} annotation.
+	 *
+	 * @param value The text to display when serializing an empty array or collection.
+	 * @return This object (for method chaining).
+	 */
+	public RestResponse setHtmlNoResultsMessage(Object value) {
+		properties.put(HtmlDocSerializerContext.HTMLDOC_noResultsMessage, value);
+		return this;
+	}
+
+	/**
+	 * Specifies the template class to use for rendering the HTML page.
+	 * <p>
+	 * By default, uses {@link HtmlDocTemplateBasic} to render the contents, although you can provide
+	 * 	 your own custom renderer or subclasses from the basic class to have full control over how the page is
+	 * 	rendered.
+	 * <p>
+	 * This is the programmatic equivalent to the {@link HtmlDoc#template() @HtmlDoc.template()} annotation.
+	 *
+	 * @param value The HTML page template to use to render the HTML page.
+	 * @return This object (for method chaining).
+	 */
+	public RestResponse setHtmlTemplate(Class<? extends HtmlDocTemplate> value) {
+		properties.put(HtmlDocSerializerContext.HTMLDOC_template, value);
+		return this;
+	}
+
+	/**
+	 * Specifies the template class to use for rendering the HTML page.
+	 * <p>
+	 * By default, uses {@link HtmlDocTemplateBasic} to render the contents, although you can provide
+	 * 	 your own custom renderer or subclasses from the basic class to have full control over how the page is
+	 * 	rendered.
+	 * <p>
+	 * This is the programmatic equivalent to the {@link HtmlDoc#template() @HtmlDoc.template()} annotation.
+	 *
+	 * @param value The HTML page template to use to render the HTML page.
+	 * @return This object (for method chaining).
+	 */
+	public RestResponse setHtmlTemplate(HtmlDocTemplate value) {
+		properties.put(HtmlDocSerializerContext.HTMLDOC_template, value);
 		return this;
 	}
 

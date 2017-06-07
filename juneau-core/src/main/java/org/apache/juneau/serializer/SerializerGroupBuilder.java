@@ -1017,14 +1017,13 @@ public class SerializerGroupBuilder {
 	}
 
 	/**
-	 * Sets the {@link BeanContext#BEAN_debug} property on all serializers in this group.
+	 * Sets the {@link BeanContext#BEAN_debug} property to <jk>true</jk> on all serializers in this group.
 	 *
-	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_debug
 	 */
-	public SerializerGroupBuilder debug(boolean value) {
-		return property(BEAN_debug, value);
+	public SerializerGroupBuilder debug() {
+		return property(BEAN_debug, true);
 	}
 
 	/**

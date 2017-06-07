@@ -511,8 +511,8 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	}
 
 	@Override /* CoreObjectBuilder */
-	public JsonSchemaSerializerBuilder debug(boolean value) {
-		super.debug(value);
+	public JsonSchemaSerializerBuilder debug() {
+		super.debug();
 		return this;
 	}
 

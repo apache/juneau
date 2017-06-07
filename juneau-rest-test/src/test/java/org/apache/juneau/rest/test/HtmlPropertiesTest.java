@@ -258,28 +258,4 @@ public class HtmlPropertiesTest extends RestTestcase {
 		assertTrue(s.contains("LocalizedExplicit.test4.nls.pageText"));
 		assertTrue(s.contains("LocalizedExplicit.test4.nls.pageLinks"));
 	}
-
-	//----------------------------------------------------------------------------------------------------
-	// Values pulled from resource bundle.
-	//----------------------------------------------------------------------------------------------------
-	@Test
-	public void testLocalizedImplicitTest1() throws Exception {
-		RestClient client = TestMicroservice.DEFAULT_CLIENT;
-		String s = client.doGet("/testHtmlProperties/LocalizedImplicit/test1").accept("text/html").getResponseAsString();
-		assertTrue(s.contains("LocalizedImplicit.nls.pageTitle"));
-		assertTrue(s.contains("LocalizedImplicit.nls.pageText"));
-		assertTrue(s.contains("LocalizedImplicit.nls.pageLinks"));
-	}
-
-	//----------------------------------------------------------------------------------------------------
-	// Values pulled from resource bundle, overridden by values in resource bundle at method level.
-	//----------------------------------------------------------------------------------------------------
-	@Test
-	public void testLocalizedImplicitTest2() throws Exception {
-		RestClient client = TestMicroservice.DEFAULT_CLIENT;
-		String s = client.doGet("/testHtmlProperties/LocalizedImplicit/test2").accept("text/html").getResponseAsString();
-		assertTrue(s.contains("LocalizedImplicit.test2.nls.pageTitle"));
-		assertTrue(s.contains("LocalizedImplicit.test2.nls.pageText"));
-		assertTrue(s.contains("LocalizedImplicit.test2.nls.pageLinks"));
-	}
 }

@@ -23,6 +23,7 @@ import org.apache.juneau.dto.atom.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.widget.*;
 
 /**
  * Sample resource that shows how to generate ATOM feeds.
@@ -31,11 +32,22 @@ import org.apache.juneau.rest.annotation.*;
 	path="/atom",
 	title="Sample ATOM feed resource",
 	description="Sample resource that shows how to render ATOM feeds",
-	pageLinks="{up:'request:/..',options:'servlet:/?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/AtomFeedResource.java'}",
+	htmldoc=@HtmlDoc(
+		links="{up:'request:/..',options:'servlet:/?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/AtomFeedResource.java'}",
+		aside=""
+			+ "<div style='min-width:200px' class='text'>"
+			+ "	<p>Shows how to produce ATOM feeds in a variety of languages.</p>"
+			+ "	<p>$W{contentTypeLinks}</p>"
+			+ "</div>",
+		css="aside {display:table-caption;}"
+	),
 	properties={
 		@Property(name=SERIALIZER_quoteChar, value="'"),
 		@Property(name=RDF_rdfxml_tab, value="5"),
 		@Property(name=RDF_addRootProperty, value="true")
+	},
+	widgets={
+		ContentTypeLinksWidget.class
 	},
 	encoders=GzipEncoder.class
 )

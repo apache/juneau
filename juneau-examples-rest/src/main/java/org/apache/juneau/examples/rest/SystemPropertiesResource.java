@@ -19,7 +19,6 @@ import java.util.*;
 import java.util.Map;
 
 import org.apache.juneau.dto.html5.*;
-import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
@@ -38,7 +37,14 @@ import org.apache.juneau.rest.annotation.Body;
 	// "request:/..." URIs are relative to the request URI.
 	// "servlet:/..." URIs are relative to the servlet URI.
 	// "$C{...}" variables are pulled from the config file.
-	pageLinks="{up:'request:/..',options:'servlet:/?method=OPTIONS',form:'servlet:/formPage',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/SystemPropertiesResource.java'}",
+	htmldoc=@HtmlDoc(
+		links="{up:'request:/..',options:'servlet:/?method=OPTIONS',form:'servlet:/formPage',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/SystemPropertiesResource.java'}",
+		aside=""
+			+ "<div style='max-width:800px' class='text'>"
+			+ "	<p>Shows standard GET/PUT/POST/DELETE operations and use of Swagger annotations.</p>"
+			+ "</div>",
+		css="aside {display:table-caption;}"
+	),
 	
 	// Properties that get applied to all serializers and parsers.
 	properties={
@@ -52,12 +58,14 @@ import org.apache.juneau.rest.annotation.Body;
 	// Support GZIP encoding on Accept-Encoding header.
 	encoders=GzipEncoder.class,
 	
-	contact="{name:'John Smith',email:'john@smith.com'}",
-	license="{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}",
-	version="2.0",
-	termsOfService="You're on your own.",
-	tags="[{name:'Java',description:'Java utility',externalDocs:{description:'Home page',url:'http://juneau.apache.org'}}]",
-	externalDocs="{description:'Home page',url:'http://juneau.apache.org'}"
+	swagger=@ResourceSwagger(
+		contact="{name:'John Smith',email:'john@smith.com'}",
+		license="{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}",
+		version="2.0",
+		termsOfService="You're on your own.",
+		tags="[{name:'Java',description:'Java utility',externalDocs:{description:'Home page',url:'http://juneau.apache.org'}}]",
+		externalDocs="{description:'Home page',url:'http://juneau.apache.org'}"
+	)
 )
 public class SystemPropertiesResource extends Resource {
 	private static final long serialVersionUID = 1L;
@@ -66,12 +74,14 @@ public class SystemPropertiesResource extends Resource {
 		name="GET", path="/",
 		summary="Show all system properties",
 		description="Returns all system properties defined in the JVM.",
-		parameters={
-			@Parameter(in="query", name="sort", description="Sort results alphabetically.", _default="false")
-		},
-		responses={
-			@Response(value=200, description="Returns a map of key/value pairs.")
-		}
+		swagger=@MethodSwagger(
+			parameters={
+				@Parameter(in="query", name="sort", description="Sort results alphabetically.", _default="false")
+			},
+			responses={
+				@Response(value=200, description="Returns a map of key/value pairs.")
+			}
+		)
 	)
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	public Map getSystemProperties(@Query("sort") boolean sort) throws Throwable {
@@ -84,12 +94,14 @@ public class SystemPropertiesResource extends Resource {
 		name="GET", path="/{propertyName}",
 		summary="Get system property",
 		description="Returns the value of the specified system property.",
-		parameters={
-			@Parameter(in="path", name="propertyName", description="The system property name.")
-		},
-		responses={
-			@Response(value=200, description="The system property value, or null if not found.")
-		}
+		swagger=@MethodSwagger(
+			parameters={
+				@Parameter(in="path", name="propertyName", description="The system property name.")
+			},
+			responses={
+				@Response(value=200, description="The system property value, or null if not found.")
+			}
+		)
 	)
 	public String getSystemProperty(@Path String propertyName) throws Throwable {
 		return System.getProperty(propertyName);
@@ -100,22 +112,24 @@ public class SystemPropertiesResource extends Resource {
 		summary="Replace system property",
 		description="Sets a new value for the specified system property.",
 		guards=AdminGuard.class,
-		parameters={
-			@Parameter(in="path", name="propertyName", description="The system property name."),
-			@Parameter(in="body", description="The new system property value."),
-		},
-		responses={
-			@Response(value=302,
-				headers={
-					@Parameter(name="Location", description="The root URL of this resource.")
-				}
-			),	
-			@Response(value=403, description="User is not an admin.")
-		}
+		swagger=@MethodSwagger(
+			parameters={
+				@Parameter(in="path", name="propertyName", description="The system property name."),
+				@Parameter(in="body", description="The new system property value."),
+			},
+			responses={
+				@Response(value=302,
+					headers={
+						@Parameter(name="Location", description="The root URL of this resource.")
+					}
+				),	
+				@Response(value=403, description="User is not an admin.")
+			}
+		)
 	)
 	public Redirect setSystemProperty(@Path String propertyName, @Body String value) {
 		System.setProperty(propertyName, value);
-		return new Redirect();
+		return new Redirect("servlet:/");
 	}
 
 	@RestMethod(
@@ -123,22 +137,24 @@ public class SystemPropertiesResource extends Resource {
 		summary="Add an entire set of system properties",
 		description="Takes in a map of key/value pairs and creates a set of new system properties.",
 		guards=AdminGuard.class,
-		parameters={
-			@Parameter(in="path", name="propertyName", description="The system property key."),
-			@Parameter(in="body", description="The new system property values.", schema="{example:{key1:'val1',key2:123}}"),
-		},
-		responses={
-			@Response(value=302,
-				headers={
-					@Parameter(name="Location", description="The root URL of this resource.")
-				}
-			),	
-			@Response(value=403, description="Unauthorized:  User is not an admin.")
-		}
+		swagger=@MethodSwagger(
+			parameters={
+				@Parameter(in="path", name="propertyName", description="The system property key."),
+				@Parameter(in="body", description="The new system property values.", schema="{example:{key1:'val1',key2:123}}"),
+			},
+			responses={
+				@Response(value=302,
+					headers={
+						@Parameter(name="Location", description="The root URL of this resource.")
+					}
+				),	
+				@Response(value=403, description="Unauthorized:  User is not an admin.")
+			}
+		)
 	)
 	public Redirect setSystemProperties(@Body java.util.Properties newProperties) {
 		System.setProperties(newProperties);
-		return new Redirect();
+		return new Redirect("servlet:/");
 	}
 
 	@RestMethod(
@@ -146,38 +162,37 @@ public class SystemPropertiesResource extends Resource {
 		summary="Delete system property",
 		description="Deletes the specified system property.",
 		guards=AdminGuard.class,
-		parameters={
-			@Parameter(in="path", name="propertyName", description="The system property name."),
-		},
-		responses={
-			@Response(value=302,
-				headers={
-					@Parameter(name="Location", description="The root URL of this resource.")
-				}
-			),	
-			@Response(value=403, description="Unauthorized:  User is not an admin")
-		}
+		swagger=@MethodSwagger(
+			parameters={
+				@Parameter(in="path", name="propertyName", description="The system property name."),
+			},
+			responses={
+				@Response(value=302,
+					headers={
+						@Parameter(name="Location", description="The root URL of this resource.")
+					}
+				),	
+				@Response(value=403, description="Unauthorized:  User is not an admin")
+			}
+		)
 	)
 	public Redirect deleteSystemProperty(@Path String propertyName) {
 		System.clearProperty(propertyName);
-		return new Redirect();
+		return new Redirect("servlet:/");
 	}
 
-	@Override
-	@RestMethod(
-		name="OPTIONS", path="/*",
-		summary="Show resource options",
-		description="Show resource options as a Swagger doc"
-	)
-	public Swagger getOptions(RestRequest req) {
-		return req.getSwagger();
-	}
-	
 	@RestMethod(
 		name="GET", path="/formPage",
 		summary="Form entry page",
 		description="A form post page for setting a single system property value",
-		guards=AdminGuard.class
+		guards=AdminGuard.class,
+		htmldoc=@HtmlDoc(
+			aside=""
+				+ "<div style='max-width:400px' class='text'>"
+				+ "	<p>Shows how HTML5 beans can be used to quickly create arbitrary HTML.</p>"
+				+ "</div>",
+			css="aside {display:table-cell;}"
+		)
 	)
 	public Form getFormPage() {
 		return form().method("POST").action("formPagePost").children(
@@ -195,6 +210,6 @@ public class SystemPropertiesResource extends Resource {
 	)
 	public Redirect formPagePost(@FormData("name") String name, @FormData("value") String value) {
 		System.setProperty(name, value);
-		return new Redirect();
+		return new Redirect("servlet:/");
 	}
 }

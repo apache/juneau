@@ -57,7 +57,7 @@ public @interface Html {
 	/**
 	 * Associates an {@link HtmlRender} with a bean property for custom HTML rendering of the property.
 	 * <p>
-	 * This annotation applies to bean properties only.
+	 * This annotation applies to bean properties and classes.
 	 */
 	@SuppressWarnings("rawtypes")
 	Class<? extends HtmlRender> render() default HtmlRender.class;

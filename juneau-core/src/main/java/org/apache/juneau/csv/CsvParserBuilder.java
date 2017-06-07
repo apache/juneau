@@ -408,8 +408,8 @@ public class CsvParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* CoreObjectBuilder */
-	public CsvParserBuilder debug(boolean value) {
-		super.debug(value);
+	public CsvParserBuilder debug() {
+		super.debug();
 		return this;
 	}
 

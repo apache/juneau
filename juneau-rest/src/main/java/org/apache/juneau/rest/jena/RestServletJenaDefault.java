@@ -200,7 +200,6 @@ import org.apache.juneau.xml.*;
 		UrlEncodingSerializer.class,
 		MsgPackSerializer.class,
 		SoapXmlSerializer.class,
-		JsoSerializer.class,
 		PlainTextSerializer.class,
 		RdfSerializer.Xml.class,
 		RdfSerializer.XmlAbbrev.class,
@@ -239,8 +238,10 @@ public abstract class RestServletJenaDefault extends RestServlet {
 	 */
 	@RestMethod(name="OPTIONS", path="/*",
 		summary="Resource options",
-		pageLinks="{back:'$R{servletURI}'}",
-		description="Resource options"
+		description="Resource options",
+		htmldoc=@HtmlDoc(
+			links="{back:'$R{servletURI}'}"
+		)
 	)
 	public Swagger getOptions(RestRequest req) {
 		return req.getSwagger();

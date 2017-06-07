@@ -855,8 +855,8 @@ public class RdfSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* CoreObjectBuilder */
-	public RdfSerializerBuilder debug(boolean value) {
-		super.debug(value);
+	public RdfSerializerBuilder debug() {
+		super.debug();
 		return this;
 	}
 

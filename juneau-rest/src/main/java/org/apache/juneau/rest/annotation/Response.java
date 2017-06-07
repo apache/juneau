@@ -18,17 +18,19 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 
 /**
- * Annotation used in conjunction with {@link RestMethod#responses()} to identify possible responses by the method.
+ * Annotation used in conjunction with {@link MethodSwagger#responses()} to identify possible responses by the method.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(
  * 		name=<js>"*"</js>,
- * 		responses={
- * 			<ja>@Response</ja>(value=200,description=<js>"Everything was great."</js>),
- * 			<ja>@Response</ja>(value=404,description=<js>"File was not found."</js>)
- * 			<ja>@Response</ja>(500),
- * 		}
+ * 		swagger=@ResourceSwagger(
+ * 			responses={
+ * 				<ja>@Response</ja>(value=200,description=<js>"Everything was great."</js>),
+ * 				<ja>@Response</ja>(value=404,description=<js>"File was not found."</js>)
+ * 				<ja>@Response</ja>(500),
+ * 			}
+ * 		)
  * 	)
  * 	<jk>public void</jk> doAnything(RestRequest req, RestResponse res, <ja>@Method</ja> String method) {
  * 		...
@@ -70,9 +72,11 @@ public @interface Response {
 	 * <p class='bcode'>
 	 * 	<ja>@RestMethod</ja>(
 	 * 		name=<js>"*"</js>,
-	 * 		responses={
-	 * 			<ja>@Response</ja>(value=200,schema=<js>"{type:'string',description:'A serialized Person bean.'}"</js>),
-	 * 		}
+	 * 		swagger=@MethodSwagger(
+	 * 			responses={
+	 * 				<ja>@Response</ja>(value=200,schema=<js>"{type:'string',description:'A serialized Person bean.'}"</js>),
+	 * 			}
+	 * 		)
 	 * </p>
 	 */
 	String schema() default "";

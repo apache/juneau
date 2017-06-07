@@ -493,8 +493,8 @@ public class MsgPackSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* CoreObjectBuilder */
-	public MsgPackSerializerBuilder debug(boolean value) {
-		super.debug(value);
+	public MsgPackSerializerBuilder debug() {
+		super.debug();
 		return this;
 	}
 

@@ -409,8 +409,8 @@ public class JsoParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* CoreObjectBuilder */
-	public JsoParserBuilder debug(boolean value) {
-		super.debug(value);
+	public JsoParserBuilder debug() {
+		super.debug();
 		return this;
 	}
 

@@ -409,8 +409,8 @@ public class MsgPackParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* CoreObjectBuilder */
-	public MsgPackParserBuilder debug(boolean value) {
-		super.debug(value);
+	public MsgPackParserBuilder debug() {
+		super.debug();
 		return this;
 	}
 

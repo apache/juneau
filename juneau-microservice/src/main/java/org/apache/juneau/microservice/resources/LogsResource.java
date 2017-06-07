@@ -87,7 +87,13 @@ public class LogsResource extends Resource {
 	 * @return The log file.
 	 * @throws Exception
 	 */
-	@RestMethod(name="GET", path="/*", responses={@Response(200),@Response(404)})
+	@RestMethod(
+		name="GET", 
+		path="/*", 
+		swagger=@MethodSwagger(
+			responses={@Response(200),@Response(404)}
+		)
+	)	
 	public Object getFileOrDirectory(RestRequest req, RestResponse res, @Properties ObjectMap properties, @PathRemainder String path) throws Exception {
 
 		File f = getFile(path);
@@ -101,12 +107,12 @@ public class LogsResource extends Resource {
 					l.add(new FileResource(fc, fUrl));
 				}
 			}
-			res.setPageText(new StringMessage("Contents of {0}", f.getAbsolutePath()));
-			properties.put(HTMLDOC_text, "Contents of " + f.getAbsolutePath());
+			res.setHtmlDescription(new StringMessage("Contents of {0}", f.getAbsolutePath()));
+			properties.put(HTMLDOC_description, "Contents of " + f.getAbsolutePath());
 			return l;
 		}
 
-		res.setPageText(new StringMessage("File details on {0}", f.getAbsolutePath()));
+		res.setHtmlDescription(new StringMessage("File details on {0}", f.getAbsolutePath()));
 		return new FileResource(f, new URL(req.getTrimmedRequestURL().toString()));
 	}
 
@@ -125,7 +131,13 @@ public class LogsResource extends Resource {
 	 * @param severity Optional severity filter.  Only show log entries with the specified severity.  Example: "&amp;severity=(ERROR,WARN)".
 	 * @throws Exception
 	 */
-	@RestMethod(name="VIEW", path="/*", responses={@Response(200),@Response(404)})
+	@RestMethod(
+		name="VIEW", 
+		path="/*",
+		swagger=@MethodSwagger(
+			responses={@Response(200),@Response(404)}
+		)
+	)
 	@SuppressWarnings("nls")
 	public void viewFile(RestRequest req, RestResponse res, @PathRemainder String path, @Properties ObjectMap properties, @Query("highlight") boolean highlight, @Query("start") String start, @Query("end") String end, @Query("thread") String thread, @Query("loggers") String[] loggers, @Query("severity") String[] severity) throws Exception {
 
@@ -198,7 +210,14 @@ public class LogsResource extends Resource {
 	 * @return The parsed contents of the log file.
 	 * @throws Exception
 	 */
-	@RestMethod(name="PARSE", path="/*", converters=Queryable.class, responses={@Response(200),@Response(404)})
+	@RestMethod(
+		name="PARSE", 
+		path="/*", 
+		converters=Queryable.class, 
+		swagger=@MethodSwagger(
+			responses={@Response(200),@Response(404)}
+		)
+	)
 	public LogParser viewParsedEntries(RestRequest req, @PathRemainder String path, @Query("start") String start, @Query("end") String end, @Query("thread") String thread, @Query("loggers") String[] loggers, @Query("severity") String[] severity) throws Exception {
 
 		File f = getFile(path);
@@ -218,7 +237,13 @@ public class LogsResource extends Resource {
 	 * @return The contents of the log file.
 	 * @throws Exception
 	 */
-	@RestMethod(name="DOWNLOAD", path="/*", responses={@Response(200),@Response(404)})
+	@RestMethod(
+		name="DOWNLOAD", 
+		path="/*", 
+		swagger=@MethodSwagger(
+			responses={@Response(200),@Response(404)}
+		)
+	)
 	public Object downloadFile(RestResponse res, @PathRemainder String path) throws Exception {
 
 		File f = getFile(path);
@@ -238,7 +263,13 @@ public class LogsResource extends Resource {
 	 * @return A redirect object to the root.
 	 * @throws Exception
 	 */
-	@RestMethod(name="DELETE", path="/*", responses={@Response(200),@Response(404)})
+	@RestMethod(
+		name="DELETE", 
+		path="/*",
+		swagger=@MethodSwagger(
+			responses={@Response(200),@Response(404)}
+		)
+	)
 	public Object deleteFile(@PathRemainder String path) throws Exception {
 
 		File f = getFile(path);

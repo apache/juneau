@@ -21,12 +21,12 @@ import javax.servlet.http.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.encoders.Encoder;
-import org.apache.juneau.html.*;
 import org.apache.juneau.ini.*;
 import org.apache.juneau.jena.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.utils.*;
@@ -348,7 +348,7 @@ public @interface RestResource {
 	/**
 	 * Optional servlet title.
 	 * <p>
-	 * It is used to populate the Swagger title field and as a default value for the {@link #pageTitle()} value.
+	 * It is used to populate the Swagger title field and as a default value for the {@link HtmlDoc#title()} value.
 	 * This value can be retrieved programmatically through the {@link RestRequest#getServletTitle()} method.
 	 * <p>
 	 * The default value pulls the label from the <code>label</code> entry in the servlet resource bundle.
@@ -365,7 +365,7 @@ public @interface RestResource {
 	/**
 	 * Optional servlet description.
 	 * <p>
-	 * It is used to populate the Swagger description field and as a default value for the {@link #pageText()} value.
+	 * It is used to populate the Swagger description field and as a default value for the {@link HtmlDoc#description()} value.
 	 * This value can be retrieved programmatically through the {@link RestRequest#getServletDescription()} method.
 	 * <p>
 	 * The default value pulls the description from the <code>description</code> entry in the servlet resource bundle.
@@ -378,161 +378,6 @@ public @interface RestResource {
 	 * The programmatic equivalent to this annotation is the {@link RestInfoProvider#getDescription(RestRequest)} method.
 	 */
 	String description() default "";
-
-	/**
-	 * Optional servlet terms-of-service for this API.
-	 * <p>
-	 * It is used to populate the Swagger terms-of-service field.
-	 * <p>
-	 * The default value pulls the description from the <code>termsOfService</code> entry in the servlet resource bundle.
-	 * 	(e.g. <js>"termsOfService = foo"</js> or <js>"MyServlet.termsOfService = foo"</js>).
-	 * <p>
-	 * This field can contain variables (e.g. "$L{my.localized.variable}").
-	 * <p>
-	 * Corresponds to the swagger field <code>/info/termsOfService</code>.
-	 * <p>
-	 * The programmatic equivalent to this annotation is the {@link RestInfoProvider#getTermsOfService(RestRequest)} method.
-	 */
-	String termsOfService() default "";
-
-	/**
-	 * Optional contact information for the exposed API.
-	 * <p>
-	 * It is used to populate the Swagger contact field and to display on HTML pages.
-	 * <p>
-	 * A simplified JSON string with the following fields:
-	 * <p class='bcode'>
-	 * 	{
-	 * 		name: string,
-	 * 		url: string,
-	 * 		email: string
-	 * 	}
-	 * </p>
-	 * <p>
-	 * The default value pulls the description from the <code>contact</code> entry in the servlet resource bundle.
-	 * 	(e.g. <js>"contact = {name:'John Smith',email:'john.smith@foo.bar'}"</js> or <js>"MyServlet.contact = {name:'John Smith',email:'john.smith@foo.bar'}"</js>).
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	<ja>@RestResource</ja>(contact=<js>"{name:'John Smith',email:'john.smith@foo.bar'}"</js>)
-	 * </p>
-	 * <p>
-	 * This field can contain variables (e.g. "$L{my.localized.variable}").
-	 * <p>
-	 * Corresponds to the swagger field <code>/info/contact</code>.
-	 * <p>
-	 * The programmatic equivalent to this annotation is the {@link RestInfoProvider#getContact(RestRequest)} method.
-	 */
-	String contact() default "";
-
-	/**
-	 * Optional license information for the exposed API.
-	 * <p>
-	 * It is used to populate the Swagger license field and to display on HTML pages.
-	 * <p>
-	 * A simplified JSON string with the following fields:
-	 * <p class='bcode'>
-	 * 	{
-	 * 		name: string,
-	 * 		url: string
-	 * 	}
-	 * </p>
-	 * <p>
-	 * The default value pulls the description from the <code>license</code> entry in the servlet resource bundle.
-	 * 	(e.g. <js>"license = {name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}"</js> or <js>"MyServlet.license = {name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}"</js>).
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	<ja>@RestResource</ja>(license=<js>"{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}"</js>)
-	 * </p>
-	 * <p>
-	 * This field can contain variables (e.g. "$L{my.localized.variable}").
-	 * <p>
-	 * Corresponds to the swagger field <code>/info/license</code>.
-	 * <p>
-	 * The programmatic equivalent to this annotation is the {@link RestInfoProvider#getLicense(RestRequest)} method.
-	 */
-	String license() default "";
-
-	/**
-	 * Provides the version of the application API (not to be confused with the specification version).
-	 * <p>
-	 * It is used to populate the Swagger version field and to display on HTML pages.
-	 * <p>
-	 * The default value pulls the description from the <code>version</code> entry in the servlet resource bundle.
-	 * 	(e.g. <js>"version = 2.0"</js> or <js>"MyServlet.version = 2.0"</js>).
-	 * <p>
-	 * This field can contain variables (e.g. "$L{my.localized.variable}").
-	 * <p>
-	 * Corresponds to the swagger field <code>/info/version</code>.
-	 * <p>
-	 * The programmatic equivalent to this annotation is the {@link RestInfoProvider#getVersion(RestRequest)} method.
-	 */
-	String version() default "";
-
-	/**
-	 * Optional tagging information for the exposed API.
-	 * <p>
-	 * It is used to populate the Swagger tags field and to display on HTML pages.
-	 * <p>
-	 * A simplified JSON string with the following fields:
-	 * <p class='bcode'>
-	 * 	[
-	 * 		{
-	 * 			name: string,
-	 * 			description: string,
-	 * 			externalDocs: {
-	 * 				description: string,
-	 * 				url: string
-	 * 			}
-	 * 		}
-	 * 	]
-	 * </p>
-	 * <p>
-	 * The default value pulls the description from the <code>tags</code> entry in the servlet resource bundle.
-	 * 	(e.g. <js>"tags = [{name:'Foo',description:'Foobar'}]"</js> or <js>"MyServlet.tags = [{name:'Foo',description:'Foobar'}]"</js>).
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	<ja>@RestResource</ja>(tags=<js>"[{name:'Foo',description:'Foobar'}]"</js>)
-	 * </p>
-	 * <p>
-	 * This field can contain variables (e.g. "$L{my.localized.variable}").
-	 * <p>
-	 * Corresponds to the swagger field <code>/tags</code>.
-	 * <p>
-	 * The programmatic equivalent to this annotation is the {@link RestInfoProvider#getTags(RestRequest)} method.
-	 */
-	String tags() default "";
-
-	/**
-	 * Optional external documentation information for the exposed API.
-	 * <p>
-	 * It is used to populate the Swagger external documentation field and to display on HTML pages.
-	 * <p>
-	 * A simplified JSON string with the following fields:
-	 * <p class='bcode'>
-	 * 	{
-	 * 		description: string,
-	 * 		url: string
-	 * 	}
-	 * </p>
-	 * <p>
-	 * The default value pulls the description from the <code>externalDocs</code> entry in the servlet resource bundle.
-	 * 	(e.g. <js>"externalDocs = {url:'http://juneau.apache.org'}"</js> or <js>"MyServlet.externalDocs = {url:'http://juneau.apache.org'}"</js>).
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	<ja>@RestResource</ja>(externalDocs=<js>"{url:'http://juneau.apache.org'}"</js>)
-	 * </p>
-	 * <p>
-	 * This field can contain variables (e.g. "$L{my.localized.variable}").
-	 * <p>
-	 * Corresponds to the swagger field <code>/tags</code>.
-	 * <p>
-	 * The programmatic equivalent to this annotation is the {@link RestInfoProvider#getExternalDocs(RestRequest)} method.
-	 */
-	String externalDocs() default "";
 
 	/**
 	 * Optional location of configuration file for this servlet.
@@ -728,110 +573,6 @@ public @interface RestResource {
 	Class<? extends RestInfoProvider> infoProvider() default RestInfoProvider.class;
 
 	/**
-	 * Specifies the page title to use on the HTML view of all pages produced by this resource.
-	 * <p>
-	 * This annotation has no effect on any serializers other than {@link HtmlDocSerializer} and is a shorthand method
-	 * for setting the {@link HtmlDocSerializerContext#HTMLDOC_title} property:
-	 * <p class='bcode'>
-	 * 	<ja>@RestResource</ja>(
-	 * 		properties={
-	 * 			<ja>@Property</ja>(name=<jsf>HTMLDOC_title</jsf>, value=<js>"My Resource Page"</js>)
-	 * 		}
-	 * 	)
-	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServletDefault {
-	 * </p>
-	 * <p>
-	 * If not specified, the page title is pulled from one of the following locations:
-	 * <ol>
-	 * 	<li><code>{servletClass}.{methodName}.pageTitle</code> resource bundle value.
-	 * 	<li><code>{servletClass}.pageTitle</code> resource bundle value.
-	 * 	<li><code><ja>@RestResource</ja>(title)</code> annotation.
-	 * 	<li><code>{servletClass}.title</code> resource bundle value.
-	 * 	<li><code>info/title</code> entry in swagger file.
-	 * <ol>
-	 * <p>
-	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestConfig#setPageTitle(String)}/{@link RestResponse#setPageTitle(Object)} methods.
-	 * <ul class='doctree'>
-	 * 	<li class='info'>
-	 * 		In most cases, you'll simply want to use the <code>@RestResource(title)</code> annotation to specify the page title.
-	 * 		However, this annotation is provided in cases where you want the page title to be different that the one
-	 * 		shown in the swagger document.
-	 * </ul>
-	 */
-	String pageTitle() default "";
-
-	/**
-	 * Specifies the page text to use on the HTML view of all pages produced by this resource.
-	 * <p>
-	 * The page text is portion of the page immediately under the title and above the links.
-	 * <p>
-	 * This annotation has no effect on any serializers other than {@link HtmlDocSerializer} and is a shorthand method
-	 * for setting the {@link HtmlDocSerializerContext#HTMLDOC_text} property:
-	 * <p class='bcode'>
-	 * 	<ja>@RestResource</ja>(
-	 * 		properties={
-	 * 			<ja>@Property</ja>(name=<jsf>HTMLDOC_text</jsf>, value=<js>"This is my awesome resource page"</js>)
-	 * 		}
-	 * 	)
-	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServletDefault {
-	 * </p>
-	 * If not specified, the page title is pulled from one of the following locations:
-	 * <ol>
-	 * 	<li><code>{servletClass}.{methodName}.pageText</code> resource bundle value.
-	 * 	<li><code>{servletClass}.pageText</code> resource bundle value.
-	 * 	<li><code><ja>@RestMethod</ja>(summary)</code> annotation.
-	 * 	<li><code>{servletClass}.{methodName}.summary</code> resource bundle value.
-	 * 	<li><code>summary</code> entry in swagger file for method.
-	 * 	<li><code>{servletClass}.description</code> resource bundle value.
-	 * 	<li><code>info/description</code> entry in swagger file.
-	 * <ol>
-	 * <p>
-	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestConfig#setPageText(String)}/{@link RestResponse#setPageText(Object)} methods.
-	 * <ul class='doctree'>
-	 * 	<li class='info'>
-	 * 		In most cases, you'll simply want to use the <code>@RestResource(description)</code> or <code>@RestMethod(summary)</code> annotations to specify the page text.
-	 * 		However, this annotation is provided in cases where you want the text to be different that the values shown in the swagger document.
-	 * </ul>
-	 */
-	String pageText() default "";
-
-	/**
-	 * Specifies the page hyperlinks to use on the HTML view of all pages produced by this resource.
-	 * <p>
-	 * The page links is positioned immediately under the title and text.
-	 * <p>
-	 * This annotation has no effect on any serializers other than {@link HtmlDocSerializer} and is a shorthand method
-	 * for setting the {@link HtmlDocSerializerContext#HTMLDOC_text} property:
-	 * <p class='bcode'>
-	 * 	<ja>@RestResource</ja>(
-	 * 		properties={
-	 * 			<ja>@Property</ja>(name=<jsf>HTMLDOC_links</jsf>, value=<js>"{up:'request:/..',options:'servlet:/?method=OPTIONS'}"</js>)
-	 * 		}
-	 * 	)
-	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServletDefault {
-	 * </p>
-	 * <p>
-	 * The format of this value is a lax-JSON string of key/value pairs where the keys are the link text and the values are relative (to the servlet) or
-	 * absolute URLs.
-	 * If not specified, the page title is pulled from one of the following locations:
-	 * <ol>
-	 * 	<li><code>{servletClass}.{methodName}.pageLinks</code> resource bundle value.
-	 * 	<li><code>{servletClass}.pageLinks</code> resource bundle value.
-	 * <ol>
-	 * <p>
-	 * This field can contain variables (e.g. <js>"$L{my.localized.variable}"</js>).
-	 * <p>
-	 * This field can also use URIs of any support type in {@link UriResolver}.
-	 * <p>
-	 * The programmatic equivalent to this annotation are the {@link RestConfig#setPageLinks(String)}/{@link RestResponse#setPageLinks(Object)} methods.
-	 */
-	String pageLinks() default "";
-
-	/**
 	 * Specifies the serializer listener class to use for listening for non-fatal errors.
 	 */
 	Class<? extends SerializerListener> serializerListener() default SerializerListener.class;
@@ -840,4 +581,77 @@ public @interface RestResource {
 	 * Specifies the parser listener class to use for listening for non-fatal errors.
 	 */
 	Class<? extends ParserListener> parserListener() default ParserListener.class;
+
+	/**
+	 * Defines widgets that can be used in conjunction with string variables of the form <js>"$W{name}"</js>to quickly
+	 * 	generate arbitrary replacement text.
+	 * <p>
+	 * Widgets are inherited from parent to child, but can be overridden by reusing the widget name.
+	 * <p>
+	 * See {@link #htmldoc()} for an example of usage.
+	 */
+	Class<? extends Widget>[] widgets() default {};
+
+	/**
+	 * Provides swagger-specific metadata on this resource.
+	 * <p>
+	 * Used to populate the auto-generated OPTIONS swagger documentation.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		path=<js>"/addressBook"</js>,
+	 *
+	 * 		<jc>// Swagger info.</jc>
+	 * 		swagger=<ja>@ResourceSwagger</ja>(
+	 * 			contact=<js>"{name:'John Smith',email:'john@smith.com'}"</js>,
+	 * 			license=<js>"{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}"</js>,
+	 * 			version=<js>"2.0"</js>,
+	 * 			termsOfService=<js>"You're on your own."</js>,
+	 * 			tags=<js>"[{name:'Java',description:'Java utility',externalDocs:{description:'Home page',url:'http://juneau.apache.org'}}]"</js>,
+	 * 			externalDocs=<js>"{description:'Home page',url:'http://juneau.apache.org'}"</js>
+	 * 		)
+	 * 	)
+	 * </p>
+	 */
+	ResourceSwagger swagger() default @ResourceSwagger;
+
+	/**
+	 * Provides HTML-doc-specific metadata on this method.
+	 * <p>
+	 * Used to customize the output from the HTML Doc serializer.
+	 * <p class='bcode'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		path=<js>"/addressBook"</js>,
+	 *
+	 * 		<jc>// Links on the HTML rendition page.
+	 * 		// "request:/..." URIs are relative to the request URI.
+	 * 		// "servlet:/..." URIs are relative to the servlet URI.
+	 * 		// "$C{...}" variables are pulled from the config file.</jc>
+	 * 		htmldoc=<ja>@HtmlDoc</ja>(
+	 * 			links=<js>"{up:'request:/..',options:'servlet:/?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/addressbook/AddressBookResource.java'}"</js>,
+	 * 				aside=<js>""</js>
+	 * 					+ <js>"&lt;div style='max-width:400px;min-width:200px'&gt;"</js>
+	 * 					+ <js>"	&lt;p&gt;Proof-of-concept resource that shows off the capabilities of working with POJO resources.&lt;/p&gt;"</js>
+	 * 					+ <js>"	&lt;p&gt;Provides examples of: &lt;/p&gt;"</js>
+	 * 					+ <js>"		&lt;ul&gt;"</js>
+	 * 					+ <js>"			&lt;li&gt;XML and RDF namespaces"</js>
+	 * 					+ <js>"			&lt;li&gt;Swagger documentation"</js>
+	 * 					+ <js>"			&lt;li&gt;Widgets"</js>
+	 * 					+ <js>"		&lt;/ul&gt;"</js>
+	 * 					+ <js>"	&lt;p style='text-weight:bold;text-decoration:underline;'&gt;Available Content Types&lt;/p&gt;"</js>
+	 * 					+ <js>"	$W{contentTypeLinks}"</js>
+	 * 					+ <js>"&lt;/div&gt;"</js>,
+	 * 			footer=<js>"$W{poweredByJuneau}"</js>
+	 * 		),
+	 *
+	 * 		<jc>// Widgets for $W variables above.</jc>
+	 * 		widgets={
+	 * 			PoweredByJuneauWidget.<jk>class</jk>,
+	 * 			ContentTypeLinksWidget.<jk>class</jk>
+	 * 		}
+	 * 	)
+	 * </p>
+	 */
+	HtmlDoc htmldoc() default @HtmlDoc;
 }

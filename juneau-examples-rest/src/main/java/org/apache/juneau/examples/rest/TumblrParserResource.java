@@ -24,14 +24,23 @@ import org.apache.juneau.rest.client.*;
 	messages="nls/TumblrParserResource",
 	title="Tumblr parser service",
 	description="Specify a URL to a Tumblr blog and parse the results.",
-	pageLinks="{up:'request:/..',options:'servlet:/?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/TumblrParserResource.java'}"
+	htmldoc=@HtmlDoc(
+		links="{up:'request:/..',options:'servlet:/?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/TumblrParserResource.java'}",
+		aside=""
+			+ "<div style='min-width:200px' class='text'>"
+			+ "	<p>An example of a REST interface that retrieves data from another REST interface.</p>"
+			+ "	<p><a class='link' href='$U{servlet:/ibmblr}'>try me</a></p>"
+			+ "</div>"
+	)
 )
 public class TumblrParserResource extends Resource {
 	private static final long serialVersionUID = 1L;
+	
+	private static final int MAX_POSTS = 100;
 
 	@RestMethod(name="GET", path="/", summary="Get the instructions page")
 	public String getInstructions() throws Exception {
-		return "Append the Tumblr blog name to the URL above (e.g. /juneau/sample/tumblrParser/mytumblrblog)";
+		return "Append the Tumblr blog name to the URL above (e.g. /tumblrParser/mytumblrblog)";
 	}
 
 	@RestMethod(name="GET", path="/{blogName}", summary="Parse the specified blog")
@@ -41,7 +50,7 @@ public class TumblrParserResource extends Resource {
 		try {
 			String site = "http://" + blogName + ".tumblr.com/api/read/json";
 			ObjectMap m = rc.doGet(site).getResponse(ObjectMap.class);
-			int postsTotal = m.getInt("posts-total");
+			int postsTotal = Math.min(m.getInt("posts-total"), MAX_POSTS);
 			for (int i = 0; i < postsTotal; i += 20) {
 				m = rc.doGet(site + "?start=" + i + "&num=20&filter=text").getResponse(ObjectMap.class);
 				ObjectList ol = m.getObjectList("posts");

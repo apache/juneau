@@ -301,6 +301,16 @@ public final class ClassUtils {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if the specified class is abstract.
+	 *
+	 * @param c The class.
+	 * @return <jk>true</jk> if the specified class is abstract.
+	 */
+	public static boolean isAbstract(Class<?> c) {
+		return Modifier.isAbstract(c.getModifiers());
+	}
+
+	/**
 	 * Returns <jk>true</jk> if the specified method is public.
 	 *
 	 * @param m The method.
@@ -745,20 +755,30 @@ public final class ClassUtils {
 	 *
 	 * @param c The class to cast to.
 	 * @param c2 The class to instantiate.
+	 * 	Can also be an instance of the class.
 	 * @param args The arguments to pass to the constructor.
-	 * @return The new class instance, or <jk>null</jk> if the class was <jk>null</jk>.
+	 * @return The new class instance, or <jk>null</jk> if the class was <jk>null</jk> or is abstract or an interface.
 	 * @throws RuntimeException if constructor could not be found or called.
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> T newInstance(Class<T> c, Class<?> c2, Object...args) {
+	public static <T> T newInstance(Class<T> c, Object c2, Object...args) {
 		if (c2 == null)
 			return null;
-		try {
-			if (args.length == 0)
-				return (T)c2.newInstance();
-			return (T)c2.getConstructor(getClasses(args)).newInstance(args);
-		} catch (Exception e) {
-			throw new RuntimeException("Could not instantiate class " + c.getName(), e);
+		if (c2 instanceof Class) {
+			try {
+				Class<?> c3 = (Class<?>)c2;
+				if (c3.isInterface() || isAbstract(c3))
+					return null;
+				if (args.length == 0)
+					return (T)c3.newInstance();
+				return (T)c3.getConstructor(getClasses(args)).newInstance(args);
+			} catch (Exception e) {
+				throw new FormattedRuntimeException(e, "Could not instantiate class {0}", c.getName());
+			}
+		} else if (isParentClass(c, c2.getClass())) {
+			return (T)c2;
+		} else {
+			throw new FormattedRuntimeException("Object of type {0} found but was expecting {1}.", c2.getClass(), c.getClass());
 		}
 	}
 }

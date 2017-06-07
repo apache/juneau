@@ -57,7 +57,9 @@ import org.apache.juneau.utils.*;
 	title="File System Explorer",
 	description="Contents of $R{attribute.path}",
 	messages="nls/DirectoryResource",
-	pageLinks="{up:'request:/..',options:'servlet:/?method=OPTIONS'}",
+	htmldoc=@HtmlDoc(
+		links="{up:'request:/..',options:'servlet:/?method=OPTIONS'}"
+	),
 	properties={
 		@Property(name=HTML_uriAnchorText, value=PROPERTY_NAME),
 		@Property(name=REST_allowMethodParam, value="*"),

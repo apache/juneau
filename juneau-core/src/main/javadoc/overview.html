@@ -2196,7 +2196,9 @@
 		<jc>// Links on the HTML rendition page.
 		// "request:/..." URIs are relative to the request URI.
 		// "servlet:/..." URIs are relative to the servlet URI.</jc>
-		pageLinks=<js>"{up:'request:/..',options:'servlet:/?method=OPTIONS'}"</js>,
+		htmldoc=<ja>@HtmlDoc</ja>(
+			links=<js>"{up:'request:/..',options:'servlet:/?method=OPTIONS'}"</js>
+		),
 		
 		<jc>// Properties that get applied to all serializers and parsers.</jc>
 		properties={
@@ -2211,12 +2213,14 @@
 		encoders=GzipEncoder.<jk>class</jk>,
 
 		<jc>// Swagger info.</jc>
-		contact=<js>"{name:'John Smith',email:'john@smith.com'}"</js>,
-		license=<js>"{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}"</js>,
-		version=<js>"2.0"</js>,
-		termsOfService=<js>"You're on your own."</js>,
-		tags=<js>"[{name:'Java',description:'Java utility',externalDocs:{description:'Home page',url:'http://juneau.apache.org'}}]"</js>,
-		externalDocs=<js>"{description:'Home page',url:'http://juneau.apache.org'}"</js>
+		swagger=<ja>@ResourceSwagger</ja>(
+			contact=<js>"{name:'John Smith',email:'john@smith.com'}"</js>,
+			license=<js>"{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}"</js>,
+			version=<js>"2.0"</js>,
+			termsOfService=<js>"You're on your own."</js>,
+			tags=<js>"[{name:'Java',description:'Java utility',externalDocs:{description:'Home page',url:'http://juneau.apache.org'}}]"</js>,
+			externalDocs=<js>"{description:'Home page',url:'http://juneau.apache.org'}"</js>
+		)
 	)
 	<jk>public class</jk> SystemPropertiesResource <jk>extends</jk> RestServletDefault {
 	
@@ -3000,7 +3004,9 @@
 	<ja>@RestResource</ja>(
 		path=<js>"/"</js>,
 		messages=<js>"nls/RootResources"</js>,
-		pageLinks=<js>"{options:'?method=OPTIONS'}"</js>,
+		htmldoc=<ja>@HtmlDoc</ja>(
+			links=<js>"{options:'?method=OPTIONS'}"</js>
+		),
 		children={
 			HelloWorldResource.<jk>class</jk>, 
 			MethodExampleResource.<jk>class</jk>, 
@@ -3093,7 +3099,9 @@
 	<ja>@RestResource</ja>( 
 		messages=<js>"nls/HelloWorldResource"</js>, 
 		path=<js>"/helloWorld"</js>, 
-		pageLinks=<js>"{up:'request:/..',options:'servlet:/?method=OPTIONS'}"</js>
+		htmldoc=<ja>@HtmlDoc</ja>(
+			links=<js>"{up:'request:/..',options:'servlet:/?method=OPTIONS'}"</js>
+		)
 	) 
 	<jk>public class</jk> HelloWorldResource <jk>extends</jk> Resource { 
 		<jk>private static final long</jk> <jsf>serialVersionUID</jsf> = 1L; 
@@ -3168,7 +3176,9 @@
 	<ja>@RestResource</ja>( 
 		path=<js>"/methodExample"</js>, 
 		messages=<js>"nls/MethodExampleResource"</js>, 
-		pageLinks=<js>"{up:'request:/..',options:'servlet:/?method=OPTIONS'}"</js>
+		htmldoc=<ja>@HtmlDoc</ja>(
+			links=<js>"{up:'request:/..',options:'servlet:/?method=OPTIONS'}"</js>
+		)
 	) 
 	<jk>public class</jk> MethodExampleResource <jk>extends</jk> Resource { 
 		<jk>private static final long</jk> <jsf>serialVersionUID</jsf> = 1L; 
@@ -3372,7 +3382,9 @@
 		</p>
 		<p class='bcode'>
 	<ja>@RestResource</ja>(
-		pageLinks=<js>"{options:'?method=OPTIONS'}"</js>
+		htmldoc=<ja>@HtmlDoc</ja>(
+			links=<js>"{options:'?method=OPTIONS'}"</js>
+		)
 	)
 		</p>
 		<p>
@@ -3637,7 +3649,9 @@
 	<ja>@RestResource</ja>(
 		path=<js>"/echo"</js>,
 		messages=<js>"nls/RequestEchoResource"</js>,
-		pageLinks=<js>"{up:'request:/..',options:'servlet:/?method=OPTIONS'}"</js>,
+		htmldoc=<ja>@HtmlDoc</ja>(
+			links=<js>"{up:'request:/..',options:'servlet:/?method=OPTIONS'}"</js>,
+		),
 		properties={
 			<ja>@Property</ja>(name=<jsf>SERIALIZER_maxDepth</jsf>, value=<js>"10"</js>),
 			<ja>@Property</ja>(name=<jsf>SERIALIZER_detectRecursions</jsf>, value=<js>"true"</js>)
@@ -4098,7 +4112,9 @@
 		// "request:/..." URIs are relative to the request URI.
 		// "servlet:/..." URIs are relative to the servlet URI.
 		// "$C{...}" variables are pulled from the config file.</jc>
-		pageLinks=<js>"{up:'request:/..', options:'servlet:/?method=OPTIONS', source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/addressbook/AddressBookResource.java'}"</js>,
+		htmldoc=<ja>@HtmlDoc</ja>(
+			links=<js>"{up:'request:/..', options:'servlet:/?method=OPTIONS', source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/addressbook/AddressBookResource.java'}"</js>
+		),
 
 		<jc>// Properties that get applied to all serializers and parsers.</jc>
 		properties={
@@ -4766,7 +4782,9 @@
 		messages=<js>"nls/SampleRemoteableServlet"</js>, 
 		title=<js>"Remoteable Service Proxy API"</js>, 
 		description=<js>"Sample class showing how to use remoteable proxies. The list below are exposed services that can be retrieved using RestClient.getProxyInterface(Class)."</js>, 
-		pageLinks=<js>"{up:'request:/..',options:'servlet:/?method=OPTIONS'}"</js>, 
+		htmldoc=<ja>@HtmlDoc</ja>(
+			links=<js>"{up:'request:/..',options:'servlet:/?method=OPTIONS'}"</js>
+		),
 		properties={ 
 			<jc>// Allow us to use method=POST from a browser.</jc> 
 			<ja>@Property</ja>(name=<jsf>REST_allowMethodParam</jsf>, value=<js>"*"</js>) 
@@ -4870,7 +4888,9 @@
 	<ja>@RestResource</ja>( 
 		path=<js>"/tempDir"</js>, 
 		messages=<js>"nls/TempDirResource"</js>, 
-		pageLinks=<js>"{up:'request:/..', options:'servlet:/?method=OPTIONS', upload:'servlet:/upload'}"</js>,
+		htmldoc=<ja>@HtmlDoc</ja>(
+			links=<js>"{up:'request:/..', options:'servlet:/?method=OPTIONS', upload:'servlet:/upload'}"</js>
+		),
 		properties={ 
 			<ja>@Property</ja>(name=<js>"DirectoryResource.rootDir"</js>, value=<js>"$S{java.io.tmpdir}"</js>), 
 			<ja>@Property</ja>(name=<js>"DirectoryResource.allowViews"</js>, value=<js>"true"</js>), 
@@ -4988,7 +5008,9 @@
 	<ja>@RestResource</ja>( 
 		path=<js>"/atom"</js>, 
 		messages=<js>"nls/AtomFeedResource"</js>, 
-		pageLinks=<js>"{up:'request:/..',options:'servlet:/?method=OPTIONS'}"</js>,
+		htmldoc=<ja>@HtmlDoc</ja>(
+			links=<js>"{up:'request:/..',options:'servlet:/?method=OPTIONS'}"</js>
+		),
 		properties={ 
 			<ja>@Property</ja>(name=<jsf>SERIALIZER_quoteChar</jsf>, value=<js>"'"</js>), 
 			<ja>@Property</ja>(name=<jsf>RDF_rdfxml_tab</jsf>, value=<js>"5"</js>), 
@@ -5096,7 +5118,9 @@
 	<ja>@RestResource</ja>( 
 		path=<js>"/docker"</js>, 
 		title=<js>"Sample Docker resource"</js>, 
-		pageLinks=<js>"{up:'request:/..',options:'servlet:/?method=OPTIONS'}"</js> 
+		htmldoc=<ja>@HtmlDoc</ja>(
+			links=<js>"{up:'request:/..',options:'servlet:/?method=OPTIONS'}"</js> 
+		)
 	) 
 	<jk>public class</jk> DockerRegistryResource <jk>extends</jk> Resource { 
 		<jk>private static final long</jk> <jsf>serialVersionUID</jsf> = 1L; 
@@ -5177,7 +5201,9 @@
 		messages=<js>"nls/TumblrParserResource"</js>, 
 		title=<js>"Tumblr parser service"</js>, 
 		description=<js>"Specify a URL to a Tumblr blog and parse the results."</js>, 
-		pageLinks=<js>"{up:'request:/..',options:'servlet:/?method=OPTIONS'}"</js> 
+		htmldoc=<ja>@HtmlDoc</ja>(
+			links=<js>"{up:'request:/..',options:'servlet:/?method=OPTIONS'}"</js> 
+		)
 	) 
 	<jk>public class</jk> TumblrParserResource <jk>extends</jk> Resource { 
 		<jk>private static final long</jk> <jsf>serialVersionUID</jsf> = 1L; 
@@ -5259,7 +5285,9 @@
 		messages=<js>"nls/PhotosResource"</js>,
 		title=<js>"Photo REST service"</js>,
 		description=<js>"Use a tool like Poster to upload and retrieve jpeg and png images."</js>,
-		pageLinks=<js>"{options:'?method=OPTIONS'}"</js>
+		htmldoc=<ja>@HtmlDoc</ja>(
+			links=<js>"{options:'?method=OPTIONS'}"</js>
+		)
 	)
 	<jk>public class</jk> PhotosResource <jk>extends</jk> RestServletDefault {
 	
@@ -5398,7 +5426,9 @@
 		path=<js>"/jsonSchema"</js>, 
 		messages=<js>"nls/JsonSchemaResource"</js>, 
 		title=<js>"Sample JSON-Schema document"</js>, 
-		pageLinks=<js>"{up:'request:/..',options:'servlet:/?method=OPTIONS'}"</js> 
+		htmldoc=<ja>@HtmlDoc</ja>(
+			links=<js>"{up:'request:/..',options:'servlet:/?method=OPTIONS'}"</js> 
+		)
 	) 
 	<jk>public class</jk> JsonSchemaResource <jk>extends</jk> ResourceJena { 
 		<jk>private static final long</jk> <jsf>serialVersionUID</jsf> = 1L; 
@@ -5479,7 +5509,9 @@
 		messages=<js>"nls/SqlQueryResource"</js>, 
 		title=<js>"SQL query service"</js>, 
 		description=<js>"Executes queries against the local derby '$C{SqlQueryResource/connectionUrl}' database"</js>, 
-		pageLinks=<js>"{up:'request:/..',options:'servlet:/?method=OPTIONS'}"</js> 
+		htmldoc=<ja>@HtmlDoc</ja>(
+			links=<js>"{up:'request:/..',options:'servlet:/?method=OPTIONS'}"</js> 
+		)
 	) 
 	<jk>public class</jk> SqlQueryResource <jk>extends</jk> Resource { 
 		<jk>private static final long</jk> <jsf>serialVersionUID</jsf> = 1L; 
@@ -5666,7 +5698,9 @@
 		path=<js>"/config"</js>, 
 		title=<js>"Configuration"</js>, 
 		description=<js>"Contents of configuration file."</js>, 
-		pageLinks=<js>"{up:'request:/..', options:'servlet:/?method=OPTIONS', edit:'servlet:/edit'}"</js>
+		htmldoc=<ja>@HtmlDoc</ja>(
+			links=<js>"{up:'request:/..', options:'servlet:/?method=OPTIONS', edit:'servlet:/edit'}"</js>
+		)
 	) 
 	<jk>public class</jk> ConfigResource <jk>extends</jk> Resource { 
 		<jk>private static final long</jk> <jsf>serialVersionUID</jsf> = 1L; 
@@ -6166,9 +6200,6 @@
 					<li>{@link org.apache.juneau.ini.ConfigFile#getObjectWithDefault(String,Object,Class) getObjectWithDefault(String,Object,Class)} 
 				</ul>
 			<li>New ability to interact with config file sections with proxy interfaces with new method {@link org.apache.juneau.ini.ConfigFile#getSectionAsInterface(String,Class)}.
-			<li>New {@link org.apache.juneau.html.annotation.Html#render() @Html.render()} annotation and {@link org.apache.juneau.html.HtmlRender} class that allows you
-				to customize the HTML output and CSS style on bean properties:<br>
-				<img class='bordered' src='doc-files/HtmlRender_1.png'>
 			<li>{@link org.apache.juneau.annotation.BeanProperty @BeanProperty} annotation can now be applied to getters
 				and setters defined on interfaces.
 			<li>New methods on {@link org.apache.juneau.serializer.SerializerSession} and {@link org.apache.juneau.parser.ParserSession}
@@ -6203,11 +6234,11 @@
 						</ul>
 						For example, currently we define HTML page links using variables and servlet-relative URIs...
 						<p class='bcode'>
-	pageLinks=<js>"{up:'$R{requestParentURI}', options:'?method=OPTIONS', upload:'upload'}"</js>
+	pages=<js>"{up:'$R{requestParentURI}', options:'?method=OPTIONS', upload:'upload'}"</js>
 						</p>
 						With these new protocols, we can define them like so:
 						<p class='bcode'>
-	pageLinks=<js>"{top:'context:/', up:'request:/..' ,options:'servlet:/?method=OPTIONS', upload:'servlet:/upload'}"</js>
+	links=<js>"{top:'context:/', up:'request:/..' ,options:'servlet:/?method=OPTIONS', upload:'servlet:/upload'}"</js>
 						</p>
 						The old method of using variables and servlet-relative URIs will still be supported, but using 
 						these new protocols should (hopefully) be easier to understand.
@@ -6252,10 +6283,35 @@
 			<li>The {@link org.apache.juneau.BeanContext#BEAN_debug} flag will now capture parser input and make it
 				available through the {@link org.apache.juneau.parser.ParserSession#getInputAsString()} method so that it can be used
 				in the listeners.
+			<li>Significant new functionality introduced to the HTML serializer.  
+				<br>Lots of new options for customizing the HTML output.
+				<ul>
+					<li>New {@link org.apache.juneau.html.annotation.Html#render() @Html.render()} annotation and {@link org.apache.juneau.html.HtmlRender} class that allows you
+						to customize the HTML output and CSS style on bean properties:
+						<br><img class='bordered' src='doc-files/HtmlRender_1.png'>
+						<br>Annotation can be applied to POJO classes and bean properties.
+					<li>Several new properties for customizing parts of the HTML page:
+						<ul>
+							<li>{@link org.apache.juneau.html.HtmlDocSerializerContext#HTMLDOC_title}
+							<li>{@link org.apache.juneau.html.HtmlDocSerializerContext#HTMLDOC_description}
+							<li>{@link org.apache.juneau.html.HtmlDocSerializerContext#HTMLDOC_header}
+							<li>{@link org.apache.juneau.html.HtmlDocSerializerContext#HTMLDOC_nav}
+							<li>{@link org.apache.juneau.html.HtmlDocSerializerContext#HTMLDOC_aside}
+							<li>{@link org.apache.juneau.html.HtmlDocSerializerContext#HTMLDOC_footer}
+							<li>{@link org.apache.juneau.html.HtmlDocSerializerContext#HTMLDOC_noResultsMessage}
+							<li>{@link org.apache.juneau.html.HtmlDocSerializerContext#HTMLDOC_cssUrl}
+							<li>{@link org.apache.juneau.html.HtmlDocSerializerContext#HTMLDOC_css}
+							<li>{@link org.apache.juneau.html.HtmlDocSerializerContext#HTMLDOC_template}
+						</ul>
+					<li>New interface {@link org.apache.juneau.html.HtmlDocTemplate} that allows full control over rendering
+						of HTML produced by {@link org.apache.juneau.html.HtmlDocSerializer}.
+					
+				</ul>
 		</ul>
 
 		<h6 class='topic'>org.apache.juneau.rest</h6>
 		<ul class='spaced-list'>
+			<li>MAJOR enhancements made to the REST API.
 			<li>The {@link org.apache.juneau.rest.RestRequest} class functionality has been broken up into the following
 				functional pieces to reduce its complexity:
 				<ul>
@@ -6374,7 +6430,67 @@
 					<li>{@link org.apache.juneau.rest.annotation.Header#def @Header.def()} - Default header value.
 					<li>{@link org.apache.juneau.rest.annotation.Query#def @Query.def()} - Default query parameter value.
 					<li>{@link org.apache.juneau.rest.annotation.FormData#def @FormData.def()} - Default form data parameter value.
-				</ul>	
+				</ul>
+			<li>New attributes on {@link org.apache.juneau.rest.annotation.RestResource @RestResource}:
+				<ul>
+					<li>{@link org.apache.juneau.rest.annotation.RestResource#serializerListener() serializerListener()}
+					<li>{@link org.apache.juneau.rest.annotation.RestResource#parserListener() parserListener()}
+					<li>{@link org.apache.juneau.rest.annotation.RestResource#widgets() widgets()}
+					<li>{@link org.apache.juneau.rest.annotation.RestResource#swagger() swagger()}
+					<li>{@link org.apache.juneau.rest.annotation.RestResource#htmldoc() htmldoc()}
+				</ul>
+			<li>New attributes on {@link org.apache.juneau.rest.annotation.RestMethod @RestMethod}:
+				<ul>
+					<li>{@link org.apache.juneau.rest.annotation.RestMethod#widgets() widgets()}
+					<li>{@link org.apache.juneau.rest.annotation.RestMethod#swagger() swagger()}
+					<li>{@link org.apache.juneau.rest.annotation.RestMethod#htmldoc() htmldoc()}
+				</ul>
+			<li>New string vars:
+				<ul>
+					<li>{@link org.apache.juneau.rest.vars.UrlVar} - Resolve <js>"$U{...}"</js> variables to URLs.
+					<li>{@link org.apache.juneau.rest.vars.WidgetVar} - Resolve <js>"$W{...}"</js> variables to widget contents.
+				</ul>
+			<li>New methods on {@link org.apache.juneau.rest.RestConfig}:
+				<ul>
+					<li>{@link org.apache.juneau.rest.RestConfig#setHtmlTitle(String) setHtmlTitle(String)}
+					<li>{@link org.apache.juneau.rest.RestConfig#setHtmlDescription(String) setHtmlDescription(String)}
+					<li>{@link org.apache.juneau.rest.RestConfig#setHtmlHeader(String) setHtmlHeader(String)}
+					<li>{@link org.apache.juneau.rest.RestConfig#setHtmlLinks(String) setHtmlLinks(String)}
+					<li>{@link org.apache.juneau.rest.RestConfig#setHtmlNav(String) setHtmlNav(String)}
+					<li>{@link org.apache.juneau.rest.RestConfig#setHtmlAside(String) setHtmlAside(String)}
+					<li>{@link org.apache.juneau.rest.RestConfig#setHtmlFooter(String) setHtmlFooter(String)}
+					<li>{@link org.apache.juneau.rest.RestConfig#setHtmlCss(String) setHtmlCss(String)}
+					<li>{@link org.apache.juneau.rest.RestConfig#setHtmlCssUrl(String) setHtmlCssUrl(String)}
+					<li>{@link org.apache.juneau.rest.RestConfig#setHtmlNoWrap(boolean) setHtmlNoWrap(boolean)}
+					<li>{@link org.apache.juneau.rest.RestConfig#setHtmlNoResultsMessage(String) setHtmlNoResultsMessage(String)}
+					<li>{@link org.apache.juneau.rest.RestConfig#setHtmlTemplate(Class) setHtmlTemplate(Class)}
+					<li>{@link org.apache.juneau.rest.RestConfig#setHtmlTemplate(HtmlDocTemplate) setHtmlTemplate(HtmlDocTemplate)}
+					<li>{@link org.apache.juneau.rest.RestConfig#addWidget(Class) addWidget(Class)}
+				</ul>
+			<li>New methods on {@link org.apache.juneau.rest.RestResponse}:
+				<ul>
+					<li>{@link org.apache.juneau.rest.RestResponse#setHtmlTitle(Object) setHtmlTitle(Object)}
+					<li>{@link org.apache.juneau.rest.RestResponse#setHtmlDescription(Object) setHtmlDescription(Object)}
+					<li>{@link org.apache.juneau.rest.RestResponse#setHtmlHeader(Object) setHtmlHeader(Object)}
+					<li>{@link org.apache.juneau.rest.RestResponse#setHtmlLinks(Object) setHtmlLinks(Object)}
+					<li>{@link org.apache.juneau.rest.RestResponse#setHtmlNav(Object) setHtmlNav(Object)}
+					<li>{@link org.apache.juneau.rest.RestResponse#setHtmlAside(Object) setHtmlAside(Object)}
+					<li>{@link org.apache.juneau.rest.RestResponse#setHtmlFooter(Object) setHtmlFooter(Object)}
+					<li>{@link org.apache.juneau.rest.RestResponse#setHtmlCss(Object) setHtmlCss(Object)}
+					<li>{@link org.apache.juneau.rest.RestResponse#setHtmlCssUrl(Object) setHtmlCssUrl(Object)}
+					<li>{@link org.apache.juneau.rest.RestResponse#setHtmlNoWrap(boolean) setHtmlNoWrap(boolean)}
+					<li>{@link org.apache.juneau.rest.RestResponse#setHtmlNoResultsMessage(Object) setHtmlNoResultsMessage(Object)}
+					<li>{@link org.apache.juneau.rest.RestResponse#setHtmlTemplate(Class) setHtmlTemplate(Class)}
+					<li>{@link org.apache.juneau.rest.RestResponse#setHtmlTemplate(HtmlDocTemplate) setHtmlTemplate(HtmlDocTemplate)}
+				</ul>
+			<li><code>&amp;plainText=true</code> parameter now works on byte-based serializers by converting the output to hex.
+			<li>New classes for widget support:
+				<ul>
+					<li>{@link org.apache.juneau.rest.widget.Widget}
+					<li>{@link org.apache.juneau.rest.widget.PoweredByJuneauWidget}
+					<li>{@link org.apache.juneau.rest.widget.ContentTypeLinksWidget}
+				</ul>
+			<li><code>devops.css</code> cleaned up.
 		</ul>
 
 		<h6 class='topic'>org.apache.juneau.rest.client</h6>
@@ -6391,6 +6507,13 @@
 
 		<h6 class='topic'>org.apache.juneau.microservice</h6>
 		<ul class='spaced-list'>
+		</ul>
+
+		<h6 class='topic'>org.apache.juneau.examples.rest</h6>
+		<ul class='spaced-list'>
+			<li>Many code enhancements make to examples to reflect new functionality.
+				<li>All pages now render aside comments to help explain what feature they're trying to explain.
+				<br><img class='bordered' src='doc-files/NewExamplesPage.png'>
 		</ul>
 	</div>
 
@@ -6538,12 +6661,12 @@
 			<li>New annotations added to {@link org.apache.juneau.rest.annotation.RestResource @RestResource} and {@link org.apache.juneau.rest.annotation.RestMethod @RestMethod}
 				to simplify defining page title, text, and links on HTML views:
 				<ul>
-					<li>{@link org.apache.juneau.rest.annotation.RestResource#pageTitle() @RestResource.pageTitle()} 
-					<li>{@link org.apache.juneau.rest.annotation.RestMethod#pageTitle() @RestMethod.pageTitle()} 
-					<li>{@link org.apache.juneau.rest.annotation.RestResource#pageText() @RestResource.pageText()} 
-					<li>{@link org.apache.juneau.rest.annotation.RestMethod#pageText() @RestMethod.pageText()} 
-					<li>{@link org.apache.juneau.rest.annotation.RestResource#pageLinks() @RestResource.pageLinks()} 
-					<li>{@link org.apache.juneau.rest.annotation.RestMethod#pageLinks() @RestMethod.pageLinks()} 
+					<li><code><del>@RestResource.pageTitle()</del></code>
+					<li><code><del>@RestMethod.pageTitle()</del></code> 
+					<li><code><del>@RestResource.pageText()</del></code> 
+					<li><code><del>@RestMethod.pageText()</del></code> 
+					<li><code><del>@RestResource.pageLinks()</del></code> 
+					<li><code><del>@RestMethod.pageLinks()</del></code> 
 				</ul>				
 				<p class='bcode'>
 	<jc>// Old method</jc>
@@ -6650,7 +6773,7 @@
 					<li>{@link org.apache.juneau.rest.client.RestClientBuilder#noTrace() noTrace()} - Adds a <code>No-Trace: true</code> header on all requests to prevent
 						the servlet from logging errors.
 						<br>Useful for testing scenarios when you don't want the console to end up showing errors done on purpose.
-					<li>{@link org.apache.juneau.rest.client.RestClientBuilder#debug(boolean) debug(boolean)} now adds a <code>Debug: true</code> header on all requests.
+					<li>{@link org.apache.juneau.rest.client.RestClientBuilder#debug() debug()} now adds a <code>Debug: true</code> header on all requests.
 				</ul>
 			<li>New methods added/updated to {@link org.apache.juneau.rest.client.RestCall}:
 				<ul>
@@ -7065,19 +7188,19 @@
 						<ul>
 							<li>{@link org.apache.juneau.rest.annotation.RestResource#title() @RestResource.title()} / {@link org.apache.juneau.rest.RestInfoProvider#getTitle(RestRequest)}
 							<li>{@link org.apache.juneau.rest.annotation.RestResource#description() @RestResource.description()} / {@link org.apache.juneau.rest.RestInfoProvider#getDescription(RestRequest)}
-							<li>{@link org.apache.juneau.rest.annotation.RestResource#termsOfService() @RestResource.termsOfService()} / {@link org.apache.juneau.rest.RestInfoProvider#getTermsOfService(RestRequest)}
-							<li>{@link org.apache.juneau.rest.annotation.RestResource#contact() @RestResource.contact()} / {@link org.apache.juneau.rest.RestInfoProvider#getContact(RestRequest)}
-							<li>{@link org.apache.juneau.rest.annotation.RestResource#license() @RestResource.license()} / {@link org.apache.juneau.rest.RestInfoProvider#getLicense(RestRequest)}
-							<li>{@link org.apache.juneau.rest.annotation.RestResource#version() @RestResource.version()} / {@link org.apache.juneau.rest.RestInfoProvider#getVersion(RestRequest)}
-							<li>{@link org.apache.juneau.rest.annotation.RestResource#tags() @RestResource.tags()} / {@link org.apache.juneau.rest.RestInfoProvider#getTags(RestRequest)}
-							<li>{@link org.apache.juneau.rest.annotation.RestResource#externalDocs() @RestResource.externalDocs()} / {@link org.apache.juneau.rest.RestInfoProvider#getExternalDocs(RestRequest)}
+							<li><code><del>@RestResource.termsOfService()</del></code> / {@link org.apache.juneau.rest.RestInfoProvider#getTermsOfService(RestRequest)}
+							<li><code><del>@RestResource.contact()</del></code> / {@link org.apache.juneau.rest.RestInfoProvider#getContact(RestRequest)}
+							<li><code><del>@RestResource.license()</del></code> / {@link org.apache.juneau.rest.RestInfoProvider#getLicense(RestRequest)}
+							<li><code><del>@RestResource.version()</del></code> / {@link org.apache.juneau.rest.RestInfoProvider#getVersion(RestRequest)}
+							<li><code><del>@RestResource.tags()</del></code> / {@link org.apache.juneau.rest.RestInfoProvider#getTags(RestRequest)}
+							<li><code><del>@RestResource.externalDocs()</del></code> / {@link org.apache.juneau.rest.RestInfoProvider#getExternalDocs(RestRequest)}
 							<li>{@link org.apache.juneau.rest.annotation.RestMethod#summary() @RestMethod.summary()} / {@link org.apache.juneau.rest.RestInfoProvider#getMethodSummary(String,RestRequest)}
 							<li>{@link org.apache.juneau.rest.annotation.RestMethod#description() @RestMethod.description()} / {@link org.apache.juneau.rest.RestInfoProvider#getMethodDescription(String,RestRequest)}
-							<li>{@link org.apache.juneau.rest.annotation.RestMethod#externalDocs() @RestMethod.externalDocs()} 
-							<li>{@link org.apache.juneau.rest.annotation.RestMethod#tags() @RestMethod.tags()} 
-							<li>{@link org.apache.juneau.rest.annotation.RestMethod#deprecated() @RestMethod.deprecated()} 
-							<li>{@link org.apache.juneau.rest.annotation.RestMethod#parameters() @RestMethod.parameters()} 
-							<li>{@link org.apache.juneau.rest.annotation.RestMethod#responses() @RestMethod.responses()} 
+							<li><code><del>@RestMethod.externalDocs()</del></code>
+							<li><code><del>@RestMethod.tags()</del></code>
+							<li><code><del>@RestMethod.deprecated()</del></code> 
+							<li><code><del>@RestMethod.parameters()</del></code> 
+							<li><code><del>@RestMethod.responses()</del></code>
 						</ul>
 					</li>					
 				</ul>
@@ -7747,7 +7870,7 @@
 		<ul class='spaced-list'>
 			<li>Fixed bug where localized strings weren't resolving when using chained resource bundles.
 			<li>Servlet and method labels and descriptions can now contain embedded string variables.
-			<li>New <del><code>RestMethod.input()</code></del> and org.apache.juneau.rest.annotation.RestMethod#responses()}
+			<li>New <del><code>RestMethod.input()</code></del> and <code><del>RestMethod.responses()</del></code>
 				annotations.
 				These replace the various <code>description</code> annotations added 2 days ago with a simpler design.
 			<li>New methods on {@link org.apache.juneau.rest.RestServlet}:
@@ -7861,7 +7984,7 @@
 					<li><del><code>RestResource.label()</code></del>
 					<li>{@link org.apache.juneau.rest.annotation.RestResource#description()}
 					<li>{@link org.apache.juneau.rest.annotation.RestMethod#description()}
-					<li>{@link org.apache.juneau.rest.annotation.RestMethod#responses()}
+					<li><del><code>RestMethod#responses()</code></del>
 					<li><del><code>Attr.description()</code></del>
 					<li><del><code>Content.description()</code></del>
 					<li><del><code>HasParam.description()</code></del>
@@ -7901,7 +8024,7 @@
 				</ul>
 			<li>New {@link org.apache.juneau.dto.jsonschema.JsonType#ANY} enum.
 			<li>New {@link org.apache.juneau.html.annotation.Html#asPlainText @Html.asPlainText()} annotation.
-			<li>New {@link org.apache.juneau.html.HtmlDocSerializerContext#HTMLDOC_cssImports} property.
+			<li>New <code><del>HtmlDocSerializerContext.HTMLDOC_cssImports</del></code> property.
 			<li>Signifant changes to RDF support.
 				<ul>
 					<li>New {@link org.apache.juneau.jena.annotation.Rdf @Rdf} and {@link org.apache.juneau.jena.annotation.RdfSchema @RdfSchema}

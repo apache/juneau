@@ -424,6 +424,8 @@ public class HtmlSerializer extends XmlSerializer {
 			HtmlBeanPropertyMeta hbpMeta = pMeta.getExtendedMeta(HtmlBeanPropertyMeta.class);
 			String link = hbpMeta.getLink();
 			HtmlRender render = hbpMeta.getRender();
+			if (render == null)
+				render = cMeta.getExtendedMeta(HtmlClassMeta.class).getRender();
 
 			String key = p.getName();
 			Object value = p.getValue();
@@ -437,7 +439,7 @@ public class HtmlSerializer extends XmlSerializer {
 			out.sTag(i+1, "tr").nl();
 			out.sTag(i+2, "td").text(key).eTag("td").nl();
 			out.oTag(i+2, "td");
-			String style = render.getStyle(session, value);
+			String style = render == null ? null : render.getStyle(session, value);
 			if (style != null)
 				out.attr("style", style);
 			out.cTag();
@@ -445,7 +447,7 @@ public class HtmlSerializer extends XmlSerializer {
 			try {
 				if (link != null)
 					out.oTag(i+3, "a").attrUri("href", m.resolveVars(link)).cTag();
-				ContentResult cr = serializeAnything(session, out, render.getContent(session, value), cMeta, key, 2, pMeta, false);
+				ContentResult cr = serializeAnything(session, out, render == null ? value : render.getContent(session, value), cMeta, key, 2, pMeta, false);
 				if (cr == CR_NORMAL)
 					out.i(i+2);
 				if (link != null)
@@ -548,17 +550,22 @@ public class HtmlSerializer extends XmlSerializer {
 						BeanPropertyMeta pMeta = p.getMeta();
 						HtmlBeanPropertyMeta hpMeta = pMeta.getExtendedMeta(HtmlBeanPropertyMeta.class);
 						String link = hpMeta.getLink();
-						HtmlRender render = hpMeta.getRender();
 
 						Object value = p.getValue();
+						ClassMeta<?> cMeta = session.getClassMetaForObject(value);
+
+						HtmlRender render = hpMeta.getRender();
+						if (render == null)
+							render = cMeta.getExtendedMeta(HtmlClassMeta.class).getRender();
+
 						out.oTag(i+2, "td");
-						String style = render.getStyle(session, value);
+						String style = render == null ? null : render.getStyle(session, value);
 						if (style != null)
 							out.attr("style", style);
 						out.cTag();
 						if (link != null)
 							out.oTag(i+3, "a").attrUri("href", m2.resolveVars(link)).cTag();
-						ContentResult cr = serializeAnything(session, out, render.getContent(session, value), pMeta.getClassMeta(), p.getKey().toString(), 2, pMeta, false);
+						ContentResult cr = serializeAnything(session, out, render == null ? value : render.getContent(session, value), pMeta.getClassMeta(), p.getKey().toString(), 2, pMeta, false);
 						if (cr == CR_NORMAL)
 							out.i(i+2);
 						if (link != null)

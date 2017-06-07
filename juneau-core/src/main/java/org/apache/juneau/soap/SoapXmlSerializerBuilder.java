@@ -555,8 +555,8 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* CoreObjectBuilder */
-	public SoapXmlSerializerBuilder debug(boolean value) {
-		super.debug(value);
+	public SoapXmlSerializerBuilder debug() {
+		super.debug();
 		return this;
 	}
 

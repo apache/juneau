@@ -32,7 +32,14 @@ import org.apache.juneau.transforms.*;
 	messages="nls/UrlEncodedFormResource",
 	title="Tumblr parser service",
 	description="Specify a URL to a Tumblr blog and parse the results.",
-	pageLinks="{up:'request:/..',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/UrlEncodedFormResource.java'}"
+	htmldoc=@HtmlDoc(
+		links="{up:'request:/..',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/UrlEncodedFormResource.java'}",
+		aside=""
+			+ "<div style='min-width:200px' class='text'>"
+			+ "	<p>Shows how to process a FORM POST body into a bean using the <code>@Body</code> annotation.</p>"
+			+ "	<p>Submitting the form post will simply echo the bean back on the response.</p>"
+			+ "</div>"
+	)
 )
 public class UrlEncodedFormResource extends Resource {
 	private static final long serialVersionUID = 1L;

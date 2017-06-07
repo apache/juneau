@@ -35,6 +35,7 @@ import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.ini.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.uon.*;
@@ -87,7 +88,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	private RequestHeaders headers;
 	private ConfigFile cf;
 	private Swagger swagger, fileSwagger;
-	private String pageTitle, pageText, pageLinks;
+	private Map<String,Widget> widgets;
 
 	/**
 	 * Constructor.
@@ -155,7 +156,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	final void init(Method javaMethod, ObjectMap properties, Map<String,String> defHeader,
 			Map<String,String> defQuery, Map<String,String> defFormData, String defaultCharset,
 			SerializerGroup mSerializers, ParserGroup mParsers, UrlEncodingParser mUrlEncodingParser,
-			EncoderGroup encoders, String pageTitle, String pageText, String pageLinks) {
+			EncoderGroup encoders, Map<String,Widget> widgets) {
 		this.javaMethod = javaMethod;
 		this.properties = properties;
 		this.urlEncodingParser = mUrlEncodingParser;
@@ -181,10 +182,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		this.serializerGroup = mSerializers;
 		this.parserGroup = mParsers;
 		this.defaultCharset = defaultCharset;
-		this.pageTitle = pageTitle;
-		this.pageText = pageText;
-		this.pageLinks = pageLinks;
 		this.defFormData = defFormData;
+		this.widgets = widgets;
 
 		if (debug) {
 			String msg = ""
@@ -698,57 +697,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		return context.getInfoProvider().getMethodDescription(javaMethod.getName(), this);
 	}
 
-	/**
-	 * Returns the localized page title for HTML views.
-	 *
-	 * @return The localized page title for HTML views.
-	 */
-	protected String getPageTitle() {
-		String s = pageTitle;
-		if (isEmpty(s))
-			s = context.getMessages().findFirstString(getLocale(), javaMethod.getName() + ".pageTitle");
-		if (isEmpty(s))
-			s = context.getMessages().findFirstString(getLocale(), "pageTitle");
-		if (! isEmpty(s))
-			return resolveVars(s);
-		s = getServletTitle();
-		return s;
-	}
-
-	/**
-	 * Returns the localized page text for HTML views.
-	 *
-	 * @return The localized page text for HTML views.
-	 */
-	protected String getPageText() {
-		String s = pageText;
-		if (isEmpty(s))
-			s = context.getMessages().findFirstString(getLocale(), javaMethod.getName() + ".pageText");
-		if (isEmpty(s))
-			s = context.getMessages().findFirstString(getLocale(), "pageText");
-		if (! isEmpty(s))
-			return resolveVars(s);
-		s = getMethodSummary();
-		if (isEmpty(s))
-			s = getServletDescription();
-		return s;
-	}
-
-	/**
-	 * Returns the localized page links for HTML views.
-	 *
-	 * @return The localized page links for HTML views.
-	 */
-	protected String getPageLinks() {
-		String s = pageLinks;
-		if (isEmpty(s))
-			s = context.getMessages().findFirstString(getLocale(), javaMethod.getName() + ".pageLinks");
-		if (isEmpty(s))
-			s = context.getMessages().findFirstString(getLocale(), "pageLinks");
-		return resolveVars(s);
-	}
-
-
 	//--------------------------------------------------------------------------------
 	// Other methods
 	//--------------------------------------------------------------------------------
@@ -955,12 +903,23 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	/**
 	 * Returns the localized swagger associated with the servlet.
 	 *
-	 * @return The swagger associated with the servlet.  Never <jk>null</jk>.
+	 * @return The swagger associated with the servlet.
+	 * 	Never <jk>null</jk>.
 	 */
 	public Swagger getSwagger() {
 		if (swagger == null)
 			swagger = context.getInfoProvider().getSwagger(this);
 		return swagger;
+	}
+
+	/**
+	 * Returns the widgets used for resolving <js>"$W{...}"</js> string variables.
+	 *
+	 * @return The widgets used for resolving <js>"$W{...}"</js> string variables.
+	 * 	Never <jk>null</jk>.
+	 */
+	public Map<String,Widget> getWidgets() {
+		return widgets;
 	}
 
 	/**

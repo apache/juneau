@@ -23,6 +23,7 @@ public class HtmlClassMeta extends ClassMetaExtended {
 
 	private final Html html;
 	private final boolean asXml, noTables, noTableHeaders, asPlainText;
+	private final HtmlRender<?> render;
 
 	/**
 	 * Constructor.
@@ -37,11 +38,13 @@ public class HtmlClassMeta extends ClassMetaExtended {
 			noTables = html.noTables();
 			noTableHeaders = html.noTableHeaders();
 			asPlainText = html.asPlainText();
+			render = ClassUtils.newInstance(HtmlRender.class, html.render());
 		} else {
 			asXml = false;
 			noTables = false;
 			noTableHeaders = false;
 			asPlainText = false;
+			render = null;
 		}
 	}
 
@@ -88,5 +91,14 @@ public class HtmlClassMeta extends ClassMetaExtended {
 	 */
 	public boolean isNoTableHeaders() {
 		return noTableHeaders;
+	}
+
+	/**
+	 * Returns the {@link Html#render()} annotation defined on the class.
+	 *
+	 * @return The value of the {@link Html#render()} annotation.
+	 */
+	public HtmlRender<?> getRender() {
+		return render;
 	}
 }

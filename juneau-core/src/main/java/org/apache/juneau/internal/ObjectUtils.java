@@ -44,6 +44,7 @@ public class ObjectUtils {
 	 * <ul>
 	 * 	<li><jk>null</jk>
 	 * 	<li>An empty Collection
+	 * 	<li>An empty Map
 	 * 	<li>An empty array
 	 * 	<li>An empty CharSequence
 	 * 	<li>An empty String when serialized to a string using {@link Object#toString()}.
@@ -58,6 +59,8 @@ public class ObjectUtils {
 			return true;
 		if (o instanceof Collection)
 			return ((Collection)o).isEmpty();
+		if (o instanceof Map)
+			return ((Map)o).isEmpty();
 		if (o.getClass().isArray())
 			return (Array.getLength(o) == 0);
 		return o.toString().isEmpty();

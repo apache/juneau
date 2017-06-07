@@ -493,8 +493,8 @@ public class JsoSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* CoreObjectBuilder */
-	public JsoSerializerBuilder debug(boolean value) {
-		super.debug(value);
+	public JsoSerializerBuilder debug() {
+		super.debug();
 		return this;
 	}
 

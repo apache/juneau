@@ -437,8 +437,8 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	}
 
 	@Override /* CoreObjectBuilder */
-	public HtmlParserBuilder debug(boolean value) {
-		super.debug(value);
+	public HtmlParserBuilder debug() {
+		super.debug();
 		return this;
 	}
 

@@ -409,8 +409,8 @@ public class JsonParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* CoreObjectBuilder */
-	public JsonParserBuilder debug(boolean value) {
-		super.debug(value);
+	public JsonParserBuilder debug() {
+		super.debug();
 		return this;
 	}
 

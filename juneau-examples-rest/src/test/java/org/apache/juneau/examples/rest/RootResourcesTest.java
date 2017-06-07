@@ -41,13 +41,13 @@ public class RootResourcesTest extends RestTestcase {
 		ResourceDescription[] x = r.getResponse(ResourceDescription[].class);
 		assertEquals("helloWorld", x[0].getName().getName());
 		assertEquals(path + "/helloWorld", x[0].getName().getHref());
-		assertEquals("Hello World sample resource", x[0].getDescription());
+		assertEquals("Hello World", x[0].getDescription());
 
 		r = jsonClient.doOptions("");
 		ObjectMap x2 = r.getResponse(ObjectMap.class);
 		String s = x2.getObjectMap("info").getString("description");
 		if (debug) System.err.println(s);
-		assertTrue(s, s.startsWith("This is an example"));
+		assertTrue(s, s.startsWith("Example of a router resource page"));
 	}
 
 	//====================================================================================================
@@ -60,13 +60,13 @@ public class RootResourcesTest extends RestTestcase {
 		ResourceDescription[] x = r.getResponse(ResourceDescription[].class);
 		assertEquals("helloWorld", x[0].getName().getName());
 		assertEquals(path + "/helloWorld", x[0].getName().getHref());
-		assertEquals("Hello World sample resource", x[0].getDescription());
+		assertEquals("Hello World", x[0].getDescription());
 
 		r = jsonClient.doOptions("");
 		ObjectMap x2 = r.getResponse(ObjectMap.class);
 		String s = x2.getObjectMap("info").getString("description");
 		if (debug) System.err.println(s);
-		assertTrue(s, s.startsWith("This is an example"));
+		assertTrue(s, s.startsWith("Example of a router resource page"));
 		
 		client.closeQuietly();
 	}
@@ -81,13 +81,13 @@ public class RootResourcesTest extends RestTestcase {
 		ResourceDescription[] x = r.getResponse(ResourceDescription[].class);
 		assertEquals("helloWorld", x[0].getName().getName());
 		assertTrue(x[0].getName().getHref().endsWith("/helloWorld"));
-		assertEquals("Hello World sample resource", x[0].getDescription());
+		assertEquals("Hello World", x[0].getDescription());
 
 		r = jsonClient.doOptions("").accept("text/json");
 		ObjectMap x2 = r.getResponse(ObjectMap.class);
 		String s = x2.getObjectMap("info").getString("description");
 		if (debug) System.err.println(s);
-		assertTrue(s, s.startsWith("This is an example"));
+		assertTrue(s, s.startsWith("Example of a router resource page"));
 		
 		client.closeQuietly();
 	}
@@ -127,6 +127,6 @@ public class RootResourcesTest extends RestTestcase {
 		RestCall r = jsonClient.doOptions("");
 		Swagger o = r.getResponse(Swagger.class);
 		if (debug) System.err.println(o);
-		assertEquals("This is an example of a router resource that is used to access other resources.", o.getInfo().getDescription());
+		assertEquals("Example of a router resource page.", o.getInfo().getDescription());
 	}
 }

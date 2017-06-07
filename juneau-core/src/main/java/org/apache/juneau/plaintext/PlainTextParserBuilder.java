@@ -409,8 +409,8 @@ public class PlainTextParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* CoreObjectBuilder */
-	public PlainTextParserBuilder debug(boolean value) {
-		super.debug(value);
+	public PlainTextParserBuilder debug() {
+		super.debug();
 		return this;
 	}
 

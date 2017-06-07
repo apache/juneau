@@ -20,10 +20,17 @@ import org.apache.juneau.rest.annotation.*;
  */
 @RestResource(
 	messages="nls/HelloWorldResource",
-	title="Hello World sample resource",
-	description="Simplest possible resource",
+	title="Hello World",
+	description="An example of the simplest-possible resource",
 	path="/helloWorld",
-	pageLinks="{up:'request:/..',options:'servlet:/?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/HelloWorldResource.java'}"
+	htmldoc=@HtmlDoc(
+		links="{up:'request:/..',options:'servlet:/?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/HelloWorldResource.java'}",
+		aside=""
+			+ "<div style='max-width:400px' class='text'>"
+			+ "	<p>This page shows a resource that simply response with a 'Hello world!' message</p>"
+			+ "	<p>The POJO serialized is a simple String.</p>"
+			+ "</div>"
+	)
 )
 public class HelloWorldResource extends Resource {
 	private static final long serialVersionUID = 1L;

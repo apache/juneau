@@ -535,8 +535,8 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* CoreObjectBuilder */
-	public XmlSchemaSerializerBuilder debug(boolean value) {
-		super.debug(value);
+	public XmlSchemaSerializerBuilder debug() {
+		super.debug();
 		return this;
 	}
 

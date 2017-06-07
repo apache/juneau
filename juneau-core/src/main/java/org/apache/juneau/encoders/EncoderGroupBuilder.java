@@ -95,7 +95,7 @@ public class EncoderGroupBuilder {
 	public EncoderGroup build() {
 		List<Encoder> l = new ArrayList<Encoder>();
 		for (Object e : encoders)
-			l.add(e instanceof Class ? newInstance(Encoder.class, (Class<?>)e) : (Encoder)e);
+			l.add(newInstance(Encoder.class, e));
 		Collections.reverse(l);
 		return new EncoderGroup(l.toArray(new Encoder[l.size()]));
 	}

@@ -645,6 +645,40 @@ public final class PropertyStore {
 	}
 
 	/**
+	 * Returns a property value either cast to the specified type, or a new instance of the specified type.
+	 * <p>
+	 * It's assumed that the current property value is either an instance of that type, or a <code>Class</code> that's
+	 * a subclass of the type to be instantiated.
+	 *
+	 * @param name The full name of the property (e.g. <js>"BeanContext.sortProperties"</js>)
+	 * @param type The class type to convert the property value to.
+	 * @param def The type to instantiate if the property is not set.
+	 * @param args The arguments to pass to the default type constructor.
+	 *
+	 * @return The property either cast to the specified type, or instantiated from a <code>Class</code> object.
+	 * @throws ConfigException If property has a value that cannot be converted to a boolean.
+	 */
+	@SuppressWarnings("unchecked")
+	public <T> T getTypedProperty(String name, Class<T> type, Class<? extends T> def, Object...args) {
+		rl.lock();
+		try {
+			Object o = null;
+			PropertyMap pm = getPropertyMap(prefix(name));
+			if (pm != null)
+				o = pm.get(name, type, null);
+			if (o == null && def != null)
+				o = ClassUtils.newInstance(type, def, args);
+			if (o == null)
+				return null;
+			if (ClassUtils.isParentClass(type, o.getClass()))
+				return (T)o;
+			throw new FormattedRuntimeException("Invalid object of type {0} found in call to PropertyStore.getTypeProperty({1},{2},{3},...)", o.getClass(), name, type, def);
+		} finally {
+			rl.unlock();
+		}
+	}
+
+	/**
 	 * Returns a property value converted to a {@link LinkedHashMap} with the specified
 	 * 	key and value types.
 	 *

@@ -447,8 +447,8 @@ public class UonParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* CoreObjectBuilder */
-	public UonParserBuilder debug(boolean value) {
-		super.debug(value);
+	public UonParserBuilder debug() {
+		super.debug();
 		return this;
 	}
 

@@ -537,8 +537,8 @@ public class ParserBuilder extends CoreObjectBuilder {
 	}
 
 	@Override /* CoreObjectBuilder */
-	public ParserBuilder debug(boolean value) {
-		super.debug(value);
+	public ParserBuilder debug() {
+		super.debug();
 		return this;
 	}
 

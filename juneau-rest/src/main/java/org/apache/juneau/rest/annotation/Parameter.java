@@ -18,16 +18,18 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 
 /**
- * Annotation used in conjunction with {@link RestMethod#parameters()} to identify content and header descriptions
+ * Annotation used in conjunction with {@link MethodSwagger#parameters()} to identify content and header descriptions
  * 	on specific method requests.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(
  * 		name=<js>"*"</js>,
- * 		parameters={
- * 			<ja>@Parameter</ja>(in=<js>"header"</js>, name=<js>"Range"</js>, description=<js>"$L{ContentRange.description}"</js>)
- * 		}
+ * 		swagger=@MethodSwagger(
+ * 			parameters={
+ * 				<ja>@Parameter</ja>(in=<js>"header"</js>, name=<js>"Range"</js>, description=<js>"$L{ContentRange.description}"</js>)
+ * 			}
+ *			)
  * 	)
  * 	<jk>public void</jk> doAnything(RestRequest req, RestResponse res, <ja>@Method</ja> String method) {
  * 		...

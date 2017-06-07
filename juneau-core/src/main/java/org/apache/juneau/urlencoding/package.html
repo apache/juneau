@@ -988,7 +988,9 @@
 		messages=<js>"nls/AddressBookResource"</js>,
 		title=<js>"$L{title}"</js>,
 		description=<js>"$L{description}"</js>,
-		pageLinks=<js>"{options:'?method=OPTIONS',doc:'doc'}"</js>,
+		htmldoc=<ja>@HtmlDoc</ja>(
+			links=<js>"{options:'?method=OPTIONS'}"</js>
+		),
 		properties={
 			<ja>@Property</ja>(name=SerializerContext.<jsf>SERIALIZER_useWhitespace</jsf>, value=<js>"true"</js>)
 		},

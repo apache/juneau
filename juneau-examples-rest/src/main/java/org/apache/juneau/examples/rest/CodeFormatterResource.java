@@ -12,8 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest;
 
-import java.io.*;
+import static org.apache.juneau.dto.html5.HtmlBuilder.*;
 
+import org.apache.juneau.dto.html5.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -27,15 +28,63 @@ import org.apache.juneau.rest.annotation.*;
 	messages="nls/CodeFormatterResource",
 	title="Code Formatter",
 	description="Utility for generating HTML code-formatted source code",
-	pageLinks="{options:'?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/CodeFormatterResource.java'}"
+	htmldoc=@HtmlDoc(
+		links="{up:'servlet:/..',options:'servlet:/?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/CodeFormatterResource.java'}",
+		aside=""
+			+ "<div style='min-width:200px' class='text'>"
+			+ "	<p>Utility for adding code syntax tags to Java and XML/HTML code.</p>"
+			+ "	<p>It's by no means perfect, but provides a good starting point.</p>"
+			+ "</div>",
+		css="aside {display:table-caption;}"
+	)
 )
 @SuppressWarnings({"serial"})
 public class CodeFormatterResource extends Resource {
 
 	/** [GET /] - Display query entry page. */
 	@RestMethod(name="GET", path="/")
-	public ReaderResource getQueryEntryPage(RestRequest req) throws IOException {
-		return req.getReaderResource("CodeFormatterResource.html", true);
+	public Div getQueryEntryPage(RestRequest req) {
+		return div(
+			script("text/javascript",
+				"\n	// Quick and dirty function to allow tabs in textarea."
+				+"\n	function checkTab(e) {"
+				+"\n		if (e.keyCode == 9) {"
+				+"\n			var t = e.target;"
+				+"\n			var ss = t.selectionStart, se = t.selectionEnd;"
+				+"\n			t.value = t.value.slice(0,ss).concat('\\t').concat(t.value.slice(ss,t.value.length));"
+				+"\n			e.preventDefault();"
+				+"\n		}"
+				+"\n	}"
+				+"\n	// Load results from IFrame into this document."
+				+"\n	function loadResults(b) {"
+				+"\n		var doc = b.contentDocument || b.contentWindow.document;"
+				+"\n		var data = doc.getElementById('data') || doc.getElementsByTagName('body')[0];"
+				+"\n		document.getElementById('results').innerHTML = data.innerHTML;"
+				+"\n	}"
+			),
+			form("form").action("codeFormatter").method("POST").target("buff").children(
+				table(
+					tr(
+						th("Language: "),
+						td(
+							select().name("lang").children(
+								option("java","Java"),
+								option("xml", "XML")
+							)
+						),
+						td(button("submit", "Submit"), button("reset", "Reset"))
+					),
+					tr(
+						td().colspan(3).children(
+							textarea().name("code").style("min-width:800px;min-height:400px;font-family:Courier;font-size:9pt;").onkeydown("checkTab(event)")
+						)
+					)
+				)
+			),
+			br(),
+			div().id("results")._class("monospace"),
+			iframe().name("buff").style("display:none").onload("parent.loadResults(this)")
+		);
 	}
 
 	/** [POST /] - Add syntax highlighting to input. */

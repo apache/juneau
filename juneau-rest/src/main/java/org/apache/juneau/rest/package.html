@@ -226,7 +226,9 @@
 	 */</jd>
 	<ja>@RestResource</ja>(
 		messages=<js>"nls/HelloWorldResource"</js>, 
-		pageLinks=<js>"{up:'request:/..',options:'servlet:/?method=OPTIONS'}"</js>
+		htmldoc=<ja>@HtmlDoc</ja>(
+			links=<js>"{up:'request:/..',options:'servlet:/?method=OPTIONS'}"</js>
+		)
 	)
 	<jk>public class</jk> HelloWorldResource <jk>extends</jk> Resource {
 	
@@ -1084,7 +1086,9 @@
 	 */</jd>
 	<ja>@RestMethod</ja>(name=<js>"OPTIONS"</js>, path=<js>"/*"</js>,
 		summary=<js>"Resource options"</js>,
-		pageLinks=<js>"{back:'$R{servletURI}'}"</js>
+		htmldoc=<ja>@HtmlDoc</ja>(
+			links=<js>"{back:'$R{servletURI}'}"</js>
+		)
 	)
 	<jk>public</jk> Swagger getOptions(RestRequest req) {
 		<jk>return</jk> req.getSwagger();
@@ -1194,8 +1198,8 @@
 		<img class='bordered' src='doc-files/Options2.png'>
 		<p>
 			This method is described through the {@link org.apache.juneau.rest.annotation.RestMethod#description() @RestMethod.description()}, 
-				{@link org.apache.juneau.rest.annotation.RestMethod#parameters() @RestMethod.parameters()},
-				and {@link org.apache.juneau.rest.annotation.RestMethod#responses() @RestMethod.responses()} annotations.
+				{@link org.apache.juneau.rest.annotation.RestMethod#swagger() @RestMethod.swagger()},
+				and {@link org.apache.juneau.rest.annotation.MethodSwagger @MethodSwagger} annotations.
 		</p>
 		<p class='bcode'>
 	<ja>@RestMethod</ja>(
@@ -1275,7 +1279,7 @@
 				<td>
 					A description of the HTTP request body.
 				</td>
-				<td>{@link org.apache.juneau.rest.annotation.RestMethod#parameters() @RestMethod.parameters()}</td>
+				<td>{@link org.apache.juneau.rest.annotation.MethodSwagger#parameters() @MethodSwagger.parameters()}</td>
 			</tr>
 			<tr>
 				<td><ck>[javaMethodName].req.[category].[name].description</ck></td>
@@ -1283,38 +1287,35 @@
 					A request input variable.
 					<br>Categories: <l>path, query, formData, header</l>
 				</td>
-				<td>{@link org.apache.juneau.rest.annotation.RestMethod#parameters() @RestMethod.parameters()}</td>
+				<td>{@link org.apache.juneau.rest.annotation.MethodSwagger#parameters() @MethodSwagger.parameters()}</td>
 			</tr>
 			<tr>
 				<td><ck>[javaMethodName].res.[code].description</ck></td>
 				<td>
 					A possible HTTP response code and description.
 				</td>
-				<td>{@link org.apache.juneau.rest.annotation.RestMethod#responses() @RestMethod.responses()}</td>
+				<td>{@link org.apache.juneau.rest.annotation.MethodSwagger#responses() @MethodSwagger.responses()}</td>
 			</tr>
 			<tr>
 				<td><ck>[javaMethodName].res.[code].body.description</ck></td>
 				<td>
 					A description of response content for the specified HTTP response.
 				</td>
-				<td>{@link org.apache.juneau.rest.annotation.RestMethod#responses() @RestMethod.responses()}</td>
+				<td>{@link org.apache.juneau.rest.annotation.MethodSwagger#responses() @MethodSwagger.responses()}</td>
 			</tr>
 			<tr>
 				<td><ck>[javaMethodName].res.[code].header.[name].description</ck></td>
 				<td>
 					A response header.
 				</td>
-				<td>{@link org.apache.juneau.rest.annotation.RestMethod#responses() @RestMethod.responses()}</td>
+				<td>{@link org.apache.juneau.rest.annotation.MethodSwagger#responses() @MethodSwagger.responses()}</td>
 			</tr>
 		</table>
 		<h6 class='topic'>Additional Information</h6>
 		<ul class='doctree'>
 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#description() @RestMethod.description()}
-			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#parameters() @RestMethod.parameters()}
-			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#responses() @RestMethod.responses()}
-			<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getServletTitle()}
-			<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getServletDescription()}
-			<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getMethodDescription()}
+			<li class='ja'>{@link org.apache.juneau.rest.annotation.MethodSwagger#parameters() @MethodSwagger.parameters()}
+			<li class='ja'>{@link org.apache.juneau.rest.annotation.MethodSwagger#responses() @MethodSwagger.responses()}
 		</ul>
 	</div>
 
@@ -2174,7 +2175,9 @@
 		messages=<js>"nls/UrlEncodedFormResource"</js>, 
 		title=<js>"URL-encoded Form Post Resource"</js>, 
 		description=<js>"Shows how form posts are converted into beans."</js>, 
-		pageLinks=<js>"{up:'request:/..',options:'servlet:/?method=OPTIONS'}"</js> 
+		htmldoc=<ja>@HtmlDoc</ja>(
+			links=<js>"{up:'request:/..',options:'servlet:/?method=OPTIONS'}"</js> 
+		)
 	) 
 	<jk>public class</jk> UrlEncodedFormResource <jk>extends</jk> Resource { 
 		<jk>private static final long</jk> <jsf>serialVersionUID</jsf> = 1L; 
@@ -2929,7 +2932,9 @@
 		messages=<js>"nls/PhotosResource"</js>,
 		title=<js>"Photo REST service"</js>,
 		description=<js>"Use a tool like Poster to upload and retrieve jpeg and png images."</js>,
-		pageLinks=<js>"{options:'?method=OPTIONS'}"</js>
+		htmldoc=<ja>@HtmlDoc</ja>(
+			links=<js>"{options:'?method=OPTIONS'}"</js>
+		)
 	)
 	<jk>public class</jk> PhotosResource <jk>extends</jk> RestServletDefault {
 	
@@ -3215,7 +3220,9 @@
 		// "request:/..." URIs are relative to the request URI.
 		// "servlet:/..." URIs are relative to the servlet URI.
 		// "$C{...}" variables are pulled from the config file.</jc>
-		pageLinks=<js>"{up:'request:/..', options:'servlet:/?method=OPTIONS', source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/addressbook/AddressBookResource.java'}"</js>,
+		htmldoc=<ja>@HtmlDoc</ja>(
+			links=<js>"{up:'request:/..', options:'servlet:/?method=OPTIONS', source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/addressbook/AddressBookResource.java'}"</js>
+		),
 
 		<jc>// Properties that get applied to all serializers and parsers.</jc>
 		properties={

@@ -493,8 +493,8 @@ public class PlainTextSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* CoreObjectBuilder */
-	public PlainTextSerializerBuilder debug(boolean value) {
-		super.debug(value);
+	public PlainTextSerializerBuilder debug() {
+		super.debug();
 		return this;
 	}
 

@@ -493,8 +493,8 @@ public class CsvSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* CoreObjectBuilder */
-	public CsvSerializerBuilder debug(boolean value) {
-		super.debug(value);
+	public CsvSerializerBuilder debug() {
+		super.debug();
 		return this;
 	}
 

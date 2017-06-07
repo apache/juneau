@@ -32,7 +32,7 @@ import org.apache.juneau.json.*;
  */
 @BeanIgnore
 @SuppressWarnings("unchecked")
-public class MediaType {
+public class MediaType implements Comparable<MediaType> {
 
 	private static final boolean nocache = Boolean.getBoolean("juneau.nocache");
 	private static final ConcurrentHashMap<String,MediaType> cache = new ConcurrentHashMap<String,MediaType>();
@@ -279,5 +279,10 @@ public class MediaType {
 	@Override /* Object */
 	public boolean equals(Object o) {
 		return this == o;
+	}
+
+	@Override
+	public int compareTo(MediaType o) {
+		return mediaType.compareTo(o.mediaType);
 	}
 }

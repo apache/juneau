@@ -26,7 +26,14 @@ import org.apache.juneau.rest.annotation.Method;
 @RestResource(
 	path="/methodExample",
 	messages="nls/MethodExampleResource",
-	pageLinks="{up:'servlet:/..',options:'servlet:/?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/MethodExampleResource.java'}"
+	htmldoc=@HtmlDoc(
+		links="{up:'servlet:/..',options:'servlet:/?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/MethodExampleResource.java'}",
+		aside=""
+			+ "<div style='max-width:400px' class='text'>"
+			+ "	<p>Shows the different methods for retrieving HTTP query/form-data parameters, headers, and path variables.</p>"
+			+ "	<p>The top-level path simply redirects to the first example method and spits out the results as a string.</p>"
+			+ "</div>"
+	)
 )
 public class MethodExampleResource extends Resource {
 	private static final long serialVersionUID = 1L;

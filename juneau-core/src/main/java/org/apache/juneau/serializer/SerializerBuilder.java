@@ -902,8 +902,8 @@ public class SerializerBuilder extends CoreObjectBuilder {
 	}
 
 	@Override /* CoreObjectBuilder */
-	public SerializerBuilder debug(boolean value) {
-		super.debug(value);
+	public SerializerBuilder debug() {
+		super.debug();
 		return this;
 	}
 

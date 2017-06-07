@@ -14,6 +14,7 @@ package org.apache.juneau.rest;
 
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.dto.swagger.SwaggerBuilder.*;
+import static org.apache.juneau.html.HtmlDocSerializerContext.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.Utils.*;
 import static org.apache.juneau.rest.RestContext.*;
@@ -29,9 +30,11 @@ import org.apache.juneau.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.html.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.urlencoding.*;
@@ -63,7 +66,11 @@ class CallMethod implements Comparable<CallMethod>  {
 	private final org.apache.juneau.rest.annotation.Parameter[] parameters;
 	private final Response[] responses;
 	private final RestContext context;
-	private final String pageTitle, pageText, pageLinks;
+	private final String htmlTitle, htmlDescription, htmlHeader, htmlLinks, htmlNav, htmlAside, htmlFooter, htmlCss,
+		htmlCssUrl, htmlNoResultsMessage;
+	private final boolean htmlNoWrap;
+	private final HtmlDocTemplate htmlTemplate;
+	private final Map<String,Widget> widgets;
 
 	CallMethod(Object servlet, java.lang.reflect.Method method, RestContext context) throws RestServletException {
 		Builder b = new Builder(servlet, method, context);
@@ -94,13 +101,26 @@ class CallMethod implements Comparable<CallMethod>  {
 		this.priority = b.priority;
 		this.parameters = b.parameters;
 		this.responses = b.responses;
-		this.pageTitle = b.pageTitle;
-		this.pageText = b.pageText;
-		this.pageLinks = b.pageLinks;
+		this.htmlTitle = b.htmlTitle;
+		this.htmlDescription = b.htmlDescription;
+		this.htmlHeader = b.htmlHeader;
+		this.htmlLinks = b.htmlLinks;
+		this.htmlNav = b.htmlNav;
+		this.htmlAside = b.htmlAside;
+		this.htmlFooter = b.htmlFooter;
+		this.htmlCss = b.htmlCss;
+		this.htmlCssUrl = b.htmlCssUrl;
+		this.htmlNoWrap = b.htmlNoWrap;
+		this.htmlTemplate = b.htmlTemplate;
+		this.htmlNoResultsMessage = b.htmlNoResultsMessage;
+		this.widgets = Collections.unmodifiableMap(b.widgets);
 	}
 
 	private static class Builder  {
-		private String httpMethod, defaultCharset, description, tags, summary, externalDocs, pageTitle, pageText, pageLinks;
+		private String httpMethod, defaultCharset, description, tags, summary, externalDocs, htmlTitle, htmlDescription,
+			htmlLinks, htmlNav, htmlAside, htmlFooter, htmlCssUrl, htmlCss, htmlHeader, htmlNoResultsMessage;
+		private boolean htmlNoWrap;
+		private HtmlDocTemplate htmlTemplate;
 		private UrlPathPattern pathPattern;
 		private RestParam[] params;
 		private RestGuard[] guards;
@@ -117,6 +137,7 @@ class CallMethod implements Comparable<CallMethod>  {
 		private Integer priority;
 		private org.apache.juneau.rest.annotation.Parameter[] parameters;
 		private Response[] responses;
+		private Map<String,Widget> widgets;
 
 		private Builder(Object servlet, java.lang.reflect.Method method, RestContext context) throws RestServletException {
 			try {
@@ -127,25 +148,41 @@ class CallMethod implements Comparable<CallMethod>  {
 
 				if (! m.description().isEmpty())
 					description = m.description();
-				if (! m.tags().isEmpty())
-					tags = m.tags();
+				MethodSwagger sm = m.swagger();
+				if (! sm.tags().isEmpty())
+					tags = sm.tags();
 				if (! m.summary().isEmpty())
 					summary = m.summary();
-				if (! m.externalDocs().isEmpty())
-					externalDocs = m.externalDocs();
-				deprecated = m.deprecated();
-				parameters = m.parameters();
-				responses = m.responses();
+				if (! sm.externalDocs().isEmpty())
+					externalDocs = sm.externalDocs();
+				deprecated = sm.deprecated();
+				parameters = sm.parameters();
+				responses = sm.responses();
 				serializers = context.getSerializers();
 				parsers = context.getParsers();
 				urlEncodingSerializer = context.getUrlEncodingSerializer();
 				urlEncodingParser = context.getUrlEncodingParser();
 				encoders = context.getEncoders();
 				properties = context.getProperties();
+				widgets = new HashMap<String,Widget>(context.getWidgets());
+				for (Class<? extends Widget> wc : m.widgets()) {
+					Widget w = ClassUtils.newInstance(Widget.class, wc);
+					widgets.put(w.getName(), w);
+				}
 
-				pageTitle = m.pageTitle().isEmpty() ? context.getPageTitle() : m.pageTitle();
-				pageText = m.pageText().isEmpty() ? context.getPageText() : m.pageText();
-				pageLinks = m.pageLinks().isEmpty() ? context.getPageLinks() : m.pageLinks();
+				HtmlDoc hd = m.htmldoc();
+				htmlTitle = hd.title().isEmpty() ? context.getHtmlTitle() : hd.title();
+				htmlDescription = hd.description().isEmpty() ? context.getHtmlDescription() : hd.description();
+				htmlHeader = hd.header().isEmpty() ? context.getHtmlHeader() : hd.header();
+				htmlLinks = hd.links().isEmpty() ? context.getHtmlLinks() : hd.links();
+				htmlNav = hd.nav().isEmpty() ? context.getHtmlNav() : hd.nav();
+				htmlAside = hd.aside().isEmpty() ? context.getHtmlAside() : hd.aside();
+				htmlFooter = hd.footer().isEmpty() ? context.getHtmlFooter() : hd.footer();
+				htmlCss = hd.css().isEmpty() ? context.getHtmlCss() : hd.css();
+				htmlCssUrl = hd.cssUrl().isEmpty() ? context.getHtmlCssUrl() : hd.cssUrl();
+				htmlNoWrap = hd.nowrap() ? hd.nowrap() : context.getHtmlNoWrap();
+				htmlNoResultsMessage = hd.noResultsMessage().isEmpty() ? context.getHtmlNoResultsMessage() : hd.header();
+				htmlTemplate = hd.template() == HtmlDocTemplate.class ? context.getHtmlTemplate() : ClassUtils.newInstance(HtmlDocTemplate.class, hd.template());
 
 				List<Inherit> si = Arrays.asList(m.serializersInherit());
 				List<Inherit> pi = Arrays.asList(m.parsersInherit());
@@ -700,7 +737,8 @@ class CallMethod implements Comparable<CallMethod>  {
 		req.getPathMatch().setRemainder(remainder);
 
 		ObjectMap requestProperties = createRequestProperties(properties, req);
-		req.init(method, requestProperties, defaultRequestHeaders, defaultQuery, defaultFormData, defaultCharset, serializers, parsers, urlEncodingParser, encoders, pageTitle, pageText, pageLinks);
+		req.init(method, requestProperties, defaultRequestHeaders, defaultQuery, defaultFormData, defaultCharset,
+			serializers, parsers, urlEncodingParser, encoders, widgets);
 		res.init(requestProperties, defaultCharset, serializers, urlEncodingSerializer, encoders);
 
 		// Class-level guards
@@ -820,12 +858,41 @@ class CallMethod implements Comparable<CallMethod>  {
 						return req.getMethodSummary();
 					if (k.equals(REST_methodDescription))
 						return req.getMethodDescription();
-					if (k.equals(HtmlDocSerializerContext.HTMLDOC_title))
-						return req.getPageTitle();
-					if (k.equals(HtmlDocSerializerContext.HTMLDOC_text))
-						return req.getPageText();
-					if (k.equals(HtmlDocSerializerContext.HTMLDOC_links))
-						return req.getPageLinks();
+					if (k.equals(HTMLDOC_title)) {
+						String s = htmlTitle;
+						if (! StringUtils.isEmpty(s))
+							return req.resolveVars(s);
+						return req.getServletTitle();
+					}
+					if (k.equals(HTMLDOC_description)) {
+						String s = htmlDescription;
+						if (! StringUtils.isEmpty(s))
+							return req.resolveVars(s);
+						s = req.getMethodSummary();
+						if (StringUtils.isEmpty(s))
+							s = req.getServletDescription();
+						return s;
+					}
+					if (k.equals(HTMLDOC_header))
+						return htmlHeader == null ? null : req.resolveVars(htmlHeader);
+					if (k.equals(HTMLDOC_links))
+						return htmlLinks == null ? null : req.resolveVars(htmlLinks);
+					if (k.equals(HTMLDOC_nav))
+						return htmlNav == null ? null : req.resolveVars(htmlNav);
+					if (k.equals(HTMLDOC_aside))
+						return htmlAside == null ? null : req.resolveVars(htmlAside);
+					if (k.equals(HTMLDOC_footer))
+						return htmlFooter == null ? null : req.resolveVars(htmlFooter);
+					if (k.equals(HTMLDOC_css))
+						return htmlCss == null ? null : req.resolveVars(htmlCss);
+					if (k.equals(HTMLDOC_cssUrl))
+						return htmlCssUrl == null ? null : req.resolveVars(htmlCssUrl);
+					if (k.equals(HTMLDOC_template))
+						return htmlTemplate;
+					if (k.equals(HTMLDOC_nowrap))
+						return htmlNoWrap;
+					if (k.equals(HTMLDOC_noResultsMessage))
+						return htmlNoResultsMessage == null ? null : req.resolveVars(htmlNoResultsMessage);
 					o = req.getPathMatch().get(k);
 					if (o == null)
 						o = req.getHeader(k);

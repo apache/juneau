@@ -68,14 +68,14 @@ public final class SoapXmlSerializer extends XmlSerializer {
 			.attr("xmlns", "soap", s.getProperty(SOAPXML_SOAPAction, "http://www.w3.org/2003/05/soap-envelope"))
 			.appendln(">");
 		w.sTag(1, "soap", "Body").nl();
-		super.serialize(s, o);
+		super.doSerialize(s, o);
 		w.eTag(1, "soap", "Body").nl();
 		w.eTag("soap", "Envelope").nl();
 	}
 
 	@Override /* Serializer */
 	public ObjectMap getResponseHeaders(ObjectMap properties) {
-		return super.getResponseHeaders(properties)
+		return new ObjectMap(super.getResponseHeaders(properties))
 			.append("SOAPAction", properties.getString(SOAPXML_SOAPAction, "http://www.w3.org/2003/05/soap-envelope"));
 	}
 }

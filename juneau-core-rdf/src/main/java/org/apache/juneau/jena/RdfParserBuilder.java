@@ -680,8 +680,8 @@ public class RdfParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* CoreObjectBuilder */
-	public RdfParserBuilder debug(boolean value) {
-		super.debug(value);
+	public RdfParserBuilder debug() {
+		super.debug();
 		return this;
 	}
 

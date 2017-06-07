@@ -14,6 +14,7 @@ package org.apache.juneau.html;
 
 import org.apache.juneau.*;
 import org.apache.juneau.html.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Metadata on bean properties specific to the HTML serializers and parsers pulled from the {@link Html @Html} annotation on the bean property.
@@ -45,7 +46,7 @@ public final class HtmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 		this.noTables = b.noTables;
 		this.noTableHeaders = b.noTableHeaders;
 		this.asPlainText = b.asPlainText;
-		this.render = b.render.newInstance();
+		this.render = ClassUtils.newInstance(HtmlRender.class, b.render);
 		this.link = b.link;
 	}
 

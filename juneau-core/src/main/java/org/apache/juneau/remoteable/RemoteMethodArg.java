@@ -55,6 +55,6 @@ public class RemoteMethodArg {
 		this.name = name.isEmpty() ? name2 : name;
 		this.index = index;
 		this.skipIfNE = skipIfNE;
-		this.serializer = (serializer == PartSerializer.class ? null : newInstance(PartSerializer.class, serializer));
+		this.serializer = newInstance(PartSerializer.class, serializer);
 	}
 }

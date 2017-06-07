@@ -535,8 +535,8 @@ public class UonSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* CoreObjectBuilder */
-	public UonSerializerBuilder debug(boolean value) {
-		super.debug(value);
+	public UonSerializerBuilder debug() {
+		super.debug();
 		return this;
 	}
 

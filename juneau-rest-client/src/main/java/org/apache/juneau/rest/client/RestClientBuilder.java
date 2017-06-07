@@ -1481,10 +1481,10 @@ public class RestClientBuilder extends CoreObjectBuilder {
 	}
 
 	@Override /* CoreObjectBuilder */
-	public RestClientBuilder debug(boolean value) {
-		super.debug(value);
-		this.debug = value;
-		header("Debug", value);
+	public RestClientBuilder debug() {
+		super.debug();
+		this.debug = true;
+		header("Debug", true);
 		return this;
 	}
 

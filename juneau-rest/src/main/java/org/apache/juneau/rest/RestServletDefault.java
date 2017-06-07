@@ -167,8 +167,7 @@ import org.apache.juneau.xml.*;
 		UrlEncodingSerializer.class,
 		MsgPackSerializer.class,
 		SoapXmlSerializer.class,
-		PlainTextSerializer.class,
-		JsoSerializer.class
+		PlainTextSerializer.class
 	},
 	parsers={
 		JsonParser.class,
@@ -197,9 +196,13 @@ public abstract class RestServletDefault extends RestServlet {
 	 * @return A bean containing the contents for the OPTIONS page.
 	 */
 	@RestMethod(name="OPTIONS", path="/*",
-		pageLinks="{back:'$R{servletURI}'}",
+		htmldoc=@HtmlDoc(
+			links="{back:'servlet:/',json:'servlet:/?method=OPTIONS&Accept=text/json&plainText=true'}",
+			description="Swagger documentation",
+			aside="NONE"
+		),
 		summary="Resource options",
-		description="Description of this resource"
+		description="Swagger documentation"
 	)
 	public Swagger getOptions(RestRequest req) {
 		return req.getSwagger();

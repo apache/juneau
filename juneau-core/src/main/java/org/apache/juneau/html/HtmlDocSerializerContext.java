@@ -39,11 +39,12 @@ import org.apache.juneau.*;
  * <p class='bcode'>
  * 	<ja>@RestResource</ja>(
  * 		messages=<js>"nls/AddressBookResource"</js>,
- * 		title=<js>"$L{title}"</js>,  <jc>// or pageTitle</jc>
- * 		description=<js>"$L{description}"</js>,  <jc>// or pageText</jc>
- * 		pageLinks=<js>"{options:'?method=OPTIONS',doc:'doc'}"</js>
+ * 		htmldoc=<ja>@HtmlDoc</ja>(
+ * 			title=<js>"$L{title}"</js>,
+ * 			description=<js>"$L{description}"</js>,
+ * 			links=<js>"{options:'?method=OPTIONS',doc:'doc'}"</js>
+ * 		)
  * 	)
- * 	<jk>public class</jk> AddressBookResource <jk>extends</jk> RestServletJenaDefault {
  * </p>
  *
  * <p>
@@ -101,12 +102,23 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * <p>
 	 * Shortcuts on <ja>@RestResource</ja> are also provided for this setting:
 	 * <p class='bcode'>
+	 * 	<jc>// Example if you want the swagger doc and HTML doc to share the same title.</jc>
 	 * 	<ja>@RestResource</ja>(
 	 * 		messages=<js>"nls/AddressBookResource"</js>,
-	 * 		title=<js>"My title"</js>,  <jc>// or pageTitle</jc>
+	 * 		title=<js>"My title"</js>
 	 * 	)
-	 * 	<jk>public class</jk> AddressBookResource <jk>extends</jk> RestServletJenaDefault {
+	 *
+	 * 	<jc>// Example if you want the swagger doc and HTML doc to share the same title.</jc>
+	 * 	<ja>@RestResource</ja>(
+	 * 		messages=<js>"nls/AddressBookResource"</js>,
+	 * 		title=<js>"My title in Swagger"</js>,
+	 * 		htmldoc=<ja>@HtmlDoc</ja>(
+	 * 			title=<js>"My title in HTML"</js>
+	 * 		)
+	 * 	)
 	 * </p>
+	 * <p>
+	 * A value of <js>"NONE"</js> can be used to represent no value to differentiate it from an empty string.
 	 */
 	public static final String HTMLDOC_title = "HtmlSerializer.title";
 
@@ -147,14 +159,54 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * <p>
 	 * Shortcuts on <ja>@RestResource</ja> are also provided for this setting:
 	 * <p class='bcode'>
+	 * 	<jc>// Example if you want the swagger doc and HTML doc to share the same description.</jc>
 	 * 	<ja>@RestResource</ja>(
 	 * 		messages=<js>"nls/AddressBookResource"</js>,
-	 * 		description=<js>"My description"</js>,  <jc>// or pageText</jc>
+	 * 		description=<js>"My description"</js>
 	 * 	)
-	 * 	<jk>public class</jk> AddressBookResource <jk>extends</jk> RestServletJenaDefault {
+	 *
+	 * 	<jc>// Example if you want the swagger doc and HTML doc to share the same description.</jc>
+	 * 	<ja>@RestResource</ja>(
+	 * 		messages=<js>"nls/AddressBookResource"</js>,
+	 * 		description=<js>"My description in Swagger"</js>,
+	 * 		htmldoc=<ja>@HtmlDoc</ja>(
+	 * 			description=<js>"My description in HTML"</js>
+	 * 		)
+	 * 	)
 	 * </p>
+	 * <p>
+	 * A value of <js>"NONE"</js> can be used to represent no value to differentiate it from an empty string.
 	 */
-	public static final String HTMLDOC_text = "HtmlSerializer.description";
+	public static final String HTMLDOC_description = "HtmlSerializer.description";
+
+	/**
+	 * <b>Configuration property:</b>  Header section contents.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.header"</js>
+	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Default:</b> <jk>null</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * Allows you to override the contents of the header section on the HTML page.
+	 * The header section normally contains the title and description at the top of the page.
+	 * <p>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		htmldoc=<ja>@HtmlDoc</ja>(
+	 * 			nav=<js>"&lt:p class='special-navigation'&gt;This is my special navigation content&lt:/p&gt;"</js>
+	 * 		)
+	 * 	)
+	 * </p>
+	 * <p>
+	 * When this property is specified, the {@link #HTMLDOC_title} and {@link #HTMLDOC_description} properties are ignored.
+	 * <p>
+	 * A value of <js>"NONE"</js> can be used to represent no value to differentiate it from an empty string.
+	 */
+	public static final String HTMLDOC_header = "HtmlDocSerializer.header";
 
 	/**
 	 * <b>Configuration property:</b>  Page links.
@@ -184,7 +236,6 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * </p>
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
-	 * 		messages=<js>"nls/AddressBookResource"</js>,
 	 * 		properties={
 	 * 			<ja>@Property</ja>(name=HtmlDocSerializerContext.<jsf>HTMLDOC_links</jsf>, value=<js>"{options:'?method=OPTIONS',doc:'doc'}"</js>)
 	 * 		}
@@ -199,8 +250,9 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * A shortcut on <ja>@RestResource</ja> is also provided for this setting:
 	 * <p class='bcode'>
 	 * 	<ja>@RestResource</ja>(
-	 * 		messages=<js>"nls/AddressBookResource"</js>,
-	 * 		pageLinks=<js>"{options:'?method=OPTIONS',doc:'doc'}"</js>
+	 * 		htmldoc=@HtmlDoc(
+	 * 			links=<js>"{options:'?method=OPTIONS',doc:'doc'}"</js>
+	 * 		)
 	 * 	)
 	 * 	<jk>public class</jk> AddressBookResource <jk>extends</jk> RestServletJenaDefault {
 	 * </p>
@@ -211,6 +263,133 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * <b>Configuration property:</b>  Add to the {@link #HTMLDOC_links} property.
 	 */
 	public static final String HTMLDOC_links_put = "HtmlDocSerializer.links.map.put";
+
+	/**
+	 * <b>Configuration property:</b>  Nav section contents.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.nav"</js>
+	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Default:</b> <jk>null</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * Allows you to override the contents of the nav section on the HTML page.
+	 * The nav section normally contains the page links at the top of the page.
+	 * <p>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		htmldoc=<ja>@HtmlDoc</ja>(
+	 * 			nav=<js>"&lt:p class='special-navigation'&gt;This is my special navigation content&lt:/p&gt;"</js>
+	 * 		)
+	 * 	)
+	 * </p>
+	 * <p>
+	 * When this property is specified, the {@link #HTMLDOC_links} property is ignored.
+	 * <p>
+	 * A value of <js>"NONE"</js> can be used to represent no value to differentiate it from an empty string.
+	 */
+	public static final String HTMLDOC_nav = "HtmlDocSerializer.nav";
+
+	/**
+	 * <b>Configuration property:</b>  Aside section contents.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.aside"</js>
+	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Default:</b> <jk>null</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * Allows you to specifigy the contents of the aside section on the HTML page.
+	 * The aside section floats on the right of the page for providing content supporting the serialized content of
+	 * 	the page.
+	 * <p>
+	 * By default, the aside section is empty.
+	 * <p>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		htmldoc=<ja>@HtmlDoc</ja>(
+	 * 			aside=<js>"&lt:ul&gt;&lt:li&gt;Item 1&lt:li&gt;Item 2&lt:li&gt;Item 3&lt:/ul&gt;"</js>
+	 * 		)
+	 * 	)
+	 * </p>
+	 * <p>
+	 * A value of <js>"NONE"</js> can be used to represent no value to differentiate it from an empty string.
+	 */
+	public static final String HTMLDOC_aside = "HtmlDocSerializer.aside";
+
+	/**
+	 * <b>Configuration property:</b>  Footer section contents.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.footer"</js>
+	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Default:</b> <jk>null</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * Allows you to specify the contents of the footer section on the HTML page.
+	 * <p>
+	 * By default, the footer section is empty.
+	 * <p>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		htmldoc=<ja>@HtmlDoc</ja>(
+	 * 			footer=<js>"&lt;b&gt;This interface is great!&lt;/b&gt;"</js>
+	 * 		)
+	 * 	)
+	 * </p>
+	 * <p>
+	 * A value of <js>"NONE"</js> can be used to represent no value to differentiate it from an empty string.
+	 */
+	public static final String HTMLDOC_footer = "HtmlDocSerializer.footer";
+
+	/**
+	 * <b>Configuration property:</b>  No-results message.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.noResultsMessage"</js>
+	 * 	<li><b>Data type:</b> <code>String</code>
+	 * 	<li><b>Default:</b> <js>"&lt;p&gt;no results&lt;/p&gt;"</js>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * Allows you to specify the string message used when trying to serialize an empty array or empty list.
+	 * <p>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		htmldoc=<ja>@HtmlDoc</ja>(
+	 * 			=<js>"&lt;b&gt;This interface is great!&lt;/b&gt;"</js>
+	 * 		)
+	 * 	)
+	 * </p>
+	 * <p>
+	 * A value of <js>"NONE"</js> can be used to represent no value to differentiate it from an empty string.
+	 */
+	public static final String HTMLDOC_noResultsMessage = "HtmlDocSerializer.noResultsMessage";
+
+	/**
+	 * <b>Configuration property:</b>  Prevent word wrap on page.
+	 * <p>
+	 * <ul>
+	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.nowrap"</js>
+	 * 	<li><b>Data type:</b> <code>Boolean</code>
+	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
+	 * </ul>
+	 * <p>
+	 * Adds <js>"* {white-space:nowrap}"</js> to the CSS instructions on the page to prevent word wrapping.
+	 */
+	public static final String HTMLDOC_nowrap = "HtmlDocSerializer.nowrap";
 
 	/**
 	 * <b>Configuration property:</b>  Stylesheet URL.
@@ -226,46 +405,80 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 * <p>
 	 * If not specified, defaults to the built-in stylesheet located at <js>"style.css"</js>.
 	 * Note that this stylesheet is controlled by the <code><ja>@RestResource</ja>.stylesheet()</code> annotation.
+	 * <p>
+	 * A value of <js>"NONE"</js> can be used to represent no value to differentiate it from an empty string.
 	 */
 	public static final String HTMLDOC_cssUrl = "HtmlDocSerializer.cssUrl";
 
 	/**
-	 * <b>Configuration property:</b>  CSS imports.
+	 * <b>Configuration property:</b>  CSS code.
 	 * <p>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.cssImports.list"</js>
+	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.css.list"</js>
 	 * 	<li><b>Data type:</b> <code>List&lt;String&gt;</code>
 	 * 	<li><b>Default:</b> empty list
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
-	 * Imports the specified CSS page URLs into the page.
+	 * Adds the specified CSS instructions to the HTML page.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * </p>
+	 * <p class='bcode'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		properties={
+	 * 			<ja>@Property</ja>(name=HtmlDocSerializerContext.<jsf>HTMLDOC_css</jsf>, value=<js>"h3 { color: red; }\nh5 { font-weight: bold; }"</js>)
+	 * 		}
+	 * 	)
+	 * </p>
+	 * A shortcut on <ja>@RestResource</ja> is also provided for this setting:
+	 * <p class='bcode'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		htmldoc=@HtmlDoc(
+	 * 			css=<js>"h3 { color: red; }\nh5 { font-weight: bold; }"</js>
+	 * 		)
+	 * 	)
+	 * </p>
 	 */
-	public static final String HTMLDOC_cssImports = "HtmlDocSerializer.cssImports.list";
+	public static final String HTMLDOC_css = "HtmlDocSerializer.css.list";
 
 	/**
-	 * <b>Configuration property:</b>  Add to the {@link #HTMLDOC_cssImports} property.
+	 * <b>Configuration property:</b>  Add to the {@link #HTMLDOC_css} property.
 	 */
-	public static final String HTMLDOC_cssImports_add = "HtmlDocSerializer.cssImports.list.add";
+	public static final String HTMLDOC_css_add = "HtmlDocSerializer.css.list.add";
 
 	/**
-	 * <b>Configuration property:</b>  Prevent word wrap on page.
+	 * <b>Configuration property:</b>  HTML document template.
 	 * <p>
 	 * <ul>
-	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.nowrap"</js>
-	 * 	<li><b>Data type:</b> <code>Boolean</code>
-	 * 	<li><b>Default:</b> <jk>false</jk>
+	 * 	<li><b>Name:</b> <js>"HtmlDocSerializer.template"</js>
+	 * 	<li><b>Data type:</b> <code>Class&lt;? <jk>extends</jk> HtmlDocTemplate&gt;</code> or {@link HtmlDocTemplate}
+	 * 	<li><b>Default:</b> <code>HtmlDocTemplateBasic.<jk>class</jk></code>
 	 * 	<li><b>Session-overridable:</b> <jk>true</jk>
 	 * </ul>
 	 * <p>
-	 * Adds <js>"* {white-space:nowrap}"</js> to the style header to prevent word wrapping.
+	 * Specifies the template to use for serializing the page.
+	 * <p>
+	 * By default, the {@link HtmlDocTemplateBasic} class is used to construct the contents of the HTML page, but
+	 * can be overridden with your own custom implementation class.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<ja>@RestResource</ja>(
+	 * 		htmldoc=@HtmlDoc(
+	 * 			template=MySpecialDocTemplate.<jk>class</jk>
+	 * 		)
+	 * 	)
+	 * </p>
 	 */
-	public static final String HTMLDOC_nowrap = "HtmlDocSerializer.nowrap";
+	public static final String HTMLDOC_template = "HtmlDocSerializer.template";
 
-	final String[] cssImports;
+
+	final String[] css;
 	final Map<String,String> links;
-	final String title, text, cssUrl;
+	final String title, description, header, nav, aside, footer, cssUrl, noResultsMessage;
 	final boolean nowrap;
+	final HtmlDocTemplate template;
 
 	/**
 	 * Constructor.
@@ -276,24 +489,36 @@ public final class HtmlDocSerializerContext extends HtmlSerializerContext {
 	 */
 	public HtmlDocSerializerContext(PropertyStore ps) {
 		super(ps);
-		cssImports = ps.getProperty(HTMLDOC_cssImports, String[].class, new String[0]);
+		css = ps.getProperty(HTMLDOC_css, String[].class, new String[0]);
 		title = ps.getProperty(HTMLDOC_title, String.class, null);
-		text = ps.getProperty(HTMLDOC_text, String.class, null);
+		description = ps.getProperty(HTMLDOC_description, String.class, null);
+		header = ps.getProperty(HTMLDOC_header, String.class, null);
+		nav = ps.getProperty(HTMLDOC_nav, String.class, null);
+		aside = ps.getProperty(HTMLDOC_aside, String.class, null);
+		footer = ps.getProperty(HTMLDOC_footer, String.class, null);
 		cssUrl = ps.getProperty(HTMLDOC_cssUrl, String.class, null);
 		nowrap = ps.getProperty(HTMLDOC_nowrap, boolean.class, false);
-		links = ps.getMap(HTMLDOC_links, String.class, String.class, Collections.<String,String>emptyMap());
+		links = ps.getMap(HTMLDOC_links, String.class, String.class, null);
+		noResultsMessage = ps.getProperty(HTMLDOC_noResultsMessage, String.class, "<p>no results</p>");
+		template = ps.getTypedProperty(HTMLDOC_template, HtmlDocTemplate.class, HtmlDocTemplateBasic.class);
 	}
 
 	@Override /* Context */
 	public ObjectMap asMap() {
 		return super.asMap()
 			.append("HtmlDocSerializerContext", new ObjectMap()
-				.append("cssImports", cssImports)
+				.append("cssImports", css)
 				.append("title", title)
-				.append("text", text)
+				.append("text", description)
+				.append("header", header)
+				.append("nav", nav)
+				.append("links", links)
+				.append("aside", aside)
+				.append("footer", footer)
 				.append("cssUrl", cssUrl)
 				.append("nowrap", nowrap)
-				.append("links", links)
+				.append("template", template)
+				.append("noResultsMessage", noResultsMessage)
 			);
 	}
 }

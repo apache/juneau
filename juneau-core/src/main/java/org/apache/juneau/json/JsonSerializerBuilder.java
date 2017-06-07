@@ -558,8 +558,8 @@ public class JsonSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* CoreObjectBuilder */
-	public JsonSerializerBuilder debug(boolean value) {
-		super.debug(value);
+	public JsonSerializerBuilder debug() {
+		super.debug();
 		return this;
 	}
 

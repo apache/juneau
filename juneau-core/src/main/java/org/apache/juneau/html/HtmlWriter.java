@@ -347,5 +347,4 @@ public class HtmlWriter extends XmlWriter {
 		super.append(c);
 		return this;
 	}
-
 }

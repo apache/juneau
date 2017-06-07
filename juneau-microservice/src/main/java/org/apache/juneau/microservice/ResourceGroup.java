@@ -38,7 +38,9 @@ import org.apache.juneau.svl.vars.*;
  */
 @SuppressWarnings("serial")
 @RestResource(
-	pageLinks="{up:'request:/..',options:'servlet:/?method=OPTIONS'}",
+	htmldoc=@HtmlDoc(
+		links="{up:'request:/..',options:'servlet:/?method=OPTIONS'}"
+	),
 	config="$S{juneau.configFile}",
 	stylesheet="$C{REST/stylesheet,styles/juneau.css}"
 )

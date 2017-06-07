@@ -598,8 +598,8 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* CoreObjectBuilder */
-	public UrlEncodingSerializerBuilder debug(boolean value) {
-		super.debug(value);
+	public UrlEncodingSerializerBuilder debug() {
+		super.debug();
 		return this;
 	}
 

@@ -118,7 +118,7 @@ import org.apache.juneau.serializer.*;
  * </p>
  * @param <T> The bean property type.
  */
-public class HtmlRender<T> {
+public abstract class HtmlRender<T> {
 
 	/**
 	 * Returns the CSS style of the element containing the bean property value.

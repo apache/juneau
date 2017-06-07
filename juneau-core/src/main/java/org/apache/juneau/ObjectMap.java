@@ -376,11 +376,16 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * @param def The default value if the entry doesn't exist.
 	 * @return The value, or the default value if the entry doesn't exist.
 	 */
+	@SuppressWarnings("unchecked")
 	public <T> T get(Class<T> type, String key, T def) {
 		Object o = get(key);
 		if (o == null)
 			return def;
-		T t = session.convertToType(o, type);
+		T t = null;
+		if (session != null)
+			t = session.convertToType(o, type);
+		else if (ClassUtils.isParentClass(type, o.getClass()))
+			t = (T)o;
 		if (t == null)
 			return def;
 		return t;

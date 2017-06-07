@@ -55,7 +55,7 @@ public class RestTestcase {
 	 */
 	protected RestClient getDebugClient(String label, Serializer serializer, Parser parser) {
 		if (! clients.containsKey(label))
-			clients.put(label, TestMicroservice.client(serializer, parser).debug(true).build());
+			clients.put(label, TestMicroservice.client(serializer, parser).debug().build());
 		return clients.get(label);
 	}
 

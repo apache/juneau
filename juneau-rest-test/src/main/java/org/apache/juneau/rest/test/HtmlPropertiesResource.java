@@ -39,9 +39,11 @@ public class HtmlPropertiesResource extends RestServletGroupDefault {
 
 	@RestResource(
 		path="/Normal",
-		pageTitle="Normal-title",
-		pageText="Normal-text",
-		pageLinks="{link:'Normal-links'}"
+		htmldoc=@HtmlDoc(
+			title="Normal-title",
+			description="Normal-text",
+			links="{link:'Normal-links'}"
+		)
 	)
 	public static class Normal extends RestServletDefault {
 
@@ -56,7 +58,14 @@ public class HtmlPropertiesResource extends RestServletGroupDefault {
 		//----------------------------------------------------------------------------------------------------
 		// Values pulled from @RestResource(pageX), overridden by @RestMethod(pageX) annotations.
 		//----------------------------------------------------------------------------------------------------
-		@RestMethod(path="/test2", pageTitle="Normal.test2-title", pageText="Normal.test2-text", pageLinks="{link:'Normal.test2-links'}")
+		@RestMethod(
+			path="/test2",
+			htmldoc=@HtmlDoc(
+				title="Normal.test2-title",
+				description="Normal.test2-text",
+				links="{link:'Normal.test2-links'}"
+			)
+		)
 		public String test2() {
 			return "OK";
 		}
@@ -66,9 +75,9 @@ public class HtmlPropertiesResource extends RestServletGroupDefault {
 		//----------------------------------------------------------------------------------------------------
 		@RestMethod(path="/test3")
 		public String test3(RestResponse res) {
-			res.setPageTitle("Normal.test3-title");
-			res.setPageText("Normal.test3-text");
-			res.setPageLinks("{link:'Normal.test3-links'}");
+			res.setHtmlTitle("Normal.test3-title");
+			res.setHtmlDescription("Normal.test3-text");
+			res.setHtmlLinks("{link:'Normal.test3-links'}");
 			return "OK";
 		}
 
@@ -78,7 +87,7 @@ public class HtmlPropertiesResource extends RestServletGroupDefault {
 		@RestMethod(path="/test4")
 		public String test4(RestResponse res) {
 			res.setProperty(HtmlDocSerializerContext.HTMLDOC_title, "Normal.test4-title");
-			res.setProperty(HtmlDocSerializerContext.HTMLDOC_text, "Normal.test4-text");
+			res.setProperty(HtmlDocSerializerContext.HTMLDOC_description, "Normal.test4-text");
 			res.setProperty(HtmlDocSerializerContext.HTMLDOC_links, "{link:'Normal.test4-links'}");
 			return "OK";
 		}
@@ -91,9 +100,9 @@ public class HtmlPropertiesResource extends RestServletGroupDefault {
 
 		@Override
 		public void init(RestConfig config) throws Exception {
-			config.setPageTitle("NormalInit-title");
-			config.setPageText("NormalInit-text");
-			config.setPageLinks("{link:'NormalInit-links'}");
+			config.setHtmlTitle("NormalInit-title");
+			config.setHtmlDescription("NormalInit-text");
+			config.setHtmlLinks("{link:'NormalInit-links'}");
 			super.init(config);
 		}
 
@@ -108,7 +117,14 @@ public class HtmlPropertiesResource extends RestServletGroupDefault {
 		//----------------------------------------------------------------------------------------------------
 		// Values pulled from RestConfig.setX() methods, overridden by @RestMethod(pageX) annotations.
 		//----------------------------------------------------------------------------------------------------
-		@RestMethod(path="/test2", pageTitle="NormalInit.test2-title", pageText="NormalInit.test2-text", pageLinks="{link:'NormalInit.test2-links'}")
+		@RestMethod(
+			path="/test2",
+			htmldoc=@HtmlDoc(
+				title="NormalInit.test2-title",
+				description="NormalInit.test2-text",
+				links="{link:'NormalInit.test2-links'}"
+			)
+		)
 		public String test2() {
 			return "OK";
 		}
@@ -118,9 +134,9 @@ public class HtmlPropertiesResource extends RestServletGroupDefault {
 		//----------------------------------------------------------------------------------------------------
 		@RestMethod(path="/test3")
 		public String test3(RestResponse res) {
-			res.setPageTitle("NormalInit.test3-title");
-			res.setPageText("NormalInit.test3-text");
-			res.setPageLinks("{link:'NormalInit.test3-links'}");
+			res.setHtmlTitle("NormalInit.test3-title");
+			res.setHtmlDescription("NormalInit.test3-text");
+			res.setHtmlLinks("{link:'NormalInit.test3-links'}");
 			return "OK";
 		}
 
@@ -130,7 +146,7 @@ public class HtmlPropertiesResource extends RestServletGroupDefault {
 		@RestMethod(path="/test4")
 		public String test4(RestResponse res) {
 			res.setProperty(HtmlDocSerializerContext.HTMLDOC_title, "NormalInit.test4-title");
-			res.setProperty(HtmlDocSerializerContext.HTMLDOC_text, "NormalInit.test4-text");
+			res.setProperty(HtmlDocSerializerContext.HTMLDOC_description, "NormalInit.test4-text");
 			res.setProperty(HtmlDocSerializerContext.HTMLDOC_links, "{link:'NormalInit.test4-links'}");
 			return "OK";
 		}
@@ -164,8 +180,8 @@ public class HtmlPropertiesResource extends RestServletGroupDefault {
 		//----------------------------------------------------------------------------------------------------
 		@RestMethod(path="/test3")
 		public String test3(RestResponse res) {
-			res.setPageTitle("NormalDefaulting.test3-title");
-			res.setPageText("NormalDefaulting.test3-text");
+			res.setHtmlTitle("NormalDefaulting.test3-title");
+			res.setHtmlDescription("NormalDefaulting.test3-text");
 			return "OK";
 		}
 
@@ -175,7 +191,7 @@ public class HtmlPropertiesResource extends RestServletGroupDefault {
 		@RestMethod(path="/test4")
 		public String test4(RestResponse res) {
 			res.setProperty(HtmlDocSerializerContext.HTMLDOC_title, "NormalDefaulting.test4-title");
-			res.setProperty(HtmlDocSerializerContext.HTMLDOC_text, "NormalDefaulting.test4-text");
+			res.setProperty(HtmlDocSerializerContext.HTMLDOC_description, "NormalDefaulting.test4-text");
 			return "OK";
 		}
 	}
@@ -199,7 +215,14 @@ public class HtmlPropertiesResource extends RestServletGroupDefault {
 		// Values pulled from parent @RestResource(path/title), overridden by @RestMethod(pageX) annotations.
 		//----------------------------------------------------------------------------------------------------
 		@Override
-		@RestMethod(path="/test2", pageTitle="NormalSubclassed1.test2-title", pageText="NormalSubclassed1.test2-text", pageLinks="{link:'NormalSubclassed1.test2-links'}")
+		@RestMethod(
+			path="/test2",
+			htmldoc=@HtmlDoc(
+				title="NormalSubclassed1.test2-title",
+				description="NormalSubclassed1.test2-text",
+				links="{link:'NormalSubclassed1.test2-links'}"
+			)
+		)
 		public String test2() {
 			return "OK";
 		}
@@ -207,9 +230,11 @@ public class HtmlPropertiesResource extends RestServletGroupDefault {
 
 	@RestResource(
 		path="/NormalSubclassed2",
-		pageTitle="NormalSubclassed2-title",
-		pageText="NormalSubclassed2-text",
-		pageLinks="{link:'NormalSubclassed2-links'}"
+		htmldoc=@HtmlDoc(
+			title="NormalSubclassed2-title",
+			description="NormalSubclassed2-text",
+			links="{link:'NormalSubclassed2-links'}"
+		)
 	)
 	public static class NormalSubclassed2 extends Normal {
 
@@ -226,7 +251,14 @@ public class HtmlPropertiesResource extends RestServletGroupDefault {
 		// Values pulled from parent @RestResource(path/title), overridden by @RestMethod(pageX).
 		//----------------------------------------------------------------------------------------------------
 		@Override
-		@RestMethod(path="/test2", pageTitle="NormalSubclassed2.test2-title", pageText="NormalSubclassed2.test2-text", pageLinks="{link:'NormalSubclassed2.test2-links'}")
+		@RestMethod(
+			path="/test2",
+			htmldoc=@HtmlDoc(
+				title="NormalSubclassed2.test2-title",
+				description="NormalSubclassed2.test2-text",
+				links="{link:'NormalSubclassed2.test2-links'}"
+			)
+		)
 		public String test2() {
 			return "OK";
 		}
@@ -235,9 +267,11 @@ public class HtmlPropertiesResource extends RestServletGroupDefault {
 	@RestResource(
 		path="/LocalizedExplicit",
 		messages="HtmlPropertiesResource",
-		pageTitle="$L{pageTitle}",
-		pageText="$L{pageText}",
-		pageLinks="$L{pageLinks}"
+		htmldoc=@HtmlDoc(
+			title="$L{pageTitle}",
+			description="$L{pageText}",
+			links="$L{pageLinks}"
+		)
 	)
 	public static class LocalizedExplicit extends RestServletDefault {
 
@@ -252,7 +286,12 @@ public class HtmlPropertiesResource extends RestServletGroupDefault {
 		//----------------------------------------------------------------------------------------------------
 		// Values pulled from @RestResource(pageX) with $L variables, overridden by @RestMethod(pageX) with $L variables.
 		//----------------------------------------------------------------------------------------------------
-		@RestMethod(path="/test2", pageTitle="$L{test2.pageTitle}", pageText="$L{test2.pageText}", pageLinks="$L{test2.pageLinks}")
+		@RestMethod(
+			path="/test2",
+			htmldoc=@HtmlDoc(
+				title="$L{test2.pageTitle}", description="$L{test2.pageText}", links="$L{test2.pageLinks}"
+			)
+		)
 		public String test2() {
 			return "OK";
 		}
@@ -262,9 +301,9 @@ public class HtmlPropertiesResource extends RestServletGroupDefault {
 		//----------------------------------------------------------------------------------------------------
 		@RestMethod(path="/test3")
 		public String test3(RestResponse res) {
-			res.setPageTitle("$L{test3.pageTitle}");
-			res.setPageText("$L{test3.pageText}");
-			res.setPageLinks("$L{test3.pageLinks}");
+			res.setHtmlTitle("$L{test3.pageTitle}");
+			res.setHtmlDescription("$L{test3.pageText}");
+			res.setHtmlLinks("$L{test3.pageLinks}");
 			return "OK";
 		}
 
@@ -274,7 +313,7 @@ public class HtmlPropertiesResource extends RestServletGroupDefault {
 		@RestMethod(path="/test4")
 		public String test4(RestResponse res) {
 			res.setProperty(HtmlDocSerializerContext.HTMLDOC_title, "$L{test4.pageTitle}");
-			res.setProperty(HtmlDocSerializerContext.HTMLDOC_text, "$L{test4.pageText}");
+			res.setProperty(HtmlDocSerializerContext.HTMLDOC_description, "$L{test4.pageText}");
 			res.setProperty(HtmlDocSerializerContext.HTMLDOC_links, "$L{test4.pageLinks}");
 			return "OK";
 		}

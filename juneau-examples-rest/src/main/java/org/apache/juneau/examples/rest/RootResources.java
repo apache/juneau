@@ -16,6 +16,7 @@ import org.apache.juneau.examples.rest.addressbook.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.microservice.resources.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.widget.*;
 
 /**
  * Sample REST resource showing how to implement a "router" resource page.
@@ -23,8 +24,24 @@ import org.apache.juneau.rest.annotation.*;
 @RestResource(
 	path="/",
 	title="Root resources",
-	description="This is an example of a router resource that is used to access other resources.",
-	pageLinks="{options:'?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/RootResources.java'}",
+	description="Example of a router resource page.",
+	htmldoc=@HtmlDoc(
+		links="{options:'?method=OPTIONS',source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/RootResources.java'}",
+		aside=""
+			+ "<div style='max-width:400px' class='text'>"
+			+ "	<p>This is an example of a 'router' page that serves as a jumping-off point to child resources.</p>"
+			+ "	<p>Resources can be nested arbitrarily deep through router pages.</p>"
+			+ "	<p>Note the <span class='link'>OPTIONS</span> link provided that lets you see the generated swagger doc for this page.</p>"
+			+ "	<p>Also note the <span class='link'>SOURCE</span> link on these pages to view the source code for the page.</p>"
+			+ "	<p>All content on pages in the UI are serialized POJOs.  In this case, it's a serialized array of beans with 2 properties.</p>"
+			+ "	<p>Other features (such as this aside) are added through annotations.</p>"
+			+ "</div>",
+		footer="$W{poweredByJuneau}"
+	),
+	widgets={
+		PoweredByJuneauWidget.class,
+		ContentTypeLinksWidget.class
+	},
 	children={
 		HelloWorldResource.class,
 		SystemPropertiesResource.class,

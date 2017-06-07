@@ -1406,12 +1406,11 @@ public abstract class CoreObjectBuilder {
 	 * 	<li>This is equivalent to calling <code>property(<jsf>BEAN_debug</jsf>, value)</code>.
 	 * </ul>
 	 *
-	 * @param value The new value for this property.
 	 * @return This object (for method chaining).
 	 * @see BeanContext#BEAN_debug
 	 */
-	public CoreObjectBuilder debug(boolean value) {
-		return property(BEAN_debug, value);
+	public CoreObjectBuilder debug() {
+		return property(BEAN_debug, true);
 	}
 
 	/**

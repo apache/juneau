@@ -1944,12 +1944,11 @@ public final class RestCall {
 	/**
 	 * Sets <code>Debug: value</code> header on this request.
 	 *
-	 * @param value The debug value.
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
 	 */
-	public RestCall debug(boolean value) throws RestCallException {
-		header("Debug", value);
+	public RestCall debug() throws RestCallException {
+		header("Debug", true);
 		return this;
 	}
 
